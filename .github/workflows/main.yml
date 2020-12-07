@@ -1,0 +1,31 @@
+name: CI
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        buildtype: [Debug, Release]
+    env:
+      BUILD_TYPE: ${{ matrix.buildtype }}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: CMake configure and build
+      run: |
+        cmake -B build -A Win32
+        cmake --build build --config ${{env.BUILD_TYPE}}
+
+    - name: Install
+      run: cmake --install build --config ${{env.BUILD_TYPE}} --prefix install
+
+    - name: Artifact
+      if: env.BUILD_TYPE == 'Release'
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        path: install/*
