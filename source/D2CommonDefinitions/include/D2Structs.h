@@ -2351,7 +2351,7 @@ struct D2PresetUnitStrc
 
 typedef BOOL(__fastcall* PROPERTYASSIGN)(int, D2UnitStrc*, D2UnitStrc*, D2PropertyStrc*, int, int, int, int, D2UnitStrc*);
 
-typedef int(__fastcall* PROPERTYASSIGNFN)(int, D2UnitStrc*, D2UnitStrc*, D2PropertyStrc*, int, short, int, int, int, int, D2UnitStrc*);
+typedef int(__fastcall* PROPERTYASSIGNFN)(int, D2UnitStrc*, D2UnitStrc*, const D2PropertyStrc*, int, short, int, int, int, int, D2UnitStrc*);
 
 struct D2PropertyAssignStrc
 {
