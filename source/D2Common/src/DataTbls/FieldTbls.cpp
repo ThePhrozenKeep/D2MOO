@@ -28,19 +28,19 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 	DWORD v2 = *(DWORD*)(pExpField + 2);
 	DWORD v3 = *(DWORD*)(pExpField + 6);
 
-	gpDataTables.pFieldData = (char*)FOG_AllocServerMemory(NULL, v2 * v3, __FILE__, __LINE__, 0);
-	D2_ASSERT(gpDataTables.pFieldData);
-	memcpy(gpDataTables.pFieldData, pExpField + 10, v2 * v3);
+	sgptDataTables->pFieldData = (char*)FOG_AllocServerMemory(NULL, v2 * v3, __FILE__, __LINE__, 0);
+	D2_ASSERT(sgptDataTables->pFieldData);
+	memcpy(sgptDataTables->pFieldData, pExpField + 10, v2 * v3);
 
-	gpDataTables.pCollisionField.nWidth = v3;
-	gpDataTables.pCollisionField.nHeight = v2;
-	gpDataTables.pCollisionField.nArea = v2 * v3;
-	gpDataTables.pCollisionField.nCenterX = v3 >> 1;
-	gpDataTables.pCollisionField.nCenterY = v2 >> 1;
+	sgptDataTables->pCollisionField.nWidth = v3;
+	sgptDataTables->pCollisionField.nHeight = v2;
+	sgptDataTables->pCollisionField.nArea = v2 * v3;
+	sgptDataTables->pCollisionField.nCenterX = v3 >> 1;
+	sgptDataTables->pCollisionField.nCenterY = v2 >> 1;
 
 	for (int i = 0; i < ARRAY_SIZE(gnFieldXOffsets); ++i)
 	{
-		gpDataTables.ExpFieldI[i] = gnFieldXOffsets[i] + v3 * gnFieldYOffsets[i];
+		sgptDataTables->ExpFieldI[i] = gnFieldXOffsets[i] + v3 * gnFieldYOffsets[i];
 	}
 
 	FOG_FreeClientMemory(pExpField, __FILE__, __LINE__, 0);
@@ -51,17 +51,17 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 //D2Common.0x6FD520F0 (#11090)
 BOOL __stdcall DATATBLS_FreeCollisionFieldTable()
 {
-	if (gpDataTables.pFieldData)
+	if (sgptDataTables->pFieldData)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pFieldData, __FILE__, __LINE__, 0);
+		FOG_FreeServerMemory(NULL, sgptDataTables->pFieldData, __FILE__, __LINE__, 0);
 	}
 
-	gpDataTables.pFieldData = NULL;
-	gpDataTables.pCollisionField.nWidth = 0;
-	gpDataTables.pCollisionField.nHeight = 0;
-	gpDataTables.pCollisionField.nArea = 0;
-	gpDataTables.pCollisionField.nCenterX = 0;
-	gpDataTables.pCollisionField.nCenterY = 0;
+	sgptDataTables->pFieldData = NULL;
+	sgptDataTables->pCollisionField.nWidth = 0;
+	sgptDataTables->pCollisionField.nHeight = 0;
+	sgptDataTables->pCollisionField.nArea = 0;
+	sgptDataTables->pCollisionField.nCenterX = 0;
+	sgptDataTables->pCollisionField.nCenterY = 0;
 
 	return TRUE;
 }
@@ -69,20 +69,20 @@ BOOL __stdcall DATATBLS_FreeCollisionFieldTable()
 //D2Common.0x6FD52140 (#11091)
 void __stdcall DATATBLS_GetCollisionFieldCenter(int* pCenterX, int* pCenterY)
 {
-	*pCenterX = gpDataTables.pCollisionField.nCenterX;
-	*pCenterY = gpDataTables.pCollisionField.nCenterY;
+	*pCenterX = sgptDataTables->pCollisionField.nCenterX;
+	*pCenterY = sgptDataTables->pCollisionField.nCenterY;
 }
 
 //D2Common.0x6FD52160 (#11092)
 int __stdcall DATATBLS_GetCollisionFieldWidth()
 {
-	return gpDataTables.pCollisionField.nWidth;
+	return sgptDataTables->pCollisionField.nWidth;
 }
 
 //D2Common.0x6FD52170 (#11093)
 int __stdcall DATATBLS_GetCollisionFieldHeight()
 {
-	return gpDataTables.pCollisionField.nHeight;
+	return sgptDataTables->pCollisionField.nHeight;
 }
 
 //D2Common.0x6FD52180 (#11094)
@@ -119,7 +119,7 @@ int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
 {
 	D2_ASSERT(pField);
 
-	return *(&gpDataTables.pFieldData[((nY - pField->nY) << 8) - pField->nX] + nX);
+	return *(&sgptDataTables->pFieldData[((nY - pField->nY) << 8) - pField->nX] + nX);
 }
 
 //D2Common.0x6FD522A0 (#11098)
@@ -129,12 +129,12 @@ int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 	
 	D2_ASSERT(pField);
 
-	nIndex = *(&gpDataTables.pFieldData[((gpDataTables.pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + gpDataTables.pCollisionField.nCenterX);
+	nIndex = *(&sgptDataTables->pFieldData[((sgptDataTables->pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + sgptDataTables->pCollisionField.nCenterX);
 
 	*pX += gnFieldXOffsets[nIndex];
 	*pY += gnFieldYOffsets[nIndex];
 
-	return *(&gpDataTables.pFieldData[((gpDataTables.pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + gpDataTables.pCollisionField.nCenterX) != 8;
+	return *(&sgptDataTables->pFieldData[((sgptDataTables->pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + sgptDataTables->pCollisionField.nCenterX) != 8;
 }
 
 //D2Common.0x6FD52360 (#11099)

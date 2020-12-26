@@ -3345,7 +3345,7 @@ BOOL __fastcall sub_6FD91E80(D2UnitStrc* pUnit, D2UnitStrc* pItem1, D2UnitStrc* 
 				if (pUnit->dwUnitType == UNIT_MONSTER)
 				{
 					nUnitId = pUnit->dwClassId;
-					if (nUnitId < 0 || nUnitId >= gpDataTables.nMonStatsTxtRecordCount)
+					if (nUnitId < 0 || nUnitId >= sgptDataTables->nMonStatsTxtRecordCount)
 					{
 						nUnitId = -1;
 					}

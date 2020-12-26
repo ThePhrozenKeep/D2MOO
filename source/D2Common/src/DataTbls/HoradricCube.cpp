@@ -73,7 +73,7 @@ BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* 
 
 			if (strlen(szInput) <= 4)
 			{
-				nLinkId = FOG_GetLinkIndex(gpDataTables.pItemTypesLinker, DATATBLS_StringToCode(szInput), 0);
+				nLinkId = FOG_GetLinkIndex(sgptDataTables->pItemTypesLinker, DATATBLS_StringToCode(szInput), 0);
 			}
 
 			if (nLinkId >= 0)
@@ -90,14 +90,14 @@ BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* 
 			{
 				nLinkId = -1;
 
-				if (gpDataTables.pUniqueItemsLinker)
+				if (sgptDataTables->pUniqueItemsLinker)
 				{
-					nLinkId = FOG_GetRowFromTxt(gpDataTables.pUniqueItemsLinker, szInput, 0);
+					nLinkId = FOG_GetRowFromTxt(sgptDataTables->pUniqueItemsLinker, szInput, 0);
 				}
 
 				if (nLinkId >= 0)
 				{
-					DATATBLS_GetItemRecordFromItemCode(gpDataTables.pUniqueItemsTxt[nLinkId].dwBaseItemCode, &nBaseItemId);
+					DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pUniqueItemsTxt[nLinkId].dwBaseItemCode, &nBaseItemId);
 					pCubeInput->wInputFlags |= CUBEFLAG_IN_SPECIAL | CUBEFLAG_IN_USEANY;
 					pCubeInput->nQuality = ITEMQUAL_UNIQUE;
 					pCubeInput->wItemID = nLinkId + 1;
@@ -107,14 +107,14 @@ BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* 
 				{
 					nLinkId = -1;
 
-					if (gpDataTables.pSetItemsLinker)
+					if (sgptDataTables->pSetItemsLinker)
 					{
-						nLinkId = FOG_GetRowFromTxt(gpDataTables.pSetItemsLinker, szInput, 0);
+						nLinkId = FOG_GetRowFromTxt(sgptDataTables->pSetItemsLinker, szInput, 0);
 					}
 
 					if (nLinkId >= 0)
 					{
-						DATATBLS_GetItemRecordFromItemCode(gpDataTables.pSetItemsTxt[nLinkId].szItemCode, &nBaseItemId);
+						DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pSetItemsTxt[nLinkId].szItemCode, &nBaseItemId);
 						pCubeInput->wInputFlags |= CUBEFLAG_IN_SPECIAL | CUBEFLAG_IN_USEANY;
 						pCubeInput->nQuality = ITEMQUAL_SET;
 						pCubeInput->wItemID = nLinkId + 1;
@@ -322,7 +322,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 
 		if (strlen(szOutput) <= 4)
 		{
-			nLinkId = FOG_GetLinkIndex(gpDataTables.pItemTypesLinker, DATATBLS_StringToCode(szOutput), 0);
+			nLinkId = FOG_GetLinkIndex(sgptDataTables->pItemTypesLinker, DATATBLS_StringToCode(szOutput), 0);
 		}
 
 		if (nLinkId >= 0)
@@ -334,39 +334,39 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 		{
 			nLinkId = -1;
 
-			if (gpDataTables.pUniqueItemsLinker)
+			if (sgptDataTables->pUniqueItemsLinker)
 			{
-				nLinkId = FOG_GetRowFromTxt(gpDataTables.pUniqueItemsLinker, szOutput, 0);
+				nLinkId = FOG_GetRowFromTxt(sgptDataTables->pUniqueItemsLinker, szOutput, 0);
 			}
 
 			if (nLinkId >= 0)
 			{
-				DATATBLS_GetItemRecordFromItemCode(gpDataTables.pUniqueItemsTxt[nLinkId].dwBaseItemCode, &nBaseItemId);
+				DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pUniqueItemsTxt[nLinkId].dwBaseItemCode, &nBaseItemId);
 				pCubeOutputParam->wItemFlags |= CUBEFLAG_OUT_SPECIAL;
 				pCubeOutputParam->nType = CUBEOP_ITEMCODE;
 				pCubeOutputParam->nQuality = ITEMQUAL_UNIQUE;
 				pCubeOutputParam->wItemID = nLinkId + 1;
 				pCubeOutputParam->wBaseItemId = nBaseItemId;
-				pCubeOutputParam->nILvl = (BYTE)gpDataTables.pUniqueItemsTxt[nLinkId].wLvl;
+				pCubeOutputParam->nILvl = (BYTE)sgptDataTables->pUniqueItemsTxt[nLinkId].wLvl;
 			}
 			else
 			{
 				nLinkId = -1;
 
-				if (gpDataTables.pSetItemsLinker)
+				if (sgptDataTables->pSetItemsLinker)
 				{
-					nLinkId = FOG_GetRowFromTxt(gpDataTables.pSetItemsLinker, szOutput, 0);
+					nLinkId = FOG_GetRowFromTxt(sgptDataTables->pSetItemsLinker, szOutput, 0);
 				}
 
 				if (nLinkId >= 0)
 				{
-					DATATBLS_GetItemRecordFromItemCode(gpDataTables.pSetItemsTxt[nLinkId].szItemCode, &nBaseItemId);
+					DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pSetItemsTxt[nLinkId].szItemCode, &nBaseItemId);
 					pCubeOutputParam->wItemFlags |= CUBEFLAG_OUT_SPECIAL;
 					pCubeOutputParam->nType = CUBEOP_ITEMCODE;
 					pCubeOutputParam->nQuality = ITEMQUAL_SET;
 					pCubeOutputParam->wItemID = nLinkId + 1;
 					pCubeOutputParam->wBaseItemId = nBaseItemId;
-					pCubeOutputParam->nILvl = (BYTE)gpDataTables.pSetItemsTxt[nLinkId].wLvl;
+					pCubeOutputParam->nILvl = (BYTE)sgptDataTables->pSetItemsTxt[nLinkId].wLvl;
 				}
 				else
 				{
@@ -565,9 +565,9 @@ void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOff
 		}
 		else
 		{
-			if (gpDataTables.pItemStatCostLinker)
+			if (sgptDataTables->pItemStatCostLinker)
 			{
-				nValue = FOG_GetRowFromTxt(gpDataTables.pItemStatCostLinker, pSrc, 0);
+				nValue = FOG_GetRowFromTxt(sgptDataTables->pItemStatCostLinker, pSrc, 0);
 				if (nValue >= 0)
 				{
 					*(int*)pRecord = nValue;
@@ -595,7 +595,7 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		{ "op", TXTFIELD_BYTE, 0, 4, NULL },
 		{ "param", TXTFIELD_DWORD, 0, 8, DATATBLS_CubeMainParamLinker },
 		{ "value", TXTFIELD_DWORD, 0, 12, NULL },
-		{ "class", TXTFIELD_CODETOBYTE, 0, 3, &gpDataTables.pPlayerClassLinker },
+		{ "class", TXTFIELD_CODETOBYTE, 0, 3, &sgptDataTables->pPlayerClassLinker },
 		{ "numinputs", TXTFIELD_BYTE, 0, 16, NULL },
 		{ "version", TXTFIELD_WORD, 0, 18, NULL },
 		{ "input 1", TXTFIELD_CUSTOMLINK, 0, 0, DATATBLS_CubeMainInputLinker },
@@ -609,27 +609,27 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		{ "lvl", TXTFIELD_BYTE, 0, 85, NULL },
 		{ "plvl", TXTFIELD_BYTE, 0, 86, NULL },
 		{ "ilvl", TXTFIELD_BYTE, 0, 87, NULL },
-		{ "mod 1", TXTFIELD_NAMETODWORD, 0, 100, &gpDataTables.pPropertiesLinker },
+		{ "mod 1", TXTFIELD_NAMETODWORD, 0, 100, &sgptDataTables->pPropertiesLinker },
 		{ "mod 1 chance", TXTFIELD_BYTE, 0, 110, NULL },
 		{ "mod 1 param", TXTFIELD_WORD, 0, 104, NULL },
 		{ "mod 1 min", TXTFIELD_WORD, 0, 106, NULL },
 		{ "mod 1 max", TXTFIELD_WORD, 0, 108, NULL },
-		{ "mod 2", TXTFIELD_NAMETODWORD, 0, 112, &gpDataTables.pPropertiesLinker },
+		{ "mod 2", TXTFIELD_NAMETODWORD, 0, 112, &sgptDataTables->pPropertiesLinker },
 		{ "mod 2 chance", TXTFIELD_BYTE, 0, 122, NULL },
 		{ "mod 2 param", TXTFIELD_WORD, 0, 116, NULL },
 		{ "mod 2 min", TXTFIELD_WORD, 0, 118, NULL },
 		{ "mod 2 max", TXTFIELD_WORD, 0, 120, NULL },
-		{ "mod 3", TXTFIELD_NAMETODWORD, 0, 124, &gpDataTables.pPropertiesLinker },
+		{ "mod 3", TXTFIELD_NAMETODWORD, 0, 124, &sgptDataTables->pPropertiesLinker },
 		{ "mod 3 chance", TXTFIELD_BYTE, 0, 134, NULL },
 		{ "mod 3 param", TXTFIELD_WORD, 0, 128, NULL },
 		{ "mod 3 min", TXTFIELD_WORD, 0, 130, NULL },
 		{ "mod 3 max", TXTFIELD_WORD, 0, 132, NULL },
-		{ "mod 4", TXTFIELD_NAMETODWORD, 0, 136, &gpDataTables.pPropertiesLinker },
+		{ "mod 4", TXTFIELD_NAMETODWORD, 0, 136, &sgptDataTables->pPropertiesLinker },
 		{ "mod 4 chance", TXTFIELD_BYTE, 0, 146, NULL },
 		{ "mod 4 param", TXTFIELD_WORD, 0, 140, NULL },
 		{ "mod 4 min", TXTFIELD_WORD, 0, 142, NULL },
 		{ "mod 4 max", TXTFIELD_WORD, 0, 144, NULL },
-		{ "mod 5", TXTFIELD_NAMETODWORD, 0, 148, &gpDataTables.pPropertiesLinker },
+		{ "mod 5", TXTFIELD_NAMETODWORD, 0, 148, &sgptDataTables->pPropertiesLinker },
 		{ "mod 5 chance", TXTFIELD_BYTE, 0, 158, NULL },
 		{ "mod 5 param", TXTFIELD_WORD, 0, 152, NULL },
 		{ "mod 5 min", TXTFIELD_WORD, 0, 154, NULL },
@@ -638,27 +638,27 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		{ "b lvl", TXTFIELD_BYTE, 0, 169, NULL },
 		{ "b plvl", TXTFIELD_BYTE, 0, 170, NULL },
 		{ "b ilvl", TXTFIELD_BYTE, 0, 171, NULL },
-		{ "b mod 1", TXTFIELD_NAMETODWORD, 0, 184, &gpDataTables.pPropertiesLinker },
+		{ "b mod 1", TXTFIELD_NAMETODWORD, 0, 184, &sgptDataTables->pPropertiesLinker },
 		{ "b mod 1 chance", TXTFIELD_BYTE, 0, 194, NULL },
 		{ "b mod 1 param", TXTFIELD_WORD, 0, 188, NULL },
 		{ "b mod 1 min", TXTFIELD_WORD, 0, 190, NULL },
 		{ "b mod 1 max", TXTFIELD_WORD, 0, 192, NULL },
-		{ "b mod 2", TXTFIELD_NAMETODWORD, 0, 196, &gpDataTables.pPropertiesLinker },
+		{ "b mod 2", TXTFIELD_NAMETODWORD, 0, 196, &sgptDataTables->pPropertiesLinker },
 		{ "b mod 2 chance", TXTFIELD_BYTE, 0, 206, NULL },
 		{ "b mod 2 param", TXTFIELD_WORD, 0, 200, NULL },
 		{ "b mod 2 min", TXTFIELD_WORD, 0, 202, NULL },
 		{ "b mod 2 max", TXTFIELD_WORD, 0, 204, NULL },
-		{ "b mod 3", TXTFIELD_NAMETODWORD, 0, 208, &gpDataTables.pPropertiesLinker },
+		{ "b mod 3", TXTFIELD_NAMETODWORD, 0, 208, &sgptDataTables->pPropertiesLinker },
 		{ "b mod 3 chance", TXTFIELD_BYTE, 0, 218, NULL },
 		{ "b mod 3 param", TXTFIELD_WORD, 0, 212, NULL },
 		{ "b mod 3 min", TXTFIELD_WORD, 0, 214, NULL },
 		{ "b mod 3 max", TXTFIELD_WORD, 0, 216, NULL },
-		{ "b mod 4", TXTFIELD_NAMETODWORD, 0, 220, &gpDataTables.pPropertiesLinker },
+		{ "b mod 4", TXTFIELD_NAMETODWORD, 0, 220, &sgptDataTables->pPropertiesLinker },
 		{ "b mod 4 chance", TXTFIELD_BYTE, 0, 230, NULL },
 		{ "b mod 4 param", TXTFIELD_WORD, 0, 224, NULL },
 		{ "b mod 4 min", TXTFIELD_WORD, 0, 226, NULL },
 		{ "b mod 4 max", TXTFIELD_WORD, 0, 228, NULL },
-		{ "b mod 5", TXTFIELD_NAMETODWORD, 0, 232, &gpDataTables.pPropertiesLinker },
+		{ "b mod 5", TXTFIELD_NAMETODWORD, 0, 232, &sgptDataTables->pPropertiesLinker },
 		{ "b mod 5 chance", TXTFIELD_BYTE, 0, 242, NULL },
 		{ "b mod 5 param", TXTFIELD_WORD, 0, 236, NULL },
 		{ "b mod 5 min", TXTFIELD_WORD, 0, 238, NULL },
@@ -667,27 +667,27 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		{ "c lvl", TXTFIELD_BYTE, 0, 253, NULL },
 		{ "c plvl", TXTFIELD_BYTE, 0, 254, NULL },
 		{ "c ilvl", TXTFIELD_BYTE, 0, 255, NULL },
-		{ "c mod 1", TXTFIELD_NAMETODWORD, 0, 268, &gpDataTables.pPropertiesLinker },
+		{ "c mod 1", TXTFIELD_NAMETODWORD, 0, 268, &sgptDataTables->pPropertiesLinker },
 		{ "c mod 1 chance", TXTFIELD_BYTE, 0, 278, NULL },
 		{ "c mod 1 param", TXTFIELD_WORD, 0, 272, NULL },
 		{ "c mod 1 min", TXTFIELD_WORD, 0, 274, NULL },
 		{ "c mod 1 max", TXTFIELD_WORD, 0, 276, NULL },
-		{ "c mod 2", TXTFIELD_NAMETODWORD, 0, 280, &gpDataTables.pPropertiesLinker },
+		{ "c mod 2", TXTFIELD_NAMETODWORD, 0, 280, &sgptDataTables->pPropertiesLinker },
 		{ "c mod 2 chance", TXTFIELD_BYTE, 0, 290, NULL },
 		{ "c mod 2 param", TXTFIELD_WORD, 0, 284, NULL },
 		{ "c mod 2 min", TXTFIELD_WORD, 0, 286, NULL },
 		{ "c mod 2 max", TXTFIELD_WORD, 0, 288, NULL },
-		{ "c mod 3", TXTFIELD_NAMETODWORD, 0, 292, &gpDataTables.pPropertiesLinker },
+		{ "c mod 3", TXTFIELD_NAMETODWORD, 0, 292, &sgptDataTables->pPropertiesLinker },
 		{ "c mod 3 chance", TXTFIELD_BYTE, 0, 302, NULL },
 		{ "c mod 3 param", TXTFIELD_WORD, 0, 296, NULL },
 		{ "c mod 3 min", TXTFIELD_WORD, 0, 298, NULL },
 		{ "c mod 3 max", TXTFIELD_WORD, 0, 300, NULL },
-		{ "c mod 4", TXTFIELD_NAMETODWORD, 0, 304, &gpDataTables.pPropertiesLinker },
+		{ "c mod 4", TXTFIELD_NAMETODWORD, 0, 304, &sgptDataTables->pPropertiesLinker },
 		{ "c mod 4 chance", TXTFIELD_BYTE, 0, 314, NULL },
 		{ "c mod 4 param", TXTFIELD_WORD, 0, 308, NULL },
 		{ "c mod 4 min", TXTFIELD_WORD, 0, 310, NULL },
 		{ "c mod 4 max", TXTFIELD_WORD, 0, 312, NULL },
-		{ "c mod 5", TXTFIELD_NAMETODWORD, 0, 316, &gpDataTables.pPropertiesLinker },
+		{ "c mod 5", TXTFIELD_NAMETODWORD, 0, 316, &sgptDataTables->pPropertiesLinker },
 		{ "c mod 5 chance", TXTFIELD_BYTE, 0, 326, NULL },
 		{ "c mod 5 param", TXTFIELD_WORD, 0, 320, NULL },
 		{ "c mod 5 min", TXTFIELD_WORD, 0, 322, NULL },
@@ -707,27 +707,27 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		FOG_10025("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
-	gpDataTables.pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(pMemPool, "cubemain", pTbl, &gpDataTables.nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));
+	sgptDataTables->pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(pMemPool, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));
 }
 
 //D2Common.0x6FD54250
 void __fastcall DATATBLS_UnloadCubeMainTxt()
 {
-	DATATBLS_UnloadBin(gpDataTables.pCubeMainTxt);
-	gpDataTables.pCubeMainTxt = NULL;
+	DATATBLS_UnloadBin(sgptDataTables->pCubeMainTxt);
+	sgptDataTables->pCubeMainTxt = NULL;
 }
 
 //D2Common.0x6FD54260 (#11232)
 D2CubeMainTxt* __stdcall DATATBLS_GetCubemainTxtRecord(int nIndex)
 {
-	D2_ASSERT(gpDataTables.pCubeMainTxt);
-	D2_ASSERT(nIndex < gpDataTables.nCubeMainTxtRecordCount);
+	D2_ASSERT(sgptDataTables->pCubeMainTxt);
+	D2_ASSERT(nIndex < sgptDataTables->nCubeMainTxtRecordCount);
 
-	return &gpDataTables.pCubeMainTxt[nIndex];
+	return &sgptDataTables->pCubeMainTxt[nIndex];
 }
 
 //D2Common.0x6FD542C0 (#11233)
 int __fastcall DATATBLS_GetCubemainTxtRecordCount()
 {
-	return gpDataTables.nCubeMainTxtRecordCount;
+	return sgptDataTables->nCubeMainTxtRecordCount;
 }

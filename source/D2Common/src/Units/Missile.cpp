@@ -1547,14 +1547,14 @@ int __stdcall MISSILE_EvaluateMissileFormula(D2UnitStrc* pMissile, D2UnitStrc* p
 		nMissile = nMissileId;
 	}
 
-	if (gpDataTables.pMissCode && nCalc < gpDataTables.nMissCodeSize)
+	if (sgptDataTables->pMissCode && nCalc < sgptDataTables->nMissCodeSize)
 	{
 		pMissileCalc.pMissile = pMissile;
 		pMissileCalc.pOwner = pOwner;
 		pMissileCalc.nMissileId = nMissile;
 		pMissileCalc.nMissileLevel = nMissileLevel;
 
-		return FOG_10253(&gpDataTables.pMissCode[nCalc], gpDataTables.nMissCodeSize - nCalc, MISSILE_GetCalcParamValue, off_6FDE5A50, dword_6FDE5A70, &pMissileCalc);
+		return FOG_10253(&sgptDataTables->pMissCode[nCalc], sgptDataTables->nMissCodeSize - nCalc, MISSILE_GetCalcParamValue, off_6FDE5A50, dword_6FDE5A70, &pMissileCalc);
 	}
 
 	return 0;

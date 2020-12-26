@@ -6,7 +6,7 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "overlay", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pOverlayLinker },
+		{ "overlay", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pOverlayLinker },
 		{ "Filename", TXTFIELD_ASCII, 64, TXTFIELD_DWORD, NULL },
 		{ "version", TXTFIELD_WORD, 0, 66, NULL },
 		{ "Frames", TXTFIELD_DWORD, 0, 68, NULL },
@@ -34,18 +34,18 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pOverlayLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pOverlayLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
-	gpDataTables.pOverlayTxt = (D2OverlayTxt*)DATATBLS_CompileTxt(pMemPool, "overlay", pTbl, &gpDataTables.nOverlayTxtRecordCount, sizeof(D2OverlayTxt));
+	sgptDataTables->pOverlayTxt = (D2OverlayTxt*)DATATBLS_CompileTxt(pMemPool, "overlay", pTbl, &sgptDataTables->nOverlayTxtRecordCount, sizeof(D2OverlayTxt));
 }
 
 //D2Common.0x6FD72500
 void __fastcall DATATBLS_UnloadOverlayTxt()
 {
-	FOG_FreeLinker(gpDataTables.pOverlayLinker);
-	DATATBLS_UnloadBin(gpDataTables.pOverlayTxt);
-	gpDataTables.pOverlayTxt = NULL;
-	gpDataTables.nOverlayTxtRecordCount = 0;
+	FOG_FreeLinker(sgptDataTables->pOverlayLinker);
+	DATATBLS_UnloadBin(sgptDataTables->pOverlayTxt);
+	sgptDataTables->pOverlayTxt = NULL;
+	sgptDataTables->nOverlayTxtRecordCount = 0;
 }
 
 //D2Common.0x6FD72530 (#10674)
@@ -166,9 +166,9 @@ int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId)
 //Inlined at various places
 D2OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay)
 {
-	if (nOverlay >= 0 && nOverlay < gpDataTables.nOverlayTxtRecordCount)
+	if (nOverlay >= 0 && nOverlay < sgptDataTables->nOverlayTxtRecordCount)
 	{
-		return &gpDataTables.pOverlayTxt[nOverlay];
+		return &sgptDataTables->pOverlayTxt[nOverlay];
 	}
 
 	return NULL;

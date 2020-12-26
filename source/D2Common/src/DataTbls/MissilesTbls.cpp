@@ -34,7 +34,7 @@ int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
 //TODO: Find a name
 int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 {
-	D2TxtLinkStrc* pLinker = gpDataTables.pMissileCalcLinker;
+	D2TxtLinkStrc* pLinker = sgptDataTables->pMissileCalcLinker;
 	char szCode[4] = {};
 	int nRow = 0;
 
@@ -42,23 +42,23 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 	{
 		if (nKeywordNumber == 3)
 		{
-			if (gpDataTables.iSkillCode)
+			if (sgptDataTables->iSkillCode)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.iSkillCode, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->iSkillCode, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
 					return nRow;
 				}
 
-				pLinker = gpDataTables.pSkillCalcLinker;
+				pLinker = sgptDataTables->pSkillCalcLinker;
 			}
 		}
 		else if (nKeywordNumber == 4)
 		{
-			if (gpDataTables.pMissilesLinker)
+			if (sgptDataTables->pMissilesLinker)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pMissilesLinker, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pMissilesLinker, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
@@ -66,7 +66,7 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 				}
 			}
 
-			pLinker = gpDataTables.pMissileCalcLinker;
+			pLinker = sgptDataTables->pMissileCalcLinker;
 		}
 	}
 
@@ -128,7 +128,7 @@ void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffse
 			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapMissilesTxtKeywordToNumber, NULL, sub_6FD62F20);
 			if (nBufferSize > 0)
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&gpDataTables.pMissCode, (int*)&gpDataTables.nMissCodeSize, &gpDataTables.nMissCodeSizeEx, pBuffer, nBufferSize);
+				*(DWORD*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx, pBuffer, nBufferSize);
 			}
 			else
 			{
@@ -147,7 +147,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Missile", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMissilesLinker },
+		{ "Missile", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMissilesLinker },
 		{ "LastCollide", TXTFIELD_BIT, 0, 4, NULL },
 		{ "Explosion", TXTFIELD_BIT, 1, 4, NULL },
 		{ "Pierce", TXTFIELD_BIT, 2, 4, NULL },
@@ -190,25 +190,25 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		{ "dParam1", TXTFIELD_DWORD, 0, 120, NULL },
 		{ "dParam2", TXTFIELD_DWORD, 0, 124, NULL },
 		{ "DmgCalc1", TXTFIELD_CALCTODWORD, 0, 144, DATATBLS_MissileCalcLinker },
-		{ "TravelSound", TXTFIELD_NAMETOWORD, 0, 18, &gpDataTables.pSoundsLinker },
-		{ "HitSound", TXTFIELD_NAMETOWORD, 0, 20, &gpDataTables.pSoundsLinker },
-		{ "ProgSound", TXTFIELD_NAMETOWORD, 0, 52, &gpDataTables.pSoundsLinker },
-		{ "ProgOverlay", TXTFIELD_NAMETOWORD, 0, 54, &gpDataTables.pOverlayLinker },
-		{ "ExplosionMissile", TXTFIELD_NAMETOWORD, 0, 22, &gpDataTables.pMissilesLinker },
-		{ "SubMissile1", TXTFIELD_NAMETOWORD, 0, 24, &gpDataTables.pMissilesLinker },
-		{ "SubMissile2", TXTFIELD_NAMETOWORD, 0, 26, &gpDataTables.pMissilesLinker },
-		{ "SubMissile3", TXTFIELD_NAMETOWORD, 0, 28, &gpDataTables.pMissilesLinker },
-		{ "HitSubMissile1", TXTFIELD_NAMETOWORD, 0, 36, &gpDataTables.pMissilesLinker },
-		{ "HitSubMissile2", TXTFIELD_NAMETOWORD, 0, 38, &gpDataTables.pMissilesLinker },
-		{ "HitSubMissile3", TXTFIELD_NAMETOWORD, 0, 40, &gpDataTables.pMissilesLinker },
-		{ "HitSubMissile4", TXTFIELD_NAMETOWORD, 0, 42, &gpDataTables.pMissilesLinker },
-		{ "CltSubMissile1", TXTFIELD_NAMETOWORD, 0, 30, &gpDataTables.pMissilesLinker },
-		{ "CltSubMissile2", TXTFIELD_NAMETOWORD, 0, 32, &gpDataTables.pMissilesLinker },
-		{ "CltSubMissile3", TXTFIELD_NAMETOWORD, 0, 34, &gpDataTables.pMissilesLinker },
-		{ "CltHitSubMissile1", TXTFIELD_NAMETOWORD, 0, 44, &gpDataTables.pMissilesLinker },
-		{ "CltHitSubMissile2", TXTFIELD_NAMETOWORD, 0, 46, &gpDataTables.pMissilesLinker },
-		{ "CltHitSubMissile3", TXTFIELD_NAMETOWORD, 0, 48, &gpDataTables.pMissilesLinker },
-		{ "CltHitSubMissile4", TXTFIELD_NAMETOWORD, 0, 50, &gpDataTables.pMissilesLinker },
+		{ "TravelSound", TXTFIELD_NAMETOWORD, 0, 18, &sgptDataTables->pSoundsLinker },
+		{ "HitSound", TXTFIELD_NAMETOWORD, 0, 20, &sgptDataTables->pSoundsLinker },
+		{ "ProgSound", TXTFIELD_NAMETOWORD, 0, 52, &sgptDataTables->pSoundsLinker },
+		{ "ProgOverlay", TXTFIELD_NAMETOWORD, 0, 54, &sgptDataTables->pOverlayLinker },
+		{ "ExplosionMissile", TXTFIELD_NAMETOWORD, 0, 22, &sgptDataTables->pMissilesLinker },
+		{ "SubMissile1", TXTFIELD_NAMETOWORD, 0, 24, &sgptDataTables->pMissilesLinker },
+		{ "SubMissile2", TXTFIELD_NAMETOWORD, 0, 26, &sgptDataTables->pMissilesLinker },
+		{ "SubMissile3", TXTFIELD_NAMETOWORD, 0, 28, &sgptDataTables->pMissilesLinker },
+		{ "HitSubMissile1", TXTFIELD_NAMETOWORD, 0, 36, &sgptDataTables->pMissilesLinker },
+		{ "HitSubMissile2", TXTFIELD_NAMETOWORD, 0, 38, &sgptDataTables->pMissilesLinker },
+		{ "HitSubMissile3", TXTFIELD_NAMETOWORD, 0, 40, &sgptDataTables->pMissilesLinker },
+		{ "HitSubMissile4", TXTFIELD_NAMETOWORD, 0, 42, &sgptDataTables->pMissilesLinker },
+		{ "CltSubMissile1", TXTFIELD_NAMETOWORD, 0, 30, &sgptDataTables->pMissilesLinker },
+		{ "CltSubMissile2", TXTFIELD_NAMETOWORD, 0, 32, &sgptDataTables->pMissilesLinker },
+		{ "CltSubMissile3", TXTFIELD_NAMETOWORD, 0, 34, &sgptDataTables->pMissilesLinker },
+		{ "CltHitSubMissile1", TXTFIELD_NAMETOWORD, 0, 44, &sgptDataTables->pMissilesLinker },
+		{ "CltHitSubMissile2", TXTFIELD_NAMETOWORD, 0, 46, &sgptDataTables->pMissilesLinker },
+		{ "CltHitSubMissile3", TXTFIELD_NAMETOWORD, 0, 48, &sgptDataTables->pMissilesLinker },
+		{ "CltHitSubMissile4", TXTFIELD_NAMETOWORD, 0, 50, &sgptDataTables->pMissilesLinker },
 		{ "ResultFlags", TXTFIELD_WORD, 0, 172, NULL },
 		{ "HitFlags", TXTFIELD_DWORD2, 0, 168, NULL },
 		{ "HitClass", TXTFIELD_BYTE, 0, 148, NULL },
@@ -220,7 +220,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		{ "yoffset", TXTFIELD_WORD, 0, 164, NULL },
 		{ "zoffset", TXTFIELD_WORD, 0, 166, NULL },
 		{ "MissileSkill", TXTFIELD_BIT, 15, 4, NULL },
-		{ "Skill", TXTFIELD_NAMETOWORD, 0, 404, &gpDataTables.iSkillCode },
+		{ "Skill", TXTFIELD_NAMETOWORD, 0, 404, &sgptDataTables->iSkillCode },
 		{ "MinDamage", TXTFIELD_DWORD, 0, 176, NULL },
 		{ "MinLevDam1", TXTFIELD_DWORD, 0, 184, NULL },
 		{ "MinLevDam2", TXTFIELD_DWORD, 0, 188, NULL },
@@ -234,7 +234,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		{ "MaxLevDam4", TXTFIELD_DWORD, 0, 216, NULL },
 		{ "MaxLevDam5", TXTFIELD_DWORD, 0, 220, NULL },
 		{ "DmgSymPerCalc", TXTFIELD_CALCTODWORD, 0, 224, DATATBLS_MissileCalcLinker },
-		{ "EType", TXTFIELD_CODETOBYTE, 0, 228, &gpDataTables.pElemTypesLinker },
+		{ "EType", TXTFIELD_CODETOBYTE, 0, 228, &sgptDataTables->pElemTypesLinker },
 		{ "EMin", TXTFIELD_DWORD, 0, 232, NULL },
 		{ "MinELev1", TXTFIELD_DWORD, 0, 240, NULL },
 		{ "MinELev2", TXTFIELD_DWORD, 0, 244, NULL },
@@ -296,52 +296,52 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMissilesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMissilesTxt = (D2MissilesTxt*)DATATBLS_CompileTxt(pMemPool, "missiles", pTbl, &gpDataTables.nMissilesTxtRecordCount, sizeof(D2MissilesTxt));
+	sgptDataTables->pMissilesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMissilesTxt = (D2MissilesTxt*)DATATBLS_CompileTxt(pMemPool, "missiles", pTbl, &sgptDataTables->nMissilesTxtRecordCount, sizeof(D2MissilesTxt));
 
-	for (int i = 0; i < gpDataTables.nMissilesTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nMissilesTxtRecordCount; ++i)
 	{
-		if (gpDataTables.pMissilesTxt[i].nCollideType > 8)
+		if (sgptDataTables->pMissilesTxt[i].nCollideType > 8)
 		{
 			FOG_WriteToLogFile("Range error in entry %d in table '%s' field '%s'.  Value must be between %d and %d.", i, "missiles", "CollideType", 0, 8);
 		}
 
-		if (gpDataTables.pMissilesTxt[i].nCollideType < 0)
+		if (sgptDataTables->pMissilesTxt[i].nCollideType < 0)
 		{
-			gpDataTables.pMissilesTxt[i].nCollideType = 0;
+			sgptDataTables->pMissilesTxt[i].nCollideType = 0;
 		}
-		else if (gpDataTables.pMissilesTxt[i].nCollideType > 8)
+		else if (sgptDataTables->pMissilesTxt[i].nCollideType > 8)
 		{
-			gpDataTables.pMissilesTxt[i].nCollideType = 8;
+			sgptDataTables->pMissilesTxt[i].nCollideType = 8;
 		}
 	}
 
-	DATATBLS_GetBinFileHandle(pMemPool, "misscode", (void**)&gpDataTables.pMissCode, (int*)&gpDataTables.nMissCodeSize, &gpDataTables.nMissCodeSizeEx);
+	DATATBLS_GetBinFileHandle(pMemPool, "misscode", (void**)&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx);
 }
 
 //D2Common.0x6FD64B80
 void __fastcall DATATBLS_UnloadMissilesTxt()
 {
-	if (gpDataTables.pMissCode)
+	if (sgptDataTables->pMissCode)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pMissCode, __FILE__, __LINE__, 0);
-		gpDataTables.pMissCode = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pMissCode, __FILE__, __LINE__, 0);
+		sgptDataTables->pMissCode = NULL;
 	}
-	gpDataTables.nMissCodeSize = 0;
-	gpDataTables.nMissCodeSizeEx = 0;
+	sgptDataTables->nMissCodeSize = 0;
+	sgptDataTables->nMissCodeSizeEx = 0;
 
-	if (gpDataTables.pMissilesTxt)
+	if (sgptDataTables->pMissilesTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMissilesTxt);
-		gpDataTables.pMissilesTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pMissilesTxt);
+		sgptDataTables->pMissilesTxt = NULL;
 	}
 
-	if (gpDataTables.pMissilesLinker)
+	if (sgptDataTables->pMissilesLinker)
 	{
-		FOG_FreeLinker(gpDataTables.pMissilesLinker);
-		gpDataTables.pMissilesLinker = NULL;
+		FOG_FreeLinker(sgptDataTables->pMissilesLinker);
+		sgptDataTables->pMissilesLinker = NULL;
 	}
-	gpDataTables.nMissilesTxtRecordCount = 0;
+	sgptDataTables->nMissilesTxtRecordCount = 0;
 }
 
 //D2Common.0x6FD64BE0 (#10590)
@@ -362,9 +362,9 @@ D2MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
 
-	if (nMissileId >= 0 && nMissileId < gpDataTables.nMissilesTxtRecordCount)
+	if (nMissileId >= 0 && nMissileId < sgptDataTables->nMissilesTxtRecordCount)
 	{
-		return &gpDataTables.pMissilesTxt[nMissileId];
+		return &sgptDataTables->pMissilesTxt[nMissileId];
 	}
 
 	return NULL;

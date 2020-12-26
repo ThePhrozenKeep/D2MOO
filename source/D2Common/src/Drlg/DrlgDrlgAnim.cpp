@@ -201,7 +201,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 				}
 
 				memset(szBuffer, 0x00, sizeof(szBuffer));
-				szBuffer[0] = gpDataTables.szDefaultString;
+				szBuffer[0] = sgptDataTables->szDefaultString;
 
 				if (nIndex >= nFrames)
 				{

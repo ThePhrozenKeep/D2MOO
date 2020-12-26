@@ -672,10 +672,10 @@ void __stdcall UNITS_SetTargetUnitForPlayerOrMonster(D2UnitStrc* pUnit, D2UnitSt
 //D2Common.0x6FDBE470 (#10354)
 void __stdcall UNITS_GetRunAndWalkSpeedForPlayer(int nUnused, int nCharId, int* pWalkSpeed, int* pRunSpeed)
 {
-	if (nCharId >= 0 && nCharId < gpDataTables.nCharStatsTxtRecordCount)
+	if (nCharId >= 0 && nCharId < sgptDataTables->nCharStatsTxtRecordCount)
 	{
-		*pWalkSpeed = gpDataTables.pCharStatsTxt[nCharId].nWalkSpeed;
-		*pRunSpeed = gpDataTables.pCharStatsTxt[nCharId].nRunSpeed;
+		*pWalkSpeed = sgptDataTables->pCharStatsTxt[nCharId].nWalkSpeed;
+		*pRunSpeed = sgptDataTables->pCharStatsTxt[nCharId].nRunSpeed;
 	}
 }
 
@@ -729,9 +729,9 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (nNewMode == PLRMODE_RUN || nNewMode == PLRMODE_KNOCKBACK)
 		{
 			pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, 4, 0, pUnit->dwUnitType, pUnit->dwUnitId);
-			if (nClassId >= 0 && nClassId < gpDataTables.nCharStatsTxtRecordCount)
+			if (nClassId >= 0 && nClassId < sgptDataTables->nCharStatsTxtRecordCount)
 			{
-				pCharStatsTxtRecord = &gpDataTables.pCharStatsTxt[nClassId];
+				pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[nClassId];
 				if (pCharStatsTxtRecord && pCharStatsTxtRecord->nWalkSpeed)
 				{
 					STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, 100 * (pCharStatsTxtRecord->nRunSpeed / pCharStatsTxtRecord->nWalkSpeed - 1), 0);
@@ -772,9 +772,9 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (pUnit->dwUnitType == UNIT_PLAYER && STATES_IsUnitShapeShifted(pUnit) && (nNewMode == MONMODE_KNOCKBACK || nNewMode == MONMODE_RUN))
 		{
 			pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, 4, 0, pUnit->dwUnitType, pUnit->dwUnitId);
-			if (pUnit->dwClassId >= 0 && pUnit->dwClassId < gpDataTables.nCharStatsTxtRecordCount)
+			if (pUnit->dwClassId >= 0 && pUnit->dwClassId < sgptDataTables->nCharStatsTxtRecordCount)
 			{
-				pCharStatsTxtRecord = &gpDataTables.pCharStatsTxt[pUnit->dwClassId];
+				pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[pUnit->dwClassId];
 				if (pCharStatsTxtRecord && pCharStatsTxtRecord->nWalkSpeed)
 				{
 					STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, 100 * (pCharStatsTxtRecord->nRunSpeed / pCharStatsTxtRecord->nWalkSpeed - 1), 0);
@@ -2254,7 +2254,7 @@ void __stdcall UNITS_SetOverlay(D2UnitStrc* pUnit, int nOverlay, int nUnused)
 {
 	D2StatListStrc* pStatList = NULL;
 
-	if (nOverlay >= 0 && nOverlay < gpDataTables.nOverlayTxtRecordCount)
+	if (nOverlay >= 0 && nOverlay < sgptDataTables->nOverlayTxtRecordCount)
 	{
 		pStatList = STATLIST_GetStatListFromUnitAndFlag(pUnit, 0x80);
 		if (!pStatList)
@@ -2546,9 +2546,9 @@ int __stdcall UNITS_GetAttackRate(D2UnitStrc* pAttacker)
 	nDexterity = STATLIST_GetUnitStat(pAttacker, STAT_DEXTERITY, 0);
 	nAttackRate = nToHit + 5 * (nDexterity - 7);
 
-	if (pAttacker->dwUnitType == UNIT_PLAYER && pAttacker->dwClassId >= 0 && pAttacker->dwClassId < gpDataTables.nCharStatsTxtRecordCount)
+	if (pAttacker->dwUnitType == UNIT_PLAYER && pAttacker->dwClassId >= 0 && pAttacker->dwClassId < sgptDataTables->nCharStatsTxtRecordCount)
 	{
-		pCharStatsTxtRecord = &gpDataTables.pCharStatsTxt[pAttacker->dwClassId];
+		pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[pAttacker->dwClassId];
 		if (pCharStatsTxtRecord)
 		{
 			return nAttackRate + pCharStatsTxtRecord->dwToHitFactor;
@@ -2584,9 +2584,9 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		if (INVENTORY_GetEquippedShield(pUnit->pInventory, NULL) && pUnit->dwClassId >= 0 && pUnit->dwClassId < gpDataTables.nCharStatsTxtRecordCount)
+		if (INVENTORY_GetEquippedShield(pUnit->pInventory, NULL) && pUnit->dwClassId >= 0 && pUnit->dwClassId < sgptDataTables->nCharStatsTxtRecordCount)
 		{
-			pCharStatsTxtRecord = &gpDataTables.pCharStatsTxt[pUnit->dwClassId];
+			pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[pUnit->dwClassId];
 
 			nBlockChance = pCharStatsTxtRecord->nBlockFactor + STATLIST_GetUnitStat(pUnit, STAT_TOBLOCK, 0);
 			if (bExpansion)
@@ -2614,7 +2614,7 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
 		if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NOSHLDBLOCK]))
 		{
-			if (nClassId < 0 || nClassId >= gpDataTables.nMonStatsTxtRecordCount)
+			if (nClassId < 0 || nClassId >= sgptDataTables->nMonStatsTxtRecordCount)
 			{
 				nClassId = -1;
 			}
@@ -3340,9 +3340,9 @@ void __stdcall UNITS_MergeDualWieldWeaponStatLists(D2UnitStrc* pUnit, int a2)
 //D2Common.0x6FDC1EE0
 D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecord(int nRecordId)
 {
-	if (nRecordId >= 0 && nRecordId < gpDataTables.nMonStats2TxtRecordCount)
+	if (nRecordId >= 0 && nRecordId < sgptDataTables->nMonStats2TxtRecordCount)
 	{
-		return &gpDataTables.pMonStats2Txt[nRecordId];
+		return &sgptDataTables->pMonStats2Txt[nRecordId];
 	}
 
 	return NULL;
@@ -3408,9 +3408,9 @@ D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecordFromMonsterId(int nMonster
 {
 	int nMonStatsEx = DATATBLS_GetMonStatsTxtRecord(nMonsterId)->wMonStatsEx;
 
-	if (nMonStatsEx >= 0 && nMonStatsEx < gpDataTables.nMonStats2TxtRecordCount)
+	if (nMonStatsEx >= 0 && nMonStatsEx < sgptDataTables->nMonStats2TxtRecordCount)
 	{
-		return &gpDataTables.pMonStats2Txt[nMonStatsEx];
+		return &sgptDataTables->pMonStats2Txt[nMonStatsEx];
 	}
 
 	return NULL;
@@ -3858,9 +3858,9 @@ BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObj
 //D2Common.0x6FDC2C80
 D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId)
 {
-	if (nRecordId >= 0 && nRecordId < gpDataTables.nCharStatsTxtRecordCount)
+	if (nRecordId >= 0 && nRecordId < sgptDataTables->nCharStatsTxtRecordCount)
 	{
-		return &gpDataTables.pCharStatsTxt[nRecordId];
+		return &sgptDataTables->pCharStatsTxt[nRecordId];
 	}
 
 	return NULL;

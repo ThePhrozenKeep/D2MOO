@@ -123,7 +123,7 @@ void __fastcall DATATBLS_MonStatsSkillModeLinker(char* pSrc, void* pRecord, int 
 			if (~nInverseLength - 1 > 3)
 			{
 				pMonStatsTxtRecord->nSkillMode[nOffset] = MONMODE_SEQUENCE;
-				pMonStatsTxtRecord->nSequence[nOffset] = FOG_GetRowFromTxt(gpDataTables.pMonSeqLinker, pSrc, 1);
+				pMonStatsTxtRecord->nSequence[nOffset] = FOG_GetRowFromTxt(sgptDataTables->pMonSeqLinker, pSrc, 1);
 				return;
 			}
 
@@ -136,13 +136,13 @@ void __fastcall DATATBLS_MonStatsSkillModeLinker(char* pSrc, void* pRecord, int 
 			}
 			while (szCurrentChar);
 
-			nMode = FOG_GetLinkIndex(gpDataTables.pMonModeLinker, DATATBLS_StringToCode(szMode), 1);
+			nMode = FOG_GetLinkIndex(sgptDataTables->pMonModeLinker, DATATBLS_StringToCode(szMode), 1);
 			pMonStatsTxtRecord->nSkillMode[nOffset] = nMode;
 
 			if (nMode < 0 || nMode == MONMODE_SEQUENCE)
 			{
 				pMonStatsTxtRecord->nSkillMode[nOffset] = MONMODE_SEQUENCE;
-				pMonStatsTxtRecord->nSequence[nOffset] = FOG_GetRowFromTxt(gpDataTables.pMonSeqLinker, pSrc, 1);
+				pMonStatsTxtRecord->nSequence[nOffset] = FOG_GetRowFromTxt(sgptDataTables->pMonSeqLinker, pSrc, 1);
 			}
 		}
 	}
@@ -165,25 +165,25 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonStatsLinker },
-		{ "BaseId", TXTFIELD_NAMETOWORD, 0, 2, &gpDataTables.pMonStatsLinker },
-		{ "NextInClass", TXTFIELD_NAMETOWORD, 0, 4, &gpDataTables.pMonStatsLinker },
+		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonStatsLinker },
+		{ "BaseId", TXTFIELD_NAMETOWORD, 0, 2, &sgptDataTables->pMonStatsLinker },
+		{ "NextInClass", TXTFIELD_NAMETOWORD, 0, 4, &sgptDataTables->pMonStatsLinker },
 		{ "NameStr", TXTFIELD_KEYTOWORD, 0, 6, DATATBLS_GetStringIdFromReferenceString },
 		{ "DescStr", TXTFIELD_KEYTOWORD, 0, 8, DATATBLS_GetStringIdFromReferenceString },
 		{ "Code", TXTFIELD_RAW, 0, 16, NULL },
 		{ "TransLvl", TXTFIELD_BYTE, 0, 77, NULL },
-		{ "MonSound", TXTFIELD_NAMETOWORD, 0, 20, &gpDataTables.pMonSoundsLinker },
-		{ "UMonSound", TXTFIELD_NAMETOWORD, 0, 22, &gpDataTables.pMonSoundsLinker },
-		{ "MonStatsEx", TXTFIELD_NAMETOWORD, 0, 24, &gpDataTables.pMonStats2Linker },
-		{ "MonType", TXTFIELD_NAMETOWORD, 0, 28, &gpDataTables.pMonTypeLinker },
-		{ "MonProp", TXTFIELD_NAMETOWORD, 0, 26, &gpDataTables.pMonPropLinker },
-		{ "AI", TXTFIELD_NAMETOWORD, 0, 30, &gpDataTables.pMonAiLinker },
-		{ "spawn", TXTFIELD_NAMETOWORD, 0, 32, &gpDataTables.pMonStatsLinker },
+		{ "MonSound", TXTFIELD_NAMETOWORD, 0, 20, &sgptDataTables->pMonSoundsLinker },
+		{ "UMonSound", TXTFIELD_NAMETOWORD, 0, 22, &sgptDataTables->pMonSoundsLinker },
+		{ "MonStatsEx", TXTFIELD_NAMETOWORD, 0, 24, &sgptDataTables->pMonStats2Linker },
+		{ "MonType", TXTFIELD_NAMETOWORD, 0, 28, &sgptDataTables->pMonTypeLinker },
+		{ "MonProp", TXTFIELD_NAMETOWORD, 0, 26, &sgptDataTables->pMonPropLinker },
+		{ "AI", TXTFIELD_NAMETOWORD, 0, 30, &sgptDataTables->pMonAiLinker },
+		{ "spawn", TXTFIELD_NAMETOWORD, 0, 32, &sgptDataTables->pMonStatsLinker },
 		{ "spawnx", TXTFIELD_BYTE, 0, 34, NULL },
 		{ "spawny", TXTFIELD_BYTE, 0, 35, NULL },
-		{ "spawnmode", TXTFIELD_CODETOBYTE, 0, 36, &gpDataTables.pMonModeLinker },
-		{ "minion1", TXTFIELD_NAMETOWORD, 0, 38, &gpDataTables.pMonStatsLinker },
-		{ "minion2", TXTFIELD_NAMETOWORD, 0, 40, &gpDataTables.pMonStatsLinker },
+		{ "spawnmode", TXTFIELD_CODETOBYTE, 0, 36, &sgptDataTables->pMonModeLinker },
+		{ "minion1", TXTFIELD_NAMETOWORD, 0, 38, &sgptDataTables->pMonStatsLinker },
+		{ "minion2", TXTFIELD_NAMETOWORD, 0, 40, &sgptDataTables->pMonStatsLinker },
 		{ "PartyMin", TXTFIELD_BYTE, 0, 44, NULL },
 		{ "PartyMax", TXTFIELD_BYTE, 0, 45, NULL },
 		{ "Rarity", TXTFIELD_BYTE, 0, 46, NULL },
@@ -221,26 +221,26 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "deathDmg", TXTFIELD_BIT, 20, 12, NULL },
 		{ "genericSpawn", TXTFIELD_BIT, 21, 12, NULL },
 		{ "zoo", TXTFIELD_BIT, 22, 12, NULL },
-		{ "MissA1", TXTFIELD_NAMETOWORD, 0, 58, &gpDataTables.pMissilesLinker },
-		{ "MissA2", TXTFIELD_NAMETOWORD, 0, 60, &gpDataTables.pMissilesLinker },
-		{ "MissS1", TXTFIELD_NAMETOWORD, 0, 62, &gpDataTables.pMissilesLinker },
-		{ "MissS2", TXTFIELD_NAMETOWORD, 0, 64, &gpDataTables.pMissilesLinker },
-		{ "MissS3", TXTFIELD_NAMETOWORD, 0, 66, &gpDataTables.pMissilesLinker },
-		{ "MissS4", TXTFIELD_NAMETOWORD, 0, 68, &gpDataTables.pMissilesLinker },
-		{ "MissC", TXTFIELD_NAMETOWORD, 0, 70, &gpDataTables.pMissilesLinker },
-		{ "MissSQ", TXTFIELD_NAMETOWORD, 0, 72, &gpDataTables.pMissilesLinker },
-		{ "TreasureClass1", TXTFIELD_NAMETOWORD, 0, 134, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass2", TXTFIELD_NAMETOWORD, 0, 136, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass3", TXTFIELD_NAMETOWORD, 0, 138, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass4", TXTFIELD_NAMETOWORD, 0, 140, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass1(N)", TXTFIELD_NAMETOWORD, 0, 142, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass2(N)", TXTFIELD_NAMETOWORD, 0, 144, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass3(N)", TXTFIELD_NAMETOWORD, 0, 146, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass4(N)", TXTFIELD_NAMETOWORD, 0, 148, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass1(H)", TXTFIELD_NAMETOWORD, 0, 150, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass2(H)", TXTFIELD_NAMETOWORD, 0, 152, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass3(H)", TXTFIELD_NAMETOWORD, 0, 154, &gpDataTables.pTreasureClassExLinker },
-		{ "TreasureClass4(H)", TXTFIELD_NAMETOWORD, 0, 156, &gpDataTables.pTreasureClassExLinker },
+		{ "MissA1", TXTFIELD_NAMETOWORD, 0, 58, &sgptDataTables->pMissilesLinker },
+		{ "MissA2", TXTFIELD_NAMETOWORD, 0, 60, &sgptDataTables->pMissilesLinker },
+		{ "MissS1", TXTFIELD_NAMETOWORD, 0, 62, &sgptDataTables->pMissilesLinker },
+		{ "MissS2", TXTFIELD_NAMETOWORD, 0, 64, &sgptDataTables->pMissilesLinker },
+		{ "MissS3", TXTFIELD_NAMETOWORD, 0, 66, &sgptDataTables->pMissilesLinker },
+		{ "MissS4", TXTFIELD_NAMETOWORD, 0, 68, &sgptDataTables->pMissilesLinker },
+		{ "MissC", TXTFIELD_NAMETOWORD, 0, 70, &sgptDataTables->pMissilesLinker },
+		{ "MissSQ", TXTFIELD_NAMETOWORD, 0, 72, &sgptDataTables->pMissilesLinker },
+		{ "TreasureClass1", TXTFIELD_NAMETOWORD, 0, 134, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass2", TXTFIELD_NAMETOWORD, 0, 136, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass3", TXTFIELD_NAMETOWORD, 0, 138, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass4", TXTFIELD_NAMETOWORD, 0, 140, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass1(N)", TXTFIELD_NAMETOWORD, 0, 142, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass2(N)", TXTFIELD_NAMETOWORD, 0, 144, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass3(N)", TXTFIELD_NAMETOWORD, 0, 146, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass4(N)", TXTFIELD_NAMETOWORD, 0, 148, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass1(H)", TXTFIELD_NAMETOWORD, 0, 150, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass2(H)", TXTFIELD_NAMETOWORD, 0, 152, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass3(H)", TXTFIELD_NAMETOWORD, 0, 154, &sgptDataTables->pTreasureClassExLinker },
+		{ "TreasureClass4(H)", TXTFIELD_NAMETOWORD, 0, 156, &sgptDataTables->pTreasureClassExLinker },
 		{ "TCQuestId", TXTFIELD_BYTE, 0, 158, NULL },
 		{ "TCQuestCP", TXTFIELD_BYTE, 0, 159, NULL },
 		{ "threat", TXTFIELD_BYTE, 0, 78, NULL },
@@ -277,7 +277,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "Level", TXTFIELD_WORD, 0, 170, NULL },
 		{ "Level(N)", TXTFIELD_WORD, 0, 172, NULL },
 		{ "Level(H)", TXTFIELD_WORD, 0, 174, NULL },
-		{ "SkillDamage", TXTFIELD_NAMETOWORD, 0, 168, &gpDataTables.pSkillsLinker },
+		{ "SkillDamage", TXTFIELD_NAMETOWORD, 0, 168, &sgptDataTables->pSkillsLinker },
 		{ "NoShldBlock", TXTFIELD_BIT, 26, 12, NULL },
 		{ "Drain", TXTFIELD_BYTE, 0, 160, NULL },
 		{ "Drain(N)", TXTFIELD_BYTE, 0, 161, NULL },
@@ -325,8 +325,8 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "S1MaxD", TXTFIELD_WORD, 0, 248, NULL },
 		{ "S1MaxD(N)", TXTFIELD_WORD, 0, 250, NULL },
 		{ "S1MaxD(H)", TXTFIELD_WORD, 0, 252, NULL },
-		{ "El1Mode", TXTFIELD_CODETOBYTE, 0, 254, &gpDataTables.pMonModeLinker },
-		{ "El1Type", TXTFIELD_CODETOBYTE, 0, 257, &gpDataTables.pElemTypesLinker },
+		{ "El1Mode", TXTFIELD_CODETOBYTE, 0, 254, &sgptDataTables->pMonModeLinker },
+		{ "El1Type", TXTFIELD_CODETOBYTE, 0, 257, &sgptDataTables->pElemTypesLinker },
 		{ "El1Pct", TXTFIELD_BYTE, 0, 260, NULL },
 		{ "El1Pct(N)", TXTFIELD_BYTE, 0, 261, NULL },
 		{ "El1Pct(H)", TXTFIELD_BYTE, 0, 262, NULL },
@@ -339,8 +339,8 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "El1Dur", TXTFIELD_WORD, 0, 306, NULL },
 		{ "El1Dur(N)", TXTFIELD_WORD, 0, 308, NULL },
 		{ "El1Dur(H)", TXTFIELD_WORD, 0, 310, NULL },
-		{ "El2Mode", TXTFIELD_CODETOBYTE, 0, 255, &gpDataTables.pMonModeLinker },
-		{ "El2Type", TXTFIELD_CODETOBYTE, 0, 258, &gpDataTables.pElemTypesLinker },
+		{ "El2Mode", TXTFIELD_CODETOBYTE, 0, 255, &sgptDataTables->pMonModeLinker },
+		{ "El2Type", TXTFIELD_CODETOBYTE, 0, 258, &sgptDataTables->pElemTypesLinker },
 		{ "El2Pct", TXTFIELD_BYTE, 0, 263, NULL },
 		{ "El2Pct(N)", TXTFIELD_BYTE, 0, 264, NULL },
 		{ "El2Pct(H)", TXTFIELD_BYTE, 0, 265, NULL },
@@ -353,8 +353,8 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "El2Dur", TXTFIELD_WORD, 0, 312, NULL },
 		{ "El2Dur(N)", TXTFIELD_WORD, 0, 314, NULL },
 		{ "El2Dur(H)", TXTFIELD_WORD, 0, 316, NULL },
-		{ "El3Mode", TXTFIELD_CODETOBYTE, 0, 256, &gpDataTables.pMonModeLinker },
-		{ "El3Type", TXTFIELD_CODETOBYTE, 0, 259, &gpDataTables.pElemTypesLinker },
+		{ "El3Mode", TXTFIELD_CODETOBYTE, 0, 256, &sgptDataTables->pMonModeLinker },
+		{ "El3Type", TXTFIELD_CODETOBYTE, 0, 259, &sgptDataTables->pElemTypesLinker },
 		{ "El3Pct", TXTFIELD_BYTE, 0, 266, NULL },
 		{ "El3Pct(N)", TXTFIELD_BYTE, 0, 267, NULL },
 		{ "El3Pct(H)", TXTFIELD_BYTE, 0, 268, NULL },
@@ -389,28 +389,28 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "ResPo(N)", TXTFIELD_WORD, 0, 356, NULL },
 		{ "ResPo(H)", TXTFIELD_WORD, 0, 358, NULL },
 		{ "SendSkills", TXTFIELD_DWORD2, 0, 364, NULL },
-		{ "Skill1", TXTFIELD_NAMETOWORD, 0, 368, &gpDataTables.pSkillsLinker },
+		{ "Skill1", TXTFIELD_NAMETOWORD, 0, 368, &sgptDataTables->pSkillsLinker },
 		{ "Sk1mode", TXTFIELD_CUSTOMLINK, 0, 0, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk1lvl", TXTFIELD_BYTE, 0, 408, NULL },
-		{ "Skill2", TXTFIELD_NAMETOWORD, 0, 370, &gpDataTables.pSkillsLinker },
+		{ "Skill2", TXTFIELD_NAMETOWORD, 0, 370, &sgptDataTables->pSkillsLinker },
 		{ "Sk2mode", TXTFIELD_CUSTOMLINK, 0, 1, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk2lvl", TXTFIELD_BYTE, 0, 409, NULL },
-		{ "Skill3", TXTFIELD_NAMETOWORD, 0, 372, &gpDataTables.pSkillsLinker },
+		{ "Skill3", TXTFIELD_NAMETOWORD, 0, 372, &sgptDataTables->pSkillsLinker },
 		{ "Sk3mode", TXTFIELD_CUSTOMLINK, 0, 2, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk3lvl", TXTFIELD_BYTE, 0, 410, NULL },
-		{ "Skill4", TXTFIELD_NAMETOWORD, 0, 374, &gpDataTables.pSkillsLinker },
+		{ "Skill4", TXTFIELD_NAMETOWORD, 0, 374, &sgptDataTables->pSkillsLinker },
 		{ "Sk4mode", TXTFIELD_CUSTOMLINK, 0, 3, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk4lvl", TXTFIELD_BYTE, 0, 411, NULL },
-		{ "Skill5", TXTFIELD_NAMETOWORD, 0, 376, &gpDataTables.pSkillsLinker },
+		{ "Skill5", TXTFIELD_NAMETOWORD, 0, 376, &sgptDataTables->pSkillsLinker },
 		{ "Sk5mode", TXTFIELD_CUSTOMLINK, 0, 4, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk5lvl", TXTFIELD_BYTE, 0, 412, NULL },
-		{ "Skill6", TXTFIELD_NAMETOWORD, 0, 378, &gpDataTables.pSkillsLinker },
+		{ "Skill6", TXTFIELD_NAMETOWORD, 0, 378, &sgptDataTables->pSkillsLinker },
 		{ "Sk6mode", TXTFIELD_CUSTOMLINK, 0, 5, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk6lvl", TXTFIELD_BYTE, 0, 413, NULL },
-		{ "Skill7", TXTFIELD_NAMETOWORD, 0, 380, &gpDataTables.pSkillsLinker },
+		{ "Skill7", TXTFIELD_NAMETOWORD, 0, 380, &sgptDataTables->pSkillsLinker },
 		{ "Sk7mode", TXTFIELD_CUSTOMLINK, 0, 6, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk7lvl", TXTFIELD_BYTE, 0, 414, NULL },
-		{ "Skill8", TXTFIELD_NAMETOWORD, 0, 382, &gpDataTables.pSkillsLinker },
+		{ "Skill8", TXTFIELD_NAMETOWORD, 0, 382, &sgptDataTables->pSkillsLinker },
 		{ "Sk8mode", TXTFIELD_CUSTOMLINK, 0, 7, DATATBLS_MonStatsSkillModeLinker },
 		{ "Sk8lvl", TXTFIELD_BYTE, 0, 415, NULL },
 		{ "DamageRegen", TXTFIELD_DWORD, 0, 416, NULL },
@@ -421,12 +421,12 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonStatsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonStatsTxt = (D2MonStatsTxt*)DATATBLS_CompileTxt(pMemPool, "monstats", pTbl, &gpDataTables.nMonStatsTxtRecordCount, sizeof(D2MonStatsTxt));
+	sgptDataTables->pMonStatsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonStatsTxt = (D2MonStatsTxt*)DATATBLS_CompileTxt(pMemPool, "monstats", pTbl, &sgptDataTables->nMonStatsTxtRecordCount, sizeof(D2MonStatsTxt));
 
-	D2_ASSERT(gpDataTables.nMonStatsTxtRecordCount < SHRT_MAX);
+	D2_ASSERT(sgptDataTables->nMonStatsTxtRecordCount < SHRT_MAX);
 
-	if (gpDataTables.nMonStatsTxtRecordCount > 0)
+	if (sgptDataTables->nMonStatsTxtRecordCount > 0)
 	{
 		nCounter = 0;
 		do
@@ -434,30 +434,30 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			bFoundInChain = false;
 
 			nChainId = 0;
-			nId = gpDataTables.pMonStatsTxt[nCounter].nBaseId;
+			nId = sgptDataTables->pMonStatsTxt[nCounter].nBaseId;
 
 			do
 			{
-				if (gpDataTables.pMonStatsTxt[nId].nBaseId != gpDataTables.pMonStatsTxt[nCounter].nBaseId && gpDataTables.bCompileTxt)
+				if (sgptDataTables->pMonStatsTxt[nId].nBaseId != sgptDataTables->pMonStatsTxt[nCounter].nBaseId && sgptDataTables->bCompileTxt)
 				{
-					szMonsterName = FOG_10255(gpDataTables.pMonStatsLinker, gpDataTables.pMonStatsTxt[nId].nId, 0);
+					szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nId].nId, 0);
 					FOG_WriteToLogFile("BaseId/NextInClass chain -- unexpected baseid for monster '%s' (%d)", szMonsterName);
 				}
 
 				if (nId == nCounter)
 				{
 					bFoundInChain = true;
-					gpDataTables.pMonStatsTxt[nCounter].nChainId = nChainId;
+					sgptDataTables->pMonStatsTxt[nCounter].nChainId = nChainId;
 				}
 
-				nNextInClass = gpDataTables.pMonStatsTxt[nId].nNextInClass;
+				nNextInClass = sgptDataTables->pMonStatsTxt[nId].nNextInClass;
 
 				++nChainId;
 				if (nId == nNextInClass)
 				{
-					if (gpDataTables.bCompileTxt)
+					if (sgptDataTables->bCompileTxt)
 					{
-						szMonsterName = FOG_10255(gpDataTables.pMonStatsLinker, gpDataTables.pMonStatsTxt[nId].nId, 0);
+						szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nId].nId, 0);
 						FOG_WriteToLogFile("BaseId/NextInClass chain -- monster '%s' (%d) pointing to itself", szMonsterName);
 					}
 					break;
@@ -467,9 +467,9 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 
 				if (nChainId > 255)
 				{
-					if (gpDataTables.bCompileTxt)
+					if (sgptDataTables->bCompileTxt)
 					{
-						szMonsterName = FOG_10255(gpDataTables.pMonStatsLinker, gpDataTables.pMonStatsTxt[nNextInClass].nId, 0);
+						szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nNextInClass].nId, 0);
 						FOG_WriteToLogFile("BaseId/NextInClass chain exceeded 255 entries at monster '%s' (%d)", szMonsterName);
 					}
 					break;
@@ -477,54 +477,54 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			}
 			while (nNextInClass >= 0);
 
-			if (!bFoundInChain && gpDataTables.bCompileTxt)
+			if (!bFoundInChain && sgptDataTables->bCompileTxt)
 			{
-				szMonsterName = FOG_10255(gpDataTables.pMonStatsLinker, gpDataTables.pMonStatsTxt[nCounter].nId, 0);
+				szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nCounter].nId, 0);
 				FOG_WriteToLogFile("BaseId/NextInClass monster '%s' (%d) not found in chain", szMonsterName);
 			}
-			gpDataTables.pMonStatsTxt[nCounter].nMaxChainId = nChainId;
+			sgptDataTables->pMonStatsTxt[nCounter].nMaxChainId = nChainId;
 
 			++nCounter;
 		}
-		while (nCounter < gpDataTables.nMonStatsTxtRecordCount);
+		while (nCounter < sgptDataTables->nMonStatsTxtRecordCount);
 	}
 
 
 	nCounter = 0;
-	while (nCounter < gpDataTables.nMonStatsTxtRecordCount)
+	while (nCounter < sgptDataTables->nMonStatsTxtRecordCount)
 	{
-		nBaseId = gpDataTables.pMonStatsTxt[nCounter].nBaseId;
-		if (nBaseId < 0 || nBaseId >= gpDataTables.nMonStatsTxtRecordCount)
+		nBaseId = sgptDataTables->pMonStatsTxt[nCounter].nBaseId;
+		if (nBaseId < 0 || nBaseId >= sgptDataTables->nMonStatsTxtRecordCount)
 		{
-			gpDataTables.pMonStatsTxt[nCounter].nBaseId = nCounter;
+			sgptDataTables->pMonStatsTxt[nCounter].nBaseId = nCounter;
 			nBaseId = nCounter;
 		}
 
 		nVelocity = *((DWORD*)DATATBLS_GetAnimDataRecord(0, nBaseId, MONMODE_WALK, 1, 0) + 3);
 		if (nBaseId != nCounter)
 		{
-			if (gpDataTables.pMonStatsTxt[nBaseId].nVelocity > 0)
+			if (sgptDataTables->pMonStatsTxt[nBaseId].nVelocity > 0)
 			{
-				nVelocity = nVelocity * gpDataTables.pMonStatsTxt[nCounter].nVelocity / (unsigned int)gpDataTables.pMonStatsTxt[nBaseId].nVelocity;
+				nVelocity = nVelocity * sgptDataTables->pMonStatsTxt[nCounter].nVelocity / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nVelocity;
 			}
 		}
 
 		if (nVelocity <= 0)
 		{
-			gpDataTables.pMonStatsTxt[nCounter].unk0x36 = 0;
+			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = 0;
 		}
 		else if (nVelocity >= 32767)
 		{
-			gpDataTables.pMonStatsTxt[nCounter].unk0x36 = 32767;
+			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = 32767;
 		}
 		else
 		{
-			gpDataTables.pMonStatsTxt[nCounter].unk0x36 = nVelocity;
+			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = nVelocity;
 		}
 
 		if (nCounter < 410)//Before Expansion
 		{
-			v21 = gpDataTables.pMonStatsTxt[nBaseId].unk0x36;
+			v21 = sgptDataTables->pMonStatsTxt[nBaseId].unk0x36;
 			nRun = ((signed int)v21 - HIDWORD(v21)) >> 1;
 		}
 		else
@@ -534,9 +534,9 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 
 		if (nBaseId != nCounter)
 		{
-			if (gpDataTables.pMonStatsTxt[nBaseId].nRun > 0)
+			if (sgptDataTables->pMonStatsTxt[nBaseId].nRun > 0)
 			{
-				nRun = nRun * gpDataTables.pMonStatsTxt[nCounter].nRun / (unsigned int)gpDataTables.pMonStatsTxt[nBaseId].nRun;
+				nRun = nRun * sgptDataTables->pMonStatsTxt[nCounter].nRun / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nRun;
 			}
 		}
 
@@ -549,7 +549,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			nRun = 32767;
 		}
 
-		gpDataTables.pMonStatsTxt[nCounter].unk0x38 = nRun;
+		sgptDataTables->pMonStatsTxt[nCounter].unk0x38 = nRun;
 
 		++nCounter;
 	}
@@ -565,14 +565,14 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 	pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
 	if (pMonStatsTxtRecord)
 	{
-		if (nLevel > gpDataTables.nMonLvlTxtRecordCount - 1)
+		if (nLevel > sgptDataTables->nMonLvlTxtRecordCount - 1)
 		{
-			nLevel = gpDataTables.nMonLvlTxtRecordCount - 1;
+			nLevel = sgptDataTables->nMonLvlTxtRecordCount - 1;
 		}
 
-		if (nLevel >= 0 && nLevel < gpDataTables.nMonLvlTxtRecordCount)
+		if (nLevel >= 0 && nLevel < sgptDataTables->nMonLvlTxtRecordCount)
 		{
-			pMonLvlTxtRecord = &gpDataTables.pMonLvlTxt[nLevel];
+			pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
 			if (pMonLvlTxtRecord)
 			{
 				if (nDifficulty < 0)
@@ -733,7 +733,7 @@ void __stdcall DATATBLS_SetVelocityInMonStatsTxtRecord(int nMonsterId, short nVe
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 
-	D2_ASSERT(gpDataTables.pMonStatsTxt);
+	D2_ASSERT(sgptDataTables->pMonStatsTxt);
 
 	pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
 	pMonStatsTxtRecord->nVelocity = nVelocity;
@@ -742,7 +742,7 @@ void __stdcall DATATBLS_SetVelocityInMonStatsTxtRecord(int nMonsterId, short nVe
 //D2Common.0x6FD68A00
 void __stdcall DATATBLS_ResetGlobalDefaultUnicodeString()
 {
-	gpDataTables.wszDefault = 0;
+	sgptDataTables->wszDefault = 0;
 }
 
 //D2Common.0x6FD68A10 (#10651)
@@ -751,20 +751,20 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
 	wchar_t* pString = NULL;
 	int nRand = 0;
 
-	if (pUnit && gpDataTables.nUniqueTitleTxtRecordCount > 0)
+	if (pUnit && sgptDataTables->nUniqueTitleTxtRecordCount > 0)
 	{
-		if ((gpDataTables.nUniqueTitleTxtRecordCount - 1) & gpDataTables.nUniqueTitleTxtRecordCount)
+		if ((sgptDataTables->nUniqueTitleTxtRecordCount - 1) & sgptDataTables->nUniqueTitleTxtRecordCount)
 		{
-			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % gpDataTables.nUniqueTitleTxtRecordCount;
+			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % sgptDataTables->nUniqueTitleTxtRecordCount;
 		}
 		else
 		{
-			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (gpDataTables.nUniqueTitleTxtRecordCount - 1);
+			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (sgptDataTables->nUniqueTitleTxtRecordCount - 1);
 		}
 
-		if (gpDataTables.pUniqueTitleTxt[nRand].wStringId)
+		if (sgptDataTables->pUniqueTitleTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(gpDataTables.pUniqueTitleTxt[nRand].wStringId);
+			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueTitleTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -772,7 +772,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
 		}
 	}
 
-	return &gpDataTables.wszDefault;
+	return &sgptDataTables->wszDefault;
 }
 
 //D2Common.0x6FD68A80 (#10652)
@@ -781,20 +781,20 @@ wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
 	wchar_t* pString = NULL;
 	int nRand = 0;
 
-	if (pUnit && gpDataTables.nUniquePrefixTxtRecordCount > 0)
+	if (pUnit && sgptDataTables->nUniquePrefixTxtRecordCount > 0)
 	{
-		if ((gpDataTables.nUniquePrefixTxtRecordCount - 1) & gpDataTables.nUniquePrefixTxtRecordCount)
+		if ((sgptDataTables->nUniquePrefixTxtRecordCount - 1) & sgptDataTables->nUniquePrefixTxtRecordCount)
 		{
-			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % gpDataTables.nUniquePrefixTxtRecordCount;
+			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % sgptDataTables->nUniquePrefixTxtRecordCount;
 		}
 		else
 		{
-			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (gpDataTables.nUniquePrefixTxtRecordCount - 1);
+			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (sgptDataTables->nUniquePrefixTxtRecordCount - 1);
 		}
 
-		if (gpDataTables.pUniquePrefixTxt[nRand].wStringId)
+		if (sgptDataTables->pUniquePrefixTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(gpDataTables.pUniquePrefixTxt[nRand].wStringId);
+			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniquePrefixTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -802,7 +802,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
 		}
 	}
 
-	return &gpDataTables.wszDefault;
+	return &sgptDataTables->wszDefault;
 }
 
 //D2Common.0x6FD68AF0 (#10653)
@@ -811,20 +811,20 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
 	wchar_t* pString = NULL;
 	int nRand = 0;
 
-	if (pUnit && gpDataTables.nUniqueSuffixTxtRecordCount > 0)
+	if (pUnit && sgptDataTables->nUniqueSuffixTxtRecordCount > 0)
 	{
-		if ((gpDataTables.nUniqueSuffixTxtRecordCount - 1) & gpDataTables.nUniqueSuffixTxtRecordCount)
+		if ((sgptDataTables->nUniqueSuffixTxtRecordCount - 1) & sgptDataTables->nUniqueSuffixTxtRecordCount)
 		{
-			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % gpDataTables.nUniqueSuffixTxtRecordCount;
+			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % sgptDataTables->nUniqueSuffixTxtRecordCount;
 		}
 		else
 		{
-			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (gpDataTables.nUniqueSuffixTxtRecordCount - 1);
+			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (sgptDataTables->nUniqueSuffixTxtRecordCount - 1);
 		}
 
-		if (gpDataTables.pUniqueSuffixTxt[nRand].wStringId)
+		if (sgptDataTables->pUniqueSuffixTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(gpDataTables.pUniqueSuffixTxt[nRand].wStringId);
+			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueSuffixTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -832,7 +832,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
 		}
 	}
 
-	return &gpDataTables.wszDefault;
+	return &sgptDataTables->wszDefault;
 }
 
 //D2Common.0x6FD68B60 (#10654)
@@ -841,20 +841,20 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 	wchar_t* pString = NULL;
 	int nRand = 0;
 
-	if (pUnit && gpDataTables.nUniqueAppellationTxtRecordCount > 0)
+	if (pUnit && sgptDataTables->nUniqueAppellationTxtRecordCount > 0)
 	{
-		if ((gpDataTables.nUniqueAppellationTxtRecordCount - 1) & gpDataTables.nUniqueAppellationTxtRecordCount)
+		if ((sgptDataTables->nUniqueAppellationTxtRecordCount - 1) & sgptDataTables->nUniqueAppellationTxtRecordCount)
 		{
-			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % gpDataTables.nUniqueAppellationTxtRecordCount;
+			nRand = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % sgptDataTables->nUniqueAppellationTxtRecordCount;
 		}
 		else
 		{
-			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (gpDataTables.nUniqueAppellationTxtRecordCount - 1);
+			nRand = SEED_RollRandomNumber(&pUnit->pSeed) & (sgptDataTables->nUniqueAppellationTxtRecordCount - 1);
 		}
 
-		if (gpDataTables.pUniqueAppellationTxt[nRand].wStringId)
+		if (sgptDataTables->pUniqueAppellationTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(gpDataTables.pUniqueAppellationTxt[nRand].wStringId);
+			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueAppellationTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -862,7 +862,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 		}
 	}
 
-	return &gpDataTables.wszDefault;
+	return &sgptDataTables->wszDefault;
 }
 
 //D2Common.0x6FD68BD0
@@ -962,10 +962,10 @@ int __fastcall DATATBLS_CalculatePercentage(signed int nValue1, signed int nValu
 //D2Common.0x6FD68DC0 (#10658)
 D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText)
 {
-	int nId = FOG_GetRowFromTxt(gpDataTables.pTreasureClassExLinker, szText, 0);
+	int nId = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szText, 0);
 	if (nId >= 0)
 	{
-		return &gpDataTables.pTreasureClassEx[nId];
+		return &sgptDataTables->pTreasureClassEx[nId];
 	}
 
 	return NULL;
@@ -977,9 +977,9 @@ D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(WORD 
 	D2TCExShortStrc* pTCExRecord = NULL;
 	D2TCExShortStrc* pNext = NULL;
 
-	if (wTCId && wTCId < gpDataTables.nTreasureClassEx)
+	if (wTCId && wTCId < sgptDataTables->nTreasureClassEx)
 	{
-		pTCExRecord = &gpDataTables.pTreasureClassEx[wTCId];
+		pTCExRecord = &sgptDataTables->pTreasureClassEx[wTCId];
 		if (nLvl > 0 && pTCExRecord->nGroup)
 		{
 			pNext = pTCExRecord + 1;
@@ -1035,11 +1035,11 @@ D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromActAndDifficulty
 		{
 			nIndex = 2;
 		}
-		return gpDataTables.pChestTreasureClasses[nIndex + 3 * (nAct + 5 * nDifficulty)];
+		return sgptDataTables->pChestTreasureClasses[nIndex + 3 * (nAct + 5 * nDifficulty)];
 	}
 	else
 	{
-		return gpDataTables.pChestTreasureClasses[3 * (nAct + 5 * nDifficulty)];
+		return sgptDataTables->pChestTreasureClasses[3 * (nAct + 5 * nDifficulty)];
 	}
 }
 
@@ -1223,21 +1223,21 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 			break;
 		}
 
-		FOG_10216_AddRecordToLinkingTable(gpDataTables.pTreasureClassExLinker, pTreasureClassExTxt[i].szTreasureClass);
+		FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, pTreasureClassExTxt[i].szTreasureClass);
 
-		if (!(gpDataTables.nTreasureClassEx % 16))
+		if (!(sgptDataTables->nTreasureClassEx % 16))
 		{
-			gpDataTables.pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, gpDataTables.pTreasureClassEx, sizeof(D2TCExShortStrc) * (gpDataTables.nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 		}
-		memset(&gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx], 0x00, sizeof(gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx]));
+		memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
-		pTCExTxtRecord = &gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx];
-		++gpDataTables.nTreasureClassEx;
+		pTCExTxtRecord = &sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx];
+		++sgptDataTables->nTreasureClassEx;
 		if (pTCExTxtRecord)
 		{
 			if (pTreasureClassExTxt[i].nGroup != 0)
 			{
-				pTCExTxtRecord->nGroup = gpDataTables.nTreasureClassItemTypes + pTreasureClassExTxt[i].nGroup;
+				pTCExTxtRecord->nGroup = sgptDataTables->nTreasureClassItemTypes + pTreasureClassExTxt[i].nGroup;
 			}
 
 			pTCExTxtRecord->nLevel = pTreasureClassExTxt[i].nLevel;
@@ -1319,7 +1319,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 					}
 					else
 					{
-						nTxtRow = FOG_GetRowFromTxt(gpDataTables.pTreasureClassExLinker, szText, 0);
+						nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szText, 0);
 						if (nTxtRow > 0)
 						{
 							nTypes = pTCExTxtRecord->nTypes;
@@ -1331,15 +1331,15 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 							pTCExInfo->nProb = pTCExTxtRecord->nProb;
 							pTCExInfo->nItemId = nTxtRow;
 							pTCExInfo->nFlags |= 4;
-							if (!gpDataTables.pTreasureClassEx[nTxtRow].nClassic)
+							if (!sgptDataTables->pTreasureClassEx[nTxtRow].nClassic)
 							{
 								pTCExInfo->nFlags |= 0x10;
 							}
 
-							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], gpDataTables.pTreasureClassEx[nTxtRow].nClassic == 0);
+							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], sgptDataTables->pTreasureClassEx[nTxtRow].nClassic == 0);
 							DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
 						}
-						else if (gpDataTables.pUniqueItemsLinker && (nTxtRow = FOG_GetRowFromTxt(gpDataTables.pUniqueItemsLinker, szText, 0)) > 0)
+						else if (sgptDataTables->pUniqueItemsLinker && (nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pUniqueItemsLinker, szText, 0)) > 0)
 						{
 							nTypes = pTCExTxtRecord->nTypes;
 							DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
@@ -1348,7 +1348,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 
 							pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
 							pTCExInfo->nProb = pTCExTxtRecord->nProb;
-							DATATBLS_GetItemRecordFromItemCode(gpDataTables.pUniqueItemsTxt[nTxtRow].dwBaseItemCode, &nItemId);
+							DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pUniqueItemsTxt[nTxtRow].dwBaseItemCode, &nItemId);
 							pTCExInfo->nFlags |= 0x11;
 							pTCExInfo->nItemId = nItemId;
 							pTCExInfo->nTxtRow = nTxtRow;
@@ -1356,7 +1356,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], TRUE);
 							DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
 						}
-						else if (gpDataTables.pSetItemsLinker && (nTxtRow = FOG_GetRowFromTxt(gpDataTables.pSetItemsLinker, szText, 0)) >= 0)
+						else if (sgptDataTables->pSetItemsLinker && (nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pSetItemsLinker, szText, 0)) >= 0)
 						{
 							nTypes = pTCExTxtRecord->nTypes;
 							DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
@@ -1365,7 +1365,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 
 							pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
 							pTCExInfo->nProb = pTCExTxtRecord->nProb;
-							DATATBLS_GetItemRecordFromItemCode(gpDataTables.pSetItemsTxt[nTxtRow].szItemCode, &nItemId);
+							DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pSetItemsTxt[nTxtRow].szItemCode, &nItemId);
 							pTCExInfo->nFlags |= 0x12;
 							pTCExInfo->nItemId = nItemId;
 							pTCExInfo->nTxtRow = nTxtRow;
@@ -1405,30 +1405,30 @@ void __fastcall DATATBLS_LoadMonItemPercentTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt = (D2MonItemPercentTxt*)DATATBLS_CompileTxt(pMemPool, "monitempercent", pTbl, &gpDataTables.pMonItemPercentDataTables.nMonItemPercentTxtRecordCount, sizeof(D2MonItemPercentTxt));
+	sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt = (D2MonItemPercentTxt*)DATATBLS_CompileTxt(pMemPool, "monitempercent", pTbl, &sgptDataTables->pMonItemPercentDataTables.nMonItemPercentTxtRecordCount, sizeof(D2MonItemPercentTxt));
 }
 
 //D2Common.0x6FD69C40
 void __fastcall DATATBLS_UnloadMonItemPercentTxt()
 {
-	DATATBLS_UnloadBin(gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt);
-	gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt = NULL;
+	DATATBLS_UnloadBin(sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt);
+	sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt = NULL;
 }
 
 //D2Common.0x6FD69C50 (#10662)
 D2MonItemPercentDataTbl* __fastcall DATATBLS_GetMonItemPercentDataTables()
 {
-	return &gpDataTables.pMonItemPercentDataTables;
+	return &sgptDataTables->pMonItemPercentDataTables;
 }
 
 //D2Common.0x6FD69C60 (#10663)
 D2MonItemPercentTxt* __stdcall DATATBLS_GetMonItemPercentTxtRecord(int nId)
 {
-	if (nId >= 0 && nId < gpDataTables.pMonItemPercentDataTables.nMonItemPercentTxtRecordCount)
+	if (nId >= 0 && nId < sgptDataTables->pMonItemPercentDataTables.nMonItemPercentTxtRecordCount)
 	{
-		D2_ASSERT(gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt);
-		D2_ASSERT(&gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt[nId]);
-		return &gpDataTables.pMonItemPercentDataTables.pMonItemPercentTxt[nId];
+		D2_ASSERT(sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt);
+		D2_ASSERT(&sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt[nId]);
+		return &sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt[nId];
 	}
 
 	return NULL;
@@ -1439,14 +1439,14 @@ void __fastcall DATATBLS_LoadMonUModTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "uniquemod", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonUModLinker },
+		{ "uniquemod", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonUModLinker },
 		{ "version", TXTFIELD_WORD, 0, 4, NULL },
 		{ "enabled", TXTFIELD_BYTE, 0, 6, NULL },
 		{ "xfer", TXTFIELD_BYTE, 0, 7, NULL },
 		{ "champion", TXTFIELD_BYTE, 0, 8, NULL },
 		{ "fpick", TXTFIELD_BYTE, 0, 9, NULL },
-		{ "exclude1", TXTFIELD_NAMETOWORD, 0, 10, &gpDataTables.pMonTypeLinker },
-		{ "exclude2", TXTFIELD_NAMETOWORD, 0, 12, &gpDataTables.pMonTypeLinker },
+		{ "exclude1", TXTFIELD_NAMETOWORD, 0, 10, &sgptDataTables->pMonTypeLinker },
+		{ "exclude2", TXTFIELD_NAMETOWORD, 0, 12, &sgptDataTables->pMonTypeLinker },
 		{ "cpick", TXTFIELD_WORD, 0, 14, NULL },
 		{ "cpick (N)", TXTFIELD_WORD, 0, 16, NULL },
 		{ "cpick (H)", TXTFIELD_WORD, 0, 18, NULL },
@@ -1457,13 +1457,13 @@ void __fastcall DATATBLS_LoadMonUModTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonUModLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonUModTxt = (D2MonUModTxt*)DATATBLS_CompileTxt(pMemPool, "monumod", pTbl, &gpDataTables.nMonUModTxtRecordCount, sizeof(D2MonUModTxt));
+	sgptDataTables->pMonUModLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonUModTxt = (D2MonUModTxt*)DATATBLS_CompileTxt(pMemPool, "monumod", pTbl, &sgptDataTables->nMonUModTxtRecordCount, sizeof(D2MonUModTxt));
 
-	if (gpDataTables.nMonUModTxtRecordCount > 256)
+	if (sgptDataTables->nMonUModTxtRecordCount > 256)
 	{
 		FOG_WriteToLogFile("monumod.txt exceeded %d entries", 256);
-		gpDataTables.nMonUModTxtRecordCount = 256;
+		sgptDataTables->nMonUModTxtRecordCount = 256;
 	}
 }
 
@@ -1473,11 +1473,11 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 	int nId = 0;
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Superunique", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pSuperUniquesLinker },
+		{ "Superunique", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pSuperUniquesLinker },
 		{ "Name", TXTFIELD_KEYTOWORD, 0, TXTFIELD_DWORD, DATATBLS_GetStringIdFromReferenceString },
-		{ "Class", TXTFIELD_NAMETODWORD, 0, 4, &gpDataTables.pMonStatsLinker },
+		{ "Class", TXTFIELD_NAMETODWORD, 0, 4, &sgptDataTables->pMonStatsLinker },
 		{ "hcIdx", TXTFIELD_DWORD, 0, 8, NULL },
-		{ "MonSound", TXTFIELD_NAMETODWORD, 0, 24, &gpDataTables.pMonSoundsLinker },
+		{ "MonSound", TXTFIELD_NAMETODWORD, 0, 24, &sgptDataTables->pMonSoundsLinker },
 		{ "Mod1", TXTFIELD_DWORD, 0, 12, NULL },
 		{ "Mod2", TXTFIELD_DWORD, 0, 16, NULL },
 		{ "Mod3", TXTFIELD_DWORD, 0, 20, NULL },
@@ -1490,45 +1490,45 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 		{ "Utrans", TXTFIELD_BYTE, 0, 40, NULL },
 		{ "Utrans(N)", TXTFIELD_BYTE, 0, 41, NULL },
 		{ "Utrans(H)", TXTFIELD_BYTE, 0, 42, NULL },
-		{ "TC", TXTFIELD_NAMETOWORD, 0, 44, &gpDataTables.pTreasureClassExLinker },
-		{ "TC(N)", TXTFIELD_NAMETOWORD, 0, 46, &gpDataTables.pTreasureClassExLinker },
-		{ "TC(H)", TXTFIELD_NAMETOWORD, 0, 48, &gpDataTables.pTreasureClassExLinker },
+		{ "TC", TXTFIELD_NAMETOWORD, 0, 44, &sgptDataTables->pTreasureClassExLinker },
+		{ "TC(N)", TXTFIELD_NAMETOWORD, 0, 46, &sgptDataTables->pTreasureClassExLinker },
+		{ "TC(H)", TXTFIELD_NAMETOWORD, 0, 48, &sgptDataTables->pTreasureClassExLinker },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pSuperUniquesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pSuperUniquesTxt = (D2SuperUniquesTxt*)DATATBLS_CompileTxt(pMemPool, "superuniques", pTbl, &gpDataTables.nSuperUniquesTxtRecordCount, sizeof(D2SuperUniquesTxt));
+	sgptDataTables->pSuperUniquesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pSuperUniquesTxt = (D2SuperUniquesTxt*)DATATBLS_CompileTxt(pMemPool, "superuniques", pTbl, &sgptDataTables->nSuperUniquesTxtRecordCount, sizeof(D2SuperUniquesTxt));
 
-	if (gpDataTables.nSuperUniquesTxtRecordCount >= 512)
+	if (sgptDataTables->nSuperUniquesTxtRecordCount >= 512)
 	{
-		if (gpDataTables.bCompileTxt)
+		if (sgptDataTables->bCompileTxt)
 		{
 			FOG_WriteToLogFile("Cut off superuniques at %d entries", 512);
 		}
-		gpDataTables.nSuperUniquesTxtRecordCount = 512;
+		sgptDataTables->nSuperUniquesTxtRecordCount = 512;
 	}
 
-	memset(gpDataTables.nSuperUniqueIds, -1, sizeof(gpDataTables.nSuperUniqueIds));
+	memset(sgptDataTables->nSuperUniqueIds, -1, sizeof(sgptDataTables->nSuperUniqueIds));
 
-	for (int i = 0; i < gpDataTables.nSuperUniquesTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nSuperUniquesTxtRecordCount; ++i)
 	{
-		nId = gpDataTables.pSuperUniquesTxt[i].dwHcIdx;
-		if (nId < 0 || nId >= ARRAY_SIZE(gpDataTables.nSuperUniqueIds))
+		nId = sgptDataTables->pSuperUniquesTxt[i].dwHcIdx;
+		if (nId < 0 || nId >= ARRAY_SIZE(sgptDataTables->nSuperUniqueIds))
 		{
-			if (gpDataTables.bCompileTxt)
+			if (sgptDataTables->bCompileTxt)
 			{
 				FOG_WriteToLogFile("Invalid hcIdx (%d) -- value must be between 0 and %d.", nId, 65);
 			}
 		}
 		else
 		{
-			if (gpDataTables.nSuperUniqueIds[nId] == -1)
+			if (sgptDataTables->nSuperUniqueIds[nId] == -1)
 			{
-				gpDataTables.nSuperUniqueIds[nId] = i;
+				sgptDataTables->nSuperUniqueIds[nId] = i;
 			}
 			else
 			{
-				if (gpDataTables.bCompileTxt)
+				if (sgptDataTables->bCompileTxt)
 				{
 					FOG_WriteToLogFile("Duplicate hcIdx (%d) -- index must be unique.", nId);
 				}
@@ -1536,24 +1536,24 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 		}
 	}
 
-	for (int i = 0; i < ARRAY_SIZE(gpDataTables.nSuperUniqueIds); ++i)
+	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->nSuperUniqueIds); ++i)
 	{
-		if (gpDataTables.nSuperUniqueIds[i] == -1 && gpDataTables.bCompileTxt)
+		if (sgptDataTables->nSuperUniqueIds[i] == -1 && sgptDataTables->bCompileTxt)
 		{
 			FOG_WriteToLogFile("Missing hcIdx (%d) -- index incomplete", i);
 		}
 
 #define SUPERUNIQUE_NONE -1
-		D2_ASSERT(gpDataTables.nSuperUniqueIds[i] != SUPERUNIQUE_NONE);
+		D2_ASSERT(sgptDataTables->nSuperUniqueIds[i] != SUPERUNIQUE_NONE);
 	}
 }
 
 //D2Common.0x6FD6A440 (#10668)
 D2SuperUniquesTxt* __stdcall DATATBLS_GetSuperUniquesTxtRecord(int nSuperUniqueId)
 {
-	if (nSuperUniqueId >= 0 && nSuperUniqueId < gpDataTables.nSuperUniquesTxtRecordCount)
+	if (nSuperUniqueId >= 0 && nSuperUniqueId < sgptDataTables->nSuperUniquesTxtRecordCount)
 	{
-		return &gpDataTables.pSuperUniquesTxt[nSuperUniqueId];
+		return &sgptDataTables->pSuperUniquesTxt[nSuperUniqueId];
 	}
 
 	return NULL;
@@ -1562,7 +1562,7 @@ D2SuperUniquesTxt* __stdcall DATATBLS_GetSuperUniquesTxtRecord(int nSuperUniqueI
 //D2Common.0x6FD6A470 (#11257)
 int __fastcall DATATBLS_GetSuperUniquesTxtRecordCount()
 {
-	return gpDataTables.nSuperUniquesTxtRecordCount;
+	return sgptDataTables->nSuperUniquesTxtRecordCount;
 }
 
 //D2Common.0x6FD6A480
@@ -1600,39 +1600,39 @@ void __fastcall DATATBLS_LoadHirelingTxt(void* pMemPool)
 		{ "dmg/lvl", TXTFIELD_DWORD, 0, 88, NULL },
 		{ "resist", TXTFIELD_DWORD, 0, 92, NULL },
 		{ "resist/lvl", TXTFIELD_DWORD, 0, 96, NULL },
-		{ "hiredesc", TXTFIELD_CODETOBYTE, 0, 210, &gpDataTables.pHireDescLinker },
+		{ "hiredesc", TXTFIELD_CODETOBYTE, 0, 210, &sgptDataTables->pHireDescLinker },
 		{ "defaultchance", TXTFIELD_DWORD, 0, 100, NULL },
-		{ "skill1", TXTFIELD_NAMETODWORD, 0, 120, &gpDataTables.pSkillsLinker },
+		{ "skill1", TXTFIELD_NAMETODWORD, 0, 120, &sgptDataTables->pSkillsLinker },
 		{ "mode1", TXTFIELD_BYTE, 0, 192, NULL },
 		{ "chance1", TXTFIELD_DWORD, 0, 144, NULL },
 		{ "chanceperlvl1", TXTFIELD_DWORD, 0, 168, NULL },
 		{ "level1", TXTFIELD_BYTE, 0, 198, NULL },
 		{ "lvlperlvl1", TXTFIELD_BYTE, 0, 204, NULL },
-		{ "skill2", TXTFIELD_NAMETODWORD, 0, 124, &gpDataTables.pSkillsLinker },
+		{ "skill2", TXTFIELD_NAMETODWORD, 0, 124, &sgptDataTables->pSkillsLinker },
 		{ "mode2", TXTFIELD_BYTE, 0, 193, NULL },
 		{ "chance2", TXTFIELD_DWORD, 0, 148, NULL },
 		{ "chanceperlvl2", TXTFIELD_DWORD, 0, 172, NULL },
 		{ "level2", TXTFIELD_BYTE, 0, 199, NULL },
 		{ "lvlperlvl2", TXTFIELD_BYTE, 0, 205, NULL },
-		{ "skill3", TXTFIELD_NAMETODWORD, 0, 128, &gpDataTables.pSkillsLinker },
+		{ "skill3", TXTFIELD_NAMETODWORD, 0, 128, &sgptDataTables->pSkillsLinker },
 		{ "mode3", TXTFIELD_BYTE, 0, 194, NULL },
 		{ "chance3", TXTFIELD_DWORD, 0, 152, NULL },
 		{ "chanceperlvl3", TXTFIELD_DWORD, 0, 176, NULL },
 		{ "level3", TXTFIELD_BYTE, 0, 200, NULL },
 		{ "lvlperlvl3", TXTFIELD_BYTE, 0, 206, NULL },
-		{ "skill4", TXTFIELD_NAMETODWORD, 0, 132, &gpDataTables.pSkillsLinker },
+		{ "skill4", TXTFIELD_NAMETODWORD, 0, 132, &sgptDataTables->pSkillsLinker },
 		{ "mode4", TXTFIELD_BYTE, 0, 195, NULL },
 		{ "chance4", TXTFIELD_DWORD, 0, 156, NULL },
 		{ "chanceperlvl4", TXTFIELD_DWORD, 0, 180, NULL },
 		{ "level4", TXTFIELD_BYTE, 0, 201, NULL },
 		{ "lvlperlvl4", TXTFIELD_BYTE, 0, 207, NULL },
-		{ "skill5", TXTFIELD_NAMETODWORD, 0, 136, &gpDataTables.pSkillsLinker },
+		{ "skill5", TXTFIELD_NAMETODWORD, 0, 136, &sgptDataTables->pSkillsLinker },
 		{ "mode5", TXTFIELD_BYTE, 0, 196, NULL },
 		{ "chance5", TXTFIELD_DWORD, 0, 160, NULL },
 		{ "chanceperlvl5", TXTFIELD_DWORD, 0, 184, NULL },
 		{ "level5", TXTFIELD_BYTE, 0, 202, NULL },
 		{ "lvlperlvl5", TXTFIELD_BYTE, 0, 208, NULL },
-		{ "skill6", TXTFIELD_NAMETODWORD, 0, 140, &gpDataTables.pSkillsLinker },
+		{ "skill6", TXTFIELD_NAMETODWORD, 0, 140, &sgptDataTables->pSkillsLinker },
 		{ "mode6", TXTFIELD_BYTE, 0, 197, NULL },
 		{ "chance6", TXTFIELD_DWORD, 0, 164, NULL },
 		{ "chanceperlvl6", TXTFIELD_DWORD, 0, 188, NULL },
@@ -1645,34 +1645,34 @@ void __fastcall DATATBLS_LoadHirelingTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pHirelingTxt = (D2HirelingTxt*)DATATBLS_CompileTxt(pMemPool, "hireling", pTbl, &gpDataTables.nHirelingTxtRecordCount, sizeof(D2HirelingTxt));
+	sgptDataTables->pHirelingTxt = (D2HirelingTxt*)DATATBLS_CompileTxt(pMemPool, "hireling", pTbl, &sgptDataTables->nHirelingTxtRecordCount, sizeof(D2HirelingTxt));
 
 	for (int i = 0; i < 256; ++i)
 	{
-		gpDataTables.nClassicHirelingStartRecordIds[i] = -1;
-		gpDataTables.nExpansionHirelingStartRecordIds[i] = -1;
+		sgptDataTables->nClassicHirelingStartRecordIds[i] = -1;
+		sgptDataTables->nExpansionHirelingStartRecordIds[i] = -1;
 	}
 
-	for (int i = 0; i < gpDataTables.nHirelingTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nHirelingTxtRecordCount; ++i)
 	{
-		gpDataTables.pHirelingTxt[i].wNameFirst = D2LANG_GetTblIndex(gpDataTables.pHirelingTxt[i].szNameFirst, &pUnicode);
-		gpDataTables.pHirelingTxt[i].wNameLast = D2LANG_GetTblIndex(gpDataTables.pHirelingTxt[i].szNameLast, &pUnicode);
+		sgptDataTables->pHirelingTxt[i].wNameFirst = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[i].szNameFirst, &pUnicode);
+		sgptDataTables->pHirelingTxt[i].wNameLast = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[i].szNameLast, &pUnicode);
 
 		if (FOG_IsExpansion())
 		{
-			D2_ASSERT(gpDataTables.pHirelingTxt[i].wNameFirst > 0);
-			D2_ASSERT(gpDataTables.pHirelingTxt[i].wNameLast > gpDataTables.pHirelingTxt[i].wNameFirst);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[i].wNameFirst > 0);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[i].wNameLast > sgptDataTables->pHirelingTxt[i].wNameFirst);
 
 #define MAX_HIRELING_ID 256
-			D2_ASSERT(gpDataTables.pHirelingTxt[i].nId < MAX_HIRELING_ID);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[i].nId < MAX_HIRELING_ID);
 		}
 
-		if (gpDataTables.pHirelingTxt[i].nId < 256)
+		if (sgptDataTables->pHirelingTxt[i].nId < 256)
 		{
-			nId = gpDataTables.pHirelingTxt[i].nId + ((gpDataTables.pHirelingTxt[i].wVersion >= 100) << 8);
-			if (gpDataTables.nClassicHirelingStartRecordIds[nId] < 0)
+			nId = sgptDataTables->pHirelingTxt[i].nId + ((sgptDataTables->pHirelingTxt[i].wVersion >= 100) << 8);
+			if (sgptDataTables->nClassicHirelingStartRecordIds[nId] < 0)
 			{
-				gpDataTables.nClassicHirelingStartRecordIds[nId] = i;
+				sgptDataTables->nClassicHirelingStartRecordIds[nId] = i;
 			}
 		}
 	}
@@ -1681,9 +1681,9 @@ void __fastcall DATATBLS_LoadHirelingTxt(void* pMemPool)
 //D2Common.0x6FD6B1A0
 D2ItemTypesTxt* __fastcall DATATBLS_GetItemTypesTxtRecord(int nItemType)
 {
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		return &gpDataTables.pItemTypesTxt[nItemType];
+		return &sgptDataTables->pItemTypesTxt[nItemType];
 	}
 
 	return NULL;
@@ -1708,13 +1708,13 @@ D2HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpan
 
 	nVersion = bExpansion != 0 ? 100 : 0;
 
-	nStartRecordId = gpDataTables.nClassicHirelingStartRecordIds[nId + ((bExpansion != FALSE) << 8)];
+	nStartRecordId = sgptDataTables->nClassicHirelingStartRecordIds[nId + ((bExpansion != FALSE) << 8)];
 
-	if (nStartRecordId >= 0 && nStartRecordId < gpDataTables.nHirelingTxtRecordCount)
+	if (nStartRecordId >= 0 && nStartRecordId < sgptDataTables->nHirelingTxtRecordCount)
 	{
-		pHirelingTxtRecord = &gpDataTables.pHirelingTxt[nStartRecordId];
+		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nStartRecordId];
 
-		while (nStartRecordId < gpDataTables.nHirelingTxtRecordCount)
+		while (nStartRecordId < sgptDataTables->nHirelingTxtRecordCount)
 		{
 			if (pHirelingTxtRecord->nId != nId)
 			{
@@ -1776,12 +1776,12 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpan
 
 	if (pOldRecord)
 	{
-		nRecordId = pOldRecord - gpDataTables.pHirelingTxt + 1;
+		nRecordId = pOldRecord - sgptDataTables->pHirelingTxt + 1;
 	}
 
-	while (nRecordId < gpDataTables.nHirelingTxtRecordCount)
+	while (nRecordId < sgptDataTables->nHirelingTxtRecordCount)
 	{
-		pHirelingTxtRecord = &gpDataTables.pHirelingTxt[nRecordId];
+		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nRecordId];
 
 		if (nNameId >= pHirelingTxtRecord->wNameFirst && nNameId <= pHirelingTxtRecord->wNameLast && pHirelingTxtRecord->wVersion == nVersion)
 		{
@@ -1805,12 +1805,12 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromClassId(BOOL bExpa
 
 	if (pOldRecord)
 	{
-		nRecordId = pOldRecord - gpDataTables.pHirelingTxt + 1;
+		nRecordId = pOldRecord - sgptDataTables->pHirelingTxt + 1;
 	}
 
-	while (nRecordId < gpDataTables.nHirelingTxtRecordCount)
+	while (nRecordId < sgptDataTables->nHirelingTxtRecordCount)
 	{
-		pHirelingTxtRecord = &gpDataTables.pHirelingTxt[nRecordId];
+		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nRecordId];
 
 		if (pHirelingTxtRecord->dwClass == nClass && pHirelingTxtRecord->wVersion == nVersion)
 		{
@@ -1834,12 +1834,12 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficu
 
 	if (pOldRecord)
 	{
-		nRecordId = pOldRecord - gpDataTables.pHirelingTxt + 1;
+		nRecordId = pOldRecord - sgptDataTables->pHirelingTxt + 1;
 	}
 
-	while (nRecordId < gpDataTables.nHirelingTxtRecordCount)
+	while (nRecordId < sgptDataTables->nHirelingTxtRecordCount)
 	{
-		pHirelingTxtRecord = &gpDataTables.pHirelingTxt[nRecordId];
+		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nRecordId];
 
 		if (pHirelingTxtRecord->dwSeller == nVendorId && pHirelingTxtRecord->dwDifficulty == (nDifficulty + 1) && pHirelingTxtRecord->wVersion == nVersion)
 		{
@@ -1865,12 +1865,12 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(B
 	if (pOldRecord)
 	{
 		nLevel = pOldRecord->nHirelingLevel;
-		nRecordId = pOldRecord - gpDataTables.pHirelingTxt + 1;
+		nRecordId = pOldRecord - sgptDataTables->pHirelingTxt + 1;
 	}
 
-	while (nRecordId < gpDataTables.nHirelingTxtRecordCount)
+	while (nRecordId < sgptDataTables->nHirelingTxtRecordCount)
 	{
-		pHirelingTxtRecord = &gpDataTables.pHirelingTxt[nRecordId];
+		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nRecordId];
 
 		if (pHirelingTxtRecord->dwAct == (nAct + 1))
 		{
@@ -1891,7 +1891,7 @@ void __fastcall DATATBLS_LoadNpcTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "npc", TXTFIELD_NAMETODWORD, 0, 0, &gpDataTables.pMonStatsLinker },
+		{ "npc", TXTFIELD_NAMETODWORD, 0, 0, &sgptDataTables->pMonStatsLinker },
 		{ "sell mult", TXTFIELD_DWORD, 0, 4, NULL },
 		{ "buy mult", TXTFIELD_DWORD, 0, 8, NULL },
 		{ "rep mult", TXTFIELD_DWORD, 0, 12, NULL },
@@ -1913,17 +1913,17 @@ void __fastcall DATATBLS_LoadNpcTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pNpcTxt = (D2NpcTxt*)DATATBLS_CompileTxt(pMemPool, "npc", pTbl, &gpDataTables.nNpcTxtRecordCount, sizeof(D2NpcTxt));
+	sgptDataTables->pNpcTxt = (D2NpcTxt*)DATATBLS_CompileTxt(pMemPool, "npc", pTbl, &sgptDataTables->nNpcTxtRecordCount, sizeof(D2NpcTxt));
 }
 
 //D2Common.0x6FD6B820 (#10588)
 D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(DWORD dwNpcId)
 {
-	for (int i = 0; i < gpDataTables.nNpcTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nNpcTxtRecordCount; ++i)
 	{
-		if (gpDataTables.pNpcTxt[i].dwNpc == dwNpcId)
+		if (sgptDataTables->pNpcTxt[i].dwNpc == dwNpcId)
 		{
-			return &gpDataTables.pNpcTxt[i];
+			return &sgptDataTables->pNpcTxt[i];
 		}
 	}
 
@@ -1935,59 +1935,59 @@ void __fastcall DATATBLS_LoadMonSoundsTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonSoundsLinker },
-		{ "Attack1", TXTFIELD_NAMETODWORD, 0, 4, &gpDataTables.pSoundsLinker },
+		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonSoundsLinker },
+		{ "Attack1", TXTFIELD_NAMETODWORD, 0, 4, &sgptDataTables->pSoundsLinker },
 		{ "Att1Del", TXTFIELD_DWORD, 0, 8, NULL },
 		{ "Att1Prb", TXTFIELD_DWORD, 0, 12, NULL },
-		{ "Attack2", TXTFIELD_NAMETODWORD, 0, 28, &gpDataTables.pSoundsLinker },
+		{ "Attack2", TXTFIELD_NAMETODWORD, 0, 28, &sgptDataTables->pSoundsLinker },
 		{ "Att2Del", TXTFIELD_DWORD, 0, 32, NULL },
 		{ "Att2Prb", TXTFIELD_DWORD, 0, 36, NULL },
-		{ "Weapon1", TXTFIELD_NAMETODWORD, 0, 16, &gpDataTables.pSoundsLinker },
+		{ "Weapon1", TXTFIELD_NAMETODWORD, 0, 16, &sgptDataTables->pSoundsLinker },
 		{ "Wea1Del", TXTFIELD_DWORD, 0, 20, NULL },
 		{ "Wea1Vol", TXTFIELD_DWORD, 0, 24, NULL },
-		{ "Weapon2", TXTFIELD_NAMETODWORD, 0, 40, &gpDataTables.pSoundsLinker },
+		{ "Weapon2", TXTFIELD_NAMETODWORD, 0, 40, &sgptDataTables->pSoundsLinker },
 		{ "Wea2Del", TXTFIELD_DWORD, 0, 44, NULL },
 		{ "Wea2Vol", TXTFIELD_DWORD, 0, 48, NULL },
-		{ "HitSound", TXTFIELD_NAMETODWORD, 0, 52, &gpDataTables.pSoundsLinker },
+		{ "HitSound", TXTFIELD_NAMETODWORD, 0, 52, &sgptDataTables->pSoundsLinker },
 		{ "HitDelay", TXTFIELD_DWORD, 0, 56, NULL },
-		{ "DeathSound", TXTFIELD_NAMETODWORD, 0, 60, &gpDataTables.pSoundsLinker },
+		{ "DeathSound", TXTFIELD_NAMETODWORD, 0, 60, &sgptDataTables->pSoundsLinker },
 		{ "DeaDelay", TXTFIELD_DWORD, 0, 64, NULL },
-		{ "Skill1", TXTFIELD_NAMETODWORD, 0, 68, &gpDataTables.pSoundsLinker },
-		{ "Skill2", TXTFIELD_NAMETODWORD, 0, 72, &gpDataTables.pSoundsLinker },
-		{ "Skill3", TXTFIELD_NAMETODWORD, 0, 76, &gpDataTables.pSoundsLinker },
-		{ "Skill4", TXTFIELD_NAMETODWORD, 0, 80, &gpDataTables.pSoundsLinker },
-		{ "Footstep", TXTFIELD_NAMETODWORD, 0, 84, &gpDataTables.pSoundsLinker },
-		{ "FootstepLayer", TXTFIELD_NAMETODWORD, 0, 88, &gpDataTables.pSoundsLinker },
+		{ "Skill1", TXTFIELD_NAMETODWORD, 0, 68, &sgptDataTables->pSoundsLinker },
+		{ "Skill2", TXTFIELD_NAMETODWORD, 0, 72, &sgptDataTables->pSoundsLinker },
+		{ "Skill3", TXTFIELD_NAMETODWORD, 0, 76, &sgptDataTables->pSoundsLinker },
+		{ "Skill4", TXTFIELD_NAMETODWORD, 0, 80, &sgptDataTables->pSoundsLinker },
+		{ "Footstep", TXTFIELD_NAMETODWORD, 0, 84, &sgptDataTables->pSoundsLinker },
+		{ "FootstepLayer", TXTFIELD_NAMETODWORD, 0, 88, &sgptDataTables->pSoundsLinker },
 		{ "FsCnt", TXTFIELD_DWORD, 0, 92, NULL },
 		{ "FsOff", TXTFIELD_DWORD, 0, 96, NULL },
 		{ "FsPrb", TXTFIELD_DWORD, 0, 100, NULL },
-		{ "Neutral", TXTFIELD_NAMETODWORD, 0, 104, &gpDataTables.pSoundsLinker },
+		{ "Neutral", TXTFIELD_NAMETODWORD, 0, 104, &sgptDataTables->pSoundsLinker },
 		{ "NeuTime", TXTFIELD_DWORD, 0, 108, NULL },
-		{ "Init", TXTFIELD_NAMETODWORD, 0, 112, &gpDataTables.pSoundsLinker },
-		{ "Taunt", TXTFIELD_NAMETODWORD, 0, 116, &gpDataTables.pSoundsLinker },
-		{ "Flee", TXTFIELD_NAMETODWORD, 0, 120, &gpDataTables.pSoundsLinker },
-		{ "CvtMo1", TXTFIELD_CODETOBYTE, 0, 124, &gpDataTables.pMonModeLinker },
-		{ "CvtMo2", TXTFIELD_CODETOBYTE, 0, 132, &gpDataTables.pMonModeLinker },
-		{ "CvtMo3", TXTFIELD_CODETOBYTE, 0, 140, &gpDataTables.pMonModeLinker },
-		{ "CvtSk1", TXTFIELD_NAMETODWORD, 0, 128, &gpDataTables.pSkillsLinker },
-		{ "CvtSk2", TXTFIELD_NAMETODWORD, 0, 136, &gpDataTables.pSkillsLinker },
-		{ "CvtSk3", TXTFIELD_NAMETODWORD, 0, 144, &gpDataTables.pSkillsLinker },
-		{ "CvtTgt1", TXTFIELD_CODETOBYTE, 0, 125, &gpDataTables.pMonModeLinker },
-		{ "CvtTgt2", TXTFIELD_CODETOBYTE, 0, 133, &gpDataTables.pMonModeLinker },
-		{ "CvtTgt3", TXTFIELD_CODETOBYTE, 0, 141, &gpDataTables.pMonModeLinker },
+		{ "Init", TXTFIELD_NAMETODWORD, 0, 112, &sgptDataTables->pSoundsLinker },
+		{ "Taunt", TXTFIELD_NAMETODWORD, 0, 116, &sgptDataTables->pSoundsLinker },
+		{ "Flee", TXTFIELD_NAMETODWORD, 0, 120, &sgptDataTables->pSoundsLinker },
+		{ "CvtMo1", TXTFIELD_CODETOBYTE, 0, 124, &sgptDataTables->pMonModeLinker },
+		{ "CvtMo2", TXTFIELD_CODETOBYTE, 0, 132, &sgptDataTables->pMonModeLinker },
+		{ "CvtMo3", TXTFIELD_CODETOBYTE, 0, 140, &sgptDataTables->pMonModeLinker },
+		{ "CvtSk1", TXTFIELD_NAMETODWORD, 0, 128, &sgptDataTables->pSkillsLinker },
+		{ "CvtSk2", TXTFIELD_NAMETODWORD, 0, 136, &sgptDataTables->pSkillsLinker },
+		{ "CvtSk3", TXTFIELD_NAMETODWORD, 0, 144, &sgptDataTables->pSkillsLinker },
+		{ "CvtTgt1", TXTFIELD_CODETOBYTE, 0, 125, &sgptDataTables->pMonModeLinker },
+		{ "CvtTgt2", TXTFIELD_CODETOBYTE, 0, 133, &sgptDataTables->pMonModeLinker },
+		{ "CvtTgt3", TXTFIELD_CODETOBYTE, 0, 141, &sgptDataTables->pMonModeLinker },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonSoundsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonSoundsTxt = (D2MonSoundsTxt*)DATATBLS_CompileTxt(pMemPool, "monsounds", pTbl, &gpDataTables.nMonSoundsTxtRecordCount, sizeof(D2MonSoundsTxt));
+	sgptDataTables->pMonSoundsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonSoundsTxt = (D2MonSoundsTxt*)DATATBLS_CompileTxt(pMemPool, "monsounds", pTbl, &sgptDataTables->nMonSoundsTxtRecordCount, sizeof(D2MonSoundsTxt));
 }
 
 //D2Common.0x6FD6BF50 (#11252)
 D2MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromSoundId(int nSoundId)
 {
-	if (gpDataTables.pMonSoundsTxt && nSoundId >= 0 && nSoundId < gpDataTables.nMonSoundsTxtRecordCount)
+	if (sgptDataTables->pMonSoundsTxt && nSoundId >= 0 && nSoundId < sgptDataTables->nMonSoundsTxtRecordCount)
 	{
-		return &gpDataTables.pMonSoundsTxt[nSoundId];
+		return &sgptDataTables->pMonSoundsTxt[nSoundId];
 	}
 
 	return NULL;
@@ -2000,12 +2000,12 @@ D2MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromMonsterId(int nMonst
 	int nSoundId = 0;
 
 	pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
-	if (gpDataTables.pMonSoundsTxt && pMonStatsTxtRecord)
+	if (sgptDataTables->pMonSoundsTxt && pMonStatsTxtRecord)
 	{
 		nSoundId = pMonStatsTxtRecord->wMonSound;
-		if (nSoundId >= 0 && nSoundId < gpDataTables.nMonSoundsTxtRecordCount)
+		if (nSoundId >= 0 && nSoundId < sgptDataTables->nMonSoundsTxtRecordCount)
 		{
-			return &gpDataTables.pMonSoundsTxt[nSoundId];
+			return &sgptDataTables->pMonSoundsTxt[nSoundId];
 		}
 	}
 
@@ -2069,7 +2069,7 @@ void __fastcall DATATBLS_MonStats2CompositLinker(char* pSrc, void* pRecord, int 
 				}
 
 
-				pMonStats2TxtRecord->unk0x26[nOffset].nComposit[nCounter] = FOG_GetLinkIndex(gpDataTables.pCompCodeLinker, DATATBLS_StringToCode(pTmp), 1);
+				pMonStats2TxtRecord->unk0x26[nOffset].nComposit[nCounter] = FOG_GetLinkIndex(sgptDataTables->pCompCodeLinker, DATATBLS_StringToCode(pTmp), 1);
 
 				++nCounter;
 
@@ -2107,7 +2107,7 @@ void __fastcall DATATBLS_LoadMonStats2Txt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonStats2Linker },
+		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonStats2Linker },
 		{ "Height", TXTFIELD_BYTE, 0, 11, NULL },
 		{ "overlayHeight", TXTFIELD_BYTE, 0, 12, NULL },
 		{ "pixHeight", TXTFIELD_BYTE, 0, 13, NULL },
@@ -2230,13 +2230,13 @@ void __fastcall DATATBLS_LoadMonStats2Txt(void* pMemPool)
 		{ "InfernoLen", TXTFIELD_BYTE, 0, 264, NULL },
 		{ "InfernoAnim", TXTFIELD_BYTE, 0, 265, NULL },
 		{ "InfernoRollback", TXTFIELD_BYTE, 0, 266, NULL },
-		{ "ResurrectMode", TXTFIELD_CODETOBYTE, 0, 267, &gpDataTables.pMonModeLinker },
-		{ "ResurrectSkill", TXTFIELD_NAMETOWORD, 0, 268, &gpDataTables.pSkillsLinker },
+		{ "ResurrectMode", TXTFIELD_CODETOBYTE, 0, 267, &sgptDataTables->pMonModeLinker },
+		{ "ResurrectSkill", TXTFIELD_NAMETOWORD, 0, 268, &sgptDataTables->pSkillsLinker },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonStats2Linker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonStats2Txt = (D2MonStats2Txt*)DATATBLS_CompileTxt(pMemPool, "monstats2", pTbl, &gpDataTables.nMonStats2TxtRecordCount, sizeof(D2MonStats2Txt));
+	sgptDataTables->pMonStats2Linker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonStats2Txt = (D2MonStats2Txt*)DATATBLS_CompileTxt(pMemPool, "monstats2", pTbl, &sgptDataTables->nMonStats2TxtRecordCount, sizeof(D2MonStats2Txt));
 }
 
 //D2Common.0x6FD6D660
@@ -2252,7 +2252,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 		return 0;
 	}
 
-	if (nMonType1 > 0 && nMonType1 < gpDataTables.nMonTypeTxtRecordCount)
+	if (nMonType1 > 0 && nMonType1 < sgptDataTables->nMonTypeTxtRecordCount)
 	{
 		nParentMonsterTypes[1] = nMonType1;
 		nIndex = 1;
@@ -2264,7 +2264,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 				return 1;
 			}
 
-			if (nMonsterType >= gpDataTables.nMonTypeTxtRecordCount)
+			if (nMonsterType >= sgptDataTables->nMonTypeTxtRecordCount)
 			{
 				break;
 			}
@@ -2274,7 +2274,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 				return 0;
 			}
 
-			pMonTypeTxtRecord = &gpDataTables.pMonTypeTxt[nMonsterType];
+			pMonTypeTxtRecord = &sgptDataTables->pMonTypeTxt[nMonsterType];
 
 			if (pMonTypeTxtRecord->nEquiv[0] > 0)
 			{
@@ -2308,27 +2308,27 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "type", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonTypeLinker },
-		{ "equiv1", TXTFIELD_NAMETOWORD, 0, 2, &gpDataTables.pMonTypeLinker },
-		{ "equiv2", TXTFIELD_NAMETOWORD, 0, 4, &gpDataTables.pMonTypeLinker },
-		{ "equiv3", TXTFIELD_NAMETOWORD, 0, 6, &gpDataTables.pMonTypeLinker },
+		{ "type", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonTypeLinker },
+		{ "equiv1", TXTFIELD_NAMETOWORD, 0, 2, &sgptDataTables->pMonTypeLinker },
+		{ "equiv2", TXTFIELD_NAMETOWORD, 0, 4, &sgptDataTables->pMonTypeLinker },
+		{ "equiv3", TXTFIELD_NAMETOWORD, 0, 6, &sgptDataTables->pMonTypeLinker },
 		{ "strsing", TXTFIELD_KEYTOWORD, 0, 8, DATATBLS_GetStringIdFromReferenceString },
 		{ "strplur", TXTFIELD_KEYTOWORD, 0, 10, DATATBLS_GetStringIdFromReferenceString },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonTypeTxt = (D2MonTypeTxt*)DATATBLS_CompileTxt(pMemPool, "montype", pTbl, &gpDataTables.nMonTypeTxtRecordCount, sizeof(D2MonTypeTxt));
+	sgptDataTables->pMonTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonTypeTxt = (D2MonTypeTxt*)DATATBLS_CompileTxt(pMemPool, "montype", pTbl, &sgptDataTables->nMonTypeTxtRecordCount, sizeof(D2MonTypeTxt));
 
-	gpDataTables.nMonTypeIndex = (gpDataTables.nMonTypeTxtRecordCount + 31) / 32;
-	gpDataTables.pMonTypeNest = (DWORD*)FOG_AllocServerMemory(NULL, sizeof(DWORD) * gpDataTables.nMonTypeTxtRecordCount * gpDataTables.nMonTypeIndex, __FILE__, __LINE__, 0);
-	memset(gpDataTables.pMonTypeNest, 0x00, sizeof(DWORD) * gpDataTables.nMonTypeTxtRecordCount * gpDataTables.nMonTypeIndex);
+	sgptDataTables->nMonTypeIndex = (sgptDataTables->nMonTypeTxtRecordCount + 31) / 32;
+	sgptDataTables->pMonTypeNest = (DWORD*)FOG_AllocServerMemory(NULL, sizeof(DWORD) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pMonTypeNest, 0x00, sizeof(DWORD) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
 
-	for (int i = 0; i < gpDataTables.nMonTypeTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nMonTypeTxtRecordCount; ++i)
 	{
-		pMonTypeNest = &gpDataTables.pMonTypeNest[gpDataTables.nMonTypeIndex * i];
+		pMonTypeNest = &sgptDataTables->pMonTypeNest[sgptDataTables->nMonTypeIndex * i];
 
-		for (int j = 0; j < gpDataTables.nMonTypeTxtRecordCount; ++j)
+		for (int j = 0; j < sgptDataTables->nMonTypeTxtRecordCount; ++j)
 		{
 			if (DATATBLS_CheckNestedMonsterTypes(i, j))
 			{
@@ -2341,13 +2341,13 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 //D2Common.0x6FD6D910
 void __fastcall DATATBLS_UnloadMonTypeTxt()
 {
-	if (gpDataTables.pMonTypeTxt)
+	if (sgptDataTables->pMonTypeTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonTypeTxt);
-		FOG_FreeLinker(gpDataTables.pMonTypeLinker);
-		FOG_FreeServerMemory(NULL, gpDataTables.pMonTypeNest, __FILE__, __LINE__, 0);
-		gpDataTables.pMonTypeTxt = NULL;
-		gpDataTables.pMonTypeLinker = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pMonTypeTxt);
+		FOG_FreeLinker(sgptDataTables->pMonTypeLinker);
+		FOG_FreeServerMemory(NULL, sgptDataTables->pMonTypeNest, __FILE__, __LINE__, 0);
+		sgptDataTables->pMonTypeTxt = NULL;
+		sgptDataTables->pMonTypeLinker = NULL;
 	}
 }
 
@@ -2356,93 +2356,93 @@ void __fastcall DATATBLS_LoadMonPropTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Id", TXTFIELD_NAMETOINDEX2, 0, 0, &gpDataTables.pMonPropLinker },
-		{ "prop1", TXTFIELD_NAMETODWORD, 0, 4, &gpDataTables.pPropertiesLinker },
+		{ "Id", TXTFIELD_NAMETOINDEX2, 0, 0, &sgptDataTables->pMonPropLinker },
+		{ "prop1", TXTFIELD_NAMETODWORD, 0, 4, &sgptDataTables->pPropertiesLinker },
 		{ "par1", TXTFIELD_DWORD, 0, 8, NULL },
 		{ "chance1", TXTFIELD_BYTE, 0, 292, NULL },
 		{ "min1", TXTFIELD_DWORD, 0, 12, NULL },
 		{ "max1", TXTFIELD_DWORD, 0, 16, NULL },
-		{ "prop2", TXTFIELD_NAMETODWORD, 0, 20, &gpDataTables.pPropertiesLinker },
+		{ "prop2", TXTFIELD_NAMETODWORD, 0, 20, &sgptDataTables->pPropertiesLinker },
 		{ "chance2", TXTFIELD_BYTE, 0, 293, NULL },
 		{ "par2", TXTFIELD_DWORD, 0, 24, NULL },
 		{ "min2", TXTFIELD_DWORD, 0, 28, NULL },
 		{ "max2", TXTFIELD_DWORD, 0, 32, NULL },
-		{ "prop3", TXTFIELD_NAMETODWORD, 0, 36, &gpDataTables.pPropertiesLinker },
+		{ "prop3", TXTFIELD_NAMETODWORD, 0, 36, &sgptDataTables->pPropertiesLinker },
 		{ "chance3", TXTFIELD_BYTE, 0, 294, NULL },
 		{ "par3", TXTFIELD_DWORD, 0, 40, NULL },
 		{ "min3", TXTFIELD_DWORD, 0, 44, NULL },
 		{ "max3", TXTFIELD_DWORD, 0, 48, NULL },
-		{ "prop4", TXTFIELD_NAMETODWORD, 0, 52, &gpDataTables.pPropertiesLinker },
+		{ "prop4", TXTFIELD_NAMETODWORD, 0, 52, &sgptDataTables->pPropertiesLinker },
 		{ "chance4", TXTFIELD_BYTE, 0, 295, NULL },
 		{ "par4", TXTFIELD_DWORD, 0, 56, NULL },
 		{ "min4", TXTFIELD_DWORD, 0, 60, NULL },
 		{ "max4", TXTFIELD_DWORD, 0, 64, NULL },
-		{ "prop5", TXTFIELD_NAMETODWORD, 0, 68, &gpDataTables.pPropertiesLinker },
+		{ "prop5", TXTFIELD_NAMETODWORD, 0, 68, &sgptDataTables->pPropertiesLinker },
 		{ "chance5", TXTFIELD_BYTE, 0, 296, NULL },
 		{ "par5", TXTFIELD_DWORD, 0, 72, NULL },
 		{ "min5", TXTFIELD_DWORD, 0, 76, NULL },
 		{ "max5", TXTFIELD_DWORD, 0, 80, NULL },
-		{ "prop6", TXTFIELD_NAMETODWORD, 0, 84, &gpDataTables.pPropertiesLinker },
+		{ "prop6", TXTFIELD_NAMETODWORD, 0, 84, &sgptDataTables->pPropertiesLinker },
 		{ "chance6", TXTFIELD_BYTE, 0, 297, NULL },
 		{ "par6", TXTFIELD_DWORD, 0, 88, NULL },
 		{ "min6", TXTFIELD_DWORD, 0, 92, NULL },
 		{ "max6", TXTFIELD_DWORD, 0, 96, NULL },
-		{ "prop1 (N)", TXTFIELD_NAMETODWORD, 0, 100, &gpDataTables.pPropertiesLinker },
+		{ "prop1 (N)", TXTFIELD_NAMETODWORD, 0, 100, &sgptDataTables->pPropertiesLinker },
 		{ "chance1 (N)", TXTFIELD_BYTE, 0, 298, NULL },
 		{ "par1 (N)", TXTFIELD_DWORD, 0, 104, NULL },
 		{ "min1 (N)", TXTFIELD_DWORD, 0, 108, NULL },
 		{ "max1 (N)", TXTFIELD_DWORD, 0, 112, NULL },
-		{ "prop2 (N)", TXTFIELD_NAMETODWORD, 0, 116, &gpDataTables.pPropertiesLinker },
+		{ "prop2 (N)", TXTFIELD_NAMETODWORD, 0, 116, &sgptDataTables->pPropertiesLinker },
 		{ "chance2 (N)", TXTFIELD_BYTE, 0, 299, NULL },
 		{ "par2 (N)", TXTFIELD_DWORD, 0, 120, NULL },
 		{ "min2 (N)", TXTFIELD_DWORD, 0, 124, NULL },
 		{ "max2 (N)", TXTFIELD_DWORD, 0, 128, NULL },
-		{ "prop3 (N)", TXTFIELD_NAMETODWORD, 0, 132, &gpDataTables.pPropertiesLinker },
+		{ "prop3 (N)", TXTFIELD_NAMETODWORD, 0, 132, &sgptDataTables->pPropertiesLinker },
 		{ "chance3 (N)", TXTFIELD_BYTE, 0, 300, NULL },
 		{ "par3 (N)", TXTFIELD_DWORD, 0, 136, NULL },
 		{ "min3 (N)", TXTFIELD_DWORD, 0, 140, NULL },
 		{ "max3 (N)", TXTFIELD_DWORD, 0, 144, NULL },
-		{ "prop4 (N)", TXTFIELD_NAMETODWORD, 0, 148, &gpDataTables.pPropertiesLinker },
+		{ "prop4 (N)", TXTFIELD_NAMETODWORD, 0, 148, &sgptDataTables->pPropertiesLinker },
 		{ "chance4 (N)", TXTFIELD_BYTE, 0, 301, NULL },
 		{ "par4 (N)", TXTFIELD_DWORD, 0, 152, NULL },
 		{ "min4 (N)", TXTFIELD_DWORD, 0, 156, NULL },
 		{ "max4 (N)", TXTFIELD_DWORD, 0, 160, NULL },
-		{ "prop5 (N)", TXTFIELD_NAMETODWORD, 0, 164, &gpDataTables.pPropertiesLinker },
+		{ "prop5 (N)", TXTFIELD_NAMETODWORD, 0, 164, &sgptDataTables->pPropertiesLinker },
 		{ "chance5 (N)", TXTFIELD_BYTE, 0, 302, NULL },
 		{ "par5 (N)", TXTFIELD_DWORD, 0, 168, NULL },
 		{ "min5 (N)", TXTFIELD_DWORD, 0, 172, NULL },
 		{ "max5 (N)", TXTFIELD_DWORD, 0, 176, NULL },
-		{ "prop6 (N)", TXTFIELD_NAMETODWORD, 0, 180, &gpDataTables.pPropertiesLinker },
+		{ "prop6 (N)", TXTFIELD_NAMETODWORD, 0, 180, &sgptDataTables->pPropertiesLinker },
 		{ "chance6 (N)", TXTFIELD_BYTE, 0, 303, NULL },
 		{ "par6 (N)", TXTFIELD_DWORD, 0, 184, NULL },
 		{ "min6 (N)", TXTFIELD_DWORD, 0, 188, NULL },
 		{ "max6 (N)", TXTFIELD_DWORD, 0, 192, NULL },
-		{ "prop1 (H)", TXTFIELD_NAMETODWORD, 0, 196, &gpDataTables.pPropertiesLinker },
+		{ "prop1 (H)", TXTFIELD_NAMETODWORD, 0, 196, &sgptDataTables->pPropertiesLinker },
 		{ "chance1 (H)", TXTFIELD_BYTE, 0, 304, NULL },
 		{ "par1 (H)", TXTFIELD_DWORD, 0, 200, NULL },
 		{ "min1 (H)", TXTFIELD_DWORD, 0, 204, NULL },
 		{ "max1 (H)", TXTFIELD_DWORD, 0, 208, NULL },
-		{ "prop2 (H)", TXTFIELD_NAMETODWORD, 0, 212, &gpDataTables.pPropertiesLinker },
+		{ "prop2 (H)", TXTFIELD_NAMETODWORD, 0, 212, &sgptDataTables->pPropertiesLinker },
 		{ "chance2 (H)", TXTFIELD_BYTE, 0, 305, NULL },
 		{ "par2 (H)", TXTFIELD_DWORD, 0, 216, NULL },
 		{ "min2 (H)", TXTFIELD_DWORD, 0, 220, NULL },
 		{ "max2 (H)", TXTFIELD_DWORD, 0, 224, NULL },
-		{ "prop3 (H)", TXTFIELD_NAMETODWORD, 0, 228, &gpDataTables.pPropertiesLinker },
+		{ "prop3 (H)", TXTFIELD_NAMETODWORD, 0, 228, &sgptDataTables->pPropertiesLinker },
 		{ "chance3 (H)", TXTFIELD_BYTE, 0, 306, NULL },
 		{ "par3 (H)", TXTFIELD_DWORD, 0, 232, NULL },
 		{ "min3 (H)", TXTFIELD_DWORD, 0, 236, NULL },
 		{ "max3 (H)", TXTFIELD_DWORD, 0, 240, NULL },
-		{ "prop4 (H)", TXTFIELD_NAMETODWORD, 0, 244, &gpDataTables.pPropertiesLinker },
+		{ "prop4 (H)", TXTFIELD_NAMETODWORD, 0, 244, &sgptDataTables->pPropertiesLinker },
 		{ "chance4 (H)", TXTFIELD_BYTE, 0, 307, NULL },
 		{ "par4 (H)", TXTFIELD_DWORD, 0, 248, NULL },
 		{ "min4 (H)", TXTFIELD_DWORD, 0, 252, NULL },
 		{ "max4 (H)", TXTFIELD_DWORD, 0, 256, NULL },
-		{ "prop5 (H)", TXTFIELD_NAMETODWORD, 0, 260, &gpDataTables.pPropertiesLinker },
+		{ "prop5 (H)", TXTFIELD_NAMETODWORD, 0, 260, &sgptDataTables->pPropertiesLinker },
 		{ "chance5 (H)", TXTFIELD_BYTE, 0, 308, NULL },
 		{ "par5 (H)", TXTFIELD_DWORD, 0, 264, NULL },
 		{ "min5 (H)", TXTFIELD_DWORD, 0, 268, NULL },
 		{ "max5 (H)", TXTFIELD_DWORD, 0, 272, NULL },
-		{ "prop6 (H)", TXTFIELD_NAMETODWORD, 0, 276, &gpDataTables.pPropertiesLinker },
+		{ "prop6 (H)", TXTFIELD_NAMETODWORD, 0, 276, &sgptDataTables->pPropertiesLinker },
 		{ "chance6 (H)", TXTFIELD_BYTE, 0, 309, NULL },
 		{ "par6 (H)", TXTFIELD_DWORD, 0, 280, NULL },
 		{ "min6 (H)", TXTFIELD_DWORD, 0, 284, NULL },
@@ -2450,8 +2450,8 @@ void __fastcall DATATBLS_LoadMonPropTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonPropLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonPropTxt = (D2MonPropTxt*)DATATBLS_CompileTxt(pMemPool, "monprop", pTbl, &gpDataTables.nMonPropTxtRecordCount, sizeof(D2MonPropTxt));
+	sgptDataTables->pMonPropLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonPropTxt = (D2MonPropTxt*)DATATBLS_CompileTxt(pMemPool, "monprop", pTbl, &sgptDataTables->nMonPropTxtRecordCount, sizeof(D2MonPropTxt));
 }
 
 //D2Common.0x6FD6E8E0
@@ -2492,7 +2492,7 @@ void __fastcall DATATBLS_LoadMonLvlTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonLvlTxt = (D2MonLvlTxt*)DATATBLS_CompileTxt(pMemPool, "monlvl", pTbl, &gpDataTables.nMonLvlTxtRecordCount, sizeof(D2MonLvlTxt));
+	sgptDataTables->pMonLvlTxt = (D2MonLvlTxt*)DATATBLS_CompileTxt(pMemPool, "monlvl", pTbl, &sgptDataTables->nMonLvlTxtRecordCount, sizeof(D2MonLvlTxt));
 }
 
 //D2Common.0x6FD6EDE0
@@ -2507,13 +2507,13 @@ void __fastcall DATATBLS_MonPresetPlaceLinker(char* pSrc, void* pRecord, int nOf
 
 		if (pSrc && *pSrc)
 		{
-			nRow = FOG_GetRowFromTxt(gpDataTables.pSuperUniquesLinker, pSrc, 0);
+			nRow = FOG_GetRowFromTxt(sgptDataTables->pSuperUniquesLinker, pSrc, 0);
 			if (nRow < 0)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pMonStatsLinker, pSrc, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pMonStatsLinker, pSrc, 0);
 				if (nRow < 0)
 				{
-					nRow = FOG_GetRowFromTxt(gpDataTables.pMonPlaceLinker, pSrc, 1);
+					nRow = FOG_GetRowFromTxt(sgptDataTables->pMonPlaceLinker, pSrc, 1);
 					if (nRow >= 0)
 					{
 						*((BYTE*)pRecord + 1) = 0;
@@ -2552,23 +2552,23 @@ void __fastcall DATATBLS_LoadMonPresetTxt(void* pMemPool)
 
 	pMonPresetTxt = (D2MonPresetTxt*)DATATBLS_CompileTxt(pMemPool, "monpreset", pTbl, &nRecordCount, sizeof(D2MonPresetTxt));
 
-	gpDataTables.pMonPresetTxt = pMonPresetTxt;
-	gpDataTables.pMonPresetTxtActSections[0] = pMonPresetTxt;
+	sgptDataTables->pMonPresetTxt = pMonPresetTxt;
+	sgptDataTables->pMonPresetTxtActSections[0] = pMonPresetTxt;
 
 	for (int i = 0; i < nRecordCount; ++i)
 	{
 		for (int j = nAct + 1; j < pMonPresetTxt[i].nAct; ++j)
 		{
-			gpDataTables.nMonPresetTxtActRecordCounts[nAct] = nActRecords;
+			sgptDataTables->nMonPresetTxtActRecordCounts[nAct] = nActRecords;
 			++nAct;
 			nActRecords = 0;
-			gpDataTables.pMonPresetTxtActSections[nAct] = &pMonPresetTxt[i];
+			sgptDataTables->pMonPresetTxtActSections[nAct] = &pMonPresetTxt[i];
 		}
 
 		++nActRecords;
 	}
 
-	gpDataTables.nMonPresetTxtActRecordCounts[nAct] = nActRecords;
+	sgptDataTables->nMonPresetTxtActRecordCounts[nAct] = nActRecords;
 }
 
 //D2Common.0x6FD6EF30 (#11256)
@@ -2576,10 +2576,10 @@ D2MonPresetTxt* __stdcall DATATBLS_GetMonPresetTxtActSection(int nAct, int* pRec
 {
 	if (pRecordCount)
 	{
-		if (nAct >= 0 && nAct < 5 && gpDataTables.pMonPresetTxt)
+		if (nAct >= 0 && nAct < 5 && sgptDataTables->pMonPresetTxt)
 		{
-			*pRecordCount = gpDataTables.nMonPresetTxtActRecordCounts[nAct];
-			return gpDataTables.pMonPresetTxtActSections[nAct];
+			*pRecordCount = sgptDataTables->nMonPresetTxtActRecordCounts[nAct];
+			return sgptDataTables->pMonPresetTxtActSections[nAct];
 		}
 		
 		*pRecordCount = 0;
@@ -2594,10 +2594,10 @@ int __stdcall DATATBLS_MapSuperUniqueId(int nType, int nSuperUnique)
 	switch (nType)
 	{
 	case 0:
-		return nSuperUnique + gpDataTables.nSuperUniquesTxtRecordCount + gpDataTables.nMonStatsTxtRecordCount;
+		return nSuperUnique + sgptDataTables->nSuperUniquesTxtRecordCount + sgptDataTables->nMonStatsTxtRecordCount;
 
 	case 2:
-		return nSuperUnique + gpDataTables.nMonStatsTxtRecordCount;
+		return nSuperUnique + sgptDataTables->nMonStatsTxtRecordCount;
 
 	default:
 		return nSuperUnique;
@@ -2610,27 +2610,27 @@ void __fastcall DATATBLS_LoadSoundsTxt(void* pMemPool)
 {
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "Sound", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pSoundsLinker },
+		{ "Sound", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pSoundsLinker },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	if (gpDataTables.bCompileTxt)
+	if (sgptDataTables->bCompileTxt)
 	{
-		gpDataTables.pSoundsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		gpDataTables.pSoundsTxtCodes = (D2SoundsTxtStub*)DATATBLS_CompileTxt(pMemPool, "sounds", pTbl, &gpDataTables.nSoundsTxtCodes, sizeof(D2SoundsTxtStub));
+		sgptDataTables->pSoundsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pSoundsTxtCodes = (D2SoundsTxtStub*)DATATBLS_CompileTxt(pMemPool, "sounds", pTbl, &sgptDataTables->nSoundsTxtCodes, sizeof(D2SoundsTxtStub));
 	}
 }
 
 //D2Common.0x6FD6F020
 void __fastcall DATATBLS_UnloadSoundsTxt()
 {
-	if (gpDataTables.pSoundsTxtCodes)
+	if (sgptDataTables->pSoundsTxtCodes)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pSoundsTxtCodes);
-		gpDataTables.pSoundsTxtCodes = NULL;
-		FOG_FreeLinker(gpDataTables.pSoundsLinker);
-		gpDataTables.pSoundsLinker = NULL;
-		gpDataTables.nSoundsTxtCodes = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pSoundsTxtCodes);
+		sgptDataTables->pSoundsTxtCodes = NULL;
+		FOG_FreeLinker(sgptDataTables->pSoundsLinker);
+		sgptDataTables->pSoundsLinker = NULL;
+		sgptDataTables->nSoundsTxtCodes = 0;
 	}
 }
 
@@ -2641,33 +2641,33 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "sequence", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pMonSeqLinker },
-		{ "mode", TXTFIELD_CODETOBYTE, 0, 2, &gpDataTables.pMonModeLinker },
+		{ "sequence", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonSeqLinker },
+		{ "mode", TXTFIELD_CODETOBYTE, 0, 2, &sgptDataTables->pMonModeLinker },
 		{ "frame", TXTFIELD_BYTE, 0, 3, NULL },
 		{ "dir", TXTFIELD_BYTE, 0, 4, NULL },
 		{ "event", TXTFIELD_BYTE, 0, 5, NULL },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonSeqLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pMonSeqTxt = (D2MonSeqTxt*)DATATBLS_CompileTxt(pMemPool, "monseq", pTbl, &gpDataTables.nMonSeqTxtRecordCount, sizeof(D2MonSeqTxt));
+	sgptDataTables->pMonSeqLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMonSeqTxt = (D2MonSeqTxt*)DATATBLS_CompileTxt(pMemPool, "monseq", pTbl, &sgptDataTables->nMonSeqTxtRecordCount, sizeof(D2MonSeqTxt));
 
-	if (gpDataTables.nMonSeqTxtRecordCount > 0)
+	if (sgptDataTables->nMonSeqTxtRecordCount > 0)
 	{
-		gpDataTables.nMonSeqTableRecordCount = gpDataTables.pMonSeqTxt[gpDataTables.nMonSeqTxtRecordCount - 1].wSequence + 1;
-		gpDataTables.pMonSeqTable = (D2SeqRecordStrc*)FOG_AllocServerMemory(NULL, sizeof(D2SeqRecordStrc) * gpDataTables.nMonSeqTableRecordCount, __FILE__, __LINE__, 0);
-		memset(gpDataTables.pMonSeqTable, 0x00, sizeof(D2SeqRecordStrc) * gpDataTables.nMonSeqTableRecordCount);
+		sgptDataTables->nMonSeqTableRecordCount = sgptDataTables->pMonSeqTxt[sgptDataTables->nMonSeqTxtRecordCount - 1].wSequence + 1;
+		sgptDataTables->pMonSeqTable = (D2SeqRecordStrc*)FOG_AllocServerMemory(NULL, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount, __FILE__, __LINE__, 0);
+		memset(sgptDataTables->pMonSeqTable, 0x00, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount);
 
-		for (int i = 0; i < gpDataTables.nMonSeqTxtRecordCount; ++i)
+		for (int i = 0; i < sgptDataTables->nMonSeqTxtRecordCount; ++i)
 		{
-			nSequence = gpDataTables.pMonSeqTxt[i].wSequence;
-			if (!gpDataTables.pMonSeqTable[nSequence].pMonSeqTxtRecord)
+			nSequence = sgptDataTables->pMonSeqTxt[i].wSequence;
+			if (!sgptDataTables->pMonSeqTable[nSequence].pMonSeqTxtRecord)
 			{
-				gpDataTables.pMonSeqTable[nSequence].pMonSeqTxtRecord = &gpDataTables.pMonSeqTxt[i];
+				sgptDataTables->pMonSeqTable[nSequence].pMonSeqTxtRecord = &sgptDataTables->pMonSeqTxt[i];
 			}
 
-			++gpDataTables.pMonSeqTable[nSequence].unk0x04;
-			++gpDataTables.pMonSeqTable[nSequence].unk0x08;
+			++sgptDataTables->pMonSeqTable[nSequence].unk0x04;
+			++sgptDataTables->pMonSeqTable[nSequence].unk0x08;
 		}
 	}
 }
@@ -2675,9 +2675,9 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 //D2Common.0x6FD6F200 (#11262)
 D2SeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence)
 {
-	if (nSequence >= 0 && nSequence < gpDataTables.nMonSeqTableRecordCount)
+	if (nSequence >= 0 && nSequence < sgptDataTables->nMonSeqTableRecordCount)
 	{
-		return &gpDataTables.pMonSeqTable[nSequence];
+		return &sgptDataTables->pMonSeqTable[nSequence];
 	}
 
 	return NULL;
@@ -2691,36 +2691,36 @@ void __fastcall DATATBLS_LoadMonEquipTxt(void* pMemPool)
 
 	D2BinFieldStrc pTbl[] =
 	{
-		{ "monster", TXTFIELD_NAMETOWORD, 0, 0, &gpDataTables.pMonStatsLinker },
+		{ "monster", TXTFIELD_NAMETOWORD, 0, 0, &sgptDataTables->pMonStatsLinker },
 		{ "level", TXTFIELD_WORD, 0, 2, NULL },
 		{ "oninit", TXTFIELD_BYTE, 0, 4, NULL },
-		{ "item1", TXTFIELD_RAW, 0, 8, &gpDataTables.pItemsLinker },
-		{ "loc1", TXTFIELD_CODETOBYTE, 0, 20, &gpDataTables.pBodyLocsLinker },
+		{ "item1", TXTFIELD_RAW, 0, 8, &sgptDataTables->pItemsLinker },
+		{ "loc1", TXTFIELD_CODETOBYTE, 0, 20, &sgptDataTables->pBodyLocsLinker },
 		{ "mod1", TXTFIELD_BYTE, 0, 23, NULL },
-		{ "item2", TXTFIELD_RAW, 0, 12, &gpDataTables.pItemsLinker },
-		{ "loc2", TXTFIELD_CODETOBYTE, 0, 21, &gpDataTables.pBodyLocsLinker },
+		{ "item2", TXTFIELD_RAW, 0, 12, &sgptDataTables->pItemsLinker },
+		{ "loc2", TXTFIELD_CODETOBYTE, 0, 21, &sgptDataTables->pBodyLocsLinker },
 		{ "mod2", TXTFIELD_BYTE, 0, 24, NULL },
-		{ "item3", TXTFIELD_RAW, 0, 16, &gpDataTables.pItemsLinker },
-		{ "loc3", TXTFIELD_CODETOBYTE, 0, 22, &gpDataTables.pBodyLocsLinker },
+		{ "item3", TXTFIELD_RAW, 0, 16, &sgptDataTables->pItemsLinker },
+		{ "loc3", TXTFIELD_CODETOBYTE, 0, 22, &sgptDataTables->pBodyLocsLinker },
 		{ "mod3", TXTFIELD_BYTE, 0, 25, NULL },
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonEquipTxt = (D2MonEquipTxt*)DATATBLS_CompileTxt(pMemPool, "monequip", pTbl, &gpDataTables.nMonEquipTxtRecordCount, sizeof(D2MonEquipTxt));
+	sgptDataTables->pMonEquipTxt = (D2MonEquipTxt*)DATATBLS_CompileTxt(pMemPool, "monequip", pTbl, &sgptDataTables->nMonEquipTxtRecordCount, sizeof(D2MonEquipTxt));
 
-	if (gpDataTables.nMonEquipTxtRecordCount >= 32767)
+	if (sgptDataTables->nMonEquipTxtRecordCount >= 32767)
 	{
 		FOG_10025("Monequip.txt exceeded maximum number of allowable rows", __FILE__, __LINE__);
 	}
 
-	for (int i = 0; i < gpDataTables.nMonStatsTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nMonStatsTxtRecordCount; ++i)
 	{
-		gpDataTables.pMonStatsTxt[i].nMonEquipTxtRecordId = -1;
+		sgptDataTables->pMonStatsTxt[i].nMonEquipTxtRecordId = -1;
 	}
 
-	for (int i = 0; i < gpDataTables.nMonEquipTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nMonEquipTxtRecordCount; ++i)
 	{
-		pMonEquipTxtRecord = &gpDataTables.pMonEquipTxt[i];
+		pMonEquipTxtRecord = &sgptDataTables->pMonEquipTxt[i];
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pMonEquipTxtRecord->nMonster);
 		if (pMonStatsTxtRecord)
 		{
@@ -2732,7 +2732,7 @@ void __fastcall DATATBLS_LoadMonEquipTxt(void* pMemPool)
 			for (int j = 0; j < 3; ++j)
 			{
 				if (pMonEquipTxtRecord->nLoc[j] <= BODYLOC_NONE || pMonEquipTxtRecord->nLoc[j] >= BODYLOC_SWRARM
-					|| pMonEquipTxtRecord->dwItem[j] != '    ' && FOG_GetLinkIndex(gpDataTables.pItemsLinker, pMonEquipTxtRecord->dwItem[j], 1) < 0)
+					|| pMonEquipTxtRecord->dwItem[j] != '    ' && FOG_GetLinkIndex(sgptDataTables->pItemsLinker, pMonEquipTxtRecord->dwItem[j], 1) < 0)
 				{
 					pMonEquipTxtRecord->nLoc[j] = BODYLOC_NONE;
 				}
@@ -2758,19 +2758,19 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pUniqueTitleTxt = (D2UniqueTitleTxt*)DATATBLS_CompileTxt(pMemPool, "uniquetitle", pTbl, &gpDataTables.nUniqueTitleTxtRecordCount, sizeof(D2UniqueTitleTxt));
-	gpDataTables.pUniquePrefixTxt = (D2UniquePrefixTxt*)DATATBLS_CompileTxt(pMemPool, "uniqueprefix", pTbl, &gpDataTables.nUniquePrefixTxtRecordCount, sizeof(D2UniquePrefixTxt));
-	gpDataTables.pUniqueSuffixTxt = (D2UniqueSuffixTxt*)DATATBLS_CompileTxt(pMemPool, "uniquesuffix", pTbl, &gpDataTables.nUniqueSuffixTxtRecordCount, sizeof(D2UniqueSuffixTxt));
-	gpDataTables.pUniqueAppellationTxt = (D2UniqueAppellationTxt*)DATATBLS_CompileTxt(pMemPool, "uniqueappellation", pTbl, &gpDataTables.nUniqueAppellationTxtRecordCount, sizeof(D2UniqueAppellationTxt));
+	sgptDataTables->pUniqueTitleTxt = (D2UniqueTitleTxt*)DATATBLS_CompileTxt(pMemPool, "uniquetitle", pTbl, &sgptDataTables->nUniqueTitleTxtRecordCount, sizeof(D2UniqueTitleTxt));
+	sgptDataTables->pUniquePrefixTxt = (D2UniquePrefixTxt*)DATATBLS_CompileTxt(pMemPool, "uniqueprefix", pTbl, &sgptDataTables->nUniquePrefixTxtRecordCount, sizeof(D2UniquePrefixTxt));
+	sgptDataTables->pUniqueSuffixTxt = (D2UniqueSuffixTxt*)DATATBLS_CompileTxt(pMemPool, "uniquesuffix", pTbl, &sgptDataTables->nUniqueSuffixTxtRecordCount, sizeof(D2UniqueSuffixTxt));
+	sgptDataTables->pUniqueAppellationTxt = (D2UniqueAppellationTxt*)DATATBLS_CompileTxt(pMemPool, "uniqueappellation", pTbl, &sgptDataTables->nUniqueAppellationTxtRecordCount, sizeof(D2UniqueAppellationTxt));
 
 	DATATBLS_LoadMonLvlTxt(pMemPool);
 
-	gpDataTables.pTreasureClassExLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pTreasureClassExLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
 	DATATBLS_CreateItemTypeTreasureClasses();
 	DATATBLS_LoadTreasureClassExTxt(pMemPool);
 
-	ppTCEx = gpDataTables.pChestTreasureClasses;
+	ppTCEx = sgptDataTables->pChestTreasureClasses;
 	for (int i = 0; i < 3; ++i)
 	{
 		for (int j = 0; j < 5; ++j)
@@ -2779,10 +2779,10 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool)
 			{
 				wsprintfA(szChest, "Act %d%s Chest %s", j + 1, szDifficulties[i], szTreasureClassVariants[k]);
 
-				nTxtRow = FOG_GetRowFromTxt(gpDataTables.pTreasureClassExLinker, szChest, 0);
+				nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szChest, 0);
 				if (nTxtRow >= 0)
 				{
-					*ppTCEx = &gpDataTables.pTreasureClassEx[nTxtRow];
+					*ppTCEx = &sgptDataTables->pTreasureClassEx[nTxtRow];
 				}
 				else
 				{
@@ -2794,7 +2794,7 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool)
 		}
 	}
 
-	D2_ASSERT(gpDataTables.nTreasureClassEx < USHRT_MAX);
+	D2_ASSERT(sgptDataTables->nTreasureClassEx < USHRT_MAX);
 
 	DATATBLS_LoadMonStats2Txt(pMemPool);
 	DATATBLS_LoadMonPropTxt(pMemPool);
@@ -2823,41 +2823,41 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 	char v37[8] = {};
 	char dest[32] = {};
 
-	FOG_10216_AddRecordToLinkingTable(gpDataTables.pTreasureClassExLinker, &gpDataTables.szDefaultString);
+	FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, &sgptDataTables->szDefaultString);
 
-	if (!(gpDataTables.nTreasureClassEx % 16))
+	if (!(sgptDataTables->nTreasureClassEx % 16))
 	{
-		gpDataTables.pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, gpDataTables.pTreasureClassEx, sizeof(D2TCExShortStrc) * (gpDataTables.nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 	}
-	memset(&gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx], 0x00, sizeof(gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx]));
-	++gpDataTables.nTreasureClassEx;
+	memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
+	++sgptDataTables->nTreasureClassEx;
 
-	for (int i = 0; i < gpDataTables.nItemTypesTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 	{
-		if (!&gpDataTables.pItemTypesTxt[i])
+		if (!&sgptDataTables->pItemTypesTxt[i])
 		{
 			break;
 		}
 
-		if (gpDataTables.pItemTypesTxt[i].nTreasureClass)
+		if (sgptDataTables->pItemTypesTxt[i].nTreasureClass)
 		{
-			++gpDataTables.nTreasureClassItemTypes;
+			++sgptDataTables->nTreasureClassItemTypes;
 
 			nLevel = 3;
 			do
 			{
-				if (FOG_GetStringFromLinkIndex(gpDataTables.pItemTypesLinker, i, v37))
+				if (FOG_GetStringFromLinkIndex(sgptDataTables->pItemTypesLinker, i, v37))
 				{
 					wsprintfA(dest, "%s%d", v37, nLevel);
-					FOG_10216_AddRecordToLinkingTable(gpDataTables.pTreasureClassExLinker, dest);
+					FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, dest);
 
-					if (!(gpDataTables.nTreasureClassEx % 16))
+					if (!(sgptDataTables->nTreasureClassEx % 16))
 					{
-						gpDataTables.pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, gpDataTables.pTreasureClassEx, sizeof(D2TCExShortStrc) * (gpDataTables.nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+						sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 					}
-					memset(&gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx], 0x00, sizeof(gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx]));
+					memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
-					pTCExTxtRecord = &gpDataTables.pTreasureClassEx[gpDataTables.nTreasureClassEx++];
+					pTCExTxtRecord = &sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx++];
 
 					if (pTCExTxtRecord)
 					{
@@ -2865,7 +2865,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 						pTCExTxtRecord->nGroup = 0;
 						pTCExTxtRecord->nLevel = nLevel - 3;
 
-						for (int j = 0; j < gpDataTables.pItemDataTables.nItemsTxtRecordCount; ++j)
+						for (int j = 0; j < sgptDataTables->pItemDataTables.nItemsTxtRecordCount; ++j)
 						{
 							pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(j);
 							if (pItemsTxtRecord && !pItemsTxtRecord->nQuest && pItemsTxtRecord->nSpawnable && ITEMS_CheckItemTypeIdByItemId(j, i) && (i == ITEMTYPE_MISSILE_POTION || !ITEMS_CheckItemTypeIdByItemId(j, ITEMTYPE_MISSILE_POTION)))
@@ -2873,9 +2873,9 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 								if (pItemsTxtRecord->nLevel > nLevel - 3 && pItemsTxtRecord->nLevel <= nLevel)
 								{
 									nItemType = pItemsTxtRecord->wType[0];
-									if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+									if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 									{
-										pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+										pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 										if (pItemTypesTxtRecord)
 										{
 											nProbability = pItemTypesTxtRecord->nRarity;
@@ -2914,147 +2914,147 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 //D2Common.0x6FD6FBB0
 void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 {
-	if (gpDataTables.pMonEquipTxt)
+	if (sgptDataTables->pMonEquipTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonEquipTxt);
-		gpDataTables.nMonEquipTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pMonEquipTxt);
+		sgptDataTables->nMonEquipTxtRecordCount = 0;
 	}
 
-	DATATBLS_UnloadBin(gpDataTables.pNpcTxt);
+	DATATBLS_UnloadBin(sgptDataTables->pNpcTxt);
 
-	DATATBLS_UnloadBin(gpDataTables.pHirelingTxt);
-	gpDataTables.nHirelingTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pHirelingTxt);
+	sgptDataTables->nHirelingTxtRecordCount = 0;
 	for (int i = 0; i < 256; ++i)
 	{
-		gpDataTables.nClassicHirelingStartRecordIds[i] = -1;
-		gpDataTables.nExpansionHirelingStartRecordIds[i] = -1;
+		sgptDataTables->nClassicHirelingStartRecordIds[i] = -1;
+		sgptDataTables->nExpansionHirelingStartRecordIds[i] = -1;
 	}
 
-	if (gpDataTables.pMonPresetTxt)
+	if (sgptDataTables->pMonPresetTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonPresetTxt);
+		DATATBLS_UnloadBin(sgptDataTables->pMonPresetTxt);
 	}
 	for (int i = 0; i < 5; ++i)
 	{
-		gpDataTables.pMonPresetTxtActSections[i] = NULL;
-		gpDataTables.nMonPresetTxtActRecordCounts[i] = 0;
+		sgptDataTables->pMonPresetTxtActSections[i] = NULL;
+		sgptDataTables->nMonPresetTxtActRecordCounts[i] = 0;
 	}
 
-	if (gpDataTables.pSuperUniquesLinker)
+	if (sgptDataTables->pSuperUniquesLinker)
 	{
-		FOG_FreeLinker(gpDataTables.pSuperUniquesLinker);
+		FOG_FreeLinker(sgptDataTables->pSuperUniquesLinker);
 	}
-	if (gpDataTables.pSuperUniquesTxt)
+	if (sgptDataTables->pSuperUniquesTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pSuperUniquesTxt);
-		gpDataTables.pSuperUniquesTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pSuperUniquesTxt);
+		sgptDataTables->pSuperUniquesTxt = NULL;
 	}
-	gpDataTables.nSuperUniquesTxtRecordCount = 0;
+	sgptDataTables->nSuperUniquesTxtRecordCount = 0;
 
-	if (gpDataTables.pMonUModLinker)
+	if (sgptDataTables->pMonUModLinker)
 	{
-		FOG_FreeLinker(gpDataTables.pMonUModLinker);
-		gpDataTables.pMonUModLinker = NULL;
+		FOG_FreeLinker(sgptDataTables->pMonUModLinker);
+		sgptDataTables->pMonUModLinker = NULL;
 	}
-	if (gpDataTables.pMonUModTxt)
+	if (sgptDataTables->pMonUModTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonUModTxt);
-		gpDataTables.pMonUModTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pMonUModTxt);
+		sgptDataTables->pMonUModTxt = NULL;
 	}
-	gpDataTables.nMonUModTxtRecordCount = 0;
+	sgptDataTables->nMonUModTxtRecordCount = 0;
 
-	if (gpDataTables.pMonStatsTxt)
+	if (sgptDataTables->pMonStatsTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonStatsTxt);
-		FOG_FreeLinker(gpDataTables.pMonStatsLinker);
+		DATATBLS_UnloadBin(sgptDataTables->pMonStatsTxt);
+		FOG_FreeLinker(sgptDataTables->pMonStatsLinker);
 	}
-	gpDataTables.pMonStatsTxt = NULL;
+	sgptDataTables->pMonStatsTxt = NULL;
 
-	if (gpDataTables.pMonStats2Txt)
+	if (sgptDataTables->pMonStats2Txt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonStats2Txt);
-		FOG_FreeLinker(gpDataTables.pMonStats2Linker);
-	}
-
-	if (gpDataTables.pMonPropTxt)
-	{
-		DATATBLS_UnloadBin(gpDataTables.pMonPropTxt);
-		FOG_FreeLinker(gpDataTables.pMonPropLinker);
-	}
-	gpDataTables.nMonPropTxtRecordCount = 0;
-
-	if (gpDataTables.pMonSoundsTxt)
-	{
-		DATATBLS_UnloadBin(gpDataTables.pMonSoundsTxt);
-		FOG_FreeLinker(gpDataTables.pMonSoundsLinker);
-		gpDataTables.nMonSoundsTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pMonStats2Txt);
+		FOG_FreeLinker(sgptDataTables->pMonStats2Linker);
 	}
 
-	if (gpDataTables.pMonSeqTxt)
+	if (sgptDataTables->pMonPropTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonSeqTxt);
-		FOG_FreeLinker(gpDataTables.pMonSeqLinker);
-		gpDataTables.nMonSeqTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pMonPropTxt);
+		FOG_FreeLinker(sgptDataTables->pMonPropLinker);
 	}
-	if (gpDataTables.pMonSeqTable)
+	sgptDataTables->nMonPropTxtRecordCount = 0;
+
+	if (sgptDataTables->pMonSoundsTxt)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pMonSeqTable, __FILE__, __LINE__, 0);
-		gpDataTables.nMonSeqTableRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pMonSoundsTxt);
+		FOG_FreeLinker(sgptDataTables->pMonSoundsLinker);
+		sgptDataTables->nMonSoundsTxtRecordCount = 0;
 	}
 
-	FOG_FreeLinker(gpDataTables.pTreasureClassExLinker);
-	for (int i = 0; i < gpDataTables.nTreasureClassEx; ++i)
+	if (sgptDataTables->pMonSeqTxt)
 	{
-		if (gpDataTables.pTreasureClassEx[i].pInfo)
+		DATATBLS_UnloadBin(sgptDataTables->pMonSeqTxt);
+		FOG_FreeLinker(sgptDataTables->pMonSeqLinker);
+		sgptDataTables->nMonSeqTxtRecordCount = 0;
+	}
+	if (sgptDataTables->pMonSeqTable)
+	{
+		FOG_FreeServerMemory(NULL, sgptDataTables->pMonSeqTable, __FILE__, __LINE__, 0);
+		sgptDataTables->nMonSeqTableRecordCount = 0;
+	}
+
+	FOG_FreeLinker(sgptDataTables->pTreasureClassExLinker);
+	for (int i = 0; i < sgptDataTables->nTreasureClassEx; ++i)
+	{
+		if (sgptDataTables->pTreasureClassEx[i].pInfo)
 		{
-			FOG_FreeServerMemory(NULL, gpDataTables.pTreasureClassEx[i].pInfo, __FILE__, __LINE__, 0);
+			FOG_FreeServerMemory(NULL, sgptDataTables->pTreasureClassEx[i].pInfo, __FILE__, __LINE__, 0);
 		}
 	}
-	FOG_FreeServerMemory(NULL, gpDataTables.pTreasureClassEx, __FILE__, __LINE__, 0);
-	gpDataTables.pTreasureClassEx = NULL;
-	gpDataTables.nTreasureClassEx = 0;
+	FOG_FreeServerMemory(NULL, sgptDataTables->pTreasureClassEx, __FILE__, __LINE__, 0);
+	sgptDataTables->pTreasureClassEx = NULL;
+	sgptDataTables->nTreasureClassEx = 0;
 
-	if (gpDataTables.pMonLvlTxt)
+	if (sgptDataTables->pMonLvlTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonLvlTxt);
-		gpDataTables.nMonLvlTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pMonLvlTxt);
+		sgptDataTables->nMonLvlTxtRecordCount = 0;
 	}
 
-	if (gpDataTables.pUniqueTitleTxt)
+	if (sgptDataTables->pUniqueTitleTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pUniqueTitleTxt);
-		gpDataTables.pUniqueTitleTxt = NULL;
-		gpDataTables.nUniqueTitleTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pUniqueTitleTxt);
+		sgptDataTables->pUniqueTitleTxt = NULL;
+		sgptDataTables->nUniqueTitleTxtRecordCount = 0;
 	}
 
-	if (gpDataTables.pUniquePrefixTxt)
+	if (sgptDataTables->pUniquePrefixTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pUniquePrefixTxt);
-		gpDataTables.pUniquePrefixTxt = NULL;
-		gpDataTables.nUniquePrefixTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pUniquePrefixTxt);
+		sgptDataTables->pUniquePrefixTxt = NULL;
+		sgptDataTables->nUniquePrefixTxtRecordCount = 0;
 	}
 
-	if (gpDataTables.pUniqueSuffixTxt)
+	if (sgptDataTables->pUniqueSuffixTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pUniqueSuffixTxt);
-		gpDataTables.pUniqueSuffixTxt = NULL;
-		gpDataTables.nUniqueSuffixTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pUniqueSuffixTxt);
+		sgptDataTables->pUniqueSuffixTxt = NULL;
+		sgptDataTables->nUniqueSuffixTxtRecordCount = 0;
 	}
 
-	if (gpDataTables.pUniqueAppellationTxt)
+	if (sgptDataTables->pUniqueAppellationTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pUniqueAppellationTxt);
-		gpDataTables.pUniqueAppellationTxt = NULL;
-		gpDataTables.nUniqueAppellationTxtRecordCount = 0;
+		DATATBLS_UnloadBin(sgptDataTables->pUniqueAppellationTxt);
+		sgptDataTables->pUniqueAppellationTxt = NULL;
+		sgptDataTables->nUniqueAppellationTxtRecordCount = 0;
 	}
 }
 
 //Inlined at various places
 D2MonStatsTxt* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonsterId)
 {
-	if (nMonsterId >= 0 && nMonsterId < gpDataTables.nMonStatsTxtRecordCount)
+	if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
 	{
-		return &gpDataTables.pMonStatsTxt[nMonsterId];
+		return &sgptDataTables->pMonStatsTxt[nMonsterId];
 	}
 
 	return NULL;
