@@ -7,12 +7,15 @@ add_dependencies(D2Common D2.DetoursLauncher)
 set_target_properties(D2Common
   PROPERTIES
     VS_DEBUGGER_COMMAND $<TARGET_FILE:D2.DetoursLauncher>
-    VS_DEBUGGER_WORKING_DIRECTORY "${D2_PATH}"
     VS_DEBUGGER_ENVIRONMENT "DIABLO2_PATCH=$<TARGET_FILE_DIR:D2Common>"
 )
 
 if(D2_EXE)
-  set_target_properties(D2Common PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "\"${D2_EXE}\"")
+  set_target_properties(D2Common 
+    PROPERTIES 
+      VS_DEBUGGER_COMMAND_ARGUMENTS "\"${D2_EXE}\""
+	  VS_DEBUGGER_WORKING_DIRECTORY "${D2_PATH}"
+)
 else()
   message(STATUS "D2 executable was not found, please set the `D2_EXE` CMake variable for debugging.")
 endif()
