@@ -1,16 +1,12 @@
 #pragma once
 
+#include <D2Dll.h>
 #include <D2DataTables.h>
 
 #ifdef FOG_IMPL
 #define FOG_DLL_DECL __declspec( dllexport )
 #else
 #define FOG_DLL_DECL __declspec( dllimport )
-#endif
-
-#ifndef D2FUNC_DLL
-#define D2FUNC_DLL(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	DLL##_DLL_DECL RETURN CONV DLL##_##NAME## ARGS;
 #endif
 
 struct D2UnkFogStrc

@@ -23,7 +23,7 @@
 #define dword_6FDD6A24 1
 
 #include <Fog.h>
-#include <Imports/D2CMP.h>
+#include <D2CMP.h>
 #include <Imports/D2LANG.h>
 
 struct D2MazeLevelIdStrc

@@ -5,7 +5,8 @@
 #undef D2FUNC_DLL
 #define D2FUNC_DLL D2FUNC_DLL_STUB
 
-#include <Fog.h>
+
+#include <D2CMP.h>
 
 BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 {
