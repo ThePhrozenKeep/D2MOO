@@ -24,7 +24,7 @@
 
 #include <Fog.h>
 #include <D2CMP.h>
-#include <Imports/D2LANG.h>
+#include <D2LANG.h>
 
 struct D2MazeLevelIdStrc
 {

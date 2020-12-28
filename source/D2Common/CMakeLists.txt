@@ -10,10 +10,9 @@ add_library(D2Common
   # Misc
   include/CommonDefinitions.h
   include/Imports/DllBases.h
-  include/Imports/D2LANG.h
 )
 
-target_link_libraries(D2Common PRIVATE D2CommonDefinitions D2CMP Fog)
+target_link_libraries(D2Common PRIVATE D2CommonDefinitions D2CMP D2Lang Fog)
 
 target_include_directories(D2Common PUBLIC include)
 
