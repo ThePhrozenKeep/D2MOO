@@ -22,7 +22,7 @@
 
 #define dword_6FDD6A24 1
 
-#include <Imports/Fog.h>
+#include <Fog.h>
 #include <Imports/D2CMP.h>
 #include <Imports/D2LANG.h>
 
