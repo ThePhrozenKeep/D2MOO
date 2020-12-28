@@ -855,7 +855,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetGemApplyTypeFromItemId                                     @10819
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetGemApplyType                                               @10820
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_IsSocketFiller                                                @10821
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetRunesTxtRecordFromItem                                     @10822
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_GetRunesTxtRecordFromItem                                     @10822
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetWeaponClassId                                              @10823
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetTransmogrifyFromItemId                                     @10824
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetTransmogrify                                               @10825

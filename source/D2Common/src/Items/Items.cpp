@@ -495,9 +495,9 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 			return FALSE;
 		}
 
-		if (pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nRepair)
 			{
 				nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
@@ -510,9 +510,9 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 					return FALSE;
 				}
 
-				if (nItemType < gpDataTables.nItemTypesTxtRecordCount)
+				if (nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 				{
-					pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+					pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 					if (pItemTypesTxtRecord && pItemTypesTxtRecord->nRepair)
 					{
 						if (ITEMS_CheckItemTypeIfThrowable(ITEMS_GetItemType(pItem)) && ITEMS_CheckIfStackable(pItem) && !ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__))
@@ -538,9 +538,9 @@ DWORD __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+		pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 		if (pItemTypesTxtRecord)
 		{
 			return pItemTypesTxtRecord->wShoots;
@@ -571,9 +571,9 @@ DWORD __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+		pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 		if (pItemTypesTxtRecord)
 		{
 			return pItemTypesTxtRecord->wQuiver;
@@ -604,9 +604,9 @@ DWORD __stdcall ITEMS_GetAutoStackFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+		pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 		{
 			return pItemTypesTxtRecord->nAutoStack;
 		}
@@ -642,9 +642,9 @@ DWORD __stdcall ITEMS_GetReload(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nReload;
@@ -666,9 +666,9 @@ DWORD __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nReEquip;
@@ -690,9 +690,9 @@ BYTE __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nStorePage;
@@ -714,9 +714,9 @@ BYTE __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nVarInvGfx;
@@ -738,9 +738,9 @@ char* __stdcall ITEMS_GetVarInvGfxString(D2UnitStrc* pItem, int nId)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				if (nId < 0)
@@ -758,7 +758,7 @@ char* __stdcall ITEMS_GetVarInvGfxString(D2UnitStrc* pItem, int nId)
 		}
 	}
 
-	return &gpDataTables.szDefaultString;
+	return &sgptDataTables->szDefaultString;
 }
 
 //D2Common.0x6FD99140 (#10792)
@@ -772,9 +772,9 @@ BOOL __stdcall ITEMS_CanBeRare(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nRare;
@@ -796,9 +796,9 @@ BOOL __stdcall ITEMS_CanBeMagic(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nMagic;
@@ -820,9 +820,9 @@ BOOL __stdcall ITEMS_CanBeNormal(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nNormal;
@@ -929,9 +929,9 @@ void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, BYTE* pBodyLoc1,
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				*pBodyLoc1 = pItemTypesTxtRecord->nBodyLoc1;
@@ -1373,9 +1373,9 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 		break;
 	case ITEMQUAL_UNIQUE:
-		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < gpDataTables.nUniqueItemsTxtRecordCount)
+		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < sgptDataTables->nUniqueItemsTxtRecordCount)
 		{
-			pUniqueItemsTxtRecord = &gpDataTables.pUniqueItemsTxt[pItem->pItemData->dwFileIndex];
+			pUniqueItemsTxtRecord = &sgptDataTables->pUniqueItemsTxt[pItem->pItemData->dwFileIndex];
 			if (pUniqueItemsTxtRecord)
 			{
 				if (pPlayer)
@@ -1493,9 +1493,9 @@ BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, BYTE nBodyLoc)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				nBodyLoc1 = pItemTypesTxtRecord->nBodyLoc1;
@@ -1522,9 +1522,9 @@ int __stdcall ITEMS_CheckItemTypeIfThrowable(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+		pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 		if (pItemTypesTxtRecord)
 		{
 			return pItemTypesTxtRecord->nThrowable;
@@ -1641,9 +1641,9 @@ DWORD __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nBeltable;
@@ -1838,7 +1838,7 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 	{
 		do
 		{
-			nSkillId = pStat[nCounter].nLayer >> gpDataTables.nStuff;
+			nSkillId = pStat[nCounter].nLayer >> sgptDataTables->nStuff;
 
 			nMax = pStat[nCounter].nValue >> 8;
 			nValue = pStat[nCounter].nValue & 0xFF;
@@ -1848,7 +1848,7 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 				pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 				if (pSkillsTxtRecord)
 				{
-					nBase = nBaseCost * ((pStat[nCounter].nLayer & gpDataTables.nShiftedStuff) + 2 * pSkillsTxtRecord->wReqLevel / 6 + 2);
+					nBase = nBaseCost * ((pStat[nCounter].nLayer & sgptDataTables->nShiftedStuff) + 2 * pSkillsTxtRecord->wReqLevel / 6 + 2);
 					if (nBase > 65535 && pSkillsTxtRecord->nCostMult)
 					{
 						nAdd = pSkillsTxtRecord->nCostMult * nBase / 1024;
@@ -1929,8 +1929,8 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 					break;
 				case 2:
 				case 3:
-					nSkillId = pStat[nCounter].nLayer >> gpDataTables.nStuff;
-					nValue = pStat[nCounter].nLayer & gpDataTables.nShiftedStuff;
+					nSkillId = pStat[nCounter].nLayer >> sgptDataTables->nStuff;
+					nValue = pStat[nCounter].nLayer & sgptDataTables->nShiftedStuff;
 
 					pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
@@ -2238,9 +2238,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 				break;
 
 			case ITEMQUAL_UNIQUE:
-				if (pItemData->dwFileIndex >= 0 && pItemData->dwFileIndex < gpDataTables.nUniqueItemsTxtRecordCount)
+				if (pItemData->dwFileIndex >= 0 && pItemData->dwFileIndex < sgptDataTables->nUniqueItemsTxtRecordCount)
 				{
-					pUniqueItemsTxtRecord = &gpDataTables.pUniqueItemsTxt[pItemData->dwFileIndex];
+					pUniqueItemsTxtRecord = &sgptDataTables->pUniqueItemsTxt[pItemData->dwFileIndex];
 					if (pUniqueItemsTxtRecord)
 					{
 						if (nSellCost > 65535 && pUniqueItemsTxtRecord->dwCostMult)
@@ -2304,9 +2304,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 				break;
 
 			case ITEMQUAL_SET:
-				if (pItemData->dwFileIndex >= 0 && pItemData->dwFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+				if (pItemData->dwFileIndex >= 0 && pItemData->dwFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 				{
-					pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[pItemData->dwFileIndex];
+					pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[pItemData->dwFileIndex];
 					if (pSetItemsTxtRecord)
 					{
 						if (nSellCost > 65535 && pSetItemsTxtRecord->dwCostMult)
@@ -2367,9 +2367,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		}
 
 		nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
-		if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+		if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nClass < 7)
 			{
 				nBuyCost /= 4;
@@ -2646,9 +2646,9 @@ void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, in
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nStaffMods != 7)
 			{
 				nStats = D2Common_11270(pItem, STAT_ITEM_SINGLESKILL, pStat, ARRAY_SIZE(pStat));
@@ -2924,9 +2924,9 @@ int __stdcall ITEMS_GetStaffMods(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				return pItemTypesTxtRecord->nStaffMods;
@@ -2962,9 +2962,9 @@ BYTE __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				if (pItem->pItemData)
@@ -3104,9 +3104,9 @@ void __stdcall ITEMS_AddSockets(D2UnitStrc* pItem, int nSockets)
 			}
 
 			nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
-			if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+			if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+				pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 				if (pItemTypesTxtRecord)
 				{
 					if (pItemsTxtRecord)
@@ -3204,9 +3204,9 @@ void __stdcall ITEMS_SetSockets(D2UnitStrc* pItem, int nSockets)
 			}
 
 			nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
-			if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+			if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+				pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 				if (pItemTypesTxtRecord)
 				{
 					nAllowedSockets = ITEMS_GetAllowedGemSocketsFromItemId(pItem->dwClassId);
@@ -3285,106 +3285,87 @@ BOOL __stdcall ITEMS_IsSocketFiller(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9D9E0 (#10822)
-D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(D2UnitStrc* pItem)
+const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pItem)
 {
-	D2RunesTxt* pRunesTxtRecord = NULL;
-	D2UnitStrc* pInventoryItem = NULL;
-	int nSocketableIds[6] = {};
-	int nETypeCounter = 0;
-	int nITypeCounter = 0;
-	int nRuneCounter = 0;
-	int nItemCounter = 0;
-	int nSockets = 0;
-	bool bContinue = false;
+	if (!pItem)
+		return nullptr;
 
-	if (pItem)
+	const bool isItemOfSpecialQuality = (pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwQualityNo >= ITEMQUAL_MAGIC && pItem->pItemData->dwQualityNo <= ITEMQUAL_TEMPERED);
+	// Note: The game specifically checks all the things above, which means we will enter the condition if dwUnitType == UNIT_ITEM
+	// While this is not really correct, this is what the game does, and it works because it expects the unit to be an item.
+	// and is using another function that checked if an item was special, which happened to check that the unit was indeed an item
+	if (isItemOfSpecialQuality)
+		return nullptr;
+
+	if (!DATATBLS_GetItemsTxtRecord(pItem->dwClassId)->nQuest && pItem->pInventory)
 	{
-		if (pItem->dwUnitType != UNIT_ITEM || !pItem->pItemData || pItem->pItemData->dwQualityNo < ITEMQUAL_MAGIC || pItem->pItemData->dwQualityNo > ITEMQUAL_TEMPERED)
+		int nSocketableIds[6] = {};
+		int nbSocketedItems = 0;
+
+		D2UnitStrc* pInventoryItem = INVENTORY_GetFirstItem(pItem->pInventory);
+		while (pInventoryItem && INVENTORY_UnitIsItem(pInventoryItem))
 		{
-			if (!DATATBLS_GetItemsTxtRecord(pItem->dwClassId)->nQuest && pItem->pInventory)
+			nSocketableIds[nbSocketedItems] = pInventoryItem->dwClassId;
+			++nbSocketedItems;
+
+			pInventoryItem = INVENTORY_GetNextItem(pInventoryItem);
+		}
+
+		D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
+
+		const int nSockets = STATLIST_GetUnitStat(pItem, STAT_ITEM_NUMSOCKETS, 0);
+
+		if (nSockets != nbSocketedItems)
+		{
+			return NULL;
+		}
+
+		for (int i = 0; i < sgptDataTables->pRuneDataTables.nRunesTxtRecordCount; ++i)
+		{
+			const D2RunesTxt* pRunesTxtRecord = &sgptDataTables->pRuneDataTables.pRunesTxt[i];
+
+			if (pRunesTxtRecord->nComplete)
 			{
-				pInventoryItem = INVENTORY_GetFirstItem(pItem->pInventory);
-				if (pInventoryItem)
+				int nRuneCounter = 0;
+				while (nRuneCounter < 6 && pRunesTxtRecord->dwRune[nRuneCounter] > 0)
 				{
-					nItemCounter = 0;
-					while (INVENTORY_UnitIsItem(pInventoryItem))
+					if (nbSocketedItems < nRuneCounter || nSocketableIds[nRuneCounter] != pRunesTxtRecord->dwRune[nRuneCounter])
 					{
-						nSocketableIds[nItemCounter] = pInventoryItem->dwClassId;
-						++nItemCounter;
+						break;
+					}
 
-						pInventoryItem = INVENTORY_GetNextItem(pInventoryItem);
+					++nRuneCounter;
+				}
 
-						if (!pInventoryItem)
+				if (nRuneCounter >= nSockets)
+				{
+					// All runes are a match, now check if the item types correspond
+					bool isItemTypeExcluded = false;
+					for(int nETypeCounter = 0; nETypeCounter < 3 && pRunesTxtRecord->wEType[nETypeCounter]; ++nETypeCounter)
+					{
+						if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wEType[nETypeCounter]))
 						{
-							D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
+							isItemTypeExcluded = true;
+							break;
+						}
+					}
 
-							nSockets = STATLIST_GetUnitStat(pItem, STAT_ITEM_NUMSOCKETS, 0);
+					// Not a match, keep looking
+					if (isItemTypeExcluded)
+						continue;
 
-							if (nSockets != nItemCounter)
-							{
-								return NULL;
-							}
-
-							for (int i = 0; i < gpDataTables.pRuneDataTables.nRunesTxtRecordCount; ++i)
-							{
-								pRunesTxtRecord = &gpDataTables.pRuneDataTables.pRunesTxt[i];
-
-								if (pRunesTxtRecord->nComplete)
-								{
-									bContinue = true;
-									nRuneCounter = 0;
-									while (nRuneCounter < 6 && pRunesTxtRecord->dwRune[nRuneCounter] > 0)
-									{
-										if (nItemCounter < nRuneCounter || nSocketableIds[nRuneCounter] != pRunesTxtRecord->dwRune[nRuneCounter])
-										{
-											bContinue = false;
-											break;
-										}
-
-										++nRuneCounter;
-									}
-
-									if (bContinue && nRuneCounter >= nSockets)
-									{
-										bContinue = true;
-										nETypeCounter = 0;
-										while (nETypeCounter < 3 && pRunesTxtRecord->wEType[nETypeCounter])
-										{
-											if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wEType[nETypeCounter]))
-											{
-												bContinue = false;
-												break;
-											}
-
-											++nETypeCounter;
-										}
-
-										if (bContinue)
-										{
-											nITypeCounter = 0;
-											while (nITypeCounter < 6 && pRunesTxtRecord->wIType[nITypeCounter])
-											{
-												if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wIType[nITypeCounter]))
-												{
-													return pRunesTxtRecord;
-												}
-
-												++nITypeCounter;
-											}
-										}
-									}
-								}
-							}
-
-							return NULL;
+					for(int nITypeCounter = 0; nITypeCounter < 6 && pRunesTxtRecord->wIType[nITypeCounter]; ++nITypeCounter)
+					{
+						if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wIType[nITypeCounter]))
+						{
+							return pRunesTxtRecord;
 						}
 					}
 				}
 			}
 		}
 	}
-
-	return NULL;
+	return nullptr;
 }
 
 //D2Common.0x6FD9DBA0 (#10729)
@@ -3392,21 +3373,21 @@ BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
-	if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 		if (pItemsTxtRecord)
 		{
-			if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+			if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				if (gpDataTables.pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[0] * gpDataTables.nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F])
+				if (sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[0] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F])
 				{
 					return TRUE;
 				}
 
-				if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < gpDataTables.nItemTypesTxtRecordCount)
+				if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < sgptDataTables->nItemTypesTxtRecordCount)
 				{
-					return gpDataTables.pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[1] * gpDataTables.nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F];
+					return sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[1] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F];
 				}
 			}
 		}
@@ -3418,16 +3399,16 @@ BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType)
 //D2Common.0x6FD9DC80 (#10730)
 BOOL __stdcall ITEMS_CheckType(int nItemType1, int nItemType2)
 {
-	if (nItemType1 >= 0 && nItemType1 < gpDataTables.nItemTypesTxtRecordCount && nItemType2 >= 0 && nItemType2 < gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType1 >= 0 && nItemType1 < sgptDataTables->nItemTypesTxtRecordCount && nItemType2 >= 0 && nItemType2 < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		return gpDataTables.pItemTypesNest[(nItemType2 >> 5) + nItemType1 * gpDataTables.nItemTypesIndex] & gdwBitMasks[nItemType2 & 0x1F];
+		return sgptDataTables->pItemTypesNest[(nItemType2 >> 5) + nItemType1 * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType2 & 0x1F];
 	}
 
 	return FALSE;
 }
 
 //D2Common.0x6FD9DCE0 (#10731)
-BOOL __stdcall ITEMS_CheckItemTypeId(D2UnitStrc* pItem, int nItemType)
+BOOL __stdcall ITEMS_CheckItemTypeId(const D2UnitStrc* pItem, int nItemType)
 {
 	if (pItem)
 	{
@@ -3550,9 +3531,9 @@ BOOL __stdcall ITEMS_IsBodyItem(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord)
 			{
 				if (pItemTypesTxtRecord->nBodyLoc1 || pItemTypesTxtRecord->nBodyLoc2)
@@ -3575,9 +3556,9 @@ BOOL __stdcall ITEMS_IsClassValidByItemId(int nItemId)
 	pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 	D2_ASSERT(pItemsTxtRecord);
 
-	if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+	if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+		pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 		if (pItemTypesTxtRecord)
 		{
 			return pItemTypesTxtRecord->nClass < 7;
@@ -3609,9 +3590,9 @@ int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < gpDataTables.nItemTypesTxtRecordCount)
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[pItemsTxtRecord->wType[0]];
+			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nClass < 7)
 			{
 				return pItemTypesTxtRecord->nClass;
@@ -3767,11 +3748,11 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 
 	if (pPlayer)
 	{
-		for (int i = 0; i < gpDataTables.nColourStates; ++i)
+		for (int i = 0; i < sgptDataTables->nColourStates; ++i)
 		{
-			if (STATES_CheckState(pPlayer, gpDataTables.pColourStates[i]) && gpDataTables.pColourStates[i] >= 0 && gpDataTables.pColourStates[i] < gpDataTables.nStatesTxtRecordCount)
+			if (STATES_CheckState(pPlayer, sgptDataTables->pColourStates[i]) && sgptDataTables->pColourStates[i] >= 0 && sgptDataTables->pColourStates[i] < sgptDataTables->nStatesTxtRecordCount)
 			{
-				pStatesTxtRecord = &gpDataTables.pStatesTxt[gpDataTables.pColourStates[i]];
+				pStatesTxtRecord = &sgptDataTables->pStatesTxt[sgptDataTables->pColourStates[i]];
 				if (pStatesTxtRecord && pStatesTxtRecord->nItemTrans < 21 && ITEMS_CheckItemTypeId(pItem, pStatesTxtRecord->wItemType))
 				{
 					pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
@@ -3869,9 +3850,9 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 		D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 		D2_ASSERT(pItem->pItemData);
 
-		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < gpDataTables.nUniqueItemsTxtRecordCount)
+		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < sgptDataTables->nUniqueItemsTxtRecordCount)
 		{
-			pUniqueItemsTxtRecord = &gpDataTables.pUniqueItemsTxt[pItem->pItemData->dwFileIndex];
+			pUniqueItemsTxtRecord = &sgptDataTables->pUniqueItemsTxt[pItem->pItemData->dwFileIndex];
 			if (pUniqueItemsTxtRecord)
 			{
 				if (nTransType)
@@ -3921,9 +3902,9 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 		D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 		D2_ASSERT(pItem->pItemData);
 
-		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[pItem->pItemData->dwFileIndex];
+			pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[pItem->pItemData->dwFileIndex];
 			if (pSetItemsTxtRecord)
 			{
 				if (nTransType)
@@ -3970,9 +3951,9 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 			if (pItemsTxtRecord && pItemsTxtRecord->nHasInv)
 			{
 				nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
-				if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+				if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 				{
-					pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+					pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 					if (pItemTypesTxtRecord)
 					{
 						nGemSockets = ITEMS_GetAllowedGemSocketsFromItemId(pItem->dwClassId);
@@ -4068,9 +4049,9 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 //D2Common.0x6FD9EE70
 D2SetItemsTxt* __fastcall ITEMS_GetSetItemsTxtRecord(int nRecordId)
 {
-	if (nRecordId >= 0 && nRecordId < gpDataTables.nSetItemsTxtRecordCount)
+	if (nRecordId >= 0 && nRecordId < sgptDataTables->nSetItemsTxtRecordCount)
 	{
-		return &gpDataTables.pSetItemsTxt[nRecordId];
+		return &sgptDataTables->pSetItemsTxt[nRecordId];
 	}
 
 	return NULL;
@@ -4236,12 +4217,12 @@ BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem)
 	}
 
 	nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
-	if (nItemType < 0 || nItemType >= gpDataTables.nItemTypesTxtRecordCount)
+	if (nItemType < 0 || nItemType >= sgptDataTables->nItemTypesTxtRecordCount)
 	{
 		return FALSE;
 	}
 
-	pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+	pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 	if (!pItemTypesTxtRecord)
 	{
 		return FALSE;
@@ -4330,9 +4311,9 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 				nItemType = 0;
 			}
 
-			if (nItemType >= 0 && nItemType < gpDataTables.nItemTypesTxtRecordCount)
+			if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				pItemTypesTxtRecord = &gpDataTables.pItemTypesTxt[nItemType];
+				pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 				if (pItemTypesTxtRecord && pItemTypesTxtRecord->nRepair && pItem->dwUnitType == UNIT_ITEM && ITEMS_CheckItemTypeIfThrowable(ITEMS_GetItemType(pItem)))
 				{
 					if (ITEMS_CheckIfStackable(pItem) && !ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__))
@@ -4498,11 +4479,11 @@ DWORD __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem,
 
 	nFileIndex = pSetItem->pItemData->dwFileIndex;
 
-	if (nFileIndex >= 0 && nFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+	if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 	{
-		pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nFileIndex];
+		pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
 
-		if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < gpDataTables.nSetsTxtRecordCount && &gpDataTables.pSetsTxt[pSetItemsTxtRecord->nSetId])
+		if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < sgptDataTables->nSetsTxtRecordCount && &sgptDataTables->pSetsTxt[pSetItemsTxtRecord->nSetId])
 		{
 			for (D2UnitStrc* i = INVENTORY_GetFirstItem(pPlayer->pInventory); i; i = INVENTORY_GetNextItem(i))
 			{
@@ -4514,9 +4495,9 @@ DWORD __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem,
 						if (pItemData && pItemData->dwQualityNo == ITEMQUAL_SET && !(pItemData->dwItemFlags & IFLAG_NOEQUIP) && !(pItemData->dwItemFlags & IFLAG_BROKEN))
 						{
 							nFileIndex = pItemData->dwFileIndex;
-							if (nFileIndex >= 0 && nFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+							if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 							{
-								pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nFileIndex];
+								pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
 								if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId == pSetItemsTxtRecord->nSetId)
 								{
 									nSetItemMask |= 1 << LOBYTE(pSetItemsTxtRecord->nSetItems);
@@ -4538,9 +4519,9 @@ D2SetItemsTxt* __stdcall ITEMS_GetSetItemsTxtRecordFromItem(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwQualityNo == ITEMQUAL_SET)
 	{
-		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			return &gpDataTables.pSetItemsTxt[pItem->pItemData->dwFileIndex];
+			return &sgptDataTables->pSetItemsTxt[pItem->pItemData->dwFileIndex];
 		}
 	}
 
@@ -5317,7 +5298,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
 			pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 12);
-			if (pItemData->dwFileIndex < 0 || pItemData->dwFileIndex >= gpDataTables.nUniqueItemsTxtRecordCount)
+			if (pItemData->dwFileIndex < 0 || pItemData->dwFileIndex >= sgptDataTables->nUniqueItemsTxtRecordCount)
 			{
 				pItemData->dwFileIndex = -1;
 			}
@@ -5334,9 +5315,9 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			nSetRecordId = BITBUFFER_Read(pBuffer, 12);
 			if (dwVersion > 92)
 			{
-				if (nSetRecordId >= 0 && nSetRecordId < gpDataTables.nSetItemsTxtRecordCount)
+				if (nSetRecordId >= 0 && nSetRecordId < sgptDataTables->nSetItemsTxtRecordCount)
 				{
-					pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nSetRecordId];
+					pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nSetRecordId];
 					if (pSetItemsTxtRecord)
 					{
 						pItemData->dwFileIndex = pSetItemsTxtRecord->wSetItemId;
@@ -5346,9 +5327,9 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			}
 			else
 			{
-				if (nSetRecordId >= 0 && nSetRecordId < gpDataTables.nSetsTxtRecordCount)
+				if (nSetRecordId >= 0 && nSetRecordId < sgptDataTables->nSetsTxtRecordCount)
 				{
-					pSetsTxtRecord = &gpDataTables.pSetsTxt[nSetRecordId];
+					pSetsTxtRecord = &sgptDataTables->pSetsTxt[nSetRecordId];
 					if (pSetsTxtRecord)
 					{
 						for (int i = 0; i < pSetsTxtRecord->nSetItems; ++i)
@@ -6093,7 +6074,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 					D2Common_10846(BITBUFFER_Read(pBuffer, nBits), &v249, &v250, &v251, &v252);
 
-					STATLIST_SetStat(pStatList, STAT_ITEM_CHARGED_SKILL, (v252 << 8) + (BYTE)v251, (v250 & LOWORD(gpDataTables.nShiftedStuff)) + ((WORD)v249 << gpDataTables.nStuff));
+					STATLIST_SetStat(pStatList, STAT_ITEM_CHARGED_SKILL, (v252 << 8) + (BYTE)v251, (v250 & LOWORD(sgptDataTables->nShiftedStuff)) + ((WORD)v249 << sgptDataTables->nStuff));
 				}
 				break;
 			}
@@ -6556,7 +6537,6 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	D2MagicAffixDataTbl* pMagicAffixInfo = NULL;
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	D2RunesTxt* pRunesTxtRecord = NULL;
 	D2StatListStrc* pStatListEx = NULL;
 	D2UnitStrc* pInventoryItem = NULL;
 	D2ItemDataStrc* pItemData = NULL;
@@ -7159,8 +7139,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 
 	if (pItemData->dwItemFlags & IFLAG_RUNEWORD)
 	{
-		pRunesTxtRecord = ITEMS_GetRunesTxtRecordFromItem(pItem);
-		if (pRunesTxtRecord)
+		if (const D2RunesTxt* pRunesTxtRecord = ITEMS_GetRunesTxtRecordFromItem(pItem))
 		{
 			nRunewordId = pRunesTxtRecord->wStringId;
 		}
@@ -7486,9 +7465,9 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 //D2Common.0x6FDA42B0
 D2ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId)
 {
-	if (nStatId >= 0 && nStatId < gpDataTables.nItemStatCostTxtRecordCount)
+	if (nStatId >= 0 && nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
 	{
-		return &gpDataTables.pItemStatCostTxt[nStatId];
+		return &sgptDataTables->pItemStatCostTxt[nStatId];
 	}
 
 	return NULL;
@@ -7501,9 +7480,9 @@ int __stdcall ITEMS_GetNoOfSetItemsFromItem(D2UnitStrc* pItem)
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwQualityNo == ITEMQUAL_SET)
 	{
-		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (pItem->pItemData->dwFileIndex >= 0 && pItem->pItemData->dwFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[pItem->pItemData->dwFileIndex];
+			pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[pItem->pItemData->dwFileIndex];
 			if (pSetItemsTxtRecord)
 			{
 				return pSetItemsTxtRecord->nSetItems;
@@ -7613,10 +7592,10 @@ BOOL __fastcall sub_6FDA4490(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3)
 	if (a3 <= 1 && pUnit && pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET && (pUnit->dwUnitType != UNIT_ITEM || !ITEMS_IsMagSetRarUniCrfOrTmp(pUnit)))
 	{
 		nFileIndex = ITEMS_GetFileIndex(pItem);
-		if (nFileIndex >= 0 && nFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nFileIndex];
-			if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < gpDataTables.nSetsTxtRecordCount)
+			pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
+			if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < sgptDataTables->nSetsTxtRecordCount)
 			{
 				nValue = pSetItemsTxtRecord->nSetId;
 				nIndex = -1;

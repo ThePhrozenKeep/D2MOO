@@ -1834,7 +1834,7 @@ int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, WORD nLay
 }
 
 //D2Common.0x6FDB7C30 (#10519)
-int __stdcall STATLIST_GetUnitStat(D2UnitStrc* pUnit, int nStatId, WORD nLayer)
+int __stdcall STATLIST_GetUnitStat(const D2UnitStrc* pUnit, int nStatId, WORD nLayer)
 {
 	D2ItemStatCostTxt* pItemStatCostTxtRecord = NULL;
 	D2StatListExStrc* pStatListEx = NULL;

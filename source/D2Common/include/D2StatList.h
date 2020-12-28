@@ -74,7 +74,7 @@ void __stdcall STATLIST_AddUnitStat(D2UnitStrc* pUnit, int nStatId, int nValue, 
 //D2Common.0x6FDB7B30 (#10521)
 int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, WORD nLayer);
 //D2Common.0x6FDB7C30 (#10519)
-int __stdcall STATLIST_GetUnitStat(D2UnitStrc* pUnit, int nStatId, WORD nLayer);
+int __stdcall STATLIST_GetUnitStat(const D2UnitStrc* pUnit, int nStatId, WORD nLayer);
 //D2Common.0x(6FDB7D40 (#10466)
 int __stdcall STATLIST_GetStatValue(D2StatListStrc* pStatList, int nStatId, WORD nLayer);
 //D2Common.0x6FDB7E30 (#10520)
