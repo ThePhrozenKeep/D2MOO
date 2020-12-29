@@ -789,7 +789,7 @@ BOOL __stdcall MONSTESR_IsSandLeaper(D2UnitStrc* pMonster, BOOL bAlwaysReturnFal
 		nClassId = -1;
 	}
 
-	if (gpDataTables.nMonStatsTxtRecordCount > MONSTER_SANDLEAPER1)
+	if (sgptDataTables->nMonStatsTxtRecordCount > MONSTER_SANDLEAPER1)
 	{
 		if (nClassId == MONSTER_SANDLEAPER1)
 		{
@@ -910,7 +910,7 @@ int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, 
 	else
 	{
 		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
-		if (pSkillsTxtRecord && pSkillsTxtRecord->wSummon >= 0 && pSkillsTxtRecord->wSummon < gpDataTables.nMonStatsTxtRecordCount)
+		if (pSkillsTxtRecord && pSkillsTxtRecord->wSummon >= 0 && pSkillsTxtRecord->wSummon < sgptDataTables->nMonStatsTxtRecordCount)
 		{
 			UNITS_GetCoords(pMonster, &pCoords);
 
@@ -951,7 +951,7 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 	{
 		nBaseId = MONSTERS_GetBaseIdFromMonsterId(pMonster->dwClassId);
 
-		if (nBaseId < 0 || nBaseId >= gpDataTables.nMonStatsTxtRecordCount)
+		if (nBaseId < 0 || nBaseId >= sgptDataTables->nMonStatsTxtRecordCount)
 		{
 			nBaseId = -1;
 		}
@@ -1313,7 +1313,7 @@ int __fastcall MONSTERS_GetClassIdFromMonsterChain(int nMonsterId, int nChainId)
 //D2Common.0x6FDA69C0
 int __fastcall MONSTERS_ValidateMonsterId(int nMonsterId)
 {
-	if (nMonsterId >= 0 && nMonsterId < gpDataTables.nMonStatsTxtRecordCount)
+	if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
 	{
 		return nMonsterId;
 	}

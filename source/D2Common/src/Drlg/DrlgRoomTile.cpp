@@ -1438,7 +1438,7 @@ void __fastcall DRLGROOMTILE_LoadDT1FilesForRoom(D2RoomExStrc* pRoomEx)
 		++nCounter;
 	}
 
-	szPath[0] = gpDataTables.szDefaultString;
+	szPath[0] = sgptDataTables->szDefaultString;
 
 	wsprintfA(szPath, "%s\\Tiles\\Act1\\Outdoors\\Blank.dt1", "DATA\\GLOBAL");
 	D2CMP_10087_LoadTileLibrarySlot(pRoomEx->pTiles, szPath);

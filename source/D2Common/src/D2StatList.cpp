@@ -668,9 +668,9 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 						nOpBase = pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase;
 						if (nOpBase != -1)
 						{
-							if (pStatListEx->pUnit->pStatListEx && nOpBase < gpDataTables.nItemStatCostTxtRecordCount)
+							if (pStatListEx->pUnit->pStatListEx && nOpBase < sgptDataTables->nItemStatCostTxtRecordCount)
 							{
-								if (&gpDataTables.pItemStatCostTxt[nOpBase] && sub_6FDB63E0(pStatListEx->pUnit->pStatListEx, nOpBase << 16, &gpDataTables.pItemStatCostTxt[nOpBase]) > 0)
+								if (&sgptDataTables->pItemStatCostTxt[nOpBase] && sub_6FDB63E0(pStatListEx->pUnit->pStatListEx, nOpBase << 16, &sgptDataTables->pItemStatCostTxt[nOpBase]) > 0)
 								{
 									bUpdate = FALSE;
 								}
@@ -1303,8 +1303,8 @@ void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pC
 	pStatListEx->pGame = pGame;
 	pStatListEx->dwFlags = nFlags & 1 | 0x80000000;
 
-	pStatListEx->StatFlags = (DWORD*)FOG_AllocServerMemory(pUnit->pMemoryPool, 2 * sizeof(DWORD) * (gpDataTables.nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
-	memset(pStatListEx->StatFlags, 0x00, 2 * sizeof(DWORD) * (gpDataTables.nStatesTxtRecordCount + 31) / 32);
+	pStatListEx->StatFlags = (DWORD*)FOG_AllocServerMemory(pUnit->pMemoryPool, 2 * sizeof(DWORD) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
+	memset(pStatListEx->StatFlags, 0x00, 2 * sizeof(DWORD) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	pUnit->pStatListEx = pStatListEx;
 }
@@ -2733,11 +2733,11 @@ void __stdcall D2Common_STATES_ToggleState_6FDB8900(D2UnitStrc* pUnit, int nStat
 			}
 		}
 
-		pUnit->pStatListEx->StatFlags[(nState >> 5) + (gpDataTables.nStatesTxtRecordCount + 31) / 32] |= gdwBitMasks[nState & 31];
+		pUnit->pStatListEx->StatFlags[(nState >> 5) + (sgptDataTables->nStatesTxtRecordCount + 31) / 32] |= gdwBitMasks[nState & 31];
 
-		if (nState >= 0 && nState < gpDataTables.nStatesTxtRecordCount)
+		if (nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
 		{
-			pStatesTxtRecord = &gpDataTables.pStatesTxt[nState];
+			pStatesTxtRecord = &sgptDataTables->pStatesTxt[nState];
 			if (pStatesTxtRecord)
 			{
 				if (bSet)
@@ -2775,7 +2775,7 @@ DWORD* __stdcall D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(D2UnitStrc* pUnit)
 {
 	if (pUnit && pUnit->pStatListEx && (pUnit->pStatListEx->dwFlags & 0x80000000) != 0)
 	{
-		return &pUnit->pStatListEx->StatFlags[(gpDataTables.nStatesTxtRecordCount + 31) / 32];
+		return &pUnit->pStatListEx->StatFlags[(sgptDataTables->nStatesTxtRecordCount + 31) / 32];
 	}
 
 	return NULL;

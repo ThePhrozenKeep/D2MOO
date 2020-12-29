@@ -40,7 +40,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, BYTE nActNo, void* a3
 	pDrlg->pfAutomap = pfAutoMap;
 	pDrlg->pfTownAutomap = pfTownAutoMap;
 
-	szPath[0] = gpDataTables.szDefaultString;
+	szPath[0] = sgptDataTables->szDefaultString;
 
 	switch (nActNo)
 	{

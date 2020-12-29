@@ -166,16 +166,16 @@ void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 	
-	gpDataTables.pObjectsTxt = (D2ObjectsTxt*)DATATBLS_CompileTxt(pMemPool, "objects", pTbl, &gpDataTables.nObjectsTxtRecordCount, sizeof(D2ObjectsTxt));
+	sgptDataTables->pObjectsTxt = (D2ObjectsTxt*)DATATBLS_CompileTxt(pMemPool, "objects", pTbl, &sgptDataTables->nObjectsTxtRecordCount, sizeof(D2ObjectsTxt));
 
-	for (int i = 0; i < gpDataTables.nObjectsTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nObjectsTxtRecordCount; ++i)
 	{
-		memset(gpDataTables.pObjectsTxt[i].wszName, 0x00, sizeof(gpDataTables.pObjectsTxt[i].wszName));
-		wcsncpy_s(gpDataTables.pObjectsTxt[i].wszName, D2LANG_GetStringByReferenceString(gpDataTables.pObjectsTxt[i].szName), sizeof(gpDataTables.pObjectsTxt[i].szName));
+		memset(sgptDataTables->pObjectsTxt[i].wszName, 0x00, sizeof(sgptDataTables->pObjectsTxt[i].wszName));
+		wcsncpy_s(sgptDataTables->pObjectsTxt[i].wszName, D2LANG_GetStringByReferenceString(sgptDataTables->pObjectsTxt[i].szName), sizeof(sgptDataTables->pObjectsTxt[i].szName));
 
 		for (int j = 0; j < 8; ++j)
 		{
-			gpDataTables.pObjectsTxt[i].dwFrameCnt[j] <<= 8;
+			sgptDataTables->pObjectsTxt[i].dwFrameCnt[j] <<= 8;
 		}
 	}
 }
@@ -183,25 +183,25 @@ void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
 //D2Common.0x6FD718F0 (#10626)
 D2ObjectsTxt* __stdcall DATATBLS_GetObjectsTxtRecord(int nObjectId)
 {
-	D2_ASSERT(nObjectId < gpDataTables.nObjectsTxtRecordCount);
+	D2_ASSERT(nObjectId < sgptDataTables->nObjectsTxtRecordCount);
 	D2_ASSERT(nObjectId >= 0);
-	return &gpDataTables.pObjectsTxt[nObjectId];
+	return &sgptDataTables->pObjectsTxt[nObjectId];
 }
 
 //D2Common.0x6FD71960
 void __fastcall DATATBLS_UnloadObjectsTxt()
 {
-	DATATBLS_UnloadBin(gpDataTables.pObjectsTxt);
-	gpDataTables.pObjectsTxt = NULL;
-	gpDataTables.nObjectsTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pObjectsTxt);
+	sgptDataTables->pObjectsTxt = NULL;
+	sgptDataTables->nObjectsTxtRecordCount = 0;
 }
 
 //D2Common.0x6FD71980
 void __fastcall DATATBLS_UnloadObjGroupTxt()
 {
-	DATATBLS_UnloadBin(gpDataTables.pObjGroupTxt);
-	gpDataTables.pObjGroupTxt = NULL;
-	gpDataTables.nObjGroupTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pObjGroupTxt);
+	sgptDataTables->pObjGroupTxt = NULL;
+	sgptDataTables->nObjGroupTxtRecordCount = 0;
 }
 
 //D2Common.0x6FD719A0
@@ -238,15 +238,15 @@ void __fastcall DATATBLS_LoadObjGroupTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pObjGroupTxt = (D2ObjGroupTxt*)DATATBLS_CompileTxt(pMemPool, "objgroup", pTbl, &gpDataTables.nObjGroupTxtRecordCount, sizeof(D2ObjGroupTxt));
+	sgptDataTables->pObjGroupTxt = (D2ObjGroupTxt*)DATATBLS_CompileTxt(pMemPool, "objgroup", pTbl, &sgptDataTables->nObjGroupTxtRecordCount, sizeof(D2ObjGroupTxt));
 }
 
 //D2Common.0x6FD71E00 (#10627)
 D2ObjGroupTxt* __stdcall DATATBLS_GetObjGroupTxtRecord(int nId)
 {
-	if (nId < gpDataTables.nObjGroupTxtRecordCount)
+	if (nId < sgptDataTables->nObjGroupTxtRecordCount)
 	{
-		return &gpDataTables.pObjGroupTxt[nId];
+		return &sgptDataTables->pObjGroupTxt[nId];
 	}
 
 	return NULL;
@@ -270,27 +270,27 @@ void __fastcall DATATBLS_LoadShrinesTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pShrinesTxt = (D2ShrinesTxt*)DATATBLS_CompileTxt(pMemPool, "shrines", pTbl, &gpDataTables.nShrinesTxtRecordCount, sizeof(D2ShrinesTxt));
+	sgptDataTables->pShrinesTxt = (D2ShrinesTxt*)DATATBLS_CompileTxt(pMemPool, "shrines", pTbl, &sgptDataTables->nShrinesTxtRecordCount, sizeof(D2ShrinesTxt));
 }
 
 //D2Common.0x6FD72000 (#10624)
 D2ShrinesTxt* __stdcall DATATBLS_GetShrinesTxtRecord(int nShrineId)
 {
-	D2_ASSERT(nShrineId < gpDataTables.nShrinesTxtRecordCount);
+	D2_ASSERT(nShrineId < sgptDataTables->nShrinesTxtRecordCount);
 	D2_ASSERT(nShrineId >= 0);
-	return &gpDataTables.pShrinesTxt[nShrineId];
+	return &sgptDataTables->pShrinesTxt[nShrineId];
 }
 
 //D2Common.0x6FD72070 (#10625)
 int __stdcall DATATBLS_GetShrinesTxtRecordCount()
 {
-	return gpDataTables.nShrinesTxtRecordCount;
+	return sgptDataTables->nShrinesTxtRecordCount;
 }
 
 //D2Common.0x6FD72080
 void __fastcall DATATBLS_UnloadShrinesTxt()
 {
-	DATATBLS_UnloadBin(gpDataTables.pShrinesTxt);
-	gpDataTables.pShrinesTxt = NULL;
-	gpDataTables.nShrinesTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pShrinesTxt);
+	sgptDataTables->pShrinesTxt = NULL;
+	sgptDataTables->nShrinesTxtRecordCount = 0;
 }

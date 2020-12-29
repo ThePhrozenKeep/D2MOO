@@ -542,7 +542,7 @@ BOOL __stdcall ITEMMODS_GetItemCharges(D2UnitStrc* pItem, int nSkillId, int nSki
 	{
 		do
 		{
-			nValue = STATLIST_GetStatValue(pStatList, STAT_ITEM_CHARGED_SKILL, (nSkillLevel & gpDataTables.nShiftedStuff) + (nSkillId << gpDataTables.nStuff));
+			nValue = STATLIST_GetStatValue(pStatList, STAT_ITEM_CHARGED_SKILL, (nSkillLevel & sgptDataTables->nShiftedStuff) + (nSkillId << sgptDataTables->nStuff));
 			if (nValue)
 			{
 				break;
@@ -594,7 +594,7 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
-		nLayer = (nSkillLevel & gpDataTables.nShiftedStuff) + (nSkillId << gpDataTables.nStuff);
+		nLayer = (nSkillLevel & sgptDataTables->nShiftedStuff) + (nSkillId << sgptDataTables->nStuff);
 
 		pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x40);
 		while (pStatList)
@@ -1643,7 +1643,7 @@ BOOL __fastcall sub_6FD94190(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2
 	{
 		nTemp = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(nSkillId)) / 4 + 1;
 
-		nMaxLevel = gpDataTables.pSkillsTxt[nSkillId].wMaxLvl;
+		nMaxLevel = sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl;
 		if (nMaxLevel <= 0)
 		{
 			nMaxLevel = 20;
@@ -1722,7 +1722,7 @@ BOOL __fastcall sub_6FD94190(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2
 	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
 
 	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)gpDataTables.nShiftedStuff)) + (nSkillId << gpDataTables.nStuff));
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
 
 	return 1;
 }
@@ -2339,9 +2339,9 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 	{
 		nFileIndex = ITEMS_GetFileIndex(pItem);
 
-		if (nFileIndex >= 0 && nFileIndex < gpDataTables.nUniqueItemsTxtRecordCount)
+		if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nUniqueItemsTxtRecordCount)
 		{
-			pUniqueItemsTxtRecord = &gpDataTables.pUniqueItemsTxt[nFileIndex];
+			pUniqueItemsTxtRecord = &sgptDataTables->pUniqueItemsTxt[nFileIndex];
 			if (pUniqueItemsTxtRecord)
 			{
 				for (int i = 0; i < ARRAY_SIZE(pUniqueItemsTxtRecord->pProperties); ++i)
@@ -2357,9 +2357,9 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 	case PROPMODE_SET:
 	{
 		nFileIndex = ITEMS_GetFileIndex(pItem);
-		if (nFileIndex >= 0 && nFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nFileIndex];
+			pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
 			if (pSetItemsTxtRecord)
 			{
 				if (ITEMS_GetItemFormat(pItem))
@@ -2473,7 +2473,7 @@ void __fastcall sub_6FD95810(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, vo
 	{
 		D2_ASSERT(pProperty);
 
-		if (pProperty->nProperty >= 0 && pProperty->nProperty < gpDataTables.nPropertiesTxtRecordCount)
+		if (pProperty->nProperty >= 0 && pProperty->nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 		{
 			if (stru_6FDE3160[pProperty->nProperty].pfAssign)
 			{
@@ -2557,12 +2557,12 @@ void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 	if (nState && pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET)
 	{
 		nFileIndex = ITEMS_GetFileIndex(pItem);
-		if (nFileIndex >= 0 && nFileIndex < gpDataTables.nSetItemsTxtRecordCount)
+		if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
 		{
-			pSetItemsTxtRecord = &gpDataTables.pSetItemsTxt[nFileIndex];
-			if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < gpDataTables.nSetsTxtRecordCount)
+			pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
+			if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < sgptDataTables->nSetsTxtRecordCount)
 			{
-				pSetsTxtRecord = &gpDataTables.pSetsTxt[pSetItemsTxtRecord->nSetId];
+				pSetsTxtRecord = &sgptDataTables->pSetsTxt[pSetItemsTxtRecord->nSetId];
 				if (pSetsTxtRecord)
 				{
 					nSetItemsMask = ITEMS_GetSetItemsMask(pUnit, pItem, 1);
@@ -2617,9 +2617,9 @@ BOOL __stdcall ITEMMODS_CanItemHaveMagicAffix(D2UnitStrc* pItem, D2MagicAffixTxt
 
 	if (ITEMS_GetItemFormat(pItem) >= 100 || !ITEMS_CheckIfStackable(pItem) && !ITEMS_CheckIfThrowable(pItem))
 	{
-		if (ITEMS_CheckIfSocketable(pItem) && ITEMS_GetMaxSockets(pItem) || pMagicAffixTxtRecord->pProperties[0].nProperty < 0 || pMagicAffixTxtRecord->pProperties[0].nProperty < gpDataTables.nPropertiesTxtRecordCount)
+		if (ITEMS_CheckIfSocketable(pItem) && ITEMS_GetMaxSockets(pItem) || pMagicAffixTxtRecord->pProperties[0].nProperty < 0 || pMagicAffixTxtRecord->pProperties[0].nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 		{
-			pPropertiesTxtRecord = &gpDataTables.pPropertiesTxt[pMagicAffixTxtRecord->pProperties[0].nProperty];
+			pPropertiesTxtRecord = &sgptDataTables->pPropertiesTxt[pMagicAffixTxtRecord->pProperties[0].nProperty];
 			if (pPropertiesTxtRecord && pPropertiesTxtRecord->wStat[0] != STAT_ITEM_NUMSOCKETS)
 			{
 				for (int i = 0; i < ARRAY_SIZE(pMagicAffixTxtRecord->wEType); ++i)
@@ -3611,7 +3611,7 @@ int __fastcall ITEMMODS_PropertyFunc11(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 		{
 			nLevel = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(pProperty->nLayer)) / 4 + 1;
 
-			nMaxLevel = gpDataTables.pSkillsTxt[pProperty->nLayer].wMaxLvl;
+			nMaxLevel = sgptDataTables->pSkillsTxt[pProperty->nLayer].wMaxLvl;
 			if (nMaxLevel <= 0)
 			{
 				nMaxLevel = 20;
@@ -3745,7 +3745,7 @@ int __fastcall ITEMMODS_PropertyFunc19(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	{
 		nTemp = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(nSkillId)) / 4 + 1;
 
-		nMaxLevel = gpDataTables.pSkillsTxt[nSkillId].wMaxLvl;
+		nMaxLevel = sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl;
 		if (nMaxLevel <= 0)
 		{
 			nMaxLevel = 20;
@@ -3824,7 +3824,7 @@ int __fastcall ITEMMODS_PropertyFunc19(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
 
 	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)gpDataTables.nShiftedStuff)) + (nSkillId << gpDataTables.nStuff));
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
 
 	return nTemp;
 }
@@ -4231,9 +4231,9 @@ void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D
 	int nFirstValue = 0;
 	int nResult = 0;
 
-	if (pProperty && pProperty->nProperty >= 0 && pProperty->nProperty < gpDataTables.nPropertiesTxtRecordCount)
+	if (pProperty && pProperty->nProperty >= 0 && pProperty->nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 	{
-		pPropertiesTxtRecord = &gpDataTables.pPropertiesTxt[pProperty->nProperty];
+		pPropertiesTxtRecord = &sgptDataTables->pPropertiesTxt[pProperty->nProperty];
 		if (pPropertiesTxtRecord)
 		{
 			for (int i = 0; i < ARRAY_SIZE(pPropertiesTxtRecord->nFunc); ++i)
@@ -4313,12 +4313,12 @@ int __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 {
 	D2ItemCalcStrc pItemCalc = {};
 
-	if (gpDataTables.pItemsCode && nCalc < gpDataTables.nItemsCodeSize)
+	if (sgptDataTables->pItemsCode && nCalc < sgptDataTables->nItemsCodeSize)
 	{
 		pItemCalc.pUnit = pUnit;
 		pItemCalc.pItem = pItem;
 
-		return FOG_10253(&gpDataTables.pItemsCode[nCalc], gpDataTables.nItemsCodeSize - nCalc, D2COMMON_10018_Return0, off_6FDE3BA0, dword_6FDE3BC0, &pItemCalc);
+		return FOG_10253(&sgptDataTables->pItemsCode[nCalc], sgptDataTables->nItemsCodeSize - nCalc, D2COMMON_10018_Return0, off_6FDE3BA0, dword_6FDE3BC0, &pItemCalc);
 	}
 
 	return 0;

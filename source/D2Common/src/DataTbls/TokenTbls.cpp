@@ -1330,17 +1330,17 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
 	pPlrType = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "plrtype", pTbl, &nTypeRecords, sizeof(D2PlrModeTypeTxt));
 	pPlrMode = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "plrmode", pTbl, &nModeRecords, sizeof(D2PlrModeTypeTxt));
 
-	gpDataTables.pPlrModeDataTables.nPlrModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
+	sgptDataTables->pPlrModeDataTables.nPlrModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
 	pPlrModeTypeTxt = (D2PlrModeTypeTxt*)FOG_AllocServerMemory(NULL, sizeof(D2PlrModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
 	D2_ASSERT(pPlrModeTypeTxt);
 
-	gpDataTables.pPlrModeDataTables.pPlrModeTypeTxt = pPlrModeTypeTxt;
-	gpDataTables.pPlrModeDataTables.pPlayerType = pPlrModeTypeTxt;
-	gpDataTables.pPlrModeDataTables.pPlayerMode = pPlrModeTypeTxt + nTypeRecords;
+	sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt = pPlrModeTypeTxt;
+	sgptDataTables->pPlrModeDataTables.pPlayerType = pPlrModeTypeTxt;
+	sgptDataTables->pPlrModeDataTables.pPlayerMode = pPlrModeTypeTxt + nTypeRecords;
 
-	memcpy(gpDataTables.pPlrModeDataTables.pPlayerType, pPlrType, sizeof(D2PlrModeTypeTxt) * nTypeRecords);
-	memcpy(gpDataTables.pPlrModeDataTables.pPlayerMode, pPlrMode, sizeof(D2PlrModeTypeTxt) * nModeRecords);
+	memcpy(sgptDataTables->pPlrModeDataTables.pPlayerType, pPlrType, sizeof(D2PlrModeTypeTxt) * nTypeRecords);
+	memcpy(sgptDataTables->pPlrModeDataTables.pPlayerMode, pPlrMode, sizeof(D2PlrModeTypeTxt) * nModeRecords);
 
 	DATATBLS_UnloadBin(pPlrType);
 	DATATBLS_UnloadBin(pPlrMode);
@@ -1372,10 +1372,10 @@ void __fastcall DATATBLS_LoadMonModeTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	gpDataTables.pMonModeDataTables.pMonModeTxt = (D2MonModeTxt*)DATATBLS_CompileTxt(pMemPool, "monmode", pTbl, &gpDataTables.pMonModeDataTables.nMonModeTxtRecordCount, sizeof(D2MonModeTxt));
+	sgptDataTables->pMonModeDataTables.pMonModeTxt = (D2MonModeTxt*)DATATBLS_CompileTxt(pMemPool, "monmode", pTbl, &sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount, sizeof(D2MonModeTxt));
 
-	gpDataTables.pMonModeDataTables.pMonMode[0] = gpDataTables.pMonModeDataTables.pMonModeTxt;
-	gpDataTables.pMonModeDataTables.pMonMode[1] = gpDataTables.pMonModeDataTables.pMonModeTxt;
+	sgptDataTables->pMonModeDataTables.pMonMode[0] = sgptDataTables->pMonModeDataTables.pMonModeTxt;
+	sgptDataTables->pMonModeDataTables.pMonMode[1] = sgptDataTables->pMonModeDataTables.pMonModeTxt;
 }
 
 //D2Common.0x6FD72E50
@@ -1398,17 +1398,17 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
 	pObjType = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "objtype", pTbl, &nTypeRecords, sizeof(D2ObjModeTypeTxt));
 	pObjMode = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "objmode", pTbl, &nModeRecords, sizeof(D2ObjModeTypeTxt));
 
-	gpDataTables.pObjModeDataTables.nObjModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
+	sgptDataTables->pObjModeDataTables.nObjModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
 	pObjModeTypeTxt = (D2ObjModeTypeTxt*)FOG_AllocServerMemory(NULL, sizeof(D2ObjModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
 	D2_ASSERT(pObjModeTypeTxt);
 
-	gpDataTables.pObjModeDataTables.pObjModeTypeTxt = pObjModeTypeTxt;
-	gpDataTables.pObjModeDataTables.pObjType = pObjModeTypeTxt;
-	gpDataTables.pObjModeDataTables.pObjMode = (D2ObjModeTypeTxt*)((char*)pObjModeTypeTxt + sizeof(D2ObjModeTypeTxt) * nTypeRecords);
+	sgptDataTables->pObjModeDataTables.pObjModeTypeTxt = pObjModeTypeTxt;
+	sgptDataTables->pObjModeDataTables.pObjType = pObjModeTypeTxt;
+	sgptDataTables->pObjModeDataTables.pObjMode = (D2ObjModeTypeTxt*)((char*)pObjModeTypeTxt + sizeof(D2ObjModeTypeTxt) * nTypeRecords);
 
-	memcpy(gpDataTables.pObjModeDataTables.pObjType, pObjType, sizeof(D2ObjModeTypeTxt) * nTypeRecords);
-	memcpy(gpDataTables.pObjModeDataTables.pObjMode, pObjMode, sizeof(D2ObjModeTypeTxt) * nModeRecords);
+	memcpy(sgptDataTables->pObjModeDataTables.pObjType, pObjType, sizeof(D2ObjModeTypeTxt) * nTypeRecords);
+	memcpy(sgptDataTables->pObjModeDataTables.pObjMode, pObjMode, sizeof(D2ObjModeTypeTxt) * nModeRecords);
 	DATATBLS_UnloadBin(pObjType);
 	DATATBLS_UnloadBin(pObjMode);
 }
@@ -1423,7 +1423,7 @@ void __fastcall DATATBLS_LoadCompositTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL }
 	};
 
-	gpDataTables.pCompositTxt = (D2CompositTxt*)DATATBLS_CompileTxt(pMemPool, "composit", pTbl, NULL, sizeof(D2CompositTxt));
+	sgptDataTables->pCompositTxt = (D2CompositTxt*)DATATBLS_CompileTxt(pMemPool, "composit", pTbl, NULL, sizeof(D2CompositTxt));
 }
 
 //D2Common.0x6FD73040
@@ -1436,90 +1436,90 @@ void __fastcall DATATBLS_LoadArmTypeTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL }
 	};
 
-	gpDataTables.pArmTypeTxt = (D2ArmTypeTxt*)DATATBLS_CompileTxt(pMemPool, "armtype", pTbl, NULL, sizeof(D2ArmTypeTxt));
+	sgptDataTables->pArmTypeTxt = (D2ArmTypeTxt*)DATATBLS_CompileTxt(pMemPool, "armtype", pTbl, NULL, sizeof(D2ArmTypeTxt));
 }
 
 //D2Common.0x6FD730C0
 void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_ArmtypeTxt()
 {
-	if (gpDataTables.pPlrModeDataTables.pPlrModeTypeTxt)
+	if (sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pPlrModeDataTables.pPlrModeTypeTxt, __FILE__, __LINE__, 0);
-		gpDataTables.pPlrModeDataTables.pPlrModeTypeTxt = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt, __FILE__, __LINE__, 0);
+		sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt = NULL;
 	}
 
-	if (gpDataTables.pMonModeDataTables.pMonModeTxt)
+	if (sgptDataTables->pMonModeDataTables.pMonModeTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pMonModeDataTables.pMonModeTxt);
-		gpDataTables.pMonModeDataTables.pMonModeTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pMonModeDataTables.pMonModeTxt);
+		sgptDataTables->pMonModeDataTables.pMonModeTxt = NULL;
 	}
 
-	if (gpDataTables.pObjModeDataTables.pObjModeTypeTxt)
+	if (sgptDataTables->pObjModeDataTables.pObjModeTypeTxt)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pObjModeDataTables.pObjModeTypeTxt, __FILE__, __LINE__, 0);
-		gpDataTables.pObjModeDataTables.pObjModeTypeTxt = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pObjModeDataTables.pObjModeTypeTxt, __FILE__, __LINE__, 0);
+		sgptDataTables->pObjModeDataTables.pObjModeTypeTxt = NULL;
 	}
 
-	if (gpDataTables.pCompositTxt)
+	if (sgptDataTables->pCompositTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pCompositTxt);
-		gpDataTables.pCompositTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pCompositTxt);
+		sgptDataTables->pCompositTxt = NULL;
 	}
 
-	if (gpDataTables.pArmTypeTxt)
+	if (sgptDataTables->pArmTypeTxt)
 	{
-		DATATBLS_UnloadBin(gpDataTables.pArmTypeTxt);
-		gpDataTables.pArmTypeTxt = NULL;
+		DATATBLS_UnloadBin(sgptDataTables->pArmTypeTxt);
+		sgptDataTables->pArmTypeTxt = NULL;
 	}
 }
 
 //D2Common.0x6FD73150 (#10643)
 D2PlrModeDataTbl* __fastcall DATATBLS_GetPlrMode_TypeDataTables()
 {
-	return &gpDataTables.pPlrModeDataTables;
+	return &sgptDataTables->pPlrModeDataTables;
 }
 
 //D2Common.0x6FD73160 (#10644)
 D2MonModeDataTbl* __fastcall DATATBLS_GetMonModeDataTables()
 {
-	return &gpDataTables.pMonModeDataTables;
+	return &sgptDataTables->pMonModeDataTables;
 }
 
 //D2Common.0x6FD73170 (#10645)
 D2ObjModeDataTbl* __fastcall DATATBLS_GetObjMode_TypeDataTables()
 {
-	return &gpDataTables.pObjModeDataTables;
+	return &sgptDataTables->pObjModeDataTables;
 }
 
 //D2Common.0x6FD73180 (#10646)
 D2PlrModeTypeTxt* __stdcall DATATBLS_GetPlrModeTypeTxtRecord(int nIndex, int bGetMode)
 {
-	if (nIndex >= gpDataTables.pPlrModeDataTables.nPlrModeTypeTxtRecordCount)
+	if (nIndex >= sgptDataTables->pPlrModeDataTables.nPlrModeTypeTxtRecordCount)
 	{
 		return NULL;
 	}
 
-	D2_ASSERT(gpDataTables.pPlrModeDataTables.pPlrModeTypeTxt);
+	D2_ASSERT(sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt);
 
 	if (bGetMode)
 	{
 		if (bGetMode == 1)
 		{
-			D2_ASSERT(&gpDataTables.pPlrModeDataTables.pPlayerMode[nIndex]);
-			return &gpDataTables.pPlrModeDataTables.pPlayerMode[nIndex];
+			D2_ASSERT(&sgptDataTables->pPlrModeDataTables.pPlayerMode[nIndex]);
+			return &sgptDataTables->pPlrModeDataTables.pPlayerMode[nIndex];
 		}
 		return NULL;
 	}
 
-	D2_ASSERT(&gpDataTables.pPlrModeDataTables.pPlayerType[nIndex]);
+	D2_ASSERT(&sgptDataTables->pPlrModeDataTables.pPlayerType[nIndex]);
 
-	return &gpDataTables.pPlrModeDataTables.pPlayerType[nIndex];
+	return &sgptDataTables->pPlrModeDataTables.pPlayerType[nIndex];
 }
 
 //D2Common.0x6FD73230 (#10647)
 D2MonModeTxt* __stdcall DATATBLS_GetMonModeTxtRecord(int nIndex, int bGetMode)
 {
-	if (nIndex >= gpDataTables.pMonModeDataTables.nMonModeTxtRecordCount)
+	if (nIndex >= sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount)
 	{
 		return NULL;
 	}
@@ -1528,21 +1528,21 @@ D2MonModeTxt* __stdcall DATATBLS_GetMonModeTxtRecord(int nIndex, int bGetMode)
 	{
 		if (bGetMode == 1)
 		{
-			D2_ASSERT(&gpDataTables.pMonModeDataTables.pMonMode[1][nIndex]);
-			return &gpDataTables.pMonModeDataTables.pMonMode[1][nIndex];
+			D2_ASSERT(&sgptDataTables->pMonModeDataTables.pMonMode[1][nIndex]);
+			return &sgptDataTables->pMonModeDataTables.pMonMode[1][nIndex];
 		}
 		return NULL;
 	}
 
-	D2_ASSERT(&gpDataTables.pMonModeDataTables.pMonMode[0][nIndex]);
+	D2_ASSERT(&sgptDataTables->pMonModeDataTables.pMonMode[0][nIndex]);
 
-	return &gpDataTables.pMonModeDataTables.pMonMode[0][nIndex];
+	return &sgptDataTables->pMonModeDataTables.pMonMode[0][nIndex];
 }
 
 //D2Common.0x6FD732B0 (#10648)
 D2ObjModeTypeTxt* __stdcall DATATBLS_GetObjModeTypeTxtRecord(int nIndex, int bGetMode)
 {
-	if (nIndex >= gpDataTables.pObjModeDataTables.nObjModeTypeTxtRecordCount)
+	if (nIndex >= sgptDataTables->pObjModeDataTables.nObjModeTypeTxtRecordCount)
 	{
 		return NULL;
 	}
@@ -1551,29 +1551,29 @@ D2ObjModeTypeTxt* __stdcall DATATBLS_GetObjModeTypeTxtRecord(int nIndex, int bGe
 	{
 		if (bGetMode == 1)
 		{
-			D2_ASSERT(&gpDataTables.pObjModeDataTables.pObjMode[nIndex]);
-			return &gpDataTables.pObjModeDataTables.pObjMode[nIndex];
+			D2_ASSERT(&sgptDataTables->pObjModeDataTables.pObjMode[nIndex]);
+			return &sgptDataTables->pObjModeDataTables.pObjMode[nIndex];
 		}
 		return NULL;
 	}
 
-	D2_ASSERT(&gpDataTables.pObjModeDataTables.pObjType[nIndex]);
-	return &gpDataTables.pObjModeDataTables.pObjType[nIndex];
+	D2_ASSERT(&sgptDataTables->pObjModeDataTables.pObjType[nIndex]);
+	return &sgptDataTables->pObjModeDataTables.pObjType[nIndex];
 }
 
 //D2Common.0x6FD73330 (#10649)
 D2CompositTxt* __stdcall DATATBLS_GetCompositTxtRecord(int nComposit)
 {
-	D2_ASSERT(&gpDataTables.pCompositTxt[nComposit]);
+	D2_ASSERT(&sgptDataTables->pCompositTxt[nComposit]);
 
-	return &gpDataTables.pCompositTxt[nComposit];
+	return &sgptDataTables->pCompositTxt[nComposit];
 }
 
 //D2Common.0x6FD73370 (#10650)
 D2ArmTypeTxt* __stdcall DATATBLS_GetArmTypeTxtRecord(int nId)
 {
-	D2_ASSERT(&gpDataTables.pArmTypeTxt[nId]);
-	return &gpDataTables.pArmTypeTxt[nId];
+	D2_ASSERT(&sgptDataTables->pArmTypeTxt[nId]);
+	return &sgptDataTables->pArmTypeTxt[nId];
 }
 
 //D2Common.0x6FD733B0 (#10667)

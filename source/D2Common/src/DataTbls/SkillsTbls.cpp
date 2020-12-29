@@ -49,7 +49,7 @@ int __fastcall sub_6FD49980(int nValue)
 //TODO: Find a name
 int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 {
-	D2TxtLinkStrc* pLinker = gpDataTables.pSkillCalcLinker;
+	D2TxtLinkStrc* pLinker = sgptDataTables->pSkillCalcLinker;
 	char szCode[4] = {};
 	int nRow = 0;
 
@@ -59,9 +59,9 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 		{
 		case 3:
 		{
-			if (gpDataTables.pSkillsLinker)
+			if (sgptDataTables->pSkillsLinker)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pSkillsLinker, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pSkillsLinker, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
@@ -69,14 +69,14 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 				}
 			}
 
-			pLinker = gpDataTables.pSkillCalcLinker;
+			pLinker = sgptDataTables->pSkillCalcLinker;
 			break;
 		}
 		case 4:
 		{
-			if (gpDataTables.pMissilesLinker)
+			if (sgptDataTables->pMissilesLinker)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pMissilesLinker, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pMissilesLinker, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
@@ -84,14 +84,14 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 				}
 			}
 
-			pLinker = gpDataTables.pMissileCalcLinker;
+			pLinker = sgptDataTables->pMissileCalcLinker;
 			break;
 		}
 		case 5:
 		{
-			if (gpDataTables.pItemStatCostLinker)
+			if (sgptDataTables->pItemStatCostLinker)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pItemStatCostLinker, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pItemStatCostLinker, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
@@ -121,9 +121,9 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 		}
 		case 6:
 		{
-			if (gpDataTables.pSkillsLinker)
+			if (sgptDataTables->pSkillsLinker)
 			{
-				nRow = FOG_GetRowFromTxt(gpDataTables.pSkillsLinker, szText, 0);
+				nRow = FOG_GetRowFromTxt(sgptDataTables->pSkillsLinker, szText, 0);
 				if (nRow >= 0)
 				{
 					*a2 = 1;
@@ -131,7 +131,7 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 				}
 			}
 
-			pLinker = gpDataTables.pSkillCalcLinker;
+			pLinker = sgptDataTables->pSkillCalcLinker;
 			break;
 		}
 		default:
@@ -201,14 +201,14 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
 			if (nBufferSize > 0)
 			{
-				nSize = gpDataTables.nSkillsCodeSize;
-				nSizeEx = gpDataTables.nSkillsCodeSizeEx;
-				pCode = gpDataTables.pSkillsCode;
+				nSize = sgptDataTables->nSkillsCodeSize;
+				nSizeEx = sgptDataTables->nSkillsCodeSizeEx;
+				pCode = sgptDataTables->pSkillsCode;
 
-				if (gpDataTables.nSkillsCodeSize + nBufferSize < gpDataTables.nSkillsCodeSizeEx)
+				if (sgptDataTables->nSkillsCodeSize + nBufferSize < sgptDataTables->nSkillsCodeSizeEx)
 				{
 					memcpy(&pCode[nSize], pBuffer, nBufferSize);
-					gpDataTables.nSkillsCodeSize += nBufferSize;
+					sgptDataTables->nSkillsCodeSize += nBufferSize;
 					*(int*)((char*)pRecord + nOffset) = nSize;
 				}
 				else
@@ -216,21 +216,21 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 					while (1)
 					{
 						nNewSize = nSizeEx + 1024;
-						gpDataTables.nSkillsCodeSizeEx = nNewSize;
+						sgptDataTables->nSkillsCodeSizeEx = nNewSize;
 						if (nNewSize >= 0x7FFFFFFF)
 						{
 							break;
 						}
 
 						pCode = (char*)FOG_ReallocServerMemory(NULL, pCode, nNewSize, __FILE__, __LINE__, 0);
-						nSize = gpDataTables.nSkillsCodeSize;
-						nSizeEx = gpDataTables.nSkillsCodeSizeEx;
-						gpDataTables.pSkillsCode = pCode;
+						nSize = sgptDataTables->nSkillsCodeSize;
+						nSizeEx = sgptDataTables->nSkillsCodeSizeEx;
+						sgptDataTables->pSkillsCode = pCode;
 
-						if (gpDataTables.nSkillsCodeSize + nBufferSize < gpDataTables.nSkillsCodeSizeEx)
+						if (sgptDataTables->nSkillsCodeSize + nBufferSize < sgptDataTables->nSkillsCodeSizeEx)
 						{
 							memcpy(&pCode[nSize], pBuffer, nBufferSize);
-							gpDataTables.nSkillsCodeSize += nBufferSize;
+							sgptDataTables->nSkillsCodeSize += nBufferSize;
 							*(int*)((char*)pRecord + nOffset) = nSize;
 							return;
 						}
@@ -267,14 +267,14 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
 			if (nBufferSize > 0)
 			{
-				nSize = gpDataTables.nSkillDescCodeSize;
-				nSizeEx = gpDataTables.nSkillDescCodeSizeEx;
-				pCode = gpDataTables.pSkillDescCode;
+				nSize = sgptDataTables->nSkillDescCodeSize;
+				nSizeEx = sgptDataTables->nSkillDescCodeSizeEx;
+				pCode = sgptDataTables->pSkillDescCode;
 
-				if (gpDataTables.nSkillDescCodeSize + nBufferSize < gpDataTables.nSkillDescCodeSizeEx)
+				if (sgptDataTables->nSkillDescCodeSize + nBufferSize < sgptDataTables->nSkillDescCodeSizeEx)
 				{
 					memcpy(&pCode[nSize], pBuffer, nBufferSize);
-					gpDataTables.nSkillDescCodeSize += nBufferSize;
+					sgptDataTables->nSkillDescCodeSize += nBufferSize;
 					*(int*)((char*)pRecord + nOffset) = nSize;
 				}
 				else
@@ -282,21 +282,21 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 					while (1)
 					{
 						nNewSize = nSizeEx + 1024;
-						gpDataTables.nSkillDescCodeSizeEx = nNewSize;
+						sgptDataTables->nSkillDescCodeSizeEx = nNewSize;
 						if (nNewSize >= 0x7FFFFFFF)
 						{
 							break;
 						}
 
 						pCode = (char*)FOG_ReallocServerMemory(NULL, pCode, nNewSize, __FILE__, __LINE__, 0);
-						nSize = gpDataTables.nSkillDescCodeSize;
-						nSizeEx = gpDataTables.nSkillDescCodeSizeEx;
-						gpDataTables.pSkillDescCode = pCode;
+						nSize = sgptDataTables->nSkillDescCodeSize;
+						nSizeEx = sgptDataTables->nSkillDescCodeSizeEx;
+						sgptDataTables->pSkillDescCode = pCode;
 
-						if (gpDataTables.nSkillDescCodeSize + nBufferSize < gpDataTables.nSkillDescCodeSizeEx)
+						if (sgptDataTables->nSkillDescCodeSize + nBufferSize < sgptDataTables->nSkillDescCodeSizeEx)
 						{
 							memcpy(&pCode[nSize], pBuffer, nBufferSize);
-							gpDataTables.nSkillDescCodeSize += nBufferSize;
+							sgptDataTables->nSkillDescCodeSize += nBufferSize;
 							*(int*)((char*)pRecord + nOffset) = nSize;
 							return;
 						}
@@ -347,8 +347,8 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 	D2BinFieldStrc pSkillTbl[] =
 	{
-		{ "skill", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pSkillsLinker },
-		{ "charclass", TXTFIELD_CODETOBYTE, 0, 12, &gpDataTables.pPlayerClassLinker },
+		{ "skill", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pSkillsLinker },
+		{ "charclass", TXTFIELD_CODETOBYTE, 0, 12, &sgptDataTables->pPlayerClassLinker },
 		{ "skilldesc", TXTFIELD_NAMETOWORD, 0, 404, &pSkillDescLinker },
 		{ "srvstfunc", TXTFIELD_WORD, 0, 44, NULL },
 		{ "srvdofunc", TXTFIELD_WORD, 0, 46, NULL },
@@ -359,115 +359,115 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "prgcalc2", TXTFIELD_CALCTODWORD, 0, 60, DATATBLS_SkillCalcLinker },
 		{ "prgcalc3", TXTFIELD_CALCTODWORD, 0, 64, DATATBLS_SkillCalcLinker },
 		{ "prgdam", TXTFIELD_BYTE, 0, 68, NULL },
-		{ "srvmissile", TXTFIELD_NAMETOWORD, 0, 70, &gpDataTables.pMissilesLinker },
-		{ "srvmissilea", TXTFIELD_NAMETOWORD, 0, 72, &gpDataTables.pMissilesLinker },
-		{ "srvmissileb", TXTFIELD_NAMETOWORD, 0, 74, &gpDataTables.pMissilesLinker },
-		{ "srvmissilec", TXTFIELD_NAMETOWORD, 0, 76, &gpDataTables.pMissilesLinker },
-		{ "srvoverlay", TXTFIELD_NAMETOWORD, 0, 78, &gpDataTables.pOverlayLinker },
+		{ "srvmissile", TXTFIELD_NAMETOWORD, 0, 70, &sgptDataTables->pMissilesLinker },
+		{ "srvmissilea", TXTFIELD_NAMETOWORD, 0, 72, &sgptDataTables->pMissilesLinker },
+		{ "srvmissileb", TXTFIELD_NAMETOWORD, 0, 74, &sgptDataTables->pMissilesLinker },
+		{ "srvmissilec", TXTFIELD_NAMETOWORD, 0, 76, &sgptDataTables->pMissilesLinker },
+		{ "srvoverlay", TXTFIELD_NAMETOWORD, 0, 78, &sgptDataTables->pOverlayLinker },
 		{ "lob", TXTFIELD_BIT, 1, 4, NULL },
 		{ "decquant", TXTFIELD_BIT, 0, 4, NULL },
 		{ "immediate", TXTFIELD_BIT, 15, 4, NULL },
 		{ "aurafilter", TXTFIELD_DWORD, 0, 80, NULL },
-		{ "aurastate", TXTFIELD_NAMETOWORD, 0, 128, &gpDataTables.pStatesLinker },
-		{ "auratargetstate", TXTFIELD_NAMETOWORD, 0, 130, &gpDataTables.pStatesLinker },
+		{ "aurastate", TXTFIELD_NAMETOWORD, 0, 128, &sgptDataTables->pStatesLinker },
+		{ "auratargetstate", TXTFIELD_NAMETOWORD, 0, 130, &sgptDataTables->pStatesLinker },
 		{ "auralencalc", TXTFIELD_CALCTODWORD, 0, 96, DATATBLS_SkillCalcLinker },
 		{ "aurarangecalc", TXTFIELD_CALCTODWORD, 0, 100, DATATBLS_SkillCalcLinker },
-		{ "aurastat1", TXTFIELD_NAMETOWORD, 0, 84, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat1", TXTFIELD_NAMETOWORD, 0, 84, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc1", TXTFIELD_CALCTODWORD, 0, 104, DATATBLS_SkillCalcLinker },
-		{ "aurastat2", TXTFIELD_NAMETOWORD, 0, 86, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat2", TXTFIELD_NAMETOWORD, 0, 86, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc2", TXTFIELD_CALCTODWORD, 0, 108, DATATBLS_SkillCalcLinker },
-		{ "aurastat3", TXTFIELD_NAMETOWORD, 0, 88, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat3", TXTFIELD_NAMETOWORD, 0, 88, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc3", TXTFIELD_CALCTODWORD, 0, 112, DATATBLS_SkillCalcLinker },
-		{ "aurastat4", TXTFIELD_NAMETOWORD, 0, 90, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat4", TXTFIELD_NAMETOWORD, 0, 90, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc4", TXTFIELD_CALCTODWORD, 0, 116, DATATBLS_SkillCalcLinker },
-		{ "aurastat5", TXTFIELD_NAMETOWORD, 0, 92, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat5", TXTFIELD_NAMETOWORD, 0, 92, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc5", TXTFIELD_CALCTODWORD, 0, 120, DATATBLS_SkillCalcLinker },
-		{ "aurastat6", TXTFIELD_NAMETOWORD, 0, 94, &gpDataTables.pItemStatCostLinker },
+		{ "aurastat6", TXTFIELD_NAMETOWORD, 0, 94, &sgptDataTables->pItemStatCostLinker },
 		{ "aurastatcalc6", TXTFIELD_CALCTODWORD, 0, 124, DATATBLS_SkillCalcLinker },
-		{ "auraevent1", TXTFIELD_NAMETOWORD, 0, 132, &gpDataTables.pEventsLinker },
+		{ "auraevent1", TXTFIELD_NAMETOWORD, 0, 132, &sgptDataTables->pEventsLinker },
 		{ "auraeventfunc1", TXTFIELD_WORD, 0, 138, NULL },
-		{ "auraevent2", TXTFIELD_NAMETOWORD, 0, 134, &gpDataTables.pEventsLinker },
+		{ "auraevent2", TXTFIELD_NAMETOWORD, 0, 134, &sgptDataTables->pEventsLinker },
 		{ "auraeventfunc2", TXTFIELD_WORD, 0, 140, NULL },
-		{ "auraevent3", TXTFIELD_NAMETOWORD, 0, 136, &gpDataTables.pEventsLinker },
+		{ "auraevent3", TXTFIELD_NAMETOWORD, 0, 136, &sgptDataTables->pEventsLinker },
 		{ "auraeventfunc3", TXTFIELD_WORD, 0, 142, NULL },
-		{ "auratgtevent", TXTFIELD_NAMETOWORD, 0, 144, &gpDataTables.pEventsLinker },
+		{ "auratgtevent", TXTFIELD_NAMETOWORD, 0, 144, &sgptDataTables->pEventsLinker },
 		{ "auratgteventfunc", TXTFIELD_WORD, 0, 146, NULL },
-		{ "passivestate", TXTFIELD_NAMETOWORD, 0, 148, &gpDataTables.pStatesLinker },
-		{ "passiveitype", TXTFIELD_CODETOWORD, 0, 150, &gpDataTables.pItemTypesLinker },
-		{ "passivestat1", TXTFIELD_NAMETOWORD, 0, 152, &gpDataTables.pItemStatCostLinker },
+		{ "passivestate", TXTFIELD_NAMETOWORD, 0, 148, &sgptDataTables->pStatesLinker },
+		{ "passiveitype", TXTFIELD_CODETOWORD, 0, 150, &sgptDataTables->pItemTypesLinker },
+		{ "passivestat1", TXTFIELD_NAMETOWORD, 0, 152, &sgptDataTables->pItemStatCostLinker },
 		{ "passivecalc1", TXTFIELD_CALCTODWORD, 0, 164, DATATBLS_SkillCalcLinker },
-		{ "passivestat2", TXTFIELD_NAMETOWORD, 0, 154, &gpDataTables.pItemStatCostLinker },
+		{ "passivestat2", TXTFIELD_NAMETOWORD, 0, 154, &sgptDataTables->pItemStatCostLinker },
 		{ "passivecalc2", TXTFIELD_CALCTODWORD, 0, 168, DATATBLS_SkillCalcLinker },
-		{ "passivestat3", TXTFIELD_NAMETOWORD, 0, 156, &gpDataTables.pItemStatCostLinker },
+		{ "passivestat3", TXTFIELD_NAMETOWORD, 0, 156, &sgptDataTables->pItemStatCostLinker },
 		{ "passivecalc3", TXTFIELD_CALCTODWORD, 0, 172, DATATBLS_SkillCalcLinker },
-		{ "passivestat4", TXTFIELD_NAMETOWORD, 0, 158, &gpDataTables.pItemStatCostLinker },
+		{ "passivestat4", TXTFIELD_NAMETOWORD, 0, 158, &sgptDataTables->pItemStatCostLinker },
 		{ "passivecalc4", TXTFIELD_CALCTODWORD, 0, 176, DATATBLS_SkillCalcLinker },
-		{ "passivestat5", TXTFIELD_NAMETOWORD, 0, 160, &gpDataTables.pItemStatCostLinker },
+		{ "passivestat5", TXTFIELD_NAMETOWORD, 0, 160, &sgptDataTables->pItemStatCostLinker },
 		{ "passivecalc5", TXTFIELD_CALCTODWORD, 0, 180, DATATBLS_SkillCalcLinker },
-		{ "passiveevent", TXTFIELD_NAMETOWORD, 0, 184, &gpDataTables.pEventsLinker },
+		{ "passiveevent", TXTFIELD_NAMETOWORD, 0, 184, &sgptDataTables->pEventsLinker },
 		{ "passiveeventfunc", TXTFIELD_WORD, 0, 186, NULL },
 		{ "summon", TXTFIELD_NAMETOWORD, 0, 188, &pMonStatsLinker },
-		{ "pettype", TXTFIELD_NAMETOWORD2, 0, 190, &gpDataTables.pPetTypeLinker },
-		{ "summode", TXTFIELD_CODETOBYTE, 0, 191, &gpDataTables.pMonModeLinker },
+		{ "pettype", TXTFIELD_NAMETOWORD2, 0, 190, &sgptDataTables->pPetTypeLinker },
+		{ "summode", TXTFIELD_CODETOBYTE, 0, 191, &sgptDataTables->pMonModeLinker },
 		{ "petmax", TXTFIELD_CALCTODWORD, 0, 192, DATATBLS_SkillCalcLinker },
-		{ "sumskill1", TXTFIELD_NAMETOWORD, 0, 196, &gpDataTables.pSkillsLinker },
+		{ "sumskill1", TXTFIELD_NAMETOWORD, 0, 196, &sgptDataTables->pSkillsLinker },
 		{ "sumsk1calc", TXTFIELD_CALCTODWORD, 0, 208, DATATBLS_SkillCalcLinker },
-		{ "sumskill2", TXTFIELD_NAMETOWORD, 0, 198, &gpDataTables.pSkillsLinker },
+		{ "sumskill2", TXTFIELD_NAMETOWORD, 0, 198, &sgptDataTables->pSkillsLinker },
 		{ "sumsk2calc", TXTFIELD_CALCTODWORD, 0, 212, DATATBLS_SkillCalcLinker },
-		{ "sumskill3", TXTFIELD_NAMETOWORD, 0, 200, &gpDataTables.pSkillsLinker },
+		{ "sumskill3", TXTFIELD_NAMETOWORD, 0, 200, &sgptDataTables->pSkillsLinker },
 		{ "sumsk3calc", TXTFIELD_CALCTODWORD, 0, 216, DATATBLS_SkillCalcLinker },
-		{ "sumskill4", TXTFIELD_NAMETOWORD, 0, 202, &gpDataTables.pSkillsLinker },
+		{ "sumskill4", TXTFIELD_NAMETOWORD, 0, 202, &sgptDataTables->pSkillsLinker },
 		{ "sumsk4calc", TXTFIELD_CALCTODWORD, 0, 220, DATATBLS_SkillCalcLinker },
-		{ "sumskill5", TXTFIELD_NAMETOWORD, 0, 204, &gpDataTables.pSkillsLinker },
+		{ "sumskill5", TXTFIELD_NAMETOWORD, 0, 204, &sgptDataTables->pSkillsLinker },
 		{ "sumsk5calc", TXTFIELD_CALCTODWORD, 0, 224, DATATBLS_SkillCalcLinker },
 		{ "sumumod", TXTFIELD_WORD, 0, 228, NULL },
-		{ "sumoverlay", TXTFIELD_NAMETOWORD, 0, 230, &gpDataTables.pOverlayLinker },
-		{ "cltmissile", TXTFIELD_NAMETOWORD, 0, 232, &gpDataTables.pMissilesLinker },
-		{ "cltmissilea", TXTFIELD_NAMETOWORD, 0, 234, &gpDataTables.pMissilesLinker },
-		{ "cltmissileb", TXTFIELD_NAMETOWORD, 0, 236, &gpDataTables.pMissilesLinker },
-		{ "cltmissilec", TXTFIELD_NAMETOWORD, 0, 238, &gpDataTables.pMissilesLinker },
-		{ "cltmissiled", TXTFIELD_NAMETOWORD, 0, 240, &gpDataTables.pMissilesLinker },
+		{ "sumoverlay", TXTFIELD_NAMETOWORD, 0, 230, &sgptDataTables->pOverlayLinker },
+		{ "cltmissile", TXTFIELD_NAMETOWORD, 0, 232, &sgptDataTables->pMissilesLinker },
+		{ "cltmissilea", TXTFIELD_NAMETOWORD, 0, 234, &sgptDataTables->pMissilesLinker },
+		{ "cltmissileb", TXTFIELD_NAMETOWORD, 0, 236, &sgptDataTables->pMissilesLinker },
+		{ "cltmissilec", TXTFIELD_NAMETOWORD, 0, 238, &sgptDataTables->pMissilesLinker },
+		{ "cltmissiled", TXTFIELD_NAMETOWORD, 0, 240, &sgptDataTables->pMissilesLinker },
 		{ "cltstfunc", TXTFIELD_WORD, 0, 242, NULL },
 		{ "cltdofunc", TXTFIELD_WORD, 0, 244, NULL },
 		{ "cltprgfunc1", TXTFIELD_WORD, 0, 246, NULL },
 		{ "cltprgfunc2", TXTFIELD_WORD, 0, 248, NULL },
 		{ "cltprgfunc3", TXTFIELD_WORD, 0, 250, NULL },
 		{ "stsuccessonly", TXTFIELD_BIT, 12, 4, NULL },
-		{ "stsound", TXTFIELD_NAMETOWORD, 0, 252, &gpDataTables.pSoundsLinker },
-		{ "stsoundclass", TXTFIELD_NAMETOWORD, 0, 254, &gpDataTables.pSoundsLinker },
+		{ "stsound", TXTFIELD_NAMETOWORD, 0, 252, &sgptDataTables->pSoundsLinker },
+		{ "stsoundclass", TXTFIELD_NAMETOWORD, 0, 254, &sgptDataTables->pSoundsLinker },
 		{ "stsounddelay", TXTFIELD_BIT, 13, 4, NULL },
 		{ "weaponsnd", TXTFIELD_BIT, 14, 4, NULL },
-		{ "dosound", TXTFIELD_NAMETOWORD, 0, 256, &gpDataTables.pSoundsLinker },
-		{ "dosound a", TXTFIELD_NAMETOWORD, 0, 258, &gpDataTables.pSoundsLinker },
-		{ "dosound b", TXTFIELD_NAMETOWORD, 0, 260, &gpDataTables.pSoundsLinker },
-		{ "tgtsound", TXTFIELD_NAMETOWORD, 0, 266, &gpDataTables.pSoundsLinker },
-		{ "tgtoverlay", TXTFIELD_NAMETOWORD, 0, 264, &gpDataTables.pOverlayLinker },
-		{ "castoverlay", TXTFIELD_NAMETOWORD, 0, 262, &gpDataTables.pOverlayLinker },
-		{ "cltoverlaya", TXTFIELD_NAMETOWORD, 0, 272, &gpDataTables.pOverlayLinker },
-		{ "cltoverlayb", TXTFIELD_NAMETOWORD, 0, 274, &gpDataTables.pOverlayLinker },
-		{ "prgsound", TXTFIELD_NAMETOWORD, 0, 270, &gpDataTables.pSoundsLinker },
-		{ "prgoverlay", TXTFIELD_NAMETOWORD, 0, 268, &gpDataTables.pOverlayLinker },
+		{ "dosound", TXTFIELD_NAMETOWORD, 0, 256, &sgptDataTables->pSoundsLinker },
+		{ "dosound a", TXTFIELD_NAMETOWORD, 0, 258, &sgptDataTables->pSoundsLinker },
+		{ "dosound b", TXTFIELD_NAMETOWORD, 0, 260, &sgptDataTables->pSoundsLinker },
+		{ "tgtsound", TXTFIELD_NAMETOWORD, 0, 266, &sgptDataTables->pSoundsLinker },
+		{ "tgtoverlay", TXTFIELD_NAMETOWORD, 0, 264, &sgptDataTables->pOverlayLinker },
+		{ "castoverlay", TXTFIELD_NAMETOWORD, 0, 262, &sgptDataTables->pOverlayLinker },
+		{ "cltoverlaya", TXTFIELD_NAMETOWORD, 0, 272, &sgptDataTables->pOverlayLinker },
+		{ "cltoverlayb", TXTFIELD_NAMETOWORD, 0, 274, &sgptDataTables->pOverlayLinker },
+		{ "prgsound", TXTFIELD_NAMETOWORD, 0, 270, &sgptDataTables->pSoundsLinker },
+		{ "prgoverlay", TXTFIELD_NAMETOWORD, 0, 268, &sgptDataTables->pOverlayLinker },
 		{ "cltcalc1", TXTFIELD_CALCTODWORD, 0, 276, DATATBLS_SkillCalcLinker },
 		{ "cltcalc2", TXTFIELD_CALCTODWORD, 0, 280, DATATBLS_SkillCalcLinker },
 		{ "cltcalc3", TXTFIELD_CALCTODWORD, 0, 284, DATATBLS_SkillCalcLinker },
 		{ "warp", TXTFIELD_BIT, 38, 4, NULL },
-		{ "anim", TXTFIELD_CODETOBYTE, 0, 16, &gpDataTables.pPlrModeLinker },
-		{ "seqtrans", TXTFIELD_CODETOBYTE, 0, 18, &gpDataTables.pPlrModeLinker },
-		{ "monanim", TXTFIELD_CODETOBYTE, 0, 17, &gpDataTables.pMonModeLinker },
+		{ "anim", TXTFIELD_CODETOBYTE, 0, 16, &sgptDataTables->pPlrModeLinker },
+		{ "seqtrans", TXTFIELD_CODETOBYTE, 0, 18, &sgptDataTables->pPlrModeLinker },
+		{ "monanim", TXTFIELD_CODETOBYTE, 0, 17, &sgptDataTables->pMonModeLinker },
 		{ "seqnum", TXTFIELD_BYTE, 0, 19, NULL },
 		{ "seqinput", TXTFIELD_BYTE, 0, 22, NULL },
 		{ "range", TXTFIELD_CODETOBYTE, 0, TXTFIELD_NAMETOWORD, &pRangeLinker },
 		{ "weapsel", TXTFIELD_BYTE, 0, 360, NULL },
-		{ "itypea1", TXTFIELD_CODETOWORD, 0, 24, &gpDataTables.pItemTypesLinker },
-		{ "itypea2", TXTFIELD_CODETOWORD, 0, 26, &gpDataTables.pItemTypesLinker },
-		{ "itypea3", TXTFIELD_CODETOWORD, 0, 28, &gpDataTables.pItemTypesLinker },
-		{ "etypea1", TXTFIELD_CODETOWORD, 0, 36, &gpDataTables.pItemTypesLinker },
-		{ "etypea2", TXTFIELD_CODETOWORD, 0, 38, &gpDataTables.pItemTypesLinker },
-		{ "itypeb1", TXTFIELD_CODETOWORD, 0, 30, &gpDataTables.pItemTypesLinker },
-		{ "itypeb2", TXTFIELD_CODETOWORD, 0, 32, &gpDataTables.pItemTypesLinker },
-		{ "itypeb3", TXTFIELD_CODETOWORD, 0, 34, &gpDataTables.pItemTypesLinker },
-		{ "etypeb1", TXTFIELD_CODETOWORD, 0, 40, &gpDataTables.pItemTypesLinker },
-		{ "etypeb2", TXTFIELD_CODETOWORD, 0, 42, &gpDataTables.pItemTypesLinker },
+		{ "itypea1", TXTFIELD_CODETOWORD, 0, 24, &sgptDataTables->pItemTypesLinker },
+		{ "itypea2", TXTFIELD_CODETOWORD, 0, 26, &sgptDataTables->pItemTypesLinker },
+		{ "itypea3", TXTFIELD_CODETOWORD, 0, 28, &sgptDataTables->pItemTypesLinker },
+		{ "etypea1", TXTFIELD_CODETOWORD, 0, 36, &sgptDataTables->pItemTypesLinker },
+		{ "etypea2", TXTFIELD_CODETOWORD, 0, 38, &sgptDataTables->pItemTypesLinker },
+		{ "itypeb1", TXTFIELD_CODETOWORD, 0, 30, &sgptDataTables->pItemTypesLinker },
+		{ "itypeb2", TXTFIELD_CODETOWORD, 0, 32, &sgptDataTables->pItemTypesLinker },
+		{ "itypeb3", TXTFIELD_CODETOWORD, 0, 34, &sgptDataTables->pItemTypesLinker },
+		{ "etypeb1", TXTFIELD_CODETOWORD, 0, 40, &sgptDataTables->pItemTypesLinker },
+		{ "etypeb2", TXTFIELD_CODETOWORD, 0, 42, &sgptDataTables->pItemTypesLinker },
 		{ "maxlvl", TXTFIELD_WORD, 0, 300, NULL },
 		{ "progressive", TXTFIELD_BIT, 2, 4, NULL },
 		{ "finishing", TXTFIELD_BIT, 3, 4, NULL },
@@ -489,8 +489,8 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "ItemCheckStart", TXTFIELD_BIT, 33, 4, NULL },
 		{ "ItemCltCheckStart", TXTFIELD_BIT, 34, 4, NULL },
 		{ "ItemTarget", TXTFIELD_BYTE, 0, 288, NULL },
-		{ "ItemCastSound", TXTFIELD_NAMETOWORD, 0, 290, &gpDataTables.pSoundsLinker },
-		{ "ItemCastOverlay", TXTFIELD_NAMETOWORD, 0, 292, &gpDataTables.pOverlayLinker },
+		{ "ItemCastSound", TXTFIELD_NAMETOWORD, 0, 290, &sgptDataTables->pSoundsLinker },
+		{ "ItemCastOverlay", TXTFIELD_NAMETOWORD, 0, 292, &sgptDataTables->pOverlayLinker },
 		{ "InGame", TXTFIELD_BIT, 10, 4, NULL },
 		{ "lineofsight", TXTFIELD_BYTE, 0, 399, NULL },
 		{ "attackrank", TXTFIELD_BYTE, 0, 398, NULL },
@@ -518,9 +518,9 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "reqdex", TXTFIELD_WORD, 0, 376, NULL },
 		{ "reqint", TXTFIELD_WORD, 0, 378, NULL },
 		{ "reqvit", TXTFIELD_WORD, 0, 380, NULL },
-		{ "reqskill1", TXTFIELD_NAMETOWORD, 0, 382, &gpDataTables.pSkillsLinker },
-		{ "reqskill2", TXTFIELD_NAMETOWORD, 0, 384, &gpDataTables.pSkillsLinker },
-		{ "reqskill3", TXTFIELD_NAMETOWORD, 0, 386, &gpDataTables.pSkillsLinker },
+		{ "reqskill1", TXTFIELD_NAMETOWORD, 0, 382, &sgptDataTables->pSkillsLinker },
+		{ "reqskill2", TXTFIELD_NAMETOWORD, 0, 384, &sgptDataTables->pSkillsLinker },
+		{ "reqskill3", TXTFIELD_NAMETOWORD, 0, 386, &sgptDataTables->pSkillsLinker },
 		{ "delay", TXTFIELD_CALCTODWORD, 0, 400, DATATBLS_SkillCalcLinker },
 		{ "usemanaondo", TXTFIELD_BIT, 37, 4, NULL },
 		{ "startmana", TXTFIELD_WORD, 0, 388, NULL },
@@ -558,7 +558,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "MaxLevDam4", TXTFIELD_DWORD, 0, 464, NULL },
 		{ "MaxLevDam5", TXTFIELD_DWORD, 0, 468, NULL },
 		{ "DmgSymPerCalc", TXTFIELD_CALCTODWORD, 0, 472, DATATBLS_SkillCalcLinker },
-		{ "EType", TXTFIELD_CODETOBYTE, 0, 476, &gpDataTables.pElemTypesLinker },
+		{ "EType", TXTFIELD_CODETOBYTE, 0, 476, &sgptDataTables->pElemTypesLinker },
 		{ "EMin", TXTFIELD_DWORD, 0, 480, NULL },
 		{ "EMinLev1", TXTFIELD_DWORD, 0, 488, NULL },
 		{ "EMinLev2", TXTFIELD_DWORD, 0, 492, NULL },
@@ -578,9 +578,9 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "ELevLen3", TXTFIELD_DWORD, 0, 544, NULL },
 		{ "ELenSymPerCalc", TXTFIELD_CALCTODWORD, 0, 548, DATATBLS_SkillCalcLinker },
 		{ "restrict", TXTFIELD_BYTE, 0, 552, NULL },
-		{ "state1", TXTFIELD_NAMETOWORD, 0, 554, &gpDataTables.pStatesLinker },
-		{ "state2", TXTFIELD_NAMETOWORD, 0, 556, &gpDataTables.pStatesLinker },
-		{ "state3", TXTFIELD_NAMETOWORD, 0, 558, &gpDataTables.pStatesLinker },
+		{ "state1", TXTFIELD_NAMETOWORD, 0, 554, &sgptDataTables->pStatesLinker },
+		{ "state2", TXTFIELD_NAMETOWORD, 0, 556, &sgptDataTables->pStatesLinker },
+		{ "state3", TXTFIELD_NAMETOWORD, 0, 558, &sgptDataTables->pStatesLinker },
 		{ "aitype", TXTFIELD_BYTE, 0, 560, NULL },
 		{ "aibonus", TXTFIELD_WORD, 0, 562, NULL },
 		{ "cost mult", TXTFIELD_DWORD, 0, 564, NULL },
@@ -590,7 +590,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 	D2BinFieldStrc pSkillDescTbl[] =
 	{
-		{ "skilldesc", TXTFIELD_NAMETOINDEX, 0, 0, &gpDataTables.pSkillDescLinker },
+		{ "skilldesc", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pSkillDescLinker },
 		{ "skillpage", TXTFIELD_BYTE, 0, 2, NULL },
 		{ "skillrow", TXTFIELD_BYTE, 0, TXTFIELD_WORD, NULL },
 		{ "skillcolumn", TXTFIELD_BYTE, 0, 4, NULL },
@@ -606,18 +606,18 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "descatt", TXTFIELD_WORD, 0, TXTFIELD_NAMETOWORD, NULL },
 		{ "ddam calc1", TXTFIELD_CALCTODWORD, 0, 24, DATATBLS_SkillDescCalcLinker },
 		{ "ddam calc2", TXTFIELD_CALCTODWORD, 0, 28, DATATBLS_SkillDescCalcLinker },
-		{ "p1dmelem", TXTFIELD_CODETOBYTE, 0, 32, &gpDataTables.pElemTypesLinker },
+		{ "p1dmelem", TXTFIELD_CODETOBYTE, 0, 32, &sgptDataTables->pElemTypesLinker },
 		{ "p1dmmin", TXTFIELD_CALCTODWORD, 0, 36, DATATBLS_SkillDescCalcLinker },
 		{ "p1dmmax", TXTFIELD_CALCTODWORD, 0, 48, DATATBLS_SkillDescCalcLinker },
-		{ "p2dmelem", TXTFIELD_CODETOBYTE, 0, 33, &gpDataTables.pElemTypesLinker },
+		{ "p2dmelem", TXTFIELD_CODETOBYTE, 0, 33, &sgptDataTables->pElemTypesLinker },
 		{ "p2dmmin", TXTFIELD_CALCTODWORD, 0, 40, DATATBLS_SkillDescCalcLinker },
 		{ "p2dmmax", TXTFIELD_CALCTODWORD, 0, 52, DATATBLS_SkillDescCalcLinker },
-		{ "p3dmelem", TXTFIELD_CODETOBYTE, 0, 34, &gpDataTables.pElemTypesLinker },
+		{ "p3dmelem", TXTFIELD_CODETOBYTE, 0, 34, &sgptDataTables->pElemTypesLinker },
 		{ "p3dmmin", TXTFIELD_CALCTODWORD, 0, 44, DATATBLS_SkillDescCalcLinker },
 		{ "p3dmmax", TXTFIELD_CALCTODWORD, 0, 56, DATATBLS_SkillDescCalcLinker },
-		{ "descmissile1", TXTFIELD_NAMETOWORD, 0, 60, &gpDataTables.pMissilesLinker },
-		{ "descmissile2", TXTFIELD_NAMETOWORD, 0, 62, &gpDataTables.pMissilesLinker },
-		{ "descmissile3", TXTFIELD_NAMETOWORD, 0, 64, &gpDataTables.pMissilesLinker },
+		{ "descmissile1", TXTFIELD_NAMETOWORD, 0, 60, &sgptDataTables->pMissilesLinker },
+		{ "descmissile2", TXTFIELD_NAMETOWORD, 0, 62, &sgptDataTables->pMissilesLinker },
+		{ "descmissile3", TXTFIELD_NAMETOWORD, 0, 64, &sgptDataTables->pMissilesLinker },
 		{ "descline1", TXTFIELD_BYTE, 0, 66, NULL },
 		{ "desctexta1", TXTFIELD_KEYTOWORD, 0, 84, DATATBLS_GetStringIdFromReferenceString },
 		{ "desctextb1", TXTFIELD_KEYTOWORD, 0, 118, DATATBLS_GetStringIdFromReferenceString },
@@ -706,7 +706,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "end", 0, 0, 0, NULL },
 	};
 
-	if (gpDataTables.bCompileTxt)
+	if (sgptDataTables->bCompileTxt)
 	{
 		pRangeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
@@ -723,23 +723,23 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		pTmpSkillDescTxt = DATATBLS_CompileTxt(pMemPool, "skilldesc", pTmpSkillDescTbl, &nSize, 2);
 	}
 
-	gpDataTables.pSkillsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pSkillsTxt = (D2SkillsTxt*)DATATBLS_CompileTxt(pMemPool, "skills", pSkillTbl, &gpDataTables.nSkillsTxtRecordCount, sizeof(D2SkillsTxt));
-	if (gpDataTables.nSkillsTxtRecordCount >= 32767)
+	sgptDataTables->pSkillsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pSkillsTxt = (D2SkillsTxt*)DATATBLS_CompileTxt(pMemPool, "skills", pSkillTbl, &sgptDataTables->nSkillsTxtRecordCount, sizeof(D2SkillsTxt));
+	if (sgptDataTables->nSkillsTxtRecordCount >= 32767)
 	{
 		FOG_10025("Skills table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
-	gpDataTables.nPassiveSkills = 0;
+	sgptDataTables->nPassiveSkills = 0;
 
-	gpDataTables.pSkillDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	gpDataTables.pSkillDescTxt = (D2SkillDescTxt*)DATATBLS_CompileTxt(pMemPool, "skilldesc", pSkillDescTbl, &gpDataTables.nSkillDescTxtRecordCount, sizeof(D2SkillDescTxt));
-	if (gpDataTables.nSkillDescTxtRecordCount >= 32767)
+	sgptDataTables->pSkillDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pSkillDescTxt = (D2SkillDescTxt*)DATATBLS_CompileTxt(pMemPool, "skilldesc", pSkillDescTbl, &sgptDataTables->nSkillDescTxtRecordCount, sizeof(D2SkillDescTxt));
+	if (sgptDataTables->nSkillDescTxtRecordCount >= 32767)
 	{
 		FOG_10025("SkillDesc table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
-	if (gpDataTables.bCompileTxt)
+	if (sgptDataTables->bCompileTxt)
 	{
 		FOG_FreeLinker(pRangeLinker);
 		FOG_FreeLinker(pMonStatsLinker);
@@ -771,97 +771,97 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 			}
 		}
 
-		if (gpDataTables.bCompileTxt && gpDataTables.pSkillsCode)
+		if (sgptDataTables->bCompileTxt && sgptDataTables->pSkillsCode)
 		{
 			wsprintfA(szFileName, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", "skillscode");
 			fopen_s(&pSkillsCodeBin, szFileName, "wb");
 			if (pSkillsCodeBin)
 			{
-				DATATBLS_LockAndWriteToFile(gpDataTables.pSkillsCode, gpDataTables.nSkillsCodeSize, 1u, pSkillsCodeBin);
+				DATATBLS_LockAndWriteToFile(sgptDataTables->pSkillsCode, sgptDataTables->nSkillsCodeSize, 1u, pSkillsCodeBin);
 				fclose(pSkillsCodeBin);
 			}
-			FOG_FreeServerMemory(NULL, gpDataTables.pSkillsCode, __FILE__, __LINE__, 0);
+			FOG_FreeServerMemory(NULL, sgptDataTables->pSkillsCode, __FILE__, __LINE__, 0);
 		}
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
-	gpDataTables.pSkillsCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
-	gpDataTables.nSkillsCodeSizeEx = nSize;
-	gpDataTables.nSkillsCodeSize = nSize;
+	sgptDataTables->pSkillsCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
+	sgptDataTables->nSkillsCodeSizeEx = nSize;
+	sgptDataTables->nSkillsCodeSize = nSize;
 
-	if (gpDataTables.bCompileTxt && gpDataTables.pSkillDescCode)
+	if (sgptDataTables->bCompileTxt && sgptDataTables->pSkillDescCode)
 	{
 		wsprintfA(szFileName, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", "skilldesccode");
 		fopen_s(&pSkillDescCodeBin, szFileName, "wb");
 		if (pSkillDescCodeBin)
 		{
-			DATATBLS_LockAndWriteToFile(gpDataTables.pSkillDescCode, gpDataTables.nSkillDescCodeSize, 1, pSkillDescCodeBin);
+			DATATBLS_LockAndWriteToFile(sgptDataTables->pSkillDescCode, sgptDataTables->nSkillDescCodeSize, 1, pSkillDescCodeBin);
 			fclose(pSkillDescCodeBin);
 		}
-		FOG_FreeServerMemory(NULL, gpDataTables.pSkillDescCode, __FILE__, __LINE__, 0);
+		FOG_FreeServerMemory(NULL, sgptDataTables->pSkillDescCode, __FILE__, __LINE__, 0);
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	gpDataTables.pSkillDescCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
-	gpDataTables.nSkillDescCodeSizeEx = nSize;
-	gpDataTables.nSkillDescCodeSize = nSize;
+	sgptDataTables->pSkillDescCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
+	sgptDataTables->nSkillDescCodeSizeEx = nSize;
+	sgptDataTables->nSkillDescCodeSize = nSize;
 
-	gpDataTables.nClassSkillCount = (int*)FOG_AllocServerMemory(NULL, 7 * sizeof(int), __FILE__, __LINE__, 0);
-	memset(gpDataTables.nClassSkillCount, 0x00, 7 * sizeof(int));
+	sgptDataTables->nClassSkillCount = (int*)FOG_AllocServerMemory(NULL, 7 * sizeof(int), __FILE__, __LINE__, 0);
+	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));
 
-	for (int i = 0; i < gpDataTables.nSkillsTxtRecordCount; ++i)
+	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)
 	{
-		nClass = gpDataTables.pSkillsTxt[i].nCharClass;
+		nClass = sgptDataTables->pSkillsTxt[i].nCharClass;
 		if (nClass >= 0 && nClass < 7)
 		{
-			++gpDataTables.nClassSkillCount[nClass];
+			++sgptDataTables->nClassSkillCount[nClass];
 		}
 
-		if (gpDataTables.pSkillsTxt[i].nPassiveState >= 0)
+		if (sgptDataTables->pSkillsTxt[i].nPassiveState >= 0)
 		{
-			++gpDataTables.nPassiveSkills;
+			++sgptDataTables->nPassiveSkills;
 		}
 	}
 
 	nHighestClassSkillCount = 0;
-	gpDataTables.nHighestClassSkillCount = 0;
+	sgptDataTables->nHighestClassSkillCount = 0;
 
 	for (int i = 0; i < 7; ++i)
 	{
-		if (gpDataTables.nClassSkillCount[i] > nHighestClassSkillCount)
+		if (sgptDataTables->nClassSkillCount[i] > nHighestClassSkillCount)
 		{
-			nHighestClassSkillCount = gpDataTables.nClassSkillCount[i];
-			gpDataTables.nHighestClassSkillCount = gpDataTables.nClassSkillCount[i];
+			nHighestClassSkillCount = sgptDataTables->nClassSkillCount[i];
+			sgptDataTables->nHighestClassSkillCount = sgptDataTables->nClassSkillCount[i];
 		}
 	}
 
-	gpDataTables.nClassSkillList = (short*)FOG_AllocServerMemory(NULL, 7 * sizeof(short) * nHighestClassSkillCount, __FILE__, __LINE__, 0);
-	memset(gpDataTables.nClassSkillList, 0x00, 7 * sizeof(short) * nHighestClassSkillCount);
-	memset(gpDataTables.nClassSkillCount, 0x00, 7 * sizeof(int));
+	sgptDataTables->nClassSkillList = (short*)FOG_AllocServerMemory(NULL, 7 * sizeof(short) * nHighestClassSkillCount, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->nClassSkillList, 0x00, 7 * sizeof(short) * nHighestClassSkillCount);
+	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));
 
-	gpDataTables.pPassiveSkills = (WORD*)FOG_AllocServerMemory(NULL, sizeof(WORD) * gpDataTables.nPassiveSkills, __FILE__, __LINE__, 0);
-	memset(gpDataTables.pPassiveSkills, 0x00, sizeof(WORD) * gpDataTables.nPassiveSkills);
+	sgptDataTables->pPassiveSkills = (WORD*)FOG_AllocServerMemory(NULL, sizeof(WORD) * sgptDataTables->nPassiveSkills, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pPassiveSkills, 0x00, sizeof(WORD) * sgptDataTables->nPassiveSkills);
 
-	gpDataTables.nPassiveSkills = 0;
-	for (int i = 0; i < gpDataTables.nSkillsTxtRecordCount; ++i)
+	sgptDataTables->nPassiveSkills = 0;
+	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)
 	{
-		nClass = gpDataTables.pSkillsTxt[i].nCharClass;
+		nClass = sgptDataTables->pSkillsTxt[i].nCharClass;
 		if (nClass >= 0 && nClass < 7)
 		{
-			gpDataTables.nClassSkillList[gpDataTables.nClassSkillCount[nClass] + gpDataTables.nHighestClassSkillCount * nClass] = i;
-			++gpDataTables.nClassSkillCount[nClass];
+			sgptDataTables->nClassSkillList[sgptDataTables->nClassSkillCount[nClass] + sgptDataTables->nHighestClassSkillCount * nClass] = i;
+			++sgptDataTables->nClassSkillCount[nClass];
 		}
 
-		if (gpDataTables.pSkillsTxt[i].nPassiveState >= 0)
+		if (sgptDataTables->pSkillsTxt[i].nPassiveState >= 0)
 		{
-			gpDataTables.pPassiveSkills[gpDataTables.nPassiveSkills] = i;
-			++gpDataTables.nPassiveSkills;
+			sgptDataTables->pPassiveSkills[sgptDataTables->nPassiveSkills] = i;
+			++sgptDataTables->nPassiveSkills;
 		}
 
-		nPetType = gpDataTables.pSkillsTxt[i].nPetType;
-		if (nPetType >= 0 && nPetType < gpDataTables.nPetTypeTxtRecordCount)
+		nPetType = sgptDataTables->pSkillsTxt[i].nPetType;
+		if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)
 		{
-			pPetTypeTxtRecord = &gpDataTables.pPetTypeTxt[nPetType];
+			pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
 			if (pPetTypeTxtRecord->nSkillCount < ARRAY_SIZE(pPetTypeTxtRecord->wSkillIds))
 			{
 				pPetTypeTxtRecord->wSkillIds[pPetTypeTxtRecord->nSkillCount] = i;
@@ -874,61 +874,61 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 //D2Common.0x6FD4E350
 void __fastcall DATATBLS_UnloadSkills_SkillDescTxt()
 {
-	if (gpDataTables.nClassSkillCount)
+	if (sgptDataTables->nClassSkillCount)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.nClassSkillCount, __FILE__, __LINE__, 0);
-		gpDataTables.nClassSkillCount = 0;
+		FOG_FreeServerMemory(NULL, sgptDataTables->nClassSkillCount, __FILE__, __LINE__, 0);
+		sgptDataTables->nClassSkillCount = 0;
 	}
 
-	if (gpDataTables.nClassSkillList)
+	if (sgptDataTables->nClassSkillList)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.nClassSkillList, __FILE__, __LINE__, 0);
-		gpDataTables.nClassSkillList = 0;
+		FOG_FreeServerMemory(NULL, sgptDataTables->nClassSkillList, __FILE__, __LINE__, 0);
+		sgptDataTables->nClassSkillList = 0;
 	}
-	gpDataTables.nHighestClassSkillCount = 0;
+	sgptDataTables->nHighestClassSkillCount = 0;
 
-	if (gpDataTables.pPassiveSkills)
+	if (sgptDataTables->pPassiveSkills)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pPassiveSkills, __FILE__, __LINE__, 0);
-		gpDataTables.pPassiveSkills = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pPassiveSkills, __FILE__, __LINE__, 0);
+		sgptDataTables->pPassiveSkills = NULL;
 	}
-	gpDataTables.nPassiveSkills = 0;
+	sgptDataTables->nPassiveSkills = 0;
 
-	if (gpDataTables.pSkillsCode)
+	if (sgptDataTables->pSkillsCode)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pSkillsCode, __FILE__, __LINE__, 0);
-		gpDataTables.pSkillsCode = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pSkillsCode, __FILE__, __LINE__, 0);
+		sgptDataTables->pSkillsCode = NULL;
 	}
-	gpDataTables.nSkillsCodeSize = 0;
-	gpDataTables.nSkillsCodeSizeEx = 0;
+	sgptDataTables->nSkillsCodeSize = 0;
+	sgptDataTables->nSkillsCodeSizeEx = 0;
 
-	if (gpDataTables.pSkillDescCode)
+	if (sgptDataTables->pSkillDescCode)
 	{
-		FOG_FreeServerMemory(NULL, gpDataTables.pSkillDescCode, __FILE__, __LINE__, 0);
-		gpDataTables.pSkillDescCode = NULL;
+		FOG_FreeServerMemory(NULL, sgptDataTables->pSkillDescCode, __FILE__, __LINE__, 0);
+		sgptDataTables->pSkillDescCode = NULL;
 	}
-	gpDataTables.nSkillDescCodeSize = 0;
-	gpDataTables.nSkillDescCodeSizeEx = 0;
+	sgptDataTables->nSkillDescCodeSize = 0;
+	sgptDataTables->nSkillDescCodeSizeEx = 0;
 
-	DATATBLS_UnloadBin(gpDataTables.pSkillsTxt);
-	gpDataTables.pSkillsTxt = NULL;
-	FOG_FreeLinker(gpDataTables.pSkillsLinker);
-	gpDataTables.pSkillsLinker = NULL;
-	gpDataTables.nSkillsTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pSkillsTxt);
+	sgptDataTables->pSkillsTxt = NULL;
+	FOG_FreeLinker(sgptDataTables->pSkillsLinker);
+	sgptDataTables->pSkillsLinker = NULL;
+	sgptDataTables->nSkillsTxtRecordCount = 0;
 
-	DATATBLS_UnloadBin(gpDataTables.pSkillDescTxt);
-	gpDataTables.pSkillDescTxt = NULL;
-	FOG_FreeLinker(gpDataTables.pSkillDescLinker);
-	gpDataTables.pSkillDescLinker = NULL;
-	gpDataTables.nSkillDescTxtRecordCount = 0;
+	DATATBLS_UnloadBin(sgptDataTables->pSkillDescTxt);
+	sgptDataTables->pSkillDescTxt = NULL;
+	FOG_FreeLinker(sgptDataTables->pSkillDescLinker);
+	sgptDataTables->pSkillDescLinker = NULL;
+	sgptDataTables->nSkillDescTxtRecordCount = 0;
 }
 
 //Inlined at various places
 D2SkillsTxt* __fastcall DATATBLS_GetSkillsTxtRecord(int nSkillId)
 {
-	if (nSkillId >= 0 && nSkillId < gpDataTables.nSkillsTxtRecordCount)
+	if (nSkillId >= 0 && nSkillId < sgptDataTables->nSkillsTxtRecordCount)
 	{
-		return &gpDataTables.pSkillsTxt[nSkillId];
+		return &sgptDataTables->pSkillsTxt[nSkillId];
 	}
 
 	return NULL;
@@ -937,9 +937,9 @@ D2SkillsTxt* __fastcall DATATBLS_GetSkillsTxtRecord(int nSkillId)
 //Inlined at various places
 D2SkillDescTxt* __fastcall DATATBLS_GetSkillDescTxtRecord(int nSkillDesc)
 {
-	if (nSkillDesc >= 0 && nSkillDesc < gpDataTables.nSkillDescTxtRecordCount)
+	if (nSkillDesc >= 0 && nSkillDesc < sgptDataTables->nSkillDescTxtRecordCount)
 	{
-		return &gpDataTables.pSkillDescTxt[nSkillDesc];
+		return &sgptDataTables->pSkillDescTxt[nSkillDesc];
 	}
 
 	return NULL;

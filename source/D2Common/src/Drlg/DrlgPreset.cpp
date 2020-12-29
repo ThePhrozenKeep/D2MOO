@@ -254,14 +254,14 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 						{
 						case 0:
 							nUnitId += DATATBLS_GetSuperUniquesTxtRecordCount();
-							nUnitId += gpDataTables.nMonStatsTxtRecordCount;
+							nUnitId += sgptDataTables->nMonStatsTxtRecordCount;
 							break;
 
 						case 1:
 							break;
 
 						case 2:
-							nUnitId += gpDataTables.nMonStatsTxtRecordCount;
+							nUnitId += sgptDataTables->nMonStatsTxtRecordCount;
 							break;
 
 						default:
@@ -695,9 +695,9 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc*
 		if (pPresetUnit->nUnitType == UNIT_MONSTER)
 		{
 			nIndex = pPresetUnit->nIndex;
-			if (nIndex < gpDataTables.nMonStatsTxtRecordCount)
+			if (nIndex < sgptDataTables->nMonStatsTxtRecordCount)
 			{
-				if (nIndex < 0 || nIndex >= gpDataTables.nMonStatsTxtRecordCount)
+				if (nIndex < 0 || nIndex >= sgptDataTables->nMonStatsTxtRecordCount)
 				{
 					nIndex = -1;
 				}
@@ -720,23 +720,23 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc*
 			}
 			else
 			{
-				if (pPresetUnit->nIndex - gpDataTables.nMonStatsTxtRecordCount >= DATATBLS_GetSuperUniquesTxtRecordCount())
+				if (pPresetUnit->nIndex - sgptDataTables->nMonStatsTxtRecordCount >= DATATBLS_GetSuperUniquesTxtRecordCount())
 				{
-					if (pPresetUnit->nIndex - gpDataTables.nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_THE_TORMENTOR)
+					if (pPresetUnit->nIndex - sgptDataTables->nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_THE_TORMENTOR)
 					{
 						if (!(SEED_RollRandomNumber(pSeed) & 3))
 						{
 							continue;
 						}
 					}
-					else if (pPresetUnit->nIndex - gpDataTables.nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_TAINTBREEDER)
+					else if (pPresetUnit->nIndex - sgptDataTables->nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_TAINTBREEDER)
 					{
 						if (!(SEED_RollRandomNumber(pSeed) & 1))
 						{
 							continue;
 						}
 					}
-					else if (pPresetUnit->nIndex - gpDataTables.nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_RIFTWRAITH_THE_CANNIBAL)
+					else if (pPresetUnit->nIndex - sgptDataTables->nMonStatsTxtRecordCount - DATATBLS_GetSuperUniquesTxtRecordCount() == SUPERUNIQUE_RIFTWRAITH_THE_CANNIBAL)
 					{
 						if (SEED_RollRandomNumber(pSeed) & 3)
 						{

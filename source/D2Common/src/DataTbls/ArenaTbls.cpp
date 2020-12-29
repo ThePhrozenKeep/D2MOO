@@ -44,7 +44,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(void* pMemPool)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "Name", TXTFIELD_ASCII, 29, 0, NULL },
-		{ "class", TXTFIELD_CODETOBYTE, 0, 30, &gpDataTables.pPlayerClassLinker },
+		{ "class", TXTFIELD_CODETOBYTE, 0, 30, &sgptDataTables->pPlayerClassLinker },
 		{ "act", TXTFIELD_BYTE, 0, 32, NULL },
 		{ "level", TXTFIELD_BYTE, 0, 31, NULL },
 		{ "str", TXTFIELD_BYTE, 0, 33, NULL },

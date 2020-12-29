@@ -259,7 +259,7 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, BYTE nParamId, int 
 					nMissileId = pSkillDescTxtRecord->wDescMissile[nParamId - 35];
 					if (DATATBLS_GetMissilesTxtRecord(nMissileId))
 					{
-						return gpDataTables.pMissilesTxt[nMissileId].wRange + nSkillLevel * gpDataTables.pMissilesTxt[nMissileId].wLevRange;
+						return sgptDataTables->pMissilesTxt[nMissileId].wRange + nSkillLevel * sgptDataTables->pMissilesTxt[nMissileId].wLevRange;
 					}
 				}
 			}
@@ -472,13 +472,13 @@ int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc,
 {
 	D2SkillCalcStrc pSkillCalc = {};
 
-	if (gpDataTables.pSkillsCode && nCalc < gpDataTables.nSkillsCodeSize)
+	if (sgptDataTables->pSkillsCode && nCalc < sgptDataTables->nSkillsCodeSize)
 	{
 		pSkillCalc.pUnit = pUnit;
 		pSkillCalc.nSkillId = nSkillId;
 		pSkillCalc.nSkillLevel = nSkillLevel;
 
-		return FOG_10253(&gpDataTables.pSkillsCode[nCalc], gpDataTables.nSkillsCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
+		return FOG_10253(&sgptDataTables->pSkillsCode[nCalc], sgptDataTables->nSkillsCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
 	}
 
 	return 0;
@@ -489,13 +489,13 @@ int __stdcall SKILLS_EvaluateSkillDescFormula(D2UnitStrc* pUnit, unsigned int nC
 {
 	D2SkillCalcStrc pSkillCalc = {};
 
-	if (gpDataTables.pSkillDescCode && nCalc < gpDataTables.nSkillDescCodeSize)
+	if (sgptDataTables->pSkillDescCode && nCalc < sgptDataTables->nSkillDescCodeSize)
 	{
 		pSkillCalc.pUnit = pUnit;
 		pSkillCalc.nSkillId = nSkillId;
 		pSkillCalc.nSkillLevel = nSkillLevel;
 
-		return FOG_10253(&gpDataTables.pSkillDescCode[nCalc], gpDataTables.nSkillDescCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
+		return FOG_10253(&sgptDataTables->pSkillDescCode[nCalc], sgptDataTables->nSkillDescCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
 	}
 
 	return 0;
@@ -517,7 +517,7 @@ void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
 		if (pSkillsTxtRecord)
 		{
 			nPassiveState = pSkillsTxtRecord->nPassiveState;
-			if (nPassiveState > 0 && nPassiveState < gpDataTables.nStatesTxtRecordCount)
+			if (nPassiveState > 0 && nPassiveState < sgptDataTables->nStatesTxtRecordCount)
 			{
 				pSkill = SKILLS_GetHighestLevelSkillFromSkillId(pUnit, nSkillId);
 				if (!pSkill || pSkillsTxtRecord->nAuraState > 0 && STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
@@ -558,7 +558,7 @@ void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
 					{
 						for (int i = 0; i < ARRAY_SIZE(pSkillsTxtRecord->nPassiveStat); ++i)
 						{
-							if (pSkillsTxtRecord->nPassiveStat[i] < 0 || pSkillsTxtRecord->nPassiveStat[i] >= gpDataTables.nItemStatCostTxtRecordCount)
+							if (pSkillsTxtRecord->nPassiveStat[i] < 0 || pSkillsTxtRecord->nPassiveStat[i] >= sgptDataTables->nItemStatCostTxtRecordCount)
 							{
 								break;
 							}
@@ -600,9 +600,9 @@ void __stdcall SKILLS_RefreshPassiveSkills(D2UnitStrc* pUnit)
 	int nSkillId = 0;
 	short nPassiveState = 0;
 
-	for (int i = 0; i < gpDataTables.nPassiveSkills; ++i)
+	for (int i = 0; i < sgptDataTables->nPassiveSkills; ++i)
 	{
-		nSkillId = gpDataTables.pPassiveSkills[i];
+		nSkillId = sgptDataTables->pPassiveSkills[i];
 
 		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 		if (pSkillsTxtRecord)
@@ -690,12 +690,12 @@ void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 	if (!SKILLS_GetSkill(pUnit, 0, -1))
 	{
 		nClass = pUnit->dwClassId;
-		if (nClass < 0 || nClass >= gpDataTables.nCharStatsTxtRecordCount)
+		if (nClass < 0 || nClass >= sgptDataTables->nCharStatsTxtRecordCount)
 		{
 			return;
 		}
 
-		pCharStatsTxtRecord = &gpDataTables.pCharStatsTxt[nClass];
+		pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[nClass];
 		if (!pCharStatsTxtRecord)
 		{
 			return;
@@ -1948,7 +1948,7 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 		{
 			nSkillLevel += STATLIST_GetUnitStat(pUnit, STAT_ITEM_ADDCLASSSKILLS, pUnit->dwClassId);
 
-			pSkillsTxtRecord = &gpDataTables.pSkillsTxt[pSkill->pSkillsTxt->nSkillId];
+			pSkillsTxtRecord = &sgptDataTables->pSkillsTxt[pSkill->pSkillsTxt->nSkillId];
 			if (pSkillsTxtRecord)
 			{
 				pSkillDescTxtRecord = DATATBLS_GetSkillDescTxtRecord(pSkillsTxtRecord->wSkillDesc);
@@ -2892,17 +2892,17 @@ void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pC
 	int nState = 0;
 	int nMode = 0;
 
-	if (!pUnit || !(pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) || gpDataTables.nTransformStates <= 0)
+	if (!pUnit || !(pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) || sgptDataTables->nTransformStates <= 0)
 	{
 		return;
 	}
 
 	while (1)
 	{
-		nState = gpDataTables.pTransformStates[nCounter];
-		if (STATES_CheckState(pUnit, nState) && nState >= 0 && nState < gpDataTables.nStatesTxtRecordCount)
+		nState = sgptDataTables->pTransformStates[nCounter];
+		if (STATES_CheckState(pUnit, nState) && nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
 		{
-			pStatesTxtRecord = &gpDataTables.pStatesTxt[nState];
+			pStatesTxtRecord = &sgptDataTables->pStatesTxt[nState];
 			if (pStatesTxtRecord)
 			{
 				if (pStatesTxtRecord->nGfxType == 1)
@@ -2932,7 +2932,7 @@ void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pC
 		}
 
 		++nCounter;
-		if (nCounter >= gpDataTables.nTransformStates)
+		if (nCounter >= sgptDataTables->nTransformStates)
 		{
 			return;
 		}
@@ -3056,7 +3056,7 @@ BOOL __stdcall D2COMMON_11017_CheckUnitIfConsumeable(D2UnitStrc* pUnit, int a2)
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId);
 		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_CORPSESEL])
 		{
-			return gpDataTables.pMonStatsTxt[pUnit->dwClassId].nVelocity != 0;
+			return sgptDataTables->pMonStatsTxt[pUnit->dwClassId].nVelocity != 0;
 		}
 	}
 
@@ -3527,18 +3527,18 @@ BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(D2UnitStrc* pUni
 
 	if (STATES_IsUnitShapeShifted(pUnit))
 	{
-		for (int i = 0; i < gpDataTables.nTransformStates; ++i)
+		for (int i = 0; i < sgptDataTables->nTransformStates; ++i)
 		{
-			if (STATES_CheckState(pUnit, gpDataTables.pTransformStates[i]))
+			if (STATES_CheckState(pUnit, sgptDataTables->pTransformStates[i]))
 			{
-				pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, gpDataTables.pTransformStates[i]);
+				pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, sgptDataTables->pTransformStates[i]);
 				if (pStatList)
 				{
 					D2Common_10474(pUnit, (D2StatListExStrc*)pStatList);
 					STATLIST_FreeStatList(pStatList);
 				}
 
-				STATES_ToggleState(pUnit, gpDataTables.pTransformStates[i], FALSE);
+				STATES_ToggleState(pUnit, sgptDataTables->pTransformStates[i], FALSE);
 			}
 		}
 
@@ -3551,9 +3551,9 @@ BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(D2UnitStrc* pUni
 //D2Common.0x6FDB4100 (#11041)
 int __stdcall SKILLS_GetClassSkillId(int nClassId, int nPosition)
 {
-	if (nClassId >= 0 && nClassId < 7 && nPosition >= 0 && nPosition < gpDataTables.nClassSkillCount[nClassId])
+	if (nClassId >= 0 && nClassId < 7 && nPosition >= 0 && nPosition < sgptDataTables->nClassSkillCount[nClassId])
 	{
-		return gpDataTables.nClassSkillList[nPosition + nClassId * gpDataTables.nHighestClassSkillCount];
+		return sgptDataTables->nClassSkillList[nPosition + nClassId * sgptDataTables->nHighestClassSkillCount];
 	}
 
 	return -1;
@@ -3564,7 +3564,7 @@ int __stdcall SKILLS_GetPlayerSkillCount(int nClassId)
 {
 	if (nClassId >= 0 && nClassId < 7)
 	{
-		return gpDataTables.nClassSkillCount[nClassId];
+		return sgptDataTables->nClassSkillCount[nClassId];
 	}
 
 	return 0;

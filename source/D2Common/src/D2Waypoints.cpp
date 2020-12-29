@@ -11,7 +11,7 @@ BOOL __stdcall WAYPOINTS_GetLevelIdFromWaypointNo(short nWaypointNo, int* pLevel
 
 	if (nWaypointNo < 255)
 	{
-		for (int i = 1; i < gpDataTables.nLevelsTxtRecordCount; ++i)
+		for (int i = 1; i < sgptDataTables->nLevelsTxtRecordCount; ++i)
 		{
 			if (DATATBLS_GetLevelsTxtRecord(i)->nWaypoint == nWaypointNo)
 			{
