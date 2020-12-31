@@ -1775,7 +1775,7 @@ struct D2SkillsTxt
 	uint16_t wAuraStat[6];					//0x54
 	uint32_t dwAuraLenCalc;				//0x60
 	uint32_t dwAuraRangeCalc;				//0x64
-	uint32_t dwAuraStatCalc[6];			//0x68
+	int32_t dwAuraStatCalc[6];				//0x68
 	int16_t nAuraState;						//0x80
 	int16_t wAuraTargetState;				//0x82
 	uint16_t wAuraEvent[3];					//0x84
@@ -1818,7 +1818,7 @@ struct D2SkillsTxt
 	uint16_t wPrgSound;						//0x10E
 	uint16_t wCltOverlayA;					//0x110
 	uint16_t wCltOverlayB;					//0x112
-	uint32_t dwCltCalc[3];					//0x114
+	int32_t dwCltCalc[3];					//0x114
 	uint8_t nItemTarget;					//0x120
 	uint8_t pad0x121;						//0x121
 	uint16_t wItemCastSound;				//0x122
@@ -1830,7 +1830,7 @@ struct D2SkillsTxt
 	uint32_t dwHitFlags;					//0x130
 	uint32_t dwHitClass;					//0x134
 	uint32_t dwCalc[4];					//0x138
-	uint32_t dwParam[8];					//0x148
+	int32_t dwParam[8];						//0x148
 	uint8_t nWeapSel;						//0x168
 	uint8_t pad0x169;						//0x169
 	uint16_t wItemEffect;					//0x16A
@@ -1848,7 +1848,7 @@ struct D2SkillsTxt
 	uint8_t nManaShift;					//0x188
 	uint8_t pad0x189;						//0x189
 	uint16_t wMana;							//0x18A
-	uint16_t wLevelMana;					//0x18C
+	int16_t wLevelMana;						//0x18C
 	uint8_t nAttackRank;					//0x18E
 	uint8_t nLineOfSight;					//0x18F
 	uint32_t dwDelay;						//0x190
@@ -1880,7 +1880,7 @@ struct D2SkillsTxt
 	int16_t nState[3];						//0x22A
 	uint8_t nAiType;						//0x230
 	uint8_t pad0x231;						//0x231
-	uint16_t wAiBonus;						//0x232
+	int16_t wAiBonus;						//0x232
 	int32_t nCostMult;						//0x234
 	int32_t nCostAdd;						//0x238
 };
