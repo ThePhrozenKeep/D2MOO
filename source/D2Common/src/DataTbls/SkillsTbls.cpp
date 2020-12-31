@@ -746,7 +746,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 		if (pTmpMonStatsTxt)
 		{
-			if (dword_6FDD6A24)
+			if (DATATBLS_LoadFromBin)
 			{
 				FOG_FreeServerMemory(NULL, (char*)pTmpMonStatsTxt - 4, __FILE__, __LINE__, 0);
 
@@ -761,7 +761,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 		if (pTmpSkillDescTxt)
 		{
-			if (dword_6FDD6A24)
+			if (DATATBLS_LoadFromBin)
 			{
 				FOG_FreeServerMemory(NULL, (char*)pTmpSkillDescTxt - 4, __FILE__, __LINE__, 0);
 			}

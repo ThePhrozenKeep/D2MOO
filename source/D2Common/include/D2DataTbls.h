@@ -19,6 +19,8 @@ extern LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
 //TODO: Reimport defs from .cpps
 
+//D2Common.0x6FDD6A24
+extern BOOL DATATBLS_LoadFromBin;
 
 //D2Common.0x6FDC412C
 void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle);

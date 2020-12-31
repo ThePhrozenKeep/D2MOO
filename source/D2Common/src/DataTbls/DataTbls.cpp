@@ -9,7 +9,7 @@ uint32_t gnCharTemplateStartIds[64];
 D2BeltsTxt* gpBeltsTxtTable;
 D2DataTablesStrc gpDataTables;
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
-
+BOOL DATATBLS_LoadFromBin = TRUE;
 
 //D2Common.0x6FDC412C
 void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle)
@@ -756,7 +756,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 		FOG_FreeServerMemory(NULL, pTxt, __FILE__, __LINE__, 0);
 	}
 
-	if (dword_6FDD6A24)
+	if (DATATBLS_LoadFromBin)
 	{
 		wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".bin");
 	}
@@ -775,7 +775,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 	pData = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nDataSize, __FILE__, __LINE__);
 	D2_ASSERT(pData);
 
-	if (dword_6FDD6A24)
+	if (DATATBLS_LoadFromBin)
 	{
 		nRecordCount = *(int*)pData;
 		pTxt = (char*)pData + 4;
@@ -809,7 +809,7 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 {
 	if (pBinFile)
 	{
-		if (dword_6FDD6A24)
+		if (DATATBLS_LoadFromBin)
 		{
 			FOG_FreeServerMemory(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
 		}

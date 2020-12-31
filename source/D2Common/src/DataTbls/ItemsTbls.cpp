@@ -1993,7 +1993,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	sgptDataTables->pItemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 	sgptDataTables->pItemTypesTxt = (D2ItemTypesTxt*)DATATBLS_CompileTxt(pMemPool, "itemtypes", pTbl, &sgptDataTables->nItemTypesTxtRecordCount, sizeof(D2ItemTypesTxt));
 
-	if (!sgptDataTables->bCompileTxt && dword_6FDD6A24)
+	if (!sgptDataTables->bCompileTxt && DATATBLS_LoadFromBin)
 	{
 		for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 		{
@@ -2142,7 +2142,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 		pRunesTxt = sgptDataTables->pRuneDataTables.pRunesTxt;
 		nSize = sizeof(D2RunesTxt) * (nRecordId + 1);
 
-		if (dword_6FDD6A24)
+		if (DATATBLS_LoadFromBin)
 		{
 			pRunesTxt = (D2RunesTxt*)((char*)sgptDataTables->pRuneDataTables.pRunesTxt - 4);
 			nSize += 4;
@@ -2150,7 +2150,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 
 		pTmp = (D2RunesTxt*)FOG_ReallocServerMemory(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
 
-		if (dword_6FDD6A24)
+		if (DATATBLS_LoadFromBin)
 		{
 			*(uint32_t*)pTmp = nRecordId + 1;
 			pTmp = (D2RunesTxt*)((char*)pTmp + 4);
