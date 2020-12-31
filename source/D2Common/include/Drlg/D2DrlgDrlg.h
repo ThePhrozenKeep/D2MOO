@@ -2,6 +2,33 @@
 
 #include "CommonDefinitions.h"
 
+enum D2DrlgFlags
+{
+	DRLGFLAG_ONCLIENT = 0x01,
+};
+
+enum D2Directions
+{
+	DIRECTION_INVALID = -1,
+	DIRECTION_SOUTHWEST = 0,
+	DIRECTION_NORTHWEST = 1,
+	DIRECTION_SOUTHEAST = 2,
+	DIRECTION_NORTHEAST = 3,
+	DIRECTION_COUNT = 4,
+};
+
+enum D2AltDirections
+{
+	ALTDIR_WEST,
+	ALTDIR_NORTH,
+	ALTDIR_EAST,
+	ALTDIR_SOUTH,
+	ALTDIR_NORTHWEST,
+	ALTDIR_NORTHEAST,
+	ALTDIR_SOUTHEAST,
+	ALTDIR_SOUTHWEST,
+};
+
 //D2Common.0x6FD74120 (#10014)
 D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* a3, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)

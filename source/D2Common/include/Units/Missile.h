@@ -5,6 +5,18 @@
 
 //TODO: Redo Header defs when .cpp is done
 
+struct D2UnkMissileCalcStrc
+{
+	int32_t field_0;
+	int32_t field_4;
+	int32_t field_8;
+	int32_t field_C;
+	int32_t field_10;
+	int32_t field_14;
+	int32_t field_18;
+	int32_t field_1C;
+	D2SeedStrc pSeed;
+};
 
 //D2Common.0x6FDB9F30 (#11115)
 void __stdcall MISSILE_AllocMissileData(D2UnitStrc* pMissile);

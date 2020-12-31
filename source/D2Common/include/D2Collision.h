@@ -4,6 +4,14 @@
 
 // TODO: Reimport from .cpp
 
+struct D2BoundingBoxStrc
+{
+	int32_t nLeft;								//0x00
+	int32_t nBottom;							//0x04
+	int32_t nRight;								//0x08
+	int32_t nTop;								//0x0C
+};
+
 //D2Common.0x6FD41000
 void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2RoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry);
 //D2Common.0x6FD411F0

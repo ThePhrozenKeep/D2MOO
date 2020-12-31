@@ -2,6 +2,14 @@
 
 #include "CommonDefinitions.h"
 
+struct D2UnkFileStrc
+{
+	char szPath[D2_MAX_PATH];			//0x00
+	long field_104;						//0x104
+	D2DrlgFileStrc* pFile;				//0x108
+	D2UnkFileStrc* pNext;				//0x10C
+};
+
 //D2Common.0x6FD859A0 (#11222)
 int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
 //D2Common.0x6FD859E0 (#11223)

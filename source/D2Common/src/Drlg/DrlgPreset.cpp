@@ -11,6 +11,7 @@
 #include "Drlg/D2DrlgDrlgVer.h"
 #include "Drlg/D2DrlgMaze.h"
 #include "Drlg/D2DrlgRoomTile.h"
+#include "Drlg/D2DrlgTileSub.h"
 #include "D2Dungeon.h"
 #include "D2Seed.h"
 #include <D2CMP.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
-
+#include <Units/Missile.h>
 
 //D2Common.0x6FD92640 (#10844)
 void __stdcall D2Common_10844_ITEMMODS_First(int nDataBits, int* pLayer, int* pValue);

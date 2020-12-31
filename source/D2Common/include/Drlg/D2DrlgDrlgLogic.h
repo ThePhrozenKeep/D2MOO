@@ -2,6 +2,18 @@
 
 #include "CommonDefinitions.h"
 
+struct D2UnkDrlgLogicStrc
+{
+	D2RoomExStrc* pRoomEx;					//0x00
+	D2DrlgGridStrc* field_4;				//0x04
+	D2DrlgGridStrc* pOrientationGrid;		//0x08
+	D2DrlgGridStrc* pWallGrid;				//0x0C
+	D2DrlgGridStrc* pFloorGrid;				//0x10
+	D2DrlgGridStrc* field_14;				//0x14
+	int32_t field_18;						//0x18
+	int32_t nFlags;							//0x1C
+};
+
 //D2Common.0x6FD76420
 void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD764A0
