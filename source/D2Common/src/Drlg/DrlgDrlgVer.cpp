@@ -2,7 +2,7 @@
 
 
 //D2Common.0x6FD782A0
-D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, BYTE nDirection)
+D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, uint8_t nDirection)
 {
 	D2DrlgVertexStrc* pDrlgVertex = (D2DrlgVertexStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2DrlgVertexStrc), __FILE__, __LINE__, 0);
 	memset(pDrlgVertex, 0x00, sizeof(D2DrlgVertexStrc));
@@ -14,7 +14,7 @@ D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, BYTE nDirection
 
 //D2Common.0x6FD782D0
 //TODO: v15, v16, v21, v23
-void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVertices, D2DrlgCoordStrc* pDrlgCoord, BYTE nDirection, D2DrlgOrthStrc* pDrlgRoomData)
+void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVertices, D2DrlgCoordStrc* pDrlgCoord, uint8_t nDirection, D2DrlgOrthStrc* pDrlgRoomData)
 {
 	D2DrlgOrthStrc* pCurrentRoomData = NULL;
 	D2DrlgVertexStrc* pPreviousVertex = NULL;

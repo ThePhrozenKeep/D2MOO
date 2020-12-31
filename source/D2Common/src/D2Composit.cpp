@@ -51,8 +51,8 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	char* szPathPrefix = NULL;
-	DWORD dwClassToken = 0;
-	DWORD dwModeToken = 0;
+	uint32_t dwClassToken = 0;
+	uint32_t dwModeToken = 0;
 	int nWeaponClassId = 0;
 	char szWeaponClass[4] = {};
 	char szClass[4] = {};
@@ -60,8 +60,8 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 
 	if (nUnitType == UNIT_PLAYER)
 	{
-		dwClassToken = *(DWORD*)&DATATBLS_GetPlrModeTypeTxtRecord(nClass, 0)->szToken[0];
-		dwModeToken = *(DWORD*)&DATATBLS_GetPlrModeTypeTxtRecord(nMode, 1)->szToken[0];
+		dwClassToken = *(uint32_t*)&DATATBLS_GetPlrModeTypeTxtRecord(nClass, 0)->szToken[0];
+		dwModeToken = *(uint32_t*)&DATATBLS_GetPlrModeTypeTxtRecord(nMode, 1)->szToken[0];
 
 		if (a9)
 		{
@@ -131,8 +131,8 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 	}
 	else if (nUnitType == UNIT_OBJECT)
 	{
-		dwClassToken = *(DWORD*)&DATATBLS_GetObjModeTypeTxtRecord(nClass, 0)->szToken[0];
-		dwModeToken = *(DWORD*)&DATATBLS_GetObjModeTypeTxtRecord(nMode, 1)->szToken[0];
+		dwClassToken = *(uint32_t*)&DATATBLS_GetObjModeTypeTxtRecord(nClass, 0)->szToken[0];
+		dwModeToken = *(uint32_t*)&DATATBLS_GetObjModeTypeTxtRecord(nMode, 1)->szToken[0];
 
 		*pWeaponClassCode = COMPOSIT_GetWeaponClassCode(pUnit, UNIT_OBJECT, nClass, nMode, pInventory, &nWeaponClassId);
 
@@ -227,7 +227,7 @@ int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int 
 	int nSecondaryWeaponClassId = 0;
 	int nPrimaryWeaponClassId = 0;
 	int nWeaponClassCode = 0;
-	BYTE nComposit = 0;
+	uint8_t nComposit = 0;
 
 	if (nUnitType == UNIT_PLAYER)
 	{
@@ -452,7 +452,7 @@ BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD472E0 (#10891)
-BYTE __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, BYTE* pArmorComponents)
+uint8_t __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents)
 {
 	D2_ASSERT(nComponent < NUM_COMPONENTS);
 

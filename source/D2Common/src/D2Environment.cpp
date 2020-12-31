@@ -185,9 +185,9 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 
 
 
-static BYTE LerpLightColor(BYTE nThis, BYTE nNext, double lerpRatio)
+static uint8_t LerpLightColor(uint8_t nThis, uint8_t nNext, double lerpRatio)
 {
-	return BYTE(D2Lerp<double>(nThis,nNext,lerpRatio) + 0.5); // Round half up
+	return uint8_t(D2Lerp<double>(nThis,nNext,lerpRatio) + 0.5); // Round half up
 }
 
 //D2Common.0x6FD8DAC0
@@ -318,7 +318,7 @@ BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo)
 }
 
 //D2Common.0x6FD8DDD0 (#10927)
-void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, BYTE* pRed, BYTE* pGreen, BYTE* pBlue)
+void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
 	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{

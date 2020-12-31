@@ -5,7 +5,7 @@
 //D2Common.0x6FD771C0
 D2RoomExStrc* __fastcall DRLGROOM_AllocRoomEx(D2DrlgLevelStrc* pLevel, int nType);
 //D2Common.0x6FD77280
-void __fastcall sub_6FD77280(D2RoomExStrc* pRoomEx, BOOL bClient, DWORD nFlags);
+void __fastcall sub_6FD77280(D2RoomExStrc* pRoomEx, BOOL bClient, uint32_t nFlags);
 //D2Common.0x6FD772B0
 void __fastcall DRLGROOM_FreeRoomTiles(void* pMemPool, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD772F0
@@ -55,7 +55,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77EB0
 void __fastcall DRLGROOM_SortRoomListByPosition(D2RoomExStrc** ppRoomList, int nListSize);
 //D2Common.0x6FD77F00
-BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, BYTE nWarpId, D2RoomExStrc* pRoomEx2, char a5, int a6);
+BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWarpId, D2RoomExStrc* pRoomEx2, char a5, int a6);
 //D2Common.0x6FD780E0
 D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2RoomExStrc* pRoomEx, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY);
 //D2Common.0x6FD78160
@@ -63,7 +63,7 @@ D2PresetUnitStrc* __fastcall DRLGROOM_GetPresetUnits(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD78190
 void __fastcall DRLGROOM_SetRoom(D2RoomExStrc* pRoomEx, D2RoomStrc* pRoom);
 //D2Common.0x6FD781A0
-void __fastcall DRLGROOM_GetRGB_IntensityFromRoomEx(D2RoomExStrc* pRoomEx, BYTE* pIntensity, BYTE* pRed, BYTE* pGreen, BYTE* pBlue);
+void __fastcall DRLGROOM_GetRGB_IntensityFromRoomEx(D2RoomExStrc* pRoomEx, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
 //D2Common.0x6FD781E0
 int* __fastcall DRLGROOM_GetVisArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevelId);
 //D2Common.0x6FD78230

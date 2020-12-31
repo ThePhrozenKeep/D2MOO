@@ -18,11 +18,11 @@ void __fastcall sub_6FD73880(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD739A0
 void __fastcall sub_6FD739A0(D2DrlgStrc* pDrlg, int nLevelId, int nX, int nY, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD73A30
-void __fastcall sub_6FD73A30(void* pMemPool, D2RoomExStrc* pRoomEx, BYTE a3);
+void __fastcall sub_6FD73A30(void* pMemPool, D2RoomExStrc* pRoomEx, uint8_t a3);
 //D2Common.0x6FD73B40
 void __fastcall sub_6FD73B40(D2DrlgStrc* pDrlg, int nLevelId, int nX, int nY, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD73BE0
-void __fastcall sub_6FD73BE0(D2RoomExStrc* pRoomEx, BYTE a2);
+void __fastcall sub_6FD73BE0(D2RoomExStrc* pRoomEx, uint8_t a2);
 //D2Common.0x6FD73C40
 void __fastcall sub_6FD73C40(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2);
 //D2Common.0x6FD73CF0
@@ -44,4 +44,4 @@ BOOL __fastcall DRLGACTIVATE_TestRoomCanUnTile(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD740F0
 void __fastcall DRLGACTIVATE_ToggleHasPortalFlag(D2RoomExStrc* pRoomEx, BOOL bReset);
 //D2Common.0x6FD74110
-BYTE __fastcall DRLGACTIVATE_GetRoomStatusFlags(D2RoomExStrc* pRoomEx);
+uint8_t __fastcall DRLGACTIVATE_GetRoomStatusFlags(D2RoomExStrc* pRoomEx);

@@ -109,7 +109,7 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 		szCode[3] = ' ';
 	}
 
-	nRow = FOG_GetLinkIndex(pLinker, *(DWORD*)szCode, 1);
+	nRow = FOG_GetLinkIndex(pLinker, *(uint32_t*)szCode, 1);
 
 	*a2 = 0;
 	return nRow;
@@ -128,16 +128,16 @@ void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffse
 			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapMissilesTxtKeywordToNumber, NULL, sub_6FD62F20);
 			if (nBufferSize > 0)
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx, pBuffer, nBufferSize);
+				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx, pBuffer, nBufferSize);
 			}
 			else
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = -1;
+				*(uint32_t*)((char*)pRecord + nOffset) = -1;
 			}
 		}
 		else
 		{
-			*(DWORD*)((char*)pRecord + nOffset) = -1;
+			*(uint32_t*)((char*)pRecord + nOffset) = -1;
 		}
 	}
 }

@@ -3,9 +3,9 @@
 #include "CommonDefinitions.h"
 
 //D2Common.0x6FD859A0 (#11222)
-int __stdcall DRLGPRESET_CountPresetObjectsByAct(BYTE a1);
+int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
 //D2Common.0x6FD859E0 (#11223)
-int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(BYTE a1, int a2);
+int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t a1, int a2);
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, char* szFileName);
 //D2Common.0x6FD86050
@@ -37,7 +37,7 @@ void __fastcall DRLGPRESET_FreeDrlgGridsFromPresetRoom(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD86D80
 void __fastcall DRLGPRESET_AllocPresetRoomData(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD86DC0
-D2RoomExStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, DWORD dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7);
+D2RoomExStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, uint32_t dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7);
 //D2Common.0x6FD86E50
 void __fastcall DRLGPRESET_InitPresetRoomGrids(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD870F0

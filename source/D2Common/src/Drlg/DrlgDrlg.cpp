@@ -15,7 +15,7 @@
 
 
 //D2Common.0x6FD74120 (#10014)
-D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, BYTE nActNo, void* a3, DWORD nInitSeed, int nTownLevelId, DWORD nFlags, D2GameStrc* pGame, BYTE nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
+D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* a3, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
 	D2DrlgStrc* pDrlg = NULL;
 	unsigned int nStaffLevel = 0;
@@ -512,7 +512,7 @@ int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2
 void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomEx)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
-	DWORD dwFlags = 0;
+	uint32_t dwFlags = 0;
 
 	pDrlgCoords.dwTilesLeft = pRoomEx->nTileXPos;
 	pDrlgCoords.dwSubtilesLeft = pRoomEx->nTileXPos;
@@ -882,7 +882,7 @@ void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc*
 }
 
 //D2Common.0x6FD75300 (#10001)
-BYTE __stdcall DRLG_GetActNoFromLevelId(int nLevelId)
+uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId)
 {
 	//IMPROVEMENT: Lookup the act from Levels.txt
 

@@ -148,8 +148,8 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 	unsigned int nIndex = 0;
 	int nX = 0;
 	int nY = 0;
-	BYTE nStyle = 0;
-	BYTE nSeq = 0;
+	uint8_t nStyle = 0;
+	uint8_t nSeq = 0;
 	char szBuffer[100] = {};
 	
 	if (pTiles)

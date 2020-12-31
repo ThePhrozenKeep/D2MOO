@@ -5,7 +5,7 @@
 
 
 //Inlined in some functions
-DWORD __fastcall DATATBLS_StringToCode(char* szText)
+uint32_t __fastcall DATATBLS_StringToCode(char* szText)
 {
 	char dwCode[4] = {};
 
@@ -48,7 +48,7 @@ DWORD __fastcall DATATBLS_StringToCode(char* szText)
 		dwCode[3] = ' ';
 	}
 
-	return *(DWORD*)dwCode;
+	return *(uint32_t*)dwCode;
 }
 
 
@@ -500,7 +500,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			nBaseId = nCounter;
 		}
 
-		nVelocity = *((DWORD*)DATATBLS_GetAnimDataRecord(0, nBaseId, MONMODE_WALK, 1, 0) + 3);
+		nVelocity = *((uint32_t*)DATATBLS_GetAnimDataRecord(0, nBaseId, MONMODE_WALK, 1, 0) + 3);
 		if (nBaseId != nCounter)
 		{
 			if (sgptDataTables->pMonStatsTxt[nBaseId].nVelocity > 0)
@@ -972,7 +972,7 @@ D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szTex
 }
 
 //D2Common.0x6FD68DF0 (#10659)
-D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(WORD wTCId, int nLvl)
+D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(uint16_t wTCId, int nLvl)
 {
 	D2TCExShortStrc* pTCExRecord = NULL;
 	D2TCExShortStrc* pNext = NULL;
@@ -1765,7 +1765,7 @@ D2HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpan
 }
 
 //D2Common.0x6FD6B270 (#10585)
-D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, WORD nNameId, D2HirelingTxt* pOldRecord)
+D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, uint16_t nNameId, D2HirelingTxt* pOldRecord)
 {
 	D2HirelingTxt* pHirelingTxtRecord = NULL;
 	int nRecordId = 0;
@@ -1858,7 +1858,7 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(B
 	D2HirelingTxt* pHirelingTxtRecord = NULL;
 	int nRecordId = 0;
 	int nVersion = 0;
-	DWORD nLevel = 0;
+	uint32_t nLevel = 0;
 
 	nVersion = bExpansion != 0 ? 100 : 0;
 
@@ -1917,7 +1917,7 @@ void __fastcall DATATBLS_LoadNpcTxt(void* pMemPool)
 }
 
 //D2Common.0x6FD6B820 (#10588)
-D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(DWORD dwNpcId)
+D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(uint32_t dwNpcId)
 {
 	for (int i = 0; i < sgptDataTables->nNpcTxtRecordCount; ++i)
 	{
@@ -2304,7 +2304,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 //D2Common.0x6FD6D730
 void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 {
-	DWORD* pMonTypeNest = NULL;
+	uint32_t* pMonTypeNest = NULL;
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -2321,8 +2321,8 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 	sgptDataTables->pMonTypeTxt = (D2MonTypeTxt*)DATATBLS_CompileTxt(pMemPool, "montype", pTbl, &sgptDataTables->nMonTypeTxtRecordCount, sizeof(D2MonTypeTxt));
 
 	sgptDataTables->nMonTypeIndex = (sgptDataTables->nMonTypeTxtRecordCount + 31) / 32;
-	sgptDataTables->pMonTypeNest = (DWORD*)FOG_AllocServerMemory(NULL, sizeof(DWORD) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pMonTypeNest, 0x00, sizeof(DWORD) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
+	sgptDataTables->pMonTypeNest = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pMonTypeNest, 0x00, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
 
 	for (int i = 0; i < sgptDataTables->nMonTypeTxtRecordCount; ++i)
 	{
@@ -2502,8 +2502,8 @@ void __fastcall DATATBLS_MonPresetPlaceLinker(char* pSrc, void* pRecord, int nOf
 
 	if (pRecord)
 	{
-		*((BYTE*)pRecord + 1) = 0;
-		*((WORD*)pRecord + 1) = 0;
+		*((uint8_t*)pRecord + 1) = 0;
+		*((uint16_t*)pRecord + 1) = 0;
 
 		if (pSrc && *pSrc)
 		{
@@ -2516,20 +2516,20 @@ void __fastcall DATATBLS_MonPresetPlaceLinker(char* pSrc, void* pRecord, int nOf
 					nRow = FOG_GetRowFromTxt(sgptDataTables->pMonPlaceLinker, pSrc, 1);
 					if (nRow >= 0)
 					{
-						*((BYTE*)pRecord + 1) = 0;
-						*((WORD*)pRecord + 1) = nRow;
+						*((uint8_t*)pRecord + 1) = 0;
+						*((uint16_t*)pRecord + 1) = nRow;
 					}
 				}
 				else
 				{
-					*((BYTE*)pRecord + 1) = 1;
-					*((WORD*)pRecord + 1) = nRow;
+					*((uint8_t*)pRecord + 1) = 1;
+					*((uint16_t*)pRecord + 1) = nRow;
 				}
 			}
 			else
 			{
-				*((BYTE*)pRecord + 1) = 2;
-				*((WORD*)pRecord + 1) = nRow;
+				*((uint8_t*)pRecord + 1) = 2;
+				*((uint16_t*)pRecord + 1) = nRow;
 			}
 		}
 	}

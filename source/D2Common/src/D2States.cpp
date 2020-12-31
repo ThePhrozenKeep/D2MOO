@@ -44,7 +44,7 @@ BOOL __stdcall STATES_CheckState(D2UnitStrc* pUnit, int nState)
 //D2Common.0x6FDB45F0 (#10488)
 void __stdcall STATES_ToggleGfxStateFlag(D2UnitStrc* pUnit, int nState, BOOL bSet)
 {
-	DWORD* pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
+	uint32_t* pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
 
 	if (pGfxFlags && nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
 	{
@@ -64,7 +64,7 @@ void __stdcall STATES_ToggleGfxStateFlag(D2UnitStrc* pUnit, int nState, BOOL bSe
 //D2Common.0x6FDB4670 (#10489)
 BOOL __stdcall STATES_CheckGfxStateFlag(D2UnitStrc* pUnit, int nState)
 {
-	DWORD* pGfxFlags = NULL;
+	uint32_t* pGfxFlags = NULL;
 
 	if (nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
 	{
@@ -81,18 +81,18 @@ BOOL __stdcall STATES_CheckGfxStateFlag(D2UnitStrc* pUnit, int nState)
 //D2Common.0x6FDB46C0 (#10491)
 void __stdcall STATES_ClearGfxStateFlags(D2UnitStrc* pUnit)
 {
-	DWORD* pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
+	uint32_t* pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
 
 	if (pGfxFlags)
 	{
-		memset(pGfxFlags, 0x00, sizeof(DWORD) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+		memset(pGfxFlags, 0x00, sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 	}
 }
 
 //D2Common.0x6FDB4710 (#10490)
 BOOL __stdcall STATES_IsAnyGfxStateFlagSet(D2UnitStrc* pUnit)
 {
-	DWORD* pGfxFlags = NULL;
+	uint32_t* pGfxFlags = NULL;
 	int nCounter = 0;
 
 	pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
@@ -114,7 +114,7 @@ BOOL __stdcall STATES_IsAnyGfxStateFlagSet(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB4760 (#10492)
-DWORD* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit)
+uint32_t* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -124,8 +124,8 @@ DWORD* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit)
 //D2Common.0x6FDB4790 (#10493)
 void __stdcall STATES_UpdateStayDeathFlags(D2UnitStrc* pUnit, BOOL bIsBoss)
 {
-	DWORD* pStatFlags = NULL;
-	DWORD* pGfxFlags = NULL;
+	uint32_t* pStatFlags = NULL;
+	uint32_t* pGfxFlags = NULL;
 
 	pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
 	pStatFlags = D2COMMON_STATES_GetStatFlags_6FDB8A90(pUnit);
@@ -162,7 +162,7 @@ void __stdcall STATES_UpdateStayDeathFlags(D2UnitStrc* pUnit, BOOL bIsBoss)
 }
 
 //D2Common.0x6FDB48F0 (#10494)
-DWORD* __stdcall D2COMMON_10494_STATES_GetStatFlags(D2UnitStrc* pUnit)
+uint32_t* __stdcall D2COMMON_10494_STATES_GetStatFlags(D2UnitStrc* pUnit)
 {
 	return D2COMMON_STATES_GetStatFlags_6FDB8A90(pUnit);
 }
@@ -200,8 +200,8 @@ BOOL __stdcall STATES_CheckStateMaskPgsvOnUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FDB4A80 (#10501)
 void __stdcall STATES_UpdatePgsvFlags(D2UnitStrc* pUnit)
 {
-	DWORD* pStatFlags = NULL;
-	DWORD* pGfxFlags = NULL;
+	uint32_t* pStatFlags = NULL;
+	uint32_t* pGfxFlags = NULL;
 
 	pGfxFlags = D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(pUnit);
 	pStatFlags = D2COMMON_STATES_GetStatFlags_6FDB8A90(pUnit);
@@ -429,7 +429,7 @@ BOOL __stdcall STATES_CheckStateMaskGreenOnUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FDB5740 (#11303)
 BOOL __stdcall STATES_CheckStateMaskOnUnit(D2UnitStrc* pUnit, int nStateMask)
 {
-	DWORD* pStatFlags = NULL;
+	uint32_t* pStatFlags = NULL;
 	int nCounter = 0;
 
 	if (pUnit && nStateMask >= 0 && nStateMask < 40)

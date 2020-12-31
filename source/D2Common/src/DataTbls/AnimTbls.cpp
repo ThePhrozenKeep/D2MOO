@@ -79,7 +79,7 @@ D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pUnit, i
 		++szTmp;
 	}
 
-	pHash = pAnimData->pHashTable[(BYTE)nHash];
+	pHash = pAnimData->pHashTable[(uint8_t)nHash];
 	nCounter = *(int*)&pHash->szAnimDataName[0];
 	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
 
@@ -134,7 +134,7 @@ void __stdcall D2Common_10640(D2UnitStrc* pUnit, int nAnimSpeed)
 		++szTmp;
 	}
 
-	pHash = pAnimData->pHashTable[(BYTE)nHash];
+	pHash = pAnimData->pHashTable[(uint8_t)nHash];
 	nCounter = *(int*)&pHash->szAnimDataName[0];
 	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
 
@@ -187,7 +187,7 @@ BOOL __stdcall D2Common_10641(char* szPath, int* pLength, int* pOutAnimSpeed, in
 		++szTmp;
 	}
 
-	pHash = pAnimData->pHashTable[(BYTE)nHash];
+	pHash = pAnimData->pHashTable[(uint8_t)nHash];
 	nCounter = *(int*)&pHash->szAnimDataName[0];
 	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
 
@@ -201,7 +201,7 @@ BOOL __stdcall D2Common_10641(char* szPath, int* pLength, int* pOutAnimSpeed, in
 			*pLength = pRecord->dwFrames;
 			*pOutAnimSpeed = pRecord->dwAnimSpeed;
 
-			for (DWORD i = 0; i < pRecord->dwFrames; ++i)
+			for (uint32_t i = 0; i < pRecord->dwFrames; ++i)
 			{
 				if (i >= 144 || pRecord->pFrameFlags[i])
 				{

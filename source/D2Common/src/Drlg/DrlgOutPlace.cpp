@@ -198,17 +198,17 @@ struct D2UnkOutPlaceStrc12
 	int nX;								//0x0C
 	int nY;								//0x10
 	int field_14;						//0x14
-	BYTE* field_18;						//0x18
-	BYTE nIndex;						//0x1C
-	BYTE field_1D;						//0x1D
-	BYTE field_1E;						//0x1E
-	BYTE field_1F;						//0x1F
+	uint8_t* field_18;					//0x18
+	uint8_t nIndex;						//0x1C
+	uint8_t field_1D;					//0x1D
+	uint8_t field_1E;					//0x1E
+	uint8_t field_1F;					//0x1F
 	D2UnkOutPlaceStrc12* pNext;			//0x20
 	D2UnkOutPlaceStrc12* field_24;		//0x24
 };
 #pragma pack()
 
-BYTE byte_6FDCFB70[8] = { 0, 1, 2, 3, 0, 1, 1, 1 };
+uint8_t byte_6FDCFB70[8] = { 0, 1, 2, 3, 0, 1, 1, 1 };
 
 char byte_6FDCFB80[] = { 1, 0, -1, 0 };
 char byte_6FDCFB84[] = { 0, 1, 0, -1 };
@@ -232,16 +232,16 @@ BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 	int v35; // ecx@36
 	int v36; // eax@37
 	char v37; // bl@38
-	BYTE *v38; // ecx@38
+	uint8_t *v38; // ecx@38
 	int v39; // eax@39
 	char v40; // bl@41
-	BYTE *v41; // ebp@41
+	uint8_t *v41; // ebp@41
 	int v42; // eax@41
 	D2UnkOutPlaceStrc12 *v50; // edi@51
 	void *v51; // edi@52
 	D2UnkOutPlaceStrc12 *v52; // ST3C_4@52
 	int v53; // eax@55
-	BYTE *v54; // ecx@55
+	uint8_t *v54; // ecx@55
 	int v55; // ecx@57
 	int v58; // [sp+10h] [bp-8D08h]@14
 	int v64; // [sp+38h] [bp-8CE0h]@14
@@ -393,7 +393,7 @@ LABEL_26:
 						v21->field_4 = v34;
 						v21->field_14 = 0;
 						v53 = sub_6FDAB750(v24, v25, nX2, nY2) / 2;
-						v54 = &byte_6FDCFB70[4 * ((v21->pNext->nIndex - (BYTE)v53) & 3)];
+						v54 = &byte_6FDCFB70[4 * ((v21->pNext->nIndex - (uint8_t)v53) & 3)];
 						v21->field_18 = v54;
 						v21->nX = v24;
 						v21->nY = v25;
@@ -735,8 +735,8 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 	int nY = 0;
 	int v41 = 0;
 	int v61 = 0;
-	BYTE nDirection = 0;
-	BYTE nAct = 0;
+	uint8_t nDirection = 0;
+	uint8_t nAct = 0;
 
 	nAct = DRLG_GetActNoFromLevelId(pLevel->nLevelId);
 	pDrlgVertex = pLevel->pOutdoors->pVertex;
@@ -1459,7 +1459,7 @@ BOOL __fastcall sub_6FD81CA0(D2DrlgLevelLinkDataStrc* pLevelLinkData)
 }
 
 //D2Common.0x6FD81D60
-void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, BYTE nAct)
+void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t nAct)
 {
 	D2LevelDefBin* pLevelDefBinRecord = NULL;
 	D2DrlgLevelStrc* pAdjacentLevel = NULL;
@@ -1835,7 +1835,7 @@ void __fastcall sub_6FD823C0(D2DrlgStrc* pDrlg, D2DrlgLinkStrc* pDrlgLink, int(_
 			{
 				v28 = 1791398085i64 * pDrlg->pSeed.nLowSeed + pDrlg->pSeed.nHighSeed;
 				pDrlg->pSeed.lSeed = v28;
-				pPresetInfo->nDirection = ~(BYTE)v28 & 1;
+				pPresetInfo->nDirection = ~(uint8_t)v28 & 1;
 			}
 		}
 
@@ -2943,7 +2943,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 	pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
 
 	nWaypointSubTheme = (pRoomEx->dwFlags & (ROOMEXFLAG_HAS_WAYPOINT|ROOMEXFLAG_HAS_WAYPOINT_SMALL)) >> 16;
-	nShrineSubTheme = (WORD)pRoomEx->dwFlags >> 12;
+	nShrineSubTheme = (uint16_t)pRoomEx->dwFlags >> 12;
 
 	nWidth = pRoomEx->nTileWidth + 1;
 	nHeight = pRoomEx->nTileHeight + 1;

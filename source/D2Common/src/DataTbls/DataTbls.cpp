@@ -4,7 +4,7 @@
 D2ArenaTxt* gpArenaTxtTable;
 D2CharTemplateTxt* gpCharTemplateTxtTable;
 int gnCharTemplateTxtTableRecordCount;
-DWORD gnCharTemplateStartIds[64];
+uint32_t gnCharTemplateStartIds[64];
 D2BeltsTxt* gpBeltsTxtTable;
 D2DataTablesStrc gpDataTables;
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
@@ -70,7 +70,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 }
 
 //D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, DWORD* lpFileSizeHigh)
+size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh)
 {
 	size_t nSize = 0;
 	char pBuffer[MAX_PATH] = {};
@@ -95,7 +95,7 @@ void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, char* szFileName, int* p
 	void* pFileHandle = NULL;
 	void* pBuffer = NULL;
 	size_t nSize = 0;
-	DWORD dwFileSizeHigh = 0;
+	uint32_t dwFileSizeHigh = 0;
 
 	if (!FOG_MPQFileOpen(szFileName, &pFileHandle))
 	{
@@ -135,10 +135,10 @@ void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, char* szFileName, int* p
 // BELTS
 
 //D2Common.0x6FD494D0
-WORD __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
+uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 {
 	wchar_t* pUnicode = NULL;
-	WORD nIndex = 0;
+	uint16_t nIndex = 0;
 
 	nIndex = D2LANG_GetTblIndex(szReference, &pUnicode);
 	if (!nIndex)
@@ -185,7 +185,7 @@ void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt()
 }
 
 //D2Common.0x6FD49660 (#11255)
-DWORD __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode)
+uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode)
 {
 	if (nCompCode < sgptDataTables->nCompCodeTxtRecordCount)
 	{
@@ -196,7 +196,7 @@ DWORD __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode)
 }
 
 //D2Common.0x6FD49680 (#11249)
-DWORD __stdcall DATATBLS_GetExpRatio(int nLevel)
+uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel)
 {
 	if (sgptDataTables->pExperienceTxt)
 	{
@@ -217,7 +217,7 @@ DWORD __stdcall DATATBLS_GetExpRatio(int nLevel)
 }
 
 //D2Common.0x6FD496B0 (#10628)
-DWORD __stdcall DATATBLS_GetLevelThreshold(int nClass, DWORD dwLevel)
+uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 {
 	if (nClass < 0 || nClass >= 7)
 	{
@@ -239,7 +239,7 @@ int __stdcall DATATBLS_GetMaxLevel(int nClass)
 }
 
 //D2Common.0x6FD49710 (#10630)
-DWORD __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, DWORD dwExperience)
+uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience)
 {
 	int nLevel = 1;
 
@@ -355,7 +355,7 @@ D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDiff
 //D2Common.0x6FD4E500
 void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 {
-	DWORD* pStateMasks = NULL;
+	uint32_t* pStateMasks = NULL;
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -439,8 +439,8 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		FOG_10025("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pStateMasks = (DWORD*)FOG_AllocServerMemory(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(DWORD) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pStateMasks, 0x00, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(DWORD) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocServerMemory(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pStateMasks, 0x00, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->fStateMasks); ++i)
 	{

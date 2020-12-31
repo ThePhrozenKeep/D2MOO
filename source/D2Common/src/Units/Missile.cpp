@@ -45,7 +45,7 @@ void __stdcall MISSILE_FreeMissileData(D2UnitStrc* pMissile)
 }
 
 //D2Common.0x6FDB9FC0 (#11117)
-DWORD __stdcall MISSILE_GetFlags(D2UnitStrc* pMissile)
+uint32_t __stdcall MISSILE_GetFlags(D2UnitStrc* pMissile)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -56,7 +56,7 @@ DWORD __stdcall MISSILE_GetFlags(D2UnitStrc* pMissile)
 }
 
 //D2Common.0x6FDB9FE0 (#11118)
-void __stdcall MISSILE_SetFlags(D2UnitStrc* pMissile, DWORD dwFlags)
+void __stdcall MISSILE_SetFlags(D2UnitStrc* pMissile, uint32_t dwFlags)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -65,7 +65,7 @@ void __stdcall MISSILE_SetFlags(D2UnitStrc* pMissile, DWORD dwFlags)
 }
 
 //D2Common.0x6FDBA000 (#11119)
-void __stdcall MISSILE_SetLevel(D2UnitStrc* pMissile, WORD nLevel)
+void __stdcall MISSILE_SetLevel(D2UnitStrc* pMissile, uint16_t nLevel)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -74,7 +74,7 @@ void __stdcall MISSILE_SetLevel(D2UnitStrc* pMissile, WORD nLevel)
 }
 
 //D2Common.0x6FDBA020 (#11120)
-DWORD __stdcall MISSILE_GetLevel(D2UnitStrc* pMissile)
+uint32_t __stdcall MISSILE_GetLevel(D2UnitStrc* pMissile)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -246,7 +246,7 @@ BOOL __stdcall MISSILE_CheckUnitIfOwner(D2UnitStrc* pMissile, D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBA2B0 (#11131)
-void __stdcall MISSILE_SetStreamMissile(D2UnitStrc* pMissile, WORD nStreamMissile)
+void __stdcall MISSILE_SetStreamMissile(D2UnitStrc* pMissile, uint16_t nStreamMissile)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -823,7 +823,7 @@ BOOL __fastcall MISSILE_HasBonusStats(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FDBAED0
-void __fastcall MISSILE_AddStatsToDamage(D2MissileDamageDataStrc* pMissileDamageData, D2UnitStrc* pMissile, BYTE nShift)
+void __fastcall MISSILE_AddStatsToDamage(D2MissileDamageDataStrc* pMissileDamageData, D2UnitStrc* pMissile, uint8_t nShift)
 {
 	int nPoisonLength = 0;
 
@@ -1126,7 +1126,7 @@ int __stdcall MISSILE_GetMaxDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 }
 
 //D2Common.0x6FDBB880 (#11289)
-BYTE __stdcall MISSILE_GetElemTypeFromMissileId(int nMissileId)
+uint8_t __stdcall MISSILE_GetElemTypeFromMissileId(int nMissileId)
 {
 	D2MissilesTxt* pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(nMissileId);
 
@@ -1281,7 +1281,7 @@ int __stdcall MISSILE_GetElementalLength(int nUnused, D2UnitStrc* pMissile, int 
 }
 
 //D2Common.0x6FDBBC50 (#11290)
-int __stdcall MISSILE_GetSpecialParamValue(D2UnitStrc* pMissile, D2UnitStrc* pOwner, BYTE nParamId, int nMissileId, int nLevel)
+int __stdcall MISSILE_GetSpecialParamValue(D2UnitStrc* pMissile, D2UnitStrc* pOwner, uint8_t nParamId, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
 
@@ -1433,7 +1433,7 @@ int __stdcall MISSILE_GetSpecialParamValue(D2UnitStrc* pMissile, D2UnitStrc* pOw
 }
 
 //D2Common.0x6FDBC060
-int __fastcall MISSILE_GetCalcParamValue(BYTE nParamId, D2MissileCalcStrc* pMissileCalc)
+int __fastcall MISSILE_GetCalcParamValue(uint8_t nParamId, D2MissileCalcStrc* pMissileCalc)
 {
 	if (pMissileCalc)
 	{
@@ -1486,7 +1486,7 @@ int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D
 }
 
 //D2Common.0x6FDBC120
-int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, BYTE nParamId, int nUnused, D2MissileCalcStrc* pMissileCalc)
+int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, uint8_t nParamId, int nUnused, D2MissileCalcStrc* pMissileCalc)
 {
 	D2SkillStrc* pSkill = NULL;
 	int nSkillLevel = 0;

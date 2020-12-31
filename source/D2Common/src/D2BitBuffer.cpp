@@ -2,13 +2,13 @@
 
 
 //Fog.0x6FF71408
-DWORD gdw_6FF71408[] =
+uint32_t gdw_6FF71408[] =
 {
 	0x00000000, 0x00000001, 0x00000003, 0x00000007, 0x0000000F, 0x0000001F, 0x0000003F, 0x0000007F, 0x000000FF
 };
 
 //Fog.0x6FF7142C
-BYTE gn_6FF7142C[] =
+uint8_t gn_6FF7142C[] =
 {
 	0xFF, 0xFE, 0xFC, 0xF8, 0xF0, 0xE0, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00
 };
@@ -19,7 +19,7 @@ Function:		BITBUFFER_Initialize
 Address:		Fog.#10126
 Notes:			
 */
-void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, BYTE* pBitStream, size_t nSize)
+void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStream, size_t nSize)
 {
 	if (!pBuffer)
 	{
@@ -48,10 +48,10 @@ Function:		BITBUFFER_Write
 Address:		Fog.#10128
 Notes:
 */
-void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, DWORD dwValue, DWORD dwBits)
+void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint32_t dwBits)
 {
-	DWORD dwBitsLeft = dwBits;
-	DWORD dwValueEx = dwValue;
+	uint32_t dwBitsLeft = dwBits;
+	uint32_t dwValueEx = dwValue;
 
 	if ((signed int)(dwBits + pBuffer->nPosBits + 8 * pBuffer->nPos) <= (signed int)pBuffer->nBits)
 	{
@@ -70,7 +70,7 @@ void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, DWORD dwValue, DWORD dw
 					n = dwBitsLeft;
 				}
 
-				*pBuffer->pBuffer |= ((BYTE)dwValueEx & gdw_6FF71408[n]) << pBuffer->nPosBits;
+				*pBuffer->pBuffer |= ((uint8_t)dwValueEx & gdw_6FF71408[n]) << pBuffer->nPosBits;
 
 				pBuffer->nPosBits += n;
 				if (pBuffer->nPosBits != 8)
@@ -126,7 +126,7 @@ Function:		BITBUFFER_Read
 Address:		Fog.#10130
 Notes:
 */
-DWORD __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
+uint32_t __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
 {
 	int n = pBuffer->nPosBits + nBits + 8 * pBuffer->nPos - pBuffer->nBits;
 
@@ -135,14 +135,14 @@ DWORD __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
 		n = 0;
 	}
 
-	DWORD dwBitsLeft = nBits - n;
+	uint32_t dwBitsLeft = nBits - n;
 	if (n)
 	{
 		pBuffer->bFull = TRUE;
 	}
 
-	DWORD dwValue = 0;
-	DWORD dw = 0;
+	uint32_t dwValue = 0;
+	uint32_t dw = 0;
 
 	if (dwBitsLeft > 0)
 	{
@@ -155,7 +155,7 @@ DWORD __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
 			}
 
 			dwBitsLeft -= i;
-			dwValue += (gdw_6FF71408[i] & ((BYTE)(*pBuffer->pBuffer & gn_6FF7142C[pBuffer->nPosBits]) >> pBuffer->nPosBits)) << dw;
+			dwValue += (gdw_6FF71408[i] & ((uint8_t)(*pBuffer->pBuffer & gn_6FF7142C[pBuffer->nPosBits]) >> pBuffer->nPosBits)) << dw;
 			dw += i;
 			pBuffer->nPosBits += i;
 
@@ -199,9 +199,9 @@ Function:		BITBUFFER_SetBitState
 Address:		Fog.#10118
 Notes:
 */
-void __stdcall BITBUFFER_SetBitState(BYTE* pBitBuffer, int nBit)
+void __stdcall BITBUFFER_SetBitState(uint8_t* pBitBuffer, int nBit)
 {
-	pBitBuffer[nBit >> 3] |= (BYTE)gdwBitMasks[nBit & 7];
+	pBitBuffer[nBit >> 3] |= (uint8_t)gdwBitMasks[nBit & 7];
 }
 
 /*
@@ -209,7 +209,7 @@ Function:		BITBUFFER_GoToNextByte
 Address:		Fog.#10119
 Notes:
 */
-int __stdcall BITBUFFER_GetBitState(BYTE* pBitBuffer, int nBit)
+int __stdcall BITBUFFER_GetBitState(uint8_t* pBitBuffer, int nBit)
 {
 	return gdwBitMasks[nBit & 7] & pBitBuffer[nBit >> 3];
 }
@@ -219,7 +219,7 @@ Function:		BITBUFFER_GoToNextByte
 Address:		Fog.#10120
 Notes:
 */
-void __stdcall BITBUFFER_ResetBitstate(BYTE* pBitBuffer, int nBit)
+void __stdcall BITBUFFER_ResetBitstate(uint8_t* pBitBuffer, int nBit)
 {
 	pBitBuffer[nBit >> 3] &= LOBYTE(gdwInvBitMasks[nBit & 7]);
 }

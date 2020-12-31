@@ -80,8 +80,8 @@ static const D2UnkPathStrc2 byte_6FDD2288[25] =
 };
 
 //TODO: ...
-extern WORD word_6FDD2118[];
-extern WORD word_6FDD211C[];
+extern uint16_t word_6FDD2118[];
+extern uint16_t word_6FDD211C[];
 extern BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathPointStrc a3);
 
 
@@ -141,14 +141,14 @@ int __fastcall D2COMMON_PATHMISC_FIRST_6FDAA720(D2PathInfoStrc*)
 //			v2 = 0;
 //			D2COMMON_PATHMISC_Unknown_6FDAB790(a2, 0, v5, a3);
 //
-//			a2[0] = ((BYTE)v7 + LOBYTE(a2[0])) & 7;
-//			a2[1] = ((BYTE)v7 + LOBYTE(a2[1])) & 7;
-//			a2[2] = ((BYTE)v7 + LOBYTE(a2[2])) & 7;
+//			a2[0] = ((uint8_t)v7 + LOBYTE(a2[0])) & 7;
+//			a2[1] = ((uint8_t)v7 + LOBYTE(a2[1])) & 7;
+//			a2[2] = ((uint8_t)v7 + LOBYTE(a2[2])) & 7;
 //
 //			if (D2COMMON_PATHMISC_Unknown_6FDAA880(v1, a2, v5, &a4))
 //			{
 //				v9 = a4;
-//				if ((((BYTE)a4 - 4) & 7) != v20)
+//				if ((((uint8_t)a4 - 4) & 7) != v20)
 //					continue;
 //			}
 //
@@ -586,7 +586,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->unk0x24 = 0;
 
-	*(DWORD*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
+	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
 
 	result = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo);
 	if (!result)
@@ -596,17 +596,17 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->dwPathPoints = result;
 
-	*(DWORD*)&pPathInfo->pDynamicPath->PathPoints[0].X = -2;
+	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -2;
 
 	v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
 	if (!v5)
 	{
-		*(DWORD*)&pPathInfo->pDynamicPath->PathPoints[0].X = 2;
+		*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = 2;
 
 		v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
 	}
 
-	*(DWORD*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
+	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
 
 	return result + v5;
 }
@@ -683,7 +683,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->unk0x24 = 0;
-	*(DWORD*)&pPathInfo->pDynamicPath->PathPoints[1].X = *(DWORD*)&pPathInfo->field_4.X;
+	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[1].X = *(uint32_t*)&pPathInfo->field_4.X;
 	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[1]);
 	return 1;
 }
@@ -1116,7 +1116,7 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 //{
 //	int v1; // esi@1
 //	int v2; // eax@4
-//	BYTE v3; // al@7
+//	uint8_t v3; // al@7
 //	signed int v4; // ecx@7
 //	float v5; // ST10_4@7
 //	int v6; // edi@7
@@ -1161,7 +1161,7 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 //	D2DynamicPathStrc*v10; // ecx@17
 //	int v11; // eax@18
 //	signed __int64 v12; // qax@21
-//	BYTE v13; // al@22
+//	uint8_t v13; // al@22
 //	signed int v14; // ecx@22
 //	float v15; // ST14_4@22
 //	int v16; // edi@22
@@ -2044,25 +2044,25 @@ int __stdcall sub_6FDAC760(int nX1, int nY1, int nX2, int nY2)
 //{
 //	D2DynamicPathStrc*v3; // esi@1
 //	int v4; // edi@1
-//	DWORD v5; // eax@1
+//	uint32_t v5; // eax@1
 //	int v6; // ebp@1
 //	int v7; // ebx@1
 //	int v8; // edi@1
 //	int v9; // ebx@1
 //	int v10; // ecx@2
-//	DWORD v11; // eax@4
-//	DWORD v12; // eax@5
+//	uint32_t v11; // eax@4
+//	uint32_t v12; // eax@5
 //	int v13; // edi@5
-//	DWORD v14; // eax@6
+//	uint32_t v14; // eax@6
 //	int v15; // edx@6
 //	int v16; // ecx@6
-//	DWORD v17; // ecx@8
-//	DWORD v18; // eax@8
+//	uint32_t v17; // ecx@8
+//	uint32_t v18; // eax@8
 //	signed int v19; // ecx@8
 //	int v20; // eax@8
 //	int v21; // ecx@8
 //	int v22; // edi@10
-//	DWORD v23; // ecx@11
+//	uint32_t v23; // ecx@11
 //	int v24; // eax@11
 //	int v26; // [sp+10h] [bp-10h]@6
 //	int v27; // [sp+14h] [bp-Ch]@1
@@ -2186,24 +2186,24 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 {
 //	D2DynamicPathStrc*v2; // esi@1
 //	signed int v3; // ebx@1
-//	DWORD v4; // edi@2
-//	DWORD v5; // eax@2
-//	DWORD v6; // eax@7
-//	DWORD v8; // eax@9
+//	uint32_t v4; // edi@2
+//	uint32_t v5; // eax@2
+//	uint32_t v6; // eax@7
+//	uint32_t v8; // eax@9
 //	D2UnitStrc*v9; // eax@12
 //	D2UnitStrc*v10; // edi@12
-//	DWORD v11; // eax@16
-//	WORD v12; // bx@18
-//	WORD v13; // bp@18
+//	uint32_t v11; // eax@16
+//	uint16_t v12; // bx@18
+//	uint16_t v13; // bp@18
 //	D2UnitStrc*v14; // eax@18
 //	signed int v15; // eax@19
 //	int v16; // eax@21
 //	int v17; // ecx@21
 //	signed int v18; // edx@36
-//	DWORD v19; // eax@38
-//	DWORD v20; // ecx@39
-//	DWORD v21; // ebp@40
-//	DWORD v22; // eax@40
+//	uint32_t v19; // eax@38
+//	uint32_t v20; // ecx@39
+//	uint32_t v21; // ebp@40
+//	uint32_t v22; // eax@40
 //	signed __int32 v23; // eax@45
 //	int v24; // ecx@45
 //	int v25; // edx@45
@@ -2982,12 +2982,12 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit
 //	int v4; // ebx@1
 //	D2UnitStrc*v5; // eax@1
 //	unsigned int v6; // edi@3
-//	WORD v7; // ax@5
-//	WORD v8; // cx@5
+//	uint16_t v7; // ax@5
+//	uint16_t v8; // cx@5
 //	int v9; // eax@6
 //	int v10; // edx@8
 //	int v11; // ecx@8
-//	WORD v12; // dx@9
+//	uint16_t v12; // dx@9
 //	D2RoomStrc*v13; // eax@13
 //	int v14; // ecx@15
 //	unsigned int v15; // edi@15
@@ -3575,15 +3575,15 @@ signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsig
 //	int v8; // edi@5
 //	signed int result; // eax@6
 //	D2RoomStrc*v10; // ecx@7
-//	DWORD v11; // eax@8
-//	DWORD v12; // eax@9
+//	uint32_t v11; // eax@8
+//	uint32_t v12; // eax@9
 //	unsigned int v13; // edi@9
 //	unsigned int v14; // ebp@9
-//	DWORD v15; // edx@12
+//	uint32_t v15; // edx@12
 //	D2UnitStrc*v16; // eax@12
 //	D2RoomStrc*v17; // ecx@14
-//	WORD v18; // bp@14
-//	WORD v19; // di@14
+//	uint16_t v18; // bp@14
+//	uint16_t v19; // di@14
 //	signed int v20; // edx@17
 //	int v21; // edi@20
 //	signed __int32 v22; // ebp@20
@@ -3594,12 +3594,12 @@ signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsig
 //	unsigned int v27; // edx@34
 //	int v28; // eax@35
 //	int v29; // ecx@38
-//	DWORD v30; // eax@46
+//	uint32_t v30; // eax@46
 //	unsigned int v31; // edi@46
 //	unsigned int v32; // ebp@46
 //	unsigned int v33; // edx@49
 //	D2UnitStrc*v34; // eax@49
-//	DWORD v35; // eax@52
+//	uint32_t v35; // eax@52
 //
 //	if (!a2 || a2->dwUnitType && a2->dwUnitType != 1)
 //		FOG_10025(//			"UnitGetType(hUnit) == UNIT_PLAYER || UnitGetType(hUnit) == UNIT_MONSTER", //			__FILE__, __LINE__//			1293);
@@ -3626,8 +3626,8 @@ signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsig
 //		a2 = (D2UnitStrc*)(v13 >> 11);
 //		a1 = (D2DynamicPathStrc*)(v14 >> 11);
 //		DUNGEON_FlattenCoords_IsoToCartesian((int*)&a2, (int*)&a1);
-//		v15 = (DWORD)a2;
-//		v6->dwTargetY = (DWORD)a1;
+//		v15 = (uint32_t)a2;
+//		v6->dwTargetY = (uint32_t)a1;
 //		v16 = v6->pUnit;
 //		v6->dwTargetX = v15;
 //		if (!v16 || !(v6->dwFlags & 1))
@@ -3772,7 +3772,7 @@ void __fastcall PATHMISC_UpdateRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc*
 //void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 //{
 //	D2DynamicPathStrc*v1; // ecx@1
-//	DWORD v2; // eax@1
+//	uint32_t v2; // eax@1
 //	unsigned int v3; // ebx@1
 //	unsigned int v4; // ebp@1
 //	D2RoomStrc*v5; // eax@2
@@ -3786,8 +3786,8 @@ void __fastcall PATHMISC_UpdateRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc*
 //	int v13; // edx@21
 //	D2UnitStrc*v14; // eax@21
 //	D2RoomStrc*v15; // eax@23
-//	WORD v16; // cx@23
-//	WORD v17; // dx@23
+//	uint16_t v16; // cx@23
+//	uint16_t v17; // dx@23
 //	signed int v18; // edi@26
 //	int v19; // esi@28
 //	int v20; // edi@28
@@ -3983,7 +3983,7 @@ void __stdcall D2Common_10235_PATH_Last(D2UnitStrc* pRiderUnit, D2UnitStrc* pHor
 	D2RoomStrc *v5; // ecx@11
 	unsigned int v6; // ebp@13
 	unsigned int v7; // edx@13
-	DWORD v8; // eax@13
+	uint32_t v8; // eax@13
 	int v9; // esi@14
 	int v10; // edi@14
 	int v11; // eax@17
@@ -3991,8 +3991,8 @@ void __stdcall D2Common_10235_PATH_Last(D2UnitStrc* pRiderUnit, D2UnitStrc* pHor
 	D2RoomStrc *v13; // eax@21
 	int v14; // ecx@24
 	D2RoomStrc *v17; // eax@34
-	WORD v18; // di@34
-	WORD v19; // si@34
+	uint16_t v18; // di@34
+	uint16_t v19; // si@34
 	int v21; // esi@39
 	int v22; // edi@39
 	unsigned int v24; // edx@45

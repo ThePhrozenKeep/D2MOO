@@ -265,25 +265,25 @@ BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2)
 //{
 //	D2DynamicPathStrc*v3; // esi@1
 //	int v4; // ebp@1
-//	DWORD v5; // eax@6
-//	DWORD v6; // eax@10
-//	DWORD result; // eax@10
-//	DWORD v8; // eax@11
-//	DWORD v9; // eax@12
-//	DWORD v10; // eax@14
+//	uint32_t v5; // eax@6
+//	uint32_t v6; // eax@10
+//	uint32_t result; // eax@10
+//	uint32_t v8; // eax@11
+//	uint32_t v9; // eax@12
+//	uint32_t v10; // eax@14
 //	D2UnitStrc*v11; // eax@15
 //	signed int v12; // edx@16
 //	D2DynamicPathStrc*v13; // eax@19
-//	DWORD v14; // ecx@20
+//	uint32_t v14; // ecx@20
 //	int v15; // ecx@27
-//	WORD v16; // cx@30
-//	DWORD v17; // ecx@32
-//	DWORD v18; // edx@32
+//	uint16_t v16; // cx@30
+//	uint32_t v17; // ecx@32
+//	uint32_t v18; // edx@32
 //	int v19; // eax@32
 //	D2UnitStrc*v20; // edi@32
-//	DWORD v21; // eax@33
-//	DWORD v22; // eax@37
-//	DWORD v23; // eax@40
+//	uint32_t v21; // eax@33
+//	uint32_t v22; // eax@37
+//	uint32_t v23; // eax@40
 //	int v24; // eax@44
 //	bool v25; // zf@47
 //	char v26; // al@49
@@ -303,8 +303,8 @@ BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2)
 //	signed __int32 v40; // ebx@85
 //	D2RoomStrc*v41; // eax@85
 //	D2UnitStrc*v42; // edi@89
-//	DWORD v43; // eax@91
-//	DWORD v44; // eax@93
+//	uint32_t v43; // eax@91
+//	uint32_t v44; // eax@93
 //	signed int v45; // edi@93
 //	D2RoomStrc*v46; // edi@97
 //	int v47; // ebp@97
@@ -316,11 +316,11 @@ BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2)
 //	__int16 v53; // dx@106
 //	__int16 v54; // ax@108
 //	__int16 v55; // cx@108
-//	WORD v56; // ax@117
-//	WORD v57; // ax@128
-//	DWORD v58; // ecx@128
-//	DWORD v59; // eax@130
-//	DWORD v60; // eax@137
+//	uint16_t v56; // ax@117
+//	uint16_t v57; // ax@128
+//	uint32_t v58; // ecx@128
+//	uint32_t v59; // eax@130
+//	uint32_t v60; // eax@137
 //	D2RoomStrc** pppRoom; // [sp+10h] [bp-68h]@69
 //	int v62; // [sp+14h] [bp-64h]@30
 //	int v63; // [sp+18h] [bp-60h]@89
@@ -338,8 +338,8 @@ BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2)
 //	int v75; // [sp+58h] [bp-20h]@57
 //	int v76; // [sp+5Ch] [bp-1Ch]@32
 //	int v77; // [sp+60h] [bp-18h]@32
-//	DWORD v78; // [sp+64h] [bp-14h]@89
-//	DWORD v79; // [sp+68h] [bp-10h]@32
+//	uint32_t v78; // [sp+64h] [bp-14h]@89
+//	uint32_t v79; // [sp+68h] [bp-10h]@32
 //	int v80; // [sp+6Ch] [bp-Ch]@32
 //	int v81; // [sp+70h] [bp-8h]@32
 //	D2DynamicPathStrc*v82; // [sp+74h] [bp-4h]@32
@@ -852,7 +852,7 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 
 //D2Common.0x6FDA90C0
 //TODO: Find a name
-BYTE __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
+uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 {
 	D2UnitStrc* pTargetUnit = pPathInfo->pDynamicPath->pTargetUnit;
 
@@ -1072,7 +1072,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 //D2Common.0x6FDA9720
 //TODO: Find a name
-void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, BYTE nDirection)
+void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection)
 {
 	int nUnitType = 0;
 
@@ -1139,7 +1139,7 @@ void __stdcall D2COMMON_10193_PATH_AdjustDirection(D2DynamicPathStrc* pDynamicPa
 //TODO: Find a name
 void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, int a4)
 {
-	BYTE nDirection = 0;
+	uint8_t nDirection = 0;
 
 	if (pDynamicPath)
 	{
@@ -1349,7 +1349,7 @@ int __stdcall PATH_GetPathPoints(D2DynamicPathStrc* pDynamicPath, D2PathPointStr
 }
 
 //D2Common.0x6FDA9BF0 (#10158)
-BYTE __stdcall PATH_GetDirection(D2DynamicPathStrc* pDynamicPath)
+uint8_t __stdcall PATH_GetDirection(D2DynamicPathStrc* pDynamicPath)
 {
 	if (pDynamicPath)
 	{
@@ -1360,14 +1360,14 @@ BYTE __stdcall PATH_GetDirection(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA9C10 (#10159)
-BYTE __stdcall PATH_GetNewDirection(D2DynamicPathStrc* pDynamicPath)
+uint8_t __stdcall PATH_GetNewDirection(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->nNewDirection;
 }
 
 //D2Common.0x6FDA9C20 (#10160)
 //TODO: Check name
-void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPath, BYTE nDirection)
+void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection)
 {
 	D2_ASSERT(nDirection < 64);
 
@@ -1375,7 +1375,7 @@ void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPat
 }
 
 //D2Common.0x6FDA9C90 (#10161)
-void __stdcall PATH_SetDirection(D2DynamicPathStrc* pDynamicPath, BYTE nDirection)
+void __stdcall PATH_SetDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection)
 {
 	if (pDynamicPath)
 	{
@@ -1727,19 +1727,19 @@ int __stdcall PATH_GetType(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDAA250 (#10190)
-void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, BYTE nDistance)
+void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance)
 {
 	pDynamicPath->nDist = nDistance;
 }
 
 //D2Common.0x6FDAA270 (#10191)
-BYTE __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath)
+uint8_t __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->nDist;
 }
 
 //D2Common.0x6FDAA280 (#10188)
-void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, BYTE nNewDistance)
+void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nNewDistance)
 {
 	if (pDynamicPath)
 	{
@@ -1754,14 +1754,14 @@ void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, BYTE nNewDis
 }
 
 //D2Common.0x6FDAA2B0 (#10189)
-BYTE __stdcall PATH_GetMaxDistance(D2DynamicPathStrc* pDynamicPath)
+uint8_t __stdcall PATH_GetMaxDistance(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->nDistMax;
 }
 
 //D2Common.0x6FDAA2C0 (#10201)
 //TODO: Find a name
-WORD __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
+uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 {
 	if (!pDynamicPath->dwVelocity)
 	{
@@ -1773,7 +1773,7 @@ WORD __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 
 //D2Common.0x6FDAA300 (#10202)
 //TODO: Find a name
-WORD __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath)
+uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->unk0x54;
 }
@@ -1851,7 +1851,7 @@ void __stdcall D2COMMON_10204_PATH_ClearPoint2(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDAA480 (#10205)
-void __stdcall PATH_SetStepNum(D2DynamicPathStrc* pDynamicPath, BYTE nSteps)
+void __stdcall PATH_SetStepNum(D2DynamicPathStrc* pDynamicPath, uint8_t nSteps)
 {
 	if (pDynamicPath)
 	{

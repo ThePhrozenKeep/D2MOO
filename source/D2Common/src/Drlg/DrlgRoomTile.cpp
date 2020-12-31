@@ -43,8 +43,8 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 	int nEntries = 0;
 	int nRand = 0;
 	int nId = 0;
-	BYTE nSubIndex = 0;
-	BYTE nIndex = 0;
+	uint8_t nSubIndex = 0;
+	uint8_t nIndex = 0;
 
 	if (nTileFlags)
 	{
@@ -539,7 +539,7 @@ void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGrid
 	int v35 = 0;
 	int nX = 0;
 	int nY = 0;
-	BYTE v17 = 0;
+	uint8_t v17 = 0;
 	BOOL bContinue = FALSE;
 
 	pMemPool = pRoomEx->pLevel->pDrlg->pMempool;
@@ -609,7 +609,7 @@ void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGrid
 					{
 						if (v15 & 2)
 						{
-							if (v17 == 30 && (!(BYTE)v18 || (BYTE)v18 == 1))
+							if (v17 == 30 && (!(uint8_t)v18 || (uint8_t)v18 == 1))
 							{
 								v15 &= 0xFFFFFF7F;
 							}
@@ -799,7 +799,7 @@ void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2RoomExStrc* pRoomEx, int nX, i
 	int v13 = 0;
 	int v15 = 0;
 	int v16 = 0;
-	BYTE v5 = 0;
+	uint8_t v5 = 0;
 
 
 	v5 = BYTE1(dwFlags);

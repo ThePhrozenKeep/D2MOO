@@ -18,7 +18,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0
 void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA90C0
-BYTE __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo);
+uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA9190 (#10156)
 void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA91B0 (#11282)
@@ -30,7 +30,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9480 (#10152)
 void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag);
 //D2Common.0x6FDA9720
-void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, BYTE nDirection);
+void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection);
 //D2Common.0x6FDA9770 (#10193)
 void __stdcall D2COMMON_10193_PATH_AdjustDirection(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA97C0 (#10216)
@@ -68,13 +68,13 @@ int __stdcall D2Common_10155(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9BD0 (#10157)
 int __stdcall PATH_GetPathPoints(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc** ppPathPoints);
 //D2Common.0x6FDA9BF0 (#10158)
-BYTE __stdcall PATH_GetDirection(D2DynamicPathStrc* pDynamicPath);
+uint8_t __stdcall PATH_GetDirection(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9C10 (#10159)
-BYTE __stdcall PATH_GetNewDirection(D2DynamicPathStrc* pDynamicPath);
+uint8_t __stdcall PATH_GetNewDirection(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9C20 (#10160)
-void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPath, BYTE nDirection);
+void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection);
 //D2Common.0x6FDA9C90 (#10161)
-void __stdcall PATH_SetDirection(D2DynamicPathStrc* pDynamicPath, BYTE nDirection);
+void __stdcall PATH_SetDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection);
 //D2Common.0x6FDA9CB0 (#10162)
 int __stdcall PATH_GetXPosition(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9CF0 (#10163)
@@ -146,17 +146,17 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA240 (#10187)
 int __stdcall PATH_GetType(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA250 (#10190)
-void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, BYTE nDistance);
+void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance);
 //D2Common.0x6FDAA270 (#10191)
-BYTE __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath);
+uint8_t __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA280 (#10188)
-void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, BYTE nNewDistance);
+void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nNewDistance);
 //D2Common.0x6FDAA2B0 (#10189)
-BYTE __stdcall PATH_GetMaxDistance(D2DynamicPathStrc* pDynamicPath);
+uint8_t __stdcall PATH_GetMaxDistance(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA2C0 (#10201)
-WORD __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath);
+uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA300 (#10202)
-WORD __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath);
+uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA310 (#10192)
 void __stdcall D2COMMON_10192_PathSetIDAMax(D2DynamicPathStrc* pDynamicPath, int a2);
 //D2Common.0x6FDAA350 (#10198)
@@ -170,7 +170,7 @@ void __stdcall D2COMMON_10203_PATH_SetRotateFlag(D2DynamicPathStrc* pDynamicPath
 //D2Common.0x6FDAA460 (#10204)
 void __stdcall D2COMMON_10204_PATH_ClearPoint2(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA480 (#10205)
-void __stdcall PATH_SetStepNum(D2DynamicPathStrc* pDynamicPath, BYTE nSteps);
+void __stdcall PATH_SetStepNum(D2DynamicPathStrc* pDynamicPath, uint8_t nSteps);
 //D2Common.0x6FDAA4B0 (#10206)
 int __stdcall PATH_GetStepNum(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA4C0 (#10207)

@@ -41,7 +41,7 @@ D2RoomExStrc* __fastcall DRLGROOM_AllocRoomEx(D2DrlgLevelStrc* pLevel, int nType
 }
 
 //D2Common.0x6FD77280
-void __fastcall sub_6FD77280(D2RoomExStrc* pRoomEx, BOOL bClient, DWORD nFlags)
+void __fastcall sub_6FD77280(D2RoomExStrc* pRoomEx, BOOL bClient, uint32_t nFlags)
 {
 	pRoomEx->pRoom = NULL;
 
@@ -256,7 +256,7 @@ void __fastcall DRLGROOM_AllocDrlgOrthsForRooms(D2RoomExStrc* pRoomEx1, D2RoomEx
 		pNew->pNext = pRoomEx2->pDrlgOrth;
 		pRoomEx2->pDrlgOrth = pNew;
 		pNew->pRoomEx = pRoomEx1;
-		pNew->nDirection = ((BYTE)nDirection - 2) & 3;
+		pNew->nDirection = ((uint8_t)nDirection - 2) & 3;
 		pNew->bInit = 1;
 		pNew->pBox = &pRoomEx1->pDrlgCoord;
 	}
@@ -664,7 +664,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 	int nX = 0;
 	int nY = 0;
 	BOOL bSkip = FALSE;
-	BYTE nWarpId = 0;
+	uint8_t nWarpId = 0;
 
 	pRoomEx->nRoomsNear = 0;
 
@@ -815,7 +815,7 @@ void __fastcall DRLGROOM_SortRoomListByPosition(D2RoomExStrc** ppRoomList, int n
 }
 
 //D2Common.0x6FD77F00
-BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, BYTE nWarpId, D2RoomExStrc* pRoomEx2, char nWarpFlag, int nDirection)
+BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWarpId, D2RoomExStrc* pRoomEx2, char nWarpFlag, int nDirection)
 {
 	D2RoomTileStrc* pRoomTile = NULL;
 	int nX = 0;
@@ -934,7 +934,7 @@ void __fastcall DRLGROOM_SetRoom(D2RoomExStrc* pRoomEx, D2RoomStrc* pRoom)
 }
 
 //D2Common.0x6FD781A0
-void __fastcall DRLGROOM_GetRGB_IntensityFromRoomEx(D2RoomExStrc* pRoomEx, BYTE* pIntensity, BYTE* pRed, BYTE* pGreen, BYTE* pBlue)
+void __fastcall DRLGROOM_GetRGB_IntensityFromRoomEx(D2RoomExStrc* pRoomEx, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
 	D2LevelDefBin* pLevelDefRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
 

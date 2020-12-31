@@ -16,7 +16,7 @@ void __stdcall STATES_ClearGfxStateFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDB4710 (#10490)
 BOOL __stdcall STATES_IsAnyGfxStateFlagSet(D2UnitStrc* pUnit);
 //D2Common.0x6FDB4760 (#10492)
-DWORD* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit);
+uint32_t* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDB4790 (#10493)
 void __stdcall STATES_UpdateStayDeathFlags(D2UnitStrc* pUnit, BOOL bIsBoss);
 //D2Common.0x6FDB4900 (#10495)

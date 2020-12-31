@@ -49,7 +49,7 @@ void __fastcall DATATBLS_UnloadOverlayTxt()
 }
 
 //D2Common.0x6FD72530 (#10674)
-DWORD __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId)
+uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId)
 {
 	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
@@ -75,7 +75,7 @@ int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId)
 }
 
 //D2Common.0x6FD725B0 (#10676)
-DWORD __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId)
+uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId)
 {
 	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
@@ -88,7 +88,7 @@ DWORD __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId)
 }
 
 //D2Common.0x6FD725F0 (#10677)
-DWORD __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId)
+uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId)
 {
 	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
@@ -114,7 +114,7 @@ int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId)
 }
 
 //D2Common.0x6FD72670 (#10679)
-int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, BYTE* pRed, BYTE* pGreen, BYTE* pBlue)
+int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
 	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
@@ -138,7 +138,7 @@ int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pIni
 }
 
 //D2Common.0x6FD72720 (#10680)
-DWORD __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId)
+uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId)
 {
 	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 

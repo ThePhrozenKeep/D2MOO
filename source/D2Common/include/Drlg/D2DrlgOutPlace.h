@@ -43,7 +43,7 @@ BOOL __fastcall sub_6FD81BF0(D2DrlgLevelLinkDataStrc* pLevelLinkData);
 //D2Common.0x6FD81CA0
 BOOL __fastcall sub_6FD81CA0(D2DrlgLevelLinkDataStrc* pLevelLinkData);
 //D2Common.0x6FD81D60
-void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, BYTE nActNo);
+void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t nActNo);
 //D2Common.0x6FD82050
 BOOL __fastcall sub_6FD82050(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration);
 //D2Common.0x6FD82130

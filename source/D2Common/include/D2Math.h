@@ -1,19 +1,20 @@
 #pragma once
 
-#include <Windows.h>
+#include <cstdint>
 
 #define ARRAY_SIZE(Array) (sizeof(Array) / sizeof(Array[0]))
 
-//#define LOBYTE(x)	(*((BYTE*)&(x)))   // low byte
-//#define LOWORD(x)	(*((WORD*)&(x)))   // low word
-#define LODWORD(x)	(*((DWORD*)&(x)))  // low dword
-//#define HIBYTE(x)	(*((BYTE*)&(x)+1))
-//#define HIWORD(x)	(*((WORD*)&(x)+1))
-#define HIDWORD(x)	(*((DWORD*)&(x)+1))
-#define BYTEn(x,n)	(*((BYTE*)&(x)+n))
-#define WORDn(x,n)	(*((WORD*)&(x)+n))
+#define LOBYTE(w)           ((uint8_t ) (( (uint16_t)(w))        & 0xff  ))
+#define HIBYTE(w)           ((uint8_t ) ((((uint16_t)(w)) >>  8) & 0xff  ))
+#define LOWORD(l)           ((uint16_t) (( (uint32_t)(l))        & 0xffff))
+#define HIWORD(l)           ((uint16_t) ((((uint32_t)(l)) >> 16) & 0xffff))
+#define LODWORD(l)          ((uint32_t) (( (uint64_t)(l))        & 0xffff))
+#define HIDWORD(l)          ((uint32_t) ((((uint64_t)(l)) >> 16) & 0xffff))
+
+#define BYTEn(x,n)	((uint8_t ) ((((uint64_t)(x)) >> ( 8*n)) & 0xff  ))
+#define WORDn(x,n)	((uint16_t) ((((uint64_t)(x)) >> (16*n)) & 0xffff))
 #define BYTE0(x)	BYTEn(x,  0)
-#define BYTE1(x)	BYTEn(x,  1)         // byte 1 (counting from 0)
+#define BYTE1(x)	BYTEn(x,  1)
 #define BYTE2(x)	BYTEn(x,  2)
 #define BYTE3(x)	BYTEn(x,  3)
 #define BYTE4(x)	BYTEn(x,  4)
@@ -30,15 +31,15 @@
 #define BYTE15(x)	BYTEn(x, 15)
 #define WORD0(x)	WORDn(x,  0)
 #define WORD1(x)	WORDn(x,  1)
-#define WORD2(x)	WORDn(x,  2)         // third word of the object, unsigned
+#define WORD2(x)	WORDn(x,  2)
 #define WORD3(x)	WORDn(x,  3)
 #define WORD4(x)	WORDn(x,  4)
 #define WORD5(x)	WORDn(x,  5)
 #define WORD6(x)	WORDn(x,  6)
 #define WORD7(x)	WORDn(x,  7)
 
-extern const DWORD gdwBitMasks[];
-extern const DWORD gdwInvBitMasks[];
+extern const uint32_t gdwBitMasks[];
+extern const uint32_t gdwInvBitMasks[];
 
 template<class T>
 constexpr const T& D2Clamp(const T& v, const T& low, const T& high)

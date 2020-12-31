@@ -17,73 +17,73 @@ void __fastcall sub_6FD413E0(D2RoomCollisionGridStrc* pCollisionGrid, D2RoomColl
 //D2Common.0x6FD41610
 void __fastcall COLLISION_FreeRoomCollisionGrid(void* pMemPool, D2RoomStrc* pRoom);
 //D2Common.0x6FD41650 (#10118)
-WORD __stdcall COLLISION_CheckMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+uint16_t __stdcall COLLISION_CheckMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD41720 (#10127)
-void __stdcall COLLISION_SetMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+void __stdcall COLLISION_SetMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD417F0 (#10123)
-void __stdcall COLLISION_ResetMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+void __stdcall COLLISION_ResetMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD418C0 (#10120)
-int __stdcall COLLISION_CheckMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, WORD nMask);
+int __stdcall COLLISION_CheckMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask);
 //D2Common.0x6FD41B40
-WORD __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD41BE0
 int __fastcall COLLISION_AdaptBoundingBoxToGrid(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, D2BoundingBoxStrc* pBoundingBoxes);
 //D2Common.0x6FD41CA0
-WORD __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, WORD nCollisionType);
+uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nCollisionType);
 //D2Common.0x6FD41DE0 (#10121)
-WORD __stdcall COLLISION_CheckMaskWithPattern1(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, WORD nMask);
+uint16_t __stdcall COLLISION_CheckMaskWithPattern1(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD42000
-WORD __fastcall COLLISION_CheckCollisionMaskWithAdjacentCells(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+uint16_t __fastcall COLLISION_CheckCollisionMaskWithAdjacentCells(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD42670
-WORD __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+uint16_t __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD42740 (#10122)
-int __stdcall COLLISION_CheckMaskWithPattern2(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, WORD nMask);
+int __stdcall COLLISION_CheckMaskWithPattern2(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD428D0
-int __fastcall sub_6FD428D0(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+int __fastcall sub_6FD428D0(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD42A30
-int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD43080 (#10119)
-WORD __stdcall COLLISION_CheckMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, WORD nMask);
+uint16_t __stdcall COLLISION_CheckMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD432A0 (#10128)
-void __stdcall COLLISION_SetMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, WORD nMask);
+void __stdcall COLLISION_SetMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD434B0
-void __fastcall COLLISION_SetCollisionMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+void __fastcall COLLISION_SetCollisionMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD43580
-void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD436F0 (#10130)
-void __stdcall COLLISION_SetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, WORD nMask);
+void __stdcall COLLISION_SetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD439D0 (#10124)
-void __stdcall COLLISION_ResetMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, WORD nMask);
+void __stdcall COLLISION_ResetMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD43C10
-void __fastcall COLLISION_ResetCollisionMask(D2RoomStrc* pRoom, int nX, int nY, WORD nMask);
+void __fastcall COLLISION_ResetCollisionMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD43CE0
-void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD43E60 (#10126)
-void __stdcall COLLISION_ResetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, WORD nMask);
+void __stdcall COLLISION_ResetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD44140 (#10125)
-void __stdcall COLLISION_ResetMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, WORD nMask);
+void __stdcall COLLISION_ResetMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask);
 //D2Common.0x6FD44370
-void __fastcall COLLISION_ResetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+void __fastcall COLLISION_ResetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD443E0 (#10129)
-void __stdcall COLLISION_SetMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, WORD nMask);
+void __stdcall COLLISION_SetMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask);
 //D2Common.0x6FD44600
-void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, WORD nMask);
+void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD44660 (#10131)
-WORD __fastcall D2Common_10131(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, WORD nMask);
+uint16_t __fastcall D2Common_10131(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
 //D2Common.0x6FD44910
 void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int nCenterX, int nCenterY, unsigned int nSizeX, unsigned int nSizeY);
 //D2Common.0x6FD44950 (#10132)
-WORD __fastcall D2Common_10132(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, WORD nMask);
+uint16_t __fastcall D2Common_10132(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
 //D2Common.0x6FD44BB0
-WORD __fastcall sub_6FD44BB0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, WORD nMask1, WORD nMask2);
+uint16_t __fastcall sub_6FD44BB0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nMask1, uint16_t nMask2);
 //D2Common.0x6FD44E00
-WORD __fastcall sub_6FD44E00(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, WORD nMask);
+uint16_t __fastcall sub_6FD44E00(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD44FF0
-int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType, WORD nMask);
+int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
 //D2Common.0x6FD451D0 (#10133)
 void __fastcall D2Common_10133(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType);
 //D2Common.0x6FD45210 (#11263)
-int __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* a2, D2CoordStrc* a3, WORD nMask);
+int __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* a2, D2CoordStrc* a3, uint16_t nMask);
 //D2Common.0x6FD459D0 (#10135)
 D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms, int nMaxDistance);
 //D2Common.0x6FD45A00

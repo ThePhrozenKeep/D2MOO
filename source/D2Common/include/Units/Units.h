@@ -7,7 +7,7 @@
 
 
 //D2Common.0x6FDBD520 (#10457)
-BYTE __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);
+uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD570 (#10320)
 D2SkillStrc* __stdcall UNITS_GetStartSkill(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD5B0 (#10321)
@@ -169,13 +169,13 @@ void __stdcall UNITS_SetPlayerPortalFlags(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDC0660 (#10426)
 int __stdcall UNITS_GetPlayerPortalFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDC06C0 (#10353)
-DWORD __stdcall UNITS_GetNameOffsetFromObject(D2UnitStrc* pUnit);
+uint32_t __stdcall UNITS_GetNameOffsetFromObject(D2UnitStrc* pUnit);
 //D2Common.0x6FDC0700 (#10427)
-BYTE __stdcall UNITS_GetObjectPortalFlags(D2UnitStrc* pUnit);
+uint8_t __stdcall UNITS_GetObjectPortalFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDC0760 (#10428)
-void __stdcall UNITS_SetObjectPortalFlags(D2UnitStrc* pUnit, BYTE nPortalFlag);
+void __stdcall UNITS_SetObjectPortalFlags(D2UnitStrc* pUnit, uint8_t nPortalFlag);
 //D2Common.0x6FDC07C0 (#10429)
-BOOL __stdcall UNITS_CheckObjectPortalFlag(D2UnitStrc* pUnit, BYTE nFlag);
+BOOL __stdcall UNITS_CheckObjectPortalFlag(D2UnitStrc* pUnit, uint8_t nFlag);
 //D2Common.0x6FDC0820 (#10430)
 int __stdcall UNITS_GetOverlayHeight(D2UnitStrc* pUnit);
 //D2Common.0x6FDC08B0 (#10431)
@@ -221,7 +221,7 @@ void __stdcall UNITS_MergeDualWieldWeaponStatLists(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDC1EE0
 D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecord(int nRecordId);
 //D2Common.0x6FDC1F10 (#10442)
-BYTE __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem);
+uint8_t __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Common.0x6FDC1FE0
 D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecordFromMonsterId(int nMonsterId);
 //D2Common.0x6FDC2030 (#10443)
