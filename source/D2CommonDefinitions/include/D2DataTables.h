@@ -1751,7 +1751,7 @@ struct D2SkillsTxt
 	uint8_t nMonAnim;						//0x11
 	uint8_t nSeqTrans;						//0x12
 	uint8_t nSeqNum;						//0x13
-	uint8_t nRange;						//0x14
+	uint8_t nRange;							//0x14
 	uint8_t nSelectProc;					//0x15
 	uint8_t nSeqInput;						//0x16
 	uint8_t pad0x17;						//0x17
@@ -1764,7 +1764,7 @@ struct D2SkillsTxt
 	uint16_t wSrvPrgFunc[3];				//0x30
 	uint16_t pad0x36;						//0x36
 	uint32_t dwPrgCalc[3];					//0x38
-	uint8_t nPrgDamage;					//0x44
+	uint8_t nPrgDamage;						//0x44
 	uint8_t pad0x45;						//0x45
 	uint16_t wSrvMissile;					//0x46
 	uint16_t wSrvMissileA;					//0x48
@@ -1773,7 +1773,7 @@ struct D2SkillsTxt
 	uint16_t wSrvOverlay;					//0x4E
 	uint32_t dwAuraFilter;					//0x50
 	uint16_t wAuraStat[6];					//0x54
-	uint32_t dwAuraLenCalc;				//0x60
+	uint32_t dwAuraLenCalc;					//0x60
 	uint32_t dwAuraRangeCalc;				//0x64
 	int32_t dwAuraStatCalc[6];				//0x68
 	int16_t nAuraState;						//0x80
@@ -1829,13 +1829,13 @@ struct D2SkillsTxt
 	uint16_t wResultFlags;					//0x12E
 	uint32_t dwHitFlags;					//0x130
 	uint32_t dwHitClass;					//0x134
-	uint32_t dwCalc[4];					//0x138
+	uint32_t dwCalc[4];						//0x138
 	int32_t dwParam[8];						//0x148
 	uint8_t nWeapSel;						//0x168
 	uint8_t pad0x169;						//0x169
 	uint16_t wItemEffect;					//0x16A
 	uint16_t wItemCltEffect;				//0x16C
-	uint16_t pad0x16E;					//0x16E
+	uint16_t pad0x16E;						//0x16E
 	uint32_t dwSkPoints;					//0x170
 	uint16_t wReqLevel;						//0x174
 	uint16_t wReqStr;						//0x176
@@ -1845,7 +1845,7 @@ struct D2SkillsTxt
 	int16_t nReqSkill[3];					//0x17E
 	uint16_t wStartMana;					//0x184
 	uint16_t wMinMana;						//0x186
-	uint8_t nManaShift;					//0x188
+	uint8_t nManaShift;						//0x188
 	uint8_t pad0x189;						//0x189
 	uint16_t wMana;							//0x18A
 	int16_t wLevelMana;						//0x18C
@@ -1865,7 +1865,7 @@ struct D2SkillsTxt
 	uint32_t dwMinLvlDam[5];				//0x1B0
 	uint32_t dwMaxLvlDam[5];				//0x1C4
 	uint32_t dwDmgSymPerCalc;				//0x1D8
-	uint8_t nEType;						//0x1DC
+	uint8_t nEType;							//0x1DC
 	uint8_t pad0x1DD[3];					//0x1DD
 	uint32_t dwEMin;						//0x1E0
 	uint32_t dwEMax;						//0x1E4
