@@ -1742,29 +1742,29 @@ struct D2SkillDescTxt
 
 struct D2SkillsTxt
 {
-	short nSkillId; 					//0x00
+	int16_t nSkillId; 						//0x00
 	uint16_t unk0x02;						//0x02
 	uint32_t dwFlags[2];					//0x04
-	char nCharClass;					//0x0C
-	uint8_t unk0x0D[3];					//0x0D
+	int8_t nCharClass;						//0x0C
+	uint8_t unk0x0D[3];						//0x0D
 	uint8_t nAnim;							//0x10
 	uint8_t nMonAnim;						//0x11
 	uint8_t nSeqTrans;						//0x12
 	uint8_t nSeqNum;						//0x13
-	uint8_t nRange;						//0x14
+	uint8_t nRange;							//0x14
 	uint8_t nSelectProc;					//0x15
 	uint8_t nSeqInput;						//0x16
 	uint8_t pad0x17;						//0x17
-	short nITypeA[3];					//0x18
-	short nITypeB[3];					//0x1E
-	short nETypeA[2];					//0x24
-	short nETypeB[2];					//0x28
+	int16_t nITypeA[3];						//0x18
+	int16_t nITypeB[3];						//0x1E
+	int16_t nETypeA[2];						//0x24
+	int16_t nETypeB[2];						//0x28
 	uint16_t wSrvStartFunc;					//0x2C
 	uint16_t wSrvDoFunc;					//0x2E
 	uint16_t wSrvPrgFunc[3];				//0x30
 	uint16_t pad0x36;						//0x36
 	uint32_t dwPrgCalc[3];					//0x38
-	uint8_t nPrgDamage;					//0x44
+	uint8_t nPrgDamage;						//0x44
 	uint8_t pad0x45;						//0x45
 	uint16_t wSrvMissile;					//0x46
 	uint16_t wSrvMissileA;					//0x48
@@ -1773,18 +1773,18 @@ struct D2SkillsTxt
 	uint16_t wSrvOverlay;					//0x4E
 	uint32_t dwAuraFilter;					//0x50
 	uint16_t wAuraStat[6];					//0x54
-	uint32_t dwAuraLenCalc;				//0x60
+	uint32_t dwAuraLenCalc;					//0x60
 	uint32_t dwAuraRangeCalc;				//0x64
-	uint32_t dwAuraStatCalc[6];			//0x68
-	short nAuraState;					//0x80
-	short wAuraTargetState;				//0x82
+	int32_t dwAuraStatCalc[6];				//0x68
+	int16_t nAuraState;						//0x80
+	int16_t wAuraTargetState;				//0x82
 	uint16_t wAuraEvent[3];					//0x84
 	uint16_t wAuraEventFunc[3];				//0x8A
 	uint16_t wAuraTgtEvent;					//0x90
 	uint16_t wAuraTgtEventFunc;				//0x92
-	short nPassiveState;				//0x94
-	short nPassiveIType;				//0x96
-	short nPassiveStat[5];				//0x98
+	int16_t nPassiveState;					//0x94
+	int16_t nPassiveIType;					//0x96
+	int16_t nPassiveStat[5];				//0x98
 	uint16_t pad0xA2;						//0xA2
 	uint32_t dwPassiveCalc[5];				//0xA4
 	uint16_t wPassiveEvent;					//0xB8
@@ -1818,7 +1818,7 @@ struct D2SkillsTxt
 	uint16_t wPrgSound;						//0x10E
 	uint16_t wCltOverlayA;					//0x110
 	uint16_t wCltOverlayB;					//0x112
-	uint32_t dwCltCalc[3];					//0x114
+	int32_t dwCltCalc[3];					//0x114
 	uint8_t nItemTarget;					//0x120
 	uint8_t pad0x121;						//0x121
 	uint16_t wItemCastSound;				//0x122
@@ -1829,26 +1829,26 @@ struct D2SkillsTxt
 	uint16_t wResultFlags;					//0x12E
 	uint32_t dwHitFlags;					//0x130
 	uint32_t dwHitClass;					//0x134
-	uint32_t dwCalc[4];					//0x138
-	uint32_t dwParam[8];					//0x148
+	uint32_t dwCalc[4];						//0x138
+	int32_t dwParam[8];						//0x148
 	uint8_t nWeapSel;						//0x168
 	uint8_t pad0x169;						//0x169
 	uint16_t wItemEffect;					//0x16A
 	uint16_t wItemCltEffect;				//0x16C
-	uint16_t pad0x16E;					//0x16E
+	uint16_t pad0x16E;						//0x16E
 	uint32_t dwSkPoints;					//0x170
 	uint16_t wReqLevel;						//0x174
 	uint16_t wReqStr;						//0x176
 	uint16_t wReqDex;						//0x178
 	uint16_t wReqInt;						//0x17A
 	uint16_t wReqVit;						//0x17C
-	short nReqSkill[3];					//0x17E
+	int16_t nReqSkill[3];					//0x17E
 	uint16_t wStartMana;					//0x184
 	uint16_t wMinMana;						//0x186
-	uint8_t nManaShift;					//0x188
+	uint8_t nManaShift;						//0x188
 	uint8_t pad0x189;						//0x189
 	uint16_t wMana;							//0x18A
-	uint16_t wLevelMana;					//0x18C
+	int16_t wLevelMana;						//0x18C
 	uint8_t nAttackRank;					//0x18E
 	uint8_t nLineOfSight;					//0x18F
 	uint32_t dwDelay;						//0x190
@@ -1865,7 +1865,7 @@ struct D2SkillsTxt
 	uint32_t dwMinLvlDam[5];				//0x1B0
 	uint32_t dwMaxLvlDam[5];				//0x1C4
 	uint32_t dwDmgSymPerCalc;				//0x1D8
-	uint8_t nEType;						//0x1DC
+	uint8_t nEType;							//0x1DC
 	uint8_t pad0x1DD[3];					//0x1DD
 	uint32_t dwEMin;						//0x1E0
 	uint32_t dwEMax;						//0x1E4
@@ -1877,12 +1877,12 @@ struct D2SkillsTxt
 	uint32_t dwELenSymPerCalc;				//0x224
 	uint8_t nRestrict;						//0x228
 	uint8_t pad0x229;						//0x229
-	short nState[3];					//0x22A
+	int16_t nState[3];						//0x22A
 	uint8_t nAiType;						//0x230
 	uint8_t pad0x231;						//0x231
-	uint16_t wAiBonus;						//0x232
-	int nCostMult;						//0x234
-	int nCostAdd;						//0x238
+	int16_t wAiBonus;						//0x232
+	int32_t nCostMult;						//0x234
+	int32_t nCostAdd;						//0x238
 };
 
 struct D2StatesTxt
