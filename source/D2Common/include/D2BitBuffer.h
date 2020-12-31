@@ -9,7 +9,7 @@ Function:		BITBUFFER_Initialize
 Address:		Fog.#10126
 Notes:
 */
-void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, BYTE* pBitStream, size_t nSize);
+void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStream, size_t nSize);
 
 /*
 Function:		BITBUFFER_GetSize
@@ -23,7 +23,7 @@ Function:		BITBUFFER_Write
 Address:		Fog.#10128
 Notes:
 */
-void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, DWORD dwValue, DWORD dwBits);
+void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint32_t dwBits);
 
 /*
 Function:		BITBUFFER_ReadSigned
@@ -37,7 +37,7 @@ Function:		BITBUFFER_Read
 Address:		Fog.#10130
 Notes:
 */
-DWORD __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits);
+uint32_t __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits);
 
 /*
 Function:		BITBUFFER_GoToNextByte
@@ -54,18 +54,18 @@ Function:		BITBUFFER_SetBitState
 Address:		Fog.#10118
 Notes:
 */
-void __stdcall BITBUFFER_SetBitState(BYTE* pBitBuffer, int nBit);
+void __stdcall BITBUFFER_SetBitState(uint8_t* pBitBuffer, int nBit);
 
 /*
 Function:		BITBUFFER_GoToNextByte
 Address:		Fog.#10119
 Notes:
 */
-int __stdcall BITBUFFER_GetBitState(BYTE* pBitBuffer, int nBit);
+int __stdcall BITBUFFER_GetBitState(uint8_t* pBitBuffer, int nBit);
 
 /*
 Function:		BITBUFFER_GoToNextByte
 Address:		Fog.#10120
 Notes:
 */
-void __stdcall BITBUFFER_ResetBitstate(BYTE* pBitBuffer, int nBit);
+void __stdcall BITBUFFER_ResetBitstate(uint8_t* pBitBuffer, int nBit);

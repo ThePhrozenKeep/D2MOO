@@ -18,7 +18,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 //D2Common.0x6FD8DD60 (#10924)
 BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo);
 //D2Common.0x6FD8DDD0 (#10927)
-void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, BYTE* pRed, BYTE* pGreen, BYTE* pBlue);
+void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
 //D2Common.0x6FD8DE00 (#10926)
 int __stdcall ENVIRONMENT_GetIntensityFromAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8DE20 (#10933)

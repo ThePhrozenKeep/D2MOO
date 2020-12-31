@@ -40,8 +40,8 @@ const int dword_6FDD19E0[] =
 //	int v10; // ecx@15
 //	int v11; // esi@17
 //	int v12; // ecx@20
-//	DWORD v13; // esi@22
-//	DWORD v14; // edi@22
+//	uint32_t v13; // esi@22
+//	uint32_t v14; // edi@22
 //	int v15; // ecx@22
 //	bool v16; // zf@22
 //	int v17; // edi@26
@@ -50,7 +50,7 @@ const int dword_6FDD19E0[] =
 //	D2DynamicPathStrc **v20; // edx@30
 //	D2DynamicPathStrc *v21; // eax@30
 //	D2DynamicPathStrc *v22; // ecx@31
-//	WORD v23; // ax@36
+//	uint16_t v23; // ax@36
 //	signed __int16 v24; // cx@36
 //	int nX; // [sp+10h] [bp-3304h]@2
 //	D2PathPointStrc nXa; // [sp+10h] [bp-3304h]@12
@@ -115,7 +115,7 @@ const int dword_6FDD19E0[] =
 //	v8->anonymous_0.wPosY = v12;
 //	v8->anonymous_0.wOffsetY = v12;
 //	*(_DWORD *)&v8->anonymous_0.wOffsetX = v7;
-//	v13 = (DWORD)a2;
+//	v13 = (uint32_t)a2;
 //	v14 = 0;
 //	v15 = (dword_6FDD17E0[v7.X & 0x7F] + dword_6FDD19E0[v8->anonymous_0.wPosX & 127]) & 127;
 //	v16 = a2 == (D2PathInfoStrc *)v2;
@@ -135,7 +135,7 @@ const int dword_6FDD19E0[] =
 //	{
 //LABEL_48:
 //		v17 = 0;
-//		v8->dwFlags = (DWORD)a2;
+//		v8->dwFlags = (uint32_t)a2;
 //		a2 = (D2PathInfoStrc *)v8;
 //	}
 //	else
@@ -188,7 +188,7 @@ const int dword_6FDD19E0[] =
 //D2Common.0x6FDA6D10
 void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathPoint)
 {
-	int nIndex = ((BYTE)dword_6FDD17E0[pPathPoint->pStartCoord.X & 0x7F] + (BYTE)dword_6FDD19E0[pPathPoint->pStartCoord.Y & 0x7F]) & 0x7F;
+	int nIndex = ((uint8_t)dword_6FDD17E0[pPathPoint->pStartCoord.X & 0x7F] + (uint8_t)dword_6FDD19E0[pPathPoint->pStartCoord.Y & 0x7F]) & 0x7F;
 
 	pPathPoint->pNext = ppPathInfo[nIndex + 128];
 	ppPathInfo[nIndex + 128] = pPathPoint;

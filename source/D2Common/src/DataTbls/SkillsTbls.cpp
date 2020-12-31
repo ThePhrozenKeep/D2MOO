@@ -178,7 +178,7 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 		szCode[3] = ' ';
 	}
 
-	nRow = FOG_GetLinkIndex(pLinker, *(DWORD*)szCode, 1);
+	nRow = FOG_GetLinkIndex(pLinker, *(uint32_t*)szCode, 1);
 
 	*a2 = 0;
 	return nRow;
@@ -329,8 +329,8 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	void* pTmpMonStatsTxt = NULL;
 	int nHighestClassSkillCount = 0;
 	int nSize = 0;
-	BYTE nPetType = 0;
-	BYTE nClass = 0;
+	uint8_t nPetType = 0;
+	uint8_t nClass = 0;
 	char szFileName[260] = {};
 
 	D2BinFieldStrc pTmpMonStatsTbl[] =
@@ -839,8 +839,8 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	memset(sgptDataTables->nClassSkillList, 0x00, 7 * sizeof(short) * nHighestClassSkillCount);
 	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));
 
-	sgptDataTables->pPassiveSkills = (WORD*)FOG_AllocServerMemory(NULL, sizeof(WORD) * sgptDataTables->nPassiveSkills, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pPassiveSkills, 0x00, sizeof(WORD) * sgptDataTables->nPassiveSkills);
+	sgptDataTables->pPassiveSkills = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->nPassiveSkills, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pPassiveSkills, 0x00, sizeof(uint16_t) * sgptDataTables->nPassiveSkills);
 
 	sgptDataTables->nPassiveSkills = 0;
 	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)

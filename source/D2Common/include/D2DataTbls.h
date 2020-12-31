@@ -8,7 +8,7 @@
 extern D2ArenaTxt* gpArenaTxtTable;
 extern D2CharTemplateTxt* gpCharTemplateTxtTable;
 extern int gnCharTemplateTxtTableRecordCount;
-extern DWORD gnCharTemplateStartIds[64];
+extern uint32_t gnCharTemplateStartIds[64];
 extern D2BeltsTxt* gpBeltsTxtTable;
 extern D2DataTablesStrc gpDataTables;
 extern D2DataTablesStrc* sgptDataTables;
@@ -29,7 +29,7 @@ size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t 
 //D2Common.0x6FDC41C1
 BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* pBuffer, size_t nBytesToRead);
 //D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, DWORD* lpFileSizeHigh);
+size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh);
 //D2Common.0x6FDC4268
 void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, char* szFileName, int* pSize, char* szFile, int nLine);
 
@@ -79,19 +79,19 @@ void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2Inv
 
 
 //D2Common.0x6FD494D0
-WORD __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference);
+uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference);
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
 void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt();
 //D2Common.0x6FD49660 (#11255)
-DWORD __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode);
+uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode);
 //D2Common.0x6FD49680 (#11249)
-DWORD __stdcall DATATBLS_GetExpRatio(int nLevel);
+uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel);
 //D2Common.0x6FD496B0 (#10628)
-DWORD __stdcall DATATBLS_GetLevelThreshold(int nClass, DWORD dwLevel);
+uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel);
 //D2Common.0x6FD496E0 (#10629)
 int __stdcall DATATBLS_GetMaxLevel(int nClass);
 //D2Common.0x6FD49710 (#10630)
-DWORD __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, DWORD dwExperience);
+uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience);
 //D2Common.0x6FD49760
 void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
 //D2Common.0x6FD49850
@@ -180,7 +180,7 @@ int __stdcall D2Common_11097(D2FieldStrc* pField, int a2, int a3);
 //D2Common.0x6FD522A0 (#11098)
 int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY);
 //D2Common.0x6FD52360 (#11099)
-BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, WORD fMask);
+BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, uint16_t fMask);
 
 
 
@@ -234,9 +234,9 @@ int __stdcall DATATBLS_MapOldItemIndexToCurrent(int nItemId);
 //D2Common.0x6FD57680 (#10600)
 D2ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId);
 //D2Common.0x6FD576D0 (#10601)
-D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(DWORD dwCode, int* pItemId);
+D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId);
 //D2Common.0x6FD57720 (#10602)
-int __stdcall DATATBLS_GetItemIdFromItemCode(DWORD dwCode);
+int __stdcall DATATBLS_GetItemIdFromItemCode(uint32_t dwCode);
 //D2Common.0x6FD57740
 void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD57820
@@ -302,7 +302,7 @@ void __fastcall DATATBLS_UnloadItemRatioTxt();
 //D2Common.0x6FD5C210 (#10622)
 D2ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables();
 //D2Common.0x6FD5C220 (#10623)
-D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, BYTE nDifficulty, WORD wVersion);
+D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion);
 //D2Common.0x6FD5C2F0
 int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* pRecord2);
 //D2Common.0x6FD5C320
@@ -345,15 +345,15 @@ void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool);
 //D2Common.0x6FD603C0 (#10631)
 D2LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId);
 //D2Common.0x6FD603F0 (#10632)
-BYTE __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId);
+uint8_t __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId);
 //D2Common.0x6FD60430 (#10634)
-BYTE __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId);
+uint8_t __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId);
 //D2Common.0x6FD60470 (#10633)
-BYTE __stdcall DATATBLS_GetMudFromLevelsTxt(int nLevelId);
+uint8_t __stdcall DATATBLS_GetMudFromLevelsTxt(int nLevelId);
 //D2Common.0x6FD604B0
 void __fastcall DATATBLS_UnloadLevelsTxt();
 //D2Common.0x6FD604F0 (#11247)
-int __stdcall DATATBLS_GetMonsterLevelInArea(int nLevelId, BYTE nDifficulty, BOOL bExpansion);
+int __stdcall DATATBLS_GetMonsterLevelInArea(int nLevelId, uint8_t nDifficulty, BOOL bExpansion);
 //D2Common.0x6FD60560
 int* __fastcall DATATBLS_GetPortalLevels(int* pnPortalLevels);
 //D2Common.0x6FD60570
@@ -369,7 +369,7 @@ void __fastcall DATATBLS_UnloadLevelTypesTxt();
 //D2Common.0x6FD61460 (#10023)
 D2LvlTypesTxt* __stdcall DATATBLS_GetLevelTypesTxtRecord(int nLevelType);
 //D2Common.0x6FD614A0 (#11226)
-bool __stdcall DATATBLS_CheckActInLevelTypesTxt(int nLevelType, BYTE nAct);
+bool __stdcall DATATBLS_CheckActInLevelTypesTxt(int nLevelType, uint8_t nAct);
 //D2Common.0x6FD61500 (#11227)
 void __stdcall DATATBLS_GetFileNameFromLevelTypeAndFileId(int nLevelType, int nFile, char* szFile);
 //D2Common.0x6FD61570
@@ -405,7 +405,7 @@ void __fastcall DATATBLS_FreeGlobalTileLibraryHash();
 //D2Common.0x6FD628C0
 void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool);
 //D2Common.0x6FD62D30 (#10011)
-int __fastcall DATATBLS_GetAutomapCellId(DWORD dwAutomapLevelType, DWORD dwAutomapTileType, int nStyle, int nSequence);
+int __fastcall DATATBLS_GetAutomapCellId(uint32_t dwAutomapLevelType, uint32_t dwAutomapTileType, int nStyle, int nSequence);
 //D2Common.0x6FD62E70
 void __fastcall DATATBLS_FreeAutomap();
 
@@ -428,7 +428,7 @@ D2MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId);
 
 
 //Inlined in some functions
-DWORD __fastcall DATATBLS_StringToCode(char* szText);
+uint32_t __fastcall DATATBLS_StringToCode(char* szText);
 //D2Common.0x6FD64C40 (#10592)
 int __stdcall DATATBLS_GetMonsterChainInfo(int nMonsterId, int* pMaxChainId, int* pChainId);
 //D2Common.0x6FD64CD0
@@ -458,7 +458,7 @@ int __fastcall DATATBLS_CalculatePercentage(signed int nValue1, signed int nValu
 //D2Common.0x6FD68DC0 (#10658)
 D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText);
 //D2Common.0x6FD68DF0 (#10659)
-D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(WORD wTCId, int nLvl);
+D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(uint16_t wTCId, int nLvl);
 //D2Common.0x6FD68E50 (#10660)
 D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromActAndDifficulty(int nDifficulty, int nAct, int nIndex);
 //D2Common.0x6FD68EC0
@@ -488,7 +488,7 @@ D2ItemTypesTxt* __fastcall DATATBLS_GetItemTypesTxtRecord(int nItemType);
 //D2Common.0x6FD6B1D0 (#10583)
 D2HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpansion, int nId, int nLevel);
 //D2Common.0x6FD6B270 (#10585)
-D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, WORD nNameId, D2HirelingTxt* pOldRecord);
+D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, uint16_t nNameId, D2HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B310 (#10586)
 D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromClassId(BOOL bExpansion, int nClass, D2HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B3A0 (#10587)
@@ -498,7 +498,7 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(B
 //D2Common.0x6FD6B4F0
 void __fastcall DATATBLS_LoadNpcTxt(void* pMemPool);
 //D2Common.0x6FD6B820 (#10588)
-D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(DWORD dwNpcId);
+D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(uint32_t dwNpcId);
 //D2Common.0x6FD6B850
 void __fastcall DATATBLS_LoadMonSoundsTxt(void* pMemPool);
 //D2Common.0x6FD6BF50 (#11252)
@@ -576,19 +576,19 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool);
 //D2Common.0x6FD72500
 void __fastcall DATATBLS_UnloadOverlayTxt();
 //D2Common.0x6FD72530 (#10674)
-DWORD __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId);
+uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72570 (#10675)
 int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD725B0 (#10676)
-DWORD __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId);
+uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD725F0 (#10677)
-DWORD __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId);
+uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72630 (#10678)
 int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72670 (#10679)
-int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, BYTE* pRed, BYTE* pGreen, BYTE* pBlue);
+int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
 //D2Common.0x6FD72720 (#10680)
-DWORD __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId);
+uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72760 (#10681)
 int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId);
 //Inlined at various places

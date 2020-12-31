@@ -209,7 +209,7 @@ void __fastcall sub_6FD736F0(D2RoomExStrc* pRoomEx)
 void __fastcall sub_6FD73790(D2RoomExStrc* pRoomEx)
 {
 	D2RoomExStrc* pRooms = NULL;
-	BYTE nCounter = 0;
+	uint8_t nCounter = 0;
 
 	if (pRoomEx->fRoomStatus >= 4 || !pRoomEx->unk0xAE[pRoomEx->fRoomStatus])
 	{
@@ -256,7 +256,7 @@ void __fastcall sub_6FD73790(D2RoomExStrc* pRoomEx)
 void __fastcall sub_6FD73880(D2RoomExStrc* pRoomEx)
 {
 	D2RoomExStrc* pRooms = NULL;
-	BYTE nCounter = 0;
+	uint8_t nCounter = 0;
 
 	if (pRoomEx->fRoomStatus != 4)
 	{
@@ -341,7 +341,7 @@ void __fastcall sub_6FD739A0(D2DrlgStrc* pDrlg, int nLevelId, int nX, int nY, D2
 }
 
 //D2Common.0x6FD73A30
-void __fastcall sub_6FD73A30(void* pMemPool, D2RoomExStrc* pRoomEx, BYTE a3)
+void __fastcall sub_6FD73A30(void* pMemPool, D2RoomExStrc* pRoomEx, uint8_t a3)
 {
 	int nCounter = 0;
 
@@ -432,7 +432,7 @@ void __fastcall sub_6FD73B40(D2DrlgStrc* pDrlg, int nLevelId, int nX, int nY, D2
 }
 
 //D2Common.0x6FD73BE0
-void __fastcall sub_6FD73BE0(D2RoomExStrc* pRoomEx, BYTE a2)
+void __fastcall sub_6FD73BE0(D2RoomExStrc* pRoomEx, uint8_t a2)
 {
 	for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
 	{
@@ -734,7 +734,7 @@ void __fastcall DRLGACTIVATE_ToggleHasPortalFlag(D2RoomExStrc* pRoomEx, BOOL bRe
 }
 
 //D2Common.0x6FD74110
-BYTE __fastcall DRLGACTIVATE_GetRoomStatusFlags(D2RoomExStrc* pRoomEx)
+uint8_t __fastcall DRLGACTIVATE_GetRoomStatusFlags(D2RoomExStrc* pRoomEx)
 {
 	return pRoomEx->fRoomStatus;
 }

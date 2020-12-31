@@ -19,7 +19,7 @@ D2UnkFileStrc* dword_6FDEA700;
 
 
 //D2Common.0x6FD859A0 (#11222)
-int __stdcall DRLGPRESET_CountPresetObjectsByAct(BYTE nAct)
+int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
 {
 	for (int i = 0; i < 150; ++i)
 	{
@@ -33,7 +33,7 @@ int __stdcall DRLGPRESET_CountPresetObjectsByAct(BYTE nAct)
 }
 
 //D2Common.0x6FD859E0 (#11223)
-int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(BYTE nAct, int nUnitId)
+int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t nAct, int nUnitId)
 {
 	static const int dword_6FDE1180[5][150] =
 	{
@@ -943,7 +943,7 @@ void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* 
 		nFlags = DRLGGRID_GetGridFlags(pDrlgGrid, j, i);
 		if (((nFlags >> 20) & 63) == 4)
 		{
-			switch ((WORD)nFlags >> 8)
+			switch ((uint16_t)nFlags >> 8)
 			{
 			case 0:
 			case 4:
@@ -1021,7 +1021,7 @@ void __fastcall DRLGPRESET_AllocPresetRoomData(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD86DC0
-D2RoomExStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, DWORD dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7)
+D2RoomExStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, uint32_t dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7)
 {
 	D2DrlgPresetRoomStrc* pDrlgPresetRoom = NULL;
 	D2RoomExStrc* pRoomEx = NULL;
@@ -1411,7 +1411,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 {
 	D2DrlgCoordStrc* pPopsLocation = NULL;
 	int* pVisArray = NULL;
-	DWORD v10 = 0;
+	uint32_t v10 = 0;
 	__int64 v48 = 0;
 	int nCounter = 0;
 	int nHeight = 0;

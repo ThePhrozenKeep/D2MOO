@@ -43,7 +43,7 @@ void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98430 (#10689)
-BYTE __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -54,7 +54,7 @@ BYTE __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98450 (#10690)
-void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, BYTE nBodyLoc)
+void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -126,7 +126,7 @@ void __stdcall ITEMS_SetItemQuality(D2UnitStrc* pItem, int nQuality)
 }
 
 //D2Common.0x6FD985A0 (#10699)
-WORD __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo)
+uint16_t __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -137,7 +137,7 @@ WORD __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo)
 }
 
 //D2Common.0x6FD985D0 (#10700)
-void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, WORD nPrefix, int nPrefixNo)
+void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, uint16_t nPrefix, int nPrefixNo)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -146,7 +146,7 @@ void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, WORD nPrefix, int nPrefixNo
 }
 
 //D2Common.0x6FD98600 (#10697)
-WORD __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem)
+uint16_t __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -157,7 +157,7 @@ WORD __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98630 (#10698)
-void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, WORD nAffix)
+void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, uint16_t nAffix)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -166,7 +166,7 @@ void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, WORD nAffix)
 }
 
 //D2Common.0x6FD98650 (#10701)
-WORD __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo)
+uint16_t __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -177,7 +177,7 @@ WORD __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo)
 }
 
 //D2Common.0x6FD98680 (#10702)
-void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, WORD nSuffix, int nSuffixNo)
+void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, uint16_t nSuffix, int nSuffixNo)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -186,7 +186,7 @@ void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, WORD nSuffix, int nSuffixNo
 }
 
 //D2Common.0x6FD986B0 (#10703)
-WORD __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem)
+uint16_t __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -197,7 +197,7 @@ WORD __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD986E0 (#10704)
-void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, WORD nPrefix)
+void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, uint16_t nPrefix)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -206,7 +206,7 @@ void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, WORD nPrefix)
 }
 
 //D2Common.0x6FD98700 (#10705)
-WORD __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem)
+uint16_t __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -217,7 +217,7 @@ WORD __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98730 (#10706)
-void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, WORD nSuffix)
+void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -226,7 +226,7 @@ void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, WORD nSuffix)
 }
 
 //D2Common.0x6FD98750 (#10707)
-BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, DWORD dwFlag, int nLine, char* szFile)
+BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, char* szFile)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -237,7 +237,7 @@ BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, DWORD dwFlag, int nLine, c
 }
 
 //D2Common.0x6FD98780 (#10708)
-void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, DWORD dwFlag, BOOL bSet)
+void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, BOOL bSet)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -253,7 +253,7 @@ void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, DWORD dwFlag, BOOL bSet)
 }
 
 //D2Common.0x6FD987C0 (#10709)
-DWORD __stdcall ITEMS_GetItemFlags(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetItemFlags(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -291,7 +291,7 @@ void __stdcall ITEMS_SetItemCMDFlag(D2UnitStrc* pItem, int nFlag, BOOL bSet)
 }
 
 //D2Common.0x6FD98850 (#10712)
-DWORD __stdcall ITEMS_GetItemCMDFlags(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetItemCMDFlags(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -330,7 +330,7 @@ void __stdcall ITEMS_SetItemLevel(D2UnitStrc* pItem, int nItemLevel)
 }
 
 //D2Common.0x6FD988E0 (#10719)
-BYTE __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -341,7 +341,7 @@ BYTE __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98900 (#10720)
-void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, BYTE nPage)
+void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, uint8_t nPage)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -350,7 +350,7 @@ void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, BYTE nPage)
 }
 
 //D2Common.0x6FD98920 (#10721)
-BYTE __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -370,7 +370,7 @@ void __stdcall ITEMS_SetCellOverlap(D2UnitStrc* pItem, int nCellOverlap)
 }
 
 //D2Common.0x6FD98960 (#10853)
-BYTE __stdcall ITEMS_GetItemCell(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetItemCell(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -417,7 +417,7 @@ void __stdcall ITEMS_SetEarName(D2UnitStrc* pItem, char* szName)
 }
 
 //D2Common.0x6FD989F0 (#10725)
-BYTE __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -428,7 +428,7 @@ BYTE __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98A10 (#10726)
-void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, BYTE nLevel)
+void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, uint8_t nLevel)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -437,7 +437,7 @@ void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, BYTE nLevel)
 }
 
 //D2Common.0x6FD98A30 (#10727)
-BYTE __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -448,7 +448,7 @@ BYTE __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98A50 (#10728)
-void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, BYTE nIndex)
+void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, uint8_t nIndex)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData)
 	{
@@ -472,7 +472,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 
 		if (nStats > 0)
 		{
-			while ((BYTE)pStat[nCounter].nValue >= (pStat[nCounter].nValue >> 8))
+			while ((uint8_t)pStat[nCounter].nValue >= (pStat[nCounter].nValue >> 8))
 			{
 				++nCounter;
 				if (nCounter >= nStats)
@@ -534,7 +534,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98C60 (#10780)
-DWORD __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
+uint32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
@@ -551,7 +551,7 @@ DWORD __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
 }
 
 //D2Common.0x6FD98CA0 (#10781)
-DWORD __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -567,7 +567,7 @@ DWORD __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98D20 (#10782)
-DWORD __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
+uint32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
@@ -584,7 +584,7 @@ DWORD __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
 }
 
 //D2Common.0x6FD98D60 (#10783)
-DWORD __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -600,7 +600,7 @@ DWORD __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98DE0 (#10784)
-DWORD __stdcall ITEMS_GetAutoStackFromItemType(int nItemType)
+uint32_t __stdcall ITEMS_GetAutoStackFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
@@ -616,7 +616,7 @@ DWORD __stdcall ITEMS_GetAutoStackFromItemType(int nItemType)
 }
 
 //D2Common.0x6FD98E20 (#10785)
-DWORD __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -632,7 +632,7 @@ DWORD __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98EA0 (#10786)
-DWORD __stdcall ITEMS_GetReload(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetReload(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -656,7 +656,7 @@ DWORD __stdcall ITEMS_GetReload(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98F20 (#10787)
-DWORD __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -680,7 +680,7 @@ DWORD __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98FA0 (#10788)
-BYTE __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -704,7 +704,7 @@ BYTE __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99020 (#10789)
-BYTE __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -834,7 +834,7 @@ BOOL __stdcall ITEMS_CanBeNormal(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD992C0 (#10744)
-DWORD __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -851,7 +851,7 @@ DWORD __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD992F0 (#10745)
-DWORD __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -862,7 +862,7 @@ DWORD __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99370 (#10746)
-DWORD __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -873,7 +873,7 @@ DWORD __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD993F0 (#10747)
-DWORD __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -891,7 +891,7 @@ DWORD __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99480 (#10748)
-BYTE __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -903,7 +903,7 @@ BYTE __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99500 (#10749)
-void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, BYTE* pWidth, BYTE* pHeight, char* szFile, int nLine)
+void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -919,7 +919,7 @@ void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, BYTE* pWidth, BYTE* pHeigh
 }
 
 //D2Common.0x6FD99540 (#10750)
-void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, BYTE* pBodyLoc1, BYTE* pBodyLoc2)
+void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -946,7 +946,7 @@ void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, BYTE* pBodyLoc1,
 }
 
 //D2Common.0x6FD995D0 (#10751)
-DWORD __stdcall ITEMS_GetItemType(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -963,7 +963,7 @@ DWORD __stdcall ITEMS_GetItemType(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99640 (#10752)
-DWORD __stdcall ITEMS_GetItemTypeFromItemId(DWORD dwItemId)
+uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId)
 {
 	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(dwItemId);
 
@@ -973,7 +973,7 @@ DWORD __stdcall ITEMS_GetItemTypeFromItemId(DWORD dwItemId)
 }
 
 //D2Common.0x6FD99680 (#10753)
-BYTE __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -1228,7 +1228,7 @@ BOOL __stdcall ITEMS_GetQuest(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99D40 (#10743)
-DWORD __stdcall ITEMS_GetNormalCode(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetNormalCode(D2UnitStrc* pItem)
 {
 
 	D2_ASSERT(pItem);
@@ -1481,12 +1481,12 @@ int __stdcall ITEMS_GetLevelRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD9A400 (#10758)
-BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, BYTE nBodyLoc)
+BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	BYTE nBodyLoc1 = 0;
-	BYTE nBodyLoc2 = 0;
+	uint8_t nBodyLoc1 = 0;
+	uint8_t nBodyLoc2 = 0;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -1562,7 +1562,7 @@ int __stdcall ITEMS_GetMissileType(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9A5E0 (#10761)
-BYTE __stdcall ITEMS_GetMeleeRange(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetMeleeRange(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -1594,7 +1594,7 @@ BOOL __stdcall ITEMS_CheckWeaponClass(D2UnitStrc* pItem, int nWeapClass)
 }
 
 //D2Common.0x6FD9A6C0 (#10766)
-DWORD __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId)
+uint32_t __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId)
 {
 	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 
@@ -1604,7 +1604,7 @@ DWORD __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId)
 }
 
 //D2Common.0x6FD9A700 (#10765)
-DWORD __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -1615,7 +1615,7 @@ DWORD __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9A750 (#10767)
-DWORD __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -1631,7 +1631,7 @@ DWORD __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9A7A0 (#10768)
-DWORD __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -2780,7 +2780,7 @@ int __stdcall ITEMS_CheckBitField1Flag8(D2UnitStrc* pItem)
 int __stdcall ITEMS_GetSpellIcon(D2UnitStrc* pItem)
 {
 	D2BooksTxt* pBooksTxtRecord = NULL;
-	WORD wBookId = 0;
+	uint16_t wBookId = 0;
 
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -2815,7 +2815,7 @@ int __stdcall ITEMS_GetSpellIcon(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9D1E0 (#10805)
-BYTE __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -2827,7 +2827,7 @@ BYTE __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9D260 (#10806)
-BYTE __stdcall ITEMS_GetQtyWarnCount(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetQtyWarnCount(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -2938,7 +2938,7 @@ int __stdcall ITEMS_GetStaffMods(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9D470 (#10814)
-BYTE __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId)
+uint8_t __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId)
 {
 	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 
@@ -2951,11 +2951,11 @@ BYTE __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId)
 }
 
 //D2Common.0x6FD9D490 (#10815)
-BYTE __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	BYTE nMaxSockets = 0;
+	uint8_t nMaxSockets = 0;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -3024,15 +3024,15 @@ void __stdcall ITEMS_AddSockets(D2UnitStrc* pItem, int nSockets)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	DWORD nQuality = 0;
+	uint32_t nQuality = 0;
 	int nCurrentSockets = 0;
 	int nMaxSockets = 0;
 	int nItemLevel = 0;
 	int nItemType = 0;
 	int nMaxSocks = 0;
-	BYTE nGemSockets = 0;
-	BYTE nHeight = 0;
-	BYTE nWidth = 0;
+	uint8_t nGemSockets = 0;
+	uint8_t nHeight = 0;
+	uint8_t nWidth = 0;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -3179,9 +3179,9 @@ void __stdcall ITEMS_SetSockets(D2UnitStrc* pItem, int nSockets)
 	int nMaxSocks = 0;
 	int nItemLevel = 0;
 	int nItemType = 0;
-	BYTE nAllowedSockets = 0;
-	BYTE nWidth = 0;
-	BYTE nHeight = 0;
+	uint8_t nAllowedSockets = 0;
+	uint8_t nWidth = 0;
+	uint8_t nHeight = 0;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -3469,7 +3469,7 @@ int __stdcall ITEMS_GetFileIndex(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9DF60 (#10733)
-void __stdcall ITEMS_SetFileIndex(D2UnitStrc* pItem, DWORD dwFileIndex)
+void __stdcall ITEMS_SetFileIndex(D2UnitStrc* pItem, uint32_t dwFileIndex)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -3604,7 +3604,7 @@ int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E410 (#10823)
-WORD __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem)
+uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem)
 {
 	static const D2CompositStrc stru_6FDE3C08[8] =
 	{
@@ -3634,11 +3634,11 @@ WORD __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem)
 		}
 	}
 
-	return (WORD)stru_6FDE3C08[nCounter].nWeaponClassId;
+	return (uint16_t)stru_6FDE3C08[nCounter].nWeaponClassId;
 }
 
 //D2Common.0x6FD9E480 (#10824)
-DWORD __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId)
+uint32_t __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId)
 {
 	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 
@@ -3648,7 +3648,7 @@ DWORD __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId)
 }
 
 //D2Common.0x6FD9E4C0 (#10825)
-DWORD __stdcall ITEMS_GetTransmogrify(D2UnitStrc* pItem)
+uint32_t __stdcall ITEMS_GetTransmogrify(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -3686,7 +3686,7 @@ BOOL __stdcall ITEMS_IsNotQuestItem(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E5F0 (#10827)
-BYTE __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -3721,7 +3721,7 @@ int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E710 (#10829)
-BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pColor, int nTransType)
+uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColor, int nTransType)
 {
 	D2UniqueItemsTxt* pUniqueItemsTxtRecord = NULL;
 	D2MagicAffixTxt* pMagicAffixTxtRecord = NULL;
@@ -3739,7 +3739,7 @@ BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pCo
 	int nItemLevel = 0;
 	int nItemType = 0;
 	int nCounter = 0;
-	WORD nAutoAffix = 0;
+	uint16_t nAutoAffix = 0;
 
 	if (!pItem)
 	{
@@ -4152,7 +4152,7 @@ BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem)
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 	D2UnitStrc* pSocket = NULL;
-	BYTE nAllowedSockets = 0;
+	uint8_t nAllowedSockets = 0;
 	int nMaxSockets = 0;
 	int nItemLevel = 0;
 	int nItemType = 0;
@@ -4351,7 +4351,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 			else
 			{
 				nCounter = 0;
-				while ((BYTE)pStat[nCounter].nValue >= pStat[nCounter].nValue >> 8)
+				while ((uint8_t)pStat[nCounter].nValue >= pStat[nCounter].nValue >> 8)
 				{
 					++nCounter;
 					if (nCounter >= nStats)
@@ -4465,11 +4465,11 @@ int __stdcall D2COMMON_11079_Return0(int a1, int a2)
 }
 
 //D2Common.0x6FD9FB50 (#10836)
-DWORD __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem)
+uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem)
 {
 	D2SetItemsTxt* pSetItemsTxtRecord = NULL;
 	D2ItemDataStrc* pItemData = NULL;
-	DWORD nSetItemMask = 0;
+	uint32_t nSetItemMask = 0;
 	int nFileIndex = 0;
 
 	if (!pPlayer || !pSetItem || pSetItem->dwUnitType != UNIT_ITEM || !pSetItem->pItemData || pSetItem->pItemData->dwQualityNo != ITEMQUAL_SET || !pPlayer->pInventory)
@@ -4653,7 +4653,7 @@ int __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc* pPlayer, int nValue)
 }
 
 //D2Common.0x6FDA0030 (#10875)
-WORD __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem)
+uint16_t __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -4663,7 +4663,7 @@ WORD __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FDA00B0 (#10876)
-void __stdcall ITEMS_SetItemFormat(D2UnitStrc* pItem, WORD nItemFormat)
+void __stdcall ITEMS_SetItemFormat(D2UnitStrc* pItem, uint16_t nItemFormat)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -4732,7 +4732,7 @@ int __stdcall ITEMS_HasUsedCharges(D2UnitStrc* pItem, BOOL* pHasChargedSkills)
 			nCounter = 0;
 			if (nStats > 0)
 			{
-				while ((BYTE)pStat[nCounter].nValue >= (pStat[nCounter].nValue >> 8))
+				while ((uint8_t)pStat[nCounter].nValue >= (pStat[nCounter].nValue >> 8))
 				{
 					++nCounter;
 
@@ -4762,7 +4762,7 @@ BOOL __stdcall ITEMS_IsEthereal(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FDA0370 (#10883)
-BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(BYTE* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave)
+BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave)
 {
 	D2BitBufferStrc pBuffer = {};
 	int dwCode = 0;
@@ -4779,19 +4779,19 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(BYTE* pBitstream, size_t nS
 
 		BITBUFFER_Read(&pBuffer, 10);
 
-		pItemSave->nAnimMode = (BYTE)BITBUFFER_Read(&pBuffer, 3);
+		pItemSave->nAnimMode = (uint8_t)BITBUFFER_Read(&pBuffer, 3);
 
 		if (pItemSave->nAnimMode == IMODE_ONGROUND || pItemSave->nAnimMode == IMODE_DROPPING)
 		{
-			pItemSave->nX = (WORD)BITBUFFER_Read(&pBuffer, 16);
-			pItemSave->nY = (WORD)BITBUFFER_Read(&pBuffer, 16);
+			pItemSave->nX = (uint16_t)BITBUFFER_Read(&pBuffer, 16);
+			pItemSave->nY = (uint16_t)BITBUFFER_Read(&pBuffer, 16);
 		}
 		else
 		{
-			pItemSave->nBodyloc = (BYTE)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nX = (WORD)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nY = (WORD)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nStorePage = (BYTE)BITBUFFER_Read(&pBuffer, 3) - 1;
+			pItemSave->nBodyloc = (uint8_t)BITBUFFER_Read(&pBuffer, 4);
+			pItemSave->nX = (uint16_t)BITBUFFER_Read(&pBuffer, 4);
+			pItemSave->nY = (uint16_t)BITBUFFER_Read(&pBuffer, 4);
+			pItemSave->nStorePage = (uint8_t)BITBUFFER_Read(&pBuffer, 3) - 1;
 		}
 
 		if (pItemSave->dwFlags & IFLAG_ISEAR)
@@ -4819,10 +4819,10 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(BYTE* pBitstream, size_t nS
 }
 
 //D2Common.0x6FDA0490 (#10882)
-size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, BYTE* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, DWORD dwVersion, BOOL* pFail)
+size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, uint32_t dwVersion, BOOL* pFail)
 {
 	D2BitBufferStrc pBuffer = {};
-	DWORD dwFlags = 0;
+	uint32_t dwFlags = 0;
 	BOOL bGamble = FALSE;
 
 	BITBUFFER_Initialize(&pBuffer, pBitstream, nSize);
@@ -4884,7 +4884,7 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, BYTE* pBitstre
 }
 
 //D2Common.0x6FDA0620
-int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, DWORD dwVersion)
+int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, uint32_t dwVersion)
 {
 	D2ItemStatCostTxt* pItemStatCostTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -4893,18 +4893,18 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 	int nBits = 0;
 	int nItemId = 0;
 	int nValue = 0;
-	DWORD dwCode = 0;
+	uint32_t dwCode = 0;
 	char szChar = 0;
-	BYTE nAnimMode = 0;
+	uint8_t nAnimMode = 0;
 
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 	pItemData = pItem->pItemData;
 	D2_ASSERT(pItemData);
 
-	pItemData->wItemFormat = (WORD)BITBUFFER_Read(pBuffer, 10);
+	pItemData->wItemFormat = (uint16_t)BITBUFFER_Read(pBuffer, 10);
 
-	nAnimMode = (BYTE)BITBUFFER_Read(pBuffer, 3);
+	nAnimMode = (uint8_t)BITBUFFER_Read(pBuffer, 3);
 	if (nAnimMode == IMODE_ONGROUND || nAnimMode == IMODE_DROPPING)
 	{
 		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 16));
@@ -4912,17 +4912,17 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 	}
 	else
 	{
-		pItemData->nBodyLoc = (BYTE)BITBUFFER_Read(pBuffer, 4);
+		pItemData->nBodyLoc = (uint8_t)BITBUFFER_Read(pBuffer, 4);
 		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
-		pItemData->nInvPage = (BYTE)BITBUFFER_Read(pBuffer, 3) - 1;
+		pItemData->nInvPage = (uint8_t)BITBUFFER_Read(pBuffer, 3) - 1;
 	}
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
 
 	if (pItemData->dwItemFlags & IFLAG_ISEAR)
 	{
 		pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 3);
-		pItemData->nEarLvl = (BYTE)BITBUFFER_Read(pBuffer, 7);
+		pItemData->nEarLvl = (uint8_t)BITBUFFER_Read(pBuffer, 7);
 
 		int i = 0;
 		do
@@ -5014,7 +5014,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 }
 
 //D2Common.0x6FDA0A20
-int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, DWORD dwVersion)
+int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, uint32_t dwVersion)
 {
 	static const int gnItemSetStates[] =
 	{
@@ -5050,7 +5050,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 	int v237, v238, v240, v241, v242, v243, v244, v245, v246, v247, v248, v249, v250, v251, v252; //TODO: Change names
 
-	DWORD dwCode = 0;
+	uint32_t dwCode = 0;
 	char szChar = 0;
 	BOOL bRuneword = FALSE;
 	BOOL bError = FALSE;
@@ -5061,7 +5061,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	pItemData = pItem->pItemData;
 	D2_ASSERT(pItemData);
 
-	pItemData->wItemFormat = (WORD)BITBUFFER_Read(pBuffer, 10);
+	pItemData->wItemFormat = (uint16_t)BITBUFFER_Read(pBuffer, 10);
 
 	nAnimMode = BITBUFFER_Read(pBuffer, 3);
 
@@ -5072,12 +5072,12 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	}
 	else
 	{
-		pItemData->nBodyLoc = (BYTE)BITBUFFER_Read(pBuffer, 4);
+		pItemData->nBodyLoc = (uint8_t)BITBUFFER_Read(pBuffer, 4);
 
 		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
 
-		pItemData->nInvPage = (BYTE)(BITBUFFER_Read(pBuffer, 3) - 1);
+		pItemData->nInvPage = (uint8_t)(BITBUFFER_Read(pBuffer, 3) - 1);
 	}
 
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
@@ -5120,7 +5120,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 	if (BITBUFFER_Read(pBuffer, 1))
 	{
-		pItemData->nInvGfxIdx = (BYTE)BITBUFFER_Read(pBuffer, 3);
+		pItemData->nInvGfxIdx = (uint8_t)BITBUFFER_Read(pBuffer, 3);
 	}
 
 	pMagicAffixDataTbl = DATATBLS_GetMagicAffixDataTables();
@@ -5159,7 +5159,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 	if (BITBUFFER_Read(pBuffer, 1))
 	{
-		pItemData->wAutoAffix = (WORD)BITBUFFER_Read(pBuffer, 11);
+		pItemData->wAutoAffix = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 		if (dwVersion > 88)
 		{
 			if (dwVersion <= 89)
@@ -5198,7 +5198,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			{
 				if (BITBUFFER_Read(pBuffer, 1))
 				{
-					pItemData->wMagicPrefix[0] = (WORD)BITBUFFER_Read(pBuffer, 11);
+					pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 					if (pItemData->wMagicPrefix[0])
 					{
 						pItemData->wMagicPrefix[0] += nMagicPrefixOffset;
@@ -5206,7 +5206,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					pItemData->wMagicSuffix[0] = (WORD)BITBUFFER_Read(pBuffer, 11);
+					pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 				}
 			}
 		}
@@ -5218,7 +5218,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SCROLL) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOK))
 		{
-			pItemData->wMagicSuffix[0] = (WORD)BITBUFFER_Read(pBuffer, 5);
+			pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 5);
 		}
 
 		break;
@@ -5228,15 +5228,15 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wRarePrefix = (WORD)BITBUFFER_Read(pBuffer, 8);
-			pItemData->wRareSuffix = (WORD)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRarePrefix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRareSuffix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
 		}
 
 		for (int i = 0; i < 3; ++i)
 		{
 			if (BITBUFFER_Read(pBuffer, 1))
 			{
-				pItemData->wMagicPrefix[i] = (WORD)BITBUFFER_Read(pBuffer, 11);
+				pItemData->wMagicPrefix[i] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
 					++pItemData->wMagicPrefix[i];
@@ -5254,7 +5254,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 			if (BITBUFFER_Read(pBuffer, 1))
 			{
-				pItemData->wMagicSuffix[i] = (WORD)BITBUFFER_Read(pBuffer, 11);
+				pItemData->wMagicSuffix[i] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
 					++pItemData->wMagicSuffix[i];
@@ -5272,8 +5272,8 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wRarePrefix = (WORD)BITBUFFER_Read(pBuffer, 8);
-			pItemData->wRareSuffix = (WORD)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRarePrefix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRareSuffix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
 		}
 
 		break;
@@ -5282,13 +5282,13 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wMagicPrefix[0] = (WORD)BITBUFFER_Read(pBuffer, 11);
+			pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 			if (pItemData->wMagicPrefix[0])
 			{
 				pItemData->wMagicPrefix[0] += nMagicPrefixOffset;
 			}
 
-			pItemData->wMagicSuffix[0] = (WORD)BITBUFFER_Read(pBuffer, 11);
+			pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
 		}
 
 		break;
@@ -5357,13 +5357,13 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	if (pItemData->dwItemFlags & IFLAG_RUNEWORD)
 	{
 		bRuneword = TRUE;
-		pItemData->wMagicPrefix[0] = (WORD)BITBUFFER_Read(pBuffer, 16);
+		pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 16);
 	}
 
 	if (pItemData->dwItemFlags & IFLAG_ISEAR)
 	{
 		pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 3);
-		pItemData->nEarLvl = (BYTE)BITBUFFER_Read(pBuffer, 7);
+		pItemData->nEarLvl = (uint8_t)BITBUFFER_Read(pBuffer, 7);
 
 		szName = pItemData->szPlayerName;
 		do
@@ -6012,7 +6012,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				else
 				{
 					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v241, &v240, &v242);
-					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONATTACK, v242, ((WORD)v241 << 6) + (v240 & 0x3F));
+					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONATTACK, v242, ((uint16_t)v241 << 6) + (v240 & 0x3F));
 				}
 				break;
 			}
@@ -6027,7 +6027,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				else
 				{
 					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v244, &v243, &v245);
-					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONHIT, v245, ((WORD)v244 << 6) + (v243 & 0x3F));
+					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONHIT, v245, ((uint16_t)v244 << 6) + (v243 & 0x3F));
 				}
 				break;
 			}
@@ -6042,7 +6042,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				else
 				{
 					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v247, &v246, &v248);
-					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONGETHIT, v248, ((WORD)v247 << 6) + (v246 & 0x3F));
+					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONGETHIT, v248, ((uint16_t)v247 << 6) + (v246 & 0x3F));
 				}
 				break;
 			}
@@ -6074,7 +6074,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 					D2Common_10846(BITBUFFER_Read(pBuffer, nBits), &v249, &v250, &v251, &v252);
 
-					STATLIST_SetStat(pStatList, STAT_ITEM_CHARGED_SKILL, (v252 << 8) + (BYTE)v251, (v250 & LOWORD(sgptDataTables->nShiftedStuff)) + ((WORD)v249 << sgptDataTables->nStuff));
+					STATLIST_SetStat(pStatList, STAT_ITEM_CHARGED_SKILL, (v252 << 8) + (uint8_t)v251, (v250 & LOWORD(sgptDataTables->nShiftedStuff)) + ((uint16_t)v249 << sgptDataTables->nStuff));
 				}
 				break;
 			}
@@ -6188,7 +6188,7 @@ void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pItem, int nStat)
 }
 
 //D2Common.0x6FDA29D0
-void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, DWORD dwVersion, int n109)
+void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109)
 {
 	int nSaveAdd = n109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd;
 	int nParamBits = n109 ? pItemStatCostTxtRecord->dw09SaveParamBits : pItemStatCostTxtRecord->dwSaveParamBits;
@@ -6292,7 +6292,7 @@ void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2Stat
 }
 
 //D2Common.0x6FDA2BA0 (#10881)
-size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, BYTE* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble)
+size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble)
 {
 	D2BitBufferStrc pBuffer = {};
 
@@ -6320,7 +6320,7 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 	int nGold = 0;
 	int nX = 0;
 	int nY = 0;
-	BYTE nBodyLoc = 0;
+	uint8_t nBodyLoc = 0;
 
 	int v39; // [sp+24h] [bp-8h]@63
 	int v40; // [sp+28h] [bp-4h]@63
@@ -6440,7 +6440,7 @@ size_t __fastcall ITEMS_SerializeItem(D2UnitStrc* pItem, D2BitBufferStrc* pBuffe
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 	D2ItemDataStrc* pItemData = NULL;
-	DWORD nItemFlags = 0;
+	uint32_t nItemFlags = 0;
 
 	if (!pItem || pItem->dwUnitType != UNIT_ITEM)
 	{
@@ -6572,7 +6572,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	int nStats = 0;
 	int nValue = 0;
 	int nGold = 0;
-	BYTE nStorePage = 0;
+	uint8_t nStorePage = 0;
 	BOOL bIsRuneword = FALSE;
 	BOOL bContinue = FALSE;
 	BOOL bInvalid = FALSE;

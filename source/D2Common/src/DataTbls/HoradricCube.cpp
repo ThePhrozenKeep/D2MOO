@@ -260,8 +260,8 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 	char* szOutputModifier = NULL;
 	char* szNext = NULL;
 	char* szTemp = NULL;
-	WORD* pPrefix = NULL;
-	WORD* pSuffix = NULL;
+	uint16_t* pPrefix = NULL;
+	uint16_t* pSuffix = NULL;
 	int nBaseItemId = 0;
 	int nLinkId = 0;
 
@@ -347,7 +347,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 				pCubeOutputParam->nQuality = ITEMQUAL_UNIQUE;
 				pCubeOutputParam->wItemID = nLinkId + 1;
 				pCubeOutputParam->wBaseItemId = nBaseItemId;
-				pCubeOutputParam->nILvl = (BYTE)sgptDataTables->pUniqueItemsTxt[nLinkId].wLvl;
+				pCubeOutputParam->nILvl = (uint8_t)sgptDataTables->pUniqueItemsTxt[nLinkId].wLvl;
 			}
 			else
 			{
@@ -366,7 +366,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 					pCubeOutputParam->nQuality = ITEMQUAL_SET;
 					pCubeOutputParam->wItemID = nLinkId + 1;
 					pCubeOutputParam->wBaseItemId = nBaseItemId;
-					pCubeOutputParam->nILvl = (BYTE)sgptDataTables->pSetItemsTxt[nLinkId].wLvl;
+					pCubeOutputParam->nILvl = (uint8_t)sgptDataTables->pSetItemsTxt[nLinkId].wLvl;
 				}
 				else
 				{

@@ -20,7 +20,7 @@
 
 
 //D2Common.0x6FDBD520 (#10457)
-BYTE __stdcall UNITS_GetDirection(D2UnitStrc* pUnit)
+uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -695,13 +695,13 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
 	D2ObjectsTxt* pObjectsTxtRecord = NULL;
 	D2StatListStrc* pStatList = NULL;
-	BYTE v19[4]; // ecx@36
+	uint8_t v19[4]; // ecx@36
 	__int16 v20; // bx@36
 	int v21; // ebp@38
 	int v23; // edi@38
 	int v24; // eax@39
 	int v28; // ebp@43
-	BYTE v34[4]; // eax@61
+	uint8_t v34[4]; // eax@61
 
 	unsigned int nFrame = 0;
 	unsigned int nMode = 0;
@@ -819,9 +819,9 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		pUnit->dwFrameCount = pObjectsTxtRecord->dwFrameCnt[nNewMode];
 		
 		//TODO: Check calculations
-		*(DWORD *)v19 = 0;
-		*(WORD *)&v19[1] = pObjectsTxtRecord->nStart[nNewMode];
-		pUnit->dwGFXcurrentFrame = *(DWORD *)v19;
+		*(uint32_t *)v19 = 0;
+		*(uint16_t *)&v19[1] = pObjectsTxtRecord->nStart[nNewMode];
+		pUnit->dwGFXcurrentFrame = *(uint32_t *)v19;
 		nEvent = pObjectsTxtRecord->wFrameDelta[nNewMode];
 
 		if (pObjectsTxtRecord->nSync)
@@ -875,9 +875,9 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 			pUnit->wAnimSpeed = (pMissilesTxtRecord->wAnimRate << 8) / 1024;
 
 			//TODO: Check calculations
-			*(DWORD*)v34 = 0;
-			*(WORD*)&v34[1] = pMissilesTxtRecord->nAnimLen;
-			pUnit->dwFrameCount = *(DWORD*)v34;
+			*(uint32_t*)v34 = 0;
+			*(uint16_t*)&v34[1] = pMissilesTxtRecord->nAnimLen;
+			pUnit->dwFrameCount = *(uint32_t*)v34;
 		}
 		break;
 	}
@@ -1021,7 +1021,7 @@ int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL b
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		switch ((BYTE)nInvPage)
+		switch ((uint8_t)nInvPage)
 		{
 		case INVPAGE_EQUIP:
 			return INVENTORYRECORD_TRADE_PAGE_1;
@@ -1625,9 +1625,9 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 		if (nUnitType == UNIT_PLAYER)
 		{
 			pCharStatsTxtRecord = UNITS_GetCharStatsTxtRecord(nClassId);
-			*(DWORD*)v60 = 0;
-			*(WORD*)&v60[1] = pCharStatsTxtRecord->nWalkSpeed;
-			nVelocity = *(DWORD*)v60;
+			*(uint32_t*)v60 = 0;
+			*(uint16_t*)&v60[1] = pCharStatsTxtRecord->nWalkSpeed;
+			nVelocity = *(uint32_t*)v60;
 		}
 		else if (nUnitType == UNIT_MONSTER)
 		{
@@ -2272,7 +2272,7 @@ void __stdcall UNITS_SetOverlay(D2UnitStrc* pUnit, int nOverlay, int nUnused)
 		}
 
 		D2Common_10534(pUnit);
-		D2Common_10531_SetStatInStatListLayer0(pStatList, STAT_UNIT_DOOVERLAY, (WORD)nOverlay, nUnused);
+		D2Common_10531_SetStatInStatListLayer0(pStatList, STAT_UNIT_DOOVERLAY, (uint16_t)nOverlay, nUnused);
 		UNITROOM_RefreshUnit(pUnit);
 	}
 }
@@ -2413,7 +2413,7 @@ int __stdcall UNITS_GetPlayerPortalFlags(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDC06C0 (#10353)
-DWORD __stdcall UNITS_GetNameOffsetFromObject(D2UnitStrc* pUnit)
+uint32_t __stdcall UNITS_GetNameOffsetFromObject(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -2426,7 +2426,7 @@ DWORD __stdcall UNITS_GetNameOffsetFromObject(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDC0700 (#10427)
-BYTE __stdcall UNITS_GetObjectPortalFlags(D2UnitStrc* pUnit)
+uint8_t __stdcall UNITS_GetObjectPortalFlags(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 	D2_ASSERT(pUnit->dwUnitType == UNIT_OBJECT);
@@ -2434,7 +2434,7 @@ BYTE __stdcall UNITS_GetObjectPortalFlags(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDC0760 (#10428)
-void __stdcall UNITS_SetObjectPortalFlags(D2UnitStrc* pUnit, BYTE nPortalFlag)
+void __stdcall UNITS_SetObjectPortalFlags(D2UnitStrc* pUnit, uint8_t nPortalFlag)
 {
 	D2_ASSERT(pUnit);
 	D2_ASSERT(pUnit->dwUnitType == UNIT_OBJECT);
@@ -2442,7 +2442,7 @@ void __stdcall UNITS_SetObjectPortalFlags(D2UnitStrc* pUnit, BYTE nPortalFlag)
 }
 
 //D2Common.0x6FDC07C0 (#10429)
-BOOL __stdcall UNITS_CheckObjectPortalFlag(D2UnitStrc* pUnit, BYTE nFlag)
+BOOL __stdcall UNITS_CheckObjectPortalFlag(D2UnitStrc* pUnit, uint8_t nFlag)
 {
 	D2_ASSERT(pUnit);
 	D2_ASSERT(pUnit->dwUnitType == UNIT_OBJECT);
@@ -3349,7 +3349,7 @@ D2MonStats2Txt* __fastcall UNITS_GetMonStats2TxtRecord(int nRecordId)
 }
 
 //D2Common.0x6FDC1F10 (#10442)
-BYTE __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem)
+uint8_t __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 {
 	D2UnitStrc* pRightHandItem = NULL;
 	D2UnitStrc* pLeftHandItem = NULL;

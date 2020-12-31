@@ -3,7 +3,7 @@
 #include "CommonDefinitions.h"
 
 //D2Common.0x6FD74120 (#10014)
-D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, BYTE nActNo, void* a3, DWORD nInitSeed, int nLevelId, DWORD nFlags, D2GameStrc* pGame, BYTE nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
+D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* a3, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)
 void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD74440
@@ -45,7 +45,7 @@ int __stdcall DRLG_GetLevelTypeFromLevelId(int nLevelId);
 //D2Common.0x6FD75270
 void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD75300 (#10001)
-BYTE __stdcall DRLG_GetActNoFromLevelId(int nLevelId);
+uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId);
 //D2Common.0x6FD75330 (#10004)
 int __stdcall DRLG_GetSaveMonstersFromLevelId(int nLevelId);
 //D2Common.0x6FD75350 (#10002)

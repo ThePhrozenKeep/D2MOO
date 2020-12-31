@@ -18,4 +18,4 @@ BOOL __stdcall COMPOSIT_IsArmorComponent(int nComponent);
 //D2Common.0x6FD47230 (#10890)
 BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit);
 //D2Common.0x6FD472E0 (#10891)
-BYTE __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, BYTE* pArmorComponents);
+uint8_t __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents);

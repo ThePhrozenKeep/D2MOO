@@ -3,7 +3,7 @@
 #include "CommonDefinitions.h"
 
 //D2Common.0x6FD8B8A0 (#10038)
-D2DrlgActStrc* __stdcall DUNGEON_AllocAct(BYTE nActNo, DWORD nInitSeed, BOOL bClient, D2GameStrc* pGame, BYTE nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
+D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nActNo, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD8B950 (#10039)
 void __stdcall DUNGEON_FreeAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8B9D0
@@ -27,7 +27,7 @@ void __stdcall DUNGEON_GetRoomCoordinates(D2RoomStrc* pRoom, D2DrlgCoordsStrc* p
 //D2Common.0x6FD8BC10 (#10035)
 void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2RoomStrc* pRoom, D2RoomStrc*** pppRoomList, int* pNumRooms);
 //D2Common.0x6FD8BC50
-D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, DWORD dwFlags);
+D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, uint32_t dwFlags);
 //D2Common.0x6FD8BD90 (#10040)
 BOOL __stdcall DUNGEON_DoRoomsTouchOrOverlap(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2);
 //D2Common.0x6FD8BE30 (#10043)
@@ -45,7 +45,7 @@ void __stdcall D2Common_10052(D2RoomStrc* pRoom, RECT* pRect);
 //D2Common.0x6FD8C170 (#10053)
 void __stdcall DUNGEON_GetSubtileRect(D2RoomStrc* pRoom, RECT* pRect);
 //D2Common.0x6FD8C210 (#10054)
-void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2RoomStrc* pRoom, BYTE* pIntensity, BYTE* pRed, BYTE* pGreen, BYTE* pBlue);
+void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2RoomStrc* pRoom, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
 //D2Common.0x6FD8C240 (#10041)
 D2RoomStrc* __stdcall DUNGEON_FindRoomBySubtileCoordinates(D2DrlgActStrc* pAct, int nX, int nY);
 //D2Common.0x6FD8C290
@@ -147,7 +147,7 @@ int __stdcall D2COMMON_10083_Return0(D2RoomStrc* pRoom);
 //D2Common.0x6FD8D130 (#10084)
 int __stdcall D2Common_10084(D2RoomStrc* pRoom);
 //D2Common.0x6FD8D140 (#10085)
-int __stdcall DUNGEON_GetTownLevelIdFromActNo(BYTE nAct);
+int __stdcall DUNGEON_GetTownLevelIdFromActNo(uint8_t nAct);
 //D2Common.0x6FD8D180 (#10087)
 int __stdcall D2Common_10087(D2RoomStrc* pRoom);
 //D2Common.0x6FD8D1C0 (#10090)

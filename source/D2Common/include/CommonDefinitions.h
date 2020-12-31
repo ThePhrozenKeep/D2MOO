@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include <cstdint>
 #include <Imports/DllBases.h>
 #include <D2Structs.h>
 #include <D2Constants.h>
@@ -26,6 +26,8 @@
 #include <D2CMP.h>
 #include <D2LANG.h>
 
+#define D2_MAX_PATH 260
+
 struct D2MazeLevelIdStrc
 {
 	int nLevelPrestId1;						//0x00
@@ -36,7 +38,7 @@ struct D2MazeLevelIdStrc
 
 struct D2UnkFileStrc
 {
-	char szPath[MAX_PATH];					//0x00
+	char szPath[D2_MAX_PATH];					//0x00
 	LONG field_104;							//0x104
 	D2DrlgFileStrc* pFile;					//0x108
 	D2UnkFileStrc* pNext;					//0x10C

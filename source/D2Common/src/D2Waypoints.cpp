@@ -41,7 +41,7 @@ BOOL __stdcall WAYPOINTS_GetWaypointNoFromLevelId(int nLevelId, short* pWaypoint
 }
 
 //D2Common.0x6FDC3DE0 (#11146)
-int __stdcall WAYPOINTS_IsActivated(D2WaypointDataStrc* pData, WORD wField)
+int __stdcall WAYPOINTS_IsActivated(D2WaypointDataStrc* pData, uint16_t wField)
 {
 	D2_ASSERT(pData);
 	D2_ASSERT(wField < gnNumberOfWaypoints);
@@ -50,7 +50,7 @@ int __stdcall WAYPOINTS_IsActivated(D2WaypointDataStrc* pData, WORD wField)
 }
 
 //D2Common.0x6FDC3E80 (#11147)
-void __stdcall WAYPOINTS_ActivateWaypoint(D2WaypointDataStrc* pData, WORD wField)
+void __stdcall WAYPOINTS_ActivateWaypoint(D2WaypointDataStrc* pData, uint16_t wField)
 {
 	D2_ASSERT(pData);
 	D2_ASSERT(wField < gnNumberOfWaypoints);

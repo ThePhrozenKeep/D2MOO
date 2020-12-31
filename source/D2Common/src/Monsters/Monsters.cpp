@@ -176,7 +176,7 @@ int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int 
 
 //D2Common.0x6FDA4E20
 //TODO: Unknown structs, a2 probably not D2HirelingInitStrc
-BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, BYTE a3)
+BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, uint8_t a3)
 {
 	static const int dword_6FDE4A84[] =
 	{
@@ -366,7 +366,7 @@ wchar_t* __fastcall MONSTERS_GetHirelingDescString(int nId)
 }
 
 //D2Common.0x6FDA51C0 (#11086)
-int __fastcall MONSTERS_GetActFromHirelingTxt(BOOL bExpansion, int nClassId, WORD nNameId)
+int __fastcall MONSTERS_GetActFromHirelingTxt(BOOL bExpansion, int nClassId, uint16_t nNameId)
 {
 	D2HirelingTxt* pHirelingTxtRecord = NULL;
 
@@ -425,39 +425,39 @@ int __stdcall D2COMMON_11068_GetCompInfo(D2UnitStrc* pMonster, int nComponent)
 }
 
 //D2Common.0x6FDA52F0 (#11069)
-DWORD __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsigned int nComponent)
+uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsigned int nComponent)
 {
-	static DWORD dword_6FDE4DC8[7] =
+	static uint32_t dword_6FDE4DC8[7] =
 	{
 		' til', ' til', ' sed', ' sed', ' yvh', ' yvh', ' yvh'
 	};
 
-	static DWORD dword_6FDE4DE4[3] =
+	static uint32_t dword_6FDE4DE4[3] =
 	{
 		' til', ' sed', ' yvh'
 	};
 
-	static DWORD dword_6FDE4DF0[10] =
+	static uint32_t dword_6FDE4DF0[10] =
 	{
 		' exa', ' exa', ' alf', ' alf', ' xah', ' xah', ' cam', ' cam', ' mcs', 'mcs'
 	};
 
-	static DWORD dword_6FDE4E18[5] =
+	static uint32_t dword_6FDE4E18[5] =
 	{
 		0, ' cub', ' grl', ' tik', ' lms'
 	};
 
-	static DWORD dword_6FDE4E2C[12] =
+	static uint32_t dword_6FDE4E2C[12] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, ' til', ' sed', ' yvh'
 	};
 
-	static DWORD dword_6FDE4E5C[3] =
+	static uint32_t dword_6FDE4E5C[3] =
 	{
 		' til', ' dem', ' yvh'
 	};
 
-	static const DWORD* off_6FDE4E68[16] =
+	static const uint32_t* off_6FDE4E68[16] =
 	{
 		dword_6FDE4DC8,
 		dword_6FDE4E5C,
@@ -477,22 +477,22 @@ DWORD __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsign
 		NULL,
 	};
 
-	static DWORD dword_6FDE4EA8[3] =
+	static uint32_t dword_6FDE4EA8[3] =
 	{
 		' til', ' sed', ' yvh'
 	};
 
-	static DWORD dword_6FDE4EB4[11] =
+	static uint32_t dword_6FDE4EB4[11] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, ' til', ' sed', ' yvh'
 	};
 
-	static DWORD dword_6FDE4EE0[2] =
+	static uint32_t dword_6FDE4EE0[2] =
 	{
 		' wbs', 0
 	};
 
-	static const DWORD* off_6FDE4EE8[16] =
+	static const uint32_t* off_6FDE4EE8[16] =
 	{
 		dword_6FDE4EA8,
 		dword_6FDE4E5C,
@@ -515,10 +515,10 @@ DWORD __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsign
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2RoomStrc* pRoom = NULL;
-	const DWORD* pCode = NULL;
+	const uint32_t* pCode = NULL;
 	int nMonsterId = 0;
 	int nLevelId = 0;
-	DWORD dwCode = 0;
+	uint32_t dwCode = 0;
 
 	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && nIndex < ARRAY_SIZE(pMonStats2TxtRecord->unk0x15))
 	{
@@ -672,7 +672,7 @@ int __stdcall D2Common_11050(D2UnitStrc* pUnit, int a2)
 }
 
 //D2Common.0x6FDA55E0 (#11052)
-char __stdcall D2Common_11052(BYTE a1)
+char __stdcall D2Common_11052(uint8_t a1)
 {
 	//D2Common.0x6FDE4F28
 	static const char byte_6FDE4F28[] =
@@ -685,7 +685,7 @@ char __stdcall D2Common_11052(BYTE a1)
 }
 
 //D2Common.0x6FDA5600 (#11053)
-char __stdcall D2Common_11053(BYTE a1)
+char __stdcall D2Common_11053(uint8_t a1)
 {
 	//D2Common.0x6FDE4F68
 	static const char byte_6FDE4F68[] =
@@ -698,7 +698,7 @@ char __stdcall D2Common_11053(BYTE a1)
 }
 
 //D2Common.0x6FDA5620 (#11054)
-char __stdcall D2Common_11054(BYTE a1)
+char __stdcall D2Common_11054(uint8_t a1)
 {
 	//D2Common.0x6FDE4FA8
 	static const char byte_6FDE4FA8[] =
@@ -710,7 +710,7 @@ char __stdcall D2Common_11054(BYTE a1)
 }
 
 //D2Common.0x6FDA5640 (#11055)
-void __stdcall D2Common_11055(BYTE a1, int* a2, int* a3)
+void __stdcall D2Common_11055(uint8_t a1, int* a2, int* a3)
 {
 	//D2Common.0x6FDD1738
 	static const char byte_6FDD1738[] =
@@ -1097,10 +1097,10 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 }
 
 //D2Common.0x6FDA6410 (#11051)
-BYTE __stdcall MONSTERS_GetMaximalLightRadius(D2UnitStrc* pMonster)
+uint8_t __stdcall MONSTERS_GetMaximalLightRadius(D2UnitStrc* pMonster)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	BYTE nMaxLightRadius = 0;
+	uint8_t nMaxLightRadius = 0;
 	int nCode = 0;
 	int nItemId = 0;
 
@@ -1253,7 +1253,7 @@ int __stdcall MONSTERS_GetHirelingTypeId(D2UnitStrc* pHireling)
 }
 
 //D2Common.0x6FDA6790 (#11246)
-void __stdcall D2Common_11246(D2UnitStrc* pMonster, int a2, BYTE a3)
+void __stdcall D2Common_11246(D2UnitStrc* pMonster, int a2, uint8_t a3)
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 

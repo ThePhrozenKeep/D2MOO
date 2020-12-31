@@ -19,7 +19,7 @@ Function: STATS_ApplyProperty
 Address: D2Common.0x55810 & D2Common.#11292
 Comments: nApplyType was totally unused
 */
-//void __stdcall STATS_ApplyProperty(int nType, int nArg, D2UnitStrc* pItem, void* pMods, int nIndex, int nPropSet, Property* pProperty, int nState, DWORD fStatlist, int nSubType)
+//void __stdcall STATS_ApplyProperty(int nType, int nArg, D2UnitStrc* pItem, void* pMods, int nIndex, int nPropSet, Property* pProperty, int nState, uint32_t fStatlist, int nSubType)
 //{
 //	if (pItem == NULL || pProperty == NULL)
 //		return;
@@ -200,8 +200,8 @@ nApplyType was unused
 
 struct D2ItemTypeCheckStrc
 {
-	BYTE bItemType;				//0x00
-	BYTE pad0x01[3];			//0x01
+	uint8_t bItemType;				//0x00
+	uint8_t pad0x01[3];			//0x01
 	int nItemType;				//0x04
 };
 
@@ -556,7 +556,7 @@ BOOL __stdcall ITEMMODS_GetItemCharges(D2UnitStrc* pItem, int nSkillId, int nSki
 		{
 			if (pValue)
 			{
-				*pValue = (BYTE)nValue;
+				*pValue = (uint8_t)nValue;
 			}
 
 			if (ppStatList)
@@ -590,7 +590,7 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 	int nShiftedValue = 0;
 	int nValue = 0;
 	int nLayer = 0;
-	BYTE v11 = 0;
+	uint8_t v11 = 0;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -1722,7 +1722,7 @@ BOOL __fastcall sub_6FD94190(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2
 	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
 
 	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
 
 	return 1;
 }
@@ -2729,7 +2729,7 @@ BOOL __stdcall ITEMMODS_CanItemBeHighQuality(D2UnitStrc* pItem, D2QualityItemsTx
 //D2Common.0x6FD95E90 (#10862)
 void __stdcall ITEMMODS_SetRandomElixirFileIndex(D2UnitStrc* pItem)
 {
-	static const DWORD dwFileIndex[] =
+	static const uint32_t dwFileIndex[] =
 	{
 		0, 1, 2, 3, 9, 7
 	};
@@ -3143,7 +3143,7 @@ int __fastcall ITEMMODS_PropertyFunc06(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	int nTemp = 0;
 	int nMin = 0;
 	int nMax = 0;
-	DWORD dwClassId = 0;
+	uint32_t dwClassId = 0;
 
 	if (!pProperty)
 	{
@@ -3269,7 +3269,7 @@ int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	int nMaxDamage = 0;
 	int nMin = 0;
 	int nMax = 0;
-	DWORD dwClassId = 0;
+	uint32_t dwClassId = 0;
 
 	if (!pProperty)
 	{
@@ -3642,8 +3642,8 @@ int __fastcall ITEMMODS_PropertyFunc14(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	int nSockets = 0;
 	int nMin = 0;
 	int nMax = 0;
-	BYTE nHeight = 0;
-	BYTE nWidth = 0;
+	uint8_t nHeight = 0;
+	uint8_t nWidth = 0;
 
 	if (!pProperty || !pItem || pItem->dwUnitType != UNIT_ITEM)
 	{
@@ -3824,7 +3824,7 @@ int __fastcall ITEMMODS_PropertyFunc19(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
 
 	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((WORD)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
 
 	return nTemp;
 }
@@ -4060,7 +4060,7 @@ int __fastcall ITEMMODS_PropertyFunc21(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 //D2Common.0x6FD97D50
-//TODO: nLayer always (in all functions and structs) 16 Bit, i.e. WORD??
+//TODO: nLayer always (in all functions and structs) 16 Bit, i.e. uint16_t??
 int __fastcall ITEMMODS_PropertyFunc22(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
 {
 	int nPossibleRolls = 0;
@@ -4101,7 +4101,7 @@ int __fastcall ITEMMODS_PropertyFunc22(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 		}
 	}
 
-	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (WORD)pProperty->nLayer, nMin, nState, fStatList, a11);
+	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (uint16_t)pProperty->nLayer, nMin, nState, fStatList, a11);
 }
 
 //D2Common.0x6FD97E80

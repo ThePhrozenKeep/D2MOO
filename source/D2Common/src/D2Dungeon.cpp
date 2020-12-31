@@ -15,7 +15,7 @@
 
 
 //D2Common.0x6FD8B8A0 (#10038)
-D2DrlgActStrc* __stdcall DUNGEON_AllocAct(BYTE nAct, DWORD nInitSeed, BOOL bClient, D2GameStrc* pGame, BYTE nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
+D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nAct, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
 	D2DrlgActStrc* pAct = (D2DrlgActStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2DrlgActStrc), __FILE__, __LINE__, 0);
 	memset(pAct, 0x00, sizeof(D2DrlgActStrc));
@@ -176,7 +176,7 @@ void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2RoomStrc* pRoom, D2RoomStr
 }
 
 //D2Common.0x6FD8BC50
-D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, DWORD dwFlags)
+D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, uint32_t dwFlags)
 {
 	D2RoomStrc* pRoom = NULL;
 
@@ -354,7 +354,7 @@ void __stdcall DUNGEON_GetSubtileRect(D2RoomStrc* pRoom, RECT* pRect)
 }
 
 //D2Common.0x6FD8C210 (#10054)
-void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2RoomStrc* pRoom, BYTE* pIntensity, BYTE* pRed, BYTE* pGreen, BYTE* pBlue)
+void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2RoomStrc* pRoom, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
 	return DRLGROOM_GetRGB_IntensityFromRoomEx(pRoom->pRoomEx, pIntensity, pRed, pGreen, pBlue);
 }
@@ -1023,7 +1023,7 @@ int __stdcall D2Common_10084(D2RoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D140 (#10085)
-int __stdcall DUNGEON_GetTownLevelIdFromActNo(BYTE nAct)
+int __stdcall DUNGEON_GetTownLevelIdFromActNo(uint8_t nAct)
 {
 	static const int gnTownLevelIds[] = { LEVEL_ROGUEENCAMPMENT, LEVEL_LUTGHOLEIN, LEVEL_KURASTDOCKTOWN, LEVEL_THEPANDEMONIUMFORTRESS, LEVEL_HARROGATH };
 

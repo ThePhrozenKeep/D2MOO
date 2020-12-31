@@ -223,16 +223,16 @@ void __fastcall DATATBLS_ItemCalcLinker(char* pSrc, void* pRecord, int nOffset, 
 			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapItemsTxtKeywordToNumber, DATATBLS_Return2, sub_6FD55150);
 			if (nBufferSize > 0)
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx, pBuffer, nBufferSize);
+				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx, pBuffer, nBufferSize);
 			}
 			else
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = -1;
+				*(uint32_t*)((char*)pRecord + nOffset) = -1;
 			}
 		}
 		else
 		{
-			*(DWORD*)((char*)pRecord + nOffset) = -1;
+			*(uint32_t*)((char*)pRecord + nOffset) = -1;
 		}
 	}
 }
@@ -477,8 +477,8 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pIndexOldToCurrent = (WORD*)FOG_AllocServerMemory(NULL, sizeof(WORD) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pIndexOldToCurrent, 0x00, sizeof(WORD) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
+	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pIndexOldToCurrent, 0x00, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
 
 	nOldCounter = 0;
 	for (int i = 0; i < sgptDataTables->pItemDataTables.nItemsTxtRecordCount; ++i)
@@ -543,7 +543,7 @@ D2ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId)
 }
 
 //D2Common.0x6FD576D0 (#10601)
-D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(DWORD dwCode, int* pItemId)
+D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId)
 {
 	*pItemId = FOG_GetLinkIndex(sgptDataTables->pItemsLinker, dwCode, 0);
 	if (*pItemId >= 0)
@@ -556,7 +556,7 @@ D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(DWORD dwCode, int* pIte
 }
 
 //D2Common.0x6FD57720 (#10602)
-int __stdcall DATATBLS_GetItemIdFromItemCode(DWORD dwCode)
+int __stdcall DATATBLS_GetItemIdFromItemCode(uint32_t dwCode)
 {
 	return FOG_GetLinkIndex(sgptDataTables->pItemsLinker, dwCode, 0);
 }
@@ -572,7 +572,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 		{
 			if (*pSrc == '-' || *pSrc >= '0' && *pSrc <= '9')
 			{
-				*(DWORD*)((char*)pRecord + nOffset) = atoi(pSrc);
+				*(uint32_t*)((char*)pRecord + nOffset) = atoi(pSrc);
 			}
 			else
 			{
@@ -581,7 +581,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 					nRow = FOG_GetRowFromTxt(sgptDataTables->pSkillsLinker, pSrc, 0);
 					if (nRow >= 0)
 					{
-						*(DWORD*)((char*)pRecord + nOffset) = nRow;
+						*(uint32_t*)((char*)pRecord + nOffset) = nRow;
 						return;
 					}
 				}
@@ -591,7 +591,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 					nRow = FOG_GetRowFromTxt(sgptDataTables->pMonTypeLinker, pSrc, 0);
 					if (nRow >= 0)
 					{
-						*(DWORD*)((char*)pRecord + nOffset) = nRow;
+						*(uint32_t*)((char*)pRecord + nOffset) = nRow;
 						return;
 					}
 				}
@@ -601,18 +601,18 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 					nRow = FOG_GetRowFromTxt(sgptDataTables->pStatesLinker, pSrc, 0);
 					if (nRow >= 0)
 					{
-						*(DWORD*)((char*)pRecord + nOffset) = nRow;
+						*(uint32_t*)((char*)pRecord + nOffset) = nRow;
 						return;
 					}
 				}
 
-				*(DWORD*)((char*)pRecord + nOffset) = 0;
+				*(uint32_t*)((char*)pRecord + nOffset) = 0;
 				FOG_WriteToLogFile("Failed to parse '%s' line %d", pSrc, nTxtRow);
 			}
 		}
 		else
 		{
-			*(DWORD*)((char*)pRecord + nOffset) = 0;
+			*(uint32_t*)((char*)pRecord + nOffset) = 0;
 		}
 	}
 }
@@ -1461,7 +1461,7 @@ D2ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables()
 }
 
 //D2Common.0x6FD5C220 (#10623)
-D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, BYTE nDifficulty, WORD wVersion)
+D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion)
 {
 	int nClass = 0;
 	int nQuest = 0;
@@ -1521,9 +1521,9 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 	int nStatsWithDescFunc = 0;
 	int nNextFreeId = 0;
 	int nOpCounter = 0;
-	WORD nOpBase = 0;
-	WORD* pOpStat = NULL;
-	BYTE* pOp = NULL;
+	uint16_t nOpBase = 0;
+	uint16_t* pOpStat = NULL;
+	uint8_t* pOp = NULL;
 	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = {};
 
 	D2BinFieldStrc pTbl[] =
@@ -1704,7 +1704,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 	qsort(pStatsWithDescFunc, nStatsWithDescFunc, sizeof(D2ItemStatCostDescStrc), DATATBLS_CompareItemStatCostDescs);
 
-	sgptDataTables->pStatsWithDescFunc = (WORD*)FOG_AllocServerMemory(NULL, sizeof(WORD) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
+	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
 	for (int i = 0; i < sgptDataTables->nStatsWithDescFunc; ++i)
 	{
 		sgptDataTables->pStatsWithDescFunc[i] = pStatsWithDescFunc[i].nRecordId;
@@ -1799,7 +1799,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 
 	if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 	{
-		sgptDataTables->pGambleDataTables.pGambleSelection = (DWORD*)FOG_AllocServerMemory(NULL, sizeof(DWORD) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
 		for (int i = 0; i < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount; ++i)
 		{
 			nItemId = FOG_GetLinkIndex(sgptDataTables->pItemsLinker, pGambleTxt[i].dwItemCode, 0);
@@ -1947,7 +1947,7 @@ BOOL __fastcall DATATBLS_CheckNestedItemTypes(int nItemType1, int nItemType2)
 //D2Common.0x6FD5D8C0
 void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 {
-	DWORD* pItemTypesNest = NULL;
+	uint32_t* pItemTypesNest = NULL;
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1996,13 +1996,13 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	{
 		for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 		{
-			FOG_10215(sgptDataTables->pItemTypesLinker, *(DWORD*)&sgptDataTables->pItemTypesTxt[i].szCode[0]);
+			FOG_10215(sgptDataTables->pItemTypesLinker, *(uint32_t*)&sgptDataTables->pItemTypesTxt[i].szCode[0]);
 		}
 	}
 
 	sgptDataTables->nItemTypesIndex = (sgptDataTables->nItemTypesTxtRecordCount + 31) / 32;
-	sgptDataTables->pItemTypesNest = (DWORD*)FOG_AllocServerMemory(NULL, sizeof(DWORD) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pItemTypesNest, 0x00, sizeof(DWORD) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
+	sgptDataTables->pItemTypesNest = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pItemTypesNest, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
 
 	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 	{
@@ -2151,7 +2151,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 
 		if (dword_6FDD6A24)
 		{
-			*(DWORD*)pTmp = nRecordId + 1;
+			*(uint32_t*)pTmp = nRecordId + 1;
 			pTmp = (D2RunesTxt*)((char*)pTmp + 4);
 		}
 		sgptDataTables->pRuneDataTables.pRunesTxt = pTmp;

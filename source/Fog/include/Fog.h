@@ -28,15 +28,15 @@ D2FUNC_DLL(FOG, ReallocServerMemory, void*, __fastcall, (void* pMemPool, void* p
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
 D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (char* szFile, void** pFileHandle), 0x11600)															//Fog.#10102
 D2FUNC_DLL(FOG, MPQFileClose, void, __fastcall, (void* pFile), 0x11610)																				//Fog.#10103
-D2FUNC_DLL(FOG, MPQFileRead, BOOL, __fastcall, (void* pFile, void* pBuffer, size_t nSize, int* nBytesRead, DWORD, DWORD, DWORD), 0x11620)			//Fog.#10104
-D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (void* pFileHandle, DWORD* lpFileSizeHigh), 0x11650)											//Fog.#10105
+D2FUNC_DLL(FOG, MPQFileRead, BOOL, __fastcall, (void* pFile, void* pBuffer, size_t nSize, int* nBytesRead, uint32_t, uint32_t, uint32_t), 0x11620)	//Fog.#10104
+D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (void* pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)											//Fog.#10105
 D2FUNC_DLL(FOG, 10207, void, __stdcall, (D2BinFileStrc* pBinFile, D2BinFieldStrc* pBinField, void* pTxt, int nRecordCount, int nRecordSize), 0xAA60)//Fog.#10207
 D2FUNC_DLL(FOG, CreateBinFile, D2BinFileStrc*, __stdcall, (void* pDataBuffer, int nBufferSize), 0xA8B0)												//Fog.#10208
 D2FUNC_DLL(FOG, FreeBinFile, void, __stdcall, (D2BinFileStrc* pBinFile), 0xAA10)																	//Fog.#10209
 D2FUNC_DLL(FOG, GetRecordCountFromBinFile, int, __stdcall, (D2BinFileStrc* pBinFile), 0xAA50)														//Fog.#10210
 D2FUNC_DLL(FOG, AllocLinker, void*, __stdcall, (char* szFile, int nLine), 0xB720)																	//Fog.#10211
 D2FUNC_DLL(FOG, FreeLinker, void, __stdcall, (void* pLinker), 0xB750)																				//Fog.#10212
-D2FUNC_DLL(FOG, GetLinkIndex, int, __stdcall, (void* pLink, DWORD dwCode, BOOL bLogError), 0xB810)													//Fog.#10213
+D2FUNC_DLL(FOG, GetLinkIndex, int, __stdcall, (void* pLink, uint32_t dwCode, BOOL bLogError), 0xB810)												//Fog.#10213
 D2FUNC_DLL(FOG, GetStringFromLinkIndex, int, __stdcall, (void* pLinker, int nIndex, char* szString), 0xB8F0)										//Fog.#10214
 D2FUNC_DLL(FOG, 10215, int, __stdcall, (void* pBin, int a2), 0xB990)																				//Fog.#10215
 D2FUNC_DLL(FOG, 10216_AddRecordToLinkingTable, int, __stdcall, (void* pBin, char* a2), 0xBD80)														//Fog.#10216

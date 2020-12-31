@@ -291,7 +291,7 @@ D2LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId)
 }
 
 //D2Common.0x6FD603F0 (#10632)
-BYTE __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId)
+uint8_t __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId)
 {
 	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
@@ -302,7 +302,7 @@ BYTE __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId)
 }
 
 //D2Common.0x6FD60430 (#10634)
-BYTE __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId)
+uint8_t __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId)
 {
 	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
@@ -313,7 +313,7 @@ BYTE __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId)
 }
 
 //D2Common.0x6FD60470 (#10633)
-BYTE __stdcall DATATBLS_GetMudFromLevelsTxt(int nLevelId)
+uint8_t __stdcall DATATBLS_GetMudFromLevelsTxt(int nLevelId)
 {
 	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
@@ -334,7 +334,7 @@ void __fastcall DATATBLS_UnloadLevelsTxt()
 }
 
 //D2Common.0x6FD604F0 (#11247)
-int __stdcall DATATBLS_GetMonsterLevelInArea(int nLevelId, BYTE nDifficulty, BOOL bExpansion)
+int __stdcall DATATBLS_GetMonsterLevelInArea(int nLevelId, uint8_t nDifficulty, BOOL bExpansion)
 {
 	D2LevelsTxt* pLevelsTxtRecord = NULL;
 
@@ -556,7 +556,7 @@ D2LvlTypesTxt* __stdcall DATATBLS_GetLevelTypesTxtRecord(int nLevelType)
 }
 
 //D2Common.0x6FD614A0 (#11226)
-bool __stdcall DATATBLS_CheckActInLevelTypesTxt(int nLevelType, BYTE nAct)
+bool __stdcall DATATBLS_CheckActInLevelTypesTxt(int nLevelType, uint8_t nAct)
 {
 	D2LvlTypesTxt* pLevelTypesTxtRecord = NULL;
 
@@ -805,7 +805,7 @@ D2LvlMazeTxt* __fastcall DATATBLS_GetLvlMazeTxtRecordFromLevelId(int nLevelId)
 void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 {
 	int nLength = 0;
-	DWORD dwType = 0;
+	uint32_t dwType = 0;
 	char* szFile = NULL;
 	char szBuffer[60] = {};
 
@@ -1116,7 +1116,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 }
 
 //D2Common.0x6FD62D30 (#10011)
-int __fastcall DATATBLS_GetAutomapCellId(DWORD dwAutomapLevelType, DWORD dwAutomapTileType, int nStyle, int nSequence)
+int __fastcall DATATBLS_GetAutomapCellId(uint32_t dwAutomapLevelType, uint32_t dwAutomapTileType, int nStyle, int nSequence)
 {
 	unsigned long long int lSeed = 0;
 	int nStart = 0;

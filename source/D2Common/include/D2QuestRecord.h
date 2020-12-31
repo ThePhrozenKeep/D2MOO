@@ -17,6 +17,6 @@ D2BitBufferStrc* __stdcall QUESTRECORD_AllocRecord(void* pMemPool);
 //D2Common.0x6FDAE970 (#11112)
 void __stdcall QUESTRECORD_FreeRecord(void* pMemPool, D2BitBufferStrc* pQuestRecord);
 //D2Common.0x6FDAE9B0 (#11113)
-void __stdcall QUESTRECORD_CopyBufferToRecord(D2BitBufferStrc* pQuestRecord, BYTE* pBuffer, WORD nBufferSize, BOOL bResetStates);
+void __stdcall QUESTRECORD_CopyBufferToRecord(D2BitBufferStrc* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, BOOL bResetStates);
 //D2Common.0x6FDAEA40 (#11114)
-void __stdcall QUESTRECORD_CopyRecordToBuffer(D2BitBufferStrc* pQuestRecord, BYTE* pBuffer, WORD nBufferSize, int nUnused);
+void __stdcall QUESTRECORD_CopyRecordToBuffer(D2BitBufferStrc* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, int nUnused);

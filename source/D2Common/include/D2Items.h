@@ -11,9 +11,9 @@ void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);
 //D2Common.0x6FD983F0 (#10688)
 void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem);
 //D2Common.0x6FD98430 (#10689)
-BYTE __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem);
 //D2Common.0x6FD98450 (#10690)
-void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, BYTE nBodyLoc);
+void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
 //D2Common.0x6FD98470 (#10691)
 D2SeedStrc* __stdcall ITEMS_GetItemSeed(D2UnitStrc* pItem);
 //D2Common.0x6FD98490 (#10692)
@@ -27,51 +27,51 @@ int __stdcall ITEMS_GetItemQuality(D2UnitStrc* pItem);
 //D2Common.0x6FD98580 (#10696)
 void __stdcall ITEMS_SetItemQuality(D2UnitStrc* pItem, int nQuality);
 //D2Common.0x6FD985A0 (#10699)
-WORD __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo);
+uint16_t __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo);
 //D2Common.0x6FD985D0 (#10700)
-void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, WORD nPrefix, int nPrefixNo);
+void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, uint16_t nPrefix, int nPrefixNo);
 //D2Common.0x6FD98600 (#10697)
-WORD __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem);
+uint16_t __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem);
 //D2Common.0x6FD98630 (#10698)
-void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, WORD nAffix);
+void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, uint16_t nAffix);
 //D2Common.0x6FD98650 (#10701)
-WORD __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo);
+uint16_t __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo);
 //D2Common.0x6FD98680 (#10702)
-void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, WORD nSuffix, int nSuffixNo);
+void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, uint16_t nSuffix, int nSuffixNo);
 //D2Common.0x6FD986B0 (#10703)
-WORD __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem);
+uint16_t __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem);
 //D2Common.0x6FD986E0 (#10704)
-void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, WORD nPrefix);
+void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, uint16_t nPrefix);
 //D2Common.0x6FD98700 (#10705)
-WORD __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem);
+uint16_t __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem);
 //D2Common.0x6FD98730 (#10706)
-void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, WORD nSuffix);
+void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix);
 //D2Common.0x6FD98750 (#10707)
-BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, DWORD dwFlag, int nLine, char* szFile);
+BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, char* szFile);
 //D2Common.0x6FD98780 (#10708)
-void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, DWORD dwFlag, BOOL bSet);
+void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, BOOL bSet);
 //D2Common.0x6FD987C0 (#10709)
-DWORD __stdcall ITEMS_GetItemFlags(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetItemFlags(D2UnitStrc* pItem);
 //D2Common.0x6FD987E0 (#10710)
 BOOL __stdcall ITEMS_CheckItemCMDFlag(D2UnitStrc* pItem, int nFlag);
 //D2Common.0x6FD98810 (#10711)
 void __stdcall ITEMS_SetItemCMDFlag(D2UnitStrc* pItem, int nFlag, BOOL bSet);
 //D2Common.0x6FD98850 (#10712)
-DWORD __stdcall ITEMS_GetItemCMDFlags(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetItemCMDFlags(D2UnitStrc* pItem);
 //D2Common.0x6FD98870 (#10717)
 int __stdcall ITEMS_GetItemLevel(D2UnitStrc* pItem);
 //D2Common.0x6FD988B0 (#10718)
 void __stdcall ITEMS_SetItemLevel(D2UnitStrc* pItem, int nItemLevel);
 //D2Common.0x6FD988E0 (#10719)
-BYTE __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem);
 //D2Common.0x6FD98900 (#10720)
-void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, BYTE nPage);
+void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, uint8_t nPage);
 //D2Common.0x6FD98920 (#10721)
-BYTE __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem);
 //D2Common.0x6FD98940 (#10722)
 void __stdcall ITEMS_SetCellOverlap(D2UnitStrc* pItem, int nCellOverlap);
 //D2Common.0x6FD98960 (#10853)
-BYTE __stdcall ITEMS_GetItemCell(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetItemCell(D2UnitStrc* pItem);
 //D2Common.0x6FD98980 (#10854)
 void __stdcall ITEMS_SetItemCell(D2UnitStrc* pItem, int nItemCell);
 //D2Common.0x6FD989A0 (#10723)
@@ -79,35 +79,35 @@ char* __stdcall ITEMS_GetEarName(D2UnitStrc* pItem);
 //D2Common.0x6FD989C0 (#10724)
 void __stdcall ITEMS_SetEarName(D2UnitStrc* pItem, char* szName);
 //D2Common.0x6FD989F0 (#10725)
-BYTE __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem);
 //D2Common.0x6FD98A10 (#10726)
-void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, BYTE nLevel);
+void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, uint8_t nLevel);
 //D2Common.0x6FD98A30 (#10727)
-BYTE __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem);
 //D2Common.0x6FD98A50 (#10728)
-void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, BYTE nIndex);
+void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, uint8_t nIndex);
 //D2Common.0x6FD98A70 (#10777)
 BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem);
 //D2Common.0x6FD98C60 (#10780)
-DWORD __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType);
+uint32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType);
 //D2Common.0x6FD98CA0 (#10781)
-DWORD __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem);
 //D2Common.0x6FD98D20 (#10782)
-DWORD __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType);
+uint32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType);
 //D2Common.0x6FD98D60 (#10783)
-DWORD __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem);
 //D2Common.0x6FD98DE0 (#10784)
-DWORD __stdcall ITEMS_GetAutoStackFromItemType(int nItemType);
+uint32_t __stdcall ITEMS_GetAutoStackFromItemType(int nItemType);
 //D2Common.0x6FD98E20 (#10785)
-DWORD __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem);
 //D2Common.0x6FD98EA0 (#10786)
-DWORD __stdcall ITEMS_GetReload(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetReload(D2UnitStrc* pItem);
 //D2Common.0x6FD98F20 (#10787)
-DWORD __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem);
 //D2Common.0x6FD98FA0 (#10788)
-BYTE __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem);
 //D2Common.0x6FD99020 (#10789)
-BYTE __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem);
 //D2Common.0x6FD990A0 (#10790)
 char* __stdcall ITEMS_GetVarInvGfxString(D2UnitStrc* pItem, int nId);
 //D2Common.0x6FD99140 (#10792)
@@ -117,25 +117,25 @@ BOOL __stdcall ITEMS_CanBeMagic(D2UnitStrc* pItem);
 //D2Common.0x6FD99240 (#10793)
 BOOL __stdcall ITEMS_CanBeNormal(D2UnitStrc* pItem);
 //D2Common.0x6FD992C0 (#10744)
-DWORD __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem);
 //D2Common.0x6FD992F0 (#10745)
-DWORD __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem);
 //D2Common.0x6FD99370 (#10746)
-DWORD __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem);
 //D2Common.0x6FD993F0 (#10747)
-DWORD __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem);
 //D2Common.0x6FD99480 (#10748)
-BYTE __stdcall ITEMS_GetComponent(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem);
 //D2Common.0x6FD99500 (#10749)
-void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, BYTE* pWidth, BYTE* pHeight, char* szFile, int nLine);
+void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine);
 //D2Common.0x6FD99540 (#10750)
-void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, BYTE* pBodyLoc1, BYTE* pBodyLoc2);
+void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)
-DWORD __stdcall ITEMS_GetItemType(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem);
 //D2Common.0x6FD99640 (#10752)
-DWORD __stdcall ITEMS_GetItemTypeFromItemId(DWORD dwItemId);
+uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId);
 //D2Common.0x6FD99680 (#10753)
-BYTE __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem);
 //D2Common.0x6FD99700 (#10754)
 int __stdcall ITEMS_CheckIfFlagIsSet(int nFlags, int nFlag);
 //D2Common.0x6FD99710 (#10755)
@@ -147,13 +147,13 @@ BOOL __stdcall ITEMS_GetQuestFromItemId(int nItemId);
 //D2Common.0x6FD99C60 (#10742)
 BOOL __stdcall ITEMS_GetQuest(D2UnitStrc* pItem);
 //D2Common.0x6FD99D40 (#10743)
-DWORD __stdcall ITEMS_GetNormalCode(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetNormalCode(D2UnitStrc* pItem);
 //D2Common.0x6FD99DB0
 int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer);
 //D2Common.0x6FD9A3F0 (#10757)
 int __stdcall ITEMS_GetLevelRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit);
 //D2Common.0x6FD9A400 (#10758)
-BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, BYTE nBodyLoc);
+BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
 //D2Common.0x6FD9A4F0 (#10762)
 int __stdcall ITEMS_CheckItemTypeIfThrowable(int nItemType);
 //D2Common.0x6FD9A530 (#10759)
@@ -161,19 +161,19 @@ int __stdcall ITEMS_CheckIfThrowable(D2UnitStrc* pItem);
 //D2Common.0x6FD9A5B0 (#10760)
 int __stdcall ITEMS_GetMissileType(D2UnitStrc* pItem);
 //D2Common.0x6FD9A5E0 (#10761)
-BYTE __stdcall ITEMS_GetMeleeRange(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetMeleeRange(D2UnitStrc* pItem);
 //D2Common.0x6FD9A610 (#10763)
 BOOL __stdcall ITEMS_CheckWeaponClassByItemId(int nItemId, int nWeapClass);
 //D2Common.0x6FD9A660 (#10764)
 BOOL __stdcall ITEMS_CheckWeaponClass(D2UnitStrc* pItem, int nWeapClass);
 //D2Common.0x6FD9A6C0 (#10766)
-DWORD __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId);
+uint32_t __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId);
 //D2Common.0x6FD9A700 (#10765)
-DWORD __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem);
 //D2Common.0x6FD9A750 (#10767)
-DWORD __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem);
 //D2Common.0x6FD9A7A0 (#10768)
-DWORD __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem);
 //D2Common.0x6FD9A820 (#10769)
 BOOL __stdcall ITEMS_ComparePotionTypes(D2UnitStrc* pItem1, D2UnitStrc* pItem2);
 //D2Common.0x6FD9A960 (#10770)
@@ -213,9 +213,9 @@ int __stdcall ITEMS_CheckBitField1Flag8(D2UnitStrc* pItem);
 //D2Common.0x6FD9D0F0 (#10804)
 int __stdcall ITEMS_GetSpellIcon(D2UnitStrc* pItem);
 //D2Common.0x6FD9D1E0 (#10805)
-BYTE __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem);
 //D2Common.0x6FD9D260 (#10806)
-BYTE __stdcall ITEMS_GetQtyWarnCount(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetQtyWarnCount(D2UnitStrc* pItem);
 //D2Common.0x6FD9D2E0 (#10807)
 short __stdcall ITEMS_GetStrengthBonus(D2UnitStrc* pItem);
 //D2Common.0x6FD9D310 (#10808)
@@ -229,9 +229,9 @@ BOOL __stdcall ITEMS_HasDurability(D2UnitStrc* pItem);
 //D2Common.0x6FD9D3F0 (#10813)
 int __stdcall ITEMS_GetStaffMods(D2UnitStrc* pItem);
 //D2Common.0x6FD9D470 (#10814)
-BYTE __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId);
+uint8_t __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId);
 //D2Common.0x6FD9D490 (#10815)
-BYTE __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem);
 //D2Common.0x6FD9D580 (#10816)
 int __stdcall ITEMS_GetSockets(D2UnitStrc* pItem);
 //D2Common.0x6FD9D5E0 (#10817)
@@ -263,7 +263,7 @@ BOOL __stdcall ITEMS_IsNotQuestItemByItemId(int nItemId);
 //D2Common.0x6FD9DEE0 (#10732)
 int __stdcall ITEMS_GetFileIndex(D2UnitStrc* pItem);
 //D2Common.0x6FD9DF60 (#10733)
-void __stdcall ITEMS_SetFileIndex(D2UnitStrc* pItem, DWORD dwFileIndex);
+void __stdcall ITEMS_SetFileIndex(D2UnitStrc* pItem, uint32_t dwFileIndex);
 //D2Common.0x6FD9DFE0 (#11244)
 void __stdcall ITEMS_GetRealmData(D2UnitStrc* pItem, int* pRealmData0, int* pRealmData1);
 //D2Common.0x6FD9E070 (#11245)
@@ -281,21 +281,21 @@ BOOL __stdcall ITEMS_IsClassValid(D2UnitStrc* pItem);
 //D2Common.0x6FD9E390 (#10739)
 int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E410 (#10823)
-WORD __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem);
+uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem);
 //D2Common.0x6FD9E480 (#10824)
-DWORD __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId);
+uint32_t __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId);
 //D2Common.0x6FD9E4C0 (#10825)
-DWORD __stdcall ITEMS_GetTransmogrify(D2UnitStrc* pItem);
+uint32_t __stdcall ITEMS_GetTransmogrify(D2UnitStrc* pItem);
 //D2Common.0x6FD9E550 (#10826)
 int __stdcall ITEMS_IsMagSetRarUniCrfOrTmp(D2UnitStrc* pItem);
 //D2Common.0x6FD9E580 (#10740)
 BOOL __stdcall ITEMS_IsNotQuestItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E5F0 (#10827)
-BYTE __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem);
+uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E670 (#10828)
 int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem);
 //D2Common.0x6FD9E710 (#10829)
-BYTE* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, BYTE* pColor, int nTransType);
+uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColor, int nTransType);
 //D2Common.0x6FD9EE70
 D2SetItemsTxt* __fastcall ITEMS_GetSetItemsTxtRecord(int nRecordId);
 //D2Common.0x6FD9EEA0 (#10830)
@@ -313,7 +313,7 @@ BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pItem);
 //D2Common.0x6FD9FB40 (#11079)
 int __stdcall D2COMMON_11079_Return0(int a1, int a2);
 //D2Common.0x6FD9FB50 (#10836)
-DWORD __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem);
+uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem);
 //D2Common.0x6FD9FD80 (#10838)
 D2SetItemsTxt* __stdcall ITEMS_GetSetItemsTxtRecordFromItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9FE20 (#10839)
@@ -327,9 +327,9 @@ int __stdcall ITEMS_GetBonusLifeBasedOnClass(D2UnitStrc* pPlayer, int nValue);
 //D2Common.0x6FD9FFE0 (#10842)
 int __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc* pPlayer, int nValue);
 //D2Common.0x6FDA0030 (#10875)
-WORD __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem);
+uint16_t __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem);
 //D2Common.0x6FDA00B0 (#10876)
-void __stdcall ITEMS_SetItemFormat(D2UnitStrc* pItem, WORD nItemFormat);
+void __stdcall ITEMS_SetItemFormat(D2UnitStrc* pItem, uint16_t nItemFormat);
 //D2Common.0x6FDA0130 (#10878)
 int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon);
 //D2Common.0x6FDA02B0 (#10879)
@@ -337,19 +337,19 @@ int __stdcall ITEMS_HasUsedCharges(D2UnitStrc* pItem, BOOL* pHasChargedSkills);
 //D2Common.0x6FDA0340 (#10880)
 BOOL __stdcall ITEMS_IsEthereal(D2UnitStrc* pItem);
 //D2Common.0x6FDA0370 (#10883)
-BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(BYTE* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave);
+BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave);
 //D2Common.0x6FDA0490 (#10882)
-size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, BYTE* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, DWORD dwVersion, BOOL* pFail);
+size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, uint32_t dwVersion, BOOL* pFail);
 //D2Common.0x6FDA0620
-int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, DWORD dwVersion);
+int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, uint32_t dwVersion);
 //D2Common.0x6FDA0A20
-int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, DWORD dwVersion);
+int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, uint32_t dwVersion);
 //D2Common.0x6FDA2690
 void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pUnit, int nStat);
 //D2Common.0x6FDA29D0
-void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, DWORD dwVersion, int n109);
+void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109);
 //D2Common.0x6FDA2BA0 (#10881)
-size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, BYTE* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
+size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
 //Inlined in D2Common.0x6FDA2C00
 void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, D2ItemsTxt* pItemsTxtRecord, BOOL bServer);
 //D2Common.0x6FDA2C00

@@ -25,8 +25,8 @@ BOOL __fastcall DATATBLS_LoadExpFieldD2(void* pMemPool)
 //D2Common.0x6FD52010 (#11089)
 BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize)
 {
-	DWORD v2 = *(DWORD*)(pExpField + 2);
-	DWORD v3 = *(DWORD*)(pExpField + 6);
+	uint32_t v2 = *(uint32_t*)(pExpField + 2);
+	uint32_t v3 = *(uint32_t*)(pExpField + 6);
 
 	sgptDataTables->pFieldData = (char*)FOG_AllocServerMemory(NULL, v2 * v3, __FILE__, __LINE__, 0);
 	D2_ASSERT(sgptDataTables->pFieldData);
@@ -138,7 +138,7 @@ int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 }
 
 //D2Common.0x6FD52360 (#11099)
-BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, WORD fMask)
+BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, uint16_t fMask)
 {
 	if (pRoom)
 	{
