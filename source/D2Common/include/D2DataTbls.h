@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CommonDefinitions.h"
-
 #include "D2Math.h"
+#include <cstdio>
 
 
 extern D2ArenaTxt* gpArenaTxtTable;

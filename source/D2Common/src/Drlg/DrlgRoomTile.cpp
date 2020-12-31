@@ -14,6 +14,7 @@
 #include "D2Dungeon.h"
 #include "D2Monsters.h"
 #include "D2Seed.h"
+#include <D2CMP.h>
 
 struct D2UnkDrlgRoomTileStrc
 {

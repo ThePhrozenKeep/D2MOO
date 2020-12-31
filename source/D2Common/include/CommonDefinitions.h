@@ -1,21 +1,10 @@
 #pragma once
 
-#include <cstdint>
-#include <Imports/DllBases.h>
+#include <D2BasicTypes.h>
+
 #include <D2Structs.h>
 #include <D2Constants.h>
 
-
-#define D2FUNC(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	typedef RETURN(##CONV##* DLL##_##NAME##_t) ARGS; \
-	static DLL##_##NAME##_t DLL##_##NAME = (DLL##_##NAME##_t)(uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
-
-#define D2VAR(DLL, NAME, TYPE, OFFSET) \
-	typedef TYPE DLL##_##NAME##_vt; \
-	static DLL##_##NAME##_vt * DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
-
-#define D2PTR(DLL, NAME, OFFSET) \
-	static PVOID NAME = (uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
 
 // Use for empty/duplicated functions
 #define REMOVE_LATER_WriteToLogFile FOG_WriteToLogFile
@@ -23,25 +12,22 @@
 #define dword_6FDD6A24 1
 
 #include <Fog.h>
-#include <D2CMP.h>
-#include <D2LANG.h>
-
 #define D2_MAX_PATH 260
 
 struct D2MazeLevelIdStrc
 {
-	int nLevelPrestId1;						//0x00
-	int nLevelPrestId2;						//0x04
-	int nPickedFile;						//0x08
-	int nDirection;							//0x0C
+	int nLevelPrestId1;					//0x00
+	int nLevelPrestId2;					//0x04
+	int nPickedFile;					//0x08
+	int nDirection;						//0x0C
 };
 
 struct D2UnkFileStrc
 {
-	char szPath[D2_MAX_PATH];					//0x00
-	LONG field_104;							//0x104
-	D2DrlgFileStrc* pFile;					//0x108
-	D2UnkFileStrc* pNext;					//0x10C
+	char szPath[D2_MAX_PATH];			//0x00
+	long field_104;						//0x104
+	D2DrlgFileStrc* pFile;				//0x108
+	D2UnkFileStrc* pNext;				//0x10C
 };
 
 struct D2UnkOutdoorStrc

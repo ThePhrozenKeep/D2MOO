@@ -1,6 +1,7 @@
 #include "D2DataTbls.h"
 
 #include "D2Items.h"
+#include <D2Lang.h>
 
 
 //D2Common.0x6FD542D0

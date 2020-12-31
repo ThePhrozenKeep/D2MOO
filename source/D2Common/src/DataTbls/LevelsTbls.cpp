@@ -4,6 +4,8 @@
 #include "Drlg/D2DrlgPreset.h"
 #include "Drlg/D2DrlgTileSub.h"
 #include "D2Seed.h"
+#include <D2Lang.h>
+#include <D2CMP.h>
 
 
 static const char* gszAutomapLevelNames[] =

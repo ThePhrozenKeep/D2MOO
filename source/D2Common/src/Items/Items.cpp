@@ -10,6 +10,7 @@
 #include "D2States.h"
 #include "D2StatList.h"
 #include "Units/Units.h"
+#include <D2CMP.h>
 
 
 //D2Common.0x6FD98380 (#10687)

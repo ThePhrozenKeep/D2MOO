@@ -3,6 +3,7 @@
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgDrlgGrid.h"
 #include "Drlg/D2DrlgRoomTile.h"
+#include <D2CMP.h>
 
 
 

@@ -2,6 +2,7 @@
 
 #include "D2Items.h"
 #include "D2Seed.h"
+#include <D2Lang.h>
 
 
 //Inlined in some functions

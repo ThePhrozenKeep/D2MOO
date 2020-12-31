@@ -1,5 +1,6 @@
 #include "D2DataTbls.h"
-
+#include <cstdio>
+#include <D2Lang.h>
 
 D2ArenaTxt* gpArenaTxtTable;
 D2CharTemplateTxt* gpCharTemplateTxtTable;

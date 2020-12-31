@@ -12,6 +12,7 @@
 #include "Drlg/D2DrlgRoomTile.h"
 #include "D2Dungeon.h"
 #include "D2Seed.h"
+#include <D2CMP.h>
 
 
 //D2Common.0x6FD74120 (#10014)
