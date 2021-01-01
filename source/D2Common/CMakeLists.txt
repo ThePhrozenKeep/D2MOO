@@ -61,9 +61,9 @@ target_sources(D2Common
 	
 	# Enums for asset indices, should be generated from .txt files
 	include/DataTbls/LevelsIds.h
-	include/DataTbls/ObjectsIds.h
 	include/DataTbls/MissilesIds.h
 	include/DataTbls/MonsterIds.h
+	include/DataTbls/ObjectsIds.h
 	include/DataTbls/SkillsIds.h
 )
 
