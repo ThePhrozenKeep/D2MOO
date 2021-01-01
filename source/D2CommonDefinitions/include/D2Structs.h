@@ -3,7 +3,6 @@
 #include <D2BasicTypes.h>
 #include <D2Seed.h>
 
-#include "D2PacketDef.h"
 #include "D2QuestDataEx.h"
 
 

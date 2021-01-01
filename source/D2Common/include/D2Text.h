@@ -4,6 +4,20 @@
 
 #define MAX_TEXT_LIST_NODES 8
 
+struct D2MessageStrc			//sizeof 0x04
+{
+	uint8_t nMenu;				//0x00
+	uint8_t pad0x01;			//0x01
+	uint16_t nStringId;			//0x02
+};
+
+struct D2MessageListStrc		//sizeof 0x22
+{
+	uint8_t nCount;				//0x00
+	uint8_t pad0x01;			//0x01
+	D2MessageStrc pMessages[8];	//0x02
+};
+
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool);
 //D2Common.0x6FDC3710 (#10902)
