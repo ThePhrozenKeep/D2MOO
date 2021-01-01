@@ -19,6 +19,8 @@
 #include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
 #include <D2Items.h>
+#include <D2Monsters.h>
+#include <Units/Units.h>
 
 
 D2UnkFileStrc* dword_6FDEA700;

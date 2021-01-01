@@ -150,6 +150,7 @@ target_sources(D2Common
 
     include/Units/Missile.h
     include/Units/MissileStream.h
+    include/Units/Player.h
     include/Units/UnitFinds.h
     include/Units/UnitRoom.h
     include/Units/Units.h

@@ -3,6 +3,7 @@
 #include "D2Items.h"
 #include <D2Lang.h>
 #include <D2BitManip.h>
+#include <D2StatList.h>
 
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey)

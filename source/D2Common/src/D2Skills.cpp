@@ -16,6 +16,7 @@
 #include <D2BitManip.h>
 #include <DataTbls/SkillsIds.h>
 #include <D2Combat.h>
+#include <D2Monsters.h>
 
 //TODO: Find names
 

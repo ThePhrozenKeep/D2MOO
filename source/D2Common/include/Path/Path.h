@@ -2,6 +2,14 @@
 
 #include "CommonDefinitions.h"
 
+enum D2PathTypes
+{
+	PATHTYPE_IDASTAR = 0,
+	PATHTYPE_TOWARD = 2,
+	PATHTYPE_MISSILE = 4,
+	PATHTYPE_KNOCKBACK_SERVER = 8,
+	PATHTYPE_KNOCKBACK_CLIENT = 11,
+};
 
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);

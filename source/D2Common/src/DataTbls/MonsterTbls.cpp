@@ -5,7 +5,7 @@
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <Units/Units.h>
-
+#include <D2Monsters.h>
 
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText)

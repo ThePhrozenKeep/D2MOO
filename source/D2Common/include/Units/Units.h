@@ -1,7 +1,68 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "Player.h"
 
+enum D2C_UnitTypes
+{
+	UNIT_PLAYER,
+	UNIT_MONSTER,
+	UNIT_OBJECT,
+	UNIT_MISSILE,
+	UNIT_ITEM,
+	UNIT_TILE,
+};
+
+enum D2C_UnitFlags
+{
+	UNITFLAG_DOUPDATE = 0x00000001,				//tells to update the unit
+	UNITFLAG_TARGETABLE = 0x00000002,			//whenever the unit can be selected or not
+	UNITFLAG_CANBEATTACKED = 0x00000004,		//whenever the unit can be attacked
+	UNITFLAG_ISVALIDTARGET = 0x00000008,		//used to check if unit is a valid target
+	UNITFLAG_INITSEEDSET = 0x00000010,			//tells whenever the unit seed has been initialized
+	UNITFLAG_DRAWSHADOW = 0x00000020,			//tells whenver to draw a shadow or not (client only)
+	UNITFLAG_SKSRVDOFUNC = 0x00000040,			//set when skill srvdofunc is executed
+	UNITFLAG_OBJPREOPERATE = 0x00000080,		//unknown, used by objects with pre-operate disabled
+	UNITFLAG_HASTXTMSG = 0x00000100,			//whenever this unit has a text message attached to it
+	UNITFLAG_ISMERC = 0x00000200,				//is mercenary unit
+	UNITFLAG_HASEVENTSOUND = 0x00000400,		//does this unit have an event-sound attached to it (server)
+	UNITFLAG_SUMMONER = 0x00000800,				//set for the summoner only
+	UNITFLAG_SENDREFRESHMSG = 0x00001000,		//used by items to send a refresh message when it drops on ground
+	UNITFLAG_ISLINKREFRESHMSG = 0x00002000,		//tells whenever this unit is linked to an update message chain
+	UNITFLAG_SQGFXCHANGE = 0x00004000,			//tells whenever to load new anim for skill SQ
+	UNITFLAG_UPGRLIFENHITCLASS = 0x00008000,	//updates life% and hitclass on client
+	UNITFLAG_ISDEAD = 0x00010000,				//unit is dead
+	UNITFLAG_NOTC = 0x00020000,					//disables treasureclass drops
+	UNITFLAG_MONMODEISCHANGING = 0x00080000,	//set when monmode changes
+	UNITFLAG_PREDRAW = 0x00100000,				//pre-draw this unit (like floor tiles, client only)
+	UNITFLAG_ISASYNC = 0x00200000,				//is async unit (critters)
+	UNITFLAG_ISCLIENTUNIT = 0x00400000,			//is client unit
+	UNITFLAG_ISINIT = 0x01000000,				//set when unit has been initialized
+	UNITFLAG_ISRESURRECT = 0x02000000,			//set for resurrected units and items on floor
+	UNITFLAG_NOXP = 0x04000000,					//no xp gain from killing this unit
+	UNITFLAG_AUTOMAP = 0x10000000,				//automap stuff
+	UNITFLAG_AUTOMAP2 = 0x20000000,				//automap stuff
+	UNITFLAG_PETIGNORE = 0x40000000,			//ignored by pets
+	UNITFLAG_ISREVIVE = 0x80000000				//is revived monster
+};
+
+enum D2C_UnitFlagsEx
+{
+	UNITFLAGEX_HASINV = 0x00000001,				//unit has inventory attached to it
+	UNITFLAGEX_UPDATEINV = 0x00000002,			//tells to update inventory content
+	UNITFLAGEX_ISVENDORITEM = 0x00000004,		//set for vendor shop items
+	UNITFLAGEX_ISSHAPESHIFTED = 0x00000008,		//unit is shapeshifted
+	UNITFLAGEX_ITEMINIT = 0x00000010,			//set for items, related to init
+	UNITFLAGEX_ISINLOS = 0x00000080,			//unit is in client's line of sight
+	UNITFLAGEX_HASBEENDELETED = 0x00000100,		//unit has been deleted but not free'd yet
+	UNITFLAGEX_STOREOWNERINFO = 0x00000400,		//unit stores info about owner
+	UNITFLAGEX_ISCORPSE = 0x00001000,			//unit is a corpse (use UNITFLAG_ISDEAD instead)
+	UNITFLAGEX_TELEPORTED = 0x00010000,			//unit has been teleported, needs resync
+	UNITFLAGEX_STORELASTATTACKER = 0x00020000,	//unit stores info about last attacker
+	UNITFLAGEX_NODRAW = 0x00040000,				//don't draw this unit
+	UNITFLAGEX_ISEXPANSION = 0x02000000,		//is expansion unit
+	UNITFLAGEX_SERVERUNIT = 0x04000000			//is server-side unit
+};
 
 //TODO: Redo Header defs when .cpp is done
 

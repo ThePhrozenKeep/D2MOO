@@ -18,6 +18,7 @@
 #include <DataTbls/LevelsIds.h>
 #include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
+#include <Units/Units.h>
 
 struct D2UnkDrlgRoomTileStrc
 {
