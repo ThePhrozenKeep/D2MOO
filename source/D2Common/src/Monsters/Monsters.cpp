@@ -10,6 +10,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2Lang.h>
+#include <D2Math.h>
 
 
 //TODO: Check names

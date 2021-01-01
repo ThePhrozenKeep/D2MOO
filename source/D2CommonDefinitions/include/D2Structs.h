@@ -1,8 +1,8 @@
 #pragma once
 
 #include <D2BasicTypes.h>
+#include <D2Seed.h>
 
-#include "D2DataTables.h"
 #include "D2PacketDef.h"
 #include "D2QuestDataEx.h"
 
@@ -228,6 +228,21 @@ struct D2WeaponDescTblStrc;
 struct D2WeaponSpeedTblStrc;
 struct D2WindowPlacementStrc;
 struct D2WinMsgStrc;
+
+
+struct D2MonStatsTxt;
+struct D2MonStats2Txt;
+struct D2LvlWarpTxt;
+struct D2DifficultyLevelsTxt;
+struct D2LvlMazeTxt;
+struct D2LvlPrestTxt;
+struct D2ObjectsTxt;
+struct D2ShrinesTxt;
+struct D2SkillsTxt;
+struct D2AnimDataRecordStrc;
+struct D2InventoryGridInfoStrc;
+
+
 
 ////////////////////////////////
 
@@ -929,15 +944,6 @@ struct D2DrlgBuildStrc
 	D2DrlgBuildStrc* pNext;					//0x0C
 };
 
-struct D2DrlgCoordListStrc
-{
-	int32_t dwFlags;							//0x00
-	int32_t nLists;								//0x04
-	D2DrlgGridStrc pIndexX;					//0x08
-	D2DrlgGridStrc pIndexY;					//0x1C
-	D2RoomCoordListStrc* pCoordList;		//0x30
-};
-
 struct D2DrlgDeleteStrc
 {
 	int32_t nUnitType;							//0x00
@@ -1068,24 +1074,6 @@ struct D2DrlgLinkerParamsStrc
 	int32_t dwFlags;							//0x14
 };
 
-struct D2DrlgMapStrc
-{
-	int32_t nLevelPrest;						//0x00
-	int32_t nPickedFile;						//0x04
-	D2LvlPrestTxt* pLvlPrestTxtRecord;		//0x08
-	D2DrlgFileStrc* pFile;					//0x0C
-	D2DrlgCoordStrc pDrlgCoord;				//0x10
-	BOOL bHasInfo;							//0x20
-	D2DrlgGridStrc pMapGrid;				//0x24
-	D2PresetUnitStrc* pPresetUnit;			//0x38
-	BOOL bInited;							//0x3C
-	int32_t nPops;								//0x40
-	int32_t* pPopsIndex;						//0x44
-	int32_t* pPopsSubIndex;						//0x48
-	int32_t* pPopsOrientation;					//0x4C
-	D2DrlgCoordStrc* pPopsLocation;			//0x50
-	D2DrlgMapStrc* pNext;					//0x54
-};
 
 struct D2DrlgOrthStrc
 {
@@ -1102,30 +1090,6 @@ struct D2DrlgOrthStrc
 	D2DrlgOrthStrc* pNext;					//0x14
 };
 
-struct D2DrlgOutdoorGridStrc
-{
-	int32_t dwFlags;							//0x00
-	D2DrlgGridStrc* pSectors;				//0x04
-	int32_t nWidth;								//0x08
-	int32_t nHeight;							//0x0C
-	BOOL bInit;								//0x10
-};
-
-struct D2DrlgOutdoorRoomStrc
-{
-	D2DrlgGridStrc pOrientationGrid;		//0x00
-	D2DrlgGridStrc pWallGrid;				//0x14
-	D2DrlgGridStrc pFloorGrid;				//0x28
-	D2DrlgGridStrc pCellGrid;				//0x3C
-	D2DrlgVertexStrc* pVertex;				//0x50
-	int32_t dwFlags;							//0x54
-	int32_t dwFlagsEx;							//0x58
-	int32_t unk0x5C;							//0x5C
-	int32_t unk0x60;							//0x60
-	int32_t nSubType;							//0x64
-	int32_t nSubTheme;							//0x68
-	int32_t nSubThemePicked;					//0x6C
-};
 
 struct D2DrlgVertexStrc
 {
@@ -1137,55 +1101,11 @@ struct D2DrlgVertexStrc
 	D2DrlgVertexStrc* pNext;				//0x10
 };
 
-struct D2DrlgOutdoorInfoStrc
-{
-	uint32_t dwFlags;							//0x00
-	D2DrlgGridStrc pGrid[4];				//0x04
-	union
-	{
-		struct
-		{
-			int32_t nWidth;								//0x54
-			int32_t nHeight;							//0x58
-			int32_t nGridWidth;							//0x5C
-			int32_t nGridHeight;						//0x60
-		};
-		D2DrlgCoordStrc pCoord;
-	};
-	D2DrlgVertexStrc* pVertex;				//0x64
-	D2DrlgVertexStrc* unk0x68[6];			//0x68
-	D2DrlgVertexStrc pVertices[24];			//0x80
-	int32_t nVertices;							//0x260
-	D2DrlgOrthStrc* pRoomData;				//0x264
-};
 
 struct D2DrlgPresetInfoStrc
 {
 	D2DrlgMapStrc* pDrlgMap;				//0x00
 	int32_t nDirection;							//0x04
-};
-
-struct D2DrlgPresetRoomStrc
-{
-	int32_t nLevelPrest;						//0x00
-	int32_t nPickedFile;						//0x04
-	D2DrlgMapStrc* pMap;					//0x08
-	union
-	{
-		struct
-		{
-			uint8_t nFlags;					//0x0C
-			uint8_t unk0x0D[3];				//0x0D
-		};
-		uint32_t dwFlags;						//0x0C
-	};
-	D2DrlgGridStrc pWallGrid[4];			//0x10
-	D2DrlgGridStrc pOrientationGrid[4];		//0x60
-	D2DrlgGridStrc pFloorGrid[2];			//0xB0
-	D2DrlgGridStrc pCellGrid;				//0xD8
-	D2DrlgGridStrc* pMazeGrid;				//0xEC
-	D2CoordStrc* pTombStoneTiles;			//0xF0
-	int32_t nTombStoneTiles;					//0xF4
 };
 
 struct D2DrlgRGBStrc
@@ -2204,9 +2124,9 @@ struct D2ObjectControlStrc
 struct D2ObjectDataStrc
 {
 	D2ObjectsTxt* pObjectTxt;				//0x00
-	uint8_t InteractType;						//0x04
-	uint8_t nPortalFlags;						//0x05
-	uint16_t unk0x06;							//0x06
+	uint8_t InteractType;					//0x04
+	uint8_t nPortalFlags;					//0x05
+	uint16_t unk0x06;						//0x06
 	D2ShrinesTxt* pShrineTxt;				//0x08
 	uint32_t dwOperateGUID;					//0x0C
 	BOOL bPermanent;						//0x10
@@ -2341,22 +2261,6 @@ struct D2PresetUnitStrc
 	BOOL bSpawned;							//0x14 
 	D2MapAIStrc* pMapAI;					//0x18
 	D2PresetUnitStrc* pNext;				//0x1C
-};
-
-//struct D2PropertySetFuncStrc
-//{
-//	int32_t nState;
-//	int32_t fStatList;
-//};
-
-typedef BOOL(__fastcall* PROPERTYASSIGN)(int32_t, D2UnitStrc*, D2UnitStrc*, D2PropertyStrc*, int32_t, int32_t, int32_t, int32_t, D2UnitStrc*);
-
-typedef int32_t(__fastcall* PROPERTYASSIGNFN)(int32_t, D2UnitStrc*, D2UnitStrc*, const D2PropertyStrc*, int32_t, int16_t, int32_t, int32_t, int32_t, int32_t, D2UnitStrc*);
-
-struct D2PropertyAssignStrc
-{
-	PROPERTYASSIGN pfAssign;				//0x00
-	int32_t nStatId;							//0x04
 };
 
 typedef BOOL(__fastcall* SPELLPREPARE)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
@@ -3169,119 +3073,6 @@ struct D2TimerStrc
 	void* fpTimerFunction;					//0x2C
 };
 
-struct D2UnitStrc
-{
-	uint32_t dwUnitType;						//0x00
-	int32_t dwClassId;							//0x04
-	void* pMemoryPool;						//0x08
-	uint32_t dwUnitId;							//0x0C
-	union									//0x10
-	{
-		uint32_t dwAnimMode;						//Player, Monster, Object, Items
-		uint32_t dwCollideType;					//Missiles
-	};
-	union									//0x14
-	{
-		D2PlayerDataStrc* pPlayerData;
-		D2ItemDataStrc* pItemData;
-		D2MonsterDataStrc* pMonsterData;
-		D2ObjectDataStrc* pObjectData;
-		D2MissileDataStrc* pMissileData;
-	};
-	uint8_t nAct;								//0x18
-	uint8_t unk0x19[3];						//0x19
-	D2DrlgActStrc* pDrlgAct;				//0x1C
-	D2SeedStrc pSeed;						//0x20
-	uint32_t dwInitSeed;						//0x28
-	union									//0x2C
-	{
-		D2DynamicPathStrc* pDynamicPath;
-		D2StaticPathStrc* pStaticPath;
-	};
-	D2AnimSeqStrc* pAnimSeq;				//0x30
-	uint32_t dwSeqFrameCount;					//0x34
-	uint32_t dwSeqFrame;						//0x38
-	uint32_t dwAnimSpeed;						//0x3C
-	uint32_t dwSeqMode;						//0x40
-	uint32_t dwGFXcurrentFrame;				//0x44
-	uint32_t dwFrameCount;						//0x48
-	uint16_t wAnimSpeed;						//0x4C
-	uint8_t nActionFrame;						//0x4E
-	uint8_t unk0x4F;							//0x4F
-	D2AnimDataRecordStrc* pAnimData;		//0x50
-	D2GfxDataStrc* pGfxData;				//0x54
-	D2GfxDataStrc* pGfxDataCopy;			//0x58
-	D2StatListExStrc* pStatListEx;			//0x5C
-	D2InventoryStrc* pInventory;			//0x60
-	union
-	{
-		struct									//Server Unit
-		{
-			uint32_t dwInteractGUID;			//0x064
-			uint32_t dwInteractType;			//0x068
-			uint16_t nInteract;					//0x06C
-			uint16_t nUpdateType;				//0x06E
-			D2UnitStrc* pUpdateUnit;		//0x070
-			D2QuestChainStrc* pQuestEventList;//0x074
-			BOOL bSparkChest;				//0x078
-			void* pTimerParams;				//0x07C
-			D2GameStrc* pGame;				//0x080
-			uint32_t __084[3];					//0x084
-			D2TimerStrc* pSrvTimerList;		//0x090
-		};
-		
-		struct									//Client Unit
-		{
-			D2GfxLightStrc* pLight;			//0x064
-			uint32_t dwStartLight;				//0x068
-			int32_t nPaletteIndex;				//0x06C
-			BOOL bUnitSfx;					//0x070
-			uint32_t dwSfxMode;				//0x074
-			void* pUnitSfxData;				//0x078
-			uint32_t dwSfxTicks;				//0x07C
-			uint32_t dwSfxAsyncTicks;			//0x080
-			uint32_t dwSfxStepTicks;			//0x084
-			BOOL bHasActiveSound;			//0x088
-			uint16_t nLastClickX;				//0x08C
-			uint16_t nLastClickY;				//0x08E
-			D2EventListStrc* pCltTimerList;	//0x090
-		};
-	};
-	uint32_t dwOwnerType;						//0x94
-	uint32_t dwOwnerGUID;						//0x98
-	uint32_t dwKillerType;						//0x09C
-	uint32_t dwKillerGUID;						//0x0A0
-	D2HoverTextStrc* pHoverText;			//0xA4
-	D2SkillListStrc* pSkills;				//0xA8
-	D2CombatStrc* pCombat;					//0xAC
-	uint32_t dwLastHitClass;					//0xB0
-	uint32_t unk0xB4;							//0xB4
-	uint32_t dwDropItemCode;					//0xB8
-	uint32_t unk0xBC[2];						//0xBC
-	uint32_t dwFlags;							//0xC4
-	uint32_t dwFlagEx;							//0xC8
-	void* pQuestData;						//0xCC
-
-	//union									//0xCC
-	//{
-	//	D2QuestSrvStrc* pSrvQuestData;				//Server pUnit
-	//	D2QuestCltStrc* pCltQuestData;				//Client pUnit
-	//};
-
-	uint32_t dwNodeIndex;						//0xD0
-	uint32_t dwTickCount;						//0xD4
-	union									//0xD8
-	{
-		uint32_t dwSrvTickCount;						//Server pUnit
-		D2PacketListStrc* pPacketList;				//Client pUnit
-	};
-	D2TimerStrc* pTimer;					//0xDC
-	D2UnitStrc* pChangeNextUnit;			//0xE0
-	D2UnitStrc* pListNext;					//0xE4
-	D2UnitStrc* pRoomNext;					//0xE8
-	void* pMsgFirst;						//0xEC
-	void* pMsgLast;							//0xF0
-};
 
 typedef int32_t(__fastcall* UNITFINDTEST)(D2UnitStrc* pUnit, D2UnitFindArgStrc* pUnitFindArg);
 

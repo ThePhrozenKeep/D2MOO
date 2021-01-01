@@ -1,6 +1,9 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "D2DrlgDrlg.h"
+#include "D2DrlgDrlgGrid.h"
+#include <DataTbls/LevelsTbls.h>
 
 struct D2UnkOutdoorStrc
 {

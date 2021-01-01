@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
-
+#include <DataTbls/ItemsTbls.h>
 
 //D2Common.0x6FDB57C0 (#10563)
 BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);

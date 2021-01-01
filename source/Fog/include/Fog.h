@@ -1,7 +1,7 @@
 #pragma once
 
 #include <D2Dll.h>
-#include <D2DataTables.h>
+#include <D2BasicTypes.h>
 
 #ifdef FOG_IMPL
 #define FOG_DLL_DECL __declspec( dllexport )
@@ -9,11 +9,58 @@
 #define FOG_DLL_DECL __declspec( dllimport )
 #endif
 
+//LINKER
+
+struct D2TxtLinkNodeStrc
+{
+	char szText[32];				//0x00
+	int nLinkIndex;					//0x20
+	D2TxtLinkNodeStrc* pPrevious;	//0x24
+	D2TxtLinkNodeStrc* pNext;		//0x28
+};
+
+struct D2TxtLinkTblStrc
+{
+	union
+	{
+		char szCode[4];				//0x00
+		uint32_t dwCode;			//0x00
+	};
+	int nLinkIndex;					//0x04
+};
+
+struct D2TxtLinkStrc
+{
+	int32_t nRecords;				//0x00
+	int32_t nAllocatedCells;		//0x04
+	D2TxtLinkTblStrc* pTbl;			//0x08
+	D2TxtLinkNodeStrc* pFirstNode;	//0x0C
+};
+
+
+struct D2BinFileStrc
+{
+	uint8_t* pDataBuffer;			//0x00
+	uint8_t* pData;					//0x04
+	int32_t nRecordCount;			//0x08
+	int32_t nCellCount;				//0x0C
+};
+
+struct D2BinFieldStrc;
+
+struct D2UnkExcelStrc
+{
+	D2UnkExcelStrc* pNext;			//0x00
+	uint32_t dwHash;				//0x04
+	D2BinFieldStrc* pBinField;		//0x08
+};
+
 struct D2UnkFogStrc
 {
-	void* pCallback;			//0x00
-	int unk0x04;				//0x04
+	void* pCallback;				//0x00
+	int32_t unk0x04;				//0x04
 };
+
 
 D2FUNC_DLL(FOG, 10018, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)														//Fog.#10018
 D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023

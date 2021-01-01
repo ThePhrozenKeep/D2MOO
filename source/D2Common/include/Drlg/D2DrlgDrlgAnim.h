@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "D2DrlgDrlgGrid.h"
 
 //D2Common.0x6FD75480
 void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData);

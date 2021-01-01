@@ -17,6 +17,7 @@
 #include "D2StatList.h"
 #include "Units/UnitRoom.h"
 #include "D2Waypoints.h"
+#include <D2Math.h>
 
 
 //D2Common.0x6FDBD520 (#10457)

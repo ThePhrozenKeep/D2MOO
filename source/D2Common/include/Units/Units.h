@@ -5,6 +5,119 @@
 
 //TODO: Redo Header defs when .cpp is done
 
+struct D2UnitStrc
+{
+	uint32_t dwUnitType;						//0x00
+	int32_t dwClassId;							//0x04
+	void* pMemoryPool;							//0x08
+	uint32_t dwUnitId;							//0x0C
+	union										//0x10
+	{
+		uint32_t dwAnimMode;					//Player, Monster, Object, Items
+		uint32_t dwCollideType;					//Missiles
+	};
+	union										//0x14
+	{
+		D2PlayerDataStrc* pPlayerData;
+		D2ItemDataStrc* pItemData;
+		D2MonsterDataStrc* pMonsterData;
+		D2ObjectDataStrc* pObjectData;
+		D2MissileDataStrc* pMissileData;
+	};
+	uint8_t nAct;								//0x18
+	uint8_t unk0x19[3];							//0x19
+	D2DrlgActStrc* pDrlgAct;					//0x1C
+	D2SeedStrc pSeed;							//0x20
+	uint32_t dwInitSeed;						//0x28
+	union										//0x2C
+	{
+		D2DynamicPathStrc* pDynamicPath;
+		D2StaticPathStrc* pStaticPath;
+	};
+	D2AnimSeqStrc* pAnimSeq;					//0x30
+	uint32_t dwSeqFrameCount;					//0x34
+	uint32_t dwSeqFrame;						//0x38
+	uint32_t dwAnimSpeed;						//0x3C
+	uint32_t dwSeqMode;							//0x40
+	uint32_t dwGFXcurrentFrame;					//0x44
+	uint32_t dwFrameCount;						//0x48
+	uint16_t wAnimSpeed;						//0x4C
+	uint8_t nActionFrame;						//0x4E
+	uint8_t unk0x4F;							//0x4F
+	D2AnimDataRecordStrc* pAnimData;			//0x50
+	D2GfxDataStrc* pGfxData;					//0x54
+	D2GfxDataStrc* pGfxDataCopy;				//0x58
+	D2StatListExStrc* pStatListEx;				//0x5C
+	D2InventoryStrc* pInventory;				//0x60
+	union
+	{
+		struct									//Server Unit
+		{
+			uint32_t dwInteractGUID;			//0x064
+			uint32_t dwInteractType;			//0x068
+			uint16_t nInteract;					//0x06C
+			uint16_t nUpdateType;				//0x06E
+			D2UnitStrc* pUpdateUnit;			//0x070
+			D2QuestChainStrc* pQuestEventList;	//0x074
+			BOOL bSparkChest;					//0x078
+			void* pTimerParams;					//0x07C
+			D2GameStrc* pGame;					//0x080
+			uint32_t __084[3];					//0x084
+			D2TimerStrc* pSrvTimerList;			//0x090
+		};
+
+		struct									//Client Unit
+		{
+			D2GfxLightStrc* pLight;				//0x064
+			uint32_t dwStartLight;				//0x068
+			int32_t nPaletteIndex;				//0x06C
+			BOOL bUnitSfx;						//0x070
+			uint32_t dwSfxMode;					//0x074
+			void* pUnitSfxData;					//0x078
+			uint32_t dwSfxTicks;				//0x07C
+			uint32_t dwSfxAsyncTicks;			//0x080
+			uint32_t dwSfxStepTicks;			//0x084
+			BOOL bHasActiveSound;				//0x088
+			uint16_t nLastClickX;				//0x08C
+			uint16_t nLastClickY;				//0x08E
+			D2EventListStrc* pCltTimerList;		//0x090
+		};
+	};
+	uint32_t dwOwnerType;						//0x94
+	uint32_t dwOwnerGUID;						//0x98
+	uint32_t dwKillerType;						//0x09C
+	uint32_t dwKillerGUID;						//0x0A0
+	D2HoverTextStrc* pHoverText;				//0xA4
+	D2SkillListStrc* pSkills;					//0xA8
+	D2CombatStrc* pCombat;						//0xAC
+	uint32_t dwLastHitClass;					//0xB0
+	uint32_t unk0xB4;							//0xB4
+	uint32_t dwDropItemCode;					//0xB8
+	uint32_t unk0xBC[2];						//0xBC
+	uint32_t dwFlags;							//0xC4
+	uint32_t dwFlagEx;							//0xC8
+	void* pQuestData;							//0xCC
+
+	//union										//0xCC
+	//{
+	//	D2QuestSrvStrc* pSrvQuestData;			//Server pUnit
+	//	D2QuestCltStrc* pCltQuestData;			//Client pUnit
+	//};
+
+	uint32_t dwNodeIndex;						//0xD0
+	uint32_t dwTickCount;						//0xD4
+	union										//0xD8
+	{
+		uint32_t dwSrvTickCount;				//Server pUnit
+		D2PacketListStrc* pPacketList;			//Client pUnit
+	};
+	D2TimerStrc* pTimer;						//0xDC
+	D2UnitStrc* pChangeNextUnit;				//0xE0
+	D2UnitStrc* pListNext;						//0xE4
+	D2UnitStrc* pRoomNext;						//0xE8
+	void* pMsgFirst;							//0xEC
+	void* pMsgLast;								//0xF0
+};
 
 //D2Common.0x6FDBD520 (#10457)
 uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);
@@ -271,7 +384,7 @@ BOOL __stdcall UNITS_IsCorpseUseable(D2UnitStrc* pUnit);
 //D2Common.0x6FDC2910
 BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObject);
 //D2Common.0x6FDC2C80
-D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId);
+struct D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId);
 //D2Common.0x6FDC2CB0 (#10399)
 int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //D2Common.0x6FDC2E40 (#10397)

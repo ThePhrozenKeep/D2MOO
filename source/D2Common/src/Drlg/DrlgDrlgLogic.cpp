@@ -1,3 +1,4 @@
+#include <D2Seed.h>
 #include "Drlg/D2DrlgDrlgLogic.h"
 
 #include "Drlg/D2DrlgDrlgAnim.h"

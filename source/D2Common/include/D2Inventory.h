@@ -2,6 +2,13 @@
 
 #include "CommonDefinitions.h"
 
+struct D2InvRectStrc
+{
+	int32_t nLeft;		//0x00
+	int32_t nRight;		//0x04
+	int32_t nTop;		//0x08
+	int32_t nBottom;	//0x0C
+};
 
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);

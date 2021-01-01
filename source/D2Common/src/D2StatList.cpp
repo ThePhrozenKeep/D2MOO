@@ -1,12 +1,12 @@
 #include "D2StatList.h"
 
+#include <D2Math.h>
 #include "D2DataTbls.h"
 #include "D2Environment.h"
 #include "D2ItemMods.h"
 #include "D2Items.h"
 #include "D2States.h"
 #include "Units/Units.h"
-
 //TODO: Find names
 
 

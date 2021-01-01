@@ -3,6 +3,8 @@
 #include "D2DataTbls.h"
 #include "D2StatList.h"
 #include "Units/UnitRoom.h"
+#include "Units/Units.h"
+#include <D2Math.h>
 
 
 //Used in some of the following functions

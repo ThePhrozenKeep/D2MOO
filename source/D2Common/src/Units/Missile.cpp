@@ -9,6 +9,7 @@
 #include "D2Skills.h"
 #include "D2StatList.h"
 #include "Units/Units.h"
+#include <D2Math.h>
 
 D2UnkFogStrc off_6FDE5A50[] =
 {

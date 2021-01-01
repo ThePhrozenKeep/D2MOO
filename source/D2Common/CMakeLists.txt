@@ -29,14 +29,35 @@ target_sources(D2Common
     src/DataTbls/DataTbls.cpp
     src/DataTbls/FieldTbls.cpp
     src/DataTbls/HoradricCube.cpp
+    src/DataTbls/InvTbls.cpp
     src/DataTbls/ItemsTbls.cpp
     src/DataTbls/LevelsTbls.cpp
     src/DataTbls/MissilesTbls.cpp
     src/DataTbls/MonsterTbls.cpp
     src/DataTbls/ObjectsTbls.cpp
     src/DataTbls/OverlayTbls.cpp
+    src/DataTbls/SequenceTbls.cpp
     src/DataTbls/SkillsTbls.cpp
     src/DataTbls/TokenTbls.cpp
+    src/DataTbls/TransformTbls.cpp
+	
+    include/DataTbls/AnimTbls.h
+    include/DataTbls/ArenaTbls.h
+    include/DataTbls/BeltsTbls.h
+    include/DataTbls/DataTbls.h
+    include/DataTbls/FieldTbls.h
+    include/DataTbls/HoradricCube.h
+    include/DataTbls/InvTbls.h
+    include/DataTbls/ItemsTbls.h
+    include/DataTbls/LevelsTbls.h
+    include/DataTbls/MissilesTbls.h
+    include/DataTbls/MonsterTbls.h
+    include/DataTbls/ObjectsTbls.h
+    include/DataTbls/OverlayTbls.h
+    include/DataTbls/SequenceTbls.h
+    include/DataTbls/SkillsTbls.h
+    include/DataTbls/TokenTbls.h
+    include/DataTbls/TransformTbls.h
 )
 
 # Dynamic Random Level Generation

@@ -11,6 +11,7 @@
 #include "Drlg/D2DrlgPreset.h"
 #include "D2Environment.h"
 #include "Units/UnitRoom.h"
+#include "Units/Units.h"
 #include "D2Seed.h"
 
 

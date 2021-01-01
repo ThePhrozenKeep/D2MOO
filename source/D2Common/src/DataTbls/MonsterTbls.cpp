@@ -3,6 +3,8 @@
 #include "D2Items.h"
 #include "D2Seed.h"
 #include <D2Lang.h>
+#include <D2Math.h>
+#include <Units/Units.h>
 
 
 //Inlined in some functions
@@ -2635,54 +2637,6 @@ void __fastcall DATATBLS_UnloadSoundsTxt()
 	}
 }
 
-//D2Common.0x6FD6F050
-void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
-{
-	int nSequence = 0;
-
-	D2BinFieldStrc pTbl[] =
-	{
-		{ "sequence", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonSeqLinker },
-		{ "mode", TXTFIELD_CODETOBYTE, 0, 2, &sgptDataTables->pMonModeLinker },
-		{ "frame", TXTFIELD_BYTE, 0, 3, NULL },
-		{ "dir", TXTFIELD_BYTE, 0, 4, NULL },
-		{ "event", TXTFIELD_BYTE, 0, 5, NULL },
-		{ "end", 0, 0, 0, NULL },
-	};
-
-	sgptDataTables->pMonSeqLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pMonSeqTxt = (D2MonSeqTxt*)DATATBLS_CompileTxt(pMemPool, "monseq", pTbl, &sgptDataTables->nMonSeqTxtRecordCount, sizeof(D2MonSeqTxt));
-
-	if (sgptDataTables->nMonSeqTxtRecordCount > 0)
-	{
-		sgptDataTables->nMonSeqTableRecordCount = sgptDataTables->pMonSeqTxt[sgptDataTables->nMonSeqTxtRecordCount - 1].wSequence + 1;
-		sgptDataTables->pMonSeqTable = (D2SeqRecordStrc*)FOG_AllocServerMemory(NULL, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount, __FILE__, __LINE__, 0);
-		memset(sgptDataTables->pMonSeqTable, 0x00, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount);
-
-		for (int i = 0; i < sgptDataTables->nMonSeqTxtRecordCount; ++i)
-		{
-			nSequence = sgptDataTables->pMonSeqTxt[i].wSequence;
-			if (!sgptDataTables->pMonSeqTable[nSequence].pMonSeqTxtRecord)
-			{
-				sgptDataTables->pMonSeqTable[nSequence].pMonSeqTxtRecord = &sgptDataTables->pMonSeqTxt[i];
-			}
-
-			++sgptDataTables->pMonSeqTable[nSequence].unk0x04;
-			++sgptDataTables->pMonSeqTable[nSequence].unk0x08;
-		}
-	}
-}
-
-//D2Common.0x6FD6F200 (#11262)
-D2SeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence)
-{
-	if (nSequence >= 0 && nSequence < sgptDataTables->nMonSeqTableRecordCount)
-	{
-		return &sgptDataTables->pMonSeqTable[nSequence];
-	}
-
-	return NULL;
-}
 
 //D2Common.0x6FD6F230
 void __fastcall DATATBLS_LoadMonEquipTxt(void* pMemPool)
