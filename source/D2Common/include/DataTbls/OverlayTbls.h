@@ -2,6 +2,20 @@
 
 #include <D2BasicTypes.h>
 
+enum D2C_OverlayTypes
+{
+	OVERLAYTYPE_MODECHNG,		//overlay is deleted when unit mode changes
+	OVERLAYTYPE_COUNTER,		//param 1 = counter. deletes overlay when counter ends
+	OVERLAYTYPE_ONCE,			//overlay is deleted once animation reaches it's end
+	OVERLAYTYPE_LOOP,			//loops, durrrrr
+	OVERLAYTYPE_LOOPEX,			//dual overlay (param1 + param2), loops
+	OVERLAYTYPE_STOP,			//freezes ate last frame. bugged
+	OVERLAYTYPE_DELAYED,		//delayed loop, random frame delay
+	OVERLAYTYPE_BONEARMOR,		//bone armor hardcode
+	OVERLAYTYPE_AURA,			//doesn't replace overlays of this type. param1 = aura state. overlay is deleted when state is unset
+	OVERLAYTYPE_AURAEX			//param1 = front overlay, param2 = back overlay, param3 = aura state, set overlay is state is set
+};
+
 struct D2OverlayTxt
 {
 	uint16_t wOverlay;					//0x00
