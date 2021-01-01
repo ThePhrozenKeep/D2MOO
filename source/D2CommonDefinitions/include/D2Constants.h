@@ -160,15 +160,6 @@ enum D2C_DrlgTypes
 };
 
 
-enum D2EnvironmentDayCycles : int {
-	EnvCycleSunrise,
-	EnvCycleMorning,
-	EnvCycleNoon,
-	EnvCycleAfteroon,
-	EnvCycleSunset,
-	EnvCycleNight,
-	NUM_ENVIRONMENT_CYCLES
-};
 
 enum D2C_CollisionFlags
 {
