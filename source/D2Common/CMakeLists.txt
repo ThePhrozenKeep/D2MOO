@@ -175,6 +175,7 @@ target_sources(D2Common
 
     include/D2Chat.h
     include/D2Collision.h
+	include/D2Combat.h
     include/D2Composit.h
     include/D2DataTbls.h
     include/D2Dungeon.h

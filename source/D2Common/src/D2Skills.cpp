@@ -15,6 +15,7 @@
 #include "Units/Units.h"
 #include <D2BitManip.h>
 #include <DataTbls/SkillsIds.h>
+#include <D2Combat.h>
 
 //TODO: Find names
 

@@ -10,6 +10,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2BitManip.h>
+#include <D2Combat.h>
 
 D2UnkFogStrc off_6FDE5A50[] =
 {
