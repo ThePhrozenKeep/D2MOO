@@ -64,6 +64,7 @@ target_sources(D2Common
 	include/DataTbls/MissilesIds.h
 	include/DataTbls/MonsterIds.h
 	include/DataTbls/ObjectsIds.h
+	include/DataTbls/StringIds.h
 	include/DataTbls/SkillsIds.h
 )
 
