@@ -82,7 +82,6 @@ void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pInventoryTxt = (D2InventoryTxt*)DATATBLS_CompileTxt(pMemPool, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(D2InventoryTxt));
-#define NUM_INVENTORY_PAGE_STATS 16
 	D2_ASSERT(sgptDataTables->nInventoryTxtRecordCount == NUM_INVENTORY_PAGE_STATS * NUM_GAME_RESOLUTIONS);
 }
 

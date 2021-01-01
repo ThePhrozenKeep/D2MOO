@@ -1024,7 +1024,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		return FALSE;
 	}
 
-	if (nInventoryGrid < 2)
+	if (nInventoryGrid != INVGRID_INVENTORY)
 	{
 		nWidth = 1;
 		nHeight = 1;
@@ -1041,7 +1041,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 			return FALSE;
 		}
 	}
-	else
+	else // INVGRID_INVENTORY
 	{
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 		if (nXPos < 0 || nXPos + nWidth > pInventoryGridInfo.nGridX || nYPos < 0 || nYPos + nHeight > pInventoryGridInfo.nGridY)

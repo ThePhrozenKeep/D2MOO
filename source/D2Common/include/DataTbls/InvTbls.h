@@ -27,11 +27,28 @@ struct D2InventoryGridInfoStrc
 	uint16_t pad0x16;						//0x16
 };
 
+enum D2InventoryComponent
+{
+	//INV_COMP_INV,
+	//INV_COMP_GRID,
+	INV_COMP_RARM,
+	INV_COMP_TORSO,
+	INV_COMP_LARM,
+	INV_COMP_HEAD,
+	INV_COMP_NECK,
+	INV_COMP_RHAND,
+	INV_COMP_LHAND,
+	INV_COMP_BELT,
+	INV_COMP_FEET,
+	INV_COMP_GLOVES,
+	NUM_INV_COMPS
+
+};
 struct D2InventoryTxt
 {
 	D2InvRectStrc pRect;					//0x00
 	D2InventoryGridInfoStrc pGridInfo;		//0x10
-	D2InvCompGridStrc pComponents[10];		//0x28
+	D2InvCompGridStrc pComponents[NUM_INV_COMPS];//0x28
 };
 
 //D2Common.0x6FD542D0
