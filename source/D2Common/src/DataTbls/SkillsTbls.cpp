@@ -336,13 +336,13 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	D2BinFieldStrc pTmpMonStatsTbl[] =
 	{
 		{ "Id", TXTFIELD_NAMETOINDEX, 0, 0, &pMonStatsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	D2BinFieldStrc pTmpSkillDescTbl[] =
 	{
 		{ "skilldesc", TXTFIELD_NAMETOINDEX, 0, 0, &pSkillDescLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	D2BinFieldStrc pSkillTbl[] =
@@ -585,7 +585,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "aibonus", TXTFIELD_WORD, 0, 562, NULL },
 		{ "cost mult", TXTFIELD_DWORD, 0, 564, NULL },
 		{ "cost add", TXTFIELD_DWORD, 0, 568, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	D2BinFieldStrc pSkillDescTbl[] =
@@ -703,7 +703,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{ "dsc3textb7", TXTFIELD_KEYTOWORD, 0, 150, DATATBLS_GetStringIdFromReferenceString },
 		{ "dsc3calca7", TXTFIELD_CALCTODWORD, 0, 216, DATATBLS_SkillDescCalcLinker },
 		{ "dsc3calcb7", TXTFIELD_CALCTODWORD, 0, 284, DATATBLS_SkillDescCalcLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	if (sgptDataTables->bCompileTxt)

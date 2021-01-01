@@ -17,6 +17,7 @@
 #include "Path/PathMisc.h"
 #include "D2Seed.h"
 #include <assert.h>
+#include <DataTbls/LevelsIds.h>
 
 int dword_6FDEA6FC;
 

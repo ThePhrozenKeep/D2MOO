@@ -2,6 +2,7 @@
 
 #include "D2Collision.h"
 #include "D2DataTbls.h"
+#include <DataTbls/LevelsIds.h>
 #include "Drlg/D2DrlgActivate.h"
 #include "Drlg/D2DrlgDrlg.h"
 #include "Drlg/D2DrlgDrlgAnim.h"

@@ -5,6 +5,7 @@
 #include "Drlg/D2DrlgOutdoors.h"
 #include "Drlg/D2DrlgOutPlace.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 struct D2DrlgOutDesertInitStrc				// size: 0x10

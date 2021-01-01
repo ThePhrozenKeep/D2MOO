@@ -303,7 +303,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 		{ "NightmareUpgrade", TXTFIELD_RAW, 0, 412, NULL },
 		{ "HellUpgrade", TXTFIELD_RAW, 0, 416, NULL },
 		{ "Nameable", TXTFIELD_BYTE, 0, 325, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 
@@ -534,7 +534,7 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 		{ "mod3param", TXTFIELD_CALCTODWORD, 0, 72, DATATBLS_ItemParamLinker },
 		{ "mod3min", TXTFIELD_DWORD, 0, 76, NULL },
 		{ "mod3max", TXTFIELD_DWORD, 0, 80, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	pMagicSuffix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "magicsuffix", pTbl, &nSuffixRecords, sizeof(D2MagicAffixTxt));
@@ -616,7 +616,7 @@ void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 		{ "etype2", TXTFIELD_CODETOWORD, 0, 32, &sgptDataTables->pItemTypesLinker },
 		{ "etype3", TXTFIELD_CODETOWORD, 0, 34, &sgptDataTables->pItemTypesLinker },
 		{ "etype4", TXTFIELD_CODETOWORD, 0, 36, &sgptDataTables->pItemTypesLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	pRareSuffix = (D2RareAffixTxt*)DATATBLS_CompileTxt(pMemPool, "raresuffix", pTbl, &nSuffixRecords, sizeof(D2RareAffixTxt));
@@ -744,7 +744,7 @@ void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
 		{ "par12", TXTFIELD_CALCTODWORD, 0, 320, DATATBLS_ItemParamLinker },
 		{ "min12", TXTFIELD_DWORD, 0, 324, NULL },
 		{ "max12", TXTFIELD_DWORD, 0, 328, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pUniqueItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -851,7 +851,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 		{ "fparam8", TXTFIELD_CALCTODWORD, 0, 260, DATATBLS_ItemParamLinker },
 		{ "fmin8", TXTFIELD_DWORD, 0, 264, NULL },
 		{ "fmax8", TXTFIELD_DWORD, 0, 268, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	D2BinFieldStrc pSetItemsTbl[] =
@@ -948,7 +948,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 		{ "apar5b", TXTFIELD_CALCTODWORD, 0, 428, DATATBLS_ItemParamLinker },
 		{ "amin5b", TXTFIELD_DWORD, 0, 432, NULL },
 		{ "amax5b", TXTFIELD_DWORD, 0, 436, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pSetsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1036,7 +1036,7 @@ void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool)
 		{ "boots", TXTFIELD_BYTE, 0, 7, NULL },
 		{ "gloves", TXTFIELD_BYTE, 0, 8, NULL },
 		{ "belt", TXTFIELD_BYTE, 0, 9, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pQualityItemDataTables.pQualityItemsTxt = (D2QualityItemsTxt*)DATATBLS_CompileTxt(pMemPool, "qualityitems", pTbl, &sgptDataTables->pQualityItemDataTables.nQualityItemsTxtRecordCount, sizeof(D2QualityItemsTxt));
@@ -1132,7 +1132,7 @@ void __fastcall DATATBLS_LoadGemsTxt(void* pMemPool)
 		{ "shieldmod3param", TXTFIELD_CALCTODWORD, 0, 180, DATATBLS_ItemParamLinker },
 		{ "shieldmod3min", TXTFIELD_DWORD, 0, 184, NULL },
 		{ "shieldmod3max", TXTFIELD_DWORD, 0, 188, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pGemDataTables.pGemsTxt = (D2GemsTxt*)DATATBLS_CompileTxt(pMemPool, "gems", pTbl, &sgptDataTables->pGemDataTables.nGemsTxtRecordCount, sizeof(D2GemsTxt));
@@ -1200,7 +1200,7 @@ void __fastcall DATATBLS_LoadBooksTxt(void* pMemPool)
 		{ "spellicon", TXTFIELD_BYTE, 0, 2, NULL },
 		{ "basecost", TXTFIELD_DWORD, 0, 16, NULL },
 		{ "costpercharge", TXTFIELD_DWORD, 0, 20, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pBookDataTables.pBooksTxt = (D2BooksTxt*)DATATBLS_CompileTxt(pMemPool, "books", pTbl, &sgptDataTables->pBookDataTables.nBooksTxtRecordCount, sizeof(D2BooksTxt));
@@ -1241,7 +1241,7 @@ void __fastcall DATATBLS_LoadLowQualityItemsTxt(void* pMemPool)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "Name", TXTFIELD_ASCII, 31, 0, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLowQualityItemDataTables.pLowQualityItemsTxt = (D2LowQualityItemsTxt *)DATATBLS_CompileTxt(pMemPool, "lowqualityitems", pTbl, &sgptDataTables->pLowQualityItemDataTables.nLowQualityItemsTxtRecordCount, sizeof(D2LowQualityItemsTxt));
@@ -1304,7 +1304,7 @@ void __fastcall DATATBLS_LoadItemRatioTxt(void* pMemPool)
 		{ "HiQualityDivisor", TXTFIELD_DWORD, 0, 52, NULL },
 		{ "Normal", TXTFIELD_DWORD, 0, 56, NULL },
 		{ "NormalDivisor", TXTFIELD_DWORD, 0, 60, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pItemRatioDataTables.pItemRatioTxt = (D2ItemRatioTxt*)DATATBLS_CompileTxt(pMemPool, "itemratio", pTbl, &sgptDataTables->pItemRatioDataTables.nItemRatioTxtRecordCount, sizeof(D2ItemRatioTxt));
@@ -1441,7 +1441,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 		{ "op stat2", TXTFIELD_NAMETOWORD, 0, 90, &sgptDataTables->pItemStatCostLinker },
 		{ "op stat3", TXTFIELD_NAMETOWORD, 0, 92, &sgptDataTables->pItemStatCostLinker },
 		{ "stuff", TXTFIELD_DWORD, 0, 320, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pItemStatCostLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1630,7 +1630,7 @@ void __fastcall DATATBLS_LoadPropertiesTxt(void* pMemPool)
 		{ "val7", TXTFIELD_WORD, 0, 22, NULL },
 		{ "func7", TXTFIELD_BYTE, 0, 30, NULL },
 		{ "stat7", TXTFIELD_NAMETOWORD, 0, 44, &sgptDataTables->pItemStatCostLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pPropertiesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1654,7 +1654,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "code", TXTFIELD_RAW, 0, 0, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	pGambleTxt = (D2GambleTxt*)DATATBLS_CompileTxt(pMemPool, "gamble", pTbl, &sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, sizeof(D2GambleTxt));
@@ -1848,7 +1848,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 		{ "invgfx4", TXTFIELD_ASCII, 31, 132, NULL },
 		{ "invgfx5", TXTFIELD_ASCII, 31, 164, NULL },
 		{ "invgfx6", TXTFIELD_ASCII, 31, 196, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pItemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1943,7 +1943,7 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 		{ "t1param7", TXTFIELD_CALCTODWORD, 0, 276, DATATBLS_ItemParamLinker },
 		{ "t1min7", TXTFIELD_DWORD, 0, 280, NULL },
 		{ "t1max7", TXTFIELD_DWORD, 0, 284, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pRunesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);

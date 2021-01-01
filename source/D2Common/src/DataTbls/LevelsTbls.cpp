@@ -224,7 +224,7 @@ void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)
 		{ "LevelName", TXTFIELD_ASCII, 39, 245, NULL },
 		{ "LevelWarp", TXTFIELD_ASCII, 39, 285, NULL },
 		{ "EntryFile", TXTFIELD_ASCII, 39, 325, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLevelsTxt = (D2LevelsTxt*)DATATBLS_CompileTxt(pMemPool, "levels", pTbl, &sgptDataTables->nLevelsTxtRecordCount, sizeof(D2LevelsTxt));
@@ -415,7 +415,7 @@ void __fastcall DATATBLS_LoadLevelDefsBin(void* pMemPool)
 		{ "Position", TXTFIELD_DWORD, 0, 144, NULL },
 		{ "SaveMonsters", TXTFIELD_DWORD, 0, 148, NULL },
 		{ "LOSDraw", TXTFIELD_DWORD, 0, 152, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLevelDefBin = (D2LevelDefBin*)DATATBLS_CompileTxt(pMemPool, "leveldefs", pTbl, 0, sizeof(D2LevelDefBin));
@@ -516,7 +516,7 @@ void __fastcall DATATBLS_LoadLevelTypesTxt(void* pMemPool)
 		{ "File 32", TXTFIELD_ASCII, 59, 1860, NULL },
 		{ "Act", TXTFIELD_BYTE, 0, 1920, NULL },
 		{ "Expansion", TXTFIELD_DWORD, 0, 1924, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLvlTypesTxt = (D2LvlTypesTxt*)DATATBLS_CompileTxt(pMemPool, "lvltypes", pTbl, &sgptDataTables->nLvlTypesTxtRecordCount, sizeof(D2LvlTypesTxt));
@@ -618,7 +618,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(void* pMemPool, int a2)
 		{ "File6", TXTFIELD_ASCII, 59, 368, NULL },
 		{ "Dt1Mask", TXTFIELD_DWORD, 0, 428, NULL },
 		{ "Expansion", TXTFIELD_DWORD, 0, 32, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLvlPrestTxt = (D2LvlPrestTxt*)DATATBLS_CompileTxt(pMemPool, "lvlprest", pTbl, &sgptDataTables->nLvlPrestTxtRecordCount, sizeof(D2LvlPrestTxt));
@@ -731,7 +731,7 @@ void __fastcall DATATBLS_LoadLvlWarpTxt(void* pMemPool)
 		{ "LitVersion", TXTFIELD_DWORD, 0, 36, NULL },
 		{ "Tiles", TXTFIELD_DWORD, 0, 40, NULL },
 		{ "Direction", TXTFIELD_ASCII, 1, 44, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLvlWarpTxt = (D2LvlWarpTxt*)DATATBLS_CompileTxt(pMemPool, "lvlwarp", pTbl, &sgptDataTables->nLvlWarpTxtRecordCount, sizeof(D2LvlWarpTxt));
@@ -775,7 +775,7 @@ void __fastcall DATATBLS_LoadLvlMazeTxt(void* pMemPool)
 		{ "SizeX", TXTFIELD_DWORD, 0, 16, NULL },
 		{ "SizeY", TXTFIELD_DWORD, 0, 20, NULL },
 		{ "Merge", TXTFIELD_DWORD, 0, 24, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLvlMazeTxt = (D2LvlMazeTxt*)DATATBLS_CompileTxt(pMemPool, "lvlmaze", pTbl, &sgptDataTables->nLvlMazeTxtRecordCount, sizeof(D2LvlMazeTxt));
@@ -835,7 +835,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 		{ "Trials4", TXTFIELD_DWORD, 0, 320, NULL },
 		{ "Max4", TXTFIELD_DWORD, 0, 340, NULL },
 		{ "Expansion", TXTFIELD_DWORD, 0, 344, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pLvlSubTxt = (D2LvlSubTxt*)DATATBLS_CompileTxt(pMemPool, "lvlsub", pTbl, &sgptDataTables->nLvlSubTxtRecordCount, sizeof(D2LvlSubTxt));
@@ -1037,7 +1037,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 		{ "Cel2", TXTFIELD_DWORD, 0, 32, NULL },
 		{ "Cel3", TXTFIELD_DWORD, 0, 36, NULL },
 		{ "Cel4", TXTFIELD_DWORD, 0, 40, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	SEED_InitSeed(gpAutomapSeed);

@@ -6,6 +6,7 @@
 #include "Drlg/D2DrlgOutPlace.h"
 #include "Drlg/D2DrlgMaze.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 //D2Common.0x6FD84CA0
 void __fastcall DRLGOUTWILD_GetBridgeCoords(D2DrlgLevelStrc* pLevel, int* pX, int* pY)

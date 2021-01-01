@@ -19,7 +19,7 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
 	{
 		{ "name", TXTFIELD_ASCII, 31, 0, NULL },
 		{ "token", TXTFIELD_RAW, 0, 32, NULL },
-		{ "end", 0, 0, 0, NULL }
+		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
 	pPlrType = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "plrtype", pTbl, &nTypeRecords, sizeof(D2PlrModeTypeTxt));
@@ -64,7 +64,7 @@ void __fastcall DATATBLS_LoadMonModeTxt(void* pMemPool)
 		{ "KB_Dir", TXTFIELD_UNKNOWN2, 0, 49, NULL },
 		{ "SQ_Dir", TXTFIELD_UNKNOWN2, 0, 50, NULL },
 		{ "RN_Dir", TXTFIELD_UNKNOWN2, 0, 51, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonModeDataTables.pMonModeTxt = (D2MonModeTxt*)DATATBLS_CompileTxt(pMemPool, "monmode", pTbl, &sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount, sizeof(D2MonModeTxt));
@@ -87,7 +87,7 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
 	{
 		{ "name", TXTFIELD_ASCII, 31, 0, NULL },
 		{ "token", TXTFIELD_RAW, 0, 32, NULL },
-		{ "end", 0, 0, 0, NULL }
+		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
 	pObjType = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "objtype", pTbl, &nTypeRecords, sizeof(D2ObjModeTypeTxt));
@@ -115,7 +115,7 @@ void __fastcall DATATBLS_LoadCompositTxt(void* pMemPool)
 	{
 		{ "name", TXTFIELD_ASCII, 31, 0, NULL },
 		{ "token", TXTFIELD_RAW, 0, 32, NULL },
-		{ "end", 0, 0, 0, NULL }
+		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
 	sgptDataTables->pCompositTxt = (D2CompositTxt*)DATATBLS_CompileTxt(pMemPool, "composit", pTbl, NULL, sizeof(D2CompositTxt));
@@ -128,7 +128,7 @@ void __fastcall DATATBLS_LoadArmTypeTxt(void* pMemPool)
 	{
 		{ "name", TXTFIELD_ASCII, 31, 0, NULL },
 		{ "token", TXTFIELD_RAW, 0, 32, NULL },
-		{ "end", 0, 0, 0, NULL }
+		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
 	sgptDataTables->pArmTypeTxt = (D2ArmTypeTxt*)DATATBLS_CompileTxt(pMemPool, "armtype", pTbl, NULL, sizeof(D2ArmTypeTxt));

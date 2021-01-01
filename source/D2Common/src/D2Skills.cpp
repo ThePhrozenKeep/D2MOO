@@ -14,6 +14,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2BitManip.h>
+#include <DataTbls/SkillsIds.h>
 
 //TODO: Find names
 

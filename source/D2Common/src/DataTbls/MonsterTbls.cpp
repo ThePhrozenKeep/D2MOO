@@ -421,7 +421,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 		{ "SplGetModeChart", TXTFIELD_BYTE, 0, 421, NULL },
 		{ "SplEndGeneric", TXTFIELD_BYTE, 0, 422, NULL },
 		{ "SplClientEnd", TXTFIELD_BYTE, 0, 423, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonStatsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1214,7 +1214,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 		{ "prob9", TXTFIELD_DWORD, 0, 728, NULL },
 		{ "item10", TXTFIELD_ASCII, 64, 632, NULL },
 		{ "prob10", TXTFIELD_DWORD, 0, 732, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	pTreasureClassExTxt = (D2TreasureClassExTxt*)DATATBLS_CompileTxt(pMemPool, "treasureclassex", pTbl, &nRecordCount, sizeof(D2TreasureClassExTxt));
@@ -1405,7 +1405,7 @@ void __fastcall DATATBLS_LoadMonItemPercentTxt(void* pMemPool)
 		{ "BodyPartPercent", TXTFIELD_BYTE, 0, 1, NULL },
 		{ "TreasureClassPercent", TXTFIELD_BYTE, 0, 2, NULL },
 		{ "ComponentPercent", TXTFIELD_BYTE, 0, 3, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonItemPercentDataTables.pMonItemPercentTxt = (D2MonItemPercentTxt*)DATATBLS_CompileTxt(pMemPool, "monitempercent", pTbl, &sgptDataTables->pMonItemPercentDataTables.nMonItemPercentTxtRecordCount, sizeof(D2MonItemPercentTxt));
@@ -1457,7 +1457,7 @@ void __fastcall DATATBLS_LoadMonUModTxt(void* pMemPool)
 		{ "upick (N)", TXTFIELD_WORD, 0, 22, NULL },
 		{ "upick (H)", TXTFIELD_WORD, 0, 24, NULL },
 		{ "constants", TXTFIELD_DWORD, 0, 28, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonUModLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1496,7 +1496,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 		{ "TC", TXTFIELD_NAMETOWORD, 0, 44, &sgptDataTables->pTreasureClassExLinker },
 		{ "TC(N)", TXTFIELD_NAMETOWORD, 0, 46, &sgptDataTables->pTreasureClassExLinker },
 		{ "TC(H)", TXTFIELD_NAMETOWORD, 0, 48, &sgptDataTables->pTreasureClassExLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pSuperUniquesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1645,7 +1645,7 @@ void __fastcall DATATBLS_LoadHirelingTxt(void* pMemPool)
 		{ "torso", TXTFIELD_DWORD, 0, 108, NULL },
 		{ "weapon", TXTFIELD_DWORD, 0, 112, NULL },
 		{ "shield", TXTFIELD_DWORD, 0, 116, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pHirelingTxt = (D2HirelingTxt*)DATATBLS_CompileTxt(pMemPool, "hireling", pTbl, &sgptDataTables->nHirelingTxtRecordCount, sizeof(D2HirelingTxt));
@@ -1913,7 +1913,7 @@ void __fastcall DATATBLS_LoadNpcTxt(void* pMemPool)
 		{ "max buy", TXTFIELD_DWORD, 0, 64, NULL },
 		{ "max buy (N)", TXTFIELD_DWORD, 0, 68, NULL },
 		{ "max buy (H)", TXTFIELD_DWORD, 0, 72, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pNpcTxt = (D2NpcTxt*)DATATBLS_CompileTxt(pMemPool, "npc", pTbl, &sgptDataTables->nNpcTxtRecordCount, sizeof(D2NpcTxt));
@@ -1978,7 +1978,7 @@ void __fastcall DATATBLS_LoadMonSoundsTxt(void* pMemPool)
 		{ "CvtTgt1", TXTFIELD_CODETOBYTE, 0, 125, &sgptDataTables->pMonModeLinker },
 		{ "CvtTgt2", TXTFIELD_CODETOBYTE, 0, 133, &sgptDataTables->pMonModeLinker },
 		{ "CvtTgt3", TXTFIELD_CODETOBYTE, 0, 141, &sgptDataTables->pMonModeLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonSoundsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -2235,7 +2235,7 @@ void __fastcall DATATBLS_LoadMonStats2Txt(void* pMemPool)
 		{ "InfernoRollback", TXTFIELD_BYTE, 0, 266, NULL },
 		{ "ResurrectMode", TXTFIELD_CODETOBYTE, 0, 267, &sgptDataTables->pMonModeLinker },
 		{ "ResurrectSkill", TXTFIELD_NAMETOWORD, 0, 268, &sgptDataTables->pSkillsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonStats2Linker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -2317,7 +2317,7 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 		{ "equiv3", TXTFIELD_NAMETOWORD, 0, 6, &sgptDataTables->pMonTypeLinker },
 		{ "strsing", TXTFIELD_KEYTOWORD, 0, 8, DATATBLS_GetStringIdFromReferenceString },
 		{ "strplur", TXTFIELD_KEYTOWORD, 0, 10, DATATBLS_GetStringIdFromReferenceString },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -2450,7 +2450,7 @@ void __fastcall DATATBLS_LoadMonPropTxt(void* pMemPool)
 		{ "par6 (H)", TXTFIELD_DWORD, 0, 280, NULL },
 		{ "min6 (H)", TXTFIELD_DWORD, 0, 284, NULL },
 		{ "max6 (H)", TXTFIELD_DWORD, 0, 288, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonPropLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -2492,7 +2492,7 @@ void __fastcall DATATBLS_LoadMonLvlTxt(void* pMemPool)
 		{ "L-XP", TXTFIELD_DWORD, 0, 108, NULL },
 		{ "L-XP(N)", TXTFIELD_DWORD, 0, 112, NULL },
 		{ "L-XP(H)", TXTFIELD_DWORD, 0, 116, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonLvlTxt = (D2MonLvlTxt*)DATATBLS_CompileTxt(pMemPool, "monlvl", pTbl, &sgptDataTables->nMonLvlTxtRecordCount, sizeof(D2MonLvlTxt));
@@ -2550,7 +2550,7 @@ void __fastcall DATATBLS_LoadMonPresetTxt(void* pMemPool)
 	{
 		{ "Act", TXTFIELD_BYTE, 0, 0, NULL },
 		{ "Place", TXTFIELD_CUSTOMLINK, 0, 0, DATATBLS_MonPresetPlaceLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	pMonPresetTxt = (D2MonPresetTxt*)DATATBLS_CompileTxt(pMemPool, "monpreset", pTbl, &nRecordCount, sizeof(D2MonPresetTxt));
@@ -2614,7 +2614,7 @@ void __fastcall DATATBLS_LoadSoundsTxt(void* pMemPool)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "Sound", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pSoundsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	if (sgptDataTables->bCompileTxt)
@@ -2658,7 +2658,7 @@ void __fastcall DATATBLS_LoadMonEquipTxt(void* pMemPool)
 		{ "item3", TXTFIELD_RAW, 0, 16, &sgptDataTables->pItemsLinker },
 		{ "loc3", TXTFIELD_CODETOBYTE, 0, 22, &sgptDataTables->pBodyLocsLinker },
 		{ "mod3", TXTFIELD_BYTE, 0, 25, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonEquipTxt = (D2MonEquipTxt*)DATATBLS_CompileTxt(pMemPool, "monequip", pTbl, &sgptDataTables->nMonEquipTxtRecordCount, sizeof(D2MonEquipTxt));
@@ -2710,7 +2710,7 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "Name", TXTFIELD_KEYTOWORD, 0, 0, DATATBLS_GetStringIdFromReferenceString },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pUniqueTitleTxt = (D2UniqueTitleTxt*)DATATBLS_CompileTxt(pMemPool, "uniquetitle", pTbl, &sgptDataTables->nUniqueTitleTxtRecordCount, sizeof(D2UniqueTitleTxt));

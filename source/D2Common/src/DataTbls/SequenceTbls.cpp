@@ -1322,7 +1322,7 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 		{ "frame", TXTFIELD_BYTE, 0, 3, NULL },
 		{ "dir", TXTFIELD_BYTE, 0, 4, NULL },
 		{ "event", TXTFIELD_BYTE, 0, 5, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMonSeqLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);

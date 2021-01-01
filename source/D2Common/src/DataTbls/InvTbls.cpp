@@ -78,7 +78,7 @@ void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool)
 		{ "glovesBottom", TXTFIELD_DWORD, 0, 232, NULL },
 		{ "glovesWidth", TXTFIELD_BYTE, 0, 236, NULL },
 		{ "glovesHeight", TXTFIELD_BYTE, 0, 237, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pInventoryTxt = (D2InventoryTxt*)DATATBLS_CompileTxt(pMemPool, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(D2InventoryTxt));

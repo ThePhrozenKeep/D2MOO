@@ -15,6 +15,10 @@
 #include "D2Dungeon.h"
 #include "D2Seed.h"
 #include <D2CMP.h>
+#include <DataTbls/LevelsIds.h>
+#include <DataTbls/MonsterIds.h>
+#include <DataTbls/ObjectsIds.h>
+#include <D2Items.h>
 
 
 D2UnkFileStrc* dword_6FDEA700;

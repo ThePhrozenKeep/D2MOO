@@ -15,6 +15,7 @@
 #include "Drlg/D2DrlgPreset.h"
 #include "Drlg/D2DrlgTileSub.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //D2Common.0x6FD7DC20

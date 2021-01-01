@@ -11,6 +11,7 @@
 #include "Units/Units.h"
 #include <D2Lang.h>
 #include <D2BitManip.h>
+#include <DataTbls/MonsterIds.h>
 
 
 //TODO: Check names

@@ -9,6 +9,7 @@
 #include "Path/Path_IDAStar.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
+#include <DataTbls/MonsterIds.h>
 
 
 

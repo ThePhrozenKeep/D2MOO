@@ -11,6 +11,7 @@
 #include "Drlg/D2DrlgOutRoom.h"
 #include "D2Dungeon.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //D2Common.0x6FD8A460

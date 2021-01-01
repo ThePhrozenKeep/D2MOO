@@ -164,7 +164,7 @@ void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
 		{ "DrawUnder", TXTFIELD_BYTE, 0, 439, NULL },
 		{ "OpenWarp", TXTFIELD_BYTE, 0, 440, NULL },
 		{ "AutoMap", TXTFIELD_DWORD, 0, 444, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	
 	sgptDataTables->pObjectsTxt = (D2ObjectsTxt*)DATATBLS_CompileTxt(pMemPool, "objects", pTbl, &sgptDataTables->nObjectsTxtRecordCount, sizeof(D2ObjectsTxt));
@@ -236,7 +236,7 @@ void __fastcall DATATBLS_LoadObjGroupTxt(void* pMemPool)
 		{ "PROB7", TXTFIELD_BYTE, 0, 47, NULL },
 		{ "SHRINES", TXTFIELD_BYTE, 0, 48, NULL },
 		{ "WELLS", TXTFIELD_BYTE, 0, 49, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pObjGroupTxt = (D2ObjGroupTxt*)DATATBLS_CompileTxt(pMemPool, "objgroup", pTbl, &sgptDataTables->nObjGroupTxtRecordCount, sizeof(D2ObjGroupTxt));
@@ -268,7 +268,7 @@ void __fastcall DATATBLS_LoadShrinesTxt(void* pMemPool)
 		{ "niftyphrase", TXTFIELD_ASCII, 127, 50, NULL },
 		{ "effectclass", TXTFIELD_BYTE, 0, 178, NULL },
 		{ "LevelMin", TXTFIELD_DWORD, 0, 180, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pShrinesTxt = (D2ShrinesTxt*)DATATBLS_CompileTxt(pMemPool, "shrines", pTbl, &sgptDataTables->nShrinesTxtRecordCount, sizeof(D2ShrinesTxt));

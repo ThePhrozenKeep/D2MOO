@@ -8,6 +8,7 @@
 #include "Drlg/D2DrlgOutPlace.h"
 #include "Drlg/D2DrlgTileSub.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //TODO: Find member names

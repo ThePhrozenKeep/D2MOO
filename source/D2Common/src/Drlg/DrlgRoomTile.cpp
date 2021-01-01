@@ -15,6 +15,9 @@
 #include "D2Monsters.h"
 #include "D2Seed.h"
 #include <D2CMP.h>
+#include <DataTbls/LevelsIds.h>
+#include <DataTbls/MonsterIds.h>
+#include <DataTbls/ObjectsIds.h>
 
 struct D2UnkDrlgRoomTileStrc
 {

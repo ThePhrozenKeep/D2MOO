@@ -436,14 +436,6 @@ struct D2AutomapLayerStrc
 //	uint32_t nLayerNo;							//0x08
 //};
 
-struct D2BinFieldStrc
-{
-	char* szFieldName;						//0x00
-	int32_t nFieldType;							//0x04
-	int32_t nFieldLength;						//0x08
-	int32_t nFieldOffset;						//0x0C
-	void* pLinkField;						//0x10
-};
 
 struct D2BnetClientDataStrc
 {

@@ -2,6 +2,7 @@
 
 #include "D2Composit.h"
 #include "D2DataTbls.h"
+#include <DataTbls/MonsterIds.h>
 #include "D2Dungeon.h"
 #include "D2Items.h"
 #include "D2StatList.h"

@@ -11,6 +11,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2CMP.h>
+#include <DataTbls/MonsterIds.h>
 
 
 //D2Common.0x6FD98380 (#10687)

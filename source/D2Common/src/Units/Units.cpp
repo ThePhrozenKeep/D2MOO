@@ -18,6 +18,9 @@
 #include "Units/UnitRoom.h"
 #include "D2Waypoints.h"
 #include <D2BitManip.h>
+#include <DataTbls/LevelsIds.h>
+#include <DataTbls/MonsterIds.h>
+#include <DataTbls/ObjectsIds.h>
 
 
 //D2Common.0x6FDBD520 (#10457)

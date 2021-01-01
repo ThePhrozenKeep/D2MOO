@@ -3,6 +3,7 @@
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgOutdoors.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 //TODO: Find names, rename variables + globals
 

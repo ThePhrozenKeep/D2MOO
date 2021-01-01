@@ -10,6 +10,51 @@ struct D2InvRectStrc
 	int32_t nBottom;	//0x0C
 };
 
+enum D2C_PlayerBodyLocs
+{
+	BODYLOC_NONE,		//Not Equipped
+	BODYLOC_HEAD,		//Helm
+	BODYLOC_NECK,		//Amulet
+	BODYLOC_TORSO,		//Body Armor
+	BODYLOC_RARM,		//Right-Hand
+	BODYLOC_LARM,		//Left-Hand
+	BODYLOC_RRIN,		//Right Ring
+	BODYLOC_LRIN,		//Left Ring
+	BODYLOC_BELT,		//Belt
+	BODYLOC_FEET,		//Boots
+	BODYLOC_GLOVES,		//Gloves
+	BODYLOC_SWRARM,		//Right-Hand on Switch
+	BODYLOC_SWLARM		//Left-Hand on Switch
+};
+
+#define D2C_InventoryHeader 0x1020304
+
+enum D2C_ItemInvPage
+{
+	INVPAGE_INVENTORY = 0,
+	INVPAGE_EQUIP = 1,
+	INVPAGE_TRADE = 2,
+	INVPAGE_CUBE = 3,
+	INVPAGE_STASH = 4,
+	INVPAGE_BELT = 5,
+	INVPAGE_NULL = 255
+};
+
+enum D2C_NodePages
+{
+	NODEPAGE_STORAGE = 1,
+	NODEPAGE_BELTSLOTS = 2,
+	NODEPAGE_EQUIP = 3
+};
+
+enum D2C_InventoryGrids
+{
+	INVGRID_BODYLOC,
+	INVGRID_BELT,
+	INVGRID_INVENTORY,
+	INVGRID_MAX_NUM
+};
+
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);
 //D2Common.0x6FD8E4A0

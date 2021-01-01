@@ -72,7 +72,7 @@ void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool)
 		{ "box16right", TXTFIELD_DWORD, 0, 252, NULL },
 		{ "box16top", TXTFIELD_DWORD, 0, 256, NULL },
 		{ "box16bottom", TXTFIELD_DWORD, 0, 260, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	gpBeltsTxtTable = (D2BeltsTxt*)DATATBLS_CompileTxt(pMemPool, "belts", pTbl, &nRecordCount, sizeof(D2BeltsTxt));
