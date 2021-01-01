@@ -5,7 +5,7 @@
 #include "D2Dungeon.h"
 #include "D2Monsters.h"
 #include "Units/Units.h"
-#include <D2Math.h>
+#include <D2BitManip.h>
 
 
 //D2Common.0x6FDBC680 (#10408)

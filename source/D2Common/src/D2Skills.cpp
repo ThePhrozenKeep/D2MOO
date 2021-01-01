@@ -13,8 +13,7 @@
 #include "D2States.h"
 #include "D2StatList.h"
 #include "Units/Units.h"
-#include <D2Math.h>
-
+#include <D2BitManip.h>
 
 //TODO: Find names
 

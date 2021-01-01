@@ -3,7 +3,7 @@
 #include "D2Items.h"
 #include "D2Seed.h"
 #include <D2Lang.h>
-#include <D2Math.h>
+#include <D2BitManip.h>
 #include <Units/Units.h>
 
 

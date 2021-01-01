@@ -1,6 +1,6 @@
 #include "D2Items.h"
 
-#include "D2BitBuffer.h"
+#include "D2BitManip.h"
 #include "D2Composit.h"
 #include "D2DataTbls.h"
 #include "D2Inventory.h"
@@ -4768,31 +4768,31 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t
 	D2BitBufferStrc pBuffer = {};
 	int dwCode = 0;
 
-	BITBUFFER_Initialize(&pBuffer, pBitstream, nSize);
+	BITMANIP_Initialize(&pBuffer, pBitstream, nSize);
 
-	if (bCheckForHeader && BITBUFFER_ReadSigned(&pBuffer, 16) != 'MJ')
+	if (bCheckForHeader && BITMANIP_ReadSigned(&pBuffer, 16) != 'MJ')
 	{
 		return FALSE;
 	}
 	else
 	{
-		pItemSave->dwFlags = BITBUFFER_Read(&pBuffer, 32);
+		pItemSave->dwFlags = BITMANIP_Read(&pBuffer, 32);
 
-		BITBUFFER_Read(&pBuffer, 10);
+		BITMANIP_Read(&pBuffer, 10);
 
-		pItemSave->nAnimMode = (uint8_t)BITBUFFER_Read(&pBuffer, 3);
+		pItemSave->nAnimMode = (uint8_t)BITMANIP_Read(&pBuffer, 3);
 
 		if (pItemSave->nAnimMode == IMODE_ONGROUND || pItemSave->nAnimMode == IMODE_DROPPING)
 		{
-			pItemSave->nX = (uint16_t)BITBUFFER_Read(&pBuffer, 16);
-			pItemSave->nY = (uint16_t)BITBUFFER_Read(&pBuffer, 16);
+			pItemSave->nX = (uint16_t)BITMANIP_Read(&pBuffer, 16);
+			pItemSave->nY = (uint16_t)BITMANIP_Read(&pBuffer, 16);
 		}
 		else
 		{
-			pItemSave->nBodyloc = (uint8_t)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nX = (uint16_t)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nY = (uint16_t)BITBUFFER_Read(&pBuffer, 4);
-			pItemSave->nStorePage = (uint8_t)BITBUFFER_Read(&pBuffer, 3) - 1;
+			pItemSave->nBodyloc = (uint8_t)BITMANIP_Read(&pBuffer, 4);
+			pItemSave->nX = (uint16_t)BITMANIP_Read(&pBuffer, 4);
+			pItemSave->nY = (uint16_t)BITMANIP_Read(&pBuffer, 4);
+			pItemSave->nStorePage = (uint8_t)BITMANIP_Read(&pBuffer, 3) - 1;
 		}
 
 		if (pItemSave->dwFlags & IFLAG_ISEAR)
@@ -4801,14 +4801,14 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t
 		}
 		else
 		{
-			dwCode = BITBUFFER_Read(&pBuffer, 32);
+			dwCode = BITMANIP_Read(&pBuffer, 32);
 		}
 
 		pItemSave->nClassId = DATATBLS_GetItemIdFromItemCode(dwCode);
 
 		if (!(pItemSave->dwFlags & (IFLAG_LOWQUALITY | IFLAG_COMPACTSAVE)))
 		{
-			pItemSave->nItemFileIndex = BITBUFFER_Read(&pBuffer, 3);
+			pItemSave->nItemFileIndex = BITMANIP_Read(&pBuffer, 3);
 		}
 		else
 		{
@@ -4826,9 +4826,9 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBits
 	uint32_t dwFlags = 0;
 	BOOL bGamble = FALSE;
 
-	BITBUFFER_Initialize(&pBuffer, pBitstream, nSize);
+	BITMANIP_Initialize(&pBuffer, pBitstream, nSize);
 
-	if (bCheckForHeader && BITBUFFER_ReadSigned(&pBuffer, 16) != 'MJ')
+	if (bCheckForHeader && BITMANIP_ReadSigned(&pBuffer, 16) != 'MJ')
 	{
 		*pFail = TRUE;
 		return 0;
@@ -4836,7 +4836,7 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBits
 
 	*pFail = FALSE;
 
-	dwFlags = BITBUFFER_Read(&pBuffer, 32);
+	dwFlags = BITMANIP_Read(&pBuffer, 32);
 	if (dwFlags & IFLAG_LOWQUALITY)
 	{
 		bGamble = TRUE;
@@ -4881,7 +4881,7 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBits
 		}
 	}
 
-	return BITBUFFER_GetSize(&pBuffer);
+	return BITMANIP_GetSize(&pBuffer);
 }
 
 //D2Common.0x6FDA0620
@@ -4903,32 +4903,32 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 	pItemData = pItem->pItemData;
 	D2_ASSERT(pItemData);
 
-	pItemData->wItemFormat = (uint16_t)BITBUFFER_Read(pBuffer, 10);
+	pItemData->wItemFormat = (uint16_t)BITMANIP_Read(pBuffer, 10);
 
-	nAnimMode = (uint8_t)BITBUFFER_Read(pBuffer, 3);
+	nAnimMode = (uint8_t)BITMANIP_Read(pBuffer, 3);
 	if (nAnimMode == IMODE_ONGROUND || nAnimMode == IMODE_DROPPING)
 	{
-		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 16));
-		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 16));
+		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 16));
+		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 16));
 	}
 	else
 	{
-		pItemData->nBodyLoc = (uint8_t)BITBUFFER_Read(pBuffer, 4);
-		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
-		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
-		pItemData->nInvPage = (uint8_t)BITBUFFER_Read(pBuffer, 3) - 1;
+		pItemData->nBodyLoc = (uint8_t)BITMANIP_Read(pBuffer, 4);
+		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
+		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
+		pItemData->nInvPage = (uint8_t)BITMANIP_Read(pBuffer, 3) - 1;
 	}
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
 
 	if (pItemData->dwItemFlags & IFLAG_ISEAR)
 	{
-		pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 3);
-		pItemData->nEarLvl = (uint8_t)BITBUFFER_Read(pBuffer, 7);
+		pItemData->dwFileIndex = BITMANIP_Read(pBuffer, 3);
+		pItemData->nEarLvl = (uint8_t)BITMANIP_Read(pBuffer, 7);
 
 		int i = 0;
 		do
 		{
-			szChar = (char)BITBUFFER_Read(pBuffer, 7);
+			szChar = (char)BITMANIP_Read(pBuffer, 7);
 			pItemData->szPlayerName[i] = szChar;
 			++i;
 		}
@@ -4936,12 +4936,12 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 	}
 	else
 	{
-		dwCode = BITBUFFER_Read(pBuffer, 32);
+		dwCode = BITMANIP_Read(pBuffer, 32);
 		pItem->dwClassId = DATATBLS_GetItemIdFromItemCode(dwCode);
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_GOLD))
 		{
-			if (BITBUFFER_Read(pBuffer, 1))
+			if (BITMANIP_Read(pBuffer, 1))
 			{
 				nBits = 32;
 			}
@@ -4949,7 +4949,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 			{
 				nBits = 12;
 			}
-			STATLIST_SetUnitStat(pItem, STAT_GOLD, BITBUFFER_Read(pBuffer, nBits), 0);
+			STATLIST_SetUnitStat(pItem, STAT_GOLD, BITMANIP_Read(pBuffer, nBits), 0);
 		}
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SCROLL))
@@ -4979,7 +4979,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 		if (pItemsTxtRecord->nQuest && pItemsTxtRecord->nQuestDiffCheck)
 		{
 			pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_QUESTITEMDIFFICULTY);
-			nValue = (BITBUFFER_Read(pBuffer, pItemStatCostTxtRecord->nSaveBits) - pItemStatCostTxtRecord->dwSaveAdd) << pItemStatCostTxtRecord->nValShift;
+			nValue = (BITMANIP_Read(pBuffer, pItemStatCostTxtRecord->nSaveBits) - pItemStatCostTxtRecord->dwSaveAdd) << pItemStatCostTxtRecord->nValShift;
 
 			pStatList = STATLIST_GetStatListFromUnitStateOrFlag(pItem, STATE_NONE, 0x40);
 			if (!pStatList)
@@ -4994,14 +4994,14 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 		}
 	}
 
-	if (bCheckForHeader && dwVersion > 86 && BITBUFFER_Read(pBuffer, 1))
+	if (bCheckForHeader && dwVersion > 86 && BITMANIP_Read(pBuffer, 1))
 	{
-		pItemData->dwRealmData[0] = BITBUFFER_Read(pBuffer, 32);
-		pItemData->dwRealmData[1] = BITBUFFER_Read(pBuffer, 32);
+		pItemData->dwRealmData[0] = BITMANIP_Read(pBuffer, 32);
+		pItemData->dwRealmData[1] = BITMANIP_Read(pBuffer, 32);
 
 		if (dwVersion > 93)
 		{
-			BITBUFFER_Read(pBuffer, 32);
+			BITMANIP_Read(pBuffer, 32);
 		}
 	}
 
@@ -5062,28 +5062,28 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	pItemData = pItem->pItemData;
 	D2_ASSERT(pItemData);
 
-	pItemData->wItemFormat = (uint16_t)BITBUFFER_Read(pBuffer, 10);
+	pItemData->wItemFormat = (uint16_t)BITMANIP_Read(pBuffer, 10);
 
-	nAnimMode = BITBUFFER_Read(pBuffer, 3);
+	nAnimMode = BITMANIP_Read(pBuffer, 3);
 
 	if (nAnimMode == IMODE_ONGROUND || nAnimMode == IMODE_DROPPING)
 	{
-		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 16));
-		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 16));
+		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 16));
+		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 16));
 	}
 	else
 	{
-		pItemData->nBodyLoc = (uint8_t)BITBUFFER_Read(pBuffer, 4);
+		pItemData->nBodyLoc = (uint8_t)BITMANIP_Read(pBuffer, 4);
 
-		UNITS_SetXForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
-		UNITS_SetYForStaticUnit(pItem, BITBUFFER_Read(pBuffer, 4));
+		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
+		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 
-		pItemData->nInvPage = (uint8_t)(BITBUFFER_Read(pBuffer, 3) - 1);
+		pItemData->nInvPage = (uint8_t)(BITMANIP_Read(pBuffer, 3) - 1);
 	}
 
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
 
-	dwCode = BITBUFFER_Read(pBuffer, 32);
+	dwCode = BITMANIP_Read(pBuffer, 32);
 
 	nClassId = DATATBLS_GetItemIdFromItemCode(dwCode);
 	if (nClassId >= 0)
@@ -5099,7 +5099,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		return 1;
 	}
 
-	nSocketedItems = BITBUFFER_Read(pBuffer, 3);
+	nSocketedItems = BITMANIP_Read(pBuffer, 3);
 	if (pSocketedItems)
 	{
 		*pSocketedItems = nSocketedItems;
@@ -5107,21 +5107,21 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 
 	if (bCheckForHeader)
 	{
-		pItem->dwInitSeed = BITBUFFER_Read(pBuffer, 32);
+		pItem->dwInitSeed = BITMANIP_Read(pBuffer, 32);
 		SEED_InitLowSeed(&pItem->pSeed, pItem->dwInitSeed);
 	}
 
-	pItemData->dwItemLevel = BITBUFFER_Read(pBuffer, 7);
+	pItemData->dwItemLevel = BITMANIP_Read(pBuffer, 7);
 	if (pItemData->dwItemLevel < 1)
 	{
 		pItemData->dwItemLevel = 1;
 	}
 
-	pItemData->dwQualityNo = BITBUFFER_Read(pBuffer, 4);
+	pItemData->dwQualityNo = BITMANIP_Read(pBuffer, 4);
 
-	if (BITBUFFER_Read(pBuffer, 1))
+	if (BITMANIP_Read(pBuffer, 1))
 	{
-		pItemData->nInvGfxIdx = (uint8_t)BITBUFFER_Read(pBuffer, 3);
+		pItemData->nInvGfxIdx = (uint8_t)BITMANIP_Read(pBuffer, 3);
 	}
 
 	pMagicAffixDataTbl = DATATBLS_GetMagicAffixDataTables();
@@ -5158,9 +5158,9 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		break;
 	}
 
-	if (BITBUFFER_Read(pBuffer, 1))
+	if (BITMANIP_Read(pBuffer, 1))
 	{
-		pItemData->wAutoAffix = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+		pItemData->wAutoAffix = (uint16_t)BITMANIP_Read(pBuffer, 11);
 		if (dwVersion > 88)
 		{
 			if (dwVersion <= 89)
@@ -5188,7 +5188,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	case ITEMQUAL_INFERIOR:
 	case ITEMQUAL_SUPERIOR:
 	{
-		pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 3);
+		pItemData->dwFileIndex = BITMANIP_Read(pBuffer, 3);
 		break;
 	}
 	case ITEMQUAL_NORMAL:
@@ -5197,9 +5197,9 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		{
 			if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 			{
-				if (BITBUFFER_Read(pBuffer, 1))
+				if (BITMANIP_Read(pBuffer, 1))
 				{
-					pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+					pItemData->wMagicPrefix[0] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 					if (pItemData->wMagicPrefix[0])
 					{
 						pItemData->wMagicPrefix[0] += nMagicPrefixOffset;
@@ -5207,19 +5207,19 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+					pItemData->wMagicSuffix[0] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 				}
 			}
 		}
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BODY_PART) && !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_PLAYER_BODY_PART))
 		{
-			pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 10);
+			pItemData->dwFileIndex = BITMANIP_Read(pBuffer, 10);
 		}
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SCROLL) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOK))
 		{
-			pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 5);
+			pItemData->wMagicSuffix[0] = (uint16_t)BITMANIP_Read(pBuffer, 5);
 		}
 
 		break;
@@ -5229,15 +5229,15 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wRarePrefix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
-			pItemData->wRareSuffix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRarePrefix = (uint16_t)BITMANIP_Read(pBuffer, 8);
+			pItemData->wRareSuffix = (uint16_t)BITMANIP_Read(pBuffer, 8);
 		}
 
 		for (int i = 0; i < 3; ++i)
 		{
-			if (BITBUFFER_Read(pBuffer, 1))
+			if (BITMANIP_Read(pBuffer, 1))
 			{
-				pItemData->wMagicPrefix[i] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+				pItemData->wMagicPrefix[i] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
 					++pItemData->wMagicPrefix[i];
@@ -5253,9 +5253,9 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				pItemData->wMagicPrefix[i] = 0;
 			}
 
-			if (BITBUFFER_Read(pBuffer, 1))
+			if (BITMANIP_Read(pBuffer, 1))
 			{
-				pItemData->wMagicSuffix[i] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+				pItemData->wMagicSuffix[i] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
 					++pItemData->wMagicSuffix[i];
@@ -5273,8 +5273,8 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wRarePrefix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
-			pItemData->wRareSuffix = (uint16_t)BITBUFFER_Read(pBuffer, 8);
+			pItemData->wRarePrefix = (uint16_t)BITMANIP_Read(pBuffer, 8);
+			pItemData->wRareSuffix = (uint16_t)BITMANIP_Read(pBuffer, 8);
 		}
 
 		break;
@@ -5283,13 +5283,13 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+			pItemData->wMagicPrefix[0] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 			if (pItemData->wMagicPrefix[0])
 			{
 				pItemData->wMagicPrefix[0] += nMagicPrefixOffset;
 			}
 
-			pItemData->wMagicSuffix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 11);
+			pItemData->wMagicSuffix[0] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 		}
 
 		break;
@@ -5298,7 +5298,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	{
 		if (bCheckForHeader || pItemData->dwItemFlags & IFLAG_IDENTIFIED)
 		{
-			pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 12);
+			pItemData->dwFileIndex = BITMANIP_Read(pBuffer, 12);
 			if (pItemData->dwFileIndex < 0 || pItemData->dwFileIndex >= sgptDataTables->nUniqueItemsTxtRecordCount)
 			{
 				pItemData->dwFileIndex = -1;
@@ -5313,7 +5313,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		{
 			bError = TRUE;
 
-			nSetRecordId = BITBUFFER_Read(pBuffer, 12);
+			nSetRecordId = BITMANIP_Read(pBuffer, 12);
 			if (dwVersion > 92)
 			{
 				if (nSetRecordId >= 0 && nSetRecordId < sgptDataTables->nSetItemsTxtRecordCount)
@@ -5358,18 +5358,18 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	if (pItemData->dwItemFlags & IFLAG_RUNEWORD)
 	{
 		bRuneword = TRUE;
-		pItemData->wMagicPrefix[0] = (uint16_t)BITBUFFER_Read(pBuffer, 16);
+		pItemData->wMagicPrefix[0] = (uint16_t)BITMANIP_Read(pBuffer, 16);
 	}
 
 	if (pItemData->dwItemFlags & IFLAG_ISEAR)
 	{
-		pItemData->dwFileIndex = BITBUFFER_Read(pBuffer, 3);
-		pItemData->nEarLvl = (uint8_t)BITBUFFER_Read(pBuffer, 7);
+		pItemData->dwFileIndex = BITMANIP_Read(pBuffer, 3);
+		pItemData->nEarLvl = (uint8_t)BITMANIP_Read(pBuffer, 7);
 
 		szName = pItemData->szPlayerName;
 		do
 		{
-			szChar = (char)BITBUFFER_Read(pBuffer, 7);
+			szChar = (char)BITMANIP_Read(pBuffer, 7);
 			*szName++ = szChar;
 		}
 		while (szChar);
@@ -5379,20 +5379,20 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		szName = pItemData->szPlayerName;
 		do
 		{
-			szChar = (char)BITBUFFER_Read(pBuffer, 7);
+			szChar = (char)BITMANIP_Read(pBuffer, 7);
 			*szName++ = szChar;
 		}
 		while (szChar);
 	}
 
-	if (bCheckForHeader && dwVersion > 86 && BITBUFFER_Read(pBuffer, 1))
+	if (bCheckForHeader && dwVersion > 86 && BITMANIP_Read(pBuffer, 1))
 	{
-		pItemData->dwRealmData[0] = BITBUFFER_Read(pBuffer, 32);
-		pItemData->dwRealmData[1] = BITBUFFER_Read(pBuffer, 32);
+		pItemData->dwRealmData[0] = BITMANIP_Read(pBuffer, 32);
+		pItemData->dwRealmData[1] = BITMANIP_Read(pBuffer, 32);
 
 		if (dwVersion > 93)
 		{
-			BITBUFFER_Read(pBuffer, 32);
+			BITMANIP_Read(pBuffer, 32);
 		}
 	}
 
@@ -5407,14 +5407,14 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_ARMOR))
 	{
 		pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_ARMORCLASS);
-		nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+		nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 		STATLIST_SetUnitStat(pItem, STAT_ARMORCLASS, nValue, 0);
 
 		STATLIST_SetUnitStat(pItem, STAT_TOBLOCK, pItemsTxtRecord->nBlock, 0);
 		STATLIST_SetUnitStat(pItem, STAT_VELOCITYPERCENT, -pItemsTxtRecord->dwSpeed, 0);
 
 		pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_MAXDURABILITY);
-		nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+		nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 		STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, nValue, 0);
 
 		if (nValue)
@@ -5428,7 +5428,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				nBits = 8;
 			}
 
-			nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+			nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 			STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nValue, 0);
 		}
 	}
@@ -5521,7 +5521,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		}
 
 		pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_MAXDURABILITY);
-		nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+		nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 		STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, nValue, 0);
 
 		if (nValue)
@@ -5535,13 +5535,13 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				nBits = 8;
 			}
 
-			nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+			nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 			STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nValue, 0);
 		}
 	}
 	else if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_GOLD))
 	{
-		if (BITBUFFER_Read(pBuffer, 1))
+		if (BITMANIP_Read(pBuffer, 1))
 		{
 			nBits = 32;
 		}
@@ -5550,7 +5550,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			nBits = 12;
 		}
 
-		STATLIST_SetUnitStat(pItem, STAT_GOLD, BITBUFFER_Read(pBuffer, nBits), 0);
+		STATLIST_SetUnitStat(pItem, STAT_GOLD, BITMANIP_Read(pBuffer, nBits), 0);
 	}
 
 	if (pItemsTxtRecord->nStackable)
@@ -5564,14 +5564,14 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			nBits = 8;
 		}
 
-		STATLIST_SetUnitStat(pItem, STAT_QUANTITY, BITBUFFER_Read(pBuffer, nBits), 0);
+		STATLIST_SetUnitStat(pItem, STAT_QUANTITY, BITMANIP_Read(pBuffer, nBits), 0);
 	}
 	
 	if (pItemData->dwItemFlags & IFLAG_SOCKETED)
 	{
 		pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_NUMSOCKETS);
 
-		nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits));
+		nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits));
 
 		nMaxSockets = pItemsTxtRecord->nInvWidth * pItemsTxtRecord->nInvHeight;
 
@@ -5610,7 +5610,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	if (dwVersion > 84 && pItemData->dwQualityNo == ITEMQUAL_SET)
 	{
 		nStatLists = 5;
-		nSetItemMask = BITBUFFER_Read(pBuffer, 5);
+		nSetItemMask = BITMANIP_Read(pBuffer, 5);
 	}
 	else
 	{
@@ -5656,7 +5656,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		nLastStatId = -1;
 		while (1)
 		{
-			nStatId = BITBUFFER_Read(pBuffer, 9);
+			nStatId = BITMANIP_Read(pBuffer, 9);
 			if (nStatId == 511)
 			{
 				break;
@@ -5681,34 +5681,34 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			case STAT_STRENGTH:
 			case STAT_DEXTERITY:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, nStatId, nValue, 0);
 				break;
 			}
 			case STAT_VITALITY:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_VITALITY, nValue, 0);
 
 				if (dwVersion <= 85)
 				{
 					pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_MAXHP);
 
-					nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+					nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 					STATLIST_SetStatIfListIsValid(pStatList, STAT_MAXHP, nValue << 8, 0);
 				}
 				break;
 			}
 			case STAT_ENERGY:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_ENERGY, nValue, 0);
 
 				if (dwVersion <= 85)
 				{
 					pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_MAXMANA);
 
-					nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+					nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 					STATLIST_SetStatIfListIsValid(pStatList, STAT_MAXMANA, nValue, 0); //TODO: nValue << 8?
 				}
 				break;
@@ -5717,14 +5717,14 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			{
 				ITEMS_SetDefenseOrDamage(pItem, STAT_ITEM_MAXDAMAGE_PERCENT);
 
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MAXDAMAGE_PERCENT, nValue, 0);
 
 				ITEMS_SetDefenseOrDamage(pItem, STAT_ITEM_MINDAMAGE_PERCENT);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_MINDAMAGE_PERCENT);
 
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MINDAMAGE_PERCENT, nValue, 0);
 				break;
 			}
@@ -5736,7 +5736,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 6;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_FIREMINDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_FIREMAXDAM);
@@ -5747,13 +5747,13 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 7;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_FIREMAXDAM, nValue, 0);
 				break;
 			}
 			case STAT_LIGHTMINDAM:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_LIGHTMINDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_LIGHTMAXDAM);
@@ -5764,24 +5764,24 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 7;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_LIGHTMAXDAM, nValue, 0);
 				break;
 			}
 			case STAT_MAGICMINDAM:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_MAGICMINDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_MAGICMAXDAM);
 
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_MAGICMAXDAM, nValue, 0);
 				break;
 			}
 			case STAT_COLDMINDAM:
 			{
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_COLDMINDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_COLDMAXDAM);
@@ -5792,12 +5792,12 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 7;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_COLDMAXDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_COLDLENGTH);
 
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_COLDLENGTH, nValue, 0);
 				break;
 			}
@@ -5809,7 +5809,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 7;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_POISONMINDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_POISONMAXDAM);
@@ -5820,12 +5820,12 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 					nBits = 8;
 				}
 
-				nValue = BITBUFFER_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, nBits) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_POISONMAXDAM, nValue, 0);
 
 				pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_POISONLENGTH);
 
-				nValue = BITBUFFER_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
+				nValue = BITMANIP_Read(pBuffer, (b109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits)) - (b109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_POISONLENGTH, nValue, 0);
 				STATLIST_SetStatIfListIsValid(pStatList, STAT_POISON_COUNT, 1, 0);
 				break;
@@ -5838,7 +5838,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					BITBUFFER_Read(pBuffer, 16);
+					BITMANIP_Read(pBuffer, 16);
 					STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_FREEZE, 1, 0);
 				}
 				break;
@@ -5851,7 +5851,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 0);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 0);
 				}
 				break;
 			}
@@ -5863,7 +5863,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 3);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 3);
 				}
 				break;
 			}
@@ -5875,7 +5875,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 2);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 2);
 				}
 				break;
 			}
@@ -5887,7 +5887,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 1);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 1);
 				}
 				break;
 			}
@@ -5899,7 +5899,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 4);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 4);
 				}
 				break;
 			}
@@ -5911,7 +5911,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 5);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 5);
 				}
 				break;
 			}
@@ -5923,7 +5923,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITBUFFER_Read(pBuffer, 3), 6);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ADDCLASSSKILLS, BITMANIP_Read(pBuffer, 3), 6);
 				}
 				break;
 			}
@@ -5940,7 +5940,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					D2Common_10848(BITBUFFER_Read(pBuffer, 10), &v238, &v237, &nValue);
+					D2Common_10848(BITMANIP_Read(pBuffer, 10), &v238, &v237, &nValue);
 					if (nValue > 7)
 					{
 						nValue = 7;
@@ -5957,7 +5957,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					STATLIST_SetStat(pStatList, STAT_ITEM_ELEMSKILL, BITBUFFER_Read(pBuffer, 4), 1);
+					STATLIST_SetStat(pStatList, STAT_ITEM_ELEMSKILL, BITMANIP_Read(pBuffer, 4), 1);
 				}
 				break;
 			}
@@ -5978,7 +5978,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					D2Common_10844_ITEMMODS_First(BITBUFFER_Read(pBuffer, 14), &nSkillId, &nValue);
+					D2Common_10844_ITEMMODS_First(BITMANIP_Read(pBuffer, 14), &nSkillId, &nValue);
 
 					pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_SINGLESKILL);
 
@@ -6012,7 +6012,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v241, &v240, &v242);
+					D2Common_10845(BITMANIP_Read(pBuffer, 21), &v241, &v240, &v242);
 					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONATTACK, v242, ((uint16_t)v241 << 6) + (v240 & 0x3F));
 				}
 				break;
@@ -6027,7 +6027,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v244, &v243, &v245);
+					D2Common_10845(BITMANIP_Read(pBuffer, 21), &v244, &v243, &v245);
 					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONHIT, v245, ((uint16_t)v244 << 6) + (v243 & 0x3F));
 				}
 				break;
@@ -6042,7 +6042,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 				}
 				else
 				{
-					D2Common_10845(BITBUFFER_Read(pBuffer, 21), &v247, &v246, &v248);
+					D2Common_10845(BITMANIP_Read(pBuffer, 21), &v247, &v246, &v248);
 					STATLIST_SetStat(pStatList, STAT_ITEM_SKILLONGETHIT, v248, ((uint16_t)v247 << 6) + (v246 & 0x3F));
 				}
 				break;
@@ -6073,7 +6073,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 						nBits = 29;
 					}
 
-					D2Common_10846(BITBUFFER_Read(pBuffer, nBits), &v249, &v250, &v251, &v252);
+					D2Common_10846(BITMANIP_Read(pBuffer, nBits), &v249, &v250, &v251, &v252);
 
 					STATLIST_SetStat(pStatList, STAT_ITEM_CHARGED_SKILL, (v252 << 8) + (uint8_t)v251, (v250 & LOWORD(sgptDataTables->nShiftedStuff)) + ((uint16_t)v249 << sgptDataTables->nStuff));
 				}
@@ -6282,10 +6282,10 @@ void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2Stat
 	}
 	if (nParamBits > 0)
 	{
-		nParam = BITBUFFER_Read(pBuffer, nParamBits);
+		nParam = BITMANIP_Read(pBuffer, nParamBits);
 	}
 
-	nValue = BITBUFFER_Read(pBuffer, nSaveBits);
+	nValue = BITMANIP_Read(pBuffer, nSaveBits);
 	if (pStatList)
 	{
 		STATLIST_SetStat(pStatList, nStatId, (nValue - nSaveAdd) << pItemStatCostTxtRecord->nValShift, nParam);
@@ -6297,7 +6297,7 @@ size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBit
 {
 	D2BitBufferStrc pBuffer = {};
 
-	BITBUFFER_Initialize(&pBuffer, pBitstream, nSize);
+	BITMANIP_Initialize(&pBuffer, pBitstream, nSize);
 
 	ITEMS_SerializeItem(pItem, &pBuffer, bServer, bSaveItemInv, bGamble);
 
@@ -6307,7 +6307,7 @@ size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBit
 	}
 	else
 	{
-		return BITBUFFER_GetSize(&pBuffer);
+		return BITMANIP_GetSize(&pBuffer);
 	}
 }
 
@@ -6339,7 +6339,7 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 	{
 		nItemFormat = 0;
 	}
-	BITBUFFER_Write(pBuffer, nItemFormat, 10);
+	BITMANIP_Write(pBuffer, nItemFormat, 10);
 
 	ITEMS_WriteBitsToBitstream(pBuffer, pItem->dwAnimMode, 3);
 
@@ -6478,7 +6478,7 @@ size_t __fastcall ITEMS_SerializeItem(D2UnitStrc* pItem, D2BitBufferStrc* pBuffe
 
 	if (bServer)
 	{
-		BITBUFFER_Write(pBuffer, 'MJ', 16);
+		BITMANIP_Write(pBuffer, 'MJ', 16);
 	}
 	else
 	{
@@ -6487,7 +6487,7 @@ size_t __fastcall ITEMS_SerializeItem(D2UnitStrc* pItem, D2BitBufferStrc* pBuffe
 			nItemFlags &= ~IFLAG_SOCKETED;
 		}
 	}
-	BITBUFFER_Write(pBuffer, nItemFlags, 32);
+	BITMANIP_Write(pBuffer, nItemFlags, 32);
 
 	if (nItemFlags & IFLAG_COMPACTSAVE)
 	{
@@ -6502,12 +6502,12 @@ size_t __fastcall ITEMS_SerializeItem(D2UnitStrc* pItem, D2BitBufferStrc* pBuffe
 	{
 		for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItem->pInventory); i; i = INVENTORY_GetNextItem(i))
 		{
-			BITBUFFER_GoToNextByte(pBuffer);
+			BITMANIP_GoToNextByte(pBuffer);
 			ITEMS_SerializeItem(INVENTORY_UnitIsItem(i), pBuffer, bServer, bSaveItemInv, 0);
 		}
 	}
 
-	return BITBUFFER_GetSize(pBuffer);
+	return BITMANIP_GetSize(pBuffer);
 }
 
 //D2Common.0x6FDA2FD0
@@ -6522,7 +6522,7 @@ void __fastcall ITEMS_WriteBitsToBitstream(D2BitBufferStrc* pBuffer, int nData, 
 		}
 	}
 
-	return BITBUFFER_Write(pBuffer, nData, nBits);
+	return BITMANIP_Write(pBuffer, nData, nBits);
 }
 
 //D2Common.0x6FDA3010
@@ -6599,7 +6599,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nItemFormat = 0;
 	}
-	BITBUFFER_Write(pBuffer, nItemFormat, 10);
+	BITMANIP_Write(pBuffer, nItemFormat, 10);
 
 	nAnimMode = pItem->dwAnimMode;
 	if (nAnimMode > 0)
@@ -6613,7 +6613,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nAnimMode = 0;
 	}
-	BITBUFFER_Write(pBuffer, nAnimMode, 3);
+	BITMANIP_Write(pBuffer, nAnimMode, 3);
 
 	if (nAnimMode == IMODE_ONGROUND || nAnimMode == IMODE_DROPPING)
 	{
@@ -6630,7 +6630,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			pCoords.nX = 0;
 		}
-		BITBUFFER_Write(pBuffer, pCoords.nX, 16);
+		BITMANIP_Write(pBuffer, pCoords.nX, 16);
 
 		if (pCoords.nY > 0)
 		{
@@ -6643,7 +6643,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			pCoords.nY = 0;
 		}
-		BITBUFFER_Write(pBuffer, pCoords.nY, 16);
+		BITMANIP_Write(pBuffer, pCoords.nY, 16);
 	}
 	else
 	{
@@ -6659,7 +6659,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nBodyLoc = 0;
 		}
-		BITBUFFER_Write(pBuffer, nBodyLoc, 4);
+		BITMANIP_Write(pBuffer, nBodyLoc, 4);
 
 		UNITS_GetCoords(pItem, &pCoords);
 
@@ -6674,7 +6674,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			pCoords.nX = 0;
 		}
-		BITBUFFER_Write(pBuffer, pCoords.nX, 4);
+		BITMANIP_Write(pBuffer, pCoords.nX, 4);
 
 		if (pCoords.nY > 0)
 		{
@@ -6687,7 +6687,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			pCoords.nY = 0;
 		}
-		BITBUFFER_Write(pBuffer, pCoords.nY, 4);
+		BITMANIP_Write(pBuffer, pCoords.nY, 4);
 
 		nStorePage = pItemData->nInvPage + 1;
 		if (nStorePage > 0)
@@ -6701,7 +6701,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nStorePage = 0;
 		}
-		BITBUFFER_Write(pBuffer, nStorePage, 3);
+		BITMANIP_Write(pBuffer, nStorePage, 3);
 	}
 
 	pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
@@ -6711,16 +6711,16 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		if (pItemsTxtRecord->dwNormCode)
 		{
-			BITBUFFER_Write(pBuffer, pItemsTxtRecord->dwNormCode, 32);
+			BITMANIP_Write(pBuffer, pItemsTxtRecord->dwNormCode, 32);
 		}
 		else
 		{
-			BITBUFFER_Write(pBuffer, pItemsTxtRecord->dwCode, 32);
+			BITMANIP_Write(pBuffer, pItemsTxtRecord->dwCode, 32);
 		}
 		return;
 	}
 
-	BITBUFFER_Write(pBuffer, pItemsTxtRecord->dwCode, 32);
+	BITMANIP_Write(pBuffer, pItemsTxtRecord->dwCode, 32);
 
 	nSocketedItems = 0;
 	if (ITEMS_CheckIfSocketable(pItem) && pItem->pInventory)
@@ -6748,11 +6748,11 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			}
 		}
 	}
-	BITBUFFER_Write(pBuffer, nSocketedItems, 3);
+	BITMANIP_Write(pBuffer, nSocketedItems, 3);
 
 	if (bServer)
 	{
-		BITBUFFER_Write(pBuffer, pItem->dwInitSeed, 32);
+		BITMANIP_Write(pBuffer, pItem->dwInitSeed, 32);
 	}
 
 	if ((int)pItemData->dwItemLevel < 1)
@@ -6773,7 +6773,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nItemLevel = 0;
 	}
-	BITBUFFER_Write(pBuffer, nItemLevel, 7);
+	BITMANIP_Write(pBuffer, nItemLevel, 7);
 
 	nQuality = pItemData->dwQualityNo;
 	if (nQuality > 0)
@@ -6787,7 +6787,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nQuality = 0;
 	}
-	BITBUFFER_Write(pBuffer, nQuality, 4);
+	BITMANIP_Write(pBuffer, nQuality, 4);
 	
 	nItemType = ITEMS_GetItemType(pItem);
 	pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(nItemType);
@@ -6799,7 +6799,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nVarInvGfx = 0;
 	}
-	BITBUFFER_Write(pBuffer, nVarInvGfx ? 1 : 0, 1);
+	BITMANIP_Write(pBuffer, nVarInvGfx ? 1 : 0, 1);
 
 	if (pItemTypesTxtRecord && pItemTypesTxtRecord->nVarInvGfx)
 	{
@@ -6815,7 +6815,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nInvGfx = 0;
 		}
-		BITBUFFER_Write(pBuffer, nInvGfx, 3);
+		BITMANIP_Write(pBuffer, nInvGfx, 3);
 	}
 
 	pMagicAffixInfo = DATATBLS_GetMagicAffixDataTables();
@@ -6827,7 +6827,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		nAutoAffix -= nAutoMagicOffset;
 	}
-	BITBUFFER_Write(pBuffer, nAutoAffix ? 1 : 0, 1);
+	BITMANIP_Write(pBuffer, nAutoAffix ? 1 : 0, 1);
 
 	if (nAutoAffix)
 	{
@@ -6842,7 +6842,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nAutoAffix = 0;
 		}
-		BITBUFFER_Write(pBuffer, nAutoAffix, 11);
+		BITMANIP_Write(pBuffer, nAutoAffix, 11);
 	}
 
 	switch (pItemData->dwQualityNo)
@@ -6862,7 +6862,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nFileIndex = 0;
 		}
-		BITBUFFER_Write(pBuffer, nFileIndex, 3);
+		BITMANIP_Write(pBuffer, nFileIndex, 3);
 		break;
 	}
 	case ITEMQUAL_RARE:
@@ -6882,7 +6882,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nRarePrefix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nRarePrefix, 8);
+			BITMANIP_Write(pBuffer, nRarePrefix, 8);
 
 			nRareSuffix = pItemData->wRareSuffix;
 			if (nRareSuffix > 0)
@@ -6896,7 +6896,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nRareSuffix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nRareSuffix, 8);
+			BITMANIP_Write(pBuffer, nRareSuffix, 8);
 		}
 
 		nCounter = 0;
@@ -6910,7 +6910,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 
 			if (nMagicPrefix)
 			{
-				BITBUFFER_Write(pBuffer, 1, 1);
+				BITMANIP_Write(pBuffer, 1, 1);
 
 				if (nMagicPrefix > 0)
 				{
@@ -6923,16 +6923,16 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 				{
 					nMagicPrefix = 0;
 				}
-				BITBUFFER_Write(pBuffer, nMagicPrefix, 11);
+				BITMANIP_Write(pBuffer, nMagicPrefix, 11);
 			}
 			else
 			{
-				BITBUFFER_Write(pBuffer, 0, 1);
+				BITMANIP_Write(pBuffer, 0, 1);
 			}
 
 			if (pItemData->wMagicSuffix[nCounter] != 0)
 			{
-				BITBUFFER_Write(pBuffer, 1, 1);
+				BITMANIP_Write(pBuffer, 1, 1);
 
 				nMagicSuffix = pItemData->wMagicSuffix[nCounter];
 				if (nMagicSuffix > 0)
@@ -6946,11 +6946,11 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 				{
 					nMagicSuffix = 0;
 				}
-				BITBUFFER_Write(pBuffer, nMagicSuffix, 11);
+				BITMANIP_Write(pBuffer, nMagicSuffix, 11);
 			}
 			else
 			{
-				BITBUFFER_Write(pBuffer, 0, 1);
+				BITMANIP_Write(pBuffer, 0, 1);
 			}
 
 			++nCounter;
@@ -6975,7 +6975,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nRarePrefix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nRarePrefix, 8);
+			BITMANIP_Write(pBuffer, nRarePrefix, 8);
 
 			nRareSuffix = pItemData->wRareSuffix;
 			if (nRareSuffix > 0)
@@ -6989,7 +6989,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nRareSuffix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nRareSuffix, 8);
+			BITMANIP_Write(pBuffer, nRareSuffix, 8);
 		}
 		break;
 	}
@@ -7014,7 +7014,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nMagicPrefix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nMagicPrefix, 11);
+			BITMANIP_Write(pBuffer, nMagicPrefix, 11);
 
 			nMagicSuffix = pItemData->wMagicSuffix[0];
 			if (nMagicSuffix > 0)
@@ -7029,7 +7029,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nMagicSuffix = 0;
 			}
-			BITBUFFER_Write(pBuffer, nMagicSuffix, 11);
+			BITMANIP_Write(pBuffer, nMagicSuffix, 11);
 		}
 		break;
 	}
@@ -7047,7 +7047,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nFileIndex = 4095;
 			}
-			BITBUFFER_Write(pBuffer, nFileIndex, 12);
+			BITMANIP_Write(pBuffer, nFileIndex, 12);
 		}
 		break;
 	}
@@ -7066,7 +7066,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nMagicPrefix -= nMagicPrefixOffset;
 			}
-			BITBUFFER_Write(pBuffer, nMagicPrefix ? 1 : 0, 1);
+			BITMANIP_Write(pBuffer, nMagicPrefix ? 1 : 0, 1);
 
 			if (nMagicPrefix)
 			{
@@ -7076,11 +7076,11 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 					{
 						nMagicPrefix = 2047;
 					}
-					BITBUFFER_Write(pBuffer, nMagicPrefix, 11);
+					BITMANIP_Write(pBuffer, nMagicPrefix, 11);
 				}
 				else
 				{
-					BITBUFFER_Write(pBuffer, 0, 11);
+					BITMANIP_Write(pBuffer, 0, 11);
 				}
 			}
 			else
@@ -7092,11 +7092,11 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 					{
 						nMagicSuffix = 2047;
 					}
-					BITBUFFER_Write(pBuffer, nMagicSuffix, 11);
+					BITMANIP_Write(pBuffer, nMagicSuffix, 11);
 				}
 				else
 				{
-					BITBUFFER_Write(pBuffer, 0, 11);
+					BITMANIP_Write(pBuffer, 0, 11);
 				}
 			}
 		}
@@ -7115,7 +7115,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nFileIndex = 0;
 			}
-			BITBUFFER_Write(pBuffer, nFileIndex, 10);
+			BITMANIP_Write(pBuffer, nFileIndex, 10);
 		}
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SCROLL) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOK))
@@ -7132,7 +7132,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nScrollType = 0;
 			}
-			BITBUFFER_Write(pBuffer, nScrollType, 5);
+			BITMANIP_Write(pBuffer, nScrollType, 5);
 		}
 		break;
 	}
@@ -7160,7 +7160,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nRunewordId = 0;
 		}
-		BITBUFFER_Write(pBuffer, nRunewordId, 16);
+		BITMANIP_Write(pBuffer, nRunewordId, 16);
 	}
 
 	if (pItemData->dwItemFlags & IFLAG_ISEAR)
@@ -7177,7 +7177,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nFileIndex = 0;
 		}
-		BITBUFFER_Write(pBuffer, nFileIndex, 3);
+		BITMANIP_Write(pBuffer, nFileIndex, 3);
 
 		nEarLevel = pItemData->nEarLvl;
 		if (nEarLevel > 0)
@@ -7191,7 +7191,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		{
 			nEarLevel = 0;
 		}
-		BITBUFFER_Write(pBuffer, nEarLevel, 7);
+		BITMANIP_Write(pBuffer, nEarLevel, 7);
 
 		szPlayerName = pItemData->szPlayerName;
 		do
@@ -7208,7 +7208,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nCurrentCharacter = 0;
 			}
-			BITBUFFER_Write(pBuffer, nCurrentCharacter, 7);
+			BITMANIP_Write(pBuffer, nCurrentCharacter, 7);
 			bContinue = *szPlayerName++;
 		}
 		while (bContinue);
@@ -7230,7 +7230,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 			{
 				nCurrentCharacter = 0;
 			}
-			BITBUFFER_Write(pBuffer, nCurrentCharacter, 7);
+			BITMANIP_Write(pBuffer, nCurrentCharacter, 7);
 			bContinue = *szPlayerName++;
 		}
 		while (bContinue);
@@ -7240,8 +7240,8 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	{
 		if (pItemData->dwRealmData[1])
 		{
-			BITBUFFER_Write(pBuffer, 1, 1);
-			BITBUFFER_Write(pBuffer, pItemData->dwRealmData[0], 32);
+			BITMANIP_Write(pBuffer, 1, 1);
+			BITMANIP_Write(pBuffer, pItemData->dwRealmData[0], 32);
 			ITEMS_WriteBitsToBitstream(pBuffer, pItemData->dwRealmData[1], 32);
 			ITEMS_WriteBitsToBitstream(pBuffer, 0, 32);
 		}

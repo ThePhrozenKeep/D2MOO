@@ -1,6 +1,6 @@
 #include <D2DataTbls.h>
 #include <DataTbls/SequenceTbls.h>
-#include <D2Math.h>
+#include <D2BitManip.h>
 #include <Units/Units.h>
 #include <D2Skills.h>
 #include <D2Composit.h>

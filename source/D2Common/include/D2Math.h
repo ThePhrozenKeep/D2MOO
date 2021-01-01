@@ -2,8 +2,6 @@
 
 #include <cstdint>
 
-extern const uint32_t gdwBitMasks[];
-extern const uint32_t gdwInvBitMasks[];
 
 template<class T>
 constexpr const T& D2Clamp(const T& v, const T& low, const T& high)

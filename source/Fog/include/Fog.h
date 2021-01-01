@@ -4,7 +4,7 @@
 #include <D2BasicTypes.h>
 
 #ifdef FOG_IMPL
-#define FOG_DLL_DECL __declspec( dllexport )
+#define FOG_DLL_DECL 
 #else
 #define FOG_DLL_DECL __declspec( dllimport )
 #endif

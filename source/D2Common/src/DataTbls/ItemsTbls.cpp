@@ -2,8 +2,7 @@
 
 #include "D2Items.h"
 #include <D2Lang.h>
-#include <D2Math.h>
-
+#include <D2BitManip.h>
 
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey)

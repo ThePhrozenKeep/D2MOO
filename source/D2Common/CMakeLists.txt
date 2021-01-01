@@ -150,7 +150,6 @@ target_sources(D2Common
 # Remaining files that were not placed into subfolders
 target_sources(D2Common
   PRIVATE
-    src/D2BitBuffer.cpp
     src/D2Chat.cpp
     src/D2Collision.cpp
     src/D2Composit.cpp
@@ -167,7 +166,6 @@ target_sources(D2Common
     src/D2Text.cpp
     src/D2Waypoints.cpp
 
-    include/D2BitBuffer.h
     include/D2Chat.h
     include/D2Collision.h
     include/D2Composit.h

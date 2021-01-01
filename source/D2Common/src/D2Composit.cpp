@@ -3,7 +3,7 @@
 #include "D2DataTbls.h"
 #include "D2Inventory.h"
 #include "D2Items.h"
-#include "D2Math.h"
+#include <D2BitManip.h>
 #include "D2Monsters.h"
 #include "D2Skills.h"
 #include "Units/Units.h"
