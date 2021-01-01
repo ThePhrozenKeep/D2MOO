@@ -3,6 +3,7 @@
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <Units/Units.h>
+#include <D2States.h>
 
 D2ArenaTxt* gpArenaTxtTable;
 D2CharTemplateTxt* gpCharTemplateTxtTable;
