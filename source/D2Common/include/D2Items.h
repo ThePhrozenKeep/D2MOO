@@ -189,6 +189,19 @@ enum D2C_ItemCmdFlags
 	ITEMCMDFLAG_DELETE = 0x00000020,
 };
 
+struct D2ItemSaveStrc
+{
+	int32_t nClassId;							//0x00
+	uint16_t nX;								//0x04
+	uint16_t nY;								//0x06
+	uint8_t nAnimMode;							//0x08
+	uint8_t pad0x09[3];							//0x09
+	uint32_t dwFlags;							//0x0C
+	uint8_t nStorePage;							//0x10
+	uint8_t nBodyloc;							//0x11
+	uint8_t pad0x12[2];							//0x12
+	int32_t nItemFileIndex;						//0x14
+};
 
 //D2Common.0x6FD98380 (#10687)
 void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);

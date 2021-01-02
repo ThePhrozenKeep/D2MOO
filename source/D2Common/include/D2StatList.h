@@ -398,6 +398,57 @@ enum D2C_StatlistFlags
 	LISTFLAG_LISTEX = 0x80000000
 };
 
+struct D2StatStrc
+{
+	union
+	{
+		struct
+		{
+			uint16_t nLayer;					//0x00
+			uint16_t nStat;						//0x02
+		};
+		int32_t nLayer_StatId;					//0x00
+	};
+	int32_t nValue;								//0x04
+};
+
+struct D2StatExStrc
+{
+	D2StatStrc* pStat;						//0x00 An Array[wStatCount]
+	uint16_t nStatCount;						//0x04
+	uint16_t nBitSize;							//0x06
+};
+
+struct D2StatListStrc
+{
+	void* pMemPool;							//0x00
+	D2UnitStrc* pUnit;						//0x04
+	uint32_t dwOwnerType;						//0x08
+	uint32_t dwOwnerId;						//0x0C
+	uint32_t dwFlags;							//0x10
+	uint32_t dwStateNo;						//0x14
+	uint32_t dwExpireFrame;					//0x18
+	uint32_t dwSkillNo;						//0x1C
+	uint32_t dwSLvl;							//0x20
+	D2StatExStrc Stats;						//0x24
+	D2StatListStrc* pPrevLink;				//0x2C
+	D2StatListStrc* pNextLink;				//0x30
+	D2StatListStrc* pPrev;					//0x34
+	void* fpStatRemove;						//0x38
+};
+
+struct D2StatListExStrc : public D2StatListStrc
+{
+	D2StatListStrc* pMyLastList;			//0x3C
+	D2StatListStrc* pMyStats;				//0x40
+	D2UnitStrc* pOwner;						//0x44
+	D2StatExStrc FullStats;					//0x48
+	D2StatExStrc ModStats;					//0x50
+	uint32_t* StatFlags;						//0x58 pt to an  array
+	void* fpCallBack;						//0x5C
+	D2GameStrc* pGame;						//0x60
+};
+
 //D2Common.0x6FDB57C0 (#10563)
 BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //----- (6FDB5830) --------------------------------------------------------

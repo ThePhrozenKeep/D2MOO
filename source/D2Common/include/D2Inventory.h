@@ -94,6 +94,48 @@ enum D2C_InventoryGrids
 	INVGRID_INVENTORY,
 };
 
+struct D2InventoryGridStrc
+{
+	D2UnitStrc* pItem;						//0x00
+	D2UnitStrc* pLastItem;					//0x04
+	uint8_t nGridWidth;						//0x08
+	uint8_t nGridHeight;					//0x09
+	uint16_t pad0x0A;						//0x0A
+	D2UnitStrc** ppItems;					//0x0C
+};
+
+struct D2InventoryStrc
+{
+	uint32_t dwSignature;					//0x00
+	void* pMemPool;							//0x04
+	D2UnitStrc* pOwner;						//0x08
+	D2UnitStrc* pFirstItem;					//0x0C
+	D2UnitStrc* pLastItem;					//0x10
+	D2InventoryGridStrc* pGrids;			//0x14
+	int32_t nGridCount;						//0x18
+	uint32_t dwLeftItemGUID;				//0x1C
+	D2UnitStrc* pCursorItem;				//0x20
+	uint32_t dwOwnerId;						//0x24
+	uint32_t dwItemCount;					//0x28
+	D2InventoryNodeStrc* pFirstNode;		//0x2C
+	D2InventoryNodeStrc* pLastNode;			//0x30
+	D2CorpseStrc* pFirstCorpse;				//0x34
+	D2CorpseStrc* pLastCorpse;				//0x38
+	int32_t nCorpseCount;					//0x3C
+};
+
+struct D2ItemExtraDataStrc
+{
+	D2InventoryStrc* pParentInv;			//0x00
+	D2UnitStrc* pPreviousItem;				//0x04
+	D2UnitStrc* pNextItem;					//0x08
+	char nNodePos;							//0x0C
+	char nNodePosOther;						//0x0D
+	uint16_t unk0x0E;							//0x0E
+	D2UnitStrc* unk0x10;					//0x10
+	D2UnitStrc* unk0x14;					//0x14
+};
+
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);
 //D2Common.0x6FD8E4A0

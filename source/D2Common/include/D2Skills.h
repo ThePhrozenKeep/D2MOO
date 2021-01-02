@@ -69,6 +69,77 @@ enum D2C_SkillUseStates
 	SKILLUSTATE_BLOCKED = 8,
 };
 
+struct D2SkillCalcStrc
+{
+	D2UnitStrc* pUnit;						//0x00
+	int32_t nSkillId;							//0x04
+	int32_t nSkillLevel;						//0x08
+};
+
+struct D2SkillListStrc
+{
+	void* pMemPool;							//0x00
+	D2SkillStrc* pFirstSkill;				//0x04
+	D2SkillStrc* pLeftSkill;				//0x08
+	D2SkillStrc* pRightSkill;				//0x0C
+	D2SkillStrc* pUsedSkill;				//0x10
+	uint32_t __014;							//0x14
+};
+
+//struct D2SkillStrc
+//{
+//	D2SkillsTxt* pSkillsTxt;				//0x00
+//	D2SkillStrc* pNextSkill;				//0x04
+//	uint32_t dwSkillMode;						//0x08
+//	uint32_t unk0x0C[7];						//0x0C
+//	uint32_t dwSkillLevel;						//0x28
+//	uint32_t unk0x2C[2];						//0x2C
+//	uint32_t dwFlags;							//0x34
+//	uint32_t unk0x38;							//0x38
+//};
+struct D2SkillStrc
+{
+
+	D2SkillsTxt* pSkillsTxt;				//0x00
+	D2SkillStrc* pNextSkill;				//0x04
+	uint32_t dwSkillMode;						//0x08
+	uint32_t dwFlags;							//0x0C
+	uint32_t unk0x10[2];						//0x10 - not used?
+
+	union
+	{
+		uint32_t dwTargetInfo;					//0x18
+		uint32_t nXpos;						//0x18
+		uint32_t nPar1;						//0x18
+	};
+	union
+	{
+		uint32_t dwTargetType;					//0x1C
+		uint32_t nYpos;						//0x1C
+		uint32_t nPar2;						//0x1C
+	};
+	union
+	{
+		uint32_t dwTargetGUID;					//0x20
+		uint32_t nPar3;						//0x20
+	};
+
+	uint32_t nPar4;							//0x24
+	int32_t nSkillLevel;						//0x28
+	uint32_t nLevelBonus;						//0x2C
+	int32_t nQuantity;							//0x30
+	int32_t nOwnerGUID;							//0x34 -1 = Native Skill
+	int32_t nCharges;							//0x38
+};
+
+struct D2SkillTreeChartStrc
+{
+	D2CellFileStrc* pCellFile;				//0x00
+	char* szFileName;						//0x04
+	uint32_t unk0x08[6];						//0x08
+	uint16_t unk0x20;							//0x20
+};
+
 
 //D2Common.0x6FDAEB10 (#10938)
 short __stdcall SKILLS_GetPassiveState(int nSkillId);

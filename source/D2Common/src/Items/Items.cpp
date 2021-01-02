@@ -1,5 +1,5 @@
 #include "D2Items.h"
-
+#include <Units/Item.h>
 #include "D2BitManip.h"
 #include "D2Composit.h"
 #include "D2DataTbls.h"

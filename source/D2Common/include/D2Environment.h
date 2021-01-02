@@ -12,6 +12,16 @@ enum D2EnvironmentDayCycles : int32_t {
 	NUM_ENVIRONMENT_CYCLES
 };
 
+struct D2EnvironmentCycleStrc
+{
+	int32_t nTicksBegin;			//0x00
+	int32_t nPeriodOfDay;				//0x04
+	uint8_t nRed;					//0x08
+	uint8_t nGreen;				//0x09
+	uint8_t nBlue;					//0x0A
+	uint8_t nIntensity;			//0x0B Unused
+};
+
 struct D2DrlgEnvironmentStrc
 {
 	int32_t nCycleIndex;					//0x00

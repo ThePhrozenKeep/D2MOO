@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
-
+#include <Drlg/D2DrlgDrlg.h>
 // TODO: Reimport from .cpp
 
 struct D2BoundingBoxStrc
@@ -31,6 +31,12 @@ enum D2C_CollisionFlags
 	COLLIDE_PET = 0x2000,
 	COLLIDE_4000 = 0x4000,
 	COLLIDE_CORPSE = 0x8000,				// also used by portals, but dead monsters are mask 0x8000
+};
+
+struct D2RoomCollisionGridStrc
+{
+	D2DrlgCoordsStrc pRoomCoords;			//0x00
+	uint16_t* pCollisionMask;					//0x20
 };
 
 //D2Common.0x6FD41000

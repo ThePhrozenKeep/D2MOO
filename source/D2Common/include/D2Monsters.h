@@ -126,6 +126,25 @@ enum D2MapAIActions
 	AIACTION_MODE_S2 = 5,
 };
 
+struct D2HirelingInitStrc
+{
+	int32_t nId;								//0x00
+	int32_t nLevel;								//0x04
+	int32_t nHitpoints;							//0x08
+	int32_t nStrength;							//0x0C
+	int32_t nDexterity;							//0x10
+	int32_t nGold;								//0x14
+	int32_t nExperience;						//0x18
+	int32_t nDefense;							//0x1C
+	int32_t nMinDamage;							//0x20
+	int32_t nMaxDamage;							//0x24
+	int32_t nShare;								//0x28
+	int32_t nResist;							//0x2C
+	int32_t nHireDesc;							//0x30
+	int32_t field_34;							//0x34
+	int16_t nFlags;							//0x38
+};
+
 //D2Common.0x6FDA4C10 (#11082)
 int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int nLowSeed, int nAct, int nDifficulty, D2HirelingInitStrc* pHirelingInit);
 //D2Common.0x6FDA4E20 (#11081)

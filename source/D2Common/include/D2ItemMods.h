@@ -20,6 +20,13 @@ struct D2PropertyAssignStrc
 	int32_t nStatId;							//0x04
 };
 
+
+struct D2ItemCalcStrc
+{
+	D2UnitStrc* pUnit;						//0x00
+	D2UnitStrc* pItem;						//0x04
+};
+
 //D2Common.0x6FD92640 (#10844)
 void __stdcall D2Common_10844_ITEMMODS_First(int nDataBits, int* pLayer, int* pValue);
 //D2Common.0x6FD92670 (#10846)

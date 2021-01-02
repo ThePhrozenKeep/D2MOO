@@ -4,6 +4,7 @@
 #include "Drlg/D2DrlgActivate.h"
 #include "Drlg/D2DrlgDrlg.h"
 #include "Drlg/D2DrlgDrlgRoom.h"
+#include "Drlg/D2DrlgPreset.h"
 #include "D2Seed.h"
 #include <Units/Units.h>
 

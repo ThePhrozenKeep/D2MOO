@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include <Drlg/D2DrlgDrlg.h>
 
 struct D2UnkOutPlaceStrc
 {

@@ -1,6 +1,10 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "Item.h"
+#include "Missile.h"
+#include "Monster.h"
+#include "Object.h"
 #include "Player.h"
 
 enum D2C_UnitTypes

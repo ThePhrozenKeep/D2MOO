@@ -649,6 +649,24 @@ struct D2SoundsTxtStub
 	uint16_t wSound;						//0x00
 };
 
+struct D2MonStatsInitStrc
+{
+	int32_t nMinHP;								//0x00
+	int32_t nMaxHP;								//0x04
+	int32_t nAC;								//0x08
+	int32_t nTH;								//0x0C
+	int32_t nExp;								//0x10
+	int32_t nA1MinD;							//0x14
+	int32_t nA1MaxD;							//0x18
+	int32_t nA2MinD;							//0x1C
+	int32_t nA2MaxD;							//0x20
+	int32_t nS1MinD;							//0x24
+	int32_t nS1MaxD;							//0x28
+	int32_t nElMinD;							//0x2C
+	int32_t nElMaxD;							//0x30
+	int32_t nElDur;								//0x34
+};
+
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText);
 //D2Common.0x6FD64C40 (#10592)

@@ -47,3 +47,54 @@ enum D2C_PlayerFlags
 	PLRFLAG_EXPANSION = 0x20,
 	PLRFLAG_LADDER = 0x40,
 };
+
+struct D2PlayerCountBonusStrc
+{
+	int32_t nHp;								//0x00
+	int32_t nExperience;						//0x04
+	int32_t nMonsterSkillBonus;					//0x08
+	int32_t nDifficulty;						//0x0C
+	int32_t nPlayerCount;						//0x10
+};
+
+struct D2PlayerTradeStrc
+{
+	int32_t nSaveLength;						//0x00
+	uint8_t* pSaveData;						//0x04
+	int32_t unk0x08[4];
+};
+
+struct D2PlayerDataStrc
+{
+	char szName[16];						//0x00
+	D2BitBufferStrc* pQuestData[3];			//0x10
+	D2WaypointDataStrc* pWaypointData[3];	//0x1C
+	uint32_t unk0x28;							//0x28
+	int32_t nPortalFlags;						//0x2C
+	int32_t unk0x30;							//0x30
+	D2ArenaUnitStrc* pArenaUnit;			//0x34
+	uint32_t unk0x38[4];						//0x38
+	uint32_t dwUniqueId;						//0x48
+	uint32_t dwTradeTick;						//0x4C
+	uint32_t dwTradeState;						//0x50
+	uint32_t unk0x54;							//0x54
+	uint32_t dwAcceptTradeTick;				//0x58
+	D2PlayerTradeStrc* pTrade;				//0x5C
+	uint32_t unk0x60[3];						//0x60
+	uint32_t dwBoughtItemId;					//0x6C
+	int32_t nRightSkillId;						//0x70
+	int32_t nLeftSkillId;						//0x74
+	int32_t nRightSkillFlags;					//0x78
+	int32_t nLeftSkillFlags;					//0x7C
+	int32_t nSwitchRightSkillId;				//0x80
+	int32_t nSwitchLeftSkillId;					//0x84
+	int32_t nSwitchRightSkillFlags;				//0x88
+	int32_t nSwitchLeftSkillFlags;				//0x8C
+	int32_t nWeaponGUID;						//0x90
+	uint32_t unk0x94[2];						//0x94
+	D2ClientStrc* pClient;					//0x9C
+	uint32_t unk0xA0[48];						//0xA0
+	uint32_t dwHostileDelay;					//0x160
+	uint32_t unk0x164;							//0x164
+	uint32_t dwGameFrame;						//0x168
+};

@@ -3,6 +3,7 @@
 #include "D2Dungeon.h"
 #include "D2StatList.h"
 #include "Units/Units.h"
+#include "Path/Path.h"
 
 
 //TODO: Find names (used by Path Functions)

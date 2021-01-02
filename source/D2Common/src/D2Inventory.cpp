@@ -8,7 +8,7 @@
 #include "D2StatList.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
-
+#include <Path/Path.h>
 
 struct D2UnkInventoryComponentStrc
 {

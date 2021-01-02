@@ -2,6 +2,16 @@
 
 #include "CommonDefinitions.h"
 
+struct D2HoverTextStrc
+{
+	uint32_t dwDisplayTime;					//0x00
+	uint32_t dwExpireTime;						//0x04
+	uint8_t nLangId;							//0x08
+	uint8_t pad0x09[3];						//0x09
+	BOOL bUsed;								//0x0C
+	char szMsg[256];						//0x10
+};
+
 //D2Common.0x6FDC3BF0 (#10892)
 D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText, int nTimeout);
 //D2Common.0x6FDC3C80 (#10893)

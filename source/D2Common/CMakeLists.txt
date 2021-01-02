@@ -148,8 +148,11 @@ target_sources(D2Common
     src/Units/UnitRoom.cpp
     src/Units/Units.cpp
 
+    include/Units/Item.h
     include/Units/Missile.h
     include/Units/MissileStream.h
+    include/Units/Monster.h
+    include/Units/Object.h
     include/Units/Player.h
     include/Units/UnitFinds.h
     include/Units/UnitRoom.h
@@ -189,11 +192,13 @@ target_sources(D2Common
     include/D2Math.h
     include/D2Monsters.h
     include/D2QuestRecord.h
+    include/D2Roster.h
     include/D2Seed.h
     include/D2Skills.h
     include/D2States.h
     include/D2StatList.h
     include/D2Text.h
+    include/D2Timer.h
     include/D2Waypoints.h
 )
 
