@@ -1,5 +1,5 @@
-#include "D2DataTbls.h"
 #include <cstdio>
+#include "D2DataTbls.h"
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <Units/Units.h>

@@ -1,9 +1,9 @@
+#include <cmath>
 #include "D2Environment.h"
 
 #include "Drlg/D2DrlgDrlg.h"
 #include "D2Dungeon.h"
 #include "D2Math.h"
-#include <cmath>
 #include <DataTbls/LevelsIds.h>
 
 #define M_PI 3.14159265358979323846

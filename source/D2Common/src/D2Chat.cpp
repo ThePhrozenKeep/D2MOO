@@ -1,6 +1,5 @@
-#include "D2Chat.h"
-
 #include <cstring>
+#include <D2Chat.h>
 #include <D2Lang.h>
 
 

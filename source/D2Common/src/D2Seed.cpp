@@ -1,6 +1,5 @@
-#include "D2Seed.h"
-
 #include <ctime>
+#include <D2Seed.h>
 #include <CommonDefinitions.h>
 
 //D2Common.0x6FDA5260 (#10916)
