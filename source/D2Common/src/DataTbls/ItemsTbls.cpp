@@ -1744,11 +1744,8 @@ D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables()
 }
 
 //D2Common.0x6FD5D800
-BOOL __fastcall DATATBLS_CheckNestedItemTypes(int nItemType1, int nItemType2)
+BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nItemType2)
 {
-	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
-	int nItemType = 0;
-	int nIndex = 0;
 	int nParentItemTypes[129] = {};
 
 	if (nItemType2 <= 0)
@@ -1759,11 +1756,11 @@ BOOL __fastcall DATATBLS_CheckNestedItemTypes(int nItemType1, int nItemType2)
 	if (nItemType1 > 0 && nItemType1 < sgptDataTables->nItemTypesTxtRecordCount)
 	{
 		nParentItemTypes[1] = nItemType1;
-		nIndex = 1;
+		int nIndex = 1;
 
 		while (1)
 		{
-			nItemType = nParentItemTypes[nIndex];
+			int nItemType = nItemType = nParentItemTypes[nIndex];
 			--nIndex;
 
 			if (nItemType2 == nItemType)
@@ -1782,7 +1779,7 @@ BOOL __fastcall DATATBLS_CheckNestedItemTypes(int nItemType1, int nItemType2)
 				return FALSE;
 			}
 
-			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
+			D2ItemTypesTxt* pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 
 			if (pItemTypesTxtRecord->nEquiv1 > 0)
 			{
@@ -1864,16 +1861,16 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	}
 
 	sgptDataTables->nItemTypesIndex = (sgptDataTables->nItemTypesTxtRecordCount + 31) / 32;
-	sgptDataTables->pItemTypesNest = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pItemTypesNest, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
+	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
+	memset(sgptDataTables->pItemTypesEquivalenceLUTs, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
 
 	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 	{
-		pItemTypesNest = &sgptDataTables->pItemTypesNest[sgptDataTables->nItemTypesIndex * i];
+		pItemTypesNest = &sgptDataTables->pItemTypesEquivalenceLUTs[sgptDataTables->nItemTypesIndex * i];
 
 		for (int j = 0; j < sgptDataTables->nItemTypesTxtRecordCount; ++j)
 		{
-			if (DATATBLS_CheckNestedItemTypes(i, j))
+			if (DATATBLS_CheckItemTypesEquivalenceNested(i, j))
 			{
 				pItemTypesNest[j >> 5] |= gdwBitMasks[j & 31];
 			}
@@ -1884,7 +1881,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 //D2Common.0x6FD5DFE0
 void __fastcall DATATBLS_UnloadItemTypesTxt()
 {
-	FOG_FreeServerMemory(NULL, sgptDataTables->pItemTypesNest, __FILE__, __LINE__, 0);
+	FOG_FreeServerMemory(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
 	DATATBLS_UnloadBin(sgptDataTables->pItemTypesTxt);
 	FOG_FreeLinker(sgptDataTables->pItemTypesLinker);
 }

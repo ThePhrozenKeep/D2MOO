@@ -3375,27 +3375,34 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 	return nullptr;
 }
 
+
+static BOOL ITEMS_CheckTypeEquivalenceFromLUT(uint32_t* pEquivalenceLUT, uint32_t nItemType)
+{
+	return pEquivalenceLUT[nItemType / 32] & gdwBitMasks[nItemType % 32];
+}
+
+static uint32_t* ITEMS_TypeEquivalenceLUT(int nItemTypeLUT)
+{
+	return &sgptDataTables->pItemTypesEquivalenceLUTs[nItemTypeLUT * sgptDataTables->nItemTypesIndex];
+}
+
 //D2Common.0x6FD9DBA0 (#10729)
 BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType)
 {
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-
 	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
-		if (pItemsTxtRecord)
+		const D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
+		D2_ASSERT(pItemsTxtRecord);
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
+			if (ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(pItemsTxtRecord->wType[0]), nItemType))
 			{
-				if (sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[0] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F])
-				{
-					return TRUE;
-				}
+				return TRUE;
+			}
 
-				if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < sgptDataTables->nItemTypesTxtRecordCount)
-				{
-					return sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[1] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F];
-				}
+			if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < sgptDataTables->nItemTypesTxtRecordCount)
+			{
+				return ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(pItemsTxtRecord->wType[1]), nItemType);
 			}
 		}
 	}
@@ -3408,7 +3415,7 @@ BOOL __stdcall ITEMS_CheckType(int nItemType1, int nItemType2)
 {
 	if (nItemType1 >= 0 && nItemType1 < sgptDataTables->nItemTypesTxtRecordCount && nItemType2 >= 0 && nItemType2 < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		return sgptDataTables->pItemTypesNest[(nItemType2 >> 5) + nItemType1 * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType2 & 0x1F];
+		return ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(nItemType1), nItemType2);
 	}
 
 	return FALSE;
