@@ -1,5 +1,5 @@
 #include "D2DataTbls.h"
-
+#include <D2Items.h>
 
 // Inlined in both Parsers
 static BOOL DATATBLS_AreStringsEqual(const char* szString1, const char* szString2)
@@ -692,7 +692,7 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 		{ "c mod 5 param", TXTFIELD_WORD, 0, 320, NULL },
 		{ "c mod 5 min", TXTFIELD_WORD, 0, 322, NULL },
 		{ "c mod 5 max", TXTFIELD_WORD, 0, 324, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");

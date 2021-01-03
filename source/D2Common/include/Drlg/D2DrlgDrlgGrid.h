@@ -13,6 +13,15 @@ enum FlagOperation
 };
 
 
+struct D2DrlgGridStrc
+{
+	int32_t* pCellsFlags;					//0x00
+	int32_t* pCellsRowOffsets;				//0x04
+	int32_t nWidth;							//0x08
+	int32_t nHeight;						//0x0C
+	int32_t unk0x10;						//0x10 Maybe indicates if uninitialized? No memset when set to 1
+};
+
 //D2Common.0x6FD75BA0
 void __fastcall DRGLGRID_OverwriteFlag(int* pFlag, int nFlag);
 //D2Common.0x6FD75BB0

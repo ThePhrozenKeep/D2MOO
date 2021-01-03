@@ -29,14 +29,43 @@ target_sources(D2Common
     src/DataTbls/DataTbls.cpp
     src/DataTbls/FieldTbls.cpp
     src/DataTbls/HoradricCube.cpp
+    src/DataTbls/InvTbls.cpp
     src/DataTbls/ItemsTbls.cpp
     src/DataTbls/LevelsTbls.cpp
     src/DataTbls/MissilesTbls.cpp
     src/DataTbls/MonsterTbls.cpp
     src/DataTbls/ObjectsTbls.cpp
     src/DataTbls/OverlayTbls.cpp
+    src/DataTbls/SequenceTbls.cpp
     src/DataTbls/SkillsTbls.cpp
     src/DataTbls/TokenTbls.cpp
+    src/DataTbls/TransformTbls.cpp
+	
+    include/DataTbls/AnimTbls.h
+    include/DataTbls/ArenaTbls.h
+    include/DataTbls/BeltsTbls.h
+    include/DataTbls/DataTbls.h
+    include/DataTbls/FieldTbls.h
+    include/DataTbls/HoradricCube.h
+    include/DataTbls/InvTbls.h
+    include/DataTbls/ItemsTbls.h
+    include/DataTbls/LevelsTbls.h
+    include/DataTbls/MissilesTbls.h
+    include/DataTbls/MonsterTbls.h
+    include/DataTbls/ObjectsTbls.h
+    include/DataTbls/OverlayTbls.h
+    include/DataTbls/SequenceTbls.h
+    include/DataTbls/SkillsTbls.h
+    include/DataTbls/TokenTbls.h
+    include/DataTbls/TransformTbls.h
+	
+	# Enums for asset indices, should be generated from .txt files
+	include/DataTbls/LevelsIds.h
+	include/DataTbls/MissilesIds.h
+	include/DataTbls/MonsterIds.h
+	include/DataTbls/ObjectsIds.h
+	include/DataTbls/StringIds.h
+	include/DataTbls/SkillsIds.h
 )
 
 # Dynamic Random Level Generation
@@ -119,8 +148,12 @@ target_sources(D2Common
     src/Units/UnitRoom.cpp
     src/Units/Units.cpp
 
+    include/Units/Item.h
     include/Units/Missile.h
     include/Units/MissileStream.h
+    include/Units/Monster.h
+    include/Units/Object.h
+    include/Units/Player.h
     include/Units/UnitFinds.h
     include/Units/UnitRoom.h
     include/Units/Units.h
@@ -129,7 +162,6 @@ target_sources(D2Common
 # Remaining files that were not placed into subfolders
 target_sources(D2Common
   PRIVATE
-    src/D2BitBuffer.cpp
     src/D2Chat.cpp
     src/D2Collision.cpp
     src/D2Composit.cpp
@@ -146,9 +178,9 @@ target_sources(D2Common
     src/D2Text.cpp
     src/D2Waypoints.cpp
 
-    include/D2BitBuffer.h
     include/D2Chat.h
     include/D2Collision.h
+	include/D2Combat.h
     include/D2Composit.h
     include/D2DataTbls.h
     include/D2Dungeon.h
@@ -160,11 +192,13 @@ target_sources(D2Common
     include/D2Math.h
     include/D2Monsters.h
     include/D2QuestRecord.h
+    include/D2Roster.h
     include/D2Seed.h
     include/D2Skills.h
     include/D2States.h
     include/D2StatList.h
     include/D2Text.h
+    include/D2Timer.h
     include/D2Waypoints.h
 )
 

@@ -14,7 +14,7 @@ void __fastcall DATATBLS_LoadArenaTxt(void* pMemPool)
 		{ "PlayerDeath", TXTFIELD_DWORD, 0, 16, NULL },
 		{ "PlayerDeathPercent", TXTFIELD_DWORD, 0, 20, NULL },
 		{ "MonsterDeath", TXTFIELD_DWORD, 0, 24, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	gpArenaTxtTable = (D2ArenaTxt*)DATATBLS_CompileTxt(pMemPool, "arena", pTbl, NULL, sizeof(D2ArenaTxt));
@@ -121,7 +121,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(void* pMemPool)
 		{ "item15", TXTFIELD_RAW, 0, 232, NULL },
 		{ "item15loc", TXTFIELD_BYTE, 0, 236, NULL },
 		{ "item15count", TXTFIELD_BYTE, 0, 237, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	gpCharTemplateTxtTable = (D2CharTemplateTxt*)DATATBLS_CompileTxt(pMemPool, "chartemplate", pTbl, &gnCharTemplateTxtTableRecordCount, sizeof(D2CharTemplateTxt));

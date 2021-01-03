@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "D2DrlgDrlgGrid.h"
 
 //D2Common.0x6FD88860
 D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int a2, unsigned int a3);

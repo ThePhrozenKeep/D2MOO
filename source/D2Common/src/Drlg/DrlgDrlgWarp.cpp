@@ -4,8 +4,9 @@
 #include "Drlg/D2DrlgActivate.h"
 #include "Drlg/D2DrlgDrlg.h"
 #include "Drlg/D2DrlgDrlgRoom.h"
+#include "Drlg/D2DrlgPreset.h"
 #include "D2Seed.h"
-
+#include <Units/Units.h>
 
 //D2Common.0x6FD78780
 D2RoomStrc* __fastcall DRLGWARP_GetDestinationRoom(D2RoomExStrc* pRoomEx, int nSourceLevel, int* pDestinationLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord)

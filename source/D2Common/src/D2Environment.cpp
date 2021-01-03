@@ -4,6 +4,7 @@
 #include "D2Dungeon.h"
 #include "D2Math.h"
 #include <cmath>
+#include <DataTbls/LevelsIds.h>
 
 #define M_PI 3.14159265358979323846
 #define NUM_TIME_RATES 3

@@ -31,7 +31,7 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool)
 		{ "Blue", TXTFIELD_BYTE, 0, 127, NULL },
 		{ "NumDirections", TXTFIELD_BYTE, 0, 128, NULL },
 		{ "LocalBlood", TXTFIELD_BYTE, 0, 129, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pOverlayLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);

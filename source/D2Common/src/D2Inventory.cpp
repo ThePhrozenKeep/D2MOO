@@ -2,12 +2,13 @@
 
 #include "D2Composit.h"
 #include "D2DataTbls.h"
+#include <DataTbls/MonsterIds.h>
 #include "D2Dungeon.h"
 #include "D2Items.h"
 #include "D2StatList.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
-
+#include <Path/Path.h>
 
 struct D2UnkInventoryComponentStrc
 {
@@ -1023,7 +1024,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		return FALSE;
 	}
 
-	if (nInventoryGrid < 2)
+	if (nInventoryGrid != INVGRID_INVENTORY)
 	{
 		nWidth = 1;
 		nHeight = 1;
@@ -1040,7 +1041,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 			return FALSE;
 		}
 	}
-	else
+	else // INVGRID_INVENTORY
 	{
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 		if (nXPos < 0 || nXPos + nWidth > pInventoryGridInfo.nGridX || nYPos < 0 || nYPos + nHeight > pInventoryGridInfo.nGridY)

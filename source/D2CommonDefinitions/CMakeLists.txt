@@ -10,9 +10,8 @@ endif()
 add_library(D2CommonDefinitions INTERFACE)
 target_sources(D2CommonDefinitions
   ${SOURCES_TRANSITIVE_USAGE}
+    include/D2BasicTypes.h
     include/D2Constants.h
-    include/D2DataTables.h
-    include/D2PacketDef.h
     include/D2QuestDataEx.h
     include/D2Structs.h
 	include/D2Dll.h

@@ -7,8 +7,11 @@
 #include "Drlg/D2DrlgMaze.h"
 #include "Drlg/D2DrlgPreset.h"
 #include "Drlg/D2DrlgRoomTile.h"
+#include "Drlg/D2DrlgOutdoors.h"
+#include "Drlg/D2DrlgOutRoom.h"
 #include "D2Dungeon.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //D2Common.0x6FD8A460

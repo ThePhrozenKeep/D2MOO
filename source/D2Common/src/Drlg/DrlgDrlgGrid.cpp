@@ -1,6 +1,6 @@
-#include "Drlg/D2DrlgDrlgGrid.h"
-
-#include "Drlg/D2DrlgDrlgRoom.h"
+#include <Drlg/D2DrlgDrlg.h>
+#include <Drlg/D2DrlgDrlgGrid.h>
+#include <Drlg/D2DrlgDrlgRoom.h>
 
 
 void(__fastcall* gpfFlagOperations[])(int*, int) =

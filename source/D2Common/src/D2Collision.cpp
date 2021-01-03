@@ -2,6 +2,8 @@
 
 #include "D2DataTbls.h"
 #include "D2Dungeon.h"
+#include <D2Lang.h>
+#include <D2CMP.h>
 
 //D2Common.0x6FD41000
 void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2RoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry)

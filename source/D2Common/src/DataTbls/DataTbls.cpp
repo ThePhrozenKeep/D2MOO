@@ -1,5 +1,9 @@
 #include "D2DataTbls.h"
-
+#include <cstdio>
+#include <D2Lang.h>
+#include <D2BitManip.h>
+#include <Units/Units.h>
+#include <D2States.h>
 
 D2ArenaTxt* gpArenaTxtTable;
 D2CharTemplateTxt* gpCharTemplateTxtTable;
@@ -8,7 +12,7 @@ uint32_t gnCharTemplateStartIds[64];
 D2BeltsTxt* gpBeltsTxtTable;
 D2DataTablesStrc gpDataTables;
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
-
+BOOL DATATBLS_LoadFromBin = TRUE;
 
 //D2Common.0x6FDC412C
 void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle)
@@ -428,7 +432,7 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		{ "clteventfunc", TXTFIELD_WORD, 0, 50, NULL },
 		{ "cltactivefunc", TXTFIELD_WORD, 0, 52, NULL },
 		{ "srvactivefunc", TXTFIELD_WORD, 0, 54, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pStatesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -576,7 +580,7 @@ void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
 		{ "mclass4", TXTFIELD_WORD, 0, 184, NULL },
 		{ "micon4", TXTFIELD_ASCII, 32, 143, NULL },
 		{ "name", TXTFIELD_KEYTOWORD, 0, 12, DATATBLS_GetStringIdFromReferenceString },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pPetTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -755,7 +759,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 		FOG_FreeServerMemory(NULL, pTxt, __FILE__, __LINE__, 0);
 	}
 
-	if (dword_6FDD6A24)
+	if (DATATBLS_LoadFromBin)
 	{
 		wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".bin");
 	}
@@ -774,7 +778,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 	pData = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nDataSize, __FILE__, __LINE__);
 	D2_ASSERT(pData);
 
-	if (dword_6FDD6A24)
+	if (DATATBLS_LoadFromBin)
 	{
 		nRecordCount = *(int*)pData;
 		pTxt = (char*)pData + 4;
@@ -808,7 +812,7 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 {
 	if (pBinFile)
 	{
-		if (dword_6FDD6A24)
+		if (DATATBLS_LoadFromBin)
 		{
 			FOG_FreeServerMemory(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
 		}
@@ -924,7 +928,7 @@ void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3)
 		{ "Druid", TXTFIELD_DWORD, 0, 20, NULL },
 		{ "Assassin", TXTFIELD_DWORD, 0, 24, NULL },
 		{ "ExpRatio", TXTFIELD_DWORD, 0, 28, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	DATATBLS_LoadSomeTxts(pMemPool);
@@ -996,82 +1000,82 @@ void __fastcall DATATBLS_LoadSomeTxts(void* pMemPool)
 	D2BinFieldStrc pHireDescTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pHireDescLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pMonModeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pMonModeLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pPlayerClassTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pPlayerClassLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pPlrModeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pPlrModeLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pStorePageTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pStorePageLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pMonAiTbl[] =
 	{
 		{ "AI", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonAiLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pHitClassTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pHitClassLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pMonPlaceTbl[] =
 	{
 		{ "code", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonPlaceLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pCompCodeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pCompCodeLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pSkillCalcTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pSkillCalcLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pElemTypesTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pElemTypesLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pMissCalcTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pMissileCalcLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pBodyLocsTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pBodyLocsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pSkillCodeTbl[] =
 	{
 		{ "skill", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->iSkillCode },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pColorsTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pColorsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	D2BinFieldStrc pEventsTbl[] =
 	{
 		{ "event", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pEventsLinker },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pCompCodeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -1202,7 +1206,7 @@ void __fastcall DATATBLS_LoadCharStatsTxt(void* pMemPool)
 		{ "item9count", TXTFIELD_BYTE, 0, 161, NULL },
 		{ "item10", TXTFIELD_RAW, 0, 164, NULL },
 		{ "item10count", TXTFIELD_BYTE, 0, 169, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pCharStatsTxt = (D2CharStatsTxt*)DATATBLS_CompileTxt(pMemPool, "charstats", pTbl, &sgptDataTables->nCharStatsTxtRecordCount, sizeof(D2CharStatsTxt));
@@ -1237,7 +1241,7 @@ void __fastcall DATATBLS_LoadDifficultyLevelsTxt(void* pMemPool)
 		{ "GambleUnique", TXTFIELD_DWORD, 0, 76, NULL },
 		{ "GambleUber", TXTFIELD_DWORD, 0, 80, NULL },
 		{ "GambleUltra", TXTFIELD_DWORD, 0, 84, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pDifficultyLevelsTxt = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(pMemPool, "difficultylevels", pTbl, &sgptDataTables->nDifficultyLevelsTxtRecordCount, sizeof(D2DifficultyLevelsTxt));

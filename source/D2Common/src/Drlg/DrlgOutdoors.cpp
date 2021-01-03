@@ -9,11 +9,13 @@
 #include "Drlg/D2DrlgMaze.h"
 #include "Drlg/D2DrlgOutDesr.h"
 #include "Drlg/D2DrlgOutPlace.h"
+#include "Drlg/D2DrlgOutRoom.h"
 #include "Drlg/D2DrlgOutSiege.h"
 #include "Drlg/D2DrlgOutWild.h"
 #include "Drlg/D2DrlgPreset.h"
 #include "Drlg/D2DrlgTileSub.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //D2Common.0x6FD7DC20

@@ -4,11 +4,12 @@
 #include "D2DataTbls.h"
 #include "D2Dungeon.h"
 #include "D2Inventory.h"
-#include "D2Math.h"
+#include <D2BitManip.h>
 #include "D2Monsters.h"
 #include "Path/Path_IDAStar.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
+#include <DataTbls/MonsterIds.h>
 
 
 

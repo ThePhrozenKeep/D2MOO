@@ -1,5 +1,22 @@
-#include "D2BitBuffer.h"
+#include "D2BitManip.h"
 
+// Fog.6FF71308
+const uint32_t gdwBitMasks[] =
+{
+	0x00000001, 0x00000002, 0x00000004, 0x00000008, 0x00000010, 0x00000020, 0x00000040, 0x00000080,
+	0x00000100, 0x00000200, 0x00000400, 0x00000800, 0x00001000, 0x00002000, 0x00004000, 0x00008000,
+	0x00010000, 0x00020000, 0x00040000, 0x00080000, 0x00100000, 0x00200000, 0x00400000, 0x00800000,
+	0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000,
+};
+
+// Fog.6FF71388
+const uint32_t gdwInvBitMasks[] =
+{
+	0xFFFFFFFE, 0xFFFFFFFD, 0xFFFFFFFB, 0xFFFFFFF7, 0xFFFFFFEF, 0xFFFFFFDF, 0xFFFFFFBF, 0xFFFFFF7F,
+	0xFFFFFEFF, 0xFFFFFDFF, 0xFFFFFBFF, 0xFFFFF7FF, 0xFFFFEFFF, 0xFFFFDFFF, 0xFFFFBFFF, 0xFFFF7FFF,
+	0xFFFEFFFF, 0xFFFDFFFF, 0xFFFBFFFF, 0xFFF7FFFF, 0xFFEFFFFF, 0xFFDFFFFF, 0xFFBFFFFF, 0xFF7FFFFF,
+	0xFEFFFFFF, 0xFDFFFFFF, 0xFBFFFFFF, 0xF7FFFFFF, 0xEFFFFFFF, 0xDFFFFFFF, 0xBFFFFFFF, 0x7FFFFFFF,
+};
 
 //Fog.0x6FF71408
 uint32_t gdw_6FF71408[] =
@@ -15,11 +32,11 @@ uint8_t gn_6FF7142C[] =
 
 
 /*
-Function:		BITBUFFER_Initialize
+Function:		BITMANIP_Initialize
 Address:		Fog.#10126
 Notes:			
 */
-void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStream, size_t nSize)
+void __stdcall BITMANIP_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStream, size_t nSize)
 {
 	if (!pBuffer)
 	{
@@ -34,21 +51,21 @@ void __stdcall BITBUFFER_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStrea
 }
 
 /*
-Function:		BITBUFFER_GetSize
+Function:		BITMANIP_GetSize
 Address:		Fog.#10127
 Notes:
 */
-size_t __stdcall BITBUFFER_GetSize(D2BitBufferStrc* pBuffer)
+size_t __stdcall BITMANIP_GetSize(D2BitBufferStrc* pBuffer)
 {
 	return (pBuffer->nPosBits) ? (pBuffer->nPos + 1) : pBuffer->nPos;
 }
 
 /*
-Function:		BITBUFFER_Write
+Function:		BITMANIP_Write
 Address:		Fog.#10128
 Notes:
 */
-void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint32_t dwBits)
+void __stdcall BITMANIP_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint32_t dwBits)
 {
 	uint32_t dwBitsLeft = dwBits;
 	uint32_t dwValueEx = dwValue;
@@ -102,13 +119,13 @@ void __stdcall BITBUFFER_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint3
 }
 
 /*
-Function:		BITBUFFER_ReadSigned
+Function:		BITMANIP_ReadSigned
 Address:		Fog.#10129
 Notes:
 */
-int __fastcall BITBUFFER_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
+int __fastcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
 {
-	int nResult = BITBUFFER_Read(pBuffer, nBits);
+	int nResult = BITMANIP_Read(pBuffer, nBits);
 
 	if (nBits < 32)
 	{
@@ -122,11 +139,11 @@ int __fastcall BITBUFFER_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
 }
 
 /*
-Function:		BITBUFFER_Read
+Function:		BITMANIP_Read
 Address:		Fog.#10130
 Notes:
 */
-uint32_t __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
+uint32_t __stdcall BITMANIP_Read(D2BitBufferStrc* pBuffer, int nBits)
 {
 	int n = pBuffer->nPosBits + nBits + 8 * pBuffer->nPos - pBuffer->nBits;
 
@@ -173,11 +190,11 @@ uint32_t __stdcall BITBUFFER_Read(D2BitBufferStrc* pBuffer, int nBits)
 }
 
 /*
-Function:		BITBUFFER_GoToNextByte
+Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10131
 Notes:
 */
-void __stdcall BITBUFFER_GoToNextByte(D2BitBufferStrc* pBuffer)
+void __stdcall BITMANIP_GoToNextByte(D2BitBufferStrc* pBuffer)
 {
 	if (pBuffer->nPosBits)
 	{
@@ -195,31 +212,31 @@ void __stdcall BITBUFFER_GoToNextByte(D2BitBufferStrc* pBuffer)
 
 
 /*
-Function:		BITBUFFER_SetBitState
+Function:		BITMANIP_SetBitState
 Address:		Fog.#10118
 Notes:
 */
-void __stdcall BITBUFFER_SetBitState(uint8_t* pBitBuffer, int nBit)
+void __stdcall BITMANIP_SetBitState(uint8_t* pBitStream, int nBit)
 {
-	pBitBuffer[nBit >> 3] |= (uint8_t)gdwBitMasks[nBit & 7];
+	pBitStream[nBit >> 3] |= (uint8_t)gdwBitMasks[nBit & 7];
 }
 
 /*
-Function:		BITBUFFER_GoToNextByte
+Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10119
 Notes:
 */
-int __stdcall BITBUFFER_GetBitState(uint8_t* pBitBuffer, int nBit)
+int __stdcall BITMANIP_GetBitState(uint8_t* pBitStream, int nBit)
 {
-	return gdwBitMasks[nBit & 7] & pBitBuffer[nBit >> 3];
+	return gdwBitMasks[nBit & 7] & pBitStream[nBit >> 3];
 }
 
 /*
-Function:		BITBUFFER_GoToNextByte
+Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10120
 Notes:
 */
-void __stdcall BITBUFFER_ResetBitstate(uint8_t* pBitBuffer, int nBit)
+void __stdcall BITMANIP_MaskBitstate(uint8_t* pBitStream, int nBit)
 {
-	pBitBuffer[nBit >> 3] &= LOBYTE(gdwInvBitMasks[nBit & 7]);
+	pBitStream[nBit >> 3] &= LOBYTE(gdwInvBitMasks[nBit & 7]);
 }

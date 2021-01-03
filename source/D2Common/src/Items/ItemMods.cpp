@@ -10,7 +10,7 @@
 #include "D2Skills.h"
 #include "D2StatList.h"
 #include "Units/Units.h"
-
+#include <D2States.h>
 
 /*
 Date: Sun Apr 08 09:12:50 2012

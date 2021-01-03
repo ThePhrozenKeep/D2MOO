@@ -1,5 +1,7 @@
-#include "Drlg/D2DrlgDrlgLogic.h"
+#include <D2Seed.h>
 
+#include "Drlg/D2DrlgDrlg.h"
+#include "Drlg/D2DrlgDrlgLogic.h"
 #include "Drlg/D2DrlgDrlgAnim.h"
 #include "Drlg/D2DrlgDrlgGrid.h"
 #include "Drlg/D2DrlgDrlgRoom.h"

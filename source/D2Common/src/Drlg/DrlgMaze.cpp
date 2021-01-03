@@ -5,6 +5,7 @@
 #include "Drlg/D2DrlgDrlgRoom.h"
 #include "Drlg/D2DrlgPreset.h"
 #include "D2Seed.h"
+#include <DataTbls/LevelsIds.h>
 
 
 //D2Common.0x6FD78E50

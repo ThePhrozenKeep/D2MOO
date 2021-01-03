@@ -1,3 +1,4 @@
+#include "Path/Path.h"
 #include "Path/Path_IDAStar.h"
 
 #include "D2Collision.h"

@@ -1,6 +1,7 @@
 #include "D2Chat.h"
 
 #include <cstring>
+#include <D2Lang.h>
 
 
 //D2Common.0x6FDC3BF0 (#10892)

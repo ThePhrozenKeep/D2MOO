@@ -1,6 +1,19 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include <D2BasicTypes.h>
+
+struct D2SeedStrc
+{
+	union
+	{
+		struct
+		{
+			int32_t nLowSeed;					//0x00
+			int32_t nHighSeed;					//0x04
+		};
+		uint64_t lSeed;		//0x00
+	};
+};
 
 //D2Common.0x6FDA5260 (#10916)
 void __stdcall SEED_Return();

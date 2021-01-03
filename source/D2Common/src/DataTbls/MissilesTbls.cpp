@@ -293,7 +293,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		{ "AnimSpeed", TXTFIELD_BYTE, 0, 417, NULL },
 		{ "LocalBlood", TXTFIELD_BYTE, 0, 418, NULL },
 		{ "DamageRate", TXTFIELD_DWORD, 0, 412, NULL },
-		{ "end", 0, 0, 0, NULL },
+		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
 	sgptDataTables->pMissilesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);

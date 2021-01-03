@@ -4,6 +4,7 @@
 #include "Drlg/D2DrlgDrlgRoom.h"
 #include "Drlg/D2DrlgPreset.h"
 #include "Drlg/D2DrlgRoomTile.h"
+#include <DataTbls/LevelsIds.h>
 
 //TODO: Find names
 

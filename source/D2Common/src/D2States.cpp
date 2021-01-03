@@ -3,7 +3,8 @@
 #include "D2DataTbls.h"
 #include "D2StatList.h"
 #include "Units/UnitRoom.h"
-
+#include "Units/Units.h"
+#include <D2BitManip.h>
 
 //Used in some of the following functions
 __forceinline BOOL __fastcall STATES_CheckStateMaskByStateId(int nState, int nStateMask)
