@@ -2,6 +2,7 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
 
 //TODO: Redo Header defs when .cpp is done
 
@@ -139,6 +140,10 @@ struct D2SkillTreeChartStrc
 	uint32_t unk0x08[6];						//0x08
 	uint16_t unk0x20;							//0x20
 };
+
+
+
+#pragma pack()
 
 
 //D2Common.0x6FDAEB10 (#10938)

@@ -3,6 +3,7 @@
 #include "CommonDefinitions.h"
 
 
+#pragma pack(1)
 //TODO: Redo Header defs when .cpp is done
 
 enum D2InactiveMonsterFlags
@@ -144,6 +145,7 @@ struct D2HirelingInitStrc
 	int32_t field_34;							//0x34
 	int16_t nFlags;							//0x38
 };
+#pragma pack()
 
 //D2Common.0x6FDA4C10 (#11082)
 int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int nLowSeed, int nAct, int nDifficulty, D2HirelingInitStrc* pHirelingInit);

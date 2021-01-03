@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 enum D2DrlgFlags
 {
 	DRLGFLAG_ONCLIENT = 0x01,
@@ -493,6 +495,7 @@ struct D2DrlgWarpStrc
 	D2DrlgWarpStrc* pNext;					//0x44
 };
 
+#pragma pack()
 
 //D2Common.0x6FD74120 (#10014)
 D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* a3, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);

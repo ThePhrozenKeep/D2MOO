@@ -23,7 +23,7 @@
 #include "DataTbls/TransformTbls.h"
 #include <D2Seed.h>
 
-
+#pragma pack(1)
 
 struct D2BodyLocsTxt
 {
@@ -503,6 +503,12 @@ extern LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
 //D2Common.0x6FDD6A24
 extern BOOL DATATBLS_LoadFromBin;
+
+
+
+#pragma pack()
+
+
 
 //D2Common.0x6FDC412C
 void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle);

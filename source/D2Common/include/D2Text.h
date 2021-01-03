@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#pragma pack(1)
 
 #define MAX_TEXT_LIST_NODES 8
 
@@ -42,6 +43,7 @@ struct D2TextNodeStrc
 	int32_t nMenu;				//0x04
 	D2TextNodeStrc* pNext;		//0x08
 };
+#pragma pack()
 
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool);

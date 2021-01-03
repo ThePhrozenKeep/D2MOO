@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 struct D2SeedStrc
 {
 	union
@@ -14,6 +16,7 @@ struct D2SeedStrc
 		uint64_t lSeed;		//0x00
 	};
 };
+#pragma pack()
 
 //D2Common.0x6FDA5260 (#10916)
 void __stdcall SEED_Return();

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#pragma pack(1)
 
 struct D2WaypointActTableStrc
 {
@@ -38,6 +39,7 @@ struct D2WaypointTableStrc
 	int32_t nLevelId;							//0x00
 	bool bActivated;						//0x04
 };
+#pragma pack()
 
 //D2Common.0x6FDC3D20 (#11153)
 BOOL __stdcall WAYPOINTS_GetLevelIdFromWaypointNo(short nWaypointNo, int* pLevelId);

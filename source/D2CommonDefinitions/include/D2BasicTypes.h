@@ -5,6 +5,10 @@
 
 typedef int32_t BOOL;
 
+// We want all of the structures to be packed since they come from reverse engineering
+// This also means that if we use external headers, they should be included before this header.
+#pragma warning(error:4820 4121)
+
 // Windows.h defines its own, replace it
 #undef LOBYTE
 #undef HIBYTE

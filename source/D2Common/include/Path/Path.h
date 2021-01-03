@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#pragma pack(1)
 
 enum D2PathTypes
 {
@@ -124,6 +125,7 @@ struct D2StaticPathStrc
 	uint8_t nDirection;						//0x1C
 	uint8_t unk0x1D[3];						//0x1D
 };
+#pragma pack()
 
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
