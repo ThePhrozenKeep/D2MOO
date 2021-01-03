@@ -3290,36 +3290,37 @@ BOOL __stdcall ITEMS_IsSocketFiller(D2UnitStrc* pItem)
 const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pItem)
 {
 	if (!pItem)
+	{
 		return nullptr;
+	}
 
 	const bool isItemOfSpecialQuality = (pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwQualityNo >= ITEMQUAL_MAGIC && pItem->pItemData->dwQualityNo <= ITEMQUAL_TEMPERED);
 	// Note: The game specifically checks all the things above, which means we will enter the condition if dwUnitType == UNIT_ITEM
 	// While this is not really correct, this is what the game does, and it works because it expects the unit to be an item.
 	// and is using another function that checked if an item was special, which happened to check that the unit was indeed an item
 	if (isItemOfSpecialQuality)
+	{
 		return nullptr;
+	}
 
 	if (!DATATBLS_GetItemsTxtRecord(pItem->dwClassId)->nQuest && pItem->pInventory)
 	{
 		int nSocketableIds[6] = {};
-		int nbSocketedItems = 0;
+		int nSocketedItems = 0;
 
-		D2UnitStrc* pInventoryItem = INVENTORY_GetFirstItem(pItem->pInventory);
-		while (pInventoryItem && INVENTORY_UnitIsItem(pInventoryItem))
+		for (D2UnitStrc* pInventoryItem = INVENTORY_GetFirstItem(pItem->pInventory); pInventoryItem && INVENTORY_UnitIsItem(pInventoryItem); pInventoryItem = INVENTORY_GetNextItem(pInventoryItem))
 		{
-			nSocketableIds[nbSocketedItems] = pInventoryItem->dwClassId;
-			++nbSocketedItems;
-
-			pInventoryItem = INVENTORY_GetNextItem(pInventoryItem);
+			nSocketableIds[nSocketedItems] = pInventoryItem->dwClassId;
+			++nSocketedItems;
 		}
 
 		D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 
 		const int nSockets = STATLIST_GetUnitStat(pItem, STAT_ITEM_NUMSOCKETS, 0);
 
-		if (nSockets != nbSocketedItems)
+		if (nSockets != nSocketedItems)
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		for (int i = 0; i < sgptDataTables->pRuneDataTables.nRunesTxtRecordCount; ++i)
@@ -3329,21 +3330,24 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 			if (pRunesTxtRecord->nComplete)
 			{
 				int nRuneCounter = 0;
-				while (nRuneCounter < 6 && pRunesTxtRecord->dwRune[nRuneCounter] > 0)
+				bool bMatch = true;
+
+				while (nRuneCounter < 6 && pRunesTxtRecord->nRune[nRuneCounter] > 0)
 				{
-					if (nbSocketedItems < nRuneCounter || nSocketableIds[nRuneCounter] != pRunesTxtRecord->dwRune[nRuneCounter])
+					if (nSocketedItems < nRuneCounter || nSocketableIds[nRuneCounter] != pRunesTxtRecord->nRune[nRuneCounter])
 					{
+						bMatch = false;
 						break;
 					}
 
 					++nRuneCounter;
 				}
 
-				if (nRuneCounter >= nSockets)
+				if (bMatch)
 				{
 					// All runes are a match, now check if the item types correspond
 					bool isItemTypeExcluded = false;
-					for(int nETypeCounter = 0; nETypeCounter < 3 && pRunesTxtRecord->wEType[nETypeCounter]; ++nETypeCounter)
+					for (int nETypeCounter = 0; nETypeCounter < 3 && pRunesTxtRecord->wEType[nETypeCounter]; ++nETypeCounter)
 					{
 						if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wEType[nETypeCounter]))
 						{
@@ -3352,21 +3356,22 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 						}
 					}
 
-					// Not a match, keep looking
-					if (isItemTypeExcluded)
-						continue;
-
-					for(int nITypeCounter = 0; nITypeCounter < 6 && pRunesTxtRecord->wIType[nITypeCounter]; ++nITypeCounter)
+					// Not an excluded type, check valid types
+					if (!isItemTypeExcluded)
 					{
-						if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wIType[nITypeCounter]))
+						for (int nITypeCounter = 0; nITypeCounter < 6 && pRunesTxtRecord->wIType[nITypeCounter]; ++nITypeCounter)
 						{
-							return pRunesTxtRecord;
+							if (ITEMS_CheckItemTypeId(pItem, pRunesTxtRecord->wIType[nITypeCounter]))
+							{
+								return pRunesTxtRecord;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+
 	return nullptr;
 }
 
