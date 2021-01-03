@@ -3,6 +3,11 @@
 #include "CommonDefinitions.h"
 #include <Drlg/D2DrlgDrlg.h>
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 //D2Common.0x6FD8B8A0 (#10038)
 D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nActNo, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD8B950 (#10039)

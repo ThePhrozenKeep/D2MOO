@@ -7,6 +7,8 @@
 #include "Object.h"
 #include "Player.h"
 
+#pragma pack(1)
+
 enum D2C_UnitTypes
 {
 	UNIT_PLAYER,
@@ -183,6 +185,8 @@ struct D2UnitStrc
 	void* pMsgFirst;							//0xEC
 	void* pMsgLast;								//0xF0
 };
+
+#pragma pack()
 
 //D2Common.0x6FDBD520 (#10457)
 uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);

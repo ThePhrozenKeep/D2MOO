@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma pack(1)
 
 enum D2C_RosterInfoFlags
 {
@@ -106,3 +107,6 @@ struct D2RosterUnitStrc
 	char szNameEx[26];						//0x66 - name with clan tag
 	D2RosterUnitStrc* pNext;				//0x80
 };
+
+#pragma pack()
+

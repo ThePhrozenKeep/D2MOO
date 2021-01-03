@@ -4,6 +4,8 @@
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 
+#pragma pack(1)
+
 struct D2UnkFileStrc
 {
 	char szPath[D2_MAX_PATH];			//0x00
@@ -65,6 +67,9 @@ struct D2DrlgPresetRoomStrc
 	D2CoordStrc* pTombStoneTiles;			//0xF0
 	int32_t nTombStoneTiles;					//0xF4
 };
+
+#pragma pack()
+
 
 //D2Common.0x6FD859A0 (#11222)
 int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);

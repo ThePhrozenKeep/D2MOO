@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 struct D2ArenaTxt
 {
 	uint32_t dwSuicide;					//0x00
@@ -44,6 +46,7 @@ struct D2CharTemplateTxt
 	D2CharItemStrc pItems[15];			//0x78
 };
 
+#pragma pack()
 
 //D2Common.0x6FD47840
 void __fastcall DATATBLS_LoadArenaTxt(void* pMemPool);

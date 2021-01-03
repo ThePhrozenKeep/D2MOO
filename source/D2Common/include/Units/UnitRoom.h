@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+
+#pragma pack()
 
 //D2Common.0x6FDBCF10 (#11279)
 int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nUnused);

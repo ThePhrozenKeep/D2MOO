@@ -3,6 +3,7 @@
 #include "CommonDefinitions.h"
 #include "Path/Path.h"
 
+#pragma pack(1)
 //TODO: Redo Header defs when .cpp is done
 
 struct D2UnkMissileCalcStrc
@@ -116,6 +117,7 @@ struct D2MissileStrc
 	void* pInitFunc;						//0x54
 	void* pInitArgs;						//0x58
 };
+#pragma pack()
 
 //D2Common.0x6FDB9F30 (#11115)
 void __stdcall MISSILE_AllocMissileData(D2UnitStrc* pMissile);

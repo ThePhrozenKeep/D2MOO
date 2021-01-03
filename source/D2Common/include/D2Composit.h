@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 enum D2Composits
 {
 	COMPOSIT_HEAD,
@@ -46,6 +48,8 @@ struct D2CompositStrc
 	int32_t nWeaponClassCode;					//0x00
 	int32_t nWeaponClassId;						//0x04
 };
+
+#pragma pack()
 
 //D2Common.0x6FD466C0 (#10884)
 void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nMode, int nUnitType, D2InventoryStrc* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9);

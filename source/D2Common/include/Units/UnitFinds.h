@@ -2,6 +2,7 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
 
 #define UNIT_FIND_ARRAY_SIZE 15
 
@@ -39,6 +40,8 @@ struct D2UnitFindDataStrc
 	int32_t nY;									//0x24
 	int32_t nSize;								//0x28
 };
+
+#pragma pack()
 
 //D2Common.0x6FDBC680 (#10408)
 BOOL __stdcall UNITFINDS_AreUnitsInNeighboredRooms(D2UnitStrc* pDestUnit, D2UnitStrc* pSrcUnit);

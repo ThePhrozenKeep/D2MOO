@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 //TODO: Find a better name
 struct D2UnkMonCompStrc
 {
@@ -666,6 +668,9 @@ struct D2MonStatsInitStrc
 	int32_t nElMaxD;							//0x30
 	int32_t nElDur;								//0x34
 };
+
+#pragma pack()
+
 
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText);

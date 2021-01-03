@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 enum D2EnvironmentDayCycles : int32_t {
 	EnvCycleSunrise,
 	EnvCycleMorning,
@@ -42,6 +44,8 @@ struct D2DrlgEnvironmentStrc
 	BOOL bEclipse;							//0x30
 	int32_t nPrev;							//0x34
 };
+
+#pragma pack()
 
 //D2Common.0x6FD8D8E0
 D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPool);

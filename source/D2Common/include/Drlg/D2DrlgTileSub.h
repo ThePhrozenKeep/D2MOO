@@ -5,6 +5,10 @@
 #include "D2DrlgDrlgGrid.h"
 #include <DataTbls/LevelsTbls.h>
 
+
+#pragma pack(1)
+
+
 struct D2UnkOutdoorStrc
 {
 	D2DrlgLevelStrc* pLevel;			//0x00
@@ -61,6 +65,10 @@ struct D2DrlgSubstGroupStrc
 	int32_t field_10;
 	int32_t field_14;
 };
+
+
+#pragma pack()
+
 
 //D2Common.0x6FD8A460
 void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1);

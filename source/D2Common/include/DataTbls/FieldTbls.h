@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
 struct D2CollisionFieldStrc
 {
 	int32_t nWidth;							//0x00
@@ -11,6 +12,7 @@ struct D2CollisionFieldStrc
 	int32_t nCenterY;						//0x10
 };
 
+#pragma pack()
 
 //D2Common.0x6FD51FC0
 BOOL __fastcall DATATBLS_LoadExpFieldD2(void* pMemPool);

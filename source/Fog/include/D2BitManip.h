@@ -4,8 +4,11 @@
 
 #include <Fog.h>
 
+#pragma pack(1)
+
 extern FOG_DLL_DECL const uint32_t gdwBitMasks[];
 extern FOG_DLL_DECL const uint32_t gdwInvBitMasks[];
+
 
 struct D2BitBufferStrc
 {
@@ -15,6 +18,8 @@ struct D2BitBufferStrc
 	int32_t nPosBits;							//0x0C
 	BOOL bFull;									//0x10
 };
+
+#pragma pack()
 
 /*
 Function:		BITMANIP_Initialize

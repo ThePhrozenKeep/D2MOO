@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 struct D2InvRectStrc
 {
 	int32_t nLeft;		//0x00
@@ -135,6 +137,7 @@ struct D2ItemExtraDataStrc
 	D2UnitStrc* unk0x10;					//0x10
 	D2UnitStrc* unk0x14;					//0x14
 };
+#pragma pack()
 
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);

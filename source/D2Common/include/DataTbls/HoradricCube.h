@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 enum D2C_CubeOps
 {
 	CUBEOP_COWPORTAL = 1,
@@ -103,6 +105,7 @@ struct D2CubeMainTxt
 	D2CubeOutputItem pOutputItem[3];	//0x4C
 };
 
+#pragma pack()
 
 //D2Common.0x6FD523E0
 void __fastcall DATATBLS_CubeMainInputLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);

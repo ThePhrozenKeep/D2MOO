@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 struct D2MazeLevelIdStrc
 {
 	int32_t nLevelPrestId1;					//0x00
@@ -9,6 +11,8 @@ struct D2MazeLevelIdStrc
 	int32_t nPickedFile;					//0x08
 	int32_t nDirection;						//0x0C
 };
+
+#pragma pack()
 
 //D2Common.0x6FD78E50
 D2RoomExStrc* __fastcall sub_6FD78E50(D2DrlgLevelStrc* pLevel);

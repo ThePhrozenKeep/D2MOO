@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 enum D2ObjectSubClasses
 {
 	OBJSUBCLASS_SHRINE = 0x01,
@@ -133,6 +135,7 @@ struct D2ShrinesTxt
 	uint32_t dwLevelMin;					//0xB4
 };
 
+#pragma pack()
 
 //D2Common.0x6FD6FDF0
 void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool);

@@ -2,6 +2,8 @@
 
 #include <D2Inventory.h>
 
+#pragma pack(1)
+
 struct D2ItemDataStrc
 {
 	uint32_t dwQualityNo;						//0x00
@@ -35,3 +37,5 @@ struct D2ItemDataStrc
 	//uint8_t nNodePos;							//0x68
 	//uint8_t nNodePosOther;						//0x69
 };
+
+#pragma pack()

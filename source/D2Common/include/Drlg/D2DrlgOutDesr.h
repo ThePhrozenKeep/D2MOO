@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 
 //Inlined in D2Common.0x6FD7D430
 void __fastcall DRLGOUTDESR_PlaceDesertTransitionToTown(D2DrlgLevelStrc* pLevel);

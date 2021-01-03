@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma pack(1)
+
 struct D2MonsterInteractStrc
 {
 	D2InteractInfoStrc* pInteractInfo;		//0x00
@@ -31,3 +33,5 @@ struct D2MonsterDataStrc
 	uint16_t wSummonerFlag;						//0x5C
 	uint8_t pad0x5E[2];						//0x5E
 };
+
+#pragma pack()

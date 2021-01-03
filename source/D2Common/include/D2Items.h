@@ -4,6 +4,7 @@
 #include <DataTbls/ItemsTbls.h>
 //TODO: Revise
 
+#pragma pack(1)
 
 enum D2C_ItemQualities
 {
@@ -202,6 +203,7 @@ struct D2ItemSaveStrc
 	uint8_t pad0x12[2];							//0x12
 	int32_t nItemFileIndex;						//0x14
 };
+#pragma pack()
 
 //D2Common.0x6FD98380 (#10687)
 void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);

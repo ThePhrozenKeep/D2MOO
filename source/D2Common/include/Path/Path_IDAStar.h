@@ -2,6 +2,9 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+#pragma pack()
+
 //TODO: Get definitions from .cpp
 int __stdcall D2Common_10215(int, int, int, int);
 int __stdcall sub_6FDAC760(int nX1, int nY1, int nX2, int nY2);

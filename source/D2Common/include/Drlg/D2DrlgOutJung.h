@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+#pragma pack()
+
+
 //D2Common.0x6FD7FC20
 void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7FE50

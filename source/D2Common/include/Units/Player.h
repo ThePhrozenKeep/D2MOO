@@ -1,5 +1,6 @@
 #pragma once 
 
+#pragma pack(1)
 
 enum D2C_PlayerModes
 {
@@ -98,3 +99,6 @@ struct D2PlayerDataStrc
 	uint32_t unk0x164;							//0x164
 	uint32_t dwGameFrame;						//0x168
 };
+
+
+#pragma pack()

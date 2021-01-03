@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 //D2Common.0x6FD78780
 D2RoomStrc* __fastcall DRLGWARP_GetDestinationRoom(D2RoomExStrc* pRoomEx, int nSourceLevel, int* pDestinationLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord);
 //D2Common.0x6FD787F0

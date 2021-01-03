@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 struct D2ArmTypeTxt
 {
 	char szName[32];					//0x00
@@ -76,6 +78,8 @@ struct D2CompCodeTxt
 {
 	uint32_t dwCode;						//0x00
 };
+
+#pragma pack()
 
 //D2Common.0x6FD729C0
 void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool);

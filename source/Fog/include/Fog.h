@@ -9,7 +9,7 @@
 #define FOG_DLL_DECL __declspec( dllimport )
 #endif
 
-//LINKER
+#pragma pack(1)
 
 struct D2TxtLinkNodeStrc
 {
@@ -99,6 +99,7 @@ struct D2UnkFogStrc
 	int32_t unk0x04;				//0x04
 };
 
+#pragma pack()
 
 D2FUNC_DLL(FOG, 10018, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)														//Fog.#10018
 D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023

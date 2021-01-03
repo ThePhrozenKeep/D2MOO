@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 //D2Common.0x6FD84CA0
 void __fastcall DRLGOUTWILD_GetBridgeCoords(D2DrlgLevelStrc* pLevel, int* pX, int* pY);
 //D2Common.0x6FD84D30

@@ -3,6 +3,8 @@
 #include "CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 
+#pragma pack(1)
+
 enum D2C_ItemStats
 {
 	STAT_INVALID = -1,
@@ -448,6 +450,8 @@ struct D2StatListExStrc : public D2StatListStrc
 	void* fpCallBack;						//0x5C
 	D2GameStrc* pGame;						//0x60
 };
+
+#pragma pack()
 
 //D2Common.0x6FDB57C0 (#10563)
 BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);

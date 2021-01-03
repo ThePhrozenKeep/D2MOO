@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
 enum D2C_StateTransformTypes
 {
 	TRANSFORMTYPE_PLAYER = 1,
@@ -240,6 +242,8 @@ enum D2C_StateMasks
 	STATEMASK_MELEEONLY,
 	STATEMASK_NOTONDEAD,
 };
+
+#pragma pack()
 
 //D2Common.0x6FDB4560 (#10486)
 void __stdcall STATES_ToggleState(D2UnitStrc* pUnit, int nState, BOOL bSet);

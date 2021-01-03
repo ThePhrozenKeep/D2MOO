@@ -1,6 +1,7 @@
 #pragma once
 
 
+#pragma pack(1)
 
 struct D2ObjectRoomCoordStrc
 {
@@ -42,3 +43,5 @@ struct D2ObjectDataStrc
 	D2CoordStrc DestPortalCoords;			//0x20
 	char szOwner[16];						//0x28
 };
+
+#pragma pack()

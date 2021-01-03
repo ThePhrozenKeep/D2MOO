@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 //D2Common.0x6FD771C0
 D2RoomExStrc* __fastcall DRLGROOM_AllocRoomEx(D2DrlgLevelStrc* pLevel, int nType);
 //D2Common.0x6FD77280

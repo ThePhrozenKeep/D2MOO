@@ -3,6 +3,10 @@
 #include "CommonDefinitions.h"
 #include "D2DrlgDrlg.h"
 
+#pragma pack(1)
+
+#pragma pack()
+
 //D2Common.0x6FD782A0
 D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, uint8_t nDirection);
 //D2Common.0x6FD782D0

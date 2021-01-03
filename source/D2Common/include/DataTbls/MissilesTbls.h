@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 enum D2C_MissilesTxtFlagIndices
 {
 	MISSILESFLAGINDEX_LASTCOLLIDE = 0,
@@ -142,6 +144,9 @@ struct D2MissilesTxt
 	uint8_t nLocalBlood;					//0x1A2
 	uint8_t pad0x1A3;						//0x1A3
 };
+
+#pragma pack()
+
 
 //D2Common.0x6FD62EA0
 int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey);

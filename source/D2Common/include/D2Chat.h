@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#pragma pack(1)
 
 struct D2HoverTextStrc
 {
@@ -11,6 +12,7 @@ struct D2HoverTextStrc
 	BOOL bUsed;								//0x0C
 	char szMsg[256];						//0x10
 };
+#pragma pack()
 
 //D2Common.0x6FDC3BF0 (#10892)
 D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText, int nTimeout);

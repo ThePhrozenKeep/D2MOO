@@ -3,6 +3,12 @@
 #include "CommonDefinitions.h"
 #include "D2DrlgDrlgGrid.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
+
 //D2Common.0x6FD88860
 D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int a2, unsigned int a3);
 //D2Common.0x6FD889C0

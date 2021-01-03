@@ -3,6 +3,9 @@
 #include "CommonDefinitions.h"
 #include <Drlg/D2DrlgDrlg.h>
 
+
+#pragma pack(1)
+
 struct D2UnkOutPlaceStrc
 {
 	D2DrlgCoordStrc pDrlgCoord;				//0x00
@@ -15,6 +18,9 @@ struct D2UnkOutPlaceStrc
 	int32_t* pJungleDefs;					//0x30
 	int32_t nJungleDefs;					//0x34
 };
+
+
+#pragma pack()
 
 //D2Common.0x6FD80480
 void __fastcall DRLGOUTPLACE_BuildKurast(D2DrlgLevelStrc* pLevel);

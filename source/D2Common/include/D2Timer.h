@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma pack(1)
 
 struct D2TimerArgStrc
 {
@@ -33,3 +34,5 @@ struct D2TimerStrc
 	void* pTimerList;						//0x28
 	void* fpTimerFunction;					//0x2C
 };
+
+#pragma pack()

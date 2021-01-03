@@ -3,6 +3,7 @@
 #include <D2BasicTypes.h>
 #include <D2Inventory.h>
 
+#pragma pack(1)
 
 
 struct D2InvCompGridStrc
@@ -50,6 +51,8 @@ struct D2InventoryTxt
 	D2InventoryGridInfoStrc pGridInfo;		//0x10
 	D2InvCompGridStrc pComponents[NUM_INV_COMPS];//0x28
 };
+
+#pragma pack()
 
 //D2Common.0x6FD542D0
 void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool);

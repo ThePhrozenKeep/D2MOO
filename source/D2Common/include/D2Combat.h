@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma pack(1)
+
 enum D2C_DamageReductionTypes
 {
 	DMGREDUCTYPE_NONE,
@@ -30,3 +32,4 @@ enum D2C_ElemTypes
 	ELEMTYPE_FREEZE,
 };
 
+#pragma pack()

@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 struct D2AnimDataRecordStrc
 {
 	char szAnimDataName[8];					//0x00
@@ -19,6 +21,8 @@ struct D2AnimDataStrc
 
 struct D2UnitStrc;
 struct D2InventoryStrc;
+
+#pragma pack()
 
 //D2Common.0x6FD473C0
 D2AnimDataStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool);

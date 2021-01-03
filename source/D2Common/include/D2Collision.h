@@ -4,6 +4,8 @@
 #include <Drlg/D2DrlgDrlg.h>
 // TODO: Reimport from .cpp
 
+#pragma pack(1)
+
 struct D2BoundingBoxStrc
 {
 	int32_t nLeft;								//0x00
@@ -38,6 +40,7 @@ struct D2RoomCollisionGridStrc
 	D2DrlgCoordsStrc pRoomCoords;			//0x00
 	uint16_t* pCollisionMask;					//0x20
 };
+#pragma pack()
 
 //D2Common.0x6FD41000
 void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2RoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry);

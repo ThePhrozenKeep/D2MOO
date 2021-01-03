@@ -3,6 +3,9 @@
 #include "CommonDefinitions.h"
 #include "D2DrlgDrlgGrid.h"
 
+#pragma pack(1)
+
+
 struct D2DrlgOutdoorRoomStrc
 {
 	D2DrlgGridStrc pOrientationGrid;		//0x00
@@ -18,6 +21,9 @@ struct D2DrlgOutdoorRoomStrc
 	int32_t nSubTheme;							//0x68
 	int32_t nSubThemePicked;					//0x6C
 };
+
+#pragma pack()
+
 
 //D2Common.0x6FD83D20
 void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoom(D2RoomExStrc* pRoomEx);

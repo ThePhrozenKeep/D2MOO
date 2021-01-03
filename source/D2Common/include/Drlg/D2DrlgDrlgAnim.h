@@ -4,6 +4,11 @@
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
+
 //D2Common.0x6FD75480
 void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData);
 //D2Common.0x6FD75560

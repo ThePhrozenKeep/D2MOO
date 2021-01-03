@@ -4,6 +4,8 @@
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 
+#pragma pack(1)
+
 struct D2UnkDrlgLogicStrc
 {
 	D2RoomExStrc* pRoomEx;					//0x00
@@ -24,6 +26,8 @@ struct D2DrlgCoordListStrc
 	D2DrlgGridStrc pIndexY;					//0x1C
 	D2RoomCoordListStrc* pCoordList;		//0x30
 };
+
+#pragma pack()
 
 //D2Common.0x6FD76420
 void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx);

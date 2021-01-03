@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
 
 struct D2PropertyStrc
 {
@@ -575,6 +576,8 @@ struct D2QualityItemDataTbl							//sgptDataTable + 0xEE4
 	int nQualityItemsTxtRecordCount;				//0x00
 	D2QualityItemsTxt* pQualityItemsTxt;			//0x04
 };
+
+#pragma pack()
 
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey);

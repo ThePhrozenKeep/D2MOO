@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack()
 struct D2MonSeqTxt
 {
 	uint16_t wSequence;					//0x00
@@ -23,6 +24,8 @@ struct D2UnkSequenceStrc
 {
 	D2SeqRecordStrc unk0x00[14];		//0x00
 };
+
+#pragma pack()
 
 //D2Common.0x6FD727A0 (#10682)
 D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit);

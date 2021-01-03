@@ -3,6 +3,8 @@
 #include <D2BasicTypes.h>
 #include <Drlg/D2DrlgDrlgGrid.h>
 
+#pragma pack(1)
+
 struct D2AutomapTxt
 {
 	char szLevelName[16];				//0x00
@@ -188,6 +190,9 @@ struct D2LvlWarpTxt
 	uint32_t dwTiles;						//0x28
 	char szDirection[4];					//0x30
 };
+
+#pragma pack()
+
 
 //D2Common.0x6FD5EAE0
 void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool);

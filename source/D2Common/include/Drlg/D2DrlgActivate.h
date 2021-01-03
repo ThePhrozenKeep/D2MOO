@@ -2,6 +2,10 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
 
 //D2Common.0x6FD733D0
 void __fastcall sub_6FD733D0(D2RoomExStrc* pRoomEx);

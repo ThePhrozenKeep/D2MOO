@@ -4,6 +4,10 @@
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 
+
+#pragma pack(1)
+
+
 struct D2DrlgOutdoorGridStrc
 {
 	int32_t dwFlags;						//0x00
@@ -34,6 +38,8 @@ struct D2DrlgOutdoorInfoStrc
 	int32_t nVertices;							//0x260
 	D2DrlgOrthStrc* pRoomData;				//0x264
 };
+
+#pragma pack()
 
 //D2Common.0x6FD7DC20
 int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pDrlgVertex);

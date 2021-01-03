@@ -2,6 +2,10 @@
 
 #include "CommonDefinitions.h"
 
+#pragma pack(1)
+
+
+#pragma pack()
 
 //D2Common.0x6FD84100
 int __fastcall sub_6FD84100(D2DrlgLevelStrc* pLevel);

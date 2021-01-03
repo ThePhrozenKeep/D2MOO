@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
+
 enum D2C_OverlayTypes
 {
 	OVERLAYTYPE_MODECHNG,		//overlay is deleted when unit mode changes
@@ -45,6 +47,7 @@ struct D2OverlayTxt
 	uint16_t pad0x82;					//0x82
 };
 
+#pragma pack()
 
 //D2Common.0x6FD720A0
 void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool);

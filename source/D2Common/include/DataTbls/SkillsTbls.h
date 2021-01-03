@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 
+#pragma pack(1)
 
 enum D2C_SkillsTxtFlagIndices
 {
@@ -274,6 +275,7 @@ struct D2SkillsTxt
 	int32_t nCostAdd;						//0x238
 };
 
+#pragma pack()
 
 //D2Common.0x6FD498D0
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey);
