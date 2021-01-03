@@ -3328,7 +3328,7 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 			const D2RunesTxt* pRunesTxtRecord = &sgptDataTables->pRuneDataTables.pRunesTxt[i];
 
 			if (pRunesTxtRecord->nComplete)
-			{	
+			{
 				int nRuneCounter = 0;
 				bool bMatch = true;
 
@@ -3343,7 +3343,7 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 					++nRuneCounter;
 				}
 
-				if (bMatch && nRuneCounter >= nSockets)
+				if (bMatch)
 				{
 					// All runes are a match, now check if the item types correspond
 					bool isItemTypeExcluded = false;
