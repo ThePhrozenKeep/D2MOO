@@ -22,7 +22,7 @@ struct D2RunesTxt
 	uint16_t pad0x84;						//0x84
 	uint16_t wIType[6];						//0x86
 	uint16_t wEType[3];						//0x92
-	uint32_t dwRune[6];						//0x98
+	int32_t nRune[6];						//0x98
 	D2PropertyStrc pProperties[7];			//0xB0
 };
 
