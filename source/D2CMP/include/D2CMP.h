@@ -1,7 +1,7 @@
 #pragma once
 
 #include <D2Dll.h>
-#include <cstdint>
+#include <D2BasicTypes.h>
 
 #ifdef D2CMP_IMPL
 #define D2CMP_DLL_DECL // We use .def files, not dllexport
