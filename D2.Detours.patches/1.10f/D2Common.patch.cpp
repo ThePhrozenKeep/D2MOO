@@ -789,7 +789,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetItemQlvl                                                   @10753
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckIfFlagIsSet                                              @10754
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetOrRemoveFlag                                               @10755
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckRequirements                                             @10756
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_CheckRequirements                                             @10756
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetLevelRequirement                                           @10757
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckBodyLocation                                             @10758
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckIfThrowable                                              @10759
