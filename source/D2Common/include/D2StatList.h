@@ -425,17 +425,17 @@ struct D2StatListStrc
 {
 	void* pMemPool;							//0x00
 	D2UnitStrc* pUnit;						//0x04
-	uint32_t dwOwnerType;						//0x08
+	uint32_t dwOwnerType;					//0x08
 	uint32_t dwOwnerId;						//0x0C
-	uint32_t dwFlags;							//0x10
+	uint32_t dwFlags;						//0x10
 	uint32_t dwStateNo;						//0x14
 	uint32_t dwExpireFrame;					//0x18
 	uint32_t dwSkillNo;						//0x1C
-	uint32_t dwSLvl;							//0x20
+	uint32_t dwSLvl;						//0x20
 	D2StatExStrc Stats;						//0x24
 	D2StatListStrc* pPrevLink;				//0x2C
 	D2StatListStrc* pNextLink;				//0x30
-	D2StatListStrc* pPrev;					//0x34
+	D2StatListStrc* pParent;				//0x34
 	void* fpStatRemove;						//0x38
 };
 

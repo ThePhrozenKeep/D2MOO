@@ -974,7 +974,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 
 	if (!(pStatListEx->dwFlags & 0x80000000))
 	{
-		pStatList = (D2StatListExStrc*)pStatListEx->pPrev;
+		pStatList = (D2StatListExStrc*)pStatListEx->pParent;
 	}
 	else
 	{
@@ -1062,7 +1062,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 			break;
 		}
 
-		pStatList = (D2StatListExStrc*)pStatList->pPrev;
+		pStatList = (D2StatListExStrc*)pStatList->pParent;
 	}
 }
 
@@ -1080,7 +1080,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListExStrc* pStatListEx)
 
 	if (pStatListEx)
 	{
-		pPrevStatList = (D2StatListExStrc*)pStatListEx->pPrev;
+		pPrevStatList = (D2StatListExStrc*)pStatListEx->pParent;
 
 		if (pPrevStatList)
 		{
@@ -1097,7 +1097,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListExStrc* pStatListEx)
 				}
 			}
 
-			pStatListEx->pPrev = NULL;
+			pStatListEx->pParent = NULL;
 		}
 
 		if (pStatListEx->pNextLink)
@@ -1222,7 +1222,7 @@ void __fastcall D2Common_STATLIST_FreeStatListEx_6FDB7050(D2StatListExStrc* pSta
 			do
 			{
 				pPrevious = pCurrent->pPrevLink;
-				pCurrent->pPrev = NULL;
+				pCurrent->pParent = NULL;
 				pCurrent->pUnit = NULL;
 				if (!(pCurrent->dwFlags & 0x80000000))
 				{
@@ -1418,7 +1418,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 
 		while ((D2StatListExStrc*)pStatList != pCurrentStatList)
 		{
-			pCurrentStatList = (D2StatListExStrc*)pCurrentStatList->pPrev;
+			pCurrentStatList = (D2StatListExStrc*)pCurrentStatList->pParent;
 			if (!pCurrentStatList)
 			{
 				if (pStatList->dwFlags & 4)
@@ -1437,7 +1437,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 
 					pStatList->pNextLink = NULL;
 					pUnit->pStatListEx->pMyStats = pStatList;
-					pStatList->pPrev = (D2StatListStrc*)pUnit->pStatListEx;
+					pStatList->pParent = (D2StatListStrc*)pUnit->pStatListEx;
 					pStatList->pUnit = pUnit;
 				}
 				else
@@ -1448,7 +1448,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 						pUnit->pStatListEx->pMyLastList->pNextLink = pStatList;
 					}
 
-					pStatList->pPrev = (D2StatListStrc*)pUnit->pStatListEx;
+					pStatList->pParent = (D2StatListStrc*)pUnit->pStatListEx;
 					pUnit->pStatListEx->pMyLastList = pStatList;
 					pStatList->pUnit = pUnit;
 
@@ -2393,7 +2393,7 @@ void __stdcall STATLIST_MergeStatLists(D2UnitStrc* pTarget, D2UnitStrc* pUnit, B
 //D2Common.0x6FDB83A0 (#10535)
 D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pDynamic)
 {
-	if (!pUnit || !pUnit->pStatListEx || !pUnit->pStatListEx->pPrev || !(pUnit->pStatListEx->pPrev->dwFlags & 0x80000000))
+	if (!pUnit || !pUnit->pStatListEx || !pUnit->pStatListEx->pParent || !(pUnit->pStatListEx->pParent->dwFlags & 0x80000000))
 	{
 		if (pDynamic)
 		{
@@ -2408,7 +2408,7 @@ D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pDynamic)
 		*pDynamic = (pUnit->pStatListEx->dwFlags >> 30) & 1;
 	}
 
-	return ((D2StatListExStrc*)pUnit->pStatListEx->pPrev)->pOwner;
+	return ((D2StatListExStrc*)pUnit->pStatListEx->pParent)->pOwner;
 }
 
 //D2Common.0x6FDB8420 (#10512)
