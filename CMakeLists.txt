@@ -17,7 +17,7 @@ set(D2MOO_ORDINALS_VERSION "1.10f" CACHE STRING "Name of the version to be used 
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(ENABLE_D2DETOURS_EMBEDDED_PATCHES "Build the DLL with builtin patching using D2.Detours" ON)
 set(D2DETOURS_EMBEDDED_PATCHES_DIR "D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches")
-
+option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
 
 if(CMAKE_GENERATOR MATCHES "Visual Studio" AND MSVC)
   option(D2MOO_ENABLE_PARALLEL_BUILD "Force /MP parallel compilation" ${D2MOO_IS_ROOT_PROJECT})
