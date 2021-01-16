@@ -1688,7 +1688,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 
 	while (pItem)
 	{
-		if (ITEMS_AreStackablesEqual(pItem, a2) && STATLIST_GetUnitStat(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
+		if (ITEMS_AreStackablesEqual(pItem, a2) && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
 		{
 			return pItem;
 		}
@@ -1732,7 +1732,7 @@ D2UnitStrc* __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc* pInven
 
 	while (pItem)
 	{
-		if (ITEMS_AreStackablesEqual(pItem, a2) && STATLIST_GetUnitStat(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
+		if (ITEMS_AreStackablesEqual(pItem, a2) && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
 		{
 			return pItem;
 		}
@@ -1786,7 +1786,7 @@ D2UnitStrc* __stdcall INVENTORY_FindFillableBook(D2InventoryStrc* pInventory, D2
 
 	while (pItem)
 	{
-		if (ITEMS_GetItemType(pItem) == ITEMTYPE_BOOK && ITEMS_GetSuffixId(pItem, 0) == ITEMS_GetSuffixId(pScrolls, 0) && STATLIST_GetUnitStat(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
+		if (ITEMS_GetItemType(pItem) == ITEMTYPE_BOOK && ITEMS_GetSuffixId(pItem, 0) == ITEMS_GetSuffixId(pScrolls, 0) && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) < ITEMS_GetTotalMaxStack(pItem))
 		{
 			return pItem;
 		}

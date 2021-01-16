@@ -519,7 +519,7 @@ EXPORTS
 	D2Common_10516														@10516
 	STATLIST_SetUnitStat												@10517
 	STATLIST_AddUnitStat												@10518
-	STATLIST_GetUnitStat												@10519
+	STATLIST_GetUnitStatUnsigned										@10519
 	STATLIST_GetUnitStatSigned											@10520
 	STATLIST_GetUnitBaseStat											@10521
 	STATLIST_GetUnitStatBonus											@10522

@@ -560,6 +560,8 @@ D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDiff
 void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool);
 //D2Common.0x6FD4F4A0
 void __fastcall DATATBLS_UnloadStatesTxt();
+// Helper function
+D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId);
 //D2Common.0x6FD4F5A0
 void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool);
 //D2Common.0x6FD4F990 (#11298)
