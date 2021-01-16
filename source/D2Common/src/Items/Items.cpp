@@ -1032,7 +1032,7 @@ static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C
 	if (nUnitStat > 0 && nUnitStat >= nStatWithPctBonus)
 	{
 		bStatReqMet = TRUE;
-
+		// Note: Owner was not checked in the original game for STAT_DEXTERITY
 		if (bEquipping && STATLIST_GetOwner(pItem, 0))
 		{
 			const int nStatBonusFromSockets = ITEMS_GetBonusStatFromSockets(pItem, stat);
