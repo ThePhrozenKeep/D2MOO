@@ -158,18 +158,12 @@ static int ComputeStatPercentage(int nValue, D2StatListExStrc* pStatListEx, int 
 //D2Common.0x6FDB5830
 int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 {
-	D2ItemStatCostTxt* pOpBaseItemStatCostTxtRecord = NULL;
-	D2ItemStatCostTxt* pItemStatCostTxtRecord = NULL;
-	int nRecursiveValue = 0;
-	int nPreviousOpStatValue = 0;
-	int nPeriodOfDay = 0;
-	int nStatId = 0;
 	int nIndex = 0;
 	int nAccumulatedValue = 0;
 
-	nStatId = (nLayer_StatId >> 16) & 0xFFFF;
+	int nStatId = (nLayer_StatId >> 16) & 0xFFFF;
 
-	pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
+	D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
 	if (!pItemStatCostTxtRecord)
 	{
 		return 0;
@@ -193,7 +187,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 		return nAccumulatedValue;
 	}
 
-	nPreviousOpStatValue = nAccumulatedValue;
+	int nPreviousOpStatValue = nAccumulatedValue;
 
 	for (int i = 0; i < ARRAY_SIZE(pItemStatCostTxtRecord->pOpStatData); ++i)
 	{
@@ -229,7 +223,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				uint16_t nOpBase = opStatData.nOpBase;
 				if (nOpBase != 0xFFFF)
 				{
-					pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
+					D2ItemStatCostTxt* pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
 					if (pOpBaseItemStatCostTxtRecord)
 					{
 						D2StatsArrayStrc* pStatsArray = STATLIST_IsExtended(pStatListEx) ? &pStatListEx->FullStats : &pStatListEx->Stats;
@@ -239,7 +233,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 							int nShiftedVal = pStat->nValue >> pOpBaseItemStatCostTxtRecord->nValShift;
 							if (nShiftedVal > 0)
 							{
-								nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
+								int nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
 								if (nRecursiveValue)
 								{
 									nAccumulatedValue += (nShiftedVal * nRecursiveValue) >> opStatData.nOpParam;
@@ -257,7 +251,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				uint16_t nOpBase = opStatData.nOpBase;
 				if (nOpBase != 0xFFFF)
 				{
-					pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
+					D2ItemStatCostTxt* pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
 					if (pOpBaseItemStatCostTxtRecord)
 					{
 						D2StatsArrayStrc* pStatsArray = STATLIST_IsExtended(pStatListEx) ? &pStatListEx->FullStats : &pStatListEx->Stats;
@@ -267,7 +261,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 							int nShiftedVal = pStat->nValue >> pOpBaseItemStatCostTxtRecord->nValShift;
 							if (nShiftedVal > 0)
 							{
-								nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
+								int nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
 								if (nRecursiveValue)
 								{
 									int nTemp = (nShiftedVal * nRecursiveValue) >> opStatData.nOpParam;
@@ -286,13 +280,13 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				uint16_t nOpBase = opStatData.nOpBase;
 				if (nOpBase != 0xFFFF)
 				{
-					pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
+					D2ItemStatCostTxt* pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
 					if (pOpBaseItemStatCostTxtRecord && pStatListEx->pUnit->pStatListEx)
 					{
 						int nTmp = STATLIST_GetTotalStat_6FDB63E0(pStatListEx->pUnit->pStatListEx, nOpBase << 16, pOpBaseItemStatCostTxtRecord) >> pOpBaseItemStatCostTxtRecord->nValShift;
 						if (nTmp > 0)
 						{
-							nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
+							int nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
 							if (nRecursiveValue)
 							{
 								nAccumulatedValue += (nTmp * nRecursiveValue) >> opStatData.nOpParam;
@@ -309,13 +303,13 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				uint16_t nOpBase = opStatData.nOpBase;
 				if (nOpBase != 0xFFFF)
 				{
-					pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
+					D2ItemStatCostTxt* pOpBaseItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpBase);
 					if (pOpBaseItemStatCostTxtRecord && pStatListEx->pUnit->pStatListEx)
 					{
 						int nTmp = STATLIST_GetTotalStat_6FDB63E0(pStatListEx->pUnit->pStatListEx, nOpBase << 16, pOpBaseItemStatCostTxtRecord) >> pOpBaseItemStatCostTxtRecord->nValShift;
 						if (nTmp > 0)
 						{
-							nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
+							int nRecursiveValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16);
 							if (nRecursiveValue)
 							{
 								int nTemp = (nTmp * nRecursiveValue) >> opStatData.nOpParam;
@@ -333,7 +327,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				if (int nTmp = sub_6FDB5830(pStatListEx, opStatData.nStat << 16))
 				{
 					int nBaseTime = 0;
-					nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
+					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
 					nAccumulatedValue += D2COMMON_10843_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL);
 				}
 			}
@@ -345,7 +339,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 				if (int nTmp = sub_6FDB5830(pStatListEx, opStatData.nStat << 16))
 				{
 					int nBaseTime = 0;
-					nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
+					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
 					nAccumulatedValue += nAccumulatedValue * D2COMMON_10843_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL) / 100.0;
 				}
 			}
