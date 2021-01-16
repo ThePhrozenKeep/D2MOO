@@ -369,13 +369,13 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 			{
 				if (D2CharStatsTxt* pCharStatsTxtRecord = UNITS_GetCharStatsTxtRecord(pStatListEx->pOwner->dwClassId))
 				{
-					int nTemp = 0;
+					int nBaseStatValue = 0;
 					if (D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(&pStatListEx->Stats, opStatData.nStat << 16))
 					{
-						nTemp = pStat->nValue;
+						nBaseStatValue = pStat->nValue;
 					}
 					
-					int nBonusValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16) - nTemp;
+					int nBonusValue = sub_6FDB5830(pStatListEx, opStatData.nStat << 16) - nBaseStatValue;
 					if (nBonusValue)
 					{
 						if (nStatId == STAT_MAXSTAMINA)
