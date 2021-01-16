@@ -377,7 +377,7 @@ struct D2DataTablesStrc
 	D2ItemTypesTxt* pItemTypesTxt;						//0xBF8
 	int nItemTypesTxtRecordCount;						//0xBFC
 	int nItemTypesIndex;								//0xC00
-	uint32_t* pItemTypesNest;							//0xC04
+	uint32_t* pItemTypesEquivalenceLUTs;				//0xC04
 	D2TxtLinkStrc* pSetsLinker;							//0xC08
 	D2SetsTxt* pSetsTxt;								//0xC0C
 	int nSetsTxtRecordCount;							//0xC10

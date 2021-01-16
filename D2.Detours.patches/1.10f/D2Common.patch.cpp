@@ -762,9 +762,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetEarLevel                                                   @10726
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetVarGfxIndex                                                @10727
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetVarGfxIndex                                                @10728
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckItemTypeIdByItemId                                       @10729
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckType                                                     @10730
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckItemTypeId                                               @10731
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_CheckItemTypeIdByItemId                                       @10729
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_CheckType                                                     @10730
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_CheckItemTypeId                                               @10731
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetFileIndex                                                  @10732
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetFileIndex                                                  @10733
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetOwnerId                                                    @10734
@@ -789,7 +789,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetItemQlvl                                                   @10753
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckIfFlagIsSet                                              @10754
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetOrRemoveFlag                                               @10755
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckRequirements                                             @10756
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_CheckRequirements                                             @10756
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetLevelRequirement                                           @10757
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckBodyLocation                                             @10758
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CheckIfThrowable                                              @10759
@@ -873,7 +873,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetNoOfSetItemsFromItem                                       @10837
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetSetItemsTxtRecordFromItem                                  @10838
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_CanBeEquipped                                                 @10839
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_IsCharmUsable                                                 @10840
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_IsCharmUsable                                                 @10840
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetBonusLifeBasedOnClass                                      @10841
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetBonusManaBasedOnClass                                      @10842
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10843_GetByTimeAdjustment                                  @10843

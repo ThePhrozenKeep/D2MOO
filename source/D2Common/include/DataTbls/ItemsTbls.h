@@ -340,7 +340,7 @@ struct D2ItemsTxt
 	uint8_t nArmorComp[6];					//0x116
 	uint8_t n2Handed;						//0x11C
 	uint8_t nUseable;						//0x11D
-	uint16_t wType[2];						//0x11E
+	int16_t wType[2];						//0x11E
 	uint8_t nSubType;						//0x122
 	uint8_t unk0x123;						//0x123
 	uint16_t wDropSound;					//0x124
@@ -686,7 +686,7 @@ void __fastcall DATATBLS_UnloadGambleTxt();
 //D2Common.0x6FD5D7F0 (#10671)
 D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables();
 //D2Common.0x6FD5D800
-BOOL __fastcall DATATBLS_CheckNestedItemTypes(int nItemType1, int nItemType2);
+BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nItemType2);
 //D2Common.0x6FD5D8C0
 void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool);
 //D2Common.0x6FD5DFE0

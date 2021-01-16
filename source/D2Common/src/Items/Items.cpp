@@ -1004,32 +1004,51 @@ void __stdcall ITEMS_SetOrRemoveFlag(int* pFlags, int nFlag, BOOL bSet)
 	}
 }
 
+static int ITEMS_GetBonusStatFromSockets(D2UnitStrc* pItem, D2C_ItemStats stat)
+{
+	int nStatBonusFromSockets = 0;
+	if (pItem->dwUnitType == UNIT_ITEM)
+	{
+		if (ITEMS_CheckIfSocketableByItemId(pItem->dwClassId))
+		{
+			for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItem->pInventory); i != NULL; i = INVENTORY_GetNextItem(i))
+			{
+				i = INVENTORY_UnitIsItem(i);
+				if (pItem->dwAnimMode == IMODE_EQUIP)
+				{
+					nStatBonusFromSockets += STATLIST_GetUnitStat(i, stat, 0);
+				}
+			}
+		}
+	}
+	return nStatBonusFromSockets;
+}
+
+static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C_ItemStats stat, BOOL bEquipping, int nStatWithPctBonus)
+{
+
+	BOOL bStatReqMet = FALSE;
+	const int nUnitStat = STATLIST_GetUnitStat(pUnit, stat, 0);
+	if (nUnitStat > 0 && nUnitStat >= nStatWithPctBonus)
+	{
+		bStatReqMet = TRUE;
+		// Note: Owner was not checked in the original game for STAT_DEXTERITY
+		if (bEquipping && STATLIST_GetOwner(pItem, 0))
+		{
+			const int nStatBonusFromSockets = ITEMS_GetBonusStatFromSockets(pItem, stat);
+			if ((nUnitStat - nStatBonusFromSockets) <= 0 || (nUnitStat - nStatBonusFromSockets) < nStatWithPctBonus)
+			{
+				bStatReqMet = FALSE;
+			}
+		}
+	}
+	return bStatReqMet;
+}
+
+
 //D2Common.0x6FD99740 (#10756)
 BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOOL bEquipping, BOOL* bStrength, BOOL* bDexterity, BOOL* bLevel)
 {
-	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-	D2ItemDataStrc* pItemData = NULL;
-
-	BOOL bIdentified = FALSE;
-	BOOL bStrReqMet = FALSE;
-	BOOL bDexReqMet = FALSE;
-	BOOL bLevelReqMet = FALSE;
-
-	int nReqPctBonus = 0;
-	int nStrBonusFromSockets = 0;
-	int nDexBonusFromSockets = 0;
-	int nBaseReqStr = 0;
-	int nBaseReqDex = 0;
-	int nReqStrBonus = 0;
-	int nReqDexBonus = 0;
-	int nUnitStr = 0;
-	int nUnitDex = 0;
-	int nLevelReq = 0;
-	int nItemType = 0;
-	int nClassReq = 0;
-	int nMonsterId = 0;
-
 	if (bStrength)
 	{
 		*bStrength = FALSE;
@@ -1050,13 +1069,16 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 		return FALSE;
 	}
 
-	pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
+
+	const D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 	if (!pItemsTxtRecord)
 	{
 		return FALSE;
 	}
 
-	pItemData = pItem->pItemData;
+
+	BOOL bIdentified = FALSE;
+	const D2ItemDataStrc* pItemData = pItem->pItemData;
 	if (pItemData)
 	{
 		bIdentified = pItemData->dwItemFlags & IFLAG_IDENTIFIED;
@@ -1066,14 +1088,17 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 		bIdentified = FALSE;
 	}
 
-	nBaseReqStr = pItemsTxtRecord->wReqStr;
-	nBaseReqDex = pItemsTxtRecord->wReqDex;
+	const int nBaseReqStr = pItemsTxtRecord->wReqStr;
+	const int nBaseReqDex = pItemsTxtRecord->wReqDex;
 
-	nReqPctBonus = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_REQ_PERCENT, 0);
-	if (nReqPctBonus)
+
+	int nReqStrBonus = 0;
+	int nReqDexBonus = 0;
+	if (int nReqPctBonus = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_REQ_PERCENT, 0))
 	{
-		nReqStrBonus = nBaseReqStr * nReqPctBonus / 100;
-		nReqDexBonus = nBaseReqDex * nReqPctBonus / 100;
+		// It seems the original game has some additional logic to handle overflow here
+		nReqStrBonus = nBaseReqStr * int64_t(nReqPctBonus) / 100;
+		nReqDexBonus = nBaseReqDex * int64_t(nReqPctBonus) / 100;
 	}
 
 	if (pItemData && pItemData->dwItemFlags & IFLAG_ETHEREAL)
@@ -1082,71 +1107,11 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 		nReqDexBonus -= 10;
 	}
 
-	nUnitStr = STATLIST_GetUnitStat(pUnit, STAT_STRENGTH, 0);
-	if (nUnitStr > 0)
-	{
-		if (nUnitStr >= nBaseReqStr + nReqStrBonus)
-		{
-			bStrReqMet = TRUE;
+	const BOOL bStrReqMet = ITEMS_CheckStatRequirement(pItem, pUnit, STAT_STRENGTH, bEquipping, nBaseReqStr + nReqStrBonus);
+	const BOOL bDexReqMet = ITEMS_CheckStatRequirement(pItem, pUnit, STAT_DEXTERITY, bEquipping, nBaseReqDex + nReqDexBonus);
 
-			if (bEquipping && STATLIST_GetOwner(pItem, 0))
-			{
-				if (pItem->dwUnitType == UNIT_ITEM)
-				{
-					if (ITEMS_CheckIfSocketableByItemId(pItem->dwClassId))
-					{
-						for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItem->pInventory); i != NULL; i = INVENTORY_GetNextItem(i))
-						{
-							i = INVENTORY_UnitIsItem(i);
-							if (pItem->dwAnimMode == IMODE_EQUIP)
-							{
-								nStrBonusFromSockets += STATLIST_GetUnitStat(i, STAT_STRENGTH, 0);
-							}
-						}
-					}
-				}
-
-				if (nUnitStr - nStrBonusFromSockets <= 0 || nUnitStr - nStrBonusFromSockets < nBaseReqStr + nReqStrBonus)
-				{
-					bStrReqMet = FALSE;
-				}
-			}
-		}
-	}
-
-	nUnitDex = STATLIST_GetUnitStat(pUnit, STAT_DEXTERITY, 0);
-	if (nUnitDex > 0)
-	{
-		if (nUnitDex >= nBaseReqDex + nReqDexBonus)
-		{
-			bDexReqMet = TRUE;
-
-			if (bEquipping)
-			{
-				if (pItem->dwUnitType == UNIT_ITEM)
-				{
-					if (ITEMS_CheckIfSocketableByItemId(pItem->dwClassId))
-					{
-						for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItem->pInventory); i != NULL; i = INVENTORY_GetNextItem(i))
-						{
-							i = INVENTORY_UnitIsItem(i);
-							if (pItem->dwAnimMode == IMODE_EQUIP)
-							{
-								nDexBonusFromSockets += STATLIST_GetUnitStat(i, STAT_DEXTERITY, 0);
-							}
-						}
-					}
-				}
-
-				if (nUnitDex - nDexBonusFromSockets <= 0 || nUnitDex - nDexBonusFromSockets < nBaseReqDex + nReqDexBonus)
-				{
-					bDexReqMet = FALSE;
-				}
-			}
-		}
-	}
-
-	nLevelReq = ITEMS_GetLevelRequirement(pItem, pUnit);
+	BOOL bLevelReqMet = FALSE;
+	const int nLevelReq = ITEMS_GetLevelRequirement(pItem, pUnit);
 	bLevelReqMet = nLevelReq == -1 || STATLIST_GetUnitStat(pUnit, STAT_LEVEL, 0) >= nLevelReq;
 
 	if (bStrength)
@@ -1166,35 +1131,38 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 
 	if (bStrReqMet && bDexReqMet && bLevelReqMet && bIdentified)
 	{
-		if (pItemsTxtRecord->wType[0] != ITEMTYPE_BOOK || STATLIST_GetUnitStat(pItem, STAT_QUANTITY, 0) > 0)
+		if (pItemsTxtRecord->wType[0] == ITEMTYPE_BOOK && STATLIST_GetUnitStat(pItem, STAT_QUANTITY, 0) <= 0)
 		{
-			nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
+			return FALSE;
+		}
 
-			pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(nItemType);
+		const int nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
+		const D2ItemTypesTxt* pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(nItemType);
 
-			if (!pItemTypesTxtRecord || pItemTypesTxtRecord->nClass >= 7)
+		if (!pItemTypesTxtRecord || pItemTypesTxtRecord->nClass >= NUMBER_OF_PLAYERCLASSES)
+		{
+			return TRUE;
+		}
+
+		const int nClassReq = pItemTypesTxtRecord->nClass;
+
+		if (!pUnit)
+		{
+			return FALSE;
+		}
+
+		if (pUnit->dwUnitType == UNIT_MONSTER && nClassReq == PCLASS_BARBARIAN)
+		{
+			const int nMonsterId = pUnit->dwClassId;
+			if (nMonsterId >= MONSTER_ACT5HIRE1 && nMonsterId <= MONSTER_ACT5HIRE2)
 			{
 				return TRUE;
 			}
+		}
 
-			nClassReq = pItemTypesTxtRecord->nClass;
-
-			if (pUnit)
-			{
-				if (pUnit->dwUnitType == UNIT_MONSTER && nClassReq == PCLASS_BARBARIAN)
-				{
-					nMonsterId = pUnit->dwClassId;
-					if (nMonsterId >= MONSTER_ACT5HIRE1 && nMonsterId <= MONSTER_ACT5HIRE2)
-					{
-						return TRUE;
-					}
-				}
-
-				if (pUnit->dwUnitType == UNIT_PLAYER && nClassReq == pUnit->dwClassId)
-				{
-					return TRUE;
-				}
-			}
+		if (pUnit->dwUnitType == UNIT_PLAYER && nClassReq == pUnit->dwClassId)
+		{
+			return TRUE;
 		}
 	}
 
@@ -3375,27 +3343,34 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 	return nullptr;
 }
 
+
+static BOOL ITEMS_CheckTypeEquivalenceFromLUT(uint32_t* pEquivalenceLUT, uint32_t nItemType)
+{
+	return pEquivalenceLUT[nItemType / 32] & gdwBitMasks[nItemType % 32];
+}
+
+static uint32_t* ITEMS_TypeEquivalenceLUT(int nItemTypeLUT)
+{
+	return &sgptDataTables->pItemTypesEquivalenceLUTs[nItemTypeLUT * sgptDataTables->nItemTypesIndex];
+}
+
 //D2Common.0x6FD9DBA0 (#10729)
 BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType)
 {
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-
 	if (nItemType >= 0 && nItemType < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
-		if (pItemsTxtRecord)
+		const D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
+		D2_ASSERT(pItemsTxtRecord);
+		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
-			if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
+			if (ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(pItemsTxtRecord->wType[0]), nItemType))
 			{
-				if (sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[0] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F])
-				{
-					return TRUE;
-				}
+				return TRUE;
+			}
 
-				if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < sgptDataTables->nItemTypesTxtRecordCount)
-				{
-					return sgptDataTables->pItemTypesNest[(nItemType >> 5) + pItemsTxtRecord->wType[1] * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType & 0x1F];
-				}
+			if (pItemsTxtRecord->wType[1] > 0 && pItemsTxtRecord->wType[1] < sgptDataTables->nItemTypesTxtRecordCount)
+			{
+				return ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(pItemsTxtRecord->wType[1]), nItemType);
 			}
 		}
 	}
@@ -3408,7 +3383,7 @@ BOOL __stdcall ITEMS_CheckType(int nItemType1, int nItemType2)
 {
 	if (nItemType1 >= 0 && nItemType1 < sgptDataTables->nItemTypesTxtRecordCount && nItemType2 >= 0 && nItemType2 < sgptDataTables->nItemTypesTxtRecordCount)
 	{
-		return sgptDataTables->pItemTypesNest[(nItemType2 >> 5) + nItemType1 * sgptDataTables->nItemTypesIndex] & gdwBitMasks[nItemType2 & 0x1F];
+		return ITEMS_CheckTypeEquivalenceFromLUT(ITEMS_TypeEquivalenceLUT(nItemType1), nItemType2);
 	}
 
 	return FALSE;
