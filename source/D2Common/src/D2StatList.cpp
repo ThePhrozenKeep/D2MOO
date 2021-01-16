@@ -1836,18 +1836,21 @@ void __stdcall STATLIST_UpdateStatListsExpiration(D2UnitStrc* pUnit, int nFrame)
 			do
 			{
 				pPrevious = pStatListEx->pPrevLink;
-				if (nFrame == 0)
+				if (pStatListEx->dwFlags & STATLIST_NEWLENGTH)
 				{
-					pStatListEx->dwExpireFrame--;
-				}
-				if ((pStatListEx->dwFlags & STATLIST_NEWLENGTH) && pStatListEx->dwExpireFrame <= nFrame)
-				{
-					if (!STATLIST_IsExtended(pStatListEx))
+					if (nFrame == 0) // Client, the server only syncs
 					{
-						D2Common_STATLIST_FreeStatListImpl_6FDB7050(pStatListEx);
+						pStatListEx->dwExpireFrame--;
 					}
+					if (pStatListEx->dwExpireFrame <= nFrame)
+					{
+						if (!STATLIST_IsExtended(pStatListEx))
+						{
+							D2Common_STATLIST_FreeStatListImpl_6FDB7050(pStatListEx);
+						}
 
-					pPrevious = pUnit->pStatListEx->pMyLastList;
+						pPrevious = pUnit->pStatListEx->pMyLastList;
+					}
 				}
 				pStatListEx = pPrevious;
 			}
