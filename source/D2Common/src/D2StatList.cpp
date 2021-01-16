@@ -2275,13 +2275,28 @@ BOOL __stdcall D2Common_11274_11275_Impl(D2UnitStrc* pTarget, D2UnitStrc* pUnit,
 		return FALSE;
 	}
 
-	if (!(pTarget->pStatListEx && STATLIST_IsExtended(pTarget->pStatListEx) && (pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC)))
+	if (!(pTarget->pStatListEx && STATLIST_IsExtended(pTarget->pStatListEx)))
 	{
 		return FALSE;
 	}
 
-	pUnit->pStatListEx->dwFlags &= ~STATLIST_DYNAMIC;
+	if (addOrSubstract)
+	{
+		if (!(pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC))
+		{
+			return FALSE;
+		}
+		pUnit->pStatListEx->dwFlags &= ~STATLIST_DYNAMIC;
 
+	}
+	else
+	{
+		if (pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC)
+		{
+			return FALSE;
+		}
+		pUnit->pStatListEx->dwFlags |= STATLIST_DYNAMIC;
+	}
 
 	D2StatListExStrc* pUnitStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx);
 	D2StatsArrayStrc* pStatsArray = pUnitStatListEx ? &pUnitStatListEx->FullStats : &pUnit->pStatListEx->Stats;
