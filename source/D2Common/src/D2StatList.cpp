@@ -158,7 +158,6 @@ static int ComputeStatPercentage(int nValue, D2StatListExStrc* pStatListEx, int 
 //D2Common.0x6FDB5830
 int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 {
-	int nIndex = 0;
 	int nAccumulatedValue = 0;
 
 	int nStatId = (nLayer_StatId >> 16) & 0xFFFF;
