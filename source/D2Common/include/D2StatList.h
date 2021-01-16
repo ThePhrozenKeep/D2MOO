@@ -535,10 +535,10 @@ BOOL __stdcall STATLIST_SetStat(D2StatListStrc* pStatList, int nStatId, int nVal
 //D2Common.0x6FDB7910 (#10465)
 void __stdcall STATLIST_SetStatIfListIsValid(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7930 (#11294)
-BOOL __stdcall D2Common_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
+BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
 //D2Common.0x6FDB7A90 (#11295)
-//Duplicate of D2Common_SetBaseStat#11294
-void __stdcall D2Common_SetBaseStat2(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
+//Duplicate of STATLIST_SetBaseStat#11294
+void __stdcall STATLIST_SetBaseStat2(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
 //D2Common.0x6FDB7AB0 (#10517)
 void __stdcall STATLIST_SetUnitStat(D2UnitStrc* pUnit, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7B00 (#10518)
@@ -588,9 +588,9 @@ void __stdcall D2Common_10534(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8770 (#10530)
 BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit);
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall D2Common_STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId);
+int __stdcall STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId);
 //D2Common.0x6FDB8890 (#10533)
-void __stdcall D2Common_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
+void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8900
 void __stdcall D2Common_STATES_ToggleState_6FDB8900(D2UnitStrc* pUnit, int nState, BOOL bSet);
 //D2Common.0x6FDB8A90
@@ -653,7 +653,7 @@ int __stdcall STATLIST_GetSkillLevel(D2StatListStrc* pStatList);
 //D2Common.0x6FDB9C30 (#11269)
 int __stdcall D2COMMON_11269_CopyStats(D2StatListExStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9C50
-int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListExStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
+int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D20 (#11270)
 int __stdcall D2Common_11270(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D60 (#11273)

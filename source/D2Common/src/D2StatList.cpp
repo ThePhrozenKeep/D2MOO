@@ -1242,7 +1242,7 @@ void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList,
 //D2Common.0x6FDB77B0 (#10463)
 BOOL __stdcall STATLIST_SetStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer)
 {
-	return D2Common_SetBaseStat(pStatList, nStatId, nValue, nLayer, NULL);
+	return STATLIST_SetBaseStat(pStatList, nStatId, nValue, nLayer, NULL);
 }
 
 //D2Common.0x6FDB7910 (#10465)
@@ -1255,7 +1255,7 @@ void __stdcall STATLIST_SetStatIfListIsValid(D2StatListStrc* pStatList, int nSta
 }
 
 //D2Common.0x6FDB7930 (#11294)
-BOOL __stdcall D2Common_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit)
+BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit)
 {
 	if (!pStatList)
 	{
@@ -1294,11 +1294,11 @@ BOOL __stdcall D2Common_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int 
 }
 
 //D2Common.0x6FDB7A90 (#11295)
-void __stdcall D2Common_SetBaseStat2(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit)
+void __stdcall STATLIST_SetBaseStat2(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit)
 {
 	if (pStatList)
 	{
-		D2Common_SetBaseStat(pStatList, nStatId, nValue, nLayer, pUnit);
+		STATLIST_SetBaseStat(pStatList, nStatId, nValue, nLayer, pUnit);
 	}
 }
 
@@ -1717,7 +1717,7 @@ int __stdcall STATLIST_GetUnitAlignment(D2UnitStrc* pUnit)
 	{
 		if (D2StatListStrc* pAlignmentStateList = D2Common_GetStateFromStatListEx_6FDB8190(pUnit->pStatListEx, STATE_ALIGNMENT))
 		{
-			return D2Common_STATLIST_GetStatUnsigned((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
+			return STATLIST_GetStatUnsigned((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
 		}
 	}
 
@@ -1745,13 +1745,13 @@ BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall D2Common_STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId)
+int __stdcall STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId)
 {
 	return STATLIST_GetStatUnsigned(pStatListEx, nStatId, 0);
 }
 
 //D2Common.0x6FDB8890 (#10533)
-void __stdcall D2Common_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit)
+void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit)
 {
 
 	if (pUnit && pUnit->pStatListEx)
@@ -2157,7 +2157,7 @@ int __stdcall D2Common_11248(D2UnitStrc* pUnused, D2UnitStrc* pUnit, int nStatId
 {
 	if (pUnit)
 	{
-		return D2Common_STATLIST_GetStatUnsigned(pUnit->pStatListEx, nStatId);
+		return STATLIST_GetStatUnsigned(pUnit->pStatListEx, nStatId);
 	}
 
 	return 0;

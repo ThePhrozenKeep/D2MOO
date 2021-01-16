@@ -547,9 +547,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_FreeModStats                                               @10511
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10512                                                      @10512
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10513                                                      @10513
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10514                                                      @10514
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_ClampStaminaManaHP                                         @10514
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10515                                                      @10515
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10516                                                      @10516
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_UpdateStatListsExpiration                                  @10516
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetUnitStat                                                @10517
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_AddUnitStat                                                @10518
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStat                                                @10519
@@ -565,8 +565,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetExpireFrame                                             @10529
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10530_D2CheckStatlistFlagDMGRed                            @10530
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10531_SetStatInStatListLayer0                              @10531
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10532                                                      @10532
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10533                                                      @10533
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetStatUnsigned                                            @10532
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_RemoveAllStatsFromOverlay                                  @10533
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10534                                                      @10534
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetOwner                                                   @10535
     PatchAction::FunctionReplacePatchByOriginal,       //   STATES_CheckStateMaskBlueOnUnit                                     @10536
@@ -1327,8 +1327,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11291                                                      @11291
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11292_ItemAssignProperty                                   @11292
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_GetItemCharges                                             @11293
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11294                                                      @11294
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11295                                                      @11295
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat                                                @11294
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat2                                               @11295
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_11296_Return                                               @11296
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_SetMonsterNameInMonsterData                                @11297
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetUnitNameFromUnit                                        @11298
