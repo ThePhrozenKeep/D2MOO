@@ -218,7 +218,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 
 				if (nPreviousOpStatValue)
 				{
-					return ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
+					nAccumulatedValue += ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
 				}
 			}
 			break;
