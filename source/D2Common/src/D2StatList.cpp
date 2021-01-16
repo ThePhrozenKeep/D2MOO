@@ -966,7 +966,7 @@ void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pC
 	pStatListEx->pOwner = pUnit;
 	pStatListEx->fpCallBack = pCallbackFunc;
 	pStatListEx->pGame = pGame;
-	pStatListEx->dwFlags = nFlags & (STATLIST_BASIC | STATLIST_EXTENDED);
+	pStatListEx->dwFlags = (nFlags & STATLIST_BASIC) | STATLIST_EXTENDED;
 	pStatListEx->StatFlags = (uint32_t*)D2_CALLOC_SERVER(pUnit->pMemoryPool, 2 * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	pUnit->pStatListEx = pStatListEx;
