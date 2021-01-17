@@ -1773,14 +1773,7 @@ void __stdcall D2Common_STATES_ToggleState_6FDB8900(D2UnitStrc* pUnit, int nStat
 	if (pUnit && pUnit->pStatListEx && STATLIST_IsExtended(pUnit->pStatListEx))
 	{
 		const uint32_t dwStateBitMask = gdwBitMasks[nState % 32];
-		uint32_t& dwStateFlags = pUnit->pStatListEx->StatFlags[nState / 32];
-		
-		const uint32_t dwPreviousStateBit = dwStateFlags & dwStateBitMask;
-		const uint32_t dwTargetStateBit = bSet ? dwStateBitMask : 0;
-
-		dwStateFlags = (dwStateFlags & (~dwStateBitMask)) | dwTargetStateBit;
-
-		const bool bStateBitChanged = dwTargetStateBit ^ dwPreviousStateBit;
+		const bool bStateBitChanged = BITMANIP_SetBitsValueForMask(pUnit->pStatListEx->StatFlags[nState / 32], dwStateBitMask, bSet);
 		if (!bStateBitChanged)
 		{
 			return;
@@ -2280,22 +2273,10 @@ BOOL __stdcall D2Common_11274_11275_Impl(D2UnitStrc* pTarget, D2UnitStrc* pUnit,
 		return FALSE;
 	}
 
-	if (addOrSubstract)
+	bool bDynamicBitChanged = BITMANIP_SetBitsValueForMask(pUnit->pStatListEx->dwFlags, STATLIST_DYNAMIC, !addOrSubstract);
+	if (!bDynamicBitChanged)
 	{
-		if (!(pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC))
-		{
-			return FALSE;
-		}
-		pUnit->pStatListEx->dwFlags &= ~STATLIST_DYNAMIC;
-
-	}
-	else
-	{
-		if (pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC)
-		{
-			return FALSE;
-		}
-		pUnit->pStatListEx->dwFlags |= STATLIST_DYNAMIC;
+		return FALSE;
 	}
 
 	D2StatListExStrc* pUnitStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx);

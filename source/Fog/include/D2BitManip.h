@@ -86,3 +86,20 @@ Address:		Fog.#10120
 Notes:
 */
 void __stdcall BITMANIP_MaskBitstate(uint8_t* pBitStream, int nBit);
+
+
+// Sets bits of the mask to newBitValue, and returns wether the value changed
+template<typename T>
+bool BITMANIP_SetBitsValueForMask(T& var, uint64_t mask, bool newBitValue)
+{
+	T previousValue = var;
+	if (newBitValue)
+	{
+		var |= mask;
+	}
+	else
+	{
+		var &= ~mask;
+	}
+	return previousValue != var;
+}
