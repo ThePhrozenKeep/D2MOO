@@ -565,7 +565,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetExpireFrame                                             @10529
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10530_D2CheckStatlistFlagDMGRed                            @10530
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10531_SetStatInStatListLayer0                              @10531
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetStatUnsigned                                            @10532
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetStatUnsigned_Layer0                                            @10532
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_RemoveAllStatsFromOverlay                                  @10533
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10534                                                      @10534
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetOwner                                                   @10535

@@ -588,7 +588,7 @@ void __stdcall D2Common_10534(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8770 (#10530)
 BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit);
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId);
+int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListExStrc* pStatListEx, int nStatId);
 //D2Common.0x6FDB8890 (#10533)
 void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8900

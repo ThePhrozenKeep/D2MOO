@@ -1710,7 +1710,7 @@ int __stdcall STATLIST_GetUnitAlignment(D2UnitStrc* pUnit)
 	{
 		if (D2StatListStrc* pAlignmentStateList = D2Common_GetStateFromStatListEx_6FDB8190(pUnit->pStatListEx, STATE_ALIGNMENT))
 		{
-			return STATLIST_GetStatUnsigned((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
+			return STATLIST_GetStatUnsigned_Layer0((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
 		}
 	}
 
@@ -1738,7 +1738,7 @@ BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall STATLIST_GetStatUnsigned(D2StatListExStrc* pStatListEx, int nStatId)
+int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListExStrc* pStatListEx, int nStatId)
 {
 	return STATLIST_GetStatUnsigned(pStatListEx, nStatId, 0);
 }
@@ -2146,7 +2146,7 @@ int __stdcall D2Common_11248(D2UnitStrc* pUnused, D2UnitStrc* pUnit, int nStatId
 {
 	if (pUnit)
 	{
-		return STATLIST_GetStatUnsigned(pUnit->pStatListEx, nStatId);
+		return STATLIST_GetStatUnsigned_Layer0(pUnit->pStatListEx, nStatId);
 	}
 
 	return 0;
