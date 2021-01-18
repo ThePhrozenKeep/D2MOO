@@ -310,164 +310,158 @@ D2UnkInventoryComponentStrc stru_6FDE2820[]
 	{ ' 2fq', ITEMTYPE_MACE },
 };
 
+//D2Common.0x6FDEA708
+D2UnkInventoryComponentStrc stru_6FDEA708[255] = {};
+
 //D2Common.0x6FDEAF00
 int dword_6FDEAF00;
 //D2Common.0x6FDEAF04
 BOOL dword_6FDEAF04;
 
-//D2Common.0x6FDEA708
-D2UnkInventoryComponentStrc stru_6FDEA708[255] = {};
 
-
-//D2Common.0x6FD8E210 -----
+//D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 {
-	D2InventoryGridStrc* pInventoryGrid = NULL;
-	D2ItemExtraDataStrc* pItemExtraData = NULL;
-	D2ItemExtraDataStrc* pExtraData = NULL;
-	D2UnitStrc** ppItem = NULL;
-	int nNodePos = 0;
-	uint8_t nHeight = 0;
-	uint8_t nWidth = 0;
-	D2CoordStrc pCoords = {};
+	D2ItemExtraDataStrc* pItemExtraData = INVENTORY_GetItemExtraDataFromItem(pItem);
 
-	pItemExtraData = INVENTORY_GetItemExtraDataFromItem(pItem);
-
-	if (pItemExtraData && pItemExtraData->pParentInv && pItemExtraData->pParentInv->dwSignature == 0x1020304)
+	if (!pItemExtraData || !pItemExtraData->pParentInv || pItemExtraData->pParentInv->dwSignature != 0x1020304)
 	{
-		if (pItemExtraData->nNodePos > 0)
+		return FALSE;
+	}
+
+	if (pItemExtraData->nNodePos > 0)
+	{
+		const int nNodePos = pItemExtraData->nNodePos - 1;
+		if (pItemExtraData->pParentInv->nGridCount > nNodePos)
 		{
-			nNodePos = pItemExtraData->nNodePos - 1;
-			if (pItemExtraData->pParentInv->nGridCount > nNodePos)
+			D2InventoryGridStrc* pInventoryGrid = &pItemExtraData->pParentInv->pGrids[nNodePos];
+
+			if (pItemExtraData->unk0x10)
 			{
-				pInventoryGrid = &pItemExtraData->pParentInv->pGrids[nNodePos];
-
-				if (pItemExtraData->unk0x10)
+				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x10);
+				if (pExtraData)
 				{
-					pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x10);
-					if (pExtraData)
-					{
-						pExtraData->unk0x14 = pItemExtraData->unk0x14;
-					}
+					pExtraData->unk0x14 = pItemExtraData->unk0x14;
+				}
+			}
+			else
+			{
+				if (pInventoryGrid->pItem == pItem)
+				{
+					pInventoryGrid->pItem = pItemExtraData->unk0x14;
+				}
+			}
+
+			if (pItemExtraData->unk0x14)
+			{
+				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x14);
+				if (pExtraData)
+				{
+					pExtraData->unk0x10 = pItemExtraData->unk0x10;
+				}
+			}
+			else
+			{
+				if (pInventoryGrid->pLastItem == pItem)
+				{
+					pInventoryGrid->pLastItem = pItemExtraData->unk0x10;
+				}
+			}
+
+			if (pInventoryGrid->ppItems)
+			{
+				D2CoordStrc pCoords = {};
+
+				UNITS_GetCoords(pItem, &pCoords);
+
+				if (nNodePos < 1)
+				{
+					pInventoryGrid->ppItems[pCoords.nX + pCoords.nY * pInventoryGrid->nGridWidth] = NULL;
 				}
 				else
 				{
-					if (pInventoryGrid->pItem == pItem)
-					{
-						pInventoryGrid->pItem = pItemExtraData->unk0x14;
-					}
-				}
+					uint8_t nHeight = 0;
+					uint8_t nWidth = 0;
 
-				if (pItemExtraData->unk0x14)
-				{
-					pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x14);
-					if (pExtraData)
-					{
-						pExtraData->unk0x10 = pItemExtraData->unk0x10;
-					}
-				}
-				else
-				{
-					if (pInventoryGrid->pLastItem == pItem)
-					{
-						pInventoryGrid->pLastItem = pItemExtraData->unk0x10;
-					}
-				}
+					ITEMS_GetDimensions(pItem, &nWidth, &nHeight, __FILE__, __LINE__);
 
-				if (pInventoryGrid->ppItems)
-				{
-					UNITS_GetCoords(pItem, &pCoords);
-
-					if (nNodePos < 1)
+					for (int y = pCoords.nY; y < pCoords.nY + nHeight; ++y)
 					{
-						pInventoryGrid->ppItems[pCoords.nX + pCoords.nY * pInventoryGrid->nGridWidth] = NULL;
-					}
-					else
-					{
-						ITEMS_GetDimensions(pItem, &nWidth, &nHeight, __FILE__, __LINE__);
-
-						for (int j = pCoords.nY; j < pCoords.nY + nHeight; ++j)
+						for (int x = pCoords.nX; x < pCoords.nX + nWidth; ++x)
 						{
-							ppItem = &pInventoryGrid->ppItems[j * pInventoryGrid->nGridWidth];
-
-							for (int i = pCoords.nX; i < pCoords.nX + nWidth; ++i)
-							{
-								ppItem[i] = NULL;
-							}
+							pInventoryGrid->ppItems[y * pInventoryGrid->nGridWidth + x] = NULL;
 						}
 					}
 				}
-
-				pItemExtraData->unk0x14 = NULL;
-				pItemExtraData->unk0x10 = NULL;
-				pItemExtraData->nNodePos = 0;
 			}
-		}
 
-		if (pItemExtraData->pParentInv->pCursorItem == pItem)
+			pItemExtraData->unk0x14 = NULL;
+			pItemExtraData->unk0x10 = NULL;
+			pItemExtraData->nNodePos = 0;
+		}
+	}
+
+	if (pItemExtraData->pParentInv->pCursorItem == pItem)
+	{
+		pItemExtraData->pParentInv->pCursorItem = NULL;
+	}
+	else
+	{
+		if (pItemExtraData->pPreviousItem)
 		{
-			pItemExtraData->pParentInv->pCursorItem = NULL;
+			D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pPreviousItem);
+			if (pExtraData)
+			{
+				pExtraData->pNextItem = pItemExtraData->pNextItem;
+			}
 		}
 		else
 		{
-			if (pItemExtraData->pPreviousItem)
+			if (pItemExtraData->pParentInv->pFirstItem == pItem)
 			{
-				pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pPreviousItem);
-				if (pExtraData)
-				{
-					pExtraData->pNextItem = pItemExtraData->pNextItem;
-				}
+				pItemExtraData->pParentInv->pFirstItem = pItemExtraData->pNextItem;
 			}
-			else
-			{
-				if (pItemExtraData->pParentInv->pFirstItem == pItem)
-				{
-					pItemExtraData->pParentInv->pFirstItem = pItemExtraData->pNextItem;
-				}
-			}
-
-			if (pItemExtraData->pNextItem)
-			{
-				pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pNextItem);
-				if (pExtraData)
-				{
-					pExtraData->pPreviousItem = pItemExtraData->pPreviousItem;
-				}
-			}
-			else
-			{
-				if (pItemExtraData->pParentInv->pLastItem == pItem)
-				{
-					pItemExtraData->pParentInv->pLastItem = pItemExtraData->pPreviousItem;
-				}
-			}
-
-			pItemExtraData->pNextItem = NULL;
-			pItemExtraData->pPreviousItem = NULL;
-
-			--pItemExtraData->pParentInv->dwItemCount;
 		}
 
-		pItemExtraData->pParentInv = NULL;
-		pItemExtraData->nNodePos = 0;
-		pItemExtraData->nNodePosOther = 0;
-
-		ITEMS_SetOwnerId(pItem, -1);
-
-		if (pItemExtraData->pParentInv->pOwner)
+		if (pItemExtraData->pNextItem)
 		{
-			STATLIST_ExpireUnitStatlist(pItemExtraData->pParentInv->pOwner, pItem);
+			D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pNextItem);
+			if (pExtraData)
+			{
+				pExtraData->pPreviousItem = pItemExtraData->pPreviousItem;
+			}
 		}
-
-		if (pItemExtraData->pParentInv->dwLeftItemGUID == pItem->dwUnitId)
+		else
 		{
-			pItemExtraData->pParentInv->dwLeftItemGUID = -1;
+			if (pItemExtraData->pParentInv->pLastItem == pItem)
+			{
+				pItemExtraData->pParentInv->pLastItem = pItemExtraData->pPreviousItem;
+			}
 		}
 
-		return TRUE;
+		pItemExtraData->pNextItem = NULL;
+		pItemExtraData->pPreviousItem = NULL;
+
+		--pItemExtraData->pParentInv->dwItemCount;
 	}
 
-	return FALSE;
+	ITEMS_SetOwnerId(pItem, -1);
+
+	if (pItemExtraData->pParentInv->pOwner)
+	{
+		STATLIST_ExpireUnitStatlist(pItemExtraData->pParentInv->pOwner, pItem);
+	}
+
+	if (pItemExtraData->pParentInv->dwLeftItemGUID == pItem->dwUnitId)
+	{
+		pItemExtraData->pParentInv->dwLeftItemGUID = -1;
+	}
+
+	pItemExtraData->pParentInv = NULL;
+	pItemExtraData->nNodePos = 0;
+	pItemExtraData->nNodePosOther = 0;
+
+	return TRUE;
 }
 
 //D2Common.0x6FD8E4A0
