@@ -166,7 +166,7 @@ BOOL __fastcall INVENTORY_CanItemBePlacedAtPos(D2InventoryGridStrc* pInventoryGr
 //D2Common.0x6FD8ECF0
 BOOL __fastcall sub_6FD8ECF0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8EE20
-int __fastcall sub_6FD8EE20(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight);
+uint8_t __fastcall sub_6FD8EE20(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8EFB0
 BOOL __fastcall sub_6FD8EFB0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8F0E0
