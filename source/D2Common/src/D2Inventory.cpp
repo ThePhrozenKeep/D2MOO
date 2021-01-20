@@ -3342,19 +3342,13 @@ BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 
 	pInventory->pCursorItem = nullptr;
 	pInventory->dwLeftItemGUID = -1;
-
-	D2UnitStrc* pItem = pInventory->pFirstItem;
-	if (pItem)
+	
+	for (D2UnitStrc* pItem = pInventory->pFirstItem; pItem; pItem = pInventory->pFirstItem)
 	{
-		while (INVENTORY_RemoveItem(pItem))
+		if (!INVENTORY_RemoveItem(pItem))
 		{
-			pItem = pInventory->pFirstItem;
-			if (!pItem)
-			{
-				return TRUE;
-			}
+			return FALSE;
 		}
-		return FALSE;
 	}
 
 	return TRUE;
