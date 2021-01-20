@@ -274,9 +274,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10238_Return                                               @10238
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10239_Return0                                              @10239
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_AllocInventory                                            @10240
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_FreeInventory                                             @10241
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemInSocket                                         @10242
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_RemoveItemFromInventory                                   @10243
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeInventory                                             @10241
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_PlaceItemInSocket                                         @10242
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveItemFromInventory                                   @10243
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CompareWithItemsParentInventory                           @10244
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetFreePosition                                           @10245
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemAtFreePosition                                   @10246
@@ -285,17 +285,17 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemAtInventoryPage                                  @10249
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_Return                                                    @10250
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10251_Return                                               @10251
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetItemFromInventoryPage                                  @10252
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemFromInventoryPage                                  @10252
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemInBodyLoc                                        @10253
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10254_Return0                                              @10254
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetSecondWieldingWeapon                                   @10255
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CheckEquipmentForWeaponByClass                            @10256
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetSecondWieldingWeapon                                   @10255
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CheckEquipmentForWeaponByClass                            @10256
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemFromBodyLoc                                        @10257
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetLeftHandWeapon                                         @10258
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetCompositItem                                           @10259
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetBodyLocFromEquippedItem                                @10260
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_SetCursorItem                                             @10261
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetCursorItem                                             @10262
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetLeftHandWeapon                                         @10258
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetCompositItem                                           @10259
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetBodyLocFromEquippedItem                                @10260
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_SetCursorItem                                             @10261
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetCursorItem                                             @10262
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_FindBackPackItemForStack                                  @10263
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_FindEquippedItemForStack                                  @10264
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_FindFillableBook                                          @10265
@@ -308,32 +308,32 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetUseableItemFromBeltSlot                                @10272
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetEquippedShield                                         @10273
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetEquippedWeapon                                         @10274
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_HasBodyArmorEquipped                                      @10275
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_HasBodyArmorEquipped                                      @10275
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_IsItemBodyLocFree                                         @10276
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetFirstItem                                              @10277
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetLastItem                                               @10278
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_RemoveInventoryItems                                      @10279
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetTradeInventory                                         @10280
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_FreeTradeInventory                                        @10281
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CheckForItemInTradeInventory                              @10282
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveInventoryItems                                      @10279
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetTradeInventory                                         @10280
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeTradeInventory                                        @10281
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CheckForItemInTradeInventory                              @10282
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_AddItemToTradeInventory                                   @10283
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetItemCount                                              @10284
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemCount                                              @10284
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetBackPackItemByType                                     @10285
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetEquippedItemByType                                     @10286
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetEquippedItemByCode                                     @10287
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetSetItemEquipCountByFileIndex                           @10288
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_UpdateWeaponGUIDOnInsert                                  @10289
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_UpdateWeaponGUIDOnRemoval                                 @10290
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetWieldType                                              @10291
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_SetOwnerId                                                @10292
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetOwnerId                                                @10293
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_UpdateWeaponGUIDOnInsert                                  @10289
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_UpdateWeaponGUIDOnRemoval                                 @10290
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetWieldType                                              @10291
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_SetOwnerId                                                @10292
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetOwnerId                                                @10293
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CreateCorpseForPlayer                                     @10294
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeCorpse                                                @10295
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetFirstCorpse                                            @10296
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetCorpseCount                                            @10297
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetItemSaveGfxInfo                                        @10298
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10299                                                      @10299
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_RemoveAllItems                                            @10300
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveAllItems                                            @10300
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10301_Return0                                              @10301
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CanItemsBeTraded                                          @10302
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10303_Return                                               @10303
@@ -1311,7 +1311,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11275                                                      @11275
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_EvaluateSkillFormula                                         @11276
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_11277_Return                                               @11277
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetItemsXPosition                                         @11278
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemsXPosition                                         @11278
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_AddUnitToRoomEx                                            @11279
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_GetSpawnMode_XY                                            @11280
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11281_Unused                                               @11281
@@ -1334,7 +1334,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetUnitNameFromUnit                                        @11298
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetUnitNameFromUnitTypeAndClassId                          @11299
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_EvaluateItemFormula                                        @11300
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_GetSecondaryWeapon                                        @11301
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetSecondaryWeapon                                        @11301
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_EvaluateSkillDescFormula                                     @11302
     PatchAction::FunctionReplacePatchByOriginal,       //   STATES_CheckStateMaskOnUnit                                         @11303
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetBaseStatsCount                                          @11304
