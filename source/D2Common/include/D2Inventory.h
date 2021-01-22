@@ -164,13 +164,13 @@ D2InventoryGridStrc* __fastcall INVENTORY_GetGrid(D2InventoryStrc* pInventory, i
 //D2Common.0x6FD8EC70
 BOOL __fastcall INVENTORY_CanItemBePlacedAtPos(D2InventoryGridStrc* pInventoryGrid, int nX, int nY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8ECF0
-BOOL __fastcall sub_6FD8ECF0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
+BOOL __fastcall INVENTORY_FindFreePositionBottomRightToTopLeftWithWeight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8EE20
-uint8_t __fastcall sub_6FD8EE20(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight);
+uint8_t __fastcall INVENTORY_GetPlacementWeight(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8EFB0
-BOOL __fastcall sub_6FD8EFB0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
+BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRightWithWeight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8F0E0
-BOOL __fastcall sub_6FD8F0E0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
+BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8F1E0 (#10246)
 BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, char* szFile, int nLine);
 //D2Common.0x6FD8F250
@@ -284,7 +284,7 @@ int __stdcall D2Common_10315(D2CorpseStrc* pCorpse);
 //D2Common.0x6FD912F0 (#10298)
 void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, uint8_t* pColor);
 //D2Common.0x6FD915C0
-void __fastcall sub_6FD915C0();
+void __fastcall INVENTORY_InitializeComponentArray();
 //D2Common.0x6FD917B0
 void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2UnitStrc* pItem);
 //D2Common.0x6FD91B60 (#10299)

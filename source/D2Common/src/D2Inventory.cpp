@@ -315,9 +315,9 @@ D2UnkInventoryComponentStrc stru_6FDE2820[]
 D2UnkInventoryComponentStrc stru_6FDEA708[255] = {};
 
 //D2Common.0x6FDEAF00
-int dword_6FDEAF00;
+int gnComponentArrayRecordCount;
 //D2Common.0x6FDEAF04
-BOOL dword_6FDEAF04;
+BOOL gbComponentArrayInitialized;
 
 
 //D2Common.0x6FD8E210
@@ -687,7 +687,7 @@ BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc
 	{
 		if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 		{
-			return sub_6FD8ECF0(pInventoryGrid, pFreeX, pFreeY, nWidth, 1);
+			return INVENTORY_FindFreePositionBottomRightToTopLeftWithWeight(pInventoryGrid, pFreeX, pFreeY, nWidth, 1);
 		}
 
 		for (int nX = pInventoryGrid->nGridWidth - 1; nX >= 0; --nX)
@@ -709,10 +709,10 @@ BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc
 
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
-		return sub_6FD8EFB0(pInventoryGrid, pFreeX, pFreeY, nWidth, nHeight);
+		return INVENTORY_FindFreePositionTopLeftToBottomRightWithWeight(pInventoryGrid, pFreeX, pFreeY, nWidth, nHeight);
 	}
 
-	return sub_6FD8F0E0(pInventoryGrid, pFreeX, pFreeY, nWidth, nHeight);
+	return INVENTORY_FindFreePositionTopLeftToBottomRight(pInventoryGrid, pFreeX, pFreeY, nWidth, nHeight);
 }
 
 //D2Common.0x6FD8EAF0
@@ -767,7 +767,7 @@ D2InventoryGridStrc* __fastcall INVENTORY_GetGrid(D2InventoryStrc* pInventory, i
 //D2Common.0x6FD8EC70
 BOOL __fastcall INVENTORY_CanItemBePlacedAtPos(D2InventoryGridStrc* pInventoryGrid, int nX, int nY, uint8_t nItemWidth, uint8_t nItemHeight)
 {
-	if (nItemWidth + nX > pInventoryGrid->nGridWidth && nItemHeight + nY > pInventoryGrid->nGridHeight)
+	if (nItemWidth + nX > pInventoryGrid->nGridWidth || nItemHeight + nY > pInventoryGrid->nGridHeight)
 	{
 		return FALSE;
 	}
@@ -787,8 +787,7 @@ BOOL __fastcall INVENTORY_CanItemBePlacedAtPos(D2InventoryGridStrc* pInventoryGr
 }
 
 //D2Common.0x6FD8ECF0
-//TODO: Find a name
-BOOL __fastcall sub_6FD8ECF0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
+BOOL __fastcall INVENTORY_FindFreePositionBottomRightToTopLeftWithWeight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
 {
 	if (pInventoryGrid->nGridWidth < 1 || pInventoryGrid->nGridHeight < 1)
 	{
@@ -802,7 +801,7 @@ BOOL __fastcall sub_6FD8ECF0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, i
 		{
 			if (INVENTORY_CanItemBePlacedAtPos(pInventoryGrid, nX, nY, nItemWidth, nItemHeight))
 			{
-				const uint8_t nWeight = sub_6FD8EE20(pInventoryGrid, nX, nY, nItemWidth, nItemHeight);
+				const uint8_t nWeight = INVENTORY_GetPlacementWeight(pInventoryGrid, nX, nY, nItemWidth, nItemHeight);
 				if (nWeight > nMax)
 				{
 					nMax = nWeight;
@@ -823,8 +822,7 @@ BOOL __fastcall sub_6FD8ECF0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, i
 }
 
 //D2Common.0x6FD8EE20
-//TODO: Find a name
-uint8_t __fastcall sub_6FD8EE20(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight)
+uint8_t __fastcall INVENTORY_GetPlacementWeight(D2InventoryGridStrc* pInventoryGrid, int nXPos, int nYPos, uint8_t nItemWidth, uint8_t nItemHeight)
 {
 	uint8_t nResult = 0;
 
@@ -897,8 +895,7 @@ uint8_t __fastcall sub_6FD8EE20(D2InventoryGridStrc* pInventoryGrid, int nXPos, 
 }
 
 //D2Common.0x6FD8EFB0
-//TODO: Find a name
-BOOL __fastcall sub_6FD8EFB0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
+BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRightWithWeight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
 {
 	if (pInventoryGrid->nGridWidth <= 0 || pInventoryGrid->nGridHeight <= 0)
 	{
@@ -912,7 +909,7 @@ BOOL __fastcall sub_6FD8EFB0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, i
 		{
 			if (INVENTORY_CanItemBePlacedAtPos(pInventoryGrid, nX, nY, nItemWidth, nItemHeight))
 			{
-				const uint8_t nWeight = sub_6FD8EE20(pInventoryGrid, nX, nY, nItemWidth, nItemHeight);
+				const uint8_t nWeight = INVENTORY_GetPlacementWeight(pInventoryGrid, nX, nY, nItemWidth, nItemHeight);
 				if (nWeight > nMax)
 				{
 					nMax = nWeight;
@@ -933,8 +930,7 @@ BOOL __fastcall sub_6FD8EFB0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, i
 }
 
 //D2Common.0x6FD8F0E0
-//TODO: Find a name
-BOOL __fastcall sub_6FD8F0E0(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
+BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight)
 {
 	for (int nX = 0; nX < pInventoryGrid->nGridWidth; ++nX)
 	{
@@ -2650,11 +2646,38 @@ int __stdcall D2Common_10315(D2CorpseStrc* pCorpse)
 	return 0;
 }
 
+// Helper function
+inline int INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(D2ItemsTxt* pItemsTxtRecord)
+{
+	for (int nCounter = 1; nCounter < ARRAY_SIZE(stru_6FDEA708); ++nCounter)
+	{
+		if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx || stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwCode)
+		{
+			return nCounter;
+		}
+	}
+
+	return ARRAY_SIZE(stru_6FDEA708);
+}
+
+// Helper function
+inline int INVENTORY_GetComponentArrayIndexFromArmTypeTxtRecord(D2ArmTypeTxt* pArmTypeTxtRecord)
+{
+	for (int nCounter = 1; nCounter < ARRAY_SIZE(stru_6FDEA708); ++nCounter)
+	{
+		if (stru_6FDEA708[nCounter].dwCode == *(uint32_t*)&pArmTypeTxtRecord->szToken[0])
+		{
+			return nCounter;
+		}
+	}
+
+	return ARRAY_SIZE(stru_6FDEA708);
+}
+
 //D2Common.0x6FD912F0 (#10298)
 void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, uint8_t* pColor)
 {
-	D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory);
-	while (pItem)
+	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
 	{
 		if (pItem->dwUnitType == UNIT_ITEM && pItem->dwAnimMode == IMODE_EQUIP)
 		{
@@ -2671,28 +2694,13 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 
 					uint8_t nComponent = ITEMS_GetComponent(pItem);
 
-					sub_6FD915C0();
+					INVENTORY_InitializeComponentArray();
 
-					int nCounter = 1;
+					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
 
-					while (nCounter < 255)
+					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
 					{
-						if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx)
-						{
-							break;
-						}
-
-						if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwCode)
-						{
-							break;
-						}
-
-						++nCounter;
-					}
-
-					if (nCounter <= 0 || nCounter >= 255)
-					{
-						if (nComponent < 16)
+						if (nComponent < NUM_COMPONENTS)
 						{
 							a2[nComponent] = -1;
 							pColor[nComponent] = -1;
@@ -2708,9 +2716,9 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 						{
 							nComponent = COMPOSIT_LEFTHAND;
 						}
-						else if (nComponent < 16)
+						else if (nComponent < NUM_COMPONENTS)
 						{
-							a2[nComponent] = nCounter;
+							a2[nComponent] = nIndex;
 
 							sub_6FD917B0(pPlayer, a2, pColor, pItem);
 
@@ -2735,77 +2743,55 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 					pArmorComponents[i] = pItemsTxtRecord->nArmorComp[i];
 				}
 
-				for (int i = 0; i < 16; ++i)
+				for (int i = 0; i < NUM_COMPONENTS; ++i)
 				{
 					if (COMPOSIT_IsArmorComponent(i))
 					{
 						D2ArmTypeTxt* pArmTypeTxtRecord = DATATBLS_GetArmTypeTxtRecord(COMPOSIT_GetArmorTypeFromComponent(i, pArmorComponents));
 						if (pItem->dwClassId > 0)
 						{
-							sub_6FD915C0();
+							INVENTORY_InitializeComponentArray();
 
-							int nCounter = 1;
+							const int nIndex = INVENTORY_GetComponentArrayIndexFromArmTypeTxtRecord(pArmTypeTxtRecord);
 
-							while (nCounter < 255)
+							if (nIndex < ARRAY_SIZE(stru_6FDEA708))
 							{
-								if (stru_6FDEA708[nCounter].dwCode == *(uint32_t*)&pArmTypeTxtRecord->szToken[0])
+								a2[i] = nIndex;
+
+								uint8_t* pComponentColor = &pColor[i];
+								if (ITEMS_GetColor(pPlayer, pItem, pComponentColor, 0))
 								{
-									break;
+									++*pComponentColor;
 								}
-
-								++nCounter;
-							}
-
-							if (nCounter && nCounter < 255)
-							{
-								if (i < 16)
+								else
 								{
-									a2[i] = nCounter;
-
-									uint8_t* pComponentColor = &pColor[i];
-									if (ITEMS_GetColor(pPlayer, pItem, pComponentColor, 0))
-									{
-										++*pComponentColor;
-									}
-									else
-									{
-										*pComponentColor = -1;
-									}
+									*pComponentColor = -1;
 								}
 							}
 							else
-							{
-								if (i < 16)
-								{
-									a2[i] = -1;
-									pColor[i] = -1;
-								}
-							}
-						}
-						else
-						{
-							if (i < 16)
 							{
 								a2[i] = -1;
 								pColor[i] = -1;
 							}
 						}
+						else
+						{
+							a2[i] = -1;
+							pColor[i] = -1;
+						}
 					}
 				}
 			}
 		}
-
-		pItem = INVENTORY_GetNextItem(pItem);
 	}
 }
 
 //D2Common.0x6FD915C0
-//TODO: Find a name
-void __fastcall sub_6FD915C0()
+void __fastcall INVENTORY_InitializeComponentArray()
 {
-	if (!dword_6FDEAF04)
+	if (!gbComponentArrayInitialized)
 	{
-		dword_6FDEAF04 = TRUE;
+		gbComponentArrayInitialized = TRUE;
 
 		memset(stru_6FDEA708, 0x00, sizeof(stru_6FDEA708));
 
@@ -2880,7 +2866,7 @@ void __fastcall sub_6FD915C0()
 			}
 		}
 
-		dword_6FDEAF00 = ARRAY_SIZE(stru_6FDEA708);
+		gnComponentArrayRecordCount = ARRAY_SIZE(stru_6FDEA708);
 	}
 }
 
@@ -2900,44 +2886,26 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 
 		if (dwWeaponClassCode == ' wbx')
 		{
-			if (nComponent == COMPOSIT_RIGHTHAND || nComponent == COMPOSIT_LEFTHAND)
+			if ((nComponent == COMPOSIT_RIGHTHAND || nComponent == COMPOSIT_LEFTHAND) && pUnit->pInventory)
 			{
-				if (pUnit->pInventory)
+				D2UnitStrc* pCompositItem = INVENTORY_GetCompositItem(pUnit->pInventory, COMPOSIT_RIGHTHAND);
+				if (pCompositItem)
 				{
-					D2UnitStrc* pCompositItem = INVENTORY_GetCompositItem(pUnit->pInventory, COMPOSIT_RIGHTHAND);
-					if (pCompositItem)
+					D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pCompositItem->dwClassId);
+					D2_ASSERT(pItemsTxtRecord);
+
+					INVENTORY_InitializeComponentArray();
+
+					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
+
+					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
 					{
-						D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pCompositItem->dwClassId);
-						D2_ASSERT(pItemsTxtRecord);
-
-						sub_6FD915C0();
-
-						int nCounter = 1;
-
-						while (nCounter < ARRAY_SIZE(stru_6FDEA708))
-						{
-							if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx)
-							{
-								break;
-							}
-
-							if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwCode)
-							{
-								break;
-							}
-
-							++nCounter;
-						}
-
-						if (nCounter <= 0 || nCounter >= ARRAY_SIZE(stru_6FDEA708))
-						{
-							a2[6] = -1;
-							pColor[6] = -1;
-						}
-						else
-						{
-							a2[6] = nCounter;
-						}
+						a2[COMPOSIT_LEFTHAND] = -1;
+						pColor[COMPOSIT_LEFTHAND] = -1;
+					}
+					else
+					{
+						a2[COMPOSIT_LEFTHAND] = nIndex;
 					}
 				}
 			}
@@ -2950,33 +2918,18 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 				D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode('til\0', &nItemId);
 				if (pItemsTxtRecord)
 				{
-					sub_6FD915C0();
+					INVENTORY_InitializeComponentArray();
 
-					int nCounter = 1;
+					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
 
-					while (nCounter < ARRAY_SIZE(stru_6FDEA708))
+					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
 					{
-						if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx)
-						{
-							break;
-						}
-
-						if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwCode)
-						{
-							break;
-						}
-
-						++nCounter;
-					}
-
-					if (nCounter <= 0 || nCounter >= ARRAY_SIZE(stru_6FDEA708))
-					{
-						a2[5] = -1;
-						pColor[5] = -1;
+						a2[COMPOSIT_RIGHTHAND] = -1;
+						pColor[COMPOSIT_RIGHTHAND] = -1;
 					}
 					else
 					{
-						a2[5] = nCounter;
+						a2[COMPOSIT_RIGHTHAND] = nIndex;
 					}
 				}
 			}
@@ -3470,11 +3423,11 @@ BOOL __fastcall INVENTORY_CanItemBePlacedInInventory(D2UnitStrc* pPlayer, D2Unit
 
 			if (nWidth && nHeight && nX >= 0 && nX + nWidth <= pInventoryGrid->nGridWidth && nY >= 0 && nY + nHeight <= pInventoryGrid->nGridHeight)
 			{
-				for (int j = nY; j < nY + nHeight; ++j)
+				for (int y = nY; y < nY + nHeight; ++y)
 				{
-					for (int i = nX; i < nX + nWidth; ++i)
+					for (int x = nX; x < nX + nWidth; ++x)
 					{
-						pInventoryGrid->ppItems[i + j * pInventoryGrid->nGridWidth] = (D2UnitStrc*)-1;//TODO: -1?!?
+						pInventoryGrid->ppItems[x + y * pInventoryGrid->nGridWidth] = (D2UnitStrc*)-1;//TODO: -1?!?
 					}
 				}
 
