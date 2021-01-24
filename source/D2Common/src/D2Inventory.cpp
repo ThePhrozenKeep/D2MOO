@@ -984,7 +984,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 	}
 
 	D2InventoryGridStrc* pInventoryGrid = nullptr;
-	if (nInventoryGrid != INVGRID_INVENTORY)
+	if (nInventoryGrid < INVGRID_INVENTORY)
 	{
 		nWidth = 1;
 		nHeight = 1;
@@ -996,12 +996,8 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		{
 			pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BELT, &gBeltInventoryGridInfo);
 		}
-		else
-		{
-			return FALSE;
-		}
 	}
-	else // INVGRID_INVENTORY
+	else
 	{
 		D2InventoryGridInfoStrc pInventoryGridInfo = {};
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
@@ -1018,24 +1014,9 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		return FALSE;
 	}
 
-	const int nXMax = nXPos + nWidth;
-	const int nYMax = nYPos + nHeight;
-
-	int nY = nYPos;
-	while (nY < nYMax)
+	if (!INVENTORY_CanItemBePlacedAtPos(pInventoryGrid, nXPos, nYPos, nWidth, nHeight))
 	{
-		int nX = nXPos;
-		while (nX < nXMax && !pInventoryGrid->ppItems[nX + nY * pInventoryGrid->nGridWidth])
-		{
-			++nX;
-		}
-
-		if (nX < nXMax)
-		{
-			return FALSE;
-		}
-
-		++nY;
+		return FALSE;
 	}
 
 	if (pItem->dwAnimMode == IMODE_ONGROUND && UNITS_GetRoom(pItem))
@@ -1084,12 +1065,11 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 	pItemExtraData->unk0x10 = pInventoryGrid->pLastItem;
 	pInventoryGrid->pLastItem = pItem;
 
-	for (int i = nYPos; i < nHeight + nYPos; ++i)
+	for (int y = 0; y < nHeight; ++y)
 	{
-		if (nXPos < nWidth + nXPos)
+		for (int x = 0; x < nWidth; ++x)
 		{
-			//memset32(&pInventoryGrid->ppItems[i * pInventoryGrid->nGridWidth] + nXPos, (int)pItem, nWidth);
-			memset(&pInventoryGrid->ppItems[i * pInventoryGrid->nGridWidth] + nXPos, (int)pItem, nWidth);
+			pInventoryGrid->ppItems[nXPos + x + (nYPos + y) * pInventoryGrid->nGridWidth] = pItem;
 		}
 	}
 
@@ -1113,18 +1093,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		ITEMS_SetInvPage(pItem, nInventoryGrid - 2);
 	}
 
-	if (nInventoryGrid != INVGRID_BODYLOC)
-	{
-		if (nInventoryGrid == INVGRID_BELT)
-		{
-			pItemExtraData->nNodePosOther = 2;
-		}
-		else
-		{
-			pItemExtraData->nNodePosOther = 1;
-		}
-	}
-	else
+	if (nInventoryGrid == INVGRID_BODYLOC)
 	{
 		if (nXPos >= 11)
 		{
@@ -1134,6 +1103,14 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		{
 			pItemExtraData->nNodePosOther = 3;
 		}
+	}
+	else if (nInventoryGrid == INVGRID_BELT)
+	{
+		pItemExtraData->nNodePosOther = 2;
+	}
+	else
+	{
+		pItemExtraData->nNodePosOther = 1;
 	}
 
 	return TRUE;

@@ -279,7 +279,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveItemFromInventory                                   @10243
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CompareWithItemsParentInventory                           @10244
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetFreePosition                                           @10245
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemAtFreePosition                                   @10246
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_PlaceItemAtFreePosition                                   @10246
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CanItemBePlaced                                           @10247
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CanItemsBeExchanged                                       @10248
     PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_PlaceItemAtInventoryPage                                  @10249
