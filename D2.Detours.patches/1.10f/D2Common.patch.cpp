@@ -116,7 +116,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveClientFromRoom                                        @10080
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10081_GetTileCountFromRoom                                 @10081
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IsRoomInTown                                                @10082
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10083_Return0                                              @10083
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10083_Return0                                              @10083
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10084                                                      @10084
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetTownLevelIdFromActNo                                     @10085
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IsTownLevelId                                               @10086
@@ -172,7 +172,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10136                                                      @10136
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesEx                                      @10137
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesWithField                               @10138
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10139_Return                                               @10139
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10139_Return                                               @10139
     PatchAction::Ignore                        , /*C*/ //   D2COMMON_10140_Return                                               @10140
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10141                                                      @10141
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10142                                                      @10142
@@ -272,7 +272,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10236                                                      @10236
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10237                                                      @10237
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10238_Return                                               @10238
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10239_Return0                                              @10239
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10239_Return0                                              @10239
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_AllocInventory                                            @10240
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeInventory                                             @10241
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_PlaceItemInSocket                                         @10242
@@ -700,7 +700,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharTemplateTxtRecordCount                              @10664
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharTemplateTxtRecord                                   @10665
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetClassFromCharTemplateTxtRecord                          @10666
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_UNUSED_Return0                                             @10667
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_UNUSED_Return0                                             @10667
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetSuperUniquesTxtRecord                                   @10668
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10669
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10670
@@ -889,7 +889,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetItemCell                                                   @10853
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetItemCell                                                   @10854
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_AssignProperty                                             @10855
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10856_Return                                               @10856
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10856_Return                                               @10856
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10857
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10858
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_CanItemHaveMagicAffix                                      @10859
@@ -976,7 +976,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_RefreshSkill                                                 @10940
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_RefreshPassiveSkills                                         @10941
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetSkillModeFromUnit                                         @10942
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10943_Return1                                              @10943
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10943_Return1                                              @10943
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetRange                                                     @10944
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_AllocSkillList                                               @10945
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_InitSkillList                                                @10946
