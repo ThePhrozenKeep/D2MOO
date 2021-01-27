@@ -388,17 +388,26 @@ enum D2C_PropertySets
 	PROPSET_SHIELD,
 };
 
-enum D2C_StatlistFlags
+enum D2C_StatlistFlags : uint32_t
 {
-	LISTFLAG_BASIC = 0x00000001,
-	LISTFLAG_LENGTH = 0x0000002,
-	LISTFLAG_TEMP = 0x00000004,
-	LISTFLAG_BUFF = 0x00000008,
-	LISTFLAG_CURSE = 0x00000020,
-	LISTFLAG_MAGICSTATS = 0x00000040,
-	LISTFLAG_CONVERT = 0x00000800,
-	LISTFLAG_LISTEX = 0x80000000
+	STATLIST_BASE = 0x0,
+	STATLIST_BASIC = 0x1,
+	STATLIST_NEWLENGTH = 0x2,
+	STATLIST_TEMPONLY = 0x4,
+	STATLIST_BUFF = 0x8,
+	STATLIST_CURSE = 0x20,
+	STATLIST_MAGIC = 0x40,
+	STATLIST_OVERLAY = 0x80,
+	STATLIST_UNK_0x100 = 0x100,
+	STATLIST_TOGGLE = 0x200,
+	STATLIST_CONVERT = 0x800,
+	STATLIST_SET = 0x2000,
+	STATLIST_ITEM_EX = 0x200000,
+	STATLIST_PERMANENT = 0x20000000,
+	STATLIST_DYNAMIC = 0x40000000,
+	STATLIST_EXTENDED = 0x80000000,
 };
+
 
 struct D2StatStrc
 {
@@ -414,28 +423,30 @@ struct D2StatStrc
 	int32_t nValue;								//0x04
 };
 
-struct D2StatExStrc
+struct D2StatsArrayStrc
 {
 	D2StatStrc* pStat;						//0x00 An Array[wStatCount]
-	uint16_t nStatCount;						//0x04
-	uint16_t nBitSize;							//0x06
+	uint16_t nStatCount;					//0x04
+	uint16_t nCapacity;						//0x06
+	static const int nGrowthAmount = 4;
+	static const int nShrinkThreshold = 8;
 };
 
 struct D2StatListStrc
 {
 	void* pMemPool;							//0x00
 	D2UnitStrc* pUnit;						//0x04
-	uint32_t dwOwnerType;						//0x08
+	uint32_t dwOwnerType;					//0x08
 	uint32_t dwOwnerId;						//0x0C
-	uint32_t dwFlags;							//0x10
+	uint32_t dwFlags;						//0x10 D2C_StatlistFlags
 	uint32_t dwStateNo;						//0x14
-	uint32_t dwExpireFrame;					//0x18
+	int32_t dwExpireFrame;					//0x18
 	uint32_t dwSkillNo;						//0x1C
-	uint32_t dwSLvl;							//0x20
-	D2StatExStrc Stats;						//0x24
+	uint32_t dwSLvl;						//0x20
+	D2StatsArrayStrc Stats;					//0x24
 	D2StatListStrc* pPrevLink;				//0x2C
 	D2StatListStrc* pNextLink;				//0x30
-	D2StatListStrc* pPrev;					//0x34
+	D2StatListStrc* pParent;				//0x34
 	void* fpStatRemove;						//0x38
 };
 
@@ -444,43 +455,53 @@ struct D2StatListExStrc : public D2StatListStrc
 	D2StatListStrc* pMyLastList;			//0x3C
 	D2StatListStrc* pMyStats;				//0x40
 	D2UnitStrc* pOwner;						//0x44
-	D2StatExStrc FullStats;					//0x48
-	D2StatExStrc ModStats;					//0x50
-	uint32_t* StatFlags;						//0x58 pt to an  array
+	D2StatsArrayStrc FullStats;				//0x48
+	D2StatsArrayStrc ModStats;				//0x50
+	uint32_t* StatFlags;					//0x58 8bytes per states
 	void* fpCallBack;						//0x5C
 	D2GameStrc* pGame;						//0x60
 };
-
 #pragma pack()
+
+// Helper function
+inline D2StatListExStrc* STATLIST_StatListExCast(D2StatListStrc* pStatList) {
+	if (pStatList->dwFlags & STATLIST_EXTENDED)
+	{
+		return static_cast<D2StatListExStrc*>(pStatList);
+	}
+	return nullptr;
+}
+
+inline bool STATLIST_IsExtended(D2StatListStrc* pStatList) { return pStatList->dwFlags & STATLIST_EXTENDED; }
 
 //D2Common.0x6FDB57C0 (#10563)
 BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //----- (6FDB5830) --------------------------------------------------------
 int __fastcall sub_6FDB5830(D2StatListExStrc* a1, int a2);
 //D2Common.0x6FDB6300
-int __fastcall sub_6FDB6300(D2StatExStrc* pStatEx, int nLayer_StatId);
+int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, int nLayer_StatId);
 //D2Common.0x6FDB6340
-int __fastcall sub_6FDB6340(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
+int __fastcall STATLIST_GetBaseStat_6FDB6340(D2StatListStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
 //D2Common.0x6FDB63E0
-int __fastcall sub_6FDB63E0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
+int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
 //D2Common.0x6FDB64A0
 int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6920
-D2StatStrc* __fastcall sub_6FDB6920(D2StatExStrc* pStatEx, int nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatEx, int nLayer_StatId);
 //D2Common.0x6FDB6970
-D2StatStrc* __fastcall sub_6FDB6970(void* pMemPool, D2StatExStrc* pStatEx, int nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatEx, int nLayer_StatId);
 //D2Common.0x6FDB6A30
-void __fastcall sub_6FDB6A30(void* pMemPool, D2StatExStrc* pStatEx, D2StatStrc* pStat);
+void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* pStatEx, D2StatStrc* pStat);
 //D2Common.0x6FDB6AB0
-void __fastcall sub_6FDB6AB0(D2StatListExStrc* pStatList, int nLayer_StatId, int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
+void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatList, int nLayer_StatId, int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6C10
 void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, int nValue, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6E30
-void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListExStrc* pStatList);
+void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList);
 //D2Common.0x6FDB7030 (#10485)
 void __stdcall STATLIST_FreeStatList(D2StatListStrc* pStatList);
 //D2Common.0x6FDB7050
-void __fastcall D2Common_STATLIST_FreeStatListEx_6FDB7050(D2StatListExStrc* pStatListEx);
+void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pStatList);
 //D2Common.0x6FDB7110 (#10527)
 void __stdcall STATLIST_FreeStatListEx(D2UnitStrc* pUnit);
 //D2Common.0x6FDB7140 (#10470)
@@ -508,27 +529,28 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 //D2Common.0x6FDB7560 (#10464)
 void __stdcall STATLIST_AddStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7690
-void __fastcall sub_6FDB7690(D2StatListExStrc* pStatListEx, int nLayer_StatId);
+void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList, int nLayer_StatId);
 //D2Common.0x6FDB77B0 (#10463)
 BOOL __stdcall STATLIST_SetStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7910 (#10465)
 void __stdcall STATLIST_SetStatIfListIsValid(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7930 (#11294)
-BOOL __stdcall D2Common_11294(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
+BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
 //D2Common.0x6FDB7A90 (#11295)
-void __stdcall D2Common_11295(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
+//Duplicate of STATLIST_SetBaseStat#11294
+void __stdcall STATLIST_SetBaseStat2(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer, D2UnitStrc* pUnit);
 //D2Common.0x6FDB7AB0 (#10517)
 void __stdcall STATLIST_SetUnitStat(D2UnitStrc* pUnit, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7B00 (#10518)
 void __stdcall STATLIST_AddUnitStat(D2UnitStrc* pUnit, int nStatId, int nValue, uint16_t nLayer);
-//D2Common.0x6FDB7B30 (#10521)
-int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB7C30 (#10519)
-int __stdcall STATLIST_GetUnitStat(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
-//D2Common.0x(6FDB7D40 (#10466)
-int __stdcall STATLIST_GetStatValue(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer);
+uint32_t __stdcall STATLIST_GetUnitStatUnsigned(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB7E30 (#10520)
 int __stdcall STATLIST_GetUnitStatSigned(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
+//D2Common.0x6FDB7B30 (#10521)
+int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
+//D2Common.0x(6FDB7D40 (#10466)
+int __stdcall STATLIST_GetStatValue(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB7F40 (#10522)
 int __stdcall STATLIST_GetUnitStatBonus(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB80C0 (#10515)
@@ -566,9 +588,9 @@ void __stdcall D2Common_10534(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8770 (#10530)
 BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit);
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall D2Common_10532(D2StatListExStrc* pStatListEx, int nStatId);
+int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListExStrc* pStatListEx, int nStatId);
 //D2Common.0x6FDB8890 (#10533)
-void __stdcall D2Common_10533(D2UnitStrc* pUnit);
+void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8900
 void __stdcall D2Common_STATES_ToggleState_6FDB8900(D2UnitStrc* pUnit, int nState, BOOL bSet);
 //D2Common.0x6FDB8A90
@@ -576,11 +598,12 @@ uint32_t* __stdcall D2COMMON_STATES_GetStatFlags_6FDB8A90(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8AC0
 uint32_t* __stdcall D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8B10 (#10516)
-void __stdcall D2Common_10516(D2UnitStrc* pUnit, int nFrame);
+// If nFrame == 0 (client), decrements dwExpireFrame, otherwise only frees the expired lists
+void __stdcall STATLIST_UpdateStatListsExpiration(D2UnitStrc* pUnit, int nFrame);
 //D2Common.0x6FDB8BA0 (#11268)
-int __stdcall STATLIST_GetFullStatsDataFromUnit(D2UnitStrc* pUnit, D2StatStrc* pStatBuffer, int nBufferSize);
+int __stdcall STATLIST_GetFullStatsDataFromUnit(D2UnitStrc* pUnit, D2StatStrc* pOutStatBuffer, int nBufferSize);
 //D2Common.0x6FDB8C00 (#11243)
-int __stdcall STATLIST_GetBaseStatsData(D2StatListExStrc* pStatListEx, D2StatStrc* pStatBuffer, int nBufferSize);
+int __stdcall STATLIST_GetBaseStatsData(D2StatListStrc* pStatListEx, D2StatStrc* pOutStatBuffer, int nBufferSize);
 //D2Common.0x6FDB8C50 (#10573)
 void __stdcall STATLIST_MergeBaseStats(D2StatListStrc* pTargetStatList, D2StatListStrc* pSourceStatlist);
 //D2Common.0x6FDB8CA0 (#10477)
@@ -588,7 +611,7 @@ void __stdcall STATLIST_SetStatRemoveCallback(D2StatListStrc* pStatList, void* p
 //D2Common.0x6FDB8CC0 (#10469)
 void __stdcall D2Common_10469(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8D30 (#10514)
-void __stdcall D2Common_10514(D2UnitStrc* pUnit);
+void __stdcall STATLIST_ClampStaminaManaHP(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8EB0 (#10574)
 BOOL __stdcall D2Common_10574(D2UnitStrc* pUnit, int nStateId, BOOL bSet);
 //D2Common.0x6FDB8F30 (#10525)
@@ -630,7 +653,7 @@ int __stdcall STATLIST_GetSkillLevel(D2StatListStrc* pStatList);
 //D2Common.0x6FDB9C30 (#11269)
 int __stdcall D2COMMON_11269_CopyStats(D2StatListExStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9C50
-int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListExStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
+int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D20 (#11270)
 int __stdcall D2Common_11270(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D60 (#11273)

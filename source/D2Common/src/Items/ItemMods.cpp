@@ -624,7 +624,7 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 					v11 = nShiftedValue;
 				}
 
-				D2Common_11295(pStatList, STAT_ITEM_CHARGED_SKILL, v11 + (nShiftedValue << 8), nLayer, pItem);
+				STATLIST_SetBaseStat2(pStatList, STAT_ITEM_CHARGED_SKILL, v11 + (nShiftedValue << 8), nLayer, pItem);
 				return TRUE;
 			}
 
@@ -4300,7 +4300,7 @@ int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, D2ItemCalcStrc* pI
 			}
 			else
 			{
-				return STATLIST_GetUnitStat(pItemCalc->pUnit, nStatId, 0);
+				return STATLIST_GetUnitStatUnsigned(pItemCalc->pUnit, nStatId, 0);
 			}
 		}
 	}

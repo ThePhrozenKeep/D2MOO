@@ -202,6 +202,13 @@ target_sources(D2Common
     include/D2Waypoints.h
 )
 
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(D2Common
+    PRIVATE
+      statictests/D2StatList_staticchecks.cpp
+  )
+endif()
+
 get_target_property(D2CommonSources D2Common SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
              FILES ${D2CommonSources}

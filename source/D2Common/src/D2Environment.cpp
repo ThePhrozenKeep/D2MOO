@@ -73,7 +73,7 @@ static const D2EnvironmentCycleStrc* ENVIRONMENT_GetCycle(int nCycle, int nAct, 
 //D2Common.0x6FD8D8E0
 D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPool)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_SERVER(D2DrlgEnvironmentStrc, pMemPool);
+	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_SERVER(pMemPool, D2DrlgEnvironmentStrc);
 	
 	pEnvironment->nCycleIndex = EnvCycleNoon;
 	pEnvironment->nTimeRate = gnTimeRates[pEnvironment->nTimeRateIndex];

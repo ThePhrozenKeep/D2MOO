@@ -555,6 +555,16 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 	sgptDataTables->pStatesLinker = NULL;
 }
 
+D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
+{
+	if (nStateId >= 0 && nStateId < sgptDataTables->nStatesTxtRecordCount)
+	{
+		return &sgptDataTables->pStatesTxt[nStateId];
+	}
+
+	return NULL;
+}
+
 //D2Common.0x6FD4F5A0
 void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
 {

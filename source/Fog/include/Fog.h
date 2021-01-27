@@ -140,11 +140,11 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 #define D2_FREE_CLIENT(ptr) FOG_FreeClientMemory(ptr, __FILE__, __LINE__, 0)
 
 
-#define D2_ALLOC_SERVER(size, pMemPool) FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0)
-#define D2_CALLOC_SERVER(size, pMemPool) memset(FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0),0x00,size)
-#define D2_REALLOC_SERVER(pMem, size, pMemPool) FOG_ReallocServerMemory(pMemPool, pMem, size, __FILE__, __LINE__, 0)
-#define D2_ALLOC_STRC_SERVER(type, pMemPool) (type*)FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0)
-#define D2_CALLOC_STRC_SERVER(type, pMemPool) (type*)memset(FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
+#define D2_ALLOC_SERVER(pMemPool, size) FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0)
+#define D2_CALLOC_SERVER(pMemPool, size) memset(FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0),0x00,size)
+#define D2_REALLOC_SERVER(pMemPool, pMem, size) FOG_ReallocServerMemory(pMemPool, pMem, size, __FILE__, __LINE__, 0)
+#define D2_ALLOC_STRC_SERVER(pMemPool, type) (type*)FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0)
+#define D2_CALLOC_STRC_SERVER(pMemPool, type) (type*)memset(FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
 #define D2_FREE_SERVER(pMemPool, ptr) FOG_FreeServerMemory(pMemPool, ptr, __FILE__, __LINE__, 0)
 
 #define D2_ASSERT(expr) __analysis_assume(!!(expr)); (void)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , 0))

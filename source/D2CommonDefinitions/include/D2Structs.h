@@ -191,7 +191,7 @@ struct D2SkillStrc;
 struct D2SkillTreeChartStrc;
 struct D2SplittedTextStrc;
 struct D2StatStrc;
-struct D2StatExStrc;
+struct D2StatsArrayStrc;
 struct D2StatListStrc;
 struct D2StatListExStrc;
 struct D2StaticPathStrc;

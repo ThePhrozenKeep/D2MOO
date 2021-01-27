@@ -514,12 +514,12 @@ EXPORTS
 	STATLIST_FreeModStats												@10511
 	D2Common_10512														@10512
 	D2Common_10513														@10513
-	D2Common_10514														@10514
+	STATLIST_ClampStaminaManaHP											@10514
 	D2Common_10515														@10515
-	D2Common_10516														@10516
+	STATLIST_UpdateStatListsExpiration									@10516
 	STATLIST_SetUnitStat												@10517
 	STATLIST_AddUnitStat												@10518
-	STATLIST_GetUnitStat												@10519
+	STATLIST_GetUnitStatUnsigned										@10519
 	STATLIST_GetUnitStatSigned											@10520
 	STATLIST_GetUnitBaseStat											@10521
 	STATLIST_GetUnitStatBonus											@10522
@@ -532,8 +532,8 @@ EXPORTS
 	STATLIST_GetExpireFrame												@10529
 	D2COMMON_10530_D2CheckStatlistFlagDMGRed							@10530
 	D2Common_10531_SetStatInStatListLayer0								@10531
-	D2Common_10532														@10532
-	D2Common_10533														@10533
+	STATLIST_GetStatUnsigned_Layer0										@10532
+	STATLIST_RemoveAllStatsFromOverlay									@10533
 	D2Common_10534														@10534
 	STATLIST_GetOwner													@10535
 	STATES_CheckStateMaskBlueOnUnit										@10536
@@ -1294,8 +1294,8 @@ EXPORTS
 	D2Common_11291														@11291
 	D2COMMON_11292_ItemAssignProperty									@11292
 	ITEMMODS_GetItemCharges												@11293
-	D2Common_11294														@11294
-	D2Common_11295														@11295
+	STATLIST_SetBaseStat												@11294
+	STATLIST_SetBaseStat2												@11295
 	D2COMMON_11296_Return												@11296
 	MONSTERS_SetMonsterNameInMonsterData								@11297
 	DATATBLS_GetUnitNameFromUnit										@11298
