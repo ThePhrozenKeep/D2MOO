@@ -96,6 +96,12 @@ enum D2C_InventoryGrids
 	INVGRID_INVENTORY,
 };
 
+enum D2TradeStates
+{
+	TRADESTATE_OTHERNOROOM,
+	TRADESTATE_SELFNOROOM,
+};
+
 struct D2InventoryGridStrc
 {
 	D2UnitStrc* pItem;						//0x00
@@ -312,7 +318,7 @@ int __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode);
 //D2Common.0x6FD92180 (#10300)
 BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory);
 //D2Common.0x6FD921D0 (#10302)
-BOOL __stdcall INVENTORY_CanItemsBeTraded(void* pMemPool, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, BOOL* a4);
+BOOL __stdcall INVENTORY_CanItemsBeTraded(void* pMemPool, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2TradeStates* pTradeState);
 //D2Common.0x6FD923C0
 BOOL __fastcall INVENTORY_CopyUnitItemsToTradeInventory(D2InventoryStrc* pInventory, D2UnitStrc* pUnit);
 //D2Common.0x6FD92490

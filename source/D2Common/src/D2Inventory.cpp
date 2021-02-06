@@ -3264,69 +3264,54 @@ BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 	return TRUE;
 }
 
-//D2Common.0x6FD921D0 (#10302)
-BOOL __stdcall INVENTORY_CanItemsBeTraded(void* pMemPool, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, BOOL* a4)
+// Helper function
+BOOL __fastcall INVENTORY_CanItemBePlacedInTradeInventory(D2InventoryStrc* pTradeInventory, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
-	BOOL bResult = FALSE;
-	
+	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
+	{
+		pItem = INVENTORY_UnitIsItem(pItem);
+		if (ITEMS_GetInvPage(pItem) == INVPAGE_TRADE && !INVENTORY_CanItemBePlacedInInventory(pPlayer2, pItem, pTradeInventory))
+		{
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
+//D2Common.0x6FD921D0 (#10302)
+BOOL __stdcall INVENTORY_CanItemsBeTraded(void* pMemPool, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2TradeStates* pTradeState)
+{	
 	D2InventoryStrc* pTradeInventory1 = INVENTORY_AllocInventory(pMemPool, nullptr);
 	D2InventoryStrc* pTradeInventory2 = INVENTORY_AllocInventory(pMemPool, nullptr);
 
 	if (pTradeInventory1 && pTradeInventory2 && INVENTORY_CopyUnitItemsToTradeInventory(pTradeInventory1, pPlayer1) && INVENTORY_CopyUnitItemsToTradeInventory(pTradeInventory2, pPlayer2))
 	{
-		D2UnitStrc* pItem = nullptr;
-
-		if (pPlayer1->pInventory && pPlayer1->pInventory->dwSignature == 0x1020304 && pPlayer1->pInventory->pFirstItem)
+		if (!INVENTORY_CanItemBePlacedInTradeInventory(pTradeInventory2, pPlayer1, pPlayer2))
 		{
-			pItem = pPlayer1->pInventory->pFirstItem;
-			while (pItem)
+			if (pTradeState)
 			{
-				if (ITEMS_GetStorePage(INVENTORY_UnitIsItem(pItem)) == INVPAGE_TRADE && !INVENTORY_CanItemBePlacedInInventory(pPlayer2, INVENTORY_UnitIsItem(pItem), pTradeInventory2))
-				{
-					if (a4)
-					{
-						*a4 = FALSE;
-					}
-
-					break;
-				}
-
-				pItem = INVENTORY_GetNextItem(pItem);
+				*pTradeState = TRADESTATE_OTHERNOROOM;
 			}
 		}
-
-		if (!pItem)
+		else if (!INVENTORY_CanItemBePlacedInTradeInventory(pTradeInventory1, pPlayer2, pPlayer1))
 		{
-			if (pPlayer2->pInventory && pPlayer2->pInventory->dwSignature == 0x1020304 && pPlayer2->pInventory->pFirstItem)
+			if (pTradeState)
 			{
-				pItem = pPlayer2->pInventory->pFirstItem;
-				while (pItem)
-				{
-					if (ITEMS_GetStorePage(INVENTORY_UnitIsItem(pItem)) == INVPAGE_TRADE && !INVENTORY_CanItemBePlacedInInventory(pPlayer1, INVENTORY_UnitIsItem(pItem), pTradeInventory1))
-					{
-						if (a4)
-						{
-							*a4 = TRUE;
-						}
-
-						break;
-					}
-
-					pItem = INVENTORY_GetNextItem(pItem);
-				}
+				*pTradeState = TRADESTATE_SELFNOROOM;
 			}
-
-			if (!pItem)
-			{
-				bResult = TRUE;
-			}
+		}
+		else
+		{
+			INVENTORY_FreeInventory(pTradeInventory1);
+			INVENTORY_FreeInventory(pTradeInventory2);
+			return TRUE;
 		}
 	}
 
 	INVENTORY_FreeInventory(pTradeInventory1);
 	INVENTORY_FreeInventory(pTradeInventory2);
-
-	return bResult;
+	return FALSE;
 }
 
 //D2Common.0x6FD923C0
@@ -3384,7 +3369,7 @@ BOOL __fastcall INVENTORY_CanItemBePlacedInInventory(D2UnitStrc* pPlayer, D2Unit
 				{
 					for (int x = nX; x < nX + nWidth; ++x)
 					{
-						pInventoryGrid->ppItems[x + y * pInventoryGrid->nGridWidth] = (D2UnitStrc*)-1;//TODO: -1?!?
+						pInventoryGrid->ppItems[x + y * pInventoryGrid->nGridWidth] = (D2UnitStrc*)0xFFFFFFFF;
 					}
 				}
 

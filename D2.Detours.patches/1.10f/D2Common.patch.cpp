@@ -335,7 +335,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10299                                                      @10299
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveAllItems                                            @10300
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10301_Return0                                              @10301
-    PatchAction::FunctionReplacePatchByOriginal,       //   INVENTORY_CanItemsBeTraded                                          @10302
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CanItemsBeTraded                                          @10302
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10303_Return                                               @10303
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetNextItem                                               @10304
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_UnitIsItem                                                @10305
