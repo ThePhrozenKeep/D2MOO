@@ -24,8 +24,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void*
 	unsigned int nBossLevel = 0;
 	char szPath[MAX_PATH] = {};
 
-	pDrlg = (D2DrlgStrc*)FOG_AllocServerMemory(pAct->pMemPool, sizeof(D2DrlgStrc), __FILE__, __LINE__, 0);
-	memset(pDrlg, 0x00, sizeof(D2DrlgStrc));
+	pDrlg = D2_CALLOC_STRC_SERVER(pAct->pMemPool, D2DrlgStrc);
 
 	pDrlg->pAct = pAct;
 	pDrlg->unk0x08 = a3;
@@ -101,7 +100,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		{
 			pNextLevel = pLevel->pNextLevel;
 			DRLG_FreeLevel(pDrlg->pMempool, pLevel, FALSE);
-			FOG_FreeServerMemory(pDrlg->pMempool, pLevel, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pDrlg->pMempool, pLevel);
 			pLevel = pNextLevel;
 		}
 		while (pLevel);
@@ -116,7 +115,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		do
 		{
 			pNextWarp = pWarp->pNext;
-			FOG_FreeServerMemory(pDrlg->pMempool, pWarp, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pDrlg->pMempool, pWarp);
 			pWarp = pNextWarp;
 		}
 		while (pWarp);
@@ -124,7 +123,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		pDrlg->pWarp = NULL;
 	}
 
-	FOG_FreeServerMemory(pDrlg->pMempool, pDrlg, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pDrlg->pMempool, pDrlg);
 }
 
 //D2Common.0x6FD74440
@@ -138,25 +137,16 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 
 	if (bAlloc)
 	{
-		if (!pLevel->pPresetMaps)
+		if (!pLevel->pPresetMaps && pLevel->nRooms)
 		{
-			if (pLevel->nRooms)
-			{
-				pLevel->pPresetMaps = (int*)FOG_AllocServerMemory(pMemPool, sizeof(int) * pLevel->nRooms, __FILE__, __LINE__, 0);
-			}
-			else
-			{
-				pLevel->nRooms = 0;
-			}
-
-			memset(pLevel->pPresetMaps, 0x00, sizeof(int) * pLevel->nRooms);
+			pLevel->pPresetMaps = (int*)D2_CALLOC_SERVER(pMemPool, sizeof(int) * pLevel->nRooms);
 		}
 	}
 	else
 	{
 		if (pLevel->pPresetMaps)
 		{
-			FOG_FreeServerMemory(pMemPool, pLevel->pPresetMaps, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pLevel->pPresetMaps);
 			pLevel->pPresetMaps = NULL;
 		}
 	}
@@ -223,7 +213,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 		{
 			pDrlgBuild = pNextDrlgBuild;
 			pNextDrlgBuild = pNextDrlgBuild->pNext;
-			FOG_FreeServerMemory(pMemPool, pDrlgBuild, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pDrlgBuild);
 		}
 		while (pNextDrlgBuild);
 
@@ -389,7 +379,7 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 
 											if (i->ppRoomsNear)
 											{
-												FOG_FreeServerMemory(pLevel->pDrlg->pMempool, i->ppRoomsNear, __FILE__, __LINE__, 0);
+												D2_FREE_SERVER(pLevel->pDrlg->pMempool, i->ppRoomsNear);
 												i->ppRoomsNear = NULL;
 												i->nRoomsNear = 0;
 											}
@@ -413,8 +403,7 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 //D2Common.0x6FD748D0 (#10013)
 D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 {
-	D2DrlgLevelStrc* pLevel = (D2DrlgLevelStrc*)FOG_AllocServerMemory(pDrlg->pMempool, sizeof(D2DrlgLevelStrc), __FILE__, __LINE__, 0);
-	memset(pLevel, 0x00, sizeof(D2DrlgLevelStrc));
+	D2DrlgLevelStrc* pLevel = D2_CALLOC_STRC_SERVER(pDrlg->pMempool, D2DrlgLevelStrc);
 
 	pLevel->pDrlg = pDrlg;
 	pLevel->nLevelId = nLevelId;
@@ -930,7 +919,7 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 		}
 	}
 
-	pDrlgWarp = (D2DrlgWarpStrc*)FOG_AllocServerMemory(pDrlg->pMempool, sizeof(D2DrlgWarpStrc), __FILE__, __LINE__, 0);
+	pDrlgWarp = D2_ALLOC_STRC_SERVER(pDrlg->pMempool, D2DrlgWarpStrc);
 	pDrlgWarp->nLevel = nLevelId;
 
 	pLevelDefBin = DATATBLS_GetLevelDefRecord(nLevelId);

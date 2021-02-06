@@ -325,10 +325,9 @@ void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDr
 	pDrlgGrid->nWidth = nWidth;
 	pDrlgGrid->nHeight = nHeight;
 
-	pDrlgGrid->pCellsRowOffsets = (int*)FOG_AllocServerMemory(pMemPool, sizeof(int) * nHeight * (nWidth + 1), __FILE__, __LINE__, 0);
 	// nHeight for the row offsets, nHeight + nWidth for the cells
-	memset(pDrlgGrid->pCellsRowOffsets, 0x00, sizeof(int) * nHeight * (nWidth + 1));
-
+	pDrlgGrid->pCellsRowOffsets = (int*)D2_CALLOC_SERVER(pMemPool, sizeof(int) * nHeight * (nWidth + 1));
+	
 	pDrlgGrid->pCellsFlags = &pDrlgGrid->pCellsRowOffsets[nHeight];
 	for (int i = 0; i < nHeight; ++i)
 	{
@@ -371,7 +370,7 @@ void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgG
 
 	pDrlgGrid->pCellsFlags = &pCellPos[pDrlgCoord->nPosX + nWidth * pDrlgCoord->nPosY];
 
-	pDrlgGrid->pCellsRowOffsets = (int*)FOG_AllocServerMemory(pMemPool, sizeof(int) * pDrlgCoord->nHeight, __FILE__, __LINE__, 0);
+	pDrlgGrid->pCellsRowOffsets = (int32_t*)D2_ALLOC_SERVER(pMemPool, sizeof(int) * pDrlgCoord->nHeight);
 
 	for (int i = 0; i < pDrlgCoord->nHeight; ++i)
 	{
@@ -404,7 +403,7 @@ void __fastcall DRLGGRID_FreeGrid(void* pMemPool, D2DrlgGridStrc* pDrlgGrid)
 {
 	if (pDrlgGrid->pCellsRowOffsets)
 	{
-		FOG_FreeServerMemory(pMemPool, pDrlgGrid->pCellsRowOffsets, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pMemPool, pDrlgGrid->pCellsRowOffsets);
 	}
 
 	pDrlgGrid->pCellsFlags = NULL;

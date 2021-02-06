@@ -1515,7 +1515,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 
 	if (pLevel->nRooms > 0)
 	{
-		ppRoomEx = (D2RoomExStrc**)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * pLevel->nRooms, __FILE__, __LINE__, 0);
+		ppRoomEx = (D2RoomExStrc**)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * pLevel->nRooms);
 	
 		pTemp = pLevel->pFirstRoomEx;
 		for (int i = 0; i < pLevel->nRooms; ++i)
@@ -1550,7 +1550,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 			}
 		}
 		
-		FOG_FreeServerMemory(pLevel->pDrlg->pMempool, ppRoomEx, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pLevel->pDrlg->pMempool, ppRoomEx);
 	}
 }
 
@@ -3603,7 +3603,7 @@ void __fastcall DRLGMAZE_RollBasicPresets(D2DrlgLevelStrc* pLevel)
 
 				if (!pDrlgBuild)
 				{
-					pDrlgBuild = (D2DrlgBuildStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgBuildStrc), __FILE__, __LINE__, 0);
+					pDrlgBuild = D2_ALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
 					pDrlgBuild->nPreset = 0;
 					pDrlgBuild->nDivisor = 0;
 					pDrlgBuild->nRand = 0;

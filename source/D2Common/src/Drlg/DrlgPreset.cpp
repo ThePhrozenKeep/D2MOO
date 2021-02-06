@@ -411,7 +411,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 		pDrlgFile->nSubstGroups = *pData;
 		++pData;
-		pDrlgFile->pSubstGroups = (D2DrlgSubstGroupStrc*)FOG_AllocServerMemory(NULL, sizeof(D2DrlgSubstGroupStrc) * pDrlgFile->nSubstGroups, __FILE__, __LINE__, 0);
+		pDrlgFile->pSubstGroups = (D2DrlgSubstGroupStrc*)D2_ALLOC_SERVER(NULL, sizeof(D2DrlgSubstGroupStrc) * pDrlgFile->nSubstGroups);
 
 		for (int i = 0; i < pDrlgFile->nSubstGroups; ++i)
 		{
@@ -452,8 +452,8 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 				{
 					if (pPresetUnit->nXpos == nX && pPresetUnit->nYpos == nY)
 					{
-						pPresetUnit->pMapAI = (D2MapAIStrc*)FOG_AllocServerMemory(NULL, sizeof(D2MapAIStrc), __FILE__, __LINE__, 0);
-						pPresetUnit->pMapAI->pPosition = (D2MapAIPathPositionStrc*)FOG_AllocServerMemory(NULL, sizeof(D2MapAIPathPositionStrc) * nNodes, __FILE__, __LINE__, 0);
+						pPresetUnit->pMapAI = D2_ALLOC_STRC_SERVER(nullptr, D2MapAIStrc);
+						pPresetUnit->pMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_ALLOC_SERVER(nullptr, sizeof(D2MapAIPathPositionStrc) * nNodes);
 						pPresetUnit->pMapAI->nPathNodes = nNodes;
 
 						for (int j = 0; j < nNodes; ++j)
@@ -522,10 +522,9 @@ void __fastcall DRLGPRESET_AllocDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMem
 	}
 	else
 	{
-		v5 = (D2UnkFileStrc*)FOG_AllocServerMemory(NULL, sizeof(D2UnkFileStrc), __FILE__, __LINE__, 0);
+		v5 = D2_ALLOC_STRC_SERVER(nullptr, D2UnkFileStrc);
 
-		*ppDrlgFile = (D2DrlgFileStrc*)FOG_AllocServerMemory(NULL, sizeof(D2DrlgFileStrc), __FILE__, __LINE__, 0);
-		memset(*ppDrlgFile, 0x00, sizeof(D2DrlgFileStrc));
+		*ppDrlgFile = D2_CALLOC_STRC_SERVER(nullptr, D2DrlgFileStrc);
 
 		strcpy_s(v5->szPath, szFile);
 		v5->field_104 = 1;
@@ -587,12 +586,12 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 
 			if ((*ppDrlgFile)->pDS1File)
 			{
-				FOG_FreeClientMemory((*ppDrlgFile)->pDS1File, __FILE__, __LINE__, 0);
+				D2_FREE_CLIENT((*ppDrlgFile)->pDS1File);
 			}
 
 			if ((*ppDrlgFile)->pSubstGroups)
 			{
-				FOG_FreeServerMemory(NULL, (*ppDrlgFile)->pSubstGroups, __FILE__, __LINE__, 0);
+				D2_FREE_SERVER(nullptr, (*ppDrlgFile)->pSubstGroups);
 			}
 
 			pPresetUnit = (*ppDrlgFile)->pPresetUnit;
@@ -605,9 +604,9 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 				pPresetUnit = pNextPresetUnit;
 			}
 
-			FOG_FreeServerMemory(NULL, *ppDrlgFile, __FILE__, __LINE__, 0);
-			FOG_FreeServerMemory(NULL, pCurrent, __FILE__, __LINE__, 0);
-			*ppDrlgFile = NULL;
+			D2_FREE_SERVER(nullptr, *ppDrlgFile);
+			D2_FREE_SERVER(nullptr, pCurrent);
+			*ppDrlgFile = nullptr;
 		}
 		else
 		{
@@ -622,8 +621,7 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 //D2Common.0x6FD86310
 D2PresetUnitStrc* __fastcall DRLGPRESET_CopyPresetUnit(void* pMemPool, D2PresetUnitStrc* pPresetUnit, int nX, int nY)
 {
-	D2PresetUnitStrc* pNewPresetUnit = (D2PresetUnitStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2PresetUnitStrc), __FILE__, __LINE__, 0);
-	memset(pNewPresetUnit, 0x00, sizeof(D2PresetUnitStrc));
+	D2PresetUnitStrc* pNewPresetUnit = D2_CALLOC_STRC_SERVER(pMemPool, D2PresetUnitStrc);
 
 	pNewPresetUnit->nUnitType = pPresetUnit->nUnitType;
 	pNewPresetUnit->nIndex = pPresetUnit->nIndex;
@@ -654,17 +652,16 @@ void __fastcall DRLGPRESET_FreePresetUnit(void* pMemPool, D2PresetUnitStrc* pPre
 		DRLGPRESET_FreeMapAI(pMemPool, pPresetUnit->pMapAI);
 	}
 
-	FOG_FreeServerMemory(pMemPool, pPresetUnit, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pMemPool, pPresetUnit);
 }
 
 //D2Common.0x6FD86480 (#10020)
 D2MapAIStrc* __fastcall DRLGPRESET_CreateCopyOfMapAI(void* pMemPool, D2MapAIStrc* pMapAI)
 {
-	D2MapAIStrc* pNewMapAI = (D2MapAIStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2MapAIStrc), __FILE__, __LINE__, 0);
+	D2MapAIStrc* pNewMapAI = D2_ALLOC_STRC_SERVER(pMemPool, D2MapAIStrc);
 
 	pNewMapAI->nPathNodes = pMapAI->nPathNodes;
-	pNewMapAI->pPosition = (D2MapAIPathPositionStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes, __FILE__, __LINE__, 0);
-	memcpy(pNewMapAI->pPosition, pMapAI->pPosition, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes);
+	pNewMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_CALLOC_SERVER(pMemPool, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes);
 
 	return pNewMapAI;
 }
@@ -681,8 +678,8 @@ D2MapAIStrc* __fastcall DRLGPRESET_ChangeMapAI(D2MapAIStrc** ppMapAI1, D2MapAISt
 //D2Common.0x6FD86500 (#10022)
 void __fastcall DRLGPRESET_FreeMapAI(void* pMemPool, D2MapAIStrc* pMapAI)
 {
-	FOG_FreeServerMemory(pMemPool, pMapAI->pPosition, __FILE__, __LINE__, 0);
-	FOG_FreeServerMemory(pMemPool, pMapAI, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pMemPool, pMapAI->pPosition);
+	D2_FREE_SERVER(pMemPool, pMapAI);
 }
 
 //D2Common.0x6FD86540
@@ -978,10 +975,10 @@ void __fastcall DRLGPRESET_FreePresetRoomData(D2RoomExStrc* pRoomEx)
 
 		if (pRoomEx->pMaze->pTombStoneTiles)
 		{
-			FOG_FreeServerMemory(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze->pTombStoneTiles, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze->pTombStoneTiles);
 		}
 
-		FOG_FreeServerMemory(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze);
 		pRoomEx->pMaze = NULL;
 	}
 }
@@ -1024,8 +1021,7 @@ void __fastcall DRLGPRESET_FreeDrlgGridsFromPresetRoom(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD86D80
 void __fastcall DRLGPRESET_AllocPresetRoomData(D2RoomExStrc* pRoomEx)
 {
-	pRoomEx->pMaze = (D2DrlgPresetRoomStrc*)FOG_AllocServerMemory(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgPresetRoomStrc), __FILE__, __LINE__, 0);
-	memset(pRoomEx->pMaze, 0x00, sizeof(D2DrlgPresetRoomStrc));
+	pRoomEx->pMaze = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgPresetRoomStrc);
 }
 
 //D2Common.0x6FD86DC0
@@ -1286,7 +1282,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 	{
 		nTombStoneTiles = 0;
 
-		pRoomEx->pMaze->pTombStoneTiles = (D2CoordStrc*)FOG_AllocServerMemory(pRoomEx->pLevel->pDrlg->pMempool, 6 * sizeof(D2CoordStrc), __FILE__, __LINE__, 0);
+		pRoomEx->pMaze->pTombStoneTiles = (D2CoordStrc*)D2_ALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, 6 * sizeof(D2CoordStrc));
 
 		for (int i = 0; i < pRoomEx->nTileHeight; ++i)
 		{
@@ -1424,7 +1420,6 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 	int nCounter = 0;
 	int nHeight = 0;
 	int nWidth = 0;
-	int nPops = 0;
 	int nFlag = 0;
 	int nX = 0;
 	int nY = 0;
@@ -1453,10 +1448,9 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 	DRLGGRID_AlterAllGridFlags(pDrlgGrid, nFlags, FLAG_OPERATION_OR);
 
-	nPops = 0;
-	v10 = pDrlgMap->pLvlPrestTxtRecord->dwPops;
+	uint32_t nPops = pDrlgMap->pLvlPrestTxtRecord->dwPops;
 
-	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || v10)
+	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || nPops)
 	{
 		DRLGPRESET_AllocDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->unk0x08, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
 
@@ -1472,18 +1466,18 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			FOG_10025("ptRegion->ptFile->nSizeY == ptRegion->tCoords.nSizeTileY", __FILE__, __LINE__);
 		}
 
-		if (v10)
+		if (nPops)
 		{
-			pDrlgMap->pPopsIndex = (int*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(int) * v10, __FILE__, __LINE__, 0);
-			pDrlgMap->pPopsSubIndex = (int*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(int) * v10, __FILE__, __LINE__, 0);
-			pDrlgMap->pPopsOrientation = (int*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(int) * v10, __FILE__, __LINE__, 0);
-			pDrlgMap->pPopsLocation = (D2DrlgCoordStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgCoordStrc) * v10, __FILE__, __LINE__, 0);
+			pDrlgMap->pPopsIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
+			pDrlgMap->pPopsSubIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
+			pDrlgMap->pPopsOrientation = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
+			pDrlgMap->pPopsLocation = (D2DrlgCoordStrc*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2DrlgCoordStrc) * nPops);
 		}
 
-		memset(pDrlgMap->pPopsIndex, 0x00, sizeof(int) * v10);
-		memset(pDrlgMap->pPopsSubIndex, 0x00, sizeof(int) * v10);
-		memset(pDrlgMap->pPopsOrientation, 0x00, sizeof(int) * v10);
-		memset(pDrlgMap->pPopsLocation, 0x00, sizeof(D2DrlgCoordStrc) * v10);
+		memset(pDrlgMap->pPopsIndex, 0x00, sizeof(int32_t) * nPops);
+		memset(pDrlgMap->pPopsSubIndex, 0x00, sizeof(int32_t) * nPops);
+		memset(pDrlgMap->pPopsOrientation, 0x00, sizeof(int32_t) * nPops);
+		memset(pDrlgMap->pPopsLocation, 0x00, sizeof(D2DrlgCoordStrc) * nPops);
 
 		memset(&pDrlgGrid1, 0x00, sizeof(D2DrlgGridStrc));
 		memset(&pDrlgGrid2, 0x00, sizeof(D2DrlgGridStrc));
@@ -1521,7 +1515,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 							}
 						}
 
-						if (v10 && v32 >= 8 && v32 <= 29)
+						if (nPops && v32 >= 8 && v32 <= 29)
 						{
 							nCounter = 0;
 							while (nCounter < nPops)
@@ -1587,7 +1581,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			DRLGGRID_ResetGrid(&pDrlgGrid1);
 		}
 
-		if (v10)
+		if (nPops)
 		{
 			pDrlgMap->nPops = nPops;
 			for (int i = 0; i < nPops; ++i)
@@ -1657,8 +1651,7 @@ void __fastcall DRLGPRESET_SetPickedFileInDrlgMap(D2DrlgMapStrc* pDrlgMap, int n
 //D2Common.0x6FD87E20
 D2DrlgMapStrc* __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc* pLevel, int nLvlPrestId, D2DrlgCoordStrc* pDrlgCoord, D2SeedStrc* pSeed)
 {
-	D2DrlgMapStrc* pDrlgMap = (D2DrlgMapStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgMapStrc), __FILE__, __LINE__, 0);
-	memset(pDrlgMap, 0x00, sizeof(D2DrlgMapStrc));
+	D2DrlgMapStrc* pDrlgMap = D2_CALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgMapStrc);
 
 	pDrlgMap->pLvlPrestTxtRecord = DATATBLS_GetLvlPrestTxtRecord(nLvlPrestId);
 	pDrlgMap->nLevelPrest = nLvlPrestId;
@@ -1730,25 +1723,25 @@ void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap)
 
 		if (pMap->pPopsIndex)
 		{
-			FOG_FreeServerMemory(pMemPool, pMap->pPopsIndex, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pMap->pPopsIndex);
 		}
 
 		if (pMap->pPopsSubIndex)
 		{
-			FOG_FreeServerMemory(pMemPool, pMap->pPopsSubIndex, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pMap->pPopsSubIndex);
 		}
 
 		if (pMap->pPopsOrientation)
 		{
-			FOG_FreeServerMemory(pMemPool, pMap->pPopsOrientation, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pMap->pPopsOrientation);
 		}
 
 		if (pMap->pPopsLocation)
 		{
-			FOG_FreeServerMemory(pMemPool, pMap->pPopsLocation, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pMemPool, pMap->pPopsLocation);
 		}
 
-		FOG_FreeServerMemory(pMemPool, pMap, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pMemPool, pMap);
 
 		pMap = pNextMap;
 	}
@@ -1920,7 +1913,7 @@ void __fastcall DRLGPRESET_InitLevelData(D2DrlgLevelStrc* pLevel)
 	pLvlPrestTxtRecord = DATATBLS_GetLvlPrestTxtRecordFromLevelId(pLevel->nLevelId);
 	D2_ASSERTM(pLvlPrestTxtRecord, "Level labeled as Preset, but no preset claims the level");
 
-	pLevel->pPreset = (D2DrlgPresetInfoStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgPresetInfoStrc), __FILE__, __LINE__, 0);
+	pLevel->pPreset = D2_ALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgPresetInfoStrc);
 
 	pLevel->pPreset->pDrlgMap = NULL;
 	pLevel->pPreset->nDirection = 0;
@@ -1998,7 +1991,7 @@ void __fastcall DRLGPRESET_ResetDrlgMap(D2DrlgLevelStrc* pLevel, BOOL bKeepPrese
 
 	if (!bKeepPreset)
 	{
-		FOG_FreeServerMemory(pLevel->pDrlg->pMempool, pLevel->pPreset, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pLevel->pDrlg->pMempool, pLevel->pPreset);
 		pLevel->pPreset = NULL;
 	}
 }
