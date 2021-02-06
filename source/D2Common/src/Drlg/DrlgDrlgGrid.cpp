@@ -119,13 +119,7 @@ void __fastcall DRLGGRID_AlterEdgeGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag
 //TODO: Name
 void __fastcall sub_6FD75DE0(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, int nFlag, FlagOperation eOperation, BOOL bAlterNextVertex)
 {
-	D2DrlgVertexStrc* pNext = NULL;
-	int nEndX = 0;
-	int nEndY = 0;
-	int nX = 0;
-	int nY = 0;
-
-	pNext = pDrlgVertex->pNext;
+	D2DrlgVertexStrc* pNext = pDrlgVertex->pNext;
 
 	if (pDrlgVertex->nPosX == pNext->nPosX && pDrlgVertex->nPosY == pNext->nPosY)
 	{
@@ -133,6 +127,10 @@ void __fastcall sub_6FD75DE0(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 		return;
 	}
 
+	int nEndX = 0;
+	int nEndY = 0;
+	int nX = 0;
+	int nY = 0;
 	if (pDrlgVertex->nPosX == pNext->nPosX)
 	{
 		nX = pDrlgVertex->nPosX;
@@ -187,11 +185,10 @@ void __fastcall sub_6FD75DE0(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 //D2Common.0x6FD75F10
 void __fastcall DRLGGRID_SetVertexGridFlags(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, int nFlag)
 {
-	D2DrlgVertexStrc* pVertex = NULL;
 	int nX = 0;
 	int nY = 0;
 
-	pVertex = pDrlgVertex;
+	D2DrlgVertexStrc* pVertex = pDrlgVertex;
 
 	while (pVertex)
 	{
@@ -210,22 +207,13 @@ void __fastcall DRLGGRID_SetVertexGridFlags(D2DrlgGridStrc* pDrlgGrid, D2DrlgVer
 //TODO: Name
 void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, D2DrlgCoordStrc* pDrlgCoord, int nFlag, FlagOperation eOperation, int nSize)
 {
-	int nIndexX = 0;
-	int nIndexY = 0;
-	int nCheck = 0;
-	int nXDiff = 0;
-	int nYDiff = 0;
+	int nX = pDrlgVertex->nPosX;
+	int nY = pDrlgVertex->nPosY;
+
+	int nXDiff = pDrlgVertex->pNext->nPosX - nX;
+	int nYDiff = pDrlgVertex->pNext->nPosY - nY;
+
 	int nXInc = 0;
-	int nYInc = 0;
-	int nX = 0;
-	int nY = 0;
-
-	nX = pDrlgVertex->nPosX;
-	nY = pDrlgVertex->nPosY;
-
-	nXDiff = pDrlgVertex->pNext->nPosX - nX;
-	nYDiff = pDrlgVertex->pNext->nPosY - nY;
-
 	if (nXDiff >= 0)
 	{
 		nXInc = 1;
@@ -236,6 +224,7 @@ void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 		nXInc = -1;
 	}
 
+	int nYInc = 0;
 	if (nYDiff >= 0)
 	{
 		nYInc = 1;
@@ -246,9 +235,10 @@ void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 		nYInc = -1;
 	}
 
-	nIndexX = nX - pDrlgCoord->nPosX;
-	nIndexY = nY - pDrlgCoord->nPosY;
+	int nIndexX = nX - pDrlgCoord->nPosX;
+	int nIndexY = nY - pDrlgCoord->nPosY;
 
+	int nCheck = 0;
 	if (nXDiff >= nYDiff)
 	{
 		for (int i = 0; i < nSize; ++i)
@@ -320,8 +310,6 @@ void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 //D2Common.0x6FD76230
 void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight)
 {
-	int nRowOffset = 0;
-
 	pDrlgGrid->nWidth = nWidth;
 	pDrlgGrid->nHeight = nHeight;
 
@@ -329,6 +317,8 @@ void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDr
 	pDrlgGrid->pCellsRowOffsets = (int*)D2_CALLOC_SERVER(pMemPool, sizeof(int) * nHeight * (nWidth + 1));
 	
 	pDrlgGrid->pCellsFlags = &pDrlgGrid->pCellsRowOffsets[nHeight];
+
+	int nRowOffset = 0;
 	for (int i = 0; i < nHeight; ++i)
 	{
 		pDrlgGrid->pCellsRowOffsets[i] = nRowOffset;
@@ -341,7 +331,6 @@ void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDr
 //D2Common.0x6FD762B0
 void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight, int* pCellPos, int* pCellRowOffsets)
 {
-	int nRowOffset = 0;
 
 	pDrlgGrid->nWidth = nWidth;
 	pDrlgGrid->nHeight = nHeight;
@@ -351,6 +340,7 @@ void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHe
 
 	pDrlgGrid->pCellsRowOffsets = pCellRowOffsets;
 
+	int nRowOffset = 0;
 	for (int i = 0; i < nHeight; ++i)
 	{
 		pDrlgGrid->pCellsRowOffsets[i] = nRowOffset;
@@ -363,7 +353,6 @@ void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHe
 //D2Common.0x6FD76310
 void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth)
 {
-	int nFlag = 0;
 
 	pDrlgGrid->nWidth = pDrlgCoord->nWidth;
 	pDrlgGrid->nHeight = pDrlgCoord->nHeight;
@@ -372,10 +361,11 @@ void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgG
 
 	pDrlgGrid->pCellsRowOffsets = (int32_t*)D2_ALLOC_SERVER(pMemPool, sizeof(int) * pDrlgCoord->nHeight);
 
+	int nOffset = 0;
 	for (int i = 0; i < pDrlgCoord->nHeight; ++i)
 	{
-		pDrlgGrid->pCellsRowOffsets[i] = nFlag;
-		nFlag += nWidth;
+		pDrlgGrid->pCellsRowOffsets[i] = nOffset;
+		nOffset += nWidth;
 	}
 
 	pDrlgGrid->unk0x10 = 1;
