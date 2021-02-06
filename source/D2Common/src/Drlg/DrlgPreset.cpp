@@ -21,6 +21,7 @@
 #include <D2Items.h>
 #include <D2Monsters.h>
 #include <Units/Units.h>
+#include <algorithm>
 
 
 D2UnkFileStrc* dword_6FDEA700;
@@ -1410,40 +1411,15 @@ D2RoomExStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMap
 }
 
 //D2Common.0x6FD87760
-//TODO: variable names
 void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridStrc* pDrlgGrid, int nFlags, D2DrlgMapStrc* pDrlgMap, BOOL bSingleRoom)
 {
-	D2DrlgCoordStrc* pPopsLocation = NULL;
-	int* pVisArray = NULL;
-	uint32_t v10 = 0;
-	__int64 v48 = 0;
-	int nCounter = 0;
-	int nHeight = 0;
-	int nWidth = 0;
-	int nFlag = 0;
-	int nX = 0;
-	int nY = 0;
-	int v28 = 0;
-	int v30 = 0;
-	int v31 = 0;
-	int v32 = 0;
-	int v53 = 0;
-	D2DrlgCoordStrc pDrlgCoord = {};
-	D2DrlgGridStrc pDrlgGrid1 = {};
-	D2DrlgGridStrc pDrlgGrid2 = {};
-	int pCellFlags1[256] = {};
-	int pCellFlags2[256] = {};
-
-	pVisArray = DRLGROOM_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId);
-	nFlag = ROOMEXFLAG_HAS_WARP_0;
+	int* pVisArray = DRLGROOM_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId);
 	for (int i = 0; i < 8; ++i)
 	{
 		if (pVisArray[i] && DRLGWARP_GetWarpDestinationFromArray(pLevel, i) == -1)
 		{
-			nFlags |= nFlag;
+			nFlags |= (ROOMEXFLAG_HAS_WARP_0 << i);
 		}
-
-		nFlag *= 2;
 	}
 
 	DRLGGRID_AlterAllGridFlags(pDrlgGrid, nFlags, FLAG_OPERATION_OR);
@@ -1479,15 +1455,18 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 		memset(pDrlgMap->pPopsOrientation, 0x00, sizeof(int32_t) * nPops);
 		memset(pDrlgMap->pPopsLocation, 0x00, sizeof(D2DrlgCoordStrc) * nPops);
 
-		memset(&pDrlgGrid1, 0x00, sizeof(D2DrlgGridStrc));
-		memset(&pDrlgGrid2, 0x00, sizeof(D2DrlgGridStrc));
-		memset(&pDrlgCoord, 0x00, sizeof(D2DrlgCoordStrc));
+		D2DrlgCoordStrc pDrlgCoord = {};
 
 		pDrlgCoord.nWidth = pDrlgMap->pFile->nWidth + 1;
 		pDrlgCoord.nHeight = pDrlgMap->pFile->nHeight + 1;
 
 		for (int i = 0; i < pDrlgMap->pFile->nWalls; ++i)
 		{
+			D2DrlgGridStrc pDrlgGrid1 = {};
+			D2DrlgGridStrc pDrlgGrid2 = {};
+			int pCellFlags1[256] = {};
+			int pCellFlags2[256] = {};
+
 			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid1, (int*)pDrlgMap->pFile->pOrientationLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags1);
 			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid2, (int*)pDrlgMap->pFile->pWallLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags2);
 
@@ -1495,11 +1474,11 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			{
 				for (int k = 0; k < pDrlgMap->pFile->nWidth; ++k)
 				{
-					v53 = DRLGGRID_GetGridFlags(&pDrlgGrid1, k, j);
-					v28 = DRLGGRID_GetGridFlags(&pDrlgGrid2, k, j);
-					v30 = BYTE1(v28);
-					v31 = v28 & 0x80000000;
-					v32 = ((unsigned int)v28 >> 20) & 0x3F;
+					int v53 = DRLGGRID_GetGridFlags(&pDrlgGrid1, k, j);
+					int v28 = DRLGGRID_GetGridFlags(&pDrlgGrid2, k, j);
+					int v30 = BYTE1(v28);
+					int v31 = v28 & 0x80000000;
+					int v32 = ((unsigned int)v28 >> 20) & 0x3F;
 
 					if (v53 == 11 || v53 == 10)
 					{
@@ -1517,7 +1496,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 						if (nPops && v32 >= 8 && v32 <= 29)
 						{
-							nCounter = 0;
+							int nCounter = 0;
 							while (nCounter < nPops)
 							{
 								if (pDrlgMap->pPopsIndex[nCounter] == v32)
@@ -1586,47 +1565,28 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			pDrlgMap->nPops = nPops;
 			for (int i = 0; i < nPops; ++i)
 			{
-				pPopsLocation = &pDrlgMap->pPopsLocation[i];
+				D2DrlgCoordStrc* pPopsLocation = &pDrlgMap->pPopsLocation[i];
 
-				nWidth = pPopsLocation->nPosX;
-				nX = pPopsLocation->nPosX;
-				if (pPopsLocation->nPosX >= pPopsLocation->nWidth)
-				{
-					nX = pPopsLocation->nWidth;
-				}
+				int nX1 = std::min(pPopsLocation->nPosX, pPopsLocation->nWidth);
+				int nX2 = std::max(pPopsLocation->nPosX, pPopsLocation->nWidth);
+				int nY1 = std::min(pPopsLocation->nPosY, pPopsLocation->nHeight);
+				int nY2 = std::max(pPopsLocation->nPosY, pPopsLocation->nHeight);
 
-				nHeight = pPopsLocation->nPosY;
-				nY = pPopsLocation->nPosY;
-				if (nHeight >= pPopsLocation->nHeight)
-				{
-					nY = pPopsLocation->nHeight;
-				}
+				pPopsLocation->nPosX = nX1 + pDrlgMap->pDrlgCoord.nPosX;
+				pPopsLocation->nPosY = nY1 + pDrlgMap->pDrlgCoord.nPosY;
+				pPopsLocation->nWidth = nX2 - nX1 + 1;
+				pPopsLocation->nHeight = nY2 - nY1 + 1;
 
-				if (nWidth <= pPopsLocation->nWidth)
-				{
-					nWidth = pPopsLocation->nWidth;
-				}
-
-				if (nHeight <= pPopsLocation->nHeight)
-				{
-					nHeight = pPopsLocation->nHeight;
-				}
-
-				pPopsLocation->nPosX = nX + pDrlgMap->pDrlgCoord.nPosX;
-				pPopsLocation->nPosY = nY + pDrlgMap->pDrlgCoord.nPosY;
-				pPopsLocation->nWidth = nWidth - nX + 1;
-				pPopsLocation->nHeight = nHeight - nY + 1;
-
-				v48 = pDrlgMap->pPopsIndex[i];
-				pDrlgMap->pPopsIndex[i] = (((BYTE4(v48) & 3) + (signed int)v48) >> 2) - 1;
+				uint32_t nPreviousPopsIndex = pDrlgMap->pPopsIndex[i];
+				pDrlgMap->pPopsIndex[i] = (((BYTE4(nPreviousPopsIndex) & 3) + (signed int)nPreviousPopsIndex) >> 2) - 1;
 			}
 		}
 
 		if (pDrlgMap->pLvlPrestTxtRecord->dwScan)
 		{
-			for (D2PresetUnitStrc* i = pDrlgMap->pFile->pPresetUnit; i; i = i->pNext)
+			for (const D2PresetUnitStrc* pPresetUnit = pDrlgMap->pFile->pPresetUnit; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
 			{
-				if (i->nUnitType == UNIT_OBJECT && i->nIndex < 573 && DATATBLS_GetObjectsTxtRecord(i->nIndex)->nSubClass & OBJSUBCLASS_WAYPOINT)
+				if (pPresetUnit->nUnitType == UNIT_OBJECT && pPresetUnit->nIndex < 573 && DATATBLS_GetObjectsTxtRecord(pPresetUnit->nIndex)->nSubClass & OBJSUBCLASS_WAYPOINT)
 				{
 					if (bSingleRoom)
 					{
@@ -1634,7 +1594,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 					}
 					else
 					{
-						DRLGGRID_AlterGridFlag(pDrlgGrid, i->nXpos / 5 / 8, i->nYpos / 5 / 8, 0x30000, FLAG_OPERATION_OR);
+						DRLGGRID_AlterGridFlag(pDrlgGrid, pPresetUnit->nXpos / 5 / 8, pPresetUnit->nYpos / 5 / 8, 0x30000, FLAG_OPERATION_OR);
 					}
 				}
 			}
