@@ -65,7 +65,7 @@ void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHe
 //D2Common.0x6FD76310
 void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth);
 //D2Common.0x6FD76380
-void __fastcall DRLGGRID_FillExternalCellFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags);
+void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags);
 //D2Common.0x6FD763E0
 void __fastcall DRLGGRID_FreeGrid(void* pMemPool, D2DrlgGridStrc* pDrlgGrid);
 //D2Common.0x6FD76410

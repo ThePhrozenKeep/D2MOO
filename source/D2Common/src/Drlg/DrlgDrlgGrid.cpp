@@ -383,10 +383,8 @@ void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgG
 }
 
 //D2Common.0x6FD76380
-void __fastcall DRLGGRID_FillExternalCellFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags)
+void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags)
 {
-	int nFlag = 0;
-
 	pDrlgGrid->nWidth = pDrlgCoord->nWidth;
 	pDrlgGrid->nHeight = pDrlgCoord->nHeight;
 
@@ -395,8 +393,7 @@ void __fastcall DRLGGRID_FillExternalCellFlags(D2DrlgGridStrc* pDrlgGrid, int* p
 
 	for (int i = 0; i < pDrlgCoord->nHeight; ++i)
 	{
-		pDrlgGrid->pCellsRowOffsets[i] = nFlag;
-		nFlag += nWidth;
+		pDrlgGrid->pCellsRowOffsets[i] = i * nWidth;
 	}
 
 	pDrlgGrid->unk0x10 = 1;

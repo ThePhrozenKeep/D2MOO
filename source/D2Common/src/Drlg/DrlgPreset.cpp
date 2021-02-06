@@ -831,7 +831,7 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 				pDrlgCoord.nWidth = pRoomEx->pMaze->pMap->pDrlgCoord.nWidth;
 				pDrlgCoord.nHeight = pRoomEx->pMaze->pMap->pDrlgCoord.nHeight;
 
-				DRLGGRID_FillExternalCellFlags(&pDrlgGrid, (int*)(*ppFile)->pFloorLayer[0], &pDrlgCoord, pRoomEx->pMaze->pMap->pDrlgCoord.nWidth + 1, nCellFlags);
+				DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid, (int*)(*ppFile)->pFloorLayer[0], &pDrlgCoord, pRoomEx->pMaze->pMap->pDrlgCoord.nWidth + 1, nCellFlags);
 
 				pDrlgCoord.nPosX = pRoomEx->pMaze->pMap->pDrlgCoord.nPosX;
 				pDrlgCoord.nPosY = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY;
@@ -1494,8 +1494,8 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 		for (int i = 0; i < pDrlgMap->pFile->nWalls; ++i)
 		{
-			DRLGGRID_FillExternalCellFlags(&pDrlgGrid1, (int*)pDrlgMap->pFile->pOrientationLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags1);
-			DRLGGRID_FillExternalCellFlags(&pDrlgGrid2, (int*)pDrlgMap->pFile->pWallLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags2);
+			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid1, (int*)pDrlgMap->pFile->pOrientationLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags1);
+			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid2, (int*)pDrlgMap->pFile->pWallLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags2);
 
 			for (int j = 0; j < pDrlgMap->pFile->nHeight; ++j)
 			{
