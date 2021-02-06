@@ -1769,10 +1769,10 @@ char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* 
 //D2Common.0x6FD881D0
 void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOOL bOtherRoom)
 {
+	const int nTick = GetTickCount() + 500;
+
 	D2DrlgMapStrc* pDrlgMap = NULL;
 	int nPopIndex = 0;
-	int nTick = GetTickCount() + 500;
-
 	if (pRoomEx->nType == DRLGTYPE_PRESET)
 	{
 		pDrlgMap = pRoomEx->pMaze->pMap;
@@ -1799,10 +1799,10 @@ void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOO
 		D2RoomExStrc* pAdjacentRoom = pRoomEx->ppRoomsNear[i];
 		if (pAdjacentRoom->nType == DRLGTYPE_PRESET && pAdjacentRoom->pRoom)
 		{
-			D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
+			const D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
 			for (int nCurrentPops = 0; nCurrentPops < pAdjacentRoomMap->nPops; ++nCurrentPops)
 			{
-				int nOrientation = pAdjacentRoomMap->pPopsOrientation[nCurrentPops];
+				const int nOrientation = pAdjacentRoomMap->pPopsOrientation[nCurrentPops];
 
 				if (pAdjacentRoomMap == pDrlgMap && pAdjacentRoomMap->pPopsIndex[nCurrentPops] == nPopIndex)
 				{
@@ -1830,7 +1830,7 @@ void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOO
 			const D2RoomExStrc* pAdjacentRoom = pRoomEx->ppRoomsNear[nAdjacentRoomIdx];
 			if (pAdjacentRoom->nType == DRLGTYPE_PRESET)
 			{
-				D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
+				const D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
 				for (int nAdjacentRoomIdx = 0; nAdjacentRoomIdx < pAdjacentRoomMap->nPops; ++nAdjacentRoomIdx)
 				{
 					pAdjacentRoomMap->pPopsOrientation[nAdjacentRoomIdx] = 0;
