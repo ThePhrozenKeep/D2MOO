@@ -2,6 +2,7 @@
 
 #include <D2Dll.h>
 #include <D2BasicTypes.h>
+#include <stdlib.h>
 
 #ifdef FOG_IMPL
 #define FOG_DLL_DECL 
