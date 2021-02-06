@@ -1769,28 +1769,23 @@ char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* 
 //D2Common.0x6FD881D0
 void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOOL bOtherRoom)
 {
-	D2DrlgCoordStrc pDrlgCoord = {};
-	D2RoomExStrc* pNearRoomEx = NULL;
+	const int nTick = GetTickCount() + 500;
+
 	D2DrlgMapStrc* pDrlgMap = NULL;
-	int nOrientation = 0;
 	int nPopIndex = 0;
-	int nTick = 0;
-	BOOL bUpdate = FALSE;
-
-	nTick = GetTickCount() + 500;
-
 	if (pRoomEx->nType == DRLGTYPE_PRESET)
 	{
 		pDrlgMap = pRoomEx->pMaze->pMap;
 		for (int i = 0; i < pDrlgMap->nPops; ++i)
 		{
-			pDrlgCoord.nPosX = 5 * pDrlgMap->pPopsLocation[i].nPosX;
-			pDrlgCoord.nPosY = 5 * pDrlgMap->pPopsLocation[i].nPosY;
+			D2DrlgCoordStrc drlgCoord = {};
+			drlgCoord.nPosX = 5 * pDrlgMap->pPopsLocation[i].nPosX;
+			drlgCoord.nPosY = 5 * pDrlgMap->pPopsLocation[i].nPosY;
 
-			pDrlgCoord.nWidth = pDrlgMap->pLvlPrestTxtRecord->dwPopPad + 5 * pDrlgMap->pPopsLocation[i].nWidth;
-			pDrlgCoord.nHeight = pDrlgMap->pLvlPrestTxtRecord->dwPopPad + 5 * pDrlgMap->pPopsLocation[i].nHeight;
+			drlgCoord.nWidth = pDrlgMap->pLvlPrestTxtRecord->dwPopPad + 5 * pDrlgMap->pPopsLocation[i].nWidth;
+			drlgCoord.nHeight = pDrlgMap->pLvlPrestTxtRecord->dwPopPad + 5 * pDrlgMap->pPopsLocation[i].nHeight;
 
-			if (DRLGROOM_AreXYInsideCoordinates(&pDrlgCoord, nX, nY))
+			if (DRLGROOM_AreXYInsideCoordinates(&drlgCoord, nX, nY))
 			{
 				nPopIndex = pDrlgMap->pPopsIndex[i];
 				break;
@@ -1798,36 +1793,31 @@ void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOO
 		}
 	}
 
+	BOOL bUpdate = FALSE;
 	for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
 	{
-		pNearRoomEx = pRoomEx->ppRoomsNear[i];
-		if (pNearRoomEx->nType == 2 && pNearRoomEx->pRoom)
+		D2RoomExStrc* pAdjacentRoom = pRoomEx->ppRoomsNear[i];
+		if (pAdjacentRoom->nType == DRLGTYPE_PRESET && pAdjacentRoom->pRoom)
 		{
-			for (int j = 0; j < pNearRoomEx->pMaze->pMap->nPops; ++j)
+			const D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
+			for (int nCurrentPops = 0; nCurrentPops < pAdjacentRoomMap->nPops; ++nCurrentPops)
 			{
-				nOrientation = pNearRoomEx->pMaze->pMap->pPopsOrientation[j];
+				const int nOrientation = pAdjacentRoomMap->pPopsOrientation[nCurrentPops];
 
-				if ((pNearRoomEx->pMaze->pMap != pDrlgMap || pNearRoomEx->pMaze->pMap->pPopsIndex[j] != nPopIndex) && nOrientation)
+				if (pAdjacentRoomMap == pDrlgMap && pAdjacentRoomMap->pPopsIndex[nCurrentPops] == nPopIndex)
 				{
-					DRLGPRESET_TogglePopsVisibility(pNearRoomEx, pNearRoomEx->pMaze->pMap->pPopsSubIndex[j], &pNearRoomEx->pMaze->pMap->pPopsLocation[j], nTick, 1);
-					bUpdate = TRUE;
-				}
+					if (nOrientation == 0 || bOtherRoom)
+					{
+						const int nTickToUse = nOrientation == 0 ? nTick : nOrientation;
 
-				if (pNearRoomEx->pMaze->pMap == pDrlgMap && pNearRoomEx->pMaze->pMap->pPopsIndex[j] == nPopIndex)
-				{
-					if (nOrientation)
-					{
-						if (bOtherRoom)
-						{
-							DRLGPRESET_TogglePopsVisibility(pNearRoomEx, pNearRoomEx->pMaze->pMap->pPopsSubIndex[j], &pNearRoomEx->pMaze->pMap->pPopsLocation[j], nOrientation, 0);
-							bUpdate = TRUE;
-						}
-					}
-					else
-					{
-						DRLGPRESET_TogglePopsVisibility(pNearRoomEx, pDrlgMap->pPopsSubIndex[j], &pDrlgMap->pPopsLocation[j], nTick, 0);
+						DRLGPRESET_TogglePopsVisibility(pAdjacentRoom, pAdjacentRoomMap->pPopsSubIndex[nCurrentPops], &pAdjacentRoomMap->pPopsLocation[nCurrentPops], nTickToUse, 0);
 						bUpdate = TRUE;
 					}
+				}
+				else if (nOrientation != 0)
+				{
+					DRLGPRESET_TogglePopsVisibility(pAdjacentRoom, pAdjacentRoomMap->pPopsSubIndex[nCurrentPops], &pAdjacentRoomMap->pPopsLocation[nCurrentPops], nTick, 1);
+					bUpdate = TRUE;
 				}
 			}
 		}
@@ -1835,20 +1825,18 @@ void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOO
 
 	if (bUpdate)
 	{
-		for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
+		for (int nAdjacentRoomIdx = 0; nAdjacentRoomIdx < pRoomEx->nRoomsNear; ++nAdjacentRoomIdx)
 		{
-			if (pRoomEx->ppRoomsNear[i]->nType == 2)
+			const D2RoomExStrc* pAdjacentRoom = pRoomEx->ppRoomsNear[nAdjacentRoomIdx];
+			if (pAdjacentRoom->nType == DRLGTYPE_PRESET)
 			{
-				for (int j = 0; j < pRoomEx->ppRoomsNear[i]->pMaze->pMap->nPops; ++i)
+				const D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
+				for (int nAdjacentRoomIdx = 0; nAdjacentRoomIdx < pAdjacentRoomMap->nPops; ++nAdjacentRoomIdx)
 				{
-					if (pRoomEx->ppRoomsNear[i]->pMaze->pMap != pDrlgMap || pRoomEx->ppRoomsNear[i]->pMaze->pMap->pPopsIndex[j] != nPopIndex)
+					pAdjacentRoomMap->pPopsOrientation[nAdjacentRoomIdx] = 0;
+					if (pAdjacentRoomMap == pDrlgMap && pAdjacentRoomMap->pPopsIndex[nAdjacentRoomIdx] == nPopIndex)
 					{
-						pRoomEx->ppRoomsNear[i]->pMaze->pMap->pPopsOrientation[j] = 0;
-					}
-
-					if (pRoomEx->ppRoomsNear[i]->pMaze->pMap == pDrlgMap && pRoomEx->ppRoomsNear[i]->pMaze->pMap->pPopsIndex[j] == nPopIndex)
-					{
-						pRoomEx->ppRoomsNear[i]->pMaze->pMap->pPopsOrientation[j] = nTick;
+						pAdjacentRoomMap->pPopsOrientation[nAdjacentRoomIdx] = nTick;
 					}
 				}
 			}
