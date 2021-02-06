@@ -1800,11 +1800,9 @@ void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOO
 //D2Common.0x6FD88450
 void __fastcall DRLGPRESET_TogglePopsVisibility(D2RoomExStrc* pRoomEx, int nPopSubIndex, D2DrlgCoordStrc* pDrlgCoord, int nTick, BOOL nCellFlags)
 {
-	D2DrlgTileDataStrc* pDrlgTileData = NULL;
-	D2DrlgCoordStrc pDrlgCoords = {};
-
 	D2_ASSERT(pRoomEx->pTileGrid);
 
+	D2DrlgCoordStrc pDrlgCoords = {};
 	pDrlgCoords.nPosX = pDrlgCoord->nPosX - 1;
 	pDrlgCoords.nPosY = pDrlgCoord->nPosY - 1;
 	pDrlgCoords.nWidth = pDrlgCoord->nWidth + 2;
@@ -1812,7 +1810,7 @@ void __fastcall DRLGPRESET_TogglePopsVisibility(D2RoomExStrc* pRoomEx, int nPopS
 
 	for (int i = 0; i < pRoomEx->pTileGrid->pTiles.nWalls; ++i)
 	{
-		pDrlgTileData = &pRoomEx->pTileGrid->pTiles.pWallTiles[i];
+		D2DrlgTileDataStrc* pDrlgTileData = &pRoomEx->pTileGrid->pTiles.pWallTiles[i];
 
 		if (pDrlgTileData->dwFlags & 0x200 && DRLGROOM_AreXYInsideCoordinates(&pDrlgCoords, pRoomEx->nTileXPos + pDrlgTileData->nPosX, pRoomEx->nTileYPos + pDrlgTileData->nPosY))
 		{
