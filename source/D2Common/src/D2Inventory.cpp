@@ -3253,9 +3253,9 @@ BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 	pInventory->pCursorItem = nullptr;
 	pInventory->dwLeftItemGUID = -1;
 	
-	for (D2UnitStrc* pItem = pInventory->pFirstItem; pItem; pItem = pInventory->pFirstItem)
+	while (pInventory->pFirstItem)
 	{
-		if (!INVENTORY_RemoveItem(pItem))
+		if (!INVENTORY_RemoveItem(pInventory->pFirstItem))
 		{
 			return FALSE;
 		}
