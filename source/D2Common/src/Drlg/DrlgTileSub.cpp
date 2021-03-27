@@ -641,7 +641,7 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvl
 
 	if (!pLvlSubTxtRecord->pDrlgFile)
 	{
-		DRLGPRESET_AllocDrlgFile(ppDrlgFile, pMemPool, pLvlSubTxtRecord->szFile);
+		DRLGPRESET_LoadDrlgFile(ppDrlgFile, pMemPool, pLvlSubTxtRecord->szFile);
 
 		pDrlgCoord.nPosX = 0;
 		pDrlgCoord.nPosY = 0;

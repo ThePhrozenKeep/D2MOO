@@ -78,7 +78,7 @@ int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t a1, int a2);
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, char* szFileName);
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_AllocDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile);
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile);
 //D2Common.0x6FD86190
 void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile);
 //D2Common.0x6FD86310

@@ -654,7 +654,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(void* pMemPool, int a2)
 				{
 					if (nLength > 1)
 					{
-						DRLGPRESET_AllocDrlgFile(&sgptDataTables->ppLvlPrestFiles[j + 6 * i], NULL, sgptDataTables->pLvlPrestTxt[i].szFile[j]);
+						DRLGPRESET_LoadDrlgFile(&sgptDataTables->ppLvlPrestFiles[j + 6 * i], NULL, sgptDataTables->pLvlPrestTxt[i].szFile[j]);
 					}
 				}
 			}
@@ -903,7 +903,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 
 		if ((FOG_IsExpansion() || !sgptDataTables->pLvlSubTxt[i].dwExpansion) && (a2 || a3))
 		{
-			DRLGPRESET_AllocDrlgFile(&sgptDataTables->ppLvlSubTypeFiles[i], NULL, szFile);
+			DRLGPRESET_LoadDrlgFile(&sgptDataTables->ppLvlSubTypeFiles[i], NULL, szFile);
 			D2_ASSERT(sgptDataTables->ppLvlSubTypeFiles[i]->nSubstGroups);
 		}
 	}

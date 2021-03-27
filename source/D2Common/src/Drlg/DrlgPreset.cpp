@@ -496,7 +496,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 //D2Common.0x6FD86050
 //TODO: Rename v4, v5
-void __fastcall DRLGPRESET_AllocDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile)
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile)
 {
 	D2UnkFileStrc* v4 = NULL;
 	D2UnkFileStrc* v5 = NULL;
@@ -796,7 +796,7 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 
 	if (!pRoomEx->pMaze->pMap->pFile)
 	{
-		DRLGPRESET_AllocDrlgFile(&pRoomEx->pMaze->pMap->pFile, pRoomEx->pLevel->pDrlg->unk0x08, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->szFile[pRoomEx->pMaze->pMap->nPickedFile]);
+		DRLGPRESET_LoadDrlgFile(&pRoomEx->pMaze->pMap->pFile, pRoomEx->pLevel->pDrlg->unk0x08, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->szFile[pRoomEx->pMaze->pMap->nPickedFile]);
 		DRLGPRESET_AddPresetUnitToDrlgMap(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze->pMap, &pRoomEx->pSeed);
 	}
 
@@ -1428,7 +1428,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || nPops)
 	{
-		DRLGPRESET_AllocDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->unk0x08, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
+		DRLGPRESET_LoadDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->unk0x08, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
 
 		DRLGPRESET_AddPresetUnitToDrlgMap(pLevel->pDrlg->pMempool, pDrlgMap, &pLevel->pSeed);
 
