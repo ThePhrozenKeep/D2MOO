@@ -24,7 +24,7 @@
 #include <algorithm>
 
 
-D2UnkFileStrc* dword_6FDEA700;
+D2LevelFileListStrc* gpLevelFilesList_6FDEA700;
 
 
 //D2Common.0x6FD859A0 (#11222)
@@ -495,61 +495,49 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 }
 
 //D2Common.0x6FD86050
-//TODO: Rename v4, v5
 void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile)
 {
-	D2UnkFileStrc* v4 = NULL;
-	D2UnkFileStrc* v5 = NULL;
-
 	if (gpLvlSubTypeFilesCriticalSection)
 	{
 		FOG_10050_EnterCriticalSection(gpLvlSubTypeFilesCriticalSection, 754);
 	}
 
-	v4 = dword_6FDEA700;
-	while (v4 && strcmp(v4->szPath, szFile))
+	D2LevelFileListStrc* pLevelFile = gpLevelFilesList_6FDEA700;
+	// Check if we already loaded this file
+	while (pLevelFile && strcmp(pLevelFile->szPath, szFile))
 	{
-		v4 = v4->pNext;
+		pLevelFile = pLevelFile->pNext;
 	}
 
-	if (v4)
+	if (pLevelFile)
 	{
-		InterlockedIncrement(&v4->field_104);
-		*ppDrlgFile = v4->pFile;
-		if (gpLvlSubTypeFilesCriticalSection)
-		{
-			LeaveCriticalSection(gpLvlSubTypeFilesCriticalSection);
-		}
+		InterlockedIncrement(&pLevelFile->nRefCount);
+		*ppDrlgFile = pLevelFile->pFile;
 	}
 	else
 	{
-		v5 = D2_ALLOC_STRC_SERVER(nullptr, D2UnkFileStrc);
+		pLevelFile = D2_ALLOC_STRC_SERVER(nullptr, D2LevelFileListStrc);
 
 		*ppDrlgFile = D2_CALLOC_STRC_SERVER(nullptr, D2DrlgFileStrc);
 
-		strcpy_s(v5->szPath, szFile);
-		v5->field_104 = 1;
-		v5->pFile = *ppDrlgFile;
-		v5->pNext = dword_6FDEA700;
-		dword_6FDEA700 = v5;
+		strcpy_s(pLevelFile->szPath, szFile);
+		pLevelFile->nRefCount = 1;
+		pLevelFile->pFile = *ppDrlgFile;
+		pLevelFile->pNext = gpLevelFilesList_6FDEA700;
+		gpLevelFilesList_6FDEA700 = pLevelFile;
 
 		DRLGPRESET_ParseDS1File(*ppDrlgFile, pMemPool, szFile);
+	}
 
-		if (gpLvlSubTypeFilesCriticalSection)
-		{
-			LeaveCriticalSection(gpLvlSubTypeFilesCriticalSection);
-		}
+	if (gpLvlSubTypeFilesCriticalSection)
+	{
+		LeaveCriticalSection(gpLvlSubTypeFilesCriticalSection);
 	}
 }
 
 //D2Common.0x6FD86190
 void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 {
-	D2PresetUnitStrc* pNextPresetUnit = NULL;
-	D2PresetUnitStrc* pPresetUnit = NULL;
-	D2UnkFileStrc* pPrevious = NULL;
-	D2UnkFileStrc* pCurrent = NULL;
-
 	if (*ppDrlgFile)
 	{
 		if (gpLvlSubTypeFilesCriticalSection)
@@ -557,8 +545,9 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 			FOG_10050_EnterCriticalSection(gpLvlSubTypeFilesCriticalSection, 754);
 		}
 
-		pPrevious = NULL;
-		for (pCurrent = dword_6FDEA700; pCurrent; pCurrent = pCurrent->pNext)
+		D2LevelFileListStrc* pPrevious = NULL;
+		D2LevelFileListStrc* pCurrent = NULL;
+		for (pCurrent = gpLevelFilesList_6FDEA700; pCurrent; pCurrent = pCurrent->pNext)
 		{
 			if (pCurrent->pFile == *ppDrlgFile)
 			{
@@ -567,9 +556,9 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 			pPrevious = pCurrent;
 		}
 
-		InterlockedDecrement(&pCurrent->field_104);
+		InterlockedDecrement(&pCurrent->nRefCount);
 
-		if (pCurrent && pCurrent->field_104 <= 0)
+		if (pCurrent && pCurrent->nRefCount <= 0)
 		{
 			if (pPrevious)
 			{
@@ -577,7 +566,7 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 			}
 			else
 			{
-				dword_6FDEA700 = pCurrent->pNext;
+				gpLevelFilesList_6FDEA700 = pCurrent->pNext;
 			}
 
 			if (gpLvlSubTypeFilesCriticalSection)
@@ -595,10 +584,10 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 				D2_FREE_SERVER(nullptr, (*ppDrlgFile)->pSubstGroups);
 			}
 
-			pPresetUnit = (*ppDrlgFile)->pPresetUnit;
+			D2PresetUnitStrc* pPresetUnit = (*ppDrlgFile)->pPresetUnit;
 			while (pPresetUnit)
 			{
-				pNextPresetUnit = pPresetUnit->pNext;
+				D2PresetUnitStrc* pNextPresetUnit = pPresetUnit->pNext;
 
 				DRLGPRESET_FreePresetUnit(NULL, pPresetUnit);
 
@@ -1655,8 +1644,8 @@ void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap)
 {
 	D2PresetUnitStrc* pNextPresetUnit = NULL;
 	D2PresetUnitStrc* pPresetUnit = NULL;
-	D2UnkFileStrc* pPrevious = NULL;
-	D2UnkFileStrc* pCurrent = NULL;
+	D2LevelFileListStrc* pPrevious = NULL;
+	D2LevelFileListStrc* pCurrent = NULL;
 	D2DrlgMapStrc* pNextMap = NULL;
 	D2DrlgMapStrc* pMap = NULL;
 

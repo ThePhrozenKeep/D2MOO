@@ -6,12 +6,12 @@
 
 #pragma pack(1)
 
-struct D2UnkFileStrc
+struct D2LevelFileListStrc
 {
 	char szPath[D2_MAX_PATH];			//0x00
-	long field_104;						//0x104
+	long nRefCount;						//0x104
 	D2DrlgFileStrc* pFile;				//0x108
-	D2UnkFileStrc* pNext;				//0x10C
+	D2LevelFileListStrc* pNext;				//0x10C
 };
 
 struct D2PresetUnitStrc
