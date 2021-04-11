@@ -101,7 +101,7 @@ struct D2DS1FileStrc
 };
 
 //D2Common.0x6FD85A10
-void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, char* szFileName)
+void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName)
 {
 	D2MonPresetTxt* pMonPresetTxtSection = NULL;
 	D2PresetUnitStrc* pNewPresetUnit = NULL;
@@ -495,7 +495,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 }
 
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile)
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, const char* szFile)
 {
 	if (gpLvlSubTypeFilesCriticalSection)
 	{

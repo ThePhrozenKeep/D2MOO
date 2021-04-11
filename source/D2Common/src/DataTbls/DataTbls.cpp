@@ -94,17 +94,16 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 }
 
 //D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, char* szFileName, int* pSize, char* szFile, int nLine)
+void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, char* szFile, int nLine)
 {
 	void* pFileHandle = NULL;
 	void* pBuffer = NULL;
 	size_t nSize = 0;
 	uint32_t dwFileSizeHigh = 0;
-
 	if (!FOG_MPQFileOpen(szFileName, &pFileHandle))
 	{
-		GetLastError();
-		FOG_WriteToLogFile("Error opening file: %s", szFileName);
+		const DWORD err = GetLastError();
+		FOG_WriteToLogFile("Error opening file: %s (0x%x)", szFileName, err);
 		return NULL;
 	}
 

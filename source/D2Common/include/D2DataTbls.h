@@ -521,7 +521,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 //D2Common.0x6FDC4152
 size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh);
 //D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, char* szFileName, int* pSize, char* szFile, int nLine);
+void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, char* szFile, int nLine);
 
 
 
