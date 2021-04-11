@@ -310,21 +310,21 @@ struct D2DrlgDeleteStrc
 struct D2DrlgFileStrc
 {
 	int32_t unk0x00;							//0x00
-	void* pDS1File;							//0x04
+	void* pDS1File;								//0x04
 	int32_t unk0x08;							//0x08
 	int32_t nWidth;								//0x0C
 	int32_t nHeight;							//0x10
 	int32_t nWalls;								//0x14
 	int32_t nFloors;							//0x18
-	void* pOrientationLayer[4];				//0x1C
-	void* pWallLayer[4];					//0x2C
-	void* pFloorLayer[2];					//0x3C
-	void* pShadowLayer;						//0x44
-	void* pSubstGroupTags;					//0x48
+	void* pOrientationLayer[4];					//0x1C
+	void* pWallLayer[4];						//0x2C
+	void* pFloorLayer[2];						//0x3C
+	void* pShadowLayer;							//0x44
+	void* pSubstGroupTags;						//0x48
 	int32_t nSubstGroups;						//0x4C named nClusters in original game
-	void* pSubstGroups;						//0x50
-	D2PresetUnitStrc* pPresetUnit;			//0x54
-	D2DrlgFileStrc* pNext;					//0x58
+	struct D2DrlgSubstGroupStrc* pSubstGroups;	//0x50
+	D2PresetUnitStrc* pPresetUnit;				//0x54
+	D2DrlgFileStrc* pNext;						//0x58
 };
 
 struct D2DrlgTileInfoStrc

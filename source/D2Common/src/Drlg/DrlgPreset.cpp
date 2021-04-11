@@ -94,50 +94,37 @@ int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t nAct, int nUnitId)
 
 struct D2DS1FileStrc
 {
-	int field_0;
-	int nWidth;
-	int nHeight;
-	int pData[1];
+	int32_t nVersion;
+	int32_t nWidth;
+	int32_t nHeight;
+	int32_t pData[1];
 };
+
+static int32_t ReadInt32(int32_t*& pData)
+{
+	return *(pData++);
+}
+
+static void SkipInt32s(int32_t*& pData, uint32_t nbToSkip)
+{
+	pData += nbToSkip;
+}
 
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName)
 {
-	D2MonPresetTxt* pMonPresetTxtSection = NULL;
-	D2PresetUnitStrc* pNewPresetUnit = NULL;
-	D2PresetUnitStrc* pPresetUnit = NULL;
-	D2DS1FileStrc* pDS1File = NULL;
-	int* pOrientationLayer = NULL;
-	int* pData = NULL;
-	int nMonPresetRecords = 0;
-	int nSpawnFlag = 0;
-	int nUnitType = 0;
-	int nStrings = 0;
-	int nUnitId = 0;
-	int nUnits = 0;
-	int nNodes = 0;
-	int nMode = 0;
-	int nArea = 0;
-	int nAct = 0;
-	int nX = 0;
-	int nY = 0;
-	int v72 = 0;
-	int v59 = 0;
-	char szItemCode[4] = {};
-
-	pDS1File = (D2DS1FileStrc*)DATATBLS_GetBinaryData(pMemPool, szFileName, NULL, __FILE__, __LINE__);
+	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)DATATBLS_GetBinaryData(pMemPool, szFileName, NULL, __FILE__, __LINE__);
 	pDrlgFile->pDS1File = pDS1File;
 	pDrlgFile->nWidth = pDS1File->nWidth;
 	pDrlgFile->nHeight = pDS1File->nHeight;
 
-	v72 = pDS1File->field_0;
-	pData = pDS1File->pData;
+	int nVersion = pDS1File->nVersion;
+	int32_t* pData = pDS1File->pData;
 	
-	nAct = 0;
-	if (v72 >= 8)
+	int nAct = ACT_I;
+	if (nVersion >= 8)
 	{
-		nAct = *pData;
-		++pData;
+		nAct = ReadInt32(pData);
 
 		if (nAct > ACT_V)
 		{
@@ -146,16 +133,14 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 	}
 
 	pDrlgFile->unk0x00 = 0;
-	if (v72 >= 10)
+	if (nVersion >= 10)
 	{
-		pDrlgFile->unk0x00 = *pData;
-		++pData;
+		pDrlgFile->unk0x00 = ReadInt32(pData);
 	}
 
-	if (v72 >= 3)
+	if (nVersion >= 3)
 	{
-		nStrings = *pData;
-		++pData;
+		int nStrings = ReadInt32(pData);
 
 		for (int i = 0; i < nStrings; ++i)
 		{
@@ -163,60 +148,58 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 		}
 	}
 
-	nArea = (pDrlgFile->nWidth + 1) * (pDrlgFile->nHeight + 1);
+	int nArea = (pDrlgFile->nWidth + 1) * (pDrlgFile->nHeight + 1);
 
-	if (v72 >= 9 && v72 < 14)
+	if (nVersion >= 9 && nVersion < 14)
 	{
-		pData += 2;
+		SkipInt32s(pData, 2);
 	}
 
-	if (v72 < 4)
+	if (nVersion < 4)
 	{
 		pDrlgFile->pWallLayer[0] = pData;
-		pData = &pData[nArea];
+		SkipInt32s(pData, nArea);
 		pDrlgFile->nWalls = 1;
 		pDrlgFile->pFloorLayer[0] = pData;
-		pData = &pData[nArea];
+		SkipInt32s(pData, nArea);
 		pDrlgFile->pOrientationLayer[0] = pData;
-		pData = &pData[nArea];
+		SkipInt32s(pData, nArea);
 		pDrlgFile->pSubstGroupTags = pData;
-		pData = &pData[nArea];
+		SkipInt32s(pData, nArea);
 	}
 	else
 	{
-		pDrlgFile->nWalls = *pData;
-		++pData;
+		pDrlgFile->nWalls = ReadInt32(pData);
 
-		if (v72 < 16)
+		if (nVersion < 16)
 		{
 			pDrlgFile->nFloors = 1;
 		}
 		else
 		{
-			pDrlgFile->nFloors = *pData;
-			++pData;
+			pDrlgFile->nFloors = ReadInt32(pData);
 		}
 
 		for (int i = 0; i < pDrlgFile->nWalls; ++i)
 		{
 			pDrlgFile->pWallLayer[i] = pData;
-			pData += nArea;
+			SkipInt32s(pData, nArea);
 			pDrlgFile->pOrientationLayer[i] = pData;
-			pData += nArea;
+			SkipInt32s(pData, nArea);
 		}
 
 		for (int i = 0; i < pDrlgFile->nFloors; ++i)
 		{
 			pDrlgFile->pFloorLayer[i] = pData;
-			pData += nArea;
+			SkipInt32s(pData, nArea);
 		}
 	}
 
-	if (v72 < 7)
+	if (nVersion < 7)
 	{
 		for (int j = 0; j < pDrlgFile->nWalls; ++j)
 		{
-			pOrientationLayer = (int*)pDrlgFile->pOrientationLayer[j];
+			int* pOrientationLayer = (int*)pDrlgFile->pOrientationLayer[j];
 			for (int i = 0; i < nArea; ++i)
 			{
 				pOrientationLayer[i] = DRLGPRESET_MapOrientationLayer(pOrientationLayer[i]);
@@ -225,35 +208,32 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 	}
 
 	pDrlgFile->pShadowLayer = pData;
-	pData = &pData[nArea];
+	SkipInt32s(pData, nArea);
 	if (pDrlgFile->unk0x00 > 0 && pDrlgFile->unk0x00 <= 2)
 	{
 		pDrlgFile->pSubstGroupTags = pData;
-		pData += nArea;
+		SkipInt32s(pData, nArea);
 	}
 
-	if (v72 > 1)
+	if (nVersion > 1)
 	{
-		nUnits = *pData;
-		++pData;
+		int nUnits = ReadInt32(pData);
 
 		for (int i = 0; i < nUnits; ++i)
 		{
-			nUnitType = *pData;
-			++pData;
-			nUnitId = *pData;
-			++pData;
+			int nUnitType = ReadInt32(pData);
+			int nUnitId = ReadInt32(pData);
 
-			nMode = 0;
+			int nMode = 0;
 
 			switch (nUnitType)
 			{
 			case UNIT_MONSTER:
 				nMode = MONMODE_NEUTRAL;
-				if (v72 > 4)
+				if (nVersion > 4)
 				{
-					nMonPresetRecords = 0;
-					pMonPresetTxtSection = DATATBLS_GetMonPresetTxtActSection(nAct, &nMonPresetRecords);
+					int nMonPresetRecords = 0;
+					D2MonPresetTxt* pMonPresetTxtSection = DATATBLS_GetMonPresetTxtActSection(nAct, &nMonPresetRecords);
 
 					if (pMonPresetTxtSection && nUnitId < nMonPresetRecords)
 					{
@@ -340,7 +320,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 				break;
 
 			case UNIT_OBJECT:
-				if (v72 > 5)
+				if (nVersion > 5)
 				{
 					if (nUnitId >= 150)
 					{
@@ -361,8 +341,9 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 				break;
 
 			case UNIT_ITEM:
-				if (v72 > 4)
+				if (nVersion > 4)
 				{
+					char szItemCode[4] = {};
 					strncpy_s(szItemCode, /*(&Source)[4 * nUnitId]*/"HDM", ARRAY_SIZE(szItemCode)); //TODO: Check comment
 					szItemCode[3] = 0;
 
@@ -378,24 +359,18 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 				break;
 			}
 
-			nX = *pData;
-			++pData;
-			nY = *pData;
-			++pData;
+			int nX = ReadInt32(pData);
+			int nY = ReadInt32(pData);
 
-			if (v72 > 5)
+			int nSpawnFlag = 0;
+			if (nVersion > 5)
 			{
-				nSpawnFlag = *pData;
-				++pData;
-			}
-			else
-			{
-				nSpawnFlag = 0;
+				nSpawnFlag = ReadInt32(pData);
 			}
 
-			if (nUnitId >= 0 && (nUnitType != UNIT_MONSTER || v72 > 4))
+			if (nUnitId >= 0 && (nUnitType != UNIT_MONSTER || nVersion > 4))
 			{
-				pNewPresetUnit = DRLGROOM_AllocPresetUnit(NULL, NULL, nUnitType, nUnitId, nMode, nX, nY);
+				D2PresetUnitStrc* pNewPresetUnit = DRLGROOM_AllocPresetUnit(NULL, NULL, nUnitType, nUnitId, nMode, nX, nY);
 				pNewPresetUnit->pNext = pDrlgFile->pPresetUnit;
 				pDrlgFile->pPresetUnit = pNewPresetUnit;
 				pNewPresetUnit->bSpawned |= nSpawnFlag;
@@ -403,52 +378,43 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 		}
 	}
 
-	if (v72 >= 12 && pDrlgFile->unk0x00 > 0 && pDrlgFile->unk0x00 <= 2)
+	if (nVersion >= 12 && pDrlgFile->unk0x00 > 0 && pDrlgFile->unk0x00 <= 2)
 	{
-		if (v72 >= 18)
+		if (nVersion >= 18)
 		{
-			++pData;
+			SkipInt32s(pData, 1);
 		}
 
-		pDrlgFile->nSubstGroups = *pData;
-		++pData;
+		pDrlgFile->nSubstGroups = ReadInt32(pData);
 		pDrlgFile->pSubstGroups = (D2DrlgSubstGroupStrc*)D2_ALLOC_SERVER(NULL, sizeof(D2DrlgSubstGroupStrc) * pDrlgFile->nSubstGroups);
 
 		for (int i = 0; i < pDrlgFile->nSubstGroups; ++i)
 		{
-			((D2DrlgSubstGroupStrc*)pDrlgFile->pSubstGroups)[i].field_0 = *pData;
-			++pData;
-			((D2DrlgSubstGroupStrc*)pDrlgFile->pSubstGroups)[i].field_4 = *pData;
-			++pData;
-			((D2DrlgSubstGroupStrc*)pDrlgFile->pSubstGroups)[i].field_8 = *pData;
-			++pData;
-			((D2DrlgSubstGroupStrc*)pDrlgFile->pSubstGroups)[i].field_C = *pData;
-			++pData;
+			pDrlgFile->pSubstGroups[i].field_0 = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].field_4 = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].field_8 = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].field_C = ReadInt32(pData);
 
-			if (v72 >= 13)
+			if (nVersion >= 13)
 			{
-				((D2DrlgSubstGroupStrc*)pDrlgFile->pSubstGroups)[i].field_14 = *pData;
-				++pData;
+				pDrlgFile->pSubstGroups[i].field_14 = ReadInt32(pData);
 			}
 		}
 	}
 
-	if (v72 >= 14)
+	if (nVersion >= 14)
 	{
-		v59 = *pData;
-		++pData;
+		int v59 = ReadInt32(pData);
 
 		for (int i = 0; i < v59; ++i)
 		{
-			nNodes = *pData;
-			++pData;
-			nX = *pData;
-			++pData;
-			nY = *pData;
-			++pData;
+			int nNodes = ReadInt32(pData);
+			int nX = ReadInt32(pData);
+			int nY = ReadInt32(pData);
 
 			if (nNodes)
 			{
+				D2PresetUnitStrc* pPresetUnit = pDrlgFile->pPresetUnit;
 				while (pPresetUnit)
 				{
 					if (pPresetUnit->nXpos == nX && pPresetUnit->nYpos == nY)
@@ -459,19 +425,16 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 						for (int j = 0; j < nNodes; ++j)
 						{
-							pPresetUnit->pMapAI->pPosition[j].nX = *pData;
-							++pData;
-							pPresetUnit->pMapAI->pPosition[j].nY = *pData;
-							++pData;
+							pPresetUnit->pMapAI->pPosition[j].nX = ReadInt32(pData);
+							pPresetUnit->pMapAI->pPosition[j].nY = ReadInt32(pData);
 
-							if (v72 < 15)
+							if (nVersion < 15)
 							{
 								pPresetUnit->pMapAI->pPosition[j].nMapAIAction = 1;
 							}
 							else
 							{
-								pPresetUnit->pMapAI->pPosition[j].nMapAIAction = *pData;
-								++pData;
+								pPresetUnit->pMapAI->pPosition[j].nMapAIAction = ReadInt32(pData);
 							}
 						}
 
@@ -483,10 +446,10 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 				if (!pPresetUnit)
 				{
-					pData += 2 * nNodes;
-					if (v72 >= 15)
+					SkipInt32s(pData, 2 * nNodes);
+					if (nVersion >= 15)
 					{
-						pData += nNodes;
+						SkipInt32s(pData, nNodes);
 					}
 				}
 			}
