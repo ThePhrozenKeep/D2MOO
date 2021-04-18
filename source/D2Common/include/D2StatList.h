@@ -574,7 +574,7 @@ D2StatListStrc* __stdcall STATLIST_GetStatListFromUnitStateAndFlag(D2UnitStrc* p
 //D2Common.0x6FDB8310 (#10523)
 void __stdcall STATLIST_MergeStatLists(D2UnitStrc* pTarget, D2UnitStrc* pUnit, BOOL bType);
 //D2Common.0x6FDB83A0 (#10535)
-D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pDynamic);
+D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pStatNotDynamic);
 //D2Common.0x6FDB8420 (#10512)
 void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatId, void(__fastcall* pfCallback)(D2UnitStrc*, int, int, D2UnitStrc*));
 //D2Common.0x6FDB84E0 (#10513)

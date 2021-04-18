@@ -1620,20 +1620,20 @@ void __stdcall STATLIST_MergeStatLists(D2UnitStrc* pTarget, D2UnitStrc* pUnit, B
 
 
 //D2Common.0x6FDB83A0 (#10535)
-D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pDynamic)
+D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pStatNotDynamic)
 {
 	if (!pUnit || !pUnit->pStatListEx || !pUnit->pStatListEx->pParent || !STATLIST_IsExtended(pUnit->pStatListEx->pParent))
 	{
-		if (pDynamic)
+		if (pStatNotDynamic)
 		{
-			*pDynamic = FALSE;
+			*pStatNotDynamic = FALSE;
 		}
 		return NULL;
 	}
 
-	if (pDynamic)
+	if (pStatNotDynamic)
 	{
-		*pDynamic = pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC;
+		*pStatNotDynamic = !(pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC);
 	}
 	return ((D2StatListExStrc*)pUnit->pStatListEx->pParent)->pOwner;
 }
