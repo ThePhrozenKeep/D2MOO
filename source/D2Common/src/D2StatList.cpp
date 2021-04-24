@@ -41,44 +41,56 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 
 
 // Helper function
-static int __fastcall STATLIST_FindStatInsertionIndex(D2StatsArrayStrc* pStatsArray, int nLayer_StatId, bool* pAlreadyInArray)
+template<class T>
+static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, int nLayer_StatId, bool* pAlreadyInArray)
 {
 	*pAlreadyInArray = false;
-	// Find lower bound by dichotomy, stats are sorted by nLayer_StatId
+	// Find by dichotomy, stats are sorted by nLayer_StatId
 	int nMin = 0;
 	int nMax = pStatsArray->nStatCount;
-	if (nMax > 0)
-	{
-		do
-		{
-			int nMidPoint = nMin + (nMax - nMin) / 2;
 
-			if (nLayer_StatId < pStatsArray->pStat[nMidPoint].nLayer_StatId)
-			{
-				nMax = nMin + (nMax - nMin) / 2;
-			}
-			else if (nLayer_StatId > pStatsArray->pStat[nMidPoint].nLayer_StatId)
-			{
-				nMin = nMidPoint + 1;
-			}
-			else
-			{
-				*pAlreadyInArray = true;
-				return nMidPoint;
-			}
-		} while (nMin < nMax);
+	while (nMin < nMax)
+	{
+		const int nMidPoint = nMin + (nMax - nMin) / 2;
+
+		if (nLayer_StatId < pStatsArray->pStat[nMidPoint].nLayer_StatId)
+		{
+			nMax = nMin + (nMax - nMin) / 2;
+		}
+		else if (nLayer_StatId > pStatsArray->pStat[nMidPoint].nLayer_StatId)
+		{
+			nMin = nMidPoint + 1;
+		}
+		else // found it
+		{
+			*pAlreadyInArray = true;
+			return nMidPoint;
+		}
 	}
 
 	return nMin;
 }
 
-// Helper function
-D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId, int insertionIdx)
+template<class T>
+int StatArray_DichotomySearch(const T* pStatArray, int nLayer_StatId)
 {
+	bool alreadyInArray = false;
+	int insertionIdx = StatArray_FindInsertionIndex(pStatArray, nLayer_StatId, &alreadyInArray);
+	if (alreadyInArray)
+		return insertionIdx;
+	return -1;
+}
+
+// Helper function
+template<class T>
+decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArray, int nLayer_StatId, int insertionIdx)
+{
+	typedef decltype(T::pStat) StatType;
+
 	if (pStatsArray->nStatCount >= pStatsArray->nCapacity)
 	{
-		pStatsArray->nCapacity += D2StatsArrayStrc::nGrowthAmount;
-		pStatsArray->pStat = (D2StatStrc*)D2_REALLOC_SERVER(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(D2StatStrc));
+		pStatsArray->nCapacity += T::nGrowthAmount;
+		pStatsArray->pStat = (StatType)D2_REALLOC_SERVER(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(*pStatsArray->pStat));
 	}
 
 	if (insertionIdx < pStatsArray->nStatCount)
@@ -87,8 +99,8 @@ D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pSt
 		memmove(&pStatsArray->pStat[insertionIdx + 1], &pStatsArray->pStat[insertionIdx], (pStatsArray->nStatCount - insertionIdx) * sizeof(D2StatStrc));
 	}
 
+	pStatsArray->pStat[insertionIdx] = {}; // Default init to 0
 	pStatsArray->pStat[insertionIdx].nLayer_StatId = nLayer_StatId;
-	pStatsArray->pStat[insertionIdx].nValue = 0;
 	++pStatsArray->nStatCount;
 
 	return &pStatsArray->pStat[insertionIdx];
@@ -98,7 +110,7 @@ D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pSt
 static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
 	bool bFoundStatInArray = false;
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
+	const int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
 	if (bFoundStatInArray)
 	{
@@ -106,7 +118,7 @@ static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsAr
 	}
 	else
 	{
-		return STATLIST_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 }
 
@@ -423,32 +435,11 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 	return nAccumulatedValue;
 }
 
+
 //D2Common.0x6FDB6300
 int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, int nLayer_StatId)
 {
-	// Find by dichotomy, stats are sorted by nLayer_StatId
-	int nMin = 0;
-	int nMax = pStatArray->nStatCount;
-
-	while (nMin < nMax)
-	{
-		const int nMidPoint = nMin + (nMax - nMin) / 2;
-
-		if (nLayer_StatId < pStatArray->pStat[nMidPoint].nLayer_StatId)
-		{
-			nMax = nMin + (nMax - nMin) / 2;
-		}
-		else if (nLayer_StatId > pStatArray->pStat[nMidPoint].nLayer_StatId)
-		{
-			nMin = nMidPoint + 1;
-		}
-		else // found it
-		{
-			return nMidPoint;
-		}
-	}
-
-	return -1;
+	return StatArray_DichotomySearch(pStatArray, nLayer_StatId);
 }
 
 // Helper function
@@ -646,12 +637,12 @@ D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatArray, 
 D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
 	bool bFoundStatInArray = false;
-	int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
+	int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 	if (bFoundStatInArray)
 	{
 		return nullptr;
 	}
-	return STATLIST_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+	return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 }
 
 //D2Common.0x6FDB6A30
@@ -682,7 +673,7 @@ void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, 
 {
 	D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
 	bool bFoundStatInArray = false;
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
+	const int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
 	D2StatStrc* pStat = nullptr;
 	if (bFoundStatInArray)
@@ -691,7 +682,7 @@ void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, 
 	}
 	else if (nNewValue != 0)
 	{
-		pStat = STATLIST_InsertStat(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		pStat = StatArray_InsertStat(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 
 	if (pStat == nullptr)
@@ -1231,8 +1222,10 @@ void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList,
 		D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
 		if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_SAVED])
 		{
-
-			STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId);
+			bool alreadyInArray = false;
+			int insertIdx = StatArray_FindInsertionIndex(&pStatListEx->ModStats, nLayer_StatId, &alreadyInArray);
+			if (!alreadyInArray)
+				StatArray_InsertStat(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId, insertIdx);
 		}
 	}
 }
@@ -1650,12 +1643,15 @@ void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatI
 	{
 		return;
 	}
-	if (STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->ModStats, nStatId << 16))
+
+	const int nLayerId = nStatId << 16;
+
+	if (StatArray_DichotomySearch(&pUnit1->pStatListEx->ModStats, nLayerId) < 0)
 	{
 		return;
 	}
 
-	if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, nStatId << 16))
+	if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, nLayerId))
 	{
 		pfCallback(pUnit1, nStatId, pBaseStat->nValue, pUnit2);
 	}
@@ -1664,16 +1660,16 @@ void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatI
 //D2Common.0x6FDB84E0 (#10513)
 void __stdcall D2Common_10513(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, void (__fastcall* pfCallback)(D2UnitStrc*, int, int, D2UnitStrc*))
 {
-	if (!pUnit1 || !pUnit2 && pfCallback || !pUnit1->pStatListEx || !STATLIST_IsExtended(pUnit1->pStatListEx))
+	if (!pUnit1 || (!pUnit2 && pfCallback) || !pUnit1->pStatListEx || !STATLIST_IsExtended(pUnit1->pStatListEx))
 	{
 		return;
 	}
-
-	for (int i = 0; i < pUnit1->pStatListEx->ModStats.nStatCount; ++i)
+	D2StatListExStrc* pUnit1StatList = pUnit1->pStatListEx;
+	for (int i = 0; i < pUnit1StatList->ModStats.nStatCount; ++i)
 	{
-		D2StatStrc* pModStat = &pUnit1->pStatListEx->ModStats.pStat[i];
+		const D2SLayerStatIdStrc* pModStat = &pUnit1StatList->ModStats.pStat[i];
 		int nBaseStatValue = 0;
-		if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, pModStat->nLayer_StatId))
+		if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1StatList->Stats, pModStat->nLayer_StatId))
 		{
 			nBaseStatValue = pBaseStat->nValue;
 		}

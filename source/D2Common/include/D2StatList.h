@@ -409,23 +409,36 @@ enum D2C_StatlistFlags : uint32_t
 };
 
 
-struct D2StatStrc
+struct D2SLayerStatIdStrc
 {
 	union
 	{
 		struct
 		{
-			uint16_t nLayer;					//0x00
-			uint16_t nStat;						//0x02
+			uint16_t nLayer;				//0x00
+			uint16_t nStat;					//0x02
 		};
-		int32_t nLayer_StatId;					//0x00
+		int32_t nLayer_StatId;				//0x00
 	};
-	int32_t nValue;								//0x04
+};
+
+struct D2StatStrc : D2SLayerStatIdStrc
+{
+	int32_t nValue;							//0x04
 };
 
 struct D2StatsArrayStrc
 {
 	D2StatStrc* pStat;						//0x00 An Array[wStatCount]
+	uint16_t nStatCount;					//0x04
+	uint16_t nCapacity;						//0x06
+	static const int nGrowthAmount = 4;
+	static const int nShrinkThreshold = 8;
+};
+
+struct D2ModStatsArrayStrc
+{
+	D2SLayerStatIdStrc* pStat;				//0x00 An Array[wStatCount]
 	uint16_t nStatCount;					//0x04
 	uint16_t nCapacity;						//0x06
 	static const int nGrowthAmount = 4;
@@ -456,7 +469,7 @@ struct D2StatListExStrc : public D2StatListStrc
 	D2StatListStrc* pMyStats;				//0x40
 	D2UnitStrc* pOwner;						//0x44
 	D2StatsArrayStrc FullStats;				//0x48
-	D2StatsArrayStrc ModStats;				//0x50
+	D2ModStatsArrayStrc ModStats;			//0x50
 	uint32_t* StatFlags;					//0x58 8bytes per states
 	void* fpCallBack;						//0x5C
 	D2GameStrc* pGame;						//0x60
