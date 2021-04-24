@@ -41,47 +41,56 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 
 
 // Helper function
-static int __fastcall STATLIST_FindStatInsertionIndex(D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
+template<class T>
+static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, int nLayer_StatId, bool* pAlreadyInArray)
 {
-	// Find lower bound by dichotomy, stats are sorted by nLayer_StatId
+	*pAlreadyInArray = false;
+	// Find by dichotomy, stats are sorted by nLayer_StatId
 	int nMin = 0;
 	int nMax = pStatsArray->nStatCount;
 
-	if (nMax > 0)
+	while (nMin < nMax)
 	{
-		do
-		{
-			int nMidPoint = nMin + (nMax - nMin) / 2;
+		const int nMidPoint = nMin + (nMax - nMin) / 2;
 
-			if (nLayer_StatId < pStatsArray->pStat[nMidPoint].nLayer_StatId)
-			{
-				nMax = nMin + (nMax - nMin) / 2;
-			}
-			else if (nLayer_StatId > pStatsArray->pStat[nMidPoint].nLayer_StatId)
-			{
-				nMin = nMidPoint + 1;
-			}
-			else
-			{
-				return -1;
-			}
-		} while (nMin < nMax);
-
-		if (nMin < 0)
+		if (nLayer_StatId < pStatsArray->pStat[nMidPoint].nLayer_StatId)
 		{
-			return -1;
+			nMax = nMin + (nMax - nMin) / 2;
+		}
+		else if (nLayer_StatId > pStatsArray->pStat[nMidPoint].nLayer_StatId)
+		{
+			nMin = nMidPoint + 1;
+		}
+		else // found it
+		{
+			*pAlreadyInArray = true;
+			return nMidPoint;
 		}
 	}
+
 	return nMin;
 }
 
-// Helper function
-D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId, int insertionIdx)
+template<class T>
+int StatArray_DichotomySearch(const T* pStatArray, int nLayer_StatId)
 {
+	bool alreadyInArray = false;
+	int insertionIdx = StatArray_FindInsertionIndex(pStatArray, nLayer_StatId, &alreadyInArray);
+	if (alreadyInArray)
+		return insertionIdx;
+	return -1;
+}
+
+// Helper function
+template<class T>
+decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArray, int nLayer_StatId, int insertionIdx)
+{
+	typedef decltype(T::pStat) StatType;
+
 	if (pStatsArray->nStatCount >= pStatsArray->nCapacity)
 	{
-		pStatsArray->nCapacity += D2StatsArrayStrc::nGrowthAmount;
-		pStatsArray->pStat = (D2StatStrc*)D2_REALLOC_SERVER(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(D2StatStrc));
+		pStatsArray->nCapacity += T::nGrowthAmount;
+		pStatsArray->pStat = (StatType)D2_REALLOC_SERVER(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(*pStatsArray->pStat));
 	}
 
 	if (insertionIdx < pStatsArray->nStatCount)
@@ -90,8 +99,8 @@ D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pSt
 		memmove(&pStatsArray->pStat[insertionIdx + 1], &pStatsArray->pStat[insertionIdx], (pStatsArray->nStatCount - insertionIdx) * sizeof(D2StatStrc));
 	}
 
+	pStatsArray->pStat[insertionIdx] = {}; // Default init to 0
 	pStatsArray->pStat[insertionIdx].nLayer_StatId = nLayer_StatId;
-	pStatsArray->pStat[insertionIdx].nValue = 0;
 	++pStatsArray->nStatCount;
 
 	return &pStatsArray->pStat[insertionIdx];
@@ -100,15 +109,16 @@ D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pSt
 // Helper function
 static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
+	bool bFoundStatInArray = false;
+	const int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
-	if (insertionIdx >= 0)
+	if (bFoundStatInArray)
 	{
 		return &pStatsArray->pStat[insertionIdx];
 	}
 	else
 	{
-		return STATLIST_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 }
 
@@ -128,7 +138,7 @@ static void STATLIST_SetUnitStatNewValue(D2StatListExStrc* pStatListEx, D2StatsA
 	if (nNewValue != 0 || pItemStatCostTxtRecord->nKeepZero)
 	{
 		pStat->nValue = nNewValue;
-		if (pItemStatCostTxtRecord->unk0x51[2])
+		if (pItemStatCostTxtRecord->bHasOpApplyingToItem)
 		{
 			pStatListEx->dwFlags |= STATLIST_PERMANENT;
 		}
@@ -181,7 +191,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 		}
 	}
 
-	if (!pItemStatCostTxtRecord->unk0x51[1])
+	if (!pItemStatCostTxtRecord->bHasOpStatData)
 	{
 		return nAccumulatedValue;
 	}
@@ -425,38 +435,17 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 	return nAccumulatedValue;
 }
 
+
 //D2Common.0x6FDB6300
 int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, int nLayer_StatId)
 {
-	// Find by dichotomy, stats are sorted by nLayer_StatId
-	int nMin = 0;
-	int nMax = pStatArray->nStatCount;
-
-	while (nMin < nMax)
-	{
-		const int nMidPoint = nMin + (nMax - nMin) / 2;
-
-		if (nLayer_StatId < pStatArray->pStat[nMidPoint].nLayer_StatId)
-		{
-			nMax = nMin + (nMax - nMin) / 2;
-		}
-		else if (nLayer_StatId > pStatArray->pStat[nMidPoint].nLayer_StatId)
-		{
-			nMin = nMidPoint + 1;
-		}
-		else // found it
-		{
-			return nMidPoint;
-		}
-	}
-
-	return -1;
+	return StatArray_DichotomySearch(pStatArray, nLayer_StatId);
 }
 
 // Helper function
 static int STATLIST_ApplyMinValue(int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2StatListExStrc* pStatListEx)
 {
-	if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FMIN])
+	if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FMIN])
 	{
 		if (pStatListEx && pStatListEx->pOwner && (pStatListEx->pOwner->dwUnitType == UNIT_PLAYER || pStatListEx->pOwner->dwUnitType == UNIT_MONSTER))
 		{
@@ -498,9 +487,9 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 {
 	int nNewValue = sub_6FDB5830(pStatListEx, nLayer_StatId);
 
-	if (pItemStatCostTxtRecord->unk0x51[0])
+	if (pItemStatCostTxtRecord->bIsBaseOfOtherStatOp)
 	{
-		if (!nNewValue)
+		if (nNewValue == 0)
 		{
 			if (D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(&pStatListEx->FullStats, nLayer_StatId))
 			{
@@ -509,8 +498,8 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 		}
 
 		bool bUpdate = TRUE;
-		int nCounter = 0;
-		while (nCounter < 3)
+		
+		for (int nCounter = 0; nCounter < 3; ++nCounter)
 		{
 			if (pItemStatCostTxtRecord->wOpStat[nCounter] == uint16_t(-1))
 			{
@@ -518,18 +507,21 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			}
 
 			int nOpStat = pItemStatCostTxtRecord->wOpStat[nCounter];
-			int nOpLayer_StatId = nOpStat << 16;
+			int nOpStatLayer_StatId = nOpStat << 16;
 			D2ItemStatCostTxt* pOpItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpStat);
 			D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
-			nNewValue = sub_6FDB64A0(pStatListEx, nOpLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
+			nNewValue = sub_6FDB64A0(pStatListEx, nOpStatLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
 			
-			D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(&pStatListEx->FullStats, nOpLayer_StatId);
+			D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(pStatsArray, nOpStatLayer_StatId);
 			if (pStat == nullptr && nNewValue != 0)
 			{
-				pStat = STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, &pStatListEx->FullStats, nOpLayer_StatId);
+				pStat = STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, pStatsArray, nOpStatLayer_StatId);
 			}
 
-			STATLIST_SetUnitStatNewValue(pStatListEx, &pStatListEx->FullStats, pStat, nOpLayer_StatId, nNewValue, pOpItemStatCostTxtRecord, pUnit);
+			if (pStat == nullptr)
+				continue;
+
+			STATLIST_SetUnitStatNewValue(pStatListEx, pStatsArray, pStat, nOpStatLayer_StatId, nNewValue, pOpItemStatCostTxtRecord, pUnit);
 
 			if (nNewValue)
 			{
@@ -552,8 +544,8 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					}
 					break;
 
-				case 4: // FALLTHROUGH
-				case 5:
+				case STAT_OP_APPLY_TO_ITEM: // FALLTHROUGH
+				case STAT_OP_APPLY_TO_ITEM_PCT:
 					if (pStatListEx->pUnit && (pStatListEx->pUnit->dwUnitType == UNIT_PLAYER || pStatListEx->pUnit->dwUnitType == UNIT_MONSTER))
 					{
 						int nOpBase = pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase;
@@ -568,15 +560,15 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					}
 					break;
 
-				case 6: // FALLTHROUGH
-				case 7:
+				case STAT_OP_BY_TIME: // FALLTHROUGH
+				case STAT_OP_BY_TIME_PCT:
 					if (pStatListEx->dwOwnerType == UNIT_PLAYER || pStatListEx->dwOwnerType == UNIT_MONSTER)
 					{
 						bUpdate = FALSE;
 					}
 					break;
 
-				case 13:
+				case STAT_OP_ADD_ITEM_STAT_PCT:
 					if (pStatListEx->dwOwnerType == UNIT_ITEM)
 					{
 						bUpdate = FALSE;
@@ -595,8 +587,6 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					break;
 				}
 			}
-
-			++nCounter;
 		}
 
 		if (bUpdate && nNewValue)
@@ -607,7 +597,7 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			{
 				int nStatId = pItemStatCostTxtRecord->unk0x5E[i];
 
-				if (nStatId == -1)
+				if (nStatId == uint16_t(-1))
 				{
 					break;
 				}
@@ -646,12 +636,13 @@ D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatArray, 
 //D2Common.0x6FDB6970
 D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
-	int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
-	if (insertionIdx <= 0)
+	bool bFoundStatInArray = false;
+	int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
+	if (bFoundStatInArray)
 	{
 		return nullptr;
 	}
-	return STATLIST_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+	return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 }
 
 //D2Common.0x6FDB6A30
@@ -681,16 +672,17 @@ void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* p
 void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, int nLayer_StatId, int nNewValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit)
 {
 	D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
+	bool bFoundStatInArray = false;
+	const int insertionIdx = StatArray_FindInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
 	D2StatStrc* pStat = nullptr;
-	if (insertionIdx >= 0)
+	if (bFoundStatInArray)
 	{
 		pStat = &pStatsArray->pStat[insertionIdx];
 	}
 	else if (nNewValue != 0)
 	{
-		pStat = STATLIST_InsertStat(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		pStat = StatArray_InsertStat(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 
 	if (pStat == nullptr)
@@ -710,10 +702,11 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 
 	const int nStatId = (nLayer_StatId >> 16) & 0xFFFF;
 	D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
-	if (!pItemStatCostTxtRecord || pStatListEx->dwFlags & STATLIST_SET)
+	if (!pItemStatCostTxtRecord || (pStatListEx->dwFlags & STATLIST_SET))
 	{
 		return;
 	}
+	const bool bStatIsDamageRelated = (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED]);
 
 	D2StatListExStrc* pParentStatList = nullptr;
 	if (!STATLIST_IsExtended(pStatListEx))
@@ -727,7 +720,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 
 	while (pParentStatList)
 	{
-		if (pItemStatCostTxtRecord->unk0x51[0] || pItemStatCostTxtRecord->unk0x51[1])
+		if (pItemStatCostTxtRecord->bIsBaseOfOtherStatOp || pItemStatCostTxtRecord->bHasOpStatData)
 		{
 			sub_6FDB64A0(pParentStatList, nLayer_StatId, pItemStatCostTxtRecord, pUnit);
 		}
@@ -738,8 +731,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 			int nNewValue = pStat->nValue + nValue;
 			STATLIST_SetUnitStatNewValue(pParentStatList, &pParentStatList->FullStats, pStat, nLayer_StatId, nNewValue, pItemStatCostTxtRecord, pUnit);
 		}
-
-		if ((pParentStatList->dwFlags & STATLIST_SET) || (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED] && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
+		if ((pParentStatList->dwFlags & STATLIST_SET) || (bStatIsDamageRelated && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
 		{
 			break;
 		}
@@ -755,25 +747,27 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 	{
 		return;
 	}
-	D2StatListStrc* pPrevStatList = pStatList->pParent;
-	if (pPrevStatList)
+	D2StatListStrc* pParentStatList = pStatList->pParent;
+	if (pParentStatList)
 	{
-		if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
+		if (D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList))
 		{
-			if (pStatListEx->pMyLastList == pStatList)
+			// Unlink the stat from the parent list
+			if (pParentStatListEx->pMyLastList == pStatList)
 			{
-				pStatListEx->pMyLastList = pStatList->pPrevLink;
+				pParentStatListEx->pMyLastList = pStatList->pPrevLink;
 			}
 
-			if (pStatListEx->pMyStats == pStatList)
+			if (pParentStatListEx->pMyStats == pStatList)
 			{
-				pStatListEx->pMyStats = pStatList->pPrevLink;
+				pParentStatListEx->pMyStats = pStatList->pPrevLink;
 			}
 		}
 
 		pStatList->pParent = NULL;
 	}
 
+	// Unlink the stat from the list
 	if (pStatList->pNextLink)
 	{
 		pStatList->pNextLink->pPrevLink = pStatList->pPrevLink;
@@ -802,7 +796,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			for (D2StatStrc* i = pStatListEx->FullStats.pStat; i < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++i)
 			{
 				D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
-				if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->unk0x51[2])
+				if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->bHasOpApplyingToItem)
 				{
 					nLayer_StatIds[nCounter] = i->nLayer_StatId;
 					++nCounter;
@@ -819,7 +813,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			}
 		}
 
-		if (pPrevStatList)
+		if (pParentStatList)
 		{
 			D2StatsArrayStrc* pStatsArray = nullptr;
 			if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
@@ -831,10 +825,12 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 				pStatsArray = &pStatList->Stats;
 			}
 
-			D2StatListExStrc* pPrevStatListEx = STATLIST_StatListExCast(pPrevStatList);
+			D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList);
 			// Something looks wrong, seems like some checks were eluded in D2Common.0x6FDB6C10
-			// Or inversely, the check above is useless as pCurStatList is in fact always an extended statlist
-			D2_ASSERT(pPrevStatListEx);
+			// Or inversely, the check above is useless as pParentStatListEx is in fact always an extended statlist
+			// if it exists or when STATLIST_SET is set on the current statlist ?
+			// In any case, we add an assert here
+			D2_ASSERT(pParentStatListEx);
 
 			if (pStatList->dwFlags & STATLIST_DYNAMIC)
 			{
@@ -843,7 +839,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 					D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
 					if (pItemStatCostTxtRecord && !(pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED]))
 					{
-						sub_6FDB6C10(pPrevStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
+						sub_6FDB6C10(pParentStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
 					}
 				}
 			}
@@ -851,7 +847,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			{
 				for (D2StatStrc* i = pStatsArray->pStat; i < &pStatsArray->pStat[pStatsArray->nStatCount]; ++i)
 				{
-					sub_6FDB6C10(pPrevStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
+					sub_6FDB6C10(pParentStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
 				}
 			}
 		}
@@ -1125,7 +1121,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 				for (D2StatStrc* i = pStatListEx->FullStats.pStat; i < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++i)
 				{
 					D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
-					if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->unk0x51[2])
+					if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->bHasOpApplyingToItem)
 					{
 						nLayer_StatIds[nCounter] = i->nLayer_StatId;
 						++nCounter;
@@ -1226,8 +1222,10 @@ void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList,
 		D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
 		if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_SAVED])
 		{
-
-			STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId);
+			bool alreadyInArray = false;
+			int insertIdx = StatArray_FindInsertionIndex(&pStatListEx->ModStats, nLayer_StatId, &alreadyInArray);
+			if (!alreadyInArray)
+				StatArray_InsertStat(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId, insertIdx);
 		}
 	}
 }
@@ -1620,20 +1618,20 @@ void __stdcall STATLIST_MergeStatLists(D2UnitStrc* pTarget, D2UnitStrc* pUnit, B
 
 
 //D2Common.0x6FDB83A0 (#10535)
-D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pDynamic)
+D2UnitStrc* __stdcall STATLIST_GetOwner(D2UnitStrc* pUnit, BOOL* pStatNotDynamic)
 {
 	if (!pUnit || !pUnit->pStatListEx || !pUnit->pStatListEx->pParent || !STATLIST_IsExtended(pUnit->pStatListEx->pParent))
 	{
-		if (pDynamic)
+		if (pStatNotDynamic)
 		{
-			*pDynamic = FALSE;
+			*pStatNotDynamic = FALSE;
 		}
 		return NULL;
 	}
 
-	if (pDynamic)
+	if (pStatNotDynamic)
 	{
-		*pDynamic = pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC;
+		*pStatNotDynamic = !(pUnit->pStatListEx->dwFlags & STATLIST_DYNAMIC);
 	}
 	return ((D2StatListExStrc*)pUnit->pStatListEx->pParent)->pOwner;
 }
@@ -1645,12 +1643,15 @@ void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatI
 	{
 		return;
 	}
-	if (STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->ModStats, nStatId << 16))
+
+	const int nLayerId = nStatId << 16;
+
+	if (StatArray_DichotomySearch(&pUnit1->pStatListEx->ModStats, nLayerId) < 0)
 	{
 		return;
 	}
 
-	if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, nStatId << 16))
+	if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, nLayerId))
 	{
 		pfCallback(pUnit1, nStatId, pBaseStat->nValue, pUnit2);
 	}
@@ -1659,16 +1660,16 @@ void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatI
 //D2Common.0x6FDB84E0 (#10513)
 void __stdcall D2Common_10513(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, void (__fastcall* pfCallback)(D2UnitStrc*, int, int, D2UnitStrc*))
 {
-	if (!pUnit1 || !pUnit2 && pfCallback || !pUnit1->pStatListEx || !STATLIST_IsExtended(pUnit1->pStatListEx))
+	if (!pUnit1 || (!pUnit2 && pfCallback) || !pUnit1->pStatListEx || !STATLIST_IsExtended(pUnit1->pStatListEx))
 	{
 		return;
 	}
-
-	for (int i = 0; i < pUnit1->pStatListEx->ModStats.nStatCount; ++i)
+	D2StatListExStrc* pUnit1StatList = pUnit1->pStatListEx;
+	for (int i = 0; i < pUnit1StatList->ModStats.nStatCount; ++i)
 	{
-		D2StatStrc* pModStat = &pUnit1->pStatListEx->ModStats.pStat[i];
+		const D2SLayerStatIdStrc* pModStat = &pUnit1StatList->ModStats.pStat[i];
 		int nBaseStatValue = 0;
-		if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1->pStatListEx->Stats, pModStat->nLayer_StatId))
+		if (D2StatStrc* pBaseStat = STATLIST_FindStat_6FDB6920(&pUnit1StatList->Stats, pModStat->nLayer_StatId))
 		{
 			nBaseStatValue = pBaseStat->nValue;
 		}
