@@ -507,8 +507,8 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 		}
 
 		bool bUpdate = TRUE;
-		int nCounter = 0;
-		while (nCounter < 3)
+		
+		for (int nCounter = 0; nCounter < 3; ++nCounter)
 		{
 			if (pItemStatCostTxtRecord->wOpStat[nCounter] == uint16_t(-1))
 			{
@@ -516,18 +516,21 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			}
 
 			int nOpStat = pItemStatCostTxtRecord->wOpStat[nCounter];
-			int nOpLayer_StatId = nOpStat << 16;
+			int nOpStatLayer_StatId = nOpStat << 16;
 			D2ItemStatCostTxt* pOpItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpStat);
 			D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
-			nNewValue = sub_6FDB64A0(pStatListEx, nOpLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
+			nNewValue = sub_6FDB64A0(pStatListEx, nOpStatLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
 			
-			D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(&pStatListEx->FullStats, nOpLayer_StatId);
+			D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(pStatsArray, nOpStatLayer_StatId);
 			if (pStat == nullptr && nNewValue != 0)
 			{
-				pStat = STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, &pStatListEx->FullStats, nOpLayer_StatId);
+				pStat = STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, pStatsArray, nOpStatLayer_StatId);
 			}
 
-			STATLIST_SetUnitStatNewValue(pStatListEx, &pStatListEx->FullStats, pStat, nOpLayer_StatId, nNewValue, pOpItemStatCostTxtRecord, pUnit);
+			if (pStat == nullptr)
+				continue;
+
+			STATLIST_SetUnitStatNewValue(pStatListEx, pStatsArray, pStat, nOpStatLayer_StatId, nNewValue, pOpItemStatCostTxtRecord, pUnit);
 
 			if (nNewValue)
 			{
@@ -593,8 +596,6 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					break;
 				}
 			}
-
-			++nCounter;
 		}
 
 		if (bUpdate && nNewValue)
@@ -605,7 +606,7 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			{
 				int nStatId = pItemStatCostTxtRecord->unk0x5E[i];
 
-				if (nStatId == -1)
+				if (nStatId == uint16_t(-1))
 				{
 					break;
 				}
