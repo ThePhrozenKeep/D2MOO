@@ -550,8 +550,8 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					}
 					break;
 
-				case 4: // FALLTHROUGH
-				case 5:
+				case STAT_OP_APPLY_TO_ITEM: // FALLTHROUGH
+				case STAT_OP_APPLY_TO_ITEM_PCT:
 					if (pStatListEx->pUnit && (pStatListEx->pUnit->dwUnitType == UNIT_PLAYER || pStatListEx->pUnit->dwUnitType == UNIT_MONSTER))
 					{
 						int nOpBase = pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase;
@@ -566,15 +566,15 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 					}
 					break;
 
-				case 6: // FALLTHROUGH
-				case 7:
+				case STAT_OP_BY_TIME: // FALLTHROUGH
+				case STAT_OP_BY_TIME_PCT:
 					if (pStatListEx->dwOwnerType == UNIT_PLAYER || pStatListEx->dwOwnerType == UNIT_MONSTER)
 					{
 						bUpdate = FALSE;
 					}
 					break;
 
-				case 13:
+				case STAT_OP_ADD_ITEM_STAT_PCT:
 					if (pStatListEx->dwOwnerType == UNIT_ITEM)
 					{
 						bUpdate = FALSE;

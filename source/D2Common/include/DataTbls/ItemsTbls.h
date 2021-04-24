@@ -174,6 +174,15 @@ struct D2ItemRatioTxt
 	uint8_t nClassSpecific;					//0x43 
 };
 
+enum D2C_StatOp {
+	STAT_OP_NONE              =  0,
+	STAT_OP_APPLY_TO_ITEM     =  4,
+	STAT_OP_APPLY_TO_ITEM_PCT =  5,
+	STAT_OP_BY_TIME           =  6,
+	STAT_OP_BY_TIME_PCT       =  7,
+	STAT_OP_ADD_ITEM_STAT_PCT = 13,
+};
+
 struct D2OpStatDataStrc
 {
 	uint16_t nOpBase;						//0x00
