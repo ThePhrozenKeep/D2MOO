@@ -41,12 +41,12 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 
 
 // Helper function
-static int __fastcall STATLIST_FindStatInsertionIndex(D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
+static int __fastcall STATLIST_FindStatInsertionIndex(D2StatsArrayStrc* pStatsArray, int nLayer_StatId, bool* pAlreadyInArray)
 {
+	*pAlreadyInArray = false;
 	// Find lower bound by dichotomy, stats are sorted by nLayer_StatId
 	int nMin = 0;
 	int nMax = pStatsArray->nStatCount;
-
 	if (nMax > 0)
 	{
 		do
@@ -63,15 +63,12 @@ static int __fastcall STATLIST_FindStatInsertionIndex(D2StatsArrayStrc* pStatsAr
 			}
 			else
 			{
-				return -1;
+				*pAlreadyInArray = true;
+				return nMidPoint;
 			}
 		} while (nMin < nMax);
-
-		if (nMin < 0)
-		{
-			return -1;
-		}
 	}
+
 	return nMin;
 }
 
@@ -100,9 +97,10 @@ D2StatStrc* __fastcall STATLIST_InsertStat(void* pMemPool, D2StatsArrayStrc* pSt
 // Helper function
 static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
+	bool bFoundStatInArray = false;
+	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
-	if (insertionIdx >= 0)
+	if (bFoundStatInArray)
 	{
 		return &pStatsArray->pStat[insertionIdx];
 	}
@@ -646,8 +644,9 @@ D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatArray, 
 //D2Common.0x6FDB6970
 D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatsArray, int nLayer_StatId)
 {
-	int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
-	if (insertionIdx <= 0)
+	bool bFoundStatInArray = false;
+	int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
+	if (bFoundStatInArray)
 	{
 		return nullptr;
 	}
@@ -681,10 +680,11 @@ void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* p
 void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, int nLayer_StatId, int nNewValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit)
 {
 	D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
-	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId);
+	bool bFoundStatInArray = false;
+	const int insertionIdx = STATLIST_FindStatInsertionIndex(pStatsArray, nLayer_StatId, &bFoundStatInArray);
 
 	D2StatStrc* pStat = nullptr;
-	if (insertionIdx >= 0)
+	if (bFoundStatInArray)
 	{
 		pStat = &pStatsArray->pStat[insertionIdx];
 	}
