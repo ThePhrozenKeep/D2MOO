@@ -711,10 +711,11 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 
 	const int nStatId = (nLayer_StatId >> 16) & 0xFFFF;
 	D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
-	if (!pItemStatCostTxtRecord || pStatListEx->dwFlags & STATLIST_SET)
+	if (!pItemStatCostTxtRecord || (pStatListEx->dwFlags & STATLIST_SET))
 	{
 		return;
 	}
+	const bool bStatIsDamageRelated = (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED]);
 
 	D2StatListExStrc* pParentStatList = nullptr;
 	if (!STATLIST_IsExtended(pStatListEx))
@@ -739,8 +740,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 			int nNewValue = pStat->nValue + nValue;
 			STATLIST_SetUnitStatNewValue(pParentStatList, &pParentStatList->FullStats, pStat, nLayer_StatId, nNewValue, pItemStatCostTxtRecord, pUnit);
 		}
-
-		if ((pParentStatList->dwFlags & STATLIST_SET) || (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED] && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
+		if ((pParentStatList->dwFlags & STATLIST_SET) || (bStatIsDamageRelated && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
 		{
 			break;
 		}
