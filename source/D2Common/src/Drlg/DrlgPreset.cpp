@@ -232,14 +232,15 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 				nMode = MONMODE_NEUTRAL;
 				if (nVersion > 4)
 				{
-					int nMonPresetRecords = 0;
-					D2MonPresetTxt* pMonPresetTxtSection = DATATBLS_GetMonPresetTxtActSection(nAct, &nMonPresetRecords);
+					int nMonPresetRecordsCount = 0;
+					D2MonPresetTxt* pMonPresetTxtSection = DATATBLS_GetMonPresetTxtActSection(nAct, &nMonPresetRecordsCount);
 
-					if (pMonPresetTxtSection && nUnitId < nMonPresetRecords)
+					if (D2_VERIFY(pMonPresetTxtSection && nUnitId < nMonPresetRecordsCount))
 					{
-						nUnitId = pMonPresetTxtSection[nUnitId].wPlace;
+						const D2MonPresetTxt& monPresetRecord = pMonPresetTxtSection[nUnitId];
+						nUnitId = monPresetRecord.wPlace;
 
-						switch (pMonPresetTxtSection[nUnitId].nType)
+						switch (monPresetRecord.nType)
 						{
 						case 0:
 							nUnitId += DATATBLS_GetSuperUniquesTxtRecordCount();
