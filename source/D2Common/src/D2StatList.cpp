@@ -756,25 +756,27 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 	{
 		return;
 	}
-	D2StatListStrc* pPrevStatList = pStatList->pParent;
-	if (pPrevStatList)
+	D2StatListStrc* pParentStatList = pStatList->pParent;
+	if (pParentStatList)
 	{
-		if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
+		if (D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList))
 		{
-			if (pStatListEx->pMyLastList == pStatList)
+			// Unlink the stat from the parent list
+			if (pParentStatListEx->pMyLastList == pStatList)
 			{
-				pStatListEx->pMyLastList = pStatList->pPrevLink;
+				pParentStatListEx->pMyLastList = pStatList->pPrevLink;
 			}
 
-			if (pStatListEx->pMyStats == pStatList)
+			if (pParentStatListEx->pMyStats == pStatList)
 			{
-				pStatListEx->pMyStats = pStatList->pPrevLink;
+				pParentStatListEx->pMyStats = pStatList->pPrevLink;
 			}
 		}
 
 		pStatList->pParent = NULL;
 	}
 
+	// Unlink the stat from the list
 	if (pStatList->pNextLink)
 	{
 		pStatList->pNextLink->pPrevLink = pStatList->pPrevLink;
@@ -820,7 +822,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			}
 		}
 
-		if (pPrevStatList)
+		if (pParentStatList)
 		{
 			D2StatsArrayStrc* pStatsArray = nullptr;
 			if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
@@ -832,10 +834,12 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 				pStatsArray = &pStatList->Stats;
 			}
 
-			D2StatListExStrc* pPrevStatListEx = STATLIST_StatListExCast(pPrevStatList);
+			D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList);
 			// Something looks wrong, seems like some checks were eluded in D2Common.0x6FDB6C10
-			// Or inversely, the check above is useless as pCurStatList is in fact always an extended statlist
-			D2_ASSERT(pPrevStatListEx);
+			// Or inversely, the check above is useless as pParentStatListEx is in fact always an extended statlist
+			// if it exists or when STATLIST_SET is set on the current statlist ?
+			// In any case, we add an assert here
+			D2_ASSERT(pParentStatListEx);
 
 			if (pStatList->dwFlags & STATLIST_DYNAMIC)
 			{
@@ -844,7 +848,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 					D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
 					if (pItemStatCostTxtRecord && !(pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DAMAGERELATED]))
 					{
-						sub_6FDB6C10(pPrevStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
+						sub_6FDB6C10(pParentStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
 					}
 				}
 			}
@@ -852,7 +856,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			{
 				for (D2StatStrc* i = pStatsArray->pStat; i < &pStatsArray->pStat[pStatsArray->nStatCount]; ++i)
 				{
-					sub_6FDB6C10(pPrevStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
+					sub_6FDB6C10(pParentStatListEx, i->nLayer_StatId, -i->nValue, pOwner);
 				}
 			}
 		}
