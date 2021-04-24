@@ -214,7 +214,7 @@ void __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc* pLevel, 
 		{
 			pLvlPrestTxtRecord = DATATBLS_GetLvlPrestTxtRecord(nLevelPrestId);
 
-			pDrlgBuild = (D2DrlgBuildStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgBuildStrc), __FILE__, __LINE__, 0);
+			pDrlgBuild = D2_ALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
 			pDrlgBuild->nPreset = pLvlPrestTxtRecord->dwDef;
 			pDrlgBuild->nDivisor = pLvlPrestTxtRecord->dwFiles;
 			pDrlgBuild->nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLvlPrestTxtRecord->dwFiles);
@@ -654,8 +654,7 @@ void __fastcall DRLGOUTDOORS_AddAct124SecondaryBorder(D2DrlgLevelStrc* pLevel, i
 //D2Common.0x6FD7EBA0
 void __fastcall DRLGOUTDOORS_AllocOutdoorInfo(D2DrlgLevelStrc* pLevel)
 {
-	pLevel->pOutdoors = (D2DrlgOutdoorInfoStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgOutdoorInfoStrc), __FILE__, __LINE__, 0);
-	memset(pLevel->pOutdoors, 0x00, sizeof(D2DrlgOutdoorInfoStrc));
+	pLevel->pOutdoors = D2_CALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgOutdoorInfoStrc);
 }
 
 //D2Common.0x6FD7EBD0
@@ -714,7 +713,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 			pVertex->pNext = pNextVertex->pNext;
 			pVertex->dwFlags |= pNextVertex->dwFlags;
 			pVertex->nDirection = pNextVertex->nDirection;
-			FOG_FreeServerMemory(pLevel->pDrlg->pMempool, pNextVertex, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pLevel->pDrlg->pMempool, pNextVertex);
 		}
 
 		pVertex = pVertex->pNext;
@@ -844,7 +843,7 @@ void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeep
 	if (!bKeepRoomData)
 	{
 		DRLGROOM_FreeRoomData(pLevel->pDrlg->pMempool, pLevel->pOutdoors->pRoomData);
-		FOG_FreeServerMemory(pLevel->pDrlg->pMempool, pLevel->pOutdoors, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pLevel->pDrlg->pMempool, pLevel->pOutdoors);
 		pLevel->pOutdoors = NULL;
 	}
 }

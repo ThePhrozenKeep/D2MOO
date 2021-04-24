@@ -6,12 +6,12 @@
 
 #pragma pack(1)
 
-struct D2UnkFileStrc
+struct D2LevelFileListStrc
 {
 	char szPath[D2_MAX_PATH];			//0x00
-	long field_104;						//0x104
+	long nRefCount;						//0x104
 	D2DrlgFileStrc* pFile;				//0x108
-	D2UnkFileStrc* pNext;				//0x10C
+	D2LevelFileListStrc* pNext;				//0x10C
 };
 
 struct D2PresetUnitStrc
@@ -76,9 +76,9 @@ int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
 //D2Common.0x6FD859E0 (#11223)
 int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t a1, int a2);
 //D2Common.0x6FD85A10
-void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, char* szFileName);
+void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName);
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_AllocDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, char* szFile);
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, const char* szFile);
 //D2Common.0x6FD86190
 void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile);
 //D2Common.0x6FD86310

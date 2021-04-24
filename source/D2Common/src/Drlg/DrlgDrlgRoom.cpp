@@ -14,8 +14,7 @@
 //D2Common.0x6FD771C0
 D2RoomExStrc* __fastcall DRLGROOM_AllocRoomEx(D2DrlgLevelStrc* pLevel, int nType)
 {
-	D2RoomExStrc* pRoomEx = (D2RoomExStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc), __FILE__, __LINE__, 0);
-	memset(pRoomEx, 0x00, sizeof(D2RoomExStrc));
+	D2RoomExStrc* pRoomEx = D2_CALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2RoomExStrc);
 
 	pRoomEx->pLevel = pLevel;
 	pRoomEx->nType = nType;
@@ -63,7 +62,7 @@ void __fastcall DRLGROOM_FreeRoomTiles(void* pMemPool, D2RoomExStrc* pRoomEx)
 	while (pRoomTile)
 	{
 		pNext = pRoomTile->pNext;
-		FOG_FreeServerMemory(pMemPool, pRoomTile, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pMemPool, pRoomTile);
 		pRoomTile = pNext;
 	}
 	pRoomEx->pRoomTiles = NULL;
@@ -86,7 +85,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 
 	if (pRoomEx->ppRoomsNear)
 	{
-		FOG_FreeServerMemory(pMemPool, pRoomEx->ppRoomsNear, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pMemPool, pRoomEx->ppRoomsNear);
 		pRoomEx->nRoomsNear = 0;
 		pRoomEx->ppRoomsNear = NULL;
 	}
@@ -121,7 +120,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 				pRoomEx->pDrlgOrth = pNextOrth;
 				pNextOrth = pOrth;
 
-				FOG_FreeServerMemory(pMemPool, pNextOrth, __FILE__, __LINE__, 0);
+				D2_FREE_SERVER(pMemPool, pNextOrth);
 			}
 			else
 			{
@@ -130,7 +129,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 					if (pNextOrth->bInit == 1 && pNextOrth->pRoomEx == pCurrentRoomEx)
 					{
 						pOrth->pNext = pNextOrth->pNext;
-						FOG_FreeServerMemory(pMemPool, pNextOrth, __FILE__, __LINE__, 0);
+						D2_FREE_SERVER(pMemPool, pNextOrth);
 						break;
 					}
 
@@ -145,7 +144,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 			{
 				pCurrentRoomEx->pDrlgOrth = pNextOrth;
 				pNextOrth = pOrth;
-				FOG_FreeServerMemory(pMemPool, pNextOrth, __FILE__, __LINE__, 0);
+				D2_FREE_SERVER(pMemPool, pNextOrth);
 			}
 			else
 			{
@@ -154,7 +153,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 					if (pNextOrth->bInit == 1 && pNextOrth->pRoomEx == pRoomEx)
 					{
 						pOrth->pNext = pNextOrth->pNext;
-						FOG_FreeServerMemory(pMemPool, pNextOrth, __FILE__, __LINE__, 0);
+						D2_FREE_SERVER(pMemPool, pNextOrth);
 						break;
 					}
 
@@ -168,7 +167,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 	for (D2DrlgOrthStrc* pDrlgOrth = pRoomEx->pDrlgOrth; pDrlgOrth; pDrlgOrth = pNextDrlgOrth)
 	{
 		pNextDrlgOrth = pDrlgOrth->pNext;
-		FOG_FreeServerMemory(pMemPool, pDrlgOrth, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pMemPool, pDrlgOrth);
 	}
 
 	pCurrentRoomEx = pRoomEx->pLevel->pFirstRoomEx;
@@ -196,7 +195,7 @@ void __fastcall DRLGROOM_FreeRoomEx(D2RoomExStrc* pRoomEx)
 
 	DRLGROOMTILE_FreeTileGrid(pRoomEx);
 	DRLGLOGIC_FreeDrlgCoordList(pRoomEx);
-	FOG_FreeServerMemory(pMemPool, pRoomEx, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pMemPool, pRoomEx);
 }
 
 //D2Common.0x6FD774F0
@@ -207,7 +206,7 @@ void __fastcall DRLGROOM_FreeRoomData(void* pMemPool, D2DrlgOrthStrc* pDrlgRoomD
 	for (D2DrlgOrthStrc* pRoomData = pDrlgRoomData; pRoomData; pRoomData = pNext)
 	{
 		pNext = pRoomData->pNext;
-		FOG_FreeServerMemory(pMemPool, pRoomData, __FILE__, __LINE__, 0);	
+		D2_FREE_SERVER(pMemPool, pRoomData);
 	}
 }
 
@@ -229,8 +228,7 @@ void __fastcall DRLGROOM_AllocDrlgOrthsForRooms(D2RoomExStrc* pRoomEx1, D2RoomEx
 
 	if (!pDrlgOrth)
 	{
-		pNew = (D2DrlgOrthStrc*)FOG_AllocServerMemory(pRoomEx1->pLevel->pDrlg->pMempool, sizeof(D2DrlgOrthStrc), __FILE__, __LINE__, 0);
-		memset(pNew, 0x00, sizeof(D2DrlgOrthStrc));
+		pNew = D2_CALLOC_STRC_SERVER(pRoomEx1->pLevel->pDrlg->pMempool, D2DrlgOrthStrc);
 		pNew->pNext = pRoomEx1->pDrlgOrth;
 		pRoomEx1->pDrlgOrth = pNew;
 		pNew->pRoomEx = pRoomEx2;
@@ -251,8 +249,7 @@ void __fastcall DRLGROOM_AllocDrlgOrthsForRooms(D2RoomExStrc* pRoomEx1, D2RoomEx
 
 	if (!pDrlgOrth)
 	{
-		pNew = (D2DrlgOrthStrc*)FOG_AllocServerMemory(pRoomEx2->pLevel->pDrlg->pMempool, sizeof(D2DrlgOrthStrc), __FILE__, __LINE__, 0);
-		memset(pNew, 0x00, sizeof(D2DrlgOrthStrc));
+		pNew = D2_CALLOC_STRC_SERVER(pRoomEx2->pLevel->pDrlg->pMempool, D2DrlgOrthStrc);
 		pNew->pNext = pRoomEx2->pDrlgOrth;
 		pRoomEx2->pDrlgOrth = pNew;
 		pNew->pRoomEx = pRoomEx1;
@@ -269,8 +266,7 @@ void __fastcall DRLGROOM_AddOrth(D2DrlgOrthStrc** ppDrlgOrth, D2DrlgLevelStrc* p
 	D2DrlgOrthStrc* pNext = NULL;
 	D2DrlgOrthStrc* pNew = NULL;
 
-	pNew = (D2DrlgOrthStrc*)FOG_AllocServerMemory(pLevel->pDrlg->pMempool, sizeof(D2DrlgOrthStrc), __FILE__, __LINE__, 0);
-	memset(pNew, 0x00, sizeof(D2DrlgOrthStrc));
+	pNew = D2_CALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgOrthStrc);
 
 	pNew->pLevel = pLevel;
 	pNew->nDirection = nDirection;
@@ -697,7 +693,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 
 	DRLGROOM_SortRoomListByPosition(ppNearRooms, pRoomEx->nRoomsNear);
 
-	pRoomEx->ppRoomsNear = (D2RoomExStrc**)FOG_AllocServerMemory(pMemPool, sizeof(D2RoomExStrc*) * pRoomEx->nRoomsNear, __FILE__, __LINE__, 0);
+	pRoomEx->ppRoomsNear = (D2RoomExStrc**)D2_ALLOC_SERVER(pMemPool, sizeof(D2RoomExStrc*) * pRoomEx->nRoomsNear);
 
 	for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
 	{
@@ -849,7 +845,7 @@ BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWa
 				if (nX < 6 && nY < 6)
 				{
 					++pRoomEx1->nRoomsNear;
-					pRoomEx1->ppRoomsNear = (D2RoomExStrc**)FOG_ReallocServerMemory(pMemPool, pRoomEx1->ppRoomsNear, sizeof(D2RoomExStrc*) * pRoomEx1->nRoomsNear, __FILE__, __LINE__, 0);
+					pRoomEx1->ppRoomsNear = (D2RoomExStrc**)D2_REALLOC_SERVER(pMemPool, pRoomEx1->ppRoomsNear, sizeof(D2RoomExStrc*) * pRoomEx1->nRoomsNear);
 
 					D2_ASSERT(pRoomEx1->ppRoomsNear);
 
@@ -868,8 +864,7 @@ BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWa
 				pRoomEx1->ppRoomsNear[pRoomEx1->nRoomsNear - 1] = pRoomEx2;
 				DRLGROOM_SortRoomListByPosition(pRoomEx1->ppRoomsNear, pRoomEx1->nRoomsNear);
 
-				pRoomTile = (D2RoomTileStrc*)FOG_AllocServerMemory(pRoomEx1->pLevel->pDrlg->pMempool, sizeof(D2RoomTileStrc), __FILE__, __LINE__, 0);
-				memset(pRoomTile, 0x00, sizeof(D2RoomTileStrc));
+				pRoomTile = D2_CALLOC_STRC_SERVER(pRoomEx1->pLevel->pDrlg->pMempool, D2RoomTileStrc);
 				pRoomTile->pRoomEx = pRoomEx2;
 				pRoomTile->pLvlWarpTxtRecord = DRLGWARP_GetLvlWarpTxtRecordFromWarpIdAndDirection(pRoomEx1->pLevel, nWarpId, 'b');
 				pRoomTile->bEnabled = 1;
@@ -889,8 +884,7 @@ BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWa
 //D2Common.0x6FD780E0
 D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2RoomExStrc* pRoomEx, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY)
 {
-	D2PresetUnitStrc* pPresetUnit = (D2PresetUnitStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2PresetUnitStrc), __FILE__, __LINE__, 0);
-	memset(pPresetUnit, 0x00, sizeof(D2PresetUnitStrc));
+	D2PresetUnitStrc* pPresetUnit = D2_CALLOC_STRC_SERVER(pMemPool, D2PresetUnitStrc);
 
 	pPresetUnit->nUnitType = nUnitType;
 	pPresetUnit->nMode = nMode;

@@ -2,6 +2,7 @@
 
 #include <D2Dll.h>
 #include <D2BasicTypes.h>
+#include <stdlib.h>
 
 #ifdef FOG_IMPL
 #define FOG_DLL_DECL 
@@ -112,7 +113,8 @@ D2FUNC_DLL(FOG, AllocServerMemory, void*, __fastcall, (void* pMemPool, int nSize
 D2FUNC_DLL(FOG, FreeServerMemory, void, __fastcall, (void* pMemPool, void* pFree, char* szFile, int nLine, int n0), 0x9030)							//Fog.#10046
 D2FUNC_DLL(FOG, ReallocServerMemory, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, char* szFile, int nLine, int n0), 0x9060)		//Fog.#10047
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
-D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (char* szFile, void** pFileHandle), 0x11600)															//Fog.#10102
+D2FUNC_DLL(FOG, MPQSetConfig, BOOL, __fastcall, (int dwDirectAccessFlags, int bEnableSeekOptimization), 0x11590)									//Fog.#10101
+D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (const char* szFile, void** pFileHandle), 0x11600)													//Fog.#10102
 D2FUNC_DLL(FOG, MPQFileClose, void, __fastcall, (void* pFile), 0x11610)																				//Fog.#10103
 D2FUNC_DLL(FOG, MPQFileRead, BOOL, __fastcall, (void* pFile, void* pBuffer, size_t nSize, int* nBytesRead, uint32_t, uint32_t, uint32_t), 0x11620)	//Fog.#10104
 D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (void* pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)											//Fog.#10105
@@ -149,4 +151,5 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 
 #define D2_ASSERT(expr) __analysis_assume(!!(expr)); (void)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , 0))
 #define D2_ASSERTM(expr,msg) __analysis_assume(!!(expr)); (void)( (!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), exit(-1) , 0))
+#define D2_VERIFY(expr) (bool)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , (expr)))
 #define D2_UNREACHABLE D2_ASSERT(false)

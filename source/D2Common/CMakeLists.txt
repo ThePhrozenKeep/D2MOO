@@ -19,6 +19,7 @@ target_include_directories(D2Common PUBLIC include)
 # The definition file that matches functions with their ordinals
 target_sources(D2Common PRIVATE definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def)
 
+target_compile_definitions(D2Common PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 
 # Data tables
 target_sources(D2Common

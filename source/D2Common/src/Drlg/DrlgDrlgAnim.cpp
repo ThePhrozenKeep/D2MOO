@@ -179,12 +179,10 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 
 				nFrames = D2CMP_10088_GetTileSize(pRoomEx->pTiles, pTiles[i].unk0x1C, nStyle, nSeq, pTileLibraryEntries, ARRAY_SIZE(pTileLibraryEntries));
 
-				pDrlgAnimTileGrid = (D2DrlgAnimTileGridStrc*)FOG_AllocServerMemory(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgAnimTileGridStrc), __FILE__, __LINE__, 0);
-				memset(pDrlgAnimTileGrid, 0x00, sizeof(D2DrlgAnimTileGridStrc));
+				pDrlgAnimTileGrid = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgAnimTileGridStrc);
 
-				pDrlgAnimTileGrid->ppMapTileData = (D2DrlgTileDataStrc**)FOG_AllocServerMemory(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc*) * nFrames, __FILE__, __LINE__, 0);
-				memset(pDrlgAnimTileGrid->ppMapTileData, 0x00, sizeof(D2DrlgTileDataStrc*) * nFrames);
-
+				pDrlgAnimTileGrid->ppMapTileData = (D2DrlgTileDataStrc**)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc*) * nFrames);
+				
 				pDrlgAnimTileGrid->nFrames = nFrames;
 				pDrlgAnimTileGrid->nAnimationSpeed = nAnimationSpeed;
 				pDrlgAnimTileGrid->pNext = pRoomEx->pTileGrid->pAnimTiles;
