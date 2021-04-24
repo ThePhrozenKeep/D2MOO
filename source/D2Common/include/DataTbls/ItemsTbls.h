@@ -261,7 +261,9 @@ struct D2ItemStatCostTxt
 	uint16_t wItemEvent[2];					//0x48
 	uint16_t wItemEventFunc[2];				//0x4C
 	uint8_t nKeepZero;						//0x50
-	uint8_t unk0x51[3];						//0x51 - also related to op stats (see DATATBLS_LoadItemStatCostTxt)
+	uint8_t bIsBaseOfOtherStatOp;			//0x51
+	uint8_t bHasOpStatData;					//0x52
+	uint8_t bHasOpApplyingToItem;			//0x53
 	uint8_t nOp;							//0x54
 	uint8_t nOpParam;						//0x55
 	uint16_t wOpBase;						//0x56

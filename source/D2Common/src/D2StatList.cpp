@@ -126,7 +126,7 @@ static void STATLIST_SetUnitStatNewValue(D2StatListExStrc* pStatListEx, D2StatsA
 	if (nNewValue != 0 || pItemStatCostTxtRecord->nKeepZero)
 	{
 		pStat->nValue = nNewValue;
-		if (pItemStatCostTxtRecord->unk0x51[2])
+		if (pItemStatCostTxtRecord->bHasOpApplyingToItem)
 		{
 			pStatListEx->dwFlags |= STATLIST_PERMANENT;
 		}
@@ -179,7 +179,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, int nLayer_StatId)
 		}
 	}
 
-	if (!pItemStatCostTxtRecord->unk0x51[1])
+	if (!pItemStatCostTxtRecord->bHasOpStatData)
 	{
 		return nAccumulatedValue;
 	}
@@ -496,9 +496,9 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 {
 	int nNewValue = sub_6FDB5830(pStatListEx, nLayer_StatId);
 
-	if (pItemStatCostTxtRecord->unk0x51[0])
+	if (pItemStatCostTxtRecord->bIsBaseOfOtherStatOp)
 	{
-		if (!nNewValue)
+		if (nNewValue == 0)
 		{
 			if (D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(&pStatListEx->FullStats, nLayer_StatId))
 			{
@@ -727,7 +727,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 
 	while (pParentStatList)
 	{
-		if (pItemStatCostTxtRecord->unk0x51[0] || pItemStatCostTxtRecord->unk0x51[1])
+		if (pItemStatCostTxtRecord->bIsBaseOfOtherStatOp || pItemStatCostTxtRecord->bHasOpStatData)
 		{
 			sub_6FDB64A0(pParentStatList, nLayer_StatId, pItemStatCostTxtRecord, pUnit);
 		}
@@ -802,7 +802,7 @@ void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
 			for (D2StatStrc* i = pStatListEx->FullStats.pStat; i < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++i)
 			{
 				D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
-				if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->unk0x51[2])
+				if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->bHasOpApplyingToItem)
 				{
 					nLayer_StatIds[nCounter] = i->nLayer_StatId;
 					++nCounter;
@@ -1125,7 +1125,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 				for (D2StatStrc* i = pStatListEx->FullStats.pStat; i < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++i)
 				{
 					D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(i->nStat);
-					if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->unk0x51[2])
+					if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->bHasOpApplyingToItem)
 					{
 						nLayer_StatIds[nCounter] = i->nLayer_StatId;
 						++nCounter;

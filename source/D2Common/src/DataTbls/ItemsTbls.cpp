@@ -1381,12 +1381,8 @@ int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* 
 //D2Common.0x6FD5C320
 void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 {
-	int nStatsWithDescFunc = 0;
-	int nNextFreeId = 0;
 	int nOpCounter = 0;
 	uint16_t nOpBase = 0;
-	uint16_t* pOpStat = NULL;
-	uint8_t* pOp = NULL;
 	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = {};
 
 	D2BinFieldStrc pTbl[] =
@@ -1465,95 +1461,93 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 	for (int nStatId = 0; nStatId < sgptDataTables->nItemStatCostTxtRecordCount; ++nStatId)
 	{
-		pOp = &sgptDataTables->pItemStatCostTxt[nStatId].nOp;
+		D2ItemStatCostTxt& rCurrentStatRecord = sgptDataTables->pItemStatCostTxt[nStatId];
+		uint8_t nCurrentStatOp = rCurrentStatRecord.nOp;
+		if (nCurrentStatOp <= 0 || nCurrentStatOp >= 14)
+			continue;
 
-		if (*pOp > 0 && *pOp < 14)
+		nOpBase = rCurrentStatRecord.wOpBase;
+
+		if (nOpBase < sgptDataTables->nItemStatCostTxtRecordCount)
 		{
-			nOpBase = sgptDataTables->pItemStatCostTxt[nStatId].wOpBase;
+			sgptDataTables->pItemStatCostTxt[nOpBase].bIsBaseOfOtherStatOp = TRUE;
 
-			if (nOpBase < sgptDataTables->nItemStatCostTxtRecordCount)
+			int nNextFreeId = 0;
+			while (nNextFreeId < ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E))
 			{
-				sgptDataTables->pItemStatCostTxt[nOpBase].unk0x51[0] = 1;
-
-				nNextFreeId = 0;
-				while (nNextFreeId < ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E))
+				if (sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E[nNextFreeId] >= sgptDataTables->nItemStatCostTxtRecordCount)
 				{
-					if (sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E[nNextFreeId] >= sgptDataTables->nItemStatCostTxtRecordCount)
-					{
-						sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E[nNextFreeId] = nStatId;
-						break;
-					}
-
-					++nNextFreeId;
-				}
-
-				if (nNextFreeId >= ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E) && sgptDataTables->bCompileTxt)
-				{
-					FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
-				}
-
-				if (*pOp == 4 || *pOp == 5)
-				{
-					sgptDataTables->pItemStatCostTxt[nStatId].unk0x51[2] = 1;
-				}
-			}
-
-			pOpStat = sgptDataTables->pItemStatCostTxt[nStatId].wOpStat;
-			for (int nOpCounter = 0; nOpCounter < ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nStatId].wOpStat); ++nOpCounter)
-			{
-				if (pOpStat[nOpCounter] >= sgptDataTables->nItemStatCostTxtRecordCount)
-				{
+					sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E[nNextFreeId] = nStatId;
 					break;
 				}
 
-				sgptDataTables->pItemStatCostTxt[nStatId].unk0x51[0] = 1;
+				++nNextFreeId;
+			}
 
-				nNextFreeId = 0;
-				while (nNextFreeId < 16)
-				{
-					if (!sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].pOpStatData[nNextFreeId].nOp)
-					{
-						sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].pOpStatData[nNextFreeId].nStat = nStatId;
-						sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].pOpStatData[nNextFreeId].nOp = *pOp;
-						sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].pOpStatData[nNextFreeId].nOpBase = nOpBase;
-						sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].pOpStatData[nNextFreeId].nOpParam = sgptDataTables->pItemStatCostTxt[nStatId].nOpParam;
+			if (nNextFreeId >= ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E) && sgptDataTables->bCompileTxt)
+			{
+				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
+			}
 
-						sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].unk0x51[1] = 1;
-
-						if (nStatId == STAT_MAXHP || pOpStat[nOpCounter] == STAT_MAXHP)
-						{
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP];
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
-						}
-						else if (nStatId == STAT_MAXMANA || pOpStat[nOpCounter] == STAT_MAXMANA)
-						{
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_MANA];
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
-						}
-						else if (nStatId == STAT_MAXSTAMINA || pOpStat[nOpCounter] == STAT_MAXSTAMINA)
-						{
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_STAMINA];
-							sgptDataTables->pItemStatCostTxt[nStatId].dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
-						}
-						break;
-					}
-
-					++nNextFreeId;
-				}
-
-				if (nNextFreeId >= 16 && sgptDataTables->bCompileTxt)
-				{
-					FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[pOpStat[nOpCounter]].wStatId, 0));
-				}
+			if (nCurrentStatOp == STAT_OP_APPLY_TO_ITEM || nCurrentStatOp == STAT_OP_APPLY_TO_ITEM_PCT)
+			{
+				rCurrentStatRecord.bHasOpApplyingToItem = TRUE;
 			}
 		}
-		else
+
+		uint16_t* pOpStat = rCurrentStatRecord.wOpStat;
+		for (const uint16_t wOpStat : rCurrentStatRecord.wOpStat)
 		{
-			*pOp = 0;
+			if (wOpStat >= sgptDataTables->nItemStatCostTxtRecordCount)
+			{
+				break;
+			}
+
+			rCurrentStatRecord.bIsBaseOfOtherStatOp = TRUE;
+
+			int nNextFreeId = 0;
+			while (nNextFreeId < 16)
+			{
+				D2ItemStatCostTxt& rCurrentOpStatRecord = sgptDataTables->pItemStatCostTxt[wOpStat];
+				// Find first unused slot
+				if (rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOp != STAT_OP_NONE)
+				{
+					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nStat = nStatId;
+					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOp = nCurrentStatOp;
+					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOpBase = nOpBase;
+					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOpParam = rCurrentStatRecord.nOpParam;
+
+					rCurrentOpStatRecord.bHasOpStatData = TRUE;
+
+					if (nStatId == STAT_MAXHP || wOpStat == STAT_MAXHP)
+					{
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP];
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
+					}
+					else if (nStatId == STAT_MAXMANA || wOpStat == STAT_MAXMANA)
+					{
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_MANA];
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
+					}
+					else if (nStatId == STAT_MAXSTAMINA || wOpStat == STAT_MAXSTAMINA)
+					{
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_STAMINA];
+						rCurrentStatRecord.dwItemStatFlags |= gdwBitMasks[ITEMSTATCOSTFLAGINDEX_HP_MANA_STAMINA];
+					}
+					break;
+				}
+
+				++nNextFreeId;
+			}
+
+			if (nNextFreeId >= 16 && sgptDataTables->bCompileTxt)
+			{
+				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[wOpStat].wStatId, 0));
+			}
 		}
 	}
 
-	nStatsWithDescFunc = 0;
+	int nStatsWithDescFunc = 0;
 	for (int i = 0; i < sgptDataTables->nItemStatCostTxtRecordCount; ++i)
 	{
 		if (sgptDataTables->pItemStatCostTxt[i].nDescFunc)
