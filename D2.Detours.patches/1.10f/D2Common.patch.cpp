@@ -1354,9 +1354,37 @@ PatchAction __cdecl GetPatchAction(int ordinal)
     return ::patchActions[ordinal - GetBaseOrdinal()];
 }
 
+static const int D2CommonImageBase = 0x6FD40000;
+
+static ExtraPatchAction extraPatchActions[] = {
+    //{ 0x6FDB6300 - D2CommonImageBase, &STATLIST_FindStatIndex_6FDB6300 , PatchAction::FunctionReplaceOriginalByPatch },
+    //{ 0x6FDB6C10 - D2CommonImageBase, &sub_6FDB6C10, PatchAction::FunctionReplacePatchByOriginal },
+    //{ 0x6FDB64A0 - D2CommonImageBase, &sub_6FDB64A0, PatchAction::FunctionReplacePatchByOriginal },
+    //{ 0x6FDB6920 - D2CommonImageBase, &STATLIST_FindStat_6FDB6920, PatchAction::FunctionReplacePatchByOriginal },
+    //{ 0x6FDB6970 - D2CommonImageBase, &STATLIST_InsertStatOrFail_6FDB6970, PatchAction::FunctionReplaceOriginalByPatch },
+    //{ 0x6FDB6AB0 - D2CommonImageBase, &STATLIST_UpdateUnitStat_6FDB6AB0, PatchAction::FunctionReplaceOriginalByPatch },
+    //{ 0x6FDB63E0 - D2CommonImageBase, &STATLIST_GetTotalStat_6FDB63E0, PatchAction::FunctionReplaceOriginalByPatch },
+    //{ 0x6FD85A10 - D2CommonImageBase, &DRLGPRESET_ParseDS1File, PatchAction::FunctionReplaceOriginalByPatch },
+
+    { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
+};
+
+__declspec(dllexport)
+constexpr int __cdecl GetExtraPatchActionsCount() { return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); }
+
+__declspec(dllexport)
+ExtraPatchAction __cdecl GetExtraPatchAction(int index)
+{
+    return extraPatchActions[index];
+}
+
 }
 
 #include <type_traits>
-static_assert(std::is_same<decltype(GetBaseOrdinal)*, GetBaseOrdinalType>::value, "Ensure calling convention doesn't change");
-static_assert(std::is_same<decltype(GetLastOrdinal)*, GetLastOrdinalType>::value, "Ensure calling convention doesn't change");
+static_assert(std::is_same<decltype(GetBaseOrdinal)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
+static_assert(std::is_same<decltype(GetLastOrdinal)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
 static_assert(std::is_same<decltype(GetPatchAction)*, GetPatchActionType>::value, "Ensure calling convention doesn't change");
+
+
+static_assert(std::is_same<decltype(GetExtraPatchActionsCount)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
+static_assert(std::is_same<decltype(GetExtraPatchAction)*, GetExtraPatchActionType>::value, "Ensure calling convention doesn't change");
