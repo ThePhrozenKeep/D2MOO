@@ -1495,7 +1495,6 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 			}
 		}
 
-		uint16_t* pOpStat = rCurrentStatRecord.wOpStat;
 		for (const uint16_t wOpStat : rCurrentStatRecord.wOpStat)
 		{
 			if (wOpStat >= sgptDataTables->nItemStatCostTxtRecordCount)
@@ -1510,7 +1509,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 			{
 				D2ItemStatCostTxt& rCurrentOpStatRecord = sgptDataTables->pItemStatCostTxt[wOpStat];
 				// Find first unused slot
-				if (rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOp != STAT_OP_NONE)
+				if (rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOp == STAT_OP_NONE)
 				{
 					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nStat = nStatId;
 					rCurrentOpStatRecord.pOpStatData[nNextFreeId].nOp = nCurrentStatOp;
