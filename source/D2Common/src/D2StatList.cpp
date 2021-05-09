@@ -125,7 +125,7 @@ static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsAr
 // Helper function
 static void STATLIST_NotifyUnitOfStatValueChange(D2ItemStatCostTxt* pItemStatCostTxtRecord, D2StatListExStrc* pStatListEx, D2UnitStrc* pUnit, int nLayer_StatId, int nPreviousValue, int nNewValue)
 {
-	if (pStatListEx->fpCallBack && pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FCALLBACK])
+	if (pStatListEx->fpCallBack && (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FCALLBACK]))
 	{
 		((void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int, int, int))pStatListEx->fpCallBack)(pStatListEx->pGame, pStatListEx->pOwner, pUnit, nLayer_StatId, nPreviousValue, nNewValue);
 	}
@@ -595,14 +595,17 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 
 			for (int i = 0; i < ARRAY_SIZE(pItemStatCostTxtRecord->unk0x5E); ++i)
 			{
-				int nStatId = pItemStatCostTxtRecord->unk0x5E[i];
+				const int nStatId = pItemStatCostTxtRecord->unk0x5E[i];
 
 				if (nStatId == uint16_t(-1))
 				{
 					break;
 				}
 
-				STATLIST_UpdateUnitStat_6FDB6AB0(pStatListEx, nStatId << 16, sub_6FDB64A0(pStatListEx, nStatId << 16, ITEMS_GetItemStatCostTxtRecord(nStatId), pUnit), ITEMS_GetItemStatCostTxtRecord(nStatId), pUnit);
+				D2ItemStatCostTxt* pLayerStatCostRecord = ITEMS_GetItemStatCostTxtRecord(nStatId);
+				const int layerStatId = nStatId << 16;
+				const int nLayerStatNewValue = sub_6FDB64A0(pStatListEx, layerStatId, pLayerStatCostRecord, pUnit);
+				STATLIST_UpdateUnitStat_6FDB6AB0(pStatListEx, layerStatId, nLayerStatNewValue, pLayerStatCostRecord, pUnit);
 			}
 		}
 		return nNewValue;
