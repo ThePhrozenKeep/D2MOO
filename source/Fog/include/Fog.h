@@ -149,7 +149,25 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 #define D2_CALLOC_STRC_SERVER(pMemPool, type) (type*)memset(FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
 #define D2_FREE_SERVER(pMemPool, ptr) FOG_FreeServerMemory(pMemPool, ptr, __FILE__, __LINE__, 0)
 
-#define D2_ASSERT(expr) __analysis_assume(!!(expr)); (void)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , 0))
-#define D2_ASSERTM(expr,msg) __analysis_assume(!!(expr)); (void)( (!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), exit(-1) , 0))
-#define D2_VERIFY(expr) (bool)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , (expr)))
+#ifndef NDEBUG
+// Assert that an expression must be true, otherwise assume the program state will not be recoverable.
+// In debug builds, this will trigger a log and exit, in release this is used as a hint for performance optimization.
+// Do NOT use this if the program can recover when expr if false, as it is used as a hint for performance and can impact generated code.
+// For recoverable errors, use D2_VERIFY
+#define D2_ASSERT(expr) (void)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , 0))
+#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), exit(-1) , 0))
+
+// Assert that an expression must be true, even though the program may be recoverable.
+// Contrary to D2_ASSERT, this is still evaluated in release builds, and can be used anywhere the expression would be valid.
+// This is to be used when one can recover from an error
+// Example:
+// if(D2_VERIFY(ptr != nullptr)) ptr->method(); // The only difference between debug and release build is the logging and breakpoint
+#define D2_VERIFY(expr) ((!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), false))
+#define D2_VERIFYM(expr,msg) ((!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), false))
+#else
+#define D2_ASSERT(expr) (__assume(expr), (void)0)
+#define D2_ASSERTM(expr,msg) (__assume(expr), (void)0)
+#define D2_VERIFY(expr) (!!(expr))
+#define D2_VERIFYM(expr,msg) (!!(expr))
+#endif
 #define D2_UNREACHABLE D2_ASSERT(false)
