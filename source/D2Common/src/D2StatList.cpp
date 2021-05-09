@@ -510,10 +510,10 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			int nOpStatLayer_StatId = nOpStat << 16;
 			D2ItemStatCostTxt* pOpItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpStat);
 			D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
-			nNewValue = sub_6FDB64A0(pStatListEx, nOpStatLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
+			int nOpStatNewValue = sub_6FDB64A0(pStatListEx, nOpStatLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
 			
 			D2StatStrc* pStat = STATLIST_FindStat_6FDB6920(pStatsArray, nOpStatLayer_StatId);
-			if (pStat == nullptr && nNewValue != 0)
+			if (pStat == nullptr && nOpStatNewValue != 0)
 			{
 				pStat = STATLIST_InsertStatOrFail_6FDB6970(pStatListEx->pMemPool, pStatsArray, nOpStatLayer_StatId);
 			}
@@ -521,9 +521,9 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 			if (pStat == nullptr)
 				continue;
 
-			STATLIST_SetUnitStatNewValue(pStatListEx, pStatsArray, pStat, nOpStatLayer_StatId, nNewValue, pOpItemStatCostTxtRecord, pUnit);
+			STATLIST_SetUnitStatNewValue(pStatListEx, pStatsArray, pStat, nOpStatLayer_StatId, nOpStatNewValue, pOpItemStatCostTxtRecord, pUnit);
 
-			if (nNewValue)
+			if (nOpStatNewValue)
 			{
 				switch (pItemStatCostTxtRecord->nOp)
 				{
