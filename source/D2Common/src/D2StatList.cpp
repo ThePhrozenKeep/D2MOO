@@ -2221,7 +2221,7 @@ int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListStrc* pStatList, int nStatI
 
 	D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList);
 	D2StatsArrayStrc* pStatArray = pStatListEx ? &pStatListEx->FullStats : &pStatList->Stats;
-	int nStatIndex = STATLIST_FindStatIndex_6FDB6300(pStatArray, nStatId << 16);
+	int nStatIndex = StatArray_FindInsertionIndex(pStatArray, nStatId << 16, nullptr);
 	if (nStatIndex < 0)
 	{
 		return 0;
