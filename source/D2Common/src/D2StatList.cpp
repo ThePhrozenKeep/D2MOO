@@ -472,6 +472,7 @@ int __fastcall STATLIST_GetBaseStat_6FDB6340(D2StatListStrc* pStatList, int nLay
 //D2Common.0x6FDB63E0
 int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord)
 {
+	D2_VERIFY(pStatList != nullptr);
 	D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList);
 	D2StatsArrayStrc* pStatArray = pStatListEx ? &pStatListEx->FullStats : &pStatList->Stats;
 
@@ -506,8 +507,9 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 				break;
 			}
 
-			int nOpStat = pItemStatCostTxtRecord->wOpStat[nCounter];
-			int nOpStatLayer_StatId = nOpStat << 16;
+			const int nOpStat = pItemStatCostTxtRecord->wOpStat[nCounter];
+			const D2OpStatDataStrc& rOpStatData = pItemStatCostTxtRecord->pOpStatData[nCounter];
+			const int nOpStatLayer_StatId = nOpStat << 16;
 			D2ItemStatCostTxt* pOpItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nOpStat);
 			D2StatsArrayStrc* pStatsArray = &pStatListEx->FullStats;
 			int nOpStatNewValue = sub_6FDB64A0(pStatListEx, nOpStatLayer_StatId, pOpItemStatCostTxtRecord, pUnit);
@@ -529,15 +531,16 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 				{
 				case 2: // FALLTHROUGH
 				case 3:
-					if ((pStatListEx->dwOwnerType == UNIT_PLAYER || pStatListEx->dwOwnerType == UNIT_MONSTER) && pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase != uint16_t(-1))
+					if ((pStatListEx->dwOwnerType == UNIT_PLAYER || pStatListEx->dwOwnerType == UNIT_MONSTER) 
+						&& rOpStatData.nOpBase != uint16_t(-1))
 					{
 						if (!STATLIST_IsExtended(pStatListEx))
 						{
 							pStatsArray = &pStatListEx->Stats;
 						}
 
-						pStat = STATLIST_FindStat_6FDB6920(pStatsArray, pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase << 16);
-						if (pStat && pStat->nValue > 0)
+						const D2StatStrc* pOpBaseStat = STATLIST_FindStat_6FDB6920(pStatsArray, rOpStatData.nOpBase << 16);
+						if (pOpBaseStat && pOpBaseStat->nValue > 0)
 						{
 							bUpdate = FALSE;
 						}
@@ -548,7 +551,7 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2
 				case STAT_OP_APPLY_TO_ITEM_PCT:
 					if (pStatListEx->pUnit && (pStatListEx->pUnit->dwUnitType == UNIT_PLAYER || pStatListEx->pUnit->dwUnitType == UNIT_MONSTER))
 					{
-						int nOpBase = pItemStatCostTxtRecord->pOpStatData[nCounter].nOpBase;
+						int nOpBase = rOpStatData.nOpBase;
 						if (nOpBase != uint16_t(-1))
 						{
 							if (D2ItemStatCostTxt* pOpItemStatCost = ITEMS_GetItemStatCostTxtRecord(nOpBase))
@@ -732,6 +735,8 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, i
 			D2StatStrc* pStat = STATLIST_GetOrInsertStat(pParentStatList->pMemPool, &pParentStatList->FullStats, nLayer_StatId);
 
 			int nNewValue = pStat->nValue + nValue;
+			D2_ASSERTM(!(nNewValue < 0 && pItemStatCostTxtRecord->bHasOpApplyingToItem), 
+				"Original game does not set STATLIST_PERMANENT if (nNewValue <= 0), while we do when (nNewValue != 0).");
 			STATLIST_SetUnitStatNewValue(pParentStatList, &pParentStatList->FullStats, pStat, nLayer_StatId, nNewValue, pItemStatCostTxtRecord, pUnit);
 		}
 		if ((pParentStatList->dwFlags & STATLIST_SET) || (bStatIsDamageRelated && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
