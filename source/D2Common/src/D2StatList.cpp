@@ -44,7 +44,8 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 template<class T>
 static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, int nLayer_StatId, bool* pAlreadyInArray)
 {
-	*pAlreadyInArray = false;
+	if(pAlreadyInArray)
+		*pAlreadyInArray = false;
 	// Find by dichotomy, stats are sorted by nLayer_StatId
 	int nMin = 0;
 	int nMax = pStatsArray->nStatCount;
@@ -63,7 +64,8 @@ static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, int nLa
 		}
 		else // found it
 		{
-			*pAlreadyInArray = true;
+			if(pAlreadyInArray)
+				*pAlreadyInArray = true;
 			return nMidPoint;
 		}
 	}
