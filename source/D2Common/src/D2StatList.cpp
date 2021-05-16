@@ -1263,11 +1263,22 @@ BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int 
 		return FALSE;
 	}
 
-	D2StatsArrayStrc* pStatsArray = &pStatList->Stats;
-	D2StatStrc* pStat = STATLIST_GetOrInsertStat(pStatList->pMemPool, pStatsArray, nLayer + (nStatId << 16));
-	
-	const int diffValue = nValue - pStat->nValue;
-	if (diffValue == 0)
+	const int nLayer_StatId = nLayer + (nStatId << 16);
+	D2StatsArrayStrc* pBaseStatsArray = &pStatList->Stats;
+	bool bFoundStatInArray = false;
+	const int insertionIdx = StatArray_FindInsertionIndex(pBaseStatsArray, nLayer_StatId, &bFoundStatInArray);
+	if (!bFoundStatInArray)
+	{
+		if (nValue == 0) // Early exit, we do not keep stats with a value of 0
+		{
+			return FALSE;
+		}
+		StatArray_InsertStat(pStatList->pMemPool, pBaseStatsArray, nLayer_StatId, insertionIdx);
+	}
+	D2StatStrc* pStat = &pBaseStatsArray->pStat[insertionIdx];
+
+	const int nDiffValue = nValue - pStat->nValue;
+	if (nDiffValue == 0)
 	{
 		return FALSE;
 	}
@@ -1278,15 +1289,15 @@ BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int 
 	}
 	else
 	{
-		STATLIST_RemoveStat_6FDB6A30(pStatList->pMemPool, pStatsArray, pStat);
+		STATLIST_RemoveStat_6FDB6A30(pStatList->pMemPool, pBaseStatsArray, pStat);
 	}
 
-	sub_6FDB6C10((D2StatListExStrc*)pStatList, nLayer + (nStatId << 16), diffValue, pUnit);
+	sub_6FDB6C10((D2StatListExStrc*)pStatList, nLayer_StatId, nDiffValue, pUnit);
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
 	{
 		if (pStatList->dwOwnerType == UNIT_PLAYER)
 		{
-			STATLIST_InsertStatModOrFail_6FDB7690(pStatListEx, nLayer + (nStatId << 16));
+			STATLIST_InsertStatModOrFail_6FDB7690(pStatListEx, nLayer_StatId);
 		}
 	}
 
