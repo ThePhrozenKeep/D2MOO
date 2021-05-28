@@ -115,11 +115,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AddClientToRoom                                             @10079
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveClientFromRoom                                        @10080
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10081_GetTileCountFromRoom                                 @10081
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IsRoomInTown                                                @10082
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsRoomInTown                                                @10082
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10083_Return0                                              @10083
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10084                                                      @10084
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetTownLevelIdFromActNo                                     @10085
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IsTownLevelId                                               @10086
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10084                                                      @10084
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetTownLevelIdFromActNo                                     @10085
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsTownLevelId                                               @10086
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10087                                                      @10087
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetDrlgFromAct                                              @10088
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetInitSeedFromAct                                          @10089
@@ -353,28 +353,28 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_CanSwitchAI                                                   @10317
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingMode                                                @10318
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingModeEx                                              @10319
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetStartSkill                                                 @10320
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetGetLeftSkill                                               @10321
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetRightSkill                                                 @10322
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetUsedSkill                                                  @10323
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetUsedSkill                                                  @10324
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStartSkill                                                 @10320
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetGetLeftSkill                                               @10321
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRightSkill                                                 @10322
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUsedSkill                                                  @10323
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetUsedSkill                                                  @10324
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimData                                                   @10325
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10326
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetPrecisionX                                                 @10327
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionX                                                 @10327
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetXForStaticUnit                                             @10328
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10329
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetPrecisionY                                                 @10330
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetYForStaticUnit                                             @10331
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetCoords                                                     @10332
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetX                                                    @10333
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetY                                                    @10334
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetCoords                                               @10335
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetUnitSizeX                                                  @10336
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetUnitSizeY                                                  @10337
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetCollisionType                                              @10338
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetStashGoldLimit                                             @10339
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetX                                                    @10340
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetY                                                    @10341
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionY                                                 @10330
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetYForStaticUnit                                             @10331
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCoords                                                     @10332
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetX                                                    @10333
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetY                                                    @10334
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetCoords                                               @10335
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeX                                                  @10336
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeY                                                  @10337
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCollisionType                                              @10338
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStashGoldLimit                                             @10339
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetX                                                    @10340
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetY                                                    @10341
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetRoom                                                       @10342
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_ResetRoom                                                     @10343
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetUnitForDynamicUnit                                   @10344
@@ -384,20 +384,20 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_ChangeAnimMode                                                @10348
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimStartFrame                                             @10349
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_InitializeStaticPath                                          @10350
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_BlockCollisionPath                                            @10351
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_FreeCollisionPath                                             @10352
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_BlockCollisionPath                                            @10351
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_FreeCollisionPath                                             @10352
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetNameOffsetFromObject                                       @10353
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetRunAndWalkSpeedForPlayer                                   @10354
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRunAndWalkSpeedForPlayer                                   @10354
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10355                                                      @10355
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10356                                                      @10356
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_RefreshInventory                                              @10357
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_RefreshInventory                                              @10357
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetSkillFromSkillId                                           @10358
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsSoftMonster                                                 @10359
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetMeleeRange                                                 @10360
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMeleeRange                                                @10361
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_TestCollisionWithUnit                                         @10362
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_TestCollisionBetweenInteractingUnits                          @10363
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_TestCollisionByCoordinates                                    @10364
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetMeleeRange                                                 @10360
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMeleeRange                                                @10361
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionWithUnit                                         @10362
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionBetweenInteractingUnits                          @10363
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionByCoordinates                                    @10364
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetHitClass                                                   @10365
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetWeaponClass                                                @10366
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetBeltType                                                   @10367
@@ -472,7 +472,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetFrameBonus                                                 @10436
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetOverlay                                                    @10437
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetHealingCost                                                @10438
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetInventoryGoldLimit                                         @10439
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetInventoryGoldLimit                                         @10439
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_MergeDualWieldWeaponStatLists                                 @10440
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10441_Return                                               @10441
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetItemComponentId                                            @10442
@@ -621,7 +621,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetNextHirelingTxtRecordFromNameId                         @10585
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetNextHirelingTxtRecordFromClassId                        @10586
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficulty          @10587
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetNpcTxtRecord                                            @10588
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetNpcTxtRecord                                            @10588
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10589
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMissileVelocityFromMissilesTxt                          @10590
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10591
