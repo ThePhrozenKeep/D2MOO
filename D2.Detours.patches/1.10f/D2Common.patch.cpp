@@ -629,7 +629,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharstatsTxtTable                                       @10593
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10594
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10595
-    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetArenaTxtRecord                                          @10596
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetArenaTxtRecord                                          @10596
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_MapOldItemIndexToCurrent                                   @10597
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10598
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetItemDataTables                                          @10599
@@ -671,8 +671,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryRect                                           @10635
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryGridInfo                                       @10636
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryComponentGrid                                  @10637
-    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetBeltsTxtRecord                                          @10638
-    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetInvRectFromBeltsTxt                                     @10639
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetBeltsTxtRecord                                          @10638
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetInvRectFromBeltsTxt                                     @10639
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10640                                                      @10640
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10641                                                      @10641
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_SetVelocityInMonStatsTxtRecord                             @10642
@@ -1019,10 +1019,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_SetParam4                                                    @10983
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_SetFlags                                                     @10984
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetFlags                                                     @10985
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetRequiredLevel                                             @10986
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetRequiredLevelBasedOnCurrent                               @10987
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_CheckRequiredSkills                                          @10988
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_CheckRequiredAttributes                                      @10989
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetRequiredLevel                                             @10986
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetRequiredLevelBasedOnCurrent                               @10987
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_CheckRequiredSkills                                          @10988
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_CheckRequiredAttributes                                      @10989
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10990
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10991
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10992
@@ -1034,12 +1034,12 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10998
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetToHitFactor                                               @10999
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetHighestSkillLevelById                                     @11000
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetManaCosts                                                 @11001
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetMinPhysDamage                                             @11002
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetMaxPhysDamage                                             @11003
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetMinElemDamage                                             @11004
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetMaxElemDamage                                             @11005
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetElementalLength                                           @11006
+    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   SKILLS_GetManaCosts                                                 @11001
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetMinPhysDamage                                             @11002
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetMaxPhysDamage                                             @11003
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetMinElemDamage                                             @11004
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetMaxElemDamage                                             @11005
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetElementalLength                                           @11006
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @11007
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetClassIdFromSkillId                                        @11008
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_11009_Return0                                              @11009
