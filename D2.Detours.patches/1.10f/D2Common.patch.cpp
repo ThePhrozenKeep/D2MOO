@@ -609,7 +609,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_MergeBaseStats                                             @10573
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10574                                                      @10574
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_UnloadAllBins                                              @10575
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_LoadAllTxts                                                @10576
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_LoadAllTxts                                                @10576
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10577
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_CompileTxt                                                 @10578
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_UnloadBin                                                  @10579
@@ -629,7 +629,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharstatsTxtTable                                       @10593
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10594
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10595
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetArenaTxtRecord                                          @10596
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetArenaTxtRecord                                          @10596
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_MapOldItemIndexToCurrent                                   @10597
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10598
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetItemDataTables                                          @10599
@@ -671,8 +671,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryRect                                           @10635
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryGridInfo                                       @10636
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryComponentGrid                                  @10637
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetBeltsTxtRecord                                          @10638
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInvRectFromBeltsTxt                                     @10639
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetBeltsTxtRecord                                          @10638
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetInvRectFromBeltsTxt                                     @10639
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10640                                                      @10640
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10641                                                      @10641
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_SetVelocityInMonStatsTxtRecord                             @10642
