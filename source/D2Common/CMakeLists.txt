@@ -205,6 +205,9 @@ if(D2MOO_WITH_STATIC_TESTS)
   )
 endif()
 
+if(D2MOO_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
 
 get_target_property(D2CommonSources D2CommonStatic SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}

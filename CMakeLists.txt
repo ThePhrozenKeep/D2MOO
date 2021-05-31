@@ -11,13 +11,24 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 endif()
 
 # Standard CMake modules
-include(CMakeDependentOption)# This is a really useful scripts that creates options that depends on other options. It can even be used with generator expressions !
+include(CMakeDependentOption)           # This is a really useful scripts that creates options that depends on other options. It can even be used with generator expressions !
+include(GNUInstallDirs)                 # This will define the default values for installation directories (all platforms even if named GNU)
+include(InstallRequiredSystemLibraries) # Tell CMake that the `install` target needs to install required system libraries (eg: Windows SDK)
+include(CTest)                          # Must be called before adding tests but after calling project(). This automatically calls enable_testing() and configures ctest targets when using Make/Ninja
+
+#####################
+##  D2MOO OPTIONS  ##
+#####################
 
 set(D2MOO_ORDINALS_VERSION "1.10f" CACHE STRING "Name of the version to be used for ordinals and patches")
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(ENABLE_D2DETOURS_EMBEDDED_PATCHES "Build the DLL with builtin patching using D2.Detours" ON)
 set(D2DETOURS_EMBEDDED_PATCHES_DIR "D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches")
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
+cmake_dependent_option(D2MOO_BUILD_TESTS
+    "Enable D2Moo project tests targets" ON # By default we want tests if CTest is enabled
+    "BUILD_TESTING" OFF # Stay coherent with CTest variables
+)
 
 if(CMAKE_GENERATOR MATCHES "Visual Studio" AND MSVC)
   option(D2MOO_ENABLE_PARALLEL_BUILD "Force /MP parallel compilation" ${D2MOO_IS_ROOT_PROJECT})
@@ -41,6 +52,25 @@ add_subdirectory(source)
 
 if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
   add_subdirectory(${D2DETOURS_EMBEDDED_PATCHES_DIR})
+endif()
+
+#===========#
+#   Tests   #
+#===========#
+
+if(D2MOO_BUILD_TESTS)
+    # Let the user add options to the test runner if needed
+    set(TEST_RUNNER_PARAMS "--force-colors=true" CACHE STRING "Options to add to our test runners commands")
+    # In a real project you most likely want to exclude test folders
+    # list(APPEND CUSTOM_COVERAGE_EXCLUDE "/test/")
+    
+    # You can setup some custom variables and add them to the CTestCustom.cmake.in template to have custom ctest settings
+    # For example, you can exclude some directories from the coverage reports such as third-parties and tests
+    configure_file(
+        ${CMAKE_CURRENT_LIST_DIR}/cmake/CTestCustom.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake
+        @ONLY
+    )
 endif()
 
 ###############
