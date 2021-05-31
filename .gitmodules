@@ -1,3 +1,6 @@
 [submodule "external/D2.Detours"]
 	path = external/D2.Detours
 	url = https://github.com/Lectem/D2.Detours
+[submodule "external/doctest"]
+	path = external/doctest
+	url = https://github.com/onqtam/doctest.git

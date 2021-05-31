@@ -11,3 +11,15 @@ if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
     get_filename_component(D2_PATH ${D2_EXE} DIRECTORY CACHE)
   endif()
 endif()
+
+
+
+
+#Doctest for unit tests
+add_library(doctest INTERFACE)
+target_include_directories(
+    doctest
+    INTERFACE
+    doctest/doctest # note : will expose the parts/ folder...
+)
+add_library(doctest::doctest ALIAS doctest)
