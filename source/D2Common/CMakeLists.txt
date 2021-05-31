@@ -1,9 +1,7 @@
 
-add_library(D2Common 
-  # We want to create a detours dll for patching
-  SHARED
-  # The DLL entrypoint
-  src/DllMain.cpp
+add_library(D2CommonStatic 
+  # We want to create a static library for tests or easier integration in user mods
+  STATIC
   # Ordinals that correspond to empty functions due to removed (debug) code
   src/UselessOrdinals.cpp
   include/UselessOrdinals.h
@@ -12,17 +10,14 @@ add_library(D2Common
   include/Imports/DllBases.h
 )
 
-target_link_libraries(D2Common PRIVATE D2CommonDefinitions D2CMP D2Lang Fog)
+target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Lang Fog)
 
-target_include_directories(D2Common PUBLIC include)
+target_include_directories(D2CommonStatic PUBLIC include)
 
-# The definition file that matches functions with their ordinals
-target_sources(D2Common PRIVATE definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def)
-
-target_compile_definitions(D2Common PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+target_compile_definitions(D2CommonStatic PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 
 # Data tables
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/DataTbls/AnimTbls.cpp
     src/DataTbls/ArenaTbls.cpp
@@ -41,7 +36,7 @@ target_sources(D2Common
     src/DataTbls/SkillsTbls.cpp
     src/DataTbls/TokenTbls.cpp
     src/DataTbls/TransformTbls.cpp
-	
+
     include/DataTbls/AnimTbls.h
     include/DataTbls/ArenaTbls.h
     include/DataTbls/BeltsTbls.h
@@ -59,18 +54,18 @@ target_sources(D2Common
     include/DataTbls/SkillsTbls.h
     include/DataTbls/TokenTbls.h
     include/DataTbls/TransformTbls.h
-	
-	# Enums for asset indices, should be generated from .txt files
-	include/DataTbls/LevelsIds.h
-	include/DataTbls/MissilesIds.h
-	include/DataTbls/MonsterIds.h
-	include/DataTbls/ObjectsIds.h
-	include/DataTbls/StringIds.h
-	include/DataTbls/SkillsIds.h
+
+    # Enums for asset indices, should be generated from .txt files
+    include/DataTbls/LevelsIds.h
+    include/DataTbls/MissilesIds.h
+    include/DataTbls/MonsterIds.h
+    include/DataTbls/ObjectsIds.h
+    include/DataTbls/StringIds.h
+    include/DataTbls/SkillsIds.h
 )
 
 # Dynamic Random Level Generation
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/Drlg/DrlgActivate.cpp
     src/Drlg/DrlgDrlg.cpp
@@ -114,14 +109,14 @@ target_sources(D2Common
 )
 
 # Items
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/Items/Items.cpp
     src/Items/ItemMods.cpp
 )
 
 # Monsters
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/Monsters/Monsters.cpp
     src/Monsters/MonsterRegion.cpp
@@ -129,7 +124,7 @@ target_sources(D2Common
 )
 
 # Path
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
@@ -141,7 +136,7 @@ target_sources(D2Common
 )
 
 # Units
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/Units/Missile.cpp
     src/Units/MissileStream.cpp
@@ -161,7 +156,7 @@ target_sources(D2Common
 )
 
 # Remaining files that were not placed into subfolders
-target_sources(D2Common
+target_sources(D2CommonStatic
   PRIVATE
     src/D2Chat.cpp
     src/D2Collision.cpp
@@ -181,7 +176,7 @@ target_sources(D2Common
 
     include/D2Chat.h
     include/D2Collision.h
-	include/D2Combat.h
+    include/D2Combat.h
     include/D2Composit.h
     include/D2DataTbls.h
     include/D2Dungeon.h
@@ -204,13 +199,25 @@ target_sources(D2Common
 )
 
 if(D2MOO_WITH_STATIC_TESTS)
-  target_sources(D2Common
+  target_sources(D2CommonStatic
     PRIVATE
       statictests/D2StatList_staticchecks.cpp
   )
 endif()
 
-get_target_property(D2CommonSources D2Common SOURCES)
+
+get_target_property(D2CommonSources D2CommonStatic SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
              FILES ${D2CommonSources}
 )
+
+# The D2Common.dll
+add_library(D2Common
+  # We want to create a detours dll for patching
+  SHARED
+  # The DLL entrypoint
+  src/DllMain.cpp
+)
+target_link_libraries(D2Common PUBLIC D2CommonStatic)
+# The definition file that matches functions with their ordinals
+target_sources(D2Common PRIVATE definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def)
