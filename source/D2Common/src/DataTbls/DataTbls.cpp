@@ -5,12 +5,16 @@
 #include <Units/Units.h>
 #include <D2States.h>
 
+// D2Common.0x6FDE9600
 D2ArenaTxt* gpArenaTxtTable;
+// D2Common.0x6FDE95F8
 D2CharTemplateTxt* gpCharTemplateTxtTable;
 int gnCharTemplateTxtTableRecordCount;
 uint32_t gnCharTemplateStartIds[64];
+// D2Common.0x6FDE9604
 D2BeltsTxt* gpBeltsTxtTable;
 D2DataTablesStrc gpDataTables;
+// D2Common.0x6FDD6A20 (#10042)
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 

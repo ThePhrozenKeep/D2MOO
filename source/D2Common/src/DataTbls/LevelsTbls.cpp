@@ -73,8 +73,9 @@ static const char* gszAutomapTileNames[] =
 };
 
 D2SeedStrc* gpAutomapSeed = &sgptDataTables->pAutomapSeed;
-LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
+//D2Common.0x6FDEA704
+LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
 //D2Common.0x6FD5EAE0
 void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)

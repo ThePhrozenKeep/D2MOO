@@ -23,9 +23,8 @@
 #include <Units/Units.h>
 #include <algorithm>
 
-
+// D2Common.0x6FDEA700
 D2LevelFileListStrc* gpLevelFilesList_6FDEA700;
-
 
 //D2Common.0x6FD859A0 (#11222)
 int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
