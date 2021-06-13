@@ -486,17 +486,21 @@ struct D2DataTablesStrc
 	D2PlrModeDataTbl pPlrModeDataTables;				//0x10D4
 };
 
-
+// D2Common.0x6FDE9600
 extern D2ArenaTxt* gpArenaTxtTable;
+// D2Common.0x6FDE95F8
 extern D2CharTemplateTxt* gpCharTemplateTxtTable;
 extern int gnCharTemplateTxtTableRecordCount;
 extern uint32_t gnCharTemplateStartIds[64];
+// D2Common.0x6FDE9604
 extern D2BeltsTxt* gpBeltsTxtTable;
 extern D2DataTablesStrc gpDataTables;
+// D2Common.0x6FDD6A20 (#10042)
 extern D2DataTablesStrc* sgptDataTables;
 
 
 extern D2SeedStrc* gpAutomapSeed;
+//D2Common.0x6FDEA704
 extern LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
 //TODO: Reimport defs from .cpps

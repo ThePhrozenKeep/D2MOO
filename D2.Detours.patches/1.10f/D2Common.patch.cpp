@@ -1,5 +1,8 @@
 #include <DetoursPatch.h>
 
+#include <D2DataTbls.h>
+#include <Drlg/D2DrlgPreset.h>
+
 extern "C" {
     __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
@@ -1365,6 +1368,13 @@ static ExtraPatchAction extraPatchActions[] = {
     //{ 0x6FDB6AB0 - D2CommonImageBase, &STATLIST_UpdateUnitStat_6FDB6AB0, PatchAction::FunctionReplaceOriginalByPatch },
     //{ 0x6FDB63E0 - D2CommonImageBase, &STATLIST_GetTotalStat_6FDB63E0, PatchAction::FunctionReplaceOriginalByPatch },
     //{ 0x6FD85A10 - D2CommonImageBase, &DRLGPRESET_ParseDS1File, PatchAction::FunctionReplaceOriginalByPatch },
+    // Patch globals using original DLL pointers for now
+    { 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplacePatchByOriginal },
+    { 0x6FDE9600 - D2CommonImageBase, &gpArenaTxtTable, PatchAction::PointerReplacePatchByOriginal },
+    { 0x6FDE95F8 - D2CommonImageBase, &gpCharTemplateTxtTable, PatchAction::PointerReplacePatchByOriginal },
+    { 0x6FDEA704 - D2CommonImageBase, &gpBeltsTxtTable, PatchAction::PointerReplacePatchByOriginal },
+    { 0x6FDEA704 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal },
+    
 
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };

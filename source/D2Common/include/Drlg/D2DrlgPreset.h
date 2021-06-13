@@ -143,3 +143,6 @@ void __fastcall DRLGPRESET_GenerateLevel(D2DrlgLevelStrc* pLevel);
 void __fastcall DRLGPRESET_ResetDrlgMap(D2DrlgLevelStrc* pLevel, BOOL bKeepPreset);
 //D2Common.0x6FD88850
 int __fastcall DRLGPRESET_MapOrientationLayer(int nId);
+
+// D2Common.0x6FDEA700
+extern D2LevelFileListStrc* gpLevelFilesList_6FDEA700;
