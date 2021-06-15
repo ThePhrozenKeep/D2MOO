@@ -9,6 +9,8 @@ if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
   )
   if(D2_EXE)
     get_filename_component(D2_PATH ${D2_EXE} DIRECTORY CACHE)
+  else()
+    message(STATUS "D2 executable was not found, please set the `D2_EXE` CMake variable for debugging if your game executable is not at the install location.")
   endif()
 endif()
 

@@ -221,7 +221,14 @@ add_library(D2Common
   SHARED
   # The DLL entrypoint
   src/DllMain.cpp
+  # The definition file that matches functions with their ordinals  
+  definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def
 )
-target_link_libraries(D2Common PUBLIC D2CommonStatic)
-# The definition file that matches functions with their ordinals
-target_sources(D2Common PRIVATE definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def)
+
+target_link_libraries(D2Common
+# D2CommonStatic itself should not be linked by targets linking D2Common, hence why it is PRIVATE
+  PRIVATE D2CommonStatic
+# But we still its dependencies to be propagated so that users can consume them
+  PUBLIC D2CommonDefinitions D2CMP D2Lang Fog
+)
+target_include_directories(D2Common INTERFACE include)

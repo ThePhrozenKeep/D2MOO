@@ -15,15 +15,19 @@ include(CMakeDependentOption)           # This is a really useful scripts that c
 include(GNUInstallDirs)                 # This will define the default values for installation directories (all platforms even if named GNU)
 include(InstallRequiredSystemLibraries) # Tell CMake that the `install` target needs to install required system libraries (eg: Windows SDK)
 include(CTest)                          # Must be called before adding tests but after calling project(). This automatically calls enable_testing() and configures ctest targets when using Make/Ninja
+include(cmake/D2MOO.ModHelpers.cmake)   # Used to make modders life easier
 
 #####################
 ##  D2MOO OPTIONS  ##
 #####################
 
 set(D2MOO_ORDINALS_VERSION "1.10f" CACHE STRING "Name of the version to be used for ordinals and patches")
-option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(ENABLE_D2DETOURS_EMBEDDED_PATCHES "Build the DLL with builtin patching using D2.Detours" ON)
-set(D2DETOURS_EMBEDDED_PATCHES_DIR "D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches")
+if(D2MOO_IS_ROOT_PROJECT) # Let parent project decide wether to use its own patches or not
+	set(D2DETOURS_EMBEDDED_PATCHES_DIR "${EMBEDDED_PATCHES_DIR_PREFIX}D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches. Defaults to the root D2.Detours.patches directory")
+endif()	
+
+option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
 cmake_dependent_option(D2MOO_BUILD_TESTS
     "Enable D2Moo project tests targets" ON # By default we want tests if CTest is enabled
@@ -50,8 +54,8 @@ add_subdirectory(external)
 
 add_subdirectory(source)
 
-if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
-  add_subdirectory(${D2DETOURS_EMBEDDED_PATCHES_DIR})
+if(ENABLE_D2DETOURS_EMBEDDED_PATCHES AND D2DETOURS_EMBEDDED_PATCHES_DIR)
+  add_subdirectory(${D2DETOURS_EMBEDDED_PATCHES_DIR} ${D2DETOURS_EMBEDDED_PATCHES_BINARY_DIR})
 endif()
 
 #===========#
