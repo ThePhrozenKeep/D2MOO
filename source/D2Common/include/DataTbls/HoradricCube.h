@@ -122,7 +122,7 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool);
 //D2Common.0x6FD54250
 void __fastcall DATATBLS_UnloadCubeMainTxt();
 //D2Common.0x6FD54260 (#11232)
-D2CubeMainTxt* __stdcall DATATBLS_GetCubemainTxtRecord(int nIndex);
+D2COMMON_DLL_DECL D2CubeMainTxt* __stdcall DATATBLS_GetCubemainTxtRecord(int nIndex);
 //D2Common.0x6FD542C0 (#11233)
-int __fastcall DATATBLS_GetCubemainTxtRecordCount();
+D2COMMON_DLL_DECL int __fastcall DATATBLS_GetCubemainTxtRecordCount();
 

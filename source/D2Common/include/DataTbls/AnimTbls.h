@@ -1,5 +1,6 @@
 #pragma once 
 
+#include <D2Common.h>
 #include <D2BasicTypes.h>
 
 #pragma pack(1)
@@ -31,8 +32,8 @@ void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataStrc* pAnimData);
 //D2Common.0x6FD474A0
 D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pUnit, int nClassId, int nMode, int nUnitType, D2InventoryStrc* pInventory);
 //D2Common.0x6FD475D0 (#10640)
-void __stdcall D2Common_10640(D2UnitStrc* pUnit, int nAnimSpeed);
+D2COMMON_DLL_DECL void __stdcall D2Common_10640(D2UnitStrc* pUnit, int nAnimSpeed);
 //D2Common.0x6FD47700 (#10641)
-BOOL __stdcall D2Common_10641(char* szPath, int* pLength, int* pOutAnimSpeed, int* pOutFirstFrameTagged);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_10641(char* szPath, int* pLength, int* pOutAnimSpeed, int* pOutFirstFrameTagged);
 
 

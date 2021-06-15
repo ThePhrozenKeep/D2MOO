@@ -20,7 +20,7 @@ void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool);
 //D2Common.0x6FD493A0
 void __fastcall DATATBLS_UnloadBeltsTxt();
 //D2Common.0x6FD493B0 (#10638)
-void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt* pRecord);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt* pRecord);
 //D2Common.0x6FD49420 (#10639)
-void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2InvRectStrc* pInvRect, int nBoxId);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2InvRectStrc* pInvRect, int nBoxId);
 

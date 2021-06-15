@@ -4,7 +4,7 @@
 
 #include <D2Structs.h>
 #include <D2Constants.h>
-
+#include <D2Common.h>
 
 // Use for empty/duplicated functions
 #define REMOVE_LATER_WriteToLogFile FOG_WriteToLogFile

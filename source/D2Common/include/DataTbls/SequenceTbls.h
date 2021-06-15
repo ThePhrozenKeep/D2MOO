@@ -28,18 +28,18 @@ struct D2UnkSequenceStrc
 #pragma pack()
 
 //D2Common.0x6FD727A0 (#10682)
-D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FD727C0
 D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FD728A0 (#10683)
-int __stdcall D2Common_10683(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall D2Common_10683(D2UnitStrc* pUnit);
 //D2Common.0x6FD728C0 (#10684)
-int __stdcall D2Common_10684(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall D2Common_10684(D2UnitStrc* pUnit);
 //D2Common.0x6FD728E0 (#10685)
-void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent);
+D2COMMON_DLL_DECL void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent);
 //D2Common.0x6FD72990 (#10686)
-void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int a2, int* pEvent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int a2, int* pEvent);
 //D2Common.0x6FD6F050
 void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool);
 //D2Common.0x6FD6F200 (#11262)
-D2SeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence);
+D2COMMON_DLL_DECL D2SeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence);

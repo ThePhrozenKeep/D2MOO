@@ -72,9 +72,9 @@ struct D2DrlgPresetRoomStrc
 
 
 //D2Common.0x6FD859A0 (#11222)
-int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
+D2COMMON_DLL_DECL int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
 //D2Common.0x6FD859E0 (#11223)
-int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t a1, int a2);
+D2COMMON_DLL_DECL int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t a1, int a2);
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName);
 //D2Common.0x6FD86050
@@ -86,11 +86,11 @@ D2PresetUnitStrc* __fastcall DRLGPRESET_CopyPresetUnit(void* pMemPool, D2PresetU
 //D2Common.0x6FD86430
 void __fastcall DRLGPRESET_FreePresetUnit(void* pMemPool, D2PresetUnitStrc* pPresetUnit);
 //D2Common.0x6FD86480 (#10020)
-D2MapAIStrc* __fastcall DRLGPRESET_CreateCopyOfMapAI(void* pMemPool, D2MapAIStrc* pMapAI);
+D2COMMON_DLL_DECL D2MapAIStrc* __fastcall DRLGPRESET_CreateCopyOfMapAI(void* pMemPool, D2MapAIStrc* pMapAI);
 //D2Common.0x6FD864F0 (#10021)
-D2MapAIStrc* __fastcall DRLGPRESET_ChangeMapAI(D2MapAIStrc** ppMapAI1, D2MapAIStrc** ppMapAI2);
+D2COMMON_DLL_DECL D2MapAIStrc* __fastcall DRLGPRESET_ChangeMapAI(D2MapAIStrc** ppMapAI1, D2MapAIStrc** ppMapAI2);
 //D2Common.0x6FD86500 (#10022)
-void __fastcall DRLGPRESET_FreeMapAI(void* pMemPool, D2MapAIStrc* pMapAI);
+D2COMMON_DLL_DECL void __fastcall DRLGPRESET_FreeMapAI(void* pMemPool, D2MapAIStrc* pMapAI);
 //D2Common.0x6FD86540
 void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap, D2SeedStrc* pSeed);
 //D2Common.0x6FD867A0
@@ -128,9 +128,9 @@ int __fastcall DRLGPRESET_GetSizeY(int nLvlPrestId);
 //D2Common.0x6FD87F20
 void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap);
 //D2Common.0x6FD881A0 (#10008)
-int __fastcall DRLGPRESET_GetLevelPrestIdFromRoomEx(D2RoomExStrc* pRoomEx);
+D2COMMON_DLL_DECL int __fastcall DRLGPRESET_GetLevelPrestIdFromRoomEx(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD881B0 (#10009)
-char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* pRoomEx);
+D2COMMON_DLL_DECL char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD881D0
 void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOOL bOtherRoom);
 //D2Common.0x6FD88450

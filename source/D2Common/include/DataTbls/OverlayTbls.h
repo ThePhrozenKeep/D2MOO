@@ -54,20 +54,20 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool);
 //D2Common.0x6FD72500
 void __fastcall DATATBLS_UnloadOverlayTxt();
 //D2Common.0x6FD72530 (#10674)
-uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72570 (#10675)
-int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD725B0 (#10676)
-uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD725F0 (#10677)
-uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72630 (#10678)
-int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72670 (#10679)
-int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue);
 //D2Common.0x6FD72720 (#10680)
-uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId);
 //D2Common.0x6FD72760 (#10681)
-int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId);
 //Inlined at various places
 D2OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay);

@@ -496,7 +496,7 @@ extern uint32_t gnCharTemplateStartIds[64];
 extern D2BeltsTxt* gpBeltsTxtTable;
 extern D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
-extern D2DataTablesStrc* sgptDataTables;
+D2COMMON_DLL_DECL extern D2DataTablesStrc* sgptDataTables;
 
 
 extern D2SeedStrc* gpAutomapSeed;
@@ -537,15 +537,15 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference);
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
 void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt();
 //D2Common.0x6FD49660 (#11255)
-uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode);
 //D2Common.0x6FD49680 (#11249)
-uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel);
 //D2Common.0x6FD496B0 (#10628)
-uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel);
 //D2Common.0x6FD496E0 (#10629)
-int __stdcall DATATBLS_GetMaxLevel(int nClass);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetMaxLevel(int nClass);
 //D2Common.0x6FD49710 (#10630)
-uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience);
+D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience);
 //D2Common.0x6FD49760
 void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
 //D2Common.0x6FD49850
@@ -555,11 +555,11 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 
 
 //D2Common.0x6FD4E4B0 (#10593)
-D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable();
+D2COMMON_DLL_DECL D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable();
 //D2Common.0x6FD4E4C0
 D2AnimDataStrc* __fastcall DATATBLS_GetAnimData();
 //D2Common.0x6FD4E4D0 (#10655)
-D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
+D2COMMON_DLL_DECL D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
 //D2Common.0x6FD4E500
 void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool);
 //D2Common.0x6FD4F4A0
@@ -569,21 +569,21 @@ D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId);
 //D2Common.0x6FD4F5A0
 void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool);
 //D2Common.0x6FD4F990 (#11298)
-char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName);
+D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName);
 //D2Common.0x6FD4FB50 (#11299)
-char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nClassId, char* szName);
+D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nClassId, char* szName);
 //D2Common.0x6FD4FCF0 (#10580)
-void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
 //D2Common.0x6FD500F0 (#11242)
-void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)
-void __stdcall DATATBLS_UnloadBin(void* pBinFile);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_UnloadBin(void* pBinFile);
 //D2Common.0x6FD50150 (#10575)
-void __stdcall DATATBLS_UnloadAllBins();
+D2COMMON_DLL_DECL void __stdcall DATATBLS_UnloadAllBins();
 //D2Common.0x6FD504B0 (#10576)
-void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3);
 //D2Common.0x6FD507B0
 void __fastcall DATATBLS_LoadSomeTxts(void* pMemPool);
 //D2Common.0x6FD50FB0

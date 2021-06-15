@@ -603,15 +603,15 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool);
 //D2Common.0x6FD575D0
 void __fastcall DATATBLS_UnloadItemsTxt();
 //D2Common.0x6FD57620 (#10599)
-D2ItemDataTbl* __stdcall DATATBLS_GetItemDataTables();
+D2COMMON_DLL_DECL D2ItemDataTbl* __stdcall DATATBLS_GetItemDataTables();
 //D2Common.0x6FD57630 (#10597)
-int __stdcall DATATBLS_MapOldItemIndexToCurrent(int nItemId);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_MapOldItemIndexToCurrent(int nItemId);
 //D2Common.0x6FD57680 (#10600)
-D2ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId);
+D2COMMON_DLL_DECL D2ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId);
 //D2Common.0x6FD576D0 (#10601)
-D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId);
+D2COMMON_DLL_DECL D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId);
 //D2Common.0x6FD57720 (#10602)
-int __stdcall DATATBLS_GetItemIdFromItemCode(uint32_t dwCode);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetItemIdFromItemCode(uint32_t dwCode);
 //D2Common.0x6FD57740
 void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD57820
@@ -619,17 +619,17 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool);
 //D2Common.0x6FD58080
 void __fastcall DATATBLS_UnloadMagicSuffix_Prefix_AutomagicTxt();
 //D2Common.0x6FD580B0 (#10603)
-D2MagicAffixDataTbl* __stdcall DATATBLS_GetMagicAffixDataTables();
+D2COMMON_DLL_DECL D2MagicAffixDataTbl* __stdcall DATATBLS_GetMagicAffixDataTables();
 //D2Common.0x6FD580C0 (#10604)
-D2MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex);
+D2COMMON_DLL_DECL D2MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex);
 //D2Common.0x6FD58110
 void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool);
 //D2Common.0x6FD58450
 void __fastcall DATATBLS_UnloadRareSuffix_PrefixTxt();
 //D2Common.0x6FD58480 (#10605)
-D2RareAffixDataTbl* __fastcall DATATBLS_GetRareAffixDataTables();
+D2COMMON_DLL_DECL D2RareAffixDataTbl* __fastcall DATATBLS_GetRareAffixDataTables();
 //D2Common.0x6FD58490 (#10606)
-D2RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId);
+D2COMMON_DLL_DECL D2RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId);
 //D2Common.0x6FD584E0
 void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool);
 //D2Common.0x6FD59110
@@ -643,41 +643,41 @@ void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool);
 //D2Common.0x6FD5B250
 void __fastcall DATATBLS_UnloadQualityItemsTxt();
 //D2Common.0x6FD5B260 (#10611)
-D2QualityItemDataTbl* __fastcall DATATBLS_GetQualityItemDataTables();
+D2COMMON_DLL_DECL D2QualityItemDataTbl* __fastcall DATATBLS_GetQualityItemDataTables();
 //D2Common.0x6FD5B270 (#10612)
-D2QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex);
+D2COMMON_DLL_DECL D2QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex);
 //D2Common.0x6FD5B2F0
 void __fastcall DATATBLS_LoadGemsTxt(void* pMemPool);
 //D2Common.0x6FD5BAE0
 void __fastcall DATATBLS_UnloadGemsTxt();
 //D2Common.0x6FD5BAF0 (#10615)
-D2GemDataTbl* __fastcall DATATBLS_GetGemDataTables();
+D2COMMON_DLL_DECL D2GemDataTbl* __fastcall DATATBLS_GetGemDataTables();
 //D2Common.0x6FD5BB00 (#10616)
-D2GemsTxt* __stdcall DATATBLS_GetGemsTxtRecord(int nGemId);
+D2COMMON_DLL_DECL D2GemsTxt* __stdcall DATATBLS_GetGemsTxtRecord(int nGemId);
 //D2Common.0x6FD5BB70
 void __fastcall DATATBLS_LoadBooksTxt(void* pMemPool);
 //D2Common.0x6FD5BD10
 void __fastcall DATATBLS_UnloadBooksTxt();
 //D2Common.0x6FD5BD20 (#10617)
-D2BookDataTbl* __fastcall DATATBLS_GetBookDataTables();
+D2COMMON_DLL_DECL D2BookDataTbl* __fastcall DATATBLS_GetBookDataTables();
 //D2Common.0x6FD5BD30 (#10618)
-D2BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId);
+D2COMMON_DLL_DECL D2BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId);
 //D2Common.0x6FD5BDA0
 void __fastcall DATATBLS_LoadLowQualityItemsTxt(void* pMemPool);
 //D2Common.0x6FD5BE40
 void __fastcall DATATBLS_UnloadLowQualityItemsTxt();
 //D2Common.0x6FD5BE50 (#10613)
-D2LowQualityItemDataTbl* __fastcall DATATBLS_GetLowQualityItemDataTables();
+D2COMMON_DLL_DECL D2LowQualityItemDataTbl* __fastcall DATATBLS_GetLowQualityItemDataTables();
 //D2Common.0x6FD5BE60 (#10614)
-D2LowQualityItemsTxt* __stdcall DATATBLS_GetLowQualityItemsTxtRecord(int nId);
+D2COMMON_DLL_DECL D2LowQualityItemsTxt* __stdcall DATATBLS_GetLowQualityItemsTxtRecord(int nId);
 //D2Common.0x6FD5BED0
 void __fastcall DATATBLS_LoadItemRatioTxt(void* pMemPool);
 //D2Common.0x6FD5C200
 void __fastcall DATATBLS_UnloadItemRatioTxt();
 //D2Common.0x6FD5C210 (#10622)
-D2ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables();
+D2COMMON_DLL_DECL D2ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables();
 //D2Common.0x6FD5C220 (#10623)
-D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion);
+D2COMMON_DLL_DECL D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion);
 //D2Common.0x6FD5C2F0
 int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* pRecord2);
 //D2Common.0x6FD5C320
@@ -695,7 +695,7 @@ int __cdecl DATATBLS_CompareGambleTxtRecords(const void* pRecord1, const void* p
 //D2Common.0x6FD5D7B0
 void __fastcall DATATBLS_UnloadGambleTxt();
 //D2Common.0x6FD5D7F0 (#10671)
-D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables();
+D2COMMON_DLL_DECL D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables();
 //D2Common.0x6FD5D800
 BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nItemType2);
 //D2Common.0x6FD5D8C0
@@ -707,9 +707,9 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool);
 //D2Common.0x6FD5E9C0
 void __fastcall DATATBLS_UnloadRunesTxt();
 //D2Common.0x6FD5E9E0 (#10619)
-D2RuneDataTbl* __fastcall DATATBLS_GetRuneDataTables();
+D2COMMON_DLL_DECL D2RuneDataTbl* __fastcall DATATBLS_GetRuneDataTables();
 //D2Common.0x6FD5E9F0 (#10621)
-void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRecord);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRecord);
 //D2Common.0x6FD5EAA0 (#10620)
-D2RunesTxt* __stdcall DATATBLS_GetRunesTxtRecord(int nRunewordId);
+D2COMMON_DLL_DECL D2RunesTxt* __stdcall DATATBLS_GetRunesTxtRecord(int nRunewordId);
 

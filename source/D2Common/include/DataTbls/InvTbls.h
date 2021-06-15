@@ -1,5 +1,6 @@
 #pragma once 
 
+#include <D2Common.h>
 #include <D2BasicTypes.h>
 #include <D2Inventory.h>
 
@@ -59,8 +60,8 @@ void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool);
 //D2Common.0x6FD54F10
 void __fastcall DATATBLS_UnloadInventoryTxt();
 //D2Common.0x6FD54F20 (#10635)
-void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2InvRectStrc* pInvRect);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2InvRectStrc* pInvRect);
 //D2Common.0x6FD54FB0 (#10636)
-void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo);
 //D2Common.0x6FD55030 (#10637)
-void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent);
