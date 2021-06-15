@@ -1354,6 +1354,8 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 {
     if (ordinal < GetBaseOrdinal() || ordinal > GetLastOrdinal())
         return PatchAction::FunctionReplacePatchByOriginal;
+    
+    static_assert(GetOrdinalCount() == (sizeof(patchActions) / sizeof(*patchActions)), "Make sure we have the right number of ordinal patch entries");
     return ::patchActions[ordinal - GetBaseOrdinal()];
 }
 
