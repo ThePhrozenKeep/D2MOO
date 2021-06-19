@@ -43,7 +43,7 @@ static const char byte_6FDD1F88[] =
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 };
 
-static const int dword_6FDD2088[] =
+static const int gaPathTypeFlags_6FDD2088[] =
 {
 	0x21900,
 	0x1900,
@@ -65,27 +65,28 @@ static const int dword_6FDD2088[] =
 	0,
 };
 
-static const short word_6FDD20D0[] =
+static const D2PathPointStrc gaOffsetForPathType_6FDD20D0[] =
 {
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 2,  0,
-	-2, -1,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	-4, -1,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
-	 0,  0,
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 2), uint16_t( 0)},
+	{uint16_t(-2), uint16_t(-1)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t(-4), uint16_t(-1)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
+	{uint16_t( 0), uint16_t( 0)},
 };
+static_assert(_countof(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
 
 //TODO: Remove
@@ -1671,25 +1672,23 @@ void __stdcall D2Common_10184(D2DynamicPathStrc* pDynamicPath, int a2)
 //D2Common.0x6FDAA0E0 (#10185)
 void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType)
 {
-	int nFlag = 0;
 
 	D2_ASSERT(!(pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER && nPathType == PATHTYPE_TOWARD));
 
-	nFlag = dword_6FDD2088[nPathType];
-	if (nFlag & 0x2000 && !(pDynamicPath->dwFlags & 0x4000))
+	int nFlag = gaPathTypeFlags_6FDD2088[nPathType];
+	if ((nFlag & PATH_UNKNOWN_FLAG_0x2000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x4000))
 	{
 		pDynamicPath->dwPrevPathType = pDynamicPath->dwPathType;
 	}
 
-	if (nFlag & 0x8000 && !(pDynamicPath->dwFlags & 0x10000))
+	if ((nFlag & PATH_UNKNOWN_FLAG_0x8000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x10000))
 	{
 		pDynamicPath->unk0x80 = pDynamicPath->dwVelocity;
 	}
 
 	pDynamicPath->dwPathType = nPathType;
 	pDynamicPath->dwFlags = nFlag | pDynamicPath->dwFlags & 0xFFF800FF;
-	pDynamicPath->PathPoints[0].X = word_6FDD20D0[2 * nPathType];
-	pDynamicPath->PathPoints[0].Y = word_6FDD20D0[2 * nPathType + 1];
+	pDynamicPath->PathPoints[0] = gaOffsetForPathType_6FDD20D0[nPathType];
 
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_CLIENT);
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_SERVER);

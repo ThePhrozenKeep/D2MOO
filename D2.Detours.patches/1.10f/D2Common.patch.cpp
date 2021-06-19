@@ -221,7 +221,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetCollisionType                                               @10182
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10183                                                      @10183
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10184                                                      @10184
-    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetType                                                        @10185
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetType                                                        @10185
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_ResetToPreviousType                                            @10186
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetType                                                        @10187
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetNewDistance                                                 @10188
