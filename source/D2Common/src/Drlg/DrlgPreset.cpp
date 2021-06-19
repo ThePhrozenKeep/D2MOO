@@ -518,6 +518,10 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile)
 			}
 			pPrevious = pCurrent;
 		}
+		D2_ASSERTM(pCurrent != nullptr, 
+			"DrlgFile not found in gpLevelFilesList_6FDEA700.\n"
+			"Either DRLGPRESET_FreeDrlgFile was called on an already freed or never allocated dlrg file, or the global pointer was not patched."
+		);
 
 		InterlockedDecrement(&pCurrent->nRefCount);
 
