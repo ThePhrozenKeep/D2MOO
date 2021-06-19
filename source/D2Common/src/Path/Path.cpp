@@ -1708,7 +1708,7 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath)
 		pDynamicPath->dwVelocity = pDynamicPath->unk0x80;
 	}
 
-	if (pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER)
+	if (pDynamicPath->pUnit->dwUnitType != UNIT_PLAYER)
 	{
 		if (pDynamicPath->dwFlags & 0x2000)
 		{
@@ -1717,7 +1717,7 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath)
 	}
 	else
 	{
-		PATH_SetType(pDynamicPath, 7);
+		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
 	}
 }
 
