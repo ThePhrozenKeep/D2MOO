@@ -472,7 +472,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetBlockRate                                                  @10433
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10434                                                      @10434
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetEquippedWeaponFromMonster                                  @10435
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetFrameBonus                                                 @10436
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetFrameBonus                                                 @10436
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetOverlay                                                    @10437
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetHealingCost                                                @10438
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetInventoryGoldLimit                                         @10439

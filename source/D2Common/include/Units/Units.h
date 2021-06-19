@@ -17,6 +17,7 @@ enum D2C_UnitTypes
 	UNIT_MISSILE,
 	UNIT_ITEM,
 	UNIT_TILE,
+	UNIT_COUNT, // Used as an invalid value
 };
 
 enum D2C_UnitFlags
