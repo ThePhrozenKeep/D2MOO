@@ -3672,7 +3672,7 @@ BOOL __fastcall UNITS_CanSwitchAI(int nMonsterId)
 	if (pMonStatsTxtRecord)
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONSTATS2MODEFLAGINDEX_WL])
+		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & MONSTATS2MODEFLAG_WL))
 		{
 			if (!(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_BOSS]))
 			{

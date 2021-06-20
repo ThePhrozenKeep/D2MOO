@@ -2845,42 +2845,40 @@ void __stdcall SKILLS_SetQuantity(D2SkillStrc* pSkill, int nQuantity)
 }
 
 //D2Common.0x6FDB2FA0 (#11014)
-int __stdcall D2Common_11014(int nArrayIndex, int nMonsterId)
+int __stdcall D2Common_11014_ConvertShapeShiftedMode(int nArrayIndex, int nMonsterId)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	int nMode = 0;
-
-	nMode = dword_6FDD2BD8[nArrayIndex];
+	int nMode = dword_6FDD2BD8[nArrayIndex];
+	
 	while (1)
 	{
-		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[nMode])
+		D2MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
+		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[nMode]))
 		{
 			return nMode;
 		}
 
 		switch (nMode)
 		{
-		case 15:
-			nMode = 2;
+		case MONMODE_NEUTRAL:
+			return nMode;
+		case MONMODE_ATTACK2:
+		case MONMODE_CAST:
+			nMode = MONMODE_ATTACK1;
 			continue;
-		case 9:
-		case 10:
-		case 11:
-			nMode = 8;
+		case MONMODE_BLOCK:
+			nMode = MONMODE_GETHIT;
 			continue;
-		case 5:
-		case 7:
-			nMode = 4;
+		case MONMODE_SKILL2:
+		case MONMODE_SKILL3:
+		case MONMODE_SKILL4:
+			nMode = MONMODE_SKILL1;
 			continue;
-		case 6:
-			nMode = 3;
+		case MONMODE_RUN:
+			nMode = MONMODE_WALK;
 			continue;
 		default:
-			nMode = 1;
+			nMode = MONMODE_NEUTRAL;
 			continue;
-		case 1:
-			return nMode;
 		}
 	}
 }
@@ -2888,49 +2886,41 @@ int __stdcall D2Common_11014(int nArrayIndex, int nMonsterId)
 //D2Common.0x6FDB30A0 (#11013)
 void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pClass, int* pMode, char* szFile, int nLine)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	D2StatesTxt* pStatesTxtRecord = NULL;
-	int nMonsterId = 0;
-	int nCounter = 0;
-	int nState = 0;
-	int nMode = 0;
-
-	if (!pUnit || !(pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) || sgptDataTables->nTransformStates <= 0)
+	if (!(pUnit && (pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) && sgptDataTables->nTransformStates > 0))
 	{
 		return;
 	}
 
+	D2StatesTxt* pStatesTxtRecord = NULL;
+	int nCounter = 0;
 	while (1)
 	{
-		nState = sgptDataTables->pTransformStates[nCounter];
-		if (STATES_CheckState(pUnit, nState) && nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
+		int nState = sgptDataTables->pTransformStates[nCounter];
+		if (STATES_CheckState(pUnit, nState) && (0 <= nState && nState < sgptDataTables->nStatesTxtRecordCount))
 		{
 			pStatesTxtRecord = &sgptDataTables->pStatesTxt[nState];
-			if (pStatesTxtRecord)
+			if (pStatesTxtRecord->nGfxType == 1)
 			{
-				if (pStatesTxtRecord->nGfxType == 1)
-				{
-					break;
-				}
+				break;
+			}
+			
+			if (pStatesTxtRecord->nGfxType == 2)
+			{
+				*pType = UNIT_PLAYER;
+				*pClass = pStatesTxtRecord->wGfxClass;
 
-				if (pStatesTxtRecord->nGfxType == 2)
+				if (pUnit->dwUnitType == UNIT_MONSTER)
 				{
-					*pType = UNIT_PLAYER;
-					*pClass = pStatesTxtRecord->wGfxClass;
-
-					if (pUnit->dwUnitType == UNIT_MONSTER)
+					if (pStatesTxtRecord->wGfxClass == 6 && *pMode == 4)
 					{
-						if (pStatesTxtRecord->wGfxClass != 6 || *pMode != 4)
-						{
-							*pMode = dword_6FDD2B98[*pMode];
-						}
-						else
-						{
-							*pMode = 12;
-						}
+						*pMode = 12;
 					}
-					return;
+					else
+					{
+						*pMode = dword_6FDD2B98[*pMode];
+					}
 				}
+				return;
 			}
 		}
 
@@ -2942,47 +2932,12 @@ void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pC
 	}
 
 	*pType = UNIT_MONSTER;
-	nMonsterId = pStatesTxtRecord->wGfxClass;
+	int nMonsterId = pStatesTxtRecord->wGfxClass;
 	*pClass = nMonsterId;
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		nMode = dword_6FDD2BD8[*pMode];
-		while (1)
-		{
-			pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(nMonsterId);
-			if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[nMode])
-			{
-				break;
-			}
-
-			switch (nMode)
-			{
-			case 15:
-				nMode = 2;
-				continue;
-			case 9:
-			case 10:
-			case 11:
-				nMode = 8;
-				continue;
-			case 5:
-			case 7:
-				nMode = 4;
-				continue;
-			case 6:
-				nMode = 3;
-				continue;
-			default:
-				nMode = 1;
-				continue;
-			case 1:
-				*pMode = nMode;
-				return;
-			}
-		}
-
-		*pMode = nMode;
+		*pMode = D2Common_11014_ConvertShapeShiftedMode(*pMode, nMonsterId);
 	}
 }
 
