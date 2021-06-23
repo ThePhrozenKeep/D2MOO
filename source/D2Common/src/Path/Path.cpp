@@ -1315,15 +1315,13 @@ BOOL __stdcall D2COMMON_10209_PathCheckPathingFlag(D2DynamicPathStrc* pDynamicPa
 }
 
 //D2Common.0x6FDA9B80 (#10154)
-//TODO: Find a name
-int __stdcall D2Common_10154(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->dwPathPoints;
 }
 
 //D2Common.0x6FDA9B90 (#11291)
-//TODO: Find a name
-void __stdcall D2Common_11291(D2DynamicPathStrc* pDynamicPath, int a2)
+void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a2)
 {
 	if (a2 < D2DynamicPathStrc::MaxPathPoints)
 	{

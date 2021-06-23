@@ -207,9 +207,9 @@ D2COMMON_DLL_DECL void __stdcall D2COMMON_10208_PathSetPathingFlag(D2DynamicPath
 //D2Common.0x6FDA9B70 (#10209)
 D2COMMON_DLL_DECL BOOL __stdcall D2COMMON_10209_PathCheckPathingFlag(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B80 (#10154)
-D2COMMON_DLL_DECL int __stdcall D2Common_10154(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B90 (#11291)
-D2COMMON_DLL_DECL void __stdcall D2Common_11291(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a2);
 //D2Common.0x6FDA9BC0 (#10155)
 D2COMMON_DLL_DECL int __stdcall D2Common_10155(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9BD0 (#10157)
