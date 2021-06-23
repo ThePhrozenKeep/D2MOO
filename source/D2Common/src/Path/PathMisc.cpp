@@ -586,7 +586,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->unk0x24 = 0;
 
-	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
+	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
 
 	result = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo);
 	if (!result)
@@ -596,17 +596,17 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->dwPathPoints = result;
 
-	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -2;
+	pPathInfo->pDynamicPath->dwUnitTypeRelated = -2;
 
 	v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
 	if (!v5)
 	{
-		*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = 2;
+		pPathInfo->pDynamicPath->dwUnitTypeRelated = 2;
 
 		v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
 	}
 
-	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[0].X = -4;
+	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
 
 	return result + v5;
 }
@@ -683,8 +683,8 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->unk0x24 = 0;
-	*(uint32_t*)&pPathInfo->pDynamicPath->PathPoints[1].X = *(uint32_t*)&pPathInfo->field_4.X;
-	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[1]);
+	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->field_4;
+	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[0]);
 	return 1;
 }
 

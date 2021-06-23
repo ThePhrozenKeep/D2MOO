@@ -65,26 +65,26 @@ static const int gaPathTypeFlags_6FDD2088[] =
 	0,
 };
 
-static const D2PathPointStrc gaOffsetForPathType_6FDD20D0[] =
+static const int32_t gaOffsetForPathType_6FDD20D0[] =
 {
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 2), uint16_t( 0)},
-	{uint16_t(-2), uint16_t(-1)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t(-4), uint16_t(-1)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
-	{uint16_t( 0), uint16_t( 0)},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 2},
+	{-2},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
+	{-4},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
+	{ 0},
 };
 static_assert(_countof(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
@@ -126,25 +126,25 @@ void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
 	{
 		for (int i = 0; i < pDynamicPath->dwPathPoints; ++i)
 		{
-			if (pDynamicPath->PathPoints[i + 1].X < pDynamicPath->pRoom->nSubtileX)
+			if (pDynamicPath->PathPoints[i].X < pDynamicPath->pRoom->nSubtileX)
 			{
 				pDynamicPath->dwFlags |= 0x00000001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i + 1].X >= pDynamicPath->pRoom->nSubtileX + pDynamicPath->pRoom->nSubtileWidth)
+			if (pDynamicPath->PathPoints[i].X >= pDynamicPath->pRoom->nSubtileX + pDynamicPath->pRoom->nSubtileWidth)
 			{
 				pDynamicPath->dwFlags |= 0x00000001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i + 1].Y < pDynamicPath->pRoom->nSubtileY)
+			if (pDynamicPath->PathPoints[i].Y < pDynamicPath->pRoom->nSubtileY)
 			{
 				pDynamicPath->dwFlags |= 0x00000001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i + 1].Y >= pDynamicPath->pRoom->nSubtileY + pDynamicPath->pRoom->nSubtileHeight)
+			if (pDynamicPath->PathPoints[i].Y >= pDynamicPath->pRoom->nSubtileY + pDynamicPath->pRoom->nSubtileHeight)
 			{
 				pDynamicPath->dwFlags |= 0x00000001;
 				break;
@@ -779,8 +779,8 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 
 	if (pDynamicPath->xSP1 && pDynamicPath->ySP1)
 	{
-		pDynamicPath->PathPoints[1].X = pDynamicPath->xSP1;
-		pDynamicPath->PathPoints[1].Y = pDynamicPath->ySP1;
+		pDynamicPath->PathPoints[0].X = pDynamicPath->xSP1;
+		pDynamicPath->PathPoints[0].Y = pDynamicPath->ySP1;
 
 		pDynamicPath->dwPathPoints = 1;
 		pDynamicPath->unk0x38 = 0;
@@ -1326,13 +1326,13 @@ int __stdcall D2Common_10154(D2DynamicPathStrc* pDynamicPath)
 //TODO: Find a name
 void __stdcall D2Common_11291(D2DynamicPathStrc* pDynamicPath, int a2)
 {
-	if (a2 <= 77)
+	if (a2 < D2DynamicPathStrc::MaxPathPoints)
 	{
 		pDynamicPath->dwPathPoints = a2;
 	}
 	else
 	{
-		pDynamicPath->dwPathPoints = 77;
+		pDynamicPath->dwPathPoints = D2DynamicPathStrc::MaxPathPoints - 1;
 	}
 }
 
@@ -1485,9 +1485,9 @@ int __stdcall D2Common_10225(D2DynamicPathStrc* pDynamicPath)
 //D2Common.0x6FDA9E20 (#10177)
 int __stdcall D2COMMON_10177_PATH_GetLastPointX(D2DynamicPathStrc* pDynamicPath)
 {
-	if (pDynamicPath->dwPathPoints)
+	if (pDynamicPath->dwPathPoints > 0)
 	{
-		return pDynamicPath->PathPoints[pDynamicPath->dwPathPoints].X;
+		return pDynamicPath->PathPoints[pDynamicPath->dwPathPoints-1].X;
 	}
 
 	return 0;
@@ -1496,9 +1496,9 @@ int __stdcall D2COMMON_10177_PATH_GetLastPointX(D2DynamicPathStrc* pDynamicPath)
 //D2Common.0x6FDA9E40 (#10178)
 int __stdcall D2COMMON_10178_PATH_GetLastPointY(D2DynamicPathStrc* pDynamicPath)
 {
-	if (pDynamicPath->dwPathPoints)
+	if (pDynamicPath->dwPathPoints > 0)
 	{
-		return pDynamicPath->PathPoints[pDynamicPath->dwPathPoints].Y;
+		return pDynamicPath->PathPoints[pDynamicPath->dwPathPoints-1].Y;
 	}
 
 	return 0;
@@ -1688,7 +1688,7 @@ void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType)
 
 	pDynamicPath->dwPathType = nPathType;
 	pDynamicPath->dwFlags = nFlag | pDynamicPath->dwFlags & 0xFFF800FF;
-	pDynamicPath->PathPoints[0] = gaOffsetForPathType_6FDD20D0[nPathType];
+	pDynamicPath->dwUnitTypeRelated = gaOffsetForPathType_6FDD20D0[nPathType];
 
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_CLIENT);
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_SERVER);

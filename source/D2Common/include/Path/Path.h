@@ -38,6 +38,7 @@ struct D2PathPointStrc
 
 struct D2DynamicPathStrc
 {
+	static const size_t MaxPathPoints = 78;
 	union
 	{
 		struct
@@ -62,12 +63,12 @@ struct D2DynamicPathStrc
 	uint16_t ySP2;								//0x16
 	uint16_t xSP3;								//0x18
 	uint16_t ySP3;								//0x1A
-	D2RoomStrc* pRoom;						//0x1C
-	D2RoomStrc* pRoomNext;					//0x20
+	D2RoomStrc* pRoom;							//0x1C
+	D2RoomStrc* pRoomNext;						//0x20
 	int32_t unk0x24;							//0x24
 	int32_t dwPathPoints;						//0x28
-	void* unk0x2C;							//0x2C
-	D2UnitStrc* pUnit;						//0x30
+	void* unk0x2C;								//0x2C
+	D2UnitStrc* pUnit;							//0x30
 	uint32_t dwFlags;							//0x34
 	uint32_t unk0x38;							//0x38
 	uint32_t dwPathType;						//0x3C
@@ -78,17 +79,17 @@ struct D2DynamicPathStrc
 	uint32_t unk0x50;							//0x50
 	uint16_t unk0x54;							//0x54
 	uint16_t unk0x56;							//0x56
-	D2UnitStrc* pTargetUnit;				//0x58
+	D2UnitStrc* pTargetUnit;					//0x58
 	uint32_t dwTargetType;						//0x5C
 	uint32_t dwTargetId;						//0x60
-	uint8_t nDirection;						//0x64
+	uint8_t nDirection;							//0x64
 	uint8_t nNewDirection;						//0x65
-	uint8_t nDiffDirection;					//0x66
+	uint8_t nDiffDirection;						//0x66
 	uint8_t unk0x67;							//0x67
 	uint8_t unk0x68[10];						//0x68
 	int32_t unk0x72;							//0x72
 	int32_t unk0x76;							//0x76
-	char unk0x7A[2];						//0x7A
+	char unk0x7A[2];							//0x7A
 	uint32_t dwVelocity;						//0x7C
 	uint32_t unk0x80;							//0x80
 	uint32_t dwVelocity2;						//0x84
@@ -98,13 +99,12 @@ struct D2DynamicPathStrc
 	uint8_t unk0x92;							//0x92
 	uint8_t nStepNum;							//0x93
 	uint8_t nDistance;							//0x94
-	char unk0x95[3];						//0x95
-	//uint32_t dwPathOffset;						//0x98
-	D2PathPointStrc PathPoints[7];			//0x98
-	uint32_t unk0xB8[72];						//0xB8
+	char unk0x95[3];							//0x95
+	int32_t dwUnitTypeRelated;					//0x98
+	D2PathPointStrc PathPoints[MaxPathPoints];	//0x9C
 	int32_t unk0x1D4;							//0x1D4
-	D2PathPointStrc unk0x1D8[7];			//0x1D8
-	char unk0x1DC[12];						//0x1DC
+	D2PathPointStrc unk0x1D8[7];				//0x1D8
+	char unk0x1DC[12];							//0x1DC
 };
 
 struct D2PathInfoStrc
