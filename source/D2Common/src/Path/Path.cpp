@@ -999,9 +999,10 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pDynamicPath->pRoom = pRoom;
 	pDynamicPath->nStepNum = 0;
 	pDynamicPath->dwPrecisionY = (nY << 16) + 32768;
-	pDynamicPath->unk0x1D4 = 1;
-	pDynamicPath->unk0x1D8[0].X = nX;
-	pDynamicPath->unk0x1D8[0].Y = nY;
+
+	pDynamicPath->nSavedStepsCount = 1;
+	pDynamicPath->SavedSteps[0].X = nX;
+	pDynamicPath->SavedSteps[0].Y = nY;
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
@@ -1790,8 +1791,8 @@ int __stdcall D2COMMON_10198_PathGetSaveStep(D2DynamicPathStrc* pDynamicPath, D2
 {
 	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
-	*ppPathPoints = pDynamicPath->unk0x1D8;
-	return pDynamicPath->unk0x1D4;
+	*ppPathPoints = pDynamicPath->SavedSteps;
+	return pDynamicPath->nSavedStepsCount;
 }
 
 //D2Common.0x6FDAA390 (#10199)
@@ -1800,9 +1801,9 @@ int __stdcall D2COMMON_10199_PathGetSaveX(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
-	if (pDynamicPath->unk0x1D4)
+	if (pDynamicPath->nSavedStepsCount)
 	{
-		return pDynamicPath->unk0x1D8[pDynamicPath->unk0x1D4 -1].X;
+		return pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount -1].X;
 	}
 
 	return 0;
@@ -1814,9 +1815,9 @@ int __stdcall D2COMMON_10200_PathGetSaveY(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
-	if (pDynamicPath->unk0x1D4)
+	if (pDynamicPath->nSavedStepsCount)
 	{
-		return pDynamicPath->unk0x1D8[pDynamicPath->unk0x1D4 - 1].Y;
+		return pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount - 1].Y;
 	}
 
 	return 0;

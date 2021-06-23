@@ -190,7 +190,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10151                                                      @10151
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_AllocDynamicPath                                               @10152
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10153                                                      @10153
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10154                                                      @10154
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetNumberOfPathPoints                                @10154
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10155                                                      @10155
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_FreeDynamicPath                                                @10156
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetPathPoints                                                  @10157
@@ -1327,7 +1327,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetMaxElemDamage                                            @11288
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetElemTypeFromMissileId                                    @11289
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetSpecialParamValue                                        @11290
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11291                                                      @11291
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetNumberOfPathPoints                                                      @11291
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11292_ItemAssignProperty                                   @11292
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_GetItemCharges                                             @11293
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat                                                @11294

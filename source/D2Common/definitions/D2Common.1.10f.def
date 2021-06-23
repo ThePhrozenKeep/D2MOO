@@ -154,7 +154,7 @@ EXPORTS
 	D2Common_10151														@10151
 	PATH_AllocDynamicPath												@10152
 	D2Common_10153														@10153
-	D2Common_10154														@10154
+	PATH_GetNumberOfPathPoints								@10154
 	D2Common_10155														@10155
 	PATH_FreeDynamicPath												@10156
 	PATH_GetPathPoints													@10157
@@ -1291,7 +1291,7 @@ EXPORTS
 	MISSILE_GetMaxElemDamage											@11288
 	MISSILE_GetElemTypeFromMissileId									@11289
 	MISSILE_GetSpecialParamValue										@11290
-	D2Common_11291														@11291
+	PATH_SetNumberOfPathPoints								@11291
 	D2COMMON_11292_ItemAssignProperty									@11292
 	ITEMMODS_GetItemCharges												@11293
 	STATLIST_SetBaseStat												@11294

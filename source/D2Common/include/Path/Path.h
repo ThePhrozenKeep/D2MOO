@@ -106,8 +106,8 @@ struct D2DynamicPathStrc
 	char unk0x95[3];							//0x95
 	int32_t dwUnitTypeRelated;					//0x98
 	D2PathPointStrc PathPoints[MaxPathPoints];	//0x9C
-	int32_t unk0x1D4;							//0x1D4
-	D2PathPointStrc unk0x1D8[7];				//0x1D8
+	int32_t nSavedStepsCount;					//0x1D4
+	D2PathPointStrc SavedSteps[7];				//0x1D8
 	char unk0x1DC[12];							//0x1DC
 };
 
