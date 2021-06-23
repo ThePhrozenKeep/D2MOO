@@ -1281,7 +1281,7 @@ EXPORTS
 	INVENTORY_GetItemsXPosition											@11278
 	UNITROOM_AddUnitToRoomEx											@11279
 	MONSTERS_GetSpawnMode_XY											@11280
-	D2Common_11281_Unused												@11281
+	D2Common_11281_CollisionPatternFromSize								@11281
 	D2Common_11282_Unused												@11282
 	SKILLS_CalculateKickDamage											@11283
 	MISSILE_EvaluateMissileFormula										@11284

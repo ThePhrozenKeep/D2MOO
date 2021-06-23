@@ -171,7 +171,7 @@ D2COMMON_DLL_DECL void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicP
 //D2Common.0x6FDA91B0 (#11282)
 D2COMMON_DLL_DECL int __stdcall D2Common_11282_Unused(int nMonsterId);
 //D2Common.0x6FDA9250 (#11281)
-D2COMMON_DLL_DECL int __stdcall D2Common_11281_Unused(D2UnitStrc* pUnit, int nSize);
+D2COMMON_DLL_DECL int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize);
 //D2Common.0x6FDA92F0 (#10214)
 D2COMMON_DLL_DECL void __stdcall D2Common_10214(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9480 (#10152)

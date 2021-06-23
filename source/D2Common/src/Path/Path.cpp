@@ -929,17 +929,14 @@ int __stdcall D2Common_11282_Unused(int nMonsterId)
 
 //D2Common.0x6FDA9250 (#11281)
 //TODO: Find a name
-int __stdcall D2Common_11281_Unused(D2UnitStrc* pUnit, int nSize)
+int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	int nCollisionPattern = 0;
-
 	if (nSize >= 0 && nSize < 4)
 	{
-		nCollisionPattern = dword_6FDD1DE4[nSize];
+		int nCollisionPattern = dword_6FDD1DE4[nSize];
 		if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && MONSTERS_CanBeInTown(pUnit))
 		{
-			pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
+			D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
 			if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]))
 			{
 				if (nCollisionPattern == 1)
@@ -968,12 +965,12 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 		if (UNITS_GetRoom(pUnit))
 		{
 			D2Common_10223(pUnit, 1);
-			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_Unused(pUnit, pUnit->pDynamicPath->dwUnitSize);
+			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pUnit->pDynamicPath->dwUnitSize);
 			D2Common_10222(pUnit);
 		}
 		else
 		{
-			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_Unused(pUnit, pUnit->pDynamicPath->dwUnitSize);
+			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pUnit->pDynamicPath->dwUnitSize);
 		}
 	}
 }
@@ -995,7 +992,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pDynamicPath->pUnit = pUnit;
 	pDynamicPath->dwUnitSize = UNITS_GetUnitSizeX(pUnit);
 
-	pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_Unused(pUnit, pDynamicPath->dwUnitSize);
+	pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pDynamicPath->dwUnitSize);
 
 	pDynamicPath->dwVelocity = 2048;
 	pDynamicPath->dwPrecisionX = (nX << 16) + 32768;
@@ -1207,7 +1204,7 @@ void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 
 		if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == 32768)
 		{
-			nCollisionPattern = D2Common_11281_Unused(pUnit, UNITS_GetUnitSizeX(pUnit));
+			nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
 
 			if (pUnit->dwUnitType == UNIT_MONSTER)
 			{
