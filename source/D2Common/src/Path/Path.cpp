@@ -1172,12 +1172,10 @@ void __stdcall D2Common_10228(D2UnitStrc* pUnit)
 //TODO: Find a name
 void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 {
+	D2_ASSERT(pUnit->pDynamicPath != nullptr);
 	if (a2 || pUnit->dwUnitType != UNIT_MONSTER)
 	{
-		if (pUnit->pDynamicPath)
-		{
-			D2Common_10223(pUnit, 1);
-		}
+		D2Common_10223(pUnit, 1);
 		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->wPosX, pUnit->pDynamicPath->wPosY, 3, 3, 32768);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
