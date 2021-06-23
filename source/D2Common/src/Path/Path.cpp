@@ -978,14 +978,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 //D2Common.0x6FDA9480 (#10152)
 void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	D2DynamicPathStrc* pDynamicPath = NULL;
-	int nClassId = 0;
-	int nTargetX = 0;
-	int nTargetY = 0;
-
-	pDynamicPath = (D2DynamicPathStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2DynamicPathStrc), __FILE__, __LINE__, 0);
-	memset(pDynamicPath, 0x00, sizeof(D2DynamicPathStrc));
+	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_SERVER(pMemPool, D2DynamicPathStrc);
 
 	pUnit->pDynamicPath = pDynamicPath;
 
@@ -1008,18 +1001,18 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	{
 		pDynamicPath->dwCollisionType = 128;
 		pDynamicPath->unk0x50 = 0x1C09;
-		PATH_SetType(pDynamicPath, 7);
+		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
 		pDynamicPath->nDistMax = 73;
 		pDynamicPath->unk0x92 = 70;
 	}
 	else if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
 		pDynamicPath->dwCollisionType = 256;
-		PATH_SetType(pDynamicPath, 2);
+		PATH_SetType(pDynamicPath, PATHTYPE_TOWARD);
 
-		nClassId = pUnit->dwClassId;
+		int nClassId = pUnit->dwClassId;
 
-		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
+		D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
 		if (pMonStatsTxtRecord)
 		{
 			nClassId = pMonStatsTxtRecord->nBaseId;
@@ -1058,8 +1051,8 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 		UNITROOM_AddUnitToRoom(pUnit, pDynamicPath->pRoom);
 	}
 
-	nTargetX = pDynamicPath->dwPrecisionX >> 11;
-	nTargetY = pDynamicPath->dwPrecisionY >> 11;
+	int nTargetX = pDynamicPath->dwPrecisionX >> 11;
+	int nTargetY = pDynamicPath->dwPrecisionY >> 11;
 
 	DUNGEON_FlattenCoords_IsoToCartesian(&nTargetX, &nTargetY);
 
