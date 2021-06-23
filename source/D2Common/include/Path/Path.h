@@ -62,14 +62,11 @@ struct D2DynamicPathStrc
 			uint32_t dwPrecisionY;				//0x04
 		};
 	};
-	uint32_t dwTargetX;						//0x08
-	uint32_t dwTargetY;						//0x0C
-	uint16_t xSP1;								//0x10
-	uint16_t ySP1;								//0x12
-	uint16_t xSP2;								//0x14
-	uint16_t ySP2;								//0x16
-	uint16_t xSP3;								//0x18
-	uint16_t ySP3;								//0x1A
+	uint32_t dwTargetX;							//0x08
+	uint32_t dwTargetY;							//0x0C
+	D2PathPointStrc SP1;						//0x10
+	D2PathPointStrc SP2;						//0x14
+	D2PathPointStrc SP3;						//0x18
 	D2RoomStrc* pRoom;							//0x1C
 	D2RoomStrc* pRoomNext;						//0x20
 	int32_t unk0x24;							//0x24

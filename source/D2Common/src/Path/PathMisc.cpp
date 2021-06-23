@@ -2167,8 +2167,8 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 	else
 	{
 		pDynamicPath->dwPathType = 2;
-		pDynamicPath->xSP1 = pDynamicPath->xSP3;
-		pDynamicPath->ySP1 = pDynamicPath->ySP3;
+		pDynamicPath->SP1.X = pDynamicPath->SP3.X;
+		pDynamicPath->SP1.Y = pDynamicPath->SP3.Y;
 	}
 
 	nResult = D2Common_10142(pDynamicPath, pUnit, 0);
@@ -2953,7 +2953,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 		}
 		else
 		{
-			return pDynamicPath->wPosX == pDynamicPath->xSP1 && pDynamicPath->wPosY == pDynamicPath->ySP1;
+			return pDynamicPath->wPosX == pDynamicPath->SP1.X && pDynamicPath->wPosY == pDynamicPath->SP1.Y;
 		}
 	}
 	else

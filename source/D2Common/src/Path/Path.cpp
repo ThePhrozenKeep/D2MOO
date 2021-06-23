@@ -757,11 +757,11 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 	{
 		UNITS_GetCoords(pDynamicPath->pTargetUnit, &pCoords);
 
-		pDynamicPath->xSP1 = pCoords.nX;
-		pDynamicPath->ySP1 = pCoords.nY;
+		pDynamicPath->SP1.X = pCoords.nX;
+		pDynamicPath->SP1.Y = pCoords.nY;
 	}
 
-	nXDistance = nOldX - pDynamicPath->xSP1;
+	nXDistance = nOldX - pDynamicPath->SP1.X;
 	if (nXDistance < 0)
 	{
 		nXDistance = -nXDistance;
@@ -769,7 +769,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 
 	D2_ASSERTM(nXDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
-	nYDistance = nOldY - pDynamicPath->ySP1;
+	nYDistance = nOldY - pDynamicPath->SP1.Y;
 	if (nYDistance < 0)
 	{
 		nYDistance = -nYDistance;
@@ -777,10 +777,10 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 
 	D2_ASSERTM(nYDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
-	if (pDynamicPath->xSP1 && pDynamicPath->ySP1)
+	if (pDynamicPath->SP1.X && pDynamicPath->SP1.Y)
 	{
-		pDynamicPath->PathPoints[0].X = pDynamicPath->xSP1;
-		pDynamicPath->PathPoints[0].Y = pDynamicPath->ySP1;
+		pDynamicPath->PathPoints[0].X = pDynamicPath->SP1.X;
+		pDynamicPath->PathPoints[0].Y = pDynamicPath->SP1.Y;
 
 		pDynamicPath->dwPathPoints = 1;
 		pDynamicPath->unk0x38 = 0;
@@ -788,7 +788,9 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 
 		pRoom = pDynamicPath->pRoom;
 
-		if (!pRoom || pDynamicPath->xSP1 < pRoom->nSubtileX || pDynamicPath->xSP1 >= pRoom->nSubtileX + pRoom->nSubtileWidth || pDynamicPath->ySP1 < pRoom->nSubtileY || pDynamicPath->ySP1 >= pRoom->nSubtileY + pRoom->nSubtileHeight)
+		if (!pRoom 
+			|| pDynamicPath->SP1.X < pRoom->nSubtileX || pDynamicPath->SP1.X >= pRoom->nSubtileX + pRoom->nSubtileWidth 
+			|| pDynamicPath->SP1.Y < pRoom->nSubtileY || pDynamicPath->SP1.Y >= pRoom->nSubtileY + pRoom->nSubtileHeight)
 		{
 			pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 		}
@@ -864,22 +866,22 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 	{
 		if (pPathInfo->pDynamicPath->wPosX >= UNITS_GetXPosition(pTargetUnit))
 		{
-			pPathInfo->pDynamicPath->xSP1 += 2;
+			pPathInfo->pDynamicPath->SP1.X += 2;
 		}
 		else
 		{
-			pPathInfo->pDynamicPath->xSP1 -= 2;
+			pPathInfo->pDynamicPath->SP1.X -= 2;
 		}
 	}
 	else
 	{
 		if (pPathInfo->pDynamicPath->wPosY >= UNITS_GetYPosition(pTargetUnit))
 		{
-			pPathInfo->pDynamicPath->ySP1 += 2;
+			pPathInfo->pDynamicPath->SP1.Y += 2;
 		}
 		else
 		{
-			pPathInfo->pDynamicPath->ySP1 -= 2;
+			pPathInfo->pDynamicPath->SP1.Y -= 2;
 		}
 	}
 
@@ -1458,28 +1460,28 @@ void __fastcall PATH_SetTargetY(D2DynamicPathStrc* pDynamicPath, int nTargetY)
 //TODO: Check name
 int __stdcall D2COMMON_10175_PathGetFirstPointX(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->xSP1;
+	return pDynamicPath->SP1.X;
 }
 
 //D2Common.0x6FDA9DF0 (#10176)
 //TODO: Check name
 int __stdcall D2COMMON_10176_PathGetFirstPointY(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->ySP1;
+	return pDynamicPath->SP1.Y;
 }
 
 //D2Common.0x6FDA9E00 (#10224)
 //TODO: Find a name
 int __stdcall D2Common_10224(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->xSP3;
+	return pDynamicPath->SP3.X;
 }
 
 //D2Common.0x6FDA9E10 (#10225)
 //TODO: Find a name
 int __stdcall D2Common_10225(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->ySP3;
+	return pDynamicPath->SP3.Y;
 }
 
 //D2Common.0x6FDA9E20 (#10177)
@@ -1534,8 +1536,8 @@ void __stdcall D2COMMON_10170_PathSetTargetPos(D2DynamicPathStrc* pDynamicPath, 
 {
 	if (pDynamicPath)
 	{
-		pDynamicPath->xSP1 = nX;
-		pDynamicPath->ySP1 = nY;
+		pDynamicPath->SP1.X = nX;
+		pDynamicPath->SP1.Y = nY;
 		pDynamicPath->pTargetUnit = NULL;
 	}
 }
@@ -1846,8 +1848,8 @@ void __stdcall D2COMMON_10203_PATH_SetRotateFlag(D2DynamicPathStrc* pDynamicPath
 //TODO: Check name
 void __stdcall D2COMMON_10204_PATH_ClearPoint2(D2DynamicPathStrc* pDynamicPath)
 {
-	pDynamicPath->xSP2 = 0;
-	pDynamicPath->ySP2 = 0;
+	pDynamicPath->SP2.X = 0;
+	pDynamicPath->SP2.Y = 0;
 }
 
 //D2Common.0x6FDAA480 (#10205)
