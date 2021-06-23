@@ -120,7 +120,7 @@ int __fastcall sub_6FDAAD10(D2DynamicPathStrc*, D2PathPointStrc*, D2PathPointStr
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
 {
-	pDynamicPath->dwFlags &= 0xFFFFFFFE;
+	pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00001);
 
 	if (pDynamicPath->pRoom)
 	{
@@ -128,25 +128,25 @@ void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
 		{
 			if (pDynamicPath->PathPoints[i].X < pDynamicPath->pRoom->nSubtileX)
 			{
-				pDynamicPath->dwFlags |= 0x00000001;
+				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
 			if (pDynamicPath->PathPoints[i].X >= pDynamicPath->pRoom->nSubtileX + pDynamicPath->pRoom->nSubtileWidth)
 			{
-				pDynamicPath->dwFlags |= 0x00000001;
+				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
 			if (pDynamicPath->PathPoints[i].Y < pDynamicPath->pRoom->nSubtileY)
 			{
-				pDynamicPath->dwFlags |= 0x00000001;
+				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
 			if (pDynamicPath->PathPoints[i].Y >= pDynamicPath->pRoom->nSubtileY + pDynamicPath->pRoom->nSubtileHeight)
 			{
-				pDynamicPath->dwFlags |= 0x00000001;
+				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 		}
@@ -790,7 +790,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 
 		if (!pRoom || pDynamicPath->xSP1 < pRoom->nSubtileX || pDynamicPath->xSP1 >= pRoom->nSubtileX + pRoom->nSubtileWidth || pDynamicPath->ySP1 < pRoom->nSubtileY || pDynamicPath->ySP1 >= pRoom->nSubtileY + pRoom->nSubtileHeight)
 		{
-			pDynamicPath->dwFlags |= 1;
+			pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 		}
 
 		return pDynamicPath->dwPathPoints;
@@ -1068,7 +1068,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 	if (bSetFlag)
 	{
-		pDynamicPath->dwFlags |= 0x10;
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00010;
 	}
 }
 
@@ -1093,7 +1093,7 @@ void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection
 	}
 	else if (nUnitType == UNIT_MISSILE)
 	{
-		if (!(pDynamicPath->dwFlags & 0x40))
+		if (!(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00040))
 		{
 			pDynamicPath->nDirection = (nDirection & 63);
 		}
@@ -1291,7 +1291,7 @@ int __stdcall D2Common_10151(D2DynamicPathStrc* pDynamicPath)
 void __stdcall D2Common_10153(D2DynamicPathStrc* pDynamicPath)
 {
 	pDynamicPath->dwPathPoints = 0;
-	pDynamicPath->dwFlags &= 0xFFFFFFDF;
+	pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00020);
 }
 
 //D2Common.0x6FDA9B40 (#10208)
@@ -1300,11 +1300,11 @@ void __stdcall D2COMMON_10208_PathSetPathingFlag(D2DynamicPathStrc* pDynamicPath
 {
 	if (bSet)
 	{
-		pDynamicPath->dwFlags |= 0x20;
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00020;
 	}
 	else
 	{
-		pDynamicPath->dwFlags &= 0xFFFFFFDF;
+		pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00020);
 	}
 }
 
@@ -1312,7 +1312,7 @@ void __stdcall D2COMMON_10208_PathSetPathingFlag(D2DynamicPathStrc* pDynamicPath
 //TODO: Check name
 BOOL __stdcall D2COMMON_10209_PathCheckPathingFlag(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwFlags & 0x20;
+	return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00020);
 }
 
 //D2Common.0x6FDA9B80 (#10154)
@@ -1544,7 +1544,7 @@ void __stdcall D2COMMON_10170_PathSetTargetPos(D2DynamicPathStrc* pDynamicPath, 
 //TODO: Find a name
 BOOL __stdcall D2Common_10172(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwFlags & 2;
+	return pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00002;
 }
 
 //D2Common.0x6FDA9ED0 (#10173)
@@ -1553,11 +1553,11 @@ void __stdcall D2Common_10173(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 {
 	if (bSet)
 	{
-		pDynamicPath->dwFlags |= 2;
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00002;
 	}
 	else
 	{
-		pDynamicPath->dwFlags &= 0xFFFFFFFD;
+		pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00002);
 	}
 }
 
@@ -1567,11 +1567,11 @@ void __stdcall D2Common_10145(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 {
 	if (bSet)
 	{
-		pDynamicPath->dwFlags |= 4;
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00004;
 	}
 	else
 	{
-		pDynamicPath->dwFlags &= 0xFFFFFFFB;
+		pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00004);
 	}
 }
 
@@ -1579,7 +1579,7 @@ void __stdcall D2Common_10145(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 //TODO: Find a name
 BOOL __stdcall D2Common_10174(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwFlags & 4;
+	return pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00004;
 }
 
 //D2Common.0x6FDA9F40 (#10179)
@@ -1676,12 +1676,12 @@ void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType)
 	D2_ASSERT(!(pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER && nPathType == PATHTYPE_TOWARD));
 
 	int nFlag = gaPathTypeFlags_6FDD2088[nPathType];
-	if ((nFlag & PATH_UNKNOWN_FLAG_0x2000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x4000))
+	if ((nFlag & PATH_UNKNOWN_FLAG_0x02000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x04000))
 	{
 		pDynamicPath->dwPrevPathType = pDynamicPath->dwPathType;
 	}
 
-	if ((nFlag & PATH_UNKNOWN_FLAG_0x8000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x10000))
+	if ((nFlag & PATH_UNKNOWN_FLAG_0x08000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x10000))
 	{
 		pDynamicPath->unk0x80 = pDynamicPath->dwVelocity;
 	}
@@ -1702,14 +1702,14 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath->pUnit);
 
-	if (pDynamicPath->dwFlags & 0x8000)
+	if (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x08000)
 	{
 		pDynamicPath->dwVelocity = pDynamicPath->unk0x80;
 	}
 
 	if (pDynamicPath->pUnit->dwUnitType != UNIT_PLAYER)
 	{
-		if (pDynamicPath->dwFlags & 0x2000)
+		if (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x02000)
 		{
 			PATH_SetType(pDynamicPath, pDynamicPath->dwPrevPathType);
 		}
@@ -1791,7 +1791,7 @@ void __stdcall D2COMMON_10192_PathSetIDAMax(D2DynamicPathStrc* pDynamicPath, int
 //TODO: Check name
 int __stdcall D2COMMON_10198_PathGetSaveStep(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc** ppPathPoints)
 {
-	D2_ASSERT(pDynamicPath->dwFlags & 0x20000);
+	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
 	*ppPathPoints = pDynamicPath->unk0x1D8;
 	return pDynamicPath->unk0x1D4;
@@ -1801,7 +1801,7 @@ int __stdcall D2COMMON_10198_PathGetSaveStep(D2DynamicPathStrc* pDynamicPath, D2
 //TODO: Check name
 int __stdcall D2COMMON_10199_PathGetSaveX(D2DynamicPathStrc* pDynamicPath)
 {
-	D2_ASSERT(pDynamicPath->dwFlags & 0x20000);
+	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
 	if (pDynamicPath->unk0x1D4)
 	{
@@ -1815,7 +1815,7 @@ int __stdcall D2COMMON_10199_PathGetSaveX(D2DynamicPathStrc* pDynamicPath)
 //TODO: Check name
 int __stdcall D2COMMON_10200_PathGetSaveY(D2DynamicPathStrc* pDynamicPath)
 {
-	D2_ASSERT(pDynamicPath->dwFlags & 0x20000);
+	D2_ASSERT(pDynamicPath->dwFlags & PATH_SAVE_STEPS_MASK);
 
 	if (pDynamicPath->unk0x1D4)
 	{
@@ -1833,11 +1833,11 @@ void __stdcall D2COMMON_10203_PATH_SetRotateFlag(D2DynamicPathStrc* pDynamicPath
 	{
 		if (bReset)
 		{
-			pDynamicPath->dwFlags &= 0xFFFFFFBF;
+			pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00040);
 		}
 		else
 		{
-			pDynamicPath->dwFlags |= 0x40;
+			pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00040;
 		}
 	}
 }
