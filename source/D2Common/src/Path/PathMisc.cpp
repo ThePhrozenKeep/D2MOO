@@ -2022,7 +2022,7 @@ int __stdcall D2Common_10215(int nX1, int nY1, int nX2, int nY2)
 	D2CoordStrc pCoords = {};
 	int nResult = 0;
 
-	sub_6FDAC5E0(&pCoords, &nResult, (nX1 << 16) + 32768, (nY1 << 16) + 32768, (nX2 << 16) + 32768, (nY2 << 16) + 32768);
+	sub_6FDAC5E0(&pCoords, &nResult, PATH_ToFP16(nX1), PATH_ToFP16(nY1), PATH_ToFP16(nX2), PATH_ToFP16(nY2));
 
 	return nResult;
 }

@@ -995,10 +995,10 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pDynamicPath->dwUnitSize);
 
 	pDynamicPath->dwVelocity = 2048;
-	pDynamicPath->dwPrecisionX = (nX << 16) + 32768;
 	pDynamicPath->pRoom = pRoom;
 	pDynamicPath->nStepNum = 0;
-	pDynamicPath->dwPrecisionY = (nY << 16) + 32768;
+	pDynamicPath->dwPrecisionX = PATH_ToFP16(nX);
+	pDynamicPath->dwPrecisionY = PATH_ToFP16(nY);
 
 	pDynamicPath->nSavedStepsCount = 1;
 	pDynamicPath->SavedSteps[0].X = nX;
@@ -1145,7 +1145,7 @@ void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, i
 
 	if (pDynamicPath)
 	{
-		nDirection = sub_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, (nX << 16) + 32768, (nY << 16) + 32768);
+		nDirection = sub_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY));
 		if (a4)
 		{
 			pDynamicPath->nNewDirection = nDirection & 63;

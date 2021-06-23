@@ -150,6 +150,11 @@ struct D2StaticPathStrc
 
 #pragma pack()
 
+// Path "precise" positions are encoded using 16bits fixed point
+inline uint32_t PATH_ToFP16(uint16_t value) {
+	return (value << 16) + (1 << 15);
+}
+
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA82A0 (#10141)
