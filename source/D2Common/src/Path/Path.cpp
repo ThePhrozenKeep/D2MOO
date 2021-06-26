@@ -10,6 +10,7 @@
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
 #include <DataTbls/MonsterIds.h>
+#include <D2Math.h>
 
 static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
 
@@ -1876,19 +1877,7 @@ int __stdcall PATH_GetDistance(D2DynamicPathStrc* pDynamicPath)
 void __stdcall PATH_AddToDistance(D2DynamicPathStrc* pDynamicPath, int nAddition)
 {
 	int nDistance = nAddition + pDynamicPath->nDistance;
-
-	if (nDistance < 0)
-	{
-		pDynamicPath->nDistance = 0;
-	}
-	else if (nDistance > 255)
-	{
-		pDynamicPath->nDistance = 255;
-	}
-	else
-	{
-		pDynamicPath->nDistance = nDistance;
-	}
+	pDynamicPath->nDistance = D2Clamp(nDistance, 0, 0xFF);
 }
 
 //D2Common.0x6FDAA570 (#10210)
