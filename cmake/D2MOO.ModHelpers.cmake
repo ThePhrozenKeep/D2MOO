@@ -30,14 +30,16 @@ endfunction()
 
 function(D2MOO_install_dll DLLName)
   install(TARGETS ${DLLName}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
+    RUNTIME # Only DLL, not import lib
+    DESTINATION ${PROJECT_NAME}/patch
   )
 endfunction()
 
 function(D2MOO_install_mod_dll ModName DLLName)
   set(target_name "${DLLName}.${ModName}")
   install(TARGETS ${target_name}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
+    RUNTIME # Only DLL, not import lib
+    DESTINATION ${PROJECT_NAME}/patch
   )
 endfunction()
 
