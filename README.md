@@ -38,6 +38,8 @@ cmake --install build --config Release --prefix YOUR_INSTALL_FOLDER
 
 The debug targets are already configured and set as startup project when using Visual Studio.
 
+Note that it will spawn the game/D2SE as a subprocess, so you might be interested in the following Visual Studio extension [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool). Then go to Debug > Other debug targets > Child process debugging settings, enable & save.
+
 ## Versions
 
 The project is currently based on the 1.10f version of the game.
@@ -68,6 +70,10 @@ More importantly, we need your feedback to determine a roadmap.
 
 We felt that the current projects are not good enough, and more importantly did not cover enough parts of the game.
 Having a centralized code that one can launch and use as reference will make it easier, we hope, for the modding community.
+
+### I can not set breakpoints in Visual Studio
+
+Please have a look at [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool).
 
 ### I have other questions !
 
