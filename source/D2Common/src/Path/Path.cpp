@@ -1100,7 +1100,7 @@ void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection
 //TODO: Check name
 void __stdcall D2COMMON_10193_PATH_AdjustDirection(D2DynamicPathStrc* pDynamicPath)
 {
-	if (pDynamicPath->nDirection != pDynamicPath->nNewDirection && !(pDynamicPath->dwFlags & 0x40))
+	if ((pDynamicPath->nDirection != pDynamicPath->nNewDirection) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00040))
 	{
 		pDynamicPath->nDirection = PATH_NormalizeDirection(pDynamicPath->nDirection + pDynamicPath->nDiffDirection);
 
@@ -1347,7 +1347,7 @@ uint8_t __stdcall PATH_GetNewDirection(D2DynamicPathStrc* pDynamicPath)
 //TODO: Check name
 void __stdcall D2COMMON_10160_PathUpdateDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection)
 {
-	D2_ASSERT(nDirection < 64);
+	D2_ASSERT(nDirection < PATH_NB_DIRECTIONS);
 
 	sub_6FDA9720(pDynamicPath, nDirection);
 }
@@ -1720,9 +1720,9 @@ void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nNew
 {
 	if (pDynamicPath)
 	{
-		if (nNewDistance >= 77)
+		if (nNewDistance >= (D2DynamicPathStrc::MaxPathPoints - 1))
 		{
-			nNewDistance = 77;
+			nNewDistance = (D2DynamicPathStrc::MaxPathPoints - 1);
 		}
 
 		pDynamicPath->nDistMax = nNewDistance;
