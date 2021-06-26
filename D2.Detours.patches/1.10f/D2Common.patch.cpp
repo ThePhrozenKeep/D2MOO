@@ -256,7 +256,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetDistance                                                    @10217
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetDistance                                                    @10218
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_AddToDistance                                                  @10219
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10220                                                      @10220
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_ComputeSquaredDistance                                                      @10220
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10221                                                      @10221
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10222                                                      @10222
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10223                                                      @10223

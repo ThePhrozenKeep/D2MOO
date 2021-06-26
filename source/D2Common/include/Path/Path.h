@@ -342,7 +342,7 @@ D2COMMON_DLL_DECL void __stdcall D2COMMON_10212_PATH_SetMoveFlags(D2UnitStrc* pU
 //D2Common.0x6FDAA600 (#10213)
 D2COMMON_DLL_DECL void __stdcall D2Common_10213(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6A0 (#10220)
-D2COMMON_DLL_DECL int __stdcall D2Common_10220(int a1, int a2, int a3, int a4);
+D2COMMON_DLL_DECL int __stdcall PATH_ComputeSquaredDistance(int a1, int a2, int a3, int a4);
 //D2Common.0x6FDAA6D0 (#10221)
 D2COMMON_DLL_DECL void __stdcall D2Common_10221(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6F0 (#10237)

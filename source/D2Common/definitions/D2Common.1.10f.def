@@ -220,7 +220,7 @@ EXPORTS
 	PATH_SetDistance													@10217
 	PATH_GetDistance													@10218
 	PATH_AddToDistance													@10219
-	D2Common_10220														@10220
+	PATH_ComputeSquaredDistance											@10220
 	D2Common_10221														@10221
 	D2Common_10222														@10222
 	D2Common_10223														@10223
