@@ -23,24 +23,16 @@ static const int dword_6FDD1E98[] =
 	0, 1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, 1, -1, -1, -1, 0, 0, 0, 1, 1, 1, -1, -1, 0, 0, 0, 0, 0, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0
 };
 
-static const char byte_6FDD1F88[] =
+static const uint32_t dword_6FDD1F88[PATH_NB_DIRECTIONS] =
 {
-	 0,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,
-	 1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,  1,  0,  0,  0,
-	 1,  0,  0,  0,  4,  0,  0,  0,  4,  0,  0,  0,  4,  0,  0,  0,
-	 4,  0,  0,  0,  4,  0,  0,  0,  4,  0,  0,  0,  4,  0,  0,  0,
-	 4,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,
-	 8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,
-	 8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,
-	 8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,
-	-8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1,
-	-8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1,
-	-8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1,
-	-8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1, -8, -1, -1, -1,
-	-4, -1, -1, -1, -4, -1, -1, -1, -4, -1, -1, -1, -4, -1, -1, -1,
-	-4, -1, -1, -1, -4, -1, -1, -1, -4, -1, -1, -1, -4, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	0x00000000, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 
+	0x00000001, 0x00000004, 0x00000004, 0x00000004, 0x00000004, 0x00000004, 0x00000004, 0x00000004, 
+	0x00000004, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 
+	0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 0x00000008, 
+	0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 
+	0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 0xFFFFFFF8, 
+	0xFFFFFFFC, 0xFFFFFFFC, 0xFFFFFFFC, 0xFFFFFFFC, 0xFFFFFFFC ,0xFFFFFFFC, 0xFFFFFFFC, 0xFFFFFFFC, 
+	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
 };
 
 static const int gaPathTypeFlags_6FDD2088[] =
@@ -1069,39 +1061,37 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 //TODO: Find a name
 void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection)
 {
-	int nUnitType = 0;
+	D2C_UnitTypes nUnitType;
 
 	if (pDynamicPath->pUnit)
 	{
-		nUnitType = pDynamicPath->pUnit->dwUnitType;
+		nUnitType = D2C_UnitTypes(pDynamicPath->pUnit->dwUnitType);
 	}
 	else
 	{
 		nUnitType = 6;
 	}
 
-	if (nUnitType == UNIT_OBJECT)
+	const uint8_t nNormalizedDirection = PATH_NormalizeDirection(nDirection);
+	switch (nUnitType)
 	{
-		pDynamicPath->nDirection = (nDirection & 63);
-	}
-	else if (nUnitType == UNIT_MISSILE)
-	{
+	case UNIT_OBJECT:
+	case UNIT_ITEM:
+		pDynamicPath->nDirection = nNormalizedDirection;
+		break;
+	case UNIT_MISSILE:
 		if (!(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00040))
 		{
-			pDynamicPath->nDirection = (nDirection & 63);
+			pDynamicPath->nDirection = nNormalizedDirection;
 		}
-	}
-	else if (nUnitType == UNIT_ITEM)
-	{
-		pDynamicPath->nDirection = (nDirection & 63);
-	}
-	else
-	{
-		if ((nDirection & 63) != pDynamicPath->nNewDirection)
+		break;
+	default:
+		if (nNormalizedDirection != pDynamicPath->nNewDirection)
 		{
-			pDynamicPath->nNewDirection = (nDirection & 63);
-			pDynamicPath->nDiffDirection = byte_6FDD1F88[4 * (((nDirection & 63) - pDynamicPath->nDirection) & 63)];
+			pDynamicPath->nNewDirection = nNormalizedDirection;
+			pDynamicPath->nDiffDirection = dword_6FDD1F88[PATH_NormalizeDirection(nNormalizedDirection - pDynamicPath->nDirection)];
 		}
+		break;
 	}
 }
 
@@ -1111,16 +1101,17 @@ void __stdcall D2COMMON_10193_PATH_AdjustDirection(D2DynamicPathStrc* pDynamicPa
 {
 	if (pDynamicPath->nDirection != pDynamicPath->nNewDirection && !(pDynamicPath->dwFlags & 0x40))
 	{
-		pDynamicPath->nDirection = ((pDynamicPath->nDirection + pDynamicPath->nDiffDirection) & 63);
+		pDynamicPath->nDirection = PATH_NormalizeDirection(pDynamicPath->nDirection + pDynamicPath->nDiffDirection);
 
-		if (((pDynamicPath->nDirection - pDynamicPath->nNewDirection) & 63) > 31)
+		const uint8_t dirDiff = PATH_NormalizeDirection(pDynamicPath->nDirection - pDynamicPath->nNewDirection);
+		if (dirDiff > 31)
 		{
 			if (pDynamicPath->nDiffDirection > 63)
 			{
 				pDynamicPath->nDirection = pDynamicPath->nNewDirection;
 			}
 		}
-		else if (((pDynamicPath->nDirection - pDynamicPath->nNewDirection) & 63) < 31)
+		else if (dirDiff < 31)
 		{
 			if (pDynamicPath->nDiffDirection < 63)
 			{
@@ -1134,19 +1125,17 @@ void __stdcall D2COMMON_10193_PATH_AdjustDirection(D2DynamicPathStrc* pDynamicPa
 //TODO: Find a name
 void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, int a4)
 {
-	uint8_t nDirection = 0;
-
 	if (pDynamicPath)
 	{
-		nDirection = sub_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY));
+		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(sub_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
 		if (a4)
 		{
-			pDynamicPath->nNewDirection = nDirection & 63;
-			pDynamicPath->nDirection = nDirection & 63;
+			pDynamicPath->nNewDirection = nNormalizedDirection;
+			pDynamicPath->nDirection = nNormalizedDirection;
 		}
 		else
 		{
-			sub_6FDA9720(pDynamicPath, nDirection);
+			sub_6FDA9720(pDynamicPath, nNormalizedDirection);
 		}
 	}
 }
@@ -1370,8 +1359,8 @@ void __stdcall PATH_SetDirection(D2DynamicPathStrc* pDynamicPath, uint8_t nDirec
 {
 	if (pDynamicPath)
 	{
-		pDynamicPath->nDirection = nDirection & 63;
-		pDynamicPath->nNewDirection = nDirection & 63;
+		pDynamicPath->nDirection = PATH_NormalizeDirection(nDirection);
+		pDynamicPath->nNewDirection = PATH_NormalizeDirection(nDirection);
 	}
 }
 

@@ -155,6 +155,11 @@ inline uint32_t PATH_ToFP16(uint16_t value) {
 	return (value << 16) + (1 << 15);
 }
 
+enum D2PathConstants {
+	PATH_NB_DIRECTIONS = 64
+};
+inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
+
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA82A0 (#10141)
