@@ -1302,13 +1302,13 @@ int __stdcall PATH_GetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath)
 //D2Common.0x6FDA9B90 (#11291)
 void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a2)
 {
-	if (a2 < D2DynamicPathStrc::MaxPathPoints)
+	if (a2 < D2DynamicPathStrc::MAXPATHLEN)
 	{
 		pDynamicPath->dwPathPoints = a2;
 	}
 	else
 	{
-		pDynamicPath->dwPathPoints = D2DynamicPathStrc::MaxPathPoints - 1;
+		pDynamicPath->dwPathPoints = D2DynamicPathStrc::MAXPATHLEN - 1;
 	}
 }
 
@@ -1669,9 +1669,7 @@ void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType)
 
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_CLIENT);
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_SERVER);
-
-#define MAXPATHLEN 78
-	D2_ASSERT((nPathType != PATHTYPE_MISSILE) || (pDynamicPath->nDistMax < MAXPATHLEN));
+	D2_ASSERT((nPathType != PATHTYPE_MISSILE) || (pDynamicPath->nDistMax < D2DynamicPathStrc::MAXPATHLEN));
 }
 
 //D2Common.0x6FDAA1E0 (#10186)
@@ -1720,9 +1718,9 @@ void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nNew
 {
 	if (pDynamicPath)
 	{
-		if (nNewDistance >= (D2DynamicPathStrc::MaxPathPoints - 1))
+		if (nNewDistance >= (D2DynamicPathStrc::MAXPATHLEN - 1))
 		{
-			nNewDistance = (D2DynamicPathStrc::MaxPathPoints - 1);
+			nNewDistance = (D2DynamicPathStrc::MAXPATHLEN - 1);
 		}
 
 		pDynamicPath->nDistMax = nNewDistance;

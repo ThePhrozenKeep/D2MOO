@@ -45,7 +45,7 @@ struct D2PathPointStrc
 
 struct D2DynamicPathStrc
 {
-	static const size_t MaxPathPoints = 78;
+	static const size_t MAXPATHLEN = 78;
 	union
 	{
 		struct
@@ -105,7 +105,7 @@ struct D2DynamicPathStrc
 	uint8_t nDistance;							//0x94
 	char unk0x95[3];							//0x95
 	int32_t dwUnitTypeRelated;					//0x98
-	D2PathPointStrc PathPoints[MaxPathPoints];	//0x9C
+	D2PathPointStrc PathPoints[MAXPATHLEN];	//0x9C
 	int32_t nSavedStepsCount;					//0x1D4
 	D2PathPointStrc SavedSteps[7];				//0x1D8
 	char unk0x1DC[12];							//0x1DC
