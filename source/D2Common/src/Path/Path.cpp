@@ -1913,12 +1913,12 @@ void __stdcall D2COMMON_10212_PATH_SetMoveFlags(D2UnitStrc* pUnit, BOOL bSet)
 
 	if (bSet)
 	{
-		pUnit->dwFlagEx |= 0x2000;
+		pUnit->dwFlagEx |= UNITFLAGEX_UNK_PATH_RELATED;
 		pDynamicPath->unk0x38 = 0;
 	}
 	else
 	{
-		pUnit->dwFlagEx &= 0xFFFFDFFF;
+		pUnit->dwFlagEx &= (~UNITFLAGEX_UNK_PATH_RELATED);
 		pDynamicPath->unk0x38 = 0;
 	}
 }
@@ -1930,7 +1930,7 @@ void __stdcall D2Common_10213(D2UnitStrc* pUnit)
 	D2DynamicPathStrc* pDynamicPath = NULL;
 	D2UnitStrc* pTargetUnit = NULL;
 
-	if (pUnit && !(pUnit->dwFlags & UNITFLAG_ISASYNC) && pUnit->dwFlagEx & 0x2000)
+	if (pUnit && !(pUnit->dwFlags & UNITFLAG_ISASYNC) && (pUnit->dwFlagEx & UNITFLAGEX_UNK_PATH_RELATED))
 	{
 		pDynamicPath = pUnit->pDynamicPath;
 		D2_ASSERT(pDynamicPath);
