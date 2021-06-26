@@ -1,0 +1,101 @@
+#This is for Modsystem compatibility only dont touch this!
+[D2SE]
+CreatedFor=2.2.0
+
+#Settings the Modder has to Set when using D2SE Modsystem it can be protected! Dont change anything here when its not your Mod and you want to play on Realm
+[Protected]
+#CoreEngine needed or included in this Mod all not included files will be taken from the Vanilla Folder of the Version!
+#Supportet Cores are 1.07 1.08 1.09b 1.09d 1.10f 1.11b 1.12a 1.13PTR2 THIS MUST BE SET
+D2Core=@D2SE_CORE@
+
+#Modnames & Title 32 Chars each maximum
+ModName=@D2SE_NAME@
+ModTitle=@D2SE_TITLE@
+
+#Mod Versions 10 Chars each maximum
+ModMajorVersion=@D2SE_VERSION_MAJOR@
+ModMinorVersion=@PROJECT_VERSION_MINOR@
+ModRevision=@D2SE_VERSION_REVISION@
+
+#Filename of a 250*60 Buttonimage in BMP format! keep the outer 1 pixel border black! used for Modselection
+ModBanner=@D2SE_MOD_BANNER@
+
+#Button to launch readme can be file or Webpage
+ModReadme=@D2SE_README@
+#Button to launch Descriptionfile can be file or Webpage
+ModDescription=@D2SE_DESCRIPTION_FILE@
+#Button to reach Homepage can be file or Webpage
+ModHP=@D2SE_HOMEPAGE@
+#Button to reach Forum/Board can be file or Webpage
+ModBoard=@D2SE_BOARD@
+#Button to a Mod Configurator Executable
+#ModConfig=
+
+#Allow the activation of -direct and -txt Checkboxes inside GUI default=0
+Modable=1
+#When Modable=0 it forces -Direct -Txt without showing the Checkboxes.
+#ModForceDirect=1
+#ModForceTxt=1
+
+#Allows the Creation of HC Characters default=1
+ModAllowHC=1
+
+#1=Allow Singleplayer Multistart!
+ModAllowSPFeature=1
+
+#ModSystems used
+#Allowed with Core 1.11b: NEFEX
+#Allowed with Core 1.10f: D2MOD
+#Allowed with the Cores it was compiled for: D2Extra
+#Allowed with all supportet Cores: D2SE
+#for correct configuration and handling of nefex, d2mod and D2Extra refere to their readmes, ini files and documentation!
+#for correct configuration and handling of D2SE refere to the documentation as soon as its available.
+#not all features of each System can work together watch out for Collisions be warned!
+#dont use any of their loadsystems D2SE will load the modsystems in a clean way for you!!!
+#D2SE 1=load and init D2SE on startup
+ModUseD2SE=0
+#Name of the D2SE Mod dll 32 Chars maximum
+D2SEDllName=
+#D2SEUtility 1=use utility functions inside D2SEUtility.dll
+ModUseD2SEUtility=0
+#Nefex 1=load nefex at startup it does selfinitialization
+ModUseNefex=0
+#D2Mod 1=load and init D2Mod.dll at startup
+ModUseD2Mod=0
+#D2Extra 1=Use D2Extra on startup make sure you have the correct version for your D2 Core!
+ModUseD2Extra=0
+
+#Let D2SE load up to 3 of your own .dll that must have selfiniting code.
+ModDll1=D2.Detours.dll
+#ModDll2=
+#ModDll3=
+
+#PlugY 1=use PlugY make sure the installed version supports the D2 Core!
+ModAllowPlugY=1
+
+#MPQ Setup
+#1=Patch_D2.mpq gets loaded 0=gets unloaded. Use 0 only when your own .mpq holds all content of patch_d2.mpq
+ModUsePatch_D2=1
+#Names of up to 3 own MPQ Files in increasing priority. All of them are higher than patch_d2 32 Chars each maximum
+#ModMPQ1=
+#ModMPQ2=
+#ModMPQ3=
+
+#Realm setup DONT EVER USE D2SE to connect to official BNet. Checksum will fail for sure!
+#Only use the baseinstallation of D2 patched to newest Patch to play on BNet with starting game.exe !!!
+#Im not responsible if you are stupid! make sure you have no type errors this cannot get verified automatic!
+#RealmGateway=
+#RealmTimezone=
+#RealmGatewayName=
+#RealmSelected=
+#RealmPort=
+
+#UPDATE Setup
+#UpdateFile=
+#UpdateMirror1=
+[END-Protected]
+
+
+#dont touch this it must be at the end of file to check for corruptions
+[END]
+endoffile=4711

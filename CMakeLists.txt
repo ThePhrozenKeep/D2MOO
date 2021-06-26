@@ -15,6 +15,7 @@ include(CMakeDependentOption)           # This is a really useful scripts that c
 include(GNUInstallDirs)                 # This will define the default values for installation directories (all platforms even if named GNU)
 include(CTest)                          # Must be called before adding tests but after calling project(). This automatically calls enable_testing() and configures ctest targets when using Make/Ninja
 include(cmake/D2MOO.ModHelpers.cmake)   # Used to make modders life easier
+include(cmake/D2MOO.D2SE.cmake)   # Used to generate D2SE .ini files
 
 #####################
 ##  D2MOO OPTIONS  ##
