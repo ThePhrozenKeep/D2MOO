@@ -215,7 +215,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 		*pDirection = pTestDir[1];
 		return TRUE;
 	}
-#define PATH_DIR_NULL 255
+
 	D2_ASSERT(pTestDir[2] != PATH_DIR_NULL);
 
 	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + word_6FDD2118[4 * pTestDir[2]]), (pPoint.Y + word_6FDD211C[4 * pTestDir[2]]), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))

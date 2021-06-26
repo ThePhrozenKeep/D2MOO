@@ -156,7 +156,9 @@ inline uint32_t PATH_ToFP16(uint16_t value) {
 }
 
 enum D2PathConstants {
-	PATH_NB_DIRECTIONS = 64
+	PATH_NB_DIRECTIONS = 64,
+	PATH_DIR_NULL = 255,
+	PATH_MAX_STEPNUM = 20,
 };
 inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
 
