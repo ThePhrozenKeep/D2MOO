@@ -6,6 +6,7 @@
 #include "Path/Path_IDAStar.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
+#include <Fog.h>
 
 struct D2UnkPathStrc
 {
@@ -1111,41 +1112,21 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 	}
 }
 
-////D2Common.0x6FDAB890) --------------------------------------------------------
-//signed __int64 __thiscall sub_6FDAB890(int this)
-//{
-//	int v1; // esi@1
-//	int v2; // eax@4
-//	uint8_t v3; // al@7
-//	signed int v4; // ecx@7
-//	float v5; // ST10_4@7
-//	int v6; // edi@7
-//	signed __int64 v7; // qax@7
-//	int v8; // ecx@7
-//	signed __int64 result; // qax@7
-//
-//	v1 = this;
-//	if (!this)
-//	{
-//		FOG_Assertion("ptPath", __FILE__, __LINE__);
-//		exit(-1);
-//	}
-//	v2 = *(_DWORD *)(this + 88);
-//	if (!v2)
-//	{
-//		FOG_Assertion(//			"ptPath->hTarget", //			__FILE__, __LINE__//			491);
-//		exit(-1);
-//	}
-//	v3 = D2COMMON_10158_PATH_GetDirection(*(D2DynamicPathStrc**)(v2 + 44));
-//	v4 = *(_BYTE *)(v1 + 104);
-//	v5 = (double)v4;
-//	v6 = (8 * v3 - ((_WORD)v4 << 8)) & 0x1FF;
-//	v7 = (signed __int64)(Fog_10083((8 * v3 - ((_WORD)v4 << 8)) & 0x1FF) * v5);
-//	*(_WORD *)(v1 + 16) += v7;
-//	result = (signed __int64)(Fog_10084(v8, HIDWORD(v7), v6) * v5);
-//	*(_WORD *)(v1 + 18) += result;
-//	return result;
-//}
+//D2Common.0x6FDAB890
+// Should be in PathUtil.cpp
+void __fastcall PATH_MoveForward_6FDAB890(D2DynamicPathStrc* ptPath)
+{
+	D2_ASSERT(ptPath);
+	D2UnitStrc* ptTarget = ptPath->pTargetUnit;
+	D2_ASSERT(ptTarget);
+	uint8_t nDirection = PATH_GetDirection(ptTarget->pDynamicPath);
+	int v6 = ptPath->unk0x68[0]; // Some kind of stepping distance or speed ?
+	uint16_t v4 = (uint16_t)v6 << 8;
+	const float nDistance = v6;
+	const uint16_t nAngleRad512 = (8 * nDirection - v4) & 0x1FF;
+	ptPath->SP1.X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
+	ptPath->SP1.Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
+}
 
 ////D2Common.0x6FDAB940) --------------------------------------------------------
 //char __fastcall sub_6FDAB940(int a1, int a2)
