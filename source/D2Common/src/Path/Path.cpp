@@ -1069,7 +1069,7 @@ void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection
 	}
 	else
 	{
-		nUnitType = 6;
+		nUnitType = UNIT_TYPES_COUNT;
 	}
 
 	const uint8_t nNormalizedDirection = PATH_NormalizeDirection(nDirection);

@@ -17,6 +17,7 @@ enum D2C_UnitTypes
 	UNIT_MISSILE,
 	UNIT_ITEM,
 	UNIT_TILE,
+	UNIT_TYPES_COUNT
 };
 
 enum D2C_UnitFlags
