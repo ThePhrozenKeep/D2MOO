@@ -14,9 +14,10 @@
 
 static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
 
-static const int dword_6FDD1DE4[] =
+// Always used with index < 4 in the original dll, but we still have more than 4 values ?
+static const D2C_CollisionFlags gaCollisionPatternsFromSize_6FDD1DE4[4] =
 {
-	0, 1, 1, 2, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, -1, -1, 0, 0, 0, 0, 0, 1, 1, -1, -1, -1, 0, 0, 0, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, 1, -1, -1, -1, -1
+	COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_MISSILE //, COLLIDE_NONE, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK
 };
 
 static const int dword_6FDD1E98[] =
@@ -897,7 +898,7 @@ int __stdcall D2Common_11282_Unused(int nMonsterId)
 	pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
 	if (pMonStats2TxtRecord && pMonStats2TxtRecord->nSizeX >= 0 && pMonStats2TxtRecord->nSizeX < 4)
 	{
-		nCollisionPattern = dword_6FDD1DE4[pMonStats2TxtRecord->nSizeX];
+		nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[pMonStats2TxtRecord->nSizeX];
 
 		if (pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_REVIVE] || pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_SMALL])
 		{
@@ -921,24 +922,23 @@ int __stdcall D2Common_11282_Unused(int nMonsterId)
 }
 
 //D2Common.0x6FDA9250 (#11281)
-//TODO: Find a name
 int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize)
 {
 	if (nSize >= 0 && nSize < 4)
 	{
-		int nCollisionPattern = dword_6FDD1DE4[nSize];
+		const D2C_CollisionFlags nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[nSize];
 		if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && MONSTERS_CanBeInTown(pUnit))
 		{
-			D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
+			const D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
 			if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]))
 			{
-				if (nCollisionPattern == 1)
+				if (nCollisionPattern == COLLIDE_BLOCK_PLAYER)
 				{
-					return 3;
+					return COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_MISSILE;
 				}
-				else if (nCollisionPattern == 2)
+				else if (nCollisionPattern == COLLIDE_BLOCK_MISSILE)
 				{
-					return 4;
+					return COLLIDE_WALL;
 				}
 			}
 		}
@@ -946,7 +946,7 @@ int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSi
 		return nCollisionPattern;
 	}
 
-	return 1;
+	return COLLIDE_BLOCK_PLAYER;
 }
 
 //D2Common.0x6FDA92F0 (#10214)
@@ -978,7 +978,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pDynamicPath->pUnit = pUnit;
 	pDynamicPath->dwUnitSize = UNITS_GetUnitSizeX(pUnit);
 
-	pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pDynamicPath->dwUnitSize);
+	pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pDynamicPath->dwUnitSize);
 
 	pDynamicPath->dwVelocity = 2048;
 	pDynamicPath->pRoom = pRoom;
@@ -992,7 +992,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		pDynamicPath->dwCollisionType = 128;
+		pDynamicPath->dwCollisionType = COLLIDE_PLAYER;
 		pDynamicPath->unk0x50 = 0x1C09;
 		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
 		pDynamicPath->nDistMax = 73;
@@ -1000,7 +1000,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	}
 	else if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
-		pDynamicPath->dwCollisionType = 256;
+		pDynamicPath->dwCollisionType = COLLIDE_MONSTER;
 		PATH_SetType(pDynamicPath, PATHTYPE_TOWARD);
 
 		int nClassId = pUnit->dwClassId;
@@ -1013,7 +1013,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 		if (nClassId == MONSTER_WRAITH1)
 		{
-			pUnit->pDynamicPath->dwCollisionPattern = 5;
+			pDynamicPath->dwCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
 			pDynamicPath->unk0x50 = 0x804;
 			pDynamicPath->nDistMax = 14;
 		}
@@ -1033,7 +1033,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	}
 	else if (pUnit->dwUnitType == UNIT_MISSILE)
 	{
-		pDynamicPath->dwCollisionType = 0;
+		pDynamicPath->dwCollisionType = COLLIDE_NONE;
 		pDynamicPath->unk0x50 = 0;
 		PATH_SetType(pDynamicPath, 4);
 	}
@@ -1159,14 +1159,14 @@ void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 	if (a2 || pUnit->dwUnitType != UNIT_MONSTER)
 	{
 		D2Common_10223(pUnit, 1);
-		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->wPosX, pUnit->pDynamicPath->wPosY, 3, 3, 32768);
+		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->wPosX, pUnit->pDynamicPath->wPosY, 3, 3, COLLIDE_CORPSE);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
 	else
 	{
 		D2Common_10223(pUnit, 1);
-		pUnit->pDynamicPath->dwCollisionPattern = 5;
-		PATH_SetCollisionType(pUnit->pDynamicPath, 32768);
+		pUnit->pDynamicPath->dwCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
+		PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		D2Common_10222(pUnit);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
@@ -1176,40 +1176,37 @@ void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 //TODO: Find a name
 void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	int nCollisionPattern = 0;
-	int nClassId = 0;
-
-	if (!bDoNothing)
+	if (bDoNothing)
 	{
-		D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_MONSTER);
+		return;
+	}
 
-		if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == 32768)
+	D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_MONSTER);
+	if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == 32768)
+	{
+		uint32_t nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
+
+		if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
-			nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
+			const int nClassId = MONSTERS_GetBaseIdFromMonsterId(pUnit->dwClassId);
 
-			if (pUnit->dwUnitType == UNIT_MONSTER)
+			if (nClassId == MONSTER_WRAITH1 || nClassId == MONSTER_BIRD1 || nClassId == MONSTER_BIRD2 || nClassId == MONSTER_PARROT)
 			{
-				nClassId = MONSTERS_GetBaseIdFromMonsterId(pUnit->dwClassId);
+				nCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
+			}
+		}
 
-				if (nClassId == MONSTER_WRAITH1 || nClassId == MONSTER_BIRD1 || nClassId == MONSTER_BIRD2 || nClassId == MONSTER_PARROT)
-				{
-					nCollisionPattern = 5;
-				}
-			}
-
-			if (UNITS_GetRoom(pUnit))
-			{
-				D2Common_10223(pUnit, 1);
-				pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
-				PATH_SetCollisionType(pUnit->pDynamicPath, 256);
-				D2Common_10222(pUnit);
-			}
-			else
-			{
-				pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
-				PATH_SetCollisionType(pUnit->pDynamicPath, 256);
-			}
+		if (UNITS_GetRoom(pUnit))
+		{
+			D2Common_10223(pUnit, 1);
+			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
+			PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_MONSTER);
+			D2Common_10222(pUnit);
+		}
+		else
+		{
+			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
+			PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_MONSTER);
 		}
 	}
 }
@@ -1600,8 +1597,9 @@ int __stdcall PATH_GetCollisionType(D2DynamicPathStrc* pDynamicPath)
 	{
 		return pDynamicPath->dwCollisionType;
 	}
-
-	return 65535;
+	
+	// Original game uses 0xFFFF because collisions fit on 16btis, but intent is to return all bits set.
+	return COLLIDE_ALL_MASK;
 }
 
 //D2Common.0x6FDA9FE0 (#10182)
@@ -1744,7 +1742,7 @@ uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 {
 	if (!pDynamicPath->dwVelocity)
 	{
-		pDynamicPath->unk0x54 = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwUnitSize, 0x7FFF);
+		pDynamicPath->unk0x54 = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
 	}
 
 	return pDynamicPath->unk0x54;
