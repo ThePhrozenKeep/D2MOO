@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "Path.h"
 
 #pragma pack(1)
 #pragma pack()
@@ -17,8 +18,8 @@ void __stdcall sub_6FDAC5E0(D2CoordStrc*, int*, int, int, int, int);
 
 
 
-////D2Common.0x6FDA69E0
-//signed int __fastcall D2Common_PATH_First_6FDA69E0(int this);
+//D2Common.0x6FDA69E0
+int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo);
 ////D2Common.0x6FDA6D10
 //int __fastcall sub_6FDA6D10(int a1, int a2);
 ////D2Common.0x6FDA6D50
