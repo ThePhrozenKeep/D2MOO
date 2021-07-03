@@ -805,55 +805,47 @@ D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPoint
 //	return result;
 //}
 
-////D2Common.0x6FDA78A0) --------------------------------------------------------
-//signed int __fastcall sub_6FDA78A0(int a1, int a2)
-//{
-//	signed int result; // eax@1
-//	int v3; // ebp@1
-//	int v4; // ebx@4
-//	int v5; // edx@5
-//	int v6; // esi@5
-//	signed int v7; // [sp+Ch] [bp-144h]@1
-//	char* v8; // [sp+10h] [bp-140h]@2
-//	void* v9; // [sp+14h] [bp-13Ch]@1
-//	char v10; // [sp+14Ch] [bp-4h]@2
-//	void* v11; // [sp+150h] [bp+0h]@11
-//
-//	result = 0;
-//	v3 = -2;
-//	v9 = (void*)(*(_DWORD *)(a2 + 48) + 156);
-//	v7 = -2;
-//	if (!a1)
-//		goto LABEL_15;
-//	v8 = &v10;
-//	do
-//	{
-//		if (result >= 78)
-//			break;
-//		v4 = *(_DWORD *)(a1 + 12);
-//		if (v4)
-//		{
-//			v5 = *(_WORD *)a1 - *(_WORD *)v4;
-//			v6 = *(_WORD *)(a1 + 2) - *(_WORD *)(v4 + 2);
-//			if (v5 != v3 || v6 != v7)
-//			{
-//				++result;
-//				v3 = *(_WORD *)a1 - *(_WORD *)v4;
-//				*(_DWORD *)v8 = *(_DWORD *)a1;
-//				v8 -= 4;
-//				v7 = v6;
-//			}
-//		}
-//		a1 = v4;
-//	}
-//	while (v4);
-//	if (result >= 1 && result < 78)
-//		memcpy(v9, &v11 - result, 4 * ((unsigned int)(4 * result) >> 2));
-//	else
-//		LABEL_15:
-//	result = 0;
-//	return result;
-//}
+//D2Common.0x6FDA78A0
+// Takes a path list, and builds the path using straight lines into the path info.
+// Note that the path list stores the path from the end to the beginning (in reverse order).
+// It also seems like it won't copy the last  point of the path list (first of the array), not sure if it's intended or not.
+signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPoint, D2PathInfoStrc* pPathInfo)
+{
+	if (!pCurPoint)
+	{
+		return 0;
+	}
+
+	int nbPoints = 0;
+	D2PathPointStrc tempPathPoints[78];
+	// Assumes all points are conex, so we can't have a delta of -2, hence used for init
+	int prevDeltaX = -2;
+	int prevDeltaY = -2;
+	while (pCurPoint && pCurPoint->pNextEntry && nbPoints < D2DynamicPathStrc::MAXPATHLEN)
+	{
+		D2PathPointsListStrc* pNextPoint = pCurPoint->pNextEntry;
+		const int deltaX = pCurPoint->point.X - pNextPoint->point.X;
+		const int deltaY = pCurPoint->point.Y - pNextPoint->point.Y;
+		// If the direction doesn't change, then ignore the point
+		if (deltaX != prevDeltaX || deltaY != prevDeltaY)
+		{
+			++nbPoints;
+			// Store path in reverse order
+			tempPathPoints[D2DynamicPathStrc::MAXPATHLEN  - nbPoints] = pCurPoint->point;
+			prevDeltaX = deltaX;
+			prevDeltaY = deltaY;
+		}
+		pCurPoint = pNextPoint;
+	}
+
+	if (nbPoints < 1 || nbPoints >= D2DynamicPathStrc::MAXPATHLEN)
+	{
+		return 0;
+	}
+
+	memcpy(pPathInfo->pDynamicPath->PathPoints, &tempPathPoints[D2DynamicPathStrc::MAXPATHLEN - nbPoints], sizeof(D2PathPointStrc) * nbPoints);
+	return nbPoints;
+}
 
 //D2Common.0x6FDA7970
 int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo)
