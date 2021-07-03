@@ -1590,411 +1590,56 @@ int __stdcall sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 //	return result;
 //}
 
-////D2Common.0x6FDAC170) --------------------------------------------------------
-//signed int __fastcall sub_6FDAC170(int a1, int a2, int a3, signed int a4)
-//{
-//	int v4; // eax@1
-//	signed int v5; // ecx@1
-//	signed int result; // eax@3
-//	int v7; // edi@5
-//	int v8; // esi@5
-//	int v9; // ebx@6
-//	int v10; // ecx@6
-//	int v11; // [sp+0h] [bp-8h]@5
-//	int v12; // [sp+4h] [bp-4h]@1
-//	signed int i; // [sp+Ch] [bp+4h]@5
-//
-//	v4 = a1;
-//	v5 = a4;
-//	v12 = v4;
-//	if (a4 >= 2)
-//	{
-//		v7 = *(_WORD *)a2 - (unsigned __int16)a3;
-//		v8 = 0;
-//		result = 0;
-//		v11 = *(_WORD *)(a2 + 2) - HIWORD(a3);
-//		for (i = 0; v8 < a4 - 1; ++v8)
-//		{
-//			v9 = *(_WORD *)(a2 + 4 * v8 + 4) - *(_WORD *)(a2 + 4 * v8);
-//			v10 = *(_WORD *)(a2 + 4 * v8 + 6) - *(_WORD *)(a2 + 4 * v8 + 2);
-//			if (v9 != v7 || v10 != v11)
-//			{
-//				if (i > 0 || v7 == v9 || v11 == v10)
-//				{
-//					i = 0;
-//					*(_DWORD *)(v12 + 4 * result++) = *(_DWORD *)(a2 + 4 * v8);
-//				}
-//				else
-//				{
-//					i = 1;
-//					v9 = -2;
-//				}
-//			}
-//			else
-//			{
-//				++i;
-//			}
-//			v11 = v10;
-//			v5 = a4;
-//			v7 = v9;
-//		}
-//		if (v8 < v5)
-//			*(_DWORD *)(v12 + 4 * result++) = *(_DWORD *)(a2 + 4 * v8);
-//	}
-//	else
-//	{
-//		if (a4 == 1)
-//		{
-//			*(_DWORD *)v4 = *(_DWORD *)a2;
-//			result = 1;
-//		}
-//		else
-//		{
-//			result = 0;
-//		}
-//	}
-//	return result;
-//}
+//D2Common.0x6FDAC170
+int __fastcall PATH_SimplifyToLines_6FDAC170(D2PathPointStrc* pOutPathPoints, D2PathPointStrc* pInputPoints, D2PathPointStrc tStartCoord, signed int nbTempPoints)
+{
+	if (nbTempPoints >= 2)
+	{
+		int nbOutPoints = 0;
+		
+		int prevDeltaX = pInputPoints->X - tStartCoord.X;
+		int prevDeltaY = pInputPoints->Y - tStartCoord.Y;
+		int nbPointsInLine = 0;
+		int nCurrentPointIdx;
+		for (nCurrentPointIdx = 0; nCurrentPointIdx < nbTempPoints - 1; ++nCurrentPointIdx)
+		{
+			int deltaX = pInputPoints[nCurrentPointIdx + 1].X - pInputPoints[nCurrentPointIdx].X;
+			int deltaY = pInputPoints[nCurrentPointIdx + 1].Y - pInputPoints[nCurrentPointIdx].Y;
+			if (deltaX == prevDeltaX && deltaY == prevDeltaY)
+			{
+				++nbPointsInLine;
+			}
+			else if (nbPointsInLine > 0 || prevDeltaX == deltaX || prevDeltaY == deltaY)
+			{
+				nbPointsInLine = 0;
+				pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+			}
+			else
+			{
+				nbPointsInLine = 1;
+				deltaX = -2;
+			}
+			prevDeltaY = deltaY;
+			prevDeltaX = deltaX;
+		}
+		if (nCurrentPointIdx < nbTempPoints)
+			pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+	}
+	else if (nbTempPoints == 1)
+	{
+		*pOutPathPoints = *pInputPoints;
+		return 1;
+	}
+	return 0;
+}
 
-////D2Common.0x6FDAC270) --------------------------------------------------------
-//signed int __thiscall sub_6FDAC270(int this)
-//{
-//	int v1; // edi@1
-//	int v2; // esi@1
-//	int v3; // eax@1
-//	D2RoomStrc*v4; // eax@7
-//	int v5; // edx@7
-//	unsigned __int8 v6; // cl@7
-//	int v7; // eax@7
-//	int v8; // edx@7
-//	signed int v9; // ebp@7
-//	bool v10; // zf@7
-//	int v11; // eax@10
-//	__int16 v12; // dx@10
-//	int v13; // esi@10
-//	int v14; // ebp@10
-//	int v15; // eax@10
-//	signed int v16; // ecx@10
-//	signed int v17; // ebx@14
-//	int v18; // esi@18
-//	int v19; // edi@22
-//	int v20; // eax@23
-//	int v21; // edx@26
-//	int v22; // ebp@28
-//	int v23; // edx@28
-//	int v24; // ebx@31
-//	int v25; // ebp@35
-//	int v26; // edx@35
-//	int v27; // ebx@38
-//	signed int v28; // esi@41
-//	signed int result; // eax@42
-//	int v30; // ebp@44
-//	int v31; // ebx@44
-//	int v32; // [sp+10h] [bp-178h]@1
-//	int v33; // [sp+14h] [bp-174h]@7
-//	int v34; // [sp+18h] [bp-170h]@10
-//	int v35; // [sp+1Ch] [bp-16Ch]@28
-//	int v36; // [sp+20h] [bp-168h]@11
-//	int v37; // [sp+24h] [bp-164h]@7
-//	int v38; // [sp+2Ch] [bp-15Ch]@16
-//	int v39; // [sp+30h] [bp-158h]@7
-//	int v40; // [sp+38h] [bp-150h]@7
-//	int v41; // [sp+3Ch] [bp-14Ch]@1
-//	int v42; // [sp+40h] [bp-148h]@7
-//	D2RoomStrc*v43; // [sp+44h] [bp-144h]@7
-//	int v44; // [sp+48h] [bp-140h]@7
-//	int v45; // [sp+4Ch] [bp-13Ch]@7
-//	int v46[78]; // [sp+50h] [bp-138h]@20
-//
-//	v1 = this;
-//	v32 = this;
-//	v2 = *(_DWORD *)(this + 48);
-//	v41 = v2;
-//	v3 = *(_DWORD *)(v2 + 48);
-//	if (!v3 || *(_DWORD *)v3 && (!v3 || *(_DWORD *)v3 != 1))
-//	{
-//		FOG_Assertion(//			"(UnitGetType(ptPathInfo->ptPath->hUnit) == UNIT_PLAYER) || (UnitGetType(ptPathInfo->ptPath->hUnit) == UNIT_MONSTER)", //			__FILE__, __LINE__//			685);
-//		exit(-1);
-//	}
-//	v4 = *(D2RoomStrc**)(this + 8);
-//	v5 = *(_DWORD *)(this + 44);
-//	v42 = *(_DWORD *)(this + 40);
-//	v6 = *(_BYTE *)(v2 + 145);
-//	v43 = v4;
-//	v7 = *(_DWORD *)(v1 + 4);
-//	v44 = v5;
-//	v8 = *(_DWORD *)v1;
-//	v9 = v6;
-//	v10 = *(_DWORD *)(v2 + 88) == 0;
-//	v33 = 0;
-//	v39 = v8;
-//	v37 = v7;
-//	v45 = v8;
-//	v40 = v6;
-//	if (!v10 && v6 < 0x28u)
-//	{
-//		v9 = 40;
-//		v40 = 40;
-//	}
-//	v11 = (unsigned __int16)v7 - (unsigned __int16)v8;
-//	v12 = HIWORD(v39);
-//	v13 = v11;
-//	v14 = v9 - 1;
-//	v15 = HIWORD(v37) - HIWORD(v39);
-//	v16 = 0;
-//	v34 = 0;
-//	if (v13 >= 0)
-//	{
-//		v36 = 1;
-//	}
-//	else
-//	{
-//		v13 = -v13;
-//		v36 = -1;
-//	}
-//	if (v15 >= 0)
-//	{
-//		v17 = 1;
-//	}
-//	else
-//	{
-//		v15 = -v15;
-//		v17 = -1;
-//	}
-//	v38 = v17;
-//	if (!v13)
-//	{
-//		if (v15 > 0)
-//		{
-//			v18 = *(int*)((char*)&v39 + 2);
-//			v34 = ((v17 <= 0) - 1) & 2;
-//			if (v15 > v14)
-//			{
-//				v16 = 0;
-//				LOWORD(v45) = 0;
-//				goto LABEL_41;
-//			}
-//			do
-//			{
-//				v18 += v17;
-//				LOWORD(v46[v16]) = v39;
-//				HIWORD(v46[v16++]) = v18;
-//				--v15;
-//			}
-//			while (v15);
-//		}
-//		goto LABEL_40;
-//	}
-//	v19 = v39;
-//	v37 = *(int*)((char*)&v39 + 2);
-//	if (v15)
-//	{
-//		v21 = 0;
-//		if (v13 < v15)
-//		{
-//			v34 = ((v38 <= 0) - 1) & 2;
-//			if (v15 <= v14)
-//			{
-//				v25 = v37;
-//				v26 = 0;
-//				v35 = v15;
-//				do
-//				{
-//					v26 += v13;
-//					v25 += v38;
-//					if (v26 >= v15)
-//					{
-//						v26 -= v15;
-//						v19 += v36;
-//					}
-//					v27 = v35;
-//					LOWORD(v46[v16]) = v19;
-//					HIWORD(v46[v16++]) = v25;
-//					v35 = v27 - 1;
-//				}
-//				while (v27 != 1);
-//				goto LABEL_39;
-//			}
-//		}
-//		else
-//		{
-//			LOBYTE(v21) = v36 <= 0;
-//			v34 = 2 * v21 + 1;
-//			if (v13 <= v14)
-//			{
-//				v22 = v37;
-//				v23 = 0;
-//				v35 = v13;
-//				do
-//				{
-//					v23 += v15;
-//					v19 += v36;
-//					if (v23 >= v13)
-//					{
-//						v23 -= v13;
-//						v22 += v38;
-//					}
-//					v24 = v35;
-//					LOWORD(v46[v16]) = v19;
-//					HIWORD(v46[v16++]) = v22;
-//					v35 = v24 - 1;
-//				}
-//				while (v24 != 1);
-//				goto LABEL_39;
-//			}
-//		}
-//LABEL_34:
-//		v1 = v32;
-//		v16 = 0;
-//		LOWORD(v45) = 0;
-//		goto LABEL_41;
-//	}
-//	v20 = v36;
-//	v34 = 2 * (v36 <= 0) + 1;
-//	if (v13 > v14)
-//		goto LABEL_34;
-//	do
-//	{
-//		v19 += v20;
-//		HIWORD(v46[v16]) = v12;
-//		LOWORD(v46[v16++]) = v19;
-//		--v13;
-//	}
-//	while (v13);
-//LABEL_39:
-//	v1 = v32;
-//LABEL_40:
-//	LOWORD(v46[v16]) = 0;
-//LABEL_41:
-//	v28 = v16;
-//	v37 = v16;
-//	if (v16 <= 2)
-//		return 0;
-//	if (v16 > 0)
-//	{
-//		v30 = v45;
-//		v31 = v33;
-//		do
-//		{
-//			if (COLLISION_CheckMaskWithPattern2(v43, LOWORD(v46[v31]), HIWORD(v46[v31]), v42, v44))
-//			{
-//				if (!sub_6FDABAC0(v1, (int)v46, v30, (int)&v33, (int)&v37, v40 - v31, v34))
-//					return sub_6FDAC170(v41 + 156, (int)v46, v39, v33);
-//				v28 = v37;
-//			}
-//			v30 = v46[v33];
-//			v31 = v33++ + 1;
-//		}
-//		while (v33 < v28);
-//	}
-//	if (v28)
-//		result = sub_6FDAC170(v41 + 156, (int)v46, v39, v28);
-//	else
-//		result = 0;
-//	return result;
-//}
 
-////D2Common.0x6FDAC5E0) --------------------------------------------------------
-//int __fastcall sub_6FDAC5E0(void* a1, int* a2, unsigned int a3, unsigned int a4, unsigned int a5, unsigned int a6)
-//{
-//	unsigned int v6; // edi@1
-//	signed int v7; // ebp@1
-//	unsigned int v8; // eax@2
-//	unsigned int v9; // esi@4
-//	unsigned int v10; // edx@5
-//	signed int v11; // ecx@8
-//	unsigned int v12; // ebx@9
-//	unsigned int v13; // ebx@9
-//	int v14; // eax@11
-//	int v15; // edx@13
-//	bool v16; // zf@13
-//	int v17; // eax@13
-//	int v18; // esi@13
-//	void* v19; // ecx@13
-//	int result; // eax@19
-//	void* v21; // [sp+Ch] [bp-Ch]@1
-//	signed int v22; // [sp+10h] [bp-8h]@2
-//	int* v23; // [sp+14h] [bp-4h]@1
-//
-//	v6 = a5;
-//	v23 = a2;
-//	v21 = a1;
-//	v7 = 1;
-//	if (a3 > a5)
-//	{
-//		v8 = a3;
-//		v22 = 0;
-//	}
-//	else
-//	{
-//		v8 = a5;
-//		v6 = a3;
-//		v22 = 1;
-//	}
-//	v9 = a4;
-//	if (a4 > a6)
-//	{
-//		v10 = a4;
-//		v9 = a6;
-//		v7 = 0;
-//	}
-//	else
-//	{
-//		v10 = a6;
-//	}
-//	if ((signed int)(v8 - v6) > (signed int)(v10 - v9))
-//	{
-//		v12 = v8;
-//		v8 = v10;
-//		v10 = v12;
-//		v13 = v6;
-//		v6 = v9;
-//		v11 = 1;
-//		v9 = v13;
-//	}
-//	else
-//	{
-//		v11 = 0;
-//	}
-//	if (v10 == v9)
-//		v14 = 0;
-//	else
-//		v14 = (signed int)(127 * (v8 - v6)) / (signed int)(v10 - v9);
-//	v15 = 3 * v14;
-//	v16 = v11 == 0;
-//	v17 = dword_6FDD25A0[3 * v14];
-//	v18 = dword_6FDD2598[v15];
-//	v19 = v21;
-//	if (v16)
-//	{
-//		*(_DWORD *)v21 = v18;
-//		*((_DWORD *)v21 + 1) = dword_6FDD259C[v15];
-//		v19 = v21;
-//	}
-//	else
-//	{
-//		*((_DWORD *)v21 + 1) = v18;
-//		*(_DWORD *)v21 = dword_6FDD259C[v15];
-//		LOBYTE(v17) = (-1 - v17) & 0xF;
-//	}
-//	if (!v7)
-//	{
-//		*((_DWORD *)v19 + 1) = -*((_DWORD *)v19 + 1);
-//		LOBYTE(v17) = (-1 - v17) & 0x1F;
-//	}
-//	if (v22)
-//	{
-//		result = (((-1 - (_BYTE)v17) & 0x3F) + 8) & 0x3F;
-//		*v23 = result;
-//	}
-//	else
-//	{
-//		*(_DWORD *)v19 = -*(_DWORD *)v19;
-//		result = ((_BYTE)v17 + 8) & 0x3F;
-//		*v23 = result;
-//	}
-//	return result;
-//}
+//D2Common.0x6FDAC270
+int __fastcall sub_6FDAC270(D2PathInfoStrc* pPathInfo)
+{
+	D2_ASSERTM(false, "Not implemented yet.");
+	return 0;
+}
 
 //D2Common.0x6FDAC700 (#10215)
 //TODO: Find a name
