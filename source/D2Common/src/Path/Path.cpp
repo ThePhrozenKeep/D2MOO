@@ -745,7 +745,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 	nOldX = pDynamicPath->wPosX;
 	nOldY = pDynamicPath->wPosY;
 
-	pDynamicPath->unk0x24 = 0;
+	pDynamicPath->unk0x24_PathPointsRelated = 0;
 
 	if (pDynamicPath->pTargetUnit)
 	{
@@ -806,8 +806,8 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 	int nX = 0;
 	int nY = 0;
 
-	nX = pPathInfo->field_4.X;
-	nY = pPathInfo->field_4.Y;
+	nX = pPathInfo->tTargetCoord.X;
+	nY = pPathInfo->tTargetCoord.Y;
 
 	nDiffX = nX - pPathInfo->pStartCoord.X;
 	if (nDiffX < 0)
@@ -842,8 +842,8 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 			}
 
 			++nDiffX;
-			pPathInfo->field_4.X = nX;
-			pPathInfo->field_4.Y = nY;
+			pPathInfo->tTargetCoord.X = nX;
+			pPathInfo->tTargetCoord.Y = nY;
 		}
 	}
 }
@@ -1316,7 +1316,7 @@ void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a
 //TODO: Find a name
 int __stdcall D2Common_10155(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->unk0x24;
+	return pDynamicPath->unk0x24_PathPointsRelated;
 }
 
 //D2Common.0x6FDA9BD0 (#10157)
@@ -1965,7 +1965,7 @@ BOOL __stdcall D2Common_10237(D2UnitStrc* pUnit)
 {
 	if (pUnit && pUnit->pDynamicPath)
 	{
-		return (pUnit->pDynamicPath->unk0x24 < pUnit->pDynamicPath->dwPathPoints);
+		return (pUnit->pDynamicPath->unk0x24_PathPointsRelated < pUnit->pDynamicPath->dwPathPoints);
 	}
 
 	return FALSE;

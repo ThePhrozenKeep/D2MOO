@@ -449,7 +449,7 @@ BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* p
 //D2Common.0x6FDAB0B0
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo)
 {
-	pPathInfo->pDynamicPath->unk0x24 = 0;
+	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
 	return sub_6FDAA9F0(pPathInfo);
 }
 
@@ -460,7 +460,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 	int result = 0;
 	int v5 = 0;
 
-	pPathInfo->pDynamicPath->unk0x24 = 0;
+	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
 
 	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
 
@@ -558,8 +558,8 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDAB240
 int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
-	pPathInfo->pDynamicPath->unk0x24 = 0;
-	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->field_4;
+	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->tTargetCoord;
 	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[0]);
 	return 1;
 }
@@ -1653,7 +1653,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		UNITROOM_RefreshUnit(pUnit);
 		pUnit->dwFlags |= UNITFLAG_DOUPDATE;
 
-		PATH_AddToDistance(pDynamicPath, -pDynamicPath->unk0x24);
+		PATH_AddToDistance(pDynamicPath, -pDynamicPath->unk0x24_PathPointsRelated);
 	}
 
 	if (pDynamicPath->dwPathType != 2 && pDynamicPath->dwPathType != 13 && pDynamicPath->dwPathType != 15)

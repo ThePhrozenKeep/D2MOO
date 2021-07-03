@@ -69,7 +69,7 @@ struct D2DynamicPathStrc
 	D2PathPointStrc SP3;						//0x18
 	D2RoomStrc* pRoom;							//0x1C
 	D2RoomStrc* pRoomNext;						//0x20
-	int32_t unk0x24;							//0x24
+	int32_t unk0x24_PathPointsRelated;			//0x24
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
 	D2UnitStrc* pUnit;							//0x30
@@ -105,7 +105,7 @@ struct D2DynamicPathStrc
 	uint8_t nDistance;							//0x94
 	char unk0x95[3];							//0x95
 	int32_t dwUnitTypeRelated;					//0x98
-	D2PathPointStrc PathPoints[MAXPATHLEN];	//0x9C
+	D2PathPointStrc PathPoints[MAXPATHLEN];		//0x9C
 	int32_t nSavedStepsCount;					//0x1D4
 	D2PathPointStrc SavedSteps[7];				//0x1D8
 	char unk0x1DC[12];							//0x1DC
@@ -114,7 +114,7 @@ struct D2DynamicPathStrc
 struct D2PathInfoStrc
 {
 	D2PathPointStrc pStartCoord;			//0x00
-	D2PathPointStrc field_4;				//0x04
+	D2PathPointStrc tTargetCoord;				//0x04
 	D2RoomStrc* pRoom;						//0x08
 	D2RoomStrc* field_C;					//0x0C
 	int32_t field_10;							//0x10
