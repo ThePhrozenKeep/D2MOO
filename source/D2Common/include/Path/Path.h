@@ -41,6 +41,9 @@ struct D2PathPointStrc
 {
 	uint16_t X;
 	uint16_t Y;
+
+	bool operator==(const D2PathPointStrc& other) { return X == other.X && Y == other.Y; }
+	bool operator!=(const D2PathPointStrc& other) { return !(*this == other); }
 };
 
 struct D2DynamicPathStrc
