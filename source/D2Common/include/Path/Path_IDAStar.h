@@ -16,6 +16,10 @@ void __stdcall sub_6FDAC790(D2DynamicPathStrc*, int, int);
 void __stdcall sub_6FDAC5E0(D2CoordStrc*, int*, int, int, int, int);
 
 
+enum class PATH_IDASTAR_CONSTANTS
+{
+	MAXPROOM = 50000, // Max size of a room for IDAStar (ptRoomCoords->nSizeGameX * ptRoomCoords->nSizeGameY <= MAXPROOM)
+};
 
 
 //D2Common.0x6FDA69E0
