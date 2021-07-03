@@ -564,100 +564,14 @@ int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 	return 1;
 }
 
-////D2Common.0x6FDAB270) --------------------------------------------------------
-//signed int __thiscall sub_6FDAB270(int this)
-//{
-//	int v1; // ebx@1
-//	int v2; // ebp@1
-//	int v3; // eax@1
-//	signed int v4; // ecx@2
-//	D2DynamicPathStrc*v5; // eax@5
-//	int v6; // esi@6
-//	int v7; // ecx@9
-//	signed int v8; // eax@9
-//	D2DynamicPathStrc*v9; // ecx@12
-//	int v10; // eax@13
-//	int v11; // ecx@16
-//	int v12; // esi@16
-//	signed int v13; // edi@16
-//	int v14; // eax@18
-//	int v15; // esi@26
-//	signed int result; // eax@27
-//	unsigned int v17; // [sp+Ch] [bp-Ch]@1
-//	int v18; // [sp+10h] [bp-8h]@2
-//
-//	v1 = this;
-//	v2 = *(_DWORD *)(this + 48);
-//	v17 = ((unsigned int)*(_BYTE *)(v2 + 144) >> 1) + 1;
-//	v3 = *(_DWORD *)(v2 + 88);
-//	if (v3)
-//	{
-//		v18 = *(_DWORD *)this;
-//		v4 = *(_DWORD *)v3;
-//		if (*(_DWORD *)v3 == 2 || v4 > 3 && v4 <= 5)
-//		{
-//			v6 = *(_DWORD *)(*(_DWORD *)(v3 + 44) + 12);
-//		}
-//		else
-//		{
-//			v5 = *(D2DynamicPathStrc**)(v3 + 44);
-//			if (v5)
-//				v6 = PATH_GetXPosition(v5);
-//			else
-//				v6 = 0;
-//		}
-//		v7 = *(_DWORD *)(v2 + 88);
-//		v8 = *(_DWORD *)v7;
-//		if (*(_DWORD *)v7 == 2 || v8 > 3 && v8 <= 5)
-//		{
-//			v10 = *(_DWORD *)(*(_DWORD *)(v7 + 44) + 16);
-//		}
-//		else
-//		{
-//			v9 = *(D2DynamicPathStrc**)(v7 + 44);
-//			if (v9)
-//				v10 = PATH_GetYPosition(v9);
-//			else
-//				v10 = 0;
-//		}
-//		v11 = *(_WORD *)v1 - v6;
-//		v12 = *(_WORD *)(v1 + 2) - v10;
-//		v13 = v12;
-//		if (v12 < 0)
-//			v13 = -v12;
-//		v14 = v11;
-//		if (v11 < 0)
-//			v14 = -v11;
-//		if (v14 > v13)
-//			v13 = v14;
-//		if (v13)
-//		{
-//			v11 = (signed int)(v11 * v17) / v13;
-//			v12 = (signed int)(v12 * v17) / v13;
-//		}
-//		LOWORD(v18) = v11 + v18;
-//		HIWORD(v18) += v12;
-//	}
-//	else
-//	{
-//		v18 = *(_DWORD *)(this + 4);
-//	}
-//	*(_DWORD *)(v2 + 156) = v18;
-//	sub_6FDAAD10(v2, (int)&v18, *(_DWORD *)v1);
-//	v15 = v18;
-//	D2COMMON_10170_PathSetTargetPos((D2DynamicPathStrc*)v2, (unsigned __int16)v18, HIWORD(v18));
-//	if (v18 == __PAIR__(*(_WORD *)(v1 + 2), *(_WORD *)v1))
-//	{
-//		result = 0;
-//	}
-//	else
-//	{
-//		result = 1;
-//		*(_DWORD *)(v2 + 156) = v15;
-//		*(_DWORD *)(v2 + 40) = 1;
-//	}
-//	return result;
-//}
+//D2Common.0x6FDAB270
+int __fastcall sub_6FDAB270(D2PathInfoStrc* pPathInfo)
+{
+	// Belongs to PathWF.cpp
+	D2_ASSERTM(false, "Not implemented yet.");
+	return 0;
+}
+
 
 ////D2Common.0x6FDAB3C0) --------------------------------------------------------
 //signed int __thiscall sub_6FDAB3C0(int this)
