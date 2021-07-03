@@ -40,8 +40,8 @@ int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo);
 //signed int __userpurge sub_6FDA7490<eax>(int a1<edx>, int a2<edi>, int a3, int a4, int a5);
 ////D2Common.0x6FDA78A0
 //signed int __fastcall sub_6FDA78A0(int a1, int a2);
-////D2Common.0x6FDA7970
-//signed int __fastcall sub_6FDA7970(int a1);
+//D2Common.0x6FDA7970
+int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo);
 ////D2Common.0x6FDA7D40
 //int __fastcall sub_6FDA7D40(int a1, signed int a2, int a3);
 ////D2Common.0x6FDA81C0
