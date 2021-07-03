@@ -487,73 +487,60 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 	return result + v5;
 }
 
-////D2Common.0x6FDAB130) --------------------------------------------------------
-//signed int __thiscall sub_6FDAB130(int this)
-//{
-//	int v1; // esi@1
-//	int v2; // edi@1
-//	int v3; // ebx@1
-//	int v4; // edi@2
-//	int v5; // eax@4
-//	int v6; // ecx@6
-//	int v7; // eax@6
-//	signed int result; // eax@9
-//
-//	v1 = this;
-//	v2 = *(_DWORD *)(this + 48);
-//	*(_DWORD *)(v2 + 36) = 0;
-//	*(_DWORD *)(v2 + 40) = 0;
-//	v3 = sub_6FDAA9F0(this);
-//	if (!v3
-//		|| (v4 = *(_DWORD *)(v2 + 4 * v3 + 152), sub_6FDABA50(v4, *(_DWORD *)(v1 + 4)) > *(_BYTE *)(v1 + 20))
-//		|| v4 == __PAIR__(*(_WORD *)(v1 + 2), *(_WORD *)v1))
-//	{
-//		v5 = *(_WORD *)v1 - *(_WORD *)(v1 + 4);
-//		if (v5 < 0)
-//			v5 = -v5;
-//		v6 = v5;
-//		v7 = *(_WORD *)(v1 + 2) - *(_WORD *)(v1 + 6);
-//		if (v7 < 0)
-//			v7 = -v7;
-//		if (v6 * v6 + v7 * v7 <= 324)
-//		{
-//			result = D2Common_PATH_First_6FDA69E0(v1);
-//			if (result)
-//				return result;
-//			if (v3)
-//				v3 = sub_6FDAA9F0(v1);
-//		}
-//	}
-//	return v3;
-//}
+//D2Common.6FDAB130
+int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
+{
 
-////D2Common.0x6FDAB1E0) --------------------------------------------------------
-//signed int __thiscall sub_6FDAB1E0(int this)
-//{
-//	int v1; // edi@1
-//	int v2; // esi@1
-//	signed int result; // eax@2
-//	int v4; // [sp+0h] [bp-4h]@1
-//
-//	v4 = this;
-//	v1 = this;
-//	v2 = *(_DWORD *)(this + 48);
-//	*(_DWORD *)(v2 + 36) = 0;
-//	v4 = *(_DWORD *)(this + 4);
-//	*(_DWORD *)(v2 + 156) = v4;
-//	sub_6FDAABF0(v2, (int)&v4);
-//	if (__PAIR__(*(_WORD *)(v1 + 2), *(_WORD *)v1) == v4)
-//	{
-//		result = 0;
-//	}
-//	else
-//	{
-//		*(_DWORD *)(v2 + 156) = v4;
-//		result = 1;
-//		*(_DWORD *)(v2 + 40) = 1;
-//	}
-//	return result;
-//}
+	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
+	pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pDynamicPath->dwPathPoints = 0;
+	int v3 = sub_6FDAA9F0(pPathInfo);
+	
+	D2PathPointStrc v4 = {0,0};
+
+	if (v3 > 0)
+	{
+		v4 = pDynamicPath->PathPoints[v3 - 1];
+		if (sub_6FDABA50(v4, pPathInfo->tTargetCoord) <= pPathInfo->field_14)
+			return v3;
+		else if (v4.X != pPathInfo->pStartCoord.X || v4.Y != pPathInfo->pStartCoord.Y)
+			return v3;
+	}
+	int nDiffX = pPathInfo->pStartCoord.X - pPathInfo->tTargetCoord.X;
+	if (nDiffX < 0)
+		nDiffX = pPathInfo->tTargetCoord.X - pPathInfo->pStartCoord.X;;
+	int nDiffY = pPathInfo->pStartCoord.Y - pPathInfo->tTargetCoord.Y;
+	if (nDiffY < 0)
+		nDiffY = pPathInfo->tTargetCoord.Y - pPathInfo->pStartCoord.Y;
+	const int nSquaredDistance = nDiffX * nDiffX + nDiffY * nDiffY;
+	const int nMaxDist = 18;
+	const int nMaxDistSquared = nMaxDist * nMaxDist;
+	if (nSquaredDistance <= nMaxDistSquared)
+	{
+		int result = sub_6FDA69E0(pPathInfo);
+		if (result)
+			return result;
+		if (v3)
+			v3 = sub_6FDAA9F0(pPathInfo);
+	}
+	return v3;
+}
+
+//D2Common.0x6FDAB1E0
+int __fastcall sub_6FDAB1E0(D2PathInfoStrc* pPathInfo)
+{
+	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
+	pDynamicPath->unk0x24_PathPointsRelated = 0;
+	D2PathPointStrc pGameCoord = pPathInfo->tTargetCoord;
+	pDynamicPath->PathPoints[0] = pGameCoord;
+	sub_6FDAABF0(pDynamicPath, &pGameCoord);
+	if (pPathInfo->pStartCoord == pGameCoord)
+		return 0;
+
+	pDynamicPath->PathPoints[0] = pGameCoord;
+	pDynamicPath->dwPathPoints = 1;
+	return pDynamicPath->dwPathPoints;
+}
 
 //D2Common.0x6FDAB240
 int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
