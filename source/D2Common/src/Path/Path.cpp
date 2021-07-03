@@ -11,6 +11,7 @@
 #include "Units/Units.h"
 #include <DataTbls/MonsterIds.h>
 #include <D2Math.h>
+#include "Path/PathMisc.h"
 
 static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
 
@@ -82,6 +83,30 @@ static const int32_t gaOffsetForPathType_6FDD20D0[] =
 };
 static_assert(_countof(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
+typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
+
+//D2Common.0x6FDD1F40
+static const PathFunctionType scpfnPathFunction[] = {
+	sub_6FDA7970
+	,sub_6FDA69E0
+	,sub_6FDAA9F0
+	,sub_6FDAB0B0
+	,nullptr
+	,sub_6FDAA9F0
+	,sub_6FDAA9F0
+	,sub_6FDAB130
+	,sub_6FDAB270
+	,sub_6FDAB1E0
+	,nullptr
+	,sub_6FDAB240
+	,sub_6FDAB0C0
+	,sub_6FDAA9F0
+	,nullptr
+	,sub_6FDAC270
+	,sub_6FDA7970
+	,nullptr
+};
+static_assert(_countof(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
 //TODO: Remove
 int __stdcall D2Common_10142(D2DynamicPathStrc*, D2UnitStrc*, int)
