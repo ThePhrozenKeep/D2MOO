@@ -1544,7 +1544,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		return 0;
 	}
 
-	if (!(pDynamicPath->dwFlags & 0x10))
+	if (!(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010))
 	{
 		if (pUnit->dwUnitType == UNIT_MONSTER && !PATH_GetDistance(pUnit->pDynamicPath))
 		{
@@ -1557,18 +1557,18 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		PATH_AddToDistance(pDynamicPath, -pDynamicPath->unk0x24_PathPointsRelated);
 	}
 
-	if (pDynamicPath->dwPathType != 2 && pDynamicPath->dwPathType != 13 && pDynamicPath->dwPathType != 15)
+	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_MON_OTHER_2 && pDynamicPath->dwPathType != PATHTYPE_MOTION)
 	{
 		return D2Common_10142(pDynamicPath, pUnit, 0);
 	}
 
 	if (a2)
 	{
-		pDynamicPath->dwPathType = 13;
+		pDynamicPath->dwPathType = PATHTYPE_MON_OTHER_2;
 	}
 	else
 	{
-		pDynamicPath->dwPathType = 2;
+		pDynamicPath->dwPathType = PATHTYPE_TOWARD;
 		pDynamicPath->SP1.X = pDynamicPath->SP3.X;
 		pDynamicPath->SP1.Y = pDynamicPath->SP3.Y;
 	}
@@ -3371,7 +3371,7 @@ BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
 {
 	if (pDynamicPath)
 	{
-		return pDynamicPath->dwFlags & 8;
+		return pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00008;
 	}
 
 	return FALSE;
@@ -3519,7 +3519,7 @@ LABEL_30:
 					v17 = 0;
 					if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
 					{
-						if (pRiderPath->dwFlags & 0x40000)
+						if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 						{
 							pRiderPath->dwPathPoints = 0;
 							return;
@@ -3540,7 +3540,7 @@ LABEL_30:
 						v17 = 0;
 						if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
 						{
-							if (pRiderPath->dwFlags & 0x40000)
+							if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 							{
 								pRiderPath->dwPathPoints = 0;
 								return;
@@ -3574,7 +3574,7 @@ LABEL_30:
 							v17 = 0;
 							if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
 							{
-								if (pRiderPath->dwFlags & 0x40000)
+								if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 								{
 									pRiderPath->dwPathPoints = 0;
 									return;
@@ -3593,7 +3593,7 @@ LABEL_30:
 				}
 				if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
 				{
-					if (pRiderPath->dwFlags & 0x40000)
+					if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 					{
 						pRiderPath->dwPathPoints = 0;
 						return;
