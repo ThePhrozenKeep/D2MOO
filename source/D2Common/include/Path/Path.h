@@ -158,6 +158,9 @@ struct D2StaticPathStrc
 inline uint32_t PATH_ToFP16(uint16_t value) {
 	return (value << 16) + (1 << 15);
 }
+inline uint16_t PATH_FromFP16(uint32_t value) {
+	return (value >> 16) & 0xFFFF;
+}
 
 enum D2PathConstants {
 	PATH_NB_DIRECTIONS = 64,

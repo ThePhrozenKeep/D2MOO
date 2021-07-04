@@ -559,62 +559,41 @@ int __fastcall sub_6FDAB270(D2PathInfoStrc* pPathInfo)
 	return 0;
 }
 
+//D2Common.0x6FDAB3C0
+signed int __fastcall PATH_ComputePathBlessedHammer_6FDAB3C0(D2DynamicPathStrc* pDynamicPath)
+{
+	const uint32_t dwOriginPrecisionX = pDynamicPath->dwPrecisionX;
+	const uint32_t dwOriginPrecisionY = pDynamicPath->dwPrecisionY;
+	D2PathPointStrc previousPoint = { PATH_FromFP16(dwOriginPrecisionX) , PATH_FromFP16(dwOriginPrecisionY) };
 
-////D2Common.0x6FDAB3C0) --------------------------------------------------------
-//signed int __thiscall sub_6FDAB3C0(int this)
-//{
-//	int v1; // ebp@1
-//	int v2; // edi@1
-//	int v3; // ebx@1
-//	float v4; // ST1C_4@2
-//	signed __int64 v5; // qax@2
-//	unsigned int v6; // esi@2
-//	int v7; // ecx@2
-//	unsigned int v8; // eax@2
-//	unsigned int v9; // ecx@2
-//	signed int result; // eax@5
-//	signed int v11; // [sp+10h] [bp-20h]@1
-//	signed int v12; // [sp+14h] [bp-1Ch]@1
-//	int v13; // [sp+1Ch] [bp-14h]@1
-//	int v14; // [sp+20h] [bp-10h]@1
-//	unsigned int v15; // [sp+24h] [bp-Ch]@1
-//	int v16; // [sp+28h] [bp-8h]@1
-//	int v17; // [sp+2Ch] [bp-4h]@1
-//
-//	v1 = this;
-//	v2 = 0;
-//	v16 = *(_DWORD *)this;
-//	v13 = this;
-//	v17 = *(_DWORD *)(this + 4);
-//	v14 = *(_DWORD *)this;
-//	v15 = *(_DWORD *)(this + 4);
-//	v12 = 0;
-//	v11 = 0;
-//	v3 = this + 158;
-//	do
-//	{
-//		v2 += 16;
-//		v12 += 9600;
-//		v4 = (double)v12;
-//		v5 = (signed __int64)(Fog_10083(v2) * v4);
-//		v6 = v16 + v5;
-//		v8 = v17 + (unsigned __int64)(signed __int64)(Fog_10084(v7, HIDWORD(v5), v2) * v4);
-//		v9 = v6 >> 16;
-//		if (HIWORD(v6) != HIWORD(v14) || (v1 = v13, v8 >> 16 != v15 >> 16))
-//		{
-//			*(_WORD *)(v3 - 2) = v9;
-//			v15 = v8;
-//			HIWORD(v14) = HIWORD(v6);
-//			*(_WORD *)v3 = HIWORD(v8);
-//			++v11;
-//			v3 += 4;
-//		}
-//		result = v11;
-//	}
-//	while (v11 < 77);
-//	*(_DWORD *)(v1 + 40) = v11;
-//	return result;
-//}
+	int nAngleRadians_512 = 0;
+	int nDistanceToOrigin = 0;
+	
+	// Looks like we keep one additional slot for the last point ?
+	// Could be an error in the original game
+	const int nbPointsToGenerate = D2DynamicPathStrc::MAXPATHLEN - 1;
+	for (int curPointIdx = 0; curPointIdx < nbPointsToGenerate; curPointIdx++)
+	{
+		nAngleRadians_512 += (512 / 32); // 32 points to make a full circle
+		nDistanceToOrigin += 9600; // Fixed point, around 0.1
+		const float fDistanceToOrigin = (float)nDistanceToOrigin;
+		D2PathPointStrc newPoint;
+		newPoint.X = PATH_FromFP16(dwOriginPrecisionX + (__int64)(FOG_10083_Cos_LUT(nAngleRadians_512) * fDistanceToOrigin));
+		newPoint.Y = PATH_FromFP16(dwOriginPrecisionY + (__int64)(FOG_10084_Sin_LUT(nAngleRadians_512) * fDistanceToOrigin));
+		// If we have a new point, use it
+		if (newPoint != previousPoint)
+		{
+			pDynamicPath->PathPoints[curPointIdx] = newPoint;
+			previousPoint = newPoint;
+		}
+		else // Try again at next position
+		{
+			curPointIdx--;
+		}
+	}
+	pDynamicPath->dwPathPoints = nbPointsToGenerate;
+	return nbPointsToGenerate;
+}
 
 ////D2Common.0x6FDAB4A0) --------------------------------------------------------
 //int __fastcall sub_6FDAB4A0(int a1, int a2)
