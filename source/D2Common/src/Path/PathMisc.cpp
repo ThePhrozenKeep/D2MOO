@@ -80,122 +80,23 @@ static const D2UnkPathStrc2 byte_6FDD2288[25] =
 	{ 0, 2, -1 },
 };
 
-//TODO: ...
-extern uint16_t word_6FDD2118[];
-extern uint16_t word_6FDD211C[];
-extern BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathPointStrc a3);
-
+// D2Common.0x6FDD2118
+D2CoordStrc gatDirectionToOffset_6FDD2118[8] = {
+	{ 1, 0},
+	{ 1, 1},
+	{ 0, 1},
+	{ -1, 1},
+	{ -1, 0},
+	{ -1, -1},
+	{ 0, -1},
+	{ 1, -1},
+};
 
 int __fastcall D2COMMON_PATHMISC_FIRST_6FDAA720(D2PathInfoStrc*)
 {
+		D2_ASSERTM(false, "Not implemented yet.");
 	return 0;
 }
-
-
-////D2Common.0x6FDAA720) --------------------------------------------------------
-//int __fastcall D2COMMON_PATHMISC_FIRST_6FDAA720(D2PathInfoStrc* pPathInfo)
-//{
-//	D2PathInfoStrc *v1; // edi@1
-//	signed int v2; // ebp@1
-//	int v3; // edx@1
-//	D2DynamicPathStrc *v4; // ecx@1
-//	D2PathPointStrc v5; // esi@1
-//	int result; // eax@1
-//	int v7; // ebx@1
-//	int v9; // eax@6
-//	int v10; // eax@9
-//	bool v11; // sf@9
-//	unsigned __int8 v12; // of@9
-//	D2PathPointStrc v13; // [sp+10h] [bp-30h]@1
-//	int v14; // [sp+14h] [bp-2Ch]@1
-//	D2PathPointStrc a3; // [sp+18h] [bp-28h]@1
-//	D2DynamicPathStrc *v16; // [sp+1Ch] [bp-24h]@1
-//	int v17; // [sp+20h] [bp-20h]@1
-//	D2PathPointStrc *v18; // [sp+24h] [bp-1Ch]@2
-//	int a4; // [sp+28h] [bp-18h]@5
-//	int v20; // [sp+2Ch] [bp-14h]@1
-//	int a2[3]; // [sp+34h] [bp-Ch]@5
-//
-//	v1 = pPathInfo;
-//	v2 = 0;
-//	v20 = 255;
-//	v17 = 0;
-//	v4 = (D2DynamicPathStrc *)pPathInfo->pNext;
-//	v5 = *(D2PathPointStrc *)&v1->pStartCoord.X;
-//
-//	result = v4->dwPathPoints;
-//	v7 = *(_DWORD *)&v4->PathPoints[0].X;
-//	a3 = *(D2PathPointStrc *)&v1->field_4.X;
-//	v16 = v4;
-//	v14 = v4->dwPathPoints;
-//	v13 = v5;
-//	if (pPathInfo->nDistMax > 0)
-//	{
-//		v18 = &v4->PathPoints[result + 1];
-//		do
-//		{
-//			if (v13.X == a3.X && v13.Y == a3.Y)
-//			{
-//				break;
-//			}
-//
-//			v2 = 0;
-//			D2COMMON_PATHMISC_Unknown_6FDAB790(a2, 0, v5, a3);
-//
-//			a2[0] = ((uint8_t)v7 + LOBYTE(a2[0])) & 7;
-//			a2[1] = ((uint8_t)v7 + LOBYTE(a2[1])) & 7;
-//			a2[2] = ((uint8_t)v7 + LOBYTE(a2[2])) & 7;
-//
-//			if (D2COMMON_PATHMISC_Unknown_6FDAA880(v1, a2, v5, &a4))
-//			{
-//				v9 = a4;
-//				if ((((uint8_t)a4 - 4) & 7) != v20)
-//					continue;
-//			}
-//
-//			result = v14;
-//			v4 = v16;
-//			goto LABEL_13;
-//
-//			v13.X += word_6FDD2118[4 * a4];
-//			v13.Y += word_6FDD211C[4 * a4];
-//
-//			if (a4 != v20)
-//			{
-//				v2 = 1;
-//				*(_DWORD *)&v18->X = v5;
-//				++v18;
-//				v9 = a4;
-//				++v14;
-//			}
-//
-//			v5 = v13;
-//			v20 = v9;
-//			v10 = v17 + 1;
-//			v17 = v10;
-//			v12 = __OFSUB__(v10, pPathInfo->nDistMax);
-//			v11 = v10 - pPathInfo->nDistMax < 0;
-//			v4 = v16;
-//			result = v14;
-//		}
-//		while (v11 ^ v12);
-//
-//		if (v2)
-//		{
-//			goto LABEL_15;
-//		}
-//
-//LABEL_13:
-//		if (v17)
-//		{
-//			*(_DWORD *)&v4->PathPoints[result++ + 1].X = v5;
-//		}
-//	}
-//
-//LABEL_15:
-//	v4->dwPathPoints = result;
-//	return result;
-//}
 
 //D2Common.0x6FDAA880
 BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPointStrc pPoint, int* pDirection)
@@ -204,13 +105,13 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER));
 
-	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + word_6FDD2118[4 * pTestDir[0]]), (pPoint.Y + word_6FDD211C[4 * pTestDir[0]]), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
 	{
 		*pDirection = pTestDir[0];
 		return TRUE;
 	}
 
-	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + word_6FDD2118[4 * pTestDir[1]]), (pPoint.Y + word_6FDD211C[4 * pTestDir[1]]), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
 	{
 		*pDirection = pTestDir[1];
 		return TRUE;
@@ -218,7 +119,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pTestDir[2] != PATH_DIR_NULL);
 
-	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + word_6FDD2118[4 * pTestDir[2]]), (pPoint.Y + word_6FDD211C[4 * pTestDir[2]]), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
 	{
 		*pDirection = pTestDir[2];
 		return TRUE;
@@ -595,123 +496,50 @@ signed int __fastcall PATH_ComputePathBlessedHammer_6FDAB3C0(D2DynamicPathStrc* 
 	return nbPointsToGenerate;
 }
 
-////D2Common.0x6FDAB4A0) --------------------------------------------------------
-//int __fastcall sub_6FDAB4A0(int a1, int a2)
-//{
-//	int v2; // ebp@1
-//	unsigned int v3; // eax@1
-//	int v4; // esi@1
-//	__int16 v5; // dx@1
-//	int v6; // ST04_4@1
-//	unsigned int v7; // edi@1
-//	int v8; // ecx@2
-//	char v9; // di@3
-//	signed __int64 v10; // qax@3
-//	int result; // eax@4
-//	int v12; // [sp+10h] [bp-98h]@1
-//	unsigned int v13; // [sp+14h] [bp-94h]@1
-//	unsigned int v14; // [sp+18h] [bp-90h]@2
-//	int v15; // [sp+1Ch] [bp-8Ch]@1
-//	int v16; // [sp+20h] [bp-88h]@1
-//	int v17; // [sp+24h] [bp-84h]@1
-//	int v18; // [sp+28h] [bp-80h]@1
-//	int v19; // [sp+2Ch] [bp-7Ch]@1
-//	int v20; // [sp+30h] [bp-78h]@1
-//	int v21; // [sp+34h] [bp-74h]@1
-//	int v22; // [sp+38h] [bp-70h]@1
-//	int v23; // [sp+3Ch] [bp-6Ch]@1
-//	int v24; // [sp+40h] [bp-68h]@1
-//	int v25; // [sp+44h] [bp-64h]@1
-//	int v26; // [sp+48h] [bp-60h]@1
-//	int v27; // [sp+4Ch] [bp-5Ch]@1
-//	int v28; // [sp+50h] [bp-58h]@1
-//	int v29; // [sp+54h] [bp-54h]@1
-//	int v30; // [sp+58h] [bp-50h]@1
-//	int v31; // [sp+5Ch] [bp-4Ch]@1
-//	int v32; // [sp+60h] [bp-48h]@1
-//	int v33; // [sp+64h] [bp-44h]@1
-//	int v34; // [sp+68h] [bp-40h]@1
-//	int v35; // [sp+6Ch] [bp-3Ch]@1
-//	int v36; // [sp+70h] [bp-38h]@1
-//	int v37; // [sp+74h] [bp-34h]@1
-//	int v38; // [sp+78h] [bp-30h]@1
-//	int v39; // [sp+7Ch] [bp-2Ch]@1
-//	int v40; // [sp+80h] [bp-28h]@1
-//	int v41; // [sp+84h] [bp-24h]@1
-//	int v42; // [sp+88h] [bp-20h]@1
-//	int v43; // [sp+8Ch] [bp-1Ch]@1
-//	int v44; // [sp+90h] [bp-18h]@1
-//	int v45; // [sp+94h] [bp-14h]@1
-//	int v46; // [sp+98h] [bp-10h]@1
-//	int v47; // [sp+9Ch] [bp-Ch]@1
-//
-//	v2 = a1;
-//	v17 = 1;
-//	v20 = 1;
-//	v23 = 1;
-//	v26 = 1;
-//	v29 = 1;
-//	v32 = 1;
-//	v35 = 1;
-//	v38 = 1;
-//	v41 = 1;
-//	v44 = 1;
-//	v46 = 1;
-//	v3 = *(_BYTE *)(a1 + 145);
-//	v4 = a2;
-//	v5 = *(_WORD *)(a1 + 6);
-//	v15 = -1;
-//	v18 = -1;
-//	v21 = -1;
-//	v24 = -1;
-//	v27 = -1;
-//	v30 = -1;
-//	v33 = -1;
-//	v36 = -1;
-//	v39 = -1;
-//	v42 = -1;
-//	v45 = -1;
-//	LOWORD(v12) = *(_WORD *)(a1 + 2);
-//	HIWORD(v12) = v5;
-//	v6 = *(_DWORD *)(a1 + 16);
-//	v16 = 0;
-//	v19 = 0;
-//	v22 = 0;
-//	v25 = 0;
-//	v28 = 0;
-//	v31 = 0;
-//	v34 = 0;
-//	v37 = 0;
-//	v40 = 0;
-//	v43 = 0;
-//	v13 = 0;
-//	v7 = v3 >> 1;
-//	sub_6FDAB790(&v47, v12, v6);
-//	if ((signed int)v7 > 0)
-//	{
-//		v8 = v2 + 156;
-//		v14 = v7;
-//		v13 = v7;
-//		do
-//		{
-//			v9 = v47;
-//			v10 = *(_DWORD *)(v4 + 4) + 1791398085i64 * *(_DWORD *)v4;
-//			*(_QWORD *)v4 = v10;
-//			LODWORD(v10) = *(&v15 + (v10 & 0x1F));
-//			*(_DWORD *)v8 = v12;
-//			v8 += 4;
-//			LODWORD(v10) = (v9 + (_BYTE)v10) & 7;
-//			HIWORD(v12) += 2 * word_6FDD211C[4 * (signed int)v10];
-//			LOWORD(v12) = 2 * word_6FDD2118[4 * (signed int)v10] + v12;
-//			--v14;
-//		}
-//		while (v14);
-//	}
-//	*(_DWORD *)(v2 + 4 * v13 + 156) = v12;
-//	result = v13 + 1;
-//	*(_DWORD *)(v2 + 40) = v13 + 1;
-//	return result;
-//}
+static DWORD getChargedBoltDirOffset(uint64_t i)
+{
+	// Note the discontinuity in the sequence. Fixing it is actually a *bad* idea as the bolts will spread less.
+	int dirOffsetSequence[32] = {
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, 0, 1,
+		-1, /*0,*/ 1,
+	};
+	return dirOffsetSequence[i & 31];
+}
+
+//D2Common.0x6FDAB4A0
+int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicPath, D2SeedStrc* pSeed)
+{
+	D2PathPointStrc nPrevPoint;
+	nPrevPoint.X = pDynamicPath->wPosX;
+	nPrevPoint.Y = pDynamicPath->wPosY;
+
+	int v16[3];
+	PATH_GetDirections_6FDAB790(v16, nPrevPoint, pDynamicPath->SP1);
+
+	int nMaxPathPoints = pDynamicPath->nDistMax >> 1;
+	for (int nCurPointIdx = 0; nCurPointIdx < nMaxPathPoints; nCurPointIdx++)
+	{
+		pDynamicPath->PathPoints[nCurPointIdx] = nPrevPoint;
+
+		char nMainDirection = v16[0];
+		DWORD nDir = getChargedBoltDirOffset(SEED_RollRandomNumber(pSeed));
+		nDir = (nMainDirection + (char)nDir) % _countof(gatDirectionToOffset_6FDD2118);
+		nPrevPoint.X += 2 * gatDirectionToOffset_6FDD2118[nDir].nX;
+		nPrevPoint.Y += 2 * gatDirectionToOffset_6FDD2118[nDir].nY;
+	}
+	pDynamicPath->PathPoints[nMaxPathPoints] = nPrevPoint;
+	pDynamicPath->dwPathPoints = nMaxPathPoints + 1;
+	return pDynamicPath->dwPathPoints;
+}
 
 //D2Common.0x6FDAB610
 int __fastcall sub_6FDAB610(int nX1, int nY1, int nX2, int nY2)
@@ -810,7 +638,7 @@ int __stdcall sub_6FDAB770(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 }
 
 //D2Common.0x6FDAB790
-void __fastcall sub_6FDAB790(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
+void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
 	int nIndex = sub_6FDAB6A0(pPoint1, pPoint2);
 

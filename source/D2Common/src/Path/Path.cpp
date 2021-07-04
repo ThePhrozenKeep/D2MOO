@@ -126,13 +126,6 @@ void __stdcall sub_6FDAC5E0(D2CoordStrc*, int*, int, int, int, int)
 {
 	REMOVE_LATER_WriteToLogFile("sub_6FDAC5E0: Not yet implemented");
 }
-unsigned short* word_6FDD211C;
-unsigned short* word_6FDD2118;
-int __fastcall sub_6FDAAD10(D2DynamicPathStrc*, D2PathPointStrc*, D2PathPointStrc)
-{
-	REMOVE_LATER_WriteToLogFile("sub_6FDAAD10: Not yet implemented");
-	return 0;
-}
 //////////////////////////////////////////////////////////////////////////////////
 
 
