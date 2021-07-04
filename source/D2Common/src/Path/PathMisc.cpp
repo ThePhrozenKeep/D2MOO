@@ -539,83 +539,44 @@ void __fastcall PATH_MoveForward_6FDAB890(D2DynamicPathStrc* ptPath)
 	ptPath->SP1.Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
 }
 
-////D2Common.0x6FDAB940) --------------------------------------------------------
-//char __fastcall sub_6FDAB940(int a1, int a2)
-//{
-//	int v2; // edi@1
-//	int v3; // esi@1
-//	int v4; // ecx@4
-//	signed int v5; // eax@7
-//	D2DynamicPathStrc*v6; // ecx@10
-//	int v7; // eax@11
-//	int v8; // ecx@14
-//	signed int v9; // eax@14
-//	D2DynamicPathStrc*v10; // ecx@17
-//	int v11; // eax@18
-//	signed __int64 v12; // qax@21
-//	uint8_t v13; // al@22
-//	signed int v14; // ecx@22
-//	float v15; // ST14_4@22
-//	int v16; // edi@22
-//	signed __int64 v17; // qax@22
-//	int v18; // ecx@22
-//
-//	v2 = a2;
-//	v3 = a1;
-//	if (!a2)
-//	{
-//		FOG_Assertion("ptPath", __FILE__, __LINE__);
-//		exit(-1);
-//	}
-//	v4 = *(_DWORD *)(a2 + 88);
-//	if (!v4)
-//	{
-//		FOG_Assertion(//			"ptPath->hTarget", //			__FILE__, __LINE__//			514);
-//		exit(-1);
-//	}
-//	v5 = *(_DWORD *)v4;
-//	if (*(_DWORD *)v4 == 2 || v5 > 3 && v5 <= 5)
-//	{
-//		v7 = *(_DWORD *)(*(_DWORD *)(v4 + 44) + 12);
-//	}
-//	else
-//	{
-//		v6 = *(D2DynamicPathStrc**)(v4 + 44);
-//		if (v6)
-//			LOWORD(v7) = PATH_GetXPosition(v6);
-//		else
-//			LOWORD(v7) = 0;
-//	}
-//	*(_WORD *)v3 = v7;
-//	v8 = *(_DWORD *)(v2 + 88);
-//	v9 = *(_DWORD *)v8;
-//	if (*(_DWORD *)v8 == 2 || v9 > 3 && v9 <= 5)
-//	{
-//		v11 = *(_DWORD *)(*(_DWORD *)(v8 + 44) + 16);
-//	}
-//	else
-//	{
-//		v10 = *(D2DynamicPathStrc**)(v8 + 44);
-//		if (v10)
-//			LOWORD(v11) = PATH_GetYPosition(v10);
-//		else
-//			LOWORD(v11) = 0;
-//	}
-//	*(_WORD *)(v3 + 2) = v11;
-//	LOBYTE(v12) = *(_BYTE *)(v2 + 104);
-//	if ((_BYTE)v12)
-//	{
-//		v13 = D2COMMON_10158_PATH_GetDirection(*(D2DynamicPathStrc**)(*(_DWORD *)(v2 + 88) + 44));
-//		v14 = *(_BYTE *)(v2 + 104);
-//		v15 = (double)v14;
-//		v16 = (8 * v13 - ((_WORD)v14 << 8)) & 0x1FF;
-//		v17 = (signed __int64)(Fog_10083((8 * v13 - ((_WORD)v14 << 8)) & 0x1FF) * v15);
-//		*(_WORD *)v3 += v17;
-//		v12 = (signed __int64)(Fog_10084(v18, HIDWORD(v17), v16) * v15);
-//		*(_WORD *)(v3 + 2) += v12;
-//	}
-//	return v12;
-//}
+//D2Common.0x6FDAB940
+//Belongs to PathUtil.cpp
+void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* ptPath)
+{	
+	D2_ASSERT(ptPath);
+	D2_ASSERT(ptPath->pTargetUnit);
+	D2UnitStrc* pTargetUnit = ptPath->pTargetUnit;
+	D2C_UnitTypes dwTargetUnitType = (D2C_UnitTypes)pTargetUnit->dwUnitType;
+
+	if (dwTargetUnitType == UNIT_OBJECT || dwTargetUnitType == UNIT_ITEM || dwTargetUnitType == UNIT_TILE)
+	{
+		pOutPathPoint->X = pTargetUnit->pStaticPath->nXPos;
+		pOutPathPoint->Y = pTargetUnit->pStaticPath->nYPos;
+	}
+	else
+	{
+		if (D2DynamicPathStrc* pTargetPath = pTargetUnit->pDynamicPath)
+		{
+			pOutPathPoint->X = PATH_GetXPosition(pTargetPath);
+			pOutPathPoint->Y = PATH_GetYPosition(pTargetPath);
+		}
+		else
+		{
+			*pOutPathPoint = { 0,0 };
+		}
+	}
+
+	if (ptPath->unk0x68[0])
+	{
+		uint8_t nDir = PATH_GetDirection(ptPath->pTargetUnit->pDynamicPath);
+		const int v15 = ptPath->unk0x68[0];
+		const uint16_t v13 = (uint16_t)v15 << 8;
+		const float nDistance = (float)v15;
+		const uint16_t nAngleRadians_512 = (8 * nDir - v13) & 0x1FF;
+		pOutPathPoint->X += (int64_t)(FOG_10083_Cos_LUT(nAngleRadians_512) * nDistance);
+		pOutPathPoint->Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRadians_512) * nDistance);
+	}
+}
 
 //D2Common.0x6FDABA50
 int __stdcall sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
