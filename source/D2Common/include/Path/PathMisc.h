@@ -31,6 +31,8 @@ int __fastcall sub_6FDAC270(D2PathInfoStrc* pPathInfo);
 
 //D2Common.0x6FDAB3C0
 signed int __fastcall PATH_ComputePathBlessedHammer_6FDAB3C0(D2DynamicPathStrc* pDynamicPath);
+//D2Common.0x6FDAAD10
+BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathPointStrc a3);
 
 //D2Common.0x6FDAB4A0
 int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicPath, D2SeedStrc* pSeed);
