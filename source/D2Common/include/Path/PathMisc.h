@@ -36,3 +36,6 @@ BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathP
 
 //D2Common.0x6FDAB4A0
 int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicPath, D2SeedStrc* pSeed);
+
+//D2Common.0x6FDAE290
+void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);
