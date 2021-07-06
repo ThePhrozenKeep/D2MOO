@@ -957,9 +957,8 @@ void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, i
 				pDrlgWarp->nWarp[i] = nWarp;
 				return;
 			}
-			D2_UNREACHABLE;
 		}
-
+		D2_UNREACHABLE;
 	}
 	D2_ASSERT(nId >= 0 && nId < 8);
 

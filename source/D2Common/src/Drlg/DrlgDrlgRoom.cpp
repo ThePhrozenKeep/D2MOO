@@ -465,7 +465,7 @@ BOOL __fastcall sub_6FD77890(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2
 	int nX = 0;
 	int nY = 0;
 
-	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx->pRoomExNext)
+	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
 		if (pRoomEx != pRoomEx1 && pRoomEx != pRoomEx2)
 		{
