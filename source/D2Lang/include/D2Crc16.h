@@ -24,11 +24,13 @@
 
 #pragma once
 
+#include <stddef.h>
+
 #include "D2Lang.h"
 
 //D2Lang.0x6FC13D80 (#10005)
 D2LANG_DLL_DECL void __stdcall CRC16_CalculateChecksum(
     unsigned short* crc16_checksum_out,
-    const char* data,
+    const unsigned char* data,
     size_t start_index,
     size_t end_index);
