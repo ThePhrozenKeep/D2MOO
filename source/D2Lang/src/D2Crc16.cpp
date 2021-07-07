@@ -109,7 +109,7 @@
 
 #define CRC_0_15_IMPL(n) CRC_N(n)
 
-#define CRC_0_15(n) (CRC_0_15_IMPL((n)))
+#define CRC_0_15(n) (unsigned short)(CRC_0_15_IMPL((n)))
 
 /*
 * If n is even, calculate for n + 1, otherwise n - 1.
@@ -117,7 +117,7 @@
 
 #define CRC_16_31_IMPL(n) CRC_N(SWAP_CRC_COLS_0_AND_1(n))
 
-#define CRC_16_31(n) (CRC_16_31_IMPL((n)))
+#define CRC_16_31(n) (unsigned short)(CRC_16_31_IMPL((n)))
 
 /*
 * For n is divided by 4, calculate for the remainders:
@@ -131,7 +131,7 @@
     CRC_N(SWAP_CRC_COLS_0_1_AND_2_3(n)) \
         - ((n % 2 == 0) ? 0 : 64)
 
-#define CRC_32_47(n) (CRC_32_47_IMPL((n)))
+#define CRC_32_47(n) (unsigned short)(CRC_32_47_IMPL((n)))
 
 /*
 * For n is divided by 4, calculate for the remainders:
@@ -147,7 +147,7 @@
     CRC_N(REVERSE_CRC_COL_ORDER(n)) \
         - ((n % 2 == 0) ? 64 : 0)
 
-#define CRC_48_63(n) (CRC_48_63_IMPL((n)))
+#define CRC_48_63(n) (unsigned short)(CRC_48_63_IMPL((n)))
 
 /*
 * For n is divided by 8, calculate for the remainders:
@@ -162,7 +162,7 @@
     CRC_N(SWAP_CRC_ROWS_0_AND_1(n)) \
         - ((n % 4 < 2) ? 0 : 128)
 
-#define CRC_64_79(n) (CRC_64_79_IMPL((n)))
+#define CRC_64_79(n) (unsigned short)(CRC_64_79_IMPL((n)))
 
 /*
 * For n is divided by 8, calculate for the remainders:
@@ -183,7 +183,7 @@
     CRC_N(SWAP_CRC_ROWS_0_AND_1(SWAP_CRC_COLS_0_AND_1(n))) \
         - ((n % 4 < 2) ? 0 : 128)
 
-#define CRC_80_95(n) (CRC_80_95_IMPL((n)))
+#define CRC_80_95(n) (unsigned short)(CRC_80_95_IMPL((n)))
 
 
 /*
@@ -208,7 +208,7 @@
     CRC_N(SWAP_CRC_ROWS_0_AND_1(SWAP_CRC_COLS_0_1_AND_2_3(n))) \
         - (((n + 2) % 4) * 64)
 
-#define CRC_96_111(n) (CRC_96_111_IMPL((n)))
+#define CRC_96_111(n) (unsigned short)(CRC_96_111_IMPL((n)))
 
 /*
 * For n is divided by 4, calculate for the remainders:
@@ -232,7 +232,7 @@
     CRC_N(SWAP_CRC_ROWS_0_AND_1(REVERSE_CRC_COL_ORDER(n))) \
         - ((3 - (n % 4)) * 64)
 
-#define CRC_112_127(n) (CRC_112_127_IMPL((n)))
+#define CRC_112_127(n) (unsigned short)(CRC_112_127_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -250,7 +250,7 @@
         - ((n % 2 == 0) ? 0 : 8192) \
         - ((n % 8 < 4) ? 0 : 256)
 
-#define CRC_128_143(n) (CRC_128_143_IMPL((n)))
+#define CRC_128_143(n) (unsigned short)(CRC_128_143_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -272,7 +272,7 @@
         - ((n % 8 < 4) ? 0 : 256) \
         - ((n % 2 == 0) ? 8192 : 0)
 
-#define CRC_144_159(n) (CRC_144_159_IMPL((n)))
+#define CRC_144_159(n) (unsigned short)(CRC_144_159_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -294,7 +294,7 @@
         - ((n % 2 == 0) ? 0 : 8256) \
         - ((n % 8 < 4) ? 0 : 256)
 
-#define CRC_160_175(n) (CRC_160_175_IMPL((n)))
+#define CRC_160_175(n) (unsigned short)(CRC_160_175_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -318,7 +318,7 @@
         - ((n % 2 == 0) ? 8256 : 0) \
         - ((n % 8 < 4) ? 0 : 256)
 
-#define CRC_176_191(n) (CRC_176_191_IMPL((n)))
+#define CRC_176_191(n) (unsigned short)(CRC_176_191_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -342,7 +342,7 @@
         - ((n % 4 < 2) ? 0 : 128) \
         - ((n % 8 < 4) ? 256 : 0)
 
-#define CRC_192_207(n) (CRC_192_207_IMPL((n)))
+#define CRC_192_207(n) (unsigned short)(CRC_192_207_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -370,7 +370,7 @@
         - ((n % 8 < 4) ? 256 : 0) \
         - ((n % 2 == 0) ? 8192 : 0)
 
-#define CRC_208_223(n) (CRC_208_223_IMPL((n)))
+#define CRC_208_223(n) (unsigned short)(CRC_208_223_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -401,7 +401,7 @@
         - ((n % 8 < 4) ? 256 : 0) \
         - (((n + 2) % 4) * 64)
 
-#define CRC_224_239(n) (CRC_224_239_IMPL((n)))
+#define CRC_224_239(n) (unsigned short)(CRC_224_239_IMPL((n)))
 
 /*
 * For n is divided by 16, calculate for the remainders:
@@ -434,7 +434,7 @@
         - ((n % 8 < 4) ? 256 : 0) \
         - ((3 - (n % 4)) * 64)
 
-#define CRC_240_255(n) (CRC_240_255_IMPL((n)))
+#define CRC_240_255(n) (unsigned short)(CRC_240_255_IMPL((n)))
 
 #define CRC_LOOKUP_TABLE_COUNT 256
 
