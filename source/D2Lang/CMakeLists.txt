@@ -1,5 +1,12 @@
 
-add_library(D2Lang SHARED src/DllMain.cpp include/D2Lang.h)
+add_library(D2Lang
+  SHARED
+    src/DllMain.cpp
+    src/D2Unicode/D2UnicodeChar.cpp
+
+    include/D2Lang.h
+    include/D2Unicode.h
+)
 # The definition file that matches functions with their ordinals
 target_sources(D2Lang PRIVATE definitions/D2Lang.${D2MOO_ORDINALS_VERSION}.def)
 target_include_directories(D2Lang PUBLIC include)
