@@ -55,5 +55,14 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDAD530 (#10227)
 BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
 
+//D2Common.0x6FDAD590 (#10229)
+BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
+
+//D2Common.0x6FDAD5E0
+BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* a1, D2RoomStrc* a2, D2PathPointStrc tCoords);
+
+//D2Common.0x6FDADA20
+void __fastcall sub_6FDADA20(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
+
 //D2Common.0x6FDAE290
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);

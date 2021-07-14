@@ -1089,23 +1089,172 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 	}
 }
 
-//D2Common.0x6FDAD590) --------------------------------------------------------
-BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2RoomStrc* a3, unsigned int a4, __int16 a5)
+//D2Common.0x6FDAD590 (#10229)
+BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit, D2RoomStrc *pDestRoom, uint32_t nDestX, uint32_t nDestY)
 {
-	UNIMPLEMENTED();
+	D2PathPointStrc tCoords = { uint16_t(nDestX), uint16_t(nDestY) };
+	if (sub_6FDAD5E0(pDynamicPath, pDestRoom, tCoords))
+	{
+		pDynamicPath->dwPathPoints = 0;
+		return TRUE;
+	}
 	return FALSE;
 }
 
+
+D2PathPointStrc sgctZeroGameCoord = { 0,0 };
+
+bool COORD_TEST_EQUAL(D2PathPointStrc lhs, D2PathPointStrc rhs) { return lhs == rhs; }
+
+D2RoomStrc* DungeonFindRoomGame(D2RoomStrc* pRoom, uint16_t x, uint16_t y)
+{	
+	if (!pRoom)
+		return nullptr;
+
+	if (   (x < pRoom->nSubtileX) || (x >= pRoom->nSubtileX + pRoom->nSubtileWidth )
+		|| (y < pRoom->nSubtileY) || (y >= pRoom->nSubtileY + pRoom->nSubtileHeight) )
+	{
+		D2RoomStrc** pRoomsList = nullptr;
+		int nbRooms = 0;
+		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &pRoomsList, &nbRooms);
+		for (int nRoomIdx = 0; nRoomIdx < nbRooms; nRoomIdx++)
+		{
+			if (D2RoomStrc* pCurRoom = pRoomsList[nRoomIdx])
+			{
+
+				if (   x >= pCurRoom->nSubtileX && x < (pCurRoom->nSubtileX + pCurRoom->nSubtileWidth )
+					&& y >= pCurRoom->nSubtileY && y < (pCurRoom->nSubtileY + pCurRoom->nSubtileHeight) )
+				{
+					return pCurRoom;
+				}
+			}
+		}
+		return nullptr;
+	}
+	else
+	{
+		return pRoom;
+	}
+}
+
 //D2Common.0x6FDAD5E0
-signed int __fastcall sub_6FDAD5E0(D2DynamicPathStrc* a1, D2RoomStrc* a2, unsigned int a3)
+// Should be in Step.cpp
+BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest)
 {
-	UNIMPLEMENTED();
-	return 0;
+	D2UnitStrc* pUnit = pDynamicPath->pUnit;
+	if (pUnit && pUnit->dwUnitType == UNIT_MISSILE)
+	{
+		if (tDest == D2PathPointStrc{ 0, 0 })
+		{
+			COLLISION_ResetMaskWithSize(
+				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->dwUnitSize,
+				pDynamicPath->dwCollisionType
+			);
+			pDynamicPath->unk0x54 = 0;
+		}
+		else
+		{
+			D2PathPointStrc tPathPos = { pDynamicPath->wPosX , pDynamicPath->wPosY };
+			if (pDynamicPath->wPosX == tDest.X && pDynamicPath->wPosY == tDest.Y)
+			{
+				pDynamicPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00008;
+			}
+			else
+			{
+				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
+			}
+			pDynamicPath->unk0x54 = sub_6FD44BB0(
+				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDestRoom, tDest.X, tDest.Y,
+				pDynamicPath->dwUnitSize,
+				pDynamicPath->dwCollisionType,
+				pDynamicPath->unk0x50
+			);
+			pDynamicPath->nSavedStepsCount = 1;
+			pDynamicPath->SavedSteps[0] = tDest;
+		}
+	}
+	else
+	{
+		if (tDest.X || tDest.Y)
+		{
+			D2Common_10133(
+				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDestRoom, tDest.X, tDest.Y,
+				pDynamicPath->dwCollisionPattern,
+				pDynamicPath->dwCollisionType
+			);
+		}
+		else
+		{
+			COLLISION_ResetMaskWithPattern(
+				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->dwCollisionPattern,
+				pDynamicPath->dwCollisionType
+			);
+		}
+	}
+	D2RoomStrc* pPathRoom = pDynamicPath->pRoom;
+	if (pDynamicPath->pRoom != pDestRoom)
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
+
+	bool bDestinationIsValid = true;
+	if (pDynamicPath->dwFlags & PATH_MISSILE_MASK)
+	{
+		if (!DungeonFindRoomGame(pDynamicPath->pRoom, tDest.X, tDest.Y))
+		{
+			pDynamicPath->dwPathPoints = 0;
+			bDestinationIsValid = false;
+		}
+	}
+
+	if (bDestinationIsValid)
+	{
+		pDynamicPath->dwPrecisionX = PATH_ToFP16(tDest.X);
+		pDynamicPath->dwPrecisionY = PATH_ToFP16(tDest.Y);
+		int dwPrecisionX = pDynamicPath->dwPrecisionX >> 11;
+		int dwPrecisionY = pDynamicPath->dwPrecisionY >> 11;
+		DUNGEON_FlattenCoords_IsoToCartesian(&dwPrecisionX, &dwPrecisionY);
+		pDynamicPath->dwTargetX = dwPrecisionX;
+		pDynamicPath->dwTargetY = dwPrecisionY;
+		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
+			sub_6FDADA20(pDynamicPath, pDestRoom);
+	}
+
+	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || DungeonFindRoomGame(pDestRoom, tDest.X, tDest.Y));
+
+	uint32_t dwPrecisionRoundedX = (pDynamicPath->dwPrecisionX & 0xFFFF0000) + 0x8000;
+	uint32_t dwPrecisionRoundedY = (pDynamicPath->dwPrecisionY & 0xFFFF0000) + 0x8000;
+	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0
+		|| COLLISION_GetRoomBySubTileCoordinates(pDynamicPath->pRoom, PATH_FromFP16(dwPrecisionRoundedX), PATH_FromFP16(dwPrecisionRoundedY)))
+	{
+		pDynamicPath->dwPrecisionX = dwPrecisionRoundedX;
+		pDynamicPath->dwPrecisionY = dwPrecisionRoundedY;
+		int dwTargetX = pDynamicPath->dwPrecisionX >> 11;
+		int dwTargetY = pDynamicPath->dwPrecisionY >> 11;
+		DUNGEON_FlattenCoords_IsoToCartesian(&dwTargetX, &dwTargetY);
+		pDynamicPath->dwTargetX = dwTargetX;
+		pDynamicPath->dwTargetY = dwTargetY;
+		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
+			sub_6FDADA20(pDynamicPath, 0);
+	}
+	else
+	{
+		pDynamicPath->dwPathPoints = 0;
+	}
+
+	pDynamicPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+	pDynamicPath->dwPathPoints = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
+	pDynamicPath->tVelocityVector.nX = 0;
+	pDynamicPath->tVelocityVector.nY = 0;
+	return TRUE;
 }
 
 
 //D2Common.0x6FDADA20
-void __fastcall sub_6FDADA20(int a1, D2RoomStrc* a2)
+void __fastcall sub_6FDADA20(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
 {
 	UNIMPLEMENTED();
 }
