@@ -7,8 +7,6 @@
 #pragma pack()
 
 //TODO: Get definitions from .cpp
-BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
-int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 void __stdcall sub_6FDAC790(D2DynamicPathStrc*, int, int);
 
 

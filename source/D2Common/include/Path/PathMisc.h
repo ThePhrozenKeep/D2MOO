@@ -45,5 +45,12 @@ int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2);
 
 //D2Common.0x6FDAC760
 int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY);
+
+//D2Common.0x6FDAC8F0 (#10236)
+int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
+
+//D2Common.0x6FDAD530 (#10227)
+BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
+
 //D2Common.0x6FDAE290
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);

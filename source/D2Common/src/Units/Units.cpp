@@ -9,6 +9,7 @@
 #include "D2Items.h"
 #include "D2Monsters.h"
 #include "Path/Path.h"
+#include "Path/PathMisc.h"
 #include "Path/Path_IDAStar.h"
 #include "D2QuestRecord.h"
 #include "D2Seed.h"

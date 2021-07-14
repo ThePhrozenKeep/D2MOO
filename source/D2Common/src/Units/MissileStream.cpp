@@ -3,6 +3,7 @@
 #include "D2Collision.h"
 #include "Units/Missile.h"
 #include "Path/Path.h"
+#include "Path/PathMisc.h"
 #include "Path/Path_IDAStar.h"
 #include "Units/Units.h"
 

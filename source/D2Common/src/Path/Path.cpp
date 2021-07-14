@@ -667,7 +667,7 @@ void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, i
 {
 	if (pDynamicPath)
 	{
-		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(sub_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
+		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(PATH_ComputeDirectionFromPreciseCoords_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
 		if (a4)
 		{
 			pDynamicPath->nNewDirection = nNormalizedDirection;
