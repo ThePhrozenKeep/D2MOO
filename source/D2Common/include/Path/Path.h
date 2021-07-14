@@ -96,8 +96,8 @@ struct D2DynamicPathStrc
 	uint8_t nDiffDirection;						//0x66
 	uint8_t unk0x67;							//0x67
 	uint8_t unk0x68[2];							//0x68
-	D2CoordStrc unkCoords0x6A;					//0x6A
-	D2CoordStrc velocityVector;					//0x72
+	D2CoordStrc tDirectionVector;				//0x6A
+	D2CoordStrc tVelocityVector;				//0x72
 	char unk0x7A[2];							//0x7A
 	uint32_t dwVelocity;						//0x7C
 	uint32_t unk0x80;							//0x80

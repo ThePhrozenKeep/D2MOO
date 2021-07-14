@@ -151,8 +151,8 @@ void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY)
 {
 	if (pUnit && UNITS_IsInMovingMode(pUnit) && pUnit->pDynamicPath->dwPathPoints)
 	{
-		*pX = pUnit->pDynamicPath->velocityVector.nX;
-		*pY = pUnit->pDynamicPath->velocityVector.nY;
+		*pX = pUnit->pDynamicPath->tVelocityVector.nX;
+		*pY = pUnit->pDynamicPath->tVelocityVector.nY;
 		*pX >>= 11;
 		*pY >>= 11;
 		DUNGEON_FlattenCoords_IsoToCartesian(pX, pY);
