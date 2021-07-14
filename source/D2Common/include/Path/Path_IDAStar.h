@@ -4,11 +4,6 @@
 #include "Path.h"
 
 #pragma pack(1)
-#pragma pack()
-
-//TODO: Get definitions from .cpp
-void __stdcall sub_6FDAC790(D2DynamicPathStrc*, int, int);
-
 
 enum class PATH_IDASTAR_CONSTANTS
 {
@@ -22,6 +17,8 @@ struct D2PathPointsListStrc
     DWORD unk0x8;
     D2PathPointsListStrc* pNextEntry;
 };
+
+#pragma pack()
 
 //D2Common.0x6FDA69E0
 int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo);

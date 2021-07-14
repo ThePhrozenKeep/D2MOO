@@ -30,6 +30,7 @@ enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
 	PATH_UNKNOWN_FLAG_0x00020 = 0x00020,
 	PATH_UNKNOWN_FLAG_0x00040 = 0x00040,
+	PATH_UNKNOWN_FLAG_0x00200 = 0x00200,
 	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
 	PATH_UNKNOWN_FLAG_0x04000 = 0x04000,
 	PATH_UNKNOWN_FLAG_0x08000 = 0x08000,
@@ -73,7 +74,7 @@ struct D2DynamicPathStrc
 	D2PathPointStrc SP3;						//0x18
 	D2RoomStrc* pRoom;							//0x1C
 	D2RoomStrc* pRoomNext;						//0x20
-	int32_t unk0x24_PathPointsRelated;			//0x24
+	int32_t dwCurrentPointIdx;					//0x24
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
 	D2UnitStrc* pUnit;							//0x30
@@ -94,9 +95,9 @@ struct D2DynamicPathStrc
 	uint8_t nNewDirection;						//0x65
 	uint8_t nDiffDirection;						//0x66
 	uint8_t unk0x67;							//0x67
-	uint8_t unk0x68[10];						//0x68
-	int32_t unk0x72;							//0x72
-	int32_t unk0x76;							//0x76
+	uint8_t unk0x68[2];							//0x68
+	D2CoordStrc unkCoords0x6A;					//0x6A
+	D2CoordStrc velocityVector;					//0x72
 	char unk0x7A[2];							//0x7A
 	uint32_t dwVelocity;						//0x7C
 	uint32_t unk0x80;							//0x80

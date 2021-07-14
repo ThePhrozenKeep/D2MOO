@@ -108,14 +108,6 @@ static const PathFunctionType scpfnPathFunction[] = {
 };
 static_assert(_countof(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
-//TODO: Remove
-
-void __stdcall sub_6FDAC790(D2DynamicPathStrc*,int,int)
-{
-	UNIMPLEMENTED();
-}
-//////////////////////////////////////////////////////////////////////////////////
-
 
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
@@ -159,8 +151,8 @@ void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY)
 {
 	if (pUnit && UNITS_IsInMovingMode(pUnit) && pUnit->pDynamicPath->dwPathPoints)
 	{
-		*pX = pUnit->pDynamicPath->unk0x72;
-		*pY = pUnit->pDynamicPath->unk0x76;
+		*pX = pUnit->pDynamicPath->velocityVector.nX;
+		*pY = pUnit->pDynamicPath->velocityVector.nY;
 		*pX >>= 11;
 		*pY >>= 11;
 		DUNGEON_FlattenCoords_IsoToCartesian(pX, pY);
@@ -284,7 +276,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 	nOldX = pDynamicPath->wPosX;
 	nOldY = pDynamicPath->wPosY;
 
-	pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
 
 	if (pDynamicPath->pTargetUnit)
 	{
@@ -855,7 +847,7 @@ void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a
 //TODO: Find a name
 int __stdcall D2Common_10155(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->unk0x24_PathPointsRelated;
+	return pDynamicPath->dwCurrentPointIdx;
 }
 
 //D2Common.0x6FDA9BD0 (#10157)
@@ -1504,7 +1496,7 @@ BOOL __stdcall D2Common_10237(D2UnitStrc* pUnit)
 {
 	if (pUnit && pUnit->pDynamicPath)
 	{
-		return (pUnit->pDynamicPath->unk0x24_PathPointsRelated < pUnit->pDynamicPath->dwPathPoints);
+		return (pUnit->pDynamicPath->dwCurrentPointIdx < pUnit->pDynamicPath->dwPathPoints);
 	}
 
 	return FALSE;

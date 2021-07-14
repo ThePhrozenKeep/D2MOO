@@ -179,7 +179,7 @@ BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathP
 //D2Common.0x6FDAB0B0
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo)
 {
-	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	return sub_6FDAA9F0(pPathInfo);
 }
 
@@ -190,7 +190,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 	int result = 0;
 	int v5 = 0;
 
-	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 
 	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
 
@@ -222,7 +222,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 {
 
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
-	pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
 	pDynamicPath->dwPathPoints = 0;
 	int v3 = sub_6FDAA9F0(pPathInfo);
 	
@@ -260,7 +260,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 int __fastcall sub_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 {
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
-	pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
 	D2PathPointStrc pGameCoord = pPathInfo->tTargetCoord;
 	pDynamicPath->PathPoints[0] = pGameCoord;
 	sub_6FDAABF0(pDynamicPath, &pGameCoord);
@@ -275,7 +275,7 @@ int __fastcall sub_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDAB240
 int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
-	pPathInfo->pDynamicPath->unk0x24_PathPointsRelated = 0;
+	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->tTargetCoord;
 	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[0]);
 	return 1;
@@ -935,6 +935,58 @@ int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPreci
 	return nDirection;
 }
 
+//D2Common.0x6FDAC790
+void __stdcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
+{
+	const DWORD dwPrecisionX = pPath->dwPrecisionX;
+	const DWORD dwPrecisionY = pPath->dwPrecisionY;
+	DWORD nPointFP16X = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
+	DWORD nPointFP16Y = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
+	while (nPointFP16X == dwPrecisionX && nPointFP16Y == dwPrecisionY)
+	{
+		if (pPath->dwCurrentPointIdx++ < (pPath->dwPathPoints - 1))
+		{
+			nPointFP16X = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
+			nPointFP16Y = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
+		}
+		else
+		{
+			pPath->tDirectionVector.nX = 0;
+			pPath->tDirectionVector.nY = 0;
+			pPath->tVelocityVector.nX = 0;
+			pPath->tVelocityVector.nY = 0;
+			pPath->dwVelocity = 0;
+			pPath->dwCurrentPointIdx = pPath->dwPathPoints;
+			return;
+		}
+	}
+
+	D2CoordStrc tDirectionVector;
+	int nDirection;
+	PATH_GetDirectionVector_6FDAC5E0( 
+		&tDirectionVector, &nDirection,
+		dwPrecisionX, dwPrecisionY,
+		nPointFP16X, nPointFP16Y
+	);
+
+	if ((pPath->dwFlags & PATH_UNKNOWN_FLAG_0x00200) != 0)
+		nDirection = PATH_NormalizeDirection(nDirection - 32);
+
+	pPath->tDirectionVector.nX = tDirectionVector.nX;
+	pPath->tDirectionVector.nY = tDirectionVector.nY;
+	pPath->tVelocityVector.nX = (tDirectionVector.nX * pPath->dwVelocity) >> 8;
+	pPath->tVelocityVector.nY = (tDirectionVector.nY * pPath->dwVelocity) >> 8;
+
+	bool nextPosInSamePoint = 
+		PATH_FromFP16(nPointFP16X) == PATH_FromFP16(dwPrecisionX + pPath->tVelocityVector.nX)
+		&& PATH_FromFP16(nPointFP16Y) == PATH_FromFP16(dwPrecisionY + pPath->tVelocityVector.nY);
+	
+	if (a3 || nextPosInSamePoint && a2)
+	{
+		sub_6FDA9720(pPath, nDirection);
+	}
+}
+
 //D2Common.0x6FDAC8F0 (#10236)
 //TODO: Find a name
 int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
@@ -958,7 +1010,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		UNITROOM_RefreshUnit(pUnit);
 		pUnit->dwFlags |= UNITFLAG_DOUPDATE;
 
-		PATH_AddToDistance(pDynamicPath, -pDynamicPath->unk0x24_PathPointsRelated);
+		PATH_AddToDistance(pDynamicPath, -pDynamicPath->dwCurrentPointIdx);
 	}
 
 	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_MON_OTHER_2 && pDynamicPath->dwPathType != PATHTYPE_MOTION)
@@ -980,7 +1032,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 	nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	if (!nResult)
 	{
-		pDynamicPath->dwPathType = 15;
+		pDynamicPath->dwPathType = PATHTYPE_MOTION;
 		nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	}
 
