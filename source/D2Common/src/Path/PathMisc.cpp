@@ -7,6 +7,7 @@
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
 #include <Fog.h>
+#include <utility>
 
 struct D2UnkPathStrc
 {
@@ -692,28 +693,246 @@ int __fastcall sub_6FDAC270(D2PathInfoStrc* pPathInfo)
 	return 0;
 }
 
+struct TanToDirectionLutEntryStrc {
+	D2CoordStrc dirVector;
+	uint8_t nAngle;
+};
+
+//D2Common.0x6FDD2598 
+TanToDirectionLutEntryStrc lutTanToDirection[] = {
+	{{ 0x0000, 0x1000 } , 0 },
+	{{ 0x0020, 0x0FFF } , 0 },
+	{{ 0x0040, 0x0FFF } , 0 },
+	{{ 0x0060, 0x0FFE } , 0 },
+	{{ 0x0080, 0x0FFD } , 0 },
+	{{ 0x00A1, 0x0FFC } , 0 },
+	{{ 0x00C1, 0x0FFB } , 0 },
+	{{ 0x00E1, 0x0FF9 } , 0 },
+	{{ 0x0101, 0x0FF7 } , 0 },
+	{{ 0x0121, 0x0FF5 } , 0 },
+	{{ 0x0141, 0x0FF3 } , 0 },
+	{{ 0x0161, 0x0FF0 } , 0 },
+	{{ 0x0181, 0x0FED } , 0 },
+	{{ 0x01A1, 0x0FEA } , 1 },
+	{{ 0x01C0, 0x0FE7 } , 1 },
+	{{ 0x01E0, 0x0FE3 } , 1 },
+	{{ 0x01FF, 0x0FDF } , 1 },
+	{{ 0x021F, 0x0FDB } , 1 },
+	{{ 0x023E, 0x0FD7 } , 1 },
+	{{ 0x025E, 0x0FD2 } , 1 },
+	{{ 0x027D, 0x0FCE } , 1 },
+	{{ 0x029C, 0x0FC9 } , 1 },
+	{{ 0x02BB, 0x0FC3 } , 1 },
+	{{ 0x02D9, 0x0FBE } , 1 },
+	{{ 0x02F8, 0x0FB8 } , 1 },
+	{{ 0x0317, 0x0FB2 } , 1 },
+	{{ 0x0335, 0x0FAC } , 2 },
+	{{ 0x0353, 0x0FA6 } , 2 },
+	{{ 0x0371, 0x0F9F } , 2 },
+	{{ 0x038F, 0x0F99 } , 2 },
+	{{ 0x03AD, 0x0F92 } , 2 },
+	{{ 0x03CB, 0x0F8B } , 2 },
+	{{ 0x03E8, 0x0F83 } , 2 },
+	{{ 0x0406, 0x0F7C } , 2 },
+	{{ 0x0423, 0x0F74 } , 2 },
+	{{ 0x0440, 0x0F6C } , 2 },
+	{{ 0x045D, 0x0F64 } , 2 },
+	{{ 0x0479, 0x0F5C } , 2 },
+	{{ 0x0496, 0x0F54 } , 2 },
+	{{ 0x04B2, 0x0F4B } , 3 },
+	{{ 0x04CE, 0x0F42 } , 3 },
+	{{ 0x04EA, 0x0F39 } , 3 },
+	{{ 0x0506, 0x0F30 } , 3 },
+	{{ 0x0521, 0x0F27 } , 3 },
+	{{ 0x053C, 0x0F1E } , 3 },
+	{{ 0x0558, 0x0F14 } , 3 },
+	{{ 0x0572, 0x0F0B } , 3 },
+	{{ 0x058D, 0x0F01 } , 3 },
+	{{ 0x05A8, 0x0EF7 } , 3 },
+	{{ 0x05C2, 0x0EED } , 3 },
+	{{ 0x05DC, 0x0EE3 } , 3 },
+	{{ 0x05F6, 0x0ED8 } , 3 },
+	{{ 0x0610, 0x0ECE } , 3 },
+	{{ 0x0629, 0x0EC4 } , 4 },
+	{{ 0x0642, 0x0EB9 } , 4 },
+	{{ 0x065B, 0x0EAE } , 4 },
+	{{ 0x0674, 0x0EA3 } , 4 },
+	{{ 0x068D, 0x0E98 } , 4 },
+	{{ 0x06A5, 0x0E8D } , 4 },
+	{{ 0x06BD, 0x0E82 } , 4 },
+	{{ 0x06D5, 0x0E77 } , 4 },
+	{{ 0x06ED, 0x0E6C } , 4 },
+	{{ 0x0704, 0x0E60 } , 4 },
+	{{ 0x071C, 0x0E55 } , 4 },
+	{{ 0x0733, 0x0E49 } , 4 },
+	{{ 0x074A, 0x0E3E } , 4 },
+	{{ 0x0760, 0x0E32 } , 4 },
+	{{ 0x0777, 0x0E26 } , 4 },
+	{{ 0x078D, 0x0E1A } , 5 },
+	{{ 0x07A3, 0x0E0F } , 5 },
+	{{ 0x07B9, 0x0E03 } , 5 },
+	{{ 0x07CE, 0x0DF7 } , 5 },
+	{{ 0x07E4, 0x0DEB } , 5 },
+	{{ 0x07F9, 0x0DDF } , 5 },
+	{{ 0x080E, 0x0DD3 } , 5 },
+	{{ 0x0822, 0x0DC6 } , 5 },
+	{{ 0x0837, 0x0DBA } , 5 },
+	{{ 0x084B, 0x0DAE } , 5 },
+	{{ 0x085F, 0x0DA2 } , 5 },
+	{{ 0x0873, 0x0D96 } , 5 },
+	{{ 0x0887, 0x0D89 } , 5 },
+	{{ 0x089A, 0x0D7D } , 5 },
+	{{ 0x08AD, 0x0D71 } , 5 },
+	{{ 0x08C0, 0x0D64 } , 5 },
+	{{ 0x08D3, 0x0D58 } , 5 },
+	{{ 0x08E6, 0x0D4B } , 6 },
+	{{ 0x08F8, 0x0D3F } , 6 },
+	{{ 0x090A, 0x0D33 } , 6 },
+	{{ 0x091C, 0x0D26 } , 6 },
+	{{ 0x092E, 0x0D1A } , 6 },
+	{{ 0x0940, 0x0D0D } , 6 },
+	{{ 0x0951, 0x0D01 } , 6 },
+	{{ 0x0962, 0x0CF5 } , 6 },
+	{{ 0x0973, 0x0CE8 } , 6 },
+	{{ 0x0984, 0x0CDC } , 6 },
+	{{ 0x0995, 0x0CCF } , 6 },
+	{{ 0x09A5, 0x0CC3 } , 6 },
+	{{ 0x09B6, 0x0CB7 } , 6 },
+	{{ 0x09C6, 0x0CAA } , 6 },
+	{{ 0x09D6, 0x0C9E } , 6 },
+	{{ 0x09E5, 0x0C92 } , 6 },
+	{{ 0x09F5, 0x0C85 } , 6 },
+	{{ 0x0A04, 0x0C79 } , 6 },
+	{{ 0x0A14, 0x0C6D } , 6 },
+	{{ 0x0A23, 0x0C61 } , 6 },
+	{{ 0x0A31, 0x0C54 } , 7 },
+	{{ 0x0A40, 0x0C48 } , 7 },
+	{{ 0x0A4F, 0x0C3C } , 7 },
+	{{ 0x0A5D, 0x0C30 } , 7 },
+	{{ 0x0A6B, 0x0C24 } , 7 },
+	{{ 0x0A79, 0x0C18 } , 7 },
+	{{ 0x0A87, 0x0C0C } , 7 },
+	{{ 0x0A95, 0x0C00 } , 7 },
+	{{ 0x0AA2, 0x0BF4 } , 7 },
+	{{ 0x0AB0, 0x0BE8 } , 7 },
+	{{ 0x0ABD, 0x0BDC } , 7 },
+	{{ 0x0ACA, 0x0BD0 } , 7 },
+	{{ 0x0AD7, 0x0BC4 } , 7 },
+	{{ 0x0AE4, 0x0BB8 } , 7 },
+	{{ 0x0AF0, 0x0BAC } , 7 },
+	{{ 0x0AFD, 0x0BA1 } , 7 },
+	{{ 0x0B09, 0x0B95 } , 7 },
+	{{ 0x0B15, 0x0B89 } , 7 },
+	{{ 0x0B21, 0x0B7E } , 7 },
+	{{ 0x0B2D, 0x0B72 } , 7 },
+	{{ 0x0B39, 0x0B67 } , 7 },
+	{{ 0x0B44, 0x0B5B } , 7 },
+	{{ 0x0B50, 0x0B50 } , 7 },
+};
+static_assert(_countof(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
+
+//D2Common.0x6FDAC5E0
+void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, int* pOutDirection, DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY)
+{
+	bool bXStartLessThanTarget;
+	DWORD dwMinPrecisionX;
+	DWORD dwMaxPrecisionX;
+	if (dwStartPrecisionX > dwTargetPrecisionX)
+	{
+		dwMinPrecisionX = dwTargetPrecisionX;
+		dwMaxPrecisionX = dwStartPrecisionX;
+		bXStartLessThanTarget = false;
+	}
+	else
+	{
+		dwMaxPrecisionX = dwTargetPrecisionX;
+		dwMinPrecisionX = dwStartPrecisionX;
+		bXStartLessThanTarget = true;
+	}
+
+	bool bYStartLessThanTarget;
+	DWORD dwMinPrecisionY;
+	DWORD dwMaxPrecisionY;
+	if (dwStartPrecisionY > dwTargetPrecisionY)
+	{
+		dwMaxPrecisionY = dwStartPrecisionY;
+		dwMinPrecisionY = dwTargetPrecisionY;
+		bYStartLessThanTarget = false;
+	}
+	else
+	{
+		dwMinPrecisionY = dwStartPrecisionY;
+		dwMaxPrecisionY = dwTargetPrecisionY;
+		bYStartLessThanTarget = true;
+	}
+
+	bool bDeltaXGreaterThanY;
+	if ((int)(dwMaxPrecisionX - dwMinPrecisionX) > (int)(dwMaxPrecisionY - dwMinPrecisionY))
+	{
+		std::swap(dwMinPrecisionX, dwMinPrecisionY);
+		std::swap(dwMaxPrecisionX, dwMaxPrecisionY);
+		bDeltaXGreaterThanY = TRUE;
+	}
+	else
+	{
+		bDeltaXGreaterThanY = FALSE;
+	}
+	int tangent = 0;
+	if (dwMaxPrecisionY != dwMinPrecisionY)
+		tangent = (int)(127 * (dwMaxPrecisionX - dwMinPrecisionX)) / (int)(dwMaxPrecisionY - dwMinPrecisionY);
+	
+	const auto& lutEntry = lutTanToDirection[tangent];
+
+	uint8_t nAngle = lutEntry.nAngle;
+	int nDirectionVectorX = lutEntry.dirVector.nX;
+	if (!bDeltaXGreaterThanY)
+	{
+		pDirectionVector->nX = nDirectionVectorX;
+		pDirectionVector->nY = lutEntry.dirVector.nY;
+	}
+	else
+	{
+		pDirectionVector->nY = nDirectionVectorX;
+		pDirectionVector->nX = lutEntry.dirVector.nY;
+		nAngle = (-1 - nAngle) & 0xF;
+	}
+	if (!bYStartLessThanTarget)
+	{
+		pDirectionVector->nY = -pDirectionVector->nY;
+		nAngle = (-1 - nAngle) & 0x1F;
+	}
+
+	if (bXStartLessThanTarget)
+	{
+		*pOutDirection = (((-1 - nAngle) & 0x3F) + 8) & 0x3F;
+	}
+	else
+	{
+		pDirectionVector->nX = -pDirectionVector->nX;
+		*pOutDirection = (nAngle + 8) & 0x3F;
+	}
+}
+
 //D2Common.0x6FDAC700 (#10215)
-//TODO: Find a name
-int __stdcall D2Common_10215(int nX1, int nY1, int nX2, int nY2)
+int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2)
 {
 	D2CoordStrc pCoords = {};
-	int nResult = 0;
+	int nDirection = 0;
 
-	sub_6FDAC5E0(&pCoords, &nResult, PATH_ToFP16(nX1), PATH_ToFP16(nY1), PATH_ToFP16(nX2), PATH_ToFP16(nY2));
+	PATH_GetDirectionVector_6FDAC5E0(&pCoords, &nDirection, PATH_ToFP16(nX1), PATH_ToFP16(nY1), PATH_ToFP16(nX2), PATH_ToFP16(nY2));
 
-	return nResult;
+	return nDirection;
 }
 
 //D2Common.0x6FDAC760
-//TODO: Find a name
-int __stdcall sub_6FDAC760(int nX1, int nY1, int nX2, int nY2)
+int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY)
 {
 	D2CoordStrc pCoords = {};
-	int nResult = 0;
+	int nDirection = 0;
 
-	sub_6FDAC5E0(&pCoords, &nResult, nX1, nY1, nX2, nY2);
+	PATH_GetDirectionVector_6FDAC5E0(&pCoords, &nDirection, dwStartPrecisionX, dwStartPrecisionY, dwTargetPrecisionX, dwTargetPrecisionY);
 
-	return nResult;
+	return nDirection;
 }
 
 //D2Common.0x6FDAC8F0 (#10236)

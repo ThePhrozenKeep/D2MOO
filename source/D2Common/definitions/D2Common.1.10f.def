@@ -215,7 +215,7 @@ EXPORTS
 	D2COMMON_10212_PATH_SetMoveFlags									@10212
 	D2Common_10213														@10213
 	D2Common_10214														@10214
-	D2Common_10215														@10215
+	PATH_ComputeDirection												@10215
 	D2Common_10216														@10216
 	PATH_SetDistance													@10217
 	PATH_GetDistance													@10218

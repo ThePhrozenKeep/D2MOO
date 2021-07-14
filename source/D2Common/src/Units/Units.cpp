@@ -2143,7 +2143,7 @@ int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit)
 
 	if (nX != pCoords.nX || nY != pCoords.nY)
 	{		
-		return D2Common_10215(pCoords.nX, pCoords.nY, nX, nY);
+		return PATH_ComputeDirection(pCoords.nX, pCoords.nY, nX, nY);
 	}
 	else
 	{
@@ -2250,7 +2250,7 @@ int __stdcall UNITS_GetDirectionToCoords(D2UnitStrc* pUnit, int nNewX, int nNewY
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
-	return D2Common_10215(pCoords.nX, pCoords.nY, nNewX, nNewY);
+	return PATH_ComputeDirection(pCoords.nX, pCoords.nY, nNewX, nNewY);
 }
 
 //D2Common.0x6FDC0160 (#10437)

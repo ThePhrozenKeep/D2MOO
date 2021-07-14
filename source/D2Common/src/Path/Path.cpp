@@ -114,10 +114,6 @@ void __stdcall sub_6FDAC790(D2DynamicPathStrc*,int,int)
 {
 	UNIMPLEMENTED();
 }
-void __stdcall sub_6FDAC5E0(D2CoordStrc*, int*, int, int, int, int)
-{
-	UNIMPLEMENTED();
-}
 //////////////////////////////////////////////////////////////////////////////////
 
 

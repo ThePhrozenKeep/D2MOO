@@ -7,12 +7,9 @@
 #pragma pack()
 
 //TODO: Get definitions from .cpp
-int __stdcall D2Common_10215(int, int, int, int);
-int __stdcall sub_6FDAC760(int nX1, int nY1, int nX2, int nY2);
 BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
 int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 void __stdcall sub_6FDAC790(D2DynamicPathStrc*, int, int);
-void __stdcall sub_6FDAC5E0(D2CoordStrc*, int*, int, int, int, int);
 
 
 enum class PATH_IDASTAR_CONSTANTS
