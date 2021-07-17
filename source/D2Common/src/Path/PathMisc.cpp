@@ -93,10 +93,55 @@ D2CoordStrc gatDirectionToOffset_6FDD2118[8] = {
 	{ 1, -1},
 };
 
-int __fastcall D2COMMON_PATHMISC_FIRST_6FDAA720(D2PathInfoStrc*)
+//D2Common.0x6FDAA720
+int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 {
-		UNIMPLEMENTED();
-	return 0;
+	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
+	int nbPathPoints = pDynamicPath->dwPathPoints;
+	if (pPathInfo->nDistMax > 0)
+	{
+		const int nDirectionOffset = pDynamicPath->dwUnitTypeRelated;
+		const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
+		int nPrevDirection = PATH_DIR_NULL;
+		D2PathPointStrc tLastSegmentEndCoord = pPathInfo->pStartCoord;
+		bool bSegmentEndAlreadyAdded = false;
+		
+		D2PathPointStrc tCurCoords = tLastSegmentEndCoord;
+		int nCurDistance;
+		for(nCurDistance = 0;nCurDistance < pPathInfo->nDistMax; nCurDistance++)
+		{
+			// We reached the destination, stop here
+			if (tCurCoords == tTargetCoord)
+				break;
+			bSegmentEndAlreadyAdded = false;
+			int nDirections[3];
+			PATH_GetDirections_6FDAB790(nDirections, tLastSegmentEndCoord, tTargetCoord);
+			nDirections[0] = (nDirectionOffset + nDirections[0]) % 8;
+			nDirections[1] = (nDirectionOffset + nDirections[1]) % 8;
+			nDirections[2] = (nDirectionOffset + nDirections[2]) % 8;
+			int nDirection;
+			if (!sub_6FDAA880(pPathInfo, nDirections, tLastSegmentEndCoord, &nDirection)
+				// If doing a 180, stop
+				|| ((nDirection + 4) % 8) == nPrevDirection
+				)
+			{
+				break;
+			}
+			tCurCoords.X += gatDirectionToOffset_6FDD2118[nDirection].nX;
+			tCurCoords.Y += gatDirectionToOffset_6FDD2118[nDirection].nY;
+			if (nDirection != nPrevDirection)
+			{
+				pDynamicPath->PathPoints[nbPathPoints++] = tLastSegmentEndCoord;
+				bSegmentEndAlreadyAdded = true;
+			}
+			tLastSegmentEndCoord = tCurCoords;
+			nPrevDirection = nDirection;
+		}
+		if(!bSegmentEndAlreadyAdded && nCurDistance != 0)
+			pDynamicPath->PathPoints[nbPathPoints++] = tLastSegmentEndCoord;
+	}
+	pDynamicPath->dwPathPoints = nbPathPoints;
+	return nbPathPoints;
 }
 
 //D2Common.0x6FDAA880
@@ -194,7 +239,7 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
 
-	result = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo);
+	result = sub_6FDAA720(pPathInfo);
 	if (!result)
 	{
 		return 0;
@@ -204,12 +249,12 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->dwUnitTypeRelated = -2;
 
-	v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
+	v5 = sub_6FDAA720(pPathInfo) - result;
 	if (!v5)
 	{
 		pPathInfo->pDynamicPath->dwUnitTypeRelated = 2;
 
-		v5 = D2COMMON_PATHMISC_FIRST_6FDAA720(pPathInfo) - result;
+		v5 = sub_6FDAA720(pPathInfo) - result;
 	}
 
 	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;

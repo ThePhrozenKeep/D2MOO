@@ -6,6 +6,9 @@
 
 #pragma pack()
 
+//D2Common.0x6FDAA880
+BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPointStrc pPoint, int* pDirection);
+
 //D2Common.0x6FDABA50
 int __stdcall  sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB750
