@@ -2874,7 +2874,7 @@ int dword_6FDD0924[] = { 0, 575, 576, 577, 578, 579, 580, 0, 581, 582, 583, 0, 5
 //TODO:Remove
 D2DrlgLevelStrc* __fastcall sub_6FD82820(D2DrlgLevelStrc* pLevel)
 {
-	REMOVE_LATER_WriteToLogFile("sub_6FD82820: Not yet implemented");
+	UNIMPLEMENTED();
 	return 0;
 }
 /////////////

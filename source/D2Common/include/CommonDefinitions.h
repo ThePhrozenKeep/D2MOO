@@ -8,6 +8,7 @@
 
 // Use for empty/duplicated functions
 #define REMOVE_LATER_WriteToLogFile FOG_WriteToLogFile
+#define UNIMPLEMENTED() D2_ASSERTM(false, __FUNCTION__ "is not implemented yet.")
 
 
 #include <Fog.h>

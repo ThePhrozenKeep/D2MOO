@@ -3,6 +3,7 @@
 #include "D2Collision.h"
 #include "Units/Missile.h"
 #include "Path/Path.h"
+#include "Path/PathMisc.h"
 #include "Path/Path_IDAStar.h"
 #include "Units/Units.h"
 
@@ -155,7 +156,7 @@ void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, in
 			nX = pPathPoints[nIndex].X;
 			nY = pPathPoints[nIndex].Y;
 
-			v23 = D2Common_10215(pPathPoints[nIndex + 1].X, pPathPoints[nIndex + 1].Y, nX, nY);
+			v23 = PATH_ComputeDirection(pPathPoints[nIndex + 1].X, pPathPoints[nIndex + 1].Y, nX, nY);
 			if (nCounter >= nMax && a3)
 			{
 				nCounter = 1;

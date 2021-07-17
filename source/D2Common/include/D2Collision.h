@@ -14,7 +14,7 @@ struct D2BoundingBoxStrc
 	int32_t nTop;								//0x0C
 };
 
-enum D2C_CollisionFlags
+enum D2C_CollisionFlags : uint32_t
 {
 	COLLIDE_NONE = 0x0000,
 	COLLIDE_BLOCK_PLAYER = 0x0001,			// 'black space' in arcane sanctuary, cliff walls etc
@@ -33,6 +33,7 @@ enum D2C_CollisionFlags
 	COLLIDE_PET = 0x2000,
 	COLLIDE_4000 = 0x4000,
 	COLLIDE_CORPSE = 0x8000,				// also used by portals, but dead monsters are mask 0x8000
+	COLLIDE_ALL_MASK = 0xFFFFFFFF,
 };
 
 struct D2RoomCollisionGridStrc

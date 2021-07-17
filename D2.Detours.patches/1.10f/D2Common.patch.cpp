@@ -190,7 +190,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10151                                                      @10151
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_AllocDynamicPath                                               @10152
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10153                                                      @10153
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10154                                                      @10154
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetNumberOfPathPoints                                @10154
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10155                                                      @10155
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_FreeDynamicPath                                                @10156
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetPathPoints                                                  @10157
@@ -251,12 +251,12 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10212_PATH_SetMoveFlags                                    @10212
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10213                                                      @10213
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10214                                                      @10214
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10215                                                      @10215
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_ComputeDirection                                               @10215
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10216                                                      @10216
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetDistance                                                    @10217
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetDistance                                                    @10218
     PatchAction::FunctionReplacePatchByOriginal,       //   PATH_AddToDistance                                                  @10219
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10220                                                      @10220
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_ComputeSquaredDistance                                                      @10220
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10221                                                      @10221
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10222                                                      @10222
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10223                                                      @10223
@@ -1317,7 +1317,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemsXPosition                                         @11278
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_AddUnitToRoomEx                                            @11279
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_GetSpawnMode_XY                                            @11280
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11281_Unused                                               @11281
+    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11281_CollisionPatternFromSize                                               @11281
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11282_Unused                                               @11282
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_CalculateKickDamage                                          @11283
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_EvaluateMissileFormula                                      @11284
@@ -1327,7 +1327,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetMaxElemDamage                                            @11288
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetElemTypeFromMissileId                                    @11289
     PatchAction::FunctionReplacePatchByOriginal,       //   MISSILE_GetSpecialParamValue                                        @11290
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11291                                                      @11291
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_SetNumberOfPathPoints                                                      @11291
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11292_ItemAssignProperty                                   @11292
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_GetItemCharges                                             @11293
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat                                                @11294

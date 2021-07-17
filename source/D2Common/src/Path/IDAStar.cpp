@@ -28,163 +28,12 @@ const int dword_6FDD19E0[] =
 	87, 9, 26, 14, 95, 113, 13, 54, 104, 82, 44, 72, 5, 78, 11, 39
 };
 
-////D2Common.0x6FDA69E0) --------------------------------------------------------
-//int __fastcall D2Common_PATH_First_6FDA69E0(D2PathInfoStrc* pPathInfo)
-//{
-//	int v2; // ebp@1
-//	int nCollisionType; // ebx@2
-//	int nCollisionPattern; // edi@2
-//	D2RoomStrc *pRoom; // esi@2
-//	int result; // eax@10
-//	D2PathPointStrc v7; // ebx@12
-//	D2DynamicPathStrc *v8; // eax@13
-//	int v10; // ecx@15
-//	int v11; // esi@17
-//	int v12; // ecx@20
-//	uint32_t v13; // esi@22
-//	uint32_t v14; // edi@22
-//	int v15; // ecx@22
-//	bool v16; // zf@22
-//	int v17; // edi@26
-//	D2DynamicPathStrc *v18; // esi@30
-//	int v19; // eax@30
-//	D2DynamicPathStrc **v20; // edx@30
-//	D2DynamicPathStrc *v21; // eax@30
-//	D2DynamicPathStrc *v22; // ecx@31
-//	uint16_t v23; // ax@36
-//	signed __int16 v24; // cx@36
-//	int nX; // [sp+10h] [bp-3304h]@2
-//	D2PathPointStrc nXa; // [sp+10h] [bp-3304h]@12
-//	int nY; // [sp+18h] [bp-32FCh]@3
-//	D2DynamicPathStrc *a1[128]; // [sp+28h] [bp-32ECh]@12
-//	char v30[512]; // [sp+228h] [bp-30ECh]@12
-//	D2PathInfoStrc *a2; // [sp+428h] [bp-2EECh]@12
-//	char v32[11200]; // [sp+42Ch] [bp-2EE8h]@14
-//	int v33; // [sp+2FECh] [bp-328h]@12
-//	int v34; // [sp+3310h] [bp-4h]@12
-//
-//	v2 = 0;
-//
-//	if (pPathInfo->pDynamicPath->pTargetUnit)
-//	{
-//		nCollisionType = pPathInfo->nCollisionType;
-//		nCollisionPattern = pPathInfo->nCollisionPattern;
-//		pRoom = pPathInfo->pRoom;
-//		nX = pPathInfo->field_4.X;
-//		nY = pPathInfo->field_4.Y;
-//
-//		if (COLLISION_CheckMaskWithPattern2(pRoom, nX - 2, nY - 2, nCollisionPattern, nCollisionType) && COLLISION_CheckMaskWithPattern2(pRoom, nX - 2, nY + 2, nCollisionPattern, nCollisionType)
-//			&& COLLISION_CheckMaskWithPattern2(pRoom, nX + 2, nY - 2, nCollisionPattern, nCollisionType) && COLLISION_CheckMaskWithPattern2(pRoom, nX + 2, nY + 2, nCollisionPattern, nCollisionType)
-//			&& COLLISION_CheckMaskWithPattern2(pRoom, nX - 2, nY, nCollisionPattern, nCollisionType) && COLLISION_CheckMaskWithPattern2(pRoom, nX, nY - 2, nCollisionPattern, nCollisionType)
-//			&& COLLISION_CheckMaskWithPattern2(pRoom, nX + 2, nY, nCollisionPattern, nCollisionType) && COLLISION_CheckMaskWithPattern2(pRoom, nX, nY + 2, nCollisionPattern, nCollisionType))
-//		{
-//			return 0;
-//		}
-//	}
-//
-//	v7 = *(D2PathPointStrc *)&pPathInfo->pStartCoord.X;
-//	v33 = v2;
-//	a2 = (D2PathInfoStrc *)v2;
-//	v34 = v2;
-//
-//	memset(a1, 0, sizeof(a1));
-//	memset(v30, 0, sizeof(v30));
-//
-//	nXa = *(D2PathPointStrc *)&pPathInfo->field_4.X;
-//	if (v2 == 200)
-//	{
-//		v8 = 0;
-//	}
-//	else
-//	{
-//		memset(&v32[56 * v33], 0, 0x38u);
-//		v8 = (D2DynamicPathStrc *)&v32[56 * v33];
-//		++v33;
-//	}
-//
-//	v10 = v7.X - nXa.X;
-//	LOWORD(v8->dwTargetX) = v2;
-//	if (v7.X - nXa.X < 0)
-//		v10 = -v10;
-//	v11 = v7.Y - nXa.Y;
-//	if (v7.Y - nXa.Y < 0)
-//		v11 = -v11;
-//	if (v10 < v11)
-//		v12 = v10 + 2 * v11;
-//	else
-//		v12 = v11 + 2 * v10;
-//	v8->anonymous_0.wPosY = v12;
-//	v8->anonymous_0.wOffsetY = v12;
-//	*(_DWORD *)&v8->anonymous_0.wOffsetX = v7;
-//	v13 = (uint32_t)a2;
-//	v14 = 0;
-//	v15 = (dword_6FDD17E0[v7.X & 0x7F] + dword_6FDD19E0[v8->anonymous_0.wPosX & 127]) & 127;
-//	v16 = a2 == (D2PathInfoStrc *)v2;
-//	v8->pUnit = (D2UnitStrc *)a1[v15];
-//	a1[v15] = v8;
-//	if (v16)
-//		goto LABEL_48;
-//	do
-//	{
-//		if (*(_WORD *)(v13 + 4) >= (signed int)v8->anonymous_0.wOffsetY)
-//			break;
-//		v14 = v13;
-//		v13 = *(_DWORD *)(v13 + 52);
-//	}
-//	while (v13 != v2);
-//	if (v14 == v2)
-//	{
-//LABEL_48:
-//		v17 = 0;
-//		v8->dwFlags = (uint32_t)a2;
-//		a2 = (D2PathInfoStrc *)v8;
-//	}
-//	else
-//	{
-//		*(_DWORD *)(v14 + 52) = v8;
-//		v8->dwFlags = v13;
-//		v8 = (D2DynamicPathStrc *)a2;
-//		v17 = 0;
-//	}
-//	while (v8 != (D2DynamicPathStrc *)v2)
-//	{
-//		v18 = v8;
-//		a2 = (D2PathInfoStrc *)v8->dwFlags;
-//		v19 = ((unsigned __int8)dword_6FDD17E0[v8->anonymous_0.wOffsetX & 0x7F]
-//			   + (unsigned __int8)dword_6FDD19E0[v8->anonymous_0.wPosX & 0x7F]) & 0x7F;
-//		v20 = &a1[v19];
-//		v21 = a1[v19];
-//		if (v21 == v18)
-//			goto LABEL_49;
-//		do
-//		{
-//			v22 = v21;
-//			v21 = (D2DynamicPathStrc *)v21->pUnit;
-//		}
-//		while (v21 != v18);
-//		if (v22 != (D2DynamicPathStrc *)v2)
-//			v22->pUnit = v18->pUnit;
-//		else
-//			LABEL_49:
-//		*v20 = (D2DynamicPathStrc *)v18->pUnit;
-//		v18->pUnit = (D2UnitStrc *)v2;
-//		sub_6FDA6D10(a1, (D2PathInfoStrc *)v18);
-//		if (v17 == v2
-//			|| (v23 = v18->anonymous_0.wPosY, v24 = *(_WORD *)(v17 + 6), (signed __int16)v23 < v24)
-//			|| v23 == v24 && SLOWORD(v18->dwTargetX) > *(_WORD *)(v17 + 8) + 5)
-//			v17 = (int)v18;
-//		if (v18->anonymous_0.wPosY == (_WORD)v2 || !sub_6FDA6D50(pPathInfo, a1, v18, nXa))
-//		{
-//			break;
-//		}
-//		v8 = (D2DynamicPathStrc *)a2;
-//	}
-//	if (v17 == v2)
-//		result = v2;
-//	else
-//		result = sub_6FDA78A0(v17, pPathInfo);
-//	return result;
-//}
+//D2Common.0x6FDA69E0
+int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo)
+{
+	D2_ASSERTM(false, "Not implemented yet.");
+	return 0;
+}
 
 //D2Common.0x6FDA6D10
 void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathPoint)
@@ -956,304 +805,54 @@ D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPoint
 //	return result;
 //}
 
-////D2Common.0x6FDA78A0) --------------------------------------------------------
-//signed int __fastcall sub_6FDA78A0(int a1, int a2)
-//{
-//	signed int result; // eax@1
-//	int v3; // ebp@1
-//	int v4; // ebx@4
-//	int v5; // edx@5
-//	int v6; // esi@5
-//	signed int v7; // [sp+Ch] [bp-144h]@1
-//	char* v8; // [sp+10h] [bp-140h]@2
-//	void* v9; // [sp+14h] [bp-13Ch]@1
-//	char v10; // [sp+14Ch] [bp-4h]@2
-//	void* v11; // [sp+150h] [bp+0h]@11
-//
-//	result = 0;
-//	v3 = -2;
-//	v9 = (void*)(*(_DWORD *)(a2 + 48) + 156);
-//	v7 = -2;
-//	if (!a1)
-//		goto LABEL_15;
-//	v8 = &v10;
-//	do
-//	{
-//		if (result >= 78)
-//			break;
-//		v4 = *(_DWORD *)(a1 + 12);
-//		if (v4)
-//		{
-//			v5 = *(_WORD *)a1 - *(_WORD *)v4;
-//			v6 = *(_WORD *)(a1 + 2) - *(_WORD *)(v4 + 2);
-//			if (v5 != v3 || v6 != v7)
-//			{
-//				++result;
-//				v3 = *(_WORD *)a1 - *(_WORD *)v4;
-//				*(_DWORD *)v8 = *(_DWORD *)a1;
-//				v8 -= 4;
-//				v7 = v6;
-//			}
-//		}
-//		a1 = v4;
-//	}
-//	while (v4);
-//	if (result >= 1 && result < 78)
-//		memcpy(v9, &v11 - result, 4 * ((unsigned int)(4 * result) >> 2));
-//	else
-//		LABEL_15:
-//	result = 0;
-//	return result;
-//}
+//D2Common.0x6FDA78A0
+// Takes a path list, and builds the path using straight lines into the path info.
+// Note that the path list stores the path from the end to the beginning (in reverse order).
+// It also seems like it won't copy the last  point of the path list (first of the array), not sure if it's intended or not.
+signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPoint, D2PathInfoStrc* pPathInfo)
+{
+	if (!pCurPoint)
+	{
+		return 0;
+	}
 
-////D2Common.0x6FDA7970) --------------------------------------------------------
-//signed int __thiscall sub_6FDA7970(int this)
-//{
-//	int v1; // ebx@1
-//	D2RoomStrc*v2; // ST04_4@1
-//	D2RoomStrc*v3; // eax@1
-//	int v4; // ebp@1
-//	int v5; // edx@4
-//	int v6; // ebx@7
-//	int v7; // esi@7
-//	unsigned int v8; // ecx@18
-//	char* v9; // edi@18
-//	int v10; // ebp@18
-//	int i; // ecx@18
-//	int v12; // eax@21
-//	int v13; // ecx@22
-//	int v14; // ecx@23
-//	int v15; // edi@23
-//	int v16; // eax@23
-//	int v17; // edx@25
-//	int v18; // esi@27
-//	int v19; // esi@30
-//	int v20; // eax@30
-//	signed int v21; // ebx@30
-//	signed int v22; // eax@32
-//	signed int v23; // eax@35
-//	int v24; // eax@38
-//	signed int v25; // ecx@42
-//	signed int v26; // ebx@43
-//	char* v27; // edi@43
-//	int v28; // esi@45
-//	int v29; // ecx@46
-//	int v30; // edx@46
-//	signed int v32; // [sp+10h] [bp-37184h]@30
-//	signed int v33; // [sp+10h] [bp-37184h]@43
-//	int v34; // [sp+14h] [bp-37180h]@1
-//	int v35; // [sp+14h] [bp-37180h]@23
-//	signed int v36; // [sp+14h] [bp-37180h]@43
-//	int v37; // [sp+1Ch] [bp-37178h]@23
-//	void* v38; // [sp+1Ch] [bp-37178h]@43
-//	D2RoomCoordStrc a2; // [sp+24h] [bp-37170h]@1
-//	int v40; // [sp+44h] [bp-37150h]@1
-//	char v41[6]; // [sp+46h] [bp-3714Eh]@6
-//	int v42; // [sp+4Ch] [bp-37148h]@4
-//	int v43; // [sp+50h] [bp-37144h]@1
-//	int v44; // [sp+54h] [bp-37140h]@30
-//	int v45; // [sp+58h] [bp-3713Ch]@30
-//	int v46; // [sp+5Ch] [bp-37138h]@30
-//	int v47; // [sp+64h] [bp-37130h]@3
-//	int v48; // [sp+68h] [bp-3712Ch]@6
-//	int v49; // [sp+6Ch] [bp-37128h]@5
-//	int v50; // [sp+70h] [bp-37124h]@8
-//	char v51; // [sp+1B8h] [bp-36FDCh]@43
-//	void* v52; // [sp+1BCh] [bp-36FD8h]@30
-//	char v53; // [sp+1C0h] [bp-36FD4h]@30
-//	int v54; // [sp+6430h] [bp-30D64h]@30
-//	__int16 v55; // [sp+6434h] [bp-30D60h]@21
-//	__int16 v56; // [sp+6436h] [bp-30D5Eh]@21
-//	__int16 v57; // [sp+6438h] [bp-30D5Ch]@21
-//	__int16 v58; // [sp+643Ah] [bp-30D5Ah]@21
-//	int v59; // [sp+643Ch] [bp-30D58h]@21
-//	int v60; // [sp+6440h] [bp-30D54h]@21
-//	int v61; // [sp+6444h] [bp-30D50h]@21
-//	int v62; // [sp+6448h] [bp-30D4Ch]@21
-//	char v63[200000]; // [sp+644Ch] [bp-30D48h]@18
-//	int v64; // [sp+3718Ch] [bp-8h]@21
-//	int v65; // [sp+37190h] [bp-4h]@22
-//
-//	v1 = this;
-//	v2 = *(D2RoomStrc**)(this + 8);
-//	v34 = this;
-//	*(_BYTE *)(this + 20) *= 2;
-//	DUNGEON_GetRoomCoordinates(v2, &a2);
-//	v3 = *(D2RoomStrc**)(v1 + 12);
-//	memcpy(&v40, &a2, 0x20u);
-//	v4 = v43;
-//	if (!v3 || *(D2RoomStrc**)(v1 + 8) == v3)
-//	{
-//		v7 = a2.nSubtileHeight;
-//		v6 = a2.nSubtileY;
-//		v5 = a2.nSubtileWidth;
-//LABEL_12:
-//		v5 += 20;
-//		a2.nSubtileX -= 10;
-//		a2.nSubtileWidth = v5;
-//		goto LABEL_13;
-//	}
-//	DUNGEON_GetRoomCoordinates(v3, (D2RoomCoordStrc*)&v47);
-//	if (v47 >= v40)
-//	{
-//		a2.nSubtileX = v40;
-//		v5 = v47 + v49 - v40;
-//	}
-//	else
-//	{
-//		a2.nSubtileX = v47;
-//		v5 = v40 + v42 - v47;
-//	}
-//	a2.nSubtileWidth = v5;
-//	if (v48 >= *(_DWORD *)&v41[2])
-//	{
-//		v6 = *(_DWORD *)&v41[2];
-//		v7 = v48 + v50 - *(_DWORD *)&v41[2];
-//	}
-//	else
-//	{
-//		v6 = v48;
-//		v7 = *(_DWORD *)&v41[2] + v4 - v48;
-//	}
-//	a2.nSubtileY = v6;
-//	a2.nSubtileHeight = v7;
-//	if (v5 == v42)
-//		goto LABEL_12;
-//LABEL_13:
-//	if (v7 == v4)
-//	{
-//		v6 -= 10;
-//		v7 += 20;
-//		a2.nSubtileY = v6;
-//		a2.nSubtileHeight = v7;
-//	}
-//	if (v5 * v7 > 50000)
-//	{
-//		FOG_Assertion(//			"ptRoomCoords->nSizeGameX * ptRoomCoords->nSizeGameY <= MAXPROOM", //			__FILE__, __LINE__//			369);
-//		exit(-1);
-//	}
-//	v8 = (unsigned int)(4 * (v5 + 6) * (v7 + 6)) >> 2;
-//	memset(v63, 0, 4 * v8);
-//	v9 = &v63[4 * v8];
-//	v10 = v34;
-//	for (i = 0; i; --i)
-//		*v9++ = 0;
-//	LOWORD(v59) = v5;
-//	v55 = a2.nSubtileX;
-//	HIWORD(v59) = v7;
-//	v60 = (unsigned __int16)v5 + 6;
-//	v56 = v6;
-//	v57 = v5 + a2.nSubtileX;
-//	v62 = 3 - (unsigned __int16)v6;
-//	v12 = *(_DWORD *)(v34 + 32);
-//	v58 = v6 + v7;
-//	v61 = 3 - (unsigned __int16)a2.nSubtileX;
-//	v64 = 0;
-//	if (v12 == 16)
-//	{
-//		v13 = *(_DWORD *)(v34 + 48);
-//		v64 = 1;
-//		v65 = *(_DWORD *)(v13 + 48) + 32;
-//	}
-//	v14 = *(_DWORD *)v34;
-//	v15 = *(_DWORD *)(v34 + 4);
-//	v16 = (unsigned __int16)*(_DWORD *)(v34 + 4) - (unsigned __int16)*(_DWORD *)v34;
-//	v37 = *(_DWORD *)v34;
-//	v35 = *(_DWORD *)(v34 + 4);
-//	*(_WORD *)&v41[2] = 0;
-//	if (v16 < 0)
-//		v16 = -v16;
-//	v17 = HIWORD(v35) - HIWORD(v37);
-//	if (HIWORD(v35) - HIWORD(v37) < 0)
-//		v17 = -v17;
-//	v18 = v16;
-//	if (v16 < v17 || (v18 = v17, v16 <= v17))
-//		v16 = v17;
-//	v19 = v18 + 2 * v16;
-//	HIWORD(v40) = v19;
-//	LOWORD(v40) = v19;
-//	v42 = v14;
-//	*(_WORD *)&v41[4] = -3;
-//	LOBYTE(v44) = sub_6FDAB770(v14, v15) & 7;
-//	v44 = (unsigned __int8)v44;
-//	v54 = 1;
-//	memset(&v53, 0, 0x1Cu);
-//	v46 = 0;
-//	v45 = 0;
-//	v52 = &v53;
-//	v20 = *(_DWORD *)(v10 + 32);
-//	v43 = (int)&unk_6FDD1BE0;
-//	v21 = (signed __int16)v19;
-//	v32 = (signed __int16)v19;
-//	if (v20)
-//	{
-//		if (v20 == 16)
-//		{
-//			v21 = (signed __int16)(HIWORD(v40) + (signed __int16)v19 / 2);
-//			v22 = *(_BYTE *)(v10 + 28);
-//			if (v21 > v22)
-//				LOWORD(v22) = HIWORD(v40) + (signed __int16)v19 / 2;
-//			v32 = (signed __int16)v22;
-//		}
-//	}
-//	else
-//	{
-//		v23 = *(_BYTE *)(v10 + 28);
-//		if ((signed __int16)v19 > v23)
-//			LOWORD(v23) = v19;
-//		v32 = (signed __int16)v23;
-//	}
-//	do
-//	{
-//		memcpy(v52, &v40, 0x1Cu);
-//		v24 = sub_6FDA7D40((int)&v52, v21, v10);
-//		v21 += 5;
-//		if (!v24 && v54 == 900)
-//			break;
-//		v54 = 1;
-//		if (v24)
-//			break;
-//	}
-//	while (v21 < v32);
-//	v25 = 0;
-//	if (v24)
-//	{
-//		v26 = 0;
-//		v38 = (void*)(*(_DWORD *)(v10 + 48) + 156);
-//		v33 = -2;
-//		v36 = -2;
-//		v27 = &v51;
-//		do
-//		{
-//			if (v26 >= 78)
-//				break;
-//			v28 = *(_DWORD *)(v24 + 20);
-//			if (v28)
-//			{
-//				v29 = *(_WORD *)(v24 + 8) - *(_WORD *)(v28 + 8);
-//				v30 = *(_WORD *)(v24 + 10) - *(_WORD *)(v28 + 10);
-//				if (v29 != v33 || v30 != v36)
-//				{
-//					++v26;
-//					*(_DWORD *)v27 = *(_DWORD *)(v24 + 8);
-//					v27 -= 4;
-//					v33 = v29;
-//					v36 = v30;
-//				}
-//			}
-//			v24 = v28;
-//		}
-//		while (v28);
-//		if (v26 <= 1 || v26 >= 78)
-//			v26 = 0;
-//		else
-//			memcpy(v38, &v52 - v26, 4 * ((unsigned int)(4 * v26) >> 2));
-//		v25 = v26;
-//		if (v26 >= 78)
-//			v25 = 0;
-//	}
-//	return v25;
-//}
+	int nbPoints = 0;
+	D2PathPointStrc tempPathPoints[78];
+	// Assumes all points are conex, so we can't have a delta of -2, hence used for init
+	int prevDeltaX = -2;
+	int prevDeltaY = -2;
+	while (pCurPoint && pCurPoint->pNextEntry && nbPoints < D2DynamicPathStrc::MAXPATHLEN)
+	{
+		D2PathPointsListStrc* pNextPoint = pCurPoint->pNextEntry;
+		const int deltaX = pCurPoint->point.X - pNextPoint->point.X;
+		const int deltaY = pCurPoint->point.Y - pNextPoint->point.Y;
+		// If the direction doesn't change, then ignore the point
+		if (deltaX != prevDeltaX || deltaY != prevDeltaY)
+		{
+			++nbPoints;
+			// Store path in reverse order
+			tempPathPoints[D2DynamicPathStrc::MAXPATHLEN  - nbPoints] = pCurPoint->point;
+			prevDeltaX = deltaX;
+			prevDeltaY = deltaY;
+		}
+		pCurPoint = pNextPoint;
+	}
+
+	if (nbPoints < 1 || nbPoints >= D2DynamicPathStrc::MAXPATHLEN)
+	{
+		return 0;
+	}
+
+	memcpy(pPathInfo->pDynamicPath->PathPoints, &tempPathPoints[D2DynamicPathStrc::MAXPATHLEN - nbPoints], sizeof(D2PathPointStrc) * nbPoints);
+	return nbPoints;
+}
+
+//D2Common.0x6FDA7970
+int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo)
+{
+	D2_ASSERTM(false, "Not implemented yet.");
+	return 0;
+}
 
 ////D2Common.0x6FDA7D40) --------------------------------------------------------
 //int __fastcall sub_6FDA7D40(int a1, signed int a2, int a3)

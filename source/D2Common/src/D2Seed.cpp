@@ -29,27 +29,27 @@ void __fastcall SEED_InitLowSeed(D2SeedStrc* pSeed, int nLowSeed)
 }
 
 //D2Common.0x6FDAEAD0 (#10914)
-int __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed)
+uint32_t  __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed)
 {
 	return pSeed->nLowSeed;
 }
 
 //D2Common.0x6FDAEAE0 (#10921)
-void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, int nLowSeed, int nHighSeed)
+void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed)
 {
 	pSeed->nLowSeed = nLowSeed;
 	pSeed->nHighSeed = nHighSeed;
 }
 
 //D2Common.0x6FDAEAF0 (#10922)
-void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, int* pLowSeed, int* pHighSeed)
+void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLowSeed, uint32_t* pHighSeed)
 {
 	*pLowSeed = pSeed->nLowSeed;
 	*pHighSeed = pSeed->nHighSeed;
 }
 
 //D2Common.0x6FDAEB00 (#10915)
-int __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed)
+uint32_t __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed)
 {
 	return pSeed->nHighSeed;
 }
