@@ -472,7 +472,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetBlockRate                                                  @10433
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10434                                                      @10434
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetEquippedWeaponFromMonster                                  @10435
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetFrameBonus                                                 @10436
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetFrameBonus                                                 @10436
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetOverlay                                                    @10437
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetHealingCost                                                @10438
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetInventoryGoldLimit                                         @10439
@@ -1049,8 +1049,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_IsPlayerClassSkill                                           @11010
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetQuantity                                                  @11011
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_SetQuantity                                                  @11012
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11013_ConvertMode                                          @11013
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11014                                                      @11014
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_11013_ConvertMode                                          @11013
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_11014_ConvertShapeShiftedMode                              @11014
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11015                                                      @11015
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11016                                                      @11016
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11017_CheckUnitIfConsumeable                               @11017
