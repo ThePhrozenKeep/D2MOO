@@ -745,14 +745,13 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		}
 		else if (nNewMode == PLRMODE_SEQUENCE)
 		{
-			pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-			if (pUnit->pAnimSeq)
+			if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
 			{
 				pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
 				pUnit->dwSeqFrame = 0;
 				pUnit->dwAnimSpeed = 256;
 				pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
-				D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
+				D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
 
 				pUnit->dwSeqMode = nMode;
 				pUnit->nActionFrame = nEvent;
@@ -788,14 +787,13 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		}
 		if (nNewMode == MONMODE_SEQUENCE)
 		{
-			pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-			if (pUnit->pAnimSeq)
+			if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
 			{
 				pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
 				pUnit->dwSeqFrame = 0;
 				pUnit->dwAnimSpeed = 256;
 				pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
-				D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
+				D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
 
 				pUnit->dwSeqMode = nMode;
 				pUnit->nActionFrame = nEvent;
@@ -1112,7 +1110,6 @@ void __stdcall UNITS_SetAnimOrSeqMode(D2UnitStrc* pUnit, int nAnimMode)
 }
 
 //D2Common.0x6FDBED90 (#10371)
-//TODO: Change type of pUnit->pAnimSeq
 void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 {
 	unsigned int nFrame = 0;
@@ -1122,15 +1119,14 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 
 	if (pUnit)
 	{
-		pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-		if (pUnit->pAnimSeq)
+		if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
 		{
 			pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
 			pUnit->dwSeqFrame = 0;
 			pUnit->dwAnimSpeed = 256;
 			pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
 
-			D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
+			D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
 
 			pUnit->dwSeqMode = nMode;
 			pUnit->nActionFrame = nEvent;
@@ -1176,7 +1172,7 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 		pUnit->dwFrameCount -= pUnit->dwAnimSpeed;
 
 		nOldMode = pUnit->dwSeqMode;
-		D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
+		D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
 
 		pUnit->dwSeqMode = nNewMode;
 		pUnit->dwGFXcurrentFrame = nFrame << 8;

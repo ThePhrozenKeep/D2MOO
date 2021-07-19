@@ -102,7 +102,7 @@ struct D2UnitStrc
 		D2DynamicPathStrc* pDynamicPath;
 		D2StaticPathStrc* pStaticPath;
 	};
-	D2AnimSeqStrc* pAnimSeq;					//0x30
+	struct D2MonSeqTxt* pAnimSeq;				//0x30
 	uint32_t dwSeqFrameCount;					//0x34
 	uint32_t dwSeqFrame;						//0x38
 	uint32_t dwAnimSpeed;						//0x3C
