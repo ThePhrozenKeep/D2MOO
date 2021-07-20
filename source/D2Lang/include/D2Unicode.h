@@ -54,7 +54,7 @@ struct D2LANG_DLL_DECL Unicode {
 
   /**
    * Returns the length of the null-terminated string. If the string
-   * pointer is NULL, the function return 0;
+   * pointer is NULL, the function returns 0;
    *
    * D2Lang.0x6FC114C0 (#10040) ?strlen@Unicode@@SIHPBU1@@Z
    */
