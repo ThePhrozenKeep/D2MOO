@@ -51,7 +51,8 @@ enum D2C_MonModes
 	MONMODE_DEAD, 		//0x0C Dead DD
 	MONMODE_KNOCKBACK, 	//0x0D Knockback KB
 	MONMODE_SEQUENCE, 	//0x0E Sequence SQ
-	MONMODE_RUN			//0x0F Run RN
+	MONMODE_RUN,		//0x0F Run RN
+	NUMBER_OF_MONMODES
 };
 
 enum D2C_MercenaryClasses

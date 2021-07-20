@@ -1,9 +1,9 @@
 LIBRARY		D2Lang
 EXPORTS
-;   D2LANG_10014 @10014 ; ??0Unicode@@QAE@G@Z
-;   D2LANG_10015 @10015 ; ??4Unicode@@QAEAAU0@ABU0@@Z
-;   D2LANG_10016 @10016 ; ??BUnicode@@QBEGXZ
-;   D2LANG_10017 @10017 ; ??_FUnicode@@QAEXXZ
+    ??0Unicode@@QAE@G@Z @10014 ; Unicode::Unicode(unsigned short)
+    ??4Unicode@@QAEAAU0@ABU0@@Z @10015 ; Unicode& Unicode::Unicode(const Unicode&)
+    ??BUnicode@@QBEGXZ @10016 ; Unicode::unsigned short() const
+    ??_FUnicode@@QAEXXZ @10017 ; Unicode::`default constructor closure` 
 ;   D2LANG_10018 @10018 ; ?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z
 ;   D2LANG_10019 @10019 ; ?_toLowerTable@Unicode@@0PAGA
 ;   D2LANG_10020 @10020 ; ?_toUpperTable@Unicode@@0PAGA

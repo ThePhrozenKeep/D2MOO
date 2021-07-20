@@ -2806,79 +2806,72 @@ D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pMonster)
 //D2Common.0x6FDC0FC0 (#10436)
 int __stdcall UNITS_GetFrameBonus(D2UnitStrc* pUnit)
 {
-	static const int dword_6FDD3078[] =
+	static const int gaClassesWeaponFrameBonus_6FDD3078[NUM_WEAPON_CLASSES][NUMBER_OF_PLAYERCLASSES] =
 	{
-		1, 1, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0
+		//AMA,SOR,NEC,PAL,BAR,DRU,ASS
+		{   1,  1,  0,  0,  0,  0,  0}, // WEAPONCLASS_NONE
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_BOW
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_1HS
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_1HT
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_STF
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_2HS
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_2HT
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_XBW
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1JS
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1JT
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1SS
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1ST
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_HT1
+		{   0,  0,  0,  0,  0,  0,  0}  // WEAPONCLASS_HT2
 	};
-
-	D2UnitStrc* pItem = NULL;
-	int nClassId = 0;
-	int nType = 0;
+	
+	int nClassId = -1;
+	int nType = UNIT_COUNT;
 	int nMode = 0;
-
 	if (pUnit)
 	{
 		nClassId = pUnit->dwClassId;
 		nType = pUnit->dwUnitType;
 		nMode = pUnit->dwAnimMode;
-	}
-	else
-	{
-		nClassId = -1;
-		nType = 6;
-		nMode = 0;
 	}		
 
 	D2COMMON_11013_ConvertMode(pUnit, &nType, &nClassId, &nMode, __FILE__, __LINE__);
 
-	if (nType == UNIT_PLAYER)
+	if (nType != UNIT_PLAYER)
 	{
-		switch (nMode)
-		{
-		case PLRMODE_ATTACK1:
-		case PLRMODE_ATTACK2:
-			pItem = D2Common_10434(pUnit, 1);
-			if (pItem)
-			{
-				return dword_6FDD3078[nClassId + 7 * ITEMS_GetWeaponClassId(pItem)];
-			}
-
-			return dword_6FDD3078[nClassId];
-
-		case PLRMODE_SPECIAL3:
-		case PLRMODE_SPECIAL4:
-			if (!UNITS_CanDualWield(pUnit))
-			{
-				return 0;
-			}
-
-			pItem = D2Common_10434(pUnit, 1);
-			if (pItem)
-			{
-				return dword_6FDD3078[nClassId + 7 * ITEMS_GetWeaponClassId(pItem)];
-			}
-
-			return dword_6FDD3078[nClassId];
-
-		default:
-			return 0;
-		}
+		return 0;
 	}
 
-	return 0;
+
+	int nWeaponClass = WEAPONCLASS_NONE;
+	switch (nMode)
+	{
+	case PLRMODE_ATTACK1:
+	case PLRMODE_ATTACK2:
+		if (D2UnitStrc* pItem = D2Common_10434(pUnit, 1))
+		{
+			nWeaponClass = ITEMS_GetWeaponClassId(pItem);
+		}
+		break;
+	case PLRMODE_SPECIAL3:
+	case PLRMODE_SPECIAL4:
+		if (!UNITS_CanDualWield(pUnit))
+		{
+			return 0;
+		}
+
+		if (D2UnitStrc* pItem = D2Common_10434(pUnit, 1))
+		{
+			nWeaponClass = ITEMS_GetWeaponClassId(pItem);
+		}
+		break;
+	default:
+		return 0;
+	}
+
+	D2_ASSERT(0 <= nClassId && nClassId < NUMBER_OF_PLAYERCLASSES);
+	D2_ASSERT(0 <= nWeaponClass && nWeaponClass < NUM_WEAPON_CLASSES);
+	return gaClassesWeaponFrameBonus_6FDD3078[nWeaponClass][nClassId];
 }
 
 //D2Common.0x6FDC1120 (#10360)
@@ -3679,7 +3672,7 @@ BOOL __fastcall UNITS_CanSwitchAI(int nMonsterId)
 	if (pMonStatsTxtRecord)
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONSTATS2MODEFLAGINDEX_WL])
+		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & MONSTATS2MODEFLAG_WL))
 		{
 			if (!(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_BOSS]))
 			{

@@ -3,7 +3,7 @@
 #include <D2Dll.h>
 
 #ifdef D2LANG_IMPL
-#define D2LANG_DLL_DECL // We use .def files, not dllexport
+#define D2LANG_DLL_DECL __declspec( dllexport ) // D2Lang uses both .def files and dllexport
 #else
 #define D2LANG_DLL_DECL __declspec( dllimport )
 #endif
