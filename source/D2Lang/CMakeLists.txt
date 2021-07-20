@@ -3,6 +3,7 @@ add_library(D2Lang
   SHARED
     src/DllMain.cpp
     src/D2Unicode/D2UnicodeChar.cpp
+    src/D2Unicode/D2UnicodeStr.cpp
 
     include/D2Lang.h
     include/D2Unicode.h
