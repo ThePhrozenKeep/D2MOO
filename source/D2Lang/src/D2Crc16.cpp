@@ -23,439 +23,101 @@
  */
 
 #include <D2Crc16.h>
+
+#include <stddef.h>
+
 #include <D2Lang.h>
 #include <Fog.h>
 
-/*
-* A majority of this is extremely messy due to the use of macros to
-* constant-initialize a lookup table. It would be faster to hardcode
-* the table directly, but I wanted to provide explanations that could
-* later be used to rewrite the lookup table with transformation
-* matrices.
-*/
-
-#define CRC_N(n) (((n) * 0x1021) & 0xFFFF)
-
-/*
-* Each entry is in sets of 16 (i.e. to have 4x4 matrices). They are
-* swapped, shifted, and subtracted from in order to produce the CRC-16
-* lookup table entries.
-*/
-
-#define CRC_SET(crc, start) \
-    crc(start), crc(start + 1), crc(start + 2), crc(start + 3), \
-    crc(start + 4), crc(start + 5), crc(start + 6), crc(start + 7), \
-    crc(start + 8), crc(start + 9), crc(start + 10), crc(start + 11), \
-    crc(start + 12), crc(start + 13), crc(start + 14), crc(start + 15)
-
-/**
- * Reverses the order of columns (for a single entry), resulting in:
- * [(n + 3), (n + 2), (n + 1), (n)]
- */
-#define REVERSE_CRC_COL_ORDER(n) \
-    ((n) + (3 - (((n) % 4) * 2)))
-
-/**
- * Reverses the order of rows (for a single entry), resulting in:
- * [(n + 12), ...]
- * [(n + 8), ...]
- * [(n + 4), ...]
- * [(n), ...]
- */
-#define REVERSE_CRC_ROW_ORDER(n) \
-    ((n) + (12 - ((((n) % 16) / 4) * 8)))
-
-/**
- * Swaps the columns 0 and 1 (for a single entry), resulting
- * in:
- * [(n + 4), n, (n + 12), (n + 8)]
- */
-#define SWAP_CRC_COLS_0_AND_1(n) \
-    (((n) % 2 == 0) ? ((n) + 1) : ((n) - 1))
-
-/**
- * Swaps the columns [0, 1] and [2, 3] (for a single entry), resulting
- * in:
- * [(n + 8), (n + 12), n, (n + 4)]
- */
-#define SWAP_CRC_COLS_0_1_AND_2_3(n) \
-    (((n) % 4 < 2) ? ((n) + 2) : ((n) - 2))
-
-/**
- * Swaps the rows 0 and 1 (for a single entry), resulting in:
- * [(n + 4), ...]
- * [(n), ...]
- * [(n + 12), ...]
- * [(n + 8), ...]
- */
-#define SWAP_CRC_ROWS_0_AND_1(n) \
-    (((n) % 8 < 4) ? ((n) + 4) : ((n) - 4))
-
-/**
- * Swaps the rows [0, 1] and [2, 3] (for a single entry), resulting
- * in:
- * [(n + 8), ...]
- * [(n + 12), ...]
- * [(n), ...]
- * [(n + 4), ...]
- */
-#define SWAP_CRC_ROWS_0_1_AND_2_3(n) \
-    (((n) % 16 < 8) ? ((n) + 8) : ((n) - 8))
-
-
-/*
-* No special rules apply.
-*/
-
-#define CRC_0_15_IMPL(n) CRC_N(n)
-
-#define CRC_0_15(n) (unsigned short)(CRC_0_15_IMPL((n)))
-
-/*
-* If n is even, calculate for n + 1, otherwise n - 1.
-*/
-
-#define CRC_16_31_IMPL(n) CRC_N(SWAP_CRC_COLS_0_AND_1(n))
-
-#define CRC_16_31(n) (unsigned short)(CRC_16_31_IMPL((n)))
-
-/*
-* For n is divided by 4, calculate for the remainders:
-* 0 - 1: n + 2
-* 2 - 3: n - 2
-*
-* In addition, if n is odd, then subtract 64.
-*/
-
-#define CRC_32_47_IMPL(n) \
-    CRC_N(SWAP_CRC_COLS_0_1_AND_2_3(n)) \
-        - ((n % 2 == 0) ? 0 : 64)
-
-#define CRC_32_47(n) (unsigned short)(CRC_32_47_IMPL((n)))
-
-/*
-* For n is divided by 4, calculate for the remainders:
-* 0: n + 3
-* 1: n + 1
-* 2: n - 1
-* 3: n - 3
-*
-* In addition, if n is even, then subtract 64.
-*/
-
-#define CRC_48_63_IMPL(n) \
-    CRC_N(REVERSE_CRC_COL_ORDER(n)) \
-        - ((n % 2 == 0) ? 64 : 0)
-
-#define CRC_48_63(n) (unsigned short)(CRC_48_63_IMPL((n)))
-
-/*
-* For n is divided by 8, calculate for the remainders:
-* 0 - 3: n + 4
-* 4 - 7: n - 4
-*
-* In addition, if after dividing n by 4, the remainder is greater than
-* or equal to 2, then subtract 128.
-*/
-
-#define CRC_64_79_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_AND_1(n)) \
-        - ((n % 4 < 2) ? 0 : 128)
-
-#define CRC_64_79(n) (unsigned short)(CRC_64_79_IMPL((n)))
-
-/*
-* For n is divided by 8, calculate for the remainders:
-* 0: n + 5
-* 1: n + 3
-* 2: n + 5
-* 3: n + 3
-* 4: n - 3
-* 5: n - 5
-* 6: n - 3
-* 7: n - 5
-*
-* In addition, if after dividing n by 4, the remainder is greater than
-* or equal to 2, then subtract 128.
-*/
-
-#define CRC_80_95_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_AND_1(SWAP_CRC_COLS_0_AND_1(n))) \
-        - ((n % 4 < 2) ? 0 : 128)
-
-#define CRC_80_95(n) (unsigned short)(CRC_80_95_IMPL((n)))
-
-
-/*
-* For n is divided by 8, calculate for the remainders:
-* 0: n + 6
-* 1: n + 6
-* 2: n + 2
-* 3: n + 2
-* 4: n - 2
-* 5: n - 2
-* 6: n - 6
-* 7: n - 6
-*
-* In addition, for n is divided by 4, subtract for the remainders:
-* 0: 128
-* 1: 192
-* 2: 0
-* 3: 64
-*/
-
-#define CRC_96_111_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_AND_1(SWAP_CRC_COLS_0_1_AND_2_3(n))) \
-        - (((n + 2) % 4) * 64)
-
-#define CRC_96_111(n) (unsigned short)(CRC_96_111_IMPL((n)))
-
-/*
-* For n is divided by 4, calculate for the remainders:
-* 0: n + 7
-* 1: n + 5
-* 2: n + 3
-* 3: n + 1
-* 4: n - 1
-* 5: n - 3
-* 6: n - 5
-* 7: n - 7
-*
-* In addition, for n is divided by 4, subtract for the remainders:
-* 0: 192
-* 1: 128
-* 2: 64
-* 3: 0
-*/
-
-#define CRC_112_127_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_AND_1(REVERSE_CRC_COL_ORDER(n))) \
-        - ((3 - (n % 4)) * 64)
-
-#define CRC_112_127(n) (unsigned short)(CRC_112_127_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 7: n + 8
-* 8 - 15: n - 8
-*
-* In addition, if n is odd, then subtract by 8192.
-*
-* In addition, for n is divided by 8, if the remainder is greater than
-* or equal to 4, then subtract by 256.
-*/
-
-#define CRC_128_143_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_1_AND_2_3(n)) \
-        - ((n % 2 == 0) ? 0 : 8192) \
-        - ((n % 8 < 4) ? 0 : 256)
-
-#define CRC_128_143(n) (unsigned short)(CRC_128_143_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 7: n + 8
-* 8 - 15: n - 8
-*
-* On top of that, for n is divided by 2, calculate for the remainders:
-* 0: n + 1
-* 1: n - 1
-*
-* In addition, if n is even, then subtract by 8192.
-*
-* In addition, for n is divided by 8, if the remainder is greater than
-* or equal to 4, then subtract by 256.
-*/
-
-#define CRC_144_159_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_1_AND_2_3(SWAP_CRC_COLS_0_AND_1(n))) \
-        - ((n % 8 < 4) ? 0 : 256) \
-        - ((n % 2 == 0) ? 8192 : 0)
-
-#define CRC_144_159(n) (unsigned short)(CRC_144_159_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 7: n + 8
-* 8 - 15: n - 8
-*
-* On top of that, for n is divided by 4, calculate for the remainders:
-* 0 - 1: n + 2
-* 2 - 3: n - 2
-*
-* In addition, if n is odd, then subtract by 8256 (i.e. 8192 + 64).
-*
-* In addition, for n is divided by 8, if the remainder is greater than
-* or equal to 4, then subtract by 256.
-*/
-
-#define CRC_160_175_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_1_AND_2_3(SWAP_CRC_COLS_0_1_AND_2_3(n))) \
-        - ((n % 2 == 0) ? 0 : 8256) \
-        - ((n % 8 < 4) ? 0 : 256)
-
-#define CRC_160_175(n) (unsigned short)(CRC_160_175_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 7: n + 8
-* 8 - 15: n - 8
-*
-* On top of that, for n is divided by 4, calculate for the remainders:
-* 0: n + 3
-* 1: n + 1
-* 2: n - 1
-* 3: n - 3
-*
-* In addition, if n is even, then subtract by 8256 (i.e. 8192 + 64).
-*
-* In addition, for n is divided by 8, if the remainder is greater than
-* or equal to 4, then subtract by 256.
-*/
-
-#define CRC_176_191_IMPL(n) \
-    CRC_N(SWAP_CRC_ROWS_0_1_AND_2_3(REVERSE_CRC_COL_ORDER(n))) \
-        - ((n % 2 == 0) ? 8256 : 0) \
-        - ((n % 8 < 4) ? 0 : 256)
-
-#define CRC_176_191(n) (unsigned short)(CRC_176_191_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 3: n + 12
-* 4 - 7: n + 4
-* 8 - 11: n - 4
-* 12 - 15: n - 12
-*
-* In addition, if n is odd, then subtract by 8192.
-*
-* In addition, for n is divided by 4, if the remainder is greater than
-* or equal to 2, then subtract by 128.
-*
-* In addition, for n is divided by 8, if the remainder is less than 4,
-* then subtract by 256.
-*/
-
-#define CRC_192_207_IMPL(n) \
-    CRC_N(REVERSE_CRC_ROW_ORDER(n)) \
-        - ((n % 2 == 0) ? 0 : 8192) \
-        - ((n % 4 < 2) ? 0 : 128) \
-        - ((n % 8 < 4) ? 256 : 0)
-
-#define CRC_192_207(n) (unsigned short)(CRC_192_207_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 3: n + 12
-* 4 - 7: n + 4
-* 8 - 11: n - 4
-* 12 - 15: n - 12
-*
-* On top of that, for n is divided by 2, calculate for the remainders:
-* 0: n + 1
-* 1: n - 1
-*
-* In addition, if n is even, then subtract by 8192.
-*
-* In addition, for n is divided by 4, if the remainder is greater than
-* or equal to 2, then subtract by 128.
-*
-* In addition, for n is divided by 8, if the remainder is less than 4,
-* then subtract by 256.
-*/
-
-#define CRC_208_223_IMPL(n) \
-    CRC_N(REVERSE_CRC_ROW_ORDER(SWAP_CRC_COLS_0_AND_1(n))) \
-        - ((n % 4 < 2) ? 0 : 128) \
-        - ((n % 8 < 4) ? 256 : 0) \
-        - ((n % 2 == 0) ? 8192 : 0)
-
-#define CRC_208_223(n) (unsigned short)(CRC_208_223_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 3: n + 12
-* 4 - 7: n + 4
-* 8 - 11: n - 4
-* 12 - 15: n - 12
-*
-* On top of that, for n is divided by 4, calculate for the remainders:
-* 0 - 1: n + 2
-* 2 - 3: n - 2
-*
-* In addition, if n is odd, then subtract by 8192.
-*
-* In addition, for n is divided by 8, if the remainder is less than 4,
-* then subtract by 256.
-*
-* In addition, for n is divided by 4, subtract for the remainders:
-* 0: 128
-* 1: 192
-* 2: 0
-* 3: 64
-*/
-
-#define CRC_224_239_IMPL(n) \
-    CRC_N(REVERSE_CRC_ROW_ORDER(SWAP_CRC_COLS_0_1_AND_2_3(n))) \
-        - ((n % 2 == 0) ? 0 : 8192) \
-        - ((n % 8 < 4) ? 256 : 0) \
-        - (((n + 2) % 4) * 64)
-
-#define CRC_224_239(n) (unsigned short)(CRC_224_239_IMPL((n)))
-
-/*
-* For n is divided by 16, calculate for the remainders:
-* 0 - 3: n + 12
-* 4 - 7: n + 4
-* 8 - 11: n - 4
-* 12 - 15: n - 12
-*
-* On top of that, for n is divided by 4, calculate for the remainders:
-* 0: n + 3
-* 1: n + 1
-* 2: n - 1
-* 3: n - 3
-*
-* In addition, if n is even, then subtract by 8192.
-*
-* In addition, for n is divided by 8, if the remainder is less than 4,
-* then subtract by 256.
-*
-* In addition, for n is divided by 4, subtract for the remainders:
-* 0: 192
-* 1: 128
-* 2: 64
-* 3: 0
-*/
-
-#define CRC_240_255_IMPL(n) \
-    CRC_N(REVERSE_CRC_ROW_ORDER(REVERSE_CRC_COL_ORDER(n))) \
-        - ((n % 2 == 0) ? 8192 : 0) \
-        - ((n % 8 < 4) ? 256 : 0) \
-        - ((3 - (n % 4)) * 64)
-
-#define CRC_240_255(n) (unsigned short)(CRC_240_255_IMPL((n)))
-
 #define CRC_LOOKUP_TABLE_COUNT 256
 
+/**
+ * Generates and returns the CRC-16 value that would be used in the
+ * CRC-16 lookup table, for a given index in the lookup table.
+ *
+ * More information regarding the generation of the table:
+ * https://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks#Generating_the_tables
+ */
+static constexpr unsigned short GenerateCrc(unsigned char i) {
+  unsigned short crc = i;
+
+  for (size_t bit = 0; bit < 16; ++bit) {
+    if (crc & 0x8000) {
+      crc = (crc << 1) ^ 0x1021;
+    } else {
+      crc <<= 1;
+    }
+  }
+
+  return crc;
+}
+
 /* [6FC1D7F0 to 6FC1D9F0) */
-static const unsigned short crc16_lookup_table[CRC_LOOKUP_TABLE_COUNT] = {
-  CRC_SET(CRC_0_15, 0),
-  CRC_SET(CRC_16_31, 16),
-  CRC_SET(CRC_32_47, 32),
-  CRC_SET(CRC_48_63, 48),
-  CRC_SET(CRC_64_79, 64),
-  CRC_SET(CRC_80_95, 80),
-  CRC_SET(CRC_96_111, 96),
-  CRC_SET(CRC_112_127, 112),
-  CRC_SET(CRC_128_143, 128),
-  CRC_SET(CRC_144_159, 144),
-  CRC_SET(CRC_160_175, 160),
-  CRC_SET(CRC_176_191, 176),
-  CRC_SET(CRC_192_207, 192),
-  CRC_SET(CRC_208_223, 208),
-  CRC_SET(CRC_224_239, 224),
-  CRC_SET(CRC_240_255, 240),
+static constexpr unsigned short sgCrc16LookupTable[CRC_LOOKUP_TABLE_COUNT] = {
+    GenerateCrc(0), GenerateCrc(1), GenerateCrc(2), GenerateCrc(3),
+    GenerateCrc(4), GenerateCrc(5), GenerateCrc(6), GenerateCrc(7),
+    GenerateCrc(8), GenerateCrc(9), GenerateCrc(10), GenerateCrc(11),
+    GenerateCrc(12), GenerateCrc(13), GenerateCrc(14), GenerateCrc(15),
+    GenerateCrc(16), GenerateCrc(17), GenerateCrc(18), GenerateCrc(19),
+    GenerateCrc(20), GenerateCrc(21), GenerateCrc(22), GenerateCrc(23),
+    GenerateCrc(24), GenerateCrc(25), GenerateCrc(26), GenerateCrc(27),
+    GenerateCrc(28), GenerateCrc(29), GenerateCrc(30), GenerateCrc(31),
+    GenerateCrc(32), GenerateCrc(33), GenerateCrc(34), GenerateCrc(35),
+    GenerateCrc(36), GenerateCrc(37), GenerateCrc(38), GenerateCrc(39),
+    GenerateCrc(40), GenerateCrc(41), GenerateCrc(42), GenerateCrc(43),
+    GenerateCrc(44), GenerateCrc(45), GenerateCrc(46), GenerateCrc(47),
+    GenerateCrc(48), GenerateCrc(49), GenerateCrc(50), GenerateCrc(51),
+    GenerateCrc(52), GenerateCrc(53), GenerateCrc(54), GenerateCrc(55),
+    GenerateCrc(56), GenerateCrc(57), GenerateCrc(58), GenerateCrc(59),
+    GenerateCrc(60), GenerateCrc(61), GenerateCrc(62), GenerateCrc(63),
+    GenerateCrc(64), GenerateCrc(65), GenerateCrc(66), GenerateCrc(67),
+    GenerateCrc(68), GenerateCrc(69), GenerateCrc(70), GenerateCrc(71),
+    GenerateCrc(72), GenerateCrc(73), GenerateCrc(74), GenerateCrc(75),
+    GenerateCrc(76), GenerateCrc(77), GenerateCrc(78), GenerateCrc(79),
+    GenerateCrc(80), GenerateCrc(81), GenerateCrc(82), GenerateCrc(83),
+    GenerateCrc(84), GenerateCrc(85), GenerateCrc(86), GenerateCrc(87),
+    GenerateCrc(88), GenerateCrc(89), GenerateCrc(90), GenerateCrc(91),
+    GenerateCrc(92), GenerateCrc(93), GenerateCrc(94), GenerateCrc(95),
+    GenerateCrc(96), GenerateCrc(97), GenerateCrc(98), GenerateCrc(99),
+    GenerateCrc(100), GenerateCrc(101), GenerateCrc(102), GenerateCrc(103),
+    GenerateCrc(104), GenerateCrc(105), GenerateCrc(106), GenerateCrc(107),
+    GenerateCrc(108), GenerateCrc(109), GenerateCrc(110), GenerateCrc(111),
+    GenerateCrc(112), GenerateCrc(113), GenerateCrc(114), GenerateCrc(115),
+    GenerateCrc(116), GenerateCrc(117), GenerateCrc(118), GenerateCrc(119),
+    GenerateCrc(120), GenerateCrc(121), GenerateCrc(122), GenerateCrc(123),
+    GenerateCrc(124), GenerateCrc(125), GenerateCrc(126), GenerateCrc(127),
+    GenerateCrc(128), GenerateCrc(129), GenerateCrc(130), GenerateCrc(131),
+    GenerateCrc(132), GenerateCrc(133), GenerateCrc(134), GenerateCrc(135),
+    GenerateCrc(136), GenerateCrc(137), GenerateCrc(138), GenerateCrc(139),
+    GenerateCrc(140), GenerateCrc(141), GenerateCrc(142), GenerateCrc(143),
+    GenerateCrc(144), GenerateCrc(145), GenerateCrc(146), GenerateCrc(147),
+    GenerateCrc(148), GenerateCrc(149), GenerateCrc(150), GenerateCrc(151),
+    GenerateCrc(152), GenerateCrc(153), GenerateCrc(154), GenerateCrc(155),
+    GenerateCrc(156), GenerateCrc(157), GenerateCrc(158), GenerateCrc(159),
+    GenerateCrc(160), GenerateCrc(161), GenerateCrc(162), GenerateCrc(163),
+    GenerateCrc(164), GenerateCrc(165), GenerateCrc(166), GenerateCrc(167),
+    GenerateCrc(168), GenerateCrc(169), GenerateCrc(170), GenerateCrc(171),
+    GenerateCrc(172), GenerateCrc(173), GenerateCrc(174), GenerateCrc(175),
+    GenerateCrc(176), GenerateCrc(177), GenerateCrc(178), GenerateCrc(179),
+    GenerateCrc(180), GenerateCrc(181), GenerateCrc(182), GenerateCrc(183),
+    GenerateCrc(184), GenerateCrc(185), GenerateCrc(186), GenerateCrc(187),
+    GenerateCrc(188), GenerateCrc(189), GenerateCrc(190), GenerateCrc(191),
+    GenerateCrc(192), GenerateCrc(193), GenerateCrc(194), GenerateCrc(195),
+    GenerateCrc(196), GenerateCrc(197), GenerateCrc(198), GenerateCrc(199),
+    GenerateCrc(200), GenerateCrc(201), GenerateCrc(202), GenerateCrc(203),
+    GenerateCrc(204), GenerateCrc(205), GenerateCrc(206), GenerateCrc(207),
+    GenerateCrc(208), GenerateCrc(209), GenerateCrc(210), GenerateCrc(211),
+    GenerateCrc(212), GenerateCrc(213), GenerateCrc(214), GenerateCrc(215),
+    GenerateCrc(216), GenerateCrc(217), GenerateCrc(218), GenerateCrc(219),
+    GenerateCrc(220), GenerateCrc(221), GenerateCrc(222), GenerateCrc(223),
+    GenerateCrc(224), GenerateCrc(225), GenerateCrc(226), GenerateCrc(227),
+    GenerateCrc(228), GenerateCrc(229), GenerateCrc(230), GenerateCrc(231),
+    GenerateCrc(232), GenerateCrc(233), GenerateCrc(234), GenerateCrc(235),
+    GenerateCrc(236), GenerateCrc(237), GenerateCrc(238), GenerateCrc(239),
+    GenerateCrc(240), GenerateCrc(241), GenerateCrc(242), GenerateCrc(243),
+    GenerateCrc(244), GenerateCrc(245), GenerateCrc(246), GenerateCrc(247),
+    GenerateCrc(248), GenerateCrc(249), GenerateCrc(250), GenerateCrc(251),
+    GenerateCrc(252), GenerateCrc(253), GenerateCrc(254), GenerateCrc(255),
 };
 
 void __stdcall CRC16_CalculateChecksum(
@@ -476,6 +138,6 @@ void __stdcall CRC16_CalculateChecksum(
     lookup_index = high_byte ^ data[i];
 
     *crc16_checksum_out <<= 8;
-    *crc16_checksum_out ^= crc16_lookup_table[lookup_index];
+    *crc16_checksum_out ^= sgCrc16LookupTable[lookup_index];
   }
 }
