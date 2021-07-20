@@ -52,6 +52,11 @@ struct D2LANG_DLL_DECL Unicode {
   // D2Lang.0x6FC11020 (#10016) ??BUnicode@@QBEGXZ
   operator unsigned short() const;
 
-  // D2Lang.0x6FC114C0 (#10040) ?strlen@Unicode@@SIHPBU1@@Z
+  /**
+   * Returns the length of the null-terminated string. If the string
+   * pointer is NULL, the function return 0;
+   *
+   * D2Lang.0x6FC114C0 (#10040) ?strlen@Unicode@@SIHPBU1@@Z
+   */
   static int __fastcall strlen(const Unicode* str);
 };
