@@ -1112,11 +1112,6 @@ void __stdcall UNITS_SetAnimOrSeqMode(D2UnitStrc* pUnit, int nAnimMode)
 //D2Common.0x6FDBED90 (#10371)
 void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 {
-	unsigned int nFrame = 0;
-	unsigned int nMode = 0;
-	int nDirection = 0;
-	int nEvent = 0;
-
 	if (pUnit)
 	{
 		if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
@@ -1126,6 +1121,8 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 			pUnit->dwAnimSpeed = 256;
 			pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
 
+			unsigned nMode = 0, nFrame = 0;
+			int nDirection = 0, nEvent = 0;
 			D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
 
 			pUnit->dwSeqMode = nMode;
