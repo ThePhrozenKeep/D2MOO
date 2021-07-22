@@ -25,13 +25,12 @@
 #include <D2Unicode.h>
 
 int __fastcall Unicode::strlen(const Unicode* str) {
-  int i = 0;
-
   if (str == NULL) {
-    return i;
+    return 0;
   }
 
-  while (str[i].ch != L'\0') {
+  int i = 0;
+  while ((str++)->ch != L'\0') {
     ++i;
   }
 
