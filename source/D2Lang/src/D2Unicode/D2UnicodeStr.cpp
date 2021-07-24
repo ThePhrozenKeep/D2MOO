@@ -22,41 +22,17 @@
  * SOFTWARE.
  */
 
-#pragma once
+#include <D2Unicode.h>
 
-#include <wchar.h>
+int __fastcall Unicode::strlen(const Unicode* str) {
+  if (str == NULL) {
+    return 0;
+  }
 
-#include "D2Lang.h"
+  int i = 0;
+  while ((str++)->ch != L'\0') {
+    ++i;
+  }
 
-/*
-* This type must be struct in order to make certain functions'
-* mangled names the same as the ones in D2Lang.
-*/
-struct D2LANG_DLL_DECL Unicode {
- public:
-  unsigned short ch;
-
-  /**
-   * Default parameter value generates the default constructor
-   * closure, but also requires dllexport to generate.
-   *
-   * D2Lang.0x6FC11200 (#10017) ??_FUnicode@@QAEXXZ
-   */
-
-  // D2Lang.0x6FC11010 (#10014) ??0Unicode@@QAE@G@Z
-  Unicode(unsigned short ch = 0);
-
-  // D2Lang.0x6FC111F0 (#10015) ??4Unicode@@QAEAAU0@ABU0@@Z
-  Unicode& operator=(const Unicode& str);
-
-  // D2Lang.0x6FC11020 (#10016) ??BUnicode@@QBEGXZ
-  operator unsigned short() const;
-
-  /**
-   * Returns the length of the null-terminated string. If the string
-   * pointer is NULL, the function returns 0;
-   *
-   * D2Lang.0x6FC114C0 (#10040) ?strlen@Unicode@@SIHPBU1@@Z
-   */
-  static int __fastcall strlen(const Unicode* str);
-};
+  return i;
+}
