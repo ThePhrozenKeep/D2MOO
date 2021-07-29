@@ -29,8 +29,8 @@ Unicode* __fastcall Unicode::strcpy(Unicode* dest, const Unicode* src) {
 
   i = 0;
   do {
-    dest[i] = src[i];
-  } while (src[i++] != L'\0');
+    dest[i].ch = src[i].ch;
+  } while (src[i++].ch != L'\0');
 
   return dest;
 }
