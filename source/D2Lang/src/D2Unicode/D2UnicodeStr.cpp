@@ -24,6 +24,19 @@
 
 #include <D2Unicode.h>
 
+Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
+  size_t i;
+
+  for (i = 0; dest[i] != L'\0'; ++i) {}
+  dest = &dest[i];
+
+  do {
+    *(dest++) = *src;
+  } while (*(src++) != L'\0');
+
+  return dest;
+}
+
 Unicode* __fastcall Unicode::strcpy(Unicode* dest, const Unicode* src) {
   size_t i = 0;
   do {
