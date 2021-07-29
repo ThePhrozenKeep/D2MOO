@@ -59,6 +59,15 @@ struct D2LANG_DLL_DECL Unicode {
   operator unsigned short() const;
 
   /**
+   * Copies the characters from a null-terminated source string into a
+   * null-terminated destination string. Returns the destination
+   * string.
+   *
+   * D2Lang.0x6FC114A0 (#10038) ?strcpy@Unicode@@SIPAU1@PAU1@PBU1@@Z
+   */
+  static Unicode* __fastcall strcpy(Unicode* dest, const Unicode* src);
+
+  /**
    * Returns the length of the null-terminated string. If the string
    * pointer is NULL, the function returns 0;
    *
