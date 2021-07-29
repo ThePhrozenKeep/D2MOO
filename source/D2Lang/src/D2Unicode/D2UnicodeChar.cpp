@@ -137,3 +137,7 @@ Unicode::Direction Unicode::directionality() {
 
   return DIR_NEUTRAL;
 }
+
+int Unicode::isASCII() const {
+  return this->ch < 0x80;
+}
