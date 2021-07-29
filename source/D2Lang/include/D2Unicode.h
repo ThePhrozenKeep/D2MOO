@@ -34,6 +34,12 @@
 */
 struct D2LANG_DLL_DECL Unicode {
  public:
+  enum Direction {
+    DIR_LEFT_TO_RIGHT = 0xF0,
+    DIR_RIGHT_TO_LEFT = 0xF1,
+    DIR_NEUTRAL = 0xF2,
+  };
+
   unsigned short ch;
 
   /**
@@ -59,4 +65,7 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC114C0 (#10040) ?strlen@Unicode@@SIHPBU1@@Z
    */
   static int __fastcall strlen(const Unicode* str);
+
+  // D2Lang.0x6FC11C50 (#10023) ?directionality@Unicode@@QAE?AW4Direction@1@XZ
+  Direction directionality();
 };
