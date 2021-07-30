@@ -25,9 +25,7 @@
 #include <D2Unicode.h>
 
 Unicode* __fastcall Unicode::strcpy(Unicode* dest, const Unicode* src) {
-  size_t i;
-
-  i = 0;
+  size_t i = 0;
   do {
     dest[i].ch = src[i].ch;
   } while (src[i++].ch != L'\0');
