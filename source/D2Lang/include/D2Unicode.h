@@ -26,6 +26,7 @@
 
 #include <wchar.h>
 
+#include <D2BasicTypes.h>
 #include "D2Lang.h"
 
 /*
@@ -68,4 +69,13 @@ struct D2LANG_DLL_DECL Unicode {
 
   // D2Lang.0x6FC11C50 (#10023) ?directionality@Unicode@@QAE?AW4Direction@1@XZ
   Direction directionality();
+
+  /**
+   * Returns whether or not this Unicode character is in 
+   * "C0 Controls and Basic Latin" character block, otherwise known as
+   * the ASCII character block.
+   *
+   * D2Lang.0x6FC11080 (#10024) ?isASCII@Unicode@@QBEHXZ
+   */
+  BOOL isASCII() const;
 };
