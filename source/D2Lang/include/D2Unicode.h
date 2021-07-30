@@ -26,6 +26,7 @@
 
 #include <wchar.h>
 
+#include <D2BasicTypes.h>
 #include "D2Lang.h"
 
 /*
@@ -76,5 +77,5 @@ struct D2LANG_DLL_DECL Unicode {
    *
    * D2Lang.0x6FC11080 (#10024) ?isASCII@Unicode@@QBEHXZ
    */
-  int isASCII() const;
+  BOOL isASCII() const;
 };
