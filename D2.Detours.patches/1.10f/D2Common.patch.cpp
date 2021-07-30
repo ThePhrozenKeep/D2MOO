@@ -700,9 +700,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10661_Return0                                              @10661
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonItemPercentDataTables                                @10662
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonItemPercentTxtRecord                                 @10663
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharTemplateTxtRecordCount                              @10664
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetCharTemplateTxtRecord                                   @10665
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetClassFromCharTemplateTxtRecord                          @10666
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetCharTemplateTxtRecordCount                              @10664
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetCharTemplateTxtRecord                                   @10665
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetClassFromCharTemplateTxtRecord                          @10666
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_UNUSED_Return0                                             @10667
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetSuperUniquesTxtRecord                                   @10668
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10669
@@ -1362,22 +1362,33 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 static const int D2CommonImageBase = 0x6FD40000;
 
 static ExtraPatchAction extraPatchActions[] = {
-    //{ 0x6FDB6300 - D2CommonImageBase, &STATLIST_FindStatIndex_6FDB6300 , PatchAction::FunctionReplaceOriginalByPatch },
-    //{ 0x6FDB6C10 - D2CommonImageBase, &sub_6FDB6C10, PatchAction::FunctionReplacePatchByOriginal },
-    //{ 0x6FDB64A0 - D2CommonImageBase, &sub_6FDB64A0, PatchAction::FunctionReplacePatchByOriginal },
-    //{ 0x6FDB6920 - D2CommonImageBase, &STATLIST_FindStat_6FDB6920, PatchAction::FunctionReplacePatchByOriginal },
-    //{ 0x6FDB6970 - D2CommonImageBase, &STATLIST_InsertStatOrFail_6FDB6970, PatchAction::FunctionReplaceOriginalByPatch },
-    //{ 0x6FDB6AB0 - D2CommonImageBase, &STATLIST_UpdateUnitStat_6FDB6AB0, PatchAction::FunctionReplaceOriginalByPatch },
-    //{ 0x6FDB63E0 - D2CommonImageBase, &STATLIST_GetTotalStat_6FDB63E0, PatchAction::FunctionReplaceOriginalByPatch },
-    //{ 0x6FD85A10 - D2CommonImageBase, &DRLGPRESET_ParseDS1File, PatchAction::FunctionReplaceOriginalByPatch },
-    // Patch globals using original DLL pointers for now
-    { 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplacePatchByOriginal },
-    { 0x6FDE9600 - D2CommonImageBase, &gpArenaTxtTable, PatchAction::PointerReplacePatchByOriginal },
-    { 0x6FDE95F8 - D2CommonImageBase, &gpCharTemplateTxtTable, PatchAction::PointerReplacePatchByOriginal },
-    { 0x6FDEA704 - D2CommonImageBase, &gpBeltsTxtTable, PatchAction::PointerReplacePatchByOriginal },
-    { 0x6FDEA704 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal },
-    
+    // We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
+    //{ 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplaceOriginalByPatch },
+    { 0x6FD86050 - D2CommonImageBase, &DRLGPRESET_LoadDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD86190 - D2CommonImageBase, &DRLGPRESET_FreeDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD87F20 - D2CommonImageBase, &DRLGPRESET_FreeDrlgMap, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD62020 - D2CommonImageBase, &DATATBLS_LoadLvlSubTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD62600 - D2CommonImageBase, &DATATBLS_UnloadLvlSubTxt, PatchAction::FunctionReplaceOriginalByPatch },
 
+    // Only ever accessed through DATATBLS_LoadArenaTxt, DATATBLS_GetArenaTxtRecord and DATATBLS_UnloadArenaTxt
+    //{ 0x6FDE9600 - D2CommonImageBase, &gpArenaTxtTable, PatchAction::PointerReplaceOriginalByPatch },
+    { 0x6FD47840 - D2CommonImageBase, &DATATBLS_LoadArenaTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD479B0 - D2CommonImageBase, &DATATBLS_UnloadArenaTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    
+    // Only ever accessed through DATATBLS_LoadCharTemplateTxt, DATATBLS_GetCharTemplateTxtRecord, DATATBLS_GetClassFromCharTemplateTxtRecord and DATATBLS_UnloadCharTemplateTxt
+    // Also need to have the count matching with DATATBLS_GetCharTemplateTxtRecordCount
+    //{ 0x6FDE95F8 - D2CommonImageBase, &gpCharTemplateTxtTable, PatchAction::PointerReplaceOriginalByPatch },
+    { 0x6FD479D0 - D2CommonImageBase, &DATATBLS_LoadCharTemplateTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD48770 - D2CommonImageBase, &DATATBLS_UnloadCharTemplateTxt, PatchAction::FunctionReplaceOriginalByPatch },
+
+    // Only ever accessed through DATATBLS_LoadCharTemplateTxt, DATATBLS_GetBeltsTxtRecord, DATATBLS_GetInvRectFromBeltsTxt and DATATBLS_UnloadBeltsTxt
+    //{ 0x6FDEA704 - D2CommonImageBase, &sgpBeltsTxtTable, PatchAction::PointerReplaceOriginalByPatch },
+    { 0x6FD48880 - D2CommonImageBase, &DATATBLS_LoadCharTemplateTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FD493A0 - D2CommonImageBase, &DATATBLS_UnloadBeltsTxt, PatchAction::FunctionReplaceOriginalByPatch },
+    
+    // Can patch directly since it's pointing to the global static data tables
+    { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
+    
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
