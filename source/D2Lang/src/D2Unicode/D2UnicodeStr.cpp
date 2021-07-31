@@ -25,14 +25,12 @@
 #include <D2Unicode.h>
 
 Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
-  size_t i;
+  size_t i = 0;
+  while (dest[i].ch != L'\0') {
+    ++i;
+  }
 
-  for (i = 0; dest[i] != L'\0'; ++i) {}
-  dest = &dest[i];
-
-  do {
-    *(dest++) = *src;
-  } while (*(src++) != L'\0');
+  Unicode::strcpy(&dest[i], src);
 
   return dest;
 }
