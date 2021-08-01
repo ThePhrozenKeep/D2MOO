@@ -385,7 +385,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetGUIDFromDynamicUnit                                  @10346
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetUnitForPlayerOrMonster                               @10347
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_ChangeAnimMode                                                @10348
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimStartFrame                                             @10349
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimStartFrame                                             @10349
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_InitializeStaticPath                                          @10350
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_BlockCollisionPath                                            @10351
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_FreeCollisionPath                                             @10352
