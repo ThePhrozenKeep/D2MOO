@@ -97,6 +97,17 @@ struct D2LANG_DLL_DECL Unicode {
   BOOL isASCII() const;
 
   /**
+   * Returns this character's lowercase if there is a lowercase for
+   * this character. Otherwise, returns a copy of this character.
+   *
+   * Vanilla bug: Returns uppercase for characters in the
+   * "Latin-1 Supplement" block.
+   *
+   * D2Lang.0x6FC110E0 (#10050) ?toLower@Unicode@@QBE?AU1@XZ
+   */
+  Unicode toLower() const;
+
+  /**
    * Returns this character's uppercase if there is an uppercase for
    * this character. Otherwise, returns a copy of this character.
    *
@@ -105,6 +116,14 @@ struct D2LANG_DLL_DECL Unicode {
   Unicode toUpper() const;
 
  private:
+  /**
+   * Vanilla bug: The characters in the Latin-1 Supplement block are
+   * uppercase.
+   *
+   * D2Lang.[0x6FC1D508 to 0x6FC1D708) (#10019) ?_toLowerTable@Unicode@@0PAGA
+   */
+  static unsigned short _toLowerTable[256];
+
   // D2Lang.[0x6FC1D308 to 0x6FC1D508) (#10020) ?_toUpperTable@Unicode@@0PAGA
   static unsigned short _toUpperTable[256];
 };

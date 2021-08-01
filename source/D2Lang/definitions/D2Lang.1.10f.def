@@ -5,7 +5,7 @@ EXPORTS
     ??BUnicode@@QBEGXZ @10016 ; Unicode::unsigned short() const
     ??_FUnicode@@QAEXXZ @10017 ; Unicode::`default constructor closure` 
 ;   D2LANG_10018 @10018 ; ?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z
-;   D2LANG_10019 @10019 ; ?_toLowerTable@Unicode@@0PAGA
+    ?_toLowerTable@Unicode@@0PAGA @10019 ; Unicode::_toLowerTable
     ?_toUpperTable@Unicode@@0PAGA @10020 ; Unicode::_toUpperTable
 ;   D2LANG_10021 @10021 ; ?compare@Unicode@@QBEHU1@@Z
 ;   D2LANG_10022 @10022 ; ?compare@Unicode@@SIHU1@0@Z
@@ -36,7 +36,7 @@ EXPORTS
 ;   D2LANG_10047 @10047 ; ?strstri@Unicode@@SIPAU1@PBU1@0@Z
 ;   D2LANG_10048 @10048 ; ?sys2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z
 ;   D2LANG_10049 @10049 ; ?sysWidth@Unicode@@SIKPBU1@H@Z
-;   D2LANG_10050 @10050 ; ?toLower@Unicode@@QBE?AU1@XZ
+    ?toLower@Unicode@@QBE?AU1@XZ @10050 ; Unicode::toLower
 ;   D2LANG_10051 @10051 ; ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
     ?toUpper@Unicode@@QBE?AU1@XZ @10052 ; Unicode::toUpper
 ;   D2LANG_10053 @10053 ; ?toUtf@Unicode@@SIPADPADPBU1@H@Z
