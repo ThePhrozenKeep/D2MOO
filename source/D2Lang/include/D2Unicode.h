@@ -60,6 +60,14 @@ struct D2LANG_DLL_DECL Unicode {
   operator unsigned short() const;
 
   /**
+   * Appends a null-terminated string to the end of a null-terminated
+   * destination string. Returns the destination string.
+   *
+   * D2Lang.0x6FC113F0 (#10034) ?strcat@Unicode@@SIPAU1@PAU1@PBU1@@Z
+   */
+  static Unicode* __fastcall strcat(Unicode* dest, const Unicode* src);
+
+  /**
    * Copies the characters from a null-terminated source string into a
    * null-terminated destination string. Returns the destination
    * string.
