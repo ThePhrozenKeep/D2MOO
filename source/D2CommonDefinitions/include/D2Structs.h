@@ -616,15 +616,50 @@ struct D2ClientStrc
 //	uint16_t* pMapEnd;							//0x24
 //};
 
+struct D2DamageStrc
+{
+	uint32_t dwHitFlags;						//0x00
+	uint16_t wResultFlags;						//0x04
+	uint16_t wExtra;							//0x06
+	uint32_t dwPhysDamage;						//0x08
+	uint32_t dwEnDmgPct;						//0x0C
+	uint32_t dwFireDamage;						//0x10
+	uint32_t dwBurnDamage;						//0x14
+	uint32_t dwBurnLen;						//0x18
+	uint32_t dwLtngDamage;						//0x1C
+	uint32_t dwMagDamage;						//0x20
+	uint32_t dwColdDamage;						//0x24
+	uint32_t dwPoisDamage;						//0x28
+	uint32_t dwPoisLen;						//0x2C
+	uint32_t dwColdLen;						//0x30
+	uint32_t dwFrzLen;							//0x34
+	uint32_t dwLifeLeech;						//0x38
+	uint32_t dwManaLeech;						//0x3C
+	uint32_t dwStamLeech;						//0x40
+	uint32_t dwStunLen;						//0x44
+	uint32_t dwAbsLife;						//0x48
+	uint32_t dwDmgTotal;						//0x4C
+	uint32_t unk0x50;							//0x50
+	uint32_t dwPiercePct;						//0x54
+	uint32_t dwDamageRate;						//0x58
+	uint32_t unk0x5C;							//0x5C
+	uint32_t dwHitClass;						//0x60
+	uint8_t nHitClassActiveSet;				//0x64
+	char nConvType;							//0x65
+	uint8_t unk0x66[2];						//0x66
+	uint32_t dwConvPct;						//0x68
+	uint8_t unk0x6C[4];						//0x6C
+};
+
 struct D2CombatStrc
 {
 	D2GameStrc* pGame;						//0x00
-	uint32_t dwAttackerType;					//0x04
-	uint32_t dwAttackerId;						//0x08
-	uint32_t dwDefenderType;					//0x0C
-	uint32_t dwDefenderId;						//0x10
-	D2DamageStrc* pDamage;					//0x14
-	D2CombatStrc* pNext;					//0x18
+	uint32_t dwAttackerType;				//0x04
+	uint32_t dwAttackerId;					//0x08
+	uint32_t dwDefenderType;				//0x0C
+	uint32_t dwDefenderId;					//0x10
+	D2DamageStrc tDamage;					//0x14
+	D2CombatStrc* pNext;					//0x84
 };
 
 
@@ -661,41 +696,6 @@ struct D2CurseStrc
 	int32_t nStatValue;							//0x18
 	int32_t nState;								//0x1C
 	void* pStateFunc;						//0x20
-};
-
-struct D2DamageStrc
-{
-	uint32_t dwHitFlags;						//0x00
-	uint16_t wResultFlags;						//0x04
-	uint16_t wExtra;							//0x06
-	uint32_t dwPhysDamage;						//0x08
-	uint32_t dwEnDmgPct;						//0x0C
-	uint32_t dwFireDamage;						//0x10
-	uint32_t dwBurnDamage;						//0x14
-	uint32_t dwBurnLen;						//0x18
-	uint32_t dwLtngDamage;						//0x1C
-	uint32_t dwMagDamage;						//0x20
-	uint32_t dwColdDamage;						//0x24
-	uint32_t dwPoisDamage;						//0x28
-	uint32_t dwPoisLen;						//0x2C
-	uint32_t dwColdLen;						//0x30
-	uint32_t dwFrzLen;							//0x34
-	uint32_t dwLifeLeech;						//0x38
-	uint32_t dwManaLeech;						//0x3C
-	uint32_t dwStamLeech;						//0x40
-	uint32_t dwStunLen;						//0x44
-	uint32_t dwAbsLife;						//0x48
-	uint32_t dwDmgTotal;						//0x4C
-	uint32_t unk0x50;							//0x50
-	uint32_t dwPiercePct;						//0x54
-	uint32_t dwDamageRate;						//0x58
-	uint32_t unk0x5C;							//0x5C
-	uint32_t dwHitClass;						//0x60
-	uint8_t nHitClassActiveSet;				//0x64
-	char nConvType;							//0x65
-	uint8_t unk0x66[2];						//0x66
-	uint32_t dwConvPct;						//0x68
-	uint8_t unk0x6C[4];						//0x6C
 };
 
 //struct D2DrlgMiscDataStrc
