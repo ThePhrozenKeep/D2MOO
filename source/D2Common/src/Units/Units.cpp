@@ -691,7 +691,7 @@ void __stdcall UNITS_SetAnimData(D2UnitStrc* pUnit, int nUnitType, int nClassId,
 }
 
 //Helper function
-void __stdcall UNITS_CharacterStartRunningOrKnocback(D2UnitStrc* pUnit, int nClassId)
+void __stdcall UNITS_CharacterStartRunningOrKnockback(D2UnitStrc* pUnit, int nClassId)
 {
 	D2StatListStrc* pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, STATLIST_TEMPONLY, 0, pUnit->dwUnitType, pUnit->dwUnitId);
 	if (D2CharStatsTxt* pCharStatsTxtRecord = UNITS_GetCharStatsTxtRecord(nClassId))
@@ -724,7 +724,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	{
 		if (nNewMode == PLRMODE_RUN || nNewMode == PLRMODE_KNOCKBACK)
 		{
-			UNITS_CharacterStartRunningOrKnocback(pUnit, nClassId);
+			UNITS_CharacterStartRunningOrKnockback(pUnit, nClassId);
 		}
 		if (nNewMode == PLRMODE_SEQUENCE)
 		{
@@ -743,7 +743,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	{
 		if (pUnit->dwUnitType == UNIT_PLAYER && STATES_IsUnitShapeShifted(pUnit) && (nNewMode == MONMODE_KNOCKBACK || nNewMode == MONMODE_RUN))
 		{
-			UNITS_CharacterStartRunningOrKnocback(pUnit, pUnit->dwClassId);
+			UNITS_CharacterStartRunningOrKnockback(pUnit, pUnit->dwClassId);
 		}
 		if (nNewMode == MONMODE_SEQUENCE)
 		{
