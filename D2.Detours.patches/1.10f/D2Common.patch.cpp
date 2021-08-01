@@ -1396,9 +1396,9 @@ __declspec(dllexport)
 constexpr int __cdecl GetExtraPatchActionsCount() { return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); }
 
 __declspec(dllexport)
-ExtraPatchAction __cdecl GetExtraPatchAction(int index)
+ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
 {
-    return extraPatchActions[index];
+    return &extraPatchActions[index];
 }
 
 }
