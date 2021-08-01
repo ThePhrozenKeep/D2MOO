@@ -95,4 +95,16 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC11080 (#10024) ?isASCII@Unicode@@QBEHXZ
    */
   BOOL isASCII() const;
+
+  /**
+   * Returns this character's uppercase if there is an uppercase for
+   * this character. Otherwise, returns a copy of this character.
+   *
+   * D2Lang.0x6FC110B0 (#10052) ?toUpper@Unicode@@QBE?AU1@XZ
+   */
+  Unicode toUpper() const;
+
+ private:
+  // D2Lang.[0x6FC1D308 to 0x6FC1D508) (#10020) ?_toUpperTable@Unicode@@0PAGA
+  static unsigned short _toUpperTable[256];
 };
