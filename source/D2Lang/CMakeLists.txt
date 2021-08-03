@@ -5,6 +5,7 @@ add_library(D2Lang
     src/D2Crc16.cpp
     src/D2Unicode/D2UnicodeChar.cpp
     src/D2Unicode/D2UnicodeStr.cpp
+    src/D2Unicode/D2UnicodeUtf.cpp
 
     include/D2Lang.h
     include/D2Crc16.h
