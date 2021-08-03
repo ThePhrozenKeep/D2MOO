@@ -63,7 +63,8 @@ struct D2LANG_DLL_DECL Unicode {
    * Returns whether the specified character in the string is the last
    * character of a word. In this function, only characters in the
    * English alphabet or Arabic numerals are considered characters in
-   * a word.
+   * a word. The first character is also not considered the end of a
+   * word.
    *
    * D2Lang.0x6FC11190 (#10031) ?isWordEnd@Unicode@@SIHPBU1@I@Z
    */
