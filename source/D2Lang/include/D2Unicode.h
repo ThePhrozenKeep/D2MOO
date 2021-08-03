@@ -59,6 +59,9 @@ struct D2LANG_DLL_DECL Unicode {
   // D2Lang.0x6FC11020 (#10016) ??BUnicode@@QBEGXZ
   operator unsigned short() const;
 
+  // D2Lang.0x6FC11190 (#10031) ?isWordEnd@Unicode@@SIHPBU1@I@Z
+  static BOOL __fastcall isWordEnd(const Unicode* str, size_t index);
+
   /**
    * Appends a null-terminated string to the end of a null-terminated
    * destination string. Returns the destination string.
