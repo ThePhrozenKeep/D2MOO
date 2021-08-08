@@ -10,17 +10,17 @@ enum D2C_ItemStats
 	STAT_INVALID = -1,
 	STAT_STRENGTH = 0, 					// 000
 	STAT_ENERGY, 						// 001
-	STAT_DEXTERITY, 						// 002
+	STAT_DEXTERITY, 					// 002
 	STAT_VITALITY, 						// 003
 	STAT_STATPTS, 						// 004
 	STAT_SKILLPTS, 						// 005
-	STAT_HITPOINTS, 						// 006
-	STAT_MAXHP, 							// 007
+	STAT_HITPOINTS, 					// 006
+	STAT_MAXHP, 						// 007
 	STAT_MANA, 							// 008
 	STAT_MAXMANA, 						// 009
 	STAT_STAMINA, 						// 00A
 	STAT_MAXSTAMINA, 					// 00B
-	STAT_LEVEL, 							// 00C
+	STAT_LEVEL, 						// 00C
 	STAT_EXPERIENCE, 					// 00D
 	STAT_GOLD, 							// 00E
 	STAT_GOLDBANK, 						// 00F
@@ -422,7 +422,7 @@ struct D2SLayerStatIdStrc
 			uint16_t nLayer;				//0x00
 			uint16_t nStat;					//0x02
 		};
-		PackedType nPackedValue;				//0x00
+		PackedType nPackedValue;			//0x00
 	};
 
 	static D2SLayerStatIdStrc Make(uint16_t wLayer, uint16_t wStatId) { return { wLayer, wStatId }; }
