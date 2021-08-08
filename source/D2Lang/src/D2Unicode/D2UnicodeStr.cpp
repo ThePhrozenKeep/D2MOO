@@ -24,6 +24,17 @@
 
 #include <D2Unicode.h>
 
+#include <ctype.h>
+
+BOOL __fastcall Unicode::isWordEnd(const Unicode* str, size_t index) {
+  if (index == 0) {
+    return FALSE;
+  }
+
+  return ::isalnum(str[index].ch)
+      && !::isalnum(str[index + 1].ch);
+}
+
 Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
   size_t i = 0;
   while (dest[i].ch != L'\0') {

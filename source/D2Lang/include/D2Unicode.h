@@ -60,6 +60,17 @@ struct D2LANG_DLL_DECL Unicode {
   operator unsigned short() const;
 
   /**
+   * Returns whether the specified character in the string is the last
+   * character of a word. In this function, only characters in the
+   * English alphabet or Arabic numerals are considered characters in
+   * a word. The first character is also not considered the end of a
+   * word.
+   *
+   * D2Lang.0x6FC11190 (#10031) ?isWordEnd@Unicode@@SIHPBU1@I@Z
+   */
+  static BOOL __fastcall isWordEnd(const Unicode* str, size_t index);
+
+  /**
    * Appends a null-terminated string to the end of a null-terminated
    * destination string. Returns the destination string.
    *
