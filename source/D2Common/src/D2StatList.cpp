@@ -755,7 +755,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::
 }
 
 //D2Common.0x6FDB6E30
-void __stdcall D2Common_ExpireStatListEx_6FDB6E30(D2StatListStrc* pStatList)
+void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 {
 	if (!pStatList)
 	{
@@ -885,7 +885,7 @@ void __stdcall STATLIST_FreeStatList(D2StatListStrc* pStatList)
 void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pStatList)
 {
 
-	D2Common_ExpireStatListEx_6FDB6E30(pStatList);
+	D2Common_ExpireStatList_6FDB6E30(pStatList);
 
 	if (pStatList->Stats.pStat)
 	{
@@ -1077,7 +1077,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 {
 	if (D2StatListExStrc* pUnitStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx))
 	{
-		D2Common_ExpireStatListEx_6FDB6E30((D2StatListExStrc*)pStatList);
+		D2Common_ExpireStatList_6FDB6E30((D2StatListExStrc*)pStatList);
 		D2StatListExStrc* pCurrentStatList = pUnitStatListEx;
 
 		while (pCurrentStatList && (pStatList != pCurrentStatList))
@@ -1618,7 +1618,7 @@ void __stdcall STATLIST_MergeStatLists(D2UnitStrc* pTarget, D2UnitStrc* pUnit, B
 	{
 		if (pUnit->dwUnitType == UNIT_ITEM && (ITEMS_GetBodyLocation(pUnit) == BODYLOC_SWRARM || ITEMS_GetBodyLocation(pUnit) == BODYLOC_SWLARM))
 		{
-			D2Common_ExpireStatListEx_6FDB6E30(pUnit->pStatListEx);
+			D2Common_ExpireStatList_6FDB6E30(pUnit->pStatListEx);
 		}
 		else if (pUnit->pStatListEx->pUnit == pTarget)
 		{
@@ -2011,7 +2011,7 @@ BOOL __stdcall D2Common_10574(D2UnitStrc* pUnit, int nStateId, BOOL bSet)
 			{
 				if (!(pStatList->dwFlags & STATLIST_SET))
 				{
-					D2Common_ExpireStatListEx_6FDB6E30((D2StatListExStrc*)pStatList);
+					D2Common_ExpireStatList_6FDB6E30((D2StatListExStrc*)pStatList);
 					pStatList->dwFlags |= STATLIST_SET;
 					D2COMMON_10475_PostStatToStatList(pUnit, pStatList, TRUE);
 				}
@@ -2020,7 +2020,7 @@ BOOL __stdcall D2Common_10574(D2UnitStrc* pUnit, int nStateId, BOOL bSet)
 			{
 				if (pStatList->dwFlags & STATLIST_SET)
 				{
-					D2Common_ExpireStatListEx_6FDB6E30((D2StatListExStrc*)pStatList);
+					D2Common_ExpireStatList_6FDB6E30((D2StatListExStrc*)pStatList);
 					pStatList->dwFlags &= ~STATLIST_SET;
 					D2COMMON_10475_PostStatToStatList(pUnit, pStatList, TRUE);
 				}
@@ -2079,7 +2079,7 @@ void __stdcall D2Common_10525(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 //D2Common.0x6FDB91C0 (#10474)
 void __stdcall D2Common_10474(D2UnitStrc* pUnused, D2StatListStrc* pStatList)
 {
-	D2Common_ExpireStatListEx_6FDB6E30((D2StatListExStrc*)pStatList);
+	D2Common_ExpireStatList_6FDB6E30((D2StatListExStrc*)pStatList);
 }
 
 //D2Common.0x6FDB91D0 (#10564)
@@ -2155,7 +2155,7 @@ void __stdcall STATLIST_ExpireUnitStatlist(D2UnitStrc* pUnused, D2UnitStrc* pUni
 {
 	if (pUnit && pUnit->pStatListEx)
 	{
-		D2Common_ExpireStatListEx_6FDB6E30(pUnit->pStatListEx);
+		D2Common_ExpireStatList_6FDB6E30(pUnit->pStatListEx);
 	}
 }
 
