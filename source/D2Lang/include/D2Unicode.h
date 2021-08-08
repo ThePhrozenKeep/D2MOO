@@ -68,6 +68,14 @@ struct D2LANG_DLL_DECL Unicode {
   static Unicode* __fastcall strcat(Unicode* dest, const Unicode* src);
 
   /**
+   * Compares two null-terminated strings lexicographically. Returns
+   * -1, 0, or 1, depending on the results of the comparison.
+   *
+   * D2Lang.0x6FC11210 (#10036) ?strcmp@Unicode@@SIHPBU1@0@Z
+   */
+  static int __fastcall strcmp(const Unicode* str1, const Unicode* str2);
+
+  /**
    * Copies the characters from a null-terminated source string into a
    * null-terminated destination string. Returns the destination
    * string.
