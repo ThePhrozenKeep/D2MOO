@@ -1975,7 +1975,7 @@ static void STATLIST_ClampStat(D2StatListExStrc* pStatListEx, int nStatId)
 		nCurrentValue = STATLIST_GetTotalStat_6FDB63E0(pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(nStatId).nPackedValue, pItemStatCostTxtRecord);
 	}
 
-	const int nMaxStatId = nStatId + 1;
+	const int nMaxStatId = nStatId + 1; // Assumes the Max of the input stat is the next stat, for example STAT_MANA = 8 and STAT_MAXMANA = 9
 	int nMaxValue = 0;
 	if (D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nMaxStatId))
 	{
