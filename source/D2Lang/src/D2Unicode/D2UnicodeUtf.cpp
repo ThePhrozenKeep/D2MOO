@@ -26,14 +26,16 @@
 
 #include <stddef.h>
 
+#include <Fog.h>
+
 #pragma pack(push, 1)
 
 struct UtfConvertSpec {
-  unsigned short leading_unusable_bits;
-  unsigned short leading_bits;
-  unsigned short num_trailing_code_point_bits;
-  int last_code_point;
-  int first_code_point;
+  uint16_t leading_unusable_bits;
+  uint16_t leading_bits;
+  uint16_t num_trailing_code_point_bits;
+  int32_t last_code_point;
+  int32_t first_code_point;
 };
 
 #pragma pack(pop)
@@ -64,9 +66,9 @@ static int UnicodeCharToUtf8CodePoint(char* dest, unsigned short ch) {
       sgUtf8ConvertTable[table_index].leading_unusable_bits != 0;
       ++table_index) {
     if (code_point <= sgUtf8ConvertTable[table_index].last_code_point) {
-      unsigned short remaining_bits =
+      uint16_t remaining_bits =
           sgUtf8ConvertTable[table_index].num_trailing_code_point_bits;
-      unsigned char leading_bits =
+      uint8_t leading_bits =
           sgUtf8ConvertTable[table_index].leading_bits;
 
       dest[0] = (code_point >> remaining_bits) | leading_bits;
@@ -87,6 +89,8 @@ static int UnicodeCharToUtf8CodePoint(char* dest, unsigned short ch) {
 }
 
 char* __fastcall Unicode::toUtf(char* dest, const Unicode* src, int count) {
+  D2_ASSERT(count >= 0);
+
   int dest_length = 0;
 
   for (size_t src_index = 0; src[src_index].ch != L'\0'; ++src_index) {
