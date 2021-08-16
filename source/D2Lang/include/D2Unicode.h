@@ -60,12 +60,31 @@ struct D2LANG_DLL_DECL Unicode {
   operator unsigned short() const;
 
   /**
+   * Returns whether the specified character in the string is the last
+   * character of a word. In this function, only characters in the
+   * English alphabet or Arabic numerals are considered characters in
+   * a word. The first character is also not considered the end of a
+   * word.
+   *
+   * D2Lang.0x6FC11190 (#10031) ?isWordEnd@Unicode@@SIHPBU1@I@Z
+   */
+  static BOOL __fastcall isWordEnd(const Unicode* str, size_t index);
+
+  /**
    * Appends a null-terminated string to the end of a null-terminated
    * destination string. Returns the destination string.
    *
    * D2Lang.0x6FC113F0 (#10034) ?strcat@Unicode@@SIPAU1@PAU1@PBU1@@Z
    */
   static Unicode* __fastcall strcat(Unicode* dest, const Unicode* src);
+
+  /**
+   * Compares two null-terminated strings lexicographically. Returns
+   * -1, 0, or 1, depending on the results of the comparison.
+   *
+   * D2Lang.0x6FC11210 (#10036) ?strcmp@Unicode@@SIHPBU1@0@Z
+   */
+  static int __fastcall strcmp(const Unicode* str1, const Unicode* str2);
 
   /**
    * Copies the characters from a null-terminated source string into a
@@ -114,6 +133,17 @@ struct D2LANG_DLL_DECL Unicode {
   BOOL isASCII() const;
 
   /**
+   * Returns this character's lowercase if there is a lowercase for
+   * this character. Otherwise, returns a copy of this character.
+   *
+   * Vanilla bug: Returns uppercase for characters in the
+   * "Latin-1 Supplement" block.
+   *
+   * D2Lang.0x6FC110E0 (#10050) ?toLower@Unicode@@QBE?AU1@XZ
+   */
+  Unicode toLower() const;
+
+  /**
    * Returns this character's uppercase if there is an uppercase for
    * this character. Otherwise, returns a copy of this character.
    *
@@ -122,6 +152,14 @@ struct D2LANG_DLL_DECL Unicode {
   Unicode toUpper() const;
 
  private:
+  /**
+   * Vanilla bug: The characters in the Latin-1 Supplement block are
+   * uppercase.
+   *
+   * D2Lang.[0x6FC1D508 to 0x6FC1D708) (#10019) ?_toLowerTable@Unicode@@0PAGA
+   */
+  static unsigned short _toLowerTable[256];
+
   // D2Lang.[0x6FC1D308 to 0x6FC1D508) (#10020) ?_toUpperTable@Unicode@@0PAGA
   static unsigned short _toUpperTable[256];
 };
