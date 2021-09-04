@@ -1014,7 +1014,7 @@ EXPORTS
 	SKILLS_GetQuantity													@11011
 	SKILLS_SetQuantity													@11012
 	D2COMMON_11013_ConvertMode											@11013
-	D2Common_11014														@11014
+	D2Common_11014_ConvertShapeShiftedMode                              @11014
 	D2Common_11015														@11015
 	D2Common_11016														@11016
 	D2COMMON_11017_CheckUnitIfConsumeable								@11017

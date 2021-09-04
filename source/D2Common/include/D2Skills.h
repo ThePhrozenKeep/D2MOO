@@ -329,7 +329,7 @@ D2COMMON_DLL_DECL int __stdcall SKILLS_GetQuantity(D2SkillStrc* pSkill);
 //D2Common.0x6FDB2F70 (#11012)
 D2COMMON_DLL_DECL void __stdcall SKILLS_SetQuantity(D2SkillStrc* pSkill, int nQuantity);
 //D2Common.0x6FDB2FA0 (#11014)
-D2COMMON_DLL_DECL int __stdcall D2Common_11014(int nArrayIndex, int nMonsterId);
+D2COMMON_DLL_DECL int __stdcall D2Common_11014_ConvertShapeShiftedMode(int nArrayIndex, int nMonsterId);
 //D2Common.0x6FDB30A0 (#11013)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pClass, int* pMode, char* szFile, int nLine);
 //D2Common.0x6FDB3290 (#11015)

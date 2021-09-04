@@ -243,30 +243,38 @@ D2RoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIn
 	return NULL;
 }
 
-//D2Common.0x6FD78C10
-D2RoomExStrc* __fastcall DRLGWARP_GetWaypointRoomExFromLevel(D2DrlgLevelStrc* pLevel, int* pX, int* pY)
+// Helper function
+static D2RoomExStrc* DRLG_FindWaypointRoom(D2DrlgLevelStrc* pLevel)
 {
 	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
 		if (DRLGROOM_CheckWaypointFlags(pRoomEx))
 		{
-			DRLGACTIVATE_InitializeRoomEx(pRoomEx);
-
-			for (D2PresetUnitStrc* pPresetUnit = pRoomEx->pPresetUnits; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
-			{
-				if (pPresetUnit->nUnitType == UNIT_OBJECT && pPresetUnit->nIndex < 573 && (DATATBLS_GetObjectsTxtRecord(pPresetUnit->nIndex)->nSubClass & OBJSUBCLASS_WAYPOINT))
-				{
-					*pX = pRoomEx->nTileXPos + pPresetUnit->nXpos / 5;
-					*pY = pRoomEx->nTileYPos + pPresetUnit->nYpos / 5;
-					return pRoomEx;
-				}
-			}
-
 			return pRoomEx;
 		}
 	}
-	
-	return NULL;
+	return nullptr;
+}
+
+//D2Common.0x6FD78C10
+D2RoomExStrc* __fastcall DRLGWARP_GetWaypointRoomExFromLevel(D2DrlgLevelStrc* pLevel, int* pX, int* pY)
+{
+	D2RoomExStrc* pWaypointRoom = DRLG_FindWaypointRoom(pLevel);
+	if (pWaypointRoom)
+	{
+		DRLGACTIVATE_InitializeRoomEx(pWaypointRoom);
+
+		for (D2PresetUnitStrc* pPresetUnit = pWaypointRoom->pPresetUnits; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
+		{
+			if (pPresetUnit->nUnitType == UNIT_OBJECT && pPresetUnit->nIndex < 573 && (DATATBLS_GetObjectsTxtRecord(pPresetUnit->nIndex)->nSubClass & OBJSUBCLASS_WAYPOINT))
+			{
+				*pX = pWaypointRoom->nTileXPos + pPresetUnit->nXpos / 5;
+				*pY = pWaypointRoom->nTileYPos + pPresetUnit->nYpos / 5;
+				return pWaypointRoom;
+			}
+		}
+	}
+	return pWaypointRoom;
 }
 
 //D2Common.0x6FD78CC0

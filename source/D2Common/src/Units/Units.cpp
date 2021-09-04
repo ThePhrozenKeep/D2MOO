@@ -22,7 +22,7 @@
 #include <DataTbls/LevelsIds.h>
 #include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
-
+#include <D2Math.h>
 
 //D2Common.0x6FDBD520 (#10457)
 uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit)
@@ -691,39 +691,31 @@ void __stdcall UNITS_SetAnimData(D2UnitStrc* pUnit, int nUnitType, int nClassId,
 	pUnit->pAnimData = DATATBLS_GetAnimDataRecord(pUnit, nClassId, nMode, nUnitType, pUnit->pInventory);
 }
 
+//Helper function
+void __stdcall UNITS_CharacterStartRunningOrKnockback(D2UnitStrc* pUnit, int nClassId)
+{
+	D2StatListStrc* pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, STATLIST_TEMPONLY, 0, pUnit->dwUnitType, pUnit->dwUnitId);
+	if (D2CharStatsTxt* pCharStatsTxtRecord = UNITS_GetCharStatsTxtRecord(nClassId))
+	{
+		if (pCharStatsTxtRecord->nWalkSpeed != 0)
+		{
+			STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, 100 * pCharStatsTxtRecord->nRunSpeed / pCharStatsTxtRecord->nWalkSpeed - 100, 0);
+			D2COMMON_10475_PostStatToStatList(pUnit, pStatList, TRUE);
+		}
+	}
+}
 
-
-//D2Common.0x6FDBE510 (#10349) --------------------------------------------------------
+//D2Common.0x6FDBE510 (#10349)
 void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 {
-	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
-	D2MissilesTxt* pMissilesTxtRecord = NULL;
-	D2ObjectsTxt* pObjectsTxtRecord = NULL;
-	D2StatListStrc* pStatList = NULL;
-	uint8_t v19[4]; // ecx@36
-	__int16 v20; // bx@36
-	int v21; // ebp@38
-	int v23; // edi@38
-	int v24; // eax@39
-	int v28; // ebp@43
-	uint8_t v34[4]; // eax@61
-
-	unsigned int nFrame = 0;
-	unsigned int nMode = 0;
-	int nDirection = 0;
-	int nUnitType = 0;
-	int nClassId = 0;
-	int nNewMode = 0;
-	int nEvent = 0;
-
 	D2_ASSERT(pUnit);
 
 	pUnit->nActionFrame = 0;
 	pUnit->dwGFXcurrentFrame = UNITS_GetFrameBonus(pUnit) << 8;
 
-	nUnitType = pUnit->dwUnitType;
-	nClassId = pUnit->dwClassId;
-	nNewMode = pUnit->dwAnimMode;
+	int nUnitType = pUnit->dwUnitType;
+	int nClassId = pUnit->dwClassId;
+	int nNewMode = pUnit->dwAnimMode;
 
 	D2COMMON_11013_ConvertMode(pUnit, &nUnitType, &nClassId, &nNewMode, __FILE__, __LINE__);
 
@@ -733,40 +725,16 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	{
 		if (nNewMode == PLRMODE_RUN || nNewMode == PLRMODE_KNOCKBACK)
 		{
-			pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, 4, 0, pUnit->dwUnitType, pUnit->dwUnitId);
-			if (nClassId >= 0 && nClassId < sgptDataTables->nCharStatsTxtRecordCount)
-			{
-				pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[nClassId];
-				if (pCharStatsTxtRecord && pCharStatsTxtRecord->nWalkSpeed)
-				{
-					STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, 100 * (pCharStatsTxtRecord->nRunSpeed / pCharStatsTxtRecord->nWalkSpeed - 1), 0);
-					D2COMMON_10475_PostStatToStatList(pUnit, pStatList, TRUE);
-				}
-			}
+			UNITS_CharacterStartRunningOrKnockback(pUnit, nClassId);
 		}
-		else if (nNewMode == PLRMODE_SEQUENCE)
+		if (nNewMode == PLRMODE_SEQUENCE)
 		{
-			pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-			if (pUnit->pAnimSeq)
-			{
-				pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
-				pUnit->dwSeqFrame = 0;
-				pUnit->dwAnimSpeed = 256;
-				pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
-				D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
-
-				pUnit->dwSeqMode = nMode;
-				pUnit->nActionFrame = nEvent;
-				pUnit->dwGFXcurrentFrame = nFrame << 8;
-
-				UNITS_ToggleUnitFlag(pUnit, UNITFLAG_SQGFXCHANGE, TRUE);
-			}
-
+			UNITS_InitializeSequence(pUnit);
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 		}
 		else
 		{
-			pUnit->pAnimSeq = NULL;
+			pUnit->pAnimSeq = nullptr;
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 			pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
 		}
@@ -776,41 +744,17 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	{
 		if (pUnit->dwUnitType == UNIT_PLAYER && STATES_IsUnitShapeShifted(pUnit) && (nNewMode == MONMODE_KNOCKBACK || nNewMode == MONMODE_RUN))
 		{
-			pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, 4, 0, pUnit->dwUnitType, pUnit->dwUnitId);
-			if (pUnit->dwClassId >= 0 && pUnit->dwClassId < sgptDataTables->nCharStatsTxtRecordCount)
-			{
-				pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[pUnit->dwClassId];
-				if (pCharStatsTxtRecord && pCharStatsTxtRecord->nWalkSpeed)
-				{
-					STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, 100 * (pCharStatsTxtRecord->nRunSpeed / pCharStatsTxtRecord->nWalkSpeed - 1), 0);
-					D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
-				}
-			}
+			UNITS_CharacterStartRunningOrKnockback(pUnit, pUnit->dwClassId);
 		}
 		if (nNewMode == MONMODE_SEQUENCE)
 		{
-			pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-			if (pUnit->pAnimSeq)
-			{
-				pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
-				pUnit->dwSeqFrame = 0;
-				pUnit->dwAnimSpeed = 256;
-				pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
-				D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
-
-				pUnit->dwSeqMode = nMode;
-				pUnit->nActionFrame = nEvent;
-				pUnit->dwGFXcurrentFrame = nFrame << 8;
-
-				UNITS_ToggleUnitFlag(pUnit, UNITFLAG_SQGFXCHANGE, TRUE);
-			}
-
+			UNITS_InitializeSequence(pUnit);
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 		}
 		else
 		{
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
-			pUnit->pAnimSeq = NULL;
+			pUnit->pAnimSeq = nullptr;
 			pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
 		}
 		break;
@@ -820,69 +764,34 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 #define NUM_OBJECTMODES 8
 		D2_ASSERT(nNewMode < NUM_OBJECTMODES);
 
-		pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pUnit->dwClassId);
+		D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pUnit->dwClassId);
 		pUnit->dwFrameCount = pObjectsTxtRecord->dwFrameCnt[nNewMode];
-		
-		//TODO: Check calculations
-		*(uint32_t *)v19 = 0;
-		*(uint16_t *)&v19[1] = pObjectsTxtRecord->nStart[nNewMode];
-		pUnit->dwGFXcurrentFrame = *(uint32_t *)v19;
-		nEvent = pObjectsTxtRecord->wFrameDelta[nNewMode];
+		pUnit->dwGFXcurrentFrame = uint16_t(pObjectsTxtRecord->nStart[nNewMode]) << 8;
+		int16_t wFrameDelta = pObjectsTxtRecord->wFrameDelta[nNewMode];
 
 		if (pObjectsTxtRecord->nSync)
 		{
-			pUnit->wAnimSpeed = v20;
+			pUnit->wAnimSpeed = wFrameDelta;
 		}
 		else
 		{
-			v21 = v20;
-			v23 = v20 >> 3;
-			//if (v23 > 0)
-			//{
-			//	if ((v23 - 1) & v23)
-			//	{
-			//		v20 = nEvent;
-			//		v24 = (unsigned int)SEED_RollRandomNumber(&pUnit->pSeed) % v23;
-			//	}
-			//	else
-			//	{
-			//		v24 = (v23 - 1) & (unsigned __int64)SEED_RollRandomNumber(&pUnit->pSeed);
-			//	}
-			//}
-			//else
-			//{
-			//	v24 = 0;
-			//}
-
-			v24 = SEED_RollLimitedRandomNumber(&pUnit->pSeed, v23);
-
-			v28 = v24 + v21 - (signed __int16)(v20 >> 4);
-			if (v28 <= 0)
+			const int nFrameDeltaDividedBy8 = wFrameDelta / 8;
+			int uRandom = 0;
+			if (nFrameDeltaDividedBy8 > 0)
 			{
-				pUnit->wAnimSpeed = 0;
+				uRandom = SEED_RollLimitedRandomNumber(&pUnit->pSeed, nFrameDeltaDividedBy8);
 			}
-			else
-			{
-				if (v28 >= 32767)
-				{
-					v28 = 32767;
-				}
-				pUnit->wAnimSpeed = v28;
-			}
+			const int newAnimSpeed = uRandom + wFrameDelta - (wFrameDelta / 16);
+			pUnit->wAnimSpeed = static_cast<int16_t>(D2Clamp(newAnimSpeed, 0, 0x7FFF));
 		}
 		break;
 	}
 	case UNIT_MISSILE:
 	{
-		pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(pUnit->dwClassId);
-		if (pMissilesTxtRecord)
+		if (D2MissilesTxt* pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(pUnit->dwClassId))
 		{
-			pUnit->wAnimSpeed = (pMissilesTxtRecord->wAnimRate << 8) / 1024;
-
-			//TODO: Check calculations
-			*(uint32_t*)v34 = 0;
-			*(uint16_t*)&v34[1] = pMissilesTxtRecord->nAnimLen;
-			pUnit->dwFrameCount = *(uint32_t*)v34;
+			pUnit->wAnimSpeed = ((int16_t)pMissilesTxtRecord->wAnimRate << 8) / 1024;
+			pUnit->dwFrameCount = pMissilesTxtRecord->nAnimLen << 8;
 		}
 		break;
 	}
@@ -905,16 +814,6 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		break;
 	}
 }
-
-
-////TODO:Remove
-//D2FUNC(D2COMMON, 10349, void, __stdcall, (D2UnitStrc*), 0x7E510)
-//void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
-//{
-//	return D2COMMON_10349(pUnit);
-//}
-///////////////
-
 
 //D2Common.0x6FDBEA60 (#10348)
 BOOL __stdcall UNITS_ChangeAnimMode(D2UnitStrc* pUnit, int nMode)
@@ -1113,25 +1012,20 @@ void __stdcall UNITS_SetAnimOrSeqMode(D2UnitStrc* pUnit, int nAnimMode)
 }
 
 //D2Common.0x6FDBED90 (#10371)
-//TODO: Change type of pUnit->pAnimSeq
 void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 {
-	unsigned int nFrame = 0;
-	unsigned int nMode = 0;
-	int nDirection = 0;
-	int nEvent = 0;
-
 	if (pUnit)
 	{
-		pUnit->pAnimSeq = (D2AnimSeqStrc*)DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
-		if (pUnit->pAnimSeq)
+		if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
 		{
 			pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
 			pUnit->dwSeqFrame = 0;
 			pUnit->dwAnimSpeed = 256;
 			pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
 
-			D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
+			unsigned nMode = 0, nFrame = 0;
+			int nDirection = 0, nEvent = 0;
+			D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, 0, &nMode, &nFrame, &nDirection, &nEvent);
 
 			pUnit->dwSeqMode = nMode;
 			pUnit->nActionFrame = nEvent;
@@ -1177,7 +1071,7 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 		pUnit->dwFrameCount -= pUnit->dwAnimSpeed;
 
 		nOldMode = pUnit->dwSeqMode;
-		D2Common_10685((D2MonSeqTxt*)pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
+		D2Common_10685(pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
 
 		pUnit->dwSeqMode = nNewMode;
 		pUnit->dwGFXcurrentFrame = nFrame << 8;
@@ -2807,79 +2701,72 @@ D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pMonster)
 //D2Common.0x6FDC0FC0 (#10436)
 int __stdcall UNITS_GetFrameBonus(D2UnitStrc* pUnit)
 {
-	static const int dword_6FDD3078[] =
+	static const int gaClassesWeaponFrameBonus_6FDD3078[NUM_WEAPON_CLASSES][NUMBER_OF_PLAYERCLASSES] =
 	{
-		1, 1, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		2, 2, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0
+		//AMA,SOR,NEC,PAL,BAR,DRU,ASS
+		{   1,  1,  0,  0,  0,  0,  0}, // WEAPONCLASS_NONE
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_BOW
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_1HS
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_1HT
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_STF
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_2HS
+		{   2,  2,  0,  0,  0,  0,  0}, // WEAPONCLASS_2HT
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_XBW
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1JS
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1JT
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1SS
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_1ST
+		{   0,  0,  0,  0,  0,  0,  0}, // WEAPONCLASS_HT1
+		{   0,  0,  0,  0,  0,  0,  0}  // WEAPONCLASS_HT2
 	};
-
-	D2UnitStrc* pItem = NULL;
-	int nClassId = 0;
-	int nType = 0;
+	
+	int nClassId = -1;
+	int nType = UNIT_TYPES_COUNT;
 	int nMode = 0;
-
 	if (pUnit)
 	{
 		nClassId = pUnit->dwClassId;
 		nType = pUnit->dwUnitType;
 		nMode = pUnit->dwAnimMode;
-	}
-	else
-	{
-		nClassId = -1;
-		nType = 6;
-		nMode = 0;
 	}		
 
 	D2COMMON_11013_ConvertMode(pUnit, &nType, &nClassId, &nMode, __FILE__, __LINE__);
 
-	if (nType == UNIT_PLAYER)
+	if (nType != UNIT_PLAYER)
 	{
-		switch (nMode)
-		{
-		case PLRMODE_ATTACK1:
-		case PLRMODE_ATTACK2:
-			pItem = D2Common_10434(pUnit, 1);
-			if (pItem)
-			{
-				return dword_6FDD3078[nClassId + 7 * ITEMS_GetWeaponClassId(pItem)];
-			}
-
-			return dword_6FDD3078[nClassId];
-
-		case PLRMODE_SPECIAL3:
-		case PLRMODE_SPECIAL4:
-			if (!UNITS_CanDualWield(pUnit))
-			{
-				return 0;
-			}
-
-			pItem = D2Common_10434(pUnit, 1);
-			if (pItem)
-			{
-				return dword_6FDD3078[nClassId + 7 * ITEMS_GetWeaponClassId(pItem)];
-			}
-
-			return dword_6FDD3078[nClassId];
-
-		default:
-			return 0;
-		}
+		return 0;
 	}
 
-	return 0;
+
+	int nWeaponClass = WEAPONCLASS_NONE;
+	switch (nMode)
+	{
+	case PLRMODE_ATTACK1:
+	case PLRMODE_ATTACK2:
+		if (D2UnitStrc* pItem = D2Common_10434(pUnit, 1))
+		{
+			nWeaponClass = ITEMS_GetWeaponClassId(pItem);
+		}
+		break;
+	case PLRMODE_SPECIAL3:
+	case PLRMODE_SPECIAL4:
+		if (!UNITS_CanDualWield(pUnit))
+		{
+			return 0;
+		}
+
+		if (D2UnitStrc* pItem = D2Common_10434(pUnit, 1))
+		{
+			nWeaponClass = ITEMS_GetWeaponClassId(pItem);
+		}
+		break;
+	default:
+		return 0;
+	}
+
+	D2_ASSERT(0 <= nClassId && nClassId < NUMBER_OF_PLAYERCLASSES);
+	D2_ASSERT(0 <= nWeaponClass && nWeaponClass < NUM_WEAPON_CLASSES);
+	return gaClassesWeaponFrameBonus_6FDD3078[nWeaponClass][nClassId];
 }
 
 //D2Common.0x6FDC1120 (#10360)
@@ -3680,7 +3567,7 @@ BOOL __fastcall UNITS_CanSwitchAI(int nMonsterId)
 	if (pMonStatsTxtRecord)
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONSTATS2MODEFLAGINDEX_WL])
+		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & MONSTATS2MODEFLAG_WL))
 		{
 			if (!(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_BOSS]))
 			{

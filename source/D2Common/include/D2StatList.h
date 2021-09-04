@@ -10,17 +10,17 @@ enum D2C_ItemStats
 	STAT_INVALID = -1,
 	STAT_STRENGTH = 0, 					// 000
 	STAT_ENERGY, 						// 001
-	STAT_DEXTERITY, 						// 002
+	STAT_DEXTERITY, 					// 002
 	STAT_VITALITY, 						// 003
 	STAT_STATPTS, 						// 004
 	STAT_SKILLPTS, 						// 005
-	STAT_HITPOINTS, 						// 006
-	STAT_MAXHP, 							// 007
+	STAT_HITPOINTS, 					// 006
+	STAT_MAXHP, 						// 007
 	STAT_MANA, 							// 008
 	STAT_MAXMANA, 						// 009
 	STAT_STAMINA, 						// 00A
 	STAT_MAXSTAMINA, 					// 00B
-	STAT_LEVEL, 							// 00C
+	STAT_LEVEL, 						// 00C
 	STAT_EXPERIENCE, 					// 00D
 	STAT_GOLD, 							// 00E
 	STAT_GOLDBANK, 						// 00F
@@ -411,6 +411,10 @@ enum D2C_StatlistFlags : uint32_t
 
 struct D2SLayerStatIdStrc
 {
+	// We can not use a struct as function parameters here as it has a different effect when using the __fastcall calling convetion.
+	// Instead we just use D2SLayerStatIdStrc::PackedType so that we may easily change it later
+	using PackedType = int32_t;
+
 	union
 	{
 		struct
@@ -418,8 +422,16 @@ struct D2SLayerStatIdStrc
 			uint16_t nLayer;				//0x00
 			uint16_t nStat;					//0x02
 		};
-		int32_t nLayer_StatId;				//0x00
+		PackedType nPackedValue;			//0x00
 	};
+
+	static D2SLayerStatIdStrc Make(uint16_t wLayer, uint16_t wStatId) { return { wLayer, wStatId }; }
+	static D2SLayerStatIdStrc MakeFromStatId(uint16_t wStatId) { return { 0, wStatId }; }
+	static D2SLayerStatIdStrc FromPackedType(PackedType nPackedValue) {
+		D2SLayerStatIdStrc ls;
+		ls.nPackedValue = nPackedValue;
+		return ls; 
+	}
 };
 
 struct D2StatStrc : D2SLayerStatIdStrc
@@ -490,25 +502,25 @@ inline bool STATLIST_IsExtended(D2StatListStrc* pStatList) { return pStatList->d
 //D2Common.0x6FDB57C0 (#10563)
 D2COMMON_DLL_DECL BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //----- (6FDB5830) --------------------------------------------------------
-int __fastcall sub_6FDB5830(D2StatListExStrc* a1, int a2);
+int __fastcall sub_6FDB5830(D2StatListExStrc* a1, D2SLayerStatIdStrc::PackedType a2);
 //D2Common.0x6FDB6300
-int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, int nLayer_StatId);
+int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6340
-int __fastcall STATLIST_GetBaseStat_6FDB6340(D2StatListStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
+int __fastcall STATLIST_GetBaseStat_6FDB6340(D2StatListStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
 //D2Common.0x6FDB63E0
-int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
+int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord);
 //D2Common.0x6FDB64A0
-int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, int nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
+int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6920
-D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatEx, int nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6970
-D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatEx, int nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6A30
 void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* pStatEx, D2StatStrc* pStat);
 //D2Common.0x6FDB6AB0
-void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatList, int nLayer_StatId, int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
+void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6C10
-void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, int nLayer_StatId, int nValue, D2UnitStrc* pUnit);
+void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nValue, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6E30
 void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList);
 //D2Common.0x6FDB7030 (#10485)
@@ -542,7 +554,7 @@ D2COMMON_DLL_DECL void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* p
 //D2Common.0x6FDB7560 (#10464)
 D2COMMON_DLL_DECL void __stdcall STATLIST_AddStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7690
-void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList, int nLayer_StatId);
+void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB77B0 (#10463)
 D2COMMON_DLL_DECL BOOL __stdcall STATLIST_SetStat(D2StatListStrc* pStatList, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7910 (#10465)
