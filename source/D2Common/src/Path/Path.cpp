@@ -1443,12 +1443,11 @@ void __stdcall D2COMMON_10212_PATH_SetMoveFlags(D2UnitStrc* pUnit, BOOL bSet)
 //TODO: Find a name
 void __stdcall D2Common_10213(D2UnitStrc* pUnit)
 {
-	D2DynamicPathStrc* pDynamicPath = NULL;
 	D2UnitStrc* pTargetUnit = NULL;
 
 	if (pUnit && !(pUnit->dwFlags & UNITFLAG_ISASYNC) && (pUnit->dwFlagEx & UNITFLAGEX_UNK_PATH_RELATED))
 	{
-		pDynamicPath = pUnit->pDynamicPath;
+		D2DynamicPathStrc* pDynamicPath = pUnit->pDynamicPath;
 		D2_ASSERT(pDynamicPath);
 
 		++pDynamicPath->unk0x38;
@@ -1458,12 +1457,7 @@ void __stdcall D2Common_10213(D2UnitStrc* pUnit)
 			pDynamicPath->unk0x38 = 0;
 			if (!D2Common_10227(pUnit))
 			{
-				if (pUnit->pDynamicPath)
-				{
-					pTargetUnit = pUnit->pDynamicPath->pTargetUnit;
-				}
-
-				if (D2Common_10236(pUnit, pTargetUnit != 0))
+				if (D2Common_10236(pUnit, pDynamicPath->pTargetUnit != nullptr))
 				{
 					UNITS_ChangeAnimMode(pUnit, 2);
 				}
