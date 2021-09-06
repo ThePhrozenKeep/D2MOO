@@ -1361,7 +1361,7 @@ void __stdcall PATH_SetStepNum(D2DynamicPathStrc* pDynamicPath, uint8_t nSteps)
 {
 	if (pDynamicPath)
 	{
-		if (0 <= nSteps && nSteps < PATH_MAX_STEPNUM)
+		if (nSteps > 0 && nSteps < PATH_MAX_STEPNUM)
 		{
 			pDynamicPath->nStepNum = nSteps - 1;
 		}
