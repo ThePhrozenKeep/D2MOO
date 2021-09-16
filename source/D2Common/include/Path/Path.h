@@ -105,7 +105,7 @@ struct D2DynamicPathStrc
 	uint32_t unk0x88[2];						//0x88
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
-	uint8_t unk0x92;							//0x92
+	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
 	uint8_t nStepNum;							//0x93
 	uint8_t nDistance;							//0x94
 	char unk0x95[3];							//0x95
