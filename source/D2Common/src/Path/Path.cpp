@@ -566,7 +566,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	{
 		pDynamicPath->dwCollisionType = COLLIDE_NONE;
 		pDynamicPath->unk0x50 = 0;
-		PATH_SetType(pDynamicPath, 4);
+		PATH_SetType(pDynamicPath, PATHTYPE_MISSILE);
 	}
 
 	if (pRoom)
