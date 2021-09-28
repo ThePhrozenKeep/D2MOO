@@ -23,10 +23,10 @@ enum D2PathTypes
 };
 
 enum D2PathFlags : uint32_t {
-	PATH_UNKNOWN_FLAG_0x00001 = 0x00001,
+	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
 	PATH_UNKNOWN_FLAG_0x00002 = 0x00002,
 	PATH_UNKNOWN_FLAG_0x00004 = 0x00004,
-	PATH_UNKNOWN_FLAG_0x00008 = 0x00008,
+	PATH_UNKNOWN_FLAG_0x00008 = 0x00008, // Set when rider and mount have the same position
 	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
 	PATH_UNKNOWN_FLAG_0x00020 = 0x00020,
 	PATH_UNKNOWN_FLAG_0x00040 = 0x00040,

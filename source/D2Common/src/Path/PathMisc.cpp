@@ -1151,37 +1151,6 @@ D2PathPointStrc sgctZeroGameCoord = { 0,0 };
 
 bool COORD_TEST_EQUAL(D2PathPointStrc lhs, D2PathPointStrc rhs) { return lhs == rhs; }
 
-D2RoomStrc* DungeonFindRoomGame(D2RoomStrc* pRoom, uint16_t x, uint16_t y)
-{	
-	if (!pRoom)
-		return nullptr;
-
-	if (   (x < pRoom->nSubtileX) || (x >= pRoom->nSubtileX + pRoom->nSubtileWidth )
-		|| (y < pRoom->nSubtileY) || (y >= pRoom->nSubtileY + pRoom->nSubtileHeight) )
-	{
-		D2RoomStrc** pRoomsList = nullptr;
-		int nbRooms = 0;
-		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &pRoomsList, &nbRooms);
-		for (int nRoomIdx = 0; nRoomIdx < nbRooms; nRoomIdx++)
-		{
-			if (D2RoomStrc* pCurRoom = pRoomsList[nRoomIdx])
-			{
-
-				if (   x >= pCurRoom->nSubtileX && x < (pCurRoom->nSubtileX + pCurRoom->nSubtileWidth )
-					&& y >= pCurRoom->nSubtileY && y < (pCurRoom->nSubtileY + pCurRoom->nSubtileHeight) )
-				{
-					return pCurRoom;
-				}
-			}
-		}
-		return nullptr;
-	}
-	else
-	{
-		return pRoom;
-	}
-}
-
 //D2Common.0x6FDAD5E0
 // Should be in Step.cpp
 BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest)
@@ -1247,7 +1216,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 	bool bDestinationIsValid = true;
 	if (pDynamicPath->dwFlags & PATH_MISSILE_MASK)
 	{
-		if (!DungeonFindRoomGame(pDynamicPath->pRoom, tDest.X, tDest.Y))
+		if (!COLLISION_GetRoomBySubTileCoordinates(pDynamicPath->pRoom, tDest.X, tDest.Y))
 		{
 			pDynamicPath->dwPathPoints = 0;
 			bDestinationIsValid = false;
@@ -1267,7 +1236,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			sub_6FDADA20(pDynamicPath, pDestRoom);
 	}
 
-	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || DungeonFindRoomGame(pDestRoom, tDest.X, tDest.Y));
+	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || COLLISION_GetRoomBySubTileCoordinates(pDestRoom, tDest.X, tDest.Y));
 
 	uint32_t dwPrecisionRoundedX = (pDynamicPath->dwPrecisionX & 0xFFFF0000) + 0x8000;
 	uint32_t dwPrecisionRoundedY = (pDynamicPath->dwPrecisionY & 0xFFFF0000) + 0x8000;
@@ -1363,231 +1332,71 @@ BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
 	return FALSE;
 }
 
-//D2Common.0x6FDAE520) --------------------------------------------------------
-void __stdcall D2Common_10235_PATH_Last(D2UnitStrc* pRiderUnit, D2UnitStrc* pHorseUnit)
+//D2Common.0x6FDAE520 (#10235)
+void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2UnitStrc* pMountUnit)
 {
-	D2DynamicPathStrc *pRiderPath; // ebx@7
-	D2DynamicPathStrc *pHorsePath; // eax@7
-	D2RoomStrc *v5; // ecx@11
-	unsigned int v6; // ebp@13
-	unsigned int v7; // edx@13
-	uint32_t v8; // eax@13
-	int v9; // esi@14
-	int v10; // edi@14
-	int v11; // eax@17
-	unsigned int v12; // edx@20
-	D2RoomStrc *v13; // eax@21
-	int v14; // ecx@24
-	D2RoomStrc *v17; // eax@34
-	uint16_t v18; // di@34
-	uint16_t v19; // si@34
-	int v21; // esi@39
-	int v22; // edi@39
-	unsigned int v24; // edx@45
-	int v25; // eax@46
-	int v26; // ecx@49
-	D2RoomStrc **pppRoom; // [sp+10h] [bp-18h]@20
-	int pX; // [sp+14h] [bp-14h]@32
-	int pY; // [sp+18h] [bp-10h]@32
-	D2RoomStrc *pRoom; // [sp+1Ch] [bp-Ch]@13
-	unsigned int v31; // [sp+24h] [bp-4h]@13
+	D2_ASSERT(pRiderUnit); // Named hRiderUnit in original game
+	D2_ASSERT(pMountUnit); // Named hHorseUnit in original game
 
-	D2_ASSERT(pRiderUnit);
-	D2_ASSERT(pHorseUnit);
+	D2DynamicPathStrc *pRiderPath = pRiderUnit->pDynamicPath;
+	D2DynamicPathStrc *pMountPath = pMountUnit->pDynamicPath;
 
-	pRiderPath = pRiderUnit->pDynamicPath;
-	pHorsePath = pHorseUnit->pDynamicPath;
-
-	if (pRiderPath->wPosX != pHorsePath->wPosX || pRiderPath->wPosY != pHorsePath->wPosY)
+	if (pRiderPath->wPosX != pMountPath->wPosX || pRiderPath->wPosY != pMountPath->wPosY)
 	{
-		pRiderPath->dwFlags |= 8;
+		pRiderPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
 	}
 	else
 	{
-		pRiderPath->dwFlags &= 0xFFFFFFF7;
+		pRiderPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00008;
 	}
 
-	if (pRiderPath->pRoom != pHorsePath->pRoom)
+	if (pRiderPath->pRoom != pMountPath->pRoom)
 	{
-		pRiderPath->dwFlags |= 1;
+		// Rider is in different room than the mount 
+		pRiderPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 	}
 
-	v5 = pRiderPath->pRoom;
-	v6 = pHorsePath->dwPrecisionX;
-	pRoom = pHorsePath->pRoom;
-	v7 = pHorsePath->dwPrecisionY;
-	v8 = pRiderPath->dwFlags;
-	v31 = v7;
-
-	if (v8 & 0x40000)
+	if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 	{
-		v9 = v7 >> 16;
-		v10 = v6 >> 16;
-		if (!v5)
+		// Try to find the missile in the mount room list, if not, end its path
+		if (!COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, PATH_FromFP16(pMountPath->dwPrecisionX), PATH_FromFP16(pMountPath->dwPrecisionY)))
 		{
 			pRiderPath->dwPathPoints = 0;
 			return;
 		}
+	}
 
-		if (v10 < v5->nSubtileX || v10 >= v5->nSubtileX + v5->nSubtileWidth || (v11 = v5->nSubtileY, v9 < v11) || v9 >= v11 + v5->nSubtileHeight)
+	pRiderPath->dwPrecisionX = pMountPath->dwPrecisionX;
+	pRiderPath->dwPrecisionY = pMountPath->dwPrecisionY;
+
+	int nMountCartesianPosX = pMountPath->dwPrecisionX >> 11;
+	int nMountCartesianPosY = pMountPath->dwPrecisionY >> 11;
+	DUNGEON_FlattenCoords_IsoToCartesian(&nMountCartesianPosX, &nMountCartesianPosY);
+
+	D2RoomStrc* pMountRoom = pMountPath->pRoom;
+
+	// Update the rider's target position
+	pRiderPath->dwTargetX = nMountCartesianPosX;
+	pRiderPath->dwTargetY = nMountCartesianPosY;
+	
+	// Rider was in a different room than the mount at some point
+	if (pRiderPath->pUnit && (pRiderPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001))
+	{
+		// Try finding room from rider's current room list
+		D2RoomStrc* pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, pRiderPath->wPosX, pRiderPath->wPosY);
+		
+		if (!pRidersUpToDateRoom)
 		{
-			pppRoom = 0;
-			pHorseUnit = 0;
-			DUNGEON_GetAdjacentRoomsListFromRoom(v5, &pppRoom, (int *)&pHorseUnit);
-			v12 = 0;
-			if (pHorseUnit)
+			// If not in the rider's current room list, try with the mount's room list
+			pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pMountRoom, pRiderPath->wPosX, pRiderPath->wPosY);
+			// If not found and it is a missile, just end its path
+			if (!pRidersUpToDateRoom && (pRiderPath->dwFlags & PATH_MISSILE_MASK))
 			{
-				while (1)
-				{
-					v13 = pppRoom[v12];
-					if (v13 && v10 >= v13->nSubtileX)
-					{
-						if (v10 < v13->nSubtileX + v13->nSubtileWidth)
-						{
-							v14 = v13->nSubtileY;
-							if (v9 >= v14)
-							{
-								if (v9 < v14 + v13->nSubtileHeight)
-								{
-									v5 = pppRoom[v12];
-									v7 = v31;
-									goto LABEL_30;
-								}
-							}
-						}
-					}
-
-					++v12;
-					if (v12 >= (unsigned int)pHorseUnit)
-					{
-						pRiderPath->dwPathPoints = 0;
-						return;
-					}
-				}
-			}
-
-			pRiderPath->dwPathPoints = 0;
-			return;
-		}
-
-LABEL_30:
-		if (!v5)
-		{
-			pRiderPath->dwPathPoints = 0;
-			return;
-		}
-	}
-
-	pRiderPath->dwPrecisionX = v6;
-	pRiderPath->dwPrecisionY = v7;
-
-	pX = v6 >> 11;
-	pY = v7 >> 11;
-	DUNGEON_FlattenCoords_IsoToCartesian(&pX, &pY);
-
-
-	pRiderPath->dwTargetX = pX;
-	pRiderPath->dwTargetY = pY;
-	if (pRiderPath->pUnit)
-	{
-		if (pRiderPath->dwFlags & 1)
-		{
-			v17 = pRiderPath->pRoom;
-			v18 = pRiderPath->wPosX;
-			v19 = pRiderPath->wPosY;
-
-			if (!v17 || v18 < v17->nSubtileX || v18 >= v17->nSubtileX + v17->nSubtileWidth || v19 < v17->nSubtileY || v19 >= v17->nSubtileY + v17->nSubtileHeight)
-			{
-				v21 = pRiderPath->wPosY;
-				v22 = pRiderPath->wPosX;
-				if (!v17)
-				{
-					v17 = 0;
-					if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
-					{
-						if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
-						{
-							pRiderPath->dwPathPoints = 0;
-							return;
-						}
-					}
-					PATHMISC_UpdateRoom(pRiderPath, v17);
-					return;
-				}
-
-				if (v22 < v17->nSubtileX || v22 >= v17->nSubtileX + v17->nSubtileWidth || v21 < v17->nSubtileY || v21 >= v17->nSubtileY + v17->nSubtileHeight)
-				{
-					pHorseUnit = 0;
-					pRiderUnit = 0;
-					DUNGEON_GetAdjacentRoomsListFromRoom(v17, (D2RoomStrc ***)&pHorseUnit, (int *)&pRiderUnit);
-					v24 = 0;
-					if (!pRiderUnit)
-					{
-						v17 = 0;
-						if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
-						{
-							if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
-							{
-								pRiderPath->dwPathPoints = 0;
-								return;
-							}
-						}
-						PATHMISC_UpdateRoom(pRiderPath, v17);
-						return;
-					}
-
-					while (1)
-					{
-						v25 = *(&pHorseUnit->dwUnitType + v24);
-						if (v25)
-						{
-							if (v22 >= *(int *)v25)
-							{
-								if (v22 < *(int *)v25 + *(int *)(v25 + 8))
-								{
-									v26 = *(int *)(v25 + 4);
-									if (v21 >= v26)
-									{
-										if (v21 < v26 + *(int *)(v25 + 12))
-											break;
-									}
-								}
-							}
-						}
-						++v24;
-						if (v24 >= (unsigned int)pRiderUnit)
-						{
-							v17 = 0;
-							if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
-							{
-								if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
-								{
-									pRiderPath->dwPathPoints = 0;
-									return;
-								}
-							}
-							PATHMISC_UpdateRoom(pRiderPath, v17);
-							return;
-						}
-					}
-					v17 = (D2RoomStrc *)*(&pHorseUnit->dwUnitType + v24);
-				}
-				if (v17)
-				{
-					PATHMISC_UpdateRoom(pRiderPath, v17);
-					return;
-				}
-				if (!pRoom || (v17 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v22, v21)) == 0)
-				{
-					if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
-					{
-						pRiderPath->dwPathPoints = 0;
-						return;
-					}
-				}
-				PATHMISC_UpdateRoom(pRiderPath, v17);
+				pRiderPath->dwPathPoints = 0;
 				return;
 			}
 		}
+
+		PATHMISC_UpdateRoom(pRiderPath, pRidersUpToDateRoom);
 	}
 }

@@ -2682,30 +2682,34 @@ void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, u
 }
 
 
+static bool PathPosIsInRoom(const D2RoomStrc& room, int posX, int posY)
+{
+	return posX >= room.nSubtileX && posX < (room.nSubtileX + room.nSubtileWidth)
+		&& posY >= room.nSubtileY && posY < (room.nSubtileY + room.nSubtileHeight);
+}
 
 //D2Common.0x6FD46620
 D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
-	D2RoomStrc** ppRoomList = NULL;
-	int nAdjacentRooms = 0;
-
 	if (pRoom)
 	{
-		if (nX >= pRoom->pCoords.dwSubtilesLeft && nX < pRoom->pCoords.dwSubtilesLeft + pRoom->pCoords.dwSubtilesWidth && nY >= pRoom->pCoords.dwSubtilesTop && nY < pRoom->pCoords.dwSubtilesTop + pRoom->pCoords.dwSubtilesHeight)
+		if (PathPosIsInRoom(*pRoom, nX,nY))
 		{
 			return pRoom;
 		}
 
+		D2RoomStrc** ppRoomList = nullptr;
+		int nAdjacentRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nAdjacentRooms);
 
 		for (int i = 0; i < nAdjacentRooms; ++i)
 		{
-			if (ppRoomList[i] && nX >= ppRoomList[i]->pCoords.dwSubtilesLeft && nX < ppRoomList[i]->pCoords.dwSubtilesLeft + ppRoomList[i]->pCoords.dwSubtilesWidth && nY >= ppRoomList[i]->pCoords.dwSubtilesTop && nY < ppRoomList[i]->pCoords.dwSubtilesTop + ppRoomList[i]->pCoords.dwSubtilesHeight)
+			if (ppRoomList[i] && PathPosIsInRoom(*ppRoomList[i], nX, nY))
 			{
 				return ppRoomList[i];
 			}
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }

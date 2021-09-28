@@ -271,7 +271,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10232                                                      @10232
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10233                                                      @10233
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10234                                                      @10234
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10235_PATH_Last                                            @10235
+    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10235_PATH_UpdateRiderPath                                 @10235
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10236                                                      @10236
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10237                                                      @10237
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10238_Return                                               @10238
