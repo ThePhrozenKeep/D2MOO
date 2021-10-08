@@ -808,86 +808,83 @@ void __stdcall SKILLS_RemoveSkill(D2UnitStrc* pUnit, int nSkillId, char* szFile,
 }
 
 //D2Common.0x6FDAFFF0
-void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, int a3, char* szFile, int nLine)
+void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, BOOL bDecrementAndCheckSkillLevel, char* szFile, int nLine)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pPreviousSkill = NULL;
-	D2SkillStrc* pSkill = NULL;
-
-	if (pUnit)
+	if (!pUnit)
 	{
-		if (pUnit->pSkills)
+		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
+		return;
+	}
+	if (!pUnit->pSkills)
+	{
+		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skillinfo  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+		return;
+	}
+	if (!pUnit->pSkills->pFirstSkill)
+	{
+		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skilllist  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+		return;
+	}
+
+	if (D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId))
+	{
+		if (pSkillsTxtRecord->nPassiveState > 0)
 		{
-			if (pUnit->pSkills->pFirstSkill)
+			STATES_ToggleState(pUnit, pSkillsTxtRecord->nPassiveState, 0);
+		}
+	}
+
+	if (const D2SkillStrc* pLeftSkill = pUnit->pSkills->pLeftSkill)
+	{
+		if (nSkillId == pLeftSkill->pSkillsTxt->nSkillId && pLeftSkill->nOwnerGUID == -1)
+		{
+			SKILLS_SetLeftActiveSkill(pUnit, SKILL_ATTACK, -1);
+		}
+	}
+
+	if (const D2SkillStrc* pRightSkill = pUnit->pSkills->pRightSkill)
+	{
+		if (nSkillId == pRightSkill->pSkillsTxt->nSkillId && pRightSkill->nOwnerGUID == -1)
+		{
+			SKILLS_SetRightActiveSkill(pUnit, SKILL_ATTACK, -1);
+		}
+	}
+
+	if (const D2SkillStrc* pUsedSkill = pUnit->pSkills->pUsedSkill)
+	{
+		if (nSkillId == pUsedSkill->pSkillsTxt->nSkillId && pUsedSkill->nOwnerGUID == -1)
+		{
+			SKILLS_SetUsedSkillInSkillList(pUnit->pSkills, nullptr);
+		}
+	}
+
+	// Try to find the skill in the unit skills list
+	D2SkillStrc* pPreviousSkill = nullptr;
+	D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill;
+	while (pSkill && !(pSkill->pSkillsTxt->nSkillId == nSkillId && pSkill->nOwnerGUID == -1))
+	{
+		pPreviousSkill = pSkill;
+		pSkill = pSkill->pNextSkill;
+	}
+
+	if (pSkill)
+	{
+		if (!bDecrementAndCheckSkillLevel || (--pSkill->nSkillLevel) <= 0)
+		{
+			if (pPreviousSkill)
 			{
-				pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
-				if (pSkillsTxtRecord && pSkillsTxtRecord->nPassiveState > 0)
-				{
-					STATES_ToggleState(pUnit, pSkillsTxtRecord->nPassiveState, 0);
-				}
-
-				if (pUnit->pSkills->pLeftSkill && nSkillId == pUnit->pSkills->pLeftSkill->pSkillsTxt->nSkillId && pUnit->pSkills->pLeftSkill->nOwnerGUID == -1)
-				{
-					SKILLS_SetLeftActiveSkill(pUnit, nSkillId, -1);
-				}
-
-				if (pUnit->pSkills->pRightSkill && nSkillId == pUnit->pSkills->pRightSkill->pSkillsTxt->nSkillId && pUnit->pSkills->pRightSkill->nOwnerGUID == -1)
-				{
-					SKILLS_SetRightActiveSkill(pUnit, nSkillId, -1);
-				}
-
-				if (pUnit->pSkills->pUsedSkill && nSkillId == pUnit->pSkills->pUsedSkill->pSkillsTxt->nSkillId)
-				{
-					if (pUnit->pSkills->pUsedSkill->nOwnerGUID == -1)
-					{
-						pUnit->pSkills->pUsedSkill = NULL;
-					}
-				}
-
-				pPreviousSkill = NULL;
-				pSkill = pUnit->pSkills->pFirstSkill;
-				while (pSkill->pSkillsTxt->nSkillId != nSkillId || pSkill->nOwnerGUID != -1)
-				{
-					pPreviousSkill = pSkill;
-
-					pSkill = pSkill->pNextSkill;
-					if (!pSkill)
-					{
-						SKILLS_RefreshSkill(pUnit, nSkillId);
-						return;
-					}
-				}
-
-				if (!a3 || (--pSkill->nSkillLevel) <= 0)
-				{
-					if (pPreviousSkill)
-					{
-						pPreviousSkill->pNextSkill = pSkill->pNextSkill;
-					}
-					else
-					{
-						pUnit->pSkills->pFirstSkill = pSkill->pNextSkill;
-					}
-
-					FOG_FreeServerMemory(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
-				}
-
-				SKILLS_RefreshSkill(pUnit, nSkillId);
+				pPreviousSkill->pNextSkill = pSkill->pNextSkill;
 			}
 			else
 			{
-				FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skilllist  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+				pUnit->pSkills->pFirstSkill = pSkill->pNextSkill;
 			}
-		}
-		else
-		{
-			FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skillinfo  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+
+			FOG_FreeServerMemory(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
 		}
 	}
-	else
-	{
-		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
-	}
+
+	SKILLS_RefreshSkill(pUnit, nSkillId);
 }
 
 //D2Common.0x6FDB0270 (#10958)
@@ -1264,17 +1261,12 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 //D2Common.0x6FDB09A0 (#10961)
 void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
-	BOOL bSkillFound = FALSE;
-
-	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	D2_ASSERT(pSkillsTxtRecord);
 
-	pSkill = UNITS_GetStartSkill(pUnit);
-
-	if (pSkill)
+	if (D2SkillStrc* pSkill = UNITS_GetStartSkill(pUnit))
 	{
+		bool bSkillFound = false;
 		while (!bSkillFound)
 		{
 			if (pSkill->pSkillsTxt != pSkillsTxtRecord || pSkill->nOwnerGUID != nOwnerGUID)
@@ -1283,7 +1275,7 @@ void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nO
 			}
 			else
 			{
-				bSkillFound = TRUE;
+				bSkillFound = true;
 			}
 
 			if (!pSkill)
