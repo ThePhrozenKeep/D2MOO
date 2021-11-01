@@ -60,6 +60,14 @@ struct D2LANG_DLL_DECL Unicode {
   operator unsigned short() const;
 
   /**
+   * Performs case insensitive comparison between a Unicode code
+   * unit to another.
+   *
+   * D2Lang.0x6FC11150 (#10022) ?compare@Unicode@@SIHU1@0@Z
+   */
+  static BOOL __fastcall compare(Unicode lhs, Unicode rhs);
+
+  /**
    * Returns whether the specified character in the string is the last
    * character of a word. In this function, only characters in the
    * English alphabet or Arabic numerals are considered characters in
@@ -119,6 +127,14 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC12B60 (#10053) ?toUtf@Unicode@@SIPADPADPBU1@H@Z
    */
   static char* __fastcall toUtf(char* dest, const Unicode* src, int count);
+
+  /**
+   * Performs case insensitive comparison between this Unicode code
+   * unit to another.
+   *
+   * D2Lang.0x6FC11110 (#10021) ?compare@Unicode@@QBEHU1@@Z
+   */
+  BOOL compare(Unicode ch) const;
 
   // D2Lang.0x6FC11C50 (#10023) ?directionality@Unicode@@QAE?AW4Direction@1@XZ
   Direction directionality();
