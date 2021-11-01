@@ -259,6 +259,14 @@ BOOL Unicode::isNewline() const {
   return this->ch == L'\n';
 }
 
+BOOL Unicode::isPipe() const {
+  if (this->ch < 0x100) {
+    return this->ch == 0xFF;
+  }
+
+  return FALSE;
+}
+
 Unicode Unicode::toLower() const {
   if (this->ch > 0xFF) {
     return this->ch;

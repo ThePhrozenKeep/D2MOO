@@ -135,6 +135,9 @@ struct D2LANG_DLL_DECL Unicode {
   // D2Lang.0x6FC11050 (#10028) ?isNewline@Unicode@@QBEHXZ
   BOOL isNewline() const;
 
+  // D2Lang.0x6FC11060 (#10029) ?isPipe@Unicode@@QBEHXZ
+  BOOL isPipe() const;
+
   /**
    * Returns this character's lowercase if there is a lowercase for
    * this character. Otherwise, returns a copy of this character.
