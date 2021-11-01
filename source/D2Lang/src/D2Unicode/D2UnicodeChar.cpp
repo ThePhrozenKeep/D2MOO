@@ -255,6 +255,10 @@ BOOL Unicode::isASCII() const {
   return this->ch < 0x80;
 }
 
+BOOL Unicode::isAlpha() const {
+  return (isASCII() && ::isalpha((char)this->ch));
+}
+
 BOOL Unicode::isNewline() const {
   return this->ch == L'\n';
 }

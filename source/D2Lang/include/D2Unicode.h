@@ -132,6 +132,14 @@ struct D2LANG_DLL_DECL Unicode {
    */
   BOOL isASCII() const;
 
+  /**
+   * Returns whether or not this Unicode character is an alphabetic
+   * character.
+   *
+   * D2Lang.0x6FC11090 (#10025) ?isAlpha@Unicode@@QBEHXZ
+   */
+  BOOL isAlpha() const;
+
   // D2Lang.0x6FC11050 (#10028) ?isNewline@Unicode@@QBEHXZ
   BOOL isNewline() const;
 

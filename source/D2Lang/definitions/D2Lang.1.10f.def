@@ -11,7 +11,7 @@ EXPORTS
 ;   D2LANG_10022 @10022 ; ?compare@Unicode@@SIHU1@0@Z
     ?directionality@Unicode@@QAE?AW4Direction@1@XZ @10023 ; Unicode::directionality
     ?isASCII@Unicode@@QBEHXZ @10024 ; Unicode::isASCII
-;   D2LANG_10025 @10025 ; ?isAlpha@Unicode@@QBEHXZ
+    ?isAlpha@Unicode@@QBEHXZ @10025 ; Unicode::isAlpha
 ;   D2LANG_10026 @10026 ; ?isLeftToRight@Unicode@@QBEHXZ
 ;   D2LANG_10027 @10027 ; ?isLineBreak@Unicode@@SIHPBU1@I@Z
     ?isNewline@Unicode@@QBEHXZ @10028 ; Unicode::isNewline
