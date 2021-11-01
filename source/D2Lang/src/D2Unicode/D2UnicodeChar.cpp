@@ -267,6 +267,14 @@ BOOL Unicode::isPipe() const {
   return FALSE;
 }
 
+BOOL Unicode::isWhitespace() const {
+  if (this->ch < 0x100) {
+    return ::isspace(this->ch);
+  }
+
+  return FALSE;
+}
+
 Unicode Unicode::toLower() const {
   if (this->ch > 0xFF) {
     return this->ch;
