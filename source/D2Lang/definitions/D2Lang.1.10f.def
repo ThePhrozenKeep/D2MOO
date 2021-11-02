@@ -7,8 +7,8 @@ EXPORTS
 ;   D2LANG_10018 @10018 ; ?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z
     ?_toLowerTable@Unicode@@0PAGA @10019 ; Unicode::_toLowerTable
     ?_toUpperTable@Unicode@@0PAGA @10020 ; Unicode::_toUpperTable
-;   D2LANG_10021 @10021 ; ?compare@Unicode@@QBEHU1@@Z
-;   D2LANG_10022 @10022 ; ?compare@Unicode@@SIHU1@0@Z
+    ?compare@Unicode@@QBEHU1@@Z @10021 ; Unicode::compare
+    ?compare@Unicode@@SIHU1@0@Z @10022 ; static Unicode::compare
     ?directionality@Unicode@@QAE?AW4Direction@1@XZ @10023 ; Unicode::directionality
     ?isASCII@Unicode@@QBEHXZ @10024 ; Unicode::isASCII
     ?isAlpha@Unicode@@QBEHXZ @10025 ; Unicode::isAlpha

@@ -150,6 +150,14 @@ Unicode::operator unsigned short() const {
   return this->ch;
 }
 
+BOOL __fastcall Unicode::compare(Unicode lhs, Unicode rhs) {
+  return lhs.toUpper().ch == rhs.toUpper().ch;
+}
+
+BOOL Unicode::compare(Unicode ch) const {
+  return this->toUpper().ch == ch.toUpper().ch;
+}
+
 Unicode::Direction Unicode::directionality() {
   /*
    * Hebrew, Arabic, Syriac, Arabic Supplement, Thaana, NKo,
