@@ -79,6 +79,24 @@ struct D2LANG_DLL_DECL Unicode {
   static BOOL __fastcall isWordEnd(const Unicode* str, size_t index);
 
   /**
+   * Performs string conversions on the supplied parameters, similar
+   * to standard C's printf.
+   *
+   * Only the conversion specifiers %%, %d, %u, and %s are supported.
+   * %s represents a pointer to a null-terminated Unicode string. To
+   * specify an unsupported conversion specifier will result in an
+   * assertion error. Flags, minimum field width, precision, and
+   * length modifiers are not supported.
+   *
+   * D2Lang.0x6FC0B250 (#10033) ?sprintf@Unicode@@SAXHPAU1@PBU1@ZZ
+   */
+  static void __cdecl sprintf(
+      int buffer_size,
+      Unicode* buffer,
+      const Unicode* format,
+      ...);
+
+  /**
    * Appends a null-terminated string to the end of a null-terminated
    * destination string. Returns the destination string.
    *

@@ -24,7 +24,10 @@
 
 #include <D2Unicode.h>
 
+#include <assert.h>
 #include <ctype.h>
+
+#include "Fog.h"
 
 BOOL __fastcall Unicode::isWordEnd(const Unicode* str, size_t index) {
   if (index == 0) {
@@ -33,6 +36,163 @@ BOOL __fastcall Unicode::isWordEnd(const Unicode* str, size_t index) {
 
   return ::isalnum(str[index].ch)
       && !::isalnum(str[index + 1].ch);
+}
+
+void __cdecl Unicode::sprintf(
+    int buffer_size,
+    Unicode* buffer,
+    const Unicode* format,
+    ...) {
+
+  if (format == NULL) {
+    return;
+  }
+
+  int i_buffer = 0;
+  buffer[0].ch = L'\0';
+
+  va_list args;
+  va_start(args, format);
+
+  Unicode percent_sign[2] = { L'%' };
+
+  for (int i_format = 0; format[i_format].ch != L'\0'; i_format += 2) {
+    unsigned short conversion_specifier = L'\0';
+    Unicode* strstr_result = Unicode::strstr(&format[i_format], percent_sign);
+    if (strstr_result != NULL) {
+      conversion_specifier = strstr_result[1];
+    }
+
+    /*
+     * Copy format into buffer up to where the % is found, or if % not
+     * found, then copy the remaining string.
+     */
+    while (&format[i_format] != strstr_result
+        && format[i_format].ch != L'\0') {
+      if (i_buffer >= buffer_size) {
+        buffer[i_buffer - 1].ch = L'\0';
+        return;
+      }
+
+      buffer[i_buffer] = format[i_format];
+
+      ++i_format;
+      ++i_buffer;
+    }
+
+    if (i_buffer >= buffer_size) {
+      buffer[i_buffer - 1].ch = L'\0';
+      return;
+    }
+
+    if (format[i_format].ch == L'\0') {
+      buffer[i_buffer].ch = L'\0';
+      return;
+    }
+
+    D2_ASSERT(strstr_result != NULL);
+
+    union {
+      int d;
+      unsigned int u;
+      const Unicode* s;
+    } arg_value;
+
+    switch (conversion_specifier) {
+      case L'\0': {
+        /*
+         * No conversion specifier found or % is the last character.
+         */
+        Unicode::strcpy(&buffer[i_buffer], percent_sign);
+        return;
+      }
+
+      case L'%': {
+        if (i_buffer + 1 >= buffer_size) {
+          return;
+        }
+
+        Unicode::strcpy(&buffer[i_buffer], percent_sign);
+        ++i_buffer;
+
+        break;
+      }
+
+      case L'd':
+      case L'u': {
+        char itoa_buffer[16];
+
+        if (conversion_specifier == L'd') {
+          ::_itoa(va_arg(args, int), itoa_buffer, 10);
+        } else {
+          ::_ultoa(va_arg(args, unsigned int), itoa_buffer, 10);
+        }
+
+        Unicode itoa_unicode[15];
+        Unicode::toUnicode(itoa_unicode, itoa_buffer, 15);
+
+        int itoa_length;
+        for (itoa_length = 0;
+            itoa_unicode[itoa_length].ch != L'\0';
+            ++itoa_length);
+
+        if ((i_buffer + itoa_length + 1) >= buffer_size) {
+          return;
+        }
+
+        Unicode::strcpy(&buffer[i_buffer], itoa_unicode);
+        i_buffer += itoa_length;
+
+        break;
+      }
+
+      case L's': {
+        arg_value.s = va_arg(args, const Unicode*);
+        if (arg_value.s == NULL || arg_value.s[0].ch == L'\0') {
+          Unicode::strncat(
+              &buffer[i_buffer],
+              arg_value.s,
+              buffer_size - (i_buffer + 1));
+          return;
+        }
+
+        int arg_s_length;
+        for (arg_s_length = 1;
+            arg_value.s[arg_s_length].ch != L'\0';
+            ++arg_s_length) {
+          /* Left empty on purpose. */
+        }
+
+        if (arg_s_length == 0 || (i_buffer + arg_s_length) >= buffer_size) {
+          Unicode::strncat(
+              &buffer[i_buffer],
+              arg_value.s,
+              buffer_size - (i_buffer + 1));
+          return;
+        }
+
+        for (int i_arg_s = 0; ; ++i_arg_s) {
+          buffer[i_buffer + i_arg_s] = arg_value.s[i_arg_s];
+
+          if (arg_value.s[i_arg_s + 1] == L'\0') {
+            break;
+          }
+        }
+
+        i_buffer += arg_s_length;
+
+        break;
+      }
+
+      default: {
+        FOG_10024_PacketAssertion(
+            "Unknown format specifier in Unicode::sprintf",
+            __FILE__,
+            __LINE__);
+        exit(-1);
+      }
+    }
+  }
 }
 
 Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
