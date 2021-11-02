@@ -104,6 +104,18 @@ struct D2LANG_DLL_DECL Unicode {
   static int __fastcall strlen(const Unicode* str);
 
   /**
+   * Returns the first occurrence of a null-terminated substring in a
+   * null-terminated string. If the substring is empty, or the
+   * string does not contain the substring, then the function returns
+   * NULL.
+   *
+   * D2Lang.0x6FC0B020 (#10046) ?strstr@Unicode@@SIPAU1@PBU1@0@Z
+   */
+  static Unicode* __fastcall strstr(
+      const Unicode* str,
+      const Unicode* substr);
+
+  /**
    * Converts a null-terminated UCS-2 string into a null-terminated
    * UTF-8 string. The count indicates the capacity of the destination
    * in terms of UTF-8 code units. Returns the pointer to the
