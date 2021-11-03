@@ -134,6 +134,25 @@ struct D2LANG_DLL_DECL Unicode {
    */
   static int __fastcall strlen(const Unicode* str);
 
+  /*
+   * Compares two null-terminated strings or substrings
+   * lexicographically. Returns -1, 0, or 1, depending on the results
+   * of the comparison.
+   *
+   * If either string is the NULL pointer, then the behavior is
+   * undefined.
+   *
+   * Vanilla bug: If one string is a prefix of another, then the
+   * function will always return 0, even when the specified count is
+   * greater than the length of the prefix.
+   *
+   * D2Lang.0x6FC11250 (#10042) ?strncmp@Unicode@@SIHPBU1@0I@Z
+   */
+  static int __fastcall strncmp(
+      const Unicode* str1,
+      const Unicode* str2,
+      size_t count);
+
   /**
    * Returns the first occurrence of a null-terminated substring in a
    * null-terminated string. If the substring is empty, or the
