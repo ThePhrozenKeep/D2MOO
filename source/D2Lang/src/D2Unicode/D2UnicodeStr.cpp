@@ -89,7 +89,7 @@ int __fastcall Unicode::strlen(const Unicode* str) {
 Unicode* __fastcall Unicode::strstr(
     const Unicode* str,
     const Unicode* substr) {
-  if (str[0].ch == L'\0' || substr[0].ch == L'\0') {
+  if (str == NULL || substr == NULL) {
     return NULL;
   }
 
