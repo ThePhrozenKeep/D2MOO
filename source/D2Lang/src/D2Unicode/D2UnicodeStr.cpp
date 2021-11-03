@@ -46,6 +46,16 @@ Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
   return dest;
 }
 
+Unicode* __fastcall Unicode::strchr(const Unicode* str, Unicode ch) {
+  for (size_t i = 0; str[i].ch != L'\0'; ++i) {
+    if (str[i].ch == ch.ch) {
+      return (Unicode*)&str[i];
+    }
+  }
+
+  return NULL;
+}
+
 int __fastcall Unicode::strcmp(const Unicode* str1, const Unicode* str2) {
   /*
    * This loop does not run beyond the end of either string. If the

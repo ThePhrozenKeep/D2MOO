@@ -21,7 +21,7 @@ EXPORTS
 ;   D2LANG_10032 @10032 ; ?loadSysMap@Unicode@@SIHPAUHD2ARCHIVE__@@PBD@Z
 ;   D2LANG_10033 @10033 ; ?sprintf@Unicode@@SAXHPAU1@PBU1@ZZ
     ?strcat@Unicode@@SIPAU1@PAU1@PBU1@@Z @10034 ; Unicode::strcat
-;   D2LANG_10035 @10035 ; ?strchr@Unicode@@SIPAU1@PBU1@U1@@Z
+    ?strchr@Unicode@@SIPAU1@PBU1@U1@@Z @10035 ; Unicode::strchr
     ?strcmp@Unicode@@SIHPBU1@0@Z @10036 ; Unicode::strcmp
 ;   D2LANG_10037 @10037 ; ?strcoll@Unicode@@SIHPBU1@0@Z
     ?strcpy@Unicode@@SIPAU1@PAU1@PBU1@@Z @10038 ; Unicode::strcpy
