@@ -121,10 +121,6 @@ Unicode* __fastcall Unicode::strstr(
     if (substr[i_substr].ch == L'\0') {
       return (Unicode*)&str[i_str];
     }
-
-    if (str[i_str].ch == L'\0') {
-      return NULL;
-    }
   }
 
   return (Unicode*)&str[i_str];
