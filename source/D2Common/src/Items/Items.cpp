@@ -3612,7 +3612,7 @@ uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem)
 
 		if (nCounter >= ARRAY_SIZE(stru_6FDE3C08))
 		{
-			return WEAPONCLASS_NONE;
+			return WEAPONCLASS_HTH;
 		}
 	}
 

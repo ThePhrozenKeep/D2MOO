@@ -27,20 +27,20 @@ enum D2Composits
 
 enum D2WeaponClasses
 {
-	WEAPONCLASS_NONE,
-	WEAPONCLASS_BOW,
-	WEAPONCLASS_1HS,
-	WEAPONCLASS_1HT,
-	WEAPONCLASS_STF,
-	WEAPONCLASS_2HS,
-	WEAPONCLASS_2HT,
-	WEAPONCLASS_XBW,
-	WEAPONCLASS_1JS,
-	WEAPONCLASS_1JT,
-	WEAPONCLASS_1SS,
-	WEAPONCLASS_1ST,
-	WEAPONCLASS_HT1,
-	WEAPONCLASS_HT2,
+	WEAPONCLASS_HTH, // Hand To Hand (Bare fists)
+	WEAPONCLASS_BOW, // Bow (All Bow class weapons)
+	WEAPONCLASS_1HS, // One-Handed: Swing (axes, swords, flails, maces, hammers, clubs and wands)
+	WEAPONCLASS_1HT, // One-Handed: Thrust (Daggers, javelins, potions)
+	WEAPONCLASS_STF, // Staff (Staves, polearms, axes, mauls)
+	WEAPONCLASS_2HS, // Two-Handed: Swing (swords)
+	WEAPONCLASS_2HT, // Two-Handed: Thrust (All Spear class weapons)
+	WEAPONCLASS_XBW, // Crossbow (All Crossbow class weapons)
+	WEAPONCLASS_1JS, // 2 x One-handed: left Jab  , right Swing
+	WEAPONCLASS_1JT, // 2 x One-handed: left Jab  , right Thrust
+	WEAPONCLASS_1SS, // 2 x One-handed: left Swing, right Swing
+	WEAPONCLASS_1ST, // 2 x One-handed: left Swing, right Thrust
+	WEAPONCLASS_HT1, // One Hand To hand (Katar, Claw, Scissors type assassin class weapons)
+	WEAPONCLASS_HT2, // Two Hand To hand (Katar, claw, scissors type assassin class weapons)
 	NUM_WEAPON_CLASSES,
 
 };

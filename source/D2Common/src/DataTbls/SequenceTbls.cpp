@@ -1142,7 +1142,7 @@ D2UnkSequenceStrc* off_6FDE0388[24] =
 //D2Common.0x6FDE03E8
 static const int dword_6FDE03E8[14][2] =
 {
-	{ 0, WEAPONCLASS_NONE },
+	{ 0, WEAPONCLASS_HTH },
 	{ 1, WEAPONCLASS_1HT },
 	{ 2, WEAPONCLASS_2HT },
 	{ 3, WEAPONCLASS_1HS },

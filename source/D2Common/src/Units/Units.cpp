@@ -2737,7 +2737,7 @@ int __stdcall UNITS_GetFrameBonus(D2UnitStrc* pUnit)
 	}
 
 
-	int nWeaponClass = WEAPONCLASS_NONE;
+	int nWeaponClass = WEAPONCLASS_HTH;
 	switch (nMode)
 	{
 	case PLRMODE_ATTACK1:
