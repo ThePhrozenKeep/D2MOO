@@ -1,15 +1,27 @@
 #pragma once 
 
 #include <D2BasicTypes.h>
+#include <D2Composit.h>
 
 #pragma pack()
+
+enum D2MonSeqEvent : uint8_t
+{
+	MONSEQ_EVENT_NONE,
+	MONSEQ_EVENT_MELEE_ATTACK,
+	MONSEQ_EVENT_MISSILE_ATTACK,
+	MONSEQ_EVENT_PLAY_SOUND,
+	MONSEQ_EVENT_TRIGGER_SKILL,
+
+};
+
 struct D2MonSeqTxt
 {
 	uint16_t wSequence;					//0x00
 	uint8_t nMode;						//0x02
 	uint8_t nFrame;						//0x03
 	uint8_t nDir;						//0x04
-	uint8_t nEvent;						//0x05
+	D2MonSeqEvent nEvent;				//0x05
 };
 
 struct D2SeqRecordStrc
@@ -20,9 +32,9 @@ struct D2SeqRecordStrc
 };
 
 //TODO: Find a better name
-struct D2UnkSequenceStrc
+struct D2PlayerWeaponSequencesStrc
 {
-	D2SeqRecordStrc unk0x00[14];		//0x00
+	D2SeqRecordStrc weaponRecords[NUM_WEAPON_CLASSES];		//0x00
 };
 
 #pragma pack()
