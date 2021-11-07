@@ -48,7 +48,7 @@ D2COMMON_DLL_DECL int __stdcall DATATBLS_GetSeqFramePointsCount(D2UnitStrc* pUni
 //D2Common.0x6FD728C0 (#10684)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit);
 //D2Common.0x6FD728E0 (#10685)
-D2COMMON_DLL_DECL void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_ComputeSequenceAnimation(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent);
 //D2Common.0x6FD72990 (#10686)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int a2, int* pEvent);
 //D2Common.0x6FD6F050

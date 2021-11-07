@@ -685,7 +685,7 @@ EXPORTS
 	DATATBLS_GetMonSeqTxtRecordFromUnit									@10682
 	DATATBLS_GetSeqFramePointsCount										@10683
 	DATATBLS_GetSeqFrameCount											@10684
-	D2Common_10685														@10685
+	DATATBLS_ComputeSequenceAnimation									@10685
 	DATATBLS_GetSequenceEvent											@10686
 	ITEMS_AllocItemData													@10687
 	ITEMS_FreeItemData													@10688

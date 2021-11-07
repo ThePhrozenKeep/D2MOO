@@ -1243,39 +1243,32 @@ int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD728E0 (#10685)
-//TODO: Find a name
-void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent)
+void __stdcall DATATBLS_ComputeSequenceAnimation(D2MonSeqTxt* pMonSeqTxt, int nTargetFramePoint, int nCurrentFramePoint, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent)
 {
-	D2MonSeqTxt* pMonSeqTxtRecord = NULL;
-	int nCounter = 0;
-
 	if (pMonSeqTxt)
 	{
-		pMonSeqTxtRecord = &pMonSeqTxt[a2 >> 8];
+		const D2MonSeqTxt* pMonSeqTxtRecord = &pMonSeqTxt[nCurrentFramePoint >> 8];
 
 		*pMode = pMonSeqTxtRecord->nMode;
 		*pFrame = pMonSeqTxtRecord->nFrame;
 		*pDirection = pMonSeqTxtRecord->nDir;
 
-		if (a2 == a3)
+		if (nCurrentFramePoint == nTargetFramePoint)
 		{
 			*pEvent = pMonSeqTxtRecord->nEvent;
 		}
-		else
+		else // Retrieve the last event, note that it discard the intermediary events.
 		{
 			*pEvent = 0;
-
-			if ((a3 >> 8) + 1 <= (a2 >> 8))
+			const int nNextFrame = (nCurrentFramePoint >> 8) + 1;
+			const int nTargetFrame = nTargetFramePoint >> 8;
+			for (int frameIdx = nNextFrame; frameIdx <= nTargetFrame; frameIdx++)
 			{
-				nCounter = 0;
-				do
+				const D2MonSeqEvent nEvent = pMonSeqTxt[frameIdx].nEvent;
+				if (nEvent != MONSEQ_EVENT_NONE)
 				{
-					if (pMonSeqTxt[(a3 >> 8) + 1 + nCounter].nEvent)
-					{
-						*pEvent = pMonSeqTxt[(a3 >> 8) + 1 + nCounter].nEvent;
-					}
-					++nCounter;
-				} while (nCounter < ((a2 >> 8) - (a3 >> 8)));
+					*pEvent = nEvent;
+				}
 			}
 		}
 	}
@@ -1284,7 +1277,7 @@ void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned 
 		*pMode = 0;
 		*pFrame = 0;
 		*pDirection = 0;
-		*pEvent = 0;
+		*pEvent = MONSEQ_EVENT_NONE;
 	}
 }
 
