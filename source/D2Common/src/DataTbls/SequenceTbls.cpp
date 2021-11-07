@@ -1289,11 +1289,11 @@ void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned 
 }
 
 //D2Common.0x6FD72990 (#10686)
-void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int nSeqFrame, int* pEvent)
+void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int nSeqFramePoint, int* pEvent)
 {
 	if (pMonSeqTxt)
 	{
-		*pEvent = pMonSeqTxt[nSeqFrame >> 8].nEvent;
+		*pEvent = pMonSeqTxt[nSeqFramePoint >> 8].nEvent;
 	}
 	else
 	{
