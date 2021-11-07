@@ -1176,34 +1176,22 @@ D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FD727C0
 D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 {
-	int nSequenceNum = 0;
-	int nWeaponClass = 0;
-	int nUnitType = 0;
 
 	if (D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit))
 	{
-		nSequenceNum = SKILLS_GetSeqNumFromSkill(pUnit, pSkill);
+		int nSequenceNum = SKILLS_GetSeqNumFromSkill(pUnit, pSkill);
 
 		if (nSequenceNum > 0)
 		{
+			int nUnitType = UNIT_COUNT;
 			if (pUnit)
 			{
 				nUnitType = pUnit->dwUnitType;
 			}
-			else
-			{
-				nUnitType = 6;
-			}
 
-			if (nUnitType != UNIT_PLAYER)
+			if (nUnitType == UNIT_PLAYER)
 			{
-				if (nUnitType == UNIT_MONSTER && DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId))
-				{
-					return DATATBLS_GetMonSeqTableRecord(nSequenceNum);
-				}
-			}
-			else
-			{
+				int nWeaponClass = WEAPONCLASS_HTH;
 				COMPOSIT_GetWeaponClassId(pUnit, pUnit->pInventory, &nWeaponClass, -1, TRUE);
 
 				int nWClassIndex = -1;
@@ -1219,6 +1207,10 @@ D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 				D2_ASSERT(nWClassIndex != -1);
 
 				return &gPlayerWeaponsSequenceTable[nSequenceNum]->weaponRecords[nWClassIndex];
+			}
+			else if (nUnitType == UNIT_MONSTER && DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId))
+			{
+				return DATATBLS_GetMonSeqTableRecord(nSequenceNum);
 			}
 		}
 	}
