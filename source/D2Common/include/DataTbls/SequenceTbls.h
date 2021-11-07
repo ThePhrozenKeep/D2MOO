@@ -27,8 +27,8 @@ struct D2MonSeqTxt
 struct D2SeqRecordStrc
 {
 	D2MonSeqTxt* pMonSeqTxtRecord;		//0x00
-	int32_t unk0x04;					//0x04
-	int32_t unk0x08;					//0x08
+	int32_t nSeqFramesCount;			//0x04
+	int32_t nFramesCount;				//0x08
 };
 
 //TODO: Find a better name
@@ -44,9 +44,9 @@ D2COMMON_DLL_DECL D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2U
 //D2Common.0x6FD727C0
 D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FD728A0 (#10683)
-D2COMMON_DLL_DECL int __stdcall D2Common_10683(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetSeqFramePointsCount(D2UnitStrc* pUnit);
 //D2Common.0x6FD728C0 (#10684)
-D2COMMON_DLL_DECL int __stdcall D2Common_10684(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit);
 //D2Common.0x6FD728E0 (#10685)
 D2COMMON_DLL_DECL void __stdcall D2Common_10685(D2MonSeqTxt* pMonSeqTxt, int a2, int a3, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent);
 //D2Common.0x6FD72990 (#10686)

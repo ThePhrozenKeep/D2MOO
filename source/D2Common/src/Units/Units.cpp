@@ -1017,10 +1017,10 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 	{
 		if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
 		{
-			pUnit->dwSeqFrameCount = D2Common_10683(pUnit);
+			pUnit->dwSeqFrameCount = DATATBLS_GetSeqFramePointsCount(pUnit);
 			pUnit->dwSeqFrame = 0;
 			pUnit->dwAnimSpeed = 256;
-			pUnit->dwFrameCount = D2Common_10684(pUnit) << 8;
+			pUnit->dwFrameCount = DATATBLS_GetSeqFrameCount(pUnit) << 8;
 
 			unsigned nMode = 0, nFrame = 0;
 			int nDirection = 0, nEvent = 0;

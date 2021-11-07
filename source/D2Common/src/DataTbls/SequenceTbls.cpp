@@ -1219,26 +1219,24 @@ D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD728A0 (#10683)
-//TODO: Find a name
-int __stdcall D2Common_10683(D2UnitStrc* pUnit)
+int __stdcall DATATBLS_GetSeqFramePointsCount(D2UnitStrc* pUnit)
 {
 	D2SeqRecordStrc* pSeqRecord = DATATBLS_GetSeqRecordFromUnit(pUnit);
 	if (pSeqRecord)
 	{
-		return (pSeqRecord->unk0x04 << 8);
+		return (pSeqRecord->nSeqFramesCount << 8);
 	}
 
 	return 0;
 }
 
 //D2Common.0x6FD728C0 (#10684)
-//TODO: Find a name
-int __stdcall D2Common_10684(D2UnitStrc* pUnit)
+int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit)
 {
 	D2SeqRecordStrc* pSeqRecord = DATATBLS_GetSeqRecordFromUnit(pUnit);
 	if (pSeqRecord)
 	{
-		return pSeqRecord->unk0x08;
+		return pSeqRecord->nFramesCount;
 	}
 
 	return 0;
@@ -1335,8 +1333,8 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 				sgptDataTables->pMonSeqTable[nSequence].pMonSeqTxtRecord = &sgptDataTables->pMonSeqTxt[i];
 			}
 
-			++sgptDataTables->pMonSeqTable[nSequence].unk0x04;
-			++sgptDataTables->pMonSeqTable[nSequence].unk0x08;
+			++sgptDataTables->pMonSeqTable[nSequence].nSeqFramesCount;
+			++sgptDataTables->pMonSeqTable[nSequence].nFramesCount;
 		}
 	}
 }
