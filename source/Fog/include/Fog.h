@@ -113,6 +113,8 @@ D2FUNC_DLL(FOG, AllocServerMemory, void*, __fastcall, (void* pMemPool, int nSize
 D2FUNC_DLL(FOG, FreeServerMemory, void, __fastcall, (void* pMemPool, void* pFree, char* szFile, int nLine, int n0), 0x9030)							//Fog.#10046
 D2FUNC_DLL(FOG, ReallocServerMemory, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, char* szFile, int nLine, int n0), 0x9060)		//Fog.#10047
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
+D2FUNC_DLL(FOG, 10083_Cos_LUT, float, __stdcall, (int16_t index), 0x1DF0)																			//Fog.#10083
+D2FUNC_DLL(FOG, 10084_Sin_LUT, float, __stdcall, (int16_t index), 0x1E10)																			//Fog.#10084
 D2FUNC_DLL(FOG, MPQSetConfig, BOOL, __fastcall, (int dwDirectAccessFlags, int bEnableSeekOptimization), 0x11590)									//Fog.#10101
 D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (const char* szFile, void** pFileHandle), 0x11600)													//Fog.#10102
 D2FUNC_DLL(FOG, MPQFileClose, void, __fastcall, (void* pFile), 0x11610)																				//Fog.#10103

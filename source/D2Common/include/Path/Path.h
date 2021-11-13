@@ -22,22 +22,35 @@ enum D2PathTypes
 	PATHTYPE_COUNT = 18
 };
 
-enum D2PathFlags {
-	PATH_UNKNOWN_FLAG_0x2000 = 0x2000,
-	PATH_UNKNOWN_FLAG_0x4000 = 0x4000,
-	PATH_UNKNOWN_FLAG_0x8000 = 0x8000,
+enum D2PathFlags : uint32_t {
+	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
+	PATH_UNKNOWN_FLAG_0x00002 = 0x00002,
+	PATH_UNKNOWN_FLAG_0x00004 = 0x00004,
+	PATH_UNKNOWN_FLAG_0x00008 = 0x00008, // Set when rider and mount have the same position
+	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
+	PATH_UNKNOWN_FLAG_0x00020 = 0x00020,
+	PATH_UNKNOWN_FLAG_0x00040 = 0x00040,
+	PATH_UNKNOWN_FLAG_0x00200 = 0x00200,
+	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
+	PATH_UNKNOWN_FLAG_0x04000 = 0x04000,
+	PATH_UNKNOWN_FLAG_0x08000 = 0x08000,
 	PATH_UNKNOWN_FLAG_0x10000 = 0x10000,
-	PATH_SAVE_STEPS_MASK = 0x20000
+	PATH_SAVE_STEPS_MASK      = 0x20000,
+	PATH_MISSILE_MASK         = 0x40000,
 };
 
 struct D2PathPointStrc
 {
 	uint16_t X;
 	uint16_t Y;
+
+	bool operator==(const D2PathPointStrc& other) { return X == other.X && Y == other.Y; }
+	bool operator!=(const D2PathPointStrc& other) { return !(*this == other); }
 };
 
 struct D2DynamicPathStrc
 {
+	static const size_t MAXPATHLEN = 78;
 	union
 	{
 		struct
@@ -54,20 +67,17 @@ struct D2DynamicPathStrc
 			uint32_t dwPrecisionY;				//0x04
 		};
 	};
-	uint32_t dwTargetX;						//0x08
-	uint32_t dwTargetY;						//0x0C
-	uint16_t xSP1;								//0x10
-	uint16_t ySP1;								//0x12
-	uint16_t xSP2;								//0x14
-	uint16_t ySP2;								//0x16
-	uint16_t xSP3;								//0x18
-	uint16_t ySP3;								//0x1A
-	D2RoomStrc* pRoom;						//0x1C
-	D2RoomStrc* pRoomNext;					//0x20
-	int32_t unk0x24;							//0x24
+	uint32_t dwTargetX;							//0x08
+	uint32_t dwTargetY;							//0x0C
+	D2PathPointStrc SP1;						//0x10
+	D2PathPointStrc SP2;						//0x14
+	D2PathPointStrc SP3;						//0x18
+	D2RoomStrc* pRoom;							//0x1C
+	D2RoomStrc* pRoomNext;						//0x20
+	int32_t dwCurrentPointIdx;					//0x24
 	int32_t dwPathPoints;						//0x28
-	void* unk0x2C;							//0x2C
-	D2UnitStrc* pUnit;						//0x30
+	void* unk0x2C;								//0x2C
+	D2UnitStrc* pUnit;							//0x30
 	uint32_t dwFlags;							//0x34
 	uint32_t unk0x38;							//0x38
 	uint32_t dwPathType;						//0x3C
@@ -78,39 +88,38 @@ struct D2DynamicPathStrc
 	uint32_t unk0x50;							//0x50
 	uint16_t unk0x54;							//0x54
 	uint16_t unk0x56;							//0x56
-	D2UnitStrc* pTargetUnit;				//0x58
+	D2UnitStrc* pTargetUnit;					//0x58
 	uint32_t dwTargetType;						//0x5C
 	uint32_t dwTargetId;						//0x60
-	uint8_t nDirection;						//0x64
+	uint8_t nDirection;							//0x64
 	uint8_t nNewDirection;						//0x65
-	uint8_t nDiffDirection;					//0x66
+	uint8_t nDiffDirection;						//0x66
 	uint8_t unk0x67;							//0x67
-	uint8_t unk0x68[10];						//0x68
-	int32_t unk0x72;							//0x72
-	int32_t unk0x76;							//0x76
-	char unk0x7A[2];						//0x7A
+	uint8_t unk0x68[2];							//0x68
+	D2CoordStrc tDirectionVector;				//0x6A
+	D2CoordStrc tVelocityVector;				//0x72
+	char unk0x7A[2];							//0x7A
 	uint32_t dwVelocity;						//0x7C
 	uint32_t unk0x80;							//0x80
 	uint32_t dwVelocity2;						//0x84
 	uint32_t unk0x88[2];						//0x88
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
-	uint8_t unk0x92;							//0x92
+	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
 	uint8_t nStepNum;							//0x93
 	uint8_t nDistance;							//0x94
-	char unk0x95[3];						//0x95
-	//uint32_t dwPathOffset;						//0x98
-	D2PathPointStrc PathPoints[7];			//0x98
-	uint32_t unk0xB8[72];						//0xB8
-	int32_t unk0x1D4;							//0x1D4
-	D2PathPointStrc unk0x1D8[7];			//0x1D8
-	char unk0x1DC[12];						//0x1DC
+	char unk0x95[3];							//0x95
+	int32_t dwUnitTypeRelated;					//0x98
+	D2PathPointStrc PathPoints[MAXPATHLEN];		//0x9C
+	int32_t nSavedStepsCount;					//0x1D4
+	D2PathPointStrc SavedSteps[7];				//0x1D8
+	char unk0x1DC[12];							//0x1DC
 };
 
 struct D2PathInfoStrc
 {
 	D2PathPointStrc pStartCoord;			//0x00
-	D2PathPointStrc field_4;				//0x04
+	D2PathPointStrc tTargetCoord;				//0x04
 	D2RoomStrc* pRoom;						//0x08
 	D2RoomStrc* field_C;					//0x0C
 	int32_t field_10;							//0x10
@@ -146,6 +155,21 @@ struct D2StaticPathStrc
 
 #pragma pack()
 
+// Path "precise" positions are encoded using 16bits fixed point
+inline uint32_t PATH_ToFP16(uint16_t value) {
+	return (value << 16) + (1 << 15);
+}
+inline uint16_t PATH_FromFP16(uint32_t value) {
+	return (value >> 16) & 0xFFFF;
+}
+
+enum D2PathConstants {
+	PATH_NB_DIRECTIONS = 64,
+	PATH_DIR_NULL = 255,
+	PATH_MAX_STEPNUM = 20,
+};
+inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
+
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA82A0 (#10141)
@@ -167,7 +191,7 @@ D2COMMON_DLL_DECL void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicP
 //D2Common.0x6FDA91B0 (#11282)
 D2COMMON_DLL_DECL int __stdcall D2Common_11282_Unused(int nMonsterId);
 //D2Common.0x6FDA9250 (#11281)
-D2COMMON_DLL_DECL int __stdcall D2Common_11281_Unused(D2UnitStrc* pUnit, int nSize);
+D2COMMON_DLL_DECL int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize);
 //D2Common.0x6FDA92F0 (#10214)
 D2COMMON_DLL_DECL void __stdcall D2Common_10214(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9480 (#10152)
@@ -203,9 +227,9 @@ D2COMMON_DLL_DECL void __stdcall D2COMMON_10208_PathSetPathingFlag(D2DynamicPath
 //D2Common.0x6FDA9B70 (#10209)
 D2COMMON_DLL_DECL BOOL __stdcall D2COMMON_10209_PathCheckPathingFlag(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B80 (#10154)
-D2COMMON_DLL_DECL int __stdcall D2Common_10154(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B90 (#11291)
-D2COMMON_DLL_DECL void __stdcall D2Common_11291(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetNumberOfPathPoints(D2DynamicPathStrc* pDynamicPath, int a2);
 //D2Common.0x6FDA9BC0 (#10155)
 D2COMMON_DLL_DECL int __stdcall D2Common_10155(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9BD0 (#10157)
@@ -333,7 +357,7 @@ D2COMMON_DLL_DECL void __stdcall D2COMMON_10212_PATH_SetMoveFlags(D2UnitStrc* pU
 //D2Common.0x6FDAA600 (#10213)
 D2COMMON_DLL_DECL void __stdcall D2Common_10213(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6A0 (#10220)
-D2COMMON_DLL_DECL int __stdcall D2Common_10220(int a1, int a2, int a3, int a4);
+D2COMMON_DLL_DECL int __stdcall PATH_ComputeSquaredDistance(int a1, int a2, int a3, int a4);
 //D2Common.0x6FDAA6D0 (#10221)
 D2COMMON_DLL_DECL void __stdcall D2Common_10221(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6F0 (#10237)

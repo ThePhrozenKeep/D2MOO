@@ -154,7 +154,7 @@ EXPORTS
 	D2Common_10151														@10151
 	PATH_AllocDynamicPath												@10152
 	D2Common_10153														@10153
-	D2Common_10154														@10154
+	PATH_GetNumberOfPathPoints								@10154
 	D2Common_10155														@10155
 	PATH_FreeDynamicPath												@10156
 	PATH_GetPathPoints													@10157
@@ -215,12 +215,12 @@ EXPORTS
 	D2COMMON_10212_PATH_SetMoveFlags									@10212
 	D2Common_10213														@10213
 	D2Common_10214														@10214
-	D2Common_10215														@10215
+	PATH_ComputeDirection												@10215
 	D2Common_10216														@10216
 	PATH_SetDistance													@10217
 	PATH_GetDistance													@10218
 	PATH_AddToDistance													@10219
-	D2Common_10220														@10220
+	PATH_ComputeSquaredDistance											@10220
 	D2Common_10221														@10221
 	D2Common_10222														@10222
 	D2Common_10223														@10223
@@ -235,7 +235,7 @@ EXPORTS
 	D2Common_10232														@10232
 	D2Common_10233														@10233
 	D2Common_10234														@10234
-	D2Common_10235_PATH_Last											@10235
+	D2Common_10235_PATH_UpdateRiderPath									@10235
 	D2Common_10236														@10236
 	D2Common_10237														@10237
 	D2COMMON_10238_Return												@10238
@@ -1281,7 +1281,7 @@ EXPORTS
 	INVENTORY_GetItemsXPosition											@11278
 	UNITROOM_AddUnitToRoomEx											@11279
 	MONSTERS_GetSpawnMode_XY											@11280
-	D2Common_11281_Unused												@11281
+	D2Common_11281_CollisionPatternFromSize								@11281
 	D2Common_11282_Unused												@11282
 	SKILLS_CalculateKickDamage											@11283
 	MISSILE_EvaluateMissileFormula										@11284
@@ -1291,7 +1291,7 @@ EXPORTS
 	MISSILE_GetMaxElemDamage											@11288
 	MISSILE_GetElemTypeFromMissileId									@11289
 	MISSILE_GetSpecialParamValue										@11290
-	D2Common_11291														@11291
+	PATH_SetNumberOfPathPoints								@11291
 	D2COMMON_11292_ItemAssignProperty									@11292
 	ITEMMODS_GetItemCharges												@11293
 	STATLIST_SetBaseStat												@11294

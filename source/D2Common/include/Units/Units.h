@@ -17,7 +17,7 @@ enum D2C_UnitTypes
 	UNIT_MISSILE,
 	UNIT_ITEM,
 	UNIT_TILE,
-	UNIT_COUNT, // Used as an invalid value
+	UNIT_TYPES_COUNT // Used as an invalid value
 };
 
 enum D2C_UnitFlags
@@ -64,6 +64,7 @@ enum D2C_UnitFlagsEx
 	UNITFLAGEX_HASBEENDELETED = 0x00000100,		//unit has been deleted but not free'd yet
 	UNITFLAGEX_STOREOWNERINFO = 0x00000400,		//unit stores info about owner
 	UNITFLAGEX_ISCORPSE = 0x00001000,			//unit is a corpse (use UNITFLAG_ISDEAD instead)
+	UNITFLAGEX_UNK_PATH_RELATED = 0x00002000,	//related to path
 	UNITFLAGEX_TELEPORTED = 0x00010000,			//unit has been teleported, needs resync
 	UNITFLAGEX_STORELASTATTACKER = 0x00020000,	//unit stores info about last attacker
 	UNITFLAGEX_NODRAW = 0x00040000,				//don't draw this unit
