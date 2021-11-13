@@ -85,3 +85,43 @@ int __fastcall Unicode::strlen(const Unicode* str) {
 
   return i;
 }
+
+Unicode* __fastcall Unicode::strstr(
+    const Unicode* str,
+    const Unicode* substr) {
+  if (str == NULL || substr == NULL) {
+    return NULL;
+  }
+
+  size_t i_str;
+  for (i_str = 0; ; ++i_str) {
+    for (; str[i_str].ch != substr[0].ch; ++i_str) {
+      if (str[i_str].ch == L'\0') {
+        return NULL;
+      }
+    }
+
+    if (str[i_str].ch == '\0') {
+      return NULL;
+    }
+
+    size_t i_substr;
+    for (i_substr = 0;
+        str[i_str + i_substr].ch == substr[i_substr].ch;
+        ++i_substr) {
+      if (str[i_str + i_substr].ch == L'\0') {
+        break;
+      }
+
+      if (substr[i_substr].ch == L'\0') {
+        return (Unicode*)&str[i_str];
+      }
+    }
+
+    if (substr[i_substr].ch == L'\0') {
+      return (Unicode*)&str[i_str];
+    }
+  }
+
+  return (Unicode*)&str[i_str];
+}
