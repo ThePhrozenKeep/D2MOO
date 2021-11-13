@@ -87,6 +87,17 @@ struct D2LANG_DLL_DECL Unicode {
   static Unicode* __fastcall strcat(Unicode* dest, const Unicode* src);
 
   /**
+   * Returns the first occurrence of a character in a null-terminated
+   * string.
+   *
+   * If the character could not be found, or the character to find is
+   * the null-terminating character, then the function returns NULL.
+   *
+   * D2Lang.0x6FC113C0 (#10035) ?strchr@Unicode@@SIPAU1@PBU1@U1@@Z
+   */
+  static Unicode* __fastcall strchr(const Unicode* str, Unicode ch);
+
+  /**
    * Compares two null-terminated strings lexicographically. Returns
    * -1, 0, or 1, depending on the results of the comparison.
    *
