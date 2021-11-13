@@ -73,6 +73,27 @@ Unicode* __fastcall Unicode::strcpy(Unicode* dest, const Unicode* src) {
   return dest;
 }
 
+int __fastcall Unicode::stricmp(const Unicode* str1, const Unicode* str2) {
+  /*
+   * This loop does not run beyond the end of either string. If the
+   * end of only one string is reached, then a comparison between '\0'
+   * to a different character is made, and a return is guaranteed to
+   * happen.
+   */
+  for (size_t i = 0; (str1[i].ch != L'\0') || (str2[i].ch != L'\0'); ++i) {
+    Unicode ch1_upper = str1[i].toUpper();
+    Unicode ch2_upper = str2[i].toUpper();
+
+    if (ch1_upper.ch < ch2_upper.ch) {
+      return -1;
+    } else if (ch1_upper.ch > ch2_upper.ch) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 int __fastcall Unicode::strlen(const Unicode* str) {
   if (str == NULL) {
     return 0;

@@ -104,6 +104,18 @@ struct D2LANG_DLL_DECL Unicode {
   static Unicode* __fastcall strcpy(Unicode* dest, const Unicode* src);
 
   /**
+   * Performs lexicographical, case-insensitive comparison between two
+   * null-terminated strings. Returns -1, 0, or 1, depending on the
+   * results of the comparison.
+   *
+   * If either string is the NULL pointer, then the behavior is
+   * undefined.
+   *
+   * D2Lang.0x6FC112A0 (#10039) ?stricmp@Unicode@@SIHPBU1@0@Z
+   */
+  static int __fastcall stricmp(const Unicode* str1, const Unicode* str2);
+
+  /**
    * Returns the length of the null-terminated string. If the string
    * pointer is NULL, the function returns 0;
    *
