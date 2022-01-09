@@ -4264,7 +4264,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 		return 0;
 	}
 
-	while (nBodyLoc < 13)
+	while (nBodyLoc < NUM_BODYLOC)
 	{
 		pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
 		if (pItem)

@@ -1314,7 +1314,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 //D2Common.0x6FD8FAB0 (#10253)
 BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc)
 {
-	if (pInventory && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (pInventory && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
 		return INVENTORY_PlaceItemInGrid(pInventory, pItem, nBodyLoc, 0, INVGRID_BODYLOC, 0, 0);
 	}
@@ -1325,7 +1325,7 @@ BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitS
 //D2Common.0x6FD8FAE0 (#10257)
 D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, int nBodyLoc)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1340,7 +1340,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, 
 //D2Common.0x6FD8FB20 (#10255)
 void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int nBodyLoc)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && !*ppItem && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && !*ppItem && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1992,7 +1992,7 @@ BOOL __stdcall INVENTORY_HasBodyArmorEquipped(D2InventoryStrc* pInventory)
 //D2Common.0x6FD908A0 (#10276)
 BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc, int nInventoryRecordId)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 
@@ -2946,12 +2946,12 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 					nOtherBodyLoc = BODYLOC_RARM;
 				}
 
-				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc) && pInventoryGrid)
 				{
 					pItem1 = pInventoryGrid->ppItems[nBodyLoc];
 				}
 
-				if (INVENTORY_CheckSignature(pUnit->pInventory) && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && INVENTORY_ValidateBodyLoc(nOtherBodyLoc) && pInventoryGrid)
 				{
 					pItem2 = pInventoryGrid->ppItems[nOtherBodyLoc];
 				}
@@ -2970,12 +2970,12 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 					nOtherBodyLoc = BODYLOC_SWRARM;
 				}
 
-				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc) && pInventoryGrid)
 				{
 					pItem1 = pInventoryGrid->ppItems[nBodyLoc];
 				}
 
-				if (INVENTORY_CheckSignature(pUnit->pInventory) && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && INVENTORY_ValidateBodyLoc(nOtherBodyLoc) && pInventoryGrid)
 				{
 					pItem2 = pInventoryGrid->ppItems[nOtherBodyLoc];
 				}
@@ -2985,7 +2985,7 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 			default:
 			{
 				D2UnitStrc* pInventoryItem = nullptr;
-				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc) && pInventoryGrid)
 				{
 					pInventoryItem = pInventoryGrid->ppItems[nBodyLoc];
 				}
@@ -3038,7 +3038,7 @@ int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, int nBodyLoc, D2UnitStr
 		}
 
 		const int nInventoryRecord = UNITS_GetInventoryRecordId(pPlayer, 0, 1);
-		if (INVENTORY_GetPtrIfValid(pPlayer->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
+		if (INVENTORY_GetPtrIfValid(pPlayer->pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 		{
 			D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pPlayer->pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 			if (pInventoryGrid && pInventoryGrid->ppItems[nBodyLoc] && INVENTORY_GetFreePosition(pPlayer->pInventory, pInventoryGrid->ppItems[nBodyLoc], nInventoryRecord, (int*)&a4, (int*)&pItem, 0))
