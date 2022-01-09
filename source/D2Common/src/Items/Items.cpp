@@ -907,12 +907,9 @@ uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
 //D2Common.0x6FD99500 (#10749)
 void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine)
 {
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
-		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
-		if (pItemsTxtRecord)
+		if (D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId))
 		{
 			*pWidth = pItemsTxtRecord->nInvWidth;
 			*pHeight = pItemsTxtRecord->nInvHeight;
