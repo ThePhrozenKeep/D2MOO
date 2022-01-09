@@ -145,6 +145,12 @@ struct D2ItemExtraDataStrc
 };
 #pragma pack()
 
+// Helper functions
+// Check if the header signature is correct. Assumes non null ptr.
+inline bool INVENTORY_CheckSignature(D2InventoryStrc* pInventory) { return pInventory->dwSignature == D2C_InventoryHeader; }
+// Check if ptr is non null and if header signature is correct.
+inline D2InventoryStrc* INVENTORY_GetPtrIfValid(D2InventoryStrc* pInventory) { return (pInventory && INVENTORY_CheckSignature(pInventory)) ? pInventory : nullptr; }
+
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);
 //D2Common.0x6FD8E4A0

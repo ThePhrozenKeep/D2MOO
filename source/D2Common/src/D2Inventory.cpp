@@ -325,7 +325,7 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 {
 	D2ItemExtraDataStrc* pItemExtraData = INVENTORY_GetItemExtraDataFromItem(pItem);
 
-	if (!pItemExtraData || !pItemExtraData->pParentInv || pItemExtraData->pParentInv->dwSignature != 0x1020304)
+	if (!pItemExtraData || !INVENTORY_GetPtrIfValid(pItemExtraData->pParentInv))
 	{
 		return FALSE;
 	}
@@ -489,7 +489,7 @@ D2InventoryStrc* __stdcall INVENTORY_AllocInventory(void* pMemPool, D2UnitStrc* 
 	{
 		memset(pInventory, 0x00, sizeof(D2InventoryStrc));
 
-		pInventory->dwSignature = 0x1020304;
+		pInventory->dwSignature = D2C_InventoryHeader;
 		pInventory->pMemPool = pMemPool;
 		pInventory->pOwner = pOwner;
 
@@ -506,7 +506,7 @@ D2InventoryStrc* __stdcall INVENTORY_AllocInventory(void* pMemPool, D2UnitStrc* 
 //D2Common.0x6FD8E520 (#10241)
 void __stdcall INVENTORY_FreeInventory(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		if (pInventory->pCursorItem)
 		{
@@ -587,7 +587,7 @@ D2UnitStrc* __stdcall INVENTORY_RemoveItemFromInventory(D2InventoryStrc* pInvent
 //D2Common.0x6FD8E6A0 (#10242)
 BOOL __stdcall INVENTORY_PlaceItemInSocket(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nUnused)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
 	}
@@ -639,7 +639,7 @@ BOOL __stdcall INVENTORY_PlaceItemInSocket(D2InventoryStrc* pInventory, D2UnitSt
 //D2Common.0x6FD8E7A0 (#10277)
 D2UnitStrc* __stdcall INVENTORY_GetFirstItem(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->pFirstItem;
 	}
@@ -650,7 +650,7 @@ D2UnitStrc* __stdcall INVENTORY_GetFirstItem(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8E7C0 (#10278)
 D2UnitStrc* __stdcall INVENTORY_GetLastItem(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->pLastItem;
 	}
@@ -661,7 +661,7 @@ D2UnitStrc* __stdcall INVENTORY_GetLastItem(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8E7E0 (#10245)
 BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, uint8_t nPage)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !pItem || pItem->dwUnitType != UNIT_ITEM || !pItem->pItemData)
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !pItem || pItem->dwUnitType != UNIT_ITEM || !pItem->pItemData)
 	{
 		return FALSE;
 	}
@@ -964,7 +964,7 @@ BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2
 //D2Common.0x6FD8F250
 BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryGrid, int nInventoryRecordId, BOOL bUnused)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
 	}
@@ -1121,7 +1121,7 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 {
 	*pHoveredItems = 0;
 
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !pItem || pItem->dwUnitType != UNIT_ITEM || nPage == -1 || nXPos < 0 || nYPos < 0)
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !pItem || pItem->dwUnitType != UNIT_ITEM || nPage == -1 || nXPos < 0 || nYPos < 0)
 	{
 		return FALSE;
 	}
@@ -1184,7 +1184,7 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 //D2Common.0x6FD8F780 (#10248)
 BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, uint8_t nPage, BOOL bCheckIfCube)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !pItem || pItem->dwUnitType != UNIT_ITEM || nPage == -1 || nXPos < 0 || nYPos < 0)
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !pItem || pItem->dwUnitType != UNIT_ITEM || nPage == -1 || nXPos < 0 || nYPos < 0)
 	{
 		return FALSE;
 	}
@@ -1268,7 +1268,7 @@ void __stdcall INVENTORY_Return(char* szFile, int nLine, D2InventoryStrc* pInven
 //D2Common.0x6FD8F980 (#10252)
 D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, uint8_t nPage)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -1325,7 +1325,7 @@ BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitS
 //D2Common.0x6FD8FAE0 (#10257)
 D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, int nBodyLoc)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1340,7 +1340,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, 
 //D2Common.0x6FD8FB20 (#10255)
 void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int nBodyLoc)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && !*ppItem && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && !*ppItem && nBodyLoc >= 0 && nBodyLoc < 13)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1366,7 +1366,7 @@ void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2Inventor
 //D2Common.0x6FD8FBB0 (#10256)
 BOOL __stdcall INVENTORY_CheckEquipmentForWeaponByClass(D2InventoryStrc* pInventory, int nWeaponClass)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 
@@ -1391,7 +1391,7 @@ BOOL __stdcall INVENTORY_CheckEquipmentForWeaponByClass(D2InventoryStrc* pInvent
 //D2Common.0x6FD8FC60 (#10258)
 D2UnitStrc* __stdcall INVENTORY_GetLeftHandWeapon(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pInventory->dwLeftItemGUID != -1)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != -1)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1416,7 +1416,7 @@ D2UnitStrc* __stdcall INVENTORY_GetLeftHandWeapon(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8FD10 (#11301)
 D2UnitStrc* __stdcall INVENTORY_GetSecondaryWeapon(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pInventory->dwLeftItemGUID != -1)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != -1)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1451,7 +1451,7 @@ D2UnitStrc* __stdcall INVENTORY_GetSecondaryWeapon(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8FDD0 (#10259)
 D2UnitStrc* __stdcall INVENTORY_GetCompositItem(D2InventoryStrc* pInventory, int nComponent)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -1498,7 +1498,7 @@ D2UnitStrc* __stdcall INVENTORY_GetCompositItem(D2InventoryStrc* pInventory, int
 //D2Common.0x6FD8FE80 (#10260)
 int __stdcall INVENTORY_GetBodyLocFromEquippedItem(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pStaticPath->nXPos < 11)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pStaticPath->nXPos < 11)
 	{
 		return pItem->pStaticPath->nXPos;
 	}
@@ -1509,7 +1509,7 @@ int __stdcall INVENTORY_GetBodyLocFromEquippedItem(D2InventoryStrc* pInventory, 
 //D2Common.0x6FD8FED0 (#11278)
 int __stdcall INVENTORY_GetItemsXPosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pItem && pItem->dwUnitType == UNIT_ITEM)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
 		return pItem->pStaticPath->nXPos;
 	}
@@ -1520,7 +1520,7 @@ int __stdcall INVENTORY_GetItemsXPosition(D2InventoryStrc* pInventory, D2UnitStr
 //D2Common.0x6FD8FF20 (#10261)
 void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		if (pItem)
 		{
@@ -1541,7 +1541,7 @@ void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc* pInventory, D2UnitStrc* 
 //D2Common.0x6FD8FF80 (#10262)
 D2UnitStrc* __stdcall INVENTORY_GetCursorItem(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->pCursorItem;
 	}
@@ -1552,7 +1552,7 @@ D2UnitStrc* __stdcall INVENTORY_GetCursorItem(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8FFA0 (#10263)
 D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInventory, D2UnitStrc* pStackable, D2UnitStrc* pCheckItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -1604,7 +1604,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 //D2Common.0x6FD90080 (#10264)
 D2UnitStrc* __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc* pInventory, D2UnitStrc* pStackable, D2UnitStrc* pCheckItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -1645,7 +1645,7 @@ D2UnitStrc* __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc* pInven
 //D2Common.0x6FD90130 (#10265)
 D2UnitStrc* __stdcall INVENTORY_FindFillableBook(D2InventoryStrc* pInventory, D2UnitStrc* pScrolls, D2UnitStrc* pCheckItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -1716,7 +1716,7 @@ BOOL __stdcall INVENTORY_PlaceItemInBeltSlot(D2InventoryStrc* pInventory, D2Unit
 //D2Common.0x6FD902B0 (#10268)
 BOOL __stdcall INVENTORY_HasSimilarPotionInBelt(D2InventoryStrc* pInventory, D2UnitStrc* pPotion)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pPotion && pPotion->dwUnitType == UNIT_ITEM)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pPotion && pPotion->dwUnitType == UNIT_ITEM)
 	{
 		D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pPotion->dwClassId);
 		if (pItemsTxtRecord && pItemsTxtRecord->dwCode != ' csi' && pItemsTxtRecord->dwCode != ' cst')
@@ -1741,7 +1741,7 @@ BOOL __stdcall INVENTORY_HasSimilarPotionInBelt(D2InventoryStrc* pInventory, D2U
 //D2Common.0x6FD90340 (#10269)
 BOOL __stdcall INVENTORY_GetFreeBeltSlot(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int* pFreeSlotId)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !pItem || pItem->dwUnitType != UNIT_ITEM || !ITEMS_CheckIfBeltable(pItem))
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !pItem || pItem->dwUnitType != UNIT_ITEM || !ITEMS_CheckIfBeltable(pItem))
 	{
 		return FALSE;
 	}
@@ -1822,7 +1822,7 @@ BOOL __stdcall INVENTORY_PlaceItemInFreeBeltSlot(D2InventoryStrc* pInventory, D2
 //D2Common.0x6FD90550 (#10271)
 D2UnitStrc* __stdcall INVENTORY_GetItemFromBeltSlot(D2InventoryStrc* pInventory, int nSlotId)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BELT, &gBeltInventoryGridInfo);
 		if (pInventoryGrid && nSlotId >= 0 && nSlotId < 16)
@@ -1837,7 +1837,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromBeltSlot(D2InventoryStrc* pInventory,
 //D2Common.0x6FD90590 (#10272)
 BOOL __stdcall INVENTORY_GetUseableItemFromBeltSlot(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nSlotId, D2UnitStrc** ppItem)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BELT, &gBeltInventoryGridInfo);
 		if (pInventoryGrid && pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_CheckIfBeltable(pItem))
@@ -1872,7 +1872,7 @@ BOOL __stdcall INVENTORY_GetUseableItemFromBeltSlot(D2InventoryStrc* pInventory,
 //D2Common.0x6FD90690 (#10273)
 BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc* pInventory, D2UnitStrc** ppItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
 	}
@@ -1926,7 +1926,7 @@ BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc* pInventory, D2UnitSt
 //D2Common.0x6FD90760 (#10274)
 BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int* pBodyLoc, BOOL* pIsLeftHandItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		*ppItem = nullptr;
 		return FALSE;
@@ -1977,7 +1977,7 @@ BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitSt
 //D2Common.0x6FD90850 (#10275)
 BOOL __stdcall INVENTORY_HasBodyArmorEquipped(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid && pInventoryGrid->ppItems[BODYLOC_TORSO])
@@ -1992,7 +1992,7 @@ BOOL __stdcall INVENTORY_HasBodyArmorEquipped(D2InventoryStrc* pInventory)
 //D2Common.0x6FD908A0 (#10276)
 BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc, int nInventoryRecordId)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13)
+	if (INVENTORY_GetPtrIfValid(pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 
@@ -2010,7 +2010,7 @@ BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitSt
 //D2Common.0x6FD90910 (#10279)
 void __stdcall INVENTORY_RemoveInventoryItems(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		for (D2UnitStrc* pItem = pInventory->pFirstItem; pItem; pItem = pInventory->pFirstItem)
 		{
@@ -2022,7 +2022,7 @@ void __stdcall INVENTORY_RemoveInventoryItems(D2InventoryStrc* pInventory)
 //D2Common.0x6FD90940 (#10280)
 D2InventoryNodeStrc* __stdcall INVENTORY_GetTradeInventory(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->pFirstNode;
 	}
@@ -2033,7 +2033,7 @@ D2InventoryNodeStrc* __stdcall INVENTORY_GetTradeInventory(D2InventoryStrc* pInv
 //D2Common.0x6FD90960 (#10281)
 void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2InventoryNodeStrc* pNextNode = nullptr;
 		for (D2InventoryNodeStrc* pNode = pInventory->pFirstNode; pNode; pNode = pNextNode)
@@ -2050,7 +2050,7 @@ void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory)
 //D2Common.0x6FD909B0 (#10282)
 BOOL __stdcall INVENTORY_CheckForItemInTradeInventory(D2InventoryStrc* pInventory, int nItemId)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		for (D2InventoryNodeStrc* pNode = pInventory->pFirstNode; pNode; pNode = pNode->pNext)
 		{
@@ -2109,7 +2109,7 @@ int __stdcall D2Common_10316(D2CorpseStrc* pCorpse)
 //D2Common.0x6FD90AC0 (#10284)
 int __stdcall INVENTORY_GetItemCount(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->dwItemCount;
 	}
@@ -2120,7 +2120,7 @@ int __stdcall INVENTORY_GetItemCount(D2InventoryStrc* pInventory)
 //D2Common.0x6FD90AE0 (#10285)
 D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventory, int nItemType, D2UnitStrc* pCheckItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -2174,7 +2174,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventor
 //D2Common.0x6FD90BC0 (#10286)
 D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc* pInventory, int nItemType, D2UnitStrc* pCheckItem)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return nullptr;
 	}
@@ -2216,7 +2216,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc* pInventor
 D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByCode(D2InventoryStrc* pInventory, int nItemCode, D2UnitStrc* pCheckItem)
 {
 	int nClassId = 0;
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !DATATBLS_GetItemRecordFromItemCode(nItemCode, &nClassId))
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !DATATBLS_GetItemRecordFromItemCode(nItemCode, &nClassId))
 	{
 		return nullptr;
 	}
@@ -2258,7 +2258,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByCode(D2InventoryStrc* pInventor
 D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByCode(D2InventoryStrc* pInventory, int nItemCode, D2UnitStrc* pCheckItem)
 {
 	int nClassId = 0;
-	if (!pInventory || pInventory->dwSignature != 0x1020304 || !DATATBLS_GetItemRecordFromItemCode(nItemCode, &nClassId))
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !DATATBLS_GetItemRecordFromItemCode(nItemCode, &nClassId))
 	{
 		return nullptr;
 	}
@@ -2299,7 +2299,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByCode(D2InventoryStrc* pInventor
 //D2Common.0x6FD90E20 (#10288)
 int __stdcall INVENTORY_GetSetItemEquipCountByFileIndex(D2InventoryStrc* pInventory, int nItemFileIndex)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return 0;
 	}
@@ -2337,7 +2337,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnInsert(D2InventoryStrc* pInventory, D
 				D2UnitStrc* pWeapon = INVENTORY_GetLeftHandWeapon(pInventory);
 				if (!pWeapon || !ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_WEAPON) || ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_MISSILE_POTION))
 				{
-					if (pInventory->dwSignature == 0x1020304)
+					if (INVENTORY_CheckSignature(pInventory))
 					{
 						pInventory->dwLeftItemGUID = pItem->dwUnitId;
 					}
@@ -2345,7 +2345,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnInsert(D2InventoryStrc* pInventory, D
 				}
 			}
 			
-			if (pInventory->dwSignature == 0x1020304 && pInventory->dwLeftItemGUID == pItem->dwUnitId)
+			if (INVENTORY_CheckSignature(pInventory) && pInventory->dwLeftItemGUID == pItem->dwUnitId)
 			{
 				pInventory->dwLeftItemGUID = -1;
 			}
@@ -2356,7 +2356,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnInsert(D2InventoryStrc* pInventory, D
 //D2Common.0x6FD90F80 (#10290)
 void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON))
+	if (INVENTORY_GetPtrIfValid(pInventory) && pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON))
 	{
 		if (pItem->dwUnitType == UNIT_ITEM && pInventory->dwLeftItemGUID == pItem->dwUnitId)
 		{
@@ -2397,7 +2397,7 @@ int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInve
 		D2UnitStrc* pRightHandItem = nullptr;
 		D2UnitStrc* pLeftHandItem = nullptr;
 
-		if (pInventory->dwSignature == 0x1020304)
+		if (INVENTORY_CheckSignature(pInventory))
 		{
 			D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 			if (pInventoryGrid)
@@ -2472,7 +2472,7 @@ int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInve
 //D2Common.0x6FD91140 (#10292)
 void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, int nOwnerId)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		pInventory->dwOwnerId = nOwnerId;
 	}
@@ -2481,7 +2481,7 @@ void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, int nOwnerId)
 //D2Common.0x6FD91160 (#10293)
 int __stdcall INVENTORY_GetOwnerId(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->dwOwnerId;
 	}
@@ -2492,7 +2492,7 @@ int __stdcall INVENTORY_GetOwnerId(D2InventoryStrc* pInventory)
 //D2Common.0x6FD91190 (#10294)
 void __stdcall INVENTORY_CreateCorpseForPlayer(D2InventoryStrc* pInventory, int nUnitId, int a3, int a4)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		D2CorpseStrc* pCorpse = (D2CorpseStrc*)FOG_AllocServerMemory(pInventory->pMemPool, sizeof(D2CorpseStrc), __FILE__, __LINE__, 0);
 		pCorpse->unk0x00 = a4;
@@ -2521,7 +2521,7 @@ void __stdcall INVENTORY_CreateCorpseForPlayer(D2InventoryStrc* pInventory, int 
 //D2Common.0x6FD91210 (#10295)
 BOOL __stdcall INVENTORY_FreeCorpse(D2InventoryStrc* pInventory, int nUnitId, int a3)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304 && pInventory->pFirstCorpse)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->pFirstCorpse)
 	{
 		D2CorpseStrc* pPreviousCorpse = nullptr;
 		D2CorpseStrc* pCorpse = pInventory->pFirstCorpse;
@@ -2568,7 +2568,7 @@ BOOL __stdcall INVENTORY_FreeCorpse(D2InventoryStrc* pInventory, int nUnitId, in
 //D2Common.0x6FD91290 (#10296)
 D2CorpseStrc* __stdcall INVENTORY_GetFirstCorpse(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->pFirstCorpse;
 	}
@@ -2579,7 +2579,7 @@ D2CorpseStrc* __stdcall INVENTORY_GetFirstCorpse(D2InventoryStrc* pInventory)
 //D2Common.0x6FD912B0 (#10297)
 int __stdcall INVENTORY_GetCorpseCount(D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return pInventory->nCorpseCount;
 	}
@@ -2946,12 +2946,12 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 					nOtherBodyLoc = BODYLOC_RARM;
 				}
 
-				if (pUnit->pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
 				{
 					pItem1 = pInventoryGrid->ppItems[nBodyLoc];
 				}
 
-				if (pUnit->pInventory->dwSignature == 0x1020304 && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
 				{
 					pItem2 = pInventoryGrid->ppItems[nOtherBodyLoc];
 				}
@@ -2970,12 +2970,12 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 					nOtherBodyLoc = BODYLOC_SWRARM;
 				}
 
-				if (pUnit->pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
 				{
 					pItem1 = pInventoryGrid->ppItems[nBodyLoc];
 				}
 
-				if (pUnit->pInventory->dwSignature == 0x1020304 && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && nOtherBodyLoc >= 0 && nOtherBodyLoc < 13 && pInventoryGrid)
 				{
 					pItem2 = pInventoryGrid->ppItems[nOtherBodyLoc];
 				}
@@ -2985,7 +2985,7 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 			default:
 			{
 				D2UnitStrc* pInventoryItem = nullptr;
-				if (pUnit->pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
+				if (INVENTORY_CheckSignature(pUnit->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13 && pInventoryGrid)
 				{
 					pInventoryItem = pInventoryGrid->ppItems[nBodyLoc];
 				}
@@ -3038,7 +3038,7 @@ int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, int nBodyLoc, D2UnitStr
 		}
 
 		const int nInventoryRecord = UNITS_GetInventoryRecordId(pPlayer, 0, 1);
-		if (pPlayer->pInventory && pPlayer->pInventory->dwSignature == 0x1020304 && nBodyLoc >= 0 && nBodyLoc < 13)
+		if (INVENTORY_GetPtrIfValid(pPlayer->pInventory) && nBodyLoc >= 0 && nBodyLoc < 13)
 		{
 			D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pPlayer->pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 			if (pInventoryGrid && pInventoryGrid->ppItems[nBodyLoc] && INVENTORY_GetFreePosition(pPlayer->pInventory, pInventoryGrid->ppItems[nBodyLoc], nInventoryRecord, (int*)&a4, (int*)&pItem, 0))
@@ -3245,7 +3245,7 @@ int __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode)
 //D2Common.0x6FD92180 (#10300)
 BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 {
-	if (!pInventory || pInventory->dwSignature != 0x1020304)
+	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
 	}
@@ -3317,7 +3317,7 @@ BOOL __stdcall INVENTORY_CanItemsBeTraded(void* pMemPool, D2UnitStrc* pPlayer1, 
 //D2Common.0x6FD923C0
 BOOL __fastcall INVENTORY_CopyUnitItemsToTradeInventory(D2InventoryStrc* pTradeInventory, D2UnitStrc* pUnit)
 {
-	if (pTradeInventory && pTradeInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pTradeInventory))
 	{
 		const int nInventoryRecordId = UNITS_GetInventoryRecordId(pUnit, INVPAGE_INVENTORY, TRUE);
 		D2InventoryGridInfoStrc pInventoryGridInfo = {};
@@ -3325,7 +3325,7 @@ BOOL __fastcall INVENTORY_CopyUnitItemsToTradeInventory(D2InventoryStrc* pTradeI
 
 		D2InventoryGridStrc* pTradeInventoryGrid = INVENTORY_GetGrid(pTradeInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 
-		if (pTradeInventoryGrid && pUnit->pInventory && pUnit->pInventory->dwSignature == 0x1020304)
+		if (pTradeInventoryGrid && INVENTORY_GetPtrIfValid(pUnit->pInventory))
 		{
 			D2InventoryGridStrc* pUnitInventoryGrid = INVENTORY_GetGrid(pUnit->pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 
@@ -3346,7 +3346,7 @@ BOOL __fastcall INVENTORY_CopyUnitItemsToTradeInventory(D2InventoryStrc* pTradeI
 //D2Common.0x6FD92490
 BOOL __fastcall INVENTORY_CanItemBePlacedInInventory(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2InventoryStrc* pInventory)
 {
-	if (pInventory && pInventory->dwSignature == 0x1020304)
+	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		const int nInventoryRecordId = UNITS_GetInventoryRecordId(pPlayer, INVPAGE_INVENTORY, TRUE);
 		D2InventoryGridInfoStrc pInventoryGridInfo = {};
