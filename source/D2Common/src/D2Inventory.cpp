@@ -484,7 +484,7 @@ D2InventoryStrc* __stdcall INVENTORY_AllocInventory(void* pMemPool, D2UnitStrc* 
 		pMemPool = pOwner->pMemoryPool;
 	}
 
-	D2InventoryStrc* pInventory = (D2InventoryStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2InventoryStrc), __FILE__, __LINE__, 0);
+	D2InventoryStrc* pInventory = D2_ALLOC_STRC_SERVER(pMemPool, D2InventoryStrc);
 	if (pInventory)
 	{
 		memset(pInventory, 0x00, sizeof(D2InventoryStrc));
@@ -522,13 +522,13 @@ void __stdcall INVENTORY_FreeInventory(D2InventoryStrc* pInventory)
 		{
 			if (pInventory->pGrids[i].ppItems)
 			{
-				FOG_FreeServerMemory(pInventory->pMemPool, pInventory->pGrids[i].ppItems, __FILE__, __LINE__, 0);
+				D2_FREE_SERVER(pInventory->pMemPool, pInventory->pGrids[i].ppItems);
 			}
 		}
 
 		if (pInventory->pGrids)
 		{
-			FOG_FreeServerMemory(pInventory->pMemPool, pInventory->pGrids, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pInventory->pMemPool, pInventory->pGrids);
 		}
 
 		if (pInventory->pOwner)
@@ -540,7 +540,7 @@ void __stdcall INVENTORY_FreeInventory(D2InventoryStrc* pInventory)
 		for (D2InventoryNodeStrc* pNode = pInventory->pFirstNode; pNode; pNode = pNextNode)
 		{
 			pNextNode = pNode->pNext;
-			FOG_FreeServerMemory(pInventory->pMemPool, pNode, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pInventory->pMemPool, pNode);
 			
 		}
 
@@ -548,10 +548,10 @@ void __stdcall INVENTORY_FreeInventory(D2InventoryStrc* pInventory)
 		for (D2CorpseStrc* pCorpse = pInventory->pFirstCorpse; pCorpse; pCorpse = pNextCorpse)
 		{
 			pNextCorpse = pCorpse->pNextCorpse;
-			FOG_FreeServerMemory(pInventory->pMemPool, pCorpse, __FILE__, __LINE__, 0);	
+			D2_FREE_SERVER(pInventory->pMemPool, pCorpse);
 		}
 
-		FOG_FreeServerMemory(pInventory->pMemPool, pInventory, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pInventory->pMemPool, pInventory);
 	}
 }
 
@@ -672,7 +672,7 @@ BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc
 	D2InventoryGridInfoStrc pInventoryGridInfo = {};
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
-	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
+	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + INVGRID_INVENTORY, &pInventoryGridInfo);
 	if (!pInventoryGrid)
 	{
 		return FALSE;
@@ -722,14 +722,14 @@ D2InventoryGridStrc* __fastcall INVENTORY_GetGrid(D2InventoryStrc* pInventory, i
 			return nullptr;
 		}
 
-		pInventory->pGrids = (D2InventoryGridStrc*)FOG_ReallocServerMemory(pInventory->pMemPool, pInventory->pGrids, sizeof(D2InventoryGridStrc) * (nInventoryGrid + 1), __FILE__, __LINE__, 0);
+		pInventory->pGrids = (D2InventoryGridStrc*)D2_REALLOC_SERVER(pInventory->pMemPool, pInventory->pGrids, sizeof(D2InventoryGridStrc) * (nInventoryGrid + 1));
 		memset(&pInventory->pGrids[pInventory->nGridCount], 0x00, sizeof(D2InventoryGridStrc) * (nInventoryGrid - pInventory->nGridCount + 1));
 		pInventory->nGridCount = nInventoryGrid + 1;
 
 		pInventoryGrid = &pInventory->pGrids[nInventoryGrid];
 		pInventoryGrid->nGridWidth = pInventoryGridInfo->nGridX;
 		pInventoryGrid->nGridHeight = pInventoryGridInfo->nGridY;
-		pInventoryGrid->ppItems = (D2UnitStrc**)FOG_AllocServerMemory(pInventory->pMemPool, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth, __FILE__, __LINE__, 0);
+		pInventoryGrid->ppItems = (D2UnitStrc**)D2_ALLOC_SERVER(pInventory->pMemPool, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth);
 		memset(pInventoryGrid->ppItems, 0x00, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth);
 	}
 	else
@@ -741,7 +741,7 @@ D2InventoryGridStrc* __fastcall INVENTORY_GetGrid(D2InventoryStrc* pInventory, i
 			{
 				pInventoryGrid->nGridWidth = pInventoryGridInfo->nGridX;
 				pInventoryGrid->nGridHeight = pInventoryGridInfo->nGridY;
-				pInventoryGrid->ppItems = (D2UnitStrc**)FOG_AllocServerMemory(pInventory->pMemPool, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth, __FILE__, __LINE__, 0);
+				pInventoryGrid->ppItems = (D2UnitStrc**)D2_ALLOC_SERVER(pInventory->pMemPool, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth);
 				memset(pInventoryGrid->ppItems, 0x00, sizeof(D2UnitStrc*) * pInventoryGrid->nGridHeight * pInventoryGrid->nGridWidth);
 			}
 
@@ -2034,7 +2034,7 @@ void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory)
 		for (D2InventoryNodeStrc* pNode = pInventory->pFirstNode; pNode; pNode = pNextNode)
 		{
 			pNextNode = pNode->pNext;
-			FOG_FreeServerMemory(pInventory->pMemPool, pNode, __FILE__, __LINE__, 0);
+			D2_FREE_SERVER(pInventory->pMemPool, pNode);
 		}
 
 		pInventory->pFirstNode = nullptr;
@@ -2069,7 +2069,7 @@ void __stdcall INVENTORY_AddItemToTradeInventory(D2InventoryStrc* pInventory, D2
 			return;
 		}
 
-		D2InventoryNodeStrc* pNode = (D2InventoryNodeStrc*)FOG_AllocServerMemory(pInventory->pMemPool, sizeof(D2InventoryNodeStrc), __FILE__, __LINE__, 0);
+		D2InventoryNodeStrc* pNode = D2_ALLOC_STRC_SERVER(pInventory->pMemPool, D2InventoryNodeStrc);
 		D2_ASSERT(pNode);
 
 		pNode->pNext = nullptr;
@@ -2489,7 +2489,7 @@ void __stdcall INVENTORY_CreateCorpseForPlayer(D2InventoryStrc* pInventory, int 
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
-		D2CorpseStrc* pCorpse = (D2CorpseStrc*)FOG_AllocServerMemory(pInventory->pMemPool, sizeof(D2CorpseStrc), __FILE__, __LINE__, 0);
+		D2CorpseStrc* pCorpse = D2_ALLOC_STRC_SERVER(pInventory->pMemPool, D2CorpseStrc);
 		pCorpse->unk0x00 = a4;
 		pCorpse->dwUnitId = nUnitId;
 		pCorpse->unk0x08 = a3;
@@ -2553,7 +2553,7 @@ BOOL __stdcall INVENTORY_FreeCorpse(D2InventoryStrc* pInventory, int nUnitId, in
 			--pInventory->nCorpseCount;
 		}
 
-		FOG_FreeServerMemory(pInventory->pMemPool, pCorpse, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pInventory->pMemPool, pCorpse);
 		return TRUE;
 	}
 	
