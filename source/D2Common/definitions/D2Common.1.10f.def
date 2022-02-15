@@ -683,9 +683,9 @@ EXPORTS
 	DATATBLS_Get1OfNFromOverlayTxt										@10680
 	DATATBLS_GetDirFromOverlayTxt										@10681
 	DATATBLS_GetMonSeqTxtRecordFromUnit									@10682
-	D2Common_10683														@10683
-	D2Common_10684														@10684
-	D2Common_10685														@10685
+	DATATBLS_GetSeqFramePointsCount										@10683
+	DATATBLS_GetSeqFrameCount											@10684
+	DATATBLS_ComputeSequenceAnimation									@10685
 	DATATBLS_GetSequenceEvent											@10686
 	ITEMS_AllocItemData													@10687
 	ITEMS_FreeItemData													@10688

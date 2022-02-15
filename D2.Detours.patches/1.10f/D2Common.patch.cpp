@@ -718,11 +718,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetRadiusAndColorFromOverlayTxt                            @10679
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_Get1OfNFromOverlayTxt                                      @10680
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetDirFromOverlayTxt                                       @10681
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonSeqTxtRecordFromUnit                                 @10682
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10683                                                      @10683
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10684                                                      @10684
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10685                                                      @10685
-    PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetSequenceEvent                                           @10686
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetMonSeqTxtRecordFromUnit                                 @10682
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSeqFramePointsCount                                     @10683
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSeqFrameCount                                           @10684
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_ComputeSequenceAnimation                                   @10685
+    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSequenceEvent                                           @10686
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_AllocItemData                                                 @10687
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_FreeItemData                                                  @10688
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetBodyLocation                                               @10689
