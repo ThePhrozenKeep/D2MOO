@@ -1183,7 +1183,7 @@ D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 
 		if (nSequenceNum > 0)
 		{
-			int nUnitType = UNIT_COUNT;
+			int nUnitType = UNIT_TYPES_COUNT;
 			if (pUnit)
 			{
 				nUnitType = pUnit->dwUnitType;
