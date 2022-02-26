@@ -11,7 +11,7 @@
 #include "Units/Units.h"
 #include <Path/Path.h>
 
-struct D2UnkInventoryComponentStrc
+struct D2InventoryComponentItemTypeStrc
 {
 	int dwCode;
 	int nItemType;
@@ -24,7 +24,7 @@ D2InventoryGridInfoStrc gBodyLocInventoryGridInfo = { 13, 1, 0, 0, 0, 0, 0, 0, 0
 D2InventoryGridInfoStrc gBeltInventoryGridInfo = { 16, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 //D2Common.0x6FDE2820
-D2UnkInventoryComponentStrc stru_6FDE2820[]
+D2InventoryComponentItemTypeStrc gComponentItemTypeMap[]
 {
 	{ 0, ITEMTYPE_NONE_2 },
 	{ ' til', ITEMTYPE_NONE_2 },
@@ -312,7 +312,7 @@ D2UnkInventoryComponentStrc stru_6FDE2820[]
 };
 
 //D2Common.0x6FDEA708
-D2UnkInventoryComponentStrc stru_6FDEA708[255] = {};
+D2InventoryComponentItemTypeStrc gTxtComponentItemTypeMap[255] = {};
 
 //D2Common.0x6FDEAF00
 int gnComponentArrayRecordCount;
@@ -2621,29 +2621,29 @@ int __stdcall D2Common_10315(D2CorpseStrc* pCorpse)
 // Helper function
 inline int INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(D2ItemsTxt* pItemsTxtRecord)
 {
-	for (int nCounter = 1; nCounter < ARRAY_SIZE(stru_6FDEA708); ++nCounter)
+	for (int nCounter = 1; nCounter < ARRAY_SIZE(gTxtComponentItemTypeMap); ++nCounter)
 	{
-		if (stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx || stru_6FDEA708[nCounter].dwCode == pItemsTxtRecord->dwCode)
+		if (gTxtComponentItemTypeMap[nCounter].dwCode == pItemsTxtRecord->dwAlternateGfx || gTxtComponentItemTypeMap[nCounter].dwCode == pItemsTxtRecord->dwCode)
 		{
 			return nCounter;
 		}
 	}
 
-	return ARRAY_SIZE(stru_6FDEA708);
+	return ARRAY_SIZE(gTxtComponentItemTypeMap);
 }
 
 // Helper function
 inline int INVENTORY_GetComponentArrayIndexFromArmTypeTxtRecord(D2ArmTypeTxt* pArmTypeTxtRecord)
 {
-	for (int nCounter = 1; nCounter < ARRAY_SIZE(stru_6FDEA708); ++nCounter)
+	for (int nCounter = 1; nCounter < ARRAY_SIZE(gTxtComponentItemTypeMap); ++nCounter)
 	{
-		if (stru_6FDEA708[nCounter].dwCode == *(uint32_t*)&pArmTypeTxtRecord->szToken[0])
+		if (gTxtComponentItemTypeMap[nCounter].dwCode == *(uint32_t*)&pArmTypeTxtRecord->szToken[0])
 		{
 			return nCounter;
 		}
 	}
 
-	return ARRAY_SIZE(stru_6FDEA708);
+	return ARRAY_SIZE(gTxtComponentItemTypeMap);
 }
 
 //D2Common.0x6FD912F0 (#10298)
@@ -2670,7 +2670,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 
 					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
 
-					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
+					if (nIndex >= ARRAY_SIZE(gTxtComponentItemTypeMap))
 					{
 						if (nComponent < NUM_COMPONENTS)
 						{
@@ -2726,7 +2726,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 
 							const int nIndex = INVENTORY_GetComponentArrayIndexFromArmTypeTxtRecord(pArmTypeTxtRecord);
 
-							if (nIndex < ARRAY_SIZE(stru_6FDEA708))
+							if (nIndex < ARRAY_SIZE(gTxtComponentItemTypeMap))
 							{
 								a2[i] = nIndex;
 
@@ -2765,14 +2765,14 @@ void __fastcall INVENTORY_InitializeComponentArray()
 	{
 		gbComponentArrayInitialized = TRUE;
 
-		memset(stru_6FDEA708, 0x00, sizeof(stru_6FDEA708));
+		memset(gTxtComponentItemTypeMap, 0x00, sizeof(gTxtComponentItemTypeMap));
 
-		stru_6FDEA708[1].dwCode = ' til';
-		stru_6FDEA708[1].nItemType = ITEMTYPE_ARMOR;
-		stru_6FDEA708[2].dwCode = ' dem';
-		stru_6FDEA708[2].nItemType = ITEMTYPE_ARMOR;
-		stru_6FDEA708[3].dwCode = ' yvh';
-		stru_6FDEA708[3].nItemType = ITEMTYPE_ARMOR;
+		gTxtComponentItemTypeMap[1].dwCode = ' til';
+		gTxtComponentItemTypeMap[1].nItemType = ITEMTYPE_ARMOR;
+		gTxtComponentItemTypeMap[2].dwCode = ' dem';
+		gTxtComponentItemTypeMap[2].nItemType = ITEMTYPE_ARMOR;
+		gTxtComponentItemTypeMap[3].dwCode = ' yvh';
+		gTxtComponentItemTypeMap[3].nItemType = ITEMTYPE_ARMOR;
 
 		D2ItemDataTbl* pItemDataTbl = DATATBLS_GetItemDataTables();
 
@@ -2804,7 +2804,7 @@ void __fastcall INVENTORY_InitializeComponentArray()
 			int nCounter = 0;
 			while (nCounter < nCurrentTableEntries)
 			{
-				if (stru_6FDEA708[nCounter].dwCode == dwCode)
+				if (gTxtComponentItemTypeMap[nCounter].dwCode == dwCode)
 				{
 					break;
 				}
@@ -2816,20 +2816,20 @@ void __fastcall INVENTORY_InitializeComponentArray()
 			{
 				int nIndex = nCurrentTableEntries;
 
-				while (ITEMS_CheckType(stru_6FDE2820[nIndex].nItemType, ITEMTYPE_WEAPON) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
-					   || ITEMS_CheckType(stru_6FDE2820[nIndex].nItemType, ITEMTYPE_ANY_ARMOR) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_ANY_ARMOR)
-					   || stru_6FDEA708[nIndex].dwCode)
+				while (ITEMS_CheckType(gComponentItemTypeMap[nIndex].nItemType, ITEMTYPE_WEAPON) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_WEAPON)
+					   || ITEMS_CheckType(gComponentItemTypeMap[nIndex].nItemType, ITEMTYPE_ANY_ARMOR) && ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_ANY_ARMOR)
+					   || gTxtComponentItemTypeMap[nIndex].dwCode)
 				{
 					++nIndex;
 				}
 
-				if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
+				if (nIndex >= ARRAY_SIZE(gTxtComponentItemTypeMap))
 				{
 					nIndex = nCurrentTableEntries;
 				}
 
-				stru_6FDEA708[nIndex].dwCode = dwCode;
-				stru_6FDEA708[nIndex].nItemType = pItemsTxtRecord->wType[0];
+				gTxtComponentItemTypeMap[nIndex].dwCode = dwCode;
+				gTxtComponentItemTypeMap[nIndex].nItemType = pItemsTxtRecord->wType[0];
 
 				if (nCurrentTableEntries == nIndex)
 				{
@@ -2838,7 +2838,7 @@ void __fastcall INVENTORY_InitializeComponentArray()
 			}
 		}
 
-		gnComponentArrayRecordCount = ARRAY_SIZE(stru_6FDEA708);
+		gnComponentArrayRecordCount = ARRAY_SIZE(gTxtComponentItemTypeMap);
 	}
 }
 
@@ -2870,7 +2870,7 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 
 					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
 
-					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
+					if (nIndex >= ARRAY_SIZE(gTxtComponentItemTypeMap))
 					{
 						a2[COMPOSIT_LEFTHAND] = -1;
 						pColor[COMPOSIT_LEFTHAND] = -1;
@@ -2894,7 +2894,7 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 
 					const int nIndex = INVENTORY_GetComponentArrayIndexFromItemsTxtRecord(pItemsTxtRecord);
 
-					if (nIndex >= ARRAY_SIZE(stru_6FDEA708))
+					if (nIndex >= ARRAY_SIZE(gTxtComponentItemTypeMap))
 					{
 						a2[COMPOSIT_RIGHTHAND] = -1;
 						pColor[COMPOSIT_RIGHTHAND] = -1;
