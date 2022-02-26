@@ -121,7 +121,7 @@ struct D2SkillStrc
 	};
 	union
 	{
-		uint32_t dwTargetGUID;					//0x20
+		D2UnitGUID dwTargetGUID;					//0x20
 		uint32_t nPar3;						//0x20
 	};
 
@@ -129,7 +129,7 @@ struct D2SkillStrc
 	int32_t nSkillLevel;						//0x28
 	uint32_t nLevelBonus;						//0x2C
 	int32_t nQuantity;							//0x30
-	int32_t nOwnerGUID;							//0x34 -1 = Native Skill
+	D2UnitGUID nOwnerGUID;						//0x34 -1 = Native Skill
 	int32_t nCharges;							//0x38
 };
 
@@ -191,7 +191,7 @@ void __fastcall SKILLS_SetUsedSkillInSkillList(D2SkillListStrc* pSkillList, D2Sk
 //D2Common.0x6FDAFF30
 D2SkillStrc* __fastcall SKILLS_GetUsedSkillFromSkillList(D2SkillListStrc* pSkillList);
 //D2Common.0x6FDAFF40 (#10949)
-D2COMMON_DLL_DECL D2SkillStrc* __fastcall SKILLS_GetSkillById(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID);
+D2COMMON_DLL_DECL D2SkillStrc* __fastcall SKILLS_GetSkillById(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FDAFF80 (#10950)
 D2COMMON_DLL_DECL D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromUnitAndId(D2UnitStrc* pUnit, int nSkillId);
 //D2Common.0x6FDAFFD0 (#10951)
@@ -209,17 +209,17 @@ D2COMMON_DLL_DECL D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int 
 //D2Common.0x6FDB04D0 (#10953)
 D2COMMON_DLL_DECL void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bRemove, char* szFile, int nLine);
 //D2Common.0x6FDB05E0 (#10954)
-D2COMMON_DLL_DECL void __stdcall D2Common_10954(D2UnitStrc* pUnit, int nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory);
+D2COMMON_DLL_DECL void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory);
 //D2Common.0x6FDB08C0 (#10957)
-D2COMMON_DLL_DECL int __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill);
 //D2Common.0x6FDB08F0 (#10955)
-D2COMMON_DLL_DECL BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, int* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges);
+D2COMMON_DLL_DECL BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, D2UnitGUID* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges);
 //D2Common.0x6FDB0960 (#10956)
 D2COMMON_DLL_DECL BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges);
 //D2Common.0x6FDB09A0 (#10961)
-D2COMMON_DLL_DECL void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID);
+D2COMMON_DLL_DECL void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FDB0A30 (#10962)
-D2COMMON_DLL_DECL void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID);
+D2COMMON_DLL_DECL void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FDB0AC0 (#10963)
 D2COMMON_DLL_DECL int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, char* szFile, int nLine);
 //D2Common.0x6FDB0AF0 (#10965)
@@ -295,7 +295,7 @@ D2COMMON_DLL_DECL int __stdcall SKILLS_GetRequiredLevelBasedOnCurrent(D2UnitStrc
 //D2Common.0x6FDB1C80 (#10988)
 D2COMMON_DLL_DECL BOOL __stdcall SKILLS_CheckRequiredSkills(D2UnitStrc* pUnit, int nSkillId);
 //D2Common.0x6FDB1F80
-D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID);
+D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FDB1FC0 (#10989)
 D2COMMON_DLL_DECL BOOL __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc* pUnit, int nSkillId);
 //D2Common.0x6FDB2110 (#10999)

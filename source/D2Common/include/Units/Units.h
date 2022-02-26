@@ -79,7 +79,7 @@ struct D2UnitStrc
 	uint32_t dwUnitType;						//0x00
 	int32_t dwClassId;							//0x04
 	void* pMemoryPool;							//0x08
-	uint32_t dwUnitId;							//0x0C
+	D2UnitGUID dwUnitId;						//0x0C
 	union										//0x10
 	{
 		uint32_t dwAnimMode;					//Player, Monster, Object, Items
@@ -122,7 +122,7 @@ struct D2UnitStrc
 	{
 		struct									//Server Unit
 		{
-			uint32_t dwInteractGUID;			//0x064
+			D2UnitGUID dwInteractGUID;			//0x064
 			uint32_t dwInteractType;			//0x068
 			uint16_t nInteract;					//0x06C
 			uint16_t nUpdateType;				//0x06E
@@ -153,9 +153,9 @@ struct D2UnitStrc
 		};
 	};
 	uint32_t dwOwnerType;						//0x94
-	uint32_t dwOwnerGUID;						//0x98
+	D2UnitGUID dwOwnerGUID;						//0x98
 	uint32_t dwKillerType;						//0x09C
-	uint32_t dwKillerGUID;						//0x0A0
+	D2UnitGUID dwKillerGUID;						//0x0A0
 	D2HoverTextStrc* pHoverText;				//0xA4
 	D2SkillListStrc* pSkills;					//0xA8
 	D2CombatStrc* pCombat;						//0xAC
@@ -251,7 +251,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_SetTargetUnitForDynamicUnit(D2UnitStrc* p
 //D2Common.0x6FDBE330 (#10345)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetTargetTypeFromDynamicUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE3A0 (#10346)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetTargetGUIDFromDynamicUnit(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall UNITS_GetTargetGUIDFromDynamicUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE410 (#10347)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetTargetUnitForPlayerOrMonster(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit);
 //D2Common.0x6FDBE470 (#10354)
@@ -321,7 +321,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_UpdateDirectionAndSpeed(D2UnitStrc* pUnit
 //D2Common.0x6FDBFDD0 (#10414)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit);
 //D2Common.0x6FDBFF20 (#10416)
-D2COMMON_DLL_DECL void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, int nOwnerId);
+D2COMMON_DLL_DECL void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, D2UnitGUID nOwnerId);
 //D2Common.0x6FDBFF40
 void __fastcall UNITS_StoreOwnerInfo(D2UnitStrc* pUnit, int nOwnerType, int nOwnerId);
 //D2Common.0x6FDBFFE0 (#10415)
@@ -435,7 +435,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_SetSwitchRightSkill(D2UnitStrc* pUnit, in
 //D2Common.0x6FDC2530 (#10455)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetWeaponGUID(D2UnitStrc* pUnit, D2UnitStrc* pWeapon);
 //D2Common.0x6FDC25B0 (#10456)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetWeaponGUID(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall UNITS_GetWeaponGUID(D2UnitStrc* pUnit);
 //D2Common.0x6FDC2630 (#10339)
 D2COMMON_DLL_DECL unsigned int __stdcall UNITS_GetStashGoldLimit(D2UnitStrc* pUnit);
 //D2Common.0x6FDC2680 (#10317)
@@ -469,4 +469,4 @@ D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int(__
 //D2Common.0x6FDC33C0 (#10407)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a5, int a6);
 //D2Common.0x6FDC3680 (#10419)
-D2COMMON_DLL_DECL void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, int nUnitGUID);
+D2COMMON_DLL_DECL void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, D2UnitGUID nUnitGUID);

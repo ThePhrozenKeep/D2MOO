@@ -455,7 +455,7 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 
 	if (pItemExtraData->pParentInv->dwLeftItemGUID == pItem->dwUnitId)
 	{
-		pItemExtraData->pParentInv->dwLeftItemGUID = -1;
+		pItemExtraData->pParentInv->dwLeftItemGUID = D2UnitInvalidGUID;
 	}
 
 	pItemExtraData->pParentInv = nullptr;
@@ -496,7 +496,7 @@ D2InventoryStrc* __stdcall INVENTORY_AllocInventory(void* pMemPool, D2UnitStrc* 
 		if (pOwner)
 		{
 			pOwner->pInventory = pInventory;
-			pInventory->dwOwnerId = pOwner->dwUnitId;
+			pInventory->dwOwnerGuid = pOwner->dwUnitId;
 		}
 	}
 
@@ -1386,7 +1386,7 @@ BOOL __stdcall INVENTORY_CheckEquipmentForWeaponByClass(D2InventoryStrc* pInvent
 //D2Common.0x6FD8FC60 (#10258)
 D2UnitStrc* __stdcall INVENTORY_GetLeftHandWeapon(D2InventoryStrc* pInventory)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != -1)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != D2UnitInvalidGUID)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -1411,7 +1411,7 @@ D2UnitStrc* __stdcall INVENTORY_GetLeftHandWeapon(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8FD10 (#11301)
 D2UnitStrc* __stdcall INVENTORY_GetSecondaryWeapon(D2InventoryStrc* pInventory)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != -1)
+	if (INVENTORY_GetPtrIfValid(pInventory) && pInventory->dwLeftItemGUID != D2UnitInvalidGUID)
 	{
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
@@ -2342,7 +2342,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnInsert(D2InventoryStrc* pInventory, D
 			
 			if (INVENTORY_CheckSignature(pInventory) && pInventory->dwLeftItemGUID == pItem->dwUnitId)
 			{
-				pInventory->dwLeftItemGUID = -1;
+				pInventory->dwLeftItemGUID = D2UnitInvalidGUID;
 			}
 		}
 	}
@@ -2355,7 +2355,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2InventoryStrc* pInventory, 
 	{
 		if (pInventory->dwLeftItemGUID == pItem->dwUnitId)
 		{
-			pInventory->dwLeftItemGUID = -1;
+			pInventory->dwLeftItemGUID = D2UnitInvalidGUID;
 		}
 
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
@@ -2465,11 +2465,11 @@ int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInve
 }
 
 //D2Common.0x6FD91140 (#10292)
-void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, int nOwnerId)
+void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, D2UnitGUID nOwnerGuid)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
-		pInventory->dwOwnerId = nOwnerId;
+		pInventory->dwOwnerGuid = nOwnerGuid;
 	}
 }
 
@@ -2478,7 +2478,7 @@ int __stdcall INVENTORY_GetOwnerId(D2InventoryStrc* pInventory)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
-		return pInventory->dwOwnerId;
+		return pInventory->dwOwnerGuid;
 	}
 
 	return -1;
@@ -2595,7 +2595,7 @@ D2CorpseStrc* __stdcall INVENTORY_GetNextCorpse(D2CorpseStrc* pCorpse)
 }
 
 //D2Common.0x6FDAFEA0 (#10314)
-int __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseStrc* pCorpse)
+D2UnitGUID __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseStrc* pCorpse)
 {
 	if (pCorpse)
 	{
@@ -3178,7 +3178,7 @@ D2UnitStrc* __stdcall INVENTORY_UnitIsItem(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD920E0 (#10306)
-int __stdcall INVENTORY_GetItemGUID(D2UnitStrc* pItem)
+D2UnitGUID __stdcall INVENTORY_GetItemGUID(D2UnitStrc* pItem)
 {
 	if (INVENTORY_UnitIsItem(pItem))
 	{
@@ -3227,7 +3227,7 @@ D2InventoryNodeStrc* __stdcall INVENTORY_GetNextNode(D2InventoryNodeStrc* pNode)
 }
 
 //D2Common.0x6FD90AB0 (#10312)
-int __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode)
+D2UnitGUID __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode)
 {
 	if (pNode)
 	{
@@ -3246,7 +3246,7 @@ BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 	}
 
 	pInventory->pCursorItem = nullptr;
-	pInventory->dwLeftItemGUID = -1;
+	pInventory->dwLeftItemGUID = D2UnitInvalidGUID;
 	
 	while (pInventory->pFirstItem)
 	{

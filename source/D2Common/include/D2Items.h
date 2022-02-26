@@ -471,7 +471,7 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_GetRealmData(D2UnitStrc* pItem, int* pRea
 //D2Common.0x6FD9E070 (#11245)
 D2COMMON_DLL_DECL void __stdcall ITEMS_SetRealmData(D2UnitStrc* pItem, int a2, int a3);
 //D2Common.0x6FD9E0A0 (#10734)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, int nOwnerGUID);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FD9E120 (#10735)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetOwnerId(D2UnitStrc* pItem);
 //D2Common.0x6FD9E1A0 (#10736)

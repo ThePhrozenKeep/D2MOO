@@ -99,7 +99,7 @@ D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_HasWaypoint(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C840 (#10061)
 D2COMMON_DLL_DECL char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C860 (#10066)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, int nUnitId);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, D2UnitGUID nUnitGuid);
 //D2Common.0x6FD8C8B0 (#10067)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_FreeDrlgDelete(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C910 (#10068)

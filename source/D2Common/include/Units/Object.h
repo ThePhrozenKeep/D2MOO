@@ -36,7 +36,7 @@ struct D2ObjectDataStrc
 	uint8_t nPortalFlags;					//0x05
 	uint16_t unk0x06;						//0x06
 	D2ShrinesTxt* pShrineTxt;				//0x08
-	uint32_t dwOperateGUID;					//0x0C
+	D2UnitGUID dwOperateGUID;					//0x0C
 	BOOL bPermanent;						//0x10
 	uint32_t __014;							//0x14
 	D2CoordStrc DestRoomCooords;			//0x18

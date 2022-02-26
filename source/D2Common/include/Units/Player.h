@@ -91,7 +91,7 @@ struct D2PlayerDataStrc
 	int32_t nSwitchLeftSkillId;					//0x84
 	int32_t nSwitchRightSkillFlags;				//0x88
 	int32_t nSwitchLeftSkillFlags;				//0x8C
-	int32_t nWeaponGUID;						//0x90
+	D2UnitGUID nWeaponGUID;						//0x90
 	uint32_t unk0x94[2];						//0x94
 	D2ClientStrc* pClient;					//0x9C
 	uint32_t unk0xA0[48];						//0xA0

@@ -27,7 +27,7 @@ void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem)
 		}
 		memset(pItem->pItemData, 0x00, sizeof(D2ItemDataStrc));
 
-		pItem->pItemData->dwOwnerGUID = -1;
+		pItem->pItemData->dwOwnerGUID = D2UnitInvalidGUID;
 	}
 }
 
@@ -3482,7 +3482,7 @@ void __stdcall ITEMS_SetRealmData(D2UnitStrc* pItem, int a2, int a3)
 }
 
 //D2Common.0x6FD9E0A0 (#10734)
-void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, int nOwnerGUID)
+void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, D2UnitGUID nOwnerGUID)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);

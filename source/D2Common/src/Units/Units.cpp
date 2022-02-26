@@ -645,7 +645,7 @@ void __stdcall UNITS_SetTargetUnitForDynamicUnit(D2UnitStrc* pUnit, D2UnitStrc* 
 int __stdcall UNITS_GetTargetTypeFromDynamicUnit(D2UnitStrc* pUnit)
 {
 	int nUnitType = 0;
-	int nUnitId = 0;
+	D2UnitGUID nUnitId = 0;
 	D2_ASSERT(pUnit);
 	D2_ASSERT((pUnit->dwUnitType == UNIT_PLAYER) || (pUnit->dwUnitType == UNIT_MONSTER) || (pUnit->dwUnitType == UNIT_MISSILE));
 
@@ -654,10 +654,10 @@ int __stdcall UNITS_GetTargetTypeFromDynamicUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBE3A0 (#10346)
-int __stdcall UNITS_GetTargetGUIDFromDynamicUnit(D2UnitStrc* pUnit)
+D2UnitGUID __stdcall UNITS_GetTargetGUIDFromDynamicUnit(D2UnitStrc* pUnit)
 {
 	int nUnitType = 0;
-	int nUnitId = 0;
+	D2UnitGUID nUnitId = 0;
 	D2_ASSERT(pUnit);
 	D2_ASSERT((pUnit->dwUnitType == UNIT_PLAYER) || (pUnit->dwUnitType == UNIT_MONSTER) || (pUnit->dwUnitType == UNIT_MISSILE));
 
@@ -2047,7 +2047,7 @@ int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBFF20 (#10416)
-void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, int nOwnerId)
+void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, D2UnitGUID nOwnerId)
 {
 	UNITS_StoreOwnerInfo(pUnit, nOwnerType, nOwnerId);
 }
@@ -3418,7 +3418,7 @@ void __stdcall UNITS_GetSwitchRightSkillDataResetRightSkill(D2UnitStrc* pUnit, i
 
 		pUnit->pPlayerData->nRightSkillId = 0;
 		pUnit->pPlayerData->nRightSkillFlags = -1;
-		pUnit->pPlayerData->nWeaponGUID = -1;
+		pUnit->pPlayerData->nWeaponGUID = D2UnitInvalidGUID;
 		pUnit->pPlayerData->unk0x94[0] = 0;
 	}
 	else
@@ -3440,7 +3440,7 @@ void __stdcall UNITS_GetSwitchLeftSkillDataResetLeftSkill(D2UnitStrc* pUnit, int
 
 		pUnit->pPlayerData->nLeftSkillId = 0;
 		pUnit->pPlayerData->nLeftSkillFlags = -1;
-		pUnit->pPlayerData->nWeaponGUID = -1;
+		pUnit->pPlayerData->nWeaponGUID = D2UnitInvalidGUID;
 		pUnit->pPlayerData->unk0x94[0] = 0;
 	}
 	else
@@ -3529,7 +3529,7 @@ void __stdcall UNITS_SetWeaponGUID(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
 }
 
 //D2Common.0x6FDC25B0 (#10456)
-int __stdcall UNITS_GetWeaponGUID(D2UnitStrc* pUnit)
+D2UnitGUID __stdcall UNITS_GetWeaponGUID(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 	D2_ASSERT(pUnit->dwUnitType == UNIT_PLAYER);
@@ -4159,7 +4159,7 @@ D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int (__f
 }
 
 //D2Common.0x6FDC3680 (#10419)
-void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, int nUnitGUID)
+void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, D2UnitGUID nUnitGUID)
 {
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && pUnit->pPlayerData)
 	{

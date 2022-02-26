@@ -75,9 +75,9 @@ struct D2MissileDataStrc
 	uint16_t unk0x12;							//0x12
 	uint32_t fFlags;							//0x14
 	int32_t nOwnerType;							//0x18
-	uint32_t dwOwnerGUID;						//0x1C
+	D2UnitGUID dwOwnerGUID;						//0x1C
 	int32_t nHomeType;							//0x20
-	uint32_t dwHomeGUID;						//0x24
+	D2UnitGUID dwHomeGUID;						//0x24
 	union
 	{
 		struct
@@ -184,7 +184,7 @@ D2COMMON_DLL_DECL int __stdcall MISSILE_GetTargetY(D2UnitStrc* pMissile);
 //D2Common.0x6FDBA510 (#11144)
 D2COMMON_DLL_DECL void __stdcall MISSILE_SetHomeType(D2UnitStrc* pMissile, D2UnitStrc* pTarget);
 //D2Common.0x6FDBA550 (#11145)
-D2COMMON_DLL_DECL void __stdcall MISSILE_GetHomeType(D2UnitStrc* pMissile, int* nHomeType, int* nHomeGUID);
+D2COMMON_DLL_DECL void __stdcall MISSILE_GetHomeType(D2UnitStrc* pMissile, int* nHomeType, D2UnitGUID* nHomeGUID);
 //D2Common.0x6FDBA5B0 (#11217)
 D2COMMON_DLL_DECL void __stdcall MISSILE_CalculateDamageData(D2MissileDamageDataStrc* pMissileDamageData, D2UnitStrc* pOwner, D2UnitStrc* pOrigin, D2UnitStrc* pMissile, int nLevel);
 //D2Common.0x6FDBADF0

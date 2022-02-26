@@ -122,9 +122,9 @@ struct D2InventoryStrc
 	D2UnitStrc* pLastItem;					//0x10
 	D2InventoryGridStrc* pGrids;			//0x14
 	int32_t nGridCount;						//0x18
-	uint32_t dwLeftItemGUID;				//0x1C
+	D2UnitGUID dwLeftItemGUID;				//0x1C
 	D2UnitStrc* pCursorItem;				//0x20
-	uint32_t dwOwnerId;						//0x24
+	D2UnitGUID dwOwnerGuid;					//0x24
 	uint32_t dwItemCount;					//0x28
 	D2InventoryNodeStrc* pFirstNode;		//0x2C
 	D2InventoryNodeStrc* pLastNode;			//0x30
@@ -279,7 +279,7 @@ D2COMMON_DLL_DECL void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2Inventory
 //D2Common.0x6FD91050 (#10291)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory);
 //D2Common.0x6FD91140 (#10292)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, int nOwnerId);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, D2UnitGUID nOwnerId);
 //D2Common.0x6FD91160 (#10293)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetOwnerId(D2InventoryStrc* pInventory);
 //D2Common.0x6FD91190 (#10294)
@@ -293,7 +293,7 @@ D2COMMON_DLL_DECL int __stdcall INVENTORY_GetCorpseCount(D2InventoryStrc* pInven
 //D2Common.0x6FD912D0 (#10313)
 D2COMMON_DLL_DECL D2CorpseStrc* __stdcall INVENTORY_GetNextCorpse(D2CorpseStrc* pCorpse);
 //D2Common.0x6FDAFEA0 (#10314)
-D2COMMON_DLL_DECL int __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseStrc* pCorpse);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseStrc* pCorpse);
 //D2Common.0x6FDB18D0 (#10315)
 D2COMMON_DLL_DECL int __stdcall D2Common_10315(D2CorpseStrc* pCorpse);
 //D2Common.0x6FD912F0 (#10298)
@@ -315,7 +315,7 @@ D2UnitStrc* __stdcall INVENTORY_GetUnknownItem(D2UnitStrc* pItem);
 //D2Common.0x6FD920C0 (#10305)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_UnitIsItem(D2UnitStrc* pItem);
 //D2Common.0x6FD920E0 (#10306)
-D2COMMON_DLL_DECL int __stdcall INVENTORY_GetItemGUID(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall INVENTORY_GetItemGUID(D2UnitStrc* pItem);
 //D2Common.0x6FD92100 (#10307)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetItemNodePage(D2UnitStrc* pItem);
 //D2Common.0x6FD92140 (#10310)
@@ -323,7 +323,7 @@ D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_IsItemInInventory(D2InventoryS
 //D2Common.0x6FDAFEA0 (#10311)
 D2COMMON_DLL_DECL D2InventoryNodeStrc* __stdcall INVENTORY_GetNextNode(D2InventoryNodeStrc* pNode);
 //D2Common.0x6FD90AB0 (#10312)
-D2COMMON_DLL_DECL int __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall INVENTORY_GetItemGUIDFromNode(D2InventoryNodeStrc* pNode);
 //D2Common.0x6FD92180 (#10300)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory);
 //D2Common.0x6FD921D0 (#10302)

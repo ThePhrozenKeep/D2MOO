@@ -5,6 +5,8 @@
 
 #include "D2QuestDataEx.h"
 
+typedef uint32_t D2UnitGUID;
+static const D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
 #pragma pack(1)
 
@@ -294,13 +296,13 @@ struct D2AiControlStrc
 	AIPARAMFN pAiParamFn;					//0x04
 	uint16_t nAiFlags;							//0x08
 	uint8_t unk0x0A[2];						//0x0A
-	uint32_t dwOwnerGUID;						//0x0C
+	D2UnitGUID dwOwnerGUID;						//0x0C
 	uint32_t dwOwnerType;						//0x10
 	int32_t dwAiParam[3];						//0x14
 	D2AiCmdStrc* pCurrentCmd;				//0x20
 	D2AiCmdStrc* pLastCmd;					//0x24
 	D2GameStrc* pGame;						//0x28
-	uint32_t dwOwnerGUIDEx;					//0x2C
+	D2UnitGUID dwOwnerGUIDEx;				//0x2C
 	uint32_t dwOwnerTypeEx;					//0x30
 	D2MinionListStrc* pMinionList;			//0x34
 	D2MapAIStrc* pMapAi;					//0x38
@@ -561,7 +563,7 @@ struct D2ClientStrc
 	D2ClientInfoStrc* pClientInfo;			//0x68
 	uint8_t unk0x6C[256];						//0x6C
 	uint32_t dwUnitType;						//0x16C
-	uint32_t dwUnitGUID;						//0x170
+	D2UnitGUID dwUnitGUID;						//0x170
 	D2UnitStrc* pPlayer;					//0x174
 	uint32_t __178;							//0x178
 	D2SaveHeaderStrc* pSaveHeader;			//0x17C
@@ -1147,7 +1149,7 @@ struct D2MercDataStrc
 
 struct D2MinionListStrc
 {
-	uint32_t dwMinionGUID;						//0x00
+	D2UnitGUID dwMinionGUID;						//0x00
 	D2MinionListStrc* pNext;				//0x04
 };
 
@@ -1210,7 +1212,7 @@ struct D2NpcControlStrc
 struct D2NpcGambleStrc
 {
 	D2InventoryStrc* pInventory;			//0x00
-	uint32_t dwGUID;							//0x04
+	D2UnitGUID dwGUID;							//0x04
 	D2NpcGambleStrc* pNext;					//0x08
 };
 
@@ -1275,7 +1277,7 @@ struct D2NpcRecordStrc
 			uint32_t dwTicks;					//0x28
 			D2UnitProxyStrc pProxy;			//0x2C
 			uint32_t dwUnk;					//0x3C
-			uint32_t dwNPCGUID;				//0x40
+			D2UnitGUID dwNPCGUID;				//0x40
 		};
 		//D2NPCTradeStrc pTrade;            //0x20
 	//};
