@@ -468,9 +468,9 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 //D2Common.0x6FD8E4A0
 D2ItemExtraDataStrc* __fastcall INVENTORY_GetItemExtraDataFromItem(D2UnitStrc* pItem)
 {
-	if (INVENTORY_UnitIsItem(pItem) && pItem->pItemData)
+	if (D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem))
 	{
-		return &pItem->pItemData->pExtraData;
+		return &pItemData->pExtraData;
 	}
 	
 	return nullptr;
@@ -656,7 +656,7 @@ D2UnitStrc* __stdcall INVENTORY_GetLastItem(D2InventoryStrc* pInventory)
 //D2Common.0x6FD8E7E0 (#10245)
 BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, uint8_t nPage)
 {
-	if (!INVENTORY_GetPtrIfValid(pInventory) || !INVENTORY_UnitIsItem(pItem) || !pItem->pItemData)
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !ITEMS_GetItemData(pItem))
 	{
 		return FALSE;
 	}
@@ -2303,7 +2303,7 @@ int __stdcall INVENTORY_GetSetItemEquipCountByFileIndex(D2InventoryStrc* pInvent
 	if (pInventoryGrid)
 	{
 		int nCounter = 0;
-		for (D2UnitStrc* pItem = pInventoryGrid->pItem; INVENTORY_UnitIsItem(pItem) && pItem->pItemData; pItem = pItem->pItemData->pExtraData.unk0x14)
+		for (D2UnitStrc* pItem = pInventoryGrid->pItem; ITEMS_GetItemData(pItem) != nullptr; pItem = pItem->pItemData->pExtraData.unk0x14)
 		{
 			if (ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET && ITEMS_GetFileIndex(pItem) == nItemFileIndex)
 			{

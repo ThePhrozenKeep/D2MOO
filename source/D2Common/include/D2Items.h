@@ -2,6 +2,7 @@
 
 #include "CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
+#include <Units/Units.h>
 //TODO: Revise
 
 #pragma pack(1)
@@ -204,6 +205,10 @@ struct D2ItemSaveStrc
 	int32_t nItemFileIndex;						//0x14
 };
 #pragma pack()
+
+// Helper function
+// Checks that the given unit is an item with data
+inline D2ItemDataStrc* ITEMS_GetItemData(D2UnitStrc* pItem) { return (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData) ? pItem->pItemData : nullptr; }
 
 //D2Common.0x6FD98380 (#10687)
 D2COMMON_DLL_DECL void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);
