@@ -2,10 +2,12 @@
 
 #include <D2Dll.h>
 
-#ifdef D2LANG_IMPL
+#if defined(D2LANG_EXPORT)
 #define D2LANG_DLL_DECL __declspec( dllexport ) // D2Lang uses both .def files and dllexport
-#else
+#elif defined(D2LANG_IMPORT)
 #define D2LANG_DLL_DECL __declspec( dllimport )
+#else
+#define D2LANG_DLL_DECL
 #endif
 
 #pragma pack(1)
