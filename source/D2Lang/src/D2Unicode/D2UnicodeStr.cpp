@@ -117,6 +117,27 @@ int __fastcall Unicode::strlen(const Unicode* str) {
   return i;
 }
 
+int __fastcall Unicode::strncmp(
+    const Unicode* str1,
+    const Unicode* str2,
+    size_t count) {
+  /*
+   * Vanilla bug: If one string is a prefix of the other string, then
+   * the loop ends early and 0 is returned.
+   */
+  for (size_t i = 0;
+      (str1[i].ch != L'\0') && (str2[i].ch != L'\0') && (i < count);
+      ++i) {
+    if (str1[i].ch < str2[i].ch) {
+      return -1;
+    } else if (str1[i].ch > str2[i].ch) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
 Unicode* __fastcall Unicode::strstr(
     const Unicode* str,
     const Unicode* substr) {

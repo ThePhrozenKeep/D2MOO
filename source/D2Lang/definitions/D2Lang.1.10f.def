@@ -28,7 +28,7 @@ EXPORTS
     ?stricmp@Unicode@@SIHPBU1@0@Z @10039 ; Unicode::stricmp
     ?strlen@Unicode@@SIHPBU1@@Z @10040 ; Unicode::strlen
 ;   D2LANG_10041 @10041 ; ?strncat@Unicode@@SIPAU1@PAU1@PBU1@H@Z
-;   D2LANG_10042 @10042 ; ?strncmp@Unicode@@SIHPBU1@0I@Z
+    ?strncmp@Unicode@@SIHPBU1@0I@Z @10042 ; Unicode::strncmp
 ;   D2LANG_10043 @10043 ; ?strncoll@Unicode@@SIHPBU1@0H@Z
 ;   D2LANG_10044 @10044 ; ?strncpy@Unicode@@SIPAU1@PAU1@PBU1@H@Z
 ;   D2LANG_10045 @10045 ; ?strnicmp@Unicode@@SIHPBU1@0I@Z
