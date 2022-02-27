@@ -18,15 +18,27 @@ You will also need to install the [CMake](https://cmake.org) build system and Vi
 
 ### Build the project
 
-In the current directory:
+The preferred way is to use CMake presets.
+You can either open D2Moo using the Visual studio "Open folder" or generate a VS solution (in `out/build/VS20XX`) using:
 
 ```sh
 # Configure the CMake project
-cmake -A Win32 -B build
+cmake --preset VS2019
 # Build the release config
-cmake --build build --config Release
+cmake --build --preset VS2019 --config Release
 # Install
-cmake --install build --config Release --prefix YOUR_INSTALL_FOLDER
+cmake --build --preset VS2019 --config Release --target install
+```
+
+Or, if you do not wish to use the presets
+
+```sh
+# Configure the CMake project
+cmake -A Win32 -B YOU_BUILD_DIR
+# Build the release config
+cmake --build YOU_BUILD_DIR --config Release
+# Install
+cmake --install YOU_BUILD_DIR --config Release --prefix YOUR_INSTALL_FOLDER
 ```
 
 ## Usage
