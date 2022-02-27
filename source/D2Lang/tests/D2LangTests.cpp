@@ -152,6 +152,21 @@ TEST_CASE("Unicode::strcpy")
     }
 }
 
+TEST_CASE("Unicode::stricmp")
+{
+    SUBCASE("Ordering")
+    {
+        CHECK(Unicode::stricmp(D2_USTR(L"0"), D2_USTR(L"0")) == 0);
+        CHECK(Unicode::stricmp(D2_USTR(L"0"), D2_USTR(L"1")) == -1);
+        CHECK(Unicode::stricmp(D2_USTR(L"1"), D2_USTR(L"0")) ==  1);
+    }
+    SUBCASE("Case sensitive")
+    {
+        CHECK(Unicode::stricmp(D2_USTR(L"Diablo2"), D2_USTR(L"DIABLO2")) == 0);
+        CHECK(Unicode::stricmp(D2_USTR(L"DIABLO2"), D2_USTR(L"Diablo2")) == 0);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
