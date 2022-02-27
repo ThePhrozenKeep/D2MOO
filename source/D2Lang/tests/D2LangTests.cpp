@@ -60,6 +60,30 @@ TEST_CASE("Unicode::isWordEnd")
     }
 }
 
+TEST_CASE("Unicode::strcat")
+{
+    SUBCASE("Append empty on empty")
+    {
+        Unicode dest[256];
+        Unicode::strcat(dest, D2_USTR(L""));
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Append text on empty")
+    {
+        Unicode dest[256];
+        Unicode::strcat(dest, D2_USTR(L"Diablo"));
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Append text on text")
+    {
+        Unicode dest[256] = { L'3', L':', L' ' };
+        Unicode::strcat(dest, D2_USTR(L"Mephisto, "));
+        Unicode::strcat(dest, D2_USTR(L"Diablo, "));
+        Unicode::strcat(dest, D2_USTR(L"and Baal"));
+        CHECK(wcscmp((wchar_t*)dest, L"3: Mephisto, Diablo, and Baal") == 0);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
