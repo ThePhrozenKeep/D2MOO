@@ -10,6 +10,7 @@ jobs:
         buildtype: [Debug, Release]
     env:
       BUILD_TYPE: ${{ matrix.buildtype }}
+      CMAKE_PRESET: VS2022
 
     steps:
     - uses: actions/checkout@v2
@@ -18,17 +19,17 @@ jobs:
 
     - name: CMake configure and build
       run: |
-        cmake --preset VS2019
-        cmake --build --preset VS2019 --config ${{env.BUILD_TYPE}}
+        cmake --preset ${{env.CMAKE_PRESET}}
+        cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}}
 
     - name: Test
       working-directory: ${{runner.workspace}}/build
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest --preset VS2019 -C ${{env.BUILD_TYPE}}
+      run: ctest --preset ${{env.CMAKE_PRESET}} -C ${{env.BUILD_TYPE}}
 
     - name: Install
-      run: cmake --build --preset VS2019 --config ${{env.BUILD_TYPE}} --target install
+      run: cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}} --target install
 
     - name: Artifact
       if: env.BUILD_TYPE == 'Release'
