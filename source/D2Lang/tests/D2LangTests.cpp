@@ -252,3 +252,29 @@ TEST_CASE("Unicode::strstr")
         CHECK(Unicode::strstr(D2_USTR(L"Diablo"), nullptr) == nullptr);
     }
 }
+
+TEST_CASE("Unicode::toUtf")
+{
+    SUBCASE("Empty")
+    {
+        char dest[256];
+        CHECK(Unicode::toUtf(dest, D2_USTR(""), sizeof(dest)) == dest);
+        CHECK(strcmp(dest, "") == 0);
+    }
+    SUBCASE("Convert ASCII text")
+    {
+        char dest[256];
+        Unicode::toUtf(dest, D2_USTR(L"Diablo"), sizeof(dest));
+        CHECK(strcmp(dest, "Diablo") == 0);
+    }
+    SUBCASE("Convert Japanese test")
+    {
+        // The official name of Diablo in Japanese
+        const wchar_t* utf16JpDiablo = L"\u30c7\u30a3\u30a2\u30d6\u30ed";
+        const char* utf8JpDiablo = (const char*)u8"\u30c7\u30a3\u30a2\u30d6\u30ed";
+
+        char dest[256];
+        Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), sizeof(dest));
+        CHECK(strcmp(dest, utf8JpDiablo) == 0);
+    }
+}
