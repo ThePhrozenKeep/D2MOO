@@ -310,8 +310,8 @@ TEST_CASE("Unicode::toUtf")
     SUBCASE("Convert Japanese text")
     {
         // The official name of Diablo in Japanese
-        const wchar_t* utf16JpDiablo = L"\u30c7\u30a3\u30a2\u30d6\u30ed";
-        const char* utf8JpDiablo = (const char*)u8"\u30c7\u30a3\u30a2\u30d6\u30ed";
+        const wchar_t* utf16JpDiablo = L"\u30C7\u30A3\u30A2\u30D6\u30ED";
+        const char* utf8JpDiablo = "\xE3\x83\x87\xE3\x82\xA3\xE3\x82\xA2\xE3\x83\x96\xE3\x83\xAD";
 
         char dest[256];
         Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), sizeof(dest));
