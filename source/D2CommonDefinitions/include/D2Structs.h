@@ -5,8 +5,8 @@
 
 #include "D2QuestDataEx.h"
 
-typedef uint32_t D2UnitGUID;
-static const D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
+using D2UnitGUID = uint32_t;
+constexpr D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
 #pragma pack(1)
 
