@@ -218,3 +218,37 @@ TEST_CASE("Unicode::strlen")
         CHECK(Unicode::strlen(nullptr) == 0);
     }
 }
+
+TEST_CASE("Unicode::strstr")
+{
+    const Unicode* diablo = D2_USTR(L"Diablo");
+
+    SUBCASE("Empty")
+    {
+        CHECK(Unicode::strstr(D2_USTR(L""), D2_USTR(L"")) == nullptr);
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"")) == nullptr);
+        CHECK(Unicode::strstr(D2_USTR(L""), diablo) == nullptr);
+    }
+    SUBCASE("Found")
+    {
+        CHECK(Unicode::strstr(diablo, diablo) == diablo);
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"i")) == &diablo[1]);
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"abl")) == &diablo[2]);
+    }
+    SUBCASE("Not Found, No Match")
+    {
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"Baal")) == nullptr);
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"Lord of Terror")) == nullptr);
+    }
+    SUBCASE("Not Found, Case sensitive")
+    {
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"diablo")) == nullptr);
+        CHECK(Unicode::strstr(diablo, D2_USTR(L"DIABLO")) == nullptr);
+    }
+    SUBCASE("Null")
+    {
+        CHECK(Unicode::strstr(nullptr, nullptr) == nullptr);
+        CHECK(Unicode::strstr(nullptr, D2_USTR(L"Diablo")) == nullptr);
+        CHECK(Unicode::strstr(D2_USTR(L"Diablo"), nullptr) == nullptr);
+    }
+}
