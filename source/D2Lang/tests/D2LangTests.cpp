@@ -31,6 +31,35 @@ TEST_CASE("Unicode::directionality")
     }
 }
 
+TEST_CASE("Unicode::isWordEnd")
+{
+    SUBCASE("Index 0")
+    {
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"0 2345678"), 0));
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"A soulstone"), 0));
+    }
+    SUBCASE("Before whitespace")
+    {
+        CHECK(Unicode::isWordEnd(D2_USTR(L"0123 5678"), 3));
+        CHECK(Unicode::isWordEnd(D2_USTR(L"The soulstone"), 2));
+    }
+    SUBCASE("On whitespace")
+    {
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"0123 5678"), 4));
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"The soulstone"), 3));
+    }
+    SUBCASE("Middle of word")
+    {
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"0123 5678"), 2));
+        CHECK(!Unicode::isWordEnd(D2_USTR(L"The soulstone"), 7));
+    }
+    SUBCASE("End of string")
+    {
+        CHECK(Unicode::isWordEnd(D2_USTR(L"0123 5678"), wcslen(L"0123 5678") - 1));
+        CHECK(Unicode::isWordEnd(D2_USTR(L"The soulstone"), wcslen(L"The soulstone") - 1));
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
