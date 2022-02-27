@@ -84,6 +84,29 @@ TEST_CASE("Unicode::strcat")
     }
 }
 
+TEST_CASE("Unicode::strchr")
+{
+    const Unicode* diablo = D2_USTR(L"Diablo");
+
+    SUBCASE("Not found in Empty")
+    {
+        CHECK(Unicode::strchr(D2_USTR(L""), L'D') == NULL);
+        CHECK(Unicode::strchr(D2_USTR(L""), L'\0') == NULL);
+    }
+    SUBCASE("Found in 'Diablo'")
+    {
+        CHECK(Unicode::strchr(diablo, L'D') == &diablo[0]);
+        CHECK(Unicode::strchr(diablo, L'a') == &diablo[2]);
+        CHECK(Unicode::strchr(diablo, L'b') == &diablo[3]);
+    }
+    SUBCASE("Not found in 'Diablo'")
+    {
+        CHECK(Unicode::strchr(diablo, L'j') == NULL);
+        CHECK(Unicode::strchr(diablo, 0x190) == NULL);
+        CHECK(Unicode::strchr(diablo, L'\0') == NULL);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
