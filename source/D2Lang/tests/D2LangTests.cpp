@@ -82,6 +82,14 @@ TEST_CASE("Unicode::strcat")
         Unicode::strcat(dest, D2_USTR(L"and Baal"));
         CHECK(wcscmp((wchar_t*)dest, L"3: Mephisto, Diablo, and Baal") == 0);
     }
+    SUBCASE("Append at correct index")
+    {
+        Unicode dest[256];
+        Unicode::strcat(dest, D2_USTR(L"Diablo"));
+        dest[3] = L'\0';
+        Unicode::strcat(dest, D2_USTR(L"mond"));
+        CHECK(wcscmp((wchar_t*)dest, L"Diamond") == 0);
+    }
 }
 
 TEST_CASE("Unicode::strchr")
