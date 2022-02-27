@@ -130,6 +130,28 @@ TEST_CASE("Unicode::strcmp")
     }
 }
 
+TEST_CASE("Unicode::strcpy")
+{
+    SUBCASE("Empty to empty")
+    {
+        Unicode dest[256];
+        CHECK(Unicode::strcpy(dest, D2_USTR(L"")) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Text to empty")
+    {
+        Unicode dest[256];
+        CHECK(Unicode::strcpy(dest, D2_USTR(L"Diablo")) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Text to text")
+    {
+        Unicode dest[256] = { L'D', L'i', L'a', L'b', L'l', L'o' };
+        CHECK(Unicode::strcpy(dest, D2_USTR(L"Baal")) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Baal") == 0);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
