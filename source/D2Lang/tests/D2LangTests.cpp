@@ -5,6 +5,32 @@
 
 #define D2_USTR(widestr) (const Unicode*)widestr
 
+TEST_CASE("Unicode::directionality")
+{
+    SUBCASE("ASCII letters")
+    {
+        CHECK(Unicode(L'a').directionality() == Unicode::DIR_LEFT_TO_RIGHT);
+        CHECK(Unicode(L'A').directionality() == Unicode::DIR_LEFT_TO_RIGHT);
+    }
+    SUBCASE("ASCII digits")
+    {
+        CHECK(Unicode(L'0').directionality() == Unicode::DIR_LEFT_TO_RIGHT);
+    }
+    SUBCASE("Whitespace")
+    {
+        CHECK(Unicode(L' ').directionality() == Unicode::DIR_NEUTRAL);
+        CHECK(Unicode(L'\t').directionality() == Unicode::DIR_NEUTRAL);
+        CHECK(Unicode(L'\n').directionality() == Unicode::DIR_NEUTRAL);
+    }
+    SUBCASE("Right-to-left")
+    {
+        // Hebrew
+        CHECK(Unicode(0x590).directionality() == Unicode::DIR_RIGHT_TO_LEFT);
+        // Right-to-Left Mark
+        CHECK(Unicode(0x200F).directionality() == Unicode::DIR_RIGHT_TO_LEFT);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
