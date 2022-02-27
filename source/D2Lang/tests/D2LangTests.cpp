@@ -62,19 +62,19 @@ TEST_CASE("Unicode::isWordEnd")
 
 TEST_CASE("Unicode::strcat")
 {
-    SUBCASE("Append empty on empty")
+    SUBCASE("Concatenate empty on empty")
     {
         Unicode dest[256];
         Unicode::strcat(dest, D2_USTR(L""));
         CHECK(wcscmp((wchar_t*)dest, L"") == 0);
     }
-    SUBCASE("Append text on empty")
+    SUBCASE("Concatenate text on empty")
     {
         Unicode dest[256];
         Unicode::strcat(dest, D2_USTR(L"Diablo"));
         CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
     }
-    SUBCASE("Append text on text")
+    SUBCASE("Concatenate text on not empty")
     {
         Unicode dest[256] = { L'3', L':', L' ' };
         Unicode::strcat(dest, D2_USTR(L"Mephisto, "));
@@ -82,7 +82,7 @@ TEST_CASE("Unicode::strcat")
         Unicode::strcat(dest, D2_USTR(L"and Baal"));
         CHECK(wcscmp((wchar_t*)dest, L"3: Mephisto, Diablo, and Baal") == 0);
     }
-    SUBCASE("Append at correct index")
+    SUBCASE("Concatenate at correct index")
     {
         Unicode dest[256];
         Unicode::strcat(dest, D2_USTR(L"Diablo"));
@@ -132,19 +132,19 @@ TEST_CASE("Unicode::strcmp")
 
 TEST_CASE("Unicode::strcpy")
 {
-    SUBCASE("Empty to empty")
+    SUBCASE("Empty onto empty")
     {
         Unicode dest[256];
         CHECK(Unicode::strcpy(dest, D2_USTR(L"")) == dest);
         CHECK(wcscmp((wchar_t*)dest, L"") == 0);
     }
-    SUBCASE("Text to empty")
+    SUBCASE("Text onto empty")
     {
         Unicode dest[256];
         CHECK(Unicode::strcpy(dest, D2_USTR(L"Diablo")) == dest);
         CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
     }
-    SUBCASE("Text to text")
+    SUBCASE("Text onto not empty")
     {
         Unicode dest[256] = { L'D', L'i', L'a', L'b', L'l', L'o' };
         CHECK(Unicode::strcpy(dest, D2_USTR(L"Baal")) == dest);
@@ -207,7 +207,7 @@ TEST_CASE("Unicode::strlen")
     {
         CHECK(Unicode::strlen(D2_USTR(L"")) == 0);
     }
-    SUBCASE("Nonempty")
+    SUBCASE("Not empty")
     {
         CHECK(Unicode::strlen(D2_USTR(L"Diablo2")) == 7);
         CHECK(Unicode::strlen(D2_USTR(L"Mephisto")) == 8);
@@ -235,12 +235,12 @@ TEST_CASE("Unicode::strstr")
         CHECK(Unicode::strstr(diablo, D2_USTR(L"i")) == &diablo[1]);
         CHECK(Unicode::strstr(diablo, D2_USTR(L"abl")) == &diablo[2]);
     }
-    SUBCASE("Not Found, No Match")
+    SUBCASE("Not found")
     {
         CHECK(Unicode::strstr(diablo, D2_USTR(L"Baal")) == nullptr);
         CHECK(Unicode::strstr(diablo, D2_USTR(L"Lord of Terror")) == nullptr);
     }
-    SUBCASE("Not Found, Case sensitive")
+    SUBCASE("Case sensitive")
     {
         CHECK(Unicode::strstr(diablo, D2_USTR(L"diablo")) == nullptr);
         CHECK(Unicode::strstr(diablo, D2_USTR(L"DIABLO")) == nullptr);
@@ -260,13 +260,13 @@ TEST_CASE("Unicode::toLower")
         CHECK(Unicode(L'A').toLower() == L'a');
         CHECK(Unicode(L'Z').toLower() == L'z');
     }
-    SUBCASE("No conversion, not alpha")
+    SUBCASE("Not alpha")
     {
         CHECK(Unicode(L'\0').toLower() == L'\0');
         CHECK(Unicode(L'0').toLower() == L'0');
         CHECK(Unicode(L' ').toLower() == L' ');
     }
-    SUBCASE("No conversion, already lower")
+    SUBCASE("Already lower")
     {
         CHECK(Unicode(L'a').toLower() == L'a');
         CHECK(Unicode(L'z').toLower() == L'z');
@@ -275,18 +275,18 @@ TEST_CASE("Unicode::toLower")
 
 TEST_CASE("Unicode::toUpper")
 {
-    SUBCASE("Lower to Upper")
+    SUBCASE("Lower to upper")
     {
         CHECK(Unicode(L'a').toUpper() == L'A');
         CHECK(Unicode(L'z').toUpper() == L'Z');
     }
-    SUBCASE("No conversion, not alpha")
+    SUBCASE("Not alpha")
     {
         CHECK(Unicode(L'\0').toUpper() == L'\0');
         CHECK(Unicode(L'0').toUpper() == L'0');
         CHECK(Unicode(L' ').toUpper() == L' ');
     }
-    SUBCASE("No conversion, already upper")
+    SUBCASE("Already upper")
     {
         CHECK(Unicode(L'A').toUpper() == L'A');
         CHECK(Unicode(L'Z').toUpper() == L'Z');
@@ -307,7 +307,7 @@ TEST_CASE("Unicode::toUtf")
         Unicode::toUtf(dest, D2_USTR(L"Diablo"), sizeof(dest));
         CHECK(strcmp(dest, "Diablo") == 0);
     }
-    SUBCASE("Convert Japanese test")
+    SUBCASE("Convert Japanese text")
     {
         // The official name of Diablo in Japanese
         const wchar_t* utf16JpDiablo = L"\u30c7\u30a3\u30a2\u30d6\u30ed";
