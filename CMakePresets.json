@@ -1,0 +1,76 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "VS2019",
+      "generator": "Visual Studio 16 2019",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "architecture": {
+        "value": "Win32",
+        "strategy": "set"
+      },
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY": {
+          "type": "PATH",
+          "value": "${sourceDir}/out/build/${presetName}/runtime"
+        }
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Windows" ]
+        }
+      }
+    },
+    {
+      "name": "VS2022",
+      "inherits": "VS2019",
+      "generator": "Visual Studio 17 2022"
+    },
+    {
+      "name": "ninja",
+      "inherits": "VS2019",
+      "generator": "Ninja",
+      "architecture": {
+        "value": "Win32",
+        "strategy": "external"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "VS2019",
+      "configurePreset": "VS2019",
+      "environment": {
+        "UseMultiToolTask": "true",
+        "EnforceProcessCountAcrossBuilds": "true"
+      }
+    },
+    {
+      "name": "VS2022",
+      "configurePreset": "VS2022",
+      "inherits": "VS2019"
+    },
+    {
+      "name": "ninja",
+      "configurePreset": "ninja"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "VS2019",
+      "configurePreset": "VS2019",
+	  "output": {"outputOnFailure": true}
+    },
+    {
+      "name": "VS2022",
+      "configurePreset": "VS2022",
+	  "output": {"outputOnFailure": true}
+    },
+    {
+      "name": "ninja",
+      "configurePreset": "ninja",
+	  "output": {"outputOnFailure": true}
+    }
+  ]
+}
