@@ -273,6 +273,26 @@ TEST_CASE("Unicode::toLower")
     }
 }
 
+TEST_CASE("Unicode::toUpper")
+{
+    SUBCASE("Lower to Upper")
+    {
+        CHECK(Unicode(L'a').toUpper() == L'A');
+        CHECK(Unicode(L'z').toUpper() == L'Z');
+    }
+    SUBCASE("No conversion, not alpha")
+    {
+        CHECK(Unicode(L'\0').toUpper() == L'\0');
+        CHECK(Unicode(L'0').toUpper() == L'0');
+        CHECK(Unicode(L' ').toUpper() == L' ');
+    }
+    SUBCASE("No conversion, already upper")
+    {
+        CHECK(Unicode(L'A').toUpper() == L'A');
+        CHECK(Unicode(L'Z').toUpper() == L'Z');
+    }
+}
+
 TEST_CASE("Unicode::toUtf")
 {
     SUBCASE("Empty")
