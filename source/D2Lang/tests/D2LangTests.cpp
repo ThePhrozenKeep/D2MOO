@@ -298,7 +298,7 @@ TEST_CASE("Unicode::toUtf")
     SUBCASE("Empty")
     {
         char dest[256];
-        CHECK(Unicode::toUtf(dest, D2_USTR(""), sizeof(dest)) == dest);
+        CHECK(Unicode::toUtf(dest, D2_USTR(L""), sizeof(dest)) == dest);
         CHECK(strcmp(dest, "") == 0);
     }
     SUBCASE("Convert ASCII text")
