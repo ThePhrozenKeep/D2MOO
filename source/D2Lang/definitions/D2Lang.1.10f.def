@@ -37,7 +37,7 @@ EXPORTS
 ;   D2LANG_10048 @10048 ; ?sys2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z
 ;   D2LANG_10049 @10049 ; ?sysWidth@Unicode@@SIKPBU1@H@Z
     ?toLower@Unicode@@QBE?AU1@XZ @10050 ; Unicode::toLower
-;   D2LANG_10051 @10051 ; ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+    ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z @10051 ; Unicode::toUnicode
     ?toUpper@Unicode@@QBE?AU1@XZ @10052 ; Unicode::toUpper
     ?toUtf@Unicode@@SIPADPADPBU1@H@Z @10053 ; Unicode::toUtf
 ;   D2LANG_10054 @10054 ; ?unicode2Sys@Unicode@@SIPADPADPBU1@H@Z

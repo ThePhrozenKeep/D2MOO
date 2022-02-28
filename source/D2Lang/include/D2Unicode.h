@@ -166,6 +166,22 @@ struct D2LANG_DLL_DECL Unicode {
       const Unicode* substr);
 
   /**
+   * Converts a null-terminated UTF-8 string into a null-terminated
+   * UCS-2 string. The count indicates the capacity of the destination
+   * in terms of UCS-2 characters. Returns the pointer to the
+   * destination string.
+   *
+   * Vanilla bug: Specifying INT_MIN for the count results in
+   * undefined behavior. Do not specify INT_MIN as the count.
+   *
+   * D2Lang.0x6FC12A40 (#10051) ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+   */
+  static Unicode* __fastcall toUnicode(
+      Unicode* dest,
+      const char* src,
+      int count);
+
+  /**
    * Converts a null-terminated UCS-2 string into a null-terminated
    * UTF-8 string. The count indicates the capacity of the destination
    * in terms of UTF-8 code units. Returns the pointer to the
