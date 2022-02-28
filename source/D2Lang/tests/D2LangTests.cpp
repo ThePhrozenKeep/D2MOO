@@ -295,26 +295,31 @@ TEST_CASE("Unicode::toUpper")
 
 TEST_CASE("Unicode::toUtf")
 {
+    constexpr size_t dest_capacity = 256;
+    char dest[dest_capacity];
+
+    // The official name of Diablo in Japanese
+    constexpr wchar_t* utf16JpDiablo = L"\u30C7\u30A3\u30A2\u30D6\u30ED";
+    constexpr char* utf8JpDiablo = "\xE3\x83\x87\xE3\x82\xA3\xE3\x82\xA2\xE3\x83\x96\xE3\x83\xAD";
+
     SUBCASE("Empty")
     {
-        char dest[256];
-        CHECK(Unicode::toUtf(dest, D2_USTR(L""), sizeof(dest)) == dest);
+        CHECK(Unicode::toUtf(dest, D2_USTR(L""), dest_capacity) == dest);
         CHECK(strcmp(dest, "") == 0);
     }
     SUBCASE("Convert ASCII text")
     {
-        char dest[256];
-        Unicode::toUtf(dest, D2_USTR(L"Diablo"), sizeof(dest));
+        Unicode::toUtf(dest, D2_USTR(L"Diablo"), dest_capacity);
         CHECK(strcmp(dest, "Diablo") == 0);
     }
     SUBCASE("Convert Japanese text")
     {
-        // The official name of Diablo in Japanese
-        const wchar_t* utf16JpDiablo = L"\u30C7\u30A3\u30A2\u30D6\u30ED";
-        const char* utf8JpDiablo = "\xE3\x83\x87\xE3\x82\xA3\xE3\x82\xA2\xE3\x83\x96\xE3\x83\xAD";
-
-        char dest[256];
-        Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), sizeof(dest));
+        Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), dest_capacity);
         CHECK(strcmp(dest, utf8JpDiablo) == 0);
+    }
+    SUBCASE("Partially convert Japanese text")
+    {
+        Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), 7);
+        CHECK(strncmp(dest, utf8JpDiablo, 6) == 0);
     }
 }
