@@ -167,6 +167,46 @@ TEST_CASE("Unicode::stricmp")
     }
 }
 
+TEST_CASE("Unicode::strncat")
+{
+    SUBCASE("Concatenate empty on empty")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L""), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Concatenate text on empty")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Concatenate text on not empty")
+    {
+        Unicode dest[256] = { L'3', L':', L' ' };
+        Unicode::strncat(dest, D2_USTR(L"Mephisto, "), INT_MAX);
+        Unicode::strncat(dest, D2_USTR(L"Diablo, "), INT_MAX);
+        Unicode::strncat(dest, D2_USTR(L"and Baal"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"3: Mephisto, Diablo, and Baal") == 0);
+    }
+    SUBCASE("Concatenate at correct index")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        dest[3] = L'\0';
+        Unicode::strncat(dest, D2_USTR(L"mond"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"Diamond") == 0);
+    }
+    SUBCASE("Concatenate partial text")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        dest[3] = L'\0';
+        Unicode::strncat(dest, D2_USTR(L"mond"), 3);
+        CHECK(wcscmp((wchar_t*)dest, L"Diamon") == 0);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
