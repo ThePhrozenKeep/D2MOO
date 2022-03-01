@@ -312,6 +312,11 @@ TEST_CASE("Unicode::toUtf")
         Unicode::toUtf(dest, D2_USTR(L"Diablo"), dest_capacity);
         CHECK(strcmp(dest, "Diablo") == 0);
     }
+    SUBCASE("Partially convert ASCII text")
+    {
+        Unicode::toUtf(dest, D2_USTR(L"Diablo"), 4);
+        CHECK(strcmp(dest, "Dia") == 0);
+    }
     SUBCASE("Convert Japanese text")
     {
         Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), dest_capacity);
