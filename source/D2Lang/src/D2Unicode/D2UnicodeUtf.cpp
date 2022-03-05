@@ -88,6 +88,87 @@ static int UnicodeCharToUtf8CodePoint(char* dest, unsigned short ch) {
   return -1;
 }
 
+
+/**
+ * Converts one or more UTF-8 code point to a single UCS-2 character.
+ * Returns the number of UTF-8 code units that were converted.
+ *
+ * 1.10: Inline
+ * 1.13D: D2Lang.0x6FC08C40
+ */
+static int Utf8CodePointToUnicodeChar(Unicode* dest, const char* src, int count) {
+  if (count < 1) {
+    return -1;
+  }
+
+  uint16_t ucs2 = src[0];
+
+  for (int i = 0; sgUtf8ConvertTable[i].leading_unusable_bits != 0; ++i) {
+    uint16_t leading_bits = sgUtf8ConvertTable[i].leading_unusable_bits
+        & src[0];
+
+    if (leading_bits == sgUtf8ConvertTable[i].leading_bits) {
+      ucs2 &= sgUtf8ConvertTable[i].last_code_point;
+      if (ucs2 < sgUtf8ConvertTable[i].first_code_point) {
+        return -1;
+      }
+
+      dest->ch = ucs2;
+      return i + 1;
+    }
+
+    if ((i + 1) >= count) {
+      return -1;
+    }
+
+    /*
+     * Check if the trailing bytes are valid:
+     * 10XX'XXXX
+     */
+    uint8_t trailing_bits = src[i + 1] ^ 0x80u;
+    if ((trailing_bits & (unsigned char)0xC0) != 0) {
+      return -1;
+    }
+
+    ucs2 = (ucs2 << 6) | trailing_bits;
+  }
+
+  return -1;
+}
+
+Unicode* __fastcall Unicode::toUnicode(
+    Unicode* dest,
+    const char* src,
+    int count) {
+  D2_ASSERT(count >= 0);
+
+  size_t src_length = ::strlen(src);
+
+  /*
+    * Vanilla bug: (count - 1) can result in undefined behavior if
+    * count is INT_MIN.
+    */
+  int i_dest = 0;
+  int i_src = 0; 
+  while (src[i_src] != '\0' && i_dest < (count - 1)) {
+    int num_code_units = Utf8CodePointToUnicodeChar(
+        &dest[i_dest],
+        &src[i_src],
+        src_length - i_src);
+
+    ++i_dest;
+
+    if (num_code_units == -1) {
+      break;
+    }
+
+    i_src += num_code_units;
+  }
+
+  dest[i_dest].ch = L'\0';
+  return dest;
+}
+
 char* __fastcall Unicode::toUtf(char* dest, const Unicode* src, int count) {
   D2_ASSERT(count >= 0);
 
