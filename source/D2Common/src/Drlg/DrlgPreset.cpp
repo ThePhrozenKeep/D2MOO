@@ -1269,100 +1269,59 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD87560
-//TODO: v17
 D2RoomExStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, int nFlags, BOOL bSingleRoom)
 {
-	D2DrlgCoordStrc pDrlgCoord = {};
-	D2DrlgGridStrc pDrlgGrid = {};
-	int nCellPos[1024] = {};
-	int nCellFlags[256] = {};
-	D2DrlgGridStrc* v17 = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
-	int nHeight = 0;
-	int nWidth = 0;
-	int nXEnd = 0;
-	int nYEnd = 0;
-	int nX = 0;
-	int nY = 0;
-	int i = 0;
-	int j = 0;
-
 	if (pDrlgMap->pLvlPrestTxtRecord->dwOutdoors)
-	{
-		nFlags |= 0x80000;
-	}
+		nFlags |= 0x80000u;
 
-	DRLGGRID_FillGrid(&pDrlgGrid, pDrlgMap->pDrlgCoord.nWidth / 8 + 1, pDrlgMap->pDrlgCoord.nHeight / 8 + 1, nCellPos, nCellFlags);
-	DRLGPRESET_BuildPresetArea(pLevel, &pDrlgGrid, nFlags, pDrlgMap, bSingleRoom);
+	
+	int nCellPos[1024];
+	int nCellFlags[256];
+	D2DrlgGridStrc tDrlgGrid;
+	DRLGGRID_FillGrid(&tDrlgGrid, pDrlgMap->pDrlgCoord.nWidth / 8 + 1, pDrlgMap->pDrlgCoord.nHeight / 8 + 1, nCellPos, nCellFlags);
+	DRLGPRESET_BuildPresetArea(pLevel, &tDrlgGrid, nFlags, pDrlgMap, bSingleRoom);
 
-	pRoomEx = 0;
-
+	D2RoomExStrc* pRoomEx = nullptr;
 	if (bSingleRoom)
 	{
-		pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &pDrlgMap->pDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, DRLGGRID_GetGridFlags(&pDrlgGrid, 0, 0), 1, 0);
+		pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &pDrlgMap->pDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, DRLGGRID_GetGridFlags(&tDrlgGrid, 0, 0), 1, 0);
 	}
 	else
 	{
-		nX = pDrlgMap->pDrlgCoord.nPosX;
-		nY = pDrlgMap->pDrlgCoord.nPosY;
-		nXEnd = pDrlgMap->pDrlgCoord.nPosX + pDrlgMap->pDrlgCoord.nWidth;
-		nYEnd = pDrlgMap->pDrlgCoord.nPosY + pDrlgMap->pDrlgCoord.nHeight;
-
-		pDrlgCoord.nPosX = 0;
-		pDrlgCoord.nPosY = 0;
-		pDrlgCoord.nWidth = 0;
-		pDrlgCoord.nHeight = 0;
-
-		i = 0;
-		if (nY < nYEnd)
+		const int nXEnd = pDrlgMap->pDrlgCoord.nPosX + pDrlgMap->pDrlgCoord.nWidth;
+		const int nYEnd = pDrlgMap->pDrlgCoord.nPosY + pDrlgMap->pDrlgCoord.nHeight;
+		D2DrlgCoordStrc tDrlgCoord = { 0, 0, 0, 0 };
+		int nGridY = 0;
+		
+		for (int nY = pDrlgMap->pDrlgCoord.nPosY; nY < nYEnd; nY += 8)
 		{
-			nHeight = nYEnd - nY;
-			while (nY < nYEnd)
+			const int nDeltaToEndY = nYEnd - nY;
+			tDrlgCoord.nPosY = nY;
+			int nGridX = 0;
+			for (int nX = pDrlgMap->pDrlgCoord.nPosX; nX < nXEnd; nX += 8)
 			{
-				j = 0;
-				if (nX < nXEnd)
-				{
-					pDrlgCoord.nPosY = nY;
-					nWidth = nXEnd - nX;
-					while (nX < nXEnd)
-					{
-						pDrlgCoord.nPosX = nX;
+				const int nDeltaToEndX = nXEnd - nX;
+				tDrlgCoord.nPosX = nX;
 
-						pDrlgCoord.nWidth = nWidth;
-						if (nWidth >= 8)
-						{
-							pDrlgCoord.nWidth = 8;
-						}
+				tDrlgCoord.nWidth = nDeltaToEndX;
+				if (nDeltaToEndX >= 8)
+					tDrlgCoord.nWidth = 8;
+				
+				tDrlgCoord.nHeight = nDeltaToEndY;
+				if (nDeltaToEndY >= 8)
+					tDrlgCoord.nHeight = 8;
+				
+				int nGridFlags = DRLGGRID_GetGridFlags(&tDrlgGrid, nGridX, nGridY);
 
-						pDrlgCoord.nHeight = nHeight;
-						if (nHeight >= 8)
-						{
-							pDrlgCoord.nHeight = 8;
-						}
-
-						if (pDrlgCoord.nWidth && pDrlgCoord.nHeight)
-						{
-							v17 = (D2DrlgGridStrc*)(pDrlgMap->bHasInfo ? DRLGGRID_GetGridFlags(&pDrlgMap->pMapGrid, j, i) : NULL);
-							pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &pDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, DRLGGRID_GetGridFlags(&pDrlgGrid, j, i), 0, v17);
-						}
-
-						nX += 8;
-						nWidth -= 8;
-
-						++j;
-					}
-				}
-
-				nY += 8;
-				nHeight -= 8;
-
-				++i;
+				if (tDrlgCoord.nWidth && tDrlgCoord.nHeight)
+					pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &tDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, nGridFlags, 0, (D2DrlgGridStrc*)(pDrlgMap->bHasInfo ? nGridFlags : 0));
+					
+				++nGridX;
 			}
+			++nGridY;
 		}
 	}
-	
-	DRLGGRID_ResetGrid(&pDrlgGrid);
-
+	DRLGGRID_ResetGrid(&tDrlgGrid);
 	return pRoomEx;
 }
 
