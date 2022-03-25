@@ -558,7 +558,7 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 			bHasWaypoint = TRUE;
 		}
 
-		if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP)
+		if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK)
 		{
 			if (!bHasWaypoint)
 			{
@@ -570,7 +570,7 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 					nFlags <<= 1;
 					++nCounter;
 
-					if (!(nFlags & ROOMEXFLAG_HAS_WARP))
+					if (!(nFlags & ROOMEXFLAG_HAS_WARP_MASK))
 					{
 						bHasWaypoint = FALSE;
 						break;

@@ -186,7 +186,7 @@ D2RoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIn
 	{		
 		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
 		{
-			if (i->dwFlags & ROOMEXFLAG_HAS_WARP)
+			if (i->dwFlags & ROOMEXFLAG_HAS_WARP_MASK)
 			{
 				nFlags = ROOMEXFLAG_HAS_WARP_0;
 				nCounter = 0;
@@ -207,7 +207,7 @@ D2RoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIn
 					nFlags *= 2;
 					++nCounter;
 				}
-				while (nFlags & ROOMEXFLAG_HAS_WARP);
+				while (nFlags & ROOMEXFLAG_HAS_WARP_MASK);
 			}
 		}
 

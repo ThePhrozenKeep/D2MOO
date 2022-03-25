@@ -700,7 +700,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 		pRoomEx->ppRoomsNear[i] = ppNearRooms[i];
 	}
 
-	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP)
+	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK)
 	{
 		nFlags = ROOMEXFLAG_HAS_WARP_0;
 		nWarpId = 0;
@@ -772,7 +772,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 
 			++nWarpId;
 		}
-		while (nFlags & ROOMEXFLAG_HAS_WARP);
+		while (nFlags & ROOMEXFLAG_HAS_WARP_MASK);
 	}
 
 	if (!DRLG_IsTownLevel(pRoomEx->pLevel->nLevelId))
