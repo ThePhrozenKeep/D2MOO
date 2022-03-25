@@ -102,7 +102,11 @@ struct D2UnkFogStrc
 
 #pragma pack()
 
+typedef int (*D2ExceptionCallback)();
+
 D2FUNC_DLL(FOG, 10018, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)														//Fog.#10018
+D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
+D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
 D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023
 D2FUNC_DLL(FOG, 10024_PacketAssertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)									//Fog.#10024
 D2FUNC_DLL(FOG, 10025, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)													//Fog.#10025
