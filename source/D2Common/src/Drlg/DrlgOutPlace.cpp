@@ -48,6 +48,7 @@ static D2DrlgLinkStrc gAct2OutdoorDrlgLink[15] =
 {
 	{ sub_6FD81330, LEVEL_LUTGHOLEIN, -1, -1 },
 	{ sub_6FD81B30, LEVEL_ROCKYWASTE, 0, -1 },
+	{ sub_6FD81530, LEVEL_DRYHILLS, 1, -1 },
 	{ sub_6FD81530, LEVEL_FAROASIS, 2, -1 },
 	{ sub_6FD81530, LEVEL_LOSTCITY, 3, -1 },
 	{ sub_6FD81BF0, LEVEL_VALLEYOFSNAKES, 4, -1 },
