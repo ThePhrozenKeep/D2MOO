@@ -1339,9 +1339,10 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 	DRLGGRID_AlterAllGridFlags(pDrlgGrid, nFlags, FLAG_OPERATION_OR);
 
-	uint32_t nPops = pDrlgMap->pLvlPrestTxtRecord->dwPops;
+	uint32_t nPresetTxtRecordNumberPops = pDrlgMap->pLvlPrestTxtRecord->dwPops;
+	uint32_t nProcessedPops = 0;
 
-	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || nPops)
+	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || nPresetTxtRecordNumberPops)
 	{
 		DRLGPRESET_LoadDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->unk0x08, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
 
@@ -1357,18 +1358,18 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			FOG_10025("ptRegion->ptFile->nSizeY == ptRegion->tCoords.nSizeTileY", __FILE__, __LINE__);
 		}
 
-		if (nPops)
+		if (nPresetTxtRecordNumberPops)
 		{
-			pDrlgMap->pPopsIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
-			pDrlgMap->pPopsSubIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
-			pDrlgMap->pPopsOrientation = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPops);
-			pDrlgMap->pPopsLocation = (D2DrlgCoordStrc*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2DrlgCoordStrc) * nPops);
+			pDrlgMap->pPopsIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+			pDrlgMap->pPopsSubIndex = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+			pDrlgMap->pPopsOrientation = (int32_t*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+			pDrlgMap->pPopsLocation = (D2DrlgCoordStrc*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2DrlgCoordStrc) * nPresetTxtRecordNumberPops);
 		}
 
-		memset(pDrlgMap->pPopsIndex, 0x00, sizeof(int32_t) * nPops);
-		memset(pDrlgMap->pPopsSubIndex, 0x00, sizeof(int32_t) * nPops);
-		memset(pDrlgMap->pPopsOrientation, 0x00, sizeof(int32_t) * nPops);
-		memset(pDrlgMap->pPopsLocation, 0x00, sizeof(D2DrlgCoordStrc) * nPops);
+		memset(pDrlgMap->pPopsIndex, 0x00, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+		memset(pDrlgMap->pPopsSubIndex, 0x00, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+		memset(pDrlgMap->pPopsOrientation, 0x00, sizeof(int32_t) * nPresetTxtRecordNumberPops);
+		memset(pDrlgMap->pPopsLocation, 0x00, sizeof(D2DrlgCoordStrc) * nPresetTxtRecordNumberPops);
 
 		D2DrlgCoordStrc pDrlgCoord = {};
 
@@ -1385,68 +1386,68 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid1, (int*)pDrlgMap->pFile->pOrientationLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags1);
 			DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid2, (int*)pDrlgMap->pFile->pWallLayer[i], &pDrlgCoord, pDrlgMap->pFile->nWidth + 1, pCellFlags2);
 
-			for (int j = 0; j < pDrlgMap->pFile->nHeight; ++j)
+			for (int nY = 0; nY < pDrlgMap->pFile->nHeight; ++nY)
 			{
-				for (int k = 0; k < pDrlgMap->pFile->nWidth; ++k)
+				for (int nX = 0; nX < pDrlgMap->pFile->nWidth; ++nX)
 				{
-					int v53 = DRLGGRID_GetGridFlags(&pDrlgGrid1, k, j);
-					int v28 = DRLGGRID_GetGridFlags(&pDrlgGrid2, k, j);
-					int v30 = BYTE1(v28);
-					int v31 = v28 & 0x80000000;
-					int v32 = ((unsigned int)v28 >> 20) & 0x3F;
+					int nGrid1Flags = DRLGGRID_GetGridFlags(&pDrlgGrid1, nX, nY);
+					int nGrid2Flags = DRLGGRID_GetGridFlags(&pDrlgGrid2, nX, nY);
+					int nGrid2FlagsByte1 = BYTE1(nGrid2Flags);
+					int nGrid2UpperBit = nGrid2Flags & 0x80000000;
+					int nFlagsBits21_26 = ((unsigned int)nGrid2Flags >> 20) & 0x3F;
 
-					if (v53 == 11 || v53 == 10)
+					if (nGrid1Flags == 11 || nGrid1Flags == 10)
 					{
-						if (pDrlgMap->pLvlPrestTxtRecord->dwScan && v32 >= 0 && v32 <= 7 && (v30 == 0 || v30 == 4 || v31))
+						if (pDrlgMap->pLvlPrestTxtRecord->dwScan && nFlagsBits21_26 >= 0 && nFlagsBits21_26 <= 7 && (nGrid2FlagsByte1 == 0 || nGrid2FlagsByte1 == 4 || nGrid2UpperBit))
 						{
 							if (bSingleRoom)
 							{
-								DRLGGRID_AlterGridFlag(pDrlgGrid, 0, 0, 1 << (v32 + 4), FLAG_OPERATION_OR);
+								DRLGGRID_AlterGridFlag(pDrlgGrid, 0, 0, 1 << (nFlagsBits21_26 + 4), FLAG_OPERATION_OR);
 							}
 							else
 							{
-								DRLGGRID_AlterGridFlag(pDrlgGrid, k / 8, j / 8, 1 << (v32 + 4), FLAG_OPERATION_OR);
+								DRLGGRID_AlterGridFlag(pDrlgGrid, nX / 8, nY / 8, 1 << (nFlagsBits21_26 + 4), FLAG_OPERATION_OR);
 							}
 						}
 
-						if (nPops && v32 >= 8 && v32 <= 29)
+						if (nPresetTxtRecordNumberPops && nFlagsBits21_26 >= 8 && nFlagsBits21_26 <= 29)
 						{
 							int nCounter = 0;
-							while (nCounter < nPops)
+							while (nCounter < nProcessedPops)
 							{
-								if (pDrlgMap->pPopsIndex[nCounter] == v32)
+								if (pDrlgMap->pPopsIndex[nCounter] == nFlagsBits21_26)
 								{
-									pDrlgMap->pPopsLocation[nCounter].nWidth = k;
-									pDrlgMap->pPopsLocation[nCounter].nHeight = j;
+									pDrlgMap->pPopsLocation[nCounter].nWidth = nX;
+									pDrlgMap->pPopsLocation[nCounter].nHeight = nY;
 									break;
 								}
 
 								++nCounter;
 							}
 
-							if (nCounter == nPops)
+							if (nCounter == nProcessedPops)
 							{
-								pDrlgMap->pPopsIndex[nPops] = v32;
-								pDrlgMap->pPopsSubIndex[nPops] = v30;
-								pDrlgMap->pPopsLocation[nPops].nPosX = k;
-								pDrlgMap->pPopsLocation[nPops].nPosY = j;
-								++nPops;
+								pDrlgMap->pPopsIndex[nProcessedPops] = nFlagsBits21_26;
+								pDrlgMap->pPopsSubIndex[nProcessedPops] = nGrid2FlagsByte1;
+								pDrlgMap->pPopsLocation[nProcessedPops].nPosX = nX;
+								pDrlgMap->pPopsLocation[nProcessedPops].nPosY = nY;
+								++nProcessedPops;
 							}
 						}
 
-						if (pDrlgMap->pLvlPrestTxtRecord->dwScan && v32 >= 30 && v32 <= 33)
+						if (pDrlgMap->pLvlPrestTxtRecord->dwScan && nFlagsBits21_26 >= 30 && nFlagsBits21_26 <= 33)
 						{
-							pLevel->pTileInfo[pLevel->nTileInfo].nPosX = k + pDrlgMap->pDrlgCoord.nPosX;
-							pLevel->pTileInfo[pLevel->nTileInfo].nPosY = j + pDrlgMap->pDrlgCoord.nPosY;
+							pLevel->pTileInfo[pLevel->nTileInfo].nPosX = nX + pDrlgMap->pDrlgCoord.nPosX;
+							pLevel->pTileInfo[pLevel->nTileInfo].nPosY = nY + pDrlgMap->pDrlgCoord.nPosY;
 
-							switch (v32)
+							switch (nFlagsBits21_26)
 							{
 							case 30:
-								pLevel->pTileInfo[pLevel->nTileInfo].nTileIndex = v30;
+								pLevel->pTileInfo[pLevel->nTileInfo].nTileIndex = nGrid2FlagsByte1;
 								break;
 
 							case 31:
-								pLevel->pTileInfo[pLevel->nTileInfo].nTileIndex = v30 + 5;
+								pLevel->pTileInfo[pLevel->nTileInfo].nTileIndex = nGrid2FlagsByte1 + 5;
 								break;
 
 							case 32:
@@ -1475,10 +1476,11 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 			DRLGGRID_ResetGrid(&pDrlgGrid1);
 		}
 
-		if (nPops)
+		if (nPresetTxtRecordNumberPops)
 		{
-			pDrlgMap->nPops = nPops;
-			for (int i = 0; i < nPops; ++i)
+			D2_ASSERT(nProcessedPops == nPresetTxtRecordNumberPops);
+			pDrlgMap->nPops = nProcessedPops;
+			for (int i = 0; i < pDrlgMap->nPops; ++i)
 			{
 				D2DrlgCoordStrc* pPopsLocation = &pDrlgMap->pPopsLocation[i];
 
