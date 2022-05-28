@@ -32,7 +32,7 @@ void __stdcall MISSILE_AllocMissileData(D2UnitStrc* pMissile)
 	{
 		pMissile->pMissileData = (D2MissileDataStrc*)FOG_AllocServerMemory(pMissile->pMemoryPool, sizeof(D2MissileDataStrc), __FILE__, __LINE__, 0);
 		memset(pMissile->pMissileData, 0x00, sizeof(D2MissileDataStrc));
-		pMissile->pMissileData->dwOwnerGUID = -1;
+		pMissile->pMissileData->dwOwnerGUID = D2UnitInvalidGUID;
 	}
 }
 
@@ -220,7 +220,7 @@ void __stdcall MISSILE_SetOwner(D2UnitStrc* pMissile, D2UnitStrc* pOwner)
 				}
 				else
 				{
-					pMissile->pMissileData->dwOwnerGUID = -1;
+					pMissile->pMissileData->dwOwnerGUID = D2UnitInvalidGUID;
 				}
 			}
 		}
@@ -442,13 +442,13 @@ void __stdcall MISSILE_SetHomeType(D2UnitStrc* pMissile, D2UnitStrc* pTarget)
 		else
 		{
 			pMissile->pMissileData->nHomeType = 0;
-			pMissile->pMissileData->dwHomeGUID = -1;
+			pMissile->pMissileData->dwHomeGUID = D2UnitInvalidGUID;
 		}
 	}
 }
 
 //D2Common.0x6FDBA550 (#11145)
-void __stdcall MISSILE_GetHomeType(D2UnitStrc* pMissile, int* nHomeType, int* nHomeGUID)
+void __stdcall MISSILE_GetHomeType(D2UnitStrc* pMissile, int* nHomeType, D2UnitGUID* nHomeGUID)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
@@ -458,7 +458,7 @@ void __stdcall MISSILE_GetHomeType(D2UnitStrc* pMissile, int* nHomeType, int* nH
 	else
 	{
 		*nHomeType = 0;
-		*nHomeGUID = -1;
+		*nHomeGUID = D2UnitInvalidGUID;
 	}
 }
 

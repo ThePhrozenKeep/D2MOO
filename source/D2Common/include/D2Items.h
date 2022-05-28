@@ -2,6 +2,7 @@
 
 #include "CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
+#include <Units/Units.h>
 //TODO: Revise
 
 #pragma pack(1)
@@ -204,6 +205,10 @@ struct D2ItemSaveStrc
 	int32_t nItemFileIndex;						//0x14
 };
 #pragma pack()
+
+// Helper function
+// Checks that the given unit is an item with data
+inline D2ItemDataStrc* ITEMS_GetItemData(D2UnitStrc* pItem) { return (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData) ? pItem->pItemData : nullptr; }
 
 //D2Common.0x6FD98380 (#10687)
 D2COMMON_DLL_DECL void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);
@@ -471,7 +476,7 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_GetRealmData(D2UnitStrc* pItem, int* pRea
 //D2Common.0x6FD9E070 (#11245)
 D2COMMON_DLL_DECL void __stdcall ITEMS_SetRealmData(D2UnitStrc* pItem, int a2, int a3);
 //D2Common.0x6FD9E0A0 (#10734)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, int nOwnerGUID);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FD9E120 (#10735)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetOwnerId(D2UnitStrc* pItem);
 //D2Common.0x6FD9E1A0 (#10736)

@@ -8,7 +8,7 @@ struct D2ItemDataStrc
 {
 	uint32_t dwQualityNo;						//0x00
 	D2SeedStrc pSeed;						//0x04
-	uint32_t dwOwnerGUID;						//0x0C
+	D2UnitGUID dwOwnerGUID;						//0x0C
 	uint32_t dwInitSeed;						//0x10
 	uint32_t dwCommandFlags;					//0x14
 	uint32_t dwItemFlags;						//0x18

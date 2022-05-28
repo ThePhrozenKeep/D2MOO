@@ -633,7 +633,7 @@ D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit
 	{
 		for (D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill; pSkill; pSkill = pSkill->pNextSkill)
 		{
-			if (pSkill->pSkillsTxt->nSkillId == nSkillId && (!pHighestLevelSkill || pSkill->nOwnerGUID == -1 || pHighestLevelSkill->nOwnerGUID != -1 && pSkill->nSkillLevel > pHighestLevelSkill->nSkillLevel))
+			if (pSkill->pSkillsTxt->nSkillId == nSkillId && (!pHighestLevelSkill || pSkill->nOwnerGUID == D2UnitInvalidGUID || pHighestLevelSkill->nOwnerGUID != D2UnitInvalidGUID && pSkill->nSkillLevel > pHighestLevelSkill->nSkillLevel))
 			{
 				pHighestLevelSkill = pSkill;
 			}
@@ -790,7 +790,7 @@ D2SkillStrc* __fastcall SKILLS_GetUsedSkillFromSkillList(D2SkillListStrc* pSkill
 }
 
 //D2Common.0x6FDAFF40 (#10949)
-D2SkillStrc* __fastcall SKILLS_GetSkillById(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID)
+D2SkillStrc* __fastcall SKILLS_GetSkillById(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
 	return SKILLS_GetSkill(pUnit, nSkillId, nOwnerGUID);
 }
@@ -836,7 +836,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 
 	if (const D2SkillStrc* pLeftSkill = pUnit->pSkills->pLeftSkill)
 	{
-		if (nSkillId == pLeftSkill->pSkillsTxt->nSkillId && pLeftSkill->nOwnerGUID == -1)
+		if (nSkillId == pLeftSkill->pSkillsTxt->nSkillId && pLeftSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			SKILLS_SetLeftActiveSkill(pUnit, SKILL_ATTACK, -1);
 		}
@@ -844,7 +844,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 
 	if (const D2SkillStrc* pRightSkill = pUnit->pSkills->pRightSkill)
 	{
-		if (nSkillId == pRightSkill->pSkillsTxt->nSkillId && pRightSkill->nOwnerGUID == -1)
+		if (nSkillId == pRightSkill->pSkillsTxt->nSkillId && pRightSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			SKILLS_SetRightActiveSkill(pUnit, SKILL_ATTACK, -1);
 		}
@@ -852,7 +852,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 
 	if (const D2SkillStrc* pUsedSkill = pUnit->pSkills->pUsedSkill)
 	{
-		if (nSkillId == pUsedSkill->pSkillsTxt->nSkillId && pUsedSkill->nOwnerGUID == -1)
+		if (nSkillId == pUsedSkill->pSkillsTxt->nSkillId && pUsedSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			SKILLS_SetUsedSkillInSkillList(pUnit->pSkills, nullptr);
 		}
@@ -861,7 +861,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 	// Try to find the skill in the unit skills list
 	D2SkillStrc* pPreviousSkill = nullptr;
 	D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill;
-	while (pSkill && !(pSkill->pSkillsTxt->nSkillId == nSkillId && pSkill->nOwnerGUID == -1))
+	while (pSkill && !(pSkill->pSkillsTxt->nSkillId == nSkillId && pSkill->nOwnerGUID == D2UnitInvalidGUID))
 	{
 		pPreviousSkill = pSkill;
 		pSkill = pSkill->pNextSkill;
@@ -959,7 +959,7 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 			pSkill = UNITS_GetStartSkill(pUnit);
 			if (pSkill)
 			{
-				while (pSkill->pSkillsTxt != pSkillsTxtRecord || pSkill->nOwnerGUID != -1)
+				while (pSkill->pSkillsTxt != pSkillsTxtRecord || pSkill->nOwnerGUID != D2UnitInvalidGUID)
 				{
 					pSkill = pSkill->pNextSkill;
 					if (!pSkill)
@@ -1084,7 +1084,7 @@ void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLev
 }
 
 //D2Common.0x6FDB05E0 (#10954)
-void __stdcall D2Common_10954(D2UnitStrc* pUnit, int nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory)
+void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2SkillListStrc* pSkillList = NULL;
@@ -1203,7 +1203,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, int nOwnerGUID, int nSkillId, i
 }
 
 //D2Common.0x6FDB08C0 (#10957)
-int __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill)
+D2UnitGUID __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -1211,11 +1211,11 @@ int __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB08F0 (#10955)
-BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, int* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges)
+BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, D2UnitGUID* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges)
 {
 	D2_ASSERT(pSkill);
 
-	if (pSkill->nOwnerGUID == -1)
+	if (pSkill->nOwnerGUID == D2UnitInvalidGUID)
 	{
 		return FALSE;
 	}
@@ -1247,7 +1247,7 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 {
 	D2_ASSERT(pSkill);
 
-	if (pSkill->nOwnerGUID == -1)
+	if (pSkill->nOwnerGUID == D2UnitInvalidGUID)
 	{
 		return FALSE;
 	}
@@ -1259,7 +1259,7 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 }
 
 //D2Common.0x6FDB09A0 (#10961)
-void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID)
+void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
 	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	D2_ASSERT(pSkillsTxtRecord);
@@ -1293,7 +1293,7 @@ void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nO
 }
 
 //D2Common.0x6FDB0A30 (#10962)
-void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID)
+void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2SkillStrc* pSkill = NULL;
@@ -1621,7 +1621,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2Skill
 
 	D2_ASSERT(pSkill);
 
-	if (pSkill->nOwnerGUID == -1)
+	if (pSkill->nOwnerGUID == D2UnitInvalidGUID)
 	{
 		nSkillLevel = SKILLS_GetSkillLevel(pUnit, pSkill, TRUE) - 1;
 		D2_ASSERT(pSkill->pSkillsTxt);
@@ -1675,7 +1675,7 @@ BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 
 	if (pUnit && pSkill && pUnit->pInventory)
 	{
-		if (pSkill->nOwnerGUID != -1)
+		if (pSkill->nOwnerGUID != D2UnitInvalidGUID)
 		{
 			pItem = INVENTORY_GetFirstItem(pUnit->pInventory);
 
@@ -2003,7 +2003,7 @@ int __stdcall SKILLS_GetSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill, BOOL 
 	if (pUnit && pSkill)
 	{
 		nSkillLevel = pSkill->nSkillLevel;
-		if (bBonus && pSkill->nOwnerGUID == -1)
+		if (bBonus && pSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			nSkillLevel += SKILLS_GetBonusSkillLevel(pUnit, pSkill);
 		}
@@ -2035,12 +2035,12 @@ int __stdcall SKILLS_GetBonusSkillLevelFromSkillId(D2UnitStrc* pUnit, int nSkill
 	{
 		pSkill = pUnit->pSkills->pFirstSkill;
 
-		while (pSkill && (pSkill->pSkillsTxt->nSkillId != nSkillId || pSkill->nOwnerGUID != -1))
+		while (pSkill && (pSkill->pSkillsTxt->nSkillId != nSkillId || pSkill->nOwnerGUID != D2UnitInvalidGUID))
 		{
 			pSkill = pSkill->pNextSkill;
 		}
 
-		if (pSkill && pSkill->nOwnerGUID == -1)
+		if (pSkill && pSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			return SKILLS_GetBonusSkillLevel(pUnit, pSkill);
 		}
@@ -2073,7 +2073,7 @@ void __stdcall D2Common_11030(D2UnitStrc* pUnit, int nSkillId, int a3)
 			SKILLS_AssignSkill(pUnit, nSkillId, 0, 0, __FILE__, __LINE__);
 		}
 
-		if (pSkill->nOwnerGUID == -1)
+		if (pSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
 			pSkill->nLevelBonus = a3;
 			SKILLS_RefreshSkill(pUnit, nSkillId);
@@ -2102,7 +2102,7 @@ void __stdcall D2Common_11031(D2UnitStrc* pUnit, int nSkillId, int a3)
 		SKILLS_AssignSkill(pUnit, nSkillId, 0, 0, __FILE__, __LINE__);
 	}
 
-	if (pSkill->nOwnerGUID == -1)
+	if (pSkill->nOwnerGUID == D2UnitInvalidGUID)
 	{
 		pSkill->nLevelBonus += a3;
 		if (pSkill->nLevelBonus < 0)
@@ -2285,7 +2285,7 @@ int __stdcall SKILLS_GetRequiredLevelBasedOnCurrent(D2UnitStrc* pUnit, int nSkil
 		if (pUnit->pSkills)
 		{
 			pSkill = pUnit->pSkills->pFirstSkill;
-			while (pSkill && (pSkill->pSkillsTxt->nSkillId != nSkillId || pSkill->nOwnerGUID != -1))
+			while (pSkill && (pSkill->pSkillsTxt->nSkillId != nSkillId || pSkill->nOwnerGUID != D2UnitInvalidGUID))
 			{
 				pSkill = pSkill->pNextSkill;
 			}
@@ -2371,7 +2371,7 @@ BOOL __stdcall SKILLS_CheckRequiredSkills(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDB1F80
-D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, int nOwnerGUID)
+D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
 	D2SkillStrc* pSkill = NULL;
 
