@@ -71,6 +71,7 @@ void __cdecl Unicode::sprintf(
         && format[i_format].ch != L'\0') {
       if (i_buffer >= buffer_size) {
         buffer[i_buffer - 1].ch = L'\0';
+        va_end(args);
         return;
       }
 
@@ -82,11 +83,13 @@ void __cdecl Unicode::sprintf(
 
     if (i_buffer >= buffer_size) {
       buffer[i_buffer - 1].ch = L'\0';
+      va_end(args);
       return;
     }
 
     if (format[i_format].ch == L'\0') {
       buffer[i_buffer].ch = L'\0';
+      va_end(args);
       return;
     }
 
@@ -104,11 +107,13 @@ void __cdecl Unicode::sprintf(
          * No conversion specifier found or % is the last character.
          */
         Unicode::strcpy(&buffer[i_buffer], percent_sign);
+        va_end(args);
         return;
       }
 
       case L'%': {
         if (i_buffer + 1 >= buffer_size) {
+          va_end(args);
           return;
         }
 
@@ -134,9 +139,12 @@ void __cdecl Unicode::sprintf(
         int itoa_length;
         for (itoa_length = 0;
             itoa_unicode[itoa_length].ch != L'\0';
-            ++itoa_length);
+            ++itoa_length) {
+          /* Left empty on purpose. */
+        }
 
         if ((i_buffer + itoa_length + 1) >= buffer_size) {
+          va_end(args);
           return;
         }
 
@@ -153,6 +161,7 @@ void __cdecl Unicode::sprintf(
               &buffer[i_buffer],
               arg_value.s,
               buffer_size - (i_buffer + 1));
+          va_end(args);
           return;
         }
 
@@ -168,6 +177,7 @@ void __cdecl Unicode::sprintf(
               &buffer[i_buffer],
               arg_value.s,
               buffer_size - (i_buffer + 1));
+          va_end(args);
           return;
         }
 
@@ -193,6 +203,8 @@ void __cdecl Unicode::sprintf(
       }
     }
   }
+
+  va_end(args);
 }
 
 Unicode* __fastcall Unicode::strcat(Unicode* dest, const Unicode* src) {
