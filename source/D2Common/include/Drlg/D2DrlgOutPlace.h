@@ -6,17 +6,31 @@
 
 #pragma pack(1)
 
-struct D2UnkOutPlaceStrc
+enum D2Jungle {
+	JUNGLE_MAX_ATTACH = 3,
+	JUNGLE_PRESET2_ATTACH_POINT = 2
+};
+
+
+enum D2JunglePresetFlags {
+	// Related to pPreset1 having a value in the direction
+	JUNGLE_FLAG_LEFT_	= 0b0001, // West : deltaX < 0
+	JUNGLE_FLAG_RIGHT_	= 0b0010, // East : deltaX > 0
+	JUNGLE_FLAG_BOTTOM_	= 0b0100, // South: deltaY > 0
+	JUNGLE_FLAG_TOP_	= 0b1000, // North: deltaY < 0
+};
+
+struct D2JungleStrc
 {
-	D2DrlgCoordStrc pDrlgCoord;				//0x00
-	int32_t field_10;						//0x10
-	int32_t nBranch;						//0x14
-	D2UnkOutPlaceStrc* field_18;			//0x18
-	D2UnkOutPlaceStrc* field_1C[3];			//0x1C
-	int32_t field_28;						//0x18
-	int32_t field_2C;						//0x2C
-	int32_t* pJungleDefs;					//0x30
-	int32_t nJungleDefs;					//0x34
+	D2DrlgCoordStrc pDrlgCoord;							//0x00
+	int32_t field_10;									//0x10 Orientation of the jungle ?
+	int32_t nBranch;									//0x14
+	D2JungleStrc* pBasedOnJungle;						//0x18 Jungle we are based from
+	D2JungleStrc* pJungleBranches[JUNGLE_MAX_ATTACH];	//0x1C Jungles that are based on this one
+	int32_t nPresetsBlocksX;							//0x18
+	int32_t nPresetsBlocksY;							//0x2C
+	int32_t* pJungleDefs;								//0x30
+	int32_t nJungleDefs;								//0x34
 };
 
 
@@ -85,9 +99,9 @@ void __fastcall sub_6FD826D0(D2DrlgStrc* pDrlg, int nStartId, int nEndId);
 //D2Common.0x6FD82750
 void __fastcall sub_6FD82750(D2DrlgStrc* pDrlg, int nStartId, int nEndId);
 //D2Common.0x6FD82820
-D2DrlgLevelStrc* __fastcall sub_6FD82820(D2DrlgLevelStrc* pLevel);
+D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD83970
-void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2UnkOutPlaceStrc* a2, int nRand, int nSizeX, int nSizeY);
+void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* a2, int nRand, int nSizeX, int nSizeY);
 //D2Common.0x6FD83A20
 void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD83C90
