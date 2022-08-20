@@ -138,7 +138,7 @@ void PatchD2Common()
 		//REPLACE_D2MOO_BY_ORG_COMMON(DRLGPRESET_InitPresetRoomData, 0x6FD86DC0);
 		//REPLACE_D2MOO_BY_ORG_COMMON(DRLGGRID_GetGridFlags, 0x6FD75CA0);
 		
-		REPLACE_D2MOO_BY_ORG_COMMON(DRLG_GenerateJungles, 0x6FD82820);
+		//REPLACE_D2MOO_BY_ORG_COMMON(DRLG_GenerateJungles, 0x6FD82820);
 
 		success = NO_ERROR == DetourTransactionCommit();
 		REQUIRE(success);
@@ -404,124 +404,153 @@ TEST_CASE("DRLG_AllocDrlg")
 	for (uint32_t seed = 0; seed != lastSeed; seed++)
 	{
 		CAPTURE(seed);
-		const D2C_TownLevels actTownLevelIds[] = { D2TOWN_ROGUECAMP, D2TOWN_LUTGHOL, D2TOWN_KURAST, D2TOWN_PANDFORT, D2TOWN_HARRO };
-		for (int nAct = ACT_I; nAct <= ACT_V; nAct++)
+		for (const D2C_Difficulties nDifficulty : { DIFFMODE_NORMAL, DIFFMODE_NIGHTMARE, DIFFMODE_HELL})
 		{
-			const D2C_TownLevels actTownId = actTownLevelIds[nAct];
+			CAPTURE(nDifficulty);
 
-			D2DrlgActStrc act{};
-			act.nAct = nAct;
-			act.dwInitSeed = 0x085f8ea3;
-			act.dwInitSeed = seed;
-			act.nTownId = actTownId;
-			D2DrlgActStrc orgAct = act;
-
-			// Looks like it is not actually used in D2Common ?
-			D2GameStrc game{};
-			game.dwInitSeed = act.dwInitSeed;
-			game.bExpansion = true;
-			D2GameStrc orgGame = game;
-
-			D2DrlgStrc* pOrgDrlg = Original_DRLG_AllocDrlg(&orgAct, act.nAct, 0, orgAct.dwInitSeed, actTownId, D2DrlgFlags(0), &orgGame, DIFFMODE_NORMAL, nullptr, nullptr);
-			D2DrlgStrc* pDrlg = DRLG_AllocDrlg(&act, act.nAct, 0, act.dwInitSeed, actTownId, D2DrlgFlags(0), &game, DIFFMODE_NORMAL, nullptr, nullptr);
-
-			CHECK(pDrlg->unk0x08 == pOrgDrlg->unk0x08);
-			CHECK(pDrlg->nAct == pOrgDrlg->nAct);
-			CHECK(pDrlg->pSeed.lSeed == pOrgDrlg->pSeed.lSeed);
-			CHECK(pDrlg->dwStartSeed == pOrgDrlg->dwStartSeed);
-			CHECK(pDrlg->dwGameLowSeed == pOrgDrlg->dwGameLowSeed);
-			CHECK(pDrlg->dwFlags == pOrgDrlg->dwFlags);
-			CHECK(pDrlg->nDifficulty == pOrgDrlg->nDifficulty);
-			CHECK(pDrlg->nStaffTombLevel == pOrgDrlg->nStaffTombLevel);
-			CHECK(pDrlg->nBossTombLevel == pOrgDrlg->nBossTombLevel);
-			CHECK(pDrlg->bJungleInterlink == pOrgDrlg->bJungleInterlink);
-
-			const D2DrlgLevelStrc* pLevel = pDrlg->pLevel;
-			const D2DrlgLevelStrc* pOrgLevel = pOrgDrlg->pLevel;
-			int levelIdx = 0;
-			while (pLevel && pOrgLevel)
+			const D2C_TownLevels actTownLevelIds[] = { D2TOWN_ROGUECAMP, D2TOWN_LUTGHOL, D2TOWN_KURAST, D2TOWN_PANDFORT, D2TOWN_HARRO };
+			for (int nAct = ACT_I; nAct <= ACT_V; nAct++)
 			{
-				CAPTURE(levelIdx);
-				CHECK(pLevel->pDrlg == pDrlg);
-				CHECK(pOrgLevel->pDrlg == pOrgDrlg);
+				const D2C_TownLevels actTownId = actTownLevelIds[nAct];
 
-				CHECK(pLevel->nLevelId == pOrgLevel->nLevelId);
-				CHECK(pLevel->nLevelType == pOrgLevel->nLevelType);
-				CHECK(pLevel->nDrlgType == pOrgLevel->nDrlgType);
-				CHECK(pLevel->dwFlags == pOrgLevel->dwFlags);
-				CHECK(pLevel->pSeed.lSeed == pOrgLevel->pSeed.lSeed);
-				CHECK(pLevel->dwInitSeed == pOrgLevel->dwInitSeed);
-				CHECK(pLevel->pLevelCoords.nPosX == pOrgLevel->pLevelCoords.nPosX);
-				CHECK(pLevel->pLevelCoords.nPosY == pOrgLevel->pLevelCoords.nPosY);
-				CHECK(pLevel->pLevelCoords.nWidth == pOrgLevel->pLevelCoords.nWidth);
-				CHECK(pLevel->pLevelCoords.nHeight == pOrgLevel->pLevelCoords.nHeight);
+				D2DrlgActStrc act{};
+				act.nAct = nAct;
+				act.dwInitSeed = seed;
+				act.nTownId = actTownId;
+				D2DrlgActStrc orgAct = act;
 
-				CHECK(pLevel->nRooms == pOrgLevel->nRooms);
-				D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx;
-				D2RoomExStrc* pOrgRoomEx = pOrgLevel->pFirstRoomEx;
-				while (pRoomEx && pOrgRoomEx)
+				// Looks like it is not actually used in D2Common ?
+				D2GameStrc game{};
+				game.dwInitSeed = act.dwInitSeed;
+				game.bExpansion = true;
+				D2GameStrc orgGame = game;
+
+
+				D2DrlgStrc* pOrgDrlg = Original_DRLG_AllocDrlg(&orgAct, act.nAct, 0, orgAct.dwInitSeed, actTownId, D2DrlgFlags(0), &orgGame, DIFFMODE_NORMAL, nullptr, nullptr);
+				D2DrlgStrc* pDrlg = DRLG_AllocDrlg(&act, act.nAct, 0, act.dwInitSeed, actTownId, D2DrlgFlags(0), &game, DIFFMODE_NORMAL, nullptr, nullptr);
+
+				CHECK(pDrlg->unk0x08 == pOrgDrlg->unk0x08);
+				CHECK(pDrlg->nAct == pOrgDrlg->nAct);
+				CHECK(pDrlg->pSeed.lSeed == pOrgDrlg->pSeed.lSeed);
+				CHECK(pDrlg->dwStartSeed == pOrgDrlg->dwStartSeed);
+				CHECK(pDrlg->dwGameLowSeed == pOrgDrlg->dwGameLowSeed);
+				CHECK(pDrlg->dwFlags == pOrgDrlg->dwFlags);
+				CHECK(pDrlg->nDifficulty == pOrgDrlg->nDifficulty);
+				CHECK(pDrlg->nStaffTombLevel == pOrgDrlg->nStaffTombLevel);
+				CHECK(pDrlg->nBossTombLevel == pOrgDrlg->nBossTombLevel);
+				CHECK(pDrlg->bJungleInterlink == pOrgDrlg->bJungleInterlink);
+
+				const D2DrlgLevelStrc* pLevel = pDrlg->pLevel;
+				const D2DrlgLevelStrc* pOrgLevel = pOrgDrlg->pLevel;
+				int levelIdx = 0;
+				while (pLevel && pOrgLevel)
 				{
-					CHECK(pRoomEx->pLevel == pLevel);
-					CHECK(pOrgRoomEx->pLevel == pOrgLevel);
-					CHECK(pRoomEx->pDrlgCoord.nPosX == pOrgRoomEx->pDrlgCoord.nPosX);
-					CHECK(pRoomEx->pDrlgCoord.nPosY == pOrgRoomEx->pDrlgCoord.nPosY);
-					CHECK(pRoomEx->pDrlgCoord.nWidth == pOrgRoomEx->pDrlgCoord.nWidth);
-					CHECK(pRoomEx->pDrlgCoord.nHeight == pOrgRoomEx->pDrlgCoord.nHeight);
-					CHECK(pRoomEx->dwFlags == pOrgRoomEx->dwFlags);
-					CHECK(pRoomEx->dwOtherFlags == pOrgRoomEx->dwOtherFlags);
-					REQUIRE(pRoomEx->nType == pOrgRoomEx->nType);
-					switch (pRoomEx->nType)
+					CAPTURE(levelIdx);
+					CHECK(pLevel->pDrlg == pDrlg);
+					CHECK(pOrgLevel->pDrlg == pOrgDrlg);
+
+					CHECK(pLevel->nLevelId == pOrgLevel->nLevelId);
+					CHECK(pLevel->nLevelType == pOrgLevel->nLevelType);
+					CHECK(pLevel->nDrlgType == pOrgLevel->nDrlgType);
+					CHECK(pLevel->dwFlags == pOrgLevel->dwFlags);
+					CHECK(pLevel->pSeed.lSeed == pOrgLevel->pSeed.lSeed);
+					CHECK(pLevel->dwInitSeed == pOrgLevel->dwInitSeed);
+					CHECK(pLevel->pLevelCoords.nPosX == pOrgLevel->pLevelCoords.nPosX);
+					CHECK(pLevel->pLevelCoords.nPosY == pOrgLevel->pLevelCoords.nPosY);
+					CHECK(pLevel->pLevelCoords.nWidth == pOrgLevel->pLevelCoords.nWidth);
+					CHECK(pLevel->pLevelCoords.nHeight == pOrgLevel->pLevelCoords.nHeight);
+
+					CHECK(pLevel->nRooms == pOrgLevel->nRooms);
+					D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx;
+					D2RoomExStrc* pOrgRoomEx = pOrgLevel->pFirstRoomEx;
+					while (pRoomEx && pOrgRoomEx)
 					{
-					case DRLGTYPE_MAZE:
-					case DRLGTYPE_PRESET:
-						CheckSameContent(pRoomEx->pMaze, pOrgRoomEx->pMaze);
-						break;
-					case DRLGTYPE_OUTDOOR:
-						break;
-					default:REQUIRE(false); break;
+						CHECK(pRoomEx->pLevel == pLevel);
+						CHECK(pOrgRoomEx->pLevel == pOrgLevel);
+						CHECK(pRoomEx->pDrlgCoord.nPosX == pOrgRoomEx->pDrlgCoord.nPosX);
+						CHECK(pRoomEx->pDrlgCoord.nPosY == pOrgRoomEx->pDrlgCoord.nPosY);
+						CHECK(pRoomEx->pDrlgCoord.nWidth == pOrgRoomEx->pDrlgCoord.nWidth);
+						CHECK(pRoomEx->pDrlgCoord.nHeight == pOrgRoomEx->pDrlgCoord.nHeight);
+						CHECK(pRoomEx->dwFlags == pOrgRoomEx->dwFlags);
+						CHECK(pRoomEx->dwOtherFlags == pOrgRoomEx->dwOtherFlags);
+						REQUIRE(pRoomEx->nType == pOrgRoomEx->nType);
+						switch (pRoomEx->nType)
+						{
+						case DRLGTYPE_MAZE:
+						case DRLGTYPE_PRESET:
+							CheckSameContent(pRoomEx->pMaze, pOrgRoomEx->pMaze);
+							break;
+						case DRLGTYPE_OUTDOOR:
+							break;
+						default:REQUIRE(false); break;
+						}
+
+						REQUIRE(pRoomEx->dwDT1Mask == pOrgRoomEx->dwDT1Mask);
+						
+						for (D2TileLibraryHashStrc* pTile : pRoomEx->pTiles)
+							REQUIRE(pTile == nullptr);
+						for (D2TileLibraryHashStrc* pTile : pOrgRoomEx->pTiles)
+							REQUIRE(pTile == nullptr);
+
+
+						REQUIRE(pRoomEx->pTileGrid == nullptr);
+						REQUIRE(pOrgRoomEx->pTileGrid == nullptr);
+
+						REQUIRE(pRoomEx->fRoomStatus == pOrgRoomEx->fRoomStatus);
+						REQUIRE(pRoomEx->unk0xAD == pOrgRoomEx->unk0xAD);
+						for (int i = 0; i < 5; i++)
+							REQUIRE(pRoomEx->unk0xAE[i] == pOrgRoomEx->unk0xAE[i]);
+
+						REQUIRE(pRoomEx->pStatusNext == nullptr);
+						REQUIRE(pOrgRoomEx->pStatusNext == nullptr);
+						REQUIRE(pRoomEx->pStatusPrev == nullptr);
+						REQUIRE(pOrgRoomEx->pStatusPrev == nullptr);
+
+						REQUIRE(pRoomEx->ppRoomsNear == nullptr);
+						REQUIRE(pOrgRoomEx->ppRoomsNear == nullptr);
+
+						REQUIRE(pRoomEx->nRoomsNear == pOrgRoomEx->nRoomsNear);
+
+						REQUIRE(pRoomEx->pRoomTiles == nullptr);
+						REQUIRE(pOrgRoomEx->pRoomTiles == nullptr);
+
+						REQUIRE(pRoomEx->pPresetUnits == nullptr);
+						REQUIRE(pOrgRoomEx->pPresetUnits == nullptr);
+
+						REQUIRE(pRoomEx->pDrlgOrth == nullptr);
+						REQUIRE(pOrgRoomEx->pDrlgOrth == nullptr);
+
+						REQUIRE(pRoomEx->pSeed.lSeed == pOrgRoomEx->pSeed.lSeed);
+						REQUIRE(pRoomEx->dwInitSeed == pOrgRoomEx->dwInitSeed);
+
+						// pCoordList expected to be nullptr at this point
+						CheckSameContent(pRoomEx->pCoordList, pOrgRoomEx->pCoordList);
+
+						REQUIRE(pRoomEx->pRoom == nullptr);
+						REQUIRE(pOrgRoomEx->pRoom == nullptr);
+
+						pRoomEx = pRoomEx->pRoomExNext;
+						pOrgRoomEx = pOrgRoomEx->pRoomExNext;
 					}
-					REQUIRE(pRoomEx->dwDT1Mask == pOrgRoomEx->dwDT1Mask);
-					// TODO: pTiles
-					// TODO: pTileGrid
-					REQUIRE(pRoomEx->fRoomStatus == pOrgRoomEx->fRoomStatus);
-					REQUIRE(pRoomEx->unk0xAD == pOrgRoomEx->unk0xAD);
-					for (int i = 0; i < 5; i++)
-						REQUIRE(pRoomEx->unk0xAE[i] == pOrgRoomEx->unk0xAE[i]);
-					// TODO: pStatusNext
-					// TODO: pStatusPrev
-					// TODO: ppRoomsNear
-					REQUIRE(pRoomEx->nRoomsNear == pOrgRoomEx->nRoomsNear);
-					// TODO: pRoomTiles
-					// TODO: pPresetUnits
-					// TODO: pDrlgOrth
-					REQUIRE(pRoomEx->pSeed.lSeed == pOrgRoomEx->pSeed.lSeed);
-					REQUIRE(pRoomEx->dwInitSeed == pOrgRoomEx->dwInitSeed);
-					
-					// pCoordList expected to be nullptr at this point
-					CheckSameContent(pRoomEx->pCoordList, pOrgRoomEx->pCoordList);
-					// TODO: pRoom
+					CHECK(pRoomEx == nullptr);
+					CHECK(pOrgRoomEx == nullptr);
 
-					pRoomEx = pRoomEx->pRoomExNext;
-					pOrgRoomEx = pOrgRoomEx->pRoomExNext;
+					CHECK(pLevel->nCoordLists == pOrgLevel->nCoordLists);
+					CHECK(pLevel->nTileInfo == pOrgLevel->nTileInfo);
+					CHECK(pLevel->nRoomCoords == pOrgLevel->nRoomCoords);
+					CHECK(pLevel->nJungleDefs == pOrgLevel->nJungleDefs);
+					CHECK(pLevel->bActive == pOrgLevel->bActive);
+					CHECK(pLevel->dwInactiveFrames == pOrgLevel->dwInactiveFrames);
+
+					pLevel = pLevel->pNextLevel;
+					pOrgLevel = pOrgLevel->pNextLevel;
+					levelIdx++;
 				}
-				CHECK(pRoomEx == nullptr);
-				CHECK(pOrgRoomEx == nullptr);
-
-				CHECK(pLevel->nCoordLists == pOrgLevel->nCoordLists);
-				CHECK(pLevel->nTileInfo == pOrgLevel->nTileInfo);
-				CHECK(pLevel->nRoomCoords == pOrgLevel->nRoomCoords);
-				CHECK(pLevel->nJungleDefs == pOrgLevel->nJungleDefs);
-				CHECK(pLevel->bActive == pOrgLevel->bActive);
-				CHECK(pLevel->dwInactiveFrames == pOrgLevel->dwInactiveFrames);
-
-				pLevel = pLevel->pNextLevel;
-				pOrgLevel = pOrgLevel->pNextLevel;
-				levelIdx++;
+				CHECK(pLevel == nullptr);
+				CHECK(pOrgLevel == nullptr);
+				DRLG_FreeDrlg(pDrlg);
+				Original_DRLG_FreeDrlg(pOrgDrlg);
 			}
-			CHECK(pLevel == nullptr);
-			CHECK(pOrgLevel == nullptr);
-			DRLG_FreeDrlg(pDrlg);
-			Original_DRLG_FreeDrlg(pOrgDrlg);
 		}
 	}
 
