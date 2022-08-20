@@ -2433,15 +2433,15 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 	{
 		uint32_t nBaseOn = SEED_RollLimitedRandomNumber(&pDrlg->pSeed, nJungleAttachIdx);
 
-		D2JungleStrc* ptJungle = &tJungles[nJungleAttachIdx];
-		sub_6FD83970(&tJungles[nBaseOn].pDrlgCoord, ptJungle, SEED_RollLimitedRandomNumber(&pDrlg->pSeed, 5), nSpiderForestLevelSizeX, nSpiderForestLevelSizeY);
+		D2JungleStrc* pCurrentJungle = &tJungles[nJungleAttachIdx];
+		sub_6FD83970(&tJungles[nBaseOn].pDrlgCoord, pCurrentJungle, SEED_RollLimitedRandomNumber(&pDrlg->pSeed, 5), nSpiderForestLevelSizeX, nSpiderForestLevelSizeY);
 
 		// Look for the first overlapping jungle
 		int nFirstOverlappingJungle;
 		for (nFirstOverlappingJungle = 0; nFirstOverlappingJungle < nJungleAttachIdx; nFirstOverlappingJungle++)
 		{
 			// sub_6FD777B0 Returns true if not overlapping and or sharing border ( distance >= 0 )
-			const bool levelsOverlaps = !sub_6FD777B0(&tJungles[nFirstOverlappingJungle].pDrlgCoord, &ptJungle->pDrlgCoord, 0);
+			const bool levelsOverlaps = !sub_6FD777B0(&tJungles[nFirstOverlappingJungle].pDrlgCoord, &pCurrentJungle->pDrlgCoord, 0);
 			if (levelsOverlaps)
 			{
 				break;
@@ -2456,15 +2456,15 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		}
 		
 		// Link to the jungle we are based on
-		ptJungle->pBasedOnJungle = &tJungles[nBaseOn];
+		pCurrentJungle->pBasedOnJungle = &tJungles[nBaseOn];
 
 		// Note: this assert used to be done AFTER assignation, which could lead to overriding the next field. We do it before instead
-		D2_ASSERT(ptJungle[nBaseOn].nBranch < JUNGLE_MAX_ATTACH);
+		D2_ASSERT(tJungles[nBaseOn].nBranch < JUNGLE_MAX_ATTACH);
 		// Link the jungle we are based on to current jungle
 		tJungles[nBaseOn].pJungleBranches[tJungles[nBaseOn].nBranch++] = &tJungles[nJungleAttachIdx];
 
 #if 0 // This assert would always come too late, overriding content.
-		if (!(ptJungle[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH))
+		if (!(tJungles[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH))
 		{
 			FOG_10025(
 				"ptJungle[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH",
@@ -2473,12 +2473,12 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		}
 #endif
 
-		if (nMinX > ptJungle->pDrlgCoord.nPosX)
-			nMinX = ptJungle->pDrlgCoord.nPosX;
-		if (nMinY > ptJungle->pDrlgCoord.nPosY)
-			nMinY = ptJungle->pDrlgCoord.nPosY;
-		if (nMaxX < ptJungle->pDrlgCoord.nWidth + ptJungle->pDrlgCoord.nPosX)
-			nMaxX = ptJungle->pDrlgCoord.nWidth + ptJungle->pDrlgCoord.nPosX;
+		if (nMinX > pCurrentJungle->pDrlgCoord.nPosX)
+			nMinX = pCurrentJungle->pDrlgCoord.nPosX;
+		if (nMinY > pCurrentJungle->pDrlgCoord.nPosY)
+			nMinY = pCurrentJungle->pDrlgCoord.nPosY;
+		if (nMaxX < pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX)
+			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
 	// Note: Original game uses FOG_10025 not FOG_Assertion
