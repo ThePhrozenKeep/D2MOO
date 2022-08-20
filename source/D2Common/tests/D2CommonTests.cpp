@@ -396,6 +396,99 @@ void CheckSameContent(const D2DrlgCoordListStrc* lhs, const D2DrlgCoordListStrc*
 	}
 }
 
+void CheckSameContent(const D2DrlgWarpStrc* lhs, const D2DrlgWarpStrc* rhs)
+{
+	while (lhs && rhs)
+	{
+		CHECK(lhs->nLevel == rhs->nLevel);
+		for (int i = 0; i < sizeof(D2DrlgWarpStrc::nVis) / sizeof(D2DrlgWarpStrc::nVis[0]); i++)
+			CHECK(lhs->nVis[i] == rhs->nVis[i]);
+		for (int i = 0; i < sizeof(D2DrlgWarpStrc::nWarp) / sizeof(D2DrlgWarpStrc::nWarp[0]); i++)
+			CHECK(lhs->nWarp[i] == rhs->nWarp[i]);
+
+		lhs = lhs->pNext;
+		rhs = rhs->pNext;
+	}
+	CHECK(lhs == nullptr);
+	CHECK(rhs == nullptr);
+}
+
+void CheckContent(const D2RoomExStrc* lhs, const D2RoomExStrc* rhs, bool bCheckStatusNull)
+{
+	if (!lhs || !rhs)
+	{
+		CHECK(lhs == nullptr);
+		CHECK(rhs == nullptr);
+		return;
+	}
+	CHECK(lhs->pDrlgCoord.nPosX == rhs->pDrlgCoord.nPosX);
+	CHECK(lhs->pDrlgCoord.nPosY == rhs->pDrlgCoord.nPosY);
+	CHECK(lhs->pDrlgCoord.nWidth == rhs->pDrlgCoord.nWidth);
+	CHECK(lhs->pDrlgCoord.nHeight == rhs->pDrlgCoord.nHeight);
+	CHECK(lhs->dwFlags == rhs->dwFlags);
+	CHECK(lhs->dwOtherFlags == rhs->dwOtherFlags);
+	REQUIRE(lhs->nType == rhs->nType);
+	switch (lhs->nType)
+	{
+	case 0:
+		break; // Not initialized
+	case DRLGTYPE_MAZE:
+	case DRLGTYPE_PRESET:
+		CheckSameContent(lhs->pMaze, rhs->pMaze);
+		break;
+	case DRLGTYPE_OUTDOOR:
+		break;
+	default:REQUIRE(false); break;
+	}
+
+	REQUIRE(lhs->dwDT1Mask == rhs->dwDT1Mask);
+
+	for (D2TileLibraryHashStrc* pTile : lhs->pTiles)
+		REQUIRE(pTile == nullptr);
+	for (D2TileLibraryHashStrc* pTile : rhs->pTiles)
+		REQUIRE(pTile == nullptr);
+
+
+	REQUIRE(lhs->pTileGrid == nullptr);
+	REQUIRE(rhs->pTileGrid == nullptr);
+
+	REQUIRE(lhs->fRoomStatus == rhs->fRoomStatus);
+	REQUIRE(lhs->unk0xAD == rhs->unk0xAD);
+	for (int i = 0; i < 5; i++)
+		REQUIRE(lhs->unk0xAE[i] == rhs->unk0xAE[i]);
+
+	if (bCheckStatusNull)
+	{
+		REQUIRE(lhs->pStatusNext == nullptr);
+		REQUIRE(rhs->pStatusNext == nullptr);
+		REQUIRE(lhs->pStatusPrev == nullptr);
+		REQUIRE(rhs->pStatusPrev == nullptr);
+	}
+
+	REQUIRE(lhs->ppRoomsNear == nullptr);
+	REQUIRE(rhs->ppRoomsNear == nullptr);
+
+	REQUIRE(lhs->nRoomsNear == rhs->nRoomsNear);
+
+	REQUIRE(lhs->pRoomTiles == nullptr);
+	REQUIRE(rhs->pRoomTiles == nullptr);
+
+	REQUIRE(lhs->pPresetUnits == nullptr);
+	REQUIRE(rhs->pPresetUnits == nullptr);
+
+	REQUIRE(lhs->pDrlgOrth == nullptr);
+	REQUIRE(rhs->pDrlgOrth == nullptr);
+
+	REQUIRE(lhs->pSeed.lSeed == rhs->pSeed.lSeed);
+	REQUIRE(lhs->dwInitSeed == rhs->dwInitSeed);
+
+	// pCoordList expected to be nullptr at this point
+	CheckSameContent(lhs->pCoordList, rhs->pCoordList);
+
+	REQUIRE(lhs->pRoom == nullptr);
+	REQUIRE(rhs->pRoom == nullptr);
+}
+
 TEST_CASE("DRLG_AllocDrlg")
 {
 	const bool checkAllSeeds = true;
@@ -430,15 +523,34 @@ TEST_CASE("DRLG_AllocDrlg")
 				D2DrlgStrc* pDrlg = DRLG_AllocDrlg(&act, act.nAct, 0, act.dwInitSeed, actTownId, D2DrlgFlags(0), &game, DIFFMODE_NORMAL, nullptr, nullptr);
 
 				CHECK(pDrlg->unk0x08 == pOrgDrlg->unk0x08);
+				// pAct
 				CHECK(pDrlg->nAct == pOrgDrlg->nAct);
+				// pad0x11
 				CHECK(pDrlg->pSeed.lSeed == pOrgDrlg->pSeed.lSeed);
 				CHECK(pDrlg->dwStartSeed == pOrgDrlg->dwStartSeed);
 				CHECK(pDrlg->dwGameLowSeed == pOrgDrlg->dwGameLowSeed);
 				CHECK(pDrlg->dwFlags == pOrgDrlg->dwFlags);
+				for (int i = 0; i < 4; i++)
+					CheckContent(&pDrlg->pRooms[i], &pOrgDrlg->pRooms[i], false);
+				CheckContent(pDrlg->pRoomEx, pOrgDrlg->pRoomEx, false);
+				CHECK(pDrlg->unk0x3DC == pOrgDrlg->unk0x3DC);
+				CHECK(pDrlg->unk0x3DD[0] == pOrgDrlg->unk0x3DD[0]);
+				CHECK(pDrlg->unk0x3DD[1] == pOrgDrlg->unk0x3DD[1]);
+				CHECK(pDrlg->unk0x3DD[2] == pOrgDrlg->unk0x3DD[2]);
+				CHECK(pDrlg->unk0x3E0[0] == pOrgDrlg->unk0x3E0[0]);
+				CHECK(pDrlg->unk0x3E0[1] == pOrgDrlg->unk0x3E0[1]);
+				// pGame
 				CHECK(pDrlg->nDifficulty == pOrgDrlg->nDifficulty);
+				// pad0x3ED
+				CHECK(pDrlg->pfAutomap == nullptr);
+				CHECK(pOrgDrlg->pfAutomap == nullptr);
+				CHECK(pDrlg->pfTownAutomap == nullptr);
+				CHECK(pOrgDrlg->pfTownAutomap == nullptr);
 				CHECK(pDrlg->nStaffTombLevel == pOrgDrlg->nStaffTombLevel);
 				CHECK(pDrlg->nBossTombLevel == pOrgDrlg->nBossTombLevel);
+				// pTiles (loaded from d2cmp, no need to check?)
 				CHECK(pDrlg->bJungleInterlink == pOrgDrlg->bJungleInterlink);
+				CheckSameContent(pDrlg->pWarp,pOrgDrlg->pWarp);
 
 				const D2DrlgLevelStrc* pLevel = pDrlg->pLevel;
 				const D2DrlgLevelStrc* pOrgLevel = pOrgDrlg->pLevel;
@@ -467,67 +579,7 @@ TEST_CASE("DRLG_AllocDrlg")
 					{
 						CHECK(pRoomEx->pLevel == pLevel);
 						CHECK(pOrgRoomEx->pLevel == pOrgLevel);
-						CHECK(pRoomEx->pDrlgCoord.nPosX == pOrgRoomEx->pDrlgCoord.nPosX);
-						CHECK(pRoomEx->pDrlgCoord.nPosY == pOrgRoomEx->pDrlgCoord.nPosY);
-						CHECK(pRoomEx->pDrlgCoord.nWidth == pOrgRoomEx->pDrlgCoord.nWidth);
-						CHECK(pRoomEx->pDrlgCoord.nHeight == pOrgRoomEx->pDrlgCoord.nHeight);
-						CHECK(pRoomEx->dwFlags == pOrgRoomEx->dwFlags);
-						CHECK(pRoomEx->dwOtherFlags == pOrgRoomEx->dwOtherFlags);
-						REQUIRE(pRoomEx->nType == pOrgRoomEx->nType);
-						switch (pRoomEx->nType)
-						{
-						case DRLGTYPE_MAZE:
-						case DRLGTYPE_PRESET:
-							CheckSameContent(pRoomEx->pMaze, pOrgRoomEx->pMaze);
-							break;
-						case DRLGTYPE_OUTDOOR:
-							break;
-						default:REQUIRE(false); break;
-						}
-
-						REQUIRE(pRoomEx->dwDT1Mask == pOrgRoomEx->dwDT1Mask);
-						
-						for (D2TileLibraryHashStrc* pTile : pRoomEx->pTiles)
-							REQUIRE(pTile == nullptr);
-						for (D2TileLibraryHashStrc* pTile : pOrgRoomEx->pTiles)
-							REQUIRE(pTile == nullptr);
-
-
-						REQUIRE(pRoomEx->pTileGrid == nullptr);
-						REQUIRE(pOrgRoomEx->pTileGrid == nullptr);
-
-						REQUIRE(pRoomEx->fRoomStatus == pOrgRoomEx->fRoomStatus);
-						REQUIRE(pRoomEx->unk0xAD == pOrgRoomEx->unk0xAD);
-						for (int i = 0; i < 5; i++)
-							REQUIRE(pRoomEx->unk0xAE[i] == pOrgRoomEx->unk0xAE[i]);
-
-						REQUIRE(pRoomEx->pStatusNext == nullptr);
-						REQUIRE(pOrgRoomEx->pStatusNext == nullptr);
-						REQUIRE(pRoomEx->pStatusPrev == nullptr);
-						REQUIRE(pOrgRoomEx->pStatusPrev == nullptr);
-
-						REQUIRE(pRoomEx->ppRoomsNear == nullptr);
-						REQUIRE(pOrgRoomEx->ppRoomsNear == nullptr);
-
-						REQUIRE(pRoomEx->nRoomsNear == pOrgRoomEx->nRoomsNear);
-
-						REQUIRE(pRoomEx->pRoomTiles == nullptr);
-						REQUIRE(pOrgRoomEx->pRoomTiles == nullptr);
-
-						REQUIRE(pRoomEx->pPresetUnits == nullptr);
-						REQUIRE(pOrgRoomEx->pPresetUnits == nullptr);
-
-						REQUIRE(pRoomEx->pDrlgOrth == nullptr);
-						REQUIRE(pOrgRoomEx->pDrlgOrth == nullptr);
-
-						REQUIRE(pRoomEx->pSeed.lSeed == pOrgRoomEx->pSeed.lSeed);
-						REQUIRE(pRoomEx->dwInitSeed == pOrgRoomEx->dwInitSeed);
-
-						// pCoordList expected to be nullptr at this point
-						CheckSameContent(pRoomEx->pCoordList, pOrgRoomEx->pCoordList);
-
-						REQUIRE(pRoomEx->pRoom == nullptr);
-						REQUIRE(pOrgRoomEx->pRoom == nullptr);
+						CheckContent(pRoomEx, pOrgRoomEx, true);
 
 						pRoomEx = pRoomEx->pRoomExNext;
 						pOrgRoomEx = pOrgRoomEx->pRoomExNext;
