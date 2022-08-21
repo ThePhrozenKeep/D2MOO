@@ -20,7 +20,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetLevelTypeFromLevelId                                        @10000
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetActNoFromLevelId                                            @10001
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetLOSDrawFromLevelId                                          @10002
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10003                                                      @10003
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_Update                                                      @10003
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetSaveMonstersFromLevelId                                     @10004
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetLevel                                                       @10005
 
@@ -41,7 +41,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_AllocDrlg                                                      @10014
 
     // Uses globals
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10015                                                      @10015
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetRoomsAllocationStats                                        @10015
 
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10016_Return0                                              @10016
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLGROOMTILE_GetNumberOfShadowsFromRoom                             @10017
