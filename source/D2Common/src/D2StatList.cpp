@@ -949,7 +949,7 @@ void __stdcall STATLIST_FreeStatListEx(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB7140 (#10470)
-D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, int nUnitGUID)
+D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, D2UnitGUID nUnitGUID)
 {
 	D2StatListStrc* pStatList = D2_CALLOC_STRC_SERVER(pMemPool, D2StatListStrc);
 
@@ -993,7 +993,7 @@ int __stdcall STATLIST_GetOwnerType(D2StatListStrc* pStatList)
 }
 
 //D2Common.0x6FD912D0 (#10472)
-int __stdcall STATLIST_GetOwnerGUID(D2StatListStrc* pStatList)
+D2UnitGUID __stdcall STATLIST_GetOwnerGUID(D2StatListStrc* pStatList)
 {
 	if (pStatList)
 	{

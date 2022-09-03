@@ -617,7 +617,7 @@ char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C860 (#10066)
-void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, int nUnitGUID)
+void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, D2UnitGUID nUnitGUID)
 {
 	D2DrlgDeleteStrc* pDrlgDelete = NULL;
 
@@ -1257,7 +1257,7 @@ void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pAc
 }
 
 //D2Common.0x6FD8D600 (#10106)
-void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, int nUnitGUID)
+void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, D2UnitGUID nUnitGUID)
 {
 	if (pRoom)
 	{

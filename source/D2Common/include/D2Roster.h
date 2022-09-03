@@ -100,8 +100,8 @@ struct D2RosterUnitStrc
 	uint32_t dwPartyFlags;					//0x30
 	D2RosterInfoStrc** pRosterInfo;			//0x34
 	D2RosterCorpseStrc* pCorpse;			//0x38
-	uint32_t dwSrcPortalGUID;				//0x3C
-	uint32_t dwDstPortalGUID;				//0x40
+	D2UnitGUID dwSrcPortalGUID;				//0x3C
+	D2UnitGUID dwDstPortalGUID;				//0x40
 	uint16_t unk0x44;						//0x44
 	uint8_t unk0x46[32];					//0x46
 	char szNameEx[26];						//0x66 - name with clan tag

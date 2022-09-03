@@ -530,13 +530,13 @@ void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pSta
 //D2Common.0x6FDB7110 (#10527)
 D2COMMON_DLL_DECL void __stdcall STATLIST_FreeStatListEx(D2UnitStrc* pUnit);
 //D2Common.0x6FDB7140 (#10470)
-D2COMMON_DLL_DECL D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, int nUnitGUID);
+D2COMMON_DLL_DECL D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, D2UnitGUID nUnitGUID);
 //D2Common.0x6FDB7190 (#10526)
 D2COMMON_DLL_DECL void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pCallbackFunc, D2GameStrc* pGame);
 //D2Common.0x6FDB7260 (#10471)
 D2COMMON_DLL_DECL int __stdcall STATLIST_GetOwnerType(D2StatListStrc* pStatList);
 //D2Common.0x6FD912D0 (#10472)
-D2COMMON_DLL_DECL int __stdcall STATLIST_GetOwnerGUID(D2StatListStrc* pStatList);
+D2COMMON_DLL_DECL D2UnitGUID __stdcall STATLIST_GetOwnerGUID(D2StatListStrc* pStatList);
 //D2Common.0x6FDB7280 (#11304)
 D2COMMON_DLL_DECL int __stdcall STATLIST_GetBaseStatsCount(D2StatListStrc* pStatList);
 //D2Common.0x6FDB72A0 (#11305)

@@ -167,6 +167,46 @@ TEST_CASE("Unicode::stricmp")
     }
 }
 
+TEST_CASE("Unicode::strncat")
+{
+    SUBCASE("Concatenate empty on empty")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L""), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Concatenate text on empty")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Concatenate text on not empty")
+    {
+        Unicode dest[256] = { L'3', L':', L' ' };
+        Unicode::strncat(dest, D2_USTR(L"Mephisto, "), INT_MAX);
+        Unicode::strncat(dest, D2_USTR(L"Diablo, "), INT_MAX);
+        Unicode::strncat(dest, D2_USTR(L"and Baal"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"3: Mephisto, Diablo, and Baal") == 0);
+    }
+    SUBCASE("Concatenate at correct index")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        dest[3] = L'\0';
+        Unicode::strncat(dest, D2_USTR(L"mond"), INT_MAX);
+        CHECK(wcscmp((wchar_t*)dest, L"Diamond") == 0);
+    }
+    SUBCASE("Concatenate partial text")
+    {
+        Unicode dest[256];
+        Unicode::strncat(dest, D2_USTR(L"Diablo"), INT_MAX);
+        dest[3] = L'\0';
+        Unicode::strncat(dest, D2_USTR(L"mond"), 3);
+        CHECK(wcscmp((wchar_t*)dest, L"Diamon") == 0);
+    }
+}
+
 TEST_CASE("Unicode::strncmp")
 {
     const size_t strLenDiablo2 = wcslen(L"Diablo2");
@@ -326,5 +366,42 @@ TEST_CASE("Unicode::toUtf")
     {
         Unicode::toUtf(dest, D2_USTR(utf16JpDiablo), 7);
         CHECK(strncmp(dest, utf8JpDiablo, 6) == 0);
+    }
+}
+
+TEST_CASE("Unicode::toUnicode")
+{
+    constexpr size_t dest_capacity = 256;
+    Unicode dest[dest_capacity];
+
+    // The official name of Diablo in Japanese
+    constexpr char* utf8JpDiablo = "\xE3\x83\x87\xE3\x82\xA3\xE3\x82\xA2\xE3\x83\x96\xE3\x83\xAD";
+    constexpr wchar_t* utf16JpDiablo = L"\u30C7\u30A3\u30A2\u30D6\u30ED";
+
+    SUBCASE("Empty")
+    {
+        CHECK(Unicode::toUnicode(dest, "", dest_capacity) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Convert ASCII text")
+    {
+        Unicode::toUnicode(dest, "Diablo", dest_capacity);
+        wprintf(L"%ls\n", (wchar_t*)dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Partially convert ASCII text")
+    {
+        Unicode::toUnicode(dest, "Diablo", 4);
+        CHECK(wcscmp((wchar_t*)dest, L"Dia") == 0);
+    }
+    SUBCASE("Convert Japanese text")
+    {
+        Unicode::toUnicode(dest, utf8JpDiablo, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, utf16JpDiablo) == 0);
+    }
+    SUBCASE("Partially convert Japanese text")
+    {
+        Unicode::toUnicode(dest, utf8JpDiablo, 3);
+        CHECK(wcsncmp((wchar_t*)dest, utf16JpDiablo, 2) == 0);
     }
 }

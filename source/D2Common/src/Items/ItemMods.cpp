@@ -827,7 +827,7 @@ D2StatListStrc* __fastcall ITEMMODS_GetOrCreateStatList(D2UnitStrc* pUnit, D2Uni
 		}
 		else
 		{
-			nItemGUID = -1;
+			nItemGUID = D2UnitInvalidGUID;
 			pMemPool = NULL;
 		}
 

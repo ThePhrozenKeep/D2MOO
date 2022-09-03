@@ -1102,7 +1102,7 @@ void __stdcall PATH_SetTargetUnit(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* p
 }
 
 //D2Common.0x6FDA9F60 (#10171)
-void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pDynamicPath, int* pTargetType, int* pTargetGUID)
+void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pDynamicPath, int* pTargetType, D2UnitGUID* pTargetGUID)
 {
 	D2_ASSERT(pDynamicPath->pTargetUnit);
 

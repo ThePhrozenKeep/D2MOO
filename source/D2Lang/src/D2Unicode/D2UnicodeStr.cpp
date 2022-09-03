@@ -117,6 +117,25 @@ int __fastcall Unicode::strlen(const Unicode* str) {
   return i;
 }
 
+Unicode* __fastcall Unicode::strncat(
+    Unicode* dest,
+    const Unicode* src,
+    int count) {
+  int i_dest = 0;
+  while (dest[i_dest].ch != L'\0') {
+    ++i_dest;
+  }
+
+  int i_src;
+  for (i_src = 0; i_src != count && src[i_src].ch != L'\0'; ++i_src) {
+    dest[i_dest + i_src] = src[i_src];
+  }
+
+  dest[i_dest + i_src] = L'\0';
+
+  return dest;
+}
+
 int __fastcall Unicode::strncmp(
     const Unicode* str1,
     const Unicode* str2,

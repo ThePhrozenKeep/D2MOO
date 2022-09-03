@@ -134,6 +134,20 @@ struct D2LANG_DLL_DECL Unicode {
    */
   static int __fastcall strlen(const Unicode* str);
 
+  /**
+   * Appends a null-terminated string to the end of a destination
+   * null-terminated string. The maximum number of characters appended
+   * is specified as the count. The destination string will always
+   * append a terminating null character, so that (count + 1)
+   * characters can be written.
+   *
+   * D2Lang.0x6FC11420 (#10041) ?strncat@Unicode@@SIPAU1@PAU1@PBU1@H@Z
+   */
+  static Unicode* __fastcall strncat(
+      Unicode* dest,
+      const Unicode* src,
+      int count);
+
   /*
    * Compares two null-terminated strings or substrings
    * lexicographically. Returns -1, 0, or 1, depending on the results
@@ -164,6 +178,22 @@ struct D2LANG_DLL_DECL Unicode {
   static Unicode* __fastcall strstr(
       const Unicode* str,
       const Unicode* substr);
+
+  /**
+   * Converts a null-terminated UTF-8 string into a null-terminated
+   * UCS-2 string. The count indicates the capacity of the destination
+   * in terms of UCS-2 characters. Returns the pointer to the
+   * destination string.
+   *
+   * Vanilla bug: Specifying INT_MIN for the count results in
+   * undefined behavior. Do not specify INT_MIN as the count.
+   *
+   * D2Lang.0x6FC12A40 (#10051) ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+   */
+  static Unicode* __fastcall toUnicode(
+      Unicode* dest,
+      const char* src,
+      int count);
 
   /**
    * Converts a null-terminated UCS-2 string into a null-terminated

@@ -295,7 +295,7 @@ D2COMMON_DLL_DECL BOOL __stdcall D2Common_10174(D2DynamicPathStrc* pDynamicPath)
 //D2Common.0x6FDA9F40 (#10179)
 D2COMMON_DLL_DECL void __stdcall PATH_SetTargetUnit(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA9F60 (#10171)
-D2COMMON_DLL_DECL void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pDynamicPath, int* pTargetType, int* pTargetGUID);
+D2COMMON_DLL_DECL void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pDynamicPath, int* pTargetType, D2UnitGUID* pTargetGUID);
 //D2Common.0x6FDA9FA0 (#10180)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall PATH_GetTargetUnit(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9FC0 (#10181)

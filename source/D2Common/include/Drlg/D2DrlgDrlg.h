@@ -177,7 +177,7 @@ struct D2RoomStrc
 	int32_t unk0x60;						//0x60
 	uint8_t nCurrentDeathIndex;				//0x64
 	uint8_t pad0x65[3];						//0x65
-	int32_t nLastDeadGUIDs[4];				//0x68
+	D2UnitGUID nLastDeadGUIDs[4];			//0x68
 	D2DrlgActStrc* pAct;					//0x78
 	D2RoomStrc* pRoomNext;					//0x7C
 };
@@ -303,9 +303,9 @@ struct D2DrlgBuildStrc
 
 struct D2DrlgDeleteStrc
 {
-	int32_t nUnitType;						//0x00
-	int32_t nUnitGUID;						//0x04
-	D2DrlgDeleteStrc* pNext;				//0x08
+	int32_t nUnitType;							//0x00
+	D2UnitGUID nUnitGUID;						//0x04
+	D2DrlgDeleteStrc* pNext;					//0x08
 };
 
 struct D2DrlgFileStrc

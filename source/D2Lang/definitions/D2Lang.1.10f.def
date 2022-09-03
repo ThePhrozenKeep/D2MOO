@@ -27,7 +27,7 @@ EXPORTS
     ?strcpy@Unicode@@SIPAU1@PAU1@PBU1@@Z @10038 ; Unicode::strcpy
     ?stricmp@Unicode@@SIHPBU1@0@Z @10039 ; Unicode::stricmp
     ?strlen@Unicode@@SIHPBU1@@Z @10040 ; Unicode::strlen
-;   D2LANG_10041 @10041 ; ?strncat@Unicode@@SIPAU1@PAU1@PBU1@H@Z
+    ?strncat@Unicode@@SIPAU1@PAU1@PBU1@H@Z @10041 ; Unicode::strncat
     ?strncmp@Unicode@@SIHPBU1@0I@Z @10042 ; Unicode::strncmp
 ;   D2LANG_10043 @10043 ; ?strncoll@Unicode@@SIHPBU1@0H@Z
 ;   D2LANG_10044 @10044 ; ?strncpy@Unicode@@SIPAU1@PAU1@PBU1@H@Z
@@ -37,7 +37,7 @@ EXPORTS
 ;   D2LANG_10048 @10048 ; ?sys2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z
 ;   D2LANG_10049 @10049 ; ?sysWidth@Unicode@@SIKPBU1@H@Z
     ?toLower@Unicode@@QBE?AU1@XZ @10050 ; Unicode::toLower
-;   D2LANG_10051 @10051 ; ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+    ?toUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z @10051 ; Unicode::toUnicode
     ?toUpper@Unicode@@QBE?AU1@XZ @10052 ; Unicode::toUpper
     ?toUtf@Unicode@@SIPADPADPBU1@H@Z @10053 ; Unicode::toUtf
 ;   D2LANG_10054 @10054 ; ?unicode2Sys@Unicode@@SIPADPADPBU1@H@Z
