@@ -386,30 +386,32 @@ BOOL __fastcall sub_6FD77740(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 }
 
 //D2Common.0x6FD777B0
-BOOL __fastcall sub_6FD777B0(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance)
+// Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMaxDistance
+BOOL __fastcall sub_6FD777B0(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
 {
-	int nX = 0;
-	int nY = 0;
+	int nSignedDistanceX = 0;
+	int nSignedDistanceY = 0;
 
+	// Negative distance means we are "inside" the other rectangle
 	if (pDrlgCoord1->nPosX >= pDrlgCoord2->nPosX)
 	{
-		nX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
+		nSignedDistanceX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
 	}
 	else
 	{
-		nX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
+		nSignedDistanceX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
 	}
 
 	if (pDrlgCoord1->nPosY >= pDrlgCoord2->nPosY)
 	{
-		nY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
+		nSignedDistanceY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
 	}
 	else
 	{
-		nY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
+		nSignedDistanceY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
 	}
 
-	return nX >= nMaxDistance || nY >= nMaxDistance;
+	return nSignedDistanceX >= nMaxDistanceToAssumeCollision || nSignedDistanceY >= nMaxDistanceToAssumeCollision;
 }
 
 //D2Common.0x6FD77800
@@ -700,7 +702,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 		pRoomEx->ppRoomsNear[i] = ppNearRooms[i];
 	}
 
-	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP)
+	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK)
 	{
 		nFlags = ROOMEXFLAG_HAS_WARP_0;
 		nWarpId = 0;
@@ -772,7 +774,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 
 			++nWarpId;
 		}
-		while (nFlags & ROOMEXFLAG_HAS_WARP);
+		while (nFlags & ROOMEXFLAG_HAS_WARP_MASK);
 	}
 
 	if (!DRLG_IsTownLevel(pRoomEx->pLevel->nLevelId))

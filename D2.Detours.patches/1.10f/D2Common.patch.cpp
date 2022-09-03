@@ -36,9 +36,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetAutomapCellId                                           @10011
 
     // Need to get DRLG_AllocDrlg to work first, which needs DATATBLS_LoadLvlPrestTxt so wait until we load datatables
-    PatchAction::FunctionReplacePatchByOriginal,       //   DRLG_FreeDrlg                                                       @10012
-    PatchAction::FunctionReplacePatchByOriginal,       //   DRLG_AllocLevel                                                     @10013
-    PatchAction::FunctionReplacePatchByOriginal,       //   DRLG_AllocDrlg                                                      @10014
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_FreeDrlg                                                       @10012
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_AllocLevel                                                     @10013
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_AllocDrlg                                                      @10014
 
     // Uses globals
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10015                                                      @10015

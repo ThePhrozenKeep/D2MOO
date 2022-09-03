@@ -545,47 +545,31 @@ int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD74B40
 void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 {
-	int* pX = NULL;
-	int* pY = NULL;
-	int nCounter = 0;
-	int nFlags = 0;
-	BOOL bHasWaypoint = FALSE;
-
 	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
-		if (pRoomEx->dwFlags & (ROOMEXFLAG_HAS_WAYPOINT | ROOMEXFLAG_HAS_WAYPOINT_SMALL))
-		{
-			bHasWaypoint = TRUE;
-		}
+		// First check if we have a waypoint
+		bool bHasWarp = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WAYPOINT_MASK) != 0;
 
-		if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP)
+		// Then check for additional warps
+		if ((pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK) != 0 && !bHasWarp)
 		{
-			if (!bHasWaypoint)
+			int nWarpIndex = 0;
+			for (int warpMask = ROOMEXFLAG_HAS_WARP_0; (warpMask & ROOMEXFLAG_HAS_WARP_MASK) != 0; warpMask <<= 1)
 			{
-				nFlags = ROOMEXFLAG_HAS_WARP_0;
-				nCounter = 0;
-
-				while (!(nFlags & pRoomEx->dwFlags) || DRLGWARP_GetWarpDestinationFromArray(pLevel, nCounter) == -1)
+				if (pRoomEx->dwFlags & warpMask && DRLGWARP_GetWarpDestinationFromArray(pLevel, nWarpIndex) != -1)
 				{
-					nFlags <<= 1;
-					++nCounter;
-
-					if (!(nFlags & ROOMEXFLAG_HAS_WARP))
-					{
-						bHasWaypoint = FALSE;
-						break;
-					}
+					bHasWarp = true;
 				}
+				nWarpIndex++;
 			}
 		}
 
-		if (bHasWaypoint)
+		if (bHasWarp)
 		{
-			bHasWaypoint = FALSE;
+			int* pX = &pLevel->nRoom_Center_Warp_X[pLevel->nRoomCoords];
+			int* pY = &pLevel->nRoom_Center_Warp_Y[pLevel->nRoomCoords];
 
-			pX = &pLevel->nRoom_Center_Warp_X[pLevel->nRoomCoords];
-			pY = &pLevel->nRoom_Center_Warp_Y[pLevel->nRoomCoords];
-
+			// Put warp in the center of the tile
 			*pX = pRoomEx->nTileXPos + pRoomEx->nTileWidth / 2;
 			*pY = pRoomEx->nTileYPos + pRoomEx->nTileHeight / 2;
 
