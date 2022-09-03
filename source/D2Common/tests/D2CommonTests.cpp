@@ -129,8 +129,8 @@ void PatchD2Common()
 		//REPLACE_D2MOO_BY_ORG_COMMON(sub_6FD81530, 0x6FD81530);
 		//REPLACE_D2MOO_BY_ORG_COMMON(sub_6FD81BF0, 0x6FD81BF0);
 		
-		void* Original_DRLGPRESET_ParseDS1File = (void*)(uintptr_t(OriginalD2Common) + (0x6FD85A10 - D2CommonImageBase));
-		success = success && NO_ERROR == DetourAttach(&(PVOID&)Original_DRLGPRESET_ParseDS1File, DRLGPRESET_ParseDS1File);
+		//void* Original_DRLGPRESET_ParseDS1File = (void*)(uintptr_t(OriginalD2Common) + (0x6FD85A10 - D2CommonImageBase));
+		//success = success && NO_ERROR == DetourAttach(&(PVOID&)Original_DRLGPRESET_ParseDS1File, DRLGPRESET_ParseDS1File);
 
 		//REPLACE_D2MOO_BY_ORG_COMMON(DRLGPRESET_BuildArea, 0x6FD87560);
 		//REPLACE_D2MOO_BY_ORG_COMMON(DRLGGRID_FillGrid, 0x6FD762B0);
