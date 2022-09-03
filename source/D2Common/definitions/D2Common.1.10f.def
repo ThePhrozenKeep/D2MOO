@@ -3,7 +3,7 @@ EXPORTS
 	DRLG_GetLevelTypeFromLevelId										@10000
 	DRLG_GetActNoFromLevelId											@10001
 	DRLG_GetLOSDrawFromLevelId											@10002
-	DRLG_Update															@10003
+	DRLGACTIVATE_Update													@10003
 	DRLG_GetSaveMonstersFromLevelId										@10004
 	DRLG_GetLevel														@10005
 	DRLG_InitLevel														@10006
@@ -15,7 +15,7 @@ EXPORTS
 	DRLG_FreeDrlg														@10012
 	DRLG_AllocLevel														@10013
 	DRLG_AllocDrlg														@10014
-	DRLG_GetRoomsAllocationStats										@10015
+	DRLGACTIVATE_GetRoomsAllocationStats								@10015
 	D2COMMON_10016_Return0												@10016
 	DRLGROOMTILE_GetNumberOfShadowsFromRoom								@10017
 	D2COMMON_10018_Return0												@10018

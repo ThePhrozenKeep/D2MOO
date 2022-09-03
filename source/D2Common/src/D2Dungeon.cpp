@@ -531,7 +531,7 @@ void __stdcall D2COMMON_10063_AddRoomData(D2DrlgActStrc* pAct, int nLevelId, int
 {
 	D2_ASSERT(pAct);
 
-	DRLG_SetClientIsInSight(pAct->pDrlg, nLevelId, nX, nY, pRoom ? pRoom->pRoomEx : NULL);
+	DRLGACTIVATE_SetClientIsInSight(pAct->pDrlg, nLevelId, nX, nY, pRoom ? pRoom->pRoomEx : nullptr);
 }
 
 //D2Common.0x6FD8C6B0 (#10064)
@@ -539,13 +539,13 @@ void __stdcall D2COMMON_10064_RemoveRoomData(D2DrlgActStrc* pAct, int nLevelId, 
 {
 	D2_ASSERT(pAct);
 
-	DRLG_UnsetClientIsInSight(pAct->pDrlg, nLevelId, nX, nY, pRoom ? pRoom->pRoomEx : NULL);
+	DRLGACTIVATE_UnsetClientIsInSight(pAct->pDrlg, nLevelId, nX, nY, pRoom ? pRoom->pRoomEx : nullptr);
 }
 
 //D2Common.0x6FD8C700 (#10062)
 void __stdcall D2Common_10062(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2)
 {
-	DRLG_ChangeClientRoom(pRoom1 ? pRoom1->pRoomEx : NULL, pRoom2 ? pRoom2->pRoomEx : NULL);
+	DRLGACTIVATE_ChangeClientRoom(pRoom1 ? pRoom1->pRoomEx : nullptr, pRoom2 ? pRoom2->pRoomEx : nullptr);
 }
 
 //D2Common.0x6FD8C730 (#10065)
@@ -553,7 +553,7 @@ D2RoomStrc* __stdcall D2COMMON_10065_GetRoomFromActAndCoord(D2DrlgActStrc* pAct,
 {
 	D2_ASSERT(pAct);
 
-	return DRLGACTIVATE_InitializeRoomExAtCoords(pAct->pDrlg, nX, nY);
+	return DRLGACTIVATE_StreamRoomAtCoords(pAct->pDrlg, nX, nY);
 }
 
 //D2Common.0x6FD8C770 (#10056)
@@ -661,7 +661,7 @@ D2RoomStrc* __stdcall D2Common_10069(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
 
-	return DRLG_GetARoomInClientSight(pAct->pDrlg);
+	return DRLGACTIVATE_GetARoomInClientSight(pAct->pDrlg);
 }
 
 //D2Common.0x6FD8C980 (#10070)
@@ -671,7 +671,7 @@ D2RoomStrc* __stdcall D2Common_10070(D2DrlgActStrc* pAct, D2RoomStrc* pRoom)
 
 	D2_ASSERT(pRoom);
 
-	return DRLG_GetARoomInSightButWithoutClient(pAct->pDrlg, pRoom->pRoomEx);
+	return DRLGACTIVATE_GetARoomInSightButWithoutClient(pAct->pDrlg, pRoom->pRoomEx);
 }
 
 //D2Common.0x6FD8C9E0 (#10071)
