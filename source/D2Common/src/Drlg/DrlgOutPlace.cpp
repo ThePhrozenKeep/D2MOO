@@ -2567,7 +2567,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 
 
 //D2Common.0x6FD83970
-void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* a2, int nRand, int nSizeX, int nSizeY)
+void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* pJungle, int nRand, int nSizeX, int nSizeY)
 {
 	unsigned int nTemp = 0;
 	int nX = 0;
@@ -2608,11 +2608,11 @@ void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* a2, int 
 		break;
 	}
 
-	a2->pDrlgCoord.nPosX = nX + pDrlgCoord->nPosX;
-	a2->pDrlgCoord.nHeight = nSizeY;
-	a2->pDrlgCoord.nWidth = nSizeX;
-	a2->pDrlgCoord.nPosY = nY + pDrlgCoord->nPosY;
-	a2->field_10 = nRand;
+	pJungle->pDrlgCoord.nPosX = nX + pDrlgCoord->nPosX;
+	pJungle->pDrlgCoord.nHeight = nSizeY;
+	pJungle->pDrlgCoord.nWidth = nSizeX;
+	pJungle->pDrlgCoord.nPosY = nY + pDrlgCoord->nPosY;
+	pJungle->field_10 = nRand;
 }
 
 //D2Common.0x6FD83A20
