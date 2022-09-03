@@ -454,8 +454,8 @@ void CheckContent(const D2RoomExStrc* lhs, const D2RoomExStrc* rhs, bool bCheckS
 
 	REQUIRE(lhs->fRoomStatus == rhs->fRoomStatus);
 	REQUIRE(lhs->unk0xAD == rhs->unk0xAD);
-	for (int i = 0; i < 5; i++)
-		REQUIRE(lhs->unk0xAE[i] == rhs->unk0xAE[i]);
+	for (int i = 0; i < ROOMSTATUS_COUNT + 1; i++)
+		REQUIRE(lhs->wRoomsInList[i] == rhs->wRoomsInList[i]);
 
 	if (bCheckStatusNull)
 	{
@@ -522,7 +522,7 @@ TEST_CASE("DRLG_AllocDrlg")
 				D2DrlgStrc* pOrgDrlg = Original_DRLG_AllocDrlg(&orgAct, act.nAct, 0, orgAct.dwInitSeed, actTownId, D2DrlgFlags(0), &orgGame, DIFFMODE_NORMAL, nullptr, nullptr);
 				D2DrlgStrc* pDrlg = DRLG_AllocDrlg(&act, act.nAct, 0, act.dwInitSeed, actTownId, D2DrlgFlags(0), &game, DIFFMODE_NORMAL, nullptr, nullptr);
 
-				CHECK(pDrlg->unk0x08 == pOrgDrlg->unk0x08);
+				CHECK(pDrlg->pDS1MemPool == pOrgDrlg->pDS1MemPool);
 				// pAct
 				CHECK(pDrlg->nAct == pOrgDrlg->nAct);
 				// pad0x11
@@ -530,15 +530,12 @@ TEST_CASE("DRLG_AllocDrlg")
 				CHECK(pDrlg->dwStartSeed == pOrgDrlg->dwStartSeed);
 				CHECK(pDrlg->dwGameLowSeed == pOrgDrlg->dwGameLowSeed);
 				CHECK(pDrlg->dwFlags == pOrgDrlg->dwFlags);
-				for (int i = 0; i < 4; i++)
-					CheckContent(&pDrlg->pRooms[i], &pOrgDrlg->pRooms[i], false);
+				for (int i = 0; i < ROOMSTATUS_COUNT; i++)
+					CheckContent(&pDrlg->tStatusRoomsLists[i], &pOrgDrlg->tStatusRoomsLists[i], false);
 				CheckContent(pDrlg->pRoomEx, pOrgDrlg->pRoomEx, false);
-				CHECK(pDrlg->unk0x3DC == pOrgDrlg->unk0x3DC);
-				CHECK(pDrlg->unk0x3DD[0] == pOrgDrlg->unk0x3DD[0]);
-				CHECK(pDrlg->unk0x3DD[1] == pOrgDrlg->unk0x3DD[1]);
-				CHECK(pDrlg->unk0x3DD[2] == pOrgDrlg->unk0x3DD[2]);
-				CHECK(pDrlg->unk0x3E0[0] == pOrgDrlg->unk0x3E0[0]);
-				CHECK(pDrlg->unk0x3E0[1] == pOrgDrlg->unk0x3E0[1]);
+				CHECK(pDrlg->nRoomsInitSinceLastUpdate == pOrgDrlg->nRoomsInitSinceLastUpdate);
+				CHECK(pDrlg->nRoomsInitTimeout == pOrgDrlg->nRoomsInitTimeout);
+				CHECK(pDrlg->nAllocatedRooms == pOrgDrlg->nAllocatedRooms);
 				// pGame
 				CHECK(pDrlg->nDifficulty == pOrgDrlg->nDifficulty);
 				// pad0x3ED
