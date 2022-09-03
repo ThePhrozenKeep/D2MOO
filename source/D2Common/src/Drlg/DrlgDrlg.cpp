@@ -548,16 +548,18 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
 		// First check if we have a waypoint
-		bool bHasWarp = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WAYPOINT_MASK);
+		bool bHasWarp = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WAYPOINT_MASK) != 0;
 
 		// Then check for additional warps
-		if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK && !bHasWarp)
+		if ((pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK) != 0 && !bHasWarp)
 		{
 			int nWarpIndex = 0;
-			for (int warpMask = ROOMEXFLAG_HAS_WARP_0; warpMask & ROOMEXFLAG_HAS_WARP_MASK; warpMask <<= 1)
+			for (int warpMask = ROOMEXFLAG_HAS_WARP_0; (warpMask & ROOMEXFLAG_HAS_WARP_MASK) != 0; warpMask <<= 1)
 			{
 				if (pRoomEx->dwFlags & warpMask && DRLGWARP_GetWarpDestinationFromArray(pLevel, nWarpIndex) != -1)
+				{
 					bHasWarp = true;
+				}
 				nWarpIndex++;
 			}
 		}
