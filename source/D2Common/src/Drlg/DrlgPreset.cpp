@@ -1129,6 +1129,9 @@ void __fastcall DRLGPRESET_GetTombStoneTileCoords(D2RoomExStrc* pRoomEx, D2Coord
 //D2Common.0x6FD87130
 void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 {
+	// Not working properly
+	// TODO: remove patch
+	UNIMPLEMENTED();
 	BOOL bTownOrGraveyard = FALSE;
 	BOOL bKillEdgeX = FALSE;
 	BOOL bKillEdgeY = FALSE;

@@ -62,17 +62,17 @@ EXPORTS
 	DUNGEON_GetLevelIdFromPopulatedRoom									@10059
 	DUNGEON_HasWaypoint													@10060
 	DUNGEON_GetPickedLevelPrestFilePathFromRoom							@10061
-	D2Common_10062														@10062
-	D2COMMON_10063_AddRoomData											@10063
-	D2COMMON_10064_RemoveRoomData										@10064
-	D2COMMON_10065_GetRoomFromActAndCoord								@10065
+	DUNGEON_ChangeClientRoom    										@10062
+	DUNGEON_SetClientIsInSight  										@10063
+	DUNGEON_UnsetClientIsInSight										@10064
+	DUNGEON_StreamRoomAtCoords  										@10065
 	DUNGEON_AllocDrlgDelete												@10066
 	DUNGEON_FreeDrlgDelete												@10067
 	DUNGEON_GetDrlgDeleteFromRoom										@10068
-	D2Common_10069														@10069
-	D2Common_10070														@10070
-	DUNGEON_TestRoomCanUnTile											@10071
-	D2Common_10072														@10072
+	DUNGEON_GetARoomInClientSight          								@10069
+	DUNGEON_GetARoomInSightButWithoutClient								@10070
+	DUNGEON_TestRoomCanUnTile              								@10071
+	DUNGEON_GetRoomStatusFlags             								@10072
 	D2Common_10073														@10073
 	D2Common_10074														@10074
 	D2Common_10075														@10075

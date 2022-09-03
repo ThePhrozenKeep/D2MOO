@@ -2,6 +2,9 @@
 
 #include <D2DataTbls.h>
 #include <Drlg/D2DrlgPreset.h>
+#include <Drlg/D2DrlgOutRoom.h>
+#include <Drlg/D2DrlgRoomTile.h>
+#include <Drlg/D2DrlgActivate.h>
 
 extern "C" {
     __declspec(dllexport)
@@ -98,17 +101,17 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetLevelIdFromPopulatedRoom                                 @10059
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_HasWaypoint                                                 @10060
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPickedLevelPrestFilePathFromRoom                         @10061
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10062                                                      @10062
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10063_AddRoomData                                          @10063
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10064_RemoveRoomData                                       @10064
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10065_GetRoomFromActAndCoord                               @10065
+    PatchAction::FunctionReplacePatchByOriginal, /*C*/ //   DUNGEON_ChangeClientRoom                                            @10062
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SetClientIsInSight                                          @10063
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UnsetClientIsInSight                                        @10064
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_StreamRoomAtCoords                                          @10065
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AllocDrlgDelete                                             @10066
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FreeDrlgDelete                                              @10067
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetDrlgDeleteFromRoom                                       @10068
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10069                                                      @10069
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10070                                                      @10070
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_TestRoomCanUnTile                                           @10071
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10072                                                      @10072
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetARoomInClientSight                                       @10069
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetARoomInSightButWithoutClient                             @10070
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_TestRoomCanUnTile                                           @10071
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRoomStatusFlags                                          @10072
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10073                                                      @10073
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10074                                                      @10074
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10075                                                      @10075
@@ -138,7 +141,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPortalFlagFromLevelId                                    @10099
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IncreaseAlliedCountOfRoom                                   @10100
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_DecreaseAlliedCountOfRoom                                   @10101
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_ToggleHasPortalFlag                                         @10102
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ToggleHasPortalFlag                                         @10102
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_SetActCallbackFunc                                          @10103
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AnimateTiles                                                @10104
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_InitRoomTileAnimation                                       @10105
@@ -1388,7 +1391,12 @@ static ExtraPatchAction extraPatchActions[] = {
     
     // Can patch directly since it's pointing to the global static data tables
     { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
-    
+
+    // Known broken (or at least unable to function without patching other functions/variables) functions
+    { 0x6FD87130 - D2CommonImageBase, &DRLGPRESET_AddPresetRoomMapTiles, PatchAction::FunctionReplacePatchByOriginal},
+    { 0x6FD89FA0 - D2CommonImageBase, &DRLGROOMTILE_InitRoomGrids, PatchAction::FunctionReplacePatchByOriginal},
+    { 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::FunctionReplacePatchByOriginal},
+
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
