@@ -2536,20 +2536,11 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		}
 	}
 
-	// Bubble sort on Y position
-	bool bSorted = false;
-	while (bSorted);
-	{
-		bSorted = true;
-		for (int i = 0; i < JUNGLE_MAX_ATTACH - 1; ++i)
-		{
-			if (tJungles[i + 1].pDrlgCoord.nPosY > tJungles[i].pDrlgCoord.nPosY)
-			{
-				std::swap(tJungles[i], tJungles[i + 1]);
-				bSorted = false;
-			}
-		}
-	}
+	std::sort(tJungles, tJungles + JUNGLE_MAX_ATTACH, 
+		[](const auto& lhs, const auto& rhs) 
+		{ // Order from higher to lower nPosY
+			return lhs.pDrlgCoord.nPosY > rhs.pDrlgCoord.nPosY; 
+		});
 
 	D2DrlgLevelStrc* pJungleLevel = nullptr;
 	for (int i = 0; i < JUNGLE_MAX_ATTACH; ++i)
