@@ -243,7 +243,7 @@ struct D2DrlgStrc
 	void* pDS1MemPool;						//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
 	D2DrlgActStrc* pAct;					//0x0C
 	uint8_t nAct;							//0x10
-	uint8_t pading0x11[3];					//0x11
+	uint8_t padding0x11[3];					//0x11
 	D2SeedStrc pSeed;						//0x14
 	uint32_t dwStartSeed;					//0x1C
 	uint32_t dwGameLowSeed;					//0x20
