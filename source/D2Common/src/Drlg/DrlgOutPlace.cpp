@@ -2622,7 +2622,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 
 	D2LevelDefBin* pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
 
-	uint32_t nWaypointSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK) >> ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT;
+	uint32_t nWaypointSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WAYPOINT_MASK) >> ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT;
 	uint32_t nShrineSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_SUBSHRINE_ROWS_MASK) >> ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT;
 
 	int nWidth = pRoomEx->nTileWidth + 1;
