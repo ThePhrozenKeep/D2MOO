@@ -6,6 +6,8 @@
 #include <Drlg/D2DrlgRoomTile.h>
 #include <Drlg/D2DrlgActivate.h>
 
+//#define DISABLE_ALL_PATCHES
+
 extern "C" {
     __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
@@ -1355,11 +1357,16 @@ extern "C" {
 __declspec(dllexport)
 PatchAction __cdecl GetPatchAction(int ordinal)
 {
+#ifdef DISABLE_ALL_PATCHES
+    return PatchAction::Ignore;
+#else
+
     if (ordinal < GetBaseOrdinal() || ordinal > GetLastOrdinal())
         return PatchAction::FunctionReplacePatchByOriginal;
     
     static_assert(GetOrdinalCount() == (sizeof(patchActions) / sizeof(*patchActions)), "Make sure we have the right number of ordinal patch entries");
     return ::patchActions[ordinal - GetBaseOrdinal()];
+#endif
 }
 
 static const int D2CommonImageBase = 0x6FD40000;
@@ -1401,7 +1408,13 @@ static ExtraPatchAction extraPatchActions[] = {
 };
 
 __declspec(dllexport)
-constexpr int __cdecl GetExtraPatchActionsCount() { return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); }
+constexpr int __cdecl GetExtraPatchActionsCount() { 
+#ifdef DISABLE_ALL_PATCHES
+    return 0;
+#else
+    return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); 
+#endif
+}
 
 __declspec(dllexport)
 ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
