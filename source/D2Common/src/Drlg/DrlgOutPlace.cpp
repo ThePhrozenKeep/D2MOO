@@ -2618,21 +2618,15 @@ void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* pJungle,
 //D2Common.0x6FD83A20
 void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 {
-	D2LevelDefBin* pLevelDefBinRecord = NULL;
-	unsigned int nFlags = 0;
-	int nWaypointSubTheme = 0;
-	int nShrineSubTheme = 0;
-	int nHeight = 0;
-	int nWidth = 0;
 	D2UnkOutdoorStrc2 a1 = {};
 
-	pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
+	D2LevelDefBin* pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
 
-	nWaypointSubTheme = (pRoomEx->dwFlags & (ROOMEXFLAG_HAS_WAYPOINT|ROOMEXFLAG_HAS_WAYPOINT_SMALL)) >> 16;
-	nShrineSubTheme = (uint16_t)pRoomEx->dwFlags >> 12;
+	uint32_t nWaypointSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WARP_MASK) >> ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT;
+	uint32_t nShrineSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_SUBSHRINE_ROWS_MASK) >> ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT;
 
-	nWidth = pRoomEx->nTileWidth + 1;
-	nHeight = pRoomEx->nTileHeight + 1;
+	int nWidth = pRoomEx->nTileWidth + 1;
+	int nHeight = pRoomEx->nTileHeight + 1;
 
 	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pOrientationGrid, nWidth, nHeight);
 	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pWallGrid, nWidth, nHeight);
@@ -2682,6 +2676,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 	a1.nSubThemePicked = pRoomEx->pOutdoor->nSubThemePicked;
 	sub_6FD8AA80(&a1);
 
+	unsigned int nFlags = 0;
 	switch (pRoomEx->pLevel->nLevelType)
 	{
 	case LVLTYPE_ACT2_DESERT:
