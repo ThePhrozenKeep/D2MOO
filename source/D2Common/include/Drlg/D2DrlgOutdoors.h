@@ -7,6 +7,19 @@
 
 #pragma pack(1)
 
+enum D2C_OutDoorInfoFlags 
+{
+	OUTDOOR_FLAG1 = 0x00000001,
+	OUTDOOR_BRIDGE = 0x00000004,
+	OUTDOOR_RIVER_OTHER = 0x00000008,
+	OUTDOOR_RIVER = 0x00000010,
+	OUTDOOR_CLIFFS = 0x00000020,
+	OUTDOOR_OUT_CAVES = 0x00000040,
+	OUTDOOR_SOUTHWEST = 0x00000080,
+	OUTDOOR_NORTHWEST = 0x00000100,
+	OUTDOOR_SOUTHEAST = 0x00000200,
+	OUTDOOR_NORTHEAST = 0x00000400,
+};
 
 struct D2DrlgOutdoorGridStrc
 {
@@ -19,23 +32,23 @@ struct D2DrlgOutdoorGridStrc
 
 struct D2DrlgOutdoorInfoStrc
 {
-	uint32_t dwFlags;							//0x00
+	uint32_t dwFlags;						//0x00 D2C_OutDoorInfoFlags
 	D2DrlgGridStrc pGrid[4];				//0x04
 	union
 	{
 		struct
 		{
-			int32_t nWidth;								//0x54
-			int32_t nHeight;							//0x58
-			int32_t nGridWidth;							//0x5C
-			int32_t nGridHeight;						//0x60
+			int32_t nWidth;					//0x54
+			int32_t nHeight;				//0x58
+			int32_t nGridWidth;				//0x5C
+			int32_t nGridHeight;			//0x60
 		};
 		D2DrlgCoordStrc pCoord;
 	};
 	D2DrlgVertexStrc* pVertex;				//0x64
-	D2DrlgVertexStrc* unk0x68[6];			//0x68
+	D2DrlgVertexStrc* pPathStarts[6];			//0x68
 	D2DrlgVertexStrc pVertices[24];			//0x80
-	int32_t nVertices;							//0x260
+	int32_t nVertices;						//0x260 Maybe nPathStarts instead?
 	D2DrlgOrthStrc* pRoomData;				//0x264
 };
 
@@ -76,7 +89,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7EEE0
 void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeepRoomData);
 //D2Common.0x6FD7EFE0
-void __fastcall sub_6FD7EFE0(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx);
+void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD7F250
 void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7F500

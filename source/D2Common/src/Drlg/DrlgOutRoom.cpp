@@ -30,7 +30,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc* pRoomEx)
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pOrientationGrid);
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pWallGrid);
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pFloorGrid);
-		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pCellGrid);
+		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pDirtPathGrid);
 		DRLGVER_FreeVertices(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pVertex);
 	}
 }

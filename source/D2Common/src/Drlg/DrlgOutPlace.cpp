@@ -507,7 +507,7 @@ LABEL_26:
 		pPreviousVertex = NULL;
 		do
 		{
-			if (pLevel->pOutdoors->unk0x68[nVertexId])
+			if (pLevel->pOutdoors->pPathStarts[nVertexId])
 			{
 				pDrlgVertex = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
 				pPreviousVertex->pNext = pDrlgVertex;
@@ -515,7 +515,7 @@ LABEL_26:
 			else
 			{
 				pDrlgVertex = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
-				pLevel->pOutdoors->unk0x68[nVertexId] = pDrlgVertex;
+				pLevel->pOutdoors->pPathStarts[nVertexId] = pDrlgVertex;
 			}
 
 			pPreviousVertex = pDrlgVertex;
@@ -528,13 +528,13 @@ LABEL_26:
 	}
 	else
 	{
-		pLevel->pOutdoors->unk0x68[nVertexId] = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
-		pLevel->pOutdoors->unk0x68[nVertexId]->nPosX = nX1;
-		pLevel->pOutdoors->unk0x68[nVertexId]->nPosY = nY1;
+		pLevel->pOutdoors->pPathStarts[nVertexId] = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
+		pLevel->pOutdoors->pPathStarts[nVertexId]->nPosX = nX1;
+		pLevel->pOutdoors->pPathStarts[nVertexId]->nPosY = nY1;
 
-		pLevel->pOutdoors->unk0x68[nVertexId]->pNext = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
-		pLevel->pOutdoors->unk0x68[nVertexId]->pNext->nPosX = nX2;
-		pLevel->pOutdoors->unk0x68[nVertexId]->pNext->nPosY = nY2;
+		pLevel->pOutdoors->pPathStarts[nVertexId]->pNext = DRLGVER_AllocVertex(pLevel->pDrlg->pMempool, 0);
+		pLevel->pOutdoors->pPathStarts[nVertexId]->pNext->nPosX = nX2;
+		pLevel->pOutdoors->pPathStarts[nVertexId]->pNext->nPosY = nY2;
 	}
 
 	return TRUE;
@@ -2642,7 +2642,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 
 	if (DRLG_GetActNoFromLevelId(pRoomEx->pLevel->nLevelId) == ACT_I)
 	{
-		sub_6FD7EFE0(pRoomEx->pLevel, pRoomEx);
+		DRLG_OUTDOORS_GenerateDirtPath(pRoomEx->pLevel, pRoomEx);
 	}
 
 	DRLGROOMTILE_AllocTileGrid(pRoomEx);
@@ -2707,13 +2707,13 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 		break;
 	}
 
-	for (int i = 0; i < nHeight; ++i)
+	for (int nY = 0; nY < nHeight; ++nY)
 	{
-		for (int j = 0; j < nWidth; ++j)
+		for (int nX = 0; nX < nWidth; ++nX)
 		{
-			if (!(DRLGGRID_GetGridFlags(&pRoomEx->pOutdoor->pFloorGrid, j, i) & 0x3F0FF80))
+			if (!(DRLGGRID_GetGridFlags(&pRoomEx->pOutdoor->pFloorGrid, nX, nY) & 0x3F0FF80))
 			{
-				DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, j, i, nFlags, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, nX, nY, nFlags, FLAG_OPERATION_OR);
 			}
 		}
 	}
