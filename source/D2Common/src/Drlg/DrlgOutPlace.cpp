@@ -2655,8 +2655,8 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 
 	memset(&a1, 0, sizeof(a1));
 	a1.pRoomEx = pRoomEx;
-	a1.pOutdoorRoom = pRoomEx->pOutdoor;
-	a1.pWallGrid = &pRoomEx->pOutdoor->pWallGrid;
+	a1.pOutdoorRooms[0] = pRoomEx->pOutdoor;
+	a1.pWallsGrids[0] = &pRoomEx->pOutdoor->pWallGrid;
 	a1.pFloorGrid = &pRoomEx->pOutdoor->pFloorGrid;
 	a1.field_28 = 0;
 	a1.field_2C = 1;

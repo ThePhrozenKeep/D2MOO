@@ -158,7 +158,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 	{
 		pDrlgFile->pWallLayer[0] = pData;
 		SkipInt32s(pData, nArea);
-		pDrlgFile->nWalls = 1;
+		pDrlgFile->nWallLayers = 1;
 		pDrlgFile->pFloorLayer[0] = pData;
 		SkipInt32s(pData, nArea);
 		pDrlgFile->pOrientationLayer[0] = pData;
@@ -168,18 +168,18 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 	}
 	else
 	{
-		pDrlgFile->nWalls = ReadInt32(pData);
+		pDrlgFile->nWallLayers = ReadInt32(pData);
 
 		if (nVersion < 16)
 		{
-			pDrlgFile->nFloors = 1;
+			pDrlgFile->nFloorLayers = 1;
 		}
 		else
 		{
-			pDrlgFile->nFloors = ReadInt32(pData);
+			pDrlgFile->nFloorLayers = ReadInt32(pData);
 		}
 
-		for (int i = 0; i < pDrlgFile->nWalls; ++i)
+		for (int i = 0; i < pDrlgFile->nWallLayers; ++i)
 		{
 			pDrlgFile->pWallLayer[i] = pData;
 			SkipInt32s(pData, nArea);
@@ -187,7 +187,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 			SkipInt32s(pData, nArea);
 		}
 
-		for (int i = 0; i < pDrlgFile->nFloors; ++i)
+		for (int i = 0; i < pDrlgFile->nFloorLayers; ++i)
 		{
 			pDrlgFile->pFloorLayer[i] = pData;
 			SkipInt32s(pData, nArea);
@@ -196,7 +196,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 	if (nVersion < 7)
 	{
-		for (int j = 0; j < pDrlgFile->nWalls; ++j)
+		for (int j = 0; j < pDrlgFile->nWallLayers; ++j)
 		{
 			int* pOrientationLayer = (int*)pDrlgFile->pOrientationLayer[j];
 			for (int i = 0; i < nArea; ++i)
@@ -950,13 +950,13 @@ void __fastcall DRLGPRESET_FreeDrlgGrids(void* pMemPool, D2RoomExStrc* pRoomEx)
 		pDrlgFile = pRoomEx->pMaze->pMap->pFile;
 		if (pDrlgFile)
 		{
-			for (int i = 0; i < pDrlgFile->nWalls; ++i)
+			for (int i = 0; i < pDrlgFile->nWallLayers; ++i)
 			{
 				DRLGGRID_FreeGrid(pMemPool, &pRoomEx->pMaze->pOrientationGrid[i]);
 				DRLGGRID_FreeGrid(pMemPool, &pRoomEx->pMaze->pWallGrid[i]);
 			}
 
-			for (int i = 0; i < pDrlgFile->nFloors; ++i)
+			for (int i = 0; i < pDrlgFile->nFloorLayers; ++i)
 			{
 				DRLGGRID_FreeGrid(pMemPool, &pRoomEx->pMaze->pFloorGrid[i]);
 			}
@@ -1033,23 +1033,23 @@ void __fastcall DRLGPRESET_InitPresetRoomGrids(D2RoomExStrc* pRoomEx)
 
 	nWidth = pRoomEx->pMaze->pMap->pDrlgCoord.nWidth + 1;
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWalls; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
 	{
 		DRLGGRID_FillNewCellFlags(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pMaze->pWallGrid[i], (int*)pRoomEx->pMaze->pMap->pFile->pWallLayer[i], &pDrlgCoord, nWidth);
 		DRLGGRID_FillNewCellFlags(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pMaze->pOrientationGrid[i], (int*)pRoomEx->pMaze->pMap->pFile->pOrientationLayer[i], &pDrlgCoord, nWidth);
 	}
 
-	if (pRoomEx->pMaze->pMap->pFile->nWalls)
+	if (pRoomEx->pMaze->pMap->pFile->nWallLayers)
 	{
 		DRLGGRID_AlterEdgeGridFlags(pRoomEx->pMaze->pWallGrid, 132, FLAG_OPERATION_OR);
 	}
 
-	for (int i = 1; i < pRoomEx->pMaze->pMap->pFile->nWalls; ++i)
+	for (int i = 1; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
 	{
 		DRLGGRID_AlterAllGridFlags(&pRoomEx->pMaze->pWallGrid[i], i << 18, FLAG_OPERATION_OR);
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloors; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
 	{
 		DRLGGRID_FillNewCellFlags(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pMaze->pFloorGrid[i], (int*)pRoomEx->pMaze->pMap->pFile->pFloorLayer[i], &pDrlgCoord, nWidth);
 		DRLGGRID_AlterAllGridFlags(&pRoomEx->pMaze->pFloorGrid[i], i << 18, FLAG_OPERATION_OR);
@@ -1057,7 +1057,7 @@ void __fastcall DRLGPRESET_InitPresetRoomGrids(D2RoomExStrc* pRoomEx)
 
 	DRLGGRID_FillNewCellFlags(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pMaze->pCellGrid, (int*)pRoomEx->pMaze->pMap->pFile->pShadowLayer, &pDrlgCoord, nWidth);
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloors; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
 	{
 		DRLGGRID_AlterEdgeGridFlags(&pRoomEx->pMaze->pFloorGrid[i], 132, FLAG_OPERATION_OR);
 	}
@@ -1162,7 +1162,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 		DRLGGRID_FillGrid(&pDrlgGrid, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1, v46, nCellFlags);
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloors; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
 	{
 		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pMaze->pFloorGrid[i], (!i && pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwFillBlanks), bKillEdgeX, bKillEdgeY);
 
@@ -1172,7 +1172,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 		}
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWalls; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
 	{
 		DRLGROOMTILE_CountWallWarpTiles(pRoomEx, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pOrientationGrid, bKillEdgeX, bKillEdgeY);
 		DRLGROOMTILE_CountAllTileTypes(pRoomEx, pRoomEx->pMaze->pWallGrid, NULL, bKillEdgeX, bKillEdgeY);
@@ -1197,12 +1197,12 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 
 	DRLGROOMTILE_AllocTileData(pRoomEx);
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloors; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
 	{
 		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pMaze->pFloorGrid[i], 0, (!i && pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwFillBlanks), bKillEdgeX, bKillEdgeY);
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWalls; ++i)
+	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
 	{
 		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pOrientationGrid, 0, bKillEdgeX, bKillEdgeY);
 	}
@@ -1216,7 +1216,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 
 	if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwAnimate)
 	{
-		DRLGANIM_AllocAnimationTileGrids(pRoomEx, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->nAnimSpeed, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pMap->pFile->nWalls, pRoomEx->pMaze->pFloorGrid, pRoomEx->pMaze->pMap->pFile->nFloors, &pRoomEx->pMaze->pCellGrid);
+		DRLGANIM_AllocAnimationTileGrids(pRoomEx, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->nAnimSpeed, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pMap->pFile->nWallLayers, pRoomEx->pMaze->pFloorGrid, pRoomEx->pMaze->pMap->pFile->nFloorLayers, &pRoomEx->pMaze->pCellGrid);
 	}
 
 	pRoomEx->pTileGrid->pTiles.nWalls = pRoomEx->pTileGrid->nWalls;
@@ -1379,7 +1379,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 		pDrlgCoord.nWidth = pDrlgMap->pFile->nWidth + 1;
 		pDrlgCoord.nHeight = pDrlgMap->pFile->nHeight + 1;
 
-		for (int i = 0; i < pDrlgMap->pFile->nWalls; ++i)
+		for (int i = 0; i < pDrlgMap->pFile->nWallLayers; ++i)
 		{
 			D2DrlgGridStrc pDrlgGrid1 = {};
 			D2DrlgGridStrc pDrlgGrid2 = {};
