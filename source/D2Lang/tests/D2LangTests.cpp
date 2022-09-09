@@ -31,6 +31,116 @@ TEST_CASE("Unicode::directionality")
     }
 }
 
+TEST_CASE("Unicode::sprintf")
+{
+    // TODO: prefill dest buffer with tombstone to check if we overflowed
+    SUBCASE("Empty")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L""));
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Empty with args")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L""), 123, L"456", 789u);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Copy string")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"Diablo"));
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Format %")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"%%%%%%%%%%"));
+        CHECK(wcscmp((wchar_t*)dest, L"%%%%%") == 0);
+    }
+    SUBCASE("Format int")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"%d"), -2000000000);
+        CHECK(wcscmp((wchar_t*)dest, L"-2000000000") == 0);
+    }
+    SUBCASE("Format unsigned int")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"%u"), 4000000000u);
+        CHECK(wcscmp((wchar_t*)dest, L"4000000000") == 0);
+    }
+    SUBCASE("Format string")
+    {
+        SUBCASE("Normal")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s:AfterString"), D2_USTR(L"Diablo"));
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:Diablo:AfterString") == 0);
+        }
+        SUBCASE("Empty")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s"), D2_USTR(L""));
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:") == 0);
+        }
+        SUBCASE("nullptr")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s"), nullptr);
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:") == 0);
+        }
+    }
+    SUBCASE("Format combination")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(
+                256,
+                dest,
+                D2_USTR(L"%s (%u + %d)"),
+                D2_USTR(L"Diablo"),
+                3u,
+                -1);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo (3 + -1)") == 0);
+    }
+    SUBCASE("Copy truncated string")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(4, dest, D2_USTR(L"Diablo"));
+        CHECK(wcscmp((wchar_t*)dest, L"Dia") == 0);
+    }
+    SUBCASE("Format truncated %")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(4, dest, D2_USTR(L"%%%%%%%%%%"));
+        CHECK(wcscmp((wchar_t*)dest, L"%%%") == 0);
+    }
+    SUBCASE("Format truncated int")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(4, dest, D2_USTR(L"%d"), -2000000000);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Format truncated unsigned int")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(4, dest, D2_USTR(L"%u"), 4000000000u);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Format truncated string")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(4, dest, D2_USTR(L"%s"), D2_USTR(L"Diablo"));
+        CHECK(wcscmp((wchar_t*)dest, L"Dia") == 0);
+    }    
+    SUBCASE("Ends with %")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"Diablo%"));
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo%") == 0);
+    }
+}
+
 TEST_CASE("Unicode::isWordEnd")
 {
     SUBCASE("Index 0")
@@ -386,7 +496,6 @@ TEST_CASE("Unicode::toUnicode")
     SUBCASE("Convert ASCII text")
     {
         Unicode::toUnicode(dest, "Diablo", dest_capacity);
-        wprintf(L"%ls\n", (wchar_t*)dest);
         CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
     }
     SUBCASE("Partially convert ASCII text")
