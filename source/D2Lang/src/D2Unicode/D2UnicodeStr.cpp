@@ -68,13 +68,9 @@ void __cdecl Unicode::sprintf(
      * found, then copy the remaining string.
      */
     while (&format[i_format] != strstr_result
-        && format[i_format].ch != L'\0') {
-      if (i_buffer >= buffer_size) {
-        buffer[i_buffer - 1].ch = L'\0';
-        va_end(args);
-        return;
-      }
-
+        && format[i_format].ch != L'\0'
+        && i_buffer < buffer_size) {
+      
       buffer[i_buffer] = format[i_format];
 
       ++i_format;
@@ -94,12 +90,6 @@ void __cdecl Unicode::sprintf(
     }
 
     D2_ASSERT(strstr_result != NULL);
-
-    union {
-      int d;
-      unsigned int u;
-      const Unicode* s;
-    } arg_value;
 
     switch (conversion_specifier) {
       case L'\0': {
@@ -155,36 +145,28 @@ void __cdecl Unicode::sprintf(
       }
 
       case L's': {
-        arg_value.s = va_arg(args, const Unicode*);
-        if (arg_value.s == NULL || arg_value.s[0].ch == L'\0') {
-          Unicode::strncat(
-              &buffer[i_buffer],
-              arg_value.s,
-              buffer_size - (i_buffer + 1));
+        const Unicode* arg_string = va_arg(args, const Unicode*);
+        if (arg_string == NULL || arg_string[0].ch == L'\0') {
+          buffer[i_buffer] = L'\0';
           va_end(args);
           return;
         }
 
-        int arg_s_length;
-        for (arg_s_length = 1;
-            arg_value.s[arg_s_length].ch != L'\0';
-            ++arg_s_length) {
-          /* Left empty on purpose. */
-        }
+        const int arg_s_length = Unicode::strlen(arg_string);
 
         if (arg_s_length == 0 || (i_buffer + arg_s_length) >= buffer_size) {
           Unicode::strncat(
               &buffer[i_buffer],
-              arg_value.s,
+              arg_string,
               buffer_size - (i_buffer + 1));
           va_end(args);
           return;
         }
 
         for (int i_arg_s = 0; ; ++i_arg_s) {
-          buffer[i_buffer + i_arg_s] = arg_value.s[i_arg_s];
+          buffer[i_buffer + i_arg_s] = arg_string[i_arg_s];
 
-          if (arg_value.s[i_arg_s + 1] == L'\0') {
+          if (arg_string[i_arg_s + 1] == L'\0') {
             break;
           }
         }
