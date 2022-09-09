@@ -33,6 +33,7 @@ TEST_CASE("Unicode::directionality")
 
 TEST_CASE("Unicode::sprintf")
 {
+    // TODO: prefill dest buffer with tombstone to check if we overflowed
     SUBCASE("Empty")
     {
         Unicode dest[256];
@@ -71,9 +72,24 @@ TEST_CASE("Unicode::sprintf")
     }
     SUBCASE("Format string")
     {
-        Unicode dest[256];
-        Unicode::sprintf(256, dest, D2_USTR(L"%s"), D2_USTR(L"Diablo"));
-        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+        SUBCASE("Normal")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s:AfterString"), D2_USTR(L"Diablo"));
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:Diablo:AfterString") == 0);
+        }
+        SUBCASE("Empty")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s"), D2_USTR(L""));
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:") == 0);
+        }
+        SUBCASE("nullptr")
+        {
+            Unicode dest[256];
+            Unicode::sprintf(256, dest, D2_USTR(L"BeforeString:%s"), nullptr);
+            CHECK(wcscmp((wchar_t*)dest, L"BeforeString:") == 0);
+        }
     }
     SUBCASE("Format combination")
     {
@@ -116,6 +132,12 @@ TEST_CASE("Unicode::sprintf")
         Unicode dest[256];
         Unicode::sprintf(4, dest, D2_USTR(L"%s"), D2_USTR(L"Diablo"));
         CHECK(wcscmp((wchar_t*)dest, L"Dia") == 0);
+    }    
+    SUBCASE("Ends with %")
+    {
+        Unicode dest[256];
+        Unicode::sprintf(256, dest, D2_USTR(L"Diablo%"));
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo%") == 0);
     }
 }
 
