@@ -103,6 +103,7 @@ Non-exhaustive list of members who helped putting this together (alphabetical or
  * @Lectem
  * @lolet
  * @Mentor
+ * @MirDrualga (aka @IAmTrial)
  * @misiek1294
  * @Mnw1995
  * @Myhrginoc
