@@ -26,7 +26,7 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRo
 //D2Common.0x6FD88FD0
 void __fastcall sub_6FD88FD0(D2RoomExStrc* pRoomEx, int nX, int nY, int a5);
 //D2Common.0x6FD89000
-void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pDrlgOutdoorRoom, int a4, BOOL bKillEdgeX, BOOL bKillEdgeY);
+void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pDrlgOutdoorRoom, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89360
 BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, int a4, int a5);
 //D2Common.0x6FD89410
@@ -34,7 +34,7 @@ void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTile
 //D2Common.0x6FD89590
 void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2RoomExStrc* pRoomEx, int nX, int nY, unsigned int dwFlags, int a5);
 //D2Common.0x6FD897E0
-D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, int a2, int a3, int nX, int nY, D2RoomExStrc** ppRoomEx);
+D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, BOOL bFloor, int nTileFlags, int nX, int nY, D2RoomExStrc** ppRoomEx);
 //D2Common.0x6FD89930
 void __fastcall DRLGROOMTILE_AddLinkedTileData(void* pMemPool, D2RoomExStrc* pRoomEx, int a3, unsigned int a4, int nX, int nY);
 //D2Common.0x6FD89AF0
@@ -42,9 +42,9 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc*
 //D2Common.0x6FD89CC0
 void __fastcall DRLGROOMTILE_GetCreateLinkedTileData(void* pMemPool, D2RoomExStrc* pRoomEx, int a3, unsigned int a4, int nX, int nY);
 //D2Common.0x6FD89E30
-void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, int a3, int a4, int a5);
+void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, BOOL bCheckCoordinatesValidity, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89F00
-void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pOutdoorRoom, int a4, int a5);
+void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pOutdoorRoom, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89FA0
 void __fastcall DRLGROOMTILE_InitRoomGrids(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD89FD0
