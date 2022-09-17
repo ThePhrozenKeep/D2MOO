@@ -50,7 +50,7 @@ void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(D2RoomExStrc* pRoomEx)
 	DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pOutdoor->pFloorGrid, 0, 0, 0);
 	DRLGROOMTILE_AllocTileData(pRoomEx);
 	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, &pRoomEx->pOutdoor->pOrientationGrid, 0, FALSE, FALSE);
-	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pFloorGrid, NULL, 0, FALSE, FALSE);
+	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pFloorGrid, nullptr, FALSE, FALSE, FALSE);
 
 	pRoomEx->pTileGrid->pTiles.nWalls = pRoomEx->pTileGrid->nWalls;
 	pRoomEx->pTileGrid->pTiles.nFloors = pRoomEx->pTileGrid->nFloors;
