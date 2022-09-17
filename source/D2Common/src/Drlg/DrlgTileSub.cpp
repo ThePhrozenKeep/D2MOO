@@ -39,7 +39,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 
 	while (pLvlSubTxtRecord->dwType == a1->nLvlSubId)
 	{
-		DRLGTILESUB_InitializeDrlgFile(a1->pLevel->pDrlg->unk0x08, pLvlSubTxtRecord);
+		DRLGTILESUB_InitializeDrlgFile(a1->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
 
 		if (pLvlSubTxtRecord->pDrlgFile->nSubstGroups > 0)
 		{
@@ -304,7 +304,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 		{
 			if (nThemeFlag & 1)
 			{
-				DRLGTILESUB_InitializeDrlgFile(a1->pRoomEx->pLevel->pDrlg->unk0x08, pLvlSubTxtRecord);
+				DRLGTILESUB_InitializeDrlgFile(a1->pRoomEx->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
 
 				if (pLvlSubTxtRecord->dwCheckAll)
 				{

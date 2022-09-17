@@ -17,18 +17,14 @@
 
 
 //D2Common.0x6FD74120 (#10014)
-D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* a3, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
+D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
-	D2DrlgStrc* pDrlg = NULL;
-	unsigned int nStaffLevel = 0;
-	unsigned int nBossLevel = 0;
-	char szPath[MAX_PATH] = {};
-
-	pDrlg = D2_CALLOC_STRC_SERVER(pAct->pMemPool, D2DrlgStrc);
+	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_SERVER(pAct->pMemPool, D2DrlgStrc);
 
 	pDrlg->pAct = pAct;
-	pDrlg->unk0x08 = a3;
 	pDrlg->pMempool = pAct->pMemPool;
+	D2_ASSERT(pDS1MemPool == nullptr);
+	pDrlg->pDS1MemPool = pDS1MemPool; // Always nullptr in the game
 	pDrlg->nAct = nActNo;
 
 	SEED_InitLowSeed(&pDrlg->pSeed, nInitSeed);
@@ -41,6 +37,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void*
 	pDrlg->pfAutomap = pfAutoMap;
 	pDrlg->pfTownAutomap = pfTownAutoMap;
 
+	char szPath[MAX_PATH] = {};
 	szPath[0] = sgptDataTables->szDefaultString;
 
 	switch (nActNo)
@@ -51,20 +48,22 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void*
 		break;
 	
 	case ACT_II:
+	{
+		unsigned int nStaffLevelOffset = 0;
+		unsigned int nBossLevelOffset = 0;
 		do
 		{
-			nStaffLevel = (unsigned int)SEED_RollRandomNumber(&pDrlg->pSeed) % 7;
-			nBossLevel = (unsigned int)SEED_RollRandomNumber(&pDrlg->pSeed) % 7;
-		}
-		while (nStaffLevel == nBossLevel);
+			nStaffLevelOffset = (unsigned int)SEED_RollRandomNumber(&pDrlg->pSeed) % 7;
+			nBossLevelOffset = (unsigned int)SEED_RollRandomNumber(&pDrlg->pSeed) % 7;
+		} while (nStaffLevelOffset == nBossLevelOffset);
 
-		pDrlg->nStaffTombLevel = nStaffLevel + 66;
-		pDrlg->nBossTombLevel = nBossLevel + 66;
+		pDrlg->nStaffTombLevel = LEVEL_TALRASHASTOMB1 + nStaffLevelOffset;
+		pDrlg->nBossTombLevel = LEVEL_TALRASHASTOMB1 + nBossLevelOffset;
 
 		wsprintfA(szPath, "%s\\Tiles\\Act2\\Town\\Ground.dt1", "DATA\\GLOBAL");
 		D2CMP_10087_LoadTileLibrarySlot(pDrlg->pTiles, szPath);
 		break;
-		
+	}
 	case ACT_III:
 		pDrlg->bJungleInterlink = SEED_RollRandomNumber(&pDrlg->pSeed) & 1;
 
@@ -73,7 +72,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void*
 		break;
 	}
 
-	sub_6FD73E30(pDrlg);
+	DRLGACTIVATE_InitializeRoomExStatusLists(pDrlg);
 	DRLGOUTPLACE_CreateLevelConnections(pDrlg, nActNo);
 
 	if (nTownLevelId != LEVEL_NONE)
@@ -749,26 +748,23 @@ D2RoomExStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* 
 }
 
 //D2Common.0x6FD74F70
-D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomEx, D2DrlgLevelStrc* pLevel)
+D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomExHint, D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgLevelStrc* pCurrentLevel = NULL;
-	D2DrlgLevelStrc* pDrlgLevel = NULL;
-	int nLevelId = 0;
 
-	if (pRoomEx)
+	if (pRoomExHint)
 	{
-		if (DRLGROOM_AreXYInsideCoordinates(&pRoomEx->pDrlgCoord, nX, nY))
+		if (DRLGROOM_AreXYInsideCoordinates(&pRoomExHint->pDrlgCoord, nX, nY))
 		{
-			return pRoomEx;
+			return pRoomExHint;
 		}
 
-		for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
+		for (int i = 0; i < pRoomExHint->nRoomsNear; ++i)
 		{
-			if (pRoomEx != pRoomEx->ppRoomsNear[i])
+			if (pRoomExHint != pRoomExHint->ppRoomsNear[i])
 			{
-				if (DRLGROOM_AreXYInsideCoordinates(&pRoomEx->ppRoomsNear[i]->pDrlgCoord, nX, nY))
+				if (DRLGROOM_AreXYInsideCoordinates(&pRoomExHint->ppRoomsNear[i]->pDrlgCoord, nX, nY))
 				{
-					return pRoomEx->ppRoomsNear[i];
+					return pRoomExHint->ppRoomsNear[i];
 				}
 			}
 		}
@@ -776,9 +772,10 @@ D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStr
 
 	if (!pLevel)
 	{
+		int nLevelId = 0;
 		if (pDrlg->pLevel)
 		{
-			pCurrentLevel = pDrlg->pLevel;
+			D2DrlgLevelStrc* pCurrentLevel = pDrlg->pLevel;
 
 			while (!DRLGROOM_AreXYInsideCoordinates(&pCurrentLevel->pLevelCoords, nX, nY))
 			{
@@ -795,16 +792,12 @@ D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStr
 			}
 		}
 
-		pDrlgLevel = DRLG_GetLevel(pDrlg, nLevelId);
-	}
-	else
-	{
-		pDrlgLevel = pLevel;
+		pLevel = DRLG_GetLevel(pDrlg, nLevelId);
 	}
 
-	if (!pDrlgLevel->pFirstRoomEx)
+	if (!pLevel->pFirstRoomEx)
 	{
-		DRLG_InitLevel(pDrlgLevel);
+		DRLG_InitLevel(pLevel);
 	}
 
 	return DRLG_GetRoomExFromLevelAndCoordinates(pLevel, nX, nY);

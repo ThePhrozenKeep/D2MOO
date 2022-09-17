@@ -1387,7 +1387,7 @@ void __fastcall sub_6FD8A2E0(D2RoomExStrc* pRoomEx, BOOL bKeepRoom)
 	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_ROOM)
 	{
 		pRoomEx->dwFlags ^= ROOMEXFLAG_HAS_ROOM;
-		++pRoomEx->pLevel->pDrlg->unk0x3E0[1];
+		++pRoomEx->pLevel->pDrlg->nFreedRooms;
 		DRLGROOMTILE_FreeTileGrid(pRoomEx);
 
 		if (pRoomEx->nType == DRLGTYPE_MAZE)

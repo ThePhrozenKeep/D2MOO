@@ -7,6 +7,7 @@
 enum D2DrlgFlags
 {
 	DRLGFLAG_ONCLIENT = 0x01,
+	DRLGFLAG_REFRESH  = 0x10,
 };
 
 enum D2Directions
@@ -37,6 +38,16 @@ enum D2C_DrlgTypes
 	DRLGTYPE_PRESET = 0x02,
 	DRLGTYPE_OUTDOOR = 0x03,
 	NUM_DRLGTYPES
+};
+
+// Note: Lower value has priority over others
+enum D2DrlgRoomStatus : uint8_t
+{
+	ROOMSTATUS_CLIENT_IN_ROOM = 0,
+	ROOMSTATUS_CLIENT_IN_SIGHT = 1,
+	ROOMSTATUS_CLIENT_OUT_OF_SIGHT = 2,
+	ROOMSTATUS_UNTILE = 3,
+	ROOMSTATUS_COUNT,
 };
 
 enum D2RoomExFlags
@@ -122,10 +133,9 @@ struct D2RoomExStrc
 	uint32_t dwDT1Mask;						//0x24 - tile caching mask, used to init below @ D2Common.0x4A380
 	D2TileLibraryHashStrc* pTiles[32];		//0x28
 	D2DrlgTileGridStrc* pTileGrid;			//0xA8
-											//uint32_t fRoomStatus;						//0xAC - actually a byte, the padding up to +B8 is related
-	uint8_t fRoomStatus;					//0xAC
+	uint8_t fRoomStatus;					//0xAC D2DrlgRoomStatus
 	uint8_t unk0xAD;						//0xAD
-	uint16_t unk0xAE[5];					//0xAE
+	uint16_t wRoomsInList[ROOMSTATUS_COUNT + 1]; //0xAE
 	D2RoomExStrc* pStatusNext;				//0xB8
 	D2RoomExStrc* pStatusPrev;				//0xBC
 	D2RoomExStrc** ppRoomsNear;				//0xC0 // names pptVisibleRooms in the original game
@@ -218,21 +228,23 @@ struct D2RoomCoordListStrc
 
 struct D2DrlgStrc
 {
-	D2DrlgLevelStrc* pLevel;				//0x00
+	D2DrlgLevelStrc* pLevel;				//0x00 Latest added level
 	void* pMempool;							//0x04
-	void* unk0x08;							//0x08
+	void* pDS1MemPool;						//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
 	D2DrlgActStrc* pAct;					//0x0C
 	uint8_t nAct;							//0x10
-	uint8_t pad0x11[3];						//0x11
+	uint8_t pading0x11[3];					//0x11
 	D2SeedStrc pSeed;						//0x14
 	uint32_t dwStartSeed;					//0x1C
 	uint32_t dwGameLowSeed;					//0x20
-	uint32_t dwFlags;						//0x24
-	D2RoomExStrc pRooms[4];					//0x28
+	uint32_t dwFlags;						//0x24 D2DrlgFlags
+	D2RoomExStrc tStatusRoomsLists[ROOMSTATUS_COUNT];		//0x28
 	D2RoomExStrc* pRoomEx;					//0x3D8
-	uint8_t unk0x3DC;						//0x3DC
-	uint8_t unk0x3DD[3];					//0x3DD
-	int32_t unk0x3E0[2];					//0x3E0
+	uint8_t nRoomsInitSinceLastUpdate;		//0x3DC
+	uint8_t nRoomsInitTimeout;				//0x3DD
+	uint8_t padding0x3DE[2];				//0x3DE
+	int32_t nAllocatedRooms;				//0x3E0
+	int32_t nFreedRooms;					//0x3E4
 	D2GameStrc* pGame;						//0x3E8
 	uint8_t nDifficulty;					//0x3EC
 	uint8_t pad0x3ED[3];					//0x3ED

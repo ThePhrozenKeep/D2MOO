@@ -79,13 +79,13 @@ D2RoomCollisionGridStrc* __fastcall DUNGEON_GetCollisionGridFromRoom(D2RoomStrc*
 //D2Common.0x6FD8C630
 void __fastcall DUNGEON_SetCollisionGridInRoom(D2RoomStrc* pRoom, D2RoomCollisionGridStrc* pCollisionGrid);
 //D2Common.0x6FD8C660 (#10063)
-D2COMMON_DLL_DECL void __stdcall D2COMMON_10063_AddRoomData(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_SetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2RoomStrc* pRoom);
 //D2Common.0x6FD8C6B0 (#10064)
-D2COMMON_DLL_DECL void __stdcall D2COMMON_10064_RemoveRoomData(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_UnsetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2RoomStrc* pRoom);
 //D2Common.0x6FD8C700 (#10062)
-D2COMMON_DLL_DECL void __stdcall D2Common_10062(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ChangeClientRoom(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2);
 //D2Common.0x6FD8C730 (#10065)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall D2COMMON_10065_GetRoomFromActAndCoord(D2DrlgActStrc* pAct, int nX, int nY);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_StreamRoomAtCoords(D2DrlgActStrc* pAct, int nX, int nY);
 //D2Common.0x6FD8C770 (#10056)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_GetRoomFromAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8C7A0 (#10057)
@@ -105,13 +105,13 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_FreeDrlgDelete(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C910 (#10068)
 D2COMMON_DLL_DECL D2DrlgDeleteStrc* __stdcall DUNGEON_GetDrlgDeleteFromRoom(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C940 (#10069)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall D2Common_10069(D2DrlgActStrc* pAct);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_GetARoomInClientSight(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8C980 (#10070)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall D2Common_10070(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_GetARoomInSightButWithoutClient(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
 //D2Common.0x6FD8C9E0 (#10071)
 D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_TestRoomCanUnTile(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
 //D2Common.0x6FD8CA60 (#10072)
-D2COMMON_DLL_DECL bool __stdcall D2Common_10072(D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL bool __stdcall DUNGEON_GetRoomStatusFlags(D2RoomStrc* pRoom);
 //D2Common.0x6FD8CA80 (#10073)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_10073(D2RoomStrc* pRoom);
 //D2Common.0x6FD8CAE0 (#10074)
