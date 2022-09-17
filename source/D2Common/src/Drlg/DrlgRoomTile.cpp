@@ -1274,19 +1274,23 @@ void __fastcall DRLGROOMTILE_AllocTileGrid(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD8A050
 void __fastcall DRLGROOMTILE_AllocTileData(D2RoomExStrc* pRoomEx)
 {
-	if (pRoomEx->pTileGrid->pTiles.nFloors)
+	void* pMemPool = pRoomEx->pLevel->pDrlg->pMempool;
+	D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pTileGrid->pTiles;
+
+	if (pRoomTiles->nFloors)
 	{
-		pRoomEx->pTileGrid->pTiles.pFloorTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc) * pRoomEx->pTileGrid->pTiles.nFloors);
+		pRoomTiles->pFloorTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pMemPool, sizeof(D2DrlgTileDataStrc) * pRoomTiles->nFloors);
 	}
 
-	if (pRoomEx->pTileGrid->pTiles.nWalls)
+	if (pRoomTiles->nWalls)
 	{
-		pRoomEx->pTileGrid->pTiles.pWallTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc) * pRoomEx->pTileGrid->pTiles.nWalls);
+		pRoomTiles->pWallTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pMemPool, sizeof(D2DrlgTileDataStrc) * pRoomTiles->nWalls);
 	}
 
-	if (pRoomEx->pTileGrid->pTiles.nRoofs)
+	// Something may already have allocated roof tiles with DRLGROOMTILE_ReallocRoofTileGrid!
+	if (pRoomTiles->nRoofs && !pRoomTiles->pRoofTiles)
 	{
-		pRoomEx->pTileGrid->pTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc) * pRoomEx->pTileGrid->pTiles.nRoofs);
+		pRoomTiles->pRoofTiles = (D2DrlgTileDataStrc*)D2_CALLOC_SERVER(pMemPool, sizeof(D2DrlgTileDataStrc) * pRoomTiles->nRoofs);
 	}
 }
 

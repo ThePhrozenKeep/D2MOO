@@ -1408,9 +1408,9 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FD8AA80 - D2CommonImageBase, &sub_6FD8AA80, PatchAction::FunctionReplacePatchByOriginal},
 
     // The following one is broken for sure
-    { 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::FunctionReplacePatchByOriginal},
 
     // Fixed or working
+    //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},
     //{ 0x6FD8ACE0 - D2CommonImageBase, &sub_6FD8ACE0, PatchAction::FunctionReplacePatchByOriginal},
     //{ 0x6FD7EFE0 - D2CommonImageBase, &DRLG_OUTDOORS_GenerateDirtPath, PatchAction::FunctionReplacePatchByOriginal},  
     
