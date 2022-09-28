@@ -157,7 +157,7 @@ struct D2LvlSubTxt
 	uint32_t dwDt1Mask;						//0x48
 	uint32_t dwGridSize;					//0x4C
 	D2DrlgFileStrc* pDrlgFile;				//0x50
-	D2DrlgGridStrc pOrientationGrid[4];		//0x54
+	D2DrlgGridStrc pTileTypeGrid[4];		//0x54
 	D2DrlgGridStrc pWallGrid[4];			//0xA4
 	D2DrlgGridStrc pFloorGrid;				//0xF4
 	D2DrlgGridStrc pShadowGrid;				//0x108

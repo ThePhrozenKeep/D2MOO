@@ -8,7 +8,7 @@
 
 struct D2DrlgOutdoorRoomStrc
 {
-	D2DrlgGridStrc pOrientationGrid;		//0x00
+	D2DrlgGridStrc pTileTypeGrid;			//0x00 aka pOrientationGrid
 	D2DrlgGridStrc pWallGrid;				//0x14
 	D2DrlgGridStrc pFloorGrid;				//0x28
 	D2DrlgGridStrc pDirtPathGrid;			//0x3C

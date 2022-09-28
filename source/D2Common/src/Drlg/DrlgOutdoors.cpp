@@ -84,9 +84,9 @@ int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVer
 //D2Common.0x6FD7DD00
 BOOL __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
-	if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x200)
+	if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x200)
 	{
-		return DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY);
+		return DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY);
 	}
 
 	return 0;
@@ -109,13 +109,13 @@ void __fastcall DRLGOUTDOORS_SetBlankGridCell(D2DrlgLevelStrc* pLevel, int nX, i
 //D2Common.0x6FD7DDB0
 unsigned int __fastcall DRLGOUTDOORS_TestGridCellNonLvlLink(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
-	return ((unsigned int)~DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) >> 10) & 1;
+	return ((unsigned int)~DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) >> 10) & 1;
 }
 
 //D2Common.0x6FD7DDD0
 BOOL __fastcall DRLGOUTDOORS_TestGridCellSpawnValid(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
-	return !(DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81);
+	return !(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81);
 }
 
 //D2Common.0x6FD7DDF0
@@ -176,7 +176,7 @@ BOOL __fastcall DRLGOUTDOORS_TestOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, int
 	{
 		for (int j = nXStart; j < nXEnd; ++j)
 		{
-			if (!DRLGGRID_IsPointInsideGridArea(&pLevel->pOutdoors->pGrid[2], j, i) || DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], j, i) & 0x1B81)
+			if (!DRLGGRID_IsPointInsideGridArea(&pLevel->pOutdoors->pGrid[2], j, i) || DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], j, i) & 0x1B81)
 			{
 				return FALSE;
 			}
@@ -436,7 +436,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 				nX = pCoord[i].nX + 1;
 				nY = pCoord[i].nY + 1;
 
-				if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x80)
+				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x80)
 				{
 					for (int j = 0; j < 8; ++j)
 					{
@@ -489,7 +489,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 		{
 			for (int j = 0; j < pLevel->pOutdoors->nGridWidth; ++j)
 			{
-				if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[1], j, i) & nFlags && DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], j, i) & 0x400)
+				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[1], j, i) & nFlags && DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], j, i) & 0x400)
 				{
 					if (!j)
 					{
@@ -549,7 +549,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 				nX = pCoord[i].nX + 1;
 				nY = pCoord[i].nY + 1;
 
-				if (!(DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81))
+				if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81))
 				{
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], nX, nY, 0x10000, FLAG_OPERATION_OR);
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0x800, FLAG_OPERATION_OR);
@@ -616,7 +616,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 				nX = pCoord[i].nX + 1;
 				nY = pCoord[i].nY + 1;
 
-				if (!(DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81))
+				if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x1B81))
 				{
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], nX, nY, dword_6FDCF948[nIndex], FLAG_OPERATION_OR);
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0x1000, FLAG_OPERATION_OR);
@@ -779,11 +779,11 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		nX = pLevel->nPosX;
 		for (int i = 0; i < pOutdoorInfo->nGridWidth; ++i)
 		{
-			a6a = DRLGGRID_GetGridFlags(&pOutdoorInfo->pGrid[1], i, j);
-			v13 = DRLGGRID_GetGridFlags(&pOutdoorInfo->pGrid[2], i, j);
+			a6a = DRLGGRID_GetGridEntry(&pOutdoorInfo->pGrid[1], i, j);
+			v13 = DRLGGRID_GetGridEntry(&pOutdoorInfo->pGrid[2], i, j);
 			if (v13 & 0x200)
 			{
-				v14 = DRLGGRID_GetGridFlags(pOutdoorInfo->pGrid, i, j);
+				v14 = DRLGGRID_GetGridEntry(pOutdoorInfo->pGrid, i, j);
 				if (v14)
 				{
 					pDrlgCoord.nWidth = 0;
@@ -798,7 +798,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 			}
 			else if (!(v13 & 0x100))
 			{
-				DRLGOUTPLACE_CreateOutdoorRoomEx(pLevel, nX, nY, 8, 8, a6a, v13, DRLGGRID_GetGridFlags(&pOutdoorInfo->pGrid[3], i, j), dwDt1Mask);
+				DRLGOUTPLACE_CreateOutdoorRoomEx(pLevel, nX, nY, 8, 8, a6a, v13, DRLGGRID_GetGridEntry(&pOutdoorInfo->pGrid[3], i, j), dwDt1Mask);
 			}
 
 			nX += 8;
@@ -926,7 +926,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 		{
 			for (int nOffsetY = -1; nOffsetY <= 1; nOffsetY++)
 			{
-				aFlags[MapOffsetToBoxIndex(nOffsetX,nOffsetY)] = DRLGGRID_GetGridFlags(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
+				aFlags[MapOffsetToBoxIndex(nOffsetX,nOffsetY)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
 			}
 		}
 
@@ -964,9 +964,9 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 			{
 				memcpy(aFlags, &aFlags[1], sizeof(aFlags) - sizeof(aFlags[0]));
 
-				aFlags[MapOffsetToBoxIndex(-1, -1)] = DRLGGRID_GetGridFlags(pDirtPathGrid, nX - 1, nY - 2);
-				aFlags[MapOffsetToBoxIndex( 0, -1)] = DRLGGRID_GetGridFlags(pDirtPathGrid, nX + 0, nY - 2);
-				aFlags[MapOffsetToBoxIndex(+1, -1)] = DRLGGRID_GetGridFlags(pDirtPathGrid, nX + 1, nY - 2);
+				aFlags[MapOffsetToBoxIndex(-1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
+				aFlags[MapOffsetToBoxIndex( 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
+				aFlags[MapOffsetToBoxIndex(+1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 1, nY - 2);
 			}
 		}
 	}
@@ -1039,8 +1039,8 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 	{
 		for (int j = 0; j < pLevel->pOutdoors->nGridHeight; ++j)
 		{
-			v9 = DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[0], i, j);
-			v10 = DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], i, j);
+			v9 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], i, j);
+			v10 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, j);
 
 			pVertex = &pLevel->pOutdoors->pVertices[pLevel->pOutdoors->nVertices];
 

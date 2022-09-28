@@ -443,7 +443,7 @@ LABEL_26:
 				{
 					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, v24, v25))
 					{
-						if (!(DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], v24, v25) & 0x200))
+						if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], v24, v25) & 0x200))
 						{
 							v28 = v21;
 							while (v28->nX != v24 || v28->nY != v25)
@@ -590,7 +590,7 @@ static const D2C_LvlPrestIds levelPrestBorder[13][4] = {
 int __fastcall sub_6FD80BE0(int a1, int a2, int a3)
 {
 	const int lutIndex = a1 + 3 * a2 + 4;
-	assert(lutIndex >= 0 && lutIndex <= _countof(nBorderIndices));
+	assert(lutIndex >= 0 && lutIndex <= ARRAY_SIZE(nBorderIndices));
 	int nIndex = nBorderIndices[a1 + 3 * a2 + nBorderIndicesOffset_sub_6FD80BE0];
 
 	if (a3 < 4)
@@ -632,7 +632,7 @@ int __fastcall sub_6FD80C10(int a1, int a2, int a3, int a4, int a5)
 		a3 -= 2;
 	}
 	const int lutIndex = a2 + a1 + 9 * (a4 + a3) + nBorderIndicesOffset_sub_6FD80C10;
-	assert(lutIndex >= 0 && lutIndex <= _countof(nBorderIndices));
+	assert(lutIndex >= 0 && lutIndex <= ARRAY_SIZE(nBorderIndices));
 
 	v6 = nBorderIndices[lutIndex];
 
@@ -679,9 +679,9 @@ void __fastcall DRLGOUTPLACE_SetBlankBorderGridCells(D2DrlgLevelStrc* pLevel)
 		nOffsetX = nCoordinates[4 * k + 2];
 		nOffsetY = nCoordinates[4 * k + 3];
 
-		for (int j = nY; !(DRLGGRID_GetGridFlags(pDrlgGrid, nX, j) & 1); j += nOffsetY)
+		for (int j = nY; !(DRLGGRID_GetGridEntry(pDrlgGrid, nX, j) & 1); j += nOffsetY)
 		{
-			for (int i = nX; !(DRLGGRID_GetGridFlags(pDrlgGrid, i, j) & 1); i += nOffsetX)
+			for (int i = nX; !(DRLGGRID_GetGridEntry(pDrlgGrid, i, j) & 1); i += nOffsetX)
 			{
 				DRLGGRID_AlterGridFlag(pDrlgGrid, i, j, 256, FLAG_OPERATION_OR);
 			}
@@ -2628,7 +2628,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 	int nWidth = pRoomEx->nTileWidth + 1;
 	int nHeight = pRoomEx->nTileHeight + 1;
 
-	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pOrientationGrid, nWidth, nHeight);
+	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pTileTypeGrid, nWidth, nHeight);
 	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pWallGrid, nWidth, nHeight);
 	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pFloorGrid, nWidth, nHeight);
 
@@ -2711,7 +2711,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 	{
 		for (int nX = 0; nX < nWidth; ++nX)
 		{
-			if (!(DRLGGRID_GetGridFlags(&pRoomEx->pOutdoor->pFloorGrid, nX, nY) & 0x3F0FF80))
+			if (!(DRLGGRID_GetGridEntry(&pRoomEx->pOutdoor->pFloorGrid, nX, nY) & 0x3F0FF80))
 			{
 				DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, nX, nY, nFlags, FLAG_OPERATION_OR);
 			}

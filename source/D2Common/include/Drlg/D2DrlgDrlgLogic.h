@@ -10,7 +10,7 @@ struct D2UnkDrlgLogicStrc
 {
 	D2RoomExStrc* pRoomEx;					//0x00
 	D2DrlgGridStrc* field_4;				//0x04
-	D2DrlgGridStrc* pOrientationGrid;		//0x08
+	D2DrlgGridStrc* pTileTypeGrid;		//0x08
 	D2DrlgGridStrc* pWallGrid;				//0x0C
 	D2DrlgGridStrc* pFloorGrid;				//0x10
 	D2DrlgGridStrc* field_14;				//0x14
@@ -33,7 +33,7 @@ struct D2DrlgCoordListStrc
 void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD764A0
 //TODO: v28, a1
-void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pOrientationGrid, D2DrlgGridStrc* pFloorGrid, D2DrlgGridStrc* pWallGrid);
+void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pTileTypeGrid, D2DrlgGridStrc* pFloorGrid, D2DrlgGridStrc* pWallGrid);
 //D2Common.0x6FD76830
 void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int nY, int a4);
 //D2Common.0x6FD769B0

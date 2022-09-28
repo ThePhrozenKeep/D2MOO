@@ -12,7 +12,7 @@
 //D2Common.0x6FD75480
 void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData);
 //D2Common.0x6FD75560
-void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgGrid, D2DrlgGridStrc* pOrientationGrid, int a4, int nTileX, int nTileY);
+void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgGrid, D2DrlgGridStrc* pTileTypeGrid, int a4, int nTileX, int nTileY);
 //D2Common.0x6FD756B0
 void __fastcall DRLGANIM_AnimateTiles(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD75740

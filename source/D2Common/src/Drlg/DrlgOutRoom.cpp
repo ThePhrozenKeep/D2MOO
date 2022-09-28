@@ -27,7 +27,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc* pRoomEx)
 {
 	if (pRoomEx->pOutdoor)
 	{
-		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pOrientationGrid);
+		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pTileTypeGrid);
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pWallGrid);
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pFloorGrid);
 		DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pDirtPathGrid);
@@ -45,11 +45,11 @@ void __fastcall DRLGOUTROOM_AllocDrlgOutdoorRoom(D2RoomExStrc* pRoomEx)
 void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(D2RoomExStrc* pRoomEx)
 {
 	DRLGROOMTILE_AllocTileGrid(pRoomEx);
-	DRLGROOMTILE_CountWallWarpTiles(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, &pRoomEx->pOutdoor->pOrientationGrid, 0, 0);
+	DRLGROOMTILE_CountWallWarpTiles(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, &pRoomEx->pOutdoor->pTileTypeGrid, 0, 0);
 	DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, 0, 0, 0);
 	DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pOutdoor->pFloorGrid, 0, 0, 0);
 	DRLGROOMTILE_AllocTileData(pRoomEx);
-	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, &pRoomEx->pOutdoor->pOrientationGrid, 0, FALSE, FALSE);
+	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pWallGrid, &pRoomEx->pOutdoor->pTileTypeGrid, 0, FALSE, FALSE);
 	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pOutdoor->pFloorGrid, nullptr, FALSE, FALSE, FALSE);
 
 	pRoomEx->pTileGrid->pTiles.nWalls = pRoomEx->pTileGrid->nWalls;

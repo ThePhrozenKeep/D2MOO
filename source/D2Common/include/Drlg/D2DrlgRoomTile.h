@@ -5,9 +5,20 @@
 
 #pragma pack(1)
 
+enum D2C_PackedTileInformationMasks
+{
+	PACKEDTILEINFO_ROOF = 0b00,
+	PACKEDTILEINFO_WALL = 0b01,
+	PACKEDTILEINFO_FLOOR = 0b10,
+	PACKEDTILEINFO_STRUCTUREPARTMASK = PACKEDTILEINFO_ROOF | PACKEDTILEINFO_WALL | PACKEDTILEINFO_FLOOR,
+	PACKEDTILEINFO_ANIMATEDTILE = 1 << 27,
+};
 
 #pragma pack()
 
+// Helper functions
+static uint32_t GetTileStyleFromPackedTileInformation(uint32_t nTileInformation) { return (nTileInformation >> 20) & 0x3F; }
+static uint32_t GetTileSequenceFromPackedTileInformation(uint32_t nTileInformation) { return BYTE1(nTileInformation); }
 
 //D2Common.0x6FD88860
 D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int a2, unsigned int a3);

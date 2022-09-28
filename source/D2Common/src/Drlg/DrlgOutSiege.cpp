@@ -210,7 +210,7 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 
 		while (nX != 0 || nY != pLevel->pOutdoors->nGridHeight - 2)
 		{
-			nIndex = DRLGGRID_GetGridFlags(pLevel->pOutdoors->pGrid, nX, nY) - nLevelPrestId1;
+			nIndex = DRLGGRID_GetGridEntry(pLevel->pOutdoors->pGrid, nX, nY) - nLevelPrestId1;
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nIndex + nLevelPrestId2, -1, 0);
 
 			nX += 2 * stru_6FDD09C8[nIndex].nX;
@@ -291,7 +291,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 {
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], i, 0) & 0x400)
+		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, 0) & 0x400)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, LVLPREST_ACT5_BARRICADE_EXIT_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -300,7 +300,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], i, pLevel->pOutdoors->nGridHeight - 2) & 0x400)
+		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, pLevel->pOutdoors->nGridHeight - 2) & 0x400)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, pLevel->pOutdoors->nGridHeight - 2, LVLPREST_ACT5_BARRICADE_ENTRANCE_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -309,7 +309,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], 0, i) & 0x400)
+		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], 0, i) & 0x400)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT5_BARRICADE_EXIT_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -318,7 +318,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridFlags(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, i) & 0x400)
+		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, i) & 0x400)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pLevel->pOutdoors->nGridWidth - 2, i, LVLPREST_ACT5_BARRICADE_ENTRANCE_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;

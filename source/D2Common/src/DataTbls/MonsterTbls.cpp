@@ -936,7 +936,7 @@ int __fastcall DATATBLS_CalculatePercentage(signed int nValue1, signed int nValu
 {
 	if (nDivisor)
 	{
-		if (nValue1 <= 1048576)
+		if (nValue1 <= 0x100000)
 		{
 			if (nValue2 <= 65536)
 			{
