@@ -1439,40 +1439,32 @@ void __fastcall DRLGMAZE_BuildBasicMaze(D2DrlgLevelStrc* pLevel)
 	}
 }
 
-//D2Common.0x6FD7A830
-void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
+static const int dword_6FDCE850[][3] =
 {
-	static const int dword_6FDCE850[][3] =
-	{
-		{ LVLPREST_ACT5_LAVA_S, 1, 0 },
-		{ LVLPREST_ACT5_LAVA_N, 3, 1 },
-		{ LVLPREST_ACT5_LAVA_S, 1, 1 },
-		{ LVLPREST_ACT5_LAVA_N, 3, 0 },
-		{ LVLPREST_ACT5_LAVA_E, 0, 1 },
-		{ LVLPREST_ACT5_LAVA_W, 2, 0 },
-		{ LVLPREST_ACT5_LAVA_E, 0, 0 },
-		{ LVLPREST_ACT5_LAVA_W, 2, 1 },
-	};
+	{ LVLPREST_ACT5_LAVA_S, 1, 0 },
+	{ LVLPREST_ACT5_LAVA_N, 3, 1 },
+	{ LVLPREST_ACT5_LAVA_S, 1, 1 },
+	{ LVLPREST_ACT5_LAVA_N, 3, 0 },
+	{ LVLPREST_ACT5_LAVA_E, 0, 1 },
+	{ LVLPREST_ACT5_LAVA_W, 2, 0 },
+	{ LVLPREST_ACT5_LAVA_E, 0, 0 },
+	{ LVLPREST_ACT5_LAVA_W, 2, 1 },
+};
 
-	D2RoomExStrc* pNewRoomEx = NULL;
-	int nDirection = 0;
-	
-	const int nSet = 2 * (SEED_RollRandomNumber(&pLevel->pFirstRoomEx->pSeed) & 3);
-	
-	const int scnLavaCombinations = 8;
-	D2_ASSERT(nSet < (scnLavaCombinations - 1));
+static void PlaceLavaPreset(D2RoomExStrc* pFirstRoomEx, int nSet)
+{
 
-	nDirection = dword_6FDCE850[nSet][1];
+	int nDirection = dword_6FDCE850[nSet][1];
 
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
+	D2RoomExStrc* pNewRoomEx = DRLGROOM_AllocRoomEx(pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
 	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
 	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
 
-	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pLevel->pFirstRoomEx, nDirection))
+	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pFirstRoomEx, nDirection))
 	{
-		DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pNewRoomEx, nDirection);
-		DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pNewRoomEx);
-		DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
+		DRLGROOM_AllocDrlgOrthsForRooms(pFirstRoomEx, pNewRoomEx, nDirection);
+		DRLGROOM_AddRoomExToLevel(pFirstRoomEx->pLevel, pNewRoomEx);
+		DRLGMAZE_PickRoomPreset(pFirstRoomEx, 1);
 
 		pNewRoomEx->pMaze->nLevelPrest = dword_6FDCE850[nSet][0];
 		pNewRoomEx->pMaze->nPickedFile = dword_6FDCE850[nSet][2];
@@ -1482,29 +1474,22 @@ void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
 	{
 		DRLGROOM_FreeRoomEx(pNewRoomEx);
 	}
+}
 
-	nDirection = dword_6FDCE850[nSet][4];
+//D2Common.0x6FD7A830
+void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
+{		
+	const int nSet = 2 * (SEED_RollRandomNumber(&pLevel->pFirstRoomEx->pSeed) & 3);
+	
+	const int scnLavaCombinations = ARRAY_SIZE(dword_6FDCE850);
+	D2_ASSERT(nSet < (scnLavaCombinations - 1));
 
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
-	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
+	// Note: pLevel->pFirstRoomEx may change when calling PlaceLavaPreset, using the same room for both presets is correct here.
+	D2RoomExStrc* pLevelFirstRoom = pLevel->pFirstRoomEx;
+	PlaceLavaPreset(pLevelFirstRoom, nSet);
+	PlaceLavaPreset(pLevelFirstRoom, nSet+1);
 
-	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pLevel->pFirstRoomEx, nDirection))
-	{
-		DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pNewRoomEx, nDirection);
-		DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pNewRoomEx);
-		DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
-
-		pNewRoomEx->pMaze->nLevelPrest = dword_6FDCE850[nSet][3];
-		pNewRoomEx->pMaze->nPickedFile = dword_6FDCE850[nSet][5];
-		pNewRoomEx->pMaze->dwFlags |= 2;
-	}
-	else
-	{
-		DRLGROOM_FreeRoomEx(pNewRoomEx);
-	}
-
-	DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, NULL);
+	DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, nullptr);
 }
 
 //D2Common.0x6FD7A9B0
