@@ -466,55 +466,38 @@ void __fastcall DRLGOUTSIEGE_PlaceSpecialPresets(D2DrlgLevelStrc* pLevel)
 void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 {
 	int nPrisonsPlaced = 0;
-	int nLevelPrestId = 0;
-	int nRandX = 0;
-	int nRandY = 0;
-	int nX = 0;
-	int nY = 0;
+	const int nPrisonsToPlace = 3;
+
+	const auto NeedsMorePrisons = [&] { return nPrisonsPlaced < nPrisonsToPlace; };
 
 	if (pLevel->nLevelId == LEVEL_ID_ACT5_BARRICADE_1)
 	{
 		D2_ASSERT(pLevel->pOutdoors);
 
-		for (int i = 0; i < 90; ++i)
+		for (int nAttemptNumber = 0; nAttemptNumber < 90 && NeedsMorePrisons(); ++nAttemptNumber)
 		{
-			if (nPrisonsPlaced >= 3)
-			{
-				break;
-			}
+			const int nRandX = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
+			const int nRandY = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
 
-			nX = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
-			nY = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
-
-			nLevelPrestId = DRLGOUTDOORS_GetPresetIndexFromGridCell(pLevel, nX, nY);
+			const int nLevelPrestId = DRLGOUTDOORS_GetPresetIndexFromGridCell(pLevel, nRandX, nRandY);
 			if (nLevelPrestId >= LVLPREST_ACT5_BARRICADE_1 && nLevelPrestId <= LVLPREST_ACT5_BARRICADE_8)
 			{
-				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nLevelPrestId + 16, -1, 0);
+				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nRandX, nRandY, nLevelPrestId + 16, -1, 0);
 				++nPrisonsPlaced;
 			}
 		}
 
-		nRandX = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
-		nRandY = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
+		const int nRandX = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
+		const int nRandY = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
 
-		for (int j = 0; j < pLevel->pOutdoors->nGridHeight; ++j)
+		for (int j = 0; j < pLevel->pOutdoors->nGridHeight && NeedsMorePrisons(); ++j)
 		{
-			if (nPrisonsPlaced >= 3)
+			for (int i = 0; i < pLevel->pOutdoors->nGridWidth && NeedsMorePrisons(); ++i)
 			{
-				break;
-			}
+				const int nX = (i + nRandX) % pLevel->pOutdoors->nGridWidth;
+				const int nY = (j + nRandY) % pLevel->pOutdoors->nGridHeight;
 
-			for (int i = 0; i < pLevel->pOutdoors->nGridWidth; ++i)
-			{
-				if (nPrisonsPlaced >= 3)
-				{
-					break;
-				}
-
-				nX = (i + 2 * nRandX) % pLevel->pOutdoors->nGridWidth;
-				nY = (j + 2 * nRandY) % pLevel->pOutdoors->nGridHeight;
-
-				nLevelPrestId = DRLGOUTDOORS_GetPresetIndexFromGridCell(pLevel, nX, nY);
+				int nLevelPrestId = DRLGOUTDOORS_GetPresetIndexFromGridCell(pLevel, nX, nY);
 				if (nLevelPrestId >= LVLPREST_ACT5_BARRICADE_1 && nLevelPrestId <= LVLPREST_ACT5_BARRICADE_8)
 				{
 					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nLevelPrestId + 16, -1, 0);
@@ -523,7 +506,7 @@ void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 			}
 		}
 
-		if (nPrisonsPlaced < 3)
+		if (NeedsMorePrisons())
 		{
 			FOG_10025("Could not place enough prisons for quest 2. Please include seed in bug report.", __FILE__, __LINE__);
 		}
