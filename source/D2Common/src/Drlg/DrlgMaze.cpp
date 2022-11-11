@@ -1550,22 +1550,22 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_PREV_NEW, LVLPREST_ACT5_BAAL_PREV_NEW },
 	};
 
-	D2RoomExStrc* pRoomEx = NULL;
-	int nDirection = 0;
+	// Warning: pLevel->pFirstRoomEx may change, so keep a copy of the pointer to the room we are using
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
 
-	nDirection = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
+	int nDirection = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 	for (int i = 0; i < 3; ++i)
 	{
-		pRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
+		D2RoomExStrc* pRoomEx = DRLGROOM_AllocRoomEx(pLevelFirstRoomEx->pLevel, DRLGTYPE_PRESET);
 
 		DRLGMAZE_SetRoomSize(pRoomEx);
 
-		if (DRLGMAZE_LinkMazeRooms(pRoomEx, pLevel->pFirstRoomEx, nDirection))
+		if (DRLGMAZE_LinkMazeRooms(pRoomEx, pLevelFirstRoomEx, nDirection))
 		{
-			DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pRoomEx, nDirection);
+			DRLGROOM_AllocDrlgOrthsForRooms(pLevelFirstRoomEx, pRoomEx, nDirection);
 			DRLGMAZE_MergeMazeRooms(pRoomEx);
-			DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pRoomEx);
-			DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
+			DRLGROOM_AddRoomExToLevel(pLevelFirstRoomEx->pLevel, pRoomEx);
+			DRLGMAZE_PickRoomPreset(pLevelFirstRoomEx, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
 		}
 		else
@@ -1578,15 +1578,15 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 
 	if (pLevel->nLevelType == LVLTYPE_ACT2_TOMB)
 	{
-		pLevel->pFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][0];
-		pLevel->pFirstRoomEx->pMaze->nPickedFile = -1;
-		pLevel->pFirstRoomEx->pMaze->dwFlags |= 2;
+		pLevelFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][0];
+		pLevelFirstRoomEx->pMaze->nPickedFile = -1;
+		pLevelFirstRoomEx->pMaze->dwFlags |= 2;
 	}
 	else if (pLevel->nLevelType == LVLTYPE_ACT5_BAAL)
 	{
-		pLevel->pFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][1];
-		pLevel->pFirstRoomEx->pMaze->nPickedFile = -1;
-		pLevel->pFirstRoomEx->pMaze->dwFlags |= 2;
+		pLevelFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][1];
+		pLevelFirstRoomEx->pMaze->nPickedFile = -1;
+		pLevelFirstRoomEx->pMaze->dwFlags |= 2;
 	}
 }
 
