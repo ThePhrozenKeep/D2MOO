@@ -57,7 +57,7 @@ struct D2DrlgOutdoorInfoStrc
 //D2Common.0x6FD7DC20
 int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pDrlgVertex);
 //D2Common.0x6FD7DD00
-BOOL __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY);
+int __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY);
 //D2Common.0x6FD7DD40
 void __fastcall DRLGOUTDOORS_AlterAdjacentPresetGridCells(D2DrlgLevelStrc* pLevel, int nX, int nY);
 //D2Common.0x6FD7DD70

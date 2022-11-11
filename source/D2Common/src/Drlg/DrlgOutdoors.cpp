@@ -82,11 +82,11 @@ int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVer
 }
 
 //D2Common.0x6FD7DD00
-BOOL __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
+int __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0x200)
 	{
-		return DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY);
+		return DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], nX, nY);
 	}
 
 	return 0;
