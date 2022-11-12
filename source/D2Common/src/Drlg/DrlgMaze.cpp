@@ -37,10 +37,6 @@ static bool DRLGMAZE_OrthWithDirectionExists(D2RoomExStrc* pRoomEx, int nDirecti
 	}
 	return false;
 }
-static bool DRLGMAZE_HasMapDS1(D2RoomExStrc* pRoomEx)
-{
-	return pRoomEx->pMaze->nFlags & DRLGPRESETROOMFLAG_HAS_MAP_DS1;
-}
 
 
 //D2Common.0x6FD78E50
@@ -453,6 +449,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	pRoomEx->nTileYPos = pLevel->nPosY + (pLevel->nHeight - pRoomEx->nTileHeight) / 2;
 
 	DRLGROOM_AddRoomExToLevel(pLevel, pRoomEx);
+	
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
 
 	switch (pLevel->nLevelType)
 	{
@@ -616,25 +614,25 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	case LVLTYPE_ACT1_CATACOMBS:
 		if (pLevel->nLevelId == LEVEL_CATACOMBSLEV1)
 		{
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 1, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 2, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 3, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 0, 1);
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NSEW, -1, FALSE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_NORTH, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_EAST, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_SOUTH, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_WEST, TRUE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NSEW, -1, FALSE);
 		}
 		else
 		{
 			if (SEED_RollRandomNumber(&pLevel->pSeed) & 1)
 			{
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 0, 1);
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 2, 1);
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_EW, -1, FALSE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_WEST, TRUE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_EAST, TRUE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_EW, -1, FALSE);
 			}
 			else
 			{
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 1, 1);
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 3, 1);
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NS, -1, FALSE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_NORTH, TRUE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_SOUTH, TRUE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NS, -1, FALSE);
 			}
 		}
 
@@ -653,7 +651,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{
 			pRandomRoomEx = DRLGMAZE_GetRandomRoomExFromLevel(pLevel);
 			nDirection = SEED_RollRandomNumber(&pRandomRoomEx->pSeed) & 3;
-			if (~pRandomRoomEx->pMaze->nFlags & 2)
+			if (!DRLGMAZE_HasMapDS1(pRandomRoomEx))
 			{
 				DRLGMAZE_AddAdjacentMazeRoom(pRandomRoomEx, nDirection, 1);
 			}
@@ -783,24 +781,24 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		switch (pLevel->nLevelId)
 		{
 		case LEVEL_CELLAROFPITY:
-			D2_ASSERT(pLevel->pFirstRoomEx);
+			D2_ASSERT(pLevelFirstRoomEx);
 
 			if (SEED_RollLimitedRandomNumber(&pRoomEx->pLevel->pSeed, 2) != 0)
 			{
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_A, -1, FALSE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_A, -1, FALSE);
 			}
 			else
 			{
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_B, -1, FALSE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_B, -1, FALSE);
 			}
 			break;
 
 		case LEVEL_ECHOCHAMBER:
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_POOL_A, -1, FALSE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_POOL_A, -1, FALSE);
 			break;
 
 		case LEVEL_GLACIALCAVESLEV2:
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_POOL_B, -1, FALSE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_POOL_B, -1, FALSE);
 			break;
 
 		default:

@@ -77,6 +77,11 @@ struct D2DrlgPresetRoomStrc
 
 #pragma pack()
 
+//Helper function
+inline bool DRLGMAZE_HasMapDS1(D2RoomExStrc* pRoomEx)
+{
+	return pRoomEx->pMaze->nFlags & DRLGPRESETROOMFLAG_HAS_MAP_DS1;
+}
 
 //D2Common.0x6FD859A0 (#11222)
 D2COMMON_DLL_DECL int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
