@@ -1,4 +1,4 @@
-#include "Drlg/D2DrlgMaze.h"
+﻿#include "Drlg/D2DrlgMaze.h"
 
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgDrlg.h"
@@ -1590,157 +1590,78 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 	}
 }
 
+//Helper function
+static D2RoomExStrc* DRLGMAZE_PlaceRoomForArcaneBranch(D2RoomExStrc* pParentRoom, int nArcaneMapBranch)
+{
+	if (D2RoomExStrc* pRoomEx = sub_6FD7AFD0(pParentRoom, nArcaneMapBranch % 4, TRUE))
+	{
+		DRLGMAZE_PickRoomPreset(pParentRoom, 1);
+		DRLGMAZE_PickRoomPreset(pRoomEx, 1);
+		return pRoomEx;
+	}
+	return nullptr;
+}
+
+/*
+Order of generation of the arcane sanctuary rooms for a given branch:
+
+                 2 →  3 →  4 →  5 →  6
+                 ↑                   ↓
+         W → 0 → 1        12         7 →  8
+                           ↑         ↓
+                14 ← 13 ← 11 ← 10  ← 9
+*/
+// Helper function
+static int DRLGMAZE_ArcaneSanctuaryDirectionFromRoomIdx(int nBranchDirection, int nBranchRoomIdx)
+{
+	switch (nBranchRoomIdx)
+	{
+	default:
+		return nBranchDirection;     // Forward when facing branch direction
+	case 2:
+	case 12:
+		return nBranchDirection + 3; // Left when facing branch direction
+	case 7:
+	case 9:
+		return nBranchDirection + 1; // Right when facing branch direction
+	case 10:
+	case 11:
+	case 13:
+	case 14:
+		return nBranchDirection + 2; // Backwards when facing branch direction
+	}
+}
+
 //D2Common.0x6FD7ABC0
-//TODO: Check for correctness
+// This function has been rewritten using a loop to avoid having macros / 15 calls to the same functions.
 void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel)
 {
-	D2RoomExStrc* pRoomExArray[60] = {};
-	D2RoomExStrc** ppRoomEx = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
-	int nRand = 0;
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
+	
+	const int nRand = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 
-	ppRoomEx = pRoomExArray;
+	static const int nRoomsPerBranch = 15;
+	static const int nBranchDirections = 4;
+	D2RoomExStrc* pRoomExArray[nRoomsPerBranch * nBranchDirections] = {};
 
-	for (int i = 0; i < 4; ++i)
+	for (int nBranchDirection = 0; nBranchDirection < nBranchDirections; ++nBranchDirection)
 	{
-		pRoomEx = sub_6FD7AFD0(pLevel->pFirstRoomEx, i % 4, TRUE);
-		if (pRoomEx)
+		D2RoomExStrc* pParentRoom = pLevelFirstRoomEx;
+		for (int nBranchRoomIdx = 0; nBranchRoomIdx < nRoomsPerBranch; nBranchRoomIdx++)
 		{
-			DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
+			const int nRoomDirection = DRLGMAZE_ArcaneSanctuaryDirectionFromRoomIdx(nBranchDirection, nBranchRoomIdx);
+			D2RoomExStrc* pNewRoom = DRLGMAZE_PlaceRoomForArcaneBranch(pParentRoom, nRoomDirection);
+			// See diagram above, those rooms do not have "child" rooms. So the next room will start from current parent.
+			// The game also didn't keep it in the room array, which means its pMaze->nPickedFile will be left untouched. Is this a mistake ?
+			// In any case we reproduce the same behaviour here
+			if (nBranchRoomIdx != 8 && nBranchRoomIdx != 12)
+			{
+				pRoomExArray[nBranchRoomIdx + nBranchDirection * nRoomsPerBranch] = pNewRoom;
+				pParentRoom = pNewRoom;
+			}
 		}
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 3) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 1) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 1) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 3) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		++ppRoomEx;
 	}
 
-	nRand = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 	for (int i = 0; i < ARRAY_SIZE(pRoomExArray); ++i)
 	{
 		if (pRoomExArray[i])
@@ -1749,7 +1670,7 @@ void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel)
 		}
 	}
 
-	pLevel->pFirstRoomEx->pMaze->nPickedFile = 4;
+	pLevelFirstRoomEx->pMaze->nPickedFile = 4;
 }
 
 //D2Common.0x6FD7AFD0
