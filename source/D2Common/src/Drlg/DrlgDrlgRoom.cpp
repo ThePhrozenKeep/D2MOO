@@ -386,7 +386,7 @@ BOOL __fastcall sub_6FD77740(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 }
 
 //D2Common.0x6FD777B0
-// Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMaxDistance
+// Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMargin
 BOOL __fastcall DRLG_ComputeRectanglesManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
 {
 	int nSignedDistanceX = 0;
@@ -462,34 +462,34 @@ BOOL __fastcall sub_6FD77800(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 }
 
 //D2Common.0x6FD77890
-BOOL __fastcall sub_6FD77890(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int nMaxDistance)
+BOOL __fastcall DRLGMAZE_CheckRoomNotOverlaping(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pIgnoredRoom, int nMargin)
 {
 	int nX = 0;
 	int nY = 0;
 
-	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
+	for (D2RoomExStrc* pCurrentRoomEx = pLevel->pFirstRoomEx; pCurrentRoomEx; pCurrentRoomEx = pCurrentRoomEx->pRoomExNext)
 	{
-		if (pRoomEx != pRoomEx1 && pRoomEx != pRoomEx2)
+		if (pCurrentRoomEx != pRoomEx1 && pCurrentRoomEx != pIgnoredRoom)
 		{
-			if (pRoomEx1->nTileXPos >= pRoomEx->nTileXPos)
+			if (pRoomEx1->nTileXPos >= pCurrentRoomEx->nTileXPos)
 			{
-				nX = pRoomEx1->nTileXPos - pRoomEx->nTileWidth - pRoomEx->nTileXPos;
+				nX = pRoomEx1->nTileXPos - pCurrentRoomEx->nTileWidth - pCurrentRoomEx->nTileXPos;
 			}
 			else
 			{
-				nX = pRoomEx->nTileXPos - pRoomEx1->nTileWidth - pRoomEx1->nTileXPos;
+				nX = pCurrentRoomEx->nTileXPos - pRoomEx1->nTileWidth - pRoomEx1->nTileXPos;
 			}
 
-			if (pRoomEx1->nTileYPos >= pRoomEx->nTileYPos)
+			if (pRoomEx1->nTileYPos >= pCurrentRoomEx->nTileYPos)
 			{
-				nY = pRoomEx1->nTileYPos - pRoomEx->nTileHeight - pRoomEx->nTileYPos;
+				nY = pRoomEx1->nTileYPos - pCurrentRoomEx->nTileHeight - pCurrentRoomEx->nTileYPos;
 			}
 			else
 			{
-				nY = pRoomEx->nTileYPos - pRoomEx1->nTileHeight - pRoomEx1->nTileYPos;
+				nY = pCurrentRoomEx->nTileYPos - pRoomEx1->nTileHeight - pRoomEx1->nTileYPos;
 			}
 
-			if (nX < nMaxDistance && nY < nMaxDistance)
+			if (nX < nMargin && nY < nMargin)
 			{
 				return FALSE;
 			}

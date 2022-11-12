@@ -51,7 +51,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 //D2Common.0x6FD7ABC0
 void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7AFD0
-D2RoomExStrc* __fastcall DRLGMAZE_PlacePresetRoom(D2RoomExStrc* pRoomEx, int nDirection, int a3);
+D2RoomExStrc* __fastcall DRLGMAZE_PlaceAdjacentPresetRoom(D2RoomExStrc* pRoomEx, int nDirection, int a3);
 //D2Common.0x6FD7B230
 void __fastcall DRLGMAZE_ScanReplaceSpecialPreset(D2DrlgLevelStrc* pLevel, const D2MazeLevelIdStrc* pMazeInit, int* pRand);
 //D2Common.0x6FD7B330
@@ -59,7 +59,7 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 //D2Common.0x6FD7B660
 void __fastcall sub_6FD7B660(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPrestId, int nFile);
 //D2Common.0x6FD7B710
-int __fastcall DRLGMAZE_CheckIfMayPlacePresetRoom(D2RoomExStrc* pRoomEx, int nDirection);
+BOOL __fastcall DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(D2RoomExStrc* pRoomEx, int nDirection);
 //D2Common.0x6FD7B8B0
 void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7BC40
