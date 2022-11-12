@@ -1340,8 +1340,6 @@ void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_DIABLO_ENTRY, LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X
 	};
 
-	int nMesaId = 0;
-	int nPitId = 0;
 
 	if (pLevel->nLevelId == LEVEL_CHAOSSANCTUM)
 	{
@@ -1359,12 +1357,12 @@ void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		{
 			if (pLevel->pOutdoors->dwFlags & 0x400000)
 			{
-				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 1, LVLPREST_ACT4_FORTRESS_TRANSITION, -1, 0);
+				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 1, LVLPREST_ACT4_FORTRESS_TRANSITION, -1, FALSE);
 			}
 
 			if (pLevel->pOutdoors->dwFlags & 0x800000)
 			{
-				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 4, LVLPREST_ACT4_FORTRESS_TRANSITION, -1, 0);
+				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 4, LVLPREST_ACT4_FORTRESS_TRANSITION, -1, FALSE);
 			}
 
 			DRLGOUTDOORS_AddAct124SecondaryBorder(pLevel, 1, LVLPREST_ACT4_MESA_BORDER_1);
@@ -1376,8 +1374,8 @@ void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 				DRLGOUTDOORS_SpawnOutdoorLevelPreset(pLevel, LVLPREST_ACT4_MESA_WARP, -1, 0, 15);
 			}
 
-			nMesaId = nMesaLvlPrestIds[pLevel->nLevelId - 104];
-			nPitId = nPitsLvlPrestIds[pLevel->nLevelId - 104];
+			const int nMesaId = nMesaLvlPrestIds[pLevel->nLevelId - 104];
+			const int nPitId = nPitsLvlPrestIds[pLevel->nLevelId - 104];
 
 			DRLGOUTDOORS_SpawnOutdoorLevelPreset(pLevel, nMesaId + 0, -1, 0, 15);
 			DRLGOUTDOORS_SpawnOutdoorLevelPreset(pLevel, nMesaId + 1, -1, 0, 15);
@@ -1411,7 +1409,7 @@ void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		{
 			for (int i = 0; i < ARRAY_SIZE(nLavaLvlPrestIds); ++i)
 			{
-				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 3 * i % 5, 3 * i / 5, nLavaLvlPrestIds[i], -1, 0);
+				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 3 * (i % 5), 3 * (i / 5), nLavaLvlPrestIds[i], -1, FALSE);
 			}
 		}
 	}
