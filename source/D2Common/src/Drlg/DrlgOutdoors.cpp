@@ -1116,20 +1116,20 @@ void __fastcall DRLGOUTDOORS_CalculatePathCoordinates(D2DrlgLevelStrc* pLevel, D
 
 	switch (pVertex1->nDirection)
 	{
-	case 0:
-		pVertex2->nPosX = 8 * pVertex2->nPosX / 8 + 11;
+	case ALTDIR_WEST:
+		pVertex2->nPosX = 8 * (pVertex2->nPosX / 8) + 11;
 		break;
 
-	case 1:
-		pVertex2->nPosY = 8 * (pVertex1->nPosY - pLevel->nPosY) / 8 + 11;
+	case ALTDIR_NORTH:
+		pVertex2->nPosY = 8 * (pVertex2->nPosY / 8) + 11;
 		break;
 
-	case 2:
-		pVertex2->nPosX = 8 * pVertex2->nPosX / 8 - 5;
+	case ALTDIR_EAST:
+		pVertex2->nPosX = 8 * (pVertex2->nPosX / 8) - 5;
 		break;
 
-	case 3:
-		pVertex2->nPosY = 8 * (pVertex1->nPosY - pLevel->nPosY) / 8 - 5;
+	case ALTDIR_SOUTH:
+		pVertex2->nPosY = 8 * (pVertex2->nPosY / 8) - 5;
 		break;
 
 	default:
