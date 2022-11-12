@@ -1481,7 +1481,6 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 		if (nPresetTxtRecordNumberPops)
 		{
-			D2_ASSERT(nProcessedPops == nPresetTxtRecordNumberPops);
 			pDrlgMap->nPops = nProcessedPops;
 			for (int i = 0; i < pDrlgMap->nPops; ++i)
 			{
