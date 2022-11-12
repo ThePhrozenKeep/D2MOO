@@ -1565,7 +1565,7 @@ BOOL __fastcall sub_6FD82050(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nItera
 	{
 		if (i != nLevelLink)
 		{
-			if (!sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+			if (!DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
 			{
 				return FALSE;
 			}
@@ -1603,7 +1603,7 @@ BOOL __fastcall sub_6FD82130(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nItera
 
 	while (nCounter < nIteration)
 	{
-		if (nCounter != gAct1MonasteryDrlgLink[nIteration].nLevelLink && !sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[nCounter], 0))
+		if (nCounter != gAct1MonasteryDrlgLink[nIteration].nLevelLink && !DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[nCounter], 0))
 		{
 			return FALSE;
 		}
@@ -1617,7 +1617,7 @@ BOOL __fastcall sub_6FD82130(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nItera
 		pLevelLinkData->pLevelCoord[0].nHeight += 200;
 		pLevelLinkData->pLevelCoord[0].nPosY -= 200;
 
-		bResult = sub_6FD777B0(pLevelLinkData->pLevelCoord, &pLevelLinkData->pLevelCoord[nCounter], 0);
+		bResult = DRLG_ComputeRectanglesManhattanDistance(pLevelLinkData->pLevelCoord, &pLevelLinkData->pLevelCoord[nCounter], 0);
 
 		pLevelLinkData->pLevelCoord[0].nHeight -= 200;
 		pLevelLinkData->pLevelCoord[0].nPosY += 200;
@@ -1633,7 +1633,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Outdoors(D2DrlgLevelLinkDataStrc* pLevelLin
 
 	for (int i = 0; i < nIteration; ++i)
 	{
-		if (i != nLevelLink && !sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+		if (i != nLevelLink && !DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
 		{
 			return FALSE;
 		}
@@ -1649,7 +1649,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Canyon(D2DrlgLevelLinkDataStrc* pLevelLinkD
 
 	for (int i = 0; i < nIteration; ++i)
 	{
-		if (i != nLevelLink && !sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+		if (i != nLevelLink && !DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
 		{
 			return FALSE;
 		}
@@ -1665,7 +1665,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct4Outdoors(D2DrlgLevelLinkDataStrc* pLevelLin
 
 	for (int i = 0; i < nIteration; ++i)
 	{
-		if (i != nLevelLink && !sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+		if (i != nLevelLink && !DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
 		{
 			return FALSE;
 		}
@@ -1681,7 +1681,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct4ChaosSanctum(D2DrlgLevelLinkDataStrc* pLeve
 
 	for (int i = 0; i < nIteration; ++i)
 	{
-		if (i != nLevelLink && !sub_6FD777B0(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+		if (i != nLevelLink && !DRLG_ComputeRectanglesManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
 		{
 			return FALSE;
 		}
@@ -2441,8 +2441,8 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		int nFirstOverlappingJungle;
 		for (nFirstOverlappingJungle = 0; nFirstOverlappingJungle < nJungleAttachIdx; nFirstOverlappingJungle++)
 		{
-			// sub_6FD777B0 Returns true if not overlapping and or sharing border ( distance >= 0 )
-			const bool levelsOverlaps = !sub_6FD777B0(&tJungles[nFirstOverlappingJungle].pDrlgCoord, &pCurrentJungle->pDrlgCoord, 0);
+			// DRLG_ComputeRectanglesManhattanDistance Returns true if not overlapping and or sharing border ( distance >= 0 )
+			const bool levelsOverlaps = !DRLG_ComputeRectanglesManhattanDistance(&tJungles[nFirstOverlappingJungle].pDrlgCoord, &pCurrentJungle->pDrlgCoord, 0);
 			if (levelsOverlaps)
 			{
 				break;

@@ -256,7 +256,7 @@ void __fastcall sub_6FD769B0(D2RoomExStrc* pRoomEx)
 		{
 			if (pCurrentRoomEx->pCoordList)
 			{
-				if (!sub_6FD777B0(&pRoomEx->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, 1))
+				if (!DRLG_ComputeRectanglesManhattanDistance(&pRoomEx->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, 1))
 				{
 					for (int j = pRoomEx->pDrlgCoord.nPosX; j <= pRoomEx->pDrlgCoord.nPosX + pRoomEx->nTileWidth; ++j)
 					{

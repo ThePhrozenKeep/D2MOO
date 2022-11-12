@@ -8,8 +8,9 @@
 
 enum D2DrlgPresetRoomFlags
 {
-	DRLGPRESETROOM_SINGLE_ROOM = 1 << 0,
-	DRLGPRESETROOM_HAS_MAP_DS1 = 1 << 1, // needs confirmation
+	DRLGPRESETROOMFLAG_NONE = 0,
+	DRLGPRESETROOMFLAG_SINGLE_ROOM = 1 << 0,
+	DRLGPRESETROOMFLAG_HAS_MAP_DS1 = 1 << 1, // needs confirmation
 };
 
 struct D2LevelFileListStrc

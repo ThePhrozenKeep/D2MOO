@@ -387,7 +387,7 @@ BOOL __fastcall sub_6FD77740(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 
 //D2Common.0x6FD777B0
 // Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMaxDistance
-BOOL __fastcall sub_6FD777B0(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
+BOOL __fastcall DRLG_ComputeRectanglesManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
 {
 	int nSignedDistanceX = 0;
 	int nSignedDistanceY = 0;
