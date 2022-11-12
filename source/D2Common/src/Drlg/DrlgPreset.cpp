@@ -1287,7 +1287,7 @@ D2RoomExStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMap
 	D2RoomExStrc* pRoomEx = nullptr;
 	if (bSingleRoom)
 	{
-		pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &pDrlgMap->pDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, DRLGGRID_GetGridEntry(&tDrlgGrid, 0, 0), 1, 0);
+		pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &pDrlgMap->pDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, DRLGGRID_GetGridEntry(&tDrlgGrid, 0, 0), DRLGPRESETROOMFLAG_SINGLE_ROOM, 0);
 	}
 	else
 	{
@@ -1317,7 +1317,7 @@ D2RoomExStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMap
 				int nGridFlags = DRLGGRID_GetGridEntry(&tDrlgGrid, nGridX, nGridY);
 
 				if (tDrlgCoord.nWidth && tDrlgCoord.nHeight)
-					pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &tDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, nGridFlags, 0, (D2DrlgGridStrc*)(pDrlgMap->bHasInfo ? nGridFlags : 0));
+					pRoomEx = DRLGPRESET_InitPresetRoomData(pLevel, pDrlgMap, &tDrlgCoord, pDrlgMap->pLvlPrestTxtRecord->dwDt1Mask, nGridFlags, DRLGPRESETROOMFLAG_NONE, (D2DrlgGridStrc*)(pDrlgMap->bHasInfo ? nGridFlags : 0));
 					
 				++nGridX;
 			}
