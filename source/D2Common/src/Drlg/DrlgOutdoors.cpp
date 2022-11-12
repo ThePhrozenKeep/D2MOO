@@ -662,7 +662,6 @@ void __fastcall DRLGOUTDOORS_AllocOutdoorInfo(D2DrlgLevelStrc* pLevel)
 void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 {
 	D2DrlgCoordStrc pDrlgCoord = {};
-	D2DrlgOutdoorInfoStrc* pOutdoorInfo = NULL;
 	D2DrlgVertexStrc** ppVertex = NULL;
 	D2DrlgVertexStrc* pNextVertex = NULL;
 	D2DrlgVertexStrc* pVertex = NULL;
@@ -674,7 +673,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	int v13 = 0;
 	int v14 = 0;
 
-	pOutdoorInfo = pLevel->pOutdoors;
+	D2DrlgOutdoorInfoStrc* pOutdoorInfo = pLevel->pOutdoors;
 
 	pOutdoorInfo->nWidth = 0;
 	pOutdoorInfo->nHeight = 0;
@@ -973,44 +972,37 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 }
 
 //D2Common.0x6FD7F250
-//TODO: Rename variables v9, v10, v13
 void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgOrthStrc* pRoomData = NULL;
-	D2DrlgVertexStrc* pVertex = NULL;
-	int v9 = 0;
-	int v10 = 0;
-	int v13 = 0;
+	D2DrlgOutdoorInfoStrc* pOutdoors = pLevel->pOutdoors;
+	pOutdoors->nVertices = 0;
 
-	pLevel->pOutdoors->nVertices = 0;
-
-	pRoomData = pLevel->pOutdoors->pRoomData;
-	while (pRoomData)
+	for(D2DrlgOrthStrc* pRoomData = pOutdoors->pRoomData; pRoomData != nullptr; pRoomData = pRoomData->pNext)
 	{
+		D2DrlgVertexStrc* pVertex = &pOutdoors->pVertices[pOutdoors->nVertices];
 		if (pRoomData->pLevel->nLevelId == LEVEL_ROGUEENCAMPMENT)
 		{
-			pVertex = &pLevel->pOutdoors->pVertices[pLevel->pOutdoors->nVertices];
+			pVertex->nDirection = pRoomData->nDirection;
 
-			pLevel->pOutdoors->pVertices[pLevel->pOutdoors->nVertices].nDirection = pRoomData->nDirection;
-
+			// Is west/east inverted here ?
 			switch (pRoomData->nDirection)
 			{
-			case 0:
+			case ALTDIR_WEST:
 				pVertex->nPosX = pRoomData->pLevel->nPosX + 59;
 				pVertex->nPosY = pRoomData->pLevel->nPosY + 19;
 				break;
 
-			case 1:
+			case ALTDIR_NORTH:
 				pVertex->nPosX = pRoomData->pLevel->nPosX + 29;
 				pVertex->nPosY = pRoomData->pLevel->nPosY + 35;
 				break;
 
-			case 2:
+			case ALTDIR_EAST:
 				pVertex->nPosX = pRoomData->pLevel->nPosX + 4;
 				pVertex->nPosY = pRoomData->pLevel->nPosY + 22;
 				break;
 
-			case 3:
+			case ALTDIR_SOUTH:
 				pVertex->nPosX = pRoomData->pLevel->nPosX + 29;
 				pVertex->nPosY = pRoomData->pLevel->nPosY + 3;
 				break;
@@ -1019,37 +1011,34 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 				break;
 			}
 
-			++pLevel->pOutdoors->nVertices;
+			++pOutdoors->nVertices;
 		}
 		else if (pRoomData->pLevel->nLevelId == LEVEL_MONASTERYGATE)
 		{
-			pVertex = &pLevel->pOutdoors->pVertices[pLevel->pOutdoors->nVertices];
 
 			pVertex->nPosX = pRoomData->pLevel->nPosX + 27;
 			pVertex->nPosY = pRoomData->pLevel->nPosY + 13;
 
-			pVertex->nDirection = 1;
-			++pLevel->pOutdoors->nVertices;
+			pVertex->nDirection = ALTDIR_NORTH;
+			++pOutdoors->nVertices;
 		}
-
-		pRoomData = pRoomData->pNext;
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nGridWidth; ++i)
+	for (int i = 0; i < pOutdoors->nGridWidth; ++i)
 	{
-		for (int j = 0; j < pLevel->pOutdoors->nGridHeight; ++j)
+		for (int j = 0; j < pOutdoors->nGridHeight; ++j)
 		{
-			v9 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], i, j);
-			v10 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, j);
+			const int nGrid0Entry = DRLGGRID_GetGridEntry(&pOutdoors->pGrid[0], i, j);
+			const uint32_t nPackedTileInformation = DRLGGRID_GetGridEntry(&pOutdoors->pGrid[2], i, j);
 
-			pVertex = &pLevel->pOutdoors->pVertices[pLevel->pOutdoors->nVertices];
+			D2DrlgVertexStrc* pVertex = &pOutdoors->pVertices[pOutdoors->nVertices];
 
 			pVertex->nPosX = pLevel->nPosX + 8 * i + 3;
 			pVertex->nPosY = pLevel->nPosY + 8 * j + 3;
 			pVertex->nDirection = 4;
-			v13 = (v10 >> 16) & 0xF;
+			int v13 = (nPackedTileInformation >> 16) & 0xF;
 
-			switch (v9)
+			switch (nGrid0Entry)
 			{
 			case 4:
 				if (v13 == 3)
@@ -1057,74 +1046,63 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 					pVertex->nDirection = 3;
 				}
 				break;
-
 			case 5:
 				if (v13 == 3)
 				{
 					pVertex->nDirection = 0;
 				}
 				break;
-
-			case 25:
-				pVertex->nDirection = 0;
-				break;
-
 			case 6:
 				if (v13 == 3)
 				{
 					pVertex->nDirection = 1;
 				}
 				break;
-
-			case 24:
-				pVertex->nDirection = 1;
-				break;
-
 			case 7:
 				if (v13 == 3)
 				{
 					pVertex->nDirection = 2;
 				}
 				break;
-
-			case 51:
-				pVertex->nDirection = v13 != 0;
+			case 24:
+				pVertex->nDirection = 1;
 				break;
-
-			case 52:
-				pVertex->nDirection = v13 != 0;
+			case 25:
+				pVertex->nDirection = 0;
 				break;
-
 			case 28:
-				if (v13 == 1 && i == pLevel->pOutdoors->nGridWidth - 2)
+				if (v13 == 1 && i == pOutdoors->nGridWidth - 2)
 				{
 					pVertex->nDirection = 2;
 				}
 				break;
-
+			case 51:
+			case 52:
+				pVertex->nDirection = v13 != 0;
+				break;
 			default:
 				break;
 			}
 
 			if (pVertex->nDirection != 4)
 			{
-				++pLevel->pOutdoors->nVertices;
+				++pOutdoors->nVertices;
 			}
 		}
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nVertices; ++i)
+	for (int i = 0; i < pOutdoors->nVertices; ++i)
 	{
-		DRLGOUTDOORS_CalculatePathCoordinates(pLevel, &pLevel->pOutdoors->pVertices[i], &pLevel->pOutdoors->pVertices[6 + i]);
+		DRLGOUTDOORS_CalculatePathCoordinates(pLevel, &pOutdoors->pVertices[i], &pOutdoors->pVertices[6 + i]);
 	}
 
 	sub_6FD7F5B0(pLevel);
 
-	for (int i = 0; i < pLevel->pOutdoors->nVertices; ++i)
+	for (int i = 0; i < pOutdoors->nVertices; ++i)
 	{
 		if (sub_6FD80750(pLevel, i))
 		{
-			DRLGGRID_SetVertexGridFlags(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->pPathStarts[i], 128);
+			DRLGGRID_SetVertexGridFlags(&pOutdoors->pGrid[2], pOutdoors->pPathStarts[i], 128);
 			sub_6FD7F810(pLevel, i);
 		}
 	}
