@@ -9,6 +9,8 @@
 #include "Drlg/D2DrlgTileSub.h"
 #include "D2Seed.h"
 #include <DataTbls/LevelsIds.h>
+#include <cmath>
+#include <algorithm>
 
 
 //TODO: Find member names
@@ -67,39 +69,15 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		{ 0, 1 },
 	};
 
-	D2LvlPrestTxt* pLvlPrestTxtRecord = NULL;
-	D2DrlgVertexStrc* pPreviousVertex = NULL;
-	D2DrlgVertexStrc* pDrlgVertex = NULL;
-	int nPreviousDiffXAbs = 0;
-	int nPreviousDiffYAbs = 0;
-	int nPreviousDiffX = 0;
-	int nPreviousDiffY = 0;
-	int nLevelPrestId1 = 0;
-	int nLevelPrestId2 = 0;
-	int nLevelPrestId = 0;
-	int nCurrentDiffX = 0;
-	int nCurrentDiffY = 0;
-	int nPreviousX = 0;
-	int nPreviousY = 0;
-	int nCurrentX = 0;
-	int nCurrentY = 0;
-	int nLookupId = 0;
-	int nXCapped = 0;
-	int nYCapped = 0;
-	int nIndex = 0;
-	int nSize = 0;
-	int nRand = 0;
-	int nX = 0;
-	int nY = 0;
-
+	D2DrlgOutdoorInfoStrc* pOutdoors = pLevel->pOutdoors;
 	if (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS)
 	{
-		D2_ASSERT(pLevel->pOutdoors);
+		D2_ASSERT(pOutdoors);
 
-		pLvlPrestTxtRecord = DATATBLS_GetLvlPrestTxtRecord(LVLPREST_ACT5_SIEGE_TO_TOWN);
+		D2LvlPrestTxt* pLvlPrestTxtRecord = DATATBLS_GetLvlPrestTxtRecord(LVLPREST_ACT5_SIEGE_TO_TOWN);
 		D2_ASSERT(pLvlPrestTxtRecord);
 
-		nSize = pLevel->pOutdoors->nGridWidth - pLvlPrestTxtRecord->nSizeX / 8;
+		int nSize = pOutdoors->nGridWidth - pLvlPrestTxtRecord->nSizeX / 8;
 		for (int i = 0; i < 15; ++i)
 		{
 			D2_ASSERTM(nSize >= 0, "Siege Level is the wrong size");
@@ -112,42 +90,29 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 	{
 		DRLGOUTPLACE_SetOutGridLinkFlags(pLevel);
 
-		pPreviousVertex = pLevel->pOutdoors->pVertex;
-		pDrlgVertex = pPreviousVertex->pNext;
+		D2DrlgVertexStrc* pPreviousVertex = pOutdoors->pVertex;
+		D2DrlgVertexStrc* pDrlgVertex = pPreviousVertex->pNext;
 
-		nLookupId = sub_6FD84100(pLevel);
+		const int nLookupId = sub_6FD84100(pLevel);
 		do
 		{
+			int nPreviousDiffX, nPreviousDiffY;
 			DRLGVER_GetCoordDiff(pPreviousVertex, &nPreviousDiffX, &nPreviousDiffY);
+			int nCurrentDiffX, nCurrentDiffY;
 			DRLGVER_GetCoordDiff(pDrlgVertex, &nCurrentDiffX, &nCurrentDiffY);
 
-			if (nPreviousDiffX < 0)
-			{
-				nPreviousDiffXAbs = -nPreviousDiffX;
-			}
-			else
-			{
-				nPreviousDiffXAbs = nPreviousDiffX;
-			}
+			const int nPreviousDiffXAbs = std::abs(nPreviousDiffX);
+			const int nPreviousDiffYAbs = std::abs(nPreviousDiffY);
 
-			if (nPreviousDiffY < 0)
-			{
-				nPreviousDiffYAbs = -nPreviousDiffY;
-			}
-			else
-			{
-				nPreviousDiffYAbs = nPreviousDiffY;
-			}
+			int nPreviousX = pPreviousVertex->nPosX & 0xFFFFFFFE;
+			int nPreviousY = pPreviousVertex->nPosY & 0xFFFFFFFE;
 
-			nPreviousX = pPreviousVertex->nPosX & 0xFFFFFFFE;
-			nPreviousY = pPreviousVertex->nPosY & 0xFFFFFFFE;
+			const int nCurrentX = pDrlgVertex->nPosX & 0xFFFFFFFE;
+			const int nCurrentY = pDrlgVertex->nPosY & 0xFFFFFFFE;
 
-			nCurrentX = pDrlgVertex->nPosX & 0xFFFFFFFE;
-			nCurrentY = pDrlgVertex->nPosY & 0xFFFFFFFE;
+			const int nLevelPrestId = sub_6FD80BE0(nPreviousDiffX, nPreviousDiffY, nLookupId);
 
-			nLevelPrestId = sub_6FD80BE0(nPreviousDiffX, nPreviousDiffY, nLookupId);
-
-			if (!(pPreviousVertex->dwFlags & 2))
+			if ((pPreviousVertex->dwFlags & 2) == 0)
 			{
 				while (nPreviousX != nCurrentX || nPreviousY != nCurrentY)
 				{
@@ -155,70 +120,56 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 					nPreviousY += 2 * nPreviousDiffY;
 
 					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nPreviousX, nPreviousY, nLevelPrestId, -1, 0);
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nPreviousX, nPreviousY, 1, FLAG_OPERATION_OR);
+					DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nPreviousX, nPreviousY, 1, FLAG_OPERATION_OR);
 				}
 			}
 
 			if (pPreviousVertex->dwFlags & 1)
 			{
-				if (pPreviousVertex->nPosX <= pDrlgVertex->nPosX)
-				{
-					nX = pDrlgVertex->nPosX;
-				}
-				else
-				{
-					nX = pPreviousVertex->nPosX;
-				}
-				nXCapped = (nX - 4 * nPreviousDiffXAbs) & 0xFFFFFFFE;
+				const int nX = std::max(pPreviousVertex->nPosX, pDrlgVertex->nPosX);
+				const int nXCapped = (nX - 4 * nPreviousDiffXAbs) & 0xFFFFFFFE;
+				const int nY = std::max(pPreviousVertex->nPosY, pDrlgVertex->nPosY);
+				const int nYCapped = (nY - 4 * nPreviousDiffYAbs) & 0xFFFFFFFE;
 
-				if (pPreviousVertex->nPosY <= pDrlgVertex->nPosY)
-				{
-					nY = pDrlgVertex->nPosY;
-				}
-				else
-				{
-					nY = pPreviousVertex->nPosY;
-				}
-				nYCapped = (nY - 4 * nPreviousDiffYAbs) & 0xFFFFFFFE;
-
-				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nXCapped, nY - 4 * nPreviousDiffYAbs, 1024, FLAG_OPERATION_OR);
-				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nXCapped + 2 * nPreviousDiffXAbs, nYCapped + 2 * nPreviousDiffYAbs, 1024, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped, nYCapped, 1024, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped + 2 * nPreviousDiffXAbs, nYCapped + 2 * nPreviousDiffYAbs, 1024, FLAG_OPERATION_OR);
 			}
 
-			nRand = sub_6FD80C10(2 * nPreviousDiffX, 2 * nPreviousDiffY, 2 * nCurrentDiffX, 2 * nCurrentDiffY, nLookupId);
-			if (nRand)
+			if (const int nRand = sub_6FD80C10(2 * nPreviousDiffX, 2 * nPreviousDiffY, 2 * nCurrentDiffX, 2 * nCurrentDiffY, nLookupId))
 			{
 				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nCurrentX, nCurrentY, nRand, -1, 0);
-				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nCurrentX, nCurrentY, 1, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nCurrentX, nCurrentY, 1, FLAG_OPERATION_OR);
 			}
 
 			pPreviousVertex = pDrlgVertex;
 			pDrlgVertex = pDrlgVertex->pNext;
 		}
-		while (pPreviousVertex != pLevel->pOutdoors->pVertex);
+		while (pPreviousVertex != pOutdoors->pVertex);
 
 		if (pLevel->nLevelId == LEVEL_ID_ACT5_BARRICADE_1)
 		{
 			sub_6FD846C0(pLevel);
 		}
 
-		nX = pLevel->pOutdoors->nGridWidth - 2;
-		nY = 0;
+		const int nLastX = pOutdoors->nGridWidth - 2;
+		const int nLastY = pOutdoors->nGridHeight - 2;
+		int nX = nLastX;
+		int nY = 0;
 
-		nLevelPrestId1 = pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1_SNOW : LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1;
-		nLevelPrestId2 = pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_RAVINE_BORDER_1_SNOW : LVLPREST_ACT5_BARRICADE_RAVINE_BORDER_1;
+		const int nLevelPrestIdCliff = pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1_SNOW : LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1;
+		const int nLevelPrestIdRavine = pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_RAVINE_BORDER_1_SNOW : LVLPREST_ACT5_BARRICADE_RAVINE_BORDER_1;
 
-		while (nX != 0 || nY != pLevel->pOutdoors->nGridHeight - 2)
+		while (nX != 0 || nY != nLastY)
 		{
-			nIndex = DRLGGRID_GetGridEntry(pLevel->pOutdoors->pGrid, nX, nY) - nLevelPrestId1;
-			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nIndex + nLevelPrestId2, -1, 0);
+			const int nIndex = DRLGGRID_GetGridEntry(pOutdoors->pGrid, nX, nY) - nLevelPrestIdCliff;
+			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nIndex + nLevelPrestIdRavine, -1, 0);
 
 			nX += 2 * stru_6FDD09C8[nIndex].nX;
 			nY += 2 * stru_6FDD09C8[nIndex].nY;
 		}
 
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pLevel->pOutdoors->nGridWidth - 2, 0, pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_CLIFF_RAVINE_BORDER_7_SNOW : LVLPREST_ACT5_BARRICADE_CLIFF_RAVINE_BORDER_7, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, pLevel->pOutdoors->nGridHeight - 2, pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_RAVINE_CLIFF_BORDER_5_SNOW : LVLPREST_ACT5_BARRICADE_RAVINE_CLIFF_BORDER_5, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pOutdoors->nGridWidth - 2, 0, pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_CLIFF_RAVINE_BORDER_7_SNOW : LVLPREST_ACT5_BARRICADE_CLIFF_RAVINE_BORDER_7, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, pOutdoors->nGridHeight - 2, pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS ? LVLPREST_ACT5_BARRICADE_RAVINE_CLIFF_BORDER_5_SNOW : LVLPREST_ACT5_BARRICADE_RAVINE_CLIFF_BORDER_5, -1, 0);
 
 		DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(pLevel);
 		DRLGOUTSIEGE_PlaceCaves(pLevel);
