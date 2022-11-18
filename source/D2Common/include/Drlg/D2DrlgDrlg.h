@@ -153,7 +153,7 @@ struct D2RoomExStrc
 		};
 		D2DrlgCoordStrc pDrlgCoord;			//0x04
 	};
-	uint32_t dwFlags;						//0x14
+	uint32_t dwFlags;						//0x14 ROOMEXFLAG_ANIMATED_FLOOR
 	uint32_t dwOtherFlags;					//0x18
 	int32_t nType;							//0x1C
 	union
@@ -295,7 +295,7 @@ struct D2DrlgTileDataStrc
 	int32_t nPosX;							//0x08
 	int32_t nPosY;							//0x0C
 	int32_t unk0x10;						//0x10
-	uint32_t dwFlags;						//0x14
+	uint32_t dwFlags;						//0x14 D2MapTileFlags
 	D2TileLibraryEntryStrc* pTile;			//0x18
 	int32_t nTileType;						//0x1C
 	D2DrlgTileDataStrc* unk0x20;			//0x20
