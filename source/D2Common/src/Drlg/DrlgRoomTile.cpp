@@ -154,87 +154,87 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoom
 }
 
 //D2Common.0x6FD88AC0
-void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nTileFlags, int nType, int nX, int nY)
+void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, uint32_t nTileFlags, int nType, int nX, int nY)
 {
-	int nFlags = 0;
+	const D2C_PackedTileInformation nTileInfo{ nTileFlags };
 
-	if (pRoomEx && (nType == 9 || nType == 8))
+	if (pRoomEx && (nType == TILETYPE_RIGHTWALLWITHDOOR || nType == TILETYPE_LEFTWALLWITHDOOR))
 	{
 		DRLGROOMTILE_AddTilePresetUnits(pRoomEx, pTileData, nTileFlags, nX, nY, 0);
 	}
 
-	if (nType != 13)
+	if (nType != TILETYPE_SHADOWS)
 	{
-		pTileData->dwFlags |= ((((unsigned int)nTileFlags >> 18) & 3) + 1) << 14;
+		pTileData->dwFlags |= (nTileInfo.nWallLayer + 1) << MAPTILE_WALL_LAYER_BIT;
 	}
 
-	if (nType == 14)
+	if (nType == TILETYPE_TREES)
 	{
-		pTileData->dwFlags |= 4;
+		pTileData->dwFlags |= MAPTILE_TREES;
 	}
-	else if (nType == 11 || nType == 10 || nType == 9 || nType == 8)
+	else if (nType == TILETYPE_SPECIALTILES_11 || nType == TILETYPE_SPECIALTILES_10 || nType == TILETYPE_RIGHTWALLWITHDOOR || nType == TILETYPE_LEFTWALLWITHDOOR)
 	{
-		pTileData->dwFlags |= 2;
-	}
-
-	if (nTileFlags & 0x80)
-	{
-		pTileData->dwFlags |= 1;
+		pTileData->dwFlags |= MAPTILE_WALL_EXIT;
 	}
 
-	if (nTileFlags & 0x10000000)
+	if (nTileInfo.bLayerAbove)
 	{
-		pTileData->dwFlags |= 0x102;
+		pTileData->dwFlags |= MAPTILE_UNK_0x1;
 	}
 
-	if (nTileFlags & 0x20000)
+	if (nTileInfo.bLinkage)
 	{
-		pTileData->dwFlags |= 0x40;
+		pTileData->dwFlags |= MAPTILE_FLOOR_LINKER_PATH | MAPTILE_WALL_EXIT;
 	}
 
-	if (nTileFlags & 0x10000)
+	if (nTileInfo.bUnwalkable)
 	{
-		pTileData->dwFlags |= 0x80;
+		pTileData->dwFlags |= MAPTILE_UNWALKABLE;
 	}
 
-	if (nTileFlags & 8)
+	if (nTileInfo.bFillLOS)
 	{
-		pTileData->dwFlags |= 4;
+		pTileData->dwFlags |= MAPTILE_FILL_LOS;
 	}
 
-	if (nTileFlags >= 0)
+	if (nTileInfo.bEnclosed)
 	{
-		pTileData->dwFlags &= 0xF7;
+		pTileData->dwFlags |= MAPTILE_TREES;
+	}
+
+	if (nTileInfo.bHidden)
+	{
+		pTileData->dwFlags &= (~MAPTILE_HIDDEN);
 	}
 	else
 	{
-		pTileData->dwFlags |= 8;
+		pTileData->dwFlags |= MAPTILE_HIDDEN;
 	}
 
-	if (nTileFlags & 0x4000000)
+	if (nTileInfo.bRevealHidden)
 	{
-		pTileData->dwFlags |= 0x20C;
+		pTileData->dwFlags |= MAPTILE_UNK_0x200 | MAPTILE_TREES | MAPTILE_HIDDEN;
 	}
 
-	if (nTileFlags & 0x20000000)
+	if (nTileInfo.bObjectWall)
 	{
-		pTileData->dwFlags |= 0x800;
+		pTileData->dwFlags |= MAPTILE_OBJECT_WALL;
 	}
 
-	if (nTileFlags & 4)
+	if (nTileInfo.bLOS)
 	{
-		pTileData->dwFlags |= 0x2000;
+		pTileData->dwFlags |= MAPTILE_LOS;
 	}
 
-	nFlags = D2CMP_10079_GetTileFlags(pTileData->pTile);
-	if (nFlags & 1)
+	uint16_t nFlags = D2CMP_10079_GetTileFlags(pTileData->pTile);
+	if (nFlags & TILE_FLAGS_OTHER)
 	{
-		pTileData->dwFlags |= 4;
+		pTileData->dwFlags |= MAPTILE_TREES;
 	}
 
-	if (nFlags & 4)
+	if (nFlags & TILE_FLAGS_WOOD_OBJ)
 	{
-		pTileData->dwFlags |= 0x800;
+		pTileData->dwFlags |= MAPTILE_OBJECT_WALL;
 	}
 }
 

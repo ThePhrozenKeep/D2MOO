@@ -40,7 +40,7 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 //D2Common.0x6FD889C0
 D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, unsigned int a5, D2TileLibraryEntryStrc* pTileLibraryEntry, int a7);
 //D2Common.0x6FD88AC0
-void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int a3, int a4, int nX, int nY);
+void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, uint32_t nPackedTileInformation, int a4, int nX, int nY);
 //D2Common.0x6FD88BE0
 void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int a2, int nX, int nY, int a6);
 //D2Common.0x6FD88DD0
