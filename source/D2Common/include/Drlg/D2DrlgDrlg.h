@@ -101,23 +101,23 @@ enum D2MapTileFlags
 {
 	MAPTILE_UNK_0x1 = 0x000001,
 	MAPTILE_WALL_EXIT = 0x000002, // warps, door exit, 
-	MAPTILE_TREES = 0x000004,
+	MAPTILE_TREES = 0x000004, // Could also be delimiting an enclosure inside another area. Probably misnamed because not only trees ?
 	MAPTILE_HIDDEN = 0x000008, // used by warps & others // aka skip automap
 	MAPTILE_UNK_0x10 = 0x000010,
 	MAPTILE_HASPRESETUNITS = 0x000020, // used for orientations 8-9; spawn doors & towers etc
 	MAPTILE_UNWALKABLE = 0x000040,
 	MAPTILE_FILL_LOS = 0x000080, // all subtiles will get wall collision; 
 	MAPTILE_FLOOR_LINKER_PATH = 0x000100, // the floor is near a wp or forms a path within level or to another level
-	MAPTILE_UNK_0x200 = 0x000200,
+	MAPTILE_UNK_0x200 = 0x000200, // Reveal hidden ?
 	MAPTILE_PITCH_BLACK = 0x000400, // the lighting changed, R&B=0 
 	MAPTILE_OBJECT_WALL = 0x000800, // wall tile made of crops: barrels / crates / benches / tables (material flag 0x04)
 	MAPTILE_UNK_0x001000 = 0x001000,
 	MAPTILE_LOS = 0x002000,
-	MAPTILE_WALL1 = 0x004000,
-	MAPTILE_WALL2 = 0x008000,
-	MAPTILE_WALL3 = 0x00C000, // weird
-	MAPTILE_WALL4 = 0x010000,
+	MAPTILE_WALL_LAYER_BIT = 14,
+	MAPTILE_WALL_LAYER_MASK = 0b111 << MAPTILE_WALL_LAYER_BIT, // 3bits value indicating the wall layer + 1 (0 indicates no wall?)
 };
+// Helper function
+inline int GetMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT - 1; }
 
 struct D2DrlgCoordStrc
 {
