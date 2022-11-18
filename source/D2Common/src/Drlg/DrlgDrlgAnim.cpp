@@ -94,10 +94,15 @@ void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2RoomExStrc* pRoomEx, D2Drlg
 	}
 }
 
-// Helper function
-int AnimationFrameFixedPointToInteger(int nFixedPointFrame)
+// Helper functions
+static int AnimationFrameFixedPointToInteger(int nFixedPointFrame)
 {
 	return nFixedPointFrame >> 8;
+}
+
+static int AnimationFrameIntegerToFixedPoint(int nIntegerPart)
+{
+	return nIntegerPart << 8;
 }
 
 //D2Common.0x6FD756B0
@@ -118,7 +123,7 @@ void __fastcall DRLGANIM_AnimateTiles(D2RoomExStrc* pRoomEx)
 					pTileData->dwFlags |= MAPTILE_HIDDEN;
 				}
 
-				j->nCurrentFrame = (j->nCurrentFrame + j->nAnimationSpeed) % AnimationFrameFixedPointToInteger(j->nFrames);
+				j->nCurrentFrame = (j->nCurrentFrame + j->nAnimationSpeed) % AnimationFrameIntegerToFixedPoint(j->nFrames);
 
 				pTileData = j->ppMapTileData[AnimationFrameFixedPointToInteger(j->nCurrentFrame)];
 				if (pTileData)
