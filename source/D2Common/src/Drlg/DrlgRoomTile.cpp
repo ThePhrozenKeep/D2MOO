@@ -389,11 +389,8 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 }
 
 //D2Common.0x6FD88DD0
-void __fastcall DRLGROOMTILE_InitTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nX, int nY, int nTileFlags, D2TileLibraryEntryStrc* pTileLibraryEntry)
+void __fastcall DRLGROOMTILE_InitTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry)
 {
-	int nPosX = 0;
-	int nPosY = 0;
-
 	pTileData->pTile = pTileLibraryEntry;
 	pTileData->nTileType = TILETYPE_FLOORS;
 	pTileData->dwFlags = 0;
@@ -407,8 +404,8 @@ void __fastcall DRLGROOMTILE_InitTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataS
 		pTileData->nPosX = nX - pRoomEx->nTileXPos;
 		pTileData->nPosY = nY - pRoomEx->nTileYPos;
 
-		nPosX = nX;
-		nPosY = nY + 1;
+		int nPosX = nX;
+		int nPosY = nY + 1;
 
 		DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
 
@@ -416,7 +413,7 @@ void __fastcall DRLGROOMTILE_InitTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataS
 		pTileData->nHeight = nPosY + 40;
 	}
 
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nTileFlags, 0, nX, nY);
+	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, TILETYPE_FLOORS, nX, nY);
 }
 
 //D2Common.0x6FD88E60
