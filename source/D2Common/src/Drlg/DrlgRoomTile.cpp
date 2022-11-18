@@ -461,14 +461,9 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitFloorTileData(D2RoomExStrc* pRoo
 }
 
 //D2Common.0x6FD88F10
-D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, int nTileFlags, D2TileLibraryEntryStrc* pTileLibraryEntry)
+D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry)
 {
-	D2DrlgTileDataStrc* pTileData = NULL;
-
-	int nPosX = 0;
-	int nPosY = 0;
-
-	pTileData = &pRoomEx->pTileGrid->pTiles.pRoofTiles[pRoomEx->pTileGrid->nShadows];
+	D2DrlgTileDataStrc* pTileData = &pRoomEx->pTileGrid->pTiles.pRoofTiles[pRoomEx->pTileGrid->nShadows];
 	if (ppTileData)
 	{
 		pTileData->unk0x20 = *ppTileData;
@@ -483,8 +478,8 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRo
 	pTileData->nPosX = nX - pRoomEx->nTileXPos;
 	pTileData->nPosY = nY - pRoomEx->nTileYPos;
 
-	nPosX = nX;
-	nPosY = nY + 1;
+	int nPosX = nX;
+	int nPosY = nY + 1;
 
 	DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
 
@@ -500,7 +495,7 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRo
 	pTileData->nRed = -1;
 	pTileData->pTile = pTileLibraryEntry;
 
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nTileFlags, 13, nX, nY);
+	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, TILETYPE_SHADOWS, nX, nY);
 
 	return pTileData;
 }
