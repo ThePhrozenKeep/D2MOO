@@ -104,13 +104,9 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 }
 
 //D2Common.0x6FD889C0
-D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, unsigned int nTileFlags, D2TileLibraryEntryStrc* pTileLibraryEntry, int nTileType)
+D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry, int nTileType)
 {
-	D2DrlgTileDataStrc* pTileData = NULL;
-	int nPosX = 0;
-	int nPosY = 0;
-
-	pTileData = &pRoomEx->pTileGrid->pTiles.pWallTiles[pRoomEx->pTileGrid->nWalls];
+	D2DrlgTileDataStrc* pTileData = pTileData = &pRoomEx->pTileGrid->pTiles.pWallTiles[pRoomEx->pTileGrid->nWalls];
 	if (ppTileData)
 	{
 		pTileData->unk0x20 = *ppTileData;
@@ -118,7 +114,7 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoom
 	}
 	else
 	{
-		pTileData->unk0x20 = NULL;
+		pTileData->unk0x20 = nullptr;
 	}
 
 	++pRoomEx->pTileGrid->nWalls;
@@ -126,8 +122,8 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoom
 	pTileData->nPosX = nX - pRoomEx->nTileXPos;
 	pTileData->nPosY = nY - pRoomEx->nTileYPos;
 
-	nPosX = nX;
-	nPosY = nY + 1;
+	int nPosX = nX;
+	int nPosY = nY + 1;
 
 	DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
 
@@ -143,11 +139,11 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoom
 	pTileData->nBlue = -1;
 	pTileData->nRed = -1;
 
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nTileFlags, nTileType, nX, nY);
+	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, nTileType, nX, nY);
 
 	if (nTileType == TILETYPE_RIGHTPARTOFNORTHCORNERWALL)
 	{
-		DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, DRLGROOMTILE_InitWallTileData(pRoomEx, ppTileData, nX, nY, nTileFlags, DRLGROOMTILE_GetTileCache(pRoomEx, 4, nTileFlags), 4), nTileFlags, 4, nX, nY);
+		DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, DRLGROOMTILE_InitWallTileData(pRoomEx, ppTileData, nX, nY, nPackedTileInformation, DRLGROOMTILE_GetTileCache(pRoomEx, TILETYPE_LEFTPARTOFNORTHCORNERWALL, nPackedTileInformation), TILETYPE_LEFTPARTOFNORTHCORNERWALL), nPackedTileInformation, TILETYPE_LEFTPARTOFNORTHCORNERWALL, nX, nY);
 	}
 
 	return pTileData;
