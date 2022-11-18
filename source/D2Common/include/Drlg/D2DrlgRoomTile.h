@@ -36,7 +36,7 @@ union D2C_PackedTileInformation
 #pragma pack()
 
 //D2Common.0x6FD88860
-D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int a2, unsigned int a3);
+D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int a2, uint32_t nPackedTileInformation);
 //D2Common.0x6FD889C0
 D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry, int a7);
 //D2Common.0x6FD88AC0

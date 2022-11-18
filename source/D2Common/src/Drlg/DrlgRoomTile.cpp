@@ -41,30 +41,17 @@ struct D2UnkDrlgRoomTileStrc2
 
 
 //D2Common.0x6FD88860
-D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int nType, unsigned int nTileFlags)
+D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoomEx, int nType, uint32_t nPackedTileInformation)
 {
 	D2TileLibraryEntryStrc* ppTileLibraryEntries[40] = {};
-	unsigned int nMax = 0;
-	int nEntries = 0;
-	int nRand = 0;
-	int nId = 0;
-	uint8_t nSequence = 0;
-	uint8_t nStyle = 0;
 
-	if (nTileFlags)
-	{
-		nStyle = (nTileFlags >> 20) & 63;
-		nSequence = BYTE1(nTileFlags);
-	}
-	else
-	{
-		nStyle = 0;
-		nSequence = 0;
-	}
+	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+	const uint32_t nStyle = nTileInformation.nTileStyle;
+	const uint32_t nSequence = nTileInformation.nTileSequence;
 
-	nEntries = D2CMP_10088_GetTiles(pRoomEx->pTiles, nType, nStyle, nSequence, ppTileLibraryEntries, ARRAY_SIZE(ppTileLibraryEntries));
-	if (nEntries)
+	if (int nEntries = D2CMP_10088_GetTiles(pRoomEx->pTiles, nType, nStyle, nSequence, ppTileLibraryEntries, ARRAY_SIZE(ppTileLibraryEntries)))
 	{
+		int nMax = 0;
 		for (int i = 0; i < nEntries; ++i)
 		{
 			if (!ppTileLibraryEntries[i])
@@ -75,7 +62,8 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 			nMax += D2CMP_10081_GetTileRarity(ppTileLibraryEntries[i]);
 		}
 
-		nRand = SEED_RollLimitedRandomNumber(&pRoomEx->pSeed, nMax) + 1;
+		int nId = 0;
+		int32_t nRand = SEED_RollLimitedRandomNumber(&pRoomEx->pSeed, nMax) + 1;
 		if (nMax)
 		{
 			while (nEntries > 1 && nRand > 0)
@@ -94,7 +82,7 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 	}
 	else
 	{
-		if (!D2CMP_10088_GetTiles(pRoomEx->pTiles, 10, 0, 0, ppTileLibraryEntries, ARRAY_SIZE(ppTileLibraryEntries)))
+		if (!D2CMP_10088_GetTiles(pRoomEx->pTiles, TILETYPE_SPECIALTILES_10, 0, 0, ppTileLibraryEntries, ARRAY_SIZE(ppTileLibraryEntries)))
 		{
 			FOG_10025("nSize", __FILE__, __LINE__);
 		}
