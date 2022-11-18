@@ -29,9 +29,9 @@ struct D2UnkDrlgRoomTileStrc
 
 struct D2UnkDrlgRoomTileStrc2
 {
-	int field_0;
-	int field_4;
-	int field_8;
+	int nTileStyle;
+	int nTileSequence;
+	BOOL bIsRightWallWithDoor;
 	int nUnitId;
 	int nUnitType;
 	int nX;
@@ -239,8 +239,7 @@ void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2Dr
 }
 
 //D2Common.0x6FD88BE0
-//TODO: v6, v10, v26
-void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nTileFlags, int nX, int nY, int nTileType)
+void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, uint32_t nPackedTileInformation, int nX, int nY, int nTileType)
 {
 	static const D2UnkDrlgRoomTileStrc stru_6FDD0DA8[] =
 	{
@@ -285,78 +284,74 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 
 	static const D2UnkDrlgRoomTileStrc2 stru_6FDD0F68[] =
 	{
-		{ 7, 0, 1, OBJECT_DOORGATERIGHT, UNIT_OBJECT, 5, 0 },
-		{ 7, 0, 0, OBJECT_DOORGATELEFT, UNIT_OBJECT, 0, 5 },
-		{ 5, 0, 1, OBJECT_DOORWOODENRIGHT, UNIT_OBJECT, 0, 0 },
-		{ 5, 0, 0, OBJECT_DOORWOODENLEFT, UNIT_OBJECT, 0, 0 },
-		{ 6, 0, 1, OBJECT_DOORMONASTERYDOUBLERIGHT, UNIT_OBJECT, 5, -2 },
-		{ 4, 0, 1, OBJECT_DOORCOURTYARDRIGHT, UNIT_OBJECT, 1, 2 },
-		{ 4, 0, 0, OBJECT_DOORCOURTYARDLEFT, UNIT_OBJECT, 0, 0 },
-		{ 4, 3, 1, OBJECT_DOORCATHEDRALDOUBLE, UNIT_OBJECT, 1, 0 },
-		{ 1, 2, 0, OBJECT_DOORCATHEDRALLEFT, UNIT_OBJECT, 0, 3 },
-		{ 1, 2, 1, OBJECT_DOORCATHEDRALRIGHT, UNIT_OBJECT, 3, 0 },
-		{ 0, 0, 1, OBJECT_DOORWOODENRIGHT, UNIT_OBJECT, 0, 0 },
-		{ 0, 0, 0, OBJECT_DOORWOODENLEFT2, UNIT_OBJECT, 0, 0 },
-		{ 2, 0, 1, OBJECT_ANDARIELS_DOOR, UNIT_OBJECT, 5, 0 },
-		{ 0, 1, 1, OBJECT_IRONGRATEDOORRIGHT, UNIT_OBJECT, 2, 0 },
-		{ 0, 1, 0, OBJECT_IRONGRATEDOORLEFT, UNIT_OBJECT, 0, 2 },
-		{ 5, 0, 1, OBJECT_WOODENGRATEDOORRIGHT, UNIT_OBJECT, 2, 0 },
-		{ 4, 0, 0, OBJECT_WOODENGRATEDOORLEFT, UNIT_OBJECT, 0, 2 },
-		{ 0, 0, 1, OBJECT_WOODENDOORRIGHT, UNIT_OBJECT, 2, 0 },
-		{ 0, 0, 0, OBJECT_WOODENDOORLEFT, UNIT_OBJECT, 0, 2 },
-		{ 2, 4, 1, OBJECT_TOMBDOORRIGHT, UNIT_OBJECT, 1, 0 },
-		{ 2, 1, 0, OBJECT_TOMBDOORLEFT, UNIT_OBJECT, 0, 2 },
-		{ 0, 1, 1, OBJECT_SLIMEDOOR1, UNIT_OBJECT, 0, 0 },
-		{ 0, 1, 0, OBJECT_SLIMEDOOR2, UNIT_OBJECT, 0, 0 },
-		{ 3, 3, 0, OBJECT_HARROGATH_TOWN_MAIN_GATE, UNIT_OBJECT, -2, 4 },
+		{ 7, 0, true,  OBJECT_DOORGATERIGHT, UNIT_OBJECT, 5, 0 },
+		{ 7, 0, false, OBJECT_DOORGATELEFT, UNIT_OBJECT, 0, 5 },
+		{ 5, 0, true,  OBJECT_DOORWOODENRIGHT, UNIT_OBJECT, 0, 0 },
+		{ 5, 0, false, OBJECT_DOORWOODENLEFT, UNIT_OBJECT, 0, 0 },
+		{ 6, 0, true,  OBJECT_DOORMONASTERYDOUBLERIGHT, UNIT_OBJECT, 5, -2 },
+		{ 4, 0, true,  OBJECT_DOORCOURTYARDRIGHT, UNIT_OBJECT, 1, 2 },
+		{ 4, 0, false, OBJECT_DOORCOURTYARDLEFT, UNIT_OBJECT, 0, 0 },
+		{ 4, 3, true,  OBJECT_DOORCATHEDRALDOUBLE, UNIT_OBJECT, 1, 0 },
+		{ 1, 2, false, OBJECT_DOORCATHEDRALLEFT, UNIT_OBJECT, 0, 3 },
+		{ 1, 2, true,  OBJECT_DOORCATHEDRALRIGHT, UNIT_OBJECT, 3, 0 },
+		{ 0, 0, true,  OBJECT_DOORWOODENRIGHT, UNIT_OBJECT, 0, 0 },
+		{ 0, 0, false, OBJECT_DOORWOODENLEFT2, UNIT_OBJECT, 0, 0 },
+		{ 2, 0, true,  OBJECT_ANDARIELS_DOOR, UNIT_OBJECT, 5, 0 },
+		{ 0, 1, true,  OBJECT_IRONGRATEDOORRIGHT, UNIT_OBJECT, 2, 0 },
+		{ 0, 1, false, OBJECT_IRONGRATEDOORLEFT, UNIT_OBJECT, 0, 2 },
+		{ 5, 0, true,  OBJECT_WOODENGRATEDOORRIGHT, UNIT_OBJECT, 2, 0 },
+		{ 4, 0, false, OBJECT_WOODENGRATEDOORLEFT, UNIT_OBJECT, 0, 2 },
+		{ 0, 0, true,  OBJECT_WOODENDOORRIGHT, UNIT_OBJECT, 2, 0 },
+		{ 0, 0, false, OBJECT_WOODENDOORLEFT, UNIT_OBJECT, 0, 2 },
+		{ 2, 4, true,  OBJECT_TOMBDOORRIGHT, UNIT_OBJECT, 1, 0 },
+		{ 2, 1, false, OBJECT_TOMBDOORLEFT, UNIT_OBJECT, 0, 2 },
+		{ 0, 1, true,  OBJECT_SLIMEDOOR1, UNIT_OBJECT, 0, 0 },
+		{ 0, 1, false, OBJECT_SLIMEDOOR2, UNIT_OBJECT, 0, 0 },
+		{ 3, 3, false, OBJECT_HARROGATH_TOWN_MAIN_GATE, UNIT_OBJECT, -2, 4 },
 
-		{ 2, 1, 0, MONSTER_BARRICADETOWER, UNIT_MONSTER, 1, 2 },
-		{ 2, 1, 1, MONSTER_BARRICADETOWER, UNIT_MONSTER, 2, 1 },
-		{ 2, 6, 0, MONSTER_BARRICADETOWER, UNIT_MONSTER, 1, 1 },
-		{ 2, 2, 0, MONSTER_BARRICADEDOOR2, UNIT_MONSTER, 0, 1 },
-		{ 2, 3, 1, MONSTER_BARRICADEDOOR1, UNIT_MONSTER, 1, 0 },
-		{ 26, 0, 0, MONSTER_PRISONDOOR, UNIT_MONSTER, 0, 1 },
-		{ 2, 4, 1, MONSTER_BARRICADEWALL1, UNIT_MONSTER, 0, 0 },
-		{ 2, 4, 0, MONSTER_BARRICADEWALL2, UNIT_MONSTER, 0, 0 },
+		{ 2,  1, false, MONSTER_BARRICADETOWER, UNIT_MONSTER, 1, 2 },
+		{ 2,  1, true,  MONSTER_BARRICADETOWER, UNIT_MONSTER, 2, 1 },
+		{ 2,  6, false, MONSTER_BARRICADETOWER, UNIT_MONSTER, 1, 1 },
+		{ 2,  2, false, MONSTER_BARRICADEDOOR2, UNIT_MONSTER, 0, 1 },
+		{ 2,  3, true,  MONSTER_BARRICADEDOOR1, UNIT_MONSTER, 1, 0 },
+		{ 26, 0, false, MONSTER_PRISONDOOR, UNIT_MONSTER, 0, 1 },
+		{ 2,  4, true,  MONSTER_BARRICADEWALL1, UNIT_MONSTER, 0, 0 },
+		{ 2,  4, false, MONSTER_BARRICADEWALL2, UNIT_MONSTER, 0, 0 },
 
-		{ 29, 0, 1, OBJECT_PERMANENT_TOWN_PORTAL, UNIT_OBJECT, 2, 0 },
-		{ 29, 0, 0, OBJECT_PERMANENT_TOWN_PORTAL, UNIT_OBJECT, 0, 2 },
+		{ 29, 0, true,  OBJECT_PERMANENT_TOWN_PORTAL, UNIT_OBJECT, 2, 0 },
+		{ 29, 0, false, OBJECT_PERMANENT_TOWN_PORTAL, UNIT_OBJECT, 0, 2 },
 	};
 
-	int nUnitId = 0;
-	int nPosX = 0;
-	int nPosY = 0;
-	int v26 = 0;
-	int v10 = 0;
-	int v6 = 0;
+	BOOL bIsRightWallWithDoor = 0;
 
 	if (pTileData)
 	{
-		if (pTileData->dwFlags & 0x20)
+		if (pTileData->dwFlags & MAPTILE_HASPRESETUNITS)
 		{
 			return;
 		}
 
-		v6 = pTileData->nTileType == TILETYPE_RIGHTWALLWITHDOOR;
+		bIsRightWallWithDoor = pTileData->nTileType == TILETYPE_RIGHTWALLWITHDOOR;
 	}
 	else
 	{
-		v6 = nTileType == TILETYPE_RIGHTWALLWITHDOOR;
+		bIsRightWallWithDoor = nTileType == TILETYPE_RIGHTWALLWITHDOOR;
 	}
 
 	for (int i = 0; i < ARRAY_SIZE(stru_6FDD0DA8); ++i)
 	{
 		if (stru_6FDD0DA8[i].nLevelId == pRoomEx->pLevel->nLevelId)
 		{
-			v10 = ((unsigned int)nTileFlags >> 20) & 0x3F;
-			v26 = BYTE1(nTileFlags);
+			D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+			const uint32_t nTileStyle = nTileInformation.nTileStyle;
+			const uint32_t nTileSequence = nTileInformation.nTileSequence;
 
 			for (int j = stru_6FDD0DA8[i].nArrayStartId; j <= stru_6FDD0DA8[i].nArrayEndId; ++j)
 			{
-				if (v10 == stru_6FDD0F68[j].field_0 && v26 == stru_6FDD0F68[j].field_4 && v6 == stru_6FDD0F68[j].field_8)
+				if (nTileStyle == stru_6FDD0F68[j].nTileStyle && nTileSequence == stru_6FDD0F68[j].nTileSequence && bIsRightWallWithDoor == stru_6FDD0F68[j].bIsRightWallWithDoor)
 				{
-					nPosX = nX - pRoomEx->nTileXPos;
-					nPosY = nY - pRoomEx->nTileYPos;
+					int nPosX = nX - pRoomEx->nTileXPos;
+					int nPosY = nY - pRoomEx->nTileYPos;
 
 					DUNGEON_ExpandCoords(&nPosX, &nPosY);
 
@@ -365,7 +360,7 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 
 					if (nPosX >= 0 && nPosY >= 0 && nPosX < 5 * pRoomEx->nTileWidth && nPosY < 5 * pRoomEx->nTileHeight)
 					{
-						nUnitId = stru_6FDD0F68[j].nUnitId;
+						const int nUnitId = stru_6FDD0F68[j].nUnitId;
 
 						switch (stru_6FDD0F68[j].nUnitType)
 						{
@@ -387,7 +382,7 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 
 						if (pTileData)
 						{
-							pTileData->dwFlags |= 0x20;
+							pTileData->dwFlags |= MAPTILE_HASPRESETUNITS;
 						}
 					}
 					return;
