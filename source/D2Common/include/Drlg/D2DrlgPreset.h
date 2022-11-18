@@ -6,6 +6,13 @@
 
 #pragma pack(1)
 
+enum D2DrlgPresetRoomFlags
+{
+	DRLGPRESETROOMFLAG_NONE = 0,
+	DRLGPRESETROOMFLAG_SINGLE_ROOM = 1 << 0,
+	DRLGPRESETROOMFLAG_HAS_MAP_DS1 = 1 << 1, // needs confirmation
+};
+
 struct D2LevelFileListStrc
 {
 	char szPath[D2_MAX_PATH];			//0x00
@@ -28,8 +35,8 @@ struct D2PresetUnitStrc
 
 struct D2DrlgMapStrc
 {
-	int32_t nLevelPrest;						//0x00
-	int32_t nPickedFile;						//0x04
+	int32_t nLevelPrest;					//0x00
+	int32_t nPickedFile;					//0x04
 	D2LvlPrestTxt* pLvlPrestTxtRecord;		//0x08
 	D2DrlgFileStrc* pFile;					//0x0C
 	D2DrlgCoordStrc pDrlgCoord;				//0x10
@@ -37,10 +44,10 @@ struct D2DrlgMapStrc
 	D2DrlgGridStrc pMapGrid;				//0x24
 	D2PresetUnitStrc* pPresetUnit;			//0x38
 	BOOL bInited;							//0x3C
-	int32_t nPops;								//0x40
-	int32_t* pPopsIndex;						//0x44
-	int32_t* pPopsSubIndex;						//0x48
-	int32_t* pPopsOrientation;					//0x4C
+	int32_t nPops;							//0x40
+	int32_t* pPopsIndex;					//0x44
+	int32_t* pPopsSubIndex;					//0x48
+	int32_t* pPopsOrientation;				//0x4C
 	D2DrlgCoordStrc* pPopsLocation;			//0x50
 	D2DrlgMapStrc* pNext;					//0x54
 };
@@ -60,7 +67,7 @@ struct D2DrlgPresetRoomStrc
 		uint32_t dwFlags;						//0x0C
 	};
 	D2DrlgGridStrc pWallGrid[4];			//0x10
-	D2DrlgGridStrc pOrientationGrid[4];		//0x60
+	D2DrlgGridStrc pTileTypeGrid[4];		//0x60 aka pOrientationGrid
 	D2DrlgGridStrc pFloorGrid[2];			//0xB0
 	D2DrlgGridStrc pCellGrid;				//0xD8
 	D2DrlgGridStrc* pMazeGrid;				//0xEC
@@ -70,6 +77,11 @@ struct D2DrlgPresetRoomStrc
 
 #pragma pack()
 
+//Helper function
+inline bool DRLGMAZE_HasMapDS1(D2RoomExStrc* pRoomEx)
+{
+	return pRoomEx->pMaze->nFlags & DRLGPRESETROOMFLAG_HAS_MAP_DS1;
+}
 
 //D2Common.0x6FD859A0 (#11222)
 D2COMMON_DLL_DECL int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t a1);
@@ -142,7 +154,7 @@ void __fastcall DRLGPRESET_GenerateLevel(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD88810
 void __fastcall DRLGPRESET_ResetDrlgMap(D2DrlgLevelStrc* pLevel, BOOL bKeepPreset);
 //D2Common.0x6FD88850
-int __fastcall DRLGPRESET_MapOrientationLayer(int nId);
+int __fastcall DRLGPRESET_MapTileType(int nId);
 
 // D2Common.0x6FDEA700
 extern D2LevelFileListStrc* gpLevelFilesList_6FDEA700;

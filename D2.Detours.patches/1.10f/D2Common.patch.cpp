@@ -5,6 +5,11 @@
 #include <Drlg/D2DrlgOutRoom.h>
 #include <Drlg/D2DrlgRoomTile.h>
 #include <Drlg/D2DrlgActivate.h>
+#include <Drlg/D2DrlgOutdoors.h>
+#include <Drlg/D2DrlgTileSub.h>
+#include <Drlg/D2DrlgOutPlace.h>
+
+//#define DISABLE_ALL_PATCHES
 
 extern "C" {
     __declspec(dllexport)
@@ -1355,11 +1360,16 @@ extern "C" {
 __declspec(dllexport)
 PatchAction __cdecl GetPatchAction(int ordinal)
 {
+#ifdef DISABLE_ALL_PATCHES
+    return PatchAction::Ignore;
+#else
+
     if (ordinal < GetBaseOrdinal() || ordinal > GetLastOrdinal())
         return PatchAction::FunctionReplacePatchByOriginal;
     
     static_assert(GetOrdinalCount() == (sizeof(patchActions) / sizeof(*patchActions)), "Make sure we have the right number of ordinal patch entries");
     return ::patchActions[ordinal - GetBaseOrdinal()];
+#endif
 }
 
 static const int D2CommonImageBase = 0x6FD40000;
@@ -1394,14 +1404,30 @@ static ExtraPatchAction extraPatchActions[] = {
 
     // Known broken (or at least unable to function without patching other functions/variables) functions
     { 0x6FD87130 - D2CommonImageBase, &DRLGPRESET_AddPresetRoomMapTiles, PatchAction::FunctionReplacePatchByOriginal},
-    { 0x6FD89FA0 - D2CommonImageBase, &DRLGROOMTILE_InitRoomGrids, PatchAction::FunctionReplacePatchByOriginal},
-    { 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::FunctionReplacePatchByOriginal},
+    //{ 0x6FD89FA0 - D2CommonImageBase, &DRLGROOMTILE_InitRoomGrids, PatchAction::FunctionReplacePatchByOriginal},
+    { 0x6FD8AA80 - D2CommonImageBase, &sub_6FD8AA80, PatchAction::FunctionReplacePatchByOriginal},
+
+    // The following one is broken for sure
+
+    // Fixed or working
+    //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},
+    //{ 0x6FD8ACE0 - D2CommonImageBase, &sub_6FD8ACE0, PatchAction::FunctionReplacePatchByOriginal},
+    //{ 0x6FD7EFE0 - D2CommonImageBase, &DRLG_OUTDOORS_GenerateDirtPath, PatchAction::FunctionReplacePatchByOriginal},  
+    
+    // this is the one that leads to issues
+    //{ 0x6FD73450 - D2CommonImageBase, &DRLGACTIVATE_RoomExSetStatus_ClientInSight, PatchAction::FunctionReplacePatchByOriginal},
 
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
 __declspec(dllexport)
-constexpr int __cdecl GetExtraPatchActionsCount() { return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); }
+constexpr int __cdecl GetExtraPatchActionsCount() { 
+#ifdef DISABLE_ALL_PATCHES
+    return 0;
+#else
+    return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); 
+#endif
+}
 
 __declspec(dllexport)
 ExtraPatchAction* __cdecl GetExtraPatchAction(int index)

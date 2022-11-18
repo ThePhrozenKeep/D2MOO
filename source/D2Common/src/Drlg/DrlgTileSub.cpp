@@ -163,18 +163,18 @@ BOOL __fastcall DRLGTILESUB_TestReplaceSubPreset(int a1, int a2, D2UnkOutdoorStr
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			if (pLvlSubTxtRecord->pDrlgFile->nFloors)
+			if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers)
 			{
-				nFloorFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
+				nFloorFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
 			}
 			else
 			{
 				nFloorFlags = 0;
 			}
 
-			if (pLvlSubTxtRecord->pDrlgFile->nWalls)
+			if (pLvlSubTxtRecord->pDrlgFile->nWallLayers)
 			{
-				nWallFlags = DRLGGRID_GetGridFlags(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
+				nWallFlags = DRLGGRID_GetGridEntry(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
 			}
 			else
 			{
@@ -184,7 +184,7 @@ BOOL __fastcall DRLGTILESUB_TestReplaceSubPreset(int a1, int a2, D2UnkOutdoorStr
 			nX = v9 + i * pLvlSubTxtRecord->dwGridSize;
 			nY = v8 + j * pLvlSubTxtRecord->dwGridSize;
 
-			v15 = DRLGGRID_GetGridFlags(a3->pGrid1, nX, nY);
+			v15 = DRLGGRID_GetGridEntry(a3->pGrid1, nX, nY);
 			if (a3->field_24)
 			{
 				if (!a3->field_24(a3->pLevel, nX, nY, v15, nFloorFlags, nWallFlags))
@@ -236,18 +236,18 @@ void __fastcall DRLGTILESUB_ReplaceSubPreset(int a1, int a2, D2UnkOutdoorStrc* a
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			if (pLvlSubTxtRecord->pDrlgFile->nWalls)
+			if (pLvlSubTxtRecord->pDrlgFile->nWallLayers)
 			{
-				nWallFlags = DRLGGRID_GetGridFlags(pLvlSubTxtRecord->pWallGrid, a6 + pSubstGroup->field_0 + i, pSubstGroup->field_4 + j);
+				nWallFlags = DRLGGRID_GetGridEntry(pLvlSubTxtRecord->pWallGrid, a6 + pSubstGroup->field_0 + i, pSubstGroup->field_4 + j);
 			}
 			else
 			{
 				nWallFlags = 0;
 			}
 
-			if (pLvlSubTxtRecord->pDrlgFile->nFloors)
+			if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers)
 			{
-				nFloorFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pFloorGrid, a6 + pSubstGroup->field_0 + i, pSubstGroup->field_4 + j);
+				nFloorFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, a6 + pSubstGroup->field_0 + i, pSubstGroup->field_4 + j);
 			}
 			else
 			{
@@ -361,7 +361,6 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 //D2Common.0x6FD8ACE0
 void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* a4, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord, int a7)
 {
-	D2DrlgGridStrc** ppDrlgGrid = NULL;
 	int nCounter = 0;
 	int nFlags = 0;
 	int nMinX = 0;
@@ -373,7 +372,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			if (DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4) & 0x8000000)
+			if (DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4) & 0x8000000)
 			{
 				++nCounter;
 			}
@@ -386,9 +385,9 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			if (pLvlSubTxtRecord->pDrlgFile->nFloors)
+			if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers)
 			{
-				nFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
 			}
 			else
 			{
@@ -401,25 +400,23 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 				DRLGGRID_AlterGridFlag(a4->pFloorGrid, nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
 			}
 
-			ppDrlgGrid = (D2DrlgGridStrc**)&a4->pOutdoorRoom->pOrientationGrid;
-			for (int k = 0; k < pLvlSubTxtRecord->pDrlgFile->nWalls; ++k)
+			D2_ASSERT(pLvlSubTxtRecord->pDrlgFile->nWallLayers <= DRLG_MAX_WALL_LAYERS);
+			for (int nLayer = 0; nLayer < pLvlSubTxtRecord->pDrlgFile->nWallLayers; ++nLayer)
 			{
-				nFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pWallGrid[k], i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
-				if (nFlags & 1 && ppDrlgGrid[4])
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pWallGrid[nLayer], i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
+				if (nFlags & 1 && a4->pWallsGrids[nLayer])
 				{
-					DRLGGRID_AlterGridFlag(ppDrlgGrid[4], nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
+					DRLGGRID_AlterGridFlag(a4->pWallsGrids[nLayer], nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
 				}
 
-				nFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pOrientationGrid[k], i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
-				if (nFlags && *ppDrlgGrid)
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pTileTypeGrid[nLayer], i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
+				if (nFlags && a4->pOutdoorRooms[nLayer])
 				{
-					DRLGGRID_AlterGridFlag(*ppDrlgGrid, nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
+					DRLGGRID_AlterGridFlag(&a4->pOutdoorRooms[nLayer]->pTileTypeGrid, nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
 				}
-
-				++ppDrlgGrid;
 			}
 
-			nFlags = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
+			nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
 			if (nFlags & 0x8000000)
 			{
 				sub_6FD88FD0(a4->pRoomEx, nX + i + a4->pRoomEx->nTileXPos, nY + j + a4->pRoomEx->nTileYPos, nFlags);
@@ -448,30 +445,26 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 //D2Common.0x6FD8B010
 BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord)
 {
-	D2DrlgGridStrc** ppDrlgGrid = NULL;
 	int nFlags = 0;
 
 	for (int j = 0; j < pSubstGroup->field_C; ++j)
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			if (DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4) & 2 || pLvlSubTxtRecord->pWallGrid[0].nWidth && DRLGGRID_GetGridFlags(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4) & 1)
+			if (DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4) & 2 || pLvlSubTxtRecord->pWallGrid[0].nWidth && DRLGGRID_GetGridEntry(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4) & 1)
 			{
-				nFlags = DRLGGRID_GetGridFlags(a3->pFloorGrid, a1 + i, a2 + j);
+				nFlags = DRLGGRID_GetGridEntry(a3->pFloorGrid, a1 + i, a2 + j);
 				if (nFlags & 0x3F0FF00 || !(nFlags & 2))
 				{
 					return FALSE;
 				}
 
-				ppDrlgGrid = &a3->pWallGrid;
-				for (int k = 0; k < a3->field_2C; ++k)
+				for (int nLayer = 0; nLayer < a3->field_2C; ++nLayer)
 				{
-					if (*ppDrlgGrid && DRLGGRID_GetGridFlags(*ppDrlgGrid, a1 + i, a2 + j) & 1)
+					if (a3->pWallsGrids[nLayer] && DRLGGRID_GetGridEntry(a3->pWallsGrids[nLayer], a1 + i, a2 + j) & 1)
 					{
 						return FALSE;
 					}
-
-					++ppDrlgGrid;
 				}
 			}
 		}
@@ -483,7 +476,7 @@ BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 //D2Common.0x6FD8B130
 BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord)
 {
-	int nOrientationFlags = 0;
+	int nTileType = 0;
 	int nFloorFlags1 = 0;
 	int nFloorFlags2 = 0;
 	int nWallFlags1 = 0;
@@ -493,15 +486,15 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 	{
 		for (int i = 0; i < pSubstGroup->field_8; ++i)
 		{
-			nOrientationFlags = DRLGGRID_GetGridFlags(pLvlSubTxtRecord->pOrientationGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
-			if (nOrientationFlags != DRLGGRID_GetGridFlags(&a3->pOutdoorRoom->pOrientationGrid, i + a1, j + a2))
+			nTileType = DRLGGRID_GetGridEntry(pLvlSubTxtRecord->pTileTypeGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
+			if (nTileType != DRLGGRID_GetGridEntry(&a3->pOutdoorRooms[0]->pTileTypeGrid, i + a1, j + a2))
 			{
 				return FALSE;
 			}
 
-			if (pLvlSubTxtRecord->pDrlgFile->nFloors)
+			if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers)
 			{
-				nFloorFlags1 = DRLGGRID_GetGridFlags(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
+				nFloorFlags1 = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
 			}
 			else
 			{
@@ -510,7 +503,7 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 
 			if (nFloorFlags1 & 2)
 			{
-				nFloorFlags2 = DRLGGRID_GetGridFlags(a3->pFloorGrid, i + a1, j + a2);
+				nFloorFlags2 = DRLGGRID_GetGridEntry(a3->pFloorGrid, i + a1, j + a2);
 				if (!(nFloorFlags2 & 2))
 				{
 					return FALSE;
@@ -522,9 +515,9 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 				}
 			}
 
-			if (pLvlSubTxtRecord->pDrlgFile->nWalls)
+			if (pLvlSubTxtRecord->pDrlgFile->nWallLayers)
 			{
-				nWallFlags1 = DRLGGRID_GetGridFlags(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
+				nWallFlags1 = DRLGGRID_GetGridEntry(pLvlSubTxtRecord->pWallGrid, i + pSubstGroup->field_0, j + pSubstGroup->field_4);
 			}
 			else
 			{
@@ -533,7 +526,7 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 
 			if (nWallFlags1 & 1)
 			{
-				nWallFlags2 = DRLGGRID_GetGridFlags(a3->pWallGrid, i + a1, j + a2);
+				nWallFlags2 = DRLGGRID_GetGridEntry(a3->pWallsGrids[0], i + a1, j + a2);
 				if (!(nWallFlags2 & 1))
 				{
 					return FALSE;
@@ -653,18 +646,18 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvl
 			FOG_10025("Substitution File was not saved with substitution groups", __FILE__, __LINE__);
 		}
 
-		for (int i = 0; i < (*ppDrlgFile)->nWalls; ++i)
+		for (int i = 0; i < (*ppDrlgFile)->nWallLayers; ++i)
 		{
 			DRLGGRID_FillNewCellFlags(NULL, &pLvlSubTxtRecord->pWallGrid[i], (int*)(*ppDrlgFile)->pWallLayer[i], &pDrlgCoord, pDrlgCoord.nWidth);
-			DRLGGRID_FillNewCellFlags(NULL, &pLvlSubTxtRecord->pOrientationGrid[i], (int*)(*ppDrlgFile)->pOrientationLayer[i], &pDrlgCoord, pDrlgCoord.nWidth);
+			DRLGGRID_FillNewCellFlags(NULL, &pLvlSubTxtRecord->pTileTypeGrid[i], (int*)(*ppDrlgFile)->pTileTypeLayer[i], &pDrlgCoord, pDrlgCoord.nWidth);
 		}
 
-		for (int i = 1; i < (*ppDrlgFile)->nWalls; ++i)
+		for (int i = 1; i < (*ppDrlgFile)->nWallLayers; ++i)
 		{
 			DRLGGRID_AlterAllGridFlags(&pLvlSubTxtRecord->pWallGrid[i], i << 18, FLAG_OPERATION_OR);
 		}
 
-		if ((*ppDrlgFile)->nFloors)
+		if ((*ppDrlgFile)->nFloorLayers)
 		{
 			DRLGGRID_FillNewCellFlags(NULL, &pLvlSubTxtRecord->pFloorGrid, (int*)(*ppDrlgFile)->pFloorLayer[0], &pDrlgCoord, pDrlgCoord.nWidth);
 		}
@@ -681,10 +674,10 @@ void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord)
 {
 	if (pLvlSubTxtRecord->pDrlgFile)
 	{
-		for (int i = 0; i < pLvlSubTxtRecord->pDrlgFile->nWalls; ++i)
+		for (int i = 0; i < pLvlSubTxtRecord->pDrlgFile->nWallLayers; ++i)
 		{
 			DRLGGRID_FreeGrid(NULL, &pLvlSubTxtRecord->pWallGrid[i]);
-			DRLGGRID_FreeGrid(NULL, &pLvlSubTxtRecord->pOrientationGrid[i]);
+			DRLGGRID_FreeGrid(NULL, &pLvlSubTxtRecord->pTileTypeGrid[i]);
 		}
 
 		DRLGGRID_FreeGrid(NULL, &pLvlSubTxtRecord->pFloorGrid);

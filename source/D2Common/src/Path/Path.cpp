@@ -81,7 +81,7 @@ static const int32_t gaOffsetForPathType_6FDD20D0[] =
 	{ 0},
 	{ 0},
 };
-static_assert(_countof(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
+static_assert(ARRAY_SIZE(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
 typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
 
@@ -106,7 +106,7 @@ static const PathFunctionType scpfnPathFunction[] = {
 	,sub_6FDA7970
 	,nullptr
 };
-static_assert(_countof(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
+static_assert(ARRAY_SIZE(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
 
 //D2Common.0x6FDA8220

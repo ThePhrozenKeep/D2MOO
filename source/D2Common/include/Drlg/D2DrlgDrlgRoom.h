@@ -26,11 +26,11 @@ BOOL __fastcall sub_6FD776B0(D2DrlgOrthStrc* pDrlgOrth1, D2DrlgOrthStrc* pDrlgOr
 //D2Common.0x6FD77740
 BOOL __fastcall sub_6FD77740(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance, int* pX, int* pY);
 //D2Common.0x6FD777B0
-BOOL __fastcall sub_6FD777B0(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance);
+BOOL __fastcall DRLG_ComputeRectanglesManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance);
 //D2Common.0x6FD77800
 BOOL __fastcall sub_6FD77800(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance);
 //D2Common.0x6FD77890
-BOOL __fastcall sub_6FD77890(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int nMaxDistance);
+BOOL __fastcall DRLGMAZE_CheckRoomNotOverlaping(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int nMaxDistance);
 //D2Common.0x6FD77910
 void __fastcall DRLGROOM_AddRoomExToLevel(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77930

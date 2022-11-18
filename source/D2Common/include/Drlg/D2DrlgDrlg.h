@@ -10,6 +10,11 @@ enum D2DrlgFlags
 	DRLGFLAG_REFRESH  = 0x10,
 };
 
+enum D2DrlgLimits {
+	DRLG_MAX_WALL_LAYERS = 4,
+	DRLG_MAX_FLOOR_LAYERS = 2,
+};
+
 enum D2Directions
 {
 	DIRECTION_INVALID = -1,
@@ -67,7 +72,6 @@ enum D2RoomExFlags
 	ROOMEXFLAG_SUBSHRINE_ROW4 = 0x00008000,
 	ROOMEXFLAG_HAS_WAYPOINT = 0x00010000,			//outdoors with subtheme and subwaypoint
 	ROOMEXFLAG_HAS_WAYPOINT_SMALL = 0x00020000,		//waypoint small
-	ROOMEXFLAG_HAS_WAYPOINT_MASK = ROOMEXFLAG_HAS_WAYPOINT | ROOMEXFLAG_HAS_WAYPOINT_SMALL,
 	ROOMEXFLAG_AUTOMAP_REVEAL = 0x00040000,
 	ROOMEXFLAG_NO_LOS_DRAW = 0x00080000,
 	ROOMEXFLAG_HAS_ROOM = 0x00100000,				//an active pRoom structure is attached to this RoomEx
@@ -79,7 +83,13 @@ enum D2RoomExFlags
 	ROOMEXFLAG_PRESET_UNITS_SPAWNED = 0x04000000,	//set after RoomEx preset units have been spawned / prevents respawning them on room reactivation
 	ROOMEXFLAG_ANIMATED_FLOOR = 0x08000000,			//animated floors (river of flame, hell act5)
 
-	ROOMEXFLAG_HAS_WARP_MASK = (ROOMEXFLAG_HAS_WARP_0 | ROOMEXFLAG_HAS_WARP_1 | ROOMEXFLAG_HAS_WARP_2 | ROOMEXFLAG_HAS_WARP_3 | ROOMEXFLAG_HAS_WARP_4 | ROOMEXFLAG_HAS_WARP_5 | ROOMEXFLAG_HAS_WARP_6 | ROOMEXFLAG_HAS_WARP_7),
+	ROOMEXFLAG_HAS_WARP_MASK = ROOMEXFLAG_HAS_WARP_0 | ROOMEXFLAG_HAS_WARP_1 | ROOMEXFLAG_HAS_WARP_2 | ROOMEXFLAG_HAS_WARP_3 | ROOMEXFLAG_HAS_WARP_4 | ROOMEXFLAG_HAS_WARP_5 | ROOMEXFLAG_HAS_WARP_6 | ROOMEXFLAG_HAS_WARP_7,
+	ROOMEXFLAG_SUBSHRINE_ROWS_MASK = ROOMEXFLAG_SUBSHRINE_ROW1 | ROOMEXFLAG_SUBSHRINE_ROW2 | ROOMEXFLAG_SUBSHRINE_ROW3 | ROOMEXFLAG_SUBSHRINE_ROW4,
+	ROOMEXFLAG_HAS_WAYPOINT_MASK = ROOMEXFLAG_HAS_WAYPOINT | ROOMEXFLAG_HAS_WAYPOINT_SMALL,
+
+	ROOMEXFLAG_HAS_WARP_FIRST_BIT = 4,
+	ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT = 12,
+	ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT = 16,
 };
 
 enum D2DrlgLevelFlags
@@ -87,6 +97,27 @@ enum D2DrlgLevelFlags
 	DRLGLEVELFLAG_AUTOMAP_REVEAL = 0x10,
 };
 
+enum D2MapTileFlags
+{
+	MAPTILE_UNK_0x1 = 0x000001,
+	MAPTILE_WALL_EXIT = 0x000002, // warps, door exit, 
+	MAPTILE_TREES = 0x000004,
+	MAPTILE_HIDDEN = 0x000008, // used by warps & others // aka skip automap
+	MAPTILE_UNK_0x10 = 0x000010,
+	MAPTILE_HASPRESETUNITS = 0x000020, // used for orientations 8-9; spawn doors & towers etc
+	MAPTILE_UNWALKABLE = 0x000040,
+	MAPTILE_FILL_LOS = 0x000080, // all subtiles will get wall collision; 
+	MAPTILE_FLOOR_LINKER_PATH = 0x000100, // the floor is near a wp or forms a path within level or to another level
+	MAPTILE_UNK_0x200 = 0x000200,
+	MAPTILE_PITCH_BLACK = 0x000400, // the lighting changed, R&B=0 
+	MAPTILE_OBJECT_WALL = 0x000800, // wall tile made of crops: barrels / crates / benches / tables (material flag 0x04)
+	MAPTILE_UNK_0x001000 = 0x001000,
+	MAPTILE_LOS = 0x002000,
+	MAPTILE_WALL1 = 0x004000,
+	MAPTILE_WALL2 = 0x008000,
+	MAPTILE_WALL3 = 0x00C000, // weird
+	MAPTILE_WALL4 = 0x010000,
+};
 
 struct D2DrlgCoordStrc
 {
@@ -233,7 +264,7 @@ struct D2DrlgStrc
 	void* pDS1MemPool;						//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
 	D2DrlgActStrc* pAct;					//0x0C
 	uint8_t nAct;							//0x10
-	uint8_t pading0x11[3];					//0x11
+	uint8_t padding0x11[3];					//0x11
 	D2SeedStrc pSeed;						//0x14
 	uint32_t dwStartSeed;					//0x1C
 	uint32_t dwGameLowSeed;					//0x20
@@ -266,7 +297,7 @@ struct D2DrlgTileDataStrc
 	int32_t unk0x10;						//0x10
 	uint32_t dwFlags;						//0x14
 	D2TileLibraryEntryStrc* pTile;			//0x18
-	int32_t unk0x1C;						//0x1C
+	int32_t nTileType;						//0x1C
 	D2DrlgTileDataStrc* unk0x20;			//0x20
 	int32_t unk0x24;						//0x24
 	uint8_t nRed;							//0x28
@@ -299,9 +330,9 @@ struct D2DrlgActStrc
 struct D2DrlgAnimTileGridStrc
 {
 	D2DrlgTileDataStrc** ppMapTileData;		//0x00
-	int32_t nFrames;						//0x04
-	int32_t nCurrentFrame;					//0x08
-	int32_t nAnimationSpeed;				//0x0C
+	int32_t nFrames;						//0x04 In 8bits fixed point format
+	int32_t nCurrentFrame;					//0x08 In 8bits fixed point format
+	int32_t nAnimationSpeed;				//0x0C In 8bits fixed point format
 	D2DrlgAnimTileGridStrc* pNext;			//0x10
 };
 
@@ -322,22 +353,22 @@ struct D2DrlgDeleteStrc
 
 struct D2DrlgFileStrc
 {
-	int32_t unk0x00;							//0x00
-	void* pDS1File;								//0x04
-	int32_t unk0x08;							//0x08
-	int32_t nWidth;								//0x0C
-	int32_t nHeight;							//0x10
-	int32_t nWalls;								//0x14
-	int32_t nFloors;							//0x18
-	void* pOrientationLayer[4];					//0x1C
-	void* pWallLayer[4];						//0x2C
-	void* pFloorLayer[2];						//0x3C
-	void* pShadowLayer;							//0x44
-	void* pSubstGroupTags;						//0x48
-	int32_t nSubstGroups;						//0x4C named nClusters in original game
-	struct D2DrlgSubstGroupStrc* pSubstGroups;	//0x50
-	D2PresetUnitStrc* pPresetUnit;				//0x54
-	D2DrlgFileStrc* pNext;						//0x58
+	int32_t unk0x00;									//0x00
+	void* pDS1File;										//0x04
+	int32_t unk0x08;									//0x08
+	int32_t nWidth;										//0x0C
+	int32_t nHeight;									//0x10
+	int32_t nWallLayers;								//0x14
+	int32_t nFloorLayers;								//0x18
+	void* pTileTypeLayer[DRLG_MAX_WALL_LAYERS];			//0x1C
+	void* pWallLayer[DRLG_MAX_WALL_LAYERS];				//0x2C
+	void* pFloorLayer[DRLG_MAX_FLOOR_LAYERS];			//0x3C
+	void* pShadowLayer;									//0x44
+	void* pSubstGroupTags;								//0x48
+	int32_t nSubstGroups;								//0x4C named nClusters in original game
+	struct D2DrlgSubstGroupStrc* pSubstGroups;			//0x50
+	D2PresetUnitStrc* pPresetUnit;						//0x54
+	D2DrlgFileStrc* pNext;								//0x58
 };
 
 struct D2DrlgTileInfoStrc

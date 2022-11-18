@@ -406,7 +406,7 @@ int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicP
 
 		char nMainDirection = v16[0];
 		DWORD nDir = getChargedBoltDirOffset(SEED_RollRandomNumber(pSeed));
-		nDir = (nMainDirection + (char)nDir) % _countof(gatDirectionToOffset_6FDD2118);
+		nDir = (nMainDirection + (char)nDir) % ARRAY_SIZE(gatDirectionToOffset_6FDD2118);
 		nPrevPoint.X += 2 * gatDirectionToOffset_6FDD2118[nDir].nX;
 		nPrevPoint.Y += 2 * gatDirectionToOffset_6FDD2118[nDir].nY;
 	}
@@ -874,7 +874,7 @@ TanToDirectionLutEntryStrc lutTanToDirection[] = {
 	{{ 0x0B44, 0x0B5B } , 7 },
 	{{ 0x0B50, 0x0B50 } , 7 },
 };
-static_assert(_countof(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
+static_assert(ARRAY_SIZE(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
 
 //D2Common.0x6FDAC5E0
 void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, int* pOutDirection, DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY)

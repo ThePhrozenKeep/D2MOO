@@ -47,7 +47,7 @@ void __fastcall DRLGGRID_AlterGridFlag(D2DrlgGridStrc* pDrlgGrid, int nX, int nY
 //D2Common.0x6FD75C80
 int* __fastcall DRLGGRID_GetGridFlagsPointer(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
 //D2Common.0x6FD75CA0
-int __fastcall DRLGGRID_GetGridFlags(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
+int __fastcall DRLGGRID_GetGridEntry(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
 //D2Common.0x6FD75CC0
 void __fastcall DRLGGRID_AlterAllGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag, FlagOperation eOperation);
 //D2Common.0x6FD75D20

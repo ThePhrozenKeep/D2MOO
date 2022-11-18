@@ -29,21 +29,15 @@ struct D2UnkOutdoorStrc
 
 struct D2UnkOutdoorStrc2
 {
-	D2RoomExStrc* pRoomEx;					//0x00
-	D2DrlgOutdoorRoomStrc* pOutdoorRoom;	//0x04
-	int32_t field_8;						//0x08
-	int32_t field_C;						//0x0C
-	int32_t field_10;						//0x10
-	D2DrlgGridStrc* pWallGrid;				//0x14
-	int32_t field_18;						//0x18
-	int32_t field_1C;						//0x1C
-	int32_t field_20;						//0x20
-	D2DrlgGridStrc* pFloorGrid;				//0x24
-	int32_t field_28;						//0x28
-	int32_t field_2C;						//0x28
-	int32_t nSubWaypoint_Shrine;			//0x2C
-	int32_t nSubTheme;						//0x30
-	int32_t nSubThemePicked;				//0x34
+	D2RoomExStrc* pRoomEx;										//0x00
+	D2DrlgOutdoorRoomStrc* pOutdoorRooms[DRLG_MAX_WALL_LAYERS];	//0x04
+	D2DrlgGridStrc* pWallsGrids[DRLG_MAX_WALL_LAYERS];			//0x14
+	D2DrlgGridStrc* pFloorGrid;									//0x24
+	int32_t field_28;											//0x28
+	int32_t field_2C;											//0x28
+	int32_t nSubWaypoint_Shrine;								//0x2C
+	int32_t nSubTheme;											//0x30
+	int32_t nSubThemePicked;									//0x34
 };
 
 struct D2UnkOutdoorStrc3

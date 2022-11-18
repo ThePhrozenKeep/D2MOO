@@ -1,4 +1,4 @@
-#include "Drlg/D2DrlgMaze.h"
+﻿#include "Drlg/D2DrlgMaze.h"
 
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgDrlg.h"
@@ -7,69 +7,104 @@
 #include "D2Seed.h"
 #include <DataTbls/LevelsIds.h>
 
+// Helper functions
+static bool DRLGMAZE_CheckIfRoomOverlapsOrth(D2RoomExStrc* pNewRoomEx, D2DrlgOrthStrc* pDrlgOrth)
+{
+	while (pDrlgOrth)
+	{
+		if (DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0) == 0)
+		{
+			return true;
+		}
+		pDrlgOrth = pDrlgOrth->pNext;
+	}
+	return false;
+}
+static bool DRLGMAZE_CheckIfRoomOverlapsAythingOtherThanParent(D2RoomExStrc* pNewRoomEx, D2RoomExStrc* pParentRoomEx)
+{
+	return DRLGMAZE_CheckIfRoomOverlapsOrth(pNewRoomEx, pParentRoomEx->pDrlgOrth) || !DRLGMAZE_CheckRoomNotOverlaping(pNewRoomEx->pLevel, pNewRoomEx, pParentRoomEx, 0);
+}
+static bool DRLGMAZE_OrthWithDirectionExists(D2RoomExStrc* pRoomEx, int nDirection)
+{
+	D2DrlgOrthStrc* pDrlgOrth = pRoomEx->pDrlgOrth;
+	while (pDrlgOrth != nullptr)
+	{
+		if (pDrlgOrth->nDirection == nDirection)
+		{
+			return true;
+		}
+		pDrlgOrth = pDrlgOrth->pNext;
+	}
+	return false;
+}
+
 
 //D2Common.0x6FD78E50
-D2RoomExStrc* __fastcall DRLGMAZE_GetBarracksEntryRoomEast(D2DrlgLevelStrc* pLevel)
+D2RoomExStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomEast(D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgOrthStrc* pDrlgOrth = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-	D2RoomExStrc* pResult = NULL;
+	D2RoomExStrc* pResult = nullptr;
 
 	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
-		if (!pResult || pRoomEx->nTileXPos < pResult->nTileXPos && (~pRoomEx->pMaze->nFlags & 2))
+		if ((!pResult || pRoomEx->nTileXPos < pResult->nTileXPos))
 		{
-			pDrlgOrth = pRoomEx->pDrlgOrth;
-			while (pDrlgOrth)
+			if (DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_WEST))
 			{
-				if (pDrlgOrth->nDirection == 0)
-				{
-					break;
-				}
-
-				pDrlgOrth = pDrlgOrth->pNext;
-			}
-
-			if (!pDrlgOrth)
-			{
-				pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
-				pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-				pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
-				pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-				pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
-
-				pDrlgOrth = pRoomEx->pDrlgOrth;
-				while (pDrlgOrth)
-				{
-					if (!sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
-					{
-						break;
-					}
-
-					pDrlgOrth = pDrlgOrth->pNext;
-				}
-
-				if (!pDrlgOrth && sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 0))
-				{
-					DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, 0);
-					DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
-					DRLGMAZE_PickRoomPreset(pNewRoomEx, 1);
-				}
-				else
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pNewRoomEx = NULL;
-				}
-
-				if (pNewRoomEx)
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pResult = pRoomEx;
-				}
+				pResult = pRoomEx;
 			}
 		}
 	}
 
+	return pResult;
+}
+
+//D2Common.0x6FD79240
+D2RoomExStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomWest(D2DrlgLevelStrc* pLevel)
+{
+	D2RoomExStrc* pResult = nullptr;
+
+	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
+	{
+		if ((!pResult || pRoomEx->nTileXPos > pResult->nTileXPos))
+		{
+			if (DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_EAST))
+			{
+				pResult = pRoomEx;
+			}
+		}
+	}
+	return pResult;
+}
+
+//D2Common.0x6FD79360
+D2RoomExStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomNorth(D2DrlgLevelStrc* pLevel)
+{
+	D2RoomExStrc* pResult = nullptr;
+
+	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
+	{
+		if ((!pResult || pRoomEx->nTileYPos > pResult->nTileYPos)
+			&& DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_SOUTH))
+		{
+			pResult = pRoomEx;
+		}
+	}
+	return pResult;
+}
+
+// Helper function
+D2RoomExStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomSouth(D2DrlgLevelStrc* pLevel)
+{
+	D2RoomExStrc* pResult = nullptr;
+
+	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
+	{
+		if ((!pResult || pRoomEx->nTileYPos < pResult->nTileYPos)
+			&& DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_NORTH))
+		{
+			pResult = pRoomEx;
+		}
+	}
 	return pResult;
 }
 
@@ -262,135 +297,6 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2RoomExStrc* pRoomEx, BOOL bResetFlag)
 	}
 }
 
-//D2Common.0x6FD79240
-D2RoomExStrc* __fastcall DRLGMAZE_GetBarracksEntryRoomWest(D2DrlgLevelStrc* pLevel)
-{
-	D2DrlgOrthStrc* pDrlgOrth = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-	D2RoomExStrc* pResult = NULL;
-
-	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
-	{
-		if (!pResult || pRoomEx->nTileXPos > pResult->nTileXPos && (~pRoomEx->pMaze->nFlags & 2))
-		{
-			pDrlgOrth = pRoomEx->pDrlgOrth;
-			while (pDrlgOrth)
-			{
-				if (pDrlgOrth->nDirection == 2)
-				{
-					break;
-				}
-
-				pDrlgOrth = pDrlgOrth->pNext;
-			}
-
-			if (!pDrlgOrth)
-			{
-				pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
-				pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-				pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
-				pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-				pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
-
-				pDrlgOrth = pRoomEx->pDrlgOrth;
-				while (pDrlgOrth)
-				{
-					if (!sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 2))
-					{
-						break;
-					}
-
-					pDrlgOrth = pDrlgOrth->pNext;
-				}
-
-				if (!pDrlgOrth && sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 2))
-				{
-					DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, 0);
-					DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
-					DRLGMAZE_PickRoomPreset(pNewRoomEx, 1);
-				}
-				else
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pNewRoomEx = NULL;
-				}
-
-				if (pNewRoomEx)
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pResult = pRoomEx;
-				}
-			}
-		}
-	}
-
-	return pResult;
-}
-
-//D2Common.0x6FD79360
-D2RoomExStrc* __fastcall DRLGMAZE_GetBarracksEntryRoomNorth(D2DrlgLevelStrc* pLevel)
-{
-	D2DrlgOrthStrc* pDrlgOrth = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-	D2RoomExStrc* pResult = NULL;
-
-	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
-	{
-		if (!pResult || pRoomEx->nTileXPos > pResult->nTileXPos && (~pRoomEx->pMaze->nFlags & 2))
-		{
-			pDrlgOrth = pRoomEx->pDrlgOrth;
-			while (pDrlgOrth)
-			{
-				if (pDrlgOrth->nDirection == 3)
-				{
-					break;
-				}
-
-				pDrlgOrth = pDrlgOrth->pNext;
-			}
-
-			if (!pDrlgOrth)
-			{
-				pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
-				pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-				pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
-				pNewRoomEx->nTileXPos = pRoomEx->nTileXPos;
-				pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
-
-				pDrlgOrth = pRoomEx->pDrlgOrth;
-				while (pDrlgOrth)
-				{
-					if (!sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 3))
-					{
-						break;
-					}
-
-					pDrlgOrth = pDrlgOrth->pNext;
-				}
-
-				if (!pDrlgOrth && sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 3))
-				{
-					DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, 0);
-					DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
-					DRLGMAZE_PickRoomPreset(pNewRoomEx, 1);
-				}
-				else
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pNewRoomEx = NULL;
-				}
-
-				if (pNewRoomEx)
-				{
-					DRLGROOM_FreeRoomEx(pNewRoomEx);
-					pResult = pRoomEx;
-				}
-			}
-		}
-	}
-
-	return pResult;
-}
 
 //D2Common.0x6FD79480
 void __fastcall DRLGMAZE_InitLevelData(D2DrlgLevelStrc* pLevel)
@@ -557,6 +463,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	pRoomEx->nTileYPos = pLevel->nPosY + (pLevel->nHeight - pRoomEx->nTileHeight) / 2;
 
 	DRLGROOM_AddRoomExToLevel(pLevel, pRoomEx);
+	
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
 
 	switch (pLevel->nLevelType)
 	{
@@ -720,25 +628,25 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	case LVLTYPE_ACT1_CATACOMBS:
 		if (pLevel->nLevelId == LEVEL_CATACOMBSLEV1)
 		{
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 1, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 2, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 3, 1);
-			DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 0, 1);
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NSEW, -1, FALSE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_NORTH, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_EAST, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_SOUTH, TRUE);
+			DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_WEST, TRUE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NSEW, -1, FALSE);
 		}
 		else
 		{
 			if (SEED_RollRandomNumber(&pLevel->pSeed) & 1)
 			{
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 0, 1);
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 2, 1);
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_EW, -1, FALSE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_WEST, TRUE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_EAST, TRUE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_EW, -1, FALSE);
 			}
 			else
 			{
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 1, 1);
-				DRLGMAZE_AddAdjacentMazeRoom(pLevel->pFirstRoomEx, 3, 1);
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NS, -1, FALSE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_NORTH, TRUE);
+				DRLGMAZE_AddAdjacentMazeRoom(pLevelFirstRoomEx, ALTDIR_SOUTH, TRUE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT1_CATACOMBS_PREV_NS, -1, FALSE);
 			}
 		}
 
@@ -757,7 +665,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{
 			pRandomRoomEx = DRLGMAZE_GetRandomRoomExFromLevel(pLevel);
 			nDirection = SEED_RollRandomNumber(&pRandomRoomEx->pSeed) & 3;
-			if (~pRandomRoomEx->pMaze->nFlags & 2)
+			if (!DRLGMAZE_HasMapDS1(pRandomRoomEx))
 			{
 				DRLGMAZE_AddAdjacentMazeRoom(pRandomRoomEx, nDirection, 1);
 			}
@@ -887,24 +795,24 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		switch (pLevel->nLevelId)
 		{
 		case LEVEL_CELLAROFPITY:
-			D2_ASSERT(pLevel->pFirstRoomEx);
+			D2_ASSERT(pLevelFirstRoomEx);
 
 			if (SEED_RollLimitedRandomNumber(&pRoomEx->pLevel->pSeed, 2) != 0)
 			{
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_A, -1, FALSE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_A, -1, FALSE);
 			}
 			else
 			{
-				DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_B, -1, FALSE);
+				DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_RIVER_B, -1, FALSE);
 			}
 			break;
 
 		case LEVEL_ECHOCHAMBER:
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_POOL_A, -1, FALSE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_POOL_A, -1, FALSE);
 			break;
 
 		case LEVEL_GLACIALCAVESLEV2:
-			DRLGMAZE_SetPickedFileAndPresetId(pLevel->pFirstRoomEx, LVLPREST_ACT5_ICE_POOL_B, -1, FALSE);
+			DRLGMAZE_SetPickedFileAndPresetId(pLevelFirstRoomEx, LVLPREST_ACT5_ICE_POOL_B, -1, FALSE);
 			break;
 
 		default:
@@ -961,11 +869,11 @@ void __fastcall DRLGMAZE_SetPickedFileAndPresetId(D2RoomExStrc* pRoomEx, int nLe
 
 	if (bResetFlag)
 	{
-		pRoomEx->pMaze->dwFlags &= 0xFFFFFFFD;
+		pRoomEx->pMaze->dwFlags &= (~DRLGPRESETROOMFLAG_HAS_MAP_DS1);
 	}
 	else
 	{
-		pRoomEx->pMaze->dwFlags |= 2;
+		pRoomEx->pMaze->dwFlags |= DRLGPRESETROOMFLAG_HAS_MAP_DS1;
 	}
 }
 
@@ -1045,14 +953,14 @@ D2RoomExStrc* __fastcall DRLGMAZE_AddAdjacentMazeRoom(D2RoomExStrc* pRoomEx, int
 
 	for (D2DrlgOrthStrc* i = pRoomEx->pDrlgOrth; i; i = i->pNext)
 	{
-		if (!sub_6FD777B0(&pNewRoomEx->pDrlgCoord, i->pBox, 0))
+		if (!DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, i->pBox, 0))
 		{
 			DRLGROOM_FreeRoomEx(pNewRoomEx);
 			return 0;
 		}
 	}
 
-	if (!sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 0))
+	if (!DRLGMAZE_CheckRoomNotOverlaping(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 0))
 	{
 		DRLGROOM_FreeRoomEx(pNewRoomEx);
 		return 0;
@@ -1261,13 +1169,13 @@ BOOL __fastcall DRLGMAZE_LinkMazeRooms(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRo
 	
 	for (D2DrlgOrthStrc* pDrlgOrth = pRoomEx2->pDrlgOrth; pDrlgOrth; pDrlgOrth = pDrlgOrth->pNext)
 	{
-		if (!sub_6FD777B0(&pRoomEx1->pDrlgCoord, pDrlgOrth->pBox, 0))
+		if (!DRLG_ComputeRectanglesManhattanDistance(&pRoomEx1->pDrlgCoord, pDrlgOrth->pBox, 0))
 		{
 			return FALSE;
 		}
 	}
 
-	return sub_6FD77890(pRoomEx1->pLevel, pRoomEx1, pRoomEx2, 0);
+	return DRLGMAZE_CheckRoomNotOverlaping(pRoomEx1->pLevel, pRoomEx1, pRoomEx2, 0);
 }
 
 //D2Common.0x6FD7A450
@@ -1411,14 +1319,14 @@ void __fastcall DRLGMAZE_BuildBasicMaze(D2DrlgLevelStrc* pLevel)
 			}
 
 			pDrlgOrth = pRandomRoomEx->pDrlgOrth;
-			while (pDrlgOrth && sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
+			while (pDrlgOrth && DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
 			{
 				pDrlgOrth = pDrlgOrth->pNext;
 			}
 
 			if (!pDrlgOrth)
 			{
-				if (sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRandomRoomEx, 0))
+				if (DRLGMAZE_CheckRoomNotOverlaping(pNewRoomEx->pLevel, pNewRoomEx, pRandomRoomEx, 0))
 				{
 					DRLGROOM_AllocDrlgOrthsForRooms(pRandomRoomEx, pNewRoomEx, nDirection);
 					DRLGMAZE_MergeMazeRooms(pNewRoomEx);
@@ -1439,40 +1347,32 @@ void __fastcall DRLGMAZE_BuildBasicMaze(D2DrlgLevelStrc* pLevel)
 	}
 }
 
-//D2Common.0x6FD7A830
-void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
+static const int dword_6FDCE850[][3] =
 {
-	static const int dword_6FDCE850[][3] =
-	{
-		{ LVLPREST_ACT5_LAVA_S, 1, 0 },
-		{ LVLPREST_ACT5_LAVA_N, 3, 1 },
-		{ LVLPREST_ACT5_LAVA_S, 1, 1 },
-		{ LVLPREST_ACT5_LAVA_N, 3, 0 },
-		{ LVLPREST_ACT5_LAVA_E, 0, 1 },
-		{ LVLPREST_ACT5_LAVA_W, 2, 0 },
-		{ LVLPREST_ACT5_LAVA_E, 0, 0 },
-		{ LVLPREST_ACT5_LAVA_W, 2, 1 },
-	};
+	{ LVLPREST_ACT5_LAVA_S, 1, 0 },
+	{ LVLPREST_ACT5_LAVA_N, 3, 1 },
+	{ LVLPREST_ACT5_LAVA_S, 1, 1 },
+	{ LVLPREST_ACT5_LAVA_N, 3, 0 },
+	{ LVLPREST_ACT5_LAVA_E, 0, 1 },
+	{ LVLPREST_ACT5_LAVA_W, 2, 0 },
+	{ LVLPREST_ACT5_LAVA_E, 0, 0 },
+	{ LVLPREST_ACT5_LAVA_W, 2, 1 },
+};
 
-	D2RoomExStrc* pNewRoomEx = NULL;
-	int nDirection = 0;
-	
-	const int nSet = 2 * (SEED_RollRandomNumber(&pLevel->pFirstRoomEx->pSeed) & 3);
-	
-	const int scnLavaCombinations = 8;
-	D2_ASSERT(nSet < (scnLavaCombinations - 1));
+static void PlaceLavaPreset(D2RoomExStrc* pFirstRoomEx, int nSet)
+{
 
-	nDirection = dword_6FDCE850[nSet][1];
+	int nDirection = dword_6FDCE850[nSet][1];
 
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
+	D2RoomExStrc* pNewRoomEx = DRLGROOM_AllocRoomEx(pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
 	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
 	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
 
-	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pLevel->pFirstRoomEx, nDirection))
+	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pFirstRoomEx, nDirection))
 	{
-		DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pNewRoomEx, nDirection);
-		DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pNewRoomEx);
-		DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
+		DRLGROOM_AllocDrlgOrthsForRooms(pFirstRoomEx, pNewRoomEx, nDirection);
+		DRLGROOM_AddRoomExToLevel(pFirstRoomEx->pLevel, pNewRoomEx);
+		DRLGMAZE_PickRoomPreset(pFirstRoomEx, 1);
 
 		pNewRoomEx->pMaze->nLevelPrest = dword_6FDCE850[nSet][0];
 		pNewRoomEx->pMaze->nPickedFile = dword_6FDCE850[nSet][2];
@@ -1482,75 +1382,68 @@ void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
 	{
 		DRLGROOM_FreeRoomEx(pNewRoomEx);
 	}
+}
 
-	nDirection = dword_6FDCE850[nSet][4];
+//D2Common.0x6FD7A830
+void __fastcall DRLGMAZE_PlaceAct5LavaPresets(D2DrlgLevelStrc* pLevel)
+{		
+	const int nSet = 2 * (SEED_RollRandomNumber(&pLevel->pFirstRoomEx->pSeed) & 3);
+	
+	const int scnLavaCombinations = ARRAY_SIZE(dword_6FDCE850);
+	D2_ASSERT(nSet < (scnLavaCombinations - 1));
 
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
-	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
+	// Note: pLevel->pFirstRoomEx may change when calling PlaceLavaPreset, using the same room for both presets is correct here.
+	D2RoomExStrc* pLevelFirstRoom = pLevel->pFirstRoomEx;
+	PlaceLavaPreset(pLevelFirstRoom, nSet);
+	PlaceLavaPreset(pLevelFirstRoom, nSet+1);
 
-	if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pLevel->pFirstRoomEx, nDirection))
-	{
-		DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pNewRoomEx, nDirection);
-		DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pNewRoomEx);
-		DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
-
-		pNewRoomEx->pMaze->nLevelPrest = dword_6FDCE850[nSet][3];
-		pNewRoomEx->pMaze->nPickedFile = dword_6FDCE850[nSet][5];
-		pNewRoomEx->pMaze->dwFlags |= 2;
-	}
-	else
-	{
-		DRLGROOM_FreeRoomEx(pNewRoomEx);
-	}
-
-	DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, NULL);
+	DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, nullptr);
 }
 
 //D2Common.0x6FD7A9B0
-void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevelPrest, D2RoomExStrc* pRoomEx)
+void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevelPrest, D2RoomExStrc* pIgnoreRoomEx)
 {
-	D2RoomExStrc** ppRoomEx = NULL;
-	D2RoomExStrc* pTemp = NULL;
-
-	if (pLevel->nRooms > 0)
+	const int nRooms = pLevel->nRooms;
+	if (nRooms > 0)
 	{
-		ppRoomEx = (D2RoomExStrc**)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * pLevel->nRooms);
-	
-		pTemp = pLevel->pFirstRoomEx;
-		for (int i = 0; i < pLevel->nRooms; ++i)
+		D2RoomExStrc** pRoomExArray = (D2RoomExStrc**)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * nRooms);
+
+		// Copy rooms pointers
 		{
-			ppRoomEx[i] = pTemp;
-			pTemp = pTemp->pRoomExNext;
+			D2RoomExStrc* pTemp = pLevel->pFirstRoomEx;
+			for (int i = 0; i < nRooms; ++i)
+			{
+				pRoomExArray[i] = pTemp;
+				pTemp = pTemp->pRoomExNext;
+			}
 		}
-	
-		for (int i = 0; i < pLevel->nRooms; ++i)
+
+		for (int i = 0; i < nRooms; ++i)
 		{
-			if (ppRoomEx[i] != pRoomEx)
+			D2RoomExStrc* pCurrentRoomEx = pRoomExArray[i];
+			if (pCurrentRoomEx != pIgnoreRoomEx)
 			{
 				for (int j = 0; j < 8; ++j)
 				{
-					pTemp = DRLGROOM_AllocRoomEx(ppRoomEx[i]->pLevel, DRLGTYPE_PRESET);
-					pTemp->nTileWidth = pTemp->pLevel->pMaze->dwSizeX;
-					pTemp->nTileHeight = pTemp->pLevel->pMaze->dwSizeY;
+					D2RoomExStrc* pNewRoomEx = DRLGROOM_AllocRoomEx(pCurrentRoomEx->pLevel, DRLGTYPE_PRESET);
+					pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
+					pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
 
-					if (DRLGMAZE_LinkMazeRooms(pTemp, ppRoomEx[i], j))
+					if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pCurrentRoomEx, j))
 					{
-						DRLGROOM_AllocDrlgOrthsForRooms(ppRoomEx[i], pTemp, j);
-						DRLGROOM_AddRoomExToLevel(ppRoomEx[i]->pLevel, pTemp);
-						pTemp->pMaze->nLevelPrest = nLevelPrest;
-						pTemp->pMaze->nPickedFile = -1;
-						pTemp->pMaze->dwFlags |= 2;
+						DRLGROOM_AllocDrlgOrthsForRooms(pCurrentRoomEx, pNewRoomEx, j);
+						DRLGROOM_AddRoomExToLevel(pCurrentRoomEx->pLevel, pNewRoomEx);
+						DRLGMAZE_SetPickedFileAndPresetId(pNewRoomEx, nLevelPrest, -1, FALSE);
 					}
 					else
 					{
-						DRLGROOM_FreeRoomEx(pTemp);
+						DRLGROOM_FreeRoomEx(pNewRoomEx);
 					}
 				}
 			}
 		}
 		
-		D2_FREE_SERVER(pLevel->pDrlg->pMempool, ppRoomEx);
+		D2_FREE_SERVER(pLevel->pDrlg->pMempool, pRoomExArray);
 	}
 }
 
@@ -1565,22 +1458,22 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_PREV_NEW, LVLPREST_ACT5_BAAL_PREV_NEW },
 	};
 
-	D2RoomExStrc* pRoomEx = NULL;
-	int nDirection = 0;
+	// Warning: pLevel->pFirstRoomEx may change, so keep a copy of the pointer to the room we are using
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
 
-	nDirection = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
+	int nDirection = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 	for (int i = 0; i < 3; ++i)
 	{
-		pRoomEx = DRLGROOM_AllocRoomEx(pLevel->pFirstRoomEx->pLevel, DRLGTYPE_PRESET);
+		D2RoomExStrc* pRoomEx = DRLGROOM_AllocRoomEx(pLevelFirstRoomEx->pLevel, DRLGTYPE_PRESET);
 
 		DRLGMAZE_SetRoomSize(pRoomEx);
 
-		if (DRLGMAZE_LinkMazeRooms(pRoomEx, pLevel->pFirstRoomEx, nDirection))
+		if (DRLGMAZE_LinkMazeRooms(pRoomEx, pLevelFirstRoomEx, nDirection))
 		{
-			DRLGROOM_AllocDrlgOrthsForRooms(pLevel->pFirstRoomEx, pRoomEx, nDirection);
+			DRLGROOM_AllocDrlgOrthsForRooms(pLevelFirstRoomEx, pRoomEx, nDirection);
 			DRLGMAZE_MergeMazeRooms(pRoomEx);
-			DRLGROOM_AddRoomExToLevel(pLevel->pFirstRoomEx->pLevel, pRoomEx);
-			DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
+			DRLGROOM_AddRoomExToLevel(pLevelFirstRoomEx->pLevel, pRoomEx);
+			DRLGMAZE_PickRoomPreset(pLevelFirstRoomEx, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
 		}
 		else
@@ -1593,169 +1486,90 @@ void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 
 	if (pLevel->nLevelType == LVLTYPE_ACT2_TOMB)
 	{
-		pLevel->pFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][0];
-		pLevel->pFirstRoomEx->pMaze->nPickedFile = -1;
-		pLevel->pFirstRoomEx->pMaze->dwFlags |= 2;
+		pLevelFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][0];
+		pLevelFirstRoomEx->pMaze->nPickedFile = -1;
+		pLevelFirstRoomEx->pMaze->dwFlags |= 2;
 	}
 	else if (pLevel->nLevelType == LVLTYPE_ACT5_BAAL)
 	{
-		pLevel->pFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][1];
-		pLevel->pFirstRoomEx->pMaze->nPickedFile = -1;
-		pLevel->pFirstRoomEx->pMaze->dwFlags |= 2;
+		pLevelFirstRoomEx->pMaze->nLevelPrest = dword_6FDCE8B4[nDirection][1];
+		pLevelFirstRoomEx->pMaze->nPickedFile = -1;
+		pLevelFirstRoomEx->pMaze->dwFlags |= 2;
+	}
+}
+
+//Helper function
+static D2RoomExStrc* DRLGMAZE_PlaceRoomForArcaneBranch(D2RoomExStrc* pParentRoom, int nArcaneMapBranch)
+{
+	if (D2RoomExStrc* pRoomEx = DRLGMAZE_PlaceAdjacentPresetRoom(pParentRoom, nArcaneMapBranch % 4, TRUE))
+	{
+		DRLGMAZE_PickRoomPreset(pParentRoom, 1);
+		DRLGMAZE_PickRoomPreset(pRoomEx, 1);
+		return pRoomEx;
+	}
+	return nullptr;
+}
+
+/*
+Order of generation of the arcane sanctuary rooms for a given branch:
+
+                 2 →  3 →  4 →  5 →  6
+                 ↑                   ↓
+         W → 0 → 1        12         7 →  8
+                           ↑         ↓
+                14 ← 13 ← 11 ← 10  ← 9
+*/
+// Helper function
+static int DRLGMAZE_ArcaneSanctuaryDirectionFromRoomIdx(int nBranchDirection, int nBranchRoomIdx)
+{
+	switch (nBranchRoomIdx)
+	{
+	default:
+		return nBranchDirection;     // Forward when facing branch direction
+	case 2:
+	case 12:
+		return nBranchDirection + 3; // Left when facing branch direction
+	case 7:
+	case 9:
+		return nBranchDirection + 1; // Right when facing branch direction
+	case 10:
+	case 11:
+	case 13:
+	case 14:
+		return nBranchDirection + 2; // Backwards when facing branch direction
 	}
 }
 
 //D2Common.0x6FD7ABC0
-//TODO: Check for correctness
+// This function has been rewritten using a loop to avoid having macros / 15 calls to the same functions.
 void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel)
 {
-	D2RoomExStrc* pRoomExArray[60] = {};
-	D2RoomExStrc** ppRoomEx = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
-	int nRand = 0;
+	D2RoomExStrc* pLevelFirstRoomEx = pLevel->pFirstRoomEx;
+	
+	const int nRand = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 
-	ppRoomEx = pRoomExArray;
+	static const int nRoomsPerBranch = 15;
+	static const int nBranchDirections = 4;
+	D2RoomExStrc* pRoomExArray[nRoomsPerBranch * nBranchDirections] = {};
 
-	for (int i = 0; i < 4; ++i)
+	for (int nBranchDirection = 0; nBranchDirection < nBranchDirections; ++nBranchDirection)
 	{
-		pRoomEx = sub_6FD7AFD0(pLevel->pFirstRoomEx, i % 4, TRUE);
-		if (pRoomEx)
+		D2RoomExStrc* pParentRoom = pLevelFirstRoomEx;
+		for (int nBranchRoomIdx = 0; nBranchRoomIdx < nRoomsPerBranch; nBranchRoomIdx++)
 		{
-			DRLGMAZE_PickRoomPreset(pLevel->pFirstRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
+			const int nRoomDirection = DRLGMAZE_ArcaneSanctuaryDirectionFromRoomIdx(nBranchDirection, nBranchRoomIdx);
+			D2RoomExStrc* pNewRoom = DRLGMAZE_PlaceRoomForArcaneBranch(pParentRoom, nRoomDirection);
+			// See diagram above, those rooms do not have "child" rooms. So the next room will start from current parent.
+			// The game also didn't keep it in the room array, which means its pMaze->nPickedFile will be left untouched. Is this a mistake ?
+			// In any case we reproduce the same behaviour here
+			if (nBranchRoomIdx != 8 && nBranchRoomIdx != 12)
+			{
+				pRoomExArray[nBranchRoomIdx + nBranchDirection * nRoomsPerBranch] = pNewRoom;
+				pParentRoom = pNewRoom;
+			}
 		}
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 3) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 1) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, i % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 1) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 3) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		pRoomEx = sub_6FD7AFD0(*ppRoomEx, (i + 2) % 4, TRUE);
-		if (pRoomEx)
-		{
-			DRLGMAZE_PickRoomPreset(*ppRoomEx, 1);
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-		}
-		++ppRoomEx;
-		*ppRoomEx = pRoomEx;
-
-		++ppRoomEx;
 	}
 
-	nRand = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
 	for (int i = 0; i < ARRAY_SIZE(pRoomExArray); ++i)
 	{
 		if (pRoomExArray[i])
@@ -1764,91 +1578,76 @@ void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel)
 		}
 	}
 
-	pLevel->pFirstRoomEx->pMaze->nPickedFile = 4;
+	pLevelFirstRoomEx->pMaze->nPickedFile = 4;
 }
 
 //D2Common.0x6FD7AFD0
-D2RoomExStrc* __fastcall sub_6FD7AFD0(D2RoomExStrc* pRoomEx, int nDirection, BOOL bMergeRooms)
+D2RoomExStrc* __fastcall DRLGMAZE_PlaceAdjacentPresetRoom(D2RoomExStrc* pParentRoomEx, int nDirection, BOOL bMergeRooms)
 {
-	D2DrlgOrthStrc* pDrlgOrth = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
+	D2RoomExStrc* pNewRoomEx = DRLGROOM_AllocRoomEx(pParentRoomEx->pLevel, DRLGTYPE_PRESET);
 	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
 	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
 
 	switch (nDirection)
 	{
 	case ALTDIR_WEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos - pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos;
 		break;
 
 	case ALTDIR_NORTH:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos - pParentRoomEx->nTileHeight;
 		break;
 
 	case ALTDIR_EAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos + pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos;
 		break;
 
 	case ALTDIR_SOUTH:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos + pParentRoomEx->nTileHeight;
 		break;
 
 	case ALTDIR_NORTHWEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos - pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos - pParentRoomEx->nTileHeight;
 		break;
 
 	case ALTDIR_NORTHEAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos + pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos - pParentRoomEx->nTileHeight;
 		break;
 
 	case ALTDIR_SOUTHEAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos + pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos + pParentRoomEx->nTileHeight;
 		break;
 
 	case ALTDIR_SOUTHWEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
+		pNewRoomEx->nTileXPos = pParentRoomEx->nTileXPos - pParentRoomEx->nTileWidth;
+		pNewRoomEx->nTileYPos = pParentRoomEx->nTileYPos + pParentRoomEx->nTileHeight;
 		break;
 
 	default:
 		break;
 	}
 
-	pDrlgOrth = pRoomEx->pDrlgOrth;
-	while (pDrlgOrth)
-	{
-		if (!sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
-		{
-			DRLGROOM_FreeRoomEx(pNewRoomEx);
-			return 0;
-		}
-
-		pDrlgOrth = pDrlgOrth->pNext;
-	}
-
-	if (!sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 0))
+	if(DRLGMAZE_CheckIfRoomOverlapsAythingOtherThanParent(pNewRoomEx, pParentRoomEx))
 	{
 		DRLGROOM_FreeRoomEx(pNewRoomEx);
-		return 0;
+		return nullptr;
 	}
 
-	DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, nDirection);
+	DRLGROOM_AllocDrlgOrthsForRooms(pParentRoomEx, pNewRoomEx, nDirection);
 
 	if (bMergeRooms)
 	{
 		DRLGMAZE_MergeMazeRooms(pNewRoomEx);
 	}
 
-	DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
+	DRLGROOM_AddRoomExToLevel(pParentRoomEx->pLevel, pNewRoomEx);
 	return pNewRoomEx;
 }
 
@@ -1967,27 +1766,27 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		pRoomEx1 = NULL;
 		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
 		{
-			if ((!pRoomEx1 || i->nTileYPos < pRoomEx1->nTileYPos) && sub_6FD7B710(i, 1))
+			if ((!pRoomEx1 || i->nTileYPos < pRoomEx1->nTileYPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(i, ALTDIR_NORTH))
 			{
 				pRoomEx1 = i;
 			}
 		}
 
-		pRoomEx2 = sub_6FD7AFD0(pRoomEx1, ALTDIR_NORTH, TRUE);
+		pRoomEx2 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx1, ALTDIR_NORTH, TRUE);
 		if (pRoomEx2)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx1, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx2, 1);
 		}
 
-		pRoomEx3 = sub_6FD7AFD0(pRoomEx2, ALTDIR_NORTH, TRUE);
+		pRoomEx3 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx2, ALTDIR_NORTH, TRUE);
 		if (pRoomEx3)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx2, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx3, 1);
 		}
 
-		pRoomEx4 = sub_6FD7AFD0(pRoomEx3, ALTDIR_WEST, FALSE);
+		pRoomEx4 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx3, ALTDIR_WEST, FALSE);
 		if (pRoomEx4)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx3, 1);
@@ -1997,34 +1796,34 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		pRoomEx1 = NULL;
 		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
 		{
-			if ((!pRoomEx1 || i->nTileXPos > pRoomEx1->nTileXPos) && sub_6FD7B710(i, 2))
+			if ((!pRoomEx1 || i->nTileXPos > pRoomEx1->nTileXPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(i, ALTDIR_EAST))
 			{
 				pRoomEx1 = i;
 			}
 		}
 
-		pRoomEx2 = sub_6FD7AFD0(pRoomEx1, ALTDIR_EAST, TRUE);
+		pRoomEx2 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx1, ALTDIR_EAST, TRUE);
 		if (pRoomEx2)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx1, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx2, 1);
 		}
 
-		pRoomEx3 = sub_6FD7AFD0(pRoomEx2, ALTDIR_EAST, TRUE);
+		pRoomEx3 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx2, ALTDIR_EAST, TRUE);
 		if (pRoomEx3)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx2, 1);
 			DRLGMAZE_PickRoomPreset(pRoomEx3, 1);
 		}
 
-		pRoomEx4 = sub_6FD7AFD0(pRoomEx3, nDirection, FALSE);
+		pRoomEx4 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx3, nDirection, FALSE);
 		if (pRoomEx4)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx3, 1);
 			DRLGMAZE_SetPickedFileAndPresetId(pRoomEx4, LVLPREST_ACT2_SEWER_PREV_NS, 0, FALSE);
 		}
 
-		pRoomEx5 = sub_6FD7AFD0(pRoomEx4, nDirection, FALSE);
+		pRoomEx5 = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx4, nDirection, FALSE);
 		if (pRoomEx5)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx5, 1);
@@ -2080,100 +1879,28 @@ void __fastcall sub_6FD7B660(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPr
 }
 
 //D2Common.0x6FD7B710
-int __fastcall sub_6FD7B710(D2RoomExStrc* pRoomEx, int nDirection)
+BOOL __fastcall DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(D2RoomExStrc* pRoomEx, int nDirection)
 {
-	D2DrlgOrthStrc* pDrlgOrth = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-
-	if (!(~pRoomEx->pMaze->nFlags & 2))
+	if (DRLGMAZE_HasMapDS1(pRoomEx))
 	{
-		return 0;
+		return FALSE;
 	}
 
-	pDrlgOrth = pRoomEx->pDrlgOrth;
-	while (pDrlgOrth && pDrlgOrth->nDirection != nDirection)
+	// Check if there is already a Drlg Orth matching direction
+	if(DRLGMAZE_OrthWithDirectionExists(pRoomEx, nDirection))
 	{
-		pDrlgOrth = pDrlgOrth->pNext;
+		return FALSE;
 	}
 
-	if (!pDrlgOrth)
+	D2RoomExStrc* pNewRoomEx = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx, nDirection, FALSE);
+
+	if (pNewRoomEx)
 	{
-		return 0;
-	}
-
-	pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, 2);
-	pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
-	pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
-
-	switch (nDirection)
-	{
-	case ALTDIR_WEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
-		break;
-
-	case ALTDIR_NORTH:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
-		break;
-
-	case ALTDIR_EAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos;
-		break;
-
-	case ALTDIR_SOUTH:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
-		break;
-
-	case ALTDIR_NORTHWEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
-		break;
-
-	case ALTDIR_NORTHEAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos - pRoomEx->nTileHeight;
-		break;
-
-	case ALTDIR_SOUTHEAST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos + pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
-		break;
-
-	case ALTDIR_SOUTHWEST:
-		pNewRoomEx->nTileXPos = pRoomEx->nTileXPos - pRoomEx->nTileWidth;
-		pNewRoomEx->nTileYPos = pRoomEx->nTileYPos + pRoomEx->nTileHeight;
-		break;
-
-	default:
-		break;
-	}
-
-	pDrlgOrth = pRoomEx->pDrlgOrth;
-	while (pDrlgOrth && sub_6FD777B0(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
-	{
-		pDrlgOrth = pDrlgOrth->pNext;
-	}
-
-	if (!pDrlgOrth && sub_6FD77890(pNewRoomEx->pLevel, pNewRoomEx, pRoomEx, 0))
-	{
-		DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, nDirection);
-		DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
 		DRLGMAZE_PickRoomPreset(pNewRoomEx, TRUE);
-
-		if (pNewRoomEx)
-		{
-			DRLGROOM_FreeRoomEx(pNewRoomEx);
-		}
-
-		return pNewRoomEx != 0;
+		DRLGROOM_FreeRoomEx(pNewRoomEx);
 	}
 
-	DRLGROOM_FreeRoomEx(pNewRoomEx);
-
-	return 0;
+	return pNewRoomEx != 0;
 }
 
 //D2Common.0x6FD7B8B0
@@ -2563,7 +2290,7 @@ void __fastcall DRLGMAZE_PlaceAct3DungeonStuff(D2DrlgLevelStrc* pLevel)
 		{
 			if (~i->pMaze->nFlags & 2)
 			{
-				pRoomEx = sub_6FD7AFD0(i, pMazeLevelIds->nDirection, FALSE);
+				pRoomEx = DRLGMAZE_PlaceAdjacentPresetRoom(i, pMazeLevelIds->nDirection, FALSE);
 				if (pRoomEx)
 				{
 					DRLGMAZE_PickRoomPreset(i, 1);
@@ -2595,7 +2322,7 @@ void __fastcall DRLGMAZE_PlaceAct3DungeonStuff(D2DrlgLevelStrc* pLevel)
 		{
 			if (~i->pMaze->nFlags & 2)
 			{
-				pRoomEx = sub_6FD7AFD0(i, pMazeLevelIds->nDirection, FALSE);
+				pRoomEx = DRLGMAZE_PlaceAdjacentPresetRoom(i, pMazeLevelIds->nDirection, FALSE);
 				if (pRoomEx)
 				{
 					DRLGMAZE_PickRoomPreset(i, 1);
@@ -2656,7 +2383,7 @@ void __fastcall DRLGMAZE_PlaceAct3SewerStuff(D2DrlgLevelStrc* pLevel)
 		{
 			if (~i->pMaze->nFlags & 2)
 			{
-				pTemp = sub_6FD7AFD0(i, pMazeLevelIds->nDirection, FALSE);
+				pTemp = DRLGMAZE_PlaceAdjacentPresetRoom(i, pMazeLevelIds->nDirection, FALSE);
 				if (pTemp)
 				{
 					DRLGMAZE_PickRoomPreset(i, 1);
@@ -2688,7 +2415,7 @@ void __fastcall DRLGMAZE_PlaceAct3SewerStuff(D2DrlgLevelStrc* pLevel)
 		{
 			if (~i->pMaze->nFlags & 2)
 			{
-				pTemp = sub_6FD7AFD0(i, pMazeLevelIds->nDirection, FALSE);
+				pTemp = DRLGMAZE_PlaceAdjacentPresetRoom(i, pMazeLevelIds->nDirection, FALSE);
 				if (pTemp)
 				{
 					DRLGMAZE_PickRoomPreset(i, 1);
@@ -2983,9 +2710,9 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 {
 	static D2RoomExStrc* (__fastcall* pfGetBarracksEntryRoom[])(D2DrlgLevelStrc*) =
 	{
-		DRLGMAZE_GetBarracksEntryRoomWest,
-		DRLGMAZE_GetBarracksEntryRoomNorth,
-		DRLGMAZE_GetBarracksEntryRoomEast,
+		DRLGMAZE_GetFreeLocationForRoomWest,
+		DRLGMAZE_GetFreeLocationForRoomNorth,
+		DRLGMAZE_GetFreeLocationForRoomEast,
 	};
 
 	static const D2MazeLevelIdStrc nAct1BarracksNextIds[] =
@@ -3078,7 +2805,7 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		break;
 
 	case 2:
-		pBarracksRoomEx = sub_6FD7AFD0(pRoomEx, ALTDIR_WEST, FALSE);
+		pBarracksRoomEx = DRLGMAZE_PlaceAdjacentPresetRoom(pRoomEx, ALTDIR_WEST, FALSE);
 		if (pBarracksRoomEx)
 		{
 			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
@@ -3152,42 +2879,22 @@ void __fastcall DRLGMAZE_PlaceAct4Lava(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT4_LAVA_E, LVLPREST_ACT4_LAVA_FORGE_E, -1, 0 },
 	};
 
-	D2DrlgLevelStrc* pChaosSanctum = NULL;
-	D2RoomExStrc* pNewRoomEx = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
-	D2RoomExStrc* pRoomEx1 = NULL;
-	D2RoomExStrc* pRoomEx2 = NULL;
-	D2RoomExStrc* pRoomEx3 = NULL;
-	int nMinX = 0;
-	int nMinY = 0;
-	int nMaxX = 0;
-	int nMaxY = 0;
-	int nX = 0;
-	int nY = 0;
-
 	if (pLevel->pDrlg->nAct != ACT_V)
 	{
-		pChaosSanctum = DRLG_GetLevel(pLevel->pDrlg, LEVEL_CHAOSSANCTUM);		
+		D2DrlgLevelStrc* pChaosSanctum = DRLG_GetLevel(pLevel->pDrlg, LEVEL_CHAOSSANCTUM);
 
-		pRoomEx = NULL;
-		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
-		{
-			if ((!pRoomEx || i->nTileYPos > pRoomEx->nTileYPos) && sub_6FD7B710(i, 3))
-			{
-				pRoomEx = i;
-			}
-		}
+		D2RoomExStrc* pParentRoom = DRLGMAZE_GetFreeLocationForRoomNorth(pLevel);
 
-		pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
+		D2RoomExStrc* pNewRoomEx = DRLGROOM_AllocRoomEx(pParentRoom->pLevel, DRLGTYPE_PRESET);
 		DRLGMAZE_SetRoomSize(pNewRoomEx);
 
-		if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pRoomEx, 3))
+		if (DRLGMAZE_LinkMazeRooms(pNewRoomEx, pParentRoom, ALTDIR_SOUTH))
 		{
-			DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, 3);
-			DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
+			DRLGROOM_AllocDrlgOrthsForRooms(pParentRoom, pNewRoomEx, ALTDIR_SOUTH);
+			DRLGROOM_AddRoomExToLevel(pParentRoom->pLevel, pNewRoomEx);
 			if (pNewRoomEx)
 			{
-				DRLGMAZE_PickRoomPreset(pRoomEx, 1);
+				DRLGMAZE_PickRoomPreset(pParentRoom, TRUE);
 				DRLGMAZE_SetPickedFileAndPresetId(pNewRoomEx, LVLPREST_ACT4_LAVA_WARP_N, -1, FALSE);
 			}
 		}
@@ -3196,48 +2903,36 @@ void __fastcall DRLGMAZE_PlaceAct4Lava(D2DrlgLevelStrc* pLevel)
 			DRLGROOM_FreeRoomEx(pNewRoomEx);
 		}
 
-		pRoomEx = NULL;
-		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
+		pParentRoom = DRLGMAZE_GetFreeLocationForRoomSouth(pLevel);
+
+		// Add bridge between lava (where the statues are) and chaos sanctum 
+		D2RoomExStrc* pBridgeRoomEx1 = DRLGMAZE_PlaceAdjacentPresetRoom(pParentRoom, ALTDIR_NORTH, FALSE);
+		if (pBridgeRoomEx1)
 		{
-			if ((!pRoomEx || i->nTileYPos < pRoomEx->nTileYPos) && sub_6FD7B710(i, 1))
-			{
-				pRoomEx = i;
-			}
+			DRLGMAZE_PickRoomPreset(pParentRoom, 1);
+			DRLGMAZE_SetPickedFileAndPresetId(pBridgeRoomEx1, LVLPREST_ACT4_BRIDGE_1, -1, FALSE);
 		}
 
-		pRoomEx1 = sub_6FD7AFD0(pRoomEx, ALTDIR_NORTH, FALSE);
-		if (pRoomEx1)
+		D2RoomExStrc* pBridgeRoomEx2 = DRLGMAZE_PlaceAdjacentPresetRoom(pBridgeRoomEx1, ALTDIR_NORTH, FALSE);
+		if (pBridgeRoomEx2)
 		{
-			DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-			pRoomEx1->pMaze->nLevelPrest = LVLPREST_ACT4_BRIDGE_1;
-			pRoomEx1->pMaze->nPickedFile = -1;
-			pRoomEx1->pMaze->dwFlags |= 2;
+			DRLGMAZE_SetPickedFileAndPresetId(pBridgeRoomEx2, LVLPREST_ACT4_BRIDGE_2, -1, FALSE);
 		}
 
-		pRoomEx2 = sub_6FD7AFD0(pRoomEx1, ALTDIR_NORTH, FALSE);
-		if (pRoomEx2)
+		D2RoomExStrc* pBridgeRoomEx3 = DRLGMAZE_PlaceAdjacentPresetRoom(pBridgeRoomEx2, ALTDIR_NORTH, FALSE);
+		if (pBridgeRoomEx3)
 		{
-			pRoomEx2->pMaze->nLevelPrest = LVLPREST_ACT4_BRIDGE_2;
-			pRoomEx2->pMaze->nPickedFile = -1;
-			pRoomEx2->pMaze->dwFlags |= 2;
+			DRLGMAZE_SetPickedFileAndPresetId(pBridgeRoomEx3, LVLPREST_ACT4_BRIDGE_2, -1, FALSE);
 		}
 
-		pRoomEx3 = sub_6FD7AFD0(pRoomEx2, ALTDIR_NORTH, FALSE);
-		if (pRoomEx3)
-		{
-			pRoomEx3->pMaze->nLevelPrest = LVLPREST_ACT4_BRIDGE_2;
-			pRoomEx3->pMaze->nPickedFile = -1;
-			pRoomEx3->pMaze->dwFlags |= 2;
-		}
+		DRLGROOM_AddOrth(&pBridgeRoomEx3->pDrlgOrth, pChaosSanctum, ALTDIR_NORTH, FALSE);
 
-		DRLGROOM_AddOrth(&pRoomEx3->pDrlgOrth, pChaosSanctum, 1, FALSE);
-
-		nX = pChaosSanctum->nPosX + 2 * pRoomEx3->nTileWidth - pRoomEx3->nTileXPos;
-		nY = pChaosSanctum->nPosY + pChaosSanctum->nHeight - pRoomEx3->nTileYPos;
+		const int nX = pChaosSanctum->nPosX + 2 * pBridgeRoomEx3->nTileWidth - pBridgeRoomEx3->nTileXPos;
+		const int nY = pChaosSanctum->nPosY + pChaosSanctum->nHeight - pBridgeRoomEx3->nTileYPos;
 
 		DRLGMAZE_ScanReplaceSpecialPreset(pLevel, &nAct4LavaForgeIds[SEED_RollRandomNumber(&pLevel->pSeed) & 1], 0);
 
-		DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, pRoomEx3);
+		DRLGMAZE_FillBlankMazeSpaces(pLevel, LVLPREST_ACT4_LAVA_X, pBridgeRoomEx3);
 
 		for (D2RoomExStrc* i = pLevel->pFirstRoomEx; i; i = i->pRoomExNext)
 		{
@@ -3245,6 +2940,7 @@ void __fastcall DRLGMAZE_PlaceAct4Lava(D2DrlgLevelStrc* pLevel)
 			i->nTileYPos += nY;
 		}
 
+		int nMinX, nMinY, nMaxX, nMaxY;
 		DRLG_GetMinAndMaxCoordinatesFromLevel(pLevel, &nMinX, &nMinY, &nMaxX, &nMaxY);
 
 		pLevel->nPosX = nMinX;

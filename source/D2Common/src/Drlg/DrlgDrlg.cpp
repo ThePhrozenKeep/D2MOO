@@ -15,6 +15,9 @@
 #include <D2CMP.h>
 #include <DataTbls/LevelsIds.h>
 
+static_assert(ROOMEXFLAG_HAS_WARP_0 == (1 << ROOMEXFLAG_HAS_WARP_FIRST_BIT), "Warp first bit must match of ROOMEXFLAG_HAS_WARP_0");
+static_assert(ROOMEXFLAG_SUBSHRINE_ROW1 == (1 << ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT), "Subshrines first bit must match of ROOMEXFLAG_SUBSHRINE_ROW1");
+static_assert(ROOMEXFLAG_HAS_WAYPOINT == (1 << ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT), "Waypoint first bit must match of ROOMEXFLAG_HAS_WAYPOINT");
 
 //D2Common.0x6FD74120 (#10014)
 D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)

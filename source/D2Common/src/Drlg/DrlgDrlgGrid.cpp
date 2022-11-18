@@ -78,7 +78,7 @@ int* __fastcall DRLGGRID_GetGridFlagsPointer(D2DrlgGridStrc* pDrlgGrid, int nX, 
 }
 
 //D2Common.0x6FD75CA0
-int __fastcall DRLGGRID_GetGridFlags(D2DrlgGridStrc* pDrlgGrid, int nX, int nY)
+int __fastcall DRLGGRID_GetGridEntry(D2DrlgGridStrc* pDrlgGrid, int nX, int nY)
 {
 	return pDrlgGrid->pCellsFlags[nX + pDrlgGrid->pCellsRowOffsets[nY]];
 }
