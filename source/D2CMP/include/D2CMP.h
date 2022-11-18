@@ -57,7 +57,7 @@ struct D2TileLibraryEntryStrc
 {
 	int32_t nLightDirection;					//0x00
 	uint16_t nRoofHeight;						//0x04
-	uint16_t nFlags;							//0x06
+	uint16_t nFlags;							//0x06 D2TileMaterialFlags
 	int32_t nTotalHeight;						//0x08
 	int32_t nWidth;								//0x0C
 	int32_t nHeightToBottom;					//0x10
@@ -66,7 +66,7 @@ struct D2TileLibraryEntryStrc
 	int32_t nSequence;							//0x1C aka nSubIndex
 	int32_t nRarity_Frame;						//0x20 By default this is the rarity of the tile, for animated tiles this is the frame index.
 	int32_t transparentColorRGB24;				//0x24
-	uint8_t dwTileFlags[4];						//0x28
+	uint8_t dwTileFlags[4];						//0x28 Collision info
 	int32_t dwBlockOffset_pBlock;				//0x2C
 	int32_t nBlockSize;							//0x30
 	int32_t nBlocks;							//0x34
