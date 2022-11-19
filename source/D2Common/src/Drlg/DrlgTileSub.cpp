@@ -419,7 +419,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 			nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->field_0 + a7, j + pSubstGroup->field_4);
 			if (nFlags & 0x8000000)
 			{
-				sub_6FD88FD0(a4->pRoomEx, nX + i + a4->pRoomEx->nTileXPos, nY + j + a4->pRoomEx->nTileYPos, nFlags);
+				DRLGROOMTILE_InitTileShadow(a4->pRoomEx, nX + i + a4->pRoomEx->nTileXPos, nY + j + a4->pRoomEx->nTileYPos, nFlags);
 			}
 		}
 	}
