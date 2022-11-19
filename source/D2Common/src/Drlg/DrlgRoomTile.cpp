@@ -492,142 +492,159 @@ void __fastcall DRLGROOMTILE_InitTileShadow(D2RoomExStrc* pRoomEx, int nX, int n
 }
 
 //D2Common.0x6FD89000
-void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pTileTypeGrid, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY)
+void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pTilePackedInfoGrid, D2DrlgGridStrc* pTileTypeGrid, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY)
 {
-	unsigned int v18 = 0;
-	unsigned int v31 = 0;
-	BOOL bContinue = FALSE;
-
 	void* pMemPool = pRoomEx->pLevel->pDrlg->pMempool;
 
 	const int nTileCountX = pRoomEx->nTileWidth + (bKillEdgeX == 0);
 	const int nTileCountY = pRoomEx->nTileHeight + (bKillEdgeY == 0);
 
-	const int nX = pRoomEx->nTileXPos;
-	const int nY = pRoomEx->nTileYPos;
+	const int nRoomX = pRoomEx->nTileXPos;
+	const int nRoomY = pRoomEx->nTileYPos;
 
-	for (int nTileY = 0; nTileY < nTileCountY; ++nTileY)
+	for (int nTileOffsetY = 0; nTileOffsetY < nTileCountY; ++nTileOffsetY)
 	{
-		for (int nTileX = 0; nTileX < nTileCountX; ++nTileX)
+		for (int nTileOffsetX = 0; nTileOffsetX < nTileCountX; ++nTileOffsetX)
 		{
-			unsigned int nGridFlags = DRLGGRID_GetGridEntry(pDrlgCoordIndex, nTileX, nTileY);
+			const uint32_t nPackedTileInformation = DRLGGRID_GetGridEntry(pTilePackedInfoGrid, nTileOffsetX, nTileOffsetY);
+			D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+			const uint8_t nTileStyle = nTileInformation.nTileStyle;
+			const uint8_t nTileSequence = nTileInformation.nTileSequence;
 
-			const int nTileType = pTileTypeGrid ? DRLGGRID_GetGridEntry(pTileTypeGrid, nTileX, nTileY) : 0;
-
-			const uint8_t v17 = (nGridFlags >> 20) & 0x3F;
-			v18 = nGridFlags >> 8;
-			if ((nTileType != TILETYPE_SPECIALTILES_11 && nTileType != TILETYPE_SPECIALTILES_10) || v17 < 8)
+			const int nTileType = pTileTypeGrid ? DRLGGRID_GetGridEntry(pTileTypeGrid, nTileOffsetX, nTileOffsetY) : TILETYPE_FLOORS;
+			
+			if ((nTileType == TILETYPE_SPECIALTILES_10 || nTileType == TILETYPE_SPECIALTILES_11) && nTileStyle >= 8)
 			{
-				if (nTileType == TILETYPE_FLOORS && v17 == 30 && (!BYTE1(nGridFlags) || BYTE1(nGridFlags) == 1))
-				{
-					nGridFlags |= 0x80000000;
-				}
+				continue;
+			}
 
-				bContinue = FALSE;
-				if (nGridFlags & 0x80000000)
+			if (nTileType == TILETYPE_FLOORS && nTileStyle == 30 && (nTileSequence == 0 || nTileSequence == 1))
+			{
+				nTileInformation.bHidden = true;
+			}
+
+			const int nTilePosX = nRoomX + nTileOffsetX;
+			const int nTilePosY = nRoomY + nTileOffsetY;
+
+			if (nTileInformation.bHidden)
+			{
+				bool bTileAdded = false;
+				switch (nTileType)
 				{
-					switch (nTileType)
+				// Doors
+				case TILETYPE_LEFTWALLWITHDOOR:
+				case TILETYPE_RIGHTWALLWITHDOOR:
+				{
+					const int nLevelId = pRoomEx->pLevel->nLevelId;
+					if (nLevelId == LEVEL_ID_ACT5_BARRICADE_1 
+						|| nLevelId == LEVEL_ARREATPLATEAU 
+						|| nLevelId == LEVEL_TUNDRAWASTELANDS)
 					{
-					// Warps
-					case TILETYPE_SPECIALTILES_10:
-					case TILETYPE_SPECIALTILES_11:
-						if (v17 < 8)
-						{
-							DRLGROOMTILE_AddWarp(pRoomEx, nX + nTileX, nY + nTileY, nGridFlags, nTileType);
-							DRLGROOMTILE_LoadFloorWarpTiles(pRoomEx, nX + nTileX, nY + nTileY, nGridFlags, nTileType);
-						}
-						bContinue = TRUE;
-						break;
-					// Doors
-					case TILETYPE_LEFTWALLWITHDOOR:
-					case TILETYPE_RIGHTWALLWITHDOOR:
-						if (pRoomEx->pLevel->nLevelId < LEVEL_ID_ACT5_BARRICADE_1 || (pRoomEx->pLevel->nLevelId > LEVEL_ARREATPLATEAU && pRoomEx->pLevel->nLevelId != LEVEL_TUNDRAWASTELANDS))
-						{
-							DRLGROOMTILE_AddTilePresetUnits(pRoomEx, 0, nGridFlags, nX + nTileX, nY + nTileY, nTileType);
-							bContinue = TRUE;
-						}
-						break;
-
-					default:
-						break;
+						break; // ignore doors for those levels
 					}
+					DRLGROOMTILE_AddTilePresetUnits(pRoomEx, nullptr, nTileInformation.nPackedValue, nTilePosX, nTilePosY, nTileType);
+					bTileAdded = true;
+					break;
 				}
-
-				if (!bContinue)
-				{
-					if (nGridFlags & 4)
+				// Warps
+				case TILETYPE_SPECIALTILES_10:
+				case TILETYPE_SPECIALTILES_11:
+					if (nTileStyle < 8)
 					{
-						if (nGridFlags & 2)
-						{
-							if (v17 == 30 && (!(uint8_t)v18 || (uint8_t)v18 == 1))
-							{
-								nGridFlags &= 0xFFFFFF7F;
-							}
+						DRLGROOMTILE_AddWarp(pRoomEx, nTilePosX, nTilePosY, nTileInformation.nPackedValue, nTileType);
+						DRLGROOMTILE_LoadFloorWarpTiles(pRoomEx, nTilePosX, nTilePosY, nTileInformation.nPackedValue, nTileType);
+					}
+					bTileAdded = true;
+					break;
+
+				default:
+					break;
+				}
+				if (bTileAdded)
+				{
+					continue;
+				}
+			}
+
+			bool bTileAdded = false;
+			if (nTileInformation.bLOS)
+			{
+				bTileAdded = true;
+				if (nTileInformation.bIsFloor)
+				{
+					if (nTileStyle == 30 && (nTileSequence == 0 || nTileSequence == 1))
+					{
+						nTileInformation.bLayerAbove = false;
+					}
 
 
-							D2RoomExStrc* pLinkedRoom = nullptr;
-							if (D2DrlgTileDataStrc* pTileData = DRLGROOMTILE_GetLinkedTileData(pRoomEx, 1, nGridFlags, nX + nTileX, nY + nTileY, &pLinkedRoom))
-							{
-								DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pLinkedRoom, pTileData, 0, nGridFlags, nX + nTileX, nY + nTileY);
-							}
-							else
-							{
-								DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx, 0, nGridFlags, nX + nTileX, nY + nTileY);
-							}
-						}
-						else if (nGridFlags & 1)
-						{
-							D2RoomExStrc* pLinkedRoom = nullptr;
-							if (D2DrlgTileDataStrc* pTileData = DRLGROOMTILE_GetLinkedTileData(pRoomEx, nTileType == 0, nGridFlags, nX + nTileX, nY + nTileY, &pLinkedRoom))
-							{
-								DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pLinkedRoom, pTileData, nTileType, nGridFlags, nX + nTileX, nY + nTileY);
-							}
-							else
-							{
-								DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx, nTileType, nGridFlags, nX + nTileX, nY + nTileY);
-							}
-						}
-						else if (nGridFlags & 0x8000000 && !(nGridFlags & 0x80000000))
-						{
-							DRLGROOMTILE_GetCreateLinkedTileData(pMemPool, pRoomEx, 13, nGridFlags, nX + nTileX, nY + nTileY);
-						}
+					D2RoomExStrc* pLinkedRoom = nullptr;
+					if (D2DrlgTileDataStrc* pLinkedTileData = DRLGROOMTILE_GetLinkedTileData(pRoomEx, TRUE, nTileInformation.nPackedValue, nTilePosX, nTilePosY, &pLinkedRoom))
+					{
+						DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pLinkedRoom, pLinkedTileData, TILETYPE_FLOORS, nTileInformation.nPackedValue, nTilePosX, nTilePosY);
 					}
 					else
 					{
-						if (nGridFlags & 2)
-						{
-							DRLGROOMTILE_InitFloorTileData(pRoomEx, 0, nX + nTileX, nY + nTileY, nGridFlags, DRLGROOMTILE_GetTileCache(pRoomEx, 0, nGridFlags));
-						}
-						else
-						{
-							if (bFillBlanks && DRLGROOM_AreXYInsideCoordinates(&pRoomEx->pDrlgCoord, nX + nTileX, nY + nTileY))
-							{
-								v31 = 0x1E00000;
-								if (pRoomEx->pLevel->nLevelId == LEVEL_ARCANESANCTUARY)
-								{
-									v31 |= 0x100;
-								}
-
-								DRLGROOMTILE_InitFloorTileData(pRoomEx, 0, nX + nTileX, nY + nTileY, (nGridFlags & 0xFFFFFF7F) | 0x80000000, DRLGROOMTILE_GetTileCache(pRoomEx, 0, v31));
-							}
-						}
-
-						if (nGridFlags & 1)
-						{
-							D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, nTileType, nGridFlags);
-							D2DrlgTileDataStrc* pTileData = DRLGROOMTILE_InitWallTileData(pRoomEx, 0, nX + nTileX, nY + nTileY, nGridFlags, pTileCache, nTileType);
-							if (nTileType == TILETYPE_SPECIALTILES_11 || nTileType == TILETYPE_SPECIALTILES_10)
-							{
-								DRLGROOMTILE_LoadWallWarpTiles(pRoomEx, pTileData, nGridFlags, nTileType);
-							}
-						}
-
-						if (nGridFlags & 0x8000000)
-						{
-							D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, 13, nGridFlags);
-							DRLGROOMTILE_InitShadowTileData(pRoomEx, 0, nX + nTileX, nY + nTileY, nGridFlags, pTileCache);
-						}
+						DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx, TILETYPE_FLOORS, nTileInformation.nPackedValue, nTilePosX, nTilePosY);
 					}
+				}
+				else if (nTileInformation.bIsWall)
+				{
+					D2RoomExStrc* pLinkedRoom = nullptr;
+					if (D2DrlgTileDataStrc* pLinkedTileData = DRLGROOMTILE_GetLinkedTileData(pRoomEx, nTileType == TILETYPE_FLOORS, nTileInformation.nPackedValue, nTilePosX, nTilePosY, &pLinkedRoom))
+					{
+						DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pLinkedRoom, pLinkedTileData, nTileType, nTileInformation.nPackedValue, nTilePosX, nTilePosY);
+					}
+					else
+					{
+						DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx, nTileType, nTileInformation.nPackedValue, nTilePosX, nTilePosY);
+					}
+				}
+				else if (nTileInformation.bShadow && !nTileInformation.bHidden)
+				{
+					DRLGROOMTILE_GetCreateLinkedTileData(pMemPool, pRoomEx, TILETYPE_SHADOWS, nTileInformation.nPackedValue, nTilePosX, nTilePosY);
+				}
+				else
+				{
+					bTileAdded = false;
+				}
+			}
+
+			if(!bTileAdded)
+			{
+				if (nTileInformation.bIsFloor)
+				{
+					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, TILETYPE_FLOORS, nTileInformation.nPackedValue);
+					DRLGROOMTILE_InitFloorTileData(pRoomEx, nullptr, nTilePosX, nTilePosY, nTileInformation.nPackedValue, pTileCache);
+				}
+				else if(bFillBlanks && DRLGROOM_AreXYInsideCoordinates(&pRoomEx->pDrlgCoord, nTilePosX, nTilePosY))
+				{
+					D2C_PackedTileInformation nCachedTileInfo{ 0 };
+					nCachedTileInfo.nTileStyle = 30;
+					nCachedTileInfo.nTileSequence = uint32_t(pRoomEx->pLevel->nLevelId == LEVEL_ARCANESANCTUARY);
+					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, 0, nCachedTileInfo.nPackedValue);
+
+
+					D2C_PackedTileInformation nArcaneFloorTileInfo = nTileInformation;
+					nArcaneFloorTileInfo.bLayerAbove = false;
+					nArcaneFloorTileInfo.bHidden = true;
+					DRLGROOMTILE_InitFloorTileData(pRoomEx, 0, nTilePosX, nTilePosY, nArcaneFloorTileInfo.nPackedValue, pTileCache);
+				}
+
+				if (nTileInformation.bIsWall)
+				{
+					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, nTileType, nTileInformation.nPackedValue);
+					D2DrlgTileDataStrc* pWallTileData = DRLGROOMTILE_InitWallTileData(pRoomEx, nullptr, nTilePosX, nTilePosY, nTileInformation.nPackedValue, pTileCache, nTileType);
+					if (nTileType == TILETYPE_SPECIALTILES_11 || nTileType == TILETYPE_SPECIALTILES_10)
+					{
+						DRLGROOMTILE_LoadWallWarpTiles(pRoomEx, pWallTileData, nTileInformation.nPackedValue, nTileType);
+					}
+				}
+
+				if (nTileInformation.bShadow)
+				{
+					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, TILETYPE_SHADOWS, nTileInformation.nPackedValue);
+					DRLGROOMTILE_InitShadowTileData(pRoomEx, nullptr, nTilePosX, nTilePosY, nTileInformation.nPackedValue, pTileCache);
 				}
 			}
 		}
