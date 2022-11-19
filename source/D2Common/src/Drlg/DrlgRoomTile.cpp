@@ -486,9 +486,9 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRo
 }
 
 //D2Common.0x6FD88FD0
-void __fastcall sub_6FD88FD0(D2RoomExStrc* pRoomEx, int nX, int nY, int nTileFlags)
+void __fastcall DRLGROOMTILE_InitTileShadow(D2RoomExStrc* pRoomEx, int nX, int nY, uint32_t nPackedTileInformation)
 {
-	DRLGROOMTILE_InitShadowTileData(pRoomEx, 0, nX, nY, nTileFlags, DRLGROOMTILE_GetTileCache(pRoomEx, 13, nTileFlags));
+	DRLGROOMTILE_InitShadowTileData(pRoomEx, nullptr, nX, nY, nPackedTileInformation, DRLGROOMTILE_GetTileCache(pRoomEx, TILETYPE_SHADOWS, nPackedTileInformation));
 }
 
 //D2Common.0x6FD89000
