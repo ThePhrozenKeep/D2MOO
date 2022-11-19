@@ -679,22 +679,18 @@ BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, uint
 }
 
 //D2Common.0x6FD89410
-void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nTileFlags, int nType)
+void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, uint32_t nPackedTileInformation, int nTileType)
 {
-	D2DrlgTileDataStrc* pDrlgTileData = NULL;
-	D2RoomTileStrc* pRoomTile = NULL;
-	int nLevelId = 0;
-	int nFlags = 0;
-	char szDirection = 0;
-
-	pRoomTile = pRoomEx->pRoomTiles;
-	nLevelId = DRLGWARP_GetWarpDestinationFromArray(pRoomEx->pLevel, ((unsigned int)nTileFlags >> 20) & 0x3F);
-	if (pRoomTile)
+	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+	
+	const int nDestinationLevelId = DRLGWARP_GetWarpDestinationFromArray(pRoomEx->pLevel, nTileInformation.nTileStyle);
+	D2RoomTileStrc* pWarpTile = pRoomEx->pRoomTiles;
+	if (pWarpTile)
 	{
-		while (pRoomTile->pLvlWarpTxtRecord->dwLevelId != nLevelId)
+		while (pWarpTile->pLvlWarpTxtRecord->dwLevelId != nDestinationLevelId)
 		{
-			pRoomTile = pRoomTile->pNext;
-			if (!pRoomTile)
+			pWarpTile = pWarpTile->pNext;
+			if (!pWarpTile)
 			{
 				FOG_10025("ptWarp", __FILE__, __LINE__);
 				return;
@@ -707,36 +703,35 @@ void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTile
 		return;
 	}
 
-	if (BYTE1(nTileFlags) && BYTE1(nTileFlags) != 4 || DRLGROOMTILE_AddWarp(pRoomEx, pRoomEx->nTileXPos + pTileData->nPosX, pTileData->nPosY + pRoomEx->nTileYPos, nTileFlags, nType))
+	if (nTileInformation.nTileSequence != 0 && nTileInformation.nTileSequence != 4 || DRLGROOMTILE_AddWarp(pRoomEx, pRoomEx->nTileXPos + pTileData->nPosX, pTileData->nPosY + pRoomEx->nTileYPos, nTileInformation.nPackedValue, nTileType))
 	{
-		D2_ASSERT(pRoomTile);
-		D2_ASSERT(pRoomTile->pLvlWarpTxtRecord);
-
-		if (pRoomTile->pLvlWarpTxtRecord->szDirection[0] != 'b')
+		D2_ASSERT(pWarpTile);
+		const D2LvlWarpTxt* pWarpDef = pWarpTile->pLvlWarpTxtRecord;
+		D2_ASSERT(pWarpDef);
+		if (pWarpDef->szDirection[0] != 'b')
 		{
-			szDirection = (((nType != 11) - 1) & 6) + 108;
-			if (pRoomTile->pLvlWarpTxtRecord->szDirection[0] != szDirection)
+			const char szDirection = nTileType == TILETYPE_SPECIALTILES_11 ? 'r' : 'l';
+			if (pWarpDef->szDirection[0] != szDirection)
 			{
-				pRoomTile->pLvlWarpTxtRecord = DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(pRoomTile->pLvlWarpTxtRecord->dwLevelId, szDirection);
+				pWarpDef = DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(pWarpDef->dwLevelId, szDirection);
 			}
 		}
 
-		pTileData->unk0x20 = pRoomTile->unk0x10;
-		pRoomTile->unk0x10 = pTileData;
+		pTileData->unk0x20 = pWarpTile->unk0x10;
+		pWarpTile->unk0x10 = pTileData;
 
-		if (!pRoomTile->pLvlWarpTxtRecord)
+		if (!pWarpDef)
 		{
 			FOG_10025("pctWarpDef", __FILE__, __LINE__);
 		}
 
-		if (pRoomTile->pLvlWarpTxtRecord->dwLitVersion)
+		if (pWarpDef->dwLitVersion)
 		{
-			nFlags = nTileFlags | (pRoomTile->pLvlWarpTxtRecord->dwTiles << 8);
-			pDrlgTileData = DRLGROOMTILE_InitWallTileData(pRoomEx, &pRoomTile->unk0x0C, pRoomEx->nTileXPos + pTileData->nPosX, pTileData->nPosY + pRoomEx->nTileYPos, nFlags, DRLGROOMTILE_GetTileCache(pRoomEx, nType, nFlags), nType);
-
-			if (pDrlgTileData)
+			nTileInformation.nTileSequence |= pWarpDef->dwTiles;
+			D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx, nTileType, nTileInformation.nPackedValue);
+			if (D2DrlgTileDataStrc* pDrlgTileData = DRLGROOMTILE_InitWallTileData(pRoomEx, &pWarpTile->unk0x0C, pRoomEx->nTileXPos + pTileData->nPosX, pTileData->nPosY + pRoomEx->nTileYPos, nTileInformation.nPackedValue, pTileCache, nTileType))
 			{
-				pDrlgTileData->dwFlags |= 8;
+				pDrlgTileData->dwFlags |= MAPTILE_HIDDEN;
 			}
 		}
 	}
