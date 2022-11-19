@@ -186,7 +186,7 @@ void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2RoomExStrc* pRoomEx, D2Dr
 		pTileData->dwFlags |= MAPTILE_TREES;
 	}
 
-	if (nTileInfo.bHidden)
+	if (!nTileInfo.bHidden)
 	{
 		pTileData->dwFlags &= (~MAPTILE_HIDDEN);
 	}
