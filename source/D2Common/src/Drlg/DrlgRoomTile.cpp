@@ -652,16 +652,15 @@ void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGrid
 }
 
 //D2Common.0x6FD89360
-BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, int nTileFlags, int nType)
+BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, uint32_t nPackedTileInformation, int nTileType)
 {
-	D2LvlWarpTxt* pLvlWarpTxtRecord = DRLGWARP_GetLvlWarpTxtRecordFromWarpIdAndDirection(pRoomEx->pLevel, ((unsigned int)nTileFlags >> 20) & 0x3F, (((nType != 11) - 1) & 6) + 108);
-	int nPosX = 0;
-	int nPosY = 0;
-
+	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+	D2LvlWarpTxt* pLvlWarpTxtRecord = DRLGWARP_GetLvlWarpTxtRecordFromWarpIdAndDirection(pRoomEx->pLevel, nTileInformation.nTileStyle, nTileType == TILETYPE_SPECIALTILES_11 ? 'r' : 'l');
+	
 	if (pLvlWarpTxtRecord)
 	{
-		nPosX = nX - pRoomEx->nTileXPos;
-		nPosY = nY - pRoomEx->nTileYPos;
+		int nPosX = nX - pRoomEx->nTileXPos;
+		int nPosY = nY - pRoomEx->nTileYPos;
 
 		if (nPosX != pRoomEx->nTileWidth && nPosY != pRoomEx->nTileHeight)
 		{
@@ -670,7 +669,7 @@ BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, int 
 			nPosX += pLvlWarpTxtRecord->dwOffsetX;
 			nPosY += pLvlWarpTxtRecord->dwOffsetY;
 
-			DRLGROOM_AllocPresetUnit(pRoomEx, pRoomEx->pLevel->pDrlg->pMempool, UNIT_TILE, pLvlWarpTxtRecord->dwLevelId, 0, nPosX, nPosY);
+			DRLGROOM_AllocPresetUnit(pRoomEx, pRoomEx->pLevel->pDrlg->pMempool, UNIT_TILE, pLvlWarpTxtRecord->dwLevelId, OBJMODE_NEUTRAL, nPosX, nPosY);
 
 			return TRUE;
 		}

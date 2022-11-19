@@ -54,7 +54,7 @@ void __fastcall DRLGROOMTILE_InitTileShadow(D2RoomExStrc* pRoomEx, int nX, int n
 //D2Common.0x6FD89000
 void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pDrlgOutdoorRoom, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89360
-BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, int a4, int a5);
+BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, uint32_t nPackedTileInformation, int nTileType);
 //D2Common.0x6FD89410
 void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int a3, int a4);
 //D2Common.0x6FD89590
