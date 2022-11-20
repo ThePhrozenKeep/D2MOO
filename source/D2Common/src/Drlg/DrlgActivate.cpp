@@ -171,7 +171,7 @@ void __fastcall DRLGACTIVATE_RoomExStatusUnset_Untile(D2RoomExStrc* pRoomEx)
 		{
 			if (DRLG_IsOnClient(pRoomEx->pLevel->pDrlg))
 			{
-				sub_6FD8A2E0(pRoomEx, false);
+				DRLGROOMTILE_FreeRoom(pRoomEx, false);
 			}
 		}
 	}

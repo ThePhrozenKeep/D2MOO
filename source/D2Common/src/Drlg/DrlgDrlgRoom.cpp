@@ -48,7 +48,7 @@ void __fastcall sub_6FD77280(D2RoomExStrc* pRoomEx, BOOL bClient, uint32_t nFlag
 
 	if (pRoomEx->dwFlags & ROOMEXFLAG_HAS_ROOM)
 	{
-		sub_6FD8A2E0(pRoomEx, bClient == 0);
+		DRLGROOMTILE_FreeRoom(pRoomEx, bClient == 0);
 	}
 }
 
