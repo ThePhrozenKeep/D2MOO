@@ -1226,28 +1226,20 @@ void __fastcall DRLGROOMTILE_FreeRoom(D2RoomExStrc* pRoomEx, BOOL bKeepRoom)
 //D2Common.0x6FD8A380
 void __fastcall DRLGROOMTILE_LoadDT1FilesForRoom(D2RoomExStrc* pRoomEx)
 {
-	D2LvlTypesTxt* pLvlTypesTxtRecord = NULL;
-	unsigned int dwDT1Mask = 0;
-	int nCounter = 0;
-	char szPath[MAX_PATH] = {};
+	D2LvlTypesTxt* pLvlTypesTxtRecord = DATATBLS_GetLevelTypesTxtRecord(pRoomEx->pLevel->nLevelType);
 
-	pLvlTypesTxtRecord = DATATBLS_GetLevelTypesTxtRecord(pRoomEx->pLevel->nLevelType);
-
-	dwDT1Mask = pRoomEx->dwDT1Mask;
-
-	while (dwDT1Mask && nCounter < 32)
+	static_assert(ARRAY_SIZE(pLvlTypesTxtRecord->szFile) <= 32, "DT1Mask is 32bits, needs to match the number of file records");
+	
+	uint32_t dwDT1Mask = pRoomEx->dwDT1Mask;
+	for (int nFileIndex = 0; nFileIndex < ARRAY_SIZE(pLvlTypesTxtRecord->szFile) && dwDT1Mask != 0; ++nFileIndex, dwDT1Mask >>= 1)
 	{
 		if (dwDT1Mask & 1)
 		{
-			D2CMP_10087_LoadTileLibrarySlot(pRoomEx->pTiles, pLvlTypesTxtRecord->szFile[nCounter]);
+			D2CMP_10087_LoadTileLibrarySlot(pRoomEx->pTiles, pLvlTypesTxtRecord->szFile[nFileIndex]);
 		}
-
-		dwDT1Mask >>= 1;
-
-		++nCounter;
 	}
 
-	szPath[0] = sgptDataTables->szDefaultString;
+	char szPath[MAX_PATH] = { sgptDataTables->szDefaultString };
 
 	wsprintfA(szPath, "%s\\Tiles\\Act1\\Outdoors\\Blank.dt1", "DATA\\GLOBAL");
 	D2CMP_10087_LoadTileLibrarySlot(pRoomEx->pTiles, szPath);
