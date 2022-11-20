@@ -58,9 +58,9 @@ BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, uint
 //D2Common.0x6FD89410
 void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, uint32_t nPackedTileInformation, int nTileType);
 //D2Common.0x6FD89590
-void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2RoomExStrc* pRoomEx, int nX, int nY, unsigned int dwFlags, int a5);
+void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2RoomExStrc* pRoomEx, int nX, int nY, uint32_t nPackedTileInformation, int nTileType);
 //D2Common.0x6FD897E0
-D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, BOOL bFloor, int nTileFlags, int nX, int nY, D2RoomExStrc** ppRoomEx);
+D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, BOOL bFloor, uint32_t nPackedTileInformation, int nX, int nY, D2RoomExStrc** ppRoomEx);
 //D2Common.0x6FD89930
 void __fastcall DRLGROOMTILE_AddLinkedTileData(void* pMemPool, D2RoomExStrc* pRoomEx, int a3, unsigned int a4, int nX, int nY);
 //D2Common.0x6FD89AF0
