@@ -748,13 +748,13 @@ void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2RoomExStrc* pRoomEx, int nX, i
 }
 
 //D2Common.0x6FD897E0
-D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, BOOL bFloor, int nTileFlags, int nX, int nY, D2RoomExStrc** ppRoomEx)
+D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoomEx, BOOL bFloor, uint32_t nPackedTileInformation, int nX, int nY, D2RoomExStrc** ppRoomEx)
 {
-	D2RoomExStrc* pNearRoomEx = NULL;
+	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
 
 	for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
 	{
-		pNearRoomEx = pRoomEx->ppRoomsNear[i];
+		D2RoomExStrc* pNearRoomEx = pRoomEx->ppRoomsNear[i];
 
 		if (pNearRoomEx != pRoomEx && pNearRoomEx->pTileGrid && DRLGROOM_AreXYInsideCoordinatesOrOnBorder(&pNearRoomEx->pDrlgCoord, nX, nY))
 		{
@@ -766,9 +766,9 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoo
 					{
 						if (pNearRoomEx->nTileXPos + pTileData->nPosX == nX && pNearRoomEx->nTileYPos + pTileData->nPosY == nY)
 						{
-							if (pTileData->nTileType != TILETYPE_LEFTPARTOFNORTHCORNERWALL && (pTileData->nTileType == TILETYPE_SHADOWS || !(nTileFlags & 0x8000000)))
+							if (pTileData->nTileType != TILETYPE_LEFTPARTOFNORTHCORNERWALL && (pTileData->nTileType == TILETYPE_SHADOWS || !nTileInformation.bShadow))
 							{
-								if (!(pTileData->dwFlags & 0x1C000) || ((((unsigned int)pTileData->dwFlags >> 14) & 7) - 1 == (((unsigned int)nTileFlags >> 18) & 3)))
+								if ((pTileData->dwFlags & MAPTILE_WALL_LAYER_MASK) == 0 || GetMapTileLayer(pTileData->dwFlags) == nTileInformation.nWallLayer)
 								{
 									*ppRoomEx = pRoomEx->ppRoomsNear[i];
 									return pTileData;
@@ -781,8 +781,8 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_GetLinkedTileData(D2RoomExStrc* pRoo
 		}
 	}
 
-	*ppRoomEx = NULL;
-	return NULL;
+	*ppRoomEx = nullptr;
+	return nullptr;
 }
 
 //D2Common.0x6FD89930
