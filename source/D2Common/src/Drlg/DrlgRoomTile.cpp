@@ -1018,33 +1018,31 @@ void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGrid
 }
 
 //D2Common.0x6FD89F00
-void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pOutdoorRoom, BOOL bKillEdgeX, BOOL bKillEdgeY)
+void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pTileInfoGrid, D2DrlgGridStrc* pTileTypeGrid, BOOL bKillEdgeX, BOOL bKillEdgeY)
 {
-	int v9 = 0;
+	const int nTileCountX = pRoomEx->nTileWidth + (bKillEdgeX == 0);
+	const int nTileCountY = pRoomEx->nTileHeight + (bKillEdgeY == 0);
 
-	for (int j = 0; j < pRoomEx->nTileHeight + (bKillEdgeY == 0); ++j)
+	for (int nY = 0; nY < nTileCountY; ++nY)
 	{
-		for (int i = 0; i < pRoomEx->nTileWidth + (bKillEdgeX == 0); ++i)
+		for (int nX = 0; nX < nTileCountX; ++nX)
 		{
-			v9 = DRLGGRID_GetGridEntry(pOutdoorRoom, i, j);
-
-			if (v9 == 3)
+			switch (int nTileType = DRLGGRID_GetGridEntry(pTileTypeGrid, nX, nY))
 			{
+			case TILETYPE_RIGHTPARTOFNORTHCORNERWALL:
 				++pRoomEx->pTileGrid->pTiles.nWalls;
-			}
-			else
-			{
-				if (v9 > 9 && v9 <= 11)
+				break;
+			case TILETYPE_SPECIALTILES_10:
+			case TILETYPE_SPECIALTILES_11:
+				if (D2C_PackedTileInformation{ (uint32_t)DRLGGRID_GetGridEntry(pTileInfoGrid, nX, nY) }.bHidden)
 				{
-					if (DRLGGRID_GetGridEntry(pDrlgCoordIndex, i, j) < 0)
-					{
-						pRoomEx->pTileGrid->pTiles.nFloors += 6;
-					}
-					else
-					{
-						++pRoomEx->pTileGrid->pTiles.nWalls;
-					}
+					pRoomEx->pTileGrid->pTiles.nFloors += 6;
 				}
+				else
+				{
+					++pRoomEx->pTileGrid->pTiles.nWalls;
+				}
+				break;
 			}
 		}
 	}
