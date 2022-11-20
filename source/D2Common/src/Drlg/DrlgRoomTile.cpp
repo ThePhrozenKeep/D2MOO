@@ -91,6 +91,34 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 	}
 }
 
+// Helper function
+static void DRLGROOMTILE_InitTileDataDefaults(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nX, int nY, uint32_t nPackedTileInformation, int nTileType, D2TileLibraryEntryStrc* pTileLibraryEntry)
+{
+	pTileData->pTile = pTileLibraryEntry;
+	pTileData->nTileType = nTileType;
+	pTileData->dwFlags = MAPTILE_FLAGS_NONE;
+	pTileData->unk0x24 = 0;
+	pTileData->nGreen = 0xFF;
+	pTileData->nBlue = 0xFF;
+	pTileData->nRed = 0xFF;
+
+	if (pRoomEx)
+	{
+		pTileData->nPosX = nX - pRoomEx->nTileXPos;
+		pTileData->nPosY = nY - pRoomEx->nTileYPos;
+
+		int nPosX = nX;
+		int nPosY = nY + 1;
+
+		DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
+
+		pTileData->nWidth = nPosX;
+		pTileData->nHeight = nPosY + 40;
+	}
+
+	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, nTileType, nX, nY);
+}
+
 //D2Common.0x6FD889C0
 D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc** ppTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry, int nTileType)
 {
@@ -107,27 +135,7 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitWallTileData(D2RoomExStrc* pRoom
 
 	++pRoomEx->pTileGrid->nWalls;
 
-	pTileData->nPosX = nX - pRoomEx->nTileXPos;
-	pTileData->nPosY = nY - pRoomEx->nTileYPos;
-
-	int nPosX = nX;
-	int nPosY = nY + 1;
-
-	DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
-
-	pTileData->nWidth = nPosX;
-	pTileData->nHeight = nPosY + 40;
-
-	pTileData->dwFlags = 0;
-	pTileData->unk0x24 = 0;
-	pTileData->nTileType = nTileType;
-
-	pTileData->pTile = pTileLibraryEntry;
-	pTileData->nGreen = -1;
-	pTileData->nBlue = -1;
-	pTileData->nRed = -1;
-
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, nTileType, nX, nY);
+	DRLGROOMTILE_InitTileDataDefaults(pRoomEx, pTileData, nX, nY, nPackedTileInformation, nTileType, pTileLibraryEntry);
 
 	if (nTileType == TILETYPE_RIGHTPARTOFNORTHCORNERWALL)
 	{
@@ -379,29 +387,7 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 //D2Common.0x6FD88DD0
 void __fastcall DRLGROOMTILE_InitTileData(D2RoomExStrc* pRoomEx, D2DrlgTileDataStrc* pTileData, int nX, int nY, uint32_t nPackedTileInformation, D2TileLibraryEntryStrc* pTileLibraryEntry)
 {
-	pTileData->pTile = pTileLibraryEntry;
-	pTileData->nTileType = TILETYPE_FLOORS;
-	pTileData->dwFlags = 0;
-	pTileData->unk0x24 = 0;
-	pTileData->nGreen = 0xFF;
-	pTileData->nBlue = 0xFF;
-	pTileData->nRed = 0xFF;
-
-	if (pRoomEx)
-	{
-		pTileData->nPosX = nX - pRoomEx->nTileXPos;
-		pTileData->nPosY = nY - pRoomEx->nTileYPos;
-
-		int nPosX = nX;
-		int nPosY = nY + 1;
-
-		DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
-
-		pTileData->nWidth = nPosX;
-		pTileData->nHeight = nPosY + 40;
-	}
-
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, TILETYPE_FLOORS, nX, nY);
+	DRLGROOMTILE_InitTileDataDefaults(pRoomEx, pTileData, nX, nY, nPackedTileInformation, TILETYPE_FLOORS, pTileLibraryEntry);
 }
 
 //D2Common.0x6FD88E60
@@ -420,28 +406,7 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitFloorTileData(D2RoomExStrc* pRoo
 
 	++pRoomEx->pTileGrid->nFloors;
 
-	pTileData->pTile = pTileLibraryEntry;
-	pTileData->nTileType = TILETYPE_FLOORS;
-	pTileData->dwFlags = 0;
-	pTileData->unk0x24 = 0;
-	pTileData->nGreen = -1;
-	pTileData->nBlue = -1;
-	pTileData->nRed = -1;
-
-
-	pTileData->nPosX = nX - pRoomEx->nTileXPos;
-	pTileData->nPosY = nY - pRoomEx->nTileYPos;
-
-	int nPosX = nX;
-	int nPosY = nY + 1;
-
-	DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
-
-	pTileData->nWidth = nPosX;
-	pTileData->nHeight = nPosY + 40;
-
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, TILETYPE_FLOORS, nX, nY);
-
+	DRLGROOMTILE_InitTileData(pRoomEx, pTileData, nX, nY, nPackedTileInformation, pTileLibraryEntry);
 	return pTileData;
 }
 
@@ -460,27 +425,8 @@ D2DrlgTileDataStrc* __fastcall DRLGROOMTILE_InitShadowTileData(D2RoomExStrc* pRo
 	}
 
 	++pRoomEx->pTileGrid->nShadows;
-	pTileData->nPosX = nX - pRoomEx->nTileXPos;
-	pTileData->nPosY = nY - pRoomEx->nTileYPos;
 
-	int nPosX = nX;
-	int nPosY = nY + 1;
-
-	DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
-
-	pTileData->nTileType = TILETYPE_SHADOWS;
-
-	pTileData->nWidth = nPosX;
-	pTileData->nHeight = nPosY + 40;
-
-	pTileData->dwFlags = 0;
-	pTileData->unk0x24 = 0;
-	pTileData->nGreen = -1;
-	pTileData->nBlue = -1;
-	pTileData->nRed = -1;
-	pTileData->pTile = pTileLibraryEntry;
-
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, TILETYPE_SHADOWS, nX, nY);
+	DRLGROOMTILE_InitTileDataDefaults(pRoomEx, pTileData, nX, nY, nPackedTileInformation, TILETYPE_SHADOWS, pTileLibraryEntry);
 
 	return pTileData;
 }
