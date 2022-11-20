@@ -831,38 +831,51 @@ void __fastcall DRLGROOMTILE_AddLinkedTileData(void* pMemPool, D2RoomExStrc* pRo
 }
 
 //D2Common.0x6FD89AF0
-//TODO: Rename variables
-void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, D2DrlgTileDataStrc* pTileData, int nTileType, unsigned int nTileFlags, int nX, int nY)
+void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, D2DrlgTileDataStrc* pTileData, int nTileType, uint32_t nPackedTileInformation, int nX, int nY)
 {
-	static const int dword_6FDD1340[] =
+	//D2Common.0x6FDD1340
+	// -1 Means stop and do nothing
+	// -2 Means ignore remapping but still init tile data
+	static const int nRemapIndices[] =
 	{
-		-1, 0, 1, 2, -1, 3, 4, 5, -2, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1
+		-1, 
+		0, // [TILETYPE_LEFTWALL				  ]
+		1, // [TILETYPE_RIGHTWALL				  ]
+		2, // [TILETYPE_RIGHTPARTOFNORTHCORNERWALL]
+		-1,// [TILETYPE_LEFTPARTOFNORTHCORNERWALL ] This one doesn't remap somehow
+		3, // [TILETYPE_LEFTENDWALL               ]
+		4, // [TILETYPE_RIGHTENDWALL              ]
+		5, // [TILETYPE_SOUTHCORNERWALL           ]
+		-2, -2, -1, -1, -1, -2, -1, -1, -1, -1, -1
 	};
-	// Maps tile type < 7 (walls) to ???
-	static const int dword_6FDD138C[] =
+	//D2Common.0x6FDD1390
+	static const int nWallTileTypeRemap[6][7] =
 	{
-		-1, 1, 3, 3, 4, 1, 3, 1, 1, 2, 3, 4, 3, 2, 2, 3, 3, 3, 4, 3, 3, 3, 1, 3, 3, 4, 5, 6, 1, 3, 2, 3, 4, 3, 6, 2, 1, 2, 3, 4, 1, 2, 7
+		/* [parameter nTileType value          ]    [pTileData->nTileType - 1]
+		/* [TILETYPE_LEFTWALL				   ] */ { TILETYPE_LEFTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_LEFTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTWALL},
+		/* [TILETYPE_RIGHTWALL				   ] */ { TILETYPE_LEFTWALL,TILETYPE_RIGHTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTWALL,TILETYPE_RIGHTWALL},
+		/* [TILETYPE_RIGHTPARTOFNORTHCORNERWALL] */ { TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL},
+		/* [TILETYPE_LEFTENDWALL               ] */ { TILETYPE_LEFTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_LEFTENDWALL,TILETYPE_RIGHTENDWALL,TILETYPE_LEFTWALL},
+		/* [TILETYPE_RIGHTENDWALL              ] */ { TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_RIGHTENDWALL,TILETYPE_RIGHTWALL},
+		/* [TILETYPE_SOUTHCORNERWALL           ] */ { TILETYPE_LEFTWALL,TILETYPE_RIGHTWALL,TILETYPE_RIGHTPARTOFNORTHCORNERWALL,TILETYPE_LEFTPARTOFNORTHCORNERWALL,TILETYPE_LEFTWALL,TILETYPE_RIGHTWALL,TILETYPE_SOUTHCORNERWALL	},
 	};
+	
+	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+	int v10 = nRemapIndices[nTileType];
 
-	D2TileLibraryEntryStrc* v16 = NULL;
-	int v10 = 0;
-	BOOL v15 = FALSE;
-	BOOL b = FALSE;
-
-	v10 = dword_6FDD1340[nTileType];
-
-	if (pTileData->dwFlags & 1)
+	if (pTileData->dwFlags & MAPTILE_UNK_0x1)
 	{
 		if (TileTypeIsAWallWithDoor(pTileData->nTileType))
 		{
-			DRLGROOMTILE_InitializeTileDataFlags(pRoomEx1, pTileData, nTileFlags, pTileData->nTileType, nX, nY);
+			DRLGROOMTILE_InitializeTileDataFlags(pRoomEx1, pTileData, nPackedTileInformation, pTileData->nTileType, nX, nY);
 		}
 
 		return;
 	}
 
-	if (!(nTileFlags & 0x80))
+	if (!nTileInformation.bLayerAbove)
 	{
+		BOOL b = FALSE;
 		if (!TileTypeIsAWallWithDoor(nTileType))
 		{
 			if (TileTypeIsAWallWithDoor(pTileData->nTileType) && (nX == pRoomEx2->nTileXPos || nY == pRoomEx2->nTileYPos))
@@ -885,7 +898,10 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc*
 			}
 			else
 			{
-				nTileType = dword_6FDD138C[pTileData->nTileType + 7 * v10];
+				D2_ASSERT(v10 < 6);
+				D2_ASSERT(pTileData->nTileType >= 0);
+				const int nWallIdx = pTileData->nTileType - TILETYPE_LEFTWALL; // From 0 to 6
+				nTileType = nWallTileTypeRemap[v10][nWallIdx];
 			}
 		}
 	}
@@ -894,35 +910,35 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc*
 	{
 		if (nTileType != TILETYPE_RIGHTPARTOFNORTHCORNERWALL)
 		{
-			pTileData->unk0x20->dwFlags |= 8;
-			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData->unk0x20, 0);
+			pTileData->unk0x20->dwFlags |= MAPTILE_HIDDEN;
+			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData->unk0x20, nullptr);
 		}
 	}
 	else
 	{
 		if (nTileType == TILETYPE_RIGHTPARTOFNORTHCORNERWALL)
 		{
-			pTileData->dwFlags |= 0xC008;
-			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData, 0);
-			DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx1, 3, nTileFlags, nX, nY);
+			pTileData->dwFlags |= (3 << MAPTILE_WALL_LAYER_BIT) | MAPTILE_HIDDEN;
+			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData, nullptr);
+			DRLGROOMTILE_AddLinkedTileData(pMemPool, pRoomEx1, TILETYPE_RIGHTPARTOFNORTHCORNERWALL, nPackedTileInformation, nX, nY);
 		}
 	}
 
-	v15 = pTileData->nTileType == TILETYPE_FLOORS && D2CMP_10078_GetTileStyle(pTileData->pTile) == 30 && !D2CMP_10082_GetTileSequence(pTileData->pTile);
-	if (nTileType != pTileData->nTileType || v15)
+	if (nTileType != pTileData->nTileType || 
+		pTileData->nTileType == TILETYPE_FLOORS && D2CMP_10078_GetTileStyle(pTileData->pTile) == 30 && D2CMP_10082_GetTileSequence(pTileData->pTile) == 0)
 	{
-		v16 = DRLGROOMTILE_GetTileCache(pRoomEx2, nTileType, nTileFlags);
+		D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pRoomEx2, nTileType, nPackedTileInformation);
 		pTileData->nTileType = nTileType;
 
-		if (v16 != pTileData->pTile && pRoomEx2->pRoom)
+		if (pTileCache != pTileData->pTile && pRoomEx2->pRoom)
 		{
-			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData, v16);
+			D2Common_COLLISION_FirstFn_6FD41000(pRoomEx2->pRoom, pTileData, pTileCache);
 		}
 
-		pTileData->pTile = v16;
+		pTileData->pTile = pTileCache;
 	}
 
-	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx1, pTileData, nTileFlags, pTileData->nTileType, nX, nY);
+	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx1, pTileData, nPackedTileInformation, pTileData->nTileType, nX, nY);
 }
 
 //D2Common.0x6FD89CC0
