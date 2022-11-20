@@ -1143,15 +1143,7 @@ int __fastcall DRLGROOMTILE_GetNumberOfShadowsFromRoom(D2RoomStrc* pRoom)
 //D2Common.0x6FD8A1D0
 void __fastcall DRLGROOMTILE_FreeTileGrid(D2RoomExStrc* pRoomEx)
 {
-	D2DrlgAnimTileGridStrc* pNextAnimTileGrid = NULL;
-	D2DrlgAnimTileGridStrc* pAnimTileGrid = NULL;
-	D2DrlgTileLinkStrc* pNextTileLink = NULL;
-	D2DrlgTileLinkStrc* pTileLink = NULL;
-	D2DrlgTileGridStrc* pTileGrid = NULL;
-
-	pTileGrid = pRoomEx->pTileGrid;
-
-	if (pTileGrid)
+	if (D2DrlgTileGridStrc* pTileGrid = pRoomEx->pTileGrid)
 	{
 		if (pTileGrid->pTiles.pWallTiles)
 		{
@@ -1168,26 +1160,26 @@ void __fastcall DRLGROOMTILE_FreeTileGrid(D2RoomExStrc* pRoomEx)
 			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pTileGrid->pTiles.pRoofTiles);
 		}
 
-		pTileLink = pTileGrid->pMapLinks;
+		D2DrlgTileLinkStrc* pTileLink = pTileGrid->pMapLinks;
 		while (pTileLink)
 		{
-			pNextTileLink = pTileLink->pNext;
+			D2DrlgTileLinkStrc* pNextTileLink = pTileLink->pNext;
 			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pTileLink);
 			pTileLink = pNextTileLink;
 		}
-		pTileGrid->pMapLinks = NULL;
+		pTileGrid->pMapLinks = nullptr;
 
-		pAnimTileGrid = pTileGrid->pAnimTiles;
+		D2DrlgAnimTileGridStrc* pAnimTileGrid = pTileGrid->pAnimTiles;
 		while (pAnimTileGrid)
 		{
-			pNextAnimTileGrid = pAnimTileGrid->pNext;
+			D2DrlgAnimTileGridStrc* pNextAnimTileGrid = pAnimTileGrid->pNext;
 			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pAnimTileGrid->ppMapTileData);
 			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pAnimTileGrid);
 			pAnimTileGrid = pNextAnimTileGrid;
 		}
 
 		D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pTileGrid);
-		pRoomEx->pTileGrid = NULL;
+		pRoomEx->pTileGrid = nullptr;
 	}
 }
 
