@@ -988,31 +988,28 @@ void __fastcall DRLGROOMTILE_GetCreateLinkedTileData(void* pMemPool, D2RoomExStr
 }
 
 //D2Common.0x6FD89E30
-void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, BOOL bCheckCoordinatesValidity, BOOL bKillEdgeX, BOOL bKillEdgeY)
+void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pTileInfoGrid, BOOL bCheckCoordinatesValidity, BOOL bKillEdgeX, BOOL bKillEdgeY)
 {
-	int* pFlags = 0;
-	int nHeight = 0;
-	int nWidth = 0;
+	const int nTileCountX = pRoomEx->nTileWidth + (bKillEdgeX == 0);
+	const int nTileCountY = pRoomEx->nTileHeight + (bKillEdgeY == 0);
 
-	nWidth = pRoomEx->nTileWidth + (bKillEdgeX == 0);
-	nHeight = pRoomEx->nTileHeight + (bKillEdgeY == 0);
-
-	for (int nY = 0; nY < nHeight; ++nY)
+	for (int nY = 0; nY < nTileCountY; ++nY)
 	{
-		for (int nX = 0; nX < nWidth; ++nX)
+		for (int nX = 0; nX < nTileCountX; ++nX)
 		{
-			pFlags = DRLGGRID_GetGridFlagsPointer(pDrlgCoordIndex, nX, nY);
-			if (*pFlags & 1)
+			const int* pFlags = DRLGGRID_GetGridFlagsPointer(pTileInfoGrid, nX, nY);
+			D2C_PackedTileInformation nTileInformation{ (uint32_t)*pFlags };
+			if (nTileInformation.bIsWall)
 			{
 				++pRoomEx->pTileGrid->pTiles.nWalls;
 			}
 
-			if (*pFlags & 2 || bCheckCoordinatesValidity && DRLGROOM_AreXYInsideCoordinates(&pRoomEx->pDrlgCoord, nX + pRoomEx->nTileXPos, nY + pRoomEx->nTileYPos))
+			if (nTileInformation.bIsFloor || bCheckCoordinatesValidity && DRLGROOM_AreXYInsideCoordinates(&pRoomEx->pDrlgCoord, nX + pRoomEx->nTileXPos, nY + pRoomEx->nTileYPos))
 			{
 				++pRoomEx->pTileGrid->pTiles.nFloors;
 			}
 
-			if (*pFlags & 0x8000000)
+			if (nTileInformation.bShadow)
 			{
 				++pRoomEx->pTileGrid->pTiles.nRoofs;
 			}

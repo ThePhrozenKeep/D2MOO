@@ -25,7 +25,7 @@ union D2C_PackedTileInformation
 		//uint32_t bOverlappedLayer3 : 1; // BIT(19)    code-generated; set when has more walls, incl' of other orientations than usual; obj, shd, tree, roof, lower
 		uint32_t nTileStyle        : 6; // BIT(20-25) AKA tile index
 		uint32_t bRevealHidden     : 1; // BIT(26)    looks like an upper wall brought to a layer in front
-		uint32_t bShadow           : 1; // BIT(27)    this layer is a shadow layer
+		uint32_t bShadow           : 1; // BIT(27)    this layer is a shadow layer | Lectem's note: seems to be roof instead ? Or are shadow tiles interpreted as roof tiles ?
 		uint32_t bLinkage          : 1; // BIT(28)    near wp, lvl links, paths // will never get hidden
 		uint32_t bObjectWall       : 1; // BIT(29)    wall tiles with props; may be block reverb / other sounds (crates, barrels, tables etc.)
 		uint32_t bUnk0x40000000    : 1; // BIT(30)    Unknown flag
@@ -68,7 +68,7 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc*
 //D2Common.0x6FD89CC0
 void __fastcall DRLGROOMTILE_GetCreateLinkedTileData(void* pMemPool, D2RoomExStrc* pRoomEx, int nTileType, uint32_t nPackedTileInformation, int nX, int nY);
 //D2Common.0x6FD89E30
-void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, BOOL bCheckCoordinatesValidity, BOOL bKillEdgeX, BOOL bKillEdgeY);
+void __fastcall DRLGROOMTILE_CountAllTileTypes(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pTileInfoGrid, BOOL bCheckCoordinatesValidity, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89F00
 void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgGridStrc* pDrlgCoordIndex, D2DrlgGridStrc* pOutdoorRoom, BOOL bKillEdgeX, BOOL bKillEdgeY);
 //D2Common.0x6FD89FA0
