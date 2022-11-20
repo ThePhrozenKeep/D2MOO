@@ -118,6 +118,7 @@ enum D2MapTileFlags
 	MAPTILE_WALL_LAYER_MASK = 0b111 << MAPTILE_WALL_LAYER_BIT, // 3bits value indicating the wall layer + 1 (0 indicates no wall?)
 };
 // Helper function
+inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }
 inline int GetMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT - 1; }
 
 struct D2DrlgCoordStrc
