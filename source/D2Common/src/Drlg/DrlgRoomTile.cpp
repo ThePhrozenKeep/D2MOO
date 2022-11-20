@@ -1111,22 +1111,21 @@ void __fastcall DRLGROOMTILE_AllocTileData(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD8A130
-void __fastcall DRLGROOMTILE_ReallocRoofTileGrid(void* pMemPool, D2DrlgTileGridStrc* pTileGrid, int nRoofs)
+void __fastcall DRLGROOMTILE_ReallocRoofTileGrid(void* pMemPool, D2DrlgTileGridStrc* pTileGrid, int nAdditionalRoofs)
 {
-	int nCounter = 0;
-
-	if (nRoofs)
+	if (nAdditionalRoofs)
 	{
-		pTileGrid->pTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_SERVER(pMemPool, pTileGrid->pTiles.pRoofTiles, sizeof(D2DrlgTileDataStrc) * (nRoofs + pTileGrid->pTiles.nRoofs));
+		pTileGrid->pTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_SERVER(pMemPool, pTileGrid->pTiles.pRoofTiles, sizeof(D2DrlgTileDataStrc) * (nAdditionalRoofs + pTileGrid->pTiles.nRoofs));
 		
+		int nCounter = 0;
 		while (nCounter < pTileGrid->nShadows - 1)
 		{
 			pTileGrid->pTiles.pRoofTiles[nCounter].unk0x20 = &pTileGrid->pTiles.pRoofTiles[nCounter + 1];
 			++nCounter;
 		}
 
-		pTileGrid->pTiles.pRoofTiles[nCounter].unk0x20 = NULL;
-		pTileGrid->pTiles.nRoofs += nRoofs;
+		pTileGrid->pTiles.pRoofTiles[nCounter].unk0x20 = nullptr;
+		pTileGrid->pTiles.nRoofs += nAdditionalRoofs;
 	}
 }
 

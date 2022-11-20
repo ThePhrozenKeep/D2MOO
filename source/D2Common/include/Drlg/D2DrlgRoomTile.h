@@ -80,7 +80,7 @@ void __fastcall DRLGROOMTILE_AllocTileGrid(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD8A050
 void __fastcall DRLGROOMTILE_AllocTileData(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD8A130
-void __fastcall DRLGROOMTILE_ReallocRoofTileGrid(void* pMemPool, D2DrlgTileGridStrc* pTileGrid, int nRoofs);
+void __fastcall DRLGROOMTILE_ReallocRoofTileGrid(void* pMemPool, D2DrlgTileGridStrc* pTileGrid, int nAdditionalRoofs);
 //D2Common.0x6FD8A1B0 (#10017)
 D2COMMON_DLL_DECL int __fastcall DRLGROOMTILE_GetNumberOfShadowsFromRoom(D2RoomStrc* pRoom);
 //D2Common.0x6FD8A1D0
