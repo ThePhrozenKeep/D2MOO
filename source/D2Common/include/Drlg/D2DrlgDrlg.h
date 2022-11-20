@@ -99,6 +99,7 @@ enum D2DrlgLevelFlags
 
 enum D2MapTileFlags
 {
+	MAPTILE_FLAGS_NONE = 0,
 	MAPTILE_UNK_0x1 = 0x000001,
 	MAPTILE_WALL_EXIT = 0x000002, // warps, door exit, 
 	MAPTILE_TREES = 0x000004, // Could also be delimiting an enclosure inside another area. Probably misnamed because not only trees ?
