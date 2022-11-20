@@ -1184,14 +1184,14 @@ void __fastcall DRLGROOMTILE_FreeTileGrid(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD8A2E0
-void __fastcall sub_6FD8A2E0(D2RoomExStrc* pRoomEx, BOOL bKeepRoom)
+void __fastcall DRLGROOMTILE_FreeRoom(D2RoomExStrc* pRoomEx, BOOL bKeepRoom)
 {
 	if (!bKeepRoom && pRoomEx->pRoom)
 	{
 		DUNGEON_RemoveRoomFromAct(pRoomEx->pLevel->pDrlg->pAct, pRoomEx->pRoom);
 	}
 
-	pRoomEx->pRoom = NULL;
+	pRoomEx->pRoom = nullptr;
 
 	DRLGLOGIC_FreeDrlgCoordList(pRoomEx);
 
@@ -1212,8 +1212,8 @@ void __fastcall sub_6FD8A2E0(D2RoomExStrc* pRoomEx, BOOL bKeepRoom)
 
 		for (D2RoomTileStrc* i = pRoomEx->pRoomTiles; i; i = i->pNext)
 		{
-			i->unk0x0C = NULL;
-			i->unk0x10 = NULL;
+			i->unk0x0C = nullptr;
+			i->unk0x10 = nullptr;
 		}
 
 		if (bKeepRoom)

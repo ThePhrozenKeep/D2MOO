@@ -86,6 +86,6 @@ D2COMMON_DLL_DECL int __fastcall DRLGROOMTILE_GetNumberOfShadowsFromRoom(D2RoomS
 //D2Common.0x6FD8A1D0
 void __fastcall DRLGROOMTILE_FreeTileGrid(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD8A2E0
-void __fastcall sub_6FD8A2E0(D2RoomExStrc* pRoomEx, int a2);
+void __fastcall DRLGROOMTILE_FreeRoom(D2RoomExStrc* pRoomEx, BOOL bKeepRoom);
 //D2Common.0x6FD8A380
 void __fastcall DRLGROOMTILE_LoadDT1FilesForRoom(D2RoomExStrc* pRoomEx);

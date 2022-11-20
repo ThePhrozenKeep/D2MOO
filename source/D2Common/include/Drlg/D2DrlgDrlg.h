@@ -155,7 +155,7 @@ struct D2RoomExStrc
 		};
 		D2DrlgCoordStrc pDrlgCoord;			//0x04
 	};
-	uint32_t dwFlags;						//0x14 ROOMEXFLAG_ANIMATED_FLOOR
+	uint32_t dwFlags;						//0x14 D2RoomExFlags
 	uint32_t dwOtherFlags;					//0x18
 	int32_t nType;							//0x1C
 	union
