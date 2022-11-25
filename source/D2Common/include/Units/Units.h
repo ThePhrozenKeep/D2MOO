@@ -195,7 +195,7 @@ D2COMMON_DLL_DECL uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD570 (#10320)
 D2COMMON_DLL_DECL D2SkillStrc* __stdcall UNITS_GetStartSkill(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD5B0 (#10321)
-D2COMMON_DLL_DECL D2SkillStrc* __stdcall UNITS_GetGetLeftSkill(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2SkillStrc* __stdcall UNITS_GetLeftSkill(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD5F0 (#10322)
 D2COMMON_DLL_DECL D2SkillStrc* __stdcall UNITS_GetRightSkill(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD630 (#10324)

@@ -321,7 +321,7 @@ EXPORTS
 	UNITS_IsInMovingMode												@10318
 	UNITS_IsInMovingModeEx												@10319
 	UNITS_GetStartSkill													@10320
-	UNITS_GetGetLeftSkill												@10321
+	UNITS_GetLeftSkill													@10321
 	UNITS_GetRightSkill													@10322
 	UNITS_GetUsedSkill													@10323
 	UNITS_SetUsedSkill													@10324

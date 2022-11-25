@@ -718,7 +718,7 @@ void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 		while (nCounter < 10);
 	}
 
-	if (!UNITS_GetGetLeftSkill(pUnit))
+	if (!UNITS_GetLeftSkill(pUnit))
 	{
 		SKILLS_SetLeftActiveSkill(pUnit, 0, -1);
 	}
