@@ -1913,7 +1913,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 					}
 					break;
 				case 4:
-					D2COMMON_10843_GetByTimeAdjustment(nBonusValue, 0, 0, &dw1, &dw2, &dw3);
+					ITEMMODS_GetByTimeAdjustment(nBonusValue, 0, 0, &dw1, &dw2, &dw3);
 
 					nValue = (dw2 + dw3) / 2;
 

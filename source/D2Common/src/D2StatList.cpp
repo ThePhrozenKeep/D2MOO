@@ -343,7 +343,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 				{
 					int nBaseTime = 0;
 					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
-					nAccumulatedValue += D2COMMON_10843_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL);
+					nAccumulatedValue += ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL);
 				}
 			}
 			break;
@@ -355,7 +355,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 				{
 					int nBaseTime = 0;
 					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
-					nAccumulatedValue += nAccumulatedValue * D2COMMON_10843_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL) / 100.0;
+					nAccumulatedValue += nAccumulatedValue * ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL) / 100.0;
 				}
 			}
 			break;

@@ -655,59 +655,72 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 }
 
 //D2Common.0x6FD928D0 (#10843)
-//TODO: Find names for variables
-int __stdcall D2COMMON_10843_GetByTimeAdjustment(int nAmount, int nTimeOfDay, int nBaseTime, int* a4, int* a5, int* a6)
+int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nBaseTime, int* nItemModPeriodOfDay, int* nItemModMin, int* nItemModMax)
 {
-	int v6;
-	int v7;
-	int v8;
-	int v9;
-	int v10;
+	// Time works in a cycle of 360 units.
+	constexpr int DAY_UNITS = 360;
 
-	v6 = ((nAmount >> 12) & 1023) - 256;
-	v7 = nAmount & 3;
-	v8 = ((nAmount >> 2) & 1023) - 256;
-
-	if (a4)
+	int nTempItemModPeriodOfDay = nAmount & 3;
+	if (nItemModPeriodOfDay != nullptr)
 	{
-		*a4 = v7;
+		*nItemModPeriodOfDay = nTempItemModPeriodOfDay;
 	}
 
-	if (a5)
+	int nTempItemModMin = ((nAmount >> 2) & 1023) - 256;
+	if (nItemModMin != nullptr)
 	{
-		*a5 = v8;
+		*nItemModMin = nTempItemModMin;
 	}
 
-	if (a6)
+	int nTempItemModMax = ((nAmount >> 12) & 1023) - 256;
+	if (nItemModMax != nullptr)
 	{
-		*a6 = v6;
+		*nItemModMax = nTempItemModMax;
 	}
 
-	v9 = nBaseTime - 90 * v7;
-	if (v9 < 0)
+	// Calculate the time difference. Each day period occupies an equal
+	// share of unit in a day. There are 4 periods of day.
+	constexpr int NUM_PERIODS_OF_DAY = 4;
+	constexpr int PERIOD_OF_DAY_UNITS = DAY_UNITS / NUM_PERIODS_OF_DAY;
+	int nTimeDiff = nBaseTime - (nTempItemModPeriodOfDay * PERIOD_OF_DAY_UNITS);
+	if (nTimeDiff < 0)
 	{
-		v9 = -v9;
+		nTimeDiff = -nTimeDiff;
 	}
 
-	v10 = 15 * (v9 + 7) / 15;
-	if (v10 > 0)
+	/*
+	 * Divide, then multiply on integer values to remove the remainder
+	 * portion of the division. Rounding to the nearest multiple is
+	 * achieved by:
+	 * Add half the divisor -> divide -> multiply.
+	 */
+	constexpr int ROUND_TIME_UNITS = DAY_UNITS / 24;
+	int nRoundedTimeDiff = ((nTimeDiff + (ROUND_TIME_UNITS / 2)) / ROUND_TIME_UNITS) * ROUND_TIME_UNITS;
+
+	// Clamp the time diff range to [0, DAY_UNITS].
+	int nClampedTimeDiff;
+	if (nRoundedTimeDiff <= 0)
 	{
-		if (v10 >= 359)
-		{
-			return v6 - (v6 - v8) / 180;
-		}
+		nClampedTimeDiff = 0;
+	}
+	else if (nRoundedTimeDiff >= (DAY_UNITS - 1))
+	{
+		nClampedTimeDiff = (DAY_UNITS - 1);
 	}
 	else
 	{
-		v10 = 0;
+		nClampedTimeDiff = nRoundedTimeDiff;
 	}
 
-	if (v10 > 180)
+	// Half the number of day units from the item modifier's optimal
+	// period of day is the least optimal time. After that, the time
+	// diff decreases.
+	if (nClampedTimeDiff > (DAY_UNITS / 2))
 	{
-		v10 = 360 - v10;
+		nClampedTimeDiff = DAY_UNITS - nClampedTimeDiff;
 	}
 
-	return v6 - v10 * (v6 - v8) / 180;
+	return nTempItemModMax - ((nTempItemModMax - nTempItemModMin) * nClampedTimeDiff) / (DAY_UNITS / 2);
 }
 
 //D2Common.0x6FD929A0 (#10849)
