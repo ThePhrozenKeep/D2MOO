@@ -47,7 +47,7 @@ D2SkillStrc* __stdcall UNITS_GetStartSkill(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD5B0 (#10321)
-D2SkillStrc* __stdcall UNITS_GetGetLeftSkill(D2UnitStrc* pUnit)
+D2SkillStrc* __stdcall UNITS_GetLeftSkill(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 	return SKILLS_GetLeftSkillFromSkillList(pUnit->pSkills);
