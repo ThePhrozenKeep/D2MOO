@@ -158,11 +158,11 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 	}
 	else
 	{
-		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * 0.005555555555555556 * M_PI;
+		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * M_PI / ENV_HALF_CIRCLE_DEGREES;
 
 		pEnvironment->fCos = float(-cos(dAngle));
 		pEnvironment->fSin = float(sin(dAngle));
-		if (pEnvironment->nTicks >= 180 * pEnvironment->nTimeRate)
+		if (pEnvironment->nTicks >= ENV_HALF_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 		{
 			pEnvironment->fSin *= 0.5;
 		}
@@ -260,7 +260,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 	}
 
 	// Should probably be pEnvironment->nTicks %= 360 * pEnvironment->nTimeRate;
-	if (pEnvironment->nTicks >= 360 * pEnvironment->nTimeRate)
+	if (pEnvironment->nTicks >= ENV_FULL_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 	{
 		pEnvironment->nTicks = 0;
 	}
@@ -423,20 +423,20 @@ int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DF40 (#10932)
-void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nAngle, BOOL bEclipse)
+void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse)
 {
 	D2_ASSERT(nIndex >= 0);
 	D2_ASSERT(nIndex < NUM_ENVIRONMENT_CYCLES);
-	D2_ASSERT(nAngle >= 0);
+	D2_ASSERT(nTicks >= 0);
 
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
-	if (nAngle > 360 * pEnvironment->nTimeRate)
+	if (nTicks > ENV_FULL_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 	{
-		nAngle = 0;
+		nTicks = 0;
 	}
 
 	pEnvironment->nCycleIndex = nIndex;
-	pEnvironment->nTicks = nAngle;
+	pEnvironment->nTicks = nTicks;
 
 	// Lectem's note: missing act4 again
 	const D2EnvironmentCycleStrc* pEnvironmentCycle = NULL;

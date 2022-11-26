@@ -23,6 +23,12 @@ enum D2EnvironmentDayCycles : int32_t {
 	NUM_ENVIRONMENT_CYCLES
 };
 
+enum D2EnvironmentConstants
+{
+	ENV_HALF_CIRCLE_DEGREES = 180,
+	ENV_FULL_CIRCLE_DEGREES = 360,
+};
+
 struct D2EnvironmentCycleStrc
 {
 	int32_t nTicksBegin;			//0x00
