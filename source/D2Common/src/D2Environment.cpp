@@ -302,6 +302,7 @@ BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo)
 			const int nNext = pEnvironment->nTicks / pEnvironment->nTimeRate;
 			const int nDiff = std::abs(nNext - pEnvironment->nPrev);
 			
+			// This was probably intended to be >15 or >=16 (ENV_FULL_CIRCLE_DEGREES/NUM_ENVIRONMENT_PERIODS_OF_DAY/NUM_ENVIRONMENT_CYCLES = 15)
 			if (nDiff > 16)
 			{
 				pEnvironment->nPrev = nNext;
