@@ -4,13 +4,22 @@
 
 #pragma pack(1)
 
+enum D2EnvironmentPeriodOfDay
+{
+	ENVPERIOD_DAY   = 0,
+	ENVPERIOD_DUSK  = 1,
+	ENVPERIOD_NIGHT = 2,
+	ENVPERIOD_DAWN  = 3,
+	NUM_ENVIRONMENT_PERIODS_OF_DAY
+};
+
 enum D2EnvironmentDayCycles : int32_t {
-	EnvCycleSunrise,
-	EnvCycleMorning,
-	EnvCycleNoon,
-	EnvCycleAfteroon,
-	EnvCycleSunset,
-	EnvCycleNight,
+	ENVCYCLE_SUNRISE,
+	ENVCYCLE_MORNING,
+	ENVCYCLE_NOON,
+	ENVCYCLE_AFTERNOON,
+	ENVCYCLE_SUNSET,
+	ENVCYCLE_NIGHT,
 	NUM_ENVIRONMENT_CYCLES
 };
 
