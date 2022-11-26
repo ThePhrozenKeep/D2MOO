@@ -656,7 +656,7 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 }
 
 //D2Common.0x6FD928D0 (#10843)
-int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nBaseTime, int* nItemModPeriodOfDay, int* nItemModMin, int* nItemModMax)
+int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nBaseTime, int* pItemModPeriodOfDay, int* pItemModMin, int* pItemModMax)
 {
 	// Time works in a cycle of 360 degrees. Each unit is 1 degree.
 
@@ -668,25 +668,25 @@ int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nB
 	 * 0 bits are discarded.
 	 * 
 	 * Subtraction is performed on the 9th bit of the modifier's min and
-	 * max.
+	 * max, which helps represent negative values.
 	 */
 
 	int nTempItemModPeriodOfDay = nAmount & 0x3;
-	if (nItemModPeriodOfDay != nullptr)
+	if (pItemModPeriodOfDay != nullptr)
 	{
-		*nItemModPeriodOfDay = nTempItemModPeriodOfDay;
+		*pItemModPeriodOfDay = nTempItemModPeriodOfDay;
 	}
 
 	int nTempItemModMin = ((nAmount >> 2) & 0x3FF) - 0x100;
-	if (nItemModMin != nullptr)
+	if (pItemModMin != nullptr)
 	{
-		*nItemModMin = nTempItemModMin;
+		*pItemModMin = nTempItemModMin;
 	}
 
 	int nTempItemModMax = ((nAmount >> 12) & 0x3FF) - 0x100;
-	if (nItemModMax != nullptr)
+	if (pItemModMax != nullptr)
 	{
-		*nItemModMax = nTempItemModMax;
+		*pItemModMax = nTempItemModMax;
 	}
 
 	// Calculate the time difference. Each period of day occupies an
