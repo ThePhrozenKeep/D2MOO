@@ -1850,9 +1850,9 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 	int nStatId = 0;
 	int nStats = 0;
 	int nValue = 0;
-	int dw1 = 0;
-	int dw2 = 0;
-	int dw3 = 0;
+	int nItemPeriodOfDay = 0;
+	int nMinValue = 0;
+	int nMaxValue = 0;
 	D2StatStrc pStat[511] = {};
 
 	nStats = STATLIST_GetFullStatsDataFromUnit(pItem, pStat, ARRAY_SIZE(pStat));
@@ -1913,9 +1913,9 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 					}
 					break;
 				case 4:
-					ITEMMODS_GetByTimeAdjustment(nBonusValue, 0, 0, &dw1, &dw2, &dw3);
+					ITEMMODS_GetByTimeAdjustment(nBonusValue, 0, 0, &nItemPeriodOfDay, &nMinValue, &nMaxValue);
 
-					nValue = (dw2 + dw3) / 2;
+					nValue = (nMinValue + nMaxValue) / 2;
 
 					if (nValue * *pSellCost > 65535 && pItemStatCostTxtRecord->dwMultiply)
 					{
