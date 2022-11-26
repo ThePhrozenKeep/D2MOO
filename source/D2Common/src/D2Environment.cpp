@@ -12,35 +12,35 @@
 //D2Common.0x6FDE21B8
 const D2EnvironmentCycleStrc gNormalEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
-	{ 320, 3, 125, 144, 243, 0 },
-	{ 340, 3, 208, 184, 131, 0 },
-	{   0, 0, 255, 255, 255, 0 },
-	{ 160, 1, 255, 255, 255, 0 },
-	{ 180, 1, 194, 152, 193, 0 },
-	{ 200, 2, 125, 144, 243, 0 }
+	{ 320, ENVPERIOD_DAWN,  125, 144, 243, 0 }, // ENVCYCLE_SUNRISE
+	{ 340, ENVPERIOD_DAWN,  208, 184, 131, 0 }, // ENVCYCLE_MORNING
+	{   0, ENVPERIOD_DAY,   255, 255, 255, 0 }, // ENVCYCLE_NOON
+	{ 160, ENVPERIOD_DUSK,  255, 255, 255, 0 }, // ENVCYCLE_AFTERNOON
+	{ 180, ENVPERIOD_DUSK,  194, 152, 193, 0 }, // ENVCYCLE_SUNSET
+	{ 200, ENVPERIOD_NIGHT, 125, 144, 243, 0 }  // ENVCYCLE_NIGHT
 };
 
 //D2Common.0x6FDE2200
 const D2EnvironmentCycleStrc gAct4EnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
-	{ 340, 3, 243,  70, 243, 0 },
-	{ 350, 3, 208, 184, 131, 0 },
-	{   0, 0, 255,  20,  20, 0 },
-	{ 180, 1, 255, 255,  30, 0 },
-	{ 190, 1,  20, 152, 193, 0 },
-	{ 200, 2, 125, 144, 243, 0 }
+	{ 340, ENVPERIOD_DAWN,  243,  70, 243, 0 }, // ENVCYCLE_SUNRISE
+	{ 350, ENVPERIOD_DAWN,  208, 184, 131, 0 }, // ENVCYCLE_MORNING
+	{   0, ENVPERIOD_DAY,   255,  20,  20, 0 }, // ENVCYCLE_NOON
+	{ 180, ENVPERIOD_DUSK,  255, 255,  30, 0 }, // ENVCYCLE_AFTERNOON
+	{ 190, ENVPERIOD_DUSK,   20, 152, 193, 0 }, // ENVCYCLE_SUNSET
+	{ 200, ENVPERIOD_NIGHT, 125, 144, 243, 0 }  // ENVCYCLE_NIGHT
 };
 
 //D2Common.0x6FDE2248
 //The tainted sun quest eclipse
 const D2EnvironmentCycleStrc gEclipseEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
-	{ 300, 3, 0, 30, 243, 0 },
-	{   0, 0, 0, 30, 244, 0 },
-	{  60, 1, 0, 30, 243, 0 },
-	{ 120, 2, 0, 30, 243, 0 },
-	{ 180, 2, 0, 30, 244, 0 },
-	{ 240, 2, 0, 30, 243, 0 }
+	{ 300, ENVPERIOD_DAWN,  0, 30, 243, 0 }, // ENVCYCLE_SUNRISE
+	{   0, ENVPERIOD_DAY,   0, 30, 244, 0 }, // ENVCYCLE_MORNING
+	{  60, ENVPERIOD_DUSK,  0, 30, 243, 0 }, // ENVCYCLE_NOON
+	{ 120, ENVPERIOD_NIGHT, 0, 30, 243, 0 }, // ENVCYCLE_AFTERNOON
+	{ 180, ENVPERIOD_NIGHT, 0, 30, 244, 0 }, // ENVCYCLE_SUNSET
+	{ 240, ENVPERIOD_NIGHT, 0, 30, 243, 0 }	 // ENVCYCLE_NIGHT
 };
 
 //D2Common.0x6FDE2290
@@ -75,7 +75,7 @@ D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPoo
 {
 	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_SERVER(pMemPool, D2DrlgEnvironmentStrc);
 	
-	pEnvironment->nCycleIndex = EnvCycleNoon;
+	pEnvironment->nCycleIndex = ENVCYCLE_NOON;
 	pEnvironment->nTimeRate = gnTimeRates[pEnvironment->nTimeRateIndex];
 
 	const D2EnvironmentCycleStrc* pEnvironmentCycle = &gNormalEnvironmentCycle[pEnvironment->nCycleIndex];
@@ -158,11 +158,11 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 	}
 	else
 	{
-		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * 0.005555555555555556 * M_PI;
+		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * M_PI / ENV_HALF_CIRCLE_DEGREES;
 
 		pEnvironment->fCos = float(-cos(dAngle));
 		pEnvironment->fSin = float(sin(dAngle));
-		if (pEnvironment->nTicks >= 180 * pEnvironment->nTimeRate)
+		if (pEnvironment->nTicks >= ENV_HALF_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 		{
 			pEnvironment->fSin *= 0.5;
 		}
@@ -248,7 +248,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 		{
 			pEnvironment->nTicks += 15;
 		}
-		else if (gNormalEnvironmentCycle[pEnvironment->nCycleIndex].nPeriodOfDay == 2)
+		else if (gNormalEnvironmentCycle[pEnvironment->nCycleIndex].nPeriodOfDay == ENVPERIOD_NIGHT)
 		{
 			++pEnvironment->nTicks;
 
@@ -260,7 +260,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 	}
 
 	// Should probably be pEnvironment->nTicks %= 360 * pEnvironment->nTimeRate;
-	if (pEnvironment->nTicks >= 360 * pEnvironment->nTimeRate)
+	if (pEnvironment->nTicks >= ENV_FULL_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 	{
 		pEnvironment->nTicks = 0;
 	}
@@ -302,6 +302,7 @@ BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo)
 			const int nNext = pEnvironment->nTicks / pEnvironment->nTimeRate;
 			const int nDiff = std::abs(nNext - pEnvironment->nPrev);
 			
+			// This was probably intended to be >15 or >=16 (ENV_FULL_CIRCLE_DEGREES/NUM_ENVIRONMENT_PERIODS_OF_DAY/NUM_ENVIRONMENT_CYCLES = 15)
 			if (nDiff > 16)
 			{
 				pEnvironment->nPrev = nNext;
@@ -423,20 +424,20 @@ int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DF40 (#10932)
-void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nAngle, BOOL bEclipse)
+void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse)
 {
 	D2_ASSERT(nIndex >= 0);
 	D2_ASSERT(nIndex < NUM_ENVIRONMENT_CYCLES);
-	D2_ASSERT(nAngle >= 0);
+	D2_ASSERT(nTicks >= 0);
 
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
-	if (nAngle > 360 * pEnvironment->nTimeRate)
+	if (nTicks > ENV_FULL_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 	{
-		nAngle = 0;
+		nTicks = 0;
 	}
 
 	pEnvironment->nCycleIndex = nIndex;
-	pEnvironment->nTicks = nAngle;
+	pEnvironment->nTicks = nTicks;
 
 	// Lectem's note: missing act4 again
 	const D2EnvironmentCycleStrc* pEnvironmentCycle = NULL;
@@ -551,7 +552,7 @@ void __stdcall ENVIRONMENT_TaintedSunBegin(D2DrlgActStrc* pAct)
 	pEnvironment->nTimeRateIndex = 1;
 	pEnvironment->nTimeRate = gnTimeRates[1];
 
-	ENVIRONMENT_InitializeEnvironment(pAct, NULL, 0, 0, TRUE);
+	ENVIRONMENT_InitializeEnvironment(pAct, NULL, ENVCYCLE_SUNRISE, 0, TRUE);
 }
 
 //D2Common.0x6FD8E1E0 (#10937)
@@ -562,5 +563,5 @@ void __stdcall ENVIRONMENT_TaintedSunEnd(D2DrlgActStrc* pAct)
 	pEnvironment->nTimeRateIndex = 0;
 	pEnvironment->nTimeRate = gnTimeRates[0];
 
-	ENVIRONMENT_InitializeEnvironment(pAct, NULL, 2, 0, FALSE);
+	ENVIRONMENT_InitializeEnvironment(pAct, NULL, ENVCYCLE_NOON, 0, FALSE);
 }
