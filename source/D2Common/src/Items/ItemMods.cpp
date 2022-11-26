@@ -1,6 +1,7 @@
 #include "D2ItemMods.h"
 
 #include "D2Collision.h"
+#include "D2Environment.h"
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgMaze.h"
 #include "D2Inventory.h"
@@ -655,59 +656,81 @@ BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkill
 }
 
 //D2Common.0x6FD928D0 (#10843)
-//TODO: Find names for variables
-int __stdcall D2COMMON_10843_GetByTimeAdjustment(int nAmount, int nTimeOfDay, int nBaseTime, int* a4, int* a5, int* a6)
+int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nBaseTime, int* pItemModPeriodOfDay, int* pItemModMin, int* pItemModMax)
 {
-	int v6;
-	int v7;
-	int v8;
-	int v9;
-	int v10;
+	// Time works in a cycle of 360 degrees. Each unit is 1 degree.
 
-	v6 = ((nAmount >> 12) & 1023) - 256;
-	v7 = nAmount & 3;
-	v8 = ((nAmount >> 2) & 1023) - 256;
+	/*
+	 * Bitmask operates on the following bits:
+	 * 0000'0000'00AA'AAAA'AAAA'BBBB'BBBB'BBCC
+	 *
+	 * A is modifier's max, B is modifier's min, and C is period of day.
+	 * 0 bits are discarded.
+	 * 
+	 * Subtraction is performed on the 9th bit of the modifier's min and
+	 * max, which helps represent negative values.
+	 */
 
-	if (a4)
+	int nTempItemModPeriodOfDay = nAmount & 0x3;
+	if (pItemModPeriodOfDay != nullptr)
 	{
-		*a4 = v7;
+		*pItemModPeriodOfDay = nTempItemModPeriodOfDay;
 	}
 
-	if (a5)
+	int nTempItemModMin = ((nAmount >> 2) & 0x3FF) - 0x100;
+	if (pItemModMin != nullptr)
 	{
-		*a5 = v8;
+		*pItemModMin = nTempItemModMin;
 	}
 
-	if (a6)
+	int nTempItemModMax = ((nAmount >> 12) & 0x3FF) - 0x100;
+	if (pItemModMax != nullptr)
 	{
-		*a6 = v6;
+		*pItemModMax = nTempItemModMax;
 	}
 
-	v9 = nBaseTime - 90 * v7;
-	if (v9 < 0)
+	// Calculate the time difference. Each period of day occupies an
+	// equal share of unit in a day.
+	constexpr int PERIOD_OF_DAY_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY;
+	int nTimeDiff = nBaseTime - (nTempItemModPeriodOfDay * PERIOD_OF_DAY_UNITS);
+	if (nTimeDiff < 0)
 	{
-		v9 = -v9;
+		nTimeDiff = -nTimeDiff;
 	}
 
-	v10 = 15 * (v9 + 7) / 15;
-	if (v10 > 0)
+	/*
+	 * Divide, then multiply on integer values to remove the remainder
+	 * portion of the division. Rounding to the nearest multiple is
+	 * achieved by:
+	 * Add half the divisor -> divide -> multiply.
+	 */
+	constexpr int ROUND_TIME_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY / NUM_ENVIRONMENT_CYCLES;
+	int nRoundedTimeDiff = ((nTimeDiff + (ROUND_TIME_UNITS / 2)) / ROUND_TIME_UNITS) * ROUND_TIME_UNITS;
+
+	// Clamp the time diff range to [0, ENV_FULL_CIRCLE_DEGREES).
+	int nClampedTimeDiff;
+	if (nRoundedTimeDiff <= 0)
 	{
-		if (v10 >= 359)
-		{
-			return v6 - (v6 - v8) / 180;
-		}
+		nClampedTimeDiff = 0;
+	}
+	else if (nRoundedTimeDiff >= (ENV_FULL_CIRCLE_DEGREES - 1))
+	{
+		nClampedTimeDiff = (ENV_FULL_CIRCLE_DEGREES - 1);
 	}
 	else
 	{
-		v10 = 0;
+		nClampedTimeDiff = nRoundedTimeDiff;
 	}
 
-	if (v10 > 180)
+	// Half of the number of day units from the item modifier's optimal
+	// period of day is the least optimal time. After that, the time
+	// diff decreases.
+	if (nClampedTimeDiff > ENV_HALF_CIRCLE_DEGREES)
 	{
-		v10 = 360 - v10;
+		nClampedTimeDiff = ENV_FULL_CIRCLE_DEGREES - nClampedTimeDiff;
 	}
 
-	return v6 - v10 * (v6 - v8) / 180;
+	return nTempItemModMax - (((nTempItemModMax - nTempItemModMin) * nClampedTimeDiff) / ENV_HALF_CIRCLE_DEGREES);
 }
 
 //D2Common.0x6FD929A0 (#10849)
