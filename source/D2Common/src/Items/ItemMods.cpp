@@ -704,7 +704,7 @@ int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nB
 	 * achieved by:
 	 * Add half the divisor -> divide -> multiply.
 	 */
-	constexpr int ROUND_TIME_UNITS = ENV_FULL_CIRCLE_DEGREES / 24;
+	constexpr int ROUND_TIME_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY / NUM_ENVIRONMENT_CYCLES;
 	int nRoundedTimeDiff = ((nTimeDiff + (ROUND_TIME_UNITS / 2)) / ROUND_TIME_UNITS) * ROUND_TIME_UNITS;
 
 	// Clamp the time diff range to [0, ENV_FULL_CIRCLE_DEGREES).
