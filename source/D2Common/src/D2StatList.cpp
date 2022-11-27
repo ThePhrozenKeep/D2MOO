@@ -1445,15 +1445,15 @@ int __stdcall STATLIST_GetUnitStatBonus(D2UnitStrc* pUnit, int nStatId, uint16_t
 }
 
 //D2Common.0x6FDB80C0 (#10515)
-void __stdcall D2Common_10515(D2UnitStrc* pUnit)
+void __stdcall STATLIST_DeactivateTemporaryStates(D2UnitStrc* pUnit)
 {
 	if (pUnit->pStatListEx == nullptr || !(pUnit->pStatListEx->dwFlags & STATLIST_NEWLENGTH))
 	{
 		return;
 	}
 
-	D2StatListStrc* pCurrent, *pPrevious;
-	for (pCurrent = pUnit->pStatListEx->pMyLastList; pCurrent != nullptr; pCurrent = pPrevious)
+	D2StatListStrc* pPrevious;
+	for (D2StatListStrc* pCurrent = pUnit->pStatListEx->pMyLastList; pCurrent != nullptr; pCurrent = pPrevious)
 	{
 		pPrevious = pCurrent->pPrevLink;
 		if (!(pCurrent->dwFlags & STATLIST_TEMPONLY))
@@ -1466,9 +1466,9 @@ void __stdcall D2Common_10515(D2UnitStrc* pUnit)
 			STATES_ToggleState(pUnit, pCurrent->dwStateNo, FALSE);
 		}
 
-		if (!(pCurrent->dwFlags & STATLIST_EXTENDED))
+		if (!STATLIST_IsExtended(pCurrent))
 		{
-			D2Common_STATLIST_FreeStatListImpl_6FDB7050((D2StatListExStrc*)pCurrent);
+			D2Common_STATLIST_FreeStatListImpl_6FDB7050(pCurrent);
 		}
 
 		pPrevious = pUnit->pStatListEx->pMyLastList;

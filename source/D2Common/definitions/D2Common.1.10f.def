@@ -515,7 +515,7 @@ EXPORTS
 	D2Common_10512														@10512
 	D2Common_10513														@10513
 	STATLIST_ClampStaminaManaHP											@10514
-	D2Common_10515														@10515
+	STATLIST_DeactivateTemporaryStates									@10515
 	STATLIST_UpdateStatListsExpiration									@10516
 	STATLIST_SetUnitStat												@10517
 	STATLIST_AddUnitStat												@10518
