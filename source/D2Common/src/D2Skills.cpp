@@ -1825,45 +1825,39 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 //TODO: Check name
 BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 {
-	int nCounter = 0;
+	if (pUnit == nullptr || pSkill == nullptr || pSkill->pSkillsTxt == nullptr) {
+		return FALSE;
+	}
 
-	if (pUnit && pSkill)
+	if (pSkill->pSkillsTxt->nRestrict == 0)
 	{
-		if (pSkill->pSkillsTxt)
+		return !STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill);
+	}
+
+	if (pSkill->pSkillsTxt->nRestrict == 1 || pSkill->pSkillsTxt->nRestrict != 2)
+	{
+		return TRUE;
+	}
+
+	if (!STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill))
+	{
+		return FALSE;
+	}
+
+	for (int i = 0; i < 3; ++i) {
+		if (pSkill->pSkillsTxt->nState[i] < 0)
 		{
-			if (!pSkill->pSkillsTxt->nRestrict)
-			{
-				return STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill) == 0;
-			}
+			return FALSE;
+		}
 
-			if (pSkill->pSkillsTxt->nRestrict == 1 || pSkill->pSkillsTxt->nRestrict != 2)
-			{
-				return TRUE;
-			}
-
-			if (STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill))
-			{
-				nCounter = 0;
-				do
-				{
-					if (pSkill->pSkillsTxt->nState[nCounter] < 0)
-					{
-						break;
-					}
-
-					if (STATES_CheckState(pUnit, pSkill->pSkillsTxt->nState[nCounter]))
-					{
-						return TRUE;
-					}
-
-					++nCounter;
-				}
-				while (nCounter < 3);
-			}
+		if (STATES_CheckState(pUnit, pSkill->pSkillsTxt->nState[i]))
+		{
+			return TRUE;
 		}
 	}
 
 	return FALSE;
+
 }
 
 //D2Common.0x6FDB1400
