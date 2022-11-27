@@ -1857,7 +1857,6 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 	}
 
 	return FALSE;
-
 }
 
 //D2Common.0x6FDB1400
