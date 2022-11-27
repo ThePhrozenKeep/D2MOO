@@ -33,7 +33,7 @@ BOOL __stdcall STATES_CheckState(D2UnitStrc* pUnit, int nState)
 {
 	if (pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER || pUnit->dwUnitType == UNIT_MISSILE) && nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
 	{
-		if (pUnit->pStatListEx && (pUnit->pStatListEx->dwFlags & 0x80000000) != 0)
+		if (pUnit->pStatListEx && STATLIST_IsExtended(pUnit->pStatListEx))
 		{
 			return pUnit->pStatListEx->StatFlags[nState >> 5] & gdwBitMasks[nState & 31];
 		}
