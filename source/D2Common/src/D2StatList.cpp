@@ -1842,33 +1842,33 @@ uint32_t* __stdcall D2COMMON_STATES_GetListGfxFlags_6FDB8AC0(D2UnitStrc* pUnit)
 //D2Common.0x6FDB8B10 (#10516)
 void __stdcall STATLIST_UpdateStatListsExpiration(D2UnitStrc* pUnit, int nFrame)
 {
-	if (pUnit && pUnit->pStatListEx && STATLIST_IsExtended(pUnit->pStatListEx))
+	if (pUnit == nullptr || pUnit->pStatListEx == nullptr || !STATLIST_IsExtended(pUnit->pStatListEx))
 	{
-		if (D2StatListStrc* pStatListEx = pUnit->pStatListEx->pMyLastList)
-		{
-			D2StatListStrc* pPrevious = nullptr;
-			do
-			{
-				pPrevious = pStatListEx->pPrevLink;
-				if (pStatListEx->dwFlags & STATLIST_NEWLENGTH)
-				{
-					if (nFrame == 0) // Client, the server only syncs
-					{
-						pStatListEx->dwExpireFrame--;
-					}
-					if (pStatListEx->dwExpireFrame <= nFrame)
-					{
-						if (!STATLIST_IsExtended(pStatListEx))
-						{
-							D2Common_STATLIST_FreeStatListImpl_6FDB7050(pStatListEx);
-						}
+		return;
+	}
 
-						pPrevious = pUnit->pStatListEx->pMyLastList;
-					}
-				}
-				pStatListEx = pPrevious;
+	D2StatListStrc* pPrevious;
+	for (D2StatListStrc* pCurrent = pUnit->pStatListEx->pMyLastList; pCurrent != nullptr; pCurrent = pPrevious)
+	{
+		pPrevious = pCurrent->pPrevLink;
+		if (!(pCurrent->dwFlags & STATLIST_NEWLENGTH))
+		{
+			continue;
+		}
+
+		if (nFrame == 0)  // Client, the server only syncs
+		{
+			pCurrent->dwExpireFrame--;
+		}
+
+		if (pCurrent->dwExpireFrame <= nFrame)
+		{
+			if (!STATLIST_IsExtended(pCurrent))
+			{
+				D2Common_STATLIST_FreeStatListImpl_6FDB7050(pCurrent);
 			}
-			while (pPrevious);
+
+			pPrevious = pUnit->pStatListEx->pMyLastList;
 		}
 	}
 }
