@@ -894,28 +894,25 @@ void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pSta
 
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
 	{
-		if (D2StatListStrc* pCurrent = pStatListEx->pMyLastList)
+		D2StatListStrc* pPrevious;
+		for (D2StatListStrc* pCurrent = pStatListEx->pMyLastList; pCurrent != nullptr; pCurrent = pPrevious)
 		{
-			D2StatListStrc* pPrevious = nullptr;
-			do
+			pPrevious = pCurrent->pPrevLink;
+			pCurrent->pParent = nullptr;
+			pCurrent->pUnit = nullptr;
+			if (STATLIST_IsExtended(pCurrent))
 			{
-				pPrevious = pCurrent->pPrevLink;
-				pCurrent->pParent = nullptr;
-				pCurrent->pUnit = nullptr;
-				if (!STATLIST_IsExtended(pCurrent))
-				{
-					if (pStatListEx->pMyLastList == pCurrent)
-					{
-						pStatListEx->pMyLastList = pPrevious;
-					}
-
-					D2Common_STATLIST_FreeStatListImpl_6FDB7050((D2StatListExStrc*)pCurrent);
-
-					pPrevious = pStatListEx->pMyLastList;
-				}
-				pCurrent = pPrevious;
+				continue;
 			}
-			while (pPrevious);
+
+			if (pStatListEx->pMyLastList == pCurrent)
+			{
+				pStatListEx->pMyLastList = pPrevious;
+			}
+
+			D2Common_STATLIST_FreeStatListImpl_6FDB7050((D2StatListExStrc*)pCurrent);
+
+			pPrevious = pStatListEx->pMyLastList;
 		}
 
 		if (pStatListEx->FullStats.pStat)
