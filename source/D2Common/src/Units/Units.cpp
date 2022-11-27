@@ -825,7 +825,7 @@ BOOL __stdcall UNITS_ChangeAnimMode(D2UnitStrc* pUnit, int nMode)
 			UNITROOM_RefreshUnit(pUnit);
 			pUnit->dwAnimMode = nMode;
 			pUnit->dwFlags |= UNITFLAG_DOUPDATE;
-			D2Common_10515(pUnit);
+			STATLIST_DeactivateTemporaryStates(pUnit);
 			UNITS_SetAnimStartFrame(pUnit);
 			return TRUE;
 		}

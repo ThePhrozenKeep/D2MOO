@@ -1445,39 +1445,36 @@ int __stdcall STATLIST_GetUnitStatBonus(D2UnitStrc* pUnit, int nStatId, uint16_t
 }
 
 //D2Common.0x6FDB80C0 (#10515)
-void __stdcall D2Common_10515(D2UnitStrc* pUnit)
+void __stdcall STATLIST_DeactivateTemporaryStates(D2UnitStrc* pUnit)
 {
-	D2StatListStrc* pStatListEx = NULL;
-	D2StatListStrc* pPrevious = NULL;
-
-	if (pUnit->pStatListEx && pUnit->pStatListEx->dwFlags & STATLIST_NEWLENGTH)
+	if (pUnit->pStatListEx == nullptr || !(pUnit->pStatListEx->dwFlags & STATLIST_NEWLENGTH))
 	{
-		if (D2StatListStrc* pCurStatListEx = pUnit->pStatListEx->pMyLastList)
+		return;
+	}
+
+	D2StatListStrc* pPrevious;
+	for (D2StatListStrc* pCurrent = pUnit->pStatListEx->pMyLastList; pCurrent != nullptr; pCurrent = pPrevious)
+	{
+		pPrevious = pCurrent->pPrevLink;
+		if (!(pCurrent->dwFlags & STATLIST_TEMPONLY))
 		{
-			do
-			{
-				pPrevious = pCurStatListEx->pPrevLink;
-				if (pCurStatListEx->dwFlags & STATLIST_TEMPONLY)
-				{
-					if (pCurStatListEx->dwStateNo)
-					{
-						STATES_ToggleState(pUnit, pCurStatListEx->dwStateNo, FALSE);
-					}
-
-					if (!(pCurStatListEx->dwFlags & STATLIST_EXTENDED))
-					{
-						D2Common_STATLIST_FreeStatListImpl_6FDB7050((D2StatListExStrc*)pCurStatListEx);
-					}
-
-					pPrevious = pUnit->pStatListEx->pMyLastList;
-				}
-				pCurStatListEx = pPrevious;
-			}
-			while (pPrevious);
+			continue;
 		}
 
-		pUnit->pStatListEx->dwFlags &= ~STATLIST_NEWLENGTH;
+		if (pCurrent->dwStateNo)
+		{
+			STATES_ToggleState(pUnit, pCurrent->dwStateNo, FALSE);
+		}
+
+		if (!STATLIST_IsExtended(pCurrent))
+		{
+			D2Common_STATLIST_FreeStatListImpl_6FDB7050(pCurrent);
+		}
+
+		pPrevious = pUnit->pStatListEx->pMyLastList;
 	}
+
+	pUnit->pStatListEx->dwFlags &= ~STATLIST_NEWLENGTH;
 }
 
 //D2Common.0x6FDB8120 (#10467)
