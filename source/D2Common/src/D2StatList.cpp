@@ -910,7 +910,7 @@ void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pSta
 				pStatListEx->pMyLastList = pPrevious;
 			}
 
-			D2Common_STATLIST_FreeStatListImpl_6FDB7050((D2StatListExStrc*)pCurrent);
+			D2Common_STATLIST_FreeStatListImpl_6FDB7050(pCurrent);
 
 			pPrevious = pStatListEx->pMyLastList;
 		}
