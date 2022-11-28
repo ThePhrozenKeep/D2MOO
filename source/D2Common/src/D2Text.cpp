@@ -175,30 +175,20 @@ short __stdcall TEXT_GetStringIdOfMenuType0Or2Node(D2TextHeaderStrc* pTextHeader
 //D2Common.0x6FDC38C0 (#10909)
 void __stdcall TEXT_CreateMessageListFromTextHeader(D2TextHeaderStrc* pTextHeader, D2MessageListStrc* pMsgList)
 {
-	D2TextNodeStrc* pNode = NULL;
-	int nCounter = 0;
-
 	D2_ASSERT(pTextHeader);
 	D2_ASSERT(pMsgList);
 
 	memset(pMsgList, 0x00, sizeof(D2MessageListStrc));
 
-	pNode = pTextHeader->pNode;
 	pMsgList->nCount = LOBYTE(pTextHeader->nCount);
+	
+	int i = 0;
+	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext) {
+		D2_ASSERT(i < MAX_TEXT_LIST_NODES);
 
-	if (pNode)
-	{
-		do
-		{
-			D2_ASSERT(nCounter < MAX_TEXT_LIST_NODES);
-
-			pMsgList->pMessages[nCounter].nMenu = LOBYTE(pNode->nMenu);
-			pMsgList->pMessages[nCounter].nStringId = pNode->nStringId;
-			++nCounter;
-
-			pNode = pNode->pNext;
-		}
-		while (pNode);
+		pMsgList->pMessages[i].nMenu = LOBYTE(pNode->nMenu);
+		pMsgList->pMessages[i].nStringId = pNode->nStringId;
+		++i;
 	}
 }
 
