@@ -128,7 +128,7 @@ static void __fastcall ARCHIVE_CloseFile(void* pArchiveHandle, void* pFileHandle
 }
 
 /**
- * pArchive identifier is confirmed by 1.00 (originally hArchive).
+ * pArchiveHandle identifier is confirmed by 1.00 (originally hArchive).
  * 
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10005029

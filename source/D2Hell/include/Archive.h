@@ -34,7 +34,7 @@
  * Reads a file from the MPQ archives into a buffer allocated by
  * this function, and returns that buffer.
  *
- * pArchive is the first parameter, but it is effectively unused.
+ * pArchiveHandle is the first parameter, but it is effectively unused.
  *
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10005029
