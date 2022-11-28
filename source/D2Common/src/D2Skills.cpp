@@ -1844,7 +1844,7 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 		return FALSE;
 	}
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < ARRAY_SIZE(pSkill->pSkillsTxt->nState); ++i) {
 		if (pSkill->pSkillsTxt->nState[i] < 0)
 		{
 			return FALSE;
