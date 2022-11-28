@@ -218,85 +218,71 @@ void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeade
 //D2Common.0x6FDC3A70 (#10911)
 void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 {
-	D2TextNodeStrc* pNodeList = NULL;
-	D2TextNodeStrc* pNode = NULL;
-	int nPreviousMenu = 0;
-	int nMenu = 0;
-	int nCounter = 0;
-	int nId = 0;
-	short nPreviousStringId = 0;
-	short nStringId = 0;
+	D2_ASSERT(pTextHeader != nullptr);
 
-	D2_ASSERT(pTextHeader);
-
-	if (pTextHeader->nCount > 1)
-	{
-		pNodeList = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount, __FILE__, __LINE__, 0);
-
-		pNode = pTextHeader->pNode;
-		nCounter = 0;
-		while (pNode)
-		{
-			pNodeList[nCounter].nStringId = pNode->nStringId;
-			pNodeList[nCounter].nMenu = pNode->nMenu;
-
-			pNode = pNode->pNext;
-			++nCounter;
-		}
-
-		nPreviousStringId = pNodeList[0].nStringId;
-		nPreviousMenu = pNodeList[0].nMenu;
-
-		nCounter = 0;
-		do
-		{
-			nStringId = pNodeList[nCounter + 1].nStringId;
-			nMenu = pNodeList[nCounter + 1].nMenu;
-
-			if (nPreviousStringId <= nStringId)
-			{
-				nPreviousMenu = nMenu;
-				nPreviousStringId = nStringId;
-			}
-			else
-			{
-				pNodeList[nCounter + 1].nStringId = nPreviousStringId;
-				pNodeList[nCounter + 1].nMenu = nPreviousMenu;
-
-				nId = nCounter;
-				while (nId)
-				{
-					if (pNodeList[nId - 1].nStringId <= nStringId)
-					{
-						break;
-					}
-
-					pNodeList[nId].nMenu = pNodeList[nId - 1].nMenu;
-					pNodeList[nId].nStringId = pNodeList[nId - 1].nStringId;
-
-					--nId;
-				}
-
-				pNodeList[nId].nMenu = nMenu;
-				pNodeList[nId].nStringId = nStringId;
-			}
-
-			++nCounter;
-		}
-		while (nCounter + 1 < pTextHeader->nCount);
-
-		pNode = pTextHeader->pNode;
-		nCounter = 0;
-		while (nCounter < pTextHeader->nCount)
-		{
-			pNode->nStringId = pNodeList[nCounter].nStringId;
-			pNode->nMenu = pNodeList[nCounter].nMenu;
-
-			pNode = pNode->pNext;
-
-			++nCounter;
-		}
-
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNodeList, __FILE__, __LINE__, 0);
+	// The list is already sorted if it is empty, or has one element.
+	if (pTextHeader->nCount <= 1) {
+		return;
 	}
+
+	// Copy all of the input into a separate node list for sorting.
+	D2TextNodeStrc* pNodeList = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount, __FILE__, __LINE__, 0);
+
+	int i = 0;
+	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext)
+	{
+		pNodeList[i].nStringId = pNode->nStringId;
+		pNodeList[i].nMenu = pNode->nMenu;
+
+		++i;
+	}
+
+	// Sort the node list via insertion sort.
+	short nPreviousStringId = pNodeList[0].nStringId;
+	int nPreviousMenu = pNodeList[0].nMenu;
+
+	for (size_t i = 0; i + 1 < pTextHeader->nCount; ++i)
+	{
+		short nStringId = pNodeList[i + 1].nStringId;
+		int nMenu = pNodeList[i + 1].nMenu;
+
+		// If the current node is sorted, move to the next node.
+		if (nPreviousStringId <= nStringId)
+		{
+			nPreviousMenu = nMenu;
+			nPreviousStringId = nStringId;
+			continue;
+		}
+
+		// Current node is not sorted, shift bigger elements forward by one index.
+		pNodeList[i + 1].nStringId = nPreviousStringId;
+		pNodeList[i + 1].nMenu = nPreviousMenu;
+
+		int nId;
+		for (nId = i; nId != 0; --nId)
+		{
+			if (pNodeList[nId - 1].nStringId <= nStringId)
+			{
+				break;
+			}
+
+			pNodeList[nId].nMenu = pNodeList[nId - 1].nMenu;
+			pNodeList[nId].nStringId = pNodeList[nId - 1].nStringId;
+		}
+
+		pNodeList[nId].nMenu = nMenu;
+		pNodeList[nId].nStringId = nStringId;
+	}
+
+	// Copy the sorted node list to the input node list.
+	D2TextNodeStrc* pNode = pTextHeader->pNode;
+	for (int i = 0; i < pTextHeader->nCount; ++i)
+	{
+		pNode->nStringId = pNodeList[i].nStringId;
+		pNode->nMenu = pNodeList[i].nMenu;
+
+		pNode = pNode->pNext;
+	}
+
+	FOG_FreeServerMemory(pTextHeader->pMemPool, pNodeList, __FILE__, __LINE__, 0);
 }
