@@ -690,7 +690,7 @@ void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 	int nCounter = 0;
 	int nClass = 0;
 
-	if (!SKILLS_GetSkill(pUnit, 0, -1))
+	if (SKILLS_GetSkill(pUnit, 0, -1) == nullptr)
 	{
 		nClass = pUnit->dwClassId;
 		if (nClass < 0 || nClass >= sgptDataTables->nCharStatsTxtRecordCount)
@@ -706,24 +706,20 @@ void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 
 		SKILLS_AddSkill(pUnit, 0);
 
-		do
-		{
-			if (DATATBLS_GetSkillsTxtRecord(pCharStatsTxtRecord->nBaseSkill[nCounter]))
+		for (int i = 0; i < ARRAY_SIZE(pCharStatsTxtRecord->nBaseSkill); ++i) {
+			if (DATATBLS_GetSkillsTxtRecord(pCharStatsTxtRecord->nBaseSkill[i]))
 			{
-				SKILLS_AddSkill(pUnit, pCharStatsTxtRecord->nBaseSkill[nCounter]);
+				SKILLS_AddSkill(pUnit, pCharStatsTxtRecord->nBaseSkill[i]);
 			}
-
-			++nCounter;
 		}
-		while (nCounter < 10);
 	}
 
-	if (!UNITS_GetLeftSkill(pUnit))
+	if (UNITS_GetLeftSkill(pUnit) == nullptr)
 	{
 		SKILLS_SetLeftActiveSkill(pUnit, 0, -1);
 	}
 
-	if (!UNITS_GetRightSkill(pUnit))
+	if (UNITS_GetRightSkill(pUnit) == nullptr)
 	{
 		SKILLS_SetRightActiveSkill(pUnit, 0, -1);
 	}
