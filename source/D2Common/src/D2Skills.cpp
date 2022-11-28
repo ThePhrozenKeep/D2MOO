@@ -1829,12 +1829,13 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 		return FALSE;
 	}
 
-	if (pSkill->pSkillsTxt->nRestrict == 0)
+	D2SkillsTxt* pSkillsTxt = pSkill->pSkillsTxt;
+	if (pSkillsTxt->nRestrict == 0)
 	{
 		return !STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill);
 	}
 
-	if (pSkill->pSkillsTxt->nRestrict == 1 || pSkill->pSkillsTxt->nRestrict != 2)
+	if (pSkillsTxt->nRestrict == 1 || pSkillsTxt->nRestrict != 2)
 	{
 		return TRUE;
 	}
@@ -1844,13 +1845,13 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 		return FALSE;
 	}
 
-	for (int i = 0; i < ARRAY_SIZE(pSkill->pSkillsTxt->nState); ++i) {
-		if (pSkill->pSkillsTxt->nState[i] < 0)
+	for (int i = 0; i < ARRAY_SIZE(pSkillsTxt->nState); ++i) {
+		if (pSkillsTxt->nState[i] < 0)
 		{
 			return FALSE;
 		}
 
-		if (STATES_CheckState(pUnit, pSkill->pSkillsTxt->nState[i]))
+		if (STATES_CheckState(pUnit, pSkillsTxt->nState[i]))
 		{
 			return TRUE;
 		}
