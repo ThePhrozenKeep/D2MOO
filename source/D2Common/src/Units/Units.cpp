@@ -1543,7 +1543,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 //D2Common.0x6FDBF050
 //TODO: Check everything related to this function
-void __stdcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
+void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 {
 	D2SkillStrc* v10 = NULL;
 	int nUnitType = 0;
