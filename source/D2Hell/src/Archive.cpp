@@ -149,7 +149,7 @@ void* __fastcall ARCHIVE_ReadFile(void* pArchiveHandle, const char* szFilePath, 
 	size_t dwFileSizeHigh;
 	size_t dwFileSize = ARCHIVE_GetFileSize(pArchiveHandle, pFileHandle, &dwFileSizeHigh);
 	// TODO: Remove the char* cast once FOG has been const corrected.
-	void* pBuffer = FOG_AllocClientMemory(dwFileSize + 800, (char*)szSrcPath, nLine, 0);
+	void* pBuffer = FOG_AllocClientMemory(dwFileSize + 800, szSrcPath, nLine, 0);
 	if (pBuffer == nullptr)
 	{
 		return nullptr;

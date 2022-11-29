@@ -944,7 +944,7 @@ BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridSt
 }
 
 //D2Common.0x6FD8F1E0 (#10246)
-BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, char* szFile, int nLine)
+BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, const char* szFile, int nLine)
 {
 	int nX = 0;
 	int nY = 0;

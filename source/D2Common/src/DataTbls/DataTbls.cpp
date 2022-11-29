@@ -26,7 +26,7 @@ void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle)
 }
 
 //D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, char* szFileName, void** pFileHandle, int bDontLogError)
+BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, void** pFileHandle, int bDontLogError)
 {
 	if (FOG_MPQFileOpen(szFileName, pFileHandle))
 	{
@@ -98,7 +98,7 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 }
 
 //D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, char* szFile, int nLine)
+void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine)
 {
 	void* pFileHandle = NULL;
 	void* pBuffer = NULL;
@@ -264,7 +264,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 }
 
 //D2Common.0x6FD49760
-void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
+void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
 {
 	FILE* pFile = NULL;
 	int nSize = 0;
@@ -727,7 +727,7 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize)
+void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize)
 {
 	D2BinFileStrc* pBinFile = NULL;
 	FILE* pFile = NULL;
