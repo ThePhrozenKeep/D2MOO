@@ -1488,13 +1488,14 @@ int __stdcall D2Common_10467(D2StatListStrc* pStatList, int nStat)
 //D2Common.0x6FDB8150 (#10468)
 void __stdcall STATLIST_RemoveAllStats(D2StatListStrc* pStatList)
 {
-	if (pStatList && pStatList->Stats.nStatCount > 0)
+	if (pStatList == nullptr)
 	{
-		do
-		{
-			STATLIST_SetStat(pStatList, pStatList->Stats.pStat->nStat, 0, pStatList->Stats.pStat->nLayer);
-		}
-		while (pStatList->Stats.nStatCount > 0);
+		return;
+	}
+
+	while (pStatList->Stats.nStatCount > 0)
+	{
+		STATLIST_SetStat(pStatList, pStatList->Stats.pStat->nStat, 0, pStatList->Stats.pStat->nLayer);
 	}
 }
 
