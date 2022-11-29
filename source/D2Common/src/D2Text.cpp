@@ -175,8 +175,8 @@ short __stdcall TEXT_GetStringIdOfMenuType0Or2Node(D2TextHeaderStrc* pTextHeader
 //D2Common.0x6FDC38C0 (#10909)
 void __stdcall TEXT_CreateMessageListFromTextHeader(D2TextHeaderStrc* pTextHeader, D2MessageListStrc* pMsgList)
 {
-	D2_ASSERT(pTextHeader);
-	D2_ASSERT(pMsgList);
+	D2_ASSERT(pTextHeader != nullptr);
+	D2_ASSERT(pMsgList != nullptr);
 
 	memset(pMsgList, 0x00, sizeof(D2MessageListStrc));
 
@@ -195,12 +195,14 @@ void __stdcall TEXT_CreateMessageListFromTextHeader(D2TextHeaderStrc* pTextHeade
 //D2Common.0x6FDC3970 (#10910)
 void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeader, D2MessageListStrc* pMsgList)
 {
-	D2_ASSERT(pTextHeader);
-	D2_ASSERT(pMsgList);
+	D2_ASSERT(pTextHeader != nullptr);
+	D2_ASSERT(pMsgList != nullptr);
 
-	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext)
+	D2TextNodeStrc* pNext;
+	for (D2TextNodeStrc* pCurrent = pTextHeader->pNode; pCurrent != nullptr; pCurrent = pNext)
 	{
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+		pNext = pCurrent->pNext;
+		FOG_FreeServerMemory(pTextHeader->pMemPool, pCurrent, __FILE__, __LINE__, 0);
 	}
 
 	D2_ASSERT(pMsgList->nCount < MAX_TEXT_LIST_NODES);
