@@ -1449,7 +1449,7 @@ __forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* p
 }
 
 //TODO: ...
-__forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, char* szFile, int nLine)
+__forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, const char* szFile, int nLine)
 {
 	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
@@ -1543,7 +1543,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 //D2Common.0x6FDBF050
 //TODO: Check everything related to this function
-void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char* szFile, int nLine)
+void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 {
 	D2SkillStrc* v10 = NULL;
 	int nUnitType = 0;
@@ -1755,7 +1755,7 @@ LABEL_75:
 
 ////TODO:Remove
 //D2FUNC(D2COMMON, 10376, void, __stdcall, (D2UnitStrc*, char*, int), 0x7F050)
-//void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char* szFile, int nLine)
+//void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 //{
 //	return D2COMMON_10376(pUnit, szFile, nLine);
 //}

@@ -743,7 +743,7 @@ void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 }
 
 //D2Common.0x6FDA9A70 (#10146)
-void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, char* szFile, int nLine)
+void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, const char* szFile, int nLine)
 {
 	if (pDynamicPath)
 	{

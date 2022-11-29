@@ -187,7 +187,7 @@ BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRightWithWeight(D2Inven
 //D2Common.0x6FD8F0E0
 BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8F1E0 (#10246)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, char* szFile, int nLine);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, const char* szFile, int nLine);
 //D2Common.0x6FD8F250
 BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryGrid, int nInventoryRecordId, BOOL bUnused);
 //D2Common.0x6FD8F600 (#10247)

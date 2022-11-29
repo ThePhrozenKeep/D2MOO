@@ -798,13 +798,13 @@ D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromUnitAndId(D2UnitStrc* pUn
 }
 
 //D2Common.0x6FDAFFD0 (#10951)
-void __stdcall SKILLS_RemoveSkill(D2UnitStrc* pUnit, int nSkillId, char* szFile, int nLine)
+void __stdcall SKILLS_RemoveSkill(D2UnitStrc* pUnit, int nSkillId, const char* szFile, int nLine)
 {
 	D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(pUnit, nSkillId, 1, szFile, nLine);
 }
 
 //D2Common.0x6FDAFFF0
-void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, BOOL bDecrementAndCheckSkillLevel, char* szFile, int nLine)
+void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, BOOL bDecrementAndCheckSkillLevel, const char* szFile, int nLine)
 {
 	if (!pUnit)
 	{
@@ -1033,7 +1033,7 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDB04D0 (#10953)
-void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bRemove, char* szFile, int nLine)
+void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bRemove, const char* szFile, int nLine)
 {
 	D2SkillStrc* pSkill = NULL;
 
@@ -1328,7 +1328,7 @@ void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2Uni
 }
 
 //D2Common.0x6FDB0AC0 (#10963)
-int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, char* szFile, int nLine)
+int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, const char* szFile, int nLine)
 {
 	if (pSkill)
 	{
@@ -2866,7 +2866,7 @@ int __stdcall D2Common_11014_ConvertShapeShiftedMode(int nArrayIndex, int nMonst
 }
 
 //D2Common.0x6FDB30A0 (#11013)
-void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pClass, int* pMode, char* szFile, int nLine)
+void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pClass, int* pMode, const char* szFile, int nLine)
 {
 	if (!(pUnit && (pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) && sgptDataTables->nTransformStates > 0))
 	{

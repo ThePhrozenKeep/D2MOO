@@ -225,7 +225,7 @@ void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix)
 }
 
 //D2Common.0x6FD98750 (#10707)
-BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, char* szFile)
+BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, const char* szFile)
 {
 	if (D2ItemDataStrc * pItemData = ITEMS_GetItemData(pItem))
 	{
@@ -902,7 +902,7 @@ uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99500 (#10749)
-void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine)
+void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{

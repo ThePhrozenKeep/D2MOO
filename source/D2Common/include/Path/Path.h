@@ -209,7 +209,7 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDA98F0 (#10144)
 D2COMMON_DLL_DECL void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing);
 //D2Common.0x6FDA9A70 (#10146)
-D2COMMON_DLL_DECL void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, char* szFile, int nLine);
+D2COMMON_DLL_DECL void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, const char* szFile, int nLine);
 //D2Common.0x6FDA9AB0 (#10147)
 D2COMMON_DLL_DECL int __stdcall PATH_GetVelocity(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9AC0 (#10148)
