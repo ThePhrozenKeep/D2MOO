@@ -43,7 +43,7 @@ void __fastcall sub_6FD76A90(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int
 //D2Common.0x6FD76B90
 void __fastcall sub_6FD76B90(D2RoomExStrc* pRoomEx, int nIndex1, int nIndex2, BOOL bNode);
 //D2Common.0x6FD76C20
-BOOL __fastcall sub_6FD76C20(D2DrlgTileDataStrc* pTileData);
+BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData);
 //D2Common.0x6FD76C50
 void __fastcall sub_6FD76C50(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD76CF0

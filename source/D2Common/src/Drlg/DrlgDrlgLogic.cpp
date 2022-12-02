@@ -99,7 +99,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 				{
 					for (D2DrlgTileDataStrc* pDrlgTileData = pDrlgTileLink->pMapTile; pDrlgTileData; pDrlgTileData = pDrlgTileData->unk0x20)
 					{
-						if (sub_6FD76C20(pDrlgTileData))
+						if (DRLG_CheckLayer1ButNotWallObject(pDrlgTileData))
 						{
 							nX = pRoomExNear->nTileXPos + pDrlgTileData->nPosX;
 							nY = pRoomExNear->nTileYPos + pDrlgTileData->nPosY;
@@ -339,13 +339,13 @@ void __fastcall sub_6FD76B90(D2RoomExStrc* pRoomEx, int nIndex1, int nIndex2, BO
 }
 
 //D2Common.0x6FD76C20
-BOOL __fastcall sub_6FD76C20(D2DrlgTileDataStrc* pTileData)
+BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData)
 {
-	if ((pTileData->dwFlags & 0x1C000) == 0x4000)
+	if (GetMapTileLayer(pTileData->dwFlags) == 1)
 	{
 		if (pTileData->nTileType != TILETYPE_ROOFS)
 		{
-			return ((unsigned int)~pTileData->dwFlags >> 11) & 1;
+			return (pTileData->dwFlags & MAPTILE_OBJECT_WALL) == 0;
 		}
 	}
 
