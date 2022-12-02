@@ -1832,7 +1832,7 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		pMazeLevelIds = &nAct2SewerNextIds[nRand];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 		break;
 
@@ -1840,7 +1840,7 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		pMazeLevelIds = &nAct2SewerPrevIds[nRand];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nRand = (nRand + 1) % 4;
@@ -1864,13 +1864,13 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 }
 
 //D2Common.0x6FD7B660
-void __fastcall sub_6FD7B660(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPrestId, int nFile)
+void __fastcall DRLGMAZE_AddSpecialPreset(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPrestId, int nFile)
 {
 	for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 	{
-		if (~pRoomEx->pMaze->nFlags & 2)
+		if (!DRLGMAZE_HasMapDS1(pRoomEx))
 		{
-			if (DRLGMAZE_InitRoomFixedPreset(pRoomEx, nDirection, nLvlPrestId, nFile, 1))
+			if (DRLGMAZE_InitRoomFixedPreset(pRoomEx, nDirection, nLvlPrestId, nFile, TRUE))
 			{
 				break;
 			}
@@ -2029,7 +2029,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombWaypointIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2040,7 +2040,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombChestIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2051,7 +2051,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombChestIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2062,7 +2062,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombLeatherarmIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2073,7 +2073,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombCubeIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2084,7 +2084,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombTreasureIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2095,7 +2095,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct2TombTalRashaIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nDirection = (nDirection + 1) % 4;
@@ -2209,7 +2209,7 @@ void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 
 		if (!pRoomEx)
 		{
-			sub_6FD7B660(pLevel, 2, LVLPREST_ACT2_LAIR_TREASURE_W, -1);
+			DRLGMAZE_AddSpecialPreset(pLevel, 2, LVLPREST_ACT2_LAIR_TREASURE_W, -1);
 		}
 
 		nIndex = 0;
@@ -2231,7 +2231,7 @@ void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 
 		if (!pRoomEx)
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nIndex = (nRand + 1) % 4;
@@ -2240,7 +2240,7 @@ void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 	pMazeLevelIds = &nAct2LairPrevIds[nIndex];
 	if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 	{
-		sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+		DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 	}
 }
 
@@ -2505,7 +2505,7 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 
 		if (!pRoomEx)
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		v14 = (v9 + 1) % 4;
@@ -2524,7 +2524,7 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 
 		if (!pRoomEx)
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		v9 = (v14 + 1) % 4;
@@ -2535,7 +2535,7 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct3MephistoNextIds[v9];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 	}
 }
@@ -2835,7 +2835,7 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct1BarracksForgeIds[(nDirection + 1) % 4];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 	}
 	else
@@ -2843,7 +2843,7 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		pMazeLevelIds = &nAct1BarracksForgeIds[nDirection];
 		if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 		{
-			sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+			DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 		}
 
 		nRand = (nDirection + 1) % 4;
@@ -3014,7 +3014,7 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 	
 	if (!pRoomEx)
 	{
-		sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+		DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 	}
 
 	nDirection = (nDirection + 1) % 4;
@@ -3033,7 +3033,7 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 
 	if (!pRoomEx)
 	{
-		sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+		DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 	}
 
 	nDirection = (nDirection + 1) % 4;
@@ -3052,7 +3052,7 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 
 	if (!pRoomEx)
 	{
-		sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+		DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 	}
 
 	nDirection = (nDirection + 1) % 4;
@@ -3063,7 +3063,7 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 			pMazeLevelIds = &nAct5IceThemeIds[nDirection];
 			if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 			{
-				sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+				DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 			}
 
 			nDirection = (nDirection + 1) % 4;
@@ -3077,7 +3077,7 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 	pMazeLevelIds = &nAct5IceWaypointIds[nDirection];
 	if (!DRLGMAZE_ReplaceRoomPreset(pLevel, pMazeLevelIds->nLevelPrestId1, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile, 0))
 	{
-		sub_6FD7B660(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
+		DRLGMAZE_AddSpecialPreset(pLevel, pMazeLevelIds->nDirection, pMazeLevelIds->nLevelPrestId2, pMazeLevelIds->nPickedFile);
 	}
 }
 

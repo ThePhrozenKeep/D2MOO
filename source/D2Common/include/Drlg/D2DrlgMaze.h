@@ -57,7 +57,7 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialPreset(D2DrlgLevelStrc* pLevel, const
 //D2Common.0x6FD7B330
 void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD7B660
-void __fastcall sub_6FD7B660(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPrestId, int nFile);
+void __fastcall DRLGMAZE_AddSpecialPreset(D2DrlgLevelStrc* pLevel, int nDirection, int nLvlPrestId, int nFile);
 //D2Common.0x6FD7B710
 BOOL __fastcall DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(D2RoomExStrc* pRoomEx, int nDirection);
 //D2Common.0x6FD7B8B0
