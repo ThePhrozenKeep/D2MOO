@@ -47,7 +47,7 @@ BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData);
 //D2Common.0x6FD76C50
 void __fastcall DRLGLOGIC_SetCoordListForTiles(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD76CF0
-void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCoordList, int nLists);
+void __fastcall DRLGLOGIC_AssignCoordListsForGrids(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCoordList, int nLists);
 //D2Common.0x6FD76F90
 void __fastcall DRLGLOGIC_AllocCoordLists(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77080

@@ -151,7 +151,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 	
 	pRoomEx->pLevel->nCoordLists += pDrlgCoordList->nLists;
 
-	sub_6FD76CF0(pRoomEx, pDrlgCoordList, nLists);
+	DRLGLOGIC_AssignCoordListsForGrids(pRoomEx, pDrlgCoordList, nLists);
 	DRLGLOGIC_SetCoordListForTiles(pRoomEx);
 	sub_6FD769B0(pRoomEx);
 }
@@ -372,31 +372,22 @@ void __fastcall DRLGLOGIC_SetCoordListForTiles(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD76CF0
-void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCoordList, int nLists)
+void __fastcall DRLGLOGIC_AssignCoordListsForGrids(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCoordList, int nLists)
 {
-	D2RoomCoordListStrc* pRoomCoordList = NULL;
-	int nTmpHeight = 0;
-	int nTmpWidth = 0;
-	int nHeight = 0;
-	int nWidth = 0;
-	int nIndex = 0;
-	int nFlags = 0;
-	BOOL bBreak = FALSE;
-
 	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pDrlgCoordList->pIndexY, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1);
-	nWidth = pRoomEx->nTileWidth + 1;
-	nHeight = pRoomEx->nTileHeight + 1;
+	const int nWidth = pRoomEx->nTileWidth + 1;
+	const int nHeight = pRoomEx->nTileHeight + 1;
 
 	for (int nY = 0; nY < nHeight; ++nY)
 	{
 		for (int nX = 0; nX < nWidth; ++nX)
 		{
-			nFlags = DRLGGRID_GetGridEntry(&pDrlgCoordList->pIndexX, nX, nY);
-			nIndex = nFlags & 0xFFFFFFF;
+			const int nFlags = DRLGGRID_GetGridEntry(&pDrlgCoordList->pIndexX, nX, nY);
+			const int nIndex = nFlags & 0xFFFFFFF;
 
 			if (!DRLGGRID_GetGridEntry(&pDrlgCoordList->pIndexY, nX, nY))
 			{
-				pRoomCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
+				D2RoomCoordListStrc* pRoomCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
 
 				pRoomCoordList->nIndex = nIndex;
 				pRoomCoordList->bNode = (nFlags & 0x20000000) == 0x20000000;
@@ -406,7 +397,7 @@ void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCo
 
 				pRoomCoordList->pBox[0].nPosX = nX;
 				pRoomCoordList->pBox[0].nPosY = nY;
-
+				int nTmpWidth;
 				for (nTmpWidth = nX; nTmpWidth < nWidth; ++nTmpWidth)
 				{
 					if (nIndex != (DRLGGRID_GetGridEntry(&pDrlgCoordList->pIndexX, nTmpWidth, nY) & 0xFFFFFFF))
@@ -421,7 +412,8 @@ void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCo
 				}
 				pRoomCoordList->pBox[0].nWidth = nTmpWidth;
 
-				bBreak = FALSE;
+				BOOL bBreak = FALSE;
+				int nTmpHeight;
 				for (nTmpHeight = nY; nTmpHeight < nHeight; ++nTmpHeight)
 				{
 					for (int i = nX; i < pRoomCoordList->pBox[0].nWidth; ++i)
