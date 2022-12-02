@@ -56,7 +56,7 @@ struct D2DrlgTileDataStrc;
 struct D2DrlgActStrc;
 struct D2DrlgAnimTileGridStrc;
 struct D2DrlgBuildStrc;
-struct D2DrlgCoordListStrc;
+struct D2DrlgLogicalRoomInfoStrc;
 struct D2DrlgDeleteStrc;
 struct D2DrlgEnvironmentStrc;
 struct D2DrlgFileStrc;

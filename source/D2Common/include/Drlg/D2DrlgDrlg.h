@@ -143,44 +143,44 @@ struct D2DrlgCoordsStrc
 
 struct D2RoomExStrc
 {
-	D2DrlgLevelStrc* pLevel;				//0x00
+	D2DrlgLevelStrc* pLevel;					//0x00
 	union
 	{
 		struct
 		{
-			int32_t nTileXPos;				//0x04
-			int32_t nTileYPos;				//0x08
-			int32_t nTileWidth;				//0x0C
-			int32_t nTileHeight;			//0x10
+			int32_t nTileXPos;					//0x04
+			int32_t nTileYPos;					//0x08
+			int32_t nTileWidth;					//0x0C
+			int32_t nTileHeight;				//0x10
 		};
-		D2DrlgCoordStrc pDrlgCoord;			//0x04
+		D2DrlgCoordStrc pDrlgCoord;				//0x04
 	};
-	uint32_t dwFlags;						//0x14 D2RoomExFlags
-	uint32_t dwOtherFlags;					//0x18
-	int32_t nType;							//0x1C
+	uint32_t dwFlags;							//0x14 D2RoomExFlags
+	uint32_t dwOtherFlags;						//0x18
+	int32_t nType;								//0x1C
 	union
 	{
-		D2DrlgPresetRoomStrc* pMaze;		//0x20
-		D2DrlgOutdoorRoomStrc* pOutdoor;	//0x20
+		D2DrlgPresetRoomStrc* pMaze;			//0x20
+		D2DrlgOutdoorRoomStrc* pOutdoor;		//0x20
 	};
-	uint32_t dwDT1Mask;						//0x24 - tile caching mask, used to init below @ D2Common.0x4A380
-	D2TileLibraryHashStrc* pTiles[32];		//0x28
-	D2DrlgTileGridStrc* pTileGrid;			//0xA8
-	uint8_t fRoomStatus;					//0xAC D2DrlgRoomStatus
-	uint8_t unk0xAD;						//0xAD
-	uint16_t wRoomsInList[ROOMSTATUS_COUNT + 1]; //0xAE
-	D2RoomExStrc* pStatusNext;				//0xB8
-	D2RoomExStrc* pStatusPrev;				//0xBC
-	D2RoomExStrc** ppRoomsNear;				//0xC0 // names pptVisibleRooms in the original game
-	int32_t nRoomsNear;						//0xC4
-	D2RoomTileStrc* pRoomTiles;				//0xC8
-	D2PresetUnitStrc* pPresetUnits;			//0xCC
-	D2DrlgOrthStrc* pDrlgOrth;				//0xD0
-	D2SeedStrc pSeed;						//0xD4
-	uint32_t dwInitSeed;					//0xDC
-	D2DrlgCoordListStrc* pCoordList;		//0xE0 // named ptLogicalRoomInfo in the original game
-	D2RoomStrc* pRoom;						//0xE4
-	D2RoomExStrc* pRoomExNext;				//0xE8
+	uint32_t dwDT1Mask;							//0x24 - tile caching mask, used to init below @ D2Common.0x4A380
+	D2TileLibraryHashStrc* pTiles[32];			//0x28
+	D2DrlgTileGridStrc* pTileGrid;				//0xA8
+	uint8_t fRoomStatus;						//0xAC D2DrlgRoomStatus
+	uint8_t unk0xAD;							//0xAD
+	uint16_t wRoomsInList[ROOMSTATUS_COUNT + 1];//0xAE
+	D2RoomExStrc* pStatusNext;					//0xB8
+	D2RoomExStrc* pStatusPrev;					//0xBC
+	D2RoomExStrc** ppRoomsNear;					//0xC0 // names pptVisibleRooms in the original game
+	int32_t nRoomsNear;							//0xC4
+	D2RoomTileStrc* pRoomTiles;					//0xC8
+	D2PresetUnitStrc* pPresetUnits;				//0xCC
+	D2DrlgOrthStrc* pDrlgOrth;					//0xD0
+	D2SeedStrc pSeed;							//0xD4
+	uint32_t dwInitSeed;						//0xDC
+	D2DrlgLogicalRoomInfoStrc* pLogicalRoomInfo;//0xE0 aka pCoordList (in other RE sources) or pRoomCoords (Mentor's notes). This seems to be the official name.
+	D2RoomStrc* pRoom;							//0xE4
+	D2RoomExStrc* pRoomExNext;					//0xE8
 };
 
 typedef int32_t(__stdcall* ROOMCALLBACKFN)(D2RoomStrc*, void*);
