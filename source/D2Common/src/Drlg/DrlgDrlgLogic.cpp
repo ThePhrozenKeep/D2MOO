@@ -152,7 +152,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 	pRoomEx->pLevel->nCoordLists += pDrlgCoordList->nLists;
 
 	sub_6FD76CF0(pRoomEx, pDrlgCoordList, nLists);
-	sub_6FD76C50(pRoomEx);
+	DRLGLOGIC_SetCoordListForTiles(pRoomEx);
 	sub_6FD769B0(pRoomEx);
 }
 
@@ -353,7 +353,7 @@ BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData)
 }
 
 //D2Common.0x6FD76C50
-void __fastcall sub_6FD76C50(D2RoomExStrc* pRoomEx)
+void __fastcall DRLGLOGIC_SetCoordListForTiles(D2RoomExStrc* pRoomEx)
 {
 	if (pRoomEx->pTileGrid->pTiles.nWalls)
 	{
