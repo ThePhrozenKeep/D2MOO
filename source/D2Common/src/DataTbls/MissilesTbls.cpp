@@ -324,7 +324,7 @@ void __fastcall DATATBLS_UnloadMissilesTxt()
 {
 	if (sgptDataTables->pMissCode)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMissCode, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMissCode, __FILE__, __LINE__, 0);
 		sgptDataTables->pMissCode = NULL;
 	}
 	sgptDataTables->nMissCodeSize = 0;

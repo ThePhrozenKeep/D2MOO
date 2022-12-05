@@ -19,7 +19,7 @@ void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
-		pItem->pItemData = (D2ItemDataStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2ItemDataStrc), __FILE__, __LINE__, 0);
+		pItem->pItemData = (D2ItemDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2ItemDataStrc), __FILE__, __LINE__, 0);
 		if (!pItem->pItemData)
 		{
 			//FOG_10024_PacketAssertion("Out of Memory in ITEMSDataInit()", __FILE__, __LINE__);
@@ -39,7 +39,7 @@ void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem)
 		INVENTORY_RemoveItem(pItem);
 		if (pItem->pItemData)
 		{
-			FOG_FreeServerMemory(pMemPool, pItem->pItemData, __FILE__, __LINE__, 0);
+			FOG_FreePool(pMemPool, pItem->pItemData, __FILE__, __LINE__, 0);
 		}
 	}
 }

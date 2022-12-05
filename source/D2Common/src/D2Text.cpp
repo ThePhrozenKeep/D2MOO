@@ -4,7 +4,7 @@
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool)
 {
-	D2TextHeaderStrc* pTextHeader = (D2TextHeaderStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2TextHeaderStrc), __FILE__, __LINE__, 0);
+	D2TextHeaderStrc* pTextHeader = (D2TextHeaderStrc*)FOG_AllocPool(pMemPool, sizeof(D2TextHeaderStrc), __FILE__, __LINE__, 0);
 	pTextHeader->pMemPool = pMemPool;
 	pTextHeader->nCount = 0;
 	pTextHeader->pNode = NULL;
@@ -22,11 +22,11 @@ void __stdcall TEXT_FreeTextHeader(D2TextHeaderStrc* pTextHeader)
 	while (pNode)
 	{
 		pNext = pNode->pNext;
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+		FOG_FreePool(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
 		pNode = pNext;
 	}
 	pTextHeader->nCount = 0;
-	FOG_FreeServerMemory(pTextHeader->pMemPool, pTextHeader, __FILE__, __LINE__, 0);
+	FOG_FreePool(pTextHeader->pMemPool, pTextHeader, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FDC3760 (#10903)
@@ -34,7 +34,7 @@ void __stdcall TEXT_AddNodeToTextList(D2TextHeaderStrc* pTextHeader, short nStri
 {
 	D2TextNodeStrc* pNode = NULL;
 
-	pNode = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
+	pNode = (D2TextNodeStrc*)FOG_AllocPool(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
 	pNode->pNext = pTextHeader->pNode;
 	pNode->nStringId = nStringId;
 	pNode->nMenu = nMenu;
@@ -73,7 +73,7 @@ void __stdcall TEXT_RemoveNodeFromTextList(D2TextHeaderStrc* pTextHeader, short 
 			pTextHeader->pNode = pNode->pNext;
 		}
 
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+		FOG_FreePool(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
 		--pTextHeader->nCount;
 	}
 }
@@ -217,7 +217,7 @@ void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeade
 		do
 		{
 			pNext = pNode->pNext;
-			FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+			FOG_FreePool(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
 			pNode = pNext;
 		}
 		while (pNode);
@@ -228,7 +228,7 @@ void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeade
 	pTextHeader->nCount = 0;
 	while (pTextHeader->nCount < pMsgList->nCount)
 	{
-		pNode = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
+		pNode = (D2TextNodeStrc*)FOG_AllocPool(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
 		pNode->nMenu = pMsgList->pMessages[pTextHeader->nCount].nMenu;
 		pNode->nStringId = pMsgList->pMessages[pTextHeader->nCount].nStringId;
 		pNode->pNext = pTextHeader->pNode;
@@ -254,7 +254,7 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 
 	if (pTextHeader->nCount > 1)
 	{
-		pNodeList = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount, __FILE__, __LINE__, 0);
+		pNodeList = (D2TextNodeStrc*)FOG_AllocPool(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount, __FILE__, __LINE__, 0);
 
 		pNode = pTextHeader->pNode;
 		nCounter = 0;
@@ -320,6 +320,6 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 			++nCounter;
 		}
 
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNodeList, __FILE__, __LINE__, 0);
+		FOG_FreePool(pTextHeader->pMemPool, pNodeList, __FILE__, __LINE__, 0);
 	}
 }

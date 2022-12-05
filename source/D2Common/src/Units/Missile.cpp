@@ -30,7 +30,7 @@ void __stdcall MISSILE_AllocMissileData(D2UnitStrc* pMissile)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && !pMissile->pMissileData)
 	{
-		pMissile->pMissileData = (D2MissileDataStrc*)FOG_AllocServerMemory(pMissile->pMemoryPool, sizeof(D2MissileDataStrc), __FILE__, __LINE__, 0);
+		pMissile->pMissileData = (D2MissileDataStrc*)FOG_AllocPool(pMissile->pMemoryPool, sizeof(D2MissileDataStrc), __FILE__, __LINE__, 0);
 		memset(pMissile->pMissileData, 0x00, sizeof(D2MissileDataStrc));
 		pMissile->pMissileData->dwOwnerGUID = D2UnitInvalidGUID;
 	}
@@ -41,7 +41,7 @@ void __stdcall MISSILE_FreeMissileData(D2UnitStrc* pMissile)
 {
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE && pMissile->pMissileData)
 	{
-		FOG_FreeServerMemory(pMissile->pMemoryPool, pMissile->pMissileData, __FILE__, __LINE__, 0);
+		FOG_FreePool(pMissile->pMemoryPool, pMissile->pMissileData, __FILE__, __LINE__, 0);
 		pMissile->pMissileData = NULL;
 	}
 }

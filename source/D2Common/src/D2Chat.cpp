@@ -25,7 +25,7 @@ D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText
 		nLength = 254;
 	}
 
-	pHoverMsg = (D2HoverTextStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2HoverTextStrc), __FILE__, __LINE__, 0);
+	pHoverMsg = (D2HoverTextStrc*)FOG_AllocPool(pMemPool, sizeof(D2HoverTextStrc), __FILE__, __LINE__, 0);
 	memset(pHoverMsg, 0x00, sizeof(D2HoverTextStrc));
 
 	pHoverMsg->dwDisplayTime = 8 * nLength + 125;
@@ -44,7 +44,7 @@ void __stdcall CHAT_FreeHoverMsg(void* pMemPool, D2HoverTextStrc* pHoverMsg)
 {
 	if (pHoverMsg)
 	{
-		FOG_FreeServerMemory(pMemPool, pHoverMsg, __FILE__, __LINE__, 0);
+		FOG_FreePool(pMemPool, pHoverMsg, __FILE__, __LINE__, 0);
 	}
 }
 

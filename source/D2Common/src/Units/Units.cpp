@@ -77,7 +77,7 @@ D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit)
 //D2Common.0x6FDBD6B0 (#11259)
 D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
 {
-	D2UnitStrc* pUnit = (D2UnitStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2UnitStrc), __FILE__, __LINE__, 0);
+	D2UnitStrc* pUnit = (D2UnitStrc*)FOG_AllocPool(pMemPool, sizeof(D2UnitStrc), __FILE__, __LINE__, 0);
 	memset(pUnit, 0x00, sizeof(D2UnitStrc));
 
 	pUnit->pMemoryPool = pMemPool;
@@ -85,7 +85,7 @@ D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
 
 	if (nUnitType == UNIT_MONSTER)
 	{
-		pUnit->pMonsterData = (D2MonsterDataStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2MonsterDataStrc), __FILE__, __LINE__, 0);
+		pUnit->pMonsterData = (D2MonsterDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2MonsterDataStrc), __FILE__, __LINE__, 0);
 		memset(pUnit->pMonsterData, 0x00, sizeof(D2MonsterDataStrc));
 	}
 
@@ -102,13 +102,13 @@ void __stdcall UNITS_FreeUnit(D2UnitStrc* pUnit)
 
 		if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
-			FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit->pMonsterData, __FILE__, __LINE__, 0);
+			FOG_FreePool(pUnit->pMemoryPool, pUnit->pMonsterData, __FILE__, __LINE__, 0);
 		}
 
 		pUnit->dwUnitType = 6;
 		pUnit->dwUnitId = -1;
 
-		FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit, __FILE__, __LINE__, 0);
+		FOG_FreePool(pUnit->pMemoryPool, pUnit, __FILE__, __LINE__, 0);
 	}
 }
 
@@ -2228,7 +2228,7 @@ void __stdcall UNITS_AllocPlayerData(D2UnitStrc* pUnit)
 	D2_ASSERT(pUnit);
 	D2_ASSERT(!pUnit->pPlayerData);
 
-	pUnit->pPlayerData = (D2PlayerDataStrc*)FOG_AllocServerMemory(pUnit->pMemoryPool, sizeof(D2PlayerDataStrc), __FILE__, __LINE__, 0);
+	pUnit->pPlayerData = (D2PlayerDataStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2PlayerDataStrc), __FILE__, __LINE__, 0);
 	memset(pUnit->pPlayerData, 0x00, sizeof(D2PlayerDataStrc));
 	pUnit->pPlayerData->szName[0] = 0;
 
@@ -2259,7 +2259,7 @@ void __stdcall UNITS_FreePlayerData(void* pMemPool, D2UnitStrc* pPlayer)
 
 	//D2COMMON_10916_Return();
 
-	FOG_FreeServerMemory(pMemPool, pPlayer->pPlayerData, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pPlayer->pPlayerData, __FILE__, __LINE__, 0);
 	pPlayer->pPlayerData = NULL;
 }
 
@@ -3600,7 +3600,7 @@ void __stdcall UNITS_AllocStaticPath(D2UnitStrc* pUnit)
 {
 	if (!pUnit->pStaticPath)
 	{
-		pUnit->pStaticPath = (D2StaticPathStrc*)FOG_AllocServerMemory(pUnit->pMemoryPool, sizeof(D2StaticPathStrc), __FILE__, __LINE__, 0);
+		pUnit->pStaticPath = (D2StaticPathStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2StaticPathStrc), __FILE__, __LINE__, 0);
 		memset(pUnit->pStaticPath, 0x00, sizeof(D2StaticPathStrc));
 	}
 }
@@ -3610,7 +3610,7 @@ void __stdcall UNITS_FreeStaticPath(D2UnitStrc* pUnit)
 {
 	if (pUnit->pStaticPath)
 	{
-		FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit->pStaticPath, __FILE__, __LINE__, 0);
+		FOG_FreePool(pUnit->pMemoryPool, pUnit->pStaticPath, __FILE__, __LINE__, 0);
 		pUnit->pStaticPath = NULL;
 	}
 }

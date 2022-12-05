@@ -434,7 +434,7 @@ void __fastcall DATATBLS_LoadLevelDefsBin(void* pMemPool)
 
 	if (sgptDataTables->nPortalLevels)
 	{
-		sgptDataTables->pPortalLevels = (int*)FOG_AllocServerMemory(NULL, sizeof(int) * sgptDataTables->nPortalLevels, __FILE__, __LINE__, 0);
+		sgptDataTables->pPortalLevels = (int*)FOG_AllocPool(NULL, sizeof(int) * sgptDataTables->nPortalLevels, __FILE__, __LINE__, 0);
 		memset(sgptDataTables->pPortalLevels, 0x00, sizeof(int) * sgptDataTables->nPortalLevels);
 	}
 
@@ -460,7 +460,7 @@ void __fastcall DATATBLS_UnloadLevelDefsBin()
 
 	if (sgptDataTables->pPortalLevels)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pPortalLevels, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pPortalLevels, __FILE__, __LINE__, 0);
 	}
 }
 
@@ -626,7 +626,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(void* pMemPool, int a2)
 
 	if (a2)
 	{
-		sgptDataTables->ppLvlPrestFiles = (D2DrlgFileStrc**)FOG_AllocClientMemory(6 * sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlPrestTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->ppLvlPrestFiles = (D2DrlgFileStrc**)FOG_Alloc(6 * sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlPrestTxtRecordCount, __FILE__, __LINE__, 0);
 		memset(sgptDataTables->ppLvlPrestFiles, 0x00, 6 * sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlPrestTxtRecordCount);
 	}
 
@@ -680,7 +680,7 @@ void __fastcall DATATBLS_UnloadLvlPrestTxt()
 			}
 		}
 
-		FOG_FreeClientMemory(ppLvlPrestFiles, __FILE__, __LINE__, 0);
+		FOG_Free(ppLvlPrestFiles, __FILE__, __LINE__, 0);
 		sgptDataTables->ppLvlPrestFiles = NULL;
 	}
 
@@ -854,7 +854,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 
 		if (dwType)
 		{
-			sgptDataTables->pLvlSubTypeStartIds = (int*)FOG_AllocServerMemory(NULL, sizeof(int) * (dwType + 1), __FILE__, __LINE__, 0);
+			sgptDataTables->pLvlSubTypeStartIds = (int*)FOG_AllocPool(NULL, sizeof(int) * (dwType + 1), __FILE__, __LINE__, 0);
 			memset(sgptDataTables->pLvlSubTypeStartIds, 0x00, sizeof(int) * (dwType + 1));
 
 			dwType = 0;
@@ -872,13 +872,13 @@ void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 	if (!a2)
 	{
 		D2_ASSERT(gpLvlSubTypeFilesCriticalSection == NULL);
-		gpLvlSubTypeFilesCriticalSection = (LPCRITICAL_SECTION)FOG_AllocClientMemory(sizeof(RTL_CRITICAL_SECTION), __FILE__, __LINE__, 0);
+		gpLvlSubTypeFilesCriticalSection = (LPCRITICAL_SECTION)FOG_Alloc(sizeof(RTL_CRITICAL_SECTION), __FILE__, __LINE__, 0);
 		InitializeCriticalSection(gpLvlSubTypeFilesCriticalSection);
 	}
 
 	if (a2 || a3)
 	{
-		sgptDataTables->ppLvlSubTypeFiles = (D2DrlgFileStrc**)FOG_AllocClientMemory(sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlSubTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->ppLvlSubTypeFiles = (D2DrlgFileStrc**)FOG_Alloc(sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlSubTxtRecordCount, __FILE__, __LINE__, 0);
 		memset(sgptDataTables->ppLvlSubTypeFiles, 0x00, sizeof(D2DrlgFileStrc*) * sgptDataTables->nLvlSubTxtRecordCount);
 	}
 
@@ -926,7 +926,7 @@ void __fastcall DATATBLS_UnloadLvlSubTxt()
 			}
 		}
 
-		FOG_FreeClientMemory(ppFiles, __FILE__, __LINE__, 0);
+		FOG_Free(ppFiles, __FILE__, __LINE__, 0);
 		sgptDataTables->ppLvlSubTypeFiles = NULL;
 	}
 
@@ -943,14 +943,14 @@ void __fastcall DATATBLS_UnloadLvlSubTxt()
 
 	if (sgptDataTables->pLvlSubTypeStartIds)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pLvlSubTypeStartIds, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pLvlSubTypeStartIds, __FILE__, __LINE__, 0);
 		sgptDataTables->pLvlSubTypeStartIds = NULL;
 	}
 
 	if (gpLvlSubTypeFilesCriticalSection)
 	{
 		DeleteCriticalSection(gpLvlSubTypeFilesCriticalSection);
-		FOG_FreeClientMemory(gpLvlSubTypeFilesCriticalSection, __FILE__, __LINE__, 0);
+		FOG_Free(gpLvlSubTypeFilesCriticalSection, __FILE__, __LINE__, 0);
 		gpLvlSubTypeFilesCriticalSection = NULL;
 	}
 }
@@ -975,7 +975,7 @@ void __fastcall DATATBLS_AllocGlobalTileLibraryHash()
 
 	D2_ASSERT(sgptDataTables->pLvlTypesTxt);
 
-	sgptDataTables->ppTileLibraryHash = (D2TileLibraryHashStrc**)FOG_AllocServerMemory(NULL, sizeof(D2TileLibraryHashStrc*[1024]) * sgptDataTables->nLvlTypesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->ppTileLibraryHash = (D2TileLibraryHashStrc**)FOG_AllocPool(NULL, sizeof(D2TileLibraryHashStrc*[1024]) * sgptDataTables->nLvlTypesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->ppTileLibraryHash, 0x00, sizeof(D2TileLibraryHashStrc*[1024]) * sgptDataTables->nLvlTypesTxtRecordCount);
 
 	ppTileLibraryHash = sgptDataTables->ppTileLibraryHash;
@@ -1012,7 +1012,7 @@ void __fastcall DATATBLS_FreeGlobalTileLibraryHash()
 {
 	if (sgptDataTables->ppTileLibraryHash)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->ppTileLibraryHash, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->ppTileLibraryHash, __FILE__, __LINE__, 0);
 	}
 }
 
@@ -1046,7 +1046,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 
 	pAutomapTxt = (D2AutomapTxt*)DATATBLS_CompileTxt(pMemPool, "automap", pTbl, &nAutomapTxtRecordCount, sizeof(D2AutomapTxt));
 
-	pAutomap = (D2AutomapShortStrc*)FOG_AllocServerMemory(NULL, sizeof(D2AutomapShortStrc) * nAutomapTxtRecordCount, __FILE__, __LINE__, 0);
+	pAutomap = (D2AutomapShortStrc*)FOG_AllocPool(NULL, sizeof(D2AutomapShortStrc) * nAutomapTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(pAutomap, 0x00, sizeof(D2AutomapShortStrc) * nAutomapTxtRecordCount);
 
 	for (int i = 0; i < nAutomapTxtRecordCount; ++i)
@@ -1172,7 +1172,7 @@ void __fastcall DATATBLS_FreeAutomap()
 {
 	if (sgptDataTables->pAutoMap)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pAutoMap, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pAutoMap, __FILE__, __LINE__, 0);
 		sgptDataTables->pAutoMap = NULL;
 	}
 }

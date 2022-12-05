@@ -416,7 +416,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDA9190 (#10156)
 void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath)
 {
-	FOG_FreeServerMemory(pMemPool, pDynamicPath, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pDynamicPath, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FDA91B0 (#11282)
@@ -502,7 +502,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 //D2Common.0x6FDA9480 (#10152)
 void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag)
 {
-	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_SERVER(pMemPool, D2DynamicPathStrc);
+	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_POOL(pMemPool, D2DynamicPathStrc);
 
 	pUnit->pDynamicPath = pDynamicPath;
 

@@ -110,12 +110,12 @@ D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)								
 D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023
 D2FUNC_DLL(FOG, 10024_PacketAssertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)									//Fog.#10024
 D2FUNC_DLL(FOG, 10025, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)													//Fog.#10025
-D2FUNC_DLL(FOG, WriteToLogFile, void, __cdecl, (const char* szFormat, ...), 0x120A0)																		//Fog.#10029
-D2FUNC_DLL(FOG, AllocClientMemory, void*, __fastcall, (int nSize, const char* szFile, int nLine, int n0), 0x8F50)											//Fog.#10042
-D2FUNC_DLL(FOG, FreeClientMemory, void, __fastcall, (void* pFree, const char* szFile, int nLine, int n0), 0x8F90)											//Fog.#10043
-D2FUNC_DLL(FOG, AllocServerMemory, void*, __fastcall, (void* pMemPool, int nSize, const char* szFile, int nLine, int n0), 0x8FF0)							//Fog.#10045
-D2FUNC_DLL(FOG, FreeServerMemory, void, __fastcall, (void* pMemPool, void* pFree, const char* szFile, int nLine, int n0), 0x9030)							//Fog.#10046
-D2FUNC_DLL(FOG, ReallocServerMemory, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine, int n0), 0x9060)		//Fog.#10047
+D2FUNC_DLL(FOG, WriteToLogFile, void, __cdecl, (const char* szFormat, ...), 0x120A0)																//Fog.#10029
+D2FUNC_DLL(FOG, Alloc, void*, __fastcall, (int nSize, const char* szFile, int nLine, int n0), 0x8F50)												//Fog.#10042
+D2FUNC_DLL(FOG, Free, void, __fastcall, (void* pFree, const char* szFile, int nLine, int n0), 0x8F90)												//Fog.#10043
+D2FUNC_DLL(FOG, AllocPool, void*, __fastcall, (void* pMemPool, int nSize, const char* szFile, int nLine, int n0), 0x8FF0)							//Fog.#10045
+D2FUNC_DLL(FOG, FreePool, void, __fastcall, (void* pMemPool, void* pFree, const char* szFile, int nLine, int n0), 0x9030)							//Fog.#10046
+D2FUNC_DLL(FOG, ReallocPool, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine, int n0), 0x9060)			//Fog.#10047
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
 D2FUNC_DLL(FOG, 10083_Cos_LUT, float, __stdcall, (int16_t index), 0x1DF0)																			//Fog.#10083
 D2FUNC_DLL(FOG, 10084_Sin_LUT, float, __stdcall, (int16_t index), 0x1E10)																			//Fog.#10084
@@ -128,7 +128,7 @@ D2FUNC_DLL(FOG, 10207, void, __stdcall, (D2BinFileStrc* pBinFile, D2BinFieldStrc
 D2FUNC_DLL(FOG, CreateBinFile, D2BinFileStrc*, __stdcall, (void* pDataBuffer, int nBufferSize), 0xA8B0)												//Fog.#10208
 D2FUNC_DLL(FOG, FreeBinFile, void, __stdcall, (D2BinFileStrc* pBinFile), 0xAA10)																	//Fog.#10209
 D2FUNC_DLL(FOG, GetRecordCountFromBinFile, int, __stdcall, (D2BinFileStrc* pBinFile), 0xAA50)														//Fog.#10210
-D2FUNC_DLL(FOG, AllocLinker, void*, __stdcall, (const char* szFile, int nLine), 0xB720)																	//Fog.#10211
+D2FUNC_DLL(FOG, AllocLinker, void*, __stdcall, (const char* szFile, int nLine), 0xB720)																//Fog.#10211
 D2FUNC_DLL(FOG, FreeLinker, void, __stdcall, (void* pLinker), 0xB750)																				//Fog.#10212
 D2FUNC_DLL(FOG, GetLinkIndex, int, __stdcall, (void* pLink, uint32_t dwCode, BOOL bLogError), 0xB810)												//Fog.#10213
 D2FUNC_DLL(FOG, GetStringFromLinkIndex, int, __stdcall, (void* pLinker, int nIndex, char* szString), 0xB8F0)										//Fog.#10214
@@ -141,19 +141,19 @@ D2FUNC_DLL(FOG, 10254, int, __stdcall, (char* pSrc, char* pBuffer, int nBufferSi
 D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB20)																	//Fog.#10255
 
 
-#define D2_ALLOC_CLIENT(size) FOG_AllocClientMemory((size), __FILE__, __LINE__, 0)
-#define D2_CALLOC_CLIENT(size) memset(FOG_AllocClientMemory(size, __FILE__, __LINE__, 0), 0x00, size)
-#define D2_ALLOC_STRC_CLIENT(type) (type*)FOG_AllocClientMemory(sizeof(type), __FILE__, __LINE__, 0)
-#define D2_CALLOC_STRC_CLIENT(type) (type*)memset(FOG_AllocClientMemory(sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
-#define D2_FREE_CLIENT(ptr) FOG_FreeClientMemory(ptr, __FILE__, __LINE__, 0)
+#define D2_ALLOC(size) FOG_Alloc((size), __FILE__, __LINE__, 0)
+#define D2_CALLOC(size) memset(FOG_Alloc(size, __FILE__, __LINE__, 0), 0x00, size)
+#define D2_ALLOC_STRC(type) (type*)FOG_Alloc(sizeof(type), __FILE__, __LINE__, 0)
+#define D2_CALLOC_STRC(type) (type*)memset(FOG_Alloc(sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
+#define D2_FREE(ptr) FOG_Free(ptr, __FILE__, __LINE__, 0)
 
 
-#define D2_ALLOC_SERVER(pMemPool, size) FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0)
-#define D2_CALLOC_SERVER(pMemPool, size) memset(FOG_AllocServerMemory(pMemPool, size, __FILE__, __LINE__, 0),0x00,size)
-#define D2_REALLOC_SERVER(pMemPool, pMem, size) FOG_ReallocServerMemory(pMemPool, pMem, size, __FILE__, __LINE__, 0)
-#define D2_ALLOC_STRC_SERVER(pMemPool, type) (type*)FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0)
-#define D2_CALLOC_STRC_SERVER(pMemPool, type) (type*)memset(FOG_AllocServerMemory(pMemPool, sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
-#define D2_FREE_SERVER(pMemPool, ptr) FOG_FreeServerMemory(pMemPool, ptr, __FILE__, __LINE__, 0)
+#define D2_ALLOC_POOL(pMemPool, size) FOG_AllocPool(pMemPool, size, __FILE__, __LINE__, 0)
+#define D2_CALLOC_POOL(pMemPool, size) memset(FOG_AllocPool(pMemPool, size, __FILE__, __LINE__, 0),0x00,size)
+#define D2_REALLOC_POOL(pMemPool, pMem, size) FOG_ReallocPool(pMemPool, pMem, size, __FILE__, __LINE__, 0)
+#define D2_ALLOC_STRC_POOL(pMemPool, type) (type*)FOG_AllocPool(pMemPool, sizeof(type), __FILE__, __LINE__, 0)
+#define D2_CALLOC_STRC_POOL(pMemPool, type) (type*)memset(FOG_AllocPool(pMemPool, sizeof(type), __FILE__, __LINE__, 0), 0x00, sizeof(type))
+#define D2_FREE_POOL(pMemPool, ptr) FOG_FreePool(pMemPool, ptr, __FILE__, __LINE__, 0)
 
 #ifndef NDEBUG
 // Assert that an expression must be true, otherwise assume the program state will not be recoverable.

@@ -1406,7 +1406,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 	const int nRooms = pLevel->nRooms;
 	if (nRooms > 0)
 	{
-		D2RoomExStrc** pRoomExArray = (D2RoomExStrc**)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * nRooms);
+		D2RoomExStrc** pRoomExArray = (D2RoomExStrc**)D2_ALLOC_POOL(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * nRooms);
 
 		// Copy rooms pointers
 		{
@@ -1443,7 +1443,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 			}
 		}
 		
-		D2_FREE_SERVER(pLevel->pDrlg->pMempool, pRoomExArray);
+		D2_FREE_POOL(pLevel->pDrlg->pMempool, pRoomExArray);
 	}
 }
 
@@ -3299,7 +3299,7 @@ void __fastcall DRLGMAZE_RollBasicPresets(D2DrlgLevelStrc* pLevel)
 
 				if (!pDrlgBuild)
 				{
-					pDrlgBuild = D2_ALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
+					pDrlgBuild = D2_ALLOC_STRC_POOL(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
 					pDrlgBuild->nPreset = 0;
 					pDrlgBuild->nDivisor = 0;
 					pDrlgBuild->nRand = 0;

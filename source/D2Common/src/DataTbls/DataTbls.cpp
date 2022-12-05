@@ -112,7 +112,7 @@ void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, 
 	}
 
 	nSize = DATATBLS_GetFileSize(pMemPool, pFileHandle, &dwFileSizeHigh);
-	pBuffer = FOG_AllocClientMemory(nSize + 800, szFile, nLine, 0);
+	pBuffer = FOG_Alloc(nSize + 800, szFile, nLine, 0);
 
 	if (!pBuffer)
 	{
@@ -281,7 +281,7 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, vo
 
 			fclose(pFile);
 		}
-		FOG_FreeServerMemory(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
 	}
 
 	*ppFileHandle = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nSize, __FILE__, __LINE__);
@@ -313,7 +313,7 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 				break;
 			}
 
-			*ppCodes = (char*)FOG_ReallocServerMemory(NULL, *ppCodes, nNewSize, __FILE__, __LINE__, 0);
+			*ppCodes = (char*)FOG_ReallocPool(NULL, *ppCodes, nNewSize, __FILE__, __LINE__, 0);
 
 			if (nBufferSize + *pSize < *pSizeEx)
 			{
@@ -446,7 +446,7 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		FOG_10025("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocServerMemory(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
+	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocPool(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pStateMasks, 0x00, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->fStateMasks); ++i)
@@ -463,23 +463,23 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pProgressiveStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pProgressiveStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pProgressiveStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nProgressiveStates = 0;
 
-	sgptDataTables->pCurseStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pCurseStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pCurseStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nCurseStates = 0;
 
-	sgptDataTables->pTransformStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pTransformStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pTransformStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nTransformStates = 0;
 
-	sgptDataTables->pActionStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pActionStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pActionStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nActionStates = 0;
 
-	sgptDataTables->pColourStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pColourStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pColourStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nColourStates = 0;
 	
@@ -522,31 +522,31 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 {
 	if (sgptDataTables->pStateMasks)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pStateMasks, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pStateMasks, __FILE__, __LINE__, 0);
 		sgptDataTables->pStateMasks = NULL;
 	}
 
 	if (sgptDataTables->pProgressiveStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pProgressiveStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pProgressiveStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pProgressiveStates = NULL;
 	}
 
 	if (sgptDataTables->pCurseStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pCurseStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pCurseStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pCurseStates = NULL;
 	}
 
 	if (sgptDataTables->pTransformStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pTransformStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pTransformStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pTransformStates = NULL;
 	}
 
 	if (sgptDataTables->pActionStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pActionStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pActionStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pActionStates = NULL;
 	}
 
@@ -756,7 +756,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 
 		pBinFile = FOG_CreateBinFile(pData, nDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocServerMemory(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
+		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
 		FOG_FreeBinFile(pBinFile);
@@ -769,7 +769,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 			DATATBLS_LockAndWriteToFile(pTxt, nSize * nRecordCount, 1, pFile);
 			fclose(pFile);
 		}
-		FOG_FreeServerMemory(NULL, pTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, pTxt, __FILE__, __LINE__, 0);
 	}
 
 	if (DATATBLS_LoadFromBin)
@@ -800,7 +800,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	{
 		pBinFile = FOG_CreateBinFile(pData, nDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocServerMemory(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
+		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
 		FOG_FreeBinFile(pBinFile);
@@ -827,11 +827,11 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 	{
 		if (DATATBLS_LoadFromBin)
 		{
-			FOG_FreeServerMemory(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
+			FOG_FreePool(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
 		}
 		else
 		{
-			FOG_FreeServerMemory(NULL, pBinFile, __FILE__, __LINE__, 0);
+			FOG_FreePool(NULL, pBinFile, __FILE__, __LINE__, 0);
 		}
 	}
 }

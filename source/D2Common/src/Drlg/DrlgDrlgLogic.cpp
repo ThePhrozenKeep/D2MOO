@@ -25,11 +25,11 @@ void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx)
 		while (pRoomCoordList)
 		{
 			pNext = pRoomCoordList->pNext;
-			D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pRoomCoordList);
+			D2_FREE_POOL(pRoomEx->pLevel->pDrlg->pMempool, pRoomCoordList);
 			pRoomCoordList = pNext;
 		}
 
-		D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pCoordList);
+		D2_FREE_POOL(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pCoordList);
 		pRoomEx->pCoordList = NULL;
 	}
 }
@@ -51,7 +51,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 	int nX = 0;
 	int nY = 0;
 
-	pDrlgCoordList = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgCoordListStrc);
+	pDrlgCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgCoordListStrc);
 	pRoomEx->pCoordList = pDrlgCoordList;
 
 	pDrlgRoomTiles = &pRoomEx->pTileGrid->pTiles;
@@ -147,7 +147,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 
 	pDrlgCoordList->nLists = a1.field_18 - nLists + 1;
 
-	pDrlgCoordList->pCoordList = (D2RoomCoordListStrc *)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2RoomCoordListStrc) * pDrlgCoordList->nLists);
+	pDrlgCoordList->pCoordList = (D2RoomCoordListStrc *)D2_CALLOC_POOL(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2RoomCoordListStrc) * pDrlgCoordList->nLists);
 	
 	pRoomEx->pLevel->nCoordLists += pDrlgCoordList->nLists;
 
@@ -396,7 +396,7 @@ void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCo
 
 			if (!DRLGGRID_GetGridEntry(&pDrlgCoordList->pIndexY, nX, nY))
 			{
-				pRoomCoordList = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
+				pRoomCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
 
 				pRoomCoordList->nIndex = nIndex;
 				pRoomCoordList->bNode = (nFlags & 0x20000000) == 0x20000000;
@@ -485,14 +485,14 @@ void __fastcall sub_6FD76CF0(D2RoomExStrc* pRoomEx, D2DrlgCoordListStrc* pDrlgCo
 //D2Common.0x6FD76F90
 void __fastcall DRLGLOGIC_AllocCoordLists(D2RoomExStrc* pRoomEx)
 {
-	D2DrlgCoordListStrc* pDrlgCoordList = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgCoordListStrc);
+	D2DrlgCoordListStrc* pDrlgCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgCoordListStrc);
 	pRoomEx->pCoordList = pDrlgCoordList;
 
 	pDrlgCoordList->dwFlags |= 1;
 	pRoomEx->pLevel->nCoordLists = 1;
 	pDrlgCoordList->nLists = 1;
 
-	pDrlgCoordList->pCoordList = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
+	pDrlgCoordList->pCoordList = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2RoomCoordListStrc);
 	
 	pDrlgCoordList->pCoordList->nIndex = pRoomEx->pLevel->nCoordLists;
 	pDrlgCoordList->pCoordList->pBox[0].nPosY = pRoomEx->nTileYPos;

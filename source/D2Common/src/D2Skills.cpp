@@ -675,7 +675,7 @@ int __stdcall SKILLS_GetRange(D2SkillStrc* pSkill)
 //D2Common.0x6FDAFCD0 (#10945)
 D2SkillListStrc* __stdcall SKILLS_AllocSkillList(void* pMemPool)
 {
-	D2SkillListStrc* pSkillList = (D2SkillListStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2SkillListStrc), __FILE__, __LINE__, 0);
+	D2SkillListStrc* pSkillList = (D2SkillListStrc*)FOG_AllocPool(pMemPool, sizeof(D2SkillListStrc), __FILE__, __LINE__, 0);
 	memset(pSkillList, 0x00, sizeof(D2SkillListStrc));
 
 	pSkillList->pMemPool = pMemPool;
@@ -876,7 +876,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 				pUnit->pSkills->pFirstSkill = pSkill->pNextSkill;
 			}
 
-			FOG_FreeServerMemory(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
+			FOG_FreePool(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
 		}
 	}
 
@@ -924,11 +924,11 @@ void __stdcall SKILLS_FreeSkillList(D2UnitStrc* pUnit)
 			while (pSkill)
 			{
 				pNextSkill = pSkill->pNextSkill;
-				FOG_FreeServerMemory(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
+				FOG_FreePool(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
 				pSkill = pNextSkill;
 			}
 
-			FOG_FreeServerMemory(pUnit->pMemoryPool, pSkillList, __FILE__, __LINE__, 0);
+			FOG_FreePool(pUnit->pMemoryPool, pSkillList, __FILE__, __LINE__, 0);
 			pUnit->pSkills = NULL;
 		}
 	}
@@ -985,7 +985,7 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 
 			if (pUnit->pSkills)
 			{
-				pSkill = (D2SkillStrc*)FOG_AllocServerMemory(pUnit->pSkills->pMemPool, sizeof(D2SkillStrc), __FILE__, __LINE__, 0);
+				pSkill = (D2SkillStrc*)FOG_AllocPool(pUnit->pSkills->pMemPool, sizeof(D2SkillStrc), __FILE__, __LINE__, 0);
 				memset(pSkill, 0x00, sizeof(D2SkillStrc));
 				pSkill->pSkillsTxt = pSkillsTxtRecord;
 
@@ -1136,7 +1136,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 							pSkillList->pFirstSkill = pSkill->pNextSkill;
 						}
 
-						FOG_FreeServerMemory(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
+						FOG_FreePool(pUnit->pMemoryPool, pSkill, __FILE__, __LINE__, 0);
 					}
 				}
 				else
@@ -1160,7 +1160,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 					}
 					else
 					{
-						pSkill = (D2SkillStrc*)FOG_AllocServerMemory(pSkillList->pMemPool, sizeof(D2SkillStrc), __FILE__, __LINE__, 0);
+						pSkill = (D2SkillStrc*)FOG_AllocPool(pSkillList->pMemPool, sizeof(D2SkillStrc), __FILE__, __LINE__, 0);
 						memset(pSkill, 0x00, sizeof(D2SkillStrc));
 						pSkill->pSkillsTxt = pSkillsTxtRecord;
 

@@ -229,7 +229,7 @@ void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLeve
 
 	if (v8)
 	{
-		v11 = (int*)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, 8 * v8);
+		v11 = (int*)D2_ALLOC_POOL(pLevel->pDrlg->pMempool, 8 * v8);
 	
 		for (int i = 0; i < v8; ++i)
 		{
@@ -275,6 +275,6 @@ void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLeve
 			}
 		}
 
-		D2_FREE_SERVER(pLevel->pDrlg->pMempool, v11);
+		D2_FREE_POOL(pLevel->pDrlg->pMempool, v11);
 	}
 }

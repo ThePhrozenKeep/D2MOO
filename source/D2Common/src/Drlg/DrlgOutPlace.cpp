@@ -1982,10 +1982,10 @@ static void DRLG_GenerateJunglesAttachPoints(
 		// Note: Original game could leak memory here (if jungle generation fails, we would realloc without freeing)
 		if (tCurrentJungle.pJungleDefs)
 		{
-			D2_FREE_SERVER(pDrlg->pMempool, tCurrentJungle.pJungleDefs);
+			D2_FREE_POOL(pDrlg->pMempool, tCurrentJungle.pJungleDefs);
 		}
 
-		tCurrentJungle.pJungleDefs = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nSpiderForestLevelPresetsBlocksSizeX * nSpiderForestLevelPresetsBlocksSizeY * sizeof(int32_t));
+		tCurrentJungle.pJungleDefs = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nSpiderForestLevelPresetsBlocksSizeX * nSpiderForestLevelPresetsBlocksSizeY * sizeof(int32_t));
 
 		// Could be the choice of direction on X axis
 		bool bLineStartWithOffset;
@@ -2492,10 +2492,10 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 	const int32_t nPresets = nPresetsWidth * nPresetsHeight;
 
 	const size_t nPresetsAllocSize = nPresets * sizeof(uint32_t);
-	int32_t* pPreset0 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
-	int32_t* pPreset1 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize); // Could be some kind of distance field ?
-	int32_t* pPreset2 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
-	int32_t* pLevelPresetId = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pPreset0 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pPreset1 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize); // Could be some kind of distance field ?
+	int32_t* pPreset2 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pLevelPresetId = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
 
 	do {
 		DRLG_GenerateJunglesAttachPoints(pDrlg, tJungles,
@@ -2556,10 +2556,10 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		pJungleLevel->nHeight     = tJungles[i].pDrlgCoord.nHeight;
 	}
 
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset0);
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset1);
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset2);
-	D2_FREE_SERVER(pDrlg->pMempool, pLevelPresetId);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset0);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset1);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset2);
+	D2_FREE_POOL(pDrlg->pMempool, pLevelPresetId);
 
 	return pJungleLevel;
 }

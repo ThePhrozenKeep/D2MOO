@@ -61,7 +61,7 @@ void __stdcall WAYPOINTS_ActivateWaypoint(D2WaypointDataStrc* pData, uint16_t wF
 //D2Common.0x6FDC3F20 (#11148)
 D2WaypointDataStrc* __stdcall WAYPOINTS_AllocWaypointData(void* pMemPool)
 {
-	D2WaypointDataStrc* pData = (D2WaypointDataStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2WaypointDataStrc), __FILE__, __LINE__, 0);
+	D2WaypointDataStrc* pData = (D2WaypointDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2WaypointDataStrc), __FILE__, __LINE__, 0);
 
 	memset(pData, 0x00, sizeof(D2WaypointDataStrc));
 
@@ -80,7 +80,7 @@ void __stdcall WAYPOINTS_FreeWaypointData(void* pMemPool, D2WaypointDataStrc* pD
 		pData->nFlags[0] = 0x102;
 	}
 
-	FOG_FreeServerMemory(pMemPool, pData, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pData, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FDC3FD0 (#11150)

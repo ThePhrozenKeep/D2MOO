@@ -314,7 +314,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 	pMisc = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "misc", pTbl, &sgptDataTables->pItemDataTables.nMiscTxtRecordCount, sizeof(D2ItemsTxt));
 
 	sgptDataTables->pItemDataTables.nItemsTxtRecordCount = sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount + sgptDataTables->pItemDataTables.nMiscTxtRecordCount + sgptDataTables->pItemDataTables.nArmorTxtRecordCount;
-	pItems = (D2ItemsTxt*)FOG_AllocServerMemory(NULL, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	pItems = (D2ItemsTxt*)FOG_AllocPool(NULL, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
 
 	sgptDataTables->pItemDataTables.pItemsTxt = pItems;
 
@@ -340,7 +340,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pIndexOldToCurrent, 0x00, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
 
 	nOldCounter = 0;
@@ -361,12 +361,12 @@ void __fastcall DATATBLS_UnloadItemsTxt()
 
 	if (sgptDataTables->pItemDataTables.pItemsTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pItemDataTables.pItemsTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pItemDataTables.pItemsTxt, __FILE__, __LINE__, 0);
 	}
 
 	if (sgptDataTables->pIndexOldToCurrent)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pIndexOldToCurrent, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pIndexOldToCurrent, __FILE__, __LINE__, 0);
 	}
 
 	sgptDataTables->pItemDataTables.pItemsTxt = NULL;
@@ -543,7 +543,7 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 	pAutoMagic = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "automagic", pTbl, &nAutoMagicRecords, sizeof(D2MagicAffixTxt));
 
 	sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = nSuffixRecords + nAutoMagicRecords + nPrefixRecords;
-	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)FOG_AllocServerMemory(NULL, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)FOG_AllocPool(NULL, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount, __FILE__, __LINE__, 0);
 	sgptDataTables->pMagicAffixDataTables.pMagicSuffix = sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt;
 	memcpy(sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, pMagicSuffix, sizeof(D2MagicAffixTxt) * nSuffixRecords);
 	sgptDataTables->pMagicAffixDataTables.pMagicPrefix = &sgptDataTables->pMagicAffixDataTables.pMagicSuffix[nSuffixRecords];
@@ -566,7 +566,7 @@ void __fastcall DATATBLS_UnloadMagicSuffix_Prefix_AutomagicTxt()
 {
 	if (sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = NULL;
 }
@@ -625,7 +625,7 @@ void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 
 	sgptDataTables->pRareAffixDataTables.nRareAffixTxtRecordCount = nPrefixRecords + nSuffixRecords;
 
-	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)FOG_AllocServerMemory(NULL, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords), __FILE__, __LINE__, 0);
+	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)FOG_AllocPool(NULL, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords), __FILE__, __LINE__, 0);
 
 	sgptDataTables->pRareAffixDataTables.pRareSuffix = sgptDataTables->pRareAffixDataTables.pRareAffixTxt;
 	memcpy(sgptDataTables->pRareAffixDataTables.pRareAffixTxt, pRareSuffix, sizeof(D2RareAffixTxt) * nSuffixRecords);
@@ -646,7 +646,7 @@ void __fastcall DATATBLS_UnloadRareSuffix_PrefixTxt()
 {
 	if (sgptDataTables->pRareAffixDataTables.pRareAffixTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pRareAffixDataTables.pRareAffixTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pRareAffixDataTables.pRareAffixTxt, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = NULL;
 }
@@ -1560,7 +1560,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 	qsort(pStatsWithDescFunc, nStatsWithDescFunc, sizeof(D2ItemStatCostDescStrc), DATATBLS_CompareItemStatCostDescs);
 
-	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
+	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
 	for (int i = 0; i < sgptDataTables->nStatsWithDescFunc; ++i)
 	{
 		sgptDataTables->pStatsWithDescFunc[i] = pStatsWithDescFunc[i].nRecordId;
@@ -1585,7 +1585,7 @@ void __fastcall DATATBLS_UnloadItemStatCostTxt()
 
 	if (sgptDataTables->pStatsWithDescFunc)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pStatsWithDescFunc, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pStatsWithDescFunc, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->nStatsWithDescFunc = 0;
 }
@@ -1655,7 +1655,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 
 	if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 	{
-		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
 		for (int i = 0; i < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount; ++i)
 		{
 			nItemId = FOG_GetLinkIndex(sgptDataTables->pItemsLinker, pGambleTxt[i].dwItemCode, 0);
@@ -1724,7 +1724,7 @@ void __fastcall DATATBLS_UnloadGambleTxt()
 {
 	if (sgptDataTables->pGambleDataTables.pGambleSelection)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pGambleDataTables.pGambleSelection, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pGambleDataTables.pGambleSelection, __FILE__, __LINE__, 0);
 		sgptDataTables->pGambleDataTables.pGambleSelection = NULL;
 		sgptDataTables->pGambleDataTables.nGambleTxtRecordCount = 0;
 	}
@@ -1854,7 +1854,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	}
 
 	sgptDataTables->nItemTypesIndex = (sgptDataTables->nItemTypesTxtRecordCount + 31) / 32;
-	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
+	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pItemTypesEquivalenceLUTs, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
 
 	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
@@ -1874,7 +1874,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 //D2Common.0x6FD5DFE0
 void __fastcall DATATBLS_UnloadItemTypesTxt()
 {
-	FOG_FreeServerMemory(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
+	FOG_FreePool(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
 	DATATBLS_UnloadBin(sgptDataTables->pItemTypesTxt);
 	FOG_FreeLinker(sgptDataTables->pItemTypesLinker);
 }
@@ -2000,7 +2000,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 			nSize += 4;
 		}
 
-		pTmp = (D2RunesTxt*)FOG_ReallocServerMemory(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
+		pTmp = (D2RunesTxt*)FOG_ReallocPool(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
 
 		if (DATATBLS_LoadFromBin)
 		{

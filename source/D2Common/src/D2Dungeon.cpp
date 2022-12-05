@@ -19,7 +19,7 @@
 //D2Common.0x6FD8B8A0 (#10038)
 D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nAct, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
-	D2DrlgActStrc* pAct = (D2DrlgActStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2DrlgActStrc), __FILE__, __LINE__, 0);
+	D2DrlgActStrc* pAct = (D2DrlgActStrc*)FOG_AllocPool(pMemPool, sizeof(D2DrlgActStrc), __FILE__, __LINE__, 0);
 	memset(pAct, 0x00, sizeof(D2DrlgActStrc));
 
 	pAct->dwInitSeed = nInitSeed;
@@ -68,7 +68,7 @@ void __stdcall DUNGEON_FreeAct(D2DrlgActStrc* pAct)
 		pAct->pEnvironment = NULL;
 	}
 
-	FOG_FreeServerMemory(pAct->pMemPool, pAct, __FILE__, __LINE__, 0);
+	FOG_FreePool(pAct->pMemPool, pAct, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FD8B9D0
@@ -184,7 +184,7 @@ D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoo
 
 	D2_ASSERT(pAct);
 
-	pRoom = (D2RoomStrc*)FOG_AllocServerMemory(pAct->pMemPool, sizeof(D2RoomStrc), __FILE__, __LINE__, 0);
+	pRoom = (D2RoomStrc*)FOG_AllocPool(pAct->pMemPool, sizeof(D2RoomStrc), __FILE__, __LINE__, 0);
 	memset(pRoom, 0x00, sizeof(D2RoomStrc));
 
 	pRoom->dwFlags = dwFlags;
@@ -201,7 +201,7 @@ D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoo
 
 	DRLGROOM_SetRoom(pRoomEx, pRoom);
 
-	pRoom->ppRoomList = (D2RoomStrc**)FOG_AllocServerMemory(pAct->pMemPool, sizeof(D2RoomStrc*) * pRoom->pRoomEx->nRoomsNear, __FILE__, __LINE__, 0);
+	pRoom->ppRoomList = (D2RoomStrc**)FOG_AllocPool(pAct->pMemPool, sizeof(D2RoomStrc*) * pRoom->pRoomEx->nRoomsNear, __FILE__, __LINE__, 0);
 	pRoom->nNumRooms = DRLGROOM_ReorderNearRoomList(pRoom->pRoomEx, pRoom->ppRoomList);
 
 	for (int i = 0; i < pRoom->nNumRooms; ++i)
@@ -623,7 +623,7 @@ void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, D2UnitG
 
 	if (pRoom)
 	{
-		pDrlgDelete = (D2DrlgDeleteStrc*)FOG_AllocServerMemory(pRoom->pAct->pMemPool, sizeof(D2DrlgDeleteStrc), __FILE__, __LINE__, 0);
+		pDrlgDelete = (D2DrlgDeleteStrc*)FOG_AllocPool(pRoom->pAct->pMemPool, sizeof(D2DrlgDeleteStrc), __FILE__, __LINE__, 0);
 		pDrlgDelete->nUnitType = nUnitType;
 		pDrlgDelete->nUnitGUID = nUnitGUID;
 		pDrlgDelete->pNext = pRoom->pDrlgDelete;
@@ -642,7 +642,7 @@ void __stdcall DUNGEON_FreeDrlgDelete(D2RoomStrc* pRoom)
 	for (D2DrlgDeleteStrc* pDrlgDelete = pRoom->pDrlgDelete; pDrlgDelete; pDrlgDelete = pNext)
 	{
 		pNext = pDrlgDelete->pNext;
-		FOG_FreeServerMemory(pRoom->pAct->pMemPool, pDrlgDelete, __FILE__, __LINE__, 0);
+		FOG_FreePool(pRoom->pAct->pMemPool, pDrlgDelete, __FILE__, __LINE__, 0);
 	}
 
 	pRoom->pDrlgDelete = NULL;
@@ -751,7 +751,7 @@ void __stdcall DUNGEON_AddClientToRoom(D2RoomStrc* pRoom, D2ClientStrc* pClient)
 	if (pRoom->nNumClients == pRoom->nMaxClients)
 	{
 		pRoom->nMaxClients += 4;
-		pRoom->ppClients = (D2ClientStrc**)FOG_ReallocServerMemory(pRoom->pAct->pMemPool, pRoom->ppClients, sizeof(D2ClientStrc*) * pRoom->nMaxClients, __FILE__, __LINE__, 0);
+		pRoom->ppClients = (D2ClientStrc**)FOG_ReallocPool(pRoom->pAct->pMemPool, pRoom->ppClients, sizeof(D2ClientStrc*) * pRoom->nMaxClients, __FILE__, __LINE__, 0);
 	}
 
 	pRoom->ppClients[pRoom->nNumClients] = pClient;
@@ -868,11 +868,11 @@ void __fastcall DUNGEON_FreeRoom(void* pMemPool, D2RoomStrc* pRoom)
 
 	if (pRoom->ppClients)
 	{
-		FOG_FreeServerMemory(pRoom->pAct->pMemPool, pRoom->ppClients, __FILE__, __LINE__, 0);
+		FOG_FreePool(pRoom->pAct->pMemPool, pRoom->ppClients, __FILE__, __LINE__, 0);
 	}
 
-	FOG_FreeServerMemory(pMemPool, pRoom->ppRoomList, __FILE__, __LINE__, 0);
-	FOG_FreeServerMemory(pMemPool, pRoom, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pRoom->ppRoomList, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pRoom, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FD8CF10 (#10076)
@@ -1154,7 +1154,7 @@ void __stdcall DUNGEON_GetPortalLevelArrayFromPortalFlags(void* pMemPool, int nF
 	
 	if (*pnLevels)
 	{
-		*ppLevels = (int*)FOG_AllocServerMemory(pMemPool, sizeof(int) * *pnLevels, __FILE__, __LINE__, 0);
+		*ppLevels = (int*)FOG_AllocPool(pMemPool, sizeof(int) * *pnLevels, __FILE__, __LINE__, 0);
 		memcpy(*ppLevels, pLevels, sizeof(int) * *pnLevels);
 	}
 }

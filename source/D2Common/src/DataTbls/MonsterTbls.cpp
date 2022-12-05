@@ -871,7 +871,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 //D2Common.0x6FD68BD0
 void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount)
 {
-	pTCExShort->pInfo = (D2TCExInfoStrc*)FOG_ReallocServerMemory(NULL, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount, __FILE__, __LINE__, 0);
+	pTCExShort->pInfo = (D2TCExInfoStrc*)FOG_ReallocPool(NULL, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount, __FILE__, __LINE__, 0);
 	memset(&pTCExShort->pInfo[pTCExShort->nTypes], 0x00, sizeof(D2TCExInfoStrc) * (nNewRecordCount - pTCExShort->nTypes));
 	pTCExShort->nTypes = nNewRecordCount;
 }
@@ -1230,7 +1230,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 
 		if (!(sgptDataTables->nTreasureClassEx % 16))
 		{
-			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 		}
 		memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
@@ -2324,7 +2324,7 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 	sgptDataTables->pMonTypeTxt = (D2MonTypeTxt*)DATATBLS_CompileTxt(pMemPool, "montype", pTbl, &sgptDataTables->nMonTypeTxtRecordCount, sizeof(D2MonTypeTxt));
 
 	sgptDataTables->nMonTypeIndex = (sgptDataTables->nMonTypeTxtRecordCount + 31) / 32;
-	sgptDataTables->pMonTypeNest = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
+	sgptDataTables->pMonTypeNest = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pMonTypeNest, 0x00, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
 
 	for (int i = 0; i < sgptDataTables->nMonTypeTxtRecordCount; ++i)
@@ -2348,7 +2348,7 @@ void __fastcall DATATBLS_UnloadMonTypeTxt()
 	{
 		DATATBLS_UnloadBin(sgptDataTables->pMonTypeTxt);
 		FOG_FreeLinker(sgptDataTables->pMonTypeLinker);
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMonTypeNest, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMonTypeNest, __FILE__, __LINE__, 0);
 		sgptDataTables->pMonTypeTxt = NULL;
 		sgptDataTables->pMonTypeLinker = NULL;
 	}
@@ -2782,7 +2782,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 
 	if (!(sgptDataTables->nTreasureClassEx % 16))
 	{
-		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 	}
 	memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 	++sgptDataTables->nTreasureClassEx;
@@ -2808,7 +2808,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 
 					if (!(sgptDataTables->nTreasureClassEx % 16))
 					{
-						sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocServerMemory(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+						sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
 					}
 					memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
@@ -2953,7 +2953,7 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	}
 	if (sgptDataTables->pMonSeqTable)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMonSeqTable, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMonSeqTable, __FILE__, __LINE__, 0);
 		sgptDataTables->nMonSeqTableRecordCount = 0;
 	}
 
@@ -2962,10 +2962,10 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	{
 		if (sgptDataTables->pTreasureClassEx[i].pInfo)
 		{
-			FOG_FreeServerMemory(NULL, sgptDataTables->pTreasureClassEx[i].pInfo, __FILE__, __LINE__, 0);
+			FOG_FreePool(NULL, sgptDataTables->pTreasureClassEx[i].pInfo, __FILE__, __LINE__, 0);
 		}
 	}
-	FOG_FreeServerMemory(NULL, sgptDataTables->pTreasureClassEx, __FILE__, __LINE__, 0);
+	FOG_FreePool(NULL, sgptDataTables->pTreasureClassEx, __FILE__, __LINE__, 0);
 	sgptDataTables->pTreasureClassEx = NULL;
 	sgptDataTables->nTreasureClassEx = 0;
 

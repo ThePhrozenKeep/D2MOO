@@ -96,7 +96,7 @@ decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArra
 	if (pStatsArray->nStatCount >= pStatsArray->nCapacity)
 	{
 		pStatsArray->nCapacity += T::nGrowthAmount;
-		pStatsArray->pStat = (StatType)D2_REALLOC_SERVER(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(*pStatsArray->pStat));
+		pStatsArray->pStat = (StatType)D2_REALLOC_POOL(pMemPool, pStatsArray->pStat, pStatsArray->nCapacity * sizeof(*pStatsArray->pStat));
 	}
 
 	if (insertionIdx < pStatsArray->nStatCount)
@@ -675,7 +675,7 @@ void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* p
 		if ((pStatEx->nCapacity - pStatEx->nStatCount) > D2StatsArrayStrc::nShrinkThreshold)
 		{
 			pStatEx->nCapacity -= D2StatsArrayStrc::nGrowthAmount;
-			pStatEx->pStat = (D2StatStrc*)D2_REALLOC_SERVER(pMemPool, pStatEx->pStat, pStatEx->nCapacity * sizeof(D2StatStrc));
+			pStatEx->pStat = (D2StatStrc*)D2_REALLOC_POOL(pMemPool, pStatEx->pStat, pStatEx->nCapacity * sizeof(D2StatStrc));
 		}
 	}
 }
@@ -889,7 +889,7 @@ void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pSta
 
 	if (pStatList->Stats.pStat)
 	{
-		D2_FREE_SERVER(pStatList->pMemPool, pStatList->Stats.pStat);
+		D2_FREE_POOL(pStatList->pMemPool, pStatList->Stats.pStat);
 	}
 
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
@@ -917,18 +917,18 @@ void __fastcall D2Common_STATLIST_FreeStatListImpl_6FDB7050(D2StatListStrc* pSta
 
 		if (pStatListEx->FullStats.pStat)
 		{
-			D2_FREE_SERVER(pStatListEx->pMemPool, pStatListEx->FullStats.pStat);
+			D2_FREE_POOL(pStatListEx->pMemPool, pStatListEx->FullStats.pStat);
 		}
 
 		if (pStatListEx->ModStats.pStat)
 		{
-			D2_FREE_SERVER(pStatListEx->pMemPool, pStatListEx->ModStats.pStat);
+			D2_FREE_POOL(pStatListEx->pMemPool, pStatListEx->ModStats.pStat);
 		}
 
-		D2_FREE_SERVER(pStatListEx->pMemPool, pStatListEx->StatFlags);
+		D2_FREE_POOL(pStatListEx->pMemPool, pStatListEx->StatFlags);
 	}
 
-	D2_FREE_SERVER(pStatList->pMemPool, pStatList);
+	D2_FREE_POOL(pStatList->pMemPool, pStatList);
 }
 
 //D2Common.0x6FDB7110 (#10527)
@@ -948,7 +948,7 @@ void __stdcall STATLIST_FreeStatListEx(D2UnitStrc* pUnit)
 //D2Common.0x6FDB7140 (#10470)
 D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, D2UnitGUID nUnitGUID)
 {
-	D2StatListStrc* pStatList = D2_CALLOC_STRC_SERVER(pMemPool, D2StatListStrc);
+	D2StatListStrc* pStatList = D2_CALLOC_STRC_POOL(pMemPool, D2StatListStrc);
 
 	pStatList->dwOwnerType = nUnitType;
 	pStatList->dwOwnerId = nUnitGUID;
@@ -964,7 +964,7 @@ void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pC
 {
 	STATLIST_FreeStatListEx(pUnit);
 
-	D2StatListExStrc* pStatListEx = D2_CALLOC_STRC_SERVER(pUnit->pMemoryPool, D2StatListExStrc);
+	D2StatListExStrc* pStatListEx = D2_CALLOC_STRC_POOL(pUnit->pMemoryPool, D2StatListExStrc);
 
 	pStatListEx->pMemPool = pUnit->pMemoryPool;
 	pStatListEx->dwOwnerType = pUnit->dwUnitType;
@@ -973,7 +973,7 @@ void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pC
 	pStatListEx->fpCallBack = pCallbackFunc;
 	pStatListEx->pGame = pGame;
 	pStatListEx->dwFlags = (nFlags & STATLIST_BASIC) | STATLIST_EXTENDED;
-	pStatListEx->StatFlags = (uint32_t*)D2_CALLOC_SERVER(pUnit->pMemoryPool, 2 * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+	pStatListEx->StatFlags = (uint32_t*)D2_CALLOC_POOL(pUnit->pMemoryPool, 2 * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	pUnit->pStatListEx = pStatListEx;
 }
@@ -1703,7 +1703,7 @@ void __stdcall STATLIST_FreeModStats(D2UnitStrc* pUnit)
 	{
 		if (pUnit->pStatListEx->ModStats.pStat)
 		{
-			D2_FREE_SERVER(pUnit->pStatListEx->pMemPool, pUnit->pStatListEx->ModStats.pStat);
+			D2_FREE_POOL(pUnit->pStatListEx->pMemPool, pUnit->pStatListEx->ModStats.pStat);
 			pUnit->pStatListEx->ModStats.pStat = NULL;
 		}
 
