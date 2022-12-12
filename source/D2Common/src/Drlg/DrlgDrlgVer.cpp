@@ -121,7 +121,7 @@ void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVert
 			break;
 
 		default:
-			FOG_10025("FALSE", __FILE__, __LINE__);
+			FOG_DisplayWarning("FALSE", __FILE__, __LINE__);
 			exit(-1);
 
 		}

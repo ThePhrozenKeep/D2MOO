@@ -997,7 +997,7 @@ D2UnitGUID __stdcall STATLIST_GetOwnerGUID(D2StatListStrc* pStatList)
 		return pStatList->dwOwnerId;
 	}
 
-	REMOVE_LATER_WriteToLogFile("STATLIST_GetOwnerGUID: NULL pointer");
+	REMOVE_LATER_Trace("STATLIST_GetOwnerGUID: NULL pointer");
 	return 0;
 }
 
@@ -1065,7 +1065,7 @@ int __stdcall STATLIST_GetExpireFrame(D2StatListStrc* pStatList)
 		return pStatList->dwExpireFrame;
 	}
 
-	REMOVE_LATER_WriteToLogFile("STATLIST_GetExpireFrame: NULL pointer");
+	REMOVE_LATER_Trace("STATLIST_GetExpireFrame: NULL pointer");
 	return 0;
 }
 
@@ -2185,7 +2185,7 @@ int __stdcall STATLIST_GetSkillId(D2StatListStrc* pStatList)
 		return pStatList->dwSkillNo;
 	}
 
-	REMOVE_LATER_WriteToLogFile("STATLIST_GetSkillId: NULL pointer");
+	REMOVE_LATER_Trace("STATLIST_GetSkillId: NULL pointer");
 	return 0;
 }
 
@@ -2198,7 +2198,7 @@ void __stdcall STATLIST_SetSkillLevel(D2StatListStrc* pStatList, int nSkillLevel
 		return;
 	}
 
-	REMOVE_LATER_WriteToLogFile("STATLIST_SetSkillLevel: NULL pointer");
+	REMOVE_LATER_Trace("STATLIST_SetSkillLevel: NULL pointer");
 }
 
 //D2Common.0x6FDA9E70 (#11267)
@@ -2209,7 +2209,7 @@ int __stdcall STATLIST_GetSkillLevel(D2StatListStrc* pStatList)
 		return pStatList->dwSLvl;
 	}
 
-	REMOVE_LATER_WriteToLogFile("STATLIST_GetSkillLevel: NULL pointer");
+	REMOVE_LATER_Trace("STATLIST_GetSkillLevel: NULL pointer");
 	return 0;
 }
 

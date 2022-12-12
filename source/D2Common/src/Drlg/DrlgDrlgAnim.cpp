@@ -149,7 +149,7 @@ D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** 
 		}
 	}
 	char szBuffer[100] = { sgptDataTables->szDefaultString };
-	FOG_10025(FOG_10018(szBuffer, "Animating tiles missing Rarity %d Tile - Style %d Seq %d", nRarity, nStyle, nSeq), __FILE__, __LINE__);
+	FOG_DisplayWarning(FOG_csprintf(szBuffer, "Animating tiles missing Rarity %d Tile - Style %d Seq %d", nRarity, nStyle, nSeq), __FILE__, __LINE__);
 	// Return first tile if nothing found.
 	return pTileLibraryEntries[0];
 }

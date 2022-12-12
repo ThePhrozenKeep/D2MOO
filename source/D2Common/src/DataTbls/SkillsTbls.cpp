@@ -727,7 +727,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	sgptDataTables->pSkillsTxt = (D2SkillsTxt*)DATATBLS_CompileTxt(pMemPool, "skills", pSkillTbl, &sgptDataTables->nSkillsTxtRecordCount, sizeof(D2SkillsTxt));
 	if (sgptDataTables->nSkillsTxtRecordCount >= 32767)
 	{
-		FOG_10025("Skills table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Skills table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->nPassiveSkills = 0;
@@ -736,7 +736,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	sgptDataTables->pSkillDescTxt = (D2SkillDescTxt*)DATATBLS_CompileTxt(pMemPool, "skilldesc", pSkillDescTbl, &sgptDataTables->nSkillDescTxtRecordCount, sizeof(D2SkillDescTxt));
 	if (sgptDataTables->nSkillDescTxtRecordCount >= 32767)
 	{
-		FOG_10025("SkillDesc table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("SkillDesc table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	if (sgptDataTables->bCompileTxt)

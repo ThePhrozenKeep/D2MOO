@@ -139,7 +139,7 @@ void __fastcall sub_6FD411F0(D2RoomCollisionGridStrc* pCollisionGrid, D2TileLibr
 //D2Common.0x6FD412B0 (#10018)
 int __stdcall D2COMMON_10018_Return0()
 {
-	REMOVE_LATER_WriteToLogFile("D2COMMON_10018_Return0: Unused");
+	REMOVE_LATER_Trace("D2COMMON_10018_Return0: Unused");
 	return 0;
 }
 

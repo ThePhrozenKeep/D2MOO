@@ -1353,12 +1353,12 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 		if (pDrlgMap->pFile->nWidth != pDrlgMap->pDrlgCoord.nWidth)
 		{
-			FOG_10025("ptRegion->ptFile->nSizeX == ptRegion->tCoords.nSizeTileX", __FILE__, __LINE__);
+			FOG_DisplayWarning("ptRegion->ptFile->nSizeX == ptRegion->tCoords.nSizeTileX", __FILE__, __LINE__);
 		}
 
 		if (pDrlgMap->pFile->nHeight != pDrlgMap->pDrlgCoord.nHeight)
 		{
-			FOG_10025("ptRegion->ptFile->nSizeY == ptRegion->tCoords.nSizeTileY", __FILE__, __LINE__);
+			FOG_DisplayWarning("ptRegion->ptFile->nSizeY == ptRegion->tCoords.nSizeTileY", __FILE__, __LINE__);
 		}
 
 		if (nPresetTxtRecordNumberPops)

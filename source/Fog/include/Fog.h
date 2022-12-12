@@ -104,13 +104,15 @@ struct D2UnkFogStrc
 
 typedef int (*D2ExceptionCallback)();
 
-D2FUNC_DLL(FOG, 10018, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)														//Fog.#10018
+D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)													//Fog.#10018
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
 D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
+D2FUNC_DLL(FOG, GetSystemInfo, void*, __cdecl, (), 0xDF20)																							//Fog.#10022
 D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023
-D2FUNC_DLL(FOG, 10024_PacketAssertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)									//Fog.#10024
-D2FUNC_DLL(FOG, 10025, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)													//Fog.#10025
-D2FUNC_DLL(FOG, WriteToLogFile, void, __cdecl, (const char* szFormat, ...), 0x120A0)																//Fog.#10029
+D2FUNC_DLL(FOG, DisplayHalt, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)												//Fog.#10024
+D2FUNC_DLL(FOG, DisplayWarning, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)											//Fog.#10025
+D2FUNC_DLL(FOG, DisplayError, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xEDF0)											//Fog.#10026
+D2FUNC_DLL(FOG, Trace, void, __cdecl, (const char* szFormat, ...), 0x120A0)																			//Fog.#10029
 D2FUNC_DLL(FOG, Alloc, void*, __fastcall, (int nSize, const char* szFile, int nLine, int n0), 0x8F50)												//Fog.#10042
 D2FUNC_DLL(FOG, Free, void, __fastcall, (void* pFree, const char* szFile, int nLine, int n0), 0x8F90)												//Fog.#10043
 D2FUNC_DLL(FOG, AllocPool, void*, __fastcall, (void* pMemPool, int nSize, const char* szFile, int nLine, int n0), 0x8FF0)							//Fog.#10045

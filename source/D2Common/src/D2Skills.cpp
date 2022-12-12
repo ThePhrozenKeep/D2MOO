@@ -657,7 +657,7 @@ int __stdcall SKILLS_GetSkillModeFromUnit(D2UnitStrc* pUnit, D2SkillStrc* pSkill
 //D2Common.0x6FDAFCA0 (#11049)
 int __stdcall SKILLS_Return1(int a1)
 {
-	REMOVE_LATER_WriteToLogFile("SKILLS_Return1: Useless");
+	REMOVE_LATER_Trace("SKILLS_Return1: Useless");
 	return 1;
 }
 
@@ -733,7 +733,7 @@ D2SkillStrc* __stdcall SKILLS_GetNextSkill(D2SkillStrc* pSkill)
 		return pSkill->pNextSkill;
 	}
 
-	REMOVE_LATER_WriteToLogFile("SKILLS_GetNextSkill: NULL pointer");
+	REMOVE_LATER_Trace("SKILLS_GetNextSkill: NULL pointer");
 	return NULL;
 }
 
@@ -745,7 +745,7 @@ D2SkillStrc* __stdcall SKILLS_GetFirstSkillFromSkillList(D2SkillListStrc* pSkill
 		return pSkillList->pFirstSkill;
 	}
 
-	REMOVE_LATER_WriteToLogFile("SKILLS_GetFirstSkillFromSkillList: NULL pointer");
+	REMOVE_LATER_Trace("SKILLS_GetFirstSkillFromSkillList: NULL pointer");
 	return NULL;
 }
 
@@ -808,17 +808,17 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 {
 	if (!pUnit)
 	{
-		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("sSkillsRemoveSkill(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
 		return;
 	}
 	if (!pUnit->pSkills)
 	{
-		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skillinfo  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+		FOG_Trace("sSkillsRemoveSkill(): NULL skillinfo  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
 		return;
 	}
 	if (!pUnit->pSkills->pFirstSkill)
 	{
-		FOG_WriteToLogFile("sSkillsRemoveSkill(): NULL skilllist  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
+		FOG_Trace("sSkillsRemoveSkill(): NULL skilllist  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", pUnit->dwUnitType, pUnit->dwClassId, szFile, nLine);
 		return;
 	}
 
@@ -1336,7 +1336,7 @@ int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, const char* szFile
 	}
 	else
 	{
-		FOG_WriteToLogFile("Null skill passed to SkillsGetType() from FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("Null skill passed to SkillsGetType() from FILE:%s  LINE:%d", szFile, nLine);
 		return 0;
 	}
 }
@@ -2119,7 +2119,7 @@ int __stdcall SKILLS_GetSkillMode(D2SkillStrc* pSkill)
 		return pSkill->dwSkillMode;
 	}
 
-	REMOVE_LATER_WriteToLogFile("SKILLS_GetSkillMode: NULL pointer");
+	REMOVE_LATER_Trace("SKILLS_GetSkillMode: NULL pointer");
 	return 0;
 }
 
@@ -2244,7 +2244,7 @@ int __stdcall SKILLS_GetFlags(D2SkillStrc* pSkill)
 		return pSkill->dwFlags;
 	}
 
-	REMOVE_LATER_WriteToLogFile("SKILLS_GetFlags: NULL pointer");
+	REMOVE_LATER_Trace("SKILLS_GetFlags: NULL pointer");
 	return 0;
 }
 
@@ -2784,7 +2784,7 @@ int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSk
 //D2Common.0x6FDB2E70 (#11239)
 int __stdcall SKILLS_Return0(int arg)
 {
-	REMOVE_LATER_WriteToLogFile("SKILLS_Return0: Useless");
+	REMOVE_LATER_Trace("SKILLS_Return0: Useless");
 	return 0;
 }
 

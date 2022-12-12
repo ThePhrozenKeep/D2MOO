@@ -56,7 +56,7 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 		{
 			if (!ppTileLibraryEntries[i])
 			{
-				FOG_10025("phTileArray[ii]", __FILE__, __LINE__);
+				FOG_DisplayWarning("phTileArray[ii]", __FILE__, __LINE__);
 			}
 
 			nMax += D2CMP_10081_GetTileRarity(ppTileLibraryEntries[i]);
@@ -84,7 +84,7 @@ D2TileLibraryEntryStrc* __fastcall DRLGROOMTILE_GetTileCache(D2RoomExStrc* pRoom
 	{
 		if (!D2CMP_10088_GetTiles(pRoomEx->pTiles, TILETYPE_SPECIALTILES_10, 0, 0, ppTileLibraryEntries, ARRAY_SIZE(ppTileLibraryEntries)))
 		{
-			FOG_10025("nSize", __FILE__, __LINE__);
+			FOG_DisplayWarning("nSize", __FILE__, __LINE__);
 		}
 
 		return ppTileLibraryEntries[0];
@@ -636,14 +636,14 @@ static D2RoomTileStrc* DRLGROOMTILE_FindDestinationWarpTile(D2RoomExStrc* pRoomE
 			pWarpTile = pWarpTile->pNext;
 			if (!pWarpTile)
 			{
-				FOG_10025("ptWarp", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptWarp", __FILE__, __LINE__);
 				return nullptr;
 			}
 		}
 	}
 	else
 	{
-		FOG_10025("ptWarp", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptWarp", __FILE__, __LINE__);
 		return nullptr;
 	}
 	return pWarpTile;
@@ -683,7 +683,7 @@ void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTile
 		const D2LvlWarpTxt* pWarpDef = DRLGROOMTILE_UpdateAndGetLvlWarpTxtRecord(pWarpTile, nTileType);
 		if (!pWarpDef)
 		{
-			FOG_10025("pctWarpDef", __FILE__, __LINE__);
+			FOG_DisplayWarning("pctWarpDef", __FILE__, __LINE__);
 		}
 
 		if (pWarpDef->dwLitVersion)

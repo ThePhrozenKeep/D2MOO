@@ -5,7 +5,7 @@
 //D2Common.0x6FDA5260 (#10916)
 void __stdcall SEED_Return()
 {
-	REMOVE_LATER_WriteToLogFile("SEED_Return: Useless");
+	REMOVE_LATER_Trace("SEED_Return: Useless");
 }
 
 //D2Common.0x6FDAEA80 (#10920)

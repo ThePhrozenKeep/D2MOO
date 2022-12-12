@@ -444,7 +444,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 				if (sgptDataTables->pMonStatsTxt[nId].nBaseId != sgptDataTables->pMonStatsTxt[nCounter].nBaseId && sgptDataTables->bCompileTxt)
 				{
 					szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nId].nId, 0);
-					FOG_WriteToLogFile("BaseId/NextInClass chain -- unexpected baseid for monster '%s' (%d)", szMonsterName);
+					FOG_Trace("BaseId/NextInClass chain -- unexpected baseid for monster '%s' (%d)", szMonsterName);
 				}
 
 				if (nId == nCounter)
@@ -461,7 +461,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 					if (sgptDataTables->bCompileTxt)
 					{
 						szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nId].nId, 0);
-						FOG_WriteToLogFile("BaseId/NextInClass chain -- monster '%s' (%d) pointing to itself", szMonsterName);
+						FOG_Trace("BaseId/NextInClass chain -- monster '%s' (%d) pointing to itself", szMonsterName);
 					}
 					break;
 				}
@@ -473,7 +473,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 					if (sgptDataTables->bCompileTxt)
 					{
 						szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nNextInClass].nId, 0);
-						FOG_WriteToLogFile("BaseId/NextInClass chain exceeded 255 entries at monster '%s' (%d)", szMonsterName);
+						FOG_Trace("BaseId/NextInClass chain exceeded 255 entries at monster '%s' (%d)", szMonsterName);
 					}
 					break;
 				}
@@ -483,7 +483,7 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			if (!bFoundInChain && sgptDataTables->bCompileTxt)
 			{
 				szMonsterName = FOG_10255(sgptDataTables->pMonStatsLinker, sgptDataTables->pMonStatsTxt[nCounter].nId, 0);
-				FOG_WriteToLogFile("BaseId/NextInClass monster '%s' (%d) not found in chain", szMonsterName);
+				FOG_Trace("BaseId/NextInClass monster '%s' (%d) not found in chain", szMonsterName);
 			}
 			sgptDataTables->pMonStatsTxt[nCounter].nMaxChainId = nChainId;
 
@@ -1057,7 +1057,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 		szArg = strchr(szNext, '=');
 		if (!szArg)
 		{
-			FOG_WriteToLogFile("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
+			FOG_Trace("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
 			break;
 		}
 
@@ -1065,7 +1065,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 		++szArg;
 		if (*szArg == 0)
 		{
-			FOG_WriteToLogFile("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
+			FOG_Trace("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
 			break;
 		}
 
@@ -1162,7 +1162,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 		}
 		else
 		{
-			FOG_WriteToLogFile("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
+			FOG_Trace("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
 			break;
 		}
 	}
@@ -1271,7 +1271,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 
 				if (pTreasureClassExTxt[i].nProb[j] <= 0)
 				{
-					FOG_WriteToLogFile("Found a treasure class item with 0 chance!  (Line:%d  Item:%d)\n", i, j);
+					FOG_Trace("Found a treasure class item with 0 chance!  (Line:%d  Item:%d)\n", i, j);
 				}
 				else
 				{
@@ -1378,7 +1378,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 						}
 						else
 						{
-							FOG_WriteToLogFile("Couldn't parse treasure class item!  (Line:%d  Item:%d)\n", i, j);
+							FOG_Trace("Couldn't parse treasure class item!  (Line:%d  Item:%d)\n", i, j);
 						}
 					}
 				}
@@ -1392,7 +1392,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 //D2Common.0x6FD69B70 (#10656)
 int __stdcall DATATBLS_ShouldNeverCallInExpansion()
 {
-	FOG_10025("should never call this function in expansion", __FILE__, __LINE__);
+	FOG_DisplayWarning("should never call this function in expansion", __FILE__, __LINE__);
 	return 0;
 }
 
@@ -1465,7 +1465,7 @@ void __fastcall DATATBLS_LoadMonUModTxt(void* pMemPool)
 
 	if (sgptDataTables->nMonUModTxtRecordCount > 256)
 	{
-		FOG_WriteToLogFile("monumod.txt exceeded %d entries", 256);
+		FOG_Trace("monumod.txt exceeded %d entries", 256);
 		sgptDataTables->nMonUModTxtRecordCount = 256;
 	}
 }
@@ -1506,7 +1506,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 	{
 		if (sgptDataTables->bCompileTxt)
 		{
-			FOG_WriteToLogFile("Cut off superuniques at %d entries", 512);
+			FOG_Trace("Cut off superuniques at %d entries", 512);
 		}
 		sgptDataTables->nSuperUniquesTxtRecordCount = 512;
 	}
@@ -1520,7 +1520,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 		{
 			if (sgptDataTables->bCompileTxt)
 			{
-				FOG_WriteToLogFile("Invalid hcIdx (%d) -- value must be between 0 and %d.", nId, 65);
+				FOG_Trace("Invalid hcIdx (%d) -- value must be between 0 and %d.", nId, 65);
 			}
 		}
 		else
@@ -1533,7 +1533,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 			{
 				if (sgptDataTables->bCompileTxt)
 				{
-					FOG_WriteToLogFile("Duplicate hcIdx (%d) -- index must be unique.", nId);
+					FOG_Trace("Duplicate hcIdx (%d) -- index must be unique.", nId);
 				}
 			}
 		}
@@ -1543,7 +1543,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 	{
 		if (sgptDataTables->nSuperUniqueIds[i] == -1 && sgptDataTables->bCompileTxt)
 		{
-			FOG_WriteToLogFile("Missing hcIdx (%d) -- index incomplete", i);
+			FOG_Trace("Missing hcIdx (%d) -- index incomplete", i);
 		}
 
 #define SUPERUNIQUE_NONE -1
@@ -2298,7 +2298,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 			}
 		}
 
-		FOG_WriteToLogFile("Invalid monster type at line %d of file %s", __LINE__, __FILE__);
+		FOG_Trace("Invalid monster type at line %d of file %s", __LINE__, __FILE__);
 	}
 
 	return 0;
@@ -2665,7 +2665,7 @@ void __fastcall DATATBLS_LoadMonEquipTxt(void* pMemPool)
 
 	if (sgptDataTables->nMonEquipTxtRecordCount >= 32767)
 	{
-		FOG_10025("Monequip.txt exceeded maximum number of allowable rows", __FILE__, __LINE__);
+		FOG_DisplayWarning("Monequip.txt exceeded maximum number of allowable rows", __FILE__, __LINE__);
 	}
 
 	for (int i = 0; i < sgptDataTables->nMonStatsTxtRecordCount; ++i)

@@ -643,7 +643,7 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvl
 
 		if (!(*ppDrlgFile)->nSubstGroups)
 		{
-			FOG_10025("Substitution File was not saved with substitution groups", __FILE__, __LINE__);
+			FOG_DisplayWarning("Substitution File was not saved with substitution groups", __FILE__, __LINE__);
 		}
 
 		for (int i = 0; i < (*ppDrlgFile)->nWallLayers; ++i)

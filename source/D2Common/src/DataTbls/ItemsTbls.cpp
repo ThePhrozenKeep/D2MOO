@@ -470,7 +470,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 				}
 
 				*(uint32_t*)((char*)pRecord + nOffset) = 0;
-				FOG_WriteToLogFile("Failed to parse '%s' line %d", pSrc, nTxtRow);
+				FOG_Trace("Failed to parse '%s' line %d", pSrc, nTxtRow);
 			}
 		}
 		else
@@ -753,7 +753,7 @@ void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nUniqueItemsTxtRecordCount >= 32767)
 	{
-		FOG_10025("uniqueitems table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("uniqueitems table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	for (int i = 0; i < sgptDataTables->nUniqueItemsTxtRecordCount; ++i)
@@ -957,7 +957,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nSetsTxtRecordCount >= 32767)
 	{
-		FOG_10025("sets table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("sets table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pSetItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -965,7 +965,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nSetItemsTxtRecordCount >= 32767)
 	{
-		FOG_10025("setitems table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("setitems table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	for (int i = 0; i < sgptDataTables->nSetItemsTxtRecordCount; ++i)
@@ -992,7 +992,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 			}
 			else
 			{
-				FOG_WriteToLogFile("Error: too many items in set %d", sgptDataTables->pSetsTxt[nSetId].wSetId);
+				FOG_Trace("Error: too many items in set %d", sgptDataTables->pSetsTxt[nSetId].wSetId);
 			}
 		}
 	}
@@ -1486,7 +1486,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 			if (nNextFreeId >= ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E) && sgptDataTables->bCompileTxt)
 			{
-				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
+				FOG_Trace("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
 			}
 
 			if (nCurrentStatOp == STAT_OP_APPLY_TO_ITEM || nCurrentStatOp == STAT_OP_APPLY_TO_ITEM_PCT)
@@ -1541,7 +1541,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 			if (nNextFreeId >= 16 && sgptDataTables->bCompileTxt)
 			{
-				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[wOpStat].wStatId, 0));
+				FOG_Trace("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[wOpStat].wStatId, 0));
 			}
 		}
 	}
@@ -1763,7 +1763,7 @@ BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nIt
 
 			if (nItemType >= sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				FOG_WriteToLogFile("Invalid item type at line %d of file %s", __LINE__, __FILE__);
+				FOG_Trace("Invalid item type at line %d of file %s", __LINE__, __FILE__);
 				return FALSE;
 			}
 
@@ -1943,21 +1943,21 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".bin");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".xls");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pRuneDataTables.pRunesTxt = (D2RunesTxt*)DATATBLS_CompileTxt(pMemPool, "runes", pTbl, &sgptDataTables->pRuneDataTables.nRunesTxtRecordCount, sizeof(D2RunesTxt));

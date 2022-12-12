@@ -40,7 +40,7 @@ void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 
 		if (!pLevel->pJungleDefs)
 		{
-			FOG_10025("ptDrlgLevel->pnJungleDefs", __FILE__, __LINE__);
+			FOG_DisplayWarning("ptDrlgLevel->pnJungleDefs", __FILE__, __LINE__);
 		}
 
 		for (int i = 0; i < nSizeY; ++i)
@@ -65,7 +65,7 @@ void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 					{
 						if (nFileIndex >= 3)
 						{
-							FOG_10025("nFileIndex < 3", __FILE__, __LINE__);
+							FOG_DisplayWarning("nFileIndex < 3", __FILE__, __LINE__);
 						}
 
 						nJungleDef += dword_6FDCFB18[pLevel->nLevelId - 76];

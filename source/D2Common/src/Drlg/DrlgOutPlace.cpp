@@ -2398,13 +2398,13 @@ static D2C_LvlPrestIds DRLG_JungleNormalizeLevelPresetId(int32_t nLevelPresetId)
 			if ((nLevelPresetId & (JUNGLE_FLAG_TOP_ << 4)) != 0)
 				nPDef = gJunglePresets[nPresetDefinitionOffset + 3];
 
-			if (nPDef == LVLPREST_NONE) FOG_10025("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
+			if (nPDef == LVLPREST_NONE) FOG_DisplayWarning("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
 		}
 	}
 	else if (nLevelPresetId >= nbDirections)
 	{
 		nPDef = gSpiderForestPresets[nLevelPresetId >> 4];
-		if (nPDef == LVLPREST_NONE) FOG_10025("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
+		if (nPDef == LVLPREST_NONE) FOG_DisplayWarning("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
 	}
 	return (D2C_LvlPrestIds)nPDef;
 }
@@ -2467,7 +2467,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 #if 0 // This assert would always come too late, overriding content.
 		if (!(tJungles[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH))
 		{
-			FOG_10025(
+			FOG_DisplayWarning(
 				"ptJungle[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH",
 				"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\DRLG\\OutPlace.cpp",
 				1570);
@@ -2482,7 +2482,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
-	// Note: Original game uses FOG_10025 not FOG_Assertion
+	// Note: Original game uses FOG_DisplayWarning not FOG_Assertion
 	D2_ASSERT((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
 	D2_ASSERT((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
 

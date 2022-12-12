@@ -1507,7 +1507,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 		if (nAnimSpeed < 0 || nAnimSpeed > 32767)
 		{
-			FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): bad velocity:%d  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nAnimSpeed, nUnitType, nClassId, szFile, nLine);
+			FOG_Trace("UnitUpdateAnimRateAndVel(): bad velocity:%d  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nAnimSpeed, nUnitType, nClassId, szFile, nLine);
 		}
 
 		if (nAnimSpeed <= 0)
@@ -1537,7 +1537,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 	}
 	else
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): NULL path (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nUnitType, nClassId, szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): NULL path (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nUnitType, nClassId, szFile, nLine);
 	}
 }
 
@@ -1561,14 +1561,14 @@ void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const
 
 	if (!pUnit)
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
 		return;
 	}
 
 	nUnitType = pUnit->dwUnitType;
 	if (nUnitType >= 5)
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): invalid unit (TYPE:%d)  FILE:%s  LINE:%d", nUnitType, szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): invalid unit (TYPE:%d)  FILE:%s  LINE:%d", nUnitType, szFile, nLine);
 		return;
 	}
 
@@ -1978,7 +1978,7 @@ D2ObjectsTxt* __stdcall UNITS_GetObjectTxtRecordFromObject(D2UnitStrc* pUnit)
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -1993,7 +1993,7 @@ D2ShrinesTxt* __stdcall UNITS_GetShrineTxtRecordFromObject(D2UnitStrc* pUnit)
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -2007,7 +2007,7 @@ void __stdcall UNITS_SetShrineTxtRecordInObjectData(D2UnitStrc* pUnit, D2Shrines
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 

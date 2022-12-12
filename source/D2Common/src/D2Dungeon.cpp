@@ -163,7 +163,7 @@ void __stdcall DUNGEON_GetRoomCoordinates(D2RoomStrc* pRoom, D2DrlgCoordsStrc* p
 	}
 	else
 	{
-		FOG_WriteToLogFile(" ----- RJS NOTE: Would have crashed, see code");
+		FOG_Trace(" ----- RJS NOTE: Would have crashed, see code");
 		memset(pCoords, 0x00, sizeof(D2DrlgCoordsStrc));
 	}
 }
@@ -1252,7 +1252,7 @@ void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pAc
 	}
 	else
 	{
-		FOG_10025("ptAct", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptAct", __FILE__, __LINE__);
 	}
 }
 

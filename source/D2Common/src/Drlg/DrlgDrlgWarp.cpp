@@ -216,7 +216,7 @@ D2RoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIn
 		{
 			if (!pLevel->pFirstRoomEx)
 			{
-				FOG_10025("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
 			}
 
 			pRoomEx = pLevel->pFirstRoomEx;
@@ -284,7 +284,7 @@ int* __fastcall DRLGWARP_GetWarpIdArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevel
 	{
 		if (!pDrlgWarp->nLevel)
 		{
-			FOG_10025("ptVisInfo->eLevelId != LEVEL_ID_NONE", __FILE__, __LINE__);
+			FOG_DisplayWarning("ptVisInfo->eLevelId != LEVEL_ID_NONE", __FILE__, __LINE__);
 		}
 
 		if (nLevelId == pDrlgWarp->nLevel)

@@ -589,7 +589,7 @@ int __fastcall DRLGROOM_GetLevelIdFromPopulatedRoom(D2RoomExStrc* pRoomEx)
 {
 	if (!pRoomEx)
 	{
-		FOG_10025("ptRoom", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 	}
 
 	if (pRoomEx->dwFlags & ROOMEXFLAG_POPULATION_ZERO)
@@ -607,7 +607,7 @@ BOOL __fastcall DRLGROOM_HasWaypoint(D2RoomExStrc* pRoomEx)
 {
 	if (!pRoomEx)
 	{
-		FOG_10025("ptRoom", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 	}
 
 	return DRLGROOM_CheckWaypointFlags(pRoomEx) != 0;
@@ -713,7 +713,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx)
 			{
 				if (nWarpId >= 8)
 				{
-					FOG_10025("ptRoom1 && bExit1 < LEVEL_VIS_MAX", __FILE__, __LINE__);
+					FOG_DisplayWarning("ptRoom1 && bExit1 < LEVEL_VIS_MAX", __FILE__, __LINE__);
 				}
 
 				pSourceVisArray = DRLGROOM_GetVisArrayFromLevelId(pRoomEx->pLevel->pDrlg, pRoomEx->pLevel->nLevelId);
@@ -949,7 +949,7 @@ int* __fastcall DRLGROOM_GetVisArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevelId)
 	{
 		if (!pDrlgWarp->nLevel)
 		{
-			FOG_10025("ptVisInfo->eLevelId != LEVEL_ID_NONE", __FILE__, __LINE__);
+			FOG_DisplayWarning("ptVisInfo->eLevelId != LEVEL_ID_NONE", __FILE__, __LINE__);
 		}
 
 		if (nLevelId == pDrlgWarp->nLevel)

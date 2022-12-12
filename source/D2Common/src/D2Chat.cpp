@@ -82,7 +82,7 @@ BOOL __stdcall CHAT_GetUsedFromHoverMsg(D2HoverTextStrc* pHoverMsg)
 		return pHoverMsg->bUsed;
 	}
 
-	REMOVE_LATER_WriteToLogFile("CHAT_GetUsedFromHoverMsg: NULL pointer");
+	REMOVE_LATER_Trace("CHAT_GetUsedFromHoverMsg: NULL pointer");
 	return FALSE;
 }
 

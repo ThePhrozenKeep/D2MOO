@@ -292,7 +292,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 		nXDistance = -nXDistance;
 	}
 
-	D2_ASSERTM(nXDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
+	D2_ASSERTM(nXDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
 	nYDistance = nOldY - pDynamicPath->SP1.Y;
 	if (nYDistance < 0)
@@ -300,7 +300,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 		nYDistance = -nYDistance;
 	}
 
-	D2_ASSERTM(nYDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
+	D2_ASSERTM(nYDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
 	if (pDynamicPath->SP1.X && pDynamicPath->SP1.Y)
 	{
@@ -757,7 +757,7 @@ void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, 
 	}
 	else
 	{
-		FOG_WriteToLogFile("PathSetVelocity passed NULL hPath from FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("PathSetVelocity passed NULL hPath from FILE:%s  LINE:%d", szFile, nLine);
 	}
 }
 

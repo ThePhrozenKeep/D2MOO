@@ -154,7 +154,7 @@ void __stdcall D2Common_10640(D2UnitStrc* pUnit, int nAnimSpeed)
 		--nCounter;
 	}
 
-	FOG_10024_PacketAssertion("DataTablesUnitAnimInfoDebugSet", __FILE__, __LINE__);
+	FOG_DisplayHalt("DataTablesUnitAnimInfoDebugSet", __FILE__, __LINE__);
 	exit(-1);
 }
 

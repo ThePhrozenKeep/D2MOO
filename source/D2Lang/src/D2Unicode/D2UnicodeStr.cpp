@@ -177,7 +177,7 @@ void __cdecl Unicode::sprintf(
       }
 
       default: {
-        FOG_10024_PacketAssertion(
+        FOG_DisplayHalt(
             "Unknown format specifier in Unicode::sprintf",
             __FILE__,
             __LINE__);

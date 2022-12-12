@@ -370,7 +370,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 				}
 				else
 				{
-					FOG_WriteToLogFile("Couldn't parse horardric cube output!  (Line:%d  Item:%d)\n", nTxtRow, nItemId);
+					FOG_Trace("Couldn't parse horardric cube output!  (Line:%d  Item:%d)\n", nTxtRow, nItemId);
 					return FALSE;
 				}
 			}
@@ -397,7 +397,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 
 		if (!szOutputModifier)
 		{
-			FOG_WriteToLogFile("Couldn't parse horardric cube output modifier!  (Line:%d  Item:%d)\n", nTxtRow, nItemId);
+			FOG_Trace("Couldn't parse horardric cube output modifier!  (Line:%d  Item:%d)\n", nTxtRow, nItemId);
 			return TRUE;
 		}
 
@@ -544,7 +544,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 		}
 		else
 		{
-			FOG_WriteToLogFile("Couldn't parse horardric cube output modifier '%s'!  (Line:%d  Item:%d)\n", szOutputModifier, nTxtRow, nItemId);
+			FOG_Trace("Couldn't parse horardric cube output modifier '%s'!  (Line:%d  Item:%d)\n", szOutputModifier, nTxtRow, nItemId);
 			return TRUE;
 		}
 	}
@@ -576,7 +576,7 @@ void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOff
 			}
 
 			*(int*)pRecord = 0;
-			FOG_WriteToLogFile("Failed to parse '%s' line %d", pSrc, nTxtRow);
+			FOG_Trace("Failed to parse '%s' line %d", pSrc, nTxtRow);
 		}
 	}
 }
@@ -698,13 +698,13 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
-		FOG_10025("Found cubeserver.bin in data path.  This file should only be on the server\n", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found cubeserver.bin in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.txt");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
-		FOG_10025("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(pMemPool, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));

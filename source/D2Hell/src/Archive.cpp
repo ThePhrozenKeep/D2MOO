@@ -48,7 +48,7 @@ static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFile
 		DWORD dwLastError = GetLastError();
 		if (!bBlockNotFoundLog || dwLastError != ERROR_FILE_NOT_FOUND)
 		{
-			FOG_WriteToLogFile("Error opening file: %s", szFilePath);
+			FOG_Trace("Error opening file: %s", szFilePath);
 		}
 
 		return FALSE;
@@ -76,7 +76,7 @@ static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, void* pFileHa
 		char szArchivePath[MAX_PATH];
 #if 0  // TODO: Enable this code once the macro is set up.
 		Storm_276_GetFileName(pFileHandle, szArchivePath, 260);
-		Fog_10026(3, szArchivePath, __FILE__, __LINE__);
+		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
 #endif
 		exit(-1);
 	}
@@ -104,7 +104,7 @@ static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, void* pFil
 		char szArchivePath[MAX_PATH];
 #if 0  // TODO: Enable this code once the macro is set up.
 		Storm_276_GetFileName(pFileHandle, szArchivePath, sizeof(szArchivePath));
-		Fog_10026(3, szArchivePath, __FILE__, __LINE__);
+		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
 #endif
 		exit(-1);
 	}

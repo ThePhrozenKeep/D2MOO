@@ -36,7 +36,7 @@ BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileNam
 	{
 		if (!bDontLogError || GetLastError() != 2)
 		{
-			FOG_WriteToLogFile("Error opening file: %s", szFileName);
+			FOG_Trace("Error opening file: %s", szFileName);
 		}
 		return FALSE;
 	}
@@ -68,7 +68,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 	{
 		//TODO: ...
 		//Storm_276_GetFileName(pFileHandle, szFileName, sizeof(szFileName));
-		//Fog_10026(3, szFileName, __FILE__, __LINE__);
+		//FOG_DisplayError(3, szFileName, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -90,7 +90,7 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 	{
 		//TODO: ...
 		//Storm_276_GetFileName(pFileHandle, &pBuffer, sizeof(pBuffer));
-		//Fog_10026(3, &pBuffer, __FILE__, __LINE__);
+		//FOG_DisplayError(3, &pBuffer, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -107,7 +107,7 @@ void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, 
 	if (!FOG_MPQFileOpen(szFileName, &pFileHandle))
 	{
 		const DWORD err = GetLastError();
-		FOG_WriteToLogFile("Error opening file: %s (0x%x)", szFileName, err);
+		FOG_Trace("Error opening file: %s (0x%x)", szFileName, err);
 		return NULL;
 	}
 
@@ -152,7 +152,7 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 	{
 		if (*szReference)
 		{
-			FOG_WriteToLogFile("Couldn't find string hash: %s", szReference);
+			FOG_Trace("Couldn't find string hash: %s", szReference);
 		}
 		nIndex = 5382;
 	}
@@ -443,7 +443,7 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 
 	if (sgptDataTables->nStatesTxtRecordCount >= 256)
 	{
-		FOG_10025("Exceeded maximum allowable number of states", __FILE__, __LINE__);
+		FOG_DisplayWarning("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocPool(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
@@ -603,7 +603,7 @@ void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
 	{
 		if (sgptDataTables->nPetTypeTxtRecordCount >= 256)
 		{
-			FOG_10025("Pet types table exceeded maximum number of entries.", __FILE__, __LINE__);
+			FOG_DisplayWarning("Pet types table exceeded maximum number of entries.", __FILE__, __LINE__);
 			sgptDataTables->nPetTypeTxtRecordCount = 256;
 		}
 	}
@@ -742,12 +742,12 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	{
 		if (_strcmpi(szName, "leveldefs"))
 		{
-			FOG_WriteToLogFile("Translating data from: %s", szName);
+			FOG_Trace("Translating data from: %s", szName);
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".txt");
 		}
 		else
 		{
-			FOG_WriteToLogFile("Translating data from: %s", "levels");
+			FOG_Trace("Translating data from: %s", "levels");
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "levels", ".txt");
 		}
 

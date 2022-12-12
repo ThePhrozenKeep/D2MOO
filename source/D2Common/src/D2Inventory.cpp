@@ -2097,7 +2097,7 @@ int __stdcall D2Common_10316(D2CorpseStrc* pCorpse)
 		return pCorpse->unk0x00;
 	}
 
-	REMOVE_LATER_WriteToLogFile("D2Common_10316: nullptr pointer");
+	REMOVE_LATER_Trace("D2Common_10316: nullptr pointer");
 	return 0;
 }
 
@@ -2590,7 +2590,7 @@ D2CorpseStrc* __stdcall INVENTORY_GetNextCorpse(D2CorpseStrc* pCorpse)
 		return pCorpse->pNextCorpse;
 	}
 
-	REMOVE_LATER_WriteToLogFile("INVENTORY_GetNextCorpse: nullptr pointer");
+	REMOVE_LATER_Trace("INVENTORY_GetNextCorpse: nullptr pointer");
 	return nullptr;
 }
 
@@ -2602,7 +2602,7 @@ D2UnitGUID __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseStrc* pCorpse)
 		return pCorpse->dwUnitId;
 	}
 
-	REMOVE_LATER_WriteToLogFile("INVENTORY_GetUnitGUIDFromCorpse: nullptr pointer");
+	REMOVE_LATER_Trace("INVENTORY_GetUnitGUIDFromCorpse: nullptr pointer");
 	return 0;
 }
 
