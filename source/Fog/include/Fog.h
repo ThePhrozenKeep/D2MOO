@@ -100,6 +100,60 @@ struct D2UnkFogStrc
 	int32_t unk0x04;				//0x04
 };
 
+#ifdef DECLARE_STRICT_HANDLE
+#error "Should move this define out of fog.h"
+#endif
+#define  DECLARE_STRICT_HANDLE(name)        typedef struct name##__ { int unused; } *name
+
+// Those are actully Storm.dll types
+DECLARE_STRICT_HANDLE(HSFILE);
+DECLARE_STRICT_HANDLE(HSARCHIVE);
+
+
+enum D2C_AsyncDataPriority
+{
+	ASYNC_DATA_PRIORITY_NORMAL = 0,
+	ASYNC_DATA_PRIORITY_HIGH = 1,
+};
+
+enum D2C_AsyncDataFlags
+{
+	ASYNC_DATA_FLAGS_LOADED = 0x01,
+	
+	ASYNC_DATA_FLAGS_DEBUG_TAG      = 0x41737960,
+	ASYNC_DATA_FLAGS_DEBUG_TAG_MASK = 0xFFFFFFF0,
+};
+
+struct AsyncDataLoadFileCallback
+{
+	DWORD(__stdcall* callback)(int a1, int a3, int C);
+	DWORD userData[6];
+};
+
+struct AsyncDataEventSlot;
+
+struct AsyncData
+{
+	HSFILE hFile;
+	DWORD pMemPool;
+	OVERLAPPED tOverlapped;
+	AsyncDataLoadFileCallback ayncOpDesc;
+	AsyncDataEventSlot* pEventSlot;
+	void* pBuffer;
+	DWORD nFileSize;
+	DWORD nPriority; // D2C_AsyncDataPriority
+	DWORD dwFlags;
+	DWORD dword4C; // Also storing priority ?
+	DWORD dword50;
+};
+
+struct AsyncDataEventSlot
+{
+	HANDLE hEvent;
+	DWORD dw04;
+	AsyncData* pAsyncOp;
+};
+
 #pragma pack()
 
 typedef int (*D2ExceptionCallback)();
@@ -121,6 +175,17 @@ D2FUNC_DLL(FOG, ReallocPool, void*, __fastcall, (void* pMemPool, void* pMemory, 
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
 D2FUNC_DLL(FOG, 10083_Cos_LUT, float, __stdcall, (int16_t index), 0x1DF0)																			//Fog.#10083
 D2FUNC_DLL(FOG, 10084_Sin_LUT, float, __stdcall, (int16_t index), 0x1E10)																			//Fog.#10084
+D2FUNC_DLL(FOG, AsyncDataInitialize, void, __fastcall, (BOOL bEnableAsyncOperations), 0xC010)														//Fog.#10089
+D2FUNC_DLL(FOG, AsyncDataDestroy, void, __fastcall, (), 0xC0E0)																						//Fog.#10090
+D2FUNC_DLL(FOG, AsyncDataLoadFileEx, AsyncData*, __fastcall, (void* pMemPool, const char* pFileName, BOOL bAllowAsync, LONG nFileOffset, int nFileSize, void* pBuffer, AsyncDataLoadFileCallback* asyncOpDesc, int a8, const char* sourceFile, int sourceLine), 0xC2B0)	//Fog.#10091
+D2FUNC_DLL(FOG, AsyncDataTestLoaded, BOOL, __fastcall, (AsyncData* pAsyncData), 0xC480)																//Fog.#10092
+D2FUNC_DLL(FOG, AsyncDataWaitAndGetBuffer, void, __fastcall, (AsyncData* pAsyncData), 0xC630)														//Fog.#10093
+D2FUNC_DLL(FOG, AsyncDataGetBuffer, void*, __fastcall, (AsyncData* pAsyncData), 0xC700)																//Fog.#10094
+D2FUNC_DLL(FOG, AsyncDataGetBufferSize, DWORD, __fastcall, (AsyncData* pAsyncData), 0xC790)															//Fog.#10095
+D2FUNC_DLL(FOG, AsyncDataSetResults, void, __fastcall, (AsyncData* pAsyncData, void* pBuffer, int nBufferSize), 0xC7E0)								//Fog.#10096
+D2FUNC_DLL(FOG, AsyncDataFree, void, __fastcall, (AsyncData* pAsyncData), 0xC880)																	//Fog.#10097
+D2FUNC_DLL(FOG, AsyncDataSetPriority, void, __fastcall, (AsyncData* pAsyncData, int nPriority), 0xC4E0)												//Fog.#10099
+D2FUNC_DLL(FOG, AsyncDataHandlePriorityChanges, void, __fastcall, (BOOL bPostpone), 0xC5A0)															//Fog.#10100
 D2FUNC_DLL(FOG, MPQSetConfig, BOOL, __fastcall, (int dwDirectAccessFlags, int bEnableSeekOptimization), 0x11590)									//Fog.#10101
 D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (const char* szFile, void** pFileHandle), 0x11600)													//Fog.#10102
 D2FUNC_DLL(FOG, MPQFileClose, void, __fastcall, (void* pFile), 0x11610)																				//Fog.#10103
