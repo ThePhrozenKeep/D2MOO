@@ -162,7 +162,7 @@ D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFor
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
 D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
 D2FUNC_DLL(FOG, GetSystemInfo, void*, __cdecl, (), 0xDF20)																							//Fog.#10022
-D2FUNC_DLL(FOG, Assertion, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)												//Fog.#10023
+D2FUNC_DLL(FOG, DisplayAssert, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)											//Fog.#10023
 D2FUNC_DLL(FOG, DisplayHalt, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)												//Fog.#10024
 D2FUNC_DLL(FOG, DisplayWarning, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)											//Fog.#10025
 D2FUNC_DLL(FOG, DisplayError, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xEDF0)											//Fog.#10026
@@ -227,16 +227,16 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 // In debug builds, this will trigger a log and exit, in release this is used as a hint for performance optimization.
 // Do NOT use this if the program can recover when expr if false, as it is used as a hint for performance and can impact generated code.
 // For recoverable errors, use D2_VERIFY
-#define D2_ASSERT(expr) (void)( (!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), exit(-1) , 0))
-#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), exit(-1) , 0))
+#define D2_ASSERT(expr) (void)( (!!(expr)) || (FOG_DisplayAssert(#expr, __FILE__, __LINE__), exit(-1) , 0))
+#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (FOG_DisplayAssert(msg, __FILE__, __LINE__), exit(-1) , 0))
 
 // Assert that an expression must be true, even though the program may be recoverable.
 // Contrary to D2_ASSERT, this is still evaluated in release builds, and can be used anywhere the expression would be valid.
 // This is to be used when one can recover from an error
 // Example:
 // if(D2_VERIFY(ptr != nullptr)) ptr->method(); // The only difference between debug and release build is the logging and breakpoint
-#define D2_VERIFY(expr) ((!!(expr)) || (FOG_Assertion(#expr, __FILE__, __LINE__), false))
-#define D2_VERIFYM(expr,msg) ((!!(expr)) || (FOG_Assertion(msg, __FILE__, __LINE__), false))
+#define D2_VERIFY(expr) ((!!(expr)) || (FOG_DisplayAssert(#expr, __FILE__, __LINE__), false))
+#define D2_VERIFYM(expr,msg) ((!!(expr)) || (FOG_DisplayAssert(msg, __FILE__, __LINE__), false))
 #else
 #define D2_ASSERT(expr) (__assume(expr), (void)0)
 #define D2_ASSERTM(expr,msg) (__assume(expr), (void)0)

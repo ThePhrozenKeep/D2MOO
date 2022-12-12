@@ -415,7 +415,7 @@ D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nL
 
 		if (!COLLISION_GetFreeCoordinates(pRoom, &pCoord, nUnitSize, 0x1C09, 0))
 		{
-			FOG_Assertion("Unable to find spawn location for act start", __FILE__, __LINE__);
+			FOG_DisplayAssert("Unable to find spawn location for act start", __FILE__, __LINE__);
 			exit(-1);
 		}
 

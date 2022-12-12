@@ -1746,7 +1746,7 @@ LABEL_75:
 			return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
 
 		default:
-			FOG_Assertion("(eTOU == UNIT_PLAYER) || (eTOU == UNIT_MONSTER)", __FILE__, __LINE__);
+			FOG_DisplayAssert("(eTOU == UNIT_PLAYER) || (eTOU == UNIT_MONSTER)", __FILE__, __LINE__);
 			exit(-1);
 		}
 	}

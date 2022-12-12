@@ -760,7 +760,7 @@ D2LvlWarpTxt* __fastcall DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(int
 		}
 	}
 
-	FOG_Assertion("Error in DRLG related to stairs that connect levels", __FILE__, __LINE__);
+	FOG_DisplayAssert("Error in DRLG related to stairs that connect levels", __FILE__, __LINE__);
 	exit(-1);
 }
 

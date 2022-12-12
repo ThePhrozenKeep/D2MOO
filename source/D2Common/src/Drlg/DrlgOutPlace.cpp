@@ -2482,7 +2482,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
-	// Note: Original game uses FOG_DisplayWarning not FOG_Assertion
+	// Note: Original game uses FOG_DisplayWarning not FOG_DisplayAssert
 	D2_ASSERT((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
 	D2_ASSERT((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
 

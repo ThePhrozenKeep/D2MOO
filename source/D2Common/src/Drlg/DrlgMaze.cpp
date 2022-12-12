@@ -2003,7 +2003,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		break;
 
 	default:
-		FOG_Assertion("sPlaceTombStuff() - Why isn't the first room the preset warp room?", __FILE__, __LINE__);
+		FOG_DisplayAssert("sPlaceTombStuff() - Why isn't the first room the preset warp room?", __FILE__, __LINE__);
 		exit(-1);
 		return;
 	}
