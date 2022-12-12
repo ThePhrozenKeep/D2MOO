@@ -19,14 +19,14 @@ D2DataTablesStrc* sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
 //D2Common.0x6FDC412C
-void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle)
+void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, HSFILE pFileHandle)
 {
 	D2_ASSERT(pFileHandle);
 	FOG_MPQFileClose(pFileHandle);
 }
 
 //D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, void** pFileHandle, int bDontLogError)
+BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, HSFILE* pFileHandle, int bDontLogError)
 {
 	if (FOG_MPQFileOpen(szFileName, pFileHandle))
 	{
@@ -55,7 +55,7 @@ size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t 
 }
 
 //D2Common.0x6FDC41C1
-BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* pBuffer, size_t nBytesToRead)
+BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, HSFILE pFileHandle, void* pBuffer, size_t nBytesToRead)
 {
 	int nBytesRead = 0;
 	BOOL bResult = FALSE;
@@ -78,7 +78,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 }
 
 //D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh)
+size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, HSFILE pFileHandle, uint32_t* lpFileSizeHigh)
 {
 	size_t nSize = 0;
 	char pBuffer[MAX_PATH] = {};
@@ -100,7 +100,7 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 //D2Common.0x6FDC4268
 void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine)
 {
-	void* pFileHandle = NULL;
+	HSFILE pFileHandle = NULL;
 	void* pBuffer = NULL;
 	size_t nSize = 0;
 	uint32_t dwFileSizeHigh = 0;

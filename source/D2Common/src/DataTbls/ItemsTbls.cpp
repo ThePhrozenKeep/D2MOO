@@ -1882,7 +1882,7 @@ void __fastcall DATATBLS_UnloadItemTypesTxt()
 //D2Common.0x6FD5E020
 void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 {
-	void* pFileHandle = NULL;
+	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
 	wchar_t* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =

@@ -584,7 +584,7 @@ void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOff
 //D2Common.0x6FD53030
 void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 {
-	void* pFileHandle = NULL;
+	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
 
 	D2BinFieldStrc pTbl[] =
