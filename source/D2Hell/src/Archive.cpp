@@ -40,7 +40,7 @@
  * 1.13c: Inline
  * 1.14c: Game.0x00514B24
  */
-static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFilePath, void** ppFileHandle, BOOL bBlockNotFoundLog)
+static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFilePath, HSFILE* ppFileHandle, BOOL bBlockNotFoundLog)
 {
 	BOOL bFileOpenSucceeded = FOG_MPQFileOpen(szFilePath, ppFileHandle);
 	if (!bFileOpenSucceeded)
@@ -66,7 +66,7 @@ static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFile
  * 1.13c: Inline
  * 1.14c: Game.0x00514B87
  */
-static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, void* pFileHandle, size_t* pFileSizeHigh)
+static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, HSFILE pFileHandle, size_t* pFileSizeHigh)
 {
 	D2_ASSERT(pFileHandle != nullptr);
 
@@ -93,7 +93,7 @@ static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, void* pFileHa
  * 1.13c: D2Lang.0x6FC07C00
  * 1.14c: Game.0x00514C61
  */
-static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, void* pFileHandle, void* pBuffer, size_t dwBytesToRead)
+static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, HSFILE pFileHandle, void* pBuffer, size_t dwBytesToRead)
 {
 	D2_ASSERT(pFileHandle != nullptr);
 
@@ -121,7 +121,7 @@ static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, void* pFil
  * 1.13c: Inline
  * 1.14c: Game.0x00514B60
  */
-static void __fastcall ARCHIVE_CloseFile(void* pArchiveHandle, void* pFileHandle)
+static void __fastcall ARCHIVE_CloseFile(void* pArchiveHandle, HSFILE pFileHandle)
 {
 	D2_ASSERT(pFileHandle != nullptr);
 	FOG_MPQFileClose(pFileHandle);
@@ -138,7 +138,7 @@ static void __fastcall ARCHIVE_CloseFile(void* pArchiveHandle, void* pFileHandle
  */
 void* __fastcall ARCHIVE_ReadFile(void* pArchiveHandle, const char* szFilePath, size_t* pBytesWritten, const char* szSrcPath, int nLine)
 {
-	void* pFileHandle;
+	HSFILE pFileHandle;
 	
 	BOOL bOpenFileSucceeded = ARCHIVE_OpenFile(pArchiveHandle, szFilePath, &pFileHandle, FALSE);
 	if (!bOpenFileSucceeded)
