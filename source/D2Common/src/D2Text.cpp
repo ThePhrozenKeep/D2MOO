@@ -4,7 +4,7 @@
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool)
 {
-	D2TextHeaderStrc* pTextHeader = (D2TextHeaderStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2TextHeaderStrc), __FILE__, __LINE__, 0);
+	D2TextHeaderStrc* pTextHeader = D2_ALLOC_STRC_SERVER(pMemPool, D2TextHeaderStrc);
 	pTextHeader->pMemPool = pMemPool;
 	pTextHeader->nCount = 0;
 	pTextHeader->pNode = NULL;
@@ -22,11 +22,11 @@ void __stdcall TEXT_FreeTextHeader(D2TextHeaderStrc* pTextHeader)
 	while (pNode)
 	{
 		pNext = pNode->pNext;
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pTextHeader->pMemPool, pNode);
 		pNode = pNext;
 	}
 	pTextHeader->nCount = 0;
-	FOG_FreeServerMemory(pTextHeader->pMemPool, pTextHeader, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pTextHeader->pMemPool, pTextHeader);
 }
 
 //D2Common.0x6FDC3760 (#10903)
@@ -34,7 +34,7 @@ void __stdcall TEXT_AddNodeToTextList(D2TextHeaderStrc* pTextHeader, short nStri
 {
 	D2TextNodeStrc* pNode = NULL;
 
-	pNode = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
+	pNode = D2_ALLOC_STRC_SERVER(pTextHeader->pMemPool, D2TextNodeStrc);
 	pNode->pNext = pTextHeader->pNode;
 	pNode->nStringId = nStringId;
 	pNode->nMenu = nMenu;
@@ -73,7 +73,7 @@ void __stdcall TEXT_RemoveNodeFromTextList(D2TextHeaderStrc* pTextHeader, short 
 			pTextHeader->pNode = pNode->pNext;
 		}
 
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pNode, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pTextHeader->pMemPool, pNode);
 		--pTextHeader->nCount;
 	}
 }
@@ -183,7 +183,8 @@ void __stdcall TEXT_CreateMessageListFromTextHeader(D2TextHeaderStrc* pTextHeade
 	pMsgList->nCount = LOBYTE(pTextHeader->nCount);
 	
 	int i = 0;
-	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext) {
+	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext)
+	{
 		D2_ASSERT(i < MAX_TEXT_LIST_NODES);
 
 		pMsgList->pMessages[i].nMenu = LOBYTE(pNode->nMenu);
@@ -202,14 +203,14 @@ void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeade
 	for (D2TextNodeStrc* pCurrent = pTextHeader->pNode; pCurrent != nullptr; pCurrent = pNext)
 	{
 		pNext = pCurrent->pNext;
-		FOG_FreeServerMemory(pTextHeader->pMemPool, pCurrent, __FILE__, __LINE__, 0);
+		D2_FREE_SERVER(pTextHeader->pMemPool, pCurrent);
 	}
 
 	D2_ASSERT(pMsgList->nCount < MAX_TEXT_LIST_NODES);
 
 	for (pTextHeader->nCount = 0; pTextHeader->nCount < pMsgList->nCount; ++pTextHeader->nCount)
 	{
-		D2TextNodeStrc* pNode = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc), __FILE__, __LINE__, 0);
+		D2TextNodeStrc* pNode = D2_ALLOC_STRC_SERVER(pTextHeader->pMemPool, D2TextNodeStrc);
 		pNode->nMenu = pMsgList->pMessages[pTextHeader->nCount].nMenu;
 		pNode->nStringId = pMsgList->pMessages[pTextHeader->nCount].nStringId;
 		pNode->pNext = pTextHeader->pNode;
@@ -223,12 +224,14 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 	D2_ASSERT(pTextHeader != nullptr);
 
 	// The list is already sorted if it is empty, or has one element.
-	if (pTextHeader->nCount <= 1) {
+	if (pTextHeader->nCount <= 1)
+	{
 		return;
 	}
 
 	// Copy all of the input into a separate node list for sorting.
-	D2TextNodeStrc* pNodeList = (D2TextNodeStrc*)FOG_AllocServerMemory(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount, __FILE__, __LINE__, 0);
+	// TODO: Replace this with array version of D2_ALLOC_STRC_SERVER.
+	D2TextNodeStrc* pNodeList = (D2TextNodeStrc*)D2_ALLOC_SERVER(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount);
 
 	int i = 0;
 	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext)
@@ -286,5 +289,5 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 		pNode = pNode->pNext;
 	}
 
-	FOG_FreeServerMemory(pTextHeader->pMemPool, pNodeList, __FILE__, __LINE__, 0);
+	D2_FREE_SERVER(pTextHeader->pMemPool, pNodeList);
 }
