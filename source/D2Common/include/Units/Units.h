@@ -287,7 +287,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_UpdateFrame(D2UnitStrc* pUnit);
 //D2Common.0x6FDBF020 (#10375)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_10375_UNITS_SetFrameNonRate(D2UnitStrc* pUnit, int nRate, int nFailRate);
 //D2Common.0x6FDBF050
-void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char* szFile, int nLine);
+void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine);
 //D2Common.0x6FDBF8D0 (#10377)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed);
 //D2Common.0x6FDBF910 (#10378)

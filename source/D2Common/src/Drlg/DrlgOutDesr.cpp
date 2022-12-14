@@ -234,13 +234,13 @@ void __fastcall DRLGOUTDESR_AddExits(D2DrlgLevelStrc* pLevel)
 		break;
 
 	default:
-		FOG_Assertion("sAddTheExitsAndStuff() - Could not add the exit!", __FILE__, __LINE__);
+		FOG_DisplayAssert("sAddTheExitsAndStuff() - Could not add the exit!", __FILE__, __LINE__);
 		exit(-1);
 	}
 
 	if (!DRLGOUTDOORS_SpawnOutdoorLevelPreset(pLevel, nLevelPrestId, -1, 0, 15))
 	{
-		FOG_Assertion("sAddTheExitsAndStuff() - Could not add the exit!", __FILE__, __LINE__);
+		FOG_DisplayAssert("sAddTheExitsAndStuff() - Could not add the exit!", __FILE__, __LINE__);
 		exit(-1);
 	}
 }

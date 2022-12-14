@@ -15,7 +15,7 @@ void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissile)
 
 	if (!MISSILE_GetStream(pMissile))
 	{
-		pStream = (D2MissileStreamStrc*)FOG_AllocServerMemory(pMissile ? pMissile->pMemoryPool : NULL, sizeof(D2MissileStreamStrc), __FILE__, __LINE__, 0);
+		pStream = (D2MissileStreamStrc*)FOG_AllocPool(pMissile ? pMissile->pMemoryPool : NULL, sizeof(D2MissileStreamStrc), __FILE__, __LINE__, 0);
 		pStream->unk0x00 = 0;
 		pStream->unk0x04 = 0;
 
@@ -32,10 +32,10 @@ void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile)
 	{
 		if (pStream->unk0x00)
 		{
-			FOG_FreeServerMemory(pMissile ? pMissile->pMemoryPool : NULL, (void*)pStream->unk0x00, __FILE__, __LINE__, 0);
+			FOG_FreePool(pMissile ? pMissile->pMemoryPool : NULL, (void*)pStream->unk0x00, __FILE__, __LINE__, 0);
 		}
 
-		FOG_FreeServerMemory(pMissile ? pMissile->pMemoryPool : NULL, pStream, __FILE__, __LINE__, 0);
+		FOG_FreePool(pMissile ? pMissile->pMemoryPool : NULL, pStream, __FILE__, __LINE__, 0);
 	}
 }
 
@@ -125,13 +125,13 @@ void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, in
 		{
 			if (pStream->unk0x04 < nPoints)
 			{
-				pStream->unk0x00 = (int*)FOG_ReallocServerMemory(pMissile->pMemoryPool, pStream->unk0x00, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
+				pStream->unk0x00 = (int*)FOG_ReallocPool(pMissile->pMemoryPool, pStream->unk0x00, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
 			}
 		}
 		else
 		{
 			pStream->unk0x04 = nPoints;
-			pStream->unk0x00 = (int*)FOG_AllocServerMemory(pMissile->pMemoryPool, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
+			pStream->unk0x00 = (int*)FOG_AllocPool(pMissile->pMemoryPool, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
 			memset(pStream->unk0x00, 0x00, sizeof(int) * nPoints);
 		}
 

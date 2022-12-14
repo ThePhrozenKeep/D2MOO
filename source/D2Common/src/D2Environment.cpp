@@ -73,7 +73,7 @@ static const D2EnvironmentCycleStrc* ENVIRONMENT_GetCycle(int nCycle, int nAct, 
 //D2Common.0x6FD8D8E0
 D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPool)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_SERVER(pMemPool, D2DrlgEnvironmentStrc);
+	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgEnvironmentStrc);
 	
 	pEnvironment->nCycleIndex = ENVCYCLE_NOON;
 	pEnvironment->nTimeRate = gnTimeRates[pEnvironment->nTimeRateIndex];
@@ -209,7 +209,7 @@ void __fastcall ENVIRONMENT_UpdateLightColor(D2DrlgEnvironmentStrc* pEnvironment
 //D2Common.6FD8DBE0
 void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, D2DrlgEnvironmentStrc* pEnvironment)
 {
-	D2_FREE_SERVER(pMemPool, pEnvironment);
+	D2_FREE_POOL(pMemPool, pEnvironment);
 }
 
 //D2Common.0x6FD8DC00 (#10923)

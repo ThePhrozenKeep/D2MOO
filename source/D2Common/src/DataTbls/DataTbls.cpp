@@ -19,14 +19,14 @@ D2DataTablesStrc* sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
 //D2Common.0x6FDC412C
-void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle)
+void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, HSFILE pFileHandle)
 {
 	D2_ASSERT(pFileHandle);
 	FOG_MPQFileClose(pFileHandle);
 }
 
 //D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, char* szFileName, void** pFileHandle, int bDontLogError)
+BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, HSFILE* pFileHandle, int bDontLogError)
 {
 	if (FOG_MPQFileOpen(szFileName, pFileHandle))
 	{
@@ -36,7 +36,7 @@ BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, char* szFileName, voi
 	{
 		if (!bDontLogError || GetLastError() != 2)
 		{
-			FOG_WriteToLogFile("Error opening file: %s", szFileName);
+			FOG_Trace("Error opening file: %s", szFileName);
 		}
 		return FALSE;
 	}
@@ -55,7 +55,7 @@ size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t 
 }
 
 //D2Common.0x6FDC41C1
-BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* pBuffer, size_t nBytesToRead)
+BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, HSFILE pFileHandle, void* pBuffer, size_t nBytesToRead)
 {
 	int nBytesRead = 0;
 	BOOL bResult = FALSE;
@@ -68,7 +68,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 	{
 		//TODO: ...
 		//Storm_276_GetFileName(pFileHandle, szFileName, sizeof(szFileName));
-		//Fog_10026(3, szFileName, __FILE__, __LINE__);
+		//FOG_DisplayError(3, szFileName, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -78,7 +78,7 @@ BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* p
 }
 
 //D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh)
+size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, HSFILE pFileHandle, uint32_t* lpFileSizeHigh)
 {
 	size_t nSize = 0;
 	char pBuffer[MAX_PATH] = {};
@@ -90,7 +90,7 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 	{
 		//TODO: ...
 		//Storm_276_GetFileName(pFileHandle, &pBuffer, sizeof(pBuffer));
-		//Fog_10026(3, &pBuffer, __FILE__, __LINE__);
+		//FOG_DisplayError(3, &pBuffer, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -98,21 +98,21 @@ size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32
 }
 
 //D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, char* szFile, int nLine)
+void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine)
 {
-	void* pFileHandle = NULL;
+	HSFILE pFileHandle = NULL;
 	void* pBuffer = NULL;
 	size_t nSize = 0;
 	uint32_t dwFileSizeHigh = 0;
 	if (!FOG_MPQFileOpen(szFileName, &pFileHandle))
 	{
 		const DWORD err = GetLastError();
-		FOG_WriteToLogFile("Error opening file: %s (0x%x)", szFileName, err);
+		FOG_Trace("Error opening file: %s (0x%x)", szFileName, err);
 		return NULL;
 	}
 
 	nSize = DATATBLS_GetFileSize(pMemPool, pFileHandle, &dwFileSizeHigh);
-	pBuffer = FOG_AllocClientMemory(nSize + 800, szFile, nLine, 0);
+	pBuffer = FOG_Alloc(nSize + 800, szFile, nLine, 0);
 
 	if (!pBuffer)
 	{
@@ -152,7 +152,7 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 	{
 		if (*szReference)
 		{
-			FOG_WriteToLogFile("Couldn't find string hash: %s", szReference);
+			FOG_Trace("Couldn't find string hash: %s", szReference);
 		}
 		nIndex = 5382;
 	}
@@ -264,7 +264,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 }
 
 //D2Common.0x6FD49760
-void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
+void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
 {
 	FILE* pFile = NULL;
 	int nSize = 0;
@@ -281,7 +281,7 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** p
 
 			fclose(pFile);
 		}
-		FOG_FreeServerMemory(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
 	}
 
 	*ppFileHandle = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nSize, __FILE__, __LINE__);
@@ -313,7 +313,7 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 				break;
 			}
 
-			*ppCodes = (char*)FOG_ReallocServerMemory(NULL, *ppCodes, nNewSize, __FILE__, __LINE__, 0);
+			*ppCodes = (char*)FOG_ReallocPool(NULL, *ppCodes, nNewSize, __FILE__, __LINE__, 0);
 
 			if (nBufferSize + *pSize < *pSizeEx)
 			{
@@ -443,10 +443,10 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 
 	if (sgptDataTables->nStatesTxtRecordCount >= 256)
 	{
-		FOG_10025("Exceeded maximum allowable number of states", __FILE__, __LINE__);
+		FOG_DisplayWarning("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocServerMemory(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
+	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocPool(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pStateMasks, 0x00, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
 
 	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->fStateMasks); ++i)
@@ -463,23 +463,23 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pProgressiveStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pProgressiveStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pProgressiveStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nProgressiveStates = 0;
 
-	sgptDataTables->pCurseStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pCurseStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pCurseStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nCurseStates = 0;
 
-	sgptDataTables->pTransformStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pTransformStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pTransformStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nTransformStates = 0;
 
-	sgptDataTables->pActionStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pActionStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pActionStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nActionStates = 0;
 
-	sgptDataTables->pColourStates = (short*)FOG_AllocServerMemory(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pColourStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pColourStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nColourStates = 0;
 	
@@ -522,31 +522,31 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 {
 	if (sgptDataTables->pStateMasks)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pStateMasks, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pStateMasks, __FILE__, __LINE__, 0);
 		sgptDataTables->pStateMasks = NULL;
 	}
 
 	if (sgptDataTables->pProgressiveStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pProgressiveStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pProgressiveStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pProgressiveStates = NULL;
 	}
 
 	if (sgptDataTables->pCurseStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pCurseStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pCurseStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pCurseStates = NULL;
 	}
 
 	if (sgptDataTables->pTransformStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pTransformStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pTransformStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pTransformStates = NULL;
 	}
 
 	if (sgptDataTables->pActionStates)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pActionStates, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pActionStates, __FILE__, __LINE__, 0);
 		sgptDataTables->pActionStates = NULL;
 	}
 
@@ -603,7 +603,7 @@ void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
 	{
 		if (sgptDataTables->nPetTypeTxtRecordCount >= 256)
 		{
-			FOG_10025("Pet types table exceeded maximum number of entries.", __FILE__, __LINE__);
+			FOG_DisplayWarning("Pet types table exceeded maximum number of entries.", __FILE__, __LINE__);
 			sgptDataTables->nPetTypeTxtRecordCount = 256;
 		}
 	}
@@ -727,7 +727,7 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize)
+void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize)
 {
 	D2BinFileStrc* pBinFile = NULL;
 	FILE* pFile = NULL;
@@ -742,12 +742,12 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 	{
 		if (_strcmpi(szName, "leveldefs"))
 		{
-			FOG_WriteToLogFile("Translating data from: %s", szName);
+			FOG_Trace("Translating data from: %s", szName);
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".txt");
 		}
 		else
 		{
-			FOG_WriteToLogFile("Translating data from: %s", "levels");
+			FOG_Trace("Translating data from: %s", "levels");
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "levels", ".txt");
 		}
 
@@ -756,7 +756,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 
 		pBinFile = FOG_CreateBinFile(pData, nDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocServerMemory(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
+		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
 		FOG_FreeBinFile(pBinFile);
@@ -769,7 +769,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 			DATATBLS_LockAndWriteToFile(pTxt, nSize * nRecordCount, 1, pFile);
 			fclose(pFile);
 		}
-		FOG_FreeServerMemory(NULL, pTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, pTxt, __FILE__, __LINE__, 0);
 	}
 
 	if (DATATBLS_LoadFromBin)
@@ -800,7 +800,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc
 	{
 		pBinFile = FOG_CreateBinFile(pData, nDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocServerMemory(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
+		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
 		FOG_FreeBinFile(pBinFile);
@@ -827,11 +827,11 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 	{
 		if (DATATBLS_LoadFromBin)
 		{
-			FOG_FreeServerMemory(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
+			FOG_FreePool(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
 		}
 		else
 		{
-			FOG_FreeServerMemory(NULL, pBinFile, __FILE__, __LINE__, 0);
+			FOG_FreePool(NULL, pBinFile, __FILE__, __LINE__, 0);
 		}
 	}
 }

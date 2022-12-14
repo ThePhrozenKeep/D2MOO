@@ -314,7 +314,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 	pMisc = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "misc", pTbl, &sgptDataTables->pItemDataTables.nMiscTxtRecordCount, sizeof(D2ItemsTxt));
 
 	sgptDataTables->pItemDataTables.nItemsTxtRecordCount = sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount + sgptDataTables->pItemDataTables.nMiscTxtRecordCount + sgptDataTables->pItemDataTables.nArmorTxtRecordCount;
-	pItems = (D2ItemsTxt*)FOG_AllocServerMemory(NULL, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	pItems = (D2ItemsTxt*)FOG_AllocPool(NULL, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
 
 	sgptDataTables->pItemDataTables.pItemsTxt = pItems;
 
@@ -340,7 +340,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pIndexOldToCurrent, 0x00, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
 
 	nOldCounter = 0;
@@ -361,12 +361,12 @@ void __fastcall DATATBLS_UnloadItemsTxt()
 
 	if (sgptDataTables->pItemDataTables.pItemsTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pItemDataTables.pItemsTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pItemDataTables.pItemsTxt, __FILE__, __LINE__, 0);
 	}
 
 	if (sgptDataTables->pIndexOldToCurrent)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pIndexOldToCurrent, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pIndexOldToCurrent, __FILE__, __LINE__, 0);
 	}
 
 	sgptDataTables->pItemDataTables.pItemsTxt = NULL;
@@ -470,7 +470,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 				}
 
 				*(uint32_t*)((char*)pRecord + nOffset) = 0;
-				FOG_WriteToLogFile("Failed to parse '%s' line %d", pSrc, nTxtRow);
+				FOG_Trace("Failed to parse '%s' line %d", pSrc, nTxtRow);
 			}
 		}
 		else
@@ -543,7 +543,7 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 	pAutoMagic = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "automagic", pTbl, &nAutoMagicRecords, sizeof(D2MagicAffixTxt));
 
 	sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = nSuffixRecords + nAutoMagicRecords + nPrefixRecords;
-	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)FOG_AllocServerMemory(NULL, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)FOG_AllocPool(NULL, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount, __FILE__, __LINE__, 0);
 	sgptDataTables->pMagicAffixDataTables.pMagicSuffix = sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt;
 	memcpy(sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, pMagicSuffix, sizeof(D2MagicAffixTxt) * nSuffixRecords);
 	sgptDataTables->pMagicAffixDataTables.pMagicPrefix = &sgptDataTables->pMagicAffixDataTables.pMagicSuffix[nSuffixRecords];
@@ -566,7 +566,7 @@ void __fastcall DATATBLS_UnloadMagicSuffix_Prefix_AutomagicTxt()
 {
 	if (sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = NULL;
 }
@@ -625,7 +625,7 @@ void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 
 	sgptDataTables->pRareAffixDataTables.nRareAffixTxtRecordCount = nPrefixRecords + nSuffixRecords;
 
-	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)FOG_AllocServerMemory(NULL, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords), __FILE__, __LINE__, 0);
+	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)FOG_AllocPool(NULL, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords), __FILE__, __LINE__, 0);
 
 	sgptDataTables->pRareAffixDataTables.pRareSuffix = sgptDataTables->pRareAffixDataTables.pRareAffixTxt;
 	memcpy(sgptDataTables->pRareAffixDataTables.pRareAffixTxt, pRareSuffix, sizeof(D2RareAffixTxt) * nSuffixRecords);
@@ -646,7 +646,7 @@ void __fastcall DATATBLS_UnloadRareSuffix_PrefixTxt()
 {
 	if (sgptDataTables->pRareAffixDataTables.pRareAffixTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pRareAffixDataTables.pRareAffixTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pRareAffixDataTables.pRareAffixTxt, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = NULL;
 }
@@ -753,7 +753,7 @@ void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nUniqueItemsTxtRecordCount >= 32767)
 	{
-		FOG_10025("uniqueitems table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("uniqueitems table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	for (int i = 0; i < sgptDataTables->nUniqueItemsTxtRecordCount; ++i)
@@ -957,7 +957,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nSetsTxtRecordCount >= 32767)
 	{
-		FOG_10025("sets table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("sets table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pSetItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -965,7 +965,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 
 	if (sgptDataTables->nSetItemsTxtRecordCount >= 32767)
 	{
-		FOG_10025("setitems table exceeded maximum number of entries.", __FILE__, __LINE__);
+		FOG_DisplayWarning("setitems table exceeded maximum number of entries.", __FILE__, __LINE__);
 	}
 
 	for (int i = 0; i < sgptDataTables->nSetItemsTxtRecordCount; ++i)
@@ -992,7 +992,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 			}
 			else
 			{
-				FOG_WriteToLogFile("Error: too many items in set %d", sgptDataTables->pSetsTxt[nSetId].wSetId);
+				FOG_Trace("Error: too many items in set %d", sgptDataTables->pSetsTxt[nSetId].wSetId);
 			}
 		}
 	}
@@ -1486,7 +1486,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 			if (nNextFreeId >= ARRAY_SIZE(sgptDataTables->pItemStatCostTxt[nOpBase].unk0x5E) && sgptDataTables->bCompileTxt)
 			{
-				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
+				FOG_Trace("Error: greater than %d ops applied to target %s\n", 3, FOG_10255(sgptDataTables->pItemStatCostLinker, nOpBase, 0));
 			}
 
 			if (nCurrentStatOp == STAT_OP_APPLY_TO_ITEM || nCurrentStatOp == STAT_OP_APPLY_TO_ITEM_PCT)
@@ -1541,7 +1541,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 			if (nNextFreeId >= 16 && sgptDataTables->bCompileTxt)
 			{
-				FOG_WriteToLogFile("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[wOpStat].wStatId, 0));
+				FOG_Trace("Error: greater than %d ops applied to target %s\n", 16, FOG_10255(sgptDataTables->pItemStatCostLinker, sgptDataTables->pItemStatCostTxt[wOpStat].wStatId, 0));
 			}
 		}
 	}
@@ -1560,7 +1560,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 	qsort(pStatsWithDescFunc, nStatsWithDescFunc, sizeof(D2ItemStatCostDescStrc), DATATBLS_CompareItemStatCostDescs);
 
-	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocServerMemory(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
+	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
 	for (int i = 0; i < sgptDataTables->nStatsWithDescFunc; ++i)
 	{
 		sgptDataTables->pStatsWithDescFunc[i] = pStatsWithDescFunc[i].nRecordId;
@@ -1585,7 +1585,7 @@ void __fastcall DATATBLS_UnloadItemStatCostTxt()
 
 	if (sgptDataTables->pStatsWithDescFunc)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pStatsWithDescFunc, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pStatsWithDescFunc, __FILE__, __LINE__, 0);
 	}
 	sgptDataTables->nStatsWithDescFunc = 0;
 }
@@ -1655,7 +1655,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 
 	if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 	{
-		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
 		for (int i = 0; i < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount; ++i)
 		{
 			nItemId = FOG_GetLinkIndex(sgptDataTables->pItemsLinker, pGambleTxt[i].dwItemCode, 0);
@@ -1724,7 +1724,7 @@ void __fastcall DATATBLS_UnloadGambleTxt()
 {
 	if (sgptDataTables->pGambleDataTables.pGambleSelection)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pGambleDataTables.pGambleSelection, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pGambleDataTables.pGambleSelection, __FILE__, __LINE__, 0);
 		sgptDataTables->pGambleDataTables.pGambleSelection = NULL;
 		sgptDataTables->pGambleDataTables.nGambleTxtRecordCount = 0;
 	}
@@ -1763,7 +1763,7 @@ BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nIt
 
 			if (nItemType >= sgptDataTables->nItemTypesTxtRecordCount)
 			{
-				FOG_WriteToLogFile("Invalid item type at line %d of file %s", __LINE__, __FILE__);
+				FOG_Trace("Invalid item type at line %d of file %s", __LINE__, __FILE__);
 				return FALSE;
 			}
 
@@ -1854,7 +1854,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	}
 
 	sgptDataTables->nItemTypesIndex = (sgptDataTables->nItemTypesTxtRecordCount + 31) / 32;
-	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocServerMemory(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
+	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
 	memset(sgptDataTables->pItemTypesEquivalenceLUTs, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
 
 	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
@@ -1874,7 +1874,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 //D2Common.0x6FD5DFE0
 void __fastcall DATATBLS_UnloadItemTypesTxt()
 {
-	FOG_FreeServerMemory(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
+	FOG_FreePool(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
 	DATATBLS_UnloadBin(sgptDataTables->pItemTypesTxt);
 	FOG_FreeLinker(sgptDataTables->pItemTypesLinker);
 }
@@ -1882,7 +1882,7 @@ void __fastcall DATATBLS_UnloadItemTypesTxt()
 //D2Common.0x6FD5E020
 void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 {
-	void* pFileHandle = NULL;
+	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
 	wchar_t* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =
@@ -1943,21 +1943,21 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".bin");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".xls");
 	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
 	{
 		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
-		FOG_10025("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
+		FOG_DisplayWarning("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	sgptDataTables->pRuneDataTables.pRunesTxt = (D2RunesTxt*)DATATBLS_CompileTxt(pMemPool, "runes", pTbl, &sgptDataTables->pRuneDataTables.nRunesTxtRecordCount, sizeof(D2RunesTxt));
@@ -2000,7 +2000,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 			nSize += 4;
 		}
 
-		pTmp = (D2RunesTxt*)FOG_ReallocServerMemory(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
+		pTmp = (D2RunesTxt*)FOG_ReallocPool(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
 
 		if (DATATBLS_LoadFromBin)
 		{

@@ -1313,7 +1313,7 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 	if (sgptDataTables->nMonSeqTxtRecordCount > 0)
 	{
 		sgptDataTables->nMonSeqTableRecordCount = sgptDataTables->pMonSeqTxt[sgptDataTables->nMonSeqTxtRecordCount - 1].wSequence + 1;
-		sgptDataTables->pMonSeqTable = (D2SeqRecordStrc*)D2_CALLOC_SERVER(NULL, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount);
+		sgptDataTables->pMonSeqTable = (D2SeqRecordStrc*)D2_CALLOC_POOL(NULL, sizeof(D2SeqRecordStrc) * sgptDataTables->nMonSeqTableRecordCount);
 		
 		for (int i = 0; i < sgptDataTables->nMonSeqTxtRecordCount; ++i)
 		{

@@ -477,7 +477,7 @@ uint8_t __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pA
 		return pArmorComponents[5];
 
 	default:
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 }

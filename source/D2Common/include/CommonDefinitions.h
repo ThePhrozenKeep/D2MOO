@@ -7,7 +7,7 @@
 #include <D2Common.h>
 
 // Use for empty/duplicated functions
-#define REMOVE_LATER_WriteToLogFile FOG_WriteToLogFile
+#define REMOVE_LATER_Trace FOG_Trace
 #define UNIMPLEMENTED() D2_ASSERTM(false, __FUNCTION__ "is not implemented yet.")
 
 

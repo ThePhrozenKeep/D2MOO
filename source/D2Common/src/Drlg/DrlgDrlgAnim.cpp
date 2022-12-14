@@ -149,7 +149,7 @@ D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** 
 		}
 	}
 	char szBuffer[100] = { sgptDataTables->szDefaultString };
-	FOG_10025(FOG_10018(szBuffer, "Animating tiles missing Rarity %d Tile - Style %d Seq %d", nRarity, nStyle, nSeq), __FILE__, __LINE__);
+	FOG_DisplayWarning(FOG_csprintf(szBuffer, "Animating tiles missing Rarity %d Tile - Style %d Seq %d", nRarity, nStyle, nSeq), __FILE__, __LINE__);
 	// Return first tile if nothing found.
 	return pTileLibraryEntries[0];
 }
@@ -183,9 +183,9 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 
 			int nFrames = D2CMP_10088_GetTiles(pRoomEx->pTiles, pCurrentTileData.nTileType, nStyle, nSeq, pTileLibraryEntries, ARRAY_SIZE(pTileLibraryEntries));
 
-			D2DrlgAnimTileGridStrc* pDrlgAnimTileGrid = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgAnimTileGridStrc);
+			D2DrlgAnimTileGridStrc* pDrlgAnimTileGrid = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgAnimTileGridStrc);
 
-			pDrlgAnimTileGrid->ppMapTileData = (D2DrlgTileDataStrc**)D2_CALLOC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc*) * nFrames);
+			pDrlgAnimTileGrid->ppMapTileData = (D2DrlgTileDataStrc**)D2_CALLOC_POOL(pRoomEx->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc*) * nFrames);
 
 			pDrlgAnimTileGrid->nFrames = nFrames;
 			pDrlgAnimTileGrid->nAnimationSpeed = nAnimationSpeed;

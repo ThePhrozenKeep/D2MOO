@@ -515,17 +515,17 @@ extern BOOL DATATBLS_LoadFromBin;
 
 
 //D2Common.0x6FDC412C
-void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, void* pFileHandle);
+void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, HSFILE hFileHandle);
 //D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, char* szFileName, void** pFileHandle, int bDontLogError);
+BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, HSFILE* pFileHandle, int bDontLogError);
 //D2Common.0x6FDC45EE
 size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t Count, FILE* File);
 //D2Common.0x6FDC41C1
-BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, void* pFileHandle, void* pBuffer, size_t nBytesToRead);
+BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, HSFILE pFileHandle, void* pBuffer, size_t nBytesToRead);
 //D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, void* pFileHandle, uint32_t* lpFileSizeHigh);
+size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, HSFILE pFileHandle, uint32_t* lpFileSizeHigh);
 //D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, char* szFile, int nLine);
+void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine);
 
 
 
@@ -547,7 +547,7 @@ D2COMMON_DLL_DECL int __stdcall DATATBLS_GetMaxLevel(int nClass);
 //D2Common.0x6FD49710 (#10630)
 D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience);
 //D2Common.0x6FD49760
-void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
+void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
 //D2Common.0x6FD49850
 int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSizeEx, char* pBuffer, int nBufferSize);
 
@@ -575,7 +575,7 @@ D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int
 //D2Common.0x6FD4FCF0 (#10580)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
 //D2Common.0x6FD500F0 (#11242)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)

@@ -19,10 +19,10 @@ void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
-		pItem->pItemData = (D2ItemDataStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2ItemDataStrc), __FILE__, __LINE__, 0);
+		pItem->pItemData = (D2ItemDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2ItemDataStrc), __FILE__, __LINE__, 0);
 		if (!pItem->pItemData)
 		{
-			//FOG_10024_PacketAssertion("Out of Memory in ITEMSDataInit()", __FILE__, __LINE__);
+			//FOG_DisplayHalt("Out of Memory in ITEMSDataInit()", __FILE__, __LINE__);
 			exit(-1);
 		}
 		memset(pItem->pItemData, 0x00, sizeof(D2ItemDataStrc));
@@ -39,7 +39,7 @@ void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem)
 		INVENTORY_RemoveItem(pItem);
 		if (pItem->pItemData)
 		{
-			FOG_FreeServerMemory(pMemPool, pItem->pItemData, __FILE__, __LINE__, 0);
+			FOG_FreePool(pMemPool, pItem->pItemData, __FILE__, __LINE__, 0);
 		}
 	}
 }
@@ -225,7 +225,7 @@ void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix)
 }
 
 //D2Common.0x6FD98750 (#10707)
-BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, char* szFile)
+BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, const char* szFile)
 {
 	if (D2ItemDataStrc * pItemData = ITEMS_GetItemData(pItem))
 	{
@@ -902,7 +902,7 @@ uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD99500 (#10749)
-void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine)
+void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine)
 {
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -1476,7 +1476,7 @@ BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc)
 	}
 	else
 	{
-		FOG_WriteToLogFile(" ----- JONM NOTE: Would have crashed, see code at ITEMSCheckBodyLocation. From FILE: %s  LINE: %d", __FILE__, __LINE__);
+		FOG_Trace(" ----- JONM NOTE: Would have crashed, see code at ITEMSCheckBodyLocation. From FILE: %s  LINE: %d", __FILE__, __LINE__);
 	}
 
 	return FALSE;
@@ -1757,7 +1757,7 @@ BOOL __stdcall ITEMS_CheckIfUseable(D2UnitStrc* pItem)
 	}
 	else
 	{
-		FOG_WriteToLogFile(" ----- JONM NOTE: Would have crashed, see code at ITEMSIsUseable. From FILE: %s  LINE: %d", __FILE__, __LINE__);
+		FOG_Trace(" ----- JONM NOTE: Would have crashed, see code at ITEMSIsUseable. From FILE: %s  LINE: %d", __FILE__, __LINE__);
 		return 0;
 	}
 }
@@ -4430,7 +4430,7 @@ BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pItem)
 //D2Common.0x6FD9FB40 (#11079)
 int __stdcall D2COMMON_11079_Return0(int a1, int a2)
 {
-	REMOVE_LATER_WriteToLogFile("D2COMMON_11079_Return0: Useless");
+	REMOVE_LATER_Trace("D2COMMON_11079_Return0: Useless");
 	return 0;
 }
 

@@ -22,7 +22,7 @@ static_assert(ROOMEXFLAG_HAS_WAYPOINT == (1 << ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT
 //D2Common.0x6FD74120 (#10014)
 D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
-	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_SERVER(pAct->pMemPool, D2DrlgStrc);
+	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_POOL(pAct->pMemPool, D2DrlgStrc);
 
 	pDrlg->pAct = pAct;
 	pDrlg->pMempool = pAct->pMemPool;
@@ -102,7 +102,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		{
 			pNextLevel = pLevel->pNextLevel;
 			DRLG_FreeLevel(pDrlg->pMempool, pLevel, FALSE);
-			D2_FREE_SERVER(pDrlg->pMempool, pLevel);
+			D2_FREE_POOL(pDrlg->pMempool, pLevel);
 			pLevel = pNextLevel;
 		}
 		while (pLevel);
@@ -117,7 +117,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		do
 		{
 			pNextWarp = pWarp->pNext;
-			D2_FREE_SERVER(pDrlg->pMempool, pWarp);
+			D2_FREE_POOL(pDrlg->pMempool, pWarp);
 			pWarp = pNextWarp;
 		}
 		while (pWarp);
@@ -125,7 +125,7 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 		pDrlg->pWarp = NULL;
 	}
 
-	D2_FREE_SERVER(pDrlg->pMempool, pDrlg);
+	D2_FREE_POOL(pDrlg->pMempool, pDrlg);
 }
 
 //D2Common.0x6FD74440
@@ -141,14 +141,14 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 	{
 		if (!pLevel->pPresetMaps && pLevel->nRooms)
 		{
-			pLevel->pPresetMaps = (int*)D2_CALLOC_SERVER(pMemPool, sizeof(int) * pLevel->nRooms);
+			pLevel->pPresetMaps = (int*)D2_CALLOC_POOL(pMemPool, sizeof(int) * pLevel->nRooms);
 		}
 	}
 	else
 	{
 		if (pLevel->pPresetMaps)
 		{
-			D2_FREE_SERVER(pMemPool, pLevel->pPresetMaps);
+			D2_FREE_POOL(pMemPool, pLevel->pPresetMaps);
 			pLevel->pPresetMaps = NULL;
 		}
 	}
@@ -204,7 +204,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 
 	if (!bAlloc && pLevel->pJungleDefs)
 	{
-		FOG_FreeServerMemory(pMemPool, pLevel->pJungleDefs, __FILE__, __LINE__, 0);
+		FOG_FreePool(pMemPool, pLevel->pJungleDefs, __FILE__, __LINE__, 0);
 		pLevel->pJungleDefs = NULL;
 	}
 
@@ -215,7 +215,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 		{
 			pDrlgBuild = pNextDrlgBuild;
 			pNextDrlgBuild = pNextDrlgBuild->pNext;
-			D2_FREE_SERVER(pMemPool, pDrlgBuild);
+			D2_FREE_POOL(pMemPool, pDrlgBuild);
 		}
 		while (pNextDrlgBuild);
 
@@ -381,7 +381,7 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 
 											if (i->ppRoomsNear)
 											{
-												D2_FREE_SERVER(pLevel->pDrlg->pMempool, i->ppRoomsNear);
+												D2_FREE_POOL(pLevel->pDrlg->pMempool, i->ppRoomsNear);
 												i->ppRoomsNear = NULL;
 												i->nRoomsNear = 0;
 											}
@@ -405,7 +405,7 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 //D2Common.0x6FD748D0 (#10013)
 D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 {
-	D2DrlgLevelStrc* pLevel = D2_CALLOC_STRC_SERVER(pDrlg->pMempool, D2DrlgLevelStrc);
+	D2DrlgLevelStrc* pLevel = D2_CALLOC_STRC_POOL(pDrlg->pMempool, D2DrlgLevelStrc);
 
 	pLevel->pDrlg = pDrlg;
 	pLevel->nLevelId = nLevelId;
@@ -691,24 +691,24 @@ void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel)
 
 	if (!pLevel)
 	{
-		FOG_10025("ptDrlgLevel", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptDrlgLevel", __FILE__, __LINE__);
 	}
 
 	if (!pLevel->pFirstRoomEx)
 	{
-		FOG_10025("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
 	}
 
 	DRLG_GetMinAndMaxCoordinatesFromLevel(pLevel, &nTileMinX, &nTileMinY, &nTileMaxX, &nTileMaxY);
 
 	if (pLevel->nWidth < nTileMaxX - nTileMinX)
 	{
-		FOG_10025("ptCoordsLevel->nSizeTileX >= nTileMaxX - nTileMinX", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptCoordsLevel->nSizeTileX >= nTileMaxX - nTileMinX", __FILE__, __LINE__);
 	}
 
 	if (pLevel->nHeight < nTileMaxY - nTileMinY)
 	{
-		FOG_10025("ptCoordsLevel->nSizeTileY >= nTileMaxY - nTileMinY", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptCoordsLevel->nSizeTileY >= nTileMaxY - nTileMinY", __FILE__, __LINE__);
 	}
 
 	pRoomEx = pLevel->pFirstRoomEx;
@@ -728,12 +728,12 @@ D2RoomExStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* 
 
 	if (!pLevel)
 	{
-		FOG_10025("ptDrlgLevel", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptDrlgLevel", __FILE__, __LINE__);
 	}
 
 	if (!pLevel->pFirstRoomEx)
 	{
-		FOG_10025("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
+		FOG_DisplayWarning("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
 	}
 
 	pRoomEx = pLevel->pFirstRoomEx;
@@ -899,7 +899,7 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 		}
 	}
 
-	pDrlgWarp = D2_ALLOC_STRC_SERVER(pDrlg->pMempool, D2DrlgWarpStrc);
+	pDrlgWarp = D2_ALLOC_STRC_POOL(pDrlg->pMempool, D2DrlgWarpStrc);
 	pDrlgWarp->nLevel = nLevelId;
 
 	pLevelDefBin = DATATBLS_GetLevelDefRecord(nLevelId);

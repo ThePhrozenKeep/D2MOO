@@ -28,7 +28,7 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 	uint32_t v2 = *(uint32_t*)(pExpField + 2);
 	uint32_t v3 = *(uint32_t*)(pExpField + 6);
 
-	sgptDataTables->pFieldData = (char*)FOG_AllocServerMemory(NULL, v2 * v3, __FILE__, __LINE__, 0);
+	sgptDataTables->pFieldData = (char*)FOG_AllocPool(NULL, v2 * v3, __FILE__, __LINE__, 0);
 	D2_ASSERT(sgptDataTables->pFieldData);
 	memcpy(sgptDataTables->pFieldData, pExpField + 10, v2 * v3);
 
@@ -43,7 +43,7 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 		sgptDataTables->ExpFieldI[i] = gnFieldXOffsets[i] + v3 * gnFieldYOffsets[i];
 	}
 
-	FOG_FreeClientMemory(pExpField, __FILE__, __LINE__, 0);
+	FOG_Free(pExpField, __FILE__, __LINE__, 0);
 
 	return TRUE;
 }
@@ -53,7 +53,7 @@ BOOL __stdcall DATATBLS_FreeCollisionFieldTable()
 {
 	if (sgptDataTables->pFieldData)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pFieldData, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pFieldData, __FILE__, __LINE__, 0);
 	}
 
 	sgptDataTables->pFieldData = NULL;
@@ -88,7 +88,7 @@ int __stdcall DATATBLS_GetCollisionFieldHeight()
 //D2Common.0x6FD52180 (#11094)
 D2FieldStrc* __stdcall DATATBLS_AllocField()
 {
-	D2FieldStrc* pField = (D2FieldStrc*)FOG_AllocServerMemory(NULL, sizeof(D2FieldStrc), __FILE__, __LINE__, 0);
+	D2FieldStrc* pField = (D2FieldStrc*)FOG_AllocPool(NULL, sizeof(D2FieldStrc), __FILE__, __LINE__, 0);
 	D2_ASSERT(pField);
 
 	pField->nX = 0;
@@ -102,7 +102,7 @@ void __stdcall DATATBLS_FreeField(D2FieldStrc* pField)
 {
 	D2_ASSERT(pField);
 
-	FOG_FreeServerMemory(NULL, pField, __FILE__, __LINE__, 0);
+	FOG_FreePool(NULL, pField, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FD52210 (#11096)

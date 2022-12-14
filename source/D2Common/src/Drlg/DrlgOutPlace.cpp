@@ -1982,10 +1982,10 @@ static void DRLG_GenerateJunglesAttachPoints(
 		// Note: Original game could leak memory here (if jungle generation fails, we would realloc without freeing)
 		if (tCurrentJungle.pJungleDefs)
 		{
-			D2_FREE_SERVER(pDrlg->pMempool, tCurrentJungle.pJungleDefs);
+			D2_FREE_POOL(pDrlg->pMempool, tCurrentJungle.pJungleDefs);
 		}
 
-		tCurrentJungle.pJungleDefs = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nSpiderForestLevelPresetsBlocksSizeX * nSpiderForestLevelPresetsBlocksSizeY * sizeof(int32_t));
+		tCurrentJungle.pJungleDefs = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nSpiderForestLevelPresetsBlocksSizeX * nSpiderForestLevelPresetsBlocksSizeY * sizeof(int32_t));
 
 		// Could be the choice of direction on X axis
 		bool bLineStartWithOffset;
@@ -2398,13 +2398,13 @@ static D2C_LvlPrestIds DRLG_JungleNormalizeLevelPresetId(int32_t nLevelPresetId)
 			if ((nLevelPresetId & (JUNGLE_FLAG_TOP_ << 4)) != 0)
 				nPDef = gJunglePresets[nPresetDefinitionOffset + 3];
 
-			if (nPDef == LVLPREST_NONE) FOG_10025("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
+			if (nPDef == LVLPREST_NONE) FOG_DisplayWarning("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
 		}
 	}
 	else if (nLevelPresetId >= nbDirections)
 	{
 		nPDef = gSpiderForestPresets[nLevelPresetId >> 4];
-		if (nPDef == LVLPREST_NONE) FOG_10025("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
+		if (nPDef == LVLPREST_NONE) FOG_DisplayWarning("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
 	}
 	return (D2C_LvlPrestIds)nPDef;
 }
@@ -2467,7 +2467,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 #if 0 // This assert would always come too late, overriding content.
 		if (!(tJungles[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH))
 		{
-			FOG_10025(
+			FOG_DisplayWarning(
 				"ptJungle[nBaseOn].nBranch <= JUNGLE_MAX_ATTACH",
 				"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\DRLG\\OutPlace.cpp",
 				1570);
@@ -2482,7 +2482,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
-	// Note: Original game uses FOG_10025 not FOG_Assertion
+	// Note: Original game uses FOG_DisplayWarning not FOG_DisplayAssert
 	D2_ASSERT((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
 	D2_ASSERT((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
 
@@ -2492,10 +2492,10 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 	const int32_t nPresets = nPresetsWidth * nPresetsHeight;
 
 	const size_t nPresetsAllocSize = nPresets * sizeof(uint32_t);
-	int32_t* pPreset0 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
-	int32_t* pPreset1 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize); // Could be some kind of distance field ?
-	int32_t* pPreset2 = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
-	int32_t* pLevelPresetId = (int32_t*)D2_ALLOC_SERVER(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pPreset0 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pPreset1 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize); // Could be some kind of distance field ?
+	int32_t* pPreset2 = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
+	int32_t* pLevelPresetId = (int32_t*)D2_ALLOC_POOL(pDrlg->pMempool, nPresetsAllocSize);
 
 	do {
 		DRLG_GenerateJunglesAttachPoints(pDrlg, tJungles,
@@ -2556,10 +2556,10 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		pJungleLevel->nHeight     = tJungles[i].pDrlgCoord.nHeight;
 	}
 
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset0);
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset1);
-	D2_FREE_SERVER(pDrlg->pMempool, pPreset2);
-	D2_FREE_SERVER(pDrlg->pMempool, pLevelPresetId);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset0);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset1);
+	D2_FREE_POOL(pDrlg->pMempool, pPreset2);
+	D2_FREE_POOL(pDrlg->pMempool, pLevelPresetId);
 
 	return pJungleLevel;
 }

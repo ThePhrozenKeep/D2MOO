@@ -251,7 +251,7 @@ D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem);
 //D2Common.0x6FD98730 (#10706)
 D2COMMON_DLL_DECL void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix);
 //D2Common.0x6FD98750 (#10707)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, char* szFile);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, const char* szFile);
 //D2Common.0x6FD98780 (#10708)
 D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, BOOL bSet);
 //D2Common.0x6FD987C0 (#10709)
@@ -331,7 +331,7 @@ D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem);
 //D2Common.0x6FD99480 (#10748)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem);
 //D2Common.0x6FD99500 (#10749)
-D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, char* szFile, int nLine);
+D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine);
 //D2Common.0x6FD99540 (#10750)
 D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)

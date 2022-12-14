@@ -192,7 +192,7 @@ nApplyType was unused
 //
 //	case PROP_UNUSED:
 //	{
-//		FOG_WriteToLogFile("STATS_ApplyProperties(0x%p): Unused Property Type: %d", _ReturnAddress(), nType);
+//		FOG_Trace("STATS_ApplyProperties(0x%p): Unused Property Type: %d", _ReturnAddress(), nType);
 //		return;
 //	}
 //	}

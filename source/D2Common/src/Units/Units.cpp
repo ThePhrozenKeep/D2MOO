@@ -77,7 +77,7 @@ D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit)
 //D2Common.0x6FDBD6B0 (#11259)
 D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
 {
-	D2UnitStrc* pUnit = (D2UnitStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2UnitStrc), __FILE__, __LINE__, 0);
+	D2UnitStrc* pUnit = (D2UnitStrc*)FOG_AllocPool(pMemPool, sizeof(D2UnitStrc), __FILE__, __LINE__, 0);
 	memset(pUnit, 0x00, sizeof(D2UnitStrc));
 
 	pUnit->pMemoryPool = pMemPool;
@@ -85,7 +85,7 @@ D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
 
 	if (nUnitType == UNIT_MONSTER)
 	{
-		pUnit->pMonsterData = (D2MonsterDataStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2MonsterDataStrc), __FILE__, __LINE__, 0);
+		pUnit->pMonsterData = (D2MonsterDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2MonsterDataStrc), __FILE__, __LINE__, 0);
 		memset(pUnit->pMonsterData, 0x00, sizeof(D2MonsterDataStrc));
 	}
 
@@ -102,13 +102,13 @@ void __stdcall UNITS_FreeUnit(D2UnitStrc* pUnit)
 
 		if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
-			FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit->pMonsterData, __FILE__, __LINE__, 0);
+			FOG_FreePool(pUnit->pMemoryPool, pUnit->pMonsterData, __FILE__, __LINE__, 0);
 		}
 
 		pUnit->dwUnitType = 6;
 		pUnit->dwUnitId = -1;
 
-		FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit, __FILE__, __LINE__, 0);
+		FOG_FreePool(pUnit->pMemoryPool, pUnit, __FILE__, __LINE__, 0);
 	}
 }
 
@@ -1449,7 +1449,7 @@ __forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* p
 }
 
 //TODO: ...
-__forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, char* szFile, int nLine)
+__forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, const char* szFile, int nLine)
 {
 	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
@@ -1507,7 +1507,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 		if (nAnimSpeed < 0 || nAnimSpeed > 32767)
 		{
-			FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): bad velocity:%d  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nAnimSpeed, nUnitType, nClassId, szFile, nLine);
+			FOG_Trace("UnitUpdateAnimRateAndVel(): bad velocity:%d  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nAnimSpeed, nUnitType, nClassId, szFile, nLine);
 		}
 
 		if (nAnimSpeed <= 0)
@@ -1537,13 +1537,13 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 	}
 	else
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): NULL path (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nUnitType, nClassId, szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): NULL path (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nUnitType, nClassId, szFile, nLine);
 	}
 }
 
 //D2Common.0x6FDBF050
 //TODO: Check everything related to this function
-void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char* szFile, int nLine)
+void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 {
 	D2SkillStrc* v10 = NULL;
 	int nUnitType = 0;
@@ -1561,14 +1561,14 @@ void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char*
 
 	if (!pUnit)
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
 		return;
 	}
 
 	nUnitType = pUnit->dwUnitType;
 	if (nUnitType >= 5)
 	{
-		FOG_WriteToLogFile("UnitUpdateAnimRateAndVel(): invalid unit (TYPE:%d)  FILE:%s  LINE:%d", nUnitType, szFile, nLine);
+		FOG_Trace("UnitUpdateAnimRateAndVel(): invalid unit (TYPE:%d)  FILE:%s  LINE:%d", nUnitType, szFile, nLine);
 		return;
 	}
 
@@ -1746,7 +1746,7 @@ LABEL_75:
 			return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
 
 		default:
-			FOG_Assertion("(eTOU == UNIT_PLAYER) || (eTOU == UNIT_MONSTER)", __FILE__, __LINE__);
+			FOG_DisplayAssert("(eTOU == UNIT_PLAYER) || (eTOU == UNIT_MONSTER)", __FILE__, __LINE__);
 			exit(-1);
 		}
 	}
@@ -1755,7 +1755,7 @@ LABEL_75:
 
 ////TODO:Remove
 //D2FUNC(D2COMMON, 10376, void, __stdcall, (D2UnitStrc*, char*, int), 0x7F050)
-//void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, char* szFile, int nLine)
+//void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 //{
 //	return D2COMMON_10376(pUnit, szFile, nLine);
 //}
@@ -1978,7 +1978,7 @@ D2ObjectsTxt* __stdcall UNITS_GetObjectTxtRecordFromObject(D2UnitStrc* pUnit)
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -1993,7 +1993,7 @@ D2ShrinesTxt* __stdcall UNITS_GetShrineTxtRecordFromObject(D2UnitStrc* pUnit)
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -2007,7 +2007,7 @@ void __stdcall UNITS_SetShrineTxtRecordInObjectData(D2UnitStrc* pUnit, D2Shrines
 
 	if (pUnit->dwUnitType != UNIT_OBJECT)
 	{
-		FOG_10024_PacketAssertion(0, __FILE__, __LINE__);
+		FOG_DisplayHalt(0, __FILE__, __LINE__);
 		exit(-1);
 	}
 
@@ -2228,7 +2228,7 @@ void __stdcall UNITS_AllocPlayerData(D2UnitStrc* pUnit)
 	D2_ASSERT(pUnit);
 	D2_ASSERT(!pUnit->pPlayerData);
 
-	pUnit->pPlayerData = (D2PlayerDataStrc*)FOG_AllocServerMemory(pUnit->pMemoryPool, sizeof(D2PlayerDataStrc), __FILE__, __LINE__, 0);
+	pUnit->pPlayerData = (D2PlayerDataStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2PlayerDataStrc), __FILE__, __LINE__, 0);
 	memset(pUnit->pPlayerData, 0x00, sizeof(D2PlayerDataStrc));
 	pUnit->pPlayerData->szName[0] = 0;
 
@@ -2259,7 +2259,7 @@ void __stdcall UNITS_FreePlayerData(void* pMemPool, D2UnitStrc* pPlayer)
 
 	//D2COMMON_10916_Return();
 
-	FOG_FreeServerMemory(pMemPool, pPlayer->pPlayerData, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pPlayer->pPlayerData, __FILE__, __LINE__, 0);
 	pPlayer->pPlayerData = NULL;
 }
 
@@ -3600,7 +3600,7 @@ void __stdcall UNITS_AllocStaticPath(D2UnitStrc* pUnit)
 {
 	if (!pUnit->pStaticPath)
 	{
-		pUnit->pStaticPath = (D2StaticPathStrc*)FOG_AllocServerMemory(pUnit->pMemoryPool, sizeof(D2StaticPathStrc), __FILE__, __LINE__, 0);
+		pUnit->pStaticPath = (D2StaticPathStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2StaticPathStrc), __FILE__, __LINE__, 0);
 		memset(pUnit->pStaticPath, 0x00, sizeof(D2StaticPathStrc));
 	}
 }
@@ -3610,7 +3610,7 @@ void __stdcall UNITS_FreeStaticPath(D2UnitStrc* pUnit)
 {
 	if (pUnit->pStaticPath)
 	{
-		FOG_FreeServerMemory(pUnit->pMemoryPool, pUnit->pStaticPath, __FILE__, __LINE__, 0);
+		FOG_FreePool(pUnit->pMemoryPool, pUnit->pStaticPath, __FILE__, __LINE__, 0);
 		pUnit->pStaticPath = NULL;
 	}
 }

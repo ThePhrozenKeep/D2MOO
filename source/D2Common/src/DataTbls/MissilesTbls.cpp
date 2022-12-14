@@ -303,7 +303,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 	{
 		if (sgptDataTables->pMissilesTxt[i].nCollideType > 8)
 		{
-			FOG_WriteToLogFile("Range error in entry %d in table '%s' field '%s'.  Value must be between %d and %d.", i, "missiles", "CollideType", 0, 8);
+			FOG_Trace("Range error in entry %d in table '%s' field '%s'.  Value must be between %d and %d.", i, "missiles", "CollideType", 0, 8);
 		}
 
 		if (sgptDataTables->pMissilesTxt[i].nCollideType < 0)
@@ -324,7 +324,7 @@ void __fastcall DATATBLS_UnloadMissilesTxt()
 {
 	if (sgptDataTables->pMissCode)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pMissCode, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pMissCode, __FILE__, __LINE__, 0);
 		sgptDataTables->pMissCode = NULL;
 	}
 	sgptDataTables->nMissCodeSize = 0;

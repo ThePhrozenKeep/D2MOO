@@ -17,7 +17,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoom(D2RoomExStrc* pRoomEx)
 	{
 		DRLGOUTROOM_FreeDrlgOutdoorRoomData(pRoomEx);
 
-		D2_FREE_SERVER(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pOutdoor);
+		D2_FREE_POOL(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pOutdoor);
 		pRoomEx->pOutdoor = NULL;
 	}
 }
@@ -38,7 +38,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD83DE0
 void __fastcall DRLGOUTROOM_AllocDrlgOutdoorRoom(D2RoomExStrc* pRoomEx)
 {
-	pRoomEx->pOutdoor = D2_CALLOC_STRC_SERVER(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgOutdoorRoomStrc);
+	pRoomEx->pOutdoor = D2_CALLOC_STRC_POOL(pRoomEx->pLevel->pDrlg->pMempool, D2DrlgOutdoorRoomStrc);
 }
 
 //D2Common.6FD83E20

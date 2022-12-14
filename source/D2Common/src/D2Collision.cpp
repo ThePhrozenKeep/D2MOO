@@ -139,7 +139,7 @@ void __fastcall sub_6FD411F0(D2RoomCollisionGridStrc* pCollisionGrid, D2TileLibr
 //D2Common.0x6FD412B0 (#10018)
 int __stdcall D2COMMON_10018_Return0()
 {
-	REMOVE_LATER_WriteToLogFile("D2COMMON_10018_Return0: Unused");
+	REMOVE_LATER_Trace("D2COMMON_10018_Return0: Unused");
 	return 0;
 }
 
@@ -158,7 +158,7 @@ void __fastcall COLLISION_AllocRoomCollisionGrid(void* pMemPool, D2RoomStrc* pRo
 	{
 		DUNGEON_GetRoomCoordinates(pRoom, &pDrlgCoords);
 
-		pCollisionGrid = (D2RoomCollisionGridStrc*)FOG_AllocServerMemory(pMemPool, sizeof(D2RoomCollisionGridStrc) + sizeof(uint16_t) * ((pDrlgCoords.dwSubtilesWidth + 2) * pDrlgCoords.dwSubtilesHeight), __FILE__, __LINE__, 0);
+		pCollisionGrid = (D2RoomCollisionGridStrc*)FOG_AllocPool(pMemPool, sizeof(D2RoomCollisionGridStrc) + sizeof(uint16_t) * ((pDrlgCoords.dwSubtilesWidth + 2) * pDrlgCoords.dwSubtilesHeight), __FILE__, __LINE__, 0);
 		memcpy(&pCollisionGrid->pRoomCoords, &pDrlgCoords, sizeof(D2DrlgCoordsStrc));
 		DUNGEON_SetCollisionGridInRoom(pRoom, pCollisionGrid);
 
@@ -308,7 +308,7 @@ void __fastcall COLLISION_FreeRoomCollisionGrid(void* pMemPool, D2RoomStrc* pRoo
 		pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
 		if (pCollisionGrid)
 		{
-			FOG_FreeServerMemory(pMemPool, pCollisionGrid, __FILE__, __LINE__, 0);
+			FOG_FreePool(pMemPool, pCollisionGrid, __FILE__, __LINE__, 0);
 			DUNGEON_SetCollisionGridInRoom(pRoom, NULL);
 		}
 	}

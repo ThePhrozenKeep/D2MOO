@@ -459,7 +459,7 @@ void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 
 		if (NeedsMorePrisons())
 		{
-			FOG_10025("Could not place enough prisons for quest 2. Please include seed in bug report.", __FILE__, __LINE__);
+			FOG_DisplayWarning("Could not place enough prisons for quest 2. Please include seed in bug report.", __FILE__, __LINE__);
 		}
 	}
 }

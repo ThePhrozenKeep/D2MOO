@@ -4,7 +4,7 @@
 //D2Common.0x6FD782A0
 D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, uint8_t nDirection)
 {
-	D2DrlgVertexStrc* pDrlgVertex = D2_CALLOC_STRC_SERVER(pMemPool, D2DrlgVertexStrc);
+	D2DrlgVertexStrc* pDrlgVertex = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgVertexStrc);
 	pDrlgVertex->nDirection = nDirection;
 	return pDrlgVertex;
 }
@@ -121,7 +121,7 @@ void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVert
 			break;
 
 		default:
-			FOG_10025("FALSE", __FILE__, __LINE__);
+			FOG_DisplayWarning("FALSE", __FILE__, __LINE__);
 			exit(-1);
 
 		}
@@ -239,13 +239,13 @@ void __fastcall DRLGVER_FreeVertices(void* pMemPool, D2DrlgVertexStrc** ppVertic
 			do
 			{
 				pNext = pVertex->pNext;
-				D2_FREE_SERVER(pMemPool, pVertex);
+				D2_FREE_POOL(pMemPool, pVertex);
 				pVertex = pNext;
 			}
 			while (pVertex != *ppVertices && pVertex);
 		}
 
-		D2_FREE_SERVER(pMemPool, *ppVertices);
+		D2_FREE_POOL(pMemPool, *ppVertices);
 		*ppVertices = NULL;
 	}
 }

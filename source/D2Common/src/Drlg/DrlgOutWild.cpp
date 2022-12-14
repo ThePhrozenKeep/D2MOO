@@ -147,7 +147,7 @@ void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 
 					if (!bAdded)
 					{
-						FOG_10025("fAdded", __FILE__, __LINE__);
+						FOG_DisplayWarning("fAdded", __FILE__, __LINE__);
 					}
 				}
 				else
@@ -172,7 +172,7 @@ void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 
 					if (!bAdded)
 					{
-						FOG_10025("fAdded", __FILE__, __LINE__);
+						FOG_DisplayWarning("fAdded", __FILE__, __LINE__);
 					}
 				}
 			}
@@ -482,7 +482,7 @@ void __fastcall DRLGOUTWILD_SpawnTownTransitionsAndCaves(D2DrlgLevelStrc* pLevel
 
 			if (!fAdded)
 			{
-				FOG_10025("fAdded", __FILE__, __LINE__);
+				FOG_DisplayWarning("fAdded", __FILE__, __LINE__);
 			}
 
 			pLevel->pOutdoors->dwFlags |= 0x40;

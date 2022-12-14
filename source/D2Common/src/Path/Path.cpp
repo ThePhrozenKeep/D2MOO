@@ -292,7 +292,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 		nXDistance = -nXDistance;
 	}
 
-	D2_ASSERTM(nXDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
+	D2_ASSERTM(nXDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
 	nYDistance = nOldY - pDynamicPath->SP1.Y;
 	if (nYDistance < 0)
@@ -300,7 +300,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 		nYDistance = -nYDistance;
 	}
 
-	D2_ASSERTM(nYDistance < 100, FOG_10018(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
+	D2_ASSERTM(nYDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
 	if (pDynamicPath->SP1.X && pDynamicPath->SP1.Y)
 	{
@@ -416,7 +416,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDA9190 (#10156)
 void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath)
 {
-	FOG_FreeServerMemory(pMemPool, pDynamicPath, __FILE__, __LINE__, 0);
+	FOG_FreePool(pMemPool, pDynamicPath, __FILE__, __LINE__, 0);
 }
 
 //D2Common.0x6FDA91B0 (#11282)
@@ -502,7 +502,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 //D2Common.0x6FDA9480 (#10152)
 void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag)
 {
-	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_SERVER(pMemPool, D2DynamicPathStrc);
+	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_POOL(pMemPool, D2DynamicPathStrc);
 
 	pUnit->pDynamicPath = pDynamicPath;
 
@@ -743,7 +743,7 @@ void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 }
 
 //D2Common.0x6FDA9A70 (#10146)
-void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, char* szFile, int nLine)
+void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, const char* szFile, int nLine)
 {
 	if (pDynamicPath)
 	{
@@ -757,7 +757,7 @@ void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, 
 	}
 	else
 	{
-		FOG_WriteToLogFile("PathSetVelocity passed NULL hPath from FILE:%s  LINE:%d", szFile, nLine);
+		FOG_Trace("PathSetVelocity passed NULL hPath from FILE:%s  LINE:%d", szFile, nLine);
 	}
 }
 

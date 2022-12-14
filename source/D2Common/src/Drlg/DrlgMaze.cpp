@@ -286,7 +286,7 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2RoomExStrc* pRoomEx, BOOL bResetFlag)
 		break;
 
 	default:
-		FOG_10024_PacketAssertion("sSetChamberPreset() - Some really bad voodoo here!", __FILE__, __LINE__);
+		FOG_DisplayHalt("sSetChamberPreset() - Some really bad voodoo here!", __FILE__, __LINE__);
 		exit(-1);
 		return;
 	}
@@ -760,22 +760,22 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 
 			if (!DRLGMAZE_ReplaceRoomPreset(pLevel, LVLPREST_ACT3_SEWER_SW, LVLPREST_ACT3_SEWER_PREV_SW, -1, 0))
 			{
-				FOG_10025("ptRoom", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 			}
 
 			if (!DRLGMAZE_ReplaceRoomPreset(pLevel, LVLPREST_ACT3_SEWER_SE, LVLPREST_ACT3_SEWER_PREV_SE, -1, 0))
 			{
-				FOG_10025("ptRoom", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 			}
 
 			if (!DRLGMAZE_ReplaceRoomPreset(pLevel, LVLPREST_ACT3_SEWER_NW, LVLPREST_ACT3_SEWER_PREV_NW, -1, 0))
 			{
-				FOG_10025("ptRoom", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 			}
 
 			if (!DRLGMAZE_ReplaceRoomPreset(pLevel, LVLPREST_ACT3_SEWER_NE, LVLPREST_ACT3_SEWER_PREV_NE, -1, 0))
 			{
-				FOG_10025("ptRoom", __FILE__, __LINE__);
+				FOG_DisplayWarning("ptRoom", __FILE__, __LINE__);
 			}
 		}
 		else
@@ -839,7 +839,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		break;
 
 	default:
-		FOG_10024_PacketAssertion("MazeLevelGenerate() - Some really bad voodoo here!", __FILE__, __LINE__);
+		FOG_DisplayHalt("MazeLevelGenerate() - Some really bad voodoo here!", __FILE__, __LINE__);
 		exit(-1);
 		return;
 	}
@@ -1406,7 +1406,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 	const int nRooms = pLevel->nRooms;
 	if (nRooms > 0)
 	{
-		D2RoomExStrc** pRoomExArray = (D2RoomExStrc**)D2_ALLOC_SERVER(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * nRooms);
+		D2RoomExStrc** pRoomExArray = (D2RoomExStrc**)D2_ALLOC_POOL(pLevel->pDrlg->pMempool, sizeof(D2RoomExStrc*) * nRooms);
 
 		// Copy rooms pointers
 		{
@@ -1443,7 +1443,7 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 			}
 		}
 		
-		D2_FREE_SERVER(pLevel->pDrlg->pMempool, pRoomExArray);
+		D2_FREE_POOL(pLevel->pDrlg->pMempool, pRoomExArray);
 	}
 }
 
@@ -2003,7 +2003,7 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		break;
 
 	default:
-		FOG_Assertion("sPlaceTombStuff() - Why isn't the first room the preset warp room?", __FILE__, __LINE__);
+		FOG_DisplayAssert("sPlaceTombStuff() - Why isn't the first room the preset warp room?", __FILE__, __LINE__);
 		exit(-1);
 		return;
 	}
@@ -3299,7 +3299,7 @@ void __fastcall DRLGMAZE_RollBasicPresets(D2DrlgLevelStrc* pLevel)
 
 				if (!pDrlgBuild)
 				{
-					pDrlgBuild = D2_ALLOC_STRC_SERVER(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
+					pDrlgBuild = D2_ALLOC_STRC_POOL(pLevel->pDrlg->pMempool, D2DrlgBuildStrc);
 					pDrlgBuild->nPreset = 0;
 					pDrlgBuild->nDivisor = 0;
 					pDrlgBuild->nRand = 0;

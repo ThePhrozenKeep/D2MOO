@@ -27,7 +27,7 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
 
 	sgptDataTables->pPlrModeDataTables.nPlrModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
-	pPlrModeTypeTxt = (D2PlrModeTypeTxt*)FOG_AllocServerMemory(NULL, sizeof(D2PlrModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
+	pPlrModeTypeTxt = (D2PlrModeTypeTxt*)FOG_AllocPool(NULL, sizeof(D2PlrModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
 	D2_ASSERT(pPlrModeTypeTxt);
 
 	sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt = pPlrModeTypeTxt;
@@ -95,7 +95,7 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
 
 	sgptDataTables->pObjModeDataTables.nObjModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
-	pObjModeTypeTxt = (D2ObjModeTypeTxt*)FOG_AllocServerMemory(NULL, sizeof(D2ObjModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
+	pObjModeTypeTxt = (D2ObjModeTypeTxt*)FOG_AllocPool(NULL, sizeof(D2ObjModeTypeTxt) * (nModeRecords + nTypeRecords), __FILE__, __LINE__, 0);
 	D2_ASSERT(pObjModeTypeTxt);
 
 	sgptDataTables->pObjModeDataTables.pObjModeTypeTxt = pObjModeTypeTxt;
@@ -139,7 +139,7 @@ void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_Armtyp
 {
 	if (sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt, __FILE__, __LINE__, 0);
 		sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt = NULL;
 	}
 
@@ -151,7 +151,7 @@ void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_Armtyp
 
 	if (sgptDataTables->pObjModeDataTables.pObjModeTypeTxt)
 	{
-		FOG_FreeServerMemory(NULL, sgptDataTables->pObjModeDataTables.pObjModeTypeTxt, __FILE__, __LINE__, 0);
+		FOG_FreePool(NULL, sgptDataTables->pObjModeDataTables.pObjModeTypeTxt, __FILE__, __LINE__, 0);
 		sgptDataTables->pObjModeDataTables.pObjModeTypeTxt = NULL;
 	}
 

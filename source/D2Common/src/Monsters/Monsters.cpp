@@ -741,7 +741,7 @@ void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStrc* pMonster, wchar
 		if (wszName)
 		{
 			nSize = sizeof(wchar_t) * (wcslen(wszName) + 1);
-			pMonster->pMonsterData->wszMonName = (wchar_t*)FOG_AllocClientMemory(nSize, __FILE__, __LINE__, 0);
+			pMonster->pMonsterData->wszMonName = (wchar_t*)FOG_Alloc(nSize, __FILE__, __LINE__, 0);
 			wcscpy_s(pMonster->pMonsterData->wszMonName, nSize, wszName);
 		}
 	}
