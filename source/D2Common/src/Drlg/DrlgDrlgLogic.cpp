@@ -10,8 +10,6 @@
 //D2Common.0x6FD76420
 void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx)
 {
-	D2RoomCoordListStrc* pRoomCoordList = NULL;
-	D2RoomCoordListStrc* pNext = NULL;
 
 	if (pRoomEx->pLogicalRoomInfo)
 	{
@@ -21,10 +19,10 @@ void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2RoomExStrc* pRoomEx)
 			DRLGGRID_FreeGrid(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pLogicalRoomInfo->pIndexY);
 		}
 
-		pRoomCoordList = pRoomEx->pLogicalRoomInfo->pCoordList;
+		D2RoomCoordListStrc* pRoomCoordList = pRoomCoordList = pRoomEx->pLogicalRoomInfo->pCoordList;
 		while (pRoomCoordList)
 		{
-			pNext = pRoomCoordList->pNext;
+			D2RoomCoordListStrc* pNext = pRoomCoordList->pNext;
 			D2_FREE_POOL(pRoomEx->pLevel->pDrlg->pMempool, pRoomCoordList);
 			pRoomCoordList = pNext;
 		}
@@ -247,11 +245,9 @@ void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int n
 //D2Common.0x6FD769B0
 void __fastcall sub_6FD769B0(D2RoomExStrc* pRoomEx)
 {
-	D2RoomExStrc* pCurrentRoomEx = NULL;
-
 	for (int i = 0; i < pRoomEx->nRoomsNear; ++i)
 	{
-		pCurrentRoomEx = pRoomEx->ppRoomsNear[i];
+		D2RoomExStrc* pCurrentRoomEx = pRoomEx->ppRoomsNear[i];
 		if (pCurrentRoomEx != pRoomEx)
 		{
 			if (pCurrentRoomEx->pLogicalRoomInfo)
@@ -278,18 +274,13 @@ void __fastcall sub_6FD769B0(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD76A90
 void __fastcall sub_6FD76A90(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int nX, int nY)
 {
-	D2RoomCoordListStrc* pRoomCoordList1 = NULL;
-	D2RoomCoordListStrc* pRoomCoordList2 = NULL;
-	int nIndex1 = 0;
-	int nIndex2 = 0;
-
 	if (DRLGROOM_AreXYInsideCoordinatesOrOnBorder(&pRoomEx2->pDrlgCoord, nX, nY))
 	{
-		pRoomCoordList1 = sub_6FD77110(pRoomEx1, nX * 5, nY * 5);
-		pRoomCoordList2 = sub_6FD77110(pRoomEx2, nX * 5, nY * 5);
+		D2RoomCoordListStrc* pRoomCoordList1 = sub_6FD77110(pRoomEx1, nX * 5, nY * 5);
+		D2RoomCoordListStrc* pRoomCoordList2 = sub_6FD77110(pRoomEx2, nX * 5, nY * 5);
 
-		nIndex1 = pRoomCoordList1->nIndex;
-		nIndex2 = pRoomCoordList2->nIndex;
+		const int nIndex1 = pRoomCoordList1->nIndex;
+		const int nIndex2 = pRoomCoordList2->nIndex;
 
 		if (nIndex2 && nIndex1)
 		{
