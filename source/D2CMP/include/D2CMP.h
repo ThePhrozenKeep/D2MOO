@@ -25,30 +25,28 @@ enum D2TileMaterialFlags : uint16_t
 	TILE_FLAGS_SNOW = 0x400,
 };
 
-// Names come from this thread https://d2mods.info/forum/viewtopic.php?f=81&t=65163
-// TODO: check those are all accurate or not misnamed
 enum D2TileType
 {
-	TILETYPE_FLOORS = 0,
-	TILETYPE_LEFTWALL = 1,
-	TILETYPE_RIGHTWALL = 2,
-	TILETYPE_RIGHTPARTOFNORTHCORNERWALL = 3,
-	TILETYPE_LEFTPARTOFNORTHCORNERWALL = 4,
-	TILETYPE_LEFTENDWALL = 5,
-	TILETYPE_RIGHTENDWALL = 6,
-	TILETYPE_SOUTHCORNERWALL = 7,
-	TILETYPE_LEFTWALLWITHDOOR = 8,
-	TILETYPE_RIGHTWALLWITHDOOR = 9,
-	TILETYPE_SPECIALTILES_10 = 10, // Warps, Corpses, Visibility changes, Teleport ...
-	TILETYPE_SPECIALTILES_11 = 11, // See 10
-	TILETYPE_PILLARS_CCOLUMNS_STANDALONEOBJECTS = 12,
-	TILETYPE_SHADOWS = 13,
-	TILETYPE_TREES = 14,
-	TILETYPE_ROOFS = 15,
-	TILETYPE_LOWERWALLSEQUIVALENTTOTILETYPE_1 = 16,
-	TILETYPE_LOWERWALLSEQUIVALENTTOTILETYPE_2 = 17,
-	TILETYPE_LOWERWALLSEQUIVALENTTOTILETYPE_3_AND_4 = 18,
-	TILETYPE_LOWERWALLSEQUIVALENTTOTILETYPE_7 = 19,
+	TILETYPE_FLOOR = 0,                 // automap code: fl
+	TILETYPE_WALL_LEFT = 1,             // automap code: wl
+	TILETYPE_WALL_RIGHT = 2,            // automap code: wr
+	TILETYPE_WALL_TOP_CORNER_RIGHT = 3, // automap code: wtlr
+	TILETYPE_WALL_TOP_CORNER_LEFT = 4,  // automap code: wtll
+	TILETYPE_WALL_TOP_RIGHT = 5,        // automap code: wtr
+	TILETYPE_WALL_BOTTOM_LEFT = 6,      // automap code: wbl
+	TILETYPE_WALL_BOTTOM_RIGHT = 7,     // automap code: wbr
+	TILETYPE_WALL_LEFT_DOOR = 8,        // automap code: wld
+	TILETYPE_WALL_RIGHT_DOOR = 9,       // automap code: wrd
+	TILETYPE_WALL_LEFT_EXIT = 10,       // automap code: wle
+	TILETYPE_WALL_RIGHT_EXIT = 11,      // automap code: wre
+	TILETYPE_COLUMN = 12,               // automap code: co
+	TILETYPE_SHADOW = 13,               // automap code: sh
+	TILETYPE_TREE = 14,                 // automap code: tr
+	TILETYPE_ROOF = 15,                 // automap code: rf
+	TILETYPE_LEFT_WALL_DOWN = 16,       // automap code: ld
+	TILETYPE_RIGHT_WALL_DOWN = 17,      // automap code: rd
+	TILETYPE_FULL_WALL_DOWN = 18,       // automap code: fd
+	TILETYPE_FRONT_WALL_DOWN = 19,      // automap code: fi
 };
 
 struct D2TileRecordStrc;
@@ -151,7 +149,7 @@ struct D2TileRecordStrc
 // Helper function
 inline bool TileTypeIsAWallWithDoor(int32_t nTileType)
 {
-	return nTileType == TILETYPE_RIGHTWALLWITHDOOR || nTileType == TILETYPE_LEFTWALLWITHDOOR;
+	return nTileType == TILETYPE_WALL_RIGHT_DOOR || nTileType == TILETYPE_WALL_LEFT_DOOR;
 }
 
 

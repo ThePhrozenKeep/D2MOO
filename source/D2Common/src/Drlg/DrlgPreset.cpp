@@ -1399,7 +1399,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 					int nGrid2UpperBit = nGrid2Flags & 0x80000000;
 					int nFlagsBits21_26 = ((unsigned int)nGrid2Flags >> 20) & 0x3F;
 
-					if (nTileType == TILETYPE_SPECIALTILES_11 || nTileType == TILETYPE_SPECIALTILES_10)
+					if (nTileType == TILETYPE_WALL_RIGHT_EXIT || nTileType == TILETYPE_WALL_LEFT_EXIT)
 					{
 						if (pDrlgMap->pLvlPrestTxtRecord->dwScan && nFlagsBits21_26 >= 0 && nFlagsBits21_26 <= 7 && (nGrid2FlagsByte1 == 0 || nGrid2FlagsByte1 == 4 || nGrid2UpperBit))
 						{

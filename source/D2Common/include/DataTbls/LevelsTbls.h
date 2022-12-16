@@ -8,7 +8,7 @@
 struct D2AutomapTxt
 {
 	char szLevelName[16];				//0x00
-	char szTileName[8];					//0x10
+	char szTileName[8];					//0x10 Matches D2TileType
 	char nStyle;						//0x18
 	char nStartSequence;				//0x19
 	char nEndSequence;					//0x1A
@@ -25,7 +25,7 @@ struct D2AutomapRandStrc
 struct D2AutomapShortStrc
 {
 	uint32_t dwAutomapLevelType;		//0x00
-	uint32_t dwAutomapTileType;			//0x04
+	uint32_t dwAutomapTileType;			//0x04 See D2TileType
 	char nStyle;						//0x08
 	char nStartSequence;				//0x09
 	char nEndSequence;					//0x0A

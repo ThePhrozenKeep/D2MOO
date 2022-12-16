@@ -115,7 +115,7 @@ enum D2MapTileFlags
 	MAPTILE_UNK_0x001000 = 0x001000,
 	MAPTILE_LOS = 0x002000,
 	MAPTILE_WALL_LAYER_BIT = 14,
-	MAPTILE_WALL_LAYER_MASK = 0b111 << MAPTILE_WALL_LAYER_BIT, // 3bits value indicating the wall layer + 1 (0 indicates no wall?)
+	MAPTILE_WALL_LAYER_MASK = 0b111 << MAPTILE_WALL_LAYER_BIT, // 0x1C000: 3bits value indicating the wall layer + 1 (0 indicates no wall?)
 };
 // Helper function
 inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }

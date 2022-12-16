@@ -204,11 +204,11 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 			{
 				D2TileLibraryEntryStrc* pTileEntry = DRLGANIM_FindAnimatedTileFrame(pTileLibraryEntries, nFrames, 0, nStyle, nSeq);
 
-				if (pCurrentTileData.nTileType == TILETYPE_FLOORS)
+				if (pCurrentTileData.nTileType == TILETYPE_FLOOR)
 				{
 					pDrlgAnimTileGrid->ppMapTileData[nRarity] = DRLGROOMTILE_InitFloorTileData(pRoomEx, nullptr, nX, nY, nPackedTileInformation.nPackedValue, pTileEntry);
 				}
-				else if (pCurrentTileData.nTileType == TILETYPE_SHADOWS)
+				else if (pCurrentTileData.nTileType == TILETYPE_SHADOW)
 				{
 					pDrlgAnimTileGrid->ppMapTileData[nRarity] = DRLGROOMTILE_InitShadowTileData(pRoomEx, nullptr, nX, nY, nPackedTileInformation.nPackedValue, pTileEntry);
 				}

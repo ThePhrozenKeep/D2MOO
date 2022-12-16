@@ -47,7 +47,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 	{
 		D2DrlgTileDataStrc* pWallTileData = &pDrlgRoomTiles->pWallTiles[i];
 
-		if (pWallTileData->dwFlags & 4 && !(pWallTileData->dwFlags & 0x1C000))
+		if (pWallTileData->dwFlags & MAPTILE_TREES && !HasMapTileLayer(pWallTileData->dwFlags))
 		{
 			DRLGGRID_AlterGridFlag(pWallGrid, pWallTileData->nPosX, pWallTileData->nPosY, 8, FLAG_OPERATION_OR);
 		}
@@ -71,7 +71,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 	for (int i = 0; i < pDrlgRoomTiles->nWalls; ++i)
 	{
 		D2DrlgTileDataStrc* pWallTileData = &pDrlgRoomTiles->pWallTiles[i];
-		if ((pWallTileData->dwFlags & 0x1C000) == 0x4000 && pWallTileData->nTileType != TILETYPE_ROOFS && ((unsigned int)~pWallTileData->dwFlags >> 11) & 1)
+		if (GetMapTileLayer(pWallTileData->dwFlags) == 1 && pWallTileData->nTileType != TILETYPE_ROOF && !(pWallTileData->dwFlags &MAPTILE_OBJECT_WALL))
 		{
 			DRLGGRID_AlterGridFlag(&pDrlgGrid, pWallTileData->nPosX, pWallTileData->nPosY, 1, FLAG_OPERATION_OR);
 		}
@@ -120,7 +120,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2RoomExStrc* pRoomEx, D2DrlgG
 			if (!(DRLGGRID_GetGridEntry(tDRLGLogicUnkStrc.field_4, i, j) & 0x10000000))
 			{
 				++tDRLGLogicUnkStrc.field_18;
-				tDRLGLogicUnkStrc.nFlags = tDRLGLogicUnkStrc.field_18 & 0xFFFFFFF | 0x10000000;
+				tDRLGLogicUnkStrc.nFlags = (tDRLGLogicUnkStrc.field_18 & 0xFFFFFFF) | 0x10000000;
 
 				D2C_PackedTileInformation nFloorPackedInfo = { (uint32_t)DRLGGRID_GetGridEntry(tDRLGLogicUnkStrc.pFloorGrid, i, j) };
 				if((nFloorPackedInfo.nTileStyle == 30 && nFloorPackedInfo.nWallLayer == 0) || nFloorPackedInfo.bHidden)
@@ -326,7 +326,7 @@ BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData)
 {
 	if (GetMapTileLayer(pTileData->dwFlags) == 1)
 	{
-		if (pTileData->nTileType != TILETYPE_ROOFS)
+		if (pTileData->nTileType != TILETYPE_ROOF)
 		{
 			return (pTileData->dwFlags & MAPTILE_OBJECT_WALL) == 0;
 		}
