@@ -431,17 +431,27 @@ enum D2C_VendorInventoryModes
 #endif // CONSTANTS_UI
 
 #ifndef CONSTANTS_STRINGS //Pseudo-Macro to group all constants
-enum D2C_LangId
+enum D2C_Language
 {
-	D2LANG_ENG = 0x00,
-	D2LANG_ESP = 0x01,
-	D2LANG_GER = 0x02,
-	D2LANG_FRA = 0x03,
-	D2LANG_POR = 0x04,
-	D2LANG_ITA = 0x05,
-	D2LANG_JPN = 0x06,
-	D2LANG_KOR = 0x07,
-	D2LANG_POL = 0x0A,
+	LANGUAGE_ENGLISH = 0,
+	LANGUAGE_SPANISH = 1,
+	LANGUAGE_GERMAN = 2,
+	LANGUAGE_FRENCH = 3,
+	LANGUAGE_PORTUGUESE = 4,
+	LANGUAGE_ITALIAN = 5,
+	LANGUAGE_JAPANESE = 6,
+	LANGUAGE_KOREAN = 7,
+	// SIN = Simplified Chinese (for Singapore)
+	LANGUAGE_CHINESESIN = 8,
+	// CHI = Traditional Chinese (for Taiwan)
+	LANGUAGE_CHINESETWN = 9,
+	LANGUAGE_POLISH = 10,
+	LANGUAGE_RUSSIAN = 11,
+
+	// TODO: Unknown. Possibly English language for Korean systems?
+	LANGUAGE_ENGLISHKOR = 12,
+
+	NUM_LANGUAGE,
 };
 
 enum D2C_StringTablesHcidx
