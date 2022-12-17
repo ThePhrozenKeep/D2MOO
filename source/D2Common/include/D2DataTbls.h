@@ -557,7 +557,7 @@ D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int
 //D2Common.0x6FD4FCF0 (#10580)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
 //D2Common.0x6FD500F0 (#11242)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)

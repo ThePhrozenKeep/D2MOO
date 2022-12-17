@@ -329,7 +329,6 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	void* pTmpSkillDescTxt = NULL;
 	void* pTmpMonStatsTxt = NULL;
 	int nHighestClassSkillCount = 0;
-	int nSize = 0;
 	uint8_t nPetType = 0;
 	uint8_t nClass = 0;
 	char szFileName[260] = {};
@@ -718,10 +717,12 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		FOG_10215(pRangeLinker, ' col');
 
 		pMonStatsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		pTmpMonStatsTxt = DATATBLS_CompileTxt(pMemPool, "monstats", pTmpMonStatsTbl, &nSize, 2);
+
+		int nTmpRecordCount;
+		pTmpMonStatsTxt = DATATBLS_CompileTxt(pMemPool, "monstats", pTmpMonStatsTbl, &nTmpRecordCount, 2);
 
 		pSkillDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		pTmpSkillDescTxt = DATATBLS_CompileTxt(pMemPool, "skilldesc", pTmpSkillDescTbl, &nSize, 2);
+		pTmpSkillDescTxt = DATATBLS_CompileTxt(pMemPool, "skilldesc", pTmpSkillDescTbl, &nTmpRecordCount, 2);
 	}
 
 	sgptDataTables->pSkillsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
@@ -786,9 +787,10 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
-	sgptDataTables->pSkillsCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, (size_t*)&nSize);
-	sgptDataTables->nSkillsCodeSizeEx = nSize;
-	sgptDataTables->nSkillsCodeSize = nSize;
+	size_t dwSize;
+	sgptDataTables->pSkillsCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->nSkillsCodeSizeEx = dwSize;
+	sgptDataTables->nSkillsCodeSize = dwSize;
 
 	if (sgptDataTables->bCompileTxt && sgptDataTables->pSkillDescCode)
 	{
@@ -803,9 +805,9 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	sgptDataTables->pSkillDescCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, (size_t*)&nSize);
-	sgptDataTables->nSkillDescCodeSizeEx = nSize;
-	sgptDataTables->nSkillDescCodeSize = nSize;
+	sgptDataTables->pSkillDescCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->nSkillDescCodeSizeEx = dwSize;
+	sgptDataTables->nSkillDescCodeSize = dwSize;
 
 	sgptDataTables->nClassSkillCount = (int*)FOG_AllocPool(NULL, 7 * sizeof(int), __FILE__, __LINE__, 0);
 	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));

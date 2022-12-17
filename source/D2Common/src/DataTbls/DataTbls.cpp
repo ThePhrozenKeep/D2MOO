@@ -627,7 +627,7 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize)
+void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize)
 {
 	D2BinFileStrc* pBinFile = NULL;
 	FILE* pFile = NULL;
@@ -656,9 +656,9 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
-		memset(pTxt, 0x00, nSize * nRecordCount);
-		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
+		pTxt = FOG_AllocPool(NULL, dwSize * nRecordCount, __FILE__, __LINE__, 0);
+		memset(pTxt, 0x00, dwSize * nRecordCount);
+		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, dwSize);
 		FOG_FreeBinFile(pBinFile);
 
 		wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".bin");
@@ -666,7 +666,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 		if (pFile)
 		{
 			DATATBLS_LockAndWriteToFile(&nRecordCount, 4, 1, pFile);
-			DATATBLS_LockAndWriteToFile(pTxt, nSize * nRecordCount, 1, pFile);
+			DATATBLS_LockAndWriteToFile(pTxt, dwSize * nRecordCount, 1, pFile);
 			fclose(pFile);
 		}
 		FOG_FreePool(NULL, pTxt, __FILE__, __LINE__, 0);
@@ -700,9 +700,9 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	{
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
-		memset(pTxt, 0x00, nSize * nRecordCount);
-		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, nSize);
+		pTxt = FOG_AllocPool(NULL, dwSize * nRecordCount, __FILE__, __LINE__, 0);
+		memset(pTxt, 0x00, dwSize * nRecordCount);
+		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, dwSize);
 		FOG_FreeBinFile(pBinFile);
 	}
 
