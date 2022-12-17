@@ -1,6 +1,18 @@
 #include "Drlg/D2DrlgPreset.h"
 
+#include <algorithm>
+
+#include <Archive.h>
+#include <D2CMP.h>
+
 #include "D2DataTbls.h"
+#include "D2Dungeon.h"
+#include "D2Items.h"
+#include "D2Monsters.h"
+#include "D2Seed.h"
+#include "DataTbls/LevelsIds.h"
+#include "DataTbls/MonsterIds.h"
+#include "DataTbls/ObjectsIds.h"
 #include "Drlg/D2DrlgActivate.h"
 #include "Drlg/D2DrlgDrlg.h"
 #include "Drlg/D2DrlgDrlgAnim.h"
@@ -12,16 +24,7 @@
 #include "Drlg/D2DrlgMaze.h"
 #include "Drlg/D2DrlgRoomTile.h"
 #include "Drlg/D2DrlgTileSub.h"
-#include "D2Dungeon.h"
-#include "D2Seed.h"
-#include <D2CMP.h>
-#include <DataTbls/LevelsIds.h>
-#include <DataTbls/MonsterIds.h>
-#include <DataTbls/ObjectsIds.h>
-#include <D2Items.h>
-#include <D2Monsters.h>
-#include <Units/Units.h>
-#include <algorithm>
+#include "Units/Units.h"
 
 // D2Common.0x6FDEA700
 D2LevelFileListStrc* gpLevelFilesList_6FDEA700;
@@ -112,7 +115,7 @@ static void SkipInt32s(int32_t*& pData, uint32_t nbToSkip)
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName)
 {
-	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)DATATBLS_GetBinaryData(pMemPool, szFileName, NULL, __FILE__, __LINE__);
+	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, NULL);
 	pDrlgFile->pDS1File = pDS1File;
 	pDrlgFile->nWidth = pDS1File->nWidth;
 	pDrlgFile->nHeight = pDS1File->nHeight;

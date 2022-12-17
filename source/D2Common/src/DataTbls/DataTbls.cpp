@@ -1,9 +1,12 @@
 #include <cstdio>
-#include "D2DataTbls.h"
-#include <D2Lang.h>
+
+#include <Archive.h>
 #include <D2BitManip.h>
-#include <Units/Units.h>
-#include <D2States.h>
+#include <D2Lang.h>
+
+#include "D2DataTbls.h"
+#include "D2States.h"
+#include "Units/Units.h"
 
 // D2Common.0x6FDE9600
 D2ArenaTxt* gpArenaTxtTable;
@@ -18,30 +21,6 @@ D2DataTablesStrc gpDataTables;
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
-//D2Common.0x6FDC412C
-void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, HSFILE pFileHandle)
-{
-	D2_ASSERT(pFileHandle);
-	FOG_MPQFileClose(pFileHandle);
-}
-
-//D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, HSFILE* pFileHandle, int bDontLogError)
-{
-	if (FOG_MPQFileOpen(szFileName, pFileHandle))
-	{
-		return TRUE;
-	}
-	else
-	{
-		if (!bDontLogError || GetLastError() != 2)
-		{
-			FOG_Trace("Error opening file: %s", szFileName);
-		}
-		return FALSE;
-	}
-}
-
 //D2Common.0x6FDC45EE
 size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t Count, FILE* File)
 {
@@ -52,85 +31,6 @@ size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t 
 	_unlock_file(File);
 
 	return nSize;
-}
-
-//D2Common.0x6FDC41C1
-BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, HSFILE pFileHandle, void* pBuffer, size_t nBytesToRead)
-{
-	int nBytesRead = 0;
-	BOOL bResult = FALSE;
-	char szFileName[MAX_PATH] = {};
-
-	D2_ASSERT(pFileHandle);
-
-	bResult = FOG_MPQFileRead(pFileHandle, pBuffer, nBytesToRead, &nBytesRead, 0, 0, 0);
-	if (!bResult)
-	{
-		//TODO: ...
-		//Storm_276_GetFileName(pFileHandle, szFileName, sizeof(szFileName));
-		//FOG_DisplayError(3, szFileName, __FILE__, __LINE__);
-		exit(-1);
-	}
-
-	D2_ASSERT(nBytesToRead == nBytesRead);
-
-	return bResult;
-}
-
-//D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, HSFILE pFileHandle, uint32_t* lpFileSizeHigh)
-{
-	size_t nSize = 0;
-	char pBuffer[MAX_PATH] = {};
-
-	D2_ASSERT(pFileHandle);
-
-	nSize = FOG_MPQFileGetSize(pFileHandle, lpFileSizeHigh);
-	if (!nSize)
-	{
-		//TODO: ...
-		//Storm_276_GetFileName(pFileHandle, &pBuffer, sizeof(pBuffer));
-		//FOG_DisplayError(3, &pBuffer, __FILE__, __LINE__);
-		exit(-1);
-	}
-
-	return nSize;
-}
-
-//D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine)
-{
-	HSFILE pFileHandle = NULL;
-	void* pBuffer = NULL;
-	size_t nSize = 0;
-	uint32_t dwFileSizeHigh = 0;
-	if (!FOG_MPQFileOpen(szFileName, &pFileHandle))
-	{
-		const DWORD err = GetLastError();
-		FOG_Trace("Error opening file: %s (0x%x)", szFileName, err);
-		return NULL;
-	}
-
-	nSize = DATATBLS_GetFileSize(pMemPool, pFileHandle, &dwFileSizeHigh);
-	pBuffer = FOG_Alloc(nSize + 800, szFile, nLine, 0);
-
-	if (!pBuffer)
-	{
-		return NULL;
-	}
-
-	DATATBLS_ReadFromFile(pMemPool, pFileHandle, pBuffer, nSize);
-
-	D2_ASSERT(pFileHandle);
-	
-	FOG_MPQFileClose(pFileHandle);
-
-	if (pSize)
-	{
-		*pSize = nSize;
-	}
-
-	return pBuffer;
 }
 
 
@@ -267,7 +167,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
 {
 	FILE* pFile = NULL;
-	int nSize = 0;
+	size_t dwSize = 0;
 	char szFilePath[MAX_PATH] = {};
 
 	wsprintfA(szFilePath, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", szFile);
@@ -284,9 +184,9 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, vo
 		FOG_FreePool(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
 	}
 
-	*ppFileHandle = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nSize, __FILE__, __LINE__);
-	*pSizeEx = nSize;
-	*pSize = nSize;
+	*ppFileHandle = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwSize);
+	*pSizeEx = dwSize;
+	*pSize = dwSize;
 }
 
 //D2Common.0x6FD49850
@@ -734,10 +634,10 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	void* pData = NULL;
 	void* pTxt = NULL;
 	int nRecordCount = 0;
-	int nDataSize = 0;
+	size_t dwDataSize = 0;
 	char szFilePath[MAX_PATH] = {};
 
-	nDataSize = 0;
+	dwDataSize = 0;
 	if (sgptDataTables->bCompileTxt)
 	{
 		if (_strcmpi(szName, "leveldefs"))
@@ -751,10 +651,10 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "levels", ".txt");
 		}
 
-		pData = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nDataSize, __FILE__, __LINE__);
+		pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwDataSize);
 		D2_ASSERT(pData);
 
-		pBinFile = FOG_CreateBinFile(pData, nDataSize);
+		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
 		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);
@@ -788,7 +688,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 		}
 	}
 
-	pData = DATATBLS_GetBinaryData(pMemPool, szFilePath, &nDataSize, __FILE__, __LINE__);
+	pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwDataSize);
 	D2_ASSERT(pData);
 
 	if (DATATBLS_LoadFromBin)
@@ -798,7 +698,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	}
 	else
 	{
-		pBinFile = FOG_CreateBinFile(pData, nDataSize);
+		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
 		pTxt = FOG_AllocPool(NULL, nSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pTxt, 0x00, nSize * nRecordCount);

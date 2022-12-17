@@ -1,7 +1,9 @@
 #include "D2DataTbls.h"
 
 #include "D2Composit.h"
-#include <Units/Units.h>
+#include "Units/Units.h"
+
+#include <Archive.h>
 
 //TODO: Find names
 
@@ -18,7 +20,7 @@ D2AnimDataStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool)
 	memset(pAnimData, 0x00, sizeof(D2AnimDataStrc));
 
 	wsprintfA(szPath, "%s\\AnimData.d2", "DATA\\GLOBAL");
-	pRecords = (char*)DATATBLS_GetBinaryData(pMemPool, szPath, NULL, __FILE__, __LINE__);
+	pRecords = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, NULL);
 	pAnimData->pRecords = (D2AnimDataRecordStrc*)pRecords;
 
 	pHashTable = pAnimData->pHashTable;

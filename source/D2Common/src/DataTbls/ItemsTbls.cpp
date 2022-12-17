@@ -1,6 +1,7 @@
 #include "D2DataTbls.h"
 
 #include "D2Items.h"
+#include <Archive.h>
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <D2StatList.h>
@@ -1940,23 +1941,23 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 	sgptDataTables->pRunesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".txt");
-	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
+	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
 	{
-		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(pMemPool, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".bin");
-	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
+	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
 	{
-		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(pMemPool, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".xls");
-	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
+	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
 	{
-		DATATBLS_CloseFileInMPQ(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(pMemPool, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 

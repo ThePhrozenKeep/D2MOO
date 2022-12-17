@@ -1,5 +1,8 @@
 #include "D2DataTbls.h"
-#include <D2Items.h>
+
+#include <Archive.h>
+
+#include "D2Items.h"
 
 // Inlined in both Parsers
 static BOOL DATATBLS_AreStringsEqual(const char* szString1, const char* szString2)
@@ -696,13 +699,13 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 	};
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");
-	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
+	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
 	{
 		FOG_DisplayWarning("Found cubeserver.bin in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.txt");
-	if (DATATBLS_CheckIfFileExists(pMemPool, szPath, &pFileHandle, 1))
+	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
 	{
 		FOG_DisplayWarning("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}

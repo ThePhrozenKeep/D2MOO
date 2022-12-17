@@ -1,5 +1,6 @@
 #include "D2DataTbls.h"
 
+#include <Archive.h>
 
 //D2Common.0x6FD498D0
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
@@ -785,7 +786,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
-	sgptDataTables->pSkillsCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
+	sgptDataTables->pSkillsCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, (size_t*)&nSize);
 	sgptDataTables->nSkillsCodeSizeEx = nSize;
 	sgptDataTables->nSkillsCodeSize = nSize;
 
@@ -802,7 +803,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	sgptDataTables->pSkillDescCode = (char*)DATATBLS_GetBinaryData(pMemPool, szFileName, &nSize, __FILE__, __LINE__);
+	sgptDataTables->pSkillDescCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, (size_t*)&nSize);
 	sgptDataTables->nSkillDescCodeSizeEx = nSize;
 	sgptDataTables->nSkillDescCodeSize = nSize;
 
