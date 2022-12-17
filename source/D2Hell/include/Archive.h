@@ -31,12 +31,9 @@
 #include <stddef.h>
 #include <windows.h>
 
-// TODO: Replace these HS type declarations and typedefs with an
-// appropriate include once a proper place for these types are found.
-// This should ideally be in a Storm-related header file.
-
-struct HSFILE__;
-using HSFILE = HSFILE__*;
+// TODO: Replace this include with the header file that defines
+// HSFILE.
+#include <Fog.h>
 
 /**
  * Opens a file in the MPQ archives and returns the handle to the
