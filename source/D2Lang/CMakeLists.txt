@@ -6,9 +6,11 @@ add_library(D2LangStatic
     src/D2Unicode/D2UnicodeChar.cpp
     src/D2Unicode/D2UnicodeStr.cpp
     src/D2Unicode/D2UnicodeUtf.cpp
+    src/D2StrTable.cpp
 
     include/D2Lang.h
     include/D2Crc16.h
+    include/D2StrTable.h
     include/D2Unicode.h
 )
 target_include_directories(D2LangStatic PUBLIC include)
