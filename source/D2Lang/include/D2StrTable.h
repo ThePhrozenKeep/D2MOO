@@ -33,7 +33,7 @@
 #include "D2Lang.h"
 
 /**
- * Returns the locale ID for the string table.
+ * Returns the string table language.
  *
  * 1.00: D2Lang.0x100010B9 (#10007)
  * 1.10: D2Lang.0x6FC13DF0 (#10007)
