@@ -16,7 +16,7 @@ add_library(D2LangStatic
 target_include_directories(D2LangStatic PUBLIC include)
 # If not defined, we use declspec(dllimport), so only define it to build the .dll
 target_compile_definitions(D2LangStatic PRIVATE D2LANG_EXPORT)
-target_link_libraries(D2LangStatic PUBLIC D2CommonDefinitions Fog)
+target_link_libraries(D2LangStatic PUBLIC D2CommonDefinitions D2Hell Fog)
 
 
 add_library(D2Lang SHARED src/DllMain.cpp)

@@ -26,6 +26,8 @@
  * SOFTWARE.
  */
 
+#include "D2StrTable.h"
+
 #include <Archive.h>
 #include <D2Constants.h>
 #include <Fog.h>
