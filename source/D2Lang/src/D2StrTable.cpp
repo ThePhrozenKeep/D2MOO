@@ -46,7 +46,7 @@ static void* ghArchive = nullptr;
  * 1.13c: D2Lang.0x6FC10A20
  * 1.14c: Game.0x00879A78
  */
-static bool gbLocaleIdInited = false;
+static bool gbTableLanguageInited = false;
 
 /**
  * 1.00: D2Lang.0x100175F8
@@ -54,7 +54,7 @@ static bool gbLocaleIdInited = false;
  * 1.13c: D2Lang.0x6FC10A1C
  * 1.14c: Game.0x00879A74
  */
-static D2C_Language gnLocaleId = LANGUAGE_ENGLISH;
+static D2C_Language gnTableLanguage = LANGUAGE_ENGLISH;
 
 /**
  * 1.00: D2Lang.0x100010B9 (#10007)
@@ -64,24 +64,24 @@ static D2C_Language gnLocaleId = LANGUAGE_ENGLISH;
  */
 D2C_Language STRTABLE_GetLanguage()
 {
-	if (gbLocaleIdInited)
+	if (gbTableLanguageInited)
 	{
-		return gnLocaleId;
+		return gnTableLanguage;
 	}
 
-	gbLocaleIdInited = true;
+	gbTableLanguageInited = true;
 
 	// Read locale from file.
 	unsigned char* pBuffer =
 			(unsigned char*) ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(
 					ghArchive, "data\\local\\use", nullptr);
-	gnLocaleId = static_cast<D2C_Language>(*pBuffer);
+	gnTableLanguage = static_cast<D2C_Language>(*pBuffer);
 	D2_FREE(pBuffer);
 
-	if (gnLocaleId >= NUM_LANGUAGE)
+	if (gnTableLanguage >= NUM_LANGUAGE)
 	{
-		gnLocaleId = LANGUAGE_ENGLISH;
+		gnTableLanguage = LANGUAGE_ENGLISH;
 	}
 
-	return gnLocaleId;
+	return gnTableLanguage;
 }
