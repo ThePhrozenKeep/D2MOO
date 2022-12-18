@@ -1,5 +1,7 @@
 #include "D2DataTbls.h"
 
+#include <Archive.h>
+
 #include "D2Collision.h"
 
 
@@ -14,10 +16,10 @@ BOOL __fastcall DATATBLS_LoadExpFieldD2(void* pMemPool)
 {
 	char szPath[80] = {};
 	char* pExpField = NULL;
-	int nSize = 0;
+	size_t nSize = 0;
 
 	wsprintfA(szPath, "%s\\expfield.d2", "DATA\\GLOBAL");
-	pExpField = (char*)DATATBLS_GetBinaryData(pMemPool, szPath, &nSize, __FILE__, __LINE__);
+	pExpField = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, &nSize);
 
 	return DATATBLS_InitializeCollisionFieldTable(pExpField, nSize);
 }

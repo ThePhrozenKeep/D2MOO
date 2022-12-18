@@ -512,26 +512,8 @@ extern BOOL DATATBLS_LoadFromBin;
 
 #pragma pack()
 
-
-
-//D2Common.0x6FDC412C
-void __fastcall DATATBLS_CloseFileInMPQ(void* pMemPool, HSFILE hFileHandle);
-//D2Common.0x6FDC40F0
-BOOL __fastcall DATATBLS_CheckIfFileExists(void* pMemPool, const char* szFileName, HSFILE* pFileHandle, int bDontLogError);
 //D2Common.0x6FDC45EE
 size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t Count, FILE* File);
-//D2Common.0x6FDC41C1
-BOOL __fastcall DATATBLS_ReadFromFile(void* pMemPool, HSFILE pFileHandle, void* pBuffer, size_t nBytesToRead);
-//D2Common.0x6FDC4152
-size_t __fastcall DATATBLS_GetFileSize(void* pMemPool, HSFILE pFileHandle, uint32_t* lpFileSizeHigh);
-//D2Common.0x6FDC4268
-void* __fastcall DATATBLS_GetBinaryData(void* pMemPool, const char* szFileName, int* pSize, const char* szFile, int nLine);
-
-
-
-
-
-
 //D2Common.0x6FD494D0
 uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference);
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
@@ -575,7 +557,7 @@ D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int
 //D2Common.0x6FD4FCF0 (#10580)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, int nSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
 //D2Common.0x6FD500F0 (#11242)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)

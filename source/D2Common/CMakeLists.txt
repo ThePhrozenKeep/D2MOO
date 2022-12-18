@@ -11,7 +11,7 @@ add_library(D2CommonStatic
   include/Imports/DllBases.h
 )
 
-target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Lang Fog)
+target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog)
 
 target_include_directories(D2CommonStatic PUBLIC include)
 
@@ -229,6 +229,6 @@ target_link_libraries(D2Common
 # D2CommonStatic itself should not be linked by targets linking D2Common, hence why it is PRIVATE
   PRIVATE D2CommonStatic
 # But we still its dependencies to be propagated so that users can consume them
-  PUBLIC D2CommonDefinitions D2CMP D2Lang Fog
+  PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog
 )
 target_include_directories(D2Common INTERFACE include)

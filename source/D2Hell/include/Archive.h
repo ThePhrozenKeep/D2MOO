@@ -29,17 +29,78 @@
 #pragma once
 
 #include <stddef.h>
+#include <windows.h>
+
+// TODO: Replace this include with the header file that defines
+// HSFILE.
+#include <Fog.h>
+
+/**
+ * Opens a file in the MPQ archives and returns the handle to the
+ * file.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.00: Inline
+ * 1.10: Inline OR D2Common.0x6FDC40F0
+ * 1.13c: Inline
+ * 1.14c: Game.0x00514B24
+ */
+BOOL __fastcall ARCHIVE_OpenFile(void* hArchive, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped);
+
+/**
+ * Closes a file handle to a file from the MPQ archives.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.00: Inline
+ * 1.10: Inline OR D2Common.0x6FDC412C
+ * 1.13c: Inline
+ * 1.14c: Game.0x00514B60
+ */
+void __fastcall ARCHIVE_CloseFile(void* hArchive, HSFILE hFile);
+
+/**
+ * Gets the uncompressed size of a file in the MPQ archives.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.00: D2Lang.0x10004DFE
+ * 1.10: D2Lang.0x6FC145F2 OR D2Common.0x6FDC4152
+ * 1.13c: Inline
+ * 1.14c: Game.0x00514B87
+ */
+size_t __fastcall ARCHIVE_GetFileSize(void* hArchive, HSFILE hFile, size_t* pdwFileSizeHigh);
+
+/**
+ * Reads a file from the MPQ archives into a specified buffer.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.00: D2Lang.0x10004EE3
+ * 1.10: D2Lang.0x6FC14661 OR D2Common.0x6FDC41C1
+ * 1.13c: D2Lang.0x6FC07C00
+ * 1.14c: Game.0x00514C61
+ */
+void __fastcall ARCHIVE_ReadFileToBuffer(void* hArchive, HSFILE hFile, void* pBuffer, size_t dwBytesToRead);
 
 /**
  * Reads a file from the MPQ archives into a buffer allocated by
- * this function, and returns that buffer.
+ * this function. Returns the buffer containing the file's contents,
+ * or nullptr on failure.
  *
- * pArchiveHandle is the first parameter, but it is effectively unused.
+ * hArchive is the first parameter, but it is effectively unused.
  *
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10005029
- * 1.10: D2Lang.0x6FC14708
+ * 1.10: D2Lang.0x6FC14708 OR D2Common.0x6FDC4268
  * 1.13c: D2Lang.0x6FC07EF0
  * 1.14c: Game.0x00514D55
  */
-void* __fastcall ARCHIVE_ReadFile(void* pArchiveHandle, const char* szFilePath, size_t* pBytesWritten, const char* szSrcPath, int nLine);
+void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* hArchive, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine);
+
+#define ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, pBytesWritten) ARCHIVE_ReadFileToAllocBuffer(hArchive, szFilePath, pBytesWritten, __FILE__, __LINE__)

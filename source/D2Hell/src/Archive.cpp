@@ -28,25 +28,26 @@
 
 #include "Archive.h"
 
-#include "Fog.h"
+#include <stddef.h>
+#include <stdlib.h>
+#include <windows.h>
+
+#include <Fog.h>
 
 /**
- * Opens a file in the MPQ archives and returns the handle to the
- * file.
- *
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: Inline
- * 1.10: Inline
+ * 1.10: Inline OR D2Common.0x6FDC40F0
  * 1.13c: Inline
  * 1.14c: Game.0x00514B24
  */
-static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFilePath, HSFILE* ppFileHandle, BOOL bBlockNotFoundLog)
+BOOL __fastcall ARCHIVE_OpenFile(void* hArchive, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped)
 {
-	BOOL bFileOpenSucceeded = FOG_MPQFileOpen(szFilePath, ppFileHandle);
+	BOOL bFileOpenSucceeded = FOG_MPQFileOpen(szFilePath, phFile);
 	if (!bFileOpenSucceeded)
 	{
 		DWORD dwLastError = GetLastError();
-		if (!bBlockNotFoundLog || dwLastError != ERROR_FILE_NOT_FOUND)
+		if (!bFileNotFoundLogSkipped || dwLastError != ERROR_FILE_NOT_FOUND)
 		{
 			FOG_Trace("Error opening file: %s", szFilePath);
 		}
@@ -58,24 +59,35 @@ static BOOL __fastcall ARCHIVE_OpenFile(void* pArchiveHandle, const char* szFile
 }
 
 /**
- * Gets the uncompressed size of a file in the MPQ archives.
- *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.00: Inline
+ * 1.10: Inline OR D2Common.0x6FDC412C
+ * 1.13c: Inline
+ * 1.14c: Game.0x00514B60
+ */
+void __fastcall ARCHIVE_CloseFile(void* hArchive, HSFILE hFile)
+{
+	D2_ASSERT(hFile != nullptr);
+	FOG_MPQFileClose(hFile);
+}
+
+/**
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10004DFE
- * 1.10: D2Lang.0x6FC145F2
+ * 1.10: D2Lang.0x6FC145F2 OR D2Common.0x6FDC4152
  * 1.13c: Inline
  * 1.14c: Game.0x00514B87
  */
-static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, HSFILE pFileHandle, size_t* pFileSizeHigh)
+size_t __fastcall ARCHIVE_GetFileSize(void* hArchive, HSFILE hFile, size_t* pdwFileSizeHigh)
 {
-	D2_ASSERT(pFileHandle != nullptr);
+	D2_ASSERT(hFile != nullptr);
 
-	size_t dwFileSize = FOG_MPQFileGetSize(pFileHandle, pFileSizeHigh);
+	size_t dwFileSize = FOG_MPQFileGetSize(hFile, pdwFileSizeHigh);
 	if (dwFileSize == 0)
 	{
 		char szArchivePath[MAX_PATH];
 #if 0  // TODO: Enable this code once the macro is set up.
-		Storm_276_GetFileName(pFileHandle, szArchivePath, 260);
+		Storm_276_GetFileName(hFile, szArchivePath, 260);
 		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
 #endif
 		exit(-1);
@@ -85,25 +97,23 @@ static size_t __fastcall ARCHIVE_GetFileSize(void* pArchiveHandle, HSFILE pFileH
 }
 
 /**
- * Reads a file from the MPQ archives into a specified buffer.
- *
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10004EE3
- * 1.10: D2Lang.0x6FC14661
+ * 1.10: D2Lang.0x6FC14661 OR D2Common.0x6FDC41C1
  * 1.13c: D2Lang.0x6FC07C00
  * 1.14c: Game.0x00514C61
  */
-static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, HSFILE pFileHandle, void* pBuffer, size_t dwBytesToRead)
+void __fastcall ARCHIVE_ReadFileToBuffer(void* hArchive, HSFILE hFile, void* pBuffer, size_t dwBytesToRead)
 {
-	D2_ASSERT(pFileHandle != nullptr);
+	D2_ASSERT(hFile != nullptr);
 
 	size_t dwBytes;
-	BOOL bFileReadSuccess = FOG_MPQFileRead(pFileHandle, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
+	BOOL bFileReadSuccess = FOG_MPQFileRead(hFile, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
 	if (!bFileReadSuccess)
 	{
 		char szArchivePath[MAX_PATH];
 #if 0  // TODO: Enable this code once the macro is set up.
-		Storm_276_GetFileName(pFileHandle, szArchivePath, sizeof(szArchivePath));
+		Storm_276_GetFileName(hFile, szArchivePath, sizeof(szArchivePath));
 		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
 #endif
 		exit(-1);
@@ -113,53 +123,38 @@ static void __fastcall ARCHIVE_ReadFileToBuffer(void* pArchiveHandle, HSFILE pFi
 }
 
 /**
- * Reads a file from the MPQ archives into a specified buffer.
- *
- * Static library; may be defined in multiple places than ones listed:
- * 1.00: Inline
- * 1.10: Inline
- * 1.13c: Inline
- * 1.14c: Game.0x00514B60
- */
-static void __fastcall ARCHIVE_CloseFile(void* pArchiveHandle, HSFILE pFileHandle)
-{
-	D2_ASSERT(pFileHandle != nullptr);
-	FOG_MPQFileClose(pFileHandle);
-}
-
-/**
- * pArchiveHandle identifier is confirmed by 1.00 (originally hArchive).
+ * hArchive identifier is confirmed via v1.00 #D2Common.0xFUN_100777f3.
  * 
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10005029
- * 1.10: D2Lang.0x6FC14708
+ * 1.10: D2Lang.0x6FC14708 OR D2Common.0x6FDC4268
  * 1.13c: D2Lang.0x6FC07EF0
  * 1.14c: Game.0x00514D55
  */
-void* __fastcall ARCHIVE_ReadFile(void* pArchiveHandle, const char* szFilePath, size_t* pBytesWritten, const char* szSrcPath, int nLine)
+void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* hArchive, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine)
 {
-	HSFILE pFileHandle;
+	HSFILE hFile;
 	
-	BOOL bOpenFileSucceeded = ARCHIVE_OpenFile(pArchiveHandle, szFilePath, &pFileHandle, FALSE);
+	BOOL bOpenFileSucceeded = ARCHIVE_OpenFile(hArchive, szFilePath, &hFile, FALSE);
 	if (!bOpenFileSucceeded)
 	{
 		return nullptr;
 	}
 
 	size_t dwFileSizeHigh;
-	size_t dwFileSize = ARCHIVE_GetFileSize(pArchiveHandle, pFileHandle, &dwFileSizeHigh);
+	size_t dwFileSize = ARCHIVE_GetFileSize(hArchive, hFile, &dwFileSizeHigh);
 	void* pBuffer = FOG_Alloc(dwFileSize + 800, szSrcPath, nLine, 0);
 	if (pBuffer == nullptr)
 	{
 		return nullptr;
 	}
 
-	ARCHIVE_ReadFileToBuffer(pArchiveHandle, pFileHandle, pBuffer, dwFileSize);
-	ARCHIVE_CloseFile(pArchiveHandle, pFileHandle);
+	ARCHIVE_ReadFileToBuffer(hArchive, hFile, pBuffer, dwFileSize);
+	ARCHIVE_CloseFile(hArchive, hFile);
 
-	if (pBytesWritten == nullptr)
+	if (pdwBytesWritten == nullptr)
 	{
-		*pBytesWritten = dwFileSize;
+		*pdwBytesWritten = dwFileSize;
 	}
 
 	return pBuffer;
