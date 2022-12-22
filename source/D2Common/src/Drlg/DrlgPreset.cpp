@@ -417,37 +417,40 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 			if (nNodes)
 			{
+				// Find unit with given position
 				D2PresetUnitStrc* pPresetUnit = pDrlgFile->pPresetUnit;
 				while (pPresetUnit)
 				{
 					if (pPresetUnit->nXpos == nX && pPresetUnit->nYpos == nY)
 					{
-						pPresetUnit->pMapAI = D2_ALLOC_STRC_POOL(nullptr, D2MapAIStrc);
-						pPresetUnit->pMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_ALLOC_POOL(nullptr, sizeof(D2MapAIPathPositionStrc) * nNodes);
-						pPresetUnit->pMapAI->nPathNodes = nNodes;
-
-						for (int j = 0; j < nNodes; ++j)
-						{
-							pPresetUnit->pMapAI->pPosition[j].nX = ReadInt32(pData);
-							pPresetUnit->pMapAI->pPosition[j].nY = ReadInt32(pData);
-
-							if (nVersion < 15)
-							{
-								pPresetUnit->pMapAI->pPosition[j].nMapAIAction = 1;
-							}
-							else
-							{
-								pPresetUnit->pMapAI->pPosition[j].nMapAIAction = ReadInt32(pData);
-							}
-						}
-
 						break;
 					}
-
 					pPresetUnit = pPresetUnit->pNext;
 				}
 
-				if (!pPresetUnit)
+				if (pPresetUnit)
+				{
+					pPresetUnit->pMapAI = D2_ALLOC_STRC_POOL(nullptr, D2MapAIStrc);
+					pPresetUnit->pMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_ALLOC_POOL(nullptr, sizeof(D2MapAIPathPositionStrc) * nNodes);
+					pPresetUnit->pMapAI->nPathNodes = nNodes;
+
+					for (int j = 0; j < nNodes; ++j)
+					{
+						pPresetUnit->pMapAI->pPosition[j].nX = ReadInt32(pData);
+						pPresetUnit->pMapAI->pPosition[j].nY = ReadInt32(pData);
+
+						if (nVersion < 15)
+						{
+							pPresetUnit->pMapAI->pPosition[j].nMapAIAction = 1;
+						}
+						else
+						{
+							pPresetUnit->pMapAI->pPosition[j].nMapAIAction = ReadInt32(pData);
+						}
+					}
+
+				}
+				else // Unit not found, skip path
 				{
 					SkipInt32s(pData, 2 * nNodes);
 					if (nVersion >= 15)
