@@ -48,7 +48,7 @@ static void* ghArchive = nullptr;
  * 1.13c: D2Lang.0x6FC10A20
  * 1.14c: Game.0x00879A78
  */
-static bool gbTableLanguageInited = false;
+static bool gbTableLanguageInitialized = false;
 
 /**
  * 1.00: D2Lang.0x100175F8
@@ -66,13 +66,11 @@ static D2C_Language gnTableLanguage = LANGUAGE_ENGLISH;
  */
 D2C_Language STRTABLE_GetLanguage()
 {
-	if (gbTableLanguageInited)
+	if (gbTableLanguageInitialized)
 	{
 		return gnTableLanguage;
 	}
-
-	gbTableLanguageInited = true;
-
+	gbTableLanguageInitialized = true;
 	// Read locale from file.
 	unsigned char* pBuffer =
 			(unsigned char*) ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(
