@@ -6,15 +6,17 @@ add_library(D2LangStatic
     src/D2Unicode/D2UnicodeChar.cpp
     src/D2Unicode/D2UnicodeStr.cpp
     src/D2Unicode/D2UnicodeUtf.cpp
+    src/D2StrTable.cpp
 
     include/D2Lang.h
     include/D2Crc16.h
+    include/D2StrTable.h
     include/D2Unicode.h
 )
 target_include_directories(D2LangStatic PUBLIC include)
 # If not defined, we use declspec(dllimport), so only define it to build the .dll
 target_compile_definitions(D2LangStatic PRIVATE D2LANG_EXPORT)
-target_link_libraries(D2LangStatic PUBLIC D2CommonDefinitions Fog)
+target_link_libraries(D2LangStatic PUBLIC D2CommonDefinitions D2Hell Fog)
 
 
 add_library(D2Lang SHARED src/DllMain.cpp)

@@ -1,7 +1,8 @@
 #include <cstring>
+
 #include <D2Chat.h>
 #include <D2Lang.h>
-
+#include <D2StrTable.h>
 
 //D2Common.0x6FDC3BF0 (#10892)
 D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText, int nTimeout)
@@ -30,7 +31,7 @@ D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText
 
 	pHoverMsg->dwDisplayTime = 8 * nLength + 125;
 	pHoverMsg->dwExpireTime = 8 * nLength + 125 + nTimeout;
-	pHoverMsg->nLangId = D2LANG_GetLocaleId();
+	pHoverMsg->nLangId = STRTABLE_GetLanguage();
 	pHoverMsg->bUsed = FALSE;
 
 	strncpy_s(pHoverMsg->szMsg, szText, nLength + 1);
