@@ -78,7 +78,7 @@ D2C_Language STRTABLE_GetLanguage()
 	gnTableLanguage = static_cast<D2C_Language>(*pBuffer);
 	D2_FREE(pBuffer);
 
-	if (gnTableLanguage >= NUM_LANGUAGE)
+	if (gnTableLanguage >= NUM_LANGUAGES)
 	{
 		gnTableLanguage = LANGUAGE_ENGLISH;
 	}

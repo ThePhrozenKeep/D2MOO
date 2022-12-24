@@ -451,7 +451,7 @@ enum D2C_Language
 	// TODO: Unknown. Possibly English language for Korean systems?
 	LANGUAGE_ENGLISHKOR = 12,
 
-	NUM_LANGUAGE,
+	NUM_LANGUAGES,
 };
 
 enum D2C_StringTablesHcidx
