@@ -1,0 +1,208 @@
+D2MOO_prepare_targets(D2Client)
+
+target_link_libraries(${D2ClientImplName}
+  PUBLIC
+    D2CommonDefinitions 
+    Fog
+    D2Common
+  PRIVATE
+    D2Game
+    D2CMP
+    D2Lang
+    D2Gfx
+    D2Net
+    D2Sound
+    D2Win
+)
+
+target_sources(${D2ClientImplName}
+  PRIVATE
+  include/D2Client.h
+    
+)
+
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Core/ARCHIVE.CPP
+    src/Core/Lng.cpp
+    src/Core/MemoryPartitions.cpp
+    src/Core/Video.cpp
+    src/Core/WINMAIN.CPP
+    src/Core/WNDPROC.CPP
+    
+    include/Core/ARCHIVE.h
+    include/Core/Lng.h
+    include/Core/MemoryPartitions.h
+    include/Core/Video.h
+    include/Core/WINMAIN.h
+    include/Core/WNDPROC.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Draw/dFloor.cpp
+    src/Draw/dLightMap.cpp
+    src/Draw/dWall.cpp
+
+    include/Draw/dFloor.h
+    include/Draw/dLightMap.h
+    include/Draw/dWall.h	
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Game/Env.cpp
+    src/Game/Game.cpp
+    src/Game/Msg.cpp
+    src/Game/PalShift.cpp
+    src/Game/Record.cpp
+    src/Game/Roster.cpp
+    src/Game/RosterPets.cpp
+    src/Game/SCmd.cpp
+    src/Game/scroll.cpp
+    src/Game/Select.cpp
+    src/Game/View.cpp
+    src/Game/Wall2.cpp
+
+    include/Game/Env.h
+    include/Game/Game.h
+    include/Game/Msg.h
+    include/Game/PalShift.h
+    include/Game/Record.h
+    include/Game/Roster.h
+    include/Game/RosterPets.h
+    include/Game/SCmd.h
+    include/Game/scroll.h
+    include/Game/Select.h
+    include/Game/View.h
+    include/Game/Wall2.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Quest/Quests.cpp
+    src/Quest/QuestsFX.cpp
+
+    include/Quest/Quests.h
+    include/Quest/QuestsFX.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Skills/Skills.cpp
+    src/Skills/SkillsAma.cpp
+    src/Skills/SkillsBar.cpp
+    src/Skills/SkillsEMon.cpp
+    src/Skills/SkillsMon.cpp
+    src/Skills/SkillsNec.cpp
+    src/Skills/SkillsPal.cpp
+
+    include/Skills/Skills.h
+    include/Skills/SkillsAma.h
+    include/Skills/SkillsBar.h
+    include/Skills/SkillsEMon.h
+    include/Skills/SkillsMon.h
+    include/Skills/SkillsNec.h
+    include/Skills/SkillsPal.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/UI/automap.cpp
+    src/UI/char.cpp
+    src/UI/chat.cpp
+    src/UI/CmdTbl.cpp
+    src/UI/dialog.cpp
+    src/UI/editbox.cpp
+    src/UI/Hireables.cpp
+    src/UI/inv.cpp
+    src/UI/LISTBOX.CPP
+    src/UI/mods.cpp
+    src/UI/npcmenu.cpp
+    src/UI/panel.cpp
+    src/UI/Party.cpp
+    src/UI/QuestLog.cpp
+    src/UI/Restart.cpp
+    src/UI/showitems.cpp
+    src/UI/SkillDesc.cpp
+    src/UI/Skillstree.cpp
+    src/UI/spellsel.cpp
+    src/UI/text.cpp
+    src/UI/trade.cpp
+    src/UI/UI.cpp
+    src/UI/useitem.cpp
+
+    include/UI/automap.h
+    include/UI/char.h
+    include/UI/chat.h
+    include/UI/CmdTbl.h
+    include/UI/dialog.h
+    include/UI/editbox.h
+    include/UI/Hireables.h
+    include/UI/inv.h
+    include/UI/LISTBOX.h
+    include/UI/mods.h
+    include/UI/npcmenu.h
+    include/UI/panel.h
+    include/UI/Party.h
+    include/UI/QuestLog.h
+    include/UI/Restart.h
+    include/UI/showitems.h
+    include/UI/SkillDesc.h
+    include/UI/Skillstree.h
+    include/UI/spellsel.h
+    include/UI/text.h
+    include/UI/trade.h
+    include/UI/UI.h
+    include/UI/useitem.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Unit/CUnit.cpp
+    src/Unit/CUnitEvent.cpp
+    src/Unit/Item.cpp
+    src/Unit/Missile.cpp
+    src/Unit/Monster.cpp
+    src/Unit/MonUnique.cpp
+    src/Unit/Object.cpp
+    src/Unit/Player.cpp
+    src/Unit/PlayerList.cpp
+    src/Unit/PlrSkills.cpp
+    src/Unit/UnitGfx.cpp
+    src/Unit/UnitMode.cpp
+    src/Unit/UnitSnd.cpp
+
+    include/Unit/CUnit.h
+    include/Unit/CUnitEvent.h
+    include/Unit/Item.h
+    include/Unit/Missile.h
+    include/Unit/Monster.h
+    include/Unit/MonUnique.h
+    include/Unit/Object.h
+    include/Unit/Player.h
+    include/Unit/PlayerList.h
+    include/Unit/PlrSkills.h
+    include/Unit/UnitGfx.h
+    include/Unit/UnitMode.h
+    include/Unit/UnitSnd.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Sound/SoundChan.cpp
+    src/Sound/SoundHdr.cpp
+    src/Sound/SoundInst.cpp
+
+    include/Sound/SoundChan.h
+    include/Sound/SoundHdr.h
+    include/Sound/SoundInst.h
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/Engine/Cursor.cpp
+    src/Engine/Gfx.cpp
+    src/Engine/GfxUtil.cpp
+    src/Engine/Particle.cpp
+
+    include/Engine/Cursor.h
+    include/Engine/Gfx.h
+    include/Engine/GfxUtil.h
+    include/Engine/Particle.h
+)
+
+D2MOO_target_source_group(D2Client)
+
