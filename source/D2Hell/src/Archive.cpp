@@ -152,7 +152,7 @@ void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* hArchive, const char* szFil
 	ARCHIVE_ReadFileToBuffer(hArchive, hFile, pBuffer, dwFileSize);
 	ARCHIVE_CloseFile(hArchive, hFile);
 
-	if (pdwBytesWritten == nullptr)
+	if (pdwBytesWritten != nullptr)
 	{
 		*pdwBytesWritten = dwFileSize;
 	}
