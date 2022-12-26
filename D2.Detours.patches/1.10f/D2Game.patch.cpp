@@ -1,4 +1,8 @@
 #include <DetoursPatch.h>
+#include <ProfilingPatchHelpers.h>
+#include <GAME/Game.h>
+#include <D2Game.h>
+
 
 //#define DISABLE_ALL_PATCHES
 
@@ -23,9 +27,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 	
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10001_Return0												@10001
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_InitGameDataTable											@10002
-    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ProcessNetworkMessages										@10003
-    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateGamesProgress											@10004
-    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateClients												@10005
+    PatchAction::Ignore,                             //   GAME_ProcessNetworkMessages										@10003
+    PatchAction::Ignore,                             //   GAME_UpdateGamesProgress											@10004
+    PatchAction::Ignore,                             //   GAME_UpdateClients												@10005
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_CloseAllGames												@10006
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ReceiveDatabaseCharacter										@10007
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10008														@10008
@@ -85,6 +89,25 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ReturnArgument												@10062
 };
 
+#define ITERATE_WRAPPERS(x)                                     \
+/*BEGIN LIST*/                                                  \
+    x(0x6FC386D0, GAME_UpdateProgress, __fastcall)              \
+    x(0x6FC38610, GAME_UpdateEnvironment, __fastcall)           \
+    x(0x6FC392A0, GAME_UpdateClients, __stdcall)          \
+//    x(0x6FC38E20, GAME_UpdateGamesProgress, __stdcall)          \
+    //x(0x6FC38530, GAME_ProcessNetworkMessages, __fastcall)      \
+/*END LIST*/
+
+
+ITERATE_WRAPPERS(DEFINE_NAME_HELPER)
+
+#define DEFINE_PROFILING_EXTRA_PATCH_D2GAME(ADDR, FUNC, CCONV) DEFINE_PROFILING_EXTRA_PATCH(D2Game, ADDR, FUNC, CCONV)
+static ExtraPatchAction extraPatchActions[] = {
+    ITERATE_WRAPPERS(DEFINE_PROFILING_EXTRA_PATCH_D2GAME)
+    //{ 0x6FC386D0 - D2GameImageBase, &GAME_UpdateProgress, PatchAction::FunctionReplaceOriginalByPatch, &GAME_UpdateProgress_OriginalFunctionPtr },
+    { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
+};
+
 extern "C" {
 
 __declspec(dllexport)
@@ -100,12 +123,6 @@ PatchAction __cdecl GetPatchAction(int ordinal)
     return ::patchActions[ordinal - GetBaseOrdinal()];
 #endif
 }
-
-static const int D2GameImageBase = 0x6FC30000;
-
-static ExtraPatchAction extraPatchActions[] = {    
-    { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
-};
 
 __declspec(dllexport)
 constexpr int __cdecl GetExtraPatchActionsCount() { 

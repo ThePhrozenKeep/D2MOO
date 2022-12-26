@@ -9,6 +9,8 @@ endif()
 
 add_library(D2CommonDefinitions INTERFACE)
 
+target_link_libraries(D2CommonDefinitions INTERFACE Tracy::TracyClient)
+
 target_sources(D2CommonDefinitions
   ${SOURCES_TRANSITIVE_USAGE}
     include/BnClient.h

@@ -2,10 +2,11 @@
 D2MOO_prepare_targets(D2Game)
 
 target_link_libraries(${D2GameImplName}
-  PRIVATE
+  PUBLIC
     D2CommonDefinitions
-    D2CMP
     D2Common
+  PRIVATE
+    D2CMP
     D2Lang
     D2Net
     Fog

@@ -1,4 +1,6 @@
 
+set(CMAKE_FOLDER external)
+
 # Disable clang-tidy for external dependencies.
 # This should really be avoided but that's what we get for including deps directly...
 set(CMAKE_CXX_CLANG_TIDY "")
@@ -23,7 +25,11 @@ if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
 endif()
 
 
-
+#Perfmarkers for profiling
+option(TRACY_STATIC "Whether to build Tracy as a static library" OFF) # We want a .dll
+option(TRACY_ON_DEMAND "On-demand profiling" ON) # Record only on demand.
+option(TRACY_NO_SAMPLING "Disable call stack sampling" ON) # Can't properly walk the stack without pdbs for the original game (no frame pointer)
+add_subdirectory(tracy)
 
 #Doctest for unit tests
 add_library(doctest INTERFACE)

@@ -10,3 +10,6 @@
 [submodule "external/squall"]
 	path = external/squall
 	url = https://github.com/Lectem/squall.git
+[submodule "external/tracy"]
+	path = external/tracy
+	url = https://github.com/wolfpld/tracy.git
