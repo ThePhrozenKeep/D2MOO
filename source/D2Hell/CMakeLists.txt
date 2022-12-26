@@ -16,4 +16,4 @@ add_library(D2Hell
 # The definition file that matches functions with their ordinals
 target_include_directories(D2Hell PUBLIC include)
 
-target_link_libraries(D2Hell PUBLIC Fog)
+target_link_libraries(D2Hell PUBLIC Fog Storm)

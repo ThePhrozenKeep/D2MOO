@@ -33,6 +33,7 @@
 #include <windows.h>
 
 #include <Fog.h>
+#include <Storm.h>
 
 /**
  * Static library; may be defined in multiple places than ones listed:
@@ -86,10 +87,8 @@ size_t __fastcall ARCHIVE_GetFileSize(void* hArchive, HSFILE hFile, size_t* pdwF
 	if (dwFileSize == 0)
 	{
 		char szArchivePath[MAX_PATH];
-#if 0  // TODO: Enable this code once the macro is set up.
-		Storm_276_GetFileName(hFile, szArchivePath, 260);
+		SFileGetFileName(hFile, szArchivePath, 260);
 		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
-#endif
 		exit(-1);
 	}
 
@@ -112,10 +111,8 @@ void __fastcall ARCHIVE_ReadFileToBuffer(void* hArchive, HSFILE hFile, void* pBu
 	if (!bFileReadSuccess)
 	{
 		char szArchivePath[MAX_PATH];
-#if 0  // TODO: Enable this code once the macro is set up.
-		Storm_276_GetFileName(hFile, szArchivePath, sizeof(szArchivePath));
+		SFileGetFileName(hFile, szArchivePath, sizeof(szArchivePath));
 		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
-#endif
 		exit(-1);
 	}
 

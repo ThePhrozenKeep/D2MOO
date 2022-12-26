@@ -2270,6 +2270,7 @@ void __stdcall UNITS_SetNameInPlayerData(D2UnitStrc* pUnit, char* szName)
 	D2_ASSERT(pUnit->pPlayerData);
 	D2_ASSERT(pUnit->dwUnitType == UNIT_PLAYER);
 
+	// Note: Game actually uses Storm.dll SStrCopy
 	strcpy_s(pUnit->pPlayerData->szName, szName);
 }
 

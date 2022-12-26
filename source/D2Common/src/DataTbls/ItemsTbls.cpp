@@ -9,6 +9,7 @@
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey)
 {
+	// Note: Game actually uses Storm.dll SStrCmpI
 	if (!_strnicmp(szKey, "min", 32))
 	{
 		return 0;
@@ -55,6 +56,7 @@ int __fastcall sub_6FD55150(char* szText, int* a2, int a3, int nKeywordNumber)
 			}
 		}
 
+		// Note: Game actually uses Storm.dll SStrCmpI
 		if (!_strnicmp(szText, "base", 32))
 		{
 			*a2 = 0;

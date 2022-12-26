@@ -4,6 +4,7 @@
 //D2Common.0x6FD62EA0
 int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
 {
+	// Note: Game actually uses Storm.dll SStrCmpI
 	if (!_strnicmp(szKey, "min", 32))
 	{
 		return 0;

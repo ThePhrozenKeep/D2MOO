@@ -2732,6 +2732,7 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool)
 		{
 			for (int k = 0; k < 3; ++k)
 			{
+				// Note: Game actually uses Storm.dll SStrVPrintf
 				wsprintfA(szChest, "Act %d%s Chest %s", j + 1, szDifficulties[i], szTreasureClassVariants[k]);
 
 				nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szChest, 0);
@@ -2803,6 +2804,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 			{
 				if (FOG_GetStringFromLinkIndex(sgptDataTables->pItemTypesLinker, i, v37))
 				{
+					// Note: Game actually uses Storm.dll SStrVPrintf
 					wsprintfA(dest, "%s%d", v37, nLevel);
 					FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, dest);
 
