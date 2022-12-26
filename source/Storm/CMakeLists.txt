@@ -1,5 +1,5 @@
 
-add_library(Storm SHARED src/DllMain.cpp include/Storm.h)
+add_library(Storm SHARED src/DllMain.cpp include/Storm.h include/StormHandles.h)
 # The definition file that matches functions with their ordinals
 target_sources(Storm PRIVATE definitions/Storm.${D2MOO_ORDINALS_VERSION}.def)
 target_include_directories(Storm PUBLIC include)

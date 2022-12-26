@@ -1,5 +1,6 @@
 #pragma once 
 #include <D2Dll.h>
+#include "StormHandles.h"
 
 #ifdef STORM_IMPL
 #define STORM_DLL_DECL // We use .def files, not dllexport

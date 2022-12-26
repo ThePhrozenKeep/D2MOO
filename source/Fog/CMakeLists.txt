@@ -14,4 +14,4 @@ target_include_directories(Fog PUBLIC include)
 
 target_compile_definitions(Fog PRIVATE FOG_IMPL)
 
-target_link_libraries(Fog PUBLIC D2CommonDefinitions)
+target_link_libraries(Fog PUBLIC D2CommonDefinitions Storm)

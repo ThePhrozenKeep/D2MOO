@@ -2,6 +2,7 @@
 
 #include <D2Dll.h>
 #include <D2BasicTypes.h>
+#include <StormHandles.h>
 #include <stdlib.h>
 
 #ifdef FOG_IMPL
@@ -99,15 +100,6 @@ struct D2UnkFogStrc
 	void* pCallback;				//0x00
 	int32_t unk0x04;				//0x04
 };
-
-#ifdef DECLARE_STRICT_HANDLE
-#error "Should move this define out of fog.h"
-#endif
-#define  DECLARE_STRICT_HANDLE(name)        typedef struct name##__ { int unused; } *name
-
-// Those are actully Storm.dll types
-DECLARE_STRICT_HANDLE(HSFILE);
-DECLARE_STRICT_HANDLE(HSARCHIVE);
 
 
 enum D2C_AsyncDataPriority
