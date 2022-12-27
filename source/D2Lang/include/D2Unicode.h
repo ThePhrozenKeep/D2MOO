@@ -1,5 +1,9 @@
 /**
- * Copyright (c) 2021 Mir Drualga
+ * D2MOO
+ * Copyright (c) 2020-2022  The Phrozen Keep community
+ *
+ * This file belongs to D2MOO.
+ * File authors: Mir Drualga
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,6 +31,7 @@
 #include <wchar.h>
 
 #include <D2BasicTypes.h>
+
 #include "D2Lang.h"
 
 /*
@@ -215,6 +220,19 @@ struct D2LANG_DLL_DECL Unicode {
 
   /**
    * Converts a null-terminated UCS-2 string into a null-terminated
+   * 7-bit ASCII string. The count indicates the capacity of the
+   * destination in terms of UCS-2 characters. Returns the pointer to
+   * the destination string.
+   *
+   * 1.00: D2Lang.0x1000109B (#10053)
+   * 1.10: D2Lang.0x6FC11C20 (#10055)
+   * ?unicode2Win@Unicode@@SIPADPADPBU1@H@Z
+   */
+  static char* __fastcall unicode2Win(
+      char* dest, const Unicode* src, int count);
+
+  /**
+   * Converts a null-terminated UCS-2 string into a null-terminated
    * UTF-8 string. The count indicates the capacity of the destination
    * in terms of UTF-8 code units. Returns the pointer to the
    * destination string.
@@ -229,6 +247,19 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC12B60 (#10053) ?toUtf@Unicode@@SIPADPADPBU1@H@Z
    */
   static char* __fastcall toUtf(char* dest, const Unicode* src, int count);
+
+  /**
+   * Converts a null-terminated 7-bit ASCII string into a
+   * null-terminated UCS-2 string. The count indicates the capacity of
+   * the destination in terms of UCS-2 characters. Returns the pointer
+   * to the destination string.
+   *
+   * 1.00: D2Lang.0x10001122 (#10059)
+   * 1.10: D2Lang.0x6FC11BD0 (#10062)
+   * ?win2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+   */
+  static Unicode* __fastcall win2Unicode(
+      Unicode* dest, const char* src, int count);
 
   /**
    * Performs case insensitive comparison between this Unicode code
