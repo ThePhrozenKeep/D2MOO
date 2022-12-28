@@ -552,7 +552,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL a3)
 //D2Common.0x6FD745C0
 void __fastcall sub_6FD745C0(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2);
 //D2Common.0x6FD74700
-void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg);
+void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD748D0 (#10013)
 D2COMMON_DLL_DECL D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId);
 //D2Common.0x6FD749A0 (#10005)

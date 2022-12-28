@@ -122,7 +122,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10075                                                      @10075
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveRoomFromAct                                           @10076
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10077                                                      @10077
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10078                                                      @10078
+    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_UpdateAndFreeInactiveRooms                                                      @10078
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AddClientToRoom                                             @10079
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveClientFromRoom                                        @10080
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10081_GetTileCountFromRoom                                 @10081

@@ -939,9 +939,9 @@ void __stdcall D2Common_10077(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2)
 }
 
 //D2Common.0x6FD8D030 (#10078)
-void __stdcall D2Common_10078(D2DrlgActStrc* pAct)
+void __stdcall DUNGEON_UpdateAndFreeInactiveRooms(D2DrlgActStrc* pAct)
 {
-	sub_6FD74700(pAct->pDrlg);
+	DRLG_UpdateAndFreeInactiveRooms(pAct->pDrlg);
 }
 
 //D2Common.0x6FD8D040 (#10044)

@@ -133,7 +133,7 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_RemoveRoomFromAct(D2DrlgActStrc* pAct, 
 //D2Common.0x6FD8D000 (#10077)
 D2COMMON_DLL_DECL void __stdcall D2Common_10077(D2RoomStrc* pRoom1, D2RoomStrc* pRoom2);
 //D2Common.0x6FD8D030 (#10078)
-D2COMMON_DLL_DECL void __stdcall D2Common_10078(D2DrlgActStrc* pAct);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_UpdateAndFreeInactiveRooms(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8D040 (#10044)
 D2COMMON_DLL_DECL int __stdcall DUNGEON_CheckLOSDraw(D2RoomStrc* pRoom);
 //D2Common.0x6FD8D060

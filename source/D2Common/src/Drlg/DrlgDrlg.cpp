@@ -304,16 +304,9 @@ void __fastcall sub_6FD745C0(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2)
 }
 
 //D2Common.0x6FD74700
-//TODO: Name
-void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
+//TODO: Clean loops
+void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 {
-	D2DrlgLevelStrc* pCurrentLevel = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
-	D2RoomExStrc* k = NULL;
-	int* pLevelIds = NULL;
-	int* pLevels = NULL;
-	int dwFlags = 0;
-	
 	for (D2DrlgLevelStrc* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
 	{
 		if (!pLevel->bActive && pLevel->pFirstRoomEx)
@@ -324,7 +317,7 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 			}
 			else
 			{
-				pRoomEx = pLevel->pFirstRoomEx;
+				D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx;
 
 				while (pRoomEx && pRoomEx->fRoomStatus > 3 && !(pRoomEx->dwFlags & ROOMEXFLAG_HAS_ROOM))
 				{
@@ -337,18 +330,19 @@ void __fastcall sub_6FD74700(D2DrlgStrc* pDrlg)
 				}
 				else
 				{
-					pLevelIds = DRLGROOM_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId);
+					int* pLevelIds = DRLGROOM_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId);
 
+					D2RoomExStrc* k = nullptr;
 					for (int j = 0; j < 8; ++j)
 					{
 						if (pLevelIds[j])
 						{
-							pCurrentLevel = DRLG_GetLevel(pLevel->pDrlg, pLevelIds[j]);
+							D2DrlgLevelStrc* pCurrentLevel = DRLG_GetLevel(pLevel->pDrlg, pLevelIds[j]);
 
 							if (pCurrentLevel->pFirstRoomEx)
 							{
-								pLevels = DRLGROOM_GetVisArrayFromLevelId(pCurrentLevel->pDrlg, pCurrentLevel->nLevelId);
-								dwFlags = 0;
+								int* pLevels = DRLGROOM_GetVisArrayFromLevelId(pCurrentLevel->pDrlg, pCurrentLevel->nLevelId);
+								int dwFlags = 0;
 
 								for (int i = 0; i < 8; ++i)
 								{
