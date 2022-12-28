@@ -1,5 +1,9 @@
 /**
- * Copyright (c) 2021 Mir Drualga
+ * D2MOO
+ * Copyright (c) 2020-2022  The Phrozen Keep community
+ *
+ * This file belongs to D2MOO.
+ * File authors: Mir Drualga, Lectem
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -309,6 +313,34 @@ int __fastcall Unicode::strncmp(
   }
 
   return 0;
+}
+
+/**
+ * This implementation outputs the same binary from 1.00.
+ *
+ * 1.00: D2Lang.0x1000114A (#10042)
+ * 1.10: D2Lang.0x6FC11460 (#10044)
+ * 1.11: D2Lang.0x6FC0A900 (#10044)
+ * 1.13c: D2Lang.0x6FC0B0D0 (#10044)
+ * ?strncpy@Unicode@@SIPAU1@PAU1@PBU1@H@Z
+ */
+Unicode* __fastcall Unicode::strncpy(
+    Unicode* dest, const Unicode* src, int count)
+{
+  // Copy src into dest, up to count characters.
+  Unicode* current_dest = dest;
+  for (; (count--) != 0 && src->ch != L'\0'; ++current_dest, ++src)
+  {
+    current_dest->ch = src->ch;
+  }
+
+  // Fill remaining characters as null-terminator.
+  for (; count != -1; ++current_dest, --count)
+  {
+    current_dest->ch = L'\0';
+  }
+
+  return dest;
 }
 
 Unicode* __fastcall Unicode::strstr(

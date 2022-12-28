@@ -191,6 +191,22 @@ struct D2LANG_DLL_DECL Unicode {
       size_t count);
 
   /**
+   * Copies up to a specified count of characters from a
+   * null-terminated source string into a null-terminated destination
+   * string. If the count is greater than the length of the source
+   * string, then the remaining characters are filled with the null
+   * terminator character. Returns the destination string.
+   *
+   * 1.00: D2Lang.0x1000114A (#10042)
+   * 1.10: D2Lang.0x6FC11460 (#10044)
+   * 1.11: D2Lang.0x6FC0A900 (#10044)
+   * 1.13c: D2Lang.0x6FC0B0D0 (#10044)
+   * ?strncpy@Unicode@@SIPAU1@PAU1@PBU1@H@Z
+   */
+  static Unicode* __fastcall strncpy(
+      Unicode* dest, const Unicode* src, int count);
+
+  /**
    * Returns the first occurrence of a null-terminated substring in a
    * null-terminated string. If the substring is empty, or the
    * string does not contain the substring, then the function returns
