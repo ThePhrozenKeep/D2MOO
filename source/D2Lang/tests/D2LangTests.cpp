@@ -351,6 +351,46 @@ TEST_CASE("Unicode::strncmp")
     }
 }
 
+TEST_CASE("Unicode::strncpy")
+{
+    SUBCASE("Empty onto empty")
+    {
+        Unicode dest[256];
+        CHECK(Unicode::strncpy(dest, D2_USTR(L""), 1) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"") == 0);
+    }
+    SUBCASE("Empty onto non-empty")
+    {
+        Unicode dest[256] = { L'D', L'i', L'a', L'b', L'l', L'o' };
+        CHECK(Unicode::strncpy(dest, D2_USTR(L""), 7) == dest);
+        CHECK(wmemcmp((wchar_t*)dest, L"\0\0\0\0\0\0", 7) == 0);
+    }
+    SUBCASE("Text onto empty")
+    {
+        Unicode dest[256];
+        CHECK(Unicode::strncpy(dest, D2_USTR(L"Diablo"), 7) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo") == 0);
+    }
+    SUBCASE("Text overfill onto empty")
+    {
+        Unicode dest[256];
+        CHECK(Unicode::strncpy(dest, D2_USTR(L"Diablo"), 13) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Diablo\0\0\0\0\0\0") == 0);
+    }
+    SUBCASE("Text onto non-empty")
+    {
+        Unicode dest[256] = { L'D', L'i', L'a', L'b', L'l', L'o' };
+        CHECK(Unicode::strncpy(dest, D2_USTR(L"Baal"), 5) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Baal") == 0);
+    }
+    SUBCASE("Text overfill onto non-empty")
+    {
+        Unicode dest[256] = { L'D', L'i', L'a', L'b', L'l', L'o' };
+        CHECK(Unicode::strncpy(dest, D2_USTR(L"Baal"), 9) == dest);
+        CHECK(wcscmp((wchar_t*)dest, L"Baal\0\0\0\0") == 0);
+    }
+}
+
 TEST_CASE("Unicode::strlen")
 {
     SUBCASE("Empty")
