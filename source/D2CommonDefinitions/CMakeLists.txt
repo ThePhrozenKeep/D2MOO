@@ -8,12 +8,16 @@ else()
 endif()
 
 add_library(D2CommonDefinitions INTERFACE)
+
 target_sources(D2CommonDefinitions
   ${SOURCES_TRANSITIVE_USAGE}
     include/D2BasicTypes.h
     include/D2Constants.h
+    include/D2PacketDef.h
     include/D2QuestDataEx.h
     include/D2Structs.h
 	include/D2Dll.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
+# Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
+target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)

@@ -91,12 +91,13 @@ struct D2MissileDataStrc
 	D2MissileStreamStrc* pStream;			//0x30
 };
 
+using MissileInitFunc = void(__fastcall*)(D2UnitStrc*, int32_t);
 struct D2MissileStrc
 {
 	uint32_t dwFlags;							//0x00
-	D2UnitStrc* pOwner;						//0x04
-	D2UnitStrc* pOrigin;					//0x08
-	D2UnitStrc* pTarget;					//0x0C
+	D2UnitStrc* pOwner;							//0x04
+	D2UnitStrc* pOrigin;						//0x08
+	D2UnitStrc* pTarget;						//0x0C
 	int32_t nMissile;							//0x10
 	int32_t nX;									//0x14
 	int32_t nY;									//0x18
@@ -114,8 +115,8 @@ struct D2MissileStrc
 	int32_t nAttBonus;							//0x48
 	int32_t nRange;								//0x4C
 	int32_t nLightRadius;						//0x50
-	void* pInitFunc;						//0x54
-	void* pInitArgs;						//0x58
+	MissileInitFunc pInitFunc;					//0x54
+	int32_t pInitArgs;							//0x58
 };
 #pragma pack()
 

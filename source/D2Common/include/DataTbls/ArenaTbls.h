@@ -7,13 +7,20 @@
 
 struct D2ArenaTxt
 {
-	uint32_t dwSuicide;					//0x00
-	uint32_t dwPlayerKill;				//0x04
-	uint32_t dwPlayerKillPercent;		//0x08
-	uint32_t dwMonsterKill;				//0x0C
-	uint32_t dwPlayerDeath;				//0x10
-	uint32_t dwPlayerDeathPercent;		//0x14
-	uint32_t dwMonsterDeath;			//0x18
+	union
+	{
+		struct
+		{
+			int32_t dwSuicide;					//0x00
+			int32_t dwPlayerKill;				//0x04
+			int32_t dwPlayerKillPercent;		//0x08
+			int32_t dwMonsterKill;				//0x0C
+			int32_t dwPlayerDeath;				//0x10
+			int32_t dwPlayerDeathPercent;		//0x14
+			int32_t dwMonsterDeath;				//0x18
+		};
+		int32_t dwScores[7];
+	};
 };
 
 struct D2CharItemStrc

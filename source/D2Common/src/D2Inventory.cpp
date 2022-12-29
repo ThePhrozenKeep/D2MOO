@@ -582,6 +582,7 @@ D2UnitStrc* __stdcall INVENTORY_RemoveItemFromInventory(D2InventoryStrc* pInvent
 //D2Common.0x6FD8E6A0 (#10242)
 BOOL __stdcall INVENTORY_PlaceItemInSocket(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
@@ -959,6 +960,7 @@ BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2
 //D2Common.0x6FD8F250
 BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryGrid, int nInventoryRecordId, BOOL bUnused)
 {
+	D2_MAYBE_UNUSED(bUnused);
 	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
 		return FALSE;
@@ -3005,6 +3007,7 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 //TODO: Find names for function and arguments
 int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, int nBodyLoc, D2UnitStrc* a3, D2UnitStrc* a4, D2UnitStrc* pItem, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	if (!a3)
 	{
 		if (a4)

@@ -35,6 +35,20 @@
         "value": "Win32",
         "strategy": "external"
       }
+    },
+    {
+      "name": "clang-tidy",
+      "inherits": "ninja",
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--header-filter=.*"
+      }
+    },
+    {
+      "name": "clang-tidy-fix",
+      "inherits": "ninja",
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--header-filter=.*;--fix"
+      }
     }
   ],
   "buildPresets": [
@@ -54,6 +68,14 @@
     {
       "name": "ninja",
       "configurePreset": "ninja"
+    },
+    {
+      "name": "clang-tidy",
+      "configurePreset": "clang-tidy"
+    },
+    {
+      "name": "clang-tidy-fix",
+      "configurePreset": "clang-tidy-fix"
     }
   ],
   "testPresets": [

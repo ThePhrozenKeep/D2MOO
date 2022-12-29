@@ -677,6 +677,7 @@ void __stdcall UNITS_SetTargetUnitForPlayerOrMonster(D2UnitStrc* pUnit, D2UnitSt
 //D2Common.0x6FDBE470 (#10354)
 void __stdcall UNITS_GetRunAndWalkSpeedForPlayer(int nUnused, int nCharId, int* pWalkSpeed, int* pRunSpeed)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	if (nCharId >= 0 && nCharId < sgptDataTables->nCharStatsTxtRecordCount)
 	{
 		*pWalkSpeed = sgptDataTables->pCharStatsTxt[nCharId].nWalkSpeed;
@@ -1752,16 +1753,6 @@ LABEL_75:
 	}
 }
 
-
-////TODO:Remove
-//D2FUNC(D2COMMON, 10376, void, __stdcall, (D2UnitStrc*, char*, int), 0x7F050)
-//void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
-//{
-//	return D2COMMON_10376(pUnit, szFile, nLine);
-//}
-///////////////
-
-
 //D2Common.0x6FDBF8D0 (#10377)
 void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed)
 {
@@ -2239,7 +2230,7 @@ void __stdcall UNITS_AllocPlayerData(D2UnitStrc* pUnit)
 	}
 
 	pUnit->pPlayerData->nPortalFlags = DUNGEON_GetPortalFlagFromLevelId(LEVEL_ROGUEENCAMPMENT);
-	pUnit->pPlayerData->dwTradeTick = 0;
+	pUnit->pPlayerData->bBusy = 0;
 
 	//D2COMMON_11296_Return(pUnit);
 }
@@ -3420,7 +3411,7 @@ void __stdcall UNITS_GetSwitchRightSkillDataResetRightSkill(D2UnitStrc* pUnit, i
 		pUnit->pPlayerData->nRightSkillId = 0;
 		pUnit->pPlayerData->nRightSkillFlags = -1;
 		pUnit->pPlayerData->nWeaponGUID = D2UnitInvalidGUID;
-		pUnit->pPlayerData->unk0x94[0] = 0;
+		pUnit->pPlayerData->unk0x94 = 0;
 	}
 	else
 	{
@@ -3442,7 +3433,7 @@ void __stdcall UNITS_GetSwitchLeftSkillDataResetLeftSkill(D2UnitStrc* pUnit, int
 		pUnit->pPlayerData->nLeftSkillId = 0;
 		pUnit->pPlayerData->nLeftSkillFlags = -1;
 		pUnit->pPlayerData->nWeaponGUID = D2UnitInvalidGUID;
-		pUnit->pPlayerData->unk0x94[0] = 0;
+		pUnit->pPlayerData->unk0x94 = 0;
 	}
 	else
 	{
@@ -3912,7 +3903,7 @@ int __stdcall UNITS_GetDistanceToOtherUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit
 }
 
 //D2Common.0x6FDC2F50 (#10398)
-int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX, int nY)
+unsigned int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX, int nY)
 {
 	D2CoordStrc pCoords = {};
 	int nDistanceX = 0;
@@ -3978,7 +3969,7 @@ BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc* pCoord, int nDist
 
 //Used in D2Common.#10406 and D2Common.#10407
 //TODO: Find a name
-D2UnitStrc* __stdcall D2Common_10407_Impl(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a5, int a6, D2UnitStrc* a7)
+D2UnitStrc* __stdcall D2Common_10407_Impl(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6, D2UnitStrc* a7)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
 	D2RoomStrc** ppRoomList = NULL;
@@ -4147,14 +4138,14 @@ D2UnitStrc* __stdcall D2Common_10407_Impl(D2RoomStrc* pRoom, int nX, int nY, int
 
 //D2Common.0x6FDC3090 (#10406)
 //TODO: Find a name
-D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int (__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a3)
+D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int (__fastcall* pCallback)(D2UnitStrc*, void*), void* a3)
 {
 	return D2Common_10407_Impl(UNITS_GetRoom(pUnit), UNITS_GetXPosition(pUnit), UNITS_GetYPosition(pUnit), pCallback, a3, UNITS_GetUnitSizeX(pUnit), pUnit);
 }
 
 //D2Common.0x6FDC33C0 (#10407)
 //TODO: Find a name
-D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int (__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a5, int a6)
+D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int (__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6)
 {
 	return D2Common_10407_Impl(pRoom, nX, nY, pCallback, a5, a6, NULL);
 }
@@ -4164,9 +4155,9 @@ void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnit
 {
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && pUnit->pPlayerData)
 	{
-		pUnit->pPlayerData->unk0xA0[44] = 1;
-		pUnit->pPlayerData->unk0xA0[45] = nSkillId;
-		pUnit->pPlayerData->unk0xA0[46] = nUnitType;
-		pUnit->pPlayerData->unk0xA0[47] = nUnitGUID;
+		pUnit->pPlayerData->unk0xA8[42] = 1;
+		pUnit->pPlayerData->unk0xA8[43] = nSkillId;
+		pUnit->pPlayerData->unk0xA8[44] = nUnitType;
+		pUnit->pPlayerData->unk0xA8[45] = nUnitGUID;
 	}
 }

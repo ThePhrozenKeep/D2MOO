@@ -73,7 +73,7 @@ void __fastcall DRLGTILESUB_ReplaceSubPreset(int a1, int a2, D2UnkOutdoorStrc* a
 //D2Common.0x6FD8AA80
 void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1);
 //D2Common.0x6FD8ACE0
-void __fastcall sub_6FD8ACE0(void* pMemPool, int edx0, int a3, D2UnkOutdoorStrc2* a4, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord, int a7);
+void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* a4, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord, int a7);
 //D2Common.0x6FD8B010
 BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B130

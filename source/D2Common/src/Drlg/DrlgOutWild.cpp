@@ -183,17 +183,7 @@ void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 				nX = pLevel->pOutdoors->nGridWidth - ((~(uint8_t)pLevel->pOutdoors->dwFlags & 0x10 | 0x40) >> 4);
 
 				v21 = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
-
-				if ((v21 & 0x80000001) < 0)
-				{
-					v22 = (((v21 & 0x80000001) - 1) | 0xFFFFFFFE) == -1;
-				}
-				else
-				{
-					v22 = (v21 & 0x80000001) == 0;
-				}
-
-				if (!v22)
+				if ((v21 % 2) != 0)
 				{
 					nX = 3;
 				}

@@ -131,9 +131,9 @@ static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsAr
 // Helper function
 static void STATLIST_NotifyUnitOfStatValueChange(D2ItemStatCostTxt* pItemStatCostTxtRecord, D2StatListExStrc* pStatListEx, D2UnitStrc* pUnit, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nPreviousValue, int nNewValue)
 {
-	if (pStatListEx->fpCallBack && (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FCALLBACK]))
+	if (pStatListEx->pfOnValueChanged && (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_FCALLBACK]))
 	{
-		((void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int, int, int))pStatListEx->fpCallBack)(pStatListEx->pGame, pStatListEx->pOwner, pUnit, nLayer_StatId, nPreviousValue, nNewValue);
+		pStatListEx->pfOnValueChanged(pStatListEx->pGame, pStatListEx->pOwner, pUnit, nLayer_StatId, nPreviousValue, nNewValue);
 	}
 }
 
@@ -960,7 +960,7 @@ D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilte
 }
 
 //D2Common.0x6FDB7190 (#10526)
-void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pCallbackFunc, D2GameStrc* pGame)
+void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, StatListValueChangeFunc pfOnValueChanged, D2GameStrc* pGame)
 {
 	STATLIST_FreeStatListEx(pUnit);
 
@@ -970,7 +970,7 @@ void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pC
 	pStatListEx->dwOwnerType = pUnit->dwUnitType;
 	pStatListEx->dwOwnerId = pUnit->dwUnitId;
 	pStatListEx->pOwner = pUnit;
-	pStatListEx->fpCallBack = pCallbackFunc;
+	pStatListEx->pfOnValueChanged = pfOnValueChanged;
 	pStatListEx->pGame = pGame;
 	pStatListEx->dwFlags = (nFlags & STATLIST_BASIC) | STATLIST_EXTENDED;
 	pStatListEx->StatFlags = (uint32_t*)D2_CALLOC_POOL(pUnit->pMemoryPool, 2 * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
@@ -2074,6 +2074,7 @@ void __stdcall D2Common_10525(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 //D2Common.0x6FDB91C0 (#10474)
 void __stdcall D2Common_10474(D2UnitStrc* pUnused, D2StatListStrc* pStatList)
 {
+	D2_MAYBE_UNUSED(pUnused);
 	D2Common_ExpireStatList_6FDB6E30((D2StatListExStrc*)pStatList);
 }
 
@@ -2148,6 +2149,7 @@ int __stdcall STATLIST_GetDefenseFromUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FDB9AE0 (#10524)
 void __stdcall STATLIST_ExpireUnitStatlist(D2UnitStrc* pUnused, D2UnitStrc* pUnit)
 {
+	D2_MAYBE_UNUSED(pUnused);
 	if (pUnit && pUnit->pStatListEx)
 	{
 		D2Common_ExpireStatList_6FDB6E30(pUnit->pStatListEx);
@@ -2157,12 +2159,14 @@ void __stdcall STATLIST_ExpireUnitStatlist(D2UnitStrc* pUnused, D2UnitStrc* pUni
 //D2Common.0x6FDB9B00 (#10531)
 int __stdcall D2Common_10531_SetStatInStatListLayer0(D2StatListStrc* pStatList, int nStatId, int nValue, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	return STATLIST_SetStat(pStatList, nStatId, nValue, 0);
 }
 
 //D2Common.0x6FDB9B10 (#11248)
 int __stdcall D2Common_11248(D2UnitStrc* pUnused, D2UnitStrc* pUnit, int nStatId)
 {
+	D2_MAYBE_UNUSED(pUnused);
 	if (pUnit)
 	{
 		return STATLIST_GetStatUnsigned_Layer0(pUnit->pStatListEx, nStatId);
@@ -2252,7 +2256,7 @@ int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListStrc* pStatList, int nStatI
 }
 
 //D2Common.0x6FDB9D20 (#11270)
-int __stdcall D2Common_11270(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize)
+int __stdcall STATLIST_CopyStats(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize)
 {
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx))
 	{

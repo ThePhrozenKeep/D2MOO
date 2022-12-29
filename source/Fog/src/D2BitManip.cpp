@@ -228,7 +228,7 @@ Notes:
 */
 int __stdcall BITMANIP_GetBitState(uint8_t* pBitStream, int nBit)
 {
-	return gdwBitMasks[nBit & 7] & pBitStream[nBit >> 3];
+	return pBitStream[nBit >> 3] & (uint8_t)gdwBitMasks[nBit & 7];
 }
 
 /*
@@ -238,5 +238,5 @@ Notes:
 */
 void __stdcall BITMANIP_MaskBitstate(uint8_t* pBitStream, int nBit)
 {
-	pBitStream[nBit >> 3] &= LOBYTE(gdwInvBitMasks[nBit & 7]);
+	pBitStream[nBit >> 3] &= (uint8_t)gdwInvBitMasks[nBit & 7];
 }

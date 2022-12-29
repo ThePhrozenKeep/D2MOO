@@ -279,7 +279,7 @@ D2COMMON_DLL_DECL void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2Inventory
 //D2Common.0x6FD91050 (#10291)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory);
 //D2Common.0x6FD91140 (#10292)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, D2UnitGUID nOwnerId);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, D2UnitGUID nOwnerGuid);
 //D2Common.0x6FD91160 (#10293)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetOwnerId(D2InventoryStrc* pInventory);
 //D2Common.0x6FD91190 (#10294)

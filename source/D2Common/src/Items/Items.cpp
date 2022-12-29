@@ -467,7 +467,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwItemFlags & IFLAG_IDENTIFIED && !(pItem->pItemData->dwItemFlags & IFLAG_ETHEREAL))
 	{
-		nStats = D2Common_11270(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
+		nStats = STATLIST_CopyStats(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
 
 		if (nStats > 0)
 		{
@@ -533,7 +533,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98C60 (#10780)
-uint32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
+int32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
@@ -550,7 +550,7 @@ uint32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType)
 }
 
 //D2Common.0x6FD98CA0 (#10781)
-uint32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
+int32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -566,7 +566,7 @@ uint32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98D20 (#10782)
-uint32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
+int32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 
@@ -583,7 +583,7 @@ uint32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType)
 }
 
 //D2Common.0x6FD98D60 (#10783)
-uint32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem)
+int32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
@@ -969,7 +969,7 @@ uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId)
 }
 
 //D2Common.0x6FD99680 (#10753)
-uint8_t __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem)
+uint8_t __stdcall ITEMS_GetItemQlvl(const D2UnitStrc* pItem)
 {
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
@@ -1268,7 +1268,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 		break;
 	case ITEMQUAL_RARE:
-		for(int i = 0; i < 3; ++i)
+		for(int i = 0; i < ITEMS_MAX_MODS; ++i)
 		{
 			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
 			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
@@ -1304,7 +1304,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		break;
 	case ITEMQUAL_CRAFT:
 		nCraftBonus = 10;
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
 		{
 			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
 			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
@@ -1397,7 +1397,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 	}
 
-	for (int i = 0; i < D2Common_11270(pItem, STAT_ITEM_SINGLESKILL, pStat, ARRAY_SIZE(pStat)); ++i)
+	for (int i = 0; i < STATLIST_CopyStats(pItem, STAT_ITEM_SINGLESKILL, pStat, ARRAY_SIZE(pStat)); ++i)
 	{
 		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pStat[i].nLayer);
 		if (pSkillsTxtRecord)
@@ -1409,7 +1409,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 	}
 
-	for (int i = 0; i < D2Common_11270(pItem, STAT_ITEM_NONCLASSSKILL, pStat, ARRAY_SIZE(pStat)); ++i)
+	for (int i = 0; i < STATLIST_CopyStats(pItem, STAT_ITEM_NONCLASSSKILL, pStat, ARRAY_SIZE(pStat)); ++i)
 	{
 		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pStat[i].nLayer);
 		if (pSkillsTxtRecord)
@@ -1798,7 +1798,7 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 	int nMax = 0;
 	D2StatStrc pStat[64] = {};
 
-	nStats = D2Common_11270(pUnit, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
+	nStats = STATLIST_CopyStats(pUnit, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
 	if (nStats > 0)
 	{
 		do
@@ -2159,7 +2159,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			{
 			case ITEMQUAL_RARE:
 			case ITEMQUAL_CRAFT:
-				for (int i = 0; i < 3; ++i)
+				for (int i = 0; i < ITEMS_MAX_MODS; ++i)
 				{
 					pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
 					if (pMagicAffixTxtRecord)
@@ -2613,7 +2613,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, in
 			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nStaffMods != 7)
 			{
-				nStats = D2Common_11270(pItem, STAT_ITEM_SINGLESKILL, pStat, ARRAY_SIZE(pStat));
+				nStats = STATLIST_CopyStats(pItem, STAT_ITEM_SINGLESKILL, pStat, ARRAY_SIZE(pStat));
 
 				for (int nStatId = 0; nStatId < nStats; ++nStatId)
 				{
@@ -3559,14 +3559,14 @@ int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 		if (pItemsTxtRecord->wType[0] >= 0 && pItemsTxtRecord->wType[0] < sgptDataTables->nItemTypesTxtRecordCount)
 		{
 			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
-			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nClass < 7)
+			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nClass < NUMBER_OF_PLAYERCLASSES)
 			{
 				return pItemTypesTxtRecord->nClass;
 			}
 		}
 	}
 
-	return 7;
+	return PCLASS_INVALID;
 }
 
 //D2Common.0x6FD9E410 (#10823)
@@ -3776,7 +3776,7 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 
 			++nCounter;
 		}
-		while (nCounter < 3);
+		while (nCounter < ITEMS_MAX_MODS);
 
 		nCounter = 0;
 		do
@@ -3806,7 +3806,7 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 
 			++nCounter;
 		}
-		while (nCounter < 3);
+		while (nCounter < ITEMS_MAX_MODS);
 		
 		break;
 
@@ -4305,7 +4305,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 				}
 			}
 
-			nStats = D2Common_11270(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
+			nStats = STATLIST_CopyStats(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
 			if (nStats <= 0)
 			{
 				if (bCanBeRepaired)
@@ -4687,7 +4687,7 @@ int __stdcall ITEMS_HasUsedCharges(D2UnitStrc* pItem, BOOL* pHasChargedSkills)
 		*pHasChargedSkills = TRUE;
 	}
 
-	nStats = D2Common_11270(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
+	nStats = STATLIST_CopyStats(pItem, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
 
 	if (nStats <= 0)
 	{
@@ -4818,7 +4818,7 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBits
 
 		pItemData->dwItemLevel = 1;
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
 		{
 			pItemData->wMagicPrefix[i] = 0;
 			pItemData->wMagicSuffix[i] = 0;
@@ -5195,7 +5195,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			pItemData->wRareSuffix = (uint16_t)BITMANIP_Read(pBuffer, 8);
 		}
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
 		{
 			if (BITMANIP_Read(pBuffer, 1))
 			{
@@ -6912,7 +6912,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 
 			++nCounter;
 		}
-		while (nCounter < 3);
+		while (nCounter < ITEMS_MAX_MODS);
 
 		break;
 	}

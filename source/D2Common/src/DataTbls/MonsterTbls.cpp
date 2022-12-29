@@ -1088,7 +1088,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x14 = atoi(szArg);
+			pTCExInfo->nUnique = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "cs", 3))
 		{
@@ -1098,7 +1098,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x12 = atoi(szArg);
+			pTCExInfo->nSet = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "cr", 3))
 		{
@@ -1108,7 +1108,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x10 = atoi(szArg);
+			pTCExInfo->nRare = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "cm", 3))
 		{
@@ -1118,7 +1118,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x0E = atoi(szArg);
+			pTCExInfo->nMagic = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "ce", 3))
 		{
@@ -1128,7 +1128,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x16 = atoi(szArg);
+			pTCExInfo->nSuperior = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "cg", 3))
 		{
@@ -1138,7 +1138,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 				*szNext = 0;
 				++szNext;
 			}
-			pTCExInfo->unk0x18 = atoi(szArg);
+			pTCExInfo->nNormal = atoi(szArg);
 		}
 		else if (!strncmp(szTmp, "ma", 3))
 		{

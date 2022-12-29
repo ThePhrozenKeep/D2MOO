@@ -361,8 +361,6 @@ int __stdcall DATATBLS_GetMissileVelocityFromMissilesTxt(int nMissileId, int nLe
 //Inlined at various places
 D2MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId)
 {
-	D2MissilesTxt* pMissilesTxtRecord = NULL;
-
 	if (nMissileId >= 0 && nMissileId < sgptDataTables->nMissilesTxtRecordCount)
 	{
 		return &sgptDataTables->pMissilesTxt[nMissileId];

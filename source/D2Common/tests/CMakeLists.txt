@@ -6,7 +6,6 @@
 
 add_executable(D2CommonTests D2CommonTests.cpp)
 target_link_libraries(D2CommonTests PRIVATE doctest::doctest D2CommonStatic)
-target_compile_definitions(D2CommonTests PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_features(D2CommonTests PRIVATE cxx_std_17)
 
 set_target_properties(D2CommonTests PROPERTIES

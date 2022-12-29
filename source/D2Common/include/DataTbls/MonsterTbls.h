@@ -4,6 +4,8 @@
 #include <D2Monsters.h>
 #pragma pack(1)
 
+struct D2ItemTypesTxt;
+
 //TODO: Find a better name
 struct D2UnkMonCompStrc
 {
@@ -15,19 +17,19 @@ struct D2UnkMonCompStrc
 
 struct D2TCExInfoStrc
 {
-	int32_t nClassic;
-	int32_t nProb;
-	int16_t nItemId;
-	int16_t nTxtRow;
-	uint8_t nFlags;
-	int8_t unk0x0D;
-	int16_t unk0x0E;
-	int16_t unk0x10;
-	int16_t unk0x12;
-	int16_t unk0x14;
-	int16_t unk0x16;
-	int16_t unk0x18;
-	int16_t unk0x1A;
+	int32_t nClassic;						//0x00
+	int32_t nProb;							//0x04
+	int16_t nItemId;						//0x08
+	int16_t nTxtRow;						//0x0A
+	uint8_t nFlags;							//0x0C
+	int8_t unk0x0D;							//0x0D
+	int16_t nMagic;							//0x0E
+	int16_t nRare;							//0x10
+	int16_t nSet;							//0x12
+	int16_t nUnique;						//0x14
+	int16_t nSuperior;						//0x16
+	int16_t nNormal;						//0x18
+	int16_t unk0x1A;						//0x1A
 };
 
 struct D2TCExShortStrc
@@ -334,21 +336,24 @@ struct D2MonStatsTxt
 	uint16_t wNameStr;						//0x06
 	uint16_t wDescStr;						//0x08
 	uint16_t unk0x0A;						//0x0A
-	uint32_t dwMonStatsFlags;				//0x0C
+	union
+	{
+		uint32_t dwMonStatsFlags;				//0x0C
+		uint8_t nMonStatsFlags[4];				//0x0C
+	};
 	uint32_t dwCode;						//0x10
 	uint16_t wMonSound;						//0x14
 	uint16_t wUMonSound;					//0x16
 	uint16_t wMonStatsEx;					//0x18
 	uint16_t wMonProp;						//0x1A
-	uint16_t wMonType;						//0x1C
+	int16_t wMonType;						//0x1C
 	uint16_t wAI;							//0x1E
 	uint16_t wSpawn;						//0x20
 	uint8_t nSpawnX;						//0x22
 	uint8_t nSpawnY;						//0x23
 	uint8_t nSpawnMode;						//0x24
 	uint8_t unk0x25;						//0x25
-	uint16_t wMinion1;						//0x26
-	uint16_t wMinion2;						//0x28
+	int16_t wMinion[2];						//0x26
 	int16_t nMonEquipTxtRecordId;			//0x2A
 	uint8_t nPartyMin;						//0x2C
 	uint8_t nPartyMax;						//0x2D
@@ -384,7 +389,7 @@ struct D2MonStatsTxt
 	uint8_t nToBlock[3];					//0xA3
 	uint8_t nCrit;							//0xA6
 	uint8_t unk0xA7;						//0xA7
-	uint16_t wSkillDamage;					//0xA8
+	int16_t wSkillDamage;					//0xA8
 	uint16_t nLevel[3];						//0xAA
 	uint16_t nMinHP[3];						//0xB0
 	uint16_t nMaxHP[3];						//0xB6
@@ -407,9 +412,9 @@ struct D2MonStatsTxt
 	uint16_t nElMaxD[3][3];					//0x120
 	uint16_t nElDur[3][3];					//0x132
 	uint16_t nResistances[6][3];			//0x144
-	uint8_t nColdEffect[3];					//0x168
+	int8_t nColdEffect[3];					//0x168
 	uint8_t unk0x16B;						//0x16B
-	uint32_t dwSendSkills;					//0x16C
+	uint8_t nSendSkills[4];					//0x16C
 	int16_t nSkill[8];						//0x170
 	uint8_t nSkillMode[8];					//0x180
 	uint16_t nSequence[8];					//0x188
@@ -424,7 +429,11 @@ struct D2MonStatsTxt
 struct D2MonStats2Txt
 {
 	uint32_t dwId;							//0x00
-	uint32_t dwFlags;						//0x04
+	union
+	{
+		uint32_t dwFlags;						//0x04
+		uint8_t nFlags[4];						//0x04
+	};
 	uint8_t nSizeX;							//0x08
 	uint8_t nSizeY;							//0x09
 	uint8_t nSpawnCol;						//0x0A
@@ -443,7 +452,11 @@ struct D2MonStats2Txt
 	uint32_t dwComponentFlags;				//0xE8
 	uint8_t nTotalPieces;					//0xEC
 	uint8_t pad0xED[3];						//0xED
-	uint32_t dwModeFlags;					//0xF0
+	union
+	{
+		uint32_t dwModeFlags;					//0xF0
+		uint8_t nModeFlags[4];					//0xF0
+	};
 	uint8_t nModeDirections[NUMBER_OF_MONMODES]; //0xF4
 	uint8_t unusedFlags[4];					//0x104
 	uint8_t nInfernoLen;					//0x108
@@ -487,7 +500,7 @@ struct D2MonUModTxt
 	uint8_t nXfer;							//0x07
 	uint8_t nChampion;						//0x08
 	uint8_t nFPick;							//0x09
-	uint16_t wExclude[2];					//0x0A
+	int16_t wExclude[2];					//0x0A
 	uint16_t wCPick[3];						//0x0E
 	uint16_t wUPick[3];						//0x14
 	uint16_t pad0x1A;						//0x1A

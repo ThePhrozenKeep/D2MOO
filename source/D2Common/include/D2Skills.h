@@ -197,7 +197,7 @@ D2COMMON_DLL_DECL D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromUnitAnd
 //D2Common.0x6FDAFFD0 (#10951)
 D2COMMON_DLL_DECL void __stdcall SKILLS_RemoveSkill(D2UnitStrc* pUnit, int nSkillId, const char* szFile, int nLine);
 //D2Common.0x6FDAFFF0
-void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, int a3, const char* szFile, int nLine);
+void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, int bDecrementAndCheckSkillLevel, const char* szFile, int nLine);
 //D2Common.0x6FDB0270 (#10958)
 D2COMMON_DLL_DECL void* __stdcall D2Common_10958(D2UnitStrc* pUnit, void* a2);
 //D2Common.0x6FDB02A0 (#10959)
@@ -305,7 +305,7 @@ D2COMMON_DLL_DECL int __stdcall SKILLS_GetHighestSkillLevelById(D2UnitStrc* pUni
 //D2Common.0x6FDB2280 (#11001)
 D2COMMON_DLL_DECL int __stdcall SKILLS_GetManaCosts(int nSkillId, int nSkillLevel);
 //D2Common.0x6FDB22E0
-int __fastcall SKILLS_CalculateDamageBonusByLevel(int nLevel, int* a2);
+int __fastcall SKILLS_CalculateDamageBonusByLevel(int nLevel, int* pLevelDamage);
 //D2Common.0x6FDB2390 (#11002)
 D2COMMON_DLL_DECL int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4);
 //D2Common.0x6FDB25D0 (#11003)

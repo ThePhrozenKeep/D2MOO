@@ -261,6 +261,8 @@ D2COMMON_DLL_DECL BOOL __stdcall STATES_IsAnyGfxStateFlagSet(D2UnitStrc* pUnit);
 D2COMMON_DLL_DECL uint32_t* __stdcall STATES_GetGfxStateFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDB4790 (#10493)
 D2COMMON_DLL_DECL void __stdcall STATES_UpdateStayDeathFlags(D2UnitStrc* pUnit, BOOL bIsBoss);
+//D2Common.0x6FDB48F0 (#10494)
+D2COMMON_DLL_DECL uint32_t* __stdcall D2COMMON_10494_STATES_GetStatFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDB4900 (#10495)
 D2COMMON_DLL_DECL int __fastcall STATES_GetNumberOfStateFlags();
 //D2Common.0x6FDB4920 (#10496)

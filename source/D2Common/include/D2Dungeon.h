@@ -57,9 +57,9 @@ D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindRoomBySubtileCoordinates(D2D
 //D2Common.0x6FD8C290
 BOOL __fastcall DUNGEON_AreSubtileCoordinatesInsideRoom(D2DrlgCoordsStrc* pDrlgCoords, int nX, int nY);
 //D2Common.0x6FD8C2F0 (#10046)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocation(D2DrlgActStrc* pAct, int nLevelId, int a3, int* pX, int* pY);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocation(D2DrlgActStrc* pAct, int nLevelId, int nTileIndex, int* pX, int* pY);
 //D2Common.0x6FD8C340 (#10045)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nLevelId, int a3, int* pX, int* pY, int nUnitSize);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nLevelId, int nTileIndex, int* pX, int* pY, int nUnitSize);
 //D2Common.0x6FD8C4A0 (#10029)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall DUNGEON_GetFirstUnitInRoom(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C4E0 (#10100)
@@ -189,9 +189,9 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_AnimateTiles(D2RoomStrc* pRoom);
 //D2Common.0x6FD8D580 (#10105)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_InitRoomTileAnimation(D2DrlgActStrc* pAct, D2RoomStrc* pRoom1, D2RoomStrc* pRoom2);
 //D2Common.0x6FD8D5C0 (#10103)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pFunc);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pActCallbackFunction);
 //D2Common.0x6FD8D600 (#10106)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, int nUnitGUID);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, D2UnitGUID nUnitGUID);
 //D2Common.0x6FD8D630 (#10111)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_WorldToScreenCoords(int* pX, int* pY);
 //D2Common.0x6FD8D660 (#10112)

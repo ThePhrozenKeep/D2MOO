@@ -4,14 +4,6 @@
 
 #pragma pack(1)
 
-struct D2PropertyStrc
-{
-	int32_t nProperty;					//0x00
-	int32_t nLayer;						//0x04
-	int32_t nMin;						//0x08
-	int32_t nMax;						//0x0C
-};
-
 struct D2RunesTxt
 {
 	char szName[64];						//0x00
@@ -153,22 +145,22 @@ struct D2ItemStatCostDescStrc
 
 struct D2ItemRatioTxt
 {
-	uint32_t dwUnique;						//0x00
-	uint32_t dwUniqueDivisor;				//0x04
-	uint32_t dwUniqueMin;					//0x08
-	uint32_t dwRare;						//0x0C
-	uint32_t dwRareDivisor;					//0x10
-	uint32_t dwRareMin;						//0x14
-	uint32_t dwSet;							//0x18
-	uint32_t dwSetDivisor;					//0x1C
-	uint32_t dwSetMin;						//0x20
-	uint32_t dwMagic;						//0x24
-	uint32_t dwMagicDivisor;				//0x28
-	uint32_t dwMagicMin;					//0x2C
-	uint32_t dwHiQuality;					//0x30
-	uint32_t dwHiQualityDivisor;			//0x34
-	uint32_t dwNormal;						//0x38
-	uint32_t dwNormalDivisor;				//0x3C
+	int32_t dwUnique;						//0x00
+	int32_t dwUniqueDivisor;				//0x04
+	int32_t dwUniqueMin;					//0x08
+	int32_t dwRare;							//0x0C
+	int32_t dwRareDivisor;					//0x10
+	int32_t dwRareMin;						//0x14
+	int32_t dwSet;							//0x18
+	int32_t dwSetDivisor;					//0x1C
+	int32_t dwSetMin;						//0x20
+	int32_t dwMagic;						//0x24
+	int32_t dwMagicDivisor;					//0x28
+	int32_t dwMagicMin;						//0x2C
+	int32_t dwHiQuality;					//0x30
+	int32_t dwHiQualityDivisor;				//0x34
+	int32_t dwNormal;						//0x38
+	int32_t dwNormalDivisor;				//0x3C
 	uint16_t wVersion;						//0x40
 	uint8_t nUber;							//0x42
 	uint8_t nClassSpecific;					//0x43 
@@ -267,7 +259,7 @@ struct D2ItemStatCostTxt
 	uint16_t wDescGrpStrPos;				//0x42
 	uint16_t wDescGrpStrNeg;				//0x44
 	uint16_t wDescGrpStr2;					//0x46
-	uint16_t wItemEvent[2];					//0x48
+	int16_t wItemEvent[2];					//0x48
 	uint16_t wItemEventFunc[2];				//0x4C
 	uint8_t nKeepZero;						//0x50
 	uint8_t bIsBaseOfOtherStatOp;			//0x51
@@ -506,8 +498,8 @@ struct D2BooksTxt
 	uint8_t nSpellIcon;								//0x02
 	uint8_t pad0x03;								//0x03
 	uint32_t dwPSpell;								//0x04
-	uint32_t dwScrollSkillId;						//0x08
-	uint32_t dwBookSkillId;							//0x0C
+	int32_t dwScrollSkillId;						//0x08
+	int32_t dwBookSkillId;							//0x0C
 	uint32_t dwBaseCost;							//0x10
 	uint32_t dwCostPerCharge;						//0x14
 	uint32_t dwScrollSpellCode;						//0x18
@@ -547,7 +539,8 @@ struct D2MagicAffixTxt
 	uint16_t wTblIndex;								//0x20
 	uint16_t wVersion;								//0x22
 	D2PropertyStrc pProperties[3];					//0x24
-	uint16_t wSpawnable;							//0x54
+	uint8_t wSpawnable;								//0x54
+	uint8_t padding0x54;							//0x54
 	char nTransformColor;							//0x56
 	uint8_t unk0x57;								//0x57
 	uint32_t dwLevel;								//0x58
@@ -561,7 +554,8 @@ struct D2MagicAffixTxt
 	uint8_t pad0x69;								//0x69
 	uint16_t wIType[7];								//0x6A
 	uint16_t wEType[5];								//0x78
-	uint16_t wFrequency;							//0x82
+	uint8_t wFrequency;								//0x82
+	uint8_t padding0x83;							//0x83
 	uint32_t dwDivide;								//0x84
 	uint32_t dwMultiply;							//0x88
 	uint32_t dwAdd;									//0x8C

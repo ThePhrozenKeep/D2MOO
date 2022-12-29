@@ -1,0 +1,9 @@
+---
+Checks:          '-*,readability-inconsistent-declaration-parameter-name'
+WarningsAsErrors: 'readability-inconsistent-declaration-parameter-name'
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+CheckOptions:
+...
+

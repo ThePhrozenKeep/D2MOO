@@ -293,13 +293,13 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, uint8_t
 //D2Common.0x6FD98A70 (#10777)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem);
 //D2Common.0x6FD98C60 (#10780)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType);
 //D2Common.0x6FD98CA0 (#10781)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem);
 //D2Common.0x6FD98D20 (#10782)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType);
 //D2Common.0x6FD98D60 (#10783)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem);
 //D2Common.0x6FD98DE0 (#10784)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAutoStackFromItemType(int nItemType);
 //D2Common.0x6FD98E20 (#10785)
@@ -339,7 +339,7 @@ D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem);
 //D2Common.0x6FD99640 (#10752)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId);
 //D2Common.0x6FD99680 (#10753)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemQlvl(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemQlvl(const D2UnitStrc* pItem);
 //D2Common.0x6FD99700 (#10754)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfFlagIsSet(int nFlags, int nFlag);
 //D2Common.0x6FD99710 (#10755)
@@ -552,7 +552,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 //D2Common.0x6FDA0A20
 int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, uint32_t dwVersion);
 //D2Common.0x6FDA2690
-void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pUnit, int nStat);
+void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pItem, int nStat);
 //D2Common.0x6FDA29D0
 void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109);
 //D2Common.0x6FDA2BA0 (#10881)
@@ -574,4 +574,4 @@ BOOL __fastcall sub_6FDA4380(D2UnitStrc* pItem, unsigned int nSetItemMask);
 //D2Common.0x6FDA4490
 BOOL __fastcall sub_6FDA4490(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3);
 //D2Common.0x6FDA4640 (#10866)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_UpdateSets(D2UnitStrc* pPlayer, D2UnitStrc* pItem, int a3, int a4);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_UpdateSets(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3, int a4);

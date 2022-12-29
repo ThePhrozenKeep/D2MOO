@@ -1,6 +1,7 @@
 #include <cstdio>
 
 #include <Archive.h>
+#include <File.h>
 #include <D2BitManip.h>
 #include <D2Lang.h>
 
@@ -20,22 +21,6 @@ D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
-
-//D2Common.0x6FDC45EE
-size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t Count, FILE* File)
-{
-	size_t nSize = 0;
-
-	_lock_file(File);
-	nSize = fwrite(Str, Size, Count, File);
-	_unlock_file(File);
-
-	return nSize;
-}
-
-
-
-
 
 // ARENA & CHARTEMPLATE
 
@@ -126,7 +111,7 @@ uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel)
 //D2Common.0x6FD496B0 (#10628)
 uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 {
-	if (nClass < 0 || nClass >= 7)
+	if (nClass < 0 || nClass >= NUMBER_OF_PLAYERCLASSES)
 	{
 		nClass = 0;
 	}
@@ -137,7 +122,7 @@ uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 //D2Common.0x6FD496E0 (#10629)
 int __stdcall DATATBLS_GetMaxLevel(int nClass)
 {
-	if (nClass >= 0 && nClass < 7)
+	if (nClass >= 0 && nClass < NUMBER_OF_PLAYERCLASSES)
 	{
 		return sgptDataTables->pExperienceTxt->dwClass[nClass];
 	}
@@ -150,7 +135,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 {
 	int nLevel = 1;
 
-	if (nClass < 0 || nClass >= 7)
+	if (nClass < 0 || nClass >= NUMBER_OF_PLAYERCLASSES)
 	{
 		nClass = 0;
 	}
@@ -177,7 +162,7 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, vo
 		fopen_s(&pFile, szFilePath, "wb");
 		if (pFile)
 		{
-			DATATBLS_LockAndWriteToFile(*ppFileHandle, *pSize, 1, pFile);
+			FileLockAndWrite(*ppFileHandle, *pSize, 1, pFile);
 
 			fclose(pFile);
 		}
@@ -620,8 +605,8 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 	fopen_s(&pFile, szFilePath, "wb");
 	if (pFile)
 	{
-		DATATBLS_LockAndWriteToFile(&nRecordCount, sizeof(nRecordCount), 1, pFile);
-		DATATBLS_LockAndWriteToFile(pWriteBuffer, nBufferSize, 1, pFile);
+		FileLockAndWrite(&nRecordCount, sizeof(nRecordCount), 1, pFile);
+		FileLockAndWrite(pWriteBuffer, nBufferSize, 1, pFile);
 		fclose(pFile);
 	}
 }
@@ -665,8 +650,8 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 		fopen_s(&pFile, szFilePath, "wb");
 		if (pFile)
 		{
-			DATATBLS_LockAndWriteToFile(&nRecordCount, 4, 1, pFile);
-			DATATBLS_LockAndWriteToFile(pTxt, dwSize * nRecordCount, 1, pFile);
+			FileLockAndWrite(&nRecordCount, 4, 1, pFile);
+			FileLockAndWrite(pTxt, dwSize * nRecordCount, 1, pFile);
 			fclose(pFile);
 		}
 		FOG_FreePool(NULL, pTxt, __FILE__, __LINE__, 0);

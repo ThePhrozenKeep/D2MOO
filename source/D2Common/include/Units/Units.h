@@ -74,9 +74,19 @@ enum D2C_UnitFlagsEx
 
 //TODO: Redo Header defs when .cpp is done
 
+
+struct D2EventTimerStrc;
+
+struct D2UnitPacketListStrc
+{
+	D2UnitPacketListStrc* pNext;
+	uint8_t nHeader;
+	//uint8_t nData[255];
+};
+
 struct D2UnitStrc
 {
-	uint32_t dwUnitType;						//0x00
+	uint32_t dwUnitType;						//0x00 D2C_UnitTypes
 	int32_t dwClassId;							//0x04
 	void* pMemoryPool;							//0x08
 	D2UnitGUID dwUnitId;						//0x0C
@@ -105,7 +115,7 @@ struct D2UnitStrc
 	};
 	struct D2MonSeqTxt* pAnimSeq;				//0x30
 	uint32_t dwSeqFrameCount;					//0x34
-	uint32_t dwSeqFrame;						//0x38
+	int32_t dwSeqFrame;						//0x38
 	uint32_t dwAnimSpeed;						//0x3C
 	uint32_t dwSeqMode;							//0x40
 	uint32_t dwGFXcurrentFrame;					//0x44
@@ -132,7 +142,7 @@ struct D2UnitStrc
 			void* pTimerParams;					//0x07C
 			D2GameStrc* pGame;					//0x080
 			uint32_t __084[3];					//0x084
-			D2TimerStrc* pSrvTimerList;			//0x090
+			D2UnitEventStrc* pSrvTimerList;			//0x090
 		};
 
 		struct									//Client Unit
@@ -180,12 +190,12 @@ struct D2UnitStrc
 		uint32_t dwSrvTickCount;				//Server pUnit
 		D2PacketListStrc* pPacketList;			//Client pUnit
 	};
-	D2TimerStrc* pTimer;						//0xDC
+	D2EventTimerStrc* pTimer;					//0xDC
 	D2UnitStrc* pChangeNextUnit;				//0xE0
 	D2UnitStrc* pListNext;						//0xE4
 	D2UnitStrc* pRoomNext;						//0xE8
-	void* pMsgFirst;							//0xEC
-	void* pMsgLast;								//0xF0
+	D2UnitPacketListStrc* pMsgFirst;			//0xEC
+	D2UnitPacketListStrc* pMsgLast;				//0xF0
 };
 
 #pragma pack()
@@ -315,7 +325,7 @@ D2COMMON_DLL_DECL D2ObjectsTxt* __stdcall UNITS_GetObjectTxtRecordFromObject(D2U
 //D2Common.0x6FDBFD00 (#10395)
 D2COMMON_DLL_DECL D2ShrinesTxt* __stdcall UNITS_GetShrineTxtRecordFromObject(D2UnitStrc* pUnit);
 //D2Common.0x6FDBFD50 (#10396)
-D2COMMON_DLL_DECL void __stdcall UNITS_SetShrineTxtRecordInObjectData(D2UnitStrc* pUnit, D2ShrinesTxt* pTxt);
+D2COMMON_DLL_DECL void __stdcall UNITS_SetShrineTxtRecordInObjectData(D2UnitStrc* pUnit, D2ShrinesTxt* pShrinesTxtRecord);
 //D2Common.0x6FDBFDB0 (#10413)
 D2COMMON_DLL_DECL void __stdcall UNITS_UpdateDirectionAndSpeed(D2UnitStrc* pUnit, int nX, int nY);
 //D2Common.0x6FDBFDD0 (#10414)
@@ -331,7 +341,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_StoreLastAttacker(D2UnitStrc* pUnit, D2Un
 //D2Common.0x6FDC00E0 (#10418)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetDirectionToCoords(D2UnitStrc* pUnit, int nNewX, int nNewY);
 //D2Common.0x6FDC0160 (#10437)
-D2COMMON_DLL_DECL void __stdcall UNITS_SetOverlay(D2UnitStrc* pUnit, int nOverlay, int a3);
+D2COMMON_DLL_DECL void __stdcall UNITS_SetOverlay(D2UnitStrc* pUnit, int nOverlay, int nUnused);
 //D2Common.0x6FDC01F0 (#10367)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetBeltType(D2UnitStrc* pUnit);
 //D2Common.0x6FDC0260 (#10368)
@@ -349,7 +359,7 @@ D2COMMON_DLL_DECL char* __stdcall UNITS_GetPlayerName(D2UnitStrc* pUnit);
 //D2Common.0x6FDC05B0 (#10424)
 D2COMMON_DLL_DECL D2PlayerDataStrc* __stdcall UNITS_GetPlayerData(D2UnitStrc* pUnit);
 //D2Common.0x6FDC0600 (#10425)
-D2COMMON_DLL_DECL void __stdcall UNITS_SetPlayerPortalFlags(D2UnitStrc* pUnit, int a2);
+D2COMMON_DLL_DECL void __stdcall UNITS_SetPlayerPortalFlags(D2UnitStrc* pUnit, int nPortalFlags);
 //D2Common.0x6FDC0660 (#10426)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetPlayerPortalFlags(D2UnitStrc* pUnit);
 //D2Common.0x6FDC06C0 (#10353)
@@ -365,13 +375,13 @@ D2COMMON_DLL_DECL int __stdcall UNITS_GetOverlayHeight(D2UnitStrc* pUnit);
 //D2Common.0x6FDC08B0 (#10431)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit);
 //D2Common.0x6FDC0AC0 (#10432)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetAttackRate(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall UNITS_GetAttackRate(D2UnitStrc* pAttacker);
 //D2Common.0x6FDC0B60 (#10433)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion);
 //D2Common.0x6FDC0DA0 (#10434)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10434(D2UnitStrc* pUnit, BOOL a2);
 //D2Common.0x6FDC0F70 (#10435)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pMonster);
 //D2Common.0x6FDC0FC0 (#10436)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetFrameBonus(D2UnitStrc* pUnit);
 //D2Common.0x6FDC1120 (#10360)
@@ -387,7 +397,7 @@ void __fastcall UNITS_ToggleUnitFlag(D2UnitStrc* pUnit, int nFlag, BOOL bSet);
 //D2Common.0x6FDC1790 (#10363)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionType);
 //D2Common.0x6FDC1A70 (#10361)
-D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInMeleeRange(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int a3);
+D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInMeleeRange(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nRangeBonus);
 //D2Common.0x6FDC1B40 (#10318)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInMovingMode(D2UnitStrc* pUnit);
 //D2Common.0x6FDC1C30 (#10319)
@@ -461,12 +471,12 @@ D2COMMON_DLL_DECL int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* p
 //D2Common.0x6FDC2E40 (#10397)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetDistanceToOtherUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //D2Common.0x6FDC2F50 (#10398)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX, int nY);
+D2COMMON_DLL_DECL unsigned int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX, int nY);
 //D2Common.0x6FDC2FF0 (#10400)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc* pCoord, int nDistance);
 //D2Common.0x6FDC3090 (#10406)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int(__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a3);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a3);
 //D2Common.0x6FDC33C0 (#10407)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, D2UnitStrc*), D2UnitStrc* a5, int a6);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6);
 //D2Common.0x6FDC3680 (#10419)
 D2COMMON_DLL_DECL void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, D2UnitGUID nUnitGUID);

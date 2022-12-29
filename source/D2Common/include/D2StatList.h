@@ -475,6 +475,8 @@ struct D2StatListStrc
 	void* fpStatRemove;						//0x38
 };
 
+using StatListValueChangeFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
+
 struct D2StatListExStrc : public D2StatListStrc
 {
 	D2StatListStrc* pMyLastList;			//0x3C
@@ -483,7 +485,7 @@ struct D2StatListExStrc : public D2StatListStrc
 	D2StatsArrayStrc FullStats;				//0x48
 	D2ModStatsArrayStrc ModStats;			//0x50
 	uint32_t* StatFlags;					//0x58 8bytes per states
-	void* fpCallBack;						//0x5C
+	StatListValueChangeFunc pfOnValueChanged;		//0x5C
 	D2GameStrc* pGame;						//0x60
 };
 #pragma pack()
@@ -502,7 +504,7 @@ inline bool STATLIST_IsExtended(D2StatListStrc* pStatList) { return pStatList->d
 //D2Common.0x6FDB57C0 (#10563)
 D2COMMON_DLL_DECL BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //----- (6FDB5830) --------------------------------------------------------
-int __fastcall sub_6FDB5830(D2StatListExStrc* a1, D2SLayerStatIdStrc::PackedType a2);
+int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6300
 int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6340
@@ -512,13 +514,13 @@ int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, D2SLaye
 //D2Common.0x6FDB64A0
 int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6920
-D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_FindStat_6FDB6920(D2StatsArrayStrc* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6970
-D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
+D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2StatsArrayStrc* pStatsArray, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6A30
 void __fastcall STATLIST_RemoveStat_6FDB6A30(void* pMemPool, D2StatsArrayStrc* pStatEx, D2StatStrc* pStat);
 //D2Common.0x6FDB6AB0
-void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
+void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nNewValue, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6C10
 void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nValue, D2UnitStrc* pUnit);
 //D2Common.0x6FDB6E30
@@ -532,7 +534,7 @@ D2COMMON_DLL_DECL void __stdcall STATLIST_FreeStatListEx(D2UnitStrc* pUnit);
 //D2Common.0x6FDB7140 (#10470)
 D2COMMON_DLL_DECL D2StatListStrc* __stdcall STATLIST_AllocStatList(void* pMemPool, uint32_t fFilter, uint32_t dwTimeout, int nUnitType, D2UnitGUID nUnitGUID);
 //D2Common.0x6FDB7190 (#10526)
-D2COMMON_DLL_DECL void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, void* pCallbackFunc, D2GameStrc* pGame);
+D2COMMON_DLL_DECL void __stdcall STATLIST_AllocStatListEx(D2UnitStrc* pUnit, char nFlags, StatListValueChangeFunc pfOnValueChanged, D2GameStrc* pGame);
 //D2Common.0x6FDB7260 (#10471)
 D2COMMON_DLL_DECL int __stdcall STATLIST_GetOwnerType(D2StatListStrc* pStatList);
 //D2Common.0x6FD912D0 (#10472)
@@ -680,9 +682,9 @@ D2COMMON_DLL_DECL int __stdcall D2COMMON_11269_CopyStats(D2StatListExStrc* pStat
 //D2Common.0x6FDB9C50
 int __fastcall D2Common_CopyStats_6FDB9C50(D2StatListStrc* pStatListEx, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D20 (#11270)
-D2COMMON_DLL_DECL int __stdcall D2Common_11270(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
+D2COMMON_DLL_DECL int __stdcall STATLIST_CopyStats(D2UnitStrc* pUnit, int nStatId, D2StatStrc* pBuffer, int nBufferSize);
 //D2Common.0x6FDB9D60 (#11273)
-D2COMMON_DLL_DECL int __stdcall D2Common_11273(D2UnitStrc* pUnit, int a2);
+D2COMMON_DLL_DECL int __stdcall D2Common_11273(D2UnitStrc* pUnit, int nStatId);
 //D2Common.0x6FDB9D90 (#11274)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_11274(D2UnitStrc* pTarget, D2UnitStrc* pUnit);
 //D2Common.0x6FDB9E60 (#11275)

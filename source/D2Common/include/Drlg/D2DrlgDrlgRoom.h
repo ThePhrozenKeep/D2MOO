@@ -30,7 +30,7 @@ BOOL __fastcall DRLG_ComputeRectanglesManhattanDistance(D2DrlgCoordStrc* pDrlgCo
 //D2Common.0x6FD77800
 BOOL __fastcall sub_6FD77800(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance);
 //D2Common.0x6FD77890
-BOOL __fastcall DRLGMAZE_CheckRoomNotOverlaping(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2, int nMaxDistance);
+BOOL __fastcall DRLGMAZE_CheckRoomNotOverlaping(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx1, D2RoomExStrc* pIgnoredRoom, int nMargin);
 //D2Common.0x6FD77910
 void __fastcall DRLGROOM_AddRoomExToLevel(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77930
@@ -60,7 +60,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77EB0
 void __fastcall DRLGROOM_SortRoomListByPosition(D2RoomExStrc** ppRoomList, int nListSize);
 //D2Common.0x6FD77F00
-BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWarpId, D2RoomExStrc* pRoomEx2, char a5, int a6);
+BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWarpId, D2RoomExStrc* pRoomEx2, char nWarpFlag, int nDirection);
 //D2Common.0x6FD780E0
 D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2RoomExStrc* pRoomEx, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY);
 //D2Common.0x6FD78160

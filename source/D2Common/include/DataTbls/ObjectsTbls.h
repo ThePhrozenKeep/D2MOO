@@ -25,8 +25,8 @@ struct D2ObjectsTxt
 	uint8_t nSelectable[8];					//0xC4
 	uint8_t nTrapProb;						//0xCC
 	uint8_t pad0xCD[3];						//0xCD
-	uint32_t dwSizeX;						//0xD0
-	uint32_t dwSizeY;						//0xD4
+	int32_t dwSizeX;						//0xD0
+	int32_t dwSizeY;						//0xD4
 	uint32_t dwFrameCnt[8];					//0xD8
 	uint16_t wFrameDelta[8];				//0xF8
 	uint8_t nCycleAnim[8];					//0x108

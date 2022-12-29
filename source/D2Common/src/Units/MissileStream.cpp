@@ -70,7 +70,7 @@ void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionType, int n
 }
 
 //D2Common.0x6FDBC3B0
-int __fastcall MISSTREAM_Return1(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
+int __fastcall MISSTREAM_Return1(D2UnitStrc* pUnit1, void* pUnit2)
 {
 	return 1;
 }

@@ -1,5 +1,6 @@
 
 add_library(D2CMP SHARED src/DllMain.cpp include/D2CMP.h)
+
 # The definition file that matches functions with their ordinals
 target_sources(D2CMP PRIVATE definitions/D2CMP.${D2MOO_ORDINALS_VERSION}.def)
 target_include_directories(D2CMP PUBLIC include)

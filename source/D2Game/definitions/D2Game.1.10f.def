@@ -1,0 +1,64 @@
+LIBRARY		D2GAME
+EXPORTS
+	D2Game_10001_Return0												@10001
+	D2Game_10002														@10002
+	GAME_ProcessNetworkMessages											@10003
+	GAME_UpdateGamesProgress											@10004
+	GAME_UpdateClients													@10005
+	D2Game_10006														@10006
+	GAME_ReceiveDatabaseCharacter										@10007
+	D2Game_10008														@10008
+	GAME_SetGlobalAct													@10009
+	GAME_SetInitSeed													@10010
+	D2Game_10011														@10011
+	GAME_GetGamesCount													@10012
+	D2Game_10013														@10013
+	D2Game_10014														@10014
+	GAME_GetGameServerTokens											@10015
+	D2Game_10016														@10016
+	D2Game_10017														@10017
+	D2Game_10018														@10018
+	D2Game_10019														@10019
+	GAME_GetStatistics													@10020
+	D2Game_10021														@10021
+	D2Game_10022														@10022
+	GAME_SetServerCallbackFunctions										@10023
+	D2Game_10024_RemoveClientFromGame									@10024
+	DEBUG_GetUnitFromTypeAndGUID										@10025
+	DEBUG_GetAct														@10026
+	DEBUG_GetFreeMonsterIndex											@10027
+	DEBUG_GetRoomBySubtileCoordinates									@10028
+	D2GAME_10029_SAVE_WriteFileInterface								@10029
+;
+;
+;
+	D2Game_10033														@10033
+	D2Game_10034_Return													@10034
+	QUESTS_DisableSequences												@10035
+	D2GAME_10036_PLRSAVE_EnableSaveFileWriting							@10036
+	QUESTS_CheckFirstPickedSet											@10037
+	QUESTS_CheckNotIntroQuest											@10038
+	TASK_InitializeClock												@10039
+	TASK_FreeAllQueueSlots												@10040
+	D2Game_10041_TASK_Create											@10041
+	D2Game_10042														@10042
+	D2Game_10043														@10043
+	D2Game_10044														@10044
+	TASK_ProcessGame													@10045
+	D2Game_10046														@10046
+	GAME_CreateNewEmptyGame												@10047
+	D2Game_10048_Return1												@10048
+	D2Game_10049_Return1												@10049
+	D2Game_10050														@10050
+	D2Game_10051														@10051
+	GAME_GetMemoryUsage													@10052
+	D2Game_10053														@10053
+	D2Game_10054														@10054
+	GAME_DisconnectClientByName											@10055
+	D2Game_10056														@10056
+	D2Game_10057														@10057
+	CLIENTS_GetExpansionClientCount										@10058
+	PLAYER_SetVirtualPlayerCount										@10059
+	D2Game_10060_Return													@10060
+	D2Game_10061_Return													@10061
+	GAME_ReturnArgument													@10062

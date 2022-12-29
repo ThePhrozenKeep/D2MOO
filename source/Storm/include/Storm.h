@@ -764,10 +764,10 @@ D2FUNC_DLL_NP(STORM, SStrLen, int, __stdcall, (const char *string), 0x2a330);  /
 D2FUNC_DLL_NP(STORM, SStrDup, void*, __stdcall, (int a1), 0x2a260);  //Storm.#507
 
 /// Imported by ['D2Launch.dll', 'Fog.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SStrCmp, int, __stdcall, (char *Str1, char *Str2, size_t MaxCount), 0x2a0a0);  //Storm.#508
+D2FUNC_DLL_NP(STORM, SStrCmp, int, __stdcall, (const char *Str1, const char *Str2, size_t MaxCount), 0x2a0a0);  //Storm.#508
 
 /// Imported by ['D2Launch.dll', 'Fog.dll', 'D2CMP.dll', 'D2Common.dll', 'D2Game.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SStrCmpI, int, __stdcall, (char *Str1, char *Str, size_t MaxCount), 0x2a0e0);  //Storm.#509
+D2FUNC_DLL_NP(STORM, SStrCmpI, int, __stdcall, (const char *Str1, const char *Str, size_t MaxCount), 0x2a0e0);  //Storm.#509
 
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SStrUpper, int, __stdcall, (char *Str), 0x2b240);  //Storm.#510

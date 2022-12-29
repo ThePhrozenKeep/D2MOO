@@ -1,6 +1,7 @@
 #include "D2DataTbls.h"
 
 #include <Archive.h>
+#include <File.h>
 
 //D2Common.0x6FD498D0
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
@@ -781,7 +782,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 			fopen_s(&pSkillsCodeBin, szFileName, "wb");
 			if (pSkillsCodeBin)
 			{
-				DATATBLS_LockAndWriteToFile(sgptDataTables->pSkillsCode, sgptDataTables->nSkillsCodeSize, 1u, pSkillsCodeBin);
+				FileLockAndWrite(sgptDataTables->pSkillsCode, sgptDataTables->nSkillsCodeSize, 1u, pSkillsCodeBin);
 				fclose(pSkillsCodeBin);
 			}
 			FOG_FreePool(NULL, sgptDataTables->pSkillsCode, __FILE__, __LINE__, 0);
@@ -800,7 +801,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		fopen_s(&pSkillDescCodeBin, szFileName, "wb");
 		if (pSkillDescCodeBin)
 		{
-			DATATBLS_LockAndWriteToFile(sgptDataTables->pSkillDescCode, sgptDataTables->nSkillDescCodeSize, 1, pSkillDescCodeBin);
+			FileLockAndWrite(sgptDataTables->pSkillDescCode, sgptDataTables->nSkillDescCodeSize, 1, pSkillDescCodeBin);
 			fclose(pSkillDescCodeBin);
 		}
 		FOG_FreePool(NULL, sgptDataTables->pSkillDescCode, __FILE__, __LINE__, 0);

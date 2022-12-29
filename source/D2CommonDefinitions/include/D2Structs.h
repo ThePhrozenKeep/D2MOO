@@ -147,6 +147,7 @@ struct D2ObjectControlStrc;
 struct D2ObjectDataStrc;
 struct D2ObjInitFnStrc;
 struct D2ObjOperateFnStrc;
+struct D2PacketDataStrc;
 struct D2PacketListStrc;
 struct D2PacketTableStrc;
 struct D2PlayerCountBonusStrc;
@@ -183,7 +184,7 @@ struct D2RosterInfoStrc;
 struct D2RosterPetStrc;
 struct D2RosterUnitStrc;
 struct D2SaveHeaderStrc;
-struct D2SaveLaunchStrc;
+struct D2CharacterPreviewInfoStrc;
 struct D2ServerPacketTableStrc;
 struct D2ServerParamStrc;
 struct D2ShrineTableStrc;
@@ -214,8 +215,8 @@ struct D2TileLibraryHashRefStrc;
 struct D2TileLibraryHeaderStrc;
 struct D2TileRecordStrc;
 struct D2TimerArgStrc;
-struct D2TimerQueueStrc;
-struct D2TimerStrc;
+struct D2EventTimerQueueStrc;
+struct D2UnitEventStrc;
 struct D2UnitStrc;
 struct D2UnitFindArgStrc;
 struct D2UnitFindDataStrc;
@@ -245,6 +246,30 @@ struct D2InventoryGridInfoStrc;
 
 
 
+
+struct D2PartyNodeStrc
+{
+	int nUnitGUID;
+	D2PartyNodeStrc* pNext;
+};
+
+struct D2PartyStrc
+{
+	int16_t nPartyId;
+	int16_t field_2;
+	D2PartyNodeStrc* pPartyNodes;
+	D2PartyStrc* pNext;
+};
+
+struct D2PartyControlStrc
+{
+	int16_t field_0;
+	int16_t field_2;
+	D2PartyStrc* pParties;
+};
+
+
+
 ////////////////////////////////
 
 struct D2ClientKeySkillStrc
@@ -256,11 +281,12 @@ struct D2ClientKeySkillStrc
 
 struct D2MercSaveDataStrc
 {
-	uint32_t dwFlags;							//0x00		//0xAF of D2SaveHeaderStrc
-	uint32_t dwSeed;							//0x04		//0xB3
-	uint16_t nName;								//0x08		//0xB7
-	uint16_t nType;								//0x0A		//0xB9
-	uint32_t dwExperience;						//0x0C		//0xBB
+	uint32_t nFlags;							//0x00		//0xAF of D2SaveHeaderStrc
+	uint32_t nSeed;								//0x04		//0xB3
+	uint16_t wName;								//0x08		//0xB7
+	uint16_t nHirelingId;						//0x0A		//0xB9
+	uint32_t nExperience;						//0x0C		//0xBB
+	uint32_t unk0x10[4];						//0x10
 };
 
 struct D2SaveSkillKeyStrc
@@ -312,13 +338,29 @@ struct D2AiControlStrc
 
 struct D2AiParamStrc
 {
-	uint32_t unk0x00;							//0x00
-	void* pAiParamFn;						//0x04
-	uint16_t nAiFlags;							//0x08
-	uint8_t unk0x0A[16];						//0x0A
-	uint32_t dwMoveMethod;						//0x18
-	int32_t nSpeedBonus;						//0x1C
-	int32_t nSteps;								//0x20
+	//uint32_t unk0x00;							//0x00
+	//void* pAiParamFn;						//0x04
+	//uint16_t nAiFlags;							//0x08
+	//uint8_t unk0x0A[16];						//0x0A
+	//uint32_t dwMoveMethod;						//0x18
+	//int32_t nSpeedBonus;						//0x1C
+	//int32_t nSteps;								//0x20
+
+	uint8_t unk0x00;
+	uint8_t unk0x01;
+	uint8_t unk0x02;
+	uint8_t unk0x03;
+	D2UnitStrc* pTarget;
+	int32_t unk0x08;
+	int32_t unk0x0C;
+	int32_t unk0x10;
+	int32_t unk0x14;
+	int32_t unk0x18;
+	int32_t nVelocity;
+	uint8_t unk0x20;
+	uint8_t unk0x21;
+	uint8_t unk0x22;
+	uint8_t unk0x23;
 };
 
 struct D2AiTableStrc
@@ -375,20 +417,6 @@ struct D2AnvilUIButtonStrc
 	uint8_t unk0x27;							//0x27
 };
 
-
-struct D2ArenaStrc
-{
-	int32_t nAlternateStartTown;				//0x00
-	int32_t nType;								//0x04
-	uint32_t fFlags;							//0x08
-	int32_t nTemplate;							//0x0C - uint8_t with 3 pad
-};
-
-struct D2ArenaUnitStrc
-{
-	int32_t nScore;								//0x00
-	BOOL bUpdateScore;						//0x04 
-};
 
 struct D2AttackStrc
 {
@@ -530,80 +558,6 @@ struct D2CellFileStrc
 	D2GfxCellStrc* pGfxCells;				//0x18
 };
 
-struct D2ClientInfoStrc
-{
-	D2ClientInfoStrc* pSelf;				//0x00
-	int32_t dwClientId;							//0x04
-	uint32_t nFlags;					//0x08
-	const char* szKickMessage;				//0x0C
-	int32_t unk0x10;							//0x10
-	uint32_t dwLastPacketResetTick;		//0x14
-	uint32_t nPacketsPerSecond;			//0x18
-	uint32_t dwNewGameTick;				//0x1C
-	uint32_t dwRemoveTick;				//0x20
-	int32_t unk0x24;							//0x24
-	int32_t unk0x28;							//0x28
-	uint32_t dwHackDetectionPacketTick;	//0x2C
-	uint32_t nACDataCount;				//0x30
-	int32_t unk0x34;							//0x34
-	int32_t unk0x38;							//0x38
-	uint32_t unk0x3C;					//0x3C
-};
-
-struct D2ClientStrc
-{
-	uint32_t dwClientId;						//0x00
-	uint32_t dwClientState;					//0x04
-	uint8_t unk0x08[2];						//0x08
-	uint16_t nFlags;							//0x0A
-	uint8_t unk0x0C;							//0x0C
-	char szName[16];						//0x0D
-	char szAccount[16];						//0x1D
-	uint8_t unk0x2D[59];						//0x2D
-	D2ClientInfoStrc* pClientInfo;			//0x68
-	uint8_t unk0x6C[256];						//0x6C
-	uint32_t dwUnitType;						//0x16C
-	D2UnitGUID dwUnitGUID;						//0x170
-	D2UnitStrc* pPlayer;					//0x174
-	uint32_t __178;							//0x178
-	D2SaveHeaderStrc* pSaveHeader;			//0x17C
-	int32_t nSaveHeaderSize;					//0x180
-	uint32_t unk0x184[9];						//0x184
-	D2GameStrc* pGame;						//0x1A8
-	uint8_t nAct;								//0x1AC
-	uint8_t pad0x1AD[3];						//0x1AD
-	uint32_t __1B0;							//0x1B0
-	D2RoomStrc* pRoom;						//0x1B4
-	void* pPacketData[3];					//0x1B8
-	uint32_t __1C4[132];						//0x1C4
-	uint32_t dwFlags;							//0x3D4
-	uint32_t dwLastPacketTick;					//0x3D8
-	D2ClientKeySkillStrc HotkeySkills[16];	//0x3DC
-	BOOL bSwitchWeapon;						//0x45C
-	uint32_t __45C[11];						//0x45C
-	uint32_t dwInactivityTime;					//0x48C
-	uint16_t nHitpoints;						//0x490
-	uint16_t nManaPoints;						//0x492
-	uint16_t nStaminaPoints;					//0x494
-	uint8_t nPotionLifePercent;				//0x496
-	uint8_t nPotionManaPercent;				//0x497
-	uint16_t nPosX;								//0x498
-	uint16_t nPosY;								//0x49A
-	uint16_t nTargetOffsetX;					//0x49C
-	uint16_t nTargetOffsetY;					//0x49E
-	uint32_t dwBeltGold;						//0x4A0
-	uint32_t dwExperience;						//0x4A4
-	D2ClientStrc* pNext;					//0x4A8
-	D2ClientStrc* pListNext;				//0x4AC
-	D2ClientStrc* pNextByName;				//0x4B0
-	uint32_t __4B4[19];						//0x4B4
-	uint32_t dwSentPings;						//0x500
-	int32_t nExpLoss;							//0x504
-	uint32_t dwExpLost;						//0x508
-	uint32_t dwLangId;							//0x50C
-	uint32_t __510[2];							//0x510
-};
-
 //struct D2CollMapStrc 
 //{
 //	uint32_t dwPosGameX;						//0x00
@@ -623,23 +577,23 @@ struct D2DamageStrc
 	uint32_t dwHitFlags;						//0x00
 	uint16_t wResultFlags;						//0x04
 	uint16_t wExtra;							//0x06
-	uint32_t dwPhysDamage;						//0x08
+	int32_t dwPhysDamage;						//0x08
 	uint32_t dwEnDmgPct;						//0x0C
-	uint32_t dwFireDamage;						//0x10
-	uint32_t dwBurnDamage;						//0x14
+	int32_t dwFireDamage;						//0x10
+	int32_t dwBurnDamage;						//0x14
 	uint32_t dwBurnLen;						//0x18
-	uint32_t dwLtngDamage;						//0x1C
-	uint32_t dwMagDamage;						//0x20
-	uint32_t dwColdDamage;						//0x24
-	uint32_t dwPoisDamage;						//0x28
+	int32_t dwLtngDamage;						//0x1C
+	int32_t dwMagDamage;						//0x20
+	int32_t dwColdDamage;						//0x24
+	int32_t dwPoisDamage;						//0x28
 	uint32_t dwPoisLen;						//0x2C
 	uint32_t dwColdLen;						//0x30
 	uint32_t dwFrzLen;							//0x34
-	uint32_t dwLifeLeech;						//0x38
-	uint32_t dwManaLeech;						//0x3C
-	uint32_t dwStamLeech;						//0x40
+	int32_t dwLifeLeech;						//0x38
+	int32_t dwManaLeech;						//0x3C
+	int32_t dwStamLeech;						//0x40
 	uint32_t dwStunLen;						//0x44
-	uint32_t dwAbsLife;						//0x48
+	int32_t dwAbsLife;						//0x48
 	uint32_t dwDmgTotal;						//0x4C
 	uint32_t unk0x50;							//0x50
 	uint32_t dwPiercePct;						//0x54
@@ -649,8 +603,8 @@ struct D2DamageStrc
 	uint8_t nHitClassActiveSet;				//0x64
 	char nConvType;							//0x65
 	uint8_t unk0x66[2];						//0x66
-	uint32_t dwConvPct;						//0x68
-	uint8_t unk0x6C[4];						//0x6C
+	int32_t dwConvPct;						//0x68
+	int32_t nOverlay;						//0x6C
 };
 
 struct D2CombatStrc
@@ -663,7 +617,6 @@ struct D2CombatStrc
 	D2DamageStrc tDamage;					//0x14
 	D2CombatStrc* pNext;					//0x84
 };
-
 
 struct D2CorpseStrc
 {
@@ -733,61 +686,6 @@ struct D2FieldStrc
 {
 	int32_t nX;									//0x00
 	int32_t nY;									//0x04
-};
-
-struct D2GameStrc
-{
-	uint32_t __0000[4];						//0x00
-	D2GameStrc* pNext;						//0x10
-	uint32_t __0014;							//0x14
-	LPCRITICAL_SECTION lpCriticalSection;	//0x18
-	void* pMemoryPool;						//0x1C
-	uint32_t __0020[2];						//0x20
-	uint16_t nServerToken;						//0x28
-	char szGameName[16];					//0x2A
-	char szGamePassword[16];				//0x3A
-	char szGameDesc[32];					//0x4A
-	uint8_t nGameType;							//0x6A
-	uint16_t __006B;							//0x6B
-	uint8_t nDifficulty;						//0x6D
-	uint16_t __006E;							//0x6E
-	BOOL bExpansion;						//0x70
-	uint32_t dwGameType;						//0x74
-	uint16_t wItemFormat;						//0x78
-	uint16_t unk0x7A;							//0x7A
-	uint32_t dwInitSeed;						//0x7C
-	uint32_t dwObjSeed;						//0x80
-	uint32_t InitSeed;							//0x84
-	D2ClientStrc* pClientList;				//0x88
-	uint32_t nClients;							//0x8C
-	uint32_t dwSpawnedPlayers;					//0x90
-	uint32_t dwSpawnedMonsters;				//0x94
-	uint32_t dwSpawnedObjects;					//0x98
-	uint32_t dwSpawnedMissiles;				//0x9C
-	uint32_t dwSpawnedItems;					//0xA0
-	uint32_t dwSpawnedTiles;					//0xA4
-	uint32_t dwGameFrame;						//0xA8
-	uint32_t unk0xAC[3];						//0xAC
-	D2TimerQueueStrc* pTimerQueue;			//0xB8
-	D2DrlgActStrc* pAct[5];					//0xBC
-	D2SeedStrc pGameSeed;					//0xD0
-	D2InactiveUnitListStrc* pInactiveUnitList[5];//0xD8
-	uint32_t dwMonSeed;						//0xEC
-	D2MonsterRegionStrc* pMonReg[1024];		//0xF0
-	D2ObjectControlStrc* pObjectControl;	//0x10F0
-	D2QuestInfoStrc* pQuestControl;			//0x10F4
-	D2TargetNodeStrc* pUnitNodes[10];		//0x10F8
-	D2UnitStrc* pUnitList[5][128];			//0x1120
-	void* pTileList;						//0x1B20
-	uint32_t dwUniqueFlags[128];				//0x1B24
-	D2NpcControlStrc* pNpcControl;			//0x1D24
-	D2ArenaStrc* pArenaCtrl;				//0x1D28
-	void* pPartyControl;					//0x1D2C
-	uint8_t nBossFlagList[64];					//0x1D30
-	uint32_t dwMonModeData[17];				//0x1D70
-	uint32_t nMonModeData;						//0x1DB4
-	uint32_t unk0x1DB8[3];						//0x1DB8
-	uint32_t nSyncTimer;						//0x1DC4
 };
 
 struct D2GfxCellStrc
@@ -1162,14 +1060,16 @@ struct D2ModeChangeStrc
 	int32_t nY;									//0x10
 	uint8_t unk0x14[4];						//0x14
 	int32_t unk0x18;							//0x18
-	int32_t unk0x1C;							//0x1C
+	uint8_t unk0x1C;							//0x1C
+	uint8_t unk0x1D[3];							//0x1D
 };
 
 struct D2MonRegDataStrc
 {
 	uint16_t nMonHcIdx;							//0x00
 	uint8_t nRarity;							//0x02
-	uint8_t unk0x03[49];						//0x03
+	uint8_t unk0x03;							//0x03
+	uint8_t unk0x04[3][16];						//0x04
 };
 
 struct D2MonsterRegionStrc
@@ -1177,7 +1077,7 @@ struct D2MonsterRegionStrc
 	uint8_t nAct;								//0x00
 	uint8_t unk0x01[3];						//0x01
 	int32_t unk0x04;							//0x04
-	uint8_t unk0x08[4];						//0x08
+	int32_t unk0x08;							//0x08
 	int32_t unk0x0C;							//0x0C
 	uint8_t nMonCount;							//0x10
 	uint8_t nTotalRarity;						//0x11
@@ -1243,56 +1143,66 @@ struct D2NPCMessageTableStrc
 	int32_t nMessages;							//0xC0
 };
 
+struct D2NpcVendorChainStrc
+{
+	int dwGUID;
+	uint8_t field_4;
+	uint8_t unk0x05[3];
+	D2NpcVendorChainStrc* pNext;
+};
+
+struct D2NpcEventStrc
+{
+	D2UnitStrc* pUnit;
+	int32_t field_4;
+	int32_t field_8;
+	int32_t field_C;
+	D2NpcEventStrc* pNext;
+};
+
+struct D2NpcTradeStrc
+{
+	struct
+	{
+		bool bVendorInit;		//0x00
+		bool bHireInit;			//0x01
+		uint8_t nAct;			//0x02
+		bool bTrader;			//0x03
+		bool bLevelRefresh;		//0x04
+		bool bInited;			//0x05
+		bool bForceVendor;		//0x06
+		bool bRefreshInventory;	//0x07
+	};
+
+	uint32_t dwTicks;				//0x08
+	D2UnitProxyStrc pProxy;			//0x0C
+	uint32_t dwUnk;					//0x1C
+	D2UnitGUID dwNPCGUID;			//0x20
+};
+
 struct D2NpcRecordStrc
 {
-	int32_t nNPC;								//0x00
+	int32_t nNPC;							//0x00
 	D2InventoryStrc* pInventory;			//0x04
 	D2NpcGambleStrc* pGamble;				//0x08
 	BOOL bGambleInit;						//0x0C
 	D2MercDataStrc* pMercData;				//0x10
-	void* pEvent;							//0x14
-	void* pVendorChain;						//0x18
+	D2NpcEventStrc* pEvent;					//0x14
+	D2NpcVendorChainStrc* pVendorChain;		//0x18
 	BOOL bTrading;							//0x1C
-
-	//union
-	//{
-		struct
-		{
-			//union
-			//{
-			//	bool bFlags[8];				//0x20
-				struct
-				{
-					bool bVendorInit;		//0x20
-					bool bHireInit;			//0x21
-					uint8_t nAct;				//0x22
-					bool bTrader;			//0x23
-					bool bLevelRefresh;		//0x24
-					bool bInited;			//0x25
-					bool bForceVendor;		//0x26
-					bool bRefreshInventory;	//0x27
-				};
-			//};
-
-			uint32_t dwTicks;					//0x28
-			D2UnitProxyStrc pProxy;			//0x2C
-			uint32_t dwUnk;					//0x3C
-			D2UnitGUID dwNPCGUID;				//0x40
-		};
-		//D2NPCTradeStrc pTrade;            //0x20
-	//};
+	D2NpcTradeStrc npcTrade;				//0x20
 };
 
-typedef int32_t(__fastcall* OBELISKPOWERUP)(D2GameStrc*, D2UnitStrc*, int32_t);
+using ObeliskPowerUpFunction = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t);
 
 struct D2ObeliskPowerUpStrc
 {
-	OBELISKPOWERUP pPowerUpCallback;		//0x00
-	uint32_t nChance;					//0x04
-	int32_t nValue;								//0x08
+	ObeliskPowerUpFunction pPowerUpCallback;//0x00
+	uint32_t nChance;						//0x04
+	int32_t nValue;							//0x08
 };
 
-typedef void(__fastcall* OBJINITFN)(D2ObjInitFnStrc*);
+using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
 
 struct D2ObjInitFnStrc
 {
@@ -1305,7 +1215,7 @@ struct D2ObjInitFnStrc
 	int32_t nY;									//0x18
 };
 
-typedef BOOL(__fastcall* OBJOPERATEFN)(D2ObjOperateFnStrc*, int32_t);
+using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
 
 struct D2ObjOperateFnStrc
 {
@@ -1314,6 +1224,13 @@ struct D2ObjOperateFnStrc
 	D2UnitStrc* pPlayer;					//0x08
 	D2ObjectControlStrc* pObjectregion;		//0x0C
 	int32_t nObjectIdx;							//0x10
+};
+
+struct D2PacketDataStrc					//sizeof 0x208
+{
+	int32_t nPacketSize;					//0x00
+	uint8_t packetData[512];				//0x04
+	D2PacketDataStrc* pNext;				//0x204
 };
 
 struct D2PacketListStrc
@@ -1351,7 +1268,7 @@ struct D2QuestArgStrc
 	{
 		struct
 		{
-			void* pTextControl;				//0x14
+			D2TextHeaderStrc* pTextControl;		//0x14
 			uint32_t dw18;						//0x18
 		};
 		struct
@@ -1381,10 +1298,11 @@ typedef bool(__fastcall* QUESTSTATUS)(D2QuestDataStrc*, D2UnitStrc*, D2BitBuffer
 typedef bool(__fastcall* QUESTUPDATE)(D2GameStrc*, D2QuestDataStrc*);
 typedef bool(__fastcall* QUESTACTIVE)(D2QuestDataStrc*, int32_t, D2UnitStrc*, D2BitBufferStrc*, D2UnitStrc*);
 typedef int32_t(__fastcall* QUESTSEQ)(D2QuestDataStrc*, D2UnitStrc*, D2BitBufferStrc*, D2BitBufferStrc*, uint8_t*);
+typedef bool(__fastcall* QUESTSEQFILTER)(D2QuestDataStrc*);
 
 struct D2QuestDataStrc
 {
-	int32_t nQuestNo;							//0x00 - internal
+	int32_t nQuestNo;						//0x00 - internal
 	D2GameStrc* pGame;						//0x04
 	char nActNo;							//0x08
 	bool bNotIntro;							//0x09 - set to false for intro quests, it could also be for already completed...
@@ -1392,45 +1310,45 @@ struct D2QuestDataStrc
 	uint8_t fLastState;						//0x0B - previous quest state
 	uint8_t fState;							//0x0C - main quest state
 	char nInitNo;							//0x0D
-	uint16_t dw0E;								//0x0E 
-	int32_t nSeqId;								//0x10 - nInitNo
-	uint32_t dwFlags;							//0x14
+	uint16_t dw0E;							//0x0E 
+	int32_t nSeqId;							//0x10 - nInitNo
+	uint32_t dwFlags;						//0x14
 	void* pQuestDataEx;						//0x18 - union of 0x29 structs
 	union
 	{
 		struct
 		{
-			uint32_t nPlayerGUID[32];			//0x1C - players that have entered the quest zone
-			uint16_t nPlayerCount;				//0x9C
+			uint32_t nPlayerGUID[32];		//0x1C - players that have entered the quest zone
+			uint16_t nPlayerCount;			//0x9C
 		};
 		D2QuestGUIDStrc pGUID;				//0x1C
 	};
-	uint16_t dw9E;								//0x9E 
+	uint16_t dw9E;							//0x9E 
 	QUESTCALLBACK pfCallback[15];			//0xA0
 	D2NPCMessageTableStrc* pNPCMessages;	//0xDC
-	int32_t nQuest;								//0xE0 - index in quest flag bit array
+	int32_t nQuest;							//0xE0 - index in quest flag bit array
 	QUESTSTATUS pfStatusFilter;				//0xE4
 	QUESTACTIVE pfActiveFilter;				//0xE8
-	void* pfSeqFilter;						//0xEC
+	QUESTSEQFILTER pfSeqFilter;				//0xEC
 	D2QuestDataStrc* pPrev;					//0xF0
 };
 
 struct D2QuestInitTableStrc
 {
 	QUESTINIT pfInit;						//0x00
-	uint8_t nAct;								//0x04
+	uint8_t nAct;							//0x04
 	uint8_t pad0x05[3];						//0x05
-	uint32_t nVersion;							//0x08
+	uint32_t nVersion;						//0x08
 	bool bNoSetState;						//0x0C - used by the sequences for quest init flags
 	uint8_t pad0x0D[3];						//0x0D
-	int32_t nChainNo;							//0x10 - quest data internal chain id
-	uint32_t nQuestNo;							//0x14 - pQuestData flag no
+	int32_t nChainNo;						//0x10 - quest data internal chain id
+	uint32_t nQuestNo;						//0x14 - pQuestData flag no
 };
 
 struct D2QuestIntroTableStrc
 {
 	QUESTINIT pfInit;						//0x00
-	uint8_t nAct;								//0x04
+	uint8_t nAct;							//0x04
 	uint8_t pad0x05[3];						//0x05
 }; 
 
@@ -1441,9 +1359,9 @@ struct D2QuestInfoStrc
 	BOOL bPickedSet;						//0x08
 	D2BitBufferStrc* pQuestFlags;			//0x0C
 	D2QuestTimerStrc* pTimer;				//0x10
-	uint32_t dwTick;							//0x14
+	uint32_t dwTick;						//0x14
 	D2SeedStrc pSeed;						//0x18
-	uint8_t unk0x20;							//0x20
+	uint8_t unk0x20;						//0x20
 	uint8_t unk0x21[3];						//0x21
 };
 
@@ -1451,7 +1369,7 @@ struct D2QuestTimerStrc
 {
 	QUESTUPDATE pfUpdate;					//0x00
 	D2QuestDataStrc* pQuest;				//0x04
-	uint32_t dwTicks;							//0x08
+	uint32_t dwTicks;						//0x08
 	uint32_t dwTimeout;						//0x0C
 	D2QuestTimerStrc* pNext;				//0x10
 };
@@ -1615,35 +1533,44 @@ struct D2SaveHeaderStrc
 	uint32_t dwLasTime;						//0x030
 	uint32_t dwPlayTime;						//0x034
 	D2SaveSkillKeyStrc SkillKeys[16];		//0x038
-	D2SaveSkillKeyStrc ButtonSkills[4];		//0x078
+	int16_t nLeftSkillId;					//0x78
+	int16_t nLeftSkillItemIndex;			//0x7A
+	int16_t nRightSkillId;					//0x7C
+	int16_t nRightSkillItemIndex;			//0x7E
+	int16_t nSwitchLeftSkillId;				//0x80
+	int16_t nSwitchLeftSkillItemIndex;		//0x82
+	int16_t nSwitchRightSkillId;			//0x84
+	int16_t nSwitchRightSkillItemIndex;		//0x86
 	uint8_t nComponent[16];					//0x088
 	uint8_t nCompColor[16];					//0x098
 	uint8_t nTown[3];							//0x0A8
 	uint32_t dwMapSeed;						//0x0AB
 	D2MercSaveDataStrc MercSaveData;		//0x0AF
-	uint8_t nRealmData[16];					//0x0BF
 	uint8_t nSaveField;						//0x0CF
 	uint32_t dwLastLevel;						//0x0D0
 	uint32_t dwLastTown;						//0x0D4
 	uint8_t nLastDifficulty;					//0x0D8
+
+	char unk0xD9[118];
 };
 
-struct D2SaveLaunchStrc
+struct D2CharacterPreviewInfoStrc // This is used as string, values are encoded so that they are != 0
 {
-	uint16_t unk0x00;					//0x00
+	uint16_t unk0x00;					//0x00 lower byte is cleared if invalid data was found => empty string
 	uint8_t pComponents[11];			//0x02
-	uint8_t nClass;					//0x0D
+	uint8_t nClass;						//0x0D
 	uint8_t pComponentColors[11];		//0x0C
-	uint8_t nLevel;					//0x19
-	uint16_t unk0x1A;					//0x1A
-	uint16_t unk0x1C;					//0x1C
-	uint8_t unk0x1E;					//0x1E
-	uint8_t unk0x1F;					//0x1F
-	uint8_t unk0x20;					//0x20
-	uint8_t unk0x21;					//0x21
+	uint8_t nLevel;						//0x19
+	uint16_t nClientFlags;				//0x1A
+	uint16_t nGuildFlags;				//0x1C
+	uint8_t nGuildEmblemBgColor;		//0x1E
+	uint8_t nGuildEmblemFgColor;		//0x1F
+	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
+	uint32_t szGuildTag;				//0x21
+	uint8_t pad0x25;					//0x25
 };
 
-typedef int32_t(__fastcall* SERVERPACKETCALLBACK)(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pPacket, size_t nPacketSize);
+typedef int32_t(__fastcall* SERVERPACKETCALLBACK)(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pPacket, int nPacketSize);
 
 struct D2ServerPacketTableStrc
 {
@@ -1688,17 +1615,10 @@ struct D2SummonArgStrc
 
 struct D2TargetNodeStrc
 {
-	D2UnitStrc* pUnit;						//0x00
+	D2UnitStrc* pUnit;							//0x00
 	int32_t unk0x04;							//0x04
-	D2TargetNodeStrc* pNext;				//0x08
-};
-
-struct D2TaskStrc
-{
-	int32_t unk0x00;							//0x00
-	int32_t nType;								//0x04
-	int32_t unk0x08;							//0x08
-	int32_t unk0x0C;							//0x0C
+	D2TargetNodeStrc* pNext;					//0x08
+	D2TargetNodeStrc* unk0x0C;					//0x0C
 };
 
 struct D2TblHeaderStrc

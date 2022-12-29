@@ -1057,7 +1057,7 @@ EXPORTS
 	D2Common_11054														@11054
 	D2Common_11055														@11055
 ;------------------------UNUSED------------------------						@11056
-	MONSTESR_IsSandLeaper												@11057
+	MONSTERS_IsSandLeaper												@11057
 	MONSTERS_IsDemon													@11058
 	MONSTERS_IsUndead													@11059
 	MONSTERS_IsBoss														@11060
@@ -1270,7 +1270,7 @@ EXPORTS
 	STATLIST_GetSkillLevel												@11267
 	STATLIST_GetFullStatsDataFromUnit									@11268
 	D2COMMON_11269_CopyStats											@11269
-	D2Common_11270														@11270
+	STATLIST_CopyStats													@11270
 	SKILLS_GetSpecialParamValue											@11271
 	STATES_CheckStateMaskRemHitOnUnit									@11272
 	D2Common_11273														@11273

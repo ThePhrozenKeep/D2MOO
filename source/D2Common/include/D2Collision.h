@@ -62,13 +62,13 @@ D2COMMON_DLL_DECL void __stdcall COLLISION_SetMask(D2RoomStrc* pRoom, int nX, in
 //D2Common.0x6FD417F0 (#10123)
 D2COMMON_DLL_DECL void __stdcall COLLISION_ResetMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD418C0 (#10120)
-D2COMMON_DLL_DECL int __stdcall COLLISION_CheckMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask);
+D2COMMON_DLL_DECL uint16_t __stdcall COLLISION_CheckMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask);
 //D2Common.0x6FD41B40
 uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD41BE0
 int __fastcall COLLISION_AdaptBoundingBoxToGrid(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, D2BoundingBoxStrc* pBoundingBoxes);
 //D2Common.0x6FD41CA0
-uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nCollisionType);
+uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD41DE0 (#10121)
 D2COMMON_DLL_DECL uint16_t __stdcall COLLISION_CheckMaskWithPattern1(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD42000
@@ -126,7 +126,7 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* a
 //D2Common.0x6FD459D0 (#10135)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms, int nMaxDistance);
 //D2Common.0x6FD45A00
-D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms, int nMaxDistance, int nPosIncrementValue);
+D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* ptSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms, int nMaxDistance, int nPosIncrementValue);
 //D2Common.0x6FD46280 (#10134)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms);
 //D2Common.0x6FD462B0 (#10137)
@@ -134,6 +134,6 @@ D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesEx(D2RoomStr
 //D2Common.0x6FD462E0 (#10138)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms);
 //D2Common.0x6FD46310 (#10136)
-D2COMMON_DLL_DECL void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, int nCollisionType, D2RoomStrc** ppRoom);
+D2COMMON_DLL_DECL void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, uint16_t nMask, D2RoomStrc** ppRoom);
 //D2Common.0x6FD46620
 D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, int nX, int nY);

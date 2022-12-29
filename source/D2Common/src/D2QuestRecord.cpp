@@ -85,6 +85,7 @@ void __stdcall QUESTRECORD_CopyBufferToRecord(D2BitBufferStrc* pQuestRecord, uin
 //D2Common.0x6FDAEA40 (#11114)
 void __stdcall QUESTRECORD_CopyRecordToBuffer(D2BitBufferStrc* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2_ASSERT(nBufferSize == (sizeof(uint16_t) * NUM_QUEST_WORDS));
 
 	memcpy(pBuffer, pQuestRecord->pBuffer, sizeof(uint16_t) * NUM_QUEST_WORDS);

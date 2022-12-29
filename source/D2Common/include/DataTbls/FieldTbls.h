@@ -21,7 +21,7 @@ D2COMMON_DLL_DECL BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pE
 //D2Common.0x6FD520F0 (#11090)
 D2COMMON_DLL_DECL BOOL __stdcall DATATBLS_FreeCollisionFieldTable();
 //D2Common.0x6FD52140 (#11091)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetCollisionFieldCenter(int* a1, int* a2);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetCollisionFieldCenter(int* pCenterX, int* pCenterY);
 //D2Common.0x6FD52160 (#11092)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetCollisionFieldWidth();
 //D2Common.0x6FD52170 (#11093)
@@ -33,7 +33,7 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_FreeField(D2FieldStrc* pField);
 //D2Common.0x6FD52210 (#11096)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY);
 //D2Common.0x6FD52250 (#11097)
-D2COMMON_DLL_DECL int __stdcall D2Common_11097(D2FieldStrc* pField, int a2, int a3);
+D2COMMON_DLL_DECL int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY);
 //D2Common.0x6FD522A0 (#11098)
 D2COMMON_DLL_DECL int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY);
 //D2Common.0x6FD52360 (#11099)

@@ -2,7 +2,7 @@
 
 // Use this by default if the function will be in an import library
 #define D2FUNC_DLL(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	DLL##_DLL_DECL RETURN CONV DLL##_##NAME## ARGS;
+	DLL##_DLL_DECL RETURN CONV DLL##_##NAME ARGS;
 
 // Same as D2FUNC_DLL_NP but without DLL name prefix
 #define D2FUNC_DLL_NP(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
@@ -15,14 +15,14 @@ template <>
 constexpr auto default_or_void<void>() -> void {}
 
 #define D2FUNC_DLL_STUB(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	DLL##_DLL_DECL RETURN CONV DLL##_##NAME## ARGS {           \
+	DLL##_DLL_DECL RETURN CONV DLL##_##NAME ARGS {           \
 		OutputDebugStringA(#DLL "_" #NAME);                     \
 		return default_or_void<RETURN>();                      \
 	}													   
 
 // Same as D2FUNC_DLL_STUB but without DLL name prefix
 #define D2FUNC_DLL_NP_STUB(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	DLL##_DLL_DECL RETURN CONV NAME## ARGS {          \
+	DLL##_DLL_DECL RETURN CONV NAME ARGS {          \
 		OutputDebugStringA(#NAME);                     \
 		return default_or_void<RETURN>();             \
 	}													   

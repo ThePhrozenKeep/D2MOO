@@ -53,31 +53,3 @@ uint32_t __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed)
 {
 	return pSeed->nHighSeed;
 }
-
-//D2Common.0x6FD78E30 + Inlined at many places
-unsigned long long int __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed)
-{
-	unsigned long long int lSeed = pSeed->nHighSeed + 0x6AC690C5i64 * pSeed->nLowSeed;
-
-	pSeed->lSeed = lSeed;
-
-	return lSeed;
-}
-
-//D2Common.0x6FD7D3E0
-unsigned int __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int nMax)
-{
-	if (nMax > 0)
-	{
-		if ((nMax - 1) & nMax)
-		{
-			return (unsigned int)SEED_RollRandomNumber(pSeed) % nMax;
-		}
-		else
-		{
-			return SEED_RollRandomNumber(pSeed) & (nMax - 1);
-		}
-	}
-
-	return 0;
-}

@@ -13,6 +13,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 int __stdcall  sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB750
 int __fastcall sub_6FDAB750(int nX1, int nY1, int nX2, int nY2);
+
 //D2Common.0x6FDAB0B0
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAA9F0
@@ -62,10 +63,22 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
 BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
 
 //D2Common.0x6FDAD5E0
-BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* a1, D2RoomStrc* a2, D2PathPointStrc tCoords);
+BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest);
 
 //D2Common.0x6FDADA20
 void __fastcall sub_6FDADA20(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
 
 //D2Common.0x6FDAE290
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);
+
+
+
+
+//D2Common.0x6FDADC20 (#10231)
+signed int __stdcall D2Common_10231(D2DynamicPathStrc * a1, D2UnitStrc * a2, D2RoomStrc * pRooms, int nX, int nY);
+BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
+void __stdcall D2Common_10233(D2DynamicPathStrc*);
+BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath);
+//D2Common.0x6FDAE520 (#10235)
+void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2UnitStrc* pMountUnit);
+

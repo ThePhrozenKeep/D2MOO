@@ -157,6 +157,7 @@ D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** 
 //D2Common.0x6FD757B0
 void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnimationSpeed, D2DrlgTileDataStrc* pTiles, int nTiles, D2DrlgGridStrc* pDrlgGrid, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	if (!pTiles)
 	{
 		return;

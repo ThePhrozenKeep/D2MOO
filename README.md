@@ -30,6 +30,8 @@ cmake --build --preset VS2019 --config Release
 cmake --build --preset VS2019 --config Release --target install
 ```
 
+Note: The `ninja` preset requires to run the `cmake` configuration step to be ran from the *x86 Native Command Prompt*.
+
 Or, if you do not wish to use the presets
 
 ```sh
@@ -61,17 +63,16 @@ Feel free to submit patches for other versions of the game!
 
 ### Why is the code so ugly and with names such as `a1`, `a2`, ... ?
 
-The code was originally extracted by a reverse engineering tool, and slowly cleaned to use understandable names
+The code was originally extracted using a reverse engineering tool, and slowly cleaned to use more understandable names.
 
 ### Can I build D2Common.dll and replace it directly with the one from the game ?
 
 Not yet, but this is one of the objectives !
 We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the current status of each ordinal.
 
-### Why is there only D2Common.dll ?
+### Why are some DLLs missing ?
 
-Because it contains a lot of functions that are used in both, client and server code, and as such, it serves as a solid base for further work.  
-We might add other DLLs in the future if there is enough interest / help from the community. Any contributions are welcome.
+Reversing the game is very time consuming. Since `D2Common.dll` and `D2Game.dll` contain most of the game logic, this is where the focus has been set. Any contribution and help is welcome !
 
 ### How can I write my own mod using this ?
 

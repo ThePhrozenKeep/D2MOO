@@ -768,7 +768,7 @@ BOOL __fastcall MONSTERS_CanBeInTown(D2UnitStrc* pMonster)
 }
 
 //D2Common.0x6FDA5750 (#11057)
-BOOL __stdcall MONSTESR_IsSandLeaper(D2UnitStrc* pMonster, BOOL bAlwaysReturnFalse)
+BOOL __stdcall MONSTERS_IsSandLeaper(D2UnitStrc* pMonster, BOOL bAlwaysReturnFalse)
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	int nClassId = 0;
@@ -875,8 +875,9 @@ BOOL __stdcall MONSTERS_IsDead(D2UnitStrc* pMonster)
 }
 
 //D2Common.0x6FDA5930 (#11280)
-int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, int nSkillId, int nUnused, int* pSpawnMode, int* pX, int* pY)
+int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, int nSkillId, int nSkillLevel, int* pSpawnMode, int* pX, int* pY)
 {
+	D2_MAYBE_UNUSED(nSkillLevel);
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2CoordStrc pCoords = {};

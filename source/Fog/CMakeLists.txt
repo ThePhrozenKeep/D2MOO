@@ -7,6 +7,7 @@ add_library(Fog
 	include/Fog.h
 	include/D2BitManip.h
 )
+
 # The definition file that matches functions with their ordinals
 target_sources(Fog PRIVATE definitions/Fog.${D2MOO_ORDINALS_VERSION}.def)
 target_include_directories(Fog PUBLIC include)

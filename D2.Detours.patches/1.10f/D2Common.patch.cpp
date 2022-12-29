@@ -365,7 +365,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingMode                                                @10318
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingModeEx                                              @10319
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStartSkill                                                 @10320
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetGetLeftSkill                                               @10321
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetLeftSkill                                                  @10321
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRightSkill                                                 @10322
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUsedSkill                                                  @10323
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetUsedSkill                                                  @10324
@@ -563,7 +563,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_UpdateStatListsExpiration                                  @10516
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetUnitStat                                                @10517
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_AddUnitStat                                                @10518
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStat                                                @10519
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatUnsigned                                        @10519
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatSigned                                          @10520
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitBaseStat                                            @10521
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatBonus                                           @10522
@@ -1101,7 +1101,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11054                                                      @11054
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11055                                                      @11055
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @11056
-    PatchAction::FunctionReplacePatchByOriginal,       //   MONSTESR_IsSandLeaper                                               @11057
+    PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_IsSandLeaper                                               @11057
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_IsDemon                                                    @11058
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_IsUndead                                                   @11059
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_IsBoss                                                     @11060
@@ -1314,7 +1314,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetSkillLevel                                              @11267
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetFullStatsDataFromUnit                                   @11268
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11269_CopyStats                                            @11269
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11270                                                      @11270
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_CopyStats                                                      @11270
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetSpecialParamValue                                         @11271
     PatchAction::FunctionReplacePatchByOriginal,       //   STATES_CheckStateMaskRemHitOnUnit                                   @11272
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11273                                                      @11273

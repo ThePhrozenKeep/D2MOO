@@ -545,12 +545,15 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 	pMagicPrefix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "magicprefix", pTbl, &nPrefixRecords, sizeof(D2MagicAffixTxt));
 	pAutoMagic = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "automagic", pTbl, &nAutoMagicRecords, sizeof(D2MagicAffixTxt));
 
-	sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = nSuffixRecords + nAutoMagicRecords + nPrefixRecords;
-	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)FOG_AllocPool(NULL, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount, __FILE__, __LINE__, 0);
+	sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = nSuffixRecords + nPrefixRecords + nAutoMagicRecords;
+	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)D2_ALLOC_POOL(nullptr, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount);
+	// Suffixes
 	sgptDataTables->pMagicAffixDataTables.pMagicSuffix = sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt;
 	memcpy(sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, pMagicSuffix, sizeof(D2MagicAffixTxt) * nSuffixRecords);
+	// Prefixes
 	sgptDataTables->pMagicAffixDataTables.pMagicPrefix = &sgptDataTables->pMagicAffixDataTables.pMagicSuffix[nSuffixRecords];
 	memcpy(&sgptDataTables->pMagicAffixDataTables.pMagicSuffix[nSuffixRecords], pMagicPrefix, sizeof(D2MagicAffixTxt) * nPrefixRecords);
+	// Automagic
 	sgptDataTables->pMagicAffixDataTables.pAutoMagic = &sgptDataTables->pMagicAffixDataTables.pMagicPrefix[nPrefixRecords];
 	memcpy(&sgptDataTables->pMagicAffixDataTables.pMagicPrefix[nPrefixRecords], pAutoMagic, sizeof(D2MagicAffixTxt) * nAutoMagicRecords);
 

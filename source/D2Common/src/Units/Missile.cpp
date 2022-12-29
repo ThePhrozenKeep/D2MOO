@@ -1008,7 +1008,7 @@ void __stdcall MISSILE_SetDamageStats(D2UnitStrc* pOwner, D2UnitStrc* pMissile, 
 
 		if (pOwner)
 		{
-			nStats = D2Common_11270(pOwner, STAT_DAMAGE_VS_MONTYPE, pStat, ARRAY_SIZE(pStat));
+			nStats = STATLIST_CopyStats(pOwner, STAT_DAMAGE_VS_MONTYPE, pStat, ARRAY_SIZE(pStat));
 			for (int i = 0; i < nStats; ++i)
 			{
 				STATLIST_SetUnitStat(pMissile, STAT_DAMAGE_VS_MONTYPE, pStat[i].nValue, pStat[i].nLayer);
@@ -1253,6 +1253,7 @@ int __stdcall MISSILE_GetMaxElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 //D2Common.0x6FDBBBA0 (#11221)
 int __stdcall MISSILE_GetElementalLength(int nUnused, D2UnitStrc* pMissile, int nMissileId, int nLevel)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
 	int nLength = 0;
 
@@ -1470,6 +1471,7 @@ int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, int a4)
 //D2Common.0x6FDBC0A0
 int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D2UnkMissileCalcStrc* pCalc)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	int nPossibilities = 0;
 
 	if (pCalc)
@@ -1490,6 +1492,7 @@ int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D
 //D2Common.0x6FDBC120
 int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, uint8_t nParamId, int nUnused, D2MissileCalcStrc* pMissileCalc)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2SkillStrc* pSkill = NULL;
 	int nSkillLevel = 0;
 

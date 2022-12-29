@@ -89,9 +89,9 @@ D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D
 //D2Common.0x6FD8DF30 (#10930)
 D2COMMON_DLL_DECL int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8DF40 (#10932)
-D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nAngle, BOOL bEclipse);
+D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse);
 //D2Common.0x6FD8E080 (#10931)
-D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc* pAct, int* pTimeIndex, int* pTicks, BOOL* pEclipse);
+D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc* pAct, int* pCycleIndex, int* pTicks, BOOL* pEclipse);
 //D2Common.0x6FD8E0B0 (#10925)
 D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_GetStatistics(D2DrlgActStrc* pAct, float* pCos, float* pLast, float* pSin, int* a5);
 //D2Common.0x6FD8E0F0 (#10934)

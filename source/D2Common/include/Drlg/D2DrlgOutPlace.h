@@ -41,7 +41,7 @@ void __fastcall DRLGOUTPLACE_BuildKurast(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD806A0
 void __fastcall DRLGOUTPLACE_InitAct3OutdoorLevel(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD80750
-BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int a2);
+BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId);
 //D2Common.0x6FD80BE0
 int __fastcall sub_6FD80BE0(int a1, int a2, int a3);
 //D2Common.0x6FD80C10
@@ -105,4 +105,4 @@ void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* pJungle,
 //D2Common.0x6FD83A20
 void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD83C90
-void __fastcall DRLGOUTPLACE_CreateOutdoorRoomEx(D2DrlgLevelStrc* pLevel, int nX, int nY, int nWidth, int nHeight, int a6, int dwFlags, int dwFlagsEx, int dwDT1Mask);
+void __fastcall DRLGOUTPLACE_CreateOutdoorRoomEx(D2DrlgLevelStrc* pLevel, int nX, int nY, int nWidth, int nHeight, int dwRoomFlags, int dwOutdoorFlags, int dwOutdoorFlagsEx, int dwDT1Mask);

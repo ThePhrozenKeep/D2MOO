@@ -427,6 +427,7 @@ int __fastcall sub_6FDAF6A0(uint8_t nParamId, D2SkillCalcStrc* pSkillCalc)
 //D2Common.0x6FDAF6C0
 int __fastcall sub_6FDAF6C0(int nSkillId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2SkillStrc* pSkill = NULL;
 	int nSkillLevel = 0;
 
@@ -451,6 +452,7 @@ int __fastcall sub_6FDAF6C0(int nSkillId, uint8_t nParamId, int nUnused, D2Skill
 //D2Common.0x6FDAF780
 int __fastcall sub_6FDAF780(int nMissileId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	if (pSkillCalc)
 	{
 		return MISSILE_GetSpecialParamValue(NULL, pSkillCalc->pUnit, nParamId, nMissileId, pSkillCalc->nSkillLevel);
@@ -2739,6 +2741,7 @@ int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 //D2Common.0x6FDB2CA0 (#11006)
 int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bUnused)
 {
+	D2_MAYBE_UNUSED(bUnused);
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	int nLength = 0;
 	int nBonus = 0;
@@ -3075,7 +3078,7 @@ int __stdcall D2Common_11024(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2SkillStrc* 
 		return 0;
 	}
 
-	for (int i = 0; i < D2Common_11270(pUnit, nStatId, pStat, ARRAY_SIZE(pStat)); ++i)
+	for (int i = 0; i < STATLIST_CopyStats(pUnit, nStatId, pStat, ARRAY_SIZE(pStat)); ++i)
 	{
 		if (ITEMS_CheckItemTypeId(pItem, pStat[i].nLayer) && pStat[i].nValue > nValue)
 		{
@@ -3127,7 +3130,7 @@ int __stdcall SKILLS_GetWeaponMasteryBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 			}
 
 			nValue = 0;
-			for (int i = 0; i < D2Common_11270(pUnit, nStatId, pStat, ARRAY_SIZE(pStat)); ++i)
+			for (int i = 0; i < STATLIST_CopyStats(pUnit, nStatId, pStat, ARRAY_SIZE(pStat)); ++i)
 			{
 				if (ITEMS_CheckItemTypeId(pItem, pStat[i].nLayer))
 				{
@@ -3491,7 +3494,7 @@ BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(D2UnitStrc* pUni
 //D2Common.0x6FDB4100 (#11041)
 int __stdcall SKILLS_GetClassSkillId(int nClassId, int nPosition)
 {
-	if (nClassId >= 0 && nClassId < 7 && nPosition >= 0 && nPosition < sgptDataTables->nClassSkillCount[nClassId])
+	if (nClassId >= 0 && nClassId < NUMBER_OF_PLAYERCLASSES && nPosition >= 0 && nPosition < sgptDataTables->nClassSkillCount[nClassId])
 	{
 		return sgptDataTables->nClassSkillList[nPosition + nClassId * sgptDataTables->nHighestClassSkillCount];
 	}

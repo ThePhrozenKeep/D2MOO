@@ -110,7 +110,7 @@ struct D2CubeMainTxt
 //D2Common.0x6FD523E0
 void __fastcall DATATBLS_CubeMainInputLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD52410
-BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* szInput, int a3, int a4);
+BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* szInput, int nTxtRow, int nItemId);
 //D2Common.0x6FD528D0
 void __fastcall DATATBLS_CubeMainOutputLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD52910

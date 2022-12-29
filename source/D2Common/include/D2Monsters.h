@@ -181,7 +181,7 @@ D2COMMON_DLL_DECL void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStr
 //D2Common.0x6FDA56C0
 BOOL __fastcall MONSTERS_CanBeInTown(D2UnitStrc* pMonster);
 //D2Common.0x6FDA5750 (#11057)
-D2COMMON_DLL_DECL BOOL __stdcall MONSTESR_IsSandLeaper(D2UnitStrc* pMonster, BOOL bAlwaysReturnFalse);
+D2COMMON_DLL_DECL BOOL __stdcall MONSTERS_IsSandLeaper(D2UnitStrc* pMonster, BOOL bAlwaysReturnFalse);
 //D2Common.0x6FDA57D0 (#11058)
 D2COMMON_DLL_DECL BOOL __stdcall MONSTERS_IsDemon(D2UnitStrc* pMonster);
 //D2Common.0x6FDA5830 (#11059)
@@ -191,7 +191,7 @@ D2COMMON_DLL_DECL BOOL __stdcall MONSTERS_IsBoss(D2MonStatsTxt* pMonStatsTxtReco
 //D2Common.0x6FDA5900 (#11064)
 D2COMMON_DLL_DECL BOOL __stdcall MONSTERS_IsDead(D2UnitStrc* pMonster);
 //D2Common.0x6FDA5930 (#11280)
-D2COMMON_DLL_DECL int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, int nSkillId, int nUnused, int* pSpawnMode, int* pX, int* pY);
+D2COMMON_DLL_DECL int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, int nSkillId, int nSkillLevel, int* pSpawnMode, int* pX, int* pY);
 //D2Common.0x6FDA5B30 (#11061)
 D2COMMON_DLL_DECL void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* pX, int* pY, int* pSpawnMode, int nDifficulty, int(__fastcall* pfSpawnClassCallback)(D2UnitStrc*));
 //D2Common.0x6FDA6410 (#11051)

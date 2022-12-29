@@ -10,12 +10,22 @@ jobs:
         buildtype: [Debug, Release]
     env:
       BUILD_TYPE: ${{ matrix.buildtype }}
-      CMAKE_PRESET: VS2022
+      CMAKE_PRESET: ${{ matrix.buildtype == 'Debug' && 'clang-tidy' || 'ninja' }}
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
+
+    # Find the clang-tidy bundled with MSVC
+    - name: Add clang-tidy to PATH
+      if: env.BUILD_TYPE == 'Debug'
+      uses: Lectem/vswhere@v1.0
+      with: {file: 'VC\Tools\Llvm\bin\clang-tidy.exe'}
+    
+    # We need to start cmake from vcvarsall env so that Ninja will pick MSVC
+    - uses: ilammy/msvc-dev-cmd@v1
+      with: {arch: x86}
 
     - name: CMake configure and build
       run: |
@@ -28,6 +38,7 @@ jobs:
       run: ctest --preset ${{env.CMAKE_PRESET}} -C ${{env.BUILD_TYPE}}
 
     - name: Install
+      if: env.BUILD_TYPE == 'Release'
       run: cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}} --target install
 
     - name: Artifact

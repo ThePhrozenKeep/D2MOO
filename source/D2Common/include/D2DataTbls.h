@@ -512,8 +512,6 @@ extern BOOL DATATBLS_LoadFromBin;
 
 #pragma pack()
 
-//D2Common.0x6FDC45EE
-size_t __cdecl DATATBLS_LockAndWriteToFile(const void* Str, size_t Size, size_t Count, FILE* File);
 //D2Common.0x6FD494D0
 uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference);
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)

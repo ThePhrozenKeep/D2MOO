@@ -253,6 +253,7 @@ BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2RoomStrc* pRoom, int nX, i
 //D2Common.0x6FD8BE90 (#10048)
 int __stdcall D2Common_10048(D2RoomStrc* pRoom, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2_ASSERT(pRoom);
 
 	if (pRoom->nTileWidth + pRoom->nTileXPos >= pRoom->nTileXPos && pRoom->nTileYPos + pRoom->nTileHeight >= pRoom->nTileYPos)

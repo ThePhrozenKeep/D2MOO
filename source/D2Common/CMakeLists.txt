@@ -6,7 +6,6 @@ add_library(D2CommonStatic
   src/UselessOrdinals.cpp
   include/UselessOrdinals.h
   # Misc
-  include/CommonDefinitions.h
   include/D2Common.h
   include/Imports/DllBases.h
 )
@@ -15,7 +14,7 @@ target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Hell D2L
 
 target_include_directories(D2CommonStatic PUBLIC include)
 
-target_compile_definitions(D2CommonStatic PRIVATE D2COMMON_IMPL NOMINMAX WIN32_LEAN_AND_MEAN)
+target_compile_definitions(D2CommonStatic PRIVATE D2COMMON_IMPL)
 
 # Data tables
 target_sources(D2CommonStatic
@@ -195,7 +194,6 @@ target_sources(D2CommonStatic
     include/D2States.h
     include/D2StatList.h
     include/D2Text.h
-    include/D2Timer.h
     include/D2Waypoints.h
 )
 
@@ -229,6 +227,6 @@ target_link_libraries(D2Common
 # D2CommonStatic itself should not be linked by targets linking D2Common, hence why it is PRIVATE
   PRIVATE D2CommonStatic
 # But we still its dependencies to be propagated so that users can consume them
-  PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog
+  PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog winmm
 )
 target_include_directories(D2Common INTERFACE include)

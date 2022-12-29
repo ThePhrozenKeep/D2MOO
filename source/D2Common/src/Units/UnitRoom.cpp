@@ -20,6 +20,7 @@ bool DungeonTestRoomGame(D2RoomStrc* pRoom, int nX, int nY)
 //D2Common.0x6FDBCF10 (#11279)
 int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nUnused)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	D2UnitStrc** ppUnitFirst = NULL;
 	D2RoomStrc* pUnitRoom = NULL;
 	D2CoordStrc pCoords = {};

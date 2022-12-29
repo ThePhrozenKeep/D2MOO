@@ -31,6 +31,8 @@ void __fastcall DATATBLS_CubeMainInputLinker(char* pSrc, void* pRecord, int nOff
 //D2Common.0x6FD52410
 BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* szInput, int nTxtRow, int nItemId)
 {
+	D2_MAYBE_UNUSED(nTxtRow);
+	D2_MAYBE_UNUSED(nItemId);
 	char* szInputModifier = NULL;
 	char* szNext = NULL;
 	char* szTemp = NULL;
