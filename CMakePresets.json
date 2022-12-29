@@ -93,6 +93,11 @@
       "name": "ninja",
       "configurePreset": "ninja",
 	  "output": {"outputOnFailure": true}
+    },
+    {
+      "name": "clang-tidy",
+      "configurePreset": "clang-tidy",
+	  "output": {"outputOnFailure": true}
     }
   ]
 }

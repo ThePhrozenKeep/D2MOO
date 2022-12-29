@@ -31,6 +31,9 @@ jobs:
       run: |
         cmake --preset ${{env.CMAKE_PRESET}}
         cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}}
+      env: # We need to enforce VC++ here as clang is picked otherwise due to clang-tidy being in the path
+        CXX: CL
+        CC: CL
 
     - name: Test
       # Execute tests defined by the CMake configuration.  
@@ -43,6 +46,6 @@ jobs:
 
     - name: Artifact
       if: env.BUILD_TYPE == 'Release'
-      uses: actions/upload-artifact@v2.2.1
+      uses: actions/upload-artifact@v3
       with:
-        path:  ${{runner.workspace}}/install/*
+        path: '${{runner.workspace}}\out\install\${{env.CMAKE_PRESET}}\'
