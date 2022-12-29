@@ -11,6 +11,10 @@
 
 //#define DISABLE_ALL_PATCHES
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wmicrosoft-cast"
+#endif
+
 extern "C" {
     __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
@@ -23,7 +27,6 @@ extern "C" {
 // /*C*/ to mean that the function has been "Checked" and works
 // /*B*/ to mean wean know it is "Broken" and needs fixing.
 //`     ` (spaces) to mean that it is "Unknown" wether it works or not
-
 static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetLevelTypeFromLevelId                                        @10000
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetActNoFromLevelId                                            @10001

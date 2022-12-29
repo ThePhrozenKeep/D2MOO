@@ -1,5 +1,9 @@
 #include <DetoursPatch.h>
 
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wmicrosoft-cast"
+#endif
+
 extern "C" {
     __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'001; }
