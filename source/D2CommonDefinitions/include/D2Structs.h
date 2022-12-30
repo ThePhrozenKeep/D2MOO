@@ -589,19 +589,6 @@ struct D2KeyConfigStrc
 	int32_t unk0x06;							//0x06
 };
 
-struct D2MapAIPathPositionStrc
-{
-	int32_t nMapAIAction;						//0x00
-	int32_t nX;									//0x04
-	int32_t nY;									//0x08
-};
-
-struct D2MapAIStrc
-{
-	int32_t nPathNodes;							//0x00
-	D2MapAIPathPositionStrc* pPosition;		//0x04
-};
-
 
 typedef int32_t(__fastcall* MENUENABLED)();
 typedef void(__fastcall* MENUSELECT)(D2MenuItemStrc*, D2WinMsgStrc*);

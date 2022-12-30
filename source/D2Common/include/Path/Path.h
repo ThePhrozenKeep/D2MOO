@@ -153,6 +153,19 @@ struct D2StaticPathStrc
 	uint8_t unk0x1D[3];						//0x1D
 };
 
+struct D2MapAIPathPositionStrc
+{
+	int32_t nMapAIAction;						//0x00
+	int32_t nX;									//0x04
+	int32_t nY;									//0x08
+};
+
+struct D2MapAIStrc
+{
+	int32_t nPathNodes;							//0x00
+	D2MapAIPathPositionStrc* pPosition;		//0x04
+};
+
 #pragma pack()
 
 // Path "precise" positions are encoded using 16bits fixed point
