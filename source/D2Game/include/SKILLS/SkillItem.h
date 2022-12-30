@@ -3,6 +3,18 @@
 #include "D2Structs.h"
 #include <Units/Units.h>
 
+#pragma pack(1)
+
+typedef BOOL(__fastcall* SPELLPREPARE)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
+typedef BOOL(__fastcall* SPELLDO)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
+
+struct D2pSpellTblStrc
+{
+	SPELLPREPARE pfSpellPrepare;			//0x00
+	SPELLDO pfSpellDo;						//0x04
+};
+
+#pragma pack()
 
 //D2Game.0x6FD02BA0
 int32_t __fastcall SKILLITEM_pSpell01_Initializer(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId);
