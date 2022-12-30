@@ -236,6 +236,20 @@ struct D2QuestTimerStrc
 	D2QuestTimerStrc* pNext;				//0x10
 };
 
+struct D2NPCMessageStrc
+{
+	int32_t nNPCNo;							//0x00
+	int16_t nStringIndex;					//0x04
+	int16_t nPad;							//0x06
+	BOOL nMenu;								//0x08
+};
+
+struct D2NPCMessageTableStrc
+{
+	D2NPCMessageStrc pMessages[16];			//0x00
+	int32_t nMessages;						//0xC0
+};
+
 #pragma pack()
 
 //D2Game.0x6FC93B60

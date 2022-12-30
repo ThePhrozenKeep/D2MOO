@@ -2,6 +2,14 @@
 
 #pragma pack(1)
 
+struct D2InteractInfoStrc
+{
+	D2UnitStrc* pUnit;						//0x00
+	int32_t nInteract;						//0x04
+	D2InteractInfoStrc* pNext;				//0x08
+};
+
+
 struct D2MonsterInteractStrc
 {
 	D2InteractInfoStrc* pInteractInfo;		//0x00

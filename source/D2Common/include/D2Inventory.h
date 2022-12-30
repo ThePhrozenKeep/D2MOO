@@ -121,6 +121,12 @@ struct D2CorpseStrc
 	D2CorpseStrc* pNextCorpse;				//0x0C
 };
 
+struct D2InventoryNodeStrc
+{
+	int32_t nItemId;						//0x00
+	D2InventoryNodeStrc* pNext;				//0x04
+};
+
 struct D2InventoryStrc
 {
 	uint32_t dwSignature;					//0x00

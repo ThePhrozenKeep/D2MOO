@@ -17,6 +17,7 @@
 #include "QUESTS/Quests.h"
 #include "QUESTS/ACT1/A1Q4.h"
 #include "UNIT/SUnit.h"
+#include "UNIT/SUnitNpc.h"
 
 
 #pragma warning(disable: 28159)
