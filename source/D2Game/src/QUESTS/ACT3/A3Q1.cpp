@@ -259,7 +259,7 @@ void __fastcall ACT3Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		pQuestData->dwFlags &= 0xFFFFFF00;
 		QUESTS_UnitIterate(pQuestData, 13, 0, ACT3Q1_UnitIterate_StatusCyclerEx, 0);
 
-		QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+		QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 
 		if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q1, QFLAG_PRIMARYGOALDONE) || !pQuestData->bNotIntro)
 		{
@@ -421,7 +421,7 @@ void __fastcall ACT3Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestDataEx->bTomeDropped = 0;
 	pQuestDataEx->bTomeActive = 0;
 	pQuestDataEx->bCanGetReward = 1;
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FCA7670
@@ -475,11 +475,11 @@ void __fastcall ACT3Q1_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 
@@ -488,7 +488,7 @@ void __fastcall ACT3Q1_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2Que
 {
 	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)pQuestData->pQuestDataEx;
 
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 
 	if (pQuestData->bNotIntro)
 	{
@@ -554,11 +554,11 @@ void __fastcall ACT3Q1_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 
 		if (pQuestArg->pPlayer)
 		{
-			QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+			QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 		}
 		else
 		{
-			QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, -1);
+			QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 		}
 	}
 	else if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q1, QFLAG_LEAVETOWN) == 1)

@@ -13,7 +13,9 @@
 #include "ITEMS/Items.h"
 #include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT2/A2Q3.h"
 #include "QUESTS/ACT2/A2Q4.h"
+#include "QUESTS/ACT2/A2Q6.h"
 #include "UNIT/SUnit.h"
 
 
@@ -388,7 +390,7 @@ void __fastcall ACT2Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDPENDING);
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN);
 
-			QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+			QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_CUSTOM6);
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_ENTERAREA);

@@ -16,6 +16,7 @@
 #include "PLAYER/PlrTrade.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/QuestsFX.h"
+#include "QUESTS/ACT3/A3Q2.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
 
@@ -628,7 +629,7 @@ void __fastcall ACT3Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q5, QFLAG_REWARDGRANTED);
 			QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q5, QFLAG_ENTERAREA);
 
-			QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+			QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 			QUESTS_NPCActivateSpeeches(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
 		}
 	}

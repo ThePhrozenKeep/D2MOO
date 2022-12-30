@@ -630,11 +630,11 @@ void __fastcall ACT5Q5_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 {
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, -1);
 	}
 }
 

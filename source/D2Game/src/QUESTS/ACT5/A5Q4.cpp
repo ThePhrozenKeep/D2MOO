@@ -182,7 +182,7 @@ void __fastcall ACT5Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT5Q4_SeqCallback;
 	pQuestData->nSeqId = 35;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act5Quest4Strc));
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FCB5CD0
@@ -689,12 +689,12 @@ void __fastcall ACT5Q4_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, -1);
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }

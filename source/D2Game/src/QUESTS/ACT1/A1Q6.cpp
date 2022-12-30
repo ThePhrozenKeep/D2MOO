@@ -286,7 +286,7 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDPENDING);
 		QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDGRANTED);
 
-		QUESTS_AddPlayerGUID(&pQuestData->pGUID, nUnitId);
+		QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, nUnitId);
 		QUESTS_UpdatePlayerFlags(pQuestData->pGame, pQuestArg->pPlayer);
 		return;
 	}

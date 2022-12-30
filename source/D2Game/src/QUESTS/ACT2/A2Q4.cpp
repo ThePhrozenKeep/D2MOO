@@ -312,7 +312,7 @@ void __fastcall ACT2Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfActiveFilter = ACT2Q4_ActiveFilterCallback;
 	pQuestData->pfSeqFilter = ACT2Q4_SeqCallback;
 	pQuestData->nSeqId = 13;
-	QUESTS_ResetPlayerGUIDCount(&pQuestData->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestData->tPlayerGUIDs);
 
 	D2Act2Quest4Strc* pQuestDataEx = (D2Act2Quest4Strc*)pQuestData->pQuestDataEx;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act2Quest4Strc));
@@ -374,7 +374,7 @@ void __fastcall ACT2Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			{
 				QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q4, QFLAG_REWARDPENDING);
 
-				QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+				QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 			}
 		}
 

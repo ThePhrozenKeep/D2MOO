@@ -352,7 +352,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 		pCurrent->fLastState = 0;
 		pCurrent->bNotIntro = true;
 		pCurrent->nActNo = gpQuestInitTable[i].nAct;
-		pCurrent->nPlayerCount = 0;
+		pCurrent->tPlayerGUIDs.nPlayerCount = 0;
 		pCurrent->pPrev = pPrev;
 		pPrev = pCurrent;
 
@@ -2350,7 +2350,7 @@ void __fastcall QUESTS_SetIntroFlags(D2GameStrc* pGame, D2UnitStrc* pPlayer, con
 //D2Game.0x6FC96810
 void __fastcall QUESTS_AddPlayerGUID(D2QuestGUIDStrc* pQuestGUID, int32_t dwGUID)
 {
-	if (pQuestGUID->nGUIDCount >= 32)
+	if (pQuestGUID->nPlayerCount >= 32)
 	{
 		return;
 	}
@@ -2360,23 +2360,23 @@ void __fastcall QUESTS_AddPlayerGUID(D2QuestGUIDStrc* pQuestGUID, int32_t dwGUID
 		return;
 	}
 
-	pQuestGUID->dwPlayerGUID[pQuestGUID->nGUIDCount] = dwGUID;
-	++pQuestGUID->nGUIDCount;
+	pQuestGUID->nPlayerGUIDs[pQuestGUID->nPlayerCount] = dwGUID;
+	++pQuestGUID->nPlayerCount;
 }
 
 //D2Game.0x6FC96840
 int32_t __fastcall QUESTS_FastRemovePlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t dwGUID)
 {
-	for (int32_t i = 0; i < pGUIDs->nGUIDCount; ++i)
+	for (int32_t i = 0; i < pGUIDs->nPlayerCount; ++i)
 	{
-		if (pGUIDs->dwPlayerGUID[i] == dwGUID)
+		if (pGUIDs->nPlayerGUIDs[i] == dwGUID)
 		{
-			if (i != pGUIDs->nGUIDCount - 1)
+			if (i != pGUIDs->nPlayerCount - 1)
 			{
-				pGUIDs->dwPlayerGUID[i] = pGUIDs->dwPlayerGUID[pGUIDs->nGUIDCount - 1];
+				pGUIDs->nPlayerGUIDs[i] = pGUIDs->nPlayerGUIDs[pGUIDs->nPlayerCount - 1];
 			}
 
-			--pGUIDs->nGUIDCount;
+			--pGUIDs->nPlayerCount;
 			return 1;
 		}
 	}
@@ -2387,9 +2387,9 @@ int32_t __fastcall QUESTS_FastRemovePlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t 
 //D2Game.0x6FC96880
 int32_t __fastcall QUESTS_QuickCheckPlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t dwGUID)
 {
-	for (int32_t i = 0; i < pGUIDs->nGUIDCount; ++i)
+	for (int32_t i = 0; i < pGUIDs->nPlayerCount; ++i)
 	{
-		if (pGUIDs->dwPlayerGUID[i] == dwGUID)
+		if (pGUIDs->nPlayerGUIDs[i] == dwGUID)
 		{
 			return 1;
 		}
@@ -2401,9 +2401,9 @@ int32_t __fastcall QUESTS_QuickCheckPlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t 
 //D2Game.0x6FC968B0
 int32_t __fastcall QUESTS_CheckPlayerGUID(D2QuestDataStrc* pQuest, int32_t dwGUID)
 {
-	for (int32_t i = 0; i < pQuest->nPlayerCount; ++i)
+	for (int32_t i = 0; i < pQuest->tPlayerGUIDs.nPlayerCount; ++i)
 	{
-		if (pQuest->nPlayerGUID[i] == dwGUID)
+		if (pQuest->tPlayerGUIDs.nPlayerGUIDs[i] == dwGUID)
 		{
 			return 1;
 		}
@@ -2415,7 +2415,7 @@ int32_t __fastcall QUESTS_CheckPlayerGUID(D2QuestDataStrc* pQuest, int32_t dwGUI
 //D2Game.0x6FC968E0
 void __fastcall QUESTS_ResetPlayerGUIDCount(D2QuestGUIDStrc* pGUIDs)
 {
-	pGUIDs->nGUIDCount = 0;
+	pGUIDs->nPlayerCount = 0;
 }
 
 //D2Game.0x6FC968F0
@@ -2423,15 +2423,15 @@ void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArg
 {
 	const int32_t nUnitGUID = pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1;
 
-	for (int32_t i = 0; i < pQuest->nPlayerCount; ++i)
+	for (int32_t i = 0; i < pQuest->tPlayerGUIDs.nPlayerCount; ++i)
 	{
-		if (pQuest->nPlayerGUID[i] == nUnitGUID)
+		if (pQuest->tPlayerGUIDs.nPlayerGUIDs[i] == nUnitGUID)
 		{
-			if (i != pQuest->nPlayerCount - 1)
+			if (i != pQuest->tPlayerGUIDs.nPlayerCount - 1)
 			{
-				pQuest->nPlayerGUID[i] = pQuest->nPlayerGUID[pQuest->nPlayerCount - 1];
+				pQuest->tPlayerGUIDs.nPlayerGUIDs[i] = pQuest->tPlayerGUIDs.nPlayerGUIDs[pQuest->tPlayerGUIDs.nPlayerCount - 1];
 			}
-			--pQuest->nPlayerCount;
+			--pQuest->tPlayerGUIDs.nPlayerCount;
 			return;
 		}
 	}
@@ -2498,22 +2498,22 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pArgs)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pArgs->pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 0) || !pQuest->nPlayerCount)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
 	{
 		return;
 	}
 
 	const int32_t nUnitGUID = pArgs->pPlayer ? pArgs->pPlayer->dwUnitId : -1;
 
-	for (int32_t i = 0; i < pQuest->nPlayerCount; ++i)
+	for (int32_t i = 0; i < pQuest->tPlayerGUIDs.nPlayerCount; ++i)
 	{
-		if (pQuest->nPlayerGUID[i] == nUnitGUID)
+		if (pQuest->tPlayerGUIDs.nPlayerGUIDs[i] == nUnitGUID)
 		{
-			if (i != pQuest->nPlayerCount - 1)
+			if (i != pQuest->tPlayerGUIDs.nPlayerCount - 1)
 			{
-				pQuest->nPlayerGUID[i] = pQuest->nPlayerGUID[pQuest->nPlayerCount - 1];
+				pQuest->tPlayerGUIDs.nPlayerGUIDs[i] = pQuest->tPlayerGUIDs.nPlayerGUIDs[pQuest->tPlayerGUIDs.nPlayerCount - 1];
 			}
-			--pQuest->nPlayerCount;
+			--pQuest->tPlayerGUIDs.nPlayerCount;
 			return;
 		}
 	}
@@ -2531,9 +2531,9 @@ void __fastcall QUESTS_UpdatePlayerFlags(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC96D60
 void __fastcall QUESTS_GUIDUpdate(D2GameStrc* pGame, D2QuestGUIDStrc* pQuestGUID, int32_t nQuest, uint16_t wSoundCMD)
 {
-	for (int32_t i = 0; i < pQuestGUID->nGUIDCount; ++i)
+	for (int32_t i = 0; i < pQuestGUID->nPlayerCount; ++i)
 	{
-		D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pQuestGUID->dwPlayerGUID[i]);
+		D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pQuestGUID->nPlayerGUIDs[i]);
 		if (pUnit)
 		{
 			D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];

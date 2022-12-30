@@ -3,8 +3,6 @@
 #include <D2BasicTypes.h>
 #include <D2Seed.h>
 
-#include "D2QuestDataEx.h"
-
 using D2UnitGUID = uint32_t;
 constexpr D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
@@ -244,6 +242,12 @@ struct D2SkillsTxt;
 struct D2AnimDataRecordStrc;
 struct D2InventoryGridInfoStrc;
 
+
+struct D2CoordStrc							//sizeof 0x08
+{
+	int nX;										//0x00
+	int nY;										//0x04
+};
 
 
 
@@ -1256,24 +1260,6 @@ struct D2pSpellTblStrc
 	SPELLPREPARE pfSpellPrepare;			//0x00
 	SPELLDO pfSpellDo;						//0x04
 };
-
-//struct D2QuestCltStrc
-//{
-//	uint8_t nQuest[3];							//0x00
-//	uint8_t nFlag[3];							//0x03
-//	uint8_t nQuestHistory[3][72];				//0x06
-//	uint8_t nQuestInitFn[3];					//
-//	uint8_t nQuestFn[3];						//
-//};
-//
-//struct D2QuestSrvStrc
-//{
-//	uint8_t nQuest[3];							//0x00
-//	uint8_t nFlag[3];							//0x03
-//	uint8_t nQuestHistory[3][72];				//0x06
-//	uint8_t nQuestInitFn[3];					//
-//	uint8_t nQuestFn[3];						//
-//};
 
 struct D2QuestDescStrc
 {

@@ -13,6 +13,7 @@
 #include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/ACT2/A2Q6.h"
+#include "QUESTS/ACT3/A3Q5.h"
 #include "UNIT/SUnit.h"
 
 
@@ -192,7 +193,7 @@ void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest2Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestDataEx->nSewerStairsObjectMode = 0;
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FCA7DA0

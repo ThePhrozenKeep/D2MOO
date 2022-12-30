@@ -5,6 +5,7 @@
 
 #include "GAME/Game.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT1/A1Q4.h"
 
 
 //D2Game.0x6FD348E8
@@ -51,7 +52,7 @@ void __fastcall ACT2Q0_InitQuestData(D2QuestDataStrc* pQuestData)
 	D2Act2Quest0Strc* pQuestDataEx = (D2Act2Quest0Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest0Strc), __FILE__, __LINE__, 0);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FC9F3F0
@@ -72,11 +73,11 @@ void __fastcall ACT2Q0_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			D2Act2Quest0Strc* pQuestDataEx = (D2Act2Quest0Strc*)pQuestData->pQuestDataEx;
 			if (pQuestArg->pPlayer)
 			{
-				QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+				QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 			}
 			else
 			{
-				QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, -1);
+				QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 			}
 		}
 	}
@@ -113,7 +114,7 @@ void __fastcall ACT2Q0_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			nUnitId = pQuestArg->pPlayer->dwUnitId;
 		}
 
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nUnitId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId))
 		{
 			return;
 		}
@@ -138,11 +139,11 @@ void __fastcall ACT2Q0_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 

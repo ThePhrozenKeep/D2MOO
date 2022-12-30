@@ -211,7 +211,7 @@ void __fastcall ACT5Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT5Q2_SeqCallback;
 	pQuestData->nSeqId = 33;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act5Quest2Strc));
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FCB2160
@@ -325,7 +325,7 @@ void __fastcall ACT5Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 					QUESTRECORD_ClearQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING);
 					QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuest);
 
-					QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+					QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 
 					D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pQuestArg->pPlayer, __FILE__, __LINE__);
 
@@ -429,13 +429,13 @@ void __fastcall ACT5Q2_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, -1);
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 

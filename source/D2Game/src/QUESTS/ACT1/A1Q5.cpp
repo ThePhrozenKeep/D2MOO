@@ -301,7 +301,7 @@ void __fastcall ACT1Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->nSeqId = 3;
 
 	memset(pQuestDataEx, 0x00, sizeof(D2Act1Quest5Strc));
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FC9D3B0
@@ -428,7 +428,7 @@ void __fastcall ACT1Q5_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 		nUnitId = pQuestArg->pPlayer->dwUnitId;
 	}
 
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId);
 	ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, nUnitId, 1);
 	ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, nUnitId, 0);
 }
@@ -712,9 +712,9 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
 		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT1Q5_UnitIterate_SetRewardGranted);
 
-		for (int32_t i = 0; i < pQuestDataEx->pGUID.nGUIDCount; ++i)
+		for (int32_t i = 0; i < pQuestDataEx->tPlayerGUIDs.nPlayerCount; ++i)
 		{
-			D2UnitStrc* pUnit = SUNIT_GetServerUnit(pQuestArg->pGame, UNIT_PLAYER, pQuestDataEx->pGUID.dwPlayerGUID[i]);
+			D2UnitStrc* pUnit = SUNIT_GetServerUnit(pQuestArg->pGame, UNIT_PLAYER, pQuestDataEx->tPlayerGUIDs.nPlayerGUIDs[i]);
 			if (pUnit)
 			{
 				D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -768,9 +768,9 @@ int32_t __fastcall ACT1Q5_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2Unit
 	}
 
 	D2Act1Quest5Strc* pQuestDataEx = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
-	if (!QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nUnitId))
+	if (!QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId))
 	{
-		QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, nUnitId);
+		QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId);
 	}
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_REWARDGRANTED);

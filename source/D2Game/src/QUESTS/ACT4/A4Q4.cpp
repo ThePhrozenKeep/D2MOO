@@ -5,6 +5,7 @@
 
 #include "GAME/Game.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT4/A4Q2.h"
 
 
 //D2Game.0x6FD3B830

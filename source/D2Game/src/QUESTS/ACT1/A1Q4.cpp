@@ -311,7 +311,7 @@ bool __fastcall ACT1Q4_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 		}
 
 		D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuest->pQuestDataEx;
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pQuestGUID, nPlayerId) != 1 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nPlayerId) && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pQuestGUID, nPlayerId) != 1 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nPlayerId) && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE))
 		{
 			return true;
 		}
@@ -1073,7 +1073,7 @@ void __fastcall ACT1Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act1Quest4Strc));
 	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pQuestGUID);
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FC9B250
@@ -1159,7 +1159,7 @@ void __fastcall ACT1Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_REWARDGRANTED);
 		QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_REWARDPENDING);
 
-		QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+		QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 		QUESTS_UpdatePlayerFlags(pQuestData->pGame, pQuestArg->pPlayer);
 
 		int32_t nItemQuality = 0;
@@ -1226,13 +1226,13 @@ void __fastcall ACT1Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 		if (nMessageIndex == 125)
 		{
-			QUESTS_AddPlayerGUID(&pQuestData->pGUID, nPlayerId);
+			QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, nPlayerId);
 			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pQuestGUID, nPlayerId);
 			QUESTS_NPCActivateSpeeches(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
 		}
 		else if (nMessageIndex == 126 || nMessageIndex == 123)
 		{
-			QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, nPlayerId);
+			QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nPlayerId);
 			QUESTS_NPCActivateSpeeches(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
 		}
 	}
@@ -1272,7 +1272,7 @@ void __fastcall ACT1Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		nPlayerId = pQuestArg->pPlayer->dwUnitId;
 	}
 
-	if (nNpcId == MONSTER_CAIN5 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nPlayerId) && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE))
+	if (nNpcId == MONSTER_CAIN5 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nPlayerId) && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_CAIN5, 5);
 		return;
@@ -1286,7 +1286,7 @@ void __fastcall ACT1Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nPlayerId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nPlayerId))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_CAIN5, 7);
 		}
@@ -1303,7 +1303,7 @@ void __fastcall ACT1Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		return;
 	}
 
-	if (QUESTS_CheckPlayerGUID(pQuestData, nPlayerId) == 1 && nNpcId == MONSTER_CAIN5 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID, nPlayerId))
+	if (QUESTS_CheckPlayerGUID(pQuestData, nPlayerId) == 1 && nNpcId == MONSTER_CAIN5 && !QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nPlayerId))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_CAIN5, 5);
 		return;
@@ -1373,11 +1373,11 @@ void __fastcall ACT1Q4_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 	if (pQuestArg->pPlayer)
 	{
 		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pQuestGUID, pQuestArg->pPlayer->dwUnitId);
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 

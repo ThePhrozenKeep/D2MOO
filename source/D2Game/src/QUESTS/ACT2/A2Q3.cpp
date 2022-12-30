@@ -15,6 +15,7 @@
 #include "ITEMS/Items.h"
 #include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT2/A2Q2.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
 
@@ -232,7 +233,7 @@ void __fastcall ACT2Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 
 	memset(pQuestDataEx, 0x00, sizeof(D2Act2Quest3Strc));
 	pQuestDataEx->nAltarMode = 0;
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FCA17F0
@@ -281,7 +282,7 @@ void __fastcall ACT2Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q3, QFLAG_REWARDGRANTED);
 		QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q3, QFLAG_REWARDPENDING);
 
-		QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+		QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 		if (!pQuestData->bNotIntro)
 		{
 			QUESTS_SetGlobalState(pQuestData->pGame, QUESTSTATEFLAG_A2Q3, QFLAG_PRIMARYGOALDONE);
@@ -297,11 +298,11 @@ void __fastcall ACT2Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 

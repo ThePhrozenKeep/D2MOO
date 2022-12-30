@@ -209,7 +209,7 @@ void __fastcall ACT4Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 				STATLIST_AddUnitStat(pQuestArg->pPlayer, STAT_SKILLPTS, 2, 0);
 				QUESTS_SendLogUpdate(pQuestArg->pPlayer, QUEST_A4Q1_IZUAL);
 
-				QUESTS_AddPlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1);
+				QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1);
 				QUESTS_NPCActivateSpeeches(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
 			}
 		}
@@ -618,10 +618,10 @@ void __fastcall ACT4Q1_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 {
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, -1);
 	}
 }

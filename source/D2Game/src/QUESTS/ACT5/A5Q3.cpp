@@ -24,6 +24,7 @@
 #include "MONSTER/MonsterRegion.h"
 #include "PLAYER/PlrMsg.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT5/A5Q4.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
 #include "UNIT/SUnitInactive.h"
@@ -326,7 +327,7 @@ void __fastcall ACT5Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT5Q3_SeqCallback;
 	pQuestData->nSeqId = 34;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act5Quest3Strc));
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 	pQuestDataEx->unk0x84 = 0;
 	pQuestDataEx->unk0x88 = 0;
 }
@@ -1071,10 +1072,10 @@ void __fastcall ACT5Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 		nUnitId = pQuestArg->pPlayer->dwUnitId;
 	}
 
-	QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, nUnitId);
 
 	D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId);
 
 	if (ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' eci'))
 	{

@@ -19,6 +19,7 @@
 #include "MONSTER/MonsterSpawn.h"
 #include "PLAYER/Player.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT5/A5Q5.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
 #include "SKILLS/Skills.h"
@@ -218,7 +219,7 @@ void __fastcall ACT5Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT5Q6_SeqCallback;
 	pQuestData->nSeqId = 37;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act5Quest6Strc));
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 	pQuestDataEx->nBaalPortalObjectMode = OBJMODE_OPERATING;
 	pQuestDataEx->nLastPortalObjectMode = OBJMODE_OPERATING;
 }
@@ -918,15 +919,15 @@ void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitS
 //
 void __fastcall ACT5Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	QUESTS_FastRemovePlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+	QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 
 	D2Act5Quest6Strc* pQuestDataEx = (D2Act5Quest6Strc*)pQuestData->pQuestDataEx;
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }

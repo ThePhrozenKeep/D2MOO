@@ -1,7 +1,11 @@
 #pragma once
 
+#include <QUESTS/Quests.h>
 
-#include "D2Structs.h"
+#pragma pack(1)
+
+#pragma pack()
+
 
 
 //D2Game.0x6FCAD6F0

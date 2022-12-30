@@ -372,7 +372,7 @@ void __fastcall ACT1Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestDataEx->bCharsiIntroActivated = 0;
 	pQuestDataEx->bCharsiEndActivated = 0;
 	pQuestDataEx->nMalusObjectMode = 0;
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);
 }
 
 //D2Game.0x6FC99540
@@ -423,7 +423,7 @@ void __fastcall ACT1Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			nUnitId = pQuestArg->pPlayer->dwUnitId;
 		}
 
-		QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID, nUnitId);
+		QUESTS_AddPlayerGUID(&pQuestDataEx->tPlayerGUIDs, nUnitId);
 		if (ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' mdh'))
 		{
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q3, QFLAG_PRIMARYGOALDONE);
@@ -621,11 +621,11 @@ void __fastcall ACT1Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 	D2Act1Quest3Strc* pQuestDataEx = (D2Act1Quest3Strc*)pQuestData->pQuestDataEx;
 	if (pQuestArg->pPlayer)
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, pQuestArg->pPlayer->dwUnitId);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 	}
 	else
 	{
-		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID, -1);
+		QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tPlayerGUIDs, -1);
 	}
 }
 

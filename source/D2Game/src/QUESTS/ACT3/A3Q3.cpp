@@ -535,11 +535,11 @@ void __fastcall ACT3Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 			if (pQuestArg->pPlayer)
 			{
-				QUESTS_AddPlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
+				QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 			}
 			else
 			{
-				QUESTS_AddPlayerGUID(&pQuestData->pGUID, -1);
+				QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, -1);
 			}
 		}
 	}
@@ -571,11 +571,11 @@ void __fastcall ACT3Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 		if (pQuestArg->pPlayer)
 		{
-			QUESTS_AddPlayerGUID(&pQuestData->pGUID, pQuestArg->pPlayer->dwUnitId);
+			QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, pQuestArg->pPlayer->dwUnitId);
 		}
 		else
 		{
-			QUESTS_AddPlayerGUID(&pQuestData->pGUID, -1);
+			QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, -1);
 		}
 	}
 }

@@ -8,6 +8,7 @@
 #include "GAME/Game.h"
 #include "ITEMS/Items.h"
 #include "QUESTS/Quests.h"
+#include "QUESTS/ACT3/A3Q3.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
 
@@ -224,7 +225,7 @@ void __fastcall ACT3Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q4_Callback10_PlayerLeavesGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERJOINEDGAME] = ACT3Q4_Callback14_PlayerJoinedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT3Q4_Callback09_PlayerDroppedWithQuestItem;
-	QUESTS_ResetPlayerGUIDCount(&pQuestData->pGUID);
+	QUESTS_ResetPlayerGUIDCount(&pQuestData->tPlayerGUIDs);
 
 	D2Act3Quest4Strc* pQuestDataEx = (D2Act3Quest4Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest4Strc), __FILE__, __LINE__, 0);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest4Strc));
@@ -417,7 +418,7 @@ void __fastcall ACT3Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 					QUESTS_UpdatePlayerFlags(pQuestArg->pGame, pQuestArg->pPlayer);
 
-					QUESTS_AddPlayerGUID(&pQuestData->pGUID, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
+					QUESTS_AddPlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));
 				}
 
 				if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q4, QFLAG_PRIMARYGOALDONE))
