@@ -422,21 +422,6 @@ struct D2CellFileStrc
 //	uint32_t unk0xC0[11];						//0xC0
 //};
 
-struct D2EventListStrc
-{
-	char nEvent;							//0x00
-	char pad0x01;							//0x01
-	char nFlags;							//0x02
-	char pad0x03;							//0x03
-	int32_t unk0x04;							//0x04
-	int32_t unk0x08;							//0x08
-	int32_t unk0x0C;							//0x0C
-	int32_t unk0x10;							//0x10
-	void* pfEventFunc;						//0x14
-	D2EventListStrc* pPrev;					//0x18
-	D2EventListStrc* pNext;					//0x1C
-};
-
 struct D2FieldStrc
 {
 	int32_t nX;									//0x00

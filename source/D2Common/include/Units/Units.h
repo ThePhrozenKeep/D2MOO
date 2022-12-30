@@ -159,7 +159,7 @@ struct D2UnitStrc
 			BOOL bHasActiveSound;				//0x088
 			uint16_t nLastClickX;				//0x08C
 			uint16_t nLastClickY;				//0x08E
-			D2EventListStrc* pCltTimerList;		//0x090
+			D2UnitEventStrc* pCltTimerList;		//0x090
 		};
 	};
 	uint32_t dwOwnerType;						//0x94
