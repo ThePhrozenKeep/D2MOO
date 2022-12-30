@@ -407,18 +407,6 @@ struct D2CellFileStrc
 	D2GfxCellStrc* pGfxCells;				//0x18
 };
 
-struct D2CurseStrc
-{
-	D2UnitStrc* pUnit;						//0x00
-	D2UnitStrc* pTarget;					//0x04
-	int32_t nSkill;								//0x08
-	int32_t nSkillLevel;						//0x0C
-	int32_t nDuration;							//0x10
-	int32_t nStat;								//0x14
-	int32_t nStatValue;							//0x18
-	int32_t nState;								//0x1C
-	void* pStateFunc;						//0x20
-};
 
 //struct D2DrlgMiscDataStrc
 //{
