@@ -2,7 +2,6 @@
 
 #include <D2BasicTypes.h>
 
-#include <D2Structs.h>
 #include <D2Constants.h>
 #include <D2Common.h>
 
