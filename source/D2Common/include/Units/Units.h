@@ -175,13 +175,7 @@ struct D2UnitStrc
 	uint32_t unk0xBC[2];						//0xBC
 	uint32_t dwFlags;							//0xC4
 	uint32_t dwFlagEx;							//0xC8
-	void* pQuestData;							//0xCC
-
-	//union										//0xCC
-	//{
-	//	D2QuestSrvStrc* pSrvQuestData;			//Server pUnit
-	//	D2QuestCltStrc* pCltQuestData;			//Client pUnit
-	//};
+	void* pUnused0xCC;							//0xCC may be quest related ?
 
 	uint32_t dwNodeIndex;						//0xD0
 	uint32_t dwTickCount;						//0xD4
