@@ -407,20 +407,6 @@ struct D2CellFileStrc
 	D2GfxCellStrc* pGfxCells;				//0x18
 };
 
-struct D2CubeItemStrc
-{
-	D2UnitStrc* pItem;						//0x00
-	int32_t nClassId;							//0x04
-	int32_t nItemLevel;							//0x08
-};
-
-typedef BOOL(__fastcall* SPECIALCUBEFN)(D2GameStrc*, D2UnitStrc*);
-
-struct D2CubeTableStrc
-{
-	SPECIALCUBEFN pFunc;					//0x00
-};
-
 struct D2CurseStrc
 {
 	D2UnitStrc* pUnit;						//0x00
