@@ -2,9 +2,13 @@
 
 #include "CommonDefinitions.h"
 
-#pragma pack(1)
+#include "D2Inventory.h"
 
-//TODO: Redo Header defs when .cpp is done
+struct D2CellFileStrc; // From D2CMP / D2Gfx
+struct D2RoomStrc;
+struct D2SkillsTxt;
+
+#pragma pack(1)
 
 enum D2C_SkillCastType
 {
@@ -77,27 +81,6 @@ struct D2SkillCalcStrc
 	int32_t nSkillLevel;						//0x08
 };
 
-struct D2SkillListStrc
-{
-	void* pMemPool;							//0x00
-	D2SkillStrc* pFirstSkill;				//0x04
-	D2SkillStrc* pLeftSkill;				//0x08
-	D2SkillStrc* pRightSkill;				//0x0C
-	D2SkillStrc* pUsedSkill;				//0x10
-	uint32_t __014;							//0x14
-};
-
-//struct D2SkillStrc
-//{
-//	D2SkillsTxt* pSkillsTxt;				//0x00
-//	D2SkillStrc* pNextSkill;				//0x04
-//	uint32_t dwSkillMode;						//0x08
-//	uint32_t unk0x0C[7];						//0x0C
-//	uint32_t dwSkillLevel;						//0x28
-//	uint32_t unk0x2C[2];						//0x2C
-//	uint32_t dwFlags;							//0x34
-//	uint32_t unk0x38;							//0x38
-//};
 struct D2SkillStrc
 {
 
@@ -131,6 +114,16 @@ struct D2SkillStrc
 	int32_t nQuantity;							//0x30
 	D2UnitGUID nOwnerGUID;						//0x34 -1 = Native Skill
 	int32_t nCharges;							//0x38
+};
+
+struct D2SkillListStrc
+{
+	void* pMemPool;							//0x00
+	D2SkillStrc* pFirstSkill;				//0x04
+	D2SkillStrc* pLeftSkill;				//0x08
+	D2SkillStrc* pRightSkill;				//0x0C
+	D2SkillStrc* pUsedSkill;				//0x10
+	uint32_t __014;							//0x14
 };
 
 struct D2SkillTreeChartStrc

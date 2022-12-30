@@ -1,6 +1,10 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+
+struct D2RoomStrc;
+struct D2UnitStrc;
+
 #pragma pack(1)
 
 enum D2PathTypes

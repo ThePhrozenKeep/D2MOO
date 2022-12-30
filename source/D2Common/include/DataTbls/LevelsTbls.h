@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <D2BasicTypes.h>
+#include <Drlg/D2DrlgDrlg.h>
 #include <Drlg/D2DrlgDrlgGrid.h>
 
 #pragma pack(1)

@@ -63,6 +63,15 @@ struct D2NpcEventStrc
 	D2NpcEventStrc* pNext;
 };
 
+struct D2MercDataStrc
+{
+	int16_t nMercName;						//0x00
+	int16_t nPad;								//0x02
+	uint32_t dwSeed;							//0x04
+	BOOL bHired;							//0x08
+	BOOL bAvailable;						//0x0C
+};
+
 struct D2NpcRecordStrc
 {
 	int32_t nNPC;							//0x00
@@ -74,15 +83,6 @@ struct D2NpcRecordStrc
 	D2NpcVendorChainStrc* pVendorChain;		//0x18
 	BOOL bTrading;							//0x1C
 	D2NpcTradeStrc npcTrade;				//0x20
-};
-
-struct D2MercDataStrc
-{
-	int16_t nMercName;						//0x00
-	int16_t nPad;								//0x02
-	uint32_t dwSeed;							//0x04
-	BOOL bHired;							//0x08
-	BOOL bAvailable;						//0x0C
 };
 
 #pragma pack()

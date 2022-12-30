@@ -3,6 +3,9 @@
 #include "CommonDefinitions.h"
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
+#include <Path/Path.h>
+
+struct D2LvlPrestTxt;
 
 #pragma pack(1)
 

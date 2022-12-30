@@ -2,7 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
-
+#include "MonsterRegion.h"
 
 struct D2UnkMonCreateStrc2;
 

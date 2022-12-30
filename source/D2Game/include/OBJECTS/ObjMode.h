@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <Units/UnitFinds.h>
 
 #pragma pack(1)
 
@@ -14,7 +15,6 @@ struct D2ObeliskPowerUpStrc
 	int32_t nValue;							//0x08
 };
 
-using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
 
 struct D2ObjOperateFnStrc
 {
@@ -24,14 +24,14 @@ struct D2ObjOperateFnStrc
 	D2ObjectControlStrc* pObjectregion;		//0x0C
 	int32_t nObjectIdx;						//0x10
 };
+using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
 
-typedef void(__fastcall* SHRINECALLBACK)(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
-
+using ObjShrineFunction = void(__fastcall* )(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
 struct D2ShrineTableStrc
 {
-	SHRINECALLBACK pfShrineCallback;		//0x00
-	int32_t unk0x04;							//0x04
-	int32_t unk0x08;							//0x08
+	ObjShrineFunction pfShrineCallback;		//0x00
+	int32_t unk0x04;						//0x04
+	int32_t unk0x08;						//0x08
 };
 
 #pragma pack()

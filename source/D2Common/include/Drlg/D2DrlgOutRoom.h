@@ -3,6 +3,9 @@
 #include "CommonDefinitions.h"
 #include "D2DrlgDrlgGrid.h"
 
+struct D2RoomExStrc;
+struct D2DrlgLevelLinkDataStrc;
+
 #pragma pack(1)
 
 

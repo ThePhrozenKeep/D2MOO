@@ -2,20 +2,9 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
-
+#include <UNIT/SUnitDmg.h>
 
 #pragma pack(push, 1)
-// TODO: Better names
-using MonModeCallback1 = int32_t(__fastcall*)(D2GameStrc*, D2ModeChangeStrc*);
-using MonModeCallback2 = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-using MonModeCallback3 = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-struct D2MonModeCallbackTableStrc
-{
-	MonModeCallback1 unk0x00;
-	MonModeCallback2 unk0x04;
-	MonModeCallback3 unk0x08;
-	int32_t unk0x0C;
-};
 
 struct D2ModeChangeStrc
 {
@@ -29,6 +18,19 @@ struct D2ModeChangeStrc
 	uint8_t unk0x1C;							//0x1C
 	uint8_t unk0x1D[3];							//0x1D
 };
+
+// TODO: Better names
+using MonModeCallback1 = int32_t(__fastcall*)(D2GameStrc*, D2ModeChangeStrc*);
+using MonModeCallback2 = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+using MonModeCallback3 = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+struct D2MonModeCallbackTableStrc
+{
+	MonModeCallback1 unk0x00;
+	MonModeCallback2 unk0x04;
+	MonModeCallback3 unk0x08;
+	int32_t unk0x0C;
+};
+
 #pragma pack(pop)
 
 

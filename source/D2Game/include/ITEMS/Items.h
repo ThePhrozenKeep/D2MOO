@@ -5,6 +5,7 @@
 
 #include <DataTbls/ItemsTbls.h>
 #include <DataTbls/MonsterTbls.h>
+#include <D2Items.h>
 
 #pragma pack(1)
 

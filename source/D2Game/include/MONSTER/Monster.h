@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include "MonsterRegion.h"
 
 
 //D2Game.0x6FC601C0

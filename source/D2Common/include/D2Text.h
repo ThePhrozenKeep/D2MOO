@@ -6,6 +6,14 @@
 
 #define MAX_TEXT_LIST_NODES 8
 
+struct D2TextNodeStrc
+{
+	int16_t nStringId;			//0x00
+	uint16_t pad0x02;			//0x02
+	int32_t nMenu;				//0x04
+	D2TextNodeStrc* pNext;		//0x08
+};
+
 struct D2TextHeaderStrc
 {
 	void* pMemPool;				//0x00
@@ -21,14 +29,6 @@ struct D2TextMessageStrc
 	int32_t nColor;				//0x1A
 	uint32_t nEndTick;			//0x1E
 	D2TextMessageStrc* pNext;	//0x22
-};
-
-struct D2TextNodeStrc
-{
-	int16_t nStringId;			//0x00
-	uint16_t pad0x02;			//0x02
-	int32_t nMenu;				//0x04
-	D2TextNodeStrc* pNext;		//0x08
 };
 
 struct D2MessageStrc		//sizeof 0x04

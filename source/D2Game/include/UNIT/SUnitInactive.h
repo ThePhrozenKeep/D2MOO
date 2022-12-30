@@ -48,16 +48,6 @@ struct D2InactiveMonsterNodeStrc
 	D2InactiveMonsterNodeStrc* pNext;		//0x58
 };
 
-struct D2InactiveUnitListStrc
-{
-	int32_t nX;											//0x00
-	int32_t nY;											//0x04
-	D2InactiveItemNodeStrc* pInactiveItems;			//0x08
-	D2InactiveMonsterNodeStrc* pInactiveMonsters;	//0x0C
-	D2InactiveUnitNodeStrc* pInactiveUnits;			//0x10
-	D2InactiveUnitListStrc* pNext;					//0x14
-};
-
 struct D2InactiveUnitNodeStrc
 {
 	int32_t nX;									//0x00
@@ -75,6 +65,16 @@ struct D2InactiveUnitNodeStrc
 	uint16_t unk0x2A;							//0x2A
 	int32_t nDropItemCode;						//0x2C
 	D2InactiveUnitNodeStrc* pNext;			//0x30
+};
+
+struct D2InactiveUnitListStrc
+{
+	int32_t nX;											//0x00
+	int32_t nY;											//0x04
+	D2InactiveItemNodeStrc* pInactiveItems;			//0x08
+	D2InactiveMonsterNodeStrc* pInactiveMonsters;	//0x0C
+	D2InactiveUnitNodeStrc* pInactiveUnits;			//0x10
+	D2InactiveUnitListStrc* pNext;					//0x14
 };
 
 #pragma pack()

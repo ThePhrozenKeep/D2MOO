@@ -1,8 +1,33 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "D2DrlgDrlgVer.h"
 
 #pragma pack(1)
+struct D2TileLibraryEntryStrc; // From D2CMP
+struct D2TileLibraryHashStrc; // From D2CMP
+struct D2GameStrc; // From D2Game
+struct D2ClientStrc; // From D2Game
+struct D2DrlgLevelStrc;
+struct D2DrlgPresetRoomStrc;
+struct D2DrlgOutdoorRoomStrc;
+struct D2DrlgTileGridStrc;
+struct D2DrlgTileDataStrc;
+struct D2RoomTileStrc;
+struct D2DrlgLogicalRoomInfoStrc;
+struct D2RoomStrc;
+struct D2DrlgRoomTilesStrc;
+struct D2DrlgActStrc;
+struct D2DrlgWarpStrc;
+struct D2DrlgEnvironmentStrc;
+struct D2DrlgPresetInfoStrc;
+struct D2DrlgOutdoorInfoStrc;
+struct D2DrlgMapStrc;
+struct D2PresetUnitStrc;
+struct D2RoomCollisionGridStrc;
+struct D2LvlWarpTxt;
+struct D2LvlMazeTxt;
+struct D2UnitStrc;
 
 enum D2DrlgFlags
 {
@@ -121,14 +146,6 @@ enum D2MapTileFlags
 inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }
 inline int GetMapTileLayer(uint32_t nMapTileFlags) { return ((nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT) - 1; }
 
-struct D2DrlgCoordStrc
-{
-	int32_t nPosX;								//0x00
-	int32_t nPosY;								//0x04
-	int32_t nWidth;								//0x08
-	int32_t nHeight;							//0x0C
-};
-
 struct D2DrlgCoordsStrc
 {
 	int32_t dwSubtilesLeft;						//0x00
@@ -184,6 +201,13 @@ struct D2RoomExStrc
 };
 
 typedef int32_t(__stdcall* ROOMCALLBACKFN)(D2RoomStrc*, void*);
+
+struct D2DrlgDeleteStrc
+{
+	int32_t nUnitType;							//0x00
+	D2UnitGUID nUnitGUID;						//0x04
+	D2DrlgDeleteStrc* pNext;					//0x08
+};
 
 struct D2RoomStrc
 {
@@ -346,13 +370,6 @@ struct D2DrlgBuildStrc
 	D2DrlgBuildStrc* pNext;					//0x0C
 };
 
-struct D2DrlgDeleteStrc
-{
-	int32_t nUnitType;							//0x00
-	D2UnitGUID nUnitGUID;						//0x04
-	D2DrlgDeleteStrc* pNext;					//0x08
-};
-
 struct D2DrlgFileStrc
 {
 	int32_t unk0x00;									//0x00
@@ -426,6 +443,14 @@ struct D2DrlgLevelStrc
 	D2DrlgLevelStrc* pNextLevel;				//0x22C
 };
 
+struct D2DrlgLinkStrc
+{
+	void* pfLinker;								//0x00
+	int32_t nLevel;								//0x04
+	int32_t nLevelLink;							//0x08
+	int32_t nLevelLinkEx;						//0x0C
+};
+
 struct D2DrlgLevelLinkDataStrc
 {
 	D2SeedStrc pSeed;							//0x00
@@ -438,14 +463,6 @@ struct D2DrlgLevelLinkDataStrc
 	};
 	int32_t nIteration;							//0x1EC
 	int32_t nCurrentLevel;						//0x1F0
-};
-
-struct D2DrlgLinkStrc
-{
-	void* pfLinker;								//0x00
-	int32_t nLevel;								//0x04
-	int32_t nLevelLink;							//0x08
-	int32_t nLevelLinkEx;						//0x0C
 };
 
 struct D2DrlgLinkerParamsStrc
@@ -471,18 +488,6 @@ struct D2DrlgOrthStrc
 	D2DrlgOrthStrc* pNext;					//0x14
 };
 
-
-struct D2DrlgVertexStrc
-{
-	int32_t nPosX;							//0x00
-	int32_t nPosY;							//0x04
-	uint8_t nDirection;						//0x08
-	uint8_t pad0x09[3];						//0x09
-	int32_t dwFlags;						//0x0C
-	D2DrlgVertexStrc* pNext;				//0x10
-};
-
-
 struct D2DrlgPresetInfoStrc
 {
 	D2DrlgMapStrc* pDrlgMap;				//0x00
@@ -507,6 +512,13 @@ struct D2DrlgRoomTilesStrc
 	int32_t nRoofs;							//0x14
 };
 
+struct D2DrlgTileLinkStrc
+{
+	BOOL bFloor;							//0x00
+	D2DrlgTileDataStrc* pMapTile;			//0x04
+	D2DrlgTileLinkStrc* pNext;				//0x08
+};
+
 struct D2DrlgTileGridStrc
 {
 	D2DrlgTileLinkStrc* pMapLinks;			//0x00
@@ -517,12 +529,6 @@ struct D2DrlgTileGridStrc
 	D2DrlgRoomTilesStrc pTiles;				//0x14
 };
 
-struct D2DrlgTileLinkStrc
-{
-	BOOL bFloor;							//0x00
-	D2DrlgTileDataStrc* pMapTile;			//0x04
-	D2DrlgTileLinkStrc* pNext;				//0x08
-};
 
 struct D2DrlgUnitsStrc
 {

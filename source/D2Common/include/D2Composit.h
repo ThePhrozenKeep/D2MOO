@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include <D2Inventory.h>
 
 #pragma pack(1)
 

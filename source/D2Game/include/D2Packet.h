@@ -26,12 +26,4 @@ struct D2PacketTableStrc
 	void* pCallback2;					//0x08
 };
 
-typedef int32_t(__fastcall* SERVERPACKETCALLBACK)(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pPacket, int nPacketSize);
-
-struct D2ServerPacketTableStrc
-{
-	SERVERPACKETCALLBACK pfCallback;		//0x00
-	BOOL b;									//0x04
-};
-
 #pragma pack()

@@ -3,9 +3,9 @@
 #include "D2Structs.h"
 #include <Units/Units.h>
 
-#pragma pack(1)
+struct D2DrlgCoordsStrc;
 
-using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
+#pragma pack(1)
 
 struct D2ObjInitFnStrc
 {
@@ -14,9 +14,10 @@ struct D2ObjInitFnStrc
 	D2RoomStrc* pRoom;						//0x08
 	D2ObjectControlStrc* pObjectregion;		//0x0C
 	D2ObjectsTxt* pObjectTxt;				//0x10
-	int32_t nX;									//0x14
-	int32_t nY;									//0x18
+	int32_t nX;								//0x14
+	int32_t nY;								//0x18
 };
+using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
 
 #pragma pack()
 

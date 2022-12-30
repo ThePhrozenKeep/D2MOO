@@ -1,6 +1,10 @@
 #pragma once
 
+#include <DataTbls/MonsterTbls.h>
+
 #pragma pack(1)
+struct D2AiControlStrc; // From D2Game
+struct D2AiParamStrc;	// From D2Game
 
 struct D2InteractInfoStrc
 {

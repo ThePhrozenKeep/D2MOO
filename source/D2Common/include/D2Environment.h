@@ -2,6 +2,9 @@
 
 #include "CommonDefinitions.h"
 
+struct D2RoomStrc;
+struct D2DrlgActStrc;
+
 #pragma pack(1)
 
 enum D2EnvironmentPeriodOfDay

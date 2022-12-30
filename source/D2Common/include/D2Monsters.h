@@ -3,8 +3,11 @@
 #include "CommonDefinitions.h"
 
 
+struct D2UnitStrc;
+struct D2RoomStrc;
+struct D2MonStatsTxt;
+
 #pragma pack(1)
-//TODO: Redo Header defs when .cpp is done
 
 enum D2InactiveMonsterFlags
 {

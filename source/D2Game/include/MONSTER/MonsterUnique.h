@@ -6,6 +6,7 @@
 #include <DataTbls/MissilesTbls.h>
 #include <DataTbls/MonsterTbls.h>
 
+#include <Drlg/D2DrlgDrlg.h>
 
 //D2Game.0x6FC6AC00
 void __fastcall MONSTERUNIQUE_ToggleUnitFlag(D2UnitStrc* pUnit, int32_t nFlag, int32_t bSet);

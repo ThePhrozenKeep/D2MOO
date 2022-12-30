@@ -3,6 +3,8 @@
 #include "D2Structs.h"
 #include <Units/Units.h>
 
+#include <D2DataTbls.h>
+
 enum D2DamageResultFlags
 {
 	DAMAGERESULTFLAG_SUCCESSFULHIT = 0x00000001,

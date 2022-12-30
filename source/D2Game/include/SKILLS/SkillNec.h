@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <UNIT/SUnitDmg.h>
 
 
 struct D2AuraCallbackStrc;

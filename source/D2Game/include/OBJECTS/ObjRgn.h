@@ -2,7 +2,8 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
-
+#include "Objects.h"
+#include "ObjMode.h"
 
 //D2Game.0x6FC7A3A0
 int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame);

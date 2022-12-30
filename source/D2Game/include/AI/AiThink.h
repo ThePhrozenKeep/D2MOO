@@ -1,7 +1,9 @@
 #pragma once
 
 #include "D2Structs.h"
+#include "AiGeneral.h"
 #include <Units/Units.h>
+#include <Units/UnitFinds.h>
 
 
 void __fastcall AITHINK_Fn000(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);

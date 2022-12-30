@@ -2,6 +2,13 @@
 
 #include "CommonDefinitions.h"
 
+struct D2DrlgStrc;
+struct D2DrlgLevelStrc;
+struct D2LvlWarpTxt;
+struct D2RoomStrc;
+struct D2RoomExStrc;
+struct D2UnitStrc;
+
 #pragma pack(1)
 
 

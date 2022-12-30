@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <UNIT/SUnitInactive.h>
 
 #include "GAME/Game.h"
 
@@ -12,6 +13,18 @@ struct D2AiCmdStrc
 	D2AiCmdStrc* pNextCmd;					//0x00
 	D2AiCmdStrc* pPrevCmd;					//0x04
 	int32_t nCmdParam[5];					//0x08
+};
+
+struct D2AiTickParamStrc
+{
+	D2AiControlStrc* pAiControl;			//0x00
+	uint32_t unk0x04;						//0x04
+	D2UnitStrc* pTarget;					//0x08
+	uint32_t unk0x0C[2];					//0x0C
+	int32_t nTargetDistance;				//0x14
+	BOOL bCombat;							//0x18
+	D2MonStatsTxt* pMonstatsTxt;			//0x1C
+	D2MonStats2Txt* pMonstats2Txt;			//0x20
 };
 
 typedef void(__fastcall* AIPARAMFN)(D2GameStrc*, D2UnitStrc*, D2AiTickParamStrc*);
@@ -71,17 +84,6 @@ struct D2AiTableStrc
 	AIPARAMFN unk0x0C;						//0x0C
 };
 
-struct D2AiTickParamStrc
-{
-	D2AiControlStrc* pAiControl;			//0x00
-	uint32_t unk0x04;						//0x04
-	D2UnitStrc* pTarget;					//0x08
-	uint32_t unk0x0C[2];					//0x0C
-	int32_t nTargetDistance;				//0x14
-	BOOL bCombat;							//0x18
-	D2MonStatsTxt* pMonstatsTxt;			//0x1C
-	D2MonStats2Txt* pMonstats2Txt;			//0x20
-};
 
 #pragma pack()
 

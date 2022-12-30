@@ -5,6 +5,8 @@
 #include <Units/Units.h>
 #include "Game.h"
 
+struct D2SaveHeaderStrc;
+
 #pragma pack(1)
 
 enum D2SystemError

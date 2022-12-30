@@ -3,6 +3,9 @@
 #include "CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 
+struct D2UnitStrc;
+struct D2GameStrc;
+
 #pragma pack(1)
 
 enum D2C_ItemStats
@@ -615,7 +618,7 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10534(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8770 (#10530)
 D2COMMON_DLL_DECL BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit);
 //D2Common.0x6FDB87A0 (#10532)
-D2COMMON_DLL_DECL int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListExStrc* pStatListEx, int nStatId);
+D2COMMON_DLL_DECL int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListStrc* pStatListEx, int nStatId);
 //D2Common.0x6FDB8890 (#10533)
 D2COMMON_DLL_DECL void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8900

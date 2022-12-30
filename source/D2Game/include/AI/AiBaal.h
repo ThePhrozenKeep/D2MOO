@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include "AiGeneral.h"
 
 
 //D2Game.0x6FCCD450

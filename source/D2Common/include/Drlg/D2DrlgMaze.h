@@ -2,6 +2,11 @@
 
 #include "CommonDefinitions.h"
 
+struct D2DrlgStrc;
+struct D2RoomStrc;
+struct D2RoomExStrc;
+struct D2DrlgLevelStrc;
+
 #pragma pack(1)
 
 struct D2MazeLevelIdStrc

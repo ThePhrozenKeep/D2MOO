@@ -2404,7 +2404,7 @@ int32_t __fastcall OBJECTS_OperateFunction02_Shrine(D2ObjOperateFnStrc* pOp, int
     const int32_t nId = pShrinesTxtRecord->nCode;
     if (nId >= 0 && nId < 24)
     {
-        SHRINECALLBACK pfCallback = gpShrineTable_6FD28D18[nId].pfShrineCallback;
+        ObjShrineFunction pfCallback = gpShrineTable_6FD28D18[nId].pfShrineCallback;
         if (!pfCallback || IsBadCodePtr((FARPROC)pfCallback))
         {
             FOG_DisplayAssert("sgcptShrineChart[idx].pfnHandler", __FILE__, __LINE__);

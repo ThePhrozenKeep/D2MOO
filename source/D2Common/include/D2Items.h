@@ -3,7 +3,9 @@
 #include "CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 #include <Units/Units.h>
-//TODO: Revise
+
+struct D2GameStrc; // From D2Game
+struct D2StatListStrc;
 
 #pragma pack(1)
 

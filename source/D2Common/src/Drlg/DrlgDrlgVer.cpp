@@ -1,4 +1,5 @@
 #include "Drlg/D2DrlgDrlgVer.h"
+#include <Drlg/D2DrlgDrlg.h>
 
 
 //D2Common.0x6FD782A0

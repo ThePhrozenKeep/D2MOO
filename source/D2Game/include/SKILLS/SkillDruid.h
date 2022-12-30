@@ -1,7 +1,9 @@
 #pragma once
 
 #include "D2Structs.h"
+#include <D2StatList.h>
 #include <Units/Units.h>
+#include <UNIT/SUnitDmg.h>
 
 
 //D2Game.0x6FCFDCF0

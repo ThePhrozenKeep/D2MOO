@@ -2,6 +2,10 @@
 
 #include "CommonDefinitions.h"
 
+struct D2RoomStrc;
+struct D2RoomExStrc;
+struct D2DrlgStrc;
+
 #pragma pack(1)
 
 

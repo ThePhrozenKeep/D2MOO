@@ -2,7 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
-
+#include <UNIT/SUnitNpc.h>
 
 #pragma pack(push, 1)
 struct Unk

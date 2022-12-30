@@ -4,7 +4,7 @@
 #include <Units/Units.h>
 
 #include <DataTbls/ItemsTbls.h>
-
+#include "Items.h"
 
 #pragma pack(push, 1)
 struct D2UnkItemModeStrc

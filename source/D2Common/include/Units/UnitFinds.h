@@ -2,11 +2,16 @@
 
 #include "CommonDefinitions.h"
 
+#include <DataTbls/FieldTbls.h>
+
+struct D2RoomStrc;
+struct D2UnitStrc;
+
 #pragma pack(1)
 
 #define UNIT_FIND_ARRAY_SIZE 15
 
-typedef int32_t(__fastcall* UNITFINDTEST)(D2UnitStrc* pUnit, D2UnitFindArgStrc* pUnitFindArg);
+using UNITFINDTEST = int32_t(__fastcall*)(D2UnitStrc* pUnit, struct D2UnitFindArgStrc* pUnitFindArg);
 
 struct D2UnitFindArgStrc
 {

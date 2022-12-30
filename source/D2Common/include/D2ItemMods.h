@@ -4,6 +4,8 @@
 #include <Units/Missile.h>
 #include <DataTbls/ItemsTbls.h>
 
+struct D2StatListStrc;
+
 #pragma pack(1)
 
 

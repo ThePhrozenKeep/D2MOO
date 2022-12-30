@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <Drlg/D2DrlgDrlg.h>
 
 
 #pragma pack(push, 1)

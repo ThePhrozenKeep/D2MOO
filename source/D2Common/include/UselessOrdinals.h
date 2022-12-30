@@ -2,6 +2,9 @@
 
 #include "CommonDefinitions.h"
 
+struct D2StatListStrc;
+struct D2UnitStrc;
+
 int __stdcall D2COMMON_10016_Return0();
 void __stdcall D2COMMON_10019_Return(int a1);
 void __stdcall D2COMMON_10139_Return();

@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 
+struct D2RoomStrc;
+
 #pragma pack(1)
 struct D2CollisionFieldStrc
 {

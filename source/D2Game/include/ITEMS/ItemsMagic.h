@@ -4,7 +4,7 @@
 #include <Units/Units.h>
 
 #include <DataTbls/ItemsTbls.h>
-
+#include "Items.h"
 
 //D2Game.0x6FC52920
 int16_t __fastcall ITEMS_RollMagicAffixes(D2UnitStrc* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefixes, int32_t nPreferredAffixIndex);

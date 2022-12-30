@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <UNIT/SUnitDmg.h>
 
 #pragma pack(1)
 

@@ -2,7 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
-
+#include "PlrSave2.h"
 
 #pragma pack(push, 1)
 struct D2SavedItemStrc

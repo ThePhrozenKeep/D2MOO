@@ -8,6 +8,12 @@
 struct D2ClientInfoStrc;
 struct D2UnitInfoStrc;
 struct D2PartyControlStrc;
+struct D2ArenaStrc;
+struct D2InactiveUnitListStrc;
+struct D2MonsterRegionStrc;
+struct D2NpcControlStrc;
+struct D2QuestInfoStrc;
+struct D2EventTimerQueueStrc;
 
 enum D2C_GameConstants
 {

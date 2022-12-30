@@ -2,6 +2,7 @@
 
 #include "D2Structs.h"
 #include <Units/Units.h>
+#include <OBJECTS/ObjMode.h>
 #include <D2DataTbls.h>
 
 #pragma pack(1)

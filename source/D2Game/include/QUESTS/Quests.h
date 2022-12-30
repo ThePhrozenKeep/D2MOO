@@ -1,7 +1,12 @@
 #pragma once
 
+#include <D2BitManip.h>
 
-#include "D2Structs.h" // TODO: remove ?
+#include <Units/Units.h>
+#include <GAME/Game.h>
+#include <GAME/Clients.h>
+#include <OBJECTS/Objects.h>
+#include <OBJECTS/ObjMode.h>
 
 #pragma pack(1)
 
@@ -151,7 +156,7 @@ struct D2QuestArgStrc
 
 struct D2QuestChainStrc
 {
-	D2QuestDataStrc* pQuestData;				//0x00
+	struct D2QuestDataStrc* pQuestData;				//0x00
 	D2QuestChainStrc* pNext;					//0x04
 };
 
@@ -168,6 +173,20 @@ struct D2QuestGUIDStrc						//sizeof 0x84
 	uint32_t nPlayerGUIDs[32];				//0x00 - players that have entered the quest zone
 	uint16_t nPlayerCount;					//0x80
 	uint8_t pad0x82[2];						//0x82
+};
+
+struct D2NPCMessageStrc
+{
+	int32_t nNPCNo;							//0x00
+	int16_t nStringIndex;					//0x04
+	int16_t nPad;							//0x06
+	BOOL nMenu;								//0x08
+};
+
+struct D2NPCMessageTableStrc
+{
+	D2NPCMessageStrc pMessages[16];			//0x00
+	int32_t nMessages;						//0xC0
 };
 
 struct D2QuestDataStrc
@@ -214,6 +233,15 @@ struct D2QuestIntroTableStrc
 	uint8_t pad0x05[3];						//0x05
 };
 
+struct D2QuestTimerStrc
+{
+	QUESTUPDATE pfUpdate;					//0x00
+	D2QuestDataStrc* pQuest;				//0x04
+	uint32_t dwTicks;						//0x08
+	uint32_t dwTimeout;						//0x0C
+	D2QuestTimerStrc* pNext;				//0x10
+};
+
 struct D2QuestInfoStrc
 {
 	D2QuestDataStrc* pLastQuest;			//0x00
@@ -225,29 +253,6 @@ struct D2QuestInfoStrc
 	D2SeedStrc pSeed;						//0x18
 	uint8_t unk0x20;						//0x20
 	uint8_t unk0x21[3];						//0x21
-};
-
-struct D2QuestTimerStrc
-{
-	QUESTUPDATE pfUpdate;					//0x00
-	D2QuestDataStrc* pQuest;				//0x04
-	uint32_t dwTicks;						//0x08
-	uint32_t dwTimeout;						//0x0C
-	D2QuestTimerStrc* pNext;				//0x10
-};
-
-struct D2NPCMessageStrc
-{
-	int32_t nNPCNo;							//0x00
-	int16_t nStringIndex;					//0x04
-	int16_t nPad;							//0x06
-	BOOL nMenu;								//0x08
-};
-
-struct D2NPCMessageTableStrc
-{
-	D2NPCMessageStrc pMessages[16];			//0x00
-	int32_t nMessages;						//0xC0
 };
 
 #pragma pack()

@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+struct D2UnitStrc;
+
 #pragma pack(1)
 
 struct D2MissileStreamStrc

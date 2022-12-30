@@ -1,6 +1,12 @@
 #pragma once 
 
+#include <D2BitManip.h>
+
 #pragma pack(1)
+
+struct D2ArenaUnitStrc; // From D2Game
+struct D2ClientStrc; // From D2Game
+struct D2WaypointDataStrc;
 
 enum D2C_PlayerModes
 {

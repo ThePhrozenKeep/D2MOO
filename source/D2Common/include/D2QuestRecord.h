@@ -2,6 +2,8 @@
 
 #include "CommonDefinitions.h"
 
+#include <D2BitManip.h>
+
 #define NUM_QUEST_WORDS 48
 
 //D2Common.0x6FDAE800 (#11107)

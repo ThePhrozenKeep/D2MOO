@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include "MissileStream.h"
 #include "Path/Path.h"
 
 #pragma pack(1)

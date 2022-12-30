@@ -1,5 +1,7 @@
 #pragma once
 
+struct D2ObjectsTxt;
+struct D2ShrinesTxt;
 
 #pragma pack(1)
 

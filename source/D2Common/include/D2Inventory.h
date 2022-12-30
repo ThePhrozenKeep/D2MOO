@@ -2,6 +2,10 @@
 
 #include "CommonDefinitions.h"
 
+
+struct D2UnitStrc;
+struct D2InventoryGridInfoStrc;
+
 #pragma pack(1)
 
 struct D2InvRectStrc
@@ -154,7 +158,7 @@ struct D2ItemExtraDataStrc
 	D2UnitStrc* pNextItem;					//0x08
 	char nNodePos;							//0x0C
 	char nNodePosOther;						//0x0D
-	uint16_t unk0x0E;							//0x0E
+	uint16_t unk0x0E;						//0x0E
 	D2UnitStrc* unk0x10;					//0x10
 	D2UnitStrc* unk0x14;					//0x14
 };

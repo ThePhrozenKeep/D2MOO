@@ -1757,7 +1757,7 @@ BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListExStrc* pStatListEx, int nStatId)
+int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListStrc* pStatListEx, int nStatId)
 {
 	return STATLIST_GetStatUnsigned(pStatListEx, nStatId, 0);
 }

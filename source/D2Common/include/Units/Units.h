@@ -6,6 +6,20 @@
 #include "Monster.h"
 #include "Object.h"
 #include "Player.h"
+#include "D2Chat.h"
+#include <DataTbls/AnimTbls.h>
+
+struct D2GameStrc; // From D2Game
+struct D2QuestChainStrc; // From D2Game
+struct D2TimerArgStrc; // From D2Game
+struct D2DrlgActStrc;
+struct D2StatListExStrc;
+struct D2UnitEventStrc;
+struct D2SkillListStrc;
+struct D2SkillStrc;
+
+struct D2GfxDataStrc;
+struct D2GfxLightStrc;
 
 #pragma pack(1)
 
