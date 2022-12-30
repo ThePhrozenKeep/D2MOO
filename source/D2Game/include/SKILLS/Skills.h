@@ -102,6 +102,19 @@ struct D2CurseStrc
 	int32_t nState;							//0x1C
 	void* pStateFunc;						//0x20
 };
+
+struct D2SummonArgStrc
+{
+	uint32_t dwFlags;						//0x00
+	D2UnitStrc* pOwner;						//0x04
+	int32_t nHcIdx;							//0x08
+	int32_t nSpecialAiState;				//0x0C
+	int32_t nMonMode;						//0x10
+	D2CoordStrc pPosition;					//0x14		
+	int32_t nPetType;						//0x1C
+	int32_t nPetMax;						//0x20
+};
+
 #pragma pack(pop)
 
 

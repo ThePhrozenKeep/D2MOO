@@ -752,18 +752,6 @@ struct D2SplittedTextStrc
 	D2SplittedTextStrc* pNext;				//0x04
 };
 
-struct D2SummonArgStrc
-{
-	uint32_t dwFlags;							//0x00
-	D2UnitStrc* pOwner;						//0x04
-	int32_t nHcIdx;								//0x08
-	int32_t nSpecialAiState;					//0x0C
-	int32_t nMonMode;							//0x10
-	D2CoordStrc pPosition;					//0x14		
-	int32_t nPetType;							//0x1C
-	int32_t nPetMax;							//0x20
-};
-
 struct D2TargetNodeStrc
 {
 	D2UnitStrc* pUnit;							//0x00
