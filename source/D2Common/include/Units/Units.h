@@ -168,7 +168,7 @@ struct D2UnitStrc
 	D2UnitGUID dwKillerGUID;						//0x0A0
 	D2HoverTextStrc* pHoverText;				//0xA4
 	D2SkillListStrc* pSkills;					//0xA8
-	D2CombatStrc* pCombat;						//0xAC
+	struct D2CombatStrc* pCombat;				//0xAC
 	uint32_t dwLastHitClass;					//0xB0
 	uint32_t unk0xB4;							//0xB4
 	uint32_t dwDropItemCode;					//0xB8
