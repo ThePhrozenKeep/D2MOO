@@ -746,16 +746,6 @@ struct D2ServerParamStrc
 	int32_t unk0x08;							//0x08
 	int32_t unk0x0C;							//0x0C
 };
-
-typedef void(__fastcall* SHRINECALLBACK)(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
-
-struct D2ShrineTableStrc
-{
-	SHRINECALLBACK pfShrineCallback;		//0x00
-	int32_t unk0x04;							//0x04
-	int32_t unk0x08;							//0x08
-};
-
 struct D2SplittedTextStrc
 {
 	wchar_t* wszLine;						//0x00

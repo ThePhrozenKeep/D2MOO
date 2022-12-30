@@ -25,6 +25,15 @@ struct D2ObjOperateFnStrc
 	int32_t nObjectIdx;						//0x10
 };
 
+typedef void(__fastcall* SHRINECALLBACK)(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
+
+struct D2ShrineTableStrc
+{
+	SHRINECALLBACK pfShrineCallback;		//0x00
+	int32_t unk0x04;							//0x04
+	int32_t unk0x08;							//0x08
+};
+
 #pragma pack()
 
 //D2Game.0x6FC748A0
