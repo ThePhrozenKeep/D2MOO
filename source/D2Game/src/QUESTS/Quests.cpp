@@ -4,7 +4,6 @@
 #include <D2BitManip.h>
 
 #include "D2Constants.h"
-#include "D2Structs.h"
 #include "D2PacketDef.h"
 
 #include <Units/Units.h>

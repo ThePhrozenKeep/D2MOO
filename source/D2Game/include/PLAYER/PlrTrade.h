@@ -1,6 +1,5 @@
 #pragma once
 
-#include "D2Structs.h"
 #include <Units/Units.h>
 #include <OBJECTS/ObjMode.h>
 #include <D2DataTbls.h>

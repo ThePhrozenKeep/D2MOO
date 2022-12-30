@@ -1,6 +1,5 @@
 #pragma once
 
-#include "D2Structs.h"
 #include "D2PacketDef.h"
 #include <Units/Units.h>
 #include "Game.h"

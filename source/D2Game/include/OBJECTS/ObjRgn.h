@@ -1,6 +1,5 @@
 #pragma once
 
-#include "D2Structs.h"
 #include <Units/Units.h>
 #include "Objects.h"
 #include "ObjMode.h"
