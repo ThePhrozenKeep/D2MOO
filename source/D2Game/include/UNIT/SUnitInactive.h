@@ -5,6 +5,12 @@
 
 #pragma pack(1)
 
+struct D2MinionListStrc
+{
+	D2UnitGUID dwMinionGUID;						//0x00
+	D2MinionListStrc* pNext;				//0x04
+};
+
 struct D2InactiveItemNodeStrc
 {
 	D2InactiveItemNodeStrc* pNext;			//0x00

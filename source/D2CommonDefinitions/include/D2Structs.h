@@ -614,12 +614,6 @@ struct D2MenuUIStateSaveStrc
 	int32_t nUIState;							//0x08
 };
 
-struct D2MinionListStrc
-{
-	D2UnitGUID dwMinionGUID;						//0x00
-	D2MinionListStrc* pNext;				//0x04
-};
-
 struct D2ModeChangeStrc
 {
 	int32_t nMode;								//0x00
