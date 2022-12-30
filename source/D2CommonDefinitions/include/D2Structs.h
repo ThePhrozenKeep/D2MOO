@@ -243,12 +243,6 @@ struct D2AnimDataRecordStrc;
 struct D2InventoryGridInfoStrc;
 
 
-struct D2CoordStrc							//sizeof 0x08
-{
-	int nX;										//0x00
-	int nY;										//0x04
-};
-
 
 
 struct D2PartyNodeStrc

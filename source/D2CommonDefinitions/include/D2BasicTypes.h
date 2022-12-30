@@ -57,4 +57,11 @@ typedef int32_t BOOL;
 
 #pragma pack(push, 1)
 
+
+struct D2CoordStrc							//sizeof 0x08
+{
+	int nX;									//0x00
+	int nY;									//0x04
+};
+
 #pragma pack(pop)
