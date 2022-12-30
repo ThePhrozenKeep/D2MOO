@@ -645,15 +645,6 @@ struct D2MenuUIStateSaveStrc
 	int32_t nUIState;							//0x08
 };
 
-struct D2MercDataStrc
-{
-	int16_t nMercName;						//0x00
-	int16_t nPad;								//0x02
-	uint32_t dwSeed;							//0x04
-	BOOL bHired;							//0x08
-	BOOL bAvailable;						//0x0C
-};
-
 struct D2MinionListStrc
 {
 	D2UnitGUID dwMinionGUID;						//0x00

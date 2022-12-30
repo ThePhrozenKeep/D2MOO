@@ -76,6 +76,15 @@ struct D2NpcRecordStrc
 	D2NpcTradeStrc npcTrade;				//0x20
 };
 
+struct D2MercDataStrc
+{
+	int16_t nMercName;						//0x00
+	int16_t nPad;								//0x02
+	uint32_t dwSeed;							//0x04
+	BOOL bHired;							//0x08
+	BOOL bAvailable;						//0x0C
+};
+
 #pragma pack()
 
 //D2Game.0x6FCC67D0
