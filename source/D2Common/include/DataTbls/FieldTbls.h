@@ -12,6 +12,11 @@ struct D2CollisionFieldStrc
 	int32_t nCenterY;						//0x10
 };
 
+struct D2FieldStrc
+{
+	int32_t nX;								//0x00
+	int32_t nY;								//0x04
+};
 #pragma pack()
 
 //D2Common.0x6FD51FC0

@@ -422,12 +422,6 @@ struct D2CellFileStrc
 //	uint32_t unk0xC0[11];						//0xC0
 //};
 
-struct D2FieldStrc
-{
-	int32_t nX;									//0x00
-	int32_t nY;									//0x04
-};
-
 struct D2GfxCellStrc
 {
 	BOOL bFlip;								//0x00
