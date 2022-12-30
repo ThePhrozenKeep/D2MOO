@@ -739,22 +739,6 @@ struct D2ResistanceRecordStrc
 
 
 
-struct D2CharacterPreviewInfoStrc // This is used as string, values are encoded so that they are != 0
-{
-	uint16_t unk0x00;					//0x00 lower byte is cleared if invalid data was found => empty string
-	uint8_t pComponents[11];			//0x02
-	uint8_t nClass;						//0x0D
-	uint8_t pComponentColors[11];		//0x0C
-	uint8_t nLevel;						//0x19
-	uint16_t nClientFlags;				//0x1A
-	uint16_t nGuildFlags;				//0x1C
-	uint8_t nGuildEmblemBgColor;		//0x1E
-	uint8_t nGuildEmblemFgColor;		//0x1F
-	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
-	uint32_t szGuildTag;				//0x21
-	uint8_t pad0x25;					//0x25
-};
-
 typedef int32_t(__fastcall* SERVERPACKETCALLBACK)(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pPacket, int nPacketSize);
 
 struct D2ServerPacketTableStrc
