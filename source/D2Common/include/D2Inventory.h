@@ -113,6 +113,14 @@ struct D2InventoryGridStrc
 	D2UnitStrc** ppItems;					//0x0C
 };
 
+struct D2CorpseStrc
+{
+	uint32_t unk0x00;						//0x00
+	uint32_t dwUnitId;						//0x04
+	uint32_t unk0x08;						//0x08
+	D2CorpseStrc* pNextCorpse;				//0x0C
+};
+
 struct D2InventoryStrc
 {
 	uint32_t dwSignature;					//0x00
