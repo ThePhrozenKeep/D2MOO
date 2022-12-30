@@ -247,13 +247,6 @@ struct D2InventoryGridInfoStrc;
 
 ////////////////////////////////
 
-struct D2ClientKeySkillStrc
-{
-	int16_t nSkill;							//0x00
-	int16_t __002;							//0x02
-	uint32_t dwFlags;							//0x04
-};
-
 struct D2MercSaveDataStrc
 {
 	uint32_t nFlags;							//0x00		//0xAF of D2SaveHeaderStrc

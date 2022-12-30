@@ -98,6 +98,13 @@ struct D2ClientUnitUpdateSortStrc
 	int32_t nNextIndex;							//0x08
 };
 
+struct D2ClientKeySkillStrc
+{
+	int16_t nSkill;								//0x00
+	int16_t __002;								//0x02
+	uint32_t dwFlags;							//0x04
+};
+
 struct D2GuildInformationStrc
 {
 	int16_t nGuildFlags;						//0x00
