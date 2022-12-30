@@ -4,6 +4,14 @@
 
 #pragma pack(1)
 
+struct D2PropertyStrc
+{
+	int32_t nProperty;					//0x00
+	int32_t nLayer;						//0x04
+	int32_t nMin;						//0x08
+	int32_t nMax;						//0x0C
+};
+
 struct D2RunesTxt
 {
 	char szName[64];						//0x00

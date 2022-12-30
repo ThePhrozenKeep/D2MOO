@@ -53,15 +53,8 @@ typedef int32_t BOOL;
 
 #define ARRAY_SIZE(Array) (sizeof(Array) / sizeof(Array[0]))
 
+#define D2_MAYBE_UNUSED(x) (void)x
 
 #pragma pack(push, 1)
-struct D2PropertyStrc
-{
-	int32_t nProperty;					//0x00
-	int32_t nLayer;						//0x04
-	int32_t nMin;						//0x08
-	int32_t nMax;						//0x0C
-};
-#pragma pack(pop)
 
-#define D2_MAYBE_UNUSED(x) (void)x
+#pragma pack(pop)

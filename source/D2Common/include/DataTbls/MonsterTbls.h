@@ -2,9 +2,10 @@
 
 #include <D2BasicTypes.h>
 #include <D2Monsters.h>
-#pragma pack(1)
 
-struct D2ItemTypesTxt;
+#include "ItemsTbls.h"
+
+#pragma pack(1)
 
 //TODO: Find a better name
 struct D2UnkMonCompStrc
