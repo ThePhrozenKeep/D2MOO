@@ -14,6 +14,7 @@ target_sources(D2CommonDefinitions
     include/D2BasicTypes.h
     include/D2Constants.h
     include/D2Structs.h
+    include/D2Structs.OtherDLLs.h
 	include/D2Dll.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)

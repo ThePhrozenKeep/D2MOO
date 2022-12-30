@@ -1,0 +1,446 @@
+
+// Archive of types that are probably coming from other DLLs.
+
+// ---------- D2Client ----------
+
+struct D2AltDrawStrc
+{
+	int32_t nLeft;								//0x000
+	int32_t nTop;								//0x004
+	int32_t nRight;								//0x008
+	int32_t nBottom;							//0x00C
+	D2UnitStrc* pItem;							//0x010
+	wchar_t wszName[128];						//0x014
+	int32_t nRectColor;							//0x114
+	int32_t nRectDrawMode;						//0x118
+	int32_t nColor;								//0x11C
+};
+
+struct D2AnvilUIButtonStrc
+{
+	uint16_t nStringId;							//0x00
+	int32_t nTextX;								//0x02
+	int32_t nTextY;								//0x06
+	int32_t nCellfileX;							//0x0A
+	int32_t nCellfileY;							//0x0E
+	int32_t nClickAreaXStart;					//0x12
+	int32_t nClickAreaXEnd;						//0x16
+	int32_t nClickAreaYStart;					//0x1A
+	int32_t nClickAreaYEnd;						//0x1E
+	int32_t nFrame;								//0x22
+	uint8_t bButtonClicked;						//0x26
+	uint8_t unk0x27;							//0x27
+};
+
+struct D2AutomapCellStrc
+{
+	uint32_t fSaved;							//0x00
+	uint16_t nCellNo;							//0x04
+	uint16_t xPixel;							//0x06
+	uint16_t yPixel;							//0x08
+	uint16_t wWeight;							//0x0A
+	D2AutomapCellStrc* pPrev;				//0x0C
+	D2AutomapCellStrc* pNext;				//0x10
+};
+
+struct D2AutomapLayerStrc
+{
+	uint32_t nLayerNo;							//0x00
+	uint32_t fSaved;							//0x04
+	D2AutomapCellStrc* pFloors;				//0x08
+	D2AutomapCellStrc* pWalls;				//0x0C
+	D2AutomapCellStrc* pObjects;			//0x10
+	D2AutomapCellStrc* pExtras;				//0x14
+	D2AutomapLayerStrc* pNext;				//0x18
+};
+
+
+struct D2BuySellTabStrc
+{
+	int32_t nX;									//0x00
+	int32_t nY;									//0x04
+	uint16_t nStringIndex;						//0x06
+	BOOL bSelected;							//0x0A
+	BOOL bActive;							//0x0E
+};
+
+
+struct D2KeyConfigOptionStrc
+{
+	uint16_t nStringIndex;					//0x00
+	void* pCallback;						//0x02
+	WORD word0x06;							//0x06
+	int nTextBeginX;						//0x08
+	int nTextEndX;							//0x0C
+	int nTextBeginY;						//0x10
+	int nTextEndY;							//0x14
+	WORD word0x18;							//0x18
+};
+
+struct D2KeyConfigStrc
+{
+	int32_t nConfig;							//0x00
+	uint16_t nStringIndex;						//0x04
+	int32_t unk0x06;							//0x06
+};
+
+
+
+typedef int32_t(__fastcall* MENUENABLED)();
+typedef void(__fastcall* MENUSELECT)(D2MenuItemStrc*, D2WinMsgStrc*);
+typedef void(__fastcall* MENUOPTION)(D2MenuItemStrc*, int32_t);
+typedef void(__fastcall* MENUUPDATE)(D2MenuItemStrc*, int32_t);
+
+struct D2MenuEntryStrc
+{
+	int32_t nType;								//0x00
+	int32_t nLeft;								//0x04
+	int32_t nTop;								//0x08
+	int32_t nWidth;								//0x0C
+	int32_t nHeight;							//0x10
+	int32_t __014;								//0x14
+	int32_t nStrIndex;							//0x18
+	D2GfxDataStrc* pGfxData;				//0x1C
+	int32_t(__stdcall* pBtnFunction)(void*);	//0x20
+	uint32_t __024[2];							//0x24
+	int32_t nFont;								//0x2C
+};
+
+struct D2MenuInfoStrc
+{
+	int32_t nItemCount;							//0x00
+	int32_t unk0x04;							//0x04
+	int32_t unk0x08;							//0x08
+	int32_t unk0x0C;							//0x0C
+	int32_t unk0x10;							//0x10
+	int32_t unk0x14;							//0x14
+};
+
+struct D2MenuItemStrc
+{
+	uint32_t dwType;							//0x00
+	BOOL bExpansion;						//0x04
+	int32_t nHeight;							//0x08
+	char szImage[260];						//0x0C
+	MENUENABLED pfEnabled;					//0x110
+	MENUSELECT pfSelect;					//0x114			
+	MENUOPTION pfOption;					//0x118
+	MENUUPDATE pfUpdate;					//0x11C
+	uint32_t dwCount;							//0x120
+	uint32_t dwMoveCount;						//0x124
+	uint32_t dwSliderType;						//0x128
+	char szChoices[4][260];					//0x12C
+	D2CellFileStrc* pImage;					//0x53C
+	D2CellFileStrc* pChoices[4];			//0x540
+};
+
+struct D2MenuUIStateSaveStrc
+{
+	BOOL bCloseWhenOpen;					//0x00
+	BOOL bSaveUIState;						//0x04
+	int32_t nUIState;							//0x08
+};
+
+
+struct D2QuestDescStrc
+{
+	uint16_t wTblTitle;							//0x00
+	uint16_t wTblInitDesc;						//0x02
+};
+
+struct D2QuestDescriptorStrc
+{
+	uint8_t bActive;							//0x00
+	uint8_t nQuestNo;							//0x01
+	uint8_t nPosition;							//0x02
+	uint8_t nTab;								//0x03
+	uint16_t* pStringIds;						//0x04
+	int32_t nQuestFlag;							//0x08
+	int32_t nArrayId;							//0x0C
+};
+
+struct D2QuestUiButtonCoordStrc
+{
+	int32_t nCellfileX;							//0x00
+	int32_t nCellfileY;							//0x04
+	int32_t nClickX;							//0x08
+	int32_t nClickY;							//0x0C
+};
+
+struct D2QuestUiStrc
+{
+	uint8_t field_0;							//0x00
+	int32_t nQuest;								//0x01
+	int16_t nQuestTitleStringId;				//0x05
+	wchar_t wszQuestDesc[300];				//0x07
+	int16_t field_25F;						//0x25F
+	uint8_t nPosition;							//0x261
+	uint8_t nQuestNo;							//0x262
+	uint8_t field_263;							//0x263
+	uint8_t field_264;							//0x264
+	uint8_t field_265;							//0x265
+	int32_t nQuestState;						//0x266
+};
+
+struct D2QuestUiTabStrc
+{
+	int32_t nStartQuest;						//0x00
+	int32_t nEndQuest;							//0x04
+};
+
+
+struct D2WindowPlacementStrc
+{
+	HWND hWnd;								//0x00
+	WINDOWPLACEMENT windowPlacement;		//0x04
+};
+
+struct D2WinMsgStrc
+{
+	HWND hWnd;								//0x00
+	uint32_t uMessage;							//0x04
+	union									//0x08
+	{
+		WPARAM  wParam;
+		int32_t	  nKey;
+	};
+	union									//0x0C
+	{
+		struct
+		{
+			uint16_t	nXpos;
+			uint16_t	nYpos;
+		};
+		LPARAM   lParam;
+	};
+	uint32_t dwCommandSource;					//0x10 HIWORD(wParam) when uMessage == WM_COMMAND
+	uint32_t dwArg;							//0x14
+	BOOL bReturn;							//0x18
+	LRESULT lResult;						//0x1C
+};
+
+// ---------- D2Launch ----------
+
+struct D2BnetClientDataStrc
+{
+	uint32_t dwExpansion;						//0x000
+	uint8_t nWindowed;							//0x004
+	uint8_t nFixAspectRatio;					//0x005
+	uint8_t n3DFXMode;							//0x006
+	uint8_t nOpenGLMode;						//0x007
+	uint8_t nRaveMode;							//0x008
+	uint8_t nDirect3DMode;						//0x009
+	uint8_t nUsePerspective;					//0x00A
+	uint8_t nLowQuality;						//0x00B
+	uint32_t dwGamma;							//0x00C
+	uint8_t nVSync;							//0x010
+	uint32_t dwFrameRate;						//0x011
+	uint32_t dwGameType;						//0x015
+	uint16_t nJoinId;							//0x019
+	char szGameName[24];					//0x01B
+	char szServerAddress[24];				//0x033
+	char szBattleNetAddress[24];			//0x04B
+	char szMCPAddress[24];					//0x063
+	uint32_t __07B;							//0x07B
+	uint8_t nNoPK;								//0x07F
+	uint8_t nOpenCharacter;					//0x080
+	uint8_t nClasses[7];						//0x081
+	uint8_t nInvincible;						//0x088
+	char szAccount[48];						//0x089
+	char szCharName[24];					//0x0B9
+	char szRealmName[32];					//0x0D1
+	uint8_t __0F1[249];						//0x0F1
+	uint8_t nCharClass;						//0x1EA
+	uint8_t nCharFlags;						//0x1EB
+	uint8_t nLastCompleteDiff;					//0x1EC
+	uint8_t nNoMonsters;						//0x1ED
+	uint8_t __1ED[23];							//0x1EE
+	//uint8_t bDirect;							//0x200
+	//uint8_t bNoCompress;						//0x202
+	uint32_t dwArenaFlags;						//0x205
+	uint8_t nTemplate;							//0x209
+	uint16_t __20A;								//0x20A
+	uint8_t nDifficulty;						//0x20C
+	uint8_t __20D[52];							//0x20D
+	//uint8_t bNoSound;						//0x21C
+	char szGamePassword[24];				//0x241
+	char szGameDesc[32];					//0x259
+	uint8_t __279[226];						//0x279
+	char szChannel[32];						//0x35B
+	uint8_t __37B[64];							//0x37B
+	uint8_t nCharacterLevel;					//0x3BB
+	uint8_t nLadder;							//0x3BC
+	uint32_t dwPasswordHash;					//0x3BD
+	uint8_t nPasswordLength;					//0x3C1
+	uint8_t __3C2[6];							//0x3C2
+};
+
+// ---------- D2CMP ----------
+struct D2CellFileStrc
+{
+	uint32_t dwVersion;						//0x00
+	struct
+	{
+		uint16_t dwFlags;
+		uint8_t mylastcol;
+		uint8_t mytabno : 1;
+	};										//0x04
+	uint32_t eFormat;							//0x08
+	uint32_t dwTermination;					//0x0C
+	int32_t nDirections;						//0x10
+	int32_t nFrames;							//0x14
+	D2GfxCellStrc* pGfxCells;				//0x18
+};
+
+// ---------- D2Gfx ----------
+
+struct D2RenderCallbackStrc
+{
+	BOOL(__fastcall* pfInitialize)(HINSTANCE);
+	BOOL(__fastcall* pfInitPerspective)(D2GfxSettingsStrc* pSettings, D2GfxHelperStrc* pHelpers);
+	BOOL(__fastcall* pfRelease)();
+	BOOL(__fastcall* pfCreateWindow)(HWND hWnd, int32_t nResolutionMode);
+	BOOL(__fastcall* pfDestroyWindow)();
+	void(__fastcall* pfEndCutScene)(HWND hWnd, int32_t nResolutionMode, int32_t nWindowState);
+	BOOL(__fastcall* pfBeginScene)(BOOL bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
+	BOOL(__fastcall* pfEndScene1)();
+	BOOL(__fastcall* pfEndScene2)();
+	BOOL(__fastcall* pfResizeWindow)(HWND hWnd, BOOL bForceResize);
+	BOOL(__fastcall* pfGetBackBuffer)(uint8_t* pBuffer);
+	BOOL(__fastcall* pfActivateWindow)();
+	BOOL(__fastcall* pfSetOption)(int32_t nOption, int32_t nValue);
+	BOOL(__fastcall* pfBeginCutScene)();
+	void(__fastcall* pfPlayCutScene)(const char* szFile, int32_t nResolutionMode, void* pfFrame);
+	BOOL(__fastcall* pfCheckCutScene)();
+	void(__fastcall* pfDecodeSmacker)(const char* szSmacker, uint8_t* pBuffer, int32_t nVersion);
+	void(__fastcall* pfPlayerSmacker)(void* pContext);
+	void(__fastcall* pfCloseSmacker)(void* pContext);
+	int32_t* (__fastcall* pfGetRenderStatistics)();
+	int32_t(__fastcall* pfGetScreenSize)(int32_t* pWidth, int32_t* pHeight);
+	void(__fastcall* pfUpdateScaleFactor)(int32_t nScaleFactor);
+	BOOL(__fastcall* pfSetGamma)(int32_t nGamma);
+	int32_t(__fastcall* pfCheckGamma)();
+	void(__fastcall* pfSetPerspectiveScale)(int32_t nScaleX, int32_t nScaleY);
+	void(__fastcall* pfAdjustPerspectivePosition)(int32_t nPosX, int32_t nPosY, int32_t nBais, int32_t* pXAdjust, int32_t* pYAdjust);
+	void(__fastcall* pfPerspectiveScalePosition)(int32_t nPosX, int32_t nPosY, int32_t nAngle, int32_t* pXAdjust, int32_t* pYAdjust, BOOL bOrder);
+	void(__fastcall* pfSetDefaultPerspectiveFactor)();
+	void(__fastcall* pfSetPalette)(LPPALETTEENTRY pPalette);
+	void(__fastcall* pfSetPaletteTable)(LPPALETTEENTRY* pPaletteTable);
+	void(__fastcall* pfSetGlobalLight)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
+	BOOL(__fastcall* pfDrawGroundTile)(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
+	void(__fastcall* pfDrawPerspectiveImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, int32_t nScreenMode, uint8_t* pPalette);
+	void(__fastcall* pfDrawImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, uint8_t* pPalette);
+	void(__fastcall* pfDrawShiftedImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
+	void(__fastcall* pfDrawVerticalCropImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, int32_t nDrawMode);
+	void(__fastcall* pfDrawShadow)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY);
+	void(__fastcall* pfDrawImageFast)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint8_t nPaletteIndex);
+	void(__fastcall* pfDrawClippedImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, void* pCropRect, int32_t nDrawMode);
+	BOOL(__fastcall* pfDrawWallTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels);
+	BOOL(__fastcall* pfDrawTransWallTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels, uint8_t nAlpha);
+	BOOL(__fastcall* pfDrawShadowTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
+	void(__fastcall* pfDrawRect)(RECT* pRect, uint8_t nPaletteIndex);
+	void(__fastcall* pfDrawRectEx)(RECT* pRect, uint8_t nPaletteIndex);
+	void(__fastcall* pfDrawSolidRect)(RECT* pRect, uint8_t nPaletteIndex);
+	void(__fastcall* pfDrawSolidSquare)(POINT* pPoint, uint8_t nSize, uint8_t nPaletteIndex);
+	void(__fastcall* pfDrawSolidRectEx)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, int32_t nDrawMode);
+	void(__fastcall* pfDrawSolidRectAlpha)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
+	void(__fastcall* pfDrawLine)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
+	void(__fastcall* pfClearScreen)(BOOL bPartial);
+	void(__fastcall* pfDrawString)(int32_t nPosX, int32_t nPosY, const char* szFormat, va_list va);
+	void(__fastcall* pfDrawLight)(uint32_t* pLight, uint32_t* pPlayerLight, int32_t nPosX, int32_t nPosY);
+	void(__fastcall* pfDebugFillBackBuffer)(int32_t nPosX, int32_t nPosY);
+	void(__fastcall* pfClearCaches)();
+};
+
+struct D2GfxCellStrc
+{
+	BOOL bFlip;								//0x00
+	uint32_t dwWidth;							//0x04
+	uint32_t dwHeight;							//0x08
+	int32_t nXOffset;							//0x0C
+	int32_t nYOffset;							//0x10
+	uint32_t unk0x14;							//0x14
+	D2GfxCellNodeStrc* pCellNode;			//0x18
+	uint32_t dwLength;							//0x1C
+	uint8_t* pPixels;							//0x20
+};
+
+struct D2GfxCellNodeStrc
+{
+	uint32_t unk;
+};
+
+struct D2GfxDataStrc
+{
+	D2GfxCellStrc* pCurrentCell;			//0x00
+	D2CellFileStrc* pCellFile;				//0x04
+	uint32_t nFrame;							//0x08
+	uint32_t nDirection;						//0x0C
+	int32_t nMaxDirections;						//0x10
+	int32_t nMaxFrames;							//0x14
+	uint32_t fFlags;							//0x18
+	uint8_t fState;							//0x1C
+	union									//0x1D
+	{
+		uint8_t nComponent;
+		uint8_t fItemFlags;
+	};
+	uint8_t unk0x1E;							//0x1E - padding no doubt
+	uint8_t unk0x1F;							//0x1F
+	int32_t nUnitType;							//0x20
+	int32_t nUnitIndex;							//0x24
+	int32_t nMode;								//0x28
+	int32_t nOverlay;							//0x2C
+	union
+	{
+		struct
+		{
+			char szToken[4];				//0x30
+			char szComponent[4];			//0x34
+			char szArmorType[4];			//0x38 - lit, med, hvy
+			char szMode[4];					//0x3C
+			char szHitClass[4];				//0x40
+		};
+		uint32_t dwName[5];					//0x30
+	};
+	char* pName;							//0x44
+};
+
+struct D2GfxHelperStrc
+{
+	void(__fastcall* pfFillYBufferTable)(void* ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4);
+	void(__fastcall* pfDrawVisTile)(int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+	void(__fastcall* field_8)(int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+	void(__fastcall* pfDrawGroundTile)(int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+	void(__fastcall* pfDrawWallTile)(int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+	void(__fastcall* pfDrawBlendedVisTile)(int32_t a1, int32_t a2, int32_t a3, int32_t a4);
+	void(__fastcall* pfDrawRoofTile)(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5);
+};
+
+struct D2GfxLightStrc
+{
+	uint8_t nIntensity;						//0x00
+	uint8_t nRed;								//0x01
+	uint8_t nGreen;							//0x02
+	uint8_t nBlue;								//0x03
+};
+
+struct D2GfxLightExStrc
+{
+	uint8_t nIntensity;						//0x00
+	uint8_t nRed;								//0x01
+	uint8_t nGreen;							//0x02
+	uint8_t nBlue;								//0x03
+	int32_t nX;									//0x04
+	int32_t nY;									//0x08
+};
+
+struct D2GfxSettingsStrc
+{
+	BOOL bPerspectiveEnabled;				//0x00
+	BOOL bPerspectiveCapable;				//0x04
+	BOOL bLowQuality;						//0x08
+	int32_t nGamma;								//0x0C
+	BOOL bVSync;							//0x10
+	BOOL bBlendedShadows;					//0x14
+};
