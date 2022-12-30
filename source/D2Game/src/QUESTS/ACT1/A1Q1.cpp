@@ -12,7 +12,7 @@
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
-
+#include "MONSTER/MonsterRegion.h"
 
 //D2Game.0x6FD31F38
 D2NPCMessageTableStrc gpAct1Q1NpcMessages[] =
