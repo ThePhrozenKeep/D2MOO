@@ -13,6 +13,8 @@
 #include "ITEMS/Items.h"
 #include "MONSTER/MonsterSpawn.h"
 #include "MONSTER/MonsterUnique.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"

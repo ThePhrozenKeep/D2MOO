@@ -13,6 +13,8 @@
 #include "GAME/Game.h"
 #include "ITEMS/Items.h"
 #include "MONSTER/MonsterSpawn.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/PlrTrade.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/QuestsFX.h"

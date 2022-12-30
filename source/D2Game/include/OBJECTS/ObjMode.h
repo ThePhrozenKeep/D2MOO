@@ -3,6 +3,29 @@
 #include "D2Structs.h"
 #include <Units/Units.h>
 
+#pragma pack(1)
+
+using ObeliskPowerUpFunction = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t);
+
+struct D2ObeliskPowerUpStrc
+{
+	ObeliskPowerUpFunction pPowerUpCallback;//0x00
+	uint32_t nChance;						//0x04
+	int32_t nValue;							//0x08
+};
+
+using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
+
+struct D2ObjOperateFnStrc
+{
+	D2GameStrc* pGame;						//0x00
+	D2UnitStrc* pObject;					//0x04
+	D2UnitStrc* pPlayer;					//0x08
+	D2ObjectControlStrc* pObjectregion;		//0x0C
+	int32_t nObjectIdx;						//0x10
+};
+
+#pragma pack()
 
 //D2Game.0x6FC748A0
 void __fastcall sub_6FC748A0(D2GameStrc* pGame, D2UnitStrc* pObject);

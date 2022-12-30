@@ -10,6 +10,7 @@
 #include "GAME/Game.h"
 #include "GAME/SCmd.h"
 #include "ITEMS/Items.h"
+#include "OBJECTS/Objects.h"
 #include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/ACT2/A2Q6.h"

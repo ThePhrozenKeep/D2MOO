@@ -22,6 +22,8 @@
 #include "ITEMS/ItemMode.h"
 #include "ITEMS/Items.h"
 #include "ITEMS/ItemsMagic.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/Player.h"
 #include "PLAYER/PlrSave.h"
 #include "QUESTS/ACT1/A1Q4.h"

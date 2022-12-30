@@ -22,6 +22,8 @@
 #include "MONSTER/MonsterAI.h"
 #include "MONSTER/MonsterMode.h"
 #include "MONSTER/MonsterRegion.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/PlrMsg.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/ACT5/A5Q4.h"

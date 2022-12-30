@@ -17,6 +17,8 @@
 #include "ITEMS/Items.h"
 #include "MONSTER/MonsterMode.h"
 #include "MONSTER/MonsterSpawn.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/Player.h"
 #include "QUESTS/Quests.h"
 #include "QUESTS/ACT5/A5Q5.h"

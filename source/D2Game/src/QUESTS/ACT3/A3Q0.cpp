@@ -7,6 +7,8 @@
 #include "AI/AiGeneral.h"
 #include "GAME/Game.h"
 #include "MONSTER/MonsterSpawn.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "UNIT/SUnit.h"
 

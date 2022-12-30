@@ -613,40 +613,6 @@ struct D2MenuUIStateSaveStrc
 	BOOL bSaveUIState;						//0x04
 	int32_t nUIState;							//0x08
 };
-
-using ObeliskPowerUpFunction = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t);
-
-struct D2ObeliskPowerUpStrc
-{
-	ObeliskPowerUpFunction pPowerUpCallback;//0x00
-	uint32_t nChance;						//0x04
-	int32_t nValue;							//0x08
-};
-
-using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
-
-struct D2ObjInitFnStrc
-{
-	D2GameStrc* pGame;						//0x00
-	D2UnitStrc* pObject;					//0x04
-	D2RoomStrc* pRoom;						//0x08
-	D2ObjectControlStrc* pObjectregion;		//0x0C
-	D2ObjectsTxt* pObjectTxt;				//0x10
-	int32_t nX;									//0x14
-	int32_t nY;									//0x18
-};
-
-using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
-
-struct D2ObjOperateFnStrc
-{
-	D2GameStrc* pGame;						//0x00
-	D2UnitStrc* pObject;					//0x04
-	D2UnitStrc* pPlayer;					//0x08
-	D2ObjectControlStrc* pObjectregion;		//0x0C
-	int32_t nObjectIdx;							//0x10
-};
-
 struct D2PacketDataStrc					//sizeof 0x208
 {
 	int32_t nPacketSize;					//0x00

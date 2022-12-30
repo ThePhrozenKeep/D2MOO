@@ -15,6 +15,8 @@
 #include "ITEMS/Items.h"
 #include "PLAYER/Player.h"
 #include "PLAYER/PlrTrade.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"

@@ -14,6 +14,8 @@
 #include "GAME/Event.h"
 #include "ITEMS/Items.h"
 #include "MONSTER/MonsterRegion.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 
 
 //D2Game.0x6FC7A3A0

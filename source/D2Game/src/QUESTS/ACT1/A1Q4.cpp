@@ -18,6 +18,8 @@
 #include "MONSTER/MonsterAI.h"
 #include "MONSTER/MonsterMode.h"
 #include "MONSTER/MonsterSpawn.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"

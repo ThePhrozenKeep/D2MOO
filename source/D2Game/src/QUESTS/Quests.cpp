@@ -39,6 +39,8 @@
 #include "MONSTER/MonsterRegion.h"
 #include "MONSTER/MonsterSpawn.h"
 #include "MONSTER/MonsterUnique.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/PlrIntro.h"
 #include "PLAYER/PlrMsg.h"
 #include "QUESTS/ACT1/A1Intro.h"

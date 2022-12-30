@@ -11,6 +11,7 @@
 #include "GAME/Game.h"
 #include "MONSTER/MonsterSpawn.h"
 #include "MONSTER/MonsterUnique.h"
+#include "OBJECTS/Objects.h"
 #include "PLAYER/PlrIntro.h"
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"

@@ -16,6 +16,8 @@
 #include "GAME/Game.h"
 #include "MISSILES/Missiles.h"
 #include "MONSTER/MonsterMode.h"
+#include "OBJECTS/Objects.h"
+#include "OBJECTS/ObjMode.h"
 #include "PLAYER/Player.h"
 #include "PLAYER/PlayerStats.h"
 #include "QUESTS/Quests.h"

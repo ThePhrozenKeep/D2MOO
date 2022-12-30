@@ -3,6 +3,22 @@
 #include "D2Structs.h"
 #include <Units/Units.h>
 
+#pragma pack(1)
+
+using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
+
+struct D2ObjInitFnStrc
+{
+	D2GameStrc* pGame;						//0x00
+	D2UnitStrc* pObject;					//0x04
+	D2RoomStrc* pRoom;						//0x08
+	D2ObjectControlStrc* pObjectregion;		//0x0C
+	D2ObjectsTxt* pObjectTxt;				//0x10
+	int32_t nX;									//0x14
+	int32_t nY;									//0x18
+};
+
+#pragma pack()
 
 //D2Game.0x6FC70180
 D2UnitStrc* __fastcall OBJECTS_SpawnShrine(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode);
