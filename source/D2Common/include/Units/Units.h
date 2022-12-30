@@ -182,7 +182,7 @@ struct D2UnitStrc
 	union										//0xD8
 	{
 		uint32_t dwSrvTickCount;				//Server pUnit
-		D2PacketListStrc* pPacketList;			//Client pUnit
+		struct D2PacketListStrc* pPacketList;	//Client pUnit
 	};
 	D2EventTimerStrc* pTimer;					//0xDC
 	D2UnitStrc* pChangeNextUnit;				//0xE0

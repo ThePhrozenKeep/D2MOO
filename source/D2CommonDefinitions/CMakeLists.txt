@@ -13,7 +13,6 @@ target_sources(D2CommonDefinitions
   ${SOURCES_TRANSITIVE_USAGE}
     include/D2BasicTypes.h
     include/D2Constants.h
-    include/D2PacketDef.
     include/D2Structs.h
 	include/D2Dll.h
 )
