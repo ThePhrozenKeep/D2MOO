@@ -752,13 +752,6 @@ struct D2SplittedTextStrc
 	D2SplittedTextStrc* pNext;				//0x04
 };
 
-struct D2TargetNodeStrc
-{
-	D2UnitStrc* pUnit;							//0x00
-	int32_t unk0x04;							//0x04
-	D2TargetNodeStrc* pNext;					//0x08
-	D2TargetNodeStrc* unk0x0C;					//0x0C
-};
 
 struct D2TblHeaderStrc
 {
