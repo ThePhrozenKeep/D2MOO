@@ -7,6 +7,7 @@
 
 struct D2ClientInfoStrc;
 struct D2UnitInfoStrc;
+struct D2PartyControlStrc;
 
 enum D2C_GameConstants
 {

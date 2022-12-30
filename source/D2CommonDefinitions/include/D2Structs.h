@@ -245,29 +245,6 @@ struct D2InventoryGridInfoStrc;
 
 
 
-struct D2PartyNodeStrc
-{
-	int nUnitGUID;
-	D2PartyNodeStrc* pNext;
-};
-
-struct D2PartyStrc
-{
-	int16_t nPartyId;
-	int16_t field_2;
-	D2PartyNodeStrc* pPartyNodes;
-	D2PartyStrc* pNext;
-};
-
-struct D2PartyControlStrc
-{
-	int16_t field_0;
-	int16_t field_2;
-	D2PartyStrc* pParties;
-};
-
-
-
 ////////////////////////////////
 
 struct D2ClientKeySkillStrc
