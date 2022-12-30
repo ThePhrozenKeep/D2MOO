@@ -281,21 +281,6 @@ struct D2AnvilUIButtonStrc
 	uint8_t unk0x27;							//0x27
 };
 
-
-struct D2AttackStrc
-{
-	D2GameStrc* pGame;						//0x00
-	D2DifficultyLevelsTxt* pTxt;			//0x04
-	D2UnitStrc* pAttacker;					//0x08
-	D2UnitStrc* pDefender;					//0x0C
-	uint32_t dwAttackerType;					//0x10
-	uint32_t dwDefenderType;					//0x14
-	D2DamageStrc* pDamage;					//0x18
-	uint32_t unk0x1C;							//0x1C
-	int32_t nDamageReduction;					//0x20
-	int32_t nMagicDamageReduction;				//0x24
-};
-
 struct D2AutomapCellStrc
 {
 	uint32_t fSaved;							//0x00

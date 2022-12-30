@@ -51,8 +51,16 @@ enum D2BlockFlags
 	BLOCKFLAG_ALL = BLOCKFLAG_BLOCK | BLOCKFLAG_AVOID | BLOCKFLAG_DODGE | BLOCKFLAG_EVADE | BLOCKFLAG_WEAPONBLOCK,
 };
 
+enum D2DamageReductionType : uint32_t
+{
+	DAMAGE_REDUCTION_NONE = 0,
+	DAMAGE_REDUCTION_PHYSICAL = 1,
+	DAMAGE_REDUCTION_MAGICAL = 2,
+	DAMAGE_REDUCTION_TYPES_COUNT
+};
 
 #pragma pack(push, 1)
+
 struct D2DamageInfoStrc
 {
 	D2GameStrc* pGame;
@@ -62,7 +70,7 @@ struct D2DamageInfoStrc
 	int32_t bAttackerIsMonster;
 	int32_t bDefenderIsMonster;
 	D2DamageStrc* pDamage;
-	int32_t nDamageReduction[3];
+	int32_t nDamageReduction[DAMAGE_REDUCTION_TYPES_COUNT];
 };
 
 struct D2DamageStatTableStrc
@@ -73,7 +81,7 @@ struct D2DamageStatTableStrc
 	int32_t nPierceStatId;
 	int32_t nAbsorbPctStatId;
 	int32_t nAbsorbStatId;
-	int32_t nDamageReductionArrayIndex;
+	D2DamageReductionType nDamageReductionType;
 	int32_t unk0x1C;
 	int32_t unk0x20;
 	const char* szName;

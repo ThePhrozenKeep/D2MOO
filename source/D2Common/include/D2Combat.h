@@ -2,13 +2,6 @@
 
 #pragma pack(1)
 
-enum D2C_DamageReductionTypes
-{
-	DMGREDUCTYPE_NONE,
-	DMGREDUCTYPE_PHYSICAL,
-	DMGREDUCTYPE_MAGICAL,
-};
-
 enum D2C_DamageApplyTypes
 {
 	DMGAPPLYTYPE_DURATION,
