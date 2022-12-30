@@ -57,6 +57,8 @@ typedef int32_t BOOL;
 
 #pragma pack(push, 1)
 
+using D2UnitGUID = uint32_t;
+constexpr D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
 struct D2CoordStrc							//sizeof 0x08
 {

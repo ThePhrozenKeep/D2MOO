@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include <D2Seed.h>
 #include "D2DrlgDrlgVer.h"
 
 #pragma pack(1)

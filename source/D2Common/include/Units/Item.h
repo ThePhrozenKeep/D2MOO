@@ -1,6 +1,7 @@
 #pragma once
 
 #include <D2Inventory.h>
+#include <D2Seed.h>
 
 #pragma pack(1)
 
