@@ -614,19 +614,6 @@ struct D2MenuUIStateSaveStrc
 	int32_t nUIState;							//0x08
 };
 
-struct D2ModeChangeStrc
-{
-	int32_t nMode;								//0x00
-	D2UnitStrc* pUnit;						//0x04
-	D2UnitStrc* pTargetUnit;				//0x08
-	int32_t nX;									//0x0C
-	int32_t nY;									//0x10
-	uint8_t unk0x14[4];						//0x14
-	int32_t unk0x18;							//0x18
-	uint8_t unk0x1C;							//0x1C
-	uint8_t unk0x1D[3];							//0x1D
-};
-
 struct D2MonRegDataStrc
 {
 	uint16_t nMonHcIdx;							//0x00
