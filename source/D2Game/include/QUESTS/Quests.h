@@ -3,6 +3,8 @@
 #include <D2BitManip.h>
 
 #include <Units/Units.h>
+#include <D2Text.h>
+
 #include <GAME/Game.h>
 #include <GAME/Clients.h>
 #include <OBJECTS/Objects.h>

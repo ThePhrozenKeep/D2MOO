@@ -3,6 +3,7 @@
 #include "D2PacketDef.h"
 #include <Units/Units.h>
 #include "Game.h"
+#include "D2Packet.h"
 
 struct D2SaveHeaderStrc;
 

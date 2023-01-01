@@ -159,7 +159,6 @@ target_sources(D2Game
 target_sources(D2Game
   PRIVATE
     include/D2Packet.h
-    include/D2PacketDef.h
 )
 
 # Quests
