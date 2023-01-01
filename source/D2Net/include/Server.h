@@ -16,9 +16,9 @@ int32_t* __stdcall D2NET_10039();
 //D2Net.0x6FC01FB0 (#10040)
 int32_t* __stdcall D2NET_10040();
 //D2Net.0x6FC01FC0
-int32_t __fastcall SERVER_ReadPacketFromBufferCallback(int32_t a1, D2PacketBufferStrc* a2, int32_t a3);
+int32_t __fastcall SERVER_ReadPacketFromBufferCallback(int32_t nUnused, D2PacketBufferStrc* pPacketBuffer, int32_t nBufferSize);
 //D2Net.0x6FC01FE0
-int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* a1, uint32_t a2, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t a7, int32_t a8);
+int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2);
 //D2Net.0x6FC020B0
 int32_t __fastcall sub_6FC020B0(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4);
 //D2Net.0x6FC020E0

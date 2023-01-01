@@ -650,21 +650,21 @@ int32_t __fastcall SERVER_ReadPacketFromBufferCallback(int32_t nUnused, D2Packet
 }
 
 //D2Net.0x6FC01FE0
-int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* a1, uint32_t a2, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2)
+int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2)
 {
 	int32_t nSize = 0;
-	if (a2 < 1 || !SERVER_GetClientPacketSize(a1, a2, &nSize))
+	if (nBufferSize < 1 || !SERVER_GetClientPacketSize(pPacketBuffer, nBufferSize, &nSize))
 	{
 		return 3;
 	}
 
-	const uint8_t nHeader = a1->data[0];
+	const uint8_t nHeader = pPacketBuffer->data[0];
 	if ((nHeader >= 0x70u && nHeader != 0xFF) || nSize < 0 || nSize > MAX_MSG_SIZE)
 	{
 		return 4;
 	}
 
-	if (nSize > a2)
+	if (nSize > nBufferSize)
 	{
 		return 3;
 	}
