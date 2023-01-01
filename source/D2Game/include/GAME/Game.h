@@ -14,11 +14,6 @@ struct D2NpcControlStrc;
 struct D2QuestInfoStrc;
 struct D2EventTimerQueueStrc;
 
-enum D2C_GameConstants
-{
-	MAX_MSG_SIZE = 516, // Actually comes from D2Net
-};
-
 enum D2PacketTypeAdmin
 {
 	PACKET_ADMIN_GETINFO = 0x01,

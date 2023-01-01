@@ -1,24 +1,24 @@
 #include <Windows.h>
 
+#include <cstdint>
+
 #include <D2Dll.h>
+
 
 #undef D2FUNC_DLL
 #define D2FUNC_DLL D2FUNC_DLL_STUB
 
-#include <D2Net.h>
 
-BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
+extern int32_t dword_6FC0B264;
+
+
+//D2Net.0x6FC01B40
+BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-	switch (dwReason)
+	if (fdwReason == DLL_PROCESS_ATTACH)
 	{
-	case DLL_PROCESS_ATTACH:
-		break;
-	case DLL_PROCESS_DETACH:
-		break;
-	case DLL_THREAD_ATTACH:
-		break;
-	case DLL_THREAD_DETACH:
-		break;
+		dword_6FC0B264 = 0;
 	}
+
 	return TRUE;
 }

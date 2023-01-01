@@ -111,7 +111,7 @@ enum D2C_AsyncDataPriority
 enum D2C_AsyncDataFlags
 {
 	ASYNC_DATA_FLAGS_LOADED = 0x01,
-	
+
 	ASYNC_DATA_FLAGS_DEBUG_TAG      = 0x41737960,
 	ASYNC_DATA_FLAGS_DEBUG_TAG_MASK = 0xFFFFFFF0,
 };
@@ -146,10 +146,177 @@ struct AsyncDataEventSlot
 	AsyncData* pAsyncOp;
 };
 
+
+struct D2ServerStrc
+{
+	int32_t field_0;
+	int32_t field_4;
+	int32_t field_8;
+	int32_t field_C;
+	int32_t field_10;
+	int32_t field_14;
+	int32_t field_18;
+	CRITICAL_SECTION* field_1C;
+	int32_t field_20;
+	int32_t field_24;
+	CRITICAL_SECTION field_28;
+	int32_t field_40;
+	int32_t field_44;
+	int32_t field_48;
+	int32_t field_4C;
+	int32_t field_50;
+	int32_t field_54;
+	int32_t field_58;
+	int32_t field_5C;
+	int32_t field_60;
+	int32_t field_64;
+	int32_t field_68;
+	int32_t field_6C;
+	int32_t field_70;
+	int32_t field_74;
+	int32_t field_78;
+	int32_t field_7C;
+	int32_t field_80;
+	int32_t field_84;
+	int32_t field_88;
+	int32_t field_8C;
+	int32_t field_90;
+	int32_t field_94;
+	int32_t field_98;
+	int32_t field_9C;
+	int32_t field_A0;
+	int32_t field_A4;
+	int32_t field_A8;
+	int32_t field_AC;
+	int32_t field_B0;
+	int32_t field_B4;
+	int32_t field_B8;
+	int32_t field_BC;
+	int32_t field_C0;
+	int32_t field_C4;
+	int32_t field_C8;
+	int32_t field_CC;
+	int32_t field_D0;
+	int32_t field_D4;
+	int32_t field_D8;
+	int32_t field_DC;
+	int32_t field_E0;
+	int32_t field_E4;
+	int32_t field_E8;
+	int32_t field_EC;
+	int32_t field_F0;
+	int32_t field_F4;
+	int32_t field_F8;
+	int32_t field_FC;
+	char field_100[1868];
+	int32_t field_84C;
+	int32_t field_850;
+	CRITICAL_SECTION field_854;
+	int32_t field_86C;
+	int32_t field_870;
+	int32_t field_874;
+	int32_t field_878;
+	int32_t field_87C;
+	int32_t field_880;
+	int32_t field_884;
+	int32_t field_888;
+	int32_t field_88C;
+	int32_t field_890;
+	CRITICAL_SECTION field_894;
+	int32_t field_8AC;
+	int32_t field_8B0;
+	CRITICAL_SECTION field_8B4;
+	int32_t field_8CC;
+	int32_t field_8D0;
+	int32_t field_8D4;
+	int32_t field_8D8;
+	int32_t field_8DC;
+	int32_t field_8E0;
+	int32_t field_8E4;
+	int32_t field_8E8;
+	int32_t field_8EC;
+	int32_t field_8F0;
+	int32_t field_8F4;
+	int32_t field_8F8;
+	int32_t field_8FC;
+	int32_t field_900;
+	int32_t field_904;
+	int32_t field_908;
+	int32_t field_90C;
+	int32_t field_910;
+	int32_t field_914;
+	int32_t field_918;
+	int32_t field_91C;
+	int32_t field_920;
+	int32_t field_924;
+	int32_t field_928;
+	int32_t field_92C;
+	int32_t field_930;
+	int32_t field_934;
+	int32_t field_938;
+	int32_t field_93C;
+	int32_t field_940;
+	int32_t field_944;
+	int32_t field_948;
+	int32_t field_94C;
+	int32_t field_950;
+	int32_t field_954;
+	int32_t field_958;
+	int32_t field_95C;
+	int32_t field_960;
+	int32_t field_964;
+	int32_t field_968;
+	int32_t field_96C;
+	int32_t field_970;
+	int32_t field_974;
+	int32_t field_978;
+	int32_t field_97C;
+	int32_t field_980;
+	int32_t field_984;
+	int32_t field_988;
+	int32_t field_98C;
+	int32_t field_990;
+	int32_t field_994;
+	int32_t field_998;
+	int32_t field_99C;
+	int32_t field_9A0;
+	int32_t field_9A4;
+	int32_t field_9A8;
+	int32_t field_9AC;
+	int32_t field_9B0;
+	int32_t field_9B4;
+	int32_t field_9B8;
+	int32_t field_9BC;
+	int32_t field_9C0;
+	int32_t field_9C4;
+	int32_t field_9C8;
+	int32_t field_9CC;
+	int32_t field_9D0;
+	int32_t field_9D4;
+	int32_t field_9D8;
+	int32_t field_9DC;
+	int32_t field_9E0;
+	int32_t field_9E4[141];
+	int32_t field_C18;
+	int32_t field_C1C;
+	int32_t field_C20;
+	int32_t field_C24;
+	int32_t field_C28;
+	int32_t field_C2C;
+	int32_t field_C30;
+	int32_t field_C34;
+	int32_t field_C38;
+	int32_t field_C3C;
+	int32_t field_C40;
+	int32_t field_C44;
+	int32_t field_C48;
+};
 #pragma pack()
 
 typedef int (*D2ExceptionCallback)();
 
+D2FUNC_DLL(FOG, SOCKET_CloseSocket, int, __fastcall, (SOCKET), 0x13280)																				//Fog.#10000
+D2FUNC_DLL(FOG, GetHostIPAddress, const char*, __fastcall, (const char*), 0x13A40)																	//Fog.#10015
 D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)													//Fog.#10018
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
 D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
@@ -169,7 +336,7 @@ D2FUNC_DLL(FOG, 10055_GetSyncTime, int32_t, __fastcall, (), 0xA690)													
 D2FUNC_DLL(FOG, 10083_Cos_LUT, float, __stdcall, (int16_t index), 0x1DF0)																			//Fog.#10083
 D2FUNC_DLL(FOG, 10084_Sin_LUT, float, __stdcall, (int16_t index), 0x1E10)																			//Fog.#10084
 D2FUNC_DLL(FOG, Decode14BitsFromString, unsigned, __stdcall, (uint16_t* p2Characters), 0x1B20)														//Fog.#10085
-D2FUNC_DLL(FOG, Encode14BitsToString, void, __stdcall, (uint16_t * p2Characters, uint32_t value), 0x1B40)											//Fog.#10086
+D2FUNC_DLL(FOG, Encode14BitsToString, void, __stdcall, (uint16_t* p2Characters, uint32_t value), 0x1B40)											//Fog.#10086
 // Note: works up to value 0xFC05FC00
 D2FUNC_DLL(FOG, Decode32BitsFromString, unsigned, __stdcall, (uint32_t* p4Characters), 0x1B60)														//Fog.#10087
 D2FUNC_DLL(FOG, Encode32BitsToString, void , __stdcall, (uint32_t* p4Characters, uint32_t value), 0x1BA0)											//Fog.#10088
@@ -191,9 +358,36 @@ D2FUNC_DLL(FOG, MPQFileRead, BOOL, __fastcall, (HSFILE pFile, void* pBuffer, siz
 D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (HSFILE pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)										//Fog.#10105
 D2FUNC_DLL(FOG, GetSavePath, size_t, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x1900)													//Fog.#10115
 D2FUNC_DLL(FOG, ComputeStringCRC16, uint16_t, __stdcall, (const char* szString), 0x3DB0)															//Fog.#10137
-D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void**pMemPoolSystem, const char* szName, uint32_t nPools, uint32_t nUnused), 0xA280)							//Fog.#10142
+D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void** pMemPoolSystem, const char* szName, uint32_t nPools, uint32_t nUnused), 0xA280)			//Fog.#10142
 D2FUNC_DLL(FOG, DestroyMemoryPoolSystem, void, __cdecl, (void* pMemoryPoolSystem), 0xA100)															//Fog.#10143
 D2FUNC_DLL(FOG, GetMemoryUsage, DWORD, __cdecl, (void*), 0xA4E0)																					//Fog.#10147
+D2FUNC_DLL(FOG, InitializeServer, void*, __stdcall, (int, int, int, int, void*, void*, void*, void*), 0x4150)										//Fog.#10149
+D2FUNC_DLL(FOG, 10151, int, __stdcall, (void*, int), 0x4970)																						//Fog.#10151
+D2FUNC_DLL(FOG, 10152, int, __stdcall, (void*, const uint8_t*, int), 0x44F0)																		//Fog.#10152
+D2FUNC_DLL(FOG, WaitForSingleObject, int, __stdcall, (void*, int), 0x4A60)																			//Fog.#10154
+D2FUNC_DLL(FOG, 10156, int, __stdcall, (void*, int, uint8_t*, int), 0x59D0)																			//Fog.#10156
+D2FUNC_DLL(FOG, 10157, int, __stdcall, (void*, int, const uint8_t*, int), 0x5EA0)																	//Fog.#10157
+D2FUNC_DLL(FOG, 10158, int, __stdcall, (void*, int), 0x6210)																						//Fog.#10158
+D2FUNC_DLL(FOG, 10159, int, __stdcall, (void*, int, char*, int), 0x6180)																			//Fog.#10159
+D2FUNC_DLL(FOG, 10161, int, __stdcall, (void*, int), 0x6310)																						//Fog.#10161
+D2FUNC_DLL(FOG, 10162, int, __stdcall, (void*, int, const char*, int), 0x6380)																		//Fog.#10162
+D2FUNC_DLL(FOG, 10163, int, __stdcall, (void*, int, const char*, int), 0x66E0)																		//Fog.#10163
+D2FUNC_DLL(FOG, 10164, int, __stdcall, (void*, int, int, int), 0x69D0)																				//Fog.#10164
+D2FUNC_DLL(FOG, 10165, int, __stdcall, (void*, int, const char*, int), 0x6A10)																		//Fog.#10165
+D2FUNC_DLL(FOG, 10166, int, __stdcall, (void*, int, int, int), 0x6C90)																				//Fog.#10166
+D2FUNC_DLL(FOG, 10170, int, __stdcall, (void*, int), 0x6F70)																						//Fog.#10170
+D2FUNC_DLL(FOG, 10171, int, __stdcall, (void*, void*), 0x6FB0)																						//Fog.#10171
+D2FUNC_DLL(FOG, 10172, int, __stdcall, (void*, int, int), 0x6FD0)																					//Fog.#10172
+D2FUNC_DLL(FOG, 10173, int, __stdcall, (void*, int), 0x7040)																						//Fog.#10173
+D2FUNC_DLL(FOG, 10175, int, __stdcall, (void*, const uint8_t*, int, int), 0x7420)																	//Fog.#10175
+D2FUNC_DLL(FOG, 10177, int, __stdcall, (void*, int), 0x5E60)																						//Fog.#10177
+D2FUNC_DLL(FOG, 10178, int, __stdcall, (void*, int), 0x75A0)																						//Fog.#10178
+D2FUNC_DLL(FOG, 10180, int, __stdcall, (void*), 0x4920)																								//Fog.#10180
+D2FUNC_DLL(FOG, 10181, int, __stdcall, (void*, const uint8_t*, int, int), 0x75C0)																	//Fog.#10181
+D2FUNC_DLL(FOG, 10182_Return, int, __stdcall, (void*), 0x1B10)																						//Fog.#10182
+D2FUNC_DLL(FOG, 10183_Return, int, __stdcall, (void*, int), 0x7620)																					//Fog.#10183
+D2FUNC_DLL(FOG, 10186, int, __stdcall, (void*, int, int), 0x44C0)																					//Fog.#10186
+D2FUNC_DLL(FOG, 10187, int, __fastcall, (void*, int, int), 0x7630)																					//Fog.#10187
 D2FUNC_DLL(FOG, 10207, void, __stdcall, (D2BinFileStrc* pBinFile, D2BinFieldStrc* pBinField, void* pTxt, int nRecordCount, int nRecordSize), 0xAA60)//Fog.#10207
 D2FUNC_DLL(FOG, CreateBinFile, D2BinFileStrc*, __stdcall, (void* pDataBuffer, int nBufferSize), 0xA8B0)												//Fog.#10208
 D2FUNC_DLL(FOG, FreeBinFile, void, __stdcall, (D2BinFileStrc* pBinFile), 0xAA10)																	//Fog.#10209
@@ -205,6 +399,10 @@ D2FUNC_DLL(FOG, GetStringFromLinkIndex, int, __stdcall, (void* pLinker, int nInd
 D2FUNC_DLL(FOG, 10215, int, __stdcall, (void* pBin, int a2), 0xB990)																				//Fog.#10215
 D2FUNC_DLL(FOG, 10216_AddRecordToLinkingTable, int, __stdcall, (void* pBin, char* a2), 0xBD80)														//Fog.#10216
 D2FUNC_DLL(FOG, GetRowFromTxt, int, __stdcall, (void* pBin, char* szText, int nColumn), 0xBC20)														//Fog.#10217
+D2FUNC_DLL(FOG, 10219, int, __fastcall, (uint8_t*), 0xC9E0)																							//Fog.#10219
+D2FUNC_DLL(FOG, 10222, int, __fastcall, (const uint8_t*, int), 0xCC90)																				//Fog.#10222
+D2FUNC_DLL(FOG, 10223, int, __fastcall, (uint8_t*, int, const uint8_t*, int), 0xCD50)																//Fog.#10223
+D2FUNC_DLL(FOG, 10224, int, __fastcall, (char*, int, uint8_t*, int), 0xCE00)																		//Fog.#10224
 D2FUNC_DLL(FOG, IsExpansion, int, __fastcall, (), 0xD730)																							//Fog.#10227
 D2FUNC_DLL(FOG, ComputeChecksum, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3940)															//Fog.#10229
 D2FUNC_DLL(FOG, PopCount, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3970)																//Fog.#10230

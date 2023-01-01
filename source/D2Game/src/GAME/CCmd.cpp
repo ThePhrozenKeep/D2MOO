@@ -1,7 +1,9 @@
 #include "GAME/CCmd.h"
 
 #include <Storm.h>
-#include <D2Net.h>
+
+// D2Net
+#include <Server.h>
 
 #include "GAME/Clients.h"
 #include "GAME/Game.h"
@@ -12,7 +14,7 @@
 
 #pragma warning(disable: 28159)
 
-#define CHARACTER_SAVE_SIZE 0x2000
+constexpr int32_t CHARACTER_SAVE_SIZE = 0x2000;
 
 
 //D2Game.0x6FC317F0

@@ -6,7 +6,9 @@
 #include <D2BitManip.h>
 #include <Fog.h>
 #include <Storm.h>
-#include <D2Net.h>
+
+// D2Net
+#include <Server.h>
 
 #include "D2PacketDef.h"
 
