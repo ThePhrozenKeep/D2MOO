@@ -294,64 +294,6 @@ struct D2CellFileStrc
 
 // ---------- D2Gfx ----------
 
-struct D2RenderCallbackStrc
-{
-	BOOL(__fastcall* pfInitialize)(HINSTANCE);
-	BOOL(__fastcall* pfInitPerspective)(D2GfxSettingsStrc* pSettings, D2GfxHelperStrc* pHelpers);
-	BOOL(__fastcall* pfRelease)();
-	BOOL(__fastcall* pfCreateWindow)(HWND hWnd, int32_t nResolutionMode);
-	BOOL(__fastcall* pfDestroyWindow)();
-	void(__fastcall* pfEndCutScene)(HWND hWnd, int32_t nResolutionMode, int32_t nWindowState);
-	BOOL(__fastcall* pfBeginScene)(BOOL bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
-	BOOL(__fastcall* pfEndScene1)();
-	BOOL(__fastcall* pfEndScene2)();
-	BOOL(__fastcall* pfResizeWindow)(HWND hWnd, BOOL bForceResize);
-	BOOL(__fastcall* pfGetBackBuffer)(uint8_t* pBuffer);
-	BOOL(__fastcall* pfActivateWindow)();
-	BOOL(__fastcall* pfSetOption)(int32_t nOption, int32_t nValue);
-	BOOL(__fastcall* pfBeginCutScene)();
-	void(__fastcall* pfPlayCutScene)(const char* szFile, int32_t nResolutionMode, void* pfFrame);
-	BOOL(__fastcall* pfCheckCutScene)();
-	void(__fastcall* pfDecodeSmacker)(const char* szSmacker, uint8_t* pBuffer, int32_t nVersion);
-	void(__fastcall* pfPlayerSmacker)(void* pContext);
-	void(__fastcall* pfCloseSmacker)(void* pContext);
-	int32_t* (__fastcall* pfGetRenderStatistics)();
-	int32_t(__fastcall* pfGetScreenSize)(int32_t* pWidth, int32_t* pHeight);
-	void(__fastcall* pfUpdateScaleFactor)(int32_t nScaleFactor);
-	BOOL(__fastcall* pfSetGamma)(int32_t nGamma);
-	int32_t(__fastcall* pfCheckGamma)();
-	void(__fastcall* pfSetPerspectiveScale)(int32_t nScaleX, int32_t nScaleY);
-	void(__fastcall* pfAdjustPerspectivePosition)(int32_t nPosX, int32_t nPosY, int32_t nBais, int32_t* pXAdjust, int32_t* pYAdjust);
-	void(__fastcall* pfPerspectiveScalePosition)(int32_t nPosX, int32_t nPosY, int32_t nAngle, int32_t* pXAdjust, int32_t* pYAdjust, BOOL bOrder);
-	void(__fastcall* pfSetDefaultPerspectiveFactor)();
-	void(__fastcall* pfSetPalette)(LPPALETTEENTRY pPalette);
-	void(__fastcall* pfSetPaletteTable)(LPPALETTEENTRY* pPaletteTable);
-	void(__fastcall* pfSetGlobalLight)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
-	BOOL(__fastcall* pfDrawGroundTile)(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
-	void(__fastcall* pfDrawPerspectiveImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, int32_t nScreenMode, uint8_t* pPalette);
-	void(__fastcall* pfDrawImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, uint8_t* pPalette);
-	void(__fastcall* pfDrawShiftedImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
-	void(__fastcall* pfDrawVerticalCropImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, int32_t nDrawMode);
-	void(__fastcall* pfDrawShadow)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY);
-	void(__fastcall* pfDrawImageFast)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint8_t nPaletteIndex);
-	void(__fastcall* pfDrawClippedImage)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, void* pCropRect, int32_t nDrawMode);
-	BOOL(__fastcall* pfDrawWallTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels);
-	BOOL(__fastcall* pfDrawTransWallTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels, uint8_t nAlpha);
-	BOOL(__fastcall* pfDrawShadowTile)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
-	void(__fastcall* pfDrawRect)(RECT* pRect, uint8_t nPaletteIndex);
-	void(__fastcall* pfDrawRectEx)(RECT* pRect, uint8_t nPaletteIndex);
-	void(__fastcall* pfDrawSolidRect)(RECT* pRect, uint8_t nPaletteIndex);
-	void(__fastcall* pfDrawSolidSquare)(POINT* pPoint, uint8_t nSize, uint8_t nPaletteIndex);
-	void(__fastcall* pfDrawSolidRectEx)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, int32_t nDrawMode);
-	void(__fastcall* pfDrawSolidRectAlpha)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
-	void(__fastcall* pfDrawLine)(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
-	void(__fastcall* pfClearScreen)(BOOL bPartial);
-	void(__fastcall* pfDrawString)(int32_t nPosX, int32_t nPosY, const char* szFormat, va_list va);
-	void(__fastcall* pfDrawLight)(uint32_t* pLight, uint32_t* pPlayerLight, int32_t nPosX, int32_t nPosY);
-	void(__fastcall* pfDebugFillBackBuffer)(int32_t nPosX, int32_t nPosY);
-	void(__fastcall* pfClearCaches)();
-};
-
 struct D2GfxCellStrc
 {
 	BOOL bFlip;								//0x00

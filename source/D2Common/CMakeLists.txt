@@ -173,7 +173,6 @@ target_sources(D2CommonStatic
     src/D2Environment.cpp
     src/D2Inventory.cpp
     src/D2Log.cpp
-    src/D2Math.cpp
     src/D2QuestRecord.cpp
     src/D2Seed.cpp
     src/D2Skills.cpp
@@ -193,7 +192,6 @@ target_sources(D2CommonStatic
     include/D2ItemMods.h
     include/D2Items.h
     include/D2Log.h
-    include/D2Math.h
     include/D2Monsters.h
     include/D2QuestRecord.h
     include/D2Roster.h

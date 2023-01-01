@@ -242,6 +242,7 @@ D2FUNC_DLL(FOG, 10224, int, __fastcall, (char*, int, uint8_t*, int), 0xCE00)				
 D2FUNC_DLL(FOG, IsExpansion, int, __fastcall, (), 0xD730)																							//Fog.#10227
 D2FUNC_DLL(FOG, ComputeChecksum, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3940)															//Fog.#10229
 D2FUNC_DLL(FOG, PopCount, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3970)																//Fog.#10230
+D2FUNC_DLL(FOG, 10233, void, __fastcall, (const char*, int), 0xF300)																				//Fog.#10233
 D2FUNC_DLL(FOG, LeadingZeroesCount, uint32_t, __stdcall, (uint32_t nValue), 0x39A0)																	//Fog.#10252
 D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB20)																	//Fog.#10255
 
