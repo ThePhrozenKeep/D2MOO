@@ -1799,6 +1799,7 @@ void __fastcall sub_6FC84D40(D2GameStrc* pGame, D2GSPacketSrv5A* pPacket5A)
         if (!pPacket5A->szText[i])
         {
             GAME_SendPacketToAllConnectedClients(pGame, j_D2GAME_SendPacket0x5A_6FC3DEC0, pPacket5A);
+            return;
         }
     }
 }
