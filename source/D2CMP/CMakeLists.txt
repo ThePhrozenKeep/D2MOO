@@ -50,4 +50,4 @@ target_include_directories(D2CMP PUBLIC include)
 
 target_compile_definitions(D2CMP PRIVATE D2CMP_IMPL)
 
-target_link_libraries(D2CMP PUBLIC D2CommonDefinitions)
+target_link_libraries(D2CMP PUBLIC D2CommonDefinitions Fog)
