@@ -261,7 +261,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 15u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) < pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) < (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -270,7 +270,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 16u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) > pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) > (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -279,7 +279,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 17u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) == pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) == (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -288,7 +288,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 18u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) != pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatUnsigned(pItem, pCubeMainTxt->nParam, 0) != (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -297,7 +297,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 19u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) < pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) < (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -306,7 +306,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 20u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) > pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) > (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -315,7 +315,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 21u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) == pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) == (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -324,7 +324,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 22u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) != pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitBaseStat(pItem, pCubeMainTxt->nParam, 0) != (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -333,7 +333,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 23u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) < pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) < (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -342,7 +342,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 24u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) > pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) > (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -351,7 +351,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 25u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) == pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) == (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -360,7 +360,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         case 26u:
                         {
                             D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pCubeMainTxt->nParam);
-                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) != pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift)
+                            if (!pItemStatCostTxtRecord || STATLIST_GetUnitStatBonus(pItem, pCubeMainTxt->nParam, 0) != (pCubeMainTxt->nValue >> pItemStatCostTxtRecord->nValShift))
                             {
                                 continue;
                             }
@@ -1772,7 +1772,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && (int32_t)STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) >= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && (int32_t)STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) >= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1789,7 +1789,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && (int32_t)STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) <= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && (int32_t)STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) <= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1806,7 +1806,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) != pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) != (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1823,7 +1823,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) == pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) == (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1840,7 +1840,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) >= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) >= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1857,7 +1857,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) <= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) <= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1874,7 +1874,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) != pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) != (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1891,7 +1891,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) == pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitBaseStat(pUnit, nStatId, 0) == (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1908,7 +1908,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) >= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) >= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1925,7 +1925,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) <= pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) <= (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1942,7 +1942,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) != pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) != (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
@@ -1959,7 +1959,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 else
                 {
                     D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
-                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) == pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift)
+                    if (pItemStatCostTxtRecord && STATLIST_GetUnitStatBonus(pUnit, nStatId, 0) == (pCubeMainTxtRecord->nValue >> pItemStatCostTxtRecord->nValShift))
                     {
                         bOpConditionsFulfilled = true;
                     }
