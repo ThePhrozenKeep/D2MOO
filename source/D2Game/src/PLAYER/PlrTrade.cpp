@@ -1967,6 +1967,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
                 break;
             }
             default:
+                bOpConditionsFulfilled = true;
                 break;
             }
 
