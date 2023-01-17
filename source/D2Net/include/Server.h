@@ -4,6 +4,7 @@
 
 #include "Packet.h"
 
+using D2NET_Unk_Callback = void __stdcall (int32_t nClientId, const char* szFile, int32_t nLine);
 
 //D2Net.0x6FC01B30 (#10024)
 int32_t __stdcall SERVER_WSAGetLastError();
@@ -68,7 +69,7 @@ void __stdcall D2NET_10016(int32_t nClientId);
 //D2Net.0x6FC02510 (#10018)
 void __stdcall D2NET_10018(int32_t a1);
 //D2Net.0x6FC02530 (#10019)
-int32_t __stdcall D2NET_10019(void* pfCallback);
+int32_t __stdcall D2NET_10019(D2NET_Unk_Callback pfCallback);
 //D2Net.0x6FC02550 (#10020)
 int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t dwGameGuid);
 //D2Net.0x6FC02580 (#10021)

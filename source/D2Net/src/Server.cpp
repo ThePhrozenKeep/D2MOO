@@ -893,7 +893,7 @@ void __stdcall D2NET_10018(int32_t a1)
 }
 
 //D2Net.0x6FC02530 (#10019)
-int32_t __stdcall D2NET_10019(void* pfCallback)
+int32_t __stdcall D2NET_10019(D2NET_Unk_Callback pfCallback)
 {
 	return FOG_10171(gpServer, pfCallback);
 }
