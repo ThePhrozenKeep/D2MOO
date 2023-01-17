@@ -70,7 +70,7 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
 
 	gHostSockAddr.sin_family = AF_INET;
 	gHostSockAddr.sin_port = htons(GAME_PORT);
-	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_GetHostIPAddress((const char*)szIpAddress));
+	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_ResolveHostIPAddress((const char*)szIpAddress));
 
 	if (connect(gClientSocket, (sockaddr*)&gHostSockAddr, sizeof(sockaddr_in)) == -1)
 	{

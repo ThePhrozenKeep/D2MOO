@@ -19,4 +19,4 @@ target_sources(D2CommonDefinitions
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
-target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX)
+target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)

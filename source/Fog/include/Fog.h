@@ -315,8 +315,6 @@ struct D2ServerStrc
 
 typedef int (*D2ExceptionCallback)();
 
-D2FUNC_DLL(FOG, SOCKET_CloseSocket, int, __fastcall, (SOCKET), 0x13280)																				//Fog.#10000
-D2FUNC_DLL(FOG, GetHostIPAddress, const char*, __fastcall, (const char*), 0x13A40)																	//Fog.#10015
 D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)													//Fog.#10018
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
 D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
