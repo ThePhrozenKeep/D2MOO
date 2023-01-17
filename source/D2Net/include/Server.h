@@ -70,7 +70,7 @@ void __stdcall D2NET_10018(int32_t a1);
 //D2Net.0x6FC02530 (#10019)
 int32_t __stdcall D2NET_10019(void* pfCallback);
 //D2Net.0x6FC02550 (#10020)
-int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t a2);
+int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t dwGameGuid);
 //D2Net.0x6FC02580 (#10021)
 int32_t __stdcall SERVER_GetClientGameGUID(int32_t nClientId);
 //D2Net.0x6FC025A0

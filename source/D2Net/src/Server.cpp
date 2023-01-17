@@ -12,7 +12,7 @@
 
 
 D2ServerStrc* gpServer;
-int32_t dword_6FC0B26C;
+int32_t gnLocalClientGameGuid_6FC0B26C;
 
 
 constexpr int32_t VARIABLE_PACKET_SIZE = -1;
@@ -899,16 +899,16 @@ int32_t __stdcall D2NET_10019(void* pfCallback)
 }
 
 //D2Net.0x6FC02550 (#10020)
-int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t a2)
+int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t dwGameGuid)
 {
 	if (nClientId)
 	{
-		return FOG_10172(gpServer, nClientId, a2);
+		return FOG_10172(gpServer, nClientId, dwGameGuid);
 	}
 
-	dword_6FC0B26C = a2;
+	gnLocalClientGameGuid_6FC0B26C = dwGameGuid;
 
-	return a2;
+	return dwGameGuid;
 }
 
 //D2Net.0x6FC02580 (#10021)
@@ -919,7 +919,7 @@ int32_t __stdcall SERVER_GetClientGameGUID(int32_t nClientId)
 		return FOG_10173(gpServer, nClientId);
 	}
 
-	return dword_6FC0B26C;
+	return gnLocalClientGameGuid_6FC0B26C;
 }
 
 //D2Net.0x6FC025A0
