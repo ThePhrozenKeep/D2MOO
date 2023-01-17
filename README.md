@@ -98,7 +98,7 @@ Please feel free to open an issue or visit the Phrozen Keep [forums](https://www
 This could not have been done without the amazing help and work of the Phrozen Keep community!
 Non-exhaustive list of members who helped putting this together (alphabetical order):
 
- * @Conqueror 
+ * @Araksson (aka @Conqueror)
  * @dzik
  * @FearedBliss
  * @Firehawk
