@@ -2440,25 +2440,5 @@ void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, u
 //D2Common.0x6FD46620
 D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
-	if (pRoom)
-	{
-		if (DungeonTestRoomGame(pRoom, nX,nY))
-		{
-			return pRoom;
-		}
-
-		D2RoomStrc** ppRoomList = nullptr;
-		int nAdjacentRooms = 0;
-		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nAdjacentRooms);
-
-		for (int i = 0; i < nAdjacentRooms; ++i)
-		{
-			if (ppRoomList[i] && DungeonTestRoomGame(ppRoomList[i], nX, nY))
-			{
-				return ppRoomList[i];
-			}
-		}
-	}
-
-	return nullptr;
+	return DUNGEON_GetRoomAtPosition(pRoom, nX, nY);
 }
