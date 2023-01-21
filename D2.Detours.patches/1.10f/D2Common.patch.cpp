@@ -1310,7 +1310,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_FreeUnit                                                      @11260
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_CalculateMonsterStatsByLevel                               @11261
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonSeqTableRecord                                       @11262
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11263                                                      @11263
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_11263                                                      @11263
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetSkillId                                                 @11264
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetSkillId                                                 @11265
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetSkillLevel                                              @11266
