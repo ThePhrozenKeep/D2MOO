@@ -214,3 +214,39 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_ScreenToWorldCoords(int* pX, int* pY);
 D2COMMON_DLL_DECL void __stdcall D2Common_10109(int* pX, int* pY);
 //D2Common.0x6FD8D8C0 (#10113)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_ExpandCoords(int* pX, int* pY);
+
+// Helper function, official name coming from D2Common.0x6FDBCF10
+inline bool DungeonTestRoomGame(const D2RoomStrc* pRoom, int nX, int nY)
+{
+	return nX >= pRoom->nSubtileX && nX < (pRoom->nSubtileX + pRoom->nSubtileWidth)
+		&& nY >= pRoom->nSubtileY && nY < (pRoom->nSubtileY + pRoom->nSubtileHeight);
+
+}
+// Helper function
+inline D2RoomStrc* __fastcall DUNGEON_GetRoomAtPosition(D2RoomStrc* pRoom, int32_t nSubtileX, int32_t nSubtileY)
+{
+    if (!pRoom)
+    {
+        return nullptr;
+    }
+
+    if (DungeonTestRoomGame(pRoom, nSubtileX , nSubtileY))
+    {
+        return pRoom;
+    }
+
+    D2RoomStrc** ppRoomList = nullptr;
+    int32_t nNumRooms = 0;
+    DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
+
+    for (int32_t i = 0; i < nNumRooms; ++i)
+    {
+        D2RoomStrc* pAdjacentRoom = ppRoomList[i];
+        if (pAdjacentRoom && DungeonTestRoomGame(pAdjacentRoom, nSubtileX, nSubtileY))
+        {
+            return pAdjacentRoom;
+        }
+    }
+
+    return nullptr;
+}

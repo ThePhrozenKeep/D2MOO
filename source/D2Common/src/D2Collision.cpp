@@ -2681,19 +2681,12 @@ void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, u
 	*ppRoom = NULL;
 }
 
-
-static bool PathPosIsInRoom(const D2RoomStrc& room, int posX, int posY)
-{
-	return posX >= room.nSubtileX && posX < (room.nSubtileX + room.nSubtileWidth)
-		&& posY >= room.nSubtileY && posY < (room.nSubtileY + room.nSubtileHeight);
-}
-
 //D2Common.0x6FD46620
 D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
 	if (pRoom)
 	{
-		if (PathPosIsInRoom(*pRoom, nX,nY))
+		if (DungeonTestRoomGame(pRoom, nX,nY))
 		{
 			return pRoom;
 		}
@@ -2704,7 +2697,7 @@ D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, 
 
 		for (int i = 0; i < nAdjacentRooms; ++i)
 		{
-			if (ppRoomList[i] && PathPosIsInRoom(*ppRoomList[i], nX, nY))
+			if (ppRoomList[i] && DungeonTestRoomGame(ppRoomList[i], nX, nY))
 			{
 				return ppRoomList[i];
 			}

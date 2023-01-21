@@ -1765,34 +1765,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
     const int32_t nX = CLIENTS_GetUnitX(pSource);
     const int32_t nY = CLIENTS_GetUnitY(pSource);
 
-    D2RoomStrc* pSourceRoom = UNITS_GetRoom(pSource);
-    if (!pSourceRoom)
-    {
-        return 0;
-    }
-
-    D2RoomStrc* pRoom = nullptr;
-    if (nX >= pSourceRoom->nSubtileX && nX < pSourceRoom->nSubtileX + pSourceRoom->nSubtileWidth && nY >= pSourceRoom->nSubtileY && nY < pSourceRoom->nSubtileY + pSourceRoom->nSubtileHeight)
-    {
-        pRoom = pSourceRoom;
-    }
-    else
-    {
-        D2RoomStrc** ppRoomList = nullptr;
-        int32_t nNumRooms = 0;
-        DUNGEON_GetAdjacentRoomsListFromRoom(pSourceRoom, &ppRoomList, &nNumRooms);
-
-        for (int32_t i = 0; i < nNumRooms; ++i)
-        {
-            D2RoomStrc* pTemp = ppRoomList[i];
-            if (pTemp && nX >= pTemp->nSubtileX && nX < pTemp->nSubtileX + pTemp->nSubtileWidth && nY >= pTemp->nSubtileY && nY < pTemp->nSubtileY + pTemp->nSubtileHeight)
-            {
-                pRoom = pTemp;
-                break;
-            }
-        }
-    }
-
+    D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pSource), nX, nY);
     if (!pRoom)
     {
         return 0;

@@ -369,7 +369,7 @@ D2RoomStrc* __stdcall DUNGEON_FindRoomBySubtileCoordinates(D2DrlgActStrc* pAct, 
 	{
 		for (D2RoomStrc* pRoom = pAct->pRoom; pRoom; pRoom = pRoom->pRoomNext)
 		{
-			if (nX >= pRoom->nSubtileX && nX < pRoom->nSubtileX + pRoom->nSubtileWidth && nY >= pRoom->nSubtileY && nY < pRoom->nSubtileY + pRoom->nSubtileHeight)
+			if (DungeonTestRoomGame(pRoom, nX, nY))
 			{
 				return pRoom;
 			}
@@ -423,7 +423,7 @@ D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nL
 		*pX = pCoord.nX;
 		*pY = pCoord.nY;
 
-		if (*pX >= pRoom->nSubtileX && *pX < pRoom->nSubtileX + pRoom->nSubtileWidth && *pY >= pRoom->nSubtileY && *pY < pRoom->nSubtileY + pRoom->nSubtileHeight)
+		if (DungeonTestRoomGame(pRoom, *pX, *pY))
 		{
 			return pRoom;
 		}
@@ -431,7 +431,7 @@ D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nL
 		for (int i = 0; i < pRoom->nNumRooms; ++i)
 		{
 			pNearRoom = pRoom->ppRoomList[i];
-			if (pNearRoom && *pX >= pNearRoom->nSubtileX && *pX < pNearRoom->nSubtileX + pNearRoom->nSubtileWidth && *pY >= pNearRoom->nSubtileY && *pY < pNearRoom->nSubtileY + pNearRoom->nSubtileHeight)
+			if (DungeonTestRoomGame(pNearRoom, *pX, *pY))
 			{
 				return pNearRoom;
 			}
@@ -1097,7 +1097,7 @@ int __stdcall D2Common_10095(D2RoomStrc* pRoom, int nX, int nY)
 		return 0;
 	}
 
-	if (nX >= pRoom->nSubtileX && nX < pRoom->nSubtileX + pRoom->nSubtileWidth && nY >= pRoom->nSubtileY && nY < pRoom->nSubtileY + pRoom->nSubtileHeight)
+	if (DungeonTestRoomGame(pRoom, nX, nY))
 	{
 		return DRLGLOGIC_GetRoomCoordListIndex(pRoom->pRoomEx, nX, nY);
 	}
@@ -1105,7 +1105,7 @@ int __stdcall D2Common_10095(D2RoomStrc* pRoom, int nX, int nY)
 	for (int i = 0; i < pRoom->nNumRooms; ++i)
 	{
 		pNearRoom = pRoom->ppRoomList[i];
-		if (pNearRoom && nX >= pNearRoom->nSubtileX && nX < pNearRoom->nSubtileX + pNearRoom->nSubtileWidth && nY >= pNearRoom->nSubtileY && nY < pNearRoom->nSubtileY + pNearRoom->nSubtileHeight)
+		if (DungeonTestRoomGame(pNearRoom, nX, nY))
 		{
 			return DRLGLOGIC_GetRoomCoordListIndex(pNearRoom->pRoomEx, nX, nY);
 		}

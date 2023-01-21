@@ -2570,30 +2570,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 //D2Game.0x6FC52070
 D2RoomStrc* __fastcall D2GAME_GetRoom_6FC52070(D2RoomStrc* pRoom, int32_t nSubtileX, int32_t nSubtileY)
 {
-    if (!pRoom)
-    {
-        return nullptr;
-    }
-
-    if (nSubtileX >= pRoom->nSubtileX && nSubtileX < pRoom->nSubtileX + pRoom->nSubtileWidth && nSubtileY >= pRoom->nSubtileY && nSubtileY < pRoom->nSubtileY + pRoom->nSubtileHeight)
-    {
-        return pRoom;
-    }
-
-    D2RoomStrc** ppRoomList = nullptr;
-    int32_t nNumRooms = 0;
-    DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
-
-    for (int32_t i = 0; i < nNumRooms; ++i)
-    {
-        D2RoomStrc* pTemp = ppRoomList[i];
-        if (pTemp && nSubtileX >= pTemp->nSubtileX && nSubtileX < pTemp->nSubtileX + pTemp->nSubtileWidth && nSubtileY >= pTemp->nSubtileY && nSubtileY < pTemp->nSubtileY + pTemp->nSubtileHeight)
-        {
-            return pTemp;
-        }
-    }
-
-    return nullptr;
+    return DUNGEON_GetRoomAtPosition(pRoom, nSubtileX, nSubtileY);
 }
 
 //D2Game.0x6FC52110
