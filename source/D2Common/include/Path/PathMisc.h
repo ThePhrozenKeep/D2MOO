@@ -67,7 +67,10 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit
 BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest);
 
 //D2Common.0x6FDADA20
-void __fastcall sub_6FDADA20(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
+void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom);
+
+//D2Common.0x6FDAE250
+void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
 
 //D2Common.0x6FDAE290
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);
