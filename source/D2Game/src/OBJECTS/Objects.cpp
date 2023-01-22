@@ -469,41 +469,7 @@ void __fastcall OBJECTS_InitFunction28_GoldPlaceHolder(D2ObjInitFnStrc* pOp)
         const int32_t nX = pOp->nX + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
         const int32_t nY = pOp->nY + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
 
-        D2RoomStrc* pRoom = pOp->pRoom;
-        if (pRoom)
-        {
-            if (nX < pRoom->nSubtileX || nX >= pRoom->nSubtileX + pRoom->nSubtileWidth || nY < pRoom->nSubtileY || nY >= pRoom->nSubtileY + pRoom->nSubtileHeight)
-            {
-                D2RoomStrc** ppRoomList = nullptr;
-                int32_t nNumRooms = 0;
-
-                DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
-                if (nNumRooms > 0)
-                {
-                    int32_t nRoomCounter = 0;
-                    do
-                    {
-                        pRoom = ppRoomList[nRoomCounter];
-
-                        if (pRoom)
-                        {
-                            if (nX >= pRoom->nSubtileX && nX < pRoom->nSubtileX + pRoom->nSubtileWidth && nY >= pRoom->nSubtileY && nY < pRoom->nSubtileY + pRoom->nSubtileHeight)
-                            {
-                                break;
-                            }
-                        }
-
-                        ++nRoomCounter;
-                    }
-                    while (nRoomCounter < nNumRooms);
-
-                    if (nRoomCounter >= nNumRooms)
-                    {
-                        pRoom = nullptr;
-                    }
-                }
-            }
-        }
+        D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pOp->pRoom, nX, nY);
 
         if (pRoom == pOp->pRoom)
         {

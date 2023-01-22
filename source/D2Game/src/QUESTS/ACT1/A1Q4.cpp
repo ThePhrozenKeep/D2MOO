@@ -1515,44 +1515,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2RoomStrc* pRoom, int
 		++pCoord.nX;
 		++pCoord.nY;
 
-		if (pFreeRoom)
-		{
-			if (pCoord.nX < pFreeRoom->nSubtileX || pCoord.nX >= pFreeRoom->nSubtileX + pFreeRoom->nSubtileWidth || pCoord.nY < pFreeRoom->nSubtileY || pCoord.nY >= pFreeRoom->nSubtileY + pFreeRoom->nSubtileHeight)
-			{
-				D2RoomStrc** ppRoomList = nullptr;
-				int32_t nNumRooms = 0;
-				DUNGEON_GetAdjacentRoomsListFromRoom(pFreeRoom, &ppRoomList, &nNumRooms);
-				int32_t ii = 0;
-				if (nNumRooms > 0)
-				{
-					while (1)
-					{
-						if (ppRoomList[ii])
-						{
-							if (pCoord.nX >= ppRoomList[ii]->nSubtileX && pCoord.nX < ppRoomList[ii]->nSubtileX + ppRoomList[ii]->nSubtileWidth)
-							{
-								if (pCoord.nY >= ppRoomList[ii]->nSubtileY && pCoord.nY < ppRoomList[ii]->nSubtileY + ppRoomList[ii]->nSubtileHeight)
-								{
-									break;
-								}
-							}
-						}
-
-						++ii;
-
-						if (ii >= nNumRooms)
-						{
-							pFreeRoom = 0;
-							break;
-						}
-					}
-					if (ii < nNumRooms)
-					{
-						pFreeRoom = ppRoomList[ii];
-					}
-				}
-			}
-		}
+		pFreeRoom = DUNGEON_GetRoomAtPosition(pFreeRoom, pCoord.nX, pCoord.nY);
 
 		if (!pFreeRoom)
 		{
@@ -2035,56 +1998,7 @@ int32_t __fastcall ACT1Q4_SpawnCainPortalOutsideTown(D2GameStrc* pGame, D2UnitSt
 	const int32_t nX = pQuestDataEx->pCainPortalOutsideTownCoords.nX;
 	const int32_t nY = pQuestDataEx->pCainPortalOutsideTownCoords.nY;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
-	if (!pRoom)
-	{
-		pQuestDataEx->pCainPortalOutsideTownCoords.nX += 3;
-		pQuestDataEx->pCainPortalOutsideTownCoords.nY += 3;
-		return 1;
-	}
-
-	if (nX < pRoom->nSubtileX || nX >= pRoom->nSubtileX + pRoom->nSubtileWidth || nY < pRoom->nSubtileY || nY >= pRoom->nSubtileY + pRoom->nSubtileHeight)
-	{
-		D2RoomStrc** ppRoomList = nullptr;
-		int32_t nNumRooms = 0;
-		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
-
-		if (nNumRooms > 0)
-		{
-			int32_t nCounter = 0;
-			while (1)
-			{
-				if (ppRoomList[nCounter])
-				{
-					if (nX >= ppRoomList[nCounter]->nSubtileX && nX < ppRoomList[nCounter]->nSubtileX + ppRoomList[nCounter]->nSubtileWidth)
-					{
-						if (nY >= ppRoomList[nCounter]->nSubtileY && nY < ppRoomList[nCounter]->nSubtileY + ppRoomList[nCounter]->nSubtileHeight)
-						{
-							break;
-						}
-					}
-				}
-
-				++nCounter;
-
-				if (nCounter >= nNumRooms)
-				{
-					pQuestDataEx->pCainPortalOutsideTownCoords.nX += 3;
-					pQuestDataEx->pCainPortalOutsideTownCoords.nY += 3;
-					return 1;
-				}
-			}
-
-			pRoom = ppRoomList[nCounter];
-		}
-		else
-		{
-			pQuestDataEx->pCainPortalOutsideTownCoords.nX += 3;
-			pQuestDataEx->pCainPortalOutsideTownCoords.nY += 3;
-			return 1;
-		}
-	}
-
+	D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pUnit), nX, nY);
 	if (!pRoom)
 	{
 		pQuestDataEx->pCainPortalOutsideTownCoords.nX += 3;
@@ -2201,47 +2115,7 @@ void __fastcall ACT1Q4_SpawnCainPortalInTown(D2GameStrc* pGame)
 	D2CoordStrc pCoord = {};
 	UNITS_GetCoords(pCainMonster, &pCoord);
 
-	pRoom = UNITS_GetRoom(pCainMonster);
-	if (!pRoom)
-	{
-		return;
-	}
-
-	if (pCoord.nX < pRoom->nSubtileX || pCoord.nX >= pRoom->nSubtileX + pRoom->nSubtileWidth || pCoord.nY < pRoom->nSubtileY || pCoord.nY >= pRoom->nSubtileY + pRoom->nSubtileHeight)
-	{
-		D2RoomStrc** ppRoomList = nullptr;
-		int32_t nNumRooms = 0;
-		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
-		if (nNumRooms <= 0)
-		{
-			return;
-		}
-
-		int32_t nCounter = 0;
-		while (1)
-		{
-			if (ppRoomList[nCounter])
-			{
-				if (pCoord.nX >= ppRoomList[nCounter]->nSubtileX && pCoord.nX < ppRoomList[nCounter]->nSubtileX + ppRoomList[nCounter]->nSubtileWidth)
-				{
-					if (pCoord.nY >= ppRoomList[nCounter]->nSubtileY && pCoord.nY < ppRoomList[nCounter]->nSubtileY + ppRoomList[nCounter]->nSubtileHeight)
-					{
-						break;
-					}
-				}
-			}
-
-			++nCounter;
-
-			if (nCounter >= nNumRooms)
-			{
-				return;
-			}
-		}
-
-		pRoom = ppRoomList[nCounter];
-	}
-
+	pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pCainMonster), pCoord.nX, pCoord.nY);
 	if (pRoom)
 	{
 		D2UnitStrc* pCainPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pGame, pRoom, 1, 1, 0);

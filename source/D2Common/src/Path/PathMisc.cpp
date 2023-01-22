@@ -1234,7 +1234,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		pDynamicPath->dwTargetX = dwPrecisionX;
 		pDynamicPath->dwTargetY = dwPrecisionY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
-			sub_6FDADA20(pDynamicPath, pDestRoom);
+			PATH_RecacheRoom(pDynamicPath, pDestRoom);
 	}
 
 	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || COLLISION_GetRoomBySubTileCoordinates(pDestRoom, tDest.X, tDest.Y));
@@ -1252,7 +1252,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		pDynamicPath->dwTargetX = dwTargetX;
 		pDynamicPath->dwTargetY = dwTargetY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
-			sub_6FDADA20(pDynamicPath, 0);
+			PATH_RecacheRoom(pDynamicPath, 0);
 	}
 	else
 	{
@@ -1269,147 +1269,30 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 
 //D2Common.0x6FDADA20
-void __fastcall sub_6FDADA20(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
+void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom)
 {
-//	int v5; // esi@1
-//	int v6; // eax@1
-//	__int16 v7; // dx@1
-//	D2RoomStrc*v8; // ecx@11
-//	int v9; // eax@12
-//	int v10; // eax@13
-//	int v11; // ebx@13
-//	unsigned int v12; // edi@13
-//	unsigned int v13; // ebp@13
-//	int v14; // edi@16
-//	int v15; // eax@22
-//	int v16; // ebp@22
-//	D2RoomStrc*v17; // edx@24
-//	int v18; // edx@25
-//	int v19; // eax@25
-//	unsigned int v20; // edx@29
-//	D2RoomStrc*v21; // eax@30
-//	int v22; // ecx@33
-//	int v23; // eax@41
-//	int pY; // [sp+10h] [bp-Ch]@25
-//	int v26; // [sp+14h] [bp-8h]@1
-//
-//	v5 = a1;
-//	v6 = *(_DWORD *)(a1 + 48);
-//	v7 = *(_WORD *)(a1 + 6);
-//	LOWORD(v26) = *(_WORD *)(a1 + 2);
-//	HIWORD(v26) = v7;
-//	if (v6 && *(_DWORD *)v6 == 3)
-//	{
-//		if (a4 || (_WORD)pppRoom)
-//			sub_6FD44E00(//				*(_DWORD *)(a1 + 28), //				(unsigned __int16)v26, //				HIWORD(v26), //				pNumRooms, //				a4, //				(unsigned __int16)pppRoom, //				*(_DWORD *)(a1 + 68), //				*(_DWORD *)(a1 + 76));
-//		else
-//			COLLISION_ResetMaskWithSize(//				*(D2RoomStrc**)(a1 + 28), //				(unsigned __int16)v26, //				HIWORD(v26), //				*(_DWORD *)(a1 + 68), //				*(_DWORD *)(a1 + 76));
-//	}
-//	else
-//	{
-//		if (a4 || (_WORD)pppRoom)
-//			D2Common_10133(//				*(D2RoomStrc**)(a1 + 28), //				(unsigned __int16)v26, //				HIWORD(v26), //				(D2RoomStrc*)pNumRooms, //				a4, //				(unsigned __int16)pppRoom, //				*(_DWORD *)(a1 + 72), //				*(_DWORD *)(a1 + 76));
-//		else
-//			COLLISION_ResetMaskWithPattern(//				*(D2RoomStrc**)(a1 + 28), //				(unsigned __int16)v26, //				HIWORD(v26), //				*(_DWORD *)(a1 + 72), //				*(_DWORD *)(a1 + 76));
-//	}
-//	v8 = *(D2RoomStrc**)(v5 + 28);
-//	if (v8 != (D2RoomStrc*)pNumRooms)
-//	{
-//		v9 = *(_DWORD *)(v5 + 52);
-//		LOBYTE(v9) = v9 | 1;
-//		*(_DWORD *)(v5 + 52) = v9;
-//	}
-//	v10 = *(_DWORD *)(v5 + 52);
-//	v11 = a4;
-//	v26 = (unsigned __int16)pppRoom;
-//	v12 = (a4 << 16) + 32768;
-//	v13 = ((unsigned __int16)pppRoom << 16) + 32768;
-//	if (v10 & 0x40000 && !COLLISION_GetRoomBySubTileCoordinates(v8, v12 >> 16, v13 >> 16))
-//	{
-//		*(_DWORD *)(v5 + 40) = 0;
-//LABEL_16:
-//		v14 = pNumRooms;
-//		goto LABEL_17;
-//	}
-//	*(_DWORD *)v5 = v12;
-//	*(_DWORD *)(v5 + 4) = v13;
-//	a1 = v12 >> 11;
-//	pY = v13 >> 11;
-//	DUNGEON_FlattenCoords_IsoToCartesian(&a1, &pY);
-//	v18 = a1;
-//	*(_DWORD *)(v5 + 12) = pY;
-//	v19 = *(_DWORD *)(v5 + 48);
-//	*(_DWORD *)(v5 + 8) = v18;
-//	if (!v19 || !(*(_BYTE *)(v5 + 52) & 1))
-//		goto LABEL_16;
-//	v14 = pNumRooms;
-//	sub_6FDADA20(v5, (D2RoomStrc*)pNumRooms);
-//LABEL_17:
-//	if (!a4 && !(_WORD)pppRoom)
-//		goto LABEL_41;
-//	if (!v14)
-//		goto LABEL_39;
-//	if (v11 < *(_DWORD *)v14 || v11 >= *(_DWORD *)v14 + *(_DWORD *)(v14 + 8))
-//	{
-//		v16 = v26;
-//	}
-//	else
-//	{
-//		v15 = *(_DWORD *)(v14 + 4);
-//		v16 = v26;
-//		if (v26 >= v15 && v26 < v15 + *(_DWORD *)(v14 + 12))
-//		{
-//			v17 = (D2RoomStrc*)v14;
-//			goto LABEL_38;
-//		}
-//	}
-//	pppRoom = 0;
-//	pNumRooms = 0;
-//	DUNGEON_GetAdjacentRoomsListFromRoom((D2RoomStrc*)v14, &pppRoom, &pNumRooms);
-//	v20 = 0;
-//	if (!pNumRooms)
-//	{
-//LABEL_39:
-//		FOG_DisplayAssert(//			"COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || DungeonFindRoomGame( hRoomDest, tDest.wX, tDest.wY )", //			__FILE__, __LINE__//			1228);
-//		exit(-1);
-//	}
-//	while (1)
-//	{
-//		v21 = pppRoom[v20];
-//		if (v21)
-//		{
-//			if (v11 >= v21->nSubtileX)
-//			{
-//				if (v11 < v21->nSubtileX + v21->nSubtileWidth)
-//				{
-//					v22 = v21->nSubtileY;
-//					if (v16 >= v22)
-//					{
-//						if (v16 < v22 + v21->nSubtileHeight)
-//							break;
-//					}
-//				}
-//			}
-//		}
-//		++v20;
-//		if (v20 >= pNumRooms)
-//			goto LABEL_39;
-//	}
-//	v17 = pppRoom[v20];
-//LABEL_38:
-//	if (!v17)
-//		goto LABEL_39;
-//LABEL_41:
-//	D2Common_10233((D2DynamicPathStrc*)v5);
-//	v23 = *(_DWORD *)(v5 + 52);
-//	LOBYTE(v23) = v23 & 0xDF;
-//	*(_DWORD *)(v5 + 52) = v23;
-//	*(_DWORD *)(v5 + 40) = 0;
-//	*(_DWORD *)(v5 + 36) = 0;
-//	*(_DWORD *)(v5 + 114) = dword_6FDD258C;
-//	*(_DWORD *)(v5 + 118) = dword_6FDD2590;
-//	*(_DWORD *)(v5 + 40) = 0;
-	UNIMPLEMENTED();
+	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY))
+	{
+		// Early out, room is already up to date.
+		return;
+	}
+
+	// Try to find room using previous path room
+	D2RoomStrc* pRoomAtLocation = DUNGEON_GetRoomAtPosition(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY);
+	if (!pRoomAtLocation)
+	{
+		// Try looking for the room using the hint room
+		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->wPosX, pDynamicPath->wPosY);
+	}
+
+	if (pRoomAtLocation)
+	{
+		PATHMISC_SetRoom(pDynamicPath, pRoomAtLocation);
+	}
+	else if((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+	{
+		pDynamicPath->dwPathPoints = 0;
+	}
 }
 
 //D2Common.0x6FDADC20
@@ -1434,7 +1317,7 @@ signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsig
 }
 
 //D2Common.0x6FDAE250
-void __fastcall PATHMISC_UpdateRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
+void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
 {
 	pDynamicPath->pRoomNext = pDynamicPath->pRoom;
 	if (pDynamicPath->pRoom)
@@ -1536,6 +1419,6 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 			}
 		}
 
-		PATHMISC_UpdateRoom(pRiderPath, pRidersUpToDateRoom);
+		PATHMISC_SetRoom(pRiderPath, pRidersUpToDateRoom);
 	}
 }

@@ -848,22 +848,13 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 	const int32_t nY = pCoord.nY;
 
 	D2RoomStrc* pRoom = UNITS_GetRoom(pDrehya);
-	if (pRoom)
+	if (pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY))
 	{
-		if (nX < pRoom->nSubtileX || nX >= pRoom->nSubtileX + pRoom->nSubtileWidth || nY < pRoom->nSubtileY || nY >= pRoom->nSubtileY + pRoom->nSubtileHeight)
+		D2UnitStrc* pDrehyaPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pRoom, 1, 1, 0);
+		if (pDrehyaPortal)
 		{
-			pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
-
-			if (pRoom)
-			{
-				// TODO: Is this really only done here inside the block?
-				D2UnitStrc* pDrehyaPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pRoom, 1, 1, 0);
-				if (pDrehyaPortal)
-				{
-					pQuestDataEx->bDrehyaPortalInTownSpawned = 1;
-					pQuestDataEx->nDrehyaPortalInTownGUID = pDrehyaPortal->dwUnitId;
-				}
-			}
+			pQuestDataEx->bDrehyaPortalInTownSpawned = 1;
+			pQuestDataEx->nDrehyaPortalInTownGUID = pDrehyaPortal->dwUnitId;
 		}
 	}
 

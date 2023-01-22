@@ -1488,54 +1488,9 @@ void __fastcall ACT2Q6_DeleteAllHoradricItemsAndOpenTomb(D2GameStrc* pGame, D2Un
 
 	const int32_t nX = CLIENTS_GetUnitX(pObject) - 13;
 	const int32_t nY = CLIENTS_GetUnitY(pObject) + 3;
-
-	if (nX >= pObjectRoom->nSubtileX && nX < pObjectRoom->nSubtileX + pObjectRoom->nSubtileWidth)
-	{
-		if (nY >= pObjectRoom->nSubtileY && nY < pObjectRoom->nSubtileY + pObjectRoom->nSubtileHeight)
-		{
-			DUNGEON_ToggleHasPortalFlag(pObjectRoom, 0);
-			return;
-		}
-	}
-
-	// TODO: Revise this to use D2GAME_GetRoom
-	D2RoomStrc** ppRoomList = nullptr;
-	int32_t nNumRooms = 0;
-	DUNGEON_GetAdjacentRoomsListFromRoom(pObjectRoom, &ppRoomList, &nNumRooms);
-
-	if (nNumRooms <= 0)
-	{
-		DUNGEON_ToggleHasPortalFlag(pObjectRoom, 0);
-		return;
-	}
-
-	int32_t nCounter = 0;
-	while (1)
-	{
-		if (ppRoomList[nCounter])
-		{
-			if (nX < ppRoomList[nCounter]->nSubtileX && nX < ppRoomList[nCounter]->nSubtileX + ppRoomList[nCounter]->nSubtileWidth)
-			{
-				if (nY >= ppRoomList[nCounter]->nSubtileY && nY < ppRoomList[nCounter]->nSubtileY + ppRoomList[nCounter]->nSubtileHeight)
-				{
-					break;
-				}
-			}
-		}
-
-		++nCounter;
-
-		if (nCounter >= nNumRooms)
-		{
-			DUNGEON_ToggleHasPortalFlag(pObjectRoom, 0);
-			return;
-		}
-	}
 	
-	D2RoomStrc* pRoom = ppRoomList[nCounter];
-
 	DUNGEON_ToggleHasPortalFlag(pObjectRoom, 0);
-	if (pRoom)
+	if (D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pObjectRoom, nX, nY))
 	{
 		DUNGEON_ToggleHasPortalFlag(pRoom, 0);
 	}

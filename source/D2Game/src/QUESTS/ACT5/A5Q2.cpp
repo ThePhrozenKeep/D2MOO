@@ -904,27 +904,7 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 
 				pQuestDataEx->unk0x10E[i] = 1;
 
-				if (pTargetRoom)
-				{
-					if (pCoord.nX < pTargetRoom->nSubtileX || pCoord.nX >= pTargetRoom->nSubtileX + pTargetRoom->nSubtileWidth || pCoord.nY < pTargetRoom->nSubtileY || pCoord.nY >= pTargetRoom->nSubtileY + pTargetRoom->nSubtileHeight)
-					{
-						ppRoomList = nullptr;
-						nNumRooms = 0;
-						DUNGEON_GetAdjacentRoomsListFromRoom(pTargetRoom, &ppRoomList, &nNumRooms);
-
-						pTargetRoom = nullptr;
-						for (int32_t k = 0; k < nNumRooms; ++k)
-						{
-							D2RoomStrc* pTemp = ppRoomList[k];
-							if (pTemp && pCoord.nX >= pTemp->nSubtileX && pCoord.nX < pTemp->nSubtileX + pTemp->nSubtileWidth && pCoord.nY >= pTemp->nSubtileY && pCoord.nY < pTemp->nSubtileY + pTemp->nSubtileHeight)
-							{
-								pTargetRoom = pTemp;
-								break;
-							}
-						}
-
-					}
-				}
+				pTargetRoom = DUNGEON_GetRoomAtPosition(pTargetRoom, pCoord.nX, pCoord.nY);
 
 				D2UnitStrc* pPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pTargetRoom, 1, 1, 0);
 				if (!pPortal)

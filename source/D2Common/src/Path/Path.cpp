@@ -265,7 +265,6 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit,
 //TODO: Find a name
 int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 {
-	D2RoomStrc* pRoom = NULL;
 	int nXDistance = 0;
 	int nYDistance = 0;
 	int nOldX = 0;
@@ -311,11 +310,7 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 		pDynamicPath->unk0x38 = 0;
 		sub_6FDAC790(pDynamicPath, 1, 1);
 
-		pRoom = pDynamicPath->pRoom;
-
-		if (!pRoom 
-			|| pDynamicPath->SP1.X < pRoom->nSubtileX || pDynamicPath->SP1.X >= pRoom->nSubtileX + pRoom->nSubtileWidth 
-			|| pDynamicPath->SP1.Y < pRoom->nSubtileY || pDynamicPath->SP1.Y >= pRoom->nSubtileY + pRoom->nSubtileHeight)
+		if (!(pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->SP1.X, pDynamicPath->SP1.Y)))
 		{
 			pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 		}

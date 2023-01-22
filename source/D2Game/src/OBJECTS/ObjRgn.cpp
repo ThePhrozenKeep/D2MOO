@@ -155,10 +155,7 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
     while (pObjectRoomCoord)
     {
         if (pObjectRoomCoord->pRoom == pOp->pRoom
-            || (pOp->pRoom && pObjectRoomCoord->nX >= pOp->pRoom->nSubtileX
-                && pObjectRoomCoord->nX < pOp->pRoom->nSubtileX + pOp->pRoom->nSubtileWidth
-                && pObjectRoomCoord->nY >= pOp->pRoom->nSubtileY
-                && pObjectRoomCoord->nY < pOp->pRoom->nSubtileY + pOp->pRoom->nSubtileHeight))
+            || (pOp->pRoom && DungeonTestRoomGame(pOp->pRoom, pObjectRoomCoord->nX, pObjectRoomCoord->nY)))
         {
             if (!pOp->pObject || pOp->pObject->dwAnimMode == OBJMODE_NEUTRAL)
             {

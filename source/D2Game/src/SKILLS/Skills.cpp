@@ -599,7 +599,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
         targetCoords.nX = CLIENTS_GetUnitX(pTarget);
         targetCoords.nY = CLIENTS_GetUnitY(pTarget);
         
-        if (D2Common_11263(pRoom, &coords, &targetCoords, 4u))
+        if (COLLISION_RayTrace(pRoom, &coords, &targetCoords, 4u))
         {
             return 0;
         }

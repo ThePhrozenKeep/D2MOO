@@ -10,13 +10,6 @@
 int dword_6FDD2580;
 int dword_6FDD2584;
 
-bool DungeonTestRoomGame(D2RoomStrc* pRoom, int nX, int nY)
-{
-	return nX >= pRoom->nSubtileX && nX < pRoom->nSubtileX + pRoom->nSubtileWidth
-		&& nY >= pRoom->nSubtileY && nY < pRoom->nSubtileY + pRoom->nSubtileHeight;
-
-}
-
 //D2Common.0x6FDBCF10 (#11279)
 int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nUnused)
 {
