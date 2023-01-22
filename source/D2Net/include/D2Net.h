@@ -4,6 +4,11 @@
 
 #include "Packet.h"
 
+#ifdef D2NET_IMPL
+#define D2NET_DLL_DECL 
+#else
+#define D2NET_DLL_DECL __declspec( dllimport )
+#endif
 
 // 1.10f Image Base: 0x6FC00000
 
