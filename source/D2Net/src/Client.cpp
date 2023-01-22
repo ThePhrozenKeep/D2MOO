@@ -118,8 +118,7 @@ void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 
 	InitializeCriticalSection(&gCriticalSection);
 
-	gpPacketBuffer = (D2PacketBufferStrc*)FOG_Alloc(sizeof(D2PacketBufferStrc), __FILE__, __LINE__, 0);
-	memset(gpPacketBuffer, 0, sizeof(D2PacketBufferStrc));
+	gpPacketBuffer = D2_CALLOC_STRC(D2PacketBufferStrc);
 
 	sub_6FC01A20(a1);
 
@@ -139,7 +138,7 @@ void __stdcall CLIENT_Release()
 
 	if (gpPacketBuffer)
 	{
-		FOG_Free(gpPacketBuffer, __FILE__, __LINE__, 0);
+		D2_FREE(gpPacketBuffer);
 	}
 
 	gpPacketBuffer = nullptr;
@@ -334,7 +333,7 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			break;
 		}
 
-		D2PacketStrc* pPacket = (D2PacketStrc*)FOG_Alloc(sizeof(D2PacketStrc), __FILE__, __LINE__, 0);
+		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
 		pPacket->nPacketSize = nSize;
 		pPacket->dwTickCount = 0;
 		pPacket->pNext = nullptr;
@@ -435,7 +434,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 
 	while (nRemainingBytes > 0)
 	{
-		D2PacketStrc* pPacket = (D2PacketStrc*)FOG_Alloc(sizeof(D2PacketStrc), __FILE__, __LINE__, 0);
+		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
 
 		int32_t nSize = 0;
 		if (!SERVER_GetServerPacketSize(pPacketBuffer, nRemainingBytes, &nSize))

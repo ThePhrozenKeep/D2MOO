@@ -41,7 +41,7 @@ int32_t __fastcall NET_DequeueFirstPacketFromList(CRITICAL_SECTION* pCriticalSec
 
 	*ppPacketList = pPacket->pNext;
 
-	FOG_Free(pPacket, __FILE__, __LINE__, 0);
+	D2_FREE(pPacket);
 
 	LeaveCriticalSection(pCriticalSection);
 	return nPacketSize;
@@ -55,7 +55,7 @@ int32_t __fastcall NET_FreePacketList(CRITICAL_SECTION* pCriticalSection, D2Pack
 	for (D2PacketStrc* i = *ppPacketList; *ppPacketList; i = *ppPacketList)
 	{
 		*ppPacketList = i->pNext;
-		FOG_Free(i, __FILE__, __LINE__, 0);
+		D2_FREE(i);
 	}
 
 	LeaveCriticalSection(pCriticalSection);
