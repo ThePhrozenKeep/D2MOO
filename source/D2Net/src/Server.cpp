@@ -11,7 +11,7 @@
 #include "D2Net.h"
 
 
-D2ServerStrc* gpServer;
+QServer* gpServer;
 int32_t gnLocalClientGameGuid_6FC0B26C;
 
 
@@ -730,7 +730,7 @@ int32_t __stdcall SERVER_WaitForSingleObject(uint32_t dwMilliseconds)
 //D2Net.0x6FC02150 (#10003)
 void __stdcall SERVER_Initialize(int32_t a1, int32_t a2)
 {
-	gpServer = (D2ServerStrc*)FOG_InitializeServer(a1, 3, GAME_PORT, a2, SERVER_ValidateClientPacket, sub_6FC020B0, sub_6FC020E0, SERVER_ReadPacketFromBufferCallback);
+	gpServer = FOG_InitializeServer(a1, 3, GAME_PORT, a2, SERVER_ValidateClientPacket, sub_6FC020B0, sub_6FC020E0, SERVER_ReadPacketFromBufferCallback);
 }
 
 //D2Net.0x6FC02190 (#10035)
