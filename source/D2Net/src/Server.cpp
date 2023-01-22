@@ -631,15 +631,15 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 }
 
 //D2Net.0x6FC01FA0 (#10039)
-int32_t* __stdcall D2NET_10039()
+D2NET_CLIENT_SendFunctionType __stdcall D2NET_10039()
 {
-	return (int32_t*)CLIENT_Send;
+	return CLIENT_Send;
 }
 
 //D2Net.0x6FC01FB0 (#10040)
-int32_t* __stdcall D2NET_10040()
+D2NET_SERVER_GetClientGameGUIDFunctionType __stdcall D2NET_10040()
 {
-	return (int32_t*)SERVER_GetClientGameGUID;
+	return SERVER_GetClientGameGUID;
 }
 
 //D2Net.0x6FC01FC0
