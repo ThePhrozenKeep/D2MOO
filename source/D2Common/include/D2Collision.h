@@ -122,7 +122,8 @@ int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pR
 //D2Common.0x6FD451D0 (#10133)
 D2COMMON_DLL_DECL void __fastcall D2Common_10133(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType);
 //D2Common.0x6FD45210 (#11263)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionType);
+//Returns true if a collision with mask was found. pEndCoord will be set to the collision location.
+D2COMMON_DLL_DECL BOOL __stdcall COLLISION_RayTrace(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionMask);
 //D2Common.0x6FD459D0 (#10135)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms, int nMaxDistance);
 //D2Common.0x6FD45A00

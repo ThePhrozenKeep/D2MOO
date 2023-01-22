@@ -1602,7 +1602,7 @@ void __fastcall D2Common_10133(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc*
 
 //D2Common.0x6FD45210 (#11263)
 //This is basicly an implementation of Bresenham's line algorithm over rooms.
-BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionType)
+BOOL __stdcall COLLISION_RayTrace(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionMask)
 {
 	const int nBeginX = pBeginCoord->nX;
 	const int nBeginY = pBeginCoord->nY;
@@ -1649,7 +1649,7 @@ BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2Coo
 	{
 		D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
 		const size_t nMaskIdx = (tCurrentCoord.nX - pRoom->nSubtileX) + (tCurrentCoord.nY - pRoom->nSubtileY) * pCollisionGrid->pRoomCoords.dwSubtilesWidth;
-		if ((nCollisionType & pCollisionGrid->pCollisionMask[nMaskIdx]) != 0)
+		if ((nCollisionMask & pCollisionGrid->pCollisionMask[nMaskIdx]) != 0)
 		{
 			*pEndCoord = tCurrentCoord;
 			return TRUE;
@@ -1698,7 +1698,7 @@ BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2Coo
 			{
 				for (; pMaskIt != pMaskEnd; pMaskIt += nYDirection * pRoom->nSubtileWidth)
 				{
-					if ((*pMaskIt & nCollisionType) != 0)
+					if ((*pMaskIt & nCollisionMask) != 0)
 					{
 						*pEndCoord = tCurrentCoord;
 						return TRUE;
@@ -1760,7 +1760,7 @@ BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2Coo
 
 			for (; pMaskIt != pMaskEnd; pMaskIt += nXDirection)
 			{
-				if ((*pMaskIt & nCollisionType) != 0)
+				if ((*pMaskIt & nCollisionMask) != 0)
 				{
 					*pEndCoord = tCurrentCoord;
 					return TRUE;
@@ -1805,7 +1805,7 @@ BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2Coo
 			
 			while (1)
 			{
-				if ((*pMaskIt & nCollisionType) != 0)
+				if ((*pMaskIt & nCollisionMask) != 0)
 				{
 					*pEndCoord = tCurrentCoord;
 					return TRUE;
@@ -1859,7 +1859,7 @@ BOOL __stdcall D2Common_11263(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2Coo
 
 			while (1)
 			{
-				if ((*pMaskIt & nCollisionType) != 0)
+				if ((*pMaskIt & nCollisionMask) != 0)
 				{
 					*pEndCoord = tCurrentCoord;
 					return TRUE;

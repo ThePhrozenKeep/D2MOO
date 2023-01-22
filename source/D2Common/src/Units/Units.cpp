@@ -2889,7 +2889,7 @@ BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int n
 	pCoords2.nX = nX2;
 	pCoords2.nY = nY2;
 
-	return D2Common_11263(pRoom, &pCoords1, &pCoords2, nCollisionType);
+	return COLLISION_RayTrace(pRoom, &pCoords1, &pCoords2, nCollisionType);
 }
 
 //D2Common.0x6FDC14C0 (#10362)

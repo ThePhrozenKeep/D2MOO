@@ -620,7 +620,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
                 coord2.nX = nX + x;
                 coord2.nY = nY + y;
 
-                if (!D2Common_11263(pRoom, &coord1, &coord2, 4u))
+                if (!COLLISION_RayTrace(pRoom, &coord1, &coord2, 4u))
                 {
                     D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
                     if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))

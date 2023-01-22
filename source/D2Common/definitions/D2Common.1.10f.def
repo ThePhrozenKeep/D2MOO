@@ -1263,7 +1263,7 @@ EXPORTS
 	UNITS_FreeUnit														@11260
 	DATATBLS_CalculateMonsterStatsByLevel								@11261
 	DATATBLS_GetMonSeqTableRecord										@11262
-	D2Common_11263														@11263
+	COLLISION_RayTrace													@11263
 	STATLIST_SetSkillId													@11264
 	STATLIST_GetSkillId													@11265
 	STATLIST_SetSkillLevel												@11266

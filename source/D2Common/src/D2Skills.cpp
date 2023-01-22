@@ -3200,7 +3200,7 @@ BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2RoomStrc* pR
 	pCoords2.nX = nX2;
 	pCoords2.nY = nY2;
 
-	return D2Common_11263(pRoom, &pCoords1, &pCoords2, a6) == 0;
+	return COLLISION_RayTrace(pRoom, &pCoords1, &pCoords2, a6) == 0;
 }
 
 //D2Common.0x6FDB3960 (#11026)
@@ -3214,7 +3214,7 @@ BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4)
 	
 	UNITS_GetCoords(pUnit, &pCoords2);
 
-	return D2Common_11263(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, a4) == 0;
+	return COLLISION_RayTrace(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, a4) == 0;
 }
 
 //D2Common.0x6FDB3A10 (#11027)
@@ -3338,7 +3338,7 @@ BOOL __stdcall D2Common_11037(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, i
 			}
 		}
 		
-		if (!D2Common_11263(pRoom, &pCoords1, &pCoord, 0x804))
+		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, 0x804))
 		{
 			*pX = pCoord.nX;
 			*pY = pCoord.nY;
