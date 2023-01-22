@@ -18,7 +18,7 @@ D2PacketStrc* gpSystemPacketList;
 sockaddr_in gHostSockAddr;
 D2PacketStrc* gpGamePacketList;
 D2PacketBufferStrc* gpPacketBuffer;
-HANDLE ghThread;
+HANDLE ghClientThread;
 SOCKET gClientSocket;
 HANDLE ghClientThreadHandle;
 WSADATA gWSAData;
@@ -40,9 +40,9 @@ int32_t __stdcall D2NET_10017()
 		return 0;
 	}
 
-	EnterCriticalSection(&gCriticalSection);
+	D2_LOCK(&gCriticalSection);
 	const int32_t v1 = dword_6FC0B260;
-	LeaveCriticalSection(&gCriticalSection);
+	D2_UNLOCK(&gCriticalSection);
 
 	return v1;
 }
@@ -100,13 +100,13 @@ int32_t __stdcall D2NET_10025()
 
 	if (!sub_6FC01A00())
 	{
-		EnterCriticalSection(&gCriticalSection);
+		D2_LOCK(&gCriticalSection);
 		dword_6FC0B260 = 1;
-		LeaveCriticalSection(&gCriticalSection);
+		D2_UNLOCK(&gCriticalSection);
 	}
 
-	ghThread = CreateThread(nullptr, 0, sub_6FC01320, nullptr, 0, &gdwThreadId);
-	SetThreadPriority(ghThread, 1);
+	ghClientThread = CreateThread(nullptr, 0, CLIENT_ThreadProc, nullptr, 0, &gdwThreadId);
+	SetThreadPriority(ghClientThread, 1);
 	return 2;
 }
 
@@ -134,7 +134,7 @@ void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 //D2Net.0x6FC01240 (#10001)
 void __stdcall CLIENT_Release()
 {
-	EnterCriticalSection(&gCriticalSection);
+	D2_LOCK(&gCriticalSection);
 
 	if (gpPacketBuffer)
 	{
@@ -145,14 +145,20 @@ void __stdcall CLIENT_Release()
 
 	dword_6FC0B25C = 1;
 
-	LeaveCriticalSection(&gCriticalSection);
+	D2_UNLOCK(&gCriticalSection);
 
-	WaitForSingleObject(ghThread, 6000u);
+	WaitForSingleObject(ghClientThread, 6000u);
 
 	NET_FreePacketList(&gCriticalSection, &gpSystemPacketList);
 	NET_FreePacketList(&gCriticalSection, &gpGamePacketList);
 
-	//EnterCriticalSection(&gCriticalSection);
+#ifdef NO_BUG_FIX
+	// Original game would lock the CS here, but it is actually undefined behaviour to then delete it.
+	// "If a critical section is deleted while it is still owned, the state of the threads waiting for ownership of the deleted critical section is undefined."
+	// This never happens because no thread other than the current one should use this critical section after ghClientThread is closed anyway.
+	// Just in case, don't do it.
+	D2_LOCK(&gCriticalSection);
+#endif
 
 	DeleteCriticalSection(&gCriticalSection);
 
@@ -182,7 +188,7 @@ int32_t __stdcall CLIENT_DequeueSystemPacket(uint8_t* pBuffer, uint32_t nBufferS
 }
 
 //D2Net.0x6FC01320
-DWORD __stdcall sub_6FC01320(void* a1)
+DWORD __stdcall CLIENT_ThreadProc(void* a1)
 {
 	// TODO: Names
 	int32_t bPacket0xAEReceived = 0;
@@ -206,9 +212,9 @@ DWORD __stdcall sub_6FC01320(void* a1)
 				WSAGetLastError();
 				if (!sub_6FC01A00())
 				{
-					EnterCriticalSection(&gCriticalSection);
+					D2_LOCK(&gCriticalSection);
 					dword_6FC0B260 = 0;
-					LeaveCriticalSection(&gCriticalSection);
+					D2_UNLOCK(&gCriticalSection);
 				}
 			}
 			else if (__WSAFDIsSet(gClientSocket, &readfds))
@@ -219,7 +225,7 @@ DWORD __stdcall sub_6FC01320(void* a1)
 					ExitThread(0);
 				}
 
-				EnterCriticalSection(&gCriticalSection);
+				D2_LOCK(&gCriticalSection);
 				if (!bPacket0xAEReceived)
 				{
 					const int32_t v10 = recv(gClientSocket, (char*)&gpPacketBuffer->data[gpPacketBuffer->nUsedBytes], 1460, 0);
@@ -275,16 +281,16 @@ DWORD __stdcall sub_6FC01320(void* a1)
 					}
 				}
 
-				LeaveCriticalSection(&gCriticalSection);
+				D2_UNLOCK(&gCriticalSection);
 
 				if (v4 == -1)
 				{
 					WSAGetLastError();
 					if (!sub_6FC01A00())
 					{
-						EnterCriticalSection(&gCriticalSection);
+						D2_LOCK(&gCriticalSection);
 						dword_6FC0B260 = 0;
-						LeaveCriticalSection(&gCriticalSection);
+						D2_UNLOCK(&gCriticalSection);
 					}
 
 					OutputDebugStringA("Client thread close #5\n");
@@ -295,9 +301,9 @@ DWORD __stdcall sub_6FC01320(void* a1)
 				{
 					if (!sub_6FC01A00())
 					{
-						EnterCriticalSection(&gCriticalSection);
+						D2_LOCK(&gCriticalSection);
 						dword_6FC0B260 = 0;
-						LeaveCriticalSection(&gCriticalSection);
+						D2_UNLOCK(&gCriticalSection);
 					}
 
 					OutputDebugStringA("Client thread close #6\n");
@@ -420,9 +426,9 @@ int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t n
 		return 0;
 	}
 
-	EnterCriticalSection(&gCriticalSection);
+	D2_LOCK(&gCriticalSection);
 	dword_6FC0B260 = 0;
-	LeaveCriticalSection(&gCriticalSection);
+	D2_UNLOCK(&gCriticalSection);
 	return 0;
 }
 

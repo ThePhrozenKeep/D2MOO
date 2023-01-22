@@ -20,7 +20,7 @@ D2NET_DLL_DECL int32_t __stdcall CLIENT_DequeueGamePacket(uint8_t* pBuffer, uint
 //D2Net.0x6FC01310 (#10008)
 D2NET_DLL_DECL int32_t __stdcall CLIENT_DequeueSystemPacket(uint8_t* pBuffer, uint32_t nBufferSize);
 //D2Net.0x6FC01320
-DWORD __stdcall sub_6FC01320(void* a1);
+DWORD __stdcall CLIENT_ThreadProc(void* a1);
 //D2Net.0x6FC015C0
 int32_t __stdcall CLIENT_ReadPacketsFromStream();
 //D2Net.0x6FC01760 (#10005)
