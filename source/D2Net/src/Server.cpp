@@ -643,8 +643,9 @@ D2NET_SERVER_GetClientGameGUIDFunctionType __stdcall D2NET_10040()
 }
 
 //D2Net.0x6FC01FC0
-int32_t __fastcall SERVER_ReadPacketFromBufferCallback(int32_t nUnused, D2PacketBufferStrc* pPacketBuffer, int32_t nBufferSize)
+int32_t __fastcall SERVER_ReadPacketFromBufferCallback(QServer* nUnused, D2PacketBufferStrc* pPacketBuffer, int32_t nBufferSize)
 {
+	D2_MAYBE_UNUSED(nUnused);
 	CLIENT_ReadPacketFromBuffer(pPacketBuffer, nBufferSize);
 	return 1;
 }
