@@ -280,6 +280,16 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		*pSize = result;
 		return *pSize;
 	}
+	case 0x3Eu:
+	{
+		if (nBufferSize < 2)
+		{
+			return 0;
+		}
+
+		*pSize = pBuffer->data[1];
+		return *pSize;
+	}
 	case 0x5Bu:
 	{
 		if (nBufferSize < 0x22)
@@ -298,16 +308,6 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		}
 
 		*pSize = 3 * (pBuffer->data[1] + 2);
-		return *pSize;
-	}
-	case 0x3Eu:
-	{
-		if (nBufferSize < 2)
-		{
-			return 0;
-		}
-
-		*pSize = pBuffer->data[1];
 		return *pSize;
 	}
 	case 0x9Cu:
