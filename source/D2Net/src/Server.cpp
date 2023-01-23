@@ -227,7 +227,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		sizeof(D2GSPacketSrvB3),
 	};
 
-	if (nBufferSize < 1)
+	if (nBufferSize == 0)
 	{
 		return 0;
 	}
@@ -553,7 +553,7 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		sizeof(D2GSPacketClt6F),
 	};
 
-	if (nBufferSize < 1)
+	if (nBufferSize == 0)
 	{
 		return 0;
 	}
@@ -654,7 +654,7 @@ int32_t __fastcall SERVER_ReadPacketFromBufferCallback(QServer* nUnused, D2Packe
 int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2)
 {
 	int32_t nSize = 0;
-	if (nBufferSize < 1 || !SERVER_GetClientPacketSize(pPacketBuffer, nBufferSize, &nSize))
+	if (nBufferSize == 0 || !SERVER_GetClientPacketSize(pPacketBuffer, nBufferSize, &nSize))
 	{
 		return 3;
 	}
