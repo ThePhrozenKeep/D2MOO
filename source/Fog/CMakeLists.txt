@@ -3,9 +3,11 @@ add_library(Fog
   SHARED
     src/DllMain.cpp
 	src/D2BitManip.cpp
+	src/Safesock.cpp
 	
 	include/Fog.h
 	include/D2BitManip.h
+	include/Safesock.h
 )
 
 # The definition file that matches functions with their ordinals

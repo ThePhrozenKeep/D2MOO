@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include "D2Packet.h"
-#include "D2Text.h"
 
 #pragma pack(1)
 
@@ -17,6 +15,24 @@ using PacketStatId = uint16_t;
 #else
 using PacketStatId = uint8_t;
 #endif // PACKETS_USE_16BITS_STATID
+
+
+//Sub-Structs
+struct D2MessageStrc		//sizeof 0x04
+{
+	uint8_t nMenu;				//0x00
+	uint8_t pad0x01;			//0x01
+	uint16_t nStringId;			//0x02
+};
+
+struct D2MessageListStrc	//sizeof 0x22
+{
+	uint8_t nCount;			//0x00
+	uint8_t pad0x01;			//0x01
+	D2MessageStrc pMessages[8];	//0x02
+};
+
+
 
 struct D2GSPacketClt01		//size of 0x05
 {
@@ -2107,58 +2123,58 @@ struct D2GSPacketSrvB4		//variable size
 
 struct D2GameServerInfoStrc
 {
-	int field_0x0;
-	int field_0x4;
-	int field_0x8;
-	int field_0xc;
-	int field_0x10;
-	int field_0x14;
-	int field_0x18;
-	int field_0x1c;
-	int field_0x20;
-	int field_0x24;
+	int32_t field_0x0;
+	int32_t field_0x4;
+	int32_t field_0x8;
+	int32_t field_0xc;
+	int32_t field_0x10;
+	int32_t field_0x14;
+	int32_t field_0x18;
+	int32_t field_0x1c;
+	int32_t field_0x20;
+	int32_t field_0x24;
 	char szCompilationData[128];
-	int field_0xa8;
-	int field_0xac;
-	int field_0xb0;
-	int field_0xb4;
-	int field_0xb8;
+	int32_t field_0xa8;
+	int32_t field_0xac;
+	int32_t field_0xb0;
+	int32_t field_0xb4;
+	int32_t field_0xb8;
 };
 
 struct D2GameServerInfoExStrc : D2GameServerInfoStrc
 {
-	DWORD dwords0xBC[6];
-	WORD word0xD4;
+	uint32_t dwords0xBC[6];
+	uint16_t word0xD4;
 	char szUnk0xD6[20];
-	WORD word0xEA;
-	DWORD dwords0xD8;
-	DWORD dwords0xF0[8];
-	DWORD dwords0x110;
+	uint16_t word0xEA;
+	uint32_t dwords0xD8;
+	uint32_t dwords0xF0[8];
+	uint32_t dwords0x110;
 };
 
 struct D2GSPacketSrvFFFD {
-	BYTE nPacketSubType;				//0x00
+	uint8_t nPacketSubType;				//0x00
 	D2GameServerInfoStrc tServerInfo;	//0x01
 };
 
 
 
 struct D2GSPacketSrvFF01 {
-	BYTE nPacketSubType;				//0x00
+	uint8_t nPacketSubType;				//0x00
 	D2GameServerInfoStrc tServerInfo;	//0x01
-	int field_0xbd;
-	int aSomeInts[8];
-	int field_0xe1;
-	int field_0xe5;
-	int field_0xe9;
-	int field_0xed;
-	int field_0xf1;
-	__int16 field_0xf5;
+	int32_t field_0xbd;
+	int32_t aSomeInts[8];
+	int32_t field_0xe1;
+	int32_t field_0xe5;
+	int32_t field_0xe9;
+	int32_t field_0xed;
+	int32_t field_0xf1;
+	int16_t field_0xf5;
 	char field_0xf6[20];
-	int field_0x10b;
-	int field_0x10f;
-	int field_0x113;
-	int field_0x117;
+	int32_t field_0x10b;
+	int32_t field_0x10f;
+	int32_t field_0x113;
+	int32_t field_0x117;
 	char nZeroed[74];
 };
 

@@ -9,8 +9,10 @@
 #include <Fog.h>
 #include <Storm.h>
 #include <D2Unicode.h>
-#include <D2Net.h>
 #include <D2Math.h>
+
+// D2Net
+#include <Server.h>
 
 #include <D2Dungeon.h>
 #include <DataTbls/ItemsTbls.h>
@@ -558,7 +560,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 
     if (a5)
     {
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(D2NET_GetClientGameGUID(nClientId));
+        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
         if (pGame)
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
@@ -578,7 +580,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     {
         FOG_Trace("Character size was zero");
         
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(D2NET_GetClientGameGUID(nClientId));
+        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
         if (pGame)
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
@@ -594,7 +596,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    D2GameStrc* pGame = TASK_GetGame_6FC397A0(D2NET_GetClientGameGUID(nClientId));
+    D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed SrvLockGame for client %d ***", nClientId);
@@ -625,7 +627,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         D2_ASSERT(pGame->lpCriticalSection);
         LeaveCriticalSection(pGame->lpCriticalSection);
 
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(D2NET_GetClientGameGUID(nClientId));
+        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
         if (pGame)
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
@@ -802,7 +804,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     CLIENTS_SetGameData(pGame);
 
     D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, byte_6FD447EC, 0, nExpLost, a13, a14);
-    D2NET_SetClientGameGUID(nClientId, v22);
+    SERVER_SetClientGameGUID(nClientId, v22);
 
     if (pGame->nGameType == 1)
     {
@@ -916,7 +918,7 @@ int32_t __fastcall GAME_VerifyJoinAct(int32_t nClientId)
 //D2Game.0x6FC36B20
 void __stdcall sub_6FC36B20(int32_t nClientId, const char* szFile, int32_t nLine)
 {
-    const int32_t nGameGUID = D2NET_GetClientGameGUID(nClientId);
+    const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     if (gpGameDataTbl_6FD45818)
     {
         int32_t bLeaveCriticalSection = 0;
@@ -968,7 +970,7 @@ void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* s
 void __fastcall GAME_SendActInit(int32_t nClientId)
 {
     int32_t bLeaveCriticalSection = 0;
-    const int32_t nGameGUID = D2NET_GetClientGameGUID(nClientId);
+    const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     if (!gpGameDataTbl_6FD45818)
     {
         return;
@@ -1215,7 +1217,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 
     EnterCriticalSection(pGame->lpCriticalSection);
     LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    D2NET_SetClientGameGUID(dwClientId, nGUID);
+    SERVER_SetClientGameGUID(dwClientId, nGUID);
 
     D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, a3, szClientName, szAccountName, a6, a7, a8, a9);
     if (pClient)
@@ -1405,7 +1407,7 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2)
         return;
     }
 
-    const int32_t nGUID = D2NET_GetClientGameGUID(nClientId);
+    const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
     if (!gpGameDataTbl_6FD45818)
     {
         GAME_LogMessage(6, "[SERVER]  SrvDisconnectClientById: *** failed to disconnect client %d ***", nClientId);
@@ -1472,7 +1474,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         return;
     }
 
-    const int32_t nGUID = D2NET_GetClientGameGUID(nClientId);
+    const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
     if (!gpGameDataTbl_6FD45818)
     {
         return;
@@ -1629,7 +1631,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
     }
     
     int32_t bLeaveCriticalSection = 0;
-    D2GameStrc* pGame = D2GAME_FindAndLockGameByGUID__6FC3B480(gpGameDataTbl_6FD45818, 0, D2NET_GetClientGameGUID(nClientId), &bLeaveCriticalSection, 0);
+    D2GameStrc* pGame = D2GAME_FindAndLockGameByGUID__6FC3B480(gpGameDataTbl_6FD45818, 0, SERVER_GetClientGameGUID(nClientId), &bLeaveCriticalSection, 0);
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvEndGame: Client %d was not in any game", nClientId);
@@ -1861,20 +1863,20 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
             }
             break;
         case PACKET_ADMIN_CONNECT:
-            D2NET_GetClientIPAddress(nClientIdx, szIPAddress, 16);
+            SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             InterlockedIncrement(&gnNumAdminConnections_6FD45838);
             a3[0] = PACKET_ADMIN_CONNECT;
             D2NET_10006(2, nClientIdx, a3, 16);
             break;
         case PACKET_ADMIN_DISCONNECT:
-            D2NET_GetClientIPAddress(nClientIdx, szIPAddress, 16);
+            SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             a3[0] = PACKET_ADMIN_DISCONNECT;
             D2NET_10006(2, nClientIdx, a3, 16);
             D2NET_10016(nClientIdx);
             InterlockedDecrement(&gnNumAdminConnections_6FD45838);
             break;
         case PACKET_ADMIN_GETIP:
-            D2NET_GetClientIPAddress(nClientIdx, szIPAddress, 16);
+            SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             a3[0] = PACKET_ADMIN_GETIP;
             D2NET_10006(2, nClientIdx, a3, 16);
             break;
@@ -1887,11 +1889,11 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
 //D2Game.0x6FC38530 (#10003)
 void __fastcall GAME_ProcessNetworkMessages()
 {
-    char buffer[520] = {};
+    uint8_t buffer[520] = {};
 
     while (1)
     {
-        int32_t nSize = D2NET_10011(&buffer[8], 512);
+        int32_t nSize = SERVER_ReadFromMessageList0(&buffer[8], 512);
         if (nSize == -1)
         {
             break;
@@ -1901,7 +1903,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = D2NET_10010(buffer, 512);
+        int32_t nSize = SERVER_ReadFromMessageList1(buffer, 512);
         if (nSize == -1)
         {
             break;
@@ -1911,7 +1913,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = D2NET_10012(buffer, 512);
+        int32_t nSize = SERVER_ReadFromMessageList2(buffer, 512);
         if (nSize == -1)
         {
             break;
@@ -2468,7 +2470,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
         }
         else
         {
-            D2NET_WSAGetLastError();
+            SERVER_WSAGetLastError();
             bError = 1;
             ++pClient->unk0x1C4;
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
@@ -2583,7 +2585,7 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 //D2Game.0x6FC394E0
 D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
 {
-    const int32_t nGameGUID = D2NET_GetClientGameGUID(nClientId);
+    const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     if (!gpGameDataTbl_6FD45818)
     {
         return nullptr;
