@@ -596,14 +596,15 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		}
 
 		const char* v9 = &v7[SStrLen(v7) + 1];
-		const int32_t v10 = v8 + SStrLen(v9) + 1;
+		const size_t v9Len = SStrLen(v9);
+		const int32_t v10 = v8 + v9Len + 1;
 		if (nBufferSize < v10)
 		{
 			*pSize = 0;
 			return *pSize;
 		}
 
-		const int32_t result = v10 + v9[SStrLen(v9) + 1] + 1;
+		const int32_t result = v10 + v9[v9Len + 1] + 1;
 		if (nBufferSize < result)
 		{
 			return 0;
