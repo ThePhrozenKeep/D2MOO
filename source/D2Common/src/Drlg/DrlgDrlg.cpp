@@ -204,7 +204,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 
 	if (!bAlloc && pLevel->pJungleDefs)
 	{
-		FOG_FreePool(pMemPool, pLevel->pJungleDefs, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pMemPool, pLevel->pJungleDefs);
 		pLevel->pJungleDefs = NULL;
 	}
 

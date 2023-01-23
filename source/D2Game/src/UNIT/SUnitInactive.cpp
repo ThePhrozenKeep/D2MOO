@@ -913,7 +913,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 			const size_t nBitstreamSize = ITEMS_SerializeItemToBitstream(pUnit, pBitstream, ARRAY_SIZE(pBitstream), 1, 1, 0);
 
-			D2InactiveItemNodeStrc* pInactiveItemNode = (D2InactiveItemNodeStrc*)FOG_AllocPool(pGame->pMemoryPool, nBitstreamSize + 15, __FILE__, __LINE__, 0);
+			D2InactiveItemNodeStrc* pInactiveItemNode = (D2InactiveItemNodeStrc*)D2_ALLOC_POOL(pGame->pMemoryPool, nBitstreamSize + 15);
 			pInactiveItemNode->pNext = nullptr;
 			pInactiveItemNode->nFrame = ITEMS_GetGroundRemovalTime(pGame, pUnit);
 			pInactiveItemNode->nOwnerId = ITEMS_GetOwnerId(pUnit);

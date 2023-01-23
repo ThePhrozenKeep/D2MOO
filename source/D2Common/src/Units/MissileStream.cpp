@@ -11,11 +11,11 @@
 //D2Common.0x6FDBC230 (#11213)
 void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissile)
 {
-	D2MissileStreamStrc* pStream = NULL;
+	D2MissileStreamStrc* pStream = nullptr;
 
 	if (!MISSILE_GetStream(pMissile))
 	{
-		pStream = (D2MissileStreamStrc*)FOG_AllocPool(pMissile ? pMissile->pMemoryPool : NULL, sizeof(D2MissileStreamStrc), __FILE__, __LINE__, 0);
+		pStream = D2_ALLOC_STRC_POOL(pMissile ? pMissile->pMemoryPool : nullptr, D2MissileStreamStrc);
 		pStream->unk0x00 = 0;
 		pStream->unk0x04 = 0;
 
@@ -32,10 +32,10 @@ void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile)
 	{
 		if (pStream->unk0x00)
 		{
-			FOG_FreePool(pMissile ? pMissile->pMemoryPool : NULL, (void*)pStream->unk0x00, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(pMissile ? pMissile->pMemoryPool : NULL, (void*)pStream->unk0x00);
 		}
 
-		FOG_FreePool(pMissile ? pMissile->pMemoryPool : NULL, pStream, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pMissile ? pMissile->pMemoryPool : NULL, pStream);
 	}
 }
 
@@ -131,8 +131,7 @@ void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, in
 		else
 		{
 			pStream->unk0x04 = nPoints;
-			pStream->unk0x00 = (int*)FOG_AllocPool(pMissile->pMemoryPool, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
-			memset(pStream->unk0x00, 0x00, sizeof(int) * nPoints);
+			pStream->unk0x00 = (int*)D2_CALLOC_POOL(pMissile->pMemoryPool, sizeof(int) * nPoints);
 		}
 
 		nMax = nTemp / nRatio;

@@ -415,7 +415,7 @@ void __fastcall ACT3Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q1_Callback10_PlayerLeavesGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT3Q1_Callback09_PlayerDroppedWithQuestItem;
 
-	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest1Strc), __FILE__, __LINE__, 0);
+	D2Act3Quest1Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest1Strc);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest1Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 

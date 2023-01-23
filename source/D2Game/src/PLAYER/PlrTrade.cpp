@@ -2001,7 +2001,7 @@ int32_t __fastcall PLRTRADE_AllocPlayerTrade(D2GameStrc* pGame, D2UnitStrc* pPla
     }
 
     D2PlayerTradeStrc* pTradeRecord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PlayerTradeStrc);
-    pTradeRecord->pSaveData = (BYTE*)FOG_AllocPool(pGame->pMemoryPool, 0x2000u, __FILE__, __LINE__, 0);
+    pTradeRecord->pSaveData = (BYTE*)D2_ALLOC_POOL(pGame->pMemoryPool, 0x2000u);
     pTradeRecord->nSaveLength = sub_6FC8A0F0(pGame, pPlayer, pTradeRecord->pSaveData, 0x2000u, 0, 0);
 
     D2_ASSERT(pTradeRecord->nSaveLength > 0);

@@ -19,8 +19,7 @@
 //D2Common.0x6FD8B8A0 (#10038)
 D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nAct, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
-	D2DrlgActStrc* pAct = (D2DrlgActStrc*)FOG_AllocPool(pMemPool, sizeof(D2DrlgActStrc), __FILE__, __LINE__, 0);
-	memset(pAct, 0x00, sizeof(D2DrlgActStrc));
+	D2DrlgActStrc* pAct = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgActStrc);
 
 	pAct->dwInitSeed = nInitSeed;
 	pAct->bClient = bClient;
@@ -68,7 +67,7 @@ void __stdcall DUNGEON_FreeAct(D2DrlgActStrc* pAct)
 		pAct->pEnvironment = NULL;
 	}
 
-	FOG_FreePool(pAct->pMemPool, pAct, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(pAct->pMemPool, pAct);
 }
 
 //D2Common.0x6FD8B9D0
@@ -180,12 +179,9 @@ void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2RoomStrc* pRoom, D2RoomStr
 //D2Common.0x6FD8BC50
 D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, uint32_t dwFlags)
 {
-	D2RoomStrc* pRoom = NULL;
-
 	D2_ASSERT(pAct);
 
-	pRoom = (D2RoomStrc*)FOG_AllocPool(pAct->pMemPool, sizeof(D2RoomStrc), __FILE__, __LINE__, 0);
-	memset(pRoom, 0x00, sizeof(D2RoomStrc));
+	D2RoomStrc* pRoom = D2_CALLOC_STRC_POOL(pAct->pMemPool, D2RoomStrc);
 
 	pRoom->dwFlags = dwFlags;
 
@@ -201,7 +197,7 @@ D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoo
 
 	DRLGROOM_SetRoom(pRoomEx, pRoom);
 
-	pRoom->ppRoomList = (D2RoomStrc**)FOG_AllocPool(pAct->pMemPool, sizeof(D2RoomStrc*) * pRoom->pRoomEx->nRoomsNear, __FILE__, __LINE__, 0);
+	pRoom->ppRoomList = (D2RoomStrc**)D2_ALLOC_POOL(pAct->pMemPool, sizeof(D2RoomStrc*) * pRoom->pRoomEx->nRoomsNear);
 	pRoom->nNumRooms = DRLGROOM_ReorderNearRoomList(pRoom->pRoomEx, pRoom->ppRoomList);
 
 	for (int i = 0; i < pRoom->nNumRooms; ++i)
@@ -624,7 +620,7 @@ void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, D2UnitG
 
 	if (pRoom)
 	{
-		pDrlgDelete = (D2DrlgDeleteStrc*)FOG_AllocPool(pRoom->pAct->pMemPool, sizeof(D2DrlgDeleteStrc), __FILE__, __LINE__, 0);
+		pDrlgDelete = D2_ALLOC_STRC_POOL(pRoom->pAct->pMemPool, D2DrlgDeleteStrc);
 		pDrlgDelete->nUnitType = nUnitType;
 		pDrlgDelete->nUnitGUID = nUnitGUID;
 		pDrlgDelete->pNext = pRoom->pDrlgDelete;
@@ -643,7 +639,7 @@ void __stdcall DUNGEON_FreeDrlgDelete(D2RoomStrc* pRoom)
 	for (D2DrlgDeleteStrc* pDrlgDelete = pRoom->pDrlgDelete; pDrlgDelete; pDrlgDelete = pNext)
 	{
 		pNext = pDrlgDelete->pNext;
-		FOG_FreePool(pRoom->pAct->pMemPool, pDrlgDelete, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pRoom->pAct->pMemPool, pDrlgDelete);
 	}
 
 	pRoom->pDrlgDelete = NULL;
@@ -869,11 +865,11 @@ void __fastcall DUNGEON_FreeRoom(void* pMemPool, D2RoomStrc* pRoom)
 
 	if (pRoom->ppClients)
 	{
-		FOG_FreePool(pRoom->pAct->pMemPool, pRoom->ppClients, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pRoom->pAct->pMemPool, pRoom->ppClients);
 	}
 
-	FOG_FreePool(pMemPool, pRoom->ppRoomList, __FILE__, __LINE__, 0);
-	FOG_FreePool(pMemPool, pRoom, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(pMemPool, pRoom->ppRoomList);
+	D2_FREE_POOL(pMemPool, pRoom);
 }
 
 //D2Common.0x6FD8CF10 (#10076)
@@ -1155,7 +1151,7 @@ void __stdcall DUNGEON_GetPortalLevelArrayFromPortalFlags(void* pMemPool, int nF
 	
 	if (*pnLevels)
 	{
-		*ppLevels = (int*)FOG_AllocPool(pMemPool, sizeof(int) * *pnLevels, __FILE__, __LINE__, 0);
+		*ppLevels = (int*)D2_ALLOC_POOL(pMemPool, sizeof(int) * *pnLevels);
 		memcpy(*ppLevels, pLevels, sizeof(int) * *pnLevels);
 	}
 }

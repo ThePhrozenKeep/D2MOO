@@ -77,16 +77,14 @@ D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit)
 //D2Common.0x6FDBD6B0 (#11259)
 D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
 {
-	D2UnitStrc* pUnit = (D2UnitStrc*)FOG_AllocPool(pMemPool, sizeof(D2UnitStrc), __FILE__, __LINE__, 0);
-	memset(pUnit, 0x00, sizeof(D2UnitStrc));
+	D2UnitStrc* pUnit = D2_CALLOC_STRC_POOL(pMemPool, D2UnitStrc);
 
 	pUnit->pMemoryPool = pMemPool;
 	pUnit->dwUnitType = nUnitType;
 
 	if (nUnitType == UNIT_MONSTER)
 	{
-		pUnit->pMonsterData = (D2MonsterDataStrc*)FOG_AllocPool(pMemPool, sizeof(D2MonsterDataStrc), __FILE__, __LINE__, 0);
-		memset(pUnit->pMonsterData, 0x00, sizeof(D2MonsterDataStrc));
+		pUnit->pMonsterData = D2_CALLOC_STRC_POOL(pMemPool, D2MonsterDataStrc);
 	}
 
 	return pUnit;
@@ -102,13 +100,13 @@ void __stdcall UNITS_FreeUnit(D2UnitStrc* pUnit)
 
 		if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
-			FOG_FreePool(pUnit->pMemoryPool, pUnit->pMonsterData, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(pUnit->pMemoryPool, pUnit->pMonsterData);
 		}
 
 		pUnit->dwUnitType = 6;
 		pUnit->dwUnitId = -1;
 
-		FOG_FreePool(pUnit->pMemoryPool, pUnit, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pUnit->pMemoryPool, pUnit);
 	}
 }
 
@@ -2219,8 +2217,7 @@ void __stdcall UNITS_AllocPlayerData(D2UnitStrc* pUnit)
 	D2_ASSERT(pUnit);
 	D2_ASSERT(!pUnit->pPlayerData);
 
-	pUnit->pPlayerData = (D2PlayerDataStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2PlayerDataStrc), __FILE__, __LINE__, 0);
-	memset(pUnit->pPlayerData, 0x00, sizeof(D2PlayerDataStrc));
+	pUnit->pPlayerData = D2_CALLOC_STRC_POOL(pUnit->pMemoryPool, D2PlayerDataStrc);
 	pUnit->pPlayerData->szName[0] = 0;
 
 	for (int i = 0; i < ARRAY_SIZE(pUnit->pPlayerData->pQuestData); ++i)
@@ -2250,7 +2247,7 @@ void __stdcall UNITS_FreePlayerData(void* pMemPool, D2UnitStrc* pPlayer)
 
 	//D2COMMON_10916_Return();
 
-	FOG_FreePool(pMemPool, pPlayer->pPlayerData, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(pMemPool, pPlayer->pPlayerData);
 	pPlayer->pPlayerData = NULL;
 }
 
@@ -3592,8 +3589,7 @@ void __stdcall UNITS_AllocStaticPath(D2UnitStrc* pUnit)
 {
 	if (!pUnit->pStaticPath)
 	{
-		pUnit->pStaticPath = (D2StaticPathStrc*)FOG_AllocPool(pUnit->pMemoryPool, sizeof(D2StaticPathStrc), __FILE__, __LINE__, 0);
-		memset(pUnit->pStaticPath, 0x00, sizeof(D2StaticPathStrc));
+		pUnit->pStaticPath = D2_CALLOC_STRC_POOL(pUnit->pMemoryPool, D2StaticPathStrc);
 	}
 }
 
@@ -3602,7 +3598,7 @@ void __stdcall UNITS_FreeStaticPath(D2UnitStrc* pUnit)
 {
 	if (pUnit->pStaticPath)
 	{
-		FOG_FreePool(pUnit->pMemoryPool, pUnit->pStaticPath, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pUnit->pMemoryPool, pUnit->pStaticPath);
 		pUnit->pStaticPath = NULL;
 	}
 }

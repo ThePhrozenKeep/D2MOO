@@ -307,7 +307,7 @@ void __fastcall ACT2Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT2Q4_Callback13_PlayerStartedGame;
 	pQuestData->bActive = 1;
 	pQuestData->fState = 0;
-	pQuestData->pQuestDataEx = FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest4Strc), __FILE__, __LINE__, 0);
+	pQuestData->pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest4Strc);
 	pQuestData->nQuest = QUESTSTATEFLAG_A2Q4;
 	pQuestData->pfStatusFilter = 0;
 	pQuestData->nInitNo = 5;

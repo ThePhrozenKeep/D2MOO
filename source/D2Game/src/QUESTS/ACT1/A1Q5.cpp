@@ -298,7 +298,7 @@ void __fastcall ACT1Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfActiveFilter = ACT1Q5_ActiveFilterCallback;
 	pQuestData->pfSeqFilter = ACT1Q5_SeqCallback;
 
-	D2Act1Quest5Strc* pQuestDataEx = (D2Act1Quest5Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act1Quest5Strc), __FILE__, __LINE__, 0);
+	D2Act1Quest5Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act1Quest5Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nSeqId = 3;
 

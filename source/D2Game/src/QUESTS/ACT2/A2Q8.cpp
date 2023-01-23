@@ -36,7 +36,7 @@ void __fastcall ACT2Q8_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct2Q8NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act2Quest8Strc* pQuestDataEx = (D2Act2Quest8Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest8Strc), __FILE__, __LINE__, 0);
+	D2Act2Quest8Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest8Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestDataEx->unk0x00[0] = 0;
 	pQuestDataEx->unk0x00[1] = 0;

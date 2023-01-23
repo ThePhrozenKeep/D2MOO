@@ -155,7 +155,7 @@ void __fastcall ACT5Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct5Q1NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act5Quest1Strc* pQuestDataEx = (D2Act5Quest1Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act5Quest1Strc), __FILE__, __LINE__, 0);
+	D2Act5Quest1Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act5Quest1Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nQuest = QUESTSTATEFLAG_A5Q1;
 	pQuestData->pfStatusFilter = ACT5Q1_StatusFilterCallback;

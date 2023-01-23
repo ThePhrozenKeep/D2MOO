@@ -146,8 +146,7 @@ void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
         { MONSTER_CAIN6,        0, ACT_V,   0, 0 },
     };
 
-    D2NpcRecordStrc* pRecordArray = (D2NpcRecordStrc*)FOG_AllocPool(pGame->pMemoryPool, MAX_NPC * sizeof(D2NpcRecordStrc), __FILE__, __LINE__, 0);
-    memset(pRecordArray, 0, MAX_NPC * sizeof(D2NpcRecordStrc));
+    D2NpcRecordStrc* pRecordArray = (D2NpcRecordStrc*)D2_CALLOC_POOL(pGame->pMemoryPool, MAX_NPC * sizeof(D2NpcRecordStrc));
 
     D2NpcControlStrc* pNpcControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2NpcControlStrc);
     pNpcControl->pFirstRecord = 0;
@@ -313,11 +312,11 @@ void __fastcall SUNITPROXY_InitializeItemCache(D2GameStrc* pGame, D2UnitProxyStr
     D2_ASSERT(nNpcInventoryId < MAX_NPC_INVENTORY);
 
     pUnitProxy->nItems = gUnitProxyItemCache[nNpcInventoryId].nItems;
-    pUnitProxy->pItemCache = (D2ItemCacheStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2ItemCacheStrc) * gUnitProxyItemCache[nNpcInventoryId].nItems, __FILE__, __LINE__, 0);
+    pUnitProxy->pItemCache = (D2ItemCacheStrc*)D2_ALLOC_POOL(pGame->pMemoryPool, sizeof(D2ItemCacheStrc) * gUnitProxyItemCache[nNpcInventoryId].nItems);
     memcpy(pUnitProxy->pItemCache, gUnitProxyItemCache[nNpcInventoryId].pItemCache, sizeof(D2ItemCacheStrc) * gUnitProxyItemCache[nNpcInventoryId].nItems);
 
     pUnitProxy->nPerms = gUnitProxyItemCache[nNpcInventoryId].nPerms;
-    pUnitProxy->pPermCache = (uint32_t*)FOG_AllocPool(pGame->pMemoryPool, sizeof(uint32_t) * gUnitProxyItemCache[nNpcInventoryId].nPerms, __FILE__, __LINE__, 0);
+    pUnitProxy->pPermCache = (uint32_t*)D2_ALLOC_POOL(pGame->pMemoryPool, sizeof(uint32_t) * gUnitProxyItemCache[nNpcInventoryId].nPerms);
     memcpy(pUnitProxy->pPermCache, gUnitProxyItemCache[nNpcInventoryId].pPermCache, sizeof(uint32_t) * gUnitProxyItemCache[nNpcInventoryId].nPerms);
 }
 
@@ -920,12 +919,10 @@ void __fastcall SUNITPROXY_FillIGlobaltemCacheRecordForNpc(int32_t nNpcId)
         }
     }
 
-    gUnitProxyItemCache[nNpcId].pItemCache = (D2ItemCacheStrc*)FOG_AllocPool(nullptr, sizeof(D2ItemCacheStrc) * nItemCount, __FILE__, __LINE__, 0);
-    memset(gUnitProxyItemCache[nNpcId].pItemCache, 0, sizeof(D2ItemCacheStrc) * nItemCount);
+    gUnitProxyItemCache[nNpcId].pItemCache = (D2ItemCacheStrc*)D2_CALLOC_POOL(nullptr, sizeof(D2ItemCacheStrc) * nItemCount);
     gUnitProxyItemCache[nNpcId].nItems = nItemCount;
 
-    gUnitProxyItemCache[nNpcId].pPermCache = (uint32_t*)FOG_AllocPool(nullptr, sizeof(uint32_t) * nPermStoreItemCount, __FILE__, __LINE__, 0);
-    memset(gUnitProxyItemCache[nNpcId].pPermCache, 0, sizeof(uint32_t) * nPermStoreItemCount);
+    gUnitProxyItemCache[nNpcId].pPermCache = (uint32_t*)D2_CALLOC_POOL(nullptr, sizeof(uint32_t) * nPermStoreItemCount);
     gUnitProxyItemCache[nNpcId].nPerms = nPermStoreItemCount;
 
     int32_t nItemCacheIndex = 0;

@@ -227,7 +227,7 @@ void __fastcall ACT3Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT3Q4_Callback09_PlayerDroppedWithQuestItem;
 	QUESTS_ResetPlayerGUIDCount(&pQuestData->tPlayerGUIDs);
 
-	D2Act3Quest4Strc* pQuestDataEx = (D2Act3Quest4Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest4Strc), __FILE__, __LINE__, 0);
+	D2Act3Quest4Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest4Strc);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest4Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 

@@ -2324,8 +2324,7 @@ void __fastcall DATATBLS_LoadMonTypeTxt(void* pMemPool)
 	sgptDataTables->pMonTypeTxt = (D2MonTypeTxt*)DATATBLS_CompileTxt(pMemPool, "montype", pTbl, &sgptDataTables->nMonTypeTxtRecordCount, sizeof(D2MonTypeTxt));
 
 	sgptDataTables->nMonTypeIndex = (sgptDataTables->nMonTypeTxtRecordCount + 31) / 32;
-	sgptDataTables->pMonTypeNest = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pMonTypeNest, 0x00, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
+	sgptDataTables->pMonTypeNest = (uint32_t*)D2_CALLOC_POOL(nullptr, sizeof(uint32_t) * sgptDataTables->nMonTypeTxtRecordCount * sgptDataTables->nMonTypeIndex);
 
 	for (int i = 0; i < sgptDataTables->nMonTypeTxtRecordCount; ++i)
 	{
@@ -2348,7 +2347,7 @@ void __fastcall DATATBLS_UnloadMonTypeTxt()
 	{
 		DATATBLS_UnloadBin(sgptDataTables->pMonTypeTxt);
 		FOG_FreeLinker(sgptDataTables->pMonTypeLinker);
-		FOG_FreePool(NULL, sgptDataTables->pMonTypeNest, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pMonTypeNest);
 		sgptDataTables->pMonTypeTxt = NULL;
 		sgptDataTables->pMonTypeLinker = NULL;
 	}
@@ -2955,7 +2954,7 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	}
 	if (sgptDataTables->pMonSeqTable)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pMonSeqTable, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pMonSeqTable);
 		sgptDataTables->nMonSeqTableRecordCount = 0;
 	}
 
@@ -2964,10 +2963,10 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	{
 		if (sgptDataTables->pTreasureClassEx[i].pInfo)
 		{
-			FOG_FreePool(NULL, sgptDataTables->pTreasureClassEx[i].pInfo, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(nullptr, sgptDataTables->pTreasureClassEx[i].pInfo);
 		}
 	}
-	FOG_FreePool(NULL, sgptDataTables->pTreasureClassEx, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(nullptr, sgptDataTables->pTreasureClassEx);
 	sgptDataTables->pTreasureClassEx = NULL;
 	sgptDataTables->nTreasureClassEx = 0;
 

@@ -158,7 +158,7 @@ void __fastcall COLLISION_AllocRoomCollisionGrid(void* pMemPool, D2RoomStrc* pRo
 	{
 		DUNGEON_GetRoomCoordinates(pRoom, &pDrlgCoords);
 
-		pCollisionGrid = (D2RoomCollisionGridStrc*)FOG_AllocPool(pMemPool, sizeof(D2RoomCollisionGridStrc) + sizeof(uint16_t) * ((pDrlgCoords.dwSubtilesWidth + 2) * pDrlgCoords.dwSubtilesHeight), __FILE__, __LINE__, 0);
+		pCollisionGrid = (D2RoomCollisionGridStrc*)D2_ALLOC_POOL(pMemPool, sizeof(D2RoomCollisionGridStrc) + /*align*/ sizeof(uint16_t) * ((pDrlgCoords.dwSubtilesWidth + 2) * pDrlgCoords.dwSubtilesHeight));
 		memcpy(&pCollisionGrid->pRoomCoords, &pDrlgCoords, sizeof(D2DrlgCoordsStrc));
 		DUNGEON_SetCollisionGridInRoom(pRoom, pCollisionGrid);
 
@@ -308,7 +308,7 @@ void __fastcall COLLISION_FreeRoomCollisionGrid(void* pMemPool, D2RoomStrc* pRoo
 		pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
 		if (pCollisionGrid)
 		{
-			FOG_FreePool(pMemPool, pCollisionGrid, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(pMemPool, pCollisionGrid);
 			DUNGEON_SetCollisionGridInRoom(pRoom, NULL);
 		}
 	}

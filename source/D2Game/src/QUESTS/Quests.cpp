@@ -203,7 +203,7 @@ void __fastcall QUESTS_FreeChainRecord(D2GameStrc* pGame, D2QuestChainStrc* pRec
 	while (pRecord)
 	{
 		pNext = pRecord->pNext;
-		FOG_FreePool(pGame ? pGame->pMemoryPool : nullptr, pRecord, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pGame ? pGame->pMemoryPool : nullptr, pRecord);
 		pRecord = pNext;
 	}
 }
@@ -309,7 +309,7 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 		}
 	}
 
-	D2QuestChainStrc* pNew = (D2QuestChainStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2QuestChainStrc), __FILE__, __LINE__, 0);
+	D2QuestChainStrc* pNew = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestChainStrc);
 	pNew->pQuestData = pQuestData;
 	pNew->pNext = pUnit->pQuestEventList;
 	pUnit->pQuestEventList = pNew;
@@ -344,8 +344,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 
 	for (int32_t i = 0; i < std::size(gpQuestInitTable); ++i)
 	{
-		pCurrent = (D2QuestDataStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2QuestDataStrc), __FILE__, __LINE__, 0);
-		memset(pCurrent, 0, sizeof(D2QuestDataStrc));
+		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestDataStrc);
 
 		pCurrent->nQuestNo = gpQuestInitTable[i].nChainNo;
 		pCurrent->pGame = pGame;
@@ -371,8 +370,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 
 	for (int32_t i = 0; i < std::size(gpQuestIntroTable); ++i)
 	{
-		pCurrent = (D2QuestDataStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2QuestDataStrc), __FILE__, __LINE__, 0);
-		memset(pCurrent, 0, sizeof(D2QuestDataStrc));
+		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestDataStrc);
 
 		pCurrent->pGame = pGame;
 		pCurrent->bActive = true;
@@ -395,8 +393,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 		}
 	}
 
-	D2QuestInfoStrc* pQuestInfo = (D2QuestInfoStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2QuestInfoStrc), __FILE__, __LINE__, 0);
-	memset(pQuestInfo, 0x00, sizeof(D2QuestInfoStrc));
+	D2QuestInfoStrc* pQuestInfo = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestInfoStrc);
 
 	pQuestInfo->pLastQuest = pCurrent;
 
@@ -426,9 +423,9 @@ void __fastcall QUESTS_QuestFree(D2GameStrc* pGame)
 		D2QuestDataStrc* pPrevQuestData = pQuestData->pPrev;
 		if (pQuestData->pQuestDataEx)
 		{
-			FOG_FreePool(pGame->pMemoryPool, pQuestData->pQuestDataEx, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(pGame->pMemoryPool, pQuestData->pQuestDataEx);
 		}
-		FOG_FreePool(pGame->pMemoryPool, pQuestData, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pGame->pMemoryPool, pQuestData);
 		pQuestData = pPrevQuestData;
 	}
 
@@ -436,12 +433,12 @@ void __fastcall QUESTS_QuestFree(D2GameStrc* pGame)
 	while (pTimer)
 	{
 		D2QuestTimerStrc* pNextTimer = pTimer->pNext;
-		FOG_FreePool(pGame->pMemoryPool, pTimer, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pGame->pMemoryPool, pTimer);
 		pTimer = pNextTimer;
 	}
 
 	QUESTRECORD_FreeRecord(pGame->pMemoryPool, pQuestControl->pQuestFlags);
-	FOG_FreePool(pGame->pMemoryPool, pQuestControl, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(pGame->pMemoryPool, pQuestControl);
 }
 
 //D2Game.0x6FC94080
@@ -737,13 +734,13 @@ void __fastcall QUESTS_QuestUpdater(D2GameStrc* pGame)
 				if (pPrev)
 				{
 					pPrev->pNext = pTimer->pNext;
-					FOG_FreePool(pGame->pMemoryPool, pTimer, __FILE__, __LINE__, 0);
+					D2_FREE_POOL(pGame->pMemoryPool, pTimer);
 					pTimer = pPrev;
 				}
 				else
 				{
 					pGame->pQuestControl->pTimer = pTimer->pNext;
-					FOG_FreePool(pGame->pMemoryPool, pTimer, __FILE__, __LINE__, 0);
+					D2_FREE_POOL(pGame->pMemoryPool, pTimer);
 					pTimer = 0;
 				}
 			}
@@ -775,7 +772,7 @@ void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallb
 
 	D2_ASSERT(!pQuestControl->bExecuting);
 
-	D2QuestTimerStrc* pQuestTimer = (D2QuestTimerStrc*)FOG_AllocPool(pQuest->pGame->pMemoryPool, sizeof(D2QuestTimerStrc), __FILE__, __LINE__, 0);
+	D2QuestTimerStrc* pQuestTimer = D2_ALLOC_STRC_POOL(pQuest->pGame->pMemoryPool, D2QuestTimerStrc);
 	pQuestTimer->pNext = pQuestControl->pTimer;
 	pQuestTimer->pQuest = pQuest;
 	pQuestTimer->pfUpdate = pfnCallback;

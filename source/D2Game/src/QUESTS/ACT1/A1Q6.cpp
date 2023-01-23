@@ -177,7 +177,7 @@ void __fastcall ACT1Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fLastState = 0;
 	pQuestData->fState = 0;
 
-	D2Act1Quest6Strc* pQuestDataEx = (D2Act1Quest6Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act1Quest6Strc), __FILE__, __LINE__, 0);
+	D2Act1Quest6Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act1Quest6Strc);
 
 	pQuestData->nInitNo = 4;
 	pQuestData->pQuestDataEx = pQuestDataEx;

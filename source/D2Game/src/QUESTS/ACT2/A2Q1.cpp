@@ -173,7 +173,7 @@ void __fastcall ACT2Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT2Q1_SeqCallback;
 	pQuestData->pNPCMessages = gpAct2Q1NpcMessages;
 
-	D2Act2Quest1Strc* pQuestDataEx = (D2Act2Quest1Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest1Strc), __FILE__, __LINE__, 0);
+	D2Act2Quest1Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest1Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nQuest = QUESTSTATEFLAG_A2Q1;
 	pQuestData->pfStatusFilter = nullptr;

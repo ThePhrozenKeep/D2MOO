@@ -276,7 +276,7 @@ void __fastcall ACT4Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_MONSTERKILLED] = ACT4Q3_Callback08_MonsterKilled;
 	pQuestData->pfCallback[QUESTEVENT_ITEMPICKEDUP] = ACT4Q3_Callback04_ItemPickedUp;
 
-	D2Act4Quest3Strc* pQuestDataEx = (D2Act4Quest3Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act4Quest3Strc), __FILE__, __LINE__, 0);
+	D2Act4Quest3Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act4Quest3Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act4Quest3Strc));
 }

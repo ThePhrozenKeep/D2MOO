@@ -753,12 +753,12 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{
 			if (DATATBLS_LoadFromBin)
 			{
-				FOG_FreePool(NULL, (char*)pTmpMonStatsTxt - 4, __FILE__, __LINE__, 0);
+				D2_FREE_POOL(nullptr, (char*)pTmpMonStatsTxt - 4);
 
 			}
 			else
 			{
-				FOG_FreePool(NULL, pTmpMonStatsTxt, __FILE__, __LINE__, 0);
+				D2_FREE_POOL(nullptr, pTmpMonStatsTxt);
 			}
 		}
 
@@ -768,11 +768,11 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		{
 			if (DATATBLS_LoadFromBin)
 			{
-				FOG_FreePool(NULL, (char*)pTmpSkillDescTxt - 4, __FILE__, __LINE__, 0);
+				D2_FREE_POOL(nullptr, (char*)pTmpSkillDescTxt - 4);
 			}
 			else
 			{
-				FOG_FreePool(NULL, pTmpSkillDescTxt, __FILE__, __LINE__, 0);
+				D2_FREE_POOL(nullptr, pTmpSkillDescTxt);
 			}
 		}
 
@@ -785,7 +785,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 				FileLockAndWrite(sgptDataTables->pSkillsCode, sgptDataTables->nSkillsCodeSize, 1u, pSkillsCodeBin);
 				fclose(pSkillsCodeBin);
 			}
-			FOG_FreePool(NULL, sgptDataTables->pSkillsCode, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(nullptr, sgptDataTables->pSkillsCode);
 		}
 	}
 
@@ -804,7 +804,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 			FileLockAndWrite(sgptDataTables->pSkillDescCode, sgptDataTables->nSkillDescCodeSize, 1, pSkillDescCodeBin);
 			fclose(pSkillDescCodeBin);
 		}
-		FOG_FreePool(NULL, sgptDataTables->pSkillDescCode, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pSkillDescCode);
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
@@ -812,8 +812,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	sgptDataTables->nSkillDescCodeSizeEx = dwSize;
 	sgptDataTables->nSkillDescCodeSize = dwSize;
 
-	sgptDataTables->nClassSkillCount = (int*)FOG_AllocPool(NULL, 7 * sizeof(int), __FILE__, __LINE__, 0);
-	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));
+	sgptDataTables->nClassSkillCount = (int*)D2_CALLOC_POOL(NULL, 7 * sizeof(int));
 
 	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)
 	{
@@ -841,12 +840,11 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->nClassSkillList = (short*)FOG_AllocPool(NULL, 7 * sizeof(short) * nHighestClassSkillCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->nClassSkillList, 0x00, 7 * sizeof(short) * nHighestClassSkillCount);
+	sgptDataTables->nClassSkillList = (short*)D2_CALLOC_POOL(NULL, 7 * sizeof(short) * nHighestClassSkillCount);
+	
 	memset(sgptDataTables->nClassSkillCount, 0x00, 7 * sizeof(int));
 
-	sgptDataTables->pPassiveSkills = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->nPassiveSkills, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pPassiveSkills, 0x00, sizeof(uint16_t) * sgptDataTables->nPassiveSkills);
+	sgptDataTables->pPassiveSkills = (uint16_t*)D2_CALLOC_POOL(NULL, sizeof(uint16_t) * sgptDataTables->nPassiveSkills);
 
 	sgptDataTables->nPassiveSkills = 0;
 	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)
@@ -882,27 +880,27 @@ void __fastcall DATATBLS_UnloadSkills_SkillDescTxt()
 {
 	if (sgptDataTables->nClassSkillCount)
 	{
-		FOG_FreePool(NULL, sgptDataTables->nClassSkillCount, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->nClassSkillCount);
 		sgptDataTables->nClassSkillCount = 0;
 	}
 
 	if (sgptDataTables->nClassSkillList)
 	{
-		FOG_FreePool(NULL, sgptDataTables->nClassSkillList, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->nClassSkillList);
 		sgptDataTables->nClassSkillList = 0;
 	}
 	sgptDataTables->nHighestClassSkillCount = 0;
 
 	if (sgptDataTables->pPassiveSkills)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pPassiveSkills, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pPassiveSkills);
 		sgptDataTables->pPassiveSkills = NULL;
 	}
 	sgptDataTables->nPassiveSkills = 0;
 
 	if (sgptDataTables->pSkillsCode)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pSkillsCode, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pSkillsCode);
 		sgptDataTables->pSkillsCode = NULL;
 	}
 	sgptDataTables->nSkillsCodeSize = 0;
@@ -910,7 +908,7 @@ void __fastcall DATATBLS_UnloadSkills_SkillDescTxt()
 
 	if (sgptDataTables->pSkillDescCode)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pSkillDescCode, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pSkillDescCode);
 		sgptDataTables->pSkillDescCode = NULL;
 	}
 	sgptDataTables->nSkillDescCodeSize = 0;

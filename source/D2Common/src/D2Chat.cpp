@@ -26,9 +26,8 @@ D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText
 		nLength = 254;
 	}
 
-	pHoverMsg = (D2HoverTextStrc*)FOG_AllocPool(pMemPool, sizeof(D2HoverTextStrc), __FILE__, __LINE__, 0);
-	memset(pHoverMsg, 0x00, sizeof(D2HoverTextStrc));
-
+	pHoverMsg = D2_CALLOC_STRC_POOL(pMemPool, D2HoverTextStrc);
+	
 	pHoverMsg->dwDisplayTime = 8 * nLength + 125;
 	pHoverMsg->dwExpireTime = 8 * nLength + 125 + nTimeout;
 	pHoverMsg->nLangId = STRTABLE_GetLanguage();
@@ -45,7 +44,7 @@ void __stdcall CHAT_FreeHoverMsg(void* pMemPool, D2HoverTextStrc* pHoverMsg)
 {
 	if (pHoverMsg)
 	{
-		FOG_FreePool(pMemPool, pHoverMsg, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(pMemPool, pHoverMsg);
 	}
 }
 

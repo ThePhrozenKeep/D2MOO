@@ -469,7 +469,7 @@ void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pC
 //D2Game.0x6FCC60D0
 void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, uint8_t nUnitType, int32_t nUnitGUID, uint8_t a6)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 20, __FILE__, __LINE__, 0);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x99u;
     *((int16_t*)pMsg + 4) = nSkillId;
@@ -495,7 +495,7 @@ void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
 //D2Game.0x6FCC6150
 void __fastcall sub_6FCC6150(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, int16_t nX, int16_t nY, uint8_t a6)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 20, __FILE__, __LINE__, 0);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x9Au;
     *((int16_t*)pMsg + 4) = nSkillId;
@@ -523,7 +523,7 @@ void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(D2UnitStrc* pUnit, uint16_t nStat
 {
     D2_ASSERT(nStatId < ((uint8_t)-1));
 
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 20, __FILE__, __LINE__, 0);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x9Eu;
     *((int32_t*)pMsg + 2) = pUnit->dwUnitId;
@@ -547,8 +547,7 @@ void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(D2UnitStrc* pUnit, uint16_t nStat
 //D2Game.0x6FCC6270
 void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 20, __FILE__, __LINE__, 0);
-    memset(pMsg, 0, 20);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xABu;
@@ -573,8 +572,7 @@ void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
 //D2Game.0x6FCC6300
 void __fastcall sub_6FCC6300(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t nSkillId, int16_t nSkillLevel, int32_t nX, int32_t nY, uint8_t a7)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 40, __FILE__, __LINE__, 0);
-    memset(pMsg, 0, 0x28u);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 40);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA3u;
@@ -615,8 +613,7 @@ void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
 {
     STATES_ToggleState(pUnit, STATE_SKILL_MOVE, 0);
 
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 20, __FILE__, __LINE__, 0);
-    memset(pMsg, 0, 20);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA5u;
@@ -641,7 +638,7 @@ void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
 //D2Game.0x6FCC6470
 void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 12, __FILE__, __LINE__, 0);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 12);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA4u;
     *((int16_t*)pMsg + 4) = a2;
@@ -663,7 +660,7 @@ void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
 //D2Game.0x6FCC64D0
 void __fastcall sub_6FCC64D0(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSkillId, int32_t nOwnerGUID)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)FOG_AllocPool(pUnit->pMemoryPool, 16, __FILE__, __LINE__, 0);
+    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 16);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x23u;
     *((int32_t*)pMsg + 2) = nOwnerGUID;

@@ -16,8 +16,7 @@ D2AnimDataStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool)
 	char* pRecords = NULL;
 	char szPath[MAX_PATH] = {};
 
-	pAnimData = (D2AnimDataStrc*)FOG_AllocPool(NULL, sizeof(D2AnimDataStrc), __FILE__, __LINE__, 0);
-	memset(pAnimData, 0x00, sizeof(D2AnimDataStrc));
+	pAnimData = D2_CALLOC_STRC_POOL(NULL, D2AnimDataStrc);
 
 	wsprintfA(szPath, "%s\\AnimData.d2", "DATA\\GLOBAL");
 	pRecords = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, NULL);
@@ -44,7 +43,7 @@ void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataStrc* pAnimData)
 	if (pAnimData)
 	{
 		FOG_Free(pAnimData->pRecords, __FILE__, __LINE__, 0);
-		FOG_FreePool(NULL, pAnimData, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, pAnimData);
 	}
 }
 

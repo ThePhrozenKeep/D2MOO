@@ -1071,7 +1071,7 @@ void __fastcall ACT1Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT1Q4_SeqCallback;
 	pQuestData->nSeqId = 3;
 
-	D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act1Quest4Strc), __FILE__, __LINE__, 0);
+	D2Act1Quest4Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act1Quest4Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	memset(pQuestDataEx, 0x00, sizeof(D2Act1Quest4Strc));
 	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pQuestGUID);

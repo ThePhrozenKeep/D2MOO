@@ -1498,7 +1498,7 @@ int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveDa
         }
         else
         {
-            pClient->pSaveHeader = (D2SaveHeaderStrc*)FOG_AllocPool(pClient->pGame->pMemoryPool, nTotalSize, __FILE__, __LINE__, 0);
+            pClient->pSaveHeader = (D2SaveHeaderStrc*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, nTotalSize);
             pDestination = pClient->pSaveHeader;
         }
 
@@ -1550,7 +1550,7 @@ void __fastcall CLIENTS_CopySaveDataToClient(D2ClientStrc* pClient, const void* 
             D2_FREE_POOL(pClient->pGame->pMemoryPool, pClient->pSaveHeader);
         }
 
-        pClient->pSaveHeader = (D2SaveHeaderStrc*)FOG_AllocPool(pClient->pGame->pMemoryPool, nSize, __FILE__, __LINE__, 0);
+        pClient->pSaveHeader = (D2SaveHeaderStrc*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, nSize);
         pClient->nSaveHeaderSize = nSize;
     }
 

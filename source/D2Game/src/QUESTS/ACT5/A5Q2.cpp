@@ -203,7 +203,7 @@ void __fastcall ACT5Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct5Q2NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act5Quest2Strc* pQuestDataEx = (D2Act5Quest2Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act5Quest2Strc), __FILE__, __LINE__, 0);
+	D2Act5Quest2Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act5Quest2Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nQuest = QUESTSTATEFLAG_A5Q2;
 	pQuestData->pfStatusFilter = 0;

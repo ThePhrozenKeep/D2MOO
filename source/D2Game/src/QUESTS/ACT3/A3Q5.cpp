@@ -457,7 +457,7 @@ void __fastcall ACT3Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfActiveFilter = ACT3Q5_ActiveFilterCallback;
 	pQuestData->nInitNo = 6;
 
-	D2Act3Quest5Strc* pQuestDataEx = (D2Act3Quest5Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest5Strc), __FILE__, __LINE__, 0);
+	D2Act3Quest5Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest5Strc);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest5Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 }

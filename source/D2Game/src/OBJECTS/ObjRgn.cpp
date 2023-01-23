@@ -62,8 +62,7 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     {
         if (nShrineSubTypes[i] > 0)
         {
-            pShrineData->pShrineSubTypeIds[i] = (int32_t*)FOG_AllocPool(pGame->pMemoryPool, sizeof(int32_t) * nShrineSubTypes[i], __FILE__, __LINE__, 0);
-            memset(pShrineData->pShrineSubTypeIds[i], 0x00, sizeof(int32_t) * nShrineSubTypes[i]);
+            pShrineData->pShrineSubTypeIds[i] = (int32_t*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(int32_t) * nShrineSubTypes[i]);
         }
 
         pShrineData->nShrineSubTypes[i] = 0;
@@ -165,7 +164,7 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
                 EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
             }
 
-            FOG_FreePool(pOp->pGame->pMemoryPool, pObjectRoomCoord, __FILE__, __LINE__, 0);
+            D2_FREE_POOL(pOp->pGame->pMemoryPool, pObjectRoomCoord);
             pOp->pGame->pObjectControl->pObjectRoomCoord = nullptr;
             return;
         }

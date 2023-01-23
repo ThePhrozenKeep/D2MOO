@@ -59,8 +59,7 @@ void __fastcall D2GAME_NPC_FirstFn_6FCC67D0(D2GameStrc* pGame, int32_t nVendorId
         return;
     }
 
-    pNpcRecord->pMercData = (D2MercDataStrc*)FOG_AllocPool(pGame->pMemoryPool, 0x450u, __FILE__, __LINE__, 0);
-    memset(pNpcRecord->pMercData, 0, 0x450u);
+    pNpcRecord->pMercData = (D2MercDataStrc*)D2_CALLOC_POOL(pGame->pMemoryPool, 0x450u);
 
     D2SeedStrc* pSeed = SUNITPROXY_GetSeedFromNpcControl(pGame);
     D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficulty(pGame->bExpansion, nVendorId, 0, 0);

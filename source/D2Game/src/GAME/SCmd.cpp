@@ -1027,7 +1027,7 @@ void __fastcall sub_6FC3DCA0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
 
     const int32_t nPacketLength = sizeof(D2GSPacketSrv94::SkillInfo) * nSkillCount + offsetof(D2GSPacketSrv94, Skills);
     D2GameStrc* pGame = CLIENTS_GetGame(pClient);
-    D2GSPacketSrv94* pPacket94 = (D2GSPacketSrv94*)FOG_AllocPool(pGame->pMemoryPool, nPacketLength, __FILE__, __LINE__, 0);
+    D2GSPacketSrv94* pPacket94 = (D2GSPacketSrv94*)D2_ALLOC_POOL(pGame->pMemoryPool, nPacketLength);
     
     pPacket94->nHeader = 0x94u;
     

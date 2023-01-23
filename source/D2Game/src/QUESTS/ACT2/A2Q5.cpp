@@ -139,7 +139,7 @@ void __fastcall ACT2Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->bActive = 1;
 	pQuestData->fState = 0;
 
-	D2Act2Quest5Strc* pQuestDataEx = (D2Act2Quest5Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest5Strc), __FILE__, __LINE__, 0);
+	D2Act2Quest5Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest5Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nQuest = QUESTSTATEFLAG_A2Q5;
 	pQuestData->pfStatusFilter = nullptr;

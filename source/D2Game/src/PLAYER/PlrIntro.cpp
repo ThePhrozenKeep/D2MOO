@@ -163,15 +163,13 @@ D2PlrIntroStrc* __fastcall PLRINTRO_Create(D2GameStrc* pGame)
 {
     D2PlrIntroStrc* pPlayerIntro = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PlrIntroStrc);
     D2BitBufferStrc* pBitBuffer1 = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2BitBufferStrc);
-    uint8_t* pBuffer1 = (uint8_t*)FOG_AllocPool(pGame->pMemoryPool, bufferSize, __FILE__, __LINE__, 0);
-    memset(pBuffer1, 0x00, bufferSize);
+    uint8_t* pBuffer1 = (uint8_t*)D2_CALLOC_POOL(pGame->pMemoryPool, bufferSize);
 
     BITMANIP_Initialize(pBitBuffer1, pBuffer1, bufferSize);
     pPlayerIntro->pQuestIntroFlags = pBitBuffer1;
 
     D2BitBufferStrc* pBitBuffer2 = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2BitBufferStrc);
-    uint8_t* pBuffer2 = (uint8_t*)FOG_AllocPool(pGame->pMemoryPool, bufferSize, __FILE__, __LINE__, 0);
-    memset(pBuffer2, 0x00, bufferSize);
+    uint8_t* pBuffer2 = (uint8_t*)D2_CALLOC_POOL(pGame->pMemoryPool, bufferSize);
 
     BITMANIP_Initialize(pBitBuffer2, pBuffer2, bufferSize);
     pPlayerIntro->pNpcIntroFlags = pBitBuffer2;

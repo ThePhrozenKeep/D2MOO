@@ -317,7 +317,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 	pMisc = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "misc", pTbl, &sgptDataTables->pItemDataTables.nMiscTxtRecordCount, sizeof(D2ItemsTxt));
 
 	sgptDataTables->pItemDataTables.nItemsTxtRecordCount = sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount + sgptDataTables->pItemDataTables.nMiscTxtRecordCount + sgptDataTables->pItemDataTables.nArmorTxtRecordCount;
-	pItems = (D2ItemsTxt*)FOG_AllocPool(NULL, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
+	pItems = (D2ItemsTxt*)D2_ALLOC_POOL(nullptr, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
 
 	sgptDataTables->pItemDataTables.pItemsTxt = pItems;
 
@@ -343,8 +343,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pIndexOldToCurrent = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pIndexOldToCurrent, 0x00, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
+	sgptDataTables->pIndexOldToCurrent = (uint16_t*)D2_CALLOC_POOL(nullptr, sizeof(uint16_t) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
 
 	nOldCounter = 0;
 	for (int i = 0; i < sgptDataTables->pItemDataTables.nItemsTxtRecordCount; ++i)
@@ -364,12 +363,12 @@ void __fastcall DATATBLS_UnloadItemsTxt()
 
 	if (sgptDataTables->pItemDataTables.pItemsTxt)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pItemDataTables.pItemsTxt, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pItemDataTables.pItemsTxt);
 	}
 
 	if (sgptDataTables->pIndexOldToCurrent)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pIndexOldToCurrent, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pIndexOldToCurrent);
 	}
 
 	sgptDataTables->pItemDataTables.pItemsTxt = NULL;
@@ -572,7 +571,7 @@ void __fastcall DATATBLS_UnloadMagicSuffix_Prefix_AutomagicTxt()
 {
 	if (sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt);
 	}
 	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = NULL;
 }
@@ -631,7 +630,7 @@ void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 
 	sgptDataTables->pRareAffixDataTables.nRareAffixTxtRecordCount = nPrefixRecords + nSuffixRecords;
 
-	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)FOG_AllocPool(NULL, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords), __FILE__, __LINE__, 0);
+	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = (D2RareAffixTxt*)D2_ALLOC_POOL(nullptr, sizeof(D2RareAffixTxt) * (nPrefixRecords + nSuffixRecords));
 
 	sgptDataTables->pRareAffixDataTables.pRareSuffix = sgptDataTables->pRareAffixDataTables.pRareAffixTxt;
 	memcpy(sgptDataTables->pRareAffixDataTables.pRareAffixTxt, pRareSuffix, sizeof(D2RareAffixTxt) * nSuffixRecords);
@@ -652,7 +651,7 @@ void __fastcall DATATBLS_UnloadRareSuffix_PrefixTxt()
 {
 	if (sgptDataTables->pRareAffixDataTables.pRareAffixTxt)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pRareAffixDataTables.pRareAffixTxt, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pRareAffixDataTables.pRareAffixTxt);
 	}
 	sgptDataTables->pRareAffixDataTables.pRareAffixTxt = NULL;
 }
@@ -1566,7 +1565,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 
 	qsort(pStatsWithDescFunc, nStatsWithDescFunc, sizeof(D2ItemStatCostDescStrc), DATATBLS_CompareItemStatCostDescs);
 
-	sgptDataTables->pStatsWithDescFunc = (uint16_t*)FOG_AllocPool(NULL, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc, __FILE__, __LINE__, 0);
+	sgptDataTables->pStatsWithDescFunc = (uint16_t*)D2_ALLOC_POOL(nullptr, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc);
 	for (int i = 0; i < sgptDataTables->nStatsWithDescFunc; ++i)
 	{
 		sgptDataTables->pStatsWithDescFunc[i] = pStatsWithDescFunc[i].nRecordId;
@@ -1591,7 +1590,7 @@ void __fastcall DATATBLS_UnloadItemStatCostTxt()
 
 	if (sgptDataTables->pStatsWithDescFunc)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pStatsWithDescFunc, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pStatsWithDescFunc);
 	}
 	sgptDataTables->nStatsWithDescFunc = 0;
 }
@@ -1661,7 +1660,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 
 	if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 	{
-		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, __FILE__, __LINE__, 0);
+		sgptDataTables->pGambleDataTables.pGambleSelection = (uint32_t*)D2_ALLOC_POOL(nullptr, sizeof(uint32_t) * sgptDataTables->pGambleDataTables.nGambleTxtRecordCount);
 		for (int i = 0; i < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount; ++i)
 		{
 			nItemId = FOG_GetLinkIndex(sgptDataTables->pItemsLinker, pGambleTxt[i].dwItemCode, 0);
@@ -1730,7 +1729,7 @@ void __fastcall DATATBLS_UnloadGambleTxt()
 {
 	if (sgptDataTables->pGambleDataTables.pGambleSelection)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pGambleDataTables.pGambleSelection, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pGambleDataTables.pGambleSelection);
 		sgptDataTables->pGambleDataTables.pGambleSelection = NULL;
 		sgptDataTables->pGambleDataTables.nGambleTxtRecordCount = 0;
 	}
@@ -1860,8 +1859,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	}
 
 	sgptDataTables->nItemTypesIndex = (sgptDataTables->nItemTypesTxtRecordCount + 31) / 32;
-	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)FOG_AllocPool(NULL, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pItemTypesEquivalenceLUTs, 0x00, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
+	sgptDataTables->pItemTypesEquivalenceLUTs = (uint32_t*)D2_CALLOC_POOL(nullptr, sizeof(uint32_t) * sgptDataTables->nItemTypesTxtRecordCount * sgptDataTables->nItemTypesIndex);
 
 	for (int i = 0; i < sgptDataTables->nItemTypesTxtRecordCount; ++i)
 	{
@@ -1880,7 +1878,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 //D2Common.0x6FD5DFE0
 void __fastcall DATATBLS_UnloadItemTypesTxt()
 {
-	FOG_FreePool(NULL, sgptDataTables->pItemTypesEquivalenceLUTs, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(nullptr, sgptDataTables->pItemTypesEquivalenceLUTs);
 	DATATBLS_UnloadBin(sgptDataTables->pItemTypesTxt);
 	FOG_FreeLinker(sgptDataTables->pItemTypesLinker);
 }

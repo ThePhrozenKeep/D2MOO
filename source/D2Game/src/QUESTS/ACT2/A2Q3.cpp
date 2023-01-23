@@ -222,7 +222,7 @@ void __fastcall ACT2Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct2Q3NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest3Strc), __FILE__, __LINE__, 0);
+	D2Act2Quest3Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest3Strc);
 	pQuestData->nQuest = QUESTSTATEFLAG_A2Q3;
 	pQuestData->nSeqId = 11;
 	pQuestData->pQuestDataEx = pQuestDataEx;

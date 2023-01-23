@@ -125,7 +125,7 @@ void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT3Q7_Callback13_PlayerStartedGame;
 	pQuestData->bActive = 1;
 
-	D2Act3Quest7Strc* pQuestDataEx = (D2Act3Quest7Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest7Strc), __FILE__, __LINE__, 0);
+	D2Act3Quest7Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest7Strc);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest7Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 

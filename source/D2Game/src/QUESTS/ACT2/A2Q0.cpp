@@ -49,7 +49,7 @@ void __fastcall ACT2Q0_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfStatusFilter = ACT2Q0_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT2Q0_ActiveFilterCallback;
 
-	D2Act2Quest0Strc* pQuestDataEx = (D2Act2Quest0Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act2Quest0Strc), __FILE__, __LINE__, 0);
+	D2Act2Quest0Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest0Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 
 	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tPlayerGUIDs);

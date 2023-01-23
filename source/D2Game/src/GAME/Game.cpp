@@ -1575,7 +1575,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
         nDataSize = 255;
     }
 
-    uint8_t* pPacket = (uint8_t*)FOG_AllocPool(pClient->pGame->pMemoryPool, 0x107u, __FILE__, __LINE__, 0);
+    uint8_t* pPacket = (uint8_t*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, 0x107u);
     *pPacket = 0xB2u;
     pPacket[1] = nDataSize;
     if (pClient->unk0x184[1])

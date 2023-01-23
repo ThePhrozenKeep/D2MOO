@@ -411,7 +411,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDA9190 (#10156)
 void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath)
 {
-	FOG_FreePool(pMemPool, pDynamicPath, __FILE__, __LINE__, 0);
+	D2_FREE_POOL(pMemPool, pDynamicPath);
 }
 
 //D2Common.0x6FDA91B0 (#11282)

@@ -166,7 +166,7 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, vo
 
 			fclose(pFile);
 		}
-		FOG_FreePool(NULL, *ppFileHandle, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, *ppFileHandle);
 	}
 
 	*ppFileHandle = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwSize);
@@ -331,9 +331,8 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		FOG_DisplayWarning("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pStateMasks = (uint32_t*)FOG_AllocPool(NULL, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pStateMasks, 0x00, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
-
+	sgptDataTables->pStateMasks = (uint32_t*)D2_CALLOC_POOL(nullptr, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+	
 	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->fStateMasks); ++i)
 	{
 		pStateMasks = &sgptDataTables->pStateMasks[(sgptDataTables->nStatesTxtRecordCount + 31) / 32 * i];
@@ -348,24 +347,19 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 		}
 	}
 
-	sgptDataTables->pProgressiveStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pProgressiveStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
+	sgptDataTables->pProgressiveStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nProgressiveStates = 0;
 
-	sgptDataTables->pCurseStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pCurseStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
+	sgptDataTables->pCurseStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nCurseStates = 0;
 
-	sgptDataTables->pTransformStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pTransformStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
+	sgptDataTables->pTransformStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nTransformStates = 0;
 
-	sgptDataTables->pActionStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pActionStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
+	sgptDataTables->pActionStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nActionStates = 0;
 
-	sgptDataTables->pColourStates = (short*)FOG_AllocPool(NULL, sizeof(short) * sgptDataTables->nStatesTxtRecordCount, __FILE__, __LINE__, 0);
-	memset(sgptDataTables->pColourStates, 0x00, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
+	sgptDataTables->pColourStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nColourStates = 0;
 	
 	for (int i = 0; i < sgptDataTables->nStatesTxtRecordCount; ++i)
@@ -407,31 +401,31 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 {
 	if (sgptDataTables->pStateMasks)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pStateMasks, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pStateMasks);
 		sgptDataTables->pStateMasks = NULL;
 	}
 
 	if (sgptDataTables->pProgressiveStates)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pProgressiveStates, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pProgressiveStates);
 		sgptDataTables->pProgressiveStates = NULL;
 	}
 
 	if (sgptDataTables->pCurseStates)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pCurseStates, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pCurseStates);
 		sgptDataTables->pCurseStates = NULL;
 	}
 
 	if (sgptDataTables->pTransformStates)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pTransformStates, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pTransformStates);
 		sgptDataTables->pTransformStates = NULL;
 	}
 
 	if (sgptDataTables->pActionStates)
 	{
-		FOG_FreePool(NULL, sgptDataTables->pActionStates, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, sgptDataTables->pActionStates);
 		sgptDataTables->pActionStates = NULL;
 	}
 
@@ -641,8 +635,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocPool(NULL, dwSize * nRecordCount, __FILE__, __LINE__, 0);
-		memset(pTxt, 0x00, dwSize * nRecordCount);
+		pTxt = D2_CALLOC_POOL(nullptr, dwSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, dwSize);
 		FOG_FreeBinFile(pBinFile);
 
@@ -654,7 +647,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 			FileLockAndWrite(pTxt, dwSize * nRecordCount, 1, pFile);
 			fclose(pFile);
 		}
-		FOG_FreePool(NULL, pTxt, __FILE__, __LINE__, 0);
+		D2_FREE_POOL(nullptr, pTxt);
 	}
 
 	if (DATATBLS_LoadFromBin)
@@ -685,8 +678,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 	{
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
-		pTxt = FOG_AllocPool(NULL, dwSize * nRecordCount, __FILE__, __LINE__, 0);
-		memset(pTxt, 0x00, dwSize * nRecordCount);
+		pTxt = D2_CALLOC_POOL(nullptr, dwSize * nRecordCount);
 		FOG_10207(pBinFile, pTbl, pTxt, nRecordCount, dwSize);
 		FOG_FreeBinFile(pBinFile);
 	}
@@ -712,11 +704,11 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 	{
 		if (DATATBLS_LoadFromBin)
 		{
-			FOG_FreePool(NULL, (char*)pBinFile - 4, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(nullptr, (char*)pBinFile - 4);
 		}
 		else
 		{
-			FOG_FreePool(NULL, pBinFile, __FILE__, __LINE__, 0);
+			D2_FREE_POOL(nullptr, pBinFile);
 		}
 	}
 }

@@ -423,11 +423,11 @@ void __fastcall OBJECTS_InitHandler(D2GameStrc* pGame, D2UnitStrc* pObject, int3
         }
     }
 
-    D2TimerArgStrc* pTimerArg = (D2TimerArgStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2TimerArgStrc), __FILE__, __LINE__, 0);
+    D2TimerArgStrc* pTimerArg = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2TimerArgStrc);
     pTimerArg->unk0x00 = nullptr;
     pTimerArg->dwUnitId = -1;
 
-    D2TimerArg2Strc* pArg = (D2TimerArg2Strc*)FOG_AllocPool(pGame->pMemoryPool, 8, __FILE__, __LINE__, 0);
+    D2TimerArg2Strc* pArg = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2TimerArg2Strc);
     pArg->nUnitGUID = -1;
     pArg->pNext = nullptr;
     pTimerArg->unk0x00 = pArg;

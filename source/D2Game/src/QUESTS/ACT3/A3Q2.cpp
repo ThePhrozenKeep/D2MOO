@@ -190,7 +190,7 @@ void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	//pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = (QUESTCALLBACK)D2GAME_OBJECTS_InitFunction05_Door_6FCA6660;
 	pQuestData->pfCallback[QUESTEVENT_ITEMPICKEDUP] = ACT3Q2_Callback04_ItemPickedUp;
 
-	D2Act3Quest2Strc* pQuestDataEx = (D2Act3Quest2Strc*)FOG_AllocPool(pQuestData->pGame->pMemoryPool, sizeof(D2Act3Quest2Strc), __FILE__, __LINE__, 0);
+	D2Act3Quest2Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest2Strc);
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest2Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestDataEx->nSewerStairsObjectMode = 0;

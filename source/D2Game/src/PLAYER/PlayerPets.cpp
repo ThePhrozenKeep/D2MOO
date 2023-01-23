@@ -34,8 +34,7 @@ void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     }
 
     pPlayerData->pPlayerPets = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PlayerPetStrc);
-    pPlayerData->pPlayerPets->pPetList = (D2PetListStrc*)FOG_AllocPool(pGame->pMemoryPool, sizeof(D2PetListStrc) * sgptDataTables->nPetTypeTxtRecordCount, __FILE__, __LINE__, 0);
-    memset(pPlayerData->pPlayerPets->pPetList, 0x00, sizeof(D2PetListStrc) * sgptDataTables->nPetTypeTxtRecordCount);
+    pPlayerData->pPlayerPets->pPetList = (D2PetListStrc*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(D2PetListStrc) * sgptDataTables->nPetTypeTxtRecordCount);
     
     for (int32_t nPetType = 0; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
