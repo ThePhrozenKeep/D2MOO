@@ -1135,103 +1135,98 @@ void __fastcall DRLGPRESET_GetTombStoneTileCoords(D2RoomExStrc* pRoomEx, D2Coord
 //D2Common.0x6FD87130
 void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 {
-	// Not working properly
-	// TODO: remove patch
-	UNIMPLEMENTED();
-	BOOL bTownOrGraveyard = FALSE;
-	BOOL bKillEdgeX = FALSE;
-	BOOL bKillEdgeY = FALSE;
-	int nTombStoneTiles = 0;
-	unsigned int nFlags = 0;
-	D2DrlgGridStrc pDrlgGrid = {};
-	D2DrlgGridStrc a3 = {};
-	int v43[256] = {};
-	int a4[1024] = {};
-	int nCellFlags[256] = {};
-	int v46[1024] = {};
-
-	int nX = 0;
-	int nY = 0;
-
 	DRLGROOMTILE_AllocTileGrid(pRoomEx);
 
-	if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwKillEdge)
+	D2DrlgPresetRoomStrc* pMaze = pRoomEx->pMaze;
+	D2DrlgMapStrc* pMazeMap = pRoomEx->pMaze->pMap;
+
+	BOOL bKillEdgeX = FALSE;
+	BOOL bKillEdgeY = FALSE;
+	if (pMazeMap->pLvlPrestTxtRecord->dwKillEdge)
 	{
-		bKillEdgeX = pRoomEx->nTileXPos + pRoomEx->nTileWidth == pRoomEx->pMaze->pMap->pDrlgCoord.nPosX + pRoomEx->pMaze->pMap->pDrlgCoord.nWidth;
-		bKillEdgeY = pRoomEx->nTileYPos + pRoomEx->nTileHeight == pRoomEx->pMaze->pMap->pDrlgCoord.nPosY + pRoomEx->pMaze->pMap->pDrlgCoord.nHeight;
+		bKillEdgeX = pRoomEx->nTileXPos + pRoomEx->nTileWidth == pMazeMap->pDrlgCoord.nPosX + pMazeMap->pDrlgCoord.nWidth;
+		bKillEdgeY = pRoomEx->nTileYPos + pRoomEx->nTileHeight == pMazeMap->pDrlgCoord.nPosY + pMazeMap->pDrlgCoord.nHeight;
 	}
 
-	if (pRoomEx->pMaze->nLevelPrest == LVLPREST_ACT1_TOWN_1 || pRoomEx->pMaze->nLevelPrest == LVLPREST_ACT1_GRAVEYARD)
+	D2DrlgGridStrc tTownOrGraveyardTileInfoGrid = {};
+	int aCellOffsets[256] = {};
+	int aCellPosBuffer[1024] = {};
+	D2DrlgGridStrc tTownOrGraveyardTileTypeGrid = {};
+	int aTownOrGraveyardCellPosOffsets[256] = {};
+	int aTownOrGraveyardCellPosBuffer[1024] = {};
+	BOOL bTownOrGraveyard = pRoomEx->pMaze->nLevelPrest == LVLPREST_ACT1_TOWN_1 || pRoomEx->pMaze->nLevelPrest == LVLPREST_ACT1_GRAVEYARD;
+	if (bTownOrGraveyard)
 	{
-		bTownOrGraveyard = TRUE;
-		DRLGGRID_FillGrid(&a3, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1, a4, v43);
-		DRLGGRID_FillGrid(&pDrlgGrid, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1, v46, nCellFlags);
+		DRLGGRID_FillGrid(&tTownOrGraveyardTileTypeGrid, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1, aTownOrGraveyardCellPosBuffer, aTownOrGraveyardCellPosOffsets);
+		DRLGGRID_FillGrid(&tTownOrGraveyardTileInfoGrid, pRoomEx->nTileWidth + 1, pRoomEx->nTileHeight + 1, aCellPosBuffer, aCellOffsets);
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
+	for (int i = 0; i < pMazeMap->pFile->nFloorLayers; ++i)
 	{
-		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pMaze->pFloorGrid[i], (!i && pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwFillBlanks), bKillEdgeX, bKillEdgeY);
+		const BOOL bCheckCoordinatesValidity = i == 0 && pMazeMap->pLvlPrestTxtRecord->dwFillBlanks;
+		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pMaze->pFloorGrid[i], bCheckCoordinatesValidity, bKillEdgeX, bKillEdgeY);
 
-		if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwAnimate)
+		if (pMazeMap->pLvlPrestTxtRecord->dwAnimate)
 		{
-			DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, &pRoomEx->pMaze->pFloorGrid[i], 0, 0, bKillEdgeX, bKillEdgeY);
+			DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, &pMaze->pFloorGrid[i], 0, 0, bKillEdgeX, bKillEdgeY);
 		}
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
+	for (int i = 0; i < pMazeMap->pFile->nWallLayers; ++i)
 	{
-		DRLGROOMTILE_CountWallWarpTiles(pRoomEx, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pTileTypeGrid, bKillEdgeX, bKillEdgeY);
-		DRLGROOMTILE_CountAllTileTypes(pRoomEx, pRoomEx->pMaze->pWallGrid, NULL, bKillEdgeX, bKillEdgeY);
+		DRLGROOMTILE_CountWallWarpTiles(pRoomEx, &pMaze->pWallGrid[i], &pMaze->pTileTypeGrid[i], bKillEdgeX, bKillEdgeY);
+		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pMaze->pWallGrid[i], FALSE, bKillEdgeX, bKillEdgeY);
 
-		if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwAnimate)
+		if (pMazeMap->pLvlPrestTxtRecord->dwAnimate)
 		{
-			DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pTileTypeGrid, 0, bKillEdgeX, bKillEdgeY);
+			DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, &pMaze->pWallGrid[i], &pMaze->pTileTypeGrid[i], TILETYPE_FLOOR, bKillEdgeX, bKillEdgeY);
 		}
 	}
 
-	DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pRoomEx->pMaze->pCellGrid, 0, bKillEdgeX, bKillEdgeY);
+	DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pMaze->pCellGrid, 0, bKillEdgeX, bKillEdgeY);
 
-	if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwAnimate)
+	if (pMazeMap->pLvlPrestTxtRecord->dwAnimate)
 	{
-		DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, &pRoomEx->pMaze->pCellGrid, NULL, 13, bKillEdgeX, bKillEdgeY);
+		DRLGANIM_TestLoadAnimatedRoomTiles(pRoomEx, &pMaze->pCellGrid, nullptr, TILETYPE_SHADOW, bKillEdgeX, bKillEdgeY);
 	}
 
 	if (bTownOrGraveyard)
 	{
-		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &pDrlgGrid, 0, bKillEdgeX, bKillEdgeY);
+		DRLGROOMTILE_CountAllTileTypes(pRoomEx, &tTownOrGraveyardTileInfoGrid, FALSE, bKillEdgeX, bKillEdgeY);
 	}
 
 	DRLGROOMTILE_AllocTileData(pRoomEx);
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nFloorLayers; ++i)
+	for (int i = 0; i < pMazeMap->pFile->nFloorLayers; ++i)
 	{
-		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pMaze->pFloorGrid[i], 0, (!i && pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwFillBlanks), bKillEdgeX, bKillEdgeY);
+		const BOOL bCheckCoordinatesValidity = i == 0 && pMazeMap->pLvlPrestTxtRecord->dwFillBlanks;
+		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pMaze->pFloorGrid[i], 0, bCheckCoordinatesValidity, bKillEdgeX, bKillEdgeY);
 	}
 
-	for (int i = 0; i < pRoomEx->pMaze->pMap->pFile->nWallLayers; ++i)
+	for (int i = 0; i < pMazeMap->pFile->nWallLayers; ++i)
 	{
-		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pTileTypeGrid, 0, bKillEdgeX, bKillEdgeY);
+		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pMaze->pWallGrid[i], &pMaze->pTileTypeGrid[i], 0, bKillEdgeX, bKillEdgeY);
 	}
 
-	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pRoomEx->pMaze->pCellGrid, 0, 0, bKillEdgeX, bKillEdgeY);
+	DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pMaze->pCellGrid, nullptr, FALSE, bKillEdgeX, bKillEdgeY);
 
 	if (bTownOrGraveyard)
 	{
-		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &pDrlgGrid, &a3, 0, bKillEdgeX, bKillEdgeY);
+		DRLGROOMTILE_LoadInitRoomTiles(pRoomEx, &tTownOrGraveyardTileInfoGrid, &tTownOrGraveyardTileTypeGrid, FALSE, bKillEdgeX, bKillEdgeY);
 	}
 
-	if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwAnimate)
+	if (pMazeMap->pLvlPrestTxtRecord->dwAnimate)
 	{
-		DRLGANIM_AllocAnimationTileGrids(pRoomEx, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->nAnimSpeed, pRoomEx->pMaze->pWallGrid, pRoomEx->pMaze->pMap->pFile->nWallLayers, pRoomEx->pMaze->pFloorGrid, pRoomEx->pMaze->pMap->pFile->nFloorLayers, &pRoomEx->pMaze->pCellGrid);
+		DRLGANIM_AllocAnimationTileGrids(pRoomEx, pMazeMap->pLvlPrestTxtRecord->nAnimSpeed, pMaze->pWallGrid, pMazeMap->pFile->nWallLayers, pMaze->pFloorGrid, pMazeMap->pFile->nFloorLayers, &pMaze->pCellGrid);
 	}
 
 	pRoomEx->pTileGrid->pTiles.nWalls = pRoomEx->pTileGrid->nWalls;
 	pRoomEx->pTileGrid->pTiles.nFloors = pRoomEx->pTileGrid->nFloors;
 	pRoomEx->pTileGrid->pTiles.nRoofs = pRoomEx->pTileGrid->nShadows;
 
-	if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwLogicals)
+	if (pMazeMap->pLvlPrestTxtRecord->dwLogicals)
 	{
-		DRLGLOGIC_InitializeDrlgCoordList(pRoomEx, pRoomEx->pMaze->pTileTypeGrid, pRoomEx->pMaze->pFloorGrid, pRoomEx->pMaze->pWallGrid);
+		DRLGLOGIC_InitializeDrlgCoordList(pRoomEx, pMaze->pTileTypeGrid, pMaze->pFloorGrid, pMaze->pWallGrid);
 	}
 	else
 	{
@@ -1240,32 +1235,34 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 
 	if (bTownOrGraveyard)
 	{
-		DRLGGRID_ResetGrid(&a3);
-		DRLGGRID_ResetGrid(&pDrlgGrid);
+		DRLGGRID_ResetGrid(&tTownOrGraveyardTileTypeGrid);
+		DRLGGRID_ResetGrid(&tTownOrGraveyardTileInfoGrid);
 	}
 
-	if (pRoomEx->pLevel->nLevelId == LEVEL_BURIALGROUNDS && !pRoomEx->pMaze->pTombStoneTiles)
+	if (pRoomEx->pLevel->nLevelId == LEVEL_BURIALGROUNDS && !pMaze->pTombStoneTiles)
 	{
-		nTombStoneTiles = 0;
+		int nTombStoneTiles = 0;
 
-		pRoomEx->pMaze->pTombStoneTiles = (D2CoordStrc*)D2_ALLOC_POOL(pRoomEx->pLevel->pDrlg->pMempool, 6 * sizeof(D2CoordStrc));
+		pMaze->pTombStoneTiles = (D2CoordStrc*)D2_ALLOC_POOL(pRoomEx->pLevel->pDrlg->pMempool, 6 * sizeof(D2CoordStrc));
 
 		for (int i = 0; i < pRoomEx->nTileHeight; ++i)
 		{
 			for (int j = 0; j < pRoomEx->nTileWidth; ++j)
 			{
-				nFlags = DRLGGRID_GetGridEntry(pRoomEx->pMaze->pWallGrid, j, i);
-				if (((nFlags >> 20) & 0x3F) == 10 && BYTE1(nFlags) >= 23u && BYTE1(nFlags) <= 27u)
+				uint32_t nPackedTileInformation = DRLGGRID_GetGridEntry(pMaze->pWallGrid, j, i);
+				D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
+				if (nTileInformation.nTileStyle == 10
+					&& nTileInformation.nTileSequence >= 23u && nTileInformation.nTileSequence <= 27u)
 				{
 					if (nTombStoneTiles < 6)
 					{
-						nX = j + pRoomEx->nTileXPos;
-						nY = i + pRoomEx->nTileYPos;
+						int nX = j + pRoomEx->nTileXPos;
+						int nY = i + pRoomEx->nTileYPos;
 
 						DUNGEON_ExpandCoords(&nX, &nY);
 
-						pRoomEx->pMaze->pTombStoneTiles[nTombStoneTiles].nX = nX + 2;
-						pRoomEx->pMaze->pTombStoneTiles[nTombStoneTiles].nY = nY + 2;
+						pMaze->pTombStoneTiles[nTombStoneTiles].nX = nX + 2;
+						pMaze->pTombStoneTiles[nTombStoneTiles].nY = nY + 2;
 
 						++nTombStoneTiles;
 					}
@@ -1273,7 +1270,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 			}
 		}
 
-		pRoomEx->pMaze->nTombStoneTiles = nTombStoneTiles;
+		pMaze->nTombStoneTiles = nTombStoneTiles;
 	}
 }
 
