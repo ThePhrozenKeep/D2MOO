@@ -1406,11 +1406,7 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
 
     // Known broken (or at least unable to function without patching other functions/variables) functions
-    { 0x6FD87130 - D2CommonImageBase, &DRLGPRESET_AddPresetRoomMapTiles, PatchAction::FunctionReplacePatchByOriginal},
-    //{ 0x6FD89FA0 - D2CommonImageBase, &DRLGROOMTILE_InitRoomGrids, PatchAction::FunctionReplacePatchByOriginal},
     { 0x6FD8AA80 - D2CommonImageBase, &sub_6FD8AA80, PatchAction::FunctionReplacePatchByOriginal},
-
-    // The following one is broken for sure
 
     // Fixed or working
     //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},
