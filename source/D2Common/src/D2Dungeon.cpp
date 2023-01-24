@@ -87,12 +87,10 @@ void __stdcall DUNGEON_ToggleRoomTilesEnableFlag(D2RoomStrc* pRoom, BOOL bEnable
 //D2Common.0x6FD8BA20 (#10027)
 D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2RoomStrc* pRoom, int nSourceLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord)
 {
-	D2RoomStrc* pDestRoom = NULL;
-	int nDestinationLevel = 0;
-
 	D2_ASSERT(pRoom);
 
-	pDestRoom = DRLGWARP_GetDestinationRoom(pRoom->pRoomEx, nSourceLevel, &nDestinationLevel, ppLvlWarpTxtRecord);
+	int nDestinationLevel = 0;
+	D2RoomStrc* pDestRoom = DRLGWARP_GetDestinationRoom(pRoom->pRoomEx, nSourceLevel, &nDestinationLevel, ppLvlWarpTxtRecord);
 	D2_ASSERT(pDestRoom);
 
 	for (D2UnitStrc* pTile = pDestRoom->pUnitFirst; pTile; pTile = pTile->pRoomNext)
@@ -103,7 +101,7 @@ D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2RoomStrc* pR
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //D2Common.0x6FD8BAB0 (#10028)

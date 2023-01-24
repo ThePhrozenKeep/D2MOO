@@ -69,7 +69,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetWarpCoordinatesFromRoom                                  @10025
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ToggleRoomTilesEnableFlag                                   @10026
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetWarpTileFromRoomAndSourceLevelId                         @10027
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetWarpTileFromRoomAndSourceLevelId                         @10027
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetLvlWarpTxtRecordFromRoomAndUnit                          @10028
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetFirstUnitInRoom                                          @10029
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetFloorTilesFromRoom                                       @10030
