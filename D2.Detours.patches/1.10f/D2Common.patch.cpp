@@ -95,7 +95,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetHoradricStaffTombLevelId                                 @10047
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CheckRoomsOverlapping_BROKEN                                                      @10048
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_CallRoomCallback                                            @10049
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetAdjacentRoomByCoordinates                                @10050
+    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetAdjacentRoomByTileCoordinates                                @10050
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FindRoomByTileCoordinates                                   @10051
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10052                                                      @10052
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetSubtileRect                                              @10053

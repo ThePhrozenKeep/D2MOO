@@ -43,7 +43,7 @@ D2COMMON_DLL_DECL int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc*
 //D2Commmon.0x6FD8BF00 (#10051)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int nX, int nY);
 //D2Common.0x6FD8BF50 (#10050)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByCoordinates(D2RoomStrc* pRoom, int nX, int nY);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByTileCoordinates(D2RoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FD8BFF0 (#10049)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_CallRoomCallback(D2RoomStrc* pRoom, ROOMCALLBACKFN pfnRoomCallback, void* pArgs);
 //D2Common.0x6FD8C080 (#10052)

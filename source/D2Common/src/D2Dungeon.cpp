@@ -288,7 +288,7 @@ D2RoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int
 }
 
 //D2Common.0x6FD8BF50 (#10050)
-D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByCoordinates(D2RoomStrc* pRoom, int nX, int nY)
+D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
 	D2RoomStrc* pTemp = NULL;
 
