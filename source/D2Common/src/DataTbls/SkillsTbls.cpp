@@ -226,7 +226,7 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 							break;
 						}
 
-						pCode = (char*)FOG_ReallocPool(NULL, pCode, nNewSize, __FILE__, __LINE__, 0);
+						pCode = (char*)D2_REALLOC_POOL(NULL, pCode, nNewSize);
 						nSize = sgptDataTables->nSkillsCodeSize;
 						nSizeEx = sgptDataTables->nSkillsCodeSizeEx;
 						sgptDataTables->pSkillsCode = pCode;
@@ -292,7 +292,7 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 							break;
 						}
 
-						pCode = (char*)FOG_ReallocPool(NULL, pCode, nNewSize, __FILE__, __LINE__, 0);
+						pCode = (char*)D2_REALLOC_POOL(NULL, pCode, nNewSize);
 						nSize = sgptDataTables->nSkillDescCodeSize;
 						nSizeEx = sgptDataTables->nSkillDescCodeSizeEx;
 						sgptDataTables->pSkillDescCode = pCode;

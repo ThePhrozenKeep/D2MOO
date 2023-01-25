@@ -236,7 +236,7 @@ void __stdcall UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(D2UnitFindDataStr
 						if (nIndex == pUnitFindData->nMaxArrayEntries)
 						{
 							pUnitFindData->nMaxArrayEntries += UNIT_FIND_ARRAY_SIZE;
-							pUnitFindData->pUnitsArray = (D2UnitStrc**)FOG_ReallocPool(pUnitFindData->pMemPool, pUnitFindData->pUnitsArray, sizeof(D2UnitStrc*) * pUnitFindData->nMaxArrayEntries, __FILE__, __LINE__, 0);
+							pUnitFindData->pUnitsArray = (D2UnitStrc**)D2_REALLOC_POOL(pUnitFindData->pMemPool, pUnitFindData->pUnitsArray, sizeof(D2UnitStrc*) * pUnitFindData->nMaxArrayEntries);
 						}
 					}
 				}

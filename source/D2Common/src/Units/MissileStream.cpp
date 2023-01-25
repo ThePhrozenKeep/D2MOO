@@ -125,7 +125,7 @@ void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, in
 		{
 			if (pStream->unk0x04 < nPoints)
 			{
-				pStream->unk0x00 = (int*)FOG_ReallocPool(pMissile->pMemoryPool, pStream->unk0x00, sizeof(int) * nPoints, __FILE__, __LINE__, 0);
+				pStream->unk0x00 = (int*)D2_REALLOC_POOL(pMissile->pMemoryPool, pStream->unk0x00, sizeof(int) * nPoints);
 			}
 		}
 		else

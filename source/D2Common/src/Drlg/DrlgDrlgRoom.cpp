@@ -860,7 +860,7 @@ BOOL __fastcall sub_6FD77F00(void* pMemPool, D2RoomExStrc* pRoomEx1, uint8_t nWa
 			else
 			{
 				++pRoomEx1->nRoomsNear;
-				pRoomEx1->ppRoomsNear = (D2RoomExStrc**)FOG_ReallocPool(pMemPool, pRoomEx1->ppRoomsNear, sizeof(D2RoomExStrc*) * pRoomEx1->nRoomsNear, __FILE__, __LINE__, 0);
+				pRoomEx1->ppRoomsNear = (D2RoomExStrc**)D2_REALLOC_POOL(pMemPool, pRoomEx1->ppRoomsNear, sizeof(D2RoomExStrc*) * pRoomEx1->nRoomsNear);
 
 				D2_ASSERT(pRoomEx1->ppRoomsNear);
 				pRoomEx1->ppRoomsNear[pRoomEx1->nRoomsNear - 1] = pRoomEx2;

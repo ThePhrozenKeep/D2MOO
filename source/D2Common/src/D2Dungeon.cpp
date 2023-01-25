@@ -748,7 +748,7 @@ void __stdcall DUNGEON_AddClientToRoom(D2RoomStrc* pRoom, D2ClientStrc* pClient)
 	if (pRoom->nNumClients == pRoom->nMaxClients)
 	{
 		pRoom->nMaxClients += 4;
-		pRoom->ppClients = (D2ClientStrc**)FOG_ReallocPool(pRoom->pAct->pMemPool, pRoom->ppClients, sizeof(D2ClientStrc*) * pRoom->nMaxClients, __FILE__, __LINE__, 0);
+		pRoom->ppClients = (D2ClientStrc**)D2_REALLOC_POOL(pRoom->pAct->pMemPool, pRoom->ppClients, sizeof(D2ClientStrc*) * pRoom->nMaxClients);
 	}
 
 	pRoom->ppClients[pRoom->nNumClients] = pClient;

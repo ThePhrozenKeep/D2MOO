@@ -2004,7 +2004,7 @@ void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRe
 			nSize += 4;
 		}
 
-		pTmp = (D2RunesTxt*)FOG_ReallocPool(NULL, pRunesTxt, nSize, __FILE__, __LINE__, 0);
+		pTmp = (D2RunesTxt*)D2_REALLOC_POOL(NULL, pRunesTxt, nSize);
 
 		if (DATATBLS_LoadFromBin)
 		{

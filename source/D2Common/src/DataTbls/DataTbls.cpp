@@ -198,7 +198,7 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 				break;
 			}
 
-			*ppCodes = (char*)FOG_ReallocPool(NULL, *ppCodes, nNewSize, __FILE__, __LINE__, 0);
+			*ppCodes = (char*)D2_REALLOC_POOL(NULL, *ppCodes, nNewSize);
 
 			if (nBufferSize + *pSize < *pSizeEx)
 			{

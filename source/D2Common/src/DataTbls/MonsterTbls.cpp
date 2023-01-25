@@ -871,7 +871,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 //D2Common.0x6FD68BD0
 void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount)
 {
-	pTCExShort->pInfo = (D2TCExInfoStrc*)FOG_ReallocPool(NULL, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount, __FILE__, __LINE__, 0);
+	pTCExShort->pInfo = (D2TCExInfoStrc*)D2_REALLOC_POOL(NULL, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount);
 	memset(&pTCExShort->pInfo[pTCExShort->nTypes], 0x00, sizeof(D2TCExInfoStrc) * (nNewRecordCount - pTCExShort->nTypes));
 	pTCExShort->nTypes = nNewRecordCount;
 }
@@ -1230,7 +1230,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 
 		if (!(sgptDataTables->nTreasureClassEx % 16))
 		{
-			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)D2_REALLOC_POOL(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16));
 		}
 		memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
@@ -2782,7 +2782,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 
 	if (!(sgptDataTables->nTreasureClassEx % 16))
 	{
-		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)D2_REALLOC_POOL(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16));
 	}
 	memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 	++sgptDataTables->nTreasureClassEx;
@@ -2809,7 +2809,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 
 					if (!(sgptDataTables->nTreasureClassEx % 16))
 					{
-						sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)FOG_ReallocPool(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16), __FILE__, __LINE__, 0);
+						sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)D2_REALLOC_POOL(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16));
 					}
 					memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
 
