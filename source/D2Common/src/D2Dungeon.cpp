@@ -245,18 +245,22 @@ BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2RoomStrc* pRoom, int nX, i
 }
 
 //D2Common.0x6FD8BE90 (#10048)
-int __stdcall D2Common_10048(D2RoomStrc* pRoom, int nUnused)
+int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc* pPrimary, D2RoomStrc* pSecondary)
 {
-	D2_MAYBE_UNUSED(nUnused);
-	D2_ASSERT(pRoom);
+	//This was probably meant to check if 2 rooms are overlaping / adjacent, but pSecondary is unused.
+	//In the end, this always returns 4 unless width or height is 0
+	//Probably why this is not used since it's broken.
+	D2_MAYBE_UNUSED(pSecondary);
+	D2_ASSERT(pPrimary); // pRoom is pPrimary in original code
 
-	if (pRoom->nTileWidth + pRoom->nTileXPos >= pRoom->nTileXPos && pRoom->nTileYPos + pRoom->nTileHeight >= pRoom->nTileYPos)
+	if (pPrimary->nTileWidth + pPrimary->nTileXPos >= pPrimary->nTileXPos 
+		&& pPrimary->nTileYPos + pPrimary->nTileHeight >= pPrimary->nTileYPos)
 	{
-		if (pRoom->nTileXPos == pRoom->nTileWidth + pRoom->nTileXPos)
+		if (pPrimary->nTileXPos == pPrimary->nTileWidth + pPrimary->nTileXPos)
 		{
 			return 1;
 		}
-		else if (pRoom->nTileYPos == pRoom->nTileYPos + pRoom->nTileHeight)
+		else if (pPrimary->nTileYPos == pPrimary->nTileYPos + pPrimary->nTileHeight)
 		{
 			return 3;
 		}

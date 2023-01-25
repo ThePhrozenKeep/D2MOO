@@ -39,7 +39,7 @@ D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_DoRoomsTouchOrOverlap(D2RoomStrc* pRoom
 //D2Common.0x6FD8BE30 (#10043)
 D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2RoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FD8BE90 (#10048)
-D2COMMON_DLL_DECL int __stdcall D2Common_10048(D2RoomStrc* pRoom, int nUnused);
+D2COMMON_DLL_DECL int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc* pRoom, int nUnused);
 //D2Commmon.0x6FD8BF00 (#10051)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int nX, int nY);
 //D2Common.0x6FD8BF50 (#10050)

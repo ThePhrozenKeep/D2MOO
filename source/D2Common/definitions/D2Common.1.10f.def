@@ -48,7 +48,7 @@ EXPORTS
 	DUNGEON_FindActSpawnLocationEx										@10045
 	DUNGEON_FindActSpawnLocation										@10046
 	DUNGEON_GetHoradricStaffTombLevelId									@10047
-	D2Common_10048														@10048
+	DUNGEON_CheckRoomsOverlapping_BROKEN								@10048
 	DUNGEON_CallRoomCallback											@10049
 	DUNGEON_GetAdjacentRoomByCoordinates								@10050
 	DUNGEON_FindRoomByTileCoordinates									@10051
