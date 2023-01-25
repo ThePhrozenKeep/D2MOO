@@ -89,10 +89,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::PointerReplacePatchByOriginal,  /*C*/ //   sgptDataTables                                                      @10042
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AreTileCoordinatesInsideRoom                                @10043
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CheckLOSDraw                                                @10044
-
-    // Waypoint misplaced, probably because of sub_6FD8AA80?
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   DUNGEON_FindActSpawnLocationEx                                      @10045
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   DUNGEON_FindActSpawnLocation                                        @10046
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindActSpawnLocationEx                                      @10045
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindActSpawnLocation                                        @10046
 
     PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetHoradricStaffTombLevelId                                 @10047
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10048                                                      @10048
@@ -1406,7 +1404,6 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
 
     // Known broken (or at least unable to function without patching other functions/variables) functions
-    { 0x6FD8AA80 - D2CommonImageBase, &sub_6FD8AA80, PatchAction::FunctionReplacePatchByOriginal},
 
     // Fixed or working
     //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},
