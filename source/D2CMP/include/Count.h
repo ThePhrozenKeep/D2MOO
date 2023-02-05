@@ -31,7 +31,7 @@
 /**
  * Returns the count of consecutive bytes that are equal to the first
  * byte in pSrc, up to nMaxCount bytes. Also sets pbCountEqualsDist if
- * the count equals the distance from pSrc to pEnd, and
+ * the count equals the distance from pSrc to pEnd, or
  * pbIsRemainingSame if all remaining bytes after nMaxCount are the
  * same as bValue.
  *
@@ -45,7 +45,7 @@ int __fastcall CountConsecutiveFirst(const BYTE* pSrc, const BYTE* pEnd, int nMa
 /**
  * Returns the count of consecutive bytes that are equal to bValue, up
  * to nMaxCount bytes. Also sets pbCountEqualsDist if the count equals
- * the distance from pSrc to pEnd, and pbIsRemainingSame if all
+ * the distance from pSrc to pEnd, or pbIsRemainingSame if all
  * remaining bytes after nMaxCount are the same as bValue.
  *
  * 1.00: D2CMP.0x10008730
@@ -58,7 +58,7 @@ int __fastcall CountConsecutive(BYTE bValue, const BYTE* pSrc, const BYTE* pEnd,
 /**
  * Returns the count of consecutive bytes that are not equal to
  * bValue, up to nMaxCount bytes. Also sets pbCountEqualsDist if the
- * count equals the distance from pSrc to pEnd, and pbIsRemainingSame
+ * count equals the distance from pSrc to pEnd, or pbIsRemainingSame
  * if all remaining bytes after nMaxCount are the same as bValue.
  *
  * 1.00: D2CMP.0x10008730
