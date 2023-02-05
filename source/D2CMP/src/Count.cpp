@@ -44,11 +44,7 @@
  */
 int __fastcall CountConsecutiveFirst(const BYTE* pSrc, const BYTE* pEnd, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	if (pSrc >= pEnd)
-	{
-		FOG_DisplayAssert("pSrc < pEnd", __FILE__, __LINE__);
-		exit(-1);
-	}
+	D2_ASSERT("pSrc < pEnd");
 
 	BYTE bFirst = pSrc[0];
 	int nCount;
@@ -85,11 +81,7 @@ int __fastcall CountConsecutiveFirst(const BYTE* pSrc, const BYTE* pEnd, int nMa
  */
 int __fastcall CountConsecutive(BYTE bValue, const BYTE* pSrc, const BYTE* pEnd, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	if (pSrc >= pEnd)
-	{
-		FOG_DisplayAssert("pSrc < pEnd", __FILE__, __LINE__);
-		exit(-1);
-	}
+	D2_ASSERT("pSrc < pEnd");
 
 	int nCount;
 	for (nCount = 0; pSrc < pEnd && bValue == *pSrc && nCount < nMaxCount; ++pSrc, ++nCount) {}
@@ -126,11 +118,7 @@ int __fastcall CountConsecutive(BYTE bValue, const BYTE* pSrc, const BYTE* pEnd,
  */
 int __fastcall CountConsecutiveDiff(const BYTE* pSrc, const BYTE* pEnd, BYTE bValue, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	if (pSrc >= pEnd)
-	{
-		FOG_DisplayAssert("pSrc < pEnd", __FILE__, __LINE__);
-		exit(-1);
-	}
+	D2_ASSERT("pSrc < pEnd");
 
 	int nCount;
 	for (nCount = 0; pSrc < pEnd && *pSrc != bValue && nCount < nMaxCount; ++pSrc, ++nCount) {}
