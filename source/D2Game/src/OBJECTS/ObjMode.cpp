@@ -1241,7 +1241,7 @@ __forceinline void __fastcall OBJECTS_ChestEnd(D2ObjOperateFnStrc* pOp, int32_t 
         UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
     }
 
-    pOp->pObject->dwFlags &= UNITFLAG_TARGETABLE;
+    pOp->pObject->dwFlags &= ~UNITFLAG_TARGETABLE;
 
     if (pOp->pObject->dwDropItemCode)
     {
