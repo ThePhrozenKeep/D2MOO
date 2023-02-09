@@ -35,8 +35,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetSaveMonstersFromLevelId                                     @10004
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_GetLevel                                                       @10005
 
-    // Note: ends up crashing somewhere in original without callstack, see if can fix later
-    PatchAction::FunctionReplacePatchByOriginal,       //   DRLG_InitLevel                                                      @10006
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_InitLevel                                                      @10006
 
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRoomExFromRoom                                           @10007
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLGPRESET_GetLevelPrestIdFromRoomEx                                @10008
@@ -46,7 +45,6 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     // Don't patch, datatable
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetAutomapCellId                                           @10011
 
-    // Need to get DRLG_AllocDrlg to work first, which needs DATATBLS_LoadLvlPrestTxt so wait until we load datatables
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_FreeDrlg                                                       @10012
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_AllocLevel                                                     @10013
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DRLG_AllocDrlg                                                      @10014
@@ -69,7 +67,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetWarpCoordinatesFromRoom                                  @10025
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ToggleRoomTilesEnableFlag                                   @10026
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetWarpTileFromRoomAndSourceLevelId                         @10027
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetWarpTileFromRoomAndSourceLevelId                         @10027
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetLvlWarpTxtRecordFromRoomAndUnit                          @10028
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetFirstUnitInRoom                                          @10029
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetFloorTilesFromRoom                                       @10030
@@ -81,86 +79,84 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetAlliedCountFromRoom                                      @10036
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetTownLevelIdFromAct                                       @10037
 
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AllocAct                                                    @10038
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FreeAct                                                     @10039
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AllocAct                                                    @10038
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FreeAct                                                     @10039
 
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_DoRoomsTouchOrOverlap                                       @10040
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindRoomBySubtileCoordinates                                @10041
     PatchAction::PointerReplacePatchByOriginal,  /*C*/ //   sgptDataTables                                                      @10042
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AreTileCoordinatesInsideRoom                                @10043
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CheckLOSDraw                                                @10044
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindActSpawnLocationEx                                      @10045
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindActSpawnLocation                                        @10046
 
-    // Waypoint misplaced, probably because of sub_6FD8AA80?
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   DUNGEON_FindActSpawnLocationEx                                      @10045
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   DUNGEON_FindActSpawnLocation                                        @10046
-
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetHoradricStaffTombLevelId                                 @10047
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10048                                                      @10048
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_CallRoomCallback                                            @10049
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetAdjacentRoomByCoordinates                                @10050
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FindRoomByTileCoordinates                                   @10051
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10052                                                      @10052
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetSubtileRect                                              @10053
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetRGB_IntensityFromRoom                                    @10054
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPresetUnitsFromRoom                                      @10055
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetRoomFromAct                                              @10056
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetLevelIdFromRoom                                          @10057
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetWarpDestinationLevel                                     @10058
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetLevelIdFromPopulatedRoom                                 @10059
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_HasWaypoint                                                 @10060
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPickedLevelPrestFilePathFromRoom                         @10061
-    PatchAction::FunctionReplacePatchByOriginal, /*C*/ //   DUNGEON_ChangeClientRoom                                            @10062
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetHoradricStaffTombLevelId                                 @10047
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CheckRoomsOverlapping_BROKEN                                                      @10048
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CallRoomCallback                                            @10049
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetAdjacentRoomByTileCoordinates                                @10050
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FindRoomByTileCoordinates                                   @10051
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10052                                                      @10052
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetSubtileRect                                              @10053
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRGB_IntensityFromRoom                                    @10054
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetPresetUnitsFromRoom                                      @10055
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRoomFromAct                                              @10056
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetLevelIdFromRoom                                          @10057
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetWarpDestinationLevel                                     @10058
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetLevelIdFromPopulatedRoom                                 @10059
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_HasWaypoint                                                 @10060
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetPickedLevelPrestFilePathFromRoom                         @10061
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ChangeClientRoom                                            @10062
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SetClientIsInSight                                          @10063
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UnsetClientIsInSight                                        @10064
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_StreamRoomAtCoords                                          @10065
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AllocDrlgDelete                                             @10066
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FreeDrlgDelete                                              @10067
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetDrlgDeleteFromRoom                                       @10068
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AllocDrlgDelete                                             @10066
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FreeDrlgDelete                                              @10067
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetDrlgDeleteFromRoom                                       @10068
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetARoomInClientSight                                       @10069
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetARoomInSightButWithoutClient                             @10070
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_TestRoomCanUnTile                                           @10071
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRoomStatusFlags                                          @10072
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10073                                                      @10073
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10074                                                      @10074
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10075                                                      @10075
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveRoomFromAct                                           @10076
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10077                                                      @10077
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_UpdateAndFreeInactiveRooms                                                      @10078
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AddClientToRoom                                             @10079
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_RemoveClientFromRoom                                        @10080
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10081_GetTileCountFromRoom                                 @10081
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10073                                                      @10073
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10074                                                      @10074
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10075                                                      @10075
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_RemoveRoomFromAct                                           @10076
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10077                                                      @10077
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UpdateAndFreeInactiveRooms                                                      @10078
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AddClientToRoom                                             @10079
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_RemoveClientFromRoom                                        @10080
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10081_GetTileCountFromRoom                                 @10081
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsRoomInTown                                                @10082
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10083_Return0                                              @10083
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10084                                                      @10084
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetTownLevelIdFromActNo                                     @10085
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsTownLevelId                                               @10086
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10087                                                      @10087
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetDrlgFromAct                                              @10088
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetInitSeedFromAct                                          @10089
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetNumberOfPopulatedRoomsInLevel                            @10090
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_UpdateWarpRoomSelect                                        @10091
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_UpdateWarpRoomDeselect                                      @10092
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_UpdatePops                                                  @10093
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetTombStoneTileCoords                                      @10094
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10095                                                      @10095
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10096                                                      @10096
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetRoomCoordList                                            @10097
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPortalLevelArrayFromPortalFlags                          @10098
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_GetPortalFlagFromLevelId                                    @10099
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_IncreaseAlliedCountOfRoom                                   @10100
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_DecreaseAlliedCountOfRoom                                   @10101
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10087                                                      @10087
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetDrlgFromAct                                              @10088
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetInitSeedFromAct                                          @10089
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetNumberOfPopulatedRoomsInLevel                            @10090
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UpdateWarpRoomSelect                                        @10091
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UpdateWarpRoomDeselect                                      @10092
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UpdatePops                                                  @10093
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetTombStoneTileCoords                                      @10094
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10095                                                      @10095
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10096                                                      @10096
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetRoomCoordList                                            @10097
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetPortalLevelArrayFromPortalFlags                          @10098
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetPortalFlagFromLevelId                                    @10099
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IncreaseAlliedCountOfRoom                                   @10100
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_DecreaseAlliedCountOfRoom                                   @10101
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ToggleHasPortalFlag                                         @10102
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_SetActCallbackFunc                                          @10103
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_AnimateTiles                                                @10104
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_InitRoomTileAnimation                                       @10105
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_SaveKilledUnitGUID                                          @10106
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10107                                                      @10107
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_ScreenToWorldCoords                                         @10108
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10109                                                      @10109
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_ExpandTileCoords                                            @10110
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_WorldToScreenCoords                                         @10111
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_FlattenCoords_IsoToCartesian                                @10112
-    PatchAction::FunctionReplacePatchByOriginal,       //   DUNGEON_ExpandCoords                                                @10113
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SetActCallbackFunc                                          @10103
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AnimateTiles                                                @10104
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_InitRoomTileAnimation                                       @10105
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SaveKilledUnitGUID                                          @10106
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10107                                                      @10107
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ScreenToWorldCoords                                         @10108
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10109                                                      @10109
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ExpandTileCoords                                            @10110
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_WorldToScreenCoords                                         @10111
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FlattenCoords_IsoToCartesian                                @10112
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ExpandCoords                                                @10113
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10114                                                      @10114
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10115                                                      @10115
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10116                                                      @10116
@@ -1406,7 +1402,6 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
 
     // Known broken (or at least unable to function without patching other functions/variables) functions
-    { 0x6FD8AA80 - D2CommonImageBase, &sub_6FD8AA80, PatchAction::FunctionReplacePatchByOriginal},
 
     // Fixed or working
     //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},

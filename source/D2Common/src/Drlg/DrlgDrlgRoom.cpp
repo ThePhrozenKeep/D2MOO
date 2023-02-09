@@ -570,11 +570,9 @@ int __fastcall DRLGROOM_GetLevelId(D2RoomExStrc* pRoomEx)
 //D2Common.0x6FD77A20
 int __fastcall DRLGROOM_GetWarpDestinationLevel(D2RoomExStrc* pRoomEx, int nSourceLevel)
 {
-	D2LvlWarpTxt* pLvlWarpTxtRecord = 0;
-	D2RoomStrc* pRoom = NULL;
 	int nDestinationLevel = 0;
-
-	pRoom = DRLGWARP_GetDestinationRoom(pRoomEx, nSourceLevel, &nDestinationLevel, &pLvlWarpTxtRecord);
+	D2LvlWarpTxt* pLvlWarpTxtRecord = nullptr;
+	D2RoomStrc* pRoom = DRLGWARP_GetDestinationRoom(pRoomEx, nSourceLevel, &nDestinationLevel, &pLvlWarpTxtRecord);
 	D2_ASSERT(pRoom);
 	
 	pRoomEx = DUNGEON_GetRoomExFromRoom(pRoom);

@@ -87,12 +87,10 @@ void __stdcall DUNGEON_ToggleRoomTilesEnableFlag(D2RoomStrc* pRoom, BOOL bEnable
 //D2Common.0x6FD8BA20 (#10027)
 D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2RoomStrc* pRoom, int nSourceLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord)
 {
-	D2RoomStrc* pDestRoom = NULL;
-	int nDestinationLevel = 0;
-
 	D2_ASSERT(pRoom);
 
-	pDestRoom = DRLGWARP_GetDestinationRoom(pRoom->pRoomEx, nSourceLevel, &nDestinationLevel, ppLvlWarpTxtRecord);
+	int nDestinationLevel = 0;
+	D2RoomStrc* pDestRoom = DRLGWARP_GetDestinationRoom(pRoom->pRoomEx, nSourceLevel, &nDestinationLevel, ppLvlWarpTxtRecord);
 	D2_ASSERT(pDestRoom);
 
 	for (D2UnitStrc* pTile = pDestRoom->pUnitFirst; pTile; pTile = pTile->pRoomNext)
@@ -103,7 +101,7 @@ D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2RoomStrc* pR
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //D2Common.0x6FD8BAB0 (#10028)
@@ -247,18 +245,22 @@ BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2RoomStrc* pRoom, int nX, i
 }
 
 //D2Common.0x6FD8BE90 (#10048)
-int __stdcall D2Common_10048(D2RoomStrc* pRoom, int nUnused)
+int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc* pPrimary, D2RoomStrc* pSecondary)
 {
-	D2_MAYBE_UNUSED(nUnused);
-	D2_ASSERT(pRoom);
+	//This was probably meant to check if 2 rooms are overlaping / adjacent, but pSecondary is unused.
+	//In the end, this always returns 4 unless width or height is 0
+	//Probably why this is not used since it's broken.
+	D2_MAYBE_UNUSED(pSecondary);
+	D2_ASSERT(pPrimary); // pRoom is pPrimary in original code
 
-	if (pRoom->nTileWidth + pRoom->nTileXPos >= pRoom->nTileXPos && pRoom->nTileYPos + pRoom->nTileHeight >= pRoom->nTileYPos)
+	if (pPrimary->nTileWidth + pPrimary->nTileXPos >= pPrimary->nTileXPos 
+		&& pPrimary->nTileYPos + pPrimary->nTileHeight >= pPrimary->nTileYPos)
 	{
-		if (pRoom->nTileXPos == pRoom->nTileWidth + pRoom->nTileXPos)
+		if (pPrimary->nTileXPos == pPrimary->nTileWidth + pPrimary->nTileXPos)
 		{
 			return 1;
 		}
-		else if (pRoom->nTileYPos == pRoom->nTileYPos + pRoom->nTileHeight)
+		else if (pPrimary->nTileYPos == pPrimary->nTileYPos + pPrimary->nTileHeight)
 		{
 			return 3;
 		}
@@ -286,7 +288,7 @@ D2RoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int
 }
 
 //D2Common.0x6FD8BF50 (#10050)
-D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByCoordinates(D2RoomStrc* pRoom, int nX, int nY)
+D2RoomStrc* __stdcall DUNGEON_GetAdjacentRoomByTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
 	D2RoomStrc* pTemp = NULL;
 

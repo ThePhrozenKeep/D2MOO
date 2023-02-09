@@ -393,10 +393,10 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 		for (int i = 0; i < pDrlgFile->nSubstGroups; ++i)
 		{
-			pDrlgFile->pSubstGroups[i].field_0 = ReadInt32(pData);
-			pDrlgFile->pSubstGroups[i].field_4 = ReadInt32(pData);
-			pDrlgFile->pSubstGroups[i].field_8 = ReadInt32(pData);
-			pDrlgFile->pSubstGroups[i].field_C = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].tBox.nPosX = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].tBox.nPosY = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].tBox.nWidth = ReadInt32(pData);
+			pDrlgFile->pSubstGroups[i].tBox.nHeight = ReadInt32(pData);
 
 			if (nVersion >= 13)
 			{

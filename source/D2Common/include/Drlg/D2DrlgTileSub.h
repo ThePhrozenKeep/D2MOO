@@ -52,10 +52,7 @@ struct D2UnkOutdoorStrc3
 
 struct D2DrlgSubstGroupStrc
 {
-	int32_t field_0;
-	int32_t field_4;
-	int32_t field_8;
-	int32_t field_C;
+	D2DrlgCoordStrc tBox;
 	int32_t field_10;
 	int32_t field_14;
 };
@@ -79,7 +76,7 @@ BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 //D2Common.0x6FD8B130
 BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B290
-void __fastcall sub_6FD8B290(D2UnkOutdoorStrc2* a1, D2LvlSubTxt* pLvlSubTxtRecord);
+void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B640
 void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B770
