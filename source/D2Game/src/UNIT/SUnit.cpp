@@ -1036,22 +1036,25 @@ D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2RoomStrc* pRo
             pUnit = SUNIT_AllocUnitData(nUnitType, nClassId, nX, nY, pGame, pRoom, 1, nMode, 0);
         }
     }
-    else if (nUnitType == UNIT_ITEM)
+    else
     {
         pUnit = SUNIT_AllocUnitData(nUnitType, nClassId, nX, nY, pGame, pRoom, 1, nMode, 0);
 
-        if (!pUnit)
+        if (nUnitType == UNIT_ITEM)
         {
-            return nullptr;
-        }
+            if (!pUnit)
+            {
+                return nullptr;
+            }
 
-        D2ItemDropStrc itemDrop = {};
-        itemDrop.nQuality = ITEMQUAL_NORMAL;
-        itemDrop.nItemLvl = DUNGEON_GetLevelIdFromRoom(pRoom);
-        if (!D2GAME_InitItemStats_6FC4E520(pGame, &pUnit, &itemDrop, 1))
-        {
-            SUNIT_RemoveUnit(pGame, pUnit);
-            return nullptr;
+            D2ItemDropStrc itemDrop = {};
+            itemDrop.nQuality = ITEMQUAL_NORMAL;
+            itemDrop.nItemLvl = DUNGEON_GetLevelIdFromRoom(pRoom);
+            if (!D2GAME_InitItemStats_6FC4E520(pGame, &pUnit, &itemDrop, 1))
+            {
+                SUNIT_RemoveUnit(pGame, pUnit);
+                return nullptr;
+            }
         }
     }
 
