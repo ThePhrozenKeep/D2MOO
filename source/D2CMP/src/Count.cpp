@@ -44,30 +44,7 @@
  */
 int __fastcall CountConsecutiveFirst(const BYTE* pSrc, const BYTE* pEnd, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	D2_ASSERT("pSrc < pEnd");
-
-	BYTE bFirst = pSrc[0];
-	int nCount;
-	for (nCount = 0; pSrc < pEnd && bFirst == *pSrc && nCount < nMaxCount; ++pSrc, ++nCount) {}
-	if (pSrc == pEnd)
-	{
-		*pbCountEqualsDist = TRUE;
-		*pbIsRemainingSame = FALSE;
-		return nCount;
-	}
-
-	*pbCountEqualsDist = FALSE;
-	for (; pSrc < pEnd && bFirst == *pSrc; ++pSrc) {}
-
-	if (pSrc == pEnd)
-	{
-		*pbIsRemainingSame = TRUE;
-	}
-	else
-	{
-		*pbIsRemainingSame = FALSE;
-	}
-	return nCount;
+	return CountConsecutive(pSrc[0], pSrc, pEnd, nMaxCount, pbCountEqualsDist, pbIsRemainingSame);
 }
 
 /**
@@ -81,7 +58,7 @@ int __fastcall CountConsecutiveFirst(const BYTE* pSrc, const BYTE* pEnd, int nMa
  */
 int __fastcall CountConsecutive(BYTE bValue, const BYTE* pSrc, const BYTE* pEnd, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	D2_ASSERT("pSrc < pEnd");
+	D2_ASSERT(pSrc < pEnd);
 
 	int nCount;
 	for (nCount = 0; pSrc < pEnd && bValue == *pSrc && nCount < nMaxCount; ++pSrc, ++nCount) {}
@@ -118,7 +95,7 @@ int __fastcall CountConsecutive(BYTE bValue, const BYTE* pSrc, const BYTE* pEnd,
  */
 int __fastcall CountConsecutiveDiff(const BYTE* pSrc, const BYTE* pEnd, BYTE bValue, int nMaxCount, BOOL* pbCountEqualsDist, BOOL* pbIsRemainingSame)
 {
-	D2_ASSERT("pSrc < pEnd");
+	D2_ASSERT(pSrc < pEnd);
 
 	int nCount;
 	for (nCount = 0; pSrc < pEnd && *pSrc != bValue && nCount < nMaxCount; ++pSrc, ++nCount) {}
