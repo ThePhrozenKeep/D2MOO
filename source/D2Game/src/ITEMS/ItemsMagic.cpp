@@ -360,7 +360,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
         {
             ITEMMODS_AssignProperty(PROPMODE_AFFIX, 0, pItem, pRolledAffix->pMagicAffixRecord, 0, 0);
         }
-        return pRolledAffix->nAffixId;
+        return pRolledAffix->nAffixId + 1;
     }
 
     return 0;
