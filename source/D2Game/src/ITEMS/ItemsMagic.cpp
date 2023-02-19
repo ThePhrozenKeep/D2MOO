@@ -210,7 +210,7 @@ static D2MagicAffixIndexAndPtrStrc* MagicItemRollAffix(
 {
     if (pPotentialMagicAffixes && nPotentialMagicAffixesCount > 0)
     {
-        int32_t nRolledAffixValue = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTotalMagicAffixesFrequency);
+        int32_t nRolledAffixValue = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTotalMagicAffixesFrequency + 1);
         
         D2MagicAffixIndexAndPtrStrc* pRolledMagicAffixIdAndPtr = nullptr;
         for (int32_t nCurrentPotentialAffix = 0; nCurrentPotentialAffix < nPotentialMagicAffixesCount; ++nCurrentPotentialAffix)
