@@ -210,7 +210,7 @@ static D2MagicAffixIndexAndPtrStrc* MagicItemRollAffix(
 {
     if (pPotentialMagicAffixes && nPotentialMagicAffixesCount > 0)
     {
-        int32_t nRolledAffixValue = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTotalMagicAffixesFrequency);
+        int32_t nRolledAffixValue = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTotalMagicAffixesFrequency + 1);
         
         D2MagicAffixIndexAndPtrStrc* pRolledMagicAffixIdAndPtr = nullptr;
         for (int32_t nCurrentPotentialAffix = 0; nCurrentPotentialAffix < nPotentialMagicAffixesCount; ++nCurrentPotentialAffix)
@@ -360,7 +360,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
         {
             ITEMMODS_AssignProperty(PROPMODE_AFFIX, 0, pItem, pRolledAffix->pMagicAffixRecord, 0, 0);
         }
-        return pRolledAffix->nAffixId;
+        return pRolledAffix->nAffixId + 1;
     }
 
     return 0;
