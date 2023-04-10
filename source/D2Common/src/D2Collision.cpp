@@ -362,8 +362,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGr
 				int nX = (pBoundingBox->nRight - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - (pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) + 1;
 				do
 				{
-					*pCollisionMask &= nMask;
-					nResult |= *pCollisionMask;
+					nResult |= (*pCollisionMask) & nMask;
 					++pCollisionMask;
 
 					--nX;
