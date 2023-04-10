@@ -1037,7 +1037,7 @@ EXPORTS
 	D2Common_11034														@11034
 	D2Common_11035														@11035
 	D2COMMON_11036_GetMonCurseResistanceSubtraction						@11036
-	D2Common_11037														@11037
+	SKILLS_CheckIfCanLeapTo												@11037
 ;------------------------UNUSED------------------------						@11038
 	D2COMMON_11039_CheckWeaponIsMissileBased							@11039
 	SKILLS_IsEnhanceable												@11040

@@ -358,7 +358,7 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11035(int nLevel, int nSkillId);
 //D2Common.0x6FDB3C20 (#11036)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nSkillId);
 //D2Common.0x6FDB3CB0 (#11037)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11037(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY);
+D2COMMON_DLL_DECL BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY);
 //D2Common.0x6FDB3F60 (#11039)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* pValue);
 //D2Common.0x6FDB4020 (#11040)

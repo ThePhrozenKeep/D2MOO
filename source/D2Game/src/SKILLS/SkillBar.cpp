@@ -1572,7 +1572,7 @@ int32_t __fastcall SKILLS_SrvSt41_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUni
     
     int32_t nX = 0;
     int32_t nY = 0;
-    if (!D2Common_11037(pUnit, pTarget, &nX, &nY))
+    if (!SKILLS_CheckIfCanLeapTo(pUnit, pTarget, &nX, &nY))
     {
         if (pTarget && UNITS_IsInMeleeRange(pUnit, pTarget, 0))
         {
@@ -1589,7 +1589,7 @@ int32_t __fastcall SKILLS_SrvSt41_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    COLLISION_SetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x80u);
+    COLLISION_SetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), COLLIDE_PLAYER);
 
     sub_6FCBDE90(pUnit, 1);
     SKILLS_SetParam1(pSkill, nX);

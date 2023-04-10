@@ -3288,7 +3288,7 @@ int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nS
 }
 
 //D2Common.0x6FDB3CB0 (#11037)
-BOOL __stdcall D2Common_11037(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY)
+BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY)
 {
 	D2RoomStrc* pRoom = NULL;
 	int nDivisor = 0;
@@ -3323,19 +3323,19 @@ BOOL __stdcall D2Common_11037(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, i
 		pRoom = UNITS_GetRoom(pUnit1);
 		D2_ASSERT(pRoom);
 
-		if (COLLISION_CheckMaskWithPattern2(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), 0x1C09))
+		if (COLLISION_CheckMaskWithPattern2(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_WALKING_UNIT))
 		{
 			pCoord.nX = pCoords2.nX;
 			pCoord.nY = pCoords2.nY;
 
-			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), 0x1C09, 0);
+			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), COLLIDE_MASK_WALKING_UNIT, 0);
 			if (!pRoom)
 			{
 				return FALSE;
 			}
 		}
 		
-		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, 0x804))
+		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_WALL))
 		{
 			*pX = pCoord.nX;
 			*pY = pCoord.nY;

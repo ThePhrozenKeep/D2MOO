@@ -34,6 +34,7 @@ enum D2C_CollisionFlags : uint32_t
 	COLLIDE_4000 = 0x4000,
 	COLLIDE_CORPSE = 0x8000,				// also used by portals, but dead monsters are mask 0x8000
 	COLLIDE_ALL_MASK = 0xFFFFFFFF,
+	COLLIDE_MASK_WALKING_UNIT = COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT | COLLIDE_DOOR | COLLIDE_UNIT_RELATED,
 };
 
 struct D2RoomCollisionGridStrc

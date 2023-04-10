@@ -1080,7 +1080,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11034                                                      @11034
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11035                                                      @11035
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11036_GetMonCurseResistanceSubtraction                     @11036
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11037                                                      @11037
+    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_CheckIfCanLeapTo                                             @11037
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @11038
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_11039_CheckWeaponIsMissileBased                            @11039
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_IsEnhanceable                                                @11040
