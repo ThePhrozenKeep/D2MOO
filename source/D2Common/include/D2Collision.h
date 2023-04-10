@@ -35,7 +35,7 @@ enum D2C_CollisionPattern
 	COLLISION_PATTERN_SMALL_NO_PRESENCE   = 5,
 };
 
-enum D2C_CollisionFlags : uint32_t
+enum D2C_CollisionFlags : uint16_t
 {
 	COLLIDE_NONE = 0x0000,
 	COLLIDE_BLOCK_PLAYER = 0x0001,			// 'black space' in arcane sanctuary, cliff walls etc
@@ -51,10 +51,11 @@ enum D2C_CollisionFlags : uint32_t
 	COLLIDE_OBJECT = 0x0400,
 	COLLIDE_DOOR = 0x0800,
 	COLLIDE_UNIT_RELATED = 0x1000,			// set for units sometimes, but not always
-	COLLIDE_PET = 0x2000,
+	COLLIDE_PET = 0x2000,					// linked to whether a monster that may be attacked is present
 	COLLIDE_4000 = 0x4000,
 	COLLIDE_CORPSE = 0x8000,				// also used by portals, but dead monsters are mask 0x8000
-	COLLIDE_ALL_MASK = 0xFFFFFFFF,
+	COLLIDE_ALL_MASK = 0xFFFF,
+	COLLIDE_INVALID = (COLLIDE_BLANK | COLLIDE_WALL | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER),
 	COLLIDE_MASK_WALKING_UNIT = COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT | COLLIDE_DOOR | COLLIDE_UNIT_RELATED,
 };
 

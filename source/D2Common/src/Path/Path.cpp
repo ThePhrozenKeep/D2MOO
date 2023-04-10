@@ -1129,7 +1129,7 @@ int __stdcall PATH_GetCollisionType(D2DynamicPathStrc* pDynamicPath)
 		return pDynamicPath->dwCollisionType;
 	}
 	
-	// Original game uses 0xFFFF because collisions fit on 16btis, but intent is to return all bits set.
+	// Note: this returns 0xFFFF not 0xFFFFFFFF because D2C_CollisionFlags is 16bits.
 	return COLLIDE_ALL_MASK;
 }
 

@@ -463,7 +463,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2Room
 		}
 	}
 
-	return (COLLIDE_BLANK | COLLIDE_WALL | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER);
+	return COLLIDE_INVALID;
 }
 
 //D2Common.0x6FD41DE0 (#10121)
@@ -585,7 +585,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int 
 		}
 	}
 
-	return (COLLIDE_BLANK | COLLIDE_WALL | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER);
+	return COLLIDE_INVALID;
 }
 
 //D2Common.0x6FD42740 (#10122)
