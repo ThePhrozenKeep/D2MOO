@@ -27,8 +27,8 @@ Precision of the coordinates:
 - `Room`: Used to group units and tiles in a single entity. Its size is 8x8 `Floor tiles`.
 - `Floor tiles`: Its size is 5x5 `Subtiles`.
 - `Subtiles`: This is the precision used to determine collision flags and properties. Equivalent to 8x8 `World coordinates` units.
-- `World position`: Granularity used for collisions, light computations and position of moving units in general.
-- `Path`: Paths use a 16bit fixed point representation of the `World position`.
+- `World coordinates`: Granularity used for collisions, light computations and position of moving units in general.
+- `Game coordinates`: Used for paths, uses a 16bit fixed point representation of the `World position`.
 
 ## Cardinal points
 
@@ -51,7 +51,7 @@ Precision of the coordinates:
 *The `Cartesian(Sub)TileBboxOrigin` functions will snap the position to the origin of the bbox in cartesion space of the source unit.
 
 A picture is worth a thousand words.
-Given a Tile/Subtile (green) isometric coordinate, you will obtain:
+Given a Tile/Subtile (green) isometric coordinate `(X;Y)`, you will obtain:
 - The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileBboxOrigin` functions
 - The <span style="color:red">**RED**</span> dot when using the `Isometric(Sub)TileToCartesian` functions.
 
