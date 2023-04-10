@@ -161,22 +161,22 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientTileDrawPositionCoords                          @10115
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientSubileDrawPositionToGameCoords                        @10116
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientSubtileDrawPositionCoords                       @10117
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern                                      @10121
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckAnyCollisionWithPattern                              @10122
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMask                                                 @10123
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSize                                         @10124
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSizeXY                                       @10125
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithPattern                                      @10126
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMask                                                   @10127
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSize                                           @10128
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSizeXY                                         @10129
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithPattern                                        @10130
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryMoveUnitCollisionMask                                  @10131
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryTeleportUnitCollisionMask                              @10132
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetUnitCollisionMask                                      @10133
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_CheckMask                                                 @10118
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_CheckMaskWithSize                                         @10119
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_CheckMaskWithSizeXY                                       @10120
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_CheckMaskWithPattern                                      @10121
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_CheckAnyCollisionWithPattern                              @10122
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_ResetMask                                                 @10123
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_ResetMaskWithSize                                         @10124
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_ResetMaskWithSizeXY                                       @10125
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_ResetMaskWithPattern                                      @10126
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_SetMask                                                   @10127
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_SetMaskWithSize                                           @10128
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_SetMaskWithSizeXY                                         @10129
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_SetMaskWithPattern                                        @10130
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_TryMoveUnitCollisionMask                                  @10131
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_TryTeleportUnitCollisionMask                              @10132
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COLLISION_SetUnitCollisionMask                                      @10133
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinates                                        @10134
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesWithMaxDistance                         @10135
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10136                                                      @10136
