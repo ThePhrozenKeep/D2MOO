@@ -45,8 +45,17 @@ Precision of the coordinates:
 | Cartesian pixel                 | Isometric subtile | DUNGEON_CartesianToIsoSubtileCoords                | D2Common@10108 | DUNGEON_IsoSubTileToCartesianCoords                 | D2Common@10111 |
 | Cartesian unit                  | Isometric unit    | DUNGEON_CartesianToIsometricCoords                 | D2Common@10109 | DUNGEON_IsometricToCartesianCoords                  | D2Common@10112 |
 | Isometric Tile                  | Isometric Subtile | DUNGEON_IsoTileToSubtileCoords                     | D2Common@10113 | N/A                                                 | N/A            |
-| Cartesian (Tile BBox origin)    | Isometric tile    | DUNGEON_CartesianTileBboxOriginToIsometricCoords   | D2Common@10114 | DUNGEON_IsometricToCartesianTileBboxOriginCoords    | D2Common@10115 |
-| Cartesian (Subtile BBox origin) | Isometric subtile | DUNGEON_CartesianSubileBboxOriginToIsometricCoords | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileBboxOriginCoords | D2Common@10117 |
+| Cartesian (Tile BBox origin)    | Isometric tile    | DUNGEON_CartesianTileBboxOriginToIsometricCoords*   | D2Common@10114 | DUNGEON_IsometricToCartesianTileBboxOriginCoords*    | D2Common@10115 |
+| Cartesian (Subtile BBox origin) | Isometric subtile | DUNGEON_CartesianSubileBboxOriginToIsometricCoords* | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileBboxOriginCoords* | D2Common@10117 |
+
+*The `Cartesian(Sub)TileBboxOrigin` functions will snap the position to the origin of the bbox in cartesion space of the source unit.
+
+A picture is worth a thousand words.
+Given a Tile/Subtile (green) isometric coordinate, you will obtain:
+- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileBboxOrigin` functions
+- The <span style="color:red">**RED**</span> dot when using the `Isometric(Sub)TileToCartesian` functions.
+
+![BBox origin](assets/img/BBoxCoordsConversion.png)
 
 
 # Screen position
