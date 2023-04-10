@@ -349,36 +349,21 @@ uint16_t __stdcall COLLISION_CheckMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int 
 //D2Common.0x6FD41B40
 uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
 {
-	uint16_t* pCollisionMask = &pCollisionGrid->pCollisionMask[(pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) + (pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop) * pCollisionGrid->pRoomCoords.dwSubtilesWidth];
-
-	if (pBoundingBox->nBottom <= pBoundingBox->nTop)
+	const int32_t boxWidth = pBoundingBox->nRight - pBoundingBox->nLeft + 1;
+	const int32_t boxHeight = pBoundingBox->nTop - pBoundingBox->nBottom + 1;
+	const int32_t nCollisionMaskBeginX = pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft;
+	const int32_t nCollisionMaskBeginY = pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop;
+	
+	uint16_t nResult = 0;
+	const uint16_t* pCollisionMaskLine = &pCollisionGrid->pCollisionMask[nCollisionMaskBeginX + nCollisionMaskBeginY * pCollisionGrid->pRoomCoords.dwSubtilesWidth];
+	for (int y = 0; y < boxHeight; y++)
 	{
-		uint16_t nResult = 0;
-		int nY = (pBoundingBox->nTop - pCollisionGrid->pRoomCoords.dwSubtilesTop) - (pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop) + 1;
-		do
-		{
-			if (pBoundingBox->nLeft <= pBoundingBox->nRight)
-			{
-				int nX = (pBoundingBox->nRight - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - (pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) + 1;
-				do
-				{
-					nResult |= (*pCollisionMask) & nMask;
-					++pCollisionMask;
-
-					--nX;
-				}
-				while (nX);
-			}
-			pCollisionMask += pCollisionGrid->pRoomCoords.dwSubtilesWidth + (pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - (pBoundingBox->nRight - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - 1;
-
-			--nY;
+		for (int x = 0; x < boxWidth; x++) {
+			nResult |= pCollisionMaskLine[x] & nMask;
 		}
-		while (nY);
-
-		return nResult;
+		pCollisionMaskLine += pCollisionGrid->pRoomCoords.dwSubtilesWidth;
 	}
-
-	return 0;
+	return nResult;
 }
 
 //D2Common.0x6FD41BE0
