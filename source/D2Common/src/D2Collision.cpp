@@ -859,9 +859,7 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* 
 //D2Common.0x6FD436F0 (#10130)
 void __stdcall COLLISION_SetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
-	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
-	D2RoomStrc* pAdjacentRoom = NULL;
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc tBoundingBox = {};
 
 	switch (nCollisionPattern)
 	{
@@ -879,8 +877,8 @@ void __stdcall COLLISION_SetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, i
 		break;
 
 	case COLLISION_PATTERN_BIG_UNIT_PRESENCE:
-		COLLISION_CreateBoundingBox(&pBoundingBox, nX, nY, 3, 3);
-		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom, &pBoundingBox, nMask);
+		COLLISION_CreateBoundingBox(&tBoundingBox, nX, nY, 3, 3);
+		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom, &tBoundingBox, nMask);
 
 		if (nMask)
 		{
@@ -901,21 +899,13 @@ void __stdcall COLLISION_SetMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, i
 
 		if (nMask)
 		{
-			pAdjacentRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, nX, nY);
-			if (pAdjacentRoom)
-			{
-				pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pAdjacentRoom);
-				if (pCollisionGrid && pCollisionGrid->pCollisionMask)
-				{
-					pCollisionGrid->pCollisionMask[nX + pCollisionGrid->pRoomCoords.dwSubtilesWidth * (nY - pCollisionGrid->pRoomCoords.dwSubtilesTop) - pCollisionGrid->pRoomCoords.dwSubtilesLeft] |= COLLIDE_PET;
-				}
-			}
+			COLLISION_SetCollisionMask(pRoom, nX, nY, COLLIDE_PET);
 		}
 		break;
 
 	case COLLISION_PATTERN_BIG_PET_PRESENCE:
-		COLLISION_CreateBoundingBox(&pBoundingBox, nX, nY, 3, 3);
-		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom, &pBoundingBox, nMask);
+		COLLISION_CreateBoundingBox(&tBoundingBox, nX, nY, 3, 3);
+		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom, &tBoundingBox, nMask);
 
 		if (nMask)
 		{
