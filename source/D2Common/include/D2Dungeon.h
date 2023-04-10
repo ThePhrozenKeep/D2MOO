@@ -201,13 +201,13 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianToIsoTileCoords(int* pX, int* 
 //D2Common.0x6FD8D6E0 (#10110)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_IsoTileToCartesianCoords(int* pX, int* pY);
 //D2Common.0x6FD8D710 (#10114)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianTileBboxOriginToIsometricCoords(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianTileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D790 (#10115)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_IsometricToCartesianTileBboxOriginCoords(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_IsometricToCartesianTileDrawPositionCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D7D0 (#10116)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianSubileBboxOriginToIsometricCoords(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianSubileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D830 (#10117)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_IsometricToCartesianSubtileBboxOriginCoords(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_IsometricToCartesianSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D870 (#10108)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_CartesianToIsoSubtileCoords(int* pX, int* pY);
 //D2Common.0x6FD8D8A0 (#10109)

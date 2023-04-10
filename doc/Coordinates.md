@@ -39,23 +39,23 @@ Precision of the coordinates:
 
 ## Conversion functions
 
-| Coordinates A                   | Coordinates B     | A => B                                             | 1.10f ordinal  | B => A                                              | 1.10f ordinal  |
-|---------------------------------|-------------------|----------------------------------------------------|----------------|-----------------------------------------------------|----------------|
-| Cartesian pixel                 | Isometric tile    | DUNGEON_CartesianToIsoTileCoords                   | D2Common@10107 | DUNGEON_IsoTileToCartesianCoords                    | D2Common@10110 |
-| Cartesian pixel                 | Isometric subtile | DUNGEON_CartesianToIsoSubtileCoords                | D2Common@10108 | DUNGEON_IsoSubTileToCartesianCoords                 | D2Common@10111 |
-| Cartesian unit                  | Isometric unit    | DUNGEON_CartesianToIsometricCoords                 | D2Common@10109 | DUNGEON_IsometricToCartesianCoords                  | D2Common@10112 |
-| Isometric Tile                  | Isometric Subtile | DUNGEON_IsoTileToSubtileCoords                     | D2Common@10113 | N/A                                                 | N/A            |
-| Cartesian (Tile BBox origin)    | Isometric tile    | DUNGEON_CartesianTileBboxOriginToIsometricCoords*   | D2Common@10114 | DUNGEON_IsometricToCartesianTileBboxOriginCoords*    | D2Common@10115 |
-| Cartesian (Subtile BBox origin) | Isometric subtile | DUNGEON_CartesianSubileBboxOriginToIsometricCoords* | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileBboxOriginCoords* | D2Common@10117 |
+| Coordinates A                   | Coordinates B     | A => B                                                | 1.10f ordinal  | B => A                                                 | 1.10f ordinal  |
+|---------------------------------|-------------------|-------------------------------------------------------|----------------|--------------------------------------------------------|----------------|
+| Cartesian pixel                 | Isometric tile    | DUNGEON_CartesianToIsoTileCoords                      | D2Common@10107 | DUNGEON_IsoTileToCartesianCoords                       | D2Common@10110 |
+| Cartesian pixel                 | Isometric subtile | DUNGEON_CartesianToIsoSubtileCoords                   | D2Common@10108 | DUNGEON_IsoSubTileToCartesianCoords                    | D2Common@10111 |
+| Cartesian unit                  | Isometric unit    | DUNGEON_CartesianToIsometricCoords                    | D2Common@10109 | DUNGEON_IsometricToCartesianCoords                     | D2Common@10112 |
+| Isometric Tile                  | Isometric Subtile | DUNGEON_IsoTileToSubtileCoords                        | D2Common@10113 | N/A                                                    | N/A            |
+| Cartesian (Draw position)       | Isometric tile    | DUNGEON_CartesianDrawPositionToIsometricCoords*       | D2Common@10114 | DUNGEON_IsometricToCartesianTileDrawPositionCoords*    | D2Common@10115 |
+| Cartesian (Draw position)       | Isometric subtile | DUNGEON_CartesianSubileDrawPositionToIsometricCoords* | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileDrawPositionCoords* | D2Common@10117 |
 
-*The `Cartesian(Sub)TileBboxOrigin` functions will snap the position to the origin of the bbox in cartesion space of the source unit.
+*The `Cartesian(Sub)TileDrawPosition` functions will provide the draw position in cartesion space of the source unit.
 
 A picture is worth a thousand words.
 Given a Tile/Subtile (green) isometric coordinate `(X;Y)`, you will obtain:
-- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileBboxOrigin` functions
+- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileDrawPosition` functions. While this is the draw position. This is not in screen coordinates, Y is still facing down!
 - The <span style="color:red">**RED**</span> dot when using the `Isometric(Sub)TileToCartesian` functions.
 
-![BBox origin](assets/img/BBoxCoordsConversion.png)
+![Draw position conversion](assets/img/DrawPositionConversion.png)
 
 
 # Screen position

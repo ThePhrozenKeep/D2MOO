@@ -114,10 +114,10 @@ EXPORTS
 	DUNGEON_IsoSubTileToCartesianCoords									@10111
 	DUNGEON_IsometricToCartesianCoords									@10112
 	DUNGEON_IsoTileToSubtileCoords										@10113
-	DUNGEON_CartesianTileBboxOriginToIsometricCoords					@10114
-	DUNGEON_IsometricToCartesianTileBboxOriginCoords					@10115
-	DUNGEON_CartesianSubileBboxOriginToIsometricCoords					@10116
-	DUNGEON_IsometricToCartesianSubtileBboxOriginCoords					@10117
+	DUNGEON_CartesianTileDrawPositionToIsometricCoords					@10114
+	DUNGEON_IsometricToCartesianTileDrawPositionCoords					@10115
+	DUNGEON_CartesianSubileDrawPositionToIsometricCoords				@10116
+	DUNGEON_IsometricToCartesianSubtileDrawPositionCoords				@10117
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120

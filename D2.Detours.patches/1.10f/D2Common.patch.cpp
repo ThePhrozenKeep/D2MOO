@@ -157,10 +157,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsoSubTileToCartesianCoords                                 @10111
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianCoords                                  @10112
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsoTileToSubtileCoords                                      @10113
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianTileBboxOriginToIsometricCoords                    @10114
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianTileBboxOriginCoords                    @10115
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianSubileBboxOriginToIsometricCoords                  @10116
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianSubtileBboxOriginCoords                 @10117
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianTileDrawPositionToIsometricCoords                  @10114
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianTileDrawPositionCoords                  @10115
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianSubileDrawPositionToIsometricCoords                @10116
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianSubtileDrawPositionCoords               @10117
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120

@@ -331,10 +331,10 @@ void __stdcall D2Common_10052(D2RoomStrc* pRoom, RECT* pRect)
 
 	D2_ASSERT(pRoom);
 
-	DUNGEON_IsometricToCartesianTileBboxOriginCoords(pRoom->nTileXPos, pRoom->nTileYPos, &nTemp, (int*)&pRect->top);
-	DUNGEON_IsometricToCartesianTileBboxOriginCoords(pRoom->nTileXPos, pRoom->nTileHeight + pRoom->nTileYPos, (int*)&pRect->left, &nTemp);
-	DUNGEON_IsometricToCartesianTileBboxOriginCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileYPos, (int*)&pRect->right, &nTemp);
-	DUNGEON_IsometricToCartesianTileBboxOriginCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileHeight + pRoom->nTileYPos, &nTemp, (int*)&pRect->bottom);
+	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileYPos, &nTemp, (int*)&pRect->top);
+	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileHeight + pRoom->nTileYPos, (int*)&pRect->left, &nTemp);
+	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileYPos, (int*)&pRect->right, &nTemp);
+	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileHeight + pRoom->nTileYPos, &nTemp, (int*)&pRect->bottom);
 
 	D2_ASSERT(pRect->top <= pRect->bottom);
 	D2_ASSERT(pRect->left <= pRect->right);
@@ -1333,7 +1333,7 @@ void __stdcall DUNGEON_IsoTileToSubtileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D710 (#10114)
-void __stdcall DUNGEON_CartesianTileBboxOriginToIsometricCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_CartesianTileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
 	*pY = 2 * nY - nX;
@@ -1358,7 +1358,7 @@ void __stdcall DUNGEON_CartesianTileBboxOriginToIsometricCoords(int nX, int nY, 
 }
 
 //D2Common.0x6FD8D790 (#10115)
-void __stdcall DUNGEON_IsometricToCartesianTileBboxOriginCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_IsometricToCartesianTileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 80 * (nX - nY);
 	*pY = 40 * (nX + nY);
@@ -1367,7 +1367,7 @@ void __stdcall DUNGEON_IsometricToCartesianTileBboxOriginCoords(int nX, int nY, 
 }
 
 //D2Common.0x6FD8D7D0 (#10116)
-void __stdcall DUNGEON_CartesianSubileBboxOriginToIsometricCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_CartesianSubileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
 	*pY = 2 * nY - nX;
@@ -1392,7 +1392,7 @@ void __stdcall DUNGEON_CartesianSubileBboxOriginToIsometricCoords(int nX, int nY
 }
 
 //D2Common.0x6FD8D830 (#10117)
-void __stdcall DUNGEON_IsometricToCartesianSubtileBboxOriginCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_IsometricToCartesianSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 16 * (nX - nY);
 	*pY = 8 * (nX + nY);
