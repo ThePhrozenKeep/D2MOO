@@ -629,22 +629,9 @@ static D2RoomTileStrc* DRLGROOMTILE_FindDestinationWarpTile(D2RoomExStrc* pRoomE
 {
 	const int nDestinationLevelId = DRLGWARP_GetWarpDestinationFromArray(pRoomEx->pLevel, nTileInformation.nTileStyle);
 	D2RoomTileStrc* pWarpTile = pRoomEx->pRoomTiles;
-	if (pWarpTile)
+	while (pWarpTile && pWarpTile->pLvlWarpTxtRecord->dwLevelId != nDestinationLevelId)
 	{
-		while (pWarpTile->pLvlWarpTxtRecord->dwLevelId != nDestinationLevelId)
-		{
-			pWarpTile = pWarpTile->pNext;
-			if (!pWarpTile)
-			{
-				FOG_DisplayWarning("ptWarp", __FILE__, __LINE__);
-				return nullptr;
-			}
-		}
-	}
-	else
-	{
-		FOG_DisplayWarning("ptWarp", __FILE__, __LINE__);
-		return nullptr;
+		pWarpTile = pWarpTile->pNext;
 	}
 	return pWarpTile;
 }
@@ -672,6 +659,12 @@ void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2RoomExStrc* pRoomEx, D2DrlgTile
 	D2C_PackedTileInformation nTileInformation{ nPackedTileInformation };
 	
 	D2RoomTileStrc* pWarpTile = DRLGROOMTILE_FindDestinationWarpTile(pRoomEx, nTileInformation);
+
+	if (!pWarpTile)
+	{
+		FOG_DisplayWarning("ptWarp", __FILE__, __LINE__);
+		return;
+	}
 
 	if (nTileInformation.nTileSequence != 0 && nTileInformation.nTileSequence != 4 || DRLGROOMTILE_AddWarp(pRoomEx, pRoomEx->nTileXPos + pTileData->nPosX, pTileData->nPosY + pRoomEx->nTileYPos, nTileInformation.nPackedValue, nTileType))
 	{
