@@ -1230,7 +1230,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		pDynamicPath->dwPrecisionY = PATH_ToFP16(tDest.Y);
 		int dwPrecisionX = pDynamicPath->dwPrecisionX >> 11;
 		int dwPrecisionY = pDynamicPath->dwPrecisionY >> 11;
-		DUNGEON_FlattenCoords_IsoToCartesian(&dwPrecisionX, &dwPrecisionY);
+		DUNGEON_IsometricToCartesianCoords(&dwPrecisionX, &dwPrecisionY);
 		pDynamicPath->dwTargetX = dwPrecisionX;
 		pDynamicPath->dwTargetY = dwPrecisionY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
@@ -1248,7 +1248,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		pDynamicPath->dwPrecisionY = dwPrecisionRoundedY;
 		int dwTargetX = pDynamicPath->dwPrecisionX >> 11;
 		int dwTargetY = pDynamicPath->dwPrecisionY >> 11;
-		DUNGEON_FlattenCoords_IsoToCartesian(&dwTargetX, &dwTargetY);
+		DUNGEON_IsometricToCartesianCoords(&dwTargetX, &dwTargetY);
 		pDynamicPath->dwTargetX = dwTargetX;
 		pDynamicPath->dwTargetY = dwTargetY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
@@ -1393,7 +1393,7 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 
 	int nMountCartesianPosX = pMountPath->dwPrecisionX >> 11;
 	int nMountCartesianPosY = pMountPath->dwPrecisionY >> 11;
-	DUNGEON_FlattenCoords_IsoToCartesian(&nMountCartesianPosX, &nMountCartesianPosY);
+	DUNGEON_IsometricToCartesianCoords(&nMountCartesianPosX, &nMountCartesianPosY);
 
 	D2RoomStrc* pMountRoom = pMountPath->pRoom;
 

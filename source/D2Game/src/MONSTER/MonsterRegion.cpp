@@ -37,8 +37,8 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
     {
         D2DrlgCoordStrc drlgCoord = {};
         memcpy(&drlgCoord, &pRoomCoordList->pBox[1], sizeof(drlgCoord));
-        DUNGEON_ExpandCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
-        DUNGEON_ExpandCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
+        DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
+        DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
         nLeft = drlgCoord.nPosX + 1;
         nTop = drlgCoord.nPosY + 1;
         nRight = drlgCoord.nWidth - (drlgCoord.nPosX + 1);
@@ -100,7 +100,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
 
                         if (nSpawnX > 0 && nSpawnY > 0)
                         {
-                            DUNGEON_ExpandCoords(&nSpawnX, &nSpawnY);
+                            DUNGEON_IsoTileToSubtileCoords(&nSpawnX, &nSpawnY);
                             const int32_t nXDiff = nX - nSpawnX;
                             const int32_t nYDiff = nY - nSpawnY;
                             if (nXDiff * nXDiff + nYDiff * nYDiff < nWarpDist)
@@ -647,8 +647,8 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2RoomStrc* pRoo
 
             if (drlgCoord.nPosX || drlgCoord.nWidth)
             {
-                DUNGEON_ExpandCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
-                DUNGEON_ExpandCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
+                DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
+                DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
 
                 for (int32_t i = (drlgCoord.nWidth - drlgCoord.nPosX) / 3 * (drlgCoord.nHeight - drlgCoord.nPosY) / 3; i > 0; --i)
                 {
@@ -742,8 +742,8 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
     {
         D2DrlgCoordStrc drlgCoord = {};
         memcpy(&drlgCoord, &pRoomCoordList->pBox[1], sizeof(drlgCoord));
-        DUNGEON_ExpandCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
-        DUNGEON_ExpandCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
+        DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
+        DUNGEON_IsoTileToSubtileCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
         nLeft = drlgCoord.nPosX + 1;
         nRight = drlgCoord.nWidth - (drlgCoord.nPosX + 1);
         nTop = drlgCoord.nPosY + 1;

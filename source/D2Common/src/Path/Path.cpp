@@ -155,7 +155,7 @@ void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY)
 		*pY = pUnit->pDynamicPath->tVelocityVector.nY;
 		*pX >>= 11;
 		*pY >>= 11;
-		DUNGEON_FlattenCoords_IsoToCartesian(pX, pY);
+		DUNGEON_IsometricToCartesianCoords(pX, pY);
 	}
 	else
 	{
@@ -573,7 +573,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	int nTargetX = pDynamicPath->dwPrecisionX >> 11;
 	int nTargetY = pDynamicPath->dwPrecisionY >> 11;
 
-	DUNGEON_FlattenCoords_IsoToCartesian(&nTargetX, &nTargetY);
+	DUNGEON_IsometricToCartesianCoords(&nTargetX, &nTargetY);
 
 	pDynamicPath->dwTargetX = nTargetX;
 	pDynamicPath->dwTargetY = nTargetY;

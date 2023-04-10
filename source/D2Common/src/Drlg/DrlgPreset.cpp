@@ -656,7 +656,7 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc*
 	nX = pDrlgMap->pDrlgCoord.nPosX;
 	nY = pDrlgMap->pDrlgCoord.nPosY;
 
-	DUNGEON_ExpandCoords(&nX, &nY);
+	DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
 
 	for (D2PresetUnitStrc* pPresetUnit = pDrlgMap->pFile->pPresetUnit; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
 	{
@@ -775,7 +775,7 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 				nX = pRoomEx->pMaze->pMap->pDrlgCoord.nPosX + pRoomEx->pMaze->pMap->pDrlgCoord.nWidth / 2;
 				nY = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY + pRoomEx->pMaze->pMap->pDrlgCoord.nHeight / 2;
 
-				DUNGEON_ExpandCoords(&nX, &nY);
+				DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
 
 				pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pRoomEx->pLevel->pDrlg->pMempool, UNIT_MONSTER, MONSTER_NAVI, MONMODE_NEUTRAL, nX, nY);
 				pPresetUnit->pNext = pRoomEx->pMaze->pMap->pPresetUnit;
@@ -803,8 +803,8 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 					nHeight = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY + (*ppFile)->nHeight;
 					nWidth = 0;
 
-					DUNGEON_ExpandCoords(&nX, &nY);
-					DUNGEON_ExpandCoords(&nWidth, &nHeight);
+					DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
+					DUNGEON_IsoTileToSubtileCoords(&nWidth, &nHeight);
 
 					while (nY < nHeight)
 					{
@@ -830,8 +830,8 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 							nHeight = pDrlgCoord.nPosY + (*ppFile)->nHeight;
 							nWidth = 0;
 
-							DUNGEON_ExpandCoords(&nX, &nY);
-							DUNGEON_ExpandCoords(&nWidth, &nHeight);
+							DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
+							DUNGEON_IsoTileToSubtileCoords(&nWidth, &nHeight);
 
 							while (nY < nHeight)
 							{
@@ -880,7 +880,7 @@ void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* 
 	{
 		nObjectX = nX + pDrlgMap->pDrlgCoord.nPosX;
 		nObjectY = i + pDrlgMap->pDrlgCoord.nPosY;
-		DUNGEON_ExpandCoords(&nObjectX, &nObjectY);
+		DUNGEON_IsoTileToSubtileCoords(&nObjectX, &nObjectY);
 		nObjectX -= 5;
 
 		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER1, OBJMODE_NEUTRAL, nObjectX, nObjectY);
@@ -1075,8 +1075,8 @@ void __fastcall DRLGPRESET_InitPresetRoomGrids(D2RoomExStrc* pRoomEx)
 	pDrlgCoord.nWidth = pRoomEx->nTileWidth;
 	pDrlgCoord.nHeight = pRoomEx->nTileHeight;
 
-	DUNGEON_ExpandCoords(&pDrlgCoord.nPosX, &pDrlgCoord.nPosY);
-	DUNGEON_ExpandCoords(&pDrlgCoord.nWidth, &pDrlgCoord.nHeight);
+	DUNGEON_IsoTileToSubtileCoords(&pDrlgCoord.nPosX, &pDrlgCoord.nPosY);
+	DUNGEON_IsoTileToSubtileCoords(&pDrlgCoord.nWidth, &pDrlgCoord.nHeight);
 
 	pPresetUnit = pRoomEx->pMaze->pMap->pPresetUnit;
 	pPrevious = NULL;
@@ -1259,7 +1259,7 @@ void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx)
 						int nX = j + pRoomEx->nTileXPos;
 						int nY = i + pRoomEx->nTileYPos;
 
-						DUNGEON_ExpandCoords(&nX, &nY);
+						DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
 
 						pMaze->pTombStoneTiles[nTombStoneTiles].nX = nX + 2;
 						pMaze->pTombStoneTiles[nTombStoneTiles].nY = nY + 2;

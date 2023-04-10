@@ -107,17 +107,17 @@ EXPORTS
 	DUNGEON_AnimateTiles												@10104
 	DUNGEON_InitRoomTileAnimation										@10105
 	DUNGEON_SaveKilledUnitGUID											@10106
-	D2Common_10107														@10107
-	DUNGEON_ScreenToWorldCoords											@10108
-	D2Common_10109														@10109
-	DUNGEON_ExpandTileCoords											@10110
-	DUNGEON_WorldToScreenCoords											@10111
-	DUNGEON_FlattenCoords_IsoToCartesian								@10112
-	DUNGEON_ExpandCoords												@10113
-	D2Common_10114														@10114
-	D2Common_10115														@10115
-	D2Common_10116														@10116
-	D2Common_10117														@10117
+	DUNGEON_CartesianToIsoTileCoords									@10107
+	DUNGEON_CartesianToIsoSubtileCoords									@10108
+	DUNGEON_CartesianToIsometricCoords									@10109
+	DUNGEON_IsoTileToCartesianCoords									@10110
+	DUNGEON_IsoSubTileToCartesianCoords									@10111
+	DUNGEON_IsometricToCartesianCoords									@10112
+	DUNGEON_IsoTileToSubtileCoords										@10113
+	DUNGEON_CartesianTileBboxOriginToIsometricCoords					@10114
+	DUNGEON_IsometricToCartesianTileBboxOriginCoords					@10115
+	DUNGEON_CartesianSubileBboxOriginToIsometricCoords					@10116
+	DUNGEON_IsometricToCartesianSubtileBboxOriginCoords					@10117
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120
