@@ -988,18 +988,12 @@ void __fastcall COLLISION_ResetCollisionMask(D2RoomStrc* pRoom, int nX, int nY, 
 //D2Common.0x6FD43CE0
 void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
 {
-	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
-	int nBoundingBoxes = 0;
-	D2BoundingBoxStrc pBoundingBoxes[3] = {};
-
-	pRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
-
-	if (pRoom)
+	if (pRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom))
 	{
-		pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
-		if (pCollisionGrid)
+		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
+			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 			if (nBoundingBoxes > 0)
 			{
 				COLLISION_ResetCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask);
