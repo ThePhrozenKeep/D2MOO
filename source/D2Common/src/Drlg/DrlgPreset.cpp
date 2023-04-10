@@ -624,8 +624,8 @@ D2MapAIStrc* __fastcall DRLGPRESET_CreateCopyOfMapAI(void* pMemPool, D2MapAIStrc
 	D2MapAIStrc* pNewMapAI = D2_ALLOC_STRC_POOL(pMemPool, D2MapAIStrc);
 
 	pNewMapAI->nPathNodes = pMapAI->nPathNodes;
-	pNewMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_CALLOC_POOL(pMemPool, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes);
-
+	pNewMapAI->pPosition = (D2MapAIPathPositionStrc*)D2_ALLOC_POOL(pMemPool, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes);
+	memcpy(pNewMapAI->pPosition, pMapAI->pPosition, sizeof(D2MapAIPathPositionStrc) * pMapAI->nPathNodes);
 	return pNewMapAI;
 }
 
