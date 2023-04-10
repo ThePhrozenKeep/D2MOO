@@ -164,8 +164,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern                                     @10121
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckAnyCollisionWithPattern                                     @10122
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern                                      @10121
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckAnyCollisionWithPattern                              @10122
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMask                                                 @10123
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSize                                         @10124
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSizeXY                                       @10125
@@ -174,9 +174,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSize                                           @10128
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSizeXY                                         @10129
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithPattern                                        @10130
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryMoveUnitPresenceMask                                   @10131
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10132                                                      @10132
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10133                                                      @10133
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryMoveUnitCollisionMask                                  @10131
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryTeleportUnitCollisionMask                              @10132
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetUnitCollisionMask                                      @10133
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinates                                        @10134
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesWithMaxDistance                         @10135
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10136                                                      @10136

@@ -788,7 +788,7 @@ uint16_t __stdcall COLLISION_CheckMaskWithSize(D2RoomStrc* pRoom, int nX, int nY
 		return COLLISION_CheckCollisionMaskForBoundingBoxRecursively(pRoom, &pBoundingBox, nMask);
 
 	default:
-		return -1;
+		return COLLIDE_ALL_MASK;
 	}
 }
 
@@ -1146,22 +1146,22 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc
 }
 
 //D2Common.0x6FD44660 (#10131)
-uint16_t __fastcall COLLISION_TryMoveUnitPresenceMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nUnitSize, uint16_t nPresenceMask, uint16_t nCollisionMask)
+uint16_t __fastcall COLLISION_TryMoveUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
 {
-	COLLISION_ResetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nPresenceMask);
+	COLLISION_ResetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nCollisionMask);
 	
-	const uint16_t nDestinationCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nCollisionMask);
+	const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nMoveConditionMask);
 
-	if (nDestinationCollisionMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_WALL))
+	if (nCollidedWithMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_WALL))
 	{
-		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nPresenceMask);
+		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nCollisionMask);
 	}
 	else
 	{
-		COLLISION_SetMaskWithSize(pRoom, nX2, nY2, nUnitSize, nPresenceMask);
+		COLLISION_SetMaskWithSize(pRoom, nX2, nY2, nUnitSize, nCollisionMask);
 	}
 
-	return nDestinationCollisionMask;
+	return nCollidedWithMask;
 }
 
 //D2Common.0x6FD44910
@@ -1174,271 +1174,73 @@ void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int
 }
 
 //D2Common.0x6FD44950 (#10132)
-uint16_t __fastcall D2Common_10132(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask)
+uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
 {
+	COLLISION_ResetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionMask);
 
-	COLLISION_ResetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionType);
-
-	uint16_t nPreviousMask = 0;
-	switch (nCollisionPattern)
+	if (const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
-	case COLLISION_PATTERN_NONE:
-		nPreviousMask = COLLISION_CheckCollisionMask(pRoom, nX2, nY2, nMask); 
-		break;
-	case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
-	case COLLISION_PATTERN_SMALL_PET_PRESENCE:
-	case COLLISION_PATTERN_SMALL_NO_PRESENCE:
-		nPreviousMask = COLLISION_CheckCollisionMaskWithAdjacentCells(pRoom, nX2, nY2, nMask);
-		break;
-	case COLLISION_PATTERN_BIG_UNIT_PRESENCE:
-	case COLLISION_PATTERN_BIG_PET_PRESENCE:
-	{
-		D2BoundingBoxStrc tBoundingBox = {};
-		COLLISION_CreateBoundingBox(&tBoundingBox, nX2, nY2, 3, 3);
-		nPreviousMask = COLLISION_CheckCollisionMaskForBoundingBoxRecursively(pRoom, &tBoundingBox, nMask);
-		break;
-	}
-	default:
-		nPreviousMask = COLLIDE_ALL_MASK;
-		break;
-	}
-
-	if (nPreviousMask)
-	{
-		COLLISION_SetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionType);
-		return nPreviousMask;
+		COLLISION_SetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionMask);
+		return nCollidedWithMask;
 	}
 	else
 	{
-		COLLISION_SetMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nCollisionType);
+		COLLISION_SetMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nCollisionMask);
 		return 0;
 	}
 
 }
 
 //D2Common.0x6FD44BB0
-uint16_t __fastcall sub_6FD44BB0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nMask1, uint16_t nMask2)
+uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
 {
-	D2BoundingBoxStrc tBoundingBox = {};
-	uint16_t nPreviousMask = 0;
+	COLLISION_ResetMaskWithSize(pRoom1, nX1, nY1, nUnitSize, nCollisionMask);
 
-	if (pRoom1)
-	{
-		switch (nUnitSize)
-		{
-		case COLLISION_UNIT_SIZE_NONE:
-			break;
+	const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nMoveConditionMask);
 
-		case COLLISION_UNIT_SIZE_POINT:
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1, nMask1);
-			break;
+	COLLISION_SetMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nCollisionMask);
 
-		case COLLISION_UNIT_SIZE_SMALL:
-			COLLISION_ResetCollisionMask(pRoom1, nX1 - 1, nY1, nMask1);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1, nMask1);
-			COLLISION_ResetCollisionMask(pRoom1, nX1 + 1, nY1, nMask1);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1 - 1, nMask1);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1 + 1, nMask1);
-			break;
-
-		case COLLISION_UNIT_SIZE_BIG:
-			COLLISION_CreateBoundingBox(&tBoundingBox, nX1, nY1, 3, 3);
-			COLLISION_ResetCollisionMaskForBoundingBoxRecursively(pRoom1, &tBoundingBox, nMask1);
-			break;
-
-		default:
-			return COLLIDE_ALL_MASK;
-		}
-	}
-
-	switch (nUnitSize)
-	{
-	case COLLISION_UNIT_SIZE_NONE:
-	case COLLISION_UNIT_SIZE_POINT:
-		nPreviousMask = COLLISION_CheckCollisionMask(pRoom2, nX2, nY2, nMask2);
-		break;
-
-	case COLLISION_UNIT_SIZE_SMALL:
-		nPreviousMask = COLLISION_CheckCollisionMaskWithAdjacentCells(pRoom2, nX2, nY2, nMask2);
-		break;
-
-	case COLLISION_UNIT_SIZE_BIG:
-		COLLISION_CreateBoundingBox(&tBoundingBox, nX2, nY2, 3, 3);
-		nPreviousMask = COLLISION_CheckCollisionMaskForBoundingBoxRecursively(pRoom2, &tBoundingBox, nMask2);
-		break;
-
-	default:
-		return COLLIDE_ALL_MASK;
-	}
-
-	switch (nUnitSize)
-	{
-	case COLLISION_PATTERN_NONE:
-		break;
-
-	case COLLISION_UNIT_SIZE_POINT:
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2, nMask1);
-		break;
-
-	case COLLISION_UNIT_SIZE_SMALL:
-		COLLISION_SetCollisionMask(pRoom2, nX2 - 1, nY2, nMask1);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2, nMask1);
-		COLLISION_SetCollisionMask(pRoom2, nX2 + 1, nY2, nMask1);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2 - 1, nMask1);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2 + 1, nMask1);
-		break;
-
-	case COLLISION_UNIT_SIZE_BIG:
-		COLLISION_CreateBoundingBox(&tBoundingBox, nX2, nY2, 3, 3);
-		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom2, &tBoundingBox, nMask1);
-		break;
-
-	default:
-		return COLLIDE_ALL_MASK;
-	}
-
-	return nPreviousMask;
+	return nCollidedWithMask;
 }
 
 //D2Common.0x6FD44E00
-uint16_t __fastcall sub_6FD44E00(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nMask)
+uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
-
-	if (pRoom1)
-	{
-		switch (nUnitSize)
-		{
-		case COLLISION_UNIT_SIZE_POINT:
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1, nMask);
-			break;
-
-		case COLLISION_UNIT_SIZE_SMALL:
-			COLLISION_ResetCollisionMask(pRoom1, nX1 - 1, nY1, nMask);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1, nMask);
-			COLLISION_ResetCollisionMask(pRoom1, nX1 + 1, nY1, nMask);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1 - 1, nMask);
-			COLLISION_ResetCollisionMask(pRoom1, nX1, nY1 + 1, nMask);
-			break;
-
-		case COLLISION_UNIT_SIZE_BIG:
-			COLLISION_CreateBoundingBox(&pBoundingBox, nX1, nY1, 3, 3);
-			COLLISION_ResetCollisionMaskForBoundingBoxRecursively(pRoom1, &pBoundingBox, nMask);
-			break;
-
-		default:
-			break;
-		}
-	}
-
-	switch(nUnitSize)
-	{
-	case COLLISION_UNIT_SIZE_POINT:
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2, nMask);
-		break;
-
-	case COLLISION_UNIT_SIZE_SMALL:
-		COLLISION_SetCollisionMask(pRoom2, nX2 - 1, nY2, nMask);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2, nMask);
-		COLLISION_SetCollisionMask(pRoom2, nX2 + 1, nY2, nMask);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2 - 1, nMask);
-		COLLISION_SetCollisionMask(pRoom2, nX2, nY2 + 1, nMask);
-		break;
-
-	case COLLISION_UNIT_SIZE_BIG:
-		COLLISION_CreateBoundingBox(&pBoundingBox, nX2, nY2, 3, 3);
-		COLLISION_SetCollisionMaskForBoundingBoxRecursively(pRoom2, &pBoundingBox, nMask);
-		break;
-
-	default:
-		break;
-	}
-
+	COLLISION_ResetMaskWithSize(pRoom1, nX1, nY1, nUnitSize, nMask);
+	COLLISION_SetMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nMask);
 	return 0;
 }
 
 //D2Common.0x6FD44FF0
-int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask)
+int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
-	int nResult = 0;
-
 	if (pRoom1)
 	{
-		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
+		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionMask);
 	}
 
-	switch (nCollisionPattern)
+	if (const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
-	case COLLISION_PATTERN_NONE:
-		nResult = COLLISION_CheckCollisionMask(pRoom2, nX2, nY2, nMask);
-		if (nResult)
-		{
-			if (pRoom1)
-			{
-				COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
-			}
-			return nResult;
-		}
-		else
-		{
-			COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionType);
-			return COLLIDE_NONE;
-		}
-
-	case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
-	case COLLISION_PATTERN_SMALL_PET_PRESENCE:
-	case COLLISION_PATTERN_SMALL_NO_PRESENCE:
-		nResult = COLLISION_CheckAnyCollisionWithAdjacentCells(pRoom2, nX2, nY2, nMask);
-		if (nResult)
-		{
-			if (pRoom1)
-			{
-				COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
-			}
-			return nResult;
-		}
-		else
-		{
-			COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionType);
-			return COLLIDE_NONE;
-		}
-
-	case COLLISION_PATTERN_BIG_UNIT_PRESENCE:
-	case COLLISION_PATTERN_BIG_PET_PRESENCE:
-		COLLISION_CreateBoundingBox(&pBoundingBox, nX2, nY2, 3, 3);
-		nResult = COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom2, &pBoundingBox, nMask);
-		if (nResult)
-		{
-			if (pRoom1)
-			{
-				COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
-			}
-			return nResult;
-		}
-		else
-		{
-			COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionType);
-			return COLLIDE_NONE;
-		}
-
-	default:
 		if (pRoom1)
 		{
-			COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
+			COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionMask);
 		}
-		return COLLIDE_BLOCK_PLAYER;
+		return nCollidedWithMask;
+	}
+	else
+	{
+		COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionMask);
+		return COLLIDE_NONE;
 	}
 }
 
 //D2Common.0x6FD451D0 (#10133)
-// TODO: Name
-void __fastcall D2Common_10133(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType)
+void __fastcall COLLISION_SetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask)
 {
 	if (pRoom1)
 	{
-		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionType);
-		COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionType);
+		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionMask);
+		COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionMask);
 	}
 }
 

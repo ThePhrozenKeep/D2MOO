@@ -1179,7 +1179,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
 			}
-			pDynamicPath->unk0x54 = sub_6FD44BB0(
+			pDynamicPath->unk0x54 = COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwUnitSize,
@@ -1194,7 +1194,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 	{
 		if (tDest.X || tDest.Y)
 		{
-			D2Common_10133(
+			COLLISION_SetUnitCollisionMask(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwCollisionPattern,

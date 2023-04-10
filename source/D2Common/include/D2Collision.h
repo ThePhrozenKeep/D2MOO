@@ -132,19 +132,19 @@ D2COMMON_DLL_DECL void __stdcall COLLISION_SetMaskWithSizeXY(D2RoomStrc* pRoom, 
 //D2Common.0x6FD44600
 void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD44660 (#10131)
-D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryMoveUnitPresenceMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nPresenceMask, uint16_t nCollisionMask);
+D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryMoveUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD44910
 void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int nCenterX, int nCenterY, unsigned int nSizeX, unsigned int nSizeY);
 //D2Common.0x6FD44950 (#10132)
-D2COMMON_DLL_DECL uint16_t __fastcall D2Common_10132(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
+D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD44BB0
-uint16_t __fastcall sub_6FD44BB0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nMask1, uint16_t nMask2);
+uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD44E00
-uint16_t __fastcall sub_6FD44E00(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nMask);
+uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD44FF0
-int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
+int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD451D0 (#10133)
-D2COMMON_DLL_DECL void __fastcall D2Common_10133(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, int nCollisionType);
+D2COMMON_DLL_DECL void __fastcall COLLISION_SetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask);
 //D2Common.0x6FD45210 (#11263)
 //Returns true if a collision with mask was found. pEndCoord will be set to the collision location.
 D2COMMON_DLL_DECL BOOL __stdcall COLLISION_RayTrace(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionMask);
