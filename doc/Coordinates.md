@@ -48,11 +48,11 @@ Precision of the coordinates:
 | Cartesian (Draw position)       | Isometric tile    | DUNGEON_CartesianDrawPositionToIsometricCoords*       | D2Common@10114 | DUNGEON_IsometricToCartesianTileDrawPositionCoords*    | D2Common@10115 |
 | Cartesian (Draw position)       | Isometric subtile | DUNGEON_CartesianSubileDrawPositionToIsometricCoords* | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileDrawPositionCoords* | D2Common@10117 |
 
-*The `Cartesian(Sub)TileDrawPosition` functions will provide the draw position in cartesion space of the source unit.
+*The `Cartesian(Sub)TileDrawPosition` functions will provide the draw position in cartesian space of the source unit.
 
 A picture is worth a thousand words.
 Given a Tile/Subtile (green) isometric coordinate `(X;Y)`, you will obtain:
-- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileDrawPosition` functions. While this is the draw position. This is not in screen coordinates, Y is still facing down!
+- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileDrawPosition` functions. While this is the draw position, this is not in screen coordinates, Y is still facing down!
 - The <span style="color:red">**RED**</span> dot when using the `Isometric(Sub)TileToCartesian` functions.
 
 ![Draw position conversion](assets/img/DrawPositionConversion.png)
