@@ -584,38 +584,27 @@ int __stdcall COLLISION_CheckAnyCollisionWithPattern(D2RoomStrc* pRoom, int nX, 
 //D2Common.0x6FD428D0
 BOOL __fastcall COLLISION_CheckAnyCollisionForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
 {
-	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
-	int nBoundingBoxes = 0;
-	D2BoundingBoxStrc pBoundingBoxes[3] = {};
-
-	pRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom);
-
-	if (!pRoom)
+	if (pRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, pBoundingBox->nLeft, pBoundingBox->nBottom))
 	{
-		return TRUE;
-	}
-
-	pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
-	if (!pCollisionGrid)
-	{
-		return TRUE;
-	}
-
-	nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
-	if (nBoundingBoxes <= 0 || COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask))
-	{
-		return TRUE;
-	}
-
-	for (int i = 1; i < nBoundingBoxes; ++i)
-	{
-		if (COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom, &pBoundingBoxes[i], nMask))
+		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			return TRUE;
+			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
+			if (nBoundingBoxes > 0 && COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask) == 0)
+			{
+				for (int i = 1; i < nBoundingBoxes; ++i)
+				{
+					if(COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom, &pBoundingBoxes[i], nMask) != 0)
+					{
+						return TRUE;
+					}
+				}
+				// No collision found!
+				return FALSE;
+			}
 		}
 	}
-
-	return FALSE;
+	return TRUE;
 }
 
 //D2Common.0x6FD42A30
