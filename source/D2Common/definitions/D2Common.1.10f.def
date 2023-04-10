@@ -131,7 +131,7 @@ EXPORTS
 	COLLISION_SetMaskWithSize											@10128
 	COLLISION_SetMaskWithSizeXY											@10129
 	COLLISION_SetMaskWithPattern										@10130
-	D2Common_10131														@10131
+	COLLISION_TryMoveUnitPresenceMask									@10131
 	D2Common_10132														@10132
 	D2Common_10133														@10133
 	COLLISION_GetFreeCoordinates										@10134

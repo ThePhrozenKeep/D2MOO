@@ -174,7 +174,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSize                                           @10128
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithSizeXY                                         @10129
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_SetMaskWithPattern                                        @10130
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10131                                                      @10131
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_TryMoveUnitPresenceMask                                   @10131
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10132                                                      @10132
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10133                                                      @10133
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinates                                        @10134

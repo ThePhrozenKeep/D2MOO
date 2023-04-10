@@ -1146,56 +1146,22 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc
 }
 
 //D2Common.0x6FD44660 (#10131)
-uint16_t __fastcall D2Common_10131(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nUnitSize, int nCollisionType, uint16_t nMask)
+uint16_t __fastcall COLLISION_TryMoveUnitPresenceMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nUnitSize, uint16_t nPresenceMask, uint16_t nCollisionMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
-	uint16_t v10 = 0;
+	COLLISION_ResetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nPresenceMask);
+	
+	const uint16_t nDestinationCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nCollisionMask);
 
-	if (pRoom)
+	if (nDestinationCollisionMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_WALL))
 	{
-		switch (nUnitSize)
-		{
-		case COLLISION_UNIT_SIZE_NONE:
-			break;
-		
-		case COLLISION_UNIT_SIZE_POINT:
-			COLLISION_ResetCollisionMask(pRoom, nX1, nY1, nCollisionType);
-			break;
-
-		case COLLISION_UNIT_SIZE_SMALL:
-			COLLISION_ResetCollisionMask(pRoom, nX1 - 1, nY1, nCollisionType);
-			COLLISION_ResetCollisionMask(pRoom, nX1, nY1, nCollisionType);
-			COLLISION_ResetCollisionMask(pRoom, nX1 + 1, nY1, nCollisionType);
-			COLLISION_ResetCollisionMask(pRoom, nX1, nY1 - 1, nCollisionType);
-			COLLISION_ResetCollisionMask(pRoom, nX1, nY1 + 1, nCollisionType);
-			break;
-
-		case COLLISION_UNIT_SIZE_BIG:
-			COLLISION_CreateBoundingBox(&pBoundingBox, nX1, nY1, 3, 3);
-			COLLISION_ResetCollisionMaskForBoundingBoxRecursively(pRoom, &pBoundingBox, nCollisionType);
-			break;
-
-		default:
-			break;
-		}
-
-		v10 = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nMask);
+		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nPresenceMask);
 	}
 	else
 	{
-		v10 = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nMask);
+		COLLISION_SetMaskWithSize(pRoom, nX2, nY2, nUnitSize, nPresenceMask);
 	}
 
-	if (v10 & 5)
-	{
-		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nCollisionType);
-	}
-	else
-	{
-		COLLISION_SetMaskWithSize(pRoom, nX2, nY2, nUnitSize, nCollisionType);
-	}
-
-	return v10;
+	return nDestinationCollisionMask;
 }
 
 //D2Common.0x6FD44910

@@ -132,7 +132,7 @@ D2COMMON_DLL_DECL void __stdcall COLLISION_SetMaskWithSizeXY(D2RoomStrc* pRoom, 
 //D2Common.0x6FD44600
 void __fastcall COLLISION_SetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD44660 (#10131)
-D2COMMON_DLL_DECL uint16_t __fastcall D2Common_10131(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, int nCollisionType, uint16_t nMask);
+D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryMoveUnitPresenceMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nPresenceMask, uint16_t nCollisionMask);
 //D2Common.0x6FD44910
 void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int nCenterX, int nCenterY, unsigned int nSizeX, unsigned int nSizeY);
 //D2Common.0x6FD44950 (#10132)
