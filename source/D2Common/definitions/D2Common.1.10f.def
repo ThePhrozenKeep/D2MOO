@@ -1282,7 +1282,7 @@ EXPORTS
 	UNITROOM_AddUnitToRoomEx											@11279
 	MONSTERS_GetSpawnMode_XY											@11280
 	D2Common_11281_CollisionPatternFromSize								@11281
-	D2Common_11282_Unused												@11282
+	PATH_GetCollisionPatternFromMonStats2Txt							@11282
 	SKILLS_CalculateKickDamage											@11283
 	MISSILE_EvaluateMissileFormula										@11284
 	MISSILE_GetMinDamage												@11285

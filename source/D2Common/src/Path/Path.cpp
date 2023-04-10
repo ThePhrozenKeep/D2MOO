@@ -15,10 +15,12 @@
 
 static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
 
-// Always used with index < 4 in the original dll, but we still have more than 4 values ?
-static const D2C_CollisionFlags gaCollisionPatternsFromSize_6FDD1DE4[4] =
+static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
-	COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_MISSILE //, COLLIDE_NONE, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_NONE, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_BLOCK_PLAYER, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK, COLLIDE_ALL_MASK
+	COLLISION_PATTERN_NONE,
+	COLLISION_PATTERN_SMALL_UNIT_PRESENCE,
+	COLLISION_PATTERN_SMALL_UNIT_PRESENCE,
+	COLLISION_PATTERN_BIG_UNIT_PRESENCE
 };
 
 static const int dword_6FDD1E98[] =
@@ -425,28 +427,27 @@ void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicP
 }
 
 //D2Common.0x6FDA91B0 (#11282)
-//TODO: Find a name
-int __stdcall D2Common_11282_Unused(int nMonsterId)
+//Unused
+int __stdcall PATH_GetCollisionPatternFromMonStats2Txt(int nMonsterId)
 {
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	int nCollisionPattern = 0;
 
 	pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
-	if (pMonStats2TxtRecord && pMonStats2TxtRecord->nSizeX >= 0 && pMonStats2TxtRecord->nSizeX < 4)
+	if (pMonStats2TxtRecord && pMonStats2TxtRecord->nSizeX >= 0 && pMonStats2TxtRecord->nSizeX < COLLISION_UNIT_SIZE_COUNT)
 	{
-		nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[pMonStats2TxtRecord->nSizeX];
+		D2C_CollisionPattern nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[pMonStats2TxtRecord->nSizeX];
 
 		if (pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_REVIVE] || pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_SMALL])
 		{
 			if (!(pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_ISATT]))
 			{
-				if (nCollisionPattern == 1)
+				if (nCollisionPattern == COLLISION_PATTERN_SMALL_UNIT_PRESENCE)
 				{
-					nCollisionPattern = 3;
+					nCollisionPattern = COLLISION_PATTERN_SMALL_PET_PRESENCE;
 				}
-				else if (nCollisionPattern == 2)
+				else if (nCollisionPattern == COLLISION_PATTERN_BIG_UNIT_PRESENCE)
 				{
-					nCollisionPattern = 4;
+					nCollisionPattern = COLLISION_PATTERN_BIG_PET_PRESENCE;
 				}
 			}
 		}
@@ -454,35 +455,35 @@ int __stdcall D2Common_11282_Unused(int nMonsterId)
 		return nCollisionPattern;
 	}
 
-	return 1;
+	return COLLISION_PATTERN_SMALL_UNIT_PRESENCE;
 }
 
 //D2Common.0x6FDA9250 (#11281)
 int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize)
 {
-	if (nSize >= 0 && nSize < 4)
+	if (nSize < 0 && nSize >= COLLISION_UNIT_SIZE_COUNT)
 	{
-		const D2C_CollisionFlags nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[nSize];
-		if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && MONSTERS_CanBeInTown(pUnit))
+		return COLLISION_PATTERN_SMALL_UNIT_PRESENCE;
+	}
+	
+	const D2C_CollisionPattern nCollisionPattern = gaCollisionPatternsFromSize_6FDD1DE4[nSize];
+	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && MONSTERS_CanBeInTown(pUnit))
+	{
+		const D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
+		if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]))
 		{
-			const D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pUnit->dwClassId);
-			if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]))
+			if (nCollisionPattern == COLLISION_PATTERN_SMALL_UNIT_PRESENCE)
 			{
-				if (nCollisionPattern == COLLIDE_BLOCK_PLAYER)
-				{
-					return COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_MISSILE;
-				}
-				else if (nCollisionPattern == COLLIDE_BLOCK_MISSILE)
-				{
-					return COLLIDE_WALL;
-				}
+				return COLLISION_PATTERN_SMALL_PET_PRESENCE;
+			}
+			else if (nCollisionPattern == COLLISION_PATTERN_BIG_UNIT_PRESENCE)
+			{
+				return COLLISION_PATTERN_BIG_PET_PRESENCE;
 			}
 		}
-
-		return nCollisionPattern;
 	}
 
-	return COLLIDE_BLOCK_PLAYER;
+	return nCollisionPattern;
 }
 
 //D2Common.0x6FDA92F0 (#10214)
@@ -549,7 +550,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 		if (nClassId == MONSTER_WRAITH1)
 		{
-			pDynamicPath->dwCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
+			pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 			pDynamicPath->unk0x50 = 0x804;
 			pDynamicPath->nDistMax = 14;
 		}
@@ -695,7 +696,7 @@ void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 	else
 	{
 		D2Common_10223(pUnit, 1);
-		pUnit->pDynamicPath->dwCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
+		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 		PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		D2Common_10222(pUnit);
 		D2Common_10233(pUnit->pDynamicPath);
@@ -714,7 +715,7 @@ void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 	D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_MONSTER);
 	if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == 32768)
 	{
-		uint32_t nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
+		int nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
 
 		if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
@@ -722,7 +723,7 @@ void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
 
 			if (nClassId == MONSTER_WRAITH1 || nClassId == MONSTER_BIRD1 || nClassId == MONSTER_BIRD2 || nClassId == MONSTER_PARROT)
 			{
-				nCollisionPattern = COLLIDE_BLOCK_PLAYER | COLLIDE_WALL;
+				nCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 			}
 		}
 

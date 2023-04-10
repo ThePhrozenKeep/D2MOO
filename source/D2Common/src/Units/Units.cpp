@@ -202,7 +202,7 @@ int __stdcall UNITS_GetUnitSizeX(D2UnitStrc* pUnit)
 		switch (pUnit->dwUnitType)
 		{
 		case UNIT_PLAYER:
-			return 2;
+			return COLLISION_UNIT_SIZE_SMALL;
 
 		case UNIT_MONSTER:
 			pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId);
@@ -210,13 +210,13 @@ int __stdcall UNITS_GetUnitSizeX(D2UnitStrc* pUnit)
 			{
 				return pMonStats2TxtRecord->nSizeX;
 			}
-			return 0;
+			return COLLISION_UNIT_SIZE_NONE;
 
 		case UNIT_OBJECT:
 			return pUnit->pObjectData->pObjectTxt->dwSizeX;
 
 		case UNIT_ITEM:
-			return 1;
+			return COLLISION_UNIT_SIZE_POINT;
 
 		case UNIT_MISSILE:
 			pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(pUnit->dwClassId);
@@ -224,14 +224,14 @@ int __stdcall UNITS_GetUnitSizeX(D2UnitStrc* pUnit)
 			{
 				return pMissilesTxtRecord->nSize;
 			}
-			return 0;
+			return COLLISION_UNIT_SIZE_NONE;
 
 		default:
-			return 0;
+			return COLLISION_UNIT_SIZE_NONE;
 		}
 	}
 	
-	return 0;
+	return COLLISION_UNIT_SIZE_NONE;
 }
 
 //D2Common.0x6FDBDA00 (#10337)

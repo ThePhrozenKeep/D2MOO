@@ -213,7 +213,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA9190 (#10156)
 D2COMMON_DLL_DECL void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA91B0 (#11282)
-D2COMMON_DLL_DECL int __stdcall D2Common_11282_Unused(int nMonsterId);
+D2COMMON_DLL_DECL int __stdcall PATH_GetCollisionPatternFromMonStats2Txt(int nMonsterId);
 //D2Common.0x6FDA9250 (#11281)
 D2COMMON_DLL_DECL int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize);
 //D2Common.0x6FDA92F0 (#10214)

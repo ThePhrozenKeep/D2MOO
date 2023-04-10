@@ -14,6 +14,27 @@ struct D2BoundingBoxStrc
 	int32_t nTop;								//0x0C
 };
 
+// Size of the unit in subtiles
+enum D2C_CollisionUnitSize
+{
+	COLLISION_UNIT_SIZE_NONE  = 0,
+	COLLISION_UNIT_SIZE_POINT = 1, // Occupies 1 subtile in width
+	COLLISION_UNIT_SIZE_SMALL = 2, // Occupies 2 subtiles in width
+	COLLISION_UNIT_SIZE_BIG   = 3, // Occupies 3 subtiles in width
+	COLLISION_UNIT_SIZE_COUNT
+};
+
+enum D2C_CollisionPattern
+{
+	COLLISION_PATTERN_NONE = 0,
+	COLLISION_PATTERN_SMALL_UNIT_PRESENCE = 1,
+	COLLISION_PATTERN_BIG_UNIT_PRESENCE = 2,
+	// Actually linked to whether a monster may be attacked?
+	COLLISION_PATTERN_SMALL_PET_PRESENCE  = 3,
+	COLLISION_PATTERN_BIG_PET_PRESENCE    = 4,
+	COLLISION_PATTERN_SMALL_NO_PRESENCE   = 5,
+};
+
 enum D2C_CollisionFlags : uint32_t
 {
 	COLLIDE_NONE = 0x0000,
