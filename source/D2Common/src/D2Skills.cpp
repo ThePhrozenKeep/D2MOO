@@ -3323,7 +3323,7 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 		pRoom = UNITS_GetRoom(pUnit1);
 		D2_ASSERT(pRoom);
 
-		if (COLLISION_CheckMaskWithPattern2(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_WALKING_UNIT))
+		if (COLLISION_CheckAnyCollisionWithPattern(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_WALKING_UNIT))
 		{
 			pCoord.nX = pCoords2.nX;
 			pCoord.nY = pCoords2.nY;

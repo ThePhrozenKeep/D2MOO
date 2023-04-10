@@ -93,17 +93,18 @@ int __fastcall COLLISION_AdaptBoundingBoxToGrid(D2RoomStrc* pRoom, D2BoundingBox
 //D2Common.0x6FD41CA0
 uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD41DE0 (#10121)
-D2COMMON_DLL_DECL uint16_t __stdcall COLLISION_CheckMaskWithPattern1(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
+D2COMMON_DLL_DECL uint16_t __stdcall COLLISION_CheckMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD42000
 uint16_t __fastcall COLLISION_CheckCollisionMaskWithAdjacentCells(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD42670
 uint16_t __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD42740 (#10122)
-D2COMMON_DLL_DECL int __stdcall COLLISION_CheckMaskWithPattern2(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
+D2COMMON_DLL_DECL int __stdcall COLLISION_CheckAnyCollisionWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask);
 //D2Common.0x6FD428D0
-int __fastcall sub_6FD428D0(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
+// Faster than COLLISION_CheckCollisionMaskForBoundingBoxRecursively since can stop as soon as a collision is found.
+BOOL __fastcall COLLISION_CheckAnyCollisionForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask);
 //D2Common.0x6FD42A30
-int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
+BOOL __fastcall COLLISION_CheckAnyCollisionWithAdjacentCells(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask);
 //D2Common.0x6FD43080 (#10119)
 D2COMMON_DLL_DECL uint16_t __stdcall COLLISION_CheckMaskWithSize(D2RoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD432A0 (#10128)

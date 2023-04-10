@@ -121,8 +121,8 @@ EXPORTS
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120
-	COLLISION_CheckMaskWithPattern1										@10121
-	COLLISION_CheckMaskWithPattern2										@10122
+	COLLISION_CheckMaskWithPattern										@10121
+	COLLISION_CheckAnyCollisionWithPattern								@10122
 	COLLISION_ResetMask													@10123
 	COLLISION_ResetMaskWithSize											@10124
 	COLLISION_ResetMaskWithSizeXY										@10125

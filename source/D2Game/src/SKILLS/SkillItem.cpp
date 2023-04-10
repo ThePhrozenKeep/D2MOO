@@ -1874,7 +1874,7 @@ int32_t __fastcall SKILLITEM_FindTargetPosition(D2GameStrc* pGame, D2UnitStrc* p
     {
         const int32_t nX = nUnitX + ITEMS_RollRandomNumber(&pUnit->pSeed) % 40 - 20;
         const int32_t nY = nUnitY + ITEMS_RollRandomNumber(&pUnit->pSeed) % 40 - 20;
-        if (!COLLISION_CheckMaskWithPattern1(pRoom, nX, nY, nCollisionPattern, nMask))
+        if (!COLLISION_CheckMaskWithPattern(pRoom, nX, nY, nCollisionPattern, nMask))
         {
             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
             return 1;

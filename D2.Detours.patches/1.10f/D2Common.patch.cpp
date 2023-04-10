@@ -164,8 +164,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern1                                     @10121
-    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern2                                     @10122
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithPattern                                     @10121
+    PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckAnyCollisionWithPattern                                     @10122
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMask                                                 @10123
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSize                                         @10124
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_ResetMaskWithSizeXY                                       @10125

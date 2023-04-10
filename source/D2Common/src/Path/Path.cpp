@@ -374,7 +374,7 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 			nX += nOffsetX;
 			nY += nOffsetY;
 
-			if (COLLISION_CheckMaskWithPattern2(pPathInfo->pRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
 			{
 				break;
 			}

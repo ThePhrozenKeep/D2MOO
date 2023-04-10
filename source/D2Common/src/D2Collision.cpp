@@ -440,8 +440,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2Room
 }
 
 //D2Common.0x6FD41DE0 (#10121)
-// TODO: Better name (Find difference to #10122)
-uint16_t __stdcall COLLISION_CheckMaskWithPattern1(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
+uint16_t __stdcall COLLISION_CheckMaskWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
 	D2BoundingBoxStrc pBoundingBox = {};
 
@@ -558,33 +557,32 @@ uint16_t __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int 
 }
 
 //D2Common.0x6FD42740 (#10122)
-// TODO: Better name (Find difference to #10121)
-int __stdcall COLLISION_CheckMaskWithPattern2(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
+int __stdcall COLLISION_CheckAnyCollisionWithPattern(D2RoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
 	D2BoundingBoxStrc pBoundingBox = {};
 
 	switch (nCollisionPattern)
 	{
 	case COLLISION_PATTERN_NONE:
-		return COLLISION_CheckMask(pRoom, nX, nY, nMask);
+		return COLLISION_CheckMask(pRoom, nX, nY, nMask) != 0;
 
 	case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
 	case COLLISION_PATTERN_SMALL_PET_PRESENCE:
 	case COLLISION_PATTERN_SMALL_NO_PRESENCE:
-		return sub_6FD42A30(pRoom, nX, nY, nMask);
+		return COLLISION_CheckAnyCollisionWithAdjacentCells(pRoom, nX, nY, nMask);
 
 	case COLLISION_PATTERN_BIG_UNIT_PRESENCE:
 	case COLLISION_PATTERN_BIG_PET_PRESENCE:
 		COLLISION_CreateBoundingBox(&pBoundingBox, nX, nY, 3, 3);
-		return sub_6FD428D0(pRoom, &pBoundingBox, nMask);
+		return COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom, &pBoundingBox, nMask);
 
 	default:
-		return 1;
+		return TRUE;
 	}
 }
 
 //D2Common.0x6FD428D0
-int __fastcall sub_6FD428D0(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
+BOOL __fastcall COLLISION_CheckAnyCollisionForBoundingBoxRecursively(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
 {
 	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
 	int nBoundingBoxes = 0;
@@ -594,35 +592,35 @@ int __fastcall sub_6FD428D0(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, 
 
 	if (!pRoom)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
 	if (!pCollisionGrid)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 	if (nBoundingBoxes <= 0 || COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask))
 	{
-		return 1;
+		return TRUE;
 	}
 
 	for (int i = 1; i < nBoundingBoxes; ++i)
 	{
-		if (sub_6FD428D0(pRoom, &pBoundingBoxes[i], nMask))
+		if (COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom, &pBoundingBoxes[i], nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 	}
 
-	return 0;
+	return FALSE;
 }
 
 //D2Common.0x6FD42A30
 // TODO: v21
-int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask)
+BOOL __fastcall COLLISION_CheckAnyCollisionWithAdjacentCells(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask)
 {
 	D2RoomCollisionGridStrc* pRoomCollisionGrid = NULL;
 	uint16_t* pCollisionMask = NULL;
@@ -632,13 +630,13 @@ int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask)
 
 	if (!pRoom)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	pRoomCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);	
 	if (!pRoomCollisionGrid || !pRoomCollisionGrid->pCollisionMask)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (pRoomCollisionGrid->pRoomCoords.dwSubtilesLeft >= nX)
@@ -668,117 +666,117 @@ int __fastcall sub_6FD42A30(D2RoomStrc* pRoom, int nX, int nY, uint16_t nMask)
 	case 0:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[1] || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth] || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 1:
 		if (nMask & *pCollisionMask || nMask & pCollisionMask[1] || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth] || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX - 1, nY, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 2:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[1] || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX, nY - 1, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 3:
 		if (nMask & *pCollisionMask || nMask & pCollisionMask[1] || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX, nY - 1, nMask) || COLLISION_CheckCollisionMask(pRoom, nX - 1, nY, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 4:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth] || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX + 1, nY, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 6:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX + 1, nY, nMask) || COLLISION_CheckCollisionMask(pRoom, nX, nY - 1, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 		
-		return 0;
+		return FALSE;
 
 	case 8:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[1] || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX, nY + 1, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 9:
 		if (nMask & *pCollisionMask || nMask & pCollisionMask[1] || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX - 1, nY, nMask) || COLLISION_CheckCollisionMask(pRoom, nX, nY + 1, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	case 12:
 		if (nMask & *pCollisionMask || nMask & *(pCollisionMask - 1) || nMask & pCollisionMask[-pRoomCollisionGrid->pRoomCoords.dwSubtilesWidth])
 		{
-			return 1;
+			return TRUE;
 		}
 
 		if (COLLISION_CheckCollisionMask(pRoom, nX + 1, nY, nMask) || COLLISION_CheckCollisionMask(pRoom, nX, nY + 1, nMask))
 		{
-			return 1;
+			return TRUE;
 		}
 
-		return 0;
+		return FALSE;
 
 	default:
-		return 1;
+		return TRUE;
 	}
 }
 
@@ -1490,7 +1488,7 @@ int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pR
 	case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
 	case COLLISION_PATTERN_SMALL_PET_PRESENCE:
 	case COLLISION_PATTERN_SMALL_NO_PRESENCE:
-		nResult = sub_6FD42A30(pRoom2, nX2, nY2, nMask);
+		nResult = COLLISION_CheckAnyCollisionWithAdjacentCells(pRoom2, nX2, nY2, nMask);
 		if (nResult)
 		{
 			if (pRoom1)
@@ -1508,7 +1506,7 @@ int __fastcall sub_6FD44FF0(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pR
 	case COLLISION_PATTERN_BIG_UNIT_PRESENCE:
 	case COLLISION_PATTERN_BIG_PET_PRESENCE:
 		COLLISION_CreateBoundingBox(&pBoundingBox, nX2, nY2, 3, 3);
-		nResult = sub_6FD428D0(pRoom2, &pBoundingBox, nMask);
+		nResult = COLLISION_CheckAnyCollisionForBoundingBoxRecursively(pRoom2, &pBoundingBox, nMask);
 		if (nResult)
 		{
 			if (pRoom1)
