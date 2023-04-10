@@ -1106,34 +1106,18 @@ void __stdcall COLLISION_ResetMaskWithSizeXY(D2RoomStrc* pRoom, int nX, int nY, 
 //D2Common.0x6FD44370
 void __fastcall COLLISION_ResetCollisionMaskForBoundingBox(D2RoomCollisionGridStrc* pCollisionGrid, D2BoundingBoxStrc* pBoundingBox, uint16_t nMask)
 {
-	uint16_t* pCollisionMask = NULL;
-	int nX = 0;
-	int nY = 0;
+	const int32_t boxWidth = pBoundingBox->nRight - pBoundingBox->nLeft + 1;
+	const int32_t boxHeight = pBoundingBox->nTop - pBoundingBox->nBottom + 1;
+	const int32_t nCollisionMaskBeginX = pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft;
+	const int32_t nCollisionMaskBeginY = pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop;
 
-	pCollisionMask = &pCollisionGrid->pCollisionMask[(pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) + (pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop) * pCollisionGrid->pRoomCoords.dwSubtilesWidth];
-
-	if (pBoundingBox->nBottom <= pBoundingBox->nTop)
+	uint16_t* pCollisionMaskLine = &pCollisionGrid->pCollisionMask[nCollisionMaskBeginX + nCollisionMaskBeginY * pCollisionGrid->pRoomCoords.dwSubtilesWidth];
+	for (int y = 0; y < boxHeight; y++)
 	{
-		nY = (pBoundingBox->nTop - pCollisionGrid->pRoomCoords.dwSubtilesTop) - (pBoundingBox->nBottom - pCollisionGrid->pRoomCoords.dwSubtilesTop) + 1;
-		do
-		{
-			if (pBoundingBox->nLeft <= pBoundingBox->nRight)
-			{
-				nX = (pBoundingBox->nRight - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - (pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) + 1;
-				do
-				{
-					*pCollisionMask &= ~nMask;
-					++pCollisionMask;
-
-					--nX;
-				}
-				while (nX);
-			}
-			pCollisionMask += pCollisionGrid->pRoomCoords.dwSubtilesWidth + (pBoundingBox->nLeft - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - (pBoundingBox->nRight - pCollisionGrid->pRoomCoords.dwSubtilesLeft) - 1;
-
-			--nY;
+		for (int x = 0; x < boxWidth; x++) {
+			pCollisionMaskLine[x] &= ~nMask;
 		}
-		while (nY);
+		pCollisionMaskLine += pCollisionGrid->pRoomCoords.dwSubtilesWidth;
 	}
 }
 
