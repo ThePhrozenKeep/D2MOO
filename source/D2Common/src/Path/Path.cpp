@@ -155,7 +155,7 @@ void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY)
 		*pY = pUnit->pDynamicPath->tVelocityVector.nY;
 		*pX >>= 11;
 		*pY >>= 11;
-		DUNGEON_IsometricToCartesianCoords(pX, pY);
+		DUNGEON_GameToClientCoords(pX, pY);
 	}
 	else
 	{
@@ -272,8 +272,8 @@ int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 	char szText[256] = {};
 	D2CoordStrc pCoords = {};
 
-	nOldX = pDynamicPath->wPosX;
-	nOldY = pDynamicPath->wPosY;
+	nOldX = pDynamicPath->tGameCoords.wPosX;
+	nOldY = pDynamicPath->tGameCoords.wPosY;
 
 	pDynamicPath->dwCurrentPointIdx = 0;
 
@@ -384,7 +384,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 
 	if (!UNITS_CheckIfObjectOrientationIs1(pTargetUnit))
 	{
-		if (pPathInfo->pDynamicPath->wPosX >= UNITS_GetXPosition(pTargetUnit))
+		if (pPathInfo->pDynamicPath->tGameCoords.wPosX >= UNITS_GetXPosition(pTargetUnit))
 		{
 			pPathInfo->pDynamicPath->SP1.X += 2;
 		}
@@ -395,7 +395,7 @@ uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
 	}
 	else
 	{
-		if (pPathInfo->pDynamicPath->wPosY >= UNITS_GetYPosition(pTargetUnit))
+		if (pPathInfo->pDynamicPath->tGameCoords.wPosY >= UNITS_GetYPosition(pTargetUnit))
 		{
 			pPathInfo->pDynamicPath->SP1.Y += 2;
 		}
@@ -509,8 +509,8 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pDynamicPath->dwVelocity = 2048;
 	pDynamicPath->pRoom = pRoom;
 	pDynamicPath->nStepNum = 0;
-	pDynamicPath->dwPrecisionX = PATH_ToFP16(nX);
-	pDynamicPath->dwPrecisionY = PATH_ToFP16(nY);
+	pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16(nX);
+	pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16(nY);
 
 	pDynamicPath->nSavedStepsCount = 1;
 	pDynamicPath->SavedSteps[0].X = nX;
@@ -570,10 +570,10 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 		UNITROOM_AddUnitToRoom(pUnit, pDynamicPath->pRoom);
 	}
 
-	int nTargetX = pDynamicPath->dwPrecisionX >> 11;
-	int nTargetY = pDynamicPath->dwPrecisionY >> 11;
+	int nTargetX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
+	int nTargetY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
 
-	DUNGEON_IsometricToCartesianCoords(&nTargetX, &nTargetY);
+	DUNGEON_GameToClientCoords(&nTargetX, &nTargetY);
 
 	pDynamicPath->dwTargetX = nTargetX;
 	pDynamicPath->dwTargetY = nTargetY;
@@ -654,7 +654,7 @@ void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, i
 {
 	if (pDynamicPath)
 	{
-		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(PATH_ComputeDirectionFromPreciseCoords_6FDAC760(pDynamicPath->dwPrecisionX, pDynamicPath->dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
+		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(PATH_ComputeDirectionFromPreciseCoords_6FDAC760(pDynamicPath->tGameCoords.dwPrecisionX, pDynamicPath->tGameCoords.dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
 		if (a4)
 		{
 			pDynamicPath->nNewDirection = nNormalizedDirection;
@@ -685,7 +685,7 @@ void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 	if (a2 || pUnit->dwUnitType != UNIT_MONSTER)
 	{
 		D2Common_10223(pUnit, 1);
-		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->wPosX, pUnit->pDynamicPath->wPosY, 3, 3, COLLIDE_CORPSE);
+		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->tGameCoords.wPosX, pUnit->pDynamicPath->tGameCoords.wPosY, 3, 3, COLLIDE_CORPSE);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
 	else
@@ -893,7 +893,7 @@ int __stdcall PATH_GetXPosition(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath);
 
-	return pDynamicPath->wPosX;
+	return pDynamicPath->tGameCoords.wPosX;
 }
 
 //D2Common.0x6FDA9CF0 (#10163)
@@ -901,7 +901,7 @@ int __stdcall PATH_GetYPosition(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath);
 
-	return pDynamicPath->wPosY;
+	return pDynamicPath->tGameCoords.wPosY;
 }
 
 //D2Common.0x6FDA9D30 (#10194)
@@ -909,7 +909,7 @@ int __stdcall PATH_GetPrecisionX(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath);
 
-	return pDynamicPath->dwPrecisionX;
+	return pDynamicPath->tGameCoords.dwPrecisionX;
 }
 
 //D2Common.0x6FDA9D60 (#10195)
@@ -917,19 +917,19 @@ int __stdcall PATH_GetPrecisionY(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath);
 
-	return pDynamicPath->dwPrecisionY;
+	return pDynamicPath->tGameCoords.dwPrecisionY;
 }
 
 //D2Common.0x6FDA9D90 (#10196)
 void __stdcall PATH_SetPrecisionX(D2DynamicPathStrc* pDynamicPath, int nPrecisionX)
 {
-	pDynamicPath->dwPrecisionX = nPrecisionX;
+	pDynamicPath->tGameCoords.dwPrecisionX = nPrecisionX;
 }
 
 //D2Common.0x6FDA9DA0 (#10197)
 void __stdcall PATH_SetPrecisionY(D2DynamicPathStrc* pDynamicPath, int nPrecisionY)
 {
-	pDynamicPath->dwPrecisionY = nPrecisionY;
+	pDynamicPath->tGameCoords.dwPrecisionY = nPrecisionY;
 }
 
 //D2Common.0x6FDA9DB0 (#10164)
@@ -1135,11 +1135,11 @@ void __stdcall PATH_SetCollisionType(D2DynamicPathStrc* pDynamicPath, int nColli
 	{
 		if (pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_MISSILE)
 		{
-			COLLISION_ResetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwUnitSize, pDynamicPath->dwCollisionType);
+			COLLISION_ResetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, pDynamicPath->dwCollisionType);
 		}
 		else
 		{
-			COLLISION_ResetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwCollisionPattern, pDynamicPath->dwCollisionType);
+			COLLISION_ResetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, pDynamicPath->dwCollisionType);
 		}
 	}
 
@@ -1149,11 +1149,11 @@ void __stdcall PATH_SetCollisionType(D2DynamicPathStrc* pDynamicPath, int nColli
 	{
 		if (pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_MISSILE)
 		{
-			COLLISION_SetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwUnitSize, nCollisionType);
+			COLLISION_SetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, nCollisionType);
 		}
 		else
 		{
-			COLLISION_SetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwCollisionPattern, nCollisionType);
+			COLLISION_SetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, nCollisionType);
 		}
 	}
 }
@@ -1266,7 +1266,7 @@ uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 {
 	if (!pDynamicPath->dwVelocity)
 	{
-		pDynamicPath->unk0x54 = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
+		pDynamicPath->unk0x54 = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
 	}
 
 	return pDynamicPath->unk0x54;

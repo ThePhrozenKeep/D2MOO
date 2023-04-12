@@ -137,8 +137,8 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		pUnit->pDynamicPath->dwPrecisionX = dword_6FDD2580;
-		pUnit->pDynamicPath->dwPrecisionY = dword_6FDD2584;
+		pUnit->pDynamicPath->tGameCoords.dwPrecisionX = dword_6FDD2580;
+		pUnit->pDynamicPath->tGameCoords.dwPrecisionY = dword_6FDD2584;
 
 		pUnit->pDynamicPath->dwTargetX = dword_6FDD2580;
 		pUnit->pDynamicPath->dwTargetY = dword_6FDD2584;

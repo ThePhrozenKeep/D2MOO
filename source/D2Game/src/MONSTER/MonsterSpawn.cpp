@@ -403,8 +403,8 @@ D2UnitStrc* __fastcall sub_6FC68E30(D2UnkMonCreateStrc* pMonCreate)
 //    if (v12)
 //    {
 //        CopyRect((LPRECT)&v97, (const RECT*)(v12 + 16));
-//        DUNGEON_IsoTileToSubtileCoords(&v97, &v98);
-//        DUNGEON_IsoTileToSubtileCoords(&v99, &v100);
+//        DUNGEON_GameTileToSubtileCoords(&v97, &v98);
+//        DUNGEON_GameTileToSubtileCoords(&v99, &v100);
 //        v13 = v1->pRoomCoordList;
 //        v91 = 1;
 //        v89 = *(D2DrlgTileDataStrc**)(v13 + 40);

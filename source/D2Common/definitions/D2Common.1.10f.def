@@ -107,17 +107,17 @@ EXPORTS
 	DUNGEON_AnimateTiles												@10104
 	DUNGEON_InitRoomTileAnimation										@10105
 	DUNGEON_SaveKilledUnitGUID											@10106
-	DUNGEON_CartesianToIsoTileCoords									@10107
-	DUNGEON_CartesianToIsoSubtileCoords									@10108
-	DUNGEON_CartesianToIsometricCoords									@10109
-	DUNGEON_IsoTileToCartesianCoords									@10110
-	DUNGEON_IsoSubTileToCartesianCoords									@10111
-	DUNGEON_IsometricToCartesianCoords									@10112
-	DUNGEON_IsoTileToSubtileCoords										@10113
-	DUNGEON_CartesianTileDrawPositionToIsometricCoords					@10114
-	DUNGEON_IsometricToCartesianTileDrawPositionCoords					@10115
-	DUNGEON_CartesianSubileDrawPositionToIsometricCoords				@10116
-	DUNGEON_IsometricToCartesianSubtileDrawPositionCoords				@10117
+	DUNGEON_ClientToGameTileCoords										@10107
+	DUNGEON_ClientToGameSubtileCoords									@10108
+	DUNGEON_ClientToGameCoords											@10109
+	DUNGEON_GameTileToClientCoords										@10110
+	DUNGEON_GameSubtileToClientCoords									@10111
+	DUNGEON_GameToClientCoords											@10112
+	DUNGEON_GameTileToSubtileCoords										@10113
+	DUNGEON_ClientTileDrawPositionToGameCoords							@10114
+	DUNGEON_GameToClientTileDrawPositionCoords							@10115
+	DUNGEON_ClientSubileDrawPositionToGameCoords						@10116
+	DUNGEON_GameToClientSubtileDrawPositionCoords						@10117
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120

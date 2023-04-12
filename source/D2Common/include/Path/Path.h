@@ -55,7 +55,7 @@ struct D2PathPointStrc
 struct D2DynamicPathStrc
 {
 	static const size_t MAXPATHLEN = 78;
-	union // In Isometric coordinates
+	union
 	{
 		struct
 		{
@@ -70,9 +70,9 @@ struct D2DynamicPathStrc
 			uint32_t dwPrecisionX;				//0x00
 			uint32_t dwPrecisionY;				//0x04
 		};
-	};
-	uint32_t dwTargetX;							//0x08 In cartesian coordinates
-	uint32_t dwTargetY;							//0x0C
+	} tGameCoords;
+	uint32_t dwTargetX;							//0x08 Pixels in client coordinates
+	uint32_t dwTargetY;							//0x0C Pixels in client coordinates
 	D2PathPointStrc SP1;						//0x10
 	D2PathPointStrc SP2;						//0x14
 	D2PathPointStrc SP3;						//0x18

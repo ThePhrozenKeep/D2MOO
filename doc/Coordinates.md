@@ -5,57 +5,82 @@ We'll try to list them with their various precisions using terms that will be re
 
 ![D2 Coordinates](assets/img/Coordinates.png)
 
-# World coordinates
+# Coordinates
 
-## Cartesian coordinates
+The game uses a 2d grid with various resolutions depending on what it needs to achieve.
+This 2d grid is then projected using an Isometric projection (actually a Dimetric projection which leads to a 2:1 ratio).
 
-The cartesian coordinates are alined with the screen axes (but not the same oritentation!)
+To avoid simplify things and avoid naming issues, we'll be speaking of "Game coordinates" for all the logic, and "Client" coordinates for the projected coordinates.
 
-- `Floor tiles` are 160x80 pixels.
-  - It is made of 5x5 `Subtiles` of 16x8 pixels each
-- `Wall tiles` have a varying dimension, but are made of blocks of 32x32 pixels
+## Game coordinates
 
-## Isometric coordinates
+To simplify, game coordinates are aligned with the tiles axes.
 
-To simplify, Isometric coordinates are aligned with the tiles axes and can be obtained with the formula:
+The following formulae can be used to transform between game and client coordinates (assuming the same precision).
 
-- `isoX =  cartX + 2 * cartY`
-- `isoY = -cartX + 2 * cartY`
+### Game to client (dimetric projection)
+- `clientX = 2 * gameY + gameX`
+- `clientY = 2 * gameY - gameX`
 
-Precision of the coordinates:
+### Client to game
+- `gameX = (clientX - clientY) / 2`
+- `gameY = (clientX + clientY) / 4`
 
-- `Room`: Used to group units and tiles in a single entity. Its size is 8x8 `Floor tiles`.
-- `Floor tiles`: Its size is 5x5 `Subtiles`.
-- `Subtiles`: This is the precision used to determine collision flags and properties. Equivalent to 8x8 `World coordinates` units.
-- `World coordinates`: Granularity used for collisions, light computations and position of moving units in general.
-- `Game coordinates`: Used for paths, uses a 16bit fixed point representation of the `World position`.
+### Precision of the coordinates
+
+| Precision              | Ratio to parent | Size in game coords | Names in D2Moo | Desc                                                                                              |
+|------------------------|-----------------|---------------------|----------------|---------------------------------------------------------------------------------------------------|
+| Room                   | 1               | 40                  | RoomX/Y        | Used to group units and tiles in a single entity                                                  |
+| Floor tiles            | 8               | 5                   | TilesX/Y       | Group of subtiles used for map edition                                                            |
+| Subtiles/Gamecoords    | 5               | 1                   | X/Y            | Used to determine floor collision flags and properties. (Called GameSquare in the original code?) |
+| Fractional coordinates | 2¹⁶ = 65536     | 1/65536             | PrecisionX/Y   | Used for paths, 16bit fixed point representation of the Game Coordinates                          |
+
+There are also `Light coordinates`: 1/8 subtile (to verify).
 
 ## Cardinal points
 
-- East: Positive X
-- West: Negative X
-- South: Positive Y
-- North: Negative Y
+Some code/assets may refer to cardinal points for orientation (for example the Rogue Encampment exit).
+
+- **East**: Positive X
+- **West**: Negative X
+- **South**: Positive Y
+- **North**: Negative Y
+
+## Client coordinates
+
+The client coordinates are aligned with the screen axes (but not the same oritentation!). They are the coordinates obtained by going through the dimetric projection.
+This matches the pixels representation of the game (if we ignore the fake perspective option). All graphics assets are represented in this coordinate system.
+
+A "square" of the `Game coordinates` grid is represented as a diamond shape in the client coordinates. Note that walls are however represented in blocks of **32x32** pixels.
+
+| Precision           | Ratio to parent | Size in pixels |
+|---------------------|-----------------|----------------|
+| Room                | 1               | 1280x640       |
+| Floor tiles         | 8               | 160x80         |
+| Subtiles/Gamecoords | 5               | 32x16          |
+| Wall block          | 1/2             | 32x32          |
+
+![Dimetric projection](assets/img/DimetricProjection.png)
 
 ## Conversion functions
 
-| Coordinates A                   | Coordinates B     | A => B                                                | 1.10f ordinal  | B => A                                                 | 1.10f ordinal  |
-|---------------------------------|-------------------|-------------------------------------------------------|----------------|--------------------------------------------------------|----------------|
-| Cartesian pixel                 | Isometric tile    | DUNGEON_CartesianToIsoTileCoords                      | D2Common@10107 | DUNGEON_IsoTileToCartesianCoords                       | D2Common@10110 |
-| Cartesian pixel                 | Isometric subtile | DUNGEON_CartesianToIsoSubtileCoords                   | D2Common@10108 | DUNGEON_IsoSubTileToCartesianCoords                    | D2Common@10111 |
-| Cartesian unit                  | Isometric unit    | DUNGEON_CartesianToIsometricCoords                    | D2Common@10109 | DUNGEON_IsometricToCartesianCoords                     | D2Common@10112 |
-| Isometric Tile                  | Isometric Subtile | DUNGEON_IsoTileToSubtileCoords                        | D2Common@10113 | N/A                                                    | N/A            |
-| Cartesian (Draw position)       | Isometric tile    | DUNGEON_CartesianDrawPositionToIsometricCoords*       | D2Common@10114 | DUNGEON_IsometricToCartesianTileDrawPositionCoords*    | D2Common@10115 |
-| Cartesian (Draw position)       | Isometric subtile | DUNGEON_CartesianSubileDrawPositionToIsometricCoords* | D2Common@10116 | DUNGEON_IsometricToCartesianSubtileDrawPositionCoords* | D2Common@10117 |
+| Coordinates A | Coordinates B            | A => B                                           | 1.10f ordinal  | B => A                                          | 1.10f ordinal  |
+|---------------|--------------------------|--------------------------------------------------|----------------|-------------------------------------------------|----------------|
+| Game tile     | Client pixel             | DUNGEON_GameTileToClientCoords                   | D2Common@10110 | DUNGEON_ClientToGameTileCoords                  | D2Common@10107 |
+| Game subtile  | Client pixel             | DUNGEON_GameSubTileToClientCoords                | D2Common@10111 | DUNGEON_ClientToGameSubtileCoords               | D2Common@10108 |
+| Game unit     | Client unit              | DUNGEON_GameToClientCoords                       | D2Common@10112 | DUNGEON_ClientToGameCoords                      | D2Common@10109 |
+| Game Subtile  | Game Tile                | N/A                                              | N/A            | DUNGEON_GameTileToSubtileCoords                 | D2Common@10113 |
+| Game tile     | Client (Render position) | DUNGEON_GameToClientTileRenderPositionCoords*    | D2Common@10115 | DUNGEON_ClientRenderPositionToGameCoords*       | D2Common@10114 |
+| Game subtile  | Client (Render position) | DUNGEON_GameToClientSubtileRenderPositionCoords* | D2Common@10117 | DUNGEON_ClientSubileRenderPositionToGameCoords* | D2Common@10116 |
 
-*The `Cartesian(Sub)TileDrawPosition` functions will provide the draw position in cartesian space of the source unit.
+*The `Client(Sub)TileRenderPosition` functions will provide the draw position in Client space of the source unit.
 
 A picture is worth a thousand words.
-Given a Tile/Subtile (green) isometric coordinate `(X;Y)`, you will obtain:
-- The <span style="color:lightblue">**BLUE**</span> dot when using the `Isometric(Sub)TileToCartesian(Sub)TileDrawPosition` functions. While this is the draw position, this is not in screen coordinates, Y is still facing down!
-- The <span style="color:red">**RED**</span> dot when using the `Isometric(Sub)TileToCartesian` functions.
+Given a Tile/Subtile (green) game coordinate `(X;Y)`, you will obtain:
+- The <span style="color:lightblue">**BLUE**</span> dot when using the `Game(Sub)TileToClient(Sub)TileRenderPosition` functions. While this is the rendering position, this is not in screen coordinates, Y is still facing down!
+- The <span style="color:red">**RED**</span> dot when using the `Game(Sub)TileToClient` functions.
 
-![Draw position conversion](assets/img/DrawPositionConversion.png)
+![Render position conversion](assets/img/RenderPositionConversion.png)
 
 
 # Screen position

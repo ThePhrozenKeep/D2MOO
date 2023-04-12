@@ -194,8 +194,8 @@ BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* p
 
 	if (!pDynamicPath->dwVelocity)
 	{
-		pGameCoord->X = pDynamicPath->wPosX;
-		pGameCoord->Y = pDynamicPath->wPosY;
+		pGameCoord->X = pDynamicPath->tGameCoords.wPosX;
+		pGameCoord->Y = pDynamicPath->tGameCoords.wPosY;
 		return FALSE;
 	}
 
@@ -203,14 +203,14 @@ BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* p
 
 	if (pDynamicPath->dwVelocity)
 	{
-		pPoint.X = pDynamicPath->wPosX;
-		pPoint.Y = pDynamicPath->wPosY;
+		pPoint.X = pDynamicPath->tGameCoords.wPosX;
+		pPoint.Y = pDynamicPath->tGameCoords.wPosY;
 		return sub_6FDAAD10(pDynamicPath, pGameCoord, pPoint);
 	}
 	else
 	{
-		pGameCoord->X = pDynamicPath->wPosX;
-		pGameCoord->Y = pDynamicPath->wPosY;
+		pGameCoord->X = pDynamicPath->tGameCoords.wPosX;
+		pGameCoord->Y = pDynamicPath->tGameCoords.wPosY;
 		return FALSE;
 	}
 }
@@ -337,8 +337,8 @@ int __fastcall sub_6FDAB270(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDAB3C0
 signed int __fastcall PATH_ComputePathBlessedHammer_6FDAB3C0(D2DynamicPathStrc* pDynamicPath)
 {
-	const uint32_t dwOriginPrecisionX = pDynamicPath->dwPrecisionX;
-	const uint32_t dwOriginPrecisionY = pDynamicPath->dwPrecisionY;
+	const uint32_t dwOriginPrecisionX = pDynamicPath->tGameCoords.dwPrecisionX;
+	const uint32_t dwOriginPrecisionY = pDynamicPath->tGameCoords.dwPrecisionY;
 	D2PathPointStrc previousPoint = { PATH_FromFP16(dwOriginPrecisionX) , PATH_FromFP16(dwOriginPrecisionY) };
 
 	int nAngleRadians_512 = 0;
@@ -393,8 +393,8 @@ static DWORD getChargedBoltDirOffset(uint64_t i)
 int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicPath, D2SeedStrc* pSeed)
 {
 	D2PathPointStrc nPrevPoint;
-	nPrevPoint.X = pDynamicPath->wPosX;
-	nPrevPoint.Y = pDynamicPath->wPosY;
+	nPrevPoint.X = pDynamicPath->tGameCoords.wPosX;
+	nPrevPoint.Y = pDynamicPath->tGameCoords.wPosY;
 
 	int v16[3];
 	PATH_GetDirections_6FDAB790(v16, nPrevPoint, pDynamicPath->SP1);
@@ -984,8 +984,8 @@ int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPreci
 //D2Common.0x6FDAC790
 void __stdcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
 {
-	const DWORD dwPrecisionX = pPath->dwPrecisionX;
-	const DWORD dwPrecisionY = pPath->dwPrecisionY;
+	const DWORD dwPrecisionX = pPath->tGameCoords.dwPrecisionX;
+	const DWORD dwPrecisionY = pPath->tGameCoords.dwPrecisionY;
 	DWORD nPointFP16X = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
 	DWORD nPointFP16Y = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
 	while (nPointFP16X == dwPrecisionX && nPointFP16Y == dwPrecisionY)
@@ -1126,7 +1126,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 		}
 		else
 		{
-			return pDynamicPath->wPosX == pDynamicPath->SP1.X && pDynamicPath->wPosY == pDynamicPath->SP1.Y;
+			return pDynamicPath->tGameCoords.wPosX == pDynamicPath->SP1.X && pDynamicPath->tGameCoords.wPosY == pDynamicPath->SP1.Y;
 		}
 	}
 	else
@@ -1162,7 +1162,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		if (tDest == D2PathPointStrc{ 0, 0 })
 		{
 			COLLISION_ResetMaskWithSize(
-				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDynamicPath->dwUnitSize,
 				pDynamicPath->dwCollisionType
 			);
@@ -1170,8 +1170,8 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		}
 		else
 		{
-			D2PathPointStrc tPathPos = { pDynamicPath->wPosX , pDynamicPath->wPosY };
-			if (pDynamicPath->wPosX == tDest.X && pDynamicPath->wPosY == tDest.Y)
+			D2PathPointStrc tPathPos = { pDynamicPath->tGameCoords.wPosX , pDynamicPath->tGameCoords.wPosY };
+			if (pDynamicPath->tGameCoords.wPosX == tDest.X && pDynamicPath->tGameCoords.wPosY == tDest.Y)
 			{
 				pDynamicPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00008;
 			}
@@ -1180,7 +1180,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
 			}
 			pDynamicPath->unk0x54 = sub_6FD44BB0(
-				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwUnitSize,
 				pDynamicPath->dwCollisionType,
@@ -1195,7 +1195,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		if (tDest.X || tDest.Y)
 		{
 			D2Common_10133(
-				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwCollisionPattern,
 				pDynamicPath->dwCollisionType
@@ -1204,7 +1204,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 		else
 		{
 			COLLISION_ResetMaskWithPattern(
-				pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY,
+				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDynamicPath->dwCollisionPattern,
 				pDynamicPath->dwCollisionType
 			);
@@ -1226,11 +1226,11 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 	if (bDestinationIsValid)
 	{
-		pDynamicPath->dwPrecisionX = PATH_ToFP16(tDest.X);
-		pDynamicPath->dwPrecisionY = PATH_ToFP16(tDest.Y);
-		int dwPrecisionX = pDynamicPath->dwPrecisionX >> 11;
-		int dwPrecisionY = pDynamicPath->dwPrecisionY >> 11;
-		DUNGEON_IsometricToCartesianCoords(&dwPrecisionX, &dwPrecisionY);
+		pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16(tDest.X);
+		pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16(tDest.Y);
+		int dwPrecisionX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
+		int dwPrecisionY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
+		DUNGEON_GameToClientCoords(&dwPrecisionX, &dwPrecisionY);
 		pDynamicPath->dwTargetX = dwPrecisionX;
 		pDynamicPath->dwTargetY = dwPrecisionY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
@@ -1239,16 +1239,16 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || COLLISION_GetRoomBySubTileCoordinates(pDestRoom, tDest.X, tDest.Y));
 
-	uint32_t dwPrecisionRoundedX = (pDynamicPath->dwPrecisionX & 0xFFFF0000) + 0x8000;
-	uint32_t dwPrecisionRoundedY = (pDynamicPath->dwPrecisionY & 0xFFFF0000) + 0x8000;
+	uint32_t dwPrecisionRoundedX = (pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
+	uint32_t dwPrecisionRoundedY = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
 	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0
 		|| COLLISION_GetRoomBySubTileCoordinates(pDynamicPath->pRoom, PATH_FromFP16(dwPrecisionRoundedX), PATH_FromFP16(dwPrecisionRoundedY)))
 	{
-		pDynamicPath->dwPrecisionX = dwPrecisionRoundedX;
-		pDynamicPath->dwPrecisionY = dwPrecisionRoundedY;
-		int dwTargetX = pDynamicPath->dwPrecisionX >> 11;
-		int dwTargetY = pDynamicPath->dwPrecisionY >> 11;
-		DUNGEON_IsometricToCartesianCoords(&dwTargetX, &dwTargetY);
+		pDynamicPath->tGameCoords.dwPrecisionX = dwPrecisionRoundedX;
+		pDynamicPath->tGameCoords.dwPrecisionY = dwPrecisionRoundedY;
+		int dwTargetX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
+		int dwTargetY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
+		DUNGEON_GameToClientCoords(&dwTargetX, &dwTargetY);
 		pDynamicPath->dwTargetX = dwTargetX;
 		pDynamicPath->dwTargetY = dwTargetY;
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
@@ -1271,18 +1271,18 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 //D2Common.0x6FDADA20
 void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom)
 {
-	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY))
+	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY))
 	{
 		// Early out, room is already up to date.
 		return;
 	}
 
 	// Try to find room using previous path room
-	D2RoomStrc* pRoomAtLocation = DUNGEON_GetRoomAtPosition(pDynamicPath->pRoom, pDynamicPath->wPosX, pDynamicPath->wPosY);
+	D2RoomStrc* pRoomAtLocation = DUNGEON_GetRoomAtPosition(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	if (!pRoomAtLocation)
 	{
 		// Try looking for the room using the hint room
-		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->wPosX, pDynamicPath->wPosY);
+		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	}
 
 	if (pRoomAtLocation)
@@ -1363,7 +1363,7 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 	D2DynamicPathStrc *pRiderPath = pRiderUnit->pDynamicPath;
 	D2DynamicPathStrc *pMountPath = pMountUnit->pDynamicPath;
 
-	if (pRiderPath->wPosX != pMountPath->wPosX || pRiderPath->wPosY != pMountPath->wPosY)
+	if (pRiderPath->tGameCoords.wPosX != pMountPath->tGameCoords.wPosX || pRiderPath->tGameCoords.wPosY != pMountPath->tGameCoords.wPosY)
 	{
 		pRiderPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
 	}
@@ -1381,36 +1381,36 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 	if (pRiderPath->dwFlags & PATH_MISSILE_MASK)
 	{
 		// Try to find the missile in the mount room list, if not, end its path
-		if (!COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, PATH_FromFP16(pMountPath->dwPrecisionX), PATH_FromFP16(pMountPath->dwPrecisionY)))
+		if (!COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, PATH_FromFP16(pMountPath->tGameCoords.dwPrecisionX), PATH_FromFP16(pMountPath->tGameCoords.dwPrecisionY)))
 		{
 			pRiderPath->dwPathPoints = 0;
 			return;
 		}
 	}
 
-	pRiderPath->dwPrecisionX = pMountPath->dwPrecisionX;
-	pRiderPath->dwPrecisionY = pMountPath->dwPrecisionY;
+	pRiderPath->tGameCoords.dwPrecisionX = pMountPath->tGameCoords.dwPrecisionX;
+	pRiderPath->tGameCoords.dwPrecisionY = pMountPath->tGameCoords.dwPrecisionY;
 
-	int nMountCartesianPosX = pMountPath->dwPrecisionX >> 11;
-	int nMountCartesianPosY = pMountPath->dwPrecisionY >> 11;
-	DUNGEON_IsometricToCartesianCoords(&nMountCartesianPosX, &nMountCartesianPosY);
+	int nMountClientPosX = pMountPath->tGameCoords.dwPrecisionX >> 11;
+	int nMountClientPosY = pMountPath->tGameCoords.dwPrecisionY >> 11;
+	DUNGEON_GameToClientCoords(&nMountClientPosX, &nMountClientPosY);
 
 	D2RoomStrc* pMountRoom = pMountPath->pRoom;
 
 	// Update the rider's target position
-	pRiderPath->dwTargetX = nMountCartesianPosX;
-	pRiderPath->dwTargetY = nMountCartesianPosY;
+	pRiderPath->dwTargetX = nMountClientPosX;
+	pRiderPath->dwTargetY = nMountClientPosY;
 	
 	// Rider was in a different room than the mount at some point
 	if (pRiderPath->pUnit && (pRiderPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001))
 	{
 		// Try finding room from rider's current room list
-		D2RoomStrc* pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, pRiderPath->wPosX, pRiderPath->wPosY);
+		D2RoomStrc* pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, pRiderPath->tGameCoords.wPosX, pRiderPath->tGameCoords.wPosY);
 		
 		if (!pRidersUpToDateRoom)
 		{
 			// If not in the rider's current room list, try with the mount's room list
-			pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pMountRoom, pRiderPath->wPosX, pRiderPath->wPosY);
+			pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pMountRoom, pRiderPath->tGameCoords.wPosX, pRiderPath->tGameCoords.wPosY);
 			// If not found and it is a missile, just end its path
 			if (!pRidersUpToDateRoom && (pRiderPath->dwFlags & PATH_MISSILE_MASK))
 			{

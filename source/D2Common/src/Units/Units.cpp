@@ -578,7 +578,7 @@ void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, 
 	pUnit->pStaticPath->nYPos = nY;
 	pUnit->pStaticPath->pRoom = pRoom;
 
-	DUNGEON_IsoSubTileToCartesianCoords(&nX, &nY);
+	DUNGEON_GameSubtileToClientCoords(&nX, &nY);
 
 	pUnit->pStaticPath->nTargetX = nX;
 	pUnit->pStaticPath->nTargetY = nY;

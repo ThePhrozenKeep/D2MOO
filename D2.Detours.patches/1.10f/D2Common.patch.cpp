@@ -150,17 +150,17 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AnimateTiles                                                @10104
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_InitRoomTileAnimation                                       @10105
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SaveKilledUnitGUID                                          @10106
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianToIsoTileCoords                                    @10107
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianToIsoSubtileCoords                                 @10108
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianToIsometricCoords                                  @10109
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsoTileToCartesianCoords                                    @10110
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsoSubTileToCartesianCoords                                 @10111
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianCoords                                  @10112
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsoTileToSubtileCoords                                      @10113
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianTileDrawPositionToIsometricCoords                  @10114
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianTileDrawPositionCoords                  @10115
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_CartesianSubileDrawPositionToIsometricCoords                @10116
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_IsometricToCartesianSubtileDrawPositionCoords               @10117
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameTileCoords                                      @10107
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameSubtileCoords                                   @10108
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameCoords                                          @10109
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameTileToClientCoords                                      @10110
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameSubtileToClientCoords                                   @10111
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientCoords                                          @10112
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameTileToSubtileCoords                                     @10113
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientTileDrawPositionToGameCoords                          @10114
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientTileDrawPositionCoords                          @10115
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientSubileDrawPositionToGameCoords                        @10116
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientSubtileDrawPositionCoords                       @10117
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120

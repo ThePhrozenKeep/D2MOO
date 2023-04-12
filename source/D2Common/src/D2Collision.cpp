@@ -25,7 +25,7 @@ void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2RoomStrc* pRoom, D2DrlgTil
 		{
 			nX = pTileData->nPosX + pCollisionGrid->pRoomCoords.dwTilesLeft;
 			nY = pTileData->nPosY + pCollisionGrid->pRoomCoords.dwTilesTop;
-			DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
+			DUNGEON_GameTileToSubtileCoords(&nX, &nY);
 
 			pRoom = COLLISION_GetRoomBySubTileCoordinates(pRoom, nX, nY);
 
@@ -197,7 +197,7 @@ void __fastcall sub_6FD413E0(D2RoomCollisionGridStrc* pCollisionGrid, D2RoomColl
 		nX = pTiles[i].nPosX + pAdjacentCollisionGrid->pRoomCoords.dwTilesLeft;
 		nY = pTiles[i].nPosY + pAdjacentCollisionGrid->pRoomCoords.dwTilesTop;
 
-		DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
+		DUNGEON_GameTileToSubtileCoords(&nX, &nY);
 
 		if (DUNGEON_AreSubtileCoordinatesInsideRoom(&pCollisionGrid->pRoomCoords, nX, nY))
 		{

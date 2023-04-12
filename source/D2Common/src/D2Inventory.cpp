@@ -1284,8 +1284,8 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 			case UNIT_PLAYER:
 			case UNIT_MONSTER:
 			case UNIT_MISSILE:
-				*pX = pItem->pDynamicPath ? pItem->pDynamicPath->wPosX : 0;
-				*pY = pItem->pDynamicPath ? pItem->pDynamicPath->wPosY : 0;
+				*pX = pItem->pDynamicPath ? pItem->pDynamicPath->tGameCoords.wPosX : 0;
+				*pY = pItem->pDynamicPath ? pItem->pDynamicPath->tGameCoords.wPosY : 0;
 				break;
 
 			case UNIT_OBJECT:
@@ -3387,7 +3387,7 @@ int __fastcall UNITS_GetXPosition(D2UnitStrc* pUnit)
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return pUnit->pDynamicPath ? pUnit->pDynamicPath->wPosX : 0;
+		return pUnit->pDynamicPath ? pUnit->pDynamicPath->tGameCoords.wPosX : 0;
 
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
@@ -3406,7 +3406,7 @@ int __fastcall UNITS_GetYPosition(D2UnitStrc* pUnit)
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return pUnit->pDynamicPath ? pUnit->pDynamicPath->wPosY : 0;
+		return pUnit->pDynamicPath ? pUnit->pDynamicPath->tGameCoords.wPosY : 0;
 
 	case UNIT_OBJECT:
 	case UNIT_ITEM:

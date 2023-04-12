@@ -331,10 +331,10 @@ void __stdcall D2Common_10052(D2RoomStrc* pRoom, RECT* pRect)
 
 	D2_ASSERT(pRoom);
 
-	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileYPos, &nTemp, (int*)&pRect->top);
-	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileHeight + pRoom->nTileYPos, (int*)&pRect->left, &nTemp);
-	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileYPos, (int*)&pRect->right, &nTemp);
-	DUNGEON_IsometricToCartesianTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileHeight + pRoom->nTileYPos, &nTemp, (int*)&pRect->bottom);
+	DUNGEON_GameToClientTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileYPos, &nTemp, (int*)&pRect->top);
+	DUNGEON_GameToClientTileDrawPositionCoords(pRoom->nTileXPos, pRoom->nTileHeight + pRoom->nTileYPos, (int*)&pRect->left, &nTemp);
+	DUNGEON_GameToClientTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileYPos, (int*)&pRect->right, &nTemp);
+	DUNGEON_GameToClientTileDrawPositionCoords(pRoom->nTileXPos + pRoom->nTileWidth, pRoom->nTileHeight + pRoom->nTileYPos, &nTemp, (int*)&pRect->bottom);
 
 	D2_ASSERT(pRect->top <= pRect->bottom);
 	D2_ASSERT(pRect->left <= pRect->right);
@@ -407,7 +407,7 @@ D2RoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nL
 	pRoom = sub_6FD788D0(pAct->pDrlg, nLevelId, nTileIndex, &nX, &nY);
 	if (pRoom)
 	{
-		DUNGEON_IsoTileToSubtileCoords(&nX, &nY);
+		DUNGEON_GameTileToSubtileCoords(&nX, &nY);
 
 		pCoord.nX = nX + 3;
 		pCoord.nY = nY + 3;
@@ -1266,7 +1266,7 @@ void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, D2UnitGUID nUnitGUI
 }
 
 //D2Common.0x6FD8D690 (#10107)
-void __stdcall DUNGEON_CartesianToIsoTileCoords(int* pX, int* pY)
+void __stdcall DUNGEON_ClientToGameTileCoords(int* pX, int* pY)
 {
 	const int nOutX = (2 * *pY + *pX) / 160;
 	const int nOutY = (2 * *pY - *pX) / 160;
@@ -1276,7 +1276,7 @@ void __stdcall DUNGEON_CartesianToIsoTileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D870 (#10108)
-void __stdcall DUNGEON_CartesianToIsoSubtileCoords(int* pX, int* pY)
+void __stdcall DUNGEON_ClientToGameSubtileCoords(int* pX, int* pY)
 {
 	const int nOutX = (2 * *pY + *pX) / 32;
 	const int nOutY = (2 * *pY - *pX) / 32;
@@ -1286,7 +1286,7 @@ void __stdcall DUNGEON_CartesianToIsoSubtileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8A0 (#10109)
-void __stdcall DUNGEON_CartesianToIsometricCoords(int* pX, int* pY)
+void __stdcall DUNGEON_ClientToGameCoords(int* pX, int* pY)
 {
 	int nX = 2 * *pY + *pX;
 	int nY = 2 * *pY - *pX;
@@ -1296,7 +1296,7 @@ void __stdcall DUNGEON_CartesianToIsometricCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D6E0 (#10110)
-void __stdcall DUNGEON_IsoTileToCartesianCoords(int* pX, int* pY)
+void __stdcall DUNGEON_GameTileToClientCoords(int* pX, int* pY)
 {
 	int nX = *pX;
 	int nY = *pY;
@@ -1306,7 +1306,7 @@ void __stdcall DUNGEON_IsoTileToCartesianCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D630 (#10111)
-void __stdcall DUNGEON_IsoSubTileToCartesianCoords(int* pX, int* pY)
+void __stdcall DUNGEON_GameSubtileToClientCoords(int* pX, int* pY)
 {
 	const int nOutX = 16 * (*pX - *pY);
 	const int nOutY =  8 * (*pX + *pY);
@@ -1316,7 +1316,7 @@ void __stdcall DUNGEON_IsoSubTileToCartesianCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D660 (#10112)
-void __stdcall DUNGEON_IsometricToCartesianCoords(int* pX, int* pY)
+void __stdcall DUNGEON_GameToClientCoords(int* pX, int* pY)
 {
 	const int nOutX = (*pX - *pY) / 2;
 	const int nOutY = (*pX + *pY) / 4;
@@ -1326,14 +1326,14 @@ void __stdcall DUNGEON_IsometricToCartesianCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8C0 (#10113)
-void __stdcall DUNGEON_IsoTileToSubtileCoords(int* pX, int* pY)
+void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* pY)
 {
 	*pX *= 5;
 	*pY *= 5;
 }
 
 //D2Common.0x6FD8D710 (#10114)
-void __stdcall DUNGEON_CartesianTileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_ClientTileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
 	*pY = 2 * nY - nX;
@@ -1358,7 +1358,7 @@ void __stdcall DUNGEON_CartesianTileDrawPositionToIsometricCoords(int nX, int nY
 }
 
 //D2Common.0x6FD8D790 (#10115)
-void __stdcall DUNGEON_IsometricToCartesianTileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_GameToClientTileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 80 * (nX - nY);
 	*pY = 40 * (nX + nY);
@@ -1367,7 +1367,7 @@ void __stdcall DUNGEON_IsometricToCartesianTileDrawPositionCoords(int nX, int nY
 }
 
 //D2Common.0x6FD8D7D0 (#10116)
-void __stdcall DUNGEON_CartesianSubileDrawPositionToIsometricCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_ClientSubileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
 	*pY = 2 * nY - nX;
@@ -1392,7 +1392,7 @@ void __stdcall DUNGEON_CartesianSubileDrawPositionToIsometricCoords(int nX, int 
 }
 
 //D2Common.0x6FD8D830 (#10117)
-void __stdcall DUNGEON_IsometricToCartesianSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
+void __stdcall DUNGEON_GameToClientSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 16 * (nX - nY);
 	*pY = 8 * (nX + nY);
