@@ -237,9 +237,9 @@ D2COMMON_DLL_DECL int __stdcall UNITS_GetUnitSizeX(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDA00 (#10337)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetUnitSizeY(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDB10 (#10333)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetTargetX(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall UNITS_GetClientCoordX(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDB60 (#10334)
-D2COMMON_DLL_DECL int __stdcall UNITS_GetTargetY(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall UNITS_GetClientCoordY(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDBB0 (#10411)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetAbsoluteXDistance(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //D2Common.0x6FDBDC20 (#10412)
@@ -251,7 +251,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_SetTargetY(D2UnitStrc* pUnit, int nTarget
 //D2Common.0x6FDBDD10 (#10332)
 D2COMMON_DLL_DECL void __stdcall UNITS_GetCoords(D2UnitStrc* pUnit, D2CoordStrc* pCoord);
 //D2Common.0x6FDBDDA0 (#10335)
-D2COMMON_DLL_DECL void __stdcall UNITS_GetTargetCoords(D2UnitStrc* pUnit, D2CoordStrc* pTargetCoords);
+D2COMMON_DLL_DECL void __stdcall UNITS_GetClientCoords(D2UnitStrc* pUnit, D2CoordStrc* pClientCoords);
 //D2Common.0x6FDBDE10 (#10338)
 D2COMMON_DLL_DECL int __fastcall UNITS_GetCollisionType(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDEC0 (#10352)

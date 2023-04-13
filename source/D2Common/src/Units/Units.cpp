@@ -120,7 +120,7 @@ int __stdcall UNITS_GetPrecisionX(D2UnitStrc* pUnit)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath->nXPos << 16;
+		return PATH_ToFP16Corner(pUnit->pStaticPath->tGameCoords.nX);
 
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
@@ -143,7 +143,7 @@ int __stdcall UNITS_GetPrecisionY(D2UnitStrc* pUnit)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath->nYPos << 16;
+		return PATH_ToFP16Corner(pUnit->pStaticPath->tGameCoords.nY);
 
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
@@ -165,7 +165,7 @@ void __stdcall UNITS_SetXForStaticUnit(D2UnitStrc* pUnit, int nX)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pUnit->pStaticPath->nXPos = nX;
+		pUnit->pStaticPath->tGameCoords.nX = nX;
 		break;
 
 	default:
@@ -183,7 +183,7 @@ void __stdcall UNITS_SetYForStaticUnit(D2UnitStrc* pUnit, int nY)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pUnit->pStaticPath->nYPos = nY;
+		pUnit->pStaticPath->tGameCoords.nY = nY;
 		break;
 
 	default:
@@ -278,7 +278,7 @@ int __stdcall UNITS_GetUnitSizeY(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBDB10 (#10333)
-int __stdcall UNITS_GetTargetX(D2UnitStrc* pUnit)
+int __stdcall UNITS_GetClientCoordX(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -287,12 +287,12 @@ int __stdcall UNITS_GetTargetX(D2UnitStrc* pUnit)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath->nTargetX;
+		return pUnit->pStaticPath->dwClientCoordX;
 
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return PATH_GetTargetX(pUnit->pDynamicPath);
+		return PATH_GetClientCoordX(pUnit->pDynamicPath);
 
 	default:
 		return 0;
@@ -300,7 +300,7 @@ int __stdcall UNITS_GetTargetX(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBDB60 (#10334)
-int __stdcall UNITS_GetTargetY(D2UnitStrc* pUnit)
+int __stdcall UNITS_GetClientCoordY(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -309,12 +309,12 @@ int __stdcall UNITS_GetTargetY(D2UnitStrc* pUnit)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath->nTargetY;
+		return pUnit->pStaticPath->dwClientCoordY;
 
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return PATH_GetTargetY(pUnit->pDynamicPath);
+		return PATH_GetClientCoordY(pUnit->pDynamicPath);
 
 	default:
 		return 0;
@@ -333,7 +333,7 @@ int __stdcall UNITS_GetAbsoluteXDistance(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		nX1 = pUnit1->pStaticPath->nXPos;
+		nX1 = pUnit1->pStaticPath->tGameCoords.nX;
 		break;
 
 	default:
@@ -353,7 +353,7 @@ int __stdcall UNITS_GetAbsoluteXDistance(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		nX2 = pUnit2->pStaticPath->nXPos;
+		nX2 = pUnit2->pStaticPath->tGameCoords.nX;
 		break;
 
 	default:
@@ -389,7 +389,7 @@ int __stdcall UNITS_GetAbsoluteYDistance(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		nY1 = pUnit1->pStaticPath->nYPos;
+		nY1 = pUnit1->pStaticPath->tGameCoords.nY;
 		break;
 
 	default:
@@ -409,7 +409,7 @@ int __stdcall UNITS_GetAbsoluteYDistance(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		nY2 = pUnit2->pStaticPath->nYPos;
+		nY2 = pUnit2->pStaticPath->tGameCoords.nY;
 		break;
 
 	default:
@@ -438,7 +438,7 @@ void __stdcall UNITS_SetTargetX(D2UnitStrc* pUnit, int nTargetX)
 {
 	D2_ASSERT(pUnit);
 
-	PATH_SetTargetX(pUnit->pDynamicPath, nTargetX);
+	PATH_SetClientCoordX(pUnit->pDynamicPath, nTargetX);
 }
 
 //D2Common.0x6FDBDCD0 (#10341)
@@ -446,7 +446,7 @@ void __stdcall UNITS_SetTargetY(D2UnitStrc* pUnit, int nTargetY)
 {
 	D2_ASSERT(pUnit);
 
-	PATH_SetTargetY(pUnit->pDynamicPath, nTargetY);
+	PATH_SetClientCoordY(pUnit->pDynamicPath, nTargetY);
 }
 
 //D2Common.0x6FDBDD10 (#10332)
@@ -459,8 +459,8 @@ void __stdcall UNITS_GetCoords(D2UnitStrc* pUnit, D2CoordStrc* pCoord)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pCoord->nX = pUnit->pStaticPath->nXPos;
-		pCoord->nY = pUnit->pStaticPath->nYPos;
+		pCoord->nX = pUnit->pStaticPath->tGameCoords.nX;
+		pCoord->nY = pUnit->pStaticPath->tGameCoords.nY;
 		break;
 
 	default:
@@ -479,7 +479,7 @@ void __stdcall UNITS_GetCoords(D2UnitStrc* pUnit, D2CoordStrc* pCoord)
 }
 
 //D2Common.0x6FDBDDA0 (#10335)
-void __stdcall UNITS_GetTargetCoords(D2UnitStrc* pUnit, D2CoordStrc* pTargetCoords)
+void __stdcall UNITS_GetClientCoords(D2UnitStrc* pUnit, D2CoordStrc* pClientCoords)
 {
 	D2_ASSERT(pUnit);
 
@@ -488,13 +488,13 @@ void __stdcall UNITS_GetTargetCoords(D2UnitStrc* pUnit, D2CoordStrc* pTargetCoor
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pTargetCoords->nX = pUnit->pStaticPath->nTargetX;
-		pTargetCoords->nY = pUnit->pStaticPath->nTargetY;
+		pClientCoords->nX = pUnit->pStaticPath->dwClientCoordX;
+		pClientCoords->nY = pUnit->pStaticPath->dwClientCoordY;
 		break;
 
 	default:
-		pTargetCoords->nX = PATH_GetTargetX(pUnit->pDynamicPath);
-		pTargetCoords->nY = PATH_GetTargetY(pUnit->pDynamicPath);
+		pClientCoords->nX = PATH_GetClientCoordX(pUnit->pDynamicPath);
+		pClientCoords->nY = PATH_GetClientCoordY(pUnit->pDynamicPath);
 		break;
 	}
 }
@@ -574,14 +574,14 @@ void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, 
 	D2_ASSERT(pUnit);
 
 	pUnit->pStaticPath->nDirection = 0;
-	pUnit->pStaticPath->nXPos = nX;
-	pUnit->pStaticPath->nYPos = nY;
+	pUnit->pStaticPath->tGameCoords.nX = nX;
+	pUnit->pStaticPath->tGameCoords.nY = nY;
 	pUnit->pStaticPath->pRoom = pRoom;
 
 	DUNGEON_GameSubtileToClientCoords(&nX, &nY);
 
-	pUnit->pStaticPath->nTargetX = nX;
-	pUnit->pStaticPath->nTargetY = nY;
+	pUnit->pStaticPath->dwClientCoordX = nX;
+	pUnit->pStaticPath->dwClientCoordY = nY;
 }
 
 //D2Common.0x6FDBE210 (#10343)

@@ -164,8 +164,8 @@ EXPORTS
 	PATH_SetDirection													@10161
 	PATH_GetXPosition													@10162
 	PATH_GetYPosition													@10163
-	PATH_GetTargetX														@10164
-	PATH_GetTargetY														@10165
+	PATH_GetClientCoordX												@10164
+	PATH_GetClientCoordY												@10165
 	PATH_GetRoom														@10166
 	PATH_SetRoom														@10167
 	PATH_GetNextRoom													@10168
@@ -333,9 +333,9 @@ EXPORTS
 	UNITS_GetPrecisionY													@10330
 	UNITS_SetYForStaticUnit												@10331
 	UNITS_GetCoords														@10332
-	UNITS_GetTargetX													@10333
-	UNITS_GetTargetY													@10334
-	UNITS_GetTargetCoords												@10335
+	UNITS_GetClientCoordX												@10333
+	UNITS_GetClientCoordY												@10334
+	UNITS_GetClientCoords												@10335
 	UNITS_GetUnitSizeX													@10336
 	UNITS_GetUnitSizeY													@10337
 	UNITS_GetCollisionType												@10338

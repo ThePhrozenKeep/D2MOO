@@ -62,6 +62,8 @@ A "square" of the `Game coordinates` grid is represented as a diamond shape in t
 
 ![Dimetric projection](assets/img/DimetricProjection.png)
 
+Note that in the `(Static|Dynamic)PathStrc` structures, both Game and Client coordinates are stored. The Client coordinates precision is in pixels, and the Game coordinates are stored as `Subtiles` for static paths, and `Fractional` for dynamic paths.
+
 ## Conversion functions
 
 | Coordinates A | Coordinates B            | A => B                                           | 1.10f ordinal  | B => A                                          | 1.10f ordinal  |
@@ -69,7 +71,9 @@ A "square" of the `Game coordinates` grid is represented as a diamond shape in t
 | Game tile     | Client pixel             | DUNGEON_GameTileToClientCoords                   | D2Common@10110 | DUNGEON_ClientToGameTileCoords                  | D2Common@10107 |
 | Game subtile  | Client pixel             | DUNGEON_GameSubTileToClientCoords                | D2Common@10111 | DUNGEON_ClientToGameSubtileCoords               | D2Common@10108 |
 | Game unit     | Client unit              | DUNGEON_GameToClientCoords                       | D2Common@10112 | DUNGEON_ClientToGameCoords                      | D2Common@10109 |
-| Game Subtile  | Game Tile                | N/A                                              | N/A            | DUNGEON_GameTileToSubtileCoords                 | D2Common@10113 |
+| Game Tile     | Game Subtile             | DUNGEON_GameTileToSubtileCoords                  | D2Common@10113 | N/A                                             | N/A            |
+| Game subtile  | Fractional               | PATH_ToFP16Corner/PATH_ToFP16Center              | N/A            | PATH_FromFP16                                   | N/A            |
+| Fractional    | Client pixel             | PATH_UpdateClientCoords                          | N/A            | N/A                                             | N/A            |
 | Game tile     | Client (Render position) | DUNGEON_GameToClientTileRenderPositionCoords*    | D2Common@10115 | DUNGEON_ClientRenderPositionToGameCoords*       | D2Common@10114 |
 | Game subtile  | Client (Render position) | DUNGEON_GameToClientSubtileRenderPositionCoords* | D2Common@10117 | DUNGEON_ClientSubileRenderPositionToGameCoords* | D2Common@10116 |
 

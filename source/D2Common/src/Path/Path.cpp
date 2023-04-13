@@ -108,6 +108,17 @@ static const PathFunctionType scpfnPathFunction[] = {
 };
 static_assert(ARRAY_SIZE(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
+void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath)
+{
+	// To game "pixels"
+	int nX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
+	int nY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
+
+	DUNGEON_GameToClientCoords(&nX, &nY);
+
+	pDynamicPath->dwClientCoordX = nX;
+	pDynamicPath->dwClientCoordY = nY;
+}
 
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
@@ -509,8 +520,8 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 	pDynamicPath->dwVelocity = 2048;
 	pDynamicPath->pRoom = pRoom;
 	pDynamicPath->nStepNum = 0;
-	pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16(nX);
-	pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16(nY);
+	pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16Center(nX);
+	pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16Center(nY);
 
 	pDynamicPath->nSavedStepsCount = 1;
 	pDynamicPath->SavedSteps[0].X = nX;
@@ -569,15 +580,9 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 		D2Common_10222(pUnit);
 		UNITROOM_AddUnitToRoom(pUnit, pDynamicPath->pRoom);
 	}
-
-	int nTargetX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
-	int nTargetY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
-
-	DUNGEON_GameToClientCoords(&nTargetX, &nTargetY);
-
-	pDynamicPath->dwTargetX = nTargetX;
-	pDynamicPath->dwTargetY = nTargetY;
-
+	
+	PATH_UpdateClientCoords(pDynamicPath);
+	
 	if (bSetFlag)
 	{
 		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00010;
@@ -654,7 +659,7 @@ void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath, int nX, int nY, i
 {
 	if (pDynamicPath)
 	{
-		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(PATH_ComputeDirectionFromPreciseCoords_6FDAC760(pDynamicPath->tGameCoords.dwPrecisionX, pDynamicPath->tGameCoords.dwPrecisionY, PATH_ToFP16(nX), PATH_ToFP16(nY)));
+		const uint8_t nNormalizedDirection = PATH_NormalizeDirection(PATH_ComputeDirectionFromPreciseCoords_6FDAC760(pDynamicPath->tGameCoords.dwPrecisionX, pDynamicPath->tGameCoords.dwPrecisionY, PATH_ToFP16Center(nX), PATH_ToFP16Center(nY)));
 		if (a4)
 		{
 			pDynamicPath->nNewDirection = nNormalizedDirection;
@@ -933,27 +938,27 @@ void __stdcall PATH_SetPrecisionY(D2DynamicPathStrc* pDynamicPath, int nPrecisio
 }
 
 //D2Common.0x6FDA9DB0 (#10164)
-int __stdcall PATH_GetTargetX(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetClientCoordX(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwTargetX;
+	return pDynamicPath->dwClientCoordX;
 }
 
 //D2Common.0x6FDC3CE0 (#10165)
-int __stdcall PATH_GetTargetY(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetClientCoordY(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwTargetY;
+	return pDynamicPath->dwClientCoordY;
 }
 
 //D2Common.0x6FDA9DC0
-void __fastcall PATH_SetTargetX(D2DynamicPathStrc* pDynamicPath, int nTargetX)
+void __fastcall PATH_SetClientCoordX(D2DynamicPathStrc* pDynamicPath, int nTargetX)
 {
-	pDynamicPath->dwTargetX = nTargetX;
+	pDynamicPath->dwClientCoordX = nTargetX;
 }
 
 //D2Common.0x6FDA9DD0
-void __fastcall PATH_SetTargetY(D2DynamicPathStrc* pDynamicPath, int nTargetY)
+void __fastcall PATH_SetClientCoordY(D2DynamicPathStrc* pDynamicPath, int nTargetY)
 {
-	pDynamicPath->dwTargetY = nTargetY;
+	pDynamicPath->dwClientCoordY = nTargetY;
 }
 
 //D2Common.0x6FDA9DE0 (#10175)

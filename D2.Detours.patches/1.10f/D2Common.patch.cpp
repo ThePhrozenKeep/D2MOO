@@ -207,8 +207,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetDirection                                                   @10161
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetXPosition                                                   @10162
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetYPosition                                                   @10163
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetX                                                     @10164
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetY                                                     @10165
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordX                                                @10164
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordY                                                @10165
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetRoom                                                        @10166
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetRoom                                                        @10167
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetNextRoom                                                    @10168
@@ -376,9 +376,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionY                                                 @10330
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetYForStaticUnit                                             @10331
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCoords                                                     @10332
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetX                                                    @10333
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetY                                                    @10334
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetCoords                                               @10335
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoordX                                               @10333
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoordY                                               @10334
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoords                                               @10335
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeX                                                  @10336
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeY                                                  @10337
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCollisionType                                              @10338

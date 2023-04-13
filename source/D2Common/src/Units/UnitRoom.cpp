@@ -98,7 +98,7 @@ void __stdcall UNITROOM_SortUnitListByTargetY(D2RoomStrc* pRoom)
 
 			while (pNextUnit)
 			{
-				if (UNITS_GetTargetY(pUnit) <= UNITS_GetTargetY(pNextUnit))
+				if (UNITS_GetClientCoordY(pUnit) <= UNITS_GetClientCoordY(pNextUnit))
 				{
 					pPreviousUnit = pUnit;
 					pUnit = pNextUnit;
@@ -140,8 +140,8 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 		pUnit->pDynamicPath->tGameCoords.dwPrecisionX = dword_6FDD2580;
 		pUnit->pDynamicPath->tGameCoords.dwPrecisionY = dword_6FDD2584;
 
-		pUnit->pDynamicPath->dwTargetX = dword_6FDD2580;
-		pUnit->pDynamicPath->dwTargetY = dword_6FDD2584;
+		pUnit->pDynamicPath->dwClientCoordX = dword_6FDD2580;
+		pUnit->pDynamicPath->dwClientCoordY = dword_6FDD2584;
 
 		pUnit->pDynamicPath->dwPathPoints = 0;
 		

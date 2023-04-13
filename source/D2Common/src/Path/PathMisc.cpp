@@ -597,8 +597,8 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 
 	if (dwTargetUnitType == UNIT_OBJECT || dwTargetUnitType == UNIT_ITEM || dwTargetUnitType == UNIT_TILE)
 	{
-		pOutPathPoint->X = pTargetUnit->pStaticPath->nXPos;
-		pOutPathPoint->Y = pTargetUnit->pStaticPath->nYPos;
+		pOutPathPoint->X = pTargetUnit->pStaticPath->tGameCoords.nX;
+		pOutPathPoint->Y = pTargetUnit->pStaticPath->tGameCoords.nY;
 	}
 	else
 	{
@@ -965,7 +965,7 @@ int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2)
 	D2CoordStrc pCoords = {};
 	int nDirection = 0;
 
-	PATH_GetDirectionVector_6FDAC5E0(&pCoords, &nDirection, PATH_ToFP16(nX1), PATH_ToFP16(nY1), PATH_ToFP16(nX2), PATH_ToFP16(nY2));
+	PATH_GetDirectionVector_6FDAC5E0(&pCoords, &nDirection, PATH_ToFP16Center(nX1), PATH_ToFP16Center(nY1), PATH_ToFP16Center(nX2), PATH_ToFP16Center(nY2));
 
 	return nDirection;
 }
@@ -986,14 +986,14 @@ void __stdcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
 {
 	const DWORD dwPrecisionX = pPath->tGameCoords.dwPrecisionX;
 	const DWORD dwPrecisionY = pPath->tGameCoords.dwPrecisionY;
-	DWORD nPointFP16X = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
-	DWORD nPointFP16Y = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
+	DWORD nPointFP16X = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
+	DWORD nPointFP16Y = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
 	while (nPointFP16X == dwPrecisionX && nPointFP16Y == dwPrecisionY)
 	{
 		if (pPath->dwCurrentPointIdx++ < (pPath->dwPathPoints - 1))
 		{
-			nPointFP16X = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
-			nPointFP16Y = PATH_ToFP16(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
+			nPointFP16X = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
+			nPointFP16Y = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
 		}
 		else
 		{
@@ -1226,13 +1226,11 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 	if (bDestinationIsValid)
 	{
-		pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16(tDest.X);
-		pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16(tDest.Y);
-		int dwPrecisionX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
-		int dwPrecisionY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
-		DUNGEON_GameToClientCoords(&dwPrecisionX, &dwPrecisionY);
-		pDynamicPath->dwTargetX = dwPrecisionX;
-		pDynamicPath->dwTargetY = dwPrecisionY;
+		pDynamicPath->tGameCoords.dwPrecisionX = PATH_ToFP16Center(tDest.X);
+		pDynamicPath->tGameCoords.dwPrecisionY = PATH_ToFP16Center(tDest.Y);
+		
+		PATH_UpdateClientCoords(pDynamicPath);
+
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
 			PATH_RecacheRoom(pDynamicPath, pDestRoom);
 	}
@@ -1246,11 +1244,9 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 	{
 		pDynamicPath->tGameCoords.dwPrecisionX = dwPrecisionRoundedX;
 		pDynamicPath->tGameCoords.dwPrecisionY = dwPrecisionRoundedY;
-		int dwTargetX = pDynamicPath->tGameCoords.dwPrecisionX >> 11;
-		int dwTargetY = pDynamicPath->tGameCoords.dwPrecisionY >> 11;
-		DUNGEON_GameToClientCoords(&dwTargetX, &dwTargetY);
-		pDynamicPath->dwTargetX = dwTargetX;
-		pDynamicPath->dwTargetY = dwTargetY;
+		
+		PATH_UpdateClientCoords(pDynamicPath);
+
 		if (pDynamicPath->pUnit && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
 			PATH_RecacheRoom(pDynamicPath, 0);
 	}
@@ -1388,18 +1384,12 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 		}
 	}
 
+	// Update the rider's target position
 	pRiderPath->tGameCoords.dwPrecisionX = pMountPath->tGameCoords.dwPrecisionX;
 	pRiderPath->tGameCoords.dwPrecisionY = pMountPath->tGameCoords.dwPrecisionY;
-
-	int nMountClientPosX = pMountPath->tGameCoords.dwPrecisionX >> 11;
-	int nMountClientPosY = pMountPath->tGameCoords.dwPrecisionY >> 11;
-	DUNGEON_GameToClientCoords(&nMountClientPosX, &nMountClientPosY);
+	PATH_UpdateClientCoords(pRiderPath);
 
 	D2RoomStrc* pMountRoom = pMountPath->pRoom;
-
-	// Update the rider's target position
-	pRiderPath->dwTargetX = nMountClientPosX;
-	pRiderPath->dwTargetY = nMountClientPosY;
 	
 	// Rider was in a different room than the mount at some point
 	if (pRiderPath->pUnit && (pRiderPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001))

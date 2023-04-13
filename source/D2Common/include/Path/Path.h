@@ -52,28 +52,31 @@ struct D2PathPointStrc
 	bool operator!=(const D2PathPointStrc& other) { return !(*this == other); }
 };
 
+// Represents a position with 16bit fixed point precision
+union D2FP32_16
+{
+	struct
+	{
+		uint16_t wOffsetX;					//0x00
+		uint16_t wPosX;						//0x02
+		uint16_t wOffsetY;					//0x04
+		uint16_t wPosY;						//0x06
+	};
+
+	struct
+	{
+		uint32_t dwPrecisionX;				//0x00
+		uint32_t dwPrecisionY;				//0x04
+	};
+};
+
 struct D2DynamicPathStrc
 {
 	static const size_t MAXPATHLEN = 78;
-	union
-	{
-		struct
-		{
-			uint16_t wOffsetX;					//0x00
-			uint16_t wPosX;						//0x02
-			uint16_t wOffsetY;					//0x04
-			uint16_t wPosY;						//0x06
-		};
-
-		struct
-		{
-			uint32_t dwPrecisionX;				//0x00
-			uint32_t dwPrecisionY;				//0x04
-		};
-	} tGameCoords;
-	uint32_t dwTargetX;							//0x08 Pixels in client coordinates
-	uint32_t dwTargetY;							//0x0C Pixels in client coordinates
-	D2PathPointStrc SP1;						//0x10
+	D2FP32_16 tGameCoords;						//0x00
+	int32_t dwClientCoordX;						//0x08
+	int32_t dwClientCoordY;						//0x0C
+	D2PathPointStrc SP1;						//0x10 tTargetCoord in original code
 	D2PathPointStrc SP2;						//0x14
 	D2PathPointStrc SP3;						//0x18
 	D2RoomStrc* pRoom;							//0x1C
@@ -148,11 +151,10 @@ struct D2PathInfoStrc
 struct D2StaticPathStrc
 {
 	D2RoomStrc* pRoom;						//0x00
-	int32_t nTargetX;							//0x04
-	int32_t nTargetY;							//0x08
-	int32_t nXPos;								//0x0C
-	int32_t nYPos;								//0x10
-	uint32_t unk0x14[2];						//0x14
+	int32_t dwClientCoordX;					//0x04
+	int32_t dwClientCoordY;					//0x08
+	D2CoordStrc tGameCoords;				//0x0C
+	uint32_t unk0x14[2];					//0x14
 	uint8_t nDirection;						//0x1C
 	uint8_t unk0x1D[3];						//0x1D
 };
@@ -173,7 +175,10 @@ struct D2MapAIStrc
 #pragma pack()
 
 // Path "precise" positions are encoded using 16bits fixed point
-inline uint32_t PATH_ToFP16(uint16_t value) {
+inline uint32_t PATH_ToFP16Corner(uint16_t value) {
+	return (value << 16);
+}
+inline uint32_t PATH_ToFP16Center(uint16_t value) {
 	return (value << 16) + (1 << 15);
 }
 inline uint16_t PATH_FromFP16(uint32_t value) {
@@ -185,7 +190,9 @@ enum D2PathConstants {
 	PATH_DIR_NULL = 255,
 	PATH_MAX_STEPNUM = 20,
 };
+// Helper functions
 inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
+void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath);
 
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
@@ -272,13 +279,13 @@ D2COMMON_DLL_DECL void __stdcall PATH_SetPrecisionX(D2DynamicPathStrc* pDynamicP
 //D2Common.0x6FDA9DA0 (#10197)
 D2COMMON_DLL_DECL void __stdcall PATH_SetPrecisionY(D2DynamicPathStrc* pDynamicPath, int nPrecisionY);
 //D2Common.0x6FDA9DB0 (#10164)
-D2COMMON_DLL_DECL int __stdcall PATH_GetTargetX(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetClientCoordX(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDC3CE0 (#10165)
-D2COMMON_DLL_DECL int __stdcall PATH_GetTargetY(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetClientCoordY(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9DC0
-void __fastcall PATH_SetTargetX(D2DynamicPathStrc* pDynamicPath, int nTargetX);
+void __fastcall PATH_SetClientCoordX(D2DynamicPathStrc* pDynamicPath, int nTargetX);
 //D2Common.0x6FDA9DD0
-void __fastcall PATH_SetTargetY(D2DynamicPathStrc* pDynamicPath, int nTargetY);
+void __fastcall PATH_SetClientCoordY(D2DynamicPathStrc* pDynamicPath, int nTargetY);
 //D2Common.0x6FDA9DE0 (#10175)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_10175_PathGetFirstPointX(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9DF0 (#10176)
