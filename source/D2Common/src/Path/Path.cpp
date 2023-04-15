@@ -683,19 +683,18 @@ void __stdcall D2Common_10228(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDA9870 (#10143)
-//TODO: Find a name
-void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
+void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 {
 	D2_ASSERT(pUnit->pDynamicPath != nullptr);
-	if (a2 || pUnit->dwUnitType != UNIT_MONSTER)
+	if (bForGameLogic || pUnit->dwUnitType != UNIT_MONSTER)
 	{
-		D2Common_10223(pUnit, 1);
+		D2Common_10223(pUnit, TRUE);
 		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->tGameCoords.wPosX, pUnit->pDynamicPath->tGameCoords.wPosY, 3, 3, COLLIDE_CORPSE);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
-	else
+	else // Called from Client, related to corpse being displayed
 	{
-		D2Common_10223(pUnit, 1);
+		D2Common_10223(pUnit, TRUE);
 		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 		PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		D2Common_10222(pUnit);
@@ -704,16 +703,16 @@ void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2)
 }
 
 //D2Common.0x6FDA98F0 (#10144)
-//TODO: Find a name
-void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing)
+void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 {
-	if (bDoNothing)
+	if (bForGameLogic)
 	{
 		return;
 	}
+	//else: Called from Client to remove corpse collision
 
 	D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_MONSTER);
-	if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == 32768)
+	if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == COLLIDE_CORPSE)
 	{
 		int nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
 

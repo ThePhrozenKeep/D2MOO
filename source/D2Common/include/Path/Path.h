@@ -229,9 +229,9 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10216(D2DynamicPathStrc* pDynamicPath,
 //D2Common.0x6FDA9850 (#10228)
 D2COMMON_DLL_DECL void __stdcall D2Common_10228(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9870 (#10143)
-D2COMMON_DLL_DECL void __stdcall D2Common_10143(D2UnitStrc* pUnit, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic);
 //D2Common.0x6FDA98F0 (#10144)
-D2COMMON_DLL_DECL void __stdcall D2Common_10144(D2UnitStrc* pUnit, BOOL bDoNothing);
+D2COMMON_DLL_DECL void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic);
 //D2Common.0x6FDA9A70 (#10146)
 D2COMMON_DLL_DECL void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, const char* szFile, int nLine);
 //D2Common.0x6FDA9AB0 (#10147)

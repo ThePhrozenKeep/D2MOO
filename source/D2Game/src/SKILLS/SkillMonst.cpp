@@ -102,7 +102,7 @@ int32_t __fastcall SKILLS_SrvSt43_MaggotEgg(D2GameStrc* pGame, D2UnitStrc* pUnit
         pUnit->dwFlags &= 0xFFFFFFF1;
     }
 
-    D2Common_10143(pUnit, 1);
+    PATH_SetUnitDeadCollision(pUnit, 1);
     return 1;
 }
 

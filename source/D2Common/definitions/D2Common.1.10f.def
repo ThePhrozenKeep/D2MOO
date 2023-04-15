@@ -143,8 +143,8 @@ EXPORTS
 	D2COMMON_10140_Return												@10140
 	PATH_GetClientCoordsVelocity										@10141
 	D2Common_10142														@10142
-	D2Common_10143														@10143
-	D2Common_10144														@10144
+	PATH_SetUnitDeadCollision											@10143
+	PATH_SetUnitAliveCollision											@10144
 	D2Common_10145														@10145
 	PATH_SetVelocity													@10146
 	PATH_GetVelocity													@10147

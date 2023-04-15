@@ -187,10 +187,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesWithField                               @10138
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10139_Return                                               @10139
     PatchAction::Ignore                        , /*C*/ //   D2COMMON_10140_Return                                               @10140
-    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetClientCoordsVelocity                                        @10141
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10142                                                      @10142
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10143                                                      @10143
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10144                                                      @10144
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordsVelocity                                        @10141
+    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   D2Common_10142                                                      @10142
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitDeadCollision                                           @10143
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitAliveCollision                                          @10144
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10145                                                      @10145
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetVelocity                                                    @10146
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetVelocity                                                    @10147

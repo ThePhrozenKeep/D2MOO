@@ -951,7 +951,7 @@ void __fastcall sub_6FC63E80(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDir)
     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
     if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_DEADCOL]))
     {
-        D2Common_10143(pUnit, 1);
+        PATH_SetUnitDeadCollision(pUnit, 1);
     }
 
     PATH_SetDirection(pUnit->pDynamicPath, dwDir);

@@ -753,7 +753,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     D2Common_10469(pDefender);
     STATES_UpdateStayDeathFlags(pDefender, 0);
     D2GAME_SetClientDead_6FC33830(pClient, 0);
-    D2Common_10143(pDefender, 1);
+    PATH_SetUnitDeadCollision(pDefender, 1);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 8, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 9, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
@@ -808,7 +808,7 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
     D2GAME_SetClientDead_6FC33830(pClient, 0);
 
-    D2Common_10143(pUnit, 1);
+    PATH_SetUnitDeadCollision(pUnit, 1);
 
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 9, 0);
@@ -1381,7 +1381,7 @@ void __fastcall sub_6FC814F0(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     STATES_UpdateStayDeathFlags(pPlayer, 0);
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     D2GAME_SetClientDead_6FC33830(pClient, 0);
-    D2Common_10143(pPlayer, 1);
+    PATH_SetUnitDeadCollision(pPlayer, 1);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 8, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 9, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
