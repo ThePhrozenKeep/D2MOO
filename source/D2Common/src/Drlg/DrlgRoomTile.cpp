@@ -110,7 +110,7 @@ static void DRLGROOMTILE_InitTileDataDefaults(D2RoomExStrc* pRoomEx, D2DrlgTileD
 		int nPosX = nX;
 		int nPosY = nY + 1;
 
-		DUNGEON_ExpandTileCoords(&nPosX, &nPosY);
+		DUNGEON_GameTileToClientCoords(&nPosX, &nPosY);
 
 		pTileData->nWidth = nPosX;
 		pTileData->nHeight = nPosY + 40;
@@ -345,7 +345,7 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2RoomExStrc* pRoomEx, D2DrlgTil
 					int nPosX = nX - pRoomEx->nTileXPos;
 					int nPosY = nY - pRoomEx->nTileYPos;
 
-					DUNGEON_ExpandCoords(&nPosX, &nPosY);
+					DUNGEON_GameTileToSubtileCoords(&nPosX, &nPosY);
 
 					nPosX += stru_6FDD0F68[j].nX;
 					nPosY += stru_6FDD0F68[j].nY;
@@ -610,7 +610,7 @@ BOOL __fastcall DRLGROOMTILE_AddWarp(D2RoomExStrc* pRoomEx, int nX, int nY, uint
 
 		if (nPosX != pRoomEx->nTileWidth && nPosY != pRoomEx->nTileHeight)
 		{
-			DUNGEON_ExpandCoords(&nPosX, &nPosY);
+			DUNGEON_GameTileToSubtileCoords(&nPosX, &nPosY);
 
 			nPosX += pLvlWarpTxtRecord->dwOffsetX;
 			nPosY += pLvlWarpTxtRecord->dwOffsetY;

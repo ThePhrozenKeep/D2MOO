@@ -510,8 +510,8 @@ void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomE
 	pDrlgCoords.dwTilesHeight = pRoomEx->nTileHeight;
 	pDrlgCoords.dwSubtilesHeight = pRoomEx->nTileHeight;
 
-	DUNGEON_ExpandCoords(&pDrlgCoords.dwSubtilesLeft, &pDrlgCoords.dwSubtilesTop);
-	DUNGEON_ExpandCoords(&pDrlgCoords.dwSubtilesWidth, &pDrlgCoords.dwSubtilesHeight);
+	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.dwSubtilesLeft, &pDrlgCoords.dwSubtilesTop);
+	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.dwSubtilesWidth, &pDrlgCoords.dwSubtilesHeight);
 
 	if (pRoomEx->pTileGrid->pTiles.nWalls || pRoomEx->pTileGrid->pTiles.nFloors)
 	{
@@ -569,7 +569,7 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 			*pX = pRoomEx->nTileXPos + pRoomEx->nTileWidth / 2;
 			*pY = pRoomEx->nTileYPos + pRoomEx->nTileHeight / 2;
 
-			DUNGEON_ExpandCoords(pX, pY);
+			DUNGEON_GameTileToSubtileCoords(pX, pY);
 
 			++pLevel->nRoomCoords;
 		}

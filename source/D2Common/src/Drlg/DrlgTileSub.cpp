@@ -429,9 +429,9 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 	nMaxX = pSubstGroup->tBox.nWidth;
 	nMaxY = pSubstGroup->tBox.nHeight;
 
-	DUNGEON_ExpandCoords(&nX, &nY);
-	DUNGEON_ExpandCoords(&nMinX, &nMinY);
-	DUNGEON_ExpandCoords(&nMaxX, &nMaxY);
+	DUNGEON_GameTileToSubtileCoords(&nX, &nY);
+	DUNGEON_GameTileToSubtileCoords(&nMinX, &nMinY);
+	DUNGEON_GameTileToSubtileCoords(&nMaxX, &nMaxY);
 	
 	for (D2PresetUnitStrc* pPresetUnit = pLvlSubTxtRecord->pDrlgFile->pPresetUnit; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
 	{

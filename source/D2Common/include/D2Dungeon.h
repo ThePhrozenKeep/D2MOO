@@ -193,27 +193,27 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct,
 //D2Common.0x6FD8D600 (#10106)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_SaveKilledUnitGUID(D2RoomStrc* pRoom, D2UnitGUID nUnitGUID);
 //D2Common.0x6FD8D630 (#10111)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_WorldToScreenCoords(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameSubtileToClientCoords(int* pX, int* pY);
 //D2Common.0x6FD8D660 (#10112)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_FlattenCoords_IsoToCartesian(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameToClientCoords(int* pX, int* pY);
 //D2Common.0x6FD8D690 (#10107)
-D2COMMON_DLL_DECL void __stdcall D2Common_10107(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ClientToGameTileCoords(int* pX, int* pY);
 //D2Common.0x6FD8D6E0 (#10110)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_ExpandTileCoords(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameTileToClientCoords(int* pX, int* pY);
 //D2Common.0x6FD8D710 (#10114)
-D2COMMON_DLL_DECL void __stdcall D2Common_10114(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ClientTileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D790 (#10115)
-D2COMMON_DLL_DECL void __stdcall D2Common_10115(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameToClientTileDrawPositionCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D7D0 (#10116)
-D2COMMON_DLL_DECL void __stdcall D2Common_10116(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ClientSubileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D830 (#10117)
-D2COMMON_DLL_DECL void __stdcall D2Common_10117(int nX, int nY, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameToClientSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY);
 //D2Common.0x6FD8D870 (#10108)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_ScreenToWorldCoords(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ClientToGameSubtileCoords(int* pX, int* pY);
 //D2Common.0x6FD8D8A0 (#10109)
-D2COMMON_DLL_DECL void __stdcall D2Common_10109(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_ClientToGameCoords(int* pX, int* pY);
 //D2Common.0x6FD8D8C0 (#10113)
-D2COMMON_DLL_DECL void __stdcall DUNGEON_ExpandCoords(int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* pY);
 
 // Helper function, official name coming from D2Common.0x6FDBCF10
 inline bool DungeonTestRoomGame(const D2RoomStrc* pRoom, int nX, int nY)

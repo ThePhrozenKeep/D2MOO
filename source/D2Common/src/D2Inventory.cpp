@@ -1284,15 +1284,15 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 			case UNIT_PLAYER:
 			case UNIT_MONSTER:
 			case UNIT_MISSILE:
-				*pX = pItem->pDynamicPath ? pItem->pDynamicPath->wPosX : 0;
-				*pY = pItem->pDynamicPath ? pItem->pDynamicPath->wPosY : 0;
+				*pX = pItem->pDynamicPath ? pItem->pDynamicPath->tGameCoords.wPosX : 0;
+				*pY = pItem->pDynamicPath ? pItem->pDynamicPath->tGameCoords.wPosY : 0;
 				break;
 
 			case UNIT_OBJECT:
 			case UNIT_ITEM:
 			case UNIT_TILE:
-				*pX = pItem->pStaticPath ? pItem->pStaticPath->nXPos : 0;
-				*pY = pItem->pStaticPath ? pItem->pStaticPath->nYPos : 0;
+				*pX = pItem->pStaticPath ? pItem->pStaticPath->tGameCoords.nX : 0;
+				*pY = pItem->pStaticPath ? pItem->pStaticPath->tGameCoords.nY : 0;
 				break;
 
 			default:
@@ -1495,9 +1495,9 @@ D2UnitStrc* __stdcall INVENTORY_GetCompositItem(D2InventoryStrc* pInventory, int
 //D2Common.0x6FD8FE80 (#10260)
 int __stdcall INVENTORY_GetBodyLocFromEquippedItem(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
-	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_UnitIsItem(pItem) && pItem->pStaticPath->nXPos < 11)
+	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_UnitIsItem(pItem) && pItem->pStaticPath->tGameCoords.nX < 11)
 	{
-		return pItem->pStaticPath->nXPos;
+		return pItem->pStaticPath->tGameCoords.nX;
 	}
 
 	return 0;
@@ -1508,7 +1508,7 @@ int __stdcall INVENTORY_GetItemsXPosition(D2InventoryStrc* pInventory, D2UnitStr
 {
 	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_UnitIsItem(pItem))
 	{
-		return pItem->pStaticPath->nXPos;
+		return pItem->pStaticPath->tGameCoords.nX;
 	}
 
 	return 0;
@@ -2309,7 +2309,7 @@ int __stdcall INVENTORY_GetSetItemEquipCountByFileIndex(D2InventoryStrc* pInvent
 		{
 			if (ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET && ITEMS_GetFileIndex(pItem) == nItemFileIndex)
 			{
-				if (pItem->pStaticPath->nXPos < 11)
+				if (pItem->pStaticPath->tGameCoords.nX < 11)
 				{
 					++nCounter;
 				}
@@ -3387,12 +3387,12 @@ int __fastcall UNITS_GetXPosition(D2UnitStrc* pUnit)
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return pUnit->pDynamicPath ? pUnit->pDynamicPath->wPosX : 0;
+		return pUnit->pDynamicPath ? pUnit->pDynamicPath->tGameCoords.wPosX : 0;
 
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath ? pUnit->pStaticPath->nXPos : 0;
+		return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nX : 0;
 	}
 
 	return 0;
@@ -3406,12 +3406,12 @@ int __fastcall UNITS_GetYPosition(D2UnitStrc* pUnit)
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		return pUnit->pDynamicPath ? pUnit->pDynamicPath->wPosY : 0;
+		return pUnit->pDynamicPath ? pUnit->pDynamicPath->tGameCoords.wPosY : 0;
 
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		return pUnit->pStaticPath ? pUnit->pStaticPath->nYPos : 0;
+		return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nY : 0;
 	}
 
 	return 0;

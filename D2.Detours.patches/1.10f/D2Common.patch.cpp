@@ -150,17 +150,17 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_AnimateTiles                                                @10104
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_InitRoomTileAnimation                                       @10105
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SaveKilledUnitGUID                                          @10106
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10107                                                      @10107
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ScreenToWorldCoords                                         @10108
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10109                                                      @10109
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ExpandTileCoords                                            @10110
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_WorldToScreenCoords                                         @10111
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_FlattenCoords_IsoToCartesian                                @10112
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ExpandCoords                                                @10113
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10114                                                      @10114
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10115                                                      @10115
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10116                                                      @10116
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10117                                                      @10117
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameTileCoords                                      @10107
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameSubtileCoords                                   @10108
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientToGameCoords                                          @10109
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameTileToClientCoords                                      @10110
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameSubtileToClientCoords                                   @10111
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientCoords                                          @10112
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameTileToSubtileCoords                                     @10113
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientTileDrawPositionToGameCoords                          @10114
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientTileDrawPositionCoords                          @10115
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ClientSubileDrawPositionToGameCoords                        @10116
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GameToClientSubtileDrawPositionCoords                       @10117
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMask                                                 @10118
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSize                                         @10119
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_CheckMaskWithSizeXY                                       @10120
@@ -184,7 +184,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COLLISION_GetFreeCoordinatesWithField                               @10138
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10139_Return                                               @10139
     PatchAction::Ignore                        , /*C*/ //   D2COMMON_10140_Return                                               @10140
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10141                                                      @10141
+    PatchAction::FunctionReplacePatchByOriginal,       //   PATH_GetClientCoordsVelocity                                        @10141
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10142                                                      @10142
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10143                                                      @10143
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10144                                                      @10144
@@ -207,8 +207,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetDirection                                                   @10161
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetXPosition                                                   @10162
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetYPosition                                                   @10163
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetX                                                     @10164
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetY                                                     @10165
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordX                                                @10164
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordY                                                @10165
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetRoom                                                        @10166
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetRoom                                                        @10167
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetNextRoom                                                    @10168
@@ -376,9 +376,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionY                                                 @10330
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetYForStaticUnit                                             @10331
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCoords                                                     @10332
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetX                                                    @10333
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetY                                                    @10334
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetCoords                                               @10335
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoordX                                               @10333
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoordY                                               @10334
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoords                                               @10335
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeX                                                  @10336
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeY                                                  @10337
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCollisionType                                              @10338

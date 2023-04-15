@@ -107,17 +107,17 @@ EXPORTS
 	DUNGEON_AnimateTiles												@10104
 	DUNGEON_InitRoomTileAnimation										@10105
 	DUNGEON_SaveKilledUnitGUID											@10106
-	D2Common_10107														@10107
-	DUNGEON_ScreenToWorldCoords											@10108
-	D2Common_10109														@10109
-	DUNGEON_ExpandTileCoords											@10110
-	DUNGEON_WorldToScreenCoords											@10111
-	DUNGEON_FlattenCoords_IsoToCartesian								@10112
-	DUNGEON_ExpandCoords												@10113
-	D2Common_10114														@10114
-	D2Common_10115														@10115
-	D2Common_10116														@10116
-	D2Common_10117														@10117
+	DUNGEON_ClientToGameTileCoords										@10107
+	DUNGEON_ClientToGameSubtileCoords									@10108
+	DUNGEON_ClientToGameCoords											@10109
+	DUNGEON_GameTileToClientCoords										@10110
+	DUNGEON_GameSubtileToClientCoords									@10111
+	DUNGEON_GameToClientCoords											@10112
+	DUNGEON_GameTileToSubtileCoords										@10113
+	DUNGEON_ClientTileDrawPositionToGameCoords							@10114
+	DUNGEON_GameToClientTileDrawPositionCoords							@10115
+	DUNGEON_ClientSubileDrawPositionToGameCoords						@10116
+	DUNGEON_GameToClientSubtileDrawPositionCoords						@10117
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120
@@ -141,7 +141,7 @@ EXPORTS
 	COLLISION_GetFreeCoordinatesWithField								@10138
 	D2COMMON_10139_Return												@10139
 	D2COMMON_10140_Return												@10140
-	D2Common_10141														@10141
+	PATH_GetClientCoordsVelocity										@10141
 	D2Common_10142														@10142
 	D2Common_10143														@10143
 	D2Common_10144														@10144
@@ -164,8 +164,8 @@ EXPORTS
 	PATH_SetDirection													@10161
 	PATH_GetXPosition													@10162
 	PATH_GetYPosition													@10163
-	PATH_GetTargetX														@10164
-	PATH_GetTargetY														@10165
+	PATH_GetClientCoordX												@10164
+	PATH_GetClientCoordY												@10165
 	PATH_GetRoom														@10166
 	PATH_SetRoom														@10167
 	PATH_GetNextRoom													@10168
@@ -333,9 +333,9 @@ EXPORTS
 	UNITS_GetPrecisionY													@10330
 	UNITS_SetYForStaticUnit												@10331
 	UNITS_GetCoords														@10332
-	UNITS_GetTargetX													@10333
-	UNITS_GetTargetY													@10334
-	UNITS_GetTargetCoords												@10335
+	UNITS_GetClientCoordX												@10333
+	UNITS_GetClientCoordY												@10334
+	UNITS_GetClientCoords												@10335
 	UNITS_GetUnitSizeX													@10336
 	UNITS_GetUnitSizeY													@10337
 	UNITS_GetCollisionType												@10338
