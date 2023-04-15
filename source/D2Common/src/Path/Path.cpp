@@ -157,8 +157,7 @@ void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA82A0 (#10141)
-//TODO: Find a name
-void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY)
+void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit, int* pX, int* pY)
 {
 	if (pUnit && UNITS_IsInMovingMode(pUnit) && pUnit->pDynamicPath->dwPathPoints)
 	{

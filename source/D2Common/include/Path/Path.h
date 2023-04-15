@@ -197,7 +197,7 @@ void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA8220
 void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA82A0 (#10141)
-D2COMMON_DLL_DECL void __stdcall D2Common_10141(D2UnitStrc* pUnit, int* pX, int* pY);
+D2COMMON_DLL_DECL void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit, int* pX, int* pY);
 //D2Common.0x6FDA8320 (#10222)
 D2COMMON_DLL_DECL void __stdcall D2Common_10222(D2UnitStrc* pUnit);
 //D2Common.0x6FDA8450 (#10223)
