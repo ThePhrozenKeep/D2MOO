@@ -111,7 +111,7 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc*
 //D2Common.0x6FD867A0
 void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD86AC0
-void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* pMemPool, int nX, D2DrlgGridStrc* pDrlgGrid);
+void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* pMemPool, int nOffsetX, D2DrlgGridStrc* pDrlgGrid);
 //D2Common.0x6FD86C80
 void __fastcall DRLGPRESET_FreePresetRoomData(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD86CE0

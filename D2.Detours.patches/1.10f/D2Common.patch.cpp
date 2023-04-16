@@ -8,8 +8,6 @@
 #include <Drlg/D2DrlgOutdoors.h>
 #include <Drlg/D2DrlgTileSub.h>
 #include <Drlg/D2DrlgOutPlace.h>
-#include <Drlg/D2DrlgActivate.h>
-#include <Drlg/D2DrlgDrlgRoom.h>
 
 //#define DISABLE_ALL_PATCHES
 
@@ -107,8 +105,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetLevelIdFromPopulatedRoom                                 @10059
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_HasWaypoint                                                 @10060
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_GetPickedLevelPrestFilePathFromRoom                         @10061
-    // DUNGEON_ChangeClientRoom: Works fine once DRLGPRESET_SpawnHardcodedPresetUnits fixed
-    PatchAction::FunctionReplaceOriginalByPatch, /*B*/ //   DUNGEON_ChangeClientRoom                                            @10062
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_ChangeClientRoom                                            @10062
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_SetClientIsInSight                                          @10063
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_UnsetClientIsInSight                                        @10064
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DUNGEON_StreamRoomAtCoords                                          @10065
@@ -1405,7 +1402,6 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FDDAF34 - D2CommonImageBase, &gpAutomapSeed, PatchAction::PointerReplacePatchByOriginal},
 
     // Known broken (or at least unable to function without patching other functions/variables) functions
-    { 0x6FD867A0 - D2CommonImageBase, &DRLGPRESET_SpawnHardcodedPresetUnits, PatchAction::FunctionReplacePatchByOriginal},
 
     // Fixed or working
     //{ 0x6FD83E20 - D2CommonImageBase, &DRLGOUTROOM_InitializeDrlgOutdoorRoom, PatchAction::PointerReplaceOriginalByPatch},

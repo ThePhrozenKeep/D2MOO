@@ -29,6 +29,22 @@
 // D2Common.0x6FDEA700
 D2LevelFileListStrc* gpLevelFilesList_6FDEA700;
 
+
+// Helper functions
+void DRLGPRESET_AddPresetUnitToMap(D2DrlgMapStrc* pMazeMap, D2PresetUnitStrc* pNewPresetUnit, BOOL bSpawned)
+{
+	pNewPresetUnit->pNext = pMazeMap->pPresetUnit;
+	pMazeMap->pPresetUnit = pNewPresetUnit;
+	pNewPresetUnit->bSpawned |= bSpawned;
+}
+D2PresetUnitStrc* DRLGPRESET_AllocateAndAddPresetUnitToMap(D2RoomExStrc* pRoomEx, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY, D2DrlgMapStrc* pMazeMap, BOOL bSpawned)
+{
+	D2PresetUnitStrc* pPresetUnit = DRLGROOM_AllocPresetUnit(pRoomEx, pMemPool, nUnitType, nIndex, nMode, nX, nY);
+	DRLGPRESET_AddPresetUnitToMap(pMazeMap, pPresetUnit, bSpawned);
+	return pPresetUnit;
+}
+
+
 //D2Common.0x6FD859A0 (#11222)
 int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
 {
@@ -738,119 +754,95 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc*
 	}
 }
 
-//D2Common.0x6FD867A0
-//TODO: Rename v22, nCellFlags
-void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
+
+static const int nRiverBlockSizeInTilesX = 5;
+static const int nRiverBlockSizeInTilesY = 4;
+// Helper function
+void DRLGPRESET_SpawnRiver(D2DrlgMapStrc* pMazeMap, const D2DrlgCoordStrc& tDrlgCoord,void* pDrlgMemPool, D2DrlgGridStrc* pDrlgGrid, int nOffsetX)
 {
-	D2DrlgCoordStrc pDrlgCoord = {};
-	D2DrlgGridStrc pDrlgGrid = {};
-	D2PresetUnitStrc* pPresetUnit = NULL;
-	D2DrlgFileStrc** ppFile = NULL;
-	unsigned int v22 = 0;
-	int nLevelPrestId = 0;
-	int nX = 0;
-	int nY = 0;
-	int nHeight = 0;
-	int nWidth = 0;
-	int nCellFlags[256] = {};
+	int nSubtileX = tDrlgCoord.nPosX + nOffsetX + 1;
+	int nSubtileY = tDrlgCoord.nPosY;
+	int nEndSubtileX = 0;
+	int nEndSubtileY = tDrlgCoord.nPosY + pMazeMap->pFile->nHeight;
 
-	ppFile = &pRoomEx->pMaze->pMap->pFile;
+	DUNGEON_GameTileToSubtileCoords(&nSubtileX, &nSubtileY);
+	DUNGEON_GameTileToSubtileCoords(&nEndSubtileX, &nEndSubtileY);
 
-	if (!pRoomEx->pMaze->pMap->pFile)
+	while (nSubtileY < nEndSubtileY)
 	{
-		DRLGPRESET_LoadDrlgFile(&pRoomEx->pMaze->pMap->pFile, pRoomEx->pLevel->pDrlg->pDS1MemPool, pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->szFile[pRoomEx->pMaze->pMap->nPickedFile]);
-		DRLGPRESET_AddPresetUnitToDrlgMap(pRoomEx->pLevel->pDrlg->pMempool, pRoomEx->pMaze->pMap, &pRoomEx->pSeed);
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pDrlgMemPool, UNIT_OBJECT, OBJECT_INVISIBLE_RIVER_SOUND1, OBJMODE_NEUTRAL, nSubtileX, nSubtileY, pMazeMap, true);
+
+		nSubtileY += DRLGROOMTILE_SUBTILES_SIZE;
 	}
 
-	if (pRoomEx->pMaze->pMap->bInited == 1)
+	DRLGPRESET_AddPresetRiverObjects(pMazeMap, pDrlgMemPool, nOffsetX, pDrlgGrid);
+}
+
+//D2Common.0x6FD867A0
+void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
+{
+	D2DrlgMapStrc* pMazeMap = pRoomEx->pMaze->pMap;
+	void* pDrlgMemPool = pRoomEx->pLevel->pDrlg->pMempool;
+	if (!pMazeMap->pFile)
 	{
-		pRoomEx->pMaze->pMap->bInited = 0;
+		DRLGPRESET_LoadDrlgFile(&pMazeMap->pFile, pRoomEx->pLevel->pDrlg->pDS1MemPool, pMazeMap->pLvlPrestTxtRecord->szFile[pMazeMap->nPickedFile]);
+		DRLGPRESET_AddPresetUnitToDrlgMap(pDrlgMemPool, pMazeMap, &pRoomEx->pSeed);
+	}
 
-		nLevelPrestId = pRoomEx->pMaze->pMap->nLevelPrest;
+	if (pMazeMap->bInited == 1)
+	{
+		pMazeMap->bInited = 0;
 
-		if (nLevelPrestId == LVLPREST_ACT1_DOE_ENTRANCE)
+		const int nLevelPrestId = pMazeMap->nLevelPrest;
+
+		if ((nLevelPrestId >= LVLPREST_ACT1_WILD_BORDER_1 && nLevelPrestId <= LVLPREST_ACT1_WILD_BORDER_4)
+			&& (pRoomEx->pLevel->nLevelId == LEVEL_BLOODMOOR && pMazeMap->nPickedFile == 3))
 		{
-			if (pRoomEx->pLevel->nLevelId == LEVEL_BLOODMOOR)
-			{
-				nX = pRoomEx->pMaze->pMap->pDrlgCoord.nPosX + pRoomEx->pMaze->pMap->pDrlgCoord.nWidth / 2;
-				nY = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY + pRoomEx->pMaze->pMap->pDrlgCoord.nHeight / 2;
+			int nX = pMazeMap->pDrlgCoord.nPosX + pMazeMap->pDrlgCoord.nWidth / 2;
+			int nY = pMazeMap->pDrlgCoord.nPosY + pMazeMap->pDrlgCoord.nHeight / 2;
 
-				DUNGEON_GameTileToSubtileCoords(&nX, &nY);
-
-				pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pRoomEx->pLevel->pDrlg->pMempool, UNIT_MONSTER, MONSTER_NAVI, MONMODE_NEUTRAL, nX, nY);
-				pPresetUnit->pNext = pRoomEx->pMaze->pMap->pPresetUnit;
-				pRoomEx->pMaze->pMap->pPresetUnit = pPresetUnit;
-			}
+			DUNGEON_GameTileToSubtileCoords(&nX, &nY);
+			const int nClassId = MONSTER_NAVI < sgptDataTables->nMonStatsTxtRecordCount ? MONSTER_NAVI : -1;
+			DRLGPRESET_AllocateAndAddPresetUnitToMap(NULL, pDrlgMemPool, UNIT_MONSTER, nClassId, MONMODE_NEUTRAL, nX, nY, pMazeMap, false);
 		}
-		else if (nLevelPrestId == LVLPREST_ACT1_TOWN_1 || nLevelPrestId == LVLPREST_ACT1_TOWN_1_TRANSITION_S || (nLevelPrestId >= LVLPREST_ACT1_RIVER_UPPER && nLevelPrestId <= LVLPREST_ACT1_BRIDGE) || nLevelPrestId == LVLPREST_ACT1_TRISTRAM)
+		else if ((nLevelPrestId == LVLPREST_ACT1_TOWN_1 || nLevelPrestId == LVLPREST_ACT1_TOWN_1_TRANSITION_S)
+			|| (nLevelPrestId >= LVLPREST_ACT1_RIVER_UPPER && nLevelPrestId <= LVLPREST_ACT1_BRIDGE)
+			|| nLevelPrestId == LVLPREST_ACT1_TRISTRAM)
 		{
 			if (pRoomEx->dwFlags & ROOMEXFLAG_AUTOMAP_REVEAL)
 			{
-				pDrlgCoord.nPosX = 0;
-				pDrlgCoord.nPosY = 0;
-				pDrlgCoord.nWidth = pRoomEx->pMaze->pMap->pDrlgCoord.nWidth;
-				pDrlgCoord.nHeight = pRoomEx->pMaze->pMap->pDrlgCoord.nHeight;
+				D2DrlgCoordStrc tDrlgCoord = {};
+				tDrlgCoord.nPosX = 0;
+				tDrlgCoord.nPosY = 0;
+				tDrlgCoord.nWidth = pMazeMap->pDrlgCoord.nWidth;
+				tDrlgCoord.nHeight = pMazeMap->pDrlgCoord.nHeight;
 
-				DRLGGRID_AssignCellsOffsetsAndFlags(&pDrlgGrid, (int*)(*ppFile)->pFloorLayer[0], &pDrlgCoord, pRoomEx->pMaze->pMap->pDrlgCoord.nWidth + 1, nCellFlags);
+				D2DrlgGridStrc tDrlgGrid = {};
+				int nCellFlags[256] = {};
+				DRLGGRID_AssignCellsOffsetsAndFlags(&tDrlgGrid, (int*)pMazeMap->pFile->pFloorLayer[0], &tDrlgCoord, pMazeMap->pDrlgCoord.nWidth + 1, nCellFlags);
 
-				pDrlgCoord.nPosX = pRoomEx->pMaze->pMap->pDrlgCoord.nPosX;
-				pDrlgCoord.nPosY = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY;
+				tDrlgCoord.nPosX = pMazeMap->pDrlgCoord.nPosX;
+				tDrlgCoord.nPosY = pMazeMap->pDrlgCoord.nPosY;
 
-				if (pRoomEx->pMaze->pMap->pLvlPrestTxtRecord->dwDef == LVLPREST_ACT1_RIVER_LOWER)
+				if (pMazeMap->pLvlPrestTxtRecord->dwDef == LVLPREST_ACT1_RIVER_LOWER)
 				{
-					nX = pRoomEx->pMaze->pMap->pDrlgCoord.nPosX;
-					nY = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY;
-					nHeight = pRoomEx->pMaze->pMap->pDrlgCoord.nPosY + (*ppFile)->nHeight;
-					nWidth = 0;
-
-					DUNGEON_GameTileToSubtileCoords(&nX, &nY);
-					DUNGEON_GameTileToSubtileCoords(&nWidth, &nHeight);
-
-					while (nY < nHeight)
-					{
-						pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pRoomEx->pLevel->pDrlg->pMempool, UNIT_OBJECT, OBJECT_INVISIBLE_RIVER_SOUND1, OBJMODE_NEUTRAL, nX, nY);
-						pPresetUnit->bSpawned |= 1;
-						pPresetUnit->pNext = pRoomEx->pMaze->pMap->pPresetUnit;
-						pRoomEx->pMaze->pMap->pPresetUnit = pPresetUnit;
-
-						nY += 40;
-					}
-
-					DRLGPRESET_AddPresetRiverObjects(pRoomEx->pMaze->pMap, pRoomEx->pLevel->pDrlg->pMempool, -1, &pDrlgGrid);
+					DRLGPRESET_SpawnRiver(pMazeMap, tDrlgCoord, pDrlgMemPool, &tDrlgGrid, -1);
 				}
 				else
 				{
-					for (int i = 0; i < pDrlgCoord.nWidth; ++i)
+					for (int nOffsetX = 0; nOffsetX < tDrlgCoord.nWidth; ++nOffsetX)
 					{
-						v22 = DRLGGRID_GetGridEntry(&pDrlgGrid, i, 0);
-						if (((v22 >> 20) & 63) == 2 && BYTE1(v22) == 24)
+						const uint32_t nGridEntry = DRLGGRID_GetGridEntry(&tDrlgGrid, nOffsetX, 0);
+						const D2C_PackedTileInformation nTileInfo{ nGridEntry };
+						if (nTileInfo.nTileStyle == 2 && nTileInfo.nTileSequence == 24)
 						{
-							nX = i + pDrlgCoord.nPosX + 1;
-							nY = pDrlgCoord.nPosY;
-							nHeight = pDrlgCoord.nPosY + (*ppFile)->nHeight;
-							nWidth = 0;
-
-							DUNGEON_GameTileToSubtileCoords(&nX, &nY);
-							DUNGEON_GameTileToSubtileCoords(&nWidth, &nHeight);
-
-							while (nY < nHeight)
-							{
-								pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pRoomEx->pLevel->pDrlg->pMempool, UNIT_OBJECT, OBJECT_INVISIBLE_RIVER_SOUND1, OBJMODE_NEUTRAL, nX, nY);
-								pPresetUnit->bSpawned |= 1;
-								pPresetUnit->pNext = pRoomEx->pMaze->pMap->pPresetUnit;
-								pRoomEx->pMaze->pMap->pPresetUnit = pPresetUnit;
-
-								nY += 40;
-							}
-
-							DRLGPRESET_AddPresetRiverObjects(pRoomEx->pMaze->pMap, pRoomEx->pLevel->pDrlg->pMempool, i, &pDrlgGrid);
-
-							i += 4;
+							DRLGPRESET_SpawnRiver(pMazeMap, tDrlgCoord, pDrlgMemPool, &tDrlgGrid, nOffsetX);
+							nOffsetX += (nRiverBlockSizeInTilesX - 1);
 						}
 					}
 				}
 
-				DRLGGRID_ResetGrid(&pDrlgGrid);
+				DRLGGRID_ResetGrid(&tDrlgGrid);
 			}
 		}
 	}
@@ -859,59 +851,27 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx)
 }
 
 //D2Common.0x6FD86AC0
-void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* pMemPool, int nX, D2DrlgGridStrc* pDrlgGrid)
+void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* pMemPool, int nOffsetX, D2DrlgGridStrc* pDrlgGrid)
 {
-	D2PresetUnitStrc* pPresetUnit = NULL;
-	unsigned int nFlags = 0;
-	int nObjectX = 0;
-	int nObjectY = 0;
-	int j = 0;
-
-	if (nX < 0)
+	int nX = nOffsetX < 0 ? 0 : nOffsetX;
+	for (int nY = 0; nY < pDrlgMap->pDrlgCoord.nHeight; ++nY)
 	{
-		j = 0;
-	}
-	else
-	{
-		j = nX;
-	}
-
-	for (int i = 0; i < pDrlgMap->pDrlgCoord.nHeight; ++i)
-	{
-		nObjectX = nX + pDrlgMap->pDrlgCoord.nPosX;
-		nObjectY = i + pDrlgMap->pDrlgCoord.nPosY;
+		int nObjectX = nOffsetX + pDrlgMap->pDrlgCoord.nPosX;
+		int nObjectY = nY + pDrlgMap->pDrlgCoord.nPosY;
 		DUNGEON_GameTileToSubtileCoords(&nObjectX, &nObjectY);
-		nObjectX -= 5;
+		nObjectX -= nRiverBlockSizeInTilesX;
 
-		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER1, OBJMODE_NEUTRAL, nObjectX, nObjectY);
-		pPresetUnit->bSpawned |= 1;
-		pPresetUnit->pNext = pDrlgMap->pPresetUnit;
-		pDrlgMap->pPresetUnit = pPresetUnit;
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pMemPool, UNIT_OBJECT, OBJECT_RIVER1, OBJMODE_NEUTRAL, nObjectX     , nObjectY, pDrlgMap, true);
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX +  5, nObjectY, pDrlgMap, true);
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX + 10, nObjectY, pDrlgMap, true);		
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX + 15, nObjectY, pDrlgMap, true);
+		DRLGPRESET_AllocateAndAddPresetUnitToMap(nullptr, pMemPool, UNIT_OBJECT, OBJECT_RIVER3, OBJMODE_NEUTRAL, nObjectX + 20, nObjectY, pDrlgMap, true);
 
-		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX + 5, nObjectY);
-		pPresetUnit->bSpawned |= 1;
-		pPresetUnit->pNext = pDrlgMap->pPresetUnit;
-		pDrlgMap->pPresetUnit = pPresetUnit;
-
-		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX + 10, nObjectY);
-		pPresetUnit->bSpawned |= 1;
-		pPresetUnit->pNext = pDrlgMap->pPresetUnit;
-		pDrlgMap->pPresetUnit = pPresetUnit;
-
-		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER2, OBJMODE_NEUTRAL, nObjectX + 15, nObjectY);
-		pPresetUnit->bSpawned |= 1;
-		pPresetUnit->pNext = pDrlgMap->pPresetUnit;
-		pDrlgMap->pPresetUnit = pPresetUnit;
-
-		pPresetUnit = DRLGROOM_AllocPresetUnit(NULL, pMemPool, UNIT_OBJECT, OBJECT_RIVER3, OBJMODE_NEUTRAL, nObjectX + 20, nObjectY);
-		pPresetUnit->bSpawned |= 1;
-		pPresetUnit->pNext = pDrlgMap->pPresetUnit;
-		pDrlgMap->pPresetUnit = pPresetUnit;
-
-		nFlags = DRLGGRID_GetGridEntry(pDrlgGrid, j, i);
-		if (((nFlags >> 20) & 63) == 4)
+		const uint32_t nGridEntry = DRLGGRID_GetGridEntry(pDrlgGrid, nX, nY);
+		const D2C_PackedTileInformation nTileInfo{ nGridEntry };
+		if (nTileInfo.nTileStyle == 4)
 		{
-			switch ((uint16_t)nFlags >> 8)
+			switch (nTileInfo.nTileSequence)
 			{
 			case 0:
 			case 4:
@@ -919,7 +879,7 @@ void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* 
 			case 16:
 			case 29:
 			case 39:
-				i += 3;
+				nY += (nRiverBlockSizeInTilesY - 1);
 				break;
 
 			default:

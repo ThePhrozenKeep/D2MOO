@@ -113,7 +113,7 @@ static void DRLGROOMTILE_InitTileDataDefaults(D2RoomExStrc* pRoomEx, D2DrlgTileD
 		DUNGEON_GameTileToClientCoords(&nPosX, &nPosY);
 
 		pTileData->nWidth = nPosX;
-		pTileData->nHeight = nPosY + 40;
+		pTileData->nHeight = nPosY + DRLGROOMTILE_SUBTILES_SIZE;
 	}
 
 	DRLGROOMTILE_InitializeTileDataFlags(pRoomEx, pTileData, nPackedTileInformation, nTileType, nX, nY);
