@@ -224,69 +224,22 @@ uint8_t byte_6FDCFB70[4*4] = {
 char byte_6FDCFB80[] = { 1, 0, -1, 0 };
 char byte_6FDCFB84[] = { 0, 1, 0, -1 };
 
-//D2Common.0x6FD80750) --------------------------------------------------------
-//TODO: Finish
+//D2Common.0x6FD80750
 BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 {
-	int v18; // eax@7
-	D2UnkOutPlaceStrc12 *v21; // esi@15
-	int v23; // eax@18
-	int v24; // ebp@18
-	int v25; // ebx@18
-	D2UnkOutPlaceStrc12 *v28; // eax@22
-	signed int v29; // eax@27
-	int v30; // edx@29
-	int v31; // eax@29
-	int v32; // ecx@31
-	int v33; // edi@33
-	int v34; // eax@36
-	int v35; // ecx@36
-	int v36; // eax@37
-	char v37; // bl@38
-	uint8_t *v38; // ecx@38
-	int v39; // eax@39
-	char v40; // bl@41
-	uint8_t *v41; // ebp@41
-	int v42; // eax@41
-	D2UnkOutPlaceStrc12 *v50; // edi@51
-	void *v51; // edi@52
-	D2UnkOutPlaceStrc12 *v52; // ST3C_4@52
-	int v53; // eax@55
-	uint8_t *v54; // ecx@55
-	int v55; // ecx@57
-	int v58; // [sp+10h] [bp-8D08h]@14
-	int v64; // [sp+38h] [bp-8CE0h]@14
-	D2UnkOutPlaceStrc12 v66; // [sp+48h] [bp-8CD0h]@7
-	D2UnkOutPlaceStrc12 *v67; // [sp+70h] [bp-8CA8h]@14
-	D2UnkOutPlaceStrc12 v68[900]; // [sp+74h] [bp-8CA4h]@14
-	int v69; // [sp+8D14h] [bp-4h]@14
+	int nX1 = (pLevel->pOutdoors->pVertices[6 + nVertexId].nPosX - pLevel->nPosX) / 8;
+	int nY1 = (pLevel->pOutdoors->pVertices[6 + nVertexId].nPosY - pLevel->nPosY) / 8;
 
+	int nX2 = (pLevel->pOutdoors->pVertices[12 + nVertexId].nPosX - pLevel->nPosX) / 8;
+	int nY2 = (pLevel->pOutdoors->pVertices[12 + nVertexId].nPosY - pLevel->nPosY) / 8;
 
-	D2DrlgVertexStrc* pPreviousVertex = NULL;
-	D2DrlgVertexStrc* pDrlgVertex = NULL;
-	int nXDiff = 0;
-	int nYDiff = 0;
-	int nMin = 0;
-	int nMax = 0;
-	int nX1 = 0;
-	int nY1 = 0;
-	int nX2 = 0;
-	int nY2 = 0;
-
-
-	nX1 = (pLevel->pOutdoors->pVertices[6 + nVertexId].nPosX - pLevel->nPosX) / 8;
-	nY1 = (pLevel->pOutdoors->pVertices[6 + nVertexId].nPosY - pLevel->nPosY) / 8;
-
-	nX2 = (pLevel->pOutdoors->pVertices[12 + nVertexId].nPosX - pLevel->nPosX) / 8;
-	nY2 = (pLevel->pOutdoors->pVertices[12 + nVertexId].nPosY - pLevel->nPosY) / 8;
-
-	nXDiff = nX1 - nX2;
+	int nXDiff = nX1 - nX2;
 	if (nXDiff < 0)
 	{
 		nXDiff = -nXDiff;
 	}
 
-	nYDiff = nY1 - nY2;
+	int nYDiff = nY1 - nY2;
 	if (nYDiff < 0)
 	{
 		nYDiff = -nYDiff;
@@ -294,8 +247,10 @@ BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 
 	if (nXDiff + nYDiff >= 2)
 	{
-		v18 = sub_6FDAB750(nX1, nY1, nX2, nY2) / 2;
+		const int v18 = sub_6FDAB750(nX1, nY1, nX2, nY2) / 2;
 
+		int nMin = 0;
+		int nMax = 0;
 		if (nXDiff < nYDiff)
 		{
 			nMin = nXDiff;
@@ -307,58 +262,63 @@ BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 			nMax = nXDiff;
 		}
 
-		memset(v68, 0x00, sizeof(D2UnkOutPlaceStrc12));
+		D2UnkOutPlaceStrc12 tOutPlaceArray[900];
+		memset(tOutPlaceArray, 0x00, sizeof(D2UnkOutPlaceStrc12));
 
-		v66.field_0 = nMin + 2 * nMax;
-		v66.field_4 = v66.field_0;
-		v66.field_8 = 0;
-		v66.nX = nX1;
-		v66.nY = nY1;
-		v66.field_14 = -1;
-		v66.field_18 = byte_6FDCFB70;
-		v66.nIndex = v18 & 3;
-		v66.pNext = NULL;
-		v66.field_24 = NULL;
+		D2UnkOutPlaceStrc12 tInitOutPlace;
+		tInitOutPlace.field_0 = nMin + 2 * nMax;
+		tInitOutPlace.field_4 = tInitOutPlace.field_0;
+		tInitOutPlace.field_8 = 0;
+		tInitOutPlace.nX = nX1;
+		tInitOutPlace.nY = nY1;
+		tInitOutPlace.field_14 = -1;
+		tInitOutPlace.field_18 = byte_6FDCFB70;
+		tInitOutPlace.nIndex = v18 & 3;
+		tInitOutPlace.pNext = nullptr;
+		tInitOutPlace.field_24 = nullptr;
 
-		v58 = v66.field_4 + v66.field_4 / 2;
-		v64 = v58 + 35;
+		int v58 = tInitOutPlace.field_4 + tInitOutPlace.field_4 / 2;
+		int v64 = v58 + 35;
 
-		v67 = v68;
+		
+		D2UnkOutPlaceStrc12* pCurrentOutPlace = nullptr;
+		D2UnkOutPlaceStrc12* pNextOutPlace = tOutPlaceArray;
 
-		v69 = 1;
+		int nNextIdx = 1;
+		int v29 = 0;
 		while (1)
 		{
-			memcpy(v67, &v66, sizeof(D2UnkOutPlaceStrc12));
-			v21 = v67;
+			memcpy(pNextOutPlace, &tInitOutPlace, sizeof(D2UnkOutPlaceStrc12));
+			pCurrentOutPlace = pNextOutPlace;
 
 LABEL_16:
-			while (v21->nX != nX2 || v21->nY != nY2)
+			while (pCurrentOutPlace->nX != nX2 || pCurrentOutPlace->nY != nY2)
 			{
-				v23 = v21->nIndex;
-				v24 = v21->nX + byte_6FDCFB80[v23];
-				v25 = v21->nY + byte_6FDCFB84[v23];
-				if (v24 == nX2 && v25 == nY2)
+				const int nOffsetsIndex = pCurrentOutPlace->nIndex;
+				const int nTestCoordX = pCurrentOutPlace->nX + byte_6FDCFB80[nOffsetsIndex];
+				const int nTestCoordY = pCurrentOutPlace->nY + byte_6FDCFB84[nOffsetsIndex];
+				if (nTestCoordX == nX2 && nTestCoordY == nY2)
 				{
 LABEL_26:
-					if (v21->nX == v24 || (v29 = 3, v21->nY == v25))
+					if (pCurrentOutPlace->nX == nTestCoordX || (v29 = 3, pCurrentOutPlace->nY == nTestCoordY))
 					{
 						v29 = 2;
 					}
 
-					v30 = v29 + v21->field_8;
-					v31 = v24 - nX2;
+					int v30 = v29 + pCurrentOutPlace->field_8;
+					int v31 = nTestCoordX - nX2;
 					if (v31 < 0)
 					{
 						v31 = -v31;
 					}
 
-					v32 = v25 - nY2;
+					int v32 = nTestCoordY - nY2;
 					if (v32 < 0)
 					{
 						v32 = -v32;
 					}
 
-					v33 = v31;
+					int v33 = v31;
 					if (v31 >= v32)
 					{
 						v33 = v32;
@@ -368,90 +328,76 @@ LABEL_26:
 						}
 					}
 
-					v34 = v33 + 2 * v32;
-					v35 = v34 + v30;
+					int v34 = v33 + 2 * v32;
+					int v35 = v34 + v30;
 					if (v35 <= v58)
 					{
-						if (!v21->field_24)
+						if (!pCurrentOutPlace->field_24)
 						{
-							if (v69 == 900)
+							D2UnkOutPlaceStrc12* v50 = nullptr;
+							if(nNextIdx != 900)
 							{
-								v50 = 0;
-							}
-							else
-							{
-								v51 = &v68[v69];
-								v52 = &v68[v69];
-								++v69;
-								memset(v51, 0x00, sizeof(D2UnkOutPlaceStrc12));
-								v50 = v52;
-								v35 = v34 + v30;
+								++nNextIdx;
+								v50 = &tOutPlaceArray[nNextIdx];
+								memset(v50, 0x00, sizeof(D2UnkOutPlaceStrc12));
 							}
 
-							v21->field_24 = v50;
+							pCurrentOutPlace->field_24 = v50;
 							if (!v50)
 							{
-								v21 = 0;
+								pCurrentOutPlace = 0;
 								break;
 							}
-							v50->pNext = v21;
+							v50->pNext = pCurrentOutPlace;
 						}
 
-						v21 = v21->field_24;
+						pCurrentOutPlace = pCurrentOutPlace->field_24;
 
-						v21->field_0 = v35;
-						v21->field_8 = v30;
-						v21->field_4 = v34;
-						v21->field_14 = 0;
-						v53 = sub_6FDAB750(v24, v25, nX2, nY2) / 2;
-						v54 = &byte_6FDCFB70[4 * ((v21->pNext->nIndex - (uint8_t)v53) & 3)];
-						v21->field_18 = v54;
-						v21->nX = v24;
-						v21->nY = v25;
-						v21->nIndex = (v53 + *v54) & 3;
+						pCurrentOutPlace->field_0 = v35;
+						pCurrentOutPlace->field_8 = v30;
+						pCurrentOutPlace->field_4 = v34;
+						pCurrentOutPlace->field_14 = 0;
+						int v53 = sub_6FDAB750(nTestCoordX, nTestCoordY, nX2, nY2) / 2;
+						pCurrentOutPlace->field_18 = &byte_6FDCFB70[4 * ((pCurrentOutPlace->pNext->nIndex - (uint8_t)v53) & 3)];
+						pCurrentOutPlace->nX = nTestCoordX;
+						pCurrentOutPlace->nY = nTestCoordY;
+						pCurrentOutPlace->nIndex = (v53 + *pCurrentOutPlace->field_18) & 3;
 					}
 					else
 					{
-						v36 = v21->field_14;
-						if (v36 < 4)
+						if (pCurrentOutPlace->field_14 < 4)
 						{
-							v37 = v21->nIndex;
-							v38 = v21->field_18 + 1;
-							v21->field_18 = v38;
-							v21->nIndex = (v37 + *v38) & 3;
+							pCurrentOutPlace->field_18++;
+							pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
 						}
 
-						v39 = v36 + 1;
-						v21->field_14 = v39;
-						if (v39 == 3)
+						pCurrentOutPlace->field_14++;
+						if (pCurrentOutPlace->field_14 == 3)
 						{
-							while (v21 != v67)
+							while (pCurrentOutPlace != pNextOutPlace)
 							{
-								v21 = v21->pNext;
-								v40 = v21->nIndex;
-								v41 = v21->field_18 + 1;
-								v21->field_18 = v41;
-								v21->nIndex = (v40 + *v41) & 3;
-								v42 = v21->field_14 + 1;
-								v21->field_14 = v42;
-								if (v42 != 3)
+								pCurrentOutPlace = pCurrentOutPlace->pNext;
+								pCurrentOutPlace->field_18++;
+								pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
+								pCurrentOutPlace->field_14++;
+								if (pCurrentOutPlace->field_14 != 3)
 								{
 									goto LABEL_16;
 								}
 							}
-							v21 = 0;
+							pCurrentOutPlace = 0;
 							break;
 						}
 					}
 				}
 				else
 				{
-					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, v24, v25))
+					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, nTestCoordX, nTestCoordY))
 					{
-						if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], v24, v25) & 0x200))
+						if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nTestCoordX, nTestCoordY) & 0x200))
 						{
-							v28 = v21;
-							while (v28->nX != v24 || v28->nY != v25)
+							D2UnkOutPlaceStrc12* v28 = pCurrentOutPlace;
+							while (v28->nX != nTestCoordX || v28->nY != nTestCoordY)
 							{
 								v28 = v28->pNext;
 								if (!v28)
@@ -462,54 +408,55 @@ LABEL_26:
 						}
 					}
 
-					if (v21->field_14 < 4)
+					if (pCurrentOutPlace->field_14 < 4)
 					{
-						++v21->field_18;
-						v21->nIndex = (v21->nIndex + *v21->field_18) & 3;
+						++pCurrentOutPlace->field_18;
+						pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
 					}
 
-					++v21->field_14;
-					if (v21->field_14 == 3)
+					++pCurrentOutPlace->field_14;
+					if (pCurrentOutPlace->field_14 == 3)
 					{
-						while (v21 != v67)
+						while (pCurrentOutPlace != pNextOutPlace)
 						{
-							v21 = v21->pNext;
+							pCurrentOutPlace = pCurrentOutPlace->pNext;
 
-							++v21->field_18;
-							v21->nIndex = (v21->nIndex + *v21->field_18) & 3;
-							++v21->field_14;
-							if (v21->field_14 != 3)
+							++pCurrentOutPlace->field_18;
+							pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
+							++pCurrentOutPlace->field_14;
+							if (pCurrentOutPlace->field_14 != 3)
 							{
 								goto LABEL_16;
 							}
 						}
 
-						v21 = 0;
+						pCurrentOutPlace = 0;
 						break;
 					}
 				}
 			}
 
-			v55 = v58 + 5;
 			v58 += 5;
-			if (v69 >= 900)
+			if (nNextIdx >= 900)
 			{
 				return 0;
 			}
 
-			v69 = 1;
-			if (v21)
+			nNextIdx = 1;
+			if (pCurrentOutPlace)
 			{
 				break;
 			}
 
-			if (v55 >= v64)
+			if (v58 >= v64)
 			{
 				return 0;
 			}
 		}
 
-		pPreviousVertex = NULL;
+		D2DrlgVertexStrc* pPreviousVertex = nullptr;
+		D2DrlgVertexStrc* pDrlgVertex = nullptr;
+		pPreviousVertex = nullptr;
 		do
 		{
 			if (pLevel->pOutdoors->pPathStarts[nVertexId])
@@ -524,12 +471,12 @@ LABEL_26:
 			}
 
 			pPreviousVertex = pDrlgVertex;
-			pDrlgVertex->nPosX = v21->nX;
-			pDrlgVertex->nPosY = v21->nY;
+			pDrlgVertex->nPosX = pCurrentOutPlace->nX;
+			pDrlgVertex->nPosY = pCurrentOutPlace->nY;
 
-			v21 = v21->pNext;
+			pCurrentOutPlace = pCurrentOutPlace->pNext;
 		}
-		while (v21);
+		while (pCurrentOutPlace);
 	}
 	else
 	{
