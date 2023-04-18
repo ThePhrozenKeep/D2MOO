@@ -579,12 +579,6 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 //D2Common.0x6FD74C10 (#10006)
 void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 {
-	int* pX = NULL;
-	int* pY = NULL;
-	int nCounter = 0;
-	int nFlag = 0;
-	BOOL bFlagSet = FALSE;
-
 	SEED_InitLowSeed(&pLevel->pSeed, pLevel->nLevelId + pLevel->pDrlg->dwStartSeed);
 
 	switch (pLevel->nDrlgType)
@@ -607,6 +601,7 @@ void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 
 	if (pLevel->nRooms && pLevel->pPresetMaps)
 	{
+		int nCounter = 0;
 		for (D2RoomExStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pRoomExNext)
 		{
 			if (pLevel->pPresetMaps[nCounter])

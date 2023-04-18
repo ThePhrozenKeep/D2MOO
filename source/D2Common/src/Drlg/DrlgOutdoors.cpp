@@ -1036,6 +1036,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 			pVertex->nPosX = pLevel->nPosX + 8 * i + 3;
 			pVertex->nPosY = pLevel->nPosY + 8 * j + 3;
 			pVertex->nDirection = 4;
+
 			int v13 = (nPackedTileInformation >> 16) & 0xF;
 
 			switch (nGrid0Entry)
@@ -1071,7 +1072,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 				pVertex->nDirection = 0;
 				break;
 			case 28:
-				if (v13 == 1 && i == pOutdoors->nGridWidth - 2)
+				if (v13 == 1 && i == (pOutdoors->nGridWidth - 2))
 				{
 					pVertex->nDirection = 2;
 				}

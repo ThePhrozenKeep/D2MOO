@@ -42,6 +42,9 @@ BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathP
 //D2Common.0x6FDAB4A0
 int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicPath, D2SeedStrc* pSeed);
 
+//D2Common.0x6FDAB610
+int __fastcall sub_6FDAB610(int nX1, int nY1, int nX2, int nY2);
+
 //D2Common.0x6FDAC5E0
 void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, int* pOutDirection, DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY);
 
