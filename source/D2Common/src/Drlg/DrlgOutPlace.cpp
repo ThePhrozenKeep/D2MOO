@@ -214,7 +214,12 @@ struct D2UnkOutPlaceStrc12
 };
 #pragma pack()
 
-uint8_t byte_6FDCFB70[8] = { 0, 1, 2, 3, 0, 1, 1, 1 };
+uint8_t byte_6FDCFB70[4*4] = { 
+	0, 1, 2, 3,
+	0, 1, 1, 1,
+	3, 2, 1, 2,
+	0, 3, 2, 1,
+};
 
 char byte_6FDCFB80[] = { 1, 0, -1, 0 };
 char byte_6FDCFB84[] = { 0, 1, 0, -1 };
