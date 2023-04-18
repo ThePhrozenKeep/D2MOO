@@ -31,11 +31,6 @@ void __fastcall DRLGOUTWILD_GetBridgeCoords(D2DrlgLevelStrc* pLevel, int* pX, in
 //TODO: Check v21, v22
 void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgVertexStrc* pPreviousVertex = NULL;
-	D2DrlgVertexStrc* pSpecialVertex = NULL;
-	D2DrlgVertexStrc* pFirstVertex = NULL;
-	D2DrlgVertexStrc* pNextVertex = NULL;
-	D2DrlgVertexStrc* pVertex = NULL;
 	int nX = 0;
 	int nY = 0;
 	BOOL bAdded = FALSE;
@@ -46,8 +41,8 @@ void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 
 	if (pLevel->nLevelId != LEVEL_BLOODMOOR && pLevel->nLevelId != LEVEL_COLDPLAINS && pLevel->nLevelId != LEVEL_BURIALGROUNDS)
 	{
-		pVertex = pLevel->pOutdoors->pVertex;
-		pPreviousVertex = pVertex;
+		D2DrlgVertexStrc* pVertex = pLevel->pOutdoors->pVertex;
+		D2DrlgVertexStrc* pPreviousVertex = pVertex;
 
 		for (D2DrlgVertexStrc* i = pVertex->pNext; i != pVertex; i = i->pNext)
 		{
@@ -57,13 +52,13 @@ void __fastcall DRLGOUTWILD_InitAct1OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		bBreak = FALSE;
 		do
 		{
-			pNextVertex = pVertex->pNext;
+			D2DrlgVertexStrc* pNextVertex = pVertex->pNext;
 			if (pVertex->nPosX < pNextVertex->nPosX && pPreviousVertex->nPosY > pVertex->nPosY && !(pVertex->dwFlags & 1)
 				&& !(pPreviousVertex->dwFlags & 1) || pVertex->nPosY > pNextVertex->nPosY 
 				&& pPreviousVertex->nPosX > pVertex->nPosX && !(pVertex->dwFlags & 1) && !(pPreviousVertex->dwFlags & 1))
 			{
-				pFirstVertex = pVertex;
-				pSpecialVertex = NULL;
+				D2DrlgVertexStrc* pFirstVertex = pVertex;
+				D2DrlgVertexStrc* pSpecialVertex = NULL;
 				do
 				{
 					if (pVertex == pLevel->pOutdoors->pVertex)
