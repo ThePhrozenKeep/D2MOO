@@ -752,7 +752,7 @@ void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, 
 		}
 
 		pDynamicPath->dwVelocity = nVelocity;
-		pDynamicPath->dwVelocity2 = nVelocity;
+		pDynamicPath->dwMaxVelocity = nVelocity;
 	}
 	else
 	{
@@ -767,17 +767,15 @@ int __stdcall PATH_GetVelocity(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA9AC0 (#10148)
-//TODO: Find a name
-void __stdcall D2Common_10148(D2DynamicPathStrc* pDynamicPath, int a2)
+void __stdcall PATH_SetMaxVelocity(D2DynamicPathStrc* pDynamicPath, int nMaxVelocity)
 {
-	pDynamicPath->dwVelocity2 = a2;
+	pDynamicPath->dwMaxVelocity = nMaxVelocity;
 }
 
 //D2Common.0x6FDA9AE0 (#10149)
-//TODO: Find a name
-int __stdcall D2Common_10149(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetMaxVelocity(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwVelocity2;
+	return pDynamicPath->dwMaxVelocity;
 }
 
 //D2Common.0x6FDA9AF0 (#10150)

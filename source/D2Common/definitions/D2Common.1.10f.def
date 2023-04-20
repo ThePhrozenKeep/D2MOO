@@ -148,8 +148,8 @@ EXPORTS
 	PATH_SetUnusedFlag_0x00004											@10145
 	PATH_SetVelocity													@10146
 	PATH_GetVelocity													@10147
-	D2Common_10148														@10148
-	D2Common_10149														@10149
+	PATH_SetMaxVelocity													@10148
+	PATH_GetMaxVelocity													@10149
 	D2Common_10150														@10150
 	D2Common_10151														@10151
 	PATH_AllocDynamicPath												@10152

@@ -194,8 +194,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnusedFlag_0x00004                                          @10145
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetVelocity                                                    @10146
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetVelocity                                                    @10147
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10148                                                      @10148
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10149                                                      @10149
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetMaxVelocity                                                 @10148
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetMaxVelocity                                                 @10149
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10150                                                      @10150
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10151                                                      @10151
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_AllocDynamicPath                                               @10152
