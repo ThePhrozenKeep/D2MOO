@@ -200,7 +200,7 @@ void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA82A0 (#10141)
 D2COMMON_DLL_DECL void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit, int* pX, int* pY);
 //D2Common.0x6FDA8320 (#10222)
-D2COMMON_DLL_DECL void __stdcall D2Common_10222(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDA8450 (#10223)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDA8600
@@ -384,6 +384,6 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10213(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6A0 (#10220)
 D2COMMON_DLL_DECL int __stdcall PATH_ComputeSquaredDistance(int nX1, int nY1, int nX2, int nY2);
 //D2Common.0x6FDAA6D0 (#10221)
-D2COMMON_DLL_DECL void __stdcall D2Common_10221(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL void __stdcall PATH_AddCollisionFootprintForOptionalUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDAA6F0 (#10237)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_10237(D2UnitStrc* pUnit);

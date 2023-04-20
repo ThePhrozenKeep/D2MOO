@@ -1773,7 +1773,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
     if (!SUNIT_IsDead(pUnit))
     {
-        D2Common_10222(pUnit);
+        PATH_AddCollisionFootprintForUnit(pUnit);
     }
 
     int32_t nNewAiState = pUnit->dwAnimMode;

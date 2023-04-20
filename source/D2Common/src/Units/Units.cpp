@@ -2966,12 +2966,12 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 
 	if (v4)
 	{
-		D2Common_10222(pUnit1);
+		PATH_AddCollisionFootprintForUnit(pUnit1);
 	}
 
 	if (v26)
 	{
-		D2Common_10222(pUnit2);
+		PATH_AddCollisionFootprintForUnit(pUnit2);
 	}
 
 	return bResult;

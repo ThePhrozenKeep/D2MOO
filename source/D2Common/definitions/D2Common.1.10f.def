@@ -221,8 +221,8 @@ EXPORTS
 	PATH_GetDistance													@10218
 	PATH_AddToDistance													@10219
 	PATH_ComputeSquaredDistance											@10220
-	D2Common_10221														@10221
-	D2Common_10222														@10222
+	PATH_AddCollisionFootprintForOptionalUnit							@10221
+	PATH_AddCollisionFootprintForUnit									@10222
 	D2Common_10223														@10223
 	D2Common_10224														@10224
 	D2Common_10225														@10225

@@ -177,34 +177,23 @@ void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit, int* pX, int* pY)
 }
 
 //D2Common.0x6FDA8320 (#10222)
-//TODO: Find a name
-void __stdcall D2Common_10222(D2UnitStrc* pUnit)
+void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit)
 {
 	D2CoordStrc pCoords = {};
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
-	if (!pUnit || pUnit->dwUnitType < 0)
+	switch (pUnit->dwUnitType)
 	{
+	case UNIT_MONSTER:
+		COLLISION_SetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionType(pUnit));
+		break;
+	case UNIT_OBJECT:
+		COLLISION_SetMaskWithSizeXY(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetUnitSizeY(pUnit), UNITS_GetCollisionType(pUnit));
+		break;
+	default:
 		COLLISION_SetMaskWithSize(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetCollisionType(pUnit));
-	}
-	else
-	{
-		if (pUnit->dwUnitType > 1)
-		{
-			if (pUnit->dwUnitType == UNIT_OBJECT)
-			{
-				COLLISION_SetMaskWithSizeXY(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetUnitSizeY(pUnit), UNITS_GetCollisionType(pUnit));
-			}
-			else
-			{
-				COLLISION_SetMaskWithSize(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetCollisionType(pUnit));
-			}
-		}
-		else
-		{
-			COLLISION_SetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionType(pUnit));
-		}
+		break;
 	}
 }
 
@@ -496,7 +485,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 		{
 			D2Common_10223(pUnit, 1);
 			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pUnit->pDynamicPath->dwUnitSize);
-			D2Common_10222(pUnit);
+			PATH_AddCollisionFootprintForUnit(pUnit);
 		}
 		else
 		{
@@ -577,7 +566,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 	if (pRoom)
 	{
-		D2Common_10222(pUnit);
+		PATH_AddCollisionFootprintForUnit(pUnit);
 		UNITROOM_AddUnitToRoom(pUnit, pDynamicPath->pRoom);
 	}
 	
@@ -697,7 +686,7 @@ void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 		D2Common_10223(pUnit, TRUE);
 		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 		PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_CORPSE);
-		D2Common_10222(pUnit);
+		PATH_AddCollisionFootprintForUnit(pUnit);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
 }
@@ -731,7 +720,7 @@ void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 			D2Common_10223(pUnit, 1);
 			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
 			PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_MONSTER);
-			D2Common_10222(pUnit);
+			PATH_AddCollisionFootprintForUnit(pUnit);
 		}
 		else
 		{
@@ -1468,12 +1457,11 @@ int __stdcall PATH_ComputeSquaredDistance(int nX1, int nY1, int nX2, int nY2)
 }
 
 //D2Common.0x6FDAA6D0 (#10221)
-//TODO: Find a name
-void __stdcall D2Common_10221(D2UnitStrc* pUnit)
+void __stdcall PATH_AddCollisionFootprintForOptionalUnit(D2UnitStrc* pUnit)
 {
 	if (pUnit)
 	{
-		D2Common_10222(pUnit);
+		PATH_AddCollisionFootprintForUnit(pUnit);
 	}
 }
 
