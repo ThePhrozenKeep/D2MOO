@@ -150,8 +150,8 @@ EXPORTS
 	PATH_GetVelocity													@10147
 	PATH_SetMaxVelocity													@10148
 	PATH_GetMaxVelocity													@10149
-	D2Common_10150														@10150
-	D2Common_10151														@10151
+	PATH_SetAcceleration												@10150
+	PATH_GetAcceleration												@10151
 	PATH_AllocDynamicPath												@10152
 	D2Common_10153														@10153
 	PATH_GetNumberOfPathPoints								@10154

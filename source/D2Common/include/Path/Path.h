@@ -109,7 +109,8 @@ struct D2DynamicPathStrc
 	uint32_t dwVelocity;						//0x7C
 	uint32_t unk0x80;							//0x80
 	uint32_t dwMaxVelocity;						//0x84
-	uint32_t unk0x88[2];						//0x88
+	uint32_t dwAcceleration;					//0x88
+	uint32_t unk0x8C;							//0x8C
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
 	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
@@ -241,9 +242,9 @@ D2COMMON_DLL_DECL void __stdcall PATH_SetMaxVelocity(D2DynamicPathStrc* pDynamic
 //D2Common.0x6FDA9AE0 (#10149)
 D2COMMON_DLL_DECL int __stdcall PATH_GetMaxVelocity(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9AF0 (#10150)
-D2COMMON_DLL_DECL void __stdcall D2Common_10150(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetAcceleration(D2DynamicPathStrc* pDynamicPath, int nAcceleration);
 //D2Common.0x6FDA9B10 (#10151)
-D2COMMON_DLL_DECL int __stdcall D2Common_10151(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetAcceleration(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B20 (#10153)
 D2COMMON_DLL_DECL void __stdcall D2Common_10153(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9B40 (#10208)

@@ -779,17 +779,15 @@ int __stdcall PATH_GetMaxVelocity(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA9AF0 (#10150)
-//TODO: Find a name
-void __stdcall D2Common_10150(D2DynamicPathStrc* pDynamicPath, int a2)
+void __stdcall PATH_SetAcceleration(D2DynamicPathStrc* pDynamicPath, int nAcceleration)
 {
-	pDynamicPath->unk0x88[0] = a2;
+	pDynamicPath->dwAcceleration = nAcceleration;
 }
 
 //D2Common.0x6FDA9B10 (#10151)
-//TODO: Find a name
-int __stdcall D2Common_10151(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetAcceleration(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->unk0x88[0];
+	return pDynamicPath->dwAcceleration;
 }
 
 //D2Common.0x6FDA9B20 (#10153)

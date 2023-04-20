@@ -273,7 +273,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     }
 
     MISSILE_SetOwner(pMissile, missileParams->pOwner);
-    D2Common_10150(pMissile->pDynamicPath, pMissilesTxtRecord->wAccel);
+    PATH_SetAcceleration(pMissile->pDynamicPath, pMissilesTxtRecord->wAccel);
     PATH_SetMaxVelocity(pMissile->pDynamicPath, ((int32_t)pMissilesTxtRecord->nMaxVel) << 8);
 
     if (missileParams->dwFlags & 0x400)
