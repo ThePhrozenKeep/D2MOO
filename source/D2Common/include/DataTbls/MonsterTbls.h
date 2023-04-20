@@ -455,7 +455,7 @@ struct D2MonStats2Txt
 	uint8_t pad0xED[3];						//0xED
 	union
 	{
-		uint32_t dwModeFlags;					//0xF0
+		uint32_t dwModeFlags;					//0xF0 If flag is set, mode is enabled. See D2C_MonModes.
 		uint8_t nModeFlags[4];					//0xF0
 	};
 	uint8_t nModeDirections[NUMBER_OF_MONMODES]; //0xF4

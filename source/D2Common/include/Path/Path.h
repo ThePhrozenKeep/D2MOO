@@ -32,7 +32,7 @@ enum D2PathFlags : uint32_t {
 	PATH_UNUSED_FLAG_0x00004  = 0x00004, // This is unused
 	PATH_UNKNOWN_FLAG_0x00008 = 0x00008, // Set when rider and mount have the same position
 	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
-	PATH_UNKNOWN_FLAG_0x00020 = 0x00020,
+	PATH_UNKNOWN_FLAG_0x00020 = 0x00020, // Only set on the client side
 	PATH_UNKNOWN_FLAG_0x00040 = 0x00040,
 	PATH_UNKNOWN_FLAG_0x00200 = 0x00200,
 	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
