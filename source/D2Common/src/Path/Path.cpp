@@ -1068,24 +1068,22 @@ void __stdcall D2Common_10173(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 }
 
 //D2Common.0x6FDA9F00 (#10145)
-//TODO: Find a name
-void __stdcall D2Common_10145(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
+void __stdcall PATH_SetUnusedFlag_0x00004(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 {
 	if (bSet)
 	{
-		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00004;
+		pDynamicPath->dwFlags |= PATH_UNUSED_FLAG_0x00004;
 	}
 	else
 	{
-		pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00004);
+		pDynamicPath->dwFlags &= (~PATH_UNUSED_FLAG_0x00004);
 	}
 }
 
 //D2Common.0x6FDA9F30 (#10174)
-//TODO: Find a name
-BOOL __stdcall D2Common_10174(D2DynamicPathStrc* pDynamicPath)
+BOOL __stdcall PATH_GetUnusedFlag_0x00004(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00004;
+	return pDynamicPath->dwFlags & PATH_UNUSED_FLAG_0x00004;
 }
 
 //D2Common.0x6FDA9F40 (#10179)

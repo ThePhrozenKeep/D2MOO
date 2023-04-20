@@ -191,7 +191,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   D2Common_10142                                                      @10142
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitDeadCollision                                           @10143
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitAliveCollision                                          @10144
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10145                                                      @10145
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnusedFlag_0x00004                                          @10145
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetVelocity                                                    @10146
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetVelocity                                                    @10147
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10148                                                      @10148
@@ -220,7 +220,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetTypeAndGUID                                           @10171
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10172                                                      @10172
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10173                                                      @10173
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10174                                                      @10174
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetUnusedFlag_0x00004                                          @10174
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10175_PathGetFirstPointX                                   @10175
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10176_PathGetFirstPointY                                   @10176
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10177_PATH_GetLastPointX                                   @10177

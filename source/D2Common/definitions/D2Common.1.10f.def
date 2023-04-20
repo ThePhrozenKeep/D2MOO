@@ -145,7 +145,7 @@ EXPORTS
 	D2Common_10142														@10142
 	PATH_SetUnitDeadCollision											@10143
 	PATH_SetUnitAliveCollision											@10144
-	D2Common_10145														@10145
+	PATH_SetUnusedFlag_0x00004											@10145
 	PATH_SetVelocity													@10146
 	PATH_GetVelocity													@10147
 	D2Common_10148														@10148
@@ -174,7 +174,7 @@ EXPORTS
 	PATH_GetTargetTypeAndGUID											@10171
 	D2Common_10172														@10172
 	D2Common_10173														@10173
-	D2Common_10174														@10174
+	PATH_GetUnusedFlag_0x00004											@10174
 	D2COMMON_10175_PathGetFirstPointX									@10175
 	D2COMMON_10176_PathGetFirstPointY									@10176
 	D2COMMON_10177_PATH_GetLastPointX									@10177

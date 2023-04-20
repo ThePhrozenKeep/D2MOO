@@ -29,7 +29,7 @@ enum D2PathTypes
 enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
 	PATH_UNKNOWN_FLAG_0x00002 = 0x00002,
-	PATH_UNKNOWN_FLAG_0x00004 = 0x00004,
+	PATH_UNUSED_FLAG_0x00004  = 0x00004, // This is unused
 	PATH_UNKNOWN_FLAG_0x00008 = 0x00008, // Set when rider and mount have the same position
 	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
 	PATH_UNKNOWN_FLAG_0x00020 = 0x00020,
@@ -313,9 +313,9 @@ D2COMMON_DLL_DECL BOOL __stdcall D2Common_10172(D2DynamicPathStrc* pDynamicPath)
 //D2Common.0x6FDA9ED0 (#10173)
 D2COMMON_DLL_DECL void __stdcall D2Common_10173(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
 //D2Common.0x6FDA9F00 (#10145)
-D2COMMON_DLL_DECL void __stdcall D2Common_10145(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
+D2COMMON_DLL_DECL void __stdcall PATH_SetUnusedFlag_0x00004(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
 //D2Common.0x6FDA9F30 (#10174)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_10174(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL BOOL __stdcall PATH_GetUnusedFlag_0x00004(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9F40 (#10179)
 D2COMMON_DLL_DECL void __stdcall PATH_SetTargetUnit(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA9F60 (#10171)
