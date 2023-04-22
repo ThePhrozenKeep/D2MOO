@@ -982,7 +982,7 @@ int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPreci
 }
 
 //D2Common.0x6FDAC790
-void __stdcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
+void __fastcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
 {
 	const DWORD dwPrecisionX = pPath->tGameCoords.dwPrecisionX;
 	const DWORD dwPrecisionY = pPath->tGameCoords.dwPrecisionY;
