@@ -198,61 +198,39 @@ void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDA8450 (#10223)
-//TODO: Find a name
-BOOL __stdcall D2Common_10223(D2UnitStrc* pUnit, int a2)
+BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bForce)
 {
-	int nUnitType = 0;
 	D2CoordStrc pCoords = {};
-
-	if (pUnit)
-	{
-		nUnitType = pUnit->dwUnitType;
-	}
-	else
-	{
-		nUnitType = 6;
-	}
-
 	UNITS_GetCoords(pUnit, &pCoords);
 
-	if (nUnitType == UNIT_PLAYER)
+	switch (pUnit->dwUnitType)
 	{
-		if (pUnit->dwAnimMode != PLRMODE_DEAD && pUnit->dwAnimMode != PLRMODE_DEATH)
+	case UNIT_PLAYER:
+		if (bForce || (pUnit->dwAnimMode != PLRMODE_DEAD && pUnit->dwAnimMode != PLRMODE_DEATH))
 		{
 			COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionType(pUnit));
 			return TRUE;
 		}
-	}
-	else if (nUnitType == UNIT_MONSTER)
-	{
-		if (pUnit->dwAnimMode != MONMODE_DEAD && pUnit->dwAnimMode != MONMODE_DEATH)
+		break;
+	case UNIT_MONSTER:
+		if (bForce || (pUnit->dwAnimMode != MONMODE_DEAD && pUnit->dwAnimMode != MONMODE_DEATH))
 		{
 			COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionType(pUnit));
 			return TRUE;
 		}
-	}
-	else if (nUnitType == UNIT_OBJECT)
-	{
-		if (UNITS_HasCollision(pUnit) || a2)
+		break;
+	case UNIT_OBJECT:
+		if (bForce || UNITS_HasCollision(pUnit))
 		{
 			COLLISION_ResetMaskWithSizeXY(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetUnitSizeY(pUnit), UNITS_GetCollisionType(pUnit));
 			return TRUE;
 		}
-		return FALSE;
-	}
-	else
-	{
+		break;
+	default:
 		COLLISION_ResetMaskWithSize(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetCollisionType(pUnit));
 		return TRUE;
 	}
-
-	if (!a2)
-	{
-		return FALSE;
-	}
-
-	COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionType(pUnit));
-	return TRUE;
+	return FALSE;
 }
 
 //D2Common.0x6FDA8600
@@ -483,7 +461,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 	{
 		if (UNITS_GetRoom(pUnit))
 		{
-			D2Common_10223(pUnit, 1);
+			PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
 			pUnit->pDynamicPath->dwCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, pUnit->pDynamicPath->dwUnitSize);
 			PATH_AddCollisionFootprintForUnit(pUnit);
 		}
@@ -667,7 +645,7 @@ void __stdcall D2Common_10228(D2UnitStrc* pUnit)
 {
 	if (pUnit->pDynamicPath)
 	{
-		D2Common_10223(pUnit, 1);
+		PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
 	}
 }
 
@@ -677,13 +655,13 @@ void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 	D2_ASSERT(pUnit->pDynamicPath != nullptr);
 	if (bForGameLogic || pUnit->dwUnitType != UNIT_MONSTER)
 	{
-		D2Common_10223(pUnit, TRUE);
+		PATH_RemoveCollisionFootprintForUnit(pUnit, TRUE);
 		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->tGameCoords.wPosX, pUnit->pDynamicPath->tGameCoords.wPosY, 3, 3, COLLIDE_CORPSE);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
 	else // Called from Client, related to corpse being displayed
 	{
-		D2Common_10223(pUnit, TRUE);
+		PATH_RemoveCollisionFootprintForUnit(pUnit, TRUE);
 		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 		PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		PATH_AddCollisionFootprintForUnit(pUnit);
@@ -717,7 +695,7 @@ void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 
 		if (UNITS_GetRoom(pUnit))
 		{
-			D2Common_10223(pUnit, 1);
+			PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
 			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
 			PATH_SetCollisionType(pUnit->pDynamicPath, COLLIDE_MONSTER);
 			PATH_AddCollisionFootprintForUnit(pUnit);

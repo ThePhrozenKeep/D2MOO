@@ -2954,12 +2954,12 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 
 	if (UNITS_GetCollisionType(pUnit1) & nCollisionType)
 	{
-		v4 = D2Common_10223(pUnit1, 0);
+		v4 = PATH_RemoveCollisionFootprintForUnit(pUnit1, 0);
 	}
 
 	if (UNITS_GetCollisionType(pUnit2) & nCollisionType)
 	{
-		v26 = D2Common_10223(pUnit2, 0);
+		v26 = PATH_RemoveCollisionFootprintForUnit(pUnit2, 0);
 	}
 
 	bResult = UNITS_TestCollision(pCoords1.nX, pCoords1.nY, UNITS_GetUnitSizeX(pUnit1), pCoords2.nX, pCoords2.nY, UNITS_GetUnitSizeX(pUnit2), pRoom, nCollisionType);

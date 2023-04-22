@@ -571,7 +571,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
         {
             if (pUnit->dwAnimMode == PLRMODE_DEAD || pUnit->dwAnimMode == PLRMODE_DEATH)
             {
-                D2Common_10223(pUnit, 1);
+                PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
                 PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
                 PATH_SetCollisionType(pUnit->pDynamicPath, 0x8000u);
             }
@@ -583,7 +583,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
                 D2MonStats2Txt* pMonStatsTxt2Record = MONSTERREGION_GetMonStats2TxtRecord(nClassId);
                 if (!pMonStatsTxt2Record || !(pMonStatsTxt2Record->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_DEADCOL]))
                 {
-                    D2Common_10223(pUnit, 1);
+                    PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
                     PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
                     PATH_SetCollisionType(pUnit->pDynamicPath, 0x8000u);
                     return pUnit;
@@ -798,7 +798,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
 
         if (pUnit->dwAnimMode == PLRMODE_DEAD || pUnit->dwAnimMode == PLRMODE_DEATH)
         {
-            D2Common_10223(pUnit, 1);
+            PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
             PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
             PATH_SetCollisionType(pUnit->pDynamicPath, 0x8000);
         }
@@ -824,7 +824,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
 
         if (MONSTERS_IsDead(pUnit))
         {
-            D2Common_10223(pUnit, 1);
+            PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
             PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
             PATH_SetCollisionType(pUnit->pDynamicPath, 0x8000);
         }
