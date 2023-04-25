@@ -29,3 +29,29 @@ target_include_directories(
     doctest/doctest # note : will expose the parts/ folder...
 )
 add_library(doctest::doctest ALIAS doctest)
+
+add_library(imgui
+	#source files
+	imgui/imgui.cpp
+	imgui/imgui_draw.cpp
+	imgui/imgui_demo.cpp
+	imgui/imgui_tables.cpp
+	imgui/imgui_widgets.cpp
+	
+	#headers
+	imgui/imgui.h
+	imgui/imgui_internal.h
+	
+	#backend
+	imgui/backends/imgui_impl_win32.cpp
+	imgui/backends/imgui_impl_win32.h
+	imgui/backends/imgui_impl_dx9.cpp
+	imgui/backends/imgui_impl_dx9.h
+)
+target_include_directories(imgui 
+	PUBLIC imgui 
+	PUBLIC imgui/backends/
+)
+add_library(imgui::imgui ALIAS imgui)
+
+
