@@ -151,7 +151,7 @@ struct D2GameStrc
 	uint8_t unk0x6E;							//0x6E
 	uint8_t unk0x6F;							//0x6F
 	BOOL bExpansion;							//0x70
-	uint32_t dwGameType;						//0x74
+	uint32_t dwGameType;						//0x74 1=Ladder
 	uint16_t wItemFormat;						//0x78
 	uint16_t unk0x7A;							//0x7A
 	uint32_t dwInitSeed;						//0x7C
@@ -159,7 +159,7 @@ struct D2GameStrc
 	uint32_t InitSeed;							//0x84
 	D2ClientStrc* pClientList;					//0x88
 	uint32_t nClients;							//0x8C
-	uint32_t dwSpawnedUnits[6];					//0x90
+	uint32_t dwSpawnedUnits[UNIT_TYPES_COUNT];	//0x90
 	int32_t dwGameFrame;						//0xA8
 	uint32_t unk0xAC[3];						//0xAC
 	D2EventTimerQueueStrc* pTimerQueue;			//0xB8
