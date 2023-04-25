@@ -87,7 +87,7 @@ if(${D2MOO_INSTALL})
   
   install(TARGETS D2.DetoursLauncher D2.Detours)
   
-  install(TARGETS D2Common D2Game
+  install(TARGETS D2Common D2Game D2Debugger
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
   )
   install(FILES README.md TYPE DOC)

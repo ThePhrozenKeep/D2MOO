@@ -7,4 +7,5 @@ add_subdirectory(D2Lang)
 add_subdirectory(D2Net)
 add_subdirectory(D2Common)
 add_subdirectory(D2Game)
+add_subdirectory(D2Debugger)
 
