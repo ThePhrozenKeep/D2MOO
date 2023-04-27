@@ -1141,7 +1141,7 @@ D2PlayerWeaponSequencesStrc* gPlayerWeaponsSequenceTable[24] =
 
 //D2Common.0x6FDE03E8
 //Note: This should really just be an array since the indices are ordered anyway...
-static const int gWeaponIndexToClassMap[14][2] =
+static const int gWeaponIndexToClassMap[NUM_WEAPON_CLASSES][2] =
 {
 	{ 0, WEAPONCLASS_HTH },
 	{ 1, WEAPONCLASS_1HT },
@@ -1176,7 +1176,6 @@ D2MonSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FD727C0
 D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 {
-
 	if (D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit))
 	{
 		int nSequenceNum = SKILLS_GetSeqNumFromSkill(pUnit, pSkill);
@@ -1195,7 +1194,7 @@ D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 				COMPOSIT_GetWeaponClassId(pUnit, pUnit->pInventory, &nWeaponClass, -1, TRUE);
 
 				int nWClassIndex = -1;
-				for (int i = 0; i < 14; i++)
+				for (int i = 0; i < NUM_WEAPON_CLASSES; i++)
 				{
 					if (nWeaponClass == gWeaponIndexToClassMap[i][1])
 					{
@@ -1215,7 +1214,7 @@ D2SeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //D2Common.0x6FD728A0 (#10683)
