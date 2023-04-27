@@ -1338,7 +1338,7 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
     int32_t nFrameCount = 0;
     if (pUnit->pAnimSeq)
     {
-        nAnimSpeed = pUnit->dwAnimSpeed;
+        nAnimSpeed = pUnit->dwAnimSequenceSpeed;
         nFrameCount = pUnit->dwSeqFrameCount;
     }
     else
@@ -1423,7 +1423,7 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     int32_t nFrameCount = 0;
     if (pUnit->pAnimSeq)
     {
-        nAnimSpeed = pUnit->dwAnimSpeed;
+        nAnimSpeed = pUnit->dwAnimSequenceSpeed;
         nFrameCount = pUnit->dwSeqFrameCount;
     }
     else
@@ -1496,7 +1496,7 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     int32_t nFrameCount = 0;
     if (pUnit->pAnimSeq)
     {
-        nAnimSpeed = pUnit->dwAnimSpeed;
+        nAnimSpeed = pUnit->dwAnimSequenceSpeed;
         nFrameCount = pUnit->dwSeqFrameCount;
     }
     else
@@ -1563,7 +1563,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
     int32_t nFrameCount = 0;
     if (pUnit->pAnimSeq)
     {
-        nAnimSpeed = pUnit->dwAnimSpeed;
+        nAnimSpeed = pUnit->dwAnimSequenceSpeed;
         nFrameCount = pUnit->dwSeqFrameCount;
     }
     else

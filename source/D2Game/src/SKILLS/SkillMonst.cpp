@@ -122,7 +122,7 @@ int32_t __fastcall SKILLS_SrvDo084_MaggotEgg(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    pUnit->dwAnimSpeed = 0;
+    pUnit->dwAnimSequenceSpeed = 0;
 
     const int32_t nCount = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     if (nCount > 0)
@@ -237,7 +237,7 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
 
     if (nFrameNo <= 0)
     {
-        pUnit->dwAnimSpeed = 0;
+        pUnit->dwAnimSequenceSpeed = 0;
     }
 
     const int32_t nPercentage = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
@@ -893,7 +893,7 @@ int32_t __fastcall SKILLS_SrvDo094_Submerge(D2GameStrc* pGame, D2UnitStrc* pUnit
     pUnit->nActionFrame = 0;
     if (pFrameNo <= 0)
     {
-        pUnit->dwAnimSpeed = 0;
+        pUnit->dwAnimSequenceSpeed = 0;
     }
 
     return 1;

@@ -58,11 +58,11 @@ void D2DebugGame(D2GameStrc* pGame)
 
                 ImGui::SeparatorText("Animation");
                 //ImGui::Text("Animation");
-                ImGui::BulletText("Mode          %d", pPlayer->dwAnimMode);
-                ImGui::BulletText("?speed?(0x3C) %d", pPlayer->dwAnimSpeed);
-                ImGui::BulletText("Speed (0x4C)  %d", pPlayer->wAnimSpeed);
-                ImGui::BulletText("FrameCount    %d", pPlayer->dwFrameCount);
-                ImGui::BulletText("nActionFrame  %d", pPlayer->nActionFrame);
+                ImGui::BulletText("Mode           %d", pPlayer->dwAnimMode);
+                ImGui::BulletText("Sequence Speed %d", pPlayer->dwAnimSequenceSpeed);
+                ImGui::BulletText("Speed          %d", pPlayer->wAnimSpeed);
+                ImGui::BulletText("FrameCount     %d", pPlayer->dwFrameCount);
+                ImGui::BulletText("nActionFrame   %d", pPlayer->nActionFrame);
             }
         }
         ImGui::Unindent();

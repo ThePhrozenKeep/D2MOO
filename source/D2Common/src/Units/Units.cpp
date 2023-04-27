@@ -1019,7 +1019,7 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 		{
 			pUnit->dwSeqFrameCount = DATATBLS_GetSeqFramePointsCount(pUnit);
 			pUnit->dwSeqFrame = 0;
-			pUnit->dwAnimSpeed = 256;
+			pUnit->dwAnimSequenceSpeed = 256;
 			pUnit->dwFrameCount = DATATBLS_GetSeqFrameCount(pUnit) << 8;
 
 			unsigned nMode = 0, nFrame = 0;
@@ -1060,14 +1060,14 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 		nOldFrame = pUnit->dwSeqFrame;
 
 		pUnit->dwFlags &= ~UNITFLAG_SQGFXCHANGE;
-		pUnit->dwSeqFrame += pUnit->dwAnimSpeed;
+		pUnit->dwSeqFrame += pUnit->dwAnimSequenceSpeed;
 
 		if (pUnit->dwSeqFrame >= pUnit->dwSeqFrameCount)
 		{
 			pUnit->dwSeqFrame -= pUnit->dwSeqFrameCount;
 		}
 
-		pUnit->dwFrameCount -= pUnit->dwAnimSpeed;
+		pUnit->dwFrameCount -= pUnit->dwAnimSequenceSpeed;
 
 		nOldMode = pUnit->dwSeqMode;
 		DATATBLS_ComputeSequenceAnimation(pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
@@ -1253,7 +1253,7 @@ __forceinline void __fastcall UNITS_UpdateAttackAnimRateAndVelocity(D2UnitStrc* 
 		nAnimSpeed = 32767;
 	}
 
-	pUnit->dwAnimSpeed = nAnimSpeed;
+	pUnit->dwAnimSequenceSpeed = nAnimSpeed;
 	pUnit->wAnimSpeed = nAnimSpeed;
 }
 
@@ -1320,7 +1320,7 @@ __forceinline void __fastcall UNITS_UpdateCastAnimRateAndVelocity(D2UnitStrc* pU
 	}
 
 	pUnit->wAnimSpeed = nAnimSpeed;
-	pUnit->dwAnimSpeed = nAnimSpeed;
+	pUnit->dwAnimSequenceSpeed = nAnimSpeed;
 }
 
 __forceinline void __fastcall UNITS_UpdateGetHitAnimRateAndVelocity(D2UnitStrc* pUnit)
