@@ -2,6 +2,10 @@
 #include "D2Debugger.h"
 #include <Game/Game.h>
 
+#include "IconsFontAwesome6.h"
+
+// Using a define so that we break inline
+#define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
 
 void D2DebugGame(D2GameStrc* pGame)
 {
@@ -36,6 +40,48 @@ void D2DebugGame(D2GameStrc* pGame)
         ImGui::BulletText("Items: %d", pGame->dwSpawnedUnits[UNIT_ITEM]);
         ImGui::BulletText("Tiles: %d", pGame->dwSpawnedUnits[UNIT_TILE]);
 
+        ImGui::SeparatorText("Players units");
+        ImGui::Indent();
+        for (int32_t i = 0; i < ARRAY_SIZE(pGame->pUnitList[UNIT_PLAYER]); ++i)
+        {
+            for (D2UnitStrc* pPlayer = pGame->pUnitList[UNIT_PLAYER][i];
+                pPlayer != nullptr;
+                pPlayer = pPlayer->pListNext)
+            {
+                AddDebugBreakButton();
+                ImGui::SameLine();
+                ImGui::SeparatorText(pPlayer->pPlayerData->szName);
+                ImGui::Text("ClassId=%d", pPlayer->dwClassId);
+                ImGui::Text("GUID=0x%x", pPlayer->dwUnitId);
+
+                ImGui::Text("Act=0x%x", pPlayer->dwUnitId);
+
+                ImGui::SeparatorText("Animation");
+                //ImGui::Text("Animation");
+                ImGui::BulletText("Mode          %d", pPlayer->dwAnimMode);
+                ImGui::BulletText("?speed?(0x3C) %d", pPlayer->dwAnimSpeed);
+                ImGui::BulletText("Speed (0x4C)  %d", pPlayer->wAnimSpeed);
+                ImGui::BulletText("FrameCount    %d", pPlayer->dwFrameCount);
+                ImGui::BulletText("nActionFrame  %d", pPlayer->nActionFrame);
+            }
+        }
+        ImGui::Unindent();
+
+#if 0
+        // No debugging for clients until we access the gClientListLock_6FD447D0 properly
+        // This means knowing wether we use the one from the original game or D2Moo
+        ImGui::Text("Clients");
+        D2_LOCK(&gClientListLock_6FD447D0);
+
+        for (D2ClientStrc* pCurrentClient = pGame->pClientList;
+            pCurrentClient != nullptr;
+            pCurrentClient = pCurrentClient->pNextByName)
+        {
+            ImGui::Text("Name:%16s", pCurrentClient->szName);
+            ImGui::Text("Account:%16s", pCurrentClient->szAccount);
+        }
+        D2_UNLOCK(&gClientListLock_6FD447D0);
+#endif
     }
     ImGui::End();
 }
