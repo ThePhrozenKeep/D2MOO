@@ -1247,7 +1247,7 @@ void __stdcall DATATBLS_ComputeSequenceAnimation(D2MonSeqTxt* pMonSeqTxt, int nT
 {
 	if (pMonSeqTxt)
 	{
-		const D2MonSeqTxt* pMonSeqTxtRecord = &pMonSeqTxt[nCurrentFramePoint >> 8];
+		const D2MonSeqTxt* pMonSeqTxtRecord = &pMonSeqTxt[nTargetFramePoint >> 8];
 
 		*pMode = pMonSeqTxtRecord->nMode;
 		*pFrame = pMonSeqTxtRecord->nFrame;

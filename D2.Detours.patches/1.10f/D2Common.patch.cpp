@@ -730,8 +730,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetDirFromOverlayTxt                                       @10681
     PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetMonSeqTxtRecordFromUnit                                 @10682
     PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSeqFramePointsCount                                     @10683
-    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSeqFrameCount                                           @10684
-    PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_ComputeSequenceAnimation                                   @10685
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetSeqFrameCount                                           @10684
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_ComputeSequenceAnimation                                   @10685
     PatchAction::FunctionReplaceOriginalByPatch,       //   DATATBLS_GetSequenceEvent                                           @10686
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_AllocItemData                                                 @10687
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_FreeItemData                                                  @10688
