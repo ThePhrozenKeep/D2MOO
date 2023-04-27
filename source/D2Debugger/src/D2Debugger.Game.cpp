@@ -7,6 +7,95 @@
 // Using a define so that we break inline
 #define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
 
+// Note: Missile and items are inverted on purpose here, this is like this in the game
+int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
+{
+    switch (nUnitType)
+    {
+    case UNIT_MISSILE: return 4;
+    case UNIT_ITEM: return 3;
+    default: return (int)nUnitType;
+    }
+}
+
+static const char* gActNames[] = {
+    "Act 1",
+    "Act 2",
+    "Act 3",
+    "Act 4",
+    "Act 5",
+    "Act *", // Used as a sentinel value
+};
+
+template<typename ItFunction>
+void IterateUnits(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&& itFunc)
+{
+    ImGui::PushID(nUnitType);
+
+    ImGui::Text("Filters:");
+
+    static const int dwordInputSize = ImGui::CalcTextSize("-00000000").x;
+    static int nClassIdFilter = -1;
+    static D2UnitGUID nUnitGUIDFilter = D2UnitInvalidGUID;
+    static int nActFilter = D2C_Acts::NUM_ACTS;
+
+    ImGui::PushItemWidth(dwordInputSize);
+    ImGui::SameLine(); ImGui::InputInt("ClassId", &nClassIdFilter, 0, 0);
+    ImGui::SameLine(); ImGui::InputInt("GUID", (int*)&nUnitGUIDFilter, 0,0);
+    ImGui::PopItemWidth();
+
+    static const int ActComboWidth = ImGui::CalcTextSize("Act X").x + /*arrow*/ ImGui::GetFrameHeight() + ImGui::GetStyle().FramePadding.x * 2;
+    ImGui::SetNextItemWidth(ActComboWidth);
+    ImGui::SameLine(); ImGui::Combo("##Act", (int*)&nActFilter, gActNames, ARRAY_SIZE(gActNames));
+
+    D2UnitStrc** pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
+    const int32_t nFirstHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0;
+    const int32_t nLastHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0x7F;
+    bool stopIteration = false;
+    for (int32_t i = nFirstHashIdx; i <= nLastHashIdx && !stopIteration; ++i)
+    {
+        for (D2UnitStrc* pUnit = pUnitList[i];
+            pUnit != nullptr && !stopIteration;
+            pUnit = pUnit->pListNext)
+        {
+            if ((nUnitGUIDFilter != D2UnitInvalidGUID) && (pUnit->dwUnitId != nUnitGUIDFilter))
+                continue;
+            if ((nClassIdFilter >= 0) && (pUnit->dwClassId != nClassIdFilter))
+                continue;
+            if ((nActFilter != D2C_Acts::NUM_ACTS) && (pUnit->nAct != nActFilter))
+                continue;
+            
+            if (!itFunc(pUnit))
+                stopIteration = true;
+
+            if (nUnitGUIDFilter != D2UnitInvalidGUID)
+                stopIteration = true;
+        }
+    }
+    ImGui::PopID();
+
+}
+
+void D2DebugUnitAnim(D2UnitStrc * pUnit)
+{
+    if (pUnit->pAnimData)
+    {
+        ImGui::BulletText("Name           %8s", pUnit->pAnimData->szAnimDataName);
+        ImGui::BulletText("Frames         %d", pUnit->pAnimData->dwFrames);
+        ImGui::BulletText("Base Speed     %d", pUnit->pAnimData->dwAnimSpeed);
+    }
+    ImGui::BulletText("Mode           %d", pUnit->dwAnimMode);
+    ImGui::BulletText("Speed          %d", pUnit->wAnimSpeed);
+    ImGui::BulletText("FrameCount     %d", pUnit->dwFrameCount);
+    ImGui::BulletText("nActionFrame   %d", pUnit->nActionFrame);
+    ImGui::BeginDisabled(pUnit->pAnimSeq == nullptr);
+    ImGui::BulletText("Sequence Mode  %d", pUnit->dwSeqMode);
+    ImGui::BulletText("Sequence Speed %d", pUnit->dwSeqSpeed);
+    ImGui::BulletText("Sequence Frame %f", pUnit->dwSeqCurrentFrame / 256.f);
+    ImGui::BulletText("Seq next frame %f", pUnit->dwSeqFrame / 256.f);
+    ImGui::EndDisabled();
+}
+
 void D2DebugGame(D2GameStrc* pGame)
 {
     if(ImGui::Begin("Game"))
@@ -40,32 +129,47 @@ void D2DebugGame(D2GameStrc* pGame)
         ImGui::BulletText("Items: %d", pGame->dwSpawnedUnits[UNIT_ITEM]);
         ImGui::BulletText("Tiles: %d", pGame->dwSpawnedUnits[UNIT_TILE]);
 
-        ImGui::SeparatorText("Players units");
-        ImGui::Indent();
-        for (int32_t i = 0; i < ARRAY_SIZE(pGame->pUnitList[UNIT_PLAYER]); ++i)
+        if (ImGui::CollapsingHeader("Players units"))
         {
-            for (D2UnitStrc* pPlayer = pGame->pUnitList[UNIT_PLAYER][i];
-                pPlayer != nullptr;
-                pPlayer = pPlayer->pListNext)
-            {
-                AddDebugBreakButton();
-                ImGui::SameLine();
-                ImGui::SeparatorText(pPlayer->pPlayerData->szName);
-                ImGui::Text("ClassId=%d", pPlayer->dwClassId);
-                ImGui::Text("GUID=0x%x", pPlayer->dwUnitId);
+            ImGui::Indent();
+            IterateUnits(pGame, UNIT_PLAYER, [](D2UnitStrc* pPlayer)
+                {
+                    AddDebugBreakButton();
+                    ImGui::SameLine();
+                    ImGui::SeparatorText(pPlayer->pPlayerData->szName);
 
-                ImGui::Text("Act=0x%x", pPlayer->dwUnitId);
+                    ImGui::Text("ClassId=%d", pPlayer->dwClassId);
+                    ImGui::SameLine(); ImGui::Text("GUID=0x%x", pPlayer->dwUnitId);
+                    ImGui::SameLine(); ImGui::Text(gActNames[pPlayer->nAct]);
 
-                ImGui::SeparatorText("Animation");
-                //ImGui::Text("Animation");
-                ImGui::BulletText("Mode           %d", pPlayer->dwAnimMode);
-                ImGui::BulletText("Sequence Speed %d", pPlayer->dwAnimSequenceSpeed);
-                ImGui::BulletText("Speed          %d", pPlayer->wAnimSpeed);
-                ImGui::BulletText("FrameCount     %d", pPlayer->dwFrameCount);
-                ImGui::BulletText("nActionFrame   %d", pPlayer->nActionFrame);
-            }
+                    ImGui::SeparatorText("Animation");
+                    D2DebugUnitAnim(pPlayer);
+                    return true;
+                }
+            );
+            ImGui::Unindent();
         }
-        ImGui::Unindent();
+        if (ImGui::CollapsingHeader("Monster units"))
+        {
+            ImGui::Indent();
+            IterateUnits(pGame, UNIT_MONSTER, [](D2UnitStrc* pMonster)
+                {
+                    ImGui::Separator();
+                    AddDebugBreakButton();
+                    ImGui::SameLine();
+
+                    //ImGui::SeparatorText(pPlayer->pMonsterData->wszMonName);
+                    ImGui::Text("ClassId=%d", pMonster->dwClassId);
+                    ImGui::SameLine(); ImGui::Text("GUID=0x%x", pMonster->dwUnitId);
+                    ImGui::SameLine(); ImGui::Text(gActNames[pMonster->nAct]);
+
+                    ImGui::SeparatorText("Animation");
+                    D2DebugUnitAnim(pMonster);
+                    return true;
+                }
+            );
+            ImGui::Unindent();
+        }
 
 #if 0
         // No debugging for clients until we access the gClientListLock_6FD447D0 properly

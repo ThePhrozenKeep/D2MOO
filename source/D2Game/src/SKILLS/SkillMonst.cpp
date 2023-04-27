@@ -122,7 +122,7 @@ int32_t __fastcall SKILLS_SrvDo084_MaggotEgg(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    pUnit->dwAnimSequenceSpeed = 0;
+    pUnit->dwSeqSpeed = 0;
 
     const int32_t nCount = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     if (nCount > 0)
@@ -237,7 +237,7 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
 
     if (nFrameNo <= 0)
     {
-        pUnit->dwAnimSequenceSpeed = 0;
+        pUnit->dwSeqSpeed = 0;
     }
 
     const int32_t nPercentage = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
@@ -893,7 +893,7 @@ int32_t __fastcall SKILLS_SrvDo094_Submerge(D2GameStrc* pGame, D2UnitStrc* pUnit
     pUnit->nActionFrame = 0;
     if (pFrameNo <= 0)
     {
-        pUnit->dwAnimSequenceSpeed = 0;
+        pUnit->dwSeqSpeed = 0;
     }
 
     return 1;
@@ -956,7 +956,7 @@ void __fastcall SKILLS_SetInfernoFrame(D2SkillsTxt* pSkillsTxtRecord, D2UnitStrc
             }
             else
             {
-                pUnit->dwGFXcurrentFrame = pMonStats2TxtRecord->nInfernoAnim << 8;
+                pUnit->dwSeqCurrentFrame = pMonStats2TxtRecord->nInfernoAnim << 8;
             }
         }
     }
@@ -2009,7 +2009,7 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
     else
     {
         const int32_t nMax = pUnit->dwFrameCount >> 8;
-        const int32_t nCurrent = pUnit->dwGFXcurrentFrame >> 8;
+        const int32_t nCurrent = pUnit->dwSeqCurrentFrame >> 8;
         if (nMax > pUnit->pAnimData->dwFrames || nCurrent + 1 >= nMax)
         {
             return 0;

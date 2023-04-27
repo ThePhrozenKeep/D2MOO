@@ -171,7 +171,7 @@ struct D2GameStrc
 	D2ObjectControlStrc* pObjectControl;		//0x10F0
 	D2QuestInfoStrc* pQuestControl;				//0x10F4
 	D2TargetNodeStrc* pTargetNodes[10];			//0x10F8
-	D2UnitStrc* pUnitList[5][128];				//0x1120
+	D2UnitStrc* pUnitList[5][128];				//0x1120 Note: This is not indexed by UnitType!! UNIT_MISSILE is index 4 and UNIT_ITEM is index 3
 	D2UnitStrc* pTileList;						//0x1B20
 	uint32_t dwUniqueFlags[128];				//0x1B24
 	D2NpcControlStrc* pNpcControl;				//0x1D24

@@ -130,9 +130,9 @@ struct D2UnitStrc
 	struct D2MonSeqTxt* pAnimSeq;				//0x30
 	uint32_t dwSeqFrameCount;					//0x34
 	int32_t dwSeqFrame;							//0x38
-	uint32_t dwAnimSequenceSpeed;				//0x3C
+	uint32_t dwSeqSpeed;						//0x3C
 	uint32_t dwSeqMode;							//0x40
-	uint32_t dwGFXcurrentFrame;					//0x44
+	uint32_t dwSeqCurrentFrame;					//0x44 8-bits fixed point. Actually reused as stop frame when not using a seq. For example for missiles / inferno.
 	uint32_t dwFrameCount;						//0x48
 	int16_t wAnimSpeed;							//0x4C
 	uint8_t nActionFrame;						//0x4E
