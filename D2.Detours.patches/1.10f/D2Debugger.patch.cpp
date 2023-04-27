@@ -23,13 +23,32 @@ static const int D2GameImageBase = 0x6FC30000;
 
 decltype(&GAME_UpdateProgress) GAME_UpdateProgress_Original = nullptr;
 
+bool IsDebuggerEnabled()
+{
+    static bool bEnabledFromCommandLine = strstr(GetCommandLineA(), "-debug");
+    if (bEnabledFromCommandLine)
+    {
+        return true;
+    }
+    // TODO: support toggling window based on chat command ?
+    return false;
+}
+
 void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame)
 {
-    static bool bDebuggerAvailable = D2DebuggerInit() == 0;
-    if (bDebuggerAvailable) D2DebuggerNewFrame();
+    if (IsDebuggerEnabled())
+    {
+        static bool bDebuggerAvailable = D2DebuggerInit() == 0;
+        if (bDebuggerAvailable)
+        {
+            D2DebuggerNewFrame();
+            GAME_UpdateProgress_Original(pGame);
+            D2DebugGame(pGame);
+            D2DebuggerEndFrame();
+            return;
+        }
+    }
     GAME_UpdateProgress_Original(pGame);
-    D2DebugGame(pGame);
-    if (bDebuggerAvailable) D2DebuggerEndFrame();
 }
 
 
