@@ -54,6 +54,11 @@ The debug targets are already configured and set as startup project when using V
 
 Note that it will spawn the game/D2SE as a subprocess, so you might be interested in the following Visual Studio extension [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool). Then go to Debug > Other debug targets > Child process debugging settings, enable & save.
 
+## Debugger (Experimental!)
+
+Start the game with the `-debug`.
+For example: `D2.DetoursLauncher -- -debug`.
+
 ## Versions
 
 The project is currently based on the 1.10f version of the game.
