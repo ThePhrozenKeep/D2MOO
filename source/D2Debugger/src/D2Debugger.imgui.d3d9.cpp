@@ -16,7 +16,7 @@ struct D2DebuggerData
     LPDIRECT3DDEVICE9        pd3dDevice = nullptr;
     D3DPRESENT_PARAMETERS    d3dpp = {};
     HWND                     hWindow = nullptr;
-    WNDCLASSEX               windowClassEx;
+    WNDCLASSEXW              windowClassEx;
     bool                     bShowDemo = true;
 } gD2DebuggerData;
 
@@ -90,17 +90,17 @@ int D2DebuggerInit()
 {
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
-    gD2DebuggerData.windowClassEx = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ImGui Example"), NULL };
-    ::RegisterClassEx(&gD2DebuggerData.windowClassEx);
+    gD2DebuggerData.windowClassEx = { sizeof(WNDCLASSEXW), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"D2Debugger", nullptr };
+    ::RegisterClassExW(&gD2DebuggerData.windowClassEx);
     int x = 0, y = 0;
     GetWindowPositionFromGameWindow(x, y);
-    gD2DebuggerData.hWindow = ::CreateWindow(gD2DebuggerData.windowClassEx.lpszClassName, _T("D2Debugger"), WS_OVERLAPPEDWINDOW, x, y, 1000, 800, NULL, NULL, gD2DebuggerData.windowClassEx.hInstance, NULL);
+    gD2DebuggerData.hWindow = ::CreateWindowW(gD2DebuggerData.windowClassEx.lpszClassName, L"D2Debugger", WS_OVERLAPPEDWINDOW, x, y, 1000, 800, nullptr, nullptr, gD2DebuggerData.windowClassEx.hInstance, nullptr);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(gD2DebuggerData.hWindow))
     {
         CleanupDeviceD3D();
-        ::UnregisterClass(gD2DebuggerData.windowClassEx.lpszClassName, gD2DebuggerData.windowClassEx.hInstance);
+        ::UnregisterClassW(gD2DebuggerData.windowClassEx.lpszClassName, gD2DebuggerData.windowClassEx.hInstance);
         return 1;
     }
 
@@ -126,17 +126,18 @@ int D2DebuggerInit()
     // Load Fonts
     // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
     // - Read 'docs/FONTS.md' for more instructions and details.
     // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
     //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
     //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != nullptr);
     return 0;
 }
 
@@ -149,7 +150,7 @@ void D2DebuggerDestroy()
 
     CleanupDeviceD3D();
     ::DestroyWindow(gD2DebuggerData.hWindow);
-    ::UnregisterClass(gD2DebuggerData.windowClassEx.lpszClassName, gD2DebuggerData.windowClassEx.hInstance);
+    ::UnregisterClassW(gD2DebuggerData.windowClassEx.lpszClassName, gD2DebuggerData.windowClassEx.hInstance);
 }
 
 // returns true if should quit
@@ -163,10 +164,10 @@ bool D2DebuggerNewFrame()
     // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
     // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
     // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-    while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+    while (::PeekMessageW(&msg, nullptr, 0U, 0U, PM_REMOVE))
     {
         ::TranslateMessage(&msg);
-        ::DispatchMessage(&msg);
+        ::DispatchMessageW(&msg);
 
         if (msg.message == WM_QUIT)
         {
@@ -197,14 +198,14 @@ void D2DebuggerEndFrame()
     
     const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x * 255.0f), (int)(clear_color.y * 255.0f), (int)(clear_color.z * 255.0f), (int)(clear_color.w * 255.0f));
-    gD2DebuggerData.pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
+    gD2DebuggerData.pd3dDevice->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
     if (gD2DebuggerData.pd3dDevice->BeginScene() >= 0)
     {
         ImGui::Render();
         ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
         gD2DebuggerData.pd3dDevice->EndScene();
     }
-    HRESULT result = gD2DebuggerData.pd3dDevice->Present(NULL, NULL, NULL, NULL);
+    HRESULT result = gD2DebuggerData.pd3dDevice->Present(nullptr, nullptr, nullptr, nullptr);
 
     // Handle loss of D3D9 device
     if (result == D3DERR_DEVICELOST && gD2DebuggerData.pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
@@ -217,7 +218,7 @@ void D2DebuggerEndFrame()
 
 bool CreateDeviceD3D(HWND hWnd)
 {
-    if ((gD2DebuggerData.pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
+    if ((gD2DebuggerData.pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == nullptr)
         return false;
 
     // Create the D3DDevice
@@ -237,8 +238,8 @@ bool CreateDeviceD3D(HWND hWnd)
 
 void CleanupDeviceD3D()
 {
-    if (gD2DebuggerData.pd3dDevice) { gD2DebuggerData.pd3dDevice->Release(); gD2DebuggerData.pd3dDevice = NULL; }
-    if (gD2DebuggerData.pD3D) { gD2DebuggerData.pD3D->Release(); gD2DebuggerData.pD3D = NULL; }
+    if (gD2DebuggerData.pd3dDevice) { gD2DebuggerData.pd3dDevice->Release(); gD2DebuggerData.pd3dDevice = nullptr; }
+    if (gD2DebuggerData.pD3D) { gD2DebuggerData.pD3D->Release(); gD2DebuggerData.pD3D = nullptr; }
 }
 
 void ResetDevice()
@@ -262,7 +263,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_SIZE:
-        if (gD2DebuggerData.pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+        if (gD2DebuggerData.pd3dDevice != nullptr && wParam != SIZE_MINIMIZED)
         {
             gD2DebuggerData.d3dpp.BackBufferWidth = LOWORD(lParam);
             gD2DebuggerData.d3dpp.BackBufferHeight = HIWORD(lParam);
@@ -277,5 +278,5 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         ::PostQuitMessage(0);
         return 0;
     }
-    return ::DefWindowProc(hWnd, msg, wParam, lParam);
+    return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
