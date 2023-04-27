@@ -26,6 +26,65 @@ void CleanupDeviceD3D();
 void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+HWND GetGameWindow()
+{
+    HWND hGameWindow = nullptr;
+    EnumWindows([](HWND hWnd, LPARAM lParam) -> BOOL
+        {
+            DWORD dwProcessId = 0x0;
+            GetWindowThreadProcessId(hWnd, &dwProcessId);
+            // Only consider the current process windows.
+            if (GetCurrentProcessId() == dwProcessId)
+            {
+                char buf[2048];
+                // There are many windows that may be created due to compatibility layers...
+                // So sadly we need to filter by name too.
+                // An alternative would be to get the window handle directly from D2Client.dll
+                if (GetWindowTextA(hWnd, buf, _countof(buf)) && strstr(buf, "Diablo"))
+                {
+                    *(HWND*)lParam = hWnd;
+                    SetLastError(ERROR_SUCCESS);
+                    // Stop iteration here.
+                    return FALSE;
+                }
+            }
+            return TRUE;
+        }
+    , (LPARAM)&hGameWindow);
+    return hGameWindow;
+}
+
+void GetWindowPositionFromGameWindow(int& x, int& y)
+{
+    const HWND hGameWindow = GetGameWindow();
+    if (!hGameWindow)
+    {
+        x = CW_USEDEFAULT;
+        return;
+    }
+    MONITORINFO monitorInfo = { 0 };
+    monitorInfo.cbSize = sizeof(MONITORINFO);
+    GetMonitorInfoA(MonitorFromWindow(hGameWindow, MONITOR_DEFAULTTOPRIMARY), &monitorInfo);
+
+    RECT windowRect;
+    GetWindowRect(hGameWindow, &windowRect);
+
+    if (windowRect.left == monitorInfo.rcMonitor.left
+        && windowRect.right == monitorInfo.rcMonitor.right
+        && windowRect.top == monitorInfo.rcMonitor.top
+        && windowRect.bottom == monitorInfo.rcMonitor.bottom)
+    {
+        // Fullscreen, same position as game window
+        x = windowRect.left;
+        y = windowRect.top;
+    }
+    else
+    {
+        // Windowed, on the right of the game window
+        x = windowRect.right + 5;
+        y = windowRect.top;
+    }
+}
 D2DEBUGGER_DLL_DECL
 int D2DebuggerInit()
 {
@@ -33,7 +92,9 @@ int D2DebuggerInit()
     //ImGui_ImplWin32_EnableDpiAwareness();
     gD2DebuggerData.windowClassEx = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("ImGui Example"), NULL };
     ::RegisterClassEx(&gD2DebuggerData.windowClassEx);
-    gD2DebuggerData.hWindow = ::CreateWindow(gD2DebuggerData.windowClassEx.lpszClassName, _T("D2Debugger"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, gD2DebuggerData.windowClassEx.hInstance, NULL);
+    int x = 0, y = 0;
+    GetWindowPositionFromGameWindow(x, y);
+    gD2DebuggerData.hWindow = ::CreateWindow(gD2DebuggerData.windowClassEx.lpszClassName, _T("D2Debugger"), WS_OVERLAPPEDWINDOW, x, y, 1000, 800, NULL, NULL, gD2DebuggerData.windowClassEx.hInstance, NULL);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(gD2DebuggerData.hWindow))
