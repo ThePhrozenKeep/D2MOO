@@ -13,7 +13,7 @@ jobs:
       CMAKE_PRESET: ${{ matrix.buildtype == 'Debug' && 'clang-tidy' || 'ninja' }}
 
     steps:
-    - uses: actions/checkout@v3.5
+    - uses: actions/checkout@v3
       with:
         submodules: recursive
 
