@@ -13,7 +13,7 @@ jobs:
       CMAKE_PRESET: ${{ matrix.buildtype == 'Debug' && 'clang-tidy' || 'ninja' }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3.5
       with:
         submodules: recursive
 
@@ -48,4 +48,4 @@ jobs:
       if: env.BUILD_TYPE == 'Release'
       uses: actions/upload-artifact@v3
       with:
-        path: '${{runner.workspace}}\out\install\${{env.CMAKE_PRESET}}\'
+        path: '${{github.workspace}}\out\install\${{env.CMAKE_PRESET}}\'
