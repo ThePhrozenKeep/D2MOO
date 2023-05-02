@@ -12,6 +12,7 @@
 #include <DataTbls/MonsterIds.h>
 #include <D2Math.h>
 #include "Path/PathMisc.h"
+#include "Path/PathWF.h"
 
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
@@ -102,7 +103,7 @@ static const PathFunctionType scpfnPathFunction[] = {
 	,sub_6FDAB0C0
 	,sub_6FDAA9F0
 	,nullptr
-	,sub_6FDAC270
+	,PATH_ComputePathOrSlideAlongObstacles
 	,sub_6FDA7970
 	,nullptr
 };

@@ -681,63 +681,6 @@ int __stdcall sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 	}
 }
 
-//D2Common.0x6FDABAC0
-int __fastcall sub_6FDABAC0(D2PathInfoStrc* ptPathInfo, D2PathPointStrc* a2, int a3, int a4, int a5, signed int nMaxLength, int a7)
-{
-	UNIMPLEMENTED();
-	return 0;
-}
-
-//D2Common.0x6FDAC170
-int __fastcall PATH_SimplifyToLines_6FDAC170(D2PathPointStrc* pOutPathPoints, D2PathPointStrc* pInputPoints, D2PathPointStrc tStartCoord, signed int nbTempPoints)
-{
-	if (nbTempPoints >= 2)
-	{
-		int nbOutPoints = 0;
-		
-		int prevDeltaX = pInputPoints->X - tStartCoord.X;
-		int prevDeltaY = pInputPoints->Y - tStartCoord.Y;
-		int nbPointsInLine = 0;
-		int nCurrentPointIdx;
-		for (nCurrentPointIdx = 0; nCurrentPointIdx < nbTempPoints - 1; ++nCurrentPointIdx)
-		{
-			int deltaX = pInputPoints[nCurrentPointIdx + 1].X - pInputPoints[nCurrentPointIdx].X;
-			int deltaY = pInputPoints[nCurrentPointIdx + 1].Y - pInputPoints[nCurrentPointIdx].Y;
-			if (deltaX == prevDeltaX && deltaY == prevDeltaY)
-			{
-				++nbPointsInLine;
-			}
-			else if (nbPointsInLine > 0 || prevDeltaX == deltaX || prevDeltaY == deltaY)
-			{
-				nbPointsInLine = 0;
-				pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
-			}
-			else
-			{
-				nbPointsInLine = 1;
-				deltaX = -2;
-			}
-			prevDeltaY = deltaY;
-			prevDeltaX = deltaX;
-		}
-		if (nCurrentPointIdx < nbTempPoints)
-			pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
-	}
-	else if (nbTempPoints == 1)
-	{
-		*pOutPathPoints = *pInputPoints;
-		return 1;
-	}
-	return 0;
-}
-
-
-//D2Common.0x6FDAC270
-int __fastcall sub_6FDAC270(D2PathInfoStrc* pPathInfo)
-{
-	UNIMPLEMENTED();
-	return 0;
-}
 
 struct TanToDirectionLutEntryStrc {
 	D2CoordStrc dirVector;

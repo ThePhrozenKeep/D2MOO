@@ -48,8 +48,14 @@ struct D2PathPointStrc
 	uint16_t X;
 	uint16_t Y;
 
-	bool operator==(const D2PathPointStrc& other) { return X == other.X && Y == other.Y; }
-	bool operator!=(const D2PathPointStrc& other) { return !(*this == other); }
+	bool operator==(const D2PathPointStrc& other) const { return X == other.X && Y == other.Y; }
+	bool operator!=(const D2PathPointStrc& other) const { return !(*this == other); }
+	int SquaredDistance(const D2PathPointStrc& other) const
+	{
+		const int nDiffX = other.X - X;
+		const int nDiffY = other.Y - Y;
+		return nDiffX * nDiffX + nDiffY * nDiffY;
+	}
 };
 
 // Represents a position with 16bit fixed point precision
