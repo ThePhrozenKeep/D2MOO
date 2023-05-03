@@ -402,7 +402,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetCurrentRoomInvalid                                         @10356
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_RefreshInventory                                              @10357
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetSkillFromSkillId                                           @10358
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsSoftMonster                                                 @10359
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsSoftMonster                                                 @10359
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetMeleeRange                                                 @10360
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMeleeRange                                                @10361
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionWithUnit                                         @10362

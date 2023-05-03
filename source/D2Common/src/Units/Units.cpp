@@ -2180,17 +2180,13 @@ int __stdcall UNITS_GetCurrentLifePercentage(D2UnitStrc* pUnit)
 //D2Common.0x6FDC02A0 (#10359)
 BOOL __stdcall UNITS_IsSoftMonster(D2UnitStrc* pUnit)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
 	{
-		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_SOFT])
+		if (D2MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId))
 		{
-			return TRUE;
+			return (pMonStats2TxtRecord->dwFlags & MONSTATS2FLAG_SOFT) != 0;
 		}
 	}
-
 	return FALSE;
 }
 
