@@ -360,7 +360,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetUnitGUIDFromCorpse                                     @10314
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10315                                                      @10315
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10316                                                      @10316
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_CanSwitchAI                                                   @10317
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_CanSwitchAI                                                   @10317
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingMode                                                @10318
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingModeEx                                              @10319
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStartSkill                                                 @10320

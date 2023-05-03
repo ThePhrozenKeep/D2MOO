@@ -3549,19 +3549,14 @@ unsigned int __stdcall UNITS_GetStashGoldLimit(D2UnitStrc* pUnit)
 //D2Common.0x6FDC2680 (#10317)
 BOOL __fastcall UNITS_CanSwitchAI(int nMonsterId)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-
-	pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
-	if (pMonStatsTxtRecord)
+	if (D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId))
 	{
-		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx);
-		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & MONSTATS2MODEFLAG_WL))
+		if (D2MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx))
 		{
-			if (!(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_BOSS]))
-			{
-				return (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_SWITCHAI]) != 0;
-			}
+			// Can switch only if walking, not a boss and has the SwitchAI flag.
+			return 0 != (pMonStats2TxtRecord->dwModeFlags    & MONSTATS2MODEFLAG_WL)
+				&& 0 == (pMonStatsTxtRecord->dwMonStatsFlags & MONSTATSFLAG_BOSS)
+				&& 0 != (pMonStatsTxtRecord->dwMonStatsFlags & MONSTATSFLAG_SWITCHAI);
 		}
 	}
 
