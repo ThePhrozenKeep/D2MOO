@@ -3017,63 +3017,38 @@ BOOL __stdcall UNITS_IsInMeleeRange(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int 
 //D2Common.0x6FDC1B40 (#10318)
 BOOL __stdcall UNITS_IsInMovingMode(D2UnitStrc* pUnit)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	int nMonsterBaseId = 0;
-	int nAnimMode = 0;
-
-	if (pUnit)
+	if (pUnit == nullptr)
 	{
-		if (pUnit->dwUnitType == UNIT_PLAYER)
-		{
-			if (pUnit->pAnimSeq)
-			{
-				nAnimMode = pUnit->dwSeqMode;
-			}
-			else
-			{
-				nAnimMode = pUnit->dwAnimMode;
-			}
-
-			if (nAnimMode >= PLRMODE_WALK)
-			{
-				if (nAnimMode <= PLRMODE_RUN)
-				{
-					return TRUE;
-				}
-
-				if (nAnimMode == PLRMODE_TWALK)
-				{
-					return TRUE;
-				}
-			}
-		}
-		else if (pUnit->dwUnitType == UNIT_MONSTER)
-		{
-			switch (pUnit->dwAnimMode)
-			{
-			case MONMODE_SKILL1:
-			case MONMODE_SKILL2:
-				nMonsterBaseId = MONSTERS_GetBaseIdFromMonsterId(pUnit->dwClassId);
-
-				if (nMonsterBaseId == MONSTER_VULTURE1)
-				{
-					return TRUE;
-				}
-
-				return FALSE;
-
-			case MONMODE_WALK:
-			case MONMODE_RUN:
-				return TRUE;
-
-			default:
-				return FALSE;
-			}
-		}
-		D2_ASSERT(pUnit->dwUnitType != UNIT_MISSILE);
+		return false;
 	}
-
-	return FALSE;
+	switch (pUnit->dwUnitType)
+	{
+	case UNIT_PLAYER:
+		switch (const int nPlayerMode = pUnit->pAnimSeq ? pUnit->dwSeqMode : pUnit->dwAnimMode)
+		{
+		case PLRMODE_WALK:
+		case PLRMODE_RUN:
+		case PLRMODE_TWALK:
+			return TRUE;
+		default:
+			return FALSE;
+		}
+	case UNIT_MONSTER:
+		switch (pUnit->dwAnimMode)
+		{
+		case MONMODE_WALK:
+		case MONMODE_RUN:
+			return TRUE;
+		case MONMODE_SKILL1:
+		case MONMODE_SKILL2:
+			return MONSTERS_GetBaseIdFromMonsterId(pUnit->dwClassId) == MONSTER_VULTURE1;
+		default:
+			return FALSE;
+		}
+	default:
+		D2_ASSERT(pUnit->dwUnitType != UNIT_MISSILE);
+		return FALSE;
+	}
 }
 
 //D2Common.0x6FDC1C30 (#10319)

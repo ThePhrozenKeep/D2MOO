@@ -361,8 +361,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10315                                                      @10315
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10316                                                      @10316
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_CanSwitchAI                                                   @10317
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingMode                                                @10318
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsInMovingModeEx                                              @10319
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMovingMode                                                @10318
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMovingModeEx                                              @10319
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStartSkill                                                 @10320
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetLeftSkill                                                  @10321
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRightSkill                                                 @10322
