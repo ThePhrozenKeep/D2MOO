@@ -640,8 +640,8 @@ EXPORTS
 	DATATBLS_GetInventoryComponentGrid									@10637
 	DATATBLS_GetBeltsTxtRecord											@10638
 	DATATBLS_GetInvRectFromBeltsTxt										@10639
-	D2Common_10640														@10640
-	D2Common_10641														@10641
+	DATATBLS_UnitAnimInfoDebugSet										@10640
+	DATATBLS_GetAnimDataInfo											@10641
 	DATATBLS_SetVelocityInMonStatsTxtRecord								@10642
 	DATATBLS_GetPlrMode_TypeDataTables									@10643
 	DATATBLS_GetMonModeDataTables										@10644

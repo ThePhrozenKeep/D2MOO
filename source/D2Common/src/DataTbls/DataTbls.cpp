@@ -223,7 +223,7 @@ D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable()
 }
 
 //D2Common.0x6FD4E4C0
-D2AnimDataStrc* __fastcall DATATBLS_GetAnimData()
+D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData()
 {
 	return sgptDataTables->pAnimData;
 }

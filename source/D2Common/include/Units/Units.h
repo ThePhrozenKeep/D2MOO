@@ -137,7 +137,7 @@ struct D2UnitStrc
 	int16_t wAnimSpeed;							//0x4C
 	uint8_t nActionFrame;						//0x4E
 	uint8_t unk0x4F;							//0x4F
-	D2AnimDataRecordStrc* pAnimData;			//0x50
+	const D2AnimDataRecordStrc* pAnimData;		//0x50
 	D2GfxDataStrc* pGfxData;					//0x54
 	D2GfxDataStrc* pGfxDataCopy;				//0x58
 	D2StatListExStrc* pStatListEx;				//0x5C

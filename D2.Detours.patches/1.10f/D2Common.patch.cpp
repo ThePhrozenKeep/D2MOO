@@ -368,7 +368,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRightSkill                                                 @10322
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUsedSkill                                                  @10323
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetUsedSkill                                                  @10324
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimData                                                   @10325
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimData                                                   @10325
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10326
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionX                                                 @10327
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetXForStaticUnit                                             @10328
@@ -683,8 +683,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetInventoryComponentGrid                                  @10637
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetBeltsTxtRecord                                          @10638
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetInvRectFromBeltsTxt                                     @10639
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10640                                                      @10640
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10641                                                      @10641
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_UnitAnimInfoDebugSet                                       @10640
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   DATATBLS_GetAnimDataInfo                                            @10641
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_SetVelocityInMonStatsTxtRecord                             @10642
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetPlrMode_TypeDataTables                                  @10643
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonModeDataTables                                       @10644

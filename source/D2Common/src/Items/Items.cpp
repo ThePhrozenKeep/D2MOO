@@ -4665,7 +4665,7 @@ int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
 
 	D2Common_10884_COMPOSIT_unk(pUnit, pUnit->dwClassId, PLRMODE_ATTACK1, pUnit->dwUnitType, pUnit->pInventory, szPath, &nWeaponClass, 0, 0);
 
-	if (D2Common_10641(szPath, &nLength, &v11, &v13))
+	if (DATATBLS_GetAnimDataInfo(szPath, &nLength, &v11, &v13))
 	{
 		D2_ASSERT(nLength);
 

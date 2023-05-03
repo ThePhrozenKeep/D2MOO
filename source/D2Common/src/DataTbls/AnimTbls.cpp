@@ -5,224 +5,138 @@
 
 #include <Archive.h>
 
-//TODO: Find names
-
-
 //D2Common.0x6FD473C0
-D2AnimDataStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool)
+D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool)
 {
-	D2AnimDataRecordStrc** pHashTable = NULL;
-	D2AnimDataStrc* pAnimData = NULL;
-	char* pRecords = NULL;
+	D2AnimDataTableStrc* pAnimDataTable = D2_CALLOC_STRC_POOL(nullptr, D2AnimDataTableStrc);
+
 	char szPath[MAX_PATH] = {};
-
-	pAnimData = D2_CALLOC_STRC_POOL(NULL, D2AnimDataStrc);
-
 	wsprintfA(szPath, "%s\\AnimData.d2", "DATA\\GLOBAL");
-	pRecords = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, NULL);
-	pAnimData->pRecords = (D2AnimDataRecordStrc*)pRecords;
-
-	pHashTable = pAnimData->pHashTable;
+	pAnimDataTable->pBinaryData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, nullptr);
+;
+	D2AnimDataBucketStrc* pBucketBinaryData = (D2AnimDataBucketStrc*)pAnimDataTable->pBinaryData;
 	for (int i = 0; i < 256; ++i)
 	{
-		*pHashTable = (D2AnimDataRecordStrc*)pRecords;
-		++pHashTable;
-
-		pRecords += 160 * *(int*)pRecords + 4;
+		pAnimDataTable->pHashTableBucket[i] = pBucketBinaryData;
+		const size_t nBucketSize = sizeof(pBucketBinaryData->nbEntries) + sizeof(D2AnimDataRecordStrc) * pBucketBinaryData->nbEntries;
+		pBucketBinaryData = (D2AnimDataBucketStrc*)(((char*)pBucketBinaryData) + nBucketSize);
 	}
 
-	pAnimData->pDefaultRecord.dwFrames = 2048;
-	pAnimData->pDefaultRecord.dwAnimSpeed = 256;
+	pAnimDataTable->tDefaultRecord.dwFrames = 2048;
+	pAnimDataTable->tDefaultRecord.dwAnimSpeed = 256;
 
-	return pAnimData;
+	return pAnimDataTable;
 }
 
 //D2Common.0x6FD47460
-void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataStrc* pAnimData)
+void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataTableStrc* pAnimData)
 {
 	if (pAnimData)
 	{
-		FOG_Free(pAnimData->pRecords, __FILE__, __LINE__, 0);
+		FOG_Free(pAnimData->pBinaryData, __FILE__, __LINE__, 0);
 		D2_FREE_POOL(nullptr, pAnimData);
 	}
 }
 
-//D2Common.0x6FD474A0
-D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pUnit, int nClassId, int nMode, int nUnitType, D2InventoryStrc* pInventory)
+static void ToUpperCase(char* str)
 {
-	D2AnimDataRecordStrc* pRecord = NULL;
-	D2AnimDataRecordStrc* pHash = NULL;
-	D2AnimDataStrc* pAnimData = NULL;
-	char* szTmp = NULL;
+	while (*str != '\0')
+	{
+		if (*str >= 'a' && *str <= 'z')
+		{
+			*str -= ' ';
+		}
+		++str;
+	}
+}
+
+static uint8_t SimpleStringHash(char* str)
+{
+	uint8_t nHash = 0;
+	while (*str)
+	{
+		nHash += *str;
+		++str;
+	}
+	return nHash;
+}
+
+static D2AnimDataRecordStrc* DATATBLS_GetAnimDataRecordFromPath(char* szPath)
+{
+	ToUpperCase(szPath);
+	const uint8_t nHash = SimpleStringHash(szPath);
+
+	D2AnimDataTableStrc* pAnimData = DATATBLS_GetAnimData();
+
+	D2AnimDataBucketStrc* pAnimDataBucket = pAnimData->pHashTableBucket[nHash];
+	for (int i = 0; i < pAnimDataBucket->nbEntries; i++)
+	{
+		D2AnimDataRecordStrc& rBucketEntry = pAnimDataBucket->aEntries[i];
+		D2_ASSERT(strlen(szPath) <= 8); // This one is useless. Remains of a more generic function?
+		D2_ASSERT(strlen(rBucketEntry.szAnimDataName) <= 8);
+		// Note: Only works if strings are completly padded after null terminator.
+		if (0 == memcmp(szPath, rBucketEntry.szAnimDataName, 8))
+		{
+			return &rBucketEntry;
+		}
+	}
+	return nullptr;
+}
+
+//D2Common.0x6FD474A0
+const D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pUnit, int nClassId, int nMode, int nUnitType, D2InventoryStrc* pInventory)
+{
 	int nWeaponClassCode = 0;
-	int nCounter = 0;
-	int nHash = 0;
 	char szPath[8] = {};
-
 	D2Common_10884_COMPOSIT_unk(pUnit, nClassId, nMode, nUnitType, pInventory, szPath, &nWeaponClassCode, FALSE, 1);
-
-	szTmp = szPath;
-	while (*szTmp)
+	if (D2AnimDataRecordStrc* pFound = DATATBLS_GetAnimDataRecordFromPath(szPath))
 	{
-		if (*szTmp >= 'a' && *szTmp <= 'z')
-		{
-			*szTmp -= ' ';
-		}
-		++szTmp;
+		return pFound;
 	}
-
-	pAnimData = DATATBLS_GetAnimData();
-
-	nHash = 0;
-	szTmp = szPath;
-	while(*szTmp)
+	else
 	{
-		nHash += *szTmp;
-		++szTmp;
+		return &DATATBLS_GetAnimData()->tDefaultRecord;
 	}
-
-	pHash = pAnimData->pHashTable[(uint8_t)nHash];
-	nCounter = *(int*)&pHash->szAnimDataName[0];
-	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
-
-	while (nCounter > 0)
-	{
-		D2_ASSERT(strlen(szPath) <= 8);
-		D2_ASSERT(strlen(pRecord->szAnimDataName) <= 8);
-
-		if (*(int*)szPath == *(int*)&pRecord->szAnimDataName[0] && *(int*)&szPath[4] == *(int*)&pRecord->szAnimDataName[4])
-		{
-			return pRecord;
-		}
-
-		++pRecord;
-		--nCounter;
-	}
-
-	return &DATATBLS_GetAnimData()->pDefaultRecord;
 }
 
 //D2Common.0x6FD475D0 (#10640)
-void __stdcall D2Common_10640(D2UnitStrc* pUnit, int nAnimSpeed)
+void __stdcall DATATBLS_UnitAnimInfoDebugSet(D2UnitStrc* pUnit, int nAnimSpeed)
 {
-	D2AnimDataRecordStrc* pRecord = NULL;
-	D2AnimDataRecordStrc* pHash = NULL;
-	D2AnimDataStrc* pAnimData = NULL;
-	char* szTmp = NULL;
 	int nWeaponClassCode = 0;
-	int nCounter = 0;
-	int nHash = 0;
 	char szPath[8] = {};
-
 	D2Common_10885_COMPOSIT_unk(pUnit, szPath, &nWeaponClassCode, 0, 1, pUnit->pInventory, -1);
-
-	szTmp = szPath;
-	while (*szTmp)
+	if (D2AnimDataRecordStrc* pRecord = DATATBLS_GetAnimDataRecordFromPath(szPath))
 	{
-		if (*szTmp >= 'a' && *szTmp <= 'z')
-		{
-			*szTmp -= ' ';
-		}
-		++szTmp;
+		pRecord->dwAnimSpeed = nAnimSpeed;
 	}
-
-	pAnimData = DATATBLS_GetAnimData();
-
-	nHash = 0;
-	szTmp = szPath;
-	while (*szTmp)
-	{
-		nHash += *szTmp;
-		++szTmp;
-	}
-
-	pHash = pAnimData->pHashTable[(uint8_t)nHash];
-	nCounter = *(int*)&pHash->szAnimDataName[0];
-	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
-
-	while (nCounter > 0)
-	{
-		D2_ASSERT(strlen(szPath) <= 8);
-		D2_ASSERT(strlen(pRecord->szAnimDataName) <= 8);
-
-		if (*(int*)szPath == *(int*)&pRecord->szAnimDataName[0] && *(int*)&szPath[4] == *(int*)&pRecord->szAnimDataName[4])
-		{
-			pRecord->dwAnimSpeed = nAnimSpeed;
-			return;
-		}
-
-		++pRecord;
-		--nCounter;
-	}
-
 	FOG_DisplayHalt("DataTablesUnitAnimInfoDebugSet", __FILE__, __LINE__);
 	exit(-1);
 }
 
 //D2Common.0x6FD47700 (#10641)
-BOOL __stdcall D2Common_10641(char* szPath, int* pLength, int* pOutAnimSpeed, int* pOutFirstFrameTagged)
+BOOL __stdcall DATATBLS_GetAnimDataInfo(char* szPath, int* pOutLength, int* pOutAnimSpeed, int* pOutFirstFrameTagged)
 {
-	D2AnimDataRecordStrc* pRecord = NULL;
-	D2AnimDataRecordStrc* pHash = NULL;
-	D2AnimDataStrc* pAnimData = NULL;
-	char* szTmp = NULL;
-	int nCounter = 0;
-	int nHash = 0;
-
-	szTmp = szPath;
-	while (*szTmp)
+	if (D2AnimDataRecordStrc* pRecord = DATATBLS_GetAnimDataRecordFromPath(szPath))
 	{
-		if (*szTmp >= 'a' && *szTmp <= 'z')
+		*pOutLength = pRecord->dwFrames;
+		*pOutAnimSpeed = pRecord->dwAnimSpeed;
+
+		for (uint32_t i = 0; i < pRecord->dwFrames; ++i)
 		{
-			*szTmp -= ' ';
-		}
-		++szTmp;
-	}
-
-	pAnimData = DATATBLS_GetAnimData();
-
-	nHash = 0;
-	szTmp = szPath;
-	while (*szTmp)
-	{
-		nHash += *szTmp;
-		++szTmp;
-	}
-
-	pHash = pAnimData->pHashTable[(uint8_t)nHash];
-	nCounter = *(int*)&pHash->szAnimDataName[0];
-	pRecord = (D2AnimDataRecordStrc*)((char*)pHash + 4);
-
-	while (nCounter > 0)
-	{
-		D2_ASSERT(strlen(szPath) <= 8);
-		D2_ASSERT(strlen(pRecord->szAnimDataName) <= 8);
-
-		if (*(int*)szPath == *(int*)&pRecord->szAnimDataName[0] && *((int*)szPath + 1) == *(int*)&pRecord->szAnimDataName[4])
-		{
-			*pLength = pRecord->dwFrames;
-			*pOutAnimSpeed = pRecord->dwAnimSpeed;
-
-			for (uint32_t i = 0; i < pRecord->dwFrames; ++i)
+			if (pRecord->pFrameFlags[i] || i >= D2AnimDataRecordStrc::MAX_FRAME_FLAGS)
 			{
-				if (i >= 144 || pRecord->pFrameFlags[i])
-				{
-					*pOutFirstFrameTagged = i;
-					return TRUE;
-				}
+				*pOutFirstFrameTagged = i;
+				return TRUE;
 			}
-
-			*pOutFirstFrameTagged = 0;
-			return TRUE;
 		}
 
-		++pRecord;
-		--nCounter;
+		*pOutFirstFrameTagged = 0;
+		return TRUE;
 	}
 
-	*pLength = pAnimData->pDefaultRecord.dwFrames;
-	*pOutAnimSpeed = pAnimData->pDefaultRecord.dwAnimSpeed;
-	*pOutFirstFrameTagged = *pLength;
-
+	const D2AnimDataRecordStrc& pDefaultRecord = DATATBLS_GetAnimData()->tDefaultRecord;
+	*pOutLength = pDefaultRecord.dwFrames;
+	*pOutAnimSpeed = pDefaultRecord.dwAnimSpeed;
+	*pOutFirstFrameTagged = *pOutLength;
 	return FALSE;
 }

@@ -405,7 +405,7 @@ struct D2DataTablesStrc
 	int nLvlPrestTxtRecordCount;						//0xC68
 	int nStuff;											//0xC6C
 	int nShiftedStuff;									//0xC70
-	D2AnimDataStrc* pAnimData;							//0xC74
+	D2AnimDataTableStrc* pAnimData;						//0xC74
 	D2ExperienceTxt* pExperienceTxt;					//0xC78
 	D2DifficultyLevelsTxt* pDifficultyLevelsTxt;		//0xC7C
 	int nDifficultyLevelsTxtRecordCount;				//0xC80
@@ -537,7 +537,7 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 //D2Common.0x6FD4E4B0 (#10593)
 D2COMMON_DLL_DECL D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable();
 //D2Common.0x6FD4E4C0
-D2AnimDataStrc* __fastcall DATATBLS_GetAnimData();
+D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData();
 //D2Common.0x6FD4E4D0 (#10655)
 D2COMMON_DLL_DECL D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
 //D2Common.0x6FD4E500
