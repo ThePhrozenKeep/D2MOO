@@ -1337,7 +1337,7 @@ int32_t __fastcall SKILLS_FindLeapTargetPosition(D2UnitStrc* pUnit, int32_t nSki
         D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY), &coords, UNITS_GetUnitSizeX(pUnit), 0x1C09u, 1);
         nX = coords.nX;
         nY = coords.nY;
-        if (pRoom && !COLLISION_CheckMaskWithPattern2(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x1C09) && D2Common_11025(nUnitX, nUnitY, nX, nY, pRoom, 0x804) && UNITS_GetDistanceToCoordinates(pUnit, nX, nY) <= nAuraRange)
+        if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x1C09) && D2Common_11025(nUnitX, nUnitY, nX, nY, pRoom, 0x804) && UNITS_GetDistanceToCoordinates(pUnit, nX, nY) <= nAuraRange)
         {
             *pX = nX;
             *pY = nY;
@@ -1572,7 +1572,7 @@ int32_t __fastcall SKILLS_SrvSt41_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUni
     
     int32_t nX = 0;
     int32_t nY = 0;
-    if (!D2Common_11037(pUnit, pTarget, &nX, &nY))
+    if (!SKILLS_CheckIfCanLeapTo(pUnit, pTarget, &nX, &nY))
     {
         if (pTarget && UNITS_IsInMeleeRange(pUnit, pTarget, 0))
         {
@@ -1589,7 +1589,7 @@ int32_t __fastcall SKILLS_SrvSt41_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    COLLISION_SetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x80u);
+    COLLISION_SetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), COLLIDE_PLAYER);
 
     sub_6FCBDE90(pUnit, 1);
     SKILLS_SetParam1(pSkill, nX);

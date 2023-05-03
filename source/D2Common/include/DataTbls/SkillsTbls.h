@@ -94,6 +94,15 @@ enum D2C_SkillsTxtFlags
 	SKILLSFLAG2_WARP = (1 << SKILLSFLAGINDEX2_WARP),
 };
 
+// Targeting behaviour when skill is cast by object
+enum D2C_SkillsTxtItemTarget {
+	SKILLSITEMTARGET_ATTACKER = 0, // default
+	SKILLSITEMTARGET_CASTER = 1,
+	SKILLSITEMTARGET_RANDOM = 2, // Random walkable location in a radius of size 20
+	SKILLSITEMTARGET_RANDOM_CORPSE = 3,
+	SKILLSITEMTARGET_LAST_ATTACKER = 4, // Attacker or last known attacker
+};
+
 struct D2SkillCalcTxt
 {
 	uint32_t dwCode;						//0x00
@@ -209,7 +218,7 @@ struct D2SkillsTxt
 	uint16_t wCltOverlayA;					//0x110
 	uint16_t wCltOverlayB;					//0x112
 	int32_t dwCltCalc[3];					//0x114
-	uint8_t nItemTarget;					//0x120
+	uint8_t nItemTarget;					//0x120 D2C_SkillsTxtItemTarget
 	uint8_t pad0x121;						//0x121
 	uint16_t wItemCastSound;				//0x122
 	uint16_t wItemCastOverlay;				//0x124

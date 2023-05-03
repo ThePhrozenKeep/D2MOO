@@ -78,7 +78,7 @@ void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathP
 //	v15 = *(_DWORD *)(a1 + 44);
 //	v16 = *(_DWORD *)(a1 + 40);
 //	v17 = *(_DWORD *)(a1 + 8);
-//	if (!COLLISION_CheckMaskWithPattern2(*(D2RoomStrc**)(a1 + 8), v4, v5, *(_DWORD *)(a1 + 40), *(_DWORD *)(a1 + 44)))
+//	if (!COLLISION_CheckAnyCollisionWithPattern(*(D2RoomStrc**)(a1 + 8), v4, v5, *(_DWORD *)(a1 + 40), *(_DWORD *)(a1 + 44)))
 //	{
 //		if (*(_WORD *)a3 == v4 || (v6 = 3, *(_WORD *)(a3 + 2) == v5))
 //			v6 = 2;
@@ -277,37 +277,37 @@ void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathP
 //	}
 //	LOWORD(v19) = *(_WORD *)a3 - 1;
 //	HIWORD(v19) = *(_WORD *)(a3 + 2) + 1;
-//	if (COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, (unsigned __int16)v19, HIWORD(v19), v16, v15)
+//	if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)v19, HIWORD(v19), v16, v15)
 //		|| (result = sub_6FDA7490(v14, v17, a3, v19, a4)) != 0)
 //	{
 //		HIWORD(v20) = *(_WORD *)(a3 + 2) - 1;
 //		LOWORD(v20) = *(_WORD *)a3 + 1;
-//		if (COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v20), v16, v15)
+//		if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v20), v16, v15)
 //			|| (result = sub_6FDA7490(v14, v17, a3, v20, a4)) != 0)
 //		{
 //			HIWORD(v21) = *(_WORD *)(a3 + 2) + 1;
 //			LOWORD(v21) = *(_WORD *)a3 + 1;
-//			if (COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v21), v16, v15)
+//			if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v21), v16, v15)
 //				|| (result = sub_6FDA7490(v14, v17, a3, v21, a4)) != 0)
 //			{
 //				HIWORD(v22) = *(_WORD *)(a3 + 2);
 //				LOWORD(v22) = *(_WORD *)a3 - 1;
-//				if (COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 - 1), HIWORD(v22), v16, v15)
+//				if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 - 1), HIWORD(v22), v16, v15)
 //					|| (result = sub_6FDA7490(v14, v17, a3, v22, a4)) != 0)
 //				{
 //					LOWORD(v23) = *(_WORD *)a3;
 //					HIWORD(v23) = *(_WORD *)(a3 + 2) - 1;
-//					if (COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v23), v16, v15)
+//					if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v23), v16, v15)
 //						|| (result = sub_6FDA7490(v14, v17, a3, v23, a4)) != 0)
 //					{
 //						HIWORD(v24) = *(_WORD *)(a3 + 2);
 //						LOWORD(v24) = *(_WORD *)a3 + 1;
-//						if (COLLISION_CheckMaskWithPattern2(//							(D2RoomStrc*)v17, //							(unsigned __int16)(*(_WORD *)a3 + 1), //							HIWORD(v24), //							v16, //							v15)
+//						if (COLLISION_CheckAnyCollisionWithPattern(//							(D2RoomStrc*)v17, //							(unsigned __int16)(*(_WORD *)a3 + 1), //							HIWORD(v24), //							v16, //							v15)
 //							|| (result = sub_6FDA7490(v14, v17, a3, v24, a4)) != 0)
 //						{
 //							LOWORD(v25) = *(_WORD *)a3;
 //							HIWORD(v25) = *(_WORD *)(a3 + 2) + 1;
-//							if (!COLLISION_CheckMaskWithPattern2((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v25), v16, v15)
+//							if (!COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v25), v16, v15)
 //								&& !sub_6FDA7490(v14, v17, a3, v25, a4))
 //								return 0;
 //							result = 1;
@@ -941,7 +941,7 @@ int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo)
 //					v38 = v17;
 //					if (!v6)
 //						break;
-//					if (!COLLISION_CheckMaskWithPattern2(*(D2RoomStrc**)(a3 + 8), v13, v12, *(_DWORD *)(a3 + 40), *(_DWORD *)(a3 + 44)))
+//					if (!COLLISION_CheckAnyCollisionWithPattern(*(D2RoomStrc**)(a3 + 8), v13, v12, *(_DWORD *)(a3 + 40), *(_DWORD *)(a3 + 44)))
 //					{
 //						v14 = v39;
 //						v17 = v38;

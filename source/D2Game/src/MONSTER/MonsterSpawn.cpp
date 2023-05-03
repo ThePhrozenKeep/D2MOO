@@ -109,7 +109,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     {
         if (pTarget && pTarget->dwFlags & UNITFLAG_TARGETABLE)
         {
-            return COLLISION_CheckMaskWithPattern2(UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), PATH_GetUnitCollisionPattern(pTarget), 0x3C01u) == 0;
+            return COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), PATH_GetUnitCollisionPattern(pTarget), 0x3C01u) == 0;
         }
 
         return 0;
@@ -139,7 +139,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         coords.nY = nTargetY;
         
         D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coords, UNITS_GetUnitSizeX(pUnit), 0x3C01u, 0);
-        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckMaskWithPattern2(pRoom, nTargetX, nTargetY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
+        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nTargetX, nTargetY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
         {
             return 0;
         }
@@ -160,7 +160,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         }
 
         D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
-        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckMaskWithPattern2(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
+        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
         {
             return 0;
         }

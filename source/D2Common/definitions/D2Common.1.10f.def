@@ -121,8 +121,8 @@ EXPORTS
 	COLLISION_CheckMask													@10118
 	COLLISION_CheckMaskWithSize											@10119
 	COLLISION_CheckMaskWithSizeXY										@10120
-	COLLISION_CheckMaskWithPattern1										@10121
-	COLLISION_CheckMaskWithPattern2										@10122
+	COLLISION_CheckMaskWithPattern										@10121
+	COLLISION_CheckAnyCollisionWithPattern								@10122
 	COLLISION_ResetMask													@10123
 	COLLISION_ResetMaskWithSize											@10124
 	COLLISION_ResetMaskWithSizeXY										@10125
@@ -131,9 +131,9 @@ EXPORTS
 	COLLISION_SetMaskWithSize											@10128
 	COLLISION_SetMaskWithSizeXY											@10129
 	COLLISION_SetMaskWithPattern										@10130
-	D2Common_10131														@10131
-	D2Common_10132														@10132
-	D2Common_10133														@10133
+	COLLISION_TryMoveUnitCollisionMask									@10131
+	COLLISION_TryTeleportUnitCollisionMask								@10132
+	COLLISION_SetUnitCollisionMask										@10133
 	COLLISION_GetFreeCoordinates										@10134
 	COLLISION_GetFreeCoordinatesWithMaxDistance							@10135
 	D2Common_10136														@10136
@@ -1037,7 +1037,7 @@ EXPORTS
 	D2Common_11034														@11034
 	D2Common_11035														@11035
 	D2COMMON_11036_GetMonCurseResistanceSubtraction						@11036
-	D2Common_11037														@11037
+	SKILLS_CheckIfCanLeapTo												@11037
 ;------------------------UNUSED------------------------						@11038
 	D2COMMON_11039_CheckWeaponIsMissileBased							@11039
 	SKILLS_IsEnhanceable												@11040
@@ -1282,7 +1282,7 @@ EXPORTS
 	UNITROOM_AddUnitToRoomEx											@11279
 	MONSTERS_GetSpawnMode_XY											@11280
 	D2Common_11281_CollisionPatternFromSize								@11281
-	D2Common_11282_Unused												@11282
+	PATH_GetCollisionPatternFromMonStats2Txt							@11282
 	SKILLS_CalculateKickDamage											@11283
 	MISSILE_EvaluateMissileFormula										@11284
 	MISSILE_GetMinDamage												@11285

@@ -1315,7 +1315,7 @@ int32_t __fastcall SKILLS_SrvDo097_Resurrect(D2GameStrc* pGame, D2UnitStrc* pUni
     const int32_t nY = CLIENTS_GetUnitY(pTarget);
 
     D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
-    if (pRoom && !COLLISION_CheckMaskWithPattern2(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? 0x3C01u : 0x1C09u))
+    if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? 0x3C01u : 0x1C09u))
     {
         PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
         SKILLS_ResurrectUnit(pGame, pTarget);

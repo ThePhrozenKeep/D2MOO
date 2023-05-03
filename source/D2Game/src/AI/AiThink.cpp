@@ -1862,7 +1862,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
-		PATH_SetUnitCollisionPattern(pUnit, 5u);
+		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 		D2Common_10184(pUnit->pDynamicPath, 0);
 		AITACTICS_Idle(pGame, pUnit, 12);
 
@@ -1886,7 +1886,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
-			PATH_SetUnitCollisionPattern(pUnit, 5u);
+			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 			D2Common_10184(pUnit->pDynamicPath, 0);
 			AITACTICS_Idle(pGame, pUnit, 12);
 
@@ -2027,13 +2027,13 @@ int32_t __fastcall sub_6FCD55D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
-	if (PATH_GetUnitCollisionPattern(pUnit) == 1 || !sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
+	if (PATH_GetUnitCollisionPattern(pUnit) == COLLISION_PATTERN_SMALL_UNIT_PRESENCE || !sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
 	{
 		return 0;
 	}
 
 	COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, COLLIDE_MONSTER);
-	PATH_SetUnitCollisionPattern(pUnit, 1u);
+	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_UNIT_PRESENCE);
 	D2Common_10184(pUnit->pDynamicPath, 0x3C01);
 	AITACTICS_Idle(pGame, pUnit, 12);
 	return 1;
@@ -4358,7 +4358,7 @@ void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
 	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_MONSTER);
-	PATH_SetUnitCollisionPattern(pUnit, 5u);
+	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 	D2Common_10184(pUnit->pDynamicPath, 0);
 	AITACTICS_Idle(pGame, pUnit, 12);
 }
@@ -4379,7 +4379,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
-			PATH_SetUnitCollisionPattern(pUnit, 5u);
+			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 			D2Common_10184(pUnit->pDynamicPath, 0);
 			AITACTICS_Idle(pGame, pUnit, 12);
 			return;
@@ -4425,7 +4425,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
-		PATH_SetUnitCollisionPattern(pUnit, 5u);
+		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 		D2Common_10184(pUnit->pDynamicPath, 0);
 		AITACTICS_Idle(pGame, pUnit, 12);
 		AITACTICS_Idle(pGame, pUnit, 24);
@@ -8330,7 +8330,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	if (nAnimMode == MONMODE_NEUTRAL)
 	{
 		int32_t bWalk = 0;
-		if (COLLISION_CheckMaskWithPattern2(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), PATH_GetUnitCollisionPattern(pUnit), COLLIDE_MISSILE))
+		if (COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), PATH_GetUnitCollisionPattern(pUnit), COLLIDE_MISSILE))
 		{
 			bWalk = 1;
 
@@ -11034,7 +11034,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	{
 		if (!pTarget)
 		{
-			if (COLLISION_CheckMaskWithPattern2(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 2, COLLIDE_MISSILE))
+			if (COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 2, COLLIDE_MISSILE))
 			{
 				nParam = 16;
 			}

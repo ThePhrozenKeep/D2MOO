@@ -1874,7 +1874,7 @@ int32_t __fastcall SKILLITEM_FindTargetPosition(D2GameStrc* pGame, D2UnitStrc* p
     {
         const int32_t nX = nUnitX + ITEMS_RollRandomNumber(&pUnit->pSeed) % 40 - 20;
         const int32_t nY = nUnitY + ITEMS_RollRandomNumber(&pUnit->pSeed) % 40 - 20;
-        if (!COLLISION_CheckMaskWithPattern1(pRoom, nX, nY, nCollisionPattern, nMask))
+        if (!COLLISION_CheckMaskWithPattern(pRoom, nX, nY, nCollisionPattern, nMask))
         {
             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
             return 1;
@@ -1924,7 +1924,7 @@ int32_t __fastcall SKILLITEM_HandleItemEffectSkill(D2GameStrc* pGame, D2UnitStrc
 
     switch (pSkillsTxtRecord->nItemTarget)
     {
-    case 1u:
+    case SKILLSITEMTARGET_CASTER:
     {
         UNITS_SetTargetUnitForDynamicUnit(pUnit, pUnit);
         if (pUnitType)
@@ -1939,7 +1939,7 @@ int32_t __fastcall SKILLITEM_HandleItemEffectSkill(D2GameStrc* pGame, D2UnitStrc
         }
         break;
     }
-    case 2u:
+    case SKILLSITEMTARGET_RANDOM:
     {
         if (SKILLITEM_FindTargetPosition(pGame, pUnit, nSkillId, nSkillLevel))
         {
@@ -1960,7 +1960,7 @@ int32_t __fastcall SKILLITEM_HandleItemEffectSkill(D2GameStrc* pGame, D2UnitStrc
         }
         break;
     }
-    case 3u:
+    case SKILLSITEMTARGET_RANDOM_CORPSE:
     {
         D2UnitStrc* pTarget = sub_6FD15210(pUnit, SUNIT_GetTargetUnit(pGame, pUnit), nSkillId, nSkillLevel);
         if (pTarget)
@@ -1979,7 +1979,7 @@ int32_t __fastcall SKILLITEM_HandleItemEffectSkill(D2GameStrc* pGame, D2UnitStrc
         }
         break;
     }
-    case 4u:
+    case SKILLSITEMTARGET_LAST_ATTACKER:
     {
         if (!SUNIT_GetTargetUnit(pGame, pUnit))
         {
