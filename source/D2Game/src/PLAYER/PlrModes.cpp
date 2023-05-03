@@ -194,7 +194,7 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
     switch (nMode)
     {
     case PLRMODE_RUN:
-        if (!STATLIST_GetUnitStatUnsigned(pPlayer, STAT_STAMINA, 0))
+        if (!STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0))
         {
             nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TWALK : PLRMODE_WALK;
         }
@@ -274,7 +274,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
                 }
             }
 
-            const int32_t nStaminaDrainPct = STATLIST_GetUnitStatSigned(pPlayer, STAT_ITEM_STAMINADRAINPCT, 0);
+            const int32_t nStaminaDrainPct = STATLIST_UnitGetItemStatOrSkillStatValue(pPlayer, STAT_ITEM_STAMINADRAINPCT, 0);
             if (nStaminaDrainPct)
             {
                 nStaminaLost += nStaminaLost * nStaminaDrainPct / -100;
@@ -287,7 +287,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 
             STATLIST_AddUnitStat(pPlayer, STAT_STAMINA, -nStaminaLost, 0);
 
-            if (STATLIST_GetUnitStatUnsigned(pPlayer, STAT_STAMINA, 0) <= 0)
+            if (STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0) <= 0)
             {
                 STATLIST_SetUnitStat(pPlayer, STAT_STAMINA, 0, 0);
                 sub_6FC7F600(pGame, pPlayer, PLRMODE_WALK);
@@ -479,7 +479,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
             }
         }
 
-        const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+        const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
         D2GAME_SetStatOrResetGold_6FC7CA70(pUnit, STAT_GOLD, 0);
         sub_6FC7C260(pGame, pUnit, pUnit->dwUnitId, nGold);
         return nullptr;
@@ -625,7 +625,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
         }
     }
 
-    const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+    const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
 
     STATLIST_SetUnitStat(pUnit, STAT_GOLD, 0, 0);
 
@@ -712,7 +712,7 @@ void __fastcall sub_6FC80440(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     if (pPlayer->dwUnitId == INVENTORY_GetOwnerId(pDeadBody->pInventory))
     {
-        const int32_t nExperience = STATLIST_GetUnitStatUnsigned(pDeadBody, STAT_EXPERIENCE, 0);
+        const int32_t nExperience = STATLIST_UnitGetStatValue(pDeadBody, STAT_EXPERIENCE, 0);
         if (nExperience)
         {
             STATLIST_SetUnitStat(pDeadBody, STAT_EXPERIENCE, 0, 0);
@@ -946,9 +946,9 @@ void __fastcall sub_6FC80A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC80B90
 void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pWeapon)
 {
-    if ((ITEMS_CheckIfStackable(pWeapon) || ITEMS_CheckIfThrowable(pWeapon) || STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_THROWABLE, 0)) && (int32_t)STATLIST_GetUnitStatUnsigned(pWeapon, STAT_QUANTITY, 0) <= 0)
+    if ((ITEMS_CheckIfStackable(pWeapon) || ITEMS_CheckIfThrowable(pWeapon) || STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_THROWABLE, 0)) && (int32_t)STATLIST_UnitGetStatValue(pWeapon, STAT_QUANTITY, 0) <= 0)
     {
-        if (STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_THROWABLE, 0))
+        if (STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_THROWABLE, 0))
         {
             STATLIST_SetUnitStat(pWeapon, STAT_QUANTITY, 0, 0);
         }
@@ -1034,7 +1034,7 @@ void __fastcall sub_6FC80E10(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         while (pItem)
         {
             if (INVENTORY_GetItemNodePage(pItem) == 3 && INVENTORY_UnitIsItem(pItem) && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON)
-                && ITEMS_HasDurability(pItem) && (int32_t)STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) <= 0 
+                && ITEMS_HasDurability(pItem) && (int32_t)STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) <= 0 
                 && !ITEMS_CheckItemFlag(pItem, 0x100u, __LINE__, __FILE__))
             {
                 if (!bChangedToNeutral)
@@ -1085,11 +1085,11 @@ int32_t __fastcall sub_6FC80EE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 //Inlined in D2Game.0x6FC80F80
 void __fastcall EVENTS_HpRegen(D2UnitStrc* pUnit)
 {
-    const int32_t nHpRegen = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0);
+    const int32_t nHpRegen = STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0);
     if (nHpRegen)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-        int32_t nLife = nHpRegen + STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+        int32_t nLife = nHpRegen + STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
         if (nLife > nMaxHp)
         {
             nLife = nMaxHp;
@@ -1108,12 +1108,12 @@ void __fastcall EVENTS_HpRegen(D2UnitStrc* pUnit)
 
         STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nLife, 0);
 
-        const uint8_t nLastSentHpPct = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LAST_SENT_HP_PCT, 0);
+        const uint8_t nLastSentHpPct = STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0);
 
         uint8_t nHpPct = 0x80;
         if (pUnit)
         {
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >> 8;
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
             const int32_t nMaxLife = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
 
             if (nMaxLife > 0 && nHitpoints < nMaxLife)
@@ -1136,8 +1136,8 @@ void __fastcall EVENTS_HpRegen(D2UnitStrc* pUnit)
 //Inlined in D2Game.0x6FC80F80
 void __fastcall EVENTS_StaminaRegen(D2UnitStrc* pUnit)
 {
-    const int32_t nStamina = STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0);
-    const int32_t nStaminaRecoveryBonus = STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINARECOVERYBONUS, 0);
+    const int32_t nStamina = STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0);
+    const int32_t nStaminaRecoveryBonus = STATLIST_UnitGetStatValue(pUnit, STAT_STAMINARECOVERYBONUS, 0);
 
     int32_t nShift = 8;
     switch (pUnit ? pUnit->dwAnimMode : 0)
@@ -1190,7 +1190,7 @@ void __fastcall EVENTS_ManaRegen(D2UnitStrc* pUnit)
 {
     if (pUnit)
     {
-        const int32_t nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+        const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
         const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pUnit);
 
         int32_t nManaRecoveryBonus = 0;
@@ -1214,10 +1214,10 @@ void __fastcall EVENTS_ManaRegen(D2UnitStrc* pUnit)
                 nManaMultiplier = 1;
             }
 
-            nManaRecoveryBonus = MONSTERUNIQUE_CalculatePercentage(nManaMultiplier, STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANARECOVERYBONUS, 0) + 100, 100);
+            nManaRecoveryBonus = MONSTERUNIQUE_CalculatePercentage(nManaMultiplier, STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERYBONUS, 0) + 100, 100);
         }
 
-        int32_t nManaRecovery = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANARECOVERY, 0) + nManaRecoveryBonus;
+        int32_t nManaRecovery = STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERY, 0) + nManaRecoveryBonus;
         if (nMaxMana <= nMana && nManaRecovery > 0)
         {
             D2StatListStrc* pManaPotStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_MANAPOT);

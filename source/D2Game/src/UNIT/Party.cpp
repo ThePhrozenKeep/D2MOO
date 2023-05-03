@@ -368,7 +368,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
                             int32_t nGoldToPick = 0;
                             int32_t nGoldToDrop = 0;
                             PARTY_CalculatePickAndDrop(pUnit, nDividedGold, &nGoldToPick, &nGoldToDrop);
-                            D2GAME_SetStatOrResetGold_6FC7CA70(pPartyMember, STAT_GOLD, nGoldToPick + STATLIST_GetUnitStatUnsigned(pPartyMember, STAT_GOLD, 0));
+                            D2GAME_SetStatOrResetGold_6FC7CA70(pPartyMember, STAT_GOLD, nGoldToPick + STATLIST_UnitGetStatValue(pPartyMember, STAT_GOLD, 0));
 
                             nGoldValue += nGoldToDrop - nDividedGold;
                         }
@@ -388,7 +388,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     int32_t nGoldToPick = 0;
     int32_t nGoldToDrop = 0;
     PARTY_CalculatePickAndDrop(pUnit, nGoldValue, &nGoldToPick, &nGoldToDrop);
-    D2GAME_SetStatOrResetGold_6FC7CA70(pUnit, STAT_GOLD, nGoldToPick + STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0));
+    D2GAME_SetStatOrResetGold_6FC7CA70(pUnit, STAT_GOLD, nGoldToPick + STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0));
 
     return nGoldToDrop;
 }
@@ -397,7 +397,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 void __fastcall PARTY_CalculatePickAndDrop(D2UnitStrc* pUnit, int32_t nValue, int32_t* pGoldToPick, int32_t* pGoldToDrop)
 {
     const int32_t nGoldLimit = UNITS_GetInventoryGoldLimit(pUnit);
-    const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+    const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
     const int32_t nDiff = nGoldLimit - nGold;
     if (nValue > nDiff)
     {

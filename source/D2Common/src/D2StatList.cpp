@@ -1353,7 +1353,8 @@ int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, uint16_t 
 }
 
 // Helper function
-static uint32_t __stdcall STATLIST_GetStatUnsigned(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer)
+// Different than STATLIST_GetStatValue in that it may use FullStats
+static int32_t __stdcall STATLIST_GetTotalStatValue(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer)
 {
 	if (!pStatList)
 	{
@@ -1369,20 +1370,26 @@ static uint32_t __stdcall STATLIST_GetStatUnsigned(D2StatListStrc* pStatList, in
 }
 
 //D2Common.0x6FDB7C30 (#10519)
-uint32_t __stdcall STATLIST_GetUnitStatUnsigned(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer)
+int32_t __stdcall STATLIST_UnitGetStatValue(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer)
 {
-	return STATLIST_GetStatUnsigned(pUnit->pStatListEx, nStatId, nLayer);
+	return STATLIST_GetTotalStatValue(pUnit->pStatListEx, nStatId, nLayer);
 }
-
 
 //D2Common.0x6FDB7E30 (#10520)
-int32_t __stdcall STATLIST_GetUnitStatSigned(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer)
+// A little history for those wondering why it returns the exact same thing as STATLIST_UnitGetStatValue
+// There have been a few reworks of the stat system over the different versions of the game.
+// In the versions 1.08 and below, the "base" stats and "item/skill" stats were in two seperate lists.
+// Then in 1.09, both lists were merged into the same system, resulting in both functions doing the same thing.
+// This can easily be tracked by checking the function responsible for computing the defense rate and its usage of both functions.
+// - 1.00 to 1.05 : UNITS_GetDefenseRate#10426. STATLIST_UnitGetStatValue#10497. STATLIST_UnitGetItemStatOrSkillStatValue#10498.
+// - 1.08 to 1.10f: UNITS_GetDefenseRate#10431. STATLIST_UnitGetStatValue#10519. STATLIST_UnitGetItemStatOrSkillStatValue#10520.
+int32_t __stdcall STATLIST_UnitGetItemStatOrSkillStatValue(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer)
 {
-	return static_cast<int32_t>(STATLIST_GetUnitStatUnsigned(pUnit, nStatId, nLayer));
+	return STATLIST_UnitGetStatValue(pUnit, nStatId, nLayer);
 }
 
 
-//D2Common.0x(6FDB7D40 (#10466)
+//D2Common.0x6FDB7D40 (#10466)
 int __stdcall STATLIST_GetStatValue(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer)
 {
 	if (!pStatList)
@@ -1729,7 +1736,7 @@ int __stdcall STATLIST_GetUnitAlignment(D2UnitStrc* pUnit)
 	{
 		if (D2StatListStrc* pAlignmentStateList = D2Common_GetStateFromStatListEx_6FDB8190(pUnit->pStatListEx, STATE_ALIGNMENT))
 		{
-			return STATLIST_GetStatUnsigned_Layer0((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
+			return STATLIST_GetTotalStatValue_Layer0((D2StatListExStrc*)pAlignmentStateList, STAT_ALIGNMENT);
 		}
 	}
 
@@ -1757,9 +1764,9 @@ BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB87A0 (#10532)
-int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListStrc* pStatListEx, int nStatId)
+int __stdcall STATLIST_GetTotalStatValue_Layer0(D2StatListStrc* pStatListEx, int nStatId)
 {
-	return STATLIST_GetStatUnsigned(pStatListEx, nStatId, 0);
+	return STATLIST_GetTotalStatValue(pStatListEx, nStatId, 0);
 }
 
 //D2Common.0x6FDB8890 (#10533)
@@ -2169,7 +2176,7 @@ int __stdcall D2Common_11248(D2UnitStrc* pUnused, D2UnitStrc* pUnit, int nStatId
 	D2_MAYBE_UNUSED(pUnused);
 	if (pUnit)
 	{
-		return STATLIST_GetStatUnsigned_Layer0(pUnit->pStatListEx, nStatId);
+		return STATLIST_GetTotalStatValue_Layer0(pUnit->pStatListEx, nStatId);
 	}
 
 	return 0;

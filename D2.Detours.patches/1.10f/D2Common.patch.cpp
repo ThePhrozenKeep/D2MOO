@@ -565,8 +565,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_UpdateStatListsExpiration                                  @10516
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetUnitStat                                                @10517
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_AddUnitStat                                                @10518
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatUnsigned                                        @10519
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatSigned                                          @10520
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_UnitGetStatValue                                           @10519
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_UnitGetItemStatOrSkillStatValue                            @10520
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitBaseStat                                            @10521
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetUnitStatBonus                                           @10522
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_MergeStatLists                                             @10523
@@ -578,7 +578,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetExpireFrame                                             @10529
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10530_D2CheckStatlistFlagDMGRed                            @10530
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10531_SetStatInStatListLayer0                              @10531
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetStatUnsigned_Layer0                                            @10532
+    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetTotalStatValue_Layer0                                   @10532
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_RemoveAllStatsFromOverlay                                  @10533
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10534                                                      @10534
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetOwner                                                   @10535

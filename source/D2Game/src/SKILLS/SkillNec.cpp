@@ -839,7 +839,7 @@ void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
 //D2Game.0x6FD0C2E0
 void __fastcall D2GAME_SetSummonResistance_6FD0C2E0(D2UnitStrc* pUnit, D2UnitStrc* pPet)
 {
-    const int32_t nSummonRes = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_SUMMON_RESIST, 0);
+    const int32_t nSummonRes = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_SUMMON_RESIST, 0);
     if (nSummonRes)
     {
         int32_t nUnitGUID = -1;
@@ -857,17 +857,17 @@ void __fastcall D2GAME_SetSummonResistance_6FD0C2E0(D2UnitStrc* pUnit, D2UnitStr
         {
             D2COMMON_10475_PostStatToStatList(pPet, pStatList, 1);
 
-            if ((int32_t)STATLIST_GetUnitStatUnsigned(pPet, STAT_ITEM_ABSORBFIRE_PERCENT, 0) <= 0)
+            if ((int32_t)STATLIST_UnitGetStatValue(pPet, STAT_ITEM_ABSORBFIRE_PERCENT, 0) <= 0)
             {
                 STATLIST_SetStatIfListIsValid(pStatList, STAT_FIRERESIST, nSummonRes, 0);
             }
 
-            if ((int32_t)STATLIST_GetUnitStatUnsigned(pPet, STAT_ITEM_ABSORBLIGHT_PERCENT, 0) <= 0)
+            if ((int32_t)STATLIST_UnitGetStatValue(pPet, STAT_ITEM_ABSORBLIGHT_PERCENT, 0) <= 0)
             {
                 STATLIST_SetStatIfListIsValid(pStatList, STAT_LIGHTRESIST, nSummonRes, 0);
             }
 
-            if ((int32_t)STATLIST_GetUnitStatUnsigned(pPet, STAT_ITEM_ABSORBCOLD_PERCENT, 0) <= 0)
+            if ((int32_t)STATLIST_UnitGetStatValue(pPet, STAT_ITEM_ABSORBCOLD_PERCENT, 0) <= 0)
             {
                 STATLIST_SetStatIfListIsValid(pStatList, STAT_COLDRESIST, nSummonRes, 0);
             }
@@ -1089,7 +1089,7 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
     }
     else
     {
-        const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+        const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
         nItemLevel = D2Clamp(3 * nSkillLevel, 1, nLevel);
         sub_6FCF9580(pGame, pUnit, pPet, nSkillId, nSkillLevel, nItemLevel, 0);
     }
@@ -1103,7 +1103,7 @@ int32_t __fastcall D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(D2GameStrc* pGame, 
     int32_t nPetLevel = nPetLevelArg;
     if (nPetLevelArg <= 0)
     {
-        const int32_t nUnitLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+        const int32_t nUnitLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
         nPetLevel = nSkillLevel + 3 * nUnitLevel / 4;
         if (nPetLevel < 1)
@@ -1321,7 +1321,7 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
     if (pTarget->dwUnitType == UNIT_MONSTER)
     {
         D2MonStatsInitStrc monStatsInit = {};
-        DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
+        DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
         nMaxHp = (monStatsInit.nMaxHP + monStatsInit.nMinHP) << 7;
     }
 
@@ -1336,8 +1336,8 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
     
     int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pTarget->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
     
-    const int32_t nTargetLevel = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0);
-    const int32_t nUnitLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+    const int32_t nTargetLevel = STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0);
+    const int32_t nUnitLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
     if (nTargetLevel && nUnitLevel < nTargetLevel)
     {
@@ -1565,14 +1565,14 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     }
 
     D2MonStatsInitStrc monStatsInit = {};
-    DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
+    DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
 
     const int32_t nNewHp = (ITEMS_RollLimitedRandomNumber(&pTarget->pSeed, monStatsInit.nMaxHP - monStatsInit.nMinHP + 1) + monStatsInit.nMinHP) << 8;
     STATLIST_SetUnitStat(pTarget, STAT_MAXHP, nNewHp, 0);
     STATLIST_SetUnitStat(pTarget, STAT_HITPOINTS, nNewHp, 0);
 
-    const int32_t nUnitLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
-    const int32_t nTargetLevel = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0);
+    const int32_t nUnitLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
+    const int32_t nTargetLevel = STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0);
     if (nTargetLevel && nUnitLevel < nTargetLevel)
     {
         int32_t nHitpoints = MONSTERUNIQUE_CalculatePercentage(nNewHp, nUnitLevel, nTargetLevel);
@@ -1965,7 +1965,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
         if (nReducedDamage > 0)
         {
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
-            int32_t nNewHp = nReducedDamage + STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0);
+            int32_t nNewHp = nReducedDamage + STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0);
             if (nNewHp > nMaxHp)
             {
                 const int32_t nHpDiff = nMaxHp - nNewHp;
@@ -1986,7 +1986,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
     if (nDamage > 0)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pAttacker);
-        int32_t nNewHp = nDamage + STATLIST_GetUnitStatUnsigned(pAttacker, STAT_HITPOINTS, 0);
+        int32_t nNewHp = nDamage + STATLIST_UnitGetStatValue(pAttacker, STAT_HITPOINTS, 0);
         if (nNewHp > nMaxHp)
         {
             const int32_t nHpDiff = nMaxHp - nNewHp;
@@ -2005,7 +2005,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
     if (pOwner && nDamageDiff > 0)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
-        int32_t nNewHp = nDamageDiff + STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0);
+        int32_t nNewHp = nDamageDiff + STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0);
         if (nNewHp > nMaxHp)
         {
             nNewHp = nMaxHp;
@@ -2062,7 +2062,7 @@ int32_t __fastcall D2GAME_EventFunc05_6FD0EDE0(D2GameStrc* pGame, int32_t nEvent
     D2UnitStrc* pOwner = SUNIT_GetServerUnit(pGame, STATLIST_GetOwnerType(pStatList), STATLIST_GetOwnerGUID(pStatList));
     const int32_t nHeal = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100);
 
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
 
     if (nHitpoints <= 0 || nMaxHp <= 0)
@@ -2199,7 +2199,7 @@ int32_t __fastcall D2GAME_EventFunc23_6FD0F1F0(D2GameStrc* pGame, int32_t nEvent
         nDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, nDrain, 100);
     }
 
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
     if (nDamage > nHitpoints)
     {
         nDamage = nHitpoints;
@@ -2256,7 +2256,7 @@ int32_t __fastcall sub_6FD0F590(D2UnitStrc* pUnit, int32_t nValue)
 {
     if (nValue > 0)
     {
-        const int32_t nHitPoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+        const int32_t nHitPoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
         int32_t nNewHp = nValue + nHitPoints;
         if (nNewHp > nMaxHp)
@@ -2286,7 +2286,7 @@ int32_t __fastcall D2GAME_EventFunc26_6FD0F5E0(D2GameStrc* pGame, int32_t nEvent
 		return 0;
 	}
 
-	const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0);
+	const int32_t nHitpoints = STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0);
 	if (nHitpoints < 256)
 	{
 		return 0;
@@ -2333,7 +2333,7 @@ int32_t __fastcall D2GAME_EventFunc27_6FD0F7A0(D2GameStrc* pGame, int32_t nEvent
         return 0;
     }
 
-    int32_t nSlow = STATLIST_GetUnitStatSigned(pAttacker, STAT_ITEM_SLOW, 0);
+    int32_t nSlow = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_SLOW, 0);
     if (!nSlow)
     {
         return 0;

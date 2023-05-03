@@ -555,7 +555,7 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         return 0;
     }
 
-    if (nValue > STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0) || nValue < 0 || nValue > UNITS_GetInventoryGoldLimit(pUnit))
+    if (nValue > STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0) || nValue < 0 || nValue > UNITS_GetInventoryGoldLimit(pUnit))
     {
         return 0;
     }
@@ -588,7 +588,7 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         UNITS_StoreOwner(pItem, pUnit);
     }
 
-    const uint32_t nDiff = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0) - nValue;
+    const uint32_t nDiff = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0) - nValue;
     D2GAME_SetStatOrResetGold_6FC7CA70(pUnit, STAT_GOLD, nDiff);
 
     return 1;
@@ -676,9 +676,9 @@ void __fastcall PLAYER_CountLivingPlayers(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 //D2Game.0x6FC7C500
 void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefender, D2UnitStrc* pAttacker)
 {
-    const int32_t nDefenderLevel = STATLIST_GetUnitStatUnsigned(pDefender, STAT_LEVEL, 0);
-    const int32_t nDefenderInventoryGold = STATLIST_GetUnitStatUnsigned(pDefender, STAT_GOLD, 0);
-    const int32_t nDefenderBankGold = STATLIST_GetUnitStatUnsigned(pDefender, STAT_GOLDBANK, 0);
+    const int32_t nDefenderLevel = STATLIST_UnitGetStatValue(pDefender, STAT_LEVEL, 0);
+    const int32_t nDefenderInventoryGold = STATLIST_UnitGetStatValue(pDefender, STAT_GOLD, 0);
+    const int32_t nDefenderBankGold = STATLIST_UnitGetStatValue(pDefender, STAT_GOLDBANK, 0);
     const int32_t nDefenderTotalGold = nDefenderBankGold + nDefenderInventoryGold;
 
     const int32_t nPenaltyPercentage = std::min(nDefenderLevel, 20);
@@ -778,7 +778,7 @@ void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefende
         int32_t nExperiencePenalty = (nCurrentExpThreshold - nPreviousExpThreshold) * pDifficultyLevelsTxtRecord->dwDeathExpPenalty / 100;
         if (nExperiencePenalty)
         {
-            int32_t nNewExperienceValue = STATLIST_GetUnitStatUnsigned(pDefender, STAT_EXPERIENCE, 0) - nExperiencePenalty;
+            int32_t nNewExperienceValue = STATLIST_UnitGetStatValue(pDefender, STAT_EXPERIENCE, 0) - nExperiencePenalty;
             if (nNewExperienceValue <= nPreviousExpThreshold)
             {
                 nExperiencePenalty += nNewExperienceValue - nPreviousExpThreshold;

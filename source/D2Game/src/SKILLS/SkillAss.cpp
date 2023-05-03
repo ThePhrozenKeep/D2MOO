@@ -146,7 +146,7 @@ int32_t __fastcall SKILLS_SrvDo033_PsychicHammer(D2GameStrc* pGame, D2UnitStrc* 
         damage.wResultFlags |= 8u;
     }
 
-    if (!(STATLIST_GetUnitStatUnsigned(pTargetUnit, STAT_HITPOINTS, 0) & 0xFFFFFF00))
+    if (!(STATLIST_UnitGetStatValue(pTargetUnit, STAT_HITPOINTS, 0) & 0xFFFFFF00))
     {
         damage.wResultFlags |= 2u;
     }
@@ -1149,7 +1149,7 @@ void __fastcall sub_6FCF7BC0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 {
     D2DamageStrc damage = {};
 
-    const int32_t nToHit = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
+    const int32_t nToHit = STATLIST_UnitGetStatValue(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, nToHit, 0);
 
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -1270,7 +1270,7 @@ int32_t __fastcall SKILLS_SrvDo042_DragonTalon(D2GameStrc* pGame, D2UnitStrc* pU
     int32_t bKnockback = 0;
     if (nParam <= 0)
     {
-        int32_t nLevel = nSkillLevel + STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0) - STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0);
+        int32_t nLevel = nSkillLevel + STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0) - STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0);
         if (nLevel < 1)
         {
             nLevel = 1;
@@ -1486,7 +1486,7 @@ int32_t __fastcall SKILLS_SrvDo044_BladeSentinel(D2GameStrc* pGame, D2UnitStrc* 
         return 0;
     }
 
-    STATLIST_SetUnitStat(pMonster, STAT_LEVEL, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 0);
+    STATLIST_SetUnitStat(pMonster, STAT_LEVEL, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0);
 
     const int32_t nX = CLIENTS_GetUnitX(pUnit);
     const int32_t nY = CLIENTS_GetUnitY(pUnit);
@@ -1577,7 +1577,7 @@ void __fastcall sub_6FCF8C70(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 
     D2DamageStrc damage = {};
 
-    damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, STATLIST_GetUnitStatUnsigned(pUnit, 325, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
+    damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, STATLIST_UnitGetStatValue(pUnit, 325, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
         damage.dwHitFlags |= 2;
@@ -1854,7 +1854,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 1;
     }
 
-    if (pSkillsTxtRecord->wStartMana > 0 && STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) < (int32_t)pSkillsTxtRecord->wStartMana << 8)
+    if (pSkillsTxtRecord->wStartMana > 0 && STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) < (int32_t)pSkillsTxtRecord->wStartMana << 8)
     {
         return 0;
     }
@@ -2004,7 +2004,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
         return 0;
     }
 
-    STATLIST_SetUnitStat(pPet, STAT_LEVEL, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 0);
+    STATLIST_SetUnitStat(pPet, STAT_LEVEL, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0);
 
     if (nSkillLevel > 1)
     {
@@ -2098,7 +2098,7 @@ int32_t __fastcall SKILLS_SrvSt27_DragonTail(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    const int32_t nToHit = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
+    const int32_t nToHit = STATLIST_UnitGetStatValue(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
 
     D2DamageStrc damage = {};
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, nToHit, 0);
@@ -2153,7 +2153,7 @@ int32_t __fastcall SKILLS_SrvDo050_DragonTail(D2GameStrc* pGame, D2UnitStrc* pUn
 
     D2DamageStrc fireDamage = {};
 
-    const int32_t nPercentage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0) + SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
+    const int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0) + SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
 
     fireDamage.dwFireDamage = MONSTERUNIQUE_CalculatePercentage(physDamage.dwPhysDamage, nPercentage, 100);
     fireDamage.wResultFlags = 9;
@@ -2175,7 +2175,7 @@ void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t n
         const int32_t nLevel = STATLIST_GetStatValue(pConversionStatList, STAT_CONVERSION_LEVEL, 0);
         const int32_t nConversionMaxHp = STATLIST_GetStatValue(pConversionStatList, STAT_CONVERSION_MAXHP, 0);
         int32_t nNewHp = STATLIST_GetMaxLifeFromUnit(pItem) >> 8;
-        const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pItem, STAT_HITPOINTS, 0) >> 8;
+        const int32_t nHitpoints = STATLIST_UnitGetStatValue(pItem, STAT_HITPOINTS, 0) >> 8;
         
         int32_t nMaxHp = 1;
         if (nNewHp)
@@ -2251,8 +2251,8 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
 
             UNITS_SetTargetUnitForDynamicUnit(pAuraCallback->pOwner, nullptr);
 
-            const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
-            const int32_t nOwnerLevel = STATLIST_GetUnitStatUnsigned(pAuraCallback->pOwner, STAT_LEVEL, 0);
+            const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
+            const int32_t nOwnerLevel = STATLIST_UnitGetStatValue(pAuraCallback->pOwner, STAT_LEVEL, 0);
             if (!nLevel || nOwnerLevel >= nLevel || STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION_SAVE))
             {
                 return 1;
@@ -2266,7 +2266,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
 
             STATLIST_SetState(pConversionSaveStatList, STATE_CONVERSION_SAVE);
             D2COMMON_10475_PostStatToStatList(pUnit, pConversionSaveStatList, 1);
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >> 8;
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
             STATLIST_SetStatIfListIsValid(pConversionSaveStatList, STAT_CONVERSION_LEVEL, nLevel, 0);
             STATLIST_SetStatIfListIsValid(pConversionSaveStatList, STAT_CONVERSION_MAXHP, nMaxHp, 0);
@@ -2360,7 +2360,7 @@ int32_t __fastcall SKILLS_SrvDo052_DragonFlight(D2GameStrc* pGame, D2UnitStrc* p
     {
         D2DamageStrc damage = {};
 
-        const int32_t nToHit = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
+        const int32_t nToHit = STATLIST_UnitGetStatValue(pUnit, STAT_PROGRESSIVE_TOHIT, 0) + SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
         damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, nToHit, 0);
         if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
         {

@@ -161,14 +161,14 @@ int32_t __fastcall SKILLS_SrvSt07_Impale(D2GameStrc* pGame, D2UnitStrc* pUnit, i
             {
                 if (ITEMS_CheckIfStackable(pItem))
                 {
-                    if (STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nChance)
+                    if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nChance)
                     {
                         sub_6FD118C0(pGame, pUnit);
                     }
                 }
                 else if (ITEMS_HasDurability(pItem) && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nChance)
                 {
-                    const int32_t nNewDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) - nAmount;
+                    const int32_t nNewDurability = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) - nAmount;
                     if (nNewDurability <= 0)
                     {
                         sub_6FC4B580(pGame, pUnit, pItem);
@@ -649,7 +649,7 @@ void __fastcall SKILLS_AddDamagePercentBonus(D2UnitStrc* pUnit, int32_t nBonus)
 {
     if (nBonus)
     {
-        STATLIST_SetUnitStat(pUnit, STAT_DAMAGEPERCENT, nBonus + STATLIST_GetUnitStatUnsigned(pUnit, STAT_DAMAGEPERCENT, 0), 0);
+        STATLIST_SetUnitStat(pUnit, STAT_DAMAGEPERCENT, nBonus + STATLIST_UnitGetStatValue(pUnit, STAT_DAMAGEPERCENT, 0), 0);
     }
 }
 
@@ -965,7 +965,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
 
     STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, nHitpoints, 0);
     STATLIST_SetUnitStat(pPet, STAT_MAXHP, nHitpoints, 0);
-    STATLIST_SetUnitStat(pPet, STAT_LEVEL, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 0);
+    STATLIST_SetUnitStat(pPet, STAT_LEVEL, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0);
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
     EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_MONUMOD, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel) + pGame->dwGameFrame, 0, 0);

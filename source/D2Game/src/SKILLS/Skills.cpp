@@ -386,7 +386,7 @@ int32_t __fastcall sub_6FD0F8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nV
     if (nLifeAdded > 0)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pBloodGolem);
-        int32_t nNewHp = nLifeAdded + STATLIST_GetUnitStatUnsigned(pBloodGolem, STAT_HITPOINTS, 0);
+        int32_t nNewHp = nLifeAdded + STATLIST_UnitGetStatValue(pBloodGolem, STAT_HITPOINTS, 0);
         if (nNewHp > nMaxHp)
         {
             nLifeAdded += nMaxHp - nNewHp;
@@ -612,19 +612,19 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 void __fastcall sub_6FD0FDD0(D2UnitStrc* pUnit)
 {
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) > nMaxHp)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) > nMaxHp)
     {
         STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nMaxHp, 0);
     }
 
     const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pUnit);
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) > nMaxMana)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) > nMaxMana)
     {
         STATLIST_SetUnitStat(pUnit, STAT_MANA, nMaxMana, 0);
     }
 
     const int32_t nMaxStamina = STATLIST_GetMaxStaminaFromUnit(pUnit);
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0) > nMaxStamina)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0) > nMaxStamina)
     {
         STATLIST_SetUnitStat(pUnit, STAT_STAMINA, nMaxStamina, 0);
     }
@@ -1098,7 +1098,7 @@ int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitSt
             return D2GAME_SKILLS_BloodMana_6FD025E0(pPlayer, nManaCost);
         }
 
-        if (STATLIST_GetUnitStatUnsigned(pPlayer, STAT_MANA, 0) < nManaCost)
+        if (STATLIST_UnitGetStatValue(pPlayer, STAT_MANA, 0) < nManaCost)
         {
             return 0;
         }
@@ -1163,7 +1163,7 @@ int32_t __fastcall D2GAME_SKILLMANA_AuraConsume_6FD10C90(D2UnitStrc* pUnit, int3
             return D2GAME_SKILLS_BloodMana_6FD025E0(pUnit, nManaCost);
         }
 
-        if ((int32_t)STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) < nManaCost)
+        if ((int32_t)STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) < nManaCost)
         {
             return 0;
         }
@@ -1208,7 +1208,7 @@ int32_t __fastcall sub_6FD10CE0(D2UnitStrc* pUnit)
             return 1;
         }
         
-        return STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) >= nManaCost;
+        return STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >= nManaCost;
     }
 
     return pSkill->nCharges > 0;
@@ -1286,7 +1286,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
     const int32_t nStateMask = STATES_CheckStateMaskCurseByStateId(pCurse->nState);
     if (nStateMask)
     {
-        const int32_t nCurseResistance = STATLIST_GetUnitStatUnsigned(pCurse->pTarget, STAT_CURSE_RESISTANCE, 0);
+        const int32_t nCurseResistance = STATLIST_UnitGetStatValue(pCurse->pTarget, STAT_CURSE_RESISTANCE, 0);
         if (nCurseResistance >= 100)
         {
             return 0;
@@ -1429,7 +1429,7 @@ int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     }
 
     int32_t bNoQuantity = 0;
-    int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) - 1;
+    int32_t nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) - 1;
     if (nQuantity < 0)
     {
         bNoQuantity = 1;
@@ -1442,7 +1442,7 @@ int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, nQuantity, 0);
 
     const int32_t nMaxDurability = STATLIST_GetMaxDurabilityFromUnit(pItem);
-    if (STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) != nMaxDurability)
+    if (STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) != nMaxDurability)
     {
         STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nMaxDurability, 0);
         D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_DURABILITY, nMaxDurability, 0);
@@ -1499,7 +1499,7 @@ D2UnitStrc* __fastcall sub_6FD11420(D2GameStrc* pGame, int32_t nMissileId, D2Uni
     {
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
-            const int32_t nToHit = STATLIST_GetUnitStatUnsigned(pUnit, STAT_TOHIT, 0);
+            const int32_t nToHit = STATLIST_UnitGetStatValue(pUnit, STAT_TOHIT, 0);
             if (nToHit)
             {
                 missileParams.nAttBonus = nToHit;
@@ -1625,13 +1625,13 @@ int32_t __fastcall sub_6FD118C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
 
     D2UnitStrc* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
-    if (pRightArmItem && (!bNoBow || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_GetUnitStatSigned(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
+    if (pRightArmItem && (!bNoBow || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return sub_6FD11340(pGame, pUnit, pRightArmItem);
     }
 
     D2UnitStrc* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
-    if (pLeftArmItem && (!bNoBow || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_GetUnitStatSigned(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
+    if (pLeftArmItem && (!bNoBow || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return sub_6FD11340(pGame, pUnit, pLeftArmItem);
     }
@@ -1668,7 +1668,7 @@ int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
     if (ITEMS_GetAmmoType(pWeapon))
     {
         bNoAmmoItem = 0;
-        if (!SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__) && STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_MAGICARROW, 0))
+        if (!SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__) && STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_MAGICARROW, 0))
         {
             return 1;
         }
@@ -1680,13 +1680,13 @@ int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
     }
 
     D2UnitStrc* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
-    if (pRightArmItem && (!bNoAmmoItem || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_GetUnitStatSigned(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
+    if (pRightArmItem && (!bNoAmmoItem || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return ITEMS_CanItemBeUsedForThrowSkill(pRightArmItem);
     }
 
     D2UnitStrc* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
-    if (pLeftArmItem && (!bNoAmmoItem || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_GetUnitStatSigned(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
+    if (pLeftArmItem && (!bNoAmmoItem || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return ITEMS_CanItemBeUsedForThrowSkill(pLeftArmItem);
     }
@@ -2055,7 +2055,7 @@ int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2Uni
     }
 
     D2DamageStrc damage = {};
-    damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, STATLIST_GetUnitStatUnsigned(pUnit, STAT_PROGRESSIVE_TOHIT, 0), 0);
+    damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, STATLIST_UnitGetStatValue(pUnit, STAT_PROGRESSIVE_TOHIT, 0), 0);
     damage.dwHitFlags |= 2;
     sub_6FCF5680(pUnit, &damage);
     SUNITDMG_FillDamageValues(pGame, pUnit, pTarget, &damage, 0, 128);
@@ -2243,7 +2243,7 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         }
     }
 
-    if (ITEMS_CheckIfThrowable(pWeapon) || STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_THROWABLE, 0))
+    if (ITEMS_CheckIfThrowable(pWeapon) || STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_THROWABLE, 0))
     {
         if (pWeapon)
         {
@@ -2262,7 +2262,7 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
             if (pMissile && pWeapon)
             {
-                STATLIST_SetUnitStat(pMissile, STAT_TOHIT, STATLIST_GetUnitStatUnsigned(pMissile, STAT_TOHIT, 0) + D2Common_11024(pUnit, pWeapon, 0, 0, 0), 0);
+                STATLIST_SetUnitStat(pMissile, STAT_TOHIT, STATLIST_UnitGetStatValue(pMissile, STAT_TOHIT, 0) + D2Common_11024(pUnit, pWeapon, 0, 0, 0), 0);
                 STATLIST_AddUnitStat(pMissile, STAT_DAMAGEPERCENT, D2Common_11024(pUnit, pWeapon, 0, 1, 0), 0);
             }
 
@@ -2301,7 +2301,7 @@ int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* 
         }
     }
 
-    if (ITEMS_CheckIfThrowable(pWeapon) || STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_THROWABLE, 0))
+    if (ITEMS_CheckIfThrowable(pWeapon) || STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_THROWABLE, 0))
     {
         if (pWeapon)
         {
@@ -2320,7 +2320,7 @@ int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* 
 
             if (pMissile && pWeapon)
             {
-                STATLIST_SetUnitStat(pMissile, STAT_TOHIT, STATLIST_GetUnitStatUnsigned(pMissile, STAT_TOHIT, 0) + D2Common_11024(pUnit, pWeapon, 0, 0, 0), 0);
+                STATLIST_SetUnitStat(pMissile, STAT_TOHIT, STATLIST_UnitGetStatValue(pMissile, STAT_TOHIT, 0) + D2Common_11024(pUnit, pWeapon, 0, 0, 0), 0);
                 STATLIST_AddUnitStat(pMissile, STAT_DAMAGEPERCENT, D2Common_11024(pUnit, pWeapon, 0, 1, 0), 0);
             }
 
@@ -2829,7 +2829,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
     }
     else
     {
-        const int32_t nAura = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_AURA, nSkillId);
+        const int32_t nAura = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_AURA, nSkillId);
         if (nAura > 0)
         {
             D2GAME_SKILLS_Handler_6FD12BA0(pGame, pUnit, nSkillId, nAura, 1, 1, 0);

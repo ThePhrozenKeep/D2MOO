@@ -317,7 +317,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     {
         if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_PIERCE])
         {
-            const int32_t nPierceValue = STATLIST_GetUnitStatSigned(missileParams->pOwner, STAT_ITEM_PIERCE, 0) + STATLIST_GetUnitStatUnsigned(missileParams->pOwner, STAT_SKILL_PIERCE, 0);
+            const int32_t nPierceValue = STATLIST_UnitGetItemStatOrSkillStatValue(missileParams->pOwner, STAT_ITEM_PIERCE, 0) + STATLIST_UnitGetStatValue(missileParams->pOwner, STAT_SKILL_PIERCE, 0);
             if (nPierceValue)
             {
                 D2SeedStrc seed = {};
@@ -390,7 +390,7 @@ void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, 
     packet73.nUnitType = pOwner->dwUnitType;
     packet73.nUnitGUID = pOwner->dwUnitId;
     packet73.nLevel = MISSILE_GetLevel(pMissile);
-    packet73.nPierce = STATLIST_GetUnitStatUnsigned(pMissile, STAT_PIERCE_IDX, 0);
+    packet73.nPierce = STATLIST_UnitGetStatValue(pMissile, STAT_PIERCE_IDX, 0);
 
     sub_6FC3F610(pClient, &packet73);
 }

@@ -841,7 +841,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 		if (!pAiTickParam->pAiControl->dwAiParam[0] || nLifePercentage > 75)
 		{
-			STATLIST_SetUnitStat(pUnit, STAT_HPREGEN, STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0) - pAiTickParam->pAiControl->dwAiParam[2], 0);
+			STATLIST_SetUnitStat(pUnit, STAT_HPREGEN, STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0) - pAiTickParam->pAiControl->dwAiParam[2], 0);
 		}
 
 		if (pAiTickParam->bCombat)
@@ -917,7 +917,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 5u + 2;
 
-				const int32_t nHpRegen = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0);
+				const int32_t nHpRegen = STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0);
 				if (nHpRegen)
 				{
 					pAiTickParam->pAiControl->dwAiParam[2] = (nHpRegen * pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty]) / 8;
@@ -1805,7 +1805,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_GreaterMummy(D2GameStrc* pGame, D2
 		return 0;
 	}
 
-	const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0);
+	const int32_t nHitpoints = STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0);
 	if (STATLIST_GetMaxLifeFromUnit(pTarget) != nHitpoints && pTarget->dwAnimMode != MONMODE_DEATH)
 	{
 		pArg->pHealTarget = pTarget;
@@ -2048,7 +2048,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_Vulture(D2GameStrc* pGame, D2UnitS
 	{
 		const int32_t nDistance = AITHINK_GetSquaredDistance(pUnit, pTarget);
 
-		if (nDistance <= pArg->nDistance && STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0) <= pArg->nLifePercentage * STATLIST_GetMaxLifeFromUnit(pTarget) / 100)
+		if (nDistance <= pArg->nDistance && STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0) <= pArg->nLifePercentage * STATLIST_GetMaxLifeFromUnit(pTarget) / 100)
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -2995,7 +2995,7 @@ void __fastcall AITHINK_Fn029_BatDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				if (pAiTickParam->pAiControl->dwAiParam[2])
 				{
-					STATLIST_SetUnitStat(pUnit, STAT_HPREGEN, STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0) - pAiTickParam->pAiControl->dwAiParam[2], 0);
+					STATLIST_SetUnitStat(pUnit, STAT_HPREGEN, STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0) - pAiTickParam->pAiControl->dwAiParam[2], 0);
 				}
 
 				AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL2, 0);
@@ -3113,7 +3113,7 @@ void __fastcall AITHINK_Fn029_BatDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		pAiTickParam->pAiControl->dwAiParam[0] = 1;
 		pAiTickParam->pAiControl->dwAiParam[1] = 0;
 
-		const int32_t nHpRegen = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0);
+		const int32_t nHpRegen = STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0);
 		if (nHpRegen)
 		{
 			pAiTickParam->pAiControl->dwAiParam[2] = (nHpRegen * pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty]) / 8;
@@ -4081,7 +4081,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_Mephisto(D2GameStrc* pGame, D2Unit
 		pArg->unk0x04 = nDistance;
 	}
 
-	const int32_t nLife = STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0) >> 8;
+	const int32_t nLife = STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0) >> 8;
 	if (nLife < pArg->unk0x10)
 	{
 		pArg->unk0x0C = pTarget;
@@ -4505,7 +4505,7 @@ void __fastcall AITHINK_Fn053_Summoner(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 6u, 0);
 	}
 
-	int32_t bUseColdSkill = STATLIST_GetUnitStatUnsigned(pAiTickParam->pTarget, STAT_FIRERESIST, 0) >= STATLIST_GetUnitStatUnsigned(pAiTickParam->pTarget, STAT_COLDRESIST, 0);
+	int32_t bUseColdSkill = STATLIST_UnitGetStatValue(pAiTickParam->pTarget, STAT_FIRERESIST, 0) >= STATLIST_UnitGetStatValue(pAiTickParam->pTarget, STAT_COLDRESIST, 0);
 
 	const int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget);
 	const int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget);
@@ -8634,7 +8634,7 @@ void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClas
 	}
 	else
 	{
-		nChance = std::min(pAiTickParam->pAiControl->dwAiParam[0] + 40 + 2 * STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 95u);
+		nChance = std::min(pAiTickParam->pAiControl->dwAiParam[0] + 40 + 2 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 95u);
 	}
 
 	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget);
@@ -8718,7 +8718,7 @@ void __fastcall sub_6FCE4830(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMons
 		return;
 	}
 
-	const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+	const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
 	D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, nHirelingId, nLevel);
 	if (!pHirelingTxtRecord)
@@ -10823,15 +10823,15 @@ int32_t __fastcall AITHINK_GetTargetScore(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	int32_t nColdResist = 0;
 	if (bInRange)
 	{
-		nColdResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_COLDRESIST, 0);
+		nColdResist = STATLIST_UnitGetStatValue(pTarget, STAT_COLDRESIST, 0);
 	}
 
-	const int32_t nResistValue = (STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIRERESIST, 0) + STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTRESIST, 0)
-					+ nColdResist + 4 * (STATLIST_GetUnitStatUnsigned(pTarget, STAT_DAMAGERESIST, 0) + 2 * STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAGICRESIST, 0))) / 15;
+	const int32_t nResistValue = (STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0) + STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0)
+					+ nColdResist + 4 * (STATLIST_UnitGetStatValue(pTarget, STAT_DAMAGERESIST, 0) + 2 * STATLIST_UnitGetStatValue(pTarget, STAT_MAGICRESIST, 0))) / 15;
 
-	const int32_t nDamageValue = (STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAXDAMAGE, 0) + STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIREMAXDAM, 0)
-					+ STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTMAXDAM, 0) + STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAGICMAXDAM, 0)
-					+ STATLIST_GetUnitStatUnsigned(pTarget, STAT_COLDMAXDAM, 0) + (STATLIST_GetUnitStatUnsigned(pTarget, STAT_POISONMAXDAM, 0) >> 8)) / 2;
+	const int32_t nDamageValue = (STATLIST_UnitGetStatValue(pTarget, STAT_MAXDAMAGE, 0) + STATLIST_UnitGetStatValue(pTarget, STAT_FIREMAXDAM, 0)
+					+ STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTMAXDAM, 0) + STATLIST_UnitGetStatValue(pTarget, STAT_MAGICMAXDAM, 0)
+					+ STATLIST_UnitGetStatValue(pTarget, STAT_COLDMAXDAM, 0) + (STATLIST_UnitGetStatValue(pTarget, STAT_POISONMAXDAM, 0) >> 8)) / 2;
 
 	const int32_t nColdStateValue = STATES_CheckState(pTarget, STATE_COLD) != 0 ? 100 : 0;
 
@@ -11097,8 +11097,8 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			}
 
 			const int32_t bColliding = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL);
-			const int32_t nFireResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIRERESIST, 0);
-			const int32_t nLightResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTRESIST, 0);
+			const int32_t nFireResist = STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0);
+			const int32_t nLightResist = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0);
 
 			int32_t chanceArray[17] = {};
 			int32_t bInMeleeRange = 0;
@@ -11963,7 +11963,7 @@ void __fastcall AITHINK_Fn102_BladeCreeper(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				UNITS_StoreOwner(pMissile, pUnit);
 				STATLIST_AddUnitStat(pUnit, STAT_TOHIT, UNITS_GetAttackRate(pOwner), 0);
 
-				int32_t nToHitPercent = STATLIST_GetUnitStatUnsigned(pOwner, STAT_ITEM_TOHIT_PERCENT, 0);
+				int32_t nToHitPercent = STATLIST_UnitGetStatValue(pOwner, STAT_ITEM_TOHIT_PERCENT, 0);
 				D2UnitStrc* pWeapon = sub_6FC7C7B0(pOwner);
 				if (pWeapon)
 				{
@@ -12678,28 +12678,28 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 				switch (pSkillsTxtRecord->nEType)
 				{
 				case ELEMTYPE_NONE:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_DAMAGERESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_DAMAGERESIST, 0);
 					break;
 
 				case ELEMTYPE_FIRE:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIRERESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0);
 					break;
 
 				case ELEMTYPE_LTNG:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTRESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0);
 					break;
 
 				case ELEMTYPE_COLD:
 				case ELEMTYPE_FREEZE:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_COLDRESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_COLDRESIST, 0);
 					break;
 
 				case ELEMTYPE_POIS:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_POISONRESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_POISONRESIST, 0);
 					break;
 
 				case ELEMTYPE_MAGIC:
-					nResistance = STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAGICRESIST, 0);
+					nResistance = STATLIST_UnitGetStatValue(pTarget, STAT_MAGICRESIST, 0);
 					break;
 
 				default:
@@ -13225,7 +13225,7 @@ void __fastcall AITHINK_Fn110_Vines(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 	{
 		if (pTarget)
 		{
-			if (STATES_CheckState(pTarget, STATE_POISON) || STATLIST_GetUnitStatUnsigned(pTarget, STAT_POISONRESIST, 0) == 100)
+			if (STATES_CheckState(pTarget, STATE_POISON) || STATLIST_UnitGetStatValue(pTarget, STAT_POISONRESIST, 0) == 100)
 			{
 				D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pTarget, pAiTickParam->pMonstatsTxt->wAiParam[3][pGame->nDifficulty], 0);
 				return;
@@ -13318,14 +13318,14 @@ void __fastcall AITHINK_Fn111_CycleOfLife(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	if (nClassId == MONSTER_CYCLEOFLIFE)
 	{
-		if (STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0) >= STATLIST_GetMaxLifeFromUnit(pOwner))
+		if (STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0) >= STATLIST_GetMaxLifeFromUnit(pOwner))
 		{
 			bUseSkill = 0;
 		}
 	}
 	else if (nClassId == MONSTER_VINECREATURE)
 	{
-		if (STATLIST_GetUnitStatUnsigned(pOwner, STAT_MANA, 0) >= STATLIST_GetMaxManaFromUnit(pOwner))
+		if (STATLIST_UnitGetStatValue(pOwner, STAT_MANA, 0) >= STATLIST_GetMaxManaFromUnit(pOwner))
 		{
 			bUseSkill = 0;
 		}
@@ -15524,8 +15524,8 @@ int32_t __fastcall sub_6FCF0E40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 
 	if (nLifePercentage < 30 && ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < 25 && !STATES_CheckState(pUnit, STATE_PREVENTHEAL))
 	{
-		int32_t nAdd = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0) << 8;
-		const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+		int32_t nAdd = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) << 8;
+		const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
 		const int32_t nMaxHitpoints = STATLIST_GetMaxLifeFromUnit(pUnit);
 		if (nHitpoints + nAdd > nMaxHitpoints)
 		{

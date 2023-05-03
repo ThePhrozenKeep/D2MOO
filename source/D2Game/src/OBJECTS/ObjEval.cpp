@@ -23,15 +23,15 @@ void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSr
 
     D2_ASSERT(pTargetUnit);
 
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pTargetUnit, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pTargetUnit, STAT_HITPOINTS, 0);
     const int32_t nMinDamage = std::max(nHitpoints >> 5, 1);
     const int32_t nMaxDamage = std::max(nHitpoints >> 3, nMinDamage + 1);
 
-    const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pTargetUnit, STAT_LEVEL, 0);
+    const int32_t nLevel = STATLIST_UnitGetStatValue(pTargetUnit, STAT_LEVEL, 0);
 
-    const int32_t nParam = 2 * ((uint8_t)(nLevel + (uint8_t)ITEMS_RollLimitedRandomNumber(&pSrcUnit->pSeed, nLevel >> 2)) - 5 * ((int32_t)STATLIST_GetUnitStatUnsigned(pTargetUnit, STAT_DEXTERITY, 0) >> 1) - nLevel);
+    const int32_t nParam = 2 * ((uint8_t)(nLevel + (uint8_t)ITEMS_RollLimitedRandomNumber(&pSrcUnit->pSeed, nLevel >> 2)) - 5 * ((int32_t)STATLIST_UnitGetStatValue(pTargetUnit, STAT_DEXTERITY, 0) >> 1) - nLevel);
 
-    const int32_t nChanceToHit = std::max(nParam - (int32_t)STATLIST_GetUnitStatUnsigned(pTargetUnit, STAT_ARMORCLASS, 0) + 125, 65);
+    const int32_t nChanceToHit = std::max(nParam - (int32_t)STATLIST_UnitGetStatValue(pTargetUnit, STAT_ARMORCLASS, 0) + 125, 65);
 
     if ((ITEMS_RollRandomNumber(&pSrcUnit->pSeed) % 100) >= nChanceToHit)
     {

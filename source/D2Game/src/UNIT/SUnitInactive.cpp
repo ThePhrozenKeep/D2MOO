@@ -853,9 +853,9 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_NODEINDEXUNEQUAL11;
 		}
 
-		pInactiveMonsterNode->nExperience = STATLIST_GetUnitStatUnsigned(pUnit, STAT_EXPERIENCE, 0);
+		pInactiveMonsterNode->nExperience = STATLIST_UnitGetStatValue(pUnit, STAT_EXPERIENCE, 0);
 		pInactiveMonsterNode->nMaxHitpoints = STATLIST_GetMaxLifeFromUnit(pUnit);
-		pInactiveMonsterNode->nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+		pInactiveMonsterNode->nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
 		pInactiveMonsterNode->nLevelId = MONSTER_GetLevelId(pUnit);
 
 		const uint8_t* pMonUMods = MONSTERUNIQUE_GetUMods(pUnit);

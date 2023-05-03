@@ -195,7 +195,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     int32_t nMultiplier = 0;
     if (!STATLIST_GetUnitAlignment(pUnit))
     {
-        const int32_t nPlayerCount = std::max(STATLIST_GetUnitStatUnsigned(pUnit, STAT_MONSTER_PLAYERCOUNT, 0), 1u);
+        const int32_t nPlayerCount = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MONSTER_PLAYERCOUNT, 0), 1u);
 
         if (pGame->nDifficulty != DIFFMODE_NORMAL && nPlayerCount >= 2)
         {
@@ -216,21 +216,21 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     int32_t nToHit = 0;
     if (nMode == MONMODE_ATTACK2)
     {
-        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 16, &pMonStatsInit);
+        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 16, &pMonStatsInit);
         nMinDamage = pMonStatsInit.nA2MinD + monSkillInfo.nMinDamage;
         nMaxDamage = pMonStatsInit.nA2MaxD + monSkillInfo.nMaxDamage;
         nToHit = pMonStatsInit.nTH + monSkillInfo.nToHit;
     }
     else if (nMode == MONMODE_BLOCK || nMode == MONMODE_CAST || nMode == MONMODE_SKILL1)
     {
-        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 32, &pMonStatsInit);
+        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 32, &pMonStatsInit);
         nMinDamage = pMonStatsInit.nS1MinD + monSkillInfo.nMinDamage;
         nMaxDamage = pMonStatsInit.nS1MaxD + monSkillInfo.nMaxDamage;
         nToHit = pMonStatsInit.nTH + monSkillInfo.nToHit;
     }
     else
     {
-        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 8, &pMonStatsInit);
+        DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 8, &pMonStatsInit);
         nMinDamage = pMonStatsInit.nA1MinD + monSkillInfo.nMinDamage;
         nMaxDamage = pMonStatsInit.nA1MaxD + monSkillInfo.nMaxDamage;
         nToHit = pMonStatsInit.nTH + monSkillInfo.nToHit;
@@ -267,7 +267,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
             if (nChance && (nChance >= 100 || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nChance))
             {
                 memset(&pMonStatsInit, 0, sizeof(pMonStatsInit));
-                DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 0x40 + i, &pMonStatsInit);
+                DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0x40 + i, &pMonStatsInit);
 
                 int32_t nElemDuration = pMonStatsInit.nElDur;
                 int32_t nElemMinDamage = pMonStatsInit.nElMaxD;
@@ -401,7 +401,7 @@ uint8_t __fastcall sub_6FC62F50(D2UnitStrc* pUnit)
 {
     if (pUnit)
     {
-        const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >> 8;
+        const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
         if (nMaxHp > 0 && nHitpoints < nMaxHp)
         {
@@ -576,7 +576,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
 {
     pUnit = pUnit;
 
-    int32_t nHpRegen = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HPREGEN, 0);
+    int32_t nHpRegen = STATLIST_UnitGetStatValue(pUnit, STAT_HPREGEN, 0);
 
     if (STATES_CheckStateMaskLifeOnUnit(pUnit))
     {
@@ -589,7 +589,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
 
         if (nHpRegen)
         {
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
             if (nHpRegen < 0 && nHitpoints < 256)
             {
                 D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -615,7 +615,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
 
             STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nNewHp, 0);
 
-            const uint8_t nLastSentHpPct = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LAST_SENT_HP_PCT, 0);
+            const uint8_t nLastSentHpPct = STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0);
             const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
             int32_t nHpPctDiff = nLastSentHpPct - nNewSentHpPct;
             nHpPctDiff = std::abs(nHpPctDiff);
@@ -892,7 +892,7 @@ int32_t __fastcall sub_6FC63B30(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
                 if (pDifficultyLevelsTxtRecord)
                 {
                     D2MonStatsInitStrc monStatsInit = {};
-                    DATATBLS_CalculateMonsterStatsByLevel(pModeChange->pUnit->dwClassId, pGame->dwGameType, pGame->nDifficulty, STATLIST_GetUnitStatUnsigned(pModeChange->pUnit, STAT_LEVEL, 0), 1, &monStatsInit);
+                    DATATBLS_CalculateMonsterStatsByLevel(pModeChange->pUnit->dwClassId, pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pModeChange->pUnit, STAT_LEVEL, 0), 1, &monStatsInit);
 
                     const int32_t nMaxDamage = MONSTERUNIQUE_CalculatePercentage(monStatsInit.nMaxHP, pDifficultyLevelsTxtRecord->dwMonsterCEDmgPercent, 100);
                     const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(nMaxDamage, 60, 100);
@@ -966,7 +966,7 @@ void __fastcall sub_6FC63FD0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
         if (i->dwUnitType == UNIT_PLAYER && i->dwAnimMode != PLRMODE_DEAD && UNITS_GetDistanceToOtherUnit(pAttacker, i) <= 2 && !UNITS_TestCollisionBetweenInteractingUnits(i, pAttacker, 15361))
         {
             D2DamageStrc pDamage = {};
-            pDamage.dwPhysDamage = (int32_t )STATLIST_GetUnitStatUnsigned(i, STAT_HITPOINTS, 0) >> 5;
+            pDamage.dwPhysDamage = (int32_t )STATLIST_UnitGetStatValue(i, STAT_HITPOINTS, 0) >> 5;
             pDamage.wResultFlags = DAMAGERESULTFLAG_SUCCESSFULHIT;
             if (!STATES_CheckState(i, STATE_UNINTERRUPTABLE))
             {
@@ -1339,7 +1339,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
             int32_t nSkillLevel = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty)->dwMonsterSkillBonus + 1;
             if (pUnit->dwFlags & UNITFLAG_ISMERC)
             {
-                nSkillLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+                nSkillLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
             }
 
             if (sub_6FD11420(pGame, nMissileId, pUnit, 0, nSkillLevel, 0, 0, 0, 0, 1))

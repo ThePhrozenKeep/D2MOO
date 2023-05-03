@@ -73,7 +73,7 @@ void __fastcall PLRSAVE2_WriteMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
     }
 
     D2PetInfoStrc* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pPlayer, pHireling->dwUnitId);
-    const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pHireling, STAT_LEVEL, 0);
+    const int32_t nLevel = STATLIST_UnitGetStatValue(pHireling, STAT_LEVEL, 0);
 
     D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nLevel);
     if (!pHirelingTxtRecord)
@@ -84,7 +84,7 @@ void __fastcall PLRSAVE2_WriteMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
     pMercData->MercSaveData.nSeed = pPetInfo->nSeed;
     pMercData->MercSaveData.wName = pPetInfo->wName;
     pMercData->MercSaveData.nHirelingId = pPetInfo->nHirelingId;
-    pMercData->MercSaveData.nExperience = STATLIST_GetUnitStatUnsigned(pHireling, STAT_EXPERIENCE, 0);
+    pMercData->MercSaveData.nExperience = STATLIST_UnitGetStatValue(pHireling, STAT_EXPERIENCE, 0);
     pMercData->MercSaveData.nFlags = 0;
     pMercData->MercSaveData.wName -= pHirelingTxtRecord->wNameFirst;
 
@@ -174,7 +174,7 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
     }
 
     saveHeader.nClass = CLIENTS_GetClassId(pClient);
-    saveHeader.nLevel = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0);
+    saveHeader.nLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
     saveHeader.dwCreateTime = CLIENTS_GetCreateTime(pClient);
     saveHeader.dwLasTime = time(0);
     saveHeader.dwPlayTime = -1;
@@ -1219,7 +1219,7 @@ D2UnitStrc* __fastcall PLRSAVE2_LoadMercData(D2GameStrc* pGame, D2UnitStrc* pPla
     int32_t nLevel = 1;
     const int32_t nMaxLevel = DATATBLS_GetMaxLevel(0);
     
-    if (STATLIST_GetUnitStatUnsigned(pMerc, STAT_EXPERIENCE, 0) < hirelingData.nExperience)
+    if (STATLIST_UnitGetStatValue(pMerc, STAT_EXPERIENCE, 0) < hirelingData.nExperience)
     {
         STATLIST_SetUnitStat(pMerc, STAT_EXPERIENCE, hirelingData.nExperience, 0);
     }
@@ -1453,13 +1453,13 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
 
-    const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+    const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
     if (nGold < 0 || nGold > UNITS_GetInventoryGoldLimit(pUnit))
     {
         STATLIST_SetUnitStat(pUnit, STAT_GOLD, 0, 0);
     }
 
-    const int32_t nGoldBank = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLDBANK, 0);
+    const int32_t nGoldBank = STATLIST_UnitGetStatValue(pUnit, STAT_GOLDBANK, 0);
     if (nGoldBank < 0 || nGoldBank > UNITS_GetStashGoldLimit(pUnit))
     {
         STATLIST_SetUnitStat(pUnit, STAT_GOLDBANK, 0, 0);
@@ -1594,8 +1594,8 @@ int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pCl
 
                     if (!nErrorCode)
                     {
-                        const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_HITPOINTS, 0);
-                        const int32_t nMana = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_MANA, 0);
+                        const int32_t nHitpoints = STATLIST_UnitGetStatValue(pPlayer, STAT_HITPOINTS, 0);
+                        const int32_t nMana = STATLIST_UnitGetStatValue(pPlayer, STAT_MANA, 0);
 
                         nErrorCode = PLRSAVE2_LoadSkills(pGame, pPlayer, &pSection, pSaveFileEnd, nVersion, pSaveHeader->nSkills);
                         if (!nErrorCode)

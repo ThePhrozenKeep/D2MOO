@@ -2246,7 +2246,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                     pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                     if (pPlayer && gpD2ServerCallbackFunctions_6FD45830->pfEnterGame)
                     {
-                        gpD2ServerCallbackFunctions_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
+                        gpD2ServerCallbackFunctions_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
                     }
                 }
 

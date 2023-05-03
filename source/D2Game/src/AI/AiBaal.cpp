@@ -218,19 +218,19 @@ int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget,
 		nDistanceWeight = 100;
 	}
 
-	const int32_t nDamageResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_DAMAGERESIST, 0);
-	const int32_t nFireResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIRERESIST, 0);
-	const int32_t nColdResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_COLDRESIST, 0);
-	const int32_t nLightningResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTRESIST, 0);
-	const int32_t nMagicResist = STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAGICRESIST, 0);
+	const int32_t nDamageResist = STATLIST_UnitGetStatValue(pTarget, STAT_DAMAGERESIST, 0);
+	const int32_t nFireResist = STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0);
+	const int32_t nColdResist = STATLIST_UnitGetStatValue(pTarget, STAT_COLDRESIST, 0);
+	const int32_t nLightningResist = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0);
+	const int32_t nMagicResist = STATLIST_UnitGetStatValue(pTarget, STAT_MAGICRESIST, 0);
 	const int32_t nResistWeight = (nFireResist + nColdResist + nLightningResist + 4 * (nDamageResist + 2 * nMagicResist)) / 15;
 
-	const int64_t nMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAXDAMAGE, 0);
-	const int64_t nFireMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_FIREMAXDAM, 0);
-	const int64_t nLightningMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LIGHTMAXDAM, 0);
-	const int64_t nMagicMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_MAGICMAXDAM, 0);
-	const int64_t nColdMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_COLDMAXDAM, 0);
-	const int64_t nPoisonMaxDamage = STATLIST_GetUnitStatUnsigned(pTarget, STAT_POISONMAXDAM, 0) >> 8;
+	const int64_t nMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_MAXDAMAGE, 0);
+	const int64_t nFireMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_FIREMAXDAM, 0);
+	const int64_t nLightningMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTMAXDAM, 0);
+	const int64_t nMagicMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_MAGICMAXDAM, 0);
+	const int64_t nColdMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_COLDMAXDAM, 0);
+	const int64_t nPoisonMaxDamage = STATLIST_UnitGetStatValue(pTarget, STAT_POISONMAXDAM, 0) >> 8;
 	const int32_t nDamageWeight = static_cast<int32_t>(nMaxDamage + nFireMaxDamage + nLightningMaxDamage + nMagicMaxDamage + nColdMaxDamage + nPoisonMaxDamage) / 2;
 
 	const int32_t nColdStateWeight = STATES_CheckState(pTarget, STATE_COLD) ? 100 : 0;
@@ -804,7 +804,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 				AIGENERAL_AllocMinionList(pGame, pUnit, pBaalClone);
 				AIGENERAL_SetOwnerData(pGame, pBaalClone, pUnit->dwUnitId, pUnit->dwUnitType, 1, 0);
 				STATLIST_SetUnitStat(pBaalClone, STAT_MAXHP, STATLIST_GetMaxLifeFromUnit(pUnit) / 3, 0);
-				STATLIST_SetUnitStat(pBaalClone, STAT_HITPOINTS, STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) / 3, 0);
+				STATLIST_SetUnitStat(pBaalClone, STAT_HITPOINTS, STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) / 3, 0);
 				STATLIST_SetUnitStat(pBaalClone, STAT_HPREGEN, 0, 0);
 				UNITS_StoreOwner(pBaalClone, pUnit);
 				UNITS_StoreOwner(pUnit, pBaalClone);

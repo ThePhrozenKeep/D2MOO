@@ -1924,9 +1924,9 @@ int32_t __fastcall D2GAME_SAVE_ProcessSaveFile_6FC8C0C0(D2GameStrc* pGame, D2Cli
 //        return result;
 //    }
 //
-//    ptClient2 = STATLIST_GetUnitStatUnsigned(v12, STAT_HITPOINTS, 0);
-//    bValid = STATLIST_GetUnitStatUnsigned(v12, STAT_MANA, 0);
-//    pGamea = STATLIST_GetUnitStatUnsigned(v12, STAT_GOLD, 0);
+//    ptClient2 = STATLIST_UnitGetStatValue(v12, STAT_HITPOINTS, 0);
+//    bValid = STATLIST_UnitGetStatValue(v12, STAT_MANA, 0);
+//    pGamea = STATLIST_UnitGetStatValue(v12, STAT_GOLD, 0);
 //    if (pGamea < 0 || (v25 = UNITS_GetInventoryGoldLimit(v12), pGamea > v25))
 //    {
 //        if (v12)
@@ -1936,7 +1936,7 @@ int32_t __fastcall D2GAME_SAVE_ProcessSaveFile_6FC8C0C0(D2GameStrc* pGame, D2Cli
 //            STATLIST_SetUnitStat(v12, STAT_GOLD, 0, 0);
 //        }
 //    }
-//    pGamea = STATLIST_GetUnitStatUnsigned(v12, STAT_GOLDBANK, 0);
+//    pGamea = STATLIST_UnitGetStatValue(v12, STAT_GOLDBANK, 0);
 //    if (pGamea < 0 || (v26 = UNITS_GetStashGoldLimit(v12), pGamea > v26))
 //    {
 //        if (v12)
@@ -2087,13 +2087,13 @@ int32_t __fastcall D2GAME_SAVE_ProcessSaveFile_6FC8C0C0(D2GameStrc* pGame, D2Cli
 //                                v75[1] = v46;
 //                                v75[2] = v47;
 //                                PLAYERPETS_UpdatePetInfo(v12, 7, v45->dwUnitId, (int)v75);
-//                                STATLIST_GetUnitStatUnsigned(v12, 12, 0);
+//                                STATLIST_UnitGetStatValue(v12, 12, 0);
 //                                v48 = DATATBLS_GetMaxLevel(0);
 //                                v49 = *(_DWORD*)(v36 + 14);
 //                                pClienta = v48;
 //                                nVersion = 1;
 //                                v64 = v49;
-//                                v50 = STATLIST_GetUnitStatUnsigned(v45, STAT_EXPERIENCE, 0);
+//                                v50 = STATLIST_UnitGetStatValue(v45, STAT_EXPERIENCE, 0);
 //                                if (v50 < (unsigned int)v64)
 //                                    STATLIST_SetUnitStat(v45, STAT_EXPERIENCE, v64, 0);
 //                                D2GAME_MERCS_SendStat_6FCC61D0(v45, STAT_EXPERIENCE, v64);

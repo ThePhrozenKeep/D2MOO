@@ -1180,14 +1180,14 @@ __forceinline void __fastcall UNITS_UpdateAttackAnimRateAndVelocity(D2UnitStrc* 
 
 	UNITS_MergeDualWieldWeaponStatLists(pUnit, 1);
 
-	nFasterAttackRate = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_FASTERATTACKRATE, 0);
+	nFasterAttackRate = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERATTACKRATE, 0);
 
 	if (nFasterAttackRate)
 	{
 		nFasterAttackRate = 120 * nFasterAttackRate / (nFasterAttackRate + 120);
 	}
 
-	nAttackRate = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ATTACKRATE, 0);
+	nAttackRate = STATLIST_UnitGetStatValue(pUnit, STAT_ATTACKRATE, 0);
 	nRate = nFasterAttackRate + nAttackRate;
 
 	if (UNITS_CanDualWield(pUnit))
@@ -1206,8 +1206,8 @@ __forceinline void __fastcall UNITS_UpdateAttackAnimRateAndVelocity(D2UnitStrc* 
 
 		if (ITEMS_CheckItemTypeId(pRightWeapon, ITEMTYPE_WEAPON) && ITEMS_CheckItemTypeId(pLeftWeapon, ITEMTYPE_WEAPON))
 		{
-			nRightAttackRate = STATLIST_GetUnitStatUnsigned(pRightWeapon, STAT_ATTACKRATE, 0);
-			nLeftAttackRate = STATLIST_GetUnitStatUnsigned(pLeftWeapon, STAT_ATTACKRATE, 0);
+			nRightAttackRate = STATLIST_UnitGetStatValue(pRightWeapon, STAT_ATTACKRATE, 0);
+			nLeftAttackRate = STATLIST_UnitGetStatValue(pLeftWeapon, STAT_ATTACKRATE, 0);
 
 			nRate += (nRightAttackRate + nLeftAttackRate) / 2 - nRightAttackRate;
 		}
@@ -1263,7 +1263,7 @@ __forceinline void __fastcall UNITS_UpdateBlockAnimRateAndVelocity(D2UnitStrc* p
 	int nBlockRateBonus = 0;
 	int nAnimSpeed = 0;
 
-	nFasterBlockRate = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_FASTERBLOCKRATE, 0);
+	nFasterBlockRate = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERBLOCKRATE, 0);
 	if (nFasterBlockRate)
 	{
 		nFasterBlockRate = 120 * nFasterBlockRate / (nFasterBlockRate + 120);
@@ -1297,7 +1297,7 @@ __forceinline void __fastcall UNITS_UpdateCastAnimRateAndVelocity(D2UnitStrc* pU
 	int nAnimSpeed = 0;
 	int nRate = 0;
 
-	nFasterCastRate = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_FASTERCASTRATE, 0);
+	nFasterCastRate = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERCASTRATE, 0);
 	if (nFasterCastRate)
 	{
 		nFasterCastRate = (120 * nFasterCastRate) / (nFasterCastRate + 120);
@@ -1328,7 +1328,7 @@ __forceinline void __fastcall UNITS_UpdateGetHitAnimRateAndVelocity(D2UnitStrc* 
 	int nFasterGetHitRate = 0;
 	int nAnimSpeed = 0;
 
-	nFasterGetHitRate = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_FASTERGETHITRATE, 0);
+	nFasterGetHitRate = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERGETHITRATE, 0);
 	if (nFasterGetHitRate)
 	{
 		nFasterGetHitRate = 120 * nFasterGetHitRate / (nFasterGetHitRate + 120);
@@ -1419,7 +1419,7 @@ __forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* p
 	}
 	else
 	{
-		nOtherAnimRate = STATLIST_GetUnitStatUnsigned(pUnit, STAT_OTHER_ANIMRATE, 0);
+		nOtherAnimRate = STATLIST_UnitGetStatValue(pUnit, STAT_OTHER_ANIMRATE, 0);
 		if (nOtherAnimRate >= 15)
 		{
 			if (nOtherAnimRate > 175)
@@ -1463,13 +1463,13 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 	if (pUnit->pDynamicPath)
 	{
-		nFasterMoveVelocity = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_FASTERMOVEVELOCITY, 0);
+		nFasterMoveVelocity = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERMOVEVELOCITY, 0);
 		if (nFasterMoveVelocity)
 		{
 			nFasterMoveVelocity = 150 * nFasterMoveVelocity / (nFasterMoveVelocity + 150);
 		}
 
-		nVelocityPercent = nFasterMoveVelocity + STATLIST_GetUnitStatUnsigned(pUnit, STAT_VELOCITYPERCENT, 0);
+		nVelocityPercent = nFasterMoveVelocity + STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0);
 		if (nVelocityPercent < 25)
 		{
 			nVelocityPercent = 25;
@@ -2184,7 +2184,7 @@ int __stdcall UNITS_GetCurrentLifePercentage(D2UnitStrc* pUnit)
 	int nMaxHp = 0;
 	int nHp = 0;
 
-	nHp = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >> 8;
+	nHp = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
 	nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
 	if (nMaxHp)
 	{
@@ -2376,8 +2376,8 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 	int nSkillId = 0;
 	int nDefense = 0;
 
-	nDefense = STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0) / 4 + STATLIST_GetUnitStatUnsigned(pUnit, STAT_ARMORCLASS, 0);
-	nArmorPercent = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_ARMOR_PERCENT, 0) + STATLIST_GetUnitStatSigned(pUnit, STAT_SKILL_ARMOR_PERCENT, 0);
+	nDefense = STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) / 4 + STATLIST_UnitGetStatValue(pUnit, STAT_ARMORCLASS, 0);
+	nArmorPercent = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_ARMOR_PERCENT, 0) + STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_SKILL_ARMOR_PERCENT, 0);
 
 	if (STATES_CheckState(pUnit, STATE_HOLYSHIELD))
 	{
@@ -2410,7 +2410,7 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 	}
 
 	nTotalDefense = nDefenseBonus + nDefense;
-	nArmorOverridePercent = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ARMOR_OVERRIDE_PERCENT, 0);
+	nArmorOverridePercent = STATLIST_UnitGetStatValue(pUnit, STAT_ARMOR_OVERRIDE_PERCENT, 0);
 
 	if (!nArmorOverridePercent)
 	{
@@ -2430,8 +2430,8 @@ int __stdcall UNITS_GetAttackRate(D2UnitStrc* pAttacker)
 
 	D2_ASSERT(pAttacker && pAttacker->dwUnitType == UNIT_PLAYER);
 
-	nToHit = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_TOHIT, 0);
-	nDexterity = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_DEXTERITY, 0);
+	nToHit = STATLIST_UnitGetStatValue(pAttacker, STAT_TOHIT, 0);
+	nDexterity = STATLIST_UnitGetStatValue(pAttacker, STAT_DEXTERITY, 0);
 	nAttackRate = nToHit + 5 * (nDexterity - 7);
 
 	if (pAttacker->dwUnitType == UNIT_PLAYER && pAttacker->dwClassId >= 0 && pAttacker->dwClassId < sgptDataTables->nCharStatsTxtRecordCount)
@@ -2476,16 +2476,16 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 		{
 			pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[pUnit->dwClassId];
 
-			nBlockChance = pCharStatsTxtRecord->nBlockFactor + STATLIST_GetUnitStatUnsigned(pUnit, STAT_TOBLOCK, 0);
+			nBlockChance = pCharStatsTxtRecord->nBlockFactor + STATLIST_UnitGetStatValue(pUnit, STAT_TOBLOCK, 0);
 			if (bExpansion)
 			{
-				nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+				nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 				if (nLevel <= 1)
 				{
 					nLevel = 1;
 				}
 
-				nBlockChance = nBlockChance * (STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0) - 15) / (2 * nLevel);
+				nBlockChance = nBlockChance * (STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) - 15) / (2 * nLevel);
 			}
 
 			if (nBlockChance > 75)
@@ -2512,7 +2512,7 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 			case MONSTER_DIABLO:
 			case MONSTER_DOOMKNIGHT1:
 			case MONSTER_DIABLOCLONE:
-				nBlockChance = STATLIST_GetUnitStatUnsigned(pUnit, STAT_TOBLOCK, 0);
+				nBlockChance = STATLIST_UnitGetStatValue(pUnit, STAT_TOBLOCK, 0);
 				if (nBlockChance > 75)
 				{
 					nBlockChance = 75;
@@ -2540,7 +2540,7 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 					pItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode(v8, &nItemId);
 					if (pItemsTxtRecord && pItemsTxtRecord->wType[0] == ITEMTYPE_SHIELD)
 					{
-						nBlockChance = STATLIST_GetUnitStatUnsigned(pUnit, STAT_TOBLOCK, 0);
+						nBlockChance = STATLIST_UnitGetStatValue(pUnit, STAT_TOBLOCK, 0);
 						if (nBlockChance > 75)
 						{
 							nBlockChance = 75;
@@ -2552,7 +2552,7 @@ int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 			}
 		}
 
-		nBlockChance = STATLIST_GetUnitStatUnsigned(pUnit, STAT_TOBLOCK, 0);
+		nBlockChance = STATLIST_UnitGetStatValue(pUnit, STAT_TOBLOCK, 0);
 		if (nBlockChance > 75)
 		{
 			nBlockChance = 75;
@@ -3139,8 +3139,8 @@ unsigned int __stdcall UNITS_GetHealingCost(D2UnitStrc* pUnit)
 
 	nMaxLife = STATLIST_GetMaxLifeFromUnit(pUnit);
 	nMaxMana = STATLIST_GetMaxManaFromUnit(pUnit);
-	nLife = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
-	nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+	nLife = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
+	nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
 
 	if (nMaxLife > nLife)
 	{
@@ -3154,7 +3154,7 @@ unsigned int __stdcall UNITS_GetHealingCost(D2UnitStrc* pUnit)
 
 	if (nShiftedLifeDifference || nShiftedManaDifference)
 	{
-		return (unsigned int)((nShiftedLifeDifference + nShiftedManaDifference) * STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0)) >> 2;
+		return (unsigned int)((nShiftedLifeDifference + nShiftedManaDifference) * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0)) >> 2;
 	}
 
 	return 0;
@@ -3163,7 +3163,7 @@ unsigned int __stdcall UNITS_GetHealingCost(D2UnitStrc* pUnit)
 //D2Common.0x6FDC1D90 (#10439)
 unsigned int __stdcall UNITS_GetInventoryGoldLimit(D2UnitStrc* pUnit)
 {
-	return 10000 * STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+	return 10000 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 }
 
 //D2Common.0x6FDC1DB0 (#10440)
@@ -3533,7 +3533,7 @@ unsigned int __stdcall UNITS_GetStashGoldLimit(D2UnitStrc* pUnit)
 	int nMultiplier = 0;
 	int nLevel = 0;
 
-	nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+	nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 	if (nLevel <= 30)
 	{
 		nMultiplier = nLevel / 10 + 1;

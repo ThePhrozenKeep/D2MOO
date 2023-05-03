@@ -163,14 +163,14 @@ void __fastcall MONSTERAI_SendMercStats(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
         return;
     }
 
-    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_LEVEL, STATLIST_GetUnitStatUnsigned(pMerc, STAT_LEVEL, 0));
+    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_LEVEL, STATLIST_UnitGetStatValue(pMerc, STAT_LEVEL, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_STRENGTH, STATLIST_GetUnitBaseStat(pMerc, STAT_STRENGTH, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_DEXTERITY, STATLIST_GetUnitBaseStat(pMerc, STAT_DEXTERITY, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_MAXHP, STATLIST_GetUnitBaseStat(pMerc, STAT_MAXHP, 0));
-    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_HITPOINTS, STATLIST_GetUnitStatUnsigned(pMerc, STAT_HITPOINTS, 0));
+    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_HITPOINTS, STATLIST_UnitGetStatValue(pMerc, STAT_HITPOINTS, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_ARMORCLASS, STATLIST_GetUnitBaseStat(pMerc, STAT_ARMORCLASS, 0));
-    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_EXPERIENCE, STATLIST_GetUnitStatUnsigned(pMerc, STAT_EXPERIENCE, 0));
-    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_NEXTEXP, STATLIST_GetUnitStatUnsigned(pMerc, STAT_NEXTEXP, 0));
+    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_EXPERIENCE, STATLIST_UnitGetStatValue(pMerc, STAT_EXPERIENCE, 0));
+    D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_NEXTEXP, STATLIST_UnitGetStatValue(pMerc, STAT_NEXTEXP, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_MINDAMAGE, STATLIST_GetUnitBaseStat(pMerc, STAT_MINDAMAGE, 0) + STATLIST_GetUnitBaseStat(pMerc, STAT_SECONDARY_MINDAMAGE, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_MAXDAMAGE, STATLIST_GetUnitBaseStat(pMerc, STAT_MAXDAMAGE, 0) + STATLIST_GetUnitBaseStat(pMerc, STAT_SECONDARY_MAXDAMAGE, 0));
     D2GAME_MERCS_SendStat_6FCC61D0(pMerc, STAT_FIRERESIST, STATLIST_GetUnitBaseStat(pMerc, STAT_FIRERESIST, 0));
@@ -197,10 +197,10 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    //STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0);
+    //STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
     if (!nLevel)
     {
-        nLevel = STATLIST_GetUnitStatUnsigned(pHireling, STAT_LEVEL, 0) + 1;
+        nLevel = STATLIST_UnitGetStatValue(pHireling, STAT_LEVEL, 0) + 1;
     }
 
     AITACTICS_AddMessage(pGame, pHireling, pPlayer, 3452u, 1);
@@ -224,7 +224,7 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     STATLIST_SetUnitStat(pHireling, STAT_NEXTEXP, nNextExp, 0);
 
     const int32_t nExperience = MONSTERS_GetHirelingExpForNextLevel(nLevel, pHirelingTxtRecord->dwExpPerLvl);
-    if (STATLIST_GetUnitStatUnsigned(pHireling, STAT_EXPERIENCE, 0) < nExperience)
+    if (STATLIST_UnitGetStatValue(pHireling, STAT_EXPERIENCE, 0) < nExperience)
     {
         STATLIST_SetUnitStat(pHireling, STAT_EXPERIENCE, nExperience, 0);
     }

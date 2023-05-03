@@ -519,8 +519,8 @@ EXPORTS
 	STATLIST_UpdateStatListsExpiration									@10516
 	STATLIST_SetUnitStat												@10517
 	STATLIST_AddUnitStat												@10518
-	STATLIST_GetUnitStatUnsigned										@10519
-	STATLIST_GetUnitStatSigned											@10520
+	STATLIST_UnitGetStatValue											@10519
+	STATLIST_UnitGetItemStatOrSkillStatValue							@10520
 	STATLIST_GetUnitBaseStat											@10521
 	STATLIST_GetUnitStatBonus											@10522
 	STATLIST_MergeStatLists												@10523
@@ -532,7 +532,7 @@ EXPORTS
 	STATLIST_GetExpireFrame												@10529
 	D2COMMON_10530_D2CheckStatlistFlagDMGRed							@10530
 	D2Common_10531_SetStatInStatListLayer0								@10531
-	STATLIST_GetStatUnsigned_Layer0										@10532
+	STATLIST_GetTotalStatValue_Layer0									@10532
 	STATLIST_RemoveAllStatsFromOverlay									@10533
 	D2Common_10534														@10534
 	STATLIST_GetOwner													@10535

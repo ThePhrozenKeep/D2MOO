@@ -191,34 +191,34 @@ void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarg
     pDamage->dwMagDamage = MISSMODE_RollDamageValue(pMissile, STAT_MAGICMINDAM, STAT_MAGICMAXDAM, STAT_PASSIVE_MAG_MASTERY);
     pDamage->dwLtngDamage = MISSMODE_RollDamageValue(pMissile, STAT_LIGHTMINDAM, STAT_LIGHTMAXDAM, STAT_PASSIVE_LTNG_MASTERY);
     pDamage->dwColdDamage = MISSMODE_RollDamageValue(pMissile, STAT_COLDMINDAM, STAT_COLDMAXDAM, STAT_PASSIVE_COLD_MASTERY);
-    pDamage->dwColdLen = STATLIST_GetUnitStatUnsigned(pMissile, STAT_COLDLENGTH, 0);
+    pDamage->dwColdLen = STATLIST_UnitGetStatValue(pMissile, STAT_COLDLENGTH, 0);
     pDamage->dwPoisDamage = MISSMODE_RollDamageValue(pMissile, STAT_POISONMINDAM, STAT_POISONMAXDAM, STAT_PASSIVE_POIS_MASTERY);
-    pDamage->dwPoisLen = STATLIST_GetUnitStatUnsigned(pMissile, STAT_POISONLENGTH, 0);
+    pDamage->dwPoisLen = STATLIST_UnitGetStatValue(pMissile, STAT_POISONLENGTH, 0);
 
-    const int32_t nPoisonCount = STATLIST_GetUnitStatUnsigned(pMissile, STAT_POISON_COUNT, 0);
+    const int32_t nPoisonCount = STATLIST_UnitGetStatValue(pMissile, STAT_POISON_COUNT, 0);
     if (nPoisonCount > 1)
     {
         pDamage->dwPoisLen /= nPoisonCount;
     }
 
-    pDamage->dwManaLeech = STATLIST_GetUnitStatUnsigned(pMissile, STAT_MANADRAINMINDAM, 0);
-    pDamage->dwLifeLeech = STATLIST_GetUnitStatUnsigned(pMissile, STAT_LIFEDRAINMINDAM, 0);
-    pDamage->dwStamLeech = STATLIST_GetUnitStatUnsigned(pMissile, STAT_STAMDRAINMINDAM, 0);
+    pDamage->dwManaLeech = STATLIST_UnitGetStatValue(pMissile, STAT_MANADRAINMINDAM, 0);
+    pDamage->dwLifeLeech = STATLIST_UnitGetStatValue(pMissile, STAT_LIFEDRAINMINDAM, 0);
+    pDamage->dwStamLeech = STATLIST_UnitGetStatValue(pMissile, STAT_STAMDRAINMINDAM, 0);
     pDamage->dwBurnDamage = MISSMODE_RollDamageValue(pMissile, STAT_BURNINGMIN, STAT_BURNINGMAX, STAT_PASSIVE_FIRE_MASTERY);
-    pDamage->dwBurnLen = STATLIST_GetUnitStatUnsigned(pMissile, STAT_FIRELENGTH, 0);
-    pDamage->dwStunLen = STATLIST_GetUnitStatUnsigned(pMissile, STAT_STUNLENGTH, 0);
+    pDamage->dwBurnLen = STATLIST_UnitGetStatValue(pMissile, STAT_FIRELENGTH, 0);
+    pDamage->dwStunLen = STATLIST_UnitGetStatValue(pMissile, STAT_STUNLENGTH, 0);
 
     if (pTarget)
     {
-        int32_t nDamagePercent = STATLIST_GetUnitStatUnsigned(pMissile, STAT_DAMAGEPERCENT, 0);
+        int32_t nDamagePercent = STATLIST_UnitGetStatValue(pMissile, STAT_DAMAGEPERCENT, 0);
         if (MONSTERS_IsDemon(pTarget))
         {
-            nDamagePercent += STATLIST_GetUnitStatUnsigned(pMissile, STAT_ITEM_DEMONDAMAGE_PERCENT, 0);
+            nDamagePercent += STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DEMONDAMAGE_PERCENT, 0);
         }
 
         if (MONSTERS_IsUndead(pTarget))
         {
-            nDamagePercent += STATLIST_GetUnitStatUnsigned(pMissile, STAT_ITEM_UNDEADDAMAGE_PERCENT, 0);
+            nDamagePercent += STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_UNDEADDAMAGE_PERCENT, 0);
         }
 
         if (pTarget->dwUnitType == UNIT_MONSTER)
@@ -252,23 +252,23 @@ void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarg
         pDamage->dwPhysDamage += (nDamagePercent * pDamage->dwPhysDamage) / 100;
     }
 
-    if (STATLIST_GetUnitStatUnsigned(pMissile, STAT_ITEM_DEADLYSTRIKE, 0))
+    if (STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DEADLYSTRIKE, 0))
     {
         pDamage->wResultFlags |= DAMAGERESULTFLAG_CRITICALSTRIKE;
         pDamage->dwPhysDamage *= 2;
     }
 
-    if (STATLIST_GetUnitStatUnsigned(pMissile, STAT_SKILL_BYPASS_UNDEAD, 0))
+    if (STATLIST_UnitGetStatValue(pMissile, STAT_SKILL_BYPASS_UNDEAD, 0))
     {
         pDamage->dwHitFlags |= DAMAGEHITFLAG_BYPASSUNDEAD;
     }
 
-    if (STATLIST_GetUnitStatUnsigned(pMissile, STAT_SKILL_BYPASS_DEMONS, 0))
+    if (STATLIST_UnitGetStatValue(pMissile, STAT_SKILL_BYPASS_DEMONS, 0))
     {
         pDamage->dwHitFlags |= DAMAGEHITFLAG_BYPASSDEMON;
     }
 
-    if (STATLIST_GetUnitStatUnsigned(pMissile, STAT_SKILL_BYPASS_BEASTS, 0))
+    if (STATLIST_UnitGetStatValue(pMissile, STAT_SKILL_BYPASS_BEASTS, 0))
     {
         pDamage->dwHitFlags |= DAMAGEHITFLAG_BYPASSBEASTS;
     }
@@ -277,13 +277,13 @@ void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarg
 //D2Game.0x6FC56290
 int32_t __fastcall MISSMODE_RollDamageValue(D2UnitStrc* pUnit, int32_t nMinDamStat, int32_t nMaxDamStat, int32_t nMasteryStat)
 {
-    int32_t nMaxDam = STATLIST_GetUnitStatUnsigned(pUnit, nMaxDamStat, 0);
+    int32_t nMaxDam = STATLIST_UnitGetStatValue(pUnit, nMaxDamStat, 0);
     if (nMaxDam <= 0)
     {
         return 0;
     }
 
-    int32_t nMinDam = STATLIST_GetUnitStatUnsigned(pUnit, nMinDamStat, 0);
+    int32_t nMinDam = STATLIST_UnitGetStatValue(pUnit, nMinDamStat, 0);
     if (nMinDam <= 0)
     {
         return 0;
@@ -299,7 +299,7 @@ int32_t __fastcall MISSMODE_RollDamageValue(D2UnitStrc* pUnit, int32_t nMinDamSt
 
     if (nMasteryStat != -1)
     {
-        const int32_t nMastery = STATLIST_GetUnitStatUnsigned(pUnit, nMasteryStat, 0);
+        const int32_t nMastery = STATLIST_UnitGetStatValue(pUnit, nMasteryStat, 0);
         if (nMastery)
         {
             nMinDam += MONSTERUNIQUE_CalculatePercentage(nMinDam, nMastery, 100);
@@ -326,15 +326,15 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
 
         if (pDefender)
         {
-            int32_t nDamagePercent = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_DAMAGEPERCENT, 0);
+            int32_t nDamagePercent = STATLIST_UnitGetStatValue(pAttacker, STAT_DAMAGEPERCENT, 0);
             if (MONSTERS_IsDemon(pDefender))
             {
-                nDamagePercent += STATLIST_GetUnitStatUnsigned(pAttacker, STAT_ITEM_DEMONDAMAGE_PERCENT, 0);
+                nDamagePercent += STATLIST_UnitGetStatValue(pAttacker, STAT_ITEM_DEMONDAMAGE_PERCENT, 0);
             }
 
             if (MONSTERS_IsUndead(pDefender))
             {
-                nDamagePercent += STATLIST_GetUnitStatUnsigned(pAttacker, STAT_ITEM_UNDEADDAMAGE_PERCENT, 0);
+                nDamagePercent += STATLIST_UnitGetStatValue(pAttacker, STAT_ITEM_UNDEADDAMAGE_PERCENT, 0);
             }
 
             nDamagePercent = std::max(nDamagePercent, -90);
@@ -342,7 +342,7 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
             pDamage->dwPhysDamage += (nDamagePercent * pDamage->dwPhysDamage) / 100;
         }
 
-        if (STATLIST_GetUnitStatUnsigned(pAttacker, STAT_ITEM_DEADLYSTRIKE, 0))
+        if (STATLIST_UnitGetStatValue(pAttacker, STAT_ITEM_DEADLYSTRIKE, 0))
         {
             pDamage->wResultFlags |= DAMAGERESULTFLAG_CRITICALSTRIKE;
             pDamage->dwPhysDamage *= 2;
@@ -368,15 +368,15 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
     case ELEMTYPE_COLD:
     {
         pDamage->dwColdDamage = MISSMODE_RollDamageValue(pAttacker, STAT_COLDMINDAM, STAT_COLDMAXDAM, STAT_PASSIVE_COLD_MASTERY);
-        pDamage->dwColdLen = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_COLDLENGTH, 0);
+        pDamage->dwColdLen = STATLIST_UnitGetStatValue(pAttacker, STAT_COLDLENGTH, 0);
         return pDamage->dwColdDamage;
     }
     case ELEMTYPE_POIS:
     {
         pDamage->dwPoisDamage = MISSMODE_RollDamageValue(pAttacker, STAT_POISONMINDAM, STAT_POISONMAXDAM, STAT_PASSIVE_POIS_MASTERY);
-        pDamage->dwPoisLen = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_POISONLENGTH, 0);
+        pDamage->dwPoisLen = STATLIST_UnitGetStatValue(pAttacker, STAT_POISONLENGTH, 0);
 
-        const int32_t nPoisonCount = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_POISON_COUNT, 0);
+        const int32_t nPoisonCount = STATLIST_UnitGetStatValue(pAttacker, STAT_POISON_COUNT, 0);
         if (nPoisonCount > 1)
         {
             pDamage->dwPoisLen /= nPoisonCount;
@@ -385,34 +385,34 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
     }
     case ELEMTYPE_LIFE:
     {
-        pDamage->dwLifeLeech = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_LIFEDRAINMINDAM, 0);
+        pDamage->dwLifeLeech = STATLIST_UnitGetStatValue(pAttacker, STAT_LIFEDRAINMINDAM, 0);
         return 0;
     }
     case ELEMTYPE_MANA:
     {
-        pDamage->dwManaLeech = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_MANADRAINMINDAM, 0);
+        pDamage->dwManaLeech = STATLIST_UnitGetStatValue(pAttacker, STAT_MANADRAINMINDAM, 0);
         return 0;
     }
     case ELEMTYPE_STAMINA:
     {
-        pDamage->dwStamLeech = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_STAMDRAINMINDAM, 0);
+        pDamage->dwStamLeech = STATLIST_UnitGetStatValue(pAttacker, STAT_STAMDRAINMINDAM, 0);
         return 0;
     }
     case ELEMTYPE_STUN:
     {
-        pDamage->dwStunLen = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_STUNLENGTH, 0);
+        pDamage->dwStunLen = STATLIST_UnitGetStatValue(pAttacker, STAT_STUNLENGTH, 0);
         return 0;
     }
     case ELEMTYPE_BURN:
     {
         pDamage->dwBurnDamage = MISSMODE_RollDamageValue(pAttacker, STAT_BURNINGMIN, STAT_BURNINGMAX, STAT_PASSIVE_FIRE_MASTERY);
-        pDamage->dwBurnLen = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_FIRELENGTH, 0);
+        pDamage->dwBurnLen = STATLIST_UnitGetStatValue(pAttacker, STAT_FIRELENGTH, 0);
         return 25 * pDamage->dwBurnDamage;
     }
     case ELEMTYPE_FREEZE:
     {
         pDamage->dwColdDamage = MISSMODE_RollDamageValue(pAttacker, STAT_COLDMINDAM, STAT_COLDMAXDAM, STAT_PASSIVE_COLD_MASTERY);
-        pDamage->dwFrzLen = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_COLDLENGTH, 0);
+        pDamage->dwFrzLen = STATLIST_UnitGetStatValue(pAttacker, STAT_COLDLENGTH, 0);
         return pDamage->dwColdDamage;
     }
     }
@@ -1750,7 +1750,7 @@ int32_t __fastcall MISSMODE_SrvDo29_RecyclerDelay(D2GameStrc* pGame, D2UnitStrc*
     {
         if (MISSILE_GetRemainingFrames(pMissile) == pMissilesTxtRecord->dwParam[0])
         {
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0) >> 8;
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0) >> 8;
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner) >> 8;
             if (nHitpoints < nMaxHp)
             {
@@ -1794,7 +1794,7 @@ int32_t __fastcall MISSMODE_SrvDo33_VineRecyclerDelay(D2GameStrc* pGame, D2UnitS
     {
         if (MISSILE_GetRemainingFrames(pMissile) == pMissilesTxtRecord->dwParam[0])
         {
-            const int32_t nMana = STATLIST_GetUnitStatUnsigned(pOwner, STAT_MANA, 0) >> 8;
+            const int32_t nMana = STATLIST_UnitGetStatValue(pOwner, STAT_MANA, 0) >> 8;
             const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pOwner) >> 8;
             if (nMana < nMaxMana)
             {
@@ -2309,7 +2309,7 @@ int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(D2GameStrc* pG
     }
 
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-    const int32_t nNewHp = std::min(nRand + (int32_t)STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0), nMaxHp);
+    const int32_t nNewHp = std::min(nRand + (int32_t)STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0), nMaxHp);
     STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nNewHp, 0);
 
     if (pMissilesTxtRecord->wProgOverlay > 0)
@@ -2964,7 +2964,7 @@ int32_t __fastcall MISSMODE_SrvHit17_Howl(D2GameStrc* pGame, D2UnitStrc* pMissil
         return 0;
     }
 
-    if (nLevel + pSkillsTxtRecord->dwParam[1] + STATLIST_GetUnitStatUnsigned(pOwner, STAT_LEVEL, 0) <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0))
+    if (nLevel + pSkillsTxtRecord->dwParam[1] + STATLIST_UnitGetStatValue(pOwner, STAT_LEVEL, 0) <= STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0))
     {
         return 0;
     }
@@ -3227,10 +3227,10 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
 
     if (pTarget->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pTarget))
     {
-        const int32_t nDamageTargetAc = STATLIST_GetUnitStatUnsigned(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
+        const int32_t nDamageTargetAc = STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
         if (nDamageTargetAc)
         {
-            const int32_t nArmorClass = std::max(nDamageTargetAc + STATLIST_GetUnitStatUnsigned(pTarget, STAT_ARMORCLASS, 0), 0u);
+            const int32_t nArmorClass = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pTarget, STAT_ARMORCLASS, 0), 0u);
             STATLIST_SetUnitStat(pTarget, STAT_ARMORCLASS, nArmorClass, 0);
         }
     }
@@ -3566,7 +3566,7 @@ int32_t __fastcall MISSMODE_SrvHit31_FireHead(D2GameStrc* pGame, D2UnitStrc* pMi
     D2DamageStrc damage = {};
     const int32_t nHeal = std::max(MISSMODE_GetDamageValue(pGame, pMissile, pUnit, &damage), 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
-    const int32_t nNewHp = std::min(nHeal + (int32_t)STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0), nMaxHp);
+    const int32_t nNewHp = std::min(nHeal + (int32_t)STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0), nMaxHp);
     STATLIST_SetUnitStat(pOwner, STAT_HITPOINTS, nNewHp, 0);
 
     if (pMissilesTxtRecord->nCollideKill)
@@ -3830,7 +3830,7 @@ int32_t __fastcall MISSMODE_SrvHit43_HealingVortex(D2GameStrc* pGame, D2UnitStrc
     const int32_t nMaxDamage = SKILLS_GetMaxPhysDamage(pOwner, nSkillId, nLevel, 1);
     const int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
 
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
 
     if (nHitpoints != nMaxHp && pMissilesTxtRecord->wProgOverlay > 0)
@@ -4147,7 +4147,7 @@ int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* p
         return 1;
     }
 
-    const int32_t nCurrentMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+    const int32_t nCurrentMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
     if (nCurrentMana <= 0)
     {
         return 1;
@@ -4371,7 +4371,7 @@ void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(D2GameStrc* pGame, D
     if (pMissilesTxtRecord)
     {
         const int32_t nPercentage = std::max(pMissilesTxtRecord->dwDmgParam[0], 0u);
-        pDamage->dwFrzLen = MONSTERUNIQUE_CalculatePercentage(STATLIST_GetUnitStatUnsigned(pMissile, STAT_COLDLENGTH, 0), nPercentage, 100);
+        pDamage->dwFrzLen = MONSTERUNIQUE_CalculatePercentage(STATLIST_UnitGetStatValue(pMissile, STAT_COLDLENGTH, 0), nPercentage, 100);
         pDamage->dwColdLen = 0;
     }
 }
@@ -4551,7 +4551,7 @@ void __fastcall MISSMODE_SrvDmg13_BlessedHammerEx(D2GameStrc* pGame, D2UnitStrc*
         D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
         if (pOwner)
         {
-            pDamage->dwPhysDamage += (int32_t)(pDamage->dwPhysDamage * STATLIST_GetUnitStatUnsigned(pOwner, STAT_DAMAGEPERCENT, 0)) / 100;
+            pDamage->dwPhysDamage += (int32_t)(pDamage->dwPhysDamage * STATLIST_UnitGetStatValue(pOwner, STAT_DAMAGEPERCENT, 0)) / 100;
         }
 
         MISSMODE_SrvDmg05_BlessedHammer(pGame, pMissile, pUnit, pDamage);
@@ -4742,7 +4742,7 @@ void __fastcall MISSMODE_SetDamageFlags(D2GameStrc* pGame, D2UnitStrc* pMissile,
         pDamage->dwHitFlags |= DAMAGEHITFLAG_128;
     }
 
-    pDamage->dwPiercePct = STATLIST_GetUnitStatUnsigned(pMissile, STAT_DAMAGE_FRAMERATE, 0);
+    pDamage->dwPiercePct = STATLIST_UnitGetStatValue(pMissile, STAT_DAMAGE_FRAMERATE, 0);
 
     if (pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -5031,11 +5031,11 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                 return 1;
             }
 
-            if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_PIERCE] && (STATLIST_GetUnitStatUnsigned(pOwner, STAT_SKILL_PIERCE, 0) || STATLIST_GetUnitStatSigned(pOwner, STAT_ITEM_PIERCE, 0)))
+            if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_PIERCE] && (STATLIST_UnitGetStatValue(pOwner, STAT_SKILL_PIERCE, 0) || STATLIST_UnitGetItemStatOrSkillStatValue(pOwner, STAT_ITEM_PIERCE, 0)))
             {
                 nPierceFlags = 3;
 
-                const int32_t nPierceIndex = STATLIST_GetUnitStatUnsigned(pMissile, STAT_PIERCE_IDX, 0);
+                const int32_t nPierceIndex = STATLIST_UnitGetStatValue(pMissile, STAT_PIERCE_IDX, 0);
                 if (nPierceIndex)
                 {
                     nPierceFlags = 2;
@@ -5057,7 +5057,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             int32_t nToHit = 0;
             if (pMissile)
             {
-                nToHit = STATLIST_GetUnitStatUnsigned(pMissile, STAT_TOHIT, 0);
+                nToHit = STATLIST_UnitGetStatValue(pMissile, STAT_TOHIT, 0);
             }
 
             if (!SUNITDMG_IsHitSuccessful(pOwner, pUnit, nToHit, 1))
@@ -5157,10 +5157,10 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 
         if (pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit))
         {
-            const int32_t nDamageTargetAc = STATLIST_GetUnitStatUnsigned(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
+            const int32_t nDamageTargetAc = STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
             if (nDamageTargetAc)
             {
-                const int32_t nArmor = std::max(nDamageTargetAc + STATLIST_GetUnitStatUnsigned(pUnit, STAT_ARMORCLASS, 0), 0u);
+                const int32_t nArmor = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pUnit, STAT_ARMORCLASS, 0), 0u);
                 STATLIST_SetUnitStat(pUnit, STAT_ARMORCLASS, nArmor, 0);
             }
         }

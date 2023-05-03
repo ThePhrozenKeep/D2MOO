@@ -1499,9 +1499,9 @@ int32_t __fastcall SKILLS_SrvDo127_SuckBlood(D2GameStrc* pGame, D2UnitStrc* pUni
             }
         }
 
-        const int32_t nOwnerHitpoints = STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0);
+        const int32_t nOwnerHitpoints = STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0);
         const int32_t nOwnerMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
-        const int32_t nTargetHitpoints = STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0);
+        const int32_t nTargetHitpoints = STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0);
 
         int32_t nDamage = pDamage->dwPhysDamage;
         if (nDamage >= nTargetHitpoints)
@@ -2293,7 +2293,7 @@ int32_t __fastcall SKILLS_SrvDo147_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 int32_t __fastcall D2GAME_SKILLS_BloodMana_6FD025E0(D2UnitStrc* pUnit, int32_t nManaCost)
 {
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_BLOOD_MANA);
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) < nManaCost)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) < nManaCost)
     {
         if (pStatList)
         {
@@ -2308,7 +2308,7 @@ int32_t __fastcall D2GAME_SKILLS_BloodMana_6FD025E0(D2UnitStrc* pUnit, int32_t n
     STATLIST_AddUnitStat(pUnit, STAT_HITPOINTS, -nManaCost, 0);
 
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(STATLIST_GetSkillId(pStatList));
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) < (pSkillsTxtRecord->dwParam[4] << 8) && pStatList)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) < (pSkillsTxtRecord->dwParam[4] << 8) && pStatList)
     {
         D2Common_10474(pUnit, pStatList);
         STATLIST_FreeStatList(pStatList);

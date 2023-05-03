@@ -1657,7 +1657,7 @@ int32_t __fastcall OBJECTS_OperateFunction17_Obelisk(D2ObjOperateFnStrc* pOp, in
 void __fastcall D2GAME_SHRINES_Health_6FC766B0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
     D2_MAYBE_UNUSED(pShrinesTxtRecord);
-    const int32_t nDiff = STATLIST_GetMaxLifeFromUnit(pOp->pPlayer) - STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_HITPOINTS, 0);
+    const int32_t nDiff = STATLIST_GetMaxLifeFromUnit(pOp->pPlayer) - STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_HITPOINTS, 0);
     if (nDiff)
     {
         STATLIST_AddUnitStat(pOp->pPlayer, STAT_HITPOINTS, nDiff, 0);
@@ -1668,7 +1668,7 @@ void __fastcall D2GAME_SHRINES_Health_6FC766B0(D2ObjOperateFnStrc* pOp, D2Shrine
 void __fastcall D2GAME_SHRINES_FillMana_6FC766F0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
     D2_MAYBE_UNUSED(pShrinesTxtRecord);
-    const int32_t nDiff = STATLIST_GetMaxManaFromUnit(pOp->pPlayer) - STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_MANA, 0);
+    const int32_t nDiff = STATLIST_GetMaxManaFromUnit(pOp->pPlayer) - STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_MANA, 0);
     if (nDiff)
     {
         STATLIST_AddUnitStat(pOp->pPlayer, STAT_MANA, nDiff, 0);
@@ -1679,13 +1679,13 @@ void __fastcall D2GAME_SHRINES_FillMana_6FC766F0(D2ObjOperateFnStrc* pOp, D2Shri
 void __fastcall D2GAME_SHRINES_Refill_6FC76730(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
     D2_MAYBE_UNUSED(pShrinesTxtRecord);
-    const int32_t nHpDiff = STATLIST_GetMaxLifeFromUnit(pOp->pPlayer) - STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_HITPOINTS, 0);
+    const int32_t nHpDiff = STATLIST_GetMaxLifeFromUnit(pOp->pPlayer) - STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_HITPOINTS, 0);
     if (nHpDiff)
     {
         STATLIST_AddUnitStat(pOp->pPlayer, STAT_HITPOINTS, nHpDiff, 0);
     }
 
-    const int32_t nManaDiff = STATLIST_GetMaxManaFromUnit(pOp->pPlayer) - STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_MANA, 0);
+    const int32_t nManaDiff = STATLIST_GetMaxManaFromUnit(pOp->pPlayer) - STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_MANA, 0);
     if (nManaDiff)
     {
         STATLIST_AddUnitStat(pOp->pPlayer, STAT_MANA, nManaDiff, 0);
@@ -1695,7 +1695,7 @@ void __fastcall D2GAME_SHRINES_Refill_6FC76730(D2ObjOperateFnStrc* pOp, D2Shrine
 //D2Game.0x6FC76790
 void __fastcall D2GAME_SHRINES_ExchangeHealth_6FC76790(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    const int32_t nHpPct = ((int32_t)STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_HITPOINTS, 0) >> 8) * pShrinesTxtRecord->dwArg0;
+    const int32_t nHpPct = ((int32_t)STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_HITPOINTS, 0) >> 8) * pShrinesTxtRecord->dwArg0;
     const int32_t nValue = nHpPct / 100 << 8;
     STATLIST_AddUnitStat(pOp->pPlayer, STAT_HITPOINTS, -nValue, 0);
     STATLIST_AddUnitStat(pOp->pPlayer, STAT_MANA, nValue * pShrinesTxtRecord->dwArg1 / 100, 0);
@@ -1704,7 +1704,7 @@ void __fastcall D2GAME_SHRINES_ExchangeHealth_6FC76790(D2ObjOperateFnStrc* pOp, 
 //D2Game.0x6FC767F0
 void __fastcall D2GAME_SHRINES_ExchangeMana_6FC767F0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    const int32_t nValue = STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_MANA, 0) * pShrinesTxtRecord->dwArg0 / 100;
+    const int32_t nValue = STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_MANA, 0) * pShrinesTxtRecord->dwArg0 / 100;
     STATLIST_AddUnitStat(pOp->pPlayer, STAT_MANA, -nValue, 0);
     STATLIST_AddUnitStat(pOp->pPlayer, STAT_HITPOINTS, nValue * pShrinesTxtRecord->dwArg1 / 100, 0);
 }
@@ -1877,7 +1877,7 @@ void __fastcall D2GAME_SHRINES_Storm_6FC76BC0(D2ObjOperateFnStrc* pOp, D2Shrines
         D2UnitStrc* pFoundUnit = unitFindData.pUnitsArray[i];
         if (pFoundUnit && (pFoundUnit->dwUnitType == UNIT_MONSTER || pFoundUnit->dwUnitType == UNIT_PLAYER) && !SUNIT_IsDead(unitFindData.pUnitsArray[i]))
         {
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pFoundUnit, STAT_HITPOINTS, 0);
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pFoundUnit, STAT_HITPOINTS, 0);
             STATLIST_AddUnitStat(pFoundUnit, STAT_HITPOINTS, ((nHitpoints >> 8) * pShrinesTxtRecord->dwArg0) / -100 << 8, 0);
         }
     }
@@ -1914,7 +1914,7 @@ void __fastcall D2GAME_SHRINES_Storm_6FC76BC0(D2ObjOperateFnStrc* pOp, D2Shrines
             missileParams.pOwner = pOp->pPlayer;
             missileParams.nMissile = 62;
 
-            missileParams.nSkillLevel = STATLIST_GetUnitStatUnsigned(missileParams.pOwner, STAT_LEVEL, 0) / 5;
+            missileParams.nSkillLevel = STATLIST_UnitGetStatValue(missileParams.pOwner, STAT_LEVEL, 0) / 5;
 
             if (missileParams.nSkillLevel < 1)
             {
@@ -2058,7 +2058,7 @@ void __fastcall D2GAME_SHRINES_Exploding_6FC770D0(D2ObjOperateFnStrc* pOp, D2Shr
         missileParams.nGfxArg = 1;
         missileParams.nMissile = 45;
 
-        missileParams.nSkillLevel = STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_LEVEL, 0) / 5;
+        missileParams.nSkillLevel = STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_LEVEL, 0) / 5;
         if (missileParams.nSkillLevel < 1)
         {
             missileParams.nSkillLevel = 1;
@@ -2131,7 +2131,7 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
         missileParams.nGfxArg = 1;
         missileParams.nMissile = 48;
 
-        missileParams.nSkillLevel = STATLIST_GetUnitStatUnsigned(pOp->pPlayer, STAT_LEVEL, 0) / 5;
+        missileParams.nSkillLevel = STATLIST_UnitGetStatValue(pOp->pPlayer, STAT_LEVEL, 0) / 5;
         if (missileParams.nSkillLevel < 1)
         {
             missileParams.nSkillLevel = 1;
@@ -2237,7 +2237,7 @@ int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId
             nAttackRate = 0;
         }
 
-        int32_t nBonus = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_TOHIT_PERCENT, 0) + SKILLS_GetWeaponMasteryBonus(pUnit, pWeapon, pSkill, 0);
+        int32_t nBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_TOHIT_PERCENT, 0) + SKILLS_GetWeaponMasteryBonus(pUnit, pWeapon, pSkill, 0);
         int32_t nPercentage = nAttackRate * ((nBonus + SKILLS_GetSkillsTxtRecordFromSkill(pSkill)->dwToHit) / 100 + 1);
 
         if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
@@ -2255,18 +2255,18 @@ int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId
     {
         if ((D2Common_10434(pUnit, 1) || pWeapon) && INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
         {
-            return nValue * STATLIST_GetUnitStatUnsigned(pUnit, STAT_SECONDARY_MINDAMAGE, 0) / 100;
+            return nValue * STATLIST_UnitGetStatValue(pUnit, STAT_SECONDARY_MINDAMAGE, 0) / 100;
         }
         else
         {
-            return nValue * STATLIST_GetUnitStatUnsigned(pUnit, STAT_MINDAMAGE, 0) / 100;
+            return nValue * STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0) / 100;
         }
     }
     default:
         break;
     }
 
-    return nValue * STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0) / 100;
+    return nValue * STATLIST_UnitGetStatValue(pUnit, nStatId, 0) / 100;
 }
 
 //D2Game.0x6FC779C0
@@ -3719,7 +3719,7 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
         int32_t bUsed = 0;
 
         const int32_t nMaxLife = STATLIST_GetMaxLifeFromUnit(pPlayer);
-        const int32_t nLife = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_HITPOINTS, 0);
+        const int32_t nLife = STATLIST_UnitGetStatValue(pPlayer, STAT_HITPOINTS, 0);
         if (nLife < nMaxLife && pObjectsTxtRecord->dwParm[3] & 2)
         {
             int32_t nNewLife = nLife + (nMaxLife * pObjectsTxtRecord->dwParm[1] >> 8);
@@ -3733,7 +3733,7 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
         }
 
         const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pPlayer);
-        const int32_t nMana = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_MANA, 0);
+        const int32_t nMana = STATLIST_UnitGetStatValue(pPlayer, STAT_MANA, 0);
         if (nMana < nMaxMana && pObjectsTxtRecord->dwParm[3] & 1)
         {
             int32_t nNewMana = nMana + (nMaxMana * pObjectsTxtRecord->dwParm[1] >> 8);
@@ -3747,7 +3747,7 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
         }
 
         const int32_t nMaxStamina = STATLIST_GetMaxStaminaFromUnit(pPlayer);
-        const int32_t nStamina = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_STAMINA, 0);
+        const int32_t nStamina = STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0);
         if (nStamina < nMaxStamina)
         {
             int32_t nNewStamina = nStamina + (nMaxStamina * pObjectsTxtRecord->dwParm[1] >> 8);
@@ -3801,7 +3801,7 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
 //D2Game.0x6FC7A000
 void __fastcall OBJMODE_PetIterate_Heal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pUnit2, void* pUnitHealed)
 {
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit2, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit2, STAT_HITPOINTS, 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit2);
     if (nHitpoints < nMaxHp)
     {

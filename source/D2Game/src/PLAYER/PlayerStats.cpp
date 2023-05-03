@@ -81,7 +81,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
 
     const int32_t nOldLevel = STATLIST_GetUnitBaseStat(pUnit, STAT_LEVEL, 0);
-    const uint32_t nExperience = STATLIST_GetUnitStatUnsigned(pUnit, STAT_EXPERIENCE, 0);
+    const uint32_t nExperience = STATLIST_UnitGetStatValue(pUnit, STAT_EXPERIENCE, 0);
     const int32_t nNewLevel = DATATBLS_GetCurrentLevelFromExp(nClassId, nExperience);
     STATLIST_SetUnitStat(pUnit, STAT_LEVEL, nNewLevel, 0);
     STATLIST_SetUnitStat(pUnit, STAT_NEXTEXP, DATATBLS_GetLevelThreshold(nClassId, nNewLevel), 0);
@@ -95,7 +95,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     STATLIST_SetUnitStat(pUnit, STAT_MAXHP, (nLevelDiff * pCharStatsTxtRecord->nLifePerLevel << 6) + STATLIST_GetUnitBaseStat(pUnit, STAT_MAXHP, 0), 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-    if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) > 0)
+    if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) > 0)
     {
         STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nMaxHp, 0);
     }
@@ -133,7 +133,7 @@ void __fastcall PLAYERSTATS_OnPlayerLeveledUp(D2GameStrc* pGame, D2UnitStrc* pUn
 //D2Game.0x6FC7EDF0
 int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId)
 {
-    if (!STATLIST_GetUnitStatUnsigned(pUnit, STAT_STATPTS, 0))
+    if (!STATLIST_UnitGetStatValue(pUnit, STAT_STATPTS, 0))
     {
         return 0;
     }
@@ -177,15 +177,15 @@ int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId
                 STATLIST_AddUnitStat(pUnit, STAT_VITALITY, 1, 0);
                 STATLIST_AddUnitStat(pUnit, STAT_MAXHP, pCharStatsTxtRecord->nLifePerVitality << 6, 0);
                 STATLIST_AddUnitStat(pUnit, STAT_HITPOINTS, pCharStatsTxtRecord->nLifePerVitality << 6, 0);
-                const int32_t nMaxHp = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MAXHP, 0);
-                if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) > nMaxHp)
+                const int32_t nMaxHp = STATLIST_UnitGetStatValue(pUnit, STAT_MAXHP, 0);
+                if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) > nMaxHp)
                 {
                     STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nMaxHp, 0);
                 }
                 STATLIST_AddUnitStat(pUnit, STAT_MAXSTAMINA, pCharStatsTxtRecord->nStaminaPerVitality << 6, 0);
                 STATLIST_AddUnitStat(pUnit, STAT_STAMINA, pCharStatsTxtRecord->nStaminaPerVitality << 6, 0);
-                const int32_t nMaxStamina = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MAXSTAMINA, 0);
-                if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0) > nMaxStamina)
+                const int32_t nMaxStamina = STATLIST_UnitGetStatValue(pUnit, STAT_MAXSTAMINA, 0);
+                if (STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0) > nMaxStamina)
                 {
                     STATLIST_SetUnitStat(pUnit, STAT_STAMINA, nMaxStamina, 0);
                 }

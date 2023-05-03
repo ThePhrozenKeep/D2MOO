@@ -337,7 +337,7 @@ void __fastcall D2GAME_PARTYSCREEN_Command4_6FC7B1D0(D2GameStrc* pGame, D2UnitSt
         return;
     }
 
-    if (!PLAYERLIST_CheckFlag(pPlayer1, pPlayer2, 8) && STATLIST_GetUnitStatUnsigned(pPlayer2, STAT_LEVEL, 0) < 9)
+    if (!PLAYERLIST_CheckFlag(pPlayer1, pPlayer2, 8) && STATLIST_UnitGetStatValue(pPlayer2, STAT_LEVEL, 0) < 9)
     {
         return;
     }

@@ -4324,11 +4324,11 @@ int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, D2ItemCalcStrc* pI
 			}
 			else if (a2 == 2)
 			{
-				return STATLIST_GetUnitStatSigned(pItemCalc->pUnit, nStatId, 0);
+				return STATLIST_UnitGetItemStatOrSkillStatValue(pItemCalc->pUnit, nStatId, 0);
 			}
 			else
 			{
-				return STATLIST_GetUnitStatUnsigned(pItemCalc->pUnit, nStatId, 0);
+				return STATLIST_UnitGetStatValue(pItemCalc->pUnit, nStatId, 0);
 			}
 		}
 	}

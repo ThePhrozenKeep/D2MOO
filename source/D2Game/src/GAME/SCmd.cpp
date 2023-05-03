@@ -313,7 +313,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CA90(D2ClientStrc* pClient, ui
         }
     }
 
-    int32_t nVelocity = STATLIST_GetUnitStatUnsigned(pMonster, STAT_VELOCITYPERCENT, 0);
+    int32_t nVelocity = STATLIST_UnitGetStatValue(pMonster, STAT_VELOCITYPERCENT, 0);
     if (nVelocity < SHRT_MIN)
     {
         nVelocity = SHRT_MIN;
@@ -361,7 +361,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x67_6FC3CBC0(D2ClientStrc* pClient, ui
         }
     }
 
-    int32_t nVelocity = STATLIST_GetUnitStatUnsigned(pMonster, STAT_VELOCITYPERCENT, 0);
+    int32_t nVelocity = STATLIST_UnitGetStatValue(pMonster, STAT_VELOCITYPERCENT, 0);
     if (nVelocity < SHRT_MIN)
     {
         nVelocity = SHRT_MIN;
@@ -403,7 +403,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(D2ClientStrc* pClient, ui
         packet68.nPathType = 11;
     }
 
-    int32_t nVelocity = STATLIST_GetUnitStatUnsigned(pMonster, STAT_VELOCITYPERCENT, 0);
+    int32_t nVelocity = STATLIST_UnitGetStatValue(pMonster, STAT_VELOCITYPERCENT, 0);
     if (nVelocity < SHRT_MIN)
     {
         nVelocity = SHRT_MIN;
@@ -453,7 +453,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(D2ClientStrc* pClient, ui
         }
     }
 
-    int32_t nVelocity = STATLIST_GetUnitStatUnsigned(pMonster, STAT_VELOCITYPERCENT, 0);
+    int32_t nVelocity = STATLIST_UnitGetStatValue(pMonster, STAT_VELOCITYPERCENT, 0);
     if (nVelocity < SHRT_MIN)
     {
         nVelocity = SHRT_MIN;
@@ -1123,7 +1123,7 @@ void __fastcall sub_6FC3DF80(D2ClientStrc* pClient1, D2UnitStrc* pPlayer, D2Clie
     packet5B.nHeader = 0x5Bu;
     packet5B.nUnitGUID = pPlayer ? pPlayer->dwUnitId : -1;
     packet5B.nClass = pPlayer ? pPlayer->dwClassId : -1;
-    packet5B.nLevel = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0);
+    packet5B.nLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
     packet5B.nPartyId = SUNIT_GetPartyId(pPlayer);
     packet5B.unk0x1C = 0;
     packet5B.nPartyFlags = 0;
@@ -2133,7 +2133,7 @@ void __fastcall SCMD_Send0x75_PartyRosterUpdate(D2UnitStrc* pLocalPlayer, D2Unit
     packet75.nHeader = 0x75u;
     packet75.nUnitGUID = pOtherPlayer ? pOtherPlayer->dwUnitId : -1;
     packet75.nPartyId = SUNIT_GetPartyId(pOtherPlayer);
-    packet75.nLevel = STATLIST_GetUnitStatUnsigned(pOtherPlayer, STAT_LEVEL, 0);
+    packet75.nLevel = STATLIST_UnitGetStatValue(pOtherPlayer, STAT_LEVEL, 0);
     packet75.nFlags = PLAYERLIST_GetFlags(pLocalPlayer, pOtherPlayer);
     packet75.unk0x0B = sub_6FCBA9D0(pLocalPlayer, pOtherPlayer);
 

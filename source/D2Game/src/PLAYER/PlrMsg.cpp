@@ -185,7 +185,7 @@ void __fastcall sub_6FC820C0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         D2_ASSERT(pClient);
 
-        D2GAME_PACKETS_SendPacket0x1D_E_F_6FC3D480(pClient, STAT_GOLDLOST, STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLDLOST, 0));
+        D2GAME_PACKETS_SendPacket0x1D_E_F_6FC3D480(pClient, STAT_GOLDLOST, STATLIST_UnitGetStatValue(pUnit, STAT_GOLDLOST, 0));
     }
 }
 
@@ -257,7 +257,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         return 0;
     }
     
-    const int32_t nShiftedHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >> 8;
+    const int32_t nShiftedHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
     const int32_t nShiftedMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
     if (nShiftedMaxHp <= 0)
     {
@@ -290,7 +290,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
         const int32_t nFrameDiff = D2COMMON_10473(pHealthPotStatList) - pGame->dwGameFrame;
 
-        nPotionLifePercent = 100 * ((STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) + nFrameDiff * STATLIST_GetStatValue(pHealthPotStatList, STAT_HPREGEN, 0)) >> 8) / nShiftedMaxHp;
+        nPotionLifePercent = 100 * ((STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) + nFrameDiff * STATLIST_GetStatValue(pHealthPotStatList, STAT_HPREGEN, 0)) >> 8) / nShiftedMaxHp;
         if ((uint8_t)nPotionLifePercent > 100u)
         {
             nPotionLifePercent = 100;
@@ -317,10 +317,10 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
                 nManaMultiplier = 1;
             }
 
-            const int32_t nFrameMultiplier = nManaMultiplier * (STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANARECOVERYBONUS, 0) + 100) / 100 + STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANARECOVERY, 0);
+            const int32_t nFrameMultiplier = nManaMultiplier * (STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERYBONUS, 0) + 100) / 100 + STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERY, 0);
             D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
             
-            nPotionManaPercent = 100 * (STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) + nFrameMultiplier * (D2COMMON_10473(pManaPotStatList) - pGame->dwGameFrame)) / nMaxMana;
+            nPotionManaPercent = 100 * (STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) + nFrameMultiplier * (D2COMMON_10473(pManaPotStatList) - pGame->dwGameFrame)) / nMaxMana;
             if ((uint8_t)nPotionManaPercent > 100u)
             {
                 nPotionManaPercent = 100;
@@ -328,8 +328,8 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         }
     }
 
-    const int32_t nShiftedMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) >> 8;
-    const int32_t nStamina = STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0) >> 8;
+    const int32_t nShiftedMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >> 8;
+    const int32_t nStamina = STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0) >> 8;
 
     if (pClientPlayerData->nPotionLifePercent != nPotionLifePercent || pClientPlayerData->nPotionManaPercent != nPotionManaPercent)
     {
@@ -395,14 +395,14 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         }
     }
 
-    const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+    const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
     if (nGold != pClientPlayerData->dwBeltGold)
     {
         D2GAME_PACKETS_SendPacket0x19_6FC3D3D0(pClient, nGold, pClientPlayerData->dwBeltGold);
         pClientPlayerData->dwBeltGold = nGold;
     }
 
-    const int32_t nExperience = STATLIST_GetUnitStatUnsigned(pUnit, STAT_EXPERIENCE, 0);
+    const int32_t nExperience = STATLIST_UnitGetStatValue(pUnit, STAT_EXPERIENCE, 0);
     if (nExperience != pClientPlayerData->dwExperience)
     {
         D2GAME_PACKETS_SendPacket0x1A_B_C_6FC3D410(pClient, nExperience, pClientPlayerData->dwExperience);
@@ -1662,7 +1662,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
 
     packet15.szName[15] = 0;
 
-    packet26.nNameColor = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+    packet26.nNameColor = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
     if (packet15.szMessage[255])
     {
@@ -3624,7 +3624,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x53_TurnStaminaOn_6FC88340(D2GameSt
     {
         if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && pUnit->dwAnimMode == PLRMODE_WALK)
         {
-            if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0))
+            if (STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0))
             {
                 UNITS_ChangeAnimMode(pUnit, PLRMODE_RUN);
             }

@@ -1011,7 +1011,7 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
 
     D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
     const Unk* pItemInfo = &dword_6FD28B08[pUnit->dwClassId - MONSTER_ANCIENTBARB1];
-    const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+    const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
     for (int32_t i = 0; i < 4; ++i)
     {

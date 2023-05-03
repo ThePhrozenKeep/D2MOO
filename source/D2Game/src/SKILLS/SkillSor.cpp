@@ -176,7 +176,7 @@ int32_t __fastcall SKILLS_StartInferno(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 int32_t __fastcall SKILLS_SrvSt11_Inferno_ArcticBlast(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
-    if (pSkillsTxtRecord && (STATES_CheckState(pUnit, STATE_INFERNO) || STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) >= pSkillsTxtRecord->wStartMana << 8) 
+    if (pSkillsTxtRecord && (STATES_CheckState(pUnit, STATE_INFERNO) || STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >= pSkillsTxtRecord->wStartMana << 8) 
         && pSkillsTxtRecord->wSrvMissileA >= 0 && pSkillsTxtRecord->wSrvMissileA < sgptDataTables->nMissilesTxtRecordCount)
     {
         return SKILLS_StartInferno(pGame, pUnit, nSkillId, nSkillLevel, pSkillsTxtRecord->wSrvMissileA);
@@ -437,7 +437,7 @@ int32_t __fastcall SKILLS_AuraCallback_StaticField(D2AuraCallbackStrc* pAuraCall
 {
     D2StaticFieldCallbackArgStrc* pStaticFieldCallbackArg = (D2StaticFieldCallbackArgStrc*)pAuraCallback->pArgs;
 
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pDefender, STAT_HITPOINTS, 0) >> 8;
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pDefender, STAT_HITPOINTS, 0) >> 8;
     if (nHitpoints < 1)
     {
         return 0;
@@ -471,7 +471,7 @@ int32_t __fastcall SKILLS_AuraCallback_StaticField(D2AuraCallbackStrc* pAuraCall
 
     if (nStatId >= 0)
     {
-        const int32_t nValue = STATLIST_GetUnitStatUnsigned(pDefender, nStatId, 0);
+        const int32_t nValue = STATLIST_UnitGetStatValue(pDefender, nStatId, 0);
         if (nValue < 0)
         {
             nDamage = MONSTERUNIQUE_CalculatePercentage(100, nDamage, 100 - nValue);
@@ -999,7 +999,7 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
         return 0;
     }
 
-    int32_t nMana = STATLIST_GetUnitStatUnsigned(pAttacker, STAT_MANA, 0);
+    int32_t nMana = STATLIST_UnitGetStatValue(pAttacker, STAT_MANA, 0);
     int32_t nDivisor = SKILLS_EvaluateSkillFormula(pAttacker, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
     if (nDivisor <= 0)
     {

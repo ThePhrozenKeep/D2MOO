@@ -502,7 +502,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 				nItemType = ITEMS_GetItemTypeFromItemId(pItem->dwClassId);
 				if (nItemType < 0)
 				{
-					if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
+					if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 					{
 						return TRUE;
 					}
@@ -521,7 +521,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 					}
 				}
 
-				if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
+				if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 				{
 					return TRUE;
 				}
@@ -1010,7 +1010,7 @@ static int ITEMS_GetBonusStatFromSockets(D2UnitStrc* pItem, D2C_ItemStats stat)
 				i = INVENTORY_UnitIsItem(i);
 				if (pItem->dwAnimMode == IMODE_EQUIP)
 				{
-					nStatBonusFromSockets += STATLIST_GetUnitStatUnsigned(i, stat, 0);
+					nStatBonusFromSockets += STATLIST_UnitGetStatValue(i, stat, 0);
 				}
 			}
 		}
@@ -1022,7 +1022,7 @@ static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C
 {
 
 	BOOL bStatReqMet = FALSE;
-	const int nUnitStat = STATLIST_GetUnitStatUnsigned(pUnit, stat, 0);
+	const int nUnitStat = STATLIST_UnitGetStatValue(pUnit, stat, 0);
 	if (nUnitStat > 0 && nUnitStat >= nStatWithPctBonus)
 	{
 		bStatReqMet = TRUE;
@@ -1088,7 +1088,7 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 
 	int nReqStrBonus = 0;
 	int nReqDexBonus = 0;
-	if (int nReqPctBonus = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_REQ_PERCENT, 0))
+	if (int nReqPctBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_REQ_PERCENT, 0))
 	{
 		// It seems the original game has some additional logic to handle overflow here
 		nReqStrBonus = nBaseReqStr * int64_t(nReqPctBonus) / 100;
@@ -1106,7 +1106,7 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 
 	BOOL bLevelReqMet = FALSE;
 	const int nLevelReq = ITEMS_GetLevelRequirement(pItem, pUnit);
-	bLevelReqMet = nLevelReq == -1 || STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0) >= nLevelReq;
+	bLevelReqMet = nLevelReq == -1 || STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) >= nLevelReq;
 
 	if (bStrength)
 	{
@@ -1125,7 +1125,7 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 
 	if (bStrReqMet && bDexReqMet && bLevelReqMet && bIdentified)
 	{
-		if (pItemsTxtRecord->wType[0] == ITEMTYPE_BOOK && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) <= 0)
+		if (pItemsTxtRecord->wType[0] == ITEMTYPE_BOOK && STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) <= 0)
 		{
 			return FALSE;
 		}
@@ -1430,7 +1430,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 	}
 
-	nRequiredLevel += STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_LEVELREQ, 0);
+	nRequiredLevel += STATLIST_UnitGetStatValue(pItem, STAT_ITEM_LEVELREQ, 0);
 	if (nRequiredLevel <= 0)
 	{
 		nRequiredLevel = 0;
@@ -2004,7 +2004,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		return 0x7FFFFFFF;
 	}
 
-	nLevel = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0);
+	nLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
 
 	if (nTransactionType == 3 && !ITEMS_IsRepairable(pItem))
 	{
@@ -2017,13 +2017,13 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 	}
 
 	pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
-	nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+	nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
 	if (nQuantity <= 0)
 	{
 		nQuantity = 1;
 	}
 	
-	nReducePricePct = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_ITEM_REDUCEDPRICES, 0);
+	nReducePricePct = STATLIST_UnitGetStatValue(pPlayer, STAT_ITEM_REDUCEDPRICES, 0);
 	if (nReducePricePct >= 99)
 	{
 		nReducePricePct = 99;
@@ -2074,7 +2074,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						nSellCost = nQuantity * pItemsTxtRecord->dwCost / 1024;
 						nBuyCost = nSellCost;
 
-						nStackQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+						nStackQuantity = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 						if (nStackQuantity >= 511)
 						{
 							nStackQuantity = 511;
@@ -2096,7 +2096,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 							nBuyCost = nSellCost;
 							nRepCost = nSellCost;
 
-							nDivisor = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+							nDivisor = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 
 							if (nDivisor < 511)
 							{
@@ -2340,9 +2340,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 		if (nTransactionType == 1)
 		{
-			if (pItemData->dwItemFlags & IFLAG_ETHEREAL && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
+			if (pItemData->dwItemFlags & IFLAG_ETHEREAL && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 			{
-				if (STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) <= 0)
+				if (STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) <= 0)
 				{
 					nBuyCost = 0;
 				}
@@ -2353,14 +2353,14 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(pItemsTxtRecord->wType[0]);
 			if (!pItemTypesTxtRecord || !pItemTypesTxtRecord->wQuiver || !pItemTypesTxtRecord->nThrowable)
 			{
-				if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
+				if (!pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 				{
-					nDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0);
+					nDurability = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0);
 					nMaxDura = STATLIST_GetMaxDurabilityFromUnit(pItem);
 
 					if (nMaxDura && nDurability < nMaxDura)
 					{
-						if (STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0))
+						if (STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0))
 						{
 							if (nDurability < nMaxDura - 1)
 							{
@@ -2457,13 +2457,13 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 				if (pItemsTxtRecord->nStackable && ITEMS_IsRepairable(pItem))
 				{
-					nMaxStack = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+					nMaxStack = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 					if (nMaxStack >= 511)
 					{
 						nMaxStack = 511;
 					}
 
-					if (nQuantity < nMaxStack && !STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0))
+					if (nQuantity < nMaxStack && !STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0))
 					{
 						nRepCost *= (nMaxStack - nQuantity);
 					}
@@ -2680,7 +2680,7 @@ int __stdcall ITEMS_GetTotalMaxStack(D2UnitStrc* pItem)
 	const D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 	D2_ASSERT(pItemsTxtRecord);
 
-	int nMaxStack = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+	int nMaxStack = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 	if (nMaxStack >= 511)
 	{
 		nMaxStack = 511;
@@ -2868,7 +2868,7 @@ BOOL __stdcall ITEMS_HasDurability(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		if (pItemsTxtRecord && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem))
 		{
-			return STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0;
+			return STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0;
 		}
 	}
 
@@ -2978,7 +2978,7 @@ int __stdcall ITEMS_GetSockets(D2UnitStrc* pItem)
 	D2_ASSERT(pItem);
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 
-	return STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_NUMSOCKETS, 0);
+	return STATLIST_UnitGetStatValue(pItem, STAT_ITEM_NUMSOCKETS, 0);
 }
 
 //D2Common.0x6FD9D5E0 (#10817)
@@ -3029,7 +3029,7 @@ void __stdcall ITEMS_AddSockets(D2UnitStrc* pItem, int nSockets)
 			{
 			case ITEMQUAL_SET:
 			case ITEMQUAL_UNIQUE:
-				nCurrentSockets = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_NUMSOCKETS, 0);
+				nCurrentSockets = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_NUMSOCKETS, 0);
 				if (nCurrentSockets <= 0)
 				{
 					if (nMaxSockets >= 1)
@@ -3276,7 +3276,7 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 
 		D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 
-		const int nSockets = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_NUMSOCKETS, 0);
+		const int nSockets = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_NUMSOCKETS, 0);
 
 		if (nSockets != nSocketedItems)
 		{
@@ -4228,7 +4228,7 @@ BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem)
 
 	D2_ASSERT(pItem->dwUnitType == UNIT_ITEM);
 
-	return STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_NUMSOCKETS, 0) == 0;
+	return STATLIST_UnitGetStatValue(pItem, STAT_ITEM_NUMSOCKETS, 0) == 0;
 }
 
 //D2Common.0x6FD9F490 (#10877)
@@ -4262,10 +4262,10 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 			if (ITEMS_IsRepairable(pItem) && pItem->dwUnitType == UNIT_ITEM)
 			{
 				pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
-				if (pItemsTxtRecord && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
+				if (pItemsTxtRecord && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 				{
 					nMaxDurability = STATLIST_GetMaxDurabilityFromUnit(pItem);
-					if (nMaxDurability && STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) != nMaxDurability)
+					if (nMaxDurability && STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) != nMaxDurability)
 					{
 						bCanBeRepaired = TRUE;
 					}
@@ -4291,13 +4291,13 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 						pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 						D2_ASSERT(pItemsTxtRecord);
 
-						nMaxStack = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+						nMaxStack = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 						if (nMaxStack >= 511)
 						{
 							nMaxStack = 511;
 						}
 
-						if (STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) < nMaxStack)
+						if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) < nMaxStack)
 						{
 							bCanBeRepaired = TRUE;
 						}
@@ -4373,17 +4373,17 @@ BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc* pItem1, D2UnitStrc* pItem2)
 	if((ITEMS_CheckItemFlag(pItem1, IFLAG_ETHEREAL, __LINE__, __FILE__) != ITEMS_CheckItemFlag(pItem2, IFLAG_ETHEREAL, __LINE__, __FILE__))
 		|| !pItem1->pItemData->dwQualityNo || pItem1->pItemData->dwQualityNo > 3 && pItem1->pItemData->dwQualityNo <= 9
 		|| !pItem2->pItemData->dwQualityNo || pItem2->pItemData->dwQualityNo > 3 && pItem2->pItemData->dwQualityNo <= 9
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_MINDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_MINDAMAGE, 0)
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_MAXDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_MAXDAMAGE, 0)
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_SECONDARY_MINDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_SECONDARY_MINDAMAGE, 0)
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_SECONDARY_MAXDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_SECONDARY_MAXDAMAGE, 0)
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_ITEM_THROW_MINDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_ITEM_THROW_MINDAMAGE, 0)
-		|| STATLIST_GetUnitStatUnsigned(pItem1, STAT_ITEM_THROW_MAXDAMAGE, 0) != STATLIST_GetUnitStatUnsigned(pItem2, STAT_ITEM_THROW_MAXDAMAGE, 0))
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_MINDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_MINDAMAGE, 0)
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_MAXDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_MAXDAMAGE, 0)
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_SECONDARY_MINDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_SECONDARY_MINDAMAGE, 0)
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_SECONDARY_MAXDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_SECONDARY_MAXDAMAGE, 0)
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_ITEM_THROW_MINDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_ITEM_THROW_MINDAMAGE, 0)
+		|| STATLIST_UnitGetStatValue(pItem1, STAT_ITEM_THROW_MAXDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_ITEM_THROW_MAXDAMAGE, 0))
 	{
 		return FALSE;
 	}
 
-	if (STATLIST_GetUnitStatUnsigned(pItem1, STAT_ITEM_NUMSOCKETS, 0) || STATLIST_GetUnitStatUnsigned(pItem2, STAT_ITEM_NUMSOCKETS, 0))
+	if (STATLIST_UnitGetStatValue(pItem1, STAT_ITEM_NUMSOCKETS, 0) || STATLIST_UnitGetStatValue(pItem2, STAT_ITEM_NUMSOCKETS, 0))
 	{
 		return FALSE;
 	}
@@ -4401,12 +4401,12 @@ BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pItem)
 
 	if (pItem)
 	{
-		if (STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0)
+		if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0)
 		{
 			return TRUE;
 		}
 
-		if (STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0))
+		if (STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0))
 		{
 			STATLIST_SetUnitStat(pItem, STAT_QUANTITY, 0, 0);
 			return TRUE;
@@ -4417,7 +4417,7 @@ BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pItem)
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		D2_ASSERT(pItemsTxtRecord);
 
-		nStack = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
+		nStack = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_EXTRA_STACK, 0) + pItemsTxtRecord->dwMaxStack;
 		if (nStack < 511 && nStack <= 0)
 		{
 			return TRUE;
@@ -4669,7 +4669,7 @@ int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
 	{
 		D2_ASSERT(nLength);
 
-		return (nLength << 8) / (v11 * (STATLIST_GetUnitStatUnsigned(pWeapon, STAT_ATTACKRATE, 0) + STATLIST_GetUnitStatSigned(pWeapon, STAT_ITEM_FASTERATTACKRATE, 0) + 100) / 100);
+		return (nLength << 8) / (v11 * (STATLIST_UnitGetStatValue(pWeapon, STAT_ATTACKRATE, 0) + STATLIST_UnitGetItemStatOrSkillStatValue(pWeapon, STAT_ITEM_FASTERATTACKRATE, 0) + 100) / 100);
 	}
 
 	return 45;
@@ -6364,7 +6364,7 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_GOLD))
 		{
-			nGold = STATLIST_GetUnitStatUnsigned(pItem, STAT_GOLD, 0);
+			nGold = STATLIST_UnitGetStatValue(pItem, STAT_GOLD, 0);
 			ITEMS_WriteBitsToBitstream(pBuffer, (nGold >= 4096), 1);
 			ITEMS_WriteBitsToBitstream(pBuffer, nGold, (((nGold < 4096) - 1) & 20) + 12);
 		}
@@ -6375,7 +6375,7 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 		pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_QUESTITEMDIFFICULTY);
 		D2_ASSERT(pItemStatCostTxtRecord);
 
-		nValue = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUESTITEMDIFFICULTY, 0);
+		nValue = STATLIST_UnitGetStatValue(pItem, STAT_QUESTITEMDIFFICULTY, 0);
 		ITEMS_WriteBitsToBitstream(pBuffer, pItemStatCostTxtRecord->dwSaveAdd + (nValue >> pItemStatCostTxtRecord->nValShift), pItemStatCostTxtRecord->nSaveBits);
 	}
 
@@ -7219,7 +7219,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		if (nMaxDurability)
 		{
 			pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_DURABILITY);
-			ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) + pItemStatCostTxtRecord->dwSaveAdd, pItemStatCostTxtRecord->nSaveBits);
+			ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) + pItemStatCostTxtRecord->dwSaveAdd, pItemStatCostTxtRecord->nSaveBits);
 		}
 	}
 	else if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON))
@@ -7231,19 +7231,19 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		if (nMaxDurability)
 		{
 			pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(STAT_DURABILITY);
-			ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) + pItemStatCostTxtRecord->dwSaveAdd, pItemStatCostTxtRecord->nSaveBits);
+			ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) + pItemStatCostTxtRecord->dwSaveAdd, pItemStatCostTxtRecord->nSaveBits);
 		}
 	}
 	else if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_GOLD))
 	{
-		nGold = STATLIST_GetUnitStatUnsigned(pItem, STAT_GOLD, 0);
+		nGold = STATLIST_UnitGetStatValue(pItem, STAT_GOLD, 0);
 		ITEMS_WriteBitsToBitstream(pBuffer, nGold >= 4096, 1);
 		ITEMS_WriteBitsToBitstream(pBuffer, nGold, nGold >= 4096 ? 32 : 12);
 	}
 
 	if (ITEMS_CheckIfStackable(pItem))
 	{
-		ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0), 9);
+		ITEMS_WriteBitsToBitstream(pBuffer, STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0), 9);
 	}
 
 	if (pItemData->dwItemFlags & IFLAG_SOCKETED)

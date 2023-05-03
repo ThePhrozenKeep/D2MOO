@@ -574,9 +574,9 @@ D2COMMON_DLL_DECL void __stdcall STATLIST_SetUnitStat(D2UnitStrc* pUnit, int nSt
 //D2Common.0x6FDB7B00 (#10518)
 D2COMMON_DLL_DECL void __stdcall STATLIST_AddUnitStat(D2UnitStrc* pUnit, int nStatId, int nValue, uint16_t nLayer);
 //D2Common.0x6FDB7C30 (#10519)
-D2COMMON_DLL_DECL uint32_t __stdcall STATLIST_GetUnitStatUnsigned(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
+D2COMMON_DLL_DECL int32_t __stdcall STATLIST_UnitGetStatValue(const D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB7E30 (#10520)
-D2COMMON_DLL_DECL int __stdcall STATLIST_GetUnitStatSigned(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
+D2COMMON_DLL_DECL int32_t __stdcall STATLIST_UnitGetItemStatOrSkillStatValue(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x6FDB7B30 (#10521)
 D2COMMON_DLL_DECL int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, uint16_t nLayer);
 //D2Common.0x(6FDB7D40 (#10466)
@@ -618,7 +618,7 @@ D2COMMON_DLL_DECL void __stdcall D2Common_10534(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8770 (#10530)
 D2COMMON_DLL_DECL BOOL __stdcall D2COMMON_10530_D2CheckStatlistFlagDMGRed(D2UnitStrc* pUnit);
 //D2Common.0x6FDB87A0 (#10532)
-D2COMMON_DLL_DECL int __stdcall STATLIST_GetStatUnsigned_Layer0(D2StatListStrc* pStatListEx, int nStatId);
+D2COMMON_DLL_DECL int __stdcall STATLIST_GetTotalStatValue_Layer0(D2StatListStrc* pStatListEx, int nStatId);
 //D2Common.0x6FDB8890 (#10533)
 D2COMMON_DLL_DECL void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8900

@@ -256,7 +256,7 @@ void __fastcall ITEMS_MakeEthereal(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
         if (ITEMS_HasDurability(pItem))
         {
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0) / 2 + 1, 0);
-            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, STATLIST_GetUnitStatUnsigned(pItem, STAT_MAXDURABILITY, 0), 0);
+            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, STATLIST_UnitGetStatValue(pItem, STAT_MAXDURABILITY, 0), 0);
         }
     }
 }
@@ -940,7 +940,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
             }
 
             ITEMS_SetEarName(pItem, pPlayerData->szName);
-            ITEMS_SetEarLevel(pItem, STATLIST_GetUnitStatUnsigned(pItemDrop->pUnit, STAT_LEVEL, 0));
+            ITEMS_SetEarLevel(pItem, STATLIST_UnitGetStatValue(pItemDrop->pUnit, STAT_LEVEL, 0));
 
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pItemDrop->pUnit, __FILE__, __LINE__);
             if (pClient)
@@ -964,13 +964,13 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
         }
     }
 
-    const int32_t nReplenishDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
+    const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
     if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
     {
         EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
     }
 
-    const int32_t nReplenishQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0);
+    const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0);
     if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
     {
         EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
@@ -1601,7 +1601,7 @@ D2UnitStrc* __fastcall ITEMS_FindQuestItem(D2GameStrc* pGame, D2UnitStrc* pUnit,
     if (pCursorItem && dwItemCode == ITEMS_GetBaseCode(pCursorItem))
     {
         D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pCursorItem->dwClassId);
-        if (!pItemsTxtRecord || !pItemsTxtRecord->nQuest || pGame->nDifficulty <= STATLIST_GetUnitStatUnsigned(pCursorItem, STAT_QUESTITEMDIFFICULTY, 0))
+        if (!pItemsTxtRecord || !pItemsTxtRecord->nQuest || pGame->nDifficulty <= STATLIST_UnitGetStatValue(pCursorItem, STAT_QUESTITEMDIFFICULTY, 0))
         {
             return pCursorItem;
         }
@@ -1612,7 +1612,7 @@ D2UnitStrc* __fastcall ITEMS_FindQuestItem(D2GameStrc* pGame, D2UnitStrc* pUnit,
         if (INVENTORY_UnitIsItem(pItem) && dwItemCode == ITEMS_GetBaseCode(pItem) && ITEMS_GetInvPage(pItem) != INVPAGE_EQUIP)
         {
             D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
-            if (!pItemsTxtRecord || !pItemsTxtRecord->nQuest || !pItemsTxtRecord->nQuestDiffCheck || pGame->nDifficulty <= STATLIST_GetUnitStatUnsigned(pItem, STAT_QUESTITEMDIFFICULTY, 0))
+            if (!pItemsTxtRecord || !pItemsTxtRecord->nQuest || !pItemsTxtRecord->nQuestDiffCheck || pGame->nDifficulty <= STATLIST_UnitGetStatValue(pItem, STAT_QUESTITEMDIFFICULTY, 0))
             {
                 return pItem;
             }
@@ -1630,7 +1630,7 @@ int32_t __fastcall ITEMS_GetItemLevelForNewItem(D2UnitStrc* pUnit, int32_t nLeve
         int32_t nLevel = 0;
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
-            nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+            nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
         }
         else if (pUnit->dwUnitType == UNIT_PLAYER)
         {
@@ -1679,12 +1679,12 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         return;
     }
 
-    int32_t nDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0) - 1;
+    int32_t nDurability = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) - 1;
     if (nDurability > 0)
     {
         nDurability = std::min(nDurability, STATLIST_GetMaxDurabilityFromUnit(pItem));
 
-        const int32_t nReplenishDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
+        const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
         if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
         {
             EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
@@ -1709,7 +1709,7 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         return;
     }
     
-    const int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+    const int32_t nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
     if (nQuantity <= 1)
     {
         STATLIST_SetUnitStat(pItem, STAT_DURABILITY, 0, 0);
@@ -1732,7 +1732,7 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
 
     if (ITEMS_GetTotalMaxStack(pItem) > 0)
     {
-        const int32_t nReplenishDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
+        const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
         if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
         {
             EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
@@ -1756,11 +1756,11 @@ void __fastcall ITEMS_FillItemDrop(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop,
 
     if (ITEMS_GetItemType(pItem) == ITEMTYPE_GOLD)
     {
-        pItemDrop->nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_GOLD, 0);
+        pItemDrop->nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_GOLD, 0);
     }
     else if (ITEMS_CheckIfStackable(pItem))
     {
-        const int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+        const int32_t nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
 
         D2_ASSERT(nQuantity >= 0);
 
@@ -1773,7 +1773,7 @@ void __fastcall ITEMS_FillItemDrop(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop,
     pItemDrop->dwItemSeed = ITEMS_GetItemStartSeed(pItem);
     pItemDrop->nItemIndex = ITEMS_GetFileIndex(pItem);
     pItemDrop->dwFlags1 = ITEMS_GetItemFlags(pItem);
-    pItemDrop->nMinDur = STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0);
+    pItemDrop->nMinDur = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0);
     pItemDrop->nMaxDur = STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0);
     pItemDrop->nItemIndex = ITEMS_GetFileIndex(pItem);
     pItemDrop->bForce = 0;
@@ -1852,7 +1852,7 @@ void __fastcall ITEMS_DropGoldPile(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_
 void __fastcall ITEMS_HandleGoldTransaction(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_t nValue)
 {
     const int32_t nGoldLimit = UNITS_GetInventoryGoldLimit(pUnit);
-    const int32_t nGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+    const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
     if (nGold == nGoldLimit)
     {
         ITEMS_DropGoldPile(pGame, pUnit, nValue);
@@ -1900,7 +1900,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pUnit, nItemId, pGame, 4u, 2u, 1u, 1u, STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0), 0, 0, 0);
+    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pUnit, nItemId, pGame, 4u, 2u, 1u, 1u, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0, 0, 0);
     if (!pItem)
     {
         return;
@@ -2032,7 +2032,7 @@ D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2U
 //D2Game.0x6FC512C0
 void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    const int32_t nReplenishDurability = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_REPLENISH_DURABILITY, 0);
+    const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_DURABILITY, 0);
     if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
     {
         EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
@@ -2042,7 +2042,7 @@ void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC51310
 void __fastcall sub_6FC51310(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    const int32_t nReplenishQuantity = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_REPLENISH_QUANTITY, 0);
+    const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_QUANTITY, 0);
     if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
     {
         EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
@@ -2142,7 +2142,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                     uint32_t nPlayerCount = (PLAYER_GetPlayerCount(pGame) - nPartyMembers) / 2 + nPartyMembers;
                     if (pMonster && pMonster->dwUnitType == UNIT_MONSTER)
                     {
-                        nPlayerCount = std::min(nPlayerCount, std::max(STATLIST_GetUnitStatUnsigned(pMonster, STAT_MONSTER_PLAYERCOUNT, 0), 1u));
+                        nPlayerCount = std::min(nPlayerCount, std::max(STATLIST_UnitGetStatValue(pMonster, STAT_MONSTER_PLAYERCOUNT, 0), 1u));
                     }
 
                     if (nPlayerCount > 1)
@@ -2338,11 +2338,11 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                                         int32_t nMagicBonus = 0;
                                         if (pPlayer && (pPlayer->dwUnitType == UNIT_PLAYER || pPlayer->dwUnitType == UNIT_MONSTER))
                                         {
-                                            nMagicBonus = STATLIST_GetUnitStatSigned(pPlayer, STAT_ITEM_MAGICBONUS, 0);
+                                            nMagicBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pPlayer, STAT_ITEM_MAGICBONUS, 0);
                                             D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pPlayer);
                                             if (pOwner)
                                             {
-                                                nMagicBonus += STATLIST_GetUnitStatSigned(pOwner, STAT_ITEM_MAGICBONUS, 0);
+                                                nMagicBonus += STATLIST_UnitGetItemStatOrSkillStatValue(pOwner, STAT_ITEM_MAGICBONUS, 0);
                                             }
                                         }
 
@@ -2537,7 +2537,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                             {
                                 if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_GOLD) && pTCExInfo->nTxtRow)
                                 {
-                                    D2GAME_SetStatOrResetGold_6FC7CA70(pItem, STAT_GOLD, pTCExInfo->nTxtRow * STATLIST_GetUnitStatUnsigned(pItem, STAT_GOLD, 0) >> 8);
+                                    D2GAME_SetStatOrResetGold_6FC7CA70(pItem, STAT_GOLD, pTCExInfo->nTxtRow * STATLIST_UnitGetStatValue(pItem, STAT_GOLD, 0) >> 8);
                                 }
 
                                 if (ppItems)
@@ -2553,14 +2553,14 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 
                                 if (pPlayer && ITEMS_GetItemType(pItem) == ITEMTYPE_GOLD)
                                 {
-                                    int32_t nGoldBonus = STATLIST_GetUnitStatSigned(pPlayer, STAT_ITEM_GOLDBONUS, 0) + 100;
+                                    int32_t nGoldBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pPlayer, STAT_ITEM_GOLDBONUS, 0) + 100;
                                     D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pPlayer);
                                     if (pOwner)
                                     {
-                                        nGoldBonus += STATLIST_GetUnitStatSigned(pOwner, STAT_ITEM_GOLDBONUS, 0);
+                                        nGoldBonus += STATLIST_UnitGetItemStatOrSkillStatValue(pOwner, STAT_ITEM_GOLDBONUS, 0);
                                     }
 
-                                    D2GAME_SetStatOrResetGold_6FC7CA70(pItem, STAT_GOLD, nGoldBonus * STATLIST_GetUnitStatUnsigned(pItem, STAT_GOLD, 0) / 100);
+                                    D2GAME_SetStatOrResetGold_6FC7CA70(pItem, STAT_GOLD, nGoldBonus * STATLIST_UnitGetStatValue(pItem, STAT_GOLD, 0) / 100);
                                 }
                             }
                         }
@@ -2586,7 +2586,7 @@ void __fastcall sub_6FC52110(D2GameStrc* pGame, D2UnitStrc* pMonster, D2UnitStrc
         D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pMonster->dwClassId);
         if (pMonStatsTxtRecord && !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NORATIO]) && !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_BOSS]))
         {
-            nLevel = STATLIST_GetUnitStatUnsigned(pMonster, STAT_LEVEL, 0);
+            nLevel = STATLIST_UnitGetStatValue(pMonster, STAT_LEVEL, 0);
         }
     }
 
@@ -2613,7 +2613,7 @@ int32_t __fastcall ITEMS_GetGroundRemovalTime(D2GameStrc* pGame, D2UnitStrc* pUn
 
     if (ITEMS_GetItemType(pUnit) == ITEMTYPE_GOLD)
     {
-		const int32_t nGoldQuantity = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
+		const int32_t nGoldQuantity = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
         if (nGoldQuantity <= 10000)
         {
             return pGame->dwGameFrame + 15000;

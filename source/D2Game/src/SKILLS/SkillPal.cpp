@@ -111,7 +111,7 @@ int32_t __fastcall SKILLS_SrvDo064_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUni
                 damage.dwHitFlags |= 0x1000u;
 
                 int32_t nBaseDamage = pDamage->dwPhysDamage;
-                const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0);
+                const int32_t nHitpoints = STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0);
                 if (nBaseDamage > nHitpoints)
                 {
                     nBaseDamage = nHitpoints;
@@ -223,7 +223,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
     }
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
-    const int32_t nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+    const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
     
     D2UnkPalSkillStrc args = {};
     args.nSkillId = nSkillId;
@@ -388,11 +388,11 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                             {
                                 if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_DIRECT])
                                 {
-                                    const int32_t nBaseValue = STATLIST_GetUnitStatUnsigned(pUnit, nStatId, 0);
+                                    const int32_t nBaseValue = STATLIST_UnitGetStatValue(pUnit, nStatId, 0);
                                     int32_t nValue = nBaseValue + nBonus;
                                     if (pItemStatCostTxtRecord->wMaxStat < sgptDataTables->nItemStatCostTxtRecordCount)
                                     {
-                                        const int32_t nMaxValue = STATLIST_GetUnitStatUnsigned(pUnit, pItemStatCostTxtRecord->wMaxStat, 0);
+                                        const int32_t nMaxValue = STATLIST_UnitGetStatValue(pUnit, pItemStatCostTxtRecord->wMaxStat, 0);
                                         if (nValue >= nMaxValue)
                                         {
                                             nValue = nMaxValue;
@@ -479,7 +479,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
     }
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
-    const int32_t nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+    const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
     const int32_t nFrame = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
     
     D2UnkPalSkillStrc args1 = {};
@@ -683,7 +683,7 @@ int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         }
     }
 
-    int32_t nVelocityPercent = STATLIST_GetUnitStatUnsigned(pUnit, STAT_VELOCITYPERCENT, 0);
+    int32_t nVelocityPercent = STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0);
     if (nVelocityPercent <= 50)
     {
         nVelocityPercent = 50;
@@ -937,24 +937,24 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
         {
             if (INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
             {
-                nShiftedMinDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_SECONDARY_MINDAMAGE, 0);
-                nShiftedMaxDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_SECONDARY_MAXDAMAGE, 0);
+                nShiftedMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_SECONDARY_MINDAMAGE, 0);
+                nShiftedMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_SECONDARY_MAXDAMAGE, 0);
             }
             else
             {
-                nShiftedMinDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MINDAMAGE, 0);
-                nShiftedMaxDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MAXDAMAGE, 0);
+                nShiftedMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0);
+                nShiftedMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0);
             }
         }
         else
         {
-            nShiftedMinDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MINDAMAGE, 0);
+            nShiftedMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0);
             if (nShiftedMinDamage <= 0)
             {
                 nShiftedMinDamage = 1;
             }
 
-            nShiftedMaxDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MAXDAMAGE, 0);
+            nShiftedMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0);
             if (nShiftedMaxDamage <= 1)
             {
                 nShiftedMaxDamage = 2;
@@ -978,7 +978,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
         int32_t nFireDamagePercent = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
         if (nFireDamagePercent)
         {
-            const int32_t nFireMastery = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
+            const int32_t nFireMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
             if (nFireMastery)
             {
                 nFireDamagePercent += MONSTERUNIQUE_CalculatePercentage(nFireDamagePercent, nFireMastery, 100);
@@ -990,7 +990,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
         int32_t nColdDamagePercent = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         if (nColdDamagePercent)
         {
-            const int32_t nColdMastery = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
+            const int32_t nColdMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
             if (nColdMastery)
             {
                 nColdDamagePercent += MONSTERUNIQUE_CalculatePercentage(nColdDamagePercent, nColdMastery, 100);
@@ -1002,7 +1002,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
         int32_t nLightningDamagePercent = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
         if (nLightningDamagePercent)
         {
-            const int32_t nLightningMastery = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
+            const int32_t nLightningMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
             if (nLightningMastery)
             {
                 nLightningDamagePercent += MONSTERUNIQUE_CalculatePercentage(nLightningDamagePercent, nLightningMastery, 100);
@@ -1169,8 +1169,8 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
         STATLIST_FreeStatList(i);
     }
 
-    const int32_t nTargetLevel = STATLIST_GetUnitStatUnsigned(pTarget, STAT_LEVEL, 0);
-    const int32_t nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+    const int32_t nTargetLevel = STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0);
+    const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
     if (nTargetLevel && nLevel < nTargetLevel && !STATLIST_GetStatListFromUnitAndState(pTarget, STATE_CONVERSION_SAVE))
     {
         D2StatListStrc* pConversionStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 0, 0, pTarget->dwUnitType, pTarget->dwUnitId);
@@ -1179,7 +1179,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
             STATLIST_SetState(pConversionStatList, STATE_CONVERSION_SAVE);
             D2COMMON_10475_PostStatToStatList(pTarget, pConversionStatList, 1);
 
-            const int32_t nTargetHp = STATLIST_GetUnitStatUnsigned(pTarget, STAT_HITPOINTS, 0) >> 8;
+            const int32_t nTargetHp = STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0) >> 8;
             const int32_t nTargetMaxHp = STATLIST_GetMaxLifeFromUnit(pTarget) >> 8;
             STATLIST_SetStatIfListIsValid(pConversionStatList, STAT_CONVERSION_LEVEL, nTargetLevel, 0);
             STATLIST_SetStatIfListIsValid(pConversionStatList, STAT_CONVERSION_MAXHP, nTargetMaxHp, 0);
@@ -1227,7 +1227,7 @@ void __fastcall SKILLS_StatRemoveCallback_Conversion(D2UnitStrc* pUnit, int32_t 
     const int32_t nConversionLevel = STATLIST_GetStatValue(pConversionStatList, STAT_CONVERSION_LEVEL, 0);
     const int32_t nConversionMaxHp = STATLIST_GetStatValue(pConversionStatList, STAT_CONVERSION_MAXHP, 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
-    const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
+    const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
 
     int32_t nNewHp = 1;
     if (nMaxHp)
@@ -1299,7 +1299,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
     }
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
-    const int32_t nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+    const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
     const int32_t nFrame = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
     
     D2UnkPalSkillStrc args1 = {};
@@ -1452,10 +1452,10 @@ int32_t __fastcall SKILLS_ApplyRedemptionEffect(D2GameStrc* pGame, D2UnitStrc* p
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && pCorpse && SKILLS_CanUnitCorpseBeSelected(pCorpse) && (bSkipChanceRoll || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel)))
     {
-        const int32_t nNewHp = std::min(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel) << 8 + STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0), STATLIST_GetMaxLifeFromUnit(pUnit));
+        const int32_t nNewHp = std::min(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel) << 8 + STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0), STATLIST_GetMaxLifeFromUnit(pUnit));
         STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nNewHp, 0);
 
-        const int32_t nNewMana = std::min(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel) << 8 + STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0), STATLIST_GetMaxManaFromUnit(pUnit));
+        const int32_t nNewMana = std::min(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel) << 8 + STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0), STATLIST_GetMaxManaFromUnit(pUnit));
         STATLIST_SetUnitStat(pUnit, STAT_MANA, nNewMana, 0);
 
         STATES_ToggleState(pCorpse, STATE_REDEEMED, 1);
@@ -1476,7 +1476,7 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
     }
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
-    const int32_t nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
+    const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
 
     D2UnkPalSkillStrc args1 = {};
     args1.nSkillId = nSkillId;
@@ -1541,7 +1541,7 @@ int32_t __fastcall SKILLS_AuraCallback_Redemption(D2AuraCallbackStrc* pAuraCallb
 //D2Game.0x6FD1B4C0
 void __fastcall SKILLS_ApplyThornsDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
 {
-    int32_t nThornsPercent = STATLIST_GetUnitStatUnsigned(pDefender, STAT_THORNS_PERCENT, 0);
+    int32_t nThornsPercent = STATLIST_UnitGetStatValue(pDefender, STAT_THORNS_PERCENT, 0);
     if (nThornsPercent <= 0)
     {
         return;

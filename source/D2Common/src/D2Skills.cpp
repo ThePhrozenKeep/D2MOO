@@ -277,7 +277,7 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 		case 40:
 			if (pUnit)
 			{
-				return STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+				return STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 			}
 			break;
 
@@ -1444,7 +1444,7 @@ int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 						}
 						else
 						{
-							bContinue = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0);
+							bContinue = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0);
 						}
 					}
 				}
@@ -1459,7 +1459,7 @@ int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 					}
 					else
 					{
-						bContinue = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0);
+						bContinue = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0);
 					}
 				}
 			}
@@ -1490,13 +1490,13 @@ int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 						}
 						else
 						{
-							bContinue = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0);
+							bContinue = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0);
 						}
 					}
 				}
 				else if (!ITEMS_CheckIfThrowable(pItem))
 				{
-					bContinue = STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0);
+					bContinue = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0);
 				}
 			}
 
@@ -1629,7 +1629,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2Skill
 		nRequiredMana = (pSkill->pSkillsTxt->wMana + nSkillLevel * pSkill->pSkillsTxt->wLevelMana) << pSkill->pSkillsTxt->nManaShift;
 		if (STATES_CheckState(pUnit, STATE_BLOOD_MANA))
 		{
-			return STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0) >= nRequiredMana;
+			return STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >= nRequiredMana;
 		}
 		else
 		{
@@ -1639,7 +1639,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2Skill
 			}
 			else
 			{
-				return STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) >= nRequiredMana;
+				return STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >= nRequiredMana;
 			}
 		}
 	}
@@ -1698,7 +1698,7 @@ BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 					nSkillLevel = DATATBLS_GetMaxLevel(0);
 				}
 
-				return STATLIST_GetUnitStatUnsigned(pItem, STAT_ITEM_CHARGED_SKILL, (pSkill->pSkillsTxt->nSkillId << 6) + (nSkillLevel & 0x3F)) > 0;
+				return STATLIST_UnitGetStatValue(pItem, STAT_ITEM_CHARGED_SKILL, (pSkill->pSkillsTxt->nSkillId << 6) + (nSkillLevel & 0x3F)) > 0;
 			}
 		}
 
@@ -1786,7 +1786,7 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 				return TRUE;
 			}
 
-			if (!pSkillsTxtRecord->nSkillId && STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_MAGICARROW, 0))
+			if (!pSkillsTxtRecord->nSkillId && STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_MAGICARROW, 0))
 			{
 				return TRUE;
 			}
@@ -1796,7 +1796,7 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 				return FALSE;
 			}
 
-			if (!pSkillsTxtRecord->nSkillId && STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_MAGICARROW, 0))
+			if (!pSkillsTxtRecord->nSkillId && STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_MAGICARROW, 0))
 			{
 				return TRUE;
 			}
@@ -1806,7 +1806,7 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 				return TRUE;
 			}
 
-			if (STATLIST_GetUnitStatUnsigned(pUnit, STAT_QUANTITY, 0) <= 0)
+			if (STATLIST_UnitGetStatValue(pUnit, STAT_QUANTITY, 0) <= 0)
 			{
 				return FALSE;
 			}
@@ -1860,7 +1860,7 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 BOOL __fastcall D2Common_SKILLMANA_CheckStartStat_6FDB1400(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER || pSkill->pSkillsTxt->wStartMana <= 0
-		|| STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0) >= (int)pSkill->pSkillsTxt->wStartMana << 8 || STATES_CheckState(pUnit, STATE_INFERNO))
+		|| STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >= (int)pSkill->pSkillsTxt->wStartMana << 8 || STATES_CheckState(pUnit, STATE_INFERNO))
 	{
 		return TRUE;
 	}
@@ -1924,13 +1924,13 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 		nSkillLevel += 2;
 	}
 
-	nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_ALLSKILLS, 0);
+	nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_ALLSKILLS, 0);
 
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
 	{
 		if (pSkill->pSkillsTxt->nCharClass == pUnit->dwClassId)
 		{
-			nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_ADDCLASSSKILLS, pUnit->dwClassId);
+			nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_ADDCLASSSKILLS, pUnit->dwClassId);
 
 			pSkillsTxtRecord = &sgptDataTables->pSkillsTxt[pSkill->pSkillsTxt->nSkillId];
 			if (pSkillsTxtRecord)
@@ -1939,11 +1939,11 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 
 				if (pSkillDescTxtRecord->nSkillPage)
 				{
-					nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_ADDSKILL_TAB, (char)pSkillDescTxtRecord->nSkillPage + 8 * pUnit->dwClassId - 1);
+					nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_ADDSKILL_TAB, (char)pSkillDescTxtRecord->nSkillPage + 8 * pUnit->dwClassId - 1);
 				}
 			}
 
-			nBonus = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
+			nBonus = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
 			if (nBonus > 3)
 			{
 				nBonus = 3;
@@ -1952,18 +1952,18 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 		}
 		else
 		{
-			nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
+			nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
 		}
 	}
 	else
 	{
 		if (pSkill->nSkillLevel <= 0)
 		{
-			nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
+			nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
 		}
 		else
 		{
-			nBonus = STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
+			nBonus = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_NONCLASSSKILL, pSkill->pSkillsTxt->nSkillId);
 			if (nBonus)
 			{
 				if (nBonus > 3)
@@ -1977,10 +1977,10 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 
 	if (pSkill->pSkillsTxt->nEType)
 	{
-		nSkillLevel += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_ELEMSKILL, pSkill->pSkillsTxt->nEType);
+		nSkillLevel += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_ELEMSKILL, pSkill->pSkillsTxt->nEType);
 	}
 
-	return nSkillLevel + STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_SINGLESKILL, pSkill->pSkillsTxt->nSkillId);
+	return nSkillLevel + STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_SINGLESKILL, pSkill->pSkillsTxt->nSkillId);
 }
 
 //D2Common.0x6FDB1700 (#10968)
@@ -2311,7 +2311,7 @@ BOOL __stdcall SKILLS_CheckRequiredSkills(D2UnitStrc* pUnit, int nSkillId)
 		return FALSE;
 	}
 
-	nLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+	nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
 	nRequiredLevel = pSkillsTxtRecord->wReqLevel;
 
@@ -2386,15 +2386,15 @@ BOOL __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc* pUnit, int nSkillId)
 
 	if (pSkillsTxtRecord && pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INGAME])
 	{
-		if (SKILLS_GetRequiredLevelBasedOnCurrent(pUnit, nSkillId) <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0))
+		if (SKILLS_GetRequiredLevelBasedOnCurrent(pUnit, nSkillId) <= STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0))
 		{
-			if (pSkillsTxtRecord->wReqStr <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_STRENGTH, 0))
+			if (pSkillsTxtRecord->wReqStr <= STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0))
 			{
-				if (pSkillsTxtRecord->wReqDex <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0))
+				if (pSkillsTxtRecord->wReqDex <= STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0))
 				{
-					if (pSkillsTxtRecord->wReqInt <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_ENERGY, 0))
+					if (pSkillsTxtRecord->wReqInt <= STATLIST_UnitGetStatValue(pUnit, STAT_ENERGY, 0))
 					{
-						return pSkillsTxtRecord->wReqVit <= STATLIST_GetUnitStatUnsigned(pUnit, STAT_VITALITY, 0);
+						return pSkillsTxtRecord->wReqVit <= STATLIST_UnitGetStatValue(pUnit, STAT_VITALITY, 0);
 					}
 				}
 			}
@@ -2505,11 +2505,11 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 		{
 			if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
 			{
-				nDamage = 3 * STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+				nDamage = 3 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 			}
 			else
 			{
-				nDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0) + STATLIST_GetUnitStatUnsigned(pUnit, STAT_STRENGTH, 0) - 20;
+				nDamage = STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) + STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0) - 20;
 			}
 
 			if (nDamage < 1)
@@ -2530,7 +2530,7 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 				}
 				else
 				{
-					nMinDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MINDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
+					nMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
 				}
 
 				nDamage = ((int)nMinDamage) >> 7;
@@ -2572,11 +2572,11 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 		{
 			if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
 			{
-				nDamage = 3 * STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+				nDamage = 3 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 			}
 			else
 			{
-				nDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0) + STATLIST_GetUnitStatUnsigned(pUnit, STAT_STRENGTH, 0) - 20;
+				nDamage = STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) + STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0) - 20;
 			}
 
 			if (nDamage < 1)
@@ -2597,7 +2597,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 				}
 				else
 				{
-					nMaxDamage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MAXDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
+					nMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
 				}
 
 				nDamage = ((int)nMaxDamage) >> 7;
@@ -2664,7 +2664,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 	switch (nElemType)
 	{
 	case ELEMTYPE_FIRE:
-		nPercentage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
+		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
 		if (!nPercentage)
 		{
 			return 0;
@@ -2672,7 +2672,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 
 		return nSrcDamage * nPercentage / 100;
 	case ELEMTYPE_LTNG:
-		nPercentage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
+		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
 		if (!nPercentage)
 		{
 			return 0;
@@ -2681,7 +2681,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 		return nSrcDamage * nPercentage / 100;
 	case ELEMTYPE_COLD:
 	case ELEMTYPE_FREEZE:
-		nPercentage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
+		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
 		if (!nPercentage)
 		{
 			return 0;
@@ -2689,7 +2689,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 
 		return nSrcDamage * nPercentage / 100;
 	case ELEMTYPE_POIS:
-		nPercentage = STATLIST_GetUnitStatUnsigned(pUnit, STAT_PASSIVE_POIS_MASTERY, 0);
+		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_POIS_MASTERY, 0);
 		if (!nPercentage)
 		{
 			return 0;
@@ -3369,7 +3369,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 
 	if (pUnit->dwUnitType != UNIT_PLAYER)
 	{
-		nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_MAGICARROW, 0);
+		nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_MAGICARROW, 0);
 		if (nValue > 0)
 		{
 			if (pValue)
@@ -3379,7 +3379,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 			return 27;
 		}
 
-		nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
+		nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
 		if (nValue > 0)
 		{
 			if (pValue)
@@ -3396,7 +3396,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 		nWeaponClass = UNITS_GetWeaponClass(pUnit);
 		if (nWeaponClass == WEAPONCLASS_BOW)
 		{
-			nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_MAGICARROW, 0);
+			nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_MAGICARROW, 0);
 			if (nValue > 0)
 			{
 				if (pValue)
@@ -3406,7 +3406,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 				return 27;
 			}
 
-			nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
+			nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
 			if (nValue > 0)
 			{
 				if (pValue)
@@ -3420,7 +3420,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 		}
 		else if (nWeaponClass == WEAPONCLASS_XBW)
 		{
-			nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_MAGICARROW, 0);
+			nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_MAGICARROW, 0);
 			if (nValue > 0)
 			{
 				if (pValue)
@@ -3430,7 +3430,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 				return 27;
 			}
 
-			nValue = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
+			nValue = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_EXPLOSIVEARROW, 0);
 			if (nValue > 0)
 			{
 				if (pValue)
@@ -3572,7 +3572,7 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 
 	if (pUnit)
 	{
-		nKickDamage = STATLIST_GetUnitStatSigned(pUnit, STAT_ITEM_KICKDAMAGE, 0);
+		nKickDamage = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_KICKDAMAGE, 0);
 		*pMinDamage += nKickDamage;
 		*pMaxDamage += nKickDamage;
 
@@ -3615,16 +3615,16 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 					nStrBonus = ITEMS_GetStrengthBonus(pBoots);
 					if (nStrBonus)
 					{
-						nDamagePercent += nStrBonus * STATLIST_GetUnitStatUnsigned(pUnit, STAT_STRENGTH, 0) / 100;
+						nDamagePercent += nStrBonus * STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0) / 100;
 					}
 
 					nDexBonus = ITEMS_GetDexBonus(pBoots);
 					if (nDexBonus)
 					{
-						nDamagePercent += nDexBonus * STATLIST_GetUnitStatUnsigned(pUnit, STAT_DEXTERITY, 0) / 100;
+						nDamagePercent += nDexBonus * STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) / 100;
 					}
 
-					nDamagePercent += STATLIST_GetUnitStatUnsigned(pUnit, STAT_DAMAGEPERCENT, 0);
+					nDamagePercent += STATLIST_UnitGetStatValue(pUnit, STAT_DAMAGEPERCENT, 0);
 					if (nDamagePercent <= -90)
 					{
 						nDamagePercent = -90;
@@ -3635,7 +3635,7 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 						nMaxDamage = nMinDamage;
 					}
 
-					*pDamagePercent += STATLIST_GetUnitStatUnsigned(pUnit, STAT_ITEM_MAXDAMAGE_PERCENT, 0) + nDamagePercent;
+					*pDamagePercent += STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_MAXDAMAGE_PERCENT, 0) + nDamagePercent;
 					*pMinDamage += nMinDamage;
 					*pMaxDamage += nMaxDamage;
 				}

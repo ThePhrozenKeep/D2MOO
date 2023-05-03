@@ -114,7 +114,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
     {
         if (nNewValue != nPreviousValue && nPreviousValue > 0)
         {
-            const int32_t nHitpoints = STATLIST_GetUnitStatUnsigned(pOwner, STAT_HITPOINTS, 0);
+            const int32_t nHitpoints = STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0);
             if (nHitpoints > 0)
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
@@ -138,7 +138,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
     {
         if (nNewValue != nPreviousValue && nPreviousValue > 0)
         {
-            const int32_t nMana = STATLIST_GetUnitStatUnsigned(pOwner, STAT_MANA, 0);
+            const int32_t nMana = STATLIST_UnitGetStatValue(pOwner, STAT_MANA, 0);
             if (nMana > 0)
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
@@ -153,7 +153,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
     {
         if (nNewValue != nPreviousValue && nPreviousValue > 0)
         {
-            int32_t nStamina = STATLIST_GetUnitStatUnsigned(pOwner, STAT_STAMINA, 0);
+            int32_t nStamina = STATLIST_UnitGetStatValue(pOwner, STAT_STAMINA, 0);
             if (nStamina > 0)
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
@@ -285,7 +285,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             const uint16_t nLayer = (uint16_t)nLayer_StatId;
             const int32_t nSkillLevel = nLayer & sgptDataTables->nShiftedStuff;
             const int32_t nSkillId = nLayer >> sgptDataTables->nStuff;
-            const int32_t nCharges = (uint8_t)STATLIST_GetUnitStatUnsigned(pOther, nStatId, nLayer);
+            const int32_t nCharges = (uint8_t)STATLIST_UnitGetStatValue(pOther, nStatId, nLayer);
             if (nCharges <= 0 || STATLIST_GetOwner(pOther, nullptr) != pOwner)
             {
                 D2Common_10954(pOwner, nOtherUnitGUID, nSkillId, nSkillLevel, 0, 1);
@@ -398,7 +398,7 @@ int32_t __fastcall sub_6FC42120(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t a3
         return 0;
     }
 
-    int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+    int32_t nQuantity = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
     if (!nQuantity)
     {
         if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOK))
@@ -881,8 +881,8 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
 void __fastcall D2GAME_PickupGold_6FC42DD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pGoldPile)
 {
     const uint32_t nInventoryLimit = UNITS_GetInventoryGoldLimit(pUnit);
-    const uint32_t nUnitGold = STATLIST_GetUnitStatUnsigned(pUnit, STAT_GOLD, 0);
-    const uint32_t nPileGold = STATLIST_GetUnitStatUnsigned(pGoldPile, STAT_GOLD, 0);
+    const uint32_t nUnitGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
+    const uint32_t nPileGold = STATLIST_UnitGetStatValue(pGoldPile, STAT_GOLD, 0);
     uint32_t nRemainingGold = 0;
    
     uint32_t nPickedGold = nPileGold;
@@ -1062,7 +1062,7 @@ void __fastcall sub_6FC43160(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2ItemModeArg
         pItemModeArg->bIsWeapon = 1;
     }
 
-    if (ITEMS_CheckIfThrowable(pItem) || STATLIST_GetUnitStatSigned(pItem, STAT_ITEM_THROWABLE, 0))
+    if (ITEMS_CheckIfThrowable(pItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0))
     {
         pItemModeArg->bIsThrowable = 1;
     }
@@ -1286,7 +1286,7 @@ int32_t __fastcall sub_6FC437F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     D2UnitStrc* pStackItem = nullptr;
     int32_t nCounter = 0;
 
-    while (STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0)
+    while (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0)
     {
         ++nCounter;
 
@@ -1306,8 +1306,8 @@ int32_t __fastcall sub_6FC437F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
         if (ITEMS_AreStackablesEqual(pItem, pStackItem))
         {
-            const int32_t nQuantity1 = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
-            const int32_t nQuantity2 = STATLIST_GetUnitStatUnsigned(pStackItem, STAT_QUANTITY, 0);
+            const int32_t nQuantity1 = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
+            const int32_t nQuantity2 = STATLIST_UnitGetStatValue(pStackItem, STAT_QUANTITY, 0);
             int32_t nQuantity = nQuantity1 + nQuantity2;
             if (nQuantity <= ITEMS_GetTotalMaxStack(pStackItem))
             {
@@ -1315,8 +1315,8 @@ int32_t __fastcall sub_6FC437F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
                 if (ITEMS_HasDurability(pItem))
                 {
-                    const int32_t nDurability = STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0);
-                    if (nDurability < STATLIST_GetUnitStatUnsigned(pStackItem, STAT_DURABILITY, 0))
+                    const int32_t nDurability = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0);
+                    if (nDurability < STATLIST_UnitGetStatValue(pStackItem, STAT_DURABILITY, 0))
                     {
                         STATLIST_SetUnitStat(pStackItem, STAT_DURABILITY, nDurability, 0);
                         D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pStackItem, 1, STAT_DURABILITY, nDurability, 0);
@@ -1438,10 +1438,10 @@ int32_t __fastcall sub_6FC43BF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
         return 0;
     }
 
-    const int32_t nSrcValue = STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+    const int32_t nSrcValue = STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
     D2_ASSERT(nSrcValue >= 0);
 
-    const int32_t nDstValue = STATLIST_GetUnitStatUnsigned(pBook, STAT_QUANTITY, 0);
+    const int32_t nDstValue = STATLIST_UnitGetStatValue(pBook, STAT_QUANTITY, 0);
     D2_ASSERT(nDstValue >= 0);
 
     const int32_t nDstMaxValue = ITEMS_GetTotalMaxStack(pBook);
@@ -2132,9 +2132,9 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
 //D2Game.0x6FC44F00
 void __fastcall sub_6FC44F00(D2UnitStrc* pUnit, D2UnkItemModeStrc* a2)
 {
-    a2->nHitpoints = STATLIST_GetUnitStatUnsigned(pUnit, STAT_HITPOINTS, 0);
-    a2->nMana = STATLIST_GetUnitStatUnsigned(pUnit, STAT_MANA, 0);
-    a2->nStamina = STATLIST_GetUnitStatUnsigned(pUnit, STAT_STAMINA, 0);
+    a2->nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
+    a2->nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
+    a2->nStamina = STATLIST_UnitGetStatValue(pUnit, STAT_STAMINA, 0);
 
     D2SkillStrc* pLeftSkill = UNITS_GetLeftSkill(pUnit);
     if (pLeftSkill)
@@ -3540,7 +3540,7 @@ int32_t __fastcall sub_6FC47470(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nT
         {
             if (ITEMS_GetItemType(pUseItem) == ITEMTYPE_BOOK)
             {
-                int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pUseItem, STAT_QUANTITY, 0) - 1;
+                int32_t nQuantity = STATLIST_UnitGetStatValue(pUseItem, STAT_QUANTITY, 0) - 1;
                 if (nQuantity < 0)
                 {
                     nQuantity = 0;
@@ -3558,7 +3558,7 @@ int32_t __fastcall sub_6FC47470(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nT
         return 0;
     }
 
-    if (ITEMS_GetItemType(pUseItem) == ITEMTYPE_BOOK && STATLIST_GetUnitStatUnsigned(pUseItem, STAT_QUANTITY, 0) <= 0)
+    if (ITEMS_GetItemType(pUseItem) == ITEMTYPE_BOOK && STATLIST_UnitGetStatValue(pUseItem, STAT_QUANTITY, 0) <= 0)
     {
         if (pUnit->pInventory)
         {
@@ -3706,10 +3706,10 @@ int32_t __fastcall sub_6FC47470(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nT
         nSkillId = pBooksTxtRecord->dwScrollSkillId;
     }
 
-    if (nSkillId != -1 && STATLIST_GetUnitStatUnsigned(pUseItem, STAT_QUANTITY, 0) > 0)
+    if (nSkillId != -1 && STATLIST_UnitGetStatValue(pUseItem, STAT_QUANTITY, 0) > 0)
     {
         STATLIST_AddUnitStat(pUseItem, STAT_QUANTITY, -1, 0);
-        D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pUseItem, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pUseItem, STAT_QUANTITY, 0), 0);
+        D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pUseItem, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pUseItem, STAT_QUANTITY, 0), 0);
 
         sub_6FC47C90(pUnit, nSkillId);
         D2GAME_PACKETS_SendPacketSize06_6FC3C850(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0x7C, pUseItem->dwUnitType, pUseItem->dwUnitId);
@@ -3807,7 +3807,7 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 
     if (pItem->dwAnimMode == IMODE_STORED && ITEMS_CheckIfUseable(pItem))
     {
-        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0) && !sub_6FC937A0(pGame, pUnit))
+        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0) && !sub_6FC937A0(pGame, pUnit))
         {
             if (SKILLITEM_pSpell_Handler(pGame, pUnit, pItem, pItem, nX, nY))
             {
@@ -3818,11 +3818,11 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
                         D2BooksTxt* pBooksTxtRecord = DATATBLS_GetBooksTxtRecord(ITEMS_GetSuffixId(pItem, 0));
                         D2_ASSERT(pBooksTxtRecord);
 
-                        if (pBooksTxtRecord->dwBookSkillId != -1 && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0)
+                        if (pBooksTxtRecord->dwBookSkillId != -1 && STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0)
                         {
                             STATLIST_AddUnitStat(pItem, STAT_QUANTITY, -1, 0);
 
-                            D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0), 0);
+                            D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0), 0);
                             D2GAME_PACKETS_SendPacketSize06_6FC3C850(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0x7C, pItem->dwUnitType, pItem->dwUnitId);
                             sub_6FC47C90(pUnit, pBooksTxtRecord->dwBookSkillId);
                         }
@@ -3832,11 +3832,11 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
                         D2BooksTxt* pBooksTxtRecord = DATATBLS_GetBooksTxtRecord(ITEMS_GetSuffixId(pItem, 0));
                         D2_ASSERT(pBooksTxtRecord);
 
-                        if (pBooksTxtRecord->dwScrollSkillId != -1 && STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) > 0)
+                        if (pBooksTxtRecord->dwScrollSkillId != -1 && STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0)
                         {
                             STATLIST_AddUnitStat(pItem, STAT_QUANTITY, -1, 0);
 
-                            D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0), 0);
+                            D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0), 0);
                             D2GAME_PACKETS_SendPacketSize06_6FC3C850(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0x7C, pItem->dwUnitType, pItem->dwUnitId);
                             sub_6FC47C90(pUnit, pBooksTxtRecord->dwScrollSkillId);
                         }
@@ -4055,10 +4055,10 @@ int32_t __fastcall sub_6FC484E0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 
     if (ITEMS_AreStackablesEqual(pItem1, pItem2))
     {
-        const int32_t nSrcValue = STATLIST_GetUnitStatUnsigned(pItem1, STAT_QUANTITY, 0);
+        const int32_t nSrcValue = STATLIST_UnitGetStatValue(pItem1, STAT_QUANTITY, 0);
         D2_ASSERT(nSrcValue >= 0);
 
-        const int32_t nDstValue = STATLIST_GetUnitStatUnsigned(pItem2, STAT_QUANTITY, 0);
+        const int32_t nDstValue = STATLIST_UnitGetStatValue(pItem2, STAT_QUANTITY, 0);
         D2_ASSERT(nDstValue >= 0);
 
         const int32_t nMaxStack = ITEMS_GetTotalMaxStack(pItem2);
@@ -4069,8 +4069,8 @@ int32_t __fastcall sub_6FC484E0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         {
             if (ITEMS_HasDurability(pItem1))
             {
-                const int32_t nDurability = STATLIST_GetUnitStatUnsigned(pItem1, STAT_DURABILITY, 0);
-                if (nDurability < STATLIST_GetUnitStatUnsigned(pItem2, STAT_DURABILITY, 0))
+                const int32_t nDurability = STATLIST_UnitGetStatValue(pItem1, STAT_DURABILITY, 0);
+                if (nDurability < STATLIST_UnitGetStatValue(pItem2, STAT_DURABILITY, 0))
                 {
                     STATLIST_SetUnitStat(pItem2, STAT_DURABILITY, nDurability, 0);
                     D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem2, 1, STAT_DURABILITY, nDurability, 0);
@@ -4775,7 +4775,7 @@ int32_t __fastcall sub_6FC49AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         exit(-1);
     }
 
-    const int32_t nQuantity = STATLIST_GetUnitStatUnsigned(pBook, STAT_QUANTITY, 0);
+    const int32_t nQuantity = STATLIST_UnitGetStatValue(pBook, STAT_QUANTITY, 0);
     if (nQuantity >= ITEMS_GetTotalMaxStack(pBook))
     {
         return 0;
@@ -4803,7 +4803,7 @@ int32_t __fastcall sub_6FC49AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     }
 
     STATLIST_AddUnitStat(pBook, STAT_QUANTITY, 1, 0);
-    D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pBook, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pBook, STAT_QUANTITY, 0), 0);
+    D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pBook, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pBook, STAT_QUANTITY, 0), 0);
     sub_6FC43AF0(pUnit, pBook, 1);
     return 1;
 }
@@ -4971,13 +4971,13 @@ void __fastcall sub_6FC4A2E0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC4A350
 int32_t __fastcall sub_6FC4A350(D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nLengthStatId, int32_t nValueStatId, int32_t nMaxValue)
 {
-    const int32_t nLength = STATLIST_GetUnitStatUnsigned(pItem, nLengthStatId, 0);
+    const int32_t nLength = STATLIST_UnitGetStatValue(pItem, nLengthStatId, 0);
     if (!nLength)
     {
         return 0;
     }
 
-    const int32_t nValue = STATLIST_GetUnitStatUnsigned(pItem, nValueStatId, 0) + 1;
+    const int32_t nValue = STATLIST_UnitGetStatValue(pItem, nValueStatId, 0) + 1;
     if (nValue > nMaxValue)
     {
         return 1;
@@ -5087,7 +5087,7 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
         D2UnitStrc* pItem = INVENTORY_UnitIsItem(i);
         if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_KEY) && ITEMS_GetInvPage(pItem) == 0)
         {
-            if (STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0) - 1 <= 0)
+            if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) - 1 <= 0)
             {
                 D2GAME_UpdateClientItem_6FC3E9D0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pUnit, pItem, 0x20);
                 D2GAME_RemoveItem_6FC471F0(pGame, pUnit, pItem, 0);
@@ -5095,7 +5095,7 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
             else
             {
                 STATLIST_AddUnitStat(pItem, STAT_QUANTITY, -1, 0);
-                D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0), 0);
+                D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0), 0);
             }
 
             return 1;
@@ -5667,7 +5667,7 @@ D2UnitStrc* __fastcall sub_6FC4B430(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
             if (!bSkip && ITEMS_GetAutoAffix(j) == ITEMS_GetAutoAffix(pItem))
             {
-                int32_t nQuantity = STATLIST_GetUnitStatUnsigned(j, STAT_QUANTITY, 0);
+                int32_t nQuantity = STATLIST_UnitGetStatValue(j, STAT_QUANTITY, 0);
                 if (nQuantity < 0)
                 {
                     nQuantity = 0;
@@ -5691,7 +5691,7 @@ void __fastcall sub_6FC4B520(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 {
     STATLIST_AddUnitStat(pItem, STAT_QUANTITY, nValue, 0);
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-    D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(pClient, pItem, 1, STAT_QUANTITY, STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0), 0);
+    D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(pClient, pItem, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0), 0);
     sub_6FC43AF0(pUnit, pItem, nValue);
 }
 
@@ -5795,7 +5795,7 @@ void __fastcall sub_6FC4B740(D2UnitStrc* pUnit, D2UnitStrc* pItem)
         return;
     }
 
-    STATLIST_GetUnitStatUnsigned(pItem, STAT_QUANTITY, 0);
+    STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0);
 
     D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, -1);
     SKILLS_SetQuantity(pSkill, 0);
@@ -6542,7 +6542,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
         const uint16_t nItemFormat = ITEMS_GetItemFormat(pItem);
         if (ITEMS_HasDurability(pItem) && !nItemFormat)
         {
-            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(5 * STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0), 255u), 0);
+            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(5 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(5 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
         }
 
@@ -6668,7 +6668,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
 
         if (ITEMS_HasDurability(pItem) && ITEMS_GetItemFormat(pItem) >= 1u)
         {
-            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(3 * STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0), 255u), 0);
+            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(3 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(3 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
         }
 
@@ -6766,7 +6766,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
         {
             if (ITEMS_HasDurability(pItem) && ITEMS_GetItemFormat(pItem) >= 1u)
             {
-                STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(2 * STATLIST_GetUnitStatUnsigned(pItem, STAT_DURABILITY, 0), 255u), 0);
+                STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(2 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
                 STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(2 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
             }
 

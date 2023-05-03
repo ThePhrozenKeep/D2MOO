@@ -280,7 +280,7 @@ void __fastcall ACT5Q5_RewardPlayer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 
 	const int32_t nMaxLevel = DATATBLS_GetMaxLevel(dwClassId);
-	int32_t nCurrentLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+	int32_t nCurrentLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
 	if (nCurrentLevel >= nMaxLevel)
 	{
@@ -318,7 +318,7 @@ void __fastcall ACT5Q5_RewardPlayer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			PLAYERSTATS_LevelUp(pGame, pUnit);
 
 			nRewardExp -= nDeltaExp;
-			nCurrentLevel = STATLIST_GetUnitStatUnsigned(pUnit, STAT_LEVEL, 0);
+			nCurrentLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 		}
 	}
 	while (nCurrentLevel < nMaxLevel);

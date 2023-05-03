@@ -399,7 +399,7 @@ void __fastcall sub_6FCC5F20(D2UnitStrc* pItem, D2ClientStrc* pClient)
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x80);
     if (pStatList)
     {
-        const int32_t nOverlay = STATLIST_GetStatUnsigned_Layer0((D2StatListExStrc*)pStatList, STAT_UNIT_DOOVERLAY);
+        const int32_t nOverlay = STATLIST_GetTotalStatValue_Layer0((D2StatListExStrc*)pStatList, STAT_UNIT_DOOVERLAY);
         if (nOverlay >= 0 && nOverlay <= sgptDataTables->nOverlayTxtRecordCount)
         {
             if (pItem)

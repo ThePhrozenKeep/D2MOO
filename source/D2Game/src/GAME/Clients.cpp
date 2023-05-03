@@ -562,7 +562,7 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
             pCharacterPreviewInfo->nClass = 1;
         }
         
-        const uint32_t nPlayerLevel = STATLIST_GetUnitStatUnsigned(pPlayer, STAT_LEVEL, 0);
+        const uint32_t nPlayerLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
 
         if (nPlayerLevel != 0 && nPlayerLevel <= 99)
         {
