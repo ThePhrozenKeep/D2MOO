@@ -371,7 +371,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimData                                                   @10325
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10326
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionX                                                 @10327
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetXForStaticUnit                                             @10328
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetXForStaticUnit                                             @10328
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10329
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetPrecisionY                                                 @10330
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetYForStaticUnit                                             @10331
@@ -385,23 +385,23 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStashGoldLimit                                             @10339
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetX                                                    @10340
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetY                                                    @10341
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetRoom                                                       @10342
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_ResetRoom                                                     @10343
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetUnitForDynamicUnit                                   @10344
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetTypeFromDynamicUnit                                  @10345
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetTargetGUIDFromDynamicUnit                                  @10346
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetTargetUnitForPlayerOrMonster                               @10347
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_ChangeAnimMode                                                @10348
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRoom                                                       @10342
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_ResetRoom                                                     @10343
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetUnitForDynamicUnit                                   @10344
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetTypeFromDynamicUnit                                  @10345
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetTargetGUIDFromDynamicUnit                                  @10346
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetUnitForPlayerOrMonster                               @10347
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_ChangeAnimMode                                                @10348
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimStartFrame                                             @10349
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_InitializeStaticPath                                          @10350
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_BlockCollisionPath                                            @10351
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_FreeCollisionPath                                             @10352
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetNameOffsetFromObject                                       @10353
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetNameOffsetFromObject                                       @10353
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRunAndWalkSpeedForPlayer                                   @10354
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsCurrentRoomInvalid                                          @10355
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetCurrentRoomInvalid                                         @10356
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_RefreshInventory                                              @10357
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetSkillFromSkillId                                           @10358
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetSkillFromSkillId                                           @10358
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsSoftMonster                                                 @10359
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetMeleeRange                                                 @10360
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMeleeRange                                                @10361

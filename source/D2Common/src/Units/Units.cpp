@@ -594,13 +594,13 @@ void __stdcall UNITS_ResetRoom(D2UnitStrc* pUnit)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pUnit->pStaticPath->pRoom = NULL;
+		pUnit->pStaticPath->pRoom = nullptr;
 		break;
 
 	default:
 		if (pUnit->pDynamicPath)
 		{
-			PATH_SetRoom(pUnit->pDynamicPath, NULL);
+			PATH_SetRoom(pUnit->pDynamicPath, nullptr);
 		}
 		break;
 	}
@@ -617,17 +617,12 @@ D2RoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit)
 	case UNIT_ITEM:
 	case UNIT_TILE:
 		return pUnit->pStaticPath->pRoom;
-
 	default:
 		if (pUnit->pDynamicPath)
 		{
 			return PATH_GetRoom(pUnit->pDynamicPath);
 		}
-		else
-		{
-			return NULL;
-		}
-		break;
+		return nullptr;
 	}
 }
 
@@ -828,8 +823,8 @@ BOOL __stdcall UNITS_ChangeAnimMode(D2UnitStrc* pUnit, int nMode)
 			UNITS_SetAnimStartFrame(pUnit);
 			return TRUE;
 		}
-
-		if (pUnit->dwUnitType != UNIT_MONSTER || pUnit->dwAnimMode != MONMODE_NEUTRAL)
+		// Force refresh unless the unit is a resting (neutral) monster
+		if (!(pUnit->dwUnitType == UNIT_MONSTER && pUnit->dwAnimMode == MONMODE_NEUTRAL))
 		{
 			UNITROOM_RefreshUnit(pUnit);
 			pUnit->dwFlags |= UNITFLAG_DOUPDATE;
@@ -1904,28 +1899,16 @@ BOOL __stdcall UNITS_HasCollision(D2UnitStrc* pUnit)
 D2SkillStrc* __stdcall UNITS_GetSkillFromSkillId(D2UnitStrc* pUnit, int nSkillId)
 {
 	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
-	D2SkillStrc* pSkill = NULL;
 
 	D2_ASSERT(pSkillsTxtRecord);
 	D2_ASSERT(pUnit);
 
-	pSkill = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills);
-	if (pSkill)
+	D2SkillStrc* pSkill = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills);
+	while (pSkill && pSkill->pSkillsTxt != pSkillsTxtRecord)
 	{
-		while (pSkill->pSkillsTxt != pSkillsTxtRecord)
-		{
-			pSkill = pSkill->pNextSkill;
-
-			if (!pSkill)
-			{
-				return NULL;
-			}
-		}
-
-		return pSkill;
+		pSkill = pSkill->pNextSkill;
 	}
-
-	return NULL;
+	return pSkill;
 }
 
 //D2Common.0x6FDBFC10 (#10392)
