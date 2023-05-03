@@ -77,7 +77,7 @@ void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool)
 
 	gpBeltsTxtTable = (D2BeltsTxt*)DATATBLS_CompileTxt(pMemPool, "belts", pTbl, &nRecordCount, sizeof(D2BeltsTxt));
 
-	D2_ASSERT((nRecordCount / NUM_GAME_RESOLUTIONS) == 7);
+	D2_ASSERT((nRecordCount / NUM_GAME_RESOLUTIONS) == BELT_IDX_COUNT_PER_RESOLUTION);
 }
 
 //D2Common.0x6FD493A0
@@ -90,7 +90,7 @@ void __fastcall DATATBLS_UnloadBeltsTxt()
 void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt* pRecord)
 {
 	D2_ASSERT(gpBeltsTxtTable);
-	memcpy(pRecord, &gpBeltsTxtTable[nIndex + 7 * bHigherRes], sizeof(D2BeltsTxt));
+	*pRecord = gpBeltsTxtTable[nIndex + BELT_IDX_COUNT_PER_RESOLUTION * bHigherRes];
 }
 
 //D2Common.0x6FD49420 (#10639)
@@ -100,7 +100,7 @@ void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2Inv
 
 	D2_ASSERT(gpBeltsTxtTable);
 
-	ptBeltsTxtRecord = &gpBeltsTxtTable[nIndex + 7 * bHigherRes];
+	ptBeltsTxtRecord = &gpBeltsTxtTable[nIndex + BELT_IDX_COUNT_PER_RESOLUTION * bHigherRes];
 
 	D2_ASSERT(ptBeltsTxtRecord);
 
