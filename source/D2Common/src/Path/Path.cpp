@@ -232,10 +232,41 @@ BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bFor
 	return FALSE;
 }
 
+// Author: Araksson
+// Inlined (1.10f)
+// D2Common.0x6FD85780 (1.13C)
+static int PATH_MissileToTarget(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit)
+{
+	switch (pPath->dwPathType)
+	{
+	case PATHTYPE_MISSILE:
+		if (!PATH_ComputePathClassicMissile(pPath, pUnit))
+		{
+			pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+			return 0;
+		}
+		break;
+	case PATHTYPE_CHARGEDBOLT:
+		PATH_ComputePathChargedBolt_6FDAB4A0(pPath, &pUnit->pSeed);
+		break;
+	case PATHTYPE_BLESSEDHAMMER:
+		PATH_ComputePathBlessedHammer_6FDAB3C0(pPath);
+		break;
+	default:
+		FOG_DisplayWarning("Not a missile path!", __FILE__, __LINE__);
+		pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+		return 0;
+	}
+
+	pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00020;
+	return pPath->dwPathPoints;
+}
+
 //D2Common.0x6FDA8600
 int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, int a3)
 {
 	UNIMPLEMENTED();
+	// Uses PATH_MissileToTarget
 	return 0;
 }
 
