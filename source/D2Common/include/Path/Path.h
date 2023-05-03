@@ -213,7 +213,7 @@ D2COMMON_DLL_DECL BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc
 //D2Common.0x6FDA8600
 int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, int a3);
 //D2Common.0x6FDA8E30
-int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
+int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0
 void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA90C0

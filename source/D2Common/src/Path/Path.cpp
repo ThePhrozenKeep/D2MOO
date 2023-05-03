@@ -240,8 +240,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit,
 }
 
 //D2Common.0x6FDA8E30
-//TODO: Find a name
-int __fastcall sub_6FDA8E30(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
+int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit)
 {
 	int nXDistance = 0;
 	int nYDistance = 0;
