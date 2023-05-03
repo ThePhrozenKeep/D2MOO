@@ -408,8 +408,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionWithUnit                                         @10362
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionBetweenInteractingUnits                          @10363
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_TestCollisionByCoordinates                                    @10364
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetHitClass                                                   @10365
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetWeaponClass                                                @10366
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetHitClass                                                   @10365
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetWeaponClass                                                @10366
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetBeltType                                                   @10367
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetCurrentLifePercentage                                      @10368
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetAnimOrSeqMode                                              @10369

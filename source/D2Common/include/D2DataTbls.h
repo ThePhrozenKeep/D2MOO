@@ -102,6 +102,36 @@ struct D2HireDescTxt
 	uint32_t dwCode;						//0x00
 };
 
+enum D2C_HitClassIds {
+	// Base
+	HITCLASS_None                = 0,
+	HITCLASS_HandToHand          = 1,
+	HITCLASS_OneHandSwingVsSmall = 2,
+	HITCLASS_OneHandSwingVsLarge = 3,
+	HITCLASS_TwoHandSwingVsSmall = 4,
+	HITCLASS_TwoHandSwingVsLarge = 5,
+	HITCLASS_OneHandThrust       = 6,
+	HITCLASS_TwoHandThrust       = 7,
+	HITCLASS_Club                = 8,
+	HITCLASS_Staff               = 9,
+	HITCLASS_Bow                 = 10,
+	HITCLASS_Crossbow			 = 11,
+	HITCLASS_Claw				 = 12,
+	HITCLASS_Overlay			 = 13,
+	// Layers
+	HITCLASS_Layer_Double	     = 16,
+	HITCLASS_Layer_Fire		     = 32,
+	HITCLASS_Layer_Cold		     = 48,
+	HITCLASS_Layer_Lightning	 = 64,
+	HITCLASS_Layer_Poison	     = 80,
+	HITCLASS_Layer_Stun		     = 96,
+	HITCLASS_Layer_Bash		     = 112,
+	HITCLASS_Layer_Thorns	     = 128,
+	HITCLASS_Layer_Sanctuary	 = 144,
+	HITCLASS_Layer_SilentVoice   = 160,
+	HITCLASS_Layer_Goo		     = 176,
+};
+
 struct D2HitClassTxt
 {
 	uint32_t dwCode;						//0x00

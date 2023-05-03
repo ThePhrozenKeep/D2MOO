@@ -3039,46 +3039,40 @@ BOOL __stdcall UNITS_IsInMovingModeEx(D2UnitStrc* pUnit)
 //D2Common.0x6FDC1C50 (#10365)
 int __fastcall UNITS_GetHitClass(D2UnitStrc* pUnit)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	D2UnitStrc* pItem = NULL;
-
 	if (pUnit)
 	{
 		if (pUnit->dwUnitType == UNIT_PLAYER)
 		{
-			pItem = D2Common_10434(pUnit, 0);
-			if (pItem)
+			if (D2UnitStrc* pItem = D2Common_10434(pUnit, FALSE))
 			{
 				return ITEMS_GetHitClassFromItem(pItem);
 			}
-
-			return 1;
+			else
+			{
+				return HITCLASS_HandToHand;
+			}
 		}
 		else if (pUnit->dwUnitType == UNIT_MONSTER)
 		{
-			pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId);
-			if (pMonStats2TxtRecord)
+			if (D2MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pUnit->dwClassId))
 			{
 				return pMonStats2TxtRecord->nHitClass;
 			}
 		}
 	}
 
-	return 0;
+	return HITCLASS_None;
 }
 
 //D2Common.0x6FDC1CE0 (#10366)
 int __fastcall UNITS_GetWeaponClass(D2UnitStrc* pUnit)
 {
-	D2UnitStrc* pItem = NULL;
-
-	pItem = D2Common_10434(pUnit, 1);
-	if (pItem)
+	if (D2UnitStrc* pItem = D2Common_10434(pUnit, TRUE))
 	{
 		return ITEMS_GetWeaponClassId(pItem);
 	}
 
-	return 0;
+	return WEAPONCLASS_HTH;
 }
 
 //D2Common.0x6FDC1D00 (#10438)
