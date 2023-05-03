@@ -867,7 +867,7 @@ void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataSt
 
     if (pRoom != pPlayerRoom)
     {
-        D2Common_10356(pPlayer, 1);
+        UNITS_SetCurrentRoomInvalid(pPlayer, 1);
         sub_6FCBB190(pGame, pPlayer, pPlayerRoom);
     }
 

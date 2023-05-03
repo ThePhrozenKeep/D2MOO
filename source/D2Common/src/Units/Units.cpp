@@ -841,23 +841,23 @@ BOOL __stdcall UNITS_ChangeAnimMode(D2UnitStrc* pUnit, int nMode)
 
 //D2Common.0x6FDBEAD0 (#10355)
 //TODO: Find a name
-int __stdcall D2Common_10355(D2UnitStrc* pUnit)
+int __stdcall UNITS_IsCurrentRoomInvalid(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
 	if (pUnit->dwUnitType == UNIT_OBJECT || pUnit->dwUnitType == UNIT_ITEM)
 	{
-		return pUnit->pStaticPath->unk0x1D[0];
+		return pUnit->pStaticPath->bRoomNeedsUpdate;
 	}
 	else
 	{
-		return D2Common_10172(pUnit->pDynamicPath);
+		return PATH_IsCurrentRoomInvalid(pUnit->pDynamicPath);
 	}
 }
 
 //D2Common.0x6FDBEB20 (#10356)
 //TODO: Find a name
-void __stdcall D2Common_10356(D2UnitStrc* pUnit, int a2)
+void __stdcall UNITS_SetCurrentRoomInvalid(D2UnitStrc* pUnit, int a2)
 {
 	D2_ASSERT(pUnit);
 
@@ -866,13 +866,13 @@ void __stdcall D2Common_10356(D2UnitStrc* pUnit, int a2)
 	case UNIT_OBJECT:
 	case UNIT_ITEM:
 	case UNIT_TILE:
-		pUnit->pStaticPath->unk0x1D[0] = a2 != 0;
+		pUnit->pStaticPath->bRoomNeedsUpdate = a2 != 0;
 		return;
 
 	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 	case UNIT_MISSILE:
-		D2Common_10173(pUnit->pDynamicPath, a2);
+		PATH_SetCurrentRoomInvalid(pUnit->pDynamicPath, a2);
 		return;
 
 	default:

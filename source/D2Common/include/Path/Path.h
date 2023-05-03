@@ -28,7 +28,7 @@ enum D2PathTypes
 
 enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
-	PATH_UNKNOWN_FLAG_0x00002 = 0x00002,
+	PATH_CURRENT_ROOM_INVALID = 0x00002,
 	PATH_UNUSED_FLAG_0x00004  = 0x00004, // This is unused
 	PATH_UNKNOWN_FLAG_0x00008 = 0x00008, // Set when rider and mount have the same position
 	PATH_UNKNOWN_FLAG_0x00010 = 0x00010,
@@ -157,7 +157,8 @@ struct D2StaticPathStrc
 	D2CoordStrc tGameCoords;				//0x0C
 	uint32_t unk0x14[2];					//0x14
 	uint8_t nDirection;						//0x1C
-	uint8_t unk0x1D[3];						//0x1D
+	uint8_t bRoomNeedsUpdate;				//0x1D
+	uint8_t unk0x1E[2];						//0x1E
 };
 
 struct D2MapAIPathPositionStrc
@@ -310,9 +311,9 @@ D2COMMON_DLL_DECL void __stdcall PATH_ClearNextRoom(D2DynamicPathStrc* pDynamicP
 //D2Common.0x6FDA9E90 (#10170)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_10170_PathSetTargetPos(D2DynamicPathStrc* pDynamicPath, int nX, int nY);
 //D2Common.0x6FDA9EC0 (#10172)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_10172(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL BOOL __stdcall PATH_IsCurrentRoomInvalid(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9ED0 (#10173)
-D2COMMON_DLL_DECL void __stdcall D2Common_10173(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
+D2COMMON_DLL_DECL void __stdcall PATH_SetCurrentRoomInvalid(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
 //D2Common.0x6FDA9F00 (#10145)
 D2COMMON_DLL_DECL void __stdcall PATH_SetUnusedFlag_0x00004(D2DynamicPathStrc* pDynamicPath, BOOL bSet);
 //D2Common.0x6FDA9F30 (#10174)

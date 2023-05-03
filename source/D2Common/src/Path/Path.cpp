@@ -1011,22 +1011,22 @@ void __stdcall D2COMMON_10170_PathSetTargetPos(D2DynamicPathStrc* pDynamicPath, 
 
 //D2Common.0x6FDA9EC0 (#10172)
 //TODO: Find a name
-BOOL __stdcall D2Common_10172(D2DynamicPathStrc* pDynamicPath)
+BOOL __stdcall PATH_IsCurrentRoomInvalid(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00002;
+	return pDynamicPath->dwFlags & PATH_CURRENT_ROOM_INVALID;
 }
 
 //D2Common.0x6FDA9ED0 (#10173)
 //TODO: Find a name
-void __stdcall D2Common_10173(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
+void __stdcall PATH_SetCurrentRoomInvalid(D2DynamicPathStrc* pDynamicPath, BOOL bSet)
 {
 	if (bSet)
 	{
-		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00002;
+		pDynamicPath->dwFlags |= PATH_CURRENT_ROOM_INVALID;
 	}
 	else
 	{
-		pDynamicPath->dwFlags &= (~PATH_UNKNOWN_FLAG_0x00002);
+		pDynamicPath->dwFlags &= (~PATH_CURRENT_ROOM_INVALID);
 	}
 }
 

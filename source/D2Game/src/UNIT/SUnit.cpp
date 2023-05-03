@@ -214,7 +214,7 @@ D2UnitStrc* __fastcall SUNIT_GetNextUnitFromList(D2UnitStrc* pUnit)
 //D2Game.0x6FCBB190
 void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom)
 {
-    if (!D2Common_10355(pUnit))
+    if (!UNITS_IsCurrentRoomInvalid(pUnit))
     {
         return;
     }
@@ -349,7 +349,7 @@ void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* p
         ++nPreviousCounter;
     }
 
-    D2Common_10173(pUnit->pDynamicPath, 0);
+    PATH_SetCurrentRoomInvalid(pUnit->pDynamicPath, 0);
 }
 
 //D2Game.0x6FCBB440
@@ -772,7 +772,7 @@ void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc*
 
     if (!a6)
     {
-        D2Common_10356(pUnit, 1);
+        UNITS_SetCurrentRoomInvalid(pUnit, 1);
     }
 }
 
@@ -878,7 +878,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
         UNITROOM_RefreshUnit(pUnit);
     }
 
-    D2Common_10356(pUnit, 1);
+    UNITS_SetCurrentRoomInvalid(pUnit, 1);
 }
 
 //D2Game.0x6FCBC280
@@ -909,7 +909,7 @@ void __fastcall sub_6FCBC300(D2GameStrc* pGame, D2UnitStrc* pUnit)
     STATLIST_FreeModStats(pUnit);
     D2GAME_SUNITMSG_FreeUnitMessages_6FCC6790(pUnit);
     pUnit->dwFlags &= ~(UNITFLAG_DOUPDATE | UNITFLAG_INITSEEDSET);
-    D2Common_10356(pUnit, 0);
+    UNITS_SetCurrentRoomInvalid(pUnit, 0);
     pUnit->dwFlags &= ~(UNITFLAG_HASEVENTSOUND | UNITFLAG_UPGRLIFENHITCLASS);
     pUnit->dwFlagEx &= 0xFFDEE7FF;
     STATES_ClearGfxStateFlags(pUnit);
@@ -1175,7 +1175,7 @@ int32_t __fastcall sub_6FCBC930(D2GameStrc* pGame, D2UnitStrc* pMissile)
 
     sub_6FCBC7E0(pGame, pMissile);
     const int32_t v4 = 2 - (D2Common_10226(pMissile, 1024) != 0);
-    if (D2Common_10355(pMissile))
+    if (UNITS_IsCurrentRoomInvalid(pMissile))
     {
         sub_6FCBB190(pGame, pMissile, 0);
     }

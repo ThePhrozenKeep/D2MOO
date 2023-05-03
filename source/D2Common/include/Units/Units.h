@@ -281,9 +281,9 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit);
 //D2Common.0x6FDBEA60 (#10348)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_ChangeAnimMode(D2UnitStrc* pUnit, int nMode);
 //D2Common.0x6FDBEAD0 (#10355)
-D2COMMON_DLL_DECL int __stdcall D2Common_10355(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall UNITS_IsCurrentRoomInvalid(D2UnitStrc* pUnit);
 //D2Common.0x6FDBEB20 (#10356)
-D2COMMON_DLL_DECL void __stdcall D2Common_10356(D2UnitStrc* pUnit, int a2);
+D2COMMON_DLL_DECL void __stdcall UNITS_SetCurrentRoomInvalid(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDBEB80 (#10357)
 D2COMMON_DLL_DECL void __stdcall UNITS_RefreshInventory(D2UnitStrc* pUnit, BOOL bSetFlag);
 //D2Common.0x6FDBEBE0 (#10409)

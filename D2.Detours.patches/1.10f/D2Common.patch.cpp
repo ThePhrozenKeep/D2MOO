@@ -215,8 +215,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_ClearNextRoom                                                  @10169
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10170_PathSetTargetPos                                     @10170
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetTypeAndGUID                                           @10171
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10172                                                      @10172
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10173                                                      @10173
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_IsCurrentRoomInvalid                                           @10172
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetCurrentRoomInvalid                                          @10173
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetUnusedFlag_0x00004                                          @10174
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10175_PathGetFirstPointX                                   @10175
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10176_PathGetFirstPointY                                   @10176
@@ -398,8 +398,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_FreeCollisionPath                                             @10352
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetNameOffsetFromObject                                       @10353
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetRunAndWalkSpeedForPlayer                                   @10354
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10355                                                      @10355
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10356                                                      @10356
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsCurrentRoomInvalid                                          @10355
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetCurrentRoomInvalid                                         @10356
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_RefreshInventory                                              @10357
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetSkillFromSkillId                                           @10358
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsSoftMonster                                                 @10359
