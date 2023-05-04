@@ -132,64 +132,64 @@ struct D2TargetNodeStrc
 
 struct D2GameStrc
 {
-	uint32_t nHashKey;							//0x00
-	uint32_t __0004[3];							//0x04
-	D2GameStrc* pNext;							//0x10
-	uint32_t __0014;							//0x14
-	LPCRITICAL_SECTION lpCriticalSection;		//0x18
-	void* pMemoryPool;							//0x1C
-	uint32_t nGameData;							//0x20
-	uint32_t unk0x24;							//0x24
-	uint16_t nServerToken;						//0x28
-	char szGameName[16];						//0x2A
-	char szGamePassword[16];					//0x3A
-	char szGameDesc[32];						//0x4A
-	uint8_t nGameType;							//0x6A
-	uint8_t nArenaTemplate;						//0x6B
-	uint8_t unk0x6C;							//0x6C
-	uint8_t nDifficulty;						//0x6D
-	uint8_t unk0x6E;							//0x6E
-	uint8_t unk0x6F;							//0x6F
-	BOOL bExpansion;							//0x70
-	uint32_t dwGameType;						//0x74 1=Ladder
-	uint16_t wItemFormat;						//0x78
-	uint16_t unk0x7A;							//0x7A
-	uint32_t dwInitSeed;						//0x7C
-	uint32_t dwObjSeed;							//0x80
-	uint32_t InitSeed;							//0x84
-	D2ClientStrc* pClientList;					//0x88
-	uint32_t nClients;							//0x8C
-	uint32_t dwSpawnedUnits[UNIT_TYPES_COUNT];	//0x90
-	int32_t dwGameFrame;						//0xA8
-	uint32_t unk0xAC[3];						//0xAC
-	D2EventTimerQueueStrc* pTimerQueue;			//0xB8
-	D2DrlgActStrc* pAct[5];						//0xBC
-	D2SeedStrc pGameSeed;						//0xD0
-	D2InactiveUnitListStrc* pInactiveUnitList[5];//0xD8
-	uint32_t dwMonSeed;							//0xEC
-	D2MonsterRegionStrc* pMonReg[1024];			//0xF0
-	D2ObjectControlStrc* pObjectControl;		//0x10F0
-	D2QuestInfoStrc* pQuestControl;				//0x10F4
-	D2TargetNodeStrc* pTargetNodes[10];			//0x10F8
-	D2UnitStrc* pUnitList[5][128];				//0x1120 Note: This is not indexed by UnitType!! UNIT_MISSILE is index 4 and UNIT_ITEM is index 3
-	D2UnitStrc* pTileList;						//0x1B20
-	uint32_t dwUniqueFlags[128];				//0x1B24
-	D2NpcControlStrc* pNpcControl;				//0x1D24
-	D2ArenaStrc* pArenaCtrl;					//0x1D28
-	D2PartyControlStrc* pPartyControl;			//0x1D2C
-	uint8_t nBossFlagList[64];					//0x1D30
-	uint32_t dwMonModeData[17];					//0x1D70
-	uint32_t nMonModeData;						//0x1DB4
-	uint32_t unk0x1DB8[2];						//0x1DB8
-	uint32_t nTickRelated;						//0x1DC0
-	uint32_t nSyncTimer;						//0x1DC4
+	uint32_t nHashKey;								//0x00
+	uint32_t __0004[3];								//0x04
+	D2GameStrc* pNext;								//0x10
+	uint32_t __0014;								//0x14
+	LPCRITICAL_SECTION lpCriticalSection;			//0x18
+	void* pMemoryPool;								//0x1C
+	uint32_t nGameData;								//0x20
+	uint32_t unk0x24;								//0x24
+	uint16_t nServerToken;							//0x28
+	char szGameName[16];							//0x2A
+	char szGamePassword[16];						//0x3A
+	char szGameDesc[32];							//0x4A
+	uint8_t nGameType;								//0x6A
+	uint8_t nArenaTemplate;							//0x6B
+	uint8_t unk0x6C;								//0x6C
+	uint8_t nDifficulty;							//0x6D
+	uint8_t unk0x6E;								//0x6E
+	uint8_t unk0x6F;								//0x6F
+	BOOL bExpansion;								//0x70
+	uint32_t dwGameType;							//0x74 1=Ladder
+	uint16_t wItemFormat;							//0x78
+	uint16_t unk0x7A;								//0x7A
+	uint32_t dwInitSeed;							//0x7C
+	uint32_t dwObjSeed;								//0x80
+	uint32_t InitSeed;								//0x84
+	D2ClientStrc* pClientList;						//0x88
+	uint32_t nClients;								//0x8C
+	uint32_t dwLastUsedUnitGUID[UNIT_TYPES_COUNT];	//0x90
+	int32_t dwGameFrame;							//0xA8
+	uint32_t unk0xAC[3];							//0xAC
+	D2EventTimerQueueStrc* pTimerQueue;				//0xB8
+	D2DrlgActStrc* pAct[5];							//0xBC
+	D2SeedStrc pGameSeed;							//0xD0
+	D2InactiveUnitListStrc* pInactiveUnitList[5];	//0xD8
+	uint32_t dwMonSeed;								//0xEC
+	D2MonsterRegionStrc* pMonReg[1024];				//0xF0
+	D2ObjectControlStrc* pObjectControl;			//0x10F0
+	D2QuestInfoStrc* pQuestControl;					//0x10F4
+	D2TargetNodeStrc* pTargetNodes[10];				//0x10F8
+	D2UnitStrc* pUnitList[5][128];					//0x1120 Note: This is not indexed by UnitType!! UNIT_MISSILE is index 4 and UNIT_ITEM is index 3
+	D2UnitStrc* pTileList;							//0x1B20
+	uint32_t dwUniqueFlags[128];					//0x1B24
+	D2NpcControlStrc* pNpcControl;					//0x1D24
+	D2ArenaStrc* pArenaCtrl;						//0x1D28
+	D2PartyControlStrc* pPartyControl;				//0x1D2C
+	uint8_t nBossFlagList[64];						//0x1D30
+	uint32_t dwMonModeData[17];						//0x1D70
+	uint32_t nMonModeData;							//0x1DB4
+	uint32_t unk0x1DB8[2];							//0x1DB8
+	uint32_t nTickRelated;							//0x1DC0
+	uint32_t nSyncTimer;							//0x1DC4
 
-	uint32_t unk0x1DC8;							//0x1DC8
-	uint32_t unk0x1DCC;							//0x1DCC
-	uint32_t unk0x1DD0;							//0x1DD0
-	uint32_t unk0x1DD4;							//0x1DD4
-	uint32_t unk0x1DD8;							//0x1DD8
-	uint32_t unk0x1DDC;							//0x1DDC
+	uint32_t unk0x1DC8;								//0x1DC8
+	uint32_t unk0x1DCC;								//0x1DCC
+	uint32_t unk0x1DD0;								//0x1DD0
+	uint32_t unk0x1DD4;								//0x1DD4
+	uint32_t unk0x1DD8;								//0x1DD8
+	uint32_t unk0x1DDC;								//0x1DDC
 };
 
 struct D2GameStatisticsStrc

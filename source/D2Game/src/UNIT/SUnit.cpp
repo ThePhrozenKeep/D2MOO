@@ -486,25 +486,25 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
     {
         D2_ASSERT(nUnitType < 6);
 
-        nUnitGUID = pGame->dwSpawnedUnits[nUnitType] + 1;
-        if (pGame->dwSpawnedUnits[nUnitType] == -2)
+        nUnitGUID = pGame->dwLastUsedUnitGUID[nUnitType] + 1;
+        if (pGame->dwLastUsedUnitGUID[nUnitType] == -2)
         {
             nUnitGUID = 1;
         }
 
-        pGame->dwSpawnedUnits[nUnitType] = nUnitGUID;
+        pGame->dwLastUsedUnitGUID[nUnitType] = nUnitGUID;
     }
     else
     {
         if (!(a7 & 2))
         {
-            nUnitGUID = pGame->dwSpawnedUnits[nUnitType] + 1;
-            if (pGame->dwSpawnedUnits[nUnitType] == -2)
+            nUnitGUID = pGame->dwLastUsedUnitGUID[nUnitType] + 1;
+            if (pGame->dwLastUsedUnitGUID[nUnitType] == -2)
             {
                 nUnitGUID = 1;
             }
 
-            pGame->dwSpawnedUnits[nUnitType] = nUnitGUID;
+            pGame->dwLastUsedUnitGUID[nUnitType] = nUnitGUID;
         }
         else
         {

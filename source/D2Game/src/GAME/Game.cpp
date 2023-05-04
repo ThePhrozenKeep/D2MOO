@@ -492,12 +492,12 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         pGame->dwGameType = 0;
     }
 
-    pGame->dwSpawnedUnits[0] = 0;
-    pGame->dwSpawnedUnits[1] = 0;
-    pGame->dwSpawnedUnits[2] = 0;
-    pGame->dwSpawnedUnits[3] = 0;
-    pGame->dwSpawnedUnits[4] = 0;
-    pGame->dwSpawnedUnits[5] = 0;
+    pGame->dwLastUsedUnitGUID[0] = 0;
+    pGame->dwLastUsedUnitGUID[1] = 0;
+    pGame->dwLastUsedUnitGUID[2] = 0;
+    pGame->dwLastUsedUnitGUID[3] = 0;
+    pGame->dwLastUsedUnitGUID[4] = 0;
+    pGame->dwLastUsedUnitGUID[5] = 0;
 
     pGame->nDifficulty = (nFlags >> 12) & 7;
 
@@ -753,12 +753,12 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     GAME_ResolveGameNameConflict(pGame, szGameName, nClientId);
     pGame->nDifficulty = nDifficulty;
     pGame->nGameType = nGameType;
-    pGame->dwSpawnedUnits[0] = 0;
-    pGame->dwSpawnedUnits[1] = 0;
-    pGame->dwSpawnedUnits[2] = 0;
-    pGame->dwSpawnedUnits[3] = 0;
-    pGame->dwSpawnedUnits[4] = 0;
-    pGame->dwSpawnedUnits[5] = 0;
+    pGame->dwLastUsedUnitGUID[0] = 0;
+    pGame->dwLastUsedUnitGUID[1] = 0;
+    pGame->dwLastUsedUnitGUID[2] = 0;
+    pGame->dwLastUsedUnitGUID[3] = 0;
+    pGame->dwLastUsedUnitGUID[4] = 0;
+    pGame->dwLastUsedUnitGUID[5] = 0;
     pGame->nArenaTemplate = nArenaTemplate;
 
     if (nFlags & 0x100000)
@@ -3074,12 +3074,12 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     pGameInfo->nServerToken = pGame->nServerToken;
     pGameInfo->nInitSeed = pGame->dwInitSeed;
     pGameInfo->nClients = pGame->nClients;
-    pGameInfo->nSpawnedPlayers = pGame->dwSpawnedUnits[0];
-    pGameInfo->nSpawnedMonsters = pGame->dwSpawnedUnits[1];
-    pGameInfo->nSpawnedObjects = pGame->dwSpawnedUnits[2];
-    pGameInfo->nSpawnedMissiles = pGame->dwSpawnedUnits[3];
-    pGameInfo->nSpawnedItems = pGame->dwSpawnedUnits[4];
-    pGameInfo->nSpawnedTiles = pGame->dwSpawnedUnits[5];
+    pGameInfo->nSpawnedPlayers = pGame->dwLastUsedUnitGUID[0];
+    pGameInfo->nSpawnedMonsters = pGame->dwLastUsedUnitGUID[1];
+    pGameInfo->nSpawnedObjects = pGame->dwLastUsedUnitGUID[2];
+    pGameInfo->nSpawnedMissiles = pGame->dwLastUsedUnitGUID[3];
+    pGameInfo->nSpawnedItems = pGame->dwLastUsedUnitGUID[4];
+    pGameInfo->nSpawnedTiles = pGame->dwLastUsedUnitGUID[5];
 
     pGameInfo->nPlayers = 0;
     for (int32_t i = 0; i < 128; ++i)

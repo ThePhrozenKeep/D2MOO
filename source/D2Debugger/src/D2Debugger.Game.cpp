@@ -170,13 +170,13 @@ bool D2DebugGame(D2GameStrc* pGame)
         if(ImGui::SmallButton(bFreezeGame ? ICON_FA_PLAY : ICON_FA_PAUSE)) bFreezeGame = !bFreezeGame;
 
         ImGui::Separator();
-        ImGui::Text("Spawned units");
-        ImGui::BulletText("Players: %d", pGame->dwSpawnedUnits[UNIT_PLAYER]);
-        ImGui::BulletText("Monsters: %d", pGame->dwSpawnedUnits[UNIT_MONSTER]);
-        ImGui::BulletText("Objects: %d", pGame->dwSpawnedUnits[UNIT_OBJECT]);
-        ImGui::BulletText("Missiles: %d", pGame->dwSpawnedUnits[UNIT_MISSILE]);
-        ImGui::BulletText("Items: %d", pGame->dwSpawnedUnits[UNIT_ITEM]);
-        ImGui::BulletText("Tiles: %d", pGame->dwSpawnedUnits[UNIT_TILE]);
+        ImGui::Text("Last used GUID");
+        ImGui::BulletText("Players: %d", pGame->dwLastUsedUnitGUID[UNIT_PLAYER]);
+        ImGui::BulletText("Monsters: %d", pGame->dwLastUsedUnitGUID[UNIT_MONSTER]);
+        ImGui::BulletText("Objects: %d", pGame->dwLastUsedUnitGUID[UNIT_OBJECT]);
+        ImGui::BulletText("Missiles: %d", pGame->dwLastUsedUnitGUID[UNIT_MISSILE]);
+        ImGui::BulletText("Items: %d", pGame->dwLastUsedUnitGUID[UNIT_ITEM]);
+        ImGui::BulletText("Tiles: %d", pGame->dwLastUsedUnitGUID[UNIT_TILE]);
 
         if (ImGui::CollapsingHeader("Players units"))
         {
