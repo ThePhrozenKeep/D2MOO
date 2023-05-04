@@ -96,7 +96,9 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::EndDisabled();
 }
 
-void D2DebugGame(D2GameStrc* pGame)
+
+static bool bFreezeGame = false;
+bool D2DebugGame(D2GameStrc* pGame)
 {
     if(ImGui::Begin("Game"))
     {
@@ -119,6 +121,8 @@ void D2DebugGame(D2GameStrc* pGame)
         }
         ImGui::Text("Init seed: 0x%x", pGame->dwInitSeed);
         ImGui::Text("Frame %d", pGame->dwGameFrame);
+        ImGui::SameLine();
+        if(ImGui::SmallButton(bFreezeGame ? ICON_FA_PLAY : ICON_FA_PAUSE)) bFreezeGame = !bFreezeGame;
 
         ImGui::Separator();
         ImGui::Text("Spawned units");
@@ -188,4 +192,6 @@ void D2DebugGame(D2GameStrc* pGame)
 #endif
     }
     ImGui::End();
+
+    return bFreezeGame;
 }

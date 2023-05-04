@@ -203,7 +203,7 @@ bool D2DebuggerNewFrame()
 }
 
 D2DEBUGGER_DLL_DECL
-void D2DebuggerEndFrame()
+void D2DebuggerEndFrame(bool VSyncNextFrame)
 {
     // Rendering
     ImGui::EndFrame();
@@ -223,8 +223,13 @@ void D2DebuggerEndFrame()
     HRESULT result = gD2DebuggerData.pd3dDevice->Present(nullptr, nullptr, nullptr, nullptr);
 
     // Handle loss of D3D9 device
-    if (result == D3DERR_DEVICELOST && gD2DebuggerData.pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+    const UINT NextFramePresentationInterval = VSyncNextFrame ? D3DPRESENT_INTERVAL_ONE : D3DPRESENT_INTERVAL_IMMEDIATE;
+    if ((NextFramePresentationInterval != gD2DebuggerData.d3dpp.PresentationInterval) ||
+        (result == D3DERR_DEVICELOST && gD2DebuggerData.pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET))
+    {
+        gD2DebuggerData.d3dpp.PresentationInterval = NextFramePresentationInterval;
         ResetDevice();
+    }
 }
 
 

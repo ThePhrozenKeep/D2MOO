@@ -13,10 +13,11 @@ D2DEBUGGER_DLL_DECL
 bool D2DebuggerNewFrame();
 
 D2DEBUGGER_DLL_DECL
-void D2DebuggerEndFrame();
+void D2DebuggerEndFrame(bool VSyncNextFrame);
 
 D2DEBUGGER_DLL_DECL
 void D2DebuggerDestroy();
 
+// return true if we should freeze the game update
 D2DEBUGGER_DLL_DECL
-void D2DebugGame(struct D2GameStrc* pGame);
+bool D2DebugGame(struct D2GameStrc* pGame);

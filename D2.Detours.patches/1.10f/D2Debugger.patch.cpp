@@ -1,4 +1,7 @@
 #include <DetoursPatch.h>
+#include <chrono>
+#include <thread>
+
 #include <D2Debugger.h>
 #include <GAME/Game.h>
 
@@ -41,10 +44,16 @@ void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame)
         static bool bDebuggerAvailable = D2DebuggerInit() == 0;
         if (bDebuggerAvailable)
         {
-            D2DebuggerNewFrame();
-            GAME_UpdateProgress_Original(pGame);
-            D2DebugGame(pGame);
-            D2DebuggerEndFrame();
+            static bool bFreezeGame = false;
+            do {
+                D2DebuggerNewFrame();
+                if (!bFreezeGame)
+                {
+                    GAME_UpdateProgress_Original(pGame);
+                }
+                bFreezeGame = D2DebugGame(pGame);
+                D2DebuggerEndFrame(bFreezeGame/*vsync ON if frozen*/);
+            } while (bFreezeGame);
             return;
         }
     }
