@@ -1,4 +1,5 @@
 #include <imgui.h>
+#include <vector>
 #include "D2Debugger.h"
 #include <Game/Game.h>
 
@@ -28,7 +29,7 @@ static const char* gActNames[] = {
 };
 
 template<typename ItFunction>
-void IterateUnits(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&& itFunc)
+void DebutIterateUnitList(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&& itFunc)
 {
     ImGui::PushID(nUnitType);
 
@@ -48,6 +49,12 @@ void IterateUnits(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&&
     ImGui::SetNextItemWidth(ActComboWidth);
     ImGui::SameLine(); ImGui::Combo("##Act", (int*)&nActFilter, gActNames, ARRAY_SIZE(gActNames));
 
+    // This is pretty crappy, we are forced to iterate all units to get the total number of units to display
+    // This is more or less required as soon as we filter the list anyway...
+    static std::vector<D2UnitStrc*> filteredUnits;
+    filteredUnits.clear();
+    filteredUnits.reserve(1024);
+
     D2UnitStrc** pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
     const int32_t nFirstHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0;
     const int32_t nLastHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0x7F;
@@ -64,14 +71,39 @@ void IterateUnits(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&&
                 continue;
             if ((nActFilter != D2C_Acts::NUM_ACTS) && (pUnit->nAct != nActFilter))
                 continue;
-            
-            if (!itFunc(pUnit))
-                stopIteration = true;
 
             if (nUnitGUIDFilter != D2UnitInvalidGUID)
+            {
+                // This is the only case where we can early out
+                itFunc(pUnit);
                 stopIteration = true;
+            }
+            else
+            {
+                filteredUnits.push_back(pUnit);
+            }
         }
     }
+
+    ImGui::Text("Count: %d", filteredUnits.size());
+    if (ImGui::BeginChild("##ScrollingRegion", ImVec2(0, 500), false, ImGuiWindowFlags_AlwaysVerticalScrollbar))
+    {
+        ImGuiListClipper clipper;
+        clipper.Begin(filteredUnits.size());
+        while (clipper.Step() && !stopIteration)
+        {
+            for (int i = clipper.DisplayStart; i < clipper.DisplayEnd && !stopIteration; i++)
+            {
+                if (!itFunc(filteredUnits[i]))
+                {
+                    stopIteration = true;
+                }
+            }
+        }
+        clipper.End();
+
+    }
+    ImGui::EndChild();
     ImGui::PopID();
 
 }
@@ -96,6 +128,19 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::EndDisabled();
 }
 
+void D2DebugUnitCommon(D2UnitStrc* pUnit)
+{
+
+    ImGui::Text("ClassId=%d", pUnit->dwClassId);
+    ImGui::SameLine(); ImGui::Text("GUID=%d", pUnit->dwUnitId);
+    ImGui::SameLine(); ImGui::Text(gActNames[pUnit->nAct]);
+    D2CoordStrc tCoords;
+    UNITS_GetCoords(pUnit, &tCoords);
+    ImGui::Text("(X,Y)=(%d,%d)", tCoords.nX, tCoords.nY);
+
+    ImGui::SeparatorText("Animation");
+    D2DebugUnitAnim(pUnit);
+}
 
 static bool bFreezeGame = false;
 bool D2DebugGame(D2GameStrc* pGame)
@@ -136,18 +181,13 @@ bool D2DebugGame(D2GameStrc* pGame)
         if (ImGui::CollapsingHeader("Players units"))
         {
             ImGui::Indent();
-            IterateUnits(pGame, UNIT_PLAYER, [](D2UnitStrc* pPlayer)
+            DebutIterateUnitList(pGame, UNIT_PLAYER, [&](D2UnitStrc* pPlayer)
                 {
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     ImGui::SeparatorText(pPlayer->pPlayerData->szName);
 
-                    ImGui::Text("ClassId=%d", pPlayer->dwClassId);
-                    ImGui::SameLine(); ImGui::Text("GUID=0x%x", pPlayer->dwUnitId);
-                    ImGui::SameLine(); ImGui::Text(gActNames[pPlayer->nAct]);
-
-                    ImGui::SeparatorText("Animation");
-                    D2DebugUnitAnim(pPlayer);
+                    D2DebugUnitCommon(pPlayer);
                     return true;
                 }
             );
@@ -156,19 +196,54 @@ bool D2DebugGame(D2GameStrc* pGame)
         if (ImGui::CollapsingHeader("Monster units"))
         {
             ImGui::Indent();
-            IterateUnits(pGame, UNIT_MONSTER, [](D2UnitStrc* pMonster)
+            DebutIterateUnitList(pGame, UNIT_MONSTER, [](D2UnitStrc* pMonster)
                 {
                     ImGui::Separator();
                     AddDebugBreakButton();
                     ImGui::SameLine();
-
-                    //ImGui::SeparatorText(pPlayer->pMonsterData->wszMonName);
-                    ImGui::Text("ClassId=%d", pMonster->dwClassId);
-                    ImGui::SameLine(); ImGui::Text("GUID=0x%x", pMonster->dwUnitId);
-                    ImGui::SameLine(); ImGui::Text(gActNames[pMonster->nAct]);
-
-                    ImGui::SeparatorText("Animation");
-                    D2DebugUnitAnim(pMonster);
+                    D2DebugUnitCommon(pMonster);
+                    return true;
+                }
+            );
+            ImGui::Unindent();
+        }
+        if (ImGui::CollapsingHeader("Object units"))
+        {
+            ImGui::Indent();
+            DebutIterateUnitList(pGame, UNIT_OBJECT, [](D2UnitStrc* pObject)
+                {
+                    ImGui::Separator();
+                    AddDebugBreakButton();
+                    ImGui::SameLine();
+                    D2DebugUnitCommon(pObject);
+                    return true;
+                }
+            );
+            ImGui::Unindent();
+        }
+        if (ImGui::CollapsingHeader("Missile units"))
+        {
+            ImGui::Indent();
+            DebutIterateUnitList(pGame, UNIT_MISSILE, [](D2UnitStrc* pMissile)
+                {
+                    ImGui::Separator();
+                    AddDebugBreakButton();
+                    ImGui::SameLine();
+                    D2DebugUnitCommon(pMissile);
+                    return true;
+                }
+            );
+            ImGui::Unindent();
+        }
+        if (ImGui::CollapsingHeader("Item units"))
+        {
+            ImGui::Indent();
+            DebutIterateUnitList(pGame, UNIT_ITEM, [](D2UnitStrc* pItem)
+                {
+                    ImGui::Separator();
+                    AddDebugBreakButton();
+                    ImGui::SameLine();
+                    D2DebugUnitCommon(pItem);
                     return true;
                 }
             );
