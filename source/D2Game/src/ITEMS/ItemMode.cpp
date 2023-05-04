@@ -6542,7 +6542,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
         const uint16_t nItemFormat = ITEMS_GetItemFormat(pItem);
         if (ITEMS_HasDurability(pItem) && !nItemFormat)
         {
-            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(5 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
+            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(5 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255), 0);
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(5 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
         }
 
@@ -6668,7 +6668,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
 
         if (ITEMS_HasDurability(pItem) && ITEMS_GetItemFormat(pItem) >= 1u)
         {
-            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(3 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
+            STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(3 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255), 0);
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(3 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
         }
 
@@ -6766,7 +6766,7 @@ int32_t __fastcall sub_6FC4C5F0(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDr
         {
             if (ITEMS_HasDurability(pItem) && ITEMS_GetItemFormat(pItem) >= 1u)
             {
-                STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(2 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255u), 0);
+                STATLIST_SetUnitStat(pItem, STAT_DURABILITY, std::min(2 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255), 0);
                 STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(2 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
             }
 

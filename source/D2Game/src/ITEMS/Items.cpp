@@ -2142,7 +2142,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                     uint32_t nPlayerCount = (PLAYER_GetPlayerCount(pGame) - nPartyMembers) / 2 + nPartyMembers;
                     if (pMonster && pMonster->dwUnitType == UNIT_MONSTER)
                     {
-                        nPlayerCount = std::min(nPlayerCount, std::max(STATLIST_UnitGetStatValue(pMonster, STAT_MONSTER_PLAYERCOUNT, 0), 1u));
+                        nPlayerCount = std::min<uint32_t>(nPlayerCount, std::max(STATLIST_UnitGetStatValue(pMonster, STAT_MONSTER_PLAYERCOUNT, 0), 1));
                     }
 
                     if (nPlayerCount > 1)

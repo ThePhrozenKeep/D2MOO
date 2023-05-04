@@ -8634,7 +8634,7 @@ void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClas
 	}
 	else
 	{
-		nChance = std::min(pAiTickParam->pAiControl->dwAiParam[0] + 40 + 2 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 95u);
+		nChance = std::min(pAiTickParam->pAiControl->dwAiParam[0] + 40 + 2 * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 95);
 	}
 
 	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget);

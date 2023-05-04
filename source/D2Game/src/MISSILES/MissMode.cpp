@@ -3230,7 +3230,7 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
         const int32_t nDamageTargetAc = STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
         if (nDamageTargetAc)
         {
-            const int32_t nArmorClass = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pTarget, STAT_ARMORCLASS, 0), 0u);
+            const int32_t nArmorClass = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pTarget, STAT_ARMORCLASS, 0), 0);
             STATLIST_SetUnitStat(pTarget, STAT_ARMORCLASS, nArmorClass, 0);
         }
     }
@@ -5160,7 +5160,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             const int32_t nDamageTargetAc = STATLIST_UnitGetStatValue(pMissile, STAT_ITEM_DAMAGETARGETAC, 0);
             if (nDamageTargetAc)
             {
-                const int32_t nArmor = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pUnit, STAT_ARMORCLASS, 0), 0u);
+                const int32_t nArmor = std::max(nDamageTargetAc + STATLIST_UnitGetStatValue(pUnit, STAT_ARMORCLASS, 0), 0);
                 STATLIST_SetUnitStat(pUnit, STAT_ARMORCLASS, nArmor, 0);
             }
         }

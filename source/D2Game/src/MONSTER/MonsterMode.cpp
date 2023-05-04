@@ -195,7 +195,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     int32_t nMultiplier = 0;
     if (!STATLIST_GetUnitAlignment(pUnit))
     {
-        const int32_t nPlayerCount = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MONSTER_PLAYERCOUNT, 0), 1u);
+        const int32_t nPlayerCount = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MONSTER_PLAYERCOUNT, 0), 1);
 
         if (pGame->nDifficulty != DIFFMODE_NORMAL && nPlayerCount >= 2)
         {

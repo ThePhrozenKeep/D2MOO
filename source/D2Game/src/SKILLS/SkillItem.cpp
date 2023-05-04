@@ -1329,7 +1329,7 @@ int32_t __fastcall SKILLITEM_EventFunc15_OpenWounds(D2GameStrc* pGame, int32_t n
         return 0;
     }
 
-    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pAttacker, STAT_LEVEL, 0), 1u);
+    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pAttacker, STAT_LEVEL, 0), 1);
     const int32_t nValues[] = { 9, 18, 27, 36, 45 };
 
     int32_t nHpRegen = SKILLITEM_CalculateOpenWoundsHpRegen(nLevel, nValues) + 40;

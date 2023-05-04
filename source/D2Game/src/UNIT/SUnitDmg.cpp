@@ -169,8 +169,8 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
         }
         else
         {
-            nMinDamage = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0), 1u);
-            nMaxDamage = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0), 2u);
+            nMinDamage = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0), 1);
+            nMaxDamage = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0), 2);
 
             nMinDamage <<= 8;
             nMaxDamage <<= 8;
@@ -979,7 +979,7 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 			}
 			else
 			{
-				nMaxResValue = std::min(STATLIST_UnitGetStatValue(pDamageInfo->pDefender, pDamageStatTableRecord->nMaxResStatId, pDamageInfo->bDefenderIsMonster) + 75, 95u);
+				nMaxResValue = std::min(STATLIST_UnitGetStatValue(pDamageInfo->pDefender, pDamageStatTableRecord->nMaxResStatId, pDamageInfo->bDefenderIsMonster) + 75, 95);
 			}
 
 			nResValue = D2Clamp(nResValue, -100, nMaxResValue);

@@ -904,7 +904,7 @@ int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
 
     const int32_t nLowSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
     const int32_t nItemFormat = ITEMS_GetItemFormat(pItem);
-    const int32_t nDurability = std::min(2 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255ui32);
+    const int32_t nDurability = std::min(2 * STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0), 255);
     STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nDurability, 0);
 
     const int32_t nMaxDurability = std::min(2 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255);

@@ -354,7 +354,7 @@ void __fastcall MONSTERUNIQUE_UMod36_Ghostly(D2UnitStrc* pUnit, int32_t nUMod, i
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
 
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
@@ -613,7 +613,7 @@ void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nU
         return;
     }
 
-    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u);
+    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1);
 
     int32_t nMax = 0;
     for (int32_t i = 0; i < 8; ++i)
@@ -717,7 +717,7 @@ void __fastcall MONSTERUNIQUE_UMod9_FireEnchanted(D2UnitStrc* pUnit, int32_t nUM
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
@@ -769,7 +769,7 @@ void __fastcall MONSTERUNIQUE_UMod17_LightningEnchanted(D2UnitStrc* pUnit, int32
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
@@ -821,7 +821,7 @@ void __fastcall MONSTERUNIQUE_UMod18_ColdEnchanted(D2UnitStrc* pUnit, int32_t nU
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
@@ -875,7 +875,7 @@ void __fastcall MONSTERUNIQUE_UMod23_PoisonEnchanted(D2UnitStrc* pUnit, int32_t 
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
@@ -929,7 +929,7 @@ void __fastcall MONSTERUNIQUE_UMod25_ManaSteal(D2UnitStrc* pUnit, int32_t nUMod,
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
@@ -973,7 +973,7 @@ void __fastcall MONSTERUNIQUE_CastAmplifyDamage(D2GameStrc* pGame, D2UnitStrc* p
         return;
     }
 
-    const int32_t nSkillLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 5 + 1, 1u);
+    const int32_t nSkillLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 5 + 1, 1);
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(SKILL_AMPLIFYDAMAGE);
     if (!pSkillsTxtRecord)
     {
@@ -1151,7 +1151,7 @@ void __fastcall MONSTERUNIQUE_CastLightUniqueMissile(D2GameStrc* pGame, D2UnitSt
 
     D2MissileStrc missileParams = {};
 
-    missileParams.nSkillLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 2, 1u);
+    missileParams.nSkillLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 2, 1);
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -1194,14 +1194,14 @@ void __fastcall MONSTERUNIQUE_CastColdUniqueMissile(D2GameStrc* pGame, D2UnitStr
         return;
     }
 
-    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 2, 1u);
+    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 2, 1);
     sub_6FD14170(pGame, pUnit, pUnit, MISSILE_COLDUNIQUE, 0, nLevel, DATATBLS_GetMissileVelocityFromMissilesTxt(MISSILE_FROSTNOVA, 0));
 }
 
 //D2Game.0x6FC6CDB0
 void __fastcall MONSTERUNIQUE_CastCorpsePoisonCloud(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u);
+    const int32_t nLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1);
     sub_6FD11420(pGame, MISSILE_CORPSEPOISONCLOUD, pUnit, 0, nLevel, 0, 0, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1);
 }
 
@@ -1364,7 +1364,7 @@ void __fastcall MONSTERUNIQUE_ApplyElementalDamage(D2GameStrc* pGame, D2UnitStrc
 
     const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
-    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1u, (uint32_t)sgptDataTables->nMonLvlTxtRecordCount - 1);
+    const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
     if (!pMonLvlTxtRecord)
     {
