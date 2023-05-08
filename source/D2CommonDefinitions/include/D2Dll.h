@@ -4,7 +4,7 @@
 #define D2FUNC_DLL(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV DLL##_##NAME ARGS;
 
-// Same as D2FUNC_DLL_NP but without DLL name prefix
+// Same as D2FUNC_DLL but without DLL name prefix
 #define D2FUNC_DLL_NP(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV NAME ARGS;
 

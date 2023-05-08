@@ -2,11 +2,34 @@
 #include <vector>
 #include "D2Debugger.h"
 #include <Game/Game.h>
+#include <D2Lang.h>
+#include <D2Unicode.h>
+#include <D2Dll.h>
 
 #include "IconsFontAwesome6.h"
 
+#include <Windows.h>
+extern HMODULE DLLBASE_D2Game;
+HMODULE delayedD2GameDllBaseGet()
+{
+    static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
+    return DLLBASE_D2Game;
+}
+
+static const int D2GameImageBase = 0x6FC30000;
+D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
+
+
 // Using a define so that we break inline
 #define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
+
+std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
+{
+    const Unicode* nameUnicode = (const Unicode*)D2LANG_GetStringFromTblIndex(index);
+    std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3, 0);
+    Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2 /*See toUtf doc*/);
+    return utf8CharBuffer;
+}
 
 // Note: Missile and items are inverted on purpose here, this is like this in the game
 int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
@@ -136,10 +159,103 @@ void D2DebugUnitCommon(D2UnitStrc* pUnit)
     ImGui::SameLine(); ImGui::Text(gActNames[pUnit->nAct]);
     D2CoordStrc tCoords;
     UNITS_GetCoords(pUnit, &tCoords);
-    ImGui::Text("(X,Y)=(%d,%d)", tCoords.nX, tCoords.nY);
-
+    ImGui::SameLine(); ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);
     ImGui::SeparatorText("Animation");
     D2DebugUnitAnim(pUnit);
+}
+
+D2UnitStrc* GetFirstPlayerInList(D2GameStrc* pGame)
+{
+    for (D2UnitStrc* pUnitList : pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)])
+    {
+        for (D2UnitStrc* pUnit = pUnitList;
+            pUnit != nullptr;
+            pUnit = pUnit->pListNext)
+        {
+            return pUnit;
+        }
+    }
+    return nullptr;
+}
+
+void D2DebugUnitSpawner(D2GameStrc* pGame)
+{
+    if (ImGui::CollapsingHeader("UnitSpawner"))
+    {
+        D2CoordStrc tCoords{};
+        if (D2UnitStrc* pPlayer = GetFirstPlayerInList(pGame))
+        {
+            UNITS_GetCoords(pPlayer, &tCoords);
+            ImGui::Text("Spawn location (player) = (%d,%d)", tCoords.nX, tCoords.nY);
+
+
+            auto GetSuperUniqueUTF8Name = [](int id)
+            {
+                if (D2SuperUniquesTxt* pSuperUniqueRecord = DATATBLS_GetSuperUniquesTxtRecord(id))
+                {
+                    return GetUTF8CharBufferFromStringIndex(pSuperUniqueRecord->wNameStr);
+                }
+                const char notFound[] = "NOT-FOUND";
+                return std::vector<char>{notFound, notFound + sizeof(notFound)};
+            };
+
+            static int currentSelectionId = 0;
+
+            static bool bWasComboOpen = false;
+            if (ImGui::BeginCombo("SuperUnique", GetSuperUniqueUTF8Name(currentSelectionId).data()))
+            {
+                ImGuiListClipper clipper;
+                clipper.Begin(DATATBLS_GetSuperUniquesTxtRecordCount());
+
+                if (!bWasComboOpen)
+                {
+                    bWasComboOpen = true;
+                    //This is needed on first frame for SetItemDefaultFocus to work
+                    clipper.ForceDisplayRangeByIndices(0,clipper.ItemsCount);
+                }
+                while (clipper.Step())
+                {
+                    for (int id = clipper.DisplayStart; id < clipper.DisplayEnd; id++)
+                    {
+                        const bool bSelected = currentSelectionId == id;
+                        if (ImGui::Selectable(GetSuperUniqueUTF8Name(id).data(), bSelected))
+                            currentSelectionId = id;
+                        if (bSelected)
+                            ImGui::SetItemDefaultFocus();
+                    }
+                }
+                clipper.End();
+                ImGui::EndCombo();
+            }
+            else
+            {
+                bWasComboOpen = false;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Spawn"))
+            {
+                if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSelectionId))
+                {
+                    // Register for debug view ?
+                }
+                else
+                {
+                    ImGui::OpenPopup("Spawn failed");
+                }
+            }
+            bool bOpened_Unused = true;
+            if (ImGui::BeginPopupModal("Spawn failed", &bOpened_Unused))
+            {
+                ImGui::Text("Spawning the monster failed. Possible issues:");
+                ImGui::BulletText("Can only be spawned once per game.");
+                ImGui::BulletText("Not engouh space left.");
+                ImGui::BulletText("...");
+                if(ImGui::Button("Close"))
+                    ImGui::CloseCurrentPopup();
+                ImGui::EndPopup();
+            }
+        }
+    }
 }
 
 static bool bFreezeGame = false;
@@ -177,6 +293,8 @@ bool D2DebugGame(D2GameStrc* pGame)
         ImGui::BulletText("Missiles: %d", pGame->dwLastUsedUnitGUID[UNIT_MISSILE]);
         ImGui::BulletText("Items: %d", pGame->dwLastUsedUnitGUID[UNIT_ITEM]);
         ImGui::BulletText("Tiles: %d", pGame->dwLastUsedUnitGUID[UNIT_TILE]);
+
+        D2DebugUnitSpawner(pGame);
 
         if (ImGui::CollapsingHeader("Players units"))
         {
