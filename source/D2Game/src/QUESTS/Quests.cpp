@@ -348,7 +348,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 
 		pCurrent->nQuestNo = gpQuestInitTable[i].nChainNo;
 		pCurrent->pGame = pGame;
-		pCurrent->bActive = true;
+		pCurrent->bActive = false;
 		pCurrent->fLastState = 0;
 		pCurrent->bNotIntro = true;
 		pCurrent->nActNo = gpQuestInitTable[i].nAct;
