@@ -977,13 +977,13 @@ int __stdcall UNITS_GetAnimOrSeqMode(D2UnitStrc* pUnit)
 {
 	if (pUnit)
 	{
-		if (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pAnimSeq)
+		if (UNITS_GetAnimSeq(pUnit))
 		{
-			return pUnit->dwAnimMode;
+			return pUnit->dwSeqMode;
 		}
 		else
 		{
-			return pUnit->dwSeqMode;
+			return pUnit->dwAnimMode;
 		}
 	}
 
@@ -995,13 +995,13 @@ void __stdcall UNITS_SetAnimOrSeqMode(D2UnitStrc* pUnit, int nAnimMode)
 {
 	D2_ASSERT(pUnit);
 
-	if (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pAnimSeq)
+	if (UNITS_GetAnimSeq(pUnit))
 	{
-		pUnit->dwAnimMode = nAnimMode;
+		pUnit->dwSeqMode = nAnimMode;
 	}
 	else
 	{
-		pUnit->dwSeqMode = nAnimMode;
+		pUnit->dwAnimMode = nAnimMode;
 	}
 }
 

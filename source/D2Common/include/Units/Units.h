@@ -208,6 +208,11 @@ struct D2UnitStrc
 
 #pragma pack()
 
+// Helper function
+inline D2MonSeqTxt* UNITS_GetAnimSeq(D2UnitStrc* pUnit) { 
+	return (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER) ? pUnit->pAnimSeq : nullptr;
+}
+
 //D2Common.0x6FDBD520 (#10457)
 D2COMMON_DLL_DECL uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD570 (#10320)
