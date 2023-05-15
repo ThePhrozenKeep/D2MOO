@@ -504,6 +504,8 @@ inline D2StatListExStrc* STATLIST_StatListExCast(D2StatListStrc* pStatList) {
 
 inline bool STATLIST_IsExtended(D2StatListStrc* pStatList) { return pStatList->dwFlags & STATLIST_EXTENDED; }
 
+inline int STAT_HitPointsFixedPointToInt(int nHP) { return nHP >> 8; }
+
 //D2Common.0x6FDB57C0 (#10563)
 D2COMMON_DLL_DECL BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
 //----- (6FDB5830) --------------------------------------------------------

@@ -2164,14 +2164,10 @@ int __stdcall UNITS_GetBeltType(D2UnitStrc* pUnit)
 //D2Common.0x6FDC0260 (#10368)
 int __stdcall UNITS_GetCurrentLifePercentage(D2UnitStrc* pUnit)
 {
-	int nMaxHp = 0;
-	int nHp = 0;
-
-	nHp = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) >> 8;
-	nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
-	if (nMaxHp)
+	const int nHp = STAT_HitPointsFixedPointToInt(STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0));
+	if (const int nMaxHp = STAT_HitPointsFixedPointToInt(STATLIST_GetMaxLifeFromUnit(pUnit)))
 	{
-		return 100 * nHp / nMaxHp;
+		return (100 * nHp) / nMaxHp;
 	}
 
 	return 0;
