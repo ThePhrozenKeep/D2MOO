@@ -886,7 +886,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         return 0;
     }
 
-    if (pGame->dwGameFrame - (pUnit->dwSeqCurrentFrame >> 8) >= nEventFrame)
+    if (pGame->dwGameFrame - (pUnit->dwSeqCurrentFramePrecise >> 8) >= nEventFrame)
     {
         D2GAME_SKILLS_RewindSkillEx_6FCBD260(pGame, pUnit, 0);
         SKILLS_SetFlags(pSkill, 1);

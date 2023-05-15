@@ -3531,7 +3531,7 @@ int __stdcall D2Common_11043(D2UnitStrc* pUnit)
 		}
 	}
 
-	return (pUnit->dwFrameCount & 0xFFFFFF00) / nAttackSpeed;
+	return (pUnit->dwFrameCountPrecise & 0xFFFFFF00) / nAttackSpeed;
 }
 
 //D2Common.0x6FDB41D0 (#11047)

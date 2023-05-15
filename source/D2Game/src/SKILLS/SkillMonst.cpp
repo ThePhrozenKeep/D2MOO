@@ -548,7 +548,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         }
         UNITS_SetAnimationFrame(pUnit, nFrame);
 
-        pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) + 256;
+        pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
     }
     else
     {
@@ -575,7 +575,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
                 {
                     SKILLS_SetFlags(pSkill, 1);
                     UNITS_SetAnimationFrame(pUnit, 12);
-                    pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) + 256;
+                    pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
                     D2Common_10233(pUnit->pDynamicPath);
                     PATH_SetNewDistance(pUnit->pDynamicPath, 5u);
                     PATH_SetStepNum(pUnit->pDynamicPath, 1u);
@@ -952,18 +952,18 @@ void __fastcall SKILLS_SetInfernoFrame(D2SkillsTxt* pSkillsTxtRecord, D2UnitStrc
             if (pSkillsTxtRecord->nMonAnim == MONMODE_SEQUENCE)
             {
                 UNITS_SetAnimationFrame(pUnit, pMonStats2TxtRecord->nInfernoAnim - 1);
-                pUnit->dwFrameCount = (pMonStats2TxtRecord->nInfernoAnim + 1) << 8;
+                pUnit->dwFrameCountPrecise = (pMonStats2TxtRecord->nInfernoAnim + 1) << 8;
             }
             else
             {
-                pUnit->dwSeqCurrentFrame = pMonStats2TxtRecord->nInfernoAnim << 8;
+                pUnit->dwSeqCurrentFramePrecise = pMonStats2TxtRecord->nInfernoAnim << 8;
             }
         }
     }
     else
     {
         UNITS_SetAnimationFrame(pUnit, 8);
-        pUnit->dwFrameCount = 0x500u;
+        pUnit->dwFrameCountPrecise = 0x500u;
     }
 }
 
@@ -1632,7 +1632,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
     if (SKILLS_GetFlags(pSkill) & 2)
     {
         SKILLS_SetFlags(pSkill, 0);
-        pUnit->dwFrameCount = pSkillsTxtRecord->dwParam[0] << 8;
+        pUnit->dwFrameCountPrecise = pSkillsTxtRecord->dwParam[0] << 8;
         UNITS_SetAnimationFrame(pUnit, pSkillsTxtRecord->dwParam[1]);
         return 1;
     }
@@ -1663,7 +1663,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
     if (nFrame == pSkillsTxtRecord->dwParam[3])
     {
-        pUnit->dwFrameCount = pSkillsTxtRecord->dwParam[4] << 8;
+        pUnit->dwFrameCountPrecise = pSkillsTxtRecord->dwParam[4] << 8;
         UNITS_SetAnimationFrame(pUnit, pSkillsTxtRecord->dwParam[5]);
         return 1;
     }
@@ -1944,7 +1944,7 @@ int32_t __fastcall SKILLS_SrvDo107_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit
     {
         SKILLS_SetParam1(pSkill, nParam - 1);
         UNITS_SetAnimationFrame(pUnit, pSkillsTxtRecord->dwParam[0]);
-        pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) + 256;
+        pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
     }
 
     return 1;
@@ -2008,8 +2008,8 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
     }
     else
     {
-        const int32_t nMax = pUnit->dwFrameCount >> 8;
-        const int32_t nCurrent = pUnit->dwSeqCurrentFrame >> 8;
+        const int32_t nMax = pUnit->dwFrameCountPrecise >> 8;
+        const int32_t nCurrent = pUnit->dwSeqCurrentFramePrecise >> 8;
         if (nMax > pUnit->pAnimData->dwFrames || nCurrent + 1 >= nMax)
         {
             return 0;

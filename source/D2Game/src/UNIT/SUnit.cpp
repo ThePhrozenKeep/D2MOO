@@ -997,16 +997,16 @@ void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit)
     else
     {
         pUnit->pAnimSeq = 0;
-        pUnit->dwSeqCurrentFrame = 0;
+        pUnit->dwSeqCurrentFramePrecise = 0;
         if (pUnit->pDynamicPath)
         {
             D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
-            pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
+            pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
         }
         else
         {
             UNITS_SetAnimData(pUnit, pUnit->dwUnitType, pUnit->dwClassId, pUnit->dwAnimMode);
-            pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
+            pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
         }
     }
 }
@@ -1344,7 +1344,7 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
     else
     {
         nAnimSpeed = pUnit->wAnimSpeed;
-        nFrameCount = pUnit->dwFrameCount;
+        nFrameCount = pUnit->dwFrameCountPrecise;
     }
 
     if (nAnimSpeed)
@@ -1402,7 +1402,7 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
         }
 
         EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, nFrame + 1, 0, 0);
-        pUnit->dwSeqCurrentFrame = pGame->dwGameFrame << 8;
+        pUnit->dwSeqCurrentFramePrecise = pGame->dwGameFrame << 8;
     }
     else
     {
@@ -1416,8 +1416,8 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
 
-    const int32_t nCalc = (100 - a3) * (pGame->dwGameFrame - (pUnit->dwSeqCurrentFrame >> 8)) / 100;
-    pUnit->dwSeqCurrentFrame = (pGame->dwGameFrame - nCalc) << 8;
+    const int32_t nCalc = (100 - a3) * (pGame->dwGameFrame - (pUnit->dwSeqCurrentFramePrecise >> 8)) / 100;
+    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;
@@ -1429,7 +1429,7 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     else
     {
         nAnimSpeed = pUnit->wAnimSpeed;
-        nFrameCount = pUnit->dwFrameCount;
+        nFrameCount = pUnit->dwFrameCountPrecise;
     }
 
     if (nAnimSpeed)
@@ -1489,8 +1489,8 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
 
-    const int32_t nCalc = pGame->dwGameFrame - (pUnit->dwSeqCurrentFrame >> 8) - a3;
-    pUnit->dwSeqCurrentFrame = (pGame->dwGameFrame - nCalc) << 8;
+    const int32_t nCalc = pGame->dwGameFrame - (pUnit->dwSeqCurrentFramePrecise >> 8) - a3;
+    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;
@@ -1502,7 +1502,7 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     else
     {
         nAnimSpeed = pUnit->wAnimSpeed;
-        nFrameCount = pUnit->dwFrameCount;
+        nFrameCount = pUnit->dwFrameCountPrecise;
     }
 
     if (nAnimSpeed)
@@ -1557,7 +1557,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
 
-    pUnit->dwSeqCurrentFrame = (pGame->dwGameFrame - a3) << 8;
+    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - a3) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;
@@ -1569,7 +1569,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
     else
     {
         nAnimSpeed = pUnit->wAnimSpeed;
-        nFrameCount = pUnit->dwFrameCount;
+        nFrameCount = pUnit->dwFrameCountPrecise;
     }
 
     if (nAnimSpeed)

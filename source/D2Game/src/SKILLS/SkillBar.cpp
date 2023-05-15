@@ -949,7 +949,7 @@ int32_t __fastcall SKILLS_SrvDo076_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUni
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
         UNITS_SetAnimationFrame(pUnit, 0);
-        pUnit->dwFrameCount = 1024;
+        pUnit->dwFrameCountPrecise = 1024;
     }
     else
     {
@@ -1497,7 +1497,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
                     {
                         SKILLS_SetFlags(pSkill, 1);
                         UNITS_SetAnimationFrame(pUnit, 12);
-                        pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) + 256;
+                        pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
                         D2Common_10233(pUnit->pDynamicPath);
                         PATH_SetNewDistance(pUnit->pDynamicPath, 5);
                         PATH_SetStepNum(pUnit->pDynamicPath, 1);
@@ -1519,7 +1519,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
             else
             {
                 SKILLS_SetFlags(pSkill, 0x200);
-                pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) - 256;
+                pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) - 256;
             }
         }
         else
@@ -1555,7 +1555,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
     }
 
     UNITS_SetAnimationFrame(pUnit, nAnimFrame);
-    pUnit->dwFrameCount = (pUnit->dwFrameCount & 0xFFFFFF00) + 256;
+    pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
     return 0;
 }
 

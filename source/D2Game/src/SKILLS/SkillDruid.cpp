@@ -2197,7 +2197,7 @@ int32_t __fastcall SKILLS_SrvDo138_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     if (STATES_CheckState(pUnit, STATE_INFERNO))
     {
         UNITS_SetAnimationFrame(pUnit, 8);
-        pUnit->dwFrameCount = 0x600u;
+        pUnit->dwFrameCountPrecise = 0x600u;
     }
 
     return 1;

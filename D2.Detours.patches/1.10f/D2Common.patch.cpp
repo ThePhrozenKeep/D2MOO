@@ -414,11 +414,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCurrentLifePercentage                                      @10368
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetAnimOrSeqMode                                              @10369
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimOrSeqMode                                              @10370
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_InitializeSequence                                            @10371
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimationFrame                                             @10372
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_StopSequence                                                  @10373
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_UpdateFrame                                                   @10374
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10375_UNITS_SetFrameNonRate                                @10375
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_InitializeSequence                                            @10371
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimationFrame                                             @10372
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_StopSequence                                                  @10373
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_UpdateFrame                                                   @10374
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10375_UNITS_SetFrameNonRate                                @10375
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10376_UpdateAnimRateAndVelocity                            @10376
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimationSpeed                                             @10377
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsAtEndOfFrameCycle                                           @10378

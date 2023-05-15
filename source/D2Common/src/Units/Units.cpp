@@ -705,7 +705,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 	D2_ASSERT(pUnit);
 
 	pUnit->nActionFrame = 0;
-	pUnit->dwSeqCurrentFrame = UNITS_GetFrameBonus(pUnit) << 8;
+	pUnit->dwSeqCurrentFramePrecise = UNITS_GetFrameBonus(pUnit) << 8;
 
 	int nUnitType = pUnit->dwUnitType;
 	int nClassId = pUnit->dwClassId;
@@ -730,7 +730,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		{
 			pUnit->pAnimSeq = nullptr;
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
-			pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
+			pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
 		}
 		break;
 	}
@@ -749,7 +749,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		{
 			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 			pUnit->pAnimSeq = nullptr;
-			pUnit->dwFrameCount = pUnit->pAnimData->dwFrames << 8;
+			pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
 		}
 		break;
 	}
@@ -759,8 +759,8 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		D2_ASSERT(nNewMode < NUM_OBJECTMODES);
 
 		D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pUnit->dwClassId);
-		pUnit->dwFrameCount = pObjectsTxtRecord->dwFrameCnt[nNewMode];
-		pUnit->dwSeqCurrentFrame = uint16_t(pObjectsTxtRecord->nStart[nNewMode]) << 8;
+		pUnit->dwFrameCountPrecise = pObjectsTxtRecord->dwFrameCnt[nNewMode];
+		pUnit->dwSeqCurrentFramePrecise = uint16_t(pObjectsTxtRecord->nStart[nNewMode]) << 8;
 		int16_t wFrameDelta = pObjectsTxtRecord->wFrameDelta[nNewMode];
 
 		if (pObjectsTxtRecord->nSync)
@@ -785,7 +785,7 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (D2MissilesTxt* pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(pUnit->dwClassId))
 		{
 			pUnit->wAnimSpeed = ((int16_t)pMissilesTxtRecord->wAnimRate << 8) / 1024;
-			pUnit->dwFrameCount = pMissilesTxtRecord->nAnimLen << 8;
+			pUnit->dwFrameCountPrecise = pMissilesTxtRecord->nAnimLen << 8;
 		}
 		break;
 	}
@@ -794,13 +794,13 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (nNewMode == IMODE_ONGROUND)
 		{
 			pUnit->wAnimSpeed = 0;
-			pUnit->dwFrameCount = 4352;
-			pUnit->dwSeqCurrentFrame = 4096;
+			pUnit->dwFrameCountPrecise = 4352;
+			pUnit->dwSeqCurrentFramePrecise = 4096;
 		}
 		else if (nNewMode == IMODE_DROPPING)
 		{
 			pUnit->wAnimSpeed = 256;
-			pUnit->dwFrameCount = 4352;
+			pUnit->dwFrameCountPrecise = 4352;
 		}
 		break;
 	}
@@ -1015,7 +1015,7 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 			pUnit->dwSeqFrameCount = DATATBLS_GetSeqFramePointsCount(pUnit);
 			pUnit->dwSeqFrame = 0;
 			pUnit->dwSeqSpeed = 256;
-			pUnit->dwFrameCount = DATATBLS_GetSeqFrameCount(pUnit) << 8;
+			pUnit->dwFrameCountPrecise = DATATBLS_GetSeqFrameCount(pUnit) << 8;
 
 			unsigned nMode = 0, nFrame = 0;
 			int nDirection = 0, nEvent = 0;
@@ -1023,7 +1023,7 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 
 			pUnit->dwSeqMode = nMode;
 			pUnit->nActionFrame = nEvent;
-			pUnit->dwSeqCurrentFrame = nFrame << 8;
+			pUnit->dwSeqCurrentFramePrecise = nFrame << 8;
 			pUnit->dwFlags |= UNITFLAG_SQGFXCHANGE;
 		}
 	}
@@ -1040,19 +1040,11 @@ void __stdcall UNITS_SetAnimationFrame(D2UnitStrc* pUnit, int nFrame)
 //D2Common.0x6FDBEE60 (#10373)
 void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 {
-	unsigned int nOldFrame = 0;
-	unsigned int nOldMode = 0;
-	unsigned int nNewMode = 0;
-	unsigned int nCounter = 0;
-	unsigned int nFrame = 0;
-	int nDirection = 0;
-	int nEvent = 0;
-
 	pUnit->nActionFrame = 0;
 
 	if (pUnit->pAnimSeq)
 	{
-		nOldFrame = pUnit->dwSeqFrame;
+		const unsigned nOldFrame = pUnit->dwSeqFrame;
 
 		pUnit->dwFlags &= ~UNITFLAG_SQGFXCHANGE;
 		pUnit->dwSeqFrame += pUnit->dwSeqSpeed;
@@ -1062,13 +1054,15 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 			pUnit->dwSeqFrame -= pUnit->dwSeqFrameCount;
 		}
 
-		pUnit->dwFrameCount -= pUnit->dwSeqSpeed;
+		pUnit->dwFrameCountPrecise -= pUnit->dwSeqSpeed;
 
-		nOldMode = pUnit->dwSeqMode;
+		unsigned nOldMode = pUnit->dwSeqMode;
+		unsigned nNewMode, nFrame;
+		int nDirection, nEvent;
 		DATATBLS_ComputeSequenceAnimation(pUnit->pAnimSeq, pUnit->dwSeqFrame, nOldFrame, &nNewMode, &nFrame, &nDirection, &nEvent);
 
 		pUnit->dwSeqMode = nNewMode;
-		pUnit->dwSeqCurrentFrame = nFrame << 8;
+		pUnit->dwSeqCurrentFramePrecise = nFrame << 8;
 		pUnit->nActionFrame = nEvent;
 
 		if (nNewMode != nOldMode)
@@ -1078,35 +1072,27 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 	}
 	else
 	{
-		nFrame = pUnit->dwSeqCurrentFrame >> 8;
-		if (pUnit->wAnimSpeed >= 256)
-		{
-			++nFrame;
-		}
+		uint32_t nFrame = pUnit->dwSeqCurrentFramePrecise >> 8 + int(pUnit->wAnimSpeed >= 256);
 
-		pUnit->dwSeqCurrentFrame += pUnit->wAnimSpeed;
+		pUnit->dwSeqCurrentFramePrecise += pUnit->wAnimSpeed;
 		
-		while (pUnit->dwSeqCurrentFrame >= pUnit->dwFrameCount)
+		while (pUnit->dwSeqCurrentFramePrecise >= pUnit->dwFrameCountPrecise)
 		{
-			nCounter = nFrame;
-			while (nCounter < (pUnit->dwFrameCount >> 8))
+			const uint32_t nFrameCount = (pUnit->dwFrameCountPrecise >> 8);
+			for(int i = nFrame; i < nFrameCount; i++)
 			{
-				UNITS_SetAnimActionFrame(pUnit, nCounter);
-
-				++nCounter;
+				UNITS_SetAnimActionFrame(pUnit, i);
 			}
-
+			// Animation looped
 			nFrame = 0;
-			pUnit->dwSeqCurrentFrame -= pUnit->dwFrameCount;
-			pUnit->dwSeqCurrentFrame += (UNITS_GetFrameBonus(pUnit) << 8);
+			pUnit->dwSeqCurrentFramePrecise -= pUnit->dwFrameCountPrecise;
+			pUnit->dwSeqCurrentFramePrecise += (UNITS_GetFrameBonus(pUnit) << 8);
 		}
-		
-		nCounter = nFrame;
-		while (nCounter <= (pUnit->dwSeqCurrentFrame >> 8))
-		{
-			UNITS_SetAnimActionFrame(pUnit, nCounter);
 
-			++nCounter;
+		const uint32_t nLastFrameReached = (pUnit->dwSeqCurrentFramePrecise >> 8);
+		for (; nFrame <= nLastFrameReached; nFrame++)
+		{
+			UNITS_SetAnimActionFrame(pUnit, nFrame);
 		}
 	}
 }
@@ -1114,23 +1100,22 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 //D2Common.0x6FDBEFF0 (#10374)
 void __stdcall UNITS_UpdateFrame(D2UnitStrc* pUnit)
 {
-	pUnit->dwSeqCurrentFrame = pUnit->wAnimSpeed + pUnit->dwSeqCurrentFrame;
+	pUnit->dwSeqCurrentFramePrecise += pUnit->wAnimSpeed;
 
-	if ((int)pUnit->dwSeqCurrentFrame >= (int)pUnit->dwFrameCount)
+	if (pUnit->dwSeqCurrentFramePrecise >= pUnit->dwFrameCountPrecise)
 	{
-		pUnit->dwSeqCurrentFrame = pUnit->wAnimSpeed + pUnit->dwSeqCurrentFrame - pUnit->dwFrameCount;
+		pUnit->dwSeqCurrentFramePrecise -= pUnit->dwFrameCountPrecise;
 	}
 }
 
 //D2Common.0x6FDBF020 (#10375)
-//TODO: Check name
 void __stdcall D2COMMON_10375_UNITS_SetFrameNonRate(D2UnitStrc* pUnit, int nRate, int nFailRate)
 {
-	pUnit->dwSeqCurrentFrame += pUnit->wAnimSpeed;
+	pUnit->dwSeqCurrentFramePrecise += pUnit->wAnimSpeed;
 
-	if ((int)pUnit->dwSeqCurrentFrame >= nFailRate << 8)
+	if (pUnit->dwSeqCurrentFramePrecise >= (nFailRate << 8))
 	{
-		pUnit->dwSeqCurrentFrame += pUnit->wAnimSpeed + (nRate << 8) - (nFailRate << 8);
+		pUnit->dwSeqCurrentFramePrecise -= ((nFailRate << 8) - (nRate << 8));
 	}
 }
 
@@ -1773,11 +1758,11 @@ int __stdcall UNITS_IsAtEndOfFrameCycle(D2UnitStrc* pUnit)
 	
 	if (pUnit->pAnimSeq)
 	{
-		return (int)pUnit->dwFrameCount <= 0;
+		return (int)pUnit->dwFrameCountPrecise <= 0;
 	}
 	else
 	{
-		return (int)(pUnit->dwSeqCurrentFrame + pUnit->wAnimSpeed) >= (int)pUnit->dwFrameCount;
+		return (int)(pUnit->dwSeqCurrentFramePrecise + pUnit->wAnimSpeed) >= (int)pUnit->dwFrameCountPrecise;
 	}
 }
 
@@ -1788,13 +1773,13 @@ void __stdcall UNITS_GetShiftedFrameMetrics(D2UnitStrc* pUnit, int* pFrameNo, in
 
 	if (pUnit->dwUnitType == UNIT_OBJECT)
 	{
-		*pFrameNo = pUnit->dwSeqCurrentFrame >> 8;
+		*pFrameNo = pUnit->dwSeqCurrentFramePrecise >> 8;
 		*pFrameCount = pUnit->pObjectData->pObjectTxt->dwFrameCnt[pUnit->dwAnimMode];
 	}
 	else
 	{
-		*pFrameNo = pUnit->dwSeqCurrentFrame >> 8;
-		*pFrameCount = pUnit->dwFrameCount >> 8;
+		*pFrameNo = pUnit->dwSeqCurrentFramePrecise >> 8;
+		*pFrameCount = pUnit->dwFrameCountPrecise >> 8;
 	}
 }
 
@@ -1805,13 +1790,13 @@ void __stdcall UNITS_GetFrameMetrics(D2UnitStrc* pUnit, int* pFrame, int* pFrame
 	{
 		if (pUnit->dwUnitType == UNIT_OBJECT)
 		{
-			*pFrame = pUnit->dwSeqCurrentFrame;
+			*pFrame = pUnit->dwSeqCurrentFramePrecise;
 			*pFrameCount = pUnit->pObjectData->pObjectTxt->dwFrameCnt[pUnit->dwAnimMode];
 		}
 		else
 		{
-			*pFrame = pUnit->dwSeqCurrentFrame;
-			*pFrameCount = pUnit->dwFrameCount;
+			*pFrame = pUnit->dwSeqCurrentFramePrecise;
+			*pFrameCount = pUnit->dwFrameCountPrecise;
 		}
 	}
 	else

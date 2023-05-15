@@ -217,7 +217,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     if (missileParams->dwFlags & 0x200)
     {
         nRange -= missileParams->nFrame;
-        pMissile->dwSeqCurrentFrame = missileParams->nFrame << 8;
+        pMissile->dwSeqCurrentFramePrecise = missileParams->nFrame << 8;
     }
 
     MISSILE_SetTotalFrames(pMissile, nRange);
