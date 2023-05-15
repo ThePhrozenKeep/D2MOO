@@ -34,6 +34,12 @@ union D2C_PackedTileInformation
 	};
 };
 
+enum D2C_RoomTileConstants
+{
+	DRLGROOMTILE_TILES_SIZE = 8,
+	DRLGROOMTILE_SUBTILES_SIZE = DRLGROOMTILE_TILES_SIZE * 5,
+};
+
 #pragma pack()
 
 //D2Common.0x6FD88860
