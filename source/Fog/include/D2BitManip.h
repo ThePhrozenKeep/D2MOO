@@ -47,7 +47,7 @@ Function:		BITMANIP_ReadSigned
 Address:		Fog.#10129
 Notes:
 */
-FOG_DLL_DECL int __fastcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits);
+FOG_DLL_DECL int __stdcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits);
 
 /*
 Function:		BITMANIP_Read

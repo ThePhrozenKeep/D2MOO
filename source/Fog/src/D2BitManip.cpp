@@ -123,7 +123,7 @@ Function:		BITMANIP_ReadSigned
 Address:		Fog.#10129
 Notes:
 */
-int __fastcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
+int __stdcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
 {
 	int nResult = BITMANIP_Read(pBuffer, nBits);
 
