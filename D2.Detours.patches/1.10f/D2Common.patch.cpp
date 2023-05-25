@@ -1340,7 +1340,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat                                                @11294
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_SetBaseStat2                                               @11295
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_11296_Return                                               @11296
-    PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_SetMonsterNameInMonsterData                                @11297
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   MONSTERS_SetMonsterNameInMonsterData                                @11297
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetUnitNameFromUnit                                        @11298
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetUnitNameFromUnitTypeAndClassId                          @11299
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_EvaluateItemFormula                                        @11300

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CommonDefinitions.h"
+#include <D2Unicode.h>
 
 
 struct D2UnitStrc;
@@ -180,7 +181,7 @@ D2COMMON_DLL_DECL char __stdcall D2Common_11054(uint8_t a1);
 //D2Common.0x6FDA5640 (#11055)
 D2COMMON_DLL_DECL void __stdcall D2Common_11055(uint8_t a1, int* a2, int* a3);
 //D2Common.0x6FDA5670 (#11297)
-D2COMMON_DLL_DECL void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStrc* pMonster, wchar_t* wszName);
+D2COMMON_DLL_DECL void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStrc* pMonster, const Unicode* wszName);
 //D2Common.0x6FDA56C0
 BOOL __fastcall MONSTERS_CanBeInTown(D2UnitStrc* pMonster);
 //D2Common.0x6FDA5750 (#11057)

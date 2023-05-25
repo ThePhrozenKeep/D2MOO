@@ -732,17 +732,15 @@ void __stdcall D2Common_11055(uint8_t a1, int* a2, int* a3)
 }
 
 //D2Common.0x6FDA5670 (#11297)
-void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStrc* pMonster, wchar_t* wszName)
+void __fastcall MONSTERS_SetMonsterNameInMonsterData(D2UnitStrc* pMonster, const Unicode* wszName)
 {
-	unsigned int nSize = 0;
-
-	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pPlayerData)
+	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
 	{
 		if (wszName)
 		{
-			nSize = sizeof(wchar_t) * (wcslen(wszName) + 1);
-			pMonster->pMonsterData->wszMonName = (wchar_t*)D2_ALLOC(nSize);
-			wcscpy_s(pMonster->pMonsterData->wszMonName, nSize, wszName);
+			const size_t nStringBufferBytes = (Unicode::strlen(wszName) + 1) * sizeof(Unicode);
+			pMonster->pMonsterData->wszMonName = (Unicode*)D2_ALLOC(nStringBufferBytes);
+			Unicode::strcpy(pMonster->pMonsterData->wszMonName, wszName);
 		}
 	}
 }

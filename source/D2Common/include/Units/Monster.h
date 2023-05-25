@@ -42,7 +42,7 @@ struct D2MonsterDataStrc
 	union									//0x2C
 	{
 		D2AiParamStrc* pAiParam;	//Server pMonster
-		wchar_t* wszMonName;		//Client pMonster
+		struct Unicode* wszMonName;	//Client pMonster
 	};
 	D2MonsterInteractStrc* pMonInteract;	//0x30
 	uint32_t unk0x34;							//0x34
