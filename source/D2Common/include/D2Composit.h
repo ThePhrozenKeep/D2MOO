@@ -69,4 +69,4 @@ D2COMMON_DLL_DECL BOOL __stdcall COMPOSIT_IsArmorComponent(int nComponent);
 //D2Common.0x6FD47230 (#10890)
 D2COMMON_DLL_DECL BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit);
 //D2Common.0x6FD472E0 (#10891)
-D2COMMON_DLL_DECL uint8_t __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents);
+D2COMMON_DLL_DECL unsigned __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents);

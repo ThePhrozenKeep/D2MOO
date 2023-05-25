@@ -934,7 +934,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   COMPOSIT_GetWeaponClassId                                           @10888
     PatchAction::FunctionReplacePatchByOriginal,       //   COMPOSIT_IsArmorComponent                                           @10889
     PatchAction::FunctionReplacePatchByOriginal,       //   COMPOSIT_IsWeaponBowOrXBow                                          @10890
-    PatchAction::FunctionReplacePatchByOriginal,       //   COMPOSIT_GetArmorTypeFromComponent                                  @10891
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   COMPOSIT_GetArmorTypeFromComponent                                  @10891
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_AllocHoverMsg                                                  @10892
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_FreeHoverMsg                                                   @10893
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_GetDisplayTimeFromHoverMsg                                     @10894

@@ -452,7 +452,8 @@ BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD472E0 (#10891)
-uint8_t __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents)
+//Note: value returned in eax register (32bits), can't change return type to uint8_t
+unsigned __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents)
 {
 	D2_ASSERT(nComponent < NUM_COMPONENTS);
 
