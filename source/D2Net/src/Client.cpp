@@ -20,7 +20,7 @@ D2PacketStrc* gpGamePacketList;
 D2PacketBufferStrc* gpPacketBuffer;
 HANDLE ghClientThread;
 SOCKET gClientSocket;
-HANDLE ghClientThreadHandle;
+HANDLE ghClientConnectToHostThreadHandle;
 WSADATA gWSAData;
 DWORD gdwThreadId;
 int32_t dword_6FC0B25C;
@@ -88,7 +88,7 @@ int32_t __stdcall D2NET_10025()
 		return 2;
 	}
 
-	if (WaitForSingleObject(ghClientThreadHandle, 100))
+	if (WaitForSingleObject(ghClientConnectToHostThreadHandle, 100))
 	{
 		return 1;
 	}
@@ -107,6 +107,8 @@ int32_t __stdcall D2NET_10025()
 
 	ghClientThread = CreateThread(nullptr, 0, CLIENT_ThreadProc, nullptr, 0, &gdwThreadId);
 	SetThreadPriority(ghClientThread, 1);
+	
+	SetThreadDescription(ghClientThread, L"D2ClientThread"); // D2Moo only
 	return 2;
 }
 
@@ -128,7 +130,8 @@ void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 		return;
 	}
 
-	ghClientThreadHandle = CreateThread(nullptr, 0, CLIENT_ConnectToHost, (void*)szIpAddress, 0, &gdwThreadId);
+	ghClientConnectToHostThreadHandle = CreateThread(nullptr, 0, CLIENT_ConnectToHost, (void*)szIpAddress, 0, &gdwThreadId);
+	SetThreadDescription(ghClientThread, L"D2ClientConnectToHostThread"); // D2Moo only
 }
 
 //D2Net.0x6FC01240 (#10001)
