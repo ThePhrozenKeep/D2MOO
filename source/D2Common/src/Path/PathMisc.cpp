@@ -1328,10 +1328,183 @@ void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pR
 //D2Common.0x6FDAE290
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 {
-	// Probably belongs to Path/Step.cpp
-	UNIMPLEMENTED();
-}
+	D2DynamicPathStrc* v1; // ecx
+	DWORD v2; // ebx
+	DWORD v3; // ebp
+	D2RoomStrc* v4; // eax
+	signed int v5; // esi
+	int v6; // edi
+	int v7; // ecx
+	DWORD v8; // edx
+	D2RoomStrc* v9; // eax
+	int v10; // ecx
+	D2DynamicPathStrc* v11; // ebp
+	int v12; // edx
+	D2UnitStrc* v13; // eax
+	D2RoomStrc* v14; // eax
+	WORD v15; // cx
+	WORD v16; // dx
+	int v17; // edi
+	int v18; // ecx
+	int v19; // esi
+	int v20; // edi
+	int v21; // ecx
+	int v22; // edx
+	D2RoomStrc* v23; // eax
+	int v24; // ecx
+	int pNumRooms; // [esp+10h] [ebp-14h] BYREF
+	D2RoomStrc** pppRoom; // [esp+14h] [ebp-10h] BYREF
+	int v27; // [esp+18h] [ebp-Ch] BYREF
+	int pX; // [esp+1Ch] [ebp-8h] BYREF
+	int pY; // [esp+20h] [ebp-4h] BYREF
 
+	v1 = pDynamicPath;
+	v2 = (pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
+	v3 = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+	if ((pDynamicPath->dwFlags & 0x40000) != 0)
+	{
+		v4 = pDynamicPath->pRoom;
+		v5 = HIWORD(v3);
+		v6 = HIWORD(v2);
+		if (!v4)
+		{
+		LABEL_19:
+			v1->dwPathPoints = 0;
+			return;
+		}
+		if (v6 < v4->nSubtileX
+			|| v6 >= v4->nSubtileX + v4->nSubtileWidth
+			|| (v7 = v4->nSubtileY, v5 < v7)
+			|| v5 >= v7 + v4->nSubtileHeight)
+		{
+			pppRoom = 0;
+			pNumRooms = 0;
+			DUNGEON_GetAdjacentRoomsListFromRoom(v4, &pppRoom, &pNumRooms);
+			v8 = 0;
+			v27 = 0;
+			if (pNumRooms)
+			{
+				while (1)
+				{
+					v9 = pppRoom[v8];
+					if (v9 && v6 >= v9->nSubtileX)
+					{
+						if (v6 < v9->nSubtileX + v9->nSubtileWidth)
+						{
+							v10 = v9->nSubtileY;
+							if (v5 >= v10 && v5 < v10 + v9->nSubtileHeight)
+							{
+								v4 = pppRoom[v27];
+								goto LABEL_17;
+							}
+						}
+						v8 = v27;
+					}
+					v27 = ++v8;
+					if (v8 >= pNumRooms)
+					{
+						pDynamicPath->dwPathPoints = 0;
+						return;
+					}
+				}
+			}
+			goto LABEL_18;
+		}
+	LABEL_17:
+		if (!v4)
+		{
+		LABEL_18:
+			v1 = pDynamicPath;
+			goto LABEL_19;
+		}
+		v1 = pDynamicPath;
+	}
+	v1->tGameCoords.dwPrecisionX = v2;
+	v1->tGameCoords.dwPrecisionY = v3;
+	pX = v2 >> 11;
+	pY = v3 >> 11;
+	DUNGEON_GameToClientCoords(&pX, &pY);
+	v11 = pDynamicPath;
+	v12 = pX;
+	pDynamicPath->dwClientCoordY = pY;
+	v13 = pDynamicPath->pUnit;
+	pDynamicPath->dwClientCoordX = v12;
+	if (v13)
+	{
+		if ((pDynamicPath->dwFlags & 1) != 0)
+		{
+			v14 = pDynamicPath->pRoom;
+			v15 = pDynamicPath->tGameCoords.wPosX;
+			v16 = pDynamicPath->tGameCoords.wPosY;
+			if (!v14
+				|| v15 < v14->nSubtileX
+				|| v15 >= v14->nSubtileX + v14->nSubtileWidth
+				|| (v17 = v14->nSubtileY, v16 < v17)
+				|| v16 >= v17 + v14->nSubtileHeight)
+			{
+				v18 = pDynamicPath->tGameCoords.wPosX;
+				v19 = pDynamicPath->tGameCoords.wPosY;
+				v20 = v18;
+				if (v14)
+				{
+					if (v18 >= v14->nSubtileX && v18 < v14->nSubtileX + v14->nSubtileWidth)
+					{
+						v21 = v14->nSubtileY;
+						if (v19 >= v21 && v19 < v21 + v14->nSubtileHeight)
+						{
+						LABEL_44:
+							if (v14)
+							{
+							LABEL_47:
+								PATHMISC_SetRoom(v11, v14);
+								return;
+							}
+						LABEL_45:
+							if ((v11->dwFlags & 0x40000) != 0)
+							{
+								v11->dwPathPoints = 0;
+								return;
+							}
+							goto LABEL_47;
+						}
+					}
+					pppRoom = 0;
+					v27 = 0;
+					DUNGEON_GetAdjacentRoomsListFromRoom(v14, &pppRoom, &v27);
+					v22 = 0;
+					if (v27)
+					{
+						while (1)
+						{
+							v23 = pppRoom[v22];
+							if (v23 && v20 >= v23->nSubtileX)
+							{
+								if (v20 < v23->nSubtileX + v23->nSubtileWidth)
+								{
+									v24 = v23->nSubtileY;
+									if (v19 >= v24 && v19 < v24 + v23->nSubtileHeight)
+									{
+										v14 = pppRoom[v22];
+										v11 = pDynamicPath;
+										goto LABEL_44;
+									}
+								}
+								v11 = pDynamicPath;
+							}
+							if (++v22 >= v27)
+							{
+								v14 = 0;
+								goto LABEL_45;
+							}
+						}
+					}
+				}
+				v14 = 0;
+				goto LABEL_45;
+			}
+		}
+	}
+}
 //D2Common.0x6FDAE500 (#10234)
 //TODO: Find a name
 BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
