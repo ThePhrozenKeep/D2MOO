@@ -1733,21 +1733,7 @@ LABEL_75:
 //D2Common.0x6FDBF8D0 (#10377)
 void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed)
 {
-	if (nSpeed > 0)
-	{
-		if (nSpeed >= 32767)
-		{
-			pUnit->wAnimSpeed = 32767;
-		}
-		else
-		{
-			pUnit->wAnimSpeed = nSpeed;
-		}
-	}
-	else
-	{
-		pUnit->wAnimSpeed = 0;
-	}
+	pUnit->wAnimSpeed = D2Clamp(nSpeed, 0, 32767);
 }
 
 //D2Common.0x6FDBF910 (#10378)
@@ -1835,11 +1821,6 @@ void __stdcall UNITS_SetAnimActionFrame(D2UnitStrc* pUnit, int nFrame)
 //D2Common.0x6FDBFA90 (#10382)
 int __stdcall UNITS_GetEventFrameInfo(D2UnitStrc* pUnit, int nFrame)
 {
-	BOOL bSequence = FALSE;
-	unsigned int nMode = 0;
-	unsigned int nTemp = 0;
-	int nDirection = 0;
-	int nEvent = 0;
 	D2_ASSERT(pUnit);
 
 	if (nFrame >= 144)
@@ -1847,16 +1828,16 @@ int __stdcall UNITS_GetEventFrameInfo(D2UnitStrc* pUnit, int nFrame)
 		return 0;
 	}
 
-	if (pUnit->dwUnitType != UNIT_PLAYER)
+	BOOL bSequence = FALSE;
+	switch (pUnit->dwUnitType)
 	{
-		if (pUnit->dwUnitType != UNIT_MONSTER)
-		{
-			return pUnit->pAnimData->pFrameFlags[nFrame];
-		}
-	}
-	else if (pUnit->dwAnimMode == PLRMODE_SEQUENCE)
-	{
-		bSequence = TRUE;
+	case UNIT_PLAYER:
+		bSequence = (pUnit->dwAnimMode == PLRMODE_SEQUENCE);
+		break;
+	case UNIT_MONSTER:
+		break;
+	default:
+		return pUnit->pAnimData->pFrameFlags[nFrame];
 	}
 
 	if (pUnit->dwAnimMode != MONMODE_SEQUENCE && !bSequence)
@@ -1864,6 +1845,10 @@ int __stdcall UNITS_GetEventFrameInfo(D2UnitStrc* pUnit, int nFrame)
 		return pUnit->pAnimData->pFrameFlags[nFrame];
 	}
 
+	unsigned int nMode = 0;
+	unsigned int nTemp = 0;
+	int nDirection = 0;
+	int nEvent = 0;
 	DATATBLS_ComputeSequenceAnimation(DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit), nFrame << 8, nFrame << 8, &nMode, &nTemp, &nDirection, &nEvent);
 	return nEvent;
 }

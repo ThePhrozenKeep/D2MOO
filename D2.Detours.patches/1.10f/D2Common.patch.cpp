@@ -419,15 +419,15 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_StopSequence                                                  @10373
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_UpdateFrame                                                   @10374
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10375_UNITS_SetFrameNonRate                                @10375
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10376_UpdateAnimRateAndVelocity                            @10376
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimationSpeed                                             @10377
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_IsAtEndOfFrameCycle                                           @10378
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetShiftedFrameMetrics                                        @10379
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetFrameMetrics                                               @10380
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimActionFrame                                            @10381
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetEventFrameInfo                                             @10382
+    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   D2COMMON_10376_UpdateAnimRateAndVelocity                            @10376
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimationSpeed                                             @10377
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsAtEndOfFrameCycle                                           @10378
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetShiftedFrameMetrics                                        @10379
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetFrameMetrics                                               @10380
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimActionFrame                                            @10381
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetEventFrameInfo                                             @10382
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_ResetLightMap                                                 @10383
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_AddUnitToRoom                                              @10384
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITROOM_AddUnitToRoom                                              @10384
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_RefreshUnit                                                @10385
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_RemoveUnitFromRoom                                         @10386
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_RemoveUnitFromUpdateQueue                                  @10387
