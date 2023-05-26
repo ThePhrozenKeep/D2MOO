@@ -1277,10 +1277,166 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pH
 	}
 }
 
-//D2Common.0x6FDADC20
+//D2Common.0x6FDADC20 (#10231)
 int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* pRooms, int nX, int nY)
 {
-	UNIMPLEMENTED();
+	D2DynamicPathStrc* v5; // esi
+	D2UnitStrc* v6; // eax
+	WORD v7; // dx
+	D2RoomStrc* v8; // ecx
+	uint32_t v9; // eax
+	uint32_t v10; // eax
+	int v11; // ebx
+	unsigned int v12; // edi
+	unsigned int v13; // ebp
+	D2RoomStrc* v14; // edi
+	int v15; // eax
+	DWORD v16; // ebp
+	D2RoomStrc* v17; // edx
+	D2DynamicPathStrc* v18; // edx
+	D2UnitStrc* v19; // eax
+	int v20; // edx
+	int* v21; // eax
+	int v22; // ecx
+	uint32_t v23; // eax
+	int pY; // [esp+10h] [ebp-Ch] BYREF
+	D2PathPointStrc v26; // [esp+14h] [ebp-8h]
+
+	v5 = a1;
+	v6 = a1->pUnit;
+	v7 = a1->tGameCoords.wPosY;
+	v26.X = a1->tGameCoords.wPosX;
+	v26.Y = v7;
+	if (v6 && v6->dwUnitType == UNIT_MISSILE)
+	{
+		if ((WORD)nX || (WORD)nY)
+			COLLISION_TeleportUnitCollisionMask(
+				a1->pRoom,
+				v26.X,
+				v26.Y,
+				pRooms,
+				(unsigned __int16)nX,
+				(unsigned __int16)nY,
+				a1->dwUnitSize,
+				a1->dwCollisionType);
+		else
+			COLLISION_ResetMaskWithSize(a1->pRoom, v26.X, v26.Y, a1->dwUnitSize, a1->dwCollisionType);
+	}
+	else if ((WORD)nX || (WORD)nY)
+	{
+		COLLISION_SetUnitCollisionMask(
+			a1->pRoom,
+			v26.X,
+			v26.Y,
+			pRooms,
+			(unsigned __int16)nX,
+			(unsigned __int16)nY,
+			a1->dwCollisionPattern,
+			a1->dwCollisionType);
+	}
+	else
+	{
+		COLLISION_ResetMaskWithPattern(
+			a1->pRoom,
+			v26.X,
+			v26.Y,
+			a1->dwCollisionPattern,
+			a1->dwCollisionType);
+	}
+	v8 = v5->pRoom;
+	if (v8 != pRooms)
+	{
+		v9 = v5->dwFlags;
+		v9 = v9 | PATH_UNKNOWN_FLAG_0x00001;
+		v5->dwFlags = v9;
+	}
+	v10 = v5->dwFlags;
+	v11 = (unsigned __int16)nX;
+	DWORD v27 = (unsigned __int16)nY;
+	v12 = ((unsigned __int16)nX << 16) + 0x8000;
+	v13 = ((unsigned __int16)nY << 16) + 0x8000;
+	if ((v10 & 0x40000) == 0 || COLLISION_GetRoomBySubTileCoordinates(v8, HIWORD(v12), HIWORD(v13)))
+	{
+		v5->tGameCoords.dwPrecisionX = v12;
+		v5->tGameCoords.dwPrecisionY = v13;
+		a1 = (D2DynamicPathStrc*)(v12 >> 11);
+		pY = v13 >> 11;
+		DUNGEON_GameToClientCoords((int*)&a1, &pY);
+		v18 = a1;
+		v5->dwClientCoordY = pY;
+		v19 = v5->pUnit;
+		v5->dwClientCoordX = (int32_t)v18;
+		if (v19 && (v5->dwFlags & 1) != 0)
+		{
+			v14 = pRooms;
+			PATH_RecacheRoom(v5, pRooms);
+			goto LABEL_17;
+		}
+	}
+	else
+	{
+		v5->dwPathPoints = 0;
+	}
+	v14 = pRooms;
+LABEL_17:
+	if (!(WORD)nX && !(WORD)nY)
+		goto LABEL_40;
+	if (!v14)
+		goto LABEL_39;
+	if (v11 < v14->nSubtileX || v11 >= v14->nSubtileX + v14->nSubtileWidth)
+	{
+		v16 = v27;
+	}
+	else
+	{
+		v15 = v14->nSubtileY;
+		v16 = v27;
+		if (*(DWORD*)&v27 >= v15 && *(DWORD*)&v27 < v15 + v14->nSubtileHeight)
+		{
+			v17 = v14;
+			goto LABEL_38;
+		}
+	}
+	nY = 0;
+	pRooms = 0;
+	DUNGEON_GetAdjacentRoomsListFromRoom(v14, (D2RoomStrc***)&nY, (int*)&pRooms);
+	v20 = 0;
+	if (!pRooms)
+		goto LABEL_39;
+	while (1)
+	{
+		v21 = *(int**)(nY + 4 * v20);
+		if (v21)
+		{
+			if (v11 >= *v21 && v11 < *v21 + v21[2])
+			{
+				v22 = v21[1];
+				if (*(DWORD*)&v16 >= v22 && *(DWORD*)&v16 < v22 + v21[3])
+					break;
+			}
+		}
+		if (++v20 >= (unsigned int)pRooms)
+			goto LABEL_39;
+	}
+	v17 = *(D2RoomStrc**)(nY + 4 * v20);
+LABEL_38:
+	if (!v17)
+	{
+	LABEL_39:
+		FOG_DisplayAssert(
+			"COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || DungeonFindRoomGame( hRoomDest, tDest.wX, tDest.wY )",
+			"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\PATH\\Step.cpp",
+			1228);
+		exit(-1);
+	}
+LABEL_40:
+	D2Common_10233(v5);
+	v5->dwFlags = v5->dwFlags & (~PATH_UNKNOWN_FLAG_0x00020);
+	v5->dwPathPoints = 0;
+	v5->dwCurrentPointIdx = 0;
+	v5->tVelocityVector.nX = 0;
+	v5->tVelocityVector.nY = 0;
+	v5->dwPathPoints = 0;
 	return 1;
 }
 
