@@ -163,6 +163,12 @@ struct D2ExperienceTxt
 	uint32_t dwExpRatio;					//0x1C
 };
 
+struct D2ExperienceDataTbl
+{
+	D2ExperienceTxt tMax;
+	D2ExperienceTxt aLevels[];
+};
+
 struct D2PlayerClassTxt
 {
 	uint32_t dwCode;						//0x00
@@ -436,7 +442,7 @@ struct D2DataTablesStrc
 	int nStuff;											//0xC6C
 	int nShiftedStuff;									//0xC70
 	D2AnimDataTableStrc* pAnimData;						//0xC74
-	D2ExperienceTxt* pExperienceTxt;					//0xC78
+	D2ExperienceDataTbl* pExperienceTxt;				//0xC78
 	D2DifficultyLevelsTxt* pDifficultyLevelsTxt;		//0xC7C
 	int nDifficultyLevelsTxtRecordCount;				//0xC80
 	BOOL bCompileTxt;									//0xC84

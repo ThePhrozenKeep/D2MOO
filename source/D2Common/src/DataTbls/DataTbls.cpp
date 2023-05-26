@@ -94,14 +94,14 @@ uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel)
 	{
 		if (nLevel > 0)
 		{
-			if (nLevel <= (int)sgptDataTables->pExperienceTxt->dwClass[0])
+			if (nLevel <= (int)sgptDataTables->pExperienceTxt->tMax.dwClass[0])
 			{
-				return sgptDataTables->pExperienceTxt[nLevel + 1].dwExpRatio;
+				return sgptDataTables->pExperienceTxt->aLevels[nLevel].dwExpRatio;
 			}
 		}
 		else
 		{
-			return sgptDataTables->pExperienceTxt->dwExpRatio;
+			return sgptDataTables->pExperienceTxt->tMax.dwExpRatio;
 		}
 	}
 
@@ -116,7 +116,7 @@ uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 		nClass = 0;
 	}
 
-	return sgptDataTables->pExperienceTxt[dwLevel + 1].dwClass[nClass];
+	return sgptDataTables->pExperienceTxt->aLevels[dwLevel].dwClass[nClass];
 }
 
 //D2Common.0x6FD496E0 (#10629)
@@ -124,23 +124,23 @@ int __stdcall DATATBLS_GetMaxLevel(int nClass)
 {
 	if (nClass >= 0 && nClass < NUMBER_OF_PLAYERCLASSES)
 	{
-		return sgptDataTables->pExperienceTxt->dwClass[nClass];
+		return sgptDataTables->pExperienceTxt->tMax.dwClass[nClass];
 	}
 
-	return sgptDataTables->pExperienceTxt->dwClass[0];
+	return sgptDataTables->pExperienceTxt->tMax.dwClass[0];
 }
 
 //D2Common.0x6FD49710 (#10630)
 uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience)
 {
-	int nLevel = 1;
-
 	if (nClass < 0 || nClass >= NUMBER_OF_PLAYERCLASSES)
 	{
 		nClass = 0;
 	}
 
-	while (dwExperience >= sgptDataTables->pExperienceTxt[nLevel].dwClass[nClass])
+	int nLevel = 0;
+	while ( nLevel < sgptDataTables->pExperienceTxt->tMax.dwClass[nClass]
+		&& dwExperience >= sgptDataTables->pExperienceTxt->aLevels[nLevel+1].dwClass[nClass])
 	{
 		++nLevel;
 	}
@@ -853,7 +853,7 @@ void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3)
 	DATATBLS_LoadCompositTxt(pMemPool);
 	DATATBLS_LoadArmTypeTxt(pMemPool);
 
-	sgptDataTables->pExperienceTxt = (D2ExperienceTxt*)DATATBLS_CompileTxt(pMemPool, "experience", pTbl, NULL, sizeof(D2ExperienceTxt));
+	sgptDataTables->pExperienceTxt = (D2ExperienceDataTbl*)DATATBLS_CompileTxt(pMemPool, "experience", pTbl, NULL, sizeof(D2ExperienceTxt));
 
 	sgptDataTables->pAnimData = DATATBLS_LoadAnimDataD2(pMemPool);
 	DATATBLS_LoadSomeMonsterTxts(pMemPool);
