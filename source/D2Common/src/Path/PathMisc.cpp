@@ -1241,11 +1241,19 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 	return 1;
 }
 
-//D2Common.0x6FDADF00
-BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStrc* a3, unsigned int a4, __int16 a5)
+//D2Common.0x6FDADF00 (#10230)
+BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStrc* pRoom, unsigned int a4, __int16 a5)
 {
-	UNIMPLEMENTED();
-	return FALSE;
+	D2PathPointStrc tPos;
+	tPos.X = a4;
+	tPos.Y = a5;
+	BOOL result = sub_6FDAD5E0(pDynamicPath, pRoom, tPos);
+	if (result)
+	{
+		pDynamicPath->unk0x38 = 15;
+		result = 1;
+	}
+	return result;
 }
 
 //D2Common.0x6FDADF50) --------------------------------------------------------
