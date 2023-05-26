@@ -83,7 +83,6 @@ BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStr
 //D2Common.0x6FDADC20 (#10231)
 signed int __stdcall D2Common_10231(D2DynamicPathStrc * a1, D2UnitStrc * a2, D2RoomStrc * pRooms, int nX, int nY);
 BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
-void __stdcall D2Common_10233(D2DynamicPathStrc*);
 BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAE520 (#10235)
 void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2UnitStrc* pMountUnit);
