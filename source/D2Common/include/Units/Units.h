@@ -294,7 +294,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_RefreshInventory(D2UnitStrc* pUnit, BOOL 
 //D2Common.0x6FDBEBE0 (#10409)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL bLoD);
 //D2Common.0x6FDBECD0 (#10383)
-D2COMMON_DLL_DECL D2GfxLightStrc* __stdcall UNITS_GetLightMap(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2GfxLightStrc* __stdcall UNITS_ResetLightMap(D2UnitStrc* pUnit);
 //D2Common.0x6FDBED10 (#10369)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetAnimOrSeqMode(D2UnitStrc* pUnit);
 //D2Common.0x6FDBED40 (#10370)

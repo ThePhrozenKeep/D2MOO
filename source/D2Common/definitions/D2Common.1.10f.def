@@ -383,7 +383,7 @@ EXPORTS
 	UNITS_GetFrameMetrics												@10380
 	UNITS_SetAnimActionFrame											@10381
 	UNITS_GetEventFrameInfo												@10382
-	UNITS_GetLightMap													@10383
+	UNITS_ResetLightMap													@10383
 	UNITROOM_AddUnitToRoom												@10384
 	UNITROOM_RefreshUnit												@10385
 	UNITROOM_RemoveUnitFromRoom											@10386

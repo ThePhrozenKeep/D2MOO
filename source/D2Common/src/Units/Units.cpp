@@ -961,13 +961,12 @@ int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL b
 }
 
 //D2Common.0x6FDBECD0 (#10383)
-D2GfxLightStrc* __stdcall UNITS_GetLightMap(D2UnitStrc* pUnit)
+D2GfxLightStrc* __stdcall UNITS_ResetLightMap(D2UnitStrc* pUnit)
 {
-	D2GfxLightStrc* pLight = NULL;
 	D2_ASSERT(pUnit);
 
-	pLight = pUnit->pLight;
-	pUnit->pLight = NULL;
+	D2GfxLightStrc* pLight = pUnit->pLight;
+	pUnit->pLight = nullptr;
 
 	return pLight;
 }

@@ -426,7 +426,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetFrameMetrics                                               @10380
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_SetAnimActionFrame                                            @10381
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetEventFrameInfo                                             @10382
-    PatchAction::FunctionReplacePatchByOriginal,       //   UNITS_GetLightMap                                                   @10383
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_ResetLightMap                                                 @10383
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_AddUnitToRoom                                              @10384
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_RefreshUnit                                                @10385
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_RemoveUnitFromRoom                                         @10386
