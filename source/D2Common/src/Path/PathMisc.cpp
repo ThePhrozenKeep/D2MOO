@@ -1071,31 +1071,743 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 	return nResult;
 }
 
-//D2Common.0x6FDAC9A0
-BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
-{
-	UNIMPLEMENTED();
-	return 1;
-}
-
 //D2Common.0x6FDACC40
-void __fastcall sub_6FDACC40(int a1, D2RoomStrc* a2, unsigned int a3, unsigned int a4)
+void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, unsigned int a3, unsigned int a4)
 {
-	UNIMPLEMENTED();
+	unsigned int v4; // ebx
+	unsigned int v6; // esi
+	uint32_t v7; // eax
+	D2RoomStrc* v8; // eax
+	signed int v9; // esi
+	signed int v10; // edi
+	int v11; // ecx
+	int v12; // edx
+	D2RoomStrc* v13; // eax
+	int v14; // ecx
+	D2UnitStrc* v15; // eax
+	int v16; // edx
+	D2RoomStrc* v17; // eax
+	uint16_t v18; // bx
+	uint16_t v19; // di
+	int v20; // edx
+	D2RoomStrc* v21; // esi
+	int v22; // edi
+	int v23; // ebx
+	int v24; // ecx
+	int v25; // edx
+	D2RoomStrc* v26; // eax
+	int v27; // ecx
+	D2RoomStrc* v28; // eax
+	D2UnitStrc* v29; // edi
+	uint32_t v30; // ecx
+	DWORD pNumRooms; // [esp+10h] [ebp-14h] BYREF
+	D2RoomStrc** pppRoom; // [esp+14h] [ebp-10h] BYREF
+	int pX; // [esp+18h] [ebp-Ch] BYREF
+	int pY; // [esp+1Ch] [ebp-8h] BYREF
+	D2RoomStrc* pRoom; // [esp+20h] [ebp-4h]
+
+	v4 = a3;
+	v6 = a4;
+	v7 = pDynamicPath->dwFlags;
+	pRoom = a2;
+	if ((v7 & PATH_MISSILE_MASK) == 0)
+		goto LABEL_18;
+	v8 = pDynamicPath->pRoom;
+	v9 = HIWORD(a4);
+	v10 = HIWORD(a3);
+	if (!v8)
+		goto LABEL_17;
+	if (v10 >= v8->nSubtileX && v10 < v8->nSubtileX + v8->nSubtileWidth)
+	{
+		v11 = v8->nSubtileY;
+		if (v9 >= v11 && v9 < v11 + v8->nSubtileHeight)
+			goto LABEL_16;
+	}
+	pppRoom = 0;
+	pNumRooms = 0;
+	DUNGEON_GetAdjacentRoomsListFromRoom(v8, &pppRoom, (int*)&pNumRooms);
+	v12 = 0;
+	if (!pNumRooms)
+	{
+	LABEL_17:
+		pDynamicPath->dwPathPoints = 0;
+		return;
+	}
+	while (1)
+	{
+		v13 = pppRoom[v12];
+		if (v13)
+		{
+			if (v10 >= v13->nSubtileX && v10 < v13->nSubtileX + v13->nSubtileWidth)
+			{
+				v14 = v13->nSubtileY;
+				if (v9 >= v14 && v9 < v14 + v13->nSubtileHeight)
+					break;
+			}
+		}
+		if (++v12 >= pNumRooms)
+		{
+			pDynamicPath->dwPathPoints = 0;
+			return;
+		}
+	}
+	v4 = a3;
+	v8 = pppRoom[v12];
+LABEL_16:
+	v6 = a4;
+	if (!v8)
+		goto LABEL_17;
+LABEL_18:
+	pDynamicPath->tGameCoords.dwPrecisionX = v4;
+	pDynamicPath->tGameCoords.dwPrecisionY = v6;
+	pX = v4 >> 11;
+	pY = v6 >> 11;
+	DUNGEON_GameToClientCoords(&pX, &pY);
+	v15 = pDynamicPath->pUnit;
+	v16 = pY;
+	pDynamicPath->dwClientCoordX = pX;
+	pDynamicPath->dwClientCoordY = v16;
+	if (!v15)
+		return;
+	if ((pDynamicPath->dwFlags & 1) == 0)
+		return;
+	v17 = pDynamicPath->pRoom;
+	v18 = pDynamicPath->tGameCoords.wPosX;
+	v19 = pDynamicPath->tGameCoords.wPosY;
+	if (v17)
+	{
+		if (v18 >= v17->nSubtileX && v18 < v17->nSubtileX + v17->nSubtileWidth)
+		{
+			v20 = v17->nSubtileY;
+			if (v19 >= v20 && v19 < v20 + v17->nSubtileHeight)
+				return;
+		}
+	}
+	v21 = 0;
+	v22 = pDynamicPath->tGameCoords.wPosY;
+	v23 = pDynamicPath->tGameCoords.wPosX;
+	if (!v17)
+		goto LABEL_32;
+	if (v23 < v17->nSubtileX
+		|| v23 >= v17->nSubtileX + v17->nSubtileWidth
+		|| (v24 = v17->nSubtileY, v22 < v24)
+		|| v22 >= v24 + v17->nSubtileHeight)
+	{
+		pppRoom = 0;
+		a3 = 0;
+		DUNGEON_GetAdjacentRoomsListFromRoom(v17, &pppRoom, (int*)&a3);
+		v25 = 0;
+		if (!a3)
+		{
+		LABEL_43:
+			v21 = 0;
+		LABEL_32:
+			if ((!pRoom || (v21 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v23, v22)) == 0)
+				&& (pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+			{
+				pDynamicPath->dwPathPoints = 0;
+				return;
+			}
+			goto LABEL_45;
+		}
+		while (1)
+		{
+			v26 = pppRoom[v25];
+			if (v26)
+			{
+				if (v23 >= v26->nSubtileX && v23 < v26->nSubtileX + v26->nSubtileWidth)
+				{
+					v27 = v26->nSubtileY;
+					if (v22 >= v27 && v22 < v27 + v26->nSubtileHeight)
+						break;
+				}
+			}
+			if (++v25 >= a3)
+				goto LABEL_43;
+		}
+		v21 = pppRoom[v25];
+	}
+	else
+	{
+		v21 = pDynamicPath->pRoom;
+	}
+	if (!v21)
+		goto LABEL_32;
+LABEL_45:
+	v28 = pDynamicPath->pRoom;
+	v29 = pDynamicPath->pUnit;
+	pDynamicPath->pRoomNext = v28;
+	if (v28)
+		UNITROOM_RemoveUnitFromRoom(v29);
+	v30 = pDynamicPath->dwFlags;
+	pDynamicPath->pRoom = v21;
+	pDynamicPath->dwFlags = v30 | PATH_CURRENT_ROOM_INVALID;
+	if (v21)
+	{
+		UNITROOM_AddUnitToRoom(v29, v21);
+		UNITROOM_RefreshUnit(v29);
+	}
 }
 
 //D2Common.0x6FDACEC0
-signed int __fastcall sub_6FDACEC0(int a1, int a2, int a3)
+BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit)
 {
-	UNIMPLEMENTED();
-	return 0;
+	D2UnitStrc* v4; // eax
+	uint32_t v5; // eax
+	int v7; // edi
+	int v8; // ebx
+	int32_t v9; // ecx
+	int v10; // eax
+	int v11; // ecx
+	int v12; // eax
+	int v13; // ecx
+	int v14; // ebp
+	int v15; // edx
+	uint32_t v16; // eax
+	uint32_t v17; // ecx
+	uint32_t v18; // ebp
+	uint32_t v19; // ecx
+	uint8_t v20; // al
+	uint32_t v21; // ecx
+	uint32_t v22; // ebp
+	uint32_t v23; // edi
+	uint32_t v24; // eax
+	uint32_t v25; // ebx
+	uint32_t v26; // ecx
+	D2PathPointStrc v27; // edx
+	int v28; // ebx
+	uint32_t v29; // eax
+	D2UnitStrc* v30; // eax
+	int v31; // ebx
+	uint32_t v32; // eax
+	uint16_t v33; // ax
+	uint16_t v34; // ax
+	signed int v35; // eax
+	uint32_t v36; // edx
+	int v37; // [esp+10h] [ebp-48h]
+	D2PathPointStrc v38; // [esp+10h] [ebp-48h]
+	int v40; // [esp+18h] [ebp-40h]
+	int v41; // [esp+18h] [ebp-40h]
+	int v42; // [esp+1Ch] [ebp-3Ch]
+	int v43; // [esp+20h] [ebp-38h]
+	D2UnitStrc* v44; // [esp+24h] [ebp-34h]
+	D2PathPointStrc v45; // [esp+28h] [ebp-30h]
+	D2PathPointStrc v46; // [esp+30h] [ebp-28h]
+	signed int v47; // [esp+34h] [ebp-24h]
+	signed int v48; // [esp+38h] [ebp-20h] BYREF
+	signed int v49; // [esp+3Ch] [ebp-1Ch] BYREF
+	uint32_t v50; // [esp+40h] [ebp-18h]
+	uint32_t v51; // [esp+44h] [ebp-14h]
+	int v52; // [esp+48h] [ebp-10h]
+	uint32_t v53; // [esp+4Ch] [ebp-Ch]
+	uint32_t v54; // [esp+50h] [ebp-8h]
+	uint32_t v55; // [esp+54h] [ebp-4h]
+
+	v4 = pDynamicPath->pUnit;
+	pDynamicPath->unk0x54 = 0;
+	v44 = v4;
+	*pUnit = 0;
+	if (!v4 || v4->dwUnitType != UNIT_MONSTER || (v42 = 1, (pDynamicPath->dwFlags & 0x10) == 0))
+		v42 = 0;
+	if (!pDynamicPath->tVelocityVector.nX && !pDynamicPath->tVelocityVector.nY)
+	{
+		v5 = pDynamicPath->tGameCoords.dwPrecisionX;
+		pDynamicPath->dwPathPoints = 0;
+		pDynamicPath->dwCurrentPointIdx = 0;
+		a2->dwPrecisionX = (v5 & 0xFFFF0000) + 0x8000;
+		a2->dwPrecisionY = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+		return 0;
+	}
+	v7 = pDynamicPath->tVelocityVector.nY;
+	v8 = pDynamicPath->tVelocityVector.nX;
+	v47 = v7;
+	if (pDynamicPath->dwPathType == 4)
+	{
+		v40 = 0;
+	}
+	else
+	{
+		v9 = pDynamicPath->dwCurrentPointIdx;
+		v10 = (pDynamicPath->PathPoints[v9].X << 16) + 0x8000;
+		v11 = (pDynamicPath->PathPoints[v9].Y << 16) + 0x8000;
+		v12 = v10 - pDynamicPath->tGameCoords.dwPrecisionX;
+		if (v12 < 0)
+			v41 = -v12;
+		else
+			v41 = v12;
+		v13 = v11 - pDynamicPath->tGameCoords.dwPrecisionY;
+		if (v13 < 0)
+			v37 = -v13;
+		else
+			v37 = v13;
+		v14 = v7;
+		if (v7 < 0)
+			v14 = -v7;
+		v15 = v8;
+		if (v8 < 0)
+			v15 = -v8;
+		if (v15 <= v14)
+			v15 = v14;
+		if (v41 > v15 || v37 > v15)
+		{
+			v40 = 0;
+		}
+		else
+		{
+			v8 = v12;
+			v47 = v13;
+			v40 = 1;
+			v7 = v13;
+		}
+	}
+	v16 = pDynamicPath->tGameCoords.dwPrecisionX;
+	v17 = pDynamicPath->tGameCoords.dwPrecisionY;
+	v18 = v8 + pDynamicPath->tGameCoords.dwPrecisionX;
+	v55 = v17 + v7;
+	v54 = v18;
+	v19 = HIWORD(v17);
+	if (HIWORD(v16) != HIWORD(v18) || (WORD)v19 != HIWORD(v55))
+	{
+		v20 = pDynamicPath->nDist;
+		if (v20)
+		{
+			v21 = pDynamicPath->dwPathType;
+			if (v21 != 8 && v21 != 11)
+				pDynamicPath->nDist = v20 - 1;
+		}
+		pDynamicPath->nSavedStepsCount = 0;
+		v48 = v8;
+		v49 = v47;
+		sub_6FDAB810(&v48, &v49);
+		v22 = pDynamicPath->tGameCoords.dwPrecisionY;
+		v23 = pDynamicPath->tGameCoords.dwPrecisionX;
+		v45.Y = HIWORD(v22);
+		v24 = v8 + pDynamicPath->tGameCoords.dwPrecisionX;
+		v25 = v47 + v22;
+		v38.X = HIWORD(v24);
+		v38.Y = (v47 + v22) >> 16;
+		v26 = pDynamicPath->dwFlags;
+		v50 = v24;
+		v27.X = HIWORD(v23);
+		v45.X = HIWORD(v23);
+		v51 = v47 + v22;
+		v43 = v26 & 0x20000;
+		while (1)
+		{
+			if (D2PathPointStrc{ v27.X, v45.Y } == v38)
+			{
+			LABEL_58:
+				if (pDynamicPath->nSavedStepsCount)
+					pDynamicPath->dwFlags |= 8u;
+				v18 = v54;
+				a2->dwPrecisionX = v24;
+				a2->dwPrecisionY = v25;
+				*pUnit = (D2UnitStrc*)pDynamicPath->nSavedStepsCount;
+				goto LABEL_61;
+			}
+			v28 = v48 + v23;
+			v53 = v22 + v49;
+			v52 = v48 + v23;
+			v46.X = (v48 + v23) >> 16;
+			v46.Y = (v22 + v49) >> 16;
+			if (D2PathPointStrc{ v27.X,v45.Y } != v46)
+				break;
+		LABEL_56:
+			v22 = v53;
+			v23 = v28;
+			v25 = v51;
+			v45 = v46;
+			v27.X = v46.X;
+			v24 = v50;
+		}
+		v29 = pDynamicPath->dwFlags;
+		if ((v29 & 4) != 0)
+		{
+			v30 = pDynamicPath->pUnit;
+			if (!v30 || v30->dwUnitType && v30->dwUnitType != UNIT_MONSTER)
+				FOG_DisplayWarning(
+					"(UnitGetType(ptPath->hUnit) == UNIT_PLAYER) || (UnitGetType(ptPath->hUnit) == UNIT_MONSTER)",
+					"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\PATH\\Step.cpp",
+					521);
+			COLLISION_SetUnitCollisionMask(
+				pDynamicPath->pRoom,
+				v45.X,
+				v45.Y,
+				pDynamicPath->pRoom,
+				v46.X,
+				v46.Y,
+				pDynamicPath->dwCollisionPattern,
+				pDynamicPath->dwCollisionType);
+		LABEL_53:
+			if (v43)
+				pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount] = v46;
+			v35 = pDynamicPath->nSavedStepsCount + 1;
+			pDynamicPath->nSavedStepsCount = v35;
+			if (v35 >= 10)
+			{
+				v24 = v50;
+				v25 = v51;
+				goto LABEL_58;
+			}
+			goto LABEL_56;
+		}
+		v31 = v29 & 0x40000;
+		v32 = pDynamicPath->unk0x50;
+		if (v32 == 13313)
+			v32 = 15361;
+		if (v31)
+			v33 = COLLISION_TryMoveUnitCollisionMask(
+				pDynamicPath->pRoom,
+				v45.X,
+				v45.Y,
+				v46.X,
+				v46.Y,
+				pDynamicPath->dwUnitSize,
+				pDynamicPath->dwCollisionType,
+				v32);
+		else
+			v33 = COLLISION_TryTeleportUnitCollisionMask(
+				pDynamicPath->pRoom,
+				v45.X,
+				v45.Y,
+				v46.X,
+				v46.Y,
+				pDynamicPath->dwCollisionPattern,
+				pDynamicPath->dwCollisionType,
+				v32);
+		pDynamicPath->unk0x54 |= v33;
+		v34 = pDynamicPath->unk0x54;
+		if (v34)
+		{
+			if (!v31)
+				goto LABEL_49;
+		}
+		else if (!v31)
+		{
+		LABEL_52:
+			v28 = v52;
+			goto LABEL_53;
+		}
+		if ((v34 & 5) != 0)
+		{
+		LABEL_49:
+			a2->dwPrecisionX = (v23 & 0xFFFF0000) + 0x8000;
+			a2->dwPrecisionY = (v22 & 0xFFFF0000) + 0x8000;
+			*pUnit = (D2UnitStrc*)pDynamicPath->nSavedStepsCount;
+			if (v42)
+				return D2Common_10236(v44, pDynamicPath->pTargetUnit != 0) == 0;
+			pDynamicPath->dwCurrentPointIdx = pDynamicPath->dwPathPoints;
+			return 0;
+		}
+		goto LABEL_52;
+	}
+LABEL_61:
+	v36 = v55;
+	a2->dwPrecisionX = v18;
+	a2->dwPrecisionY = v36;
+	if (!v40)
+		return 0;
+	++pDynamicPath->dwCurrentPointIdx;
+	return 1;
 }
 
 //D2Common.0x6FDAD330
-int __fastcall sub_6FDAD330(D2PathInfoStrc* ptPathInfo)
+int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 {
-	UNIMPLEMENTED();
-	return 0;
+	uint32_t v2; // eax
+	DWORD v3; // ebp
+	DWORD v4; // edi
+	D2RoomStrc* v5; // eax
+	signed int v6; // edi
+	signed int v7; // ebx
+	int v8; // ecx
+	DWORD v9; // edx
+	D2RoomStrc* v10; // eax
+	int v11; // ecx
+	int v12; // edx
+	D2UnitStrc* v13; // eax
+	D2RoomStrc* v14; // ecx
+	uint16_t v15; // dx
+	uint16_t v16; // ax
+	int v17; // ebx
+	D2RoomStrc* v18; // edi
+	D2RoomStrc* v19; // eax
+	D2UnitStrc* v20; // ebx
+	uint32_t v21; // ecx
+	uint32_t v22; // eax
+	int result; // eax
+	DWORD pNumRooms; // [esp+10h] [ebp-1Ch] BYREF
+	D2RoomStrc** pppRoom; // [esp+14h] [ebp-18h] BYREF
+	DWORD v26; // [esp+18h] [ebp-14h]
+	int pX; // [esp+1Ch] [ebp-10h] BYREF
+	int pY; // [esp+20h] [ebp-Ch] BYREF
+	DWORD v29; // [esp+28h] [ebp-4h]
+
+	v2 = pPath->dwFlags;
+	v3 = (pPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
+	v4 = (pPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+	v29 = v4;
+	if ((v2 & 0x40000) != 0)
+	{
+		v5 = pPath->pRoom;
+		v6 = HIWORD(v4);
+		v7 = HIWORD(v3);
+		if (!v5)
+			goto LABEL_18;
+		if (v7 < v5->nSubtileX
+			|| v7 >= v5->nSubtileX + v5->nSubtileWidth
+			|| (v8 = v5->nSubtileY, v6 < v8)
+			|| v6 >= v8 + v5->nSubtileHeight)
+		{
+			pppRoom = 0;
+			pNumRooms = 0;
+			DUNGEON_GetAdjacentRoomsListFromRoom(v5, &pppRoom, (int*)&pNumRooms);
+			v9 = 0;
+			v26 = 0;
+			if (pNumRooms)
+			{
+				while (1)
+				{
+					v10 = pppRoom[v9];
+					if (v10 && v7 >= v10->nSubtileX)
+					{
+						if (v7 < v10->nSubtileX + v10->nSubtileWidth)
+						{
+							v11 = v10->nSubtileY;
+							if (v6 >= v11 && v6 < v11 + v10->nSubtileHeight)
+							{
+								v5 = pppRoom[v26];
+								goto LABEL_17;
+							}
+						}
+						v9 = v26;
+					}
+					v26 = ++v9;
+					if (v9 >= pNumRooms)
+					{
+						pPath->dwPathPoints = 0;
+						goto LABEL_34;
+					}
+				}
+			}
+			goto LABEL_18;
+		}
+	LABEL_17:
+		if (!v5)
+		{
+		LABEL_18:
+			pPath->dwPathPoints = 0;
+			goto LABEL_34;
+		}
+		v4 = v29;
+	}
+	pPath->tGameCoords.dwPrecisionX = v3;
+	pPath->tGameCoords.dwPrecisionY = v4;
+	pX = v3 >> 11;
+	pY = v4 >> 11;
+	DUNGEON_GameToClientCoords(&pX, &pY);
+	v12 = pX;
+	pPath->dwClientCoordY = pY;
+	v13 = pPath->pUnit;
+	pPath->dwClientCoordX = v12;
+	if (v13)
+	{
+		if ((pPath->dwFlags & 1) != 0)
+		{
+			v14 = pPath->pRoom;
+			v15 = pPath->tGameCoords.wPosX;
+			v16 = pPath->tGameCoords.wPosY;
+			if (!v14
+				|| v15 < v14->nSubtileX
+				|| v15 >= v14->nSubtileX + v14->nSubtileWidth
+				|| (v17 = v14->nSubtileY, v16 < v17)
+				|| v16 >= v17 + v14->nSubtileHeight)
+			{
+				v18 = COLLISION_GetRoomBySubTileCoordinates(
+					v14,
+					pPath->tGameCoords.wPosX,
+					pPath->tGameCoords.wPosY);
+				if (v18 || (pPath->dwFlags & 0x40000) == 0)
+				{
+					v19 = pPath->pRoom;
+					v20 = pPath->pUnit;
+					pPath->pRoomNext = v19;
+					if (v19)
+						UNITROOM_RemoveUnitFromRoom(v20);
+					v21 = pPath->dwFlags;
+					pPath->pRoom = v18;
+					pPath->dwFlags = v21 | 2;
+					if (v18)
+					{
+						UNITROOM_AddUnitToRoom(v20, v18);
+						UNITROOM_RefreshUnit(v20);
+					}
+				}
+				else
+				{
+					pPath->dwPathPoints = 0;
+				}
+			}
+		}
+	}
+LABEL_34:
+	pPath->dwFlags = pPath->dwFlags & (D2PathFlags)~PATH_UNKNOWN_FLAG_0x00020;
+	result = 0;
+	pPath->dwPathPoints = 0;
+	pPath->dwCurrentPointIdx = 0;
+	pPath->tVelocityVector.nX = 0;
+	pPath->tVelocityVector.nY = 0;
+	return result;
+}
+
+//D2Common.0x6FDAC9A0 (#10226)
+BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
+{
+	D2DynamicPathStrc* pDynamicPath; // esi
+	uint32_t v3; // edi
+	uint32_t v4; // eax
+	signed int v6; // eax
+	D2UnitStrc* v7; // eax
+	D2UnitStrc* v8; // edi
+	int v9; // eax
+	uint16_t v10; // bx
+	uint16_t v11; // bp
+	D2UnitStrc* v12; // eax
+	int v13; // eax
+	int v14; // eax
+	int v15; // ecx
+	signed int v16; // edx
+	uint32_t v17; // eax
+	signed int v18; // ecx
+	signed int v19; // ebp
+	signed int v20; // eax
+	signed int v21; // eax
+	int v22; // ecx
+	int v23; // edx
+	D2PathPointStrc pOutPathPoint; // [esp+10h] [ebp-10h] BYREF
+	unsigned int a3[2]; // [esp+18h] [ebp-8h] BYREF
+
+	pDynamicPath = pUnit->pDynamicPath;
+	if (!pDynamicPath)
+		return 0;
+	v3 = pDynamicPath->dwFlags & ~PATHTYPE_KNOCKBACK_SERVER;
+	pDynamicPath->dwFlags = v3;
+	if ((v3 & PATH_MISSILE_MASK) != 0)
+		pDynamicPath->unk0x54 = 0;
+	if ((v3 & 0x20) == 0 || (int)pDynamicPath->dwPathPoints <= 0 || !pDynamicPath->dwVelocity)
+	{
+		sub_6FDACC40(
+			pDynamicPath,
+			0,
+			(pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000,
+			(pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000);
+		pDynamicPath->dwPathPoints = 0;
+		pDynamicPath->dwCurrentPointIdx = 0;
+		pDynamicPath->dwFlags = pDynamicPath->dwFlags & (D2PathFlags)~PATH_UNKNOWN_FLAG_0x00020;
+		pDynamicPath->tVelocityVector.nX = 0;
+		pDynamicPath->tVelocityVector.nY = 0;
+		return 0;
+	}
+	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+		goto LABEL_34;
+	v6 = pDynamicPath->dwPathType;
+	if (v6 >= 5 && v6 <= 6 && (signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
+		goto LABEL_34;
+	v7 = pDynamicPath->pTargetUnit;
+	v8 = pDynamicPath->pUnit;
+	if (!v7)
+	{
+		if ((signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints
+			|| pDynamicPath->tGameCoords.wPosX == pDynamicPath->SP3.X
+			&& pDynamicPath->tGameCoords.wPosY == pDynamicPath->SP3.Y)
+		{
+			goto LABEL_34;
+		}
+		v9 = D2Common_10236(v8, 0);
+		goto LABEL_31;
+	}
+	if (D2Common_10399(v7, pDynamicPath->pUnit) <= pDynamicPath->nStepNum)
+	{
+	LABEL_32:
+		sub_6FDAD330(pDynamicPath);
+		return 0;
+	}
+	v10 = pDynamicPath->tGameCoords.wPosX;
+	v11 = pDynamicPath->tGameCoords.wPosY;
+	sub_6FDAB940(&pOutPathPoint, pDynamicPath);
+	v12 = pDynamicPath->pTargetUnit;
+	if (v12)
+	{
+		v13 = v12->dwUnitType;
+		if (v13 >= 0 && v13 <= 1)
+		{
+			v14 = pDynamicPath->SP2.X - pOutPathPoint.X;
+			v15 = pDynamicPath->SP2.Y - pOutPathPoint.Y;
+			if (v14 < 0)
+				v14 = pOutPathPoint.X - pDynamicPath->SP2.X;
+			if (v14 > 5)
+				goto LABEL_30;
+			if (v15 < 0)
+				v15 = pOutPathPoint.Y - pDynamicPath->SP2.Y;
+			if (v15 > 5)
+				goto LABEL_30;
+		}
+	}
+	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints
+		&& (pDynamicPath->SP3.X != v10 || pDynamicPath->SP3.Y != v11))
+	{
+	LABEL_30:
+		v9 = D2Common_10236(v8, 1);
+	LABEL_31:
+		if (!v9)
+			goto LABEL_32;
+	}
+LABEL_34:
+	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
+		goto LABEL_32;
+	v16 = a2;
+	if (a2 <= 0)
+		v16 = 1024;
+	v17 = pDynamicPath->dwAcceleration;
+	if (v17)
+	{
+		v18 = pDynamicPath->unk0x8C + 1;
+		pDynamicPath->unk0x8C = v18;
+		if (v18 >= 5)
+		{
+			v19 = v17 + pDynamicPath->dwVelocity;
+			v20 = pDynamicPath->dwMaxVelocity;
+			pDynamicPath->dwVelocity = v19;
+			if (v19 <= v20)
+			{
+				if (v19 < 0)
+					pDynamicPath->dwVelocity = 0;
+			}
+			else
+			{
+				pDynamicPath->dwVelocity = v20;
+				pDynamicPath->dwAcceleration = 0;
+			}
+			pDynamicPath->unk0x8C = 0;
+		}
+	}
+	v21 = (signed int)(v16 * pDynamicPath->dwVelocity) >> 6;
+	v22 = (v21 * pDynamicPath->tDirectionVector.nX) >> 12;
+	v23 = (v21 * pDynamicPath->tDirectionVector.nY) >> 12;
+	pDynamicPath->tVelocityVector.nX = v22;
+	pDynamicPath->tVelocityVector.nY = v23;
+	if (!v22 && !v23)
+		goto LABEL_32;
+	sub_6FDACEC0(pDynamicPath, (D2FP32_16*)a3, &pUnit);
+	sub_6FDACC40(pDynamicPath, 0, a3[0], a3[1]);
+	if (pDynamicPath->dwPathType != 4
+		&& (signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints)
+	{
+		sub_6FDAC790(pDynamicPath, 1, 1);
+	}
+	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
+		goto LABEL_32;
+	return 1;
 }
 
 //D2Common.0x6FDAD530 (#10227)
