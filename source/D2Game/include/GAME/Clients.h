@@ -37,7 +37,8 @@ enum D2ClientSaveFlags
 	CLIENTSAVEFLAG_0x80 = 0x80,
 	CLIENTSAVEFLAG_WEAPON_SWITCH = 0x2000,
 
-	// Encoded as Acts 1-5 Normal, then 1-5 NM, then 1-5 Hell 
+	// Encoded as Acts 1-5 Normal (values 0-4), then 1-5 NM (values 5-9), then 1-5 Hell (values 10-14) for Expansion
+        // Encoded as Acts 1-4 Normal (values 0-3), then 1-4 NM (values 4-7), then 1-4 Hell  (values 8-11) for Classic
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT = 8,
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK = (0x1F) << CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT,
 
