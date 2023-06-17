@@ -165,12 +165,12 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
     saveHeader.dwSaveFlags = CLIENTS_GetFlags(pClient);
     if (pGame->bExpansion)
     {
-        saveHeader.dwSaveFlags |= 0x20;
+        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_EXPANSION;
     }
 
     if (pGame->dwGameType)
     {
-        saveHeader.dwSaveFlags |= 0x40;
+        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_LADDER;
     }
 
     saveHeader.nClass = CLIENTS_GetClassId(pClient);
@@ -184,7 +184,7 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
 
     if (CLIENTS_GetWeaponSwitch(pClient))
     {
-        saveHeader.dwWeaponSet |= 1;
+        saveHeader.dwWeaponSwitch |= 1;
     }
 
     for (i = 0; i < 16; ++i)
@@ -237,7 +237,7 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
     uint8_t nUnused1 = 0;
     uint8_t nUnused2 = 0;
     CLIENTS_GetGuildEmblem(pClient, &nSaveField, &nUnused1, &nUnused2);
-    saveHeader.nSaveField = nSaveField;
+    saveHeader.nGuildEmblemBgColor = nSaveField;
 
     memcpy(*ppSection, &saveHeader, sizeof(D2SaveHeaderStrc));
     *ppSection += sizeof(D2SaveHeaderStrc);
@@ -628,9 +628,9 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FC8DC20
-int32_t __fastcall PLRSAVE2_ReadPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
 {
-    if (dwFlags & 0x20)
+    if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
     {
         if (!pGame->bExpansion)
         {
@@ -645,55 +645,57 @@ int32_t __fastcall PLRSAVE2_ReadPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
         }
     }
 
-    if (dwFlags & 0x40)
+    if (dwFlags & CLIENTSAVEFLAG_LADDER)
     {
         if (!pGame->dwGameType)
         {
-            return 25;
+            return SYSERROR_LADDERGAME;
         }
     }
     else
     {
         if (pGame->dwGameType)
         {
-            return 26;
+            return SYSERROR_NOTLADDERGAME;
         }
     }
 
-    if (dwFlags & 4)
+    if (dwFlags & CLIENTSAVEFLAG_HARDCORE)
     {
-        if (dwFlags & 8)
+        if (dwFlags & CLIENTSAVEFLAG_DEAD)
         {
-            return 10;
+            return SYSERROR_HARDCORE_DEAD;
         }
 
-        if (!(ARENA_GetFlags(pGame) & 0x800))
+        if (!(ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE))
         {
-            return 11;
+            return SYSERROR_NOT_HARDCORE_ARENA;
         }
     }
     else
     {
-        if (ARENA_GetFlags(pGame) & 0x800)
+        if (ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE)
         {
-            return 12;
+            return SYSERROR_HARDCORE_ARENA;
         }
     }
 
-    const uint8_t nFlagHeader = (dwFlags >> 8) & 0x1F;
-    if (pGame->nDifficulty <= 1u)
+    const uint8_t nProgression = (dwFlags >> CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT) & CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK;
+    switch (pGame->nDifficulty)
     {
-        if (pGame->nDifficulty && (dwFlags & 0x20 && nFlagHeader < 5 || nFlagHeader < 4))
+    case DIFFMODE_NORMAL: break;
+    case DIFFMODE_NIGHTMARE: 
+        if ((dwFlags & CLIENTSAVEFLAG_EXPANSION) && nProgression < 5 || nProgression < 4)
         {
-            return 13;
+            return SYSERROR_PROGRESSION_NOT_NIGHTMARE;
         }
-    }
-    else
-    {
-        if (dwFlags & 0x20 && nFlagHeader < 10 || nFlagHeader < 8)
+        break;
+    case DIFFMODE_HELL:
+        if ((dwFlags & CLIENTSAVEFLAG_EXPANSION) && nProgression < 10 || nProgression < 8)
         {
-            return 14;
+            return SYSERROR_PROGRESSION_NOT_HELL;
         }
+        break;
     }
 
     return 0;
@@ -706,87 +708,87 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
     CLIENTS_SetFlags(pClient, 0);
     
-    if (*ppSection + 335 > pEnd)
+    if (*ppSection + sizeof(D2SaveHeaderStrc) > pEnd)
     {
-        return 4;
+        return SYSERROR_CLIENT_ERROR;
     }
 
-    uint8_t* pSection = *ppSection;
+    D2SaveHeaderStrc* pSaveHeader = (D2SaveHeaderStrc*)*ppSection;
 
-    const uint32_t nSize = pEnd - pSection;
-    const uint32_t nCheckSum = *((uint32_t*)pSection + 3);
-    *((uint32_t*)pSection + 3) = 0;
+    const uint32_t nSize = pEnd - *ppSection;
+    const uint32_t nCheckSum = pSaveHeader->dwChecksum;
+    pSaveHeader->dwChecksum = 0;
 
-    if (FOG_ComputeChecksum(pSection, nSize) != nCheckSum)
+    if (FOG_ComputeChecksum(pSaveHeader, nSize) != nCheckSum)
     {
-        return 6;
+        return SYSERROR_INVALID_CHECKSUM;
     }
 
-    if (nSize != *((uint32_t*)pSection + 2))
+    if (nSize != pSaveHeader->dwSize)
     {
-        return 5;
+        return SYSERROR_INVALID_SIZE;
     }
 
-    const uint32_t nVersion = *((uint32_t*)pSection + 1);
+    const uint32_t nVersion = pSaveHeader->dwVersion;
     if (nVersion <= 91 || nVersion > 96)
     {
-        return 7;
+        return SYSERROR_NOT_COMPATIBLE;
     }
 
-    pSection[35] = 0;
+    pSaveHeader->szName[15] = '\0';
 
     const char* szClientName = CLIENTS_GetName(pClient);
     if (!szClientName)
     {
-        return 3;
+        return SYSERROR_NO_CLIENT_NAME;
     }
 
-    if (_strcmpi(szClientName, (const char*)pSection + 20))
+    if (_strcmpi(szClientName, pSaveHeader->szName))
     {
-        return 7;
+        return SYSERROR_NOT_COMPATIBLE;
     }
 
-    const int32_t nResult = PLRSAVE2_ReadPlayerFlags(pGame, *((uint16_t*)pSection + 18));
+    const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
     if (nResult)
     {
         return nResult;
     }
 
-    const uint8_t nClass = pSection[40];
-    if (nClass > 7u)
+    const uint8_t nClass = pSaveHeader->nClass;
+    if (nClass > NUMBER_OF_PLAYERCLASSES)
     {
-        return 4;
+        return SYSERROR_CLIENT_ERROR;
     }
 
     CLIENTS_SetClassId(pClient, nClass);
 
-    uint32_t nFlags = *((uint32_t*)pSection + 9);
-    if (nFlags & 1)
+    uint32_t nFlags = pSaveHeader->dwSaveFlags;
+    if (nFlags & CLIENTSAVEFLAG_INIT)
     {
-        nFlags &= 0xFFFFFFFE;
-        *((uint32_t*)pSection + 9) = nFlags;
+        nFlags &= (~CLIENTSAVEFLAG_INIT);
+        pSaveHeader->dwSaveFlags = nFlags;
         CLIENTS_SetFlags(pClient, (uint16_t)nFlags);
 
-        *ppSection += 335;
-        return 2;
+        *ppSection += sizeof(D2SaveHeaderStrc);
+        return SYSERROR_NEWBIE_SAVE;
     }
 
-    CLIENTS_SetWeaponSwitch(pClient, pSection[16] & 1);
-    CLIENTS_SetFlags(pClient, *((uint16_t*)pSection + 18));
-    CLIENTS_SetCreateTime(pClient, *((uint32_t*)pSection + 11));
+    CLIENTS_SetWeaponSwitch(pClient, pSaveHeader->dwWeaponSwitch & 1);
+    CLIENTS_SetFlags(pClient, pSaveHeader->dwSaveFlags);
+    CLIENTS_SetCreateTime(pClient, pSaveHeader->dwCreateTime);
 
-    const uint8_t v18 = pSection[168 + pGame->nDifficulty];
-    uint8_t nAct = v18 & 127;
-    if (nAct >= 5u)
+    const uint8_t nCurrentTown = pSaveHeader->nTown[pGame->nDifficulty];
+    uint8_t nAct = nCurrentTown & 0x7F;
+    if (nAct >= NUM_ACTS)
     {
-        nAct = 0;
+        nAct = ACT_I;
     }
 
     CLIENTS_SetActNo(pClient, nAct);
 
-    if (pGame->nGameType == 3 && !pGame->InitSeed && v18 & 0x80)
+    if (pGame->nGameType == 3 && !pGame->InitSeed && nCurrentTown & 0x80)
     {
-        pGame->dwInitSeed = *(uint32_t*)(pSection + 171);
+        pGame->dwInitSeed = pSaveHeader->dwMapSeed;
     }
 
     D2UnitStrc* pPlayer = SUNIT_AllocUnitData(UNIT_PLAYER, nClass, 0, 0, pGame, 0, 0, PLRMODE_DEATH, 0);
@@ -806,20 +808,19 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
     D2GAME_SUNITMSG_FirstFn_6FCC5520(CLIENTS_GetGame(pClient), *ppPlayer, pClient);
 
-    const uint8_t* pSkillKeyData = pSection + 56;
     for (int32_t i = 0; i < 16; ++i)
     {
-        if (*(int16_t*)pSkillKeyData == -1)
+        if (pSaveHeader->SkillKeys[i].nSkill == -1)
         {
             CLIENTS_SetSkillHotKey(pClient, i, -1, 0, -1);
         }
         else
         {
-            const int16_t nSkillData = *(int16_t*)pSkillKeyData;
-            const int16_t nSkillId = nSkillData & 0xFFF;
+            const int16_t nSkillData = pSaveHeader->SkillKeys[i].nSkill;
+            const int16_t nSkillId = nSkillData & 0x0FFF;
             const uint8_t v28 = nSkillData >> 15;
 
-            int16_t nFlags = *((int16_t*)pSkillKeyData + 1);
+            int16_t nFlags = pSaveHeader->SkillKeys[i].nItemSlot;
             if (!nFlags)
             {
                 nFlags = -1;
@@ -827,16 +828,14 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
             CLIENTS_SetSkillHotKey(pClient, i, nSkillId, v28, nFlags);
         }
-
-        pSkillKeyData += 4;
     }
 
     if (!pPlayerData)
     {
-        return 4;
+        return SYSERROR_CLIENT_ERROR;
     }
 
-    const int16_t nLeftSkill = *((int16_t*)pSection + 60);
+    const int16_t nLeftSkill = pSaveHeader->nLeftSkillId;
     if (nLeftSkill == -1)
     {
         pPlayerData->nLeftSkillId = -1;
@@ -845,7 +844,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
     else
     {
         pPlayerData->nLeftSkillId = nLeftSkill & 0xFFF;
-        pPlayerData->nLeftSkillFlags = *((uint16_t*)pSection + 61);
+        pPlayerData->nLeftSkillFlags = pSaveHeader->nLeftSkillItemIndex;
 
         if (!pPlayerData->nLeftSkillFlags)
         {
@@ -853,7 +852,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         }
     }
 
-    const int16_t nRightSkill = *((int16_t*)pSection + 62);
+    const int16_t nRightSkill = pSaveHeader->nRightSkillId;
     if (nRightSkill == -1)
     {
         pPlayerData->nRightSkillId = -1;
@@ -862,7 +861,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
     else
     {
         pPlayerData->nRightSkillId = nRightSkill & 0xFFF;
-        pPlayerData->nRightSkillFlags = *((int16_t*)pSection + 63);
+        pPlayerData->nRightSkillFlags = pSaveHeader->nRightSkillItemIndex;
 
         if (!pPlayerData->nRightSkillFlags)
         {
@@ -870,7 +869,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         }
     }
 
-    const int16_t nSwitchLeftSkill = *((int16_t*)pSection + 64);
+    const int16_t nSwitchLeftSkill = pSaveHeader->nSwitchLeftSkillId;
     if (nSwitchLeftSkill == -1)
     {
         pPlayerData->nSwitchLeftSkillId = -1;
@@ -879,7 +878,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
     else
     {
         pPlayerData->nSwitchLeftSkillId = nSwitchLeftSkill & 0xFFF;
-        pPlayerData->nSwitchLeftSkillFlags = *((int16_t*)pSection + 65);
+        pPlayerData->nSwitchLeftSkillFlags = pSaveHeader->nSwitchLeftSkillItemIndex;
 
         if (!pPlayerData->nSwitchLeftSkillFlags)
         {
@@ -887,7 +886,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         }
     }
 
-    const int16_t nSwitchRightSkill = *((int16_t*)pSection + 66);
+    const int16_t nSwitchRightSkill = pSaveHeader->nSwitchRightSkillId;
     if (nSwitchRightSkill == -1)
     {
         pPlayerData->nSwitchRightSkillId = -1;
@@ -896,7 +895,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
     else
     {
         pPlayerData->nSwitchRightSkillId = nSwitchRightSkill & 0xFFF;
-        pPlayerData->nSwitchRightSkillFlags = *((int16_t*)pSection + 67);
+        pPlayerData->nSwitchRightSkillFlags = pSaveHeader->nSwitchRightSkillItemIndex;
 
         if (!pPlayerData->nSwitchRightSkillFlags)
         {
@@ -904,10 +903,9 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         }
     }
 
-    CLIENTS_SetGuildEmblem(pClient, pSection[207], 0, 0);
+    CLIENTS_SetGuildEmblem(pClient, pSaveHeader->nGuildEmblemBgColor, 0, 0);
 
-    *ppSection += 335;
-
+    *ppSection += sizeof(D2SaveHeaderStrc);
     return 0;
 }
 

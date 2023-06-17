@@ -22,7 +22,7 @@ struct D2SaveSkillKeyStrc
 		struct
 		{
 			uint8_t nKey;						//0x02
-			uint8_t nKeyEx;					//0x03
+			uint8_t nKeyEx;						//0x03
 		};
 
 		uint16_t nItemSlot;						//0x02
@@ -31,21 +31,21 @@ struct D2SaveSkillKeyStrc
 
 struct D2SaveHeaderStrc
 {
-	uint32_t dwHeaderMagic;					//0x000
-	uint32_t dwVersion;						//0x004
-	uint32_t dwSize;							//0x008
-	uint32_t dwChecksum;						//0x00C
-	uint32_t dwWeaponSet;						//0x010
-	char szName[16];						//0x014
-	uint32_t dwSaveFlags;						//0x024
-	uint8_t nClass;							//0x028
-	uint8_t nStats;							//0x029
-	uint8_t nSkills;							//0x02A
-	uint8_t nLevel;							//0x02B
-	uint32_t dwCreateTime;						//0x02C
-	uint32_t dwLasTime;						//0x030
-	uint32_t dwPlayTime;						//0x034
-	D2SaveSkillKeyStrc SkillKeys[16];		//0x038
+	uint32_t dwHeaderMagic;					//0x00
+	uint32_t dwVersion;						//0x04
+	uint32_t dwSize;						//0x08
+	uint32_t dwChecksum;					//0x0C
+	uint32_t dwWeaponSwitch;				//0x10
+	char szName[16];						//0x14
+	uint32_t dwSaveFlags;					//0x24
+	uint8_t nClass;							//0x28
+	uint8_t nStats;							//0x29
+	uint8_t nSkills;						//0x2A
+	uint8_t nLevel;							//0x2B
+	uint32_t dwCreateTime;					//0x2C
+	uint32_t dwLasTime;						//0x30
+	uint32_t dwPlayTime;					//0x34
+	D2SaveSkillKeyStrc SkillKeys[16];		//0x38
 	int16_t nLeftSkillId;					//0x78
 	int16_t nLeftSkillItemIndex;			//0x7A
 	int16_t nRightSkillId;					//0x7C
@@ -54,15 +54,15 @@ struct D2SaveHeaderStrc
 	int16_t nSwitchLeftSkillItemIndex;		//0x82
 	int16_t nSwitchRightSkillId;			//0x84
 	int16_t nSwitchRightSkillItemIndex;		//0x86
-	uint8_t nComponent[16];					//0x088
-	uint8_t nCompColor[16];					//0x098
-	uint8_t nTown[3];							//0x0A8
-	uint32_t dwMapSeed;						//0x0AB
-	D2MercSaveDataStrc MercSaveData;		//0x0AF
-	uint8_t nSaveField;						//0x0CF
-	uint32_t dwLastLevel;						//0x0D0
-	uint32_t dwLastTown;						//0x0D4
-	uint8_t nLastDifficulty;					//0x0D8
+	uint8_t nComponent[16];					//0x88
+	uint8_t nCompColor[16];					//0x98
+	uint8_t nTown[3];						//0xA8
+	uint32_t dwMapSeed;						//0xAB
+	D2MercSaveDataStrc MercSaveData;		//0xAF
+	uint8_t nGuildEmblemBgColor;			//0xCF
+	uint32_t dwLastLevel;					//0xD0
+	uint32_t dwLastTown;					//0xD4
+	uint8_t nLastDifficulty;				//0xD8
 
 	char unk0xD9[118];
 };
@@ -86,7 +86,7 @@ int32_t __fastcall PLRSAVE2_WriteIronGolemSection(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FC8D940
 int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t a6, int32_t a7);
 //D2Game.0x6FC8DC20
-int32_t __fastcall PLRSAVE2_ReadPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags);
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags);
 //D2Game.0x6FC8DD00
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
 //D2Game.0x6FC8E070

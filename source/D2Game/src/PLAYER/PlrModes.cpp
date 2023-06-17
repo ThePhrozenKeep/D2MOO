@@ -747,7 +747,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     PLAYER_ApplyDeathPenalty(pGame, pDefender, pAttacker);
     SUNIT_SetCombatMode(pGame, pDefender, 0);
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pDefender, __FILE__, __LINE__);
-    CLIENTS_ToggleFlag(pClient, 8, 1);
+    CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
     sub_6FCBC4D0(pDefender);
     STATLIST_SetUnitStat(pDefender, STAT_HITPOINTS, 0, 0);
     D2Common_10469(pDefender);
@@ -793,9 +793,9 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
     D2GAME_KillPlayerPets_6FC7CD10(pGame, pUnit);
     
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-    CLIENTS_ToggleFlag(pClient, PLRFLAG_DEAD, 1);
+    CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
 
-    if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, PLRFLAG_HARDCORE))
+    if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
     {
         D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(pClient), 0);
     }
@@ -1343,9 +1343,9 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
         D2GAME_KillPlayerPets_6FC7CD10(pGame, pUnit);
         
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-        CLIENTS_ToggleFlag(pClient, 8, 1);
+        CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
 
-        if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, 4u))
+        if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
         {
             D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(pClient), 0);
         }

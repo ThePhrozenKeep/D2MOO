@@ -45,7 +45,7 @@ struct D2PartyScreenCallbackStrc
 void __fastcall PARTYSCREEN_ToggleLootability(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
-    if (!CLIENTS_CheckFlag(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), 4u))
+    if (!CLIENTS_CheckFlag(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), CLIENTSAVEFLAG_HARDCORE))
     {
         return;
     }

@@ -46,15 +46,6 @@ enum D2C_PlayerClasses
 	NUMBER_OF_PLAYERCLASSES = 7,
 };
 
-enum D2C_PlayerFlags
-{
-	PLRFLAG_NEWBIE = 0x01,
-	PLRFLAG_HARDCORE = 0x04,
-	PLRFLAG_DEAD = 0x08,
-	PLRFLAG_EXPANSION = 0x20,
-	PLRFLAG_LADDER = 0x40,
-};
-
 struct D2PlayerCountBonusStrc
 {
 	int32_t nHp;								//0x00

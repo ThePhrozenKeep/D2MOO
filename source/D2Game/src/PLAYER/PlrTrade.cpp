@@ -2103,7 +2103,7 @@ void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
 int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
-    const int32_t bSet = CLIENTS_CheckFlag(pClient, 4u);
+    const int32_t bSet = CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE);
 
     for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {

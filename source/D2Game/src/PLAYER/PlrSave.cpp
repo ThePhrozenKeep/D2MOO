@@ -866,9 +866,9 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
     CLIENTS_SetGuildName(pClient, v47);
     CLIENTS_SetGuildEmblem(pClient, saveHeader[123], saveHeader[124], saveHeader[125]);
 
-    if (nFlags & 1)
+    if (nFlags & CLIENTSAVEFLAG_INIT)
     {
-        const uint32_t nFlagsCopy = nFlags & 0xFFFFFFFEu;
+        const uint32_t nFlagsCopy = nFlags & (~CLIENTSAVEFLAG_INIT);
         *pValid = 1;
         CLIENTS_SetFlags(pClient, nFlagsCopy);
         return 0;

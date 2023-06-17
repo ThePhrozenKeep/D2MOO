@@ -3129,7 +3129,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x41_Resurrect_6FC87480(D2GameStrc* 
     if (pUnit && pUnit->dwAnimMode == PLRMODE_DEAD)
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-        if (CLIENTS_CheckFlag(pClient, 4u))
+        if (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
         {
             GAME_DisconnectClient(pGame, pClient, 3);
             return 0;

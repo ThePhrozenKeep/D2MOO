@@ -945,7 +945,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pItemDrop->pUnit, __FILE__, __LINE__);
             if (pClient)
             {
-                ITEMS_SetItemFlag(pItem, IFLAG_NAMED, CLIENTS_CheckFlag(pClient, 4u));
+                ITEMS_SetItemFlag(pItem, IFLAG_NAMED, CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE));
             }
         }
     }
