@@ -4,6 +4,39 @@
 
 #pragma pack(1)
 
+enum D2PlayerSave2Error
+{
+	PLRSAVE2ERROR_SUCCESS = 0,
+	PLRSAVE2ERROR_UNKNOWN = 1,
+	PLRSAVE2ERROR_NEWBIE_SAVE = 2,
+	PLRSAVE2ERROR_BAD_CLIENT = 3,
+	PLRSAVE2ERROR_CLIENT_ERROR = 4,
+	PLRSAVE2ERROR_INVALID_SIZE = 5,
+	PLRSAVE2ERROR_INVALID_CHECKSUM = 6,
+	PLRSAVE2ERROR_NOT_COMPATIBLE = 7,
+	PLRSAVE2ERROR_NOTEXPANSIONGAME = 8,
+	PLRSAVE2ERROR_EXPANSIONGAME = 9,
+	PLRSAVE2ERROR_DEADHARDCORE = 10,
+	PLRSAVE2ERROR_HARDCOREJOINSOFTCORE = 11,
+	PLRSAVE2ERROR_SOFTCOREJOINHARDCORE = 12,
+	PLRSAVE2ERROR_NIGHTMARE_NOT_UNLOCKED = 13,
+	PLRSAVE2ERROR_HELL_NOT_UNLOCKED = 14,
+	PLRSAVE2ERROR_BAD_QUESTRECORD = 15,
+	PLRSAVE2ERROR_BAD_WAYPOINT = 16,
+	PLRSAVE2ERROR_BAD_PLAYERINTRO = 17,
+	PLRSAVE2ERROR_BAD_STATS = 18,
+	PLRSAVE2ERROR_BAD_SKILLS = 19,
+	PLRSAVE2ERROR_BAD_ITEMS = 20,
+	PLRSAVE2ERROR_BAD_CORPSES = 21,
+	PLRSAVE2ERROR_BAD_PET = 22,
+	PLRSAVE2ERROR_BAD_IRONGOLEM = 23,
+	PLRSAVE2ERROR_UNK_24 = 24,
+	PLRSAVE2ERROR_NOTLADDERGAME = 25,
+	PLRSAVE2ERROR_LADDERGAME = 26,
+	PLRSAVE2ERROR_COUNT
+
+};
+
 struct D2MercSaveDataStrc
 {
 	uint32_t nFlags;							//0x00		//0xAF of D2SaveHeaderStrc
@@ -90,17 +123,17 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
 //D2Game.0x6FC8DD00
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
 //D2Game.0x6FC8E070
-int32_t __fastcall PLRSAVE2_LoadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);
+int32_t __fastcall PLRSAVE2_ReadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);
 //D2Game.0x6FC8E0F0
-int32_t __fastcall PLRSAVE2_LoadStatsEx(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion);
+int32_t __fastcall PLRSAVE2_ReadStatsEx(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion);
 //D2Game.0x6FC8E250
-int32_t __fastcall PLRSAVE2_LoadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nStats);
+int32_t __fastcall PLRSAVE2_ReadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nStats);
 //D2Game.0x6FC8E330
 int32_t __fastcall PLRSAVE2_LoadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused, int32_t nSkills);
 //D2Game.0x6FC8E420
-int32_t __fastcall PLRSAVE2_LoadCorpses(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t* a6);
+int32_t __fastcall PLRSAVE2_ReadCorpses(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t* a6);
 //D2Game.0x6FC8E670
-D2UnitStrc* __fastcall PLRSAVE2_LoadMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2MercSaveDataStrc* pData, uint32_t dwVersion);
+D2UnitStrc* __fastcall PLRSAVE2_ReadMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2MercSaveDataStrc* pData, uint32_t dwVersion);
 //D2Game.0x6FC8E850
 int32_t __fastcall PLRSAVE2_ReadPetSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pMerc, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion, int32_t* a6);
 //D2Game.0x6FC8E920

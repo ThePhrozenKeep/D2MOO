@@ -750,7 +750,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
             return 0;
         }
 
-        return 14;
+        return SYSERROR_UNK_14;
     }
 
     const uint32_t nVersion = *(uint32_t*)&saveHeader[4];
@@ -885,7 +885,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
     const uint8_t nDifficulty = saveHeader[88] >> 4;
     if (nAct >= 5 || nDifficulty >= 3u)
     {
-        return SYSERROR_INVALID_ACT_OR_DIFFICULTY;
+        return SYSERROR_UNK_9;
     }
 
     if (pGame->nGameType == 3 && !pGame->InitSeed)
@@ -1015,7 +1015,7 @@ int32_t __fastcall D2GAME_SAVE_ReadWaypointData_6FC8AD50(D2UnitStrc* pUnit, uint
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
     if (*(uint16_t*)pSource != 'SW')
     {
-        return 3;
+        return SYSERROR_BAD_WAYPOINT;
     }
 
     uint8_t* pData = &pSource[8];
@@ -1024,7 +1024,7 @@ int32_t __fastcall D2GAME_SAVE_ReadWaypointData_6FC8AD50(D2UnitStrc* pUnit, uint
         D2WaypointDataStrc* pWaypointData = (D2WaypointDataStrc*)pData;
         if (pWaypointData->nFlags[0] != 0x102 && pWaypointData->nFlags[0] != 0x101 && pWaypointData->nFlags[0] != 0)
         {
-            return 3;
+            return SYSERROR_BAD_WAYPOINT;
         }
 
         WAYPOINTS_CopyAndValidateWaypointData(pPlayerData->pWaypointData[i], pWaypointData);
@@ -1069,7 +1069,7 @@ int32_t __fastcall sub_6FC8ADE0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* p
         return 0;
     }
 
-    return 4;
+    return SYSERROR_BAD_STATS;
 }
 
 //D2Game.0x6FC8AEC0
@@ -1098,7 +1098,7 @@ int32_t __fastcall sub_6FC8AEC0(D2GameStrc* pGame, D2ClientStrc* pClient, D2Unit
         return 0;
     }
 
-    return 5;
+    return SYSERROR_BAD_SKILLS;
 }
 
 //D2Game.0x6FC8AF70
@@ -1254,7 +1254,7 @@ int32_t __fastcall sub_6FC8B3D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
 
         if (*(uint16_t*)pData != 'MJ')
         {
-            return 14;
+            return SYSERROR_UNK_14;
         }
 
         pData += 2;
@@ -1286,7 +1286,7 @@ int32_t __fastcall sub_6FC8B3D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
 
             if (*(uint16_t*)pData != 'MJ')
             {
-                return 14;
+                return SYSERROR_UNK_14;
             }
 
             pData += 2;
@@ -1323,7 +1323,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
     D2UnitStrc* pItem = sub_6FC897F0(pGame, pSavedItem);
     if (!pItem)
     {
-        return 13;
+        return SYSERROR_INVENTORY;
     }
 
     switch (pItem->dwAnimMode)
@@ -1336,7 +1336,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), 0, 0, 0))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
         break;
     }
@@ -1345,7 +1345,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         const int32_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
         if (!nBodyLoc || !INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, nBodyLoc))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         int32_t nUnused = 3;
@@ -1356,7 +1356,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
 
         if (!INVENTORY_PlaceItemInSocket(pUnit->pInventory, pItem, nUnused))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         ITEMS_SetBodyLocation(pItem, nBodyLoc);
@@ -1382,13 +1382,13 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         int32_t nUnused = 0;
         if (!D2GAME_ITEMSOCKET_PlaceItem_6FC497E0(pGame, pUnit, pItem->dwUnitId, (*ppItem) ? (*ppItem)->dwUnitId : -1, &nUnused, 0, 1u, 0))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         break;
     }
     default:
-        return 13;
+        return SYSERROR_INVENTORY;
     }
 
     if (pSavedItem->unk0x01)
@@ -1418,14 +1418,14 @@ int32_t __fastcall sub_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
         ITEMS_GetCompactItemDataFromBitstream(pItemBitstream, nBitstreamSize, 1, &itemSave);
         if (itemSave.nClassId == -1)
         {
-            return 14;
+            return SYSERROR_UNK_14;
         }
 
         uint32_t nRemainingSize = 0;
         D2UnitStrc* pItem = sub_6FC4EC10(pGame, 0, pItemBitstream, nBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
         if (!pItem && nRemainingSize <= 0)
         {
-            return 14;
+            return SYSERROR_UNK_14;
         }
 
         pItemBitstream += nRemainingSize;
@@ -1462,7 +1462,7 @@ int32_t __fastcall sub_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
             D2UnitStrc* pSocketable = sub_6FC4EC10(pGame, 0, pItemBitstream, nSocketableBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
             if (!pSocketable && nRemainingSize <= 0)
             {
-                return 14;
+                return SYSERROR_UNK_14;
             }
 
             pItemBitstream += nRemainingSize;
@@ -1509,7 +1509,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 {
     if (!pItem)
     {
-        return 13;
+        return SYSERROR_INVENTORY;
     }
 
     switch (pItem->dwAnimMode)
@@ -1523,7 +1523,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             return 0;
         }
 
-        return 13;
+        return SYSERROR_INVENTORY;
     }
     case IMODE_EQUIP:
     {
@@ -1541,7 +1541,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 
         if (!INVENTORY_PlaceItemInSocket(pPlayer->pInventory, pItem, nUnused))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         ITEMS_SetBodyLocation(pItem, nBodyLoc);
@@ -1569,7 +1569,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     {
         if (!a4)
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         UNITS_ChangeAnimMode(pItem, 4);
@@ -1577,13 +1577,13 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         int32_t bPlaced = 0;
         if (!D2GAME_ITEMSOCKET_PlaceItem_6FC497E0(pGame, pPlayer, pItem ? pItem->dwUnitId : -1, a4->dwUnitId, &bPlaced, 0, 1u, 0))
         {
-            return 13;
+            return SYSERROR_INVENTORY;
         }
 
         return 0;
     }
     default:
-        return 13;
+        return SYSERROR_INVENTORY;
     }
 }
 
@@ -1616,7 +1616,7 @@ int32_t __fastcall sub_6FC8BCC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
 
     if (*(uint16_t*)pSection != 'MJ')
     {
-        return 14;
+        return SYSERROR_UNK_14;
     }
 
     uint8_t* pData = pSection + 4;
@@ -1628,7 +1628,7 @@ int32_t __fastcall sub_6FC8BCC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
         D2UnitStrc* pPlayerBody = SUNIT_AllocUnitData(UNIT_PLAYER, pPlayer ? pPlayer->dwClassId : -1, 0, 0, pGame, nullptr, 1, PLRMODE_DEAD, 0);
         if (!pPlayerBody)
         {
-            return 8;
+            return SYSERROR_CORPSES;
         }
 
         pPlayerBody->dwFlags &= 0xFFFFFFFB;
@@ -2239,7 +2239,7 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
     FILE* pSaveFile = fopen(szFileName, "rb");
     if (!pSaveFile)
     {
-        return 14;
+        return SYSERROR_UNK_14;
     }
 
     uint8_t saveFile[0x2000] = {};
@@ -2248,12 +2248,12 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
     
     if (!nFileSize)
     {
-        return 14;
+        return SYSERROR_UNK_14;
     }
 
     if (nFileSize < 8 || *(uint32_t*)saveFile != D2SMAGIC_HEADER)
     {
-        return 9;
+        return SYSERROR_UNK_9;
     }
 
     D2UnitStrc* pPlayer = nullptr;
@@ -2272,7 +2272,7 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
         *ppPlayer = pPlayer;
         if (!pPlayer)
         {
-            nResult = 14;
+            nResult = SYSERROR_UNK_14;
         }
     }
 
@@ -2325,19 +2325,19 @@ int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D
             const uint32_t nSaveHeaderSize = CLIENTS_GetSaveHeaderSize(pClient);
             if (!nSaveHeaderSize)
             {
-                return 14;
+                return SYSERROR_UNK_14;
             }
 
             if (nSaveHeaderSize < 8)
             {
                 *ppPlayer = nullptr;
-                return 9;
+                return SYSERROR_UNK_9;
             }
 
             if (pSaveHeader->dwHeaderMagic != D2SMAGIC_HEADER)
             {
                 *ppPlayer = nullptr;
-                return 9;
+                return SYSERROR_UNK_9;
             }
 
             int32_t nErrorCode = 0;
@@ -2358,7 +2358,7 @@ int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D
 
             if (!*ppPlayer)
             {
-                return 14;
+                return SYSERROR_UNK_14;
             }
 
             if (pGame->nGameType == 1 || pGame->nGameType == 2)
@@ -2372,7 +2372,7 @@ int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D
 
     if (!*ppPlayer)
     {
-        return 14;
+        return SYSERROR_UNK_14;
     }
 
     sub_6FD14C30(*ppPlayer);
