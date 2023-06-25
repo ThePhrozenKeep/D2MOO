@@ -413,10 +413,10 @@ bool __fastcall ACT4Q1_SpawnIzualGhost(D2GameStrc* pGame, D2QuestDataStrc* pQues
 		D2RoomStrc* pRoom = DUNGEON_FindRoomBySubtileCoordinates(pGame->pAct[ACT_IV], pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY);
 		if (pRoom)
 		{
-			if (!sub_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, -1, 0)
-				&& !sub_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, 3, 0))
+			if (!D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, -1, 0)
+				&& !D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, 3, 0))
 			{
-				sub_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, 5, 0);
+				D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, 5, 0);
 			}
 		}
 	}

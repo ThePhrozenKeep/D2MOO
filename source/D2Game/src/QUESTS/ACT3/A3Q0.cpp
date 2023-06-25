@@ -127,7 +127,7 @@ void __fastcall OBJECTS_InitFunction49_HratliStart(D2ObjInitFnStrc* pOp)
 		return;
 	}
 
-	D2UnitStrc* pHratli = sub_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_HRATLI, 1, -1, 0);
+	D2UnitStrc* pHratli = D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_HRATLI, 1, -1, 0);
 	if (pHratli)
 	{
 		pQuestDataEx->bHratliStartCreated = 1;
@@ -160,7 +160,7 @@ void __fastcall OBJECTS_InitFunction50_HratliEnd(D2ObjInitFnStrc* pOp)
 		return;
 	}
 
-	D2UnitStrc* pHratli = sub_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_HRATLI, 1, -1, 0);
+	D2UnitStrc* pHratli = D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_HRATLI, 1, -1, 0);
 	if (!pHratli)
 	{
 		return;

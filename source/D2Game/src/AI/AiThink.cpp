@@ -5058,7 +5058,7 @@ void __fastcall AITHINK_Fn066_SandMaggotQueen(D2GameStrc* pGame, D2UnitStrc* pUn
 		D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 		if (pRoom)
 		{
-			D2UnitStrc* pSandMaggot = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
+			D2UnitStrc* pSandMaggot = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
 			if (pSandMaggot)
 			{
 				pSandMaggot->dwFlags |= UNITFLAG_NOXP;
@@ -5815,7 +5815,7 @@ void __fastcall AITHINK_Fn076_EvilHole(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 		if (pRoom)
 		{
-			D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
+			D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
 			if (pMonster)
 			{
 				--pAiTickParam->pAiControl->dwAiParam[1];
@@ -6034,7 +6034,7 @@ void __fastcall AITHINK_Fn082_InvisoSpawner(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 			int32_t nX = 0;
 			int32_t nY = 0;
-			if (sub_6FC66260(pGame, pRoom, 0, nMonsterId, &nX, &nY, 0) && sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, 2, 66))
+			if (sub_6FC66260(pGame, pRoom, 0, nMonsterId, &nX, &nY, 0) && D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, 2, 66))
 			{
 				--pAiTickParam->pAiControl->dwAiParam[1];
 				pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame + pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty];

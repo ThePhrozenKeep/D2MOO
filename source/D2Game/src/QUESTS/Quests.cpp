@@ -2760,11 +2760,11 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 		nTargetY = nYpos;
 	}
 
-	D2UnitStrc* pMonster = sub_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, -1, 0);
+	D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, -1, 0);
 
 	if (!pMonster)
 	{
-		pMonster = sub_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, 5, 0);
+		pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, 5, 0);
 	}
 
 	if (pMonster)
@@ -2811,7 +2811,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 
 		++nCounter;
 
-		pMonster = sub_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, 10, 0);
+		pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, 10, 0);
 		if (pMonster)
 		{
 			if (bSpecialInit)
@@ -2823,7 +2823,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 	}
 	while (nCounter < 20);
 
-	pMonster = sub_6FC69F10(pGame, pRoom, nXpos, nYpos, nMonster, 1, 15, 0);
+	pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nXpos, nYpos, nMonster, 1, 15, 0);
 	if (pMonster)
 	{
 		if (bSpecialInit)

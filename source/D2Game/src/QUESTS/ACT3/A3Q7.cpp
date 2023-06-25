@@ -108,7 +108,7 @@ void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 	pQuestDataEx->nDarkWandererY = pOp->nY;
 
 	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pOp->pRoom, pOp->nX + 7, pOp->nY);
-	if (sub_6FC69F10(pOp->pGame, pRoom, pQuestDataEx->nDarkWandererX, pQuestDataEx->nDarkWandererY, MONSTER_DARKWANDERER, 1, -1, 0))
+	if (D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pRoom, pQuestDataEx->nDarkWandererX, pQuestDataEx->nDarkWandererY, MONSTER_DARKWANDERER, 1, -1, 0))
 	{
 		pQuestDataEx->bPrimaryGoalOpen = 0;
 	}

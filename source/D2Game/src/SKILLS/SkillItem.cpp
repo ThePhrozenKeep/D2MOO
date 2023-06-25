@@ -1779,7 +1779,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
      
     COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pSource), nX, nY, PATH_GetUnitCollisionPattern(pSource), 0x8000u);
 
-    D2UnitStrc* pRevivedMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonId, MONMODE_NEUTRAL, -1, 74);
+    D2UnitStrc* pRevivedMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonId, MONMODE_NEUTRAL, -1, 74);
     if (!pRevivedMonster)
     {
         return 0;

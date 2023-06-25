@@ -679,7 +679,7 @@ int32_t __fastcall ACT5Q2_SpawnCagedWussies(D2QuestDataStrc* pQuestData, D2ObjIn
 	int32_t nWussiesSpawned = 0;
 	for (int32_t i = 0; i < 25; ++i)
 	{
-		D2UnitStrc* pWussies = sub_6FC69F10(pQuestData->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_ACT5POW, 1, 5, 0);
+		D2UnitStrc* pWussies = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_ACT5POW, 1, 5, 0);
 		if (pWussies)
 		{
 			pWussies->dwFlags |= (UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT);

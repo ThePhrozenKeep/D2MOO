@@ -2054,10 +2054,10 @@ int32_t __fastcall SKILLS_SrvDo135_MinionSpawner(D2GameStrc* pGame, D2UnitStrc* 
         return 0;
     }
 
-    D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, -1, 0);
+    D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, -1, 0);
     if (!pMonster)
     {
-        pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, 4, 0);
+        pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, 4, 0);
     }
 
     if (!pMonster)
@@ -2356,7 +2356,7 @@ int32_t __fastcall SKILLS_SrvDo140_BaalTentacle(D2GameStrc* pGame, D2UnitStrc* p
         D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nMinionX, nMinionY);
         if (pRoom)
         {
-            D2UnitStrc* pMinion = sub_6FC69F10(pGame, pRoom, nMinionX, nMinionY, nMinionId, nMinionSpawnMode, -1, 0);
+            D2UnitStrc* pMinion = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nMinionX, nMinionY, nMinionId, nMinionSpawnMode, -1, 0);
             if (pMinion)
             {
                 MONSTERUNIQUE_ToggleUnitFlag(pMinion, UNITFLAG_NOXP, 1);

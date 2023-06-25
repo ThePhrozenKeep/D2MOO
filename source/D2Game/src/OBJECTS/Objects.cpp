@@ -903,7 +903,7 @@ void __fastcall OBJECTS_InitFunction46_TrappedSoulPlaceHolder(D2ObjInitFnStrc* p
         {
             bPositionFound = 1;
 
-            if (sub_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, (ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 1) ? MONSTER_TRAPPEDSOUL2 : MONSTER_TRAPPEDSOUL1, 1, -1, 0))
+            if (D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, (ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 1) ? MONSTER_TRAPPEDSOUL2 : MONSTER_TRAPPEDSOUL1, 1, -1, 0))
             {
                 UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
                 --ii;
@@ -954,7 +954,7 @@ void __fastcall OBJECTS_InitFunction46_TrappedSoulPlaceHolder(D2ObjInitFnStrc* p
                 {
                     ++nBase;
 
-                    if (sub_6FC69F10(pOp->pGame, pOp->pRoom, nX, nY, (ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 1) ? MONSTER_TRAPPEDSOUL2 : MONSTER_TRAPPEDSOUL1, 1, -1, 0))
+                    if (D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pOp->pRoom, nX, nY, (ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 1) ? MONSTER_TRAPPEDSOUL2 : MONSTER_TRAPPEDSOUL1, 1, -1, 0))
                     {
                         UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
                         --ii;

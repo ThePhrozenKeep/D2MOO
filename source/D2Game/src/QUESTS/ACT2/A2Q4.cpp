@@ -626,10 +626,10 @@ void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2Un
 	D2RoomStrc* pFoundRoom = D2GAME_GetRoom_6FC52070(pRoom, pCoord->nX, pCoord->nY);
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x100, &pFoundRoom, 9);
 
-	D2UnitStrc* pJerhyn = sub_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, -1, 0);
+	D2UnitStrc* pJerhyn = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, -1, 0);
 	if (!pJerhyn)
 	{
-		pJerhyn = sub_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, 2, 0);
+		pJerhyn = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, 2, 0);
 	}
 
 	if (!pJerhyn)
@@ -749,7 +749,7 @@ void __fastcall ACT2Q4_InitializeJerhynStartObject(D2QuestDataStrc* pQuestData, 
 
 	QUESTS_GetFreePosition(pRoom, &pCoord, 2, 0x100, &pRoom, 10);
 
-	D2UnitStrc* pJerhyn = sub_6FC69F10(pQuestData->pGame, pRoom, pCoord.nX, pCoord.nY, MONSTER_JERHYN, 1, -1, 0);
+	D2UnitStrc* pJerhyn = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, pCoord.nX, pCoord.nY, MONSTER_JERHYN, 1, -1, 0);
 	if (pJerhyn)
 	{
 		pQuestDataEx->bJerhynStartInitialized = 1;

@@ -914,7 +914,7 @@ void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitS
 
 	if (pFreeRoom)
 	{
-		sub_6FC69F10(pGame, pFreeRoom, coord.nX, coord.nY, MONSTER_TYRAEL3, MONMODE_NEUTRAL, 4, 66);
+		D2GAME_SpawnMonster_6FC69F10(pGame, pFreeRoom, coord.nX, coord.nY, MONSTER_TYRAEL3, MONMODE_NEUTRAL, 4, 66);
 	}
 }
 

@@ -46,7 +46,7 @@ int32_t __fastcall MONSTERSPAWN_GetResurrectMode(D2UnitStrc* pUnit, int32_t a2);
 //D2Game.0x6FC68D70
 D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t a5, int16_t nFlags);
 //D2Game.0x6FC68E30
-D2UnitStrc* __fastcall sub_6FC68E30(D2UnkMonCreateStrc* pMonCreate);
+D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate);
 
 
 
@@ -55,7 +55,7 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit);
 //D2Game.0x6FC69C00
 void __fastcall sub_6FC69C00(int32_t a1, D2UnitStrc* a2);
 //D2Game.0x6FC69F10
-D2UnitStrc* __fastcall sub_6FC69F10(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags);
+D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags);
 //D2Game.0x6FC69F70
 D2UnitStrc* __fastcall sub_6FC69F70(D2GameStrc* pGame, D2RoomCoordListStrc* pRoomCoordList, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t a6, int16_t nFlags);
 //D2Game.0x6FC6A030

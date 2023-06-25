@@ -297,7 +297,7 @@ int32_t __fastcall SKILLS_SrvDo087_MaggotLay(D2GameStrc* pGame, D2UnitStrc* pUni
 
     pUnit->nActionFrame = 0;
 
-    D2UnitStrc* pSummon = sub_6FC69F10(pGame, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit) + nOffsetX, CLIENTS_GetUnitY(pUnit) + nOffsetY, nSummonId, nSpawnMode, -1, 0);
+    D2UnitStrc* pSummon = D2GAME_SpawnMonster_6FC69F10(pGame, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit) + nOffsetX, CLIENTS_GetUnitY(pUnit) + nOffsetY, nSummonId, nSpawnMode, -1, 0);
     if (pSummon)
     {
         pSummon->dwFlags |= UNITFLAG_NOXP;
@@ -722,7 +722,7 @@ int32_t __fastcall SKILLS_SrvDo091_Nest_EvilHutSpawner(D2GameStrc* pGame, D2Unit
     
     COLLISION_ResetMaskWithPattern(pRoom, nX, nY, 1, 0x100u);
 
-    D2UnitStrc* pSummon = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, 1, 0);
+    D2UnitStrc* pSummon = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nAnimMode, 1, 0);
     if (!pSummon)
     {
         return 0;

@@ -1119,7 +1119,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitSt
 
         if (ppRoom)
         {
-            sub_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 3, 8);
+            D2GAME_SpawnMonster_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 3, 8);
         }
     }
 }
@@ -1137,7 +1137,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2Unit
 
         if (ppRoom)
         {
-            sub_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 3, 8);
+            D2GAME_SpawnMonster_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 3, 8);
         }
     }
 }
@@ -1155,7 +1155,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitSt
 
         if (ppRoom)
         {
-            sub_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 3, 8);
+            D2GAME_SpawnMonster_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 3, 8);
         }
     }
 }
@@ -1173,7 +1173,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler4_6FC75E20(D2GameStrc* pGame, D2UnitSt
         
         if (ppRoom)
         {
-            sub_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 3, 8);
+            D2GAME_SpawnMonster_6FC69F10(pGame, ppRoom, pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 3, 8);
         }
     }
 }

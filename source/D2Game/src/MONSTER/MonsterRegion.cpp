@@ -125,7 +125,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
                     return 1;
                 }
             }
-            else if (sub_6FC69F10(pGame, pRoom, nX, nY, nSuperUniqueId, 1, -1, 1))
+            else if (D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nSuperUniqueId, 1, -1, 1))
             {
                 *pX = nX;
                 *pY = nY;
@@ -210,7 +210,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
             nFlags = 8;
         }
 
-        D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nClassId, nMode, -1, nFlags);
+        D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nClassId, nMode, -1, nFlags);
         if (!pMonster)
         {
             if (!sub_6FC670A0(nClassId))
@@ -218,7 +218,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
                 return nullptr;
             }
 
-            pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nClassId, nMode, 4, nFlags);
+            pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nClassId, nMode, 4, nFlags);
             if (!pMonster)
             {
                 return nullptr;
@@ -261,7 +261,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
             return nullptr;
         }
 
-        D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, 0);
+        D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, 0);
         if (!pMonster)
         {
             return nullptr;
@@ -287,15 +287,15 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
     }
     case 4:
     {
-        return sub_6FC69F10(pGame, pRoom, nX, nY, MONSTER_NAVI, nMode, -1, 0);
+        return D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, MONSTER_NAVI, nMode, -1, 0);
     }
     case 5:
     {
-        return sub_6FC69F10(pGame, pRoom, nX, nY, MONSTER_BLOODRAVEN, nMode, -1, 0);
+        return D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, MONSTER_BLOODRAVEN, nMode, -1, 0);
     }
     case 8:
     {
-        return sub_6FC69F10(pGame, pRoom, nX, nY, MONSTER_MAGGOTQUEEN1, nMode, -1, 8);
+        return D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, MONSTER_MAGGOTQUEEN1, nMode, -1, 8);
     }
     case 10:
     case 11:
@@ -352,7 +352,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
             }
         }
 
-        return sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, nFlags);
+        return D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, nFlags);
     }
     case 17:
     case 18:
@@ -460,10 +460,10 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
             nFlags = 8;
         }
 
-        D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, nFlags);
+        D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, nFlags);
         if (!pMonster)
         {
-            pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, 4, nFlags);
+            pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, 4, nFlags);
             if (!pMonster)
             {
                 return nullptr;
@@ -789,7 +789,7 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
             }
             else
             {
-                pMonster = sub_6FC69F10(pGame, pRoom, nX + a5->records[j].nXOffset, nY + a5->records[j].nYOffset, nMonsterId, 1, -1, 1);
+                pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX + a5->records[j].nXOffset, nY + a5->records[j].nYOffset, nMonsterId, 1, -1, 1);
             }
 
             if (!pMonster)
@@ -894,7 +894,7 @@ void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2RoomStrc* pRoom)
         return;
     }
 
-    D2UnitStrc* pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, -1, 0);
+    D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, -1, 0);
     if (!pMonster)
     {
         return;

@@ -712,9 +712,9 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 		D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
 
 		D2UnitStrc* pDiablo = nullptr;
-		if ((pDiablo = sub_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, -1, 0)) != nullptr
-			|| (pDiablo = sub_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 5, 0)) != nullptr
-			|| (pDiablo = sub_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 10, 0)) != nullptr)
+		if ((pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, -1, 0)) != nullptr
+			|| (pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 5, 0)) != nullptr
+			|| (pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 10, 0)) != nullptr)
 		{
 			pDiablo->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 

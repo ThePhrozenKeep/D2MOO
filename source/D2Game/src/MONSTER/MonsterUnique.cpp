@@ -2376,10 +2376,10 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2RoomStr
     {
         if (nUnitGUID == -1)
         {
-            pMonster = sub_6FC69F10(pGame, pRoom, nTargetX, nTargetY, nClassId, 1, nUnitGUID, 64);
+            pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nTargetX, nTargetY, nClassId, 1, nUnitGUID, 64);
             if (!pMonster)
             {
-                pMonster = sub_6FC69F10(pGame, pRoom, nX, nY, nClassId, 1, 5, 64);
+                pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nClassId, 1, 5, 64);
             }
         }
         else
