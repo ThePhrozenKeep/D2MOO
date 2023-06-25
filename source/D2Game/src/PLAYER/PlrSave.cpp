@@ -1401,7 +1401,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
 }
 
 //D2Game.0x6FC8B8A0
-int32_t __fastcall sub_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pSection, uint32_t dwVersion, int32_t a5, int32_t a6, int32_t* pSize)
+int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pSection, uint32_t dwVersion, int32_t a5, int32_t a6, int32_t* pSize)
 {
     if (*(uint16_t*)pSection != 'MJ')
     {
@@ -1596,7 +1596,7 @@ int32_t __fastcall sub_6FC8BC70(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* p
     }
     else if (dwVersion >= 72 && dwVersion <= 96)
     {
-        return sub_6FC8B8A0(pGame, pUnit, pSection, dwVersion, a5, a6, a7);
+        return PLRSAVE_ReadItems_6FC8B8A0(pGame, pUnit, pSection, dwVersion, a5, a6, a7);
     }
     else
     {
