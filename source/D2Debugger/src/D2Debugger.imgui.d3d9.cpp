@@ -87,6 +87,15 @@ void GetWindowPositionFromGameWindow(int& x, int& y)
         y = windowRect.top;
     }
 }
+
+bool IsCursorVisible()
+{
+    CURSORINFO ci = { sizeof(CURSORINFO) };
+    if (GetCursorInfo(&ci))
+        return ci.flags & CURSOR_SHOWING;
+    return false;
+}
+
 D2DEBUGGER_DLL_DECL
 int D2DebuggerInit()
 {
@@ -190,6 +199,13 @@ bool D2DebuggerNewFrame()
         }
     }
 
+    // Some rendering backends seem to force hide all cursors of the application.
+    // So detect this case and ask ImGui to render it instead.
+    if (!IsCursorVisible())
+    {
+        auto& io = ImGui::GetIO();
+        io.MouseDrawCursor = true;
+    }
     // Start the Dear ImGui frame
     ImGui_ImplDX9_NewFrame();
     ImGui_ImplWin32_NewFrame();
