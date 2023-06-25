@@ -763,5 +763,3 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(void* pMemPool);
 void __fastcall DATATBLS_CreateItemTypeTreasureClasses();
 //D2Common.0x6FD6FBB0
 void __fastcall DATATBLS_UnloadSomeMonsterTxts();
-//Inlined at various places
-D2MonStatsTxt* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonsterId);

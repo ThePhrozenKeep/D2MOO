@@ -607,3 +607,19 @@ void __fastcall DATATBLS_LoadCharStatsTxt(void* pMemPool);
 //D2Common.0x6FD51BF0
 void __fastcall DATATBLS_LoadDifficultyLevelsTxt(void* pMemPool);
 
+
+//Inlined at various places
+inline D2MonStatsTxt* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonsterId)
+{
+	if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
+	{
+		return &sgptDataTables->pMonStatsTxt[nMonsterId];
+	}
+
+	return NULL;
+}
+
+inline int __fastcall DATATBLS_GetMonStatsTxtRecordCount()
+{
+	return sgptDataTables->nMonStatsTxtRecordCount;
+}

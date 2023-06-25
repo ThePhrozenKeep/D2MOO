@@ -5,6 +5,7 @@
 #include <D2Lang.h>
 #include <D2Unicode.h>
 #include <D2Dll.h>
+#include <D2DataTbls.h>
 
 #include "IconsFontAwesome6.h"
 
@@ -18,6 +19,7 @@ HMODULE delayedD2GameDllBaseGet()
 
 static const int D2GameImageBase = 0x6FC30000;
 D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
+D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
 
 
 // Using a define so that we break inline
@@ -178,6 +180,49 @@ D2UnitStrc* GetFirstPlayerInList(D2GameStrc* pGame)
     return nullptr;
 }
 
+const std::vector<char>& GetNOTFOUNDCharBuffer()
+{
+    static const char notFound[] = "NOT-FOUND";
+    static std::vector<char> notFoundBuffer{notFound, notFound + sizeof(notFound)};
+    return notFoundBuffer;
+}
+
+template<typename NAMEGETTER>
+void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& NameGetter)
+{
+
+    static bool bWasComboOpen = false;
+    if (ImGui::BeginCombo(Title, NameGetter(selectedID).data()))
+    {
+        ImGuiListClipper clipper;
+        clipper.Begin(count);
+
+        if (!bWasComboOpen)
+        {
+            bWasComboOpen = true;
+            //This is needed on first frame for SetItemDefaultFocus to work
+            clipper.ForceDisplayRangeByIndices(0, clipper.ItemsCount);
+        }
+        while (clipper.Step())
+        {
+            for (int id = clipper.DisplayStart; id < clipper.DisplayEnd; id++)
+            {
+                const bool bSelected = selectedID == id;
+                if (ImGui::Selectable(NameGetter(id).data(), bSelected))
+                    selectedID = id;
+                if (bSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+        }
+        clipper.End();
+        ImGui::EndCombo();
+    }
+    else
+    {
+        bWasComboOpen = false;
+    }
+}
+
 void D2DebugUnitSpawner(D2GameStrc* pGame)
 {
     if (ImGui::CollapsingHeader("UnitSpawner"))
@@ -195,46 +240,15 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 {
                     return GetUTF8CharBufferFromStringIndex(pSuperUniqueRecord->wNameStr);
                 }
-                const char notFound[] = "NOT-FOUND";
-                return std::vector<char>{notFound, notFound + sizeof(notFound)};
+                return GetNOTFOUNDCharBuffer();
             };
 
-            static int currentSelectionId = 0;
-
-            static bool bWasComboOpen = false;
-            if (ImGui::BeginCombo("SuperUnique", GetSuperUniqueUTF8Name(currentSelectionId).data()))
-            {
-                ImGuiListClipper clipper;
-                clipper.Begin(DATATBLS_GetSuperUniquesTxtRecordCount());
-
-                if (!bWasComboOpen)
-                {
-                    bWasComboOpen = true;
-                    //This is needed on first frame for SetItemDefaultFocus to work
-                    clipper.ForceDisplayRangeByIndices(0,clipper.ItemsCount);
-                }
-                while (clipper.Step())
-                {
-                    for (int id = clipper.DisplayStart; id < clipper.DisplayEnd; id++)
-                    {
-                        const bool bSelected = currentSelectionId == id;
-                        if (ImGui::Selectable(GetSuperUniqueUTF8Name(id).data(), bSelected))
-                            currentSelectionId = id;
-                        if (bSelected)
-                            ImGui::SetItemDefaultFocus();
-                    }
-                }
-                clipper.End();
-                ImGui::EndCombo();
-            }
-            else
-            {
-                bWasComboOpen = false;
-            }
+            static int currentSuperUniqueSelectionId = 0;
+            D2ComboBox("SuperUnique", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount(), GetSuperUniqueUTF8Name);
             ImGui::SameLine();
-            if (ImGui::Button("Spawn"))
+            if (ImGui::Button("Spawn##SuperUnique"))
             {
-                if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSelectionId))
+                if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
                 {
                     // Register for debug view ?
                 }
@@ -243,6 +257,34 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
+
+
+            static int currentNormalSelectionId = 0;
+            auto GetNormalMonsterUTF8Name = [](int id)
+            {
+                if (D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(id))
+                {
+                    return GetUTF8CharBufferFromStringIndex(pMonStatsTxtRecord->wNameStr);
+                }
+                return GetNOTFOUNDCharBuffer();
+            };
+            D2ComboBox("Normal", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount(), GetNormalMonsterUTF8Name);
+            ImGui::SameLine();
+            if (ImGui::Button("Spawn##Normal"))
+            {
+                
+                if (D2UnitStrc* pSpawned = D2Game_SpawnMonster_6FC69F10(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentNormalSelectionId, MONMODE_NEUTRAL, 5, 0))
+                {
+                    // Register for debug view ?
+                }
+                else
+                {
+                    ImGui::OpenPopup("Spawn failed");
+                }
+            }
+
+
+
             bool bOpened_Unused = true;
             if (ImGui::BeginPopupModal("Spawn failed", &bOpened_Unused))
             {
@@ -250,10 +292,11 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 ImGui::BulletText("Can only be spawned once per game.");
                 ImGui::BulletText("Not engouh space left.");
                 ImGui::BulletText("...");
-                if(ImGui::Button("Close"))
+                if (ImGui::Button("Close"))
                     ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
             }
+
         }
     }
 }
