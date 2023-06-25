@@ -28,7 +28,7 @@ decltype(&GAME_UpdateProgress) GAME_UpdateProgress_Original = nullptr;
 
 bool IsDebuggerEnabled()
 {
-    static bool bEnabledFromCommandLine = strstr(GetCommandLineA(), "-debug");
+    static bool bEnabledFromCommandLine = strstr(GetCommandLineA(), "-debug") || (getenv("D2_DEBUGGER") && *getenv("D2_DEBUGGER") == '1');
     if (bEnabledFromCommandLine)
     {
         return true;

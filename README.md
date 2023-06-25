@@ -58,6 +58,7 @@ Note that it will spawn the game/D2SE as a subprocess, so you might be intereste
 
 Start the game with the `-debug`.
 For example: `D2.DetoursLauncher -- -debug`.
+Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
 
 ## Versions
 
