@@ -2163,6 +2163,8 @@ enum D2C_WillowispAIConstants
 	WHISP_RITUAL_FORMATION_COUNT = 4,
 	WHISP_BAPTISM_FORMATION_COUNT = 5,
 	WHISP_RITUAL_BAPTISM_COOLDOWN_IN_FRAMES = 1800,
+	WHISP_RITUAL_MF_BUFF_DURATION_IN_FRAMES = 24 * 60 * 60 * 20, // 20 hours
+	
 };
 
 
@@ -2248,11 +2250,11 @@ static void AITHINK_Fn025_Willowisp_State_AttemptRitual(D2GameStrc* pGame, D2Uni
 
 	switch (unitFindData.nIndex)
 	{
-	case 4:
+	case WHISP_RITUAL_FORMATION_COUNT:
 	{
-		for (int32_t i = 0; i < 4; ++i)
+		for (int32_t i = 0; i < WHISP_RITUAL_FORMATION_COUNT; ++i)
 		{
-			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, 6);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE);
 			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
 			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
 			AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
@@ -2261,11 +2263,11 @@ static void AITHINK_Fn025_Willowisp_State_AttemptRitual(D2GameStrc* pGame, D2Uni
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
 		break;
 	}
-	case 5:
+	case WHISP_BAPTISM_FORMATION_COUNT:
 	{
-		for (int32_t i = 0; i < 5; ++i)
+		for (int32_t i = 0; i < WHISP_BAPTISM_FORMATION_COUNT; ++i)
 		{
-			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, 5);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, WILLOWISP_AI_STATE_BAPTISM);
 			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
 			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
 			AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
@@ -2407,8 +2409,7 @@ static void AITHINK_Fn025_Willowisp_State_Ritual(D2GameStrc* pGame, D2UnitStrc* 
 
 	if (GetCloseForRitualOrBaptism(pGame, pUnit, nX, nY))
 	{
-		int32_t nFrame = pGame->dwGameFrame % 67;
-		if (nFrame)
+		if (const int32_t nFrame = pGame->dwGameFrame % 67)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - nFrame);
 			return;
@@ -2429,13 +2430,12 @@ static void AITHINK_Fn025_Willowisp_State_Ritual(D2GameStrc* pGame, D2UnitStrc* 
 
 			if (pAiTickParam->pTarget->dwUnitType == UNIT_PLAYER && !SUNIT_IsDead(pAiTickParam->pTarget))
 			{
-				nFrame = pGame->dwGameFrame + 1728000;
-				D2StatListStrc* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, STATLIST_NEWLENGTH, nFrame, pAiTickParam->pTarget->dwUnitType, pAiTickParam->pTarget->dwUnitId);
-				if (pStatList)
+				const uint32_t nBuffEndFrame = pGame->dwGameFrame + WHISP_RITUAL_MF_BUFF_DURATION_IN_FRAMES;
+				if (D2StatListStrc* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, STATLIST_NEWLENGTH, nBuffEndFrame, pAiTickParam->pTarget->dwUnitType, pAiTickParam->pTarget->dwUnitId))
 				{
 					STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MAGICBONUS, 50 * (pGame->nDifficulty + 1), 0);
-					D2COMMON_10476(pStatList, nFrame);
-					EVENT_SetEvent(pGame, pAiTickParam->pTarget, UNITEVENTCALLBACK_REMOVESTATE, nFrame, 0, 0);
+					D2COMMON_10476(pStatList, nBuffEndFrame);
+					EVENT_SetEvent(pGame, pAiTickParam->pTarget, UNITEVENTCALLBACK_REMOVESTATE, nBuffEndFrame, 0, 0);
 					D2COMMON_10475_PostStatToStatList(pAiTickParam->pTarget, pStatList, 1);
 				}
 			}
