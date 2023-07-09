@@ -214,6 +214,11 @@ struct D2PetMoveStrc
 };
 #pragma pack(pop)
 
+// Inlined helper function
+bool AIRollChanceParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam, int32_t nParamId)
+{
+	return (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[nParamId][pGame->nDifficulty];
+}
 
 void __fastcall AITHINK_Fn000(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
@@ -2123,403 +2128,388 @@ void __fastcall AITHINK_Fn024_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	}
 }
 
-//D2Game.0x6FCD5A60) --------------------------------------------------------
-void __fastcall AITHINK_Fn025_Willowisp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+enum D2C_WillowispAIState
 {
-	D2CoordStrc v74[1];
-	int32_t v75;
-	int32_t v76;
-	int32_t v77;
-	int32_t v78;
-	int32_t v79;
-	D2CoordStrc v80[1];
-	v80[0].nX = (int32_t)pAiTickParam->pMonstatsTxt;
-	v80[0].nY = (int32_t)pAiTickParam->pTarget;
+	WILLOWISP_AI_STATE_IDLE = 0,
+	WILLOWISP_AI_STATE_MOVING = 1,
+	WILLOWISP_AI_STATE_CAN_CAST = 2,
+	WILLOWISP_AI_STATE_CAN_ATTACK_HTH = 3,
+	WILLOWISP_AI_STATE_ATTEMPT_RITUAL_OR_BAPTISM = 4,
+	// Pentagram baptism that gives MF%
+	WILLOWISP_AI_STATE_BAPTISM = 5,
+	// Ritual that showcases names of developpers
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_D = 6, // David Brevik ?
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_E = 7, // Eric Schaefer ?
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_M = 8, // Max Schaefer ?
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_HORNS = 9, // Demon symbol
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_R = 10, // Rick Seis ?
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_P = 11, // Phil Shenk ?
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_S = 12, // Stieg Hedlund ?
+	WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE = WILLOWISP_AI_STATE_RITUAL_SHAPE_D,
+	WILLOWISP_AI_STATE_RITUAL_LAST_SHAPE = WILLOWISP_AI_STATE_RITUAL_SHAPE_S,
+	WILLOWISP_AI_STATE_RITUAL_SHAPE_COUNT =  WILLOWISP_AI_STATE_RITUAL_LAST_SHAPE - WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE + 1
+};
 
-	int32_t v81 = -5;
-	int32_t v82 = -5;
-	int32_t v83 = 3;
-	int32_t v84 = -5;
-	int32_t v85 = 6;
-	int32_t v86 = 3;
-	int32_t v87 = 3;
-	int32_t v88 = 6;
-	int32_t v89 = -5;
-	D2CoordStrc v90[1];
-	v90[0].nX = 3;
-	int32_t v91 = 6;
-	int32_t v92 = 3;
-	int32_t v93 = 3;
-	int32_t v94 = 6;
-	int32_t v95 = -5;
-	int32_t v96 = 3;
-	int32_t v97 = -5;
-	int32_t v98 = -5;
-	int32_t v99 = 3;
-	int32_t v100 = -5;
-	D2CoordStrc v101[1] = { 1, -5 };
-	int32_t v102 = 6;
-	int32_t v103 = 0;
-	int32_t v104 = 4;
-	int32_t v105 = 10;
-	D2CoordStrc v106[1] = { -10, -3 };
-	int32_t v107 = 1;
-	int32_t v108 = 8;
-	int32_t v109 = -9;
-	int32_t v110 = -2;
-	int32_t v111 = -5;
-	int32_t v112 = 4;
-	int32_t v113 = 1;
-	int32_t v114 = 8;
-	int32_t v115 = -12;
-	int32_t v116 = 0;
-	int32_t v117 = 7;
-	int32_t v118 = 5;
-	int32_t v119 = -3;
-	int32_t v120 = -11;
-	int32_t v121 = 11;
-	int32_t v122 = -2;
-	int32_t v123 = 7;
-	int32_t v124 = 9;
-	int32_t v125 = -15;
-	int32_t v126 = -3;
-	int32_t v127 = -6;
-	int32_t v128 = -13;
-	int32_t v129 = 9;
-	int32_t v130 = 7;
-	int32_t v131 = -5;
-	int32_t v132 = -7;
-	int32_t v133 = -5;
-	int32_t v134 = -7;
-	int32_t v135 = 9;
-	int32_t v136 = 0;
-	int32_t v137 = -12;
-	int32_t v138 = -2;
-	int32_t v139 = -8;
-	int32_t v140 = -11;
-	int32_t v141 = -2;
-	int32_t v142 = -6;
-	int32_t v143 = -2;
-	int32_t v144 = -6;
-	int32_t v145 = -13;
-	int32_t v146 = -6;
-	int32_t v147 = -8;
-	int32_t v148 = 1;
-	int32_t v149 = 1;
-	int32_t v150 = -6;
-	int32_t v151 = 6;
-	int32_t v152 = 9;
-	int32_t v153 = 0;
-	int32_t v154 = 0;
-	int32_t v155 = -10;
-	int32_t v156 = -3;
-	int32_t v157 = 1;
-	int32_t v158 = -5;
-	int32_t v159 = 6;
-	int32_t v160 = 0;
-	int32_t v161 = 4;
-	int32_t v162 = 10;
-	int32_t v163 = -9;
-	int32_t v164 = -2;
-	int32_t v165 = -6;
-	int32_t v166 = -11;
-	int32_t v167 = -2;
-	int32_t v168 = -5;
-	int32_t v169 = 6;
-	int32_t v170 = 1;
-	int32_t v171 = 0;
-	int32_t v172 = 13;
-	int32_t v173 = -12;
-	int32_t v174 = 0;
-	int32_t v175 = 7;
-	int32_t v176 = 5;
-	int32_t v177 = -3;
-	int32_t v178 = -11;
-	int32_t v179 = -15;
-	int32_t v180 = -3;
-	int32_t v181 = -6;
-	int32_t v182 = -3;
-	int32_t v183 = -4;
-	int32_t v184 = -5;
-	int32_t v185 = -6;
-	int32_t v186 = -13;
-	int32_t v187 = -12;
-	int32_t v188 = -2;
-	int32_t v189 = -6;
-	int32_t v190 = 2;
-	int32_t v191 = -5;
-	int32_t v192 = 5;
-	int32_t v193 = 1;
-	int32_t v194 = 11;
-	int32_t v195 = -13;
-	int32_t v196 = -6;
-	int32_t v197 = -8;
-	int32_t v198 = -11;
-	int32_t v199 = -7;
-	int32_t v200 = 0;
-	int32_t v201 = 1;
-	int32_t v202 = 8;
-	int32_t v203 = -5;
-	int32_t v204 = -8;
-	int32_t v205 = -8;
-	int32_t v206 = 1;
-	int32_t v207 = 1;
-	int32_t v208 = -6;
-	int32_t v209 = 6;
-	int32_t v210 = 9;
+enum D2C_WillowispAIParams
+{
+	WILLOWISP_AI_PARAM_CAST_CHANCE_PCT = 0,
+	WILLOWISP_AI_PARAM_MELEE_CHANCE_PCT = 1,
+	WILLOWISP_AI_PARAM_APPROACH_CHANCE_PCT = 2,
+};
 
-	if (pAiTickParam->pTarget && pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[2])
+enum D2C_WillowispAIConstants
+{
+	WILLOWISP_ATTACKS_PER_SHAPE = 3,
+	WHISP_RITUAL_FORMATION_COUNT = 4,
+	WHISP_BAPTISM_FORMATION_COUNT = 5,
+	WHISP_RITUAL_BAPTISM_COOLDOWN_IN_FRAMES = 1800,
+	WHISP_RITUAL_MF_BUFF_DURATION_IN_FRAMES = 24 * 60 * 60 * 20, // 20 hours
+	
+};
+
+
+// inlined 
+static void AITHINK_Fn025_Willowisp_State_NotMoving(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	const int32_t nAIState = pAiTickParam->pAiControl->dwAiParam[0];
+	if (pAiTickParam->bCombat)
 	{
-		if (AITHINK_GetSquaredDistance(pUnit, pAiTickParam->pTarget) < 1024 && pAiTickParam->pAiControl->dwAiParam[0] < 4 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 1000) <= pGame->nDifficulty + 2)
+		if (nAIState == WILLOWISP_AI_STATE_CAN_ATTACK_HTH || AIRollChanceParam(pGame, pUnit, pAiTickParam, WILLOWISP_AI_PARAM_MELEE_CHANCE_PCT))
 		{
-			pAiTickParam->pAiControl->dwAiParam[0] = 4;
-		}
-	}
-
-	const int32_t nParam = pAiTickParam->pAiControl->dwAiParam[0];
-	if (nParam == 4)
-	{
-		D2UnitFindArgStrc unitFindArg = {};
-		unitFindArg.nX = CLIENTS_GetUnitX(pUnit);
-		unitFindArg.nY = CLIENTS_GetUnitY(pUnit);
-		unitFindArg.nFlags = 1411;
-		unitFindArg.nSize = 32;
-
-		D2UnitFindDataStrc unitFindData = {};
-		UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, UNITS_GetRoom(pUnit), unitFindArg.nX, unitFindArg.nY, 32, AITHINK_UnitFindCallback_Willowisp, &unitFindArg);
-		UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
-
-		switch (unitFindData.nIndex)
-		{
-		case 4:
-		{
-			for (int32_t i = 0; i < 4; ++i)
-			{
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, 6);
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
-				AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
-			}
-
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
-			break;
-		}
-		case 5:
-		{
-			for (int32_t i = 0; i < 5; ++i)
-			{
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, 5);
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
-				AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
-				AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
-			}
-
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
-			break;
-		}
-		default:
-		{
-			pAiTickParam->pAiControl->dwAiParam[0] = 2;
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
-			break;
-		}
-		}
-		UNITFINDS_FreeUnitFindData(&unitFindData);
-		return;
-	}
-
-	if (nParam >= 6)
-	{
-		if (pAiTickParam->pAiControl->dwAiParam[2] > 4)
-		{
-			pAiTickParam->pAiControl->dwAiParam[0] = 2;
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
+			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
+			pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_IDLE;
 			return;
 		}
-
-		int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + v106[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0]].nX;
-		int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + v106[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0]].nY;
-
-		if (AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) <= 3)
-		{
-			int32_t nFrame = pGame->dwGameFrame % 67;
-			if (nFrame)
-			{
-				AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - nFrame);
-				return;
-			}
-
-			if (pAiTickParam->pAiControl->dwAiParam[1] >= 3)
-			{
-				pAiTickParam->pAiControl->dwAiParam[1] = 0;
-				++pAiTickParam->pAiControl->dwAiParam[0];
-
-				if (pAiTickParam->pAiControl->dwAiParam[0] - 6 > 6)
-				{
-					pAiTickParam->pAiControl->dwAiParam[0] = 2;
-					pAiTickParam->pAiControl->dwAiParam[2] = pGame->dwGameFrame + 1800;
-				}
-
-				AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
-
-				if (pAiTickParam->pTarget->dwUnitType == UNIT_PLAYER && !SUNIT_IsDead(pAiTickParam->pTarget))
-				{
-					nFrame = pGame->dwGameFrame + 1728000;
-					D2StatListStrc* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nFrame, pAiTickParam->pTarget->dwUnitType, pAiTickParam->pTarget->dwUnitId);
-					if (pStatList)
-					{
-						STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MAGICBONUS, 50 * (pGame->nDifficulty + 1), 0);
-						D2COMMON_10476(pStatList, nFrame);
-						EVENT_SetEvent(pGame, pAiTickParam->pTarget, UNITEVENTCALLBACK_REMOVESTATE, nFrame, 0, 0);
-						D2COMMON_10475_PostStatToStatList(pAiTickParam->pTarget, pStatList, 1);
-					}
-				}
-				return;
-			}
-
-			if (!v101[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0] - 25].nX && !v101[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0] - 25].nY)
-			{
-				++pAiTickParam->pAiControl->dwAiParam[1];
-				AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - pGame->dwGameFrame % 67);
-				return;
-			}
-
-			nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + v74[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0]].nX;
-			nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + v74[pAiTickParam->pAiControl->dwAiParam[2] + 4 * pAiTickParam->pAiControl->dwAiParam[0]].nY;
-
-			AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, 7, nX, nY);
-			++pAiTickParam->pAiControl->dwAiParam[1];
-			return;
-		}
-
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 34)
-		{
-			AITACTICS_ChangeModeAndTargetCoordinatesNoStep(pGame, pUnit, nX, nY, 2);
-		}
-		else
-		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
-		}
-		return;
-	}
-
-	if (nParam == 5)
-	{
-		if (pAiTickParam->pAiControl->dwAiParam[2] > 5)
-		{
-			pAiTickParam->pAiControl->dwAiParam[0] = 2;
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
-			return;
-		}
-
-		int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + v80[pAiTickParam->pAiControl->dwAiParam[2]].nX;
-		int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + v80[pAiTickParam->pAiControl->dwAiParam[2]].nY;
-
-		if (AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) <= 3)
-		{
-			const int32_t nFrame = pGame->dwGameFrame % 67;
-			if (nFrame)
-			{
-				AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - nFrame);
-				return;
-			}
-
-			if (pAiTickParam->pAiControl->dwAiParam[1] >= 3)
-			{
-				pAiTickParam->pAiControl->dwAiParam[0] = 2;
-				pAiTickParam->pAiControl->dwAiParam[2] = pGame->dwGameFrame + 1800;
-			}
-			else
-			{
-				if (v90[pAiTickParam->pAiControl->dwAiParam[2]].nX || v90[pAiTickParam->pAiControl->dwAiParam[2]].nY)
-				{
-					nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + v90[pAiTickParam->pAiControl->dwAiParam[2]].nX;
-					nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + v90[pAiTickParam->pAiControl->dwAiParam[2]].nY;
-
-					AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, 7, nX, nY);
-					++pAiTickParam->pAiControl->dwAiParam[1];
-					return;
-				}
-
-				++pAiTickParam->pAiControl->dwAiParam[1];
-			}
-			AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
-			return;
-		}
-
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 34)
-		{
-			AITACTICS_ChangeModeAndTargetCoordinatesNoStep(pGame, pUnit, nX, nY, 2);
-		}
-		else
-		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
-		}
-		return;
-	}
-
-	if (nParam != 1)
-	{
-		if (pAiTickParam->bCombat)
-		{
-			if (nParam == 3 || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[1][pGame->nDifficulty])
-			{
-				AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
-				pAiTickParam->pAiControl->dwAiParam[0] = 0;
-				return;
-			}
-		}
-		else
-		{
-			if (nParam == 2 || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty])
-			{
-				AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_CAST, pAiTickParam->pTarget);
-				pAiTickParam->pAiControl->dwAiParam[0] = 0;
-				return;
-			}
-		}
-
-		pAiTickParam->pAiControl->dwAiParam[0] = 1;
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty])
-		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
-			pAiTickParam->pAiControl->dwAiParam[1] = 3;
-		}
-		else
-		{
-			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 0);
-			pAiTickParam->pAiControl->dwAiParam[1] = 3;
-		}
-		return;
-	}
-
-	if (pAiTickParam->pAiControl->dwAiParam[1] > 0)
-	{
-		if (pAiTickParam->bCombat)
-		{
-			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, 0);
-			pAiTickParam->pAiControl->dwAiParam[0] = 3;
-			return;
-		}
-
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty])
-		{
-			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, 0);
-			pAiTickParam->pAiControl->dwAiParam[0] = 2;
-			return;
-		}
-	}
-
-	--pAiTickParam->pAiControl->dwAiParam[1];
-	pAiTickParam->pAiControl->dwAiParam[0] = 1;
-
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty])
-	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 	}
 	else
 	{
+		if (nAIState == WILLOWISP_AI_STATE_CAN_CAST || AIRollChanceParam(pGame, pUnit, pAiTickParam, WILLOWISP_AI_PARAM_CAST_CHANCE_PCT))
+		{
+			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_CAST, pAiTickParam->pTarget);
+			pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_IDLE;
+			return;
+		}
+	}
+
+	pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_MOVING;
+	pAiTickParam->pAiControl->dwAiParam[1] = 3; // Iterations to stay in state moving
+	if (AIRollChanceParam(pGame, pUnit, pAiTickParam, WILLOWISP_AI_PARAM_APPROACH_CHANCE_PCT))
+	{
 		AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 0);
+	}
+	else
+	{
+		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+	}
+}
+
+// inlined 
+static void AITHINK_Fn025_Willowisp_State_Moving(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	const bool bFinishedMoving = pAiTickParam->pAiControl->dwAiParam[1] <= 0;
+
+	if (bFinishedMoving && pAiTickParam->bCombat)
+	{
+		AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, 0);
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_ATTACK_HTH;
+	}
+	else if(bFinishedMoving && AIRollChanceParam(pGame, pUnit, pAiTickParam, WILLOWISP_AI_PARAM_CAST_CHANCE_PCT))
+	{
+		AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, 0);
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+	}
+	else
+	{
+		--pAiTickParam->pAiControl->dwAiParam[1];
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_MOVING;
+
+		if (AIRollChanceParam(pGame, pUnit, pAiTickParam, WILLOWISP_AI_PARAM_APPROACH_CHANCE_PCT))
+		{
+			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 0);
+		}
+		else
+		{
+			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+		}
+	}
+}
+
+
+// inlined 
+static void AITHINK_Fn025_Willowisp_State_AttemptRitual(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	D2UnitFindArgStrc unitFindArg = {};
+	unitFindArg.nX = CLIENTS_GetUnitX(pUnit);
+	unitFindArg.nY = CLIENTS_GetUnitY(pUnit);
+	unitFindArg.nFlags = 1411;
+	unitFindArg.nSize = 32;
+
+	D2UnitFindDataStrc unitFindData = {};
+	UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, UNITS_GetRoom(pUnit), unitFindArg.nX, unitFindArg.nY, 32, AITHINK_UnitFindCallback_Willowisp, &unitFindArg);
+	UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
+
+	switch (unitFindData.nIndex)
+	{
+	case WHISP_RITUAL_FORMATION_COUNT:
+	{
+		for (int32_t i = 0; i < WHISP_RITUAL_FORMATION_COUNT; ++i)
+		{
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
+			AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
+		}
+
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
+		break;
+	}
+	case WHISP_BAPTISM_FORMATION_COUNT:
+	{
+		for (int32_t i = 0; i < WHISP_BAPTISM_FORMATION_COUNT; ++i)
+		{
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 1, WILLOWISP_AI_STATE_BAPTISM);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 2, 0);
+			AIGENERAL_SetAiControlParam(unitFindData.pUnitsArray[i], 3, i + 1);
+			AITACTICS_IdleInNeutralMode(pGame, unitFindData.pUnitsArray[i], 337 - pGame->dwGameFrame % 337);
+		}
+
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
+		break;
+	}
+	default:
+	{
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
+		break;
+	}
+	}
+	UNITFINDS_FreeUnitFindData(&unitFindData);
+}
+
+// inlined
+static bool GetCloseForRitualOrBaptism(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY)
+{
+	const int32_t nMaxDistance = 3;
+	if (AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) <= nMaxDistance)
+	{
+		return true;
+	}
+	else
+	{
+		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 35)
+		{
+			AITTACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance + 1);
+		}
+		else
+		{
+			AITACTICS_ChangeModeAndTargetCoordinatesNoStep(pGame, pUnit, nX, nY, MONMODE_WALK);
+		}
+		return false;
+	}
+}
+
+// inlined 
+static void AITHINK_Fn025_Willowisp_State_Baptism(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	if (pAiTickParam->pAiControl->dwAiParam[2] > WHISP_BAPTISM_FORMATION_COUNT)
+	{
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
+		return;
+	}
+
+	D2_ASSERT(pAiTickParam->pAiControl->dwAiParam[2] >= 1);
+
+	static const D2CoordStrc aBaptismCoordsOffsets[6] = {
+		{},			// 0 unused
+		{ -5, -5 }, // 1
+		{  3, -5 }, // 2
+		{  6 , 3 }, // 3
+		{  3 , 6 }, // 4
+		{ -5 , 3 }, // 5
+	};
+
+	const int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + aBaptismCoordsOffsets[pAiTickParam->pAiControl->dwAiParam[2]].nX;
+	const int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + aBaptismCoordsOffsets[pAiTickParam->pAiControl->dwAiParam[2]].nY;
+
+	if (GetCloseForRitualOrBaptism(pGame, pUnit, nX, nY))
+	{
+		const int32_t nFrame = pGame->dwGameFrame % 67;
+		if (nFrame)
+		{
+			AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - nFrame);
+			return;
+		}
+
+		if (pAiTickParam->pAiControl->dwAiParam[1] >= WILLOWISP_ATTACKS_PER_SHAPE)
+		{
+			pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+			pAiTickParam->pAiControl->dwAiParam[2] = pGame->dwGameFrame + WHISP_RITUAL_BAPTISM_COOLDOWN_IN_FRAMES;
+		}
+		else
+		{
+			static const D2CoordStrc aBaptismTargetOffsets[6] = {
+				{},         // 0 unused
+				{  6,  3 }, // 1
+				{  3,  6 }, // 2
+				{ -5,  3 }, // 3
+				{ -5, -5 }, // 4
+				{  3, -5 }, // 5
+			};
+			const D2CoordStrc tBaptismTargetOffset = aBaptismTargetOffsets[pAiTickParam->pAiControl->dwAiParam[2]];
+			if (tBaptismTargetOffset.nX || tBaptismTargetOffset.nY)
+			{
+				const int32_t nTargetX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + tBaptismTargetOffset.nX;
+				const int32_t nTargetY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + tBaptismTargetOffset.nY;
+
+				AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, MONMODE_CAST, nTargetX, nTargetY);
+				// Next attack
+				++pAiTickParam->pAiControl->dwAiParam[1];
+				return;
+			}
+
+			// Next attack
+			++pAiTickParam->pAiControl->dwAiParam[1];
+		}
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
+		return;
+	}
+}
+
+// inlined 
+static void AITHINK_Fn025_Willowisp_State_Ritual(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	// 4 whisps ritual
+	// => dwAiParam[0] == shape ( 6 - 12 )
+	// => dwAiParam[1] == fire lightning iteration ( 0 - 2 )
+	// => dwAiParam[2] == whisp id ( 1 - 4 )
+
+	const int32_t nWhispIndex = pAiTickParam->pAiControl->dwAiParam[2] - 1;
+	const int32_t nWhispFormationIndex = pAiTickParam->pAiControl->dwAiParam[0] - WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE;
+	
+	if (nWhispIndex >= WHISP_RITUAL_FORMATION_COUNT) // New whisp tried to enter ritual, go back to normal AI after idling
+	{
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 8);
+		return;
+	}
+
+	static const D2CoordStrc aRitualCoordsOffsets[WILLOWISP_AI_STATE_RITUAL_SHAPE_COUNT][WHISP_RITUAL_FORMATION_COUNT] = {
+		{{ -10 ,  -3 }, {   1 ,  -5 }, {  6 ,  0 }, {  4 ,  10 }},
+		{{  -9 ,  -2 }, {  -6 , -11 }, { -2 , -5 }, {  6 ,   1 }},
+		{{   0 ,  13 }, { -12 ,   0 }, {  7 ,  5 }, { -3 , -11 }},
+		{{ -15 ,  -3 }, {  -6 ,  -3 }, { -4 , -5 }, { -6 , -13 }},
+		{{ -12 ,  -2 }, {  -6 ,   2 }, { -5 ,  5 }, {  1 ,  11 }},
+		{{ -13 ,  -6 }, {  -8 , -11 }, { -7 ,  0 }, {  1 ,   8 }},
+		{{  -5 ,  -8 }, {  -8 ,   1 }, {  1 , -6 }, {  6 ,   9 }}
+	};
+
+	int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + aRitualCoordsOffsets[nWhispFormationIndex][nWhispIndex].nX;
+	int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + aRitualCoordsOffsets[nWhispFormationIndex][nWhispIndex].nY;
+
+	if (GetCloseForRitualOrBaptism(pGame, pUnit, nX, nY))
+	{
+		if (const int32_t nFrame = pGame->dwGameFrame % 67)
+		{
+			AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - nFrame);
+			return;
+		}
+
+		if (pAiTickParam->pAiControl->dwAiParam[1] >= 3)
+		{
+			pAiTickParam->pAiControl->dwAiParam[1] = 0;
+			++pAiTickParam->pAiControl->dwAiParam[0];
+
+			if (pAiTickParam->pAiControl->dwAiParam[0] - 6 > 6) // Finished last shape, go back to normal AI
+			{
+				pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_CAN_CAST;
+				pAiTickParam->pAiControl->dwAiParam[2] = pGame->dwGameFrame + WHISP_RITUAL_BAPTISM_COOLDOWN_IN_FRAMES;
+			}
+
+			AITACTICS_IdleInNeutralMode(pGame, pUnit, 337 - pGame->dwGameFrame % 337);
+
+			if (pAiTickParam->pTarget->dwUnitType == UNIT_PLAYER && !SUNIT_IsDead(pAiTickParam->pTarget))
+			{
+				const uint32_t nBuffEndFrame = pGame->dwGameFrame + WHISP_RITUAL_MF_BUFF_DURATION_IN_FRAMES;
+				if (D2StatListStrc* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, STATLIST_NEWLENGTH, nBuffEndFrame, pAiTickParam->pTarget->dwUnitType, pAiTickParam->pTarget->dwUnitId))
+				{
+					STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MAGICBONUS, 50 * (pGame->nDifficulty + 1), 0);
+					D2COMMON_10476(pStatList, nBuffEndFrame);
+					EVENT_SetEvent(pGame, pAiTickParam->pTarget, UNITEVENTCALLBACK_REMOVESTATE, nBuffEndFrame, 0, 0);
+					D2COMMON_10475_PostStatToStatList(pAiTickParam->pTarget, pStatList, 1);
+				}
+			}
+			return;
+		}
+
+		static const D2CoordStrc aRitualTargetsOffsets[WILLOWISP_AI_STATE_RITUAL_SHAPE_COUNT][WHISP_RITUAL_FORMATION_COUNT] = {
+			{{   1,  -5}, {   6,  0},{  4,  10}, { -10, -3}},
+			{{   1,   8}, {  -9, -2},{ -5,   4}, {   1,  8}},
+			{{ -12,   0}, {   7,  5},{ -3, -11}, {  11, -2}},
+			{{   7,   9}, { -15, -3},{ -6, -13}, {   9,  7}},
+			{{  -5,  -7}, {  -5, -7},{  9,   0}, { -12, -2}},
+			{{  -8, -11}, {  -2, -6},{ -2,  -6}, { -13, -6}},
+			{{  -8,   1}, {   1, -6},{  6,   9}, {   0,  0}}
+		};
+
+		D2CoordStrc tRitualTargetOffset = aRitualTargetsOffsets[nWhispFormationIndex][nWhispIndex];
+
+		if (tRitualTargetOffset.nX == 0 && tRitualTargetOffset.nY == 0)
+		{
+			++pAiTickParam->pAiControl->dwAiParam[1];
+			AITACTICS_IdleInNeutralMode(pGame, pUnit, 67 - pGame->dwGameFrame % 67);
+			return;
+		}
+
+		nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + tRitualTargetOffset.nX;
+		nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + tRitualTargetOffset.nY;
+
+		AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, MONMODE_CAST, nX, nY);
+		++pAiTickParam->pAiControl->dwAiParam[1];
+		return;
+	}
+}
+
+// inlined
+static void AITHINK_Fn025_Willowisp_CheckConditionsForRitualOrBaptism(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	const int32_t nAIState = pAiTickParam->pAiControl->dwAiParam[0];
+	if (pAiTickParam->pTarget														// We have a target player
+		&& pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[2]				// Ritual / Baptism cooldown elapsed
+		&& AITHINK_GetSquaredDistance(pUnit, pAiTickParam->pTarget) < (32 * 32)		// Player close enough
+		&& nAIState < WILLOWISP_AI_STATE_ATTEMPT_RITUAL_OR_BAPTISM					// Not already doing a ritual
+		&& (ITEMS_RollRandomNumber(&pUnit->pSeed) % 1000) <= pGame->nDifficulty + 2 // 0.2% to 0.5% chance to initiate sequence
+		)
+	{
+		pAiTickParam->pAiControl->dwAiParam[0] = WILLOWISP_AI_STATE_ATTEMPT_RITUAL_OR_BAPTISM;
+	}
+}
+
+//D2Game.0x6FCD5A60
+void __fastcall AITHINK_Fn025_Willowisp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	AITHINK_Fn025_Willowisp_CheckConditionsForRitualOrBaptism(pGame, pUnit, pAiTickParam);
+
+	switch (const uint32_t nAIState = pAiTickParam->pAiControl->dwAiParam[0])
+	{
+	case WILLOWISP_AI_STATE_IDLE:
+	case WILLOWISP_AI_STATE_CAN_CAST:
+	case WILLOWISP_AI_STATE_CAN_ATTACK_HTH:
+		AITHINK_Fn025_Willowisp_State_NotMoving(pGame, pUnit, pAiTickParam);
+		return;
+	case WILLOWISP_AI_STATE_MOVING:
+		AITHINK_Fn025_Willowisp_State_Moving(pGame, pUnit, pAiTickParam);
+		return;
+	case WILLOWISP_AI_STATE_ATTEMPT_RITUAL_OR_BAPTISM:
+		AITHINK_Fn025_Willowisp_State_AttemptRitual(pGame, pUnit, pAiTickParam);
+		return;
+	case WILLOWISP_AI_STATE_BAPTISM:
+		AITHINK_Fn025_Willowisp_State_Baptism(pGame, pUnit, pAiTickParam);
+		return;
+	case WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE:
+	default: // Ritual >= WILLOWISP_AI_STATE_RITUAL_FIRST_SHAPE
+		AITHINK_Fn025_Willowisp_State_Ritual(pGame, pUnit, pAiTickParam);
+		return;
 	}
 }
 
