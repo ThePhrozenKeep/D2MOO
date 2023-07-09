@@ -783,9 +783,7 @@ int32_t __fastcall D2GAME_InitItemStats_6FC4E520(D2GameStrc* pGame, D2UnitStrc**
 //D2Game.0x6FC4EBF0
 uint32_t __fastcall ITEMS_RollRandomNumber(D2SeedStrc* pSeed)
 {
-    uint64_t lSeed = pSeed->nHighSeed + 0x6AC690C5ui64 * pSeed->nLowSeed;
-    pSeed->lSeed = lSeed;
-    return lSeed;
+    return SEED_RollRandomNumber(pSeed);
 }
 
 //D2Game.0x6FC4EC10

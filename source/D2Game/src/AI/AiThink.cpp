@@ -214,10 +214,16 @@ struct D2PetMoveStrc
 };
 #pragma pack(pop)
 
-// Inlined helper function
-bool AIRollChanceParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam, int32_t nParamId)
+
+static uint32_t AI_RollPercentage(D2UnitStrc* pUnit)
 {
-	return (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[nParamId][pGame->nDifficulty];
+	return SEED_RollPercentage(&pUnit->pSeed);
+}
+
+// Inlined helper function
+static bool AIRollChanceParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam, int32_t nParamId)
+{
+	return AI_RollPercentage(pUnit) < pAiTickParam->pMonstatsTxt->wAiParam[nParamId][pGame->nDifficulty];
 }
 
 void __fastcall AITHINK_Fn000(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
@@ -527,7 +533,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 				return;
 			}
 
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+			if (AI_RollPercentage(pUnit) < 30)
 			{
 				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 				return;
@@ -541,7 +547,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		{
 			if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, 2))
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+				if (AI_RollPercentage(pUnit) < 30)
 				{
 					AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL2, pAiTickParam->pTarget);
 					return;
@@ -851,7 +857,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 		if (pAiTickParam->bCombat)
 		{
-			if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 33)
+			if (AI_RollPercentage(pUnit) < 33)
 			{
 				if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, 3))
 				{
@@ -877,7 +883,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 		if (pAiTickParam->nTargetDistance >= 24 && !sub_6FCF2E70(pUnit))
 		{
-			if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 33)
+			if (AI_RollPercentage(pUnit) < 33)
 			{
 				sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 			}
@@ -918,7 +924,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	{
 		if (nLifePercentage < pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty])
 		{
-			if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 50)
+			if (AI_RollPercentage(pUnit) < 50)
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 5u + 2;
 
@@ -953,7 +959,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			return;
 		}
 
-		if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 20)
+		if (AI_RollPercentage(pUnit) < 20)
 		{
 			sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 0);
 			pAiTickParam->pAiControl->dwAiParam[1] = 0;
@@ -1221,7 +1227,7 @@ void __fastcall AITHINK_Fn015_SandMaggot(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		}
 	}
 
-	if (UNITS_GetCurrentLifePercentage(pUnit) < 25 && pAiTickParam->pMonstatsTxt->nSkill[1] >= 0 && nDistance < 7 && pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[1] && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+	if (UNITS_GetCurrentLifePercentage(pUnit) < 25 && pAiTickParam->pMonstatsTxt->nSkill[1] >= 0 && nDistance < 7 && pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[1] && AI_RollPercentage(pUnit) < 20)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pAiTickParam->pTarget, 0, 0);
 		sub_6FCD0150(pGame, pUnit, 30);
@@ -1242,7 +1248,7 @@ void __fastcall AITHINK_Fn015_SandMaggot(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+	if (AI_RollPercentage(pUnit) < 20)
 	{
 		sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 6u, 0);
 		return;
@@ -1323,7 +1329,7 @@ void __fastcall AITHINK_Fn016_ClawViper(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+	if (AI_RollPercentage(pUnit) < 50)
 	{
 		AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 7);
 		return;
@@ -1377,7 +1383,7 @@ void __fastcall AITHINK_Fn142_ClawViperEx(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	if (pAiTickParam->pMonstatsTxt->nSkill[0] < 0 || pAiTickParam->nTargetDistance >= pAiTickParam->pMonstatsTxt->wAiParam[1][pGame->nDifficulty] || !AIRollChanceParam(pGame, pUnit, pAiTickParam, 0))
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 50)
+		if (AI_RollPercentage(pUnit) >= 50)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty]);
 		}
@@ -1390,7 +1396,7 @@ void __fastcall AITHINK_Fn142_ClawViperEx(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	if (!sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 50)
+		if (AI_RollPercentage(pUnit) >= 50)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty]);
 		}
@@ -1492,7 +1498,7 @@ void __fastcall AITHINK_Fn018_PantherWoman(D2GameStrc* pGame, D2UnitStrc* pUnit,
 			}
 			else
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 25)
+				if (AI_RollPercentage(pUnit) >= 25)
 				{
 					AITACTICS_IdleInNeutralMode(pGame, pUnit, pAiTickParam->pMonstatsTxt->wAiParam[3][pGame->nDifficulty]);
 				}
@@ -1615,7 +1621,7 @@ void __fastcall AITHINK_Fn020_Scarab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			AITACTICS_SetVelocity(pUnit, 2, 0, 4u);
 			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 7);
 
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) > 10)
+			if (AI_RollPercentage(pUnit) > 10)
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = 0;
 			}
@@ -1761,7 +1767,7 @@ void __fastcall AITHINK_Fn022_GreaterMummy(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+	if (AI_RollPercentage(pUnit) < 50)
 	{
 		sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 0);
 		return;
@@ -1861,7 +1867,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 		}
 	}
 
-	if (!nParam && !AIGENERAL_GetMinionOwner(pUnit) && pAiTickParam->pTarget && nDistance > 144 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60)
+	if (!nParam && !AIGENERAL_GetMinionOwner(pUnit) && pAiTickParam->pTarget && nDistance > 144 && AI_RollPercentage(pUnit) < 60)
 	{
 		pUnit->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
@@ -1885,7 +1891,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 
 	if (nParam > 1)
 	{
-		if (!arg.pTarget && (pAiTickParam->nTargetDistance >= 6 || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 15))
+		if (!arg.pTarget && (pAiTickParam->nTargetDistance >= 6 || AI_RollPercentage(pUnit) >= 15))
 		{
 			pUnit->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
@@ -2083,7 +2089,7 @@ void __fastcall AITHINK_Fn024_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			return;
 		}
 
-		if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 > 20)
+		if (AI_RollPercentage(pUnit) > 20)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 15);
 			return;
@@ -2296,7 +2302,7 @@ static bool GetCloseForRitualOrBaptism(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 	}
 	else
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 35)
+		if (AI_RollPercentage(pUnit) < 35)
 		{
 			AITTACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance + 1);
 		}
@@ -2558,7 +2564,7 @@ void __fastcall AITHINK_Fn026_Arach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 			return;
 		}
 
-		if (!pAiTickParam->bCombat || pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty] <= 25 || ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty] - 25))
+		if (!pAiTickParam->bCombat || pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty] <= 25 || (AI_RollPercentage(pUnit) >= pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty] - 25))
 		{
 			if (pAiTickParam->nTargetDistance < pAiTickParam->pMonstatsTxt->wAiParam[3][pGame->nDifficulty] || sub_6FCF2E70(pUnit))
 			{
@@ -2595,7 +2601,7 @@ void __fastcall AITHINK_Fn026_Arach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 
 			if (pAiTickParam->pAiControl->dwAiParam[2] != 1 || !AIRollChanceParam(pGame, pUnit, pAiTickParam, 2))
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 20)
+				if (AI_RollPercentage(pUnit) >= 20)
 				{
 					AITACTICS_IdleInNeutralMode(pGame, pUnit, 15);
 				}
@@ -2741,9 +2747,9 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 
 		if (pAiTickParam->bCombat)
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) <= 30 && nParam & 1)
+			if (AI_RollPercentage(pUnit) <= 30 && nParam & 1)
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+				if (AI_RollPercentage(pUnit) < 50)
 				{
 					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 				}
@@ -2813,7 +2819,7 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 
 		if (nParam & 1 && pTarget && nDistance <= 20)
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+			if (AI_RollPercentage(pUnit) < 50)
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
 			}
@@ -2843,7 +2849,7 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 
 		if (AIRollChanceParam(pGame, pUnit, pAiTickParam, 0))
 		{
-			if (!(nParam & 1) || !pTarget || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) > 30)
+			if (!(nParam & 1) || !pTarget || AI_RollPercentage(pUnit) > 30)
 			{
 				AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
 				return;
@@ -2851,7 +2857,7 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 
 			if (nDistance <= 20)
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+				if (AI_RollPercentage(pUnit) < 50)
 				{
 					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
 				}
@@ -2863,7 +2869,7 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 			}
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 33)
+		if (AI_RollPercentage(pUnit) < 33)
 		{
 			sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 		}
@@ -2910,13 +2916,13 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 75)
+		if (AI_RollPercentage(pUnit) >= 75)
 		{
 			sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+		if (AI_RollPercentage(pUnit) < 50)
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
 		}
@@ -2933,13 +2939,13 @@ void __fastcall AITHINK_Fn028_Vampire(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 		return;
 	}
 
-	if (pAiTickParam->nTargetDistance < 9 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+	if (pAiTickParam->nTargetDistance < 9 && AI_RollPercentage(pUnit) < 50)
 	{
 		D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 8u, 0);
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+	if (AI_RollPercentage(pUnit) < 50)
 	{
 		sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 	}
@@ -3016,9 +3022,9 @@ void __fastcall AITHINK_Fn029_BatDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			}
 			else
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 33)
+				if (AI_RollPercentage(pUnit) >= 33)
 				{
-					if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 15)
+					if (AI_RollPercentage(pUnit) >= 15)
 					{
 						AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 					}
@@ -3214,7 +3220,7 @@ void __fastcall AITHINK_Fn030_Fetish(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			pAiTickParam->pAiControl->dwAiParam[1] = 0;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 20)
+		if (AI_RollPercentage(pUnit) >= 20)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
@@ -3295,7 +3301,7 @@ void __fastcall AITHINK_Fn035_CorruptArcher(D2GameStrc* pGame, D2UnitStrc* pUnit
 	D2UnitStrc* pTarget = sub_6FCF2CC0(pGame, pUnit, &nDistance, 0);
 	if (!pTarget)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 50)
+		if (AI_RollPercentage(pUnit) >= 50)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty]);
 		}
@@ -3446,7 +3452,7 @@ void __fastcall AITHINK_Fn037_SkeletonBow(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+		if (AI_RollPercentage(pUnit) < 20)
 		{
 			sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 0);
 			return;
@@ -3862,7 +3868,7 @@ void __fastcall AITHINK_Fn048_ZakarumZealot(D2GameStrc* pGame, D2UnitStrc* pUnit
 		{
 			pAiTickParam->pAiControl->dwAiParam[0] = 0;
 
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 80)
+			if (AI_RollPercentage(pUnit) >= 80)
 			{
 				sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 			}
@@ -3931,7 +3937,7 @@ void __fastcall AITHINK_Fn049_ZakarumPriest(D2GameStrc* pGame, D2UnitStrc* pUnit
 	arg.nMaxDistance = pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty] * pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty];
 	sub_6FCF1E80(pGame, pUnit, &arg, AITHINK_TargetCallback_ZakarumPriest, 1);
 
-	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && arg.pTarget && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 25)
+	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && arg.pTarget && AI_RollPercentage(pUnit) < 25)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], arg.pTarget, 0, 0);
 		return;
@@ -3967,7 +3973,7 @@ void __fastcall AITHINK_Fn049_ZakarumPriest(D2GameStrc* pGame, D2UnitStrc* pUnit
 		}
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 30)
+	if (AI_RollPercentage(pUnit) >= 30)
 	{
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 20);
 	}
@@ -4030,9 +4036,9 @@ D2UnitStrc* __fastcall AITHINK_FindTargetForMephisto(D2GameStrc* pGame, D2UnitSt
 
 	sub_6FCF1E80(pGame, pUnit, &arg, AITHINK_TargetCallback_Mephisto, 1);
 
-	if (!arg.unk0x0C || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pMonStatsTxtRecord->wAiParam[1][pGame->nDifficulty])
+	if (!arg.unk0x0C || AI_RollPercentage(pUnit) >= pMonStatsTxtRecord->wAiParam[1][pGame->nDifficulty])
 	{
-		if (!arg.unk0x14 || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pMonStatsTxtRecord->wAiParam[2][pGame->nDifficulty])
+		if (!arg.unk0x14 || AI_RollPercentage(pUnit) >= pMonStatsTxtRecord->wAiParam[2][pGame->nDifficulty])
 		{
 			return a4;
 		}
@@ -4096,7 +4102,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	if (pAiTickParam->bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) <= pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty])
+		if (AI_RollPercentage(pUnit) <= pAiTickParam->pMonstatsTxt->wAiParam[0][pGame->nDifficulty])
 		{
 			nParam = 2;
 			pAiTickParam->pAiControl->dwAiParam[0] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 3 + 3;
@@ -4112,21 +4118,21 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		{
 			if (!pAiTickParam->pAiControl->dwAiParam[2])
 			{
-				if (nLifePercentage <= 20 && pAiTickParam->nTargetDistance < 5 && ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 40))
+				if (nLifePercentage <= 20 && pAiTickParam->nTargetDistance < 5 && (AI_RollPercentage(pUnit) < 40))
 				{
 					nParam = 1;
 				}
 				else
 				{
-					if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= nLifeChance + 50)
+					if (AI_RollPercentage(pUnit) >= nLifeChance + 50)
 					{
-						if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 65)
+						if (AI_RollPercentage(pUnit) >= 65)
 						{
 							AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 						}
 						else
 						{
-							if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 65 || pAiTickParam->nTargetDistance > 5)
+							if (AI_RollPercentage(pUnit) < 65 || pAiTickParam->nTargetDistance > 5)
 							{
 								sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 							}
@@ -4183,7 +4189,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		break;
 
 	case 3:
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= nLifeChance + 80)
+		if (AI_RollPercentage(pUnit) >= nLifeChance + 80)
 		{
 			AITACTICS_SetVelocity(pUnit, 0, 50, 0);
 
@@ -4194,7 +4200,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		}
 		else
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 80 - nLifeChance)
+			if (AI_RollPercentage(pUnit) >= 80 - nLifeChance)
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], pAiTickParam->pTarget, 0, 0);
 			}
@@ -4225,13 +4231,13 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 
 	default:
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 65)
+		if (AI_RollPercentage(pUnit) >= 65)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
 		else
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 65 || pAiTickParam->nTargetDistance > 5)
+			if (AI_RollPercentage(pUnit) < 65 || pAiTickParam->nTargetDistance > 5)
 			{
 				sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
 			}
@@ -4283,7 +4289,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	else
 	{
 		const int32_t nSkillChance = 100 / nValidSkills;
-		const uint32_t nRand = (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100);
+		const uint32_t nRand = AI_RollPercentage(pUnit);
 
 		int32_t bUseBlizzard = 0;
 		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL))
@@ -4313,7 +4319,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		}
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50 - nLifeChance)
+	if (AI_RollPercentage(pUnit) < 50 - nLifeChance)
 	{
 		pAiTickParam->pAiControl->dwAiParam[1] = 0;
 	}
@@ -4511,7 +4517,7 @@ void __fastcall AITHINK_Fn053_Summoner(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		int32_t nDistance = 0;
 		D2UnitStrc* pTarget = sub_6FCF2CC0(pGame, pUnit, &nDistance, nullptr);
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) > pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty])
+		if (AI_RollPercentage(pUnit) > pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty])
 		{
 			bUseColdSkill = (bUseColdSkill == 0);
 		}
@@ -4657,7 +4663,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		return;
 	}
 
-	if (pOwner->dwAnimMode == MONMODE_DEAD && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 40)
+	if (pOwner->dwAnimMode == MONMODE_DEAD && AI_RollPercentage(pUnit) < 40)
 	{
 		SUNITDMG_KillMonster(pGame, pUnit, SUNIT_GetTargetUnit(pGame, pOwner), 1);
 		return;
@@ -4678,7 +4684,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		{
 			if (pAiTickParam->nTargetDistance > pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty]
 				|| !pAiTickParam->bCombat && AIRollChanceParam(pGame, pUnit, pAiTickParam, 1)
-				|| pOwner->dwAnimMode == MONMODE_SEQUENCE && ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50))
+				|| pOwner->dwAnimMode == MONMODE_SEQUENCE && (AI_RollPercentage(pUnit) < 50))
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 8);
@@ -4706,7 +4712,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 		if (pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[1])
 		{
-			if (pAiTickParam->bCombat || pAiTickParam->nTargetDistance < pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty] || pOwner->dwAnimMode != MONMODE_SEQUENCE && ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 5))
+			if (pAiTickParam->bCombat || pAiTickParam->nTargetDistance < pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty] || pOwner->dwAnimMode != MONMODE_SEQUENCE && (AI_RollPercentage(pUnit) < 5))
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pUnit, 0, 0);
 				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * pAiTickParam->pMonstatsTxt->wAiParam[3][pGame->nDifficulty];
@@ -5224,7 +5230,7 @@ void __fastcall AITHINK_Fn070_FingerMage(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 	{
 		++pAiTickParam->pAiControl->dwAiParam[1];
 
-		if (nLifePercentage > pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty] || ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 25) || pAiTickParam->pAiControl->dwAiParam[1] > pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty])
+		if (nLifePercentage > pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty] || (AI_RollPercentage(pUnit) < 25) || pAiTickParam->pAiControl->dwAiParam[1] > pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty])
 		{
 			pAiTickParam->pAiControl->dwAiParam[0] = 0;
 		}
@@ -5381,7 +5387,7 @@ void __fastcall AITHINK_Fn071_Regurgitator(D2GameStrc* pGame, D2UnitStrc* pUnit,
 	{
 		if (!arg.pTarget)
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+			if (AI_RollPercentage(pUnit) < 20)
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = 0;
 				pAiTickParam->pAiControl->dwAiParam[1] = 0;
@@ -5649,7 +5655,7 @@ void __fastcall AITHINK_Fn074_OblivionKnight(D2GameStrc* pGame, D2UnitStrc* pUni
 		}
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 70)
+	if (AI_RollPercentage(pUnit) >= 70)
 	{
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 	}
@@ -6154,7 +6160,7 @@ void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 				}
 			}
 
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+			if (AI_RollPercentage(pUnit) < 80)
 			{
 				if (pAiTickParam->nTargetDistance <= pAiTickParam->pMonstatsTxt->wAiParam[7][pGame->nDifficulty])
 				{
@@ -6186,7 +6192,7 @@ void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		{
 			if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, 5))
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 90)
+				if (AI_RollPercentage(pUnit) >= 90)
 				{
 					AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 				}
@@ -6212,7 +6218,7 @@ void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 	{
 		if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, 5))
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 70)
+			if (AI_RollPercentage(pUnit) >= 70)
 			{
 				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 12);
 			}
@@ -6639,7 +6645,7 @@ void __fastcall AITHINK_Fn096_FetishBlowgun(D2GameStrc* pGame, D2UnitStrc* pUnit
 		}
 		else
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 20 || !sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 1))
+			if (AI_RollPercentage(pUnit) >= 20 || !sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 1))
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = 0;
 				pAiTickParam->pAiControl->dwAiParam[1] = 0;
@@ -7115,7 +7121,7 @@ void __fastcall AITHINK_Fn119_SuccubusWitch(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 			if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, 1))
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 50 || !sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 6u, 1))
+				if (AI_RollPercentage(pUnit) >= 50 || !sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 6u, 1))
 				{
 					AITACTICS_IdleInNeutralMode(pGame, pUnit, pAiTickParam->pMonstatsTxt->wAiParam[5][pGame->nDifficulty]);
 				}
@@ -7133,7 +7139,7 @@ void __fastcall D2GAME_AI_SpecialState14_6FCE1480(D2GameStrc* pGame, D2UnitStrc*
 {
 	if (pAiTickParam->bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 95)
+		if (AI_RollPercentage(pUnit) < 95)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK2, pAiTickParam->pTarget);
 			return;
@@ -7141,7 +7147,7 @@ void __fastcall D2GAME_AI_SpecialState14_6FCE1480(D2GameStrc* pGame, D2UnitStrc*
 	}
 	else
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 89)
+		if (AI_RollPercentage(pUnit) < 89)
 		{
 			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 0);
 			return;
@@ -7214,7 +7220,7 @@ void __fastcall AITHINK_Fn120_Overseer(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 				return;
 			}
 
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+			if (AI_RollPercentage(pUnit) < 50)
 			{
 				sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 5u, 0);
 				return;
@@ -7222,7 +7228,7 @@ void __fastcall AITHINK_Fn120_Overseer(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		}
 		else
 		{
-			if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60)
+			if (AI_RollPercentage(pUnit) < 60)
 			{
 				AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 0);
 				return;
@@ -7370,9 +7376,9 @@ void __fastcall D2GAME_AI_SpecialState16_6FCE1DC0(D2GameStrc* pGame, D2UnitStrc*
 		return;
 	}
 
-	if (pAiTickParam->nTargetDistance >= pImp2TxtRecord->wAiParam[1][pGame->nDifficulty] || ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= pImp2TxtRecord->wAiParam[2][pGame->nDifficulty]))
+	if (pAiTickParam->nTargetDistance >= pImp2TxtRecord->wAiParam[1][pGame->nDifficulty] || (AI_RollPercentage(pUnit) >= pImp2TxtRecord->wAiParam[2][pGame->nDifficulty]))
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+		if (AI_RollPercentage(pUnit) < 50)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, pAiTickParam->pTarget);
 			return;
@@ -7452,19 +7458,19 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pImp3Record->wAiParam[1][pGame->nDifficulty] && D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 5u, 1))
+		if (AI_RollPercentage(pUnit) < pImp3Record->wAiParam[1][pGame->nDifficulty] && D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 5u, 1))
 		{
 			return;
 		}
 	}
 
-	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pImp1Record->wAiParam[2][pGame->nDifficulty])
+	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && AI_RollPercentage(pUnit) < pImp1Record->wAiParam[2][pGame->nDifficulty])
 	{
 		AITACTICS_UseSkillInRange(pUnit, pImp1Record->wAiParam[1][pGame->nDifficulty], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pMonstatsTxt->nSkillMode[0]);
 		return;
 	}
 
-	if (nDistance < pImp3Record->wAiParam[0][pGame->nDifficulty] && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pImp3Record->wAiParam[1][pGame->nDifficulty])
+	if (nDistance < pImp3Record->wAiParam[0][pGame->nDifficulty] && AI_RollPercentage(pUnit) < pImp3Record->wAiParam[1][pGame->nDifficulty])
 	{
 		D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 5u, 0);
 		return;
@@ -7477,7 +7483,7 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 		{
 			if (nDistance < pImp3Record->wAiParam[2][pGame->nDifficulty])
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pImp3Record->wAiParam[3][pGame->nDifficulty])
+				if (AI_RollPercentage(pUnit) < pImp3Record->wAiParam[3][pGame->nDifficulty])
 				{
 					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[3], pAiTickParam->pMonstatsTxt->nSkill[3], pTarget, 0, 0);
 					return;
@@ -7485,7 +7491,7 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 			}
 			else if (nDistance < pImp4Record->wAiParam[2][pGame->nDifficulty])
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pImp4Record->wAiParam[3][pGame->nDifficulty])
+				if (AI_RollPercentage(pUnit) < pImp4Record->wAiParam[3][pGame->nDifficulty])
 				{
 					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[3], pAiTickParam->pMonstatsTxt->nSkill[3], pTarget, 0, 0);
 					return;
@@ -7494,13 +7500,13 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 		}
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 33)
+	if (AI_RollPercentage(pUnit) < 33)
 	{
 		AITACTICS_WalkToTargetUnitWithSteps(pGame, pUnit, pAiTickParam->pTarget, 4u);
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+	if (AI_RollPercentage(pUnit) < 20)
 	{
 		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 		return;
@@ -7686,7 +7692,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	int32_t v17 = 7;
 	int32_t v16 = 0;
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 15)
+	if (AI_RollPercentage(pUnit) < 15)
 	{
 		v17 = 8;
 		v16 = 1;
@@ -7703,13 +7709,13 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+	if (AI_RollPercentage(pUnit) < 80)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 75)
+	if (AI_RollPercentage(pUnit) >= 75)
 	{
 		sub_6FCD0E80(pGame, pUnit, pTarget, 3u, 0);
 		return;
@@ -7915,7 +7921,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 	}
 	case 2:
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 10)
+		if (AI_RollPercentage(pUnit) >= 10)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 15);
 			return 1;
@@ -8190,7 +8196,7 @@ void __fastcall sub_6FCE3740(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParam
 	// TODO: Names
 	int32_t v23 = 0;
 	int32_t v24 = 0;
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 15)
+	if (AI_RollPercentage(pUnit) >= 15)
 	{
 		v24 = 7;
 		v23 = 0;
@@ -8214,7 +8220,7 @@ void __fastcall sub_6FCE3740(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParam
 
 	if (bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+		if (AI_RollPercentage(pUnit) < 80)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pTarget);
 		}
@@ -8372,7 +8378,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 5)
+		if (AI_RollPercentage(pUnit) < 5)
 		{
 			D2GAME_AICORE_WalkToOwner_6FCD0B60(pGame, pUnit, pOwner, nMinDistance);
 			return;
@@ -8534,7 +8540,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 	}
 	case 2:
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed)) % 100 >= 10)
+		if (AI_RollPercentage(pUnit) >= 10)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 15);
 		}
@@ -8644,7 +8650,7 @@ void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClas
 	const int32_t nHirelingId = pPetInfo->nHirelingId;
 
 	int32_t bUseSkill = 0;
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= nChance)
+	if (AI_RollPercentage(pUnit) >= nChance)
 	{
 		bUseSkill = 0;
 		pAiTickParam->pAiControl->dwAiParam[0] += 10;
@@ -8675,7 +8681,7 @@ void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClas
 		return;
 	}
 
-	if (nDistance >= 4 || ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 50))
+	if (nDistance >= 4 || (AI_RollPercentage(pUnit) >= 50))
 	{
 		if (bUseSkill)
 		{
@@ -8815,7 +8821,7 @@ void __fastcall D2GAME_AI_SpecialState03_6FCE4B90(D2GameStrc* pGame, D2UnitStrc*
 
 	if (pOwner == pUnit)
 	{
-		pAiTickParam->pAiControl->dwAiParam[2] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 100;
+		pAiTickParam->pAiControl->dwAiParam[2] = AI_RollPercentage(pUnit);
 	}
 }
 
@@ -8862,7 +8868,7 @@ void __fastcall D2GAME_AI_SpecialState03_6FCE4CC0(D2GameStrc* pGame, D2UnitStrc*
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+	if (AI_RollPercentage(pUnit) < 30)
 	{
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		return;
@@ -8947,7 +8953,7 @@ void __fastcall AITHINK_Fn090_Griswold(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 {
 	if (pAiTickParam->bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+		if (AI_RollPercentage(pUnit) < 80)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
 			return;
@@ -8955,7 +8961,7 @@ void __fastcall AITHINK_Fn090_Griswold(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	}
 	else
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 50)
+		if (AI_RollPercentage(pUnit) < 50)
 		{
 			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 7);
 			return;
@@ -9062,7 +9068,7 @@ void __fastcall D2GAME_AI_SpecialState13_6FCE5080(D2GameStrc* pGame, D2UnitStrc*
 
 	if (pAiTickParam->bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty] + 10)
+		if (AI_RollPercentage(pUnit) < pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty] + 10)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
 			return;
@@ -9274,7 +9280,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 	pAiTickParam->pAiControl->dwAiParam[0] += 3;
 
-	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && !pAiTickParam->bCombat && pAiTickParam->pAiControl->dwAiParam[1] < 2 * pGame->nDifficulty + 8 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pAiTickParam->pAiControl->dwAiParam[0])
+	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && !pAiTickParam->bCombat && pAiTickParam->pAiControl->dwAiParam[1] < 2 * pGame->nDifficulty + 8 && AI_RollPercentage(pUnit) < pAiTickParam->pAiControl->dwAiParam[0])
 	{
 		const int32_t nMaxLength = ITEMS_RollRandomNumber(&pUnit->pSeed) % 15 + 5;
 
@@ -9310,7 +9316,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 	if (nTargetDistance > 5)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 5 && nDistance < 50)
+		if (AI_RollPercentage(pUnit) < 5 && nDistance < 50)
 		{
 			AITACTICS_SetVelocity(pUnit, 7, 100, 0);
 			AITTACTICS_RunCloseToTargetUnit(pGame, pUnit, pAiTickParam->pTarget, 12);
@@ -9320,9 +9326,9 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		int32_t nUnused1 = 0;
 		int32_t nUnused2 = 0;
 		D2UnitStrc* pTarget = sub_6FCF2CC0(pGame, pUnit, &nUnused1, &nUnused2);
-		if (pTarget && !sub_6FCF2E70(pUnit) && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+		if (pTarget && !sub_6FCF2E70(pUnit) && AI_RollPercentage(pUnit) < 80)
 		{
-			if (pAiTickParam->pMonstatsTxt->nSkill[1] >= 0 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 10 * (pGame->nDifficulty + 4))
+			if (pAiTickParam->pMonstatsTxt->nSkill[1] >= 0 && AI_RollPercentage(pUnit) < 10 * (pGame->nDifficulty + 4))
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pTarget, 0, 0);
 				return;
@@ -9340,7 +9346,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		}
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30 && nTargetDistance < 12)
+	if (AI_RollPercentage(pUnit) < 30 && nTargetDistance < 12)
 	{
 		AITACTICS_SetVelocity(pUnit, 7, 100, 0);
 
@@ -9906,7 +9912,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 			}
 			else if (pUnit->dwClassId == MONSTER_LARZUK)
 			{
-				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) > 4)
+				if (AI_RollPercentage(pUnit) > 4)
 				{
 					pAiCmd->nCmdParam[1] = 0;
 					AITACTICS_IdleInNeutralMode(pGame, pUnit, 50);
@@ -9938,7 +9944,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 			return 1;
 		}
 
-		if (pUnit && pUnit->dwClassId == MONSTER_FARA && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 66)
+		if (pUnit && pUnit->dwClassId == MONSTER_FARA && AI_RollPercentage(pUnit) < 66)
 		{
 			pAiCmd->nCmdParam[1] = 8;
 		}
@@ -9975,7 +9981,7 @@ int32_t __fastcall AITHINK_ExecuteMapAiAction(D2GameStrc* pGame, D2UnitStrc* pUn
 	};
 
 	D2MapAIStrc* pMapAi = pAiTickParam->pAiControl->pMapAi;
-	if (!pMapAi || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 66 || !pMapAi->nPathNodes)
+	if (!pMapAi || AI_RollPercentage(pUnit) >= 66 || !pMapAi->nPathNodes)
 	{
 		return 0;
 	}
@@ -10403,7 +10409,7 @@ void __fastcall AITHINK_Fn060_GoodNpcRanged(D2GameStrc* pGame, D2UnitStrc* pUnit
 	int32_t a4 = 0;
 	if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)) || (pTarget = sub_6FCF2CC0(pGame, pUnit, &a3, &a4)) == 0 || a3 >= 20)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+		if (AI_RollPercentage(pUnit) < 20)
 		{
 			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 			return;
@@ -10413,7 +10419,7 @@ void __fastcall AITHINK_Fn060_GoodNpcRanged(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+	if (AI_RollPercentage(pUnit) < 30)
 	{
 		if (pUnit->dwClassId == MONSTER_ROGUEHIRE)
 		{
@@ -10426,7 +10432,7 @@ void __fastcall AITHINK_Fn060_GoodNpcRanged(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+	if (AI_RollPercentage(pUnit) < 30)
 	{
 		sub_6FCD0E80(pGame, pUnit, pTarget, 4u, 0);
 		return;
@@ -10447,7 +10453,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (DUNGEON_IsRoomInTown(pRoom))
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 20)
+		if (AI_RollPercentage(pUnit) >= 20)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
@@ -10463,7 +10469,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 	D2UnitStrc* pTarget = sub_6FCF2110(pGame, pUnit, pAiTickParam->pAiControl, &nDistance, &bCombat);
 	if (!pTarget)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 20)
+		if (AI_RollPercentage(pUnit) >= 20)
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
@@ -10476,7 +10482,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 
 	if (bCombat)
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 80)
+		if (AI_RollPercentage(pUnit) < 80)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pTarget);
 			return;
@@ -10484,7 +10490,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 	}
 	else
 	{
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 30)
+		if (AI_RollPercentage(pUnit) < 30)
 		{
 			AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pTarget, 7);
 			return;
@@ -10618,7 +10624,7 @@ void __fastcall D2GAME_AI_SpecialState10_17_6FCE7CF0(D2GameStrc* pGame, D2UnitSt
 		return;
 	}
 
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+	if (AI_RollPercentage(pUnit) < 20)
 	{
 		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		return;
@@ -11622,7 +11628,7 @@ int32_t __fastcall AITHINK_CullPotentialTargetsForDiablo(D2UnitStrc* pUnit, D2Un
 //D2Game.0x6FCE9890
 void __fastcall AITHINK_Fn042_Vendor(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+	if (AI_RollPercentage(pUnit) < 20)
 	{
 		AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, MONMODE_SKILL1, 0, 0);
 		return;
@@ -11640,7 +11646,7 @@ void __fastcall AITHINK_Fn086_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 		return;
 	}
 
-	if (pAiTickParam->pTarget && pAiTickParam->nTargetDistance < 25 && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60)
+	if (pAiTickParam->pTarget && pAiTickParam->nTargetDistance < 25 && AI_RollPercentage(pUnit) < 60)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 		return;
@@ -12187,7 +12193,7 @@ void __fastcall AITHINK_Fn105_ShadowWarrior(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 				if (pAiTickParam->bCombat)
 				{
-					if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nCombatChance)
+					if (AI_RollPercentage(pUnit) < nCombatChance)
 					{
 						pSkill = SKILLS_GetSkillById(pUnit, 0, -1);
 						nSkillId = 0;
@@ -12311,7 +12317,7 @@ int32_t __fastcall sub_6FCEAC10(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 	{
 		const int32_t nManaCost = SKILLS_GetShiftedManaCosts(nSkillId, SKILLS_GetSkillLevel(pUnit, pSkill, 1));
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) > 100 - 160 * nManaCost / 100 || pAiTickParam->pAiControl->dwAiParam[0] > pGame->dwGameFrame)
+		if (AI_RollPercentage(pUnit) > 100 - 160 * nManaCost / 100 || pAiTickParam->pAiControl->dwAiParam[0] > pGame->dwGameFrame)
 		{
 			return 0;
 		}
@@ -12324,7 +12330,7 @@ int32_t __fastcall sub_6FCEAC10(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 			pAiTickParam->pAiControl->dwAiParam[1] = nParam1;
 		}
 
-		if (ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pAiTickParam->pAiControl->dwAiParam[1]) > (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100))
+		if (ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pAiTickParam->pAiControl->dwAiParam[1]) > AI_RollPercentage(pUnit))
 		{
 			return 0;
 		}
@@ -12527,9 +12533,9 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 							}
 						}
 
-						if (!bSameStateGroup || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 4)
+						if (!bSameStateGroup || AI_RollPercentage(pUnit) < 4)
 						{
-							if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60 && sub_6FCECBA0(pGame, pOwner, pUnit, nSkillId, pAiTickParam->bCombat, 0, 0, 0, pAiTickParam))
+							if (AI_RollPercentage(pUnit) < 60 && sub_6FCECBA0(pGame, pOwner, pUnit, nSkillId, pAiTickParam->bCombat, 0, 0, 0, pAiTickParam))
 							{
 								return;
 							}
@@ -12538,7 +12544,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 				}
 				else if (pSkillsTxtRecord->nAiType == 6)
 				{
-					if (!UNITS_GetLeftSkill(pUnit) && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 20)
+					if (!UNITS_GetLeftSkill(pUnit) && AI_RollPercentage(pUnit) < 20)
 					{
 						SKILLS_SetLeftActiveSkill(pUnit, nSkillId, -1);
 					}
@@ -12579,7 +12585,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 
 	const int32_t nChance = D2Clamp(pAiTickParam->pMonstatsTxt->wAiParam[2][pGame->nDifficulty] - 2 * nParam, 5, 100);
 
-	if (!pAiTickParam->bCombat || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= nChance || !sub_6FCECBA0(pGame, pOwner, pUnit, 0, pAiTickParam->bCombat, pTarget, 0, 0, pAiTickParam))
+	if (!pAiTickParam->bCombat || AI_RollPercentage(pUnit) >= nChance || !sub_6FCECBA0(pGame, pOwner, pUnit, 0, pAiTickParam->bCombat, pTarget, 0, 0, pAiTickParam))
 	{
 		D2ShadowMasterAiCallbackArgStrc arg = {};
 		arg.unk0x00 = pOwner;
@@ -12855,14 +12861,14 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 				{
 					if (!UNITS_GetLeftSkill(pUnit))
 					{
-						if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 20)
+						if (AI_RollPercentage(pUnit) < 20)
 						{
 							SKILLS_SetLeftActiveSkill(pUnit, nSkillId, -1);
 						}
 					}
 					else
 					{
-						if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 6)
+						if (AI_RollPercentage(pUnit) < 6)
 						{
 							SKILLS_SetLeftActiveSkill(pUnit, nSkillId, -1);
 						}
@@ -13328,7 +13334,7 @@ void __fastcall AITHINK_Fn111_CycleOfLife(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		return;
 	}
 
-	if (bCombat && pTarget && ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 25))
+	if (bCombat && pTarget && (AI_RollPercentage(pUnit) < 25))
 	{
 		D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pTarget, pAiTickParam->pMonstatsTxt->wAiParam[3][pGame->nDifficulty], 0);
 		return;
@@ -14061,7 +14067,7 @@ void __fastcall AITHINK_Fn126_CatapultSpotter(D2GameStrc* pGame, D2UnitStrc* pUn
 {
 	constexpr int32_t nCatapultSkillIds[5] = { SKILL_CATAPULTCHARGEDBALL, SKILL_CATAPULTSPIKEBALL, SKILL_CATAPULTBLIZZARD, SKILL_CATAPULTPLAGUE, SKILL_CATAPULTMETEOR };
 
-	if (!pAiTickParam->pAiControl->dwAiParam[2] && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 3)
+	if (!pAiTickParam->pAiControl->dwAiParam[2] && AI_RollPercentage(pUnit) < 3)
 	{
 		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		D2_ASSERT(pRoom);
@@ -14235,11 +14241,11 @@ void __fastcall AITHINK_Fn131_Wussie(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		return;
 	}
 
-	if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 70)
+	if (AI_RollPercentage(pUnit) < 70)
 	{
 		AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pPortal, 7);
 	}
-	else if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < 10)
+	else if (AI_RollPercentage(pUnit) < 10)
 	{
 		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 	}
@@ -14280,7 +14286,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		return;
 	}
 
-	if (pAiTickParam->nTargetDistance >= pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty] || ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 40) || !D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 5u, 1))
+	if (pAiTickParam->nTargetDistance >= pAiTickParam->pMonstatsTxt->wAiParam[4][pGame->nDifficulty] || (AI_RollPercentage(pUnit) >= 40) || !D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 5u, 1))
 	{
 		if (pAiTickParam->pMonstatsTxt->nSkill[2] > 0)
 		{
@@ -14295,7 +14301,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			}
 		}
 
-		if (pAiTickParam->pMonstatsTxt->nSkill[3] > 0 && SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pAiTickParam->pMonstatsTxt->nSkill[3]) && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60 && pAiTickParam->nTargetDistance < 14)
+		if (pAiTickParam->pMonstatsTxt->nSkill[3] > 0 && SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pAiTickParam->pMonstatsTxt->nSkill[3]) && AI_RollPercentage(pUnit) < 60 && pAiTickParam->nTargetDistance < 14)
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[3], pAiTickParam->pMonstatsTxt->nSkill[3], pAiTickParam->pTarget, 0, 0);
 			return;
@@ -14340,7 +14346,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			return;
 		}
 
-		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 60)
+		if (AI_RollPercentage(pUnit) < 60)
 		{
 			AITACTICS_WalkToTargetUnit(pGame, pUnit, pAiTickParam->pTarget);
 		}
@@ -15464,7 +15470,7 @@ int32_t __fastcall sub_6FCF0E40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 		}
 	}
 
-	if (SUNIT_IsDead(pUnit) || !AIUTIL_CheckAiControlFlag(pAiTickParam->pAiControl, 0x20u) || (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= 40)
+	if (SUNIT_IsDead(pUnit) || !AIUTIL_CheckAiControlFlag(pAiTickParam->pAiControl, 0x20u) || AI_RollPercentage(pUnit) >= 40)
 	{
 		return sub_6FCF0E40_inline(pGame, pUnit, pAiTickParam);
 	}

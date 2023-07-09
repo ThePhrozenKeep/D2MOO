@@ -36,9 +36,9 @@ D2COMMON_DLL_DECL void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLo
 //D2Common.0x6FDAEB00 (#10915)
 D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed);
 //D2Common.0x6FD78E30 + Inlined at many places
-inline unsigned long long int __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed)
+inline uint64_t __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed)
 {
-	unsigned long long int lSeed = pSeed->nHighSeed + 0x6AC690C5i64 * pSeed->nLowSeed;
+	uint64_t lSeed = pSeed->nHighSeed + 0x6AC690C5i64 * pSeed->nLowSeed;
 
 	pSeed->lSeed = lSeed;
 
@@ -46,7 +46,7 @@ inline unsigned long long int __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed
 }
 
 //D2Common.0x6FD7D3E0
-inline unsigned int __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int nMax)
+inline uint32_t __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int nMax)
 {
 	if (nMax > 0)
 	{
@@ -61,4 +61,9 @@ inline unsigned int __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, i
 	}
 
 	return 0;
+}
+
+inline uint32_t SEED_RollPercentage(D2SeedStrc* pSeed)
+{
+	return (SEED_RollRandomNumber(pSeed) % 100);
 }
