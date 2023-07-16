@@ -4,6 +4,7 @@ add_library(Fog
     src/DllMain.cpp
 	src/D2BitManip.cpp
 	src/Safesock.cpp
+	src/Calc.cpp
 	
 	include/Fog.h
 	include/D2BitManip.h

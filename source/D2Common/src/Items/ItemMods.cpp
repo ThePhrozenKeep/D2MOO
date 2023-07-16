@@ -12,6 +12,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2States.h>
+#include <Calc.h>
 
 /*
 Date: Sun Apr 08 09:12:50 2012
@@ -206,9 +207,7 @@ struct D2ItemTypeCheckStrc
 	int nItemType;				//0x04
 };
 
-//TODO: Replace by the respective header includes
-
-D2UnkFogStrc off_6FDE3BA0[] =
+D2CalcCallbackInfoStrc off_6FDE3BA0[] =
 {
 	{ MISSILE_GetMinimum, 2},
 	{ MISSILE_GetMaximum, 2},
@@ -4287,14 +4286,14 @@ void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D
 
 //D2Common.0x6FD98220
 //TODO: a4, v5
-int __fastcall sub_6FD98220(int nMin, int nMax, int nUnused, D2UnkMissileCalcStrc* a4)
+int __fastcall sub_6FD98220(int nMin, int nMax, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
 	D2SeedStrc* v5 = NULL;
 
-	if (a4)
+	if (D2UnkMissileCalcStrc* pCalc = (D2UnkMissileCalcStrc*) pUserData)
 	{
-		v5 = (D2SeedStrc*)(a4->field_0 + 32);
+		v5 = (D2SeedStrc*)(pCalc->field_0 + 32);
 		if (nMin < nMax)
 		{
 			return nMin + SEED_RollLimitedRandomNumber(v5, nMax - nMin + 1);
@@ -4307,9 +4306,10 @@ int __fastcall sub_6FD98220(int nMin, int nMax, int nUnused, D2UnkMissileCalcStr
 }
 
 //D2Common.0x6FD982A0
-int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, D2ItemCalcStrc* pItemCalc)
+int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
+	D2ItemCalcStrc* pItemCalc = (D2ItemCalcStrc*)pUserData;
 	if (pItemCalc && pItemCalc->pUnit && ITEMS_GetItemStatCostTxtRecord(nStatId))
 	{
 		if (nStatId == STAT_TOHIT)
@@ -4336,6 +4336,12 @@ int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, D2ItemCalcStrc* pI
 	return 0;
 }
 
+// Actually merged with D2COMMON_10018_Return0
+static int __fastcall ITEMMODS_GetCalcParamValue_Return0(int, void*)
+{
+	return 0;
+}
+
 //D2Common.0x6FD98300 (#11300)
 int __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc* pUnit, D2UnitStrc* pItem, unsigned int nCalc)
 {
@@ -4346,7 +4352,7 @@ int __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 		pItemCalc.pUnit = pUnit;
 		pItemCalc.pItem = pItem;
 
-		return FOG_10253(&sgptDataTables->pItemsCode[nCalc], sgptDataTables->nItemsCodeSize - nCalc, D2COMMON_10018_Return0, off_6FDE3BA0, dword_6FDE3BC0, &pItemCalc);
+		return DATATBLS_CalcEvaluateExpression(&sgptDataTables->pItemsCode[nCalc], sgptDataTables->nItemsCodeSize - nCalc, ITEMMODS_GetCalcParamValue_Return0, off_6FDE3BA0, dword_6FDE3BC0, &pItemCalc);
 	}
 
 	return 0;

@@ -17,10 +17,11 @@
 #include <DataTbls/SkillsIds.h>
 #include <D2Combat.h>
 #include <D2Monsters.h>
+#include <Calc.h>
 
 //TODO: Find names
 
-D2UnkFogStrc off_6FDE5804[] =
+D2CalcCallbackInfoStrc off_6FDE5804[] =
 {
 	{ MISSILE_GetMinimum, 2 },
 	{ MISSILE_GetMaximum, 2 },
@@ -414,9 +415,9 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 }
 
 //D2Common.0x6FDAF6A0
-int __fastcall sub_6FDAF6A0(uint8_t nParamId, D2SkillCalcStrc* pSkillCalc)
+int __fastcall sub_6FDAF6A0(int32_t nParamId, void* pUserData)
 {
-	if (pSkillCalc)
+	if (D2SkillCalcStrc * pSkillCalc = (D2SkillCalcStrc*) pUserData)
 	{
 		return SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, nParamId, pSkillCalc->nSkillId, pSkillCalc->nSkillLevel);
 	}
@@ -425,13 +426,13 @@ int __fastcall sub_6FDAF6A0(uint8_t nParamId, D2SkillCalcStrc* pSkillCalc)
 }
 
 //D2Common.0x6FDAF6C0
-int __fastcall sub_6FDAF6C0(int nSkillId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc)
+int __fastcall sub_6FDAF6C0(int nSkillId, int nParamId, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
 	D2SkillStrc* pSkill = NULL;
 	int nSkillLevel = 0;
 
-	if (pSkillCalc)
+	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*) pUserData)
 	{
 		if (pSkillCalc->pUnit)
 		{
@@ -450,10 +451,10 @@ int __fastcall sub_6FDAF6C0(int nSkillId, uint8_t nParamId, int nUnused, D2Skill
 }
 
 //D2Common.0x6FDAF780
-int __fastcall sub_6FDAF780(int nMissileId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc)
+int __fastcall sub_6FDAF780(int nMissileId, int nParamId, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
-	if (pSkillCalc)
+	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*)pUserData)
 	{
 		return MISSILE_GetSpecialParamValue(NULL, pSkillCalc->pUnit, nParamId, nMissileId, pSkillCalc->nSkillLevel);
 	}
@@ -462,9 +463,9 @@ int __fastcall sub_6FDAF780(int nMissileId, uint8_t nParamId, int nUnused, D2Ski
 }
 
 //D2Common.0x6FDAF7A0
-int __fastcall sub_6FDAF7A0(int nSkillId, uint8_t a2, uint8_t a3, D2SkillCalcStrc* pSkillCalc)
+int __fastcall sub_6FDAF7A0(int nSkillId, int a2, int a3, void* pUserData)
 {
-	if (pSkillCalc)
+	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*)pUserData)
 	{
 		return SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, a3, nSkillId, SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, a2, pSkillCalc->nSkillId, pSkillCalc->nSkillLevel));
 	}
@@ -483,7 +484,7 @@ int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc,
 		pSkillCalc.nSkillId = nSkillId;
 		pSkillCalc.nSkillLevel = nSkillLevel;
 
-		return FOG_10253(&sgptDataTables->pSkillsCode[nCalc], sgptDataTables->nSkillsCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
+		return DATATBLS_CalcEvaluateExpression(&sgptDataTables->pSkillsCode[nCalc], sgptDataTables->nSkillsCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
 	}
 
 	return 0;
@@ -500,7 +501,7 @@ int __stdcall SKILLS_EvaluateSkillDescFormula(D2UnitStrc* pUnit, unsigned int nC
 		pSkillCalc.nSkillId = nSkillId;
 		pSkillCalc.nSkillLevel = nSkillLevel;
 
-		return FOG_10253(&sgptDataTables->pSkillDescCode[nCalc], sgptDataTables->nSkillDescCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
+		return DATATBLS_CalcEvaluateExpression(&sgptDataTables->pSkillDescCode[nCalc], sgptDataTables->nSkillDescCodeSize - nCalc, sub_6FDAF6A0, off_6FDE5804, dword_6FDE583C, &pSkillCalc);
 	}
 
 	return 0;

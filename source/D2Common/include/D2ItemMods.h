@@ -171,8 +171,8 @@ int __fastcall ITEMMODS_PropertyFunc23(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 //D2Common.0x6FD98160 (#11292)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10);
 //D2Common.0x6FD98220
-int __fastcall sub_6FD98220(int nMin, int nMax, int nUnused, D2UnkMissileCalcStrc* a4);
+int __fastcall sub_6FD98220(int nMin, int nMax, int nUnused, void* pUserData);
 //D2Common.0x6FD982A0
-int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, D2ItemCalcStrc* pItemCalc);
+int __fastcall sub_6FD982A0(int nStatId, int a2, int nUnused, void* pUserData);
 //D2Common.0x6FD98300 (#11300)
 D2COMMON_DLL_DECL int __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc* pUnit, D2UnitStrc* pItem, unsigned int nCalc);
