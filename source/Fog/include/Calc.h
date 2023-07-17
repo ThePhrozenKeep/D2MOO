@@ -11,9 +11,9 @@ enum FOGCalcTypes
 {
 	CALCTYPE_None = 0,
 	CALCTYPE_CallbackTable = 1,
-	CALCTYPE_Callback_Param_UInt8 = 4,
-	CALCTYPE_Callback_ParamUInt16 = 5,
-	CALCTYPE_Callback_Param_UInt32 = 6,
+	CALCTYPE_Callback_Param_Int8 = 4,
+	CALCTYPE_Callback_Param_Int16 = 5,
+	CALCTYPE_Callback_Param_Int32 = 6,
 	CALCTYPE_Raw_Int8 = 7,
 	CALCTYPE_Raw_Int16 = 8,
 	CALCTYPE_Raw_Int32 = 9,
@@ -76,5 +76,11 @@ void __fastcall DATATBLS_IntStackPush(Fog64IntStack* pCalcStack, int32_t nValue)
 // 1.13c: 0x6FF69E90 (#10253)
 FOG_DLL_DECL int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData);
 
+// 1.10f: 0x6FF53280
+// 1.13c: 0x6FF69680
+char* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue);
 
+// 1.10f: Inlined
+// 1.13c: 0x6FF695E0
+char* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue);
 

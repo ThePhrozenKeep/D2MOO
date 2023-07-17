@@ -70,14 +70,14 @@ static void DATATBLS_EvaluateUsingConstantFromBuffer(Fog64IntStack* pCalcStack, 
 
 	switch (nCalcType)
 	{
-	case CALCTYPE_Callback_Param_UInt8:
-		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint8_t>(pBufferCurrentPos), pUserData);
+	case CALCTYPE_Callback_Param_Int8:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<int8_t>(pBufferCurrentPos), pUserData);
 		break;
-	case CALCTYPE_Callback_ParamUInt16:
-		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint16_t>(pBufferCurrentPos), pUserData);
+	case CALCTYPE_Callback_Param_Int16:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<int16_t>(pBufferCurrentPos), pUserData);
 		break;
-	case CALCTYPE_Callback_Param_UInt32:
-		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint32_t>(pBufferCurrentPos), pUserData);
+	case CALCTYPE_Callback_Param_Int32:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<int32_t>(pBufferCurrentPos), pUserData);
 		break;
 	case CALCTYPE_Raw_Int8:
 		nCallbackResult = ReadFromBuffer<int8_t>(pBufferCurrentPos);
@@ -191,9 +191,9 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 			DATATBLS_EvaluateCalcCallback(&tCalcStack, pBufferCurrentPos, pTableData, nTableSize, pUserData);
 			break;
 		}
-		case CALCTYPE_Callback_Param_UInt8:
-		case CALCTYPE_Callback_ParamUInt16:
-		case CALCTYPE_Callback_Param_UInt32:
+		case CALCTYPE_Callback_Param_Int8:
+		case CALCTYPE_Callback_Param_Int16:
+		case CALCTYPE_Callback_Param_Int32:
 			if (!fpParamCallBack)
 			{
 				return 0;
@@ -241,13 +241,12 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 	return 0;
 }
 
-// 1.10f: 0x6FF53280
-// 1.13c: 0x6FF69680
-char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue)
+// Helper function
+static char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue, bool bCallback)
 {
 	char* pNewExpressionBufferPos; // eax
-		
-	if (nValue >= std::numeric_limits<int8_t>::lowest() && nValue <= std::numeric_limits<int8_t>::max())
+
+	if (std::numeric_limits<int8_t>::lowest() <= nValue && nValue <= std::numeric_limits<int8_t>::max())
 	{
 		const int nPayloadSize = 1 + sizeof(int8_t);
 		if (pExpressionBufferPos - pExpressionBufferStart >= szBufferSize) // Can overflow...
@@ -255,11 +254,11 @@ char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferP
 			*pExpressionBufferStart = CALCTYPE_None;
 			return nullptr;
 		}
-		pExpressionBufferPos[0] = CALCTYPE_Raw_Int8;
+		pExpressionBufferPos[0] = bCallback ? CALCTYPE_Callback_Param_Int8 : CALCTYPE_Raw_Int8;
 		pExpressionBufferPos[1] = nValue;
 		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
 	}
-	else if (nValue >= std::numeric_limits<int16_t>::lowest() && nValue <= std::numeric_limits<int16_t>::max())
+	else if (std::numeric_limits<int16_t>::lowest() <= nValue && nValue <= std::numeric_limits<int16_t>::max())
 	{
 		const int nPayloadSize = 1 + sizeof(int16_t);
 		if (pExpressionBufferPos - pExpressionBufferStart + nPayloadSize >= szBufferSize)
@@ -267,7 +266,7 @@ char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferP
 			*pExpressionBufferStart = CALCTYPE_None;
 			return nullptr;
 		}
-		pExpressionBufferPos[0] = CALCTYPE_Raw_Int16;
+		pExpressionBufferPos[0] = bCallback ? CALCTYPE_Callback_Param_Int16 : CALCTYPE_Raw_Int16;
 		*(int16_t*)(pExpressionBufferPos + 1) = nValue;
 		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
 	}
@@ -279,12 +278,26 @@ char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferP
 			*pExpressionBufferStart = CALCTYPE_None;
 			return nullptr;
 		}
-		pExpressionBufferPos[0] = CALCTYPE_Raw_Int32;
+		pExpressionBufferPos[0] = bCallback ? CALCTYPE_Callback_Param_Int32 : CALCTYPE_Raw_Int32;
 		*(int32_t*)(pExpressionBufferPos + 1) = nValue;
 		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
 	}
 	++pCalc->nCurrentLinkerIndex;
 	return pNewExpressionBufferPos;
+}
+
+// 1.10f: 0x6FF53280
+// 1.13c: 0x6FF69680
+char* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue)
+{
+	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, false);
+}
+
+// 1.10f: Inlined
+// 1.13c: 0x6FF695E0
+char* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue)
+{
+	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, true);
 }
 
 
