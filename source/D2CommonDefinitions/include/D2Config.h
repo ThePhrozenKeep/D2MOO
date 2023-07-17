@@ -5,6 +5,23 @@
 #include <D2BuildInformation.h>
 
 #pragma pack(push, 1)
+
+// Whole structure is used as string, values are encoded so that they are != 0
+struct D2CharacterPreviewInfoStrc 
+{
+	uint16_t nVersion;					//0x00 lower byte is cleared if invalid data was found => empty string. Otherwise contains FOG_Encode14BitsToString(10)
+	uint8_t pComponents[11];			//0x02
+	uint8_t nClass;						//0x0D Encoded using +1
+	uint8_t pComponentColors[11];		//0x0C
+	uint8_t nLevel;						//0x19
+	uint16_t nClientFlags;				//0x1A D2ClientSaveFlags. Encoded via FOG_Encode14BitsToString
+	uint16_t nGuildFlags;				//0x1C Encoded via FOG_Encode14BitsToString
+	uint8_t nGuildEmblemBgColor;		//0x1E
+	uint8_t nGuildEmblemFgColor;		//0x1F
+	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
+	uint32_t szGuildTag;				//0x21
+	uint8_t pad0x25;					//0x25
+};
 struct D2ConfigStrc
 {
 #if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
@@ -41,9 +58,22 @@ struct D2ConfigStrc
 	uint8_t bInvincible;
 	uint8_t _0082[48];
 	char szName[24];
-	char szRealm[256];
+	char szRealm[24];
+	D2CharacterPreviewInfoStrc tCharPreviewInfo;
+	char szUnk[194];
 	uint8_t _01D0[0x18];
-	uint32_t dwCTemp; // Arena mode character template
+	
+	union
+	{
+		uint32_t dwCTemp;
+		struct
+		{
+			uint8_t nUnk;
+			uint8_t nCharacterClassId;		// D2C_PlayerClasses
+			uint16_t nCharacterSaveFlags;	// D2PackedClientSaveFlags
+		} unpackedCTemp;
+	};
+
 	uint8_t bNoMonsters;
 	uint32_t dwMonsterClass;
 	uint8_t bMonsterInfo;
@@ -57,7 +87,7 @@ struct D2ConfigStrc
 	uint8_t bLowEnd;
 	uint8_t bNoCompress;
 	uint16_t wArena;
-	uint32_t nArenaFlags;
+	uint32_t nArenaFlags; // D2GameFlags
 	uint8_t nArenaTemplate;
 	uint8_t _01E9[2]; // Related to Arena
 	uint8_t nArenaDifficulty;

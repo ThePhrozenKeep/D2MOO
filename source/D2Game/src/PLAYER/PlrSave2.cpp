@@ -165,12 +165,12 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
     saveHeader.dwSaveFlags = CLIENTS_GetFlags(pClient);
     if (pGame->bExpansion)
     {
-        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_EXPANSION;
+        saveHeader.tPackedSaveFlags.bExpansion = true;
     }
 
     if (pGame->dwGameType)
     {
-        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_LADDER;
+		saveHeader.tPackedSaveFlags.bLadder = true;
     }
 
     saveHeader.nClass = CLIENTS_GetClassId(pClient);
@@ -764,12 +764,11 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
     CLIENTS_SetClassId(pClient, nClass);
 
-    uint32_t nFlags = pSaveHeader->dwSaveFlags;
-    if (nFlags & CLIENTSAVEFLAG_INIT)
+	D2PackedClientSaveFlags& rPackedFlags = pSaveHeader->tPackedSaveFlags;
+    if (rPackedFlags.bInit)
     {
-        nFlags &= (~CLIENTSAVEFLAG_INIT);
-        pSaveHeader->dwSaveFlags = nFlags;
-        CLIENTS_SetFlags(pClient, (uint16_t)nFlags);
+		rPackedFlags.bInit = false;
+        CLIENTS_SetFlags(pClient, rPackedFlags.nPackedValue);
 
         *ppSection += sizeof(D2SaveHeaderStrc);
         return PLRSAVE2ERROR_NEWBIE_SAVE;

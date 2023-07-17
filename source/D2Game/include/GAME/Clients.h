@@ -1,5 +1,6 @@
 #pragma once
 
+#include <D2Config.h>
 #include "D2PacketDef.h"
 #include <Units/Units.h>
 #include "Game.h"
@@ -47,11 +48,12 @@ enum D2ClientState : uint32_t
 	CLIENTSTATE_CHANGING_ACT = 5,
 };
 
+
 // Character information flags
 enum D2ClientSaveFlags
 {
 	CLIENTSAVEFLAG_INIT = 0x1, // Newbie save
-	CLIENTSAVEFLAG_0x2 = 0x2,
+	CLIENTSAVEFLAG_0x2 = 0x2, // Set at character creation for realm characters.
 	CLIENTSAVEFLAG_HARDCORE = 0x4,
 	CLIENTSAVEFLAG_DEAD = 0x8,
 	CLIENTSAVEFLAG_0x10 = 0x10,
@@ -66,7 +68,28 @@ enum D2ClientSaveFlags
 	// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT = 8,
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK = (0x1F) << CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT,
+};
 
+union D2PackedClientSaveFlags
+{
+	uint16_t nPackedValue;			// D2ClientSaveFlags
+	struct {
+		uint16_t bInit : 1;			// BIT(0)
+		uint16_t bUnkFlag0x02 : 1;	// BIT(1)
+		uint16_t bHardcore : 1;		// BIT(2)
+		uint16_t bDead : 1;			// BIT(3)
+		uint16_t bUnkFlag0x10 : 1;	// BIT(4)
+		uint16_t bExpansion : 1;	// BIT(5)
+		uint16_t bLadder : 1;		// BIT(6)
+		uint16_t bUnkFlag0x80 : 1;	// BIT(7)
+		// Encodes completed acts 
+		// => 0 No act completed
+		// => Acts 1-5 Normal (values 1-5), then 1-5 NM (values 6-10), then 1-5 Hell (values 11-15) for Expansion
+		// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic
+		uint16_t nProgression : 5;	// BIT(8-12)
+		uint16_t bWeaponSwitch : 1;	// BIT(13)
+		uint16_t nDONOTUSEBITS : 2; // BIT(14-15) Will not be propagated to character preview info string due to encoding with FOG_Encode14BitsToString
+	};
 };
 
 // Internal management flags
@@ -81,22 +104,6 @@ enum D2ClientFlagsEx
 enum D2ClientsConstants
 {
 	CLIENTS_MAX_UPDATES = 55,
-};
-
-struct D2CharacterPreviewInfoStrc // This is used as string, values are encoded so that they are != 0
-{
-	uint16_t unk0x00;					//0x00 lower byte is cleared if invalid data was found => empty string
-	uint8_t pComponents[11];			//0x02
-	uint8_t nClass;						//0x0D
-	uint8_t pComponentColors[11];		//0x0C
-	uint8_t nLevel;						//0x19
-	uint16_t nClientFlags;				//0x1A
-	uint16_t nGuildFlags;				//0x1C
-	uint8_t nGuildEmblemBgColor;		//0x1E
-	uint8_t nGuildEmblemFgColor;		//0x1F
-	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
-	uint32_t szGuildTag;				//0x21
-	uint8_t pad0x25;					//0x25
 };
 
 struct D2ClientInfoStrc
@@ -165,7 +172,7 @@ struct D2ClientStrc
 	D2ClientState dwClientState;				//0x004
 	uint8_t nClassId;							//0x008
 	uint8_t unk0x09;							//0x009
-	uint16_t nSaveFlags;						//0x00A D2ClientSaveFlags
+	D2PackedClientSaveFlags tSaveFlags;			//0x00A
 	uint8_t nCharTemplate;						//0x00C
 	char szName[16];							//0x00D
 	char szAccount[16];							//0x01D

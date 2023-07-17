@@ -129,7 +129,7 @@ struct D2GameInfoStrc
 	uint8_t unk0xA5;								// 0xA5
 	uint8_t unk0xA6;								// 0xA6
 	uint8_t padding0xA7;							// 0xA7
-	uint32_t nArenaFlags;							// 0xA8
+	uint32_t nArenaFlags;							// 0xA8 D2GameFlags
 	void* pMemoryPool;								// 0xAC
 };
 

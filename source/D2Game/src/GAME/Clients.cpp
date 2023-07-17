@@ -90,7 +90,7 @@ int32_t __stdcall CLIENTS_GetExpansionClientCount()
     {
         for (D2ClientStrc* pClient = gpClientList_6FD43FB8[i]; pClient; pClient = pClient->pListNext)
         {
-            if (pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION)
+            if (pClient->tSaveFlags.bExpansion)
             {
                 ++result;
             }
@@ -337,7 +337,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
         return nError;
     }
 
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION)
+    if (pClient->tSaveFlags.bExpansion)
     {
         if (!pGame->bExpansion)
         {
@@ -356,7 +356,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
         }
     }
 
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_LADDER)
+    if (pClient->tSaveFlags.bLadder)
     {
         if (!pGame->dwGameType)
         {
@@ -374,9 +374,9 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
             return SYSERROR_LADDERGAME;
         }
     }
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_HARDCORE)
+    if (pClient->tSaveFlags.bHardcore)
     {
-        if (pClient->nSaveFlags & CLIENTSAVEFLAG_DEAD)
+        if (pClient->tSaveFlags.bDead)
         {
             FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_DEADHARDCORE", pClient->szName);
             pClient->pPlayer = nullptr;
@@ -536,7 +536,7 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
 //D2Game.0x6FC32810
 void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2CharacterPreviewInfoStrc* pCharacterPreviewInfo)
 {
-    FOG_Encode14BitsToString(&pCharacterPreviewInfo->unk0x00, 10);
+    FOG_Encode14BitsToString(&pCharacterPreviewInfo->nVersion, 10);
     D2_ASSERT(pClient);
 
     if (D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, FALSE))
@@ -580,17 +580,17 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         const uint32_t nPlayerMode = pPlayer->dwAnimMode;
         
-        uint16_t nClientFlags = pClient->nSaveFlags;
-        if ((nPlayerMode == PLRMODE_DEAD || nPlayerMode == PLRMODE_DEATH) && (pClient->nSaveFlags & CLIENTSAVEFLAG_HARDCORE) != 0)
+		D2PackedClientSaveFlags tClientFlags = pClient->tSaveFlags;
+        if ((nPlayerMode == PLRMODE_DEAD || nPlayerMode == PLRMODE_DEATH) && pClient->tSaveFlags.bHardcore)
         {
-            nClientFlags |= CLIENTSAVEFLAG_DEAD;
+			tClientFlags.bDead = true;
         }
         else
         {
-            nClientFlags &= (~CLIENTSAVEFLAG_DEAD);
+			tClientFlags.bDead = false;
         }
 
-        FOG_Encode14BitsToString(&pCharacterPreviewInfo->nClientFlags, nClientFlags);
+        FOG_Encode14BitsToString(&pCharacterPreviewInfo->nClientFlags, tClientFlags.nPackedValue);
         FOG_Encode14BitsToString(&pCharacterPreviewInfo->nGuildFlags, pClient->tGuildInfo.nGuildFlags);
 
         pCharacterPreviewInfo->nGuildEmblemBgColor = pClient->tGuildInfo.nBackgroundColor ? pClient->tGuildInfo.nBackgroundColor : 0xFFu;
@@ -601,11 +601,11 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         if (!nPlayerLevel || nPlayerLevel > 99u
             || nPlayerClassId >= NUMBER_OF_PLAYERCLASSES
-            || (nClientFlags & (CLIENTSAVEFLAG_INIT | CLIENTSAVEFLAG_0x2 | CLIENTSAVEFLAG_0x10)) != 0
+            || (tClientFlags.bInit || tClientFlags.bUnkFlag0x02 || tClientFlags.bUnkFlag0x10)
             || SStrLen((const char*)pCharacterPreviewInfo) != 33) // If any member of D2SaveLaunchStrc is 0. Looks like a debug check that is not required since we only fill with non-zero values.
         {
             // If any issue, we return an empty string
-            *((char*)&pCharacterPreviewInfo->unk0x00) = '\0';
+            *((char*)&pCharacterPreviewInfo->nVersion) = '\0';
         }
     }
 }
@@ -686,7 +686,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						&pClientToRemove->pClientInfo,
 						pGame->nGameId,
 						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
-						pClientToRemove->nSaveFlags, pClientToRemove->szName,
+						pClientToRemove->tSaveFlags.nPackedValue, pClientToRemove->szName,
 						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
 						0,
 						0,
@@ -703,7 +703,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *(char*)&pClientToRemove->tCharacterInfo.unk0x00 = '\0';
+            *(char*)&pClientToRemove->tCharacterInfo.nVersion = '\0';
 
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
@@ -1202,13 +1202,13 @@ void __fastcall CLIENTS_SetClassId(D2ClientStrc* pClient, int32_t nClass)
 //D2Game.0x6FC33A20
 void __fastcall CLIENTS_SetFlags(D2ClientStrc* pClient, int32_t nFlags)
 {
-    pClient->nSaveFlags = nFlags;
+    pClient->tSaveFlags.nPackedValue = nFlags;
 }
 
 //D2Game.0x6FC33A30
 int32_t __fastcall CLIENTS_GetFlags(D2ClientStrc* pClient)
 {
-    return pClient->nSaveFlags;
+    return pClient->tSaveFlags.nPackedValue;
 }
 
 //D2Game.0x6FC33A40
@@ -1216,28 +1216,29 @@ void __fastcall CLIENTS_ToggleFlag(D2ClientStrc* pClient, uint16_t nFlag, int32_
 {
     if (bSet)
     {
-        pClient->nSaveFlags |= nFlag;
+        pClient->tSaveFlags.nPackedValue |= nFlag;
     }
     else
     {
-        pClient->nSaveFlags &= ~nFlag;
+        pClient->tSaveFlags.nPackedValue &= ~nFlag;
     }
 }
 
 //D2Game.0x6FC33A60
 int32_t __fastcall CLIENTS_CheckFlag(D2ClientStrc* pClient, uint16_t nFlag)
 {
-    return pClient->nSaveFlags & nFlag;
+    return pClient->tSaveFlags.nPackedValue & nFlag;
 }
 
 //D2Game.0x6FC33A70
 void __fastcall CLIENTS_UpdateCharacterProgression(D2ClientStrc* pClient, uint16_t nAct, uint16_t nDifficulty)
 {
-    int32_t nNewActDifficulty = nAct + nDifficulty * ((pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION) ? NUM_ACTS : NUM_ACTS - 1);
+	const int32_t nActsPerDifficulty = pClient->tSaveFlags.bExpansion ? NUM_ACTS : (NUM_ACTS - 1);
+    int32_t nNewActDifficulty = nAct + nDifficulty * nActsPerDifficulty;
 
-    if (nNewActDifficulty >= ((pClient->nSaveFlags& CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK) >> CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT))
+    if (nNewActDifficulty >= pClient->tSaveFlags.nProgression)
     {
-        pClient->nSaveFlags = pClient->nSaveFlags & (~CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK) | (nNewActDifficulty << CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT);
+		pClient->tSaveFlags.nProgression = nNewActDifficulty;
     }
 }
 

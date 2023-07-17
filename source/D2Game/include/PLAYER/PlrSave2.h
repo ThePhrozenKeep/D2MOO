@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
+#include <GAME/Clients.h>
 
 #pragma pack(1)
 
@@ -70,7 +71,13 @@ struct D2SaveHeaderStrc
 	uint32_t dwChecksum;					//0x0C
 	uint32_t dwWeaponSwitch;				//0x10
 	char szName[16];						//0x14
-	uint32_t dwSaveFlags;					//0x24
+	union {
+		uint32_t dwSaveFlags;				//0x24 D2ClientSaveFlags
+		struct {
+			D2PackedClientSaveFlags tPackedSaveFlags;
+			uint16_t nUnk; // Padding ? Unused in D2Launch
+		};
+	};
 	uint8_t nClass;							//0x28
 	uint8_t nStats;							//0x29
 	uint8_t nSkills;						//0x2A
