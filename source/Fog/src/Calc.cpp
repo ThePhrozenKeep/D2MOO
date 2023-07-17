@@ -63,6 +63,38 @@ static void DATATBLS_EvaluateCalcCallback(Fog64IntStack* pCalcStack, const char*
 }
 
 // Inlined
+static void DATATBLS_EvaluateUsingConstantFromBuffer(Fog64IntStack* pCalcStack, FOGCalcTypes nCalcType, const char*& pBufferCurrentPos, CalcFogCallBack2_t fpParamCallBack, void* pUserData)
+{
+	int nCallbackResult = 0;
+
+	switch (nCalcType)
+	{
+	case CALCTYPE_Callback_Param_UInt8:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint8_t>(pBufferCurrentPos), pUserData);
+		break;
+	case CALCTYPE_Callback_ParamUInt16:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint16_t>(pBufferCurrentPos), pUserData);
+		break;
+	case CALCTYPE_Callback_Param_UInt32:
+		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint32_t>(pBufferCurrentPos), pUserData);
+		break;
+	case CALCTYPE_Raw_Int8:
+		nCallbackResult = ReadFromBuffer<int8_t>(pBufferCurrentPos);
+		break;
+	case CALCTYPE_Raw_Int16:
+		nCallbackResult = ReadFromBuffer<int16_t>(pBufferCurrentPos);
+		break;
+	case CALCTYPE_Raw_Int32:
+		nCallbackResult = ReadFromBuffer<int32_t>(pBufferCurrentPos);
+		break;
+	default:
+		D2_UNREACHABLE;
+	}
+
+	DATATBLS_IntStackPush(pCalcStack, nCallbackResult);
+}
+
+// Inlined
 static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGCalcTypes nCalcType)
 {
 	const int nRightHandSide = DATATBLS_IntStackPop(pCalcStack);
@@ -150,8 +182,8 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 	Fog64IntStack tCalcStack;
 	while (!ReachedEndOfBuffer())
 	{
-		uint8_t nCurrentCode = ReadFromBuffer<uint8_t>(pBufferCurrentPos);
-		switch (nCurrentCode)
+		uint8_t nCalcType = ReadFromBuffer<uint8_t>(pBufferCurrentPos);
+		switch (nCalcType)
 		{
 		case CALCTYPE_CallbackTable:
 		{
@@ -159,57 +191,24 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 			break;
 		}
 		case CALCTYPE_Callback_Param_UInt8:
-		{
-			if (!fpParamCallBack || ReachedEndOfBuffer())
-			{
-				return 0;
-			}
-			int nCallbackResult = fpParamCallBack(ReadFromBuffer<uint8_t>(pBufferCurrentPos), pUserData);
-			DATATBLS_IntStackPush(&tCalcStack, nCallbackResult);
-			break;
-		}
 		case CALCTYPE_Callback_ParamUInt16:
-		{
-			if (!fpParamCallBack || ReachedEndOfBuffer()) // May read OOB...
-			{
-				return 0;
-			}
-			int nCallbackResult = fpParamCallBack(ReadFromBuffer<uint16_t>(pBufferCurrentPos), pUserData);
-			DATATBLS_IntStackPush(&tCalcStack, nCallbackResult);
-			break;
-		}
 		case CALCTYPE_Callback_Param_UInt32:
-		{
-			if (!fpParamCallBack || ReachedEndOfBuffer()) // May read OOB...
+			if (!fpParamCallBack)
 			{
 				return 0;
 			}
-			int nCallbackResult = fpParamCallBack(ReadFromBuffer<uint32_t>(pBufferCurrentPos), pUserData);
-			DATATBLS_IntStackPush(&tCalcStack, nCallbackResult);
+			// FALLTHROUGH
+		case CALCTYPE_Raw_Int8:
+		case CALCTYPE_Raw_Int16:
+		case CALCTYPE_Raw_Int32:
+		{
+			if (ReachedEndOfBuffer()) // We may read OOB for non 8bit constants...
+			{
+				return 0;
+			}
+			DATATBLS_EvaluateUsingConstantFromBuffer(&tCalcStack, (FOGCalcTypes)nCalcType, pBufferCurrentPos, fpParamCallBack, pUserData);
 			break;
 		}
-
-		case CALCTYPE_Raw_Int8:
-			if (!fpParamCallBack || ReachedEndOfBuffer())
-			{
-				return 0;
-			}
-			DATATBLS_IntStackPush(&tCalcStack, ReadFromBuffer<int8_t>(pBufferCurrentPos));
-			break;
-		case CALCTYPE_Raw_Int16:
-			if (!fpParamCallBack || ReachedEndOfBuffer()) // May read OOB...
-			{
-				return 0;
-			}
-			DATATBLS_IntStackPush(&tCalcStack, ReadFromBuffer<int16_t>(pBufferCurrentPos));
-			break;
-		case CALCTYPE_Raw_Int32:
-			if (!fpParamCallBack || ReachedEndOfBuffer()) // May read OOB...
-			{
-				return 0;
-			}
-			DATATBLS_IntStackPush(&tCalcStack, ReadFromBuffer<int32_t>(pBufferCurrentPos));
-			break;
 		case CALCTYPE_LessThan:
 		case CALCTYPE_GreaterThan:
 		case CALCTYPE_LessOrEqualThan:
@@ -221,7 +220,7 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 		case CALCTYPE_Multipliction:
 		case CALCTYPE_Division:
 		case CALCTYPE_Power:
-			DATATBLS_EvaluateBinaryOperator(&tCalcStack, (FOGCalcTypes)nCurrentCode);
+			DATATBLS_EvaluateBinaryOperator(&tCalcStack, (FOGCalcTypes)nCalcType);
 			break;
 		case CALCTYPE_Negate:
 			DATATBLS_IntStackPush(&tCalcStack, -DATATBLS_IntStackPop(&tCalcStack));
