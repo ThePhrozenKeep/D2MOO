@@ -9,7 +9,7 @@
 
 enum FOGCalcTypes
 {
-	CALCTYPE_NONE = 0,
+	CALCTYPE_None = 0,
 	CALCTYPE_CallbackTable = 1,
 	CALCTYPE_Callback_Param_UInt8 = 4,
 	CALCTYPE_Callback_ParamUInt16 = 5,

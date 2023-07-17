@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <limits>
 
 #include <Calc.h>
 
@@ -240,6 +241,51 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 	return 0;
 }
 
+// 1.10f: 0x6FF53280
+// 1.13c: 0x6FF69680
+char* __fastcall DATATBLS_ExpressionBuffer_PushConstant(char* pExpressionBufferPos, char* pExpressionBufferStart, int szBufferSize, D2CalcProcessStrc* pCalc, int32_t nValue)
+{
+	char* pNewExpressionBufferPos; // eax
+		
+	if (nValue >= std::numeric_limits<int8_t>::lowest() && nValue <= std::numeric_limits<int8_t>::max())
+	{
+		const int nPayloadSize = 1 + sizeof(int8_t);
+		if (pExpressionBufferPos - pExpressionBufferStart >= szBufferSize) // Can overflow...
+		{
+			*pExpressionBufferStart = CALCTYPE_None;
+			return nullptr;
+		}
+		pExpressionBufferPos[0] = CALCTYPE_Raw_Int8;
+		pExpressionBufferPos[1] = nValue;
+		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
+	}
+	else if (nValue >= std::numeric_limits<int16_t>::lowest() && nValue <= std::numeric_limits<int16_t>::max())
+	{
+		const int nPayloadSize = 1 + sizeof(int16_t);
+		if (pExpressionBufferPos - pExpressionBufferStart + nPayloadSize >= szBufferSize)
+		{
+			*pExpressionBufferStart = CALCTYPE_None;
+			return nullptr;
+		}
+		pExpressionBufferPos[0] = CALCTYPE_Raw_Int16;
+		*(int16_t*)(pExpressionBufferPos + 1) = nValue;
+		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
+	}
+	else
+	{
+		const int nPayloadSize = 1 + sizeof(int32_t);
+		if (pExpressionBufferPos - pExpressionBufferStart + nPayloadSize >= szBufferSize)
+		{
+			*pExpressionBufferStart = CALCTYPE_None;
+			return nullptr;
+		}
+		pExpressionBufferPos[0] = CALCTYPE_Raw_Int32;
+		*(int32_t*)(pExpressionBufferPos + 1) = nValue;
+		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
+	}
+	++pCalc->nCurrentLinkerIndex;
+	return pNewExpressionBufferPos;
+}
 
 
 
