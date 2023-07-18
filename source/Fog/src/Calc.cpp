@@ -181,6 +181,8 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const char* pExpressionBuffer, int
 	};
 
 	Fog64IntStack tCalcStack;
+	tCalcStack.nSize = 0;
+
 	while (!ReachedEndOfBuffer())
 	{
 		uint8_t nCalcType = ReadFromBuffer<uint8_t>(pBufferCurrentPos);
