@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 #include <Fog.h>
+#include <Calc.h>
+
 #include <stdio.h> // for FILE
 
 #include "DataTbls/AnimTbls.h"
@@ -291,7 +293,7 @@ struct D2DataTablesStrc
 	D2TxtLinkStrc* pPlrModeLinker;						//0x34
 	D2SkillCalcTxt* pSkillCalcTxt;						//0x38
 	D2TxtLinkStrc* pSkillCalcLinker;					//0x3C
-	union FOGASTNodeStrc* pSkillsCode;					//0x40
+	FOGASTNodeStrc* pSkillsCode;						//0x40
 	unsigned int nSkillsCodeSize;						//0x44
 	unsigned int nSkillsCodeSizeEx;						//0x48
 	FOGASTNodeStrc* pSkillDescCode;						//0x4C
@@ -299,7 +301,7 @@ struct D2DataTablesStrc
 	unsigned int nSkillDescCodeSizeEx;					//0x54
 	D2MissCalcTxt* pMissileCalcTxt;						//0x58
 	D2TxtLinkStrc* pMissileCalcLinker;					//0x5C
-	union FOGASTNodeStrc* pMissCode;					//0x60
+	FOGASTNodeStrc* pMissCode;							//0x60
 	unsigned int nMissCodeSize;							//0x64
 	int nMissCodeSizeEx;								//0x68
 
@@ -315,7 +317,7 @@ struct D2DataTablesStrc
 	D2TxtLinkStrc* pMonAiLinker;						//0x8C
 	int nMonAiTxtRecordCount;							//0x90
 	D2TxtLinkStrc* pItemsLinker;						//0x94
-	union FOGASTNodeStrc* pItemsCode;					//0x98
+	FOGASTNodeStrc* pItemsCode;							//0x98
 	unsigned int nItemsCodeSize;						//0x9C
 	int nItemsCodeSizeEx;								//0xA0
 	D2PropertiesTxt* pPropertiesTxt;					//0xA4
