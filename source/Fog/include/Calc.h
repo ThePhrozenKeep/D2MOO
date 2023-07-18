@@ -76,7 +76,7 @@ struct D2CalcCallbackInfoStrc
 
 typedef int(__fastcall* CalcGetKeyWordToNumber_t)(char* szKey);
 typedef int(__fastcall* CalcGetFunctionParameterCount_t)(int nFunctionIndex);
-typedef int(__fastcall* CalcGetLinkerIndex_t)(char* szText, BOOL* pOutIsFunctionParameter, int nAST, int nKeywordNumber);
+typedef int(__fastcall* CalcGetLinkerIndex_t)(char* szText, BOOL* pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 typedef int(__fastcall* CalcProcessCache_t)(int nIndex);
 
 struct FOGExpressionParserContextStrc

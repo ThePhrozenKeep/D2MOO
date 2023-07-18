@@ -450,16 +450,16 @@ FOGASTNodeStrc* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNodeStrc* pASTBuf
 // Helper function
 static void DATATBLS_ResolveConstantLink(char* szLinkName, FOGExpressionParserContextStrc* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
 {
-	BOOL pOutIsFunctionParameter = FALSE;
+	BOOL bHasResolvedToConstant = FALSE;
 	const int32_t nLinkerIndex = pfnLinkParse(
 		szLinkName,
-		&pOutIsFunctionParameter,
+		&bHasResolvedToConstant,
 		pCalc->tPendingOperationsASTs[pCalc->nPendingOps - 1],
 		pCalc->tLinkerIndex[pCalc->nPendingOps - 1]
 	);
 	if (nLinkerIndex >= 0)
 	{
-		*pOutTokenType = pOutIsFunctionParameter ? TOKEN_CUSTOM_FUNCTION_PARAMETER_CONSTANT : TOKEN_CUSTOM_RAW_CONSTANT;
+		*pOutTokenType = bHasResolvedToConstant ? TOKEN_CUSTOM_RAW_CONSTANT : TOKEN_CUSTOM_FUNCTION_PARAMETER_CONSTANT;
 		*pTokenAssociatedValue = nLinkerIndex;
 	}
 	else // Not found
@@ -511,10 +511,10 @@ static const char* DATATBLS_ParseSublinkToken(const char* szExpression, FOGExpre
 	}
 	tLinkNameBuffer[nLinkNameSize] = 0;
 
-	BOOL pOutIsFunctionParameter = FALSE;
+	BOOL bHasResolvedToConstant = FALSE;
 	const int32_t nLinkerIndex = pfnLinkParse(
 		tLinkNameBuffer,
-		&pOutIsFunctionParameter,
+		&bHasResolvedToConstant,
 		pCalc->tPendingOperationsASTs[pCalc->nPendingOps - 1],
 		pCalc->tLinkerIndex[pCalc->nPendingOps - 1]
 	);
@@ -575,7 +575,7 @@ const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpr
 {
 	*pTokenAssociatedValue = 0;
 	// Advance until next token
-	while (*szExpression != 0 && !isspace(*szExpression) && *szExpression != '"')
+	while (*szExpression != 0 && (isspace(*szExpression) || *szExpression == '"'))
 	{
 		szExpression++;
 	}
@@ -730,6 +730,7 @@ int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNode
 
 				if (tContext.nPendingParameters < nParams || (pASTBufferPos - pOutASTBuffer) >= nOutASTBufferSize)
 				{
+					pOutASTBuffer->nRawValue = 0;
 					return 0; // error, not enough values or AST buffer full
 				}
 				pASTBufferPos->nType = nPreviousASTType;
@@ -740,17 +741,35 @@ int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNode
 				{
 					if ((pASTBufferPos - pOutASTBuffer) >= nOutASTBufferSize)
 					{
+						pOutASTBuffer->nRawValue = 0;
 						return 0; // AST buffer full
 					}
 					pASTBufferPos->nRawValue = nLinkerIndex;
 					pASTBufferPos++;
+
+					if (tContext.nPendingOps <= 0)
+					{
+						return 0;
+					}
 					break;
 				}
 				if ((--tContext.nPendingOps) <= 0)
 				{
+					pOutASTBuffer->nRawValue = 0;
 					return 0; // Should never happen
 				}
 			}
+
+			{
+				const FOGASTType nPreviousASTType = tContext.tPendingOperationsASTs[tContext.nPendingOps - 1];
+				if (nPreviousASTType != AST_Parenthesis_Open && nPreviousASTType != AST_CallbackTable) // Logic error
+				{
+					pOutASTBuffer->nRawValue = 0;
+					return 0;
+				}
+				tContext.nPendingOps--;
+			}
+
 			continue; // Handle next token
 		case TOKEN_COMMA:
 			pASTBufferPos = DATATBLS_Evaluate_HandleNewOp(pASTBufferPos, pOutASTBuffer, nOutASTBufferSize, &tContext,
