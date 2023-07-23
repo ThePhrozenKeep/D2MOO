@@ -382,7 +382,7 @@ struct D2MonStatsTxt
 	uint8_t nAIdel[3];						//0x4F
 	uint8_t nAiDist[3];						//0x52
 	uint8_t unk0x55;						//0x55
-	uint16_t wAiParam[8][3];				//0x56
+	int16_t wAiParam[8][3];					//0x56
 	uint16_t wTreasureClass[3][4];			//0x86
 	uint8_t nTCQuestId;						//0x9E
 	uint8_t nTCQuestCP;						//0x9F

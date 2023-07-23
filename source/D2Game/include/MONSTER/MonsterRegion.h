@@ -79,7 +79,7 @@ void __fastcall sub_6FC68110(D2GameStrc* pGame);
 //D2Game.0x6FC68180
 void __fastcall sub_6FC68180(D2MonsterRegionStrc** ppMonsterRegion, D2RoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bToggleFlag);
 //D2Game.0x6FC681C0
-void __fastcall sub_6FC681C0(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit, int32_t a3, int32_t a4);
+void __fastcall sub_6FC681C0(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit, int32_t nPreviousAlignment, int32_t nNewAlignment);
 //D2Game.0x6FC68240
 void __fastcall sub_6FC68240(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit);
 //D2Game.0x6FC68280

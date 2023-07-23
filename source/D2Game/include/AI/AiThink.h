@@ -371,7 +371,7 @@ void __fastcall D2GAME_AI_Unk105_6FCEA680(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 //D2Game.0x6FCEA6D0
 void __fastcall AITHINK_Fn105_ShadowWarrior(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);
 //D2Game.0x6FCEAC10
-int32_t __fastcall sub_6FCEAC10(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pOwner, D2SkillStrc* pSkill, int32_t nSkillId, int32_t bCombat, D2AiTickParamStrc* pAiTickParam);
+BOOL __fastcall AITHINK_ShadowWarriorCheckUseSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pOwner, D2SkillStrc* pSkill, int32_t nSkillId, int32_t bCombat, D2AiTickParamStrc* pAiTickParam);
 //D2Game.0x6FCEAF20
 int32_t __fastcall AITHINK_ShadowMasterCheckTargetPetType(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId);
 //D2Game.0x6FCEAFE0

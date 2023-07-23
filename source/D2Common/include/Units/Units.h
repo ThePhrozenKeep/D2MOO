@@ -86,6 +86,15 @@ enum D2C_UnitFlagsEx
 	UNITFLAGEX_SERVERUNIT = 0x04000000			//is server-side unit
 };
 
+enum D2C_UnitAlignment {
+
+	UNIT_ALIGNMENT_EVIL = 0,
+	UNIT_ALIGNMENT_NEUTRAL = 1,
+	UNIT_ALIGNMENT_GOOD = 2,
+	UNIT_NUM_ALIGNMENT = 3,
+	UNIT_ALIGNMENT_UNASSIGNED = 4,
+};
+
 //TODO: Redo Header defs when .cpp is done
 
 

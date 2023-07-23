@@ -43,8 +43,6 @@ constexpr uint32_t dword_6FD3F45C = 0xDEADDEAD;
 constexpr uint32_t dword_6FD3F460 = 1;
 constexpr uint32_t dword_6FD3F464 = 2;
 
-// TODO: Create enum
-#define ALIGNMENT_NEUTRAL 1
 
 
 
@@ -211,7 +209,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 							}
 							else
 							{
-								D2_ASSERT(nOldAlign == ALIGNMENT_NEUTRAL);
+								D2_ASSERT(nOldAlign == UNIT_ALIGNMENT_NEUTRAL);
 
 								sub_6FC40280(pGame, pUnit, 0, 9);
 							}
