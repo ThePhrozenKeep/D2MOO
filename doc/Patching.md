@@ -16,7 +16,7 @@ When a `.dll` load attempt is made, we complete the load then patch all newly lo
 
 ## Patch actions
 
-Each `.dll` in D2MOO exposes a few functions needed to list what functions/pointers needs to be patched. This is located in the [D2.Detours.patches](D2.Detours.patches/1.10f) folder.
+Each `.dll` in D2MOO exposes a few functions needed to list what functions/pointers needs to be patched. This is located in the [D2.Detours.patches](../D2.Detours.patches/1.10f) folder.
 
 The functions to be implemented (and exported) are the following:
 
