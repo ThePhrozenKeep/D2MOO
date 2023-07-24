@@ -63,3 +63,14 @@ struct ExtraPatchAction {
 ```
 
 As can be seen, we can patch both ways, this is required because we do not want the patch .dll to call its own functions by default. Each patch must be opt-in.
+
+## Patching a .dll with another name
+
+By default, patch `.dll`s will be used to patch the original `.dll` with the same name.
+It is however possible to override this by providing a `NAME.patch.rc` file containing the following resource:
+
+```rc
+NameOfModuleToPatch 256 { L"OTHERDLLNAME.dll\0" }
+```
+
+For example the `D2Debugger.dll` compiles `D2Debugger.patch.rc` which has the resource `NameOfModuleToPatch 256 { L"D2Game.dll\0" }`, because it currently hooks into the `D2Game.dll` functions.
