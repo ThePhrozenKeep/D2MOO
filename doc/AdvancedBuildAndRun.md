@@ -6,7 +6,7 @@ You will also need to install the [CMake](https://cmake.org) build system and Vi
 
 # Build the project
 
-The recommanded way is to use CMake presets.
+The recommended way is to use CMake presets.
 
 ## With presets
 

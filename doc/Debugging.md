@@ -14,6 +14,14 @@ If the executable was not found, please provide its path as command argument.
 Note that it will spawn the game/D2SE as a subprocess, so you might be interested in the following Visual Studio extension [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool).
 Project will already be configured to use it by default, but you may confirm it by going to `Debug > Other debug targets > Child process debugging settings`.
 
+## Symbols
+
+D2MOO does not patch all functions by default. This also means that you will only have symbols (`.pdb` file) for D2MOO's version of the functions.
+
+Such functions are listed in the `XXXXX.patch.cpp` files in the [D2.Detours.patches/1.10f](D2.Detours.patches/1.10f) folder. You can only put breakpoints through source code for functions marked with `PatchAction::FunctionReplaceOriginalByPatch`.
+
+Note that you can still break in the original game `.dll`s, however you will not have any source mapping. Keep in mind that there are 2 `.dll`s loaded with the same name: the original one and D2MOO's. See also [Patching](Patching.md).
+
 # D2MOO Debugger (Experimental)
 
 A visual debugger based on ImGui has been in development.
