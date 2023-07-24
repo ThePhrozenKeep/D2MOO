@@ -3,9 +3,7 @@
 
 If you are using a default Diablo2 install and generated .sln through CMake, you are good to go!
 
-Otherwise have a look at [Debugging](Debugging.md)
-
-Targets debugging options are already configured and set as startup project if you are using a generated Visual Studio `.sln` and D2 can be found through registry/PATH, or is set up through the `D2INSTALL` or `D2SE` environment variables. 
+Targets debugging options are already configured and set as startup project if you are using a generated Visual Studio `.sln` and D2 can be found through registry/PATH, or is set up through the `D2INSTALL` or `D2SE` environment variables. The registry should be updated automatically by simply starting the game.
 
 If the executable was not found, please provide its path as command argument.
 ![Example of debugging properties](assets/img/Debugging%20properties.png)
