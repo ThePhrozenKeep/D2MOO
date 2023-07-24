@@ -34,6 +34,13 @@ function(D2MOO_add_detours_patch_to_dll DLLTargetName)
         VS_DEBUGGER_WORKING_DIRECTORY "${D2_PATH}"
     )
   endif()
+  
+  if(NOT D2MOO_CHILD_PROCESS_DBG_SETTINGS_COPIED)
+    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.21.0") # Needed for COPY_FILE and CMAKE_CURRENT_FUNCTION_LIST_DIR requires 3.17
+      file(COPY_FILE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/D2MOO.ChildProcessDbgSettings" "${CMAKE_BINARY_DIR}/D2MOO.ChildProcessDbgSettings")
+    endif()
+    set(D2MOO_CHILD_PROCESS_DBG_SETTINGS_COPIED TRUE CACHE INTERNAL "")
+  endif()
 
 endfunction()
 
