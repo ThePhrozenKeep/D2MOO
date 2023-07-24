@@ -33,7 +33,7 @@ Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
 See also the [Improve the debugger!](https://github.com/ThePhrozenKeep/D2MOO/issues/113) issue.
 
 
-# Debug a function by comparing results
+# Debug a function by comparing results (DRAFT)
 
 Here is an ad-hoc example of how to compare results of two functions at runtime.
 Ideally we should be able to use a test framework for those kind of things. Here is a quick and dirty way to do it in the meantime.
