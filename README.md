@@ -41,7 +41,7 @@ Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) document
 
 If you are using a default Diablo2 install and generated `.sln` through *CMake*, you are good to go, simply build and run with `F5`!
 
-Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.md) and [Debugging](Debugging.md) documentation.
+Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.md) and [Debugging](./doc/Debugging.md) documentation.
 
 ## D2MOO Debugger (Experimental!)
 
