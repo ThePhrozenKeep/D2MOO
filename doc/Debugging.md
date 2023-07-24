@@ -1,4 +1,29 @@
 
+# Debugging in Visual Studio
+
+If you are using a default Diablo2 install and generated .sln through CMake, you are good to go!
+
+Otherwise have a look at [Debugging](Debugging.md)
+
+Targets debugging options are already configured and set as startup project if you are using a generated Visual Studio `.sln` and D2 can be found through registry/PATH, or is set up through the `D2INSTALL` or `D2SE` environment variables. 
+
+If the executable was not found, please provide its path as command argument.
+![Example of debugging properties](assets/img/Debugging%20properties.png)
+
+
+Note that it will spawn the game/D2SE as a subprocess, so you might be interested in the following Visual Studio extension [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool).
+Project will already be configured to use it by default, but you may confirm it by going to `Debug > Other debug targets > Child process debugging settings`.
+
+# D2MOO Debugger (Experimental)
+
+A visual debugger based on ImGui has been in development.
+To use it, start the game with the `-debug` argument. (For example: `D2.DetoursLauncher -- -debug`).  
+Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
+
+![D2Moo Debugger](assets/img/D2MooDebugger.png)
+
+See also the [Improve the debugger!](https://github.com/ThePhrozenKeep/D2MOO/issues/113) issue.
+
 
 # Debug a function by comparing results
 

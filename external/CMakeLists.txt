@@ -8,7 +8,7 @@ if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
   
   # Look for D2SE first, then Diablo II.
   find_program(D2_EXE NAMES D2SE.exe "Game.exe" "Diablo II.exe"
-    HINTS $ENV{D2SE}
+    HINTS $ENV{D2INSTALL} $ENV{D2SE}
     PATH_SUFFIXES "Diablo II"
   )
   if(D2_EXE)

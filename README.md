@@ -1,6 +1,6 @@
 # D2MOO - Diablo II Method and Ordinal Overhaul
 
-![Cow](ECWLHTH.gif)
+![Cow](doc/assets/img/ECWLHTH.gif)
 
 This project is a re-implementation of the Diablo2 game coupled with patching facilities for modders.
 The aim is to provide the modding community with an easy tool to understand and patch the game.
@@ -18,8 +18,8 @@ You will also need to install the [CMake](https://cmake.org) build system and Vi
 
 ### Build the project
 
-The preferred way is to use CMake presets.
-You can either open D2Moo using the Visual studio "Open folder" or generate a VS solution (in `out/build/VS20XX`) using:
+The recommended way is to use CMake presets.
+You can generate a VS solution (located in `out/build/VS20XX`) and build using the command-line:
 
 ```sh
 # Configure the CMake project
@@ -30,35 +30,26 @@ cmake --build --preset VS2019 --config Release
 cmake --build --preset VS2019 --config Release --target install
 ```
 
-Note: The `ninja` preset requires to run the `cmake` configuration step to be ran from the *x86 Native Command Prompt*.
+Or using the CMake-gui:
+![CMake GUI](doc/assets/img/CMake-GUI.png)
 
-Or, if you do not wish to use the presets
+Where of course you can replace `VS2019` by `VS2022` if you are using Visual Studio 2022.
 
-```sh
-# Configure the CMake project
-cmake -A Win32 -B YOU_BUILD_DIR
-# Build the release config
-cmake --build YOU_BUILD_DIR --config Release
-# Install
-cmake --install YOU_BUILD_DIR --config Release --prefix YOUR_INSTALL_FOLDER
-```
+Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) documentation.
 
 ## Usage
 
-- Build D2MOO
-- Launch Diablo2 (or D2SE) by using the command `D2.DetoursLauncher [Path to D2 or D2SE]`.
-  - If the `Game.exe`/`D2SE.exe` executable is not provided, you can start it from the game folder. It can also detect the installation path.
-  - The detours .dll expects patch dlls to be in `patch` folder of the *Diablo2*/*D2SE* executable. This can be overriden using the `DIABLO2_PATCH` environment variable.
+If you are using a default Diablo2 install and generated `.sln` through *CMake*, you are good to go, simply build and run with `F5`!
 
-The debug targets are already configured and set as startup project when using Visual Studio.
+Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.md) and [Debugging](Debugging.md) documentation.
 
-Note that it will spawn the game/D2SE as a subprocess, so you might be interested in the following Visual Studio extension [Microsoft Child Process Debugging Power Tool](https://marketplace.visualstudio.com/items?itemName=vsdbgplat.MicrosoftChildProcessDebuggingPowerTool). Then go to Debug > Other debug targets > Child process debugging settings, enable & save.
+## D2MOO Debugger (Experimental!)
 
-## Debugger (Experimental!)
-
-Start the game with the `-debug`.
+Start the game with the `-debug` argument.
 For example: `D2.DetoursLauncher -- -debug`.
 Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
+
+![D2Moo Debugger](./doc/assets/img/D2MooDebugger.png)
 
 ## Versions
 
@@ -83,7 +74,7 @@ Reversing the game is very time consuming. Since `D2Common.dll` and `D2Game.dll`
 ### How can I write my own mod using this ?
 
 The documentation for that is not written yet, please contact us directly on the Phrozen Keep [forums](https://www.d2mods.info) / [Discord server](https://discord.gg/NvfftHY).
-More importantly, we need your feedback to determine a roadmap.
+More importantly, we need your [feedback](https://github.com/ThePhrozenKeep/D2MOO/issues/20) to determine a roadmap.
 
 ### Why yet another project for D2 modding and code editing ?
 
