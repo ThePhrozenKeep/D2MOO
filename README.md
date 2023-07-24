@@ -46,7 +46,7 @@ Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.
 ## D2MOO Debugger (Experimental!)
 
 Start the game with the `-debug` argument.
-For example: `D2.DetoursLauncher -- -debug`.
+For example: `D2.DetoursLauncher -- -debug`.  
 Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
 
 ![D2Moo Debugger](./doc/assets/img/D2MooDebugger.png)
