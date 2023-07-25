@@ -203,7 +203,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2RoomExStrc* pRoomEx, int nAnim
 
 			for (unsigned int nRarity = 1; nRarity < nFrames; ++nRarity)
 			{
-				D2TileLibraryEntryStrc* pTileEntry = DRLGANIM_FindAnimatedTileFrame(pTileLibraryEntries, nFrames, 0, nStyle, nSeq);
+				D2TileLibraryEntryStrc* pTileEntry = DRLGANIM_FindAnimatedTileFrame(pTileLibraryEntries, nFrames, nRarity, nStyle, nSeq);
 
 				if (pCurrentTileData.nTileType == TILETYPE_FLOOR)
 				{
