@@ -2628,6 +2628,7 @@ void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame)
 //D2Game.0x6FC39600) --------------------------------------------------------
 void __fastcall GAME_CloseGame(int32_t a1)
 {
+    UNIMPLEMENTED();
 //    D2GameManagerStrc* v1; // edi@1
 //    int32_t v2; // ebx@1
 //    struct _RTL_CRITICAL_SECTION* v3; // ebp@2
@@ -2708,6 +2709,7 @@ void __fastcall GAME_CloseGame(int32_t a1)
 //D2Game.0x6FC397A0) --------------------------------------------------------
 D2GameStrc* __fastcall TASK_GetGame_6FC397A0(int32_t nGameHashKey)
 {
+    UNIMPLEMENTED();
     return nullptr;
 
 //    D2GameManagerStrc* v1; // esi@1
@@ -3379,6 +3381,7 @@ void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId
 //D2Game.0x6FC3A8B0) --------------------------------------------------------
 void __stdcall D2Game_10019(uint16_t a1, int32_t a2, int32_t nUnitType)
 {
+    UNIMPLEMENTED();
 //    int32_t v3; // edi@1
 //    int32_t v4; // eax@1
 //    int32_t v5; // esi@4
@@ -3843,6 +3846,7 @@ void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
 //D2Game.0x6FC3B480) --------------------------------------------------------
 D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t a2, void* a3, int32_t a4)
 {
+    UNIMPLEMENTED();
     D2_MAYBE_UNUSED(nUnused);
     return nullptr;
 
@@ -3887,6 +3891,7 @@ D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameManagerStrc*
 // Should be __thiscall, nUnused is present due to using __fastcall 
 void __fastcall D2GameManagerStrc_Lock_6FC3B510(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t* a2, int32_t a3)
 {
+    UNIMPLEMENTED();
     D2_MAYBE_UNUSED(nUnused);
     EnterCriticalSection(&pGameManager->pLock);
     *a2 = 2 * (a3 != 0) - 1;
@@ -3928,6 +3933,7 @@ void __fastcall D2GameManagerStrc_Unlock_6FC3B540(D2GameManagerStrc* pGameManage
 //D2Game.0x6FC3B590) --------------------------------------------------------
 D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int32_t a2, int32_t* a3, int32_t a4, int32_t a5)
 {
+    UNIMPLEMENTED();
     D2_MAYBE_UNUSED(nUnused);
     return nullptr;
 
@@ -4011,6 +4017,7 @@ D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int3
 //D2Game.0x6FC3B6A0) --------------------------------------------------------
 D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameManagerStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, void* a4)
 {
+    UNIMPLEMENTED();
     D2_MAYBE_UNUSED(nUnused);
     return nullptr;
 
