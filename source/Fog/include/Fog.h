@@ -95,12 +95,6 @@ struct D2UnkExcelStrc
 	D2BinFieldStrc* pBinField;		//0x08
 };
 
-struct D2UnkFogStrc
-{
-	void* pCallback;				//0x00
-	int32_t unk0x04;				//0x04
-};
-
 
 enum D2C_AsyncDataPriority
 {
@@ -244,8 +238,6 @@ D2FUNC_DLL(FOG, IsExpansion, int, __fastcall, (), 0xD730)																							
 D2FUNC_DLL(FOG, ComputeChecksum, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3940)															//Fog.#10229
 D2FUNC_DLL(FOG, PopCount, uint32_t, __stdcall, (void* pData, size_t dwSize), 0x3970)																//Fog.#10230
 D2FUNC_DLL(FOG, LeadingZeroesCount, uint32_t, __stdcall, (uint32_t nValue), 0x39A0)																	//Fog.#10252
-D2FUNC_DLL(FOG, 10253, int, __stdcall, (void*, int, void*, void*, int, void*), 0x1E30)																//Fog.#10253
-D2FUNC_DLL(FOG, 10254, int, __stdcall, (char* pSrc, char* pBuffer, int nBufferSize, void*, void*, void*), 0x24F0)									//Fog.#10254
 D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB20)																	//Fog.#10255
 
 

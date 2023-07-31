@@ -2,6 +2,7 @@
 
 #include <Archive.h>
 #include <File.h>
+#include <Calc.h>
 
 //D2Common.0x6FD498D0
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
@@ -195,14 +196,14 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 	unsigned int nSizeEx = 0;
 	unsigned int nSize = 0;
 	int nBufferSize = 0;
-	char* pCode = NULL;
-	char pBuffer[1024] = {};
+	FOGASTNodeStrc* pCode = nullptr;
+	FOGASTNodeStrc pBuffer[1024] = {};
 
 	if (pRecord)
 	{
 		if (pSrc)
 		{
-			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
+			nBufferSize = DATATBLS_CompileExpression(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
 			if (nBufferSize > 0)
 			{
 				nSize = sgptDataTables->nSkillsCodeSize;
@@ -226,7 +227,7 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 							break;
 						}
 
-						pCode = (char*)D2_REALLOC_POOL(NULL, pCode, nNewSize);
+						pCode = (FOGASTNodeStrc*)D2_REALLOC_POOL(nullptr, pCode, nNewSize);
 						nSize = sgptDataTables->nSkillsCodeSize;
 						nSizeEx = sgptDataTables->nSkillsCodeSizeEx;
 						sgptDataTables->pSkillsCode = pCode;
@@ -261,14 +262,14 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 	unsigned int nSizeEx = 0;
 	unsigned int nSize = 0;
 	int nBufferSize = 0;
-	char* pCode = NULL;
-	char pBuffer[1024] = {};
+	FOGASTNodeStrc* pCode = nullptr;
+	FOGASTNodeStrc pBuffer[1024] = {};
 
 	if (pRecord)
 	{
 		if (pSrc)
 		{
-			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
+			nBufferSize = DATATBLS_CompileExpression(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapSkillsTxtKeywordToNumber, sub_6FD49980, sub_6FD49990);
 			if (nBufferSize > 0)
 			{
 				nSize = sgptDataTables->nSkillDescCodeSize;
@@ -292,7 +293,7 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 							break;
 						}
 
-						pCode = (char*)D2_REALLOC_POOL(NULL, pCode, nNewSize);
+						pCode = (FOGASTNodeStrc*)D2_REALLOC_POOL(nullptr, pCode, nNewSize);
 						nSize = sgptDataTables->nSkillDescCodeSize;
 						nSizeEx = sgptDataTables->nSkillDescCodeSizeEx;
 						sgptDataTables->pSkillDescCode = pCode;
@@ -791,7 +792,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
 	size_t dwSize;
-	sgptDataTables->pSkillsCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->pSkillsCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
 	sgptDataTables->nSkillsCodeSizeEx = dwSize;
 	sgptDataTables->nSkillsCodeSize = dwSize;
 
@@ -808,7 +809,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	sgptDataTables->pSkillDescCode = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->pSkillDescCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
 	sgptDataTables->nSkillDescCodeSizeEx = dwSize;
 	sgptDataTables->nSkillDescCodeSize = dwSize;
 

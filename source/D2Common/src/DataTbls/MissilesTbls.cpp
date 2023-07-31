@@ -1,5 +1,5 @@
 #include "D2DataTbls.h"
-
+#include <Calc.h>
 
 //D2Common.0x6FD62EA0
 int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
@@ -120,16 +120,16 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	int nBufferSize = 0;
-	char pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = {};
 
 	if (pRecord)
 	{
 		if (pSrc)
 		{
-			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapMissilesTxtKeywordToNumber, NULL, sub_6FD62F20);
+			nBufferSize = DATATBLS_CompileExpression(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapMissilesTxtKeywordToNumber, NULL, sub_6FD62F20);
 			if (nBufferSize > 0)
 			{
-				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx, pBuffer, nBufferSize);
+				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer((char**)&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx, pBuffer, nBufferSize);
 			}
 			else
 			{

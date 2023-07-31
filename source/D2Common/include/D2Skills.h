@@ -144,13 +144,13 @@ D2COMMON_DLL_DECL short __stdcall SKILLS_GetPassiveState(int nSkillId);
 //D2Common.0x6FDAEB60 (#11271)
 D2COMMON_DLL_DECL int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, int nSkillId, int nSkillLevel);
 //D2Common.0x6FDAF6A0
-int __fastcall sub_6FDAF6A0(uint8_t nParamId, D2SkillCalcStrc* pSkillCalc);
+int __fastcall sub_6FDAF6A0(int32_t nParamId, void* pUserData);
 //D2Common.0x6FDAF6C0
-int __fastcall sub_6FDAF6C0(int nSkillId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc);
+int __fastcall sub_6FDAF6C0(int nSkillId, int nParamId, int nUnused, void* pUserData);
 //D2Common.0x6FDAF780
-int __fastcall sub_6FDAF780(int nMissileId, uint8_t nParamId, int nUnused, D2SkillCalcStrc* pSkillCalc);
+int __fastcall sub_6FDAF780(int nMissileId, int nParamId, int nUnused, void* pUserData);
 //D2Common.0x6FDAF7A0
-int __fastcall sub_6FDAF7A0(int nSkillId, uint8_t a2, uint8_t a3, D2SkillCalcStrc* pSkillCalc);
+int __fastcall sub_6FDAF7A0(int nSkillId, int a2, int a3 , void* pUserData);
 //D2Common.0x6FDAF7E0 (#11276)
 D2COMMON_DLL_DECL int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel);
 //D2Common.0x6FDAF850 (#11302)

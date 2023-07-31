@@ -2,6 +2,8 @@
 
 #include <D2BasicTypes.h>
 #include <Fog.h>
+#include <Calc.h>
+
 #include <stdio.h> // for FILE
 
 #include "DataTbls/AnimTbls.h"
@@ -291,15 +293,15 @@ struct D2DataTablesStrc
 	D2TxtLinkStrc* pPlrModeLinker;						//0x34
 	D2SkillCalcTxt* pSkillCalcTxt;						//0x38
 	D2TxtLinkStrc* pSkillCalcLinker;					//0x3C
-	char* pSkillsCode;									//0x40
+	FOGASTNodeStrc* pSkillsCode;						//0x40
 	unsigned int nSkillsCodeSize;						//0x44
 	unsigned int nSkillsCodeSizeEx;						//0x48
-	char* pSkillDescCode;								//0x4C
+	FOGASTNodeStrc* pSkillDescCode;						//0x4C
 	unsigned int nSkillDescCodeSize;					//0x50
 	unsigned int nSkillDescCodeSizeEx;					//0x54
 	D2MissCalcTxt* pMissileCalcTxt;						//0x58
 	D2TxtLinkStrc* pMissileCalcLinker;					//0x5C
-	char* pMissCode;									//0x60
+	FOGASTNodeStrc* pMissCode;							//0x60
 	unsigned int nMissCodeSize;							//0x64
 	int nMissCodeSizeEx;								//0x68
 
@@ -315,7 +317,7 @@ struct D2DataTablesStrc
 	D2TxtLinkStrc* pMonAiLinker;						//0x8C
 	int nMonAiTxtRecordCount;							//0x90
 	D2TxtLinkStrc* pItemsLinker;						//0x94
-	char* pItemsCode;									//0x98
+	FOGASTNodeStrc* pItemsCode;							//0x98
 	unsigned int nItemsCodeSize;						//0x9C
 	int nItemsCodeSizeEx;								//0xA0
 	D2PropertiesTxt* pPropertiesTxt;					//0xA4
@@ -565,7 +567,7 @@ D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass,
 //D2Common.0x6FD49760
 void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
 //D2Common.0x6FD49850
-int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSizeEx, char* pBuffer, int nBufferSize);
+int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSizeEx, void* pBuffer, int nBufferSize);
 
 
 

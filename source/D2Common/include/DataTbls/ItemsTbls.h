@@ -595,7 +595,7 @@ struct D2QualityItemDataTbl							//sgptDataTable + 0xEE4
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey);
 //D2Common.0x6FD55140
-int __fastcall DATATBLS_Return2();
+int __fastcall DATATBLS_Return2(int);
 //D2Common.0x6FD55150
 int __fastcall sub_6FD55150(char* szText, int* a2, int a3, int nKeywordNumber);
 //D2Common.0x6FD551E0

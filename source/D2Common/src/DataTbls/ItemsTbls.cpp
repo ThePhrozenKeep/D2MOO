@@ -5,6 +5,7 @@
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <D2StatList.h>
+#include <Calc.h>
 
 //D2Common.0x6FD550E0
 int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey)
@@ -33,7 +34,7 @@ int __fastcall DATATBLS_MapItemsTxtKeywordToNumber(char* szKey)
 }
 
 //D2Common.0x6FD55140
-int __fastcall DATATBLS_Return2()
+int __fastcall DATATBLS_Return2(int)
 {
 	return 2;
 }
@@ -80,16 +81,16 @@ int __fastcall sub_6FD55150(char* szText, int* a2, int a3, int nKeywordNumber)
 void __fastcall DATATBLS_ItemCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	int nBufferSize = 0;
-	char pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = {};
 
 	if (pRecord)
 	{
 		if (pSrc)
 		{
-			nBufferSize = FOG_10254(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapItemsTxtKeywordToNumber, DATATBLS_Return2, sub_6FD55150);
+			nBufferSize = DATATBLS_CompileExpression(pSrc, pBuffer, sizeof(pBuffer), DATATBLS_MapItemsTxtKeywordToNumber, DATATBLS_Return2, sub_6FD55150);
 			if (nBufferSize > 0)
 			{
-				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer(&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx, pBuffer, nBufferSize);
+				*(uint32_t*)((char*)pRecord + nOffset) = DATATBLS_AppendMemoryBuffer((char**)&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx, pBuffer, nBufferSize);
 			}
 			else
 			{

@@ -11,8 +11,9 @@
 #include "Units/Units.h"
 #include <D2BitManip.h>
 #include <D2Combat.h>
+#include <Calc.h>
 
-D2UnkFogStrc off_6FDE5A50[] =
+D2CalcCallbackInfoStrc off_6FDE5A50[] =
 {
 	{ MISSILE_GetMinimum, 2 },
 	{ MISSILE_GetMaximum, 2 },
@@ -1436,9 +1437,9 @@ int __stdcall MISSILE_GetSpecialParamValue(D2UnitStrc* pMissile, D2UnitStrc* pOw
 }
 
 //D2Common.0x6FDBC060
-int __fastcall MISSILE_GetCalcParamValue(uint8_t nParamId, D2MissileCalcStrc* pMissileCalc)
+int __fastcall MISSILE_GetCalcParamValue(int32_t nParamId, void* pUserData)
 {
-	if (pMissileCalc)
+	if (D2MissileCalcStrc * pMissileCalc = (D2MissileCalcStrc*)pUserData)
 	{
 		return MISSILE_GetSpecialParamValue(pMissileCalc->pMissile, pMissileCalc->pOwner, nParamId, pMissileCalc->nMissileId, pMissileCalc->nMissileLevel);
 	}
@@ -1447,7 +1448,7 @@ int __fastcall MISSILE_GetCalcParamValue(uint8_t nParamId, D2MissileCalcStrc* pM
 }
 
 //D2Common.0x6FDBC080
-int __fastcall MISSILE_GetMinimum(int a1, int a2, int a3, int a4)
+int __fastcall MISSILE_GetMinimum(int a1, int a2, int a3, void* pUserData)
 {
 	if (a1 >= a2)
 	{
@@ -1458,7 +1459,7 @@ int __fastcall MISSILE_GetMinimum(int a1, int a2, int a3, int a4)
 }
 
 //D2Common.0x6FDBC090
-int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, int a4)
+int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, void* pUserData)
 {
 	if (a1 <= a2)
 	{
@@ -1469,9 +1470,9 @@ int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, int a4)
 }
 
 //D2Common.0x6FDBC0A0
-int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D2UnkMissileCalcStrc* pCalc)
-{
+int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, void* pUserData){
 	D2_MAYBE_UNUSED(nUnused);
+	D2UnkMissileCalcStrc* pCalc = (D2UnkMissileCalcStrc*)pUserData;
 	int nPossibilities = 0;
 
 	if (pCalc)
@@ -1490,13 +1491,14 @@ int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D
 }
 
 //D2Common.0x6FDBC120
-int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, uint8_t nParamId, int nUnused, D2MissileCalcStrc* pMissileCalc)
+int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, int nParamId, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
+
 	D2SkillStrc* pSkill = NULL;
 	int nSkillLevel = 0;
 
-	if (pMissileCalc)
+	if (D2MissileCalcStrc* pMissileCalc = (D2MissileCalcStrc*)pUserData)
 	{
 		if (pMissileCalc->pOwner)
 		{
@@ -1559,7 +1561,7 @@ int __stdcall MISSILE_EvaluateMissileFormula(D2UnitStrc* pMissile, D2UnitStrc* p
 		pMissileCalc.nMissileId = nMissile;
 		pMissileCalc.nMissileLevel = nMissileLevel;
 
-		return FOG_10253(&sgptDataTables->pMissCode[nCalc], sgptDataTables->nMissCodeSize - nCalc, MISSILE_GetCalcParamValue, off_6FDE5A50, dword_6FDE5A70, &pMissileCalc);
+		return DATATBLS_CalcEvaluateExpression(&sgptDataTables->pMissCode[nCalc], sgptDataTables->nMissCodeSize - nCalc, MISSILE_GetCalcParamValue, off_6FDE5A50, dword_6FDE5A70, &pMissileCalc);
 	}
 
 	return 0;

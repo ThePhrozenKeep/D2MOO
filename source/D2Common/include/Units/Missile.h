@@ -215,14 +215,14 @@ D2COMMON_DLL_DECL int __stdcall MISSILE_GetElementalLength(int nUnused, D2UnitSt
 //D2Common.0x6FDBBC50 (#11290)
 D2COMMON_DLL_DECL int __stdcall MISSILE_GetSpecialParamValue(D2UnitStrc* pMissile, D2UnitStrc* pOwner, uint8_t nParamId, int nMissileId, int nLevel);
 //D2Common.0x6FDBC060
-int __fastcall MISSILE_GetCalcParamValue(uint8_t nParamId, D2MissileCalcStrc* pMissileCalc);
+int __fastcall MISSILE_GetCalcParamValue(int32_t nParamId, void* pUserData);
 //D2Common.0x6FDBC080
-int __fastcall MISSILE_GetMinimum(int a1, int a2, int a3, int a4);
+int __fastcall MISSILE_GetMinimum(int a1, int a2, int a3, void* pUserData);
 //D2Common.0x6FDBC090
-int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, int a4);
+int __fastcall MISSILE_GetMaximum(int a1, int a2, int a3, void* pUserData);
 //D2Common.0x6FDBC0A0
-int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, D2UnkMissileCalcStrc* pCalc);
+int __fastcall MISSILE_GetRandomNumberInRange(int nMin, int nMax, int nUnused, void* pUserData);
 //D2Common.0x6FDBC120
-int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, uint8_t nParamId, int nUnused, D2MissileCalcStrc* pMissileCalc);
+int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, int nParamId, int nUnused, void* pUserData);
 //D2Common.0x6FDBC170 (#11284)
 D2COMMON_DLL_DECL int __stdcall MISSILE_EvaluateMissileFormula(D2UnitStrc* pMissile, D2UnitStrc* pOwner, unsigned int nCalc, int nMissileId, int nLevel);
