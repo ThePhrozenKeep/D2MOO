@@ -1893,7 +1893,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = SERVER_ReadFromMessageList0(&buffer[8], 512);
+        int32_t nSize = SERVER_ReadFromMessageList0(buffer, 512);
         if (nSize == -1)
         {
             break;
