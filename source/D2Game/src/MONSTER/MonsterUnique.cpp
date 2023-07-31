@@ -1652,7 +1652,7 @@ void __fastcall sub_6FC6DD20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         return;
     }
 
-    if (pUnit->dwAnimMode != MONMODE_DEATH || STATLIST_GetUnitAlignment(pUnit))
+    if (pUnit->dwAnimMode != MONMODE_DEATH || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
     {
         return;
     }
@@ -1687,7 +1687,7 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         return;
     }
 
-    if (STATLIST_GetUnitAlignment(pUnit) == 2)
+    if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_GOOD)
     {
         return;
     }
@@ -1698,7 +1698,7 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
     }
     else if (AIGENERAL_GetAiControlParam(pUnit, 1) < 2 && D2COMMON_11017_CheckUnitIfConsumeable(pUnit, 0))
     {
-        if (!STATLIST_GetUnitAlignment(pUnit))
+        if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
         {
             AITACTICS_UseSkill(pGame, pUnit, MONMODE_SKILL1, SKILL_SELF_RESURRECT, nullptr, 0, 0);
             pUnit->dwFlags &= 0xFBFDFFFFu;

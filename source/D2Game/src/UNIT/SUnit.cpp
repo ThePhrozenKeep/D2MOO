@@ -2023,21 +2023,21 @@ int32_t __fastcall SUNIT_AreUnitsAligned(D2GameStrc* pGame, D2UnitStrc* pUnit1, 
 //D2Game.0x6FCBDD30
 void __fastcall sub_6FCBDD30(D2UnitStrc* pUnit, uint8_t nAlignNew, int32_t a3)
 {
-    int32_t nAlignment = 4;
+    int32_t nAlignment = UNIT_ALIGNMENT_UNASSIGNED;
 
     if (!pUnit)
     {
         return;
     }
 
-    if (nAlignNew >= 3)
+    if (nAlignNew >= UNIT_NUM_ALIGNMENT)
     {
         FOG_DisplayAssert("eAlignNew < NUM_ALIGNMENT", __FILE__, __LINE__);
         exit(-1);
     }
 
     const int32_t nClassId = pUnit->dwClassId;
-    if (nClassId != MONSTER_HYDRA1 && nClassId != MONSTER_HYDRA2 && nClassId != MONSTER_HYDRA3 && !nAlignNew && pUnit->dwFlags >> 31)
+    if (nClassId != MONSTER_HYDRA1 && nClassId != MONSTER_HYDRA2 && nClassId != MONSTER_HYDRA3 && nAlignNew == UNIT_ALIGNMENT_EVIL && pUnit->dwFlags >> 31)
     {
         return;
     }
@@ -2053,8 +2053,8 @@ void __fastcall sub_6FCBDD30(D2UnitStrc* pUnit, uint8_t nAlignNew, int32_t a3)
         if (pStatList)
         {
             STATLIST_SetState(pStatList, STATE_ALIGNMENT);
-            D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
-            STATES_ToggleState(pUnit, STATE_ALIGNMENT, 1);
+            D2COMMON_10475_PostStatToStatList(pUnit, pStatList, TRUE);
+            STATES_ToggleState(pUnit, STATE_ALIGNMENT, TRUE);
         }
         else
         {
@@ -2086,11 +2086,11 @@ void __fastcall sub_6FCBDD30(D2UnitStrc* pUnit, uint8_t nAlignNew, int32_t a3)
         return;
     }
 
-    if (nAlignNew == 2)
+    if (nAlignNew == UNIT_ALIGNMENT_GOOD)
     {
         DUNGEON_IncreaseAlliedCountOfRoom(pRoom);
     }
-    else if (nAlignment == 2)
+    else if (nAlignment == UNIT_ALIGNMENT_GOOD)
     {
         DUNGEON_DecreaseAlliedCountOfRoom(pRoom);
     }

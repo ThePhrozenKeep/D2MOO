@@ -185,7 +185,7 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
 	if ((pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !sub_6FCBD900(pGame, pUnit, pTarget))
 	{
-		if (pTarget->dwUnitType == UNIT_MONSTER && (!pUnit || pUnit->dwUnitType != UNIT_PLAYER) && !STATLIST_GetUnitAlignment(pUnit) && pArg->unk0x08 && !MONSTERS_IsDead(pTarget))
+		if (pTarget->dwUnitType == UNIT_MONSTER && (!pUnit || pUnit->dwUnitType != UNIT_PLAYER) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pArg->unk0x08 && !MONSTERS_IsDead(pTarget))
 		{
 			D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pTarget);
 
@@ -663,7 +663,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 	if (!sub_6FCF2920(pGame, pUnit, v66, 0, &pTargetUnit, &nDistanceToTarget))
 	{
-		if (STATLIST_GetUnitAlignment(pUnit))
+		if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
 		{
 			D2UnkAiCallbackArgStrc arg = {};
 			arg.pTarget = nullptr;
@@ -802,7 +802,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 		return nullptr;
 	}
 
-	if (STATLIST_GetUnitAlignment(pUnit) != 2)
+	if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_GOOD)
 	{
 		pAiControl->nAiFlags |= 8u;
 
@@ -947,7 +947,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 	case 3:
 	{
 		const int32_t nAlignment = STATLIST_GetUnitAlignment(pUnit);
-		if (nAlignment == 1)
+		if (nAlignment ==  UNIT_ALIGNMENT_NEUTRAL)
 		{
 			if (ITEMS_RollRandomNumber(&pUnit->pSeed) & 1)
 			{
@@ -962,11 +962,11 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 		{
 			if (ITEMS_RollRandomNumber(&pUnit->pSeed) & 1)
 			{
-				if (nAlignment == 0)
+				if (nAlignment ==  UNIT_ALIGNMENT_EVIL)
 				{
 					sub_6FCBDD30(pUnit, 2, 1);
 				}
-				else if (nAlignment == 2)
+				else if (nAlignment == UNIT_ALIGNMENT_GOOD)
 				{
 					sub_6FCBDD30(pUnit, 0, 1);
 				}

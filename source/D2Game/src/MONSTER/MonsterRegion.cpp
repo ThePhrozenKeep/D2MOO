@@ -1114,19 +1114,19 @@ void __fastcall sub_6FC68180(D2MonsterRegionStrc** ppMonsterRegion, D2RoomStrc* 
 }
 
 //D2Game.0x6FC681C0
-void __fastcall sub_6FC681C0(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+void __fastcall sub_6FC681C0(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit, int32_t nPreviousAlignment, int32_t nNewAlignment)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !SUNIT_IsDead(pUnit) && !MONSTER_CheckSummonerFlag(pUnit, 2u))
     {
         D2MonsterRegionStrc* pMonsterRegion = ppMonsterRegion[MONSTER_GetLevelId(pUnit)];
-        if (pMonsterRegion && !pMonsterRegion->nQuest && a3 != a4)
+        if (pMonsterRegion && !pMonsterRegion->nQuest && nPreviousAlignment != nNewAlignment)
         {
-            if (!a3 && (a4 == 1 || a4 == 2))
+            if (nPreviousAlignment == UNIT_ALIGNMENT_EVIL && (nNewAlignment == UNIT_ALIGNMENT_NEUTRAL || nNewAlignment == UNIT_ALIGNMENT_GOOD))
             {
                 --pMonsterRegion->dwMonSpawnCount;
             }
 
-            if (!a4 && a3 != 4)
+            if (nNewAlignment == UNIT_ALIGNMENT_EVIL && nPreviousAlignment != UNIT_ALIGNMENT_UNASSIGNED)
             {
                 ++pMonsterRegion->dwMonSpawnCount;
             }
@@ -1140,7 +1140,7 @@ void __fastcall sub_6FC68240(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* 
     if (!MONSTER_CheckSummonerFlag(pUnit, 2u))
     {
         D2MonsterRegionStrc* pMonsterRegion = ppMonsterRegion[MONSTER_GetLevelId(pUnit)];
-        if (!STATLIST_GetUnitAlignment(pUnit))
+        if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
         {
             ++pMonsterRegion->dwMonKillCount;
         }
@@ -1172,7 +1172,7 @@ void __fastcall sub_6FC682C0(D2MonsterRegionStrc** ppMonRegion, int32_t nLevelId
             MONSTER_SetLevelId(pUnit, nLevelId1);
         }
 
-        if (!a6 && !STATLIST_GetUnitAlignment(pUnit))
+        if (!a6 && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
         {
             --pMonsterRegion2->dwMonSpawnCount;
 
@@ -1184,7 +1184,7 @@ void __fastcall sub_6FC682C0(D2MonsterRegionStrc** ppMonRegion, int32_t nLevelId
     }
     else
     {
-        if (!a6 && !bDead && !nAlignment)
+        if (!a6 && !bDead && nAlignment == UNIT_ALIGNMENT_EVIL)
         {
             --pMonsterRegion1->dwMonSpawnCount;
         }

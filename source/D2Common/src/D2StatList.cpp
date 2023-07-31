@@ -13,9 +13,6 @@
 //D2Common.0x6FDB57C0 (#10563)
 BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {
-	int nAlignment1 = 0;
-	int nAlignment2 = 0;
-
 	if (pUnit1 && pUnit2)
 	{
 		if (pUnit1 == pUnit2)
@@ -23,14 +20,14 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 			return TRUE;
 		}
 
-		nAlignment1 = STATLIST_GetUnitAlignment(pUnit1);
-		nAlignment2 = STATLIST_GetUnitAlignment(pUnit2);
+		int nAlignment1 = STATLIST_GetUnitAlignment(pUnit1);
+		int nAlignment2 = STATLIST_GetUnitAlignment(pUnit2);
 
-		if (nAlignment1 == 0 && nAlignment2 == 0)
+		if (nAlignment1 == UNIT_ALIGNMENT_EVIL && nAlignment2 == UNIT_ALIGNMENT_EVIL)
 		{
 			return TRUE;
 		}
-		else if (nAlignment1 == 2 && nAlignment2 == 2)
+		else if (nAlignment1 == UNIT_ALIGNMENT_GOOD && nAlignment2 == UNIT_ALIGNMENT_GOOD)
 		{
 			return TRUE;
 		}
@@ -1724,12 +1721,12 @@ int __stdcall STATLIST_GetUnitAlignment(D2UnitStrc* pUnit)
 {
 	if (!pUnit || !pUnit->pStatListEx)
 	{
-		return 0;
+		return UNIT_ALIGNMENT_EVIL;
 	}
 
 	if (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER)
 	{
-		return 2;
+		return UNIT_ALIGNMENT_GOOD;
 	}
 
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx))
@@ -1740,7 +1737,7 @@ int __stdcall STATLIST_GetUnitAlignment(D2UnitStrc* pUnit)
 		}
 	}
 
-	return 0;
+	return UNIT_ALIGNMENT_EVIL;
 }
 
 //D2Common.0x6FDB8750 (#10534)

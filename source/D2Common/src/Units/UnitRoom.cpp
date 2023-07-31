@@ -38,7 +38,7 @@ int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int
 
 	UNITROOM_RefreshUnit(pUnit);
 
-	if (pUnit->dwUnitType == UNIT_PLAYER || (pUnit->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pUnit) == 2))
+	if (pUnit->dwUnitType == UNIT_PLAYER || (pUnit->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_GOOD))
 	{
 		DUNGEON_IncreaseAlliedCountOfRoom(pRoom);
 	}
@@ -222,7 +222,7 @@ void __stdcall UNITROOM_RemoveUnitFromRoom(D2UnitStrc* pUnit)
 
 				pRoomUnit->pRoomNext = NULL;
 
-				if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pUnit) == 2)
+				if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_GOOD)
 				{
 					DUNGEON_DecreaseAlliedCountOfRoom(pRoom);
 				}

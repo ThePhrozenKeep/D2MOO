@@ -288,7 +288,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
 
     if (v2->unk0x08)
     {
-        if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) == 1)
+        if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_NEUTRAL)
         {
             return 0;
         }
@@ -584,7 +584,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
     }
 
     D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
-    if (!pTargetUnit || STATLIST_GetUnitAlignment(pTargetUnit) || !sub_6FD15190(pTargetUnit, 19) || SUNIT_IsDead(pTargetUnit) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTargetUnit)) || !sub_6FCBD900(pGame, pUnit, pTargetUnit))
+    if (!pTargetUnit || STATLIST_GetUnitAlignment(pTargetUnit) != UNIT_ALIGNMENT_EVIL || !sub_6FD15190(pTargetUnit, 19) || SUNIT_IsDead(pTargetUnit) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTargetUnit)) || !sub_6FCBD900(pGame, pUnit, pTargetUnit))
     {
         return 0;
     }
@@ -641,7 +641,7 @@ int32_t __fastcall sub_6FD0BDA0(D2UnitStrc* pUnit, void* pArg)
 {
     D2UnkNecSkillStrc3* pParam = (D2UnkNecSkillStrc3*)pArg;
 
-    if (pUnit && !STATLIST_GetUnitAlignment(pUnit) && sub_6FD15190(pUnit, 19) && !SUNIT_IsDead(pUnit) && !DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)) && sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit))
+    if (pUnit && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pUnit, 19) && !SUNIT_IsDead(pUnit) && !DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)) && sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit))
     {
         int32_t nParam = 1;
         if (pParam->nUnitType != UNIT_PLAYER)
@@ -729,7 +729,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 {
     D2UnkNecSkillStrc* pParam = (D2UnkNecSkillStrc*)pArg;
 
-    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) || !sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit) || SUNIT_IsDead(pUnit) || !sub_6FD15190(pUnit, 11))
+    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL || !sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit) || SUNIT_IsDead(pUnit) || !sub_6FD15190(pUnit, 11))
     {
         return 0;
     }
@@ -1936,7 +1936,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
     }
 
     const uint8_t nDrain = pUnit->pMonsterData->pMonstatsTxt->nDrain[pGame->nDifficulty];
-    if (!nDrain || STATLIST_GetUnitAlignment(pUnit))
+    if (!nDrain || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
     {
         return 1;
     }
@@ -2188,7 +2188,7 @@ int32_t __fastcall D2GAME_EventFunc23_6FD0F1F0(D2GameStrc* pGame, int32_t nEvent
         }
     }
 
-    if (STATLIST_GetUnitAlignment(pUnit))
+    if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
     {
         return 0;
     }

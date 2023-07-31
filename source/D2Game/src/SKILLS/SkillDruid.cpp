@@ -1914,7 +1914,7 @@ int32_t __fastcall sub_6FD01910(D2UnitStrc* pUnit, D2UnitStrc* pTarget)
         return 0;
     }
 
-    return STATLIST_GetUnitAlignment(pTarget) != 2;
+    return STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_GOOD;
 }
 
 //D2Game.0x6FD019B0

@@ -787,7 +787,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_SandRaider(D2GameStrc* pGame, D2Un
 {
 	D2SandRaiderAiCallbackArgStrc* pArg = (D2SandRaiderAiCallbackArgStrc*)pCallbackArg;
 
-	if (pUnit == pTarget || !pTarget || pTarget->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pTarget) || MONSTERS_IsDead(pTarget))
+	if (pUnit == pTarget || !pTarget || pTarget->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL || MONSTERS_IsDead(pTarget))
 	{
 		return nullptr;
 	}
@@ -1187,7 +1187,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_FallenShaman(D2GameStrc* pGame, D2
 	}
 
 	if ((nClassId != MONSTER_FALLEN1 && nClassId != MONSTER_FALLENSHAMAN1)
-		|| STATLIST_GetUnitAlignment(pTarget)
+		|| STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL
 		|| !(pTarget->dwFlags & UNITFLAG_TARGETABLE)
 		|| STATES_CheckStateMaskUdeadOnUnit(pTarget)
 		|| pTarget->dwAnimMode != MONMODE_DEAD
@@ -1859,7 +1859,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_GreaterMummy(D2GameStrc* pGame, D2
 {
 	D2GreaterMummyAiCallbackArgStrc* pArg = (D2GreaterMummyAiCallbackArgStrc*)pCallbackArg;
 
-	if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || pUnit == pTarget || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) == 2 || !(pTarget->dwFlags & UNITFLAG_TARGETABLE) || STATES_CheckStateMaskUdeadOnUnit(pTarget))
+	if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || pUnit == pTarget || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_GOOD || !(pTarget->dwFlags & UNITFLAG_TARGETABLE) || STATES_CheckStateMaskUdeadOnUnit(pTarget))
 	{
 		return 0;
 	}
@@ -4256,7 +4256,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_ZakarumPriest(D2GameStrc* pGame, D
 {
 	D2ZakarumPriestAiCallbackArgStrc* pArg = (D2ZakarumPriestAiCallbackArgStrc*)pCallbackArg;
 
-	if (pUnit == pTarget || !pTarget || pTarget->dwUnitType != UNIT_MONSTER || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) == 2 || MONSTERS_IsDead(pTarget))
+	if (pUnit == pTarget || !pTarget || pTarget->dwUnitType != UNIT_MONSTER || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_GOOD || MONSTERS_IsDead(pTarget))
 	{
 		return nullptr;
 	}
@@ -5465,7 +5465,7 @@ void __fastcall AITHINK_Fn068_VileMother(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		}
 	}
 
-	if (pAiTickParam->pAiControl->dwAiParam[0] < AI_GetParamValue(pGame, pAiTickParam, VILEMOTHER_AI_PARAM_MAX_SPAWN) && !STATLIST_GetUnitAlignment(pUnit) && AIRollChanceParam(pGame, pUnit, pAiTickParam, VILEMOTHER_AI_PARAM_SPAWN_CHANCE_PCT))
+	if (pAiTickParam->pAiControl->dwAiParam[0] < AI_GetParamValue(pGame, pAiTickParam, VILEMOTHER_AI_PARAM_MAX_SPAWN) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && AIRollChanceParam(pGame, pUnit, pAiTickParam, VILEMOTHER_AI_PARAM_SPAWN_CHANCE_PCT))
 	{
 		D2VileMotherAiCallbackArgStrc arg = {};
 		arg.nLastInClass = nLastInClass;
@@ -5866,7 +5866,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_Regurgitator(D2GameStrc* pGame, D2
 		return nullptr;
 	}
 
-	if (!MONSTERS_IsDead(pTarget) || STATES_CheckStateMaskUdeadOnUnit(pTarget) || STATLIST_GetUnitAlignment(pTarget))
+	if (!MONSTERS_IsDead(pTarget) || STATES_CheckStateMaskUdeadOnUnit(pTarget) || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL)
 	{
 		return nullptr;
 	}
@@ -6110,7 +6110,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_OblivionKnight(D2GameStrc* pGame, 
 	}
 
 	const int32_t nDistance = AITHINK_GetSquaredDistance(pUnit, pTarget);
-	if (nDistance > pArg->unk0x08 || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget))
+	if (nDistance > pArg->unk0x08 || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL)
 	{
 		return nullptr;
 	}
@@ -6735,7 +6735,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_HighPriest(D2GameStrc* pGame, D2Un
 {
 	D2HighPriestAiCallbackArgStrc* pArg = (D2HighPriestAiCallbackArgStrc*)pCallbackArg;
 
-	if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || MONSTERS_IsDead(pTarget) || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget))
+	if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || MONSTERS_IsDead(pTarget) || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL)
 	{
 		return 0;
 	}
@@ -7321,7 +7321,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_SiegeBeast(D2GameStrc* pGame, D2Un
 		nClassId = pMonStatsTxtRecord->nBaseId;
 	}
 
-	if (nClassId != MONSTER_IMP1 || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) || SUNIT_GetOwner(pGame, pUnit))
+	if (nClassId != MONSTER_IMP1 || !STATLIST_AreUnitsAligned(pUnit, pTarget) || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL || SUNIT_GetOwner(pGame, pUnit))
 	{
 		return 0;
 	}
@@ -7360,7 +7360,7 @@ void __fastcall AITHINK_Fn115_SiegeBeast(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		return;
 	}
 
-	if (!pOwner && !STATLIST_GetUnitAlignment(pUnit))
+	if (!pOwner && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
 	{
 		D2SiegeBeastTowerAiCallbackArgStrc arg = {};
 		arg.nMaxDistance = AI_GetParamValue(pGame, pAiTickParam, SIEGEBEAST_AI_PARAM_CALL_IMP_DISTANCE) * AI_GetParamValue(pGame, pAiTickParam, SIEGEBEAST_AI_PARAM_CALL_IMP_DISTANCE);
@@ -7825,7 +7825,7 @@ void __fastcall AITHINK_Fn120_Overseer(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		if (pAiTickParam->pMonstatsTxt->nSkill[2]
 			&& arg.pDistantTarget
 			&& AIRollChanceParam(pGame, pUnit, pAiTickParam, OVERSEER_AI_PARAM_WHIP_CHANCE_PCT)
-			&& STATLIST_GetUnitAlignment(pUnit) != 2
+			&& STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_GOOD
 			&& AIUTIL_CheckIfMonsterUsesSkill(pUnit, pAiTickParam->pMonstatsTxt->nSkill[2]))
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], arg.pDistantTarget, 0, 0);
@@ -7953,7 +7953,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_MinionSpawner(D2GameStrc* pGame, D
 		nTargetBaseClass = pMonStatsTxtRecord->nBaseId;
 	}
 
-	if ((nTargetBaseClass == MONSTER_MINION1 || nTargetBaseClass == MONSTER_SUICIDEMINION1) && !STATLIST_GetUnitAlignment(pTarget))
+	if ((nTargetBaseClass == MONSTER_MINION1 || nTargetBaseClass == MONSTER_SUICIDEMINION1) && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL)
 	{
 		++pArg->nMinions;
 	}
@@ -8000,7 +8000,7 @@ void __fastcall D2GAME_AI_SpecialState16_6FCE1DC0(D2GameStrc* pGame, D2UnitStrc*
 	D2MonStatsTxt* pImp1TxtRecord = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_IMP1);
 	D2MonStatsTxt* pImp2TxtRecord = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_IMP2);
 
-	if (pAiTickParam->nTargetDistance > 24 || SUNIT_IsDead(pOwner) || STATLIST_GetUnitAlignment(pOwner) || !pAiTickParam->pAiControl->dwAiParam[1])
+	if (pAiTickParam->nTargetDistance > 24 || SUNIT_IsDead(pOwner) || STATLIST_GetUnitAlignment(pOwner) != UNIT_ALIGNMENT_EVIL || !pAiTickParam->pAiControl->dwAiParam[1])
 	{
 		AITACTICS_UseSkillInRange(pUnit, pImp1TxtRecord->wAiParam[1][pGame->nDifficulty], pImp1TxtRecord->nSkill[0], pImp1TxtRecord->nSkillMode[0]);
 
@@ -8078,10 +8078,10 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 	D2MonStatsTxt* pImp3Record = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_IMP3);
 	D2MonStatsTxt* pImp4Record = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_IMP4);
 
-	if (pAiTickParam->pAiControl->dwAiParam[0] != -1 && !STATLIST_GetUnitAlignment(pUnit))
+	if (pAiTickParam->pAiControl->dwAiParam[0] != -1 && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
 	{
 		D2UnitStrc* pTarget = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pAiTickParam->pAiControl->dwAiParam[0]);
-		if (!pTarget || SUNIT_IsDead(pTarget) || SUNIT_GetOwner(pGame, pTarget) || STATLIST_GetUnitAlignment(pTarget))
+		if (!pTarget || SUNIT_IsDead(pTarget) || SUNIT_GetOwner(pGame, pTarget) || STATLIST_GetUnitAlignment(pTarget) != UNIT_ALIGNMENT_EVIL)
 		{
 			AIGENERAL_GetAiControlFromUnit(pUnit)->dwAiParam[0] = -1;
 		}

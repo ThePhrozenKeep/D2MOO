@@ -193,7 +193,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     }
 
     int32_t nMultiplier = 0;
-    if (!STATLIST_GetUnitAlignment(pUnit))
+    if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
     {
         const int32_t nPlayerCount = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_MONSTER_PLAYERCOUNT, 0), 1);
 
@@ -993,7 +993,7 @@ void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
             pCoord.nX = CLIENTS_GetUnitX(pMonster);
             pCoord.nY = CLIENTS_GetUnitY(pMonster);
             D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), 0x3C01u, 0);
-            if (!STATLIST_GetUnitAlignment(pUnit) && pRoom && AITACTICS_UseSkill(pGame, pMonster, pMonStatsTxtRecord->nSkillMode[0], pMonStatsTxtRecord->nSkill[0], 0, pCoord.nX, pCoord.nY))
+            if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pRoom && AITACTICS_UseSkill(pGame, pMonster, pMonStatsTxtRecord->nSkillMode[0], pMonStatsTxtRecord->nSkill[0], 0, pCoord.nX, pCoord.nY))
             {
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, 2, 0);
             }

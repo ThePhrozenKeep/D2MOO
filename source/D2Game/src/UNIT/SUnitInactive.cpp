@@ -169,15 +169,15 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 						pUnit = sub_6FC6FDC0(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nMonUMods);
 					}
 
-					int32_t nOldAlign = 0;
-					if (pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_ALIGNMENT2)
+					int32_t nOldAlign = UNIT_ALIGNMENT_EVIL;
+					if (pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_ALIGNMENT_GOOD)
 					{
-						nOldAlign = 2;
+						nOldAlign = UNIT_ALIGNMENT_GOOD;
 					}
 
-					if (pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_ALIGNMENT1)
+					if (pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_ALIGNMENT_NEUTRAL)
 					{
-						nOldAlign = 1;
+						nOldAlign = UNIT_ALIGNMENT_NEUTRAL;
 					}
 
 					if (pUnit)
@@ -605,7 +605,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 				bCompress = 0;
 			}
 
-			if (STATLIST_GetUnitAlignment(pUnit) == 2)
+			if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_GOOD)
 			{
 				bCompress = 0;
 			}
@@ -827,17 +827,17 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		}
 
 		const int32_t nAlignment = STATLIST_GetUnitAlignment(pUnit);
-		if (nAlignment == 1)
+		if (nAlignment == UNIT_ALIGNMENT_NEUTRAL)
 		{
-			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT1;
+			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT_NEUTRAL;
 		}
-		else if (nAlignment == 2)
+		else if (nAlignment == UNIT_ALIGNMENT_GOOD)
 		{
-			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT2;
+			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT_GOOD;
 		}
-		else if (nAlignment == 0)
+		else if (nAlignment == UNIT_ALIGNMENT_EVIL)
 		{
-			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT0;
+			pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_ALIGNMENT_EVIL;
 		}
 
 		if (pUnit->dwNodeIndex < 8)

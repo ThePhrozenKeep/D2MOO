@@ -50,7 +50,7 @@ void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
         if (pMonster && pMonster->dwUnitType == UNIT_MONSTER)
         {
             int32_t bAllied = 0;
-            if (STATLIST_GetUnitAlignment(pMonster) == 0)
+            if (STATLIST_GetUnitAlignment(pMonster) == UNIT_ALIGNMENT_EVIL)
             {
                 bAllied = 1;
             }

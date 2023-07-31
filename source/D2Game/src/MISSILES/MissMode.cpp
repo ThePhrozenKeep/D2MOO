@@ -118,7 +118,7 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithAlignUnit(D2UnitStrc*
         return 0;
     }
 
-    if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && (pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != 2)))
+    if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && (pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_GOOD)))
     {
         return 0;
     }

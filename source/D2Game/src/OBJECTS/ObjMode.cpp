@@ -1980,7 +1980,7 @@ void __fastcall D2GAME_SHRINES_Monster_6FC76ED0(D2ObjOperateFnStrc* pOp, D2Shrin
 //D2Game.0x6FC76F60
 int32_t __fastcall sub_6FC76F60(D2UnitStrc* pMonster, D2UnitStrc* pUnit1)
 {
-    if (pMonster != pUnit1 && pMonster && pMonster->dwUnitType == UNIT_MONSTER && STATLIST_AreUnitsAligned(pUnit1, pMonster) != 1 && !STATLIST_GetUnitAlignment(pMonster) && !MONSTERS_IsDead(pMonster))
+    if (pMonster != pUnit1 && pMonster && pMonster->dwUnitType == UNIT_MONSTER && STATLIST_AreUnitsAligned(pUnit1, pMonster) != 1 && STATLIST_GetUnitAlignment(pMonster) == UNIT_ALIGNMENT_EVIL && !MONSTERS_IsDead(pMonster))
     {
         const int32_t nAnimMode = pMonster->dwAnimMode;
         if ((nAnimMode == MONMODE_NEUTRAL || nAnimMode == MONMODE_WALK))

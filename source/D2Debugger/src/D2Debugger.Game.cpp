@@ -6,6 +6,7 @@
 #include <D2Unicode.h>
 #include <D2Dll.h>
 #include <D2DataTbls.h>
+#include <D2StatList.h>
 
 #include "IconsFontAwesome6.h"
 
@@ -153,6 +154,20 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::EndDisabled();
 }
 
+const char* GetAlignmentString(D2C_UnitAlignment nAlignment)
+{
+    switch (nAlignment)
+    {
+    case UNIT_ALIGNMENT_EVIL: return "Evil";
+    case UNIT_ALIGNMENT_NEUTRAL: return "Neutral";
+    case UNIT_ALIGNMENT_GOOD: return "Good";
+    case UNIT_NUM_ALIGNMENT: 
+    case UNIT_ALIGNMENT_UNASSIGNED:
+    default:
+        return "Invalid alignment";
+    }
+}
+
 void D2DebugUnitCommon(D2UnitStrc* pUnit)
 {
 
@@ -162,6 +177,10 @@ void D2DebugUnitCommon(D2UnitStrc* pUnit)
     D2CoordStrc tCoords;
     UNITS_GetCoords(pUnit, &tCoords);
     ImGui::SameLine(); ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);
+    if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)
+    {
+        ImGui::SameLine(); ImGui::Text("| %s", GetAlignmentString((D2C_UnitAlignment)STATLIST_GetUnitAlignment(pUnit)));
+    }
     ImGui::SeparatorText("Animation");
     D2DebugUnitAnim(pUnit);
 }

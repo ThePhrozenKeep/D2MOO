@@ -260,7 +260,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 	pDamage->dwHitFlags |= DAMAGEHITFLAG_32;
 
-	if ((pAttacker->dwUnitType == UNIT_PLAYER || STATLIST_GetUnitAlignment(pAttacker) == 2) && pDefender->dwUnitType == UNIT_MONSTER)
+	if ((pAttacker->dwUnitType == UNIT_PLAYER || STATLIST_GetUnitAlignment(pAttacker) == UNIT_ALIGNMENT_GOOD) && pDefender->dwUnitType == UNIT_MONSTER)
 	{
 		const int32_t nDamageTargetAc = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_DAMAGETARGETAC, 0);
 		if (nDamageTargetAc)
