@@ -667,14 +667,14 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
             return PLRSAVE2ERROR_DEADHARDCORE;
         }
 
-        if (!(ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE))
+        if (!(ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE))
         {
             return PLRSAVE2ERROR_HARDCOREJOINSOFTCORE;
         }
     }
     else
     {
-        if (ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE)
+        if (ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE)
         {
             return PLRSAVE2ERROR_SOFTCOREJOINHARDCORE;
         }

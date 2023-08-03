@@ -17,29 +17,18 @@ enum D2ArenaScoreTypes
     NUM_ARENA_SCORES,
 };
 
-enum D2ArenaFlags
-{
-    ARENAFLAG_ARENAMODE     = 0x00000002,
-    ARENAFLAG_UPDATECLIENTS = 0x00000004,
-    ARENAFLAG_TEMPLATE      = 0x00000020,
-    ARENAFLAG_UPDATE        = 0x00000400,
-    ARENAFLAG_HARDCORE      = 0x00000800,
-    ARENAFLAG_ACTIVE        = 0x00010000,
-    ARENAFLAG_ALLOWPARTY    = 0x00100000
-};
-
 struct D2ArenaStrc
 {
     int32_t nAlternateStartTown;				//0x00
     int32_t nType;								//0x04
-    uint32_t fFlags;							//0x08 D2ArenaFlags
+    uint32_t fFlags;							//0x08 D2GameFlags
     int32_t nTemplate;							//0x0C - uint8_t with 3 pad
 };
 
 struct D2ArenaUnitStrc
 {
     int32_t nScore;								//0x00
-    BOOL bUpdateScore;						//0x04 
+    BOOL bUpdateScore;						    //0x04 
 };
 
 #pragma pack()

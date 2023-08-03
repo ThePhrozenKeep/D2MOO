@@ -26,7 +26,7 @@ void __fastcall ARENA_AllocArena(D2GameStrc* pGame, int32_t nUnused, uint32_t nF
     D2ArenaStrc* pArena = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2ArenaStrc);
 
     pGame->pArenaCtrl = pArena;
-    pArena->fFlags = nFlags & (0x200000 | ARENAFLAG_ALLOWPARTY | ARENAFLAG_ACTIVE | 0x4000 | 0x2000 | 0x1000 | ARENAFLAG_HARDCORE | 0x100 | 0x80 | 0x40 | ARENAFLAG_UPDATECLIENTS | ARENAFLAG_ARENAMODE | 0x01);
+    pArena->fFlags = nFlags & (GAMEFLAG_ARENA_LADDER | GAMEFLAG_ARENA_EXPANSION | GAMEFLAG_ARENA_ACTIVE | 0x4000 | 0x2000 | 0x1000 | GAMEFLAG_ARENA_HARDCORE | 0x100 | 0x80 | 0x40 | GAMEFLAG_ARENA_UPDATECLIENTS | GAMEFLAG_ARENA_MODE | 0x01);
     pArena->nTemplate = nTemplate;
 }
 
@@ -158,7 +158,7 @@ void __fastcall ARENA_UpdateScore(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2Un
 
     pArenaUnit->bUpdateScore = 1;
 
-    pArena->fFlags |= ARENAFLAG_UPDATE;
+    pArena->fFlags |= GAMEFLAG_ARENA_UPDATE;
     UNITROOM_RefreshUnit(pDefender);
 }
 
@@ -166,7 +166,7 @@ void __fastcall ARENA_UpdateScore(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2Un
 void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     D2ArenaStrc* pArena = pGame->pArenaCtrl;
-    if (!pArena || !(pArena->fFlags & ARENAFLAG_UPDATE))
+    if (!pArena || !(pArena->fFlags & GAMEFLAG_ARENA_UPDATE))
     {
         return;
     }
@@ -234,7 +234,7 @@ uint32_t __fastcall ARENA_NeedsClientUpdate(D2GameStrc* pGame)
     D2ArenaStrc* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
-    return pArena->fFlags & ARENAFLAG_UPDATECLIENTS;
+    return pArena->fFlags & GAMEFLAG_ARENA_UPDATECLIENTS;
 }
 
 //D2Game.0x6FC316D0
@@ -243,7 +243,7 @@ uint32_t __fastcall ARENA_IsInArenaMode(D2GameStrc* pGame)
     D2ArenaStrc* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
-    return pArena->fFlags & ARENAFLAG_ARENAMODE;
+    return pArena->fFlags & GAMEFLAG_ARENA_MODE;
 }
 
 //D2Game.0x6FC31710
@@ -252,7 +252,7 @@ uint32_t __fastcall ARENA_IsActive(D2GameStrc* pGame)
     D2ArenaStrc* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
-    return pArena->fFlags & ARENAFLAG_ACTIVE;
+    return pArena->fFlags & GAMEFLAG_ARENA_ACTIVE;
 }
 
 //D2Game.0x6FC31750

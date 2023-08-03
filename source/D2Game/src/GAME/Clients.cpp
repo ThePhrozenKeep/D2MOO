@@ -379,7 +379,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
             return SYSERROR_DEADHARDCORE;
         }
 
-        if (!(ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE))
+        if (!(ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE))
         {
             //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_HARDCOREJOINSOFTCORE", pClient->szName);
             pClient->pPlayer = nullptr;
@@ -388,7 +388,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     }
     else
     {
-        if (ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE)
+        if (ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE)
         {
             //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_SOFTCOREJOINHARDCORE", pClient->szName);
             pClient->pPlayer = nullptr;
