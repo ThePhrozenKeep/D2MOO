@@ -851,7 +851,7 @@ int32_t __fastcall sub_6FC83340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStr
         packet5A.nHeader = 0x5Au;
         packet5A.nColor = 1;
         packet5A.dwParam = 0;
-        packet5A.nType = 14;
+        packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
     }
 
@@ -1713,7 +1713,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
             D2GSPacketSrv5A packet5A = {};
 
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 13;
+            packet5A.nType = EVENTTYPE_NOTLISTENINGTOYOU;
             packet5A.nColor = 0;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
@@ -1727,7 +1727,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
             D2GSPacketSrv5A packet5A = {};
 
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 4;
+            packet5A.nType = EVENTTYPE_NOTINGAME;
             packet5A.nColor = 0;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
@@ -1966,7 +1966,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x19_RemoveItemFromBuffer_6FC850C0(D
                 packet5A.nHeader = 0x5A;
                 packet5A.nColor = 1;
                 packet5A.dwParam = 0;
-                packet5A.nType = 14;
+                packet5A.nType = EVENTTYPE_CANTDOTHAT;
                 D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
                 return 2;
             }
@@ -3131,7 +3131,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x41_Resurrect_6FC87480(D2GameStrc* 
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         if (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
         {
-            GAME_DisconnectClient(pGame, pClient, 3);
+            GAME_DisconnectClient(pGame, pClient, EVENTTYPE_PLAYERLEFT);
             return 0;
         }
 
@@ -4125,7 +4125,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
         packet5A.nHeader = 0x5Au;
         packet5A.nColor = 1;
         packet5A.dwParam = 0;
-        packet5A.nType = 14;
+        packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
         return 2;
     }
@@ -4366,7 +4366,7 @@ void __fastcall D2GAME_PLRMSG_Last_6FC89450(D2GameStrc* pGame, D2UnitStrc* pAtta
 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
-    packet5A.nType = 6;
+    packet5A.nType = EVENTTYPE_SLAIN;
     packet5A.nColor = 4;
 
     if (pPlayer)

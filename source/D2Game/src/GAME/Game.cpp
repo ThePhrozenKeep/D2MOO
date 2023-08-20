@@ -1374,7 +1374,7 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37690
-void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t a3)
+void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, D2C_SRV2CLT5A_TYPES nEventType)
 {
     if (!pClient)
     {
@@ -1385,7 +1385,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
-    packet5A.nType = a3;
+    packet5A.nType = nEventType;
     packet5A.nColor = 4;
     packet5A.dwParam = 0;
     CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
@@ -1400,7 +1400,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 }
 
 //D2Game.0x6FC37750
-void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2)
+void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES nEventType)
 {
     if (!nClientId)
     {
@@ -1447,14 +1447,14 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2)
         return;
     }
 
-    GAME_DisconnectClient(pGame, CLIENTS_GetClientFromClientId(pGame, nClientId), a2);
+    GAME_DisconnectClient(pGame, CLIENTS_GetClientFromClientId(pGame, nClientId), nEventType);
     
     D2_ASSERT(pGame->lpCriticalSection);
     LeaveCriticalSection(pGame->lpCriticalSection);
 }
 
 //D2Game.0x6FC37880
-int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, char a3)
+int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
 {
     const int32_t nClientId = sub_6FC33F20(szClientName);
     if (!nClientId)
@@ -1462,7 +1462,7 @@ int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, char a3)
         return 0;
     }
 
-    GAME_DisconnectClientById(nClientId, a3);
+    GAME_DisconnectClientById(nClientId, nEventType);
     return 1;
 }
 
@@ -1507,7 +1507,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nType = 0;
+        packet5A.nType = EVENTTYPE_DROPTIMEOUT;
         packet5A.nColor = 4;
         packet5A.dwParam = 0;
         packet5A.szText[16] = 0;
@@ -1616,7 +1616,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
     if (pClient->unk0x1C4 >= 3)
     {
         CLIENTS_FreeSaveHeader(pClient);
-        GAME_DisconnectClient(pGame, pClient, 0);
+        GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
     }
 }
 
@@ -1704,7 +1704,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 
             D2GSPacketSrv5A packet5A = {};
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 3;
+            packet5A.nType = EVENTTYPE_PLAYERLEFT;
             packet5A.nColor = 4;
             packet5A.dwParam = 0;
             CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
@@ -2154,7 +2154,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
                 bPlayerDisconnected = 1;
                 GAME_LogMessage(6, "[DISCONNECT]  PLAYER:%s  REASON:Heartbeat Timeout", CLIENTS_GetName(pClient));
-                GAME_DisconnectClient(pGame, pClient, 0);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
             }
             pClient = pNext;
         }
@@ -2253,7 +2253,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
-                packet5A.nType = 2;
+                packet5A.nType = EVENTTYPE_PLAYERJOIN;
                 packet5A.nColor = 4;
                 packet5A.dwParam = 0;
                 packet5A.szText[16] = '\0';
@@ -2476,7 +2476,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
             if (pClient->unk0x1C4 >= 3)
             {
-                GAME_DisconnectClient(pGame, pClient, 0);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
                 return;
             }
         }
@@ -3648,7 +3648,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
             {
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5Au;
-                packet5A.nType = 15;
+                packet5A.nType = EVENTTYPE_REALMGOINGDOWN;
                 packet5A.nColor = 4;
                 packet5A.dwParam = nPacketParam;
                 packet5A.szText[16] = 0;
