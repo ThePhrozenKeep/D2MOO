@@ -3,6 +3,7 @@
 enum D2HarcodedConstants
 {
 	HARDCODEDCST_MAX_LEVEL = 99, // Should be using DATATBLS_GetMaxLevel instead
+	DEFAULT_FRAMES_PER_SECOND = 25
 };
 
 enum D2GameTypeMode

@@ -60,15 +60,15 @@ int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
 int32_t dword_6FD45820;
 int32_t dword_6FD4581C;
-int32_t dword_6FD2CA60;
-int32_t dword_6FD457F8;
+int32_t gnTargetFrameRate_6FD2CA60 = DEFAULT_FRAMES_PER_SECOND;
+int32_t gnTargetMsPerFrame_6FD457F8;
 int32_t gnFrameRate_6FD2CA14;
 int32_t gnPeakMemoryUsageInLast10s_6FD45828;
 DWORD dword_6FD4582C;
 uint32_t gnPreviousMemUsageUpdateTickCount_6FD45840;
 uint32_t dword_6FD45844;
 uint32_t dword_6FD45848;
-int32_t dword_6FD2CA10;
+int32_t dword_6FD2CA10 = 1;
 char byte_6FD447EC[8];
 
 int32_t gnGamesGUIDs_6FD447F8[1024];
@@ -544,7 +544,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     }
 
     D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*) v22);
-    pGame->unk0x1DB8[1] = GetTickCount();
+    pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nServerToken;
 
     return 1;
@@ -2305,7 +2305,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 //D2Game.0x6FC38E00
 void __fastcall sub_6FC38E00()
 {
-    dword_6FD457F8 = 1000 / dword_6FD2CA60;
+    gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
 //D2Game.0x6FC38E20 (#10004)
@@ -2315,24 +2315,24 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
     LARGE_INTEGER start = {};
     QueryPerformanceCounter(&start);
 
-    const uint32_t time = timeGetTime() & 0x7FFFFFFF;
+    const uint32_t nSysTimeMs = timeGetTime() & 0x7FFFFFFF;
     if (!dword_6FD45844)
     {
-        dword_6FD45844 = time;
+        dword_6FD45844 = nSysTimeMs;
     }
 
-    if (time - dword_6FD45844 < dword_6FD457F8)
+    if (nSysTimeMs - dword_6FD45844 < gnTargetMsPerFrame_6FD457F8)
     {
         return 0;
     }
 
-    int32_t v5 = time - dword_6FD45844 - dword_6FD457F8;
-    if (a1 && v5 >= dword_6FD457F8)
+    int32_t v5 = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
+    if (a1 && v5 >= gnTargetMsPerFrame_6FD457F8)
     {
-        v5 = dword_6FD457F8;
+        v5 = gnTargetMsPerFrame_6FD457F8;
     }
 
-    dword_6FD45844 = time - v5;
+    dword_6FD45844 = nSysTimeMs - v5;
     
     int32_t bQueryPerformance = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
@@ -2358,16 +2358,17 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 
                 if (dword_6FD2CA10)
                 {
-                    pGame->unk0x1DB8[1] = 1024;
+                    pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = 1024;
                 }
                 else
                 {
-                    if (pGame->unk0x1DB8[0])
+                    if (pGame->nLastUpdateSystemTimeMs)
                     {
-                        pGame->unk0x1DB8[1] = D2Clamp(((time - pGame->unk0x1DB8[0]) << 10) / dword_6FD457F8, 10u, 2048u);
+                        const uint32_t nTimeSinceLastUpdateMs = nSysTimeMs - pGame->nLastUpdateSystemTimeMs;
+                        pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = D2Clamp((nTimeSinceLastUpdateMs << 10) / gnTargetMsPerFrame_6FD457F8, 10u, 2048u);
                     }
 
-                    pGame->unk0x1DB8[0] = time;
+                    pGame->nLastUpdateSystemTimeMs = nSysTimeMs;
                 }
 
                 GAME_UpdateProgress(pGame);
@@ -2547,18 +2548,23 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 
                 if (pGame->nClients)
                 {
-                    pGame->unk0x1DB8[2] = 0;
+                    pGame->nTickCountSinceNoClients = 0;
                     D2_ASSERT(pGame->lpCriticalSection);
                     LeaveCriticalSection(pGame->lpCriticalSection);
                 }
                 else
                 {
-                    if (!pGame->unk0x1DB8[2])
+                    if (!pGame->nTickCountSinceNoClients)
                     {
-                        pGame->unk0x1DB8[2] = nTickCount;
+                        pGame->nTickCountSinceNoClients = nTickCount;
                     }
 
-                    if (nTickCount - pGame->unk0x1DB8[2] > 300000 || pGame->dwGameFrame > 1500 && pGame->dwGameFrame < 7500)
+                    const uint32_t nTicksToWaitBeforePurgingEmptyGame = 5 * 60 * 1000; // 5 minutes
+                    if (
+                        // No clients for more than 5 minutes.
+                        (nTickCount - pGame->nTickCountSinceNoClients) > nTicksToWaitBeforePurgingEmptyGame
+                        // No clients during the first 1-5 minutes, close game immediately (creator failed to join)
+                        || pGame->dwGameFrame > (60 * DEFAULT_FRAMES_PER_SECOND) && pGame->dwGameFrame < (5 * 60 * DEFAULT_FRAMES_PER_SECOND) )
                     {
                         GAME_LogMessage(6, "[SERVER]  Deleting game from SrvSendAllMsgs()");
 
@@ -2975,7 +2981,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 
                 LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
-                const int32_t nSecondsPassed = pGame->dwGameFrame / 25;
+                const int32_t nSecondsPassed = pGame->dwGameFrame / DEFAULT_FRAMES_PER_SECOND;
 
                 D2_ASSERT(pGame->lpCriticalSection);
                 LeaveCriticalSection(pGame->lpCriticalSection);
@@ -3144,7 +3150,8 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
 
     SStrCopy(pGameInfo->szGameName, pGame->szGameName, 16u);
 
-    pGameInfo->nTime = (GetTickCount() - pGame->unk0x1DB8[1]) / 1000 / 60;
+    // Should have been the uptime of the game, but this actually now always returns the uptime of the machine. (nCreationTimeMs_Or_CPUTargetRatioFP10 always 1024)
+    pGameInfo->nTime = (GetTickCount() - pGame->nCreationTimeMs_Or_CPUTargetRatioFP10) / 1000 / 60;
     pGameInfo->nFrames = pGame->dwGameFrame / 100;
     pGameInfo->nFrameRate = pGame->nFrameRate;
     pGameInfo->nArenaTemplate = pGame->nArenaTemplate;
@@ -3782,8 +3789,8 @@ void __fastcall GAME_LeaveGlobalGamesCriticalSection()
 //D2Game.0x6FC3B280
 void __stdcall D2Game_10008(int32_t a1)
 {
-    dword_6FD2CA60 = a1;
-    dword_6FD457F8 = 1000 / a1;
+    gnTargetFrameRate_6FD2CA60 = a1;
+    gnTargetMsPerFrame_6FD457F8 = 1000 / a1;
 }
 
 //D2Game.0x6FC3B2A0 (#10009)

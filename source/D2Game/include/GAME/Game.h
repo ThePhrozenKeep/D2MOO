@@ -119,7 +119,7 @@ struct D2GameInfoStrc {
 	int32_t nPathAStarPct;							// 0x50
 	int32_t nPathTotalCalls;						// 0x54
 	int32_t nFrames;								// 0x58 Frames / 100
-	int32_t nTime;									// 0x5C Time (minutes)
+	int32_t nTime;									// 0x5C Time (minutes) since game creation (bugged, actually returns machine uptime)
     int32_t nFrameRate;								// 0x60
 	char szGameName[16];							// 0x64
 	char szGamePassword[16];						// 0x74
@@ -192,8 +192,9 @@ struct D2GameStrc
 	uint8_t nBossFlagList[64];						//0x1D30
 	uint32_t dwMonModeData[17];						//0x1D70
 	uint32_t nMonModeData;							//0x1DB4
-	uint32_t unk0x1DB8[2];							//0x1DB8
-	uint32_t nTickRelated;							//0x1DC0
+	uint32_t nLastUpdateSystemTimeMs;				//0x1DB8
+	uint32_t nCreationTimeMs_Or_CPUTargetRatioFP10;	//0x1DBC Used to be the creation time, but now represents ratio of the budget used for last frame, in FP10 represenation (x/1024)
+	uint32_t nTickCountSinceNoClients;				//0x1DC0
 	uint32_t nSyncTimer;							//0x1DC4
 
 	uint32_t unk0x1DC8;								//0x1DC8
