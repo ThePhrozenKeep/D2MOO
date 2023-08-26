@@ -100,19 +100,20 @@ struct D2GameManagerStrc
 	CRITICAL_SECTION pLock;
 };
 
-struct D2GameInfoStrc {
-    int32_t nServerToken;							// 0x00 nGameId
-    uint32_t nInitSeed;								// 0x04
-    int32_t nClients;								// 0x08
-    int32_t nPlayers;								// 0x0C
-    int32_t nMonsters;								// 0x10
+struct D2GameInfoStrc
+{
+	int32_t nServerToken;							// 0x00 nGameId
+	uint32_t nInitSeed;								// 0x04
+	int32_t nClients;								// 0x08
+	int32_t nPlayers;								// 0x0C
+	int32_t nMonsters;								// 0x10
 	int32_t nObjects;								// 0x14
 	int32_t nItems;									// 0x18
 	int32_t nMissiles;								// 0x1C
-    int32_t nUniqueItems;							// 0x20
+	int32_t nUniqueItems;							// 0x20
 	int32_t nNPCs;									// 0x24
 	uint32_t dwLastUsedUnitGUID[UNIT_TYPES_COUNT];	// 0x3C Tile = Warp
-    int32_t nPathTowardPct;							// 0x40
+	int32_t nPathTowardPct;							// 0x40
 	int32_t nPathClockPct;							// 0x44
 	int32_t nPathCounterPct;						// 0x48
 	int32_t nPathFoWallPct;							// 0x4C
@@ -120,7 +121,7 @@ struct D2GameInfoStrc {
 	int32_t nPathTotalCalls;						// 0x54
 	int32_t nFrames;								// 0x58 Frames / 100
 	int32_t nTime;									// 0x5C Time (minutes) since game creation (bugged, actually returns machine uptime)
-    int32_t nFrameRate;								// 0x60
+	int32_t nFrameRate;								// 0x60
 	char szGameName[16];							// 0x64
 	char szGamePassword[16];						// 0x74
 	char szGameDescription[32];						// 0x84 Before 1.10f (unsure what version), struct used to have desc of 24 chars, and end here.
@@ -128,8 +129,8 @@ struct D2GameInfoStrc {
 	uint8_t unk0xA5;								// 0xA5
 	uint8_t unk0xA6;								// 0xA6
 	uint8_t unk0xA7;								// 0xA7
-    uint32_t nArenaFlags;							// 0xA8
-    void* pMemoryPool;								// 0xAC
+	uint32_t nArenaFlags;							// 0xA8
+	void* pMemoryPool;								// 0xAC
 };
 
 struct D2TargetNodeStrc
