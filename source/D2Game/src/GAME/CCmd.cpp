@@ -195,7 +195,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     {
         if (sub_6FC38100(nClientId))
         {
-            GAME_DisconnectClientById(nClientId, EVENTTYPE_DROPTIMEOUT);
+            GAME_DisconnectClientById(nClientId, EVENTTYPE_DISCONNECT);
         }
         else
         {

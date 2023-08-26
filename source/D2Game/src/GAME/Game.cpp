@@ -1507,7 +1507,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nType = EVENTTYPE_DROPTIMEOUT;
+        packet5A.nType = EVENTTYPE_DISCONNECT;
         packet5A.nColor = 4;
         packet5A.dwParam = 0;
         packet5A.szText[16] = 0;
@@ -1616,7 +1616,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
     if (pClient->unk0x1C4 >= 3)
     {
         CLIENTS_FreeSaveHeader(pClient);
-        GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
+        GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
     }
 }
 
@@ -2154,7 +2154,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
                 bPlayerDisconnected = 1;
                 GAME_LogMessage(6, "[DISCONNECT]  PLAYER:%s  REASON:Heartbeat Timeout", CLIENTS_GetName(pClient));
-                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
             }
             pClient = pNext;
         }
@@ -2476,7 +2476,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
             if (pClient->unk0x1C4 >= 3)
             {
-                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DROPTIMEOUT);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
                 return;
             }
         }

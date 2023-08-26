@@ -4366,7 +4366,7 @@ void __fastcall D2GAME_PLRMSG_Last_6FC89450(D2GameStrc* pGame, D2UnitStrc* pAtta
 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
-    packet5A.nType = EVENTTYPE_SLAIN;
+    packet5A.nType = EVENTTYPE_SLAIN_BY;
     packet5A.nColor = 4;
 
     if (pPlayer)
