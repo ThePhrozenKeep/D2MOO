@@ -2230,7 +2230,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
             if (D2Common_10073(pClient->pRoom) && CLIENTS_GetPlayerFromClient(pClient, 0))
             {
                 D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 4u);
-                CLIENTS_SetClientState(pClient, 4u);
+                CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)

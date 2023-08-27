@@ -1232,7 +1232,7 @@ void __fastcall CLIENTS_UpdateCharacterProgression(D2ClientStrc* pClient, uint16
 }
 
 //D2Game.0x6FC33AC0
-void __fastcall CLIENTS_SetClientState(D2ClientStrc* pClient, uint32_t nClientState)
+void __fastcall CLIENTS_SetClientState(D2ClientStrc* pClient, D2ClientState nClientState)
 {
     D2_ASSERT(pClient);
 
@@ -1307,7 +1307,7 @@ uint32_t __fastcall sub_6FC33C10(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC33C50
-BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, int32_t nExpectedClientState)
+BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, D2ClientState nExpectedClientState)
 {
     if (gbClientListInitialized_6FD447E8)
     {

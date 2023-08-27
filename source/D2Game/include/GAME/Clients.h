@@ -37,7 +37,7 @@ enum D2SystemError
 	SYSERROR_NOTLADDERGAME = 26,
 };
 
-enum D2ClientState
+enum D2ClientState : uint32_t
 {
 	CLIENTSTATE_JUST_CREATED = 0,
 	CLIENTSTATE_GAME_INIT_SENT = 1,
@@ -162,7 +162,7 @@ struct D2GuildInformationStrc
 struct D2ClientStrc
 {
 	uint32_t dwClientId;						//0x00
-	uint32_t dwClientState;						//0x04 D2ClientState
+	D2ClientState dwClientState;				//0x04
 	uint8_t nClassId;							//0x08
 	uint8_t unk0x09;							//0x09
 	uint16_t nSaveFlags;						//0x0A D2ClientSaveFlags
@@ -297,7 +297,7 @@ int32_t __fastcall CLIENTS_CheckFlag(D2ClientStrc* pClient, uint16_t nFlag);
 //D2Game.0x6FC33A70
 void __fastcall CLIENTS_UpdateCharacterProgression(D2ClientStrc* pClient, uint16_t nAct, uint16_t nDifficulty);
 //D2Game.0x6FC33AC0
-void __fastcall CLIENTS_SetClientState(D2ClientStrc* pClient, uint32_t nClientState);
+void __fastcall CLIENTS_SetClientState(D2ClientStrc* pClient, D2ClientState nClientState);
 //D2Game.0x6FC33AF0
 void __fastcall CLIENTS_SetIronGolemItemGUID(D2ClientStrc* pClient, int32_t nIronGolemItemGUID);
 //D2Game.0x6FC33B20
@@ -313,7 +313,7 @@ char* __fastcall CLIENTS_GetName(D2ClientStrc* pClient);
 //D2Game.0x6FC33C10
 uint32_t __fastcall sub_6FC33C10(D2ClientStrc* pClient);
 //D2Game.0x6FC33C50
-BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, int32_t nExpectedClientState);
+BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, D2ClientState nExpectedClientState);
 //D2Game.0x6FC33CD0
 void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0);
 //D2Game.0x6FC33EA0
