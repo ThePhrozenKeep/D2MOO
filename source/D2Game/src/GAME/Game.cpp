@@ -1749,7 +1749,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     D2ClientStrc* pCheckedClient = nullptr;
-    GAME_SendPacketToAllConnectedClients(pGame, sub_6FC380D0, &pCheckedClient);
+    GAME_ForEachIngameClient(pGame, sub_6FC380D0, &pCheckedClient);
 
     if (pCheckedClient)
     {
@@ -1764,7 +1764,7 @@ void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
     }
 
     pCheckedClient = nullptr;
-    GAME_SendPacketToAllConnectedClients(pGame, sub_6FC380D0, &pCheckedClient);
+    GAME_ForEachIngameClient(pGame, sub_6FC380D0, &pCheckedClient);
 
     if (pCheckedClient)
     {
@@ -3716,7 +3716,7 @@ void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
 }
 
 //D2Game.0x6FC3B0E0
-void __fastcall GAME_SendPacketToAllConnectedClients(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pPacket)
+void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pContext)
 {
     D2_ASSERT(pGame);
 
@@ -3730,7 +3730,7 @@ void __fastcall GAME_SendPacketToAllConnectedClients(D2GameStrc* pGame, void(__f
     {
         if (pClient->dwClientState == CLIENTSTATE_INGAME)
         {
-            pFn(pClient, pPacket);
+            pFn(pClient, pContext);
         }
     }
 }
