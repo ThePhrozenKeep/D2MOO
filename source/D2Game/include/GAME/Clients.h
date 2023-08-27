@@ -37,6 +37,16 @@ enum D2SystemError
 	SYSERROR_NOTLADDERGAME = 26,
 };
 
+enum D2ClientState
+{
+	CLIENTSTATE_JUST_CREATED = 0,
+	CLIENTSTATE_GAME_INIT_SENT = 1,
+	CLIENTSTATE_ACT_INIT_SENT = 2,
+	CLIENTSTATE_PLAYER_SPAWNED = 3,
+	CLIENTSTATE_INGAME = 4,
+	CLIENTSTATE_CHANGING_ACT = 5,
+};
+
 // Character information flags
 enum D2ClientSaveFlags
 {
@@ -152,7 +162,7 @@ struct D2GuildInformationStrc
 struct D2ClientStrc
 {
 	uint32_t dwClientId;						//0x00
-	uint32_t dwClientState;						//0x04
+	uint32_t dwClientState;						//0x04 D2ClientState
 	uint8_t nClassId;							//0x08
 	uint8_t unk0x09;							//0x09
 	uint16_t nSaveFlags;						//0x0A D2ClientSaveFlags
@@ -303,7 +313,7 @@ char* __fastcall CLIENTS_GetName(D2ClientStrc* pClient);
 //D2Game.0x6FC33C10
 uint32_t __fastcall sub_6FC33C10(D2ClientStrc* pClient);
 //D2Game.0x6FC33C50
-int32_t __fastcall CLIENTS_Verify(int32_t nClientId, int32_t dwFlags);
+BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, int32_t nExpectedClientState);
 //D2Game.0x6FC33CD0
 void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0);
 //D2Game.0x6FC33EA0

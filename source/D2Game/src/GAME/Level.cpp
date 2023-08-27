@@ -244,7 +244,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
 
     LEVEL_LoadAct(pGame, nNewAct);
 
-    CLIENTS_SetClientState(pClient, 5u);
+    CLIENTS_SetClientState(pClient, CLIENTSTATE_CHANGING_ACT);
 
     D2UnitStrc* pUnit = CLIENTS_GetPlayerFromClient(pClient, 0);
     D2_ASSERT(pUnit);

@@ -482,7 +482,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     pClient->unk0x60 = a6;
     pClient->pClientInfo = 0;
     pClient->dwExpLost = nExpLost;
-    pClient->dwClientState = 0;
+    pClient->dwClientState = CLIENTSTATE_JUST_CREATED;
     pClient->tPacketDataList.pHead = nullptr;
     pClient->tPacketDataList.pTail = nullptr;
     pClient->tPacketDataList.pPacketDataPool = nullptr;
@@ -1307,7 +1307,7 @@ uint32_t __fastcall sub_6FC33C10(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC33C50
-int32_t __fastcall CLIENTS_Verify(int32_t nClientId, int32_t dwFlags)
+BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, int32_t nExpectedClientState)
 {
     if (gbClientListInitialized_6FD447E8)
     {
@@ -1317,7 +1317,7 @@ int32_t __fastcall CLIENTS_Verify(int32_t nClientId, int32_t dwFlags)
         {
             if (pClient->dwClientId == nClientId)
             {
-                const int32_t result = pClient->dwClientState == dwFlags;
+                const BOOL result = pClient->dwClientState == nExpectedClientState;
                 LeaveCriticalSection(&gClientListLock_6FD447D0);
                 return result;
             }
@@ -1326,7 +1326,7 @@ int32_t __fastcall CLIENTS_Verify(int32_t nClientId, int32_t dwFlags)
         LeaveCriticalSection(&gClientListLock_6FD447D0);
     }
 
-    return 0;
+    return FALSE;
 }
 
 //D2Game.0x6FC33CD0
