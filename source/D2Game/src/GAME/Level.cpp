@@ -292,7 +292,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
     }
 
     CLIENTS_SetRoomInClient(pClient, nullptr);
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 5u);
+    D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 5u);
     CLIENTS_SetActNo(pClient, nNewAct);
     pUnit->nAct = nNewAct;
     pUnit->pDrlgAct = pGame->pAct[nNewAct];

@@ -649,7 +649,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     D2_ASSERT(pGame->lpCriticalSection);
     LeaveCriticalSection(pGame->lpCriticalSection);
 
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+    D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 2u);
     GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: Sent ACTINITDONE for client %d '%s'", nClientId, pClient->szName);
     return nTotalSize;
 }
@@ -827,7 +827,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 0);
+    D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 0);
     CLIENTS_SetClientState(pClient, CLIENTSTATE_GAME_INIT_SENT);
     GAME_LogMessage(6, "[SERVER]  sSrvSendGameInit:      Sent game init to client %d '%s' for game %d '%s'", pClient->dwClientId, pClient->szName, pGame->nServerToken, pGame->szGameName);
     CLIENTS_SetActNo(pClient, gnAct_6FD45824);
@@ -847,7 +847,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         exit(-1);
     }
 
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+    D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 2u);
 }
 
 //D2Game.0x6FC369C0
@@ -1223,7 +1223,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
     if (pClient)
     {
         D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
-        D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 0);
+        D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 0);
         CLIENTS_SetClientState(pClient, CLIENTSTATE_GAME_INIT_SENT);
         GAME_LogMessage(6, "[SERVER]  sSrvSendGameInit:      Sent game init to client %d '%s' for game %d '%s'", pClient->dwClientId, pClient->szName, pGame->nServerToken, pGame->szGameName);
         pClient->nAct = gnAct_6FD45824;
@@ -1246,7 +1246,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+            D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 2u);
         }
     }
     else
@@ -1686,7 +1686,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
     {
         while (1)
         {
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 5u);
+            D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 5u);
 
             if ((pGame->nGameType == 1 || pGame->nGameType == 2) && CLIENT_GetSaveHeader_6FC34350(pClient))
             {
@@ -1697,7 +1697,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
                 while (CLIENT_GetSaveHeader_6FC34350(pClient));
             }
 
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 6u);
+            D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 6u);
 
             sub_6FC3C690(nClientId);
             sub_6FC39030(pGame, pClient, 0, 0);
@@ -2229,7 +2229,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
             if (D2Common_10073(pClient->pRoom) && CLIENTS_GetPlayerFromClient(pClient, 0))
             {
-                D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 4u);
+                D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 4u);
                 CLIENTS_SetClientState(pClient, 4u);
 
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
@@ -2283,7 +2283,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
             if (D2Common_10073(pClient->pRoom))
             {
-                D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 4u);
+                D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 4u);
                 CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
