@@ -39,7 +39,7 @@ void __fastcall sub_6FC90BE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 //D2Game.0x6FC90C20
 void __fastcall sub_6FC90C20(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 //D2Game.0x6FC90D70
-void __fastcall PLRTRADE_SendEventPacketToPlayer(D2UnitStrc* pPlayer, char nType, char* szSource);
+void __fastcall PLRTRADE_SendEventPacketToPlayer(D2UnitStrc* pPlayer, D2C_SRV2CLT5A_TYPES nType, char* szSource);
 //D2Game.0x6FC90DE0
 void __fastcall PLRTRADE_TryToTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2);
 //D2Game.0x6FC91050
