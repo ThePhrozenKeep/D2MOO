@@ -4,6 +4,13 @@
 
 #include "D2PacketDef.h"
 
+#pragma warning(push)
+#pragma warning(disable: 4820)
+#include <storm/hash/TSHashObject.hpp>
+#include <storm/hash/HashKey.hpp>
+#include <storm/hash/TSExportTableSimpleReuse.hpp>
+#pragma warning(pop)
+
 struct D2ClientInfoStrc;
 struct D2UnitInfoStrc;
 struct D2PartyControlStrc;
@@ -40,6 +47,10 @@ enum D2GameFlags
 
 using D2GameGUID = uint32_t;
 constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
+DECLARE_STRICT_HANDLE(HGAMEDATA);
+
+inline D2GameGUID GetHashValueFromGameHandle(HGAMEDATA hGame) { return (uint32_t)(uintptr_t)hGame; }
+
 
 using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nFlags, uint32_t nSpawnedPlayers, int32_t nFrame);
 using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t a6, uint32_t nFlags, const char* szCharName, const char* a9, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t a14, void* a15); //TODO: Unknown args
@@ -79,26 +90,6 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 	FnLoadComplete pfLoadComplete;							//0x3C
 };
 
-struct D2GameHashTableStrc
-{
-	int32_t unk0x00;
-	int32_t unk0x04;
-	int32_t unk0x08;
-	int32_t unk0x0C;
-	int32_t unk0x10;
-	int32_t unk0x14;
-	int32_t unk0x18;
-	int32_t unk0x1C;
-	int32_t unk0x20;
-	int32_t unk0x24;
-};
-
-struct D2GameManagerStrc
-{
-	D2GameHashTableStrc unk0x00;
-	D2GameHashTableStrc pGamesEx;
-	CRITICAL_SECTION pLock;
-};
 
 struct D2GameInfoStrc
 {
@@ -141,12 +132,8 @@ struct D2TargetNodeStrc
 	D2TargetNodeStrc* unk0x0C;					//0x0C
 };
 
-struct D2GameStrc
+struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA in original game
 {
-	uint32_t nHashKey;								//0x00
-	uint32_t __0004[3];								//0x04
-	D2GameStrc* pNext;								//0x10
-	uint32_t __0014;								//0x14
 	LPCRITICAL_SECTION lpCriticalSection;			//0x18
 	void* pMemoryPool;								//0x1C
 	uint32_t nGameData;								//0x20
@@ -204,6 +191,13 @@ struct D2GameStrc
 	uint32_t unk0x1DD4;								//0x1DD4
 	uint32_t unk0x1DD8;								//0x1DD8
 	uint32_t unk0x1DDC;								//0x1DDC
+};
+
+struct D2GameManagerStrc
+{
+	void(__thiscall** pfnDelete)(struct D2GameManagerStrc*, D2GameStrc*);
+	TSExportTableSimpleReuse<D2GameStrc, HGAMEDATA> tHashTable;
+	CRITICAL_SECTION tLock;
 };
 
 struct D2GameStatisticsStrc
@@ -403,9 +397,9 @@ void __fastcall D2GameManagerStrc_Unlock_6FC3B540(D2GameManagerStrc* pGameManage
 ////D2Game.0x6FC3B560) --------------------------------------------------------
 //int32_t __thiscall sub_6FC3B560(void* this, int32_t a2);
 //D2Game.0x6FC3B590) --------------------------------------------------------
-D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int32_t a2, int32_t* a3, int32_t a4, int32_t a5);
+D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int32_t a2, struct HASHKEY_NONE* a3, int32_t a4, int32_t a5);
 //D2Game.0x6FC3B6A0) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameManagerStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, void* a4);
+D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameManagerStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, const struct HASHKEY_NONE* pHashKey);
 ////D2Game.0x6FC3B6F0) --------------------------------------------------------
 //int32_t __thiscall sub_6FC3B6F0(void* this, int32_t a2);
 ////D2Game.0x6FC3B710) --------------------------------------------------------
