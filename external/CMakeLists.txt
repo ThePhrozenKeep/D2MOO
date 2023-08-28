@@ -2,6 +2,7 @@
 # Disable clang-tidy for external dependencies.
 # This should really be avoided but that's what we get for including deps directly...
 set(CMAKE_CXX_CLANG_TIDY "")
+set(CMAKE_FOLDER external)
 
 if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
   add_subdirectory(D2.Detours)
