@@ -235,7 +235,7 @@ int32_t __stdcall D2Game_10050();
 //D2Game.0x6FC35840
 int32_t __fastcall sub_6FC35840(uint16_t nGameId);
 //D2Game.0x6FC35880
-void __stdcall D2Game_10002(D2GameManagerStrc* pGameDataTbl, void* pGameList);
+void __stdcall GAME_InitGameManager(D2GameManagerStrc* pGameDataTbl, void* pGameList);
 //D2Game.0x6FC358E0
 void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2ServerCallbackFunctions);
 //D2Game.0x6FC35920 (#10010)
