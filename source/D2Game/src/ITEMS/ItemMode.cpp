@@ -472,11 +472,11 @@ void __fastcall D2GAME_ITEMS_UpdateItemStatlist_6FC42310(D2GameStrc* pGame, D2Un
         return;
     }
 
-    //if (pItem->dwUnitType != UNIT_ITEM)
-    //{
-    //    Fog_10030(&unk_6FD447EC, "[sITEMSAddStatsList] tried to add stats for deleted/non item");
-    //    return;
-    //}
+    if (pItem->dwUnitType != UNIT_ITEM)
+    {
+        FOG_TraceF(gszEmptyString_6FD447EC, "[sITEMSAddStatsList] tried to add stats for deleted/non item");
+        return;
+    }
 
     if (pUnit->dwUnitType == UNIT_PLAYER && STATES_CheckState(pUnit, STATE_PLAYERBODY))
     {

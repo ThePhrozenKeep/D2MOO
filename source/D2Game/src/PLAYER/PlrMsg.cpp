@@ -1897,8 +1897,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
     {
         if (!PLAYER_IsBusy(pUnit) && nInvPage)
         {
-            // TODO: ...
-            //Fog_10030(&unk_6FD447EC, " tell jon and steve about error at line %d of file %s\n", __LINE__, __FILE__);
+            FOG_TraceF(gszEmptyString_6FD447EC, " tell jon and steve about error at line %d of file %s\n", __LINE__, __FILE__);
             return 2;
         }
 
@@ -1907,8 +1906,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
             D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || !DUNGEON_IsRoomInTown(pRoom))
             {
-                // TODO: ...
-                //Fog_10030(&unk_6FD447EC, " Player %s insert itemgrid error #1\n", UNITS_GetPlayerData(pUnit)->szName);
+                FOG_TraceF(gszEmptyString_6FD447EC, " Player %s insert itemgrid error #1\n", UNITS_GetPlayerData(pUnit)->szName);
                 return 3;
             }
         }

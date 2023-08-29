@@ -70,7 +70,7 @@ uint32_t gnPreviousMemUsageUpdateTickCount_6FD45840;
 uint32_t dword_6FD45844;
 uint32_t dword_6FD45848;
 int32_t dword_6FD2CA10 = 1;
-char byte_6FD447EC[8];
+char gszEmptyString_6FD447EC[8];
 
 int32_t gnGamesGUIDs_6FD447F8[1024];
 
@@ -774,7 +774,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     ARENA_AllocArena(pGame, a2, nFlags, nArenaTemplate);
     CLIENTS_SetGameData(pGame);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, byte_6FD447EC, 0, nExpLost, a13, a14);
+    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nExpLost, a13, a14);
     SERVER_SetClientGameGUID(nClientId, GetHashValueFromGameHandle(hGame));
 
     if (pGame->nGameType == 1)
@@ -2689,7 +2689,7 @@ void __fastcall sub_6FC39870(int32_t nClientId)
         }
     }
 
-    sub_6FC3C640(nClientId, -1, 0, byte_6FD447EC);
+    sub_6FC3C640(nClientId, -1, 0, gszEmptyString_6FD447EC);
 }
 
 //D2Game.0x6FC399A0

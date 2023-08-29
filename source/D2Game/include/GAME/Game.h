@@ -72,6 +72,8 @@ using FnSetGameData = uint32_t(__fastcall*)();
 using FnRelockDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnLoadComplete = int32_t(__stdcall*)(int32_t);
 
+extern char gszEmptyString_6FD447EC[8];
+
 #pragma pack(push, 1)
 struct D2ServerCallbackFunctions							// sizeof 0x40
 {
