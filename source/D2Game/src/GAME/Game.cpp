@@ -74,7 +74,7 @@ char byte_6FD447EC[8];
 
 int32_t gnGamesGUIDs_6FD447F8[1024];
 
-int32_t dword_6FD2CA00 = 1;
+BOOL gbAllowTimeoutDisconnection_6FD2CA00 = TRUE;
 
 // TODO: Looks like it's a bigger struct, but unused
 int32_t dword_6FD27D88;
@@ -2114,7 +2114,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         bUpdateLadder = 1;
     }
 
-    if (dword_6FD2CA00)
+    if (gbAllowTimeoutDisconnection_6FD2CA00)
     {
         const uint32_t nTickCount = GetTickCount();
         
