@@ -522,9 +522,9 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
     pGame->nClients = 0;
     pGame->pClientList = nullptr;
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfSetGameData)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSetGameData)
     {
-        pGame->nGameData = gpD2ServerCallbackFunctions_6FD45830->pfSetGameData();
+        pGame->nGameData = gpD2EventCallbackTable_6FD45830->pfSetGameData();
     }
 }
 
@@ -672,11 +672,11 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
         DUNGEON_ChangeClientRoom(pPlayerRoom, 0);
         D2Common_10077(pPlayerRoom, 0);
 
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
-            if (D2_VERIFY(gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame))
+            if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
-                gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame(
+                gpD2EventCallbackTable_6FD45830->pfLeaveGame(
                     &pClientToRemove->pClientInfo,
                     pGame->nServerToken,
                     pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
@@ -695,13 +695,13 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     }
     else
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *(char*)pClientToRemove->tCharacterInfo.unk0x00 = '\0';
 
-            if (D2_VERIFY(gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame))
+            if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
-                gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame(
+                gpD2EventCallbackTable_6FD45830->pfLeaveGame(
                     &pClientToRemove->pClientInfo,
                     pGame->nServerToken,
                     0, 0, 0, 0,

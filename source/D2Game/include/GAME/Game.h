@@ -213,7 +213,7 @@ struct D2GameStatisticsStrc
 
 #pragma pack(pop)
 
-extern D2ServerCallbackFunctions* gpD2ServerCallbackFunctions_6FD45830;
+extern D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 
 
 

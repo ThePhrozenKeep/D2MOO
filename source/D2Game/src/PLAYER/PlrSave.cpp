@@ -603,9 +603,9 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
             {
                 ++dword_6FD4DC28;
 
-                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfRelockDatabaseCharacter)
+                if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter)
                 {
-                    gpD2ServerCallbackFunctions_6FD45830->pfRelockDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName);
+                    gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName);
                 }
 
                 D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
@@ -619,15 +619,15 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
     D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
     D2GAME_SetSaveFileChecksum_6FC33970(pClient, nCalculatedChecksum);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfSaveDatabaseCharacter)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter)
     {
-        if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfSaveDatabaseCharacter))
+        if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter))
         {
             FOG_DisplayAssert("ptEventCallbackTable->fpSaveDatabaseCharacter", __FILE__, __LINE__);
             exit(-1);
         }
 
-        gpD2ServerCallbackFunctions_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, a6);
+        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, a6);
         CLIENTS_CopySaveDataToClient(pClient, &pSaveData[2], nFileSize);
     }
 
@@ -684,7 +684,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
         return 1;
     }
 
-    if (gpD2ServerCallbackFunctions_6FD45830)
+    if (gpD2EventCallbackTable_6FD45830)
     {
         return D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(pGame, pPlayer, szName, szAccountName, bInteractsWithPlayer, a6, dwArg, pClientInfo);
     }
@@ -733,7 +733,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
 
     if (*(uint32_t*)saveHeader != D2SMAGIC_HEADER)
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *pValid = 1;
             return 0;
@@ -744,7 +744,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
 
     if (*(uint16_t*)&saveHeader[32] != 0x82)
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *pValid = 1;
             return 0;
@@ -758,7 +758,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
 
     if (nVersion < 71 || nVersion > 96)
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *pValid = 1;
             return 9;
@@ -932,7 +932,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
     const uint16_t v39 = *(uint16_t*)&saveHeader[28];
     if (v37 > 16 || v39 > sgptDataTables->nSkillsTxtRecordCount)
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *pValid = 1;
             return 0;
@@ -2282,7 +2282,7 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
 //D2Game.0x6FC8CB40
 int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D2ClientStrc* pClient, const char* szName, int32_t a4, D2UnitStrc** ppPlayer, DWORD dw1, DWORD dw2, DWORD dw3)
 {
-    if (pGame->nGameType != 1 && pGame->nGameType != 2 && !gpD2ServerCallbackFunctions_6FD45830)
+    if (pGame->nGameType != 1 && pGame->nGameType != 2 && !gpD2EventCallbackTable_6FD45830)
     {
         if (a4)
         {

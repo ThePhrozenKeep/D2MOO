@@ -795,7 +795,7 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
 
-    if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
+    if (!gpD2EventCallbackTable_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
     {
         D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(pClient), 0);
     }
@@ -1345,7 +1345,7 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
 
-        if (!gpD2ServerCallbackFunctions_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
+        if (!gpD2EventCallbackTable_6FD45830 || CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
         {
             D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(pClient), 0);
         }

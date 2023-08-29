@@ -52,7 +52,7 @@ static_assert(offsetof(D2GameStrc, lpCriticalSection) == 0x18, "Make sure TSHash
 
 D2GameStrc* gpGame_6FD457FC;
 int32_t gnAct_6FD45824;
-D2ServerCallbackFunctions* gpD2ServerCallbackFunctions_6FD45830;
+D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 CRITICAL_SECTION gCriticalSection_6FD45800;
 HGAMEDATA hGameArray_6FD447F8[1024]; // TODO: Right size?
 int32_t gwGameId_6FD2CA04;
@@ -119,9 +119,9 @@ void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
     va_start(va, szFormat);
     vsprintf(szMessage, szFormat, va);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
     {
-        gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage(a1, "%s", szMessage);
+        gpD2EventCallbackTable_6FD45830->pfServerLogMessage(a1, "%s", szMessage);
     }
     else if (a1 == 1)
     {
@@ -187,13 +187,13 @@ void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2Ser
 {
     if (pD2ServerCallbackFunctions)
     {
-        gpD2ServerCallbackFunctions_6FD45830 = pD2ServerCallbackFunctions;
+        gpD2EventCallbackTable_6FD45830 = pD2ServerCallbackFunctions;
         gbD2ServerCallbackFunctionsInitialized_6FD45834 = 1;
         //D2COMMON_11277_Return((int32_t)pD2ServerCallbackFunctions->pfLoadComplete);
     }
     else
     {
-        gpD2ServerCallbackFunctions_6FD45830 = nullptr;
+        gpD2EventCallbackTable_6FD45830 = nullptr;
         gbD2ServerCallbackFunctionsInitialized_6FD45834 = 0;
     }
 }
@@ -308,7 +308,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 //D2Game.0x6FC35CB0
 int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
 {
-    if (gpD2ServerCallbackFunctions_6FD45830 && pPacket->bSkipVerification)
+    if (gpD2EventCallbackTable_6FD45830 && pPacket->bSkipVerification)
     {
         return 0;
     }
@@ -812,7 +812,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     // TODO: 1st argument
     D2Game_10042((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
         FOG_DisplayAssert("!\"This is not supposed to happen!\"", __FILE__, __LINE__);
         exit(-1);
@@ -1108,18 +1108,18 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
         case '\0':
             if (i != 0)
             {
-                if (!gpD2ServerCallbackFunctions_6FD45830)
+                if (!gpD2EventCallbackTable_6FD45830)
                 {
                     return 1;
                 }
 
-                if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfFindPlayerToken))
+                if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfFindPlayerToken))
                 {
                     FOG_DisplayAssert("ptEventCallbackTable->fpFindPlayerToken", __FILE__, __LINE__);
                     exit(-1);
                 }
 
-                if (!gpD2ServerCallbackFunctions_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, a7, a9, a10))
+                if (!gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, a7, a9, a10))
                 {
                     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Token", szAccountName, szClientName, nGameId, nToken);
                     GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player token %d for client %d '%s' ***", nToken, nClientId, szClientName);
@@ -1204,15 +1204,15 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 
         LeaveCriticalSection(pGame->lpCriticalSection);
 
-        if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter)
+        if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
         {
-            if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter))
+            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter))
             {
                 FOG_DisplayAssert("ptEventCallbackTable->fpGetDatabaseCharacter", __FILE__, __LINE__);
                 exit(-1);
             }
 
-            gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter(&pClient->pClientInfo, szClientName, dwClientId, szAccountName);
+            gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter(&pClient->pClientInfo, szClientName, dwClientId, szAccountName);
             sub_6FC33910(pClient);
         }
         else
@@ -1222,17 +1222,17 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
     }
     else
     {
-        if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter)
+        if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter)
         {
             GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Unable to add client %d '%s' to game %d (unlocking character)", dwClientId, szClientName, nGameId);
 
-            if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter))
+            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter))
             {
                 FOG_DisplayAssert("ptEventCallbackTable->fpUnlockDatabaseCharacter", __FILE__, __LINE__);
                 exit(-1);
             }
 
-            gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
+            gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
         }
 
         D2_ASSERT(pGame->lpCriticalSection);
@@ -1333,12 +1333,12 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(i), 0);
             }
 
-            if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+            if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
             {
                 const int32_t nExperience = STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0);
                 const int32_t nLevel = STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0);
                 const char* szClientName = CLIENTS_GetName(i);
-                gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x184[3]);
+                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x184[3]);
             }
         }
     }
@@ -1636,9 +1636,9 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             if (pUnit)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(i), 0);
-                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                 {
-                    gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                    gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                         CLIENTS_GetName(i),
                         pUnit->dwClassId,
                         STATLIST_GetUnitBaseStat(pUnit, STAT_LEVEL, 0),
@@ -1785,18 +1785,18 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
     char a3[16];
     char szIPAddress[16];
 
-    if (gpD2ServerCallbackFunctions_6FD45830)
+    if (gpD2EventCallbackTable_6FD45830)
     {
         const int nClientIdx = *(DWORD*)a1;
         switch (*((BYTE*)a1 + 5))
         {
         case PACKET_ADMIN_GETINFO:
         case PACKET_ADMIN_GETGAMEINFO:
-            if (gpD2ServerCallbackFunctions_6FD45830->pfHandlePacket && gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage)
+            if (gpD2EventCallbackTable_6FD45830->pfHandlePacket && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
             {
                 D2GSPacketSrvFF01 tPacket;
                 D2GameServerInfoExStrc tGameServerInfoEx;
-                gpD2ServerCallbackFunctions_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
+                gpD2EventCallbackTable_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
                 tPacket.nPacketSubType = *((BYTE*)a1 + 5);
                 tPacket.tServerInfo.field_0x4 = tGameServerInfoEx.field_0x4;
                 tPacket.tServerInfo.field_0x8 = tGameServerInfoEx.field_0x8;
@@ -2122,7 +2122,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         while (pClient)
         {
             D2ClientStrc* pNext = pClient->pNext;
-            if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2ServerCallbackFunctions_6FD45830)
+            if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2EventCallbackTable_6FD45830)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
                 bPlayerDisconnected = 1;
@@ -2144,9 +2144,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 {
                     D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
 
-                    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                     {
-                        gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                        gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                             CLIENTS_GetName(pClient),
                             pPlayer->dwClassId,
                             STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0),
@@ -2173,9 +2173,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
             if (pPlayer)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
-                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                 {
-                    gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                    gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                         CLIENTS_GetName(pClient),
                         pPlayer->dwClassId, STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0),
                         STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
@@ -2214,12 +2214,12 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 sub_6FC369C0(pGame, pClient);
                 sub_6FCBAB20(pGame, CLIENTS_GetPlayerFromClient(pClient, 1));
 
-                if (gpD2ServerCallbackFunctions_6FD45830)
+                if (gpD2EventCallbackTable_6FD45830)
                 {
                     pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-                    if (pPlayer && gpD2ServerCallbackFunctions_6FD45830->pfEnterGame)
+                    if (pPlayer && gpD2EventCallbackTable_6FD45830->pfEnterGame)
                     {
-                        gpD2ServerCallbackFunctions_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
+                        gpD2EventCallbackTable_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
                     }
                 }
 
@@ -2615,10 +2615,10 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
         {
             D2_LOCK(pGame->lpCriticalSection);
 
-            if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfCloseGame)
+            if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfCloseGame)
             {
-                D2_ASSERT(!IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfCloseGame));
-                gpD2ServerCallbackFunctions_6FD45830->pfCloseGame(
+                D2_ASSERT(!IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfCloseGame));
+                gpD2EventCallbackTable_6FD45830->pfCloseGame(
                     pGame->nServerToken,
                     pGame->bExpansion ? 0x44325850 : 0x44324456,
                     pGame->dwLastUsedUnitGUID[UNIT_PLAYER],
