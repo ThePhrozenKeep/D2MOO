@@ -55,7 +55,7 @@ int32_t gnAct_6FD45824;
 D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 CRITICAL_SECTION gCriticalSection_6FD45800;
 HGAMEDATA hGameArray_6FD447F8[1024]; // TODO: Right size?
-int32_t gwGameId_6FD2CA04;
+int32_t gwGameId_6FD2CA04 = 1;
 D2GameManagerStrc* gpGameDataTbl_6FD45818;
 int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
