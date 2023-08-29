@@ -54,7 +54,7 @@ D2GameStrc* gpGame_6FD457FC;
 int32_t gnAct_6FD45824;
 D2ServerCallbackFunctions* gpD2ServerCallbackFunctions_6FD45830;
 CRITICAL_SECTION gCriticalSection_6FD45800;
-int32_t gpGameArray_6FD447F4[1024]; // TODO: Right size?
+HGAMEDATA hGameArray_6FD447F8[1024]; // TODO: Right size?
 int32_t gwGameId_6FD2CA04;
 D2GameManagerStrc* gpGameDataTbl_6FD45818;
 int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
@@ -160,7 +160,8 @@ int32_t __fastcall sub_6FC35840(uint16_t nGameId)
     
     EnterCriticalSection(&gCriticalSection_6FD45800);
     
-    const int32_t nGUID = gpGameArray_6FD447F4[nGameId];
+    const HGAMEDATA hGame = hGameArray_6FD447F8[nGameId-1];
+    const D2GameGUID nGUID = GetHashValueFromGameHandle(hGame);
     if (nGUID && nGUID != -1)
     {
         nResult = nGUID;
@@ -391,7 +392,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         gwGameId_6FD2CA04 = 1;
     }
 
-    if (gpGameArray_6FD447F4[nGameId])
+    if (hGameArray_6FD447F8[nGameId - 1])
     {
         while (1)
         {
@@ -410,14 +411,14 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
                 return 0;
             }
 
-            if (!gpGameArray_6FD447F4[nGameId])
+            if (!hGameArray_6FD447F8[nGameId - 1])
             {
                 break;
             }
         }
     }
 
-    int32_t* v21 = &gpGameArray_6FD447F4[nGameId];
+    D2GameGUID* v21 = (D2GameGUID*)&hGameArray_6FD447F8[nGameId - 1];
     *v21 = -1;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
@@ -686,7 +687,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         gwGameId_6FD2CA04 = 1;
     }
 
-    if (gpGameArray_6FD447F4[nGameId])
+    if (hGameArray_6FD447F8[nGameId - 1])
     {
         while (1)
         {
@@ -705,9 +706,9 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
                 break;
             }
 
-            if (!gpGameArray_6FD447F4[nGameId])
+            if (!hGameArray_6FD447F8[nGameId - 1])
             {
-                gpGameArray_6FD447F4[nGameId] = -1;
+                hGameArray_6FD447F8[nGameId - 1] = D2GameReservedSlotHandle;
                 LeaveCriticalSection(&gCriticalSection_6FD45800);
                 break;
             }
@@ -715,7 +716,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
     else
     {
-        gpGameArray_6FD447F4[nGameId] = -1;
+        hGameArray_6FD447F8[nGameId - 1] = D2GameReservedSlotHandle;
         LeaveCriticalSection(&gCriticalSection_6FD45800);
     }
 
@@ -788,12 +789,12 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     QUESTS_QuestInit(pGame);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[pGame->nServerToken] != -1)
+    if (hGameArray_6FD447F8[pGame->nServerToken-1] != D2GameReservedSlotHandle)
     {
         FOG_DisplayAssert("hGameArray[wGameId-1] == RESERVED_SLOT", __FILE__, __LINE__);
         exit(-1);
     }
-    gpGameArray_6FD447F4[pGame->nServerToken] = GetHashValueFromGameHandle(hGame);
+    hGameArray_6FD447F8[pGame->nServerToken - 1] = hGame;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
@@ -1154,9 +1155,9 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
@@ -2895,9 +2896,9 @@ int32_t __stdcall D2Game_10013(uint16_t nGameId)
 {
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
@@ -2932,9 +2933,9 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
@@ -3080,14 +3081,14 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 }
 
 //D2Game.0x6FC3A490 (#10016)
-int32_t __stdcall D2Game_10016(uint16_t a1)
+int32_t __stdcall D2Game_10016(uint16_t nGameId)
 {
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
     int32_t nGUID = 0;
-    if (gpGameArray_6FD447F4[a1] && gpGameArray_6FD447F4[a1] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[a1];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
@@ -3560,12 +3561,12 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
 //D2Game.0x6FC3AFB0 (#10022)
 void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
 {
-    int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    int32_t nGUID = 0;
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);

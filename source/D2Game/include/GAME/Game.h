@@ -49,7 +49,10 @@ using D2GameGUID = uint32_t;
 constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
 DECLARE_STRICT_HANDLE(HGAMEDATA);
 
+// TODO: get rid of this and use handles properly where needed
 inline D2GameGUID GetHashValueFromGameHandle(HGAMEDATA hGame) { return (uint32_t)(uintptr_t)hGame; }
+inline HGAMEDATA GetGameHandleFromHashValue(D2GameGUID nGameGUID) { return (HGAMEDATA)(uintptr_t)nGameGUID; }
+static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2GameInvalidGUID);
 
 
 using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nFlags, uint32_t nSpawnedPlayers, int32_t nFrame);
@@ -349,7 +352,7 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo);
 //D2Game.0x6FC3A390 (#10015)
 int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount);
 //D2Game.0x6FC3A490
-int32_t __stdcall D2Game_10016(uint16_t a1);
+int32_t __stdcall D2Game_10016(uint16_t nGameId);
 //D2Game.0x6FC3A5A0
 int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
 //D2Game.0x6FC3A6F0
