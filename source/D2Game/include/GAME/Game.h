@@ -265,7 +265,7 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
 //D2Game.0x6FC37150
 void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, char* szClientName, char* szAccountName, int32_t a6, int32_t a7, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
-void __fastcall GAME_FreeGame(int32_t a1, D2GameStrc* pGame);
+void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame);
 //D2Game.0x6FC37560
 int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId);
 //D2Game.0x6FC375A0
@@ -321,9 +321,9 @@ D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId);
 //D2Game.0x6FC395B0
 void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame);
 //D2Game.0x6FC39600
-void __fastcall GAME_CloseGame(int32_t a1);
+void __fastcall GAME_CloseGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC397A0
-D2GameStrc* __fastcall TASK_GetGame_6FC397A0(int32_t nGameHashKey);
+D2GameStrc* __fastcall GAME_GetGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC39870
 void __fastcall sub_6FC39870(int32_t nClientId);
 //D2Game.0x6FC399A0

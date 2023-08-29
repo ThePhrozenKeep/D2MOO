@@ -340,7 +340,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
     D2_ASSERT(ptTask->nType == TASK_PROCESSGAME);
 
     const uint32_t nGameHashKey = (uint32_t)ptTask->pTaskBalanceLink.pPrev;
-    if (D2GameStrc* pGame = TASK_GetGame_6FC397A0(nGameHashKey))
+    if (D2GameStrc* pGame = GAME_GetGame(nGameHashKey))
     {
         GAME_UpdateProgress(pGame);
         sub_6FC39270(pGame, 0);

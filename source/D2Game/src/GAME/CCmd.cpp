@@ -46,7 +46,7 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
 
-    D2GameStrc* pGame = TASK_GetGame_6FC397A0(v6);
+    D2GameStrc* pGame = GAME_GetGame(v6);
     if (!pGame)
     {
         return 6;
