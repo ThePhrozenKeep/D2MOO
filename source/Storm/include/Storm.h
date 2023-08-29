@@ -905,10 +905,10 @@ D2FUNC_DLL_NP(STORM, SCompCompress, BOOL, __stdcall, (void *a1, int a2, unsigned
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SCompDecompress, BOOL, __stdcall, (void *a1, int *a2, const void *a3, unsigned int a4), 0xcc10);  //Storm.#552
 
-/// Not imported by any .dll
-D2FUNC_DLL_NP(STORM, SErrCheckDebugSymbolLibrary, int, __cdecl, (char *Format, char Args), 0x11f50);  //Storm.#561
-
 #if !WITH_SQUALL
+/// Not imported by any .dll
+D2FUNC_DLL_NP(STORM, SErrDisplayAppFatal, void, __declspec(noreturn), (char *Format, ...), 0x11f50);  //Storm.#561
+
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SErrDisplayErrorFmt, int, __cdecl, (DWORD dwMessageId, const char* filename, int32_t linenumber, int32_t recoverable, UINT uExitCode, char* Format, ...), 0x12570); //Storm.#562
 #endif

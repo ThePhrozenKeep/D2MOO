@@ -57,8 +57,11 @@ add_library(imgui::imgui ALIAS imgui)
 
 # Note: we only use squall for a few headers
 # We may want to use the whole library at some point though.
-add_library(squallstorm INTERFACE)
-target_include_directories(squallstorm INTERFACE squall)
+add_library(squallstorm 
+	squall/storm/thread/CCritSect.cpp
+)
+target_include_directories(squallstorm PUBLIC squall)
+target_compile_definitions(squallstorm PUBLIC WHOA_SYSTEM_WIN)
 add_library(squall::Storm ALIAS squallstorm)
 
 

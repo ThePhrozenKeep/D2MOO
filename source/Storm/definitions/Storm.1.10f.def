@@ -300,7 +300,7 @@ EXPORTS
 	SCompCompress @551 NONAME
 	SCompDecompress @552 NONAME
 
-	SErrCheckDebugSymbolLibrary @561 NONAME
+	SErrDisplayAppFatal @561 NONAME
 	SErrDisplayErrorFmt @562 NONAME
 	SErrIsDisplayingError @563 NONAME
 	SErrPrepareAppFatal @564 NONAME

@@ -8,7 +8,8 @@
 #pragma warning(disable: 4820)
 #include <storm/hash/TSHashObject.hpp>
 #include <storm/hash/HashKey.hpp>
-#include <storm/hash/TSExportTableSimpleReuse.hpp>
+#include <storm/hash/TSExportTableSyncReuse.hpp>
+#include <storm/thread/CCritSect.hpp>
 #pragma warning(pop)
 
 struct D2ClientInfoStrc;
@@ -48,6 +49,7 @@ enum D2GameFlags
 using D2GameGUID = uint32_t;
 constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
 DECLARE_STRICT_HANDLE(HGAMEDATA);
+DECLARE_STRICT_HANDLE(GAMEDATALOCKEDHANDLE);
 
 // TODO: get rid of this and use handles properly where needed
 inline D2GameGUID GetHashValueFromGameHandle(HGAMEDATA hGame) { return (uint32_t)(uintptr_t)hGame; }
@@ -200,10 +202,8 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 
 struct D2GameDataTableStrc
 {
-	void(__thiscall** pfnDelete)(struct D2GameDataTableStrc*, D2GameStrc*);	// 0x00
-	TSExportTableSimpleReuse<D2GameStrc, HGAMEDATA> tHashTable;				// 0x04
-	CRITICAL_SECTION tLock;													// 0x50
-};																			// Size = 0x68
+	TSExportTableSyncReuse<D2GameStrc, HGAMEDATA, GAMEDATALOCKEDHANDLE, CCritSect> tHashTable;
+}; // Size = 0x68
 
 struct D2GameStatisticsStrc
 {
@@ -328,7 +328,7 @@ void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame);
 //D2Game.0x6FC39600
 void __fastcall GAME_CloseGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC397A0
-D2GameStrc* __fastcall GAME_GetGame(D2GameGUID nGameGUID);
+D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC39870
 void __fastcall sub_6FC39870(int32_t nClientId);
 //D2Game.0x6FC399A0
@@ -394,11 +394,11 @@ void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame);
 //D2Game.0x6FC3B3D0
 void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3B480) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t a2, void* a3, int32_t a4);
+D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t nGameGUID, void* pLockedHandle, int32_t a4);
 //D2Game.0x6FC3B510
-void __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* a2, int32_t a3);
+void __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting);
 //D2Game.0x6FC3B540
-void __fastcall D2GameDataTable_Unlock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t bLeaveCriticalSection);
+void __fastcall D2GameDataTable_Unlock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle);
 ////D2Game.0x6FC3B560) --------------------------------------------------------
 //int32_t __thiscall sub_6FC3B560(void* this, int32_t a2);
 //D2Game.0x6FC3B590) --------------------------------------------------------
