@@ -22,7 +22,7 @@ extern "C" {
 static PatchAction patchActions[GetOrdinalCount()] = {
 	
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10001_Return0												@10001
-    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_InitGameManager												@10002
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_InitGameDataTable											@10002
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ProcessNetworkMessages														@10003
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateGamesProgress														@10004
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateClients														@10005
