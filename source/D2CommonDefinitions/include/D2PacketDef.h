@@ -310,6 +310,7 @@ struct D2GSPacketClt32		//size of 0x11
 	D2TransactionMode dwTransactionMode;	//0x09
 	int32_t dwCost;							//0x0D
 };
+static_assert(sizeof(D2GSPacketClt32) == 0x11, "size mismatch");
 
 struct D2GSPacketClt33		//size of 0x11
 {
@@ -388,7 +389,7 @@ struct D2GSPacketClt44		//size of 0x11
 struct D2GSPacketClt45		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	int32_t nPortalGUID;			//0x01
+	int32_t nPortalGUID;		//0x01
 	int32_t nLevelId;			//0x05
 };
 
@@ -495,7 +496,7 @@ struct D2GSPacketClt66		//size of 0x2E
 	uint8_t nGameType;			//0x11
 	uint8_t nPlayerClass;		//0x12
 	int8_t nTemplate;			//0x13
-	int8_t nSelectedDiff;		//0x14
+	int8_t nDifficulty ;		//0x14
 	char szClientName[16];		//0x15
 	int16_t unk0x25;			//0x25
 	uint32_t nGameFlags;		//0x27
