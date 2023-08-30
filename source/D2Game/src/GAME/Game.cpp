@@ -3332,55 +3332,18 @@ void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
     }
 }
 
-//D2Game.0x6FC3B480) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t nGameGUID, void* pLockedHandle, int32_t a4)
+//D2Game.0x6FC3B480
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, HGAMEDATA hGame, GAMEDATALOCKEDHANDLE* pLockedHandle, int32_t forWriting)
 {
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return nullptr;
-
-//    int32_t v4; // esi@1
-//    struct _RTL_CRITICAL_SECTION* v5; // edi@1
-//    int32_t v6; // eax@1
-//    int32_t v7; // ecx@1
-//    int32_t v8; // ecx@1
-//    int32_t v9; // esi@4
-//
-//    v4 = this;
-//    v5 = (struct _RTL_CRITICAL_SECTION*)(this + 80);
-//    EnterCriticalSection((LPCRITICAL_SECTION)(this + 80));
-//    *(_DWORD*)a3 = 2 * (a4 != 0) - 1;
-//    v6 = *(_DWORD*)(*(_DWORD*)(v4 + 28) + 12 * (a2 & *(_DWORD*)(v4 + 36)) + 8);
-//    v7 = v6 < 0;
-//    LOBYTE(v7) = v6 <= 0;
-//    v8 = v6 & (v7 - 1);
-//    if (v8 <= 0)
-//    {
-//LABEL_4:
-//        v9 = 0;
-//LABEL_6:
-//        if (*(_DWORD*)a3)
-//            LeaveCriticalSection(v5);
-//        *(_DWORD*)a3 = 0;
-//        return v9;
-//    }
-//    while (*(_DWORD*)v8 != a2)
-//    {
-//        v8 = *(_DWORD*)(v8 + *(_DWORD*)(*(_DWORD*)(v4 + 28) + 12 * (a2 & *(_DWORD*)(v4 + 36))) + 4);
-//        if (v8 <= 0)
-//            goto LABEL_4;
-//    }
-//    v9 = v8;
-//    if (!v8)
-//        goto LABEL_6;
-//    return v9;
+    return pGameDataTable->tHashTable.Lock(hGame, pLockedHandle, forWriting);
 }
 
 //D2Game.0x6FC3B510
+// See TSExportTableSyncReuse::SyncEnterLock
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting)
+void __fastcall D2GameDataTable_SyncEnterLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting)
 {
-    // See TSExportTableSyncReuse::SyncEnterLock
     D2_MAYBE_UNUSED(nUnused);
     pGameDataTable->tHashTable.GetSync().Enter(bForWriting);
     *pLockHandle = 2 * (bForWriting != 0) - 1;
@@ -3388,9 +3351,9 @@ void __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_
 
 //D2Game.0x6FC3B540
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_Unlock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle)
+// See TSExportTableSyncReuse::SyncLeaveLock
+void __fastcall D2GameDataTable_SyncLeaveLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle)
 {
-    // See TSExportTableSyncReuse::SyncLeaveLock
     D2_MAYBE_UNUSED(nUnused);
     if (tLockHandle != 0)
     {
@@ -3398,528 +3361,108 @@ void __fastcall D2GameDataTable_Unlock(D2GameDataTableStrc* pGameDataTable, int3
     }
 }
 
-////D2Game.0x6FC3B560) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B560(void* this, int32_t a2)
-//{
-//    int32_t v2; // eax@1
-//    int32_t result; // eax@2
-//    int32_t v4; // edx@3
-//
-//    v2 = *((_DWORD*)this + 1);
-//    if (v2 >= 0)
-//    {
-//        v4 = a2;
-//        if (a2 < 0)
-//            v4 = (int32_t)((char*)this - *(_DWORD*)(*(_DWORD*)this + 4));
-//        result = v4 + v2;
-//    }
-//    else
-//    {
-//        result = ~v2;
-//    }
-//    return result;
-//}
-
-//D2Game.0x6FC3B590) --------------------------------------------------------
-D2GameStrc* __fastcall sub_6FC3B590(D2GameDataTableStrc* a1, int32_t nUnused, int32_t a2, HASHKEY_NONE* a3, int32_t a4, int32_t a5)
+//D2Game.0x6FC3B560
+// Should be __thiscall, nUnused is present due to using __fastcall 
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TLink_NextLink(TSLink<D2GameStrc>* pLink, int32_t nUnused, int nLinkOffset)
 {
-    // return this->TSHashTable<T, HASHKEY_NONE>::New(hashval, this->m_key, 0, 0x0);
-    
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return nullptr;
-
-//    int32_t v5; // esi@1
-//    int32_t v6; // edx@1
-//    uint32_t v7; // eax@2
-//    int32_t v8; // eax@5
-//    int32_t v9; // ecx@5
-//    int32_t v10; // ecx@5
-//    int32_t v11; // eax@6
-//    int32_t v12; // eax@7
-//    int32_t v13; // eax@8
-//    int32_t result; // eax@13
-//    int32_t v15; // ecx@14
-//    int32_t v16; // ebx@16
-//    int32_t v17; // edi@17
-//    int32_t v18; // edi@18
-//    int32_t v19; // edx@21
-//
-//    v5 = this;
-//    v6 = a2 & *(_DWORD*)(this + 36);
-//    if (*(_DWORD*)(this + 36) < 0x3FFu)
-//    {
-//        v7 = *(_DWORD*)(this + 16);
-//        *(_DWORD*)(this + 16) = v7 <= 3 ? 0 : v7 - 3;
-//        v8 = *(_DWORD*)(*(_DWORD*)(this + 28) + 12 * v6 + 8);
-//        v9 = v8 < 0;
-//        LOBYTE(v9) = v8 <= 0;
-//        v10 = v8 & (v9 - 1);
-//        if (v10 > 0)
-//        {
-//            while (1)
-//            {
-//                v11 = *(_DWORD*)(v5 + 16) + 1;
-//                *(_DWORD*)(v5 + 16) = v11;
-//                if ((uint32_t)v11 > 0xD)
-//                    break;
-//                v12 = 12 * v6 + *(_DWORD*)(v5 + 28);
-//                if (v10)
-//                    v13 = v10 + *(_DWORD*)v12;
-//                else
-//                    v13 = v12 + 4;
-//                v10 = *(_DWORD*)(v13 + 4);
-//                if (v10 <= 0)
-//                    goto LABEL_13;
-//            }
-//            *(_DWORD*)(v5 + 16) = 0;
-//            sub_6FC3B710(v5);
-//            v6 = *(_DWORD*)(v5 + 36) & a2;
-//        }
-//    }
-//LABEL_13:
-//    result = (*(int32_t(__thiscall**)(int32_t, int32_t, int32_t, int32_t))(*(_DWORD*)v5 + 4))(v5, *(_DWORD*)(v5 + 28) + 12 * v6, a4, a5);
-//    if (result)
-//        v15 = result + *(_DWORD*)(v5 + 4);
-//    else
-//        v15 = v5 + 8;
-//    v16 = *(_DWORD*)v15;
-//    if (*(_DWORD*)v15)
-//    {
-//        v17 = *(_DWORD*)(v15 + 4);
-//        if (v17 >= 0)
-//            v18 = v15 - *(_DWORD*)(v16 + 4) + v17;
-//        else
-//            v18 = ~v17;
-//        *(_DWORD*)v18 = v16;
-//        *(_DWORD*)(*(_DWORD*)v15 + 4) = *(_DWORD*)(v15 + 4);
-//        *(_DWORD*)v15 = 0;
-//        *(_DWORD*)(v15 + 4) = 0;
-//    }
-//    v19 = *(_DWORD*)(v5 + 8);
-//    *(_DWORD*)v15 = v19;
-//    *(_DWORD*)(v15 + 4) = *(_DWORD*)(v19 + 4);
-//    *(_DWORD*)(v19 + 4) = result;
-//    *(_DWORD*)(v5 + 8) = v15;
-//    *(_DWORD*)result = a2;
-//    *(_BYTE*)(result + 20) = *(_BYTE*)a3;
-//    return result;
+    return pLink->NextLink(nLinkOffset);
 }
 
-//D2Game.0x6FC3B6A0) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameDataTableStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey)
+//D2Game.0x6FC3B590
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_New(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, HASHKEY_NONE* pKey, int32_t extrabytes, int32_t flags)
 {
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return static_cast<TSHashTable<D2GameStrc,HASHKEY_NONE>&>(a1->tHashTable).Ptr((uint32_t)nGameGUID, *pHashKey);
+    return static_cast<TSHashTable<D2GameStrc, HASHKEY_NONE>&>(pGameDataTable->tHashTable).New((uint32_t)nGameGUID, *pKey, extrabytes, flags);
 }
 
-////D2Game.0x6FC3B6F0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B6F0(void* this, int32_t a2)
-//{
-//    int32_t result; // eax@2
-//
-//    if (a2)
-//        result = a2 + *(_DWORD*)this;
-//    else
-//        result = (int32_t)((char*)this + 4);
-//    return result;
-//}
+//D2Game.0x6FC3B6A0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_Ptr(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey)
+{
+    return static_cast<TSHashTable<D2GameStrc,HASHKEY_NONE>&>(pGameDataTable->tHashTable).Ptr((uint32_t)nGameGUID, *pHashKey);
+}
 
-////D2Game.0x6FC3B710) --------------------------------------------------------
-//void __thiscall sub_6FC3B710(int32_t this)
-//{
-//    int32_t v1; // esi@1
-//    int32_t v2; // ebp@1
-//    int32_t v3; // ebx@1
-//    uint32_t v4; // edi@1
-//    int32_t v5; // eax@3
-//    int32_t v6; // eax@6
-//    int32_t v7; // edi@7
-//    int32_t v8; // esi@8
-//    int32_t v9; // ebx@14
-//    int32_t v10; // esi@15
-//    int32_t v11; // eax@17
-//    int32_t v12; // ecx@22
-//    int32_t v13; // ebx@23
-//    int32_t v14; // eax@23
-//    int32_t v15; // edi@23
-//    int32_t v16; // esi@23
-//    int32_t v17; // eax@25
-//    int32_t v18; // eax@28
-//    int32_t v19; // [sp+10h] [bp-24h]@1
-//    uint32_t v20; // [sp+14h] [bp-20h]@5
-//    int32_t v21; // [sp+18h] [bp-1Ch]@1
-//    int32_t v22; // [sp+1Ch] [bp-18h]@1
-//    int32_t v23; // [sp+20h] [bp-14h]@1
-//    int32_t v24; // [sp+24h] [bp-10h]@1
-//    int32_t v25; // [sp+30h] [bp-4h]@1
-//
-//    v1 = this;
-//    v2 = 0;
-//    v19 = this;
-//    v3 = *(_DWORD*)(this + 36) + 1;
-//    v23 = 0;
-//    v24 = 0;
-//    v4 = 2 * v3;
-//    v21 = 2 * v3;
-//    v25 = 0;
-//    v22 = 0;
-//    sub_6FC3BB40((int32_t)&v22);
-//    v25 = 1;
-//    v22 = -572662307;
-//    sub_6FC3BB40((int32_t)&v22);
-//    v25 = 2;
-//    if (v22 != 4)
-//    {
-//        while (v24 > 0)
-//        {
-//            v5 = sub_6FC3B6F0(&v22, v24);
-//            sub_6FC3B960((void*)v5);
-//        }
-//        v22 = 4;
-//        sub_6FC3BB40((int32_t)&v22);
-//    }
-//    v20 = 0;
-//    if ((uint32_t)v3 > 0)
-//    {
-//        v6 = v23;
-//        do
-//        {
-//            while (1)
-//            {
-//                v7 = *(_DWORD*)(*(_DWORD*)(v1 + 28) + v2 + 8);
-//                if (v7 <= 0)
-//                    break;
-//                v8 = v7 + v22;
-//                if (*(_DWORD*)(v7 + v22))
-//                {
-//                    sub_6FC3B960((void*)(v7 + v22));
-//                    v6 = v23;
-//                }
-//                *(_DWORD*)v8 = v6;
-//                *(_DWORD*)(v8 + 4) = *(_DWORD*)(v6 + 4);
-//                *(_DWORD*)(v6 + 4) = v7;
-//                v6 = v8;
-//                v1 = v19;
-//                v23 = v6;
-//            }
-//            v2 += 12;
-//            ++v20;
-//        }
-//        while (v20 < v3);
-//        v4 = 2 * v3;
-//    }
-//    sub_6FC3B9A0(v1 + 20, v4);
-//    if (v4)
-//    {
-//        v9 = 0;
-//        do
-//        {
-//            v10 = v9 + *(_DWORD*)(v1 + 28);
-//            if (*(_DWORD*)v10 != 4)
-//            {
-//                while (*(_DWORD*)(v10 + 8) > 0)
-//                {
-//                    v11 = sub_6FC3B6F0((void*)v10, *(_DWORD*)(v10 + 8));
-//                    sub_6FC3B960((void*)v11);
-//                }
-//                *(_DWORD*)v10 = 4;
-//                sub_6FC3BB40(v10);
-//            }
-//            v1 = v19;
-//            v9 += 12;
-//            --v4;
-//        }
-//        while (v4);
-//        v4 = v21;
-//    }
-//    *(_DWORD*)(v1 + 36) = v4 - 1;
-//    while (1)
-//    {
-//        v12 = v24;
-//        if (v24 <= 0)
-//            break;
-//        v13 = v24;
-//        v14 = *(_DWORD*)(v1 + 28);
-//        v15 = v14 + 12 * (*(_DWORD*)(v1 + 36) & *(_DWORD*)v24);
-//        v16 = v24 + *(_DWORD*)(v14 + 12 * (*(_DWORD*)(v1 + 36) & *(_DWORD*)v24));
-//        if (*(_DWORD*)v16)
-//            sub_6FC3B960((void*)v16);
-//        v17 = *(_DWORD*)(v15 + 4);
-//        *(_DWORD*)v16 = v17;
-//        *(_DWORD*)(v16 + 4) = *(_DWORD*)(v17 + 4);
-//        *(_DWORD*)(v17 + 4) = v13;
-//        *(_DWORD*)(v15 + 4) = v16;
-//        v1 = v19;
-//    }
-//    v25 = 3;
-//    while (v12 > 0)
-//    {
-//        v18 = sub_6FC3B6F0(&v22, v12);
-//        sub_6FC3B960((void*)v18);
-//        v12 = v24;
-//    }
-//    v25 = -1;
-//    sub_6FC3B960(&v23);
-//}
+//D2Game.0x6FC3B6F0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TSExplicitList_Link(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, D2GameStrc* ptr)
+{
+    return pNode->Link(ptr);
+}
 
-////D2Game.0x6FC3B8E0) --------------------------------------------------------
-//void __thiscall sub_6FC3B8E0(int32_t this)
-//{
-//    int32_t v1; // ebx@1
-//    int32_t v2; // edx@2
-//    int32_t v3; // eax@3
-//    int32_t v4; // edi@3
-//    int32_t v5; // esi@4
-//    int32_t v6; // esi@5
-//    int32_t v7; // edx@8
-//    int32_t v8; // ecx@9
-//    int32_t v9; // ecx@10
-//
-//    v1 = this + 4;
-//    while (1)
-//    {
-//        v2 = *(_DWORD*)(this + 8);
-//        if (v2 <= 0)
-//            break;
-//        v3 = v2 + *(_DWORD*)this;
-//        v4 = *(_DWORD*)v3;
-//        if (*(_DWORD*)v3)
-//        {
-//            v5 = *(_DWORD*)(v3 + 4);
-//            if (v5 >= 0)
-//                v6 = v3 - *(_DWORD*)(v4 + 4) + v5;
-//            else
-//                v6 = ~v5;
-//            *(_DWORD*)v6 = v4;
-//            *(_DWORD*)(*(_DWORD*)v3 + 4) = *(_DWORD*)(v3 + 4);
-//            *(_DWORD*)v3 = 0;
-//            *(_DWORD*)(v3 + 4) = 0;
-//        }
-//    }
-//    v7 = *(_DWORD*)v1;
-//    if (*(_DWORD*)v1)
-//    {
-//        v8 = *(_DWORD*)(this + 8);
-//        if (v8 >= 0)
-//            v9 = v1 - *(_DWORD*)(v7 + 4) + v8;
-//        else
-//            v9 = ~v8;
-//        *(_DWORD*)v9 = v7;
-//        *(_DWORD*)(*(_DWORD*)v1 + 4) = *(_DWORD*)(v1 + 4);
-//        *(_DWORD*)v1 = 0;
-//        *(_DWORD*)(v1 + 4) = 0;
-//    }
-//}
+//D2Game.0x6FC3B710
+//void __thiscall TSHashTable_SGAMEDATA::Grow_6FC3B710(D2GameDataTableStrc pGameDataTable)
 
-////D2Game.0x6FC3B960) --------------------------------------------------------
-//void __thiscall sub_6FC3B960(void* this)
-//{
-//    int32_t v1; // esi@1
-//    int32_t v2; // edx@2
-//    char* v3; // edx@3
-//
-//    v1 = *(_DWORD*)this;
-//    if (*(_DWORD*)this)
-//    {
-//        v2 = *((_DWORD*)this + 1);
-//        if (v2 >= 0)
-//            v3 = (char*)this + v2 - *(_DWORD*)(v1 + 4);
-//        else
-//            v3 = (char*)~v2;
-//        *(_DWORD*)v3 = v1;
-//        *(_DWORD*)(*(_DWORD*)this + 4) = *((_DWORD*)this + 1);
-//        *(_DWORD*)this = 0;
-//        *((_DWORD*)this + 1) = 0;
-//    }
-//}
+//D2Game.0x6FC3B8E0
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+{
+    pList->UnlinkAll();
+    pList->m_terminator.Unlink();
+}
 
-////D2Game.0x6FC3B9A0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B9A0(int32_t this, uint32_t a2)
-//{
-//    uint32_t v2; // ebp@1
-//    int32_t v3; // esi@1
-//    int32_t result; // eax@1
-//    uint32_t v5; // ecx@3
-//    uint32_t i; // eax@5
-//    uint32_t v7; // edi@10
-//    int32_t v8; // eax@12
-//    uint32_t v9; // ebx@12
-//    int32_t v10; // ebp@13
-//    int32_t v11; // eax@16
-//    int32_t v12; // ebx@17
-//    uint32_t v13; // eax@18
-//    int32_t v14; // edi@21
-//    uint32_t v15; // ebp@21
-//    int32_t v16; // edi@26
-//    int32_t v17; // ebx@26
-//    uint32_t v18; // ebx@30
-//    uint32_t v19; // edi@30
-//    int32_t v20; // [sp+24h] [bp-4h]@12
-//
-//    v2 = a2;
-//    v3 = this;
-//    result = *(_DWORD*)(this + 4);
-//    if (a2 <= result)
-//    {
-//        if (a2 < result)
-//        {
-//            v18 = a2;
-//            v19 = 12 * a2;
-//            do
-//            {
-//                sub_6FC3B8E0(v19 + *(_DWORD*)(v3 + 8));
-//                result = *(_DWORD*)(v3 + 4);
-//                ++v18;
-//                v19 += 12;
-//            }
-//            while (v18 < result);
-//        }
-//        goto LABEL_32;
-//    }
-//    if (a2 > *(_DWORD*)this)
-//    {
-//        v5 = *(_DWORD*)(this + 12);
-//        if (!v5)
-//        {
-//            v5 = a2;
-//            if (a2 >= 0x15)
-//            {
-//                *(_DWORD*)(v3 + 12) = 21;
-//                v5 = 21;
-//            }
-//            else
-//            {
-//                for (i = a2 & (a2 - 1); i; i &= i - 1)
-//                    v5 = i;
-//                if (v5 < 1)
-//                    v5 = 1;
-//            }
-//        }
-//        v7 = a2;
-//        if (a2 % v5)
-//            v7 = a2 + v5 - a2 % v5;
-//        v8 = *(_DWORD*)(v3 + 8);
-//        v20 = *(_DWORD*)(v3 + 8);
-//        v9 = v7;
-//        if (v7 < *(_DWORD*)(v3 + 4))
-//        {
-//            v10 = v8 + 12 * v7;
-//            do
-//            {
-//                sub_6FC3BB10(v10, 0);
-//                ++v9;
-//                v10 += 12;
-//            }
-//            while (v9 < *(_DWORD*)(v3 + 4));
-//            v8 = v20;
-//            v2 = a2;
-//        }
-//        *(_DWORD*)v3 = v7;
-//        v11 = Storm_405(v8, 12 * v7, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 16);
-//        *(_DWORD*)(v3 + 8) = v11;
-//        if (!v11)
-//        {
-//            v12 = v20;
-//            *(_DWORD*)(v3 + 8) = Storm_401(12 * v7, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 0);
-//            if (v20)
-//            {
-//                v13 = *(_DWORD*)(v3 + 4);
-//                if (v7 < v13)
-//                    v13 = v7;
-//                if (v13)
-//                {
-//                    v14 = 0;
-//                    v15 = v13;
-//                    do
-//                    {
-//                        sub_6FC3BB80(v14 + *(_DWORD*)(v3 + 8), v12);
-//                        sub_6FC3BB10(v12, 0);
-//                        v14 += 12;
-//                        v12 += 12;
-//                        --v15;
-//                    }
-//                    while (v15);
-//                    v2 = a2;
-//                    v12 = v20;
-//                }
-//                Storm_403(v12, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 0);
-//            }
-//        }
-//    }
-//    result = *(_DWORD*)(v3 + 4);
-//    if (result >= v2)
-//    {
-//LABEL_32:
-//        *(_DWORD*)(v3 + 4) = v2;
-//        return result;
-//    }
-//    v16 = 12 * result;
-//    v17 = v2 - result;
-//    do
-//    {
-//        result = sub_6FC3BB50(v16 + *(_DWORD*)(v3 + 8));
-//        v16 += 12;
-//        --v17;
-//    }
-//    while (v17);
-//    *(_DWORD*)(v3 + 4) = v2;
-//    return result;
-//}
+//D2Game.0x6FC3B960
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink)
+{
+    pLink->Unlink();
+}
 
-////D2Game.0x6FC3BB10) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB10(int32_t this, char a2)
-//{
-//    int32_t v2; // esi@1
-//
-//    v2 = this;
-//    sub_6FC3B8E0(this);
-//    if (a2 & 1 && v2)
-//        Storm_403(v2, "delete", -1, 0);
-//    return v2;
-//}
+//D2Game.0x6FC3B9A0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+int32_t __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
+{
+    D2_MAYBE_UNUSED(nUnused);
+    //TODO: Fix squall impl
+    D2_ASSERTM(nCount >= pArray->Count(), "Squall's implementation is buggy, and won't work if new size is smaller than old one. (should destroy objects after nCount)");
+    pArray->SetCount(nCount);
+}
+ 
+//D2Game.0x6FC3BB10
+// Should be __thiscall, nUnused is present due to using __fastcall 
+void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree)
+{
+    D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(pNode);
+    if ((bShouldFree & 1) != 0 && pNode)
+    {
+        SMemFree(pNode, "delete", -1, 0);
+    }
+}
 
-////D2Game.0x6FC3BB40) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB40(int32_t this)
-//{
-//    int32_t result; // eax@1
-//
-//    *(_DWORD*)(this + 4) = this + 4;
-//    result = ~(this + 4);
-//    *(_DWORD*)(this + 8) = result;
-//    return result;
-//}
+//D2Game.0x6FC3BB40
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+{
+    pList->InitializeTerminator();
+}
 
-////D2Game.0x6FC3BB50) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB50(int32_t this)
-//{
-//    int32_t result; // eax@2
-//
-//    if (this)
-//    {
-//        *(_DWORD*)(this + 4) = 0;
-//        *(_DWORD*)(this + 8) = 0;
-//        *(_DWORD*)(this + 4) = this + 4;
-//        *(_DWORD*)this = -572662307;
-//        result = ~(this + 4);
-//        *(_DWORD*)(this + 8) = result;
-//    }
-//    return result;
-//}
+////D2Game.0x6FC3BB50
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew(void* pMemory)
+{
+    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    {
+        // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
+        // Investigate why and fix it.
+        pNode->m_terminator.m_prevlink = 0;
+        pNode->m_terminator.m_next = 0;
+        pNode->m_terminator.m_prevlink = &pNode->m_terminator;
+        pNode->m_linkoffset = 0xDDDDDDDD;
+        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+    }
+}
 
-////D2Game.0x6FC3BB80) --------------------------------------------------------
-//void __fastcall sub_6FC3BB80(int32_t a1, int32_t a2)
-//{
-//    int32_t v2; // edx@2
-//
-//    if (a1)
-//    {
-//        *(_DWORD*)(a1 + 4) = 0;
-//        *(_DWORD*)(a1 + 8) = 0;
-//        v2 = *(_DWORD*)a2;
-//        *(_DWORD*)(a1 + 4) = a1 + 4;
-//        *(_DWORD*)a1 = v2;
-//        *(_DWORD*)(a1 + 8) = ~(a1 + 4);
-//    }
-//}
+//D2Game.0x6FC3BB80
+// Should be __thiscall, nUnused is present due to using __fastcall 
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory, int32_t nUnused, TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pList)
+{
+    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    {
+        // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
+        // Investigate why and fix it.
+        pNode->m_terminator.m_prevlink = 0;
+        pNode->m_terminator.m_next = 0;
+        pNode->m_terminator.m_prevlink = &pNode->m_terminator;
+        pNode->m_linkoffset = pList->m_linkoffset;
+        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+    }
+}
