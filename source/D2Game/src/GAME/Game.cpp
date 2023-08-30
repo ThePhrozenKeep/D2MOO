@@ -2435,7 +2435,7 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
                 D2_ASSERT(!IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfCloseGame));
                 gpD2EventCallbackTable_6FD45830->pfCloseGame(
                     pGame->nServerToken,
-                    pGame->bExpansion ? 0x44325850 : 0x44324456,
+                    pGame->bExpansion ? 'D2XP' : 'D2DV',
                     pGame->dwLastUsedUnitGUID[UNIT_PLAYER],
                     (signed int)pGame->dwGameFrame / 25);
             }
