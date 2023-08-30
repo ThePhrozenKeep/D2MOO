@@ -334,7 +334,7 @@ void __fastcall D2GAME_NPC_BuildHirelingList_6FCC6FF0(D2GameStrc* pGame, D2Clien
         return;
     }
 
-    D2GAME_PACKETS_SendPacket0x4F_UpdateClientState(pClient, 0x4Fu);
+    D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 0x4Fu);
 
     int32_t nUnused = 0;
     D2NpcRecordStrc* pNpcRecord = SUNITPROXY_GetNpcRecordFromUnit(CLIENTS_GetGame(pClient), pUnit, &nUnused);
