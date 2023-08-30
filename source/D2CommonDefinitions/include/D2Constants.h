@@ -84,13 +84,6 @@ enum D2C_Acts
 
 #endif // CONSTANTS_LEVELS
 
-
-
-enum D2C_ClientStates
-{
-	CLTSTATE_CONNECTED = 4
-};
-
 enum D2SaveCharType
 {
 	CHARTYPE_HARDCORE = 0x24,

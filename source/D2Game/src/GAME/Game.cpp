@@ -306,7 +306,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 //D2Game.0x6FC35CB0
 int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
 {
-    if (gpD2ServerCallbackFunctions_6FD45830 && pPacket->bSkipVerification)
+    if (gpD2ServerCallbackFunctions_6FD45830 && pPacket->nGameType)
     {
         return 0;
     }
@@ -1386,7 +1386,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
     packet5A.nType = nEventType;
-    packet5A.nColor = 4;
+    packet5A.nColor = STRCOLOR_DARK_GOLD;
     packet5A.dwParam = 0;
     CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
     packet5A.szText[31] = '\0';
@@ -1508,7 +1508,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
         packet5A.nType = EVENTTYPE_DISCONNECT;
-        packet5A.nColor = 4;
+        packet5A.nColor = STRCOLOR_DARK_GOLD;
         packet5A.dwParam = 0;
         packet5A.szText[16] = 0;
         SStrCopy(packet5A.szText, CLIENTS_GetName(pClient), 16u);
@@ -1705,7 +1705,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             D2GSPacketSrv5A packet5A = {};
             packet5A.nHeader = 0x5Au;
             packet5A.nType = EVENTTYPE_PLAYERLEFT;
-            packet5A.nColor = 4;
+            packet5A.nColor = STRCOLOR_DARK_GOLD;
             packet5A.dwParam = 0;
             CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
             packet5A.szText[31] = '\0';
@@ -2254,7 +2254,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
                 packet5A.nType = EVENTTYPE_PLAYERJOIN;
-                packet5A.nColor = 4;
+                packet5A.nColor = STRCOLOR_DARK_GOLD;
                 packet5A.dwParam = 0;
                 packet5A.szText[16] = '\0';
                 
@@ -3649,7 +3649,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5Au;
                 packet5A.nType = EVENTTYPE_REALMGOINGDOWN;
-                packet5A.nColor = 4;
+                packet5A.nColor = STRCOLOR_DARK_GOLD;
                 packet5A.dwParam = nPacketParam;
                 packet5A.szText[16] = 0;
                 sub_6FC84D40(pGame, &packet5A);

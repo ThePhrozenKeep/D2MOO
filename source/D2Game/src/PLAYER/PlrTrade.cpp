@@ -1105,7 +1105,7 @@ void __fastcall PLRTRADE_SendEventPacketToPlayer(D2UnitStrc* pPlayer, D2C_SRV2CL
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5A;
     packet5A.nType = nType;
-    packet5A.nColor = 0;
+    packet5A.nColor = STRCOLOR_WHITE;
     packet5A.dwParam = 0;
 
     if (szSource)

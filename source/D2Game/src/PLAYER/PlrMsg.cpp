@@ -849,7 +849,7 @@ int32_t __fastcall sub_6FC83340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStr
     {
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nColor = 1;
+        packet5A.nColor = STRCOLOR_RED;
         packet5A.dwParam = 0;
         packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
@@ -1714,7 +1714,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
 
             packet5A.nHeader = 0x5Au;
             packet5A.nType = EVENTTYPE_NOTLISTENINGTOYOU;
-            packet5A.nColor = 0;
+            packet5A.nColor = STRCOLOR_WHITE;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
             packet5A.szText[15] = 0;
@@ -1728,7 +1728,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
 
             packet5A.nHeader = 0x5Au;
             packet5A.nType = EVENTTYPE_NOTINGAME;
-            packet5A.nColor = 0;
+            packet5A.nColor = STRCOLOR_WHITE;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
             packet5A.szText[15] = 0;
@@ -1964,7 +1964,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x19_RemoveItemFromBuffer_6FC850C0(D
             {
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
-                packet5A.nColor = 1;
+                packet5A.nColor = STRCOLOR_RED;
                 packet5A.dwParam = 0;
                 packet5A.nType = EVENTTYPE_CANTDOTHAT;
                 D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
@@ -3272,8 +3272,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x45_ChangeTpLocation_6FC87930(D2Gam
         return 3;
     }
 
-    const int32_t nPortalGUID = *(int32_t*)((char*)pPacket + 1);
-    const uint16_t nLevelId = *(uint16_t*)((char*)pPacket + 5);
+    D2GSPacketClt45* pPacket45 = (D2GSPacketClt45*)pPacket;
+
+    const int32_t nPortalGUID = pPacket45->nPortalGUID;
+    const uint16_t nLevelId = pPacket45->nLevelId;
     D2UnitStrc* pPortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, nPortalGUID);
     if (pPortal)
     {
@@ -4123,7 +4125,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
     {
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nColor = 1;
+        packet5A.nColor = STRCOLOR_RED;
         packet5A.dwParam = 0;
         packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
@@ -4367,7 +4369,7 @@ void __fastcall D2GAME_PLRMSG_Last_6FC89450(D2GameStrc* pGame, D2UnitStrc* pAtta
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
     packet5A.nType = EVENTTYPE_SLAIN_BY;
-    packet5A.nColor = 4;
+    packet5A.nColor = STRCOLOR_DARK_GOLD;
 
     if (pPlayer)
     {
