@@ -3434,13 +3434,13 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 return 1;
             }
 
-            if (!pPacket49->unk0x05)
+            if (!pPacket49->nLevelId)
             {
-                D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->unk0x05);
+                D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                 return 0;
             }
 
-            if (pPacket49->unk0x05 >= sgptDataTables->nLevelsTxtRecordCount)
+            if (pPacket49->nLevelId >= sgptDataTables->nLevelsTxtRecordCount)
             {
                 nResult = 3;
             }
@@ -3451,7 +3451,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 D2_ASSERT(pPlayerData);
 
                 int16_t nWaypointNo = 0;
-                if (!WAYPOINTS_GetWaypointNoFromLevelId(pPacket49->unk0x05, &nWaypointNo))
+                if (!WAYPOINTS_GetWaypointNoFromLevelId(pPacket49->nLevelId, &nWaypointNo))
                 {
                     nResult = 3;
                 }
@@ -3459,7 +3459,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 {
                     if (WAYPOINTS_IsActivated(pPlayerData->pWaypointData[pGame->nDifficulty], nWaypointNo))
                     {
-                        D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->unk0x05);
+                        D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                         return 0;
                     }
 
