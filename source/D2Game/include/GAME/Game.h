@@ -14,6 +14,7 @@
 
 struct D2ClientInfoStrc;
 struct D2UnitInfoStrc;
+struct D2UnitDescriptionListStrc;
 struct D2PartyControlStrc;
 struct D2ArenaStrc;
 struct D2InactiveUnitListStrc;
@@ -178,7 +179,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	D2ObjectControlStrc* pObjectControl;			//0x10F0
 	D2QuestInfoStrc* pQuestControl;					//0x10F4
 	D2TargetNodeStrc* pTargetNodes[10];				//0x10F8
-	D2UnitStrc* pUnitList[5][128];					//0x1120 Note: This is not indexed by UnitType!! UNIT_MISSILE is index 4 and UNIT_ITEM is index 3
+	D2UnitStrc* pUnitList[5][128];					//0x1120 Note: This is not indexed by UnitType! See GAME_RemapUnitTypeToListIndex
 	D2UnitStrc* pTileList;							//0x1B20
 	uint32_t dwUniqueFlags[128];					//0x1B24
 	D2NpcControlStrc* pNpcControl;					//0x1D24
@@ -369,8 +370,8 @@ void __fastcall GAME_GetObjectDescription(char* szDescription, int32_t nClassId)
 void __fastcall GAME_GetItemDescription(char* szDescription, int32_t nClassId);
 //D2Game.0x6FC3A8A0
 void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId);
-//D2Game.0x6FC3A8B0
-void __stdcall D2Game_10019(uint16_t a1, int32_t a2, int32_t nUnitType);
+//D2Game.0x6FC3A8B0 (#10019)
+void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType);
 //D2Game.0x6FC3AB20
 int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID);
 //D2Game.0x6FC3ACD0
@@ -414,7 +415,7 @@ void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STO
 //D2Game.0x6FC3B960
 void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink);
 //D2Game.0x6FC3B9A0
-int32_t __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount);
+void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount);
 //D2Game.0x6FC3BB10
 void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree);
 //D2Game.0x6FC3BB40

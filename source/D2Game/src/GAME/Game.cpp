@@ -2944,148 +2944,60 @@ void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId
     sprintf(szDescription, "Missile %d", nClassId);
 }
 
+//D2Game.0x6FC3A8B0 (#10019)
 // Note: used by server only to retrieve unit lists
-//D2Game.0x6FC3A8B0) --------------------------------------------------------
-void __stdcall D2Game_10019(uint16_t a1, int32_t a2, int32_t nUnitType)
+void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType)
 {
-    UNIMPLEMENTED();
-//    int32_t v3; // edi@1
-//    int32_t v4; // eax@1
-//    int32_t v5; // esi@4
-//    D2GameStrc* v6; // edi@5
-//    D2GameStrc* v7; // eax@6
-//    LPCRITICAL_SECTION v8; // ecx@8
-//    D2UnitStrc** v9; // edx@16
-//    int32_t v10; // eax@21
-//    D2UnitStrc* v11; // ebp@22
-//    int32_t v12; // esi@23
-//    int32_t v13; // eax@23
-//    void* v14; // edx@26
-//    int32_t i; // esi@41
-//    D2GameStrc* v16; // [sp+10h] [bp-8h]@5
-//    int32_t v17; // [sp+14h] [bp-4h]@21
-//    D2UnitStrc** v18; // [sp+1Ch] [bp+4h]@13
-//
-//    v3 = 0;
-//    EnterCriticalSection(&gCriticalSection_6FD45800);
-//    v4 = gpGameArray_6FD447F4[a1];
-//    if (v4 && v4 != -1)
-//        v3 = gpGameArray_6FD447F4[a1];
-//    LeaveCriticalSection(&gCriticalSection_6FD45800);
-//    v5 = (int32_t)gpGameDataTbl_6FD45818;
-//    if (gpGameDataTbl_6FD45818)
-//    {
-//        EnterCriticalSection(&gpGameDataTbl_6FD45818->tLock);
-//        v7 = D2GAME_FindGameByGUID_6FC3B6A0((D2GameDataTableStrc*)v5, v5 + 68, v3, (void*)(v5 + 68));
-//        v6 = v7;
-//        if (v7)
-//        {
-//            v8 = v7->lpCriticalSection;
-//            if (!v8)
-//            {
-//                FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//                exit(-1);
-//            }
-//            EnterCriticalSection(v8);
-//            LeaveCriticalSection(&gpGameDataTbl_6FD45818->tLock);
-//        }
-//        else
-//        {
-//            D2GameDataTable_Unlock(v5, (LPCRITICAL_SECTION)0xFFFFFFFF);
-//        }
-//        v16 = v6;
-//    }
-//    else
-//    {
-//        v6 = 0;
-//        v16 = 0;
-//    }
-//    v18 = 0;
-//    if (v6)
-//    {
-//        switch (nUnitType)
-//        {
-//        case UNIT_PLAYER:
-//            v18 = (D2UnitStrc**)v6->pUnitList;
-//            break;
-//        case UNIT_MONSTER:
-//            v9 = v6->pUnitList[1];
-//            goto LABEL_20;
-//        case UNIT_OBJECT:
-//            v18 = v6->pUnitList[2];
-//            break;
-//        case UNIT_MISSILE:
-//            v18 = v6->pUnitList[3];
-//            break;
-//        case UNIT_ITEM:
-//            v9 = v6->pUnitList[4];
-//LABEL_20:
-//            v18 = v9;
-//            break;
-//        default:
-//            break;
-//        }
-//        v10 = 0;
-//        v17 = 0;
-//        do
-//        {
-//            v11 = v18[v10];
-//            if (v11)
-//            {
-//                do
-//                {
-//                    v12 = v11->dwClassId;
-//                    v13 = a2;
-//                    if (!a2)
-//                    {
-//                        FOG_DisplayAssert("ptList", __FILE__, __LINE__);
-//                        exit(-1);
-//                    }
-//                    do
-//                    {
-//                        if (*(_DWORD*)v13 == v12)
-//                        {
-//                            ++* (_DWORD*)(v13 + 4);
-//                            goto LABEL_28;
-//                        }
-//                        v13 = *(_DWORD*)(v13 + 140);
-//                    }
-//                    while (v13);
-//                    v14 = FOG_AllocPool(0, 144, __FILE__, __LINE__, 0);
-//                    if (v14)
-//                    {
-//                        memset(v14, 0, 0x90u);
-//                        v6 = v16;
-//                        *(_DWORD*)v14 = v12;
-//                        *((_DWORD*)v14 + 2) = 0;
-//                        *((_DWORD*)v14 + 1) = 1;
-//                        *((_DWORD*)v14 + 35) = *(_DWORD*)(a2 + 140);
-//                        *(_DWORD*)(a2 + 140) = v14;
-//                    }
-//LABEL_28:
-//                    v11 = SUNIT_GetNextUnitFromList(v11);
-//                }
-//                while (v11);
-//                v10 = v17;
-//            }
-//            ++v10;
-//            v17 = v10;
-//        }
-//        while (v10 < 128);
-//        if (!v6->lpCriticalSection)
-//        {
-//            FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//            exit(-1);
-//        }
-//        LeaveCriticalSection(v6->lpCriticalSection);
-//        if (IsBadCodePtr((FARPROC)gpfGetDescription_6FD2CA64[nUnitType]))
-//        {
-//            FOG_DisplayAssert("sgpfnGetDescription[eType]", __FILE__, __LINE__);
-//            exit(-1);
-//        }
-//        for (i = *(_DWORD*)(a2 + 140); i; i = *(_DWORD*)(i + 140))
-//            gpfGetDescription_6FD2CA64[nUnitType]((char*)(i + 12), *(_DWORD*)i);
-//    }
+    const int32_t nGUID = sub_6FC35840(nGameId);
+    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    {
+        // Note: eType is not D2C_UnitTypes
+        D2UnitStrc** pUnitList = eType <= 4 ? pGame->pUnitList[eType] : nullptr;
+        for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
+        {
+            for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
+                pUnit != nullptr;
+                pUnit = SUNIT_GetNextUnitFromList(pUnit)
+                )
+            {
+                D2_ASSERT(pUnitDescriptionsList);
+                int32_t nUnitClassId = pUnit->dwClassId;
+                D2UnitDescriptionListStrc* pCurrentNode = pUnitDescriptionsList;
+                do
+                {
+                    if (pCurrentNode->nClassId == nUnitClassId)
+                    {
+                        pCurrentNode->nCount++;
+                        break;
+                    }
+                    pCurrentNode = pCurrentNode->pNext;
+                } while (pCurrentNode);
+
+                if (pCurrentNode == nullptr) // Unit class id not in list yet
+                {
+                    if (D2UnitDescriptionListStrc* pNewNode = D2_CALLOC_STRC_POOL(nullptr, D2UnitDescriptionListStrc))
+                    {
+                        pNewNode->nClassId = nUnitClassId;
+                        pNewNode->nCount = 1;
+                        pNewNode->dwUnk0x08 = 0;
+                        pNewNode->pNext = pUnitDescriptionsList->pNext;
+                        pUnitDescriptionsList->pNext = pNewNode;
+                    }
+                }
+            }
+        }
+        
+        D2_UNLOCK(pGame->lpCriticalSection);
+
+        D2_ASSERT(gpfGetDescription_6FD2CA64[eType]);
+
+        for (D2UnitDescriptionListStrc* pCurrentUnitInfo = pUnitDescriptionsList->pNext; 
+            pCurrentUnitInfo != nullptr; 
+            pCurrentUnitInfo = pCurrentUnitInfo->pNext)
+        {
+            gpfGetDescription_6FD2CA64[eType](pCurrentUnitInfo->szDescription, pCurrentUnitInfo->nClassId);
+        }
+    }
 }
 
 //D2Game.0x6FC3AB20 (#10018)
@@ -3111,7 +3023,7 @@ int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoSt
                         exit(-1);
                     }
 
-                    gpfGetDescription_6FD2CA64[pUnitType[i]](pUnitInfo[nUnitInfoCount].szName, pUnit->dwClassId);
+                    gpfGetDescription_6FD2CA64[pUnitType[i]](pUnitInfo[nUnitInfoCount].szDescription, pUnit->dwClassId);
                 }
 
                 ++nUnitInfoCount;
@@ -3409,7 +3321,7 @@ void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink)
 
 //D2Game.0x6FC3B9A0
 // Should be __thiscall, nUnused is present due to using __fastcall 
-int32_t __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
+void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
 {
     D2_MAYBE_UNUSED(nUnused);
     //TODO: Fix squall impl

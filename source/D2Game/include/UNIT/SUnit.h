@@ -17,8 +17,17 @@ struct D2UnitInfoStrc
 	int32_t nOwnerType;
 	int32_t nOwnerGUID;
 	int32_t unk0x20;
-	char szName[16];
+	char szDescription[16];
 };
+
+struct D2UnitDescriptionListStrc
+{
+	uint32_t nClassId;					//0x00
+	uint32_t nCount;					//0x04
+	uint32_t dwUnk0x08;					//0x08
+	char szDescription[128];			//0x0C
+	D2UnitDescriptionListStrc* pNext;	//0x8C
+}; // Size=0x90
 #pragma pack(pop)
 
 

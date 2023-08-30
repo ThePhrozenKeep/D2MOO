@@ -18,7 +18,7 @@ EXPORTS
 	D2Game_10016														@10016
 	D2Game_10017														@10017
 	D2Game_10018														@10018
-	D2Game_10019														@10019
+	GAME_GetUnitsDescriptions											@10019
 	GAME_GetStatistics													@10020
 	D2Game_10021														@10021
 	D2Game_10022														@10022

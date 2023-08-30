@@ -39,7 +39,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10016														@10016
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10017														@10017
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10018														@10018
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10019														@10019
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetUnitsDescriptions											@10019
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetStatistics														@10020
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10021														@10021
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10022														@10022
