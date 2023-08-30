@@ -92,13 +92,10 @@ void __fastcall sub_6FC3C6D0(int32_t nClientId, uint32_t nErrorCode)
 }
 
 //D2Game.0x6FC3C6F0
-void __fastcall D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(D2ClientStrc* pClient, uint8_t nHeader)
+//It seems there were multiple functions for header only packets that got merged by the linker into a single one.
+void __fastcall D2GAME_PACKETS_SendHeaderOnlyPacket(D2ClientStrc* pClient, uint8_t nHeader)
 {
-    D2GSPacketSrv4F packet4F = {};
-
-    packet4F.nHeader = nHeader;
-
-    D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet4F, sizeof(packet4F));
+    D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &nHeader, sizeof(nHeader));
 }
 
 //D2Game.0x6FC3C710
