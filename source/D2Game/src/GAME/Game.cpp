@@ -2453,7 +2453,9 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
 D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 {
     if (!gpGameDataTbl_6FD45818)
-        return 0;
+    {
+        return nullptr;
+    }
 
     GAMEDATALOCKEDHANDLE hLock;
     if (D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
