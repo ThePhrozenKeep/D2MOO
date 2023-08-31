@@ -2783,7 +2783,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x32_BuyItemFromNpcBuffer_6FC86AE0(D
 {
     if (nSize == 17)
     {
-        return D2GAME_NPC_BuyItemHandler_6FCC92A0(pGame, pUnit, *(int32_t*)((char*)pPacket + 1), *(int32_t*)((char*)pPacket + 5), (*(int32_t*)((char*)pPacket + 9) & INT_MAX) >> 16, *(int32_t*)((char*)pPacket + 9), *(int32_t*)((char*)pPacket + 13), *(int32_t*)((char*)pPacket + 9) & 0x80000000);
+        D2GSPacketClt32* pPacket32 = (D2GSPacketClt32*)pPacket;
+        return D2GAME_NPC_BuyItemHandler_6FCC92A0(pGame, pUnit, pPacket32->dwNpcGUID, pPacket32->dwItemGUID, pPacket32->nItemMode, pPacket32->nTransactionType, pPacket32->dwCost, pPacket32->bFill);
     }
 
     return 3;
