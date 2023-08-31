@@ -301,8 +301,8 @@ struct D2GSPacketClt32		//size of 0x11
 	uint8_t nHeader;						//0x00
 	int32_t dwNpcGUID;						//0x01
 	int32_t dwItemGUID;						//0x05
-	uint16_t nTransactionType;              //0x09
-	struct {                                //0x0B
+	uint16_t nTransactionType;				//0x09
+	struct {								//0x0B
 		uint8_t nItemMode : 8;
 		uint8_t : 7;
 		uint8_t bFill : 1;
