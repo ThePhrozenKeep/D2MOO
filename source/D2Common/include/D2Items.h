@@ -395,13 +395,13 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 //D2Common.0x6FD9ACE0
 void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
 //D2Common.0x6FD9B1C0
-int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, int nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, int nTransactionType);
+int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType);
 //D2Common.0x6FD9CB50
 void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
 //D2Common.0x6FD9CDC0
 int __fastcall ITEMS_CheckUnitFlagEx(D2UnitStrc* pUnit, int nFlag);
 //D2Common.0x6FD9CDE0 (#10775)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, int nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, int nTransactionType);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType);
 //D2Common.0x6FD9CE10 (#10794)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetMaxStack(int nItemId);
 //D2Common.0x6FD9CE50 (#10795)
@@ -514,7 +514,7 @@ D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsPersonalizable(D2UnitStrc* pItem);
 //D2Common.0x6FD9F260 (#10831)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem);
 //D2Common.0x6FD9F490 (#10877)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int nNpcId, int nDifficulty, D2BitBufferStrc* pQuestFlags, void(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*));
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int nNpcId, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, void(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*));
 //D2Common.0x6FD9F720 (#10833)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc* pItem1, D2UnitStrc* pItem2);
 //D2Common.0x6FD9FA70 (#10834)

@@ -305,7 +305,7 @@ enum D2TransactionMode : uint32_t {
 struct D2GSPacketClt32		//size of 0x11
 {
 	uint8_t nHeader;						//0x00
-	int32_t dwUnitGUID;						//0x01
+	int32_t dwNpcGUID;						//0x01
 	int32_t dwItemGUID;						//0x05
 	D2TransactionMode dwTransactionMode;	//0x09
 	int32_t dwCost;							//0x0D
