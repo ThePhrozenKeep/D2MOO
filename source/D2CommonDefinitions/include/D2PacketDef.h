@@ -296,18 +296,17 @@ struct D2GSPacketClt31		//size of 0x09
 	int32_t unk0x01[2];			//0x01
 };
 
-enum D2TransactionMode : uint32_t {
-    TRANSACTIONMODE_BUY = 0,
-    TRANSACTIONMODE_GAMBLE = 2,
-    TRANSACTIONMODE_FILL = 0x80000000
-};
-
 struct D2GSPacketClt32		//size of 0x11
 {
 	uint8_t nHeader;						//0x00
 	int32_t dwNpcGUID;						//0x01
 	int32_t dwItemGUID;						//0x05
-	D2TransactionMode dwTransactionMode;	//0x09
+	uint16_t nTransactionType;              //0x09
+	struct {                                //0x0B
+		uint8_t nItemMode : 8;
+		uint8_t : 7;
+		uint8_t bFill : 1;
+	};
 	int32_t dwCost;							//0x0D
 };
 static_assert(sizeof(D2GSPacketClt32) == 0x11, "size mismatch");
