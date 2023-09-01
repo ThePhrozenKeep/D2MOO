@@ -308,7 +308,6 @@ struct D2GSPacketClt32		//size of 0x11
 	};
 	int32_t dwCost;							//0x0D
 };
-static_assert(sizeof(D2GSPacketClt32) == 0x11, "size mismatch");
 
 struct D2GSPacketClt33		//size of 0x11
 {

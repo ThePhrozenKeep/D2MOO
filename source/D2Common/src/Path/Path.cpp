@@ -13,8 +13,6 @@
 #include <D2Math.h>
 #include "Path/PathMisc.h"
 
-static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
-
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
 	COLLISION_PATTERN_NONE,

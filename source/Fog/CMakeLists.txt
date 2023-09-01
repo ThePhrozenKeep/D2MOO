@@ -11,6 +11,13 @@ add_library(Fog
 	include/Safesock.h
 )
 
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(Fog
+    PRIVATE
+      statictests/Fog_staticchecks.cpp
+  )
+endif()
+
 # The definition file that matches functions with their ordinals
 target_sources(Fog PRIVATE definitions/Fog.${D2MOO_ORDINALS_VERSION}.def)
 target_include_directories(Fog PUBLIC include)
