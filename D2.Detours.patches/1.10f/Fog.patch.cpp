@@ -1,7 +1,9 @@
 #include <DetoursPatch.h>
+#include <stdlib.h>
 #include <Calc.h>
 
 //#define DISABLE_ALL_PATCHES
+//#define REPLACE_FOG_ALLOCS_BY_MALLOC
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
@@ -63,12 +65,17 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10039 @10039
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10040 @10040
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10041 @10041
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Alloc @10042
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Free @10043
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Realloc @10044
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_AllocPool @10045
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FreePool @10046
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_ReallocPool @10047
+#ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
+#define ALLOC_ORDINAL_PATCH_ACTION PatchAction::Ignore
+#else
+#define ALLOC_ORDINAL_PATCH_ACTION PatchAction::FunctionReplacePatchByOriginal
+#endif
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_Alloc @10042
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_Free @10043
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_Realloc @10044
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_AllocPool @10045
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_FreePool @10046
+    ALLOC_ORDINAL_PATCH_ACTION,                        //   FOG_ReallocPool @10047
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10048 @10048
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10049 @10049
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10050_EnterCriticalSection @10050
@@ -305,9 +312,64 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int D2FogImageBase = 0x6FF50000;
+static const int FogImageBase = 0x6FF50000;
 
-static ExtraPatchAction extraPatchActions[] = {
+#ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
+void* __fastcall FOG_Debug_AllocPool_Impl(void* pMemPool, int nSize, const char* szFile, int nLine)
+{
+    return malloc(nSize > 0 ? nSize : 1);
+}
+
+void __fastcall FOG_Debug_FreePool_Impl(void* pMemPool, void* pFree, const char* szFile, int nLine)
+{
+    free(pFree);
+}
+
+void* __fastcall FOG_Debug_ReallocPoolImpl(void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine)
+{
+    return realloc(pMemory, nSize > 0 ? nSize : 1);
+}
+
+
+
+void* __fastcall FOG_Debug_Alloc(int nSize, const char* szFile, int nLine, int n0)
+{
+    return FOG_Debug_AllocPool_Impl(nullptr, nSize, szFile, nLine);
+}
+void __fastcall FOG_Debug_Free(void* pFree, const char* szFile, int nLine, int n0)
+{
+    FOG_Debug_FreePool_Impl(nullptr, pFree, szFile, nLine);
+}
+void* __fastcall FOG_Debug_Realloc(void* pMemory, int nSize, const char* szFile, int nLine, int n0)
+{
+    return FOG_Debug_ReallocPoolImpl(nullptr, pMemory, nSize, szFile, nLine);
+}
+void* __fastcall FOG_Debug_AllocPool(void* pMemPool, int nSize, const char* szFile, int nLine, int n0)
+{
+    return FOG_Debug_AllocPool_Impl(pMemPool, nSize, szFile, nLine);
+}
+void __fastcall FOG_Debug_FreePool(void* pMemPool, void* pFree, const char* szFile, int nLine, int n0)
+{
+    FOG_Debug_FreePool_Impl(pMemPool, pFree, szFile, nLine);
+}
+void* __fastcall FOG_Debug_ReallocPool(void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine, int n0)
+{
+    return FOG_Debug_ReallocPoolImpl(pMemPool, pMemory, nSize, szFile, nLine);
+}
+#endif
+
+static ExtraPatchAction extraPatchActions[] = {    
+#ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
+    { 0x6FF58F50 - FogImageBase, &FOG_Debug_Alloc, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF58F90 - FogImageBase, &FOG_Debug_Free, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF58FB0 - FogImageBase, &FOG_Debug_Realloc, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF58FF0 - FogImageBase, &FOG_Debug_AllocPool, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF59030 - FogImageBase, &FOG_Debug_FreePool, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF59060 - FogImageBase, &FOG_Debug_ReallocPool, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF59310 - FogImageBase, &FOG_Debug_AllocPool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF599C0 - FogImageBase, &FOG_Debug_FreePool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
+    { 0x6FF59BE0 - FogImageBase, &FOG_Debug_ReallocPoolImpl, PatchAction::FunctionReplaceOriginalByPatch },
+#endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
