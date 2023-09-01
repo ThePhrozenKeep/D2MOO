@@ -44,6 +44,20 @@ enum D2C_MissilesTxtFlags
 	MISSILESFLAG_MISSILESKILL = (1 << MISSILESFLAGINDEX_MISSILESKILL),
 };
 
+
+enum D2C_MissilesTxtCollideTypes
+{
+	MISSILESCOLLIDE_NONE = 0,
+	MISSILESCOLLIDE_PLAYER = 1,
+	MISSILESCOLLIDE_MONSTER = 2,
+	MISSILESCOLLIDE_PLAYER_AND_MONSTER = 3,
+	MISSILESCOLLIDE_NONE4 = 4, // Same as 0
+	MISSILESCOLLIDE_MONSTER_5 = 5, // Same as 2
+	MISSILESCOLLIDE_BARRIER = 6, // Missile barriers, Doors, ...
+	MISSILESCOLLIDE_MISSILE = 7,
+	MISSILESCOLLIDE_PLAYER_MONSTER_BARRIER_WALL = 8,
+};
+
 struct D2MissilesTxt
 {
 	uint16_t wId;							//0x00
@@ -121,7 +135,7 @@ struct D2MissilesTxt
 	uint8_t nSubLoop;						//0x180
 	uint8_t nSubStart;						//0x181
 	uint8_t nSubStop;						//0x182
-	uint8_t nCollideType;					//0x183
+	uint8_t nCollideType;					//0x183 D2C_MissilesTxtCollideTypes
 	uint8_t nCollision;						//0x184
 	uint8_t nClientCol;						//0x185
 	uint8_t nCollideKill;					//0x186

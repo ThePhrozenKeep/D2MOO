@@ -31,7 +31,7 @@ extern D2MissileUnitFindTableStrc stru_6FD2E5F8[9];
 //D2Game.0x6FC55CE0
 int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* pUnit, void* pArgument);
 //D2Game.0x6FC55D90
-int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithAlignUnit(D2UnitStrc* pUnit, void* pArgument);
+int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit(D2UnitStrc* pUnit, void* pArgument);
 //D2Game.0x6FC55E60
 int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster(D2UnitStrc* pUnit, void* pArgument);
 //D2Game.0x6FC55F20

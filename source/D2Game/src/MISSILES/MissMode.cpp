@@ -70,15 +70,15 @@ struct D2HitFunc22ParamStrc
 
 D2MissileUnitFindTableStrc stru_6FD2E5F8[9] =
 {
-    { nullptr,                                                  0x00 },
-    { MISSMODE_UnitFindCallback_CanCollideWithAlignUnit,        0x84 },
-    { MISSMODE_UnitFindCallback_CanCollideWithMonster,          0x104 },
-    { MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster,  0x184 },
-    { nullptr,                                                  0x00 },
-    { MISSMODE_UnitFindCallback_CanCollideWithMonster,          0x104 },
-    { nullptr,                                                  0x04 },
-    { MISSMODE_UnitFindCallback_CanMissileDestroy,              0x40 },
-    { MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster,  0x185 },
+    /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
+    /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_BARRIER                   },
+    /*[2]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
+    /*[3]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER },
+    /*[4]*/{ nullptr                                                  , COLLIDE_NONE                                       },
+    /*[5]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
+    /*[6]*/{ nullptr                                                  , COLLIDE_BARRIER                                    },
+    /*[7]*/{ MISSMODE_UnitFindCallback_CanMissileDestroy              , COLLIDE_MISSILE                                    },
+    /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER },
 };
 
 
@@ -110,7 +110,7 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* p
 }
 
 //D2Game.0x6FC55D90
-int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithAlignUnit(D2UnitStrc* pUnit, void* pArgument)
+int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit(D2UnitStrc* pUnit, void* pArgument)
 {
     D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
     if (!pArg || !pArg->pMissilesTxtRecord)
