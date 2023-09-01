@@ -384,8 +384,7 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDA90C0
-//TODO: Find a name
-uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo)
+uint8_t __fastcall PATH_AdvanceToDoor(D2PathInfoStrc* pPathInfo)
 {
 	D2UnitStrc* pTargetUnit = pPathInfo->pDynamicPath->pTargetUnit;
 

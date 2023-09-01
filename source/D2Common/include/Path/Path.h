@@ -217,7 +217,7 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 //D2Common.0x6FDA8FE0
 void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA90C0
-uint8_t __fastcall sub_6FDA90C0(D2PathInfoStrc* pPathInfo);
+uint8_t __fastcall PATH_AdvanceToDoor(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA9190 (#10156)
 D2COMMON_DLL_DECL void __stdcall PATH_FreeDynamicPath(void* pMemPool, D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA91B0 (#11282)
