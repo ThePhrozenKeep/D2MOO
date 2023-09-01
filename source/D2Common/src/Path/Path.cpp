@@ -109,6 +109,7 @@ static const PathFunctionType scpfnPathFunction[] = {
 };
 static_assert(ARRAY_SIZE(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
+// Helper function
 void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath)
 {
 	// To game "pixels"

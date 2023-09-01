@@ -91,7 +91,7 @@ struct D2DynamicPathStrc
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
 	D2UnitStrc* pUnit;							//0x30
-	uint32_t dwFlags;							//0x34
+	uint32_t dwFlags;							//0x34 D2PathFlags
 	uint32_t unk0x38;							//0x38
 	uint32_t dwPathType;						//0x3C
 	uint32_t dwPrevPathType;					//0x40
