@@ -103,6 +103,16 @@ enum D2C_SkillsTxtItemTarget {
 	SKILLSITEMTARGET_LAST_ATTACKER = 4, // Attacker or last known attacker
 };
 
+enum D2C_SkillsTxtLineOfSight
+{
+	SKILLSLOS_NONE = 0,
+	SKILLSLOS_MISSILE_BARRIER = 1,
+	SKILLSLOS_PLAYER_PATH = 2,
+	SKILLSLOS_PLAYER_MONSTER = 3,
+	SKILLSLOS_PLAYER_FLYING = 4,
+	SKILLSLOS_RADIAL_BARRIER = 5,
+};
+
 struct D2SkillCalcTxt
 {
 	uint32_t dwCode;						//0x00
@@ -249,7 +259,7 @@ struct D2SkillsTxt
 	int16_t wMana;							//0x18A
 	int16_t wLevelMana;						//0x18C
 	uint8_t nAttackRank;					//0x18E
-	uint8_t nLineOfSight;					//0x18F
+	uint8_t nLineOfSight;					//0x18F D2C_SkillsTxtLineOfSight
 	uint32_t dwDelay;						//0x190
 	uint16_t wSkillDesc;					//0x194
 	uint16_t pad0x196;						//0x196

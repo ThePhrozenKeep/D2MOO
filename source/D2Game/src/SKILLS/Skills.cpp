@@ -2360,7 +2360,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         }
     }
 
-    if (pSkillsTxtRecord->nLineOfSight)
+    if (pSkillsTxtRecord->nLineOfSight != SKILLSLOS_NONE)
     {
         int32_t nX = 0;
         int32_t nY = 0;
@@ -2382,20 +2382,20 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
             uint32_t nCollisionMask = 0;
             switch (pSkillsTxtRecord->nLineOfSight)
             {
-            case 1u:
-                nCollisionMask = 0x04;
+            case SKILLSLOS_MISSILE_BARRIER:
+                nCollisionMask = COLLIDE_BARRIER;
                 break;
-            case 2u:
-                nCollisionMask = 0x1C09;
+            case SKILLSLOS_PLAYER_PATH:
+                nCollisionMask = COLLIDE_MASK_WALKING_UNIT;
                 break;
-            case 3u:
-                nCollisionMask = 0x180;
+            case SKILLSLOS_PLAYER_MONSTER:
+                nCollisionMask = COLLIDE_PLAYER | COLLIDE_MONSTER;
                 break;
-            case 4u:
-                nCollisionMask = 0x804;
+            case SKILLSLOS_PLAYER_FLYING:
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER;
                 break;
-            case 5u:
-                nCollisionMask = 0x805;
+            case SKILLSLOS_RADIAL_BARRIER:
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER;
                 break;
             default:
                 return 0;
