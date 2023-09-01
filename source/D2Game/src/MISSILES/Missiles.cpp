@@ -252,11 +252,11 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 
     if (pMissilesTxtRecord->nCollision)
     {
-        PATH_SetCollisionType(pMissile->pDynamicPath, 64);
+        PATH_SetCollisionMask(pMissile->pDynamicPath, 64);
     }
     else
     {
-        PATH_SetCollisionType(pMissile->pDynamicPath, 0);
+        PATH_SetCollisionMask(pMissile->pDynamicPath, 0);
     }
 
     D2Common_10184(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);

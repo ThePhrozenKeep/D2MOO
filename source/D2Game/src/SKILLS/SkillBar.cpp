@@ -893,7 +893,7 @@ int32_t __fastcall SKILLS_RemoveWhirlwindStats(D2GameStrc* pGame, D2UnitStrc* pU
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), v9);
     }
 
-    PATH_SetCollisionType(pUnit->pDynamicPath, v9);
+    PATH_SetCollisionMask(pUnit->pDynamicPath, v9);
     D2Common_10184(pUnit->pDynamicPath, pUnita);
 
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(a4);
@@ -1417,7 +1417,7 @@ int32_t __fastcall SKILLS_SetVelocityForLeap(D2GameStrc* pGame, D2UnitStrc* pUni
 
     SKILLS_SetFlags(pSkill, 0x1101u);
     D2Common_10184(pUnit->pDynamicPath, 0);
-    PATH_SetCollisionType(pUnit->pDynamicPath, 0);
+    PATH_SetCollisionMask(pUnit->pDynamicPath, 0);
 
     const int32_t nX = SKILLS_GetParam1(pSkill);
     const int32_t nY = SKILLS_GetParam2(pSkill);
@@ -1484,7 +1484,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100);
-            PATH_SetCollisionType(pUnit->pDynamicPath, 0x100);
+            PATH_SetCollisionMask(pUnit->pDynamicPath, 0x100);
             D2Common_10184(pUnit->pDynamicPath, 0x3C01);
             PATH_SetType(pUnit->pDynamicPath, 2);
 
@@ -1525,7 +1525,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
         else
         {
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x80u);
-            PATH_SetCollisionType(pUnit->pDynamicPath, 0x80);
+            PATH_SetCollisionMask(pUnit->pDynamicPath, 0x80);
             D2Common_10184(pUnit->pDynamicPath, 0x1C09);
             PATH_SetType(pUnit->pDynamicPath, 7);
             SKILLS_SetFlags(pSkill, 0x200);

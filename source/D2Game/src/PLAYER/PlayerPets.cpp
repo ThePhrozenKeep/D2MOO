@@ -881,7 +881,7 @@ void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataSt
     MONSTER_UpdateAiCallbackEvent(pGame, pPlayer);
     if (!MONSTERS_IsDead(pPlayer) && pPlayer->pDynamicPath)
     {
-        PATH_SetCollisionType(pPlayer->pDynamicPath, 256);
+        PATH_SetCollisionMask(pPlayer->pDynamicPath, 256);
     }
 }
 

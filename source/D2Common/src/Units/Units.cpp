@@ -500,7 +500,7 @@ void __stdcall UNITS_GetClientCoords(D2UnitStrc* pUnit, D2CoordStrc* pClientCoor
 }
 
 //D2Common.0x6FDBDE10 (#10338)
-int __fastcall UNITS_GetCollisionType(D2UnitStrc* pUnit)
+int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -537,7 +537,7 @@ int __fastcall UNITS_GetCollisionType(D2UnitStrc* pUnit)
 		return 1;
 
 	default:
-		return PATH_GetCollisionType(pUnit->pDynamicPath);
+		return PATH_GetCollisionMask(pUnit->pDynamicPath);
 	}
 }
 
@@ -548,7 +548,7 @@ void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit)
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
-	COLLISION_ResetMaskWithSizeXY(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetUnitSizeY(pUnit), UNITS_GetCollisionType(pUnit));
+	COLLISION_ResetMaskWithSizeXY(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, UNITS_GetUnitSizeX(pUnit), UNITS_GetUnitSizeY(pUnit), UNITS_GetCollisionMask(pUnit));
 }
 
 //D2Common.0x6FDBE060 (#10351)
@@ -564,7 +564,7 @@ void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, in
 
 	if (nSizeX && nSizeY)
 	{
-		COLLISION_SetMaskWithSizeXY(pRoom, nX, nY, nSizeX, nSizeY, UNITS_GetCollisionType(pUnit));
+		COLLISION_SetMaskWithSizeXY(pRoom, nX, nY, nSizeX, nSizeY, UNITS_GetCollisionMask(pUnit));
 	}
 }
 
@@ -2886,12 +2886,12 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 	UNITS_GetCoords(pUnit1, &pCoords1);
 	UNITS_GetCoords(pUnit2, &pCoords2);
 
-	if (UNITS_GetCollisionType(pUnit1) & nCollisionType)
+	if (UNITS_GetCollisionMask(pUnit1) & nCollisionType)
 	{
 		v4 = PATH_RemoveCollisionFootprintForUnit(pUnit1, 0);
 	}
 
-	if (UNITS_GetCollisionType(pUnit2) & nCollisionType)
+	if (UNITS_GetCollisionMask(pUnit2) & nCollisionType)
 	{
 		v26 = PATH_RemoveCollisionFootprintForUnit(pUnit2, 0);
 	}

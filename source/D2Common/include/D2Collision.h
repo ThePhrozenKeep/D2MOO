@@ -35,7 +35,7 @@ enum D2C_CollisionPattern
 	COLLISION_PATTERN_SMALL_NO_PRESENCE   = 5,
 };
 
-enum D2C_CollisionFlags : uint16_t
+enum D2C_CollisionMaskFlags : uint16_t
 {
 	COLLIDE_NONE = 0x0000,
 	COLLIDE_BLOCK_PLAYER = 0x0001,			// 'black space' in arcane sanctuary, cliff walls etc

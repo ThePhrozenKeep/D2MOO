@@ -334,9 +334,9 @@ D2COMMON_DLL_DECL void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pD
 //D2Common.0x6FDA9FA0 (#10180)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall PATH_GetTargetUnit(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9FC0 (#10181)
-D2COMMON_DLL_DECL int __stdcall PATH_GetCollisionType(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetCollisionMask(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9FE0 (#10182)
-D2COMMON_DLL_DECL void __stdcall PATH_SetCollisionType(D2DynamicPathStrc* pDynamicPath, int nCollisionType);
+D2COMMON_DLL_DECL void __stdcall PATH_SetCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionType);
 //D2Common.0x6FDAA0C0 (#10183)
 D2COMMON_DLL_DECL int __stdcall D2Common_10183(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA0D0 (#10184)

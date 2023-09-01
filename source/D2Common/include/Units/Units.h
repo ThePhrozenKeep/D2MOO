@@ -268,7 +268,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_GetCoords(D2UnitStrc* pUnit, D2CoordStrc*
 //D2Common.0x6FDBDDA0 (#10335)
 D2COMMON_DLL_DECL void __stdcall UNITS_GetClientCoords(D2UnitStrc* pUnit, D2CoordStrc* pClientCoords);
 //D2Common.0x6FDBDE10 (#10338)
-D2COMMON_DLL_DECL int __fastcall UNITS_GetCollisionType(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDEC0 (#10352)
 D2COMMON_DLL_DECL void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE060 (#10351)

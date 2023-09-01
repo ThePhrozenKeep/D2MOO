@@ -224,8 +224,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10178_PATH_GetLastPointY                                   @10178
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetTargetUnit                                                  @10179
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetUnit                                                  @10180
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetCollisionType                                               @10181
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetCollisionType                                               @10182
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetCollisionMask                                               @10181
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetCollisionMask                                               @10182
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10183                                                      @10183
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10184                                                      @10184
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetType                                                        @10185
@@ -381,7 +381,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetClientCoords                                               @10335
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeX                                                  @10336
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetUnitSizeY                                                  @10337
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCollisionType                                              @10338
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetCollisionMask                                              @10338
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetStashGoldLimit                                             @10339
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetX                                                    @10340
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetTargetY                                                    @10341
