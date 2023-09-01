@@ -511,30 +511,38 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 		{
 			if (pUnit->pObjectData->pObjectTxt->nBlocksVis)
 			{
-				return 2054;
+				return COLLIDE_MASK_DOOR_BLOCK_VIS;
+			}
+			else if(pUnit->pObjectData->pObjectTxt->nBlockMissile)
+			{
+				return COLLIDE_DOOR | COLLIDE_BARRIER;
 			}
 			else
 			{
-				return pUnit->pObjectData->pObjectTxt->nBlockMissile != 0 ? 2052 : 1024;
+				return COLLIDE_OBJECT;
 			}
 		}
 		else
 		{
 			if (pUnit->pObjectData->pObjectTxt->nSubClass & OBJSUBCLASS_TOWNPORTAL)
 			{
-				return 32768;
+				return COLLIDE_CORPSE;
+			}
+			else if (pUnit->pObjectData->pObjectTxt->nBlockMissile)
+			{
+				return COLLIDE_OBJECT | COLLIDE_BARRIER;
 			}
 			else
 			{
-				return pUnit->pObjectData->pObjectTxt->nBlockMissile != 0 ? 1028 : 1024;
+				return COLLIDE_OBJECT;
 			}
 		}
 
 	case UNIT_ITEM:
-		return 512;
+		return COLLIDE_ITEM;
 
 	case UNIT_TILE:
-		return 1;
+		return COLLIDE_BLOCK_PLAYER;
 
 	default:
 		return PATH_GetCollisionMask(pUnit->pDynamicPath);
