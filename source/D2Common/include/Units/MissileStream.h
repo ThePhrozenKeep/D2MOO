@@ -14,6 +14,8 @@ struct D2MissileStreamStrc
 
 #pragma pack()
 
+// Note: MISSSTREAM functions are all unreferenced except for MISSTREAM_FreeMissileStream which is probably just a security.
+
 //D2Common.0x6FDBC230 (#11213)
 D2COMMON_DLL_DECL void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissile);
 //D2Common.0x6FDBC280 (#11214)

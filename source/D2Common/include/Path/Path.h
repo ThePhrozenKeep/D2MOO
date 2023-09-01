@@ -22,6 +22,8 @@ enum D2PathTypes
 	PATHTYPE_MON_OTHER_2 = 13,
 	PATHTYPE_BLESSEDHAMMER = 14,
 	PATHTYPE_MOTION = 15,
+	PATHTYPE_MISSILE_STREAM = 16, // Not actually used anywhere in the game
+	PATHTYPE_UNK_17 = 17,
 
 	PATHTYPE_COUNT = 18
 };
@@ -35,6 +37,7 @@ enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x00020 = 0x00020, // Only set on the client side
 	PATH_UNKNOWN_FLAG_0x00040 = 0x00040,
 	PATH_UNKNOWN_FLAG_0x00200 = 0x00200,
+	PATH_UNKNOWN_FLAG_0x00800 = 0x00800,
 	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
 	PATH_UNKNOWN_FLAG_0x04000 = 0x04000,
 	PATH_UNKNOWN_FLAG_0x08000 = 0x08000,
@@ -132,10 +135,10 @@ struct D2DynamicPathStrc
 
 struct D2PathInfoStrc
 {
-	D2PathPointStrc pStartCoord;			//0x00
+	D2PathPointStrc pStartCoord;				//0x00
 	D2PathPointStrc tTargetCoord;				//0x04
-	D2RoomStrc* pRoom;						//0x08
-	D2RoomStrc* field_C;					//0x0C
+	D2RoomStrc* pRoom;							//0x08
+	D2RoomStrc* pTargetRoom;					//0x0C
 	int32_t field_10;							//0x10
 	uint8_t field_14;							//0x14
 	uint8_t field_15;							//0x15
