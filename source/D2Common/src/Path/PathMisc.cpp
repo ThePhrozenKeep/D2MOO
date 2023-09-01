@@ -1160,13 +1160,8 @@ LABEL_16:
 LABEL_18:
 	pDynamicPath->tGameCoords.dwPrecisionX = v4;
 	pDynamicPath->tGameCoords.dwPrecisionY = v6;
-	pX = v4 >> 11;
-	pY = v6 >> 11;
-	DUNGEON_GameToClientCoords(&pX, &pY);
+	PATH_UpdateClientCoords(pDynamicPath);
 	v15 = pDynamicPath->pUnit;
-	v16 = pY;
-	pDynamicPath->dwClientCoordX = pX;
-	pDynamicPath->dwClientCoordY = v16;
 	if (!v15)
 		return;
 	if ((pDynamicPath->dwFlags & 1) == 0)
@@ -1547,7 +1542,7 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 	v3 = (pPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
 	v4 = (pPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
 	v29 = v4;
-	if ((v2 & 0x40000) != 0)
+	if ((v2 & PATH_MISSILE_MASK) != 0)
 	{
 		v5 = pPath->pRoom;
 		v6 = HIWORD(v4);
@@ -1603,13 +1598,8 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 	}
 	pPath->tGameCoords.dwPrecisionX = v3;
 	pPath->tGameCoords.dwPrecisionY = v4;
-	pX = v3 >> 11;
-	pY = v4 >> 11;
-	DUNGEON_GameToClientCoords(&pX, &pY);
-	v12 = pX;
-	pPath->dwClientCoordY = pY;
+	PATH_UpdateClientCoords(pPath);
 	v13 = pPath->pUnit;
-	pPath->dwClientCoordX = v12;
 	if (v13)
 	{
 		if ((pPath->dwFlags & 1) != 0)
@@ -2206,7 +2196,6 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 	DWORD v8; // edx
 	D2RoomStrc* v9; // eax
 	int v10; // ecx
-	D2DynamicPathStrc* v11; // ebp
 	int v12; // edx
 	D2UnitStrc* v13; // eax
 	D2RoomStrc* v14; // eax
@@ -2287,16 +2276,10 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 		}
 		v1 = pDynamicPath;
 	}
-	v1->tGameCoords.dwPrecisionX = v2;
-	v1->tGameCoords.dwPrecisionY = v3;
-	pX = v2 >> 11;
-	pY = v3 >> 11;
-	DUNGEON_GameToClientCoords(&pX, &pY);
-	v11 = pDynamicPath;
-	v12 = pX;
-	pDynamicPath->dwClientCoordY = pY;
+	pDynamicPath->tGameCoords.dwPrecisionX = v2;
+	pDynamicPath->tGameCoords.dwPrecisionY = v3;
+	PATH_UpdateClientCoords(pDynamicPath);
 	v13 = pDynamicPath->pUnit;
-	pDynamicPath->dwClientCoordX = v12;
 	if (v13)
 	{
 		if ((pDynamicPath->dwFlags & 1) != 0)
@@ -2324,13 +2307,13 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 							if (v14)
 							{
 							LABEL_47:
-								PATHMISC_SetRoom(v11, v14);
+								PATHMISC_SetRoom(pDynamicPath, v14);
 								return;
 							}
 						LABEL_45:
-							if ((v11->dwFlags & 0x40000) != 0)
+							if ((pDynamicPath->dwFlags & 0x40000) != 0)
 							{
-								v11->dwPathPoints = 0;
+								pDynamicPath->dwPathPoints = 0;
 								return;
 							}
 							goto LABEL_47;
@@ -2353,11 +2336,9 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 									if (v19 >= v24 && v19 < v24 + v23->nSubtileHeight)
 									{
 										v14 = pppRoom[v22];
-										v11 = pDynamicPath;
 										goto LABEL_44;
 									}
 								}
-								v11 = pDynamicPath;
 							}
 							if (++v22 >= v27)
 							{
