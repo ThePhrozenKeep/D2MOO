@@ -124,9 +124,9 @@ int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	const int32_t nOffsetX = D2signum(CLIENTS_GetUnitX(pUnit1) - nX2) * nOffset;
 	const int32_t nOffsetY = D2signum(CLIENTS_GetUnitY(pUnit1) - nY2) * nOffset;
 
-	if (UNITS_TestCollisionByCoordinates(pUnit1, nX2, nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_WALL | COLLIDE_DOOR)
-		&& UNITS_TestCollisionByCoordinates(pUnit1, nX2 - nOffsetY, nOffsetX + nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_WALL | COLLIDE_DOOR)
-		&& UNITS_TestCollisionByCoordinates(pUnit1, nOffsetY + nX2, nY2 - nOffsetX, COLLIDE_BLOCK_PLAYER | COLLIDE_WALL | COLLIDE_DOOR))
+	if (UNITS_TestCollisionByCoordinates(pUnit1, nX2, nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR)
+		&& UNITS_TestCollisionByCoordinates(pUnit1, nX2 - nOffsetY, nOffsetX + nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR)
+		&& UNITS_TestCollisionByCoordinates(pUnit1, nOffsetY + nX2, nY2 - nOffsetX, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR))
 	{
 		return 0;
 	}
@@ -245,7 +245,7 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		}
 	}
 
-	if (pArg->unk0x08 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+	if (pArg->unk0x08 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 	{
 		return nullptr;
 	}
@@ -339,7 +339,7 @@ D2UnitStrc* __fastcall sub_6FCF1980(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		}
 	}
 
-	if (!UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+	if (!UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 	{
 		if (nThreat > 1)
 		{
@@ -408,7 +408,7 @@ D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
 	if (pTarget->dwUnitType == UNIT_PLAYER)
 	{
-		if (nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+		if (nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -417,7 +417,7 @@ D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 	else if (pTarget->dwUnitType == UNIT_MONSTER)
 	{
 		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
-		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -729,7 +729,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 								while (1)
 								{
-									if (nDistance < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_WALL)))
+									if (nDistance < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
 									{
 										nDistanceToTarget = nDistance;
 										pTargetUnit = pTargetNode->pUnit;
@@ -754,7 +754,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 				if (pUnit->nAct == pTargetNode->pUnit->nAct)
 				{
 					const int32_t nTemp = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
-					if (nTemp < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_WALL)))
+					if (nTemp < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
 					{
 						nDistanceToTarget = nTemp;
 						pTargetUnit = pTargetNode->pUnit;
@@ -775,7 +775,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 					if (pUnit->nAct == pTargetNode->pUnit->nAct)
 					{
 						const int32_t nTemp = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
-						if (nTemp < nMinDistance && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_WALL)))
+						if (nTemp < nMinDistance && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
 						{
 							nMinDistance = nTemp;
 							pPotentialTarget = pTargetNode->pUnit;
@@ -898,7 +898,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -917,7 +917,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -936,7 +936,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_WALL))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;

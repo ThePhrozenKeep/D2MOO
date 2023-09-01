@@ -259,7 +259,7 @@ void __fastcall sub_6FD413E0(D2RoomCollisionGridStrc* pCollisionGrid, D2RoomColl
 			}
 			if (pTiles[i].dwFlags & 0x80)
 			{
-				nFlags |= COLLIDE_WALL;
+				nFlags |= COLLIDE_BARRIER;
 			}
 
 			if (nFlags && pCollisionGrid->pCollisionMask)
@@ -436,7 +436,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2Room
 		}
 	}
 
-	return COLLIDE_INVALID;
+	return COLLIDE_MASK_INVALID;
 }
 
 //D2Common.0x6FD41DE0 (#10121)
@@ -553,7 +553,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMask(D2RoomStrc* pRoom, int nX, int 
 		}
 	}
 
-	return COLLIDE_INVALID;
+	return COLLIDE_MASK_INVALID;
 }
 
 //D2Common.0x6FD42740 (#10122)
@@ -1152,7 +1152,7 @@ uint16_t __fastcall COLLISION_TryMoveUnitCollisionMask(D2RoomStrc* pRoom, int nX
 	
 	const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nMoveConditionMask);
 
-	if (nCollidedWithMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_WALL))
+	if (nCollidedWithMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_BARRIER))
 	{
 		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nCollisionMask);
 	}

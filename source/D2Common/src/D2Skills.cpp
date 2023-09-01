@@ -3336,7 +3336,7 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 			}
 		}
 		
-		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_WALL))
+		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_BARRIER))
 		{
 			*pX = pCoord.nX;
 			*pY = pCoord.nY;

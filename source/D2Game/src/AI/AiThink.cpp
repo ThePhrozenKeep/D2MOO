@@ -4211,7 +4211,7 @@ void __fastcall AITHINK_Fn049_ZakarumPriest(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return;
 	}
 
-	if (UNITS_TestCollisionWithUnit(pUnit, pAiTickParam->pTarget, COLLIDE_WALL))
+	if (UNITS_TestCollisionWithUnit(pUnit, pAiTickParam->pTarget, COLLIDE_BARRIER))
 	{
 		if (AIRollChanceParam(pGame, pUnit, pAiTickParam, ZAKARUMPRIEST_AI_PARAM_ATTACK_CHANCE_PCT) && pAiTickParam->pMonstatsTxt->nSkill[3] >= 0
 			&& pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[1] && AIRollChanceParam(pGame, pUnit, pAiTickParam, ZAKARUMPRIEST_AI_PARAM_BLIZZARD_CHANCE_PCT))
@@ -4567,7 +4567,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		const uint32_t nRand = AI_RollPercentage(pUnit);
 
 		int32_t bUseBlizzard = 0;
-		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL))
+		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
 		{
 			bUseBlizzard = 1;
 		}
@@ -8349,7 +8349,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	if (!pTarget || nDistance > 15)
 	{
 		pTarget = nullptr;
-		if (pPotentialTarget && !UNITS_TestCollisionWithUnit(pUnit, pPotentialTarget, COLLIDE_WALL))
+		if (pPotentialTarget && !UNITS_TestCollisionWithUnit(pUnit, pPotentialTarget, COLLIDE_BARRIER))
 		{
 			nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pPotentialTarget);
 			if (nDistance < 20)
@@ -11540,7 +11540,7 @@ int32_t __fastcall AITHINK_GetTargetScore(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	{
 		nRangeValue = 100;
 	}
-	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL))
+	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
 	{
 		nRangeValue = 75;
 	}
@@ -11775,7 +11775,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 				}
 			}
 
-			const int32_t bColliding = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL);
+			const int32_t bColliding = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER);
 			const int32_t nFireResist = STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0);
 			const int32_t nLightResist = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0);
 
@@ -13362,7 +13362,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 			bProgressiveState = 1;
 		}
 
-		const int32_t bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_WALL) == 0);
+		const int32_t bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0);
 
 		if (arg.unk0x0C > 3 && (ITEMS_RollRandomNumber(&pUnit->pSeed) & 31) < 2 * arg.unk0x0C)
 		{

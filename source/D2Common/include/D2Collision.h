@@ -38,14 +38,15 @@ enum D2C_CollisionPattern
 enum D2C_CollisionMaskFlags : uint16_t
 {
 	COLLIDE_NONE = 0x0000,
-	COLLIDE_BLOCK_PLAYER = 0x0001,			// 'black space' in arcane sanctuary, cliff walls etc
+	COLLIDE_BLOCK_PLAYER = 0x0001,			// 'black space' in arcane sanctuary, cliff walls etc. Seems to be named "wall" only in original game?
 	COLLIDE_BLOCK_MISSILE = 0x0002,			// tile based obstacles you can't shoot over
-	COLLIDE_WALL = 0x0004,					// again used inconsistantly -.-
+	COLLIDE_BARRIER = 0x0004,				// again used inconsistantly -.- Can guard against Missile / Flying ?
 	COLLIDE_BLOCK_LEAP = 0x0008,
 	COLLIDE_ALTERNATE_FLOOR = 0x0010,		// some floors have this set, others don't
 	COLLIDE_BLANK = 0x0020,					// returned if the subtile is invalid
 	COLLIDE_MISSILE = 0x0040,
 	COLLIDE_PLAYER = 0x0080,
+	COLLIDE_WATER = 0x00C0,
 	COLLIDE_MONSTER = 0x0100,
 	COLLIDE_ITEM = 0x0200,
 	COLLIDE_OBJECT = 0x0400,
@@ -55,8 +56,9 @@ enum D2C_CollisionMaskFlags : uint16_t
 	COLLIDE_4000 = 0x4000,
 	COLLIDE_CORPSE = 0x8000,				// also used by portals, but dead monsters are mask 0x8000
 	COLLIDE_ALL_MASK = 0xFFFF,
-	COLLIDE_INVALID = (COLLIDE_BLANK | COLLIDE_WALL | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER),
+	COLLIDE_MASK_INVALID = (COLLIDE_BLANK | COLLIDE_BARRIER | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER),
 	COLLIDE_MASK_WALKING_UNIT = COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT | COLLIDE_DOOR | COLLIDE_UNIT_RELATED,
+	COLLIDE_MASK_DOOR_BLOCK_VIS = COLLIDE_DOOR | COLLIDE_BARRIER | COLLIDE_BLOCK_MISSILE,
 };
 
 struct D2RoomCollisionGridStrc
