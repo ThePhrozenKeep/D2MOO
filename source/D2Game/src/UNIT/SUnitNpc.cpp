@@ -607,7 +607,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
         return 3;
     }
 
-    const int32_t nTransactionCost = ITEMS_GetTransactionCost(pPlayer, pItem, pGame->nDifficulty, UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty], pNpc->dwClassId, 1);
+    const int32_t nTransactionCost = ITEMS_GetTransactionCost(pPlayer, pItem, (D2C_Difficulties)pGame->nDifficulty, UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty], pNpc->dwClassId, D2C_TransactionTypes::TRANSACTIONTYPE_SELL);
 
     int32_t bReSellAble = 1;
 
@@ -1212,7 +1212,7 @@ D2UnitStrc* __fastcall sub_6FCC87C0(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2Un
 }
 
 //D2Game.0x6FCC88B0) --------------------------------------------------------
-int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t a5, uint16_t nTab, int32_t nCost, int32_t a8)
+int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bFill)
 {
     return 0;
 
@@ -1651,7 +1651,7 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 }
 
 //D2Game.0x6FCC92A0
-int32_t __fastcall D2GAME_NPC_BuyItemHandler_6FCC92A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nNpcUnitId, int32_t nItemId, int32_t a5, uint16_t nTab, int32_t nCost, int32_t a8)
+int32_t __fastcall D2GAME_NPC_BuyItemHandler_6FCC92A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nNpcUnitId, int32_t nItemId, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bFill)
 {
     D2_ASSERT(pGame);
 
@@ -1659,7 +1659,7 @@ int32_t __fastcall D2GAME_NPC_BuyItemHandler_6FCC92A0(D2GameStrc* pGame, D2UnitS
     D2UnitStrc* pNpc = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, nNpcUnitId);
     if (pNpc && pInteractUnit == pNpc)
     {
-        return sub_6FCC88B0(pGame, pPlayer, pNpc, nItemId, a5, nTab, nCost, a8);
+        return sub_6FCC88B0(pGame, pPlayer, pNpc, nItemId, nItemMode, nTransactionType, nCost, bFill);
     }
 
     const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
@@ -1775,7 +1775,7 @@ int32_t __fastcall D2GAME_NPC_Repair_6FCC95B0(D2GameStrc* pGame, D2UnitStrc* pUn
 
     if (a6 < 0)
     {
-        const int32_t nRepairCosts = ITEMS_GetAllRepairCosts(pGame, pUnit, pNpc->dwClassId, pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], nullptr);
+        const int32_t nRepairCosts = ITEMS_GetAllRepairCosts(pGame, pUnit, pNpc->dwClassId, (D2C_Difficulties)pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], nullptr);
         if (nRepairCosts)
         {
             const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
@@ -1795,7 +1795,7 @@ int32_t __fastcall D2GAME_NPC_Repair_6FCC95B0(D2GameStrc* pGame, D2UnitStrc* pUn
                 PLRTRADE_AddGold(pUnit, STAT_GOLD, -nRepairCosts);
             }
 
-            ITEMS_GetAllRepairCosts(pGame, pUnit, pNpc->dwClassId, pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], D2GAME_NPC_RepairItem_6FCC6970);
+            ITEMS_GetAllRepairCosts(pGame, pUnit, pNpc->dwClassId, (D2C_Difficulties)pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], D2GAME_NPC_RepairItem_6FCC6970);
         }
 
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0x2Au, 2, STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0), -1, 1);
@@ -1827,7 +1827,7 @@ int32_t __fastcall D2GAME_NPC_Repair_6FCC95B0(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    const int32_t nTransactionCosts = ITEMS_GetTransactionCost(pUnit, pItem, pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], pNpc->dwClassId, 3);
+    const int32_t nTransactionCosts = ITEMS_GetTransactionCost(pUnit, pItem, (D2C_Difficulties)pGame->nDifficulty, UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], pNpc->dwClassId, D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR);
     const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
     if (nGold + STATLIST_UnitGetStatValue(pUnit, STAT_GOLDBANK, 0) >= nTransactionCosts)
     {

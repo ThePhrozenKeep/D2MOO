@@ -1958,7 +1958,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 
 //TODO: Check Calculations for unnamed variables, contains some small (rounding?) errors
 //D2Common.0x6FD9B1C0
-int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, int nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, int nTransactionType)
+int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType)
 {
 	D2UniqueItemsTxt* pUniqueItemsTxtRecord = NULL;
 	D2MagicAffixTxt* pMagicAffixTxtRecord = NULL;
@@ -2006,7 +2006,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 	nLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
 
-	if (nTransactionType == 3 && !ITEMS_IsRepairable(pItem))
+	if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR && !ITEMS_IsRepairable(pItem))
 	{
 		return 0;
 	}
@@ -2029,7 +2029,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		nReducePricePct = 99;
 	}
 
-	if (nTransactionType != 2)
+	if (nTransactionType != D2C_TransactionTypes::TRANSACTIONTYPE_GAMBLE)
 	{
 		nSellCost = 0;
 		nBuyCost = 0;
@@ -2338,7 +2338,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			}
 		}
 
-		if (nTransactionType == 1)
+		if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_SELL)
 		{
 			if (pItemData->dwItemFlags & IFLAG_ETHEREAL && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 			{
@@ -2348,7 +2348,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 				}
 			}
 		}
-		else if (nTransactionType == 3)
+		else if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
 		{
 			pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(pItemsTxtRecord->wType[0]);
 			if (!pItemTypesTxtRecord || !pItemTypesTxtRecord->wQuiver || !pItemTypesTxtRecord->nThrowable)
@@ -2483,7 +2483,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 		nCost = nBuyCost;
 
-		if (nTransactionType == 3)
+		if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
 		{
 			if (!(pItemData->dwItemFlags & IFLAG_ETHEREAL))
 			{
@@ -2496,9 +2496,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			nCost = pNpcTxtRecord->nMaxBuy[nDifficulty];
 		}
 
-		if (nTransactionType != 1)
+		if (nTransactionType != D2C_TransactionTypes::TRANSACTIONTYPE_SELL)
 		{
-			if (nTransactionType == 3)
+			if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
 			{
 				nCost = nRepCost - DATATBLS_CalculatePercentage(nRepCost, nReducePricePct, 100);
 			}
@@ -2655,7 +2655,7 @@ int __fastcall ITEMS_CheckUnitFlagEx(D2UnitStrc* pUnit, int nFlag)
 }
 
 //D2Common.0x6FD9CDE0 (#10775)
-int __stdcall ITEMS_GetTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, int nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, int nTransactionType)
+int __stdcall ITEMS_GetTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType)
 {
 	return ITEMS_CalculateTransactionCost(pPlayer, pItem, nDifficulty, pQuestFlags, nVendorId, nTransactionType);
 }
@@ -4232,7 +4232,7 @@ BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9F490 (#10877)
-int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int nNpcId, int nDifficulty, D2BitBufferStrc* pQuestFlags, void(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*))
+int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int nNpcId, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, void(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*))
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -4310,7 +4310,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 			{
 				if (bCanBeRepaired)
 				{
-					nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, 3);
+					nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR);
 
 					if (pfCallback)
 					{
@@ -4328,7 +4328,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 					{
 						if (bCanBeRepaired)
 						{
-							nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, 3);
+							nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR);
 
 							if (pfCallback)
 							{

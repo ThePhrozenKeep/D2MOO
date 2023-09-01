@@ -298,13 +298,17 @@ struct D2GSPacketClt31		//size of 0x09
 
 struct D2GSPacketClt32		//size of 0x11
 {
-	uint8_t nHeader;			//0x00
-	int32_t unk0x01;			//0x01
-	int32_t unk0x05;			//0x05
-	uint16_t unk0x09;			//0x09
-	uint16_t unk0x0B;			//0x0B
-	int32_t unk0x0D;			//0x0D
+	uint8_t nHeader;						//0x00
+	int32_t dwNpcGUID;						//0x01
+	int32_t dwItemGUID;						//0x05
+	uint16_t nTransactionType;				//0x09
+	struct {								//0x0B
+		uint16_t nItemMode : 15;
+		uint16_t bFill : 1;
+	};
+	int32_t dwCost;							//0x0D
 };
+static_assert(sizeof(D2GSPacketClt32) == 0x11, "size mismatch");
 
 struct D2GSPacketClt33		//size of 0x11
 {
@@ -383,8 +387,8 @@ struct D2GSPacketClt44		//size of 0x11
 struct D2GSPacketClt45		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01;			//0x01
-	int32_t unk0x05;			//0x05
+	int32_t nPortalGUID;		//0x01
+	int32_t nLevelId;			//0x05
 };
 
 //TODO: 0x46 - 0x48
@@ -393,7 +397,7 @@ struct D2GSPacketClt49		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
 	int32_t nWaypointGUID;			//0x01
-	int32_t unk0x05;			//0x05
+	int32_t nLevelId;			//0x05
 };
 
 //TODO: 0x4A - 0x4E
@@ -433,7 +437,10 @@ struct D2GSPacketClt58		//size of 0x03
 struct D2GSPacketClt59		//size of 0x11
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01[4];			//0x01
+	uint32_t nUnitType;			//0x01
+	uint32_t dwUnitGUID;		//0x05
+	uint32_t dwTargetX;			//0x09
+	uint32_t dwTargetY;			//0x0D
 };
 
 //TODO: 0x5A - 0x5C
@@ -450,7 +457,7 @@ struct D2GSPacketClt5E		//size of 0x06
 {
 	uint8_t nHeader;			//0x00
 	uint8_t nType;				//0x01
-	int32_t unk0x02;			//0x02
+	int32_t dwPlayerGUID;		//0x02
 };
 
 struct D2GSPacketClt5F
@@ -484,10 +491,10 @@ struct D2GSPacketClt66		//size of 0x2E
 {
 	uint8_t nHeader;			//0x00
 	char szGameName[16];		//0x01
-	uint8_t bSkipVerification;	//0x11
+	uint8_t nGameType;			//0x11
 	uint8_t nPlayerClass;		//0x12
-	int8_t unk0x13;				//0x13
-	int8_t unk0x14;				//0x14
+	int8_t nTemplate;			//0x13
+	int8_t nDifficulty ;		//0x14
 	char szClientName[16];		//0x15
 	int16_t unk0x25;			//0x25
 	uint32_t nGameFlags;		//0x27

@@ -39,6 +39,13 @@ enum D2InteractStates
 	INTERACT_TRADE = 2,   //your trading
 };
 
+enum D2C_TransactionTypes
+{
+	TRANSACTIONTYPE_BUY = 0,
+	TRANSACTIONTYPE_SELL = 1,
+	TRANSACTIONTYPE_GAMBLE = 2,
+	TRANSACTIONTYPE_REPAIR = 3,
+};
 
 #ifndef CONSTANTS_LEVELS //Pseudo-Macro to group all constants
 
@@ -83,13 +90,6 @@ enum D2C_Acts
 
 
 #endif // CONSTANTS_LEVELS
-
-
-
-enum D2C_ClientStates
-{
-	CLTSTATE_CONNECTED = 4
-};
 
 enum D2SaveCharType
 {
