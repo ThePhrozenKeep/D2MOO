@@ -304,7 +304,7 @@ struct D2GSPacketClt32		//size of 0x11
 	uint16_t nTransactionType;				//0x09
 	struct {								//0x0B
 		uint16_t nItemMode : 15;
-		uint16_t bFill : 1;
+		uint16_t bMultibuy : 1;
 	};
 	int32_t dwCost;							//0x0D
 };
