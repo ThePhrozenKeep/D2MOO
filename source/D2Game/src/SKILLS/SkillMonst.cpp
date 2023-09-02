@@ -515,8 +515,8 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         if (nSkillFlags & 0x80)
         {
             SKILLS_SetFlags(pSkill, 0x101u);
-            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
-            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0);
+            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
+            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
             PATH_SetType(pUnit->pDynamicPath, 9);
             PATH_SetVelocity(pUnit->pDynamicPath, sub_6FD15500(pUnit), __FILE__, __LINE__);
@@ -555,8 +555,8 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         SKILLS_SetFlags(pSkill, 0);
         sub_6FCBDE90(pUnit, 0);
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
-        PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x100u);
-        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0x3C01u);
+        PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
+        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
         PATH_SetType(pUnit->pDynamicPath, 0x65u);
 
         if (pUnit->dwUnitType == UNIT_MONSTER)
@@ -1269,7 +1269,7 @@ int32_t __fastcall SKILLS_ResurrectUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
             MONSTER_UpdateAiCallbackEvent(pGame, pUnit);
             sub_6FC68280(pGame->pMonReg, pUnit);
             QUESTS_AttachLevelChainRecord(pGame, pUnit, pRoom, 0);
-            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x100);
+            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
             D2Common_10214(pUnit);
             COLLISION_SetMaskWithPattern(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), PATH_GetUnitCollisionPattern(pUnit), 0x100);
         }
@@ -1277,7 +1277,7 @@ int32_t __fastcall SKILLS_ResurrectUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             pUnit->dwFlags |= UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET;
 
-            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x80);
+            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_PLAYER);
             D2Common_10214(pUnit);
             COLLISION_SetMaskWithPattern(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), PATH_GetUnitCollisionPattern(pUnit), 0x80);
         }

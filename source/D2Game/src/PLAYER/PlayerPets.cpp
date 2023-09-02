@@ -5,6 +5,7 @@
 #include <Fog.h>
 #include <D2BitManip.h>
 
+#include <D2Collision.h>
 #include <D2DataTbls.h>
 #include <D2Dungeon.h>
 #include <D2Monsters.h>
@@ -881,7 +882,7 @@ void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataSt
     MONSTER_UpdateAiCallbackEvent(pGame, pPlayer);
     if (!MONSTERS_IsDead(pPlayer) && pPlayer->pDynamicPath)
     {
-        PATH_SetFootprintCollisionMask(pPlayer->pDynamicPath, 256);
+        PATH_SetFootprintCollisionMask(pPlayer->pDynamicPath, COLLIDE_MONSTER);
     }
 }
 

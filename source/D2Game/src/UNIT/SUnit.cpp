@@ -560,7 +560,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
             {
                 PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
                 PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-                PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x8000u);
+                PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
             }
         }
         else if (nUnitType == UNIT_MONSTER)
@@ -572,7 +572,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
                 {
                     PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
                     PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-                    PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x8000u);
+                    PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
                     return pUnit;
                 }
             }
@@ -787,7 +787,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
         {
             PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
             PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x8000);
+            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
         }
         break;
     }
@@ -813,7 +813,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
         {
             PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
             PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 0x8000);
+            PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
         }
         break;
     }

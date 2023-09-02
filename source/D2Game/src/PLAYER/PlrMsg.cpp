@@ -6,6 +6,7 @@
 #include <Storm.h>
 #include <D2BitManip.h>
 
+#include <D2Collision.h>
 #include <D2Skills.h>
 #include <D2StatList.h>
 #include <D2DataTbls.h>
@@ -3767,7 +3768,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0x409u);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT);
     PATH_SetType(pUnit->pDynamicPath, 15);
     PATH_SetNewDistance(pUnit->pDynamicPath, 77);
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, pPacket5F->nX, pPacket5F->nY);

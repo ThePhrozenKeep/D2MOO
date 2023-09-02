@@ -8,6 +8,7 @@
 
 #include <DataTbls/MissilesTbls.h>
 #include <D2StatList.h>
+#include <D2Collision.h>
 #include <D2Dungeon.h>
 #include <D2States.h>
 #include <D2DataTbls.h>
@@ -252,11 +253,11 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 
     if (pMissilesTxtRecord->nCollision)
     {
-        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, 64);
+        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, COLLIDE_MISSILE);
     }
     else
     {
-        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, 0);
+        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, COLLIDE_NONE);
     }
 
     PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);
