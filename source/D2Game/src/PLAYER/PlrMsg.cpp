@@ -3759,7 +3759,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     }
 
     // TODO: a2
-    const int32_t a2 = D2Common_10183(pUnit->pDynamicPath);
+    const int32_t a2 = PATH_GetMoveTestCollisionMask(pUnit->pDynamicPath);
     const int32_t nPathType = PATH_GetType(pUnit->pDynamicPath);
     const uint8_t nNewDistance = PATH_GetMaxDistance(pUnit->pDynamicPath);
     D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
@@ -3767,7 +3767,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    D2Common_10184(pUnit->pDynamicPath, 0x409u);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0x409u);
     PATH_SetType(pUnit->pDynamicPath, 15);
     PATH_SetNewDistance(pUnit->pDynamicPath, 77);
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, pPacket5F->nX, pPacket5F->nY);
@@ -3785,7 +3785,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
         }
     }
 
-    D2Common_10184(pUnit->pDynamicPath, a2);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, a2);
     PATH_SetType(pUnit->pDynamicPath, nPathType);
     PATH_SetNewDistance(pUnit->pDynamicPath, nNewDistance);
 

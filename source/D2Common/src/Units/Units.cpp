@@ -545,7 +545,7 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 		return COLLIDE_BLOCK_PLAYER;
 
 	default:
-		return PATH_GetCollisionMask(pUnit->pDynamicPath);
+		return PATH_GetFootprintCollisionMask(pUnit->pDynamicPath);
 	}
 }
 
@@ -2758,7 +2758,7 @@ BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int n
 }
 
 //D2Common.0x6FDC13D0
-BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2RoomStrc* pRoom, int nCollisionType)
+BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2RoomStrc* pRoom, int nCollisionMask)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -2828,11 +2828,11 @@ BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int n
 	pCoords2.nX = nX2;
 	pCoords2.nY = nY2;
 
-	return COLLISION_RayTrace(pRoom, &pCoords1, &pCoords2, nCollisionType);
+	return COLLISION_RayTrace(pRoom, &pCoords1, &pCoords2, nCollisionMask);
 }
 
 //D2Common.0x6FDC14C0 (#10362)
-BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionType)
+BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask)
 {
 	D2RoomStrc* pRoom = NULL;
 	D2CoordStrc pCoords1 = {};
@@ -2850,7 +2850,7 @@ BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit
 	UNITS_GetCoords(pUnit1, &pCoords1);
 	UNITS_GetCoords(pUnit2, &pCoords2);
 
-	return UNITS_TestCollision(pCoords1.nX, pCoords1.nY, UNITS_GetUnitSizeX(pUnit1), pCoords2.nX, pCoords2.nY, UNITS_GetUnitSizeX(pUnit2), pRoom, nCollisionType);
+	return UNITS_TestCollision(pCoords1.nX, pCoords1.nY, UNITS_GetUnitSizeX(pUnit1), pCoords2.nX, pCoords2.nY, UNITS_GetUnitSizeX(pUnit2), pRoom, nCollisionMask);
 }
 
 //D2Common.0x6FDC1760
@@ -2871,7 +2871,7 @@ void __fastcall UNITS_ToggleUnitFlag(D2UnitStrc* pUnit, int nFlag, BOOL bSet)
 
 //D2Common.0x6FDC1790 (#10363)
 //TODO: v4 + v26
-BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionType)
+BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -2894,17 +2894,17 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 	UNITS_GetCoords(pUnit1, &pCoords1);
 	UNITS_GetCoords(pUnit2, &pCoords2);
 
-	if (UNITS_GetCollisionMask(pUnit1) & nCollisionType)
+	if (UNITS_GetCollisionMask(pUnit1) & nCollisionMask)
 	{
 		v4 = PATH_RemoveCollisionFootprintForUnit(pUnit1, 0);
 	}
 
-	if (UNITS_GetCollisionMask(pUnit2) & nCollisionType)
+	if (UNITS_GetCollisionMask(pUnit2) & nCollisionMask)
 	{
 		v26 = PATH_RemoveCollisionFootprintForUnit(pUnit2, 0);
 	}
 
-	bResult = UNITS_TestCollision(pCoords1.nX, pCoords1.nY, UNITS_GetUnitSizeX(pUnit1), pCoords2.nX, pCoords2.nY, UNITS_GetUnitSizeX(pUnit2), pRoom, nCollisionType);
+	bResult = UNITS_TestCollision(pCoords1.nX, pCoords1.nY, UNITS_GetUnitSizeX(pUnit1), pCoords2.nX, pCoords2.nY, UNITS_GetUnitSizeX(pUnit2), pRoom, nCollisionMask);
 
 	if (v4)
 	{

@@ -58,6 +58,9 @@ enum D2C_CollisionMaskFlags : uint16_t
 	COLLIDE_ALL_MASK = 0xFFFF,
 	COLLIDE_MASK_INVALID = (COLLIDE_BLANK | COLLIDE_BARRIER | COLLIDE_BLOCK_MISSILE | COLLIDE_BLOCK_PLAYER),
 	COLLIDE_MASK_WALKING_UNIT = COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT | COLLIDE_DOOR | COLLIDE_UNIT_RELATED,
+	COLLIDE_MASK_FLYING_UNIT = COLLIDE_BARRIER | COLLIDE_DOOR | COLLIDE_UNIT_RELATED,
+	COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS = COLLIDE_BLOCK_PLAYER | COLLIDE_OBJECT | COLLIDE_UNIT_RELATED | COLLIDE_PET,
+	COLLIDE_MASK_MONSTER_DEFAULT = COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS | COLLIDE_DOOR,
 	COLLIDE_MASK_DOOR_BLOCK_VIS = COLLIDE_DOOR | COLLIDE_BARRIER | COLLIDE_BLOCK_MISSILE,
 };
 
@@ -138,13 +141,13 @@ D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryMoveUnitCollisionMask(D2RoomS
 //D2Common.0x6FD44910
 void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int nCenterX, int nCenterY, unsigned int nSizeX, unsigned int nSizeY);
 //D2Common.0x6FD44950 (#10132)
-D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
+D2COMMON_DLL_DECL uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD44BB0
-uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
+uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD44E00
 uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nMask);
 //D2Common.0x6FD44FF0
-int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask);
+int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask);
 //D2Common.0x6FD451D0 (#10133)
 D2COMMON_DLL_DECL void __fastcall COLLISION_SetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask);
 //D2Common.0x6FD45210 (#11263)

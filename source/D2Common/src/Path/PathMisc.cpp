@@ -151,13 +151,13 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER));
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[0];
 		return TRUE;
 	}
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[1];
 		return TRUE;
@@ -165,7 +165,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pTestDir[2] != PATH_DIR_NULL);
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[2];
 		return TRUE;
@@ -1432,7 +1432,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 				v46.X,
 				v46.Y,
 				pDynamicPath->dwCollisionPattern,
-				pDynamicPath->dwCollisionType);
+				pDynamicPath->nFootprintCollisionMask);
 		LABEL_53:
 			if (v43)
 				pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount] = v46;
@@ -1447,7 +1447,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			goto LABEL_56;
 		}
 		v31 = v29 & 0x40000;
-		v32 = pDynamicPath->unk0x50;
+		v32 = pDynamicPath->nMoveTestCollisionMask;
 		if (v32 == 13313)
 			v32 = 15361;
 		if (v31)
@@ -1458,7 +1458,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 				v46.X,
 				v46.Y,
 				pDynamicPath->dwUnitSize,
-				pDynamicPath->dwCollisionType,
+				pDynamicPath->nFootprintCollisionMask,
 				v32);
 		else
 			v33 = COLLISION_TryTeleportUnitCollisionMask(
@@ -1468,7 +1468,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 				v46.X,
 				v46.Y,
 				pDynamicPath->dwCollisionPattern,
-				pDynamicPath->dwCollisionType,
+				pDynamicPath->nFootprintCollisionMask,
 				v32);
 		pDynamicPath->unk0x54 |= v33;
 		v34 = pDynamicPath->unk0x54;
@@ -1852,7 +1852,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			COLLISION_ResetMaskWithSize(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDynamicPath->dwUnitSize,
-				pDynamicPath->dwCollisionType
+				pDynamicPath->nFootprintCollisionMask
 			);
 			pDynamicPath->unk0x54 = 0;
 		}
@@ -1871,8 +1871,8 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwUnitSize,
-				pDynamicPath->dwCollisionType,
-				pDynamicPath->unk0x50
+				pDynamicPath->nFootprintCollisionMask,
+				pDynamicPath->nMoveTestCollisionMask
 			);
 			pDynamicPath->nSavedStepsCount = 1;
 			pDynamicPath->SavedSteps[0] = tDest;
@@ -1886,7 +1886,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwCollisionPattern,
-				pDynamicPath->dwCollisionType
+				pDynamicPath->nFootprintCollisionMask
 			);
 		}
 		else
@@ -1894,7 +1894,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			COLLISION_ResetMaskWithPattern(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDynamicPath->dwCollisionPattern,
-				pDynamicPath->dwCollisionType
+				pDynamicPath->nFootprintCollisionMask
 			);
 		}
 	}
@@ -2020,9 +2020,9 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 				(unsigned __int16)nX,
 				(unsigned __int16)nY,
 				a1->dwUnitSize,
-				a1->dwCollisionType);
+				a1->nFootprintCollisionMask);
 		else
-			COLLISION_ResetMaskWithSize(a1->pRoom, v26.X, v26.Y, a1->dwUnitSize, a1->dwCollisionType);
+			COLLISION_ResetMaskWithSize(a1->pRoom, v26.X, v26.Y, a1->dwUnitSize, a1->nFootprintCollisionMask);
 	}
 	else if ((WORD)nX || (WORD)nY)
 	{
@@ -2034,7 +2034,7 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 			(unsigned __int16)nX,
 			(unsigned __int16)nY,
 			a1->dwCollisionPattern,
-			a1->dwCollisionType);
+			a1->nFootprintCollisionMask);
 	}
 	else
 	{
@@ -2043,7 +2043,7 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 			v26.X,
 			v26.Y,
 			a1->dwCollisionPattern,
-			a1->dwCollisionType);
+			a1->nFootprintCollisionMask);
 	}
 	v8 = v5->pRoom;
 	if (v8 != pRooms)

@@ -1868,7 +1868,7 @@ int32_t __fastcall SKILLITEM_FindTargetPosition(D2GameStrc* pGame, D2UnitStrc* p
     const int32_t nUnitX = CLIENTS_GetUnitX(pUnit);
     const int32_t nUnitY = CLIENTS_GetUnitY(pUnit);
     const int32_t nCollisionPattern = PATH_GetUnitCollisionPattern(pUnit);
-    const uint16_t nMask = PATH_GetCollisionMask(pUnit->pDynamicPath);
+    const uint16_t nMask = PATH_GetFootprintCollisionMask(pUnit->pDynamicPath);
 
     for (int32_t i = 0; i < 10; ++i)
     {

@@ -371,7 +371,7 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 			nX += nOffsetX;
 			nY += nOffsetY;
 
-			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionType))
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 			{
 				break;
 			}
@@ -525,15 +525,15 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		pDynamicPath->dwCollisionType = COLLIDE_PLAYER;
-		pDynamicPath->unk0x50 = 0x1C09;
+		pDynamicPath->nFootprintCollisionMask = COLLIDE_PLAYER;
+		pDynamicPath->nMoveTestCollisionMask = COLLIDE_MASK_WALKING_UNIT;
 		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
 		pDynamicPath->nDistMax = 73;
 		pDynamicPath->unk0x92 = 70;
 	}
 	else if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
-		pDynamicPath->dwCollisionType = COLLIDE_MONSTER;
+		pDynamicPath->nFootprintCollisionMask = COLLIDE_MONSTER;
 		PATH_SetType(pDynamicPath, PATHTYPE_TOWARD);
 
 		int nClassId = pUnit->dwClassId;
@@ -547,7 +547,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 		if (nClassId == MONSTER_WRAITH1)
 		{
 			pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
-			pDynamicPath->unk0x50 = 0x804;
+			pDynamicPath->nMoveTestCollisionMask = COLLIDE_BARRIER | COLLIDE_DOOR;
 			pDynamicPath->nDistMax = 14;
 		}
 		else
@@ -555,19 +555,22 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, 
 			if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_FLYING])
 			{
 				pDynamicPath->nDistMax = 14;
-				pDynamicPath->unk0x50 = 0x1804;
+				pDynamicPath->nMoveTestCollisionMask = COLLIDE_MASK_FLYING_UNIT;
 			}
 			else
 			{
 				pDynamicPath->nDistMax = 14;
-				pDynamicPath->unk0x50 = (pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_OPENDOORS]) != 0) ? 0x3401 : 0x3C01;
+				pDynamicPath->nMoveTestCollisionMask = 
+					(pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_OPENDOORS]) != 0) 
+					? COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS
+					: COLLIDE_MASK_MONSTER_DEFAULT;
 			}
 		}
 	}
 	else if (pUnit->dwUnitType == UNIT_MISSILE)
 	{
-		pDynamicPath->dwCollisionType = COLLIDE_NONE;
-		pDynamicPath->unk0x50 = 0;
+		pDynamicPath->nFootprintCollisionMask = COLLIDE_NONE;
+		pDynamicPath->nMoveTestCollisionMask = COLLIDE_NONE;
 		PATH_SetType(pDynamicPath, PATHTYPE_MISSILE);
 	}
 
@@ -692,7 +695,7 @@ void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 	{
 		PATH_RemoveCollisionFootprintForUnit(pUnit, TRUE);
 		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
-		PATH_SetCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
+		PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		PATH_AddCollisionFootprintForUnit(pUnit);
 		D2Common_10233(pUnit->pDynamicPath);
 	}
@@ -708,7 +711,7 @@ void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 	//else: Called from Client to remove corpse collision
 
 	D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_MONSTER);
-	if (pUnit->pDynamicPath && pUnit->pDynamicPath->dwCollisionType == COLLIDE_CORPSE)
+	if (pUnit->pDynamicPath && pUnit->pDynamicPath->nFootprintCollisionMask == COLLIDE_CORPSE)
 	{
 		int nCollisionPattern = D2Common_11281_CollisionPatternFromSize(pUnit, UNITS_GetUnitSizeX(pUnit));
 
@@ -726,13 +729,13 @@ void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 		{
 			PATH_RemoveCollisionFootprintForUnit(pUnit, 1);
 			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
-			PATH_SetCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
+			PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
 			PATH_AddCollisionFootprintForUnit(pUnit);
 		}
 		else
 		{
 			pUnit->pDynamicPath->dwCollisionPattern = nCollisionPattern;
-			PATH_SetCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
+			PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
 		}
 	}
 }
@@ -1111,11 +1114,11 @@ D2UnitStrc* __stdcall PATH_GetTargetUnit(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA9FC0 (#10181)
-int __stdcall PATH_GetCollisionMask(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetFootprintCollisionMask(D2DynamicPathStrc* pDynamicPath)
 {
 	if (pDynamicPath)
 	{
-		return pDynamicPath->dwCollisionType;
+		return pDynamicPath->nFootprintCollisionMask;
 	}
 	
 	// Note: this returns 0xFFFF not 0xFFFFFFFF because D2C_CollisionFlags is 16bits.
@@ -1123,47 +1126,45 @@ int __stdcall PATH_GetCollisionMask(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDA9FE0 (#10182)
-void __stdcall PATH_SetCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionType)
+void __stdcall PATH_SetFootprintCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionMask)
 {
 	if (pDynamicPath->pRoom)
 	{
 		if (pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_MISSILE)
 		{
-			COLLISION_ResetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, pDynamicPath->dwCollisionType);
+			COLLISION_ResetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, pDynamicPath->nFootprintCollisionMask);
 		}
 		else
 		{
-			COLLISION_ResetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, pDynamicPath->dwCollisionType);
+			COLLISION_ResetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, pDynamicPath->nFootprintCollisionMask);
 		}
 	}
 
-	pDynamicPath->dwCollisionType = nCollisionType;
+	pDynamicPath->nFootprintCollisionMask = nCollisionMask;
 
 	if (pDynamicPath->pRoom)
 	{
 		if (pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_MISSILE)
 		{
-			COLLISION_SetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, nCollisionType);
+			COLLISION_SetMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, nCollisionMask);
 		}
 		else
 		{
-			COLLISION_SetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, nCollisionType);
+			COLLISION_SetMaskWithPattern(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwCollisionPattern, nCollisionMask);
 		}
 	}
 }
 
 //D2Common.0x6FDAA0C0 (#10183)
-//TODO: Find a name
-int __stdcall D2Common_10183(D2DynamicPathStrc* pDynamicPath)
+int __stdcall PATH_GetMoveTestCollisionMask(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->unk0x50;
+	return pDynamicPath->nMoveTestCollisionMask;
 }
 
 //D2Common.0x6FDAA0D0 (#10184)
-//TODO: Find a name
-void __stdcall D2Common_10184(D2DynamicPathStrc* pDynamicPath, int a2)
+void __stdcall PATH_SetMoveTestCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionMask)
 {
-	pDynamicPath->unk0x50 = a2;
+	pDynamicPath->nMoveTestCollisionMask = nCollisionMask;
 }
 
 //D2Common.0x6FDAA0E0 (#10185)

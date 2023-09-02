@@ -224,10 +224,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10178_PATH_GetLastPointY                                   @10178
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetTargetUnit                                                  @10179
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetTargetUnit                                                  @10180
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetCollisionMask                                               @10181
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetCollisionMask                                               @10182
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10183                                                      @10183
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10184                                                      @10184
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetFootprintCollisionMask                                      @10181
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetFootprintCollisionMask                                      @10182
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetMoveTestCollisionMask                                       @10183
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetMoveTestCollisionMask                                       @10184
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetType                                                        @10185
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_ResetToPreviousType                                            @10186
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetType                                                        @10187

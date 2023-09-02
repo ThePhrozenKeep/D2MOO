@@ -1702,7 +1702,7 @@ int32_t __fastcall SKILLS_SrvSt61_SelfResurrect(D2GameStrc* pGame, D2UnitStrc* p
 
     SKILLS_ResurrectUnit(pGame, pUnit);
     pUnit->dwFlags &= 0xFFFFFFF1;
-    PATH_SetCollisionMask(pUnit->pDynamicPath, 256);
+    PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, 256);
     return 1;
 }
 

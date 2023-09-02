@@ -40,7 +40,7 @@ void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile)
 }
 
 //D2Common.0x6FDBC2E0 (#11215)
-void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionType, int nCollisionPattern, void (__fastcall* pfnHit)(D2UnitStrc*, D2UnitStrc*))
+void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int nCollisionPattern, void (__fastcall* pfnHit)(D2UnitStrc*, D2UnitStrc*))
 {
 	D2PathPointStrc* ppPathPoints = NULL;
 	D2UnitStrc* pTargetUnit = NULL;
@@ -56,7 +56,7 @@ void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionType, int n
 
 	for (int i = 0; i < nPathPoints; ++i)
 	{
-		if (COLLISION_CheckMaskWithSize(pRoom, ppPathPoints[i].X, ppPathPoints[i].Y, nCollisionPattern, nCollisionType))
+		if (COLLISION_CheckMaskWithSize(pRoom, ppPathPoints[i].X, ppPathPoints[i].Y, nCollisionPattern, nCollisionMask))
 		{
 			pTargetUnit = D2Common_10407(pRoom, ppPathPoints[i].X, ppPathPoints[i].Y, MISSTREAM_Return1, 0, nCollisionPattern);
 			if (pTargetUnit)

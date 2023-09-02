@@ -252,14 +252,14 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 
     if (pMissilesTxtRecord->nCollision)
     {
-        PATH_SetCollisionMask(pMissile->pDynamicPath, 64);
+        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, 64);
     }
     else
     {
-        PATH_SetCollisionMask(pMissile->pDynamicPath, 0);
+        PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, 0);
     }
 
-    D2Common_10184(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);
+    PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CANDESTROY])
     {

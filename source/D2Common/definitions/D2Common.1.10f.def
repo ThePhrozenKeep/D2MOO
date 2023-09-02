@@ -181,10 +181,10 @@ EXPORTS
 	D2COMMON_10178_PATH_GetLastPointY									@10178
 	PATH_SetTargetUnit													@10179
 	PATH_GetTargetUnit													@10180
-	PATH_GetCollisionMask												@10181
-	PATH_SetCollisionMask												@10182
-	D2Common_10183														@10183
-	D2Common_10184														@10184
+	PATH_GetFootprintCollisionMask										@10181
+	PATH_SetFootprintCollisionMask										@10182
+	PATH_GetMoveTestCollisionMask										@10183
+	PATH_SetMoveTestCollisionMask										@10184
 	PATH_SetType														@10185
 	PATH_ResetToPreviousType											@10186
 	PATH_GetType														@10187

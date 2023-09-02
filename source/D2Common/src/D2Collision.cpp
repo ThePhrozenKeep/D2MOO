@@ -1174,31 +1174,31 @@ void __fastcall COLLISION_CreateBoundingBox(D2BoundingBoxStrc* pBoundingBox, int
 }
 
 //D2Common.0x6FD44950 (#10132)
-uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
+uint16_t __fastcall COLLISION_TryTeleportUnitCollisionMask(D2RoomStrc* pRoom, int nX1, int nY1, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask)
 {
-	COLLISION_ResetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionMask);
+	COLLISION_ResetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 
 	if (const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
-		COLLISION_SetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nCollisionMask);
+		COLLISION_SetMaskWithPattern(pRoom, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 		return nCollidedWithMask;
 	}
 	else
 	{
-		COLLISION_SetMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nCollisionMask);
+		COLLISION_SetMaskWithPattern(pRoom, nX2, nY2, nCollisionPattern, nFootprintCollisionMask);
 		return 0;
 	}
 
 }
 
 //D2Common.0x6FD44BB0
-uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
+uint16_t __fastcall COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nUnitSize, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask)
 {
-	COLLISION_ResetMaskWithSize(pRoom1, nX1, nY1, nUnitSize, nCollisionMask);
+	COLLISION_ResetMaskWithSize(pRoom1, nX1, nY1, nUnitSize, nFootprintCollisionMask);
 
 	const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nMoveConditionMask);
 
-	COLLISION_SetMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nCollisionMask);
+	COLLISION_SetMaskWithSize(pRoom2, nX2, nY2, nUnitSize, nFootprintCollisionMask);
 
 	return nCollidedWithMask;
 }
@@ -1212,24 +1212,24 @@ uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2RoomStrc* pRoom1, int 
 }
 
 //D2Common.0x6FD44FF0
-int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nCollisionMask, uint16_t nMoveConditionMask)
+int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask)
 {
 	if (pRoom1)
 	{
-		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionMask);
+		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 	}
 
 	if (const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
 		if (pRoom1)
 		{
-			COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nCollisionMask);
+			COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 		}
 		return nCollidedWithMask;
 	}
 	else
 	{
-		COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nCollisionMask);
+		COLLISION_SetMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nFootprintCollisionMask);
 		return COLLIDE_NONE;
 	}
 }

@@ -21,7 +21,7 @@ D2COMMON_DLL_DECL void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissi
 //D2Common.0x6FDBC280 (#11214)
 D2COMMON_DLL_DECL void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile);
 //D2Common.0x6FDBC2E0 (#11215)
-D2COMMON_DLL_DECL void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionType, int nCollisionPattern, void (__fastcall* pfnHit)(D2UnitStrc*, D2UnitStrc*));
+D2COMMON_DLL_DECL void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int nCollisionPattern, void (__fastcall* pfnHit)(D2UnitStrc*, D2UnitStrc*));
 //D2Common.0x6FDBC3B0
 int __fastcall MISSTREAM_Return1(D2UnitStrc* pUnit1, void* pUnit2);
 //D2Common.0x6FDBC3C0 (#11216)

@@ -104,8 +104,8 @@ struct D2DynamicPathStrc
 	uint32_t dwPrevPathType;					//0x40
 	uint32_t dwUnitSize;						//0x44
 	uint32_t dwCollisionPattern;				//0x48
-	uint32_t dwCollisionType;					//0x4C
-	uint32_t unk0x50;							//0x50
+	uint32_t nFootprintCollisionMask;			//0x4C
+	uint32_t nMoveTestCollisionMask;			//0x50
 	uint16_t unk0x54;							//0x54
 	uint16_t unk0x56;							//0x56
 	D2UnitStrc* pTargetUnit;					//0x58
@@ -154,7 +154,7 @@ struct D2PathInfoStrc
 	int32_t nPathType;							//0x20
 	int32_t nUnitSize;							//0x24
 	int32_t nCollisionPattern;					//0x28
-	int32_t nCollisionType;						//0x2C
+	int32_t nCollisionMask;						//0x2C
 	union
 	{
 		D2DynamicPathStrc* pDynamicPath;	//0x30 - not sure yet
@@ -338,13 +338,13 @@ D2COMMON_DLL_DECL void __stdcall PATH_GetTargetTypeAndGUID(D2DynamicPathStrc* pD
 //D2Common.0x6FDA9FA0 (#10180)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall PATH_GetTargetUnit(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9FC0 (#10181)
-D2COMMON_DLL_DECL int __stdcall PATH_GetCollisionMask(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetFootprintCollisionMask(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9FE0 (#10182)
-D2COMMON_DLL_DECL void __stdcall PATH_SetCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionType);
+D2COMMON_DLL_DECL void __stdcall PATH_SetFootprintCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionMask);
 //D2Common.0x6FDAA0C0 (#10183)
-D2COMMON_DLL_DECL int __stdcall D2Common_10183(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL int __stdcall PATH_GetMoveTestCollisionMask(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA0D0 (#10184)
-D2COMMON_DLL_DECL void __stdcall D2Common_10184(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetMoveTestCollisionMask(D2DynamicPathStrc* pDynamicPath, int nCollisionMask);
 //D2Common.0x6FDAA0E0 (#10185)
 D2COMMON_DLL_DECL void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType);
 //D2Common.0x6FDAA1E0 (#10186)

@@ -1961,7 +1961,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
 		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-		D2Common_10184(pUnit->pDynamicPath, 0);
+		PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
 		AITACTICS_Idle(pGame, pUnit, 12);
 
 		pAiTickParam->pAiControl->dwAiParam[0] = (ITEMS_RollRandomNumber(&pUnit->pSeed) & 7) + 24;
@@ -1985,7 +1985,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
 			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-			D2Common_10184(pUnit->pDynamicPath, 0);
+			PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
 			AITACTICS_Idle(pGame, pUnit, 12);
 
 			const int32_t nCurrentX = CLIENTS_GetUnitX(pUnit);
@@ -2132,7 +2132,7 @@ int32_t __fastcall sub_6FCD55D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, COLLIDE_MONSTER);
 	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_UNIT_PRESENCE);
-	D2Common_10184(pUnit->pDynamicPath, 0x3C01);
+	PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0x3C01);
 	AITACTICS_Idle(pGame, pUnit, 12);
 	return 1;
 }
@@ -4630,7 +4630,7 @@ void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
 	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_MONSTER);
 	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-	D2Common_10184(pUnit->pDynamicPath, 0);
+	PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
 	AITACTICS_Idle(pGame, pUnit, 12);
 }
 
@@ -4663,7 +4663,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-			D2Common_10184(pUnit->pDynamicPath, 0);
+			PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
 			AITACTICS_Idle(pGame, pUnit, 12);
 			return;
 		}
@@ -4709,7 +4709,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
-		D2Common_10184(pUnit->pDynamicPath, 0);
+		PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, 0);
 		AITACTICS_Idle(pGame, pUnit, 12);
 		AITACTICS_Idle(pGame, pUnit, 24);
 		pAiTickParam->pAiControl->dwAiParam[2] = 1;
