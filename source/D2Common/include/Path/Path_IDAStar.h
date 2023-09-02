@@ -43,7 +43,7 @@ int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA78A0
 signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPoint, D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA7970
-int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo);
 ////D2Common.0x6FDA7D40
 //int __fastcall sub_6FDA7D40(int a1, signed int a2, int a3);
 ////D2Common.0x6FDA81C0

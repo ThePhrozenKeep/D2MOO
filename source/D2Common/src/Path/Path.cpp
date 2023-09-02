@@ -88,24 +88,24 @@ typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
 
 //D2Common.0x6FDD1F40
 static const PathFunctionType scpfnPathFunction[] = {
-	sub_6FDA7970
-	,sub_6FDA69E0
-	,sub_6FDAA9F0
-	,sub_6FDAB0B0
-	,nullptr
-	,sub_6FDAA9F0
-	,sub_6FDAA9F0
-	,sub_6FDAB130
-	,sub_6FDAB270
-	,sub_6FDAB1E0
-	,nullptr
-	,sub_6FDAB240
-	,sub_6FDAB0C0
-	,sub_6FDAA9F0
-	,nullptr
-	,PATH_ComputePathOrSlideAlongObstacles
-	,sub_6FDA7970
-	,nullptr
+/*[0]*/PATH_IdaStar_6FDA7970
+/*[1]*/,sub_6FDA69E0
+/*[2]*/,PATH_Toward_6FDAA9F0
+/*[3]*/,sub_6FDAB0B0
+/*[4]*/,nullptr
+/*[5]*/,PATH_Toward_6FDAA9F0
+/*[6]*/,PATH_Toward_6FDAA9F0
+/*[7]*/,sub_6FDAB130
+/*[8]*/,PATH_Knockback_Server_6FDAB270
+/*[9]*/,PATH_Leap_6FDAB1E0
+/*[10]*/,nullptr
+/*[11]*/,PATH_Knockback_Client_6FDAB240
+/*[12]*/,sub_6FDAB0C0
+/*[13]*/,PATH_Toward_6FDAA9F0
+/*[14]*/,nullptr
+/*[15]*/,PATH_ComputePathOrSlideAlongObstacles
+/*[16]*/,PATH_IdaStar_6FDA7970
+/*[17]*/,nullptr
 };
 static_assert(ARRAY_SIZE(scpfnPathFunction) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 

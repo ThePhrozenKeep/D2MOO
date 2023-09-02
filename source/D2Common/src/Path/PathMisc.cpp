@@ -175,7 +175,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 }
 
 //D2Common.0x6FDAA9F0
-int __fastcall sub_6FDAA9F0(D2PathInfoStrc *pPathInfo)
+int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 {
 	UNIMPLEMENTED();
 	return 0;
@@ -225,7 +225,7 @@ BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathP
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
-	return sub_6FDAA9F0(pPathInfo);
+	return PATH_Toward_6FDAA9F0(pPathInfo);
 }
 
 //D2Common.0x6FDAB0C0
@@ -269,7 +269,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
 	pDynamicPath->dwCurrentPointIdx = 0;
 	pDynamicPath->dwPathPoints = 0;
-	int v3 = sub_6FDAA9F0(pPathInfo);
+	int v3 = PATH_Toward_6FDAA9F0(pPathInfo);
 	
 	D2PathPointStrc v4 = {0,0};
 
@@ -296,13 +296,13 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 		if (result)
 			return result;
 		if (v3)
-			v3 = sub_6FDAA9F0(pPathInfo);
+			v3 = PATH_Toward_6FDAA9F0(pPathInfo);
 	}
 	return v3;
 }
 
 //D2Common.0x6FDAB1E0
-int __fastcall sub_6FDAB1E0(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 {
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
 	pDynamicPath->dwCurrentPointIdx = 0;
@@ -318,7 +318,7 @@ int __fastcall sub_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDAB240
-int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Knockback_Client_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->tTargetCoord;
@@ -327,7 +327,7 @@ int __fastcall sub_6FDAB240(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDAB270
-int __fastcall sub_6FDAB270(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Knockback_Server_6FDAB270(D2PathInfoStrc* pPathInfo)
 {
 	// Belongs to PathWF.cpp
 	UNIMPLEMENTED();

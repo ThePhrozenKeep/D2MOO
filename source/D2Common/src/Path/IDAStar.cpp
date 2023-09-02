@@ -848,9 +848,9 @@ signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPo
 }
 
 //D2Common.0x6FDA7970
-int __fastcall sub_6FDA7970(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
 {
-	D2_ASSERTM(false, "Not implemented yet.");
+	UNIMPLEMENTED();
 	return 0;
 }
 
