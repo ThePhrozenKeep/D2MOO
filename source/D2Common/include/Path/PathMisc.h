@@ -58,8 +58,6 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDAC9A0 (#10226)
 BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
 
-//D2Common.0x6FDAD330
-int __fastcall sub_6FDAD330(D2PathInfoStrc* ptPathInfo);
 
 //D2Common.0x6FDAD530 (#10227)
 BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);

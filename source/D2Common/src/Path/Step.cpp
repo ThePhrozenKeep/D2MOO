@@ -394,19 +394,7 @@ LABEL_18:
 	if (!v21)
 		goto LABEL_32;
 LABEL_45:
-	v28 = pDynamicPath->pRoom;
-	v29 = pDynamicPath->pUnit;
-	pDynamicPath->pPreviousRoom = v28;
-	if (v28)
-		UNITROOM_RemoveUnitFromRoom(v29);
-	v30 = pDynamicPath->dwFlags;
-	pDynamicPath->pRoom = v21;
-	pDynamicPath->dwFlags = v30 | PATH_CURRENT_ROOM_INVALID;
-	if (v21)
-	{
-		UNITROOM_AddUnitToRoom(v29, v21);
-		UNITROOM_RefreshUnit(v29);
-	}
+	PATHMISC_SetRoom(pDynamicPath, v21);
 }
 
 //D2Common.0x6FDAB810
@@ -695,6 +683,138 @@ LABEL_61:
 		return 0;
 	++pDynamicPath->dwCurrentPointIdx;
 	return 1;
+}
+
+//D2Common.0x6FDAD330
+int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
+{
+	uint32_t v2; // eax
+	DWORD v3; // ebp
+	DWORD v4; // edi
+	D2RoomStrc* v5; // eax
+	signed int v6; // edi
+	signed int v7; // ebx
+	int v8; // ecx
+	DWORD v9; // edx
+	D2RoomStrc* v10; // eax
+	int v11; // ecx
+	int v12; // edx
+	D2UnitStrc* v13; // eax
+	D2RoomStrc* v14; // ecx
+	uint16_t v15; // dx
+	uint16_t v16; // ax
+	int v17; // ebx
+	D2RoomStrc* v18; // edi
+	D2RoomStrc* v19; // eax
+	D2UnitStrc* v20; // ebx
+	uint32_t v21; // ecx
+	uint32_t v22; // eax
+	int result; // eax
+	DWORD pNumRooms; // [esp+10h] [ebp-1Ch] BYREF
+	D2RoomStrc** pppRoom; // [esp+14h] [ebp-18h] BYREF
+	DWORD v26; // [esp+18h] [ebp-14h]
+	int pX; // [esp+1Ch] [ebp-10h] BYREF
+	int pY; // [esp+20h] [ebp-Ch] BYREF
+	DWORD v29; // [esp+28h] [ebp-4h]
+
+	v2 = pPath->dwFlags;
+	v3 = PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionX);
+	v4 = PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionY);
+	v29 = v4;
+	if ((v2 & PATH_MISSILE_MASK) != 0)
+	{
+		v5 = pPath->pRoom;
+		v6 = HIWORD(v4);
+		v7 = HIWORD(v3);
+		if (!v5)
+			goto LABEL_18;
+		if (v7 < v5->nSubtileX
+			|| v7 >= v5->nSubtileX + v5->nSubtileWidth
+			|| (v8 = v5->nSubtileY, v6 < v8)
+			|| v6 >= v8 + v5->nSubtileHeight)
+		{
+			pppRoom = 0;
+			pNumRooms = 0;
+			DUNGEON_GetAdjacentRoomsListFromRoom(v5, &pppRoom, (int*)&pNumRooms);
+			v9 = 0;
+			v26 = 0;
+			if (pNumRooms)
+			{
+				while (1)
+				{
+					v10 = pppRoom[v9];
+					if (v10 && v7 >= v10->nSubtileX)
+					{
+						if (v7 < v10->nSubtileX + v10->nSubtileWidth)
+						{
+							v11 = v10->nSubtileY;
+							if (v6 >= v11 && v6 < v11 + v10->nSubtileHeight)
+							{
+								v5 = pppRoom[v26];
+								goto LABEL_17;
+							}
+						}
+						v9 = v26;
+					}
+					v26 = ++v9;
+					if (v9 >= pNumRooms)
+					{
+						pPath->dwPathPoints = 0;
+						goto LABEL_34;
+					}
+				}
+			}
+			goto LABEL_18;
+		}
+	LABEL_17:
+		if (!v5)
+		{
+		LABEL_18:
+			pPath->dwPathPoints = 0;
+			goto LABEL_34;
+		}
+		v4 = v29;
+	}
+	pPath->tGameCoords.dwPrecisionX = v3;
+	pPath->tGameCoords.dwPrecisionY = v4;
+	PATH_UpdateClientCoords(pPath);
+	v13 = pPath->pUnit;
+	if (v13)
+	{
+		if ((pPath->dwFlags & 1) != 0)
+		{
+			v14 = pPath->pRoom;
+			v15 = pPath->tGameCoords.wPosX;
+			v16 = pPath->tGameCoords.wPosY;
+			if (!v14
+				|| v15 < v14->nSubtileX
+				|| v15 >= v14->nSubtileX + v14->nSubtileWidth
+				|| (v17 = v14->nSubtileY, v16 < v17)
+				|| v16 >= v17 + v14->nSubtileHeight)
+			{
+				v18 = COLLISION_GetRoomBySubTileCoordinates(
+					v14,
+					pPath->tGameCoords.wPosX,
+					pPath->tGameCoords.wPosY);
+				if (v18 || (pPath->dwFlags & 0x40000) == 0)
+				{
+					PATHMISC_SetRoom(pPath, v18);
+				}
+				else
+				{
+					pPath->dwPathPoints = 0;
+				}
+			}
+		}
+	}
+LABEL_34:
+	pPath->dwFlags = pPath->dwFlags & (D2PathFlags)~PATH_UNKNOWN_FLAG_0x00020;
+	result = 0;
+	pPath->dwPathPoints = 0;
+	pPath->dwCurrentPointIdx = 0;
+	pPath->tVelocityVector.nX = 0;
+	pPath->tVelocityVector.nY = 0;
+	return result;
 }
 
 //1.00:  D2Common.0x1005FAB0

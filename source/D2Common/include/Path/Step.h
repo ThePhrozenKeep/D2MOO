@@ -17,12 +17,14 @@ void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, un
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit);
+//D2Common.0x6FDAD330
+int __fastcall sub_6FDAD330(D2DynamicPathStrc* ptPathInfo);
 //1.00:  D2Common.0x1005FAB0
 //1.10f: D2Common.0x6FDAD5E0
 BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest);
 //1.00:  D2Common.0x100604E0 Note: Changed since then. Used to look for the room using coordinates
 //1.10f: D2Common.0x6FDAE250
-void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
+void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2RoomStrc* pNewRoom);
 
 
 //1.00:  D2Common.0x10060640 (#10227)
