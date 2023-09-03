@@ -126,15 +126,17 @@ target_sources(D2CommonStatic
 # Path
 target_sources(D2CommonStatic
   PRIVATE
+    src/Path/IDAStar.cpp
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
     src/Path/PathWF.cpp
-    src/Path/IDAStar.cpp
+    src/Path/Step.cpp
 
     include/Path/Path.h
     include/Path/PathMisc.h
     include/Path/Path_IDAStar.h
     include/Path/PathWF.h
+    include/Path/Step.h
 )
 
 # Units

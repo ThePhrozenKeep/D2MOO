@@ -9,7 +9,7 @@
 #include <D2Skills.h>
 #include <D2Items.h>
 #include <D2Monsters.h>
-#include <Path/PathMisc.h>
+#include <Path/Step.h>
 
 #include <UselessOrdinals.h>
 

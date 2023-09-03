@@ -23,6 +23,7 @@
 #include <D2Combat.h>
 #include <Path/Path.h>
 #include <Path/PathMisc.h>
+#include <Path/Step.h>
 #include <D2Monsters.h>
 #include <D2Collision.h>
 #include <UselessOrdinals.h>

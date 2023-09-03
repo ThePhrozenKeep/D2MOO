@@ -13,7 +13,7 @@
 #include <DataTbls/MonsterIds.h>
 #include <Units/UnitFinds.h>
 #include <DataTbls/SkillsIds.h>
-#include <Path/PathMisc.h>
+#include <Path/Step.h>
 #include <D2Items.h>
 
 #include <UselessOrdinals.h>

@@ -93,7 +93,7 @@ struct D2DynamicPathStrc
 	D2PathPointStrc SP2;						//0x14
 	D2PathPointStrc SP3;						//0x18
 	D2RoomStrc* pRoom;							//0x1C
-	D2RoomStrc* pRoomNext;						//0x20
+	D2RoomStrc* pPreviousRoom;					//0x20
 	int32_t dwCurrentPointIdx;					//0x24
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
@@ -196,6 +196,7 @@ inline uint32_t PATH_ToFP16Corner(uint16_t value) {
 inline uint32_t PATH_ToFP16Center(uint16_t value) {
 	return (value << 16) + (1 << 15);
 }
+// Called FRACTIONAL_TO_GAMESQUARE in the original game
 inline uint16_t PATH_FromFP16(uint32_t value) {
 	return (value >> 16) & 0xFFFF;
 }

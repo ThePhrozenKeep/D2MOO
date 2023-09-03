@@ -123,7 +123,8 @@ void __stdcall UNITROOM_SortUnitListByTargetY(D2RoomStrc* pRoom)
 	}
 }
 
-//D2Common.0x6FDBD250 (#10390)
+//1.00:  D2Common.0x1006D1E0 (#10385)
+//1.10f: D2Common.0x6FDBD250 (#10390)
 void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
@@ -143,9 +144,9 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 		
 		if (pUnit->pDynamicPath->pRoom)
 		{
-			pUnit->pDynamicPath->pRoomNext = pUnit->pDynamicPath->pRoom;
+			pUnit->pDynamicPath->pPreviousRoom = pUnit->pDynamicPath->pRoom;
 			UNITROOM_RemoveUnitFromRoom(pUnit->pDynamicPath->pUnit);
-			pUnit->pDynamicPath->dwFlags |= 2;
+			pUnit->pDynamicPath->dwFlags |= PATH_CURRENT_ROOM_INVALID;
 		}
 		break;
 

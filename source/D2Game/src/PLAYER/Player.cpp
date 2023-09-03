@@ -13,6 +13,7 @@
 #include <D2StatList.h>
 #include <DataTbls/ObjectsIds.h>
 #include <Path/PathMisc.h>
+#include <Path/Step.h>
 
 #include "AI/AiGeneral.h"
 #include "GAME/Arena.h"

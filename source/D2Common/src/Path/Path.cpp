@@ -13,6 +13,7 @@
 #include <D2Math.h>
 #include "Path/PathMisc.h"
 #include "Path/PathWF.h"
+#include "Path/Step.h"
 
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
@@ -1020,13 +1021,13 @@ void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
 //D2Common.0x6FDA9E70 (#10168)
 D2RoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->pRoomNext;
+	return pDynamicPath->pPreviousRoom;
 }
 
 //D2Common.0x6FDA9E80 (#10169)
 void __stdcall PATH_ClearNextRoom(D2DynamicPathStrc* pDynamicPath)
 {
-	pDynamicPath->pRoomNext = NULL;
+	pDynamicPath->pPreviousRoom = NULL;
 }
 
 //D2Common.0x6FDA9E90 (#10170)
@@ -1261,17 +1262,17 @@ uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 {
 	if (!pDynamicPath->dwVelocity)
 	{
-		pDynamicPath->unk0x54 = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
+		pDynamicPath->nCollidedWithMask = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
 	}
 
-	return pDynamicPath->unk0x54;
+	return pDynamicPath->nCollidedWithMask;
 }
 
 //D2Common.0x6FDAA300 (#10202)
 //TODO: Find a name
 uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->unk0x54;
+	return pDynamicPath->nCollidedWithMask;
 }
 
 //D2Common.0x6FDAA310 (#10192)

@@ -16,7 +16,7 @@
 #include <D2Collision.h>
 #include <DataTbls/SkillsIds.h>
 #include <DataTbls/MissilesIds.h>
-#include <Path/PathMisc.h>
+#include <Path/Step.h>
 #include <Units/UnitFinds.h>
 #include <DataTbls/MonsterIds.h>
 
