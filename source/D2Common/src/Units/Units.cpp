@@ -1429,16 +1429,12 @@ __forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* p
 //TODO: ...
 __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, const char* szFile, int nLine)
 {
-	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	int nFasterMoveVelocity = 0;
 	int nVelocityPercent = 0;
 	int nAnimSpeed = 0;
 	int nVelocity = 0;
 	int nBase = 0;
-	int v53 = 0;
-	int v54 = 0;
-	char v60[4] = {};
 
 	if (pUnit->pDynamicPath)
 	{
@@ -1478,10 +1474,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 			}
 		}
 
-		v53 = (signed int)((unsigned __int64)(1374389535i64 * nVelocityPercent * nBase) >> 32) >> 5;
-		v54 = (unsigned int)((unsigned __int64)(1374389535i64 * nVelocityPercent * nBase) >> 32) >> 31;
-
-		nAnimSpeed = v54 + v53;
+		nAnimSpeed = nVelocityPercent * nBase / 100;
 
 		if (nAnimSpeed < 0 || nAnimSpeed > 32767)
 		{
@@ -1501,10 +1494,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 		if (nUnitType == UNIT_PLAYER)
 		{
-			pCharStatsTxtRecord = UNITS_GetCharStatsTxtRecord(nClassId);
-			*(uint32_t*)v60 = 0;
-			*(uint16_t*)&v60[1] = pCharStatsTxtRecord->nWalkSpeed;
-			nVelocity = *(uint32_t*)v60;
+			nVelocity = UNITS_GetCharStatsTxtRecord(nClassId)->nWalkSpeed << 8;
 		}
 		else if (nUnitType == UNIT_MONSTER)
 		{
