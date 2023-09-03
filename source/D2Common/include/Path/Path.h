@@ -106,7 +106,7 @@ struct D2DynamicPathStrc
 	uint32_t dwCollisionPattern;				//0x48
 	uint32_t nFootprintCollisionMask;			//0x4C
 	uint32_t nMoveTestCollisionMask;			//0x50
-	uint16_t unk0x54;							//0x54
+	uint16_t nCollidedWithMask;					//0x54
 	uint16_t unk0x56;							//0x56
 	D2UnitStrc* pTargetUnit;					//0x58
 	uint32_t dwTargetType;						//0x5C
@@ -199,11 +199,16 @@ inline uint32_t PATH_ToFP16Center(uint16_t value) {
 inline uint16_t PATH_FromFP16(uint32_t value) {
 	return (value >> 16) & 0xFFFF;
 }
+inline uint32_t PATH_FP16FitToCenter(uint32_t value)
+{
+	return (value & 0xFFFF0000) + (1 << 15);
+}
 
 enum D2PathConstants {
 	PATH_NB_DIRECTIONS = 64,
 	PATH_DIR_NULL = 255,
 	PATH_MAX_STEPNUM = 20,
+	PATH_MAX_STEP_LEN = 10,
 };
 // Helper functions
 inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }

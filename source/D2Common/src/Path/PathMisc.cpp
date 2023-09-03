@@ -1245,6 +1245,7 @@ LABEL_45:
 }
 
 //D2Common.0x6FDACEC0
+// Should be in Step.cpp
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit)
 {
 	D2UnitStrc* v4; // eax
@@ -1271,12 +1272,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 	uint32_t v26; // ecx
 	D2PathPointStrc v27; // edx
 	int v28; // ebx
-	uint32_t v29; // eax
-	D2UnitStrc* v30; // eax
-	int v31; // ebx
-	uint32_t v32; // eax
-	uint16_t v33; // ax
-	uint16_t v34; // ax
+	uint16_t nCollidedWithMask; // ax
 	signed int v35; // eax
 	uint32_t v36; // edx
 	int v37; // [esp+10h] [ebp-48h]
@@ -1299,7 +1295,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 	uint32_t v55; // [esp+54h] [ebp-4h]
 
 	v4 = pDynamicPath->pUnit;
-	pDynamicPath->unk0x54 = 0;
+	pDynamicPath->nCollidedWithMask = 0;
 	v44 = v4;
 	*pUnit = 0;
 	if (!v4 || v4->dwUnitType != UNIT_MONSTER || (v42 = 1, (pDynamicPath->dwFlags & 0x10) == 0))
@@ -1309,8 +1305,8 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		v5 = pDynamicPath->tGameCoords.dwPrecisionX;
 		pDynamicPath->dwPathPoints = 0;
 		pDynamicPath->dwCurrentPointIdx = 0;
-		a2->dwPrecisionX = (v5 & 0xFFFF0000) + 0x8000;
-		a2->dwPrecisionY = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+		a2->dwPrecisionX = PATH_FP16FitToCenter(v5);
+		a2->dwPrecisionY = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY);
 		return 0;
 	}
 	v7 = pDynamicPath->tVelocityVector.nY;
@@ -1323,8 +1319,8 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 	else
 	{
 		v9 = pDynamicPath->dwCurrentPointIdx;
-		v10 = (pDynamicPath->PathPoints[v9].X << 16) + 0x8000;
-		v11 = (pDynamicPath->PathPoints[v9].Y << 16) + 0x8000;
+		v10 = PATH_ToFP16Center(pDynamicPath->PathPoints[v9].X);
+		v11 = PATH_ToFP16Center(pDynamicPath->PathPoints[v9].Y);
 		v12 = v10 - pDynamicPath->tGameCoords.dwPrecisionX;
 		if (v12 < 0)
 			v41 = -v12;
@@ -1415,15 +1411,9 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			v27.X = v46.X;
 			v24 = v50;
 		}
-		v29 = pDynamicPath->dwFlags;
-		if ((v29 & 4) != 0)
+		if ((pDynamicPath->dwFlags & 4) != 0)
 		{
-			v30 = pDynamicPath->pUnit;
-			if (!v30 || v30->dwUnitType && v30->dwUnitType != UNIT_MONSTER)
-				FOG_DisplayWarning(
-					"(UnitGetType(ptPath->hUnit) == UNIT_PLAYER) || (UnitGetType(ptPath->hUnit) == UNIT_MONSTER)",
-					"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\PATH\\Step.cpp",
-					521);
+			D2_CHECK(pDynamicPath->pUnit && (pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pDynamicPath->pUnit->dwUnitType != UNIT_MONSTER));
 			COLLISION_SetUnitCollisionMask(
 				pDynamicPath->pRoom,
 				v45.X,
@@ -1436,9 +1426,8 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		LABEL_53:
 			if (v43)
 				pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount] = v46;
-			v35 = pDynamicPath->nSavedStepsCount + 1;
-			pDynamicPath->nSavedStepsCount = v35;
-			if (v35 >= 10)
+			pDynamicPath->nSavedStepsCount++;
+			if (pDynamicPath->nSavedStepsCount >= PATH_MAX_STEP_LEN)
 			{
 				v24 = v50;
 				v25 = v51;
@@ -1446,12 +1435,12 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			}
 			goto LABEL_56;
 		}
-		v31 = v29 & 0x40000;
-		v32 = pDynamicPath->nMoveTestCollisionMask;
-		if (v32 == 13313)
-			v32 = 15361;
-		if (v31)
-			v33 = COLLISION_TryMoveUnitCollisionMask(
+		const bool bIsMissilePath = pDynamicPath->dwFlags & PATH_MISSILE_MASK;
+		uint32_t nMoveTestColMask = pDynamicPath->nMoveTestCollisionMask;
+		if (nMoveTestColMask == COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS)
+			nMoveTestColMask = COLLIDE_MASK_MONSTER_DEFAULT;
+		if (bIsMissilePath)
+			nCollidedWithMask = COLLISION_TryMoveUnitCollisionMask(
 				pDynamicPath->pRoom,
 				v45.X,
 				v45.Y,
@@ -1459,9 +1448,9 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 				v46.Y,
 				pDynamicPath->dwUnitSize,
 				pDynamicPath->nFootprintCollisionMask,
-				v32);
+				nMoveTestColMask);
 		else
-			v33 = COLLISION_TryTeleportUnitCollisionMask(
+			nCollidedWithMask = COLLISION_TryTeleportUnitCollisionMask(
 				pDynamicPath->pRoom,
 				v45.X,
 				v45.Y,
@@ -1469,25 +1458,24 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 				v46.Y,
 				pDynamicPath->dwCollisionPattern,
 				pDynamicPath->nFootprintCollisionMask,
-				v32);
-		pDynamicPath->unk0x54 |= v33;
-		v34 = pDynamicPath->unk0x54;
-		if (v34)
+				nMoveTestColMask);
+		pDynamicPath->nCollidedWithMask |= nCollidedWithMask;
+		if (pDynamicPath->nCollidedWithMask)
 		{
-			if (!v31)
+			if (!bIsMissilePath)
 				goto LABEL_49;
 		}
-		else if (!v31)
+		else if (!bIsMissilePath)
 		{
 		LABEL_52:
 			v28 = v52;
 			goto LABEL_53;
 		}
-		if ((v34 & 5) != 0)
+		if ((pDynamicPath->nCollidedWithMask & (COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER)) != 0)
 		{
 		LABEL_49:
-			a2->dwPrecisionX = (v23 & 0xFFFF0000) + 0x8000;
-			a2->dwPrecisionY = (v22 & 0xFFFF0000) + 0x8000;
+			a2->dwPrecisionX = PATH_FP16FitToCenter(v23);
+			a2->dwPrecisionY = PATH_FP16FitToCenter(v22);
 			*pUnit = (D2UnitStrc*)pDynamicPath->nSavedStepsCount;
 			if (v42)
 				return D2Common_10236(v44, pDynamicPath->pTargetUnit != 0) == 0;
@@ -1539,8 +1527,8 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 	DWORD v29; // [esp+28h] [ebp-4h]
 
 	v2 = pPath->dwFlags;
-	v3 = (pPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
-	v4 = (pPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+	v3 = PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionX);
+	v4 = PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionY);
 	v29 = v4;
 	if ((v2 & PATH_MISSILE_MASK) != 0)
 	{
@@ -1683,14 +1671,14 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 	v3 = pDynamicPath->dwFlags & ~PATHTYPE_KNOCKBACK_SERVER;
 	pDynamicPath->dwFlags = v3;
 	if ((v3 & PATH_MISSILE_MASK) != 0)
-		pDynamicPath->unk0x54 = 0;
+		pDynamicPath->nCollidedWithMask = 0;
 	if ((v3 & 0x20) == 0 || (int)pDynamicPath->dwPathPoints <= 0 || !pDynamicPath->dwVelocity)
 	{
 		sub_6FDACC40(
 			pDynamicPath,
 			0,
-			(pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000,
-			(pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000);
+			PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX),
+			PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY));
 		pDynamicPath->dwPathPoints = 0;
 		pDynamicPath->dwCurrentPointIdx = 0;
 		pDynamicPath->dwFlags = pDynamicPath->dwFlags & (D2PathFlags)~PATH_UNKNOWN_FLAG_0x00020;
@@ -1854,7 +1842,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 				pDynamicPath->dwUnitSize,
 				pDynamicPath->nFootprintCollisionMask
 			);
-			pDynamicPath->unk0x54 = 0;
+			pDynamicPath->nCollidedWithMask = 0;
 		}
 		else
 		{
@@ -1867,7 +1855,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00008;
 			}
-			pDynamicPath->unk0x54 = COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(
+			pDynamicPath->nCollidedWithMask = COLLISION_ForceTeleportUnitCollisionMaskAndGetCollision(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
 				pDestRoom, tDest.X, tDest.Y,
 				pDynamicPath->dwUnitSize,
@@ -1925,13 +1913,13 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || COLLISION_GetRoomBySubTileCoordinates(pDestRoom, tDest.X, tDest.Y));
 
-	uint32_t dwPrecisionRoundedX = (pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
-	uint32_t dwPrecisionRoundedY = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+	const uint32_t dwPrecisionSubileCenterX = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX);
+	const uint32_t dwPrecisionSubtileCenterY = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY);
 	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0
-		|| COLLISION_GetRoomBySubTileCoordinates(pDynamicPath->pRoom, PATH_FromFP16(dwPrecisionRoundedX), PATH_FromFP16(dwPrecisionRoundedY)))
+		|| COLLISION_GetRoomBySubTileCoordinates(pDynamicPath->pRoom, PATH_FromFP16(dwPrecisionSubileCenterX), PATH_FromFP16(dwPrecisionSubtileCenterY)))
 	{
-		pDynamicPath->tGameCoords.dwPrecisionX = dwPrecisionRoundedX;
-		pDynamicPath->tGameCoords.dwPrecisionY = dwPrecisionRoundedY;
+		pDynamicPath->tGameCoords.dwPrecisionX = dwPrecisionSubileCenterX;
+		pDynamicPath->tGameCoords.dwPrecisionY = dwPrecisionSubtileCenterY;
 		
 		PATH_UpdateClientCoords(pDynamicPath);
 
@@ -1980,7 +1968,7 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pH
 }
 
 //D2Common.0x6FDADC20 (#10231)
-int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* pRooms, int nX, int nY)
+int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
 	D2DynamicPathStrc* v5; // esi
 	D2UnitStrc* v6; // eax
@@ -2011,20 +1999,20 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 	v26.Y = v7;
 	if (v6 && v6->dwUnitType == UNIT_MISSILE)
 	{
-		if ((WORD)nX || (WORD)nY)
+		if (nX || nY)
 			COLLISION_TeleportUnitCollisionMask(
 				a1->pRoom,
 				v26.X,
 				v26.Y,
 				pRooms,
-				(unsigned __int16)nX,
-				(unsigned __int16)nY,
+				nX,
+				nY,
 				a1->dwUnitSize,
 				a1->nFootprintCollisionMask);
 		else
 			COLLISION_ResetMaskWithSize(a1->pRoom, v26.X, v26.Y, a1->dwUnitSize, a1->nFootprintCollisionMask);
 	}
-	else if ((WORD)nX || (WORD)nY)
+	else if (nX || nY)
 	{
 		COLLISION_SetUnitCollisionMask(
 			a1->pRoom,
@@ -2053,10 +2041,10 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* 
 		v5->dwFlags = v9;
 	}
 	v10 = v5->dwFlags;
-	v11 = (unsigned __int16)nX;
-	DWORD v27 = (unsigned __int16)nY;
-	v12 = ((unsigned __int16)nX << 16) + 0x8000;
-	v13 = ((unsigned __int16)nY << 16) + 0x8000;
+	v11 = nX;
+	DWORD v27 = nY;
+	v12 = PATH_ToFP16Center(nX);
+	v13 = PATH_ToFP16Center(nY);
 	if ((v10 & 0x40000) == 0 || COLLISION_GetRoomBySubTileCoordinates(v8, HIWORD(v12), HIWORD(v13)))
 	{
 		v5->tGameCoords.dwPrecisionX = v12;
@@ -2216,8 +2204,8 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 	int pY; // [esp+20h] [ebp-4h] BYREF
 
 	v1 = pDynamicPath;
-	v2 = (pDynamicPath->tGameCoords.dwPrecisionX & 0xFFFF0000) + 0x8000;
-	v3 = (pDynamicPath->tGameCoords.dwPrecisionY & 0xFFFF0000) + 0x8000;
+	v2 = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX);
+	v3 = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY);
 	if ((pDynamicPath->dwFlags & 0x40000) != 0)
 	{
 		v4 = pDynamicPath->pRoom;

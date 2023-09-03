@@ -268,6 +268,8 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 #define D2_DISPLAY_ASSERT_THEN_BREAK(expr) (FOG_DisplayAssert(#expr, __FILE__, __LINE__), __debugbreak())
 #define D2_ASSERT(expr) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), exit(-1) , 0))
 #define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), exit(-1) , 0))
+#define D2_CHECK(expr) (void)( (!!(expr)) || (FOG_DisplayWarning(#expr, __FILE__, __LINE__), 0))
+
 
 // Assert that an expression must be true, even though the program may be recoverable.
 // Contrary to D2_ASSERT, this is still evaluated in release builds, and can be used anywhere the expression would be valid.
