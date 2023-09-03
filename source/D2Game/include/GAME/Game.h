@@ -277,11 +277,11 @@ int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId);
 //D2Game.0x6FC375A0
 void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame);
 //D2Game.0x6FC37690
-void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t a3);
+void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, D2C_SRV2CLT5A_TYPES nEventType);
 //D2Game.0x6FC37750
-void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2);
+void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES nEventType);
 //D2Game.0x6FC37880
-int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, char a3);
+int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType);
 //D2Game.0x6FC379C0
 void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId);
 //D2Game.0x6FC37B10
@@ -381,7 +381,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
 //D2Game.0x6FC3AFB0
 void __stdcall D2Game_10022(uint16_t a1, const char* Str2);
 //D2Game.0x6FC3B0E0
-void __fastcall GAME_SendPacketToAllConnectedClients(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pPacket);
+void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pContext);
 //D2Game.0x6FC3B160
 D2GameStrc* __fastcall sub_6FC3B160();
 //D2Game.0x6FC3B220

@@ -98,7 +98,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         D2GSPacketClt66* pPacket66 = (D2GSPacketClt66*)pPacket;
         if (GAME_VerifyCreateNewGame(nClientId, pPacket66))
         {
-            GAME_SendGameInit(nClientId, pPacket66->szGameName, pPacket66->bSkipVerification, pPacket66->nPlayerClass, pPacket66->szClientName, pPacket66->unk0x25, pPacket66->nGameFlags, pPacket66->unk0x13, pPacket66->unk0x2B, pPacket66->unk0x2C, pPacket66->unk0x14, pPacket66->nLocale, 0, 0);
+            GAME_SendGameInit(nClientId, pPacket66->szGameName, pPacket66->nGameType, pPacket66->nPlayerClass, pPacket66->szClientName, pPacket66->unk0x25, pPacket66->nGameFlags, pPacket66->nTemplate, pPacket66->unk0x2B, pPacket66->unk0x2C, pPacket66->nDifficulty, pPacket66->nLocale, 0, 0);
         }
         else
         {
@@ -195,7 +195,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     {
         if (sub_6FC38100(nClientId))
         {
-            GAME_DisconnectClientById(nClientId, 0);
+            GAME_DisconnectClientById(nClientId, EVENTTYPE_DISCONNECT);
         }
         else
         {

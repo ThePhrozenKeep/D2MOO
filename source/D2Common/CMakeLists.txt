@@ -201,6 +201,8 @@ if(D2MOO_WITH_STATIC_TESTS)
   target_sources(D2CommonStatic
     PRIVATE
       statictests/D2StatList_staticchecks.cpp
+      statictests/D2PacketDef_staticchecks.cpp
+      statictests/Path_staticchecks.cpp
   )
 endif()
 

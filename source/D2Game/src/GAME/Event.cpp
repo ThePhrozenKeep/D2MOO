@@ -181,16 +181,25 @@ void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 
     pTimerQueue->nArrayIndex = pGame->dwGameFrame % 64;
 
-    EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[2], 0);
-    EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->unk0x04[2][pTimerQueue->nArrayIndex], 1);
-    EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[0], 0);
-    EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->unk0x04[0][pTimerQueue->nArrayIndex], 1);
-    EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[1], 0);
-    EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->unk0x04[1][pTimerQueue->nArrayIndex], 1);
-    EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[3], 0);
-    EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->unk0x04[3][pTimerQueue->nArrayIndex], 1);
-    EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[4], 0);
-    EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->unk0x04[4][pTimerQueue->nArrayIndex], 1);
+    const int nMissileEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MISSILE);
+    EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[nMissileEventIdx], 0);
+    EVENT_ExecuteMissileEvents(pGame, pTimerQueue, pTimerQueue->unk0x04 [nMissileEventIdx][pTimerQueue->nArrayIndex], 1);
+
+    const int nPlayerEventIdx = EVENT_MapUnitTypeToIndex(UNIT_PLAYER);
+    EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[nPlayerEventIdx], 0);
+    EVENT_ExecutePlayerEvents(pGame, pTimerQueue, pTimerQueue->unk0x04 [nPlayerEventIdx][pTimerQueue->nArrayIndex], 1);
+
+    const int nMonsterEventIdx = EVENT_MapUnitTypeToIndex(UNIT_MONSTER);
+    EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[nMonsterEventIdx], 0);
+    EVENT_ExecuteMonsterEvents(pGame, pTimerQueue, pTimerQueue->unk0x04 [nMonsterEventIdx][pTimerQueue->nArrayIndex], 1);
+
+    const int nObjectEventIdx = EVENT_MapUnitTypeToIndex(UNIT_OBJECT);
+    EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[nObjectEventIdx], 0);
+    EVENT_ExecuteObjectEvents(pGame, pTimerQueue, pTimerQueue->unk0x04 [nObjectEventIdx][pTimerQueue->nArrayIndex], 1);
+
+    const int nItemEventIdx = EVENT_MapUnitTypeToIndex(UNIT_ITEM);
+    EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->unk0xA04[nItemEventIdx], 0);
+    EVENT_ExecuteItemEvents(pGame, pTimerQueue, pTimerQueue->unk0x04 [nItemEventIdx][pTimerQueue->nArrayIndex], 1);
 }
 
 // Only differs from EventTimerCallback by return type

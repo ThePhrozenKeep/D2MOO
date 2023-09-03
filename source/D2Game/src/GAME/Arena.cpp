@@ -192,7 +192,7 @@ void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pC
     for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
     {
         D2UnitStrc* pOtherPlayer = CLIENTS_GetPlayerFromClient(i, 0);
-        if (i->dwClientState == 4 && pOtherPlayer && pOtherPlayer != pLocalPlayer)
+        if (i->dwClientState == CLIENTSTATE_INGAME && pOtherPlayer && pOtherPlayer != pLocalPlayer)
         {
             D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pOtherPlayer)->pArenaUnit;
             D2_ASSERT(pArenaUnit);
@@ -211,7 +211,7 @@ void __fastcall ARENA_SendScoresToClient(D2GameStrc* pGame, D2ClientStrc* pClien
     for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
     {
         D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
-        if (i->dwClientState == 4 && pPlayer)
+        if (i->dwClientState == CLIENTSTATE_INGAME && pPlayer)
         {
             D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
             D2_ASSERT(pArenaUnit);
@@ -220,7 +220,7 @@ void __fastcall ARENA_SendScoresToClient(D2GameStrc* pGame, D2ClientStrc* pClien
     }
     
     D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 1);
-    if (pClient->dwClientState != 4 && pPlayer)
+    if (pClient->dwClientState != CLIENTSTATE_INGAME && pPlayer)
     {
         D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
         D2_ASSERT(pArenaUnit);

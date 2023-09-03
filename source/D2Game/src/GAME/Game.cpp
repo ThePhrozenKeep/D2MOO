@@ -285,7 +285,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 //D2Game.0x6FC35CB0
 int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
 {
-    if (gpD2EventCallbackTable_6FD45830 && pPacket->bSkipVerification)
+    if (gpD2EventCallbackTable_6FD45830 && pPacket->nGameType)
     {
         return 0;
     }
@@ -601,7 +601,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 
     D2_UNLOCK(pGame->lpCriticalSection);
 
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+    D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
     GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: Sent ACTINITDONE for client %d '%s'", nClientId, pClient->szName);
     return nTotalSize;
 }
@@ -762,8 +762,8 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 0);
-    CLIENTS_SetClientState(pClient, 1u);
+    D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 0);
+    CLIENTS_SetClientState(pClient, CLIENTSTATE_GAME_INIT_SENT);
     GAME_LogMessage(6, "[SERVER]  sSrvSendGameInit:      Sent game init to client %d '%s' for game %d '%s'", pClient->dwClientId, pClient->szName, pGame->nServerToken, pGame->szGameName);
     CLIENTS_SetActNo(pClient, gnAct_6FD45824);
 
@@ -782,7 +782,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         exit(-1);
     }
 
-    D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+    D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
 }
 
 //D2Game.0x6FC369C0
@@ -828,7 +828,7 @@ void __fastcall GAME_SendPacket0x5CToAllConnectedClients(D2GameStrc* pGame, D2Cl
     {
         for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
         {
-            if (pClient->dwClientState == 4)
+            if (pClient->dwClientState == CLIENTSTATE_INGAME)
             {
                 D2GAME_PACKETS_SendPacket0x5C_6FC3E090(pClient, pPlayer->dwUnitId);
             }
@@ -839,7 +839,7 @@ void __fastcall GAME_SendPacket0x5CToAllConnectedClients(D2GameStrc* pGame, D2Cl
 //D2Game.0x6FC36AE0
 int32_t __fastcall GAME_VerifyJoinAct(int32_t nClientId)
 {
-    if (CLIENTS_Verify(nClientId, 1))
+    if (CLIENTS_CheckState(nClientId, CLIENTSTATE_GAME_INIT_SENT))
     {
         return 1;
     }
@@ -909,10 +909,10 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 
             LEVEL_LoadAct(pGame, pClient->nAct);
             LEVEL_SynchronizeDayNightCycleWithClient(pGame, pClient);
-            CLIENTS_SetClientState(pClient, 2u);
+            CLIENTS_SetClientState(pClient, CLIENTSTATE_ACT_INIT_SENT);
             GAME_LogMessage(6, "[SERVER]  SrvSendActInit:        Sent act init to client %d '%s' for game %d '%s'", pClient->dwClientId, pClient->szName, pGame->nServerToken, pGame->szGameName);
             sub_6FC31EF0(pClient, CLIENTS_GetPlayerFromClient(pClient, 1), pGame, 0, 0, 0);
-            CLIENTS_SetClientState(pClient, 3u);
+            CLIENTS_SetClientState(pClient, CLIENTSTATE_PLAYER_SPAWNED);
         }
 
         D2_UNLOCK(pGame->lpCriticalSection);
@@ -1117,8 +1117,8 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
     if (pClient)
     {
         D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
-        D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 0);
-        CLIENTS_SetClientState(pClient, 1u);
+        D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 0);
+        CLIENTS_SetClientState(pClient, CLIENTSTATE_GAME_INIT_SENT);
         GAME_LogMessage(6, "[SERVER]  sSrvSendGameInit:      Sent game init to client %d '%s' for game %d '%s'", pClient->dwClientId, pClient->szName, pGame->nServerToken, pGame->szGameName);
         pClient->nAct = gnAct_6FD45824;
         GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           client %d '%s' joined game %d '%s'", dwClientId, szClientName, nGameId, pGame->szGameName);
@@ -1138,7 +1138,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 2u);
+            D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
         }
     }
     else
@@ -1217,7 +1217,7 @@ void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
 //D2Game.0x6FC37560
 int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId)
 {
-    if (CLIENTS_Verify(nClientId, 4))
+    if (CLIENTS_CheckState(nClientId, CLIENTSTATE_INGAME))
     {
         return 1;
     }
@@ -1264,7 +1264,7 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37690
-void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t a3)
+void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, D2C_SRV2CLT5A_TYPES nEventType)
 {
     if (!pClient)
     {
@@ -1275,8 +1275,8 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
-    packet5A.nType = a3;
-    packet5A.nColor = 4;
+    packet5A.nType = nEventType;
+    packet5A.nColor = STRCOLOR_DARK_GOLD;
     packet5A.dwParam = 0;
     CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
     packet5A.szText[31] = '\0';
@@ -1290,7 +1290,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 }
 
 //D2Game.0x6FC37750
-void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2)
+void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES nEventType)
 {
     if (!nClientId)
     {
@@ -1313,13 +1313,13 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, int32_t a2)
         return;
     }
 
-    GAME_DisconnectClient(pGame, CLIENTS_GetClientFromClientId(pGame, nClientId), a2);
+    GAME_DisconnectClient(pGame, CLIENTS_GetClientFromClientId(pGame, nClientId), nEventType);
     
     D2_UNLOCK(pGame->lpCriticalSection);
 }
 
 //D2Game.0x6FC37880
-int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, char a3)
+int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
 {
     const int32_t nClientId = sub_6FC33F20(szClientName);
     if (!nClientId)
@@ -1327,7 +1327,7 @@ int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, char a3)
         return 0;
     }
 
-    GAME_DisconnectClientById(nClientId, a3);
+    GAME_DisconnectClientById(nClientId, nEventType);
     return 1;
 }
 
@@ -1352,8 +1352,8 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nType = 0;
-        packet5A.nColor = 4;
+        packet5A.nType = EVENTTYPE_DISCONNECT;
+        packet5A.nColor = STRCOLOR_DARK_GOLD;
         packet5A.dwParam = 0;
         packet5A.szText[16] = 0;
         SStrCopy(packet5A.szText, CLIENTS_GetName(pClient), 16u);
@@ -1460,7 +1460,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
     if (pClient->unk0x1C4 >= 3)
     {
         CLIENTS_FreeSaveHeader(pClient);
-        GAME_DisconnectClient(pGame, pClient, 0);
+        GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
     }
 }
 
@@ -1518,7 +1518,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
     {
         while (1)
         {
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 5u);
+            D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 5u);
 
             if ((pGame->nGameType == 1 || pGame->nGameType == 2) && CLIENT_GetSaveHeader_6FC34350(pClient))
             {
@@ -1529,15 +1529,15 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
                 while (CLIENT_GetSaveHeader_6FC34350(pClient));
             }
 
-            D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 6u);
+            D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 6u);
 
             sub_6FC3C690(nClientId);
             sub_6FC39030(pGame, pClient, 0, 0);
 
             D2GSPacketSrv5A packet5A = {};
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 3;
-            packet5A.nColor = 4;
+            packet5A.nType = EVENTTYPE_PLAYERLEFT;
+            packet5A.nColor = STRCOLOR_DARK_GOLD;
             packet5A.dwParam = 0;
             CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
             packet5A.szText[31] = '\0';
@@ -1580,7 +1580,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     D2ClientStrc* pCheckedClient = nullptr;
-    GAME_SendPacketToAllConnectedClients(pGame, sub_6FC380D0, &pCheckedClient);
+    GAME_ForEachIngameClient(pGame, sub_6FC380D0, &pCheckedClient);
 
     if (pCheckedClient)
     {
@@ -1595,7 +1595,7 @@ void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
     }
 
     pCheckedClient = nullptr;
-    GAME_SendPacketToAllConnectedClients(pGame, sub_6FC380D0, &pCheckedClient);
+    GAME_ForEachIngameClient(pGame, sub_6FC380D0, &pCheckedClient);
 
     if (pCheckedClient)
     {
@@ -1802,7 +1802,7 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
                 {
                     D2GAME_UpdatePlayerItems_6FC4BB90(pGame, pPlayer, 1);
 
-                    if (pClient->dwClientState == 4 && pClient->nAct == i)
+                    if (pClient->dwClientState == CLIENTSTATE_INGAME && pClient->nAct == i)
                     {
                         D2GAME_SendPacket0x53_6FC3DF50(pClient, &packet53);
                     }
@@ -1987,7 +1987,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
                 bPlayerDisconnected = 1;
                 GAME_LogMessage(6, "[DISCONNECT]  PLAYER:%s  REASON:Heartbeat Timeout", CLIENTS_GetName(pClient));
-                GAME_DisconnectClient(pGame, pClient, 0);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
             }
             pClient = pNext;
         }
@@ -2056,14 +2056,14 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
         switch (pClient->dwClientState)
         {
-        case 3u:
+        case CLIENTSTATE_PLAYER_SPAWNED:
         {
             sub_6FC33670(pGame, pClient);
 
             if (D2Common_10073(pClient->pRoom) && CLIENTS_GetPlayerFromClient(pClient, 0))
             {
-                D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 4u);
-                CLIENTS_SetClientState(pClient, 4u);
+                D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 4u);
+                CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
@@ -2086,8 +2086,8 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
-                packet5A.nType = 2;
-                packet5A.nColor = 4;
+                packet5A.nType = EVENTTYPE_PLAYERJOIN;
+                packet5A.nColor = STRCOLOR_DARK_GOLD;
                 packet5A.dwParam = 0;
                 packet5A.szText[16] = '\0';
                 
@@ -2104,20 +2104,20 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
             }
             break;
         }
-        case 4u:
+        case CLIENTSTATE_INGAME:
         {
             sub_6FC33670(pGame, pClient);
             break;
         }
 
-        case 5u:
+        case CLIENTSTATE_CHANGING_ACT:
         {
             sub_6FC33670(pGame, pClient);
 
             if (D2Common_10073(pClient->pRoom))
             {
-                D2GAME_PACKETS_SendPacket0x4F_StartMercList_6FC3C6F0(pClient, 4u);
-                CLIENTS_SetClientState(pClient, 4u);
+                D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 4u);
+                CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
@@ -2215,7 +2215,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
     D2_ASSERT(pGame);
     D2_ASSERT(pClient);
 
-    if (a3 && pClient->dwClientState == 4)
+    if (a3 && pClient->dwClientState == CLIENTSTATE_INGAME)
     {
         if (dword_6FD4582C)
         {
@@ -2297,7 +2297,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
             if (pClient->unk0x1C4 >= 3)
             {
-                GAME_DisconnectClient(pGame, pClient, 0);
+                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
                 return;
             }
         }
@@ -3086,8 +3086,8 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
             {
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5Au;
-                packet5A.nType = 15;
-                packet5A.nColor = 4;
+                packet5A.nType = EVENTTYPE_REALMGOINGDOWN;
+                packet5A.nColor = STRCOLOR_DARK_GOLD;
                 packet5A.dwParam = nPacketParam;
                 packet5A.szText[16] = 0;
                 sub_6FC84D40(pGame, &packet5A);
@@ -3140,7 +3140,7 @@ void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
 }
 
 //D2Game.0x6FC3B0E0
-void __fastcall GAME_SendPacketToAllConnectedClients(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pPacket)
+void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pContext)
 {
     D2_ASSERT(pGame);
 
@@ -3152,9 +3152,9 @@ void __fastcall GAME_SendPacketToAllConnectedClients(D2GameStrc* pGame, void(__f
 
     for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
     {
-        if (pClient->dwClientState == 4)
+        if (pClient->dwClientState == CLIENTSTATE_INGAME)
         {
-            pFn(pClient, pPacket);
+            pFn(pClient, pContext);
         }
     }
 }
@@ -3208,7 +3208,7 @@ void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame)
 
     for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
     {
-        if (pClient->dwClientState == 4)
+        if (pClient->dwClientState == CLIENTSTATE_INGAME)
         {
             sub_6FC3B3D0(pClient, pUnit);
         }

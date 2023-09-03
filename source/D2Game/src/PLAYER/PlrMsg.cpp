@@ -849,9 +849,9 @@ int32_t __fastcall sub_6FC83340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStr
     {
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nColor = 1;
+        packet5A.nColor = STRCOLOR_RED;
         packet5A.dwParam = 0;
-        packet5A.nType = 14;
+        packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
     }
 
@@ -1704,7 +1704,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
         packet26Args.nUnitId = -1;
     }
 
-    GAME_SendPacketToAllConnectedClients(pGame, pFn, &packet26Args);
+    GAME_ForEachIngameClient(pGame, pFn, &packet26Args);
 
     if (packet26.nMessageType == 2)
     {
@@ -1713,8 +1713,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
             D2GSPacketSrv5A packet5A = {};
 
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 13;
-            packet5A.nColor = 0;
+            packet5A.nType = EVENTTYPE_NOTLISTENINGTOYOU;
+            packet5A.nColor = STRCOLOR_WHITE;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
             packet5A.szText[15] = 0;
@@ -1727,8 +1727,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x15_HandleChatMessage_6FC84950(D2Ga
             D2GSPacketSrv5A packet5A = {};
 
             packet5A.nHeader = 0x5Au;
-            packet5A.nType = 4;
-            packet5A.nColor = 0;
+            packet5A.nType = EVENTTYPE_NOTINGAME;
+            packet5A.nColor = STRCOLOR_WHITE;
             packet5A.dwParam = 0;
             SStrCopy(packet5A.szText, packet15.szName, INT_MAX);
             packet5A.szText[15] = 0;
@@ -1766,7 +1766,7 @@ void __fastcall sub_6FC84C70(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.nMessageColor = nColor;
     memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
 
-    GAME_SendPacketToAllConnectedClients(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
+    GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }
 
 //D2Game.0x6FC84CD0
@@ -1782,7 +1782,7 @@ void __fastcall sub_6FC84CD0(D2GameStrc* pGame, const char* szMessage, uint8_t n
     pPacket.nLang = 0;
     memcpy(pPacket.szMessage, szMessage, sizeof(pPacket.szMessage));
 
-    GAME_SendPacketToAllConnectedClients(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
+    GAME_ForEachIngameClient(pGame, j_D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0, &pPacket);
 }
 
 //D2Game.0x6FC84D30
@@ -1798,7 +1798,7 @@ void __fastcall sub_6FC84D40(D2GameStrc* pGame, D2GSPacketSrv5A* pPacket5A)
     {
         if (!pPacket5A->szText[i])
         {
-            GAME_SendPacketToAllConnectedClients(pGame, j_D2GAME_SendPacket0x5A_6FC3DEC0, pPacket5A);
+            GAME_ForEachIngameClient(pGame, j_D2GAME_SendPacket0x5A_6FC3DEC0, pPacket5A);
             return;
         }
     }
@@ -1962,9 +1962,9 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x19_RemoveItemFromBuffer_6FC850C0(D
             {
                 D2GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
-                packet5A.nColor = 1;
+                packet5A.nColor = STRCOLOR_RED;
                 packet5A.dwParam = 0;
-                packet5A.nType = 14;
+                packet5A.nType = EVENTTYPE_CANTDOTHAT;
                 D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
                 return 2;
             }
@@ -2781,7 +2781,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x32_BuyItemFromNpcBuffer_6FC86AE0(D
 {
     if (nSize == 17)
     {
-        return D2GAME_NPC_BuyItemHandler_6FCC92A0(pGame, pUnit, *(int32_t*)((char*)pPacket + 1), *(int32_t*)((char*)pPacket + 5), (*(int32_t*)((char*)pPacket + 9) & INT_MAX) >> 16, *(int32_t*)((char*)pPacket + 9), *(int32_t*)((char*)pPacket + 13), *(int32_t*)((char*)pPacket + 9) & 0x80000000);
+        D2GSPacketClt32* pPacket32 = (D2GSPacketClt32*)pPacket;
+        return D2GAME_NPC_BuyItemHandler_6FCC92A0(pGame, pUnit, pPacket32->dwNpcGUID, pPacket32->dwItemGUID, pPacket32->nItemMode, pPacket32->nTransactionType, pPacket32->dwCost, pPacket32->bMultibuy);
     }
 
     return 3;
@@ -3129,7 +3130,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x41_Resurrect_6FC87480(D2GameStrc* 
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         if (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE))
         {
-            GAME_DisconnectClient(pGame, pClient, 3);
+            GAME_DisconnectClient(pGame, pClient, EVENTTYPE_PLAYERLEFT);
             return 0;
         }
 
@@ -3270,8 +3271,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x45_ChangeTpLocation_6FC87930(D2Gam
         return 3;
     }
 
-    const int32_t nPortalGUID = *(int32_t*)((char*)pPacket + 1);
-    const uint16_t nLevelId = *(uint16_t*)((char*)pPacket + 5);
+    D2GSPacketClt45* pPacket45 = (D2GSPacketClt45*)pPacket;
+
+    const int32_t nPortalGUID = pPacket45->nPortalGUID;
+    const uint16_t nLevelId = pPacket45->nLevelId;
     D2UnitStrc* pPortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, nPortalGUID);
     if (pPortal)
     {
@@ -3430,13 +3433,13 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 return 1;
             }
 
-            if (!pPacket49->unk0x05)
+            if (!pPacket49->nLevelId)
             {
-                D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->unk0x05);
+                D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                 return 0;
             }
 
-            if (pPacket49->unk0x05 >= sgptDataTables->nLevelsTxtRecordCount)
+            if (pPacket49->nLevelId >= sgptDataTables->nLevelsTxtRecordCount)
             {
                 nResult = 3;
             }
@@ -3447,7 +3450,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 D2_ASSERT(pPlayerData);
 
                 int16_t nWaypointNo = 0;
-                if (!WAYPOINTS_GetWaypointNoFromLevelId(pPacket49->unk0x05, &nWaypointNo))
+                if (!WAYPOINTS_GetWaypointNoFromLevelId(pPacket49->nLevelId, &nWaypointNo))
                 {
                     nResult = 3;
                 }
@@ -3455,7 +3458,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 {
                     if (WAYPOINTS_IsActivated(pPlayerData->pWaypointData[pGame->nDifficulty], nWaypointNo))
                     {
-                        D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->unk0x05);
+                        D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                         return 0;
                     }
 
@@ -4121,9 +4124,9 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
     {
         D2GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
-        packet5A.nColor = 1;
+        packet5A.nColor = STRCOLOR_RED;
         packet5A.dwParam = 0;
-        packet5A.nType = 14;
+        packet5A.nType = EVENTTYPE_CANTDOTHAT;
         D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet5A);
         return 2;
     }
@@ -4364,8 +4367,8 @@ void __fastcall D2GAME_PLRMSG_Last_6FC89450(D2GameStrc* pGame, D2UnitStrc* pAtta
 
     D2GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
-    packet5A.nType = 6;
-    packet5A.nColor = 4;
+    packet5A.nType = EVENTTYPE_SLAIN_BY;
+    packet5A.nColor = STRCOLOR_DARK_GOLD;
 
     if (pPlayer)
     {
@@ -4414,7 +4417,7 @@ void __fastcall D2GAME_PLRMSG_Last_6FC89450(D2GameStrc* pGame, D2UnitStrc* pAtta
     {
         if (!packet5A.szText[i])
         {
-            GAME_SendPacketToAllConnectedClients(pGame, j_D2GAME_SendPacket0x5A_6FC3DEC0, &packet5A);
+            GAME_ForEachIngameClient(pGame, j_D2GAME_SendPacket0x5A_6FC3DEC0, &packet5A);
             return;
         }
     }

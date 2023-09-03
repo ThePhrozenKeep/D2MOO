@@ -115,7 +115,8 @@ struct D2UnitStrc
 	D2UnitGUID dwUnitId;						//0x0C
 	union										//0x10
 	{
-		uint32_t dwAnimMode;					//Player, Monster, Object, Items
+		uint32_t dwAnimMode;					//Player, Monster, Object
+		uint32_t dwItemMode;					//Items, see D2C_ItemModes
 		uint32_t dwCollideType;					//Missiles
 	};
 	union										//0x14

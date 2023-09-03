@@ -3,8 +3,6 @@
 
 #include <Calc.h>
 
-static_assert(sizeof(FOGASTNodeStrc) == sizeof(uint8_t), "Make sure we use the right size for FOGASTNodeStrc");
-
 // 1.10f: 0x6FF524D0
 // 1.13c: 0x6FF69CB0
 int __fastcall DATATBLS_IntStackPop(Fog64IntStack* pCalcStack)
