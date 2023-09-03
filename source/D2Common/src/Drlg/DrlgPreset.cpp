@@ -150,10 +150,10 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 		}
 	}
 
-	pDrlgFile->unk0x00 = 0;
+	pDrlgFile->nSubstMethod = 0;
 	if (nVersion >= 10)
 	{
-		pDrlgFile->unk0x00 = ReadInt32(pData);
+		pDrlgFile->nSubstMethod = ReadInt32(pData);
 	}
 
 	if (nVersion >= 3)
@@ -227,7 +227,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 
 	pDrlgFile->pShadowLayer = pData;
 	SkipInt32s(pData, nArea);
-	if (pDrlgFile->unk0x00 > 0 && pDrlgFile->unk0x00 <= 2)
+	if (pDrlgFile->nSubstMethod > DRLGSUBST_NONE && pDrlgFile->nSubstMethod <= DRLGSUBST_RANDOM)
 	{
 		pDrlgFile->pSubstGroupTags = pData;
 		SkipInt32s(pData, nArea);
@@ -397,7 +397,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 		}
 	}
 
-	if (nVersion >= 12 && pDrlgFile->unk0x00 > 0 && pDrlgFile->unk0x00 <= 2)
+	if (nVersion >= 12 && pDrlgFile->nSubstMethod > DRLGSUBST_NONE && pDrlgFile->nSubstMethod <= DRLGSUBST_RANDOM)
 	{
 		if (nVersion >= 18)
 		{

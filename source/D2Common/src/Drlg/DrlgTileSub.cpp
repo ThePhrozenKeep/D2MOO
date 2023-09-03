@@ -315,7 +315,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 						nHeight = a1->pRoomEx->nTileHeight - pSubstGroup->tBox.nHeight + 1;
 						if (nWidth > 0 && nHeight > 0)
 						{
-							if (pLvlSubTxtRecord->pDrlgFile->unk0x00 == 1)
+							if (pLvlSubTxtRecord->pDrlgFile->nSubstMethod == DRLGSUBST_FIXED)
 							{
 								for (int j = 1; j < nHeight; ++j)
 								{
@@ -328,7 +328,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 									}
 								}
 							}
-							else if (pLvlSubTxtRecord->pDrlgFile->unk0x00 == 2)
+							else if (pLvlSubTxtRecord->pDrlgFile->nSubstMethod == DRLGSUBST_RANDOM)
 							{
 								for (int j = 0; j < nHeight; ++j)
 								{
