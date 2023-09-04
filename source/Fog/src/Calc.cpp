@@ -3,8 +3,8 @@
 
 #include <Calc.h>
 
-// 1.10f: 0x6FF524D0
-// 1.13c: 0x6FF69CB0
+//1.10f: 0x6FF524D0
+//1.13c: 0x6FF69CB0
 int __fastcall DATATBLS_IntStackPop(Fog64IntStack* pCalcStack)
 {
 	if (pCalcStack->nSize <= 0)
@@ -15,8 +15,8 @@ int __fastcall DATATBLS_IntStackPop(Fog64IntStack* pCalcStack)
 	return pCalcStack->tData[--pCalcStack->nSize];
 }
 
-// 1.10f: 0x6FF524B0
-// 1.13c: 0x6FF69CD0
+//1.10f: 0x6FF524B0
+//1.13c: 0x6FF69CD0
 void __fastcall DATATBLS_IntStackPush(Fog64IntStack* pCalcStack, int32_t nValue)
 {
 	if (pCalcStack->nSize < pCalcStack->nCapacity)
@@ -162,8 +162,8 @@ static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGASTTyp
 }
 
 
-// 1.10f: 0x6FF51E30 (#10253)
-// 1.13c: 0x6FF69E90 (#10253)
+//1.10f: 0x6FF51E30 (#10253)
+//1.13c: 0x6FF69E90 (#10253)
 int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData)
 {
 	if (nExpressionBufferSize <= 0)
@@ -288,15 +288,15 @@ static FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTN
 	return pNewExpressionBufferPos;
 }
 
-// 1.10f: 0x6FF53280
-// 1.13c: 0x6FF69680
+//1.10f: 0x6FF53280
+//1.13c: 0x6FF69680
 FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue)
 {
 	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, false);
 }
 
-// 1.10f: Inlined
-// 1.13c: 0x6FF695E0
+//1.10f: Inlined
+//1.13c: 0x6FF695E0
 FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue)
 {
 	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, true);
@@ -345,7 +345,7 @@ static const char nCacheExceptionsList[] = {
 	3,
 	9,9,9,9,9,9,15,15,15,15,15,15,17,17,19,19,20,21,22 };
 
-// 1.10f: 0x6FF712F0
+//1.10f: 0x6FF712F0
 static const FOGASTType aASTOperatorPrecedence[24] = {
 	AST_Ternary_Colon,				  // AST_None = 0
 	AST_CallbackTable,				  // AST_CallbackTable = 1
@@ -373,8 +373,8 @@ static const FOGASTType aASTOperatorPrecedence[24] = {
 	AST_None						  // AST_Ternary_Colon = 23
 };
 
-// 1.10f: 0x6FF53000
-// 1.13c: 0x6FF69790
+//1.10f: 0x6FF53000
+//1.13c: 0x6FF69790
 BOOL __fastcall DATATABLS_CheckPrecendence(FOGASTType nPreviousCalcType, FOGASTType nNewCalcType)
 {
 	if (nPreviousCalcType == AST_CallbackTable || nNewCalcType == AST_CallbackTable || nPreviousCalcType >= AST_Ternary_Colon)
@@ -387,8 +387,8 @@ BOOL __fastcall DATATABLS_CheckPrecendence(FOGASTType nPreviousCalcType, FOGASTT
 	}
 }
 
-// 1.10f: 0x6FF530B0
-// 1.13c: 0x6FF69CF0
+//1.10f: 0x6FF530B0
+//1.13c: 0x6FF69CF0
 FOGASTNodeStrc* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNodeStrc* pASTBufferPos, FOGASTNodeStrc* pASTBufferStart, int nASTBufferSize, FOGExpressionParserContextStrc* pContext, FOGASTType nNewASTType, CalcGetFunctionParameterCount_t pfnGetFunctionParametersCount, int nTokenAssociatedValue)
 {
 	while (pContext->nPendingOps > 0)
@@ -566,8 +566,8 @@ static const char* DATATABLS_ParseSubExpression(const char* szExpression, FOGExp
 	return szExpression;
 }
 
-// 1.10f: Inlined
-// 1.13c: 0x6FF697B0
+//1.10f: Inlined
+//1.13c: 0x6FF697B0
 // Returns the position after the parsed token
 const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpressionParserTokenType* pOutTokenType, FOGExpressionParserContextStrc* pCalc, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse)
 {
@@ -679,8 +679,8 @@ const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpr
 
 }
 
-// 1.10f: 0x6FF524F0 (#10254)
-// 1.13c: 0x6FF5BB20 (#10254)
+//1.10f: 0x6FF524F0 (#10254)
+//1.13c: 0x6FF5BB20 (#10254)
 int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNodeStrc* pOutASTBuffer, int nOutASTBufferSize, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetFunctionParameterCount_t pfnGetFunctionParameterCount, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	bool bPendingValue = false;
