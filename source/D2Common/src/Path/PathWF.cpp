@@ -34,8 +34,8 @@ void __vectorcall PATH_ReplaceSubpathPoints(D2PathMovStrc* pMov, D2PathPointStrc
 	(*pSubPathStartIdx) = nLastReplacedPointIdx + 1;
 }
 
-//0x6FDE5198 (1.13c)
-//0x6FDD2458 (1.10f)
+//1.10f: 0x6FDE5198
+//1.13C: 0x6FDD2458
 static int gnCellOffsetsToDirections[] =
 {
 	/*(-1,-1)*/ 7, /*( 0,-1)*/ 0, /*( 1,-1)*/ 1,
@@ -43,16 +43,16 @@ static int gnCellOffsetsToDirections[] =
 	/*(-1, 1)*/ 5, /*( 0, 1)*/ 4, /*( 1 ,1)*/ 3
 };
 
-//D2Common.0x6FDD23D8 (1.10f)
-//D2Common.0x6fddca38 (1.13c)
+//1.10f: D2Common.0x6FDD23D8
+//1.13C: D2Common.0x6fddca38
 static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 {
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1},
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
 };
 
-//Inlined (1.10f)
-//D2Common.0x6FD686D0 (1.13C)
+//1.10f: Inlined
+//1.13C: D2Common.0x6FD686D0
 BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
 {
 	D2_ASSERT(pInfo && pMov && pInfo->pDynamicPath->pUnit && (pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
@@ -87,16 +87,16 @@ BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2Path
 // If the path would be too long, then it goes straight to the first collision along the line.
 int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPointStrc tSubPathStart, D2PathPointStrc* pPathPoints, int* pSubPathStartIdx, int* nMaxIndex, int nMaxLength, int nMajorDirection)
 {
-	//D2Common.0x6FDD2480 (1.10f)
-	//D2Common.0x6FDE5158 (1.13c)
+	//1.10f: D2Common.0x6FDD2480
+	//1.13C: D2Common.0x6FDE5158
 	static int gnPreviousDirection1[16] =
 	{
 		6,6,0,0,2,2,4,4,
 		6,6,0,0,2,2,4,4,
 	};
 
-	//D2Common.0x6FDD24C0 (1.10f)
-	//D2Common.0x6FDE5118 (1.13c)
+	//1.10f: D2Common.0x6FDD24C0
+	//1.13C: D2Common.0x6FDE5118
 	static int gnPreviousDirection2[16] =
 	{
 		// Opposite direction of gnDirIndexCache1List
@@ -104,16 +104,16 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		2,2,4,4,6,6,0,0
 	};
 
-	//D2Common.0x6FDD2500 (1.10f)
-	//D2Common.0x6FDE50D8 (1.13c)
+	//1.10f: D2Common.0x6FDD2500
+	//1.13C: D2Common.0x6FDE50D8
 	static int gnNextDirection1[16] =
 	{
 		2,2,4,4,6,6,0,0,
 		2,2,4,4,6,6,0,0
 	};
 
-	//D2Common.0x6FDD2540 (1.10f)
-	//D2Common.0x6FDE5098 (1.13c)
+	//1.10f: D2Common.0x6FDD2540
+	//1.13C: D2Common.0x6FDE5098
 	static int gnNextDirection2[16] =
 	{
 		6,0,0,2,2,4,4,6,
@@ -359,8 +359,8 @@ int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPoint
 	return 0;
 }
 
-// Inlined (1.10f)
-// D2Common.0x6FD684C0 (1.13c)
+//1.10f: Inlined
+//1.13C: D2Common.0x6FD684C0
 static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTargetPoint, int nDistMax, int* nMajorDirection, D2PathPointStrc* pOutPoints)
 {
 	// We kind of "null terminate" the path by setting the last point X to 0

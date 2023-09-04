@@ -235,8 +235,8 @@ BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bFor
 }
 
 // Author: Araksson
-// Inlined (1.10f)
-// D2Common.0x6FD85780 (1.13C)
+//1.10f: Inlined
+//1.13C: D2Common.0x6FD85780
 static int PATH_MissileToTarget(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit)
 {
 	switch (pPath->dwPathType)
