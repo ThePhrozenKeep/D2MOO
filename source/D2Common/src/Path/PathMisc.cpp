@@ -144,7 +144,8 @@ int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 	return nbPathPoints;
 }
 
-//D2Common.0x6FDAA880
+//1.00:  D2Common.0x1005B6D0
+//1.10f: D2Common.0x6FDAA880
 BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPointStrc pPoint, int* pDirection)
 {
 	D2UnitStrc* pUnit = pPathInfo->pDynamicPath->pUnit;
