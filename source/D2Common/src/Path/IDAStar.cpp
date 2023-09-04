@@ -31,7 +31,7 @@ const int dword_6FDD19E0[] =
 //D2Common.0x6FDA69E0
 int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo)
 {
-	D2_ASSERTM(false, "Not implemented yet.");
+	UNIMPLEMENTED();
 	return 0;
 }
 
