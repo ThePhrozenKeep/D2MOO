@@ -174,11 +174,81 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 	return FALSE;
 }
 
-//D2Common.0x6FDAA9F0
+//1.00:  D2Common.0x1005B890
+//1.10f: D2Common.0x6FDAA9F0
 int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 {
-	UNIMPLEMENTED();
-	return 0;
+	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
+	pPath->dwCurrentPointIdx = 0;
+	pPath->dwPathPoints = 0;
+	if (pPath->dwUnitTypeRelated)
+		return sub_6FDAA720(pPathInfo);
+	D2PathPointStrc nNextPoint = pPathInfo->tTargetCoord;
+	pPath->PathPoints[0] = nNextPoint;
+	if (sub_6FDAABF0(pPath, &nNextPoint))
+	{
+		pPath->PathPoints[pPath->dwPathPoints] = nNextPoint;
+		pPath->dwPathPoints++;
+	}
+	else if (sub_6FDABA50(nNextPoint, pPathInfo->tTargetCoord) > pPathInfo->field_14)
+	{
+		D2PathPointStrc tPoint = pPathInfo->pStartCoord;
+		D2PathPointStrc tCurCoords = pPathInfo->pStartCoord;
+		if (pPathInfo->pStartCoord != nNextPoint)
+		{
+			pPath->PathPoints[pPath->dwPathPoints++] = nNextPoint;
+			tPoint = nNextPoint;
+			tCurCoords = nNextPoint;
+		}
+		nNextPoint = pPathInfo->tTargetCoord;
+		int nPrevDir = PATH_DIR_NULL;
+		int nNewPointsCount = pPath->dwPathPoints;
+		BOOL bNotStraightLine = FALSE;
+		int nCurDist = 0;
+		if (pPathInfo->nDistMax > 0)
+		{
+			D2PathPointStrc* pPathPointsEnd = &pPath->PathPoints[pPath->dwPathPoints];
+			do
+			{
+				if (tCurCoords == nNextPoint)
+					break;
+				bNotStraightLine = FALSE;
+				int aTestDir[3];
+				PATH_GetDirections_6FDAB790(aTestDir, tPoint, nNextPoint);
+				int nDirection;
+				if (!sub_6FDAA880(pPathInfo, aTestDir, tPoint, &nDirection) || (((uint8_t)nDirection - 4) & 7) == nPrevDir)
+					goto LABEL_20;
+				tCurCoords.X += gatDirectionToOffset_6FDD2118[nDirection].nX;
+				tCurCoords.Y += gatDirectionToOffset_6FDD2118[nDirection].nY;
+				if (nDirection != nPrevDir)
+				{
+					if (tPoint != pPathInfo->pStartCoord)
+					{
+						*pPathPointsEnd = tPoint;
+						++nNewPointsCount;
+						++pPathPointsEnd;
+					}
+					bNotStraightLine = TRUE;
+				}
+				tPoint = tCurCoords;
+				nPrevDir = nDirection;
+				++nCurDist;
+			} while (nCurDist < pPathInfo->nDistMax);
+			if (bNotStraightLine)
+				goto LABEL_22;
+		LABEL_20:
+			if (nCurDist)
+				pPath->PathPoints[nNewPointsCount++] = tPoint;
+		}
+	LABEL_22:
+		pPath->dwPathPoints = nNewPointsCount;
+	}
+	else
+	{
+		pPath->PathPoints[pPath->dwPathPoints] = nNextPoint;
+		pPath->dwPathPoints++;
+	}
+	return pPath->dwPathPoints;
 }
 
 //D2Common.0x6FDAABF0
