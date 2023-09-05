@@ -614,7 +614,8 @@ void __stdcall UNITS_ResetRoom(D2UnitStrc* pUnit)
 	}
 }
 
-//D2Common.0x6FDBE270 (#10342)
+//1.10f: D2Common.0x6FDBE270 (#10342)
+//1.13c: D2Common.0x6FD7FE10 (#10331)
 D2RoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);

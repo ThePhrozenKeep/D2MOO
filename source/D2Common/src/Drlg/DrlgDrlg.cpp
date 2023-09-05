@@ -795,7 +795,8 @@ D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStr
 	return DRLG_GetRoomExFromLevelAndCoordinates(pLevel, nX, nY);
 }
 
-//D2Common.0x6FD751C0
+//1.10f: D2Common.0x6FD751C0
+//1.13c: D2Common.0x6FD7D320
 BOOL __fastcall DRLG_IsTownLevel(int nLevelId)
 {
 	switch (nLevelId)

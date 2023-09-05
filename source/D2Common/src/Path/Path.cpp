@@ -234,6 +234,37 @@ BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bFor
 	return FALSE;
 }
 
+//1.10f: Inlined
+//1.13C: D2Common.0x6FD85780
+BOOL __fastcall PATH_IsTargetDestinationAllowed(D2PathInfoStrc* pPathInfo, D2UnitStrc* pUnit)
+{
+	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER) // Only monsters may have restricted access to town
+	{
+		if (MONSTERS_CanBeInTown(pUnit)) // If it can be in town, everything's fine
+		{
+			return TRUE;
+		}
+
+		// Otherwise check if the target is in town
+		D2RoomStrc* pTargetRoom = pPathInfo->pTargetRoom;
+		if (!pTargetRoom)
+		{
+			// Try to find target room
+			D2RoomStrc* pRoomHalfway = COLLISION_GetRoomBySubTileCoordinates(
+				pPathInfo->pRoom,
+				pPathInfo->pStartCoord.X + (pPathInfo->tTargetCoord.X - pPathInfo->pStartCoord.X) / 2,
+				pPathInfo->pStartCoord.Y + (pPathInfo->tTargetCoord.Y - pPathInfo->pStartCoord.Y) / 2);
+			pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(pRoomHalfway, pPathInfo->tTargetCoord.X, pPathInfo->tTargetCoord.Y);
+		}
+		if (pTargetRoom && DUNGEON_IsRoomInTown(pTargetRoom))
+		{
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 // Author: Araksson
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD85780

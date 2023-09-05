@@ -593,6 +593,7 @@ void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoin
 }
 
 //D2Common.0x6FDAB7D0
+//Should be __thiscall but we have to use __fastcall, hence nUnused
 void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
 	D2_MAYBE_UNUSED(nUnused);
