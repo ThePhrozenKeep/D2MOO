@@ -12,14 +12,22 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 //D2Common.0x6FDABA50
 int __stdcall  sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
+//1.10f: D2Common.0x6FDAB6A0
+//1.13c: D2Common.0x6FD8E190
+int __stdcall sub_6FDAB6A0(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB750
 int __fastcall sub_6FDAB750(int nX1, int nY1, int nX2, int nY2);
+//D2Common.0x6FDAB7D0
+void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB890
 // Should be in PathUtil.h
 void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath);
 
 //D2Common.0x6FDAB0B0
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo);
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD85E00
+BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAA9F0
 int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc* pPathInfo);
 //1.00:  D2Common.0x1005BB30

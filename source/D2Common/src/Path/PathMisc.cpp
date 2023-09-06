@@ -53,6 +53,8 @@ static const D2UnkPathStrc stru_6FDD2158[25] =
 	{ 1, 0, 2 },
 };
 
+//1.10f: D2Common.0x6FDD2288
+//1.13c: D2Common.0x6FDDC450
 static const D2UnkPathStrc2 byte_6FDD2288[25] =
 {
 	{ 4, 6, -1 },
@@ -82,8 +84,11 @@ static const D2UnkPathStrc2 byte_6FDD2288[25] =
 	{ 0, 2, -1 },
 };
 
-// D2Common.0x6FDD2118
-D2CoordStrc gatDirectionToOffset_6FDD2118[8] = {
+// 1.10f: D2Common.0x6FDD1DA0
+// 1.10f: D2Common.0x6FDD2118
+// 1.13c: D2Common.0x6FDDC5A0
+// Seems to be kind of inlined everywhere
+const D2CoordStrc gatDirectionToOffset[8] = {
 	{ 1, 0},
 	{ 1, 1},
 	{ 0, 1},
@@ -128,8 +133,8 @@ int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 			{
 				break;
 			}
-			tCurCoords.X += gatDirectionToOffset_6FDD2118[nDirection].nX;
-			tCurCoords.Y += gatDirectionToOffset_6FDD2118[nDirection].nY;
+			tCurCoords.X += gatDirectionToOffset[nDirection].nX;
+			tCurCoords.Y += gatDirectionToOffset[nDirection].nY;
 			if (nDirection != nPrevDirection)
 			{
 				pDynamicPath->PathPoints[nbPathPoints++] = tLastSegmentEndCoord;
@@ -153,13 +158,13 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER));
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[0];
 		return TRUE;
 	}
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[1];
 		return TRUE;
@@ -167,7 +172,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pTestDir[2] != PATH_DIR_NULL);
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[2];
 		return TRUE;
@@ -175,6 +180,80 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	return FALSE;
 }
+
+// Very similar to D2Common.0x6FDAA880, except it doesn't assert on pTestDir[2] != PATH_DIR_NULL, simply checks it.
+// It also accumulates positions.
+BOOL __fastcall PATH_CheckTestDirForCollisions(const D2PathInfoStrc* pPathInfo, const int* pTestDir, D2PathPointStrc* pPoints, int* pFreeOfCollisionDirIndex)
+{
+	D2UnitStrc* pUnit = pPathInfo->pDynamicPath->pUnit;
+
+	pPoints[0].X += gatDirectionToOffset[pTestDir[0]].nX;
+	pPoints[0].Y += gatDirectionToOffset[pTestDir[0]].nY;
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, pPoints[0].X, pPoints[0].Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	{
+		*pFreeOfCollisionDirIndex = 0;
+		return TRUE;
+	}
+
+	pPoints[1].X += gatDirectionToOffset[pTestDir[1]].nX;
+	pPoints[1].Y += gatDirectionToOffset[pTestDir[1]].nY;
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, pPoints[1].X, pPoints[1].Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	{
+		*pFreeOfCollisionDirIndex = 1;
+		return TRUE;
+	}
+
+	if (pTestDir[2] != PATH_DIR_NULL);
+	{
+		pPoints[2].X += gatDirectionToOffset[pTestDir[2]].nX;
+		pPoints[2].Y += gatDirectionToOffset[pTestDir[2]].nY;
+		if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, pPoints[2].X, pPoints[2].Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+		{
+			*pFreeOfCollisionDirIndex = 2;
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD85E00
+BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
+{
+	int pTestDir[3];
+
+	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
+	D2_ASSERT(!(pPath->dwFlags & PATH_MISSILE_MASK));
+
+	D2PathPointStrc aTestDirPathPoints[3] = { pPathInfo->tTargetCoord, pPathInfo->tTargetCoord, pPathInfo->tTargetCoord };
+
+	sub_6FDAB7D0(pTestDir, 0 /*unused*/, pPathInfo->tTargetCoord, pPathInfo->pStartCoord);
+	while (1)
+	{
+		if (pPathInfo->pStartCoord == aTestDirPathPoints[0])
+		{
+			return 0;
+		}
+
+		int nFreeOfCollisionDirectionIndex = -1;
+		if (PATH_CheckTestDirForCollisions(pPathInfo, pTestDir, aTestDirPathPoints, &nFreeOfCollisionDirectionIndex))
+		{
+			const D2PathPointStrc tNextPoint = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
+			if (pPathInfo->pStartCoord == aTestDirPathPoints[0])
+			{
+				return 0;
+			}
+			if (pPath->pUnit && pPath->pUnit->dwUnitType == UNIT_PLAYER)
+			{
+				sub_6FDA8FE0(pPathInfo);
+			}
+			return 1;
+		}
+		pTestDir[0] = byte_6FDD2288[sub_6FDAB6A0(aTestDirPathPoints[0], pPathInfo->pStartCoord)].unk0x00;
+	}
+}
+
 
 //1.00:  D2Common.0x1005B890
 //1.10f: D2Common.0x6FDAA9F0
@@ -220,8 +299,8 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 				int nDirection;
 				if (!sub_6FDAA880(pPathInfo, aTestDir, tPoint, &nDirection) || (((uint8_t)nDirection - 4) & 7) == nPrevDir)
 					goto LABEL_20;
-				tCurCoords.X += gatDirectionToOffset_6FDD2118[nDirection].nX;
-				tCurCoords.Y += gatDirectionToOffset_6FDD2118[nDirection].nY;
+				tCurCoords.X += gatDirectionToOffset[nDirection].nX;
+				tCurCoords.Y += gatDirectionToOffset[nDirection].nY;
 				if (nDirection != nPrevDir)
 				{
 					if (tPoint != pPathInfo->pStartCoord)
@@ -651,9 +730,9 @@ int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicP
 
 		char nMainDirection = v16[0];
 		DWORD nDir = getChargedBoltDirOffset(SEED_RollRandomNumber(pSeed));
-		nDir = (nMainDirection + (char)nDir) % ARRAY_SIZE(gatDirectionToOffset_6FDD2118);
-		nPrevPoint.X += 2 * gatDirectionToOffset_6FDD2118[nDir].nX;
-		nPrevPoint.Y += 2 * gatDirectionToOffset_6FDD2118[nDir].nY;
+		nDir = (nMainDirection + (char)nDir) % ARRAY_SIZE(gatDirectionToOffset);
+		nPrevPoint.X += 2 * gatDirectionToOffset[nDir].nX;
+		nPrevPoint.Y += 2 * gatDirectionToOffset[nDir].nY;
 	}
 	pDynamicPath->PathPoints[nMaxPathPoints] = nPrevPoint;
 	pDynamicPath->dwPathPoints = nMaxPathPoints + 1;
@@ -738,7 +817,8 @@ int __fastcall sub_6FDAB610(int nX1, int nY1, int nX2, int nY2)
 	return nDiffY + 5 * nDiffX + 12;
 }
 
-//D2Common.0x6FDAB6A0
+//1.10f: D2Common.0x6FDAB6A0
+//1.13c: D2Common.0x6FD8E190
 int __stdcall sub_6FDAB6A0(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
 	return sub_6FDAB610(pPoint1.X, pPoint1.Y, pPoint2.X, pPoint2.Y);
@@ -766,7 +846,9 @@ void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoin
 	pTestDir[2] = stru_6FDD2158[nIndex].unk0x08;
 }
 
-//D2Common.0x6FDAB7D0
+//1.00:  D2Common.0x1005D100
+//1.10f: D2Common.0x6FDAB7D0
+//1.13c: Inlined
 //Should be __thiscall but we have to use __fastcall, hence nUnused
 void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {

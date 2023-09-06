@@ -333,20 +333,131 @@ uint8_t PATH_UpdateTargetUnit(D2PathInfoStrc* pPathInfo)
 	return 1;
 }
 
-//1.10f: Inlined
-//1.13c: D2Common.0x6FD85E00
-BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pInfo)
+//1.00:  D2Common.0x10059110 (#10141)
+//1.10f: D2Common.0x6FDA8600 (#10142)
+//1.13c: D2Common.0x6FD86230 (#10334)
+int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown)
 {
-	UNIMPLEMENTED();
-	return 0;
-}
 
 
-//D2Common.0x6FDA8600
-int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, int a3)
-{
-	UNIMPLEMENTED();
-	// Uses PATH_MissileToTarget
+	// BROKEN
+
+
+
+	if (!pPath)
+	{
+		return 0;
+	}
+	D2_ASSERT(pPath->pUnit == pUnit);
+
+	if (pPath->dwFlags & PATH_MISSILE_MASK)
+	{
+		return PATH_MissileToTarget(pPath, pUnit);
+	}
+	pPath->nCollidedWithMask = 0;
+	D2UnitStrc* const pTargetUnit = pPath->pTargetUnit;
+	if (pTargetUnit && (UNITS_GetXPosition(pTargetUnit) == 0 || UNITS_GetYPosition(pTargetUnit)) == 0)
+	{
+		return 0;
+	}
+
+	D2PathInfoStrc tPathInfo{};
+	D2PathPointStrc tStart = { pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY };
+	tPathInfo.pStartCoord = tStart;
+	if (tPathInfo.pStartCoord != D2PathPointStrc{ 0,0 })
+	{
+		tPathInfo.nUnitSize = pPath->dwUnitSize;
+		tPathInfo.nCollisionPattern = pPath->dwCollisionPattern;
+		tPathInfo.pDynamicPath = pPath;
+		tPathInfo.nCollisionMask = pPath->nMoveTestCollisionMask;
+		tPathInfo.nDistMax = pPath->nDistMax;
+		tPathInfo.field_1C = pPath->unk0x92;
+		tPathInfo.field_14 = PATH_UpdateTargetUnit(&tPathInfo);
+
+		if (pPath->SP1 != D2PathPointStrc{ 0,0 })
+		{
+			tPathInfo.tTargetCoord = pPath->SP1;
+			if (tPathInfo.pStartCoord != tPathInfo.tTargetCoord
+				&& std::abs(tPathInfo.pStartCoord.X - tPathInfo.tTargetCoord.X) <= 100
+				&& std::abs(tPathInfo.pStartCoord.Y - tPathInfo.tTargetCoord.Y) <= 100
+				)
+			{
+				tPathInfo.pStartRoom = pPath->pRoom;
+				D2RoomStrc* pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(tPathInfo.pStartRoom, tPathInfo.tTargetCoord.X, tPathInfo.tTargetCoord.Y);
+				if (tPathInfo.pStartRoom && pTargetRoom && PATH_IsTargetDestinationAllowed(&tPathInfo, pUnit) || bAllowInTown)
+				{
+					tPathInfo.nPathType = pPath->dwPathType;
+
+					BOOL bRemovedTargetUnitFootprint = FALSE;
+					PATH_RemoveCollisionFootprintForUnit(pUnit, FALSE);
+					if (pPath->pTargetUnit
+						&& UNITS_GetUnitSizeX(pPath->pTargetUnit)
+						&& (pPath->dwFlags & PATH_UNKNOWN_FLAG_0x00800) != 0)
+					{
+						bRemovedTargetUnitFootprint = PATH_RemoveCollisionFootprintForUnit(pPath->pTargetUnit, FALSE);
+					}
+
+					BOOL bUpdatePath = 1;
+					if ((pPath->dwFlags & PATH_UNKNOWN_FLAG_0x01000) != 0
+						&& COLLISION_CheckAnyCollisionWithPattern(
+							tPathInfo.pStartRoom,
+							tPathInfo.tTargetCoord.X,
+							tPathInfo.tTargetCoord.Y,
+							pPath->dwCollisionPattern,
+							pPath->nMoveTestCollisionMask))
+					{
+						bUpdatePath = PATH_PreparePathTargetForPathUpdate(&tPathInfo);
+					}
+
+					pPath->dwCurrentPointIdx = 0;
+					pPath->dwPathPoints = 0;
+					pPath->SP3 = tPathInfo.tTargetCoord;
+					if (bUpdatePath)
+					{
+						D2_ASSERT(scpfnPathFunction[tPathInfo.nPathType]);
+						pPath->dwPathPoints = scpfnPathFunction[tPathInfo.nPathType](&tPathInfo);
+					}
+					D2_ASSERT(tPathInfo.pStartCoord == tStart);
+					if (bRemovedTargetUnitFootprint)
+					{
+						PATH_AddCollisionFootprintForUnit(pPath->pTargetUnit);
+					}
+					PATH_AddCollisionFootprintForUnit(pUnit);
+					if (!pPath->dwPathPoints)
+					{
+						pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+						return 0;
+					}
+
+					PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pPath, 1, 1);
+					if (pPath->dwCurrentPointIdx < pPath->dwPathPoints)
+					{
+						sub_6FDA8220(pPath);
+						pPath->SP2 = pPath->SP1;
+						pPath->unk0x38 = 0;
+						if ((pPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0 && !pPath->pTargetUnit)
+						{
+							pPath->SP1 = pPath->PathPoints[pPath->dwPathPoints - 1];
+						}
+
+						if (pPath->dwPathPoints)
+						{
+							pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00020;
+						}
+						else
+						{
+							pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+						}
+						return pPath->dwPathPoints;
+					}
+				}
+
+			}
+		}
+	}    
+	pPath->dwCurrentPointIdx = 0;
+	pPath->dwPathPoints = 0;
+	pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
 	return 0;
 }
 
