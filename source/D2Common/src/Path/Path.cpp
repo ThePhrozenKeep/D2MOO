@@ -251,7 +251,7 @@ BOOL __fastcall PATH_IsTargetDestinationAllowed(D2PathInfoStrc* pPathInfo, D2Uni
 		{
 			// Try to find target room
 			D2RoomStrc* pRoomHalfway = COLLISION_GetRoomBySubTileCoordinates(
-				pPathInfo->pRoom,
+				pPathInfo->pStartRoom,
 				pPathInfo->pStartCoord.X + (pPathInfo->tTargetCoord.X - pPathInfo->pStartCoord.X) / 2,
 				pPathInfo->pStartCoord.Y + (pPathInfo->tTargetCoord.Y - pPathInfo->pStartCoord.Y) / 2);
 			pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(pRoomHalfway, pPathInfo->tTargetCoord.X, pPathInfo->tTargetCoord.Y);
@@ -294,6 +294,53 @@ static int PATH_MissileToTarget(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit)
 	pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00020;
 	return pPath->dwPathPoints;
 }
+
+//1.10f: Inlined
+//1.13C: D2Common.D2Common.0x6FD85470
+uint8_t PATH_UpdateTargetUnit(D2PathInfoStrc* pPathInfo)
+{
+	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
+	if (D2UnitStrc* pPathTargetUnit = pPath->pTargetUnit)
+	{
+		pPath->SP1.X = UNITS_GetXPosition(pPathTargetUnit);
+		pPath->SP1.Y = UNITS_GetYPosition(pPathTargetUnit);
+
+		if (pPath->SP1 == D2PathPointStrc{ 0,0 })
+		{
+			return 0;
+		}
+		switch (pPathTargetUnit->dwUnitType)
+		{
+		case UNIT_PLAYER:
+		case UNIT_MONSTER:
+			if (pPath->dwSpeed)
+			{
+				PATHUtil_AdvanceTowardsTarget_6FDAB890(pPath);
+			}
+			return 1;
+		case UNIT_OBJECT:
+			if (!UNITS_IsDoor(pPathTargetUnit))
+			{
+				return 2;
+			}
+			return PATH_AdvanceToDoor(pPathInfo);
+		case UNIT_ITEM:
+			return 2;
+		default:
+			return 1;
+		}
+	}
+	return 1;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD85E00
+BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pInfo)
+{
+	UNIMPLEMENTED();
+	return 0;
+}
+
 
 //D2Common.0x6FDA8600
 int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, int a3)
@@ -349,7 +396,7 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 
 		pDynamicPath->dwPathPoints = 1;
 		pDynamicPath->unk0x38 = 0;
-		sub_6FDAC790(pDynamicPath, 1, 1);
+		PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);
 
 		if (!(pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->SP1.X, pDynamicPath->SP1.Y)))
 		{
@@ -403,7 +450,7 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 			nX += nOffsetX;
 			nY += nOffsetY;
 
-			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 			{
 				break;
 			}
@@ -1405,7 +1452,7 @@ int __stdcall PATH_GetStepNum(D2DynamicPathStrc* pDynamicPath)
 void __stdcall D2Common_10207(D2DynamicPathStrc* pDynamicPath, char a2, char a3)
 {
 	pDynamicPath->unk0x67 = a2;
-	pDynamicPath->unk0x68[0] = a3;
+	pDynamicPath->dwSpeed = a3;
 }
 
 //D2Common.0x6FDAA4E0 (#10217)

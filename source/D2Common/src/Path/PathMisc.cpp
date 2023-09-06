@@ -8,6 +8,7 @@
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
 #include <Fog.h>
+#include <utility>
 
 struct D2UnkPathStrc
 {
@@ -152,13 +153,13 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER));
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[0]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[0]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[0];
 		return TRUE;
 	}
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[1]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[1]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[1];
 		return TRUE;
@@ -166,7 +167,7 @@ BOOL __fastcall sub_6FDAA880(D2PathInfoStrc* pPathInfo, int* pTestDir, D2PathPoi
 
 	D2_ASSERT(pTestDir[2] != PATH_DIR_NULL);
 
-	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, (pPoint.X + gatDirectionToOffset_6FDD2118[pTestDir[2]].nX), (pPoint.Y + gatDirectionToOffset_6FDD2118[pTestDir[2]].nY), pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 	{
 		*pDirection = pTestDir[2];
 		return TRUE;
@@ -186,7 +187,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 		return sub_6FDAA720(pPathInfo);
 	D2PathPointStrc nNextPoint = pPathInfo->tTargetCoord;
 	pPath->PathPoints[0] = nNextPoint;
-	if (sub_6FDAABF0(pPath, &nNextPoint))
+	if (PATH_CheckCollisionsToNextPosition(pPath, &nNextPoint))
 	{
 		pPath->PathPoints[pPath->dwPathPoints] = nNextPoint;
 		pPath->dwPathPoints++;
@@ -252,8 +253,10 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 	return pPath->dwPathPoints;
 }
 
-//D2Common.0x6FDAABF0
-BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pGameCoord)
+//1.00:  D2Common.0x1005BB30
+//1.10f: D2Common.0x6FDAABF0
+//1.13c: D2Common.0x6FDB7630
+BOOL __fastcall PATH_CheckCollisionsToNextPosition(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pGameCoord)
 {
 	D2PathPointStrc pPoint = {};
 
@@ -270,13 +273,13 @@ BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* p
 		return FALSE;
 	}
 
-	sub_6FDAC790(pDynamicPath, 1, 1);
+	PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);
 
 	if (pDynamicPath->dwVelocity)
 	{
 		pPoint.X = pDynamicPath->tGameCoords.wPosX;
 		pPoint.Y = pDynamicPath->tGameCoords.wPosY;
-		return sub_6FDAAD10(pDynamicPath, pGameCoord, pPoint);
+		return PATH_RayTrace(pDynamicPath, pGameCoord, pPoint);
 	}
 	else
 	{
@@ -286,10 +289,180 @@ BOOL __fastcall sub_6FDAABF0(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* p
 	}
 }
 
-//D2Common.0x6FDAAD10
-BOOL __fastcall sub_6FDAAD10(D2DynamicPathStrc* a1, D2PathPointStrc* a2, D2PathPointStrc a3)
+//1.00:  D2Common.0x1005BCA0
+//1.10f: D2Common.0x6FDAAD10
+//1.13c: D2Common.0x6FDB6C20
+BOOL __fastcall PATH_RayTrace(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pPathDestination, D2PathPointStrc tStartCoord)
 {
-	UNIMPLEMENTED();
+	const uint32_t nCollisionPattern = pDynamicPath->dwCollisionPattern;
+	const uint32_t nMoveTestCollisionMask = pDynamicPath->nMoveTestCollisionMask;
+	D2RoomStrc* pPathRoom = pDynamicPath->pRoom;
+	D2PathPointStrc tTargetPoint = *pPathDestination;
+
+	D2PathPointStrc tLastPointWithoutCollision = tStartCoord;
+	D2PathPointStrc tCurPoint = tStartCoord;
+	const int nDeltaX = tTargetPoint.X - tStartCoord.X;
+	const int nDeltaY = tTargetPoint.Y - tStartCoord.Y;
+	const int nAbsDeltaY = std::abs(nDeltaY);
+	const int nPointsX = std::abs(nDeltaX) + 1;
+	const int nPointsY = nAbsDeltaY + 1;
+
+	if (nPointsX > nPointsY)
+	{
+		if (nDeltaX)
+		{
+			const int nXIncrement = 2 * int(nDeltaX >= 0) - 1;
+			const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
+			int nYOffset = nPointsY;
+			if (tStartCoord.X != tTargetPoint.X)
+			{
+				while (1)
+				{
+					tCurPoint.X += nXIncrement;
+					if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+						tCurPoint.X, tCurPoint.Y,
+						nCollisionPattern, nMoveTestCollisionMask))
+					{
+						break;
+					}
+					nYOffset += nPointsY;
+					if (nYOffset >= nPointsX)
+					{
+						nYOffset -= nPointsX;
+						tCurPoint.Y += nYIncrement;
+						if (nYOffset > 0)
+						{
+							if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+								tCurPoint.X, tCurPoint.Y,
+								nCollisionPattern, nMoveTestCollisionMask))
+							{
+								*pPathDestination = tLastPointWithoutCollision;
+								return 0;
+							}
+						}
+					}
+					tLastPointWithoutCollision = tCurPoint;
+					if (tCurPoint.X == tTargetPoint.X)
+						return 1;
+				}
+				*pPathDestination = tLastPointWithoutCollision;
+				return 0;
+			}
+		}
+		else
+		{
+			const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
+			if (tStartCoord.Y != tTargetPoint.Y)
+			{
+				int nCurY = tStartCoord.Y;
+				while (1)
+				{
+					nCurY += nYIncrement;
+					tCurPoint.Y = nCurY;
+					if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+						tStartCoord.X, nCurY,
+						nCollisionPattern, nMoveTestCollisionMask))
+					{
+						break;
+					}
+					tLastPointWithoutCollision = tCurPoint;
+					if (nCurY == tTargetPoint.Y)
+						return 1;
+				}
+				*pPathDestination = tLastPointWithoutCollision;
+				return 0;
+			}
+		}
+		return 1;
+	}
+	if (nPointsX >= nPointsY)
+	{
+		const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
+		const int nYIncrement = 2 * (nDeltaY >= 0) - 1;
+		if (tStartCoord.X == tTargetPoint.X)
+			return 1;
+		int nCurX = tStartCoord.X;
+		while (1)
+		{
+			nCurX += nXIncrement;
+			tCurPoint.Y += nYIncrement;
+			tCurPoint.X = nCurX;
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+				nCurX, tCurPoint.Y,
+				nCollisionPattern, nMoveTestCollisionMask))
+			{
+				break;
+			}
+			tLastPointWithoutCollision = tCurPoint;
+			if (nCurX == tTargetPoint.X)
+				return 1;
+		}
+		*pPathDestination = tLastPointWithoutCollision;
+		return 0;
+	}
+	if (nDeltaY == 0)
+	{
+		const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
+		if (tStartCoord.X == tTargetPoint.X)
+			return 1;
+		int nCurX = tStartCoord.X;
+		while (1)
+		{
+			nCurX += nXIncrement;
+			tCurPoint.X = nCurX;
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+				nCurX, tStartCoord.Y,
+				nCollisionPattern, nMoveTestCollisionMask))
+			{
+				break;
+			}
+			tLastPointWithoutCollision = tCurPoint;
+			if (nCurX == tTargetPoint.X)
+				return 1;
+		}
+		*pPathDestination = tLastPointWithoutCollision;
+		return 0;
+	}
+
+	const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
+	const int nYIncrement = 2 * (nDeltaY >= 0) - 1;
+	if (tStartCoord.Y == tTargetPoint.Y)
+		return 1;
+
+
+	int nEndOffsetX = nPointsX;
+	while (1)
+	{
+		tCurPoint.Y += nYIncrement;
+		if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+			tCurPoint.X, tCurPoint.Y,
+			nCollisionPattern, nMoveTestCollisionMask))
+		{
+			break;
+		}
+
+		nEndOffsetX += nPointsX;
+		if (nEndOffsetX >= nPointsY)
+		{
+			nEndOffsetX -= nPointsY;
+			tCurPoint.X += nXIncrement;
+			if (nEndOffsetX > 0)
+			{
+				if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+					tCurPoint.X, tCurPoint.Y,
+					nCollisionPattern, nMoveTestCollisionMask))
+				{
+					*pPathDestination = tLastPointWithoutCollision;
+					return 0;
+				}
+			}
+		}
+		tLastPointWithoutCollision = tCurPoint;
+		if (tCurPoint.Y == tTargetPoint.Y)
+			return 1;
+	}
+	*pPathDestination = tLastPointWithoutCollision;
+	return 0;
 }
 
 //D2Common.0x6FDAB0B0
@@ -372,14 +545,15 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 	return v3;
 }
 
-//D2Common.0x6FDAB1E0
+//1.10f: D2Common.0x6FDAB1E0
+//1.13c: D2Common.0x6FDB77F0
 int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 {
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
 	pDynamicPath->dwCurrentPointIdx = 0;
 	D2PathPointStrc pGameCoord = pPathInfo->tTargetCoord;
 	pDynamicPath->PathPoints[0] = pGameCoord;
-	sub_6FDAABF0(pDynamicPath, &pGameCoord);
+	PATH_CheckCollisionsToNextPosition(pDynamicPath, &pGameCoord);
 	if (pPathInfo->pStartCoord == pGameCoord)
 		return 0;
 
@@ -393,7 +567,7 @@ int __fastcall PATH_Knockback_Client_6FDAB240(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->tTargetCoord;
-	sub_6FDAABF0(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[0]);
+	PATH_CheckCollisionsToNextPosition(pPathInfo->pDynamicPath, &pPathInfo->pDynamicPath->PathPoints[0]);
 	return 1;
 }
 
@@ -604,17 +778,19 @@ void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1
 	pTestDir[2] = byte_6FDD2288[nIndex].unk0x02;
 }
 
-//D2Common.0x6FDAB890
+
+//1.10f: D2Common.0x6FDAB890
+//1.13c: D2Common.0x6FD8E080
 // Should be in PathUtil.cpp
-void __fastcall PATH_MoveForward_6FDAB890(D2DynamicPathStrc* ptPath)
+void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath)
 {
 	D2_ASSERT(ptPath);
 	D2UnitStrc* ptTarget = ptPath->pTargetUnit;
 	D2_ASSERT(ptTarget);
 	uint8_t nDirection = PATH_GetDirection(ptTarget->pDynamicPath);
-	int v6 = ptPath->unk0x68[0]; // Some kind of stepping distance or speed ?
-	uint16_t v4 = (uint16_t)v6 << 8;
-	const float nDistance = v6;
+	int nSpeed = ptPath->dwSpeed;
+	uint16_t v4 = (uint16_t)nSpeed << 8;
+	const float nDistance = nSpeed;
 	const uint16_t nAngleRad512 = (8 * nDirection - v4) & 0x1FF;
 	ptPath->SP1.X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
 	ptPath->SP1.Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
@@ -647,15 +823,9 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 		}
 	}
 
-	if (ptPath->unk0x68[0])
+	if (ptPath->dwSpeed)
 	{
-		uint8_t nDir = PATH_GetDirection(ptPath->pTargetUnit->pDynamicPath);
-		const int v15 = ptPath->unk0x68[0];
-		const uint16_t v13 = (uint16_t)v15 << 8;
-		const float nDistance = (float)v15;
-		const uint16_t nAngleRadians_512 = (8 * nDir - v13) & 0x1FF;
-		pOutPathPoint->X += (int64_t)(FOG_10083_Cos_LUT(nAngleRadians_512) * nDistance);
-		pOutPathPoint->Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRadians_512) * nDistance);
+		PATHUtil_AdvanceTowardsTarget_6FDAB890(ptPath);
 	}
 }
 
@@ -781,13 +951,16 @@ int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPreci
 	return nDirection;
 }
 
-//D2Common.0x6FDAC790
-void __fastcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
+//1.00:  D2Common.0x1005E9C0
+//1.10f: D2Common.0x6FDAC790
+//1.13c: D2Common.0x6FD5D240
+void __fastcall PATH_ComputeVelocityAndDirectionVectorsToNextPoint(D2DynamicPathStrc* pPath, BOOL bNormalizeDirectionIfSamePos, BOOL bForceDirectionNormalization)
 {
 	const DWORD dwPrecisionX = pPath->tGameCoords.dwPrecisionX;
 	const DWORD dwPrecisionY = pPath->tGameCoords.dwPrecisionY;
 	DWORD nPointFP16X = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].X);
 	DWORD nPointFP16Y = PATH_ToFP16Center(pPath->PathPoints[pPath->dwCurrentPointIdx].Y);
+	// Remove duplicates
 	while (nPointFP16X == dwPrecisionX && nPointFP16Y == dwPrecisionY)
 	{
 		if (pPath->dwCurrentPointIdx++ < (pPath->dwPathPoints - 1))
@@ -827,7 +1000,7 @@ void __fastcall sub_6FDAC790(D2DynamicPathStrc* pPath, int a2, int a3)
 		PATH_FromFP16(nPointFP16X) == PATH_FromFP16(dwPrecisionX + pPath->tVelocityVector.nX)
 		&& PATH_FromFP16(nPointFP16Y) == PATH_FromFP16(dwPrecisionY + pPath->tVelocityVector.nY);
 	
-	if (a3 || nextPosInSamePoint && a2)
+	if (bForceDirectionNormalization || nextPosInSamePoint && bNormalizeDirectionIfSamePos)
 	{
 		sub_6FDA9720(pPath, nDirection);
 	}
@@ -1029,7 +1202,7 @@ LABEL_34:
 	if (pDynamicPath->dwPathType != 4
 		&& (signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints)
 	{
-		sub_6FDAC790(pDynamicPath, 1, 1);
+		PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);
 	}
 	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
 		goto LABEL_32;

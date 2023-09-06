@@ -115,7 +115,8 @@ struct D2DynamicPathStrc
 	uint8_t nNewDirection;						//0x65
 	uint8_t nDiffDirection;						//0x66
 	uint8_t unk0x67;							//0x67
-	uint8_t unk0x68[2];							//0x68
+	uint8_t dwSpeed;							//0x68
+	uint8_t unk0x69;							//0x69
 	D2CoordStrc tDirectionVector;				//0x6A
 	D2CoordStrc tVelocityVector;				//0x72
 	char unk0x7A[2];							//0x7A
@@ -141,7 +142,7 @@ struct D2PathInfoStrc
 {
 	D2PathPointStrc pStartCoord;				//0x00
 	D2PathPointStrc tTargetCoord;				//0x04
-	D2RoomStrc* pRoom;							//0x08
+	D2RoomStrc* pStartRoom;						//0x08
 	D2RoomStrc* pTargetRoom;					//0x0C
 	int32_t field_10;							//0x10
 	uint8_t field_14;							//0x14
@@ -224,7 +225,7 @@ D2COMMON_DLL_DECL void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* p
 //D2Common.0x6FDA8450 (#10223)
 D2COMMON_DLL_DECL BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bForce);
 //D2Common.0x6FDA8600
-int __stdcall D2Common_10142(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, int a3);
+int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown);
 //D2Common.0x6FDA8E30
 int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0

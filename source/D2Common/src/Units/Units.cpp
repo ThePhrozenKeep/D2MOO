@@ -1879,7 +1879,8 @@ D2SkillStrc* __stdcall UNITS_GetSkillFromSkillId(D2UnitStrc* pUnit, int nSkillId
 	return pSkill;
 }
 
-//D2Common.0x6FDBFC10 (#10392)
+//1.10f: D2Common.0x6FDBFC10 (#10392)
+//1.13c: D2Common.0x6FD7EDA0 (#11020)
 BOOL __stdcall UNITS_IsDoor(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
