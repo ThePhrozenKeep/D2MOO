@@ -35,7 +35,8 @@ BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStr
 signed int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* pRooms, uint16_t nX, uint16_t nY);
 //1.00:  D2Common.0x100606B0 (#10229)
 //1.10f: D2Common.0x6FDADF50 (#10232)
-signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsigned int pNumRooms, int a4, int pppRoom);
+//1.13c: D2Common.0x6FD5DCE0 (#10223)
+BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, int nTargetX, int nTargetY);
 //1.00:  D2Common.0x10060A60 (#10230)
 //1.10f: D2Common.0x6FDAE290 (#10233)
 void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);

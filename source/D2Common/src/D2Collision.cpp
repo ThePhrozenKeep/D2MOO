@@ -1211,7 +1211,8 @@ uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2RoomStrc* pRoom1, int 
 	return 0;
 }
 
-//D2Common.0x6FD44FF0
+//1.10f: D2Common.0x6FD44FF0
+//1.13c: D2Common.0x6FD9D5C0
 int __fastcall COLLISION_TrySetUnitCollisionMask(D2RoomStrc* pRoom1, int nX1, int nY1, D2RoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask)
 {
 	if (pRoom1)
@@ -2082,6 +2083,7 @@ void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, u
 }
 
 //D2Common.0x6FD46620
+//Named DungeonFindRoomGame in the original game
 D2RoomStrc* __fastcall COLLISION_GetRoomBySubTileCoordinates(D2RoomStrc* pRoom, int nX, int nY)
 {
 	return DUNGEON_GetRoomAtPosition(pRoom, nX, nY);

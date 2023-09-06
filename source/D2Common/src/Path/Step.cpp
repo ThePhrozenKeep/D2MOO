@@ -1147,12 +1147,68 @@ LABEL_40:
 }
 
 
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD5DA40
+void PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pPath, uint32_t nPrecisionX, uint32_t nPrecisionY, D2RoomStrc* pHintRoom)
+{
+	if ((pPath->dwFlags & PATH_MISSILE_MASK) == 0
+		|| COLLISION_GetRoomBySubTileCoordinates(pPath->pRoom, PATH_FromFP16(nPrecisionX), PATH_FromFP16(nPrecisionY)))
+	{
+		pPath->tGameCoords.dwPrecisionX = nPrecisionX;
+		pPath->tGameCoords.dwPrecisionY = nPrecisionY;
+		PATH_UpdateClientCoords(pPath);
+		if (pPath->pUnit && (pPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001) != 0)
+		{
+			PATH_RecacheRoom(pPath, pHintRoom);
+		}
+	}
+	else
+	{
+		pPath->dwPathPoints = 0;
+	}
+}
+
+//1.00: Inlined
+//1.10f: Inlined
+//1.13c: D2Common.6FD5DC80
+void PATH_ResetMovement(D2DynamicPathStrc* pPath)
+{
+	PATH_RecacheRoomIfNeeded(
+		pPath,
+		PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionX),
+		PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionY),
+		0);
+	pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+	pPath->dwPathPoints = 0;
+	pPath->dwCurrentPointIdx = 0;
+	pPath->tVelocityVector.nX = 0;
+	pPath->tVelocityVector.nY = 0;
+}
+
 //1.00:  D2Common.0x100606B0 (#10229)
 //1.10f: D2Common.0x6FDADF50 (#10232)
-signed int __stdcall D2Common_10232(D2DynamicPathStrc* a1, D2UnitStrc* a2, unsigned int pNumRooms, int a4, int pppRoom)
+//1.13c: D2Common.0x6FD5DCE0 (#10223)
+BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, int nTargetX, int nTargetY)
 {
-	UNIMPLEMENTED();
-	return 1;
+	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)); 
+	
+	if (COLLISION_TrySetUnitCollisionMask(
+		pPath->pRoom, pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY,
+		pDestRoom, nTargetX, nTargetY, 
+		pPath->dwCollisionPattern, pPath->nFootprintCollisionMask, pPath->nMoveTestCollisionMask))
+	{
+		return FALSE;
+	}
+	if (pPath->pRoom != pDestRoom)
+	{
+		pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
+	}
+#ifdef VERSION_113
+	PATH_RecacheRoomIfNeeded(pPath, PATH_ToFP16Center(nTargetX), PATH_ToFP16Center(nTargetY), pDestRoom);
+#endif
+	D2_ASSERT(COLLISION_GetRoomBySubTileCoordinates(pDestRoom, nTargetX, nTargetY));
+	PATH_ResetMovement(pPath);
+	return TRUE;
 }
 
 //1.00:  D2Common.0x10060A60 (#10230)
