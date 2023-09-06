@@ -252,8 +252,8 @@ BOOL __fastcall PATH_IsTargetDestinationAllowed(D2PathInfoStrc* pPathInfo, D2Uni
 			// Try to find target room
 			D2RoomStrc* pRoomHalfway = COLLISION_GetRoomBySubTileCoordinates(
 				pPathInfo->pStartRoom,
-				pPathInfo->pStartCoord.X + (pPathInfo->tTargetCoord.X - pPathInfo->pStartCoord.X) / 2,
-				pPathInfo->pStartCoord.Y + (pPathInfo->tTargetCoord.Y - pPathInfo->pStartCoord.Y) / 2);
+				pPathInfo->tStartCoord.X + (pPathInfo->tTargetCoord.X - pPathInfo->tStartCoord.X) / 2,
+				pPathInfo->tStartCoord.Y + (pPathInfo->tTargetCoord.Y - pPathInfo->tStartCoord.Y) / 2);
 			pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(pRoomHalfway, pPathInfo->tTargetCoord.X, pPathInfo->tTargetCoord.Y);
 		}
 		if (pTargetRoom && DUNGEON_IsRoomInTown(pTargetRoom))
@@ -363,8 +363,8 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 
 	D2PathInfoStrc tPathInfo{};
 	D2PathPointStrc tStart = { pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY };
-	tPathInfo.pStartCoord = tStart;
-	if (tPathInfo.pStartCoord != D2PathPointStrc{ 0,0 })
+	tPathInfo.tStartCoord = tStart;
+	if (tPathInfo.tStartCoord != D2PathPointStrc{ 0,0 })
 	{
 		tPathInfo.nUnitSize = pPath->dwUnitSize;
 		tPathInfo.nCollisionPattern = pPath->dwCollisionPattern;
@@ -377,9 +377,9 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 		if (pPath->SP1 != D2PathPointStrc{ 0,0 })
 		{
 			tPathInfo.tTargetCoord = pPath->SP1;
-			if (tPathInfo.pStartCoord != tPathInfo.tTargetCoord
-				&& std::abs(tPathInfo.pStartCoord.X - tPathInfo.tTargetCoord.X) <= 100
-				&& std::abs(tPathInfo.pStartCoord.Y - tPathInfo.tTargetCoord.Y) <= 100
+			if (tPathInfo.tStartCoord != tPathInfo.tTargetCoord
+				&& std::abs(tPathInfo.tStartCoord.X - tPathInfo.tTargetCoord.X) <= 100
+				&& std::abs(tPathInfo.tStartCoord.Y - tPathInfo.tTargetCoord.Y) <= 100
 				)
 			{
 				tPathInfo.pStartRoom = pPath->pRoom;
@@ -417,7 +417,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 						D2_ASSERT(scpfnPathFunction[tPathInfo.nPathType]);
 						pPath->dwPathPoints = scpfnPathFunction[tPathInfo.nPathType](&tPathInfo);
 					}
-					D2_ASSERT(tPathInfo.pStartCoord == tStart);
+					D2_ASSERT(tPathInfo.tStartCoord == tStart);
 					if (bRemovedTargetUnitFootprint)
 					{
 						PATH_AddCollisionFootprintForUnit(pPath->pTargetUnit);
@@ -534,13 +534,13 @@ void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
 	nX = pPathInfo->tTargetCoord.X;
 	nY = pPathInfo->tTargetCoord.Y;
 
-	nDiffX = nX - pPathInfo->pStartCoord.X;
+	nDiffX = nX - pPathInfo->tStartCoord.X;
 	if (nDiffX < 0)
 	{
 		nDiffX = -nDiffX;
 	}
 
-	nDiffY = nY - pPathInfo->pStartCoord.Y;
+	nDiffY = nY - pPathInfo->tStartCoord.Y;
 	if (nDiffY < 0)
 	{
 		nDiffY = -nDiffY;

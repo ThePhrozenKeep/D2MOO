@@ -140,7 +140,7 @@ struct D2DynamicPathStrc
 
 struct D2PathInfoStrc
 {
-	D2PathPointStrc pStartCoord;				//0x00
+	D2PathPointStrc tStartCoord;				//0x00
 	D2PathPointStrc tTargetCoord;				//0x04
 	D2RoomStrc* pStartRoom;						//0x08
 	D2RoomStrc* pTargetRoom;					//0x0C

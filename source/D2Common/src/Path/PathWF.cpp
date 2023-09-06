@@ -282,7 +282,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 	const int nSquaredDist1 = ComputeSquaredDistToTarget(tCache1);
 	const int nSquaredDist2 = ComputeSquaredDistToTarget(tCache2);
-	const int nSquaredDistStartToTarget = pInfo->pStartCoord.SquaredDistance(pInfo->tTargetCoord);
+	const int nSquaredDistStartToTarget = pInfo->tStartCoord.SquaredDistance(pInfo->tTargetCoord);
 
 	D2PathMovStrc* pBestPath;
 	if (nSquaredDist1 < nSquaredDist2)
@@ -503,7 +503,7 @@ int __fastcall PATH_ComputePathOrSlideAlongObstacles(D2PathInfoStrc* ptPathInfo)
 
 	int nMajorDirection = 0;
 	D2PathPointStrc aPathPoints[D2DynamicPathStrc::MAXPATHLEN] = {}; // Could actually be D2DynamicPathStrc::MAXPATHLEN + 1 ? Why is 6FDABAC0 using 80 as maxlen?!
-	D2PathPointStrc pStartPoint = ptPathInfo->pStartCoord;
+	D2PathPointStrc pStartPoint = ptPathInfo->tStartCoord;
 	int nMovementPoints = PATH_BresenhamLine(pStartPoint, ptPathInfo->tTargetCoord, nDist, &nMajorDirection, aPathPoints);
 	if (nMovementPoints > 2)
 	{

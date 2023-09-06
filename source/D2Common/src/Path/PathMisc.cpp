@@ -109,7 +109,7 @@ int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 		const int nDirectionOffset = pDynamicPath->dwUnitTypeRelated;
 		const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
 		int nPrevDirection = PATH_DIR_NULL;
-		D2PathPointStrc tLastSegmentEndCoord = pPathInfo->pStartCoord;
+		D2PathPointStrc tLastSegmentEndCoord = pPathInfo->tStartCoord;
 		bool bSegmentEndAlreadyAdded = false;
 		
 		D2PathPointStrc tCurCoords = tLastSegmentEndCoord;
@@ -228,10 +228,10 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 
 	D2PathPointStrc aTestDirPathPoints[3] = { pPathInfo->tTargetCoord, pPathInfo->tTargetCoord, pPathInfo->tTargetCoord };
 
-	sub_6FDAB7D0(pTestDir, 0 /*unused*/, pPathInfo->tTargetCoord, pPathInfo->pStartCoord);
+	sub_6FDAB7D0(pTestDir, 0 /*unused*/, pPathInfo->tTargetCoord, pPathInfo->tStartCoord);
 	while (1)
 	{
-		if (pPathInfo->pStartCoord == aTestDirPathPoints[0])
+		if (pPathInfo->tStartCoord == aTestDirPathPoints[0])
 		{
 			return 0;
 		}
@@ -240,7 +240,7 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 		if (PATH_CheckTestDirForCollisions(pPathInfo, pTestDir, aTestDirPathPoints, &nFreeOfCollisionDirectionIndex))
 		{
 			const D2PathPointStrc tNextPoint = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
-			if (pPathInfo->pStartCoord == aTestDirPathPoints[0])
+			if (pPathInfo->tStartCoord == aTestDirPathPoints[0])
 			{
 				return 0;
 			}
@@ -250,7 +250,7 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 			}
 			return 1;
 		}
-		pTestDir[0] = byte_6FDD2288[sub_6FDAB6A0(aTestDirPathPoints[0], pPathInfo->pStartCoord)].unk0x00;
+		pTestDir[0] = byte_6FDD2288[sub_6FDAB6A0(aTestDirPathPoints[0], pPathInfo->tStartCoord)].unk0x00;
 	}
 }
 
@@ -273,9 +273,9 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 	}
 	else if (sub_6FDABA50(nNextPoint, pPathInfo->tTargetCoord) > pPathInfo->field_14)
 	{
-		D2PathPointStrc tPoint = pPathInfo->pStartCoord;
-		D2PathPointStrc tCurCoords = pPathInfo->pStartCoord;
-		if (pPathInfo->pStartCoord != nNextPoint)
+		D2PathPointStrc tPoint = pPathInfo->tStartCoord;
+		D2PathPointStrc tCurCoords = pPathInfo->tStartCoord;
+		if (pPathInfo->tStartCoord != nNextPoint)
 		{
 			pPath->PathPoints[pPath->dwPathPoints++] = nNextPoint;
 			tPoint = nNextPoint;
@@ -303,7 +303,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 				tCurCoords.Y += gatDirectionToOffset[nDirection].nY;
 				if (nDirection != nPrevDir)
 				{
-					if (tPoint != pPathInfo->pStartCoord)
+					if (tPoint != pPathInfo->tStartCoord)
 					{
 						*pPathPointsEnd = tPoint;
 						++nNewPointsCount;
@@ -601,15 +601,15 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 		v4 = pDynamicPath->PathPoints[v3 - 1];
 		if (sub_6FDABA50(v4, pPathInfo->tTargetCoord) <= pPathInfo->field_14)
 			return v3;
-		else if (v4.X != pPathInfo->pStartCoord.X || v4.Y != pPathInfo->pStartCoord.Y)
+		else if (v4.X != pPathInfo->tStartCoord.X || v4.Y != pPathInfo->tStartCoord.Y)
 			return v3;
 	}
-	int nDiffX = pPathInfo->pStartCoord.X - pPathInfo->tTargetCoord.X;
+	int nDiffX = pPathInfo->tStartCoord.X - pPathInfo->tTargetCoord.X;
 	if (nDiffX < 0)
-		nDiffX = pPathInfo->tTargetCoord.X - pPathInfo->pStartCoord.X;;
-	int nDiffY = pPathInfo->pStartCoord.Y - pPathInfo->tTargetCoord.Y;
+		nDiffX = pPathInfo->tTargetCoord.X - pPathInfo->tStartCoord.X;;
+	int nDiffY = pPathInfo->tStartCoord.Y - pPathInfo->tTargetCoord.Y;
 	if (nDiffY < 0)
-		nDiffY = pPathInfo->tTargetCoord.Y - pPathInfo->pStartCoord.Y;
+		nDiffY = pPathInfo->tTargetCoord.Y - pPathInfo->tStartCoord.Y;
 	const int nSquaredDistance = nDiffX * nDiffX + nDiffY * nDiffY;
 	const int nMaxDist = 18;
 	const int nMaxDistSquared = nMaxDist * nMaxDist;
@@ -633,7 +633,7 @@ int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 	D2PathPointStrc pGameCoord = pPathInfo->tTargetCoord;
 	pDynamicPath->PathPoints[0] = pGameCoord;
 	PATH_CheckCollisionsToNextPosition(pDynamicPath, &pGameCoord);
-	if (pPathInfo->pStartCoord == pGameCoord)
+	if (pPathInfo->tStartCoord == pGameCoord)
 		return 0;
 
 	pDynamicPath->PathPoints[0] = pGameCoord;

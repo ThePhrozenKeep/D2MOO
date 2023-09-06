@@ -38,7 +38,7 @@ int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo)
 //D2Common.0x6FDA6D10
 void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathPoint)
 {
-	int nIndex = ((uint8_t)dword_6FDD17E0[pPathPoint->pStartCoord.X & 0x7F] + (uint8_t)dword_6FDD19E0[pPathPoint->pStartCoord.Y & 0x7F]) & 0x7F;
+	int nIndex = ((uint8_t)dword_6FDD17E0[pPathPoint->tStartCoord.X & 0x7F] + (uint8_t)dword_6FDD19E0[pPathPoint->tStartCoord.Y & 0x7F]) & 0x7F;
 
 	pPathPoint->pNext = ppPathInfo[nIndex + 128];
 	ppPathInfo[nIndex + 128] = pPathPoint;
@@ -353,7 +353,7 @@ D2PathInfoStrc* __fastcall sub_6FDA7280(D2PathInfoStrc** ppPathInfo, D2PathPoint
 {
 	for (D2PathInfoStrc* result = ppPathInfo[(dword_6FDD17E0[pPathPoint.X & 0x7F] + dword_6FDD19E0[pPathPoint.Y & 0x7F]) & 0x7F]; result; result = result->pNext)
 	{
-		if (pPathPoint.X == result->pStartCoord.X && pPathPoint.Y == result->pStartCoord.Y)
+		if (pPathPoint.X == result->tStartCoord.X && pPathPoint.Y == result->tStartCoord.Y)
 		{
 			return result;
 		}		
@@ -367,7 +367,7 @@ D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPoint
 {
 	for (D2PathInfoStrc* result = ppPathInfo[((dword_6FDD17E0[pPathPoint.X & 0x7F] + dword_6FDD19E0[pPathPoint.Y & 0x7F]) & 0x7F) + 128]; result; result = result->pNext)
 	{
-		if (pPathPoint.X == result->pStartCoord.X && pPathPoint.Y == result->pStartCoord.Y)
+		if (pPathPoint.X == result->tStartCoord.X && pPathPoint.Y == result->tStartCoord.Y)
 		{
 			return result;
 		}
