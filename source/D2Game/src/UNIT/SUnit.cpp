@@ -482,7 +482,11 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
     pUnit->dwFlags |= UNITFLAG_INITSEEDSET;
 
     uint32_t nUnitGUID = 0;
-    if (nUnitType != UNIT_MONSTER)
+    if (nUnitType == UNIT_MONSTER && (a7 & 2) != 0)
+    {
+        nUnitGUID = a3;
+    }
+    else
     {
         D2_ASSERT(nUnitType < 6);
 
@@ -493,23 +497,6 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
         }
 
         pGame->dwLastUsedUnitGUID[nUnitType] = nUnitGUID;
-    }
-    else
-    {
-        if (!(a7 & 2))
-        {
-            nUnitGUID = pGame->dwLastUsedUnitGUID[nUnitType] + 1;
-            if (pGame->dwLastUsedUnitGUID[nUnitType] == -2)
-            {
-                nUnitGUID = 1;
-            }
-
-            pGame->dwLastUsedUnitGUID[nUnitType] = nUnitGUID;
-        }
-        else
-        {
-            nUnitGUID = a3;
-        }
     }
 
     switch (nUnitGUID)

@@ -362,13 +362,13 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
         int32_t nTick = GetTickCount();
         if (pGame->nClients)
         {
-            pGame->nTickRelated = 0;
+            pGame->nTickCountSinceNoClients = 0;
         }
         else
         {
-            if (!pGame->nTickRelated)
-                pGame->nTickRelated = nTick;
-            if (nTick - pGame->nTickRelated > 300000
+            if (!pGame->nTickCountSinceNoClients)
+                pGame->nTickCountSinceNoClients = nTick;
+            if (nTick - pGame->nTickCountSinceNoClients > 300000
                 || pGame->dwGameFrame > 1500 && pGame->dwGameFrame < 7500)
             {
                 GAME_LogMessage(6, "[SERVER]  Deleting game from sSrvTaskProcessGame(), empty game");

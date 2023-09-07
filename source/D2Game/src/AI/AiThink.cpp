@@ -4994,7 +4994,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 			AITACTICS_Idle(pGame, pUnit, 8);
-			pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
+			pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
 			pAiTickParam->pAiControl->dwAiParam[2] = 1;
 			return;
 		}
@@ -5007,7 +5007,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 8);
-				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
+				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
 				pAiTickParam->pAiControl->dwAiParam[2] = 1;
 				return;
 			}
@@ -5034,7 +5034,7 @@ void __fastcall AITHINK_Fn056_Tentacle(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			if (pAiTickParam->bCombat || pAiTickParam->nTargetDistance < AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_ACTIVE_DISTANCE) || pOwner->dwAnimMode != MONMODE_SEQUENCE && (AI_RollPercentage(pUnit) < 5))
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pUnit, 0, 0);
-				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_EMERGE_DURATION_SECONDS);
+				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_EMERGE_DURATION_SECONDS);
 				pAiTickParam->pAiControl->dwAiParam[2] = 2;
 				return;
 			}
@@ -5068,7 +5068,7 @@ void __fastcall AITHINK_Fn057_TentacleHead(D2GameStrc* pGame, D2UnitStrc* pUnit,
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 			AITACTICS_Idle(pGame, pUnit, 8);
 			pAiTickParam->pAiControl->dwAiParam[2] = 1;
-			pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
+			pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
 			return;
 		}
 
@@ -5079,7 +5079,7 @@ void __fastcall AITHINK_Fn057_TentacleHead(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 20);
 				pAiTickParam->pAiControl->dwAiParam[2] = 1;
-				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
+				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
 				return;
 			}
 
@@ -5088,7 +5088,7 @@ void __fastcall AITHINK_Fn057_TentacleHead(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 20);
 				pAiTickParam->pAiControl->dwAiParam[2] = 1;
-				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
+				pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_SUBMERGE_DURATION_SECONDS);
 				return;
 			}
 		}
@@ -5098,7 +5098,7 @@ void __fastcall AITHINK_Fn057_TentacleHead(D2GameStrc* pGame, D2UnitStrc* pUnit,
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pUnit, 0, 0);
 		pAiTickParam->pAiControl->dwAiParam[2] = 2;
-		pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 25 * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_EMERGE_DURATION_SECONDS);
+		pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, TENTACLE_AI_PARAM_EMERGE_DURATION_SECONDS);
 		return;
 	}
 
@@ -5394,7 +5394,7 @@ void __fastcall AITHINK_Fn066_SandMaggotQueen(D2GameStrc* pGame, D2UnitStrc* pUn
 {
 	if (pAiTickParam->pAiControl->dwAiParam[2])
 	{
-		AITACTICS_IdleInNeutralMode(pGame, pUnit, 25 * AI_GetParamValue(pGame, pAiTickParam, SANDMAGGOTQUEEN_AI_PARAM_DELAY));
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, DEFAULT_FRAMES_PER_SECOND * AI_GetParamValue(pGame, pAiTickParam, SANDMAGGOTQUEEN_AI_PARAM_DELAY));
 		pAiTickParam->pAiControl->dwAiParam[2] = 0;
 		return;
 	}

@@ -823,14 +823,14 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
             return SYSERROR_DEADHARDCORE;
         }
 
-        if (!(ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE))
+        if (!(ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE))
         {
             return SYSERROR_HARDCOREJOINSOFTCORE;
         }
     }
     else
     {
-        if (ARENA_GetFlags(pGame) & ARENAFLAG_HARDCORE)
+        if (ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE)
         {
             return SYSERROR_SOFTCOREJOINHARDCORE;
         }

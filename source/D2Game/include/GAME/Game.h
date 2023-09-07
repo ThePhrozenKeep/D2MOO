@@ -23,6 +23,21 @@ enum D2PacketTypeAdmin
 	PACKET_ADMIN_GETGAMEINFO = 0xFD
 };
 
+enum D2GameFlags
+{
+	GAMEFLAG_ARENA_MODE          = 0x00000002,
+	GAMEFLAG_ARENA_UPDATECLIENTS = 0x00000004,
+	GAMEFLAG_ARENA_TEMPLATE      = 0x00000020,
+	GAMEFLAG_ARENA_UPDATE        = 0x00000400,
+	GAMEFLAG_ARENA_HARDCORE      = 0x00000800,
+	GAMEFLAG_ARENA_ACTIVE        = 0x00010000,
+	GAMEFLAG_ARENA_EXPANSION     = 0x00100000,
+	GAMEFLAG_ARENA_LADDER        = 0x00200000,
+
+	GAMEFLAG_DIFFICULTY_BIT      = 12,
+	GAMEFLAG_DIFFICULTY_MASK     = (0x7) << GAMEFLAG_DIFFICULTY_BIT,
+};
+
 using D2GameGUID = uint32_t;
 constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
 
@@ -85,41 +100,37 @@ struct D2GameManagerStrc
 	CRITICAL_SECTION pLock;
 };
 
-struct D2GameInfoStrc {
-    int32_t nServerToken;
-    uint32_t nInitSeed;
-    int32_t nClients;
-    int32_t nPlayers;
-    int32_t nMonsters;
-    int32_t nObjects;
-    int32_t nItems;
-    int32_t nMissiles;
-    int32_t unk0x20;
-    int32_t unk0x24;
-    int32_t nSpawnedPlayers;
-    int32_t nSpawnedMonsters;
-    int32_t nSpawnedObjects;
-    int32_t nSpawnedMissiles;
-    int32_t nSpawnedItems;
-    int32_t nSpawnedTiles;
-    int32_t unk0x40;
-    int32_t unk0x44;
-    int32_t unk0x48;
-    int32_t unk0x4C;
-    int32_t unk0x50;
-    int32_t unk0x54;
-    int32_t unk0x58;
-    int32_t unk0x5C;
-    int32_t unk0x60;
-    char szGameName[16];
-    char szGamePassword[16];
-    char szGameDescription[32];
-    uint8_t nArenaTemplate;
-    uint8_t unk0xA5;
-    uint8_t unk0xA6;
-    uint8_t unk0xA7;
-    uint32_t nArenaFlags;
-    void* pMemoryPool;
+struct D2GameInfoStrc
+{
+	int32_t nServerToken;							// 0x00 nGameId
+	uint32_t nInitSeed;								// 0x04
+	int32_t nClients;								// 0x08
+	int32_t nPlayers;								// 0x0C
+	int32_t nMonsters;								// 0x10
+	int32_t nObjects;								// 0x14
+	int32_t nItems;									// 0x18
+	int32_t nMissiles;								// 0x1C
+	int32_t nUniqueItems;							// 0x20
+	int32_t nNPCs;									// 0x24
+	uint32_t dwLastUsedUnitGUID[UNIT_TYPES_COUNT];	// 0x3C Tile = Warp
+	int32_t nPathTowardPct;							// 0x40
+	int32_t nPathClockPct;							// 0x44
+	int32_t nPathCounterPct;						// 0x48
+	int32_t nPathFoWallPct;							// 0x4C
+	int32_t nPathAStarPct;							// 0x50
+	int32_t nPathTotalCalls;						// 0x54
+	int32_t nFrames;								// 0x58 Frames / 100
+	int32_t nTime;									// 0x5C Time (minutes) since game creation (bugged, actually returns machine uptime)
+	int32_t nFrameRate;								// 0x60
+	char szGameName[16];							// 0x64
+	char szGamePassword[16];						// 0x74
+	char szGameDescription[32];						// 0x84 Before 1.10f (unsure what version), struct used to have desc of 24 chars, and end here.
+	uint8_t nArenaTemplate;							// 0xA4
+	uint8_t unk0xA5;								// 0xA5
+	uint8_t unk0xA6;								// 0xA6
+	uint8_t padding0xA7;							// 0xA7
+	uint32_t nArenaFlags;							// 0xA8
+	void* pMemoryPool;								// 0xAC
 };
 
 struct D2TargetNodeStrc
@@ -161,7 +172,9 @@ struct D2GameStrc
 	uint32_t nClients;								//0x8C
 	uint32_t dwLastUsedUnitGUID[UNIT_TYPES_COUNT];	//0x90
 	int32_t dwGameFrame;							//0xA8
-	uint32_t unk0xAC[3];							//0xAC
+	uint32_t nFrameRate;							//0xAC
+	uint32_t nFramesSinceLastFrameRateUpdate;		//0xB0
+	uint32_t nPreviousUpdateTickCount;				//0xB4
 	D2EventTimerQueueStrc* pTimerQueue;				//0xB8
 	D2DrlgActStrc* pAct[5];							//0xBC
 	D2SeedStrc pGameSeed;							//0xD0
@@ -180,8 +193,9 @@ struct D2GameStrc
 	uint8_t nBossFlagList[64];						//0x1D30
 	uint32_t dwMonModeData[17];						//0x1D70
 	uint32_t nMonModeData;							//0x1DB4
-	uint32_t unk0x1DB8[2];							//0x1DB8
-	uint32_t nTickRelated;							//0x1DC0
+	uint32_t nLastUpdateSystemTimeMs;				//0x1DB8
+	uint32_t nCreationTimeMs_Or_CPUTargetRatioFP10;	//0x1DBC Used to be the creation time, but now represents ratio of the budget used for last frame, in FP10 represenation (x/1024)
+	uint32_t nTickCountSinceNoClients;				//0x1DC0
 	uint32_t nSyncTimer;							//0x1DC4
 
 	uint32_t unk0x1DC8;								//0x1DC8

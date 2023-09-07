@@ -60,15 +60,15 @@ int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
 int32_t dword_6FD45820;
 int32_t dword_6FD4581C;
-int32_t dword_6FD2CA60;
-int32_t dword_6FD457F8;
-int32_t dword_6FD2CA14;
+int32_t gnTargetFrameRate_6FD2CA60 = DEFAULT_FRAMES_PER_SECOND;
+int32_t gnTargetMsPerFrame_6FD457F8;
+int32_t gnFrameRate_6FD2CA14;
 int32_t gnPeakMemoryUsageInLast10s_6FD45828;
 DWORD dword_6FD4582C;
-uint32_t dword_6FD45840;
+uint32_t gnPreviousMemUsageUpdateTickCount_6FD45840;
 uint32_t dword_6FD45844;
 uint32_t dword_6FD45848;
-int32_t dword_6FD2CA10;
+int32_t dword_6FD2CA10 = 1;
 char byte_6FD447EC[8];
 
 int32_t gnGamesGUIDs_6FD447F8[1024];
@@ -472,7 +472,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     pGame->unk0x6C = a6;
     pGame->unk0x6E = a7;
 
-    if (nFlags & 0x100000)
+    if (nFlags & GAMEFLAG_ARENA_EXPANSION)
     {
         pGame->bExpansion = 1;
     }
@@ -483,7 +483,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
 
     pGame->wItemFormat = pGame->bExpansion != 0 ? 101 : 2;
 
-    if (nFlags & 0x200000)
+    if (nFlags & GAMEFLAG_ARENA_LADDER)
     {
         pGame->dwGameType = 1;
     }
@@ -499,7 +499,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     pGame->dwLastUsedUnitGUID[4] = 0;
     pGame->dwLastUsedUnitGUID[5] = 0;
 
-    pGame->nDifficulty = (nFlags >> 12) & 7;
+    pGame->nDifficulty = (nFlags & GAMEFLAG_DIFFICULTY_MASK) >> GAMEFLAG_DIFFICULTY_BIT;
 
     if (nInitSeed_6FDC2CA08 == -1)
     {
@@ -544,7 +544,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     }
 
     D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*) v22);
-    pGame->unk0x1DB8[1] = GetTickCount();
+    pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nServerToken;
 
     return 1;
@@ -2010,28 +2010,30 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
     GAME_UpdateEnvironment(pGame);
 
     const uint32_t nTickCount = GetTickCount();
-    const uint32_t nTickDiff = nTickCount - pGame->unk0xAC[2];
-    if (nTickDiff >= 1000)
+    const uint32_t nTickDiff = nTickCount - pGame->nPreviousUpdateTickCount;
+    const uint32_t nTicksPerSec = 1000;
+    if (nTickDiff >= nTicksPerSec)
     {
-        const uint32_t nOldTick = pGame->unk0xAC[1];
-        pGame->unk0xAC[1] = 0;
-        pGame->unk0xAC[2] = nTickCount;
-        pGame->unk0xAC[0] = 1000 * nOldTick / nTickDiff;
-        dword_6FD2CA14 = 1000 * nOldTick / nTickDiff;
+        const uint32_t nFrames = pGame->nFramesSinceLastFrameRateUpdate;
+        pGame->nFramesSinceLastFrameRateUpdate = 0;
+        pGame->nPreviousUpdateTickCount = nTickCount;
+        pGame->nFrameRate = nTicksPerSec * nFrames / nTickDiff;
+        gnFrameRate_6FD2CA14 = pGame->nFrameRate;
 
-        const uint32_t v6 = FOG_GetMemoryUsage(pGame->pMemoryPool);
-        if (nTickCount - dword_6FD45840 > 10000)
+        const uint32_t nMemoryUsage = FOG_GetMemoryUsage(pGame->pMemoryPool);
+        if ((nTickCount - gnPreviousMemUsageUpdateTickCount_6FD45840) > (10 * nTicksPerSec))
         {
-            dword_6FD45840 = nTickCount;
-            gnPeakMemoryUsageInLast10s_6FD45828 = v6;
+            // "Forget" previous results every 10s
+            gnPreviousMemUsageUpdateTickCount_6FD45840 = nTickCount;
+            gnPeakMemoryUsageInLast10s_6FD45828 = nMemoryUsage;
         }
-        else if (v6 > gnPeakMemoryUsageInLast10s_6FD45828)
+        else if (nMemoryUsage > gnPeakMemoryUsageInLast10s_6FD45828)
         {
-            gnPeakMemoryUsageInLast10s_6FD45828 = v6;
+            gnPeakMemoryUsageInLast10s_6FD45828 = nMemoryUsage;
         }
     }
 
-    ++pGame->unk0xAC[1];
+    ++pGame->nFramesSinceLastFrameRateUpdate;
 
     for (int32_t i = 0; i < 5; ++i)
     {
@@ -2303,7 +2305,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 //D2Game.0x6FC38E00
 void __fastcall sub_6FC38E00()
 {
-    dword_6FD457F8 = 1000 / dword_6FD2CA60;
+    gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
 //D2Game.0x6FC38E20 (#10004)
@@ -2313,24 +2315,24 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
     LARGE_INTEGER start = {};
     QueryPerformanceCounter(&start);
 
-    const uint32_t time = timeGetTime() & 0x7FFFFFFF;
+    const uint32_t nSysTimeMs = timeGetTime() & 0x7FFFFFFF;
     if (!dword_6FD45844)
     {
-        dword_6FD45844 = time;
+        dword_6FD45844 = nSysTimeMs;
     }
 
-    if (time - dword_6FD45844 < dword_6FD457F8)
+    if (nSysTimeMs - dword_6FD45844 < gnTargetMsPerFrame_6FD457F8)
     {
         return 0;
     }
 
-    int32_t v5 = time - dword_6FD45844 - dword_6FD457F8;
-    if (a1 && v5 >= dword_6FD457F8)
+    int32_t v5 = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
+    if (a1 && v5 >= gnTargetMsPerFrame_6FD457F8)
     {
-        v5 = dword_6FD457F8;
+        v5 = gnTargetMsPerFrame_6FD457F8;
     }
 
-    dword_6FD45844 = time - v5;
+    dword_6FD45844 = nSysTimeMs - v5;
     
     int32_t bQueryPerformance = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
@@ -2356,16 +2358,17 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 
                 if (dword_6FD2CA10)
                 {
-                    pGame->unk0x1DB8[1] = 1024;
+                    pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = 1024;
                 }
                 else
                 {
-                    if (pGame->unk0x1DB8[0])
+                    if (pGame->nLastUpdateSystemTimeMs)
                     {
-                        pGame->unk0x1DB8[1] = D2Clamp(((time - pGame->unk0x1DB8[0]) << 10) / dword_6FD457F8, 10u, 2048u);
+                        const uint32_t nTimeSinceLastUpdateMs = nSysTimeMs - pGame->nLastUpdateSystemTimeMs;
+                        pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = D2Clamp((nTimeSinceLastUpdateMs << 10) / gnTargetMsPerFrame_6FD457F8, 10u, 2048u);
                     }
 
-                    pGame->unk0x1DB8[0] = time;
+                    pGame->nLastUpdateSystemTimeMs = nSysTimeMs;
                 }
 
                 GAME_UpdateProgress(pGame);
@@ -2545,18 +2548,23 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 
                 if (pGame->nClients)
                 {
-                    pGame->unk0x1DB8[2] = 0;
+                    pGame->nTickCountSinceNoClients = 0;
                     D2_ASSERT(pGame->lpCriticalSection);
                     LeaveCriticalSection(pGame->lpCriticalSection);
                 }
                 else
                 {
-                    if (!pGame->unk0x1DB8[2])
+                    if (!pGame->nTickCountSinceNoClients)
                     {
-                        pGame->unk0x1DB8[2] = nTickCount;
+                        pGame->nTickCountSinceNoClients = nTickCount;
                     }
 
-                    if (nTickCount - pGame->unk0x1DB8[2] > 300000 || pGame->dwGameFrame > 1500 && pGame->dwGameFrame < 7500)
+                    const uint32_t nTicksToWaitBeforePurgingEmptyGame = 5 * 60 * 1000; // 5 minutes
+                    if (
+                        // No clients for more than 5 minutes.
+                        (nTickCount - pGame->nTickCountSinceNoClients) > nTicksToWaitBeforePurgingEmptyGame
+                        // No clients during the first 1-5 minutes, close game immediately (creator failed to join)
+                        || pGame->dwGameFrame > (60 * DEFAULT_FRAMES_PER_SECOND) && pGame->dwGameFrame < (5 * 60 * DEFAULT_FRAMES_PER_SECOND) )
                     {
                         GAME_LogMessage(6, "[SERVER]  Deleting game from SrvSendAllMsgs()");
 
@@ -2973,7 +2981,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 
                 LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
-                const int32_t nSecondsPassed = pGame->dwGameFrame / 25;
+                const int32_t nSecondsPassed = pGame->dwGameFrame / DEFAULT_FRAMES_PER_SECOND;
 
                 D2_ASSERT(pGame->lpCriticalSection);
                 LeaveCriticalSection(pGame->lpCriticalSection);
@@ -2997,7 +3005,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 //D2Game.0x6FC39EC0 (#10051)
 int32_t __fastcall D2Game_10051()
 {
-    return dword_6FD2CA14;
+    return gnFrameRate_6FD2CA14;
 }
 
 //D2Game.0x6FC39ED0 (#10052)
@@ -3076,12 +3084,10 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     pGameInfo->nServerToken = pGame->nServerToken;
     pGameInfo->nInitSeed = pGame->dwInitSeed;
     pGameInfo->nClients = pGame->nClients;
-    pGameInfo->nSpawnedPlayers = pGame->dwLastUsedUnitGUID[0];
-    pGameInfo->nSpawnedMonsters = pGame->dwLastUsedUnitGUID[1];
-    pGameInfo->nSpawnedObjects = pGame->dwLastUsedUnitGUID[2];
-    pGameInfo->nSpawnedMissiles = pGame->dwLastUsedUnitGUID[3];
-    pGameInfo->nSpawnedItems = pGame->dwLastUsedUnitGUID[4];
-    pGameInfo->nSpawnedTiles = pGame->dwLastUsedUnitGUID[5];
+    for (int i = 0; i < UNIT_TYPES_COUNT; i++)
+    {
+        pGameInfo->dwLastUsedUnitGUID[i] = pGame->dwLastUsedUnitGUID[i];
+    }
 
     pGameInfo->nPlayers = 0;
     for (int32_t i = 0; i < 128; ++i)
@@ -3130,13 +3136,13 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
 
     if (pGame->nMonModeData)
     {
-        pGameInfo->unk0x40 = 100 * pGame->dwMonModeData[2] / pGame->nMonModeData;
-        pGameInfo->unk0x44 = 100 * pGame->dwMonModeData[5] / pGame->nMonModeData;
-        pGameInfo->unk0x48 = 100 * pGame->dwMonModeData[6] / pGame->nMonModeData;
-        pGameInfo->unk0x4C = 100 * pGame->dwMonModeData[1] / pGame->nMonModeData;
-        pGameInfo->unk0x50 = 100 * pGame->dwMonModeData[15] / pGame->nMonModeData;
-        pGameInfo->unk0x54 = pGame->nMonModeData;
-        if (pGame->nMonModeData > 200 && pGameInfo->unk0x54)
+        pGameInfo->nPathTowardPct = 100 * pGame->dwMonModeData[2] / pGame->nMonModeData;
+        pGameInfo->nPathClockPct = 100 * pGame->dwMonModeData[5] / pGame->nMonModeData;
+        pGameInfo->nPathCounterPct = 100 * pGame->dwMonModeData[6] / pGame->nMonModeData;
+        pGameInfo->nPathFoWallPct = 100 * pGame->dwMonModeData[1] / pGame->nMonModeData;
+        pGameInfo->nPathAStarPct = 100 * pGame->dwMonModeData[15] / pGame->nMonModeData;
+        pGameInfo->nPathTotalCalls = pGame->nMonModeData;
+        if (pGame->nMonModeData > 200 && pGameInfo->nPathTotalCalls)
         {
             memset(pGame->dwMonModeData, 0, 0x48u);
         }
@@ -3144,9 +3150,10 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
 
     SStrCopy(pGameInfo->szGameName, pGame->szGameName, 16u);
 
-    pGameInfo->unk0x5C = (GetTickCount() - pGame->unk0x1DB8[1]) / 1000 / 60;
-    pGameInfo->unk0x58 = pGame->dwGameFrame / 100;
-    pGameInfo->unk0x60 = pGame->unk0xAC[0];
+    // Should have been the uptime of the game, but this actually now always returns the uptime of the machine. (nCreationTimeMs_Or_CPUTargetRatioFP10 always 1024)
+    pGameInfo->nTime = (GetTickCount() - pGame->nCreationTimeMs_Or_CPUTargetRatioFP10) / 1000 / 60;
+    pGameInfo->nFrames = pGame->dwGameFrame / 100;
+    pGameInfo->nFrameRate = pGame->nFrameRate;
     pGameInfo->nArenaTemplate = pGame->nArenaTemplate;
     pGameInfo->unk0xA5 = pGame->unk0x6C;
     pGameInfo->unk0xA6 = pGame->unk0x6E;
@@ -3782,8 +3789,8 @@ void __fastcall GAME_LeaveGlobalGamesCriticalSection()
 //D2Game.0x6FC3B280
 void __stdcall D2Game_10008(int32_t a1)
 {
-    dword_6FD2CA60 = a1;
-    dword_6FD457F8 = 1000 / a1;
+    gnTargetFrameRate_6FD2CA60 = a1;
+    gnTargetMsPerFrame_6FD457F8 = 1000 / a1;
 }
 
 //D2Game.0x6FC3B2A0 (#10009)
