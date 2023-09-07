@@ -878,6 +878,7 @@ TanToDirectionLutEntryStrc lutTanToDirection[] = {
 static_assert(ARRAY_SIZE(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
 
 //D2Common.0x6FDAC5E0
+// Should be in Step.cpp
 void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, int* pOutDirection, DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY)
 {
 	bool bXStartLessThanTarget;
@@ -930,15 +931,14 @@ void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, 
 	const auto& lutEntry = lutTanToDirection[tangent];
 
 	uint8_t nAngle = lutEntry.nAngle;
-	int nDirectionVectorX = lutEntry.dirVector.nX;
 	if (!bDeltaXGreaterThanY)
 	{
-		pDirectionVector->nX = nDirectionVectorX;
+		pDirectionVector->nX = lutEntry.dirVector.nX;
 		pDirectionVector->nY = lutEntry.dirVector.nY;
 	}
 	else
 	{
-		pDirectionVector->nY = nDirectionVectorX;
+		pDirectionVector->nY = lutEntry.dirVector.nX;
 		pDirectionVector->nX = lutEntry.dirVector.nY;
 		nAngle = (-1 - nAngle) & 0xF;
 	}
@@ -950,13 +950,13 @@ void __fastcall PATH_GetDirectionVector_6FDAC5E0(D2CoordStrc* pDirectionVector, 
 
 	if (bXStartLessThanTarget)
 	{
-		*pOutDirection = (((-1 - nAngle) & 0x3F) + 8) & 0x3F;
+		nAngle = (-1 - nAngle) & 0x3F;
 	}
 	else
 	{
 		pDirectionVector->nX = -pDirectionVector->nX;
-		*pOutDirection = (nAngle + 8) & 0x3F;
 	}
+	*pOutDirection = (nAngle + 8) & 0x3F;
 }
 
 //D2Common.0x6FDAC700 (#10215)

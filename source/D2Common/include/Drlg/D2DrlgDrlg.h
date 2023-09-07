@@ -71,6 +71,13 @@ enum D2C_DrlgTypes
 	NUM_DRLGTYPES
 };
 
+enum D2C_DrlgTileSubstitionMethod
+{
+	DRLGSUBST_NONE = 0,
+	DRLGSUBST_FIXED = 1,
+	DRLGSUBST_RANDOM = 2,
+};
+
 // Note: Lower value has priority over others
 enum D2DrlgRoomStatus : uint8_t
 {
@@ -373,7 +380,7 @@ struct D2DrlgBuildStrc
 
 struct D2DrlgFileStrc
 {
-	int32_t unk0x00;									//0x00
+	int32_t nSubstMethod;								//0x00 D2C_DrlgTileSubstitionMethod
 	void* pDS1File;										//0x04
 	int32_t unk0x08;									//0x08
 	int32_t nWidth;										//0x0C
