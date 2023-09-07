@@ -1617,13 +1617,13 @@ void __fastcall SUNIT_FillUnitInfo(D2UnitStrc* pUnit, D2UnitInfoStrc* pInfo)
     D2_ASSERT(pInfo);
     D2_ASSERT(pUnit);
 
-    pInfo->szName[0] = 0;
+    pInfo->szDescription[0] = 0;
     if (pUnit->dwUnitType == UNIT_PLAYER)
     {
         D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
         if (pPlayerData)
         {
-            strcpy_s(pInfo->szName, pPlayerData->szName);
+            strcpy_s(pInfo->szDescription, pPlayerData->szName);
         }
     }
 

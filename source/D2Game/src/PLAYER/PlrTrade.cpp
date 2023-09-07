@@ -1056,8 +1056,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         }
         else
         {
-            // TODO: ...
-            //Fog_10030(&unk_6FD447EC, "[sPlayerRestoreInventoryCopy] Deleted/non-item in hand");
+            FOG_TraceF(gszEmptyString_6FD447EC, "[sPlayerRestoreInventoryCopy] Deleted/non-item in hand");
         }
     }
 
@@ -2597,14 +2596,14 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     }
     case 12:
     {
-        //Fog_10030("TRADE", "  time: %d", pGame->dwGameFrame);
+        FOG_TraceF("TRADE", "  time: %d", pGame->dwGameFrame);
         pPlayerData->dwTradeState = 13;
         EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 4, 0, 0);
         return;
     }
     case 13:
     {
-        //Fog_10030("TRADE", "  time: %d", pGame->dwGameFrame);
+        FOG_TraceF("TRADE", "  time: %d", pGame->dwGameFrame);
         pPlayerData->dwTradeState = 0;
         if (pPlayer)
         {

@@ -118,9 +118,9 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
     D2GAME_UpdatePlayerVitals_6FC4B240(pGame, pUnit);
     D2GAME_UpdatePlayerItems_6FC4BB90(pGame, pUnit, 1);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateGameInformation)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation)
     {
-        gpD2ServerCallbackFunctions_6FD45830->pfUpdateGameInformation(pGame->nServerToken, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
+        gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation(pGame->nServerToken, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
     }
 }
 

@@ -4,8 +4,17 @@
 
 #include "D2PacketDef.h"
 
+#pragma warning(push)
+#pragma warning(disable: 4820)
+#include <storm/hash/TSHashObject.hpp>
+#include <storm/hash/HashKey.hpp>
+#include <storm/hash/TSExportTableSyncReuse.hpp>
+#include <storm/thread/CCritSect.hpp>
+#pragma warning(pop)
+
 struct D2ClientInfoStrc;
 struct D2UnitInfoStrc;
+struct D2UnitDescriptionListStrc;
 struct D2PartyControlStrc;
 struct D2ArenaStrc;
 struct D2InactiveUnitListStrc;
@@ -40,8 +49,16 @@ enum D2GameFlags
 
 using D2GameGUID = uint32_t;
 constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
+DECLARE_STRICT_HANDLE(HGAMEDATA);
+DECLARE_STRICT_HANDLE(GAMEDATALOCKEDHANDLE);
 
-using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nFlags, uint32_t nSpawnedPlayers, int32_t nFrame);
+// TODO: get rid of this and use handles properly where needed
+inline D2GameGUID GetHashValueFromGameHandle(HGAMEDATA hGame) { return (uint32_t)(uintptr_t)hGame; }
+inline HGAMEDATA GetGameHandleFromHashValue(D2GameGUID nGameGUID) { return (HGAMEDATA)(uintptr_t)nGameGUID; }
+static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2GameInvalidGUID);
+
+
+using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
 using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t a6, uint32_t nFlags, const char* szCharName, const char* a9, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t a14, void* a15); //TODO: Unknown args
 using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
 using FnSaveDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nUnused);
@@ -57,6 +74,8 @@ using FnHandlePacket = void(__fastcall*)(void* pPacket, int32_t nPacketSize);
 using FnSetGameData = uint32_t(__fastcall*)();
 using FnRelockDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnLoadComplete = int32_t(__stdcall*)(int32_t);
+
+extern char gszEmptyString_6FD447EC[8];
 
 #pragma pack(push, 1)
 struct D2ServerCallbackFunctions							// sizeof 0x40
@@ -79,26 +98,6 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 	FnLoadComplete pfLoadComplete;							//0x3C
 };
 
-struct D2GameHashTableStrc
-{
-	int32_t unk0x00;
-	int32_t unk0x04;
-	int32_t unk0x08;
-	int32_t unk0x0C;
-	int32_t unk0x10;
-	int32_t unk0x14;
-	int32_t unk0x18;
-	int32_t unk0x1C;
-	int32_t unk0x20;
-	int32_t unk0x24;
-};
-
-struct D2GameManagerStrc
-{
-	D2GameHashTableStrc unk0x00;
-	D2GameHashTableStrc pGamesEx;
-	CRITICAL_SECTION pLock;
-};
 
 struct D2GameInfoStrc
 {
@@ -141,12 +140,8 @@ struct D2TargetNodeStrc
 	D2TargetNodeStrc* unk0x0C;					//0x0C
 };
 
-struct D2GameStrc
+struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA in original game
 {
-	uint32_t nHashKey;								//0x00
-	uint32_t __0004[3];								//0x04
-	D2GameStrc* pNext;								//0x10
-	uint32_t __0014;								//0x14
 	LPCRITICAL_SECTION lpCriticalSection;			//0x18
 	void* pMemoryPool;								//0x1C
 	uint32_t nGameData;								//0x20
@@ -184,7 +179,7 @@ struct D2GameStrc
 	D2ObjectControlStrc* pObjectControl;			//0x10F0
 	D2QuestInfoStrc* pQuestControl;					//0x10F4
 	D2TargetNodeStrc* pTargetNodes[10];				//0x10F8
-	D2UnitStrc* pUnitList[5][128];					//0x1120 Note: This is not indexed by UnitType!! UNIT_MISSILE is index 4 and UNIT_ITEM is index 3
+	D2UnitStrc* pUnitList[5][128];					//0x1120 Note: This is not indexed by UnitType! See GAME_RemapUnitTypeToListIndex
 	D2UnitStrc* pTileList;							//0x1B20
 	uint32_t dwUniqueFlags[128];					//0x1B24
 	D2NpcControlStrc* pNpcControl;					//0x1D24
@@ -206,6 +201,11 @@ struct D2GameStrc
 	uint32_t unk0x1DDC;								//0x1DDC
 };
 
+struct D2GameDataTableStrc
+{
+	TSExportTableSyncReuse<D2GameStrc, HGAMEDATA, GAMEDATALOCKEDHANDLE, CCritSect> tHashTable;
+}; // Size = 0x68
+
 struct D2GameStatisticsStrc
 {
 	DWORD nGamesCount;
@@ -216,7 +216,7 @@ struct D2GameStatisticsStrc
 
 #pragma pack(pop)
 
-extern D2ServerCallbackFunctions* gpD2ServerCallbackFunctions_6FD45830;
+extern D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 
 
 
@@ -235,7 +235,7 @@ int32_t __stdcall D2Game_10050();
 //D2Game.0x6FC35840
 int32_t __fastcall sub_6FC35840(uint16_t nGameId);
 //D2Game.0x6FC35880
-void __stdcall D2Game_10002(D2GameManagerStrc* pGameDataTbl, void* pGameList);
+void __stdcall GAME_InitGameDataTable(D2GameDataTableStrc* pGameDataTbl, void* pGameList);
 //D2Game.0x6FC358E0
 void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2ServerCallbackFunctions);
 //D2Game.0x6FC35920 (#10010)
@@ -271,7 +271,7 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
 //D2Game.0x6FC37150
 void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, char* szClientName, char* szAccountName, int32_t a6, int32_t a7, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
-void __fastcall GAME_FreeGame(int32_t a1, D2GameStrc* pGame);
+void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame);
 //D2Game.0x6FC37560
 int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId);
 //D2Game.0x6FC375A0
@@ -327,9 +327,9 @@ D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId);
 //D2Game.0x6FC395B0
 void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame);
 //D2Game.0x6FC39600
-void __fastcall GAME_CloseGame(int32_t a1);
+void __fastcall GAME_CloseGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC397A0
-D2GameStrc* __fastcall TASK_GetGame_6FC397A0(int32_t nGameHashKey);
+D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC39870
 void __fastcall sub_6FC39870(int32_t nClientId);
 //D2Game.0x6FC399A0
@@ -355,7 +355,7 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo);
 //D2Game.0x6FC3A390 (#10015)
 int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount);
 //D2Game.0x6FC3A490
-int32_t __stdcall D2Game_10016(uint16_t a1);
+int32_t __stdcall D2Game_10016(uint16_t nGameId);
 //D2Game.0x6FC3A5A0
 int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
 //D2Game.0x6FC3A6F0
@@ -370,8 +370,8 @@ void __fastcall GAME_GetObjectDescription(char* szDescription, int32_t nClassId)
 void __fastcall GAME_GetItemDescription(char* szDescription, int32_t nClassId);
 //D2Game.0x6FC3A8A0
 void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId);
-//D2Game.0x6FC3A8B0
-void __stdcall D2Game_10019(uint16_t a1, int32_t a2, int32_t nUnitType);
+//D2Game.0x6FC3A8B0 (#10019)
+void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType);
 //D2Game.0x6FC3AB20
 int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID);
 //D2Game.0x6FC3ACD0
@@ -395,32 +395,33 @@ void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame);
 //D2Game.0x6FC3B3D0
 void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3B480) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t a2, void* a3, int32_t a4);
+D2GameStrc* __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, HGAMEDATA hGame, GAMEDATALOCKEDHANDLE* pLockedHandle, int32_t forWriting);
 //D2Game.0x6FC3B510
-void __fastcall D2GameManagerStrc_Lock_6FC3B510(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t* a2, int32_t a3);
+void __fastcall D2GameDataTable_SyncEnterLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting);
 //D2Game.0x6FC3B540
-void __fastcall D2GameManagerStrc_Unlock_6FC3B540(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t bLeaveCriticalSection);
-////D2Game.0x6FC3B560) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B560(void* this, int32_t a2);
-//D2Game.0x6FC3B590) --------------------------------------------------------
-D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int32_t a2, int32_t* a3, int32_t a4, int32_t a5);
-//D2Game.0x6FC3B6A0) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameManagerStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, void* a4);
-////D2Game.0x6FC3B6F0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B6F0(void* this, int32_t a2);
-////D2Game.0x6FC3B710) --------------------------------------------------------
-//void __thiscall sub_6FC3B710(int32_t this);
-////D2Game.0x6FC3B8E0) --------------------------------------------------------
-//void __thiscall sub_6FC3B8E0(int32_t this);
-////D2Game.0x6FC3B960) --------------------------------------------------------
-//void __thiscall sub_6FC3B960(void* this);
-////D2Game.0x6FC3B9A0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B9A0(int32_t this, uint32_t a2);
-////D2Game.0x6FC3BB10) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB10(int32_t this, char a2);
-////D2Game.0x6FC3BB40) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB40(int32_t this);
-////D2Game.0x6FC3BB50) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB50(int32_t this);
+void __fastcall D2GameDataTable_SyncLeaveLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle);
+//D2Game.0x6FC3B560
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TSGetExplicitLink_Link(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, int nLinkOffset);
+//D2Game.0x6FC3B590
+D2GameStrc* __fastcall D2GameDataTable_New(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, HASHKEY_NONE* pKey, int32_t extrabytes, int32_t flags);
+//D2Game.0x6FC3B6A0
+D2GameStrc* __fastcall D2GameDataTable_Ptr(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey);
+//D2Game.0x6FC3B6F0
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TSExplicitList_Link(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, D2GameStrc* ptr);
+//D2Game.0x6FC3B710
+//void __thiscall TSHashTable_SGAMEDATA::Grow_6FC3B710(D2GameDataTableStrc pGameDataTable)
+//D2Game.0x6FC3B8E0
+void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList);
+//D2Game.0x6FC3B960
+void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink);
+//D2Game.0x6FC3B9A0
+void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount);
+//D2Game.0x6FC3BB10
+void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree);
+//D2Game.0x6FC3BB40
+void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList);
+//D2Game.0x6FC3BB50
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew(void* pMemory);
 //D2Game.0x6FC3BB80
-void __fastcall sub_6FC3BB80(int32_t a1, int32_t a2);
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory, int32_t nUnused, TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pList);
+

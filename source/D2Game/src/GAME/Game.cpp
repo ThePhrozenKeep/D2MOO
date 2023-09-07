@@ -47,15 +47,16 @@
 
 #pragma warning(disable: 28159)
 
-
+static_assert(offsetof(D2GameStrc, lpCriticalSection) == 0x18, "Make sure TSHashObject<D2GameStrc,HASHKEY_NONE> has the correct size.");
+static_assert(sizeof(D2GameDataTableStrc) == 0x68, "Make sure D2GameDataTableStrc has the correct size.");
 
 D2GameStrc* gpGame_6FD457FC;
 int32_t gnAct_6FD45824;
-D2ServerCallbackFunctions* gpD2ServerCallbackFunctions_6FD45830;
+D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 CRITICAL_SECTION gCriticalSection_6FD45800;
-int32_t gpGameArray_6FD447F4[1024]; // TODO: Right size?
-int32_t gwGameId_6FD2CA04;
-D2GameManagerStrc* gpGameDataTbl_6FD45818;
+HGAMEDATA hGameArray_6FD447F8[1024]; // TODO: Right size?
+int32_t gwGameId_6FD2CA04 = 1;
+D2GameDataTableStrc* gpGameDataTbl_6FD45818;
 int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
 int32_t dword_6FD45820;
@@ -69,11 +70,11 @@ uint32_t gnPreviousMemUsageUpdateTickCount_6FD45840;
 uint32_t dword_6FD45844;
 uint32_t dword_6FD45848;
 int32_t dword_6FD2CA10 = 1;
-char byte_6FD447EC[8];
+char gszEmptyString_6FD447EC[8];
 
 int32_t gnGamesGUIDs_6FD447F8[1024];
 
-int32_t dword_6FD2CA00 = 1;
+BOOL gbAllowTimeoutDisconnection_6FD2CA00 = TRUE;
 
 // TODO: Looks like it's a bigger struct, but unused
 int32_t dword_6FD27D88;
@@ -118,9 +119,9 @@ void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
     va_start(va, szFormat);
     vsprintf(szMessage, szFormat, va);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
     {
-        gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage(a1, "%s", szMessage);
+        gpD2EventCallbackTable_6FD45830->pfServerLogMessage(a1, "%s", szMessage);
     }
     else if (a1 == 1)
     {
@@ -159,7 +160,8 @@ int32_t __fastcall sub_6FC35840(uint16_t nGameId)
     
     EnterCriticalSection(&gCriticalSection_6FD45800);
     
-    const int32_t nGUID = gpGameArray_6FD447F4[nGameId];
+    const HGAMEDATA hGame = hGameArray_6FD447F8[nGameId-1];
+    const D2GameGUID nGUID = GetHashValueFromGameHandle(hGame);
     if (nGUID && nGUID != -1)
     {
         nResult = nGUID;
@@ -171,7 +173,7 @@ int32_t __fastcall sub_6FC35840(uint16_t nGameId)
 }
 
 //D2Game.0x6FC35880
-void __stdcall D2Game_10002(D2GameManagerStrc* pGameDataTbl, void* pGameList)
+void __stdcall GAME_InitGameDataTable(D2GameDataTableStrc* pGameDataTbl, void* pGameList)
 {
     D2_ASSERT(pGameDataTbl);
 
@@ -185,13 +187,13 @@ void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2Ser
 {
     if (pD2ServerCallbackFunctions)
     {
-        gpD2ServerCallbackFunctions_6FD45830 = pD2ServerCallbackFunctions;
+        gpD2EventCallbackTable_6FD45830 = pD2ServerCallbackFunctions;
         gbD2ServerCallbackFunctionsInitialized_6FD45834 = 1;
         //D2COMMON_11277_Return((int32_t)pD2ServerCallbackFunctions->pfLoadComplete);
     }
     else
     {
-        gpD2ServerCallbackFunctions_6FD45830 = nullptr;
+        gpD2EventCallbackTable_6FD45830 = nullptr;
         gbD2ServerCallbackFunctionsInitialized_6FD45834 = 0;
     }
 }
@@ -215,24 +217,7 @@ uint32_t __fastcall D2Game_10011()
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
-    if (gpGameDataTbl_6FD45818)
-    {
-        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-        D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-        if (pGame)
-        {
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-        }
-
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        gpGame_6FD457FC = pGame;
-    }
-    else
-    {
-        gpGame_6FD457FC = nullptr;
-    }
+    gpGame_6FD457FC = GAME_LockGame(nGUID);
 
     if (!gpGame_6FD457FC)
     {
@@ -240,8 +225,7 @@ uint32_t __fastcall D2Game_10011()
     }
 
     const uint32_t nInitSeed = gpGame_6FD457FC->dwInitSeed;
-    D2_ASSERT(gpGame_6FD457FC->lpCriticalSection);
-    LeaveCriticalSection(gpGame_6FD457FC->lpCriticalSection);
+    D2_UNLOCK(gpGame_6FD457FC->lpCriticalSection);
     return nInitSeed;
 }
 
@@ -252,21 +236,16 @@ D2GameStrc* GAME_FindGameWithName(const char* szGameName)
     {
         if (nCurrentGameGUID && nCurrentGameGUID != D2GameInvalidGUID)
         {
-            BOOL bHasLock = FALSE;
-            D2GameManagerStrc_Lock_6FC3B510(gpGameDataTbl_6FD45818, 0, &bHasLock, FALSE);
-            if (D2GameStrc* pCurrentGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nCurrentGameGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C))
+            if (D2GameStrc* pCurrentGame = GAME_LockGame(nCurrentGameGUID))
             {
-                D2_LOCK(pCurrentGame->lpCriticalSection);
                 bool bGameNameMatches = SStrCmpI(szGameName, pCurrentGame->szGameName, ARRAY_SIZE(D2GameStrc::szGameName)) == 0;
                 D2_UNLOCK(pCurrentGame->lpCriticalSection);
 
                 if (bGameNameMatches)
                 {
-                    D2GameManagerStrc_Unlock_6FC3B540(gpGameDataTbl_6FD45818, 0, bHasLock);
                     return pCurrentGame;
                 }
             }
-            D2GameManagerStrc_Unlock_6FC3B540(gpGameDataTbl_6FD45818, 0, bHasLock);
         }
     }
     return nullptr;
@@ -306,7 +285,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 //D2Game.0x6FC35CB0
 int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
 {
-    if (gpD2ServerCallbackFunctions_6FD45830 && pPacket->nGameType)
+    if (gpD2EventCallbackTable_6FD45830 && pPacket->nGameType)
     {
         return 0;
     }
@@ -390,7 +369,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         gwGameId_6FD2CA04 = 1;
     }
 
-    if (gpGameArray_6FD447F4[nGameId])
+    if (hGameArray_6FD447F8[nGameId - 1])
     {
         while (1)
         {
@@ -409,14 +388,14 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
                 return 0;
             }
 
-            if (!gpGameArray_6FD447F4[nGameId])
+            if (!hGameArray_6FD447F8[nGameId - 1])
             {
                 break;
             }
         }
     }
 
-    int32_t* v21 = &gpGameArray_6FD447F4[nGameId];
+    D2GameGUID* v21 = (D2GameGUID*)&hGameArray_6FD447F8[nGameId - 1];
     *v21 = -1;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
@@ -426,26 +405,11 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         return 0;
     }
 
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    do
-    {
-        while (1)
-        {
-            ++gpGameDataTbl_6FD45818->pGamesEx.unk0x20;
-            if (gpGameDataTbl_6FD45818->pGamesEx.unk0x20)
-            {
-                break;
-            }
 
-            gpGameDataTbl_6FD45818->pGamesEx.unk0x24 = 1;
-        }
-    }
-    while (gpGameDataTbl_6FD45818->pGamesEx.unk0x24 && D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gpGameDataTbl_6FD45818->pGamesEx.unk0x20, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C));
-
-    const int32_t v22 = gpGameDataTbl_6FD45818->pGamesEx.unk0x20;
-
-    D2GameStrc* pGame = sub_6FC3B590(gpGameDataTbl_6FD45818, 0, gpGameDataTbl_6FD45818->pGamesEx.unk0x20, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C, 0, 0);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
+    GAMEDATALOCKEDHANDLE hLock;
+    HGAMEDATA hGame;
+    D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
+    gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
 
     D2_ASSERT(pGame);
     pGame->lpCriticalSection = D2_ALLOC_STRC_POOL(nullptr, CRITICAL_SECTION);
@@ -534,7 +498,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         FOG_DisplayAssert("hGameArray[wGameId-1] == RESERVED_SLOT", __FILE__, __LINE__);
         exit(-1);
     }
-    *v21 = v22;
+    *v21 = GetHashValueFromGameHandle(hGame);
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     pGame->nSyncTimer = FOG_10055_GetSyncTime();
@@ -543,7 +507,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         pGame->nSyncTimer = 2;
     }
 
-    D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*) v22);
+    D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nServerToken;
 
@@ -560,16 +524,14 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 
     if (a5)
     {
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
-        if (pGame)
+        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
             {
                 CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
+            D2_UNLOCK(pGame->lpCriticalSection);
         }
 
         D2NET_10015(nClientId, __FILE__, __LINE__);
@@ -580,23 +542,21 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     {
         FOG_Trace("Character size was zero");
         
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
-        if (pGame)
+        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
             {
                 CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
+            D2_UNLOCK(pGame->lpCriticalSection);
         }
 
         D2NET_10015(nClientId, __FILE__, __LINE__);
         return 0;
     }
 
-    D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
+    D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed SrvLockGame for client %d ***", nClientId);
@@ -605,9 +565,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 
     if (!CLIENTS_IsInGame(pGame, nClientId))
     {
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
-
+        D2_UNLOCK(pGame->lpCriticalSection);
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed SrvLockGame for client %d ***", nClientId);
         return 0;
     }
@@ -616,27 +574,22 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     if (!pClient)
     {
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed ClientGetFromId for client %d in game %d '%s' ***", nClientId, pGame->nServerToken, pGame->szGameName);
-
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
         return 0;
     }
 
     if (pClient->unk0x60 != a8)
     {
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
 
-        D2GameStrc* pGame = TASK_GetGame_6FC397A0(SERVER_GetClientGameGUID(nClientId));
-        if (pGame)
+        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
             {
                 CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
+            D2_UNLOCK(pGame->lpCriticalSection);
         }
 
         D2NET_10015(nClientId, __FILE__, __LINE__);
@@ -646,8 +599,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     pClient->unk0x184[3] = *(int32_t*)a7;
     pClient->unk0x184[4] = *(int32_t*)(a7 + 4);
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 
     D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
     GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: Sent ACTINITDONE for client %d '%s'", nClientId, pClient->szName);
@@ -663,27 +615,10 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         return;
     }
 
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    do
-    {
-        while (1)
-        {
-            ++gpGameDataTbl_6FD45818->pGamesEx.unk0x20;
-
-            if (gpGameDataTbl_6FD45818->pGamesEx.unk0x20)
-            {
-                break;
-            }
-
-            gpGameDataTbl_6FD45818->pGamesEx.unk0x24 = 1;
-        }
-    }
-    while (gpGameDataTbl_6FD45818->pGamesEx.unk0x24 && D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gpGameDataTbl_6FD45818->pGamesEx.unk0x20, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C));
-
-    const int32_t v22 = gpGameDataTbl_6FD45818->pGamesEx.unk0x20;
-
-    D2GameStrc* pGame = sub_6FC3B590(gpGameDataTbl_6FD45818, 0, v22, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C, 0, 0);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
+    GAMEDATALOCKEDHANDLE hLock;
+    HGAMEDATA hGame;
+    D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
+    gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
 
     if (!pGame)
     {
@@ -716,7 +651,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         gwGameId_6FD2CA04 = 1;
     }
 
-    if (gpGameArray_6FD447F4[nGameId])
+    if (hGameArray_6FD447F8[nGameId - 1])
     {
         while (1)
         {
@@ -735,9 +670,9 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
                 break;
             }
 
-            if (!gpGameArray_6FD447F4[nGameId])
+            if (!hGameArray_6FD447F8[nGameId - 1])
             {
-                gpGameArray_6FD447F4[nGameId] = -1;
+                hGameArray_6FD447F8[nGameId - 1] = D2GameReservedSlotHandle;
                 LeaveCriticalSection(&gCriticalSection_6FD45800);
                 break;
             }
@@ -745,7 +680,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
     else
     {
-        gpGameArray_6FD447F4[nGameId] = -1;
+        hGameArray_6FD447F8[nGameId - 1] = D2GameReservedSlotHandle;
         LeaveCriticalSection(&gCriticalSection_6FD45800);
     }
 
@@ -803,8 +738,8 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     ARENA_AllocArena(pGame, a2, nFlags, nArenaTemplate);
     CLIENTS_SetGameData(pGame);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, byte_6FD447EC, 0, nExpLost, a13, a14);
-    SERVER_SetClientGameGUID(nClientId, v22);
+    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nExpLost, a13, a14);
+    SERVER_SetClientGameGUID(nClientId, GetHashValueFromGameHandle(hGame));
 
     if (pGame->nGameType == 1)
     {
@@ -818,12 +753,12 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     QUESTS_QuestInit(pGame);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[pGame->nServerToken] != -1)
+    if (hGameArray_6FD447F8[pGame->nServerToken-1] != D2GameReservedSlotHandle)
     {
         FOG_DisplayAssert("hGameArray[wGameId-1] == RESERVED_SLOT", __FILE__, __LINE__);
         exit(-1);
     }
-    gpGameArray_6FD447F4[pGame->nServerToken] = v22;
+    hGameArray_6FD447F8[pGame->nServerToken - 1] = hGame;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
@@ -839,9 +774,9 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
 
     // TODO: 1st argument
-    D2Game_10042((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)v22);
+    D2Game_10042((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
         FOG_DisplayAssert("!\"This is not supposed to happen!\"", __FILE__, __LINE__);
         exit(-1);
@@ -921,34 +856,14 @@ void __stdcall sub_6FC36B20(int32_t nClientId, const char* szFile, int32_t nLine
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     if (gpGameDataTbl_6FD45818)
     {
-        int32_t bLeaveCriticalSection = 0;
-        D2GameManagerStrc_Lock_6FC3B510(gpGameDataTbl_6FD45818, 0, &bLeaveCriticalSection, 0);
-
-        D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGameGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-        if (pGame)
+        if (D2GameStrc* pGame = GAME_LockGame(nGameGUID))
         {
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-
-            if (bLeaveCriticalSection)
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            }
-
             if (CLIENTS_IsInGame(pGame, nClientId)/* && CLIENTS_IsInGame(pGame, nClientId)*/)
             {
                 CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
-        }
-        else
-        {
-            if (bLeaveCriticalSection)
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            }
+            D2_UNLOCK(pGame->lpCriticalSection);
         }
     }
 
@@ -971,24 +886,11 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 {
     int32_t bLeaveCriticalSection = 0;
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
-    if (!gpGameDataTbl_6FD45818)
-    {
-        return;
-    }
-
-    D2GameStrc* pGame = D2GAME_FindAndLockGameByGUID__6FC3B480(gpGameDataTbl_6FD45818, 0, nGameGUID, &bLeaveCriticalSection, 0);
+    
+    D2GameStrc* pGame = GAME_LockGame(nGameGUID);
     if (!pGame)
     {
         return;
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    if (bLeaveCriticalSection)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
     }
 
     if (CLIENTS_IsInGame(pGame, nClientId))
@@ -1013,8 +915,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
             CLIENTS_SetClientState(pClient, CLIENTSTATE_PLAYER_SPAWNED);
         }
 
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
     }
     else
     {
@@ -1137,18 +1038,18 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
         case '\0':
             if (i != 0)
             {
-                if (!gpD2ServerCallbackFunctions_6FD45830)
+                if (!gpD2EventCallbackTable_6FD45830)
                 {
                     return 1;
                 }
 
-                if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfFindPlayerToken))
+                if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfFindPlayerToken))
                 {
                     FOG_DisplayAssert("ptEventCallbackTable->fpFindPlayerToken", __FILE__, __LINE__);
                     exit(-1);
                 }
 
-                if (!gpD2ServerCallbackFunctions_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, a7, a9, a10))
+                if (!gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, a7, a9, a10))
                 {
                     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Token", szAccountName, szClientName, nGameId, nToken);
                     GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player token %d for client %d '%s' ***", nToken, nClientId, szClientName);
@@ -1184,9 +1085,9 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
@@ -1203,20 +1104,13 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
         return;
     }
 
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
         GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Failed to lock game %d (client %d '%s') ***", nGameId, dwClientId, szClientName);
         return;
     }
 
-    D2_ASSERT(pGame->lpCriticalSection);
-
-    EnterCriticalSection(pGame->lpCriticalSection);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
     SERVER_SetClientGameGUID(dwClientId, nGUID);
 
     D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, a3, szClientName, szAccountName, a6, a7, a8, a9);
@@ -1229,19 +1123,17 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
         pClient->nAct = gnAct_6FD45824;
         GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           client %d '%s' joined game %d '%s'", dwClientId, szClientName, nGameId, pGame->szGameName);
         
-        D2_ASSERT(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
 
-        LeaveCriticalSection(pGame->lpCriticalSection);
-
-        if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter)
+        if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
         {
-            if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter))
+            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter))
             {
                 FOG_DisplayAssert("ptEventCallbackTable->fpGetDatabaseCharacter", __FILE__, __LINE__);
                 exit(-1);
             }
 
-            gpD2ServerCallbackFunctions_6FD45830->pfGetDatabaseCharacter(&pClient->pClientInfo, szClientName, dwClientId, szAccountName);
+            gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter(&pClient->pClientInfo, szClientName, dwClientId, szAccountName);
             sub_6FC33910(pClient);
         }
         else
@@ -1251,22 +1143,20 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
     }
     else
     {
-        if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter)
+        if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter)
         {
             GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Unable to add client %d '%s' to game %d (unlocking character)", dwClientId, szClientName, nGameId);
 
-            if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter))
+            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter))
             {
                 FOG_DisplayAssert("ptEventCallbackTable->fpUnlockDatabaseCharacter", __FILE__, __LINE__);
                 exit(-1);
             }
 
-            gpD2ServerCallbackFunctions_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
+            gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
         }
 
-        D2_ASSERT(pGame->lpCriticalSection);
-
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
 
         sub_6FC3C690(dwClientId);
         D2NET_10016(dwClientId);
@@ -1274,7 +1164,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 }
 
 //D2Game.0x6FC37450
-void __fastcall GAME_FreeGame(int32_t a1, D2GameStrc* pGame)
+void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
 {
     if (pGame)
     {
@@ -1285,7 +1175,7 @@ void __fastcall GAME_FreeGame(int32_t a1, D2GameStrc* pGame)
     
     for (int32_t i = 0; i < 1024; ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] == a1)
+        if (gnGamesGUIDs_6FD447F8[i] == nGameGUID)
         {
             gnGamesGUIDs_6FD447F8[i] = 0;
         }
@@ -1362,12 +1252,12 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(i), 0);
             }
 
-            if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+            if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
             {
                 const int32_t nExperience = STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0);
                 const int32_t nLevel = STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0);
                 const char* szClientName = CLIENTS_GetName(i);
-                gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x184[3]);
+                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x184[3]);
             }
         }
     }
@@ -1408,40 +1298,16 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
     }
 
     const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
-    if (!gpGameDataTbl_6FD45818)
-    {
-        GAME_LogMessage(6, "[SERVER]  SrvDisconnectClientById: *** failed to disconnect client %d ***", nClientId);
-        return;
-    }
-
-    // TODO: v14
-    int32_t v14 = 0;
-    D2GameManagerStrc_Lock_6FC3B510(gpGameDataTbl_6FD45818, 0, &v14, 0);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
-        if (v14)
-        {
-            LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        }
-
         GAME_LogMessage(6, "[SERVER]  SrvDisconnectClientById: *** failed to disconnect client %d ***", nClientId);
         return;
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    if (v14)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
     }
 
     if (!CLIENTS_IsInGame(pGame, nClientId))
     {
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
 
         GAME_LogMessage(6, "[SERVER]  SrvDisconnectClientById: *** failed to disconnect client %d ***", nClientId);
         return;
@@ -1449,8 +1315,7 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
 
     GAME_DisconnectClient(pGame, CLIENTS_GetClientFromClientId(pGame, nClientId), nEventType);
     
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 }
 
 //D2Game.0x6FC37880
@@ -1475,31 +1340,11 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
     }
 
     const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
-    if (!gpGameDataTbl_6FD45818)
-    {
-        return;
-    }
-
-    // TODO: v14
-    int32_t v14 = 0;
-    D2GameManagerStrc_Lock_6FC3B510(gpGameDataTbl_6FD45818, 0, &v14, 0);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+    
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
-        if (v14)
-        {
-            LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        }
         return;
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    if (v14)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
     }
 
     if (CLIENTS_IsInGame(pGame, nClientId))
@@ -1516,8 +1361,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
         CLIENTS_RemoveClientFromGame(pGame, CLIENTS_GetClientId(pClient), 1);
     }
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 }
 
 //D2Game.0x6FC37B10
@@ -1623,30 +1467,18 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
 //D2Game.0x6FC37CE0
 void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 {
+    D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
+
     // TODO: v10
-    if (!gpGameDataTbl_6FD45818)
-    {
-        GAME_LogMessage(6, "[SERVER]  SrvEndGame: Client %d was not in any game", nClientId);
-        return;
-    }
-    
-    int32_t bLeaveCriticalSection = 0;
-    D2GameStrc* pGame = D2GAME_FindAndLockGameByGUID__6FC3B480(gpGameDataTbl_6FD45818, 0, SERVER_GetClientGameGUID(nClientId), &bLeaveCriticalSection, 0);
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvEndGame: Client %d was not in any game", nClientId);
         return;
     }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    D2GameManagerStrc_Unlock_6FC3B540(gpGameDataTbl_6FD45818, 0, bLeaveCriticalSection);
-
+    
     if (!CLIENTS_IsInGame(pGame, nClientId))
     {
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
 
         GAME_LogMessage(6, "[SERVER]  SrvEndGame: Client %d was not in any game", nClientId);
         return;
@@ -1665,9 +1497,9 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             if (pUnit)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(i), 0);
-                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                 {
-                    gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                    gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                         CLIENTS_GetName(i),
                         pUnit->dwClassId,
                         STATLIST_GetUnitBaseStat(pUnit, STAT_LEVEL, 0),
@@ -1734,8 +1566,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
         }
     }
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 
     if (pGame->nGameType == 1 || pGame->nGameType == 2)
     {
@@ -1814,18 +1645,18 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
     char a3[16];
     char szIPAddress[16];
 
-    if (gpD2ServerCallbackFunctions_6FD45830)
+    if (gpD2EventCallbackTable_6FD45830)
     {
         const int nClientIdx = *(DWORD*)a1;
         switch (*((BYTE*)a1 + 5))
         {
         case PACKET_ADMIN_GETINFO:
         case PACKET_ADMIN_GETGAMEINFO:
-            if (gpD2ServerCallbackFunctions_6FD45830->pfHandlePacket && gpD2ServerCallbackFunctions_6FD45830->pfServerLogMessage)
+            if (gpD2EventCallbackTable_6FD45830->pfHandlePacket && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
             {
                 D2GSPacketSrvFF01 tPacket;
                 D2GameServerInfoExStrc tGameServerInfoEx;
-                gpD2ServerCallbackFunctions_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
+                gpD2EventCallbackTable_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
                 tPacket.nPacketSubType = *((BYTE*)a1 + 5);
                 tPacket.tServerInfo.field_0x4 = tGameServerInfoEx.field_0x4;
                 tPacket.tServerInfo.field_0x8 = tGameServerInfoEx.field_0x8;
@@ -1989,7 +1820,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
     ++pGame->dwGameFrame;
 
     // Debug ?
-    const uint32_t nDebugBreakTrigger = pGame[1].__0014;
+    const uint32_t nDebugBreakTrigger = *(uint32_t*)&pGame[1].m_key;
     if (nDebugBreakTrigger == 1)
     {
         *((BYTE*)0) = 0;
@@ -2143,7 +1974,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         bUpdateLadder = 1;
     }
 
-    if (dword_6FD2CA00)
+    if (gbAllowTimeoutDisconnection_6FD2CA00)
     {
         const uint32_t nTickCount = GetTickCount();
         
@@ -2151,7 +1982,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         while (pClient)
         {
             D2ClientStrc* pNext = pClient->pNext;
-            if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2ServerCallbackFunctions_6FD45830)
+            if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2EventCallbackTable_6FD45830)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
                 bPlayerDisconnected = 1;
@@ -2173,9 +2004,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 {
                     D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
 
-                    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                     {
-                        gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                        gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                             CLIENTS_GetName(pClient),
                             pPlayer->dwClassId,
                             STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0),
@@ -2202,9 +2033,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
             if (pPlayer)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
-                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder)
+                if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder)
                 {
-                    gpD2ServerCallbackFunctions_6FD45830->pfUpdateCharacterLadder(
+                    gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(
                         CLIENTS_GetName(pClient),
                         pPlayer->dwClassId, STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0),
                         STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
@@ -2243,12 +2074,12 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 sub_6FC369C0(pGame, pClient);
                 sub_6FCBAB20(pGame, CLIENTS_GetPlayerFromClient(pClient, 1));
 
-                if (gpD2ServerCallbackFunctions_6FD45830)
+                if (gpD2EventCallbackTable_6FD45830)
                 {
                     pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-                    if (pPlayer && gpD2ServerCallbackFunctions_6FD45830->pfEnterGame)
+                    if (pPlayer && gpD2EventCallbackTable_6FD45830->pfEnterGame)
                     {
-                        gpD2ServerCallbackFunctions_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
+                        gpD2EventCallbackTable_6FD45830->pfEnterGame(pGame->nServerToken, pClient->szName, pPlayer->dwClassId, STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0), pClient->nSaveFlags);
                     }
                 }
 
@@ -2338,22 +2169,10 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
-        if (nGUID && nGUID != -1 && gpGameDataTbl_6FD45818)
+        if (nGUID && nGUID != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (!pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(nGUID))
             {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            }
-            else
-            {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 bQueryPerformance = 1;
 
                 if (dword_6FD2CA10)
@@ -2373,8 +2192,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 
                 GAME_UpdateProgress(pGame);
 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
+                D2_UNLOCK(pGame->lpCriticalSection);
             }
         }
     }
@@ -2520,22 +2338,11 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
-        if (nGUID && nGUID != -1 && gpGameDataTbl_6FD45818)
+        if (nGUID && nGUID != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (!pGame)
+            GAMEDATALOCKEDHANDLE hLock;
+            if(D2GameStrc* pGame = GAME_LockGame(nGUID))
             {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            }
-            else
-            {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 D2ClientStrc* pClient = pGame->pClientList;
 
                 bQueryPerformance = 1;
@@ -2549,8 +2356,7 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
                 if (pGame->nClients)
                 {
                     pGame->nTickCountSinceNoClients = 0;
-                    D2_ASSERT(pGame->lpCriticalSection);
-                    LeaveCriticalSection(pGame->lpCriticalSection);
+                    D2_UNLOCK(pGame->lpCriticalSection);
                 }
                 else
                 {
@@ -2568,14 +2374,12 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
                     {
                         GAME_LogMessage(6, "[SERVER]  Deleting game from SrvSendAllMsgs()");
 
-                        D2_ASSERT(pGame->lpCriticalSection);
-                        LeaveCriticalSection(pGame->lpCriticalSection);
+                        D2_UNLOCK(pGame->lpCriticalSection);
                         GAME_CloseGame(nGUID);
                     }
                     else
                     {
-                        D2_ASSERT(pGame->lpCriticalSection);
-                        LeaveCriticalSection(pGame->lpCriticalSection);
+                        D2_UNLOCK(pGame->lpCriticalSection);
                     }
                 }
             }
@@ -2594,32 +2398,19 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
 {
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
-    if (!gpGameDataTbl_6FD45818)
-    {
-        return nullptr;
-    }
 
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGameGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+    D2GameStrc* pGame = GAME_LockGame(nGameGUID);
     if (!pGame)
     {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
         return 0;
     }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
     if (CLIENTS_IsInGame(pGame, nClientId))
     {
         return pGame;
     }
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 
     return nullptr;
 }
@@ -2628,155 +2419,52 @@ D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
 void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame)
 {
     D2_ASSERT(pGame);
-    D2_ASSERT(pGame->lpCriticalSection);
-
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 }
 
-//D2Game.0x6FC39600) --------------------------------------------------------
-void __fastcall GAME_CloseGame(int32_t a1)
+//D2Game.0x6FC39600
+void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
 {
-    UNIMPLEMENTED();
-//    D2GameManagerStrc* v1; // edi@1
-//    int32_t v2; // ebx@1
-//    struct _RTL_CRITICAL_SECTION* v3; // ebp@2
-//    int32_t v4; // eax@2
-//    D2GameStrc* v5; // esi@2
-//    LPCRITICAL_SECTION v6; // ecx@13
-//    D2GameManagerStrc* v7; // ebp@16
-//    char* v8; // edi@17
-//    char* v9; // edi@19
-//
-//    v1 = gpGameDataTbl_6FD45818;
-//    v2 = a1;
-//    if (gpGameDataTbl_6FD45818)
-//    {
-//        v3 = &gpGameDataTbl_6FD45818->pLock;
-//        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-//        v4 = *(_DWORD*)(v1->field_0.field_1C + 12 * (v2 & v1->field_0.field_24) + 8);
-//        v5 = (D2GameStrc*)(v4 & ((v4 <= 0) - 1));
-//        if ((int32_t)v5 > 0)
-//        {
-//            while (v5->__0000[0] != v2)
-//            {
-//                v5 = *(D2GameStrc**)(sub_6FC3B6F0((void*)(v1->field_0.field_1C + 12 * (v2 & v1->field_0.field_24)), (int32_t)v5)
-//                                     + 4);
-//                if ((int32_t)v5 <= 0)
-//                {
-//                    LeaveCriticalSection(&v1->pLock);
-//                    return;
-//                }
-//            }
-//            if (v5)
-//            {
-//                if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfCloseGame)
-//                {
-//                    if (IsBadCodePtr((FARPROC)gpD2ServerCallbackFunctions_6FD45830->pfCloseGame))
-//                    {
-//                        FOG_DisplayAssert("ptEventCallbackTable->fpCloseGame", __FILE__, __LINE__);
-//                        exit(-1);
-//                    }
-//                    gpD2ServerCallbackFunctions_6FD45830->pfCloseGame(v5->nServerToken, v5->bExpansion != 0 ? 0x44325850u : 0x44324456u, v5->dwSpawnedPlayers, (signed __int32_t32)v5->dwGameFrame / 25);
-//                }
-//                v6 = v5->lpCriticalSection;
-//                if (!v6)
-//                {
-//                    FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//                    exit(-1);
-//                }
-//                EnterCriticalSection(v6);
-//                GAME_FreeGame(v2, v5);
-//                v7 = gpGameDataTbl_6FD45818;
-//                if (v5->__0000[2])
-//                {
-//                    v8 = (char*)&v5->__0000[1];
-//                    if (v5->__0000[1])
-//                    {
-//                        *(_DWORD*)sub_6FC3B560(&v5->__0000[1], -1) = *(_DWORD*)v8;
-//                        *(_DWORD*)(*(_DWORD*)v8 + 4) = v5->__0000[2];
-//                        *(_DWORD*)v8 = 0;
-//                        v5->__0000[2] = 0;
-//                    }
-//                    v9 = (char*)&v5->__0000[3];
-//                    if (v5->__0000[3])
-//                    {
-//                        *(_DWORD*)sub_6FC3B560(&v5->__0000[3], -1) = *(_DWORD*)v9;
-//                        *(_DWORD*)(*(_DWORD*)v9 + 4) = v5->pNext;
-//                        *(_DWORD*)v9 = 0;
-//                        v5->pNext = 0;
-//                    }
-//                }
-//                (*(void(__thiscall**)(D2GameManagerStrc*, D2GameStrc*))v7->field_0.field_0)(v7, v5);
-//                v3 = &v7->pLock;
-//            }
-//        }
-//        LeaveCriticalSection(v3);
-//    }
+    if (gpGameDataTbl_6FD45818)
+    {
+        GAMEDATALOCKEDHANDLE hLock;
+        if (D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
+        {
+            if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfCloseGame)
+            {
+                D2_ASSERT(!IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfCloseGame));
+                gpD2EventCallbackTable_6FD45830->pfCloseGame(
+                    pGame->nServerToken,
+                    pGame->bExpansion ? 'D2XP' : 'D2DV',
+                    pGame->dwLastUsedUnitGUID[UNIT_PLAYER],
+                    (signed int)pGame->dwGameFrame / 25);
+            }
+            D2_LOCK(pGame->lpCriticalSection);
+
+            GAME_FreeGame(nGameGUID, pGame);
+
+            gpGameDataTbl_6FD45818->tHashTable.DeleteUnlock(pGame, hLock);
+        }
+    }
+
 }
 
-//D2Game.0x6FC397A0) --------------------------------------------------------
-D2GameStrc* __fastcall TASK_GetGame_6FC397A0(int32_t nGameHashKey)
+//D2Game.0x6FC397A0
+D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 {
-    UNIMPLEMENTED();
+    if (!gpGameDataTbl_6FD45818)
+    {
+        return nullptr;
+    }
+
+    GAMEDATALOCKEDHANDLE hLock;
+    if (D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
+    {
+        D2_LOCK(pGame->lpCriticalSection);
+        gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
+        return pGame;
+    }
     return nullptr;
-
-//    D2GameManagerStrc* v1; // esi@1
-//    int32_t v2; // edi@1
-//    D2GameStrc* result; // eax@2
-//    struct _RTL_CRITICAL_SECTION* v4; // ebx@3
-//    int32_t v5; // eax@3
-//    D2GameStrc* v6; // eax@3
-//    D2GameStrc* v7; // esi@7
-//    LPCRITICAL_SECTION v8; // eax@9
-//
-//    v1 = gpGameDataTbl_6FD45818;
-//    v2 = a1;
-//    if (gpGameDataTbl_6FD45818)
-//    {
-//        v4 = &gpGameDataTbl_6FD45818->pLock;
-//        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-//        v5 = *(_DWORD*)(v1->field_0.field_1C + 12 * (v2 & v1->field_0.field_24) + 8);
-//        v6 = (D2GameStrc*)(((v5 <= 0) - 1) & v5);
-//        if ((int32_t)v6 <= 0)
-//        {
-//LABEL_6:
-//            LeaveCriticalSection(&v1->pLock);
-//            result = 0;
-//        }
-//        else
-//        {
-//            while (v6->__0000[0] != v2)
-//            {
-//                v6 = *(D2GameStrc**)(sub_6FC3B6F0((void*)(v1->field_0.field_1C + 12 * (v2 & v1->field_0.field_24)), (int32_t)v6)
-//                                     + 4);
-//                if ((int32_t)v6 <= 0)
-//                    goto LABEL_6;
-//            }
-//            v7 = v6;
-//            if (v6)
-//            {
-//                v8 = v6->lpCriticalSection;
-//                if (!v8)
-//                {
-//                    FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//                    exit(-1);
-//                }
-//                EnterCriticalSection(v8);
-//                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-//                result = v7;
-//            }
-//            else
-//            {
-//                LeaveCriticalSection(v4);
-//                result = v7;
-//            }
-//        }
-//    }
-//    else
-//    {
-//        result = 0;
-//    }
-//    return result;
 }
 
 //D2Game.0x6FC39870
@@ -2784,36 +2472,23 @@ void __fastcall sub_6FC39870(int32_t nClientId)
 {
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1 && gpGameDataTbl_6FD45818)
+        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 const uint32_t nClientCount = pGame->nClients;
                 const uint16_t nServerToken = pGame->nServerToken;
                 char szGameName[16] = {};
                 SStrCopy(szGameName, pGame->szGameName, 0x7FFFFFFFu);
                 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
+                D2_UNLOCK(pGame->lpCriticalSection);
 
                 sub_6FC3C640(nClientId, nServerToken, nClientCount, szGameName);
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
             }
         }
     }
 
-    sub_6FC3C640(nClientId, -1, 0, byte_6FD447EC);
+    sub_6FC3C640(nClientId, -1, 0, gszEmptyString_6FD447EC);
 }
 
 //D2Game.0x6FC399A0
@@ -2832,15 +2507,9 @@ void __stdcall D2Game_10006()
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
             D2_ASSERT(gpGameDataTbl_6FD45818);
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+            D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
             D2_ASSERT(pGame);
-
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-
-            LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
             D2ClientStrc* pClient = pGame->pClientList;
             while (pClient)
@@ -2865,8 +2534,7 @@ void __stdcall D2Game_10006()
                 pClient = pNext;
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
+            D2_UNLOCK(pGame->lpCriticalSection);
 
             GAME_CloseGame(gnGamesGUIDs_6FD447F8[i]);
         }
@@ -2895,29 +2563,16 @@ int32_t __stdcall D2Game_10057()
     int32_t nExpansionGames = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1 && gpGameDataTbl_6FD45818)
+        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 if (pGame->bExpansion)
                 {
                     ++nExpansionGames;
                 }
 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
+                D2_UNLOCK(pGame->lpCriticalSection);
             }
         }
     }
@@ -2932,20 +2587,14 @@ void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
 
     for (int32_t i = 0; i < 1024; ++i)
     {
-        const int32_t v7 = gnGamesGUIDs_6FD447F8[i];
-        if (v7 && v7 != -1 && gpGameDataTbl_6FD45818)
+        const int32_t nGameGuid = gnGamesGUIDs_6FD447F8[i];
+        if (nGameGuid && nGameGuid != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, v7, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(nGameGuid))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
                 int32_t nIndex = pGame->nClients;
                 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
+                D2_UNLOCK(pGame->lpCriticalSection);
 
                 if (nIndex > nArraySize)
                 {
@@ -2953,10 +2602,6 @@ void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
                 }
 
                 ++pCount[nIndex];
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
             }
         }
     }
@@ -2969,22 +2614,13 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1 && gpGameDataTbl_6FD45818)
+        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 const int32_t nSecondsPassed = pGame->dwGameFrame / DEFAULT_FRAMES_PER_SECOND;
 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
+                D2_UNLOCK(pGame->lpCriticalSection);
 
                 int32_t nIndex = nSecondsPassed / 300;
                 if (nIndex >= nMaxCount)
@@ -2993,10 +2629,6 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
                 }
 
                 ++a1[nIndex];
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
             }
         }
     }
@@ -3020,33 +2652,20 @@ int32_t __stdcall D2Game_10013(uint16_t nGameId)
 {
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     D2_ASSERT(gpGameDataTbl_6FD45818);
 
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-    if (!pGame)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        FOG_DisplayAssert("ptGame", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    D2_ASSERT(pGame);
     const int32_t nClients = pGame->nClients;
     
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 
     return nClients;
 }
@@ -3057,29 +2676,18 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
-    if (!gpGameDataTbl_6FD45818)
-    {
-        return 0;
-    }
-
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
         return 0;
     }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
 
     pGameInfo->nServerToken = pGame->nServerToken;
     pGameInfo->nInitSeed = pGame->dwInitSeed;
@@ -3164,9 +2772,7 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     pGameInfo->nArenaFlags = ARENA_GetFlags(pGame);
     pGameInfo->pMemoryPool = pGame->pMemoryPool;
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
-
+    D2_UNLOCK(pGame->lpCriticalSection);
     return 1;
 }
 
@@ -3176,27 +2782,14 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
     int32_t nServerTokenCount = 0;
     for (int32_t i = 0; nServerTokenCount < nMaxCount && i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1 && gpGameDataTbl_6FD45818)
+        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
                 pServerToken[nServerTokenCount] = pGame->nServerToken;
                 ++nServerTokenCount;
 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
+                D2_UNLOCK(pGame->lpCriticalSection);
             }
         }
     }
@@ -3205,35 +2798,20 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 }
 
 //D2Game.0x6FC3A490 (#10016)
-int32_t __stdcall D2Game_10016(uint16_t a1)
+int32_t __stdcall D2Game_10016(uint16_t nGameId)
 {
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
     int32_t nGUID = 0;
-    if (gpGameArray_6FD447F4[a1] && gpGameArray_6FD447F4[a1] != -1)
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[a1];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
-    D2GameStrc* pGame = nullptr;
-    if (gpGameDataTbl_6FD45818)
-    {
-        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-       
-        pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-        if (pGame)
-        {
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-        }
-
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    }
-
     int32_t nUnits = 0;
-    if (pGame)
+    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         for (int32_t i = 0; i < 128; ++i)
         {
@@ -3248,8 +2826,7 @@ int32_t __stdcall D2Game_10016(uint16_t a1)
             }
         }
         
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
     }
 
     return nUnits;
@@ -3260,23 +2837,8 @@ int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int3
 {
     const int32_t nGUID = sub_6FC35840(nGameId);
 
-    D2GameStrc* pGame = nullptr;
-    if (gpGameDataTbl_6FD45818)
-    {
-        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        
-        pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-        if (pGame)
-        {
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-        }
-
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    }
-
     int32_t nUnitInfoCount = 0;
-    if (pGame)
+    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         for (int32_t i = 0; nUnitInfoCount < nMaxCount && i < 128; ++i)
         {
@@ -3292,8 +2854,7 @@ int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int3
             }
         }
 
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
     }
 
     return nUnitInfoCount;
@@ -3385,147 +2946,60 @@ void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId
     sprintf(szDescription, "Missile %d", nClassId);
 }
 
-//D2Game.0x6FC3A8B0) --------------------------------------------------------
-void __stdcall D2Game_10019(uint16_t a1, int32_t a2, int32_t nUnitType)
+//D2Game.0x6FC3A8B0 (#10019)
+// Note: used by server only to retrieve unit lists
+void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType)
 {
-    UNIMPLEMENTED();
-//    int32_t v3; // edi@1
-//    int32_t v4; // eax@1
-//    int32_t v5; // esi@4
-//    D2GameStrc* v6; // edi@5
-//    D2GameStrc* v7; // eax@6
-//    LPCRITICAL_SECTION v8; // ecx@8
-//    D2UnitStrc** v9; // edx@16
-//    int32_t v10; // eax@21
-//    D2UnitStrc* v11; // ebp@22
-//    int32_t v12; // esi@23
-//    int32_t v13; // eax@23
-//    void* v14; // edx@26
-//    int32_t i; // esi@41
-//    D2GameStrc* v16; // [sp+10h] [bp-8h]@5
-//    int32_t v17; // [sp+14h] [bp-4h]@21
-//    D2UnitStrc** v18; // [sp+1Ch] [bp+4h]@13
-//
-//    v3 = 0;
-//    EnterCriticalSection(&gCriticalSection_6FD45800);
-//    v4 = gpGameArray_6FD447F4[a1];
-//    if (v4 && v4 != -1)
-//        v3 = gpGameArray_6FD447F4[a1];
-//    LeaveCriticalSection(&gCriticalSection_6FD45800);
-//    v5 = (int32_t)gpGameDataTbl_6FD45818;
-//    if (gpGameDataTbl_6FD45818)
-//    {
-//        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-//        v7 = D2GAME_FindGameByGUID_6FC3B6A0((D2GameManagerStrc*)v5, v5 + 68, v3, (void*)(v5 + 68));
-//        v6 = v7;
-//        if (v7)
-//        {
-//            v8 = v7->lpCriticalSection;
-//            if (!v8)
-//            {
-//                FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//                exit(-1);
-//            }
-//            EnterCriticalSection(v8);
-//            LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-//        }
-//        else
-//        {
-//            D2GameManagerStrc_Unlock_6FC3B540(v5, (LPCRITICAL_SECTION)0xFFFFFFFF);
-//        }
-//        v16 = v6;
-//    }
-//    else
-//    {
-//        v6 = 0;
-//        v16 = 0;
-//    }
-//    v18 = 0;
-//    if (v6)
-//    {
-//        switch (nUnitType)
-//        {
-//        case UNIT_PLAYER:
-//            v18 = (D2UnitStrc**)v6->pUnitList;
-//            break;
-//        case UNIT_MONSTER:
-//            v9 = v6->pUnitList[1];
-//            goto LABEL_20;
-//        case UNIT_OBJECT:
-//            v18 = v6->pUnitList[2];
-//            break;
-//        case UNIT_MISSILE:
-//            v18 = v6->pUnitList[3];
-//            break;
-//        case UNIT_ITEM:
-//            v9 = v6->pUnitList[4];
-//LABEL_20:
-//            v18 = v9;
-//            break;
-//        default:
-//            break;
-//        }
-//        v10 = 0;
-//        v17 = 0;
-//        do
-//        {
-//            v11 = v18[v10];
-//            if (v11)
-//            {
-//                do
-//                {
-//                    v12 = v11->dwClassId;
-//                    v13 = a2;
-//                    if (!a2)
-//                    {
-//                        FOG_DisplayAssert("ptList", __FILE__, __LINE__);
-//                        exit(-1);
-//                    }
-//                    do
-//                    {
-//                        if (*(_DWORD*)v13 == v12)
-//                        {
-//                            ++* (_DWORD*)(v13 + 4);
-//                            goto LABEL_28;
-//                        }
-//                        v13 = *(_DWORD*)(v13 + 140);
-//                    }
-//                    while (v13);
-//                    v14 = FOG_AllocPool(0, 144, __FILE__, __LINE__, 0);
-//                    if (v14)
-//                    {
-//                        memset(v14, 0, 0x90u);
-//                        v6 = v16;
-//                        *(_DWORD*)v14 = v12;
-//                        *((_DWORD*)v14 + 2) = 0;
-//                        *((_DWORD*)v14 + 1) = 1;
-//                        *((_DWORD*)v14 + 35) = *(_DWORD*)(a2 + 140);
-//                        *(_DWORD*)(a2 + 140) = v14;
-//                    }
-//LABEL_28:
-//                    v11 = SUNIT_GetNextUnitFromList(v11);
-//                }
-//                while (v11);
-//                v10 = v17;
-//            }
-//            ++v10;
-//            v17 = v10;
-//        }
-//        while (v10 < 128);
-//        if (!v6->lpCriticalSection)
-//        {
-//            FOG_DisplayAssert("ptGame->_ptLock != nullptr", __FILE__, __LINE__);
-//            exit(-1);
-//        }
-//        LeaveCriticalSection(v6->lpCriticalSection);
-//        if (IsBadCodePtr((FARPROC)gpfGetDescription_6FD2CA64[nUnitType]))
-//        {
-//            FOG_DisplayAssert("sgpfnGetDescription[eType]", __FILE__, __LINE__);
-//            exit(-1);
-//        }
-//        for (i = *(_DWORD*)(a2 + 140); i; i = *(_DWORD*)(i + 140))
-//            gpfGetDescription_6FD2CA64[nUnitType]((char*)(i + 12), *(_DWORD*)i);
-//    }
+    const int32_t nGUID = sub_6FC35840(nGameId);
+    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    {
+        // Note: eType is not D2C_UnitTypes
+        D2UnitStrc** pUnitList = eType <= 4 ? pGame->pUnitList[eType] : nullptr;
+        for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
+        {
+            for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
+                pUnit != nullptr;
+                pUnit = SUNIT_GetNextUnitFromList(pUnit)
+                )
+            {
+                D2_ASSERT(pUnitDescriptionsList);
+                int32_t nUnitClassId = pUnit->dwClassId;
+                D2UnitDescriptionListStrc* pCurrentNode = pUnitDescriptionsList;
+                do
+                {
+                    if (pCurrentNode->nClassId == nUnitClassId)
+                    {
+                        pCurrentNode->nCount++;
+                        break;
+                    }
+                    pCurrentNode = pCurrentNode->pNext;
+                } while (pCurrentNode);
+
+                if (pCurrentNode == nullptr) // Unit class id not in list yet
+                {
+                    if (D2UnitDescriptionListStrc* pNewNode = D2_CALLOC_STRC_POOL(nullptr, D2UnitDescriptionListStrc))
+                    {
+                        pNewNode->nClassId = nUnitClassId;
+                        pNewNode->nCount = 1;
+                        pNewNode->dwUnk0x08 = 0;
+                        pNewNode->pNext = pUnitDescriptionsList->pNext;
+                        pUnitDescriptionsList->pNext = pNewNode;
+                    }
+                }
+            }
+        }
+        
+        D2_UNLOCK(pGame->lpCriticalSection);
+
+        D2_ASSERT(gpfGetDescription_6FD2CA64[eType]);
+
+        for (D2UnitDescriptionListStrc* pCurrentUnitInfo = pUnitDescriptionsList->pNext; 
+            pCurrentUnitInfo != nullptr; 
+            pCurrentUnitInfo = pCurrentUnitInfo->pNext)
+        {
+            gpfGetDescription_6FD2CA64[eType](pCurrentUnitInfo->szDescription, pCurrentUnitInfo->nClassId);
+        }
+    }
 }
 
 //D2Game.0x6FC3AB20 (#10018)
@@ -3533,23 +3007,8 @@ int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoSt
 {
     const int32_t nGUID = sub_6FC35840(nGameId);
 
-    D2GameStrc* pGame = nullptr;
-    if (gpGameDataTbl_6FD45818)
-    {
-        EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-        pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-        if (pGame)
-        {
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-        }
-
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    }
-
     int32_t nUnitInfoCount = 0;
-    if (pGame)
+    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         for (int32_t i = 0; i < nMaxCount; ++i)
         {
@@ -3566,15 +3025,14 @@ int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoSt
                         exit(-1);
                     }
 
-                    gpfGetDescription_6FD2CA64[pUnitType[i]](pUnitInfo[nUnitInfoCount].szName, pUnit->dwClassId);
+                    gpfGetDescription_6FD2CA64[pUnitType[i]](pUnitInfo[nUnitInfoCount].szDescription, pUnit->dwClassId);
                 }
 
                 ++nUnitInfoCount;
             }
         }
 
-        D2_ASSERT(pGame->lpCriticalSection);
-        LeaveCriticalSection(pGame->lpCriticalSection);
+        D2_UNLOCK(pGame->lpCriticalSection);
     }
 
     return nUnitInfoCount;
@@ -3590,18 +3048,10 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
 
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
-        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1 && gpGameDataTbl_6FD45818)
+        if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (pGame)
+            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
-                D2_ASSERT(pGame->lpCriticalSection);
-                EnterCriticalSection(pGame->lpCriticalSection);
-
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-                
                 for (int32_t j = 0; j < 128; ++j)
                 {
                     for (D2UnitStrc* k = pGame->pUnitList[UNIT_MONSTER][j]; k; k = SUNIT_GetNextUnitFromList(k))
@@ -3615,14 +3065,9 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
                     }
                 }
                 
-                D2_ASSERT(pGame->lpCriticalSection);
-                LeaveCriticalSection(pGame->lpCriticalSection);
+                D2_UNLOCK(pGame->lpCriticalSection);
 
                 ++pStats->nGamesCount;
-            }
-            else
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
             }
         }
     }
@@ -3635,22 +3080,8 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            D2_ASSERT(gpGameDataTbl_6FD45818);
-
-            EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-            
-            D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, gnGamesGUIDs_6FD447F8[i], &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-            if (!pGame)
-            {
-                LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-                D2_ASSERT(pGame);
-            }
-
-            D2_ASSERT(pGame->lpCriticalSection);
-            EnterCriticalSection(pGame->lpCriticalSection);
-
-            LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
+            D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
+            D2_ASSERT(pGame);
             if (a1 == 1)
             {
                 D2GSPacketSrv5A packet5A = {};
@@ -3676,8 +3107,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
                 }
             }
 
-            D2_ASSERT(pGame->lpCriticalSection);
-            LeaveCriticalSection(pGame->lpCriticalSection);
+            D2_UNLOCK(pGame->lpCriticalSection);
         }
     }
 }
@@ -3685,30 +3115,18 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
 //D2Game.0x6FC3AFB0 (#10022)
 void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
 {
-    int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
-    if (gpGameArray_6FD447F4[nGameId] && gpGameArray_6FD447F4[nGameId] != -1)
+    int32_t nGUID = 0;
+    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
     {
-        nGUID = gpGameArray_6FD447F4[nGameId];
+        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
     }
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
-    D2_ASSERT(gpGameDataTbl_6FD45818);
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-    if (!pGame)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        D2_ASSERT(pGame);
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-    EnterCriticalSection(pGame->lpCriticalSection);
-
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    D2_ASSERT(pGame);
 
     a2[255] = 0;
     if (!strncmp("<ABEND> ", a2, 8u))
@@ -3718,8 +3136,7 @@ void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
 
     sub_6FC84CD0(pGame, a2, 1u);
 
-    D2_ASSERT(pGame->lpCriticalSection);
-    LeaveCriticalSection(pGame->lpCriticalSection);
+    D2_UNLOCK(pGame->lpCriticalSection);
 }
 
 //D2Game.0x6FC3B0E0
@@ -3755,28 +3172,7 @@ D2GameStrc* __fastcall sub_6FC3B160()
 
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
-    if (!gpGameDataTbl_6FD45818)
-    {
-        gpGame_6FD457FC = nullptr;
-        return gpGame_6FD457FC;
-    }
-
-    EnterCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-
-    D2GameStrc* pGame = D2GAME_FindGameByGUID_6FC3B6A0(gpGameDataTbl_6FD45818, 0, nGUID, &gpGameDataTbl_6FD45818->pGamesEx.unk0x1C);
-    if (!pGame)
-    {
-        LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-        gpGame_6FD457FC = nullptr;
-        return gpGame_6FD457FC;
-    }
-
-    D2_ASSERT(pGame->lpCriticalSection);
-
-    EnterCriticalSection(pGame->lpCriticalSection);
-    LeaveCriticalSection(&gpGameDataTbl_6FD45818->pLock);
-    gpGame_6FD457FC = pGame;
-
+    gpGame_6FD457FC = GAME_LockGame(nGUID);
     return gpGame_6FD457FC;
 }
 
@@ -3850,613 +3246,137 @@ void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
     }
 }
 
-//D2Game.0x6FC3B480) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindAndLockGameByGUID__6FC3B480(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t a2, void* a3, int32_t a4)
+//D2Game.0x6FC3B480
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, HGAMEDATA hGame, GAMEDATALOCKEDHANDLE* pLockedHandle, int32_t forWriting)
 {
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return nullptr;
-
-//    int32_t v4; // esi@1
-//    struct _RTL_CRITICAL_SECTION* v5; // edi@1
-//    int32_t v6; // eax@1
-//    int32_t v7; // ecx@1
-//    int32_t v8; // ecx@1
-//    int32_t v9; // esi@4
-//
-//    v4 = this;
-//    v5 = (struct _RTL_CRITICAL_SECTION*)(this + 80);
-//    EnterCriticalSection((LPCRITICAL_SECTION)(this + 80));
-//    *(_DWORD*)a3 = 2 * (a4 != 0) - 1;
-//    v6 = *(_DWORD*)(*(_DWORD*)(v4 + 28) + 12 * (a2 & *(_DWORD*)(v4 + 36)) + 8);
-//    v7 = v6 < 0;
-//    LOBYTE(v7) = v6 <= 0;
-//    v8 = v6 & (v7 - 1);
-//    if (v8 <= 0)
-//    {
-//LABEL_4:
-//        v9 = 0;
-//LABEL_6:
-//        if (*(_DWORD*)a3)
-//            LeaveCriticalSection(v5);
-//        *(_DWORD*)a3 = 0;
-//        return v9;
-//    }
-//    while (*(_DWORD*)v8 != a2)
-//    {
-//        v8 = *(_DWORD*)(v8 + *(_DWORD*)(*(_DWORD*)(v4 + 28) + 12 * (a2 & *(_DWORD*)(v4 + 36))) + 4);
-//        if (v8 <= 0)
-//            goto LABEL_4;
-//    }
-//    v9 = v8;
-//    if (!v8)
-//        goto LABEL_6;
-//    return v9;
+    return pGameDataTable->tHashTable.Lock(hGame, pLockedHandle, forWriting);
 }
 
 //D2Game.0x6FC3B510
+// See TSExportTableSyncReuse::SyncEnterLock
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameManagerStrc_Lock_6FC3B510(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t* a2, int32_t a3)
+void __fastcall D2GameDataTable_SyncEnterLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting)
 {
-    UNIMPLEMENTED();
     D2_MAYBE_UNUSED(nUnused);
-    EnterCriticalSection(&pGameManager->pLock);
-    *a2 = 2 * (a3 != 0) - 1;
+    pGameDataTable->tHashTable.GetSync().Enter(bForWriting);
+    *pLockHandle = 2 * (bForWriting != 0) - 1;
 }
 
 //D2Game.0x6FC3B540
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameManagerStrc_Unlock_6FC3B540(D2GameManagerStrc* pGameManager, int32_t nUnused, int32_t bLeaveCriticalSection)
+// See TSExportTableSyncReuse::SyncLeaveLock
+void __fastcall D2GameDataTable_SyncLeaveLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle)
 {
     D2_MAYBE_UNUSED(nUnused);
-    if (bLeaveCriticalSection)
+    if (tLockHandle != 0)
     {
-        LeaveCriticalSection(&pGameManager->pLock);
+        pGameDataTable->tHashTable.GetSync().Leave(tLockHandle == 1);
     }
 }
 
-////D2Game.0x6FC3B560) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B560(void* this, int32_t a2)
-//{
-//    int32_t v2; // eax@1
-//    int32_t result; // eax@2
-//    int32_t v4; // edx@3
-//
-//    v2 = *((_DWORD*)this + 1);
-//    if (v2 >= 0)
-//    {
-//        v4 = a2;
-//        if (a2 < 0)
-//            v4 = (int32_t)((char*)this - *(_DWORD*)(*(_DWORD*)this + 4));
-//        result = v4 + v2;
-//    }
-//    else
-//    {
-//        result = ~v2;
-//    }
-//    return result;
-//}
-
-//D2Game.0x6FC3B590) --------------------------------------------------------
-D2GameStrc* __fastcall sub_6FC3B590(D2GameManagerStrc* a1, int32_t nUnused, int32_t a2, int32_t* a3, int32_t a4, int32_t a5)
+//D2Game.0x6FC3B560
+// Should be __thiscall, nUnused is present due to using __fastcall 
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TLink_NextLink(TSLink<D2GameStrc>* pLink, int32_t nUnused, int nLinkOffset)
 {
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return nullptr;
-
-//    int32_t v5; // esi@1
-//    int32_t v6; // edx@1
-//    uint32_t v7; // eax@2
-//    int32_t v8; // eax@5
-//    int32_t v9; // ecx@5
-//    int32_t v10; // ecx@5
-//    int32_t v11; // eax@6
-//    int32_t v12; // eax@7
-//    int32_t v13; // eax@8
-//    int32_t result; // eax@13
-//    int32_t v15; // ecx@14
-//    int32_t v16; // ebx@16
-//    int32_t v17; // edi@17
-//    int32_t v18; // edi@18
-//    int32_t v19; // edx@21
-//
-//    v5 = this;
-//    v6 = a2 & *(_DWORD*)(this + 36);
-//    if (*(_DWORD*)(this + 36) < 0x3FFu)
-//    {
-//        v7 = *(_DWORD*)(this + 16);
-//        *(_DWORD*)(this + 16) = v7 <= 3 ? 0 : v7 - 3;
-//        v8 = *(_DWORD*)(*(_DWORD*)(this + 28) + 12 * v6 + 8);
-//        v9 = v8 < 0;
-//        LOBYTE(v9) = v8 <= 0;
-//        v10 = v8 & (v9 - 1);
-//        if (v10 > 0)
-//        {
-//            while (1)
-//            {
-//                v11 = *(_DWORD*)(v5 + 16) + 1;
-//                *(_DWORD*)(v5 + 16) = v11;
-//                if ((uint32_t)v11 > 0xD)
-//                    break;
-//                v12 = 12 * v6 + *(_DWORD*)(v5 + 28);
-//                if (v10)
-//                    v13 = v10 + *(_DWORD*)v12;
-//                else
-//                    v13 = v12 + 4;
-//                v10 = *(_DWORD*)(v13 + 4);
-//                if (v10 <= 0)
-//                    goto LABEL_13;
-//            }
-//            *(_DWORD*)(v5 + 16) = 0;
-//            sub_6FC3B710(v5);
-//            v6 = *(_DWORD*)(v5 + 36) & a2;
-//        }
-//    }
-//LABEL_13:
-//    result = (*(int32_t(__thiscall**)(int32_t, int32_t, int32_t, int32_t))(*(_DWORD*)v5 + 4))(v5, *(_DWORD*)(v5 + 28) + 12 * v6, a4, a5);
-//    if (result)
-//        v15 = result + *(_DWORD*)(v5 + 4);
-//    else
-//        v15 = v5 + 8;
-//    v16 = *(_DWORD*)v15;
-//    if (*(_DWORD*)v15)
-//    {
-//        v17 = *(_DWORD*)(v15 + 4);
-//        if (v17 >= 0)
-//            v18 = v15 - *(_DWORD*)(v16 + 4) + v17;
-//        else
-//            v18 = ~v17;
-//        *(_DWORD*)v18 = v16;
-//        *(_DWORD*)(*(_DWORD*)v15 + 4) = *(_DWORD*)(v15 + 4);
-//        *(_DWORD*)v15 = 0;
-//        *(_DWORD*)(v15 + 4) = 0;
-//    }
-//    v19 = *(_DWORD*)(v5 + 8);
-//    *(_DWORD*)v15 = v19;
-//    *(_DWORD*)(v15 + 4) = *(_DWORD*)(v19 + 4);
-//    *(_DWORD*)(v19 + 4) = result;
-//    *(_DWORD*)(v5 + 8) = v15;
-//    *(_DWORD*)result = a2;
-//    *(_BYTE*)(result + 20) = *(_BYTE*)a3;
-//    return result;
+    return pLink->NextLink(nLinkOffset);
 }
 
-//D2Game.0x6FC3B6A0) --------------------------------------------------------
-D2GameStrc* __fastcall D2GAME_FindGameByGUID_6FC3B6A0(D2GameManagerStrc* a1, int32_t nUnused, D2GameGUID nGameGUID, void* a4)
+//D2Game.0x6FC3B590
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_New(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, HASHKEY_NONE* pKey, int32_t extrabytes, int32_t flags)
 {
-    UNIMPLEMENTED();
-    D2_MAYBE_UNUSED(nUnused);
-    return nullptr;
-
-//    int32_t v4; // eax@1
-//    D2GameStrc* result; // eax@1
-//
-//    v4 = *(_DWORD*)(a1->field_0.field_1C + 12 * (a1->field_0.field_24 & a3) + 8);
-//    result = (D2GameStrc*)(((v4 <= 0) - 1) & v4);
-//    if ((int32_t)result <= 0)
-//    {
-//LABEL_4:
-//        result = 0;
-//    }
-//    else
-//    {
-//        while (result->__0000[0] != a3)
-//        {
-//            result = *(D2GameStrc**)((char*)&result->__0000[1]
-//                                     + *(_DWORD*)(a1->field_0.field_1C + 12 * (a1->field_0.field_24 & a3)));
-//            if ((int32_t)result <= 0)
-//                goto LABEL_4;
-//        }
-//    }
-//    return result;
+    return static_cast<TSHashTable<D2GameStrc, HASHKEY_NONE>&>(pGameDataTable->tHashTable).New((uint32_t)nGameGUID, *pKey, extrabytes, flags);
 }
 
-////D2Game.0x6FC3B6F0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B6F0(void* this, int32_t a2)
-//{
-//    int32_t result; // eax@2
-//
-//    if (a2)
-//        result = a2 + *(_DWORD*)this;
-//    else
-//        result = (int32_t)((char*)this + 4);
-//    return result;
-//}
+//D2Game.0x6FC3B6A0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+D2GameStrc* __fastcall D2GameDataTable_Ptr(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey)
+{
+    return static_cast<TSHashTable<D2GameStrc,HASHKEY_NONE>&>(pGameDataTable->tHashTable).Ptr((uint32_t)nGameGUID, *pHashKey);
+}
 
-////D2Game.0x6FC3B710) --------------------------------------------------------
-//void __thiscall sub_6FC3B710(int32_t this)
-//{
-//    int32_t v1; // esi@1
-//    int32_t v2; // ebp@1
-//    int32_t v3; // ebx@1
-//    uint32_t v4; // edi@1
-//    int32_t v5; // eax@3
-//    int32_t v6; // eax@6
-//    int32_t v7; // edi@7
-//    int32_t v8; // esi@8
-//    int32_t v9; // ebx@14
-//    int32_t v10; // esi@15
-//    int32_t v11; // eax@17
-//    int32_t v12; // ecx@22
-//    int32_t v13; // ebx@23
-//    int32_t v14; // eax@23
-//    int32_t v15; // edi@23
-//    int32_t v16; // esi@23
-//    int32_t v17; // eax@25
-//    int32_t v18; // eax@28
-//    int32_t v19; // [sp+10h] [bp-24h]@1
-//    uint32_t v20; // [sp+14h] [bp-20h]@5
-//    int32_t v21; // [sp+18h] [bp-1Ch]@1
-//    int32_t v22; // [sp+1Ch] [bp-18h]@1
-//    int32_t v23; // [sp+20h] [bp-14h]@1
-//    int32_t v24; // [sp+24h] [bp-10h]@1
-//    int32_t v25; // [sp+30h] [bp-4h]@1
-//
-//    v1 = this;
-//    v2 = 0;
-//    v19 = this;
-//    v3 = *(_DWORD*)(this + 36) + 1;
-//    v23 = 0;
-//    v24 = 0;
-//    v4 = 2 * v3;
-//    v21 = 2 * v3;
-//    v25 = 0;
-//    v22 = 0;
-//    sub_6FC3BB40((int32_t)&v22);
-//    v25 = 1;
-//    v22 = -572662307;
-//    sub_6FC3BB40((int32_t)&v22);
-//    v25 = 2;
-//    if (v22 != 4)
-//    {
-//        while (v24 > 0)
-//        {
-//            v5 = sub_6FC3B6F0(&v22, v24);
-//            sub_6FC3B960((void*)v5);
-//        }
-//        v22 = 4;
-//        sub_6FC3BB40((int32_t)&v22);
-//    }
-//    v20 = 0;
-//    if ((uint32_t)v3 > 0)
-//    {
-//        v6 = v23;
-//        do
-//        {
-//            while (1)
-//            {
-//                v7 = *(_DWORD*)(*(_DWORD*)(v1 + 28) + v2 + 8);
-//                if (v7 <= 0)
-//                    break;
-//                v8 = v7 + v22;
-//                if (*(_DWORD*)(v7 + v22))
-//                {
-//                    sub_6FC3B960((void*)(v7 + v22));
-//                    v6 = v23;
-//                }
-//                *(_DWORD*)v8 = v6;
-//                *(_DWORD*)(v8 + 4) = *(_DWORD*)(v6 + 4);
-//                *(_DWORD*)(v6 + 4) = v7;
-//                v6 = v8;
-//                v1 = v19;
-//                v23 = v6;
-//            }
-//            v2 += 12;
-//            ++v20;
-//        }
-//        while (v20 < v3);
-//        v4 = 2 * v3;
-//    }
-//    sub_6FC3B9A0(v1 + 20, v4);
-//    if (v4)
-//    {
-//        v9 = 0;
-//        do
-//        {
-//            v10 = v9 + *(_DWORD*)(v1 + 28);
-//            if (*(_DWORD*)v10 != 4)
-//            {
-//                while (*(_DWORD*)(v10 + 8) > 0)
-//                {
-//                    v11 = sub_6FC3B6F0((void*)v10, *(_DWORD*)(v10 + 8));
-//                    sub_6FC3B960((void*)v11);
-//                }
-//                *(_DWORD*)v10 = 4;
-//                sub_6FC3BB40(v10);
-//            }
-//            v1 = v19;
-//            v9 += 12;
-//            --v4;
-//        }
-//        while (v4);
-//        v4 = v21;
-//    }
-//    *(_DWORD*)(v1 + 36) = v4 - 1;
-//    while (1)
-//    {
-//        v12 = v24;
-//        if (v24 <= 0)
-//            break;
-//        v13 = v24;
-//        v14 = *(_DWORD*)(v1 + 28);
-//        v15 = v14 + 12 * (*(_DWORD*)(v1 + 36) & *(_DWORD*)v24);
-//        v16 = v24 + *(_DWORD*)(v14 + 12 * (*(_DWORD*)(v1 + 36) & *(_DWORD*)v24));
-//        if (*(_DWORD*)v16)
-//            sub_6FC3B960((void*)v16);
-//        v17 = *(_DWORD*)(v15 + 4);
-//        *(_DWORD*)v16 = v17;
-//        *(_DWORD*)(v16 + 4) = *(_DWORD*)(v17 + 4);
-//        *(_DWORD*)(v17 + 4) = v13;
-//        *(_DWORD*)(v15 + 4) = v16;
-//        v1 = v19;
-//    }
-//    v25 = 3;
-//    while (v12 > 0)
-//    {
-//        v18 = sub_6FC3B6F0(&v22, v12);
-//        sub_6FC3B960((void*)v18);
-//        v12 = v24;
-//    }
-//    v25 = -1;
-//    sub_6FC3B960(&v23);
-//}
+//D2Game.0x6FC3B6F0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+TSLink<D2GameStrc>* __fastcall D2GameDataTable_TSExplicitList_Link(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, D2GameStrc* ptr)
+{
+    return pNode->Link(ptr);
+}
 
-////D2Game.0x6FC3B8E0) --------------------------------------------------------
-//void __thiscall sub_6FC3B8E0(int32_t this)
-//{
-//    int32_t v1; // ebx@1
-//    int32_t v2; // edx@2
-//    int32_t v3; // eax@3
-//    int32_t v4; // edi@3
-//    int32_t v5; // esi@4
-//    int32_t v6; // esi@5
-//    int32_t v7; // edx@8
-//    int32_t v8; // ecx@9
-//    int32_t v9; // ecx@10
-//
-//    v1 = this + 4;
-//    while (1)
-//    {
-//        v2 = *(_DWORD*)(this + 8);
-//        if (v2 <= 0)
-//            break;
-//        v3 = v2 + *(_DWORD*)this;
-//        v4 = *(_DWORD*)v3;
-//        if (*(_DWORD*)v3)
-//        {
-//            v5 = *(_DWORD*)(v3 + 4);
-//            if (v5 >= 0)
-//                v6 = v3 - *(_DWORD*)(v4 + 4) + v5;
-//            else
-//                v6 = ~v5;
-//            *(_DWORD*)v6 = v4;
-//            *(_DWORD*)(*(_DWORD*)v3 + 4) = *(_DWORD*)(v3 + 4);
-//            *(_DWORD*)v3 = 0;
-//            *(_DWORD*)(v3 + 4) = 0;
-//        }
-//    }
-//    v7 = *(_DWORD*)v1;
-//    if (*(_DWORD*)v1)
-//    {
-//        v8 = *(_DWORD*)(this + 8);
-//        if (v8 >= 0)
-//            v9 = v1 - *(_DWORD*)(v7 + 4) + v8;
-//        else
-//            v9 = ~v8;
-//        *(_DWORD*)v9 = v7;
-//        *(_DWORD*)(*(_DWORD*)v1 + 4) = *(_DWORD*)(v1 + 4);
-//        *(_DWORD*)v1 = 0;
-//        *(_DWORD*)(v1 + 4) = 0;
-//    }
-//}
+//D2Game.0x6FC3B710
+//void __thiscall TSHashTable_SGAMEDATA::Grow_6FC3B710(D2GameDataTableStrc pGameDataTable)
 
-////D2Game.0x6FC3B960) --------------------------------------------------------
-//void __thiscall sub_6FC3B960(void* this)
-//{
-//    int32_t v1; // esi@1
-//    int32_t v2; // edx@2
-//    char* v3; // edx@3
-//
-//    v1 = *(_DWORD*)this;
-//    if (*(_DWORD*)this)
-//    {
-//        v2 = *((_DWORD*)this + 1);
-//        if (v2 >= 0)
-//            v3 = (char*)this + v2 - *(_DWORD*)(v1 + 4);
-//        else
-//            v3 = (char*)~v2;
-//        *(_DWORD*)v3 = v1;
-//        *(_DWORD*)(*(_DWORD*)this + 4) = *((_DWORD*)this + 1);
-//        *(_DWORD*)this = 0;
-//        *((_DWORD*)this + 1) = 0;
-//    }
-//}
+//D2Game.0x6FC3B8E0
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+{
+    pList->UnlinkAll();
+    pList->m_terminator.Unlink();
+}
 
-////D2Game.0x6FC3B9A0) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3B9A0(int32_t this, uint32_t a2)
-//{
-//    uint32_t v2; // ebp@1
-//    int32_t v3; // esi@1
-//    int32_t result; // eax@1
-//    uint32_t v5; // ecx@3
-//    uint32_t i; // eax@5
-//    uint32_t v7; // edi@10
-//    int32_t v8; // eax@12
-//    uint32_t v9; // ebx@12
-//    int32_t v10; // ebp@13
-//    int32_t v11; // eax@16
-//    int32_t v12; // ebx@17
-//    uint32_t v13; // eax@18
-//    int32_t v14; // edi@21
-//    uint32_t v15; // ebp@21
-//    int32_t v16; // edi@26
-//    int32_t v17; // ebx@26
-//    uint32_t v18; // ebx@30
-//    uint32_t v19; // edi@30
-//    int32_t v20; // [sp+24h] [bp-4h]@12
-//
-//    v2 = a2;
-//    v3 = this;
-//    result = *(_DWORD*)(this + 4);
-//    if (a2 <= result)
-//    {
-//        if (a2 < result)
-//        {
-//            v18 = a2;
-//            v19 = 12 * a2;
-//            do
-//            {
-//                sub_6FC3B8E0(v19 + *(_DWORD*)(v3 + 8));
-//                result = *(_DWORD*)(v3 + 4);
-//                ++v18;
-//                v19 += 12;
-//            }
-//            while (v18 < result);
-//        }
-//        goto LABEL_32;
-//    }
-//    if (a2 > *(_DWORD*)this)
-//    {
-//        v5 = *(_DWORD*)(this + 12);
-//        if (!v5)
-//        {
-//            v5 = a2;
-//            if (a2 >= 0x15)
-//            {
-//                *(_DWORD*)(v3 + 12) = 21;
-//                v5 = 21;
-//            }
-//            else
-//            {
-//                for (i = a2 & (a2 - 1); i; i &= i - 1)
-//                    v5 = i;
-//                if (v5 < 1)
-//                    v5 = 1;
-//            }
-//        }
-//        v7 = a2;
-//        if (a2 % v5)
-//            v7 = a2 + v5 - a2 % v5;
-//        v8 = *(_DWORD*)(v3 + 8);
-//        v20 = *(_DWORD*)(v3 + 8);
-//        v9 = v7;
-//        if (v7 < *(_DWORD*)(v3 + 4))
-//        {
-//            v10 = v8 + 12 * v7;
-//            do
-//            {
-//                sub_6FC3BB10(v10, 0);
-//                ++v9;
-//                v10 += 12;
-//            }
-//            while (v9 < *(_DWORD*)(v3 + 4));
-//            v8 = v20;
-//            v2 = a2;
-//        }
-//        *(_DWORD*)v3 = v7;
-//        v11 = Storm_405(v8, 12 * v7, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 16);
-//        *(_DWORD*)(v3 + 8) = v11;
-//        if (!v11)
-//        {
-//            v12 = v20;
-//            *(_DWORD*)(v3 + 8) = Storm_401(12 * v7, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 0);
-//            if (v20)
-//            {
-//                v13 = *(_DWORD*)(v3 + 4);
-//                if (v7 < v13)
-//                    v13 = v7;
-//                if (v13)
-//                {
-//                    v14 = 0;
-//                    v15 = v13;
-//                    do
-//                    {
-//                        sub_6FC3BB80(v14 + *(_DWORD*)(v3 + 8), v12);
-//                        sub_6FC3BB10(v12, 0);
-//                        v14 += 12;
-//                        v12 += 12;
-//                        --v15;
-//                    }
-//                    while (v15);
-//                    v2 = a2;
-//                    v12 = v20;
-//                }
-//                Storm_403(v12, ".?AV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@", -2, 0);
-//            }
-//        }
-//    }
-//    result = *(_DWORD*)(v3 + 4);
-//    if (result >= v2)
-//    {
-//LABEL_32:
-//        *(_DWORD*)(v3 + 4) = v2;
-//        return result;
-//    }
-//    v16 = 12 * result;
-//    v17 = v2 - result;
-//    do
-//    {
-//        result = sub_6FC3BB50(v16 + *(_DWORD*)(v3 + 8));
-//        v16 += 12;
-//        --v17;
-//    }
-//    while (v17);
-//    *(_DWORD*)(v3 + 4) = v2;
-//    return result;
-//}
+//D2Game.0x6FC3B960
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink)
+{
+    pLink->Unlink();
+}
 
-////D2Game.0x6FC3BB10) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB10(int32_t this, char a2)
-//{
-//    int32_t v2; // esi@1
-//
-//    v2 = this;
-//    sub_6FC3B8E0(this);
-//    if (a2 & 1 && v2)
-//        Storm_403(v2, "delete", -1, 0);
-//    return v2;
-//}
+//D2Game.0x6FC3B9A0
+// Should be __thiscall, nUnused is present due to using __fastcall 
+void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
+{
+    D2_MAYBE_UNUSED(nUnused);
+    //TODO: Fix squall impl
+    D2_ASSERTM(nCount >= pArray->Count(), "Squall's implementation is buggy, and won't work if new size is smaller than old one. (should destroy objects after nCount)");
+    pArray->SetCount(nCount);
+}
+ 
+//D2Game.0x6FC3BB10
+// Should be __thiscall, nUnused is present due to using __fastcall 
+void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree)
+{
+    D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(pNode);
+    if ((bShouldFree & 1) != 0 && pNode)
+    {
+        SMemFree(pNode, "delete", -1, 0);
+    }
+}
 
-////D2Game.0x6FC3BB40) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB40(int32_t this)
-//{
-//    int32_t result; // eax@1
-//
-//    *(_DWORD*)(this + 4) = this + 4;
-//    result = ~(this + 4);
-//    *(_DWORD*)(this + 8) = result;
-//    return result;
-//}
+//D2Game.0x6FC3BB40
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+{
+    pList->InitializeTerminator();
+}
 
-////D2Game.0x6FC3BB50) --------------------------------------------------------
-//int32_t __thiscall sub_6FC3BB50(int32_t this)
-//{
-//    int32_t result; // eax@2
-//
-//    if (this)
-//    {
-//        *(_DWORD*)(this + 4) = 0;
-//        *(_DWORD*)(this + 8) = 0;
-//        *(_DWORD*)(this + 4) = this + 4;
-//        *(_DWORD*)this = -572662307;
-//        result = ~(this + 4);
-//        *(_DWORD*)(this + 8) = result;
-//    }
-//    return result;
-//}
+////D2Game.0x6FC3BB50
+// Should be __thiscall
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew(void* pMemory)
+{
+    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    {
+        // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
+        // Investigate why and fix it.
+        pNode->m_terminator.m_prevlink = 0;
+        pNode->m_terminator.m_next = 0;
+        pNode->m_terminator.m_prevlink = &pNode->m_terminator;
+        pNode->m_linkoffset = 0xDDDDDDDD;
+        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+    }
+}
 
-////D2Game.0x6FC3BB80) --------------------------------------------------------
-//void __fastcall sub_6FC3BB80(int32_t a1, int32_t a2)
-//{
-//    int32_t v2; // edx@2
-//
-//    if (a1)
-//    {
-//        *(_DWORD*)(a1 + 4) = 0;
-//        *(_DWORD*)(a1 + 8) = 0;
-//        v2 = *(_DWORD*)a2;
-//        *(_DWORD*)(a1 + 4) = a1 + 4;
-//        *(_DWORD*)a1 = v2;
-//        *(_DWORD*)(a1 + 8) = ~(a1 + 4);
-//    }
-//}
+//D2Game.0x6FC3BB80
+// Should be __thiscall, nUnused is present due to using __fastcall 
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory, int32_t nUnused, TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pList)
+{
+    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    {
+        // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
+        // Investigate why and fix it.
+        pNode->m_terminator.m_prevlink = 0;
+        pNode->m_terminator.m_next = 0;
+        pNode->m_terminator.m_prevlink = &pNode->m_terminator;
+        pNode->m_linkoffset = pList->m_linkoffset;
+        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+    }
+}

@@ -46,7 +46,7 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
 
-    D2GameStrc* pGame = TASK_GetGame_6FC397A0(v6);
+    D2GameStrc* pGame = GAME_LockGame(v6);
     if (!pGame)
     {
         return 6;
@@ -110,7 +110,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     case D2CLTSYS_JOINGAME:
     {
         D2GSPacketClt67* pPacket67 = (D2GSPacketClt67*)pPacket;
-        if (!gpD2ServerCallbackFunctions_6FD45830)
+        if (!gpD2EventCallbackTable_6FD45830)
         {
             const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->unk0x08, pPacket67->szClientName);
             if (nErrorCode)

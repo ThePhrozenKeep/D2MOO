@@ -325,12 +325,12 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
     D2UnitStrc* ppUnit = nullptr;
 
-    const int32_t nResult = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, a4, a5, a6);
-    if (nResult)
+    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, a4, a5, a6);
+    if (nError)
     {
-        //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", pClient->szName, v9, "nError");
+        FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", pClient->szName, nError, "nError");
         pClient->pPlayer = nullptr;
-        return nResult;
+        return nError;
     }
 
     if (pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION)
@@ -374,14 +374,14 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     {
         if (pClient->nSaveFlags & CLIENTSAVEFLAG_DEAD)
         {
-            //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_DEADHARDCORE", pClient->szName);
+            FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_DEADHARDCORE", pClient->szName);
             pClient->pPlayer = nullptr;
             return SYSERROR_DEADHARDCORE;
         }
 
         if (!(ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE))
         {
-            //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_HARDCOREJOINSOFTCORE", pClient->szName);
+            FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_HARDCOREJOINSOFTCORE", pClient->szName);
             pClient->pPlayer = nullptr;
             return SYSERROR_HARDCOREJOINSOFTCORE;
         }
@@ -390,7 +390,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     {
         if (ARENA_GetFlags(pGame) & GAMEFLAG_ARENA_HARDCORE)
         {
-            //Fog_10030(&unk_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_SOFTCOREJOINHARDCORE", pClient->szName);
+            FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_SOFTCOREJOINHARDCORE", pClient->szName);
             pClient->pPlayer = nullptr;
             return SYSERROR_SOFTCOREJOINHARDCORE;
         }
@@ -522,9 +522,9 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
     pGame->nClients = 0;
     pGame->pClientList = nullptr;
 
-    if (gpD2ServerCallbackFunctions_6FD45830 && gpD2ServerCallbackFunctions_6FD45830->pfSetGameData)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSetGameData)
     {
-        pGame->nGameData = gpD2ServerCallbackFunctions_6FD45830->pfSetGameData();
+        pGame->nGameData = gpD2EventCallbackTable_6FD45830->pfSetGameData();
     }
 }
 
@@ -672,11 +672,11 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
         DUNGEON_ChangeClientRoom(pPlayerRoom, 0);
         D2Common_10077(pPlayerRoom, 0);
 
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
-            if (D2_VERIFY(gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame))
+            if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
-                gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame(
+                gpD2EventCallbackTable_6FD45830->pfLeaveGame(
                     &pClientToRemove->pClientInfo,
                     pGame->nServerToken,
                     pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
@@ -695,13 +695,13 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     }
     else
     {
-        if (gpD2ServerCallbackFunctions_6FD45830)
+        if (gpD2EventCallbackTable_6FD45830)
         {
             *(char*)pClientToRemove->tCharacterInfo.unk0x00 = '\0';
 
-            if (D2_VERIFY(gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame))
+            if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
-                gpD2ServerCallbackFunctions_6FD45830->pfLeaveGame(
+                gpD2EventCallbackTable_6FD45830->pfLeaveGame(
                     &pClientToRemove->pClientInfo,
                     pGame->nServerToken,
                     0, 0, 0, 0,
