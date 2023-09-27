@@ -9,6 +9,7 @@
 #include "Units/Units.h"
 #include <Fog.h>
 #include <utility>
+#include <cmath>
 
 struct D2UnkPathStrc
 {
