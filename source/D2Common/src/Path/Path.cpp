@@ -14,6 +14,7 @@
 #include "Path/PathMisc.h"
 #include "Path/PathWF.h"
 #include "Path/Step.h"
+#include <cmath>
 
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
@@ -90,7 +91,7 @@ typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
 //D2Common.0x6FDD1F40
 static const PathFunctionType scpfnPathFunction[] = {
 /*[0]*/PATH_IdaStar_6FDA7970
-/*[1]*/,sub_6FDA69E0
+/*[1]*/,PATH_IDAStar_ComputePath
 /*[2]*/,PATH_Toward_6FDAA9F0
 /*[3]*/,sub_6FDAB0B0
 /*[4]*/,nullptr

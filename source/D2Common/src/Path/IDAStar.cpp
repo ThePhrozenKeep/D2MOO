@@ -2,7 +2,7 @@
 #include "Path/Path_IDAStar.h"
 
 #include "D2Collision.h"
-
+#include <cmath>
 
 const int dword_6FDD17E0[] =
 {
@@ -28,11 +28,89 @@ const int dword_6FDD19E0[] =
 	87, 9, 26, 14, 95, 113, 13, 54, 104, 82, 44, 72, 5, 78, 11, 39
 };
 
-//D2Common.0x6FDA69E0
-int __fastcall sub_6FDA69E0(D2PathInfoStrc* pPathInfo)
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDCB2C0
+BOOL PATH_TargetLocationHasEnoughRoom(D2PathInfoStrc* pPathInfo)
+{
+	if (!pPathInfo->pDynamicPath->pTargetUnit)
+	{
+		return TRUE;
+	}
+	D2RoomStrc* pStartRoom = pPathInfo->pStartRoom;
+	const int nTargetY = pPathInfo->tTargetCoord.Y;
+	const int nTargetX = pPathInfo->tTargetCoord.X;
+	const int32_t nCollisionMask = pPathInfo->nCollisionMask;
+	const int32_t nCollisionPattern = pPathInfo->nCollisionPattern;
+	return !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX - 2, nTargetY - 2, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX - 2, nTargetY + 2, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 2, nTargetY - 2, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 2, nTargetY + 2, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX - 2, nTargetY + 0, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 0, nTargetY - 2, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 2, nTargetY + 0, nCollisionPattern, nCollisionMask)
+		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 0, nTargetY + 2, nCollisionPattern, nCollisionMask);
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDCAE20
+void PATH_CacheInsertPoint(D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pPointToInsert)
 {
 	UNIMPLEMENTED();
-	return 0;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDCB220
+D2IdaStarPathPointsListStrc* PATH_AssignLastPointDefault(D2IdaStarPathContextStrc* pIdaStarContext)
+{
+	UNIMPLEMENTED();
+}
+
+//1.00:  D2Common.0x10056EC0
+//1.10f: D2Common.0x6FDA69E0
+//1.13c: D2Common.0x6FDCB630
+int __fastcall PATH_IDAStar_ComputePath(D2PathInfoStrc* pPathInfo)
+{
+	if (!PATH_TargetLocationHasEnoughRoom(pPathInfo))
+	{
+		return FALSE;
+	}
+
+	const D2PathPointStrc tStartCoord = pPathInfo->tStartCoord;
+	const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
+		
+	D2IdaStarPathContextStrc tIDAStarContext{};
+	tIDAStarContext.nIndexUsed = 1;
+
+	const int nDistToTarget = PATH_IdaStar_Heuristic(tTargetCoord, tStartCoord);
+	tIDAStarContext.pArrayPositions[0].nMinDist = 0;
+	tIDAStarContext.pArrayPositions[0].nMaxDist = nDistToTarget;
+	tIDAStarContext.pArrayPositions[0].nDist = nDistToTarget;
+	tIDAStarContext.pArrayPositions[0].tPoint = tStartCoord;
+	PATH_CacheInsertPoint(&tIDAStarContext, tIDAStarContext.pArrayPositions);
+	D2IdaStarPathPointsListStrc* pBestPathAttempt = 0;
+	D2IdaStarPathPointsListStrc* pCurPathAttempt = PATH_AssignLastPointDefault(&tIDAStarContext);
+	if (pCurPathAttempt)
+	{
+		do
+		{
+			if (pBestPathAttempt)
+			{
+				const uint16_t v9 = pCurPathAttempt->nMaxDist;
+				const uint16_t v10 = pBestPathAttempt->nMaxDist;
+				if (v9 >= v10 && (v9 != v10 || (__int16)pCurPathAttempt->nMinDist <= (__int16)pBestPathAttempt->nMinDist + 5))
+					continue;
+			}
+			pBestPathAttempt = pCurPathAttempt;     // skipped by continue
+			if (!pCurPathAttempt->nMaxDist)       // no attempt made, finished
+				break;
+			if (!sub_6FDA6D50(pPathInfo, &tIDAStarContext, pCurPathAttempt, tTargetCoord))
+				break;
+			pCurPathAttempt = PATH_AssignLastPointDefault(&tIDAStarContext);
+		} while (pCurPathAttempt);
+		return PATH_IdaStar_FlushPointListToDynamicPath(pBestPathAttempt, pPathInfo);
+	}
+	return FALSE;
 }
 
 //D2Common.0x6FDA6D10
@@ -44,8 +122,12 @@ void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathP
 	ppPathInfo[nIndex + 128] = pPathPoint;
 }
 
-////D2Common.0x6FDA6D50) --------------------------------------------------------
-//signed int __fastcall sub_6FDA6D50(int a1, int a2, int a3, int a4)
+//1.10f: D2Common.0x6FDA6D50
+//1.13c: D2Common.0x6FDCB3C0
+BOOL __fastcall sub_6FDA6D50(D2PathInfoStrc* pPathInfo, D2IdaStarPathContextStrc* pIDAStarContext, D2IdaStarPathPointsListStrc* a3, D2PathPointStrc tTargetCoord)
+{
+	UNIMPLEMENTED();
+}
 //{
 //	unsigned __int16 v4; // di@1
 //	unsigned __int16 v5; // bx@1
@@ -320,24 +402,23 @@ void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathP
 //	return result;
 //}
 
-//D2Common.0x6FDA7230
-int __stdcall sub_6FDA7230(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
+//1.10f: D2Common.0x6FDA7230
+//1.13c: D2Common.0x6FDCAF70
+// Diagonal distance with D=2 and D2=3 (2 to move to an adjacent pixel, 3 in diagonal)
+// http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#diagonal-distance 
+// Note: This heuristic returns values in the same order as the Euclidian distance to pixel centers
+//       It is both "admissible" and "consistent".
+// Sample return values for the first quadrant:
+// dY
+// |6 7 8 9
+// |4 5 6 8
+// |2 3 5 7
+// |0 2 4 6
+// +-------dX
+int __stdcall PATH_IdaStar_Heuristic(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
-	int nDiffX = 0;
-	int nDiffY = 0;
-
-	nDiffX = pPoint1.X - pPoint2.X;
-	if (nDiffX < 0)
-	{
-		nDiffX = -nDiffX;
-	}
-
-	nDiffY = pPoint1.Y - pPoint2.Y;
-	if (nDiffY < 0)
-	{
-		nDiffY = -nDiffY;
-	}
-
+	const int nDiffX = std::abs(pPoint1.X - pPoint2.X);
+	const int nDiffY = std::abs(pPoint1.Y - pPoint2.Y);
 	if (nDiffX < nDiffY)
 	{
 		return nDiffX + 2 * nDiffY;
@@ -348,7 +429,8 @@ int __stdcall sub_6FDA7230(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 	}
 }
 
-//D2Common.0x6FDA7280
+//1.10f: D2Common.0x6FDA7280
+//1.13c: D2Common.0x6FDCAF20
 D2PathInfoStrc* __fastcall sub_6FDA7280(D2PathInfoStrc** ppPathInfo, D2PathPointStrc pPathPoint)
 {
 	for (D2PathInfoStrc* result = ppPathInfo[(dword_6FDD17E0[pPathPoint.X & 0x7F] + dword_6FDD19E0[pPathPoint.Y & 0x7F]) & 0x7F]; result; result = result->pNext)
@@ -486,7 +568,9 @@ D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPoint
 //	return result;
 //}
 
-////D2Common.0x6FDA7490) --------------------------------------------------------
+
+//1.10f: D2Common.0x6FDA7490
+//1.13c: D2Common.0x6FDCAFB0
 //signed int __userpurge sub_6FDA7490<eax>(int a1<edx>, int a2<edi>, int a3, int a4, int a5)
 //{
 //	int v5; // ebp@1
@@ -805,11 +889,12 @@ D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPoint
 //	return result;
 //}
 
-//D2Common.0x6FDA78A0
+//1.10f: D2Common.0x6FDA78A0
+//1.13c: D2Common.0x6FDCAB50
 // Takes a path list, and builds the path using straight lines into the path info.
 // Note that the path list stores the path from the end to the beginning (in reverse order).
 // It also seems like it won't copy the last  point of the path list (first of the array), not sure if it's intended or not.
-signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPoint, D2PathInfoStrc* pPathInfo)
+signed int __fastcall PATH_IdaStar_FlushPointListToDynamicPath(D2IdaStarPathPointsListStrc* pCurPoint, D2PathInfoStrc* pPathInfo)
 {
 	if (!pCurPoint)
 	{
@@ -821,17 +906,17 @@ signed int __fastcall PATH_SimplifyToLines_6FDA78A0(D2PathPointsListStrc* pCurPo
 	// Assumes all points are conex, so we can't have a delta of -2, hence used for init
 	int prevDeltaX = -2;
 	int prevDeltaY = -2;
-	while (pCurPoint && pCurPoint->pNextEntry && nbPoints < D2DynamicPathStrc::MAXPATHLEN)
+	while (pCurPoint && pCurPoint->pNextPathAttempt && nbPoints < D2DynamicPathStrc::MAXPATHLEN)
 	{
-		D2PathPointsListStrc* pNextPoint = pCurPoint->pNextEntry;
-		const int deltaX = pCurPoint->point.X - pNextPoint->point.X;
-		const int deltaY = pCurPoint->point.Y - pNextPoint->point.Y;
+		D2IdaStarPathPointsListStrc* pNextPoint = pCurPoint->pNextPathAttempt;
+		const int deltaX = pCurPoint->tPoint.X - pNextPoint->tPoint.X;
+		const int deltaY = pCurPoint->tPoint.Y - pNextPoint->tPoint.Y;
 		// If the direction doesn't change, then ignore the point
 		if (deltaX != prevDeltaX || deltaY != prevDeltaY)
 		{
 			++nbPoints;
 			// Store path in reverse order
-			tempPathPoints[D2DynamicPathStrc::MAXPATHLEN  - nbPoints] = pCurPoint->point;
+			tempPathPoints[D2DynamicPathStrc::MAXPATHLEN  - nbPoints] = pCurPoint->tPoint;
 			prevDeltaX = deltaX;
 			prevDeltaY = deltaY;
 		}

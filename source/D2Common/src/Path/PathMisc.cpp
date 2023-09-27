@@ -589,7 +589,6 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 //D2Common.6FDAB130
 int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 {
-
 	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
 	pDynamicPath->dwCurrentPointIdx = 0;
 	pDynamicPath->dwPathPoints = 0;
@@ -616,7 +615,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 	const int nMaxDistSquared = nMaxDist * nMaxDist;
 	if (nSquaredDistance <= nMaxDistSquared)
 	{
-		int result = sub_6FDA69E0(pPathInfo);
+		int result = PATH_IDAStar_ComputePath(pPathInfo);
 		if (result)
 			return result;
 		if (v3)
