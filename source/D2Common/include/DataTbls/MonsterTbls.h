@@ -339,7 +339,7 @@ struct D2MonStatsTxt
 	uint16_t unk0x0A;						//0x0A
 	union
 	{
-		uint32_t dwMonStatsFlags;				//0x0C
+		uint32_t dwMonStatsFlags;				//0x0C D2C_MonStats2TxtModeFlags
 		uint8_t nMonStatsFlags[4];				//0x0C
 	};
 	uint32_t dwCode;						//0x10
@@ -455,11 +455,11 @@ struct D2MonStats2Txt
 	uint8_t pad0xED[3];						//0xED
 	union
 	{
-		uint32_t dwModeFlags;					//0xF0 If flag is set, mode is enabled. See D2C_MonModes.
+		uint32_t dwModeFlags;					//0xF0 If flag is set, mode is enabled. See D2C_MonModes/D2C_MonStats2TxtModeFlags.
 		uint8_t nModeFlags[4];					//0xF0
 	};
 	uint8_t nModeDirections[NUMBER_OF_MONMODES]; //0xF4
-	uint8_t unusedFlags[4];					//0x104
+	uint8_t nModeEnabledWhenMovingFlags[4];	//0x104 See D2C_MonStats2TxtModeFlags
 	uint8_t nInfernoLen;					//0x108
 	uint8_t nInfernoAnim;					//0x109
 	uint8_t nInfernoRollback;				//0x10A

@@ -800,7 +800,7 @@ void __fastcall sub_6FC63940(D2GameStrc* pGame, D2UnitStrc* pUnit)
     if (pUnit)
     {
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-        if (pMonStats2TxtRecord && pMonStats2TxtRecord->unusedFlags[1] & gdwBitMasks[0])
+        if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[1] & gdwBitMasks[0])
         {
             modeChange.unk0x14[1] = 101;
         }
@@ -833,7 +833,7 @@ void __fastcall sub_6FC63A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
     if (pUnit)
     {
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-        if (pMonStats2TxtRecord && pMonStats2TxtRecord->unusedFlags[1] & gdwBitMasks[0])
+        if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[1] & gdwBitMasks[0])
         {
             modeChange.unk0x14[1] = 101;
         }
@@ -1235,7 +1235,7 @@ int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
         else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
         {
             D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pModeChange->pUnit->dwClassId);
-            if (pMonStats2TxtRecord && pMonStats2TxtRecord->unusedFlags[pModeChange->nMode >> 3] & gdwBitMasks[pModeChange->nMode & 7])
+            if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pModeChange->nMode >> 3] & gdwBitMasks[pModeChange->nMode & 7])
             {
                 bContinue = true;
             }
@@ -1299,7 +1299,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-                    if (pMonStats2TxtRecord && pMonStats2TxtRecord->unusedFlags[pUnit->dwAnimMode >> 3] & gdwBitMasks[pUnit->dwAnimMode & 7])
+                    if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pUnit->dwAnimMode >> 3] & gdwBitMasks[pUnit->dwAnimMode & 7])
                     {
                         v10 = 1;
                     }
@@ -1970,7 +1970,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
                 else
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-                    if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->unusedFlags[nCurrentAnimMode >> 3] & gdwBitMasks[nCurrentAnimMode & 7]))
+                    if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nCurrentAnimMode >> 3] & gdwBitMasks[nCurrentAnimMode & 7]))
                     {
                         sub_6FCBCE70(pGame, pUnit);
                     }
@@ -2072,7 +2072,7 @@ void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D
     else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
     {
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-        if (pMonStats2TxtRecord && pMonStats2TxtRecord->unusedFlags[nMode >> 3] & gdwBitMasks[nMode & 7])
+        if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nMode >> 3] & gdwBitMasks[nMode & 7])
         {
             pModeChange->unk0x14[1] = 101;
         }
