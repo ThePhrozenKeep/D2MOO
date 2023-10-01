@@ -4,7 +4,9 @@
 #include "D2Collision.h"
 #include <cmath>
 
-const int dword_6FDD17E0[] =
+//1.10f: D2Common.0x6FDD17E0
+//1.13c: D2Common.0x6FDDB458
+const int gaIdaStar_PointCacheHashMaskX[IDASTAR_CACHE_SIZE] =
 {
 	57, 92, 72, 94, 119, 80, 14, 84, 93, 17, 20, 37, 87, 70, 100, 108,
 	30, 91, 85, 60, 40, 3, 118, 78, 81, 109, 43, 26, 67, 27, 49, 75, 
@@ -16,7 +18,9 @@ const int dword_6FDD17E0[] =
 	25, 32, 124, 127, 76, 8, 79, 21, 102, 52, 107, 73, 13, 116, 98, 12
 };
 
-const int dword_6FDD19E0[] =
+//1.10f: D2Common.0x6FDD19E0
+//1.13c: D2Common.0x6FDDB658
+const int gaIdaStar_PointCacheHashMaskY[IDASTAR_CACHE_SIZE] =
 {
 	114, 80, 68, 91, 97, 73, 127, 88, 18, 58, 101, 41, 19, 108, 6, 8,
 	24, 99, 83, 33, 77, 56, 74, 37, 43, 107, 85, 12, 75, 30, 27, 23,
@@ -52,18 +56,72 @@ BOOL PATH_TargetLocationHasEnoughRoom(D2PathInfoStrc* pPathInfo)
 		|| !COLLISION_CheckAnyCollisionWithPattern(pStartRoom, nTargetX + 0, nTargetY + 2, nCollisionPattern, nCollisionMask);
 }
 
-//1.10f: Inlined
-//1.13c: D2Common.0x6FDCAE20
-void PATH_CacheInsertPoint(D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pPointToInsert)
+// Helper function
+static D2IdaStarPathPointsListStrc* PATH_IdaStar_FindSortedByFScoreInsertionPoint(D2IdaStarPathContextStrc* pIdaStarContext, uint16_t nFScore)
 {
-	UNIMPLEMENTED();
+	D2IdaStarPathPointsListStrc* pInsertionPoint = nullptr;
+	for (D2IdaStarPathPointsListStrc* pCurrent = pIdaStarContext->pSortedListByFScore;
+		pCurrent != nullptr;
+		pCurrent = pCurrent->pNextSortedByFScore)
+	{
+		if (pCurrent->nFScore >= nFScore)
+		{
+			break;
+		}
+		pInsertionPoint = pCurrent;
+	}
+	return pInsertionPoint;
+}
+
+// Helper function
+static D2IdaStarPathPointsListStrc* PATH_IdaStar_RemoveCache0Point(D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pToRemove)
+{
+	D2IdaStarPathPointsListStrc* pPreviousPoint = nullptr;
+	
+	const uint8_t nCacheIndex = (gaIdaStar_PointCacheHashMaskX[pToRemove->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pToRemove->tPoint.Y & 0x7F]) & 0x7F;
+	for (D2IdaStarPathPointsListStrc* pCache0Entry = pIdaStarContext->aCache0[nCacheIndex];
+		pCache0Entry != nullptr;
+		pCache0Entry = pCache0Entry->pNextCachePoint)
+	{
+		if (pCache0Entry == pToRemove)
+		{
+			break;
+		}
+
+		pPreviousPoint = pCache0Entry;
+
+		// Safety check, original game didn't actually stop on pCache0Entry != nullptr
+		// This is because it expects the point to be in the list!
+		D2_ASSERT(pCache0Entry->pNextCachePoint != nullptr);
+	}
+
+	if (pPreviousPoint)
+	{
+		pPreviousPoint->pNextCachePoint = pToRemove->pNextCachePoint;
+	}
+	else
+	{
+		pIdaStarContext->aCache0[nCacheIndex] = pToRemove->pNextCachePoint; // Handle the case where pIdaStarContext->aCache0[nCacheIndex] == pToRemove
+	}
+	pToRemove->pNextCachePoint = 0; // Not in the cache list anymore
+	return pPreviousPoint;
 }
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDCB220
-D2IdaStarPathPointsListStrc* PATH_AssignLastPointDefault(D2IdaStarPathContextStrc* pIdaStarContext)
+// TODO: rename?
+D2IdaStarPathPointsListStrc* PATH_IdaStar_RemoveFromCandidates(D2IdaStarPathContextStrc* pIdaStarContext)
 {
-	UNIMPLEMENTED();
+	D2IdaStarPathPointsListStrc* pPopped = pIdaStarContext->pSortedListByFScore;
+	if (pPopped)
+	{
+		// pop from sorted list
+		pIdaStarContext->pSortedListByFScore = pPopped->pNextSortedByFScore;
+		// Transfer from cache0 to cache1
+		PATH_IdaStar_RemoveCache0Point(pIdaStarContext, pPopped);
+		PATH_IdaStar_PushPointListToCache1(pIdaStarContext, pPopped);
+	}
+	return pPopped;
 }
 
 //1.00:  D2Common.0x10056EC0
@@ -83,30 +141,31 @@ int __fastcall PATH_IDAStar_ComputePath(D2PathInfoStrc* pPathInfo)
 	tIDAStarContext.nIndexUsed = 1;
 
 	const int nDistToTarget = PATH_IdaStar_Heuristic(tTargetCoord, tStartCoord);
-	tIDAStarContext.pArrayPositions[0].nMinDist = 0;
-	tIDAStarContext.pArrayPositions[0].nMaxDist = nDistToTarget;
-	tIDAStarContext.pArrayPositions[0].nDist = nDistToTarget;
+	tIDAStarContext.pArrayPositions[0].nBestDistanceFromStart = 0;
+	tIDAStarContext.pArrayPositions[0].nHeuristicDistanceToTarget = nDistToTarget;
+	tIDAStarContext.pArrayPositions[0].nFScore = nDistToTarget;
 	tIDAStarContext.pArrayPositions[0].tPoint = tStartCoord;
-	PATH_CacheInsertPoint(&tIDAStarContext, tIDAStarContext.pArrayPositions);
+	PATH_IdaStar_MakeCandidate(&tIDAStarContext, tIDAStarContext.pArrayPositions);
 	D2IdaStarPathPointsListStrc* pBestPathAttempt = 0;
-	D2IdaStarPathPointsListStrc* pCurPathAttempt = PATH_AssignLastPointDefault(&tIDAStarContext);
+	D2IdaStarPathPointsListStrc* pCurPathAttempt = PATH_IdaStar_RemoveFromCandidates(&tIDAStarContext);
 	if (pCurPathAttempt)
 	{
 		do
 		{
-			if (pBestPathAttempt)
+			if (pBestPathAttempt == nullptr
+			    || pCurPathAttempt->nHeuristicDistanceToTarget < pBestPathAttempt->nHeuristicDistanceToTarget
+				|| (pCurPathAttempt->nHeuristicDistanceToTarget == pBestPathAttempt->nHeuristicDistanceToTarget 
+					&& pCurPathAttempt->nBestDistanceFromStart > (pBestPathAttempt->nBestDistanceFromStart + 5))
+				)
 			{
-				const uint16_t v9 = pCurPathAttempt->nMaxDist;
-				const uint16_t v10 = pBestPathAttempt->nMaxDist;
-				if (v9 >= v10 && (v9 != v10 || (__int16)pCurPathAttempt->nMinDist <= (__int16)pBestPathAttempt->nMinDist + 5))
-					continue;
+				pBestPathAttempt = pCurPathAttempt;
 			}
-			pBestPathAttempt = pCurPathAttempt;     // skipped by continue
-			if (!pCurPathAttempt->nMaxDist)       // no attempt made, finished
+
+			if (pCurPathAttempt->nHeuristicDistanceToTarget == 0) // Reached target point
 				break;
 			if (!sub_6FDA6D50(pPathInfo, &tIDAStarContext, pCurPathAttempt, tTargetCoord))
 				break;
-			pCurPathAttempt = PATH_AssignLastPointDefault(&tIDAStarContext);
+			pCurPathAttempt = PATH_IdaStar_RemoveFromCandidates(&tIDAStarContext);
 		} while (pCurPathAttempt);
 		return PATH_IdaStar_FlushPointListToDynamicPath(pBestPathAttempt, pPathInfo);
 	}
@@ -114,293 +173,45 @@ int __fastcall PATH_IDAStar_ComputePath(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDA6D10
-void __fastcall sub_6FDA6D10(D2PathInfoStrc** ppPathInfo, D2PathInfoStrc* pPathPoint)
+int __fastcall PATH_IdaStar_PushPointListToCache1(D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pPointList)
 {
-	int nIndex = ((uint8_t)dword_6FDD17E0[pPathPoint->tStartCoord.X & 0x7F] + (uint8_t)dword_6FDD19E0[pPathPoint->tStartCoord.Y & 0x7F]) & 0x7F;
-
-	pPathPoint->pNext = ppPathInfo[nIndex + 128];
-	ppPathInfo[nIndex + 128] = pPathPoint;
+	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pPointList->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pPointList->tPoint.Y & 0x7F]) & 0x7F;
+	pPointList->pNextCachePoint = pIdaStarContext->aCache1[nHash];
+	pIdaStarContext->aCache1[nHash] = pPointList;
+	return nHash;
 }
 
 //1.10f: D2Common.0x6FDA6D50
 //1.13c: D2Common.0x6FDCB3C0
-BOOL __fastcall sub_6FDA6D50(D2PathInfoStrc* pPathInfo, D2IdaStarPathContextStrc* pIDAStarContext, D2IdaStarPathPointsListStrc* a3, D2PathPointStrc tTargetCoord)
+BOOL __fastcall sub_6FDA6D50(D2PathInfoStrc* pPathInfo, D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* a3, D2PathPointStrc tTargetCoord)
 {
-	UNIMPLEMENTED();
+	static const D2CoordStrc aOffsets[] =
+	{
+		{-1,-1},
+		{-1,1},
+		{1,-1},
+		{1,1},
+		{-1,0},
+		{0,-1},
+		{1,0},
+		{0,1}
+	};
+
+	for (D2CoordStrc tOffset : aOffsets)
+	{
+		D2PathPointStrc tNewPointCoord = a3->tPoint;
+		tNewPointCoord.X += tOffset.nX;
+		tNewPointCoord.Y += tOffset.nY;
+
+		if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, tNewPointCoord.X, tNewPointCoord.Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask) &&
+			!PATH_IdaStar_EvaluateNeighbour(pPathInfo, pIdaStarContext, a3, tNewPointCoord, tTargetCoord))
+		{
+			return FALSE;
+		}
+	}
+
+	return TRUE;
 }
-//{
-//	unsigned __int16 v4; // di@1
-//	unsigned __int16 v5; // bx@1
-//	signed __int16 v6; // ax@3
-//	__int16 v7; // bx@5
-//	int v8; // eax@5
-//	__int16 v9; // cx@23
-//	int v10; // eax@24
-//	int v11; // edi@43
-//	__int16 v12; // ax@44
-//	signed int result; // eax@61
-//	int v14; // [sp+10h] [bp-1Ch]@1
-//	int v15; // [sp+18h] [bp-14h]@1
-//	int v16; // [sp+1Ch] [bp-10h]@1
-//	int v17; // [sp+20h] [bp-Ch]@1
-//	int v18; // [sp+24h] [bp-8h]@1
-//	int v19; // [sp+24h] [bp-8h]@60
-//	int v20; // [sp+24h] [bp-8h]@62
-//	int v21; // [sp+24h] [bp-8h]@64
-//	int v22; // [sp+24h] [bp-8h]@66
-//	int v23; // [sp+24h] [bp-8h]@68
-//	int v24; // [sp+24h] [bp-8h]@70
-//	int v25; // [sp+24h] [bp-8h]@72
-//
-//	v14 = a2;
-//	v4 = *(_WORD *)a3 - 1;
-//	v5 = *(_WORD *)(a3 + 2) - 1;
-//	LOWORD(v18) = v4;
-//	HIWORD(v18) = v5;
-//	v15 = *(_DWORD *)(a1 + 44);
-//	v16 = *(_DWORD *)(a1 + 40);
-//	v17 = *(_DWORD *)(a1 + 8);
-//	if (!COLLISION_CheckAnyCollisionWithPattern(*(D2RoomStrc**)(a1 + 8), v4, v5, *(_DWORD *)(a1 + 40), *(_DWORD *)(a1 + 44)))
-//	{
-//		if (*(_WORD *)a3 == v4 || (v6 = 3, *(_WORD *)(a3 + 2) == v5))
-//			v6 = 2;
-//		v7 = v6 + *(_WORD *)(a3 + 8);
-//		v8 = sub_6FDA7280((void*)v14, v18);
-//		if (v8)
-//		{
-//			if (*(_DWORD *)(a3 + 16))
-//			{
-//				if (*(_DWORD *)(a3 + 20))
-//				{
-//					if (*(_DWORD *)(a3 + 24))
-//					{
-//						if (*(_DWORD *)(a3 + 28))
-//						{
-//							if (*(_DWORD *)(a3 + 32))
-//							{
-//								if (*(_DWORD *)(a3 + 36))
-//								{
-//									if (*(_DWORD *)(a3 + 40))
-//									{
-//										if (!*(_DWORD *)(a3 + 44))
-//											*(_DWORD *)(a3 + 44) = v8;
-//									}
-//									else
-//									{
-//										*(_DWORD *)(a3 + 40) = v8;
-//									}
-//								}
-//								else
-//								{
-//									*(_DWORD *)(a3 + 36) = v8;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(a3 + 32) = v8;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(a3 + 28) = v8;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(a3 + 24) = v8;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(a3 + 20) = v8;
-//				}
-//			}
-//			else
-//			{
-//				*(_DWORD *)(a3 + 16) = v8;
-//			}
-//			if (v7 < *(_WORD *)(v8 + 8))
-//			{
-//				v9 = *(_WORD *)(v8 + 6);
-//				*(_DWORD *)(v8 + 12) = a3;
-//				*(_WORD *)(v8 + 8) = v7;
-//				*(_WORD *)(v8 + 4) = v7 + v9;
-//			}
-//		}
-//		else
-//		{
-//			v10 = sub_6FDA72D0((void*)v14, v18);
-//			if (v10)
-//			{
-//				if (*(_DWORD *)(a3 + 16))
-//				{
-//					if (*(_DWORD *)(a3 + 20))
-//					{
-//						if (*(_DWORD *)(a3 + 24))
-//						{
-//							if (*(_DWORD *)(a3 + 28))
-//							{
-//								if (*(_DWORD *)(a3 + 32))
-//								{
-//									if (*(_DWORD *)(a3 + 36))
-//									{
-//										if (*(_DWORD *)(a3 + 40))
-//										{
-//											if (!*(_DWORD *)(a3 + 44))
-//												*(_DWORD *)(a3 + 44) = v10;
-//										}
-//										else
-//										{
-//											*(_DWORD *)(a3 + 40) = v10;
-//										}
-//									}
-//									else
-//									{
-//										*(_DWORD *)(a3 + 36) = v10;
-//									}
-//								}
-//								else
-//								{
-//									*(_DWORD *)(a3 + 32) = v10;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(a3 + 28) = v10;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(a3 + 24) = v10;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(a3 + 20) = v10;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(a3 + 16) = v10;
-//				}
-//				if (v7 < *(_WORD *)(v10 + 8))
-//				{
-//					*(_WORD *)(v10 + 4) = v7 + *(_WORD *)(v10 + 6);
-//					*(_DWORD *)(v10 + 12) = a3;
-//					*(_WORD *)(v10 + 8) = v7;
-//					sub_6FDA7390(v14, v10);
-//				}
-//			}
-//			else
-//			{
-//				v11 = sub_6FDA7450(v14);
-//				if (!v11)
-//					return 0;
-//				*(_DWORD *)(v11 + 12) = a3;
-//				*(_WORD *)(v11 + 8) = v7;
-//				v12 = sub_6FDA7230(v18, a4);
-//				*(_WORD *)(v11 + 6) = v12;
-//				*(_WORD *)(v11 + 4) = v7 + v12;
-//				*(_DWORD *)v11 = v18;
-//				sub_6FDA7320(v14, v11);
-//				if (*(_DWORD *)(a3 + 16))
-//				{
-//					if (*(_DWORD *)(a3 + 20))
-//					{
-//						if (*(_DWORD *)(a3 + 24))
-//						{
-//							if (*(_DWORD *)(a3 + 28))
-//							{
-//								if (*(_DWORD *)(a3 + 32))
-//								{
-//									if (*(_DWORD *)(a3 + 36))
-//									{
-//										if (*(_DWORD *)(a3 + 40))
-//										{
-//											if (!*(_DWORD *)(a3 + 44))
-//												*(_DWORD *)(a3 + 44) = v11;
-//										}
-//										else
-//										{
-//											*(_DWORD *)(a3 + 40) = v11;
-//										}
-//									}
-//									else
-//									{
-//										*(_DWORD *)(a3 + 36) = v11;
-//									}
-//								}
-//								else
-//								{
-//									*(_DWORD *)(a3 + 32) = v11;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(a3 + 28) = v11;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(a3 + 24) = v11;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(a3 + 20) = v11;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(a3 + 16) = v11;
-//				}
-//			}
-//		}
-//	}
-//	LOWORD(v19) = *(_WORD *)a3 - 1;
-//	HIWORD(v19) = *(_WORD *)(a3 + 2) + 1;
-//	if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)v19, HIWORD(v19), v16, v15)
-//		|| (result = sub_6FDA7490(v14, v17, a3, v19, a4)) != 0)
-//	{
-//		HIWORD(v20) = *(_WORD *)(a3 + 2) - 1;
-//		LOWORD(v20) = *(_WORD *)a3 + 1;
-//		if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v20), v16, v15)
-//			|| (result = sub_6FDA7490(v14, v17, a3, v20, a4)) != 0)
-//		{
-//			HIWORD(v21) = *(_WORD *)(a3 + 2) + 1;
-//			LOWORD(v21) = *(_WORD *)a3 + 1;
-//			if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 + 1), HIWORD(v21), v16, v15)
-//				|| (result = sub_6FDA7490(v14, v17, a3, v21, a4)) != 0)
-//			{
-//				HIWORD(v22) = *(_WORD *)(a3 + 2);
-//				LOWORD(v22) = *(_WORD *)a3 - 1;
-//				if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, (unsigned __int16)(*(_WORD *)a3 - 1), HIWORD(v22), v16, v15)
-//					|| (result = sub_6FDA7490(v14, v17, a3, v22, a4)) != 0)
-//				{
-//					LOWORD(v23) = *(_WORD *)a3;
-//					HIWORD(v23) = *(_WORD *)(a3 + 2) - 1;
-//					if (COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v23), v16, v15)
-//						|| (result = sub_6FDA7490(v14, v17, a3, v23, a4)) != 0)
-//					{
-//						HIWORD(v24) = *(_WORD *)(a3 + 2);
-//						LOWORD(v24) = *(_WORD *)a3 + 1;
-//						if (COLLISION_CheckAnyCollisionWithPattern(//							(D2RoomStrc*)v17, //							(unsigned __int16)(*(_WORD *)a3 + 1), //							HIWORD(v24), //							v16, //							v15)
-//							|| (result = sub_6FDA7490(v14, v17, a3, v24, a4)) != 0)
-//						{
-//							LOWORD(v25) = *(_WORD *)a3;
-//							HIWORD(v25) = *(_WORD *)(a3 + 2) + 1;
-//							if (!COLLISION_CheckAnyCollisionWithPattern((D2RoomStrc*)v17, *(_WORD *)a3, HIWORD(v25), v16, v15)
-//								&& !sub_6FDA7490(v14, v17, a3, v25, a4))
-//								return 0;
-//							result = 1;
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-//	return result;
-//}
 
 //1.10f: D2Common.0x6FDA7230
 //1.13c: D2Common.0x6FDCAF70
@@ -415,10 +226,10 @@ BOOL __fastcall sub_6FDA6D50(D2PathInfoStrc* pPathInfo, D2IdaStarPathContextStrc
 // |2 3 5 7
 // |0 2 4 6
 // +-------dX
-int __stdcall PATH_IdaStar_Heuristic(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
+int __stdcall PATH_IdaStar_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2)
 {
-	const int nDiffX = std::abs(pPoint1.X - pPoint2.X);
-	const int nDiffY = std::abs(pPoint1.Y - pPoint2.Y);
+	const int nDiffX = std::abs(tPoint1.X - tPoint2.X);
+	const int nDiffY = std::abs(tPoint1.Y - tPoint2.Y);
 	if (nDiffX < nDiffY)
 	{
 		return nDiffX + 2 * nDiffY;
@@ -429,465 +240,176 @@ int __stdcall PATH_IdaStar_Heuristic(D2PathPointStrc pPoint1, D2PathPointStrc pP
 	}
 }
 
+// Helper function
+static int16_t PATH_IdaStar_HeuristicForNeighbour(D2PathPointStrc tPoint, D2PathPointStrc tNeighbour)
+{
+	if (tPoint.X == tNeighbour.X || tPoint.Y == tNeighbour.Y)
+	{
+		return 2; // Adjacent pixel
+	}
+	else
+	{
+		return 3; // Diagonal pixel
+	}
+}
+
+//1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA7280
 //1.13c: D2Common.0x6FDCAF20
-D2PathInfoStrc* __fastcall sub_6FDA7280(D2PathInfoStrc** ppPathInfo, D2PathPointStrc pPathPoint)
+D2IdaStarPathPointsListStrc* __fastcall PATH_IdaStar_GetPointListFromCache0(D2IdaStarPathContextStrc* pIdaStarContext, D2PathPointStrc tPathPoint)
 {
-	for (D2PathInfoStrc* result = ppPathInfo[(dword_6FDD17E0[pPathPoint.X & 0x7F] + dword_6FDD19E0[pPathPoint.Y & 0x7F]) & 0x7F]; result; result = result->pNext)
+	const uint8_t nHash = uint8_t((gaIdaStar_PointCacheHashMaskX[tPathPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[tPathPoint.Y & 0x7F]) & 0x7F);
+	for (D2IdaStarPathPointsListStrc* pPointList = pIdaStarContext->aCache0[nHash];
+		pPointList != nullptr;
+		pPointList = pPointList->pNextCachePoint)
 	{
-		if (pPathPoint.X == result->tStartCoord.X && pPathPoint.Y == result->tStartCoord.Y)
+		if (tPathPoint.X == pPointList->tPoint.X && tPathPoint.Y == pPointList->tPoint.Y)
 		{
-			return result;
-		}		
-	}
-
-	return NULL;
-}
-
-//D2Common.0x6FDA72D0
-D2PathInfoStrc* __fastcall sub_6FDA72D0(D2PathInfoStrc** ppPathInfo, D2PathPointStrc pPathPoint)
-{
-	for (D2PathInfoStrc* result = ppPathInfo[((dword_6FDD17E0[pPathPoint.X & 0x7F] + dword_6FDD19E0[pPathPoint.Y & 0x7F]) & 0x7F) + 128]; result; result = result->pNext)
-	{
-		if (pPathPoint.X == result->tStartCoord.X && pPathPoint.Y == result->tStartCoord.Y)
-		{
-			return result;
+			return pPointList;
 		}
 	}
-
-	return NULL;
+	return nullptr;
 }
 
-////D2Common.0x6FDA7320) --------------------------------------------------------
-//signed int __fastcall sub_6FDA7320(int a1, int a2)
-//{
-//	int v2; // esi@1
-//	int v3; // ebp@1
-//	int v4; // eax@1
-//	signed int result; // eax@1
-//
-//	v2 = *(_DWORD *)(a1 + 1024);
-//	v3 = 0;
-//	v4 = (dword_6FDD17E0[*(_BYTE *)a2 & 127] + dword_6FDD19E0[*(_BYTE *)(a2 + 2) & 127]) & 127;
-//	*(_DWORD *)(a2 + 48) = *(_DWORD *)(a1 + 4 * v4);
-//	*(_DWORD *)(a1 + 4 * v4) = a2;
-//	result = *(_WORD *)(a2 + 4);
-//	if (!v2)
-//		goto LABEL_9;
-//	do
-//	{
-//		if (*(_WORD *)(v2 + 4) >= result)
-//			break;
-//		v3 = v2;
-//		v2 = *(_DWORD *)(v2 + 52);
-//	}
-//	while (v2);
-//	if (v3)
-//	{
-//		*(_DWORD *)(v3 + 52) = a2;
-//		*(_DWORD *)(a2 + 52) = v2;
-//	}
-//	else
-//	{
-//LABEL_9:
-//		result = *(_DWORD *)(a1 + 1024);
-//		*(_DWORD *)(a2 + 52) = result;
-//		*(_DWORD *)(a1 + 1024) = a2;
-//	}
-//	return result;
-//}
+//1.00:  D2Common.0x10057A10
+//1.10f: D2Common.0x6FDA72D0
+//1.13c: D2Common.0x6FDCAED0
+D2IdaStarPathPointsListStrc* __fastcall PATH_IdaStar_GetPointListFromCache1(D2IdaStarPathContextStrc* pIdaStarContext, D2PathPointStrc tPathPoint)
+{
+	const uint8_t nHash = uint8_t((gaIdaStar_PointCacheHashMaskX[tPathPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[tPathPoint.Y & 0x7F]) & 0x7F);
+	for (D2IdaStarPathPointsListStrc* pPointList = pIdaStarContext->aCache1[nHash];
+		pPointList != nullptr;
+		pPointList = pPointList->pNextCachePoint)
+	{
+		if (tPathPoint.X == pPointList->tPoint.X && tPathPoint.Y == pPointList->tPoint.Y)
+		{
+			return pPointList;
+		}
+	}
+	return nullptr;
+}
 
-////D2Common.0x6FDA7390) --------------------------------------------------------
-//int __thiscall sub_6FDA7390(int this, int a2)
-//{
-//	int result; // eax@1
-//	int v3; // eax@2
-//	signed int v4; // ebp@2
-//	int v5; // esi@2
-//	int v6; // ebx@2
-//	int v7; // eax@3
-//	signed __int16 v8; // di@5
-//	__int16 v9; // dx@7
-//	__int16 v10; // di@8
-//
-//	*(_DWORD *)(this + 4 * *(_DWORD *)(this + 13032) + 12232) = a2;
-//	result = *(_DWORD *)(this + 13032) + 1;
-//	for (*(_DWORD *)(this + 13032) = result; result; result = *(_DWORD *)(this + 13032))
-//	{
-//		v3 = *(_DWORD *)(this + 13032) - 1;
-//		v4 = 0;
-//		*(_DWORD *)(this + 13032) = v3;
-//		v5 = *(_DWORD *)(this + 4 * v3 + 12232);
-//		v6 = v5 + 16;
-//		do
-//		{
-//			v7 = *(_DWORD *)v6;
-//			if (!*(_DWORD *)v6)
-//				break;
-//			if (*(_WORD *)v5 != *(_WORD *)v7)
-//			{
-//				v8 = 3;
-//				if (*(_WORD *)(v5 + 2) != *(_WORD *)(v7 + 2))
-//					continue;
-//			}
-//			v8 = 2;
-//			v9 = v8 + *(_WORD *)(v5 + 8);
-//			if (v9 < *(_WORD *)(v7 + 8))
-//			{
-//				v10 = *(_WORD *)(v7 + 6);
-//				*(_DWORD *)(v7 + 12) = v5;
-//				*(_WORD *)(v7 + 8) = v9;
-//				*(_WORD *)(v7 + 4) = v9 + v10;
-//				*(_DWORD *)(this + 4 * (*(_DWORD *)(this + 13032))++ + 12232) = v7;
-//			}
-//			++v4;
-//			v6 += 4;
-//		}
-//		while (v4 < 8);
-//	}
-//	return result;
-//}
+//1.10f: D2Common.0x6FDA7320
+//1.13c: D2Common.0x6FDCAE20
+void __fastcall PATH_IdaStar_MakeCandidate(D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pPoint)
+{
+	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pPoint->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pPoint->tPoint.Y & 0x7F]) & 0x7F;
+	pPoint->pNextCachePoint = pIdaStarContext->aCache0[nHash];
+	pIdaStarContext->aCache0[nHash] = pPoint;
 
-////D2Common.0x6FDA7450) --------------------------------------------------------
-//int __thiscall sub_6FDA7450(int this)
-//{
-//	int v1; // eax@1
-//	int result; // eax@2
-//
-//	v1 = *(_DWORD *)(this + 12228);
-//	if (v1 == 200)
-//	{
-//		result = 0;
-//	}
-//	else
-//	{
-//		*(_DWORD *)(this + 12228) = v1 + 1;
-//		memset((void*)(this + 56 * v1 + 1028), 0, 0x38u);
-//		result = this + 56 * v1 + 1028;
-//	}
-//	return result;
-//}
+	if (D2IdaStarPathPointsListStrc* pInsertionPoint = PATH_IdaStar_FindSortedByFScoreInsertionPoint(pIdaStarContext, pPoint->nFScore))
+	{
+		pPoint->pNextSortedByFScore = pInsertionPoint->pNextSortedByFScore;
+		pInsertionPoint->pNextSortedByFScore = pPoint;
+	}
+	else
+	{
+		pPoint->pNextSortedByFScore = pIdaStarContext->pSortedListByFScore;
+		pIdaStarContext->pSortedListByFScore = pPoint;
+	}
+}
 
+//1.10f: D2Common.0x6FDA7390
+//1.13c: D2Common.0x6FDCAC50
+//Should be __thiscall but we have to use __fastcall, hence nUnused
+void __fastcall sub_6FDA7390(D2IdaStarPathContextStrc* pIDAStarContext, int nUnused, D2IdaStarPathPointsListStrc* pNewPoint)
+{
+	D2_MAYBE_UNUSED(nUnused);
+
+	pIDAStarContext->aPointsStack[pIDAStarContext->nStackCount++] = pNewPoint;
+	while (pIDAStarContext->nStackCount != 0)
+	{
+		D2IdaStarPathPointsListStrc* pCurrentPoint = pIDAStarContext->aPointsStack[--pIDAStarContext->nStackCount];
+		for (D2IdaStarPathPointsListStrc* pParent : pCurrentPoint->pParents)
+		{
+			if (!pParent)
+			{
+				break;
+			}
+			const int16_t nDistanceBetweenPoints = PATH_IdaStar_HeuristicForNeighbour(pCurrentPoint->tPoint, pParent->tPoint);
+			const int16_t nDistanceFromStart = nDistanceBetweenPoints + pCurrentPoint->nBestDistanceFromStart;
+			if (nDistanceFromStart < pParent->nBestDistanceFromStart)
+			{
+				pParent->pNextPathAttempt = pCurrentPoint;
+				pParent->nBestDistanceFromStart = nDistanceFromStart;
+				pParent->nFScore = nDistanceFromStart + pParent->nHeuristicDistanceToTarget;
+				pIDAStarContext->aPointsStack[pIDAStarContext->nStackCount++] = pParent;
+			}
+		}
+	}
+}
+
+//1.10f: D2Common.0x6FDA7450
+//1.13c: Inlined
+D2IdaStarPathPointsListStrc* __fastcall PATH_IdaStar_GetNewPathList(D2IdaStarPathContextStrc* pIdaStarContext)
+{
+	if (pIdaStarContext->nIndexUsed == 200)
+		return 0;
+	D2IdaStarPathPointsListStrc* pNewPathList = &pIdaStarContext->pArrayPositions[pIdaStarContext->nIndexUsed++];
+	memset(pNewPathList, 0, sizeof(D2IdaStarPathPointsListStrc));
+	return pNewPathList;
+}
+
+// Helper function
+static void PATH_IdaStar_PathListAddParent(D2IdaStarPathPointsListStrc* pPointList, D2IdaStarPathPointsListStrc* pParent)
+{
+	for (D2IdaStarPathPointsListStrc*& pParentRef : pPointList->pParents)
+	{
+		if (!pParentRef)
+		{
+			pParentRef = pParent;
+			break;
+		}
+	}
+}
 
 //1.10f: D2Common.0x6FDA7490
 //1.13c: D2Common.0x6FDCAFB0
-//signed int __userpurge sub_6FDA7490<eax>(int a1<edx>, int a2<edi>, int a3, int a4, int a5)
-//{
-//	int v5; // ebp@1
-//	signed __int16 v6; // ax@2
-//	int v7; // edi@4
-//	int v8; // ecx@4
-//	int i; // eax@4
-//	int v10; // ecx@9
-//	__int16 v11; // dx@30
-//	signed int result; // eax@30
-//	__int16 v13; // ax@48
-//	int v14; // eax@48
-//	int v15; // eax@49
-//	signed int v16; // ebp@49
-//	int v17; // esi@49
-//	int v18; // ebx@49
-//	int v19; // eax@50
-//	signed __int16 v20; // di@52
-//	__int16 v21; // cx@54
-//	__int16 v22; // di@55
-//	int v23; // eax@59
-//	int v24; // esi@60
-//	int v25; // ebx@62
-//	int v26; // eax@64
-//	int v27; // eax@67
-//	int v28; // edi@69
-//	int v29; // ecx@69
-//	int v30; // eax@69
-//	int v31; // [sp+18h] [bp+4h]@4
-//
-//	v5 = a3;
-//	if (*(_WORD *)a3 == (_WORD)a4 || (v6 = 3, *(_WORD *)(a3 + 2) == HIWORD(a4)))
-//		v6 = 2;
-//	LOWORD(a2) = v6 + *(_WORD *)(a3 + 8);
-//	v31 = a2;
-//	v8 = (dword_6FDD19E0[HIWORD(a4) & 0x7F] + dword_6FDD17E0[a4 & 0x7F]) & 0x7F;
-//	for (i = *(_DWORD *)(a1 + 4 * v8); i; i = *(_DWORD *)(i + 48))
-//	{
-//		if ((_WORD)a4 == *(_WORD *)i)
-//		{
-//			if (HIWORD(a4) == *(_WORD *)(i + 2))
-//			{
-//				if (*(_DWORD *)(v5 + 16))
-//				{
-//					if (*(_DWORD *)(v5 + 20))
-//					{
-//						if (*(_DWORD *)(v5 + 24))
-//						{
-//							if (*(_DWORD *)(v5 + 28))
-//							{
-//								if (*(_DWORD *)(v5 + 32))
-//								{
-//									if (*(_DWORD *)(v5 + 36))
-//									{
-//										if (*(_DWORD *)(v5 + 40))
-//										{
-//											if (!*(_DWORD *)(v5 + 44))
-//												*(_DWORD *)(v5 + 44) = i;
-//										}
-//										else
-//										{
-//											*(_DWORD *)(v5 + 40) = i;
-//										}
-//									}
-//									else
-//									{
-//										*(_DWORD *)(v5 + 36) = i;
-//									}
-//								}
-//								else
-//								{
-//									*(_DWORD *)(v5 + 32) = i;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(v5 + 28) = i;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(v5 + 24) = i;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(v5 + 20) = i;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(v5 + 16) = i;
-//				}
-//				if ((signed __int16)v31 < *(_WORD *)(i + 8))
-//				{
-//					v11 = v31 + *(_WORD *)(i + 6);
-//					*(_DWORD *)(i + 12) = v5;
-//					*(_WORD *)(i + 8) = v31;
-//					*(_WORD *)(i + 4) = v11;
-//					return 1;
-//				}
-//				return 1;
-//			}
-//			LOWORD(v7) = v31;
-//		}
-//	}
-//	v10 = *(_DWORD *)(a1 + 4 * v8 + 512);
-//	if (v10)
-//	{
-//		while (a4 != __PAIR__(*(_WORD *)(v10 + 2), *(_WORD *)v10))
-//		{
-//			v10 = *(_DWORD *)(v10 + 48);
-//			if (!v10)
-//				goto LABEL_59;
-//		}
-//		if (*(_DWORD *)(v5 + 16))
-//		{
-//			if (*(_DWORD *)(v5 + 20))
-//			{
-//				if (*(_DWORD *)(v5 + 24))
-//				{
-//					if (*(_DWORD *)(v5 + 28))
-//					{
-//						if (*(_DWORD *)(v5 + 32))
-//						{
-//							if (*(_DWORD *)(v5 + 36))
-//							{
-//								if (*(_DWORD *)(v5 + 40))
-//								{
-//									if (!*(_DWORD *)(v5 + 44))
-//										*(_DWORD *)(v5 + 44) = v10;
-//								}
-//								else
-//								{
-//									*(_DWORD *)(v5 + 40) = v10;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(v5 + 36) = v10;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(v5 + 32) = v10;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(v5 + 28) = v10;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(v5 + 24) = v10;
-//				}
-//			}
-//			else
-//			{
-//				*(_DWORD *)(v5 + 20) = v10;
-//			}
-//		}
-//		else
-//		{
-//			*(_DWORD *)(v5 + 16) = v10;
-//		}
-//		if ((signed __int16)v7 >= *(_WORD *)(v10 + 8)
-//			|| (v13 = *(_WORD *)(v10 + 6), //				*(_DWORD *)(v10 + 12) = v5, //				*(_WORD *)(v10 + 8) = v7, //				*(_WORD *)(v10 + 4) = v7 + v13, //				*(_DWORD *)(a1 + 4 * *(_DWORD *)(a1 + 13032) + 12232) = v10, //				v14 = *(_DWORD *)(a1 + 13032) + 1, //				(*(_DWORD *)(a1 + 13032) = v14) == 0))
-//			return 1;
-//		do
-//		{
-//			v15 = *(_DWORD *)(a1 + 13032) - 1;
-//			v16 = 0;
-//			*(_DWORD *)(a1 + 13032) = v15;
-//			v17 = *(_DWORD *)(a1 + 4 * v15 + 12232);
-//			v18 = v17 + 16;
-//			do
-//			{
-//				v19 = *(_DWORD *)v18;
-//				if (!*(_DWORD *)v18)
-//					break;
-//				if (*(_WORD *)v17 != *(_WORD *)v19)
-//				{
-//					v20 = 3;
-//					if (*(_WORD *)(v17 + 2) != *(_WORD *)(v19 + 2))
-//						continue;
-//				}
-//				v20 = 2;
-//				v21 = v20 + *(_WORD *)(v17 + 8);
-//				if (v21 < *(_WORD *)(v19 + 8))
-//				{
-//					v22 = *(_WORD *)(v19 + 6);
-//					*(_DWORD *)(v19 + 12) = v17;
-//					*(_WORD *)(v19 + 8) = v21;
-//					*(_WORD *)(v19 + 4) = v21 + v22;
-//					*(_DWORD *)(a1 + 4 * (*(_DWORD *)(a1 + 13032))++ + 12232) = v19;
-//				}
-//				++v16;
-//				v18 += 4;
-//			}
-//			while (v16 < 8);
-//		}
-//		while (*(_DWORD *)(a1 + 13032));
-//		result = 1;
-//	}
-//	else
-//	{
-//LABEL_59:
-//		v23 = *(_DWORD *)(a1 + 12228);
-//		if (v23 != 200
-//			&& (*(_DWORD *)(a1 + 12228) = v23 + 1, //				v24 = a1 + 56 * v23 + 1028, //				memset((void*)v24, 0, 0x38u), //				a1 + 56 * v23 != -1028))
-//		{
-//			*(_DWORD *)(a1 + 56 * v23 + 1040) = v5;
-//			v25 = (unsigned __int16)a4 - (unsigned __int16)a5;
-//			*(_WORD *)(a1 + 56 * v23 + 1036) = v31;
-//			if (v25 < 0)
-//				v25 = -v25;
-//			v26 = HIWORD(a4) - HIWORD(a5);
-//			if (HIWORD(a4) - HIWORD(a5) < 0)
-//				v26 = -v26;
-//			if (v25 < v26)
-//				v27 = v25 + 2 * v26;
-//			else
-//				v27 = v26 + 2 * v25;
-//			*(_WORD *)(v24 + 6) = v27;
-//			*(_WORD *)(v24 + 4) = v31 + v27;
-//			*(_DWORD *)v24 = a4;
-//			v28 = *(_DWORD *)(a1 + 1024);
-//			v29 = 0;
-//			v30 = (dword_6FDD17E0[*(_BYTE *)v24 & 0x7F] + dword_6FDD19E0[*(_BYTE *)(v24 + 2) & 0x7F]) & 0x7F;
-//			*(_DWORD *)(v24 + 48) = *(_DWORD *)(a1 + 4 * v30);
-//			*(_DWORD *)(a1 + 4 * v30) = v24;
-//			if (!v28)
-//				goto LABEL_94;
-//			do
-//			{
-//				if (*(_WORD *)(v28 + 4) >= (signed int)*(_WORD *)(v24 + 4))
-//					break;
-//				v29 = v28;
-//				v28 = *(_DWORD *)(v28 + 52);
-//			}
-//			while (v28);
-//			if (v29)
-//			{
-//				*(_DWORD *)(v29 + 52) = v24;
-//				*(_DWORD *)(v24 + 52) = v28;
-//			}
-//			else
-//			{
-//LABEL_94:
-//				*(_DWORD *)(v24 + 52) = *(_DWORD *)(a1 + 1024);
-//				*(_DWORD *)(a1 + 1024) = v24;
-//			}
-//			if (*(_DWORD *)(v5 + 16))
-//			{
-//				if (*(_DWORD *)(v5 + 20))
-//				{
-//					if (*(_DWORD *)(v5 + 24))
-//					{
-//						if (*(_DWORD *)(v5 + 28))
-//						{
-//							if (*(_DWORD *)(v5 + 32))
-//							{
-//								if (*(_DWORD *)(v5 + 36))
-//								{
-//									if (*(_DWORD *)(v5 + 40))
-//									{
-//										if (!*(_DWORD *)(v5 + 44))
-//											*(_DWORD *)(v5 + 44) = v24;
-//										return 1;
-//									}
-//									*(_DWORD *)(v5 + 40) = v24;
-//									result = 1;
-//								}
-//								else
-//								{
-//									*(_DWORD *)(v5 + 36) = v24;
-//									result = 1;
-//								}
-//							}
-//							else
-//							{
-//								*(_DWORD *)(v5 + 32) = v24;
-//								result = 1;
-//							}
-//						}
-//						else
-//						{
-//							*(_DWORD *)(v5 + 28) = v24;
-//							result = 1;
-//						}
-//					}
-//					else
-//					{
-//						*(_DWORD *)(v5 + 24) = v24;
-//						result = 1;
-//					}
-//				}
-//				else
-//				{
-//					*(_DWORD *)(v5 + 20) = v24;
-//					result = 1;
-//				}
-//			}
-//			else
-//			{
-//				*(_DWORD *)(v5 + 16) = v24;
-//				result = 1;
-//			}
-//		}
-//		else
-//		{
-//			result = 0;
-//		}
-//	}
-//	return result;
-//}
+signed int __fastcall PATH_IdaStar_EvaluateNeighbour(D2PathInfoStrc* pPathInfo, D2IdaStarPathContextStrc* pIdaStarContext, D2IdaStarPathPointsListStrc* pCurrentPointList, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord)
+{
+	const int16_t nDistanceBetweenPoints = PATH_IdaStar_HeuristicForNeighbour(pCurrentPointList->tPoint, tNewPointCoord);
+	const int16_t nNewPointDistance = pCurrentPointList->nBestDistanceFromStart + nDistanceBetweenPoints;
+	if (D2IdaStarPathPointsListStrc* pNewPointList = PATH_IdaStar_GetPointListFromCache0(pIdaStarContext, tNewPointCoord))
+	{
+		PATH_IdaStar_PathListAddParent(pCurrentPointList, pNewPointList);
+		if (nNewPointDistance < pNewPointList->nBestDistanceFromStart)
+		{
+			pNewPointList->pNextPathAttempt = pCurrentPointList;
+			pNewPointList->nBestDistanceFromStart = nNewPointDistance;
+			pNewPointList->nFScore = nNewPointDistance + pNewPointList->nHeuristicDistanceToTarget;
+		}
+		return TRUE;
+	}
+	else if(D2IdaStarPathPointsListStrc* pNewPointList = PATH_IdaStar_GetPointListFromCache1(pIdaStarContext, tNewPointCoord))
+	{
+		PATH_IdaStar_PathListAddParent(pCurrentPointList, pNewPointList);
+		if (nNewPointDistance < pNewPointList->nBestDistanceFromStart)
+		{
+			pNewPointList->pNextPathAttempt = pCurrentPointList;
+			pNewPointList->nBestDistanceFromStart = nNewPointDistance;
+			pNewPointList->nFScore = nNewPointDistance + pNewPointList->nHeuristicDistanceToTarget;
+			sub_6FDA7390(pIdaStarContext,/*unused*/0, pNewPointList);
+		}
+		return TRUE;
+	}
+	else if(D2IdaStarPathPointsListStrc* pNewPointList = PATH_IdaStar_GetNewPathList(pIdaStarContext))
+	{
+		PATH_IdaStar_PathListAddParent(pCurrentPointList, pNewPointList);
+
+		pNewPointList->tPoint = tNewPointCoord;
+		pNewPointList->nHeuristicDistanceToTarget = PATH_IdaStar_Heuristic(tNewPointCoord, tTargetCoord);
+
+		pNewPointList->pNextPathAttempt = pCurrentPointList;
+		pNewPointList->nBestDistanceFromStart = nNewPointDistance;
+		pNewPointList->nFScore = pNewPointList->nBestDistanceFromStart + pNewPointList->nHeuristicDistanceToTarget;
+		PATH_IdaStar_MakeCandidate(pIdaStarContext, pNewPointList);
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
 
 //1.10f: D2Common.0x6FDA78A0
 //1.13c: D2Common.0x6FDCAB50
