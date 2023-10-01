@@ -2,6 +2,7 @@
 #include "Path/Path_IDAStar.h"
 
 #include "D2Collision.h"
+#include "D2Dungeon.h"
 #include <cmath>
 
 //1.10f: D2Common.0x6FDD17E0
@@ -454,12 +455,73 @@ signed int __fastcall PATH_IdaStar_FlushPointListToDynamicPath(D2IdaStarPathPoin
 	return nbPoints;
 }
 
-//D2Common.0x6FDA7970
-int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDC0BB0
+int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, D2PathInfoStrc* pInfo)
 {
 	UNIMPLEMENTED();
-	return 0;
 }
+
+//1.10f: D2Common.0x6FDA7970
+//1.13c: D2Common.0x6FDC0E40
+int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
+{
+	pPathInfo->field_14 *= 2;
+	D2DrlgCoordsStrc tStartRoomCoords;
+	DUNGEON_GetRoomCoordinates(pPathInfo->pStartRoom, &tStartRoomCoords);
+	D2DrlgCoordsStrc tPathRoomsAABB = tStartRoomCoords;
+
+	int nAABBHeight = 0;
+	int nAABBWidth = 0;
+
+	if (!pPathInfo->pTargetRoom || pPathInfo->pStartRoom == pPathInfo->pTargetRoom)
+	{
+		nAABBHeight = tPathRoomsAABB.nSubtileHeight;
+		nAABBWidth = tPathRoomsAABB.nSubtileWidth;
+	}
+	else
+	{
+		D2DrlgCoordsStrc tTargetRoomCoords;
+		DUNGEON_GetRoomCoordinates(pPathInfo->pTargetRoom, &tTargetRoomCoords);
+		if (tTargetRoomCoords.nSubtileX >= tStartRoomCoords.nSubtileX)
+		{
+			tPathRoomsAABB.nSubtileX = tStartRoomCoords.nSubtileX;
+			nAABBWidth = tTargetRoomCoords.nSubtileX + tTargetRoomCoords.nSubtileWidth - tStartRoomCoords.nSubtileX;
+		}
+		else
+		{
+			tPathRoomsAABB.nSubtileX = tTargetRoomCoords.nSubtileX;
+			nAABBWidth = tStartRoomCoords.nSubtileX + tStartRoomCoords.nSubtileWidth - tTargetRoomCoords.nSubtileX;
+		}
+		tPathRoomsAABB.nSubtileWidth = nAABBWidth;
+		if (tTargetRoomCoords.nSubtileY >= tStartRoomCoords.nSubtileY)
+		{
+			nAABBHeight = tTargetRoomCoords.nSubtileY + tTargetRoomCoords.nSubtileHeight - tStartRoomCoords.nSubtileY;
+			tPathRoomsAABB.nSubtileY = tStartRoomCoords.nSubtileY;
+		}
+		else
+		{
+			nAABBHeight = tStartRoomCoords.nSubtileY + tStartRoomCoords.nSubtileHeight - tTargetRoomCoords.nSubtileY;
+			tPathRoomsAABB.nSubtileY = tTargetRoomCoords.nSubtileY;
+		}
+		tPathRoomsAABB.nSubtileHeight = nAABBHeight;
+	}
+
+	// allow pathing at a distance of +/-10 subtiles if AABB is the same size as the start room
+	if (nAABBWidth == tStartRoomCoords.nSubtileWidth)
+	{
+		tPathRoomsAABB.nSubtileX -= 10;
+		tPathRoomsAABB.nSubtileWidth = nAABBWidth + 20;
+	}
+	if (nAABBHeight == tStartRoomCoords.nSubtileHeight)
+	{
+		nAABBHeight += 20;
+		tPathRoomsAABB.nSubtileY -= 10;
+		tPathRoomsAABB.nSubtileHeight = nAABBHeight;
+	}
+	return PATH_IdaStar_ComputePathWithRooms(&tPathRoomsAABB, pPathInfo);
+}
+
 
 ////D2Common.0x6FDA7D40) --------------------------------------------------------
 //int __fastcall sub_6FDA7D40(int a1, signed int a2, int a3)
