@@ -154,6 +154,44 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::EndDisabled();
 }
 
+
+void D2DebugPath(D2StaticPathStrc* pStaticPath)
+{
+
+}
+
+
+void D2DebugPath(D2DynamicPathStrc* pDynamicPath)
+{
+    ImGui::BulletText("Type=%d Flags=0x%x", pDynamicPath->dwPathType, pDynamicPath->dwFlags);
+    ImGui::BulletText("Game  (X,Y)=(%5d,%5d)", pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
+    ImGui::SameLine(); ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
+    ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->SP1.X, pDynamicPath->SP1.Y);
+    if (pDynamicPath->SP2 != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->SP2.X, pDynamicPath->SP2.Y);
+    if (pDynamicPath->SP3 != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->SP3.X, pDynamicPath->SP3.Y);
+    ImGui::BulletText   ("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
+
+}
+
+
+void D2DebugUnitPath(D2UnitStrc* pUnit)
+{
+    switch (pUnit->dwUnitType)
+    {
+    case UNIT_OBJECT:
+    case UNIT_ITEM:
+    case UNIT_TILE:
+        D2DebugPath(pUnit->pStaticPath);
+        break;
+
+    default:
+        D2DebugPath(pUnit->pDynamicPath);
+        break;
+    }
+}
+
 const char* GetAlignmentString(D2C_UnitAlignment nAlignment)
 {
     switch (nAlignment)
@@ -183,6 +221,8 @@ void D2DebugUnitCommon(D2UnitStrc* pUnit)
     }
     ImGui::SeparatorText("Animation");
     D2DebugUnitAnim(pUnit);
+    ImGui::SeparatorText("Path");
+    D2DebugUnitPath(pUnit);
 }
 
 D2UnitStrc* GetFirstPlayerInList(D2GameStrc* pGame)
