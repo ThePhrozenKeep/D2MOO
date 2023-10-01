@@ -10,12 +10,12 @@ struct D2UnitStrc;
 enum D2PathTypes
 {
 	PATHTYPE_IDASTAR = 0,
-	PATHTYPE_UNKNOWN_1 = 1,
+	PATHTYPE_FOLLOW_WALL = 1,
 	PATHTYPE_TOWARD = 2,
 	PATHTYPE_UNKNOWN_3 = 3,
 	PATHTYPE_MISSILE = 4,
-	PATHTYPE_MON_CIRCLE_1 = 5,
-	PATHTYPE_MON_CIRCLE_2 = 6,
+	PATHTYPE_MON_CIRCLE_CW = 5, // Clock-wise
+	PATHTYPE_MON_CIRCLE_CCW = 6,// Counter-clock-wise
 	PATHTYPE_UNKNOWN_7 = 7,
 	PATHTYPE_KNOCKBACK_SERVER = 8,
 	PATHTYPE_LEAP = 9,
@@ -24,8 +24,8 @@ enum D2PathTypes
 	PATHTYPE_UNKNOWN_12 = 12,
 	PATHTYPE_MON_OTHER_2 = 13,
 	PATHTYPE_BLESSEDHAMMER = 14,
-	PATHTYPE_MOTION = 15,
-	PATHTYPE_MISSILE_STREAM = 16, // Not actually used anywhere in the game
+	PATHTYPE_MOTION = 15,         // Called AStar server side ?
+	PATHTYPE_MISSILE_STREAM = 16, // Missile streams seems to be unused in the game even though the code exists?
 	PATHTYPE_UNKNOWN_17 = 17,
 
 	PATHTYPE_COUNT = 18

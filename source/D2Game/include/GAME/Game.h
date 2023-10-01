@@ -186,8 +186,8 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	D2ArenaStrc* pArenaCtrl;						//0x1D28
 	D2PartyControlStrc* pPartyControl;				//0x1D2C
 	uint8_t nBossFlagList[64];						//0x1D30
-	uint32_t dwMonModeData[17];						//0x1D70
-	uint32_t nMonModeData;							//0x1DB4
+	uint32_t dwPathTypesCount[17];					//0x1D70 Note: 17 entries only, means PATHTYPE_UNKNOWN_17 is unused ? Stats only
+	uint32_t nTotalPathTypesCount;					//0x1DB4
 	uint32_t nLastUpdateSystemTimeMs;				//0x1DB8
 	uint32_t nCreationTimeMs_Or_CPUTargetRatioFP10;	//0x1DBC Used to be the creation time, but now represents ratio of the budget used for last frame, in FP10 represenation (x/1024)
 	uint32_t nTickCountSinceNoClients;				//0x1DC0

@@ -1485,7 +1485,7 @@ int32_t __fastcall sub_6FC64B60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
     {
         if (pModeChange->pUnit->dwAnimMode)
         {
-            PATH_SetType(pModeChange->pUnit->pDynamicPath, 8);
+            PATH_SetType(pModeChange->pUnit->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
 
             int32_t nDistance = 5;
             if (pModeChange->pUnit->dwUnitType == UNIT_MONSTER)
@@ -1815,12 +1815,12 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         }
 
         int32_t v31 = pModeChange->unk0x18;
-        uint8_t v12 = pModeChange->unk0x14[1];
+        uint8_t nPathType = pModeChange->unk0x14[1];
         uint8_t dwNewDist = pModeChange->unk0x1C;
 
         if (pAiParam->unk0x18)
         {
-            v12 = pAiParam->unk0x18;
+            nPathType = pAiParam->unk0x18;
         }
 
         if (pAiParam->nVelocity)
@@ -1838,10 +1838,10 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         pAiParam->unk0x20 = 0;
 
         int32_t v13 = -1;
-        int32_t nIndex = 0;
-        if (v12 == 100)
+        int32_t nNewPathType = 0;
+        if (nPathType == 100)
         {
-            nIndex = 0;
+            nNewPathType = 0;
             v31 = 0;
         }
         else
@@ -1851,13 +1851,13 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
                 dwNewDist = 5;
             }
 
-            if (v12 == 101)
+            if (nPathType == 101)
             {
-                v12 = 13;
+                nPathType = PATHTYPE_MON_OTHER_2;
             }
 
-            nIndex = sub_6FC65680(pUnit, v12, pAiParam, dwNewDist);
-            if (nIndex != 1 && PATH_GetTargetUnit(pUnit->pDynamicPath))
+            nNewPathType = sub_6FC65680(pUnit, nPathType, pAiParam, dwNewDist);
+            if (nNewPathType != PATHTYPE_FOLLOW_WALL && PATH_GetTargetUnit(pUnit->pDynamicPath))
             {
                 v13 = 10;
             }
@@ -1866,11 +1866,11 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         pAiParam->unk0x14 = v13;
         pAiParam->unk0x10 = v31;
 
-        ++pGame->dwMonModeData[nIndex];
+        ++pGame->dwPathTypesCount[nNewPathType];
 
-        if (nIndex)
+        if (nNewPathType)
         {
-            ++pGame->nMonModeData;
+            ++pGame->nTotalPathTypesCount;
         }
 
         sub_6FC627B0(pUnit, nMode);
@@ -1989,7 +1989,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
     if (nCurrentAnimMode == MONMODE_GETHIT)
     {
-        PATH_SetType(pUnit->pDynamicPath, 0);
+        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_IDASTAR);
         PATH_SetNewDistance(pUnit->pDynamicPath, 0);
     }
 
@@ -2028,15 +2028,15 @@ int32_t __fastcall sub_6FC65680(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamS
     {
         switch (nPathType)
         {
-        case 2:
-        case 7:
-        case 9:
-        case 13:
+        case PATHTYPE_TOWARD:
+        case PATHTYPE_UNKNOWN_7:
+        case PATHTYPE_LEAP:
+        case PATHTYPE_MON_OTHER_2:
             UNITROOM_RefreshUnit(pUnit);
             pUnit->dwFlags |= UNITFLAG_DOUPDATE;
-            PATH_SetType(pUnit->pDynamicPath, 15);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_MOTION);
             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
-            return 15;
+            return PATHTYPE_MOTION;
 
         default:
             break;

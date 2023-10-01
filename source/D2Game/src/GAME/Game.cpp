@@ -2742,17 +2742,18 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
         }
     }
 
-    if (pGame->nMonModeData)
+    if (pGame->nTotalPathTypesCount)
     {
-        pGameInfo->nPathTowardPct = 100 * pGame->dwMonModeData[2] / pGame->nMonModeData;
-        pGameInfo->nPathClockPct = 100 * pGame->dwMonModeData[5] / pGame->nMonModeData;
-        pGameInfo->nPathCounterPct = 100 * pGame->dwMonModeData[6] / pGame->nMonModeData;
-        pGameInfo->nPathFoWallPct = 100 * pGame->dwMonModeData[1] / pGame->nMonModeData;
-        pGameInfo->nPathAStarPct = 100 * pGame->dwMonModeData[15] / pGame->nMonModeData;
-        pGameInfo->nPathTotalCalls = pGame->nMonModeData;
-        if (pGame->nMonModeData > 200 && pGameInfo->nPathTotalCalls)
+        pGameInfo->nPathTowardPct = 100 * pGame->dwPathTypesCount[PATHTYPE_TOWARD] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathClockPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CW] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathCounterPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CCW] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathFoWallPct = 100 * pGame->dwPathTypesCount[PATHTYPE_FOLLOW_WALL] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathAStarPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MOTION] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathTotalCalls = pGame->nTotalPathTypesCount;
+        if (pGame->nTotalPathTypesCount > 200 && pGameInfo->nPathTotalCalls)
         {
-            memset(pGame->dwMonModeData, 0, 0x48u);
+            memset(pGame->dwPathTypesCount, 0, sizeof(pGame->dwPathTypesCount));
+            pGame->nTotalPathTypesCount = 0;
         }
     }
 

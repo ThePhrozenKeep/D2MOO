@@ -792,7 +792,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     const int32_t a2 = nUnitType == UNIT_PLAYER ? COLLIDE_MASK_WALKING_UNIT : COLLIDE_MASK_MONSTER_DEFAULT;
     PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_PLAYER_WW);
-    PATH_SetType(pUnit->pDynamicPath, 7);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_UNKNOWN_7);
 
     if (!D2Common_10142(pUnit->pDynamicPath, pUnit, 0))
     {
@@ -1427,7 +1427,7 @@ int32_t __fastcall SKILLS_SetVelocityForLeap(D2GameStrc* pGame, D2UnitStrc* pUni
     }
 
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
-    PATH_SetType(pUnit->pDynamicPath, 9);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_LEAP);
 
     if (pUnit->dwUnitType != UNIT_MONSTER)
     {
@@ -1486,7 +1486,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
             PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
-            PATH_SetType(pUnit->pDynamicPath, 2);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
 
             if (nBaseId == MONSTER_SANDLEAPER1)
             {
@@ -1509,7 +1509,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
                         if (!pTargetRoom || !DUNGEON_IsRoomInTown(pTargetRoom))
                         {
                             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nTargetX, nTargetY);
-                            PATH_SetType(pUnit->pDynamicPath, 8);
+                            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
                             _10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
                             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
                         }
@@ -1527,7 +1527,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x80u);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_PLAYER);
             PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_WALKING_UNIT);
-            PATH_SetType(pUnit->pDynamicPath, 7);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_UNKNOWN_7);
             SKILLS_SetFlags(pSkill, 0x200);
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
             EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);

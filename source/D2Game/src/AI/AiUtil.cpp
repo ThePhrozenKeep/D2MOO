@@ -841,7 +841,7 @@ int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_
 	const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
 	PATH_SetTargetUnit(pUnit->pDynamicPath, *ppTarget);
-	PATH_SetType(pUnit->pDynamicPath, 2u);
+	PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
 	D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
 	PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
 	D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);

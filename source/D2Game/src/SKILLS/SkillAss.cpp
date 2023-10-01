@@ -786,7 +786,7 @@ void __fastcall sub_6FCF6C10(D2UnitStrc* pMissile, int32_t nLowSeed)
     }
 
     SEED_InitLowSeed(&pMissile->pSeed, nLowSeed);
-    PATH_SetType(pMissile->pDynamicPath, 10);
+    PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
     PATH_SetNewDistance(pMissile->pDynamicPath, nTotalFrames);
     D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 }
@@ -896,7 +896,7 @@ void __fastcall sub_6FCF7390(D2UnitStrc* pMissile, int32_t nInitSeed)
     }
 
     SEED_InitLowSeed(&pMissile->pSeed, nInitSeed);
-    PATH_SetType(pMissile->pDynamicPath, 10);
+    PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
     PATH_SetNewDistance(pMissile->pDynamicPath, nFrames);
 
     D2PathPointStrc* ppPathPoints = nullptr;

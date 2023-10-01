@@ -209,7 +209,7 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
 
     case PLRMODE_KNOCKBACK:
     {
-        PATH_SetType(pPlayer->pDynamicPath, 8);
+        PATH_SetType(pPlayer->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
         _10190_PATH_SetDistance(pPlayer->pDynamicPath, 5u);
         break;
     }

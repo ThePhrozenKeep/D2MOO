@@ -1192,7 +1192,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
 		goto LABEL_34;
 	v6 = pDynamicPath->dwPathType;
-	if (v6 >= 5 && v6 <= 6 && (signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
+	if ((v6 == PATHTYPE_MON_CIRCLE_CW || v6 == PATHTYPE_MON_CIRCLE_CCW) && (signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
 		goto LABEL_34;
 	v7 = pDynamicPath->pTargetUnit;
 	v8 = pDynamicPath->pUnit;
@@ -1281,7 +1281,7 @@ LABEL_34:
 		goto LABEL_32;
 	sub_6FDACEC0(pDynamicPath, (D2FP32_16*)a3, &pUnit);
 	sub_6FDACC40(pDynamicPath, 0, a3[0], a3[1]);
-	if (pDynamicPath->dwPathType != 4
+	if (pDynamicPath->dwPathType != PATHTYPE_MISSILE
 		&& (signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints)
 	{
 		PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);

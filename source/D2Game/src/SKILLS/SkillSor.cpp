@@ -269,7 +269,7 @@ void __fastcall SKILLS_MissileInit_ChargedBolt(D2UnitStrc* pMissile, int32_t a2)
     }
 
     SEED_InitLowSeed(&pMissile->pSeed, a2 + D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath));
-    PATH_SetType(pMissile->pDynamicPath, 10);
+    PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
     PATH_SetNewDistance(pMissile->pDynamicPath, nFrames);
     D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 }

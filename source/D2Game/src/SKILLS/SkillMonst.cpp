@@ -518,7 +518,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
             PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
-            PATH_SetType(pUnit->pDynamicPath, 9);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_LEAP);
             PATH_SetVelocity(pUnit->pDynamicPath, sub_6FD15500(pUnit), __FILE__, __LINE__);
             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
         }
@@ -557,7 +557,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
         PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
         PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
-        PATH_SetType(pUnit->pDynamicPath, 0x65u);
+        PATH_SetType(pUnit->pDynamicPath, 101); // This is a bug in the original game, this value seems to be used by monmodes but should be converted to PATHTYPE_MON_OTHER_2?
 
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
@@ -581,7 +581,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
                     PATH_SetStepNum(pUnit->pDynamicPath, 1u);
                     PATH_SetTargetUnit(pUnit->pDynamicPath, nullptr);
                     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, 3 * nX - 2 * CLIENTS_GetUnitX(pTarget), 3 * nY - 2 * CLIENTS_GetUnitY(pTarget));
-                    PATH_SetType(pUnit->pDynamicPath, 8);
+                    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
                     _10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
                     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
                 }
@@ -608,7 +608,7 @@ int32_t __fastcall SKILLS_SrvSt48_SwarmMove(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     PATH_SetNewDistance(pUnit->pDynamicPath, 5u);
 
-    PATH_SetType(pUnit->pDynamicPath, 2);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
     if (PATH_GetNumberOfPathPoints(pUnit->pDynamicPath))
     {
@@ -616,7 +616,7 @@ int32_t __fastcall SKILLS_SrvSt48_SwarmMove(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 1;
     }
     
-    PATH_SetType(pUnit->pDynamicPath, 1);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
     if (PATH_GetNumberOfPathPoints(pUnit->pDynamicPath))
     {
@@ -1586,7 +1586,7 @@ void __fastcall SKILLS_MissileInit_DiabWall(D2UnitStrc* pMissile, int32_t nInitS
 
         if ((ITEMS_RollRandomNumber(&pMissile->pSeed) % 100) >= 20)
         {
-            PATH_SetType(pMissile->pDynamicPath, 10);
+            PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
             PATH_SetNewDistance(pMissile->pDynamicPath, nFrames);
             D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
         }
@@ -1655,7 +1655,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
         }
 
         PATH_SetVelocity(pUnit->pDynamicPath, MONSTERUNIQUE_CalculatePercentage(nBaseVelocity, STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0), 100), __FILE__, __LINE__);
-        PATH_SetType(pUnit->pDynamicPath, 1);
+        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
         D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
         SKILLS_SetFlags(pSkill, 1);
         return 1;

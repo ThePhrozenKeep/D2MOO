@@ -3704,7 +3704,7 @@ void __fastcall MISSMODE_CatapultChargedBall_LightningTrailingJavelin_Submissile
     const int32_t nRange = std::min(MISSILE_GetTotalFrames(pMissile), 255);
 
     SEED_InitLowSeed(&pMissile->pSeed, D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath));
-    PATH_SetType(pMissile->pDynamicPath, 10);
+    PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
     PATH_SetNewDistance(pMissile->pDynamicPath, nRange);
     D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 }

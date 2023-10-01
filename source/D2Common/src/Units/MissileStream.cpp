@@ -47,7 +47,7 @@ void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int n
 	D2RoomStrc* pRoom = NULL;
 	int nPathPoints = 0;
 
-	PATH_SetType(pUnit->pDynamicPath, 16);
+	PATH_SetType(pUnit->pDynamicPath, PATHTYPE_MISSILE_STREAM);
 	D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
 
 	nPathPoints = PATH_GetPathPoints(pUnit->pDynamicPath, &ppPathPoints);
@@ -97,7 +97,7 @@ void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, in
 	int v29 = 0;
 	char v23 = 0;
 
-	PATH_SetType(pMissile->pDynamicPath, 16);
+	PATH_SetType(pMissile->pDynamicPath, PATHTYPE_MISSILE_STREAM);
 	D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 
 	nPathPoints = PATH_GetPathPoints(pMissile->pDynamicPath, &pPathPoints);

@@ -1063,7 +1063,7 @@ int32_t __fastcall SKILLS_SrvDo073_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* 
             D2UnitStrc* pMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
             if (pMissile)
             {
-                PATH_SetType(pMissile->pDynamicPath, 14);
+                PATH_SetType(pMissile->pDynamicPath, PATHTYPE_BLESSEDHAMMER);
                 D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 
                 const int32_t nPercentage = SKILLS_GetConcentrationDamageBonus(pUnit, nSkillId) + 100;

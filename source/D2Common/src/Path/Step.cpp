@@ -503,7 +503,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 	v7 = pDynamicPath->tVelocityVector.nY;
 	v8 = pDynamicPath->tVelocityVector.nX;
 	v47 = v7;
-	if (pDynamicPath->dwPathType == 4)
+	if (pDynamicPath->dwPathType == PATHTYPE_MISSILE)
 	{
 		v40 = 0;
 	}
@@ -554,7 +554,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		if (v20)
 		{
 			v21 = pDynamicPath->dwPathType;
-			if (v21 != 8 && v21 != 11)
+			if (v21 != PATHTYPE_KNOCKBACK_SERVER && v21 != PATHTYPE_KNOCKBACK_CLIENT)
 				pDynamicPath->nDist = v20 - 1;
 		}
 		pDynamicPath->nSavedStepsCount = 0;

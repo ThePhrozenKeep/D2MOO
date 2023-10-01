@@ -11660,7 +11660,7 @@ D2UnitStrc* __fastcall AITHINK_GetTargetForBoss(D2GameStrc* pGame, D2UnitStrc* p
 		if (pTemp && AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTemp, nX, nY) < 5 && !UNITS_IsInMeleeRange(pUnit, pTarget, 0))
 		{
 			PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
-			PATH_SetType(pUnit->pDynamicPath, 2u);
+			PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
 			D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
 
 			if (!PATH_GetNumberOfPathPoints(pUnit->pDynamicPath))
