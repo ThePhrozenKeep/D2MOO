@@ -19,12 +19,12 @@ To simplify, game coordinates are aligned with the tiles axes.
 The following formulae can be used to transform between game and client coordinates (assuming the same precision).
 
 ### Game to client (dimetric projection)
-- `clientX = 2 * gameY + gameX`
-- `clientY = 2 * gameY - gameX`
+- `clientX = (gameX - gameY) / 2`
+- `clientY = (gameX + gameY) / 4`
 
 ### Client to game
-- `gameX = (clientX - clientY) / 2`
-- `gameY = (clientX + clientY) / 4`
+- `gameX = 2 * clientY + clientX`
+- `gameY = 2 * clientY - clientX`
 
 ### Precision of the coordinates
 
