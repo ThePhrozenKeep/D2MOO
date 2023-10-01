@@ -686,8 +686,8 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
             D2DrlgCoordsStrc drlgCoords = {};
             DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
-            if ((nX + nAuraRange >= drlgCoords.dwSubtilesLeft || nX - nAuraRange <= drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth)
-                && (nY + nAuraRange >= drlgCoords.dwSubtilesTop || nY - nAuraRange <= drlgCoords.dwSubtilesTop + drlgCoords.dwSubtilesHeight))
+            if ((nX + nAuraRange >= drlgCoords.nSubtileX || nX - nAuraRange <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
+                && (nY + nAuraRange >= drlgCoords.nSubtileY || nY - nAuraRange <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight))
             {
                 D2UnitStrc* pTarget = pRoom->pUnitFirst;
                 while (pTarget)
@@ -871,9 +871,9 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
         {
             D2DrlgCoordsStrc drlgCoords = {};
             DUNGEON_GetRoomCoordinates(ppRoomList[i], &drlgCoords);
-            if (nX + nDistance >= drlgCoords.dwSubtilesLeft || nX - nDistance <= drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth)
+            if (nX + nDistance >= drlgCoords.nSubtileX || nX - nDistance <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
             {
-                if (nY + nDistance >= drlgCoords.dwSubtilesTop || nY - nDistance <= drlgCoords.dwSubtilesTop + drlgCoords.dwSubtilesHeight)
+                if (nY + nDistance >= drlgCoords.nSubtileY || nY - nDistance <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
                 {
                     for (D2UnitStrc* j = ppRoomList[i]->pUnitFirst; j; j = j->pRoomNext)
                     {

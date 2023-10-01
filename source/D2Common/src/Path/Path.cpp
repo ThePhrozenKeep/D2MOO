@@ -133,25 +133,26 @@ void __fastcall sub_6FDA8220(D2DynamicPathStrc* pDynamicPath)
 	{
 		for (int i = 0; i < pDynamicPath->dwPathPoints; ++i)
 		{
-			if (pDynamicPath->PathPoints[i].X < pDynamicPath->pRoom->nSubtileX)
+			const D2DrlgCoordsStrc& tRoomCoords = pDynamicPath->pRoom->tCoords;
+			if (pDynamicPath->PathPoints[i].X < tRoomCoords.nSubtileX)
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i].X >= pDynamicPath->pRoom->nSubtileX + pDynamicPath->pRoom->nSubtileWidth)
+			if (pDynamicPath->PathPoints[i].X >= tRoomCoords.nSubtileX + tRoomCoords.nSubtileWidth)
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i].Y < pDynamicPath->pRoom->nSubtileY)
+			if (pDynamicPath->PathPoints[i].Y < tRoomCoords.nSubtileY)
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;
 			}
 
-			if (pDynamicPath->PathPoints[i].Y >= pDynamicPath->pRoom->nSubtileY + pDynamicPath->pRoom->nSubtileHeight)
+			if (pDynamicPath->PathPoints[i].Y >= tRoomCoords.nSubtileY + tRoomCoords.nSubtileHeight)
 			{
 				pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 				break;

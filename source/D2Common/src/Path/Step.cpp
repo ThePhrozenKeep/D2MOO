@@ -282,10 +282,10 @@ void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, un
 	v10 = HIWORD(a3);
 	if (!v8)
 		goto LABEL_17;
-	if (v10 >= v8->nSubtileX && v10 < v8->nSubtileX + v8->nSubtileWidth)
+	if (v10 >= v8->tCoords.nSubtileX && v10 < v8->tCoords.nSubtileX + v8->tCoords.nSubtileWidth)
 	{
-		v11 = v8->nSubtileY;
-		if (v9 >= v11 && v9 < v11 + v8->nSubtileHeight)
+		v11 = v8->tCoords.nSubtileY;
+		if (v9 >= v11 && v9 < v11 + v8->tCoords.nSubtileHeight)
 			goto LABEL_16;
 	}
 	pppRoom = 0;
@@ -303,10 +303,10 @@ void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, un
 		v13 = pppRoom[v12];
 		if (v13)
 		{
-			if (v10 >= v13->nSubtileX && v10 < v13->nSubtileX + v13->nSubtileWidth)
+			if (v10 >= v13->tCoords.nSubtileX && v10 < v13->tCoords.nSubtileX + v13->tCoords.nSubtileWidth)
 			{
-				v14 = v13->nSubtileY;
-				if (v9 >= v14 && v9 < v14 + v13->nSubtileHeight)
+				v14 = v13->tCoords.nSubtileY;
+				if (v9 >= v14 && v9 < v14 + v13->tCoords.nSubtileHeight)
 					break;
 			}
 		}
@@ -336,10 +336,10 @@ LABEL_18:
 	v19 = pDynamicPath->tGameCoords.wPosY;
 	if (v17)
 	{
-		if (v18 >= v17->nSubtileX && v18 < v17->nSubtileX + v17->nSubtileWidth)
+		if (v18 >= v17->tCoords.nSubtileX && v18 < v17->tCoords.nSubtileX + v17->tCoords.nSubtileWidth)
 		{
-			v20 = v17->nSubtileY;
-			if (v19 >= v20 && v19 < v20 + v17->nSubtileHeight)
+			v20 = v17->tCoords.nSubtileY;
+			if (v19 >= v20 && v19 < v20 + v17->tCoords.nSubtileHeight)
 				return;
 		}
 	}
@@ -348,10 +348,10 @@ LABEL_18:
 	v23 = pDynamicPath->tGameCoords.wPosX;
 	if (!v17)
 		goto LABEL_32;
-	if (v23 < v17->nSubtileX
-		|| v23 >= v17->nSubtileX + v17->nSubtileWidth
-		|| (v24 = v17->nSubtileY, v22 < v24)
-		|| v22 >= v24 + v17->nSubtileHeight)
+	if (v23 < v17->tCoords.nSubtileX
+		|| v23 >= v17->tCoords.nSubtileX + v17->tCoords.nSubtileWidth
+		|| (v24 = v17->tCoords.nSubtileY, v22 < v24)
+		|| v22 >= v24 + v17->tCoords.nSubtileHeight)
 	{
 		pppRoom = 0;
 		a3 = 0;
@@ -375,10 +375,10 @@ LABEL_18:
 			v26 = pppRoom[v25];
 			if (v26)
 			{
-				if (v23 >= v26->nSubtileX && v23 < v26->nSubtileX + v26->nSubtileWidth)
+				if (v23 >= v26->tCoords.nSubtileX && v23 < v26->tCoords.nSubtileX + v26->tCoords.nSubtileWidth)
 				{
-					v27 = v26->nSubtileY;
-					if (v22 >= v27 && v22 < v27 + v26->nSubtileHeight)
+					v27 = v26->tCoords.nSubtileY;
+					if (v22 >= v27 && v22 < v27 + v26->tCoords.nSubtileHeight)
 						break;
 				}
 			}
@@ -728,10 +728,10 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 		v7 = HIWORD(v3);
 		if (!v5)
 			goto LABEL_18;
-		if (v7 < v5->nSubtileX
-			|| v7 >= v5->nSubtileX + v5->nSubtileWidth
-			|| (v8 = v5->nSubtileY, v6 < v8)
-			|| v6 >= v8 + v5->nSubtileHeight)
+		if (v7 < v5->tCoords.nSubtileX
+			|| v7 >= v5->tCoords.nSubtileX + v5->tCoords.nSubtileWidth
+			|| (v8 = v5->tCoords.nSubtileY, v6 < v8)
+			|| v6 >= v8 + v5->tCoords.nSubtileHeight)
 		{
 			pppRoom = 0;
 			pNumRooms = 0;
@@ -743,12 +743,12 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 				while (1)
 				{
 					v10 = pppRoom[v9];
-					if (v10 && v7 >= v10->nSubtileX)
+					if (v10 && v7 >= v10->tCoords.nSubtileX)
 					{
-						if (v7 < v10->nSubtileX + v10->nSubtileWidth)
+						if (v7 < v10->tCoords.nSubtileX + v10->tCoords.nSubtileWidth)
 						{
-							v11 = v10->nSubtileY;
-							if (v6 >= v11 && v6 < v11 + v10->nSubtileHeight)
+							v11 = v10->tCoords.nSubtileY;
+							if (v6 >= v11 && v6 < v11 + v10->tCoords.nSubtileHeight)
 							{
 								v5 = pppRoom[v26];
 								goto LABEL_17;
@@ -787,10 +787,10 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 			v15 = pPath->tGameCoords.wPosX;
 			v16 = pPath->tGameCoords.wPosY;
 			if (!v14
-				|| v15 < v14->nSubtileX
-				|| v15 >= v14->nSubtileX + v14->nSubtileWidth
-				|| (v17 = v14->nSubtileY, v16 < v17)
-				|| v16 >= v17 + v14->nSubtileHeight)
+				|| v15 < v14->tCoords.nSubtileX
+				|| v15 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth
+				|| (v17 = v14->tCoords.nSubtileY, v16 < v17)
+				|| v16 >= v17 + v14->tCoords.nSubtileHeight)
 			{
 				v18 = COLLISION_GetRoomBySubTileCoordinates(
 					v14,
@@ -1089,15 +1089,15 @@ LABEL_17:
 		goto LABEL_40;
 	if (!v14)
 		goto LABEL_39;
-	if (v11 < v14->nSubtileX || v11 >= v14->nSubtileX + v14->nSubtileWidth)
+	if (v11 < v14->tCoords.nSubtileX || v11 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth)
 	{
 		v16 = v27;
 	}
 	else
 	{
-		v15 = v14->nSubtileY;
+		v15 = v14->tCoords.nSubtileY;
 		v16 = v27;
-		if (*(DWORD*)&v27 >= v15 && *(DWORD*)&v27 < v15 + v14->nSubtileHeight)
+		if (*(DWORD*)&v27 >= v15 && *(DWORD*)&v27 < v15 + v14->tCoords.nSubtileHeight)
 		{
 			v17 = v14;
 			goto LABEL_38;
@@ -1258,10 +1258,10 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 			v1->dwPathPoints = 0;
 			return;
 		}
-		if (v6 < v4->nSubtileX
-			|| v6 >= v4->nSubtileX + v4->nSubtileWidth
-			|| (v7 = v4->nSubtileY, v5 < v7)
-			|| v5 >= v7 + v4->nSubtileHeight)
+		if (v6 < v4->tCoords.nSubtileX
+			|| v6 >= v4->tCoords.nSubtileX + v4->tCoords.nSubtileWidth
+			|| (v7 = v4->tCoords.nSubtileY, v5 < v7)
+			|| v5 >= v7 + v4->tCoords.nSubtileHeight)
 		{
 			pppRoom = 0;
 			pNumRooms = 0;
@@ -1273,12 +1273,12 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 				while (1)
 				{
 					v9 = pppRoom[v8];
-					if (v9 && v6 >= v9->nSubtileX)
+					if (v9 && v6 >= v9->tCoords.nSubtileX)
 					{
-						if (v6 < v9->nSubtileX + v9->nSubtileWidth)
+						if (v6 < v9->tCoords.nSubtileX + v9->tCoords.nSubtileWidth)
 						{
-							v10 = v9->nSubtileY;
-							if (v5 >= v10 && v5 < v10 + v9->nSubtileHeight)
+							v10 = v9->tCoords.nSubtileY;
+							if (v5 >= v10 && v5 < v10 + v9->tCoords.nSubtileHeight)
 							{
 								v4 = pppRoom[v27];
 								goto LABEL_17;
@@ -1317,20 +1317,20 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 			v15 = pDynamicPath->tGameCoords.wPosX;
 			v16 = pDynamicPath->tGameCoords.wPosY;
 			if (!v14
-				|| v15 < v14->nSubtileX
-				|| v15 >= v14->nSubtileX + v14->nSubtileWidth
-				|| (v17 = v14->nSubtileY, v16 < v17)
-				|| v16 >= v17 + v14->nSubtileHeight)
+				|| v15 < v14->tCoords.nSubtileX
+				|| v15 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth
+				|| (v17 = v14->tCoords.nSubtileY, v16 < v17)
+				|| v16 >= v17 + v14->tCoords.nSubtileHeight)
 			{
 				v18 = pDynamicPath->tGameCoords.wPosX;
 				v19 = pDynamicPath->tGameCoords.wPosY;
 				v20 = v18;
 				if (v14)
 				{
-					if (v18 >= v14->nSubtileX && v18 < v14->nSubtileX + v14->nSubtileWidth)
+					if (v18 >= v14->tCoords.nSubtileX && v18 < v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth)
 					{
-						v21 = v14->nSubtileY;
-						if (v19 >= v21 && v19 < v21 + v14->nSubtileHeight)
+						v21 = v14->tCoords.nSubtileY;
+						if (v19 >= v21 && v19 < v21 + v14->tCoords.nSubtileHeight)
 						{
 						LABEL_44:
 							if (v14)
@@ -1357,12 +1357,12 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 						while (1)
 						{
 							v23 = pppRoom[v22];
-							if (v23 && v20 >= v23->nSubtileX)
+							if (v23 && v20 >= v23->tCoords.nSubtileX)
 							{
-								if (v20 < v23->nSubtileX + v23->nSubtileWidth)
+								if (v20 < v23->tCoords.nSubtileX + v23->tCoords.nSubtileWidth)
 								{
-									v24 = v23->nSubtileY;
-									if (v19 >= v24 && v19 < v24 + v23->nSubtileHeight)
+									v24 = v23->tCoords.nSubtileY;
+									if (v19 >= v24 && v19 < v24 + v23->tCoords.nSubtileHeight)
 									{
 										v14 = pppRoom[v22];
 										goto LABEL_44;

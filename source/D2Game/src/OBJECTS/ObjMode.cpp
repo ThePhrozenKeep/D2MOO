@@ -756,8 +756,8 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
 
             D2GSPacketSrv07 packet07 = {};
             packet07.nHeader = 0x07;
-            packet07.nX = (WORD)pRoom->nTileXPos;
-            packet07.nY = (WORD)pRoom->nTileYPos;
+            packet07.nX = (WORD)pRoom->tCoords.nTileXPos;
+            packet07.nY = (WORD)pRoom->tCoords.nTileYPos;
             packet07.nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
             D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet07, sizeof(D2GSPacketSrv07));
 
@@ -1099,7 +1099,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler5_7_6FC75BC0(D2GameStrc* pGame, D2Unit
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
     const int32_t nX = pCoord.nX + 1;
-    if (nX >= drlgCoords.dwSubtilesLeft && nX < drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth)
+    if (nX >= drlgCoords.nSubtileX && nX < drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
     {
         D2UnitStrc* pFireSmall = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_FIRE_SMALL, nX, pCoord.nY, pGame, pRoom, 1, 1, 0);
         D2GAME_SetSparkChest_6FCBD7C0(pFireSmall, 2);

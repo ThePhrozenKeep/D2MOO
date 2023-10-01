@@ -144,7 +144,7 @@ void __fastcall LEVEL_AddClient(D2GameStrc* pGame, D2RoomStrc* pRoom, D2ClientSt
 
     D2DrlgCoordsStrc drlgCoords = {};
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-    D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.dwTilesLeft, drlgCoords.dwTilesTop);
+    D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.nTileXPos, drlgCoords.nTileYPos);
 
     DUNGEON_AddClientToRoom(pRoom, pClient);
 
@@ -194,7 +194,7 @@ void __fastcall LEVEL_RemoveClient(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Clien
 
     D2DrlgCoordsStrc drlgCoords = {};
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-    D2GAME_PACKETS_SendPacket0x08_6FC3D160(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.dwTilesLeft, drlgCoords.dwTilesTop);
+    D2GAME_PACKETS_SendPacket0x08_6FC3D160(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.nTileXPos, drlgCoords.nTileYPos);
 }
 
 //D2Game.0x6FC3BFB0

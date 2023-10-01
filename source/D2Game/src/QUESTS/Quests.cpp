@@ -2454,7 +2454,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 			const int32_t nY = y + nCenterY;
 
 			D2RoomStrc* pRoom1 = pRoom;
-			if (nY < drlgCoords.dwSubtilesTop || nY >= drlgCoords.dwSubtilesTop + drlgCoords.dwSubtilesHeight)
+			if (nY < drlgCoords.nSubtileY || nY >= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
 			{
 				pRoom1 = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
 			}
@@ -2468,14 +2468,14 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 					nX = x + nCenterX;
 
 					D2RoomStrc* pRoom2 = pRoom1;
-					if (nX < drlgCoords.dwSubtilesLeft || nX /*TODO: was nY instead, but most likely wrong*/ >= drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth)
+					if (nX < drlgCoords.nSubtileX || nX /*TODO: was nY instead, but most likely wrong*/ >= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
 					{
 						pRoom2 = D2GAME_GetRoom_6FC52070(pRoom1, nX, nY);
 					}
 
 					if (pRoom2 && !COLLISION_CheckMaskWithSizeXY(pRoom2, nX, nY, 2 * nSize + 1, 2 * nSize + 1, fCollision)
-						&& nX >= drlgCoords.dwSubtilesLeft && nX < drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth
-						&& nY >= drlgCoords.dwSubtilesTop && nY < drlgCoords.dwSubtilesTop + drlgCoords.dwSubtilesHeight)
+						&& nX >= drlgCoords.nSubtileX && nX < drlgCoords.nSubtileX + drlgCoords.nSubtileWidth
+						&& nY >= drlgCoords.nSubtileY && nY < drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
 					{
 						pCoord->nX = (nSize >> 1) + nX;
 						pCoord->nY = (nSize >> 1) + nY;
@@ -2724,7 +2724,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 	int32_t nCounter = 0;
 	while (1)
 	{
-		if (nY >= drlgCoords.dwSubtilesLeft && nX >= drlgCoords.dwSubtilesTop && nY < drlgCoords.dwSubtilesLeft + drlgCoords.dwSubtilesWidth - 1 && nX < drlgCoords.dwSubtilesHeight + drlgCoords.dwSubtilesTop - 1)
+		if (nY >= drlgCoords.nSubtileX && nX >= drlgCoords.nSubtileY && nY < drlgCoords.nSubtileX + drlgCoords.nSubtileWidth - 1 && nX < drlgCoords.nSubtileHeight + drlgCoords.nSubtileY - 1)
 		{
 			coord.nX = nY;
 			break;

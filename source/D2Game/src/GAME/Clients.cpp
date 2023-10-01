@@ -238,7 +238,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 
         D2DrlgCoordsStrc drlgCoords = {};
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-        D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.dwTilesLeft, (uint16_t)drlgCoords.dwTilesTop);
+        D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.nTileXPos, (uint16_t)drlgCoords.nTileYPos);
     }
 
     if (pRoom != pClient->pRoom)

@@ -14872,8 +14872,8 @@ void __fastcall AITHINK_Fn126_CatapultSpotter(D2GameStrc* pGame, D2UnitStrc* pUn
 		D2DrlgCoordsStrc drlgCoords = {};
 		DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
-		int32_t nX = drlgCoords.dwSubtilesLeft;
-		int32_t nY = drlgCoords.dwSubtilesTop;
+		int32_t nX = drlgCoords.nSubtileX;
+		int32_t nY = drlgCoords.nSubtileY;
 
 		int32_t nXOffset = 0;
 		int32_t nYOffset = 0;
@@ -14890,8 +14890,8 @@ void __fastcall AITHINK_Fn126_CatapultSpotter(D2GameStrc* pGame, D2UnitStrc* pUn
 
 		for (int32_t i = 0; i < 3; ++i)
 		{
-			nX += nXOffset * drlgCoords.dwSubtilesWidth;
-			nY += nYOffset * drlgCoords.dwSubtilesHeight;
+			nX += nXOffset * drlgCoords.nSubtileWidth;
+			nY += nYOffset * drlgCoords.nSubtileHeight;
 
 			if (SUNITINACTIVE_IsUnitInsideRoom(pGame, pRoom, nX, nY, nClassId))
 			{

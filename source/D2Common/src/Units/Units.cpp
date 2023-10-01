@@ -3901,9 +3901,9 @@ D2UnitStrc* __stdcall D2Common_10407_Impl(D2RoomStrc* pRoom, int nX, int nY, int
 	{
 		DUNGEON_GetRoomCoordinates(ppRoomList[i], &pDrlgCoords);
 
-		if (nX + 2 >= pDrlgCoords.dwSubtilesLeft || nX - 2 <= pDrlgCoords.dwSubtilesLeft + pDrlgCoords.dwSubtilesWidth)
+		if (nX + 2 >= pDrlgCoords.nSubtileX || nX - 2 <= pDrlgCoords.nSubtileX + pDrlgCoords.nSubtileWidth)
 		{
-			if (nY + 2 >= pDrlgCoords.dwSubtilesTop || nY - 2 <= pDrlgCoords.dwSubtilesTop + pDrlgCoords.dwSubtilesHeight)
+			if (nY + 2 >= pDrlgCoords.nSubtileY || nY - 2 <= pDrlgCoords.nSubtileY + pDrlgCoords.nSubtileHeight)
 			{
 				pUnit = ppRoomList[i]->pUnitFirst;
 				while (pUnit)

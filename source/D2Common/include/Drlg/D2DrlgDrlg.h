@@ -156,14 +156,14 @@ inline int GetMapTileLayer(uint32_t nMapTileFlags) { return ((nMapTileFlags & MA
 
 struct D2DrlgCoordsStrc
 {
-	int32_t dwSubtilesLeft;						//0x00
-	int32_t dwSubtilesTop;						//0x04
-	int32_t dwSubtilesWidth;					//0x08
-	int32_t dwSubtilesHeight;					//0x0C
-	int32_t dwTilesLeft;						//0x10
-	int32_t dwTilesTop;							//0x14
-	int32_t dwTilesWidth;						//0x18
-	int32_t dwTilesHeight;						//0x1C
+	int32_t nSubtileX;				//0x00 Called game coords in original game
+	int32_t nSubtileY;				//0x04
+	int32_t nSubtileWidth;			//0x08 Called nSizeGameX in original game
+	int32_t nSubtileHeight;			//0x0C Called nSizeGameY in original game
+	int32_t nTileXPos;				//0x10
+	int32_t nTileYPos;				//0x14
+	int32_t nTileWidth;				//0x18
+	int32_t nTileHeight;			//0x1C
 };
 
 struct D2RoomExStrc
@@ -219,21 +219,7 @@ struct D2DrlgDeleteStrc
 
 struct D2RoomStrc
 {
-	union
-	{
-		struct
-		{
-			int32_t nSubtileX;				//0x00
-			int32_t nSubtileY;				//0x04
-			int32_t nSubtileWidth;			//0x08
-			int32_t nSubtileHeight;			//0x0C
-			int32_t nTileXPos;				//0x10
-			int32_t nTileYPos;				//0x14
-			int32_t nTileWidth;				//0x18
-			int32_t nTileHeight;			//0x1C
-		};
-		D2DrlgCoordsStrc pCoords;			//0x00
-	};
+	D2DrlgCoordsStrc tCoords;				//0x00
 	D2DrlgRoomTilesStrc* pRoomTiles;		//0x20
 	D2RoomStrc** ppRoomList;				//0x24
 	int32_t nNumRooms;						//0x28

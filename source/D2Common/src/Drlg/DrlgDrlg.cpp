@@ -501,17 +501,17 @@ void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomE
 	D2DrlgCoordsStrc pDrlgCoords = {};
 	uint32_t dwFlags = 0;
 
-	pDrlgCoords.dwTilesLeft = pRoomEx->nTileXPos;
-	pDrlgCoords.dwSubtilesLeft = pRoomEx->nTileXPos;
-	pDrlgCoords.dwTilesTop = pRoomEx->nTileYPos;
-	pDrlgCoords.dwSubtilesTop = pRoomEx->nTileYPos;
-	pDrlgCoords.dwTilesWidth = pRoomEx->nTileWidth;
-	pDrlgCoords.dwSubtilesWidth = pRoomEx->nTileWidth;
-	pDrlgCoords.dwTilesHeight = pRoomEx->nTileHeight;
-	pDrlgCoords.dwSubtilesHeight = pRoomEx->nTileHeight;
+	pDrlgCoords.nTileXPos = pRoomEx->nTileXPos;
+	pDrlgCoords.nSubtileX = pRoomEx->nTileXPos;
+	pDrlgCoords.nTileYPos = pRoomEx->nTileYPos;
+	pDrlgCoords.nSubtileY = pRoomEx->nTileYPos;
+	pDrlgCoords.nTileWidth = pRoomEx->nTileWidth;
+	pDrlgCoords.nSubtileWidth = pRoomEx->nTileWidth;
+	pDrlgCoords.nTileHeight = pRoomEx->nTileHeight;
+	pDrlgCoords.nSubtileHeight = pRoomEx->nTileHeight;
 
-	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.dwSubtilesLeft, &pDrlgCoords.dwSubtilesTop);
-	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.dwSubtilesWidth, &pDrlgCoords.dwSubtilesHeight);
+	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.nSubtileX, &pDrlgCoords.nSubtileY);
+	DUNGEON_GameTileToSubtileCoords(&pDrlgCoords.nSubtileWidth, &pDrlgCoords.nSubtileHeight);
 
 	if (pRoomEx->pTileGrid->pTiles.nWalls || pRoomEx->pTileGrid->pTiles.nFloors)
 	{

@@ -1060,7 +1060,7 @@ void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Pr
 
     DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
 
-    D2UnitStrc* pUnit = SUNIT_CreatePresetUnit(pGame, pRoom, pPresetUnit->nUnitType, pPresetUnit->nIndex, pCoord.dwSubtilesLeft + pPresetUnit->nXpos, pCoord.dwSubtilesTop + pPresetUnit->nYpos, pPresetUnit->nMode, 0);
+    D2UnitStrc* pUnit = SUNIT_CreatePresetUnit(pGame, pRoom, pPresetUnit->nUnitType, pPresetUnit->nIndex, pCoord.nSubtileX + pPresetUnit->nXpos, pCoord.nSubtileY + pPresetUnit->nYpos, pPresetUnit->nMode, 0);
     if (!pUnit)
     {
         return;
@@ -1194,8 +1194,8 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
     {
         D2DrlgCoordsStrc drlgCoords = {};
         DUNGEON_GetRoomCoordinates(pSecondRoom, &drlgCoords);
-        pFirst->pObjectData->DestRoomCooords.nX = drlgCoords.dwTilesLeft;
-        pFirst->pObjectData->DestRoomCooords.nY = drlgCoords.dwTilesTop;
+        pFirst->pObjectData->DestRoomCooords.nX = drlgCoords.nTileXPos;
+        pFirst->pObjectData->DestRoomCooords.nY = drlgCoords.nTileYPos;
     }
 
     D2RoomStrc* pFirstRoom = UNITS_GetRoom(pFirst);
@@ -1203,8 +1203,8 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
     {
         D2DrlgCoordsStrc drlgCoords = {};
         DUNGEON_GetRoomCoordinates(pFirstRoom, &drlgCoords);
-        pSecond->pObjectData->DestRoomCooords.nX = drlgCoords.dwTilesLeft;
-        pSecond->pObjectData->DestRoomCooords.nY = drlgCoords.dwTilesTop;
+        pSecond->pObjectData->DestRoomCooords.nX = drlgCoords.nTileXPos;
+        pSecond->pObjectData->DestRoomCooords.nY = drlgCoords.nTileYPos;
     }
 }
 
@@ -2179,7 +2179,7 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc
         D2DrlgCoordsStrc drlgCoords = {};
 
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-        D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.dwTilesLeft, (uint16_t)drlgCoords.dwTilesTop);
+        D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.nTileXPos, (uint16_t)drlgCoords.nTileYPos);
 
         if (a7)
         {

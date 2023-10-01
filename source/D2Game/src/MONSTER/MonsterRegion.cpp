@@ -48,10 +48,10 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
     {
         D2DrlgCoordsStrc drlgCoords = {};
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-        nLeft = drlgCoords.dwSubtilesLeft + 1;
-        nTop = drlgCoords.dwSubtilesTop + 1;
-        nRight = drlgCoords.dwSubtilesWidth - 1;
-        nBottom = drlgCoords.dwSubtilesHeight - 1;
+        nLeft = drlgCoords.nSubtileX + 1;
+        nTop = drlgCoords.nSubtileY + 1;
+        nRight = drlgCoords.nSubtileWidth - 1;
+        nBottom = drlgCoords.nSubtileHeight - 1;
     }
 
     int32_t nRoomCoordListIndex = 0;
@@ -753,10 +753,10 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
     {
         D2DrlgCoordsStrc drlgCoords = {};
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
-        nLeft = drlgCoords.dwSubtilesLeft + 1;
-        nTop = drlgCoords.dwSubtilesTop + 1;
-        nBottom = drlgCoords.dwSubtilesHeight - 1;
-        nRight = drlgCoords.dwSubtilesWidth - 1;
+        nLeft = drlgCoords.nSubtileX + 1;
+        nTop = drlgCoords.nSubtileY + 1;
+        nBottom = drlgCoords.nSubtileHeight - 1;
+        nRight = drlgCoords.nSubtileWidth - 1;
     }
 
     int32_t nRoomCoordListIndex = 0;

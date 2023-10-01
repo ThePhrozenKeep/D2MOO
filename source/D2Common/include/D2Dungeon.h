@@ -218,8 +218,8 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* p
 // Helper function, official name coming from D2Common.0x6FDBCF10
 inline bool DungeonTestRoomGame(const D2RoomStrc* pRoom, int nX, int nY)
 {
-	return nX >= pRoom->nSubtileX && nX < (pRoom->nSubtileX + pRoom->nSubtileWidth)
-		&& nY >= pRoom->nSubtileY && nY < (pRoom->nSubtileY + pRoom->nSubtileHeight);
+	return nX >= pRoom->tCoords.nSubtileX && nX < (pRoom->tCoords.nSubtileX + pRoom->tCoords.nSubtileWidth)
+        && nY >= pRoom->tCoords.nSubtileY && nY < (pRoom->tCoords.nSubtileY + pRoom->tCoords.nSubtileHeight);
 
 }
 // Helper function

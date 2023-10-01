@@ -117,8 +117,8 @@ D2UnitStrc* __stdcall UNITFINDS_GetNearestTestedUnit(D2UnitStrc* pUnit, int nX, 
 	{
 		DUNGEON_GetRoomCoordinates(ppRoomList[i], &pRoomCoord);
 
-		if ((nX + nSize >= pRoomCoord.dwSubtilesLeft || nX - nSize <= pRoomCoord.dwSubtilesLeft + pRoomCoord.dwSubtilesWidth)
-			&& (nSize + nY >= pRoomCoord.dwSubtilesTop || nY - nSize <= pRoomCoord.dwSubtilesTop + pRoomCoord.dwSubtilesHeight))
+		if ((nX + nSize >= pRoomCoord.nSubtileX || nX - nSize <= pRoomCoord.nSubtileX + pRoomCoord.nSubtileWidth)
+			&& (nSize + nY >= pRoomCoord.nSubtileY || nY - nSize <= pRoomCoord.nSubtileY + pRoomCoord.nSubtileHeight))
 		{
 			for (D2UnitStrc* j = ppRoomList[i]->pUnitFirst; j != NULL; j = j->pRoomNext)
 			{
@@ -194,7 +194,7 @@ void __stdcall UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(D2UnitFindDataStr
 
 	DUNGEON_GetRoomCoordinates(pRoom, &pRoomCoord);
 
-	if (nX - nSize <= pRoomCoord.dwSubtilesLeft || nY - nSize <= pRoomCoord.dwSubtilesTop || nSize + nX >= pRoomCoord.dwSubtilesLeft + pRoomCoord.dwSubtilesWidth || nSize + nY >= pRoomCoord.dwSubtilesTop + pRoomCoord.dwSubtilesHeight)
+	if (nX - nSize <= pRoomCoord.nSubtileX || nY - nSize <= pRoomCoord.nSubtileY || nSize + nX >= pRoomCoord.nSubtileX + pRoomCoord.nSubtileWidth || nSize + nY >= pRoomCoord.nSubtileY + pRoomCoord.nSubtileHeight)
 	{
 		DUNGEON_GetAdjacentRoomsListFromRoom(pUnitFindData->pRoom, &ppRoomList, &nNumRooms);
 	}
@@ -210,8 +210,8 @@ void __stdcall UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(D2UnitFindDataStr
 		{
 			DUNGEON_GetRoomCoordinates(ppRoomList[i], &pRoomCoord);
 
-			if ((nX + nSize >= pRoomCoord.dwSubtilesLeft || nX - nSize <= pRoomCoord.dwSubtilesLeft + pRoomCoord.dwSubtilesWidth)
-				&& (nY + nSize >= pRoomCoord.dwSubtilesTop || nY - nSize <= pRoomCoord.dwSubtilesTop + pRoomCoord.dwSubtilesHeight))
+			if ((nX + nSize >= pRoomCoord.nSubtileX || nX - nSize <= pRoomCoord.nSubtileX + pRoomCoord.nSubtileWidth)
+				&& (nY + nSize >= pRoomCoord.nSubtileY || nY - nSize <= pRoomCoord.nSubtileY + pRoomCoord.nSubtileHeight))
 			{
 				
 				for (D2UnitStrc* pUnit = ppRoomList[i]->pUnitFirst; pUnit; pUnit = pNextUnit)

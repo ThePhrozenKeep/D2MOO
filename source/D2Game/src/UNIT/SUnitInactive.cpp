@@ -54,7 +54,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	const uint8_t nAct = DRLG_GetActNoFromLevelId(nLevelId);
 
-	D2InactiveUnitListStrc* pInactiveUnitList = SUNITINACTIVE_GetListNodeFromActAndCoordinates(pGame, nAct, pDrlgCoords.dwSubtilesLeft, pDrlgCoords.dwSubtilesTop, 0);
+	D2InactiveUnitListStrc* pInactiveUnitList = SUNITINACTIVE_GetListNodeFromActAndCoordinates(pGame, nAct, pDrlgCoords.nSubtileX, pDrlgCoords.nSubtileY, 0);
 	if (pInactiveUnitList)
 	{
 		D2InactiveMonsterNodeStrc* pInactiveMonsterNode = pInactiveUnitList->pInactiveMonsters;
@@ -269,12 +269,12 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 	pInactiveUnitList = pGame->pInactiveUnitList[nAct];
 	while (pInactiveUnitList)
 	{
-		if (pDrlgCoords.dwSubtilesLeft > pInactiveUnitList->nX)
+		if (pDrlgCoords.nSubtileX > pInactiveUnitList->nX)
 		{
 			break;
 		}
 
-		if (pDrlgCoords.dwSubtilesLeft == pInactiveUnitList->nX && pDrlgCoords.dwSubtilesTop == pInactiveUnitList->nY)
+		if (pDrlgCoords.nSubtileX == pInactiveUnitList->nX && pDrlgCoords.nSubtileY == pInactiveUnitList->nY)
 		{
 			if (pPreviousList)
 			{
@@ -1126,7 +1126,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc*
 	D2DrlgCoordsStrc pCoord = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
 
-	return SUNITINACTIVE_GetListNodeFromActAndCoordinates(pGame, DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)), pCoord.dwSubtilesLeft, pCoord.dwSubtilesTop, bAllocNewNode);
+	return SUNITINACTIVE_GetListNodeFromActAndCoordinates(pGame, DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)), pCoord.nSubtileX, pCoord.nSubtileY, bAllocNewNode);
 }
 
 //D2Game.0x6FCC4ED0

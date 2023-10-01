@@ -1471,7 +1471,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2RoomStrc* pRoom, int
 	pCoord.nY = nY;
 
 	int32_t nCounter = 0;
-	while (nTmpX < pRoomCoord.dwSubtilesLeft || nTmpY < pRoomCoord.dwSubtilesTop || nTmpX >= pRoomCoord.dwSubtilesWidth + pRoomCoord.dwSubtilesLeft - 1 || nTmpY >= pRoomCoord.dwSubtilesTop + pRoomCoord.dwSubtilesHeight - 1)
+	while (nTmpX < pRoomCoord.nSubtileX || nTmpY < pRoomCoord.nSubtileY || nTmpX >= pRoomCoord.nSubtileWidth + pRoomCoord.nSubtileX - 1 || nTmpY >= pRoomCoord.nSubtileY + pRoomCoord.nSubtileHeight - 1)
 	{
 		++nTmpX;
 		++nTmpY;
