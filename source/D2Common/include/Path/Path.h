@@ -24,7 +24,7 @@ enum D2PathTypes
 	PATHTYPE_UNKNOWN_12 = 12,
 	PATHTYPE_MON_OTHER_2 = 13,
 	PATHTYPE_BLESSEDHAMMER = 14,
-	PATHTYPE_MOTION = 15,         // Called AStar server side ?
+	PATHTYPE_WF = 15,         // Wrongly called AStar server side ? Value could have changed between versions.
 	PATHTYPE_MISSILE_STREAM = 16, // Missile streams seems to be unused in the game even though the code exists?
 	PATHTYPE_UNKNOWN_17 = 17,
 

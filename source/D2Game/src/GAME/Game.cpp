@@ -2748,7 +2748,7 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
         pGameInfo->nPathClockPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CW] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathCounterPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CCW] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathFoWallPct = 100 * pGame->dwPathTypesCount[PATHTYPE_FOLLOW_WALL] / pGame->nTotalPathTypesCount;
-        pGameInfo->nPathAStarPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MOTION] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathAStarPct = 100 * pGame->dwPathTypesCount[PATHTYPE_WF] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathTotalCalls = pGame->nTotalPathTypesCount;
         if (pGame->nTotalPathTypesCount > 200 && pGameInfo->nPathTotalCalls)
         {

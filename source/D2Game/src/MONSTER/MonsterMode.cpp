@@ -2034,9 +2034,9 @@ int32_t __fastcall sub_6FC65680(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamS
         case PATHTYPE_MON_OTHER_2:
             UNITROOM_RefreshUnit(pUnit);
             pUnit->dwFlags |= UNITFLAG_DOUPDATE;
-            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_MOTION);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WF);
             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
-            return PATHTYPE_MOTION;
+            return PATHTYPE_WF;
 
         default:
             break;

@@ -1114,7 +1114,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		PATH_AddToDistance(pDynamicPath, -pDynamicPath->dwCurrentPointIdx);
 	}
 
-	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_MON_OTHER_2 && pDynamicPath->dwPathType != PATHTYPE_MOTION)
+	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_MON_OTHER_2 && pDynamicPath->dwPathType != PATHTYPE_WF)
 	{
 		return D2Common_10142(pDynamicPath, pUnit, 0);
 	}
@@ -1133,7 +1133,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 	nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	if (!nResult)
 	{
-		pDynamicPath->dwPathType = PATHTYPE_MOTION;
+		pDynamicPath->dwPathType = PATHTYPE_WF;
 		nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	}
 
