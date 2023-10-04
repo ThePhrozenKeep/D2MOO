@@ -132,9 +132,9 @@ target_sources(D2CommonStatic
     src/Path/PathWF.cpp
     src/Path/Step.cpp
 
+    include/Path/IDAStar.h
     include/Path/Path.h
     include/Path/PathMisc.h
-    include/Path/Path_IDAStar.h
     include/Path/PathWF.h
     include/Path/Step.h
 )

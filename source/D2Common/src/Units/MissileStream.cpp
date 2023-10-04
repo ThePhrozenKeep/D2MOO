@@ -4,7 +4,7 @@
 #include "Units/Missile.h"
 #include "Path/Path.h"
 #include "Path/PathMisc.h"
-#include "Path/Path_IDAStar.h"
+#include "Path/IDAStar.h"
 #include "Units/Units.h"
 
 

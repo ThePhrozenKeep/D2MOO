@@ -15,7 +15,7 @@
 #include <D2Collision.h>
 #include <D2BitManip.h>
 #include <Path/Step.h>
-#include <Path/Path_IDAStar.h>
+#include <Path/IDAStar.h>
 #include <DataTbls/MonsterIds.h>
 #include <D2Composit.h>
 

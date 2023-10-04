@@ -1,5 +1,5 @@
 #include "Path/Path.h"
-#include "Path/Path_IDAStar.h"
+#include "Path/IDAStar.h"
 
 #include "D2Collision.h"
 #include "D2Dungeon.h"

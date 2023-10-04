@@ -6,7 +6,7 @@
 #include "D2Inventory.h"
 #include <D2BitManip.h>
 #include "D2Monsters.h"
-#include "Path/Path_IDAStar.h"
+#include "Path/IDAStar.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"
 #include <DataTbls/MonsterIds.h>
