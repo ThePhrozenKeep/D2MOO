@@ -4,6 +4,7 @@
 #include "D2Dungeon.h"
 #include "Path/Path.h"
 #include "Path/IDAStar.h"
+#include "Path/FollowWall.h"
 #include "Path/Step.h"
 #include "Units/UnitRoom.h"
 #include "Units/Units.h"

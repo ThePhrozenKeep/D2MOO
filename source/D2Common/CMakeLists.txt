@@ -127,12 +127,14 @@ target_sources(D2CommonStatic
 target_sources(D2CommonStatic
   PRIVATE
     src/Path/IDAStar.cpp
+    src/Path/FollowWall.cpp
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
     src/Path/PathWF.cpp
     src/Path/Step.cpp
 
     include/Path/IDAStar.h
+    include/Path/FollowWall.h
     include/Path/Path.h
     include/Path/PathMisc.h
     include/Path/PathWF.h
