@@ -91,7 +91,7 @@ typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
 //D2Common.0x6FDD1F40
 static const PathFunctionType scpfnPathFunction[] = {
 /*[0]*/PATH_IdaStar_6FDA7970
-/*[1]*/,PATH_IDAStar_ComputePath
+/*[1]*/,PATH_FoWall_ComputePath
 /*[2]*/,PATH_Toward_6FDAA9F0
 /*[3]*/,sub_6FDAB0B0
 /*[4]*/,nullptr

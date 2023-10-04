@@ -615,7 +615,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 	const int nMaxDistSquared = nMaxDist * nMaxDist;
 	if (nSquaredDistance <= nMaxDistSquared)
 	{
-		int result = PATH_IDAStar_ComputePath(pPathInfo);
+		int result = PATH_FoWall_ComputePath(pPathInfo);
 		if (result)
 			return result;
 		if (v3)
