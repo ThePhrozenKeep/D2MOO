@@ -587,42 +587,45 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 	return result + v5;
 }
 
-//D2Common.6FDAB130
+//1.10f: D2Common.0x6FDAB130
+//1.13c: D2Common.0x6FDB7AD0
 int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 {
-	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
-	pDynamicPath->dwCurrentPointIdx = 0;
-	pDynamicPath->dwPathPoints = 0;
-	int v3 = PATH_Toward_6FDAA9F0(pPathInfo);
-	
-	D2PathPointStrc v4 = {0,0};
+	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
+	pPathInfo->pDynamicPath->dwPathPoints = 0;
 
-	if (v3 > 0)
+	int nPathPoints = PATH_Toward_6FDAA9F0(pPathInfo);
+	if (nPathPoints)
 	{
-		v4 = pDynamicPath->PathPoints[v3 - 1];
-		if (sub_6FDABA50(v4, pPathInfo->tTargetCoord) <= pPathInfo->field_14)
-			return v3;
-		else if (v4.X != pPathInfo->tStartCoord.X || v4.Y != pPathInfo->tStartCoord.Y)
-			return v3;
+		D2PathPointStrc tPathLastPoint = pPathInfo->pDynamicPath->PathPoints[nPathPoints - 1];
+		if (sub_6FDABA50(tPathLastPoint, pPathInfo->tTargetCoord) <= pPathInfo->field_14 // If heuristic distance is too small
+			|| tPathLastPoint != pPathInfo->tStartCoord)								 // Or we couldn't reach the target
+		{
+			return nPathPoints;															 // Then stop here
+		}
 	}
-	int nDiffX = pPathInfo->tStartCoord.X - pPathInfo->tTargetCoord.X;
-	if (nDiffX < 0)
-		nDiffX = pPathInfo->tTargetCoord.X - pPathInfo->tStartCoord.X;;
-	int nDiffY = pPathInfo->tStartCoord.Y - pPathInfo->tTargetCoord.Y;
-	if (nDiffY < 0)
-		nDiffY = pPathInfo->tTargetCoord.Y - pPathInfo->tStartCoord.Y;
-	const int nSquaredDistance = nDiffX * nDiffX + nDiffY * nDiffY;
+
+	
+	// If distance is short enough, try to go around obstacles.
 	const int nMaxDist = 18;
 	const int nMaxDistSquared = nMaxDist * nMaxDist;
+
+	const int nDiffX = std::abs(pPathInfo->tStartCoord.X - pPathInfo->tTargetCoord.X);
+	const int nDiffY = std::abs(pPathInfo->tStartCoord.Y - pPathInfo->tTargetCoord.Y);
+	const int nSquaredDistance = nDiffX * nDiffX + nDiffY * nDiffY;
+
 	if (nSquaredDistance <= nMaxDistSquared)
 	{
-		int result = PATH_FoWall_ComputePath(pPathInfo);
-		if (result)
-			return result;
-		if (v3)
-			v3 = PATH_Toward_6FDAA9F0(pPathInfo);
+		if (nPathPoints = PATH_FoWall_ComputePath(pPathInfo))
+		{
+			return nPathPoints;
+		}
+		else if (nPathPoints = PATH_Toward_6FDAA9F0(pPathInfo)) // Recompute the previous path result.
+		{
+			return nPathPoints;
+		}
 	}
-	return v3;
+	return nPathPoints;
 }
 
 //1.10f: D2Common.0x6FDAB1E0
