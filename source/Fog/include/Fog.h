@@ -265,9 +265,9 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 // In debug builds, this will trigger a log and exit, in release this is used as a hint for performance optimization.
 // Do NOT use this if the program can recover when expr if false, as it is used as a hint for performance and can impact generated code.
 // For recoverable errors, use D2_VERIFY
-#define D2_DISPLAY_ASSERT_THEN_BREAK(expr) (FOG_DisplayAssert(#expr, __FILE__, __LINE__), __debugbreak())
-#define D2_ASSERT(expr) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), exit(-1) , 0))
-#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), exit(-1) , 0))
+#define D2_DISPLAY_ASSERT_THEN_BREAK(msg) (FOG_DisplayAssert(msg, __FILE__, __LINE__), __debugbreak())
+#define D2_ASSERT(expr) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(#expr), exit(-1) , 0))
+#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(msg), exit(-1) , 0))
 #define D2_CHECK(expr) (void)( (!!(expr)) || (FOG_DisplayWarning(#expr, __FILE__, __LINE__), 0))
 
 
@@ -276,8 +276,8 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 // This is to be used when one can recover from an error
 // Example:
 // if(D2_VERIFY(ptr != nullptr)) ptr->method(); // The only difference between debug and release build is the logging and breakpoint
-#define D2_VERIFY(expr) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), false))
-#define D2_VERIFYM(expr,msg) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(expr), false))
+#define D2_VERIFY(expr) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(#expr), false))
+#define D2_VERIFYM(expr,msg) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(msg), false))
 #else
 #define D2_ASSERT(expr) (__assume(expr), (void)0)
 #define D2_ASSERTM(expr,msg) (__assume(expr), (void)0)
