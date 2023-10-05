@@ -884,7 +884,6 @@ void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* s
 //D2Game.0x6FC36C60
 void __fastcall GAME_SendActInit(int32_t nClientId)
 {
-    int32_t bLeaveCriticalSection = 0;
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     
     D2GameStrc* pGame = GAME_LockGame(nGameGUID);

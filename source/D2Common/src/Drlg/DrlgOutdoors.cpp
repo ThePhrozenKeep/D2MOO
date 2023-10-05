@@ -464,7 +464,6 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 {
 	D2CoordStrc pCoord[256] = {};
 	int* pVisArray = NULL;
-	int nCounter = 0;
 	int nFlags = 0;
 	int nWidth = 0;
 	int nRand1 = 0;

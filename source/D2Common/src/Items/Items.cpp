@@ -3635,7 +3635,6 @@ int __stdcall ITEMS_IsMagSetRarUniCrfOrTmp(D2UnitStrc* pItem)
 //D2Common.0x6FD9E580 (#10740)
 BOOL __stdcall ITEMS_IsNotQuestItem(D2UnitStrc* pItem)
 {
-	D2ItemsTxt* pItemsTxtRecord = NULL;
 	int nItemId = 0;
 
 	if (pItem)
@@ -6283,7 +6282,6 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 	int nGold = 0;
 	int nX = 0;
 	int nY = 0;
-	uint8_t nBodyLoc = 0;
 
 	int v39; // [sp+24h] [bp-8h]@63
 	int v40; // [sp+28h] [bp-4h]@63

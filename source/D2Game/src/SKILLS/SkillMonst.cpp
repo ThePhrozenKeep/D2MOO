@@ -2349,10 +2349,9 @@ D2UnitStrc* __fastcall SKILLS_CreateSpiderLayMissile(D2GameStrc* pGame, D2UnitSt
         return nullptr;
     }
 
-    // TODO: Check this calculation, Names
-    uint32_t v22 = 0x1416080Au;
-    uint32_t v23 = 0xC0E1012u;
-    uint32_t a1a = *((uint8_t*)&v22 + (uint8_t)D2Common_11053(PATH_GetNewDirection(pUnit->pDynamicPath)));
+    // TODO: Check this calculation, Names    
+    uint8_t v22[8] = { 10, 8, 22, 20, 18, 16, 14, 12, };
+    uint32_t a1a = v22[D2Common_11053(PATH_GetNewDirection(pUnit->pDynamicPath))];
     int32_t a2a = 0;
     int32_t a3 = 0;
     D2Common_11055((uint8_t)a1a, &a2a, &a3);

@@ -2225,7 +2225,6 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 
 
 				int32_t nCurrentPresetLevelId = pLevelPresetId[nCurrentPresetIndex];
-				const int32_t nPrevPreset3RowFlags = nCurrentPresetLevelId;
 				bool bHadNoPresetLeveld = nCurrentPresetLevelId == 0;
 
 				bool bLookAtNextDirection;

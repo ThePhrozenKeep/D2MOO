@@ -168,6 +168,8 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster(D2Uni
 int32_t __fastcall MISSMODE_UnitFindCallback_CanMissileDestroy(D2UnitStrc* pUnit, void* pArgument)
 {
     D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
+    D2_MAYBE_UNUSED(pArg);
+
     if (!pUnit || pUnit->dwUnitType != UNIT_MISSILE)
     {
         return 0;

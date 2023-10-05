@@ -1387,7 +1387,6 @@ int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* 
 //D2Common.0x6FD5C320
 void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 {
-	int nOpCounter = 0;
 	uint16_t nOpBase = 0;
 	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = {};
 

@@ -1293,7 +1293,6 @@ int32_t __fastcall OBJECTS_OperateFunction04_Chest(D2ObjOperateFnStrc* pOp, int3
     D2UnitStrc* pItem = nullptr;
     int32_t nMagicItemsDropped = 0;
     int32_t nItemsDropped = 0;
-    int32_t nItemLevel = 0;
     int32_t nCounter = 0;
     int32_t nRand = 0;
 

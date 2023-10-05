@@ -1627,8 +1627,6 @@ void __stdcall D2COMMON_10212_PATH_SetMoveFlags(D2UnitStrc* pUnit, BOOL bSet)
 //TODO: Find a name
 void __stdcall D2Common_10213(D2UnitStrc* pUnit)
 {
-	D2UnitStrc* pTargetUnit = NULL;
-
 	if (pUnit && !(pUnit->dwFlags & UNITFLAG_ISASYNC) && (pUnit->dwFlagEx & UNITFLAGEX_UNK_PATH_RELATED))
 	{
 		D2DynamicPathStrc* pDynamicPath = pUnit->pDynamicPath;

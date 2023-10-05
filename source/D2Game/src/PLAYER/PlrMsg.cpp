@@ -2950,7 +2950,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x3B_AddSkillPoint_6FC86EF0(D2GameSt
     D2GSPacketClt3B* pPacket3B = (D2GSPacketClt3B*)pPacket;
     if (nSize == 3)
     {
-        const int32_t nSkillId = *(int16_t*)((char*)pPacket + 1);
+        const int32_t nSkillId = pPacket3B->nSkill;
         if (nSkillId >= sgptDataTables->nSkillsTxtRecordCount)
         {
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);

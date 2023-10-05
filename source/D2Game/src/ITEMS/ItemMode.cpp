@@ -1883,7 +1883,8 @@ int32_t __fastcall sub_6FC446B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         bTrade = 1;
     }
 
-    //INVENTORY_Return(__FILE__, __LINE__, pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem),  nInventoryRecordId, 0, nInvPage);
+    //No-Op
+    INVENTORY_Return(__FILE__, __LINE__, pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem),  nInventoryRecordId, 0, nInvPage);
 
     ITEMS_SetItemCell(pItem, nInvPage);
     ITEMS_SetInvPage(pItem, 0xFFu);

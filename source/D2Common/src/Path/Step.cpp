@@ -875,7 +875,6 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 			);
 		}
 	}
-	D2RoomStrc* pPathRoom = pDynamicPath->pRoom;
 	if (pDynamicPath->pRoom != pDestRoom)
 		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 

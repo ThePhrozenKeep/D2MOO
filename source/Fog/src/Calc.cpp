@@ -100,7 +100,6 @@ static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGASTTyp
 {
 	const int nRightHandSide = DATATBLS_IntStackPop(pCalcStack);
 	const int nLeftHandSide = DATATBLS_IntStackPop(pCalcStack);
-	int nResult = 0;
 	switch (nAST)
 	{
 	case AST_LessThan:

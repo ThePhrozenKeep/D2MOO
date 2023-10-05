@@ -2924,7 +2924,6 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 //D2Common.0x6FDC1A70 (#10361)
 BOOL __stdcall UNITS_IsInMeleeRange(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nRangeBonus)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	int nDistance = 0;
 	int nClassId = 0;
 

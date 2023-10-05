@@ -1537,8 +1537,6 @@ void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap)
 {
 	D2PresetUnitStrc* pNextPresetUnit = NULL;
 	D2PresetUnitStrc* pPresetUnit = NULL;
-	D2LevelFileListStrc* pPrevious = NULL;
-	D2LevelFileListStrc* pCurrent = NULL;
 	D2DrlgMapStrc* pNextMap = NULL;
 	D2DrlgMapStrc* pMap = NULL;
 

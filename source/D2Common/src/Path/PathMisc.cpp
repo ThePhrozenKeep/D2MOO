@@ -189,6 +189,8 @@ BOOL __fastcall PATH_CheckTestDirForCollisions(const D2PathInfoStrc* pPathInfo, 
 {
 	D2UnitStrc* pUnit = pPathInfo->pDynamicPath->pUnit;
 
+	D2_ASSERT(pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER);
+
 	pPoints[0].X += gatDirectionToOffset[pTestDir[0]].nX;
 	pPoints[0].Y += gatDirectionToOffset[pTestDir[0]].nY;
 	if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, pPoints[0].X, pPoints[0].Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))

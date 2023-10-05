@@ -689,7 +689,6 @@ D2SkillListStrc* __stdcall SKILLS_AllocSkillList(void* pMemPool)
 void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 {
 	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
-	int nCounter = 0;
 	int nClass = 0;
 
 	if (SKILLS_GetSkill(pUnit, 0, -1) == nullptr)

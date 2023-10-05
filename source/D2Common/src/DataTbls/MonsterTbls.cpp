@@ -1773,7 +1773,6 @@ D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpan
 	D2HirelingTxt* pHirelingTxtRecord = NULL;
 	int nRecordId = 0;
 	int nVersion = 0;
-	int nRand = 0;
 
 	nVersion = bExpansion != 0 ? 100 : 0;
 
@@ -2023,7 +2022,6 @@ void __fastcall DATATBLS_MonStats2CompositLinker(char* pSrc, void* pRecord, int 
 	char* pTmp = NULL;
 	int nCounter = 0;
 	int nSum = 0;
-	char szCode[4] = {};
 
 	pMonStats2TxtRecord = (D2MonStats2Txt*)pRecord;
 	if (pMonStats2TxtRecord && nOffset >= 0 && nOffset < 16)

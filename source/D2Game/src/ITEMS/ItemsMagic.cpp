@@ -712,6 +712,7 @@ BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
     const uint16_t nItemFormat = ITEMS_GetItemFormat(pItem);
+    D2_MAYBE_UNUSED(nItemFormat);
     const int16_t nRolledPrefixId = D2GAME_RollRareAffix_6FC53610(pItem, TRUE);
     const int16_t nRolledSuffixId = D2GAME_RollRareAffix_6FC53610(pItem, FALSE);
 
@@ -746,6 +747,7 @@ int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
     const uint16_t nItemFormat = ITEMS_GetItemFormat(pItem);
+    D2_MAYBE_UNUSED(nItemFormat);
     const int16_t nRolledPrefixId = D2GAME_RollRareAffix_6FC53610(pItem, TRUE);
     const int16_t nRolledSuffixId = D2GAME_RollRareAffix_6FC53610(pItem, FALSE);
 

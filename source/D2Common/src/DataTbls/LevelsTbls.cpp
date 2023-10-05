@@ -1115,7 +1115,6 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 //D2Common.0x6FD62D30 (#10011)
 int __fastcall DATATBLS_GetAutomapCellId(uint32_t dwAutomapLevelType, uint32_t dwAutomapTileType, int nStyle, int nSequence)
 {
-	unsigned long long int lSeed = 0;
 	int nStart = 0;
 	int nEnd = 0;
 	int nCels = 0;

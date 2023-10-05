@@ -2335,7 +2335,6 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 	D2SetItemsTxt* pSetItemsTxtRecord = NULL;
 	D2PropertyStrc* pProperties[3] = {};
 	D2PropertyStrc* pProperty = NULL;
-	D2PropertyStrc* pModsa = NULL;
 	int nProperties = 0;
 	int nFileIndex = 0;
 	int nState = 0;
