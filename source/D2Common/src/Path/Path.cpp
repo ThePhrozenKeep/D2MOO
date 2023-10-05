@@ -360,7 +360,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 	}
 	pPath->nCollidedWithMask = 0;
 	D2UnitStrc* const pTargetUnit = pPath->pTargetUnit;
-	if (pTargetUnit && (UNITS_GetXPosition(pTargetUnit) == 0 || UNITS_GetYPosition(pTargetUnit)) == 0)
+	if (pTargetUnit && (UNITS_GetXPosition(pTargetUnit) == 0 || UNITS_GetYPosition(pTargetUnit) == 0))
 	{
 		return 0;
 	}
