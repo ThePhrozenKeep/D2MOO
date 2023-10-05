@@ -131,50 +131,50 @@ int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo)
 {
 	if (!PATH_FoWall_TargetLocationHasEnoughRoom(pPathInfo))
 	{
-		return FALSE;
+		return 0;
 	}
 
 	const D2PathPointStrc tStartCoord = pPathInfo->tStartCoord;
 	const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
 
-	D2PathFoWallContextStrc tIDAStarContext{};
-	tIDAStarContext.nNodesCount = 1;
+	D2PathFoWallContextStrc tContext{};
+	tContext.nNodesCount = 1;
 
 	const int nDistToTarget = PATH_FoWall_Heuristic(tTargetCoord, tStartCoord);
-	tIDAStarContext.aNodesStorage[0].nBestDistanceFromStart = 0;
-	tIDAStarContext.aNodesStorage[0].nHeuristicDistanceToTarget = nDistToTarget;
-	tIDAStarContext.aNodesStorage[0].nFScore = nDistToTarget;
-	tIDAStarContext.aNodesStorage[0].tPoint = tStartCoord;
-	PATH_FoWall_MakeCandidate(&tIDAStarContext, tIDAStarContext.aNodesStorage);
-	D2PathFoWallNodeStrc* pBestPathAttempt = 0;
-	for (D2PathFoWallNodeStrc* pCurPathAttempt = PATH_FoWall_PopBestScoreForVisit(&tIDAStarContext);
-		pCurPathAttempt != nullptr;
-		pCurPathAttempt = PATH_FoWall_PopBestScoreForVisit(&tIDAStarContext)
+	tContext.aNodesStorage[0].nBestDistanceFromStart = 0;
+	tContext.aNodesStorage[0].nHeuristicDistanceToTarget = nDistToTarget;
+	tContext.aNodesStorage[0].nFScore = nDistToTarget;
+	tContext.aNodesStorage[0].tPoint = tStartCoord;
+	PATH_FoWall_MakeCandidate(&tContext, &tContext.aNodesStorage[0]);
+	D2PathFoWallNodeStrc* pBestNode = 0;
+	for (D2PathFoWallNodeStrc* pCurNodeToVisit = PATH_FoWall_PopBestScoreForVisit(&tContext);
+		pCurNodeToVisit != nullptr;
+		pCurNodeToVisit = PATH_FoWall_PopBestScoreForVisit(&tContext)
 		)
 	{
-		if (pBestPathAttempt == nullptr
-			|| pCurPathAttempt->nHeuristicDistanceToTarget < pBestPathAttempt->nHeuristicDistanceToTarget
-			|| (pCurPathAttempt->nHeuristicDistanceToTarget == pBestPathAttempt->nHeuristicDistanceToTarget
-				&& pCurPathAttempt->nBestDistanceFromStart > (pBestPathAttempt->nBestDistanceFromStart + 5))
+		if (pBestNode == nullptr
+			|| pCurNodeToVisit->nHeuristicDistanceToTarget < pBestNode->nHeuristicDistanceToTarget
+			|| (pCurNodeToVisit->nHeuristicDistanceToTarget == pBestNode->nHeuristicDistanceToTarget
+				&& pCurNodeToVisit->nBestDistanceFromStart > (pBestNode->nBestDistanceFromStart + 5))
 			)
 		{
-			pBestPathAttempt = pCurPathAttempt;
+			pBestNode = pCurNodeToVisit;
 		}
 
-		if (// Reached target point
-			pCurPathAttempt->nHeuristicDistanceToTarget == 0
-			// Or can't allocate new nodes
-			|| !PATH_FoWall_ExploreChildren(pPathInfo, &tIDAStarContext, pCurPathAttempt, tTargetCoord)
+		if (// If reached target point
+			pCurNodeToVisit->nHeuristicDistanceToTarget == 0
+			// or can't allocate new nodes
+			|| !PATH_FoWall_ExploreChildren(pPathInfo, &tContext, pCurNodeToVisit, tTargetCoord)
 			)
 		{
-			break;
+			break; // Then stop here
 		}
 	}
-	if (pBestPathAttempt)
+	if (pBestNode)
 	{
-		return PATH_FoWall_FlushNodeToDynamicPath(pBestPathAttempt, pPathInfo);
+		return PATH_FoWall_FlushNodeToDynamicPath(pBestNode, pPathInfo);
 	}
-	return FALSE;
+	return 0;
 }
 
 //D2Common.0x6FDA6D10
@@ -296,28 +296,28 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_FindPointInVisitedCache(D2PathFoWal
 
 //1.10f: D2Common.0x6FDA7320
 //1.13c: D2Common.0x6FDCAE20
-void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pPoint)
+void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode)
 {
-	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pPoint->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pPoint->tPoint.Y & 0x7F]) & 0x7F;
-	pPoint->pNextCachePoint = pContext->aPendingCache[nHash];
-	pContext->aPendingCache[nHash] = pPoint;
+	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pNode->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pNode->tPoint.Y & 0x7F]) & 0x7F;
+	pNode->pNextCachePoint = pContext->aPendingCache[nHash];
+	pContext->aPendingCache[nHash] = pNode;
 
-	if (D2PathFoWallNodeStrc* pInsertionPoint = PATH_IdaStar_FindSortedByFScoreInsertionPoint(pContext, pPoint->nFScore))
+	if (D2PathFoWallNodeStrc* pInsertionPoint = PATH_IdaStar_FindSortedByFScoreInsertionPoint(pContext, pNode->nFScore))
 	{
-		pPoint->pNextSortedByFScore = pInsertionPoint->pNextSortedByFScore;
-		pInsertionPoint->pNextSortedByFScore = pPoint;
+		pNode->pNextSortedByFScore = pInsertionPoint->pNextSortedByFScore;
+		pInsertionPoint->pNextSortedByFScore = pNode;
 	}
 	else
 	{
-		pPoint->pNextSortedByFScore = pContext->pSortedListByFScore;
-		pContext->pSortedListByFScore = pPoint;
+		pNode->pNextSortedByFScore = pContext->pSortedListByFScore;
+		pContext->pSortedListByFScore = pNode;
 	}
 }
 
 //1.10f: D2Common.0x6FDA7390
 //1.13c: D2Common.0x6FDCAC50
 //Should be __thiscall but we have to use __fastcall, hence nUnused
-void __fastcall PATH_FoWall_RecomputeShortestPathToStart(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewPoint)
+void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewPoint)
 {
 	D2_MAYBE_UNUSED(nUnused);
 
@@ -325,20 +325,20 @@ void __fastcall PATH_FoWall_RecomputeShortestPathToStart(D2PathFoWallContextStrc
 	while (pContext->nStackCount != 0)
 	{
 		D2PathFoWallNodeStrc* pCurrentPoint = pContext->aPointsStack[--pContext->nStackCount];
-		for (D2PathFoWallNodeStrc* pParent : pCurrentPoint->pParents)
+		for (D2PathFoWallNodeStrc* pChild : pCurrentPoint->pChildren)
 		{
-			if (!pParent)
+			if (!pChild)
 			{
 				break;
 			}
-			const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbour(pCurrentPoint->tPoint, pParent->tPoint);
+			const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbour(pCurrentPoint->tPoint, pChild->tPoint);
 			const int16_t nDistanceFromStart = nDistanceBetweenPoints + pCurrentPoint->nBestDistanceFromStart;
-			if (nDistanceFromStart < pParent->nBestDistanceFromStart)
+			if (nDistanceFromStart < pChild->nBestDistanceFromStart)
 			{
-				pParent->pBestParent = pCurrentPoint;
-				pParent->nBestDistanceFromStart = nDistanceFromStart;
-				pParent->nFScore = nDistanceFromStart + pParent->nHeuristicDistanceToTarget;
-				pContext->aPointsStack[pContext->nStackCount++] = pParent;
+				pChild->pBestParent = pCurrentPoint;
+				pChild->nBestDistanceFromStart = nDistanceFromStart;
+				pChild->nFScore = nDistanceFromStart + pChild->nHeuristicDistanceToTarget;
+				pContext->aPointsStack[pContext->nStackCount++] = pChild;
 			}
 		}
 	}
@@ -358,13 +358,13 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc*
 }
 
 // Helper function
-static void PATH_FoWall_AddParentToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWallNodeStrc* pParent)
+static void PATH_FoWall_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWallNodeStrc* pChild)
 {
-	for (D2PathFoWallNodeStrc*& pParentRef : pNode->pParents)
+	for (D2PathFoWallNodeStrc*& pChildRef : pNode->pChildren)
 	{
-		if (!pParentRef)
+		if (pChildRef == nullptr)
 		{
-			pParentRef = pParent;
+			pChildRef = pChild;
 			break;
 		}
 	}
@@ -378,7 +378,7 @@ BOOL __fastcall PATH_FoWall_EvaluateNeighbour(D2PathInfoStrc* pPathInfo, D2PathF
 	const int16_t nNewPointDistance = pCurrentNode->nBestDistanceFromStart + nDistanceBetweenPoints;
 	if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_GetNodeFromPendingCache(pContext, tNewPointCoord))
 	{
-		PATH_FoWall_AddParentToNode(pCurrentNode, pNewNode);
+		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
 		if (nNewPointDistance < pNewNode->nBestDistanceFromStart)
 		{
 			pNewNode->pBestParent = pCurrentNode;
@@ -389,19 +389,19 @@ BOOL __fastcall PATH_FoWall_EvaluateNeighbour(D2PathInfoStrc* pPathInfo, D2PathF
 	}
 	else if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_FindPointInVisitedCache(pContext, tNewPointCoord))
 	{
-		PATH_FoWall_AddParentToNode(pCurrentNode, pNewNode);
+		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
 		if (nNewPointDistance < pNewNode->nBestDistanceFromStart)
 		{
 			pNewNode->pBestParent = pCurrentNode;
 			pNewNode->nBestDistanceFromStart = nNewPointDistance;
 			pNewNode->nFScore = nNewPointDistance + pNewNode->nHeuristicDistanceToTarget;
-			PATH_FoWall_RecomputeShortestPathToStart(pContext,/*unused*/0, pNewNode);
+			PATH_FoWall_PropagateNewFScoreToChildren(pContext,/*unused*/0, pNewNode);
 		}
 		return TRUE;
 	}
 	else if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_GetNewNode(pContext))
 	{
-		PATH_FoWall_AddParentToNode(pCurrentNode, pNewNode);
+		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
 
 		pNewNode->tPoint = tNewPointCoord;
 		pNewNode->nHeuristicDistanceToTarget = PATH_FoWall_Heuristic(tNewPointCoord, tTargetCoord);
