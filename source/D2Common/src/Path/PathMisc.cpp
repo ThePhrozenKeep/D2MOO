@@ -205,7 +205,7 @@ BOOL __fastcall PATH_CheckTestDirForCollisions(const D2PathInfoStrc* pPathInfo, 
 		return TRUE;
 	}
 
-	if (pTestDir[2] != PATH_DIR_NULL);
+	if (pTestDir[2] != PATH_DIR_NULL)
 	{
 		pPoints[2].X += gatDirectionToOffset[pTestDir[2]].nX;
 		pPoints[2].Y += gatDirectionToOffset[pTestDir[2]].nY;
