@@ -241,7 +241,7 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 		int nFreeOfCollisionDirectionIndex = -1;
 		if (PATH_CheckTestDirForCollisions(pPathInfo, pTestDir, aTestDirPathPoints, &nFreeOfCollisionDirectionIndex))
 		{
-			const D2PathPointStrc tNextPoint = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
+			pPathInfo->tTargetCoord = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
 			if (pPathInfo->tStartCoord == aTestDirPathPoints[0])
 			{
 				return 0;
