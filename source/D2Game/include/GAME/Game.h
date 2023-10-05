@@ -7,7 +7,7 @@
 #pragma warning(push)
 #pragma warning(disable: 4820)
 #include <storm/hash/TSHashObject.hpp>
-#include <storm/hash/HashKey.hpp>
+#include <storm/hash/Hashkey.hpp>
 #include <storm/hash/TSExportTableSyncReuse.hpp>
 #include <storm/thread/CCritSect.hpp>
 #pragma warning(pop)

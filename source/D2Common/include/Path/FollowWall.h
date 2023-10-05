@@ -63,11 +63,11 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_FindPointInVisitedCache(D2PathFoWal
 
 //1.10f: D2Common.0x6FDA7320
 //1.13c: D2Common.0x6FDCAE20
-void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pPoint);
+void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode);
 
 //1.10f: D2Common.0x6FDA7390
 //1.13c: D2Common.0x6FDCAC50
-void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewPoint);
+void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode);
 
 //1.10f: D2Common.0x6FDA7450
 //1.13c: Inlined

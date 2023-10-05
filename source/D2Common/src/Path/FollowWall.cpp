@@ -317,11 +317,11 @@ void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2P
 //1.10f: D2Common.0x6FDA7390
 //1.13c: D2Common.0x6FDCAC50
 //Should be __thiscall but we have to use __fastcall, hence nUnused
-void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewPoint)
+void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode)
 {
 	D2_MAYBE_UNUSED(nUnused);
 
-	pContext->aPointsStack[pContext->nStackCount++] = pNewPoint;
+	pContext->aPointsStack[pContext->nStackCount++] = pNewNode;
 	while (pContext->nStackCount != 0)
 	{
 		D2PathFoWallNodeStrc* pCurrentPoint = pContext->aPointsStack[--pContext->nStackCount];
