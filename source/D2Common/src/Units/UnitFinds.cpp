@@ -347,38 +347,39 @@ int __stdcall UNITFINDS_TestUnit(D2UnitStrc* pUnit, D2UnitFindArgStrc* pUnitFind
 			default:
 				return 0;
 			}
-		}
-	}
 
-	if (!(pUnitFindArg->nFlags & 0x80) || pUnit->dwFlags & UNITFLAG_CANBEATTACKED)
-	{
-		if (!(pUnitFindArg->nFlags & 0x400) || pUnit->dwFlags & UNITFLAG_ISVALIDTARGET)
-		{
-			if (!(pUnitFindArg->nFlags & 0x100) || !DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
+			if (!(pUnitFindArg->nFlags & 0x80) || pUnit->dwFlags & UNITFLAG_CANBEATTACKED)
 			{
-				if (pUnitFindArg->nFlags & 0x200)
+				if (!(pUnitFindArg->nFlags & 0x400) || pUnit->dwFlags & UNITFLAG_ISVALIDTARGET)
 				{
-					pRoom = UNITS_GetRoom(pUnit);
-					if (pRoom)
+					if (!(pUnitFindArg->nFlags & 0x100) || !DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
 					{
-						while (D2Common_11098(pUnitFindArg->pField, &nX, &nY))
+						if (pUnitFindArg->nFlags & 0x200)
 						{
-							if (COLLISION_CheckMask(pRoom, nX, nY, 4) == 4)
+							pRoom = UNITS_GetRoom(pUnit);
+							if (pRoom)
 							{
-								return 0;
+								while (D2Common_11098(pUnitFindArg->pField, &nX, &nY))
+								{
+									if (COLLISION_CheckMask(pRoom, nX, nY, 4) == 4)
+									{
+										return 0;
+									}
+								}
 							}
 						}
-					}
-				}
 
-				if (!(pUnitFindArg->nFlags & 0x800) || !pUnitFindArg->pfnUnitTest(pUnit, pUnitFindArg))
-				{
-					++pUnitFindArg->nIndex;
-					return 1;
+						if (!(pUnitFindArg->nFlags & 0x800) || !pUnitFindArg->pfnUnitTest(pUnit, pUnitFindArg))
+						{
+							++pUnitFindArg->nIndex;
+							return 1;
+						}
+					}
 				}
 			}
 		}
 	}
+
 
 	return 0;
 }
