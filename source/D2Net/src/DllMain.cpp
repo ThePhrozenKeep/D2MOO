@@ -4,6 +4,7 @@
 
 extern int32_t dword_6FC0B264;
 
+// NOLINTBEGIN(bugprone-branch-clone)
 //D2Net.0x6FC01B40
 BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -22,3 +23,4 @@ BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
 	return TRUE;
 }
+// NOLINTEND(bugprone-branch-clone)

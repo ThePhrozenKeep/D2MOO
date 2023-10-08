@@ -1,7 +1,7 @@
 #include <imgui.h>
 #include <vector>
 #include "D2Debugger.h"
-#include <Game/Game.h>
+#include <GAME/Game.h>
 #include <D2Lang.h>
 #include <D2Unicode.h>
 #include <D2Dll.h>
@@ -211,7 +211,7 @@ void D2DebugUnitCommon(D2UnitStrc* pUnit)
 
     ImGui::Text("ClassId=%d", pUnit->dwClassId);
     ImGui::SameLine(); ImGui::Text("GUID=%d", pUnit->dwUnitId);
-    ImGui::SameLine(); ImGui::Text(gActNames[pUnit->nAct]);
+    ImGui::SameLine(); ImGui::Text("%s", gActNames[pUnit->nAct]);
     D2CoordStrc tCoords;
     UNITS_GetCoords(pUnit, &tCoords);
     ImGui::SameLine(); ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);

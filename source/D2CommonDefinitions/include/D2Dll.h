@@ -1,5 +1,6 @@
 #pragma once
 
+// NOLINTBEGIN
 // Use this by default if the function will be in an import library
 #define D2FUNC_DLL(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV DLL##_##NAME ARGS;
@@ -31,11 +32,13 @@ constexpr auto default_or_void<void>() -> void {}
 // Useful if you do not have an import library or want to use LoadLibray
 #define D2FUNC(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	typedef RETURN(CONV* DLL##_##NAME##_t) ARGS; \
-	static DLL##_##NAME##_t DLL##_##NAME = (DLL##_##NAME##_t)(uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
+	static DLL##_##NAME##_t DLL##_##NAME = (DLL##_##NAME##_t)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 #define D2VAR(DLL, NAME, TYPE, OFFSET) \
 	typedef TYPE DLL##_##NAME##_vt; \
-	static DLL##_##NAME##_vt * DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
+	static DLL##_##NAME##_vt * DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 #define D2PTR(DLL, NAME, OFFSET) \
-	static PVOID NAME = (uintptr_t(delayed##DLL##DllBaseGet()) + OFFSET);
+	static PVOID NAME = (uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
+
+// NOLINTEND

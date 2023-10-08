@@ -331,7 +331,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		*pSize = *(uint16_t*)&pBuffer->data[2];
 		return *pSize;
 	}
-	case 0xA8u:
+	case 0xA8u: // NOLINT error: switch has 2 consecutive identical branches [bugprone-branch-clone,-warnings-as-errors]
 	{
 		if (nBufferSize < 7)
 		{

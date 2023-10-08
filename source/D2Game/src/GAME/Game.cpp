@@ -117,7 +117,7 @@ void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
     va_list va = nullptr;
 
     va_start(va, szFormat);
-    vsprintf(szMessage, szFormat, va);
+    vsprintf(szMessage, szFormat, va); // NOLINT(clang-diagnostic-deprecated-declarations)
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
     {
@@ -596,8 +596,8 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    pClient->unk0x184[3] = *(int32_t*)a7;
-    pClient->unk0x184[4] = *(int32_t*)(a7 + 4);
+    pClient->unk0x190 = *(int32_t*)a7;
+    pClient->unk0x194[0] = *(int32_t*)(a7 + 4);
 
     D2_UNLOCK(pGame->lpCriticalSection);
 
@@ -1256,7 +1256,7 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
                 const int32_t nExperience = STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0);
                 const int32_t nLevel = STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0);
                 const char* szClientName = CLIENTS_GetName(i);
-                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x184[3]);
+                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->unk0x190);
             }
         }
     }
@@ -1505,7 +1505,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
                         STATLIST_GetUnitBaseStat(pUnit, STAT_EXPERIENCE, 0),
                         0,
                         CLIENTS_GetFlags(i),
-                        &i->unk0x184[3]
+                        &i->unk0x190
                     );
                 }
             }
@@ -1641,7 +1641,7 @@ int32_t __fastcall sub_6FC38100(int32_t nClientId)
 //Note: You better disable those packets as they were used to DDos servers in the past...
 void __fastcall sub_6FC38140(void *a1, int32_t a2)
 {
-    char a3[16];
+    uint8_t a3[16];
     char szIPAddress[16];
 
     if (gpD2EventCallbackTable_6FD45830)
@@ -1822,7 +1822,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
     const uint32_t nDebugBreakTrigger = *(uint32_t*)&pGame[1].m_key;
     if (nDebugBreakTrigger == 1)
     {
-        *((BYTE*)0) = 0;
+        *((volatile BYTE*)0) = 0;
     }
     else if (nDebugBreakTrigger == 2)
     {
@@ -2012,7 +2012,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                             STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
                             0,
                             CLIENTS_GetFlags(pClient),
-                            &pClient->unk0x184[3]
+                            &pClient->unk0x190
                         );
                     }
                 }
@@ -2040,7 +2040,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                         STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
                         0,
                         CLIENTS_GetFlags(pClient),
-                        &pClient->unk0x184[3]
+                        &pClient->unk0x190
                     );
                 }
             }
@@ -2126,6 +2126,8 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
             }
             break;
         }
+        default:
+            break;
         }
 
         pClient = pNext;
@@ -2869,6 +2871,7 @@ int32_t __stdcall GAME_ReturnArgument(int32_t a1)
 //D2Game.0x6FC3A700
 void __fastcall GAME_GetPlayerDescription(char* szDescription, int32_t nClassId)
 {
+    // NOLINTBEGIN(clang-diagnostic-deprecated-declarations)
     switch (nClassId)
     {
     case PCLASS_AMAZON:
@@ -2896,6 +2899,7 @@ void __fastcall GAME_GetPlayerDescription(char* szDescription, int32_t nClassId)
         strcpy(szDescription, "Invalid Class");
         break;
     }
+    // NOLINTEND(clang-diagnostic-deprecated-declarations)
 }
 
 //D2Game.0x6FC3A7C0
@@ -2918,7 +2922,7 @@ void __fastcall GAME_GetObjectDescription(char* szDescription, int32_t nClassId)
     D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nClassId);
     if (pObjectsTxtRecord)
     {
-        strcpy(szDescription, pObjectsTxtRecord->szName);
+        strcpy(szDescription, pObjectsTxtRecord->szName); // NOLINT(clang-diagnostic-deprecated-declarations)
     }
     else
     {
@@ -3101,7 +3105,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
                 else
                 {
                     char szCopy[256] = {};
-                    strncpy(szCopy, szMessage, 255);
+                    strncpy(szCopy, szMessage, 255); // NOLINT(clang-diagnostic-deprecated-declarations)
                     szCopy[255] = '\0';
                     sub_6FC84CD0(pGame, szCopy, 1u);
                 }

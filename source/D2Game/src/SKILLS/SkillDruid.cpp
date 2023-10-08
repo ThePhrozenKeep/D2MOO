@@ -1943,7 +1943,7 @@ int32_t __fastcall SKILLS_SrvDo133_Impregnate(D2GameStrc* pGame, D2UnitStrc* pUn
     curse.nSkillLevel = nSkillLevel;
     curse.nStat = -1;
     curse.nState = STATE_PREGNANT;
-    curse.pStateFunc = sub_6FD01B00;
+    curse.pStateRemoveCallback = sub_6FD01B00;
     sub_6FD10EC0(&curse);
     return 1;
 }

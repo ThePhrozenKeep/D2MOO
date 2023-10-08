@@ -331,6 +331,13 @@ target_sources(D2Game
     include/SKILLS/SkillSor.h
 )
 
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(D2Game
+    PRIVATE
+      statictests/Clients_staticchecks.cpp
+  )
+endif()
+
 get_target_property(D2GameSources D2Game SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
              FILES ${D2GameSources}

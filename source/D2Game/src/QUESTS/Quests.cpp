@@ -1255,7 +1255,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 
 		D2_ASSERT(pQuest);
 
-		packet5E.__001[i] = pQuest->bNotIntro;
+		packet5E.unk0x001[i] = pQuest->bNotIntro;
 	}
 
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
@@ -1391,11 +1391,7 @@ void __fastcall QUESTS_WarrivSpawn(D2GameStrc* pGame, D2UnitStrc* pWarriv, int32
 {
 	if (nWarrivID >= 0 && nWarrivID < sgptDataTables->nMonStatsTxtRecordCount)
 	{
-		if (nWarrivID == MONSTER_JERHYN)
-		{
-			//D2GAME_Return_6FCA3310(nXpos, nYpos);
-		}
-		else if (nWarrivID == MONSTER_ACT2GUARD2)
+		if (nWarrivID == MONSTER_JERHYN || nWarrivID == MONSTER_ACT2GUARD2)
 		{
 			//D2GAME_Return_6FCA3310(nXpos, nYpos);
 		}

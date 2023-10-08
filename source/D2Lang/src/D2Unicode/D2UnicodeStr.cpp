@@ -122,9 +122,9 @@ void __cdecl Unicode::sprintf(
         char itoa_buffer[16];
 
         if (conversion_specifier == L'd') {
-          ::_itoa(va_arg(args, int), itoa_buffer, 10);
+          ::_itoa(va_arg(args, int), itoa_buffer, 10); // NOLINT(clang-diagnostic-deprecated-declarations)
         } else {
-          ::_ultoa(va_arg(args, unsigned int), itoa_buffer, 10);
+          ::_ultoa(va_arg(args, unsigned int), itoa_buffer, 10); // NOLINT(clang-diagnostic-deprecated-declarations)
         }
 
         Unicode itoa_unicode[15];

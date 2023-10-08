@@ -318,8 +318,9 @@ int32_t __fastcall SKILLS_SrvDo017_ChargedBolt_BoltSentry(D2GameStrc* pGame, D2U
 }
 
 //D2Game.0x6FD16040
-void __fastcall SKILLS_CurseStateCallback_DefensiveBuff(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall SKILLS_CurseStateCallback_DefensiveBuff(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     SUNITEVENT_FreeTimer(pUnit->pGame, pUnit, 1, nState);
 
     if (SUNIT_IsDead(pUnit) && STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
@@ -356,7 +357,7 @@ int32_t __fastcall SKILLS_SrvDo018_DefensiveBuff(D2GameStrc* pGame, D2UnitStrc* 
     curse.nStat = -1;
     curse.nDuration = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     curse.nState = pSkillsTxtRecord->nAuraState;
-    curse.pStateFunc = SKILLS_CurseStateCallback_DefensiveBuff;
+    curse.pStateRemoveCallback = SKILLS_CurseStateCallback_DefensiveBuff;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)

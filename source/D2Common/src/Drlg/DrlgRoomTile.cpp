@@ -844,7 +844,7 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2RoomExStrc*
 	//D2Common.0x6FDD1390
 	static const int nWallTileTypeRemap[6][7] =
 	{
-		/* [parameter nTileType value     ]    [pTileData->nTileType - 1]
+		/* [parameter nTileType value     ]    [pTileData->nTileType - 1] */
 		/* [TILETYPE_WALL_LEFT            ] */ { TILETYPE_WALL_LEFT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_LEFT,TILETYPE_WALL_LEFT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_LEFT},
 		/* [TILETYPE_WALL_RIGHT           ] */ { TILETYPE_WALL_LEFT,TILETYPE_WALL_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_LEFT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_RIGHT,TILETYPE_WALL_RIGHT},
 		/* [TILETYPE_WALL_TOP_CORNER_RIGHT] */ { TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_LEFT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT,TILETYPE_WALL_TOP_CORNER_RIGHT},
@@ -957,11 +957,7 @@ void __fastcall DRLGROOMTILE_GetCreateLinkedTileData(void* pMemPool, D2RoomExStr
 						{
 							if (pTileData->nTileType != TILETYPE_WALL_TOP_CORNER_LEFT && (pTileData->nTileType == TILETYPE_SHADOW || !nTileInformation.bShadow))
 							{
-								if (!HasMapTileLayer(pTileData->dwFlags))
-								{
-									return DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pRoomEx->ppRoomsNear[i], pTileData, nTileType, nPackedTileInformation, nX, nY);
-								}
-								else if (GetMapTileLayer(pTileData->dwFlags) == nTileInformation.nWallLayer)
+								if (!HasMapTileLayer(pTileData->dwFlags) || GetMapTileLayer(pTileData->dwFlags) == nTileInformation.nWallLayer)
 								{
 									return DRLGROOMTILE_LinkedTileDataManager(pMemPool, pRoomEx, pRoomEx->ppRoomsNear[i], pTileData, nTileType, nPackedTileInformation, nX, nY);
 								}

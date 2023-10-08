@@ -810,7 +810,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
     for (int32_t i = 0; i < 16; ++i)
     {
-        if (pSaveHeader->SkillKeys[i].nSkill == -1)
+        if (pSaveHeader->SkillKeys[i].nSkill == uint16_t(-1))
         {
             CLIENTS_SetSkillHotKey(pClient, i, -1, 0, -1);
         }
@@ -1039,18 +1039,18 @@ int32_t __fastcall PLRSAVE2_ReadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, u
     uint8_t* pData = *ppSection + 2;
     if (pData > pEnd)
     {
-        PLRSAVE2ERROR_BAD_SKILLS;
+        return PLRSAVE2ERROR_BAD_SKILLS;
     }
 
     if (*(uint16_t*)*ppSection != 0x6669)
     {
-        PLRSAVE2ERROR_BAD_SKILLS;
+        return PLRSAVE2ERROR_BAD_SKILLS;
     }
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     if (!pClient)
     {
-        return 19;
+        return PLRSAVE2ERROR_BAD_SKILLS;
     }
 
     const uint8_t nClassId = CLIENTS_GetClassId(pClient);
@@ -1705,7 +1705,7 @@ int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pCl
 
         const uint8_t nAct = CLIENTS_GetActNo(pClient);
         PLAYERSTATS_SetStatsForStartingAct(pGame, pPlayer, nAct);
-        PLAYER_CreateStartItemsFromCharStatsTxt(pPlayer, pGame, (void*)nAct);
+        PLAYER_CreateStartItemsFromCharStatsTxt(pPlayer, pGame, (void*)(uintptr_t)nAct);
 
         pPlayerData->nLeftSkillId = 0;
         pPlayerData->nRightSkillId = 0;

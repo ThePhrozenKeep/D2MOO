@@ -254,10 +254,7 @@ void __fastcall sub_6FC74B00(D2GameStrc* pGame, D2UnitStrc* pObject)
     if (UNITS_IsShrine(pObject))
     {
         UNITROOM_RefreshUnit(pObject);
-        if (pObject)
-        {
-            pObject->dwFlags |= 1;
-        }
+        pObject->dwFlags |= UNITFLAG_DOUPDATE;
 
         UNITS_ChangeAnimMode(pObject, 0);
         pObject->pObjectData->dwOperateGUID = 0;
@@ -446,12 +443,7 @@ void __fastcall sub_6FC74DF0(D2GameStrc* pGame, D2UnitStrc* pObject)
 void __fastcall D2GAME_SpikeTraps_6FC74F60(D2GameStrc* pGame, D2UnitStrc* pObject)
 {
     // TODO: v8, v10, v11
-    int32_t nAnimMode = 0;
-    if (pObject)
-    {
-        nAnimMode = pObject->dwAnimMode;
-    }
-
+    int32_t nAnimMode = pObject->dwAnimMode;
     D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
 
     int32_t v10 = 0;
@@ -1715,7 +1707,7 @@ void __fastcall D2GAME_SHRINES_Enirhs_6FC76850(D2ObjOperateFnStrc* pOp, D2Shrine
     char* szName = UNITS_GetPlayerData(pOp->pPlayer)->szName;
     if (szName)
     {
-        strncpy(szName, _strrev(szName), 16);
+        strncpy(szName, _strrev(szName), 16); // NOLINT(clang-diagnostic-deprecated-declarations)
     }
 }
 
@@ -2190,12 +2182,57 @@ void __fastcall D2GAME_SHRINES_CombatBoost_6FC77690(D2ObjOperateFnStrc* pOp, D2S
     curse.nDuration = pShrinesTxtRecord->dwDurationInFrames;
     curse.nStat = 25;
     curse.nStatValue = pShrinesTxtRecord->dwArg1;
-    curse.pStateFunc = 0;
+    curse.pStateRemoveCallback = 0;
 
     STATLIST_SetStat(sub_6FD10EC0(&curse), STAT_TOHIT, nValue, 0);
 }
 
-//D2Game.0x6FC77750
+//1.10f: Inlined
+//1.13c: D2Game.0x6FC89B00
+int32_t OBJMODE_GetToHitPercentage(D2UnitStrc* pUnit, D2UnitStrc* pWeapon, D2SkillStrc* pSkill)
+{
+    int32_t nAttackRate = UNITS_GetAttackRate(pUnit);
+    D2_CHECK(pSkill);
+
+    if (!pWeapon)
+    {
+        pWeapon = INVENTORY_GetLeftHandWeapon(pUnit->pInventory); // NOLINT(clang-analyzer-core.NullDereference)
+    }
+
+    if (pWeapon && ITEMS_GetItemType(pWeapon) == ITEMTYPE_MISSILE_POTION)
+    {
+        nAttackRate = 0;
+    }
+
+    int32_t nBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_TOHIT_PERCENT, 0) + SKILLS_GetWeaponMasteryBonus(pUnit, pWeapon, pSkill, 0);
+    int32_t nPercentage = nAttackRate * ((nBonus + SKILLS_GetSkillsTxtRecordFromSkill(pSkill)->dwToHit) / 100 + 1);
+
+    if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
+    {
+        D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
+        if (pCharStatsTxtRecord)
+        {
+            nPercentage += pCharStatsTxtRecord->dwToHitFactor;
+        }
+    }
+    return nPercentage;
+}
+
+//Helper function
+static int32_t OBJMODE_GetMinDamagePercentage(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
+{
+    if ((D2Common_10434(pUnit, 1) || pWeapon) && INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2) // NOLINT(clang-analyzer-core.NullDereference)
+    {
+        return STATLIST_UnitGetStatValue(pUnit, STAT_SECONDARY_MINDAMAGE, 0);
+    }
+    else
+    {
+        return STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0);
+    }
+}
+
+//1.10f: D2Game.0x6FC77750
+//1.13c: D2Game.0x6FC89EE0
 int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId, int32_t nValue, D2UnitStrc* pUnit)
 {
     D2UnitStrc* pWeapon = nullptr;
@@ -2220,52 +2257,15 @@ int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId
     case STAT_TOHIT:
     {
         D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, 0, -1);
-        int32_t nAttackRate = UNITS_GetAttackRate(pUnit);
-        if (!pSkill)
-        {
-            FOG_DisplayWarning("hSkill", __FILE__, __LINE__);
-        }
-
-        if (!pWeapon)
-        {
-            pWeapon = INVENTORY_GetLeftHandWeapon(pUnit->pInventory);
-        }
-
-        if (pWeapon && ITEMS_GetItemType(pWeapon) == ITEMTYPE_MISSILE_POTION)
-        {
-            nAttackRate = 0;
-        }
-
-        int32_t nBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_TOHIT_PERCENT, 0) + SKILLS_GetWeaponMasteryBonus(pUnit, pWeapon, pSkill, 0);
-        int32_t nPercentage = nAttackRate * ((nBonus + SKILLS_GetSkillsTxtRecordFromSkill(pSkill)->dwToHit) / 100 + 1);
-
-        if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
-        {
-            D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
-            if (pCharStatsTxtRecord)
-            {
-                nPercentage += pCharStatsTxtRecord->dwToHitFactor;
-            }
-        }
-
-        return nValue * nPercentage / 100;
+        return (nValue * OBJMODE_GetToHitPercentage(pUnit, pWeapon, pSkill)) / 100;
     }
     case STAT_MINDAMAGE:
     {
-        if ((D2Common_10434(pUnit, 1) || pWeapon) && INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
-        {
-            return nValue * STATLIST_UnitGetStatValue(pUnit, STAT_SECONDARY_MINDAMAGE, 0) / 100;
-        }
-        else
-        {
-            return nValue * STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0) / 100;
-        }
+        return (nValue * OBJMODE_GetMinDamagePercentage(pUnit, pWeapon)) / 100;
     }
     default:
-        break;
+        return nValue * STATLIST_UnitGetStatValue(pUnit, nStatId, 0) / 100;
     }
-
-    return nValue * STATLIST_UnitGetStatValue(pUnit, nStatId, 0) / 100;
 }
 
 //D2Game.0x6FC779C0
@@ -2286,7 +2286,7 @@ void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2Shrin
     curse.nSkillLevel = 0;
     curse.nDuration = pShrinesTxtRecord->dwDurationInFrames;
     curse.nState = pShrineRecord->unk0x08;
-    curse.pStateFunc = sub_6FC77AB0;
+    curse.pStateRemoveCallback = sub_6FC77AB0;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     STATLIST_SetStat(pStatList, STAT_STAMINA, 2 * curse.nStatValue, 0);
@@ -2294,9 +2294,9 @@ void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2Shrin
 }
 
 //D2Game.0x6FC77AB0
-void __fastcall sub_6FC77AB0(D2UnitStrc* pUnit, int32_t a2, int32_t a3)
+void __fastcall sub_6FC77AB0(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
-    sub_6FD10E50(pUnit, a2, a3);
+    sub_6FD10E50(pUnit, nState, pStatList);
     STATLIST_SetUnitStat(pUnit, STAT_STAMINA, STATLIST_GetMaxStaminaFromUnit(pUnit), 0);
 }
 
@@ -2322,7 +2322,7 @@ void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, 
     curse.nSkill = 0;
     curse.nSkillLevel = 0;
     curse.nState = pShrineRecord->unk0x08;
-    curse.pStateFunc = 0;
+    curse.pStateRemoveCallback = 0;
 
     sub_6FD10EC0(&curse);
 }
@@ -2339,16 +2339,16 @@ void __fastcall D2GAME_SHRINES_SkillBoost_6FC77BA0(D2ObjOperateFnStrc* pOp, D2Sh
     curse.pTarget = pOp->pPlayer;
     curse.nDuration = pShrinesTxtRecord->dwDurationInFrames;
     curse.nStat = STAT_MAXSTAMINA;
-    curse.pStateFunc = sub_6FC77C10;
+    curse.pStateRemoveCallback = sub_6FC77C10;
     curse.nState = gpShrineTable_6FD28D18[pShrinesTxtRecord->nCode].unk0x08;
     sub_6FD10EC0(&curse);
     sub_6FD14C30(pOp->pPlayer);
 }
 
 //D2Game.0x6FC77C10
-void __fastcall sub_6FC77C10(D2UnitStrc* pUnit, int32_t a2, int32_t a3)
+void __fastcall sub_6FC77C10(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
-    sub_6FD10E50(pUnit, a2, a3);
+    sub_6FD10E50(pUnit, nState, pStatList);
     sub_6FD14C30(pUnit);
 }
 

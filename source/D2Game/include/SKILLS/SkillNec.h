@@ -20,7 +20,7 @@ int32_t __fastcall SKILLS_SrvSt20_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUnit
 //D2Game.0x6FD0B190
 int32_t __fastcall SKILLS_SrvSt21_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD0B250
-void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused);
+void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList);
 //D2Game.0x6FD0B2B0
 int32_t __fastcall sub_6FD0B2B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget);
 //D2Game.0x6FD0B3D0
@@ -40,7 +40,7 @@ int32_t __fastcall SKILLS_SrvDo061_Confuse(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //D2Game.0x6FD0C060
 int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg);
 //D2Game.0x6FD0C2B0
-void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused);
+void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList);
 //D2Game.0x6FD0C2E0
 void __fastcall D2GAME_SetSummonResistance_6FD0C2E0(D2UnitStrc* pUnit, D2UnitStrc* pPet);
 //D2Game.0x6FD0C3A0

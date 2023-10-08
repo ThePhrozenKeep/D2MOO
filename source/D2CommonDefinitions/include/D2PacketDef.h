@@ -680,7 +680,7 @@ struct D2GSPacketSrv0F		//size of 0x10
 	uint8_t nFlags;			//0x06
 	uint16_t nDestPosX;			//0x07
 	uint16_t nDestPosY;			//0x09
-	uint8_t __00B;				//0x0B
+	uint8_t unk0x00B;				//0x0B
 	uint16_t nCurrentPosX;		//0x0C
 	uint16_t nCurrentPosY;		//0x0E
 };
@@ -702,25 +702,25 @@ struct D2GSPacketSrv11		//size of 0x08
 	uint8_t nHeader;			//0x00
 	uint8_t nUnitType;			//0x01
 	uint32_t dwUnitGUID;		//0x02
-	uint16_t __006;				//0x06
+	uint16_t unk0x006;				//0x06
 };
 
 struct D2GSPacketSrv12		//size of 0x1A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[25];			//0x01
+	uint8_t unk0x001[25];			//0x01
 };
 
 struct D2GSPacketSrv13		//size of 0x0E
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[13];			//0x01
+	uint8_t unk0x001[13];			//0x01
 };
 
 struct D2GSPacketSrv14		//size of 0x12
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[17];			//0x01
+	uint8_t unk0x001[17];			//0x01
 };
 
 struct D2GSPacketSrv15		//size of 0x0B
@@ -730,7 +730,7 @@ struct D2GSPacketSrv15		//size of 0x0B
 	uint32_t dwUnitGUID;		//0x02
 	uint16_t nPosX;				//0x06
 	uint16_t nPosY;				//0x08
-	uint8_t __00A;				//0x0A
+	uint8_t unk0x00A;				//0x0A
 };
 
 struct D2ClientUnitUpdateStrc
@@ -757,7 +757,7 @@ struct D2GSPacketSrv17		//size of 0x01
 struct D2GSPacketSrv18		//size of 0x0F
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[14];			//0x01
+	uint8_t unk0x001[14];			//0x01
 };
 
 struct D2GSPacketSrv19		//size of 0x02
@@ -863,19 +863,19 @@ struct D2GSPacketSrv23		//size of 0x0D
 	uint32_t dwUnitGUID;		//0x02
 	uint8_t nPosition;			//0x06
 	uint16_t nSkill;			//0x07
-	uint32_t __009;			//0x09
+	uint32_t unk0x009;			//0x09
 };
 
 struct D2GSPacketSrv24		//size of 0x5A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[89];			//0x01
+	uint8_t unk0x001[89];			//0x01
 };
 
 struct D2GSPacketSrv25		//size of 0x5A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[89];			//0x01
+	uint8_t unk0x001[89];			//0x01
 };
 
 struct D2GSPacketSrv26		//variable size
@@ -1057,7 +1057,7 @@ struct D2GSPacketSrv3F		//size of 0x08
 struct D2GSPacketSrv40		//size of 0x0D
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[12];			//0x01
+	uint8_t unk0x001[12];			//0x01
 };
 
 //struct D2GSPacketSrv41		//size of 0x01
@@ -1085,7 +1085,7 @@ struct D2GSPacketSrv42		//size of 0x06
 struct D2GSPacketSrv45		//size of 0x0D
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[12];			//0x01
+	uint8_t unk0x001[12];			//0x01
 };
 
 //struct D2GSPacketSrv46		//size of 0x01
@@ -1129,7 +1129,7 @@ struct D2GSPacketSrv48		//size of 0x0B
 struct D2GSPacketSrv4C		//size of 0x10
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[15];			//0x01
+	uint8_t unk0x001[15];			//0x01
 };
 
 struct D2GSPacketSrv4D		//size of 0x11
@@ -1229,13 +1229,13 @@ struct D2GSPacketSrv53		//size of 0x0A
 struct D2GSPacketSrv54		//size of 0x0A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[9];			//0x01
+	uint8_t unk0x001[9];			//0x01
 };
 
 struct D2GSPacketSrv55		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[2];			//0x01
+	uint8_t unk0x001[2];			//0x01
 };
 
 //struct D2GSPacketSrv56		//size of 0x01
@@ -1388,13 +1388,13 @@ struct D2GSPacketSrv5D		//size of 0x06
 struct D2GSPacketSrv5E		//size of 0x26
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[37];			//0x01
+	uint8_t unk0x001[37];			//0x01
 };
 
 struct D2GSPacketSrv5F		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[4];			//0x01
+	uint8_t unk0x001[4];			//0x01
 };
 
 struct D2GSPacketSrv60		//size of 0x07
@@ -1408,7 +1408,7 @@ struct D2GSPacketSrv60		//size of 0x07
 struct D2GSPacketSrv61		//size of 0x02
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001;				//0x01
+	uint8_t unk0x001;				//0x01
 };
 
 struct D2GSPacketSrv62		//size of 0x07
@@ -1451,7 +1451,7 @@ struct D2GSPacketSrv65			//size of 0x07
 struct D2GSPacketSrv66		//size of 0x07
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[6];			//0x01
+	uint8_t unk0x001[6];			//0x01
 };
 
 struct D2GSPacketSrv67		//size of 0x10
@@ -1663,7 +1663,7 @@ struct D2GSPacketSrv7D		//size of 0x12
 struct D2GSPacketSrv7E		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[4];			//0x01
+	uint8_t unk0x001[4];			//0x01
 };
 
 struct D2GSPacketSrv7F		//size of 0x0A
@@ -1774,7 +1774,7 @@ struct D2GSPacketSrv8E		//size of 0x0A
 struct D2GSPacketSrv8F		//size of 0x21
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[32];			//0x01
+	uint8_t unk0x001[32];			//0x01
 };
 
 struct D2GSPacketSrv90		//size of 0x0D
@@ -1795,13 +1795,13 @@ struct D2GSPacketSrv91		//size of 0x1A
 struct D2GSPacketSrv92		//size of 0x06
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[5];			//0x01
+	uint8_t unk0x001[5];			//0x01
 };
 
 struct D2GSPacketSrv93		//size of 0x08
 {
 	uint8_t nHeader;			//0x00
-	uint8_t __001[7];			//0x01
+	uint8_t unk0x001[7];			//0x01
 };
 
 struct D2GSPacketSrv94		//variable size
@@ -1825,7 +1825,7 @@ struct D2GSPacketSrv95		//size of 0x0D
 	//uint32_t dwStamina;		//0x09
 	//uint16_t nPosX;				//0x0D
 	//uint16_t nPosY;				//0x0F
-	//uint16_t __011;				//0x11
+	//uint16_t unk0x011;				//0x11
 };
 
 struct D2GSPacketSrv96		//size of 0x09

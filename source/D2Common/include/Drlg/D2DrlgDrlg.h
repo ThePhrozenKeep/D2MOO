@@ -152,7 +152,7 @@ enum D2MapTileFlags
 };
 // Helper function
 inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }
-inline int GetMapTileLayer(uint32_t nMapTileFlags) { return ((nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT) - 1; }
+inline int32_t GetMapTileLayer(uint32_t nMapTileFlags) { return int32_t((nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT) - 1; }
 
 struct D2DrlgCoordsStrc
 {

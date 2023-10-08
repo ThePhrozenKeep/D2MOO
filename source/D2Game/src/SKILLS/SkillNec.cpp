@@ -203,8 +203,9 @@ int32_t __fastcall SKILLS_SrvSt21_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FD0B250
-void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     if (pUnit)
     {
         D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
@@ -221,7 +222,7 @@ void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
             AITHINK_ExecuteAiFn(pGame, pUnit, pAiControl, 0);
         }
 
-        sub_6FD10E50(pUnit, nState, nUnused);
+        sub_6FD10E50(pUnit, nState, pStatList);
     }
 }
 
@@ -354,7 +355,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
     curse.nDuration = v2->nDuration;
     curse.nSkill = v2->nSkillId;
     curse.nSkillLevel = v2->nSkillLevel;
-    curse.pStateFunc = v2->unk0x08 ? sub_6FD0B250 : nullptr;
+    curse.pStateRemoveCallback = v2->unk0x08 ? sub_6FD0B250 : nullptr;
     curse.pTarget = pUnit;
     curse.nStat = v2->nAuraStat[0];
     curse.nStatValue = nValue;
@@ -630,7 +631,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
     curse.nDuration = nLength;
     curse.nStat = -1;
     curse.nState = pSkillsTxtRecord->wAuraTargetState;
-    curse.pStateFunc = sub_6FD0C2B0;
+    curse.pStateRemoveCallback = sub_6FD0C2B0;
     sub_6FD10EC0(&curse);
 
     return 1;
@@ -777,7 +778,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
     curse.nStat = nStatId;
     curse.nStatValue = nValue;
     curse.nState = pParam->nAuraTargetState;
-    curse.pStateFunc = sub_6FD0C2B0;
+    curse.pStateRemoveCallback = sub_6FD0C2B0;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)
@@ -829,8 +830,9 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 }
 
 //D2Game.0x6FD0C2B0
-void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     sub_6FCBDD30(pUnit, 0, 1);
     STATES_ToggleState(pUnit, nState, 0);
     D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pUnit), pUnit);

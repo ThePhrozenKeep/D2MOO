@@ -1,6 +1,7 @@
 #include "D2Debugger.h"
 #include <Windows.h>
 
+// NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
 	switch (fdwReason)
@@ -17,3 +18,4 @@ BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 
 	return TRUE;
 }
+// NOLINTEND(bugprone-branch-clone)

@@ -846,7 +846,7 @@ void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeep
 	}
 }
 
-static const char byte_6FDCF958[] =
+static const uint8_t byte_6FDCF958[] =
 {
 	0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x10, 0x10,
 	0x0E, 0x0E, 0x06, 0x13, 0x0E, 0x0E, 0x06, 0x13,
@@ -949,9 +949,9 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 				if (nDirectionsWithPathFlags)
 				{
 					D2_ASSERT(nDirectionsWithPathFlags < (sizeof(byte_6FDCF958) / sizeof(byte_6FDCF958[0])));
-					if (const int v19 = byte_6FDCF958[nDirectionsWithPathFlags])
+					if (const uint32_t v19 = byte_6FDCF958[nDirectionsWithPathFlags])
 					{
-						const uint32_t nNewFloorFLags = (((uint32_t)v19 << 8) | 0x82);
+						const uint32_t nNewFloorFLags = ((v19 << 8) | 0x82);
 						DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, nX - 1, nY - 1, nNewFloorFLags, FLAG_OPERATION_OVERWRITE);
 					}
 				}

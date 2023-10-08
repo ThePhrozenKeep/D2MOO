@@ -1046,7 +1046,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 	for (int i = 0; i < nAutomapTxtRecordCount; ++i)
 	{
 		nLevelCounter = 0;
-		while (strcmp(pAutomapTxt[i].szLevelName, gszAutomapLevelNames[nLevelCounter]))
+		while (0 != strcmp(pAutomapTxt[i].szLevelName, gszAutomapLevelNames[nLevelCounter]))
 		{
 			++nLevelCounter;
 			D2_ASSERT(nLevelCounter < ARRAY_SIZE(gszAutomapLevelNames));
@@ -1054,7 +1054,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 		pAutomap[i].dwAutomapLevelType = nLevelCounter;
 
 		nTileCounter = 0;
-		while (strcmp(pAutomapTxt[i].szTileName, gszAutomapTileNames[nTileCounter]))
+		while (0 != strcmp(pAutomapTxt[i].szTileName, gszAutomapTileNames[nTileCounter]))
 		{
 			++nTileCounter;
 			D2_ASSERT(nTileCounter < ARRAY_SIZE(gszAutomapTileNames));

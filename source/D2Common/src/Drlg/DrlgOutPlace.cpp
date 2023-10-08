@@ -300,9 +300,10 @@ LABEL_16:
 				if (nTestCoordX == nX2 && nTestCoordY == nY2)
 				{
 LABEL_26:
-					if (pCurrentOutPlace->nX == nTestCoordX || (v29 = 3, pCurrentOutPlace->nY == nTestCoordY))
+					v29 = 2;
+					if (pCurrentOutPlace->nX != nTestCoordX && pCurrentOutPlace->nY != nTestCoordY)
 					{
-						v29 = 2;
+						v29 = 3;
 					}
 
 					int v30 = v29 + pCurrentOutPlace->field_8;

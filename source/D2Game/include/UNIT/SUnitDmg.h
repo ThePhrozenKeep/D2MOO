@@ -91,7 +91,7 @@ struct D2DamageStrc
 	uint32_t unk0x5C;						//0x5C
 	uint32_t dwHitClass;					//0x60
 	uint8_t nHitClassActiveSet;				//0x64
-	char nConvType;							//0x65
+	int8_t nConvType;						//0x65
 	uint8_t unk0x66[2];						//0x66
 	int32_t dwConvPct;						//0x68
 	int32_t nOverlay;						//0x6C
@@ -146,7 +146,7 @@ int32_t __fastcall SUNITDMG_SetHitClass(D2DamageStrc* pDamage, uint32_t nHitClas
 //D2Game.0x6FCBE310
 int32_t __fastcall SUNITDMG_GetColdEffect(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBE360
-void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, int32_t a3);
+void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FCBE420
 int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetStats, D2UnitStrc* pItem, int32_t nMinDmg, int32_t nMaxDmg, int32_t nDamagePercent, int32_t nDamage, uint8_t nSrcDam);
 //D2Game.0x6FCBE7E0
@@ -174,7 +174,7 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 //D2Game.0x6FCC0940
 void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nColdLength);
 //D2Game.0x6FCC0B90
-void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, int32_t a3);
+void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FCC0BE0
 void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nFreezeLength);
 //D2Game.0x6FCC0E20

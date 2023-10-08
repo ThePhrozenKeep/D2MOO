@@ -80,7 +80,7 @@ static void DATATBLS_EvaluateUsingConstantFromBuffer(Fog64IntStack* pCalcStack, 
 		nCallbackResult = fpParamCallBack(ReadFromBuffer<uint32_t>(pBufferCurrentPos), pUserData);
 		break;
 	case AST_Raw_Int8:
-		nCallbackResult = ReadFromBuffer<int8_t>(pBufferCurrentPos);
+		nCallbackResult = ReadFromBuffer<int8_t>(pBufferCurrentPos); // NOLINT
 		break;
 	case AST_Raw_Int16:
 		nCallbackResult = ReadFromBuffer<int16_t>(pBufferCurrentPos);

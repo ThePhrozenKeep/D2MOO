@@ -246,6 +246,16 @@ static void AITACTICS_ChangeModeAndTargetUnitToAttack1Or2(D2GameStrc* pGame, D2U
 	}
 }
 
+// Inlined
+static D2StatListStrc* GetAuraStateStatList(D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord)
+{
+	if (pSkillsTxtRecord->nAuraState > 0 && STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState) != 0)
+	{
+		return STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
+	}
+	return nullptr;
+}
+
 void __fastcall AITHINK_Fn000(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 }
@@ -8397,7 +8407,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, int32_t a4, int32_t bRun, int32_t nVelocity, int32_t a7)
 {
 	// TODO: Names
-	constexpr char byte_6FD295C4[] =
+	constexpr uint8_t byte_6FD295C4[] =
 	{
 		4, 3, 2, 1, 0, 7, 6, 5
 	};
@@ -8417,7 +8427,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 	{
 	case 0:
 	{
-		int32_t nIndex = D2Common_11053(UNITS_GetDirectionToCoords(pOwner, v65, v64));
+		uint8_t nIndex = D2Common_11053(UNITS_GetDirectionToCoords(pOwner, v65, v64));
 
 		const int32_t a4a = D2Common_10095(UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
 
@@ -9078,7 +9088,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 	{
 	case 0:
 	{
-		int32_t nIndex = D2Common_11053(UNITS_GetDirectionToCoords(pOwner, v11, v12));
+		uint8_t nIndex = D2Common_11053(UNITS_GetDirectionToCoords(pOwner, v11, v12));
 
 		const int32_t a4 = D2Common_10095(UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
 
@@ -11086,38 +11096,45 @@ void __fastcall AITHINK_Fn060_GoodNpcRanged(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return;
 	}
 
-	D2UnitStrc* pTarget = nullptr;
 	// TODO: Names
 	int32_t a3 = 0;
 	int32_t a4 = 0;
-	if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)) || (pTarget = sub_6FCF2CC0(pGame, pUnit, &a3, &a4)) == 0 || a3 >= 20)
+
+
+	if (!DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
 	{
-		if (AI_RollPercentage(pUnit) < 20)
+		D2UnitStrc* pTarget = sub_6FCF2CC0(pGame, pUnit, &a3, &a4);
+		if (pTarget && a3 < 20)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			if (AI_RollPercentage(pUnit) < 30)
+			{
+				if (pUnit->dwClassId == MONSTER_ROGUEHIRE)
+				{
+					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
+				}
+				else
+				{
+					AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pTarget);
+				}
+			}
+			else
+			{
+				if (AI_RollPercentage(pUnit) < 30)
+				{
+					sub_6FCD0E80(pGame, pUnit, pTarget, 4u, 0);
+				}
+				else
+				{
+					AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
+				}
+			}
 			return;
 		}
-
-		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
-		return;
 	}
 
-	if (AI_RollPercentage(pUnit) < 30)
+	if (AI_RollPercentage(pUnit) < 20)
 	{
-		if (pUnit->dwClassId == MONSTER_ROGUEHIRE)
-		{
-			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
-		}
-		else
-		{
-			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pTarget);
-		}
-		return;
-	}
-
-	if (AI_RollPercentage(pUnit) < 30)
-	{
-		sub_6FCD0E80(pGame, pUnit, pTarget, 4u, 0);
+		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 		return;
 	}
 
@@ -13362,7 +13379,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 			bProgressiveState = 1;
 		}
 
-		const int32_t bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0);
+		const bool bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0);
 
 		if (arg.unk0x0C > 3 && (ITEMS_RollRandomNumber(&pUnit->pSeed) & 31) < 2 * arg.unk0x0C)
 		{
@@ -13542,46 +13559,53 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 					}
 					else
 					{
-						D2StatListStrc* pStatList = nullptr;
-						if (pSkillsTxtRecord->nAuraState <= 0 || !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState) || (pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState)) == 0)
+						int32_t nAuraStatValue = 0;
+						if (D2StatListStrc* pStatList = GetAuraStateStatList(pUnit, pSkillsTxtRecord))
+						{
+							nAuraStatValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
+							nAuraStatBonus += nAuraStatValue;
+						}
+
+						if (nAuraStatValue < 3)
 						{
 							nCurrentValue = nProgressiveBonus + nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick);
-						}
-						else
-						{
-							const int32_t nAuraStatValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
-							nAuraStatBonus += nAuraStatValue;
-
-							if (nAuraStatValue < 3)
-							{
-								nCurrentValue = nProgressiveBonus + nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick);
-							}
 						}
 					}
 					break;
 				}
 				case 5u:
 				{
-					D2MissilesTxt* pMissilesTxtRecord = nullptr;
-					if (bNotColliding && (pSkillsTxtRecord->wSrvMissile >= 0 || (pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pSkillsTxtRecord->wSrvMissileA)) == 0 || nDistanceToTarget < (pMissilesTxtRecord->wRange - 1) * (pMissilesTxtRecord->wRange - 1)))
+					if (!bNotColliding)
 					{
-						if (arg.unk0x08 <= 25)
-						{
-							nTemp -= 5;
-						}
-
-						if (nDistanceToTarget <= 25)
-						{
-							nTemp -= 5;
-						}
-
-						if (bProgressiveState)
-						{
-							nTemp -= 5;
-						}
-
-						nCurrentValue = nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick);
+						break;
 					}
+					if (pSkillsTxtRecord->wSrvMissile < 0)
+					{
+						if (D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pSkillsTxtRecord->wSrvMissileA))
+						{
+							if (nDistanceToTarget >= (pMissilesTxtRecord->wRange - 1) * (pMissilesTxtRecord->wRange - 1))
+							{
+								break;
+							}
+						}
+					}
+
+					if (arg.unk0x08 <= 25)
+					{
+						nTemp -= 5;
+					}
+
+					if (nDistanceToTarget <= 25)
+					{
+						nTemp -= 5;
+					}
+
+					if (bProgressiveState)
+					{
+						nTemp -= 5;
+					}
+
+					nCurrentValue = nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick);
 					break;
 				}
 				case 6u:
@@ -13647,26 +13671,37 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 				}
 				case 11u:
 				{
-					D2MissilesTxt* pMissilesTxtRecord = nullptr;
-					if (bNotColliding && (pSkillsTxtRecord->wSrvMissile >= 0 || (pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pSkillsTxtRecord->wSrvMissileA)) == 0 || nDistanceToTarget < (pMissilesTxtRecord->wRange - 1) * (pMissilesTxtRecord->wRange - 1)))
+					if (!bNotColliding)
 					{
-						if (arg.unk0x08 <= 25)
-						{
-							nTemp -= 5;
-						}
-
-						if (nDistanceToTarget <= 25)
-						{
-							nTemp -= 5;
-						}
-
-						if (bProgressiveState)
-						{
-							nTemp -= 5;
-						}
-
-						nCurrentValue = nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick) + 3 * arg.unk0x1C;
+						break;
 					}
+					if (pSkillsTxtRecord->wSrvMissile < 0)
+					{
+						if (D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pSkillsTxtRecord->wSrvMissileA))
+						{
+							if (nDistanceToTarget >= (pMissilesTxtRecord->wRange - 1) * (pMissilesTxtRecord->wRange - 1))
+							{
+								break;
+							}
+						}
+					}
+
+					if (arg.unk0x08 <= 25)
+					{
+						nTemp -= 5;
+					}
+
+					if (nDistanceToTarget <= 25)
+					{
+						nTemp -= 5;
+					}
+
+					if (bProgressiveState)
+					{
+						nTemp -= 5;
+					}
+
+					nCurrentValue = nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick) + 3 * arg.unk0x1C;
 					break;
 				}
 				case 12u:
@@ -13684,10 +13719,16 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 							nTemp += 10;
 						}
 
-						D2StatListStrc* pStatList = nullptr;
 						int32_t nAuraStatValue = 0;
-						if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[2]) || pSkillsTxtRecord->nAuraState <= 0 || !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState)
-							|| (pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState)) == 0 || (nAuraStatValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0), nAuraStatBonus += nAuraStatValue, nAuraStatValue < 3))
+						if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[2])
+						{
+							if (D2StatListStrc* pStatList = GetAuraStateStatList(pUnit, pSkillsTxtRecord))
+							{
+								nAuraStatValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
+								nAuraStatBonus += nAuraStatValue;
+							}
+						}
+						if(nAuraStatValue < 3)
 						{
 							nCurrentValue = nTemp + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRandomPick);
 

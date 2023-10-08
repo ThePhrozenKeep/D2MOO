@@ -423,7 +423,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     {
         if (pClient->HotkeySkills[i].nSkill >= 0 && pClient->HotkeySkills[i].nSkill < sgptDataTables->nSkillsTxtRecordCount)
         {
-            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].__002, pClient->HotkeySkills[i].dwFlags);
+            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].unk0x002, pClient->HotkeySkills[i].dwFlags);
         }
     }
 
@@ -490,7 +490,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     for (int32_t i = 0; i < 16; ++i)
     {
         pClient->HotkeySkills[i].nSkill = -1;
-        pClient->HotkeySkills[i].__002 = 0;
+        pClient->HotkeySkills[i].unk0x002 = 0;
         pClient->HotkeySkills[i].dwFlags = -1;
     }
 
@@ -625,7 +625,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
         D2_LOCK(&gClientListLock_6FD447D0);
         D2ClientStrc* pClientToRemove = CLIENTS_RemoveClientFromListWithId(&gpClientList_6FD43FB8[nClientIdToRemove & 0xFF], nClientIdToRemove);
         D2_ASSERT(pClientToRemove);
-        strcpy(szName, pClientToRemove->szName);
+        strcpy(szName, pClientToRemove->szName); // NOLINT(clang-diagnostic-deprecated-declarations)
         D2_UNLOCK(&gClientListLock_6FD447D0);
     }
 
@@ -684,7 +684,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
                     (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
                     0,
                     0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, pClientToRemove->unk0x190);
+                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
             }
 
             GAME_LogMessage( 6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
@@ -697,7 +697,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *(char*)pClientToRemove->tCharacterInfo.unk0x00 = '\0';
+            *(char*)&pClientToRemove->tCharacterInfo.unk0x00 = '\0';
 
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
@@ -709,7 +709,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
                     (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
                     0,
                     0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, pClientToRemove->unk0x190);
+                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
             }
         }
 
@@ -873,7 +873,7 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
 
     for (int32_t nCurrentRoom = 0; nCurrentRoom < nNumRooms; nCurrentRoom++)
     {
-        for (D2UnitStrc* pRoomUnit = pAdjacentRoomsList[nCurrentRoom]->pUnitFirst; pRoomUnit != nullptr; pRoomUnit->pRoomNext)
+        for (D2UnitStrc* pRoomUnit = pAdjacentRoomsList[nCurrentRoom]->pUnitFirst; pRoomUnit != nullptr; pRoomUnit = pRoomUnit->pRoomNext)
         {
             if (pRoomUnit->dwUnitType != UNIT_PLAYER)
             {
@@ -1110,14 +1110,14 @@ void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom
 }
 
 //D2Game.0x6FC33830
-void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, int32_t always0)
+void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull)
 {
     D2_ASSERT(pClient);
 
-    if (always0)
+    if (pAlwaysNull)
     {
-        pClient->unk0x190[2] = *(int32_t*)always0;
-        pClient->unk0x190[3] = *(int32_t*)(always0 + 12);
+        pClient->unk0x194[1] = *(int32_t*)pAlwaysNull;
+        pClient->unk0x194[2] = *((int32_t*)(pAlwaysNull) + 3);
         pClient->dwFlags |= 2;
     }
     else
@@ -1623,7 +1623,7 @@ void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId,
     if (pClient)
     {
         pClient->HotkeySkills[nHotkeyId].nSkill = nSkillId;
-        pClient->HotkeySkills[nHotkeyId].__002 = a4;
+        pClient->HotkeySkills[nHotkeyId].unk0x002 = a4;
         pClient->HotkeySkills[nHotkeyId].dwFlags = nFlags;
     }
 }
@@ -1634,7 +1634,7 @@ void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32
     if (pClient)
     {
         *pSkillId = pClient->HotkeySkills[nId].nSkill;
-        *a4 = pClient->HotkeySkills[nId].__002;
+        *a4 = pClient->HotkeySkills[nId].unk0x002;
         *pFlags = pClient->HotkeySkills[nId].dwFlags;
     }
 }

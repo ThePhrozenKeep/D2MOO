@@ -26,9 +26,23 @@ static const int D2GameImageBase = 0x6FC30000;
 
 decltype(&GAME_UpdateProgress) GAME_UpdateProgress_Original = nullptr;
 
+bool CheckEnvVarTrue(const char* envVarName)
+{
+    char* envBuffer = nullptr;
+    size_t bufferSize = 0;
+
+    if (0 == _dupenv_s(&envBuffer, &bufferSize, envVarName))
+    {
+        const bool isSet = envBuffer && *envBuffer == '1';
+        free(envBuffer);
+        return isSet;
+    }
+    return false;
+}
+
 bool IsDebuggerEnabled()
 {
-    static bool bEnabledFromCommandLine = strstr(GetCommandLineA(), "-debug") || (getenv("D2_DEBUGGER") && *getenv("D2_DEBUGGER") == '1');
+    static bool bEnabledFromCommandLine = strstr(GetCommandLineA(), "-debug") || CheckEnvVarTrue("D2_DEBUGGER");
     if (bEnabledFromCommandLine)
     {
         return true;

@@ -98,8 +98,9 @@ int32_t __fastcall SUNITDMG_GetColdEffect(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBE360
-void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, int32_t a3)
+void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+	D2_MAYBE_UNUSED(pStatList);
 	if (SUNIT_IsDead(pUnit) && STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
 	{
 		return;
@@ -317,7 +318,11 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		pDamage->dwPhysDamage = SUNITDMG_ApplyDamageBonuses(pAttacker, 1, nullptr, 0, 0, pDamage->dwEnDmgPct, pDamage->dwPhysDamage, nSrcDam);
 
 		int32_t nWeaponMastery = 0;
-		if (!a5 && (nWeaponMastery = SKILLS_GetWeaponMasteryBonus(pAttacker, sub_6FC7C7B0(pAttacker), 0, 2), nWeaponMastery > 0) && (int32_t)(ITEMS_RollRandomNumber(&pAttacker->pSeed) % 100) < nWeaponMastery)
+
+		if (!a5 
+			&& (nWeaponMastery = SKILLS_GetWeaponMasteryBonus(pAttacker, sub_6FC7C7B0(pAttacker), 0, 2), nWeaponMastery > 0) // NOLINT(bugprone-assignment-in-if-condition)
+			&& (int32_t)(ITEMS_RollRandomNumber(&pAttacker->pSeed) % 100) < nWeaponMastery
+			)
 		{
 			pDamage->wResultFlags |= DAMAGERESULTFLAG_CRITICALSTRIKE;
 			pDamage->dwPhysDamage *= 2;
@@ -775,14 +780,17 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 	damageInfo.pDefender = pDefender;
 	damageInfo.pDamage = pDamage;
 
-	if (!damageInfo.pAttacker || pAttacker->dwUnitType != UNIT_MONSTER || (damageInfo.bAttackerIsMonster = 1, MONSTERS_GetHirelingTypeId(pAttacker)))
+
+	damageInfo.bAttackerIsMonster = 0;
+	if (damageInfo.pAttacker && pAttacker->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pAttacker))
 	{
-		damageInfo.bAttackerIsMonster = 0;
+		damageInfo.bAttackerIsMonster = 1;
 	}
 
-	if (!pDefender || pDefender->dwUnitType != UNIT_MONSTER || (damageInfo.bDefenderIsMonster = 1, MONSTERS_GetHirelingTypeId(pDefender)))
+	damageInfo.bDefenderIsMonster = 0;
+	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pDefender))
 	{
-		damageInfo.bDefenderIsMonster = 0;
+		damageInfo.bDefenderIsMonster = 1;
 	}
 
 	damageInfo.nDamageReduction[0] = 0;
@@ -1610,8 +1618,9 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 }
 
 //D2Game.0x6FCC0B90
-void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, int32_t a3)
+void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+	D2_MAYBE_UNUSED(pStatList);
 	if (SUNIT_IsDead(pUnit) && STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
 	{
 		return;

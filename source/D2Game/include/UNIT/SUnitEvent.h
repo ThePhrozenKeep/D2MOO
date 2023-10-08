@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
-#include "Game/Event.h"
+#include "GAME/Event.h"
 #include "SUnitDmg.h"
 
 using D2UnitEventCallbackFunction = int32_t(__fastcall*)(D2GameStrc*, int32_t, D2UnitStrc*, D2UnitStrc*, D2DamageStrc*, int32_t, int32_t);

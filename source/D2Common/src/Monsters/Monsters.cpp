@@ -430,6 +430,7 @@ int __stdcall D2COMMON_11068_GetCompInfo(D2UnitStrc* pMonster, int nComponent)
 //D2Common.0x6FDA52F0 (#11069)
 uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsigned int nComponent)
 {
+	// NOLINTBEGIN(clang-diagnostic-multichar)
 	static uint32_t dword_6FDE4DC8[7] =
 	{
 		' til', ' til', ' sed', ' sed', ' yvh', ' yvh', ' yvh'
@@ -514,6 +515,7 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 		NULL,
 		NULL,
 	};
+	// NOLINTEND(clang-diagnostic-multichar)
 
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
@@ -675,10 +677,10 @@ int __stdcall D2Common_11050(D2UnitStrc* pUnit, int a2)
 }
 
 //D2Common.0x6FDA55E0 (#11052)
-char __stdcall D2Common_11052(uint8_t a1)
+uint8_t __stdcall D2Common_11052(uint8_t a1)
 {
 	//D2Common.0x6FDE4F28
-	static const char byte_6FDE4F28[] =
+	static const uint8_t byte_6FDE4F28[] =
 	{
 		0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
 		8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 0, 0
@@ -688,10 +690,10 @@ char __stdcall D2Common_11052(uint8_t a1)
 }
 
 //D2Common.0x6FDA5600 (#11053)
-char __stdcall D2Common_11053(uint8_t a1)
+uint8_t __stdcall D2Common_11053(uint8_t a1)
 {
 	//D2Common.0x6FDE4F68
-	static const char byte_6FDE4F68[] =
+	static const uint8_t byte_6FDE4F68[] =
 	{
 		0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4,
 		4, 4, 4, 4,	5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0
@@ -701,10 +703,10 @@ char __stdcall D2Common_11053(uint8_t a1)
 }
 
 //D2Common.0x6FDA5620 (#11054)
-char __stdcall D2Common_11054(uint8_t a1)
+uint8_t __stdcall D2Common_11054(uint8_t a1)
 {
 	//D2Common.0x6FDE4FA8
-	static const char byte_6FDE4FA8[] =
+	static const uint8_t byte_6FDE4FA8[] =
 	{
 		4, 12, 20, 28, 36, 44, 52, 60
 	};
@@ -716,13 +718,13 @@ char __stdcall D2Common_11054(uint8_t a1)
 void __stdcall D2Common_11055(uint8_t a1, int* a2, int* a3)
 {
 	//D2Common.0x6FDD1738
-	static const char byte_6FDD1738[] =
+	static const int8_t byte_6FDD1738[] =
 	{
 		0, -1, -1, -1, 0, 1, 1, 1, 0, -1, -2, -2, -2, -2, -2, -1, 0, 1, 2, 2, 2, 2, 2, 1, 0, -3, -3, -3, 0, 3, 3, 3
 	};
 
 	//D2Common.0x6FDD1758
-	static const char byte_6FDD1758[] =
+	static const int8_t byte_6FDD1758[] =
 	{
 		-1, -1, 0, 1, 1, 1, 0, -1, -2, -2, -2, -1, 0, 1, 2, 2, 2, 2, 2, 1, 0, -1, -2, -2, -3, -3, 0, 3, 3, 3, 0, -3
 	};

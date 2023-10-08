@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 enum D2HarcodedConstants
 {
 	HARDCODEDCST_MAX_LEVEL = 99, // Should be using DATATBLS_GetMaxLevel instead
@@ -20,7 +22,7 @@ enum D2GameResolutionMode {
 	NUM_GAME_RESOLUTIONS
 };
 
-enum D2C_SaveMagicHeaders
+enum D2C_SaveMagicHeaders : uint32_t
 {
 	D2SMAGIC_HEADER = 0xAA55AA55,
 	D2SMAGIC_QUESTINFO = 0x576F6F21,

@@ -3,36 +3,36 @@
 #include <Archive.h>
 #include <File.h>
 #include <Calc.h>
+#include <Storm.h>
 
 //D2Common.0x6FD498D0
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
 {
-	// Note: Game actually uses Storm.dll SStrCmpI
-	if (!_strnicmp(szKey, "min", 32))
+	if (0 == SStrCmpI(szKey, "min", 32))
 	{
 		return 0;
 	}
-	else if (!_strnicmp(szKey, "max", 32))
+	else if (0 == SStrCmpI(szKey, "max", 32))
 	{
 		return 1;
 	}
-	else if (!_strnicmp(szKey, "rand", 32))
+	else if (0 == SStrCmpI(szKey, "rand", 32))
 	{
 		return 2;
 	}
-	else if (!_strnicmp(szKey, "skill", 32))
+	else if (0 == SStrCmpI(szKey, "skill", 32))
 	{
 		return 3;
 	}
-	else if (!_strnicmp(szKey, "miss", 32))
+	else if (0 == SStrCmpI(szKey, "miss", 32))
 	{
 		return 4;
 	}
-	else if (!_strnicmp(szKey, "stat", 32))
+	else if (0 == SStrCmpI(szKey, "stat", 32))
 	{
 		return 5;
 	}
-	else if (!_strnicmp(szKey, "sklvl", 32))
+	else if (0 == SStrCmpI(szKey, "sklvl", 32))
 	{
 		return 6;
 	}
@@ -103,12 +103,12 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 				}
 			}
 
-			// Note: Game actually uses Storm.dll SStrCmpI
-			if (_strnicmp(szText, "base", 32))
+			if (SStrCmpI(szText, "base", 32) != 0)
 			{
-				if (_strnicmp(szText, "mod", 32))
+				if (SStrCmpI(szText, "mod", 32) != 0)
 				{
-					_strnicmp(szText, "accr", 32); //Seems unused / unneeded
+					bool isAcc = SStrCmpI(szText, "accr", 32) == 0; //Seems unused / unneeded
+					D2_MAYBE_UNUSED(isAcc);
 					*a2 = 0;
 					return 0;
 				}

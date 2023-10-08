@@ -67,24 +67,24 @@ static const int gaPathTypeFlags_6FDD2088[] =
 
 static const int32_t gaOffsetForPathType_6FDD20D0[] =
 {
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 2},
-	{-2},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
-	{-4},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
-	{ 0},
+	0,
+	0,
+	0,
+	0,
+	0,
+	2,
+	-2,
+	0,
+	0,
+	0,
+	0,
+	0,
+	-4,
+	0,
+	0,
+	0,
+	0,
+	0,
 };
 static_assert(ARRAY_SIZE(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
@@ -458,7 +458,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 
 			}
 		}
-	}    
+	}
 	pPath->dwCurrentPointIdx = 0;
 	pPath->dwPathPoints = 0;
 	pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
@@ -1417,13 +1417,15 @@ int __stdcall PATH_GetType(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDAA250 (#10190)
-void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance)
+// TODO: rename
+void __stdcall D2COMMON_10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance)
 {
 	pDynamicPath->nDist = nDistance;
 }
 
 //D2Common.0x6FDAA270 (#10191)
-uint8_t __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath)
+// TODO: rename
+uint8_t __stdcall D2COMMON_10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->nDist;
 }
@@ -1455,7 +1457,7 @@ uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicPath)
 {
 	if (!pDynamicPath->dwVelocity)
 	{
-		pDynamicPath->nCollidedWithMask = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, ~COLLIDE_CORPSE);
+		pDynamicPath->nCollidedWithMask = COLLISION_CheckMaskWithSize(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY, pDynamicPath->dwUnitSize, (uint16_t)~COLLIDE_CORPSE);
 	}
 
 	return pDynamicPath->nCollidedWithMask;

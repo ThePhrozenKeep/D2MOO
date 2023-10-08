@@ -847,8 +847,8 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 	const int32_t nX = pCoord.nX;
 	const int32_t nY = pCoord.nY;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pDrehya);
-	if (pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY))
+	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pDrehya), nX, nY);
+	if (pRoom)
 	{
 		D2UnitStrc* pDrehyaPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pRoom, 1, 1, 0);
 		if (pDrehyaPortal)

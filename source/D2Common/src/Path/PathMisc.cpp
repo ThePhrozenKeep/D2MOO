@@ -21,9 +21,9 @@ struct D2UnkPathStrc
 
 struct D2UnkPathStrc2
 {
-	char unk0x00;
-	char unk0x01;
-	char unk0x02;
+	int8_t unk0x00;
+	int8_t unk0x01;
+	int8_t unk0x02;
 };
 
 static const D2UnkPathStrc stru_6FDD2158[25] =
@@ -270,12 +270,8 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 		return sub_6FDAA720(pPathInfo);
 	D2PathPointStrc nNextPoint = pPathInfo->tTargetCoord;
 	pPath->PathPoints[0] = nNextPoint;
-	if (PATH_CheckCollisionsToNextPosition(pPath, &nNextPoint))
-	{
-		pPath->PathPoints[pPath->dwPathPoints] = nNextPoint;
-		pPath->dwPathPoints++;
-	}
-	else if (sub_6FDABA50(nNextPoint, pPathInfo->tTargetCoord) > pPathInfo->field_14)
+
+	if(!PATH_CheckCollisionsToNextPosition(pPath, &nNextPoint) && sub_6FDABA50(nNextPoint, pPathInfo->tTargetCoord) > pPathInfo->field_14)
 	{
 		D2PathPointStrc tPoint = pPathInfo->tStartCoord;
 		D2PathPointStrc tCurCoords = pPathInfo->tStartCoord;
@@ -618,13 +614,13 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 
 	if (nSquaredDistance <= nMaxDistSquared)
 	{
-		if (nPathPoints = PATH_FoWall_ComputePath(pPathInfo))
+		if (int nFoWallPathPoints = PATH_FoWall_ComputePath(pPathInfo))
 		{
-			return nPathPoints;
+			return nFoWallPathPoints;
 		}
-		else if (nPathPoints = PATH_Toward_6FDAA9F0(pPathInfo)) // Recompute the previous path result.
+		else if(nPathPoints) // Recompute the previous path result if a path was found
 		{
-			return nPathPoints;
+			nPathPoints = PATH_Toward_6FDAA9F0(pPathInfo);
 		}
 	}
 	return nPathPoints;

@@ -292,7 +292,7 @@ bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 			D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuest->pQuestDataEx;
 			if (pQuestDataEx->bCubeDropped
 				&& !pQuestDataEx->nHoradricCubes || !pQuestDataEx->nAmulets
-				&& (pQuestData10 = QUESTS_GetQuestData(pQuest->pGame, QUEST_A2Q3_TAINTEDSUN)) != 0
+				&& (pQuestData10 = QUESTS_GetQuestData(pQuest->pGame, QUEST_A2Q3_TAINTEDSUN)) != 0 // NOLINT(bugprone-assignment-in-if-condition)
 				&& ((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed || pQuestDataEx->bHoradricScrollDropped && !pQuestDataEx->nBaseStaffs)
 			{
 				*pStatus = 9;
@@ -422,7 +422,7 @@ void __fastcall ACT2Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	}
 
 	uint8_t pData = 0;
-	if (ACT2Q2_CheckItemsAndState(pQuestData, pQuestArg->pPlayer, &pData) && pData != -1)
+	if (ACT2Q2_CheckItemsAndState(pQuestData, pQuestArg->pPlayer, &pData) && pData != uint8_t(-1))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_CAIN2, pData);
 		return;
@@ -497,36 +497,7 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 
 	if (pItemsTxtRecord->dwCode != ' 1rt' || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN))
 	{
-		if (pItemsTxtRecord->dwCode == ' piv')
-		{
-			if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN))
-			{
-				pQuestData->fLastState = 2;
-				if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_COMPLETEDBEFORE) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_PRIMARYGOALDONE))
-				{
-					QUESTS_StatusCyclerEx(pQuestData->pGame, pQuestArg->pPlayer, QUEST_A2Q2_HORADRICSTAFF);
-					return;
-				}
-				if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_COMPLETEDNOW))
-				{
-					return;
-				}
-			}
-			else
-			{
-				pQuestData->fLastState = 6;
-				if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_COMPLETEDBEFORE) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_PRIMARYGOALDONE))
-				{
-					QUESTS_StatusCyclerEx(pQuestData->pGame, pQuestArg->pPlayer, QUEST_A2Q2_HORADRICSTAFF);
-					return;
-				}
-				if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_COMPLETEDNOW))
-				{
-					return;
-				}
-			}
-		}
-		else if (pItemsTxtRecord->dwCode == ' xob')
+		if (pItemsTxtRecord->dwCode == ' piv' || pItemsTxtRecord->dwCode == ' xob')
 		{
 			if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN))
 			{
@@ -794,8 +765,12 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 
 	if (!pQuestDataEx->bCubeDropped || pQuestDataEx->nHoradricCubes)
 	{
-		D2QuestDataStrc* pQuestData10 = nullptr;
-		if (pQuestDataEx->nAmulets || (pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN)) == nullptr || !((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed)
+		if (pQuestDataEx->nAmulets)
+		{
+			return;
+		}
+		D2QuestDataStrc* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
+		if(pQuestData10 == nullptr || !((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed)
 		{
 			if (!pQuestDataEx->bHoradricScrollDropped || pQuestDataEx->nBaseStaffs)
 			{

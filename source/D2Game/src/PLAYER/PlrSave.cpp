@@ -706,7 +706,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
         return 1;
     }
 
-    FILE* pFile = fopen(szFileName, "wb");
+    FILE* pFile = fopen(szFileName, "wb"); // NOLINT(clang-diagnostic-deprecated-declarations)
     if (pFile)
     {
         FileLockAndWrite(pSaveData, nFileSize, 1u, pFile);
@@ -1362,7 +1362,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         ITEMS_SetBodyLocation(pItem, nBodyLoc);
         pItem->dwFlags &= 0xFFFFFFFDu;
         UNITS_ChangeAnimMode(pItem, 1);
-        ITEMS_SetInvPage(pItem, -1u);
+        ITEMS_SetInvPage(pItem, uint8_t(-1));
         ITEMS_SetItemCMDFlag(pItem, 8, 1);
         pItem->dwFlags &= 0xFDFFFFFFu;
         INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
@@ -2204,7 +2204,7 @@ int32_t __fastcall sub_6FC8C890(D2GameStrc* pGame, D2ClientStrc* pClient, D2Unit
 
     const uint8_t nAct = CLIENTS_GetActNo(pClient);
     PLAYERSTATS_SetStatsForStartingAct(pGame, pPlayer, nAct);
-    PLAYER_CreateStartItemsFromCharStatsTxt(pPlayer, pGame, (void*)nAct);
+    PLAYER_CreateStartItemsFromCharStatsTxt(pPlayer, pGame, (void*)(uintptr_t)nAct);
 
     pPlayerData->nLeftSkillId = 0;
     pPlayerData->nRightSkillId = 0;
@@ -2236,7 +2236,7 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
     char szFileName[500] = {};
     sprintf_s(szFileName, "%s%s.d2s", szPath, szName);
 
-    FILE* pSaveFile = fopen(szFileName, "rb");
+    FILE* pSaveFile = fopen(szFileName, "rb"); // NOLINT(clang-diagnostic-deprecated-declarations)
     if (!pSaveFile)
     {
         return SYSERROR_UNK_14;

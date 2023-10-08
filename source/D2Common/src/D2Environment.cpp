@@ -168,7 +168,7 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 		}
 
 		pEnvironment->fLast = 0.0f;
-		pEnvironment->nIntensity = (int)(signed long long)((pEnvironment->fSin * 128.0) + 128.0 + 0.5);
+		pEnvironment->nIntensity = (int32_t)(int64_t)((pEnvironment->fSin * 128.0) + 128.0 + 0.5); // NOLINT(bugprone-incorrect-roundings)
 
 		if (nAct == ACT_V)
 		{
@@ -188,7 +188,7 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 
 static uint8_t LerpLightColor(uint8_t nThis, uint8_t nNext, double lerpRatio)
 {
-	return uint8_t(D2Lerp<double>(nThis,nNext,lerpRatio) + 0.5); // Round half up
+	return uint8_t(D2Lerp<double>(nThis,nNext,lerpRatio) + 0.5); // Round half up // NOLINT(bugprone-incorrect-roundings)
 }
 
 //D2Common.0x6FD8DAC0

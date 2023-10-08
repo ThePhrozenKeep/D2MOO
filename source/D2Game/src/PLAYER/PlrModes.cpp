@@ -210,7 +210,7 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
     case PLRMODE_KNOCKBACK:
     {
         PATH_SetType(pPlayer->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
-        _10190_PATH_SetDistance(pPlayer->pDynamicPath, 5u);
+        D2COMMON_10190_PATH_SetDistance(pPlayer->pDynamicPath, 5u);
         break;
     }
     default:
@@ -752,7 +752,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     STATLIST_SetUnitStat(pDefender, STAT_HITPOINTS, 0, 0);
     D2Common_10469(pDefender);
     STATES_UpdateStayDeathFlags(pDefender, 0);
-    D2GAME_SetClientDead_6FC33830(pClient, 0);
+    D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pDefender, 1);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 8, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 9, 0);
@@ -806,7 +806,7 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
     D2Common_10469(pUnit);
     STATES_UpdateStayDeathFlags(pUnit, 0);
 
-    D2GAME_SetClientDead_6FC33830(pClient, 0);
+    D2GAME_SetClientDead_6FC33830(pClient, nullptr);
 
     PATH_SetUnitDeadCollision(pUnit, 1);
 
@@ -1122,7 +1122,7 @@ void __fastcall EVENTS_HpRegen(D2UnitStrc* pUnit)
             }
         }
 
-        uint8_t nHpPctDiff = nLastSentHpPct - nHpPct;
+        int32_t nHpPctDiff = nLastSentHpPct - nHpPct;
         nHpPctDiff = std::abs(nHpPctDiff);
 
         if (nHpPctDiff > 4)
@@ -1380,7 +1380,7 @@ void __fastcall sub_6FC814F0(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     D2Common_10469(pPlayer);
     STATES_UpdateStayDeathFlags(pPlayer, 0);
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-    D2GAME_SetClientDead_6FC33830(pClient, 0);
+    D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pPlayer, 1);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 8, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 9, 0);

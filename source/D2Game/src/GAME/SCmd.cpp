@@ -267,7 +267,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, ch
     packet0F.nFlags = a5;
     packet0F.nDestPosX = a6;
     packet0F.nDestPosY = a7;
-    packet0F.__00B = a8;
+    packet0F.unk0x00B = a8;
     packet0F.nCurrentPosX = a9;
     packet0F.nCurrentPosY = a10;
 
@@ -555,7 +555,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x15_6FC3D0D0(D2ClientStrc* pClient, ch
     packet15.dwUnitGUID = a4;
     packet15.nPosX = a5;
     packet15.nPosY = a6;
-    packet15.__00A = a7;
+    packet15.unk0x00A = a7;
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet15, sizeof(packet15));
 }
@@ -1005,7 +1005,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x23_6FC3DC60(D2ClientStrc* pClient, BY
     packet23.dwUnitGUID = nUnitGUID;
     packet23.nPosition = a4;
     packet23.nSkill = a5;
-    packet23.__009 = a6;
+    packet23.unk0x009 = a6;
     
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet23, sizeof(packet23));
 }
@@ -2020,7 +2020,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x11_6FC3F4A0(D2ClientStrc* pClient, BY
     packet11.nHeader = 0x11;
     packet11.nUnitType = nUnitType;
     packet11.dwUnitGUID = dwUnitId;
-    packet11.__006 = unk;
+    packet11.unk0x006 = unk;
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet11, sizeof(packet11));
 }
@@ -2070,7 +2070,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x61_6FC3F590(D2ClientStrc* pClient, BY
     D2GSPacketSrv61 packet61 = {};
 
     packet61.nHeader = 0x61;
-    packet61.__001 = unk;
+    packet61.unk0x001 = unk;
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
 }

@@ -3167,7 +3167,7 @@ int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pM
     curse.nSkillLevel = nLevel;
     curse.nDuration = SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nLevel);
     curse.nState = pSkillsTxtRecord->wAuraTargetState;
-    curse.pStateFunc = nullptr;
+    curse.pStateRemoveCallback = nullptr;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (pStatList)
@@ -4373,7 +4373,7 @@ void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(D2GameStrc* pGame, D
     D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (pMissilesTxtRecord)
     {
-        const int32_t nPercentage = std::max(pMissilesTxtRecord->dwDmgParam[0], 0u);
+        const int32_t nPercentage = std::max(pMissilesTxtRecord->dwDmgParam[0], 0);
         pDamage->dwFrzLen = MONSTERUNIQUE_CalculatePercentage(STATLIST_UnitGetStatValue(pMissile, STAT_COLDLENGTH, 0), nPercentage, 100);
         pDamage->dwColdLen = 0;
     }
@@ -5184,8 +5184,9 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 }
 
 //D2Game.0x6FC60080
-void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     STATES_ToggleState(pUnit, nState, 0);
 }
 

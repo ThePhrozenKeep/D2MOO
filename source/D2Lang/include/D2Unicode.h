@@ -93,7 +93,7 @@ struct D2LANG_DLL_DECL Unicode {
    * assertion error. Flags, minimum field width, precision, and
    * length modifiers are not supported.
    *
-   * D2Lang.0x6FC0B250 (#10033) ?sprintf@Unicode@@SAXHPAU1@PBU1@ZZ
+   * D2Lang.0x6FC11670 (#10033) ?sprintf@Unicode@@SAXHPAU1@PBU1@ZZ
    */
   static void __cdecl sprintf(
       int buffer_size,

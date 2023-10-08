@@ -18,6 +18,7 @@ HMODULE delayedFOGDllBaseGet() {
 	return DLLBASE_FOG;
 }
 
+// NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 {
 	switch (dwReason)
@@ -33,3 +34,4 @@ BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 	}
 	return TRUE;
 }
+// NOLINTEND(bugprone-branch-clone)

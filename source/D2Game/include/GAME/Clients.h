@@ -145,7 +145,7 @@ struct D2ClientUnitUpdateSortStrc
 struct D2ClientKeySkillStrc
 {
 	int16_t nSkill;								//0x00
-	int16_t __002;								//0x02
+	int16_t unk0x002;								//0x02
 	uint32_t dwFlags;							//0x04
 };
 
@@ -161,20 +161,20 @@ struct D2GuildInformationStrc
 
 struct D2ClientStrc
 {
-	uint32_t dwClientId;						//0x00
-	D2ClientState dwClientState;				//0x04
-	uint8_t nClassId;							//0x08
-	uint8_t unk0x09;							//0x09
-	uint16_t nSaveFlags;						//0x0A D2ClientSaveFlags
-	uint8_t unk0x0C;							//0x0C
-	char szName[16];							//0x0D
-	char szAccount[16];							//0x1D
-	uint8_t unk0x2D[51];						//0x2D
-	int32_t unk0x60;							//0x60
-	int32_t unk0x64;							//0x64
-	D2ClientInfoStrc* pClientInfo;				//0x68
-	D2CharacterPreviewInfoStrc tCharacterInfo;	//0x6C
-	uint8_t unk0x8E[222];						//0x8E
+	uint32_t dwClientId;						//0x000
+	D2ClientState dwClientState;				//0x004
+	uint8_t nClassId;							//0x008
+	uint8_t unk0x09;							//0x009
+	uint16_t nSaveFlags;						//0x00A D2ClientSaveFlags
+	uint8_t unk0x0C;							//0x00C
+	char szName[16];							//0x00D
+	char szAccount[16];							//0x01D
+	uint8_t unk0x2D[51];						//0x02D
+	int32_t unk0x60;							//0x060
+	int32_t unk0x64;							//0x064
+	D2ClientInfoStrc* pClientInfo;				//0x068
+	D2CharacterPreviewInfoStrc tCharacterInfo;	//0x06C
+	uint8_t unk0x92[218];						//0x092
 	uint32_t dwUnitType;						//0x16C
 	D2UnitGUID dwUnitGUID;						//0x170
 	D2UnitStrc* pPlayer;						//0x174
@@ -183,7 +183,8 @@ struct D2ClientStrc
 	int32_t nSaveHeaderSize;					//0x180
 	uint32_t unk0x184[2];						//0x184
 	DWORD nSaveChecksum;						//0x18C
-	DWORD unk0x190[6];							//0x190
+	DWORD unk0x190;								//0x190
+	DWORD unk0x194[5];							//0x194
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
@@ -269,7 +270,7 @@ int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId);
 //D2Game.0x6FC337E0
 void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom);
 //D2Game.0x6FC33830
-void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, int32_t always0);
+void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull);
 //D2Game.0x6FC33890
 uint8_t __fastcall CLIENTS_GetActNo(D2ClientStrc* pClient);
 //D2Game.0x6FC338C0

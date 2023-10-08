@@ -449,7 +449,7 @@ struct D2DataTablesStrc
 	int nDifficultyLevelsTxtRecordCount;				//0xC80
 	BOOL bCompileTxt;									//0xC84
 	int ExpFieldI[9];									//0xC88
-	char* pFieldData;									//0xCAC
+	uint8_t* pFieldData;								//0xCAC
 	D2CollisionFieldStrc pCollisionField;				//0xCB0
 	D2CubeMainTxt* pCubeMainTxt;						//0xCC4
 	int nCubeMainTxtRecordCount;						//0xCC8

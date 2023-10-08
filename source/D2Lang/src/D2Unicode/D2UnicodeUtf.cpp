@@ -101,7 +101,7 @@ static int Utf8CodePointToUnicodeChar(Unicode* dest, const char* src, int count)
     return -1;
   }
 
-  uint16_t ucs2 = src[0];
+  uint16_t ucs2 = uint8_t(src[0]);
 
   for (int i = 0; sgUtf8ConvertTable[i].leading_unusable_bits != 0; ++i) {
     uint16_t leading_bits = sgUtf8ConvertTable[i].leading_unusable_bits

@@ -138,13 +138,13 @@ int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId
 //D2Game.0x6FC779C0
 void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
 //D2Game.0x6FC77AB0
-void __fastcall sub_6FC77AB0(D2UnitStrc* pUnit, int32_t a2, int32_t a3);
+void __fastcall sub_6FC77AB0(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FC77AE0
 void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
 //D2Game.0x6FC77BA0
 void __fastcall D2GAME_SHRINES_SkillBoost_6FC77BA0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
 //D2Game.0x6FC77C10
-void __fastcall sub_6FC77C10(D2UnitStrc* pUnit, int32_t a2, int32_t a3);
+void __fastcall sub_6FC77C10(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FC77C30
 int32_t __fastcall OBJECTS_OperateFunction02_Shrine(D2ObjOperateFnStrc* pOp, int32_t nOperate);
 //D2Game.0x6FC77E80

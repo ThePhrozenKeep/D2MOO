@@ -1,7 +1,8 @@
 ---
-Checks:          '-*,readability-inconsistent-declaration-parameter-name'
-WarningsAsErrors: 'readability-inconsistent-declaration-parameter-name'
-HeaderFilterRegex: ''
+Checks:          '-*,readability-inconsistent-declaration-parameter-name,bugprone-*,-bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-clang-diagnostic-multichar,-clang-diagnostic-microsoft-cast'
+CheckOptions:
+  bugprone-signed-char-misuse.CharTypdefsToIgnore: 'int8_t'
+WarningsAsErrors: '*,-clang-diagnostic-microsoft-cast,-clang-diagnostic-multichar'
+HeaderFilterRegex: 'doctest.*'
 AnalyzeTemporaryDtors: false
 FormatStyle:     none
-

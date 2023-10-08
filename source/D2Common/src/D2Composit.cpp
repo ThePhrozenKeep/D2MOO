@@ -50,7 +50,7 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	char* szPathPrefix = NULL;
+	const char* szPathPrefix = NULL;
 	uint32_t dwClassToken = 0;
 	uint32_t dwModeToken = 0;
 	int nWeaponClassId = 0;

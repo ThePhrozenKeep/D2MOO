@@ -94,15 +94,15 @@ struct D2MonSkillInfoStrc
 
 struct D2CurseStrc
 {
-	D2UnitStrc* pUnit;						//0x00
-	D2UnitStrc* pTarget;					//0x04
-	int32_t nSkill;							//0x08
-	int32_t nSkillLevel;					//0x0C
-	int32_t nDuration;						//0x10
-	int32_t nStat;							//0x14
-	int32_t nStatValue;						//0x18
-	int32_t nState;							//0x1C
-	void* pStateFunc;						//0x20
+	D2UnitStrc* pUnit;								//0x00
+	D2UnitStrc* pTarget;							//0x04
+	int32_t nSkill;									//0x08
+	int32_t nSkillLevel;							//0x0C
+	int32_t nDuration;								//0x10
+	int32_t nStat;									//0x14
+	int32_t nStatValue;								//0x18
+	int32_t nState;									//0x1C
+	StatListRemoveCallback pStateRemoveCallback;	//0x20
 };
 
 struct D2SummonArgStrc
@@ -165,11 +165,11 @@ D2UnitFindDataStrc* __fastcall sub_6FD10D90(D2GameStrc* pGame, D2UnitStrc* pUnit
 //D2Game.0x6FD10E20
 void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindData);
 //D2Game.0x6FD10E50
-void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused);
+void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList);
 //D2Game.0x6FD10EC0
 D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse);
 //D2Game.0x6FD11260
-D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, void* pfRemove);
+D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback);
 //D2Game.0x6FD11340
 int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FD11420

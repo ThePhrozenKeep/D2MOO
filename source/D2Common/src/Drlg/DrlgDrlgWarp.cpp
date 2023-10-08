@@ -214,10 +214,7 @@ D2RoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIn
 		pRoomEx = DRLG_GetRoomExFromLevelAndCoordinates(pLevel, pLevel->nWidth / 2 + pLevel->nPosX - 2, pLevel->nHeight / 2 + pLevel->nPosY - 2);
 		if (!pRoomEx)
 		{
-			if (!pLevel->pFirstRoomEx)
-			{
-				FOG_DisplayWarning("ptDrlgLevel->ptRoomFirst", __FILE__, __LINE__);
-			}
+			D2_CHECK(pLevel->pFirstRoomEx);
 
 			pRoomEx = pLevel->pFirstRoomEx;
 

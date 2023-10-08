@@ -359,9 +359,9 @@ D2COMMON_DLL_DECL void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDy
 //D2Common.0x6FDAA240 (#10187)
 D2COMMON_DLL_DECL int __stdcall PATH_GetType(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA250 (#10190)
-D2COMMON_DLL_DECL void __stdcall _10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance);
+D2COMMON_DLL_DECL void __stdcall D2COMMON_10190_PATH_SetDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nDistance);
 //D2Common.0x6FDAA270 (#10191)
-D2COMMON_DLL_DECL uint8_t __stdcall _10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL uint8_t __stdcall D2COMMON_10191_PATH_GetDistance(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA280 (#10188)
 D2COMMON_DLL_DECL void __stdcall PATH_SetNewDistance(D2DynamicPathStrc* pDynamicPath, uint8_t nNewDistance);
 //D2Common.0x6FDAA2B0 (#10189)

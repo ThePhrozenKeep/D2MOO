@@ -1018,7 +1018,8 @@ void __stdcall UNITS_InitializeSequence(D2UnitStrc* pUnit)
 {
 	if (pUnit)
 	{
-		if (pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
+		pUnit->pAnimSeq = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
+		if (pUnit->pAnimSeq)
 		{
 			pUnit->dwSeqFrameCount = DATATBLS_GetSeqFramePointsCount(pUnit);
 			pUnit->dwSeqFrame = 0;
@@ -1080,7 +1081,11 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 	}
 	else
 	{
-		uint32_t nFrame = pUnit->dwSeqCurrentFramePrecise >> 8 + int(pUnit->wAnimSpeed >= 256);
+		uint32_t nFrame = pUnit->dwSeqCurrentFramePrecise >> 8;
+		if (pUnit->wAnimSpeed >= 256)
+		{
+			nFrame++;
+		}
 
 		pUnit->dwSeqCurrentFramePrecise += pUnit->wAnimSpeed;
 		

@@ -733,8 +733,9 @@ int32_t __fastcall SKILLS_SrvDo009_Frenzy(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 }
 
 //D2Game.0x6FCFBF80
-void __fastcall SKILLS_CurseStateCallback_Whirlwind(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall SKILLS_CurseStateCallback_Whirlwind(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
 
     SUNITEVENT_FreeTimer(pGame, pUnit, 1, nState);
@@ -840,7 +841,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
     curse.nStat = -1;
     curse.nDuration = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     curse.nState = pSkillsTxtRecord->nAuraState;
-    curse.pStateFunc = SKILLS_CurseStateCallback_Whirlwind;
+    curse.pStateRemoveCallback = SKILLS_CurseStateCallback_Whirlwind;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)
@@ -1510,7 +1511,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
                         {
                             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nTargetX, nTargetY);
                             PATH_SetType(pUnit->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
-                            _10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
+                            D2COMMON_10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
                             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
                         }
                     }

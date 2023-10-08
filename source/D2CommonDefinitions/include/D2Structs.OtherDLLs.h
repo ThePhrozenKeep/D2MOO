@@ -98,11 +98,11 @@ struct D2MenuEntryStrc
 	int32_t nTop;								//0x08
 	int32_t nWidth;								//0x0C
 	int32_t nHeight;							//0x10
-	int32_t __014;								//0x14
+	int32_t unk0x014;								//0x14
 	int32_t nStrIndex;							//0x18
 	D2GfxDataStrc* pGfxData;				//0x1C
 	int32_t(__stdcall* pBtnFunction)(void*);	//0x20
-	uint32_t __024[2];							//0x24
+	uint32_t unk0x024[2];							//0x24
 	int32_t nFont;								//0x2C
 };
 
@@ -241,7 +241,7 @@ struct D2BnetClientDataStrc
 	char szServerAddress[24];				//0x033
 	char szBattleNetAddress[24];			//0x04B
 	char szMCPAddress[24];					//0x063
-	uint32_t __07B;							//0x07B
+	uint32_t unk0x07B;							//0x07B
 	uint8_t nNoPK;								//0x07F
 	uint8_t nOpenCharacter;					//0x080
 	uint8_t nClasses[7];						//0x081
@@ -249,7 +249,7 @@ struct D2BnetClientDataStrc
 	char szAccount[48];						//0x089
 	char szCharName[24];					//0x0B9
 	char szRealmName[32];					//0x0D1
-	uint8_t __0F1[249];						//0x0F1
+	uint8_t unk0x0F1[249];						//0x0F1
 	uint8_t nCharClass;						//0x1EA
 	uint8_t nCharFlags;						//0x1EB
 	uint8_t nLastCompleteDiff;					//0x1EC

@@ -115,6 +115,17 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
     }
 }
 
+// Inline
+static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
+{
+    if (nAnimMode == MONMODE_WALK || nAnimMode == MONMODE_RUN)
+    {
+        int nPathType = PATH_GetType(pDynamicPath);
+        return nPathType == PATHTYPE_MON_CIRCLE_CW || nPathType == PATHTYPE_MON_CIRCLE_CCW;
+    }
+    return false;
+}
+
 //D2Game.0x6FC65C70
 void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
 {
@@ -177,14 +188,13 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     int32_t a4 = 0;
     int32_t v8 = 0;
     int32_t v9 = 0;
-    int32_t v10 = 0;
 
     D2DynamicPathStrc* pDynamicPath = pMonster->pDynamicPath;
     D2_ASSERT(pDynamicPath);
 
     if (pTarget)
     {
-        if (nAnimMode != MONMODE_WALK && nAnimMode != MONMODE_RUN || (v10 = PATH_GetType(pDynamicPath), v10 < 5) || v10 > 6)
+        if (IsPathCircling(nAnimMode,pDynamicPath))
         {
             nHeader = 0x68u;
             a4 = v5->unk0x14;
@@ -239,7 +249,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     }
     case MONMODE_KNOCKBACK:
     {
-        const int32_t nDistance = _10191_PATH_GetDistance(pDynamicPath);
+        const int32_t nDistance = D2COMMON_10191_PATH_GetDistance(pDynamicPath);
         if (nHeader == 0x68)
         {
             D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, nDistance, sub_6FC62F50(pMonster), pMonster->dwLastHitClass);

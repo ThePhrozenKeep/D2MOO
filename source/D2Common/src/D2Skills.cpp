@@ -66,7 +66,6 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 	D2SkillDescTxt* pSkillDescTxtRecord = NULL;
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2SkillStrc* pSkill = NULL;
-	__int64 v8 = 0;
 	int nMissileId = 0;
 	D2SkillCalcStrc pSkillCalc = {};
 
@@ -187,8 +186,10 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 		case 22:
 			if (nSkillLevel > 0)
 			{
-				v8 = 25 * ((signed int)pSkillsTxtRecord->wMana + (nSkillLevel - 1) * (signed int)pSkillsTxtRecord->wLevelMana);
-				return ((signed int)v8 - HIDWORD(v8)) >> 1 << pSkillsTxtRecord->nManaShift >> 8;
+				int32_t nTemp = ((25 * pSkillsTxtRecord->wMana) + (nSkillLevel - 1) * pSkillsTxtRecord->wLevelMana);
+				nTemp /= 2;
+				nTemp <<= pSkillsTxtRecord->nManaShift;
+				return nTemp >> 8;
 			}
 			break;
 
@@ -891,8 +892,8 @@ void* __stdcall D2Common_10958(D2UnitStrc* pUnit, void* a2)
 
 	if (pUnit && pUnit->pSkills)
 	{
-		pResult = (void*)pUnit->pSkills->__014;
-		pUnit->pSkills->__014 = (int)a2;
+		pResult = (void*)pUnit->pSkills->unk014;
+		pUnit->pSkills->unk014 = (int)a2;
 	}
 
 	return pResult;
@@ -903,7 +904,7 @@ void* __stdcall D2Common_10959(D2UnitStrc* pUnit)
 {
 	if (pUnit && pUnit->pSkills)
 	{
-		return (void*)pUnit->pSkills->__014;
+		return (void*)pUnit->pSkills->unk014;
 	}
 
 	return NULL;
@@ -2493,7 +2494,6 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2UnitStrc* pItem = NULL;
-	long long int nMinDamage = 0;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2524,16 +2524,16 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 			if (pSkillsTxtRecord->nSrcDam && a4)
 			{
 				pItem = D2Common_10434(pUnit, 0);
+				int32_t nMinDamage = 0;
 				if (pItem && INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
 				{
-					nMinDamage = STATLIST_GetMinDamageFromUnit(pItem, 1) * pSkillsTxtRecord->nSrcDam;
+					nMinDamage = STATLIST_GetMinDamageFromUnit(pItem, 1);
 				}
 				else
 				{
-					nMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
+					nMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0);
 				}
-
-				nDamage = ((int)nMinDamage) >> 7;
+				nDamage = (nMinDamage * pSkillsTxtRecord->nSrcDam) / 128;
 			}
 
 			nDamage += pSkillsTxtRecord->dwMinDam + SKILLS_CalculateDamageBonusByLevel(nSkillLevel, (int*)pSkillsTxtRecord->dwMinLvlDam);
@@ -2560,7 +2560,6 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2UnitStrc* pItem = NULL;
-	long long int nMaxDamage = 0;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2591,6 +2590,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 			if (pSkillsTxtRecord->nSrcDam && a4)
 			{
 				pItem = D2Common_10434(pUnit, 0);
+				int32_t nMaxDamage = 0;
 				if (pItem && INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
 				{
 					nMaxDamage = STATLIST_GetMaxDamageFromUnit(pItem, 24) * pSkillsTxtRecord->nSrcDam;
@@ -2600,7 +2600,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 					nMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0) * pSkillsTxtRecord->nSrcDam;
 				}
 
-				nDamage = ((int)nMaxDamage) >> 7;
+				nDamage = nMaxDamage / 128;
 			}
 
 			nDamage += pSkillsTxtRecord->dwMaxDam + SKILLS_CalculateDamageBonusByLevel(nSkillLevel, (int*)pSkillsTxtRecord->dwMaxLvlDam);

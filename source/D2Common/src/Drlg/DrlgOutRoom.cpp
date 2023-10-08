@@ -132,12 +132,13 @@ BOOL __fastcall DRLGOUTROOM_LinkLevelsByOffsetCoords(D2DrlgLevelLinkDataStrc* pL
 	}
 	else
 	{
-		if (!pLevelLinkData->nRand[0][pLevelLinkData->nIteration] == pLevelLinkData->nRand[1][pLevelLinkData->nIteration])
+		const bool bRand0IsNull = pLevelLinkData->nRand[0][pLevelLinkData->nIteration] == 0;
+		if (int(bRand0IsNull) == pLevelLinkData->nRand[1][pLevelLinkData->nIteration])
 		{
 			return 0;
 		}
 
-		pLevelLinkData->nRand[0][pLevelLinkData->nIteration] = !pLevelLinkData->nRand[0][pLevelLinkData->nIteration];
+		pLevelLinkData->nRand[0][pLevelLinkData->nIteration] = bRand0IsNull;
 	}
 
 	if (pLevelLinkData->nRand[0][pLevelLinkData->nIteration] == 0)

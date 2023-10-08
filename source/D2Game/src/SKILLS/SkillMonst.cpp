@@ -582,7 +582,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
                     PATH_SetTargetUnit(pUnit->pDynamicPath, nullptr);
                     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, 3 * nX - 2 * CLIENTS_GetUnitX(pTarget), 3 * nY - 2 * CLIENTS_GetUnitY(pTarget));
                     PATH_SetType(pUnit->pDynamicPath, PATHTYPE_KNOCKBACK_SERVER);
-                    _10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
+                    D2COMMON_10190_PATH_SetDistance(pUnit->pDynamicPath, 5u);
                     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
                 }
             }

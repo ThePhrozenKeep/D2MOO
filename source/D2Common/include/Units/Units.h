@@ -165,7 +165,7 @@ struct D2UnitStrc
 			BOOL bSparkChest;					//0x078
 			void* pTimerParams;					//0x07C
 			D2GameStrc* pGame;					//0x080
-			uint32_t __084[3];					//0x084
+			uint32_t unk0x084[3];					//0x084
 			D2UnitEventStrc* pSrvTimerList;			//0x090
 		};
 

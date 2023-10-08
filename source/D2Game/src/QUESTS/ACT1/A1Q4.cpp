@@ -617,11 +617,7 @@ void __fastcall OBJECTS_InitFunction06_CairnStone(D2ObjInitFnStrc* pOp)
 		}
 		else
 		{
-			if (pQuestDataEx->bActivateCairnStones)
-			{
-				UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
-			}
-			else if (pQuestDataEx->unk0x50)
+			if (pQuestDataEx->bActivateCairnStones || pQuestDataEx->unk0x50)
 			{
 				UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
 			}

@@ -453,14 +453,14 @@ void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonu
         return;
     }
 
-    memset(pPlayerCountBonus, 0x00, sizeof(pPlayerCountBonus));
-
-    if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER || !pMonster->pMonsterData || !pMonster->pMonsterData->pMonstatsTxt)
+    memset(pPlayerCountBonus, 0x00, sizeof(*pPlayerCountBonus));
+    D2MonsterDataStrc* pMonsterData = MONSTERUNIQUE_GetMonsterData(pMonster);
+    if (!pMonsterData || !pMonster->pMonsterData->pMonstatsTxt)
     {
         return;
     }
 
-    if (pMonster->pMonsterData->pMonstatsTxt->nAlign)
+    if (pMonsterData->pMonstatsTxt->nAlign)
     {
         pPlayerCountBonus->nPlayerCount = 1;
     }

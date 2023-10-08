@@ -522,7 +522,7 @@ D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pI
 //D2Common.0x6FD9FB40 (#11079)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_11079_Return0(int a1, int a2);
 //D2Common.0x6FD9FB50 (#10836)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bDontIgnoreInputItem);
 //D2Common.0x6FD9FD80 (#10838)
 D2COMMON_DLL_DECL D2SetItemsTxt* __stdcall ITEMS_GetSetItemsTxtRecordFromItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9FE20 (#10839)

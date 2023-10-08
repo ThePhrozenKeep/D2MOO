@@ -7,7 +7,7 @@
 #include <dinput.h>
 #include <tchar.h>
 #include "IconsFontAwesome6.h"
-#include "fa-solid-900.cpp"
+#include "fa-solid-900.cpp" // NOLINT
 
 #include "D2Debugger.h"
 
@@ -254,7 +254,8 @@ void D2DebuggerEndFrame(bool VSyncNextFrame)
 
 bool CreateDeviceD3D(HWND hWnd)
 {
-    if ((gD2DebuggerData.pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == nullptr)
+    gD2DebuggerData.pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+    if (gD2DebuggerData.pD3D == nullptr)
         return false;
 
     // Create the D3DDevice

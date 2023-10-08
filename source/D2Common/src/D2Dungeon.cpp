@@ -599,7 +599,7 @@ BOOL __stdcall DUNGEON_HasWaypoint(D2RoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C840 (#10061)
-char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom)
+const char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom)
 {
 	if (pRoom)
 	{

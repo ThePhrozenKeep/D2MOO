@@ -175,10 +175,10 @@ struct D2SkillsTxt
 	uint32_t dwPrgCalc[3];					//0x38
 	uint8_t nPrgDamage;						//0x44
 	uint8_t pad0x45;						//0x45
-	uint16_t wSrvMissile;					//0x46
-	uint16_t wSrvMissileA;					//0x48
-	uint16_t wSrvMissileB;					//0x4A
-	uint16_t wSrvMissileC;					//0x4C
+	int16_t wSrvMissile;					//0x46
+	int16_t wSrvMissileA;					//0x48
+	int16_t wSrvMissileB;					//0x4A
+	int16_t wSrvMissileC;					//0x4C
 	int16_t wSrvOverlay;					//0x4E
 	uint32_t dwAuraFilter;					//0x50
 	int16_t wAuraStat[6];					//0x54

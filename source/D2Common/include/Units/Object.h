@@ -52,7 +52,7 @@ struct D2ObjectDataStrc
 	D2ShrinesTxt* pShrineTxt;				//0x08
 	D2UnitGUID dwOperateGUID;					//0x0C
 	BOOL bPermanent;						//0x10
-	uint32_t __014;							//0x14
+	uint32_t unk0x014;							//0x14
 	D2CoordStrc DestRoomCooords;			//0x18
 	D2CoordStrc DestPortalCoords;			//0x20
 	char szOwner[16];						//0x28

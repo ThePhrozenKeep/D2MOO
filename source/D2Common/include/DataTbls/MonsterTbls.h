@@ -592,20 +592,20 @@ struct D2HirelingTxt
 	uint32_t dwExpPerLvl;					//0x20
 	uint32_t dwHitpoints;					//0x24
 	uint32_t dwHitpointsPerLvl;				//0x28
-	uint32_t dwDefense;						//0x2C
-	uint32_t dwDefensePerLvl;				//0x30
+	int32_t dwDefense;						//0x2C
+	int32_t dwDefensePerLvl;				//0x30
 	int32_t nStr;							//0x34
 	int32_t nStrPerLvl;						//0x38
 	int32_t nDex;							//0x3C
 	int32_t nDexPerLvl;						//0x40
-	uint32_t dwAttackRate;					//0x44
-	uint32_t dwAttackRatePerLvl;			//0x48
+	int32_t dwAttackRate;					//0x44
+	int32_t dwAttackRatePerLvl;				//0x48
 	uint32_t dwShare;						//0x4C
 	int32_t nDmgMin;						//0x50
 	int32_t nDmgMax;						//0x54
 	int32_t nDmgPerLvl;						//0x58
-	uint32_t dwResist;						//0x5C
-	uint32_t dwResistPerLvl;				//0x60
+	int32_t dwResist;						//0x5C
+	int32_t dwResistPerLvl;					//0x60
 	uint32_t dwDefaultChance;				//0x64
 	uint32_t dwHead;						//0x68
 	uint32_t dwTorso;						//0x6C

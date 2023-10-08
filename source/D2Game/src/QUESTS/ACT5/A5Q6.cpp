@@ -834,7 +834,7 @@ int32_t __fastcall OBJECTS_OperateFunction72_LastPortal(D2ObjOperateFnStrc* pOp,
 
 			D2GSPacketSrv61 packet61 = {};
 			packet61.nHeader = 0x61;
-			packet61.__001 = 7;
+			packet61.unk0x001 = 7;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
 
 			QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM6);

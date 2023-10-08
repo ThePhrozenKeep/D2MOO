@@ -30,7 +30,7 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 	uint32_t v2 = *(uint32_t*)(pExpField + 2);
 	uint32_t v3 = *(uint32_t*)(pExpField + 6);
 
-	sgptDataTables->pFieldData = (char*)D2_ALLOC_POOL(nullptr, v2 * v3);
+	sgptDataTables->pFieldData = (uint8_t*)D2_ALLOC_POOL(nullptr, v2 * v3);
 	D2_ASSERT(sgptDataTables->pFieldData);
 	memcpy(sgptDataTables->pFieldData, pExpField + 10, v2 * v3);
 
@@ -127,11 +127,10 @@ int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
 //D2Common.0x6FD522A0 (#11098)
 int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 {
-	int nIndex = 0;
 	
 	D2_ASSERT(pField);
 
-	nIndex = *(&sgptDataTables->pFieldData[((sgptDataTables->pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + sgptDataTables->pCollisionField.nCenterX);
+	int nIndex = *(&sgptDataTables->pFieldData[((sgptDataTables->pCollisionField.nCenterY + *pY - pField->nY) << 8) - pField->nX] + *pX + sgptDataTables->pCollisionField.nCenterX);
 
 	*pX += gnFieldXOffsets[nIndex];
 	*pY += gnFieldYOffsets[nIndex];

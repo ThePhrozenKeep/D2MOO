@@ -35,11 +35,11 @@ D2COMMON_DLL_DECL void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2RoomStrc
 //D2Common.0x6FD8BC50
 D2RoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2RoomExStrc* pRoomEx, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, uint32_t dwFlags);
 //D2Common.0x6FD8BD90 (#10040)
-D2COMMON_DLL_DECL BOOL __stdcallDUNGEON_DoRoomsTouchOrOverlap(D2RoomStrc* ptFirst, D2RoomStrc* ptSecond);
+D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_DoRoomsTouchOrOverlap(D2RoomStrc* ptFirst, D2RoomStrc* ptSecond);
 //D2Common.0x6FD8BE30 (#10043)
 D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2RoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FD8BE90 (#10048)
-D2COMMON_DLL_DECL int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc* pRoom, int nUnused);
+D2COMMON_DLL_DECL int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2RoomStrc* pPrimary, D2RoomStrc* pSecondary);
 //D2Commmon.0x6FD8BF00 (#10051)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int nX, int nY);
 //D2Common.0x6FD8BF50 (#10050)
@@ -97,7 +97,7 @@ D2COMMON_DLL_DECL int __stdcall DUNGEON_GetLevelIdFromPopulatedRoom(D2RoomStrc* 
 //D2Common.0x6FD8C800 (#10060)
 D2COMMON_DLL_DECL BOOL __stdcall DUNGEON_HasWaypoint(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C840 (#10061)
-D2COMMON_DLL_DECL char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL const char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2RoomStrc* pRoom);
 //D2Common.0x6FD8C860 (#10066)
 D2COMMON_DLL_DECL void __stdcall DUNGEON_AllocDrlgDelete(D2RoomStrc* pRoom, int nUnitType, D2UnitGUID nUnitGuid);
 //D2Common.0x6FD8C8B0 (#10067)

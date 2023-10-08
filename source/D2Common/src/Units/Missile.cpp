@@ -542,7 +542,7 @@ void __stdcall MISSILE_CalculateDamageData(D2MissileDamageDataStrc* pMissileDama
 		}
 
 		nMissileSrcDamage = 0;
-		if (pMissilesTxtRecord->nSrcDamage == -1)
+		if (pMissilesTxtRecord->nSrcDamage == uint8_t(-1))
 		{
 			nSkillSrcDamage = 0;
 		}

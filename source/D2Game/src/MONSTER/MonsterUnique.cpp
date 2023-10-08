@@ -1013,7 +1013,7 @@ void __fastcall MONSTERUNIQUE_CurseCallback_ApplyAmplifyDamage(D2GameStrc* pGame
     curse.nStat = pSkillsTxtRecord->wAuraStat[0];
     curse.nStatValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[0], SKILL_AMPLIFYDAMAGE, nSkillLevel);
     curse.nState = pSkillsTxtRecord->wAuraTargetState;
-    curse.pStateFunc = nullptr;
+    curse.pStateRemoveCallback = nullptr;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)
@@ -1982,13 +1982,8 @@ void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         bUnique = (pUnit->pMonsterData->nTypeFlag & MONTYPEFLAG_UNIQUE) != 0;
     }
 
-    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pMonsterData)
-    {
-        return;
-    }
-
-    const uint8_t* pUMods = pUnit->pMonsterData->nMonUmod;
-    if (!pUMods || !*pUMods)
+    uint8_t* pUMods = MONSTERUNIQUE_GetUMods(pUnit);
+    if (!pUMods || *pUMods == 0)
     {
         return;
     }
@@ -2067,13 +2062,20 @@ D2UnitStrc* __fastcall sub_6FC6E8D0(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Room
 //D2Game.0x6FC6E940
 void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 {
-    if (!pGame || pGame->nDifficulty >= 3u || !pUnit || pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pMonsterData || !pUnit->pMonsterData->nMonUmod)
+    if (!pGame || pGame->nDifficulty >= 3u)
     {
         return;
     }
 
+    uint8_t* pMonUmods = MONSTERUNIQUE_GetUMods(pUnit);
+    if (!pMonUmods)
+    {
+        return;
+    }
+
+
     int32_t nIndex = 0;
-    while (pUnit->pMonsterData->nMonUmod[nIndex])
+    while (pMonUmods[nIndex])
     {
         ++nIndex;
         if (nIndex >= 9)
@@ -2137,10 +2139,10 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
                 nRand -= nPick;
             }
 
-            const int32_t nUModIndex = MONSTERUNIQUE_GetUModCount(pUnit->pMonsterData->nMonUmod);
+            const int32_t nUModIndex = MONSTERUNIQUE_GetUModCount(pMonUmods);
             if (nUModIndex < 9)
             {
-                pUnit->pMonsterData->nMonUmod[nUModIndex] = nAccumulatedPicks;
+                pMonUmods[nUModIndex] = nAccumulatedPicks;
             }
             return;
         }
@@ -2157,12 +2159,12 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 
     for (int32_t i = 0; i < nIndex; ++i)
     {
-        bUModUsageTable[pUnit->pMonsterData->nMonUmod[i]] = 1;
+        bUModUsageTable[pMonUmods[i]] = 1;
     }
 
     for (int32_t i = 0; i < nRandCount; ++i)
     {
-        uint8_t* pUMod = &pUnit->pMonsterData->nMonUmod[nIndex];
+        uint8_t* pUMod = &pMonUmods[nIndex];
 
         const int32_t nUMod = sub_6FC6EE90(pGame, pUnit, bUModUsageTable);
         if (!nUMod)
@@ -2522,24 +2524,24 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2RoomStrc* pRoo
 
     for (int32_t i = 0; i < std::size(mods); ++i)
     {
-        sub_6FC6F670(pUnit, mods[i], 1);
+        sub_6FC6F670(pUnit, mods[i], TRUE);
 
-        AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)mods[i], 0, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
+        AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)mods[i], FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
     }
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData && pUnit->pMonsterData->nMonUmod)
+    if (uint8_t * pMonUmods = MONSTERUNIQUE_GetUMods(pUnit))
     {
         for (int32_t i = 0; i < 9; ++i)
         {
-            const uint8_t nUMod = pUnit->pMonsterData->nMonUmod[i];
+            const uint8_t nUMod = pMonUmods[i];
             if (!nUMod)
             {
                 break;
             }
 
-            sub_6FC6F670(pUnit, nUMod, 1);
+            sub_6FC6F670(pUnit, nUMod, TRUE);
 
-            AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)nUMod, 0, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
+            AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)nUMod, FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
         }
     }
 }
@@ -2635,8 +2637,8 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
     {
         return nullptr;
     }
-
-    if (pMonster->dwUnitType != UNIT_MONSTER || !pMonster->pMonsterData || !pMonster->pMonsterData->nMonUmod)
+    uint8_t* pMonUmods = MONSTERUNIQUE_GetUMods(pMonster);
+    if (pMonUmods)
     {
         return pMonster;
     }
@@ -2647,7 +2649,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
     pMonster->pMonsterData->wBossHcIdx = nSuperUnique;
 
 
-    const int32_t nCounter = MONSTERUNIQUE_GetUModCount(pMonster->pMonsterData->nMonUmod);
+    const int32_t nCounter = MONSTERUNIQUE_GetUModCount(pMonUmods);
     if (nCounter >= 5)
     {
         return pMonster;
@@ -2658,7 +2660,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
 
     int32_t bAuraEnchanted = 0;
 
-    uint8_t* pMonUMods = &pMonster->pMonsterData->nMonUmod[nCounter];
+    uint8_t* pCurrentMonUMod = &pMonUmods[nCounter];
     for (int32_t i = 0; i < 3; ++i)
     {
         const uint8_t nUMod = pSuperUniquesTxtRecord->dwMod[i];
@@ -2670,15 +2672,15 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
         if (nUMod == MONUMOD_AURACHANT)
         {
             bAuraEnchanted = 1;
-            *pMonUMods = nUMod;
+            *pCurrentMonUMod = nUMod;
             bUModUsageTable[nUMod] = 1;
-            ++pMonUMods;
+            ++pCurrentMonUMod;
         }
         else if (nUMod != MONUMOD_THIEF)
         {
-            *pMonUMods = nUMod;
+            *pCurrentMonUMod = nUMod;
             bUModUsageTable[nUMod] = 1;
-            ++pMonUMods;
+            ++pCurrentMonUMod;
         }
     }
 
@@ -2690,8 +2692,8 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
             break;
         }
 
-        *pMonUMods = nUMod;
-        ++pMonUMods;
+        *pCurrentMonUMod = nUMod;
+        ++pCurrentMonUMod;
 
         bUModUsageTable[nUMod] = 1;
     }
@@ -2795,12 +2797,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Roo
 D2UnitStrc* __fastcall sub_6FC6FBA0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nUnitGUID, uint16_t nNameSeed, int32_t bChampion, int32_t bSuperUnique, int16_t nBossHcIdx, uint8_t* pUMods)
 {
     D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC6F220(pGame, pRoom, 0, nX, nY, nUnitGUID, nClassId, 1);
-    if (!pMonster || !pMonster->dwUnitType == UNIT_MONSTER)
-    {
-        return pMonster;
-    }
-
-    D2MonsterDataStrc* pMonsterData = pMonster->pMonsterData;
+    D2MonsterDataStrc* pMonsterData = MONSTERUNIQUE_GetMonsterData(pMonster);
     if (!pMonsterData)
     {
         return pMonster;
@@ -2891,14 +2888,15 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_
         }
     }
 
-    if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER || !pMonster->pMonsterData)
+    uint8_t* pMonUmods = MONSTERUNIQUE_GetUMods(pMonster);
+    if (!pMonUmods)
     {
         return nullptr;
     }
 
     for (int32_t i = 0; i < 9; ++i)
     {
-        pMonster->pMonsterData->nMonUmod[i] = pUMods[i];
+        pMonUmods[i] = pUMods[i];
     }
 
     if (pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
@@ -2914,7 +2912,7 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_
 
     for (int32_t i = 0; i < 9; ++i)
     {
-        sub_6FC6F670(pMonster, pMonster->pMonsterData->nMonUmod[i], 0);
+        sub_6FC6F670(pMonster, pMonUmods[i], 0);
     }
     
     return pMonster;
@@ -2923,12 +2921,7 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_
 //D2Game.0x6FC6FF10
 void __fastcall D2GAME_BOSSES_AssignUMod_6FC6FF10(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pMonsterData)
-    {
-        return;
-    }
-
-    uint8_t* pUMods = pUnit->pMonsterData->nMonUmod;
+    uint8_t* pUMods = MONSTERUNIQUE_GetUMods(pUnit);
     if (!pUMods)
     {
         return;

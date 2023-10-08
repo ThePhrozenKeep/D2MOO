@@ -1270,18 +1270,7 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 		}
 	}
 
-	if (nClassId == MONSTER_DOOMKNIGHT3)
-	{
-		if (pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
-		{
-			pInactiveMonsterNode->nCmdParam1 = pUnit->pMonsterData->nComponent[10];
-		}
-		else
-		{
-			pInactiveMonsterNode->nCmdParam1 = 0;
-		}
-	}
-	else if (nClassId == MONSTER_DOOMKNIGHT2)
+	if (nClassId == MONSTER_DOOMKNIGHT2 || nClassId == MONSTER_DOOMKNIGHT3)
 	{
 		if (pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
 		{

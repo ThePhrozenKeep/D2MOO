@@ -460,6 +460,8 @@ struct D2ModStatsArrayStrc
 	static const int nShrinkThreshold = 8;
 };
 
+using StatListRemoveCallback = void(__fastcall*)(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
+
 struct D2StatListStrc
 {
 	void* pMemPool;							//0x00
@@ -475,7 +477,7 @@ struct D2StatListStrc
 	D2StatListStrc* pPrevLink;				//0x2C
 	D2StatListStrc* pNextLink;				//0x30
 	D2StatListStrc* pParent;				//0x34
-	void* fpStatRemove;						//0x38
+	StatListRemoveCallback fpStatRemove;	//0x38
 };
 
 using StatListValueChangeFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
@@ -639,7 +641,7 @@ D2COMMON_DLL_DECL int __stdcall STATLIST_GetBaseStatsData(D2StatListStrc* pStatL
 //D2Common.0x6FDB8C50 (#10573)
 D2COMMON_DLL_DECL void __stdcall STATLIST_MergeBaseStats(D2StatListStrc* pTargetStatList, D2StatListStrc* pSourceStatlist);
 //D2Common.0x6FDB8CA0 (#10477)
-D2COMMON_DLL_DECL void __stdcall STATLIST_SetStatRemoveCallback(D2StatListStrc* pStatList, void* pfStatRemove);
+D2COMMON_DLL_DECL void __stdcall STATLIST_SetStatRemoveCallback(D2StatListStrc* pStatList, StatListRemoveCallback pfStatRemove);
 //D2Common.0x6FDB8CC0 (#10469)
 D2COMMON_DLL_DECL void __stdcall D2Common_10469(D2UnitStrc* pUnit);
 //D2Common.0x6FDB8D30 (#10514)

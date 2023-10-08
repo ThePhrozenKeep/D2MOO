@@ -640,6 +640,12 @@ void __fastcall DATATBLS_UnloadUniqueItemsTxt();
 void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool);
 //D2Common.0x6FD5AE00
 void __fastcall DATATBLS_UnloadSets_SetItemsTxt();
+// Inlined
+D2SetItemsTxt* __stdcall DATATBLS_GetSetItemsTxtRecord(int nSetItemId);
+// Inlined
+D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecord(int nSetId);
+// Inlined
+D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId);
 //D2Common.0x6FD5AE40
 void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool);
 //D2Common.0x6FD5B250

@@ -173,11 +173,11 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11070(int nMonsterId, unsigned int nCom
 //D2Common.0x6FDA54E0 (#11050)
 D2COMMON_DLL_DECL int __stdcall D2Common_11050(D2UnitStrc* pUnit, int a2);
 //D2Common.0x6FDA55E0 (#11052)
-D2COMMON_DLL_DECL char __stdcall D2Common_11052(uint8_t a1);
+D2COMMON_DLL_DECL uint8_t __stdcall D2Common_11052(uint8_t a1);
 //D2Common.0x6FDA5600 (#11053)
-D2COMMON_DLL_DECL char __stdcall D2Common_11053(uint8_t a1);
+D2COMMON_DLL_DECL uint8_t __stdcall D2Common_11053(uint8_t a1);
 //D2Common.0x6FDA5620 (#11054)
-D2COMMON_DLL_DECL char __stdcall D2Common_11054(uint8_t a1);
+D2COMMON_DLL_DECL uint8_t __stdcall D2Common_11054(uint8_t a1);
 //D2Common.0x6FDA5640 (#11055)
 D2COMMON_DLL_DECL void __stdcall D2Common_11055(uint8_t a1, int* a2, int* a3);
 //D2Common.0x6FDA5670 (#11297)

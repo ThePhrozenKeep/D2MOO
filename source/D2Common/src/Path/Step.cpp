@@ -258,7 +258,6 @@ void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, un
 	D2RoomStrc* v21; // esi
 	int v22; // edi
 	int v23; // ebx
-	int v24; // ecx
 	int v25; // edx
 	D2RoomStrc* v26; // eax
 	int v27; // ecx
@@ -350,8 +349,8 @@ LABEL_18:
 		goto LABEL_32;
 	if (v23 < v17->tCoords.nSubtileX
 		|| v23 >= v17->tCoords.nSubtileX + v17->tCoords.nSubtileWidth
-		|| (v24 = v17->tCoords.nSubtileY, v22 < v24)
-		|| v22 >= v24 + v17->tCoords.nSubtileHeight)
+		|| (v22 < v17->tCoords.nSubtileY)
+		|| v22 >= v17->tCoords.nSubtileY + v17->tCoords.nSubtileHeight)
 	{
 		pppRoom = 0;
 		a3 = 0;
@@ -362,7 +361,7 @@ LABEL_18:
 		LABEL_43:
 			v21 = 0;
 		LABEL_32:
-			if ((!pRoom || (v21 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v23, v22)) == 0)
+			if ((!pRoom || (v21 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v23, v22)) == 0) // NOLINT todo
 				&& (pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
 			{
 				pDynamicPath->dwPathPoints = 0;
@@ -489,8 +488,9 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 	pDynamicPath->nCollidedWithMask = 0;
 	v44 = v4;
 	*pUnit = 0;
-	if (!v4 || v4->dwUnitType != UNIT_MONSTER || (v42 = 1, (pDynamicPath->dwFlags & 0x10) == 0))
-		v42 = 0;
+
+	v42 = v4 && v4->dwUnitType == UNIT_MONSTER && (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) != 0;
+
 	if (!pDynamicPath->tVelocityVector.nX && !pDynamicPath->tVelocityVector.nY)
 	{
 		v5 = pDynamicPath->tGameCoords.dwPrecisionX;
@@ -694,7 +694,6 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 	D2RoomStrc* v5; // eax
 	signed int v6; // edi
 	signed int v7; // ebx
-	int v8; // ecx
 	DWORD v9; // edx
 	D2RoomStrc* v10; // eax
 	int v11; // ecx
@@ -703,7 +702,6 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 	D2RoomStrc* v14; // ecx
 	uint16_t v15; // dx
 	uint16_t v16; // ax
-	int v17; // ebx
 	D2RoomStrc* v18; // edi
 	D2RoomStrc* v19; // eax
 	D2UnitStrc* v20; // ebx
@@ -730,8 +728,8 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 			goto LABEL_18;
 		if (v7 < v5->tCoords.nSubtileX
 			|| v7 >= v5->tCoords.nSubtileX + v5->tCoords.nSubtileWidth
-			|| (v8 = v5->tCoords.nSubtileY, v6 < v8)
-			|| v6 >= v8 + v5->tCoords.nSubtileHeight)
+			|| (v6 < v5->tCoords.nSubtileY)
+			|| v6 >= v5->tCoords.nSubtileY + v5->tCoords.nSubtileHeight)
 		{
 			pppRoom = 0;
 			pNumRooms = 0;
@@ -789,8 +787,8 @@ int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath)
 			if (!v14
 				|| v15 < v14->tCoords.nSubtileX
 				|| v15 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth
-				|| (v17 = v14->tCoords.nSubtileY, v16 < v17)
-				|| v16 >= v17 + v14->tCoords.nSubtileHeight)
+				|| (v16 < v14->tCoords.nSubtileY)
+				|| v16 >= v14->tCoords.nSubtileY + v14->tCoords.nSubtileHeight)
 			{
 				v18 = COLLISION_GetRoomBySubTileCoordinates(
 					v14,
@@ -1220,7 +1218,6 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 	D2RoomStrc* v4; // eax
 	signed int v5; // esi
 	int v6; // edi
-	int v7; // ecx
 	DWORD v8; // edx
 	D2RoomStrc* v9; // eax
 	int v10; // ecx
@@ -1229,7 +1226,6 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 	D2RoomStrc* v14; // eax
 	WORD v15; // cx
 	WORD v16; // dx
-	int v17; // edi
 	int v18; // ecx
 	int v19; // esi
 	int v20; // edi
@@ -1259,8 +1255,8 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 		}
 		if (v6 < v4->tCoords.nSubtileX
 			|| v6 >= v4->tCoords.nSubtileX + v4->tCoords.nSubtileWidth
-			|| (v7 = v4->tCoords.nSubtileY, v5 < v7)
-			|| v5 >= v7 + v4->tCoords.nSubtileHeight)
+			|| (v5 < v4->tCoords.nSubtileY)
+			|| v5 >= v4->tCoords.nSubtileY + v4->tCoords.nSubtileHeight)
 		{
 			pppRoom = 0;
 			pNumRooms = 0;
@@ -1318,8 +1314,8 @@ void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
 			if (!v14
 				|| v15 < v14->tCoords.nSubtileX
 				|| v15 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth
-				|| (v17 = v14->tCoords.nSubtileY, v16 < v17)
-				|| v16 >= v17 + v14->tCoords.nSubtileHeight)
+				|| (v16 < v14->tCoords.nSubtileY)
+				|| v16 >= v14->tCoords.nSubtileY + v14->tCoords.nSubtileHeight)
 			{
 				v18 = pDynamicPath->tGameCoords.wPosX;
 				v19 = pDynamicPath->tGameCoords.wPosY;

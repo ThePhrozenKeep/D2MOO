@@ -91,7 +91,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
     }
 
     D2ItemsTxt* pInputItemTxtRecord = nullptr;
-    if (nInputFlags & CUBEFLAG_IN_USEANY && pCubeMainTxt->pInputItem[nInputIndex].wItem != -1)
+    if (nInputFlags & CUBEFLAG_IN_USEANY && pCubeMainTxt->pInputItem[nInputIndex].wItem != uint16_t(-1))
     {
         pInputItemTxtRecord = DATATBLS_GetItemsTxtRecord(pCubeMainTxt->pInputItem[nInputIndex].wItem);
     }
@@ -113,7 +113,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
 
                 if (nInputFlags & CUBEFLAG_IN_USEANY)
                 {
-                    if (pCubeMainTxt->pInputItem[nInputIndex].wItem != -1)
+                    if (pCubeMainTxt->pInputItem[nInputIndex].wItem != uint16_t(-1))
                     {
                         if (nInputFlags & CUBEFLAG_IN_UPGRADED)
                         {

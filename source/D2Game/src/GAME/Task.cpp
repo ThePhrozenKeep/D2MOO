@@ -69,6 +69,7 @@ void __stdcall TASK_FreeAllQueueSlots()
 //D2Game.0x6FC405B0 (#10041) 
 int __cdecl D2Game_10041_TASK_Create()
 {
+    UNIMPLEMENTED();
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
     if (!gpTaskQueueLink.pPrev)
     {
@@ -97,8 +98,8 @@ int __cdecl D2Game_10041_TASK_Create()
         for (D2LinkStrc* pLink = gpTaskQueueLink.pNext; pLink != &gpTaskQueueLink; pLink = pLink->pNext)
         {
             bool v9 = (int)--v21 < 0;
-#define __PAIR64__(high, low) ((uint64_t(uint32_t(high)) << 32) |(uint32_t(low)))
-            int v10 = (__PAIR64__(CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType, v4 + !v9) - 1) >> 32;
+#define D2_PAIR64(high, low) ((uint64_t(uint32_t(high)) << 32) |(uint32_t(low)))
+            int v10 = (D2_PAIR64(CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType, v4 + !v9) - 1) >> 32;
             EnterCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskStrc, pTaskQueueLink)->nTaskQ].cs);
             D2LinkStrc* pTaskBalanceIterator = pLink[-1].pPrev;
             D2LinkStrc* pTaskBalancePrevLink = pLink - 1;
@@ -150,10 +151,10 @@ int __cdecl D2Game_10041_TASK_Create()
                         D2LinkStrc* v18 = nPreviousTypeTaskLink->pNext;
                         if (v18 != pTaskBalanceLink)
                         {
-                            D2LinkStrc* v19 = v16[-2u].pNext;
+                            D2LinkStrc* v19 = v16[-2u].pNext; // NOLINT TODO proper list
                             do
                             {
-                                if ((char*)v19 - (char*)v18[-2].pNext <= 0)
+                                if ((char*)v19 - (char*)v18[-2].pNext <= 0) // NOLINT TODO proper list
                                     break;
                                 nPreviousTypeTaskLink = v18;
                                 v18 = v18->pNext;

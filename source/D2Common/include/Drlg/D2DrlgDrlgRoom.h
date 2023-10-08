@@ -60,7 +60,7 @@ int __fastcall DRLGROOM_GetLevelIdFromPopulatedRoom(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77AF0
 BOOL __fastcall DRLGROOM_HasWaypoint(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77B20
-char* __fastcall DRLGROOM_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* pRoomEx);
+const char* __fastcall DRLGROOM_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* pRoomEx);
 //D2Common.0x6FD77B50
 int __fastcall DRLGROOM_ReorderNearRoomList(D2RoomExStrc* pRoomEx, D2RoomStrc** ppRoomList);
 //D2Common.0x6FD77BB0

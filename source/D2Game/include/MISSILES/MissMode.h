@@ -281,6 +281,6 @@ int32_t __fastcall MISSMODE_SrvDo01_BasicMissile(D2GameStrc* pGame, D2UnitStrc* 
 //D2Game.0x6FC5FAD0
 int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, int32_t a4);
 //D2Game.0x6FC60080
-void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused);
+void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FC60090
 void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnused);

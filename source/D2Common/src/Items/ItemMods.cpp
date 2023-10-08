@@ -2760,11 +2760,7 @@ void __stdcall ITEMMODS_SetRandomElixirFileIndex(D2UnitStrc* pItem)
 
 	ITEMS_SetFileIndex(pItem, dwFileIndex[nRand]);
 
-	if (dwFileIndex[nRand] == 9)
-	{
-		STATLIST_SetUnitStat(pItem, STAT_VALUE, ((SEED_RollRandomNumber(ITEMS_GetItemSeed(pItem)) & 3) + 1) << 8, 0);
-	}
-	else if (dwFileIndex[nRand] == 7)
+	if (dwFileIndex[nRand] == 9 || dwFileIndex[nRand] == 7)
 	{
 		STATLIST_SetUnitStat(pItem, STAT_VALUE, ((SEED_RollRandomNumber(ITEMS_GetItemSeed(pItem)) & 3) + 1) << 8, 0);
 	}

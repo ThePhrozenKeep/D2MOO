@@ -2247,15 +2247,12 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 
                     for (int32_t i = 0; i < 6; ++i)
                     {
-                        *pCurrent = *pOld;
-                        if (!*pOld)
+                        int16_t nVal = *pOld;
+                        if (!*pOld || *pTCValue > *pOld)
                         {
-                            *pCurrent = *pTCValue;
+                            nVal = *pTCValue;
                         }
-                        else if (*pTCValue > *pOld)
-                        {
-                            *pCurrent = *pTCValue;
-                        }
+                        *pCurrent = nVal;
 
                         ++pTCValue;
                         ++pOld;

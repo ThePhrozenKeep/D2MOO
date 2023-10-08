@@ -239,7 +239,7 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     STATLIST_SetUnitStat(pHireling, STAT_MAXHP, nHitpoints, 0);
     STATLIST_SetUnitStat(pHireling, STAT_HITPOINTS, nHitpoints, 0);
 
-    const int32_t nDefense = std::max(pHirelingTxtRecord->dwDefense + nLevelUps * pHirelingTxtRecord->dwDefensePerLvl, 0u);
+    const int32_t nDefense = std::max(pHirelingTxtRecord->dwDefense + nLevelUps * pHirelingTxtRecord->dwDefensePerLvl, 0);
     STATLIST_SetUnitStat(pHireling, STAT_ARMORCLASS, nDefense, 0);
 
     const int32_t nMinDamage = std::max(pHirelingTxtRecord->nDmgMin + nLevelUps * pHirelingTxtRecord->nDmgPerLvl / 8, 0);
@@ -248,10 +248,10 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     const int32_t nMaxDamage = std::max(pHirelingTxtRecord->nDmgMax + nLevelUps * pHirelingTxtRecord->nDmgPerLvl / 8, 1);
     STATLIST_SetUnitStat(pHireling, STAT_SECONDARY_MAXDAMAGE, nMaxDamage, 0);
 
-    const int32_t nAttackRate = std::max(pHirelingTxtRecord->dwAttackRate + nLevelUps * pHirelingTxtRecord->dwAttackRatePerLvl, 0u);
+    const int32_t nAttackRate = std::max(pHirelingTxtRecord->dwAttackRate + nLevelUps * pHirelingTxtRecord->dwAttackRatePerLvl, 0);
     STATLIST_SetUnitStat(pHireling, STAT_TOHIT, nAttackRate, 0);
 
-    const int32_t nResist = std::max(pHirelingTxtRecord->dwResist + (nLevelUps * pHirelingTxtRecord->dwResistPerLvl) / 4, 0u);
+    const int32_t nResist = std::max(pHirelingTxtRecord->dwResist + (nLevelUps * pHirelingTxtRecord->dwResistPerLvl) / 4, 0);
     STATLIST_SetUnitStat(pHireling, STAT_FIRERESIST, nResist, 0);
     STATLIST_SetUnitStat(pHireling, STAT_LIGHTRESIST, nResist, 0);
     STATLIST_SetUnitStat(pHireling, STAT_COLDRESIST, nResist, 0);

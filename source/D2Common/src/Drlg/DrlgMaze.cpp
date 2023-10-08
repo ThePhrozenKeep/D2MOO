@@ -1042,11 +1042,13 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 		else
 		{
 			DRLGROOM_FreeRoomEx(pNewRoomEx);
-			pNewRoomEx = NULL;
+			pNewRoomEx = nullptr;
 		}
+		D2_ASSERT(pRoomEx != nullptr); // Not in original game. Could be nullptr if fails to link.
 		pRoomEx = pNewRoomEx;
 	}
 
+	D2_ASSERT(nullptr); // Not in original game. Could be nullptr if the last fails to link.
 	for (int i = nRoomsPerDirection - 1; i > 0; --i)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
@@ -2773,6 +2775,7 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 			DRLGROOM_FreeRoomEx(pBarracksRoomEx);
 			pBarracksRoomEx = 0;
 		}
+		D2_ASSERT(pBarracksRoomEx); // Original game does not check for nullptr here, and may still dereference a nullptr...
 
 		DRLGROOM_AddOrth(&pBarracksRoomEx->pDrlgOrth, pOuterCloisterLevel, 2, FALSE);
 		nX -= pLevel->pMaze->dwSizeX + pBarracksRoomEx->nTileXPos;

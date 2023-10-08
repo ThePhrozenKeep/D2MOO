@@ -25,6 +25,7 @@
 #include "QUESTS/Quests.h"
 #include "UNIT/Party.h"
 #include "UNIT/SUnit.h"
+#include "GAME/Task.h"
 
 
 #pragma warning(disable: 28159)
@@ -596,31 +597,24 @@ void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 			}
 		}
 
-		if (!pQuestData->bNotIntro)
+		if (pQuestData->bNotIntro)
 		{
-			return;
+			pQuestDataEx->nPlayerCount = 0;
+			QUESTS_UnitIterate(pQuestData, 13, 0, ACT4Q2_UnitIterate_StatusCyclerEx, 1);
+			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_UpdateQuestStateFlags);
+			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers);
+			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetCompletionFlag);
+			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_AttachCompletionSound);
+
+			if (bNotRewarded)
+			{
+				for(int nPlayer = 0; nPlayer < pQuestDataEx->nPlayerCount; nPlayer++)
+				{
+					D2Game_10034_Return(64);
+				}
+			}
 		}
 
-		pQuestDataEx->nPlayerCount = 0;
-		QUESTS_UnitIterate(pQuestData, 13, 0, ACT4Q2_UnitIterate_StatusCyclerEx, 1);
-		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_UpdateQuestStateFlags);
-		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers);
-		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetCompletionFlag);
-		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_AttachCompletionSound);
-
-		//if (bNotRewarded)
-		//{
-		//	int32_t nCounter = 0;
-		//	if (pQuestDataEx->nPlayerCount > 0)
-		//	{
-		//		do
-		//		{
-		//			//D2Game_10034_Return(64);
-		//			++nCounter;
-		//		}
-		//		while (nCounter < pQuestDataEx->nPlayerCount);
-		//	}
-		//}
 		return;
 	}
 	else
@@ -711,10 +705,11 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 
 		D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
 
-		D2UnitStrc* pDiablo = nullptr;
-		if ((pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, -1, 0)) != nullptr
-			|| (pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 5, 0)) != nullptr
-			|| (pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 10, 0)) != nullptr)
+		D2UnitStrc*   pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, -1, 0);
+		if (!pDiablo) pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1,  5, 0);
+		if (!pDiablo) pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, 10, 0);
+
+		if (pDiablo)
 		{
 			pDiablo->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 
@@ -1293,7 +1288,7 @@ int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* 
 
 			D2GSPacketSrv61 packet61 = {};
 			packet61.nHeader = 0x61;
-			packet61.__001 = 5;
+			packet61.unk0x001 = 5;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
 		}
 	}

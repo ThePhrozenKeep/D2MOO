@@ -17,6 +17,7 @@ int gnCharTemplateTxtTableRecordCount;
 uint32_t gnCharTemplateStartIds[64];
 // D2Common.0x6FDE9604
 D2BeltsTxt* gpBeltsTxtTable;
+// D2Common.0x6FDE9608
 D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
 D2DataTablesStrc* sgptDataTables = &gpDataTables;
@@ -544,7 +545,7 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
 		if (pMonStatsTxtRecord && pMonStatsTxtRecord->wNameStr != 5382)
 		{
-			wcstombs(szName, D2LANG_GetStringFromTblIndex(pMonStatsTxtRecord->wNameStr), 64);
+			Unicode::unicode2Win(szName, (const Unicode*)D2LANG_GetStringFromTblIndex(pMonStatsTxtRecord->wNameStr), 64);
 		}
 		else
 		{
@@ -572,7 +573,7 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nClassId);
 		if (pItemsTxtRecord && pItemsTxtRecord->wNameStr != 5382)
 		{
-			wcstombs(szName, D2LANG_GetStringFromTblIndex(pItemsTxtRecord->wNameStr), 64);
+			Unicode::unicode2Win(szName, (const Unicode*)D2LANG_GetStringFromTblIndex(pItemsTxtRecord->wNameStr), 64);
 		}
 		else
 		{

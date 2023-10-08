@@ -168,8 +168,9 @@ int32_t __fastcall SKILLS_SrvSt23_AssasinChargeStrikes(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FCF52E0
-void __fastcall SKILLS_StatRemoveCallback_ProgressiveStrike(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall SKILLS_StatRemoveCallback_ProgressiveStrike(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     STATES_ToggleState(pUnit, nState, 0);
 }
 
@@ -1002,7 +1003,7 @@ int32_t __fastcall SKILLS_SrvDo041_RoyalStrike_ProgressiveFn3(D2GameStrc* pGame,
         if (pMissile)
         {
             MISSILE_SetTargetX(pMissile, SEED_GetLowSeed(&seed));
-            MISSILE_SetTargetY(pMissile, (uint16_t)missileParams.nTargetX + ((uint16_t)missileParams.nTargetY) << 16);
+            MISSILE_SetTargetY(pMissile, (uint16_t)missileParams.nTargetX + (((uint16_t)missileParams.nTargetY) << 16));
         }
     }
 
@@ -1198,8 +1199,8 @@ void __fastcall sub_6FCF7CE0(D2GameStrc* pGame, D2DamageStrc* pDamage, D2UnitStr
     int32_t nDamagePercent = pDamage->dwEnDmgPct;
     SKILLS_CalculateKickDamage(pUnit, &nMinKickDamage, &nMaxKickDamage, &nDamagePercent);
 
-    const int32_t nMinDamage = nMinBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMinKickDamage << 8, nDamagePercent, 100) + nMinKickDamage << 8;
-    const int32_t nMaxDamage = nMaxBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMaxKickDamage << 8, nDamagePercent, 100) + nMaxKickDamage << 8;
+    const int32_t nMinDamage = nMinBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMinKickDamage << 8, nDamagePercent, 100) + (nMinKickDamage << 8);
+    const int32_t nMaxDamage = nMaxBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMaxKickDamage << 8, nDamagePercent, 100) + (nMaxKickDamage << 8);
     pDamage->dwPhysDamage += ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
 
     D2GAME_RollElementalDamage_6FD14DD0(pUnit, pDamage, nSkillId, nSkillLevel);
@@ -1660,7 +1661,7 @@ int32_t __fastcall SKILLS_SrvDo047_CloakOfShadows(D2GameStrc* pGame, D2UnitStrc*
     curse.nStat = pSkillsTxtRecord->nPassiveStat[0];
     curse.nStatValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPassiveCalc[0], nSkillId, nSkillLevel);
     curse.nState = pSkillsTxtRecord->nAuraState;
-    curse.pStateFunc = sub_6FD10E50;
+    curse.pStateRemoveCallback = sub_6FD10E50;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)
@@ -1734,7 +1735,7 @@ int32_t __fastcall SKILLS_AuraCallback_CloakOfShadows(D2AuraCallbackStrc* pAuraC
     }
     curse.nStatValue = pArgs->nAuraStatCalcValue[0];
     curse.nState = pArgs->nAuraTargetState;
-    curse.pStateFunc = sub_6FD0B250;
+    curse.pStateRemoveCallback = sub_6FD0B250;
 
     D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
     if (!pStatList)
@@ -1884,8 +1885,9 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FCF9550
-void __fastcall SKILLS_StatRemoveCallback_RemoveState(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall SKILLS_StatRemoveCallback_RemoveState(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     STATES_ToggleState(pUnit, nState, 0);
 
     if (pUnit)
@@ -2163,8 +2165,9 @@ int32_t __fastcall SKILLS_SrvDo050_DragonTail(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FCF9EA0
-void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t nState, int32_t nUnused)
+void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     sub_6FCBDD30(pItem, 0, 1);
     STATES_ToggleState(pItem, nState, 0);
     D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pItem), pItem);

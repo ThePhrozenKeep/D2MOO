@@ -1,27 +1,27 @@
 #include "D2DataTbls.h"
 #include <Calc.h>
+#include <Storm.h>
 
 //D2Common.0x6FD62EA0
 int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
 {
-	// Note: Game actually uses Storm.dll SStrCmpI
-	if (!_strnicmp(szKey, "min", 32))
+	if (!SStrCmpI(szKey, "min", 32))
 	{
 		return 0;
 	}
-	else if (!_strnicmp(szKey, "max", 32))
+	else if (!SStrCmpI(szKey, "max", 32))
 	{
 		return 1;
 	}
-	else if (!_strnicmp(szKey, "rand", 32))
+	else if (!SStrCmpI(szKey, "rand", 32))
 	{
 		return 2;
 	}
-	else if (!_strnicmp(szKey, "skill", 32))
+	else if (!SStrCmpI(szKey, "skill", 32))
 	{
 		return 3;
 	}
-	else if (!_strnicmp(szKey, "miss", 32))
+	else if (!SStrCmpI(szKey, "miss", 32))
 	{
 		return 4;
 	}

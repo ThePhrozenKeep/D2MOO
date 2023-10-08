@@ -1240,8 +1240,9 @@ void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindDat
 }
 
 //D2Game.0x6FD10E50
-void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, int32_t nUnused)
+void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
+    D2_MAYBE_UNUSED(pStatList);
     SUNITEVENT_FreeTimer(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
 
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
@@ -1383,9 +1384,9 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
 
     D2COMMON_10475_PostStatToStatList(pCurse->pTarget, pStatList, 1);
 
-    if (pCurse->pStateFunc)
+    if (pCurse->pStateRemoveCallback)
     {
-        STATLIST_SetStatRemoveCallback(pStatList, pCurse->pStateFunc);
+        STATLIST_SetStatRemoveCallback(pStatList, pCurse->pStateRemoveCallback);
     }
     else
     {
@@ -1396,7 +1397,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
 }
 
 //D2Game.0x6FD11260
-D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, void* pfRemove)
+D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 
@@ -1409,9 +1410,9 @@ D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, 
     curse.nSkill = nSkillId;
     curse.nStatValue = pSkillsTxtRecord->dwParam[0] + (nSkillLevel - 1) * pSkillsTxtRecord->dwParam[2];
     curse.nState = nState;
-    curse.pStateFunc = pfRemove;
+    curse.pStateRemoveCallback = pfRemoveStatCallback;
 
-    if (pfRemove && IsBadCodePtr((FARPROC)pfRemove))
+    if (pfRemoveStatCallback && IsBadCodePtr((FARPROC)pfRemoveStatCallback))
     {
         FOG_DisplayAssert("pfnRemove", __FILE__, __LINE__);
         exit(-1);

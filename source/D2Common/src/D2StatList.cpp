@@ -23,11 +23,8 @@ BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 		int nAlignment1 = STATLIST_GetUnitAlignment(pUnit1);
 		int nAlignment2 = STATLIST_GetUnitAlignment(pUnit2);
 
-		if (nAlignment1 == UNIT_ALIGNMENT_EVIL && nAlignment2 == UNIT_ALIGNMENT_EVIL)
-		{
-			return TRUE;
-		}
-		else if (nAlignment1 == UNIT_ALIGNMENT_GOOD && nAlignment2 == UNIT_ALIGNMENT_GOOD)
+		if (nAlignment1 == UNIT_ALIGNMENT_EVIL && nAlignment2 == UNIT_ALIGNMENT_EVIL
+			|| nAlignment1 == UNIT_ALIGNMENT_GOOD && nAlignment2 == UNIT_ALIGNMENT_GOOD)
 		{
 			return TRUE;
 		}
@@ -864,7 +861,7 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 
 		if (pUnit && pStatList->fpStatRemove)
 		{
-			((void(__fastcall*)(D2UnitStrc*, int, D2StatListStrc*))pStatList->fpStatRemove)(pUnit, pStatList->dwStateNo, pStatList);
+			pStatList->fpStatRemove(pUnit, pStatList->dwStateNo, pStatList);
 		}
 	}
 }
@@ -1928,7 +1925,7 @@ void __stdcall STATLIST_MergeBaseStats(D2StatListStrc* pTargetStatList, D2StatLi
 }
 
 //D2Common.0x6FDB8CA0 (#10477)
-void __stdcall STATLIST_SetStatRemoveCallback(D2StatListStrc* pStatList, void* pfStatRemove)
+void __stdcall STATLIST_SetStatRemoveCallback(D2StatListStrc* pStatList, StatListRemoveCallback pfStatRemove)
 {
 	if (pStatList)
 	{

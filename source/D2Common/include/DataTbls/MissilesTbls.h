@@ -81,7 +81,7 @@ struct D2MissilesTxt
 	uint32_t dwHitPar[3];					//0x4C
 	uint32_t dwCltParam[5];					//0x58
 	uint32_t dwCltHitPar[3];				//0x6C
-	uint32_t dwDmgParam[2];					//0x78
+	int32_t dwDmgParam[2];					//0x78
 	uint32_t dwSrvCalc;						//0x80
 	uint32_t dwCltCalc;						//0x84
 	uint32_t dwHitCalc;						//0x88

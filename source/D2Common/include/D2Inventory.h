@@ -215,7 +215,7 @@ D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* 
 //D2Common.0x6FD8F930 (#10249)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtInventoryPage(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, BOOL bUnused, uint8_t nPage);
 //D2Common.0x6FD8F970 (#10250)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_Return(char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, uint8_t nPage);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_Return(const char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, uint8_t nPage);
 //D2Common.0x6FD8F980 (#10252)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, uint8_t nPage);
 //D2Common.0x6FD8FAB0 (#10253)

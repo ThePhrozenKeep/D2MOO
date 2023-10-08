@@ -1503,7 +1503,7 @@ int32_t __fastcall sub_6FC64B60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
                 }
             }
 
-            _10190_PATH_SetDistance(pModeChange->pUnit->pDynamicPath, nDistance);
+            D2COMMON_10190_PATH_SetDistance(pModeChange->pUnit->pDynamicPath, nDistance);
             D2Common_10142(pModeChange->pUnit->pDynamicPath, pModeChange->pUnit, 0);
             SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 13);
         }

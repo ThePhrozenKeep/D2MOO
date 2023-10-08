@@ -489,7 +489,7 @@ void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemP
 
 	D2LevelFileListStrc* pLevelFile = gpLevelFilesList_6FDEA700;
 	// Check if we already loaded this file
-	while (pLevelFile && strcmp(pLevelFile->szPath, szFile))
+	while (pLevelFile && strcmp(pLevelFile->szPath, szFile) != 0)
 	{
 		pLevelFile = pLevelFile->pNext;
 	}

@@ -81,7 +81,7 @@ enum D2C_TxtFieldTypes : uint32_t
 
 struct D2BinFieldStrc
 {
-	char* szFieldName;				//0x00
+	const char* szFieldName;		//0x00
 	D2C_TxtFieldTypes nFieldType;	//0x04
 	int32_t nFieldLength;			//0x08
 	int32_t nFieldOffset;			//0x0C
@@ -102,7 +102,7 @@ enum D2C_AsyncDataPriority
 	ASYNC_DATA_PRIORITY_HIGH = 1,
 };
 
-enum D2C_AsyncDataFlags
+enum D2C_AsyncDataFlags : uint32_t
 {
 	ASYNC_DATA_FLAGS_LOADED = 0x01,
 
@@ -233,7 +233,7 @@ D2FUNC_DLL(FOG, FreeLinker, void, __stdcall, (void* pLinker), 0xB750)											
 D2FUNC_DLL(FOG, GetLinkIndex, int, __stdcall, (void* pLink, uint32_t dwCode, BOOL bLogError), 0xB810)												//Fog.#10213
 D2FUNC_DLL(FOG, GetStringFromLinkIndex, int, __stdcall, (void* pLinker, int nIndex, char* szString), 0xB8F0)										//Fog.#10214
 D2FUNC_DLL(FOG, 10215, int, __stdcall, (void* pBin, int a2), 0xB990)																				//Fog.#10215
-D2FUNC_DLL(FOG, 10216_AddRecordToLinkingTable, int, __stdcall, (void* pBin, char* a2), 0xBD80)														//Fog.#10216
+D2FUNC_DLL(FOG, 10216_AddRecordToLinkingTable, int, __stdcall, (void* pBin, const char* a2), 0xBD80)														//Fog.#10216
 D2FUNC_DLL(FOG, GetRowFromTxt, int, __stdcall, (void* pBin, char* szText, int nColumn), 0xBC20)														//Fog.#10217
 D2FUNC_DLL(FOG, 10219, int, __fastcall, (uint8_t*), 0xC9E0)																							//Fog.#10219
 D2FUNC_DLL(FOG, 10222, int, __fastcall, (const uint8_t*, int), 0xCC90)																				//Fog.#10222

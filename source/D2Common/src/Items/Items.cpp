@@ -11,6 +11,7 @@
 #include "D2StatList.h"
 #include "Units/Units.h"
 #include <D2CMP.h>
+#include <D2Math.h>
 #include <DataTbls/MonsterIds.h>
 
 
@@ -1242,7 +1243,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 
 		if (pPrefixTxtRecord)
 		{
-			nLevelRequirement = pPrefixTxtRecord->nClass != -1 && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
+			nLevelRequirement = pPrefixTxtRecord->nClass != uint8_t(-1) && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
 			if (nLevelRequirement >= 0)
 			{
 				nRequiredLevel = nLevelRequirement;
@@ -1251,7 +1252,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 
 		if (pSuffixTxtRecord)
 		{
-			nLevelRequirement = pSuffixTxtRecord->nClass != -1 && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
+			nLevelRequirement = pSuffixTxtRecord->nClass != uint8_t(-1) && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
 			if (nRequiredLevel <= nLevelRequirement)
 			{
 				nRequiredLevel = nLevelRequirement;
@@ -1260,7 +1261,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 
 		if (pAutoAffixTxtRecord)
 		{
-			nLevelRequirement = pAutoAffixTxtRecord->nClass != -1 && pPlayer && pAutoAffixTxtRecord->nClass == pPlayer->dwClassId ? pAutoAffixTxtRecord->nClassLevelReq : pAutoAffixTxtRecord->nLevelReq;
+			nLevelRequirement = pAutoAffixTxtRecord->nClass != uint8_t(-1) && pPlayer && pAutoAffixTxtRecord->nClass == pPlayer->dwClassId ? pAutoAffixTxtRecord->nClassLevelReq : pAutoAffixTxtRecord->nLevelReq;
 			if (nRequiredLevel <= nLevelRequirement)
 			{
 				nRequiredLevel = nLevelRequirement;
@@ -1275,7 +1276,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 
 			if (pPrefixTxtRecord)
 			{
-				nLevelRequirement = pPrefixTxtRecord->nClass != -1 && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
+				nLevelRequirement = pPrefixTxtRecord->nClass != uint8_t(-1) && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
 				if (nRequiredLevel <= nLevelRequirement)
 				{
 					nRequiredLevel = nLevelRequirement;
@@ -1284,7 +1285,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 
 			if (pSuffixTxtRecord)
 			{
-				nLevelRequirement = pSuffixTxtRecord->nClass != -1 && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
+				nLevelRequirement = pSuffixTxtRecord->nClass != uint8_t(-1) && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
 				if (nRequiredLevel <= nLevelRequirement)
 				{
 					nRequiredLevel = nLevelRequirement;
@@ -1295,7 +1296,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		pAutoAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wAutoAffix);
 		if (pAutoAffixTxtRecord)
 		{
-			nLevelRequirement = pAutoAffixTxtRecord->nClass != -1 && pPlayer && pAutoAffixTxtRecord->nClass == pPlayer->dwClassId ? pAutoAffixTxtRecord->nClassLevelReq : pAutoAffixTxtRecord->nLevelReq;
+			nLevelRequirement = pAutoAffixTxtRecord->nClass != uint8_t(-1) && pPlayer && pAutoAffixTxtRecord->nClass == pPlayer->dwClassId ? pAutoAffixTxtRecord->nClassLevelReq : pAutoAffixTxtRecord->nLevelReq;
 			if (nRequiredLevel <= nLevelRequirement)
 			{
 				nRequiredLevel = nLevelRequirement;
@@ -1312,7 +1313,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 			if (pPrefixTxtRecord)
 			{
 				nCraftBonus += 3;
-				nLevelRequirement = pPrefixTxtRecord->nClass != -1 && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
+				nLevelRequirement = pPrefixTxtRecord->nClass != uint8_t(-1) && pPlayer && pPrefixTxtRecord->nClass == pPlayer->dwClassId ? pPrefixTxtRecord->nClassLevelReq : pPrefixTxtRecord->nLevelReq;
 				if (nRequiredLevel <= nLevelRequirement)
 				{
 					nRequiredLevel = nLevelRequirement;
@@ -1322,7 +1323,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 			if (pSuffixTxtRecord)
 			{
 				nCraftBonus += 3;
-				nLevelRequirement = pSuffixTxtRecord->nClass != -1 && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
+				nLevelRequirement = pSuffixTxtRecord->nClass != uint8_t(-1) && pPlayer && pSuffixTxtRecord->nClass == pPlayer->dwClassId ? pSuffixTxtRecord->nClassLevelReq : pSuffixTxtRecord->nLevelReq;
 				if (nRequiredLevel <= nLevelRequirement)
 				{
 					nRequiredLevel = nLevelRequirement;
@@ -4434,53 +4435,42 @@ int __stdcall D2COMMON_11079_Return0(int a1, int a2)
 }
 
 //D2Common.0x6FD9FB50 (#10836)
-uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bSkipItem)
+uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bDontIgnoreInputItem)
 {
-	D2SetItemsTxt* pSetItemsTxtRecord = NULL;
-	D2ItemDataStrc* pItemData = NULL;
-	uint32_t nSetItemMask = 0;
-	int nFileIndex = 0;
-
-	if (!pPlayer || !pSetItem || pSetItem->dwUnitType != UNIT_ITEM || !pSetItem->pItemData || pSetItem->pItemData->dwQualityNo != ITEMQUAL_SET || !pPlayer->pInventory)
+	if (!pPlayer || !pPlayer->pInventory || ITEMS_GetItemQuality(pSetItem) != ITEMQUAL_SET)
 	{
 		return 0;
 	}
 
-	nFileIndex = pSetItem->pItemData->dwFileIndex;
-
-	if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
+	int nFileIndex = pSetItem->pItemData->dwFileIndex;
+	D2SetItemsTxt* pSetItemTxt = DATATBLS_GetSetItemsTxtRecord(nFileIndex);
+	if(!pSetItemTxt || !DATATBLS_GetSetsTxtRecordFromSetItemId(pSetItemTxt->nSetId))
 	{
-		pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
+		return 0;
+	}
 
-		if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId >= 0 && pSetItemsTxtRecord->nSetId < sgptDataTables->nSetsTxtRecordCount && &sgptDataTables->pSetsTxt[pSetItemsTxtRecord->nSetId])
+	uint32_t nSetItemMask = 0;
+	for (D2UnitStrc* pEquippedItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pEquippedItem; pEquippedItem = INVENTORY_GetNextItem(pEquippedItem))
+	{
+		if (INVENTORY_GetItemNodePage(pEquippedItem) == NODEPAGE_EQUIP)
 		{
-			for (D2UnitStrc* i = INVENTORY_GetFirstItem(pPlayer->pInventory); i; i = INVENTORY_GetNextItem(i))
+			if (INVENTORY_UnitIsItem(pEquippedItem) && (bDontIgnoreInputItem || pEquippedItem != pSetItem))
 			{
-				if (INVENTORY_GetItemNodePage(i) == 3)
+				D2ItemDataStrc* pEquippedItemData = pEquippedItem->pItemData;
+				if (pEquippedItemData && pEquippedItemData->dwQualityNo == ITEMQUAL_SET && !(pEquippedItemData->dwItemFlags & IFLAG_NOEQUIP) && !(pEquippedItemData->dwItemFlags & IFLAG_BROKEN))
 				{
-					if (INVENTORY_UnitIsItem(i) && (bSkipItem || i != pSetItem))
+					if (D2SetItemsTxt* pEquippedSetItemsTxtRecord = DATATBLS_GetSetItemsTxtRecord(pEquippedItemData->dwFileIndex))
 					{
-						pItemData = i->pItemData;
-						if (pItemData && pItemData->dwQualityNo == ITEMQUAL_SET && !(pItemData->dwItemFlags & IFLAG_NOEQUIP) && !(pItemData->dwItemFlags & IFLAG_BROKEN))
+						if (pEquippedSetItemsTxtRecord->nSetId == pSetItemTxt->nSetId)
 						{
-							nFileIndex = pItemData->dwFileIndex;
-							if (nFileIndex >= 0 && nFileIndex < sgptDataTables->nSetItemsTxtRecordCount)
-							{
-								pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[nFileIndex];
-								if (pSetItemsTxtRecord && pSetItemsTxtRecord->nSetId == pSetItemsTxtRecord->nSetId)
-								{
-									nSetItemMask |= 1 << LOBYTE(pSetItemsTxtRecord->nSetItems);
-								}
-							}
+							nSetItemMask |= 1 << LOBYTE(pEquippedSetItemsTxtRecord->nSetItems);
 						}
 					}
 				}
 			}
-			return nSetItemMask;
 		}
 	}
-
-	return 0;
+	return nSetItemMask;
 }
 
 //D2Common.0x6FD9FD80 (#10838)
@@ -6502,7 +6492,6 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	char* szPlayerName = NULL;
 	int nMagicPrefixOffset = 0;
 	int nAutoMagicOffset = 0;
-	int nCurrentCharacter = 0;
 	int nStatListCounter = 0;
 	int nSocketedItems = 0;
 	int nMaxDurability = 0;
@@ -6533,7 +6522,6 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	int nGold = 0;
 	uint8_t nStorePage = 0;
 	BOOL bIsRuneword = FALSE;
-	BOOL bContinue = FALSE;
 	BOOL bInvalid = FALSE;
 	D2CoordStrc pCoords = {};
 	int nStatValues[511] = {};
@@ -7151,44 +7139,20 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		szPlayerName = pItemData->szPlayerName;
 		do
 		{
-			nCurrentCharacter = *szPlayerName;
-			if (nCurrentCharacter > 0)
-			{
-				if (nCurrentCharacter >= 127)
-				{
-					nCurrentCharacter = 127;
-				}
-			}
-			else
-			{
-				nCurrentCharacter = 0;
-			}
+			int nCurrentCharacter = D2Clamp<int>(int8_t(*szPlayerName), 0, 127);
 			BITMANIP_Write(pBuffer, nCurrentCharacter, 7);
-			bContinue = *szPlayerName++;
 		}
-		while (bContinue);
+		while (*szPlayerName++);
 	}
 	else if (pItemData->dwItemFlags & IFLAG_PERSONALIZED)
 	{
 		szPlayerName = pItemData->szPlayerName;
 		do
 		{
-			nCurrentCharacter = *szPlayerName;
-			if (nCurrentCharacter > 0)
-			{
-				if (nCurrentCharacter >= 127)
-				{
-					nCurrentCharacter = 127;
-				}
-			}
-			else
-			{
-				nCurrentCharacter = 0;
-			}
+			int nCurrentCharacter = D2Clamp<int>(int8_t(*szPlayerName), 0, 127);
 			BITMANIP_Write(pBuffer, nCurrentCharacter, 7);
-			bContinue = *szPlayerName++;
 		}
-		while (bContinue);
+		while (*szPlayerName++);
 	}
 
 	if (bServer)

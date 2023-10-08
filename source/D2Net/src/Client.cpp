@@ -70,7 +70,7 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
 
 	gHostSockAddr.sin_family = AF_INET;
 	gHostSockAddr.sin_port = htons(GAME_PORT);
-	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_ResolveHostIPAddress((const char*)szIpAddress));
+	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_ResolveHostIPAddress((const char*)szIpAddress)); // NOLINT
 
 	if (connect(gClientSocket, (sockaddr*)&gHostSockAddr, sizeof(sockaddr_in)) == -1)
 	{
@@ -267,7 +267,7 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 								break;
 							}
 
-							v4 = FOG_10224((char*)&gpPacketBuffer->data[gpPacketBuffer->nUsedBytes], sizeof(gpPacketBuffer->data) - gpPacketBuffer->nUsedBytes, &buffer[v6] + 2 - ((uint32_t)v8 < 0xF0), v8 - (2 - ((uint32_t)v8 < 0xF0)));
+							v4 = FOG_10224((char*)&gpPacketBuffer->data[gpPacketBuffer->nUsedBytes], int(sizeof(gpPacketBuffer->data) - gpPacketBuffer->nUsedBytes), &buffer[v6] + 2 - ((uint32_t)v8 < 0xF0), v8 - (2 - ((uint32_t)v8 < 0xF0)));
 							v2 -= v8;
 							v6 += v8;
 							if (v4 > 0)
@@ -516,7 +516,7 @@ void __stdcall CLIENT_GetLocalIpAddressString(char* szBuffer)
 
 	getsockname(gClientSocket, (sockaddr*)&sa, &sa_len);
 
-	const char* szLocalIpAddress = inet_ntoa(sa.sin_addr);
+	const char* szLocalIpAddress = inet_ntoa(sa.sin_addr); // NOLINT
 
 	SStrCopy(szBuffer, szLocalIpAddress, INT_MAX);
 }

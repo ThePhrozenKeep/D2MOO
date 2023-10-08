@@ -190,8 +190,8 @@ EXPORTS
 	PATH_GetType														@10187
 	PATH_SetNewDistance													@10188
 	PATH_GetMaxDistance													@10189
-	_10190_PATH_SetDistance												@10190
-	_10191_PATH_GetDistance												@10191
+	D2COMMON_10190_PATH_SetDistance										@10190
+	D2COMMON_10191_PATH_GetDistance										@10191
 	D2COMMON_10192_PathSetIDAMax										@10192
 	D2COMMON_10193_PATH_AdjustDirection									@10193
 	PATH_GetPrecisionX													@10194

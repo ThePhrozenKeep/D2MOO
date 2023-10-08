@@ -6041,7 +6041,10 @@ int32_t __fastcall D2GAME_RechargeItem_6FC4BD50(D2GameStrc* pGame, D2UnitStrc* p
             bRecharged = 1;
             if (pClient)
             {
-                D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(pClient, pItem, 1, STAT_ITEM_CHARGED_SKILL, (nValue << 8) + (uint8_t)nValue, (nSkillLevel & (uint16_t)sgptDataTables->nShiftedStuff) + nSkillId << sgptDataTables->nStuff);
+                D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(pClient, pItem, 1, STAT_ITEM_CHARGED_SKILL, 
+                    (nValue << 8) + (uint8_t)nValue, 
+                    (nSkillLevel & (uint16_t)sgptDataTables->nShiftedStuff) + (nSkillId << sgptDataTables->nStuff)
+                    );
             }
         }
     }

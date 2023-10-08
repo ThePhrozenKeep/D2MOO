@@ -123,7 +123,7 @@ struct D2SkillListStrc
 	D2SkillStrc* pLeftSkill;				//0x08
 	D2SkillStrc* pRightSkill;				//0x0C
 	D2SkillStrc* pUsedSkill;				//0x10
-	uint32_t __014;							//0x14
+	uint32_t unk014;						//0x14
 };
 
 struct D2SkillTreeChartStrc

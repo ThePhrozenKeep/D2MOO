@@ -871,7 +871,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 //D2Common.0x6FD68BD0
 void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount)
 {
-	pTCExShort->pInfo = (D2TCExInfoStrc*)D2_REALLOC_POOL(NULL, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount);
+	pTCExShort->pInfo = (D2TCExInfoStrc*)D2_REALLOC_POOL(nullptr, pTCExShort->pInfo, sizeof(D2TCExInfoStrc) * nNewRecordCount);
 	memset(&pTCExShort->pInfo[pTCExShort->nTypes], 0x00, sizeof(D2TCExInfoStrc) * (nNewRecordCount - pTCExShort->nTypes));
 	pTCExShort->nTypes = nNewRecordCount;
 }
@@ -1069,8 +1069,9 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			break;
 		}
 
+		// NOLINTBEGIN(bugprone-branch-clone)
 		szTmp = szNext;
-		if (!strncmp(szTmp, "mul", 4))
+		if (!strncmp(szTmp, "mul", 3))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1080,7 +1081,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nTxtRow = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "cu", 3))
+		else if (!strncmp(szTmp, "cu", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1090,7 +1091,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nUnique = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "cs", 3))
+		else if (!strncmp(szTmp, "cs", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1100,7 +1101,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nSet = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "cr", 3))
+		else if (!strncmp(szTmp, "cr", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1110,7 +1111,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nRare = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "cm", 3))
+		else if (!strncmp(szTmp, "cm", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1120,7 +1121,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nMagic = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "ce", 3))
+		else if (!strncmp(szTmp, "ce", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1130,7 +1131,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nSuperior = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "cg", 3))
+		else if (!strncmp(szTmp, "cg", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1140,7 +1141,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nNormal = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "ma", 3))
+		else if (!strncmp(szTmp, "ma", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1150,7 +1151,7 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			}
 			pTCExInfo->nTxtRow = atoi(szArg);
 		}
-		else if (!strncmp(szTmp, "mg", 3))
+		else if (!strncmp(szTmp, "mg", 2))
 		{
 			szNext = strchr(szArg, ',');
 			if (szNext)
@@ -1165,24 +1166,167 @@ __forceinline void __fastcall DATATBLS_ProcessAdditionalTreasureClassArguments(D
 			FOG_Trace("Couldn't parse treasure class modifier!  (Line:%d  Item:%d)\n", nCounter, nItemCounter);
 			break;
 		}
+		// NOLINTEND(bugprone-branch-clone)
+	}
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDA3780
+D2TCExShortStrc* DATATBLS_NewTreasureClassEx(const char* nTreasureClass)
+{
+	FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, nTreasureClass);
+
+	if (!(sgptDataTables->nTreasureClassEx % 16))
+	{
+		sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)D2_REALLOC_POOL(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16));
+	}
+	memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
+
+	return &sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx];
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FDA4430
+void DATATBLS_ParseTreasureClassItem(D2TCExShortStrc* pTCExTxtRecord, D2TreasureClassExTxt* pTreasureClassExTxt, int nLine, int nItem)
+{
+	const int32_t nCurrentItemProb = pTreasureClassExTxt[nLine].nProb[nItem];
+	if (nCurrentItemProb <= 0)
+	{
+		FOG_Trace("Found a treasure class item with 0 chance!  (Line:%d  Item:%d)\n", nLine, nItem);
+	}
+	else
+	{
+		char* szText = pTreasureClassExTxt[nLine].szItem[nItem];
+		if (szText[0] == '"')
+		{
+			++szText;
+		}
+
+		char* szTmp = szText;
+		if (szTmp[0])
+		{
+			do
+			{
+				if (szTmp[0] == '"')
+				{
+					szTmp[0] = 0;
+				}
+				++szTmp;
+			} while (szTmp[0]);
+		}
+
+		char* szNext = strchr(szText, ',');
+		if (szNext)
+		{
+			szNext[0] = 0;
+			++szNext;
+		}
+
+		// Try to find in normal items
+		if (strlen(szText) <= 4)
+		{
+			int nItemId = 0;
+			if (D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode(DATATBLS_StringToCode(szText), &nItemId))
+			{
+				const int nNewTypeIdx = pTCExTxtRecord->nTypes;
+				DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nNewTypeIdx + 1);
+				D2TCExInfoStrc* pTCExInfo = &pTCExTxtRecord->pInfo[nNewTypeIdx];
+
+				pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
+				pTCExInfo->nProb = pTCExTxtRecord->nProb;
+				pTCExInfo->nItemId = nItemId;
+				if (pItemsTxtRecord->wVersion >= 100)
+				{
+					pTCExInfo->nFlags |= 0x10;
+				}
+
+				DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, nCurrentItemProb, pItemsTxtRecord->wVersion >= 100);
+				DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, nLine, nItem);
+				return;
+			}
+		}
+
+		// Then try to find in treasure class
+		{
+			const int nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szText, 0);
+			if (nTxtRow > 0)
+			{
+				const int nNewTypeIdx = pTCExTxtRecord->nTypes;
+				DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nNewTypeIdx + 1);
+				D2TCExInfoStrc* pTCExInfo = &pTCExTxtRecord->pInfo[nNewTypeIdx];
+
+				pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
+				pTCExInfo->nProb = pTCExTxtRecord->nProb;
+				pTCExInfo->nItemId = nTxtRow;
+				pTCExInfo->nFlags |= 4;
+				if (!sgptDataTables->pTreasureClassEx[nTxtRow].nClassic)
+				{
+					pTCExInfo->nFlags |= 0x10;
+				}
+
+				DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, nCurrentItemProb, sgptDataTables->pTreasureClassEx[nTxtRow].nClassic == 0);
+				DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, nLine, nItem);
+				return;
+			}
+		}
+
+		// Then try to find in uniques
+		if (sgptDataTables->pUniqueItemsLinker)
+		{
+			const int nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pUniqueItemsLinker, szText, 0);
+			if (nTxtRow > 0)
+			{
+				const int nNewTypeIdx = pTCExTxtRecord->nTypes;
+				DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nNewTypeIdx + 1);
+				D2TCExInfoStrc* pTCExInfo = &pTCExTxtRecord->pInfo[nNewTypeIdx];
+
+				pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
+				pTCExInfo->nProb = pTCExTxtRecord->nProb;
+				int nItemId = 0;
+				DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pUniqueItemsTxt[nTxtRow].dwBaseItemCode, &nItemId);
+				pTCExInfo->nFlags |= 0x11;
+				pTCExInfo->nItemId = nItemId;
+				pTCExInfo->nTxtRow = nTxtRow;
+
+				DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, nCurrentItemProb, TRUE);
+				DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, nLine, nItem);
+				return;
+			}
+		}
+
+		// Then try to find in sets
+		if (sgptDataTables->pSetItemsLinker)
+		{
+			const int nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pSetItemsLinker, szText, 0);
+			if (nTxtRow >= 0)
+			{
+				const int nNewTypeIdx = pTCExTxtRecord->nTypes;
+				DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nNewTypeIdx + 1);
+				D2TCExInfoStrc* pTCExInfo = &pTCExTxtRecord->pInfo[nNewTypeIdx];
+
+				pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
+				pTCExInfo->nProb = pTCExTxtRecord->nProb;
+				int nItemId = 0;
+				DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pSetItemsTxt[nTxtRow].szItemCode, &nItemId);
+				pTCExInfo->nFlags |= 0x12;
+				pTCExInfo->nItemId = nItemId;
+				pTCExInfo->nTxtRow = nTxtRow;
+
+				DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, nCurrentItemProb, TRUE);
+				DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, nLine, nItem);
+				return;
+			}
+		}
+		else
+		{
+			FOG_Trace("Couldn't parse treasure class item!  (Line:%d  Item:%d)\n", nLine, nItem);
+		}
 	}
 }
 
 //D2Common.0x6FD68EC0
 void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 {
-	D2TreasureClassExTxt* pTreasureClassExTxt = NULL;
-	D2TCExShortStrc* pTCExTxtRecord = NULL;
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-	D2TCExInfoStrc* pTCExInfo = NULL;
-	char* szNext = NULL;
-	char* szText = NULL;
-	char* szTmp = NULL;
-	int nRecordCount = 0;
-	int nItemId = 0;
-	int nTxtRow = 0;
-	int nTypes = 0;
-
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "treasure class", TXTFIELD_ASCII, 32, 0, NULL },
@@ -1217,7 +1361,8 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	pTreasureClassExTxt = (D2TreasureClassExTxt*)DATATBLS_CompileTxt(pMemPool, "treasureclassex", pTbl, &nRecordCount, sizeof(D2TreasureClassExTxt));
+	int nRecordCount = 0;
+	D2TreasureClassExTxt* pTreasureClassExTxt = (D2TreasureClassExTxt*)DATATBLS_CompileTxt(pMemPool, "treasureclassex", pTbl, &nRecordCount, sizeof(D2TreasureClassExTxt));
 
 	for (int i = 0; i < nRecordCount; ++i)
 	{
@@ -1226,15 +1371,7 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 			break;
 		}
 
-		FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, pTreasureClassExTxt[i].szTreasureClass);
-
-		if (!(sgptDataTables->nTreasureClassEx % 16))
-		{
-			sgptDataTables->pTreasureClassEx = (D2TCExShortStrc*)D2_REALLOC_POOL(NULL, sgptDataTables->pTreasureClassEx, sizeof(D2TCExShortStrc) * (sgptDataTables->nTreasureClassEx + 16));
-		}
-		memset(&sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx], 0x00, sizeof(sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx]));
-
-		pTCExTxtRecord = &sgptDataTables->pTreasureClassEx[sgptDataTables->nTreasureClassEx];
+		D2TCExShortStrc* pTCExTxtRecord = DATATBLS_NewTreasureClassEx(pTreasureClassExTxt[i].szTreasureClass);
 		++sgptDataTables->nTreasureClassEx;
 		if (pTCExTxtRecord)
 		{
@@ -1262,126 +1399,14 @@ void __fastcall DATATBLS_LoadTreasureClassExTxt(void* pMemPool)
 			pTCExTxtRecord->nSuperior = pTreasureClassExTxt[i].nSuperior;
 			pTCExTxtRecord->nNormal = pTreasureClassExTxt[i].nNormal;
 
-			for (int j = 0; j < 10; ++j)
+			for (int nItem = 0; nItem < 10; ++nItem)
 			{
-				if (!pTreasureClassExTxt[i].szItem[j][0])
+				if (!pTreasureClassExTxt[i].szItem[nItem][0])
 				{
 					break;
 				}
 
-				if (pTreasureClassExTxt[i].nProb[j] <= 0)
-				{
-					FOG_Trace("Found a treasure class item with 0 chance!  (Line:%d  Item:%d)\n", i, j);
-				}
-				else
-				{
-					szText = pTreasureClassExTxt[i].szItem[j];
-					if (szText[0] == '"')
-					{
-						++szText;
-					}
-
-					szTmp = szText;
-					if (szTmp[0])
-					{
-						do
-						{
-							if (szTmp[0] == '"')
-							{
-								szTmp[0] = 0;
-							}
-							++szTmp;
-						}
-						while (szTmp[0]);
-					}
-
-					szNext = strchr(szText, ',');
-					if (szNext)
-					{
-						szNext[0] = 0;
-						++szNext;
-					}
-
-					if (strlen(szText) <= 4 && (pItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode(DATATBLS_StringToCode(szText), &nItemId)) != NULL)
-					{
-						nTypes = pTCExTxtRecord->nTypes;
-						DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
-
-						pTCExInfo = &pTCExTxtRecord->pInfo[nTypes];
-
-						pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
-						pTCExInfo->nProb = pTCExTxtRecord->nProb;
-						pTCExInfo->nItemId = nItemId;
-						if (pItemsTxtRecord->wVersion >= 100)
-						{
-							pTCExInfo->nFlags |= 0x10;
-						}
-
-						DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], pItemsTxtRecord->wVersion >= 100);
-						DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
-					}
-					else
-					{
-						nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szText, 0);
-						if (nTxtRow > 0)
-						{
-							nTypes = pTCExTxtRecord->nTypes;
-							DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
-
-							pTCExInfo = &pTCExTxtRecord->pInfo[nTypes];
-
-							pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
-							pTCExInfo->nProb = pTCExTxtRecord->nProb;
-							pTCExInfo->nItemId = nTxtRow;
-							pTCExInfo->nFlags |= 4;
-							if (!sgptDataTables->pTreasureClassEx[nTxtRow].nClassic)
-							{
-								pTCExInfo->nFlags |= 0x10;
-							}
-
-							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], sgptDataTables->pTreasureClassEx[nTxtRow].nClassic == 0);
-							DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
-						}
-						else if (sgptDataTables->pUniqueItemsLinker && (nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pUniqueItemsLinker, szText, 0)) > 0)
-						{
-							nTypes = pTCExTxtRecord->nTypes;
-							DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
-
-							pTCExInfo = &pTCExTxtRecord->pInfo[nTypes];
-
-							pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
-							pTCExInfo->nProb = pTCExTxtRecord->nProb;
-							DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pUniqueItemsTxt[nTxtRow].dwBaseItemCode, &nItemId);
-							pTCExInfo->nFlags |= 0x11;
-							pTCExInfo->nItemId = nItemId;
-							pTCExInfo->nTxtRow = nTxtRow;
-
-							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], TRUE);
-							DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
-						}
-						else if (sgptDataTables->pSetItemsLinker && (nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pSetItemsLinker, szText, 0)) >= 0)
-						{
-							nTypes = pTCExTxtRecord->nTypes;
-							DATATBLS_ReallocTCExInfo(pTCExTxtRecord, nTypes + 1);
-
-							pTCExInfo = &pTCExTxtRecord->pInfo[nTypes];
-
-							pTCExInfo->nClassic = pTCExTxtRecord->nClassic;
-							pTCExInfo->nProb = pTCExTxtRecord->nProb;
-							DATATBLS_GetItemRecordFromItemCode(sgptDataTables->pSetItemsTxt[nTxtRow].szItemCode, &nItemId);
-							pTCExInfo->nFlags |= 0x12;
-							pTCExInfo->nItemId = nItemId;
-							pTCExInfo->nTxtRow = nTxtRow;
-
-							DATATBLS_UpdateTreasureClassProbabilities(pTCExTxtRecord, pTCExInfo, pTreasureClassExTxt[i].nProb[j], TRUE);
-							DATATBLS_ProcessAdditionalTreasureClassArguments(pTCExInfo, szNext, i, j);
-						}
-						else
-						{
-							FOG_Trace("Couldn't parse treasure class item!  (Line:%d  Item:%d)\n", i, j);
-						}
-					}
-				}
+				DATATBLS_ParseTreasureClassItem(pTCExTxtRecord, pTreasureClassExTxt, i, nItem);
 			}
 		}
 	}
@@ -1546,7 +1571,7 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(void* pMemPool)
 			FOG_Trace("Missing hcIdx (%d) -- index incomplete", i);
 		}
 
-#define SUPERUNIQUE_NONE -1
+		const int SUPERUNIQUE_NONE = -1;
 		D2_ASSERT(sgptDataTables->nSuperUniqueIds[i] != SUPERUNIQUE_NONE);
 	}
 }
@@ -1695,76 +1720,40 @@ D2ItemTypesTxt* __fastcall DATATBLS_GetItemTypesTxtRecord(int nItemType)
 //D2Common.0x6FD6B1D0 (#10583)
 D2HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpansion, int nId, int nLevel)
 {
-	D2HirelingTxt* pHirelingTxtRecord = NULL;
-	D2HirelingTxt* pLastRecord = NULL;
-	int nStartRecordId = 0;
-	int nVersion = 0;
-
-	//bool v10; // zf@7
-	//bool v11; // sf@7
-	//unsigned __int8 v12; // of@7
-
 	if (nId >= 256)
 	{
 		return NULL;
 	}
 
-	nVersion = bExpansion != 0 ? 100 : 0;
+	const int nVersion = bExpansion != 0 ? 100 : 0;
 
-	nStartRecordId = sgptDataTables->nClassicHirelingStartRecordIds[nId + ((bExpansion != FALSE) << 8)];
-
-	if (nStartRecordId >= 0 && nStartRecordId < sgptDataTables->nHirelingTxtRecordCount)
+	int nStartRecordId = sgptDataTables->nClassicHirelingStartRecordIds[nId + (bExpansion != FALSE) * 256];
+	if (nStartRecordId < 0)
 	{
-		pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nStartRecordId];
+		return nullptr;
+	}
+	D2HirelingTxt* pBestLevelHireling = nullptr;
+	for(int nRecordIdx = nStartRecordId; nRecordIdx < sgptDataTables->nHirelingTxtRecordCount; nRecordIdx++)
+	{
+		D2HirelingTxt* pHirelingTxtRecord = &sgptDataTables->pHirelingTxt[nRecordIdx];
 
-		while (nStartRecordId < sgptDataTables->nHirelingTxtRecordCount)
+		if (pHirelingTxtRecord->nId == nId && pHirelingTxtRecord->wVersion == nVersion)
 		{
-			if (pHirelingTxtRecord->nId != nId)
+			if (pBestLevelHireling != nullptr && pHirelingTxtRecord->nHirelingLevel > nLevel)
 			{
-				//TODO: Check correctness
-				//v12 = __OFSUB__(pHirelingTxtRecord->nId, nId);
-				//v10 = pHirelingTxtRecord->nId == nId;
-				//v11 = pHirelingTxtRecord->nId < nId;
-
-				if (pHirelingTxtRecord->nId > nId /*!((unsigned __int8)(v11 ^ v12) | v10)*/) //TODO: Or <=
-				{
-					return pLastRecord;
-				}
+				// We had found an hireling, but the level of the new one is too high
+				return pBestLevelHireling;
 			}
-			else if (pHirelingTxtRecord->wVersion != nVersion)
-			{
-				//TODO: Check correctness
-				//v12 = __OFSUB__(pHirelingTxtRecord->nId, nId);
-				//v10 = pHirelingTxtRecord->nId == nId;
-				//v11 = pHirelingTxtRecord->nId < nId;
+			pBestLevelHireling = pHirelingTxtRecord;
 
-				if (pHirelingTxtRecord->nId > nId /*!((unsigned __int8)(v11 ^ v12) | v10)*/) //TODO: Or <=
-				{
-					return pLastRecord;
-				}
-			}
-			else if (pLastRecord)
-			{
-				if (pHirelingTxtRecord->nHirelingLevel > nLevel)
-				{
-					return pLastRecord;
-				}
-
-				pLastRecord = pHirelingTxtRecord;
-			}
-			else
-			{
-				pLastRecord = pHirelingTxtRecord;
-			}
-
-			++nStartRecordId;
-			++pHirelingTxtRecord;
 		}
-
-		return pLastRecord;
+		else if(pHirelingTxtRecord->nId > nId)
+		{
+			return pBestLevelHireling;
+		}
 	}
 
-	return NULL;
+	return pBestLevelHireling;
 }
 
 //D2Common.0x6FD6B270 (#10585)

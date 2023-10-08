@@ -195,7 +195,7 @@ struct D2QuestDataStrc
 {
 	int32_t nQuestNo;						//0x00 - internal
 	D2GameStrc* pGame;						//0x04
-	char nActNo;							//0x08
+	uint8_t nActNo;							//0x08
 	bool bNotIntro;							//0x09 - set to false for intro quests, it could also be for already completed...
 	bool bActive;							//0x0A - confirmed
 	uint8_t fLastState;						//0x0B - previous quest state

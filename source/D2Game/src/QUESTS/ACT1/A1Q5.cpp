@@ -882,7 +882,7 @@ void __fastcall ACT1Q5_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 	}
 
 	if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_ENTERAREA) == 1)
-	{
+	{ // NOLINT(bugprone-branch-clone)
 		pQuestData->fState = 3;
 		pQuestData->fLastState = 1;
 	}
