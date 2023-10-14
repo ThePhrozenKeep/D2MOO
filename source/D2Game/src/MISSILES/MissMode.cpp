@@ -817,21 +817,21 @@ int32_t __fastcall MISSMODE_SrvDo05_FireWall_ImmolationFire_MeteorFire_MoltenBou
         return MISSMODE_HandleMissileCollision(pGame, pMissile);
     }
 
-    const int32_t nCurrentFrame = pMissile->dwSeqCurrentFramePrecise >> 8;
+    const int32_t nCurrentFrame = pMissile->nSeqCurrentFramePrecise >> 8;
     COLLISION_SetMaskWithSize(UNITS_GetRoom(pMissile), CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40);
 
     if (nCurrentFrame == pMissilesTxtRecord->nSubStart - 1)
     {
-        pMissile->dwSeqCurrentFramePrecise = (nCurrentFrame + ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, pMissilesTxtRecord->nSubStop - pMissilesTxtRecord->nSubStart)) << 8;
+        pMissile->nSeqCurrentFramePrecise = (nCurrentFrame + ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, pMissilesTxtRecord->nSubStop - pMissilesTxtRecord->nSubStart)) << 8;
     }
     else if (MISSILE_GetCurrentFrame(pMissile) == pMissilesTxtRecord->nSubStart)
     {
-        pMissile->dwSeqCurrentFramePrecise = (pMissilesTxtRecord->nSubStart - 3) << 8;
+        pMissile->nSeqCurrentFramePrecise = (pMissilesTxtRecord->nSubStart - 3) << 8;
     }
     else if (MISSILE_GetCurrentFrame(pMissile) < pMissilesTxtRecord->nSubStart)
     {
         const int32_t nCappedFrame = std::max(nCurrentFrame - 2, 0);
-        pMissile->dwSeqCurrentFramePrecise = nCappedFrame << 8;
+        pMissile->nSeqCurrentFramePrecise = nCappedFrame << 8;
     }
 
     return MISSMODE_HandleMissileCollision(pGame, pMissile);

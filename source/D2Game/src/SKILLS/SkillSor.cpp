@@ -89,7 +89,7 @@ int32_t __fastcall SKILLS_DoInferno(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
     {
-        pUnit->dwSeqCurrentFramePrecise = 0xB00;
+        pUnit->nSeqCurrentFramePrecise = 0xB00;
 
         if (pGame->dwGameFrame < SKILLS_GetParam1(pSkill) && STATES_CheckState(pUnit, STATE_INFERNO))
         {

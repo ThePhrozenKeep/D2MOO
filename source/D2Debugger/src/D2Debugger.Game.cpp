@@ -149,7 +149,7 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::BeginDisabled(pUnit->pAnimSeq == nullptr);
     ImGui::BulletText("Sequence Mode  %d", pUnit->dwSeqMode);
     ImGui::BulletText("Sequence Speed %d", pUnit->dwSeqSpeed);
-    ImGui::BulletText("Sequence Frame %f", pUnit->dwSeqCurrentFramePrecise / 256.f);
+    ImGui::BulletText("Sequence Frame %f", pUnit->nSeqCurrentFramePrecise / 256.f);
     ImGui::BulletText("Seq next frame %f", pUnit->dwSeqFrame / 256.f);
     ImGui::EndDisabled();
 }

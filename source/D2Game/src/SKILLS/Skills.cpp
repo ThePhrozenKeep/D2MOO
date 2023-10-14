@@ -1945,7 +1945,7 @@ void __fastcall sub_6FD11E40(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t n
 //D2Game.0x6FD11FF0
 int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    pUnit->dwSeqCurrentFramePrecise = UNITS_GetFrameBonus(pUnit) << 8;
+    pUnit->nSeqCurrentFramePrecise = UNITS_GetFrameBonus(pUnit) << 8;
     if (STATES_CheckStateMaskOnUnit(pUnit, 38))
     {
         return sub_6FD00370(pGame, pUnit, nSkillLevel);

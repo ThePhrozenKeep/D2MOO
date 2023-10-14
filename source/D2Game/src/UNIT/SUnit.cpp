@@ -984,7 +984,7 @@ void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit)
     else
     {
         pUnit->pAnimSeq = 0;
-        pUnit->dwSeqCurrentFramePrecise = 0;
+        pUnit->nSeqCurrentFramePrecise = 0;
         if (pUnit->pDynamicPath)
         {
             D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
@@ -1389,7 +1389,7 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
         }
 
         EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, nFrame + 1, 0, 0);
-        pUnit->dwSeqCurrentFramePrecise = pGame->dwGameFrame << 8;
+        pUnit->nSeqCurrentFramePrecise = pGame->dwGameFrame << 8;
     }
     else
     {
@@ -1403,8 +1403,8 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
 
-    const int32_t nCalc = (100 - a3) * (pGame->dwGameFrame - (pUnit->dwSeqCurrentFramePrecise >> 8)) / 100;
-    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
+    const int32_t nCalc = (100 - a3) * (pGame->dwGameFrame - (pUnit->nSeqCurrentFramePrecise >> 8)) / 100;
+    pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;
@@ -1476,8 +1476,8 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
 
-    const int32_t nCalc = pGame->dwGameFrame - (pUnit->dwSeqCurrentFramePrecise >> 8) - a3;
-    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
+    const int32_t nCalc = pGame->dwGameFrame - (pUnit->nSeqCurrentFramePrecise >> 8) - a3;
+    pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;
@@ -1544,7 +1544,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
 
-    pUnit->dwSeqCurrentFramePrecise = (pGame->dwGameFrame - a3) << 8;
+    pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - a3) << 8;
 
     int32_t nAnimSpeed = 0;
     int32_t nFrameCount = 0;

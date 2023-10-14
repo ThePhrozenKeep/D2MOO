@@ -956,7 +956,7 @@ void __fastcall SKILLS_SetInfernoFrame(D2SkillsTxt* pSkillsTxtRecord, D2UnitStrc
             }
             else
             {
-                pUnit->dwSeqCurrentFramePrecise = pMonStats2TxtRecord->nInfernoAnim << 8;
+                pUnit->nSeqCurrentFramePrecise = pMonStats2TxtRecord->nInfernoAnim << 8;
             }
         }
     }
@@ -2009,7 +2009,7 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
     else
     {
         const int32_t nMax = pUnit->dwFrameCountPrecise >> 8;
-        const int32_t nCurrent = pUnit->dwSeqCurrentFramePrecise >> 8;
+        const int32_t nCurrent = pUnit->nSeqCurrentFramePrecise >> 8;
         if (nMax > pUnit->pAnimData->dwFrames || nCurrent + 1 >= nMax)
         {
             return 0;
