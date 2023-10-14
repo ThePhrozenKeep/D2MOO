@@ -126,9 +126,9 @@ int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 			bSegmentEndAlreadyAdded = false;
 			int nDirections[3];
 			PATH_GetDirections_6FDAB790(nDirections, tLastSegmentEndCoord, tTargetCoord);
-			nDirections[0] = (nDirectionOffset + nDirections[0]) % 8;
-			nDirections[1] = (nDirectionOffset + nDirections[1]) % 8;
-			nDirections[2] = (nDirectionOffset + nDirections[2]) % 8;
+			nDirections[0] = ((uint8_t)nDirectionOffset + (uint8_t)nDirections[0]) % 8;
+			nDirections[1] = ((uint8_t)nDirectionOffset + (uint8_t)nDirections[1]) % 8;
+			nDirections[2] = ((uint8_t)nDirectionOffset + (uint8_t)nDirections[2]) % 8;
 			int nDirection;
 			if (!sub_6FDAA880(pPathInfo, nDirections, tLastSegmentEndCoord, &nDirection)
 				// If doing a 180, stop
