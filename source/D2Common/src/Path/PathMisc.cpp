@@ -384,19 +384,40 @@ BOOL __fastcall PATH_RayTrace(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* 
 	D2PathPointStrc tCurPoint = tStartCoord;
 	const int nDeltaX = tTargetPoint.X - tStartCoord.X;
 	const int nDeltaY = tTargetPoint.Y - tStartCoord.Y;
-	const int nAbsDeltaY = std::abs(nDeltaY);
 	const int nPointsX = std::abs(nDeltaX) + 1;
-	const int nPointsY = nAbsDeltaY + 1;
+	const int nPointsY = std::abs(nDeltaY) + 1;
 
 	if (nPointsX > nPointsY)
 	{
-		if (nDeltaX)
+		if (nDeltaX == 0)
 		{
-			const int nXIncrement = 2 * int(nDeltaX >= 0) - 1;
-			const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
-			int nYOffset = nPointsY;
+			if (tStartCoord.Y != tTargetPoint.Y)
+			{
+				const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
+				int nCurY = tStartCoord.Y;
+				while (nCurY != tTargetPoint.Y)
+				{
+					nCurY += nYIncrement;
+					tCurPoint.Y = nCurY;
+					if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+						tStartCoord.X, nCurY,
+						nCollisionPattern, nMoveTestCollisionMask))
+					{
+						*pPathDestination = tLastPointWithoutCollision;
+						return FALSE;
+					}
+					tLastPointWithoutCollision = tCurPoint;
+				}
+				return TRUE;
+			}
+		}
+		else // (nDeltaX != 0)
+		{
 			if (tStartCoord.X != tTargetPoint.X)
 			{
+				const int nXIncrement = 2 * int(nDeltaX >= 0) - 1;
+				const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
+				int nYOffset = nPointsY;
 				while (1)
 				{
 					tCurPoint.X += nXIncrement;
@@ -404,7 +425,8 @@ BOOL __fastcall PATH_RayTrace(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* 
 						tCurPoint.X, tCurPoint.Y,
 						nCollisionPattern, nMoveTestCollisionMask))
 					{
-						break;
+						*pPathDestination = tLastPointWithoutCollision;
+						return FALSE;
 					}
 					nYOffset += nPointsY;
 					if (nYOffset >= nPointsX)
@@ -418,132 +440,101 @@ BOOL __fastcall PATH_RayTrace(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* 
 								nCollisionPattern, nMoveTestCollisionMask))
 							{
 								*pPathDestination = tLastPointWithoutCollision;
-								return 0;
+								return FALSE;
 							}
 						}
 					}
 					tLastPointWithoutCollision = tCurPoint;
 					if (tCurPoint.X == tTargetPoint.X)
-						return 1;
+						return TRUE;
 				}
-				*pPathDestination = tLastPointWithoutCollision;
-				return 0;
 			}
 		}
-		else
-		{
-			const int nYIncrement = 2 * int(nDeltaY >= 0) - 1;
-			if (tStartCoord.Y != tTargetPoint.Y)
-			{
-				int nCurY = tStartCoord.Y;
-				while (1)
-				{
-					nCurY += nYIncrement;
-					tCurPoint.Y = nCurY;
-					if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
-						tStartCoord.X, nCurY,
-						nCollisionPattern, nMoveTestCollisionMask))
-					{
-						break;
-					}
-					tLastPointWithoutCollision = tCurPoint;
-					if (nCurY == tTargetPoint.Y)
-						return 1;
-				}
-				*pPathDestination = tLastPointWithoutCollision;
-				return 0;
-			}
-		}
-		return 1;
+		return TRUE;
 	}
+	
 	if (nPointsX >= nPointsY)
 	{
 		const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
 		const int nYIncrement = 2 * (nDeltaY >= 0) - 1;
 		if (tStartCoord.X == tTargetPoint.X)
-			return 1;
-		int nCurX = tStartCoord.X;
-		while (1)
+			return TRUE;
+		
+		tCurPoint.X = tStartCoord.X;
+		while (tCurPoint.X != tTargetPoint.X)
 		{
-			nCurX += nXIncrement;
 			tCurPoint.Y += nYIncrement;
-			tCurPoint.X = nCurX;
+			tCurPoint.X += nXIncrement;
 			if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
-				nCurX, tCurPoint.Y,
+				tCurPoint.X, tCurPoint.Y,
 				nCollisionPattern, nMoveTestCollisionMask))
 			{
-				break;
+				*pPathDestination = tLastPointWithoutCollision;
+				return FALSE;
 			}
 			tLastPointWithoutCollision = tCurPoint;
-			if (nCurX == tTargetPoint.X)
-				return 1;
 		}
-		*pPathDestination = tLastPointWithoutCollision;
-		return 0;
+		return TRUE;
 	}
 	if (nDeltaY == 0)
 	{
 		const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
 		if (tStartCoord.X == tTargetPoint.X)
-			return 1;
-		int nCurX = tStartCoord.X;
-		while (1)
+			return TRUE;
+		tCurPoint.X = tStartCoord.X;
+		while (tCurPoint.X != tTargetPoint.X)
 		{
-			nCurX += nXIncrement;
-			tCurPoint.X = nCurX;
+			tCurPoint.X += nXIncrement;
 			if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
-				nCurX, tStartCoord.Y,
+				tCurPoint.X, tStartCoord.Y,
 				nCollisionPattern, nMoveTestCollisionMask))
 			{
-				break;
+				*pPathDestination = tLastPointWithoutCollision;
+				return FALSE;
 			}
 			tLastPointWithoutCollision = tCurPoint;
-			if (nCurX == tTargetPoint.X)
-				return 1;
 		}
-		*pPathDestination = tLastPointWithoutCollision;
-		return 0;
+		return TRUE;
 	}
-
-	const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
-	const int nYIncrement = 2 * (nDeltaY >= 0) - 1;
-	if (tStartCoord.Y == tTargetPoint.Y)
-		return 1;
-
-
-	int nEndOffsetX = nPointsX;
-	while (1)
+	else // nDeltaY != 0
 	{
-		tCurPoint.Y += nYIncrement;
-		if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
-			tCurPoint.X, tCurPoint.Y,
-			nCollisionPattern, nMoveTestCollisionMask))
-		{
-			break;
-		}
+		const int nXIncrement = 2 * (nDeltaX >= 0) - 1;
+		const int nYIncrement = 2 * (nDeltaY >= 0) - 1;
+		if (tStartCoord.Y == tTargetPoint.Y)
+			return TRUE;
 
-		nEndOffsetX += nPointsX;
-		if (nEndOffsetX >= nPointsY)
+		int nEndOffsetX = nPointsX;
+		while (tCurPoint.Y != tTargetPoint.Y)
 		{
-			nEndOffsetX -= nPointsY;
-			tCurPoint.X += nXIncrement;
-			if (nEndOffsetX > 0)
+			tCurPoint.Y += nYIncrement;
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+				tCurPoint.X, tCurPoint.Y,
+				nCollisionPattern, nMoveTestCollisionMask))
 			{
-				if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
-					tCurPoint.X, tCurPoint.Y,
-					nCollisionPattern, nMoveTestCollisionMask))
+				*pPathDestination = tLastPointWithoutCollision;
+				return 0;
+			}
+
+			nEndOffsetX += nPointsX;
+			if (nEndOffsetX >= nPointsY)
+			{
+				nEndOffsetX -= nPointsY;
+				tCurPoint.X += nXIncrement;
+				if (nEndOffsetX > 0)
 				{
-					*pPathDestination = tLastPointWithoutCollision;
-					return 0;
+					if (COLLISION_CheckAnyCollisionWithPattern(pPathRoom,
+						tCurPoint.X, tCurPoint.Y,
+						nCollisionPattern, nMoveTestCollisionMask))
+					{
+						*pPathDestination = tLastPointWithoutCollision;
+						return 0;
+					}
 				}
 			}
+			tLastPointWithoutCollision = tCurPoint;
 		}
-		tLastPointWithoutCollision = tCurPoint;
-		if (tCurPoint.Y == tTargetPoint.Y)
-			return 1;
+		return TRUE;
 	}
-	*pPathDestination = tLastPointWithoutCollision;
-	return 0;
 }
 
 //D2Common.0x6FDAB0B0
