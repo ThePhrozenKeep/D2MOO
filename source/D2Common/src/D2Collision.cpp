@@ -369,40 +369,39 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBox(D2RoomCollisionGr
 //D2Common.0x6FD41BE0
 int __fastcall COLLISION_AdaptBoundingBoxToGrid(D2RoomStrc* pRoom, D2BoundingBoxStrc* pBoundingBox, D2BoundingBoxStrc* pBoundingBoxes)
 {
-	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
 	int nBoundingBoxes = 0;
-
-	pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom);
-
-	if (pCollisionGrid && pBoundingBox->nLeft <= pBoundingBox->nRight && pBoundingBox->nBottom <= pBoundingBox->nTop)
+	if (pBoundingBox->nLeft > pBoundingBox->nRight || pBoundingBox->nBottom > pBoundingBox->nTop)
 	{
-		pBoundingBoxes[0].nLeft = pBoundingBox->nLeft;
-		pBoundingBoxes[0].nRight = pBoundingBox->nRight;
-		pBoundingBoxes[0].nBottom = pBoundingBox->nBottom;
-		pBoundingBoxes[0].nTop = pBoundingBox->nTop;
+		return nBoundingBoxes;
+	}
 
+	if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
+	{
+		pBoundingBoxes[0] = *pBoundingBox;
 		++nBoundingBoxes;
 
-		if (pBoundingBox->nRight >= pCollisionGrid->pRoomCoords.nSubtileX + pCollisionGrid->pRoomCoords.nSubtileWidth)
+		const int32_t nCollisionGridRight = pCollisionGrid->pRoomCoords.nSubtileX + pCollisionGrid->pRoomCoords.nSubtileWidth;
+		if (pBoundingBox->nRight >= nCollisionGridRight)
 		{
-			pBoundingBoxes[0].nRight = pCollisionGrid->pRoomCoords.nSubtileX + pCollisionGrid->pRoomCoords.nSubtileWidth - 1;
+			pBoundingBoxes[0].nRight = nCollisionGridRight - 1;
 
-			pBoundingBoxes[1].nLeft = pBoundingBoxes[0].nRight + 1;
-			pBoundingBoxes[1].nRight = pBoundingBox->nRight;
-			pBoundingBoxes[1].nBottom = pBoundingBoxes[0].nBottom;
-			pBoundingBoxes[1].nTop = pBoundingBoxes[0].nTop;
+			pBoundingBoxes[nBoundingBoxes].nLeft = pBoundingBoxes[0].nRight + 1;
+			pBoundingBoxes[nBoundingBoxes].nRight = pBoundingBox->nRight;
+			pBoundingBoxes[nBoundingBoxes].nBottom = pBoundingBoxes[0].nBottom;
+			pBoundingBoxes[nBoundingBoxes].nTop = pBoundingBoxes[0].nTop;
 
 			++nBoundingBoxes;
 		}
 
-		if (pBoundingBox->nTop >= pCollisionGrid->pRoomCoords.nSubtileY + pCollisionGrid->pRoomCoords.nSubtileHeight)
+		const int32_t nCollisionGridTop = pCollisionGrid->pRoomCoords.nSubtileY + pCollisionGrid->pRoomCoords.nSubtileHeight;
+		if (pBoundingBox->nTop >= nCollisionGridTop)
 		{
-			pBoundingBoxes[0].nTop = pCollisionGrid->pRoomCoords.nSubtileY + pCollisionGrid->pRoomCoords.nSubtileHeight - 1;
+			pBoundingBoxes[0].nTop = nCollisionGridTop - 1;
 
-			pBoundingBoxes[2].nLeft = pBoundingBoxes[0].nLeft;
-			pBoundingBoxes[2].nRight = pBoundingBoxes[0].nRight;
-			pBoundingBoxes[2].nBottom = pBoundingBoxes[0].nTop + 1;
-			pBoundingBoxes[2].nTop = pBoundingBox->nTop;
+			pBoundingBoxes[nBoundingBoxes].nLeft = pBoundingBoxes[0].nLeft;
+			pBoundingBoxes[nBoundingBoxes].nRight = pBoundingBoxes[0].nRight;
+			pBoundingBoxes[nBoundingBoxes].nBottom = nCollisionGridTop;
+			pBoundingBoxes[nBoundingBoxes].nTop = pBoundingBox->nTop;
 
 			++nBoundingBoxes;
 		}
@@ -410,7 +409,7 @@ int __fastcall COLLISION_AdaptBoundingBoxToGrid(D2RoomStrc* pRoom, D2BoundingBox
 		return nBoundingBoxes;
 	}
 
-	return 0;
+	return nBoundingBoxes;
 }
 
 //D2Common.0x6FD41CA0
