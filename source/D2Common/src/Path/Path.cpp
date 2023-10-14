@@ -375,7 +375,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 		tPathInfo.pDynamicPath = pPath;
 		tPathInfo.nCollisionMask = pPath->nMoveTestCollisionMask;
 		tPathInfo.nDistMax = pPath->nDistMax;
-		tPathInfo.field_1C = pPath->unk0x92;
+		tPathInfo.nMinimumFScoreToEvaluate = pPath->unk0x92;
 		tPathInfo.field_14 = PATH_UpdateTargetUnit(&tPathInfo);
 
 		if (pPath->SP1 != D2PathPointStrc{ 0,0 })

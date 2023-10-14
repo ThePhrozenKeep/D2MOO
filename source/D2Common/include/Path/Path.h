@@ -149,7 +149,7 @@ struct D2PathInfoStrc
 	uint8_t field_15;							//0x15
 	uint16_t field_16;							//0x16
 	int32_t nDistMax;							//0x18
-	uint8_t field_1C;							//0x1C
+	uint8_t nMinimumFScoreToEvaluate;			//0x1C for IDAStar: max heuristic value or max FScore?
 	uint8_t field_1D;							//0x1D
 	uint16_t field_1E;							//0x1E
 	int32_t nPathType;							//0x20

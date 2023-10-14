@@ -209,7 +209,7 @@ BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoW
 		tNewPointCoord.Y += tOffset.nY;
 
 		if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, tNewPointCoord.X, tNewPointCoord.Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask) &&
-			!PATH_FoWall_EvaluateNeighbour(pPathInfo, pContext, a3, tNewPointCoord, tTargetCoord))
+			!PATH_FoWall_EvaluateNeighbor(pPathInfo, pContext, a3, tNewPointCoord, tTargetCoord))
 		{
 			return FALSE;
 		}
@@ -246,9 +246,9 @@ int __stdcall PATH_FoWall_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPo
 }
 
 // Helper function
-static int16_t PATH_FoWall_HeuristicForNeighbour(D2PathPointStrc tPoint, D2PathPointStrc tNeighbour)
+int16_t PATH_FoWall_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor)
 {
-	if (tPoint.X == tNeighbour.X || tPoint.Y == tNeighbour.Y)
+	if (tPoint.X == tNeighbor.X || tPoint.Y == tNeighbor.Y)
 	{
 		return 2; // Adjacent pixel
 	}
@@ -331,7 +331,7 @@ void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc
 			{
 				break;
 			}
-			const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbour(pCurrentPoint->tPoint, pChild->tPoint);
+			const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbor(pCurrentPoint->tPoint, pChild->tPoint);
 			const int16_t nDistanceFromStart = nDistanceBetweenPoints + pCurrentPoint->nBestDistanceFromStart;
 			if (nDistanceFromStart < pChild->nBestDistanceFromStart)
 			{
@@ -350,11 +350,11 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc*
 {
 	if (pContext->nNodesCount == ARRAY_SIZE(pContext->aNodesStorage))
 	{
-		return 0;
+		return nullptr;
 	}
-	D2PathFoWallNodeStrc* pNewPathList = &pContext->aNodesStorage[pContext->nNodesCount++];
-	memset(pNewPathList, 0, sizeof(D2PathFoWallNodeStrc));
-	return pNewPathList;
+	D2PathFoWallNodeStrc* pNewNode = &pContext->aNodesStorage[pContext->nNodesCount++];
+	memset(pNewNode, 0, sizeof(*pNewNode));
+	return pNewNode;
 }
 
 // Helper function
@@ -372,9 +372,9 @@ static void PATH_FoWall_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWall
 
 //1.10f: D2Common.0x6FDA7490
 //1.13c: D2Common.0x6FDCAFB0
-BOOL __fastcall PATH_FoWall_EvaluateNeighbour(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord)
+BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord)
 {
-	const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbour(pCurrentNode->tPoint, tNewPointCoord);
+	const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbor(pCurrentNode->tPoint, tNewPointCoord);
 	const int16_t nNewPointDistance = pCurrentNode->nBestDistanceFromStart + nDistanceBetweenPoints;
 	if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_GetNodeFromPendingCache(pContext, tNewPointCoord))
 	{
@@ -452,6 +452,7 @@ signed int __fastcall PATH_FoWall_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* p
 		pNode = pNextPoint;
 	}
 
+	// Note: IDAStar returns 0 if only 1 point is found. Optimization ?
 	if (nbPoints < 1 || nbPoints >= D2DynamicPathStrc::MAXPATHLEN)
 	{
 		return 0;

@@ -26,6 +26,8 @@ struct D2UnkPathStrc2
 	int8_t unk0x02;
 };
 
+//1.10f: D2Common.0x6FDD2158
+//1.13c: D2Common.0x6FDDC320
 static const D2UnkPathStrc stru_6FDD2158[25] =
 {
 	{ 5, 4, 6 },
@@ -832,7 +834,8 @@ int __fastcall sub_6FDAB750(int nX1, int nY1, int nX2, int nY2)
 	return stru_6FDD2158[sub_6FDAB610(nX1, nY1, nX2, nY2)].unk0x00;
 }
 
-//D2Common.0x6FDAB770
+//1.10f: D2Common.0x6FDAB770
+//1.13c: D2Common.0x6FD8E5F0 (Inlined everywhere, but not stripped)
 int __stdcall sub_6FDAB770(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
 	return stru_6FDD2158[sub_6FDAB6A0(pPoint1, pPoint2)].unk0x00;

@@ -17,6 +17,9 @@ int __stdcall  sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 int __stdcall sub_6FDAB6A0(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB750
 int __fastcall sub_6FDAB750(int nX1, int nY1, int nX2, int nY2);
+//1.10f: D2Common.0x6FDAB770
+//1.13c: D2Common.0x6FD8E5F0 (Inlined everywhere, but not stripped)
+int __stdcall sub_6FDAB770(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB7D0
 void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB890

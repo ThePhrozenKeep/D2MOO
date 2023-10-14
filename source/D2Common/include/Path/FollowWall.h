@@ -26,6 +26,7 @@ struct D2PathFoWallContextStrc						  //sizeof 0x32EC
 	static const size_t CACHE_SIZE = 128;
 	static const size_t STORAGE_SIZE = 200;
 	static const size_t STACK_SIZE = 200;
+
 	D2PathFoWallNodeStrc* aPendingCache[CACHE_SIZE];  //0x0000 Open set
 	D2PathFoWallNodeStrc* aVisitedCache[CACHE_SIZE];  //0x0200 Closed set
 	D2PathFoWallNodeStrc* pSortedListByFScore;		  //0x0400 Sorted in ascending order (best first)
@@ -51,6 +52,8 @@ BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoW
 //1.10f: D2Common.0x6FDA7230
 //1.13c: D2Common.0x6FDCAF70
 int __stdcall PATH_FoWall_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2);
+// Helper function
+int16_t PATH_FoWall_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor);
 
 //1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA7280
@@ -75,7 +78,7 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc*
 
 //1.10f: D2Common.0x6FDA7490
 //1.13c: D2Common.0x6FDCAFB0
-BOOL __fastcall PATH_FoWall_EvaluateNeighbour(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord);
+BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord);
 
 //D2Common.0x6FDA78A0
 signed int __fastcall PATH_FoWall_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* pNode, D2PathInfoStrc* pPathInfo);

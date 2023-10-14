@@ -1548,14 +1548,14 @@ BOOL __stdcall COLLISION_RayTrace(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D
 }
 
 //D2Common.0x6FD459D0 (#10135)
-D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms, int nMaxDistance)
+D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighborRooms, int nMaxDistance)
 {
-	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, NULL, nUnitSize, nMask, nMask, bAllowNeighboorRooms, nMaxDistance, 1);
+	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, NULL, nUnitSize, nMask, nMask, bAllowNeighborRooms, nMaxDistance, 1);
 }
 
 //D2Common.0x6FD45A00
 // TODO: Names, vars
-D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* ptSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms, int nMaxDistance, int nPosIncrementValue)
+D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* ptSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighborRooms, int nMaxDistance, int nPosIncrementValue)
 {
 	D2FieldStrc* pField = NULL;
 	D2RoomStrc* v10 = NULL;
@@ -1790,7 +1790,7 @@ D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2Coo
 
 	if (v63 == -1)
 	{
-		if (bAllowNeighboorRooms)
+		if (bAllowNeighborRooms)
 		{
 			return COLLISION_GetRoomBySubTileCoordinates(v10, ptSpawnPoint->nX, ptSpawnPoint->nY);
 		}
@@ -1802,9 +1802,9 @@ D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2Coo
 }
 
 //D2Common.0x6FD46280 (#10134)
-D2RoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms)
+D2RoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighborRooms)
 {
-	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, NULL, nUnitSize, nMask, nMask, bAllowNeighboorRooms, 50, 1);
+	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, NULL, nUnitSize, nMask, nMask, bAllowNeighborRooms, 50, 1);
 }
 
 //D2Common.0x6FD462B0 (#10137)
@@ -1814,9 +1814,9 @@ D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesEx(D2RoomStrc* pRoom, D2CoordS
 }
 
 //D2Common.0x6FD462E0 (#10138)
-D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms)
+D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighborRooms)
 {
-	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, pFieldCoord, nUnitSize, nMask, nFieldMask, bAllowNeighboorRooms, 50, 1);
+	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, pFieldCoord, nUnitSize, nMask, nFieldMask, bAllowNeighborRooms, 50, 1);
 }
 
 ////D2Common.0x6FD46310) --------------------------------------------------------

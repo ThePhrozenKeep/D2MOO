@@ -155,15 +155,15 @@ D2COMMON_DLL_DECL void __fastcall COLLISION_SetUnitCollisionMask(D2RoomStrc* pRo
 //Returns true if a collision with mask was found. pEndCoord will be set to the collision location.
 D2COMMON_DLL_DECL BOOL __stdcall COLLISION_RayTrace(D2RoomStrc* pRoom, D2CoordStrc* pBeginCoord, D2CoordStrc* pEndCoord, uint16_t nCollisionMask);
 //D2Common.0x6FD459D0 (#10135)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms, int nMaxDistance);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithMaxDistance(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighborRooms, int nMaxDistance);
 //D2Common.0x6FD45A00
-D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* ptSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms, int nMaxDistance, int nPosIncrementValue);
+D2RoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2RoomStrc* pRoom, D2CoordStrc* ptSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighborRooms, int nMaxDistance, int nPosIncrementValue);
 //D2Common.0x6FD46280 (#10134)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighboorRooms);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighborRooms);
 //D2Common.0x6FD462B0 (#10137)
 D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesEx(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, int nPosIncrementValue);
 //D2Common.0x6FD462E0 (#10138)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighboorRooms);
+D2COMMON_DLL_DECL D2RoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2RoomStrc* pRoom, D2CoordStrc* pSpawnPoint, D2CoordStrc* pFieldCoord, int nUnitSize, unsigned int nMask, unsigned int nFieldMask, BOOL bAllowNeighborRooms);
 //D2Common.0x6FD46310 (#10136)
 D2COMMON_DLL_DECL void __fastcall D2Common_10136(D2RoomStrc* pRoom, D2CoordStrc* pCoord, int a3, uint16_t nMask, D2RoomStrc** ppRoom);
 //D2Common.0x6FD46620
