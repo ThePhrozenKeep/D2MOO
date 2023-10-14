@@ -39,11 +39,11 @@ BOOL __fastcall PATH_CheckCollisionsToNextPosition(D2DynamicPathStrc* pDynamicPa
 //D2Common.0x6FDAB130
 int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB270
-int __fastcall PATH_Knockback_Server_6FDAB270(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_Knockback_Server(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB1E0
 int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB240
-int __fastcall PATH_Knockback_Client_6FDAB240(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_Knockback_Client(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB0C0
 int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB790

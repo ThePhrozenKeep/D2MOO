@@ -100,10 +100,10 @@ static const PathFunctionType scpfnPathFunction[] = {
 /*[5]*/,PATH_Toward_6FDAA9F0
 /*[6]*/,PATH_Toward_6FDAA9F0
 /*[7]*/,sub_6FDAB130
-/*[8]*/,PATH_Knockback_Server_6FDAB270
+/*[8]*/,PATH_Knockback_Server
 /*[9]*/,PATH_Leap_6FDAB1E0
 /*[10]*/,nullptr
-/*[11]*/,PATH_Knockback_Client_6FDAB240
+/*[11]*/,PATH_Knockback_Client
 /*[12]*/,sub_6FDAB0C0
 /*[13]*/,PATH_Toward_6FDAA9F0
 /*[14]*/,nullptr

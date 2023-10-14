@@ -646,7 +646,7 @@ int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDAB240
-int __fastcall PATH_Knockback_Client_6FDAB240(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Knockback_Client(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	pPathInfo->pDynamicPath->PathPoints[0] = pPathInfo->tTargetCoord;
@@ -655,11 +655,41 @@ int __fastcall PATH_Knockback_Client_6FDAB240(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDAB270
-int __fastcall PATH_Knockback_Server_6FDAB270(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Knockback_Server(D2PathInfoStrc* pPathInfo)
 {
-	// Belongs to PathWF.cpp
-	UNIMPLEMENTED();
-	return 0;
+	D2DynamicPathStrc* pDynamicPath = pPathInfo->pDynamicPath;
+	int nHalfDist = (pDynamicPath->nDist >> 1) + 1;
+	D2PathPointStrc tFinalCoords;
+	if (D2UnitStrc* pTargetUnit = pDynamicPath->pTargetUnit)
+	{
+		tFinalCoords = pPathInfo->tStartCoord;
+
+		const int nTargetUnitX = UNITS_GetXPosition(pTargetUnit);
+		const int nTargetUnitY = UNITS_GetYPosition(pTargetUnit);
+		int nDeltaX = pPathInfo->tStartCoord.X - nTargetUnitX;
+		int nDeltaY = pPathInfo->tStartCoord.Y - nTargetUnitY;
+		if (const int nMaxAbsDelta = std::max(std::abs(nDeltaX), std::abs(nDeltaY)))
+		{
+			nDeltaX = (nDeltaX * nHalfDist) / nMaxAbsDelta;
+			nDeltaY = (nDeltaY * nHalfDist) / nMaxAbsDelta;
+		}
+		tFinalCoords.X += nDeltaX;
+		tFinalCoords.Y += nDeltaY;
+	}
+	else
+	{
+		tFinalCoords = pPathInfo->tTargetCoord;
+	}
+	pDynamicPath->PathPoints[0] = tFinalCoords;
+	PATH_RayTrace(pDynamicPath, &tFinalCoords, pPathInfo->tStartCoord);
+	D2COMMON_10170_PathSetTargetPos(pDynamicPath, tFinalCoords.X, tFinalCoords.Y);
+	if (tFinalCoords == pPathInfo->tStartCoord)
+	{
+		return 0;
+	}
+	pDynamicPath->PathPoints[0] = tFinalCoords;
+	pDynamicPath->dwPathPoints = 1;
+	return pDynamicPath->dwPathPoints;
 }
 
 //D2Common.0x6FDAB3C0
