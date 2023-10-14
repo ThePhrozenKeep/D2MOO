@@ -1048,7 +1048,7 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 		pRoomEx = pNewRoomEx;
 	}
 
-	D2_ASSERT(nullptr); // Not in original game. Could be nullptr if the last fails to link.
+	D2_ASSERT(pRoomEx != nullptr); // Not in original game. Could be nullptr if the last fails to link.
 	for (int i = nRoomsPerDirection - 1; i > 0; --i)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
