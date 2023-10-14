@@ -1200,7 +1200,7 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Roo
 	{
 		pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 	}
-#ifdef VERSION_113
+#ifdef D2_VERSION_113C
 	PATH_RecacheRoomIfNeeded(pPath, PATH_ToFP16Center(nTargetX), PATH_ToFP16Center(nTargetY), pDestRoom);
 #endif
 	D2_ASSERT(COLLISION_GetRoomBySubTileCoordinates(pDestRoom, nTargetX, nTargetY));

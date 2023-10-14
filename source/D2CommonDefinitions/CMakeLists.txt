@@ -15,8 +15,14 @@ target_sources(D2CommonDefinitions
     include/D2Constants.h
     include/D2Structs.OtherDLLs.h
     include/D2PacketDef.h
-	include/D2Dll.h
+    include/D2Dll.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
 target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)
+
+if(D2MOO_ORDINALS_VERSION)
+  string(REPLACE "." "" VERSION_DEFINE_NAME "D2_VERSION_${D2MOO_ORDINALS_VERSION}")
+  string(TOUPPER "${VERSION_DEFINE_NAME}" VERSION_DEFINE_NAME)
+  target_compile_definitions(D2CommonDefinitions INTERFACE ${VERSION_DEFINE_NAME})
+endif()
