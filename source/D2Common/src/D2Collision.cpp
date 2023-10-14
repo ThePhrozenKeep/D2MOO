@@ -565,7 +565,7 @@ int __stdcall COLLISION_CheckAnyCollisionWithPattern(D2RoomStrc* pRoom, int nX, 
 	switch (nCollisionPattern)
 	{
 	case COLLISION_PATTERN_NONE:
-		return COLLISION_CheckMask(pRoom, nX, nY, nMask) != 0;
+		return COLLISION_CheckMask(pRoom, nX, nY, nMask);
 
 	case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
 	case COLLISION_PATTERN_SMALL_PET_PRESENCE:
