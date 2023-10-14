@@ -592,7 +592,7 @@ BOOL __fastcall COLLISION_CheckAnyCollisionForBoundingBoxRecursively(D2RoomStrc*
 		{
 			D2BoundingBoxStrc pBoundingBoxes[3] = {};
 			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
-			if (nBoundingBoxes > 0 && COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask) == 0)
+			if (nBoundingBoxes > 0 && !COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask))
 			{
 				for (int i = 1; i < nBoundingBoxes; ++i)
 				{
