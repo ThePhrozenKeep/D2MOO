@@ -387,8 +387,13 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 				)
 			{
 				tPathInfo.pStartRoom = pPath->pRoom;
-				D2RoomStrc* pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(tPathInfo.pStartRoom, tPathInfo.tTargetCoord.X, tPathInfo.tTargetCoord.Y);
-				if (tPathInfo.pStartRoom && pTargetRoom && PATH_IsTargetDestinationAllowed(&tPathInfo, pUnit) || bAllowInTown)
+				tPathInfo.pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(tPathInfo.pStartRoom, tPathInfo.tTargetCoord.X, tPathInfo.tTargetCoord.Y);
+
+				if (tPathInfo.pStartRoom && 
+#ifdef D2_VERSION_113C
+					tPathInfo.pTargetRoom && // Optimization done in 1.13f
+#endif
+					(PATH_IsTargetDestinationAllowed(&tPathInfo, pUnit) || bAllowInTown))
 				{
 					tPathInfo.nPathType = pPath->dwPathType;
 
