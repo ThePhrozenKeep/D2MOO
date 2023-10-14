@@ -252,7 +252,7 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 			}
 			if (pPath->pUnit && pPath->pUnit->dwUnitType == UNIT_PLAYER)
 			{
-				sub_6FDA8FE0(pPathInfo);
+				PATH_FindValidTargetCoordsByMovingOrthogonally(pPathInfo);
 			}
 			return 1;
 		}

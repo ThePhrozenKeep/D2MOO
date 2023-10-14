@@ -17,6 +17,7 @@
 #include "Path/FollowWall.h"
 #include "Path/Step.h"
 #include <cmath>
+#include <utility>
 
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
@@ -25,10 +26,17 @@ static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION
 	COLLISION_PATTERN_SMALL_UNIT_PRESENCE,
 	COLLISION_PATTERN_BIG_UNIT_PRESENCE
 };
-
-static const int dword_6FDD1E98[] =
+static const int gaOffsetsForSnappingToCardinalDirection[9][9] =
 {
-	0, 1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, 1, -1, -1, -1, 0, 0, 0, 1, 1, 1, -1, -1, 0, 0, 0, 0, 0, 1, 1, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0
+	{-1,  0,  0,  0, 0, 0, 0, 0, 1},
+	{-1, -1,  0,  0, 0, 0, 0, 1, 1},
+	{-1, -1, -1,  0, 0, 0, 1, 1, 1},
+	{-1, -1, -1, -1, 0, 1, 1, 1, 1},
+	{-1, -1, -1, -1, 0, 1, 1, 1, 1},
+	{-1, -1, -1, -1, 0, 1, 1, 1, 1},
+	{-1, -1, -1,  0, 0, 0, 1, 1, 1},
+	{-1, -1,  0,  0, 0, 0, 0, 1, 1},
+	{-1,  0,  0,  0, 0, 0, 0, 0, 1}
 };
 
 static const uint32_t dword_6FDD1F88[PATH_NB_DIRECTIONS] =
@@ -530,54 +538,36 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 }
 
 //D2Common.0x6FDA8FE0
-//TODO: Find a name
-void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo)
+void __fastcall PATH_FindValidTargetCoordsByMovingOrthogonally(D2PathInfoStrc* pPathInfo)
 {
-	int nOffsetX = 0;
-	int nOffsetY = 0;
-	int nDiffX = 0;
-	int nDiffY = 0;
-	int nX = 0;
-	int nY = 0;
+	D2PathPointStrc tCoords = pPathInfo->tTargetCoord;
 
-	nX = pPathInfo->tTargetCoord.X;
-	nY = pPathInfo->tTargetCoord.Y;
-
-	nDiffX = nX - pPathInfo->tStartCoord.X;
-	if (nDiffX < 0)
+	const int nDeltaX = tCoords.X - pPathInfo->tStartCoord.X;
+	const int nDeltaY = tCoords.Y - pPathInfo->tStartCoord.Y;
+	const int nAbsDeltaX = std::abs(nDeltaX);
+	const int nAbsDeltaY = std::abs(nDeltaY);
+	if (nAbsDeltaX < 5 && nAbsDeltaY < 5 && (nDeltaX != 0 || nDeltaY != 0))
 	{
-		nDiffX = -nDiffX;
-	}
+		const int nRemappedX = nDeltaX + 4;
+		const int nRemappedY = nDeltaY + 4;
+		// A convoluted way to chose one the 4 cardinal directions.
+		const int nOffsetX = gaOffsetsForSnappingToCardinalDirection[nRemappedY][nRemappedX];
+		const int nOffsetY = gaOffsetsForSnappingToCardinalDirection[nRemappedX][nRemappedY];
 
-	nDiffY = nY - pPathInfo->tStartCoord.Y;
-	if (nDiffY < 0)
-	{
-		nDiffY = -nDiffY;
-	}
-
-	if (nDiffX < 5 && nDiffY < 5 && (nDiffX || nDiffY))
-	{
-		nOffsetX = dword_6FDD1E98[nDiffX + 9 * nDiffY];
-		nOffsetY = dword_6FDD1E98[nDiffY + 9 * nDiffX];
-
-		if (nDiffX <= nDiffY)
+		int nChebyshevDistance = std::max(nAbsDeltaX, nAbsDeltaY);
+		while (nChebyshevDistance < 5)
 		{
-			nDiffX = nDiffY;
-		}
+			tCoords.X += nOffsetX;
+			tCoords.Y += nOffsetY;
 
-		while (nDiffX < 5)
-		{
-			nX += nOffsetX;
-			nY += nOffsetY;
-
-			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, nX, nY, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
+			if (COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, tCoords.X, tCoords.Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask))
 			{
 				break;
 			}
 
-			++nDiffX;
-			pPathInfo->tTargetCoord.X = nX;
-			pPathInfo->tTargetCoord.Y = nY;
+			++nChebyshevDistance;
+			pPathInfo->tTargetCoord.X = tCoords.X;
+			pPathInfo->tTargetCoord.Y = tCoords.Y;
 		}
 	}
 }

@@ -229,7 +229,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 //D2Common.0x6FDA8E30
 int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0
-void __fastcall sub_6FDA8FE0(D2PathInfoStrc* pPathInfo);
+void __fastcall PATH_FindValidTargetCoordsByMovingOrthogonally(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA90C0
 uint8_t __fastcall PATH_AdvanceToDoor(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDA9190 (#10156)
