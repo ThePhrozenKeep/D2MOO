@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        buildtype: [Debug, Release]
+        buildtype: [Debug, RelWithDebInfo]
     env:
       BUILD_TYPE: ${{ matrix.buildtype }}
       CMAKE_PRESET: ${{ matrix.buildtype == 'Debug' && 'clang-tidy' || 'ninja' }}
