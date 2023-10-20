@@ -1081,7 +1081,7 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 	}
 	else
 	{
-		uint32_t nFrame = pUnit->nSeqCurrentFramePrecise >> 8;
+		int32_t nFrame = pUnit->nSeqCurrentFramePrecise >> 8;
 		if (pUnit->wAnimSpeed >= 256)
 		{
 			nFrame++;
@@ -1091,7 +1091,7 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 		
 		while (pUnit->nSeqCurrentFramePrecise >= pUnit->dwFrameCountPrecise)
 		{
-			const uint32_t nFrameCount = (pUnit->dwFrameCountPrecise >> 8);
+			const int32_t nFrameCount = (pUnit->dwFrameCountPrecise >> 8);
 			for(int i = nFrame; i < nFrameCount; i++)
 			{
 				UNITS_SetAnimActionFrame(pUnit, i);
@@ -1102,7 +1102,7 @@ void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 			pUnit->nSeqCurrentFramePrecise += (UNITS_GetFrameBonus(pUnit) << 8);
 		}
 
-		const uint32_t nLastFrameReached = (pUnit->nSeqCurrentFramePrecise >> 8);
+		const int32_t nLastFrameReached = (pUnit->nSeqCurrentFramePrecise >> 8);
 		for (; nFrame <= nLastFrameReached; nFrame++)
 		{
 			UNITS_SetAnimActionFrame(pUnit, nFrame);

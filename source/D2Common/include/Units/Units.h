@@ -143,7 +143,7 @@ struct D2UnitStrc
 	uint32_t dwSeqSpeed;						//0x3C
 	uint32_t dwSeqMode;							//0x40
 	int32_t nSeqCurrentFramePrecise;			//0x44 8-bits fixed point. Actually reused as stop frame when not using a seq. For example for missiles / inferno.
-	uint32_t dwFrameCountPrecise;				//0x48 8-bits fixed point.
+	int32_t dwFrameCountPrecise;				//0x48 8-bits fixed point.
 	int16_t wAnimSpeed;							//0x4C
 	uint8_t nActionFrame;						//0x4E
 	uint8_t unk0x4F;							//0x4F
