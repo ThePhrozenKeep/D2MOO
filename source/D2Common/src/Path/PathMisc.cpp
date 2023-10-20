@@ -590,7 +590,7 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 	{
 		D2PathPointStrc tPathLastPoint = pPathInfo->pDynamicPath->PathPoints[nPathPoints - 1];
 		if (sub_6FDABA50(tPathLastPoint, pPathInfo->tTargetCoord) <= pPathInfo->field_14 // If heuristic distance is too small
-			|| tPathLastPoint != pPathInfo->tStartCoord)								 // Or we couldn't reach the target
+			&& tPathLastPoint != pPathInfo->tStartCoord)								 // and we couldn't reach the target
 		{
 			return nPathPoints;															 // Then stop here
 		}
