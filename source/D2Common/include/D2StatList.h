@@ -510,7 +510,7 @@ inline int STAT_HitPointsFixedPointToInt(int nHP) { return nHP >> 8; }
 
 //D2Common.0x6FDB57C0 (#10563)
 D2COMMON_DLL_DECL BOOL __stdcall STATLIST_AreUnitsAligned(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2);
-//----- (6FDB5830) --------------------------------------------------------
+//D2Common.0x6FDB5830
 int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId);
 //D2Common.0x6FDB6300
 int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId);
