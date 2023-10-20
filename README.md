@@ -64,8 +64,10 @@ The code was originally extracted using a reverse engineering tool, and slowly c
 
 ### Can I build D2Common.dll and replace it directly with the one from the game ?
 
-Not yet, but this is one of the objectives !
+Yes this is now possible! However it is not guaranteed to be bugfree, so you may want to patch the functions you use instead.
 We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the current status of each ordinal.
+
+This is not the case yet for other .dlls.
 
 ### Why are some DLLs missing ?
 
