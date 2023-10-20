@@ -335,15 +335,17 @@ int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPoint
 			{
 				++nbPointsInLine;
 			}
-			else if (nbPointsInLine > 0 || prevDeltaX == deltaX || prevDeltaY == deltaY)
+			else if (nbPointsInLine <= 0 && prevDeltaX != deltaX && prevDeltaY != deltaY)
 			{
-				nbPointsInLine = 0;
-				pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+				// Force a new line for the next point, as deltaX can never be -2
+				deltaX = -2;
+				nbPointsInLine = 1;
 			}
 			else
 			{
-				nbPointsInLine = 1;
-				deltaX = -2;
+				// New line, output current line end point
+				pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+				nbPointsInLine = 0;
 			}
 			prevDeltaY = deltaY;
 			prevDeltaX = deltaX;
