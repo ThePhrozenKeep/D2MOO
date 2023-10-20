@@ -349,7 +349,10 @@ int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPoint
 			prevDeltaX = deltaX;
 		}
 		if (nCurrentPointIdx < nbTempPoints)
+		{
 			pOutPathPoints[nbOutPoints++] = pInputPoints[nCurrentPointIdx];
+		}
+		return nbOutPoints;
 	}
 	else if (nbTempPoints == 1)
 	{
