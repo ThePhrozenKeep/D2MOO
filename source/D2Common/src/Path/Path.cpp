@@ -486,6 +486,8 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 	int nOldX = 0;
 	int nOldY = 0;
 	char szText[256] = {};
+	D2_MAYBE_UNUSED(szText);
+
 	D2CoordStrc pCoords = {};
 
 	nOldX = pDynamicPath->tGameCoords.wPosX;

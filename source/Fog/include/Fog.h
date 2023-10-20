@@ -283,6 +283,7 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 #define D2_ASSERTM(expr,msg) (__assume(expr), (void)0)
 #define D2_VERIFY(expr) (!!(expr))
 #define D2_VERIFYM(expr,msg) (!!(expr))
+#define D2_CHECK(expr) (__assume(expr), (void)0)
 #endif
 #define D2_UNREACHABLE D2_ASSERT(false)
 

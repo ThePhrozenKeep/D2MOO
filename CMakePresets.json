@@ -30,7 +30,7 @@
     {
       "name": "ninja",
       "inherits": "VS2019",
-      "generator": "Ninja",
+      "generator": "Ninja Multi-Config",
       "architecture": {
         "value": "Win32",
         "strategy": "external"
