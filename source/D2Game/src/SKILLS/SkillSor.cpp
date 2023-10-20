@@ -329,7 +329,7 @@ void __fastcall SKILLS_CurseStateCallback_DefensiveBuff(D2UnitStrc* pUnit, int32
     }
 
     STATES_ToggleState(pUnit, nState, 0);
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     sub_6FD14C30(pUnit);
 }
 

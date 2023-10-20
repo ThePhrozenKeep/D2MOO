@@ -1914,7 +1914,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         if (pStatList)
         {
             STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, pAiParam->unk0x10, 0);
-            D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+            UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
         }
         else
         {
@@ -1923,7 +1923,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             {
                 D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
                 STATLIST_SetStat(pStatList, STAT_VELOCITYPERCENT, pAiParam->unk0x10, 0);
-                D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+                UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
             }
         }
     }

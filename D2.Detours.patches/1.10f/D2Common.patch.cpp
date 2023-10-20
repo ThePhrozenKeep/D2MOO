@@ -185,7 +185,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10139_Return                                               @10139
     PatchAction::Ignore                        , /*C*/ //   D2COMMON_10140_Return                                               @10140
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetClientCoordsVelocity                                        @10141
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   D2Common_10142                                                      @10142
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10142                                                      @10142
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitDeadCollision                                           @10143
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnitAliveCollision                                          @10144
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetUnusedFlag_0x00004                                          @10145
@@ -196,9 +196,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetAcceleration                                                @10150
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetAcceleration                                                @10151
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_AllocDynamicPath                                               @10152
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10153                                                      @10153
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetNumberOfPathPoints                                @10154
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10155                                                      @10155
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10153                                                      @10153
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetNumberOfPathPoints                                          @10154
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10155                                                      @10155
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_FreeDynamicPath                                                @10156
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPathPoints                                                  @10157
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetDirection                                                   @10158

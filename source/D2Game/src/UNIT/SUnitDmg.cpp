@@ -1600,7 +1600,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 		STATLIST_SetStatIfListIsValid(pNewStatList, STAT_VELOCITYPERCENT, nColdEffect, 0);
 		STATLIST_SetStatIfListIsValid(pNewStatList, STAT_ATTACKRATE, nColdEffect, 0);
 		STATLIST_SetStatIfListIsValid(pNewStatList, STAT_OTHER_ANIMRATE, nColdEffect, 0);
-		D2COMMON_10376_UpdateAnimRateAndVelocity(pDefender, __FILE__, __LINE__);
+		UNITS_UpdateAnimRateAndVelocity(pDefender, __FILE__, __LINE__);
 	}
 
 	if ((ITEMS_RollRandomNumber(&pDefender->pSeed) % 100) >= 20 && pDefender && pDefender->dwUnitType == UNIT_MONSTER)
@@ -1632,7 +1632,7 @@ void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, D
 		STATES_ToggleState(pUnit, STATE_SHATTER, 0);
 	}
 
-	D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+	UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 }
 
 //D2Game.0x6FCC0BE0

@@ -1611,7 +1611,7 @@ int32_t __fastcall SKILLITEM_EventFunc19_Slow(D2GameStrc* pGame, int32_t nEvent,
     {
         STATLIST_SetStat(pStatList, STAT_ATTACKRATE, -nSlowValue, 0);
         STATLIST_SetStat(pStatList, STAT_OTHER_ANIMRATE, -nSlowValue, 0);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
         return 1;
     }
 

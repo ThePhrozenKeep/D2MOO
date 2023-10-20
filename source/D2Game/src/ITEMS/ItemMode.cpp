@@ -567,7 +567,7 @@ void __fastcall D2GAME_ITEMS_UpdateItemStatlist_6FC42310(D2GameStrc* pGame, D2Un
 
     if (pUnit->pDynamicPath)
     {
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 }
 

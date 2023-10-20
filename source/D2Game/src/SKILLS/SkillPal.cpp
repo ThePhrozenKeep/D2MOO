@@ -448,7 +448,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
         }
     }
 
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     STATLIST_SetStatIfListIsValid(pStatList, STAT_MODIFIERLIST_SKILL, pArgs->nSkillId, 0);
     STATLIST_SetStatIfListIsValid(pStatList, STAT_MODIFIERLIST_LEVEL, pArgs->nSkillLevel, 0);
 
@@ -1404,7 +1404,7 @@ void __fastcall SKILLS_CurseStateCallback_HolyFreeze(D2UnitStrc* pUnit, int32_t 
             STATES_ToggleState(pUnit, STATE_SHATTER, 0);
         }
 
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 }
 

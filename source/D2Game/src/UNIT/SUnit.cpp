@@ -979,7 +979,7 @@ void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit)
     if (bSequence && DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit))
     {
         UNITS_InitializeSequence(pUnit);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
     else
     {
@@ -987,7 +987,7 @@ void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit)
         pUnit->nSeqCurrentFramePrecise = 0;
         if (pUnit->pDynamicPath)
         {
-            D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+            UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
             pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
         }
         else

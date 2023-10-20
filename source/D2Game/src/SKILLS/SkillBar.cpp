@@ -743,7 +743,7 @@ void __fastcall SKILLS_CurseStateCallback_Whirlwind(D2UnitStrc* pUnit, int32_t n
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
     {
         STATES_ToggleState(pUnit, nState, 0);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
         sub_6FD14C30(pUnit);
     }
 }

@@ -629,7 +629,7 @@ void __fastcall sub_6FD0FDD0(D2UnitStrc* pUnit)
         STATLIST_SetUnitStat(pUnit, STAT_STAMINA, nMaxStamina, 0);
     }
 
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 }
 
 //D2Game.0x6FD0FE50
@@ -1248,7 +1248,7 @@ void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* 
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
     {
         STATES_ToggleState(pUnit, nState, 0);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
         SKILLS_RefreshPassiveSkills(pUnit);
 
         if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
@@ -4030,7 +4030,7 @@ void __fastcall sub_6FD15470(D2UnitStrc* pUnit, int32_t nAttackRate)
     {
         D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
         STATLIST_SetStatIfListIsValid(pStatList, STAT_ATTACKRATE, nAttackRate, 0);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 }
 

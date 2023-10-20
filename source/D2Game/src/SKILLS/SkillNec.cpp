@@ -425,7 +425,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
 
     if (v2->bUpdateAnimRate)
     {
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 
     if (v2->nAuraEvent[0] >= 0 && v2->nAuraEventFunc[0] > 0)
@@ -818,7 +818,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 
     if (pParam->bUpdateAnimRate)
     {
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 
     sub_6FCBDD30(pUnit, 1u, 1);
@@ -2386,7 +2386,7 @@ int32_t __fastcall D2GAME_EventFunc27_6FD0F7A0(D2GameStrc* pGame, int32_t nEvent
     {
         STATLIST_SetStat(pStatList, STAT_ATTACKRATE, -nSlow, 0);
         STATLIST_SetStat(pStatList, STAT_OTHER_ANIMRATE, -nSlow, 0);
-        D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+        UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
         return 1;
     }
 

@@ -312,7 +312,7 @@ int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc*
         PATH_SetVelocity(pMonster->pDynamicPath, pMonStatsTxtRecord->nVelocity << 8, __FILE__, __LINE__);
     }
 
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pMonster, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pMonster, __FILE__, __LINE__);
 
     D2ModeChangeStrc modeChange = {};
     MONSTERMODE_GetModeChangeInfo(pMonster, nAnimMode, &modeChange);

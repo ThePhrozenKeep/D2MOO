@@ -217,7 +217,7 @@ void __fastcall sub_6FCFE0E0(D2UnitStrc* pUnit, D2StatListStrc* pStatList, D2Ski
         }
     }
 
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 }
 
 //D2Game.0x6FCFE200
@@ -255,7 +255,7 @@ void __fastcall sub_6FCFE200(D2UnitStrc* pUnit, D2StatListStrc* pStatList, D2Ski
         }
     }
 
-    D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+    UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 }
 
 //D2Game.0x6FCFE330

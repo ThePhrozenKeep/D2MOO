@@ -154,7 +154,7 @@ EXPORTS
 	PATH_GetAcceleration												@10151
 	PATH_AllocDynamicPath												@10152
 	D2Common_10153														@10153
-	PATH_GetNumberOfPathPoints								@10154
+	PATH_GetNumberOfPathPoints											@10154
 	D2Common_10155														@10155
 	PATH_FreeDynamicPath												@10156
 	PATH_GetPathPoints													@10157
