@@ -87,7 +87,7 @@ struct D2SkillStrc
 	D2SkillsTxt* pSkillsTxt;				//0x00
 	D2SkillStrc* pNextSkill;				//0x04
 	uint32_t dwSkillMode;						//0x08
-	uint32_t dwFlags;							//0x0C
+	uint32_t dwFlags;							//0x0C D2C_SkillFlags
 	uint32_t unk0x10[2];						//0x10 - not used?
 
 	union

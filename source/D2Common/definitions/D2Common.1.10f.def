@@ -376,7 +376,7 @@ EXPORTS
 	UNITS_StopSequence													@10373
 	UNITS_UpdateFrame													@10374
 	D2COMMON_10375_UNITS_SetFrameNonRate								@10375
-	D2COMMON_10376_UpdateAnimRateAndVelocity							@10376
+	UNITS_UpdateAnimRateAndVelocity										@10376
 	UNITS_SetAnimationSpeed												@10377
 	UNITS_IsAtEndOfFrameCycle											@10378
 	UNITS_GetShiftedFrameMetrics										@10379

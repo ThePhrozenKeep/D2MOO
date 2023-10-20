@@ -339,7 +339,7 @@ struct D2MonStatsTxt
 	uint16_t unk0x0A;						//0x0A
 	union
 	{
-		uint32_t dwMonStatsFlags;				//0x0C D2C_MonStats2TxtModeFlags
+		uint32_t dwMonStatsFlags;				//0x0C D2C_MonStatsTxtFlags
 		uint8_t nMonStatsFlags[4];				//0x0C
 	};
 	uint32_t dwCode;						//0x10
@@ -364,8 +364,8 @@ struct D2MonStatsTxt
 	uint8_t nSparsePopulate;				//0x31
 	int16_t nVelocity;						//0x32
 	int16_t nRun;							//0x34
-	int16_t unk0x36;						//0x36 - Special Velocity (see DATATBLS_LoadMonStatsTxt)
-	int16_t unk0x38;						//0x38 - Special RunSpeed (see DATATBLS_LoadMonStatsTxt)
+	int16_t nWalkAnimSpeed;					//0x36 - Special Velocity (see DATATBLS_LoadMonStatsTxt)
+	int16_t nRunAnimSpeed;						//0x38 - Special RunSpeed (see DATATBLS_LoadMonStatsTxt)
 	uint16_t wMissA1;						//0x3A
 	uint16_t wMissA2;						//0x3C
 	uint16_t wMissS1;						//0x3E

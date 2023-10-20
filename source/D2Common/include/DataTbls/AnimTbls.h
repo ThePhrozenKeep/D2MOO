@@ -10,7 +10,7 @@ struct D2AnimDataRecordStrc
 	static const int MAX_FRAME_FLAGS = 144;
 	char szAnimDataName[8];						//0x00
 	uint32_t dwFrames;							//0x08
-	uint32_t dwAnimSpeed;						//0x0C
+	int32_t dwAnimSpeed;						//0x0C
 	uint8_t pFrameFlags[MAX_FRAME_FLAGS];		//0x10
 };
 

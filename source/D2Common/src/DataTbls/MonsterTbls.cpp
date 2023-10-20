@@ -158,11 +158,11 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 
 	char* szMonsterName = NULL;
 	int nNextInClass = 0;
-	int nVelocity = 0;
+	int nWalkAnimSpeed = 0;
 	int nCounter = 0;
 	int nChainId = 0;
 	int nBaseId = 0;
-	int nRun = 0;
+	int nRunAnimSpeed = 0;
 	int nId = 0;
 	bool bFoundInChain = false;
 
@@ -503,56 +503,56 @@ void __fastcall DATATBLS_LoadMonStatsTxt(void* pMemPool)
 			nBaseId = nCounter;
 		}
 
-		nVelocity = *((uint32_t*)DATATBLS_GetAnimDataRecord(0, nBaseId, MONMODE_WALK, 1, 0) + 3);
+		nWalkAnimSpeed = DATATBLS_GetAnimDataRecord(0, nBaseId, MONMODE_WALK, 1, 0)->dwAnimSpeed;
 		if (nBaseId != nCounter)
 		{
 			if (sgptDataTables->pMonStatsTxt[nBaseId].nVelocity > 0)
 			{
-				nVelocity = nVelocity * sgptDataTables->pMonStatsTxt[nCounter].nVelocity / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nVelocity;
+				nWalkAnimSpeed = nWalkAnimSpeed * sgptDataTables->pMonStatsTxt[nCounter].nVelocity / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nVelocity;
 			}
 		}
 
-		if (nVelocity <= 0)
+		if (nWalkAnimSpeed <= 0)
 		{
-			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = 0;
+			sgptDataTables->pMonStatsTxt[nCounter].nWalkAnimSpeed = 0;
 		}
-		else if (nVelocity >= 32767)
+		else if (nWalkAnimSpeed >= 32767)
 		{
-			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = 32767;
+			sgptDataTables->pMonStatsTxt[nCounter].nWalkAnimSpeed = 32767;
 		}
 		else
 		{
-			sgptDataTables->pMonStatsTxt[nCounter].unk0x36 = nVelocity;
+			sgptDataTables->pMonStatsTxt[nCounter].nWalkAnimSpeed = nWalkAnimSpeed;
 		}
 
 		if (nCounter < 410)//Before Expansion
 		{
-			v21 = sgptDataTables->pMonStatsTxt[nBaseId].unk0x36;
-			nRun = ((signed int)v21 - HIDWORD(v21)) >> 1;
+			v21 = sgptDataTables->pMonStatsTxt[nBaseId].nWalkAnimSpeed;
+			nRunAnimSpeed = ((signed int)v21 - HIDWORD(v21)) >> 1;
 		}
 		else
 		{
-			nRun = DATATBLS_GetAnimDataRecord(NULL, nBaseId, MONMODE_RUN, UNIT_MONSTER, NULL)->dwAnimSpeed;
+			nRunAnimSpeed = DATATBLS_GetAnimDataRecord(NULL, nBaseId, MONMODE_RUN, UNIT_MONSTER, NULL)->dwAnimSpeed;
 		}
 
 		if (nBaseId != nCounter)
 		{
 			if (sgptDataTables->pMonStatsTxt[nBaseId].nRun > 0)
 			{
-				nRun = nRun * sgptDataTables->pMonStatsTxt[nCounter].nRun / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nRun;
+				nRunAnimSpeed = nRunAnimSpeed * sgptDataTables->pMonStatsTxt[nCounter].nRun / (unsigned int)sgptDataTables->pMonStatsTxt[nBaseId].nRun;
 			}
 		}
 
-		if (nRun <= 0)
+		if (nRunAnimSpeed <= 0)
 		{
-			nRun = 0;
+			nRunAnimSpeed = 0;
 		}
-		else if (nRun >= 32767)
+		else if (nRunAnimSpeed >= 32767)
 		{
-			nRun = 32767;
+			nRunAnimSpeed = 32767;
 		}
 
-		sgptDataTables->pMonStatsTxt[nCounter].unk0x38 = nRun;
+		sgptDataTables->pMonStatsTxt[nCounter].nRunAnimSpeed = nRunAnimSpeed;
 
 		++nCounter;
 	}

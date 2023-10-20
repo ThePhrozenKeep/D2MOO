@@ -419,7 +419,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_StopSequence                                                  @10373
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_UpdateFrame                                                   @10374
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10375_UNITS_SetFrameNonRate                                @10375
-    PatchAction::FunctionReplacePatchByOriginal, /*B*/ //   D2COMMON_10376_UpdateAnimRateAndVelocity                            @10376
+    PatchAction::FunctionReplaceOriginalByPatch,       //   UNITS_UpdateAnimRateAndVelocity                                     @10376
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_SetAnimationSpeed                                             @10377
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsAtEndOfFrameCycle                                           @10378
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_GetShiftedFrameMetrics                                        @10379

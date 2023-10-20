@@ -929,7 +929,8 @@ void __stdcall PATH_SetUnitAliveCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 	}
 }
 
-//D2Common.0x6FDA9A70 (#10146)
+//1.10f: D2Common.0x6FDA9A70 (#10146)
+//1.13c: D2Common.0x6FD84D40 (#10488)
 void __stdcall PATH_SetVelocity(D2DynamicPathStrc* pDynamicPath, int nVelocity, const char* szFile, int nLine)
 {
 	if (pDynamicPath)

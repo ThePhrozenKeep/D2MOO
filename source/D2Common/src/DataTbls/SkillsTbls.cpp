@@ -928,7 +928,8 @@ void __fastcall DATATBLS_UnloadSkills_SkillDescTxt()
 	sgptDataTables->nSkillDescTxtRecordCount = 0;
 }
 
-//Inlined at various places
+//1.10f: Inlined at various places
+//1.13c: D2Common.0x6FD51250
 D2SkillsTxt* __fastcall DATATBLS_GetSkillsTxtRecord(int nSkillId)
 {
 	if (nSkillId >= 0 && nSkillId < sgptDataTables->nSkillsTxtRecordCount)

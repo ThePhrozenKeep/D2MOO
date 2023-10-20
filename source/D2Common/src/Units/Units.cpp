@@ -23,6 +23,7 @@
 #include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
 #include <D2Math.h>
+#include <limits>
 
 //D2Common.0x6FDBD520 (#10457)
 uint8_t __stdcall UNITS_GetDirection(D2UnitStrc* pUnit)
@@ -67,7 +68,8 @@ void __stdcall UNITS_SetUsedSkill(D2UnitStrc* pUnit, D2SkillStrc* pUsedSkill)
 	SKILLS_SetUsedSkillInSkillList(pUnit->pSkills, pUsedSkill);
 }
 
-//D2Common.0x6FDBD670 (#10323)
+//1.10f: D2Common.0x6FDBD670 (#10323)
+//1.13c: D2Common.0x6FD803A0 (#10511)
 D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
@@ -687,7 +689,8 @@ void __stdcall UNITS_GetRunAndWalkSpeedForPlayer(int nUnused, int nCharId, int* 
 	}
 }
 
-//D2Common.0x6FDBE4C0 (#10325)
+//1.10f: D2Common.0x6FDBE4C0 (#10325)
+//1.13c: D2Common.0x6FD82670 (#11122)
 void __stdcall UNITS_SetAnimData(D2UnitStrc* pUnit, int nUnitType, int nClassId, int nMode)
 {
 	D2_ASSERT(pUnit);
@@ -733,12 +736,12 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (nNewMode == PLRMODE_SEQUENCE)
 		{
 			UNITS_InitializeSequence(pUnit);
-			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+			UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 		}
 		else
 		{
 			pUnit->pAnimSeq = nullptr;
-			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+			UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 			pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
 		}
 		break;
@@ -752,11 +755,11 @@ void __stdcall UNITS_SetAnimStartFrame(D2UnitStrc* pUnit)
 		if (nNewMode == MONMODE_SEQUENCE)
 		{
 			UNITS_InitializeSequence(pUnit);
-			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+			UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 		}
 		else
 		{
-			D2COMMON_10376_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
+			UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
 			pUnit->pAnimSeq = nullptr;
 			pUnit->dwFrameCountPrecise = pUnit->pAnimData->dwFrames << 8;
 		}
@@ -1132,32 +1135,207 @@ void __stdcall D2COMMON_10375_UNITS_SetFrameNonRate(D2UnitStrc* pUnit, int nRate
 	}
 }
 
-
-static int dword_6FDD2C28[] =
+struct D2AnimUnkStrc
 {
-	0, 0, 0, 0,
+	BOOL bCanUseVelocityModifierByPassiveSkill;
+	BOOL bCanUseVelocityModifier;
+	BOOL bCanUseSkillAttackRate;
+	BOOL bCanUseAttackRate;
+	BOOL bAllowAnimSpeed;
 };
 
-static int dword_6FDD2C38[] =
-{
-	1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+//1.10f: 0x6FDD2C28
+//1.13c: 0x6FDDC5F8
+static D2AnimUnkStrc gaPlayerModesAnimModulators[NUMBER_OF_PLRMODES] = {
+	{ 0, 0, 0, 0, 1 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 1, 0, 0, 0 },
+	{ 0, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 1, 0, 0, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 0, 0, 0, 0, 1 },
+	{ 1, 0, 1, 0, 0 },
+	{ 0, 0, 0, 0, 0 }
 };
 
-static int dword_6FDD2DB8[] =
-{
-	0, 0, 0, 0,
+//1.10f: 0x6FDD2DB8
+//1.13c: 0x6FDDC788
+D2AnimUnkStrc gaMonModesAnimModulators[16] = {
+	{ 0, 0, 0, 0, 1},
+	{ 0, 0, 0, 0, 0},
+	{ 0, 1, 0, 0, 0},
+	{ 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 1, 0},
+	{ 0, 0, 0, 1, 0},
+	{ 0, 0, 0, 0, 0},
+	{ 0, 0, 0, 0, 0},
+	{ 1, 1, 1, 0, 0},
+	{ 1, 1, 1, 0, 0},
+	{ 1, 1, 1, 0, 0},
+	{ 1, 1, 1, 0, 0},
+	{ 0, 0, 0, 0, 1},
+	{ 0, 0, 0, 0, 0},
+	{ 1, 0, 1, 0, 0},
+	{ 0, 1, 0, 0, 0},
 };
 
-static int dword_6FDD2DC8[] =
-{
-	1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0,
+//1.10f: 0x6FDD2EF8
+//1.13c: 0x6FDDC8C8
+static D2AnimUnkStrc gaMonModesAnimModulatorsExpansion[NUMBER_OF_MONMODES] = {
+	{ 0, 0, 0, 0, 1 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 1, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 0, 0, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 0, 0, 0, 0, 1 },
+	{ 0, 0, 0, 0, 0 },
+	{ 1, 0, 1, 0, 0 },
+	{ 0, 1, 0, 0, 0 }
 };
 
-static int dword_6FDD2EF8[] =
+struct D2UnitAnimModeStatBasePercentageStrc
 {
-	0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,
-	0x78, 0x5D, 1, 0x78, 0x63, 1, 0x78, 0x69, 1, 0x78, 0x66, 1, 0x96, 0x60, 0
+	BOOL bHasBasePercentage;
+	int32_t nBasePercentage;
+	int32_t nStatId;
 };
+
+enum D2C_UnitAnimModeStats
+{
+	ANIMMODESTAT_ATTACKRATE,
+	ANIMMODESTAT_GETHITRATE,
+	ANIMMODESTAT_CASTRATE,
+	ANIMMODESTAT_BLOCKRATE,
+	ANIMMODESTAT_MOVEVELOCITY,
+};
+//1.10f: Inlined
+//1.13c: 0x6FDE4608
+D2UnitAnimModeStatBasePercentageStrc gaAnimModeStatBasePercentage[5] = {
+	{TRUE, 120, STAT_ITEM_FASTERATTACKRATE},
+	{TRUE, 120, STAT_ITEM_FASTERGETHITRATE},
+	{TRUE, 120, STAT_ITEM_FASTERCASTRATE},
+	{TRUE, 120, STAT_ITEM_FASTERBLOCKRATE},
+	{TRUE, 150, STAT_ITEM_FASTERMOVEVELOCITY},
+};
+
+//1.10f: Inlined
+//1.13c: 0x6FD823E0
+int UNITS_GetAnimStatBasePercentage(D2C_UnitAnimModeStats nStat, D2UnitStrc* pUnit)
+{
+	const int nStatId = gaAnimModeStatBasePercentage[nStat].nStatId;
+	const int nValue = pUnit->pStatListEx ? STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, nStatId, 0) : 0;
+
+	if (gaAnimModeStatBasePercentage[nStat].bHasBasePercentage && nValue)
+	{
+		return (nValue * gaAnimModeStatBasePercentage[nStat].nBasePercentage)
+			/ (nValue + gaAnimModeStatBasePercentage[nStat].nBasePercentage);
+	}
+	return nValue;
+}
+
+//1.10f: Inlined
+//1.13c: 0x6FD7FB10
+int UNITS_GetBaseAnimSpeed(int nUnitType, int nClassId, int nAnimMode)
+{
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+		if (nAnimMode == PLRMODE_RUN)
+		{
+			return 101;
+		}
+		else
+		{
+			return 213;
+		}
+	case UNIT_MONSTER:
+	{
+		const D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
+		if (nAnimMode == MONMODE_RUN)
+		{
+			return pMonStatsTxtRecord->nRunAnimSpeed;
+		}
+		else
+		{
+			return pMonStatsTxtRecord->nWalkAnimSpeed;
+		}
+	}
+	default:
+		return 0;
+	}
+}
+
+//1.10f: Inlined
+//1.13c: 0x6FD80D50
+int UNITS_GetBaseVelocity(int nUnitType, int nClassId)
+{
+	if (nUnitType == UNIT_PLAYER)
+	{
+		return UNITS_GetCharStatsTxtRecord(nClassId)->nWalkSpeed << 8;
+	}
+	else if (nUnitType == UNIT_MONSTER)
+	{
+		return DATATBLS_GetMonStatsTxtRecord(nClassId)->nVelocity << 8;
+	}
+	return 0;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD80BD0
+BOOL UNITS_CanAnimModeUseAttackRate(int nUnitType, int nAnimMode, D2UnitStrc* pUnit, int nClassId)
+{
+	D2_ASSERT((nUnitType == UNIT_PLAYER) || (nUnitType == UNIT_MONSTER));
+	D2AnimUnkStrc* pAnimModeModulators = nullptr;
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+		pAnimModeModulators = &gaPlayerModesAnimModulators[nAnimMode];
+		break;
+	case UNIT_MONSTER:
+		if (nClassId >= MONSTER_FIRST_EXPANSION)
+		{
+			pAnimModeModulators = &gaMonModesAnimModulatorsExpansion[nAnimMode];
+		}
+		else
+		{
+			pAnimModeModulators = &gaMonModesAnimModulators[nAnimMode];
+		}
+
+	default:
+		return FALSE;
+
+	}
+	if (pAnimModeModulators->bCanUseAttackRate)
+	{
+		return TRUE;
+	}
+
+	if (pAnimModeModulators->bCanUseSkillAttackRate)
+	{
+		D2SkillsTxt* pSkillsRecord = DATATBLS_GetSkillsTxtRecord(UNITS_GetUsedSkill(pUnit)->pSkillsTxt->nSkillId);
+		return (pSkillsRecord->dwFlags[0] & SKILLSFLAG_USEATTACKRATE) != 0;
+	}
+
+	return FALSE;
+}
 
 __forceinline void __fastcall UNITS_UpdateAttackAnimRateAndVelocity(D2UnitStrc* pUnit)
 {
@@ -1237,17 +1415,26 @@ __forceinline void __fastcall UNITS_UpdateAttackAnimRateAndVelocity(D2UnitStrc* 
 	}
 
 	nAnimSpeed = nRate * nBaseSpeed / 100;
-	if (nAnimSpeed <= 0)
-	{
-		nAnimSpeed = 0;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
+	nAnimSpeed = static_cast<int16_t>(D2Clamp(nAnimSpeed, 0, 0x7FFF));
 
 	pUnit->dwSeqSpeed = nAnimSpeed;
 	pUnit->wAnimSpeed = nAnimSpeed;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD7EF90
+BOOL UNITS_IsAnimModeBlocking(int nUnitType, int nAnimMode)
+{
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+		return nAnimMode == PLRMODE_BLOCK;
+	case UNIT_MONSTER:
+		return nAnimMode == MONMODE_BLOCK;
+	default:
+		return FALSE;
+
+	}
 }
 
 __forceinline void __fastcall UNITS_UpdateBlockAnimRateAndVelocity(D2UnitStrc* pUnit)
@@ -1272,16 +1459,42 @@ __forceinline void __fastcall UNITS_UpdateBlockAnimRateAndVelocity(D2UnitStrc* p
 	}
 
 	nAnimSpeed = (pUnit->pAnimData->dwAnimSpeed * (nBlockRateBonus + nFasterBlockRate)) / 100;
-	if (nAnimSpeed < 1)
-	{
-		nAnimSpeed = 1;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
 
-	pUnit->wAnimSpeed = nAnimSpeed;
+	pUnit->wAnimSpeed = static_cast<int16_t>(D2Clamp(nAnimSpeed, 1, 0x7FFF));
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD80B80
+BOOL UNITS_IsSeqAnimSpeedModulatedByFCR(D2UnitStrc* pUnit, int nUnitType, int nAnimMode)
+{
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+
+		if (nAnimMode == PLRMODE_CAST)
+		{
+			return TRUE;
+		}
+		if (nAnimMode == PLRMODE_SEQUENCE)
+		{
+			if (pUnit)
+			{
+				if (D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit))
+				{
+					if (D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pUsedSkill->pSkillsTxt->nSkillId))
+					{
+						return pSkillsTxtRecord->nSeqTrans == PLRMODE_CAST;
+					}
+				}
+			}
+		}
+		return FALSE;
+	case UNIT_MONSTER:
+		return nAnimMode == MONMODE_CAST;
+	default:
+		return FALSE;
+
+	}
 }
 
 __forceinline void __fastcall UNITS_UpdateCastAnimRateAndVelocity(D2UnitStrc* pUnit)
@@ -1303,17 +1516,25 @@ __forceinline void __fastcall UNITS_UpdateCastAnimRateAndVelocity(D2UnitStrc* pU
 	}
 
 	nAnimSpeed = nRate * pUnit->pAnimData->dwAnimSpeed / 100;
-	if (nAnimSpeed <= 0)
-	{
-		nAnimSpeed = 0;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
 
-	pUnit->wAnimSpeed = nAnimSpeed;
-	pUnit->dwSeqSpeed = nAnimSpeed;
+	UNITS_SetAnimationSpeed(pUnit, nAnimSpeed);
+	pUnit->dwSeqSpeed = pUnit->wAnimSpeed;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD7EFC0
+BOOL UNITS_IsAnimModeGetHit(int nUnitType, int nAnimMode)
+{
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+		return nAnimMode == PLRMODE_BLOCK;
+	case UNIT_MONSTER:
+		return nAnimMode == MONMODE_BLOCK;
+	default:
+		return FALSE;
+
+	}
 }
 
 __forceinline void __fastcall UNITS_UpdateGetHitAnimRateAndVelocity(D2UnitStrc* pUnit)
@@ -1328,193 +1549,147 @@ __forceinline void __fastcall UNITS_UpdateGetHitAnimRateAndVelocity(D2UnitStrc* 
 	}
 
 	nAnimSpeed = (pUnit->pAnimData->dwAnimSpeed * (nFasterGetHitRate + 50)) / 100;
+	UNITS_SetAnimationSpeed(pUnit, nAnimSpeed);
+}
 
-	if (nAnimSpeed <= 0)
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD7F010
+BOOL UNITS_IsAnimModeKnockBack(int nUnitType, int nAnimMode)
+{
+	switch (nUnitType)
 	{
-		nAnimSpeed = 0;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
+	case UNIT_PLAYER:
+		return nAnimMode == PLRMODE_KNOCKBACK;
+	case UNIT_MONSTER:
+		return nAnimMode == MONMODE_KNOCKBACK;
+	default:
+		return FALSE;
 
-	pUnit->wAnimSpeed = nAnimSpeed;
+	}
 }
 
 __forceinline void __fastcall UNITS_UpdateKnockbackAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = 0;
-	int nAnimSpeed = 0;
+	int nAnimSpeed = UNITS_GetBaseAnimSpeed(nUnitType, nClassId, nAnimMode);
 
-	if (nUnitType == UNIT_PLAYER)
-	{
-		if (nAnimMode == PLRMODE_RUN)
-		{
-			nAnimSpeed = 101;
-		}
-		else
-		{
-			nAnimSpeed = 213;
-		}
-	}
-	else if (nUnitType == UNIT_MONSTER)
-	{
-		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
-		if (nAnimMode == MONMODE_RUN)
-		{
-			nAnimSpeed = pMonStatsTxtRecord->unk0x38;
-		}
-		else
-		{
-			nAnimSpeed = pMonStatsTxtRecord->unk0x36;
-		}
-	}
-
-	if (nAnimSpeed <= 0)
-	{
-		nAnimSpeed = 0;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
-
-	pUnit->wAnimSpeed = nAnimSpeed;
+	UNITS_SetAnimationSpeed(pUnit, nAnimSpeed);
 	PATH_SetVelocity(pUnit->pDynamicPath, 4096, __FILE__, __LINE__);
 }
 
-//TODO: v77
-__forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId)
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD7FAC0
+BOOL UNITS_AnimModeAllowsAnimSpeed(int nUnitType, int nAnimMode, int nClassId)
 {
-	int v77 = 0;
-	int nOtherAnimRate = 0;
-	int nAnimSpeed = 0;
-
-	if (nUnitType == UNIT_PLAYER)
+	switch (nUnitType)
 	{
-		v77 = dword_6FDD2C38[5 * nAnimMode];
-	}
-	else if (nUnitType == UNIT_MONSTER)
-	{
-		if (nClassId >= 410)
+	case UNIT_PLAYER:
+		return gaPlayerModesAnimModulators[nAnimMode].bAllowAnimSpeed;
+	case UNIT_MONSTER:
+		if (nClassId >= MONSTER_FIRST_EXPANSION)
 		{
-			v77 = dword_6FDD2EF8[5 * nAnimMode + 4];
+			return gaMonModesAnimModulatorsExpansion[nAnimMode].bAllowAnimSpeed;
 		}
 		else
 		{
-			v77 = dword_6FDD2DC8[5 * nAnimMode];
+			return gaMonModesAnimModulators[nAnimMode].bAllowAnimSpeed;
 		}
+	default:
+		return FALSE;
 	}
+}
 
-	if (v77)
+__forceinline void __fastcall UNITS_UpdateOtherAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId)
+{
+	int nAnimSpeed = 0;
+	if (UNITS_AnimModeAllowsAnimSpeed(nUnitType, nAnimMode, nClassId))
 	{
 		nAnimSpeed = pUnit->pAnimData->dwAnimSpeed;
 	}
 	else
 	{
-		nOtherAnimRate = STATLIST_UnitGetStatValue(pUnit, STAT_OTHER_ANIMRATE, 0);
-		if (nOtherAnimRate >= 15)
-		{
-			if (nOtherAnimRate > 175)
-			{
-				nOtherAnimRate = 175;
-			}
-		}
-		else
-		{
-			nOtherAnimRate = 15;
-		}
+		int nOtherAnimRate = STATLIST_UnitGetStatValue(pUnit, STAT_OTHER_ANIMRATE, 0);
+		nOtherAnimRate = D2Clamp(nOtherAnimRate, 15, 175);
 
 		nAnimSpeed = (nOtherAnimRate * pUnit->pAnimData->dwAnimSpeed) / 100;
 	}
-
-	if (nAnimSpeed <= 0)
-	{
-		nAnimSpeed = 0;
-	}
-	else if (nAnimSpeed >= 32767)
-	{
-		nAnimSpeed = 32767;
-	}
-
-	pUnit->wAnimSpeed = nAnimSpeed;
+	UNITS_SetAnimationSpeed(pUnit, nAnimSpeed);
 }
 
-//TODO: ...
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD80BD0
+BOOL UNITS_CanAnimModeUseVelocityModifier(int nUnitType, int nAnimMode, D2UnitStrc* pUnit, int nClassId)
+{
+	D2_ASSERT((nUnitType == UNIT_PLAYER) || (nUnitType == UNIT_MONSTER));
+	D2AnimUnkStrc* pAnimModeModulators = nullptr;
+	switch (nUnitType)
+	{
+	case UNIT_PLAYER:
+		pAnimModeModulators = &gaPlayerModesAnimModulators[nAnimMode];
+		break;
+	case UNIT_MONSTER:
+
+		if (D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId))
+		{
+			if (pMonStatsTxtRecord->dwMonStatsFlags & MONSTATSFLAG_NPC)
+			{
+				return nAnimMode == MONMODE_WALK || nAnimMode == MONMODE_RUN;
+			}
+		}
+
+		if (nClassId >= MONSTER_FIRST_EXPANSION)
+		{
+			pAnimModeModulators = &gaMonModesAnimModulatorsExpansion[nAnimMode];
+		}
+		else
+		{
+			pAnimModeModulators = &gaMonModesAnimModulators[nAnimMode];
+		}
+
+	default:
+		return FALSE;
+
+	}  
+	
+	if (pAnimModeModulators->bCanUseVelocityModifier)
+	{
+		return TRUE;
+	}
+
+	if (pAnimModeModulators->bCanUseVelocityModifierByPassiveSkill)
+	{
+		if (D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit))
+		{
+			return (pUsedSkill->dwFlags & SKFLAG_PASSIVE) != 0 && (pUsedSkill->dwFlags & SKFLAG_STUN) == 0;
+		}
+	}
+	return FALSE;
+}
+
 __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc* pUnit, int nAnimMode, int nUnitType, int nClassId, const char* szFile, int nLine)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	int nFasterMoveVelocity = 0;
 	int nVelocityPercent = 0;
-	int nAnimSpeed = 0;
-	int nVelocity = 0;
-	int nBase = 0;
 
 	if (pUnit->pDynamicPath)
 	{
-		nFasterMoveVelocity = STATLIST_UnitGetItemStatOrSkillStatValue(pUnit, STAT_ITEM_FASTERMOVEVELOCITY, 0);
-		if (nFasterMoveVelocity)
-		{
-			nFasterMoveVelocity = 150 * nFasterMoveVelocity / (nFasterMoveVelocity + 150);
-		}
-
+		nFasterMoveVelocity = UNITS_GetAnimStatBasePercentage(ANIMMODESTAT_MOVEVELOCITY, pUnit);
 		nVelocityPercent = nFasterMoveVelocity + STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0);
 		if (nVelocityPercent < 25)
 		{
 			nVelocityPercent = 25;
 		}
 
-		if (nUnitType == UNIT_PLAYER)
-		{
-			if (nAnimMode == PLRMODE_RUN)
-			{
-				nBase = 101;
-			}
-			else
-			{
-				nBase = 213;
-			}
-		}
-		else if (nUnitType == UNIT_MONSTER)
-		{
-			pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
-			if (nAnimMode == MONMODE_RUN)
-			{
-				nBase = pMonStatsTxtRecord->unk0x38;
-			}
-			else
-			{
-				nBase = pMonStatsTxtRecord->unk0x36;
-			}
-		}
-
-		nAnimSpeed = nVelocityPercent * nBase / 100;
+		int nBaseAnimSpeed = UNITS_GetBaseAnimSpeed(nUnitType, nClassId, nAnimMode);
+		int nAnimSpeed = nVelocityPercent * nBaseAnimSpeed / 100;
 
 		if (nAnimSpeed < 0 || nAnimSpeed > 32767)
 		{
 			FOG_Trace("UnitUpdateAnimRateAndVel(): bad velocity:%d  (TYPE:%d  CLASS:%d)  FILE:%s  LINE:%d", nAnimSpeed, nUnitType, nClassId, szFile, nLine);
 		}
+		UNITS_SetAnimationSpeed(pUnit, nAnimSpeed);
 
-		if (nAnimSpeed <= 0)
-		{
-			nAnimSpeed = 0;
-		}
-		else if (nAnimSpeed >= 32767)
-		{
-			nAnimSpeed = 32767;
-		}
-
-		pUnit->wAnimSpeed = nAnimSpeed;
-
-		if (nUnitType == UNIT_PLAYER)
-		{
-			nVelocity = UNITS_GetCharStatsTxtRecord(nClassId)->nWalkSpeed << 8;
-		}
-		else if (nUnitType == UNIT_MONSTER)
-		{
-			nVelocity = DATATBLS_GetMonStatsTxtRecord(nClassId)->nVelocity << 8;
-		}
-
+		const int nVelocity = UNITS_GetBaseVelocity(nUnitType, nClassId);
 		PATH_SetVelocity(pUnit->pDynamicPath, nVelocityPercent * nVelocity / 100, __FILE__, __LINE__);
 	}
 	else
@@ -1523,221 +1698,68 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 	}
 }
 
-//D2Common.0x6FDBF050
-//TODO: Check everything related to this function
-void __stdcall D2COMMON_10376_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
-{
-	D2SkillStrc* v10 = NULL;
-	int nUnitType = 0;
-	int nAnimMode = 0;
-	int nClassId = 0;
-	int v11 = 0;
-	D2SkillsTxt* v12 = NULL;
-	int* v43 = NULL;
-	D2SkillStrc* v44 = NULL;
-	int v45 = 0;
-	int* v61 = NULL;
-	D2MonStatsTxt* v41 = NULL;
-	D2SkillStrc* v62 = NULL;
-	int v63 = 0;
 
+//1.10f: D2Common.0x6FDBF050 (#10376)
+//1.13c: D2Common.0x6FD83110 (#10819)
+void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
+{
 	if (!pUnit)
 	{
 		FOG_Trace("UnitUpdateAnimRateAndVel(): NULL unit  FILE:%s  LINE:%d", szFile, nLine);
 		return;
 	}
 
-	nUnitType = pUnit->dwUnitType;
-	if (nUnitType >= 5)
+	int nUnitType = pUnit->dwUnitType;
+	if (nUnitType >= UNIT_TILE)
 	{
 		FOG_Trace("UnitUpdateAnimRateAndVel(): invalid unit (TYPE:%d)  FILE:%s  LINE:%d", nUnitType, szFile, nLine);
 		return;
 	}
-
-	if (nUnitType != UNIT_ITEM)
+	else if (nUnitType == UNIT_ITEM)
 	{
-		nClassId = pUnit->dwClassId;
-		nAnimMode = pUnit->dwAnimMode;
-		D2COMMON_11013_ConvertMode(pUnit, &nUnitType, &nClassId, &nAnimMode, __FILE__, __LINE__);
+		return;
+	}
 
-		pUnit->pAnimData = DATATBLS_GetAnimDataRecord(pUnit, nClassId, nAnimMode, nUnitType, pUnit->pInventory);
+	int nClassId = pUnit->dwClassId;
+	int nAnimMode = pUnit->dwAnimMode;
+	D2COMMON_11013_ConvertMode(pUnit, &nUnitType, &nClassId, &nAnimMode, __FILE__, __LINE__);
+	UNITS_SetAnimData(pUnit, nUnitType, nClassId, nAnimMode);
+	pUnit->pAnimData = DATATBLS_GetAnimDataRecord(pUnit, nClassId, nAnimMode, nUnitType, pUnit->pInventory);
 
-		switch (nUnitType)
-		{
-		case UNIT_PLAYER:
-			if (nAnimMode == PLRMODE_CAST)
-			{
-				return UNITS_UpdateCastAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == PLRMODE_SEQUENCE)
-			{
-				v10 = SKILLS_GetUsedSkillFromSkillList(pUnit->pSkills);
-				if (v10)
-				{
-					v11 = SKILLS_GetSkillIdFromSkill(v10, __FILE__, __LINE__);
-					v12 = DATATBLS_GetSkillsTxtRecord(v11);
-
-					if (v12 && v12->nSeqTrans == 10)
-					{
-						return UNITS_UpdateCastAnimRateAndVelocity(pUnit);
-					}
-				}
-			}
-			else if (nAnimMode == PLRMODE_BLOCK)
-			{
-				return UNITS_UpdateBlockAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == PLRMODE_GETHIT)
-			{
-				return UNITS_UpdateGetHitAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == PLRMODE_KNOCKBACK)
-			{
-				return UNITS_UpdateKnockbackAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
-			}
-
-			v43 = &dword_6FDD2C28[5 * nAnimMode];
-
-			if (v43[1])
-			{
-				return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
-			}
-
-			if (v43[0])
-			{
-				v44 = UNITS_GetUsedSkill(pUnit);
-				if (v44)
-				{
-					v45 = SKILLS_GetFlags(v44);
-					if (v45 & 1 && !(v45 & 0x100))
-					{
-						return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
-					}
-				}
-			}
-
-			v61 = &dword_6FDD2C28[5 * nAnimMode];
-
-			if (v61[3])
-			{
-				return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
-			}
-
-			if (v61[2])
-			{
-				v62 = SKILLS_GetUsedSkillFromSkillList(pUnit->pSkills);
-				if (v62)
-				{
-					v63 = SKILLS_GetSkillIdFromSkill(v62, __FILE__, __LINE__);
-					if (gdwBitMasks[SKILLSFLAGINDEX_USEATTACKRATE] & DATATBLS_GetSkillsTxtRecord(v63)->dwFlags[0])
-					{
-						return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
-					}
-				}
-			}
-
-			return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
-
-		case UNIT_MONSTER:
-			if (nAnimMode == MONMODE_CAST)
-			{
-				return UNITS_UpdateCastAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == MONMODE_BLOCK)
-			{
-				return UNITS_UpdateBlockAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == MONMODE_GETHIT)
-			{
-				return UNITS_UpdateGetHitAnimRateAndVelocity(pUnit);
-			}
-			else if (nAnimMode == MONMODE_KNOCKBACK)
-			{
-				return UNITS_UpdateKnockbackAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
-			}
-
-			v41 = DATATBLS_GetMonStatsTxtRecord(nClassId);
-			if (v41)
-			{
-				if (gdwBitMasks[MONSTATSFLAGINDEX_NPC] & v41->dwMonStatsFlags)
-				{
-					if (nAnimMode != MONMODE_WALK && nAnimMode != MONMODE_RUN)
-					{
-						goto LABEL_75;
-					}
-
-					return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
-				}
-			}
-
-			if (nClassId >= 410)
-			{
-				v43 = &dword_6FDD2EF8[5 * nAnimMode];
-			}
-			else
-			{
-				v43 = &dword_6FDD2DB8[5 * nAnimMode];
-			}
-
-			if (v43[1])
-			{
-				return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
-			}
-
-			if (v43[0])
-			{
-				v44 = UNITS_GetUsedSkill(pUnit);
-				if (v44)
-				{
-					v45 = SKILLS_GetFlags(v44);
-					if (v45 & 1 && !(v45 & 0x100))
-					{
-						return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
-					}
-				}
-			}
-
-LABEL_75:
-			if (nClassId >= 410)
-			{
-				v61 = &dword_6FDD2EF8[5 * nAnimMode];
-			}
-			else
-			{
-				v61 = &dword_6FDD2DB8[5 * nAnimMode];
-			}
-
-			if (v61[3])
-			{
-				return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
-			}
-
-			if (v61[2])
-			{
-				v62 = SKILLS_GetUsedSkillFromSkillList(pUnit->pSkills);
-				if (v62)
-				{
-					v63 = SKILLS_GetSkillIdFromSkill(v62, __FILE__, __LINE__);
-					if (gdwBitMasks[SKILLSFLAGINDEX_USEATTACKRATE] & DATATBLS_GetSkillsTxtRecord(v63)->dwFlags[0])
-					{
-						return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
-					}
-				}
-			}
-
-			return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
-
-		default:
-			FOG_DisplayAssert("(eTOU == UNIT_PLAYER) || (eTOU == UNIT_MONSTER)", __FILE__, __LINE__);
-			exit(-1);
-		}
+	if (UNITS_IsSeqAnimSpeedModulatedByFCR(pUnit, nUnitType, nAnimMode))
+	{
+		return UNITS_UpdateCastAnimRateAndVelocity(pUnit);
+	}
+	else if (UNITS_IsAnimModeBlocking(nUnitType, nAnimMode))
+	{
+		return UNITS_UpdateBlockAnimRateAndVelocity(pUnit);
+	}
+	else if (UNITS_IsAnimModeGetHit(nUnitType, nAnimMode))
+	{
+		return UNITS_UpdateGetHitAnimRateAndVelocity(pUnit);
+	}
+	else if (UNITS_IsAnimModeKnockBack(nUnitType, nAnimMode))
+	{
+		return UNITS_UpdateKnockbackAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
+	}
+	else if (UNITS_CanAnimModeUseVelocityModifier(nUnitType, nAnimMode, pUnit, nClassId))
+	{
+		return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
+	}
+	else if (UNITS_CanAnimModeUseAttackRate(nUnitType, nAnimMode, pUnit, nClassId))
+	{
+		return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
+	}
+	else
+	{
+		return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
 	}
 }
 
 //D2Common.0x6FDBF8D0 (#10377)
 void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed)
 {
-	pUnit->wAnimSpeed = D2Clamp(nSpeed, 0, 32767);
+	pUnit->wAnimSpeed = static_cast<int16_t>(D2Clamp<int>(nSpeed, 0, std::numeric_limits<int16_t>::max()));
 }
 
 //D2Common.0x6FDBF910 (#10378)

@@ -153,7 +153,7 @@ struct D2SkillsTxt
 {
 	int16_t nSkillId; 						//0x00
 	uint16_t unk0x02;						//0x02
-	uint32_t dwFlags[2];					//0x04
+	uint32_t dwFlags[2];					//0x04 D2C_SkillsTxtFlags
 	int8_t nCharClass;						//0x0C
 	uint8_t unk0x0D[3];						//0x0D
 	uint8_t nAnim;							//0x10
