@@ -41,11 +41,11 @@ jobs:
       run: ctest --preset ${{env.CMAKE_PRESET}} -C ${{env.BUILD_TYPE}}
 
     - name: Install
-      if: env.BUILD_TYPE == 'Release'
+      if: env.BUILD_TYPE == 'RelWithDebInfo'
       run: cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}} --target install
 
     - name: Artifact
-      if: env.BUILD_TYPE == 'Release'
+      if: env.BUILD_TYPE == 'RelWithDebInfo'
       uses: actions/upload-artifact@v3
       with:
         path: '${{github.workspace}}\out\install\${{env.CMAKE_PRESET}}\'
