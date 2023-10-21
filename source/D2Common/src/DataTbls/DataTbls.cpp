@@ -141,7 +141,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 
 	int nLevel = 0;
 	while ( nLevel < sgptDataTables->pExperienceTxt->tMax.dwClass[nClass]
-		&& dwExperience >= sgptDataTables->pExperienceTxt->aLevels[nLevel+1].dwClass[nClass])
+		&& dwExperience >= sgptDataTables->pExperienceTxt->aLevels[nLevel].dwClass[nClass])
 	{
 		++nLevel;
 	}
