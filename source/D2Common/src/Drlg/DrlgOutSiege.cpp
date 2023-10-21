@@ -120,7 +120,9 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 					nPreviousY += 2 * nPreviousDiffY;
 
 					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nPreviousX, nPreviousY, nLevelPrestId, -1, 0);
-					DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nPreviousX, nPreviousY, 1, FLAG_OPERATION_OR);
+					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+					tPackedInfo.nUnkb00 = true;
+					DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nPreviousX, nPreviousY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 				}
 			}
 
@@ -131,14 +133,18 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 				const int nY = std::max(pPreviousVertex->nPosY, pDrlgVertex->nPosY);
 				const int nYCapped = (nY - 4 * nPreviousDiffYAbs) & 0xFFFFFFFE;
 
-				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped, nYCapped, 1024, FLAG_OPERATION_OR);
-				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped + 2 * nPreviousDiffXAbs, nYCapped + 2 * nPreviousDiffYAbs, 1024, FLAG_OPERATION_OR);
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				tPackedInfo.bLvlLink = true;
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped, nYCapped, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped + 2 * nPreviousDiffXAbs, nYCapped + 2 * nPreviousDiffYAbs, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
 
 			if (const int nRand = sub_6FD80C10(2 * nPreviousDiffX, 2 * nPreviousDiffY, 2 * nCurrentDiffX, 2 * nCurrentDiffY, nLookupId))
 			{
 				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nCurrentX, nCurrentY, nRand, -1, 0);
-				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nCurrentX, nCurrentY, 1, FLAG_OPERATION_OR);
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				tPackedInfo.nUnkb00 = true;
+				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nCurrentX, nCurrentY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
 
 			pPreviousVertex = pDrlgVertex;
@@ -242,7 +248,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 {
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, 0) & 0x400)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, 0).bLvlLink)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, LVLPREST_ACT5_BARRICADE_EXIT_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -251,7 +257,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], i, pLevel->pOutdoors->nGridHeight - 2) & 0x400)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, pLevel->pOutdoors->nGridHeight - 2).bLvlLink)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, pLevel->pOutdoors->nGridHeight - 2, LVLPREST_ACT5_BARRICADE_ENTRANCE_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -260,7 +266,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], 0, i) & 0x400)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, 0, i).bLvlLink)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT5_BARRICADE_EXIT_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -269,7 +275,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 
 	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
 	{
-		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, i) & 0x400)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, pLevel->pOutdoors->nGridWidth - 2, i).bLvlLink)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pLevel->pOutdoors->nGridWidth - 2, i, LVLPREST_ACT5_BARRICADE_ENTRANCE_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
@@ -280,8 +286,10 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 //D2Common.0x6FD846C0
 void __fastcall sub_6FD846C0(D2DrlgLevelStrc* pLevel)
 {
-	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 4, 1024, FLAG_OPERATION_OR);
-	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 3, 1024, FLAG_OPERATION_OR);
+	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+	tPackedInfo.bLvlLink = true;
+	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 4, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
+	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 3, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 }
 
 //D2Common.0x6FD84700

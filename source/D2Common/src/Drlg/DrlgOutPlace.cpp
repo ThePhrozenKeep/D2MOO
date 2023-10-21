@@ -395,7 +395,7 @@ LABEL_26:
 				{
 					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, nTestCoordX, nTestCoordY))
 					{
-						if (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nTestCoordX, nTestCoordY) & 0x200))
+						if (!DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nTestCoordX, nTestCoordY).bHasPickedFile)
 						{
 							D2UnkOutPlaceStrc12* v28 = pCurrentOutPlace;
 							while (v28->nX != nTestCoordX || v28->nY != nTestCoordY)
@@ -606,38 +606,39 @@ int __fastcall sub_6FD80C10(int a1, int a2, int a3, int a4, int a5)
 
 //D2Common.0x6FD80C80
 void __fastcall DRLGOUTPLACE_SetBlankBorderGridCells(D2DrlgLevelStrc* pLevel)
-{
-	D2DrlgGridStrc* pDrlgGrid = NULL;
-	int nOffsetX = 0;
-	int nOffsetY = 0;
-	int nX = 0;
-	int nY = 0;
-	int nCoordinates[] = { 0, 0, 1, 1, 1, 0, -1, 1, 0, 1, 1, -1, 1, 1, -1, -1 };
-
-	pDrlgGrid = &pLevel->pOutdoors->pGrid[2];
+{	const D2CoordStrc aOffsets[4][2] = {
+		{{  0,  0 }, {  1,  1 }},
+		{{  1,  0 }, { -1,  1 }}, 
+		{{  0,  1 }, {  1, -1 }},  
+		{{  1,  1 }, { -1, -1 }}
+	};
 
 	for (int k = 0; k < 4; ++k)
 	{
-		nX = nCoordinates[4 * k + 0];
+		D2CoordStrc tStartPos = aOffsets[k][0];
+		D2CoordStrc tDirection = aOffsets[k][1];
+		int nX = tStartPos.nX;
 		if (nX)
 		{
 			nX = pLevel->pOutdoors->nGridWidth - 1;
 		}
 
-		nY = nCoordinates[4 * k + 1];
+		int nY = tStartPos.nY;
 		if (nY)
 		{
 			nY = pLevel->pOutdoors->nGridHeight - 1;
 		}
 
-		nOffsetX = nCoordinates[4 * k + 2];
-		nOffsetY = nCoordinates[4 * k + 3];
+		int nDirX = tDirection.nX;
+		int nDirY = tDirection.nY;
 
-		for (int j = nY; !(DRLGGRID_GetGridEntry(pDrlgGrid, nX, j) & 1); j += nOffsetY)
+		for (int j = nY; !DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, j).nUnkb00; j += nDirY)
 		{
-			for (int i = nX; !(DRLGGRID_GetGridEntry(pDrlgGrid, i, j) & 1); i += nOffsetX)
+			for (int i = nX; !DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, j).nUnkb00; i += nDirX)
 			{
-				DRLGGRID_AlterGridFlag(pDrlgGrid, i, j, 256, FLAG_OPERATION_OR);
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				tPackedInfo.nUnkb08 = true;
+				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], i, j, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
 		}
 	}
@@ -654,7 +655,10 @@ void __fastcall DRLGOUTPLACE_SetOutGridLinkFlags(D2DrlgLevelStrc* pLevel)
 		if (pVertex->dwFlags & 1)
 		{
 			sub_6FD75DE0(&pLevel->pOutdoors->pGrid[1], pVertex, DRLGOUTDOORS_GetOutLinkVisFlag(pLevel, pVertex), FLAG_OPERATION_OR, 1);
-			sub_6FD75DE0(&pLevel->pOutdoors->pGrid[2], pVertex, 2 * (pVertex->nDirection != 0) + 1, FLAG_OPERATION_OR, 1);
+			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+			tPackedInfo.nUnkb00 = true;
+			tPackedInfo.bHasDirection = pVertex->nDirection != 0;
+			sub_6FD75DE0(&pLevel->pOutdoors->pGrid[2], pVertex, tPackedInfo.nPackedValue, FLAG_OPERATION_OR, 1);
 		}
 
 		pVertex = pNext;
@@ -694,13 +698,17 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 	int nX = 0;
 	int nY = 0;
 	int v41 = 0;
-	int v61 = 0;
 	uint8_t nDirection = 0;
 	uint8_t nAct = 0;
 
 	nAct = DRLG_GetActNoFromLevelId(pLevel->nLevelId);
 	pDrlgVertex = pLevel->pOutdoors->pVertex;
 	pNextVertex = pDrlgVertex->pNext;
+
+	D2DrlgOutdoorPackedGrid2InfoStrc tLvlPrestPackedInfo{ 0 };
+	tLvlPrestPackedInfo.nUnkb00 = true;
+	tLvlPrestPackedInfo.bHasDirection = pDrlgVertex->nDirection != 0;
+
 	do
 	{
 		DRLGVER_GetCoordDiff(pDrlgVertex, &nCurrentDiffX, &nCurrentDiffY);
@@ -741,9 +749,6 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 		{
 			nDiff = -nDiff;
 		}
-
-		v61 = 2 * (pDrlgVertex->nDirection != 0) + 1;
-
 		switch (pLevel->nLevelType)
 		{
 		case LVLTYPE_ACT1_WILDERNESS:
@@ -774,7 +779,7 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 				nCurrentX += nCurrentDiffX;
 				nCurrentY += nCurrentDiffY;
 				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nCurrentX, nCurrentY, nLevelPrestId, -1, 0);
-				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nCurrentX, nCurrentY, v61, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nCurrentX, nCurrentY, tLvlPrestPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
 		}
 
@@ -784,6 +789,7 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 			{
 			case ACT_I:
 			case ACT_V:
+			{
 				if (pDrlgVertex->nPosX < pNextVertex->nPosX)
 				{
 					nX = pDrlgVertex->nPosX;
@@ -804,43 +810,42 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 				}
 				nY += nCurrentDiffYAbs * nDiff / 2;
 
-				if (pLevel->nLevelId == LEVEL_BURIALGROUNDS)
-				{
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0x40400, FLAG_OPERATION_OR);
-				}
-				else
-				{
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0x30400, FLAG_OPERATION_OR);
-				}
-				break;
-
-			case ACT_IV:
-				if (pDrlgVertex->nPosX < pNextVertex->nPosX)
-				{
-					nX = pDrlgVertex->nPosX;
-				}
-				else
-				{
-					nX = pNextVertex->nPosX;
-				}
-				nX += nCurrentDiffXAbs * nDiff / 2;
-
-				if (pDrlgVertex->nPosY < pNextVertex->nPosY)
-				{
-					nY = pDrlgVertex->nPosY;
-				}
-				else
-				{
-					nY = pNextVertex->nPosY;
-				}
-				nY += nCurrentDiffYAbs * nDiff / 2;
-
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd{ 0 };
+				tPackedInfoToAdd.bLvlLink = true;
+				tPackedInfoToAdd.nPickedFile = (pLevel->nLevelId == LEVEL_BURIALGROUNDS) ? 4 : 3;
 				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
-				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0x30400, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, tPackedInfoToAdd.nPackedValue, FLAG_OPERATION_OR);
 				break;
+			}
+			case ACT_IV:
+			{
+				if (pDrlgVertex->nPosX < pNextVertex->nPosX)
+				{
+					nX = pDrlgVertex->nPosX;
+				}
+				else
+				{
+					nX = pNextVertex->nPosX;
+				}
+				nX += nCurrentDiffXAbs * nDiff / 2;
 
+				if (pDrlgVertex->nPosY < pNextVertex->nPosY)
+				{
+					nY = pDrlgVertex->nPosY;
+				}
+				else
+				{
+					nY = pNextVertex->nPosY;
+				}
+				nY += nCurrentDiffYAbs * nDiff / 2;
+
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd{ 0 };
+				tPackedInfoToAdd.bLvlLink = true;
+				tPackedInfoToAdd.nPickedFile = 3;
+				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
+				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, tPackedInfoToAdd.nPackedValue, FLAG_OPERATION_OR);
+				break;
+			}
 			case ACT_II:
 				if (pDrlgVertex->nPosX < pNextVertex->nPosX)
 				{
@@ -875,15 +880,12 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 		nDirection = pDrlgVertex->nDirection;
 		if (nDirection)
 		{
-			v61 |= 2;
+			tLvlPrestPackedInfo.bHasDirection = true;
 		}
 		else
 		{
 			nDirection = pNextVertex->nDirection;
-			if (nDirection)
-			{
-				v61 |= 2;
-			}
+			tLvlPrestPackedInfo.bHasDirection = true;
 		}
 
 		switch (pLevel->nLevelType)
@@ -947,12 +949,12 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 			}
 
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nNextX, nNextY, nLevelPrestId, -1, 0);
-			DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nNextX, nNextY, v61, FLAG_OPERATION_OR);
+			DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nNextX, nNextY, tLvlPrestPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 		}
 		else if (nLevelPrestId != LVLPREST_NONE)
 		{
 			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nNextX, nNextY, nLevelPrestId, -1, 0);
-			DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nNextX, nNextY, v61, FLAG_OPERATION_OR);
+			DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nNextX, nNextY, tLvlPrestPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 		}
 
 		pDrlgVertex = pNextVertex;

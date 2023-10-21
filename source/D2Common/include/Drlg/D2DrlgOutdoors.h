@@ -30,10 +30,29 @@ struct D2DrlgOutdoorGridStrc
 	BOOL bInit;								//0x10
 };
 
+union D2DrlgOutdoorPackedGrid2InfoStrc // TODO: rename
+{
+	uint32_t nPackedValue;
+	struct {
+		uint32_t nUnkb00 : 1;		 // Mask 0x00000001
+		uint32_t bHasDirection : 1;  // Mask 0x00000002
+		uint32_t nUnkb02 : 5;        // Mask 0x0000007C
+		uint32_t nUnkb07 : 1;        // Mask 0x00000080 spawn preset level here ?
+		uint32_t nUnkb08 : 1;        // Mask 0x00000100 related to being a blank grid cell?
+		uint32_t bHasPickedFile : 1; // Mask 0x00000200
+		uint32_t bLvlLink : 1;		 // Mask 0x00000400
+		uint32_t nUnkb11 : 1;		 // Mask 0x00000800
+		uint32_t nUnkb12 : 1;		 // Mask 0x00001000
+		uint32_t nUnkb13 : 3;		 // Mask 0x0000E000
+		uint32_t nPickedFile : 4;    // Mask 0x000F0000
+		uint32_t nUnkb20 : 12;       // Mask 0xFFF00000
+	};
+};
+
 struct D2DrlgOutdoorInfoStrc
 {
 	uint32_t dwFlags;						//0x00 D2C_OutDoorInfoFlags
-	D2DrlgGridStrc pGrid[4];				//0x04
+	D2DrlgGridStrc pGrid[4];				//0x04 0: LevelPrestId 1: ? 2: D2DrlgOutdoorPackedGrid2InfoStrc
 	union
 	{
 		struct
@@ -53,6 +72,13 @@ struct D2DrlgOutdoorInfoStrc
 };
 
 #pragma pack()
+
+//Helper function
+inline D2DrlgOutdoorPackedGrid2InfoStrc DRLGOUTDOORS_GetPackedGrid2Info(D2DrlgOutdoorInfoStrc* pOutdoors, int nX, int nY)
+{
+	uint32_t nPackedValue = DRLGGRID_GetGridEntry(&pOutdoors->pGrid[2], nX, nY);
+	return D2DrlgOutdoorPackedGrid2InfoStrc{ nPackedValue };
+}
 
 //D2Common.0x6FD7DC20
 int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pDrlgVertex);

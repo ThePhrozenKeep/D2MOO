@@ -15,7 +15,8 @@ void __fastcall DRLGOUTWILD_GetBridgeCoords(D2DrlgLevelStrc* pLevel, int* pX, in
 
 	for (int nY = 1; nY < pLevel->pOutdoors->nGridWidth - 1; ++nY)
 	{
-		if (DRLGGRID_GetGridEntry(pLevel->pOutdoors->pGrid, nX, nY) == 28 && (((unsigned int)DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) >> 16) & 15) == 1)
+		if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], nX, nY) == 28 
+			&& DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY).nPickedFile == 1)
 		{
 			*pX = nX;
 			*pY = nY;
@@ -226,7 +227,8 @@ BOOL __fastcall DRLGOUTWILD_TestSpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
 {
 	for (int nY = 0; nY < pLevel->pOutdoors->nGridHeight; ++nY)
 	{
-		if ((DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 2) || (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX + 1, nY) & 2))
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY).bHasDirection 
+			|| DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX + 1, nY).bHasDirection)
 		{
 			return FALSE;
 		}
@@ -235,15 +237,13 @@ BOOL __fastcall DRLGOUTWILD_TestSpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
 	return TRUE;
 }
 
-//D2Common.0x6FD850B0
-void __fastcall DRLGOUTWILD_SpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
+//1.10f: Inlined
+void DRLGOUTWILD_SpawnRiverPreset(D2DrlgLevelStrc* pLevel, int nX, int nY, bool bLowerRiver)
 {
-	int nFlags1 = 0;
-	int nFlags2 = 0;
-	int nRand = 0;
-	int nY = 0;
-
-	static const D2CoordStrc stru_6FDD0CA0[] = 
+	static const struct {
+		int nUpperFile;
+		int nLowerFile;
+	} stru_6FDD0CA0[] =
 	{
 		{ 2, 2 },
 		{ 0, 3 },
@@ -258,91 +258,63 @@ void __fastcall DRLGOUTWILD_SpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
 		{ 3, 1 },
 		{ 3, 2 }
 	};
+	int nPickedFile = 0;
 
-	
-	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX + int(bLowerRiver), nY);
+	int nFlags2 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], nX + int(bLowerRiver), nY);
+	if (nFlags2)
 	{
-		nFlags1 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, i);
-		nFlags2 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], nX, i);
-		if (nFlags2)
+		if (nFlags2 != LVLPREST_ACT1_WILD_BORDER_4 || tPackedInfo.nPickedFile != 3)
 		{
-			if (nFlags2 != 7 || (nFlags1 & 0xF0000) != 0x30000)
-			{
-				nRand = stru_6FDD0CA0[nFlags2 - 8].nX;
-			}
-			else
-			{
-				nRand = 3;
-			}
+
+			const int nIdx = nFlags2 - LVLPREST_ACT1_WILD_BORDER_1;
+			D2_ASSERT(nIdx < ARRAY_SIZE(stru_6FDD0CA0));
+			nPickedFile = bLowerRiver ? stru_6FDD0CA0[nIdx].nLowerFile : stru_6FDD0CA0[nIdx].nUpperFile;
 		}
 		else
 		{
-			if (nFlags1 & 0x100)
-			{
-				nRand = 0;
-			}
-			else
-			{
-				nRand = 3;
-			}
+			nPickedFile = 3;
 		}
-
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, i, LVLPREST_ACT1_RIVER_UPPER, nRand, FALSE);
-
-		nFlags1 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX + 1, i);
-		nFlags2 = DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[0], nX + 1, i);
-		if (nFlags2)
+	}
+	else
+	{
+		if (tPackedInfo.nUnkb08)
 		{
-			if (nFlags2 != 7 || (nFlags1 & 0xF0000) != 0x30000)
-			{
-				nRand = stru_6FDD0CA0[nFlags2 - 8].nY;
-			}
-			else
-			{
-				nRand = 3;
-			}
+			nPickedFile = 0;
 		}
 		else
 		{
-			if (nFlags1 & 0x100)
-			{
-				nRand = 0;
-			}
-			else
-			{
-				nRand = 3;
-			}
+			nPickedFile = 3;
 		}
-
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX + 1, i, LVLPREST_ACT1_RIVER_LOWER, nRand, FALSE);
 	}
 
-	if (pLevel->pOutdoors->dwFlags & 0x14)
+	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX + int(bLowerRiver), nY, bLowerRiver ? LVLPREST_ACT1_RIVER_LOWER : LVLPREST_ACT1_RIVER_UPPER, nPickedFile, FALSE);
+
+}
+//D2Common.0x6FD850B0
+void __fastcall DRLGOUTWILD_SpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
+{
+	for (int nY = 0; nY < pLevel->pOutdoors->nGridHeight; ++nY)
 	{
-		nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight - 2);
+		DRLGOUTWILD_SpawnRiverPreset(pLevel, nX, nY, false);
+		DRLGOUTWILD_SpawnRiverPreset(pLevel, nX, nY, true);
+	}
+
+	if (pLevel->pOutdoors->dwFlags & (OUTDOOR_RIVER|OUTDOOR_BRIDGE))
+	{
+		int nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight - 2);
 
 		for (int i = 0; i < pLevel->pOutdoors->nGridHeight - 2; ++i)
 		{
-			nY = (nRand + i) % (pLevel->pOutdoors->nGridHeight - 1);
+			int nY = (nRand + i) % (pLevel->pOutdoors->nGridHeight - 1);
 
-			if (!(pLevel->pOutdoors->dwFlags & 4))
+			if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX - 1, nY) && ((pLevel->pOutdoors->dwFlags & OUTDOOR_BRIDGE) != 0 || DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX + 2, nY)))
 			{
-				if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX - 1, nY))
+				if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX    , nY).nPickedFile == 3 && 
+					DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX + 1, nY).nPickedFile == 3)
 				{
-					if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX + 2, nY) && (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0xF0000) == 0x30000 && (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX + 1, nY) & 0xF0000) == 0x30000)
-					{
-						DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, LVLPREST_ACT1_BRIDGE, 1, 0);
-						DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX + 1, nY, LVLPREST_ACT1_BRIDGE, 2, 0);
-						return;
-					}
-				}
-			}
-			else
-			{
-				if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX - 1, nY) && (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 0xF0000) == 0x30000 && (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX + 1, nY) & 0xF0000) == 0x30000)
-				{
-					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nY, LVLPREST_ACT1_BRIDGE, 1, 0);
-					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX + 1, nY, LVLPREST_ACT1_BRIDGE, 3, 0);
+					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX    , nY, LVLPREST_ACT1_BRIDGE, 1, 0);
+					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX + 1, nY, LVLPREST_ACT1_BRIDGE, (pLevel->pOutdoors->dwFlags & OUTDOOR_BRIDGE) != 0 ? 3 : 2, 0);
 					return;
 				}
 			}
@@ -421,7 +393,8 @@ void __fastcall DRLGOUTWILD_SpawnTownTransitionsAndCaves(D2DrlgLevelStrc* pLevel
 			}
 			else
 			{
-				while (!(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX, nY) & 2) && !(DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[2], nX + 1, nY) & 2))
+				while (!DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX    , nY).bHasDirection 
+					&& !DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX + 1, nY).bHasDirection)
 				{
 					++nY;
 
