@@ -1154,16 +1154,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 		pDynamicPath->nCollidedWithMask = 0;
 	if ((v3 & 0x20) == 0 || (int)pDynamicPath->dwPathPoints <= 0 || !pDynamicPath->dwVelocity)
 	{
-		PATH_RecacheRoomAtCoordIfNeeded(
-			pDynamicPath,
-			0,
-			PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX),
-			PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY));
-		pDynamicPath->dwPathPoints = 0;
-		pDynamicPath->dwCurrentPointIdx = 0;
-		pDynamicPath->dwFlags = pDynamicPath->dwFlags & (D2PathFlags)~PATH_UNKNOWN_FLAG_0x00020;
-		pDynamicPath->tVelocityVector.nX = 0;
-		pDynamicPath->tVelocityVector.nY = 0;
+		PATH_ResetMovement(pDynamicPath);
 		return 0;
 	}
 	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
