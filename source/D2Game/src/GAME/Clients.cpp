@@ -447,7 +447,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 }
 
 //D2Game.0x6FC325E0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9)
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
     {
@@ -466,14 +466,14 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     pClient->dwLastPacketTick = GetTickCount() + 180000;
     pClient->pGame = pGame;
 
-    if (sub_6FC31790(pGame))
+    if (ARENA_ShouldTreatClassIdAsTemplateId(pGame))
     {
-        pClient->unk0x0C = nCharTemplate;
-        pClient->nClassId = DATATBLS_GetClassFromCharTemplateTxtRecord(nCharTemplate, ARENA_GetTemplateType(pGame));
+        pClient->unk0x0C = nClassIdOrCharTemplate;
+        pClient->nClassId = DATATBLS_GetClassFromCharTemplateTxtRecord(nClassIdOrCharTemplate, ARENA_GetTemplateType(pGame));
     }
     else
     {
-        pClient->nClassId = nCharTemplate;
+        pClient->nClassId = nClassIdOrCharTemplate;
     }
 
     SStrCopy(pClient->szName, szClientName, INT_MAX);

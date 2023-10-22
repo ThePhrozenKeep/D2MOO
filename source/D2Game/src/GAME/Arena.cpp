@@ -271,12 +271,12 @@ int32_t __fastcall ARENA_Return0()
 }
 
 //D2Game.0x6FC31790
-uint32_t __fastcall sub_6FC31790(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_ShouldTreatClassIdAsTemplateId(D2GameStrc* pGame)
 {
     D2ArenaStrc* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
-    return pArena->fFlags & 0x100;
+    return pArena->fFlags & GAMEFLAG_ARENA_CLASS_OR_TEMPLATE_ID;
 }
 
 //D2Game.0x6FC317C0

@@ -64,6 +64,6 @@ uint32_t __fastcall ARENA_GetFlags(D2GameStrc* pGame);
 //D2Game.0x6FC31780
 int32_t __fastcall ARENA_Return0();
 //D2Game.0x6FC31790
-uint32_t __fastcall sub_6FC31790(D2GameStrc* pGame);
+uint32_t __fastcall ARENA_ShouldTreatClassIdAsTemplateId(D2GameStrc* pGame);
 //D2Game.0x6FC317C0
 int32_t __fastcall ARENA_GetTemplateType(D2GameStrc* pGame);
