@@ -15,6 +15,10 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 //1.10f: D2Common.0x6FDACC40
 //1.13c: D2Common.0x6FD5DA40
 void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2RoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY);
+//1.00:  Inlined
+//1.10f: Inlined
+//1.13c: D2Common.6FD5DC80
+void PATH_ResetMovement(D2DynamicPathStrc* pDynamicPath);
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
 //1.13c: D2Common.0x6FD5D8E0
