@@ -819,169 +819,74 @@ BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStr
 	return result;
 }
 
+// TODO: Check name
+//1.00:  Inlined
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD5DC80
+void PATH_StopMovement(D2DynamicPathStrc* pDynamicPath)
+{
+	PATH_RecacheRoomIfNeeded(pDynamicPath);
+	pDynamicPath->dwFlags = pDynamicPath->dwFlags & (~PATH_UNKNOWN_FLAG_0x00020);
+	pDynamicPath->dwPathPoints = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
+	pDynamicPath->tVelocityVector.nX = 0;
+	pDynamicPath->tVelocityVector.nY = 0;
+}
+
+//1.00:  Inlined
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD5DDC0
+BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoomDest, D2PathPointStrc tDest)
+{
+	D2PathPointStrc tCurrentPos;
+	tCurrentPos.X = pDynamicPath->tGameCoords.wPosX;
+	tCurrentPos.Y = pDynamicPath->tGameCoords.wPosY;
+	if (pDynamicPath->pUnit && pDynamicPath->pUnit->dwUnitType == UNIT_MISSILE)
+	{
+		if (tDest.X || tDest.Y)
+		{
+			COLLISION_TeleportUnitCollisionMask(pDynamicPath->pRoom, tCurrentPos.X, tCurrentPos.Y, pRoomDest, tDest.X, tDest.Y, pDynamicPath->dwUnitSize, pDynamicPath->nFootprintCollisionMask);
+		}
+		else
+		{
+			COLLISION_ResetMaskWithSize(pDynamicPath->pRoom, tCurrentPos.X, tCurrentPos.Y, pDynamicPath->dwUnitSize, pDynamicPath->nFootprintCollisionMask);
+		}
+	}
+	else
+	{
+		if (tDest.X || tDest.Y)
+		{
+			COLLISION_SetUnitCollisionMask(pDynamicPath->pRoom, tCurrentPos.X, tCurrentPos.Y, pRoomDest, tDest.X, tDest.Y, pDynamicPath->dwCollisionPattern, pDynamicPath->nFootprintCollisionMask);
+		}
+		else
+		{
+			COLLISION_ResetMaskWithPattern(pDynamicPath->pRoom, tCurrentPos.X, tCurrentPos.Y, pDynamicPath->dwCollisionPattern, pDynamicPath->nFootprintCollisionMask);
+		}
+	}
+
+	if (pDynamicPath->pRoom != pRoomDest)
+	{
+		pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
+	}
+	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, pRoomDest, PATH_FP16FitToCenter(tDest.X), PATH_FP16FitToCenter(tDest.Y));
+
+	D2_ASSERT(COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || COLLISION_GetRoomBySubTileCoordinates(pRoomDest, tDest.X, tDest.Y));
+	PATH_StopMovement(pDynamicPath);
+	return TRUE;
+}
+
 //1.00:  D2Common.0x10060120 (#10228)
 //1.10f: D2Common.0x6FDADC20 (#10231)
-int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2RoomStrc* pRooms, uint16_t nX, uint16_t nY)
+//1.13c: D2Common.0x6FD5E1A0 (#10075)
+int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2RoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
-	D2DynamicPathStrc* v5; // esi
-	D2UnitStrc* v6; // eax
-	WORD v7; // dx
-	D2RoomStrc* v8; // ecx
-	uint32_t v9; // eax
-	uint32_t v10; // eax
-	int v11; // ebx
-	unsigned int v12; // edi
-	unsigned int v13; // ebp
-	D2RoomStrc* v14; // edi
-	int v15; // eax
-	DWORD v16; // ebp
-	D2RoomStrc* v17; // edx
-	D2DynamicPathStrc* v18; // edx
-	D2UnitStrc* v19; // eax
-	int v20; // edx
-	int* v21; // eax
-	int v22; // ecx
-	uint32_t v23; // eax
-	int pY; // [esp+10h] [ebp-Ch] BYREF
-	D2PathPointStrc v26; // [esp+14h] [ebp-8h]
-
-	v5 = a1;
-	v6 = a1->pUnit;
-	v7 = a1->tGameCoords.wPosY;
-	v26.X = a1->tGameCoords.wPosX;
-	v26.Y = v7;
-	if (v6 && v6->dwUnitType == UNIT_MISSILE)
-	{
-		if (nX || nY)
-			COLLISION_TeleportUnitCollisionMask(
-				a1->pRoom,
-				v26.X,
-				v26.Y,
-				pRooms,
-				nX,
-				nY,
-				a1->dwUnitSize,
-				a1->nFootprintCollisionMask);
-		else
-			COLLISION_ResetMaskWithSize(a1->pRoom, v26.X, v26.Y, a1->dwUnitSize, a1->nFootprintCollisionMask);
-	}
-	else if (nX || nY)
-	{
-		COLLISION_SetUnitCollisionMask(
-			a1->pRoom,
-			v26.X,
-			v26.Y,
-			pRooms,
-			(unsigned __int16)nX,
-			(unsigned __int16)nY,
-			a1->dwCollisionPattern,
-			a1->nFootprintCollisionMask);
-	}
-	else
-	{
-		COLLISION_ResetMaskWithPattern(
-			a1->pRoom,
-			v26.X,
-			v26.Y,
-			a1->dwCollisionPattern,
-			a1->nFootprintCollisionMask);
-	}
-	v8 = v5->pRoom;
-	if (v8 != pRooms)
-	{
-		v9 = v5->dwFlags;
-		v9 = v9 | PATH_UNKNOWN_FLAG_0x00001;
-		v5->dwFlags = v9;
-	}
-	v10 = v5->dwFlags;
-	v11 = nX;
-	DWORD v27 = nY;
-	v12 = PATH_ToFP16Center(nX);
-	v13 = PATH_ToFP16Center(nY);
-	if ((v10 & 0x40000) == 0 || COLLISION_GetRoomBySubTileCoordinates(v8, HIWORD(v12), HIWORD(v13)))
-	{
-		v5->tGameCoords.dwPrecisionX = v12;
-		v5->tGameCoords.dwPrecisionY = v13;
-		a1 = (D2DynamicPathStrc*)(v12 >> 11);
-		pY = v13 >> 11;
-		DUNGEON_GameToClientCoords((int*)&a1, &pY);
-		v18 = a1;
-		v5->dwClientCoordY = pY;
-		v19 = v5->pUnit;
-		v5->dwClientCoordX = (int32_t)v18;
-		if (v19 && (v5->dwFlags & 1) != 0)
-		{
-			v14 = pRooms;
-			PATH_RecacheRoom(v5, pRooms);
-			goto LABEL_17;
-		}
-	}
-	else
-	{
-		v5->dwPathPoints = 0;
-	}
-	v14 = pRooms;
-LABEL_17:
-	if (!(WORD)nX && !(WORD)nY)
-		goto LABEL_40;
-	if (!v14)
-		goto LABEL_39;
-	if (v11 < v14->tCoords.nSubtileX || v11 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth)
-	{
-		v16 = v27;
-	}
-	else
-	{
-		v15 = v14->tCoords.nSubtileY;
-		v16 = v27;
-		if (*(DWORD*)&v27 >= v15 && *(DWORD*)&v27 < v15 + v14->tCoords.nSubtileHeight)
-		{
-			v17 = v14;
-			goto LABEL_38;
-		}
-	}
-	nY = 0;
-	pRooms = 0;
-	DUNGEON_GetAdjacentRoomsListFromRoom(v14, (D2RoomStrc***)&nY, (int*)&pRooms);
-	v20 = 0;
-	if (!pRooms)
-		goto LABEL_39;
-	while (1)
-	{
-		v21 = *(int**)(nY + 4 * v20);
-		if (v21)
-		{
-			if (v11 >= *v21 && v11 < *v21 + v21[2])
-			{
-				v22 = v21[1];
-				if (*(DWORD*)&v16 >= v22 && *(DWORD*)&v16 < v22 + v21[3])
-					break;
-			}
-		}
-		if (++v20 >= (unsigned int)pRooms)
-			goto LABEL_39;
-	}
-	v17 = *(D2RoomStrc**)(nY + 4 * v20);
-LABEL_38:
-	if (!v17)
-	{
-	LABEL_39:
-		FOG_DisplayAssert(
-			"COORD_TEST_EQUAL(tDest, sgctZeroGameCoord) || DungeonFindRoomGame( hRoomDest, tDest.wX, tDest.wY )",
-			"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Common\\PATH\\Step.cpp",
-			1228);
-		exit(-1);
-	}
-LABEL_40:
-	PATH_RecacheRoomIfNeeded(v5);
-	v5->dwFlags = v5->dwFlags & (~PATH_UNKNOWN_FLAG_0x00020);
-	v5->dwPathPoints = 0;
-	v5->dwCurrentPointIdx = 0;
-	v5->tVelocityVector.nX = 0;
-	v5->tVelocityVector.nY = 0;
-	v5->dwPathPoints = 0;
-	return 1;
+	D2_MAYBE_UNUSED(pUnit_unused);
+	D2Common_10231_Impl(pDynamicPath, pRooms, D2PathPointStrc{ pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY });
+	pDynamicPath->dwPathPoints = 0;
+	return TRUE;
 }
+
+
 
 //1.00:  D2Common.0x1005F220
 //1.10f: D2Common.0x6FDACC40
