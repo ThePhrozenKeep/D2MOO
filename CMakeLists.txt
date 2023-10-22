@@ -41,6 +41,13 @@ if(CMAKE_GENERATOR MATCHES "Visual Studio" AND MSVC)
   endif()
 endif()
 
+if(D2MOO_IS_ROOT_PROJECT)
+  # clang-cl
+  if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND "${CMAKE_CXX_SIMULATE_ID}" STREQUAL "MSVC")
+    add_compile_options("-Wno-microsoft-cast" "-Wno-multichar")
+  endif()
+endif()
+
 
 if(NOT ${CMAKE_SIZEOF_VOID_P} EQUAL 4)
   message(WARNING "Diablo2 is 32bits only, 64bits build are unsupported. Invoke CMake with '-A Win32'")
