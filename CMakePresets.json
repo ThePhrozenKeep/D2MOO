@@ -40,12 +40,13 @@
       "name": "clang-tidy",
       "inherits": "ninja",
       "cacheVariables": {
-        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--header-filter=.*"
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--header-filter=.*",
+        "CMAKE_CXX_FLAGS": "-Wno-microsoft-cast -Wno-multichar"
       }
     },
     {
       "name": "clang-tidy-fix",
-      "inherits": "ninja",
+      "inherits": "clang-tidy",
       "cacheVariables": {
         "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--header-filter=.*;--fix"
       }
