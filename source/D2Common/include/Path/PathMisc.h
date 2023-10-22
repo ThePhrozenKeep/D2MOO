@@ -22,9 +22,6 @@ int __fastcall sub_6FDAB750(int nX1, int nY1, int nX2, int nY2);
 int __stdcall sub_6FDAB770(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 //D2Common.0x6FDAB7D0
 void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
-//D2Common.0x6FDAB890
-// Should be in PathUtil.h
-void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath);
 
 //D2Common.0x6FDAB0B0
 int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo);

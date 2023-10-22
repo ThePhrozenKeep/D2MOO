@@ -130,6 +130,7 @@ target_sources(D2CommonStatic
     src/Path/FollowWall.cpp
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
+    src/Path/PathUtil.cpp
     src/Path/PathWF.cpp
     src/Path/Step.cpp
 
@@ -137,6 +138,7 @@ target_sources(D2CommonStatic
     include/Path/FollowWall.h
     include/Path/Path.h
     include/Path/PathMisc.h
+    include/Path/PathUtil.h
     include/Path/PathWF.h
     include/Path/Step.h
 )

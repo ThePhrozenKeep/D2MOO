@@ -13,6 +13,7 @@
 #include <D2Math.h>
 #include "Path/IDAStar.h"
 #include "Path/PathMisc.h"
+#include "Path/PathUtil.h"
 #include "Path/PathWF.h"
 #include "Path/FollowWall.h"
 #include "Path/Step.h"
