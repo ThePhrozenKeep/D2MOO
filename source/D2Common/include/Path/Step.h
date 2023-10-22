@@ -16,6 +16,7 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, unsigned int a3, unsigned int a4);
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
+//1.13c: D2Common.0x6FD5D8E0
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit);
 //D2Common.0x6FDAD330
 int __fastcall sub_6FDAD330(D2DynamicPathStrc* pPath);

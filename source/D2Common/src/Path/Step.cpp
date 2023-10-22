@@ -436,6 +436,7 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
+//1.13c: D2Common.0x6FD5D8E0
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit)
 {
 	D2UnitStrc* v4; // eax

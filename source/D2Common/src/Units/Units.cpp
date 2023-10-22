@@ -3680,7 +3680,8 @@ D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId)
 	return NULL;
 }
 
-//D2Common.0x6FDC2CB0 (#10399)
+//1.10f: D2Common.0x6FDC2CB0 (#10399)
+//1.13c: D2Common.0x6FDCFCD0 (#10407)
 //TODO: Find a name
 int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {

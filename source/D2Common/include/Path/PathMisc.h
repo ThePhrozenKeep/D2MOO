@@ -71,7 +71,8 @@ int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPreci
 void __fastcall PATH_ComputeVelocityAndDirectionVectorsToNextPoint(D2DynamicPathStrc* pPath, BOOL bNormalizeDirectionIfSamePos, BOOL bForceDirectionNormalization);
 
 
-//D2Common.0x6FDAC8F0 (#10236)
+//1.10f: D2Common.0x6FDAC8F0 (#10236)
+//1.13c: D2Common.0x6FD5D820 (#10831)
 int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 
 //D2Common.0x6FDAC9A0 (#10226)
