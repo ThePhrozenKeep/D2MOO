@@ -1499,7 +1499,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
                         SKILLS_SetFlags(pSkill, 1);
                         UNITS_SetAnimationFrame(pUnit, 12);
                         pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
-                        D2Common_10233(pUnit->pDynamicPath);
+                        PATH_RecacheRoomIfNeeded(pUnit->pDynamicPath);
                         PATH_SetNewDistance(pUnit->pDynamicPath, 5);
                         PATH_SetStepNum(pUnit->pDynamicPath, 1);
                         PATH_SetTargetUnit(pUnit->pDynamicPath, 0);

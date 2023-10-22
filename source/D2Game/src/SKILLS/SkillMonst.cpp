@@ -576,7 +576,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
                     SKILLS_SetFlags(pSkill, 1);
                     UNITS_SetAnimationFrame(pUnit, 12);
                     pUnit->dwFrameCountPrecise = (pUnit->dwFrameCountPrecise & 0xFFFFFF00) + 256;
-                    D2Common_10233(pUnit->pDynamicPath);
+                    PATH_RecacheRoomIfNeeded(pUnit->pDynamicPath);
                     PATH_SetNewDistance(pUnit->pDynamicPath, 5u);
                     PATH_SetStepNum(pUnit->pDynamicPath, 1u);
                     PATH_SetTargetUnit(pUnit->pDynamicPath, nullptr);

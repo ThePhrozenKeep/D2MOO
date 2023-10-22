@@ -235,167 +235,6 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 }
 
 
-//1.00:  D2Common.0x1005F220
-//1.10f: D2Common.0x6FDACC40
-void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, unsigned int a3, unsigned int a4)
-{
-	unsigned int v4; // ebx
-	unsigned int v6; // esi
-	uint32_t v7; // eax
-	D2RoomStrc* v8; // eax
-	signed int v9; // esi
-	signed int v10; // edi
-	int v11; // ecx
-	int v12; // edx
-	D2RoomStrc* v13; // eax
-	int v14; // ecx
-	D2UnitStrc* v15; // eax
-	int v16; // edx
-	D2RoomStrc* v17; // eax
-	uint16_t v18; // bx
-	uint16_t v19; // di
-	int v20; // edx
-	D2RoomStrc* v21; // esi
-	int v22; // edi
-	int v23; // ebx
-	int v25; // edx
-	D2RoomStrc* v26; // eax
-	int v27; // ecx
-	D2RoomStrc* v28; // eax
-	D2UnitStrc* v29; // edi
-	uint32_t v30; // ecx
-	DWORD pNumRooms; // [esp+10h] [ebp-14h] BYREF
-	D2RoomStrc** pppRoom; // [esp+14h] [ebp-10h] BYREF
-	int pX; // [esp+18h] [ebp-Ch] BYREF
-	int pY; // [esp+1Ch] [ebp-8h] BYREF
-	D2RoomStrc* pRoom; // [esp+20h] [ebp-4h]
-
-	v4 = a3;
-	v6 = a4;
-	v7 = pDynamicPath->dwFlags;
-	pRoom = a2;
-	if ((v7 & PATH_MISSILE_MASK) == 0)
-		goto LABEL_18;
-	v8 = pDynamicPath->pRoom;
-	v9 = HIWORD(a4);
-	v10 = HIWORD(a3);
-	if (!v8)
-		goto LABEL_17;
-	if (v10 >= v8->tCoords.nSubtileX && v10 < v8->tCoords.nSubtileX + v8->tCoords.nSubtileWidth)
-	{
-		v11 = v8->tCoords.nSubtileY;
-		if (v9 >= v11 && v9 < v11 + v8->tCoords.nSubtileHeight)
-			goto LABEL_16;
-	}
-	pppRoom = 0;
-	pNumRooms = 0;
-	DUNGEON_GetAdjacentRoomsListFromRoom(v8, &pppRoom, (int*)&pNumRooms);
-	v12 = 0;
-	if (!pNumRooms)
-	{
-	LABEL_17:
-		pDynamicPath->dwPathPoints = 0;
-		return;
-	}
-	while (1)
-	{
-		v13 = pppRoom[v12];
-		if (v13)
-		{
-			if (v10 >= v13->tCoords.nSubtileX && v10 < v13->tCoords.nSubtileX + v13->tCoords.nSubtileWidth)
-			{
-				v14 = v13->tCoords.nSubtileY;
-				if (v9 >= v14 && v9 < v14 + v13->tCoords.nSubtileHeight)
-					break;
-			}
-		}
-		if (++v12 >= pNumRooms)
-		{
-			pDynamicPath->dwPathPoints = 0;
-			return;
-		}
-	}
-	v4 = a3;
-	v8 = pppRoom[v12];
-LABEL_16:
-	v6 = a4;
-	if (!v8)
-		goto LABEL_17;
-LABEL_18:
-	pDynamicPath->tGameCoords.dwPrecisionX = v4;
-	pDynamicPath->tGameCoords.dwPrecisionY = v6;
-	PATH_UpdateClientCoords(pDynamicPath);
-	v15 = pDynamicPath->pUnit;
-	if (!v15)
-		return;
-	if ((pDynamicPath->dwFlags & 1) == 0)
-		return;
-	v17 = pDynamicPath->pRoom;
-	v18 = pDynamicPath->tGameCoords.wPosX;
-	v19 = pDynamicPath->tGameCoords.wPosY;
-	if (v17)
-	{
-		if (v18 >= v17->tCoords.nSubtileX && v18 < v17->tCoords.nSubtileX + v17->tCoords.nSubtileWidth)
-		{
-			v20 = v17->tCoords.nSubtileY;
-			if (v19 >= v20 && v19 < v20 + v17->tCoords.nSubtileHeight)
-				return;
-		}
-	}
-	v21 = 0;
-	v22 = pDynamicPath->tGameCoords.wPosY;
-	v23 = pDynamicPath->tGameCoords.wPosX;
-	if (!v17)
-		goto LABEL_32;
-	if (v23 < v17->tCoords.nSubtileX
-		|| v23 >= v17->tCoords.nSubtileX + v17->tCoords.nSubtileWidth
-		|| (v22 < v17->tCoords.nSubtileY)
-		|| v22 >= v17->tCoords.nSubtileY + v17->tCoords.nSubtileHeight)
-	{
-		pppRoom = 0;
-		a3 = 0;
-		DUNGEON_GetAdjacentRoomsListFromRoom(v17, &pppRoom, (int*)&a3);
-		v25 = 0;
-		if (!a3)
-		{
-		LABEL_43:
-			v21 = 0;
-		LABEL_32:
-			if ((!pRoom || (v21 = COLLISION_GetRoomBySubTileCoordinates(pRoom, v23, v22)) == 0) // NOLINT todo
-				&& (pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
-			{
-				pDynamicPath->dwPathPoints = 0;
-				return;
-			}
-			goto LABEL_45;
-		}
-		while (1)
-		{
-			v26 = pppRoom[v25];
-			if (v26)
-			{
-				if (v23 >= v26->tCoords.nSubtileX && v23 < v26->tCoords.nSubtileX + v26->tCoords.nSubtileWidth)
-				{
-					v27 = v26->tCoords.nSubtileY;
-					if (v22 >= v27 && v22 < v27 + v26->tCoords.nSubtileHeight)
-						break;
-				}
-			}
-			if (++v25 >= a3)
-				goto LABEL_43;
-		}
-		v21 = pppRoom[v25];
-	}
-	else
-	{
-		v21 = pDynamicPath->pRoom;
-	}
-	if (!v21)
-		goto LABEL_32;
-LABEL_45:
-	PATHMISC_SetRoom(pDynamicPath, v21);
-}
-
 //D2Common.0x6FDAB810
 void __fastcall sub_6FDAB810(int* a1, int* a2)
 {
@@ -1134,7 +973,7 @@ LABEL_38:
 		exit(-1);
 	}
 LABEL_40:
-	D2Common_10233(v5);
+	PATH_RecacheRoomIfNeeded(v5);
 	v5->dwFlags = v5->dwFlags & (~PATH_UNKNOWN_FLAG_0x00020);
 	v5->dwPathPoints = 0;
 	v5->dwCurrentPointIdx = 0;
@@ -1144,10 +983,10 @@ LABEL_40:
 	return 1;
 }
 
-
-//1.10f: Inlined
+//1.00:  D2Common.0x1005F220
+//1.10f: D2Common.0x6FDACC40
 //1.13c: D2Common.0x6FD5DA40
-void PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pPath, uint32_t nPrecisionX, uint32_t nPrecisionY, D2RoomStrc* pHintRoom)
+void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2RoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY)
 {
 	if ((pPath->dwFlags & PATH_MISSILE_MASK) == 0
 		|| COLLISION_GetRoomBySubTileCoordinates(pPath->pRoom, PATH_FromFP16(nPrecisionX), PATH_FromFP16(nPrecisionY)))
@@ -1169,18 +1008,19 @@ void PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pPath, uint32_t nPrecisionX, ui
 //1.00: Inlined
 //1.10f: Inlined
 //1.13c: D2Common.6FD5DC80
-void PATH_ResetMovement(D2DynamicPathStrc* pPath)
+void PATH_ResetMovement(D2DynamicPathStrc* pDynamicPath)
 {
-	PATH_RecacheRoomIfNeeded(
-		pPath,
-		PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionX),
-		PATH_FP16FitToCenter(pPath->tGameCoords.dwPrecisionY),
-		0);
-	pPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
-	pPath->dwPathPoints = 0;
-	pPath->dwCurrentPointIdx = 0;
-	pPath->tVelocityVector.nX = 0;
-	pPath->tVelocityVector.nY = 0;
+	PATH_RecacheRoomAtCoordIfNeeded(
+		pDynamicPath,
+		nullptr,
+		PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX),
+		PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY)
+	);
+	pDynamicPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00020;
+	pDynamicPath->dwPathPoints = 0;
+	pDynamicPath->dwCurrentPointIdx = 0;
+	pDynamicPath->tVelocityVector.nX = 0;
+	pDynamicPath->tVelocityVector.nY = 0;
 }
 
 //1.00:  D2Common.0x100606B0 (#10229)
@@ -1211,173 +1051,10 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Roo
 
 //1.00:  D2Common.0x10060A60 (#10230)
 //1.10f: D2Common.0x6FDAE290 (#10233)
-void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath)
+//1.13c: D2Common.0x6FD5DB40 (#10770)
+void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath)
 {
-	D2DynamicPathStrc* v1; // ecx
-	DWORD v2; // ebx
-	DWORD v3; // ebp
-	D2RoomStrc* v4; // eax
-	signed int v5; // esi
-	int v6; // edi
-	DWORD v8; // edx
-	D2RoomStrc* v9; // eax
-	int v10; // ecx
-	int v12; // edx
-	D2UnitStrc* v13; // eax
-	D2RoomStrc* v14; // eax
-	WORD v15; // cx
-	WORD v16; // dx
-	int v18; // ecx
-	int v19; // esi
-	int v20; // edi
-	int v21; // ecx
-	int v22; // edx
-	D2RoomStrc* v23; // eax
-	int v24; // ecx
-	int pNumRooms; // [esp+10h] [ebp-14h] BYREF
-	D2RoomStrc** pppRoom; // [esp+14h] [ebp-10h] BYREF
-	int v27; // [esp+18h] [ebp-Ch] BYREF
-	int pX; // [esp+1Ch] [ebp-8h] BYREF
-	int pY; // [esp+20h] [ebp-4h] BYREF
-
-	v1 = pDynamicPath;
-	v2 = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX);
-	v3 = PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY);
-	if ((pDynamicPath->dwFlags & 0x40000) != 0)
-	{
-		v4 = pDynamicPath->pRoom;
-		v5 = HIWORD(v3);
-		v6 = HIWORD(v2);
-		if (!v4)
-		{
-		LABEL_19:
-			v1->dwPathPoints = 0;
-			return;
-		}
-		if (v6 < v4->tCoords.nSubtileX
-			|| v6 >= v4->tCoords.nSubtileX + v4->tCoords.nSubtileWidth
-			|| (v5 < v4->tCoords.nSubtileY)
-			|| v5 >= v4->tCoords.nSubtileY + v4->tCoords.nSubtileHeight)
-		{
-			pppRoom = 0;
-			pNumRooms = 0;
-			DUNGEON_GetAdjacentRoomsListFromRoom(v4, &pppRoom, &pNumRooms);
-			v8 = 0;
-			v27 = 0;
-			if (pNumRooms)
-			{
-				while (1)
-				{
-					v9 = pppRoom[v8];
-					if (v9 && v6 >= v9->tCoords.nSubtileX)
-					{
-						if (v6 < v9->tCoords.nSubtileX + v9->tCoords.nSubtileWidth)
-						{
-							v10 = v9->tCoords.nSubtileY;
-							if (v5 >= v10 && v5 < v10 + v9->tCoords.nSubtileHeight)
-							{
-								v4 = pppRoom[v27];
-								goto LABEL_17;
-							}
-						}
-						v8 = v27;
-					}
-					v27 = ++v8;
-					if (v8 >= pNumRooms)
-					{
-						pDynamicPath->dwPathPoints = 0;
-						return;
-					}
-				}
-			}
-			goto LABEL_18;
-		}
-	LABEL_17:
-		if (!v4)
-		{
-		LABEL_18:
-			v1 = pDynamicPath;
-			goto LABEL_19;
-		}
-		v1 = pDynamicPath;
-	}
-	pDynamicPath->tGameCoords.dwPrecisionX = v2;
-	pDynamicPath->tGameCoords.dwPrecisionY = v3;
-	PATH_UpdateClientCoords(pDynamicPath);
-	v13 = pDynamicPath->pUnit;
-	if (v13)
-	{
-		if ((pDynamicPath->dwFlags & 1) != 0)
-		{
-			v14 = pDynamicPath->pRoom;
-			v15 = pDynamicPath->tGameCoords.wPosX;
-			v16 = pDynamicPath->tGameCoords.wPosY;
-			if (!v14
-				|| v15 < v14->tCoords.nSubtileX
-				|| v15 >= v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth
-				|| (v16 < v14->tCoords.nSubtileY)
-				|| v16 >= v14->tCoords.nSubtileY + v14->tCoords.nSubtileHeight)
-			{
-				v18 = pDynamicPath->tGameCoords.wPosX;
-				v19 = pDynamicPath->tGameCoords.wPosY;
-				v20 = v18;
-				if (v14)
-				{
-					if (v18 >= v14->tCoords.nSubtileX && v18 < v14->tCoords.nSubtileX + v14->tCoords.nSubtileWidth)
-					{
-						v21 = v14->tCoords.nSubtileY;
-						if (v19 >= v21 && v19 < v21 + v14->tCoords.nSubtileHeight)
-						{
-						LABEL_44:
-							if (v14)
-							{
-							LABEL_47:
-								PATHMISC_SetRoom(pDynamicPath, v14);
-								return;
-							}
-						LABEL_45:
-							if ((pDynamicPath->dwFlags & 0x40000) != 0)
-							{
-								pDynamicPath->dwPathPoints = 0;
-								return;
-							}
-							goto LABEL_47;
-						}
-					}
-					pppRoom = 0;
-					v27 = 0;
-					DUNGEON_GetAdjacentRoomsListFromRoom(v14, &pppRoom, &v27);
-					v22 = 0;
-					if (v27)
-					{
-						while (1)
-						{
-							v23 = pppRoom[v22];
-							if (v23 && v20 >= v23->tCoords.nSubtileX)
-							{
-								if (v20 < v23->tCoords.nSubtileX + v23->tCoords.nSubtileWidth)
-								{
-									v24 = v23->tCoords.nSubtileY;
-									if (v19 >= v24 && v19 < v24 + v23->tCoords.nSubtileHeight)
-									{
-										v14 = pppRoom[v22];
-										goto LABEL_44;
-									}
-								}
-							}
-							if (++v22 >= v27)
-							{
-								v14 = 0;
-								goto LABEL_45;
-							}
-						}
-					}
-				}
-				v14 = 0;
-				goto LABEL_45;
-			}
-		}
-	}
+	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, nullptr, PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX), PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY));
 }
 
 

@@ -1154,7 +1154,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 		pDynamicPath->nCollidedWithMask = 0;
 	if ((v3 & 0x20) == 0 || (int)pDynamicPath->dwPathPoints <= 0 || !pDynamicPath->dwVelocity)
 	{
-		sub_6FDACC40(
+		PATH_RecacheRoomAtCoordIfNeeded(
 			pDynamicPath,
 			0,
 			PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX),
@@ -1257,7 +1257,7 @@ LABEL_34:
 	if (!v22 && !v23)
 		goto LABEL_32;
 	sub_6FDACEC0(pDynamicPath, (D2FP32_16*)a3, &pUnit);
-	sub_6FDACC40(pDynamicPath, 0, a3[0], a3[1]);
+	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, 0, a3[0], a3[1]);
 	if (pDynamicPath->dwPathType != PATHTYPE_MISSILE
 		&& (signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints)
 	{

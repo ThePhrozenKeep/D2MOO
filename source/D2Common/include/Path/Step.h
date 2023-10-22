@@ -13,7 +13,8 @@
 void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOutDirection, DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY);
 //1.00:  D2Common.0x1005F220
 //1.10f: D2Common.0x6FDACC40
-void __fastcall sub_6FDACC40(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* a2, unsigned int a3, unsigned int a4);
+//1.13c: D2Common.0x6FD5DA40
+void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2RoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY);
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
 //1.13c: D2Common.0x6FD5D8E0
@@ -40,7 +41,8 @@ signed int __stdcall D2Common_10231(D2DynamicPathStrc* a1, D2UnitStrc* a2, D2Roo
 BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, int nTargetX, int nTargetY);
 //1.00:  D2Common.0x10060A60 (#10230)
 //1.10f: D2Common.0x6FDAE290 (#10233)
-void __stdcall D2Common_10233(D2DynamicPathStrc* pDynamicPath);
+//1.13c: D2Common.0x6FD5DB40 (#10770)
+void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath);
 //1.00:  D2Common.0x10060C40 (#10231)
 //1.10f: D2Common.0x6FDAE500 (#10234)
 BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath);

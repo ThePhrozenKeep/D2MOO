@@ -881,7 +881,7 @@ void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 	{
 		PATH_RemoveCollisionFootprintForUnit(pUnit, TRUE);
 		COLLISION_SetMaskWithSizeXY(pUnit->pDynamicPath->pRoom, pUnit->pDynamicPath->tGameCoords.wPosX, pUnit->pDynamicPath->tGameCoords.wPosY, 3, 3, COLLIDE_CORPSE);
-		D2Common_10233(pUnit->pDynamicPath);
+		PATH_RecacheRoomIfNeeded(pUnit->pDynamicPath);
 	}
 	else // Called from Client, related to corpse being displayed
 	{
@@ -889,7 +889,7 @@ void __stdcall PATH_SetUnitDeadCollision(D2UnitStrc* pUnit, BOOL bForGameLogic)
 		pUnit->pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
 		PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_CORPSE);
 		PATH_AddCollisionFootprintForUnit(pUnit);
-		D2Common_10233(pUnit->pDynamicPath);
+		PATH_RecacheRoomIfNeeded(pUnit->pDynamicPath);
 	}
 }
 
