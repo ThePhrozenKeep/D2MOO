@@ -1117,146 +1117,152 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 	return nResult;
 }
 
-//1.10f: D2Common.0x1005EEB0 (#10223)
-//1.10f: D2Common.0x6FDAC9A0 (#10226)
-BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD5CEB0
+void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 {
-	D2DynamicPathStrc* pDynamicPath; // esi
-	uint32_t v3; // edi
-	uint32_t v4; // eax
-	signed int v6; // eax
-	D2UnitStrc* v7; // eax
-	D2UnitStrc* v8; // edi
-	int v9; // eax
-	uint16_t v10; // bx
-	uint16_t v11; // bp
-	D2UnitStrc* v12; // eax
-	int v13; // eax
-	int v14; // eax
-	int v15; // ecx
-	signed int v16; // edx
-	uint32_t v17; // eax
-	signed int v18; // ecx
-	signed int v19; // ebp
-	signed int v20; // eax
-	signed int v21; // eax
-	int v22; // ecx
-	int v23; // edx
-	D2PathPointStrc pOutPathPoint; // [esp+10h] [ebp-10h] BYREF
-	unsigned int a3[2]; // [esp+18h] [ebp-8h] BYREF
-
-	pDynamicPath = pUnit->pDynamicPath;
-	if (!pDynamicPath)
-		return 0;
-	v3 = pDynamicPath->dwFlags & ~PATH_UNKNOWN_FLAG_0x00008;
-	pDynamicPath->dwFlags = v3;
-	if ((v3 & PATH_MISSILE_MASK) != 0)
-		pDynamicPath->nCollidedWithMask = 0;
-	if ((v3 & 0x20) == 0 || (int)pDynamicPath->dwPathPoints <= 0 || !pDynamicPath->dwVelocity)
+	if (nBaseVelocity <= 0)
 	{
-		PATH_ResetMovement(pDynamicPath);
-		return 0;
+		nBaseVelocity = 1024;
 	}
-	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
-		goto LABEL_34;
-	v6 = pDynamicPath->dwPathType;
-	if ((v6 == PATHTYPE_MON_CIRCLE_CW || v6 == PATHTYPE_MON_CIRCLE_CCW) && (signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
-		goto LABEL_34;
-	v7 = pDynamicPath->pTargetUnit;
-	v8 = pDynamicPath->pUnit;
-	if (!v7)
+	// Actually assumed to be deceleration?
+	if (int nAcceleration = pDynamicPath->dwAcceleration)
 	{
-		if ((signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints
-			|| pDynamicPath->tGameCoords.wPosX == pDynamicPath->SP3.X
-			&& pDynamicPath->tGameCoords.wPosY == pDynamicPath->SP3.Y)
+		pDynamicPath->unk0x8C++;
+		if (pDynamicPath->unk0x8C >= 5)
 		{
-			goto LABEL_34;
-		}
-		v9 = D2Common_10236(v8, 0);
-		goto LABEL_31;
-	}
-	if (D2Common_10399(v7, pDynamicPath->pUnit) <= pDynamicPath->nStepNum)
-	{
-	LABEL_32:
-		sub_6FDAD330(pDynamicPath);
-		return 0;
-	}
-	v10 = pDynamicPath->tGameCoords.wPosX;
-	v11 = pDynamicPath->tGameCoords.wPosY;
-	sub_6FDAB940(&pOutPathPoint, pDynamicPath);
-	v12 = pDynamicPath->pTargetUnit;
-	if (v12)
-	{
-		v13 = v12->dwUnitType;
-		if (v13 >= 0 && v13 <= 1)
-		{
-			v14 = pDynamicPath->SP2.X - pOutPathPoint.X;
-			v15 = pDynamicPath->SP2.Y - pOutPathPoint.Y;
-			if (v14 < 0)
-				v14 = pOutPathPoint.X - pDynamicPath->SP2.X;
-			if (v14 > 5)
-				goto LABEL_30;
-			if (v15 < 0)
-				v15 = pOutPathPoint.Y - pDynamicPath->SP2.Y;
-			if (v15 > 5)
-				goto LABEL_30;
-		}
-	}
-	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints
-		&& (pDynamicPath->SP3.X != v10 || pDynamicPath->SP3.Y != v11))
-	{
-	LABEL_30:
-		v9 = D2Common_10236(v8, 1);
-	LABEL_31:
-		if (!v9)
-			goto LABEL_32;
-	}
-LABEL_34:
-	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
-		goto LABEL_32;
-	v16 = a2;
-	if (a2 <= 0)
-		v16 = 1024;
-	v17 = pDynamicPath->dwAcceleration;
-	if (v17)
-	{
-		v18 = pDynamicPath->unk0x8C + 1;
-		pDynamicPath->unk0x8C = v18;
-		if (v18 >= 5)
-		{
-			v19 = v17 + pDynamicPath->dwVelocity;
-			v20 = pDynamicPath->dwMaxVelocity;
-			pDynamicPath->dwVelocity = v19;
-			if (v19 <= v20)
+			const int nOldVelocity = pDynamicPath->dwMaxVelocity;
+			pDynamicPath->dwVelocity = nAcceleration + pDynamicPath->dwVelocity;
+			if (pDynamicPath->dwVelocity >= nOldVelocity)
 			{
-				if (v19 < 0)
-					pDynamicPath->dwVelocity = 0;
+				pDynamicPath->dwVelocity = nOldVelocity;
+				pDynamicPath->dwAcceleration = 0;
 			}
 			else
 			{
-				pDynamicPath->dwVelocity = v20;
-				pDynamicPath->dwAcceleration = 0;
+				if (pDynamicPath->dwVelocity < 0)
+				{
+					pDynamicPath->dwVelocity = 0;
+				}
 			}
 			pDynamicPath->unk0x8C = 0;
 		}
 	}
-	v21 = (signed int)(v16 * pDynamicPath->dwVelocity) >> 6;
-	v22 = (v21 * pDynamicPath->tDirectionVector.nX) >> 12;
-	v23 = (v21 * pDynamicPath->tDirectionVector.nY) >> 12;
-	pDynamicPath->tVelocityVector.nX = v22;
-	pDynamicPath->tVelocityVector.nY = v23;
-	if (!v22 && !v23)
-		goto LABEL_32;
-	sub_6FDACEC0(pDynamicPath, (D2FP32_16*)a3, &pUnit);
-	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, 0, a3[0], a3[1]);
-	if (pDynamicPath->dwPathType != PATHTYPE_MISSILE
-		&& (signed int)pDynamicPath->dwCurrentPointIdx < (signed int)pDynamicPath->dwPathPoints)
+	const int nVelocityMagnitude = (signed int)(nBaseVelocity * pDynamicPath->dwVelocity) >> 6;
+	pDynamicPath->tVelocityVector.nX = (nVelocityMagnitude * pDynamicPath->tDirectionVector.nX) >> 12;
+	pDynamicPath->tVelocityVector.nY = (nVelocityMagnitude * pDynamicPath->tDirectionVector.nY) >> 12;
+}
+
+//1.10f: Inlined
+//1.13c: D2Common.0x6FD5DB70
+BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
+{
+	if ((pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CW || pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CCW)
+		&& pDynamicPath->dwCurrentPointIdx >= pDynamicPath->dwPathPoints)
 	{
-		PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);
+		return TRUE;
 	}
-	if ((signed int)pDynamicPath->dwCurrentPointIdx >= (signed int)pDynamicPath->dwPathPoints)
-		goto LABEL_32;
-	return 1;
+
+	D2UnitStrc* pTargetUnit = pDynamicPath->pTargetUnit;
+	if (!pTargetUnit)
+	{
+		if (pDynamicPath->dwCurrentPointIdx >= pDynamicPath->dwPathPoints
+			&& pDynamicPath->tGameCoords.ToPathPoint() != pDynamicPath->SP3)
+		{
+			return D2Common_10236(pDynamicPath->pUnit, FALSE);
+		}
+		return TRUE;
+	}
+	if (D2Common_10399(pTargetUnit, pDynamicPath->pUnit) <= (int)pDynamicPath->nStepNum)
+	{
+		return FALSE;
+	}
+
+	D2PathPointStrc a3;
+	sub_6FDAB940(&a3, pDynamicPath);
+
+	if (pTargetUnit)
+	{
+		if (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER)
+		{
+			const int nAbsDiffX = std::abs(pDynamicPath->SP2.X - a3.X);
+			const int nAbsDiffY = std::abs(pDynamicPath->SP2.Y - a3.Y);
+			if (nAbsDiffX <= 5 && nAbsDiffY <= 5)
+			{
+				if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
+					|| pDynamicPath->SP3 == pDynamicPath->tGameCoords.ToPathPoint() )
+				{
+					return TRUE;
+				}
+			}
+		}
+	}
+	return D2Common_10236(pDynamicPath->pUnit, TRUE);
+}
+
+//1.00:  D2Common.0x1005EEB0 (#10223)
+//1.10f: D2Common.0x6FDAC9A0 (#10226)
+//1.13c: D2Common.0x6FD5E230 (#10342)
+BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
+{
+	D2DynamicPathStrc* pDynamicPath = pUnit->pDynamicPath;
+	if (!pDynamicPath)
+	{
+		return FALSE;
+	}
+
+	pDynamicPath->dwFlags &= ~PATH_UNKNOWN_FLAG_0x00008;
+	if ((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+	{
+		pDynamicPath->nCollidedWithMask = 0;
+	}
+
+	if ((pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00020) != 0 && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity != 0)
+	{
+#ifdef D2_VERSION_113C // Optimisation added in 1.13c ? Not compatible with 1.10f
+	// TODO name
+		auto IsUnitSomething = [](D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath) -> bool {
+			switch (pUnit->dwUnitType)
+			{
+			case UNIT_PLAYER:
+				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0;
+			case UNIT_MONSTER:
+				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0
+					&& (pUnit->dwFlags & UNITFLAG_ISASYNC) == 0;
+			default:
+				return false;
+			}
+			};
+		if (IsUnitSomething(pUnit, pDynamicPath))
+#endif
+		{
+			if(((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0 || sub_6FD5DB70(pDynamicPath))
+				&& pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints)
+			{
+				sub_6FD5CEB0(pDynamicPath, a2);
+				if (pDynamicPath->tVelocityVector.nX || pDynamicPath->tVelocityVector.nY)
+				{
+					D2UnitStrc* nUnused = nullptr;
+					D2_MAYBE_UNUSED(nUnused);
+					D2FP32_16 tCoord;
+					sub_6FDACEC0(pDynamicPath, &tCoord, &nUnused);
+					PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, nullptr, tCoord.dwPrecisionX, tCoord.dwPrecisionY);
+					if (pDynamicPath->dwPathType != PATHTYPE_MISSILE && pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints)
+					{
+						PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath,TRUE, TRUE);
+					}
+					if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints)
+					{
+						return TRUE;
+					}
+				}
+
+			}
+		}
+	}
+
+	PATH_ResetMovement(pDynamicPath);
+	return FALSE;
 }
 
 //D2Common.0x6FDAD530 (#10227)

@@ -269,7 +269,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_RemoveCollisionFootprintForUnit                                @10223
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10224                                                      @10224
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10225                                                      @10225
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10226                                                      @10226
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10226                                                      @10226
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10227                                                      @10227
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10228                                                      @10228
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10229                                                      @10229

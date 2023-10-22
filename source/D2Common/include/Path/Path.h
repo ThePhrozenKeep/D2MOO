@@ -81,6 +81,7 @@ union D2FP32_16
 		uint32_t dwPrecisionX;				//0x00
 		uint32_t dwPrecisionY;				//0x04
 	};
+	D2PathPointStrc ToPathPoint() const { return { wPosX,wPosY }; }
 };
 
 struct D2DynamicPathStrc
@@ -120,11 +121,11 @@ struct D2DynamicPathStrc
 	D2CoordStrc tDirectionVector;				//0x6A
 	D2CoordStrc tVelocityVector;				//0x72
 	char unk0x7A[2];							//0x7A
-	uint32_t dwVelocity;						//0x7C
+	int32_t dwVelocity;							//0x7C
 	uint32_t unk0x80;							//0x80
-	uint32_t dwMaxVelocity;						//0x84
-	uint32_t dwAcceleration;					//0x88
-	uint32_t unk0x8C;							//0x8C
+	int32_t dwMaxVelocity;						//0x84
+	int32_t dwAcceleration;						//0x88
+	int32_t unk0x8C;							//0x8C
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
 	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
