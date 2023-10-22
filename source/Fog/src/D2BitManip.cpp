@@ -1,7 +1,8 @@
 #include "D2BitManip.h"
 
+
 // Fog.6FF71308
-const uint32_t gdwBitMasks[] =
+extern "C" const uint32_t gdwBitMasks[] =
 {
 	0x00000001, 0x00000002, 0x00000004, 0x00000008, 0x00000010, 0x00000020, 0x00000040, 0x00000080,
 	0x00000100, 0x00000200, 0x00000400, 0x00000800, 0x00001000, 0x00002000, 0x00004000, 0x00008000,
@@ -10,7 +11,7 @@ const uint32_t gdwBitMasks[] =
 };
 
 // Fog.6FF71388
-const uint32_t gdwInvBitMasks[] =
+extern "C" const uint32_t gdwInvBitMasks[] =
 {
 	0xFFFFFFFE, 0xFFFFFFFD, 0xFFFFFFFB, 0xFFFFFFF7, 0xFFFFFFEF, 0xFFFFFFDF, 0xFFFFFFBF, 0xFFFFFF7F,
 	0xFFFFFEFF, 0xFFFFFDFF, 0xFFFFFBFF, 0xFFFFF7FF, 0xFFFFEFFF, 0xFFFFDFFF, 0xFFFFBFFF, 0xFFFF7FFF,

@@ -279,6 +279,10 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 #define D2_VERIFY(expr) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(#expr), false))
 #define D2_VERIFYM(expr,msg) ((!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(msg), false))
 #else
+  #if defined(__clang__)
+    // the argument to '__builtin_assume' has side effects that will be discarded
+    #pragma clang diagnostic ignored "-Wassume"
+  #endif // defined(__clang__)
 #define D2_ASSERT(expr) (__assume(expr), (void)0)
 #define D2_ASSERTM(expr,msg) (__assume(expr), (void)0)
 #define D2_VERIFY(expr) (!!(expr))

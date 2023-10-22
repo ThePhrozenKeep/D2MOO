@@ -6,8 +6,9 @@
 
 #pragma pack(1)
 
-extern FOG_DLL_DECL const uint32_t gdwBitMasks[];
-extern FOG_DLL_DECL const uint32_t gdwInvBitMasks[];
+
+extern "C" FOG_DLL_DECL const uint32_t gdwBitMasks[];
+extern "C" FOG_DLL_DECL const uint32_t gdwInvBitMasks[];
 
 
 struct D2BitBufferStrc

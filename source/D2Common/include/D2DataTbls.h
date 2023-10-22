@@ -534,7 +534,7 @@ extern uint32_t gnCharTemplateStartIds[64];
 extern D2BeltsTxt* gpBeltsTxtTable;
 extern D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
-D2COMMON_DLL_DECL extern D2DataTablesStrc* sgptDataTables;
+extern "C" D2COMMON_DLL_DECL D2DataTablesStrc * sgptDataTables;
 
 
 extern D2SeedStrc* gpAutomapSeed;

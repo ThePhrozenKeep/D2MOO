@@ -20,7 +20,7 @@ D2BeltsTxt* gpBeltsTxtTable;
 // D2Common.0x6FDE9608
 D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
-D2DataTablesStrc* sgptDataTables = &gpDataTables;
+extern "C" D2DataTablesStrc * sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
 // ARENA & CHARTEMPLATE
