@@ -45,24 +45,25 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
 
     switch (nResolution)
     {
-    case 0:
+    case D2GAMERES_640x480:
         rect.right = 640;
         rect.bottom = 480;
         break;
 
-    case 1:
-    case 2:
+    case D2GAMERES_800x600:
+    case NUM_GAME_RESOLUTIONS:
         rect.right = 800;
         rect.bottom = 600;
         break;
 
-    case 3:
+    case D2GAMERES_1344x700:
         rect.right = 1344;
         rect.bottom = 700;
         break;
 
     default:
-        //FOG_DisplayHalt(Fog_10018(&unk_6FA8D748, "Unknown resolution %d", nResolution), __FILE__, __LINE__);
+        static char szLocalBuffer[256];
+        FOG_DisplayHalt(FOG_csprintf(szLocalBuffer, "Unknown resolution %d", nResolution), __FILE__, __LINE__);
         exit(-1);
     }
 
