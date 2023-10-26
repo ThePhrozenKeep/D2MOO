@@ -22,6 +22,7 @@ BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 	case DLL_THREAD_DETACH:
 		break;
 	}
+
 	return TRUE;
 }
 // NOLINTEND(bugprone-branch-clone)
