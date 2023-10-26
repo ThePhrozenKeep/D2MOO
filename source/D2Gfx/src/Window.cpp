@@ -16,7 +16,7 @@ extern int32_t gnDisplayType;
 
 HWND ghWnd;
 int32_t gbIsWindowed;
-int32_t gnResolutionMode;
+D2GameResolutionMode gnResolutionMode;
 //int32_t dword_6FA8D740;
 D2WindowPlacementStrc gWindowPlacement[4];
 int32_t gbCursorDisplayed;
@@ -27,7 +27,7 @@ HINSTANCE ghInstance;
 
 
 //D2Gfx.0x6FA74450 (#10023)
-int32_t __stdcall WINDOW_Create(int32_t bWindowed, int32_t nResolution)
+int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolution)
 {
     if (FindWindowA("Diablo II", 0))
     {
@@ -35,7 +35,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, int32_t nResolution)
         return 0;
     }
 
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
     D2_ASSERT(!ghWnd);
 
     gbIsWindowed = bWindowed;
@@ -138,7 +138,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, int32_t nResolution)
         gbCursorDisplayed = 0;
     }
 
-    if (gpRenderCallbacks->pfCreateWindow(ghWnd, gnResolutionMode))
+    if (gpGraphicsInterface->pfCreateSurface(ghWnd, gnResolutionMode))
     {
         D2GFX_SetContrastAndGamma_6FA710C0();
         SetWindowPos(ghWnd, HWND_NOTOPMOST, 0, 0, nWidth, nHeight, SWP_NOMOVE);
@@ -164,7 +164,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, int32_t nResolution)
 //D2Gfx.0x6FA74820 (#10024)
 int32_t __stdcall WINDOW_Destroy()
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
     if (!gbCursorDisplayed)
     {
@@ -173,7 +173,7 @@ int32_t __stdcall WINDOW_Destroy()
     }
 
     int32_t bWindowDestroyed = 1;
-    if (!gpRenderCallbacks->pfDestroyWindow())
+    if (!gpGraphicsInterface->pfCloseSurface())
     {
         bWindowDestroyed = 0;
     }
@@ -205,7 +205,7 @@ int32_t __stdcall WINDOW_GetState()
         return gbWindowState_6FA8D850;
     }
 
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
     int32_t bPaused = gbPaused_6FA8D84C;
     if (!gbPaused_6FA8D84C)
@@ -230,7 +230,7 @@ int32_t __stdcall WINDOW_GetState()
         while (ShowCursor(0) >= 0);
     }
 
-    gpRenderCallbacks->pfEndCutScene(ghWnd, gnResolutionMode, gbWindowState_6FA8D850);
+    gpGraphicsInterface->pfPauseSurface(ghWnd, gnResolutionMode, gbWindowState_6FA8D850);
 
     if (!gbWindowState_6FA8D850)
     {
@@ -248,11 +248,11 @@ HWND __stdcall WINDOW_GetWindow()
 }
 
 //D2Gfx.0x6FA749D0 (#10041)
-int32_t __stdcall WINDOW_GetScreenSize(int32_t* pWidth, int32_t* pHeight)
+int32_t __stdcall WINDOW_GetDimensions(int32_t* pWidth, int32_t* pHeight)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfGetScreenSize(pWidth, pHeight);
+    return gpGraphicsInterface->pfGetDimensions(pWidth, pHeight);
 }
 
 //D2Gfx.0x6FA74A10 (#10029)
@@ -284,7 +284,7 @@ void __stdcall WINDOW_ShowCursor(int32_t bShow)
 //D2Gfx.0x6FA74A80 (#10028)
 int32_t __stdcall WINDOW_IsFullScreen()
 {
-    if (gpRenderCallbacks)
+    if (gpGraphicsInterface)
     {
         return gbIsWindowed == 0;
     }
@@ -295,16 +295,16 @@ int32_t __stdcall WINDOW_IsFullScreen()
 //D2Gfx.0x6FA74AA0 (#10043)
 int32_t __stdcall WINDOW_Activate(int32_t bActive)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
     gbIsWindowed = bActive == 0;
-    return gpRenderCallbacks->pfActivateWindow();
+    return gpGraphicsInterface->pfActivateWindow();
 }
 
 //D2Gfx.0x6FA74AE0 (#10030)
-int32_t __stdcall WINDOW_Resize(int32_t nResolution, int32_t bForceResize)
+int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution, int32_t bForceResize)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
     if (!bForceResize && nResolution == gnResolutionMode)
     {
@@ -354,7 +354,7 @@ int32_t __stdcall WINDOW_Resize(int32_t nResolution, int32_t bForceResize)
         SetWindowPos(ghWnd, HWND_NOTOPMOST, 0, 0, nWidth, nHeight, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
     }
 
-    const int32_t bResult = gpRenderCallbacks->pfResizeWindow(ghWnd, nResolution);
+    const int32_t bResult = gpGraphicsInterface->pfChangeRes(ghWnd, nResolution);
     D2GFX_SetContrastAndGamma_6FA710C0();
     return bResult;
 }
@@ -362,21 +362,21 @@ int32_t __stdcall WINDOW_Resize(int32_t nResolution, int32_t bForceResize)
 //D2Gfx.0x6FA74C60 (#10031)
 void __stdcall WINDOW_ClearCaches()
 {
-    gpRenderCallbacks->pfClearCaches();
+    gpGraphicsInterface->pfClearCaches();
 }
 
 //D2Gfx.0x6FA74C70 (#10032)
-void __stdcall WINDOW_BeginCutScene()
+void __stdcall WINDOW_PlayCutscene()
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    gpRenderCallbacks->pfBeginCutScene();
+    gpGraphicsInterface->pfPlayCutscene();
 }
 
 //D2Gfx.0x6FA74CA0 (#10033)
-void __stdcall WINDOW_EndCutScene(int32_t nResolution)
+void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
     if (gbWindowState_6FA8D850 != gbPaused_6FA8D84C && ghWnd && (gbPaused_6FA8D84C || !IsIconic(ghWnd)))
     {
@@ -393,7 +393,7 @@ void __stdcall WINDOW_EndCutScene(int32_t nResolution)
             while (ShowCursor(0) >= 0);
         }
 
-        gpRenderCallbacks->pfEndCutScene(ghWnd, gnResolutionMode, gbWindowState_6FA8D850);
+        gpGraphicsInterface->pfPauseSurface(ghWnd, gnResolutionMode, gbWindowState_6FA8D850);
 
         if (gbWindowState_6FA8D850)
         {
@@ -420,43 +420,43 @@ void __stdcall WINDOW_EndCutScene(int32_t nResolution)
 }
 
 //D2Gfx.0x6FA74DE0 (#10034)
-void __stdcall WINDOW_PlayCutScene(const char* szFile, int32_t nResolution, void(__cdecl* pfFrame)())
+void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, D2GameResolutionMode nResolution, void(__cdecl* pfFrame)())
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfPlayCutScene(szFile, nResolution, pfFrame);
+    return gpGraphicsInterface->pfOpenSmackCutscene(szFile, nResolution, pfFrame);
 }
 
 //D2Gfx.0x6FA74E20 (#10035)
 int32_t __stdcall WINDOW_CheckCutScene()
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfCheckCutScene();
+    return gpGraphicsInterface->pfCheckCutScene();
 }
 
 //D2Gfx.0x6FA74E50 (#10036)
 void __stdcall WINDOW_DecodeSmacker(const char* szSmacker, uint8_t* pBuffer, int32_t nVersion)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfDecodeSmacker(szSmacker, pBuffer, nVersion);
+    return gpGraphicsInterface->pfDecodeSmacker(szSmacker, pBuffer, nVersion);
 }
 
 //D2Gfx.0x6FA74E90 (#10037)
 void __stdcall WINDOW_PlaySmacker(void* pContext)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfPlaySmacker(pContext);
+    return gpGraphicsInterface->pfPlaySmacker(pContext);
 }
 
 //D2Gfx.0x6FA74ED0 (#10038)
 void __stdcall WINDOW_CloseSmacker(void* pContext)
 {
-    D2_ASSERT(gpRenderCallbacks);
+    D2_ASSERT(gpGraphicsInterface);
 
-    return gpRenderCallbacks->pfCloseSmacker(pContext);
+    return gpGraphicsInterface->pfCloseSmacker(pContext);
 }
 
 //D2Gfx.0x6FA74F10 (#10039)

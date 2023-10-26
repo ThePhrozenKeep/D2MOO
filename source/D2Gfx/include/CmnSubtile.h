@@ -76,7 +76,7 @@ void __fastcall D2GFX_DrawVisTile_6FA72730(uint8_t* a1, int32_t nX, int32_t nY);
 void __fastcall sub_6FA72900(uint8_t* a1, int32_t nX, int32_t nY, uint8_t a4);
 
 //D2Gfx.0x6FA729D0
-void __fastcall TILE_DrawWallTile_6FA729D0(uint8_t* a1, int32_t nX, int32_t nY, int32_t* pIntensities);
+void __fastcall TILE_TileDrawLit_6FA729D0(uint8_t* a1, int32_t nX, int32_t nY, int32_t* pIntensities);
 
 //D2Gfx.0x6FA72B80) --------------------------------------------------------
 void __fastcall D2GFX_DrawBlendedVisTile_6FA72B80(int32_t a1, int32_t nX, int32_t nY, uint8_t nAlpha);
@@ -91,4 +91,4 @@ void __fastcall sub_6FA73130(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3,
 void __fastcall sub_6FA73270(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3, uint8_t* a4, int32_t* a5);
 
 //D2Gfx.0x6FA73410) --------------------------------------------------------
-void __fastcall D2GFX_DrawGroundTile_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx);
+void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx);

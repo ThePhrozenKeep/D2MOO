@@ -19,9 +19,9 @@ EXPORTS
 	D2GFX_CheckLowQuality					@10016 NONAME
 	D2GFX_SetLowQuality						@10017 NONAME
 	D2GFX_SetGamma							@10018 NONAME
-	D2GFX_CheckGamma						@10019 NONAME
+	D2GFX_GammaCanBeControlled				@10019 NONAME
 	D2GFX_EnableVSync						@10020 NONAME
-	D2GFX_GetRenderStatistics				@10021 NONAME
+	D2GFX_GetCacheResults					@10021 NONAME
 	D2GFX_SetViewMatrixAdjust				@10022 NONAME
 	WINDOW_Create							@10023 NONAME
 	WINDOW_Destroy							@10024 NONAME
@@ -32,31 +32,31 @@ EXPORTS
 	WINDOW_ShowCursor						@10029 NONAME
 	WINDOW_Resize							@10030 NONAME
 	WINDOW_ClearCaches						@10031 NONAME
-	WINDOW_BeginCutScene					@10032 NONAME
+	WINDOW_PlayCutscene						@10032 NONAME
 	WINDOW_EndCutScene						@10033 NONAME
-	WINDOW_PlayCutScene						@10034 NONAME
+	WINDOW_OpenSmackCutscene				@10034 NONAME
 	WINDOW_CheckCutScene					@10035 NONAME
 	WINDOW_DecodeSmacker					@10036 NONAME
 	WINDOW_PlaySmacker						@10037 NONAME
 	WINDOW_CloseSmacker						@10038 NONAME
 	WINDOW_UpdatePlacement					@10039 NONAME
 	WINDOW_ShowAll							@10040 NONAME
-	WINDOW_GetScreenSize					@10041 NONAME
+	WINDOW_GetDimensions					@10041 NONAME
 	D2GFX_SetOption							@10042 NONAME
 	WINDOW_Activate							@10043 NONAME
-	D2GFX_BeginScene						@10044 NONAME
+	D2GFX_StartDraw							@10044 NONAME
 	D2GFX_EndScene							@10045 NONAME
 	D2GFX_GetBackBuffer						@10046 NONAME
 	D2GFX_HardwareAcceleratedRenderMode		@10047 NONAME
 	D2GFX_SetPalette						@10048 NONAME
-	D2GFX_SetPaletteTable					@10049 NONAME
-	D2GFX_SetGlobalLight					@10050 NONAME
-	D2GFX_DrawRect							@10051 NONAME
-	D2GFX_DrawRectEx						@10052 NONAME
-	D2GFX_DrawSolidRect						@10053 NONAME
-	D2GFX_DrawSolidSquare					@10054 NONAME
-	D2GFX_DrawSolidRectEx					@10055 NONAME
-	D2GFX_DrawSolidRectAlpha				@10056 NONAME
+	D2GFX_SetPaletteTables					@10049 NONAME
+	D2GFX_SetAmbientColor					@10050 NONAME
+	D2GFX_UtilDiamond						@10051 NONAME
+	D2GFX_UtilRect							@10052 NONAME
+	D2GFX_UtilFilledRect					@10053 NONAME
+	D2GFX_UtilPoint							@10054 NONAME
+	D2GFX_DrawBox							@10055 NONAME
+	D2GFX_DrawBoxAlpha						@10056 NONAME
 	D2GFX_DrawLine							@10057 NONAME
 	D2GFX_ClearScreen						@10058 NONAME
 	SCALE_UpdateFactor						@10059 NONAME
@@ -69,17 +69,17 @@ EXPORTS
 	SCALE_AdjustPerspectivePosition			@10066 NONAME
 	SCALE_ScalePerspectivePosition			@10067 NONAME
 	SCALE_SetDefaultFactorPerspectiveFactor	@10068 NONAME
-	D2GFX_DrawString						@10069 NONAME
-	D2GFX_DrawLight							@10070 NONAME
-	TEXTURE_DrawPerspectiveImage			@10071 NONAME
-	TEXTURE_DrawImage						@10072 NONAME
-	TEXTURE_DrawShiftedImage				@10073 NONAME
-	TEXTURE_DrawVerticalCropImage			@10074 NONAME
-	TEXTURE_DrawShadow						@10075 NONAME
-	TEXTURE_DrawImageFast					@10076 NONAME
-	TEXTURE_DrawClippedImage				@10077 NONAME
+	D2GFX_OutputString						@10069 NONAME
+	D2GFX_DebugDraw							@10070 NONAME
+	TEXTURE_CelFlatSpriteDraw			@10071 NONAME
+	TEXTURE_CelDraw						@10072 NONAME
+	TEXTURE_CelDrawColor				@10073 NONAME
+	TEXTURE_CelDrawEx			@10074 NONAME
+	TEXTURE_CelDrawShadow						@10075 NONAME
+	TEXTURE_CelDrawHilight					@10076 NONAME
+	TEXTURE_CelDrawClipped				@10077 NONAME
 	TEXTURE_DebugFillBackBuffer				@10078 NONAME
-	D2GFX_DrawGroundTile					@10079 NONAME
-	TILE_DrawWallTile						@10080 NONAME
-	TILE_DrawTransparentWallTile			@10081 NONAME
-	TILE_DrawShadowTile						@10082 NONAME
+	D2GFX_FloorTileDraw						@10079 NONAME
+	TILE_TileDrawLit						@10080 NONAME
+	TILE_TileDrawTrans			@10081 NONAME
+	TILE_ShadowTileDraw						@10082 NONAME

@@ -18,7 +18,7 @@ int32_t gnPerspectiveScaleY;
 void __stdcall SCALE_UpdateFactor()
 {
     gnScaleFactor = gnChangedScaleFactor;
-    return gpRenderCallbacks->pfUpdateScaleFactor(gnScaleFactor);
+    return gpGraphicsInterface->pfSetGlobalScale(gnScaleFactor);
 }
 
 //D2Gfx.0x6FA73F50 (#10060)
@@ -31,7 +31,7 @@ int32_t __stdcall SCALE_GetFactor()
 void __stdcall SCALE_SetDefaultFactor()
 {
     gnScaleFactor = 256;
-    return gpRenderCallbacks->pfUpdateScaleFactor(gnScaleFactor);
+    return gpGraphicsInterface->pfSetGlobalScale(gnScaleFactor);
 }
 
 //D2Gfx.0x6FA73F80 (#10062)
@@ -60,7 +60,7 @@ void __stdcall SCALE_SetPerspectiveScale(int32_t nXScale, int32_t nYScale)
 
     gnPerspectiveScaleX = nXScale;
     gnPerspectiveScaleY = nYScale;
-    return gpRenderCallbacks->pfSetPerspectiveScale(nXScale, nYScale);
+    return gpGraphicsInterface->pfUpdatePerspective(nXScale, nYScale);
 }
 
 //D2Gfx.0x6FA74060 (#10065)
@@ -90,7 +90,7 @@ void __stdcall SCALE_AdjustPerspectivePosition(int32_t nXPos, int32_t nYPos, int
     D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
-    return gpRenderCallbacks->pfAdjustPerspectivePosition(nXPos, nYPos, nBais, pXAdjust, pYAdjust);
+    return gpGraphicsInterface->pfPerspectiveTransform(nXPos, nYPos, nBais, pXAdjust, pYAdjust);
 }
 
 //D2Gfx.0x6FA74170 (#10067)
@@ -99,7 +99,7 @@ void __stdcall SCALE_ScalePerspectivePosition(int32_t nXPos, int32_t nYPos, int3
     D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
-    return gpRenderCallbacks->pfScalePerspectivePosition(nXPos, nYPos, 0, pXAdjust, pYAdjust, bOrder);
+    return gpGraphicsInterface->pfPerspectiveTransformScale(nXPos, nYPos, 0, pXAdjust, pYAdjust, bOrder);
 }
 
 //D2Gfx.0x6FA74200 (#10068)
@@ -108,5 +108,5 @@ void __stdcall SCALE_SetDefaultFactorPerspectiveFactor()
     D2_ASSERT(D2GFX_HardwareAcceleratedRenderMode());
     D2_ASSERT(gGfxSettings.bPerspectiveEnabled);
 
-    return gpRenderCallbacks->pfSetDefaultPerspectiveFactor();
+    return gpGraphicsInterface->pfPerspectiveClearScale();
 }

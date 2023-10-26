@@ -1305,7 +1305,7 @@ void __fastcall sub_6FA72900(uint8_t* a1, int32_t nX, int32_t nY, uint8_t a4)
 }
 
 //D2Gfx.0x6FA729D0
-void __fastcall TILE_DrawWallTile_6FA729D0(uint8_t* a1, int32_t nX, int32_t nY, int32_t* pIntensities)
+void __fastcall TILE_TileDrawLit_6FA729D0(uint8_t* a1, int32_t nX, int32_t nY, int32_t* pIntensities)
 {
     if (dword_6FA8D250)
     {
@@ -1838,7 +1838,7 @@ void __fastcall sub_6FA73270(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3,
 }
 
 //D2Gfx.0x6FA73410) --------------------------------------------------------
-void __fastcall D2GFX_DrawGroundTile_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx)
+void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx)
 {
 //    int32_t v4; // ebx@1
 //    int32_t v5; // edi@1
