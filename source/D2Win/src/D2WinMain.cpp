@@ -126,14 +126,14 @@ D2WinCommandRegisterStrc gpCommandRegister_6F8BDE28[28] =
 
 
 //D2Win.0x6F8ACC60 (#10000)
-BOOL __stdcall D2Win_10000_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress)
+BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress)
 {
 	D2CMP_SetCompressedDataMode(bCompress);
 	return D2GFX_Initialize(hInstance, D2Win_MAINWINDOW_WndProc_6F8AD9B0, nRenderMode, bWindowed);
 }
 
 //D2Win.0x6F8ACC90 (#10001)
-BOOL __stdcall D2Win_10001_InitializeSpriteCache(BOOL bWindowed, D2GameResolutionMode nResolution)
+BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, D2GameResolutionMode nResolution)
 {
 	dword_6F8FE26C = 1;
 
@@ -184,7 +184,7 @@ int __fastcall D2Win_10015()
 }
 
 //D2Win.0x6F8ACDB0 (#10002)
-int __stdcall D2Win_10002_CloseSpriteCache()
+int __stdcall D2Win_CloseSpriteCache()
 {
 	dword_6F8FE26C = 0;
 	ghMainWindow_6F8FE23C = 0;

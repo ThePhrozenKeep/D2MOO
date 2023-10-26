@@ -16,15 +16,15 @@ extern int32_t dword_6F8FE254;
 
 
 //D2Win.0x6F8ACC60
-BOOL __stdcall D2Win_10000_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress);
+BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress);
 //D2Win.0x6F8ACC90
-BOOL __stdcall D2Win_10001_InitializeSpriteCache(BOOL bWindowed, int nResolution);
+BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, int nResolution);
 //D2Win.0x6F8ACD40
 int __stdcall D2Win_10014_SetWndProc(WNDPROC wndProc);
 //D2Win.0x6F8ACD60
 int __fastcall D2Win_10015();
 //D2Win.0x6F8ACDB0
-int __stdcall D2Win_10002_CloseSpriteCache();
+int __stdcall D2Win_CloseSpriteCache();
 //D2Win.0x6F8ACDD0
 void __stdcall D2Win_10003();
 //D2Win.0x6F8ACDE0

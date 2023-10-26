@@ -1,8 +1,8 @@
 LIBRARY		D2WIN
 EXPORTS
-	D2Win_10000_CreateWindow										@10000
-	D2Win_10001_InitializeSpriteCache								@10001
-	D2Win_10002_CloseSpriteCache									@10002
+	D2Win_CreateWindow												@10000
+	D2Win_InitializeSpriteCache										@10001
+	D2Win_CloseSpriteCache											@10002
 	D2Win_10003														@10003
 	D2Win_10004														@10004
 	D2Win_10005														@10005
