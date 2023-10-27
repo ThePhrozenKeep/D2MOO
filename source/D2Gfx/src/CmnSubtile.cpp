@@ -103,7 +103,7 @@ void __fastcall D2GFX_FillYBufferTable_6FA71010(uint8_t* a1, int32_t a2, int32_t
 }
 
 //D2Gfx.0x6FA71070
-void __fastcall sub_6FA71070(PALETTEENTRY** pPaletteTable)
+void __fastcall sub_6FA71070(D2PaletteTableStrc* pPaletteTable)
 {
     memcpy(gpPaletteTable_6FA81460, pPaletteTable, sizeof(gpPaletteTable_6FA81460));
     dword_6FA81448 = gpPaletteTable_6FA81460;
@@ -1073,15 +1073,7 @@ void __fastcall DGFX_InitGouraudCache_6FA72570()
         {
             for (int32_t k = 0; k < 32; ++k)
             {
-                if (nVal < 0)
-                {
-                    nVal = 0;
-                }
-                else if (nVal > 0x1F000000)
-                {
-                    nVal = 0x1F000000;
-                }
-
+                nVal = D2Clamp(nVal, 0, 0x1F000000);
                 byte_6FA85220[i][j][k] = (nVal >> GOURAUD_SHIFT) & 0XFF;
                 nVal += v1 >> 5;
             }

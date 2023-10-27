@@ -235,7 +235,7 @@ int32_t __stdcall WINDOW_GetState()
 
     if (!gbWindowState_6FA8D850)
     {
-        D2GFX_SetPalette(0);
+        D2GFX_SetPalette(nullptr);
         D2GFX_SetContrastAndGamma_6FA710C0();
     }
 
@@ -399,11 +399,11 @@ void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution)
         if (gbWindowState_6FA8D850)
         {
             gnResolutionMode = nResolution;
-            D2GFX_SetPalette(0);
+            D2GFX_SetPalette(nullptr);
             return;
         }
 
-        D2GFX_SetPalette(0);
+        D2GFX_SetPalette(nullptr);
         D2GFX_SetContrastAndGamma_6FA710C0();
     }
 
@@ -417,7 +417,7 @@ void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution)
         exit(-1);
     }
 
-    D2GFX_SetPalette(0);
+    D2GFX_SetPalette(nullptr);
 }
 
 //D2Gfx.0x6FA74DE0 (#10034)

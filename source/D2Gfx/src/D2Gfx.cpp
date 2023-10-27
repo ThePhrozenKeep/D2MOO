@@ -421,7 +421,7 @@ void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette)
 }
 
 //D2Gfx.0x6FA73EB0 (#10049)
-void __stdcall D2GFX_SetPaletteTables(PALETTEENTRY** pPaletteTables)
+void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables)
 {
     gpGraphicsInterface->pfSetPaletteTables(pPaletteTables);
     sub_6FA71070(pPaletteTables);

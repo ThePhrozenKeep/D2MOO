@@ -7,6 +7,7 @@
 
 struct D2TileLibraryEntryStrc;
 struct D2GfxLightExStrc;
+struct D2PaletteTableStrc;
 
 
 #pragma pack(push, 1)
@@ -37,7 +38,7 @@ void __fastcall D2GFX_InitGouraudCache_6FA71000();
 void __fastcall D2GFX_FillYBufferTable_6FA71010(uint8_t* a1, int32_t a2, int32_t a3, int32_t a4);
 
 //D2Gfx.0x6FA71070
-void __fastcall sub_6FA71070(PALETTEENTRY** pPaletteTable);
+void __fastcall sub_6FA71070(D2PaletteTableStrc* pPaletteTable);
 
 //D2Gfx.0x6FA710C0
 int32_t __fastcall D2GFX_SetContrastAndGamma_6FA710C0();
