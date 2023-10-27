@@ -678,7 +678,7 @@ void __fastcall DATATBLS_UnloadLvlPrestTxt()
 			}
 		}
 
-		FOG_Free(ppLvlPrestFiles, __FILE__, __LINE__, 0);
+		D2_FREE(ppLvlPrestFiles);
 		sgptDataTables->ppLvlPrestFiles = NULL;
 	}
 
@@ -922,7 +922,7 @@ void __fastcall DATATBLS_UnloadLvlSubTxt()
 			}
 		}
 
-		FOG_Free(ppFiles, __FILE__, __LINE__, 0);
+		D2_FREE(ppFiles);
 		sgptDataTables->ppLvlSubTypeFiles = NULL;
 	}
 
@@ -946,7 +946,7 @@ void __fastcall DATATBLS_UnloadLvlSubTxt()
 	if (gpLvlSubTypeFilesCriticalSection)
 	{
 		DeleteCriticalSection(gpLvlSubTypeFilesCriticalSection);
-		FOG_Free(gpLvlSubTypeFilesCriticalSection, __FILE__, __LINE__, 0);
+		D2_FREE(gpLvlSubTypeFilesCriticalSection);
 		gpLvlSubTypeFilesCriticalSection = NULL;
 	}
 }

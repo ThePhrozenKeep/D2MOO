@@ -45,7 +45,7 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 		sgptDataTables->ExpFieldI[i] = gnFieldXOffsets[i] + v3 * gnFieldYOffsets[i];
 	}
 
-	FOG_Free(pExpField, __FILE__, __LINE__, 0);
+	D2_FREE(pExpField);
 
 	return TRUE;
 }

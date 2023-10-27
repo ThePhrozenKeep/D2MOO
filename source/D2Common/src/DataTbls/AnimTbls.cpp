@@ -33,7 +33,7 @@ void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataTableStrc* pAnimData)
 {
 	if (pAnimData)
 	{
-		FOG_Free(pAnimData->pBinaryData, __FILE__, __LINE__, 0);
+		D2_FREE(pAnimData->pBinaryData);
 		D2_FREE_POOL(nullptr, pAnimData);
 	}
 }
