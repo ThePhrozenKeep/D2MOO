@@ -53,7 +53,7 @@ void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int(__stdcal
 //D2Win.0x6F8AC6D0
 int __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList);
 //D2Win.0x6F8AC720
-D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int a2);
+D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_t nIndex);
 //D2Win.0x6F8AC770
 int __fastcall D2Win_10141(D2WinListStrc* pList);
 //D2Win.0x6F8AC7A0

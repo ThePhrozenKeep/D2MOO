@@ -79,15 +79,15 @@ int __fastcall D2Win_10121_GetTextWidth(const Unicode* wszText);
 //D2Win.0x6F8AA2F0
 int __stdcall D2Win_10125();
 //D2Win.0x6F8AA310
-void __fastcall D2Win_10119_DrawCroppedText(const Unicode*wszText, int nX, int nY, int a4, int a5, int a6, int a7);
+void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6, int32_t a7);
 //D2Win.0x6F8AA510
-void __fastcall sub_6F8AA510(const Unicode* wszText, int nX, int nY, int a4, int a5, int a6);
+void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6);
 //D2Win.0x6F8AA6E0
 void __stdcall D2Win_10124();
 //D2Win.0x6F8AA910
 int __fastcall sub_6F8AA910(const Unicode* pStr);
 //D2Win.0x6F8AA9E0
-void __fastcall sub_6F8AA9E0(const Unicode *a1, int a2, int nYpos, int a4, int nGlobalPaletteShift, int a6);
+void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t nGlobalPaletteShift, int32_t a6);
 //D2Win.0x6F8AABB0
 int __fastcall sub_6F8AABB0(const Unicode* pStr);
 //D2Win.0x6F8AAC60
@@ -101,24 +101,27 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 //D2Win.0x6F8AAF80
 void __fastcall D2Win_10126_DrawTextFromCache(Unicode *wszText, int nX, int nY);
 //D2Win.0x6F8AB080
-void __fastcall D2Win_10132(const Unicode *wszText, int nX, int nY, DWORD dwColor, int nDrawMode, int nColor);
+void __fastcall D2Win_10132(const Unicode* wszText, int nX, int nY, DWORD dwColor, DrawMode eDrawMode, int nColor);
 //D2Win.0x6F8AB1B0
 void __fastcall D2Win_10133(const Unicode* pText, int nX, int nY, DWORD dwColor, DrawMode eDrawMode, int nPaletteShift);
 //D2Win.0x6F8AB260
-void __fastcall D2Win_10131_GetTextDimensions(const Unicode* wszText, int *pWidth, int *pHeight);
+void __fastcall D2Win_10131_GetTextDimensions(const Unicode* pText, int* pWidth, int* pHeight);
 //D2Win.0x6F8AB2F0
 unsigned int __fastcall D2Win_10128(uint8_t a1);
 //D2Win.0x6F8AB360
 void __fastcall sub_6F8AB360(const Unicode* pStr, int nX, int nY, int nBoxWidth, DWORD dwColor, DrawMode eDrawMode, int nPaletteShift);
 //D2Win.0x6F8AB480
-void __fastcall D2Win_10134_DrawCellFile(D2CellFileStrc* pCellFile, int nX, int nY, int nDiv, int nDrawMode, int nColor);
+void __fastcall D2Win_10134_DrawCellFile(D2CellFileStrc* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor);
 //D2Win.0x6F8AB560
-void __fastcall D2Win_10120(const Unicode *a1, int a2, int a3, int a4, int a5, int nXStart);
+void __fastcall D2Win_10120(const Unicode* wszText, int nX, int nY, int a4, int a5, int a6);
 //D2Win.0x6F8AB730
 void __fastcall D2Win_10200(D2SplittedTextStrc* pSplitText);
 //D2Win.0x6F8AB770
 D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode *wszText, int *pLines, int nMaxLength);
+
+using DrawFramedTextPtr = decltype(D2Win_10129_DrawFramedText)*;
 //D2Win.0x6F8ABA70
-void(__fastcall* __stdcall D2Win_10206())(const Unicode*, int, int, int, int);
+DrawFramedTextPtr __stdcall D2Win_10206();
+using GetTextDimensionsPtr = decltype(D2Win_10131_GetTextDimensions)*;
 //D2Win.0x6F8ABA80
-void(__fastcall* __stdcall D2Win_10207())(const Unicode*, int*, int*);
+GetTextDimensionsPtr __stdcall D2Win_10207();

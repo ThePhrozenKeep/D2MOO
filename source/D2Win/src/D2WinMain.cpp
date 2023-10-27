@@ -1401,18 +1401,15 @@ void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg)
 
 					if (!nScrollBarY && nScrollBarX <= 0)
 					{
-						if (!nControlY && nControlX <= 0 && nScrollBarX <= nControlX)
+						if (nControlY == 0 && nControlX <= 0 && nScrollBarX <= nControlX)
 						{
 							pScrollBar = pControl;
 						}
 					}
 					else
 					{
-						if (!nControlY && nControlX <= 0)
-						{
-							pScrollBar = pControl;
-						}
-						else if (nScrollBarX * nScrollBarX + nScrollBarY * nScrollBarY >= nControlX * nControlX + nControlY * nControlY)
+						if ((nControlY == 0 && nControlX <= 0)
+							|| (nScrollBarX * nScrollBarX + nScrollBarY * nScrollBarY >= nControlX * nControlX + nControlY * nControlY))
 						{
 							pScrollBar = pControl;
 						}

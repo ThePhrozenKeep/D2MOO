@@ -672,15 +672,15 @@ void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 	int32_t v7 = pEditBox->field_54;
 	int32_t v8 = pEditBox->field_54;
 
-	int32_t v9;
+	int32_t v9 = pEditBox->nTextLength;
 
-	if (v7 < v6 || (v8 = pEditBox->nTextLength, v7 <= v6))
+	if (v7 >= v6)
 	{
-		v9 = pEditBox->nTextLength;
-	}
-	else
-	{
-		v9 = pEditBox->field_54;
+		v8 = pEditBox->nTextLength;
+		if (v7 > v6)
+		{
+			v9 = pEditBox->field_54;
+		}
 	}
 
 	if (v8)

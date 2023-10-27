@@ -28,9 +28,9 @@ int __fastcall SCROLLBAR_Destroy(D2WinControlStrc* pControl);
 //D2Win.0x6F8AF100
 int __fastcall SCROLLBAR_GetMaxSteps(D2WinScrollBarStrc* pScrollBar);
 //D2Win.0x6F8AF130
-int __fastcall SCROLLBAR_SetMaxSteps(D2WinScrollBarStrc* pScrollBar, int a2);
+int32_t __fastcall SCROLLBAR_SetMaxSteps(D2WinScrollBarStrc* pScrollBar, int32_t nMaxSteps);
 //D2Win.0x6F8AF170
-int __fastcall SCROLLBAR_SetCurrentStep(D2WinScrollBarStrc* pScrollBar, int a2);
+int32_t __fastcall SCROLLBAR_SetCurrentStep(D2WinScrollBarStrc* pScrollBar, int32_t nCurrentStep);
 //D2Win.0x6F8AF1B0
 int __fastcall SCROLLBAR_GetCurrentStep(D2WinScrollBarStrc* pScrollBar);
 //D2Win.0x6F8AF1E0

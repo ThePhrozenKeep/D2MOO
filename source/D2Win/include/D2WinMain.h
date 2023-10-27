@@ -44,11 +44,11 @@ void __stdcall D2Win_10010(int(*a1)());
 //D2Win.0x6F8ACF80
 int __stdcall D2Win_10009();
 //D2Win.0x6F8ACF90
-int __stdcall D2Win_10008(void(__stdcall* a1)(DWORD));
+int __stdcall D2Win_10008(void(__stdcall* pCallback)(DWORD));
 //D2Win.0x6F8AD0B0
 int __stdcall CONTROL_SetCellFile(D2WinControlStrc* pControl, D2CellFileStrc* pCellFile);
 //D2Win.0x6F8AD0D0
-signed int __stdcall D2Win_10012(D2WinEditBoxStrc* a1);
+int __stdcall D2Win_10012(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8AD110
 D2WinEditBoxStrc* __stdcall D2Win_10023();
 //D2Win.0x6F8AD120
@@ -64,11 +64,11 @@ void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(D2WinControlStrc* pControl, 
 //D2Win.0x6F8AD5A0
 int __fastcall D2Win_10024_CONTROL_CheckFirstFlag(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD5D0
-void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(D2WinControlStrc* pChild, int bSet);
+void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(D2WinControlStrc* pControl, int bSet);
 //D2Win.0x6F8AD620
 int __fastcall D2Win_10026_CONTROL_CheckThirdFlag(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD650
-BOOL __stdcall CONTROL_MouseInsideRect(const RECT* lprc);
+BOOL __stdcall CONTROL_MouseInsideRect(const RECT* pRect);
 //D2Win.0x6F8AD670
 void __stdcall D2Win_COMMANDS_MouseMove_6F8AD670(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AD6F0

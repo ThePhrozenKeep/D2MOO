@@ -174,7 +174,7 @@ int32_t __stdcall D2Win_10185()
 }
 
 //D2Win.0x6F8A5E80 (#10171)
-int32_t __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(), int32_t(*pfShowInsertExpansionDisc)(), HANDLE hFile, void *a4)
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(), int32_t(*pfShowInsertExpansionDisc)(), HANDLE hFile, void *a4)
 {
 	if (FOG_UseDirect())
 	{
@@ -216,7 +216,7 @@ int32_t __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(
 }
 
 //D2Win.0x6F8A60A0 (#10172)
-int32_t __fastcall ARCHIVE_LoadVideoArchives(int32_t(*pfShowMessage)(), HANDLE hFile, int32_t bExpansion)
+BOOL __fastcall ARCHIVE_LoadVideoArchives(int32_t(*pfShowMessage)(), HANDLE hFile, int32_t bExpansion)
 {
 	if (FOG_UseDirect())
 	{

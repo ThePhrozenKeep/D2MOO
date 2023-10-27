@@ -6,7 +6,7 @@
 #pragma pack(push, 1)
 struct D2WinPopUpLineStrc
 {
-	Unicode wszText[64];							//0x00
+	wchar_t wszText[64];							//0x00
 	void(__stdcall* pfHandleMouseInput)();			//0x80
 };
 

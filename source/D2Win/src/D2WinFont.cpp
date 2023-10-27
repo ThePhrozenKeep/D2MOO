@@ -323,7 +323,7 @@ D2CharStrc* __fastcall sub_6F8AA100(Unicode wszChar)
 }
 
 //D2Win.0x6F8AA140
-D2CharStrc* __fastcall sub_6F8AA140(Unicode a1)
+D2CharStrc* __fastcall sub_6F8AA140(Unicode wszChar)
 {
 	D2FontCacheStrc* pFontCache = &stru_6F8FD8C0[gnFontSize_6F8BDB24];
 
@@ -333,12 +333,12 @@ D2CharStrc* __fastcall sub_6F8AA140(Unicode a1)
 	for (int i = 0; i <= 1000 && nMin <= nMax; ++i)
 	{
 		int nMidpoint = (nMax + nMin) / 2;
-		if (a1 == pFontCache->pCharInfo[nMidpoint].wChar)
+		if (wszChar == pFontCache->pCharInfo[nMidpoint].wChar)
 		{
 			return &pFontCache->pCharInfo[nMidpoint];
 		}
 
-		if (a1 >= pFontCache->pCharInfo[nMidpoint].wChar)
+		if (wszChar >= pFontCache->pCharInfo[nMidpoint].wChar)
 		{
 			nMin = nMidpoint + 1;
 		}
@@ -560,7 +560,7 @@ void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int
 			++v10;
 			++v7;
 
-			if (Unicode::strncmp(&v17, word_6F8FE208, 1))
+			if (Unicode::strncmp(&v17, word_6F8FE208, 1) != 0)
 			{
 				--v10;
 				--v7;
@@ -765,7 +765,7 @@ int __fastcall sub_6F8AA910(const Unicode* pStr)
 }
 
 //D2Win.0x6F8AA9E0
-void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6)
+void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t nGlobalPaletteShift, int32_t a6)
 {
 	// TODO: Names
 	int32_t v6 = nX;
@@ -779,7 +779,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 	gfxData.pCellFile = gpFontCache->pCellFile;
 
 	const Unicode* v10 = wszText;
-	int32_t v11 = a5;
+	int32_t v11 = nGlobalPaletteShift;
 
 	int32_t v8 = 0;
 	const int32_t v21 = Unicode::strlen(wszText);
@@ -817,7 +817,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 			++v8;
 			++v10;
 
-			if (Unicode::strncmp(&v24, word_6F8FE208, 1))
+			if (Unicode::strncmp(&v24, word_6F8FE208, 1) != 0)
 			{
 				--v8;
 				--v10;
@@ -987,7 +987,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 			++v6;
 			++v11;
 
-			if (Unicode::strncmp(&v19, word_6F8FE208, 1))
+			if (Unicode::strncmp(&v19, word_6F8FE208, 1) != 0)
 			{
 				--v6;
 				--v11;
@@ -1160,7 +1160,7 @@ unsigned int __fastcall D2Win_10128(uint8_t a1)
 		0, 0xFFFFFFFF, 0xFFFFFFFF, 0x7FFFFFFF, 0x00060000, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
 	};
 
-	if (a1 >= 0x100u || a1 != 0xFF)
+	if (a1 != 0xFF)
 	{
 		const uint32_t dwOffset = a1 >> 5;
 
@@ -1482,13 +1482,13 @@ D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode* wszText, int* pLines, 
 }
 
 //D2Win.0x6F8ABA70 (#10206)
-void(__fastcall* __stdcall D2Win_10206())(const Unicode*, int, int, int, int)
+DrawFramedTextPtr __stdcall D2Win_10206()
 {
 	return D2Win_10129_DrawFramedText;
 }
 
 //D2Win.0x6F8ABA80 (#10207)
-void(__fastcall* __stdcall D2Win_10207())(const Unicode*, int*, int*)
+GetTextDimensionsPtr __stdcall D2Win_10207()
 {
 	return D2Win_10131_GetTextDimensions;
 }

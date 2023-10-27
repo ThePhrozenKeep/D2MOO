@@ -80,7 +80,7 @@ int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
 	memcpy(&gpPopUp->lines[pPopUp->nLines], pPopUpLine, sizeof(*pPopUpLine));
 	D2Win_10127_SetFont(D2FONT_FONT16);
 
-	const int32_t nTextWidth = D2Win_10121_GetTextWidth(pPopUpLine->wszText);
+	const int32_t nTextWidth = D2Win_10121_GetTextWidth((Unicode*)pPopUpLine->wszText);
 	pPopUp->controlHeader.nWidth = std::max(pPopUp->controlHeader.nWidth, nTextWidth);
 
 	++pPopUp->nLines;
@@ -167,7 +167,7 @@ int32_t __fastcall POPUP_Draw(D2WinControlStrc* pControl)
 	for (int32_t i = 0; i < pPopUp->nLines; ++i)
 	{
 		D2Win_10117_DrawText(
-			pPopUp->lines[i].wszText,
+			(Unicode*)pPopUp->lines[i].wszText,
 			pPopUp->controlHeader.nImageX,
 			pPopUp->controlHeader.nImageY + 20 * (i - pPopUp->nLines + 1),
 			((i != pPopUp->nCurrentLine) - 1) & 3,

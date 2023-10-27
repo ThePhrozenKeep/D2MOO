@@ -36,7 +36,7 @@ struct D2WinImage2Strc
 
 
 //D2Win.0x6F8ABA90
-D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* a8)(SMSGHANDLER_PARAMS*));
+D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* pfHandleVirtualKeyInput)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1BF0
 int __fastcall IMAGE_Destroy(D2WinControlStrc* pControl);
 //D2Win.0x6F8ABB40

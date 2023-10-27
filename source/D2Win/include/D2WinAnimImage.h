@@ -44,4 +44,4 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8A5900
 int __stdcall ANIMIMAGE_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A5980
-int __stdcall ANIMIMAGE_SetIsRunning(D2WinAnimImageStrc* pAnimImage, int a2);
+int32_t __stdcall ANIMIMAGE_SetIsRunning(D2WinAnimImageStrc* pAnimImage, int32_t bIsRunning);
