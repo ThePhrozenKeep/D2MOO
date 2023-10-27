@@ -11,6 +11,8 @@
 #define FOG_DLL_DECL __declspec( dllimport )
 #endif
 
+//1.10f Image base: 0x6FF50000
+
 #pragma pack(1)
 
 struct D2TxtLinkNodeStrc
@@ -161,6 +163,7 @@ D2FUNC_DLL(FOG, Trace, void, __cdecl, (const char* szFormat, ...), 0x120A0)					
 D2FUNC_DLL(FOG, TraceF, void, __cdecl, (const char* pFileSubName, const char* szFormat, ...), 0x120E0)												//Fog.#10030
 // Append to the default logfile. No date nor '\n'.
 D2FUNC_DLL(FOG, TraceAppend, void, __cdecl, (const char* szFormat, ...), 0x12180)																	//Fog.#10031
+D2FUNC_DLL(FOG, IsHandlingError, BOOL, __cdecl, (), 0xF2A0)																							//Fog.#10039
 D2FUNC_DLL(FOG, Alloc, void*, __fastcall, (int nSize, const char* szFile, int nLine, int n0), 0x8F50)												//Fog.#10042
 D2FUNC_DLL(FOG, Free, void, __fastcall, (void* pFree, const char* szFile, int nLine, int n0), 0x8F90)												//Fog.#10043
 D2FUNC_DLL(FOG, Realloc, void, __fastcall, (void* pMemory, int nSize, const char* szFile, int nLine, int n0), 0x8F90)								//Fog.#10044
@@ -192,7 +195,12 @@ D2FUNC_DLL(FOG, MPQFileOpen, BOOL, __fastcall, (const char* szFile, HSFILE* pFil
 D2FUNC_DLL(FOG, MPQFileClose, void, __fastcall, (HSFILE pFile), 0x11610)																			//Fog.#10103
 D2FUNC_DLL(FOG, MPQFileRead, BOOL, __fastcall, (HSFILE pFile, void* pBuffer, size_t nSize, int* nBytesRead, uint32_t, uint32_t, uint32_t), 0x11620)	//Fog.#10104
 D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (HSFILE pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)										//Fog.#10105
+D2FUNC_DLL(FOG, CreateFileA, HANDLE, __fastcall, (LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile), 0x11680); //Fog.#10107
+D2FUNC_DLL(FOG, DeleteFileA, BOOL, __fastcall, (LPCSTR lpFileName), 0x116B0);																		//Fog.#10108
+D2FUNC_DLL(FOG, CloseFile, BOOL, __fastcall, (HANDLE hFILE), 0x116C0);																				//Fog.#10109
 D2FUNC_DLL(FOG, GetSavePath, size_t, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x1900)													//Fog.#10115
+D2FUNC_DLL(FOG, GetInstallPath, BOOL, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x1900)													//Fog.#10116
+D2FUNC_DLL(FOG, UseDirect, BOOL, __fastcall, (), 0x11A10)																							//Fog.#10117
 D2FUNC_DLL(FOG, ComputeStringCRC16, uint16_t, __stdcall, (const char* szString), 0x3DB0)															//Fog.#10137
 D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void** pMemPoolSystem, const char* szName, uint32_t nPools, uint32_t nUnused), 0xA280)			//Fog.#10142
 D2FUNC_DLL(FOG, DestroyMemoryPoolSystem, void, __cdecl, (void* pMemoryPoolSystem), 0xA100)															//Fog.#10143

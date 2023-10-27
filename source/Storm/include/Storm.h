@@ -221,7 +221,7 @@ D2FUNC_DLL_NP(STORM, SDlgSetLocale, char*, __stdcall, (int a1, const char *a2), 
 D2FUNC_DLL_NP(STORM, SFileAuthenticateArchive, int, __stdcall, (HANDLE hArchive, int a2), 0x13b00);  //Storm.#251
 
 /// Imported by ['D2Win.dll']
-D2FUNC_DLL_NP(STORM, SFileCloseArchive, BOOL, __stdcall, (HANDLE hArchive), 0x147c0);  //Storm.#252
+D2FUNC_DLL_NP(STORM, SFileCloseArchive, BOOL, __stdcall, (HSARCHIVE hArchive), 0x147c0);  //Storm.#252
 
 /// Imported by ['D2Launch.dll', 'Fog.dll', 'D2Client.dll']
 D2FUNC_DLL_NP(STORM, SFileCloseFile, BOOL, __stdcall, (HANDLE hFile), 0x14900);  //Storm.#253
@@ -263,7 +263,7 @@ D2FUNC_DLL_NP(STORM, SFileGetFileArchive, BOOL, __stdcall, (HANDLE hFile, HANDLE
 D2FUNC_DLL_NP(STORM, SFileGetFileSize, int, __stdcall, (int, LPDWORD lpFileSizeHigh), 0x17300);  //Storm.#265
 
 /// Imported by ['D2Win.dll']
-D2FUNC_DLL_NP(STORM, SFileOpenArchive, int, __stdcall, (char *Str, int, int, int), 0x17510);  //Storm.#266
+D2FUNC_DLL_NP(STORM, SFileOpenArchive, BOOL, __stdcall, (char *szName, int nPriority, int nFlags, HSARCHIVE*), 0x17510);  //Storm.#266
 
 /// Imported by ['Fog.dll']
 D2FUNC_DLL_NP(STORM, SFileOpenFile, int, __stdcall, (char *Str, int), 0x17ed0);  //Storm.#267
@@ -525,7 +525,7 @@ struct SMSGHANDLER_PARAMS {
     UINT    nMessage;
     WPARAM  wParam;
     LPARAM  lParam;
-    UINT    nNootifyCode;
+    UINT    nNotifyCode;
     LPVOID  pExtra;
     BOOL    bUseResult;
     LRESULT lResult;
@@ -778,7 +778,7 @@ D2FUNC_DLL_NP(STORM, SStrCopy, size_t, __stdcall, (char *dest, const char *sourc
 D2FUNC_DLL_NP(STORM, SStrHash, DWORD, __stdcall, (const char *string, unsigned __int32 flags, unsigned __int32 Seed), 0x2ad40);  //Storm.#502
 
 /// Imported by ['D2Launch.dll', 'Fog.dll', 'D2Win.dll']
-D2FUNC_DLL_NP(STORM, SStrNCat, int, __stdcall, (char *base, char *append, int max_length), 0x2a3c0);  //Storm.#503
+D2FUNC_DLL_NP(STORM, SStrNCat, int, __stdcall, (char *base, const char *append, int max_length), 0x2a3c0);  //Storm.#503
 
 #if !WITH_SQUALL
 /// Imported by ['D2Client.dll']
