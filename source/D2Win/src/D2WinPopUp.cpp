@@ -90,7 +90,7 @@ int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
 }
 
 //D2Win.0x6F8AECA0
-int32_t __stdcall POPUP_HandleMouseButtonInput(D2WinMsgStrc* pMsg)
+int32_t __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinPopUpStrc* pPopUp = gpPopUp;
 

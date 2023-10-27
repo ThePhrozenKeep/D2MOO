@@ -12,7 +12,7 @@ uint32_t gdwTimeoutTickCount;
 
 
 //D2Win.0x6F8B1B70
-D2WinTimerStrc* __fastcall TIMER_Create(uint32_t nTimeout, int32_t(__stdcall* a2)(D2WinMsgStrc*))
+D2WinTimerStrc* __fastcall TIMER_Create(uint32_t nTimeout, int32_t(__stdcall* a2)(SMSGHANDLER_PARAMS*))
 {
 	D2WinTimerStrc* pTimer = D2_CALLOC_STRC(D2WinTimerStrc);
 
@@ -66,8 +66,8 @@ int32_t __fastcall sub_6F8B1C60(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	D2WinMsgStrc msg = {};
-	msg.hWnd = (HWND)pTimer;
+	SMSGHANDLER_PARAMS msg = {};
+	msg.hWindow = (HWND)pTimer;
 
 	if (pTimer->controlHeader.field_34)
 	{
@@ -95,8 +95,8 @@ int32_t __fastcall sub_6F8B1CF0(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	D2WinMsgStrc pMsg = {};
-	pMsg.hWnd = (HWND)pTimer;
+	SMSGHANDLER_PARAMS pMsg = {};
+	pMsg.hWindow = (HWND)pTimer;
 
 	if (pTimer->controlHeader.field_34)
 	{
@@ -108,13 +108,13 @@ int32_t __fastcall sub_6F8B1CF0(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8B1D70
-int32_t __stdcall TIMER_HandleVirtualKeyInput(D2WinMsgStrc* pMsg)
+int32_t __stdcall TIMER_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinTimerStrc* pTimer = (D2WinTimerStrc*)pMsg->hWnd;
+	D2WinTimerStrc* pTimer = (D2WinTimerStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pTimer->controlHeader.nType == D2WIN_TIMER);
 
-	if (pMsg->uMessage == WM_CHAR || pMsg->wParam != VK_SPACE)
+	if (pMsg->nMessage == WM_CHAR || pMsg->wParam != VK_SPACE)
 	{
 		return 0;
 	}

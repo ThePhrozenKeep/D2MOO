@@ -87,7 +87,7 @@ struct D2KeyConfigStrc
 
 
 typedef int32_t(__fastcall* MENUENABLED)();
-typedef void(__fastcall* MENUSELECT)(D2MenuItemStrc*, D2WinMsgStrc*);
+typedef void(__fastcall* MENUSELECT)(D2MenuItemStrc*, SMSGHANDLER_PARAMS*);
 typedef void(__fastcall* MENUOPTION)(D2MenuItemStrc*, int32_t);
 typedef void(__fastcall* MENUUPDATE)(D2MenuItemStrc*, int32_t);
 
@@ -195,7 +195,7 @@ struct D2WindowPlacementStrc
 	WINDOWPLACEMENT windowPlacement;		//0x04
 };
 
-struct D2WinMsgStrc
+struct SMSGHANDLER_PARAMS
 {
 	HWND hWnd;								//0x00
 	uint32_t uMessage;							//0x04

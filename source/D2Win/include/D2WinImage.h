@@ -12,7 +12,7 @@ struct D2WinImageClickRectStrc
 	int32_t nY;										//0x04
 	int32_t nWidth;									//0x08
 	int32_t nHeight;								//0x0C
-	int32_t(__stdcall* pCallback)(D2WinMsgStrc*);	//0x14
+	int32_t(__stdcall* pCallback)(SMSGHANDLER_PARAMS*);	//0x14
 };
 
 struct D2WinImageStrc
@@ -36,7 +36,7 @@ struct D2WinImage2Strc
 
 
 //D2Win.0x6F8ABA90
-D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(D2WinMsgStrc*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* a8)(D2WinMsgStrc*));
+D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* a8)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1BF0
 int __fastcall IMAGE_Destroy(D2WinControlStrc* pControl);
 //D2Win.0x6F8ABB40
@@ -56,4 +56,4 @@ int32_t __fastcall IMAGE2_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8ABEA0
 int32_t __fastcall IMAGE_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8AC170
-int32_t __stdcall IMAGE2_HandleMouseDown(D2WinMsgStrc* pMsg);
+int32_t __stdcall IMAGE2_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);

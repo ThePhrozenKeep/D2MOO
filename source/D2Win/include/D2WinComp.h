@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include <D2Gfx.h>
-
+#include <D2Unicode.h>
 
 #pragma pack(push, 1)
 struct D2CofDataStrc
@@ -86,10 +86,10 @@ struct D2CompositeUnitStrc
 	uint8_t unk0xC3;
 	D2CompositeUnitStrc* pNext;
 	D2CompositeUnitStrc* unk0xC8;
-	wchar_t unk0xCC[64];
-	wchar_t unk0x14C[64];
-	wchar_t unk0x1CC[16];
-	wchar_t unk0x1EC[32];
+	Unicode unk0xCC[64];
+	Unicode unk0x14C[64];
+	Unicode unk0x1CC[16];
+	Unicode unk0x1EC[32];
 	uint32_t unk0x22C;
 	uint32_t unk0x230;
 	uint32_t unk0x234;

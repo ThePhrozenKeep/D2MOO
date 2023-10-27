@@ -5,7 +5,7 @@
 
 
 //D2Win.0x6F8B1DC0 (#10020)
-void __fastcall WREGISTER_RegisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(D2WinMsgStrc*))
+void __fastcall WREGISTER_RegisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(SMSGHANDLER_PARAMS*))
 {
 	D2_ASSERT(hWnd);
 
@@ -37,7 +37,7 @@ void __fastcall WREGISTER_RegisterCommand(HWND hWnd, int32_t nType, int32_t nId,
 }
 
 //D2Win.0x6F8B1EC0 (#10021)
-void __fastcall WREGISTER_UnregisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(D2WinMsgStrc*))
+void __fastcall WREGISTER_UnregisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(SMSGHANDLER_PARAMS*))
 {
 	D2_ASSERT(hWnd);
 

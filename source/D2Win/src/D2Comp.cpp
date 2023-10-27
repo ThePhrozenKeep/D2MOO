@@ -6,7 +6,7 @@
 
 #include <Fog.h>
 #include <D2CMP.h>
-//#include <D2Hell.h>
+#include <Archive.h>
 #include <D2Lang.h>
 
 #include <D2Gfx.h>
@@ -295,7 +295,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			if (dword_6F8FD654)
 //				*(DWORD*)(dword_6F8FD654 + 28) = v16;
 //			dword_6F8FD654 = (int)v16;
-//			v18 = D2Win_10038_Return0();
+//			v18 = D2Win_GetMemPool();
 //			v19 = D2Hell_ARCHIVE_OpenFile_6F8B22F8(//				v18, //				&v29, //				(int)((char*)v16 + 16), //				__FILE__, __LINE__//				992);
 //			if (!v19)
 //			{
@@ -423,7 +423,7 @@ return 0;
 //					a2.fFlags |= 2u;
 //					if (D2CMP_10055_CacheCurrentCell(&a2, 0, 1) && (DWORD)a2.pCurrentCell)
 //					{
-//						v9 = *(DWORD*)(v1 + 20) + D2CMP_10040_CelGetOffsetY(a2.pCurrentCell);
+//						v9 = *(DWORD*)(v1 + 20) + D2CMP_CelGetOffsetY(a2.pCurrentCell);
 //						if (v9 > v15)
 //							v15 = v9;
 //						++v14;
@@ -690,7 +690,7 @@ return 0;
 //	int v2; // ebp@1
 //	signed int result; // eax@5
 //	int v4; // ebx@6
-//	wchar_t *v5; // esi@6
+//	Unicode *v5; // esi@6
 //	signed int v6; // edi@6
 //	int v7; // edx@8
 //	unsigned int v8; // eax@14
@@ -715,7 +715,7 @@ return 0;
 //	int v27; // [sp+24h] [bp-60Ch]@1
 //	size_t pWidth; // [sp+28h] [bp-608h]@41
 //	size_t pHeight; // [sp+2Ch] [bp-604h]@41
-//	wchar_t wszText; // [sp+30h] [bp-600h]@6
+//	Unicode wszText; // [sp+30h] [bp-600h]@6
 //	char v31; // [sp+34h] [bp-5FCh]@32
 //	char v32; // [sp+38h] [bp-5F8h]@26
 //	char v33; // [sp+230h] [bp-400h]@24
@@ -779,11 +779,11 @@ return 0;
 //				--v14;
 //			}
 //			while (v14);
-//			D2LANG_win2Unicode(&v33, v12, 255);
+//			Unicode::win2Unicode(&v33, v12, 255);
 //			memset(&v32, 0, 0x200u);
-//			D2LANG_strcpy(&v32, &v35);
-//			v11 = D2LANG_strcat;
-//			D2LANG_strcat(&v32, v2 + 332);
+//			Unicode::strcpy(&v32, &v35);
+//			v11 = Unicode::strcat;
+//			Unicode::strcat(&v32, v2 + 332);
 //		}
 //		else
 //		{
@@ -792,8 +792,8 @@ return 0;
 //				v10 = v2 + 332;
 //			else
 //				v10 = v2 + 204;
-//			D2LANG_strcpy(&wszText, v10);
-//			v11 = D2LANG_strcat;
+//			Unicode::strcpy(&wszText, v10);
+//			v11 = Unicode::strcat;
 //		}
 //		v15 = &v36;
 //		v16 = 256;
@@ -804,7 +804,7 @@ return 0;
 //			--v16;
 //		}
 //		while (v16);
-//		if (D2LANG_strlen(v2 + 460))
+//		if (Unicode::strlen(v2 + 460))
 //		{
 //			D2LANG_toUnicode(&v36, &unk_6F8BD288, 256);
 //			v11(&v32, &v36);
@@ -846,7 +846,7 @@ return 0;
 //			while (!v23);
 //			*(DWORD*)(v21 - 1) = *(DWORD*)Source;
 //		}
-//		D2LANG_win2Unicode(&v31, v34, 299);
+//		Unicode::win2Unicode(&v31, v34, 299);
 //		D2Win_10131_GetTextDimensions(&wszText, &pWidth, &pHeight);
 //		if (v25)
 //			D2Win_10117_DrawText(&wszText, *(DWORD*)(v27 + 20) - ((signed int)pWidth >> 1) - 1, nY - 1, 6, 0);
@@ -869,13 +869,13 @@ return 0;
 //// 6F8A1D10: using guessed type char var_3FC[4];
 
 //D2Win.0x6F8A2040
-void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* a4)(const wchar_t*))
+void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* a4)(const Unicode*))
 {
-	const wchar_t* v4 = a1;
+	const Unicode* v4 = a1;
 	for (int i = 0; i < a3; ++i)
 	{
 		a4(v4);
-		v4 = (const wchar_t*)((char*)v4 + a2);
+		v4 = (const Unicode*)((char*)v4 + a2);
 	}
 }
 
@@ -894,7 +894,7 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //	int v10; // eax@15
 //	__int16 *v11; // edi@16
 //	int v12; // ST1C_4@23
-//	wchar_t *v13; // eax@23
+//	Unicode *v13; // eax@23
 //	__int16 *v14; // edi@23
 //	__int16 *v15; // edi@27
 //	__int16 *v16; // edi@34
@@ -906,7 +906,7 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //	unsigned int v22; // eax@68
 //	int v23; // edx@77
 //	__int16 *v24; // edi@93
-//	wchar_t *v25; // eax@102
+//	Unicode *v25; // eax@102
 //	__int16 *v26; // edi@102
 //	__int16 *v27; // edi@108
 //	__int16 *v28; // edi@117
@@ -973,8 +973,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //		if (*((DWORD*)v1 + 140) == 'D2XP')
 //		{
 //			D2LANG_toUnicode(&v45, "Expansion", 256);
-//			D2LANG_strcpy(wszText, &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)wszText, &pWidth, (size_t*)pHeight);
+//			Unicode::strcpy(wszText, &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)wszText, &pWidth, (size_t*)pHeight);
 //			if (((pWidth + 6) & 0x80000000u) == 0)
 //				v5 = pWidth + 6;
 //			v8 = 1;
@@ -990,9 +990,9 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
 //			v38 = (int)(v11 + 258);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v11 + 128, (size_t*)v11 + 129);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v11 + 128, (size_t*)v11 + 129);
 //			if (v5 <= *((DWORD*)v11 + 128) + 6)
 //				v5 = *((DWORD*)v11 + 128) + 6;
 //			v1 = v39;
@@ -1009,8 +1009,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v15 + 128, (size_t*)v15 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v15 + 128, (size_t*)v15 + 129);
 //			if (v5 <= *((DWORD*)v15 + 128) + 6)
 //				v5 = *((DWORD*)v15 + 128) + 6;
 //			v42 = 3;
@@ -1026,8 +1026,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v16 + 128, (size_t*)v16 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v16 + 128, (size_t*)v16 + 129);
 //			if (v5 <= *((DWORD*)v16 + 128) + 6)
 //				v5 = *((DWORD*)v16 + 128) + 6;
 //			v42 = 3;
@@ -1043,8 +1043,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v17 + 128, (size_t*)v17 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v17 + 128, (size_t*)v17 + 129);
 //			if (v5 <= *((DWORD*)v17 + 128) + 6)
 //				v5 = *((DWORD*)v17 + 128) + 6;
 //			v18 = (int)(v17 + 258);
@@ -1059,8 +1059,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v19 + 128, (size_t*)v19 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v19 + 128, (size_t*)v19 + 129);
 //			if (v5 <= *((DWORD*)v19 + 128) + 6)
 //				v5 = *((DWORD*)v19 + 128) + 6;
 //			v18 = (int)(v19 + 258);
@@ -1081,8 +1081,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v20 + 128, (size_t*)v20 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v20 + 128, (size_t*)v20 + 129);
 //			if (v5 <= *((DWORD*)v20 + 128) + 6)
 //				v5 = *((DWORD*)v20 + 128) + 6;
 //			v18 = (int)(v20 + 258);
@@ -1097,8 +1097,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v21 + 128, (size_t*)v21 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v21 + 128, (size_t*)v21 + 129);
 //			if (v5 <= *((DWORD*)v21 + 128) + 6)
 //				v5 = *((DWORD*)v21 + 128) + 6;
 //			v18 = (int)(v21 + 258);
@@ -1112,15 +1112,15 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //			{
 //LABEL_117:
 //				v9(&v45, "Account Name: ", 256);
-//				D2LANG_strcat(&v45, (char*)v39 + 204);
+//				Unicode::strcat(&v45, (char*)v39 + 204);
 //				v28 = &wszText[260 * v8];
 //				if (v8 >= 7)
 //				{
 //					FOG_DisplayAssert(//						"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //						__FILE__, __LINE__//						1837);
 //					exit(-1);
 //				}
-//				D2LANG_strcpy(&wszText[260 * v8], &v45);
-//				D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v28 + 128, (size_t*)v28 + 129);
+//				Unicode::strcpy(&wszText[260 * v8], &v45);
+//				D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v28 + 128, (size_t*)v28 + 129);
 //				if (v5 <= *((DWORD*)v28 + 128) + 6)
 //					v5 = *((DWORD*)v28 + 128) + 6;
 //				v29 = v8 + 1;
@@ -1155,13 +1155,13 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //					v36 = 0;
 //					if (!i)
 //						v36 = v42;
-//					D2Win_10117_DrawText(//						(const wchar_t*)&wszText[260 * i], //						v41 - (*(DWORD*)&wszText[260 * i + 256] >> 1), //						v34, //						v36, //						0);
+//					D2Win_10117_DrawText(//						(const Unicode*)&wszText[260 * i], //						v41 - (*(DWORD*)&wszText[260 * i + 256] >> 1), //						v34, //						v36, //						0);
 //				}
 //				return 1;
 //			}
 //			v12 = *((DWORD*)v1 + 139);
 //			memset(&v45, 0, 0x200u);
-//			v13 = D2LANG_10004_GetStringFromTblIndex(5017);
+//			v13 = D2LANG_GetStringFromTblIndex(5017);
 //			D2LANG_sprintf(256, &v45, v13, v12);
 //			v14 = &wszText[260 * v8];
 //			if (v8 >= 7)
@@ -1169,38 +1169,38 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v14 + 128, (size_t*)v14 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v14 + 128, (size_t*)v14 + 129);
 //			if (v5 <= *((DWORD*)v14 + 128) + 6)
 //				v5 = *((DWORD*)v14 + 128) + 6;
 //			++v8;
 //			v37 += *((DWORD*)v14 + 129);
 //			if (gdwBitMasks[5] & *(DWORD*)v39)
 //			{
-//				v25 = D2LANG_10004_GetStringFromTblIndex(5016);
+//				v25 = D2LANG_GetStringFromTblIndex(5016);
 //				v26 = &wszText[260 * v8];
 //				if (v8 >= 7)
 //				{
 //					FOG_DisplayAssert(//						"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //						__FILE__, __LINE__//						1837);
 //					exit(-1);
 //				}
-//				D2LANG_strcpy(&wszText[260 * v8], v25);
-//				D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v26 + 128, (size_t*)v26 + 129);
+//				Unicode::strcpy(&wszText[260 * v8], v25);
+//				D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v26 + 128, (size_t*)v26 + 129);
 //				if (v5 <= *((DWORD*)v26 + 128) + 6)
 //					v5 = *((DWORD*)v26 + 128) + 6;
 //				++v8;
 //				v37 += *((DWORD*)v26 + 129);
 //			}
 //			D2LANG_toUnicode(&v45, "Realm: ", 256);
-//			D2LANG_strcat(&v45, (char*)v39 + 492);
+//			Unicode::strcat(&v45, (char*)v39 + 492);
 //			v27 = &wszText[260 * v8];
 //			if (v8 >= 7)
 //			{
 //				FOG_DisplayAssert(//					"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //					__FILE__, __LINE__//					1837);
 //				exit(-1);
 //			}
-//			D2LANG_strcpy(&wszText[260 * v8], &v45);
-//			D2Win_10131_GetTextDimensions((wchar_t*)&wszText[260 * v8], (size_t*)v27 + 128, (size_t*)v27 + 129);
+//			Unicode::strcpy(&wszText[260 * v8], &v45);
+//			D2Win_10131_GetTextDimensions((Unicode*)&wszText[260 * v8], (size_t*)v27 + 128, (size_t*)v27 + 129);
 //			if (v5 <= *((DWORD*)v27 + 128) + 6)
 //				v5 = *((DWORD*)v27 + 128) + 6;
 //			v18 = (int)(v27 + 258);
@@ -1257,8 +1257,8 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //						FOG_DisplayAssert(//							"*nStrCount < MAXIMUM_NUMBER_OF_EXTRA_DATA_STRINGS", //							__FILE__, __LINE__//							1837);
 //						exit(-1);
 //					}
-//					D2LANG_strcpy(&wszText[260 * v8], &v45);
-//					D2Win_10131_GetTextDimensions(//						(wchar_t*)&wszText[260 * v8], //						(size_t*)v24 + 128, //						(size_t*)v24 + 129);
+//					Unicode::strcpy(&wszText[260 * v8], &v45);
+//					D2Win_10131_GetTextDimensions(//						(Unicode*)&wszText[260 * v8], //						(size_t*)v24 + 128, //						(size_t*)v24 + 129);
 //					if (v5 <= *((DWORD*)v24 + 128) + 6)
 //						v5 = *((DWORD*)v24 + 128) + 6;
 //					v18 = (int)(v24 + 258);
@@ -1287,7 +1287,7 @@ void __stdcall sub_6F8A2040(const wchar_t* a1, int a2, int a3, void(__fastcall* 
 //// 6F8BA05C: using guessed type int __thiscall Unicode___default constructor closure_(DWORD);
 //// 6F8BA060: using guessed type int __fastcall Unicode__strcpy(DWORD, DWORD);
 //// 6F8BA064: using guessed type int __fastcall Unicode__strcat(DWORD, DWORD);
-//// 6F8A2070: using guessed type wchar_t wszText[256];
+//// 6F8A2070: using guessed type Unicode wszText[256];
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
@@ -1380,14 +1380,14 @@ void __stdcall D2Win_10142(D2CompositeUnitStrc* pCompositeUnit, int a2)
 }
 
 //D2Win.0x6F8A2BD0 (#10154)
-void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const wchar_t* a2, const wchar_t* a3, const wchar_t* a4, const wchar_t* a5, int a6, int a7)
+void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a2, const Unicode* a3, const Unicode* a4, const Unicode* a5, int a6, int a7)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	D2LANG_strcpy(pCompositeUnit->unk0xCC, a2);
-	D2LANG_strcpy(pCompositeUnit->unk0x14C, a3);
-	D2LANG_strcpy(pCompositeUnit->unk0x1CC, a4);
-	D2LANG_strcpy(pCompositeUnit->unk0x1EC, a5);
+	Unicode::strcpy(pCompositeUnit->unk0xCC, a2);
+	Unicode::strcpy(pCompositeUnit->unk0x14C, a3);
+	Unicode::strcpy(pCompositeUnit->unk0x1CC, a4);
+	Unicode::strcpy(pCompositeUnit->unk0x1EC, a5);
 	pCompositeUnit->unk0x22C = a6;
 	pCompositeUnit->unk0x230 = a7;
 }
@@ -1420,7 +1420,7 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 }
 
 //D2Win.0x6F8A2CE0
-void* __stdcall sub_6F8A2CE0(int nUnused, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
+void* __stdcall sub_6F8A2CE0(void* pMempool, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
 {
 	char szFilename[260] = {};
 
@@ -1438,7 +1438,7 @@ void* __stdcall sub_6F8A2CE0(int nUnused, const char* szName, D2BinFieldStrc* pB
 	}
 
 	unsigned int nFileSize = 0;
-	void* pFileData = D2Hell_ARCHIVE_OpenFile_6F8B22F8(nUnused, szFilename, &nFileSize, __FILE__, __LINE__);
+	void* pFileData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMempool, szFilename, &nFileSize);
 
 	D2_ASSERT(pFileData);
 
@@ -1723,9 +1723,9 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSelectedCelFile)
 {
 	ghSquelchCelFile_6F8FD65C = pSquelchCelFile;
-	gnSquelchCelFileFrameCount_6F8FD660 = D2CMP_10046_CelFileGetCelsPerDirection(pSquelchCelFile);
+	gnSquelchCelFileFrameCount_6F8FD660 = D2CMP_CelFileGetCelsPerDirection(pSquelchCelFile);
 	ghSelectedCelFile_6F8FD668 = pSelectedCelFile;
-	gnSelectedCelFileFrameCount_6F8FD66C = D2CMP_10046_CelFileGetCelsPerDirection(pSelectedCelFile);
+	gnSelectedCelFileFrameCount_6F8FD66C = D2CMP_CelFileGetCelsPerDirection(pSelectedCelFile);
 }
 
 //D2Win.0x6F8A3390 (#10144)
@@ -2151,7 +2151,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //		v152 = 0;
 //		v153 = 0;
 //		dword_6F8FD240 = Fog_10211(__FILE__, __LINE__);
-//		v1 = D2Win_10038_Return0();
+//		v1 = D2Win_GetMemPool();
 //		dword_6F8FD244 = sub_6F8A2CE0(v1, "itemtypes", (int)&v34, (int)&unk_6F8FD248, 228);
 //		v24 = (int)"code";
 //		v25 = 10;
@@ -2164,9 +2164,9 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //		v32 = 0;
 //		v33 = 0;
 //		dword_6F8FD238 = Fog_10211(__FILE__, __LINE__);
-//		v2 = D2Win_10038_Return0();
+//		v2 = D2Win_GetMemPool();
 //		dword_6F8FD234 = sub_6F8A2CE0(v2, "hitclass", (int)&v24, 0, 4);
-//		v3 = D2Win_10038_Return0();
+//		v3 = D2Win_GetMemPool();
 //		sub_6F8A2E70(v3);
 //		dword_6F8C1530 = dword_6F8BCF98[0];
 //		dword_6F8C153C = dword_6F8BCF98[0];

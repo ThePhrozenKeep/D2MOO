@@ -2,6 +2,7 @@
 
 #include "D2WinControlHeader.h"
 
+#include <D2Unicode.h>
 #include "Font.h"
 
 
@@ -22,7 +23,7 @@ struct D2WinEditBoxStrc
 	int32_t field_50;								//0x50
 	int32_t field_54;								//0x54
 	int32_t nTextLength;							//0x58
-	wchar_t wszText[256];							//0x258
+	Unicode wszText[256];							//0x258
 	int32_t field_25C;								//0x25C
 	uint32_t dwEditBoxFlags;						//0x260
 	int32_t field_264;								//0x264
@@ -38,7 +39,7 @@ struct D2WinEditBoxStrc
 
 
 //D2Win.0x6F8A6C80
-D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int nX, int nY, int nWidth, int nHeight, int a5, int a6, D2CellFileStrc* pCellFile, int a8, int(__stdcall* a9)(D2WinMsgStrc*), int nEditBoxFlags, int a11);
+D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int nX, int nY, int nWidth, int nHeight, int a5, int a6, D2CellFileStrc* pCellFile, int a8, int(__stdcall* a9)(SMSGHANDLER_PARAMS*), int nEditBoxFlags, int a11);
 //D2Win.0x6F8A6DC0
 int __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A6E10
@@ -60,9 +61,9 @@ void __fastcall D2Win_10081(D2WinEditBoxStrc* pEditBox, int a2);
 //D2Win.0x6F8A80F0
 int __fastcall D2Win_10076(D2WinEditBoxStrc* pEditBox, const char* szText);
 //D2Win.0x6F8A8140
-int __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const wchar_t* pText);
+int __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText);
 //D2Win.0x6F8A81E0
-wchar_t* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox);
+const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A8230
 void __fastcall D2Win_10080(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext);
 //D2Win.0x6F8A82D0
@@ -72,13 +73,13 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl);
 //D2Win.0x6F8A8D60
 void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int* a2, int* a3);
 //D2Win.0x6F8A9120
-int __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg);
+int __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A93A0
-int __stdcall EDITBOX_HandleMouseUp(D2WinMsgStrc* pMsg);
+int __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A9410
-int __fastcall sub_6F8A9410(D2WinMsgStrc* a1, int a2, int a3);
+int __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* a1, int a2, int a3);
 //D2Win.0x6F8A97D0
-int __stdcall sub_6F8A97D0(D2WinMsgStrc* pMsg);
+int __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A9850
 bool __stdcall D2Win_10078_IsNumber(int a1, int a2, char* a3);
 //D2Win.0x6F8A9870

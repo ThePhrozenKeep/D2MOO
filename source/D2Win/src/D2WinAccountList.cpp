@@ -163,8 +163,8 @@ int32_t __fastcall ACCOUNTLIST_Draw(D2WinControlStrc* pControl)
 			const int32_t nY = nBaseY + 20 * nCounter / 6;
 			D2GFX_DrawBox(nX, nY - 14, nX + 28, nY, 0x55u, DRAWMODE_NORMAL);
 
-			wchar_t wszText[256] = {};
-			D2LANG_win2Unicode(wszText, pData->szText, std::size(wszText));
+			Unicode wszText[256] = {};
+			Unicode::win2Unicode(wszText, pData->szText, std::size(wszText));
 			D2Win_10117_DrawText(wszText, nX + 32, nY, 0, 0);
 
 			if (pData == pAccountList->pSelectedDataEntry)
@@ -180,9 +180,9 @@ int32_t __fastcall ACCOUNTLIST_Draw(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8A52E0
-int32_t __stdcall ACCOUNTLIST_HandleMouseDown(D2WinMsgStrc* pMsg)
+int32_t __stdcall ACCOUNTLIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinAccountListStrc* pAccountList = (D2WinAccountListStrc*)pMsg->hWnd;
+	D2WinAccountListStrc* pAccountList = (D2WinAccountListStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pAccountList->controlHeader.nType == D2WIN_ACCOUNTLIST);
 

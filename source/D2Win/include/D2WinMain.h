@@ -9,7 +9,7 @@ struct D2CellFileStrc;
 struct D2WinEditBoxStrc;
 struct D2WinControlInitStrc;
 struct D2WinControlStrc;
-struct D2WinMsgStrc;
+struct SMSGHANDLER_PARAMS;
 
 extern POINT gMousePosition_6F8FE234;
 extern int32_t dword_6F8FE254;
@@ -70,35 +70,35 @@ int __fastcall D2Win_10026_CONTROL_CheckThirdFlag(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD650
 BOOL __stdcall CONTROL_MouseInsideRect(const RECT* lprc);
 //D2Win.0x6F8AD670
-void __stdcall D2Win_COMMANDS_MouseMove_6F8AD670(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_MouseMove_6F8AD670(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AD6F0
 void __stdcall D2Win_10019();
 //D2Win.0x6F8AD9B0
 LRESULT __stdcall D2Win_MAINWINDOW_WndProc_6F8AD9B0(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 //D2Win.0x6F8ADA80
-void __stdcall D2Win_COMMANDS_Char_6F8ADA80(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_Char_6F8ADA80(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADB10
-void __stdcall D2Win_COMMANDS_Escape_6F8ADB10(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_Escape_6F8ADB10(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADB50
-void __stdcall D2Win_COMMANDS_VirtualKey_6F8ADB50(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_VirtualKey_6F8ADB50(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADBE0
-void __stdcall D2Win_COMMANDS_Control_6F8ADBE0(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_Control_6F8ADBE0(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADBF0
-void __stdcall D2Win_COMMANDS_Control_6F8ADBF0(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_Control_6F8ADBF0(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADC00
-void __stdcall D2Win_COMMANDS_SysCommand_6F8ADC00(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_SysCommand_6F8ADC00(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADC40
-void __stdcall D2Win_COMMANDS_ActivateApp_6F8ADC40(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_ActivateApp_6F8ADC40(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ADCD0
 void __stdcall D2Win_10168_WINMAIN_CreateScreenshot();
 //D2Win.0x6F8ADE70
-void __stdcall D2Win_COMMANDS_Snapshot_6F8ADE70(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_Snapshot_6F8ADE70(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE020
-void __stdcall D2Win_COMMANDS_KeyF1_6F8AE020(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_KeyF1_6F8AE020(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE070
-void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE220
-void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(D2WinMsgStrc* pMsg);
+void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE4A0
 void __stdcall D2Win_10029(int a1);
 //D2Win.0x6F8AE4B0

@@ -25,7 +25,7 @@ int dword_6F8FD8B4;
 
 
 //D2Win.0x6F8A6C80 (#10070)
-D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t a8, int32_t(__stdcall* a9)(D2WinMsgStrc*), int32_t nEditBoxFlags, int32_t a11)
+D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t a8, int32_t(__stdcall* a9)(SMSGHANDLER_PARAMS*), int32_t nEditBoxFlags, int32_t a11)
 {
 	D2WinEditBoxStrc* pEditBox = D2_CALLOC_STRC(D2WinEditBoxStrc);
 
@@ -117,7 +117,7 @@ int32_t __fastcall D2Win_10082(D2WinEditBoxStrc* pEditBox)
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
 	pEditBox->field_54 = 0;
-	pEditBox->nTextLength = D2LANG_strlen(pEditBox->wszText);
+	pEditBox->nTextLength = Unicode::strlen(pEditBox->wszText);
 
 	return pEditBox->nTextLength;
 }
@@ -144,7 +144,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //	unsigned __int8 *v19; // esi@54
 //	unsigned int v20; // kr0C_4@54
 //	int v21; // ebp@54
-//	wchar_t *v22; // esi@59
+//	Unicode *v22; // esi@59
 //	signed int v23; // edi@59
 //	char *v24; // esi@61
 //	signed int v25; // edi@61
@@ -182,7 +182,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //	char *v57; // esi@129
 //	signed int v58; // edi@129
 //	int v59; // ebp@129
-//	wchar_t *v60; // esi@131
+//	Unicode *v60; // esi@131
 //	signed int v61; // edi@131
 //	char *v62; // edi@133
 //	char *v63; // esi@133
@@ -211,7 +211,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //	char v86; // [sp+1F1h] [bp-9FFh]@118
 //	char v87; // [sp+1F2h] [bp-9FEh]@118
 //	char v88[1024]; // [sp+3F0h] [bp-800h]@41
-//	wchar_t v89[256]; // [sp+7F0h] [bp-400h]@59
+//	Unicode v89[256]; // [sp+7F0h] [bp-400h]@59
 //	char v90; // [sp+9F0h] [bp-200h]@63
 //
 //	v2 = pEditBox;
@@ -258,7 +258,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //	v10 = v2->field_54;
 //	if (v10 != -1 && v10 != v2->nTextLength && v7 != 3 && v7 != 24 && v7 != 1)
 //		sub_6F8A7970(v2);
-//	v77 = D2LANG_strlen(v2->wszText);
+//	v77 = Unicode::strlen(v2->wszText);
 //	v11 = v88;
 //	v12 = 512;
 //	do
@@ -268,7 +268,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //		--v12;
 //	}
 //	while (v12);
-//	D2LANG_strcpy(v88, v2->wszText);
+//	Unicode::strcpy(v88, v2->wszText);
 //	v13 = &v88[2 * v2->field_25C];
 //	v75 = &v88[2 * v2->field_25C];
 //	switch ((char)v73)
@@ -388,12 +388,12 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //			}
 //			*v32 = 0;
 //		}
-//		D2LANG_strncpy(v89, v88, v29);
-//		D2LANG_strcpy(&v90, &v88[2 * v30]);
-//		D2LANG_win2Unicode(&v85, v84, strlen(v84) + 1);
-//		D2LANG_strcpy(v88, v89);
-//		D2LANG_strcat(v88, &v85);
-//		D2LANG_strcat(v88, &v90);
+//		Unicode::strncpy(v89, v88, v29);
+//		Unicode::strcpy(&v90, &v88[2 * v30]);
+//		Unicode::win2Unicode(&v85, v84, strlen(v84) + 1);
+//		Unicode::strcpy(v88, v89);
+//		Unicode::strcat(v88, &v85);
+//		Unicode::strcat(v88, &v90);
 //		if (v2->controlHeader.nType != 1)
 //		{
 //			FOG_DisplayAssert("ptEditData->eType == D2WIN_EDITBOX", __FILE__, __LINE__);
@@ -493,8 +493,8 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //					CloseClipboard();
 //				}
 //				sub_6F8A7970(v2);
-//				D2LANG_strlen(v2->wszText);
-//				D2LANG_strcpy(v88, v2->wszText);
+//				Unicode::strlen(v2->wszText);
+//				Unicode::strcpy(v88, v2->wszText);
 //				v75 = (char *)v76;
 //				v13 = (char *)v76;
 //			}
@@ -507,7 +507,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //			exit(-1);
 //		}
 //		v2->field_54 = 0;
-//		v2->nTextLength = D2LANG_strlen(v2->wszText);
+//		v2->nTextLength = Unicode::strlen(v2->wszText);
 //		break;
 //	default:
 //		if (v77 >= v2->field_48 - 1)
@@ -519,14 +519,14 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //				D2LANG_unicode2Win(&v87, v13);
 //				v85 = 13;
 //				v86 = 10;
-//				D2LANG_win2Unicode(v13, &v85, 256);
+//				Unicode::win2Unicode(v13, &v85, 256);
 //				v13 += 4;
 //			}
 //			else
 //			{
 //				D2LANG_unicode2Win(&v86, v13);
 //				v85 = v73;
-//				D2LANG_win2Unicode(v13, &v85, 256);
+//				Unicode::win2Unicode(v13, &v85, 256);
 //				v13 += 2;
 //			}
 //			v55 = v2->controlHeader.nType;
@@ -564,7 +564,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //			--v58;
 //		}
 //		while (v58);
-//		D2LANG_win2Unicode(&v78, &v77, 2);
+//		Unicode::win2Unicode(&v78, &v77, 2);
 //		v80 = D2Win_10122(&v78, 2);
 //		v60 = v89;
 //		v61 = 256;
@@ -596,7 +596,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //					while (v67 != '\r' && v67 != '\n')
 //					{
 //						v84[v66] = v67;
-//						D2LANG_win2Unicode(v89, v84, 256);
+//						Unicode::win2Unicode(v89, v84, 256);
 //						v68 = D2Win_10122((int)v89, v66);
 //						if (v80 + v68 > v83)
 //						{
@@ -609,7 +609,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //							break;
 //					}
 //				}
-//				D2LANG_win2Unicode(v89, v84, 256);
+//				Unicode::win2Unicode(v89, v84, 256);
 //				v69 = v74;
 //				if (v79)
 //				{
@@ -649,7 +649,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //			return 1;
 //		v13 = v75;
 //	}
-//	D2LANG_strcpy(v2->wszText, v88);
+//	Unicode::strcpy(v2->wszText, v88);
 //	v2->field_25C = (signed int)(v13 - v88) >> 1;
 //	sub_6F8A98A0(v2);
 //	v72 = v2->field_26C;
@@ -662,8 +662,8 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 {
 	// TODO: Names
-	wchar_t v11[256] = {};
-	wchar_t v12[256] = {};
+	Unicode v11[256] = {};
+	Unicode v12[256] = {};
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -685,18 +685,18 @@ void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 
 	if (v8)
 	{
-		D2LANG_strncpy(v11, pEditBox->wszText, v8);
+		Unicode::strncpy(v11, pEditBox->wszText, v8);
 	}
 	else
 	{
 		v11[0] = 0;
 	}
 
-	D2LANG_strcpy(v12, &pEditBox->wszText[v9]);
-	D2LANG_strcpy(pEditBox->wszText, v11);
-	D2LANG_strcat(pEditBox->wszText, v12);
+	Unicode::strcpy(v12, &pEditBox->wszText[v9]);
+	Unicode::strcpy(pEditBox->wszText, v11);
+	Unicode::strcat(pEditBox->wszText, v12);
 
-	int32_t v10 = D2LANG_strlen(pEditBox->wszText);
+	int32_t v10 = Unicode::strlen(pEditBox->wszText);
 	if (v8 > v10)
 	{
 		pEditBox->field_25C = v10;
@@ -717,7 +717,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //	int v4; // eax@7
 //	int v5; // eax@9
 //	signed int v6; // ebx@9
-//	wchar_t *v7; // edi@9
+//	Unicode *v7; // edi@9
 //	int v8; // ebp@9
 //	int v9; // eax@13
 //	int v10; // edx@15
@@ -729,7 +729,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //	int v16; // eax@38
 //	void *v17; // edx@38
 //	int v18; // eax@40
-//	wchar_t v19; // ax@54
+//	Unicode v19; // ax@54
 //	size_t v20; // ebx@63
 //	int v21; // ebp@68
 //	int v22; // edi@74
@@ -742,7 +742,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //	char v29; // [sp+10h] [bp-30h]@1
 //	int v30; // [sp+14h] [bp-2Ch]@9
 //	int a2a; // [sp+18h] [bp-28h]@38
-//	D2WinMsgStrc a1; // [sp+1Ch] [bp-24h]@38
+//	SMSGHANDLER_PARAMS a1; // [sp+1Ch] [bp-24h]@38
 //
 //	v3 = pEditBox;
 //	v29 = a2;
@@ -816,7 +816,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //			{
 //				sub_6F8A8D60(v3, (int *)&a1, &a2a);
 //				v16 = D2Win_10125();
-//				v17 = a1.hWnd;
+//				v17 = a1.hWindow;
 //				v27 = a2a - v16;
 //				goto LABEL_41;
 //			}
@@ -831,11 +831,11 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //				sub_6F8A8D60(v3, &a2a, (int *)&a1);
 //				v18 = D2Win_10125();
 //				v17 = (void *)a2a;
-//				v27 = (int)((char *)a1.hWnd + v18);
+//				v27 = (int)((char *)a1.hWindow + v18);
 //LABEL_41:
 //				a1.uMessage = (UINT)v3;
 //				a1.wParam = 0;
-//				sub_6F8A9410((D2WinMsgStrc*)((char *)&a1 + 4), (int)v17, v27);
+//				sub_6F8A9410((SMSGHANDLER_PARAMS*)((char *)&a1 + 4), (int)v17, v27);
 //				v7 = &v3->wszText[v3->field_25C];
 //			}
 //			else
@@ -897,7 +897,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //			if ((unsigned int)v7 <= (unsigned int)v3->wszText || v6)
 //				goto LABEL_26;
 //			--v7;
-//			v20 = 2 * (D2LANG_strlen(v7 + 1) + 1);
+//			v20 = 2 * (Unicode::strlen(v7 + 1) + 1);
 //			memcpy(v7, v7 + 1, v20);
 //			if ((unsigned int)v7 <= (unsigned int)v3->wszText || *(v7 - 1) != 13)
 //				goto LABEL_72;
@@ -908,7 +908,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //		case 46:
 //			if (*v7 && !v6)
 //			{
-//				v21 = D2LANG_strlen(v7 + 1) + 1;
+//				v21 = Unicode::strlen(v7 + 1) + 1;
 //				memcpy(v7, v7 + 1, 2 * v21);
 //				if (*v7 && *v7 == 10)
 //				{
@@ -926,7 +926,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //				goto LABEL_26;
 //			v22 = v3->dwEditBoxFlags & 2;
 //			++dword_6F8FE254;
-//			((void(__stdcall *)(wchar_t *))v3->field_264)(v3->wszText);
+//			((void(__stdcall *)(Unicode *))v3->field_264)(v3->wszText);
 //			--dword_6F8FE254;
 //			if (!v22)
 //				return 1;
@@ -984,7 +984,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //			D2_ASSERT(v23->controlHeader.nType == D2WIN_EDITBOX);
 //
 //			v23->field_54 = 0;
-//			v23->nTextLength = D2LANG_strlen(v23->wszText);
+//			v23->nTextLength = Unicode::strlen(v23->wszText);
 //LABEL_98:
 //			result = 1;
 //			break;
@@ -1014,22 +1014,22 @@ void __fastcall D2Win_10081(D2WinEditBoxStrc* pEditBox, int32_t a2)
 //D2Win.0x6F8A80F0 (#10076)
 int32_t __fastcall D2Win_10076(D2WinEditBoxStrc* pEditBox, const char* szText)
 {
-	wchar_t wszText[256] = {};
+	Unicode wszText[256] = {};
 
-	D2LANG_win2Unicode(wszText, szText, 256);
+	Unicode::win2Unicode(wszText, szText, 256);
 	return D2Win_10075(pEditBox, wszText);
 }
 
 //D2Win.0x6F8A8140 (#10075)
-int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const wchar_t* pText)
+int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_25C = D2LANG_strlen(pText);
+	pEditBox->field_25C = Unicode::strlen(pText);
 	if (pEditBox->field_25C)
 	{
-		D2LANG_strcpy(pEditBox->wszText, pText);
+		Unicode::strcpy(pEditBox->wszText, pText);
 	}
 	else
 	{
@@ -1047,7 +1047,7 @@ int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const wchar_t* pText)
 }
 
 //D2Win.0x6F8A81E0 (#10077)
-wchar_t* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox)
+const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1086,9 +1086,9 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 
 		if (pEditBox->field_280)
 		{
-			D2WinMsgStrc msg = {};
-			msg.hWnd = (HWND)pEditBox;
-			msg.uMessage = WM_LBUTTONDOWN;
+			SMSGHANDLER_PARAMS msg = {};
+			msg.hWindow = (HWND)pEditBox;
+			msg.nMessage = WM_LBUTTONDOWN;
 			sub_6F8A9120(&msg);
 		}
 
@@ -1106,14 +1106,14 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 		int32_t nX = pEditBox->controlHeader.nImageX + pEditBox->field_40;
 		const int32_t nY = pEditBox->field_44 - pEditBox->controlHeader.nHeight + pEditBox->controlHeader.nImageY + 16;
 
-		wchar_t v48[300] = {};
-		D2LANG_strncpy(v48, &pEditBox->wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1);
+		Unicode v48[300] = {};
+		Unicode::strncpy(v48, &pEditBox->wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1);
 
-		//const int32_t v50 = D2LANG_strlen(v48);
+		//const int32_t v50 = Unicode::strlen(v48);
 		if (pEditBox->dwEditBoxFlags & 1)
 		{
-			wchar_t v41[2] = {};
-			D2LANG_win2Unicode(v41, "*", 2);
+			Unicode v41[2] = {};
+			Unicode::win2Unicode(v41, "*", 2);
 
 			//TODO: Set text
 			//if (v50 > 0)
@@ -1139,9 +1139,9 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 		}
 		else
 		{
-			wchar_t v49[256] = {};
-			wchar_t wszText[256] = {};
-			wchar_t v51[256] = {};
+			Unicode v49[256] = {};
+			Unicode wszText[256] = {};
+			Unicode v51[256] = {};
 
 			int32_t v27 = pEditBox->field_54;
 			if (pEditBox->field_54 >= pEditBox->nTextLength)
@@ -1167,9 +1167,9 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 				v30 = v25 - pEditBox->field_4C - v29;
 			}
 
-			D2LANG_strncpy(wszText, v48, v29);
-			D2LANG_strncpy(v49, &v48[v29], v30);
-			D2LANG_strcpy(v51, &v48[v29 + v30]);
+			Unicode::strncpy(wszText, v48, v29);
+			Unicode::strncpy(v49, &v48[v29], v30);
+			Unicode::strcpy(v51, &v48[v29 + v30]);
 
 			int32_t nWidth1 = 0;
 			int32_t nWidth2 = 0;
@@ -1183,8 +1183,8 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 
 		if (D2Win_10023() == pEditBox && GetTickCount() / 250 & 1)
 		{
-			wchar_t v41[2] = {};
-			D2LANG_win2Unicode(v41, "_", 2);
+			Unicode v41[2] = {};
+			Unicode::win2Unicode(v41, "_", 2);
 			if (pEditBox->field_25C != pEditBox->field_4C)
 			{
 				nX += D2Win_10122(v48, pEditBox->field_25C - pEditBox->field_4C);
@@ -1256,15 +1256,15 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //
 //		if (pEditBox->field_280)
 //		{
-//			D2WinMsgStrc msg = {};
+//			SMSGHANDLER_PARAMS msg = {};
 //
-//			msg.hWnd = (HWND)pEditBox;
+//			msg.hWindow = (HWND)pEditBox;
 //			msg.uMessage = WM_LBUTTONDOWN;
 //
 //			sub_6F8A9410(&msg, gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY);
 //		}
 //
-//		wchar_t v61[300] = {};
+//		Unicode v61[300] = {};
 //
 //		D2Win_10127_SetFont(pEditBox->nFont);
 //
@@ -1272,11 +1272,11 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //		v6 = pEditBox->field_44 + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + D2Win_10125();
 //		nY = v6;
 //
-//		D2LANG_strcpy(v61, pEditBox->wszText);
+//		Unicode::strcpy(v61, pEditBox->wszText);
 //
-//		wchar_t wszText[2] = {};
+//		Unicode wszText[2] = {};
 //
-//		D2LANG_win2Unicode(wszText, "_", 2);
+//		Unicode::win2Unicode(wszText, "_", 2);
 //
 //		v55 = D2Win_10122(wszText, 2);
 //		if (D2Win_10023() != pEditBox || !(GetTickCount() / 250 & 1))
@@ -1290,7 +1290,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //
 //		v46 = 0;
 //
-//		wchar_t v60[256] = {};
+//		Unicode v60[256] = {};
 //
 //		D2LANG_unicode2Win(a2, pEditBox->wszText);
 //
@@ -1321,7 +1321,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //					{
 //						v17 = Count;
 //						Dest[Count] = v16;
-//						D2LANG_win2Unicode(v60, Dest, 256);
+//						Unicode::win2Unicode(v60, Dest, 256);
 //						v18 = D2Win_10122(v60, v17);
 //						if (v55 + v18 > v56)
 //						{
@@ -1350,7 +1350,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //LABEL_57:
 //				strncpy(Dest, v12, Count);
 //				Dest[v13 - v12] = 0;
-//				D2LANG_win2Unicode(v60, Dest, 256);
+//				Unicode::win2Unicode(v60, Dest, 256);
 //				D2Win_10117_DrawText(v60, nX, v6, pEditBox->nTextColor, 0);
 //				if (v45)
 //				{
@@ -1471,7 +1471,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //					{
 //						strncpy(Dest, v12, v39 - v22);
 //						Dest[v53] = 0;
-//						D2LANG_win2Unicode(v60, Dest, 256);
+//						Unicode::win2Unicode(v60, Dest, 256);
 //						D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
 //						v52 = nX + pWidth;
 //					}
@@ -1479,7 +1479,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //					v26 = v24 - v39;
 //					strncpy(Dest, &v12[v53], v26);
 //					Dest[v26] = 0;
-//					D2LANG_win2Unicode(v60, Dest, 256);
+//					Unicode::win2Unicode(v60, Dest, 256);
 //					D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
 //					D2GFX_10055_DrawSolidRectEx(v52, v6 - v47, v52 + pWidth, v6, D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u), DRAWMODE_NORMAL);
 //					goto LABEL_57;
@@ -1492,7 +1492,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //					strncpy(Dest, v12, Count);
 //					Dest[v13 - v12] = 0;
 //
-//					D2LANG_win2Unicode(v60, Dest, 256);
+//					Unicode::win2Unicode(v60, Dest, 256);
 //
 //					D2Win_10131_GetTextDimensions(v60, &pWidth, &pHeight);
 //					D2GFX_10055_DrawSolidRectEx(nX, v6 - v47, nX + pWidth, v6, D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u), DRAWMODE_NORMAL);
@@ -1515,7 +1515,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //D2Win.0x6F8A8D60
 void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a3)
 {
-	//wchar_t v48[300] = {};
+	//Unicode v48[300] = {};
 
 	//TODO: Names
 	D2_ASSERT(pEditBox);
@@ -1527,15 +1527,15 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 	const int32_t v6 = D2Win_10125();
 	const int32_t v38 = pEditBox->field_44 + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + v6;
 	int32_t v7 = v38;
-	//D2LANG_strcpy(v48, pEditBox->wszText);
+	//Unicode::strcpy(v48, pEditBox->wszText);
 
-	wchar_t a1[2] = {};
-	D2LANG_win2Unicode(a1, "_", 2);
+	Unicode a1[2] = {};
+	Unicode::win2Unicode(a1, "_", 2);
 
 	const int32_t v43 = D2Win_10122(a1, 2);
 
 	char v45[256] = {};
-	D2LANG_unicode2Win(v45, pEditBox->wszText);
+	Unicode::unicode2Win(v45, pEditBox->wszText, ARRAY_SIZE(v45));
 	const char* v10 = v45;
 	const char* v32 = v45;
 	const int32_t v44 = pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40;
@@ -1553,12 +1553,12 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 
 		int32_t v16 = v10 - v32;
 		char v46[256] = {};
-		wchar_t v47[256] = {};
+		Unicode v47[256] = {};
 		BOOL v41 = 0;
 		while (*v10 && *v10 != '\r' && *v10 != '\n')
 		{
 			v46[v16] = *v10;
-			D2LANG_win2Unicode(v47, v46, 256);
+			Unicode::win2Unicode(v47, v46, 256);
 			if (v43 + D2Win_10122(v47, v16) > v44)
 			{
 				v41 = 1;
@@ -1575,7 +1575,7 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 			*a2 = v37;
 			if (v19)
 			{
-				D2LANG_win2Unicode(v47, v46, 256);
+				Unicode::win2Unicode(v47, v46, 256);
 				*a2 += D2Win_10122(v47, v19);
 			}
 			*a3 = v7;
@@ -1643,9 +1643,9 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 }
 
 //D2Win.0x6F8A9120
-int32_t __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg)
+int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWnd;
+	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1690,7 +1690,7 @@ int32_t __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg)
 				}
 				else if (nX >= pEditBox->controlHeader.nWidth - pEditBox->field_40)
 				{
-					const int nLength = D2LANG_strlen(pEditBox->wszText) - 1;
+					const int nLength = Unicode::strlen(pEditBox->wszText) - 1;
 					if (pEditBox->field_25C + 1 > nLength)
 					{
 						pEditBox->field_25C = nLength;
@@ -1707,7 +1707,7 @@ int32_t __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg)
 			int nCounter = 1;
 			while (nX > D2Win_10122(&pEditBox->wszText[pEditBox->field_4C], nCounter))
 			{
-				if (nCounter > D2LANG_strlen(&pEditBox->wszText[pEditBox->field_4C]))
+				if (nCounter > Unicode::strlen(&pEditBox->wszText[pEditBox->field_4C]))
 				{
 					break;
 				}
@@ -1732,7 +1732,7 @@ int32_t __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg)
 			}
 		}
 
-		if (pMsg->uMessage == WM_LBUTTONDOWN)
+		if (pMsg->nMessage == WM_LBUTTONDOWN)
 		{
 			pEditBox->field_280 = 1;
 		}
@@ -1750,9 +1750,9 @@ int32_t __stdcall sub_6F8A9120(D2WinMsgStrc* pMsg)
 }
 
 //D2Win.0x6F8A93A0
-int32_t __stdcall EDITBOX_HandleMouseUp(D2WinMsgStrc* pMsg)
+int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWnd;
+	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1767,10 +1767,10 @@ int32_t __stdcall EDITBOX_HandleMouseUp(D2WinMsgStrc* pMsg)
 }
 
 //D2Win.0x6F8A9410
-int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
+int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY)
 {
 	//TODO: Names
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWnd;
+	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1792,13 +1792,13 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 	{
 		D2Win_10127_SetFont(pEditBox->eFont);
 
-		wchar_t wszText[2] = {};
-		D2LANG_win2Unicode(wszText, "_", 2);
+		Unicode wszText[2] = {};
+		Unicode::win2Unicode(wszText, "_", 2);
 
 		const int32_t v36 = D2Win_10121_GetTextWidth(wszText);
 
 		char v38[256] = {};
-		D2LANG_unicode2Win(v38, pEditBox->wszText);
+		Unicode::unicode2Win(v38, pEditBox->wszText, ARRAYSIZE(v38));
 		const char* v30 = v38;
 		const char* v13 = v38;
 		int32_t v26 = 0;
@@ -1809,14 +1809,14 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 		while (*v13)
 		{
 			char v39[256] = {};
-			wchar_t v40[256] = {};
+			Unicode v40[256] = {};
 
 			int32_t v34 = 0;
 			int32_t v18 = v13 - v30;
 			while (*v13 && *v13 != '\r' && *v13 != '\n')
 			{
 				v39[v18] = *v13;
-				D2LANG_win2Unicode(v40, v39, 256);
+				Unicode::win2Unicode(v40, v39, 256);
 				if (v36 + D2Win_10122(v40, v18) > pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40)
 				{
 					v34 = 1;
@@ -1829,7 +1829,7 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 			if (nY >= v26 && nY < v28 + v26)
 			{
 				int32_t v21 = 1;
-				D2LANG_win2Unicode(v40, v39, 256);
+				Unicode::win2Unicode(v40, v39, 256);
 				while (nX > D2Win_10122(v40, v21))
 				{
 					if (v21 > v18)
@@ -1870,7 +1870,7 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 		if (!v31)
 		{
 			v23 = pEditBox->field_25C;
-			pEditBox->field_25C = D2LANG_strlen(pEditBox->wszText);
+			pEditBox->field_25C = Unicode::strlen(pEditBox->wszText);
 		}
 
 		if ((GetKeyState(VK_SHIFT) & 0x8000 || pEditBox->field_280) && v23 != -1)
@@ -1887,7 +1887,7 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 		}
 	}
 
-	if (pMsg->uMessage == WM_LBUTTONDOWN)
+	if (pMsg->nMessage == WM_LBUTTONDOWN)
 	{
 		pEditBox->field_280 = 1;
 	}
@@ -1901,9 +1901,9 @@ int32_t __fastcall sub_6F8A9410(D2WinMsgStrc* pMsg, int32_t nX, int32_t nY)
 }
 
 //D2Win.0x6F8A97D0
-int32_t __stdcall sub_6F8A97D0(D2WinMsgStrc* pMsg)
+int32_t __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWnd;
+	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1929,13 +1929,13 @@ void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
 	//TODO: Names
 	D2Win_10127_SetFont(pEditBox->eFont);
 
-	const int32_t v2 = D2LANG_strlen(pEditBox->wszText);
+	const int32_t v2 = Unicode::strlen(pEditBox->wszText);
 
-	wchar_t wszText[300] = {};
+	Unicode wszText[300] = {};
 	if (pEditBox->dwEditBoxFlags & EDITBOX_PASSWORD)
 	{
-		wchar_t wszStar[2] = {};
-		D2LANG_win2Unicode(wszStar, "*", 2);
+		Unicode wszStar[2] = {};
+		Unicode::win2Unicode(wszStar, "*", 2);
 		if (v2 > 0)
 		{
 			//TODO: Set text
@@ -1954,11 +1954,11 @@ void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
 	}
 	else
 	{
-		D2LANG_strcpy(wszText, pEditBox->wszText);
+		Unicode::strcpy(wszText, pEditBox->wszText);
 	}
 
-	wchar_t wszDash[2] = {};
-	D2LANG_win2Unicode(wszDash, "_", 2);
+	Unicode wszDash[2] = {};
+	Unicode::win2Unicode(wszDash, "_", 2);
 
 	const int32_t nDashWidth = D2Win_10121_GetTextWidth(wszDash);
 

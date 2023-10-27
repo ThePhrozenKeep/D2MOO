@@ -61,11 +61,11 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 		do
 		{
 			D2WinListDataStrc* pData = D2_ALLOC_STRC(D2WinListDataStrc);
-			const wchar_t* pText = D2LANG_10004_GetStringFromTblIndex(*((WORD*)nWidtha - 2));
+			const Unicode* pText = D2LANG_GetStringFromTblIndex(*((WORD*)nWidtha - 2));
 
-			D2_ASSERT(D2LANG_strlen(pText) < std::size(pData->wszText));
+			D2_ASSERT(Unicode::strlen(pText) < std::size(pData->wszText));
 
-			D2LANG_strcpy(pData->wszText, pText);
+			Unicode::strcpy(pData->wszText, pText);
 
 			int32_t nTextWidth = 0;
 			int32_t nTextHeight = 0;
@@ -80,7 +80,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 			v24 = nWidtha;
 			pData->field_200 = nTextWidth;
 			pData->field_208 = 0;
-			pData->field_204 = (int32_t(__stdcall*)(D2WinMsgStrc*))*((DWORD*)nWidtha + 2);
+			pData->field_204 = (int32_t(__stdcall*)(SMSGHANDLER_PARAMS*))*((DWORD*)nWidtha + 2);
 			pData->field_20C = 0;
 			pData->field_210 = 0;
 			pData->field_214 = 0;
@@ -134,25 +134,25 @@ int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
 }
 
 //D2Win.0x6F8AC4F0 (#10138)
-void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__stdcall* a3)(D2WinMsgStrc*), char a4, int32_t a5, int32_t a6, int32_t a7)
+void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
-	wchar_t wszText[256] = {};
+	Unicode wszText[256] = {};
 
-	D2LANG_win2Unicode(wszText, szText, std::size(wszText));
+	Unicode::win2Unicode(wszText, szText, std::size(wszText));
 	D2Win_10137(pList, wszText, a3, a4, a5, a6, a7);
 }
 
 //D2Win.0x6F8AC570 (#10137)
-void __fastcall D2Win_10137(D2WinListStrc* pList, wchar_t* wszText, int32_t(__stdcall* a3)(D2WinMsgStrc*), char a4, int32_t a5, int32_t a6, int32_t a7)
+void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	D2Win_10127_SetFont(pList->eFont);
 
 	D2WinListDataStrc* pNewData = D2_ALLOC_STRC(D2WinListDataStrc);
-	D2_ASSERT(D2LANG_strlen(wszText) < 256);
+	D2_ASSERT(Unicode::strlen(wszText) < 256);
 
-	D2LANG_strcpy(pNewData->wszText, wszText);
+	Unicode::strcpy(pNewData->wszText, wszText);
 
 	int32_t nTextWidth = 0;
 	int32_t nTextHeight = 0;
@@ -343,9 +343,9 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AC9B0
-int32_t __stdcall LIST_HandleMouseDown(D2WinMsgStrc* pMsg)
+int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWnd;
+	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
@@ -377,9 +377,9 @@ int32_t __stdcall LIST_HandleMouseDown(D2WinMsgStrc* pMsg)
 }
 
 //D2Win.0x6F8ACA70
-int32_t __stdcall LIST_HandleCharInput(D2WinMsgStrc* pMsg)
+int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWnd;
+	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
@@ -395,13 +395,13 @@ int32_t __stdcall LIST_HandleCharInput(D2WinMsgStrc* pMsg)
 }
 
 //D2Win.0x6F8ACAE0
-int32_t __stdcall LIST_HandleVirtualKeyInput(D2WinMsgStrc* pMsg)
+int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWnd;
+	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
-	if (pMsg->uMessage == WM_CHAR)
+	if (pMsg->nMessage == WM_CHAR)
 	{
 		return 0;
 	}

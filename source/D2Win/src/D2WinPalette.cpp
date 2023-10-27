@@ -5,7 +5,7 @@
 
 #include "D2CMP.h"
 #include "D2Gfx.h"
-//#include "D2Hell.h"
+#include "Archive.h"
 #include "Fog.h"
 
 #include "D2WinArchive.h"
@@ -82,7 +82,7 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 {
 	D2PaletteTableStrc paletteTable = {};
 
-	uint8_t* pDatFile = (uint8_t*)D2Hell_ARCHIVE_OpenFile_6F8B22F8(D2Win_10038_Return0(), szDatFileName, nullptr, __FILE__, __LINE__);
+	uint8_t* pDatFile = (uint8_t*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetMemPool(), szDatFileName, nullptr);
 	for (int32_t i = 0; i < std::size(paletteTable.datFilePalette); ++i)
 	{
 		paletteTable.datFilePalette[i].peBlue = *pDatFile++;
@@ -91,7 +91,7 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 		paletteTable.datFilePalette[i].peFlags = 0;
 	}
 
-	D2PL2FileStrc* pPL2File = (D2PL2FileStrc*)D2Hell_ARCHIVE_OpenFile_6F8B22F8(D2Win_10038_Return0(), szPL2FileName, nullptr, __FILE__, __LINE__);
+	D2PL2FileStrc* pPL2File = (D2PL2FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetMemPool(), szPL2FileName, nullptr);
 	memcpy(gRGBAPalette_6F9622C0, pPL2File->rgbaPalette, sizeof(gRGBAPalette_6F9622C0));
 	memcpy(gTransPalette_6F922198, pPL2File->trans, sizeof(gTransPalette_6F922198));
 	memcpy(&gShadowsLightGammaPalette_6F91E298.shadowsPalette, pPL2File->shadows, sizeof(gShadowsLightGammaPalette_6F91E298.shadowsPalette));
@@ -116,8 +116,8 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 		const uint8_t green = std::min(170 * gRGBAPalette_6F9622C0[i].peGreen / 100, 255);
 		const uint8_t blue = std::min(170 * gRGBAPalette_6F9622C0[i].peBlue / 100, 255);
 
-		byte_6F96A6C0[i] = D2CMP_10004_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, red, green, blue);
-		byte_6F952198[i] = D2CMP_10004_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, gRGBAPalette_6F9622C0[i].peRed, 0, 0);
+		byte_6F96A6C0[i] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, red, green, blue);
+		byte_6F952198[i] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, gRGBAPalette_6F9622C0[i].peRed, 0, 0);
 	}
 
 	for (int32_t i = 0; i < std::size(paletteTable.transPalettes); ++i)
@@ -232,7 +232,7 @@ int32_t __stdcall D2Win_10028(const char* pszPalDatFilename, const char* pszPalP
 //D2Win.0x6F8AEA80 (#10034)
 uint8_t __stdcall D2Win_10034_MixRGB(uint8_t nRed, uint8_t nGreen, uint8_t nBlue)
 {
-	return D2CMP_10004_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, nRed, nGreen, nBlue);
+	return D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, nRed, nGreen, nBlue);
 }
 
 //D2Win.0x6F8AEAC0 (#10178)

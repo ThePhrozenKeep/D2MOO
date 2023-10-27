@@ -23,7 +23,7 @@ BOOL __fastcall ARCHIVE_LoadArchives();
 //D2Win.0x6F8A5CB0
 void __fastcall ARCHIVE_FreeArchives();
 //D2Win.0x6F8A5DE0
-int __stdcall D2Win_10038_Return0();
+void* __stdcall D2Win_GetMemPool();
 //D2Win.0x6F8A5DF0
 int __stdcall D2Win_10185();
 //D2Win.0x6F8A5E80

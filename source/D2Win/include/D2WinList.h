@@ -2,15 +2,16 @@
 
 #include "D2WinControlHeader.h"
 
+#include <D2Unicode.h>
 #include "Font.h"
 
 
 #pragma pack(push, 1)
 struct D2WinListDataStrc
 {
-	wchar_t wszText[256];							//0x00
+	Unicode wszText[256];							//0x00
 	int32_t field_200;								//0x200
-	int32_t(__stdcall* field_204)(D2WinMsgStrc*);	//0x204
+	int32_t(__stdcall* field_204)(SMSGHANDLER_PARAMS*);	//0x204
 	int32_t field_208;								//0x208
 	int32_t field_20C;								//0x20C
 	int32_t field_210;								//0x210
@@ -46,9 +47,9 @@ D2WinListStrc* __fastcall LIST_Create(int nX, int nY, int nWidth, int nHeight, v
 //D2Win.0x6F8AC490
 int __fastcall LIST_Destroy(D2WinListStrc* pList);
 //D2Win.0x6F8AC4F0
-void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int(__stdcall* a3)(D2WinMsgStrc*), char a4, int a5, int a6, int a7);
+void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
 //D2Win.0x6F8AC570
-void __fastcall D2Win_10137(D2WinListStrc* pList, wchar_t* wszText, int(__stdcall* a3)(D2WinMsgStrc*), char a4, int a5, int a6, int a7);
+void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
 //D2Win.0x6F8AC6D0
 int __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList);
 //D2Win.0x6F8AC720
@@ -62,8 +63,8 @@ void __stdcall LIST_UnloadPentspinCellfile();
 //D2Win.0x6F8AC820
 int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8AC9B0
-int __stdcall LIST_HandleMouseDown(D2WinMsgStrc* pMsg);
+int __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ACA70
-int __stdcall LIST_HandleCharInput(D2WinMsgStrc* pMsg);
+int __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ACAE0
-int __stdcall LIST_HandleVirtualKeyInput(D2WinMsgStrc* pMsg);
+int __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg);

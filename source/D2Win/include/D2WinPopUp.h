@@ -1,12 +1,12 @@
 #pragma once
 
 #include "D2WinControlHeader.h"
-
+#include <D2Unicode.h>
 
 #pragma pack(push, 1)
 struct D2WinPopUpLineStrc
 {
-	wchar_t wszText[64];							//0x00
+	Unicode wszText[64];							//0x00
 	void(__stdcall* pfHandleMouseInput)();			//0x80
 };
 
@@ -29,7 +29,7 @@ int __stdcall POPUP_IsActive();
 //D2Win.0x6F8AEC10
 int __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine);
 //D2Win.0x6F8AECA0
-int __stdcall POPUP_HandleMouseButtonInput(D2WinMsgStrc* pMsg);
+int __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AED10
 int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl);
 //D2Win.0x6F8AEDB0

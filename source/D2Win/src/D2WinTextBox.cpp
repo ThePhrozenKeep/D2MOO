@@ -6,6 +6,7 @@
 
 #include <D2CMP.h>
 #include <D2Lang.h>
+#include <D2StrTable.h>
 #include <Storm.h>
 
 #include <D2Gfx.h>
@@ -26,7 +27,7 @@ extern int32_t dword_6F96A8DC;
 
 
 //D2Win.0x6F8AFAA0 (#10042)
-D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t(__stdcall* a8)(D2WinMsgStrc*), uint32_t dwTextBoxFlags, int32_t a10, int32_t a11)
+D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t(__stdcall* a8)(SMSGHANDLER_PARAMS*), uint32_t dwTextBoxFlags, int32_t a10, int32_t a11)
 {
 	D2WinTextBoxStrc* pTextBox = D2_CALLOC_STRC(D2WinTextBoxStrc);
 
@@ -109,15 +110,15 @@ D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, 
 //D2Win.0x6F8AFCC0
 void __fastcall sub_6F8AFCC0(Font nFontSize)
 {
-	switch (D2LANG_10007_GetLocaleId())
+	switch (STRTABLE_GetLanguage())
 	{
-	case 6:
-	case 10:
+	case LANGUAGE_JAPANESE:
+	case LANGUAGE_POLISH:
 	{
 		dword_6F8BE238 = dword_6F96A8DC != 0 ? 0 : 4;
 		break;
 	}
-	case 7:
+	case LANGUAGE_KOREAN:
 	{
 		const Font nOldFont = D2Win_10127_SetFont(nFontSize);
 		if (D2Win_10125() <= 13)
@@ -131,7 +132,7 @@ void __fastcall sub_6F8AFCC0(Font nFontSize)
 		D2Win_10127_SetFont(nOldFont);
 		break;
 	}
-	case 9:
+	case LANGUAGE_CHINESETWN:
 	{
 		const Font nOldFont = D2Win_10127_SetFont(nFontSize);
 		if (D2Win_10125() <= 13)
@@ -224,53 +225,53 @@ int32_t __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t a2, int32_t a
 //D2Win.0x6F8AFF30 (#10045)
 void __fastcall D2Win_10045(D2WinTextBoxStrc* pTextBox, const char* szText)
 {
-	wchar_t wszText[1024] = {};
+	Unicode wszText[1024] = {};
 
 	D2_ASSERT(pTextBox);
 
-	D2LANG_win2Unicode(wszText, szText, std::size(wszText));
+	Unicode::win2Unicode(wszText, szText, std::size(wszText));
 	D2Win_10051(pTextBox, wszText, 4, 0, 0);
 }
 
 //D2Win.0x6F8AFFB0 (#10046)
 int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t a3)
 {
-	wchar_t wszText[1024] = {};
+	Unicode wszText[1024] = {};
 
 	D2_ASSERT(pTextBox);
 
-	D2LANG_utf8ToUnicode(wszText, szText, std::size(wszText));
+	Unicode::utf8ToUnicode(wszText, szText, std::size(wszText));
 	return D2Win_10051(pTextBox, wszText, a3, 0, 0);
 }
 
 //D2Win.0x6F8B0030 (#10044)
-int32_t __fastcall D2Win_10044(D2WinTextBoxStrc* pTextBox, const wchar_t* wszText)
+int32_t __fastcall D2Win_10044(D2WinTextBoxStrc* pTextBox, const Unicode* wszText)
 {
 	return D2Win_10051(pTextBox, wszText, 4, 0, 0);
 }
 
-int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const wchar_t* v9, int32_t a3, char a4, int32_t a5)
+int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const Unicode* v9, int32_t a3, char a4, int32_t a5)
 {
 	D2WinTextBoxLineStrc* v23 = D2_ALLOC_STRC(D2WinTextBoxLineStrc);
-	wchar_t* v26 = nullptr;
+	Unicode* v26 = nullptr;
 	if (a5 == 2)
 	{
-		v23->pColumns[0] = (wchar_t*)D2_ALLOC(sizeof(wchar_t) * (D2LANG_strlen(v9) + 6));
+		v23->pColumns[0] = (Unicode*)D2_ALLOC(sizeof(Unicode) * (Unicode::strlen(v9) + 6));
 		v23->pColumns[0][4] = ' ';
 		v23->pColumns[0][3] = v23->pColumns[0][4];
 		v23->pColumns[0][2] = v23->pColumns[0][3];
 		v23->pColumns[0][1] = v23->pColumns[0][2];
 		v23->pColumns[0][0] = v23->pColumns[0][1];
 
-		v26 = (wchar_t*)(v23->pColumns[0] + 5);
+		v26 = (Unicode*)(v23->pColumns[0] + 5);
 	}
 	else
 	{
-		v23->pColumns[0] = (wchar_t*)D2_ALLOC(sizeof(wchar_t) * (D2LANG_strlen(v9) + 1));
+		v23->pColumns[0] = (Unicode*)D2_ALLOC(sizeof(Unicode) * (Unicode::strlen(v9) + 1));
 
 		v26 = v23->pColumns[0];
 	}
-	D2LANG_strcpy(v26, v9);
+	Unicode::strcpy(v26, v9);
 
 	int32_t v29 = 0;
 
@@ -352,33 +353,33 @@ int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const wchar_t*
 }
 
 //D2Win.0x6F8B0040) --------------------------------------------------------
-int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const wchar_t* a2, int32_t a3, char a4, int32_t a5)
+int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, int32_t a3, char a4, int32_t a5)
 {
-	wchar_t* v14; // ebp@27
+	Unicode* v14; // ebp@27
 	int v15; // edi@27
 	int v16; // eax@27
-	wchar_t* v17; // ecx@27
-	wchar_t* v18; // ebx@37
+	Unicode* v17; // ecx@27
+	Unicode* v18; // ebx@37
 	int v19; // ebp@37
-	wchar_t* v20; // edi@37
+	Unicode* v20; // edi@37
 	signed int v21; // ebp@37
 	signed int v29; // ebp@44
-	wchar_t* v46; // [sp+40h] [bp-824h]@27
+	Unicode* v46; // [sp+40h] [bp-824h]@27
 	int v48; // [sp+44h] [bp-820h]@23
-	wchar_t* v49; // [sp+48h] [bp-81Ch]@27
-	wchar_t* a2a; // [sp+58h] [bp-80Ch]@32
+	Unicode* v49; // [sp+48h] [bp-81Ch]@27
+	Unicode* a2a; // [sp+58h] [bp-80Ch]@32
 	int v52; // [sp+5Ch] [bp-808h]@27
-	wchar_t* v53; // [sp+60h] [bp-804h]@27
+	Unicode* v53; // [sp+60h] [bp-804h]@27
 
 
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	wchar_t v58[1024] = {};
+	Unicode v58[1024] = {};
 
-	D2LANG_strcpy(v58, a2);
+	Unicode::strcpy(v58, a2);
 
-	const wchar_t* v9 = v58;
+	const Unicode* v9 = v58;
 	while (*v9)
 	{
 		if (*v9 >= 0x100u || !isspace(*v9))
@@ -398,8 +399,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const wchar_t* a2, in
 	int32_t v10 = pTextBox->controlHeader.nWidth - 2 * pTextBox->field_40;
 	if (a5 == 2)
 	{
-		const wchar_t* wszPlaceholder = L"     ";
-		v10 -= D2Win_10121_GetTextWidth(wszPlaceholder);
+		v10 -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
 	}
 
 	if (D2Win_10122(v9, 255) < v10)
@@ -412,16 +412,15 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const wchar_t* a2, in
 	v48 = pTextBox->controlHeader.nWidth - 2 * pTextBox->field_40;
 	if (a5 == 2)
 	{
-		const wchar_t* wszPlaceholder = L"     ";
-		v48 -= D2Win_10121_GetTextWidth(wszPlaceholder);
+		v48 -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
 	}
 
-	v14 = (wchar_t*)SMemAlloc(2048, __FILE__, __LINE__, 0);
+	v14 = (Unicode*)SMemAlloc(2048, __FILE__, __LINE__, 0);
 	v49 = v14;
-	D2LANG_strcpy(v14, v9);
+	Unicode::strcpy(v14, v9);
 
 	v15 = 0;
-	v16 = D2LANG_strlen(v14);
+	v16 = Unicode::strlen(v14);
 	v17 = v14;
 	v52 = v16;
 	v46 = v14;
@@ -435,7 +434,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const wchar_t* a2, in
 				v53 = v17;
 			}
 
-			a2a = (wchar_t*)(v15 + 1);
+			a2a = (Unicode*)(v15 + 1);
 			if (D2Win_10122(v9, v15 + 1) >= v48)
 			{
 				break;
@@ -460,14 +459,14 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const wchar_t* a2, in
 	}
 
 LABEL_37:
-	v18 = (wchar_t*)SMemAlloc(2048, __FILE__, __LINE__, 0);
-	a2a = (wchar_t*)SMemAlloc(2048, __FILE__, __LINE__, 0);
-	D2LANG_strncpy(v18, v14, v15);
+	v18 = (Unicode*)SMemAlloc(2048, __FILE__, __LINE__, 0);
+	a2a = (Unicode*)SMemAlloc(2048, __FILE__, __LINE__, 0);
+	Unicode::strncpy(v18, v14, v15);
 
 	v18[v15] = 0;
 	v19 = v52 - v15;
 	v20 = a2a;
-	D2LANG_strncpy(a2a, v46, v19);
+	Unicode::strncpy(a2a, v46, v19);
 	v20[v19] = 0;
 
 	SMemFree(v49, __FILE__, __LINE__, 0);
@@ -488,7 +487,7 @@ LABEL_37:
 }
 
 //D2Win.0x6F8B05E0 (#10198)
-int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const wchar_t* pText, int32_t a3, int32_t a4, char a5)
+int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t a3, int32_t a4, char a5)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -496,8 +495,8 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const wchar_t* pText,
 	for (int32_t i = 0; i < a3; ++i)
 	{
 		D2WinTextBoxLineStrc* pLine = D2_CALLOC_STRC(D2WinTextBoxLineStrc);
-		pLine->pColumns[0] = (wchar_t*)D2_ALLOC(sizeof(wchar_t) * (D2LANG_strlen(pText) + 1));
-		D2LANG_strcpy(pLine->pColumns[0], pText);
+		pLine->pColumns[0] = (Unicode*)D2_ALLOC(sizeof(Unicode) * (Unicode::strlen(pText) + 1));
+		Unicode::strcpy(pLine->pColumns[0], pText);
 		pLine->pColumns[1] = nullptr;
 		pLine->pColumns[2] = nullptr;
 		pLine->pColumns[3] = nullptr;
@@ -531,24 +530,24 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const wchar_t* pText,
 }
 
 //D2Win.0x6F8B0750 (#10057)
-int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, int32_t a2, int32_t a3, int32_t a4)
+int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* a2, int32_t a3, int32_t a4)
 {
-	wchar_t wszText[1024] = {};
+	Unicode wszText[1024] = {};
 
-	D2LANG_win2Unicode(wszText, a2, std::size(wszText));
+	Unicode::win2Unicode(wszText, a2, std::size(wszText));
 	return D2Win_10058_0(pTextBox, wszText, a3, a4);
 }
 
 //D2Win.0x6F8B07C0 (#10058)
-int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const wchar_t* pText, int32_t a3, int32_t nColumn)
+int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t a3, int32_t nColumn)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 	D2_ASSERT(pTextBox->nNumColumns > nColumn);
 
-	wchar_t wszText[1024] = {};
+	Unicode wszText[1024] = {};
 
-	D2LANG_strcpy(wszText, pText);
+	Unicode::strcpy(wszText, pText);
 
 	D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine;
 	
@@ -566,8 +565,8 @@ int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const wchar_t* pTex
 	{
 		D2_ASSERT(pLine->pColumns[nColumn] == nullptr);
 
-		pLine->pColumns[nColumn] = (wchar_t*)D2_ALLOC(sizeof(wchar_t) * (D2LANG_strlen(wszText) + 1));
-		D2LANG_strcpy(pLine->pColumns[nColumn], wszText);
+		pLine->pColumns[nColumn] = (Unicode*)D2_ALLOC(sizeof(Unicode) * (Unicode::strlen(wszText) + 1));
+		Unicode::strcpy(pLine->pColumns[nColumn], wszText);
 	}
 
 	return 1;
@@ -688,7 +687,7 @@ int32_t __fastcall D2Win_10055(D2WinTextBoxStrc* pTextBox)
 }
 
 //D2Win.0x6F8B0C50 (#10048)
-wchar_t* __fastcall D2Win_10048(D2WinTextBoxStrc* pTextBox)
+Unicode* __fastcall D2Win_10048(D2WinTextBoxStrc* pTextBox)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -713,7 +712,7 @@ wchar_t* __fastcall D2Win_10048(D2WinTextBoxStrc* pTextBox)
 }
 
 //D2Win.0x6F8B0CC0 (#10196)
-wchar_t* __fastcall D2Win_10196(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t nColumnNum)
+Unicode* __fastcall D2Win_10196(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t nColumnNum)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -922,7 +921,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 	{
 		for (int32_t i = 0; i < pTextBox->nNumColumns; ++i)
 		{
-			const wchar_t* wszColumn = pCurrentLine->pColumns[i];
+			const Unicode* wszColumn = pCurrentLine->pColumns[i];
 			if (!wszColumn)
 			{
 				break;
@@ -977,11 +976,11 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				}
 			}
 
-			wchar_t wszText[1024] = {};
-			D2LANG_strcpy(wszText, pCurrentLine->pColumns[i]);
+			Unicode wszText[1024] = {};
+			Unicode::strcpy(wszText, pCurrentLine->pColumns[i]);
 
 			int32_t j = 0;
-			while (j < D2LANG_strlen(wszText))
+			while (j < Unicode::strlen(wszText))
 			{
 				if (D2Win_10122(wszText, j + 1) >= v48)
 				{
@@ -1033,9 +1032,9 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8B15A0
-int32_t __stdcall TEXTBOX_HandleMouseDown(D2WinMsgStrc* pMsg)
+int32_t __stdcall TEXTBOX_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pMsg->hWnd;
+	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1071,9 +1070,9 @@ int32_t __stdcall TEXTBOX_HandleMouseDown(D2WinMsgStrc* pMsg)
 }
 
 //D2Win.0x6F8B16B0
-int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(D2WinMsgStrc* pMsg)
+int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pMsg->hWnd;
+	D2WinTextBoxStrc* pTextBox = (D2WinTextBoxStrc*)pMsg->hWindow;
 
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1219,7 +1218,7 @@ int32_t __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* a2)
 }
 
 //D2Win.0x6F8B1A80 (#10195)
-int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(D2WinMsgStrc*))
+int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(SMSGHANDLER_PARAMS*))
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);

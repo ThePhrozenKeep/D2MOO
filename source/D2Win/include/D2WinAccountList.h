@@ -41,4 +41,4 @@ int __fastcall ACCOUNTLIST_GetTextFromSelectedEntry(D2WinAccountListStrc* pAccou
 //D2Win.0x6F8A5180
 int32_t __fastcall ACCOUNTLIST_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8A52E0
-int __stdcall ACCOUNTLIST_HandleMouseDown(D2WinMsgStrc* pMsg);
+int __stdcall ACCOUNTLIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);

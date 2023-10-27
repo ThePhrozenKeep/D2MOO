@@ -2,6 +2,7 @@
 
 #include "D2WinControlHeader.h"
 
+#include <D2Unicode.h>
 #include "Font.h"
 
 
@@ -25,9 +26,9 @@ struct D2WinButtonStrc
 	int32_t field_58;										//0x58
 	int32_t nBaseFrame;										//0x5C
 	Font eFont;												//0x60
-	wchar_t wszText[256];									//0x64
+	Unicode wszText[256];									//0x64
 	int32_t nTextColor;										//0x264
-	int32_t(__stdcall* pfUpdateHoverState)(D2WinMsgStrc*);	//0x268
+	int32_t(__stdcall* pfUpdateHoverState)(SMSGHANDLER_PARAMS*);	//0x268
 	int32_t isButtonHovered;								//0x26C
 	uint16_t nStringId;										//0x270
 	int16_t pad0x272;										//0x272
@@ -36,7 +37,7 @@ struct D2WinButtonStrc
 
 
 //D2Win.0x6F8A61A0
-D2WinButtonStrc* __fastcall BUTTON_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, int(__stdcall* pCallback)(D2WinMsgStrc*), int a7, int a8, uint32_t a9, uint16_t nStringId, int(__stdcall* a11)(D2WinMsgStrc*));
+D2WinButtonStrc* __fastcall BUTTON_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, int(__stdcall* pCallback)(SMSGHANDLER_PARAMS*), int a7, int a8, uint32_t a9, uint16_t nStringId, int(__stdcall* a11)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8A62C0
 int __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton);
 //D2Win.0x6F8A62F0
@@ -44,13 +45,13 @@ BOOL __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton);
 //D2Win.0x6F8A6330
 void __fastcall BUTTON_SetIsPressed(D2WinButtonStrc* pButton, int a2);
 //D2Win.0x6F8A6360
-int __fastcall BUTTON_SetText(D2WinButtonStrc* pButton, Font nFont, const wchar_t* wszText, int nTextColor);
+void __fastcall BUTTON_SetText(D2WinButtonStrc* pButton, Font nFont, const Unicode* wszText, int nTextColor);
 //D2Win.0x6F8A63A0
-int __fastcall BUTTON_SetTextWithStringId(D2WinButtonStrc* pButton, Font nFont, WORD nStringIndex, int nTextColor);
+void __fastcall BUTTON_SetTextWithStringId(D2WinButtonStrc* pButton, Font nFont, WORD nStringIndex, int nTextColor);
 //D2Win.0x6F8A63F0
 void __fastcall BUTTON_SetCoordinates(D2WinButtonStrc* pButton, int nX, int nY, int nWidth, int nHeight);
 //D2Win.0x6F8A6430
-void __fastcall BUTTON_SimulateClick(D2WinMsgStrc* pMsg);
+void __fastcall BUTTON_SimulateClick(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A64A0
 void __fastcall BUTTON_SetBaseFrame(D2WinButtonStrc* pButton, int a2);
 //D2Win.0x6F8A64D0
@@ -60,8 +61,8 @@ void __fastcall BUTTON_SetStringId(D2WinButtonStrc* pButton, WORD nStringIndex);
 //D2Win.0x6F8A65A0
 int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8A6A10
-int __stdcall BUTTON_HandleMouseDown(D2WinMsgStrc* pMsg);
+int __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A6AF0
-int __stdcall BUTTON_HandleMouseUp(D2WinMsgStrc* pMsg);
+int __stdcall BUTTON_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A6BB0
-int __stdcall BUTTON_HandleVirtualKeyInput(D2WinMsgStrc* pMsg);
+int __stdcall BUTTON_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg);

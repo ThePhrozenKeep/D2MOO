@@ -38,7 +38,7 @@ EXPORTS
 	CONTROL_GetType													@10035
 	ARCHIVE_FreeArchives											@10036
 	ARCHIVE_LoadArchives											@10037
-	D2Win_10038_Return0												@10038
+	D2Win_GetMemPool												@10038
 	ARCHIVE_LoadCellFile											@10039
 	ARCHIVE_LoadCellFileWithFileSize								@10040
 	ARCHIVE_FreeCellFile											@10041
