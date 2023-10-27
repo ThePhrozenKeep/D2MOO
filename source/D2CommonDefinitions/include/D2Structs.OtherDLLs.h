@@ -275,23 +275,6 @@ struct D2BnetClientDataStrc
 	uint8_t __3C2[6];							//0x3C2
 };
 
-// ---------- D2CMP ----------
-struct D2CellFileStrc
-{
-	uint32_t dwVersion;						//0x00
-	struct
-	{
-		uint16_t dwFlags;
-		uint8_t mylastcol;
-		uint8_t mytabno : 1;
-	};										//0x04
-	uint32_t eFormat;							//0x08
-	uint32_t dwTermination;					//0x0C
-	int32_t nDirections;						//0x10
-	int32_t nFrames;							//0x14
-	D2GfxCellStrc* pGfxCells;				//0x18
-};
-
 // ---------- D2Gfx ----------
 
 struct D2GfxCellStrc
