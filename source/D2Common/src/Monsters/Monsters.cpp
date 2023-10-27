@@ -352,7 +352,7 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 }
 
 //D2Common.0x6FDA51A0 (#11085)
-wchar_t* __fastcall MONSTERS_GetHirelingDescString(int nId)
+const Unicode* __fastcall MONSTERS_GetHirelingDescString(int nId)
 {
 	//D2Common.0x6FDD16E0
 	static const short gnHirelingDescStringIds[9] =

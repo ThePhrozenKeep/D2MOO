@@ -157,7 +157,7 @@ D2COMMON_DLL_DECL int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitSt
 //D2Common.0x6FDA4E20 (#11081)
 D2COMMON_DLL_DECL BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, uint8_t a3);
 //D2Common.0x6FDA51A0 (#11085)
-D2COMMON_DLL_DECL wchar_t* __fastcall MONSTERS_GetHirelingDescString(int nId);
+D2COMMON_DLL_DECL const Unicode* __fastcall MONSTERS_GetHirelingDescString(int nId);
 //D2Common.0x6FDA51C0 (#11086)
 D2COMMON_DLL_DECL int __fastcall MONSTERS_GetActFromHirelingTxt(BOOL bExpansion, int nClassId, uint16_t nNameId);
 //D2Common.0x6FDA5200 (#11084)

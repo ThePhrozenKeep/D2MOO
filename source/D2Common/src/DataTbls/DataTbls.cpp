@@ -30,7 +30,7 @@ BOOL DATATBLS_LoadFromBin = TRUE;
 //D2Common.0x6FD494D0
 uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	uint16_t nIndex = 0;
 
 	nIndex = D2LANG_GetTblIndex(szReference, &pUnicode);
@@ -49,30 +49,27 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
 void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt()
 {
-	wchar_t* wszClassName = NULL;
-	wchar_t wszClass[512] = {};
-	wchar_t wszName[512] = {};
-	size_t nConvertedChars = 0;
+	Unicode wszClass[512] = {};
+	Unicode wszName[512] = {};
 
 	for (int i = 0; i < sgptDataTables->nCharStatsTxtRecordCount; ++i)
 	{
 		memset(sgptDataTables->pCharStatsTxt[i].wszClassName, 0x00, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].wszClassName));
 
-		wszClassName = D2LANG_GetStringByReferenceString(sgptDataTables->pCharStatsTxt[i].szClassName);
+		const Unicode* wszClassName = D2LANG_GetStringByReferenceString(sgptDataTables->pCharStatsTxt[i].szClassName);
 
 		if (wszClassName)
 		{
-			wcsncpy_s(sgptDataTables->pCharStatsTxt[i].wszClassName, wszClassName, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].wszClassName));
+			Unicode::strncpy(sgptDataTables->pCharStatsTxt[i].wszClassName, wszClassName, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].wszClassName));
 		}
 		else
 		{
-			mbstowcs_s(&nConvertedChars, wszName, sgptDataTables->pCharStatsTxt[i].szClassName, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].szClassName) - 1);
+			Unicode::toUnicode(wszName, sgptDataTables->pCharStatsTxt[i].szClassName, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].szClassName) - 1);
+			Unicode::strcpy(wszClass, (const Unicode*)L"<");
+			Unicode::strcat(wszClass, wszName);
+			Unicode::strcat(wszClass, (const Unicode*)L">");
 
-			wcscpy_s(wszClass, L"<");
-			wcscat_s(wszClass, wszName);
-			wcscat_s(wszClass, L">");
-
-			wcsncpy_s(sgptDataTables->pCharStatsTxt[i].wszClassName, wszClass, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].wszClassName));
+			Unicode::strncpy(sgptDataTables->pCharStatsTxt[i].wszClassName, wszClass, ARRAY_SIZE(sgptDataTables->pCharStatsTxt[i].wszClassName));
 		}
 	}
 }

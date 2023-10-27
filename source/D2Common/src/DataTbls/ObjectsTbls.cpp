@@ -172,7 +172,7 @@ void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
 	for (int i = 0; i < sgptDataTables->nObjectsTxtRecordCount; ++i)
 	{
 		memset(sgptDataTables->pObjectsTxt[i].wszName, 0x00, sizeof(sgptDataTables->pObjectsTxt[i].wszName));
-		wcsncpy_s(sgptDataTables->pObjectsTxt[i].wszName, D2LANG_GetStringByReferenceString(sgptDataTables->pObjectsTxt[i].szName), sizeof(sgptDataTables->pObjectsTxt[i].szName));
+		Unicode::strncpy(sgptDataTables->pObjectsTxt[i].wszName, D2LANG_GetStringByReferenceString(sgptDataTables->pObjectsTxt[i].szName), sizeof(sgptDataTables->pObjectsTxt[i].szName));
 
 		for (int j = 0; j < 8; ++j)
 		{

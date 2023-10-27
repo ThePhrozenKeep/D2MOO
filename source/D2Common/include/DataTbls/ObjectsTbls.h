@@ -19,7 +19,7 @@ enum D2ObjectSubClasses
 struct D2ObjectsTxt
 {
 	char szName[64];						//0x00
-	wchar_t wszName[64];					//0x40
+	Unicode wszName[64];					//0x40
 	char szToken[3];						//0xC0
 	uint8_t nSpawnMax;						//0xC3
 	uint8_t nSelectable[8];					//0xC4

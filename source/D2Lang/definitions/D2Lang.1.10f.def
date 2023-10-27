@@ -13,7 +13,7 @@ EXPORTS
     ?isASCII@Unicode@@QBEHXZ @10024 ; Unicode::isASCII
     ?isAlpha@Unicode@@QBEHXZ @10025 ; Unicode::isAlpha
 ;   D2LANG_10026 @10026 ; ?isLeftToRight@Unicode@@QBEHXZ
-;   D2LANG_10027 @10027 ; ?isLineBreak@Unicode@@SIHPBU1@I@Z
+    ?isLineBreak@Unicode@@SIHPBU1@I@Z @10027 ; Unicode::isLineBreak
     ?isNewline@Unicode@@QBEHXZ @10028 ; Unicode::isNewline
     ?isPipe@Unicode@@QBEHXZ @10029 ; Unicode::isPipe
     ?isWhitespace@Unicode@@QBEHXZ @10030 ; Unicode::isWhitespace
@@ -31,7 +31,7 @@ EXPORTS
     ?strncmp@Unicode@@SIHPBU1@0I@Z @10042 ; Unicode::strncmp
 ;   D2LANG_10043 @10043 ; ?strncoll@Unicode@@SIHPBU1@0H@Z
     ?strncpy@Unicode@@SIPAU1@PAU1@PBU1@H@Z @10044 ; Unicode::strncpy
-;   D2LANG_10045 @10045 ; ?strnicmp@Unicode@@SIHPBU1@0I@Z
+    ?strnicmp@Unicode@@SIHPBU1@0I@Z @10045 ; Unicode::strnicmp
     ?strstr@Unicode@@SIPAU1@PBU1@0@Z @10046 ; Unicode::strstr
 ;   D2LANG_10047 @10047 ; ?strstri@Unicode@@SIPAU1@PBU1@0@Z
 ;   D2LANG_10048 @10048 ; ?sys2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z
@@ -45,7 +45,7 @@ EXPORTS
 ;   D2LANG_10056 @10056 ; ?unicodeWidth@Unicode@@SIKPBDH@Z
 ;   D2LANG_10057 @10057 ; ?unicodenwidth@Unicode@@SIIPBDH@Z
 ;   D2LANG_10058 @10058 ; ?unloadSysMap@Unicode@@SIXXZ
-;   D2LANG_10059 @10059 ; ?utf8ToUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+    ?utf8ToUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z @10059 ; Unicode::utf8ToUnicode
 ;   D2LANG_10060 @10060 ; ?utfnwidth@Unicode@@SIIPBU1@H@Z
 ;   D2LANG_10061 @10061 ; ?utfwidth@Unicode@@QBEHXZ
     ?win2Unicode@Unicode@@SIPAU1@PAU1@PBDH@Z @10062 ; Unicode::win2Unicode

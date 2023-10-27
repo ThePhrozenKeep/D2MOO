@@ -3,6 +3,7 @@
 #include <D2BasicTypes.h>
 #include <Drlg/D2DrlgDrlg.h>
 #include <Drlg/D2DrlgDrlgGrid.h>
+#include <D2Unicode.h>
 
 #pragma pack(1)
 
@@ -122,8 +123,8 @@ struct D2LevelsTxt
 	char szLevelWarp[40];				//0x11D
 	char szEntryFile[40];				//0x145
 	uint8_t pad0x16D;					//0x16D
-	wchar_t wszLevelName[40];			//0x16E
-	wchar_t wszLevelWarp[40];			//0x1BE
+	Unicode wszLevelName[40];			//0x16E
+	Unicode wszLevelWarp[40];			//0x1BE
 	uint16_t pad0x20E;					//0x20E
 	uint32_t dwThemes;					//0x210
 	uint32_t dwFloorFilter;				//0x214

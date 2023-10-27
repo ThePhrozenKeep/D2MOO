@@ -749,9 +749,8 @@ void __stdcall DATATBLS_ResetGlobalDefaultUnicodeString()
 }
 
 //D2Common.0x6FD68A10 (#10651)
-wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
+const Unicode* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
 {
-	wchar_t* pString = NULL;
 	int nRand = 0;
 
 	if (pUnit && sgptDataTables->nUniqueTitleTxtRecordCount > 0)
@@ -767,7 +766,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
 
 		if (sgptDataTables->pUniqueTitleTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueTitleTxt[nRand].wStringId);
+			const Unicode* pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueTitleTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -779,9 +778,8 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD68A80 (#10652)
-wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
+const Unicode* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
 {
-	wchar_t* pString = NULL;
 	int nRand = 0;
 
 	if (pUnit && sgptDataTables->nUniquePrefixTxtRecordCount > 0)
@@ -797,7 +795,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
 
 		if (sgptDataTables->pUniquePrefixTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniquePrefixTxt[nRand].wStringId);
+			const Unicode* pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniquePrefixTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -809,9 +807,8 @@ wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD68AF0 (#10653)
-wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
+const Unicode* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
 {
-	wchar_t* pString = NULL;
 	int nRand = 0;
 
 	if (pUnit && sgptDataTables->nUniqueSuffixTxtRecordCount > 0)
@@ -827,7 +824,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
 
 		if (sgptDataTables->pUniqueSuffixTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueSuffixTxt[nRand].wStringId);
+			const Unicode* pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueSuffixTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -839,9 +836,8 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD68B60 (#10654)
-wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit)
+const Unicode* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit)
 {
-	wchar_t* pString = NULL;
 	int nRand = 0;
 
 	if (pUnit && sgptDataTables->nUniqueAppellationTxtRecordCount > 0)
@@ -857,7 +853,7 @@ wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit
 
 		if (sgptDataTables->pUniqueAppellationTxt[nRand].wStringId)
 		{
-			pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueAppellationTxt[nRand].wStringId);
+			const Unicode* pString = D2LANG_GetStringFromTblIndex(sgptDataTables->pUniqueAppellationTxt[nRand].wStringId);
 			if (pString)
 			{
 				return pString;
@@ -1596,7 +1592,7 @@ int __fastcall DATATBLS_GetSuperUniquesTxtRecordCount()
 //D2Common.0x6FD6A480
 void __fastcall DATATBLS_LoadHirelingTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	int nId = 0;
 
 	D2BinFieldStrc pTbl[] =

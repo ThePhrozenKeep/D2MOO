@@ -238,10 +238,10 @@ void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)
 		memset(sgptDataTables->pLevelsTxt[i].wszLevelName, 0x00, sizeof(sgptDataTables->pLevelsTxt[i].wszLevelName));
 		memset(sgptDataTables->pLevelsTxt[i].wszLevelWarp, 0x00, sizeof(sgptDataTables->pLevelsTxt[i].wszLevelWarp));
 
-		wcsncpy_s(sgptDataTables->pLevelsTxt[i].wszLevelName, D2LANG_GetStringByReferenceString(sgptDataTables->pLevelsTxt[i].szLevelName), sizeof(sgptDataTables->pLevelsTxt[i].szLevelName));
+		Unicode::strncpy(sgptDataTables->pLevelsTxt[i].wszLevelName, D2LANG_GetStringByReferenceString(sgptDataTables->pLevelsTxt[i].szLevelName), sizeof(sgptDataTables->pLevelsTxt[i].szLevelName));
 		sgptDataTables->pLevelsTxt[i].wszLevelName[39] = 0;
 
-		wcsncpy_s(sgptDataTables->pLevelsTxt[i].wszLevelWarp, D2LANG_GetStringByReferenceString(sgptDataTables->pLevelsTxt[i].szLevelWarp), sizeof(sgptDataTables->pLevelsTxt[i].szLevelWarp));
+		Unicode::strncpy(sgptDataTables->pLevelsTxt[i].wszLevelWarp, D2LANG_GetStringByReferenceString(sgptDataTables->pLevelsTxt[i].szLevelWarp), sizeof(sgptDataTables->pLevelsTxt[i].szLevelWarp));
 		sgptDataTables->pLevelsTxt[i].wszLevelWarp[39] = 0;
 
 		nMonsterCounter = 0;

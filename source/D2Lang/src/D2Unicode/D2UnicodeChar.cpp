@@ -23,6 +23,7 @@
  */
 
 #include <D2Unicode.h>
+#include <D2StrTable.h>
 
 unsigned short Unicode::_toLowerTable[256] = {
   // C0 Controls
@@ -265,6 +266,43 @@ BOOL Unicode::isASCII() const {
 
 BOOL Unicode::isAlpha() const {
   return (isASCII() && ::isalpha((char)this->ch));
+}
+
+BOOL __fastcall Unicode::isLineBreak(const Unicode* str, size_t count)
+{
+    if (!count)
+    {
+        return TRUE;
+    }
+
+    D2C_Language nLocale = STRTABLE_GetLanguage();
+    if (nLocale == LANGUAGE_JAPANESE || nLocale > LANGUAGE_KOREAN && nLocale <= LANGUAGE_CHINESETWN)
+    {
+        const wchar_t nWChar = str[count].ch;
+        if (nWChar == 8230
+            || nWChar == 12289
+            || nWChar == 12290
+            || nWChar == 0xFF01
+            || nWChar == 0xFF0C
+            || nWChar == 0xFF0E
+            || nWChar == 0xFF1F
+            || nWChar == 0xFF61
+            || nWChar == 0xFF64
+            || nWChar >= 0x61u && nWChar <= 0x7Au
+            || nWChar >= 0xFF41u && nWChar <= 0xFF5Au
+            || nWChar >= 0x41u && nWChar <= 0x5Au
+            || nWChar >= 0xFF21u && nWChar <= 0xFF3Au
+            || nWChar >= 0x30u && nWChar <= 0x39u
+            || nWChar >= 0xFF10u && nWChar <= 0xFF19u)
+        {
+            return FALSE;
+        }
+    }
+    else if (str[count].ch < 256u && isspace(str[count].ch) || str[count - 1].ch >= 256u || !isspace(str[count - 1].ch))
+    {
+        return FALSE;
+    }
+    return TRUE;
 }
 
 BOOL Unicode::isNewline() const {

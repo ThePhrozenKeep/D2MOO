@@ -486,7 +486,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 //D2Common.0x6FD57820
 void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 
 	int nSuffixRecords = 0;
 	int nPrefixRecords = 0;
@@ -600,7 +600,7 @@ D2MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex)
 //D2Common.0x6FD58110
 void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 
 	D2RareAffixTxt* pRareSuffix = NULL;
 	D2RareAffixTxt* pRarePrefix = NULL;
@@ -680,7 +680,7 @@ D2RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId)
 //D2Common.0x6FD584E0
 void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -786,7 +786,7 @@ void __fastcall DATATBLS_UnloadUniqueItemsTxt()
 //D2Common.0x6FD59140
 void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	short nSetId = 0;
 
 	D2BinFieldStrc pSetsTbl[] =
@@ -1046,7 +1046,7 @@ D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId)
 //D2Common.0x6FD5AE40
 void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1120,7 +1120,7 @@ D2QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex)
 //D2Common.0x6FD5B2F0
 void __fastcall DATATBLS_LoadGemsTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	int nItemCode = 0;
 	char szReference[4] = {};
 
@@ -1272,7 +1272,7 @@ D2BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId)
 //D2Common.0x6FD5BDA0
 void __fastcall DATATBLS_LoadLowQualityItemsTxt(void* pMemPool)
 {
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "Name", TXTFIELD_ASCII, 31, 0, NULL },
@@ -1916,7 +1916,7 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 {
 	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
-	wchar_t* pUnicode = NULL;
+	const Unicode* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "name", TXTFIELD_ASCII, 63, 0, NULL },

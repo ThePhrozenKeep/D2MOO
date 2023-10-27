@@ -666,13 +666,13 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_SetVelocityInMonStatsTxtRecord(int nMo
 //D2Common.0x6FD68A00
 void __stdcall DATATBLS_ResetGlobalDefaultUnicodeString();
 //D2Common.0x6FD68A10 (#10651)
-D2COMMON_DLL_DECL wchar_t* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit);
 //D2Common.0x6FD68A80 (#10652)
-D2COMMON_DLL_DECL wchar_t* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit);
 //D2Common.0x6FD68AF0 (#10653)
-D2COMMON_DLL_DECL wchar_t* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit);
 //D2Common.0x6FD68B60 (#10654)
-D2COMMON_DLL_DECL wchar_t* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit);
 //D2Common.0x6FD68BD0
 void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount);
 //D2Common.0x6FD68C40

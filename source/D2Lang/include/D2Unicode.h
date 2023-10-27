@@ -150,6 +150,18 @@ struct D2LANG_DLL_DECL Unicode {
   static int __fastcall stricmp(const Unicode* str1, const Unicode* str2);
 
   /**
+   * Performs lexicographical, case-insensitive comparison between two
+   * null-terminated strings. Returns -1, 0, or 1, depending on the
+   * results of the comparison.
+   *
+   * If either string is the NULL pointer, then the behavior is
+   * undefined.
+   *
+   * D2Lang.0x6FC11310 (#10045) ?strnicmp@Unicode@@SIHPBU1@0I@Z
+   */
+  static int __fastcall strnicmp(const Unicode* str1, const Unicode* str2, size_t count);
+
+  /**
    * Returns the length of the null-terminated string. If the string
    * pointer is NULL, the function returns 0;
    *
@@ -263,6 +275,9 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC12B60 (#10053) ?toUtf@Unicode@@SIPADPADPBU1@H@Z
    */
   static char* __fastcall toUtf(char* dest, const Unicode* src, int count);
+  
+  //1.10f: D2Lang.0x6FC11B30 (#10059) ?utf8ToUnicode@Unicode@@SIPAU1@PAU1@PBDH@Z
+  static Unicode* __fastcall utf8ToUnicode(Unicode* dest, char const* src, int count);
 
   /**
    * Converts a null-terminated 7-bit ASCII string into a
@@ -304,6 +319,9 @@ struct D2LANG_DLL_DECL Unicode {
    * D2Lang.0x6FC11090 (#10025) ?isAlpha@Unicode@@QBEHXZ
    */
   BOOL isAlpha() const;
+
+  // D2Lang.0x6FC11A30 (#10027) ?isLineBreak@Unicode@@SIHPBU1@I@Z
+  static BOOL __fastcall isLineBreak(const Unicode* str, size_t count);
 
   // D2Lang.0x6FC11050 (#10028) ?isNewline@Unicode@@QBEHXZ
   BOOL isNewline() const;

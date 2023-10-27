@@ -35,7 +35,7 @@ struct D2BodyLocsTxt
 
 struct D2CharStatsTxt
 {
-	wchar_t wszClassName[16];				//0x00
+	Unicode wszClassName[16];				//0x00
 	char szClassName[16];					//0x20
 	uint8_t nStr;							//0x30
 	uint8_t nDex;							//0x31
@@ -496,7 +496,7 @@ struct D2DataTablesStrc
 	char szDefaultString;								//0x1058
 	char pad0x1059[3];									//0x1059
 	D2MonItemPercentDataTbl pMonItemPercentDataTables;	//0x105C
-	wchar_t wszDefault;									//0x1064
+	Unicode wszDefault;									//0x1064
 	uint16_t unk0x1066;									//0x1066
 	D2UniqueTitleTxt* pUniqueTitleTxt;					//0x1068
 	D2UniquePrefixTxt* pUniquePrefixTxt;				//0x106C

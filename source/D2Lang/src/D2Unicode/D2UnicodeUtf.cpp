@@ -27,6 +27,7 @@
 #include <stddef.h>
 
 #include <Fog.h>
+#include <Storm.h>
 
 #pragma pack(push, 1)
 
@@ -199,4 +200,27 @@ char* __fastcall Unicode::toUtf(char* dest, const Unicode* src, int count) {
   dest[dest_length] = '\0';
 
   return dest;
+}
+
+Unicode* __fastcall Unicode::utf8ToUnicode(Unicode* dest, const char* src, int count)
+{
+    int nCharsCount;
+    wchar_t wszString[1024];
+
+    size_t nLength = 0;
+    if (0 == SUniConvertUTF8to16(wszString, ARRAY_SIZE(wszString)-1, src, ::strlen(src) + 1, &nCharsCount, 0))
+    {
+        nLength = nCharsCount;
+    }
+    wszString[nLength] = 0;
+    int i;
+    for (i = 0; i < count && wszString[i] != L'\0'; i++)
+    {
+        dest[i] = wszString[i];
+    }
+    if (wszString[i] != L'\0')
+        dest[i - 1].ch = 0;
+    else
+        dest[i].ch = 0;
+    return dest;
 }
