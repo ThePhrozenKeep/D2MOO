@@ -519,23 +519,37 @@ D2FUNC_DLL_NP(STORM, SMemGetSize, size_t, __stdcall, (void *location, const char
 D2FUNC_DLL_NP(STORM, SMemReAlloc, void*, __stdcall, (void *location, int amount, const char *logfilename, int logline, uint32_t flags), 0x1ce40);  //Storm.#405
 #endif
 
+
+struct SMSGHANDLER_PARAMS {
+    HWND    hWindow;
+    UINT    nMessage;
+    WPARAM  wParam;
+    LPARAM  lParam;
+    UINT    nNootifyCode;
+    LPVOID  pExtra;
+    BOOL    bUseResult;
+    LRESULT lResult;
+};
+typedef BOOL(CALLBACK* SMSGIDLEPROC)(DWORD);
+typedef void (CALLBACK* SMSGHANDLER)(SMSGHANDLER_PARAMS*);
+
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgDispatchMessage, BOOL, __stdcall, (HWND hWnd, DWORD messageID, WPARAM wParam, LPARAM lParam, int a5, int a6), 0x1d200);  //Storm.#412
+D2FUNC_DLL_NP(STORM, SMsgDispatchMessage, BOOL, __stdcall, (HWND hWnd, DWORD messageID, WPARAM wParam, LPARAM lParam, BOOL* bUseResult, LRESULT* pResult), 0x1d200);  //Storm.#412
 
 /// Not imported by any .dll
-D2FUNC_DLL_NP(STORM, SMsgDoMessageLoop, WPARAM, __stdcall, (void *callback, int followWithStormDestroy), 0x1d310);  //Storm.#413
+D2FUNC_DLL_NP(STORM, SMsgDoMessageLoop, WPARAM, __stdcall, (SMSGIDLEPROC *pIdleProc, bool bCleanUponQuit), 0x1d310);  //Storm.#413
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgRegisterCommand, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d4c0);  //Storm.#414
+D2FUNC_DLL_NP(STORM, SMsgRegisterCommand, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d4c0);  //Storm.#414
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgRegisterKeyDown, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d5b0);  //Storm.#415
+D2FUNC_DLL_NP(STORM, SMsgRegisterKeyDown, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d5b0);  //Storm.#415
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgRegisterKeyUp, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d5d0);  //Storm.#416
+D2FUNC_DLL_NP(STORM, SMsgRegisterKeyUp, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d5d0);  //Storm.#416
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgRegisterMessage, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d5f0);  //Storm.#417
+D2FUNC_DLL_NP(STORM, SMsgRegisterMessage, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d5f0);  //Storm.#417
 
 /// Imported by ['D2Client.dll']
 D2FUNC_DLL_NP(STORM, SMsgPopRegisterState, BOOL, __stdcall, (int type), 0x1d440);  //Storm.#418
@@ -792,19 +806,19 @@ D2FUNC_DLL_NP(STORM, SStrUpper, char*, __stdcall, (char *Str), 0x2b240);  //Stor
 #endif
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgBreakHandlerChain, BOOL, __stdcall, (int a1), 0x1d110);  //Storm.#511
+D2FUNC_DLL_NP(STORM, SMsgBreakHandlerChain, BOOL, __stdcall, (SMSGHANDLER_PARAMS* pData), 0x1d110);  //Storm.#511
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgUnregisterCommand, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d630);  //Storm.#512
+D2FUNC_DLL_NP(STORM, SMsgUnregisterCommand, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d630);  //Storm.#512
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgUnregisterKeyDown, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d680);  //Storm.#513
+D2FUNC_DLL_NP(STORM, SMsgUnregisterKeyDown, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d680);  //Storm.#513
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgUnregisterKeyUp, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d6a0);  //Storm.#514
+D2FUNC_DLL_NP(STORM, SMsgUnregisterKeyUp, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d6a0);  //Storm.#514
 
 /// Imported by ['D2Win.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SMsgUnregisterMessage, BOOL, __stdcall, (int a1, int a2, int a3), 0x1d6c0);  //Storm.#515
+D2FUNC_DLL_NP(STORM, SMsgUnregisterMessage, BOOL, __stdcall, (HWND hWnd, uint32_t nId, SMSGHANDLER pHandler), 0x1d6c0);  //Storm.#515
 
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SMsgGetDispatcher, int, __stdcall, (int a1), 0x1d3a0);  //Storm.#516
