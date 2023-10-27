@@ -1126,7 +1126,7 @@ D2FUNC_DLL_NP(STORM, SUniConvertUTF16to8, int, __stdcall, (int a1, int a2, int a
 D2FUNC_DLL_NP(STORM, SUniConvertUTF8to16Len, int, __stdcall, (int a1, int a2, int a3), 0x2cf00);  //Storm.#903
 
 /// Imported by ['D2Lang.dll']
-D2FUNC_DLL_NP(STORM, SUniConvertUTF8to16, int, __stdcall, (int a1, int a2, int a3, int a4, int a5, int a6), 0x2d000);  //Storm.#904
+D2FUNC_DLL_NP(STORM, SUniConvertUTF8to16, int, __stdcall, (wchar_t* pBuffer, int nBufferCount, const char* szSrc, int nSrcCount, int* pOutLength, int a6), 0x2d000);  //Storm.#904
 
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SUniS905, int, __stdcall, (int a1, int a2), 0x2d1a0);  //Storm.#905
