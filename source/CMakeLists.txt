@@ -8,5 +8,6 @@ add_subdirectory(D2Net)
 add_subdirectory(D2Common)
 add_subdirectory(D2Game)
 add_subdirectory(D2Gfx)
+add_subdirectory(D2Sound)
 add_subdirectory(D2Debugger)
 
