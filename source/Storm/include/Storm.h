@@ -578,7 +578,7 @@ D2FUNC_DLL_NP(STORM, SRegLoadValue, BOOL, __stdcall, (const char *keyname, const
 D2FUNC_DLL_NP(STORM, SRegSaveData, BOOL, __stdcall, (char *keyname, char *valuename, BYTE flags, BYTE *lpData, DWORD cbData), 0x25ba0);  //Storm.#424
 
 /// Imported by ['D2Launch.dll', 'Fog.dll', 'D2Client.dll']
-D2FUNC_DLL_NP(STORM, SRegSaveString, BOOL, __stdcall, (char *keyname, char *valuename, BYTE flags, char *string), 0x25d10);  //Storm.#425
+D2FUNC_DLL_NP(STORM, SRegSaveString, BOOL, __stdcall, (const char *keyname, const char *valuename, BYTE flags, const char *string), 0x25d10);  //Storm.#425
 
 /// Imported by ['D2Launch.dll', 'D2Multi.dll', 'D2sound.dll', 'D2Client.dll']
 D2FUNC_DLL_NP(STORM, SRegSaveValue, BOOL, __stdcall, (const char *keyname, const char *valuename, BYTE flags, DWORD result), 0x25d80);  //Storm.#426
