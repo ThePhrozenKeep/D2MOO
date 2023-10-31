@@ -151,7 +151,7 @@ typedef int (*D2ExceptionCallback)();
 
 D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFormat, ...), 0xDD90)													//Fog.#10018
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
-D2FUNC_DLL(FOG, 10021, int, __fastcall, (const char* szLogName), 0xE1A0)																			//Fog.#10021
+D2FUNC_DLL(FOG, SetLogPrefix, int, __fastcall, (const char* szLogPrefix), 0xE1A0)																	//Fog.#10021
 D2FUNC_DLL(FOG, GetSystemInfo, void*, __cdecl, (), 0xDF20)																							//Fog.#10022
 D2FUNC_DLL(FOG, DisplayAssert, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)											//Fog.#10023
 D2FUNC_DLL(FOG, DisplayHalt, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)												//Fog.#10024
@@ -172,6 +172,8 @@ D2FUNC_DLL(FOG, FreePool, void, __fastcall, (void* pMemPool, void* pFree, const 
 D2FUNC_DLL(FOG, ReallocPool, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine, int n0), 0x9060)			//Fog.#10047
 D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
 D2FUNC_DLL(FOG, 10055_GetSyncTime, int32_t, __fastcall, (), 0xA690)																					//Fog.#10055
+// Noop, same as 10048, 10049, 10053, 10054, 10146, 10194, 10195, 10196, 10197, 10220, 10221, 10225, 10232, 10240, 10241, 10242
+D2FUNC_DLL(FOG, 10082_Noop, void, __fastcall, (), 0x1DE0)																						//Fog.#10082
 D2FUNC_DLL(FOG, 10083_Cos_LUT, float, __stdcall, (int16_t index), 0x1DF0)																			//Fog.#10083
 D2FUNC_DLL(FOG, 10084_Sin_LUT, float, __stdcall, (int16_t index), 0x1E10)																			//Fog.#10084
 D2FUNC_DLL(FOG, Decode14BitsFromString, unsigned, __stdcall, (uint16_t* p2Characters), 0x1B20)														//Fog.#10085
