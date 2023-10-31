@@ -63,4 +63,10 @@ target_include_directories(squallstorm SYSTEM PUBLIC squall)
 target_compile_definitions(squallstorm PUBLIC WHOA_SYSTEM_WIN)
 add_library(squall::Storm ALIAS squallstorm)
 
-
+#STB for image writing
+add_library(stb INTERFACE)
+target_include_directories(stb SYSTEM
+    INTERFACE
+    stb # note : will expose the parts/ folder...
+)
+add_library(stb::stb ALIAS stb)
