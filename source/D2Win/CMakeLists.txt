@@ -5,7 +5,7 @@ add_library(D2Win
   src/DllMain.cpp
 )
 
-target_link_libraries(D2Win PRIVATE Fog D2CMP D2Gfx D2Lang Storm D2Hell D2Sound)
+target_link_libraries(D2Win PRIVATE Fog D2CMP D2Gfx D2Lang Storm D2Hell D2Sound stb::stb)
 
 target_include_directories(D2Win PUBLIC include)
 
@@ -33,6 +33,8 @@ target_sources(D2Win
     src/D2WinTextBox.cpp
     src/D2WinTimer.cpp
     src/D2WRegister.cpp
+    src/JpegLibraryWrapper.cpp
+    src/JpegLibraryWrapper.h
 
     include/Font.h
     include/D2WinComp.h

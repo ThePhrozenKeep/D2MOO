@@ -6,7 +6,7 @@
 #include <D2CMP.h>
 #include <D2Gfx.h>
 #include <D2Sound.h>
-//#include "ijl.h"
+#include "JpegLibraryWrapper.h"
 #include <Storm.h>
 
 #include <Fog.h>
@@ -37,19 +37,6 @@
 
 #pragma warning (disable : 28159)
 #pragma warning (disable : 6262)
-
-
-void ijlInit(...)
-{
-}
-
-void ijlWrite(...)
-{
-}
-
-void ijlFree(...)
-{
-}
 
 
 #pragma pack(push, 1)
@@ -1193,20 +1180,15 @@ void __stdcall D2Win_10168_WINMAIN_CreateScreenshot()
 			FOG_CloseFile(v3);
 		}
 
-		char v9[20032] = {};
-
-		ijlInit(v9);
-		*(DWORD*)&v9[16] = ((3 * nWidth + 3) & 0xFFFFFFFC) - 3 * nWidth;
-		*(DWORD*)&v9[8] = nWidth;
-		*(DWORD*)&v9[12] = nHeight;
-		*(DWORD*)&v9[4] = (DWORD)pBuffer;
-		*(DWORD*)&v9[24] = 1;
-		*(DWORD*)&v9[32] = (DWORD)szFilename;
-		*(DWORD*)&v9[44] = nWidth;
-		*(DWORD*)&v9[48] = nHeight;
-		*(DWORD*)&v9[80] = 100;
-		ijlWrite(v9, 8);
-		ijlFree(v9);
+		D2MooJpegProperties tJpegProperties; //  ijl's JPEG_CORE_PROPERTIESin in original code
+		D2MooJpegLibInit(&tJpegProperties);
+		tJpegProperties.nWidth = nWidth;
+		tJpegProperties.nHeight = nHeight;
+		tJpegProperties.pBuffer = pBuffer;
+		tJpegProperties.szFileName = szFilename;
+		tJpegProperties.nJQuality = 100;
+		D2MooJpegLibWrite(&tJpegProperties);
+		D2MooJpegLibFree(&tJpegProperties);
 	}
 
 	gdwScreenshotTickCount_6F8FE28C = dwTickCount;
