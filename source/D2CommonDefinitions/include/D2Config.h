@@ -10,7 +10,12 @@
 #define D2_HAS_OPENGL 0
 #define D2_HAS_RAVE 0
 
-#define D2_HAS_MULTILAN defined(D2_VERSION_100) // TODO: figure out when this was removed
+// TODO: figure out when this was removed
+#ifdef D2_VERSION_100
+#define D2_HAS_MULTILAN 1
+#else
+#define D2_HAS_MULTILAN 0
+#endif
 
 #pragma pack(push, 1)
 struct D2ConfigStrc

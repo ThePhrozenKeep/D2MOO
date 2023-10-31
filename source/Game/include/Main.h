@@ -4,8 +4,6 @@
 
 #include <D2Config.h>
 
-#define D2_HAS_MULTILAN defined(D2_VERSION_100) // TODO: figure out when this was removed
-
 /*
  *	Project definitions
  */
@@ -110,6 +108,6 @@ int GAMEAPI GetCmdIndex(const char *s);
 void GAMEAPI ParseCmdValue(char *s);
 int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModType);
 void GAMEAPI SaveCmdLine(const char *argv[]);
-int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors);
+int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[]);
 VOID WINAPI D2ServerServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);
 VOID WINAPI D2ServerServiceHandlerProc(DWORD dwCtrlCode);

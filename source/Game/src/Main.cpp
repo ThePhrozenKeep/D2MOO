@@ -88,7 +88,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 /*
  *	Module names loaded by main game
  */
-char *lpszD2Module[] = {
+const char *lpszD2Module[] = {
 	"none.dll",
 	"D2Client.dll",
 	"D2Server.dll",
@@ -104,7 +104,7 @@ static_assert(D2_MODULES_COUNT == ARRAY_SIZE(lpszD2Module), "Size of module type
 /*
  *	Internal name type for each module
  */
-char *lpszModuleType[] = {
+const char *lpszModuleType[] = {
 	"modstate0",
 	"client",
 	"server",
@@ -179,14 +179,14 @@ static bool GetD2IniPath(char* pPathBuffer, size_t nBufferSize)
 		}
 
 		pPathBuffer[nPathCut] = '\0';
-		strcat(pPathBuffer, GAME_FILE_INI);
+		strcat(pPathBuffer, GAME_FILE_INI); // NOLINT(clang-diagnostic-deprecated-declarations)
 		return true;
 	}
 	return false;
 }
 
 //1.10f: Game.0x401040
-void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv)
+void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 {
 	memset(pCfg, 0, sizeof(*pCfg));
 
@@ -240,7 +240,7 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv)
 
 			szCommand[i] = '\0';
 			szCommand[i + 1] = '\0';
-			strcpy(szCommandNameTestBuf, szCommand);
+			strcpy(szCommandNameTestBuf, szCommand); // NOLINT(clang-diagnostic-deprecated-declarations)
 			stoLower(szCommandNameTestBuf);
 			for (size_t i = strlen(szCommandNameTestBuf); i != 0; i--)
 			{
@@ -274,7 +274,7 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv)
 					*(int*)pCfgMember = atoi(szCommandValueBuf);
 					break;
 				case CMD_STRING:
-					strcpy((char*)pCfgMember, szCommandValueBuf);
+					strcpy((char*)pCfgMember, szCommandValueBuf); // NOLINT(clang-diagnostic-deprecated-declarations)
 					break;
 				case CMD_BOOLEAN:
 					*(BYTE*)pCfgMember = TRUE;
@@ -315,7 +315,7 @@ int GAMEAPI GetCmdIndex(const char *s)
 void GAMEAPI ParseCmdValue(char *s)
 {
 	char szBuf[24];
-	strcpy(szBuf, s);
+	strcpy(szBuf, s); // NOLINT(clang-diagnostic-deprecated-declarations)
 
 	const char separatorChars[] = { ' ', '\t', '\n', ':', 0};
 	size_t nFirstChar = strspn(szBuf, separatorChars);
@@ -345,7 +345,7 @@ D2_MODULES LoadCurrentlySelectedModule(D2ConfigStrc* pCfg)
 		else
 		{
 			char szErrMsg[100];
-			sprintf(szErrMsg, ERRMSG_LOADMOD, lpszD2Module[geModState], GetLastError());
+			sprintf(szErrMsg, ERRMSG_LOADMOD, lpszD2Module[geModState], (int)GetLastError());
 			MessageBoxA(NULL, szErrMsg, ERRMSG_TITLE, MB_ICONERROR);
 		}
 	}
@@ -521,7 +521,7 @@ void GAMEAPI SaveCmdLine(const char* argv[])
 		}
 		else
 		{
-			strcpy(szSRegWriteBuf, CMDLINE_BNET);
+			strcpy(szSRegWriteBuf, CMDLINE_BNET); // NOLINT(clang-diagnostic-deprecated-declarations)
 			SRegSaveString(REG_KEY_HOME, CMDLINE_SZ, SREG_DEFAULT, szSRegWriteBuf);
 		}
 	}
@@ -569,11 +569,11 @@ void MoveBetaSettingsToRelease()
 }
 
 //1.10f: Game.0x401970
-int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors)
+int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 {
 	char *lpArgvTokens;
 	char **lpszModType;
-	char *lpArgvCmd;
+	const char *lpArgvCmd;
 	char szRegPathVid[sizeof(REG_PATH_VIDEO)];
 	D2ConfigStrc pCfg;
 
@@ -612,7 +612,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors)
 	
 	int nChosenModule = MODULE_NONE;
 
-	for (char* pCurrentParam = strtok(lpArgvDupe, "-"); pCurrentParam; pCurrentParam = strtok(0, "-"))
+	for (char* pCurrentParam = strtok(lpArgvDupe, "-"); pCurrentParam; pCurrentParam = strtok(0, "-")) // NOLINT(clang-diagnostic-deprecated-declarations)
 	{
 		for (int i = 0; i < D2_MODULES_COUNT && pCurrentParam; i++)
 		{
@@ -665,14 +665,14 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors)
 	return GameStart(ghCurrentProcess, &pCfg, MODULE_LAUNCHER);
 }
 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, INT nCmdShow)
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, INT nShowCmd)
 {
 	SC_HANDLE schService;
 
 	ghCurrentProcess = hInstance;
-	gnCmdShow = nCmdShow;
+	gnCmdShow = nShowCmd;
 
-	const bool bHasBuildVersion = GetVersion() & 0x80000000;
+	const bool bHasBuildVersion = GetVersion() & 0x80000000; // NOLINT(clang-diagnostic-deprecated-declarations)
 
 	if(!bHasBuildVersion)
 	{
@@ -690,7 +690,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 			if(bCouldOpenService)
 			{
 				SERVICE_TABLE_ENTRYA DispatchTable[] = {
-					{ SVC_NAME, D2ServerServiceMain },
+					{ SVC_NAME, D2ServerServiceMain }, // NOLINT(clang-diagnostic-writable-strings)
 					{ NULL, NULL }
 				};
 
@@ -705,7 +705,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	if (strstr(lpCmdLine, CMDLINE_INSTALL) == nullptr)
 	{
 		// If we did not ask to install the service, simply run the game.
-		char* argv[2];
+		const char* argv[2];
 		argv[0] = INIT_NAME;
 		argv[1] = lpCmdLine;
 
@@ -759,7 +759,7 @@ VOID WINAPI D2ServerServiceMain(DWORD dwArgc, LPTSTR *lpszArgv)
 	gbD2ServerStopEvent = TRUE;
 	ghD2ServerServiceStatus = RegisterServiceCtrlHandlerA(SVC_NAME, D2ServerServiceHandlerProc);
 	SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
-	GameInit(dwArgc, lpszArgv);
+	GameInit(dwArgc, (const char**)lpszArgv);
 	gD2ServerServiceStatus.dwCurrentState = SERVICE_STOPPED;
 	SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
 	gbD2ServerStopEvent = FALSE;
