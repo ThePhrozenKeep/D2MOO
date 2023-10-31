@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include <cstdint>
-
+#include <D2Constants.h>
 
 struct D2CellFileStrc;
 struct D2WinEditBoxStrc;
@@ -18,7 +18,7 @@ extern int32_t dword_6F8FE254;
 //D2Win.0x6F8ACC60
 BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress);
 //D2Win.0x6F8ACC90
-BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, int nResolution);
+BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, D2GameResolutionMode nResolution);
 //D2Win.0x6F8ACD40
 int __stdcall D2Win_10014_SetWndProc(WNDPROC wndProc);
 //D2Win.0x6F8ACD60

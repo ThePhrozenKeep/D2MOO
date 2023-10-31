@@ -113,7 +113,9 @@ void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* pMempool, const char* szFil
 
 #define ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMempool, szFilePath, pBytesWritten) ARCHIVE_ReadFileToAllocBuffer(pMempool, szFilePath, pBytesWritten, __FILE__, __LINE__)
 
+using ARCHIVE_ShowMessageFunctionPtr = BOOL (__stdcall*)();
+
 //1.10f: D2Win.0x6F8B2399
-D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, int(*pfShowMessage)(), int nPriority);
+D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority);
 //1.10f: D2Win.0x6F8B2548
 void __fastcall ARCHIVE_UnloadMPQFile(D2ArchiveHandleStrc* pMPQHandle);

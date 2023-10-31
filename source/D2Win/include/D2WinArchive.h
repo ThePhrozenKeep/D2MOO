@@ -2,33 +2,34 @@
 
 #include <Windows.h>
 #include <D2BasicTypes.h>
+#include <Archive.h>
 
 struct D2CellFileStrc;
 
 
-//D2Win.0x6F8A59C0
+//D2Win.0x6F8A59C0 (#10039)
 D2CellFileStrc* __fastcall ARCHIVE_LoadCellFile(const char* szFile, int32_t nType);
-//D2Win.0x6F8A5A50
+//D2Win.0x6F8A5A50 (#10040)
 D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, uint32_t* pFileSize, int32_t nType);
-//D2Win.0x6F8A5AE0
+//D2Win.0x6F8A5AE0 (#10041)
 void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile);
-//D2Win.0x6F8A5B00
-bool __stdcall ARCHIVE_ShowInsertExpansionDiscMessage();
-//D2Win.0x6F8A5B20
-bool __stdcall ARCHIVE_ShowInsertPlayDiscMessage();
-//D2Win.0x6F8A5B40
-bool __stdcall ARCHIVE_ShowInsertCinematicsDisc();
-//D2Win.0x6F8A5B60
+//D2Win.0x6F8A5B00 (#10205)
+BOOL __stdcall ARCHIVE_ShowInsertExpansionDiscMessage();
+//D2Win.0x6F8A5B20 (#10174)
+BOOL __stdcall ARCHIVE_ShowInsertPlayDiscMessage();
+//D2Win.0x6F8A5B40 (#10183)
+BOOL __stdcall ARCHIVE_ShowInsertCinematicsDisc();
+//D2Win.0x6F8A5B60 (#10037)
 BOOL __fastcall ARCHIVE_LoadArchives();
-//D2Win.0x6F8A5CB0
+//D2Win.0x6F8A5CB0 (#10036)
 void __fastcall ARCHIVE_FreeArchives();
-//D2Win.0x6F8A5DE0
+//D2Win.0x6F8A5DE0 (#10038)
 void* __stdcall D2Win_GetMemPool();
-//D2Win.0x6F8A5DF0
+//D2Win.0x6F8A5DF0 (#10185)
 int __stdcall D2Win_10185();
-//D2Win.0x6F8A5E80
-BOOL __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(), int32_t(*pfShowInsertExpansionDisc)(), HANDLE hFile, void* a4);
-//D2Win.0x6F8A60A0
-BOOL __fastcall ARCHIVE_LoadVideoArchives(int32_t(*pfShowMessage)(), HANDLE hFile, int32_t bExpansion);
-//D2Win.0x6F8A6110
+//D2Win.0x6F8A5E80 (#10171)
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, void* a4);
+//D2Win.0x6F8A60A0 (#10172)
+BOOL __fastcall ARCHIVE_LoadVideoArchives(ARCHIVE_ShowMessageFunctionPtr pfShowMessage, HANDLE hFile, int32_t bExpansion);
+//D2Win.0x6F8A6110 (#10173)
 void __fastcall ARCHIVE_UnloadExpansionArchives();

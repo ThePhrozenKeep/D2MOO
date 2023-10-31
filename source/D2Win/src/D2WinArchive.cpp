@@ -59,19 +59,19 @@ void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile)
 }
 
 //D2Win.0x6F8A5B00 (#10205)
-bool __stdcall ARCHIVE_ShowInsertExpansionDiscMessage()
+BOOL __stdcall ARCHIVE_ShowInsertExpansionDiscMessage()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Expansion Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
 
 //D2Win.0x6F8A5B20 (#10174)
-bool __stdcall ARCHIVE_ShowInsertPlayDiscMessage()
+BOOL __stdcall ARCHIVE_ShowInsertPlayDiscMessage()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Play Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
 
 //D2Win.0x6F8A5B40 (#10183)
-bool __stdcall ARCHIVE_ShowInsertCinematicsDisc()
+BOOL __stdcall ARCHIVE_ShowInsertCinematicsDisc()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Cinematics Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
@@ -174,7 +174,7 @@ int32_t __stdcall D2Win_10185()
 }
 
 //D2Win.0x6F8A5E80 (#10171)
-BOOL __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(), int32_t(*pfShowInsertExpansionDisc)(), HANDLE hFile, void *a4)
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, void *a4)
 {
 	if (FOG_UseDirect())
 	{
@@ -216,7 +216,7 @@ BOOL __fastcall ARCHIVE_LoadExpansionArchives(int32_t(*pfShowInsertPlayDisc)(), 
 }
 
 //D2Win.0x6F8A60A0 (#10172)
-BOOL __fastcall ARCHIVE_LoadVideoArchives(int32_t(*pfShowMessage)(), HANDLE hFile, int32_t bExpansion)
+BOOL __fastcall ARCHIVE_LoadVideoArchives(ARCHIVE_ShowMessageFunctionPtr pfShowMessage, HANDLE hFile, int32_t bExpansion)
 {
 	if (FOG_UseDirect())
 	{

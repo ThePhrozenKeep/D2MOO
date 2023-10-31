@@ -5,7 +5,18 @@ add_library(D2Win
   src/DllMain.cpp
 )
 
-target_link_libraries(D2Win PRIVATE Fog D2CMP D2Gfx D2Lang Storm D2Hell D2Sound stb::stb)
+target_link_libraries(D2Win 
+  PRIVATE 
+    Fog 
+    D2CMP
+    D2Gfx
+    D2Lang
+    Storm
+    D2Sound
+    stb::stb
+  PUBLIC
+    D2Hell
+)
 
 target_include_directories(D2Win PUBLIC include)
 

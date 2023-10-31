@@ -222,7 +222,7 @@ HSARCHIVE __fastcall ARCHIVE_FindAndOpenArchive(LPSTR szOutPath, LPCSTR szModule
 }
 
 //1.10f: D2Win.0x6F8B2399
-D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, int(*pfShowMessage)(), int nPriority)
+D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority)
 {
 	D2ArchiveHandleStrc* pMpqHandle = D2_ALLOC_STRC(D2ArchiveHandleStrc);
 	pMpqHandle->hArchive = NULL;
