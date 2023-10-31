@@ -7,13 +7,11 @@ add_library(D2Hell
     src/CRC.cpp
     src/Fault.cpp
     src/File.cpp
-    src/Window.cpp
 
     include/Archive.h
     include/CRC.h
     include/Fault.h
     include/File.h
-    include/Window.h
 )
 # The definition file that matches functions with their ordinals
 target_include_directories(D2Hell PUBLIC include)
