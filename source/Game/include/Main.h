@@ -2,11 +2,7 @@
 #include <Windows.h>
 #include <D2BasicTypes.h>
 
-//TODO
-#define D2_VERSION_EXPANSION true
-#define D2_VERSION_MAJOR 1
-#define D2_VERSION_MINOR 10
-#define D2_HAS_OPENGL false
+#include <D2Config.h>
 
 #define D2_HAS_MULTILAN defined(D2_VERSION_100) // TODO: figure out when this was removed
 
@@ -75,20 +71,6 @@ enum D2_MODULES
 };
 
 /*
- *	Define graphic render modes
- */
-enum
-{
-	DISPLAYTYPE_NONE,
-	DISPLAYTYPE_GDI,
-	DISPLAYTYPE_UNUSED,
-	DISPLAYTYPE_RAVE,
-	DISPLAYTYPE_GLIDE,
-	DISPLAYTYPE_OPENGL,
-	DISPLAYTYPE_DIRECT3D
-};
-
-/*
  *	Define command line types
  */
 enum D2ParseCmdArgType : uint8_t
@@ -98,89 +80,6 @@ enum D2ParseCmdArgType : uint8_t
 	CMD_STRING
 };
 
-/*
- *	Create structure for game configuration parameters
- */
-#pragma pack(push, 1)
-struct D2GameCfgStrc
-{
-#if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
-	BOOL bIsExpansion;
-#endif
-	BYTE bWindow;
-	BYTE b3DFX;
-	BYTE bOpenGL;
-	BYTE bRave;
-	BYTE bD3D;
-	BYTE bPerspective;
-	BYTE bQuality;
-	DWORD dwGamma;
-	BYTE bVSync;
-	DWORD dwFramerate;
-	DWORD dwGameType;
-	WORD wJoinID; // Dangerous ! We may be overwriting szGameName since code expects a DWORD
-	char szGameName[24];
-	char szServerIP[24];
-	char szBattleNetIP[24];
-	char szMCPIP[24];
-	BYTE _0076[4];
-	BYTE bNoPK;
-	BYTE bOpenC;
-	BYTE bAmazon;
-	BYTE bPaladin;
-	BYTE bSorceress;
-	BYTE bNecromancer;
-	BYTE bBarbarian;
-#if D2_VERSION_EXPANSION
-	BYTE bDruid;
-	BYTE bAssassin;
-#endif
-	BYTE bInvincible;
-	BYTE _0082[48];
-	char szName[24];
-	BYTE szRealm[256];
-	BYTE _01D0[0x18];
-	DWORD dwCTemp;
-	BYTE bNoMonsters;
-	DWORD dwMonsterClass;
-	BYTE bMonsterInfo;
-	DWORD dwMonsterDebug;
-	BYTE bRare;
-	BYTE bUnique;
-	BYTE _01DA[2]; // Possibly Set/Magic
-	DWORD dwAct;
-	BYTE bNoPreload;
-	BYTE bDirect;
-	BYTE bLowEnd;
-	BYTE bNoCompress;
-	DWORD dwArena;
-	BYTE _01E8[6]; // Related to Arena
-#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
-	void* pAllowExpansionCallback;
-	BYTE bTxt;
-#endif
-	BYTE bLog;
-	BYTE bMsgLog;
-	BYTE bSafeMode;
-	BYTE bNoSave;
-	DWORD dwSeed;
-	BYTE bCheats;
-#ifndef VERSION_100 // TODO: figure out when this was added
-	BYTE bTeen;
-#endif
-	BYTE bNoSound;
-	BYTE bQuests;
-	BYTE _01F9;
-	
-#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
-	BYTE bBuild;
-#endif
-	DWORD dwComInt;
-	BYTE _01FE[308]; // Related to ComInt
-	BYTE bSkipToBNet;
-	BYTE _0333[112];
-};
-#pragma pack(pop)
 
 #pragma warning(push)
 #pragma warning(disable:4820)
@@ -205,11 +104,11 @@ struct D2CmdArgStrc				//sizeof(0x3C)
 /*
  *	Prototypes
  */
-void GAMEAPI ParseCmdLine(D2GameCfgStrc* pCfg, char *argv);
+void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv);
 void GAMEAPI stoLower(char *s);
 int GAMEAPI GetCmdIndex(const char *s);
 void GAMEAPI ParseCmdValue(char *s);
-int GAMEAPI GameStart(HINSTANCE hInstance, D2GameCfgStrc* pCfg, D2_MODULES nModType);
+int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModType);
 void GAMEAPI SaveCmdLine(const char *argv[]);
 int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors);
 VOID WINAPI D2ServerServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);

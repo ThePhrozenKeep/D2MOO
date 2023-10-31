@@ -174,7 +174,7 @@ int32_t __stdcall D2Win_10185()
 }
 
 //D2Win.0x6F8A5E80 (#10171)
-BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, void *a4)
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, D2ConfigStrc* pConfig)
 {
 	if (FOG_UseDirect())
 	{
@@ -184,7 +184,7 @@ BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfS
 
 	gpD2XVideoMPQ = nullptr;
 
-	if (FOG_IsExpansion() && (!a4 || (*((int32_t(**)())a4 + 131))()))
+	if (FOG_IsExpansion() && (!pConfig || pConfig->pAllowExpansionCallback()))
 	{
 		gpD2CharMPQ = ARCHIVE_LoadMPQFile("D2Win.dll", "d2char.mpq", "D2CHAR", 0, nullptr, pfShowInsertPlayDisc, 1000);
 		gpD2MusicMPQ = ARCHIVE_LoadMPQFile("D2Win.dll", "d2music.mpq", "D2MUSIC", 0, nullptr, pfShowInsertPlayDisc, 1000);

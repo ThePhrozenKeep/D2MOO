@@ -3,7 +3,7 @@ EXPORTS
 	D2GFX_Initialize						@10000 NONAME
 	D2GFX_Release							@10001 NONAME
 	D2GFX_ReturnFalse						@10002 NONAME
-	D2GFX_GetRenderMode						@10003 NONAME
+	D2GFX_GetDisplayType					@10003 NONAME
 	D2GFX_CheckWindowed						@10004 NONAME
 	D2GFX_GetResolutionMode					@10005 NONAME
 ;	D2GFX_HardwareAcceleratedRenderMode		@10006 NONAME

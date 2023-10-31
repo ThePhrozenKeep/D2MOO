@@ -126,7 +126,7 @@ D2WinCommandRegisterStrc gpCommandRegister_6F8BDE28[28] =
 
 
 //D2Win.0x6F8ACC60 (#10000)
-BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, int nRenderMode, BOOL bWindowed, BOOL bCompress)
+BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, DisplayType nRenderMode, BOOL bWindowed, BOOL bCompress)
 {
 	D2CMP_SetCompressedDataMode(bCompress);
 	return D2GFX_Initialize(hInstance, D2Win_MAINWINDOW_WndProc_6F8AD9B0, nRenderMode, bWindowed);

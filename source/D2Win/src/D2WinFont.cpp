@@ -433,7 +433,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 		return;
 	}
 
-	const int32_t nDisplayType = D2GFX_GetRenderMode();
+	const int32_t nDisplayType = D2GFX_GetDisplayType();
 
 	D2GfxDataStrc gfxData = {};
 	gfxData.nDirection = 0;

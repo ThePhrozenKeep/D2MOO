@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <D2BasicTypes.h>
 #include <Archive.h>
+#include <D2Config.h>
 
 struct D2CellFileStrc;
 
@@ -28,7 +29,7 @@ void* __stdcall D2Win_GetMemPool();
 //D2Win.0x6F8A5DF0 (#10185)
 int __stdcall D2Win_10185();
 //D2Win.0x6F8A5E80 (#10171)
-BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, void* a4);
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, D2ConfigStrc* pConfig);
 //D2Win.0x6F8A60A0 (#10172)
 BOOL __fastcall ARCHIVE_LoadVideoArchives(ARCHIVE_ShowMessageFunctionPtr pfShowMessage, HANDLE hFile, int32_t bExpansion);
 //D2Win.0x6F8A6110 (#10173)

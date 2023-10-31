@@ -17,14 +17,14 @@
 
 static_assert(sizeof(D2CmdArgStrc) == 0x3C, "Check D2CmdArgStrc matches original size");
 
-#define cmdidx(m)	offsetof(D2GameCfgStrc, m)
+#define cmdidx(m)	offsetof(D2ConfigStrc, m)
 //1.10f: Game.0x
 D2CmdArgStrc gaCmdArguments[] = {
 	{ "VIDEO",     "WINDOW",       "w",          CMD_BOOLEAN, cmdidx(bWindow),        0 },
 	{ "VIDEO",     "3DFX",         "3dfx",       CMD_BOOLEAN, cmdidx(b3DFX),          0 },
 	{ "VIDEO",     "OPENGL",       "opengl",     CMD_BOOLEAN, cmdidx(bOpenGL),        0 },
-	{ "VIDEO",     "D3D",          "d3d",        CMD_BOOLEAN, cmdidx(bRave),          0 },
-	{ "VIDEO",     "RAVE",         "rave",       CMD_BOOLEAN, cmdidx(bD3D),           0 },
+	{ "VIDEO",     "D3D",          "d3d",        CMD_BOOLEAN, cmdidx(bD3D),           0 },
+	{ "VIDEO",     "RAVE",         "rave",       CMD_BOOLEAN, cmdidx(bRave),          0 },
 	{ "VIDEO",     "PERSPECTIVE",  "per",        CMD_BOOLEAN, cmdidx(bPerspective),   0 },
 	{ "VIDEO",     "QUALITY",      "lq",         CMD_BOOLEAN, cmdidx(bQuality),       0 },
 	{ "VIDEO",     "GAMMA",        "gamma",      CMD_INTEGER, cmdidx(dwGamma),        0 },
@@ -144,7 +144,7 @@ char lpZero = '\0';
 //1.10f: Game.0x413444
 D2_MODULES geModState = MODULE_NONE;
 
-typedef D2_MODULES (QUERYINTAPI* ModuleInitPointer)(D2GameCfgStrc*);
+typedef D2_MODULES (QUERYINTAPI* ModuleInitPointer)(D2ConfigStrc*);
 //1.10f: Game.0x413448
 void* gpCurrentModuleInterface = nullptr; // Could be local, shareware builds use a table instead ?
 //1.10f: Game.0x413450
@@ -186,7 +186,7 @@ static bool GetD2IniPath(char* pPathBuffer, size_t nBufferSize)
 }
 
 //1.10f: Game.0x401040
-void GAMEAPI ParseCmdLine(D2GameCfgStrc* pCfg, char *argv)
+void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv)
 {
 	memset(pCfg, 0, sizeof(*pCfg));
 
@@ -328,7 +328,7 @@ void GAMEAPI ParseCmdValue(char *s)
 }
 
 //1.10f: 0x4014D0 (Inlined)
-D2_MODULES LoadCurrentlySelectedModule(D2GameCfgStrc* pCfg)
+D2_MODULES LoadCurrentlySelectedModule(D2ConfigStrc* pCfg)
 {
 	if (geModState >= MODULE_NONE && geModState < D2_MODULES_COUNT)
 	{
@@ -353,7 +353,7 @@ D2_MODULES LoadCurrentlySelectedModule(D2GameCfgStrc* pCfg)
 }
 
 //1.10f: Game.0x401570
-int GAMEAPI GameStart(HINSTANCE hInstance, D2GameCfgStrc* pCfg, D2_MODULES nModType)
+int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModType)
 {
 	BOOL bSoundStarted = FALSE;
 	BOOL bGfxStarted = FALSE;
@@ -375,14 +375,16 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2GameCfgStrc* pCfg, D2_MODULES nModT
 	}
 
 
-	int dwRenderMode = DISPLAYTYPE_NONE;
+	DisplayType dwRenderMode = DISPLAYTYPE_NONE;
 	if (pCfg->b3DFX) dwRenderMode = DISPLAYTYPE_GLIDE;
 	else if (pCfg->bWindow) dwRenderMode = DISPLAYTYPE_GDI;
 #if D2_HAS_OPENGL
 	else if (pCfg->bOpenGL) dwRenderMode = DISPLAYTYPE_OPENGL;
+#elif D2_HAS_RAVE
+	else if (pCfg->bRave) dwRenderMode = DISPLAYTYPE_RAVE;
 #endif
 	else if (pCfg->bD3D) dwRenderMode = DISPLAYTYPE_DIRECT3D;
-	else dwRenderMode = DISPLAYTYPE_RAVE;
+	else dwRenderMode = DISPLAYTYPE_DDRAW;
 
 	if(nModType != MODULE_SERVER)
 	{
@@ -573,7 +575,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, LPSTR* lpServiceArgVectors)
 	char **lpszModType;
 	char *lpArgvCmd;
 	char szRegPathVid[sizeof(REG_PATH_VIDEO)];
-	D2GameCfgStrc pCfg;
+	D2ConfigStrc pCfg;
 
 	lpArgvCmd = &lpZero;
 

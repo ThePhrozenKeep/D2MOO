@@ -6,6 +6,7 @@
 #include <D2Constants.h>
 
 #include "DrawMode.h"
+#include <DisplayType.h>
 
 
 #pragma pack(push, 1)
@@ -202,7 +203,7 @@ extern D2GfxSettingsStrc gGfxSettings;
 
 
 //D2Gfx.0x6FA73750 (#10000)
-int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, int32_t nDisplayType, int32_t bWindowed);
+int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, DisplayType nDisplayType, int32_t bWindowed);
 //D2Gfx.0x6FA73980
 void __cdecl j_D2GFX_10040_ShowAllWindows();
 //D2Gfx.0x6FA73990 (#10002)
@@ -210,7 +211,7 @@ int32_t __stdcall D2GFX_ReturnFalse();
 //D2Gfx.0x6FA739A0 (#10001)
 int32_t __stdcall D2GFX_Release();
 //D2Gfx.0x6FA73AC0 (#10003)
-int32_t __stdcall D2GFX_GetRenderMode();
+DisplayType __stdcall D2GFX_GetDisplayType();
 //D2Gfx.0x6FA73AD0 (#10004)
 int32_t __stdcall D2GFX_CheckWindowed();
 //D2Gfx.0x6FA73AE0 (#10005)

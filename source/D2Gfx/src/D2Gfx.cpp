@@ -22,7 +22,7 @@ PALETTEENTRY gpPalette_6FA8D278[256];
 
 HMODULE ghRenderModule;
 D2GraphicsInterfaceStrc* gpGraphicsInterface;
-int32_t gnDisplayType;
+DisplayType gnDisplayType;
 int32_t gnViewMatrixAdjust_6FA8D254;
 
 D2GfxSettingsStrc gGfxSettings = { 0, 1, 0, 155, 1, 1 };
@@ -40,7 +40,7 @@ constexpr D2GfxHelperStrc gpGfxHelpers =
 
 
 //D2Gfx.0x6FA73750 (#10000)
-int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, int32_t nDisplayType, int32_t bWindowed)
+int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, DisplayType nDisplayType, int32_t bWindowed)
 {
     gpfWndProc = pfWndProc;
     ghInstance = hInstance;
@@ -186,7 +186,7 @@ int32_t __stdcall D2GFX_Release()
 }
 
 //D2Gfx.0x6FA73AC0 (#10003)
-int32_t __stdcall D2GFX_GetRenderMode()
+DisplayType __stdcall D2GFX_GetDisplayType()
 {
     return gnDisplayType;
 }
@@ -225,7 +225,7 @@ void __stdcall D2GFX_SetUnitPerspective(int32_t bPerspective)
 //D2Gfx.0x6FA73B20 (#10047)
 int32_t __stdcall D2GFX_HardwareAcceleratedRenderMode()
 {
-    return gnDisplayType >= 4;
+    return gnDisplayType >= DISPLAYTYPE_GLIDE;
 }
 
 //D2Gfx.0x6FA73B30 (#10009)

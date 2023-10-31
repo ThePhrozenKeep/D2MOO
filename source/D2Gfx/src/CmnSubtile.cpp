@@ -11,7 +11,7 @@
 
 
 extern int32_t gnViewMatrixAdjust_6FA8D254;
-extern int32_t gnDisplayType;
+extern DisplayType gnDisplayType;
 
 
 constexpr int32_t GOURAUD_SHIFT = 24;

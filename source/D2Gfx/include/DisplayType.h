@@ -2,9 +2,9 @@
 
 enum DisplayType
 {
-	DISPLAYTYPE_INVALID,
-	DISPLAYTYPE_GDI,
-	DISPLAYTYPE_UNK,
+	DISPLAYTYPE_NONE,
+	DISPLAYTYPE_GDI,	  // Both 1 and 2 are called "Software" render modes (in demos)
+	DISPLAYTYPE_SOFTWARE, // Both 1 and 2 are called "Software" render modes (in demos)
 	DISPLAYTYPE_DDRAW,
 	DISPLAYTYPE_GLIDE,
 	DISPLAYTYPE_OPENGL,

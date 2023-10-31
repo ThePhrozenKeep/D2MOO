@@ -11,7 +11,7 @@
 #include "D2Gfx.h"
 
 
-extern int32_t gnDisplayType;
+extern DisplayType gnDisplayType;
 
 
 HWND ghWnd;
