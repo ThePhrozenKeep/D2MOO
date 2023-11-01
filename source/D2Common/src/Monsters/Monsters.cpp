@@ -1256,19 +1256,41 @@ int __stdcall MONSTERS_GetHirelingTypeId(D2UnitStrc* pHireling)
 	return 0;
 }
 
-//D2Common.0x6FDA6790 (#11246)
+struct D2ClassicStatAdjustmentStrc
+{
+	D2C_ItemStats nStatID;
+	int nNightmareMultiplier;
+	int nNightmareDivisor;
+	int nHellMultiplier;
+	int nHellDivisor;
+};
+
+//1.10f: D2Common.0x6FDD179C
+static D2ClassicStatAdjustmentStrc aClassicStatAdjustments[]
+{
+	{STAT_MAXHP, 1, 2, 1, 2},
+	{STAT_ARMORCLASS, 10, 12, 10, 12},
+	{STAT_EXPERIENCE, 10, 17, 10, 26},
+};
+
+//1.10f: D2Common.0x6FDA6790 (#11246)
 void __stdcall MONSTERS_ApplyClassicScaling(D2UnitStrc* pMonster, BOOL bExpansion, uint8_t nDifficulty)
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 
-	if (!bExpansion && nDifficulty && pMonster && pMonster->dwUnitType == UNIT_MONSTER)
+	if (!bExpansion && nDifficulty != DIFFMODE_NORMAL && pMonster && pMonster->dwUnitType == UNIT_MONSTER)
 	{
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pMonster->dwClassId);
-		if (pMonStatsTxtRecord && pMonStatsTxtRecord->nAlign != 1)
+		if (pMonStatsTxtRecord && pMonStatsTxtRecord->nAlign != MONALIGN_GOOD)
 		{
-			STATLIST_SetUnitStat(pMonster, STAT_MAXHP, STATLIST_UnitGetStatValue(pMonster, STAT_MAXHP, 0) / 2, 0);
-			STATLIST_SetUnitStat(pMonster, STAT_ARMORCLASS, 10 * STATLIST_UnitGetStatValue(pMonster, STAT_ARMORCLASS, 0) / 12, 0);
-			STATLIST_SetUnitStat(pMonster, STAT_EXPERIENCE, 10 * STATLIST_UnitGetStatValue(pMonster, STAT_EXPERIENCE, 0) / (a3 == 1 ? 17 : 26), 0);
+			for (const auto& rAdjustment : aClassicStatAdjustments)
+			{
+				const int32_t nValue = STATLIST_UnitGetStatValue(pMonster, rAdjustment.nStatID, 0);
+				const int32_t nAdjustedValue = nDifficulty == DIFFMODE_NIGHTMARE
+					? DATATBLS_ApplyRatio(nValue, rAdjustment.nNightmareMultiplier, rAdjustment.nNightmareDivisor)
+					: DATATBLS_ApplyRatio(nValue, rAdjustment.nHellMultiplier, rAdjustment.nHellDivisor);
+				STATLIST_SetUnitStat(pMonster, rAdjustment.nStatID, nAdjustedValue, 0);
+			}
 			STATLIST_SetUnitStat(pMonster, STAT_LEVEL, 25 * nDifficulty + pMonStatsTxtRecord->nLevel[0], 0);
 		}
 	}
