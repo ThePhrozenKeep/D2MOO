@@ -2501,11 +2501,11 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		{
 			if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
 			{
-				nCost = nRepCost - DATATBLS_CalculatePercentage(nRepCost, nReducePricePct, 100);
+				nCost = nRepCost - DATATBLS_ApplyRatio(nRepCost, nReducePricePct, 100);
 			}
 			else
 			{
-				nCost = nSellCost - DATATBLS_CalculatePercentage(nSellCost, nReducePricePct, 100);
+				nCost = nSellCost - DATATBLS_ApplyRatio(nSellCost, nReducePricePct, 100);
 			}
 		}
 
@@ -2578,7 +2578,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 			if (nReducePricePct)
 			{
-				return nCost - DATATBLS_CalculatePercentage(nCost, nReducePricePct, 100);
+				return nCost - DATATBLS_ApplyRatio(nCost, nReducePricePct, 100);
 			}
 			else
 			{
