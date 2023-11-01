@@ -329,6 +329,13 @@ enum D2C_MonStats2TxtModeFlags
 	MONSTATS2MODEFLAG_RN = (1 << MONMODE_RUN),
 };
 
+enum D2C_MonsterAlignment
+{
+	MONALIGN_EVIL = 0,
+	MONALIGN_GOOD = 1,
+	MONALIGN_NEUTRAL = 2,
+};
+
 struct D2MonStatsTxt
 {
 	int16_t nId;							//0x00
@@ -376,7 +383,7 @@ struct D2MonStatsTxt
 	uint16_t wMissSQ;						//0x48
 	uint8_t nMaxChainId;					//0x4A
 	uint8_t nChainId;						//0x4B
-	uint8_t nAlign;							//0x4C
+	uint8_t nAlign;							//0x4C D2C_MonsterAlignment
 	uint8_t nTransLvl;						//0x4D
 	uint8_t nThreat;						//0x4E
 	uint8_t nAIdel[3];						//0x4F

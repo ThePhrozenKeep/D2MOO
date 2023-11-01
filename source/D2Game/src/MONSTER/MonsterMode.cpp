@@ -247,7 +247,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     }
     else
     {
-        if (pGame->nDifficulty != DIFFMODE_NORMAL && pMonStatsTxtRecord->nAlign != 1)
+        if (pGame->nDifficulty != DIFFMODE_NORMAL && pMonStatsTxtRecord->nAlign != MONALIGN_GOOD)
         {
             nMinDamage = 10 * nMinDamage / 12;
             nMaxDamage = 10 * nMaxDamage / 12;

@@ -460,7 +460,7 @@ void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonu
         return;
     }
 
-    if (pMonsterData->pMonstatsTxt->nAlign)
+    if (pMonsterData->pMonstatsTxt->nAlign != MONALIGN_EVIL)
     {
         pPlayerCountBonus->nPlayerCount = 1;
     }
