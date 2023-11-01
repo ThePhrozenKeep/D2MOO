@@ -1289,7 +1289,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetBaseStatsData                                           @11243
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetRealmData                                                  @11244
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetRealmData                                                  @11245
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11246                                                      @11246
+    PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_ApplyClassicScaling                                        @11246
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetMonsterLevelInArea                                      @11247
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11248                                                      @11248
     PatchAction::FunctionReplacePatchByOriginal,       //   DATATBLS_GetExpRatio                                                @11249

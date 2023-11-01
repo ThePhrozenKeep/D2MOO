@@ -227,7 +227,7 @@ void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2RoomStrc* 
     STATLIST_SetUnitStat(pUnit, STAT_EXPERIENCE, monStatsInit.nExp + MONSTERUNIQUE_CalculatePercentage(monStatsInit.nExp, playerCountBonus.nExperience, 100), 0);
     STATLIST_SetUnitStat(pUnit, STAT_HPREGEN, (nShiftedHp * pMonStatsTxtRecord->dwDamageRegen) >> 12, 0);
 
-    D2Common_11246(pUnit, pGame->bExpansion, pGame->nDifficulty);
+    MONSTERS_ApplyClassicScaling(pUnit, pGame->bExpansion, pGame->nDifficulty);
     
     D2COMMON_10475_PostStatToStatList(pUnit, STATLIST_AllocStatList(pGame->pMemoryPool, 1u, 0, UNIT_MONSTER, pUnit->dwUnitId), 1);
 

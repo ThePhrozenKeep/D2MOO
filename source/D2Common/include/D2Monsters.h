@@ -209,7 +209,7 @@ D2COMMON_DLL_DECL void __stdcall D2Common_11066(D2UnitStrc* pMonster, int* pDire
 //D2Common.0x6FDA6730 (#11067)
 D2COMMON_DLL_DECL int __stdcall MONSTERS_GetHirelingTypeId(D2UnitStrc* pHireling);
 //D2Common.0x6FDA6790 (#11246)
-D2COMMON_DLL_DECL void __stdcall D2Common_11246(D2UnitStrc* pMonster, int a2, uint8_t a3);
+D2COMMON_DLL_DECL void __stdcall MONSTERS_ApplyClassicScaling(D2UnitStrc* pMonster, BOOL bExpansion, uint8_t nDifficulty);
 //D2Common.0x6FDA6920
 int __fastcall MONSTERS_GetBaseIdFromMonsterId(int nMonsterId);
 //D2Common.0x6FDA6950

@@ -1246,7 +1246,7 @@ EXPORTS
 	STATLIST_GetBaseStatsData											@11243
 	ITEMS_GetRealmData													@11244
 	ITEMS_SetRealmData													@11245
-	D2Common_11246														@11246
+	MONSTERS_ApplyClassicScaling										@11246
 	DATATBLS_GetMonsterLevelInArea										@11247
 	D2Common_11248														@11248
 	DATATBLS_GetExpRatio												@11249
