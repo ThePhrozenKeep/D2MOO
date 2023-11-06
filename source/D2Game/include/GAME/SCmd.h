@@ -26,7 +26,7 @@ void __fastcall D2GAME_PACKETS_SendPacketSize06_6FC3C850(D2ClientStrc* pClient, 
 //D2Game.0x6FC3C880
 void __fastcall D2GAME_SendPacketSize05_6FC3C880(D2ClientStrc* pClient, char nHeader, int32_t nArg);
 //D2Game.0x6FC3C8A0
-void __fastcall D2GAME_PACKETS_SendPacket0x0C_6FC3C8A0(D2ClientStrc* pClient, char nHeader, char a3, int32_t nUnitGUID, char a5, char a6, char a7);
+void __fastcall D2GAME_PACKETS_SendPacket0x0C_6FC3C8A0(D2ClientStrc* pClient, char nHeader, D2C_UnitTypes nUnitType, int32_t nUnitGUID, char a5, char nHitClass, char nLifePct);
 //D2Game.0x6FC3C8E0
 void __fastcall D2GAME_PACKETS_SendPacket0x0E_6FC3C8E0(D2ClientStrc* pClient, char nHeader, char a3, int32_t a4, char a5, char a6, int32_t nAnimMode);
 //D2Game.0x6FC3C920
@@ -44,7 +44,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(D2ClientStrc* pClient, ui
 //D2Game.0x6FC3CDE0
 void __fastcall D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int16_t nX, int16_t nY, int8_t a7, int8_t a8, int8_t a9);
 //D2Game.0x6FC3CEE0
-void __fastcall D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(D2ClientStrc* pClient, char a2, int32_t a3, char a4, char a5, int32_t a6, char a7);
+void __fastcall D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(D2ClientStrc* pClient, char a2, int32_t nUnitGUID, char a4, char a5, int32_t a6, char nDirection);
 //D2Game.0x6FC3CF30
 void __fastcall D2GAME_PACKETS_SendPacket0x69_6FC3CF30(D2ClientStrc* pClient, char a2, int32_t a3, char a4, int16_t a5, int16_t a6, char a7, char a8);
 //D2Game.0x6FC3CF90
