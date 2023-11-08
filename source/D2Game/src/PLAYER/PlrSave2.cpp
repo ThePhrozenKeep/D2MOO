@@ -1467,7 +1467,6 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     for (int32_t i = 0; i < 16; ++i)
     {
-        // TODO: Names
         int32_t nSkillId = 0;
         int32_t nHand = 0;
         int32_t nItemIndex = 0;
