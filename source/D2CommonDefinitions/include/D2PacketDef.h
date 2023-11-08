@@ -505,7 +505,7 @@ struct D2GSPacketClt66		//size of 0x2E
 struct D2GSPacketClt67		//size of 0x1D
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01;			//0x01
+	int32_t nToken;				//0x01
 	uint16_t nGameId;			//0x05
 	uint8_t nPlayerClass;		//0x07
 	int32_t unk0x08;			//0x08
@@ -646,7 +646,7 @@ struct D2GSPacketSrv0C		//size of 0x09
 	uint8_t nUnitType;			//0x01
 	uint32_t dwUnitGUID;		//0x02
 	uint8_t unk0x06;			//0x06
-	uint8_t unk0x07;			//0x07
+	uint8_t nHitClass;			//0x07
 	uint8_t nLife;				//0x08
 };
 
@@ -1498,11 +1498,11 @@ struct D2GSPacketSrv69		//size of 0x0C
 struct D2GSPacketSrv6A		//size of 0x0C
 {
 	uint8_t nHeader;			//0x00
-	uint32_t unk0x01;			//0x01
+	uint32_t nUnitGUID;			//0x01
 	uint8_t unk0x05;			//0x05
-	uint8_t unk0x06;			//0x06
-	uint32_t unk0x07;			//0x07
-	uint8_t unk0x0B;			//0x0B
+	uint8_t nTargetUnitType;	//0x06
+	uint32_t nTargetUnitGuid;	//0x07
+	uint8_t nDirection;			//0x0B
 };
 
 struct D2GSPacketSrv6B		//size of 0x10
