@@ -102,7 +102,7 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 
 struct D2GameInfoStrc
 {
-	int32_t nServerToken;							// 0x00 nGameId
+	int32_t nGameId;								// 0x00
 	uint32_t nInitSeed;								// 0x04
 	int32_t nClients;								// 0x08
 	int32_t nPlayers;								// 0x0C
@@ -147,7 +147,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	void* pMemoryPool;								//0x1C
 	uint32_t nGameData;								//0x20
 	uint32_t unk0x24;								//0x24
-	uint16_t nServerToken;							//0x28
+	uint16_t nGameId;								//0x28
 	char szGameName[16];							//0x2A
 	char szGamePassword[16];						//0x3A
 	char szGameDesc[32];							//0x4A
@@ -252,7 +252,7 @@ void __stdcall D2Game_10056(int32_t a1);
 //D2Game.0x6FC35E70
 int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
-int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t a8);
+int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t nDatabaseCharacterId);
 //D2Game.0x6FC36570
 void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nExpLost, int32_t a13, int32_t a14);
 //D2Game.0x6FC369C0
@@ -270,7 +270,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId);
 //D2Game.0x6FC36DF0
 int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, const char* szAccountName, int32_t* a7, uint8_t nLocale, int32_t* a9, int32_t* a10);
 //D2Game.0x6FC37150
-void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, char* szClientName, char* szAccountName, int32_t a6, int32_t a7, int32_t a8, int32_t a9);
+void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nDatabaseCharacterId, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
 void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame);
 //D2Game.0x6FC37560

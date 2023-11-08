@@ -120,7 +120,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation)
     {
-        gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation(pGame->nServerToken, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
+        gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation(pGame->nGameId, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
     }
 }
 

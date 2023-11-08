@@ -145,8 +145,8 @@ struct D2ClientUnitUpdateSortStrc
 struct D2ClientKeySkillStrc
 {
 	int16_t nSkill;								//0x00
-	int16_t unk0x002;								//0x02
-	uint32_t dwFlags;							//0x04
+	int16_t nHand;								//0x02
+	uint32_t nItemGUID;							//0x04
 };
 
 struct D2GuildInformationStrc
@@ -166,11 +166,11 @@ struct D2ClientStrc
 	uint8_t nClassId;							//0x008
 	uint8_t unk0x09;							//0x009
 	uint16_t nSaveFlags;						//0x00A D2ClientSaveFlags
-	uint8_t unk0x0C;							//0x00C
+	uint8_t nCharTemplate;						//0x00C
 	char szName[16];							//0x00D
 	char szAccount[16];							//0x01D
 	uint8_t unk0x2D[51];						//0x02D
-	int32_t unk0x60;							//0x060
+	int32_t nDatabaseCharacterId;				//0x060
 	int32_t unk0x64;							//0x064
 	D2ClientInfoStrc* pClientInfo;				//0x068
 	D2CharacterPreviewInfoStrc tCharacterInfo;	//0x06C
@@ -183,7 +183,7 @@ struct D2ClientStrc
 	int32_t nSaveHeaderSize;					//0x180
 	uint32_t unk0x184[2];						//0x184
 	DWORD nSaveChecksum;						//0x18C
-	DWORD unk0x190;								//0x190
+	DWORD nPlayerMark;							//0x190
 	DWORD unk0x194[5];							//0x194
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC
@@ -218,7 +218,7 @@ struct D2ClientStrc
 	uint64_t nPingMovingAverage;				//0x4F8
 	uint32_t dwPingsCount;						//0x500
 	int32_t nExpLoss;							//0x504
-	uint32_t dwExpLost;							//0x508
+	uint32_t dwLocale;							//0x508
 	uint32_t dwLangId;							//0x50C
 	//uint32_t __510[2];						//0x510
 };
@@ -244,7 +244,7 @@ void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 //D2Game.0x6FC32260
 int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
 //D2Game.0x6FC325E0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9);
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nDatabaseCharacterId, uint32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC327E0
 void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame);
 //D2Game.0x6FC32810
@@ -344,9 +344,9 @@ uint32_t __fastcall CLIENT_IsSaveLoaded(D2ClientStrc* pClient);
 //D2Game.0x6FC34420
 D2ClientStrc* __fastcall CLIENTS_GetNext(D2ClientStrc* pClient);
 //D2Game.0x6FC34430
-void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t a4, int32_t nFlags);
+void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t nHand, int32_t nItemGUID);
 //D2Game.0x6FC34460
-void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* a4, int32_t* pFlags);
+void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* nHand, int32_t* nItemGUID);
 //D2Game.0x6FC344A0
 int16_t __fastcall CLIENTS_GetGuildFlags(D2ClientStrc* pClient);
 //D2Game.0x6FC344B0
@@ -384,7 +384,7 @@ D2PacketDataStrc* __fastcall CLIENTS_PacketDataList_GetHead(D2ClientStrc* pClien
 //D2Game.0x6FC34690
 void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szAccount);
 //D2Game.0x6FC346A0
-void __fastcall sub_6FC346A0(D2ClientStrc* pClient, int32_t* a2);
+void __fastcall D2GAME_GetDatabaseCharacterId_6FC346A0(D2ClientStrc* pClient, int32_t* pDatabaseCharacterId);
 //D2Game.0x6FC346B0
 void __fastcall D2GAME_GetRealmIdFromClient_6FC346B0(D2ClientStrc* pClient, D2ClientInfoStrc** ppClientInfo);
 //D2Game.0x6FC346C0

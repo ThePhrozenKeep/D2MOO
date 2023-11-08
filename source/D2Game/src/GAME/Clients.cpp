@@ -423,7 +423,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     {
         if (pClient->HotkeySkills[i].nSkill >= 0 && pClient->HotkeySkills[i].nSkill < sgptDataTables->nSkillsTxtRecordCount)
         {
-            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].unk0x002, pClient->HotkeySkills[i].dwFlags);
+            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].nHand, pClient->HotkeySkills[i].nItemGUID);
         }
     }
 
@@ -447,7 +447,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 }
 
 //D2Game.0x6FC325E0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9)
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nDatabaseCharacterId, uint32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
     {
@@ -456,7 +456,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
 
     if (pGame->nClients >= 8)
     {
-        GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Couldn't add client %d '%s' to full game %d '%s'", nClientId, szClientName, pGame->nServerToken, pGame->szGameName);
+        GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Couldn't add client %d '%s' to full game %d '%s'", nClientId, szClientName, pGame->nGameId, pGame->szGameName);
         return 0;
     }
 
@@ -468,7 +468,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
 
     if (ARENA_ShouldTreatClassIdAsTemplateId(pGame))
     {
-        pClient->unk0x0C = nClassIdOrCharTemplate;
+        pClient->nCharTemplate = nClassIdOrCharTemplate;
         pClient->nClassId = DATATBLS_GetClassFromCharTemplateTxtRecord(nClassIdOrCharTemplate, ARENA_GetTemplateType(pGame));
     }
     else
@@ -479,9 +479,9 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     SStrCopy(pClient->szName, szClientName, INT_MAX);
     SStrCopy(pClient->szAccount, szAccount, INT_MAX);
 
-    pClient->unk0x60 = a6;
+    pClient->nDatabaseCharacterId = nDatabaseCharacterId;
     pClient->pClientInfo = 0;
-    pClient->dwExpLost = nExpLost;
+    pClient->dwLocale = nLocale;
     pClient->dwClientState = CLIENTSTATE_JUST_CREATED;
     pClient->tPacketDataList.pHead = nullptr;
     pClient->tPacketDataList.pTail = nullptr;
@@ -490,8 +490,8 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     for (int32_t i = 0; i < 16; ++i)
     {
         pClient->HotkeySkills[i].nSkill = -1;
-        pClient->HotkeySkills[i].unk0x002 = 0;
-        pClient->HotkeySkills[i].dwFlags = -1;
+        pClient->HotkeySkills[i].nHand = 0;
+        pClient->HotkeySkills[i].nItemGUID = -1;
     }
 
     pClient->pNext = pGame->pClientList;
@@ -511,7 +511,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
 
     ++pGame->nClients;
 
-    GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Added client %d '%s' to game %d '%s'", nClientId, szClientName, pGame->nServerToken, pGame->szGameName);
+    GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Added client %d '%s' to game %d '%s'", nClientId, szClientName, pGame->nGameId, pGame->szGameName);
 
     return pClient;
 }
@@ -646,7 +646,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     if (!pClientToRemove)
     {
         GAME_LogMessage(6, "[CLIENT]  ClientRemoveFromGame:  *** Can't find client %d to remove from game %d '%s' ***",
-            nClientIdToRemove, pGame->nServerToken, pGame->szGameName);
+			nClientIdToRemove, pGame->nGameId, pGame->szGameName);
         return;
     }
 
@@ -677,19 +677,19 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
-                    &pClientToRemove->pClientInfo,
-                    pGame->nServerToken,
-                    pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
-                    pClientToRemove->nSaveFlags, pClientToRemove->szName,
-                    (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
-                    0,
-                    0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
+						&pClientToRemove->pClientInfo,
+						pGame->nGameId,
+						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
+						pClientToRemove->nSaveFlags, pClientToRemove->szName,
+						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
+						0,
+						0,
+						pClientToRemove->szAccount, pClientToRemove->nDatabaseCharacterId, &pClientToRemove->nPlayerMark);
             }
 
-            GAME_LogMessage( 6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
-                pClientToRemove->dwClientId, pClientToRemove->szName,
-                pGame->nServerToken, pGame->szGameName,
+            GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
+				pClientToRemove->dwClientId, pClientToRemove->szName,
+				pGame->nGameId, pGame->szGameName,
                 pClientToRemove->bUnlockCharacter ? " (but unlock character)" : "(don't unlock character)");
         }
     }
@@ -702,20 +702,20 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
-                    &pClientToRemove->pClientInfo,
-                    pGame->nServerToken,
-                    0, 0, 0, 0,
-                    0, pClientToRemove->szName,
-                    (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
-                    0,
-                    0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
+						&pClientToRemove->pClientInfo,
+						pGame->nGameId,
+						0, 0, 0, 0,
+						0, pClientToRemove->szName,
+						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
+						0,
+						0,
+						pClientToRemove->szAccount, pClientToRemove->nDatabaseCharacterId, &pClientToRemove->nPlayerMark);
             }
         }
 
-        GAME_LogMessage( 6, "[SERVER]  ClientRemoveFromGame:  no HUNIT to save for client %d '%s' from game %d '%s'%s",
-            pClientToRemove->dwClientId, pClientToRemove->szName,
-            pGame->nServerToken, pGame->szGameName,
+        GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  no HUNIT to save for client %d '%s' from game %d '%s'%s",
+			pClientToRemove->dwClientId, pClientToRemove->szName,
+			pGame->nGameId, pGame->szGameName,
             pClientToRemove->bUnlockCharacter ? " (but unlock character)" : "(don't unlock character)");
     }
 
@@ -1618,24 +1618,24 @@ D2ClientStrc* __fastcall CLIENTS_GetNext(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC34430
-void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t a4, int32_t nFlags)
+void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t nHand, int32_t nItemGUID)
 {
     if (pClient)
     {
         pClient->HotkeySkills[nHotkeyId].nSkill = nSkillId;
-        pClient->HotkeySkills[nHotkeyId].unk0x002 = a4;
-        pClient->HotkeySkills[nHotkeyId].dwFlags = nFlags;
+        pClient->HotkeySkills[nHotkeyId].nHand = nHand;
+        pClient->HotkeySkills[nHotkeyId].nItemGUID = nItemGUID;
     }
 }
 
 //D2Game.0x6FC34460
-void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* a4, int32_t* pFlags)
+void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* nHand, int32_t* nItemGUID)
 {
     if (pClient)
     {
         *pSkillId = pClient->HotkeySkills[nId].nSkill;
-        *a4 = pClient->HotkeySkills[nId].unk0x002;
-        *pFlags = pClient->HotkeySkills[nId].dwFlags;
+        *nHand = pClient->HotkeySkills[nId].nHand;
+        *nItemGUID = pClient->HotkeySkills[nId].nItemGUID;
     }
 }
 
@@ -1801,9 +1801,9 @@ void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szA
 }
 
 //D2Game.0x6FC346A0
-void __fastcall sub_6FC346A0(D2ClientStrc* pClient, int32_t* a2)
+void __fastcall D2GAME_GetDatabaseCharacterId_6FC346A0(D2ClientStrc* pClient, int32_t* pDatabaseCharacterId)
 {
-    *a2 = pClient->unk0x60;
+    *pDatabaseCharacterId = pClient->nDatabaseCharacterId;
 }
 
 //D2Game.0x6FC346B0

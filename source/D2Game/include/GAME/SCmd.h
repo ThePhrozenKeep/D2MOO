@@ -6,7 +6,7 @@
 
 
 //D2Game.0x6FC3C640
-int32_t __fastcall sub_6FC3C640(int32_t nClientId, int16_t a2, int16_t a3, const char* szSource);
+int32_t __fastcall sub_6FC3C640(int32_t nClientId, int16_t nGameId, int16_t nClientCount, const char* szGameName);
 //D2Game.0x6FC3C690
 void __fastcall sub_6FC3C690(int32_t nClientId);
 //D2Game.0x6FC3C6B0
@@ -234,7 +234,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x74_6FC3F640(D2ClientStrc* pClient, D2
 //D2Game.0x6FC3F690
 void __fastcall SCMD_Send0x75_PartyRosterUpdate(D2UnitStrc* pLocalPlayer, D2UnitStrc* pOtherPlayer);
 //D2Game.0x6FC3F720
-void __fastcall D2GAME_PACKETS_SendPacket0x7B_6FC3F720(D2ClientStrc* pClient, BYTE slot, int16_t a3, int32_t a4, int32_t a5);
+void __fastcall D2GAME_PACKETS_SendPacket0x7B_6FC3F720(D2ClientStrc* pClient, BYTE slot, int16_t nSkill, int32_t nHand, int32_t nItemGUID);
 //D2Game.0x6FC3F770
 void __fastcall D2GAME_PACKETS_SendPacket0x7E_6FC3F770(D2ClientStrc* pClient);
 //D2Game.0x6FC3F790
