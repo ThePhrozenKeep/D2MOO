@@ -2572,42 +2572,42 @@ void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* pJungle,
 }
 
 //D2Common.0x6FD83A20
-void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
+void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2DrlgRoomStrc* pDrlgRoom)
 {
 	D2UnkOutdoorStrc2 a1 = {};
 
-	D2LevelDefBin* pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pRoomEx->pLevel->nLevelId);
+	D2LevelDefBin* pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pDrlgRoom->pLevel->nLevelId);
 
-	uint32_t nWaypointSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_HAS_WAYPOINT_MASK) >> ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT;
-	uint32_t nShrineSubTheme = (pRoomEx->dwFlags & ROOMEXFLAG_SUBSHRINE_ROWS_MASK) >> ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT;
+	uint32_t nWaypointSubTheme = (pDrlgRoom->dwFlags & DRLGROOMFLAG_HAS_WAYPOINT_MASK) >> DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT;
+	uint32_t nShrineSubTheme = (pDrlgRoom->dwFlags & DRLGROOMFLAG_SUBSHRINE_ROWS_MASK) >> DRLGROOMFLAG_SUBSHRINE_ROWS_FIRST_BIT;
 
-	int nWidth = pRoomEx->nTileWidth + 1;
-	int nHeight = pRoomEx->nTileHeight + 1;
+	int nWidth = pDrlgRoom->nTileWidth + 1;
+	int nHeight = pDrlgRoom->nTileHeight + 1;
 
-	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pTileTypeGrid, nWidth, nHeight);
-	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pWallGrid, nWidth, nHeight);
-	DRLGGRID_InitializeGridCells(pRoomEx->pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pFloorGrid, nWidth, nHeight);
+	DRLGGRID_InitializeGridCells(pDrlgRoom->pLevel->pDrlg->pMempool, &pDrlgRoom->pOutdoor->pTileTypeGrid, nWidth, nHeight);
+	DRLGGRID_InitializeGridCells(pDrlgRoom->pLevel->pDrlg->pMempool, &pDrlgRoom->pOutdoor->pWallGrid, nWidth, nHeight);
+	DRLGGRID_InitializeGridCells(pDrlgRoom->pLevel->pDrlg->pMempool, &pDrlgRoom->pOutdoor->pFloorGrid, nWidth, nHeight);
 
 	for (int i = 0; i < 8; ++i)
 	{
 		for (int j = 0; j < 8; ++j)
 		{
-			DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, j, i, 0x40002, FLAG_OPERATION_OVERWRITE);
+			DRLGGRID_AlterGridFlag(&pDrlgRoom->pOutdoor->pFloorGrid, j, i, 0x40002, FLAG_OPERATION_OVERWRITE);
 		}
 	}
 
-	if (DRLG_GetActNoFromLevelId(pRoomEx->pLevel->nLevelId) == ACT_I)
+	if (DRLG_GetActNoFromLevelId(pDrlgRoom->pLevel->nLevelId) == ACT_I)
 	{
-		DRLG_OUTDOORS_GenerateDirtPath(pRoomEx->pLevel, pRoomEx);
+		DRLG_OUTDOORS_GenerateDirtPath(pDrlgRoom->pLevel, pDrlgRoom);
 	}
 
-	DRLGROOMTILE_AllocTileGrid(pRoomEx);
+	DRLGROOMTILE_AllocTileGrid(pDrlgRoom);
 
 	memset(&a1, 0, sizeof(a1));
-	a1.pRoomEx = pRoomEx;
-	a1.pOutdoorRooms[0] = pRoomEx->pOutdoor;
-	a1.pWallsGrids[0] = &pRoomEx->pOutdoor->pWallGrid;
-	a1.pFloorGrid = &pRoomEx->pOutdoor->pFloorGrid;
+	a1.pDrlgRoom = pDrlgRoom;
+	a1.pOutdoorRooms[0] = pDrlgRoom->pOutdoor;
+	a1.pWallsGrids[0] = &pDrlgRoom->pOutdoor->pWallGrid;
+	a1.pFloorGrid = &pDrlgRoom->pOutdoor->pFloorGrid;
 	a1.field_28 = 0;
 	a1.field_2C = 1;
 
@@ -2627,13 +2627,13 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 		sub_6FD8AA80(&a1);
 	}
 
-	a1.nSubWaypoint_Shrine = pRoomEx->pOutdoor->nSubType;
-	a1.nSubTheme = pRoomEx->pOutdoor->nSubTheme;
-	a1.nSubThemePicked = pRoomEx->pOutdoor->nSubThemePicked;
+	a1.nSubWaypoint_Shrine = pDrlgRoom->pOutdoor->nSubType;
+	a1.nSubTheme = pDrlgRoom->pOutdoor->nSubTheme;
+	a1.nSubThemePicked = pDrlgRoom->pOutdoor->nSubThemePicked;
 	sub_6FD8AA80(&a1);
 
 	unsigned int nFlags = 0;
-	switch (pRoomEx->pLevel->nLevelType)
+	switch (pDrlgRoom->pLevel->nLevelType)
 	{
 	case LVLTYPE_ACT2_DESERT:
 		nFlags = 0x100;
@@ -2656,7 +2656,7 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 		break;
 
 	case LVLTYPE_ACT5_BARRICADE:
-		nFlags = (pRoomEx->pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS) ? 0x600000 : 0;
+		nFlags = (pDrlgRoom->pLevel->nLevelId == LEVEL_TUNDRAWASTELANDS) ? 0x600000 : 0;
 		break;
 
 	default:
@@ -2667,39 +2667,39 @@ void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2RoomExStrc* pRoomEx)
 	{
 		for (int nX = 0; nX < nWidth; ++nX)
 		{
-			if (!(DRLGGRID_GetGridEntry(&pRoomEx->pOutdoor->pFloorGrid, nX, nY) & 0x3F0FF80))
+			if (!(DRLGGRID_GetGridEntry(&pDrlgRoom->pOutdoor->pFloorGrid, nX, nY) & 0x3F0FF80))
 			{
-				DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, nX, nY, nFlags, FLAG_OPERATION_OR);
+				DRLGGRID_AlterGridFlag(&pDrlgRoom->pOutdoor->pFloorGrid, nX, nY, nFlags, FLAG_OPERATION_OR);
 			}
 		}
 	}
 
-	DRLGGRID_AlterEdgeGridFlags(&pRoomEx->pOutdoor->pWallGrid, 4, FLAG_OPERATION_OR);
-	DRLGGRID_AlterEdgeGridFlags(&pRoomEx->pOutdoor->pFloorGrid, 4, FLAG_OPERATION_OR);
+	DRLGGRID_AlterEdgeGridFlags(&pDrlgRoom->pOutdoor->pWallGrid, 4, FLAG_OPERATION_OR);
+	DRLGGRID_AlterEdgeGridFlags(&pDrlgRoom->pOutdoor->pFloorGrid, 4, FLAG_OPERATION_OR);
 }
 
 //D2Common.0x6FD83C90
 void __fastcall DRLGOUTPLACE_CreateOutdoorRoomEx(D2DrlgLevelStrc* pLevel, int nX, int nY, int nWidth, int nHeight, int dwRoomFlags, int dwOutdoorFlags, int dwOutdoorFlagsEx, int dwDT1Mask)
 {
 	D2LevelDefBin* pLevelDefBinRecord = NULL;
-	D2RoomExStrc* pRoomEx = NULL;
+	D2DrlgRoomStrc* pDrlgRoom = NULL;
 
-	pRoomEx = DRLGROOM_AllocRoomEx(pLevel, DRLGTYPE_MAZE);
-	pRoomEx->nTileWidth = nWidth;
-	pRoomEx->nTileHeight = nHeight;
-	pRoomEx->nTileXPos = nX;
-	pRoomEx->nTileYPos = nY;
+	pDrlgRoom = DRLGROOM_AllocRoomEx(pLevel, DRLGTYPE_MAZE);
+	pDrlgRoom->nTileWidth = nWidth;
+	pDrlgRoom->nTileHeight = nHeight;
+	pDrlgRoom->nTileXPos = nX;
+	pDrlgRoom->nTileYPos = nY;
 
-	DRLGROOM_AddRoomExToLevel(pLevel, pRoomEx);
+	DRLGROOM_AddRoomExToLevel(pLevel, pDrlgRoom);
 
-	pRoomEx->dwDT1Mask = dwDT1Mask;
-	pRoomEx->dwFlags |= dwRoomFlags | ROOMEXFLAG_NO_LOS_DRAW;
+	pDrlgRoom->dwDT1Mask = dwDT1Mask;
+	pDrlgRoom->dwFlags |= dwRoomFlags | DRLGROOMFLAG_NO_LOS_DRAW;
 
-	pRoomEx->pOutdoor->dwFlags = dwOutdoorFlags;
-	pRoomEx->pOutdoor->dwFlagsEx = dwOutdoorFlagsEx;
+	pDrlgRoom->pOutdoor->dwFlags = dwOutdoorFlags;
+	pDrlgRoom->pOutdoor->dwFlagsEx = dwOutdoorFlagsEx;
 
 	pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pLevel->nLevelId);
-	pRoomEx->pOutdoor->nSubType = pLevelDefBinRecord->dwSubType;
-	pRoomEx->pOutdoor->nSubTheme = pLevelDefBinRecord->dwSubTheme;
-	pRoomEx->pOutdoor->nSubThemePicked = DRLGTILESUB_PickSubThemes(pRoomEx, pLevelDefBinRecord->dwSubType, pLevelDefBinRecord->dwSubTheme);
+	pDrlgRoom->pOutdoor->nSubType = pLevelDefBinRecord->dwSubType;
+	pDrlgRoom->pOutdoor->nSubTheme = pLevelDefBinRecord->dwSubTheme;
+	pDrlgRoom->pOutdoor->nSubThemePicked = DRLGTILESUB_PickSubThemes(pDrlgRoom, pLevelDefBinRecord->dwSubType, pLevelDefBinRecord->dwSubTheme);
 }

@@ -89,7 +89,7 @@ int32_t __fastcall SKILLS_SrvSt15_RaiseSkeleton_Mage(D2GameStrc* pGame, D2UnitSt
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
         if (!DUNGEON_IsRoomInTown(pRoom))
         {
             return D2COMMON_11017_CheckUnitIfConsumeable(pTarget, 0);
@@ -105,7 +105,7 @@ int32_t __fastcall SKILLS_SrvSt16_PoisonDagger(D2GameStrc* pGame, D2UnitStrc* pU
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
         if (!DUNGEON_IsRoomInTown(pRoom))
         {
             D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -149,7 +149,7 @@ int32_t __fastcall SKILLS_SrvSt17_Poison_CorpseExplosion(D2GameStrc* pGame, D2Un
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
         if (!DUNGEON_IsRoomInTown(pRoom))
         {
             return D2COMMON_11021(pTarget);
@@ -1542,7 +1542,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
     COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pTarget), coords.nX, coords.nY, PATH_GetUnitCollisionPattern(pTarget), 0x8000u);
 
-    D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pTarget), &coords, UNITS_GetUnitSizeX(pTarget), 0x3C01u, 1);
+    D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pTarget), &coords, UNITS_GetUnitSizeX(pTarget), 0x3C01u, 1);
     if (pRoom)
     {
         MONSTERUNIQUE_ToggleUnitFlag(pTarget, UNITFLAG_CANBEATTACKED, 1);
@@ -1643,7 +1643,7 @@ int32_t __fastcall SKILLS_SrvDo060_BoneWall(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
     
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nTargetX, nTargetY);    
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nTargetX, nTargetY);    
     if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
     {
         return 0;

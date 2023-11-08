@@ -97,7 +97,7 @@ void __fastcall ACT4Q1_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -410,7 +410,7 @@ bool __fastcall ACT4Q1_SpawnIzualGhost(D2GameStrc* pGame, D2QuestDataStrc* pQues
 	{
 		pQuestDataEx->bNeedToSpawnIzualGhost = 0;
 
-		D2RoomStrc* pRoom = DUNGEON_FindRoomBySubtileCoordinates(pGame->pAct[ACT_IV], pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY);
+		D2ActiveRoomStrc* pRoom = DUNGEON_FindRoomBySubtileCoordinates(pGame->pAct[ACT_IV], pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY);
 		if (pRoom)
 		{
 			if (!D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, pQuestDataEx->pCoords.nX, pQuestDataEx->pCoords.nY, MONSTER_IZUALGHOST, MONMODE_SKILL1, -1, 0)
@@ -428,7 +428,7 @@ bool __fastcall ACT4Q1_SpawnIzualGhost(D2GameStrc* pGame, D2QuestDataStrc* pQues
 //D2Game.0x6FCAE140
 int32_t __fastcall ACT4Q1_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	D2_ASSERT(pRoom);
 
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q1_IZUAL);
@@ -436,7 +436,7 @@ int32_t __fastcall ACT4Q1_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 
 	D2Act4Quest1Strc* pQuestDataEx = (D2Act4Quest1Strc*)pQuestData->pQuestDataEx;
 
-	D2RoomStrc* pTargetRoom = UNITS_GetRoom(pQuestDataEx->pTargetUnit);
+	D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pQuestDataEx->pTargetUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -444,7 +444,7 @@ int32_t __fastcall ACT4Q1_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 
 	if (pRoom != pTargetRoom)
 	{
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 

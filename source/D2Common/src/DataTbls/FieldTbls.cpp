@@ -139,7 +139,7 @@ int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 }
 
 //D2Common.0x6FD52360 (#11099)
-BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, uint16_t fMask)
+BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t fMask)
 {
 	if (pRoom)
 	{

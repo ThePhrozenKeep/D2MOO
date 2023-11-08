@@ -332,7 +332,7 @@ void __fastcall ACT1Q4_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -379,7 +379,7 @@ void __fastcall ACT1Q4_SpawnCainInTristram(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	const int32_t nX = CLIENTS_GetUnitX(pUnit) + 3;
 	const int32_t nY = CLIENTS_GetUnitY(pUnit) + 3;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	D2UnitStrc* pCain = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, MONSTER_CAIN1, 1, -1, 0);
 	if (!pCain)
 	{
@@ -387,7 +387,7 @@ void __fastcall ACT1Q4_SpawnCainInTristram(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		pCoord.nX = nX;
 		pCoord.nY = nY;
 
-		D2RoomStrc* pFreeRoom = nullptr;
+		D2ActiveRoomStrc* pFreeRoom = nullptr;
 		QUESTS_GetFreePosition(pRoom, &pCoord, 2, 0x100, &pFreeRoom, 3);
 		if (pFreeRoom)
 		{
@@ -457,7 +457,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_TRISTRAM)
 	{
 		return 0;
@@ -494,7 +494,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 //D2Game.0x6FC9A530
 int32_t __fastcall ACT1Q4_UnitIterate_FindPlayersInTristram(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_TRISTRAM)
 	{
@@ -669,7 +669,7 @@ void __fastcall ACT1Q4_UnitIterate_SetEnterAreaFlag(D2GameStrc* pGame, D2UnitStr
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -822,8 +822,8 @@ int32_t __fastcall OBJECTS_OperateFunction09_Monolith(D2ObjOperateFnStrc* pOp, i
 
 	if (monolithCoords.nX == 0)
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -1446,7 +1446,7 @@ void __fastcall ACT1Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FC9BC80
-void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY)
+void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q4_CAIN);
 	if (!pQuestData)
@@ -1485,7 +1485,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2RoomStrc* pRoom, int
 	}
 	pCoord.nY = nTmpY;
 
-	D2RoomStrc* pFreeRoom = pRoom;
+	D2ActiveRoomStrc* pFreeRoom = pRoom;
 	QUESTS_GetFreePosition(pRoom, &pCoord, 2, 0x100, &pFreeRoom, 1);
 
 	if (!pFreeRoom)
@@ -1750,7 +1750,7 @@ void __fastcall ACT1Q4_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 //D2Game.0x6FC9C300
 int32_t __fastcall ACT1Q4_UnitIterate_SetCustom6Flag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (pRoom && DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_MOOMOOFARM)
 	{
@@ -1887,7 +1887,7 @@ int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_ROGUEENCAMPMENT)
 	{
 		SUNIT_AttachSound(pUnit, 20, pUnit);
@@ -1896,7 +1896,7 @@ int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	D2CoordStrc pCoord = {};
 	UNITS_GetCoords(pUnit, &pCoord);
-	D2RoomStrc* pFreeRoom = nullptr;
+	D2ActiveRoomStrc* pFreeRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4);
 	if (pFreeRoom && D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pFreeRoom, pCoord.nX, pCoord.nY, LEVEL_MOOMOOFARM, 0, OBJECT_PERMANENT_TOWN_PORTAL, 0))
 	{
@@ -1994,7 +1994,7 @@ int32_t __fastcall ACT1Q4_SpawnCainPortalOutsideTown(D2GameStrc* pGame, D2UnitSt
 	const int32_t nX = pQuestDataEx->pCainPortalOutsideTownCoords.nX;
 	const int32_t nY = pQuestDataEx->pCainPortalOutsideTownCoords.nY;
 
-	D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pUnit), nX, nY);
+	D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pUnit), nX, nY);
 	if (!pRoom)
 	{
 		pQuestDataEx->pCainPortalOutsideTownCoords.nX += 3;
@@ -2079,7 +2079,7 @@ void __fastcall ACT1Q4_SpawnCainPortalInTown(D2GameStrc* pGame)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pCainObject);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pCainObject);
 
 	const int32_t nX = CLIENTS_GetUnitX(pCainObject);
 	const int32_t nY = CLIENTS_GetUnitY(pCainObject);

@@ -83,7 +83,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
 BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
 
 //D2Common.0x6FDAD590 (#10229)
-BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
+BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2ActiveRoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
 
 //D2Common.0x6FDADA20
-void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom);
+void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom);

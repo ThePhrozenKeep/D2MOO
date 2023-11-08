@@ -85,7 +85,7 @@ int32_t __fastcall SKILLITEM_pSpell02_CastPortal(D2GameStrc* pGame, D2UnitStrc* 
     {
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
         const int32_t nTownLevelId = DUNGEON_GetTownLevelIdFromActNo(DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)));
         if (!DUNGEON_IsRoomInTown(pRoom))
@@ -1765,7 +1765,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
     const int32_t nX = CLIENTS_GetUnitX(pSource);
     const int32_t nY = CLIENTS_GetUnitY(pSource);
 
-    D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pSource), nX, nY);
+    D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pSource), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -1859,7 +1859,7 @@ int32_t __fastcall SKILLITEM_FindTargetPosition(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;

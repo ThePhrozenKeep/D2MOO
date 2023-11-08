@@ -113,7 +113,7 @@ void __fastcall ACT5Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -241,7 +241,7 @@ void __fastcall ACT5Q6_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 //D2Game.0x6FCB85C0
 int32_t __fastcall ACT5Q6_UnitIterate_CreateLastPortal(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_THEWORLDSTONECHAMBER)
 	{
 		return 0;
@@ -553,7 +553,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2Unit
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_THEWORLDSTONECHAMBER)
 	{
 		return 0;
@@ -637,7 +637,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -769,7 +769,7 @@ int32_t __fastcall OBJECTS_OperateFunction70_BaalPortal(D2ObjOperateFnStrc* pOp,
 		return 1;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
 	if (!pRoom)
 	{
 		return 1;
@@ -902,14 +902,14 @@ int32_t __fastcall ACT5Q6_UnitIterate_SendZooMonsterIdToClient(D2GameStrc* pGame
 }
 
 //D2Game.0x6FCB9520
-void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pUnit)
+void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
 	D2CoordStrc coord = {};
 	UNITS_GetCoords(pUnit, &coord);
 	coord.nX -= 5;
 	coord.nY -= 5;
 
-	D2RoomStrc* pFreeRoom = nullptr;
+	D2ActiveRoomStrc* pFreeRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, &coord, 5, 0x400u, &pFreeRoom, 19);
 
 	if (pFreeRoom)

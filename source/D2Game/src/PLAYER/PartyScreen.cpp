@@ -320,7 +320,7 @@ void __fastcall PARTYSCREEN_PartyIterate_PlayerLeftParty(D2GameStrc* pGame, D2Un
 //D2Game.0x6FC7B1D0
 void __fastcall D2GAME_PARTYSCREEN_Command4_6FC7B1D0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer1);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer1);
     if (!pRoom || !DUNGEON_IsRoomInTown(pRoom) || STATLIST_GetUnitBaseStat(pPlayer1, STAT_LEVEL, 0) < 9 || STATLIST_GetUnitBaseStat(pPlayer2, STAT_LEVEL, 0) < 9)
     {
         *pFailure = 1;

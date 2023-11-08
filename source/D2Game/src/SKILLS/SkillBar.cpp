@@ -203,7 +203,7 @@ int32_t __fastcall SKILLS_SrvDo069_FindPotion(D2GameStrc* pGame, D2UnitStrc* pUn
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         OBJMODE_DropItemWithCodeAndQuality(pGame, pTarget, 0, 2);
@@ -546,7 +546,7 @@ int32_t __fastcall SKILLS_SrvDo075_GrimWard(D2GameStrc* pGame, D2UnitStrc* pUnit
     coords.nX = CLIENTS_GetUnitX(pTarget);
     coords.nY = CLIENTS_GetUnitY(pTarget);
     
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pTarget), coords.nX, coords.nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pTarget), coords.nX, coords.nY);
     if (!pRoom || !COLLISION_GetFreeCoordinates(pRoom, &coords, 2, 0x1000u, 1) || pTarget->dwUnitType != UNIT_MONSTER)
     {
         return 0;
@@ -1266,7 +1266,7 @@ int32_t __fastcall SKILLS_SrvSt40_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, int
             return 0;
         }
         
-        D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY);
         if (!pRoom || !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]) && DUNGEON_IsRoomInTown(pRoom))
         {
             return 0;
@@ -1335,7 +1335,7 @@ int32_t __fastcall SKILLS_FindLeapTargetPosition(D2UnitStrc* pUnit, int32_t nSki
     int32_t nCounter = 3;
     while (nCounter)
     {
-        D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY), &coords, UNITS_GetUnitSizeX(pUnit), 0x1C09u, 1);
+        D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY), &coords, UNITS_GetUnitSizeX(pUnit), 0x1C09u, 1);
         nX = coords.nX;
         nY = coords.nY;
         if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x1C09) && D2Common_11025(nUnitX, nUnitY, nX, nY, pRoom, 0x804) && UNITS_GetDistanceToCoordinates(pUnit, nX, nY) <= nAuraRange)
@@ -1456,7 +1456,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
         return 0;
     }
     
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;
@@ -1506,7 +1506,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
 
                         const int32_t nTargetX = 3 * nX - 2 * CLIENTS_GetUnitX(pTarget);
                         const int32_t nTargetY = 3 * nY - 2 * CLIENTS_GetUnitY(pTarget);
-                        D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nTargetX, nTargetY);
+                        D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nTargetX, nTargetY);
                         if (!pTargetRoom || !DUNGEON_IsRoomInTown(pTargetRoom))
                         {
                             D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nTargetX, nTargetY);
@@ -1584,7 +1584,7 @@ int32_t __fastcall SKILLS_SrvSt41_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;

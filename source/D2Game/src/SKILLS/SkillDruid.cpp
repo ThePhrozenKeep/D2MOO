@@ -1029,7 +1029,7 @@ int32_t __fastcall SKILLS_SrvDo145_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[8]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
             D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
@@ -1055,7 +1055,7 @@ int32_t __fastcall SKILLS_SrvDo145_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nSkillId);
     EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, pSkillsTxtRecord->dwParam[3] + pGame->dwGameFrame, nSkillId, nSkillLevel);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
     {
         return 0;
@@ -1082,7 +1082,7 @@ int32_t __fastcall SKILLS_SrvDo146_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
             D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
@@ -1122,7 +1122,7 @@ int32_t __fastcall SKILLS_SrvDo146_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nSkillId);
     EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, pGame->dwGameFrame + pSkillsTxtRecord->dwParam[3], nSkillId, nSkillLevel);
     
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
     {
         return 0;
@@ -1137,7 +1137,7 @@ int32_t __fastcall SKILLS_SrvDo146_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         const int32_t nY = CLIENTS_GetUnitY(pUnit) + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2 * nRange + 1) - nRange;
         if (D2Common_11026(nX, nY, pUnit, 0x805u))
         {
-            D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+            D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
             if (pTargetRoom && !COLLISION_CheckMask(pTargetRoom, nX, nY, 1u))
             {
                 D2GAME_CreateMissile_6FD115E0(pGame, pUnit, nSkillId, nSkillLevel, nMissileId, nX, nY);
@@ -2048,7 +2048,7 @@ int32_t __fastcall SKILLS_SrvDo135_MinionSpawner(D2GameStrc* pGame, D2UnitStrc* 
     const int32_t nY = SKILLS_GetParam3(pSkill);
     const int32_t nAnimMode = SKILLS_GetParam4(pSkill);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -2353,7 +2353,7 @@ int32_t __fastcall SKILLS_SrvDo140_BaalTentacle(D2GameStrc* pGame, D2UnitStrc* p
         nMinionX = nX + ITEMS_RollRandomNumber(&pUnit->pSeed) % 18 - 9;
         nMinionY = nY + ITEMS_RollRandomNumber(&pUnit->pSeed) % 18 - 9;
         
-        D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nMinionX, nMinionY);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nMinionX, nMinionY);
         if (pRoom)
         {
             D2UnitStrc* pMinion = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nMinionX, nMinionY, nMinionId, nMinionSpawnMode, -1, 0);

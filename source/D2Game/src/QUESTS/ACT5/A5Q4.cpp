@@ -100,7 +100,7 @@ void __fastcall ACT5Q4_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -239,7 +239,7 @@ void __fastcall ACT5Q4_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 	const int32_t nX = CLIENTS_GetUnitX(pQuestArg->pTarget);
 	const int32_t nY = CLIENTS_GetUnitY(pQuestArg->pTarget);
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 	if (D2GAME_CreatePortalObject_6FD13DF0(pQuestData->pGame, nullptr, pRoom, nX + 10, nY + 5, LEVEL_NIHLATHAKSTEMPLE, nullptr, OBJECT_PERMANENT_TOWN_PORTAL, 1))
 	{
 		pQuestDataEx->bPortalCreated = 1;
@@ -449,7 +449,7 @@ void __fastcall ACT5Q4_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 	if (!pRoom)
 	{
 		return;
@@ -478,7 +478,7 @@ void __fastcall ACT5Q4_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 int32_t __fastcall ACT5Q4_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q4, QFLAG_COMPLETEDNOW) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q4, QFLAG_REWARDGRANTED))
 	{
 		return 0;
@@ -488,7 +488,7 @@ int32_t __fastcall ACT5Q4_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 
 	if (pRoom != pQuestDataEx->pRoom)
 	{
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -672,7 +672,7 @@ void __fastcall ACT5Q4_AnyaOpenPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_V || !D2GAME_CreatePortalObject_6FD13DF0(pGame, nullptr, pRoom, CLIENTS_GetUnitX(pUnit) + 10, CLIENTS_GetUnitY(pUnit) + 5, LEVEL_NIHLATHAKSTEMPLE, nullptr, OBJECT_PERMANENT_TOWN_PORTAL, 1))
 	{

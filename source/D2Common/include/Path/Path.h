@@ -2,7 +2,7 @@
 
 #include "CommonDefinitions.h"
 
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2UnitStrc;
 
 #pragma pack(1)
@@ -93,8 +93,8 @@ struct D2DynamicPathStrc
 	D2PathPointStrc SP1;						//0x10 tTargetCoord in original code
 	D2PathPointStrc SP2;						//0x14
 	D2PathPointStrc SP3;						//0x18
-	D2RoomStrc* pRoom;							//0x1C
-	D2RoomStrc* pPreviousRoom;					//0x20
+	D2ActiveRoomStrc* pRoom;					//0x1C
+	D2ActiveRoomStrc* pPreviousRoom;			//0x20
 	int32_t dwCurrentPointIdx;					//0x24
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
@@ -143,8 +143,8 @@ struct D2PathInfoStrc
 {
 	D2PathPointStrc tStartCoord;				//0x00
 	D2PathPointStrc tTargetCoord;				//0x04
-	D2RoomStrc* pStartRoom;						//0x08
-	D2RoomStrc* pTargetRoom;					//0x0C
+	D2ActiveRoomStrc* pStartRoom;				//0x08
+	D2ActiveRoomStrc* pTargetRoom;				//0x0C
 	int32_t field_10;							//0x10
 	uint8_t field_14;							//0x14
 	uint8_t field_15;							//0x15
@@ -166,7 +166,7 @@ struct D2PathInfoStrc
 
 struct D2StaticPathStrc
 {
-	D2RoomStrc* pRoom;						//0x00
+	D2ActiveRoomStrc* pRoom;				//0x00
 	int32_t dwClientCoordX;					//0x04
 	int32_t dwClientCoordY;					//0x08
 	D2CoordStrc tGameCoords;				//0x0C
@@ -178,14 +178,14 @@ struct D2StaticPathStrc
 
 struct D2MapAIPathPositionStrc
 {
-	int32_t nMapAIAction;						//0x00
-	int32_t nX;									//0x04
-	int32_t nY;									//0x08
+	int32_t nMapAIAction;					//0x00
+	int32_t nX;								//0x04
+	int32_t nY;								//0x08
 };
 
 struct D2MapAIStrc
 {
-	int32_t nPathNodes;							//0x00
+	int32_t nPathNodes;						//0x00
 	D2MapAIPathPositionStrc* pPosition;		//0x04
 };
 
@@ -242,7 +242,7 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitSt
 //D2Common.0x6FDA92F0 (#10214)
 D2COMMON_DLL_DECL void __stdcall D2Common_10214(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9480 (#10152)
-D2COMMON_DLL_DECL void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag);
+D2COMMON_DLL_DECL void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag);
 //D2Common.0x6FDA9720
 void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection);
 //D2Common.0x6FDA9770 (#10193)
@@ -322,11 +322,11 @@ D2COMMON_DLL_DECL int __stdcall D2COMMON_10177_PATH_GetLastPointX(D2DynamicPathS
 //D2Common.0x6FDA9E40 (#10178)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_10178_PATH_GetLastPointY(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDB9C10 (#10166)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E60 (#10167)
-D2COMMON_DLL_DECL void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pRoom);
 //D2Common.0x6FDA9E70 (#10168)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E80 (#10169)
 D2COMMON_DLL_DECL void __stdcall PATH_ClearNextRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E90 (#10170)

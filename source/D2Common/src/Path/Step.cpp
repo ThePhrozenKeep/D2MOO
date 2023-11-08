@@ -527,7 +527,7 @@ LABEL_61:
 
 //1.00:  D2Common.0x1005FAB0
 //1.10f: D2Common.0x6FDAD5E0
-BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestRoom, D2PathPointStrc tDest)
+BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pDestRoom, D2PathPointStrc tDest)
 {
 	D2UnitStrc* pUnit = pDynamicPath->pUnit;
 	if (pUnit && pUnit->dwUnitType == UNIT_MISSILE)
@@ -637,9 +637,9 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pDestR
 
 //1.00:  D2Common.0x100604E0 Note: Changed since then. Used to look for the room using coordinates
 //1.10f: D2Common.0x6FDAE250
-void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2RoomStrc* pNewRoom)
+void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pNewRoom)
 {
-	D2RoomStrc* pRoomDest = pNewRoom;
+	D2ActiveRoomStrc* pRoomDest = pNewRoom;
 #ifdef VERSION_100
 	if (!pPath->pRoom || !DungeonTestRoomGame(pPath->pRoom, pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY))
 	{
@@ -675,7 +675,7 @@ void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2RoomStrc* pNewRoom)
 
 //1.00:  D2Common.0x10060640 (#10227)
 //1.10f: D2Common.0x6FDADF00 (#10230)
-BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2RoomStrc* pRoom, unsigned int a4, __int16 a5)
+BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2ActiveRoomStrc* pRoom, unsigned int a4, __int16 a5)
 {
 	D2PathPointStrc tPos;
 	tPos.X = a4;
@@ -706,7 +706,7 @@ void PATH_StopMovement(D2DynamicPathStrc* pDynamicPath)
 //1.00:  Inlined
 //1.10f: Inlined
 //1.13c: D2Common.0x6FD5DDC0
-BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoomDest, D2PathPointStrc tDest)
+BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pRoomDest, D2PathPointStrc tDest)
 {
 	D2PathPointStrc tCurrentPos;
 	tCurrentPos.X = pDynamicPath->tGameCoords.wPosX;
@@ -748,7 +748,7 @@ BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* 
 //1.00:  D2Common.0x10060120 (#10228)
 //1.10f: D2Common.0x6FDADC20 (#10231)
 //1.13c: D2Common.0x6FD5E1A0 (#10075)
-int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2RoomStrc* pRooms, uint16_t nX, uint16_t nY)
+int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2ActiveRoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
 	D2_MAYBE_UNUSED(pUnit_unused);
 	D2Common_10231_Impl(pDynamicPath, pRooms, D2PathPointStrc{ pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY });
@@ -761,7 +761,7 @@ int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_
 //1.00:  D2Common.0x1005F220
 //1.10f: D2Common.0x6FDACC40
 //1.13c: D2Common.0x6FD5DA40
-void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2RoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY)
+void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pHintRoom, uint32_t nPrecisionX, uint32_t nPrecisionY)
 {
 	if ((pPath->dwFlags & PATH_MISSILE_MASK) == 0
 		|| COLLISION_GetRoomBySubTileCoordinates(pPath->pRoom, PATH_FromFP16(nPrecisionX), PATH_FromFP16(nPrecisionY)))
@@ -801,7 +801,7 @@ void PATH_ResetMovement(D2DynamicPathStrc* pDynamicPath)
 //1.00:  D2Common.0x100606B0 (#10229)
 //1.10f: D2Common.0x6FDADF50 (#10232)
 //1.13c: D2Common.0x6FD5DCE0 (#10223)
-BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, int nTargetX, int nTargetY)
+BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2ActiveRoomStrc* pDestRoom, int nTargetX, int nTargetY)
 {
 	D2_ASSERT(pUnit && (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)); 
 	
@@ -886,13 +886,13 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 	pRiderPath->tGameCoords.dwPrecisionY = pMountPath->tGameCoords.dwPrecisionY;
 	PATH_UpdateClientCoords(pRiderPath);
 
-	D2RoomStrc* pMountRoom = pMountPath->pRoom;
+	D2ActiveRoomStrc* pMountRoom = pMountPath->pRoom;
 
 	// Rider was in a different room than the mount at some point
 	if (pRiderPath->pUnit && (pRiderPath->dwFlags & PATH_UNKNOWN_FLAG_0x00001))
 	{
 		// Try finding room from rider's current room list
-		D2RoomStrc* pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, pRiderPath->tGameCoords.wPosX, pRiderPath->tGameCoords.wPosY);
+		D2ActiveRoomStrc* pRidersUpToDateRoom = COLLISION_GetRoomBySubTileCoordinates(pRiderPath->pRoom, pRiderPath->tGameCoords.wPosX, pRiderPath->tGameCoords.wPosY);
 
 		if (!pRidersUpToDateRoom)
 		{

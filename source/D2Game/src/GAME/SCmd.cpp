@@ -1855,10 +1855,10 @@ void __fastcall sub_6FC3F0C0(D2ClientStrc* pClient, uint8_t a2, int32_t a3, uint
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(CLIENTS_GetPlayerFromClient(pClient, 0));
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(CLIENTS_GetPlayerFromClient(pClient, 0));
     if (pRoom)
     {
-        D2RoomStrc** ppRoomList = nullptr;
+        D2ActiveRoomStrc** ppRoomList = nullptr;
         int32_t nNumRooms = 0;
         DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
         for (int32_t i = 0; i < nNumRooms; ++i)

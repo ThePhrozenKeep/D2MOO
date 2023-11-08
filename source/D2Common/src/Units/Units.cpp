@@ -562,7 +562,7 @@ void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBE060 (#10351)
-void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY)
+void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	int nSizeX = 0;
 	int nSizeY = 0;
@@ -579,7 +579,7 @@ void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, in
 }
 
 //D2Common.0x6FDBE1A0 (#10350)
-void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY)
+void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	D2_ASSERT(pUnit);
 
@@ -618,7 +618,7 @@ void __stdcall UNITS_ResetRoom(D2UnitStrc* pUnit)
 
 //1.10f: D2Common.0x6FDBE270 (#10342)
 //1.13c: D2Common.0x6FD7FE10 (#10331)
-D2RoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit)
+D2ActiveRoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
 
@@ -2767,7 +2767,7 @@ int __stdcall UNITS_GetMeleeRange(D2UnitStrc* pUnit)
 //D2Common.0x6FDC1230 (#10364)
 BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int nY, int nFlags)
 {
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	D2CoordStrc pCoords = {};
 
 	if (!pUnit)
@@ -2787,7 +2787,7 @@ BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int n
 }
 
 //D2Common.0x6FDC13D0
-BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2RoomStrc* pRoom, int nCollisionMask)
+BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2ActiveRoomStrc* pRoom, int nCollisionMask)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -2863,7 +2863,7 @@ BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int n
 //D2Common.0x6FDC14C0 (#10362)
 BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask)
 {
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
 
@@ -2904,7 +2904,7 @@ BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	BOOL bResult = FALSE;
 	int v4 = 0;
 	int v26 = 0;
@@ -3900,10 +3900,10 @@ BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc* pCoord, int nDist
 
 //Used in D2Common.#10406 and D2Common.#10407
 //TODO: Find a name
-D2UnitStrc* __stdcall D2Common_10407_Impl(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6, D2UnitStrc* a7)
+D2UnitStrc* __stdcall D2Common_10407_Impl(D2ActiveRoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6, D2UnitStrc* a7)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
-	D2RoomStrc** ppRoomList = NULL;
+	D2ActiveRoomStrc** ppRoomList = NULL;
 	D2UnitStrc* pUnit = NULL;
 	int nNumRooms = 0;
 	int nAbsDiffX = 0;
@@ -4076,7 +4076,7 @@ D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int (__fastcall* pCallba
 
 //D2Common.0x6FDC33C0 (#10407)
 //TODO: Find a name
-D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int (__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6)
+D2UnitStrc* __stdcall D2Common_10407(D2ActiveRoomStrc* pRoom, int nX, int nY, int (__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6)
 {
 	return D2Common_10407_Impl(pRoom, nX, nY, pCallback, a5, a6, NULL);
 }

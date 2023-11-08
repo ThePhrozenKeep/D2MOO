@@ -11,7 +11,7 @@ int dword_6FDD2580;
 int dword_6FDD2584;
 
 //D2Common.0x6FDBCF10 (#11279)
-int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nUnused)
+int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
 
@@ -19,7 +19,7 @@ int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int
 	D2_ASSERT(pRoom);
 
 	//Note: tRoomCoord is unused but filled in the original code
-	//D2RoomCoordStrc tRoomCoord = {};
+	//D2DrlgCoordsStrc tRoomCoord = {};
 	//DUNGEON_GetRoomCoordinates(pRoom, &tRoomCoord);
 
 	D2CoordStrc tCoord = {};
@@ -47,7 +47,7 @@ int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int
 }
 
 //D2Common.0x6FDBD100 (#10384)
-int __stdcall UNITROOM_AddUnitToRoom(D2UnitStrc* pUnit, D2RoomStrc* pRoom)
+int __stdcall UNITROOM_AddUnitToRoom(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
 {
 	return UNITROOM_AddUnitToRoomEx(pUnit, pRoom, 1);
 }
@@ -58,7 +58,7 @@ void __stdcall UNITROOM_RefreshUnit(D2UnitStrc* pUnit)
 
 	D2_ASSERT(pUnit);
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (pRoom && !D2Common_10084(pRoom) && !(pUnit->dwFlags & UNITFLAG_ISLINKREFRESHMSG))
 	{
 		pUnit->dwFlags |= UNITFLAG_ISLINKREFRESHMSG;
@@ -72,7 +72,7 @@ void __stdcall UNITROOM_RefreshUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD1B0 (#10388)
-void __stdcall UNITROOM_SortUnitListByTargetY(D2RoomStrc* pRoom)
+void __stdcall UNITROOM_SortUnitListByTargetY(D2ActiveRoomStrc* pRoom)
 {
 	D2UnitStrc** ppUnitFirst = NULL;
 	D2UnitStrc** ppUnit = NULL;
@@ -163,7 +163,7 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD2B0 (#10391)
-void __stdcall UNITROOM_ClearUpdateQueue(D2RoomStrc* pRoom)
+void __stdcall UNITROOM_ClearUpdateQueue(D2ActiveRoomStrc* pRoom)
 {
 	D2UnitStrc** ppChangeUnit = NULL;
 	D2UnitStrc* pNextChangeUnit = NULL;
@@ -186,7 +186,7 @@ void __stdcall UNITROOM_RemoveUnitFromRoom(D2UnitStrc* pUnit)
 	D2UnitStrc** ppRoomUnit = NULL;
 	D2UnitStrc* pPreviousUnit = NULL;
 	D2UnitStrc* pRoomUnit = NULL;
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	bool bReset = false;
 
 	D2_ASSERT(pUnit);
@@ -246,7 +246,7 @@ void __stdcall UNITROOM_RemoveUnitFromUpdateQueue(D2UnitStrc* pUnit)
 	D2UnitStrc** ppChangeUnit = NULL;
 	D2UnitStrc* pPreviousChangeUnit = NULL;
 	D2UnitStrc* pChangeUnit = NULL;
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 
 	D2_ASSERT(pUnit);
 
@@ -287,7 +287,7 @@ void __stdcall UNITROOM_RemoveUnitFromUpdateQueue(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD4C0 (#10389)
-BOOL __stdcall UNITROOM_IsUnitInRoom(D2RoomStrc* pRoom, D2UnitStrc* pUnit)
+BOOL __stdcall UNITROOM_IsUnitInRoom(D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
 	D2UnitStrc* pRoomUnit = NULL;
 

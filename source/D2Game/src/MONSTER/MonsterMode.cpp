@@ -474,7 +474,7 @@ void __fastcall D2GAME_MONSTERMODE_Unk_6FC63040(D2GameStrc* pGame, D2ModeChangeS
 
     if (!COLLISION_CheckMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0x801u))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
         D2_ASSERT(pRoom);
 
@@ -491,7 +491,7 @@ void __fastcall sub_6FC631B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a7, D
 {    
     D2_ASSERT(pUnit);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     D2_ASSERT(pRoom);
 
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -592,7 +592,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
             const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
             if (nHpRegen < 0 && nHitpoints < 256)
             {
-                D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+                D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
                 if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
                 {
                     return;
@@ -992,7 +992,7 @@ void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
             D2CoordStrc pCoord = {};
             pCoord.nX = CLIENTS_GetUnitX(pMonster);
             pCoord.nY = CLIENTS_GetUnitY(pMonster);
-            D2RoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), 0x3C01u, 0);
+            D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), 0x3C01u, 0);
             if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pRoom && AITACTICS_UseSkill(pGame, pMonster, pMonStatsTxtRecord->nSkillMode[0], pMonStatsTxtRecord->nSkill[0], 0, pCoord.nX, pCoord.nY))
             {
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, 2, 0);

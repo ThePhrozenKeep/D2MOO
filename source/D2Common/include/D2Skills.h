@@ -5,7 +5,7 @@
 #include "D2Inventory.h"
 
 struct D2CellFileStrc; // From D2CMP / D2Gfx
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2SkillsTxt;
 
 #pragma pack(1)
@@ -342,7 +342,7 @@ D2COMMON_DLL_DECL int __stdcall SKILLS_GetWeaponMasteryBonus(D2UnitStrc* pUnit, 
 //D2Common.0x6FDB37B0 (#11032)
 D2COMMON_DLL_DECL int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, int nType);
 //D2Common.0x6FDB3910 (#11025)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2RoomStrc* pRoom, int a6);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6);
 //D2Common.0x6FDB3960 (#11026)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4);
 //D2Common.0x6FDB3A10 (#11027)

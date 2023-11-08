@@ -304,13 +304,13 @@ void __fastcall sub_6FC38140(void* a1, int32_t a2);
 //D2Game.0x6FC38530 (#10003)
 void __fastcall GAME_ProcessNetworkMessages();
 //D2Game.0x6FC385A0
-void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2RoomStrc* pRoom);
+void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC38610
 void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame);
 //D2Game.0x6FC386D0
 void __fastcall GAME_UpdateProgress(D2GameStrc* pGame);
 //D2Game.0x6FC38990
-void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2RoomStrc* pRoom);
+void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC389C0
 void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame);
 //D2Game.0x6FC38E00

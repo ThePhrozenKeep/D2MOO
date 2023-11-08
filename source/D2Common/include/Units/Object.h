@@ -7,7 +7,7 @@ struct D2ShrinesTxt;
 
 struct D2ObjectRoomCoordStrc
 {
-	D2RoomStrc* pRoom;						//0x00
+	D2ActiveRoomStrc* pRoom;				//0x00
 	int32_t nX;								//0x04
 	int32_t nY;								//0x08
 	D2ObjectRoomCoordStrc* pNext;			//0x0C

@@ -444,7 +444,7 @@ int32_t __fastcall SKILLS_SrvSt47_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         SKILLS_SetParam4(pSkill, -1);
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -684,7 +684,7 @@ int32_t __fastcall SKILLS_SrvSt49_Nest_EvilHutSpawner(D2GameStrc* pGame, D2UnitS
     SKILLS_SetParam3(pSkill, nY);
     SKILLS_SetParam4(pSkill, nSpawnMode);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
     COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, 0x100u);
     sub_6FCBDE90(pUnit, 1);
@@ -714,7 +714,7 @@ int32_t __fastcall SKILLS_SrvDo091_Nest_EvilHutSpawner(D2GameStrc* pGame, D2Unit
     const int32_t nY = SKILLS_GetParam3(pSkill);
     const int32_t nAnimMode = SKILLS_GetParam4(pSkill);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom || !nX || !nY)
     {
         return 0;
@@ -1252,7 +1252,7 @@ int32_t __fastcall SKILLS_SrvDo096_ZakarumHeal_Bestow(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FD08850
 int32_t __fastcall SKILLS_ResurrectUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;
@@ -1314,7 +1314,7 @@ int32_t __fastcall SKILLS_SrvDo097_Resurrect(D2GameStrc* pGame, D2UnitStrc* pUni
     const int32_t nX = CLIENTS_GetUnitX(pTarget);
     const int32_t nY = CLIENTS_GetUnitY(pTarget);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
     if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? 0x3C01u : 0x1C09u))
     {
         PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
@@ -1346,7 +1346,7 @@ int32_t __fastcall SKILLS_SrvDo098_MonTeleport(D2GameStrc* pGame, D2UnitStrc* pU
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
@@ -1737,7 +1737,7 @@ int32_t __fastcall SKILLS_SrvDo104_DiabPrison(D2GameStrc* pGame, D2UnitStrc* pUn
         pTarget = pObject;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
     if (pRoom && !DUNGEON_IsRoomInTown(pRoom))
     {
         sub_6FC6A810(pGame, pRoom, 0, 0, pTarget, nSummonId, 0);

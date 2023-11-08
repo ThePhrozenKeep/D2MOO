@@ -98,7 +98,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         nY = CLIENTS_GetUnitY(missileParams->pOrigin);
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
     if (!pRoom)
     {
         return 0;

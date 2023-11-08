@@ -551,10 +551,10 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	}
 	case 1:
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		if (pRoom)
 		{
-			D2RoomStrc** ppRoomList = nullptr;
+			D2ActiveRoomStrc** ppRoomList = nullptr;
 			int32_t nNumRooms = 0;
 			DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -623,7 +623,7 @@ void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 //D2Game.0x6FCF2110
 D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t* pDistance, int32_t* pCombat)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
@@ -711,7 +711,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 					if (pUnit->nAct == pTargetNode->pUnit->nAct)
 					{
-						D2RoomStrc* pTargetRoom = UNITS_GetRoom(pTargetNode->pUnit);
+						D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetNode->pUnit);
 						if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))
 						{
 							int32_t nDistance = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
@@ -1047,13 +1047,13 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 //D2Game.0x6FCF2B80
 D2UnitStrc* __fastcall AIUTIL_FindTargetInAdjacentRooms(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArg, D2UnitStrc* (__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*))
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
 	}
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -1080,13 +1080,13 @@ D2UnitStrc* __fastcall AIUTIL_FindTargetInAdjacentActiveRooms(D2GameStrc* pGame,
 		return nullptr;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
 	}
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 

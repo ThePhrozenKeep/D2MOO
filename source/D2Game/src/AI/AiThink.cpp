@@ -515,7 +515,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -524,7 +524,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -2131,7 +2131,7 @@ int32_t __fastcall sub_6FCD55D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		pUnit->dwFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
@@ -4633,7 +4633,7 @@ void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		pUnit->dwFlags &= 0xFFFFFFF1;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
@@ -5417,7 +5417,7 @@ void __fastcall AITHINK_Fn066_SandMaggotQueen(D2GameStrc* pGame, D2UnitStrc* pUn
 		int32_t nY = 0;
 		MONSTERS_GetMinionSpawnInfo(pUnit, &nMonsterId, &nX, &nY, &nSpawnMode, 0, AIGENERAL_GetMinionSpawnClassId);
 
-		D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+		D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 		if (pRoom)
 		{
 			D2UnitStrc* pSandMaggot = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
@@ -6260,7 +6260,7 @@ void __fastcall AITHINK_Fn076_EvilHole(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		int32_t nY = 0;
 		MONSTERS_GetMinionSpawnInfo(pUnit, &nMonsterId, &nX, &nY, &nSpawnMode, 0, 0);
 
-		D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+		D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 		if (pRoom)
 		{
 			D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nSpawnMode, 2, 66);
@@ -6515,7 +6515,7 @@ void __fastcall AITHINK_Fn082_InvisoSpawner(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 		if (pAiTickParam->pAiControl->dwAiParam[0] <= pGame->dwGameFrame)
 		{
-			D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+			D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 			const int32_t nMonsterId = D2Common_11063(pRoom, MONSTER_MUMMY1);
 
 			int32_t nX = 0;
@@ -8624,7 +8624,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 	}
 	case 3:
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pOwner);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOwner);
 
 		int32_t nX = 0;
 		int32_t nY = 0;
@@ -9236,7 +9236,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 	}
 	case 3:
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pOwner);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOwner);
 		int32_t nX = 0;
 		int32_t nY = 0;
 		if (!sub_6FC66260(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner)), MONSTER_NECROSKELETON, &nX, &nY, 0))
@@ -9672,7 +9672,7 @@ void __fastcall D2GAME_AI_SpecialState13_6FCE5080(D2GameStrc* pGame, D2UnitStrc*
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -11150,7 +11150,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (DUNGEON_IsRoomInTown(pRoom))
 	{
 		if (AI_RollPercentage(pUnit) >= 20)
@@ -12570,7 +12570,7 @@ int32_t __fastcall AITHINK_AssasinSentryHasLostTarget(D2GameStrc* pGame, D2UnitS
 		return 1;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pOwner);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOwner);
 	if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
 	{
 		AITACTICS_ChangeModeAndTargetCoordinates(pGame, pUnit, 0, 0, 0);
@@ -14907,7 +14907,7 @@ void __fastcall AITHINK_Fn126_CatapultSpotter(D2GameStrc* pGame, D2UnitStrc* pUn
 
 	if (!pAiTickParam->pAiControl->dwAiParam[2] && AI_RollPercentage(pUnit) < 3)
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		D2_ASSERT(pRoom);
 
 		D2DrlgCoordsStrc drlgCoords = {};
@@ -15181,7 +15181,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			return;
 		}
 
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 		if (sub_6FC68350(MONSTER_EVILHUT, pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
 		{
@@ -16350,7 +16350,7 @@ int32_t __fastcall sub_6FCF0E40_inline(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -16429,7 +16429,7 @@ int32_t __fastcall sub_6FCF0E40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 	}
 
 	const int32_t nLifePercentage = UNITS_GetCurrentLifePercentage(pUnit);
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	int32_t nX = 0;
 	int32_t nY = 0;

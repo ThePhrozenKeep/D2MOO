@@ -80,7 +80,7 @@ void __fastcall ACT1Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -362,7 +362,7 @@ bool __fastcall ACT1Q2_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 //D2Game.0x6FC98AD0
 int32_t __fastcall ACT1Q2_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pUnit);
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q2_BLOODRAVEN);
 
 	D2_ASSERT(pQuestData);
@@ -374,7 +374,7 @@ int32_t __fastcall ACT1Q2_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 	}
 
 	D2UnitStrc* pMonster = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pQuestDataEx->nBloodravenGUID);
-	D2RoomStrc* pMonsterRoom = UNITS_GetRoom(pMonster);
+	D2ActiveRoomStrc* pMonsterRoom = UNITS_GetRoom(pMonster);
 	if (!pPlayerRoom)
 	{
 		return 0;
@@ -384,7 +384,7 @@ int32_t __fastcall ACT1Q2_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 	{
 		D2_ASSERT(pPlayerRoom);
 
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pPlayerRoom, &ppRoomList, &nRooms);
 

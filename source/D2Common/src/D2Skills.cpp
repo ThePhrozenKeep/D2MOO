@@ -3187,7 +3187,7 @@ int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, i
 }
 
 //D2Common.0x6FDB3910 (#11025)
-BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2RoomStrc* pRoom, int a6)
+BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -3290,7 +3290,7 @@ int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nS
 //D2Common.0x6FDB3CB0 (#11037)
 BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY)
 {
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	int nDivisor = 0;
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};

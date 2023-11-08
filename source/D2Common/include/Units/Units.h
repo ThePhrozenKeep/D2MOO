@@ -272,13 +272,13 @@ D2COMMON_DLL_DECL int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDEC0 (#10352)
 D2COMMON_DLL_DECL void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE060 (#10351)
-D2COMMON_DLL_DECL void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY);
+D2COMMON_DLL_DECL void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FDBE1A0 (#10350)
-D2COMMON_DLL_DECL void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY);
+D2COMMON_DLL_DECL void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FDBE210 (#10343)
 D2COMMON_DLL_DECL void __stdcall UNITS_ResetRoom(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE270 (#10342)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE2D0 (#10344)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetTargetUnitForDynamicUnit(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit);
 //D2Common.0x6FDBE330 (#10345)
@@ -412,7 +412,7 @@ D2COMMON_DLL_DECL int __stdcall UNITS_GetMeleeRange(D2UnitStrc* pUnit);
 //D2Common.0x6FDC1230 (#10364)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int nY, int nFlags);
 //D2Common.0x6FDC13D0
-BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2RoomStrc* pRoom, int nCollisionMask);
+BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2ActiveRoomStrc* pRoom, int nCollisionMask);
 //D2Common.0x6FDC14C0 (#10362)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask);
 //D2Common.0x6FDC1760
@@ -501,6 +501,6 @@ D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc*
 //D2Common.0x6FDC3090 (#10406)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a3);
 //D2Common.0x6FDC33C0 (#10407)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2ActiveRoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6);
 //D2Common.0x6FDC3680 (#10419)
 D2COMMON_DLL_DECL void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, D2UnitGUID nUnitGUID);

@@ -126,7 +126,7 @@ void __fastcall ACT5Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -458,11 +458,11 @@ void __fastcall ACT5Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 
 	if (pQuestArg->pTarget && pQuestArg->pTarget->dwClassId == MONSTER_PRISONDOOR)
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 		DUNGEON_ToggleHasPortalFlag(pRoom, 0);
 		if (pRoom)
 		{
-			D2RoomStrc** ppRoomList = nullptr;
+			D2ActiveRoomStrc** ppRoomList = nullptr;
 			int32_t nNumRooms = 0;
 			DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -865,15 +865,15 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 
 				D2CoordStrc pCoord = {}; pCoord.nX = pQuestDataEx->pWussieCoords[i].nX + 12;
 				pCoord.nY = pQuestDataEx->pWussieCoords[i].nY;
-				D2RoomStrc* pTargetRoom = UNITS_GetRoom(pWussie);
-				D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+				D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pWussie);
+				D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
 
 				if (!pPlayerRoom)
 				{
 					return;
 				}
 
-				D2RoomStrc** ppRoomList = nullptr;
+				D2ActiveRoomStrc** ppRoomList = nullptr;
 				int32_t nNumRooms = 0;
 				DUNGEON_GetAdjacentRoomsListFromRoom(pPlayerRoom, &ppRoomList, &nNumRooms);
 				if (!nNumRooms)
@@ -912,7 +912,7 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 					pPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX - 2, pCoord.nY, pQuestData->pGame, pTargetRoom, 1, 1, 0);
 					if (!pPortal && pTargetRoom)
 					{
-						D2RoomStrc* pTemp = pTargetRoom;
+						D2ActiveRoomStrc* pTemp = pTargetRoom;
 						QUESTS_GetFreePosition(pTargetRoom, &pCoord, 2, 0x8000u, &pTemp, 17);
 
 						if (pTemp)
@@ -1185,13 +1185,13 @@ int32_t __fastcall ACT5Q2_IsPrisonDoorDead(D2GameStrc* pGame, D2UnitStrc* pPlaye
 		}
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
 	}
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 

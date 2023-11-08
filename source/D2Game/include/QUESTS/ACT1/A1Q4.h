@@ -140,7 +140,7 @@ void __fastcall ACT1Q4_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 //D2Game.0x6FC9B9D0
 void __fastcall ACT1Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9BC80
-void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY);
+void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY);
 //D2Game.0x6FC9BEF0
 int32_t __fastcall ACT1Q4_UnitIterate_AddPlayerGUIDs(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9BF70

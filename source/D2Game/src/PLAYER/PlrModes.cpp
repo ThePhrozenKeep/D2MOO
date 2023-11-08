@@ -158,7 +158,7 @@ int32_t __fastcall D2GAME_PLRMODES_First_6FC7F340(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FC7F550
 void __fastcall PLRMODE_StartXY_Neutral(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMode, int32_t nX, int32_t nY)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
     int32_t nCombatMode = nMode;
 
     if (pRoom)
@@ -339,7 +339,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     if (v28 < 0)
     {
         int32_t nMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
             nMode = PLRMODE_TNEUTRAL;
@@ -372,7 +372,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     else
     {
         int32_t nMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
             nMode = PLRMODE_TNEUTRAL;
@@ -424,7 +424,7 @@ int32_t __fastcall sub_6FC7FBB0(D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7FBD0
-D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2RoomStrc* pRoom)
+D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit->pInventory)
     {
@@ -485,7 +485,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
         return nullptr;
     }
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
     if (!pTargetRoom)
     {
         char szMessage[256] = {};
@@ -1362,7 +1362,7 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     else
     {
         int32_t nCombatMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (pRoom)
         {
             nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TNEUTRAL : PLRMODE_NEUTRAL;

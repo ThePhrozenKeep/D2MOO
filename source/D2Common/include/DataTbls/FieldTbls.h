@@ -2,7 +2,7 @@
 
 #include <D2BasicTypes.h>
 
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 
 #pragma pack(1)
 struct D2CollisionFieldStrc
@@ -44,5 +44,5 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int 
 //D2Common.0x6FD522A0 (#11098)
 D2COMMON_DLL_DECL int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY);
 //D2Common.0x6FD52360 (#11099)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2RoomStrc* pRoom, int nX, int nY, uint16_t fMask);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t fMask);
 

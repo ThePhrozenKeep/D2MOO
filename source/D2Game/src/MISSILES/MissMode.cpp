@@ -612,7 +612,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
         {
             const int32_t nX = nUnitX + x;
             const int32_t nY = nUnitY + y;
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (pRoom && x * x + y * y <= a3 * a3)
             {
                 D2CoordStrc coord1 = {};
@@ -625,7 +625,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
 
                 if (!COLLISION_RayTrace(pRoom, &coord1, &coord2, 4u))
                 {
-                    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+                    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
                     if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))
                     {
                         if (nRange)
@@ -676,7 +676,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
     if (!pRoom || !pMissile->pDynamicPath)
     {
         return 2;
@@ -1333,7 +1333,7 @@ int32_t __fastcall MISSMODE_SrvDo17_CairnStones(D2GameStrc* pGame, D2UnitStrc* p
     {
         MISSILE_SetTargetX(pMissile, 1);
         D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -1395,7 +1395,7 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
             pCoord.nY += ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, 2 * nRange + 1) - nRange;
 
             D2CoordStrc returnCoords = {};
-            D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
+            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
             if (pRoom)
             {
                 D2ItemDropStrc itemDrop = {};
@@ -3598,7 +3598,7 @@ int32_t __fastcall MISSMODE_SrvHit32_CairnStones(D2GameStrc* pGame, D2UnitStrc* 
     {
         MISSILE_SetTargetX(pMissile, 1);
         D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -3611,7 +3611,7 @@ int32_t __fastcall MISSMODE_SrvHit33_TowerChestSpawner(D2GameStrc* pGame, D2Unit
 {
     if (!pUnit)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (pRoom)
         {
             DUNGEON_ToggleHasPortalFlag(pRoom, 1);
@@ -3635,7 +3635,7 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     if (pRoom)
     {
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
@@ -4790,7 +4790,7 @@ int32_t __fastcall MISSMODE_SrvDo36_BaalFxControl(D2GameStrc* pGame, D2UnitStrc*
     if (!MISSILE_GetTargetX(pMissile) && nFrame <= 100)
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -4808,7 +4808,7 @@ int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(D2GameStrc* pGame, D2UnitStrc
     if (!pUnit && !MISSILE_GetTargetX(pMissile))
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -5106,7 +5106,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                 return 1;
             }
 
-            D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
             if (pRoom)
             {
                 COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5174,7 +5174,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
     if (pRoom)
     {
         COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5262,7 +5262,7 @@ void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, i
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_SRCTOWN])
     {

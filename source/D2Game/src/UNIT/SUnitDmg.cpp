@@ -1064,7 +1064,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pDefender);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
 	if (!pRoom)
 	{
 		pDamage->wResultFlags &= (uint16_t)(~(DAMAGERESULTFLAG_SUCCESSFULHIT | DAMAGERESULTFLAG_WILLDIE));
@@ -1868,7 +1868,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 			{
 			case MONSTER_BARRICADEDOOR1:
 			{
-				D2RoomStrc* pRoom = UNITS_GetRoom(pDefender);
+				D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
 				if (pRoom)
 				{
 					for (D2UnitStrc* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
@@ -1893,7 +1893,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 			}
 			case MONSTER_BARRICADEDOOR2:
 			{
-				D2RoomStrc* pRoom = UNITS_GetRoom(pDefender);
+				D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
 				if (pRoom)
 				{
 					for (D2UnitStrc* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
@@ -1924,7 +1924,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 //D2Game.0x6FCC1260
 void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (pRoom && DUNGEON_IsRoomInTown(pRoom))
 	{
 		if (!pAttacker || pAttacker->dwUnitType != UNIT_MONSTER)
@@ -2817,7 +2817,7 @@ int32_t __fastcall SUNITDMG_GetWeaponBlock(D2UnitStrc* pUnit)
 //D2Game.0x6FCC2910
 int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t a7, int32_t a8, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t a10)
 {
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
 	int32_t nFlags = a10;
 	if (!a10)

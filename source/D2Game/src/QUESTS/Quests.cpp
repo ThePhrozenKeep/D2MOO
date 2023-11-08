@@ -230,7 +230,7 @@ D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId)
 }
 
 //D2Game.0x6FC93BD0
-void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t bDebug)
+void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t bDebug)
 {
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (!nLevelId)
@@ -579,7 +579,7 @@ void __fastcall QUESTS_EventCallback(D2QuestArgStrc* pArgs, bool bCheckActive, b
 	int8_t nAct = -1;
 	if (bCheckAct)
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pArgs->pPlayer);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pArgs->pPlayer);
 		if (pRoom)
 		{
 			nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
@@ -978,7 +978,7 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 	}
 
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-	D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 	if (!pRoom)
 	{
 		return;
@@ -1609,7 +1609,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		nUnitId = pUnit->dwClassId;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	switch (nUnitId)
 	{
@@ -1892,7 +1892,7 @@ void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(D2ObjInitFnStrc* pOp)
 //D2Game.0x6FC95D10
 void __fastcall QUESTS_SetJadeFigurineBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
@@ -1922,7 +1922,7 @@ void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
@@ -1989,7 +1989,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 		{
 			D2CoordStrc pCoord = {};
 			UNITS_GetCoords(pPlayer, &pCoord);
-			D2RoomStrc* pRoom = nullptr;
+			D2ActiveRoomStrc* pRoom = nullptr;
 			QUESTS_GetFreePosition(UNITS_GetRoom(pPlayer), &pCoord, 1, 0x3E01, &pRoom, 5);
 			D2GAME_DropItem_6FC52260(pGame, nullptr, pItem, pRoom, pCoord.nX, pCoord.nY);
 			return pItem;
@@ -2432,7 +2432,7 @@ void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArg
 }
 
 //D2Game.0x6FC96940
-void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2RoomStrc** ppRoom, int32_t nRadius)
+void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2ActiveRoomStrc** ppRoom, int32_t nRadius)
 {
 	const uint32_t nCenterX = pCoord->nX - (nSize >> 1);
 	const uint32_t nCenterY = pCoord->nY - (nSize >> 1);
@@ -2449,7 +2449,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 		{
 			const int32_t nY = y + nCenterY;
 
-			D2RoomStrc* pRoom1 = pRoom;
+			D2ActiveRoomStrc* pRoom1 = pRoom;
 			if (nY < drlgCoords.nSubtileY || nY >= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
 			{
 				pRoom1 = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
@@ -2463,7 +2463,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 
 					nX = x + nCenterX;
 
-					D2RoomStrc* pRoom2 = pRoom1;
+					D2ActiveRoomStrc* pRoom2 = pRoom1;
 					if (nX < drlgCoords.nSubtileX || nX /*TODO: was nY instead, but most likely wrong*/ >= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
 					{
 						pRoom2 = D2GAME_GetRoom_6FC52070(pRoom1, nX, nY);
@@ -2627,7 +2627,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FC97020
-int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2RoomStrc** ppRoom)
+int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2ActiveRoomStrc** ppRoom)
 {
 	if (nLevel == LEVEL_DURIELSLAIR)
 	{
@@ -2683,7 +2683,7 @@ void __fastcall QUESTS_SendLogUpdate(D2UnitStrc* pUnit, uint8_t nQuestId)
 //D2Game.0x6FC97120
 void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, uint8_t nAct)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 	if (pRoom)
 	{
 		const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -2704,9 +2704,9 @@ void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, ui
 }
 
 //D2Game.0x6FC97190
-D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2RoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster)
+D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2ActiveRoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster)
 {
-	D2RoomStrc* ppRoom = pRoom;
+	D2ActiveRoomStrc* ppRoom = pRoom;
 	D2DrlgCoordsStrc drlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
@@ -2741,7 +2741,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 
 	QUESTS_GetFreePosition(pRoom, &coord, 2, 0x100u, &ppRoom, 6);
 
-	D2RoomStrc* pTargetRoom = ppRoom;
+	D2ActiveRoomStrc* pTargetRoom = ppRoom;
 	int32_t nTargetX = 0;
 	int32_t nTargetY = 0;
 	if (ppRoom)
@@ -2838,7 +2838,7 @@ void __fastcall QUESTS_MonsterSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (DUNGEON_GetLevelIdFromRoom(pRoom) < 108)
 	{
 		ACT3Q5_SpawnCouncil(pGame, pUnit);
@@ -2875,7 +2875,7 @@ int32_t __fastcall QUESTS_LevelWarpCheck(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 //D2Game.0x6FC974B0
 D2UnitStrc* __fastcall QUESTS_SpawnMonster(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pPosition, int32_t nType, int32_t nIndex)
 {
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
 
 	if (pRoom)
 	{

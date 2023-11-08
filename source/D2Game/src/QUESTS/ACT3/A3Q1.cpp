@@ -304,7 +304,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 //D2Game.0x6FCA7420
 int32_t __fastcall ACT3Q1_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -640,7 +640,7 @@ bool __fastcall ACT3Q1_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 	{
 		*pStatus = 12;
 
-		D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 		if (!pRoom)
 		{
 			return true;

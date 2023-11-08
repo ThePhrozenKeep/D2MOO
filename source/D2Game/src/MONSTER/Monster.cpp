@@ -103,7 +103,7 @@ void __fastcall MONSTER_ToggleSummonerFlag(D2UnitStrc* pMonster, uint16_t nFlag,
 }
 
 //D2Game.0x6FC602A0
-void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pMonster, int32_t nUnitGUID)
+void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pMonster, int32_t nUnitGUID)
 {
     if (pMonster)
     {
@@ -150,7 +150,7 @@ D2MonPropTxt* __fastcall MONSTER_GetMonPropTxtRecord(int32_t nId)
 }
 
 //D2Game.0x6FC603D0
-void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData)
+void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER || !pUnit->pMonsterData || !pUnit->pMonsterData->pMonstatsTxt)
     {
@@ -446,7 +446,7 @@ int32_t __fastcall MONSTER_GetExperienceBonus(int32_t nPlayerCount)
 }
 
 //D2Game.0x6FC60E90
-void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonusStrc* pPlayerCountBonus, D2RoomStrc* pRoom, D2UnitStrc* pMonster)
+void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonusStrc* pPlayerCountBonus, D2ActiveRoomStrc* pRoom, D2UnitStrc* pMonster)
 {
     if (!pPlayerCountBonus)
     {
@@ -544,7 +544,7 @@ int32_t __fastcall MONSTER_Reinitialize(D2GameStrc* pGame, D2UnitStrc* pUnit, in
     }
 
     const int32_t nUnitGUID = pUnit->dwUnitId;
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     MONSTER_Free(pGame, pUnit);
 
     pUnit->dwClassId = nClassId;

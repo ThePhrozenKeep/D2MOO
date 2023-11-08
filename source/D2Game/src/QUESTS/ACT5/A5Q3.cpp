@@ -129,7 +129,7 @@ void __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -847,7 +847,7 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 	const int32_t nX = pCoord.nX;
 	const int32_t nY = pCoord.nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pDrehya), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pDrehya), nX, nY);
 	if (pRoom)
 	{
 		D2UnitStrc* pDrehyaPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pRoom, 1, 1, 0);
@@ -1512,7 +1512,7 @@ void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2Uni
 	else if (pUnit->dwAnimMode == OBJMODE_OPENED)
 	{
 		D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		if (DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_HARROGATH)
 		{
 			++pQuestDataEx->nObjectUpdateInvocations;
@@ -1566,7 +1566,7 @@ int32_t __fastcall ACT5Q3_SpawnDrehyaPortalOutsideTown(D2GameStrc* pGame, D2Unit
 	const int32_t nX = pQuestDataEx->pDrehyaPortalCoords.nX;
 	const int32_t nY = pQuestDataEx->pDrehyaPortalCoords.nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 	if (!pRoom)
 	{
 		pQuestDataEx->pDrehyaPortalCoords.nX += 3;

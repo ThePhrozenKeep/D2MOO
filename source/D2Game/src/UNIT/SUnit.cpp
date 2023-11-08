@@ -212,15 +212,15 @@ D2UnitStrc* __fastcall SUNIT_GetNextUnitFromList(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBB190
-void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom)
+void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
 {
     if (!UNITS_IsCurrentRoomInvalid(pUnit))
     {
         return;
     }
 
-    D2RoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
-    D2RoomStrc* pPreviousRoom = pRoom;
+    D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pPreviousRoom = pRoom;
     if (pRoom)
     {
         if (pCurrentRoom == pPreviousRoom)
@@ -230,12 +230,12 @@ void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* p
     }
     else
     {
-        D2RoomStrc* pNextRoom = PATH_GetNextRoom(pUnit->pDynamicPath);
+        D2ActiveRoomStrc* pNextRoom = PATH_GetNextRoom(pUnit->pDynamicPath);
 
         const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pCurrentRoom);
         if (nLevelId)
         {
-            D2RoomStrc* pTemp = DUNGEON_GetRoomFromAct(pGame->pAct[DRLG_GetActNoFromLevelId(nLevelId)]);
+            D2ActiveRoomStrc* pTemp = DUNGEON_GetRoomFromAct(pGame->pAct[DRLG_GetActNoFromLevelId(nLevelId)]);
             while (pTemp)
             {
                 if (pTemp == pNextRoom)
@@ -358,7 +358,7 @@ void __fastcall SUNIT_WarpPlayer(D2GameStrc* pGame, D2UnitStrc* pTarget, D2UnitS
     D2_ASSERT(pGame);
     D2_ASSERT(pTarget);
 
-    D2RoomStrc* pTilesRoom = UNITS_GetRoom(pRoomTile);
+    D2ActiveRoomStrc* pTilesRoom = UNITS_GetRoom(pRoomTile);
 
     D2LvlWarpTxt* pLvlWarpTxtRecord = nullptr;
     D2UnitStrc* pWarpTile = DUNGEON_GetWarpTileFromRoomAndSourceLevelId(pTilesRoom, pRoomTile ? pRoomTile->dwClassId : -1, &pLvlWarpTxtRecord);
@@ -368,13 +368,13 @@ void __fastcall SUNIT_WarpPlayer(D2GameStrc* pGame, D2UnitStrc* pTarget, D2UnitS
     }
 
     D2CoordStrc pCoord = {};
-    D2RoomStrc* pWarpTileRoom = UNITS_GetRoom(pWarpTile);
+    D2ActiveRoomStrc* pWarpTileRoom = UNITS_GetRoom(pWarpTile);
     pCoord.nX = CLIENTS_GetUnitX(pWarpTile);
     pCoord.nY = CLIENTS_GetUnitY(pWarpTile);
 
     D2_ASSERT(pTarget->dwUnitType == UNIT_PLAYER);
 
-    D2RoomStrc* pDestinationRoom = COLLISION_GetFreeCoordinates(pWarpTileRoom, &pCoord, UNITS_GetUnitSizeX(pTarget), 0x1C09u, 1);
+    D2ActiveRoomStrc* pDestinationRoom = COLLISION_GetFreeCoordinates(pWarpTileRoom, &pCoord, UNITS_GetUnitSizeX(pTarget), 0x1C09u, 1);
     if (!pDestinationRoom)
     {
         return;
@@ -422,7 +422,7 @@ void __fastcall SUNIT_InitSeed(D2UnitStrc* pUnit, D2SeedStrc* pSeed)
 }
 
 //D2Game.0x6FCBB6C0
-D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, D2GameStrc* pGame, D2RoomStrc* pRoom, char a7, int32_t nMode, DWORD a3)
+D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, char a7, int32_t nMode, DWORD a3)
 {
     if (nUnitType == UNIT_PLAYER)
     {
@@ -634,7 +634,7 @@ D2UnitStrc* __fastcall SUNIT_GetLastAttacker(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FCBBCB0
-void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t a6)
+void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t a6)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -654,7 +654,7 @@ void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc*
     {
         PATH_AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
         MONSTER_SetVelocityAndPosition(pGame, pUnit, nX, nY, a6);
-        D2RoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
         if (pCurrentRoom && pCurrentRoom->nNumClients)
         {
             MONSTER_UpdateAiCallbackEvent(pGame, pUnit);
@@ -764,7 +764,7 @@ void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc*
 }
 
 //D2Game.0x6FCBBFE0
-void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t nX, int32_t nY)
+void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -799,7 +799,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* 
         PATH_AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
         MONSTER_SetVelocityAndPosition(pGame, pUnit, nX, nY, 0);
 
-        D2RoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
         if (pUnitRoom && pUnitRoom->nNumClients)
         {
             MONSTER_UpdateAiCallbackEvent(pGame, pUnit);
@@ -999,7 +999,7 @@ void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBC590
-D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode, int32_t nUnitFlags)
+D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode, int32_t nUnitFlags)
 {
     D2UnitStrc* pUnit = nullptr;
     if (nUnitType == UNIT_MONSTER)
@@ -1054,7 +1054,7 @@ D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2RoomStrc* pRo
 }
 
 //D2Game.0x6FCBC6F0
-void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, D2PresetUnitStrc* pPresetUnit)
+void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2PresetUnitStrc* pPresetUnit)
 {
     D2DrlgCoordsStrc pCoord = {};
 
@@ -1081,7 +1081,7 @@ void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Pr
 }
 
 //D2Game.0x6FCBC780
-void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     if (!pGame)
     {
@@ -1189,7 +1189,7 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
     pSecond->pObjectData->DestPortalCoords.nX = CLIENTS_GetUnitX(pFirst);
     pSecond->pObjectData->DestPortalCoords.nY = CLIENTS_GetUnitY(pFirst);
 
-    D2RoomStrc* pSecondRoom = UNITS_GetRoom(pSecond);
+    D2ActiveRoomStrc* pSecondRoom = UNITS_GetRoom(pSecond);
     if (pSecondRoom)
     {
         D2DrlgCoordsStrc drlgCoords = {};
@@ -1198,7 +1198,7 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
         pFirst->pObjectData->DestRoomCooords.nY = drlgCoords.nTileYPos;
     }
 
-    D2RoomStrc* pFirstRoom = UNITS_GetRoom(pFirst);
+    D2ActiveRoomStrc* pFirstRoom = UNITS_GetRoom(pFirst);
     if (pFirstRoom)
     {
         D2DrlgCoordsStrc drlgCoords = {};
@@ -1219,7 +1219,7 @@ D2UnitStrc* __fastcall SUNIT_GetPortalOwner(D2GameStrc* pGame, D2UnitStrc* pPort
 
     if (!DUNGEON_FindRoomBySubtileCoordinates(pGame->pAct[nActNo], nX, nY))
     {
-        D2RoomStrc* pRoom = DUNGEON_StreamRoomAtCoords(pGame->pAct[nActNo], nX, nY);
+        D2ActiveRoomStrc* pRoom = DUNGEON_StreamRoomAtCoords(pGame->pAct[nActNo], nX, nY);
         if (pRoom)
         {
             sub_6FC385A0(pGame, pRoom);
@@ -2067,7 +2067,7 @@ void __fastcall sub_6FCBDD30(D2UnitStrc* pUnit, uint8_t nAlignNew, int32_t a3)
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return;
@@ -2143,12 +2143,12 @@ int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 }
 
 //D2Game.0x6FCBDFE0
-int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pInputRoom, int32_t nX, int32_t nY, int32_t a6, int32_t a7)
+int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pInputRoom, int32_t nX, int32_t nY, int32_t a6, int32_t a7)
 {
     D2_ASSERT(pUnit);
     D2_ASSERT(pUnit->pDynamicPath);
 
-    D2RoomStrc* pRoom = pInputRoom;
+    D2ActiveRoomStrc* pRoom = pInputRoom;
     if (!pRoom)
     {
         pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);

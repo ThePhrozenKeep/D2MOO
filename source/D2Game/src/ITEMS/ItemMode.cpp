@@ -1206,7 +1206,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
             return 0;
         }
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             DUNGEON_AllocDrlgDelete(pRoom, pItem->dwUnitType, pItem->dwUnitId);
@@ -1333,7 +1333,7 @@ int32_t __fastcall sub_6FC437F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
                     sub_6FC43AF0(pUnit, pStackItem, nQuantity1);
                 }
 
-                D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+                D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
                 if (pRoom)
                 {
                     int32_t nUnitGUID = -1;
@@ -1458,7 +1458,7 @@ int32_t __fastcall sub_6FC43BF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
         sub_6FC43AF0(pUnit, pBook, nSrcValue);
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             int32_t nUnitGUID = -1;
@@ -1514,7 +1514,7 @@ int32_t __fastcall sub_6FC43E60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
     if (bRemove)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             int32_t nUnitGUID = -1;
@@ -1599,7 +1599,7 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
     D2CoordStrc returnCoords = {};
     D2CoordStrc coords = {};
     UNITS_GetCoords(pUnit, &coords);
-    D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
     if (!pRoom)
     {
         return;
@@ -2618,7 +2618,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                 UNITS_GetCoords(pUnit, &coords);
 
                 D2CoordStrc returnCoords = {};
-                D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
+                D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
                 if (pRoom)
                 {
                     D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, pBeltItem, pUnit, 0, 1);
@@ -4790,7 +4790,7 @@ int32_t __fastcall sub_6FC49AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     }
     else
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pScroll);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pScroll);
         if (pRoom)
         {
             DUNGEON_AllocDrlgDelete(pRoom, pScroll->dwUnitType, pScroll->dwUnitId);
@@ -6053,7 +6053,7 @@ int32_t __fastcall D2GAME_RechargeItem_6FC4BD50(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC4BE80
-void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnitGUID, D2RoomStrc* pRoom)
+void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnitGUID, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit)
     {
@@ -6080,12 +6080,12 @@ void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnit
 }
 
 //D2Game.0x6FC4BF00
-D2RoomStrc* __fastcall D2GAME_GetFreeSpaceEx_6FC4BF00(D2RoomStrc* pRoom, D2CoordStrc* pCoords, D2CoordStrc* pReturnCoords, int32_t nUnitSize)
+D2ActiveRoomStrc* __fastcall D2GAME_GetFreeSpaceEx_6FC4BF00(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2CoordStrc* pReturnCoords, int32_t nUnitSize)
 {
     const int32_t nX = pCoords->nX + 2;
     const int32_t nY = pCoords->nY + 3;
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
     if (pTargetRoom)
     {
         pReturnCoords->nX = nX;

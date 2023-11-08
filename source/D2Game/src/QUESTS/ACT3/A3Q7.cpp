@@ -107,7 +107,7 @@ void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 	pQuestDataEx->nDarkWandererX = pOp->nX + 7;
 	pQuestDataEx->nDarkWandererY = pOp->nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pOp->pRoom, pOp->nX + 7, pOp->nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pOp->pRoom, pOp->nX + 7, pOp->nY);
 	if (D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pRoom, pQuestDataEx->nDarkWandererX, pQuestDataEx->nDarkWandererY, MONSTER_DARKWANDERER, 1, -1, 0))
 	{
 		pQuestDataEx->bPrimaryGoalOpen = 0;
@@ -208,7 +208,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pGame);
 
-	D2RoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
+	D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
 	//UNITS_GetCoords(pDarkWanderer, &pCoord); // TODO: Was this meant to be used on pCoords?
 
 	D2CoordStrc pCoords = {};
@@ -217,7 +217,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 	{
 		pCoords.nY += pAdjustCoords[i].nY;
 		pCoords.nX += pAdjustCoords[i].nX;
-		D2RoomStrc* pRoom = nullptr;
+		D2ActiveRoomStrc* pRoom = nullptr;
 		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, 0x3F11, &pRoom, 11);
 
 		if (pRoom)
@@ -238,7 +238,7 @@ int32_t __fastcall ACT3Q7_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2Unit
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (nLevelId && DRLG_GetActNoFromLevelId(nLevelId) == ACT_III)
 	{

@@ -1753,7 +1753,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 }
 
 //D2Game.0x6FC385A0
-void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     sub_6FC679F0(pGame, pRoom);
 
@@ -1869,7 +1869,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
     {
         if (pGame->pAct[i] && pGame->pAct[i]->unk0x20)
         {
-            for (D2RoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
+            for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
             {
                 sub_6FC679F0(pGame, pRoom);
 
@@ -1906,8 +1906,8 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
         {
             if (pGame->pAct[i])
             {
-                D2RoomStrc* pNextRoom = nullptr;
-                for (D2RoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pNextRoom)
+                D2ActiveRoomStrc* pNextRoom = nullptr;
+                for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pNextRoom)
                 {
                     pNextRoom = pRoom->pRoomNext;
                     if (D2Common_10081_GetTileCountFromRoom(pRoom) > 10 && DUNGEON_TestRoomCanUnTile(pGame->pAct[i], pRoom))
@@ -1948,7 +1948,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC38990
-void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     SUNIT_SpawnPresetUnitsInRoom(pGame, pRoom);
     SUNITINACTIVE_RestoreInactiveUnits(pGame, pRoom);
@@ -3229,17 +3229,17 @@ void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
         return;
     }
 
-    D2RoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
-    D2RoomStrc* pClientRoom = pClient->pRoom;
+    D2ActiveRoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pClientRoom = pClient->pRoom;
     D2_ASSERT(pClientRoom);
 
-    D2RoomStrc** ppRoomList = nullptr;
+    D2ActiveRoomStrc** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pClientRoom, &ppRoomList, &nNumRooms);
 
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        D2RoomStrc* pRoom = ppRoomList[i];
+        D2ActiveRoomStrc* pRoom = ppRoomList[i];
         D2_ASSERT(pRoom);
 
         if (pUnitRoom == pRoom)

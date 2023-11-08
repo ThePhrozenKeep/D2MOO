@@ -259,11 +259,11 @@ BOOL __fastcall PATH_IsTargetDestinationAllowed(D2PathInfoStrc* pPathInfo, D2Uni
 		}
 
 		// Otherwise check if the target is in town
-		D2RoomStrc* pTargetRoom = pPathInfo->pTargetRoom;
+		D2ActiveRoomStrc* pTargetRoom = pPathInfo->pTargetRoom;
 		if (!pTargetRoom)
 		{
 			// Try to find target room
-			D2RoomStrc* pRoomHalfway = COLLISION_GetRoomBySubTileCoordinates(
+			D2ActiveRoomStrc* pRoomHalfway = COLLISION_GetRoomBySubTileCoordinates(
 				pPathInfo->pStartRoom,
 				pPathInfo->tStartCoord.X + (pPathInfo->tTargetCoord.X - pPathInfo->tStartCoord.X) / 2,
 				pPathInfo->tStartCoord.Y + (pPathInfo->tTargetCoord.Y - pPathInfo->tStartCoord.Y) / 2);
@@ -694,7 +694,7 @@ void __stdcall D2Common_10214(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDA9480 (#10152)
-void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag)
+void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag)
 {
 	D2DynamicPathStrc* pDynamicPath = D2_CALLOC_STRC_POOL(pMemPool, D2DynamicPathStrc);
 
@@ -1199,19 +1199,19 @@ int __stdcall D2COMMON_10178_PATH_GetLastPointY(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDB9C10 (#10166)
-D2RoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath)
+D2ActiveRoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->pRoom;
 }
 
 //D2Common.0x6FDA9E60 (#10167)
-void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom)
+void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pRoom)
 {
 	pDynamicPath->pRoom = pRoom;
 }
 
 //D2Common.0x6FDA9E70 (#10168)
-D2RoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath)
+D2ActiveRoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath)
 {
 	return pDynamicPath->pPreviousRoom;
 }

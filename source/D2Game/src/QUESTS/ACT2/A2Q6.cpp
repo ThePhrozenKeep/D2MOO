@@ -146,7 +146,7 @@ void __fastcall ACT2Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -236,7 +236,7 @@ void __fastcall ACT2Q6_UnitIterate_SetCustom1Flag(D2GameStrc* pGame, D2UnitStrc*
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -731,7 +731,7 @@ void __fastcall ACT2Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 int32_t __fastcall ACT2Q6_UnitIterate_SetLeaveTownFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -862,7 +862,7 @@ bool __fastcall ACT2Q6_TImer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 int32_t __fastcall ACT2Q6_UnitIterate_SetCustom1FlagForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_DURIELSLAIR)
 	{
 		return 0;
@@ -1330,7 +1330,7 @@ bool __fastcall ACT2Q6_Timer_UpdateObjects(D2GameStrc* pGame, D2QuestDataStrc* p
 			const int32_t nX = CLIENTS_GetUnitX(pHoradricOrifice) - 13;
 			const int32_t nY = CLIENTS_GetUnitY(pHoradricOrifice) + 3;
 
-			D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pHoradricOrifice), nX, nY);
+			D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pHoradricOrifice), nX, nY);
 			if (pRoom)
 			{
 				D2UnitStrc* pDurielLairPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_PORTAL_TO_DURIELS_LAIR, nX, nY, pGame, pRoom, 1, 1, 0);
@@ -1372,7 +1372,7 @@ void __fastcall ACT2Q6_UnitIterate_DeleteHoradricItems(D2GameStrc* pGame, D2Unit
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -1483,14 +1483,14 @@ void __fastcall ACT2Q6_DeleteAllHoradricItemsAndOpenTomb(D2GameStrc* pGame, D2Un
 
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
-	D2RoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
+	D2ActiveRoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
 	D2_ASSERT(pObjectRoom);
 
 	const int32_t nX = CLIENTS_GetUnitX(pObject) - 13;
 	const int32_t nY = CLIENTS_GetUnitY(pObject) + 3;
 	
 	DUNGEON_ToggleHasPortalFlag(pObjectRoom, 0);
-	if (D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pObjectRoom, nX, nY))
+	if (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pObjectRoom, nX, nY))
 	{
 		DUNGEON_ToggleHasPortalFlag(pRoom, 0);
 	}
@@ -1535,7 +1535,7 @@ void __fastcall ACT2Q6_UnitIterate_CheckDistanceToTyrael(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCA6390
-int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D2RoomStrc** ppRoom)
+int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D2ActiveRoomStrc** ppRoom)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
 	if (!pQuestData || ((D2Act2Quest6Strc*)pQuestData->pQuestDataEx)->bPortalIsOpening != 1)
@@ -1545,7 +1545,7 @@ int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D
 
 	int32_t nX = 0;
 	int32_t nY = 0;
-	D2RoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[ACT_II], LEVEL_LUTGHOLEIN, 12, &nX, &nY, 3);
+	D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[ACT_II], LEVEL_LUTGHOLEIN, 12, &nX, &nY, 3);
 	if (!pRoom)
 	{
 		return 0;

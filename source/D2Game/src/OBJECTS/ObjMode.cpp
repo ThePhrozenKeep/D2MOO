@@ -367,7 +367,7 @@ void __fastcall sub_6FC74DF0(D2GameStrc* pGame, D2UnitStrc* pObject)
         D2GAME_OBJECTS_TrapHandler8_9_6FC75AC0
     };
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
     const uint8_t nTrapType = pObject->pObjectData->InteractType & 127;
@@ -444,7 +444,7 @@ void __fastcall D2GAME_SpikeTraps_6FC74F60(D2GameStrc* pGame, D2UnitStrc* pObjec
 {
     // TODO: v8, v10, v11
     int32_t nAnimMode = pObject->dwAnimMode;
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
     int32_t v10 = 0;
     if (pObject->pObjectData->InteractType != 0)
@@ -542,7 +542,7 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
             //UNITS_GetRoom(pObject);
             //OBJRGN_GetObjectControlFromGame(pGame);
 
-            D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
             D2CoordStrc pCoord = {};
             UNITS_GetCoords(pObject, &pCoord);
@@ -694,7 +694,7 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
     D2UnitStrc* pObject = pOp->pObject;
     D2UnitStrc* pPlayer = pOp->pPlayer;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
     if (pRoom)
     {
@@ -708,7 +708,7 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
 
         if (!pUnit)
         {
-            D2RoomStrc** ppRoomList = nullptr;
+            D2ActiveRoomStrc** ppRoomList = nullptr;
             int32_t nNumRooms = 0;
             DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
             if (nNumRooms > 0)
@@ -716,7 +716,7 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
                 int32_t nCounter = 0;
                 while (1)
                 {
-                    D2RoomStrc* pTemp = ppRoomList[nCounter];
+                    D2ActiveRoomStrc* pTemp = ppRoomList[nCounter];
                     if (pTemp != pRoom)
                     {
                         pUnit = pTemp->pUnitFirst;
@@ -795,7 +795,7 @@ int32_t __fastcall OBJECTS_OperateFunction08_Door(D2ObjOperateFnStrc* pOp, int32
 
     D2UnitStrc* pObject = pOp->pObject;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pObject, &pCoord);
     
@@ -909,7 +909,7 @@ int32_t __fastcall OBJECTS_OperateFunction47_Stair(D2ObjOperateFnStrc* pOp, int3
     }
 
     D2UnitStrc* pObject = pOp->pObject;
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
     if (pObject->dwAnimMode == OBJMODE_NEUTRAL)
     {
@@ -929,7 +929,7 @@ int32_t __fastcall OBJECTS_OperateFunction47_Stair(D2ObjOperateFnStrc* pOp, int3
             }
         }
 
-        D2RoomStrc** pRoomList = nullptr;
+        D2ActiveRoomStrc** pRoomList = nullptr;
         int32_t nNumRooms = 0;
         DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &pRoomList, &nNumRooms);
 
@@ -962,7 +962,7 @@ int32_t __fastcall OBJECTS_OperateFunction61_HarrogathMainGate(D2ObjOperateFnStr
 
     D2UnitStrc* pObject = pOp->pObject;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pObject, &pCoord);
@@ -1063,7 +1063,7 @@ void __fastcall D2GAME_SpawnTrapMonster_6FC75B40(D2ObjOperateFnStrc* pOp, int32_
 {
     if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
         if (nMonsterId != 234 || !pRoom || DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)) != ACT_I)
         {
             if (!sub_6FC6A150(pOp->pGame, pOp->pObject, nMonsterId, a3, -1, 0) && !sub_6FC6A150(pOp->pGame, pOp->pObject, nMonsterId, a3, 1, 0))
@@ -1080,7 +1080,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler5_7_6FC75BC0(D2GameStrc* pGame, D2Unit
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
     
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     D2UnitStrc* pFireLarge = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_FIRE_LARGE, pCoord.nX, pCoord.nY, pGame, pRoom, 1, 1, 0);
     if (pFireLarge)
     {
@@ -1106,7 +1106,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitSt
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 136))
     {
-        D2RoomStrc* ppRoom = nullptr;
+        D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
 
         if (ppRoom)
@@ -1124,7 +1124,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2Unit
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 136))
     {
-        D2RoomStrc* ppRoom = nullptr;
+        D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
 
         if (ppRoom)
@@ -1142,7 +1142,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitSt
    
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 136))
     {
-        D2RoomStrc* ppRoom = nullptr;
+        D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
 
         if (ppRoom)
@@ -1160,7 +1160,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler4_6FC75E20(D2GameStrc* pGame, D2UnitSt
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 136))
     {
-        D2RoomStrc* ppRoom = nullptr;
+        D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
         
         if (ppRoom)
@@ -1574,7 +1574,7 @@ void __fastcall  D2GAME_SetTrapCallback_6FC764B0(D2ObjOperateFnStrc* pOp, uint8_
         }
 
         const int32_t nMonsterId = OBJRGN_GetTrapMonsterId(pOp);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
         if (nMonsterId != MONSTER_FLYINGSCIMITAR || !pRoom || DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)) != ACT_I)
         {
             EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_TRAP, pOp->pGame->dwGameFrame + 35, 0, 0);
@@ -1718,7 +1718,7 @@ void __fastcall D2GAME_SHRINES_Portal_6FC76880(D2ObjOperateFnStrc* pOp, D2Shrine
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pOp->pPlayer, &pCoord);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
     const int32_t nTownId = DUNGEON_GetTownLevelIdFromActNo(DRLG_GetActNoFromLevelId(nLevelId));
 
@@ -1805,7 +1805,7 @@ int32_t __fastcall sub_6FC76A60(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     UNITS_GetCoords(pPlayer, &pCoord);
    
     D2CoordStrc pReturnCoords = {};
-    D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &pCoord, &pReturnCoords, 1);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &pCoord, &pReturnCoords, 1);
     if (pRoom)
     {
         D2ItemDropStrc itemDrop = {};
@@ -2003,7 +2003,7 @@ void __fastcall D2GAME_SHRINES_Exploding_6FC770D0(D2ObjOperateFnStrc* pOp, D2Shr
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pOp->pPlayer, &pCoord);
         D2CoordStrc pReturnCoords = {};
-        D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
         if (pRoom)
         {
             D2ItemDropStrc itemDrop = {};
@@ -2076,7 +2076,7 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pOp->pPlayer, &pCoord);
         D2CoordStrc pReturnCoords = {};
-        D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
         if (pRoom)
         {
             D2ItemDropStrc itemDrop = {};
@@ -2480,7 +2480,7 @@ int32_t __fastcall OBJECTS_OperateFunction68_EvilUrn(D2ObjOperateFnStrc* pOp, in
 
     if (pObject->dwAnimMode == OBJMODE_NEUTRAL && OBJMODE_DropFromChestTCWithQuality(pOp, 0))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
         const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
         UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
@@ -2739,7 +2739,7 @@ int32_t __fastcall OBJECTS_OperateFunction19_ArmorStand(D2ObjOperateFnStrc* pOp,
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pObject, &pCoord);
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
         D2GAME_DropArmor_6FC4F830(pOp->pGame, pRoom, &pCoord, -1, 0, 0);
 
         UNITS_ChangeAnimMode(pObject, OBJMODE_OPENED);
@@ -2764,7 +2764,7 @@ int32_t __fastcall OBJECTS_OperateFunction20_WeaponRack(D2ObjOperateFnStrc* pOp,
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pObject, &pCoord);
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
         D2GAME_DropWeapon_6FC4FA50(pOp->pGame, pRoom, &pCoord, -1, 0, 0);
 
         UNITS_ChangeAnimMode(pObject, OBJMODE_OPENED);
@@ -3053,7 +3053,7 @@ int32_t __fastcall OBJECTS_OperateFunction34_ArcaneSanctuaryPortal(D2ObjOperateF
 
     D2UnitStrc* pObject = pOp->pObject;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
     if (pObject->dwAnimMode != OBJMODE_NEUTRAL)
@@ -3090,7 +3090,7 @@ int32_t __fastcall OBJECTS_OperateFunction46_HellGatePortal(D2ObjOperateFnStrc* 
 
     D2UnitStrc* pObject = pOp->pObject;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
     if (pObject->dwAnimMode != OBJMODE_NEUTRAL)
@@ -3197,7 +3197,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
             }
 
             D2CoordStrc pCoord = {}; 
-            D2RoomStrc* pRoom = nullptr;
+            D2ActiveRoomStrc* pRoom = nullptr;
             if (pPortalOwner)
             {
                 pCoord.nX = CLIENTS_GetUnitX(pPortalOwner);
@@ -3212,13 +3212,13 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
 
             UNITS_SetObjectPortalFlags(pObject, UNITS_GetObjectPortalFlags(pObject) | 5);
 
-            D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+            D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
             if (DUNGEON_IsRoomInTown(pPlayerRoom))
             {
                 QUESTS_ChangeLevel(pGame, DUNGEON_GetLevelIdFromRoom(pPlayerRoom), DUNGEON_GetLevelIdFromRoom(pRoom), pPlayer);
             }
 
-            D2RoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pPlayer), 0x1C09, 0);
+            D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pPlayer), 0x1C09, 0);
             if (pFreeCoordsRoom)
             {
                 if (!sub_6FCBDFE0(pGame, pPlayer, pFreeCoordsRoom, pCoord.nX, pCoord.nY, 0, 0))
@@ -3236,13 +3236,13 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
                 {
                     if (PLAYER_GetUniqueIdFromPlayerData(pPlayer) == pPortalOwner->dwUnitId)
                     {
-                        D2RoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
+                        D2ActiveRoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
                         DUNGEON_AllocDrlgDelete(pObjectRoom, UNIT_OBJECT, pObject->dwUnitId);
                         SUNIT_RemoveUnit(pGame, pObject);
                         DUNGEON_ToggleHasPortalFlag(pObjectRoom, 1);
                         ACT5Q5_OnPortalClosed(pGame, pPortalOwner);
 
-                        D2RoomStrc* pOwnerRoom = UNITS_GetRoom(pPortalOwner);
+                        D2ActiveRoomStrc* pOwnerRoom = UNITS_GetRoom(pPortalOwner);
                         DUNGEON_AllocDrlgDelete(pOwnerRoom, UNIT_OBJECT, pPortalOwner->dwUnitId);
                         SUNIT_RemoveUnit(pGame, pPortalOwner);
                         DUNGEON_ToggleHasPortalFlag(pOwnerRoom, 1);
@@ -3304,7 +3304,7 @@ int32_t __fastcall OBJECTS_OperateFunction43_DurielPortal(D2ObjOperateFnStrc* pO
     const int32_t nSize = UNITS_GetUnitSizeX(pPlayer);
     int32_t nX = 0;
     int32_t nY = 0;
-    D2RoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pOp->pGame->pAct[nAct], nLevel, 0, &nX, &nY, nSize);
+    D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pOp->pGame->pAct[nAct], nLevel, 0, &nX, &nY, nSize);
 
     D2_ASSERT(pRoom);
 
@@ -3332,7 +3332,7 @@ int32_t __fastcall OBJECTS_OperateFunction23_Waypoint(D2ObjOperateFnStrc* pOp, i
 
     D2UnitStrc* pObject = pOp->pObject;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
     D2WaypointDataStrc* pWaypointFlags = UNITS_GetPlayerData(pOp->pPlayer)->pWaypointData[pOp->pGame->nDifficulty];
     short nWpNo = 0;
@@ -3403,7 +3403,7 @@ void __fastcall D2GAME_WAYPOINT_Unk_6FC79600(D2GameStrc* pGame, D2UnitStrc* pPla
                         }
                         LEVEL_WarpUnit(pGame, pPlayer, nLevelId, nParam);
 
-                        D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+                        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
                         int32_t nX = 0;
                         int32_t nY = 0;
                         if (pRoom && pRoom == DUNGEON_FindActSpawnLocation(pGame->pAct[DRLG_GetActNoFromLevelId(nLevelId)], nLevelId, nParam, &nX, &nY))
@@ -3873,7 +3873,7 @@ D2UnitStrc* __fastcall OBJMODE_DropItemWithCodeAndQuality(D2GameStrc* pGame, D2U
     UNITS_GetCoords(pUnit, &pCoord);
 
     D2CoordStrc pReturnCoords = {};
-    D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pCoord, &pReturnCoords, 1);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pCoord, &pReturnCoords, 1);
     if (!pRoom)
     {
         return 0;
@@ -3915,7 +3915,7 @@ D2UnitStrc* __fastcall OBJMODE_DropFromChestTCWithQuality(D2ObjOperateFnStrc* pO
     D2_ASSERT(pGame);
     D2_ASSERT(UNITS_GetObjectTxtRecordFromObject(pOp->pObject));
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
     if (!pRoom)
     {
         return nullptr;

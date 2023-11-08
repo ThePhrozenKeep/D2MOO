@@ -585,7 +585,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 
     if (nAuraFilter & 0x200)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pAttacker);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pAttacker);
         if (!pRoom || !UNITS_GetRoom(pTarget))
         {
             return 0;
@@ -652,7 +652,7 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
         return;
     }
 
-    D2RoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
     if (!pCurrentRoom)
     {
         return;
@@ -675,12 +675,12 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
     auraCallback.pGame = pGame;
     auraCallback.nCounter = 0;
 
-    D2RoomStrc** ppRoomList = nullptr;
+    D2ActiveRoomStrc** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pCurrentRoom, &ppRoomList, &nNumRooms);
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        D2RoomStrc* pRoom = ppRoomList[i];
+        D2ActiveRoomStrc* pRoom = ppRoomList[i];
         if (!(nAuraFilter & 0x2000) || !DUNGEON_IsRoomInTown(pRoom))
         {
             D2DrlgCoordsStrc drlgCoords = {};
@@ -855,13 +855,13 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
         return 0;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
     }
 
-    D2RoomStrc** ppRoomList = nullptr;
+    D2ActiveRoomStrc** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -2348,7 +2348,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, nullptr);
@@ -2462,7 +2462,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
         D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit);
         if (pUsedSkill && !(SKILLS_GetFlags(pUsedSkill) & 1) && !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
         {
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
             {
                 UNITS_SetUsedSkill(pUnit, nullptr);
@@ -2659,7 +2659,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, 0);
@@ -3020,8 +3020,8 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     const uint8_t nAct = DRLG_GetActNoFromLevelId(nDestLevel);
     int32_t nX = 0;
     int32_t nY = 0;
-    D2RoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
-    D2RoomStrc* pDestinationRoom = pRoom;
+    D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
+    D2ActiveRoomStrc* pDestinationRoom = pRoom;
 
     sub_6FC385A0(pGame, pRoom);
 
@@ -3084,7 +3084,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FD13DF0
-int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
+int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
 {
     D2_ASSERT(pRoom);
 
@@ -3121,7 +3121,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
         nTargetY = coords.nY;
     }
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
     if (!pTargetRoom)
     {
         return 0;
@@ -3549,7 +3549,7 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
         nY = pSummonArg->pPosition.nY;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
     if (!pRoom)
     {
         return nullptr;
@@ -3670,7 +3670,7 @@ void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUni
         unitFindArg.nY = nY;
         unitFindArg.nSize = nRange;
 
-        D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
         if (pRoom)
         {
             D2UnitFindDataStrc unitFindData = {};
@@ -3715,7 +3715,7 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
     unitFindArg.nY = pEffect->nY;
     unitFindArg.nSize = nParam;
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
     if (pRoom)
     {
         D2UnitFindDataStrc unitFindData = {};
@@ -3982,7 +3982,7 @@ int32_t __fastcall sub_6FD15340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
     D2_ASSERT(pMissilesTxtRecord);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom)
     {
         D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);

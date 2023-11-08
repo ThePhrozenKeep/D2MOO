@@ -519,7 +519,7 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	const uint32_t* pCode = NULL;
 	int nMonsterId = 0;
 	int nLevelId = 0;
@@ -1133,7 +1133,7 @@ uint8_t __stdcall MONSTERS_GetMaximalLightRadius(D2UnitStrc* pMonster)
 }
 
 //D2Common.0x6FDA64B0 (#11063)
-int __stdcall D2Common_11063(D2RoomStrc* pRoom, int nMonsterId)
+int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId)
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2LevelsTxt* pLevelsTxtRecord = NULL;

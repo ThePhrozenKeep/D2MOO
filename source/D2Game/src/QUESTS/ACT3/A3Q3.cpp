@@ -223,7 +223,7 @@ void __fastcall ACT3Q3_UnitIterate_SetGidbinnBroughtBackQuestState(D2GameStrc* p
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -849,8 +849,8 @@ bool __fastcall ACT3Q3_SpawnGidbinnBoss(D2GameStrc* pGame, D2QuestDataStrc* pQue
 {
 	D2Act3Quest3Strc* pQuestDataEx = nullptr;
 	D2UnitStrc* pFetishBoss = nullptr;
-	D2RoomStrc** ppRoomList = nullptr;
-	D2RoomStrc* pRoom = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc* pRoom = nullptr;
 	D2UnitStrc* pUnit = nullptr;
 	int32_t nNumRooms = 0;
 	int32_t nCounter = 0;

@@ -44,7 +44,7 @@ struct D2Act2Quest6Strc							//sizeof 0x68
 	uint8_t bCloseToTyrael;						//0x44
 	uint8_t pad0x45[3];							//0x45
 	int nArcaneThingObjectIds[6];				//0x48
-	D2RoomStrc* pDurielRoom;					//0x60
+	D2ActiveRoomStrc* pDurielRoom;					//0x60
 	int unused0x64;								//0x64
 };
 
@@ -125,4 +125,4 @@ int32_t __fastcall ACT2Q6_IsInRangeOfTyrael(D2GameStrc* pGame, D2UnitStrc* pUnit
 //D2Game.0x6FCA6370
 void __fastcall ACT2Q6_UnitIterate_CheckDistanceToTyrael(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FCA6390
-int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D2RoomStrc** ppRoom);
+int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D2ActiveRoomStrc** ppRoom);

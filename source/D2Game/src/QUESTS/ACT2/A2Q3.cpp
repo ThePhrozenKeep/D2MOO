@@ -119,7 +119,7 @@ void __fastcall ACT2Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -566,7 +566,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 		pQuestDataEx->bAltarDestroyed = 1;
 		SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT2Q3_UnitIterate_DetermineViperAmuletDropCount);
 
-		D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 		int32_t nItemLevel = DUNGEON_GetLevelIdFromRoom(pRoom);
 
 		int32_t nAmuletsDropped = 0;
@@ -597,7 +597,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
 	pQuestDataEx->pRoom = pRoom;
 	pQuestDataEx->nAltarLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
@@ -728,7 +728,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q3_TAINTEDSUN);
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (pRoom && pQuestData
 		&& ((D2Act2Quest3Strc*)pQuestData->pQuestDataEx)->nAltarLevelId == DUNGEON_GetLevelIdFromRoom(pRoom)

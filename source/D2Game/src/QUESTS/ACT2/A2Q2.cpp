@@ -478,7 +478,7 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 
 	pQuestData->dwFlags &= 0xFFFFFF00;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
 	// TODO: Remove useless code

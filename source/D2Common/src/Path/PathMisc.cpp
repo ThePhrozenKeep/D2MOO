@@ -378,7 +378,7 @@ BOOL __fastcall PATH_RayTrace(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* 
 {
 	const uint32_t nCollisionPattern = pDynamicPath->dwCollisionPattern;
 	const uint32_t nMoveTestCollisionMask = pDynamicPath->nMoveTestCollisionMask;
-	D2RoomStrc* pPathRoom = pDynamicPath->pRoom;
+	D2ActiveRoomStrc* pPathRoom = pDynamicPath->pRoom;
 	D2PathPointStrc tTargetPoint = *pPathDestination;
 
 	D2PathPointStrc tLastPointWithoutCollision = tStartCoord;
@@ -1289,7 +1289,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAD590 (#10229)
-BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit, D2RoomStrc *pDestRoom, uint32_t nDestX, uint32_t nDestY)
+BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit, D2ActiveRoomStrc *pDestRoom, uint32_t nDestX, uint32_t nDestY)
 {
 	D2PathPointStrc tCoords = { uint16_t(nDestX), uint16_t(nDestY) };
 	if (sub_6FDAD5E0(pDynamicPath, pDestRoom, tCoords))
@@ -1302,7 +1302,7 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit
 
 //1.10f: D2Common.0x6FDADA20
 //1.13c: D2Common.0x6FD5D760
-void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom)
+void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom)
 {
 	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY))
 	{
@@ -1311,7 +1311,7 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pH
 	}
 
 	// Try to find room using previous path room
-	D2RoomStrc* pRoomAtLocation = DUNGEON_GetRoomAtPosition(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
+	D2ActiveRoomStrc* pRoomAtLocation = DUNGEON_GetRoomAtPosition(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	if (!pRoomAtLocation)
 	{
 		// Try looking for the room using the hint room

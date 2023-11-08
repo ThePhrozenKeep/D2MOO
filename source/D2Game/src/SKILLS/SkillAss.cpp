@@ -76,13 +76,13 @@ int32_t __fastcall SKILLS_SrvSt22_PsychicHammer(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    D2RoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
     if (DUNGEON_IsRoomInTown(pUnitRoom))
     {
         return 0;
     }
 
-    D2RoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
+    D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
     if (DUNGEON_IsRoomInTown(pTargetRoom))
     {
         return 0;
@@ -651,7 +651,7 @@ int32_t __fastcall SKILLS_SrvDo039_FistsOfFire_BladesOfIce_ProgressiveFn3(D2Game
     D2SeedStrc seed = {};
     SEED_InitLowSeed(&seed, nRand);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     const int32_t nArea = nRange * nRange;
     for (int32_t i = 0; i < nArea; ++i)
     {
@@ -1426,7 +1426,7 @@ D2UnitStrc* __fastcall sub_6FCF8610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
         return 0;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOwner), nX, nY);
     if (!pRoom || !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]) && DUNGEON_IsRoomInTown(pRoom))
     {
         return 0;
@@ -2391,7 +2391,7 @@ int32_t __fastcall SKILLS_SrvDo052_DragonFlight(D2GameStrc* pGame, D2UnitStrc* p
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;
@@ -2555,7 +2555,7 @@ int32_t __fastcall SKILLS_SrvDo054_BladeShield(D2GameStrc* pGame, D2UnitStrc* pU
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!DUNGEON_IsRoomInTown(pRoom))
     {
         SKILLS_SrvDo142_Unused(pGame, pUnit, nSkillId, nSkillLevel);

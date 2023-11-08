@@ -214,14 +214,14 @@ void __fastcall CLIENTS_SetPlayerInClient(D2ClientStrc* pClient, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC31EF0
-void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2RoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
+void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     if (!pGame || !pPlayer || !pClient)
     {
         return;
     }
 
-    D2RoomStrc* pRoom = pRoomArg;
+    D2ActiveRoomStrc* pRoom = pRoomArg;
     int32_t nX = 0;
     int32_t nY = 0;
 
@@ -264,7 +264,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
             if (pCorpsePlayer)
             {
                 D2CoordStrc coords = {};
-                D2RoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
+                D2ActiveRoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
                 sub_6FC7BFC0(pGame, pSpawnLocation, nCorpseUnitGUID, &coords);
             }
 
@@ -662,7 +662,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
         QUESTS_PlayerDroppedWithQuestItem(pGame, pPlayer);
         PLRTRADE_StopAllPlayerInteractions(pGame, pPlayer);
 
-        D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
         if (pPlayerRoom)
         {
             DUNGEON_AllocDrlgDelete(pPlayerRoom, pPlayer->dwUnitType, pPlayer->dwUnitId);
@@ -719,7 +719,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
             pClientToRemove->bUnlockCharacter ? " (but unlock character)" : "(don't unlock character)");
     }
 
-    if (D2RoomStrc* pClientRoom = pClientToRemove->pRoom)
+    if (D2ActiveRoomStrc* pClientRoom = pClientToRemove->pRoom)
     {
         LEVEL_RemoveClientFromAdjacentRooms(pClientRoom, pClientToRemove);
     }
@@ -756,7 +756,7 @@ void __fastcall CLIENTS_FreeClientsFromGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC33020
-void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
+void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 {
     if (!pClient || !pClient->pGame || pClient->pRoom == pRoom)
     {
@@ -766,14 +766,14 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
     DUNGEON_ChangeClientRoom(pClient->pRoom, pRoom);
     D2Common_10077(pClient->pRoom, pRoom);
 
-    D2RoomStrc** ppAdjacentRooms = 0;
+    D2ActiveRoomStrc** ppAdjacentRooms = 0;
     int32_t nAdjacentRooms = 0;
     if (pRoom)
     {
         DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppAdjacentRooms, &nAdjacentRooms);
     }
 
-    D2RoomStrc** ppClientAdjacentRooms = 0;
+    D2ActiveRoomStrc** ppClientAdjacentRooms = 0;
     int32_t nClientAdjacentRooms = 0;
     if (pClient->pRoom)
     {
@@ -849,7 +849,7 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
 void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t nUpdateSize)
 {
     D2_ASSERT(pClient->pRoom);
-    D2RoomStrc** pAdjacentRoomsList = nullptr;
+    D2ActiveRoomStrc** pAdjacentRoomsList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pClient->pRoom, &pAdjacentRoomsList, &nNumRooms);
     D2_ASSERT(pAdjacentRoomsList);
@@ -1049,8 +1049,8 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
         return;
     }
 
-    D2RoomStrc* pClientRoom = pClient->pRoom;
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pClientRoom = pClient->pRoom;
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
     LEVEL_RemoveUnitsExceptClientPlayer(pClientRoom, pClient);
     LEVEL_UpdateUnitsInAdjacentRooms(pGame, pClientRoom, pClient);
     D2Common_10513(pPlayer, pPlayer, (void(__fastcall*)(D2UnitStrc*, int32_t, int32_t, D2UnitStrc*))D2GAME_UpdateAttribute_6FC822D0);
@@ -1097,7 +1097,7 @@ int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId)
 }
 
 //D2Game.0x6FC337E0
-void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom)
+void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 {
     D2_ASSERT(pClient);
 
@@ -1274,7 +1274,7 @@ D2GameStrc* __fastcall CLIENTS_GetGame(D2ClientStrc* pClient)
 //D2Game.0x6FC33BB0
 int32_t __fastcall CLIENTS_IsInUnitsRoom(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom)
     {
         for (int32_t i = 0; i < pRoom->nNumClients; ++i)

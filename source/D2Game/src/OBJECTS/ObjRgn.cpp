@@ -136,7 +136,7 @@ D2ShrineDataStrc* __fastcall OBJRGN_GetShrineDataFromGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7A6E0
-void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom)
+void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
 {
     D2ObjectRoomCoordStrc* pObjectRoomCoord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2ObjectRoomCoordStrc);
 

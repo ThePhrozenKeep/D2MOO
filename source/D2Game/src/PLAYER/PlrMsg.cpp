@@ -1904,7 +1904,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
 
         if (nInvPage == 4)
         {
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || !DUNGEON_IsRoomInTown(pRoom))
             {
                 FOG_TraceF(gszEmptyString_6FD447EC, " Player %s insert itemgrid error #1\n", UNITS_GetPlayerData(pUnit)->szName);
@@ -2681,7 +2681,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x2C_2D_52_6FC867B0(D2GameStrc* pGam
 //D2Game.0x6FC867C0
 void __fastcall D2GAME_PlayerChangeAct_6FC867C0(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDestLvl, DWORD nTileCalc)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     const uint8_t nSourceAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
     const uint8_t nDestAct = DRLG_GetActNoFromLevelId(dwDestLvl);
 

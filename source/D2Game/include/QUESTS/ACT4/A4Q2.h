@@ -27,7 +27,7 @@ struct D2Act4Quest2Strc						//sizeof 0x4C
 	int nPlayerCount;						//0x1C
 	D2UnitStrc* unk0x20;					//0x20 TODO
 	D2CoordStrc pSealCoords[3];				//0x24
-	D2RoomStrc* pRoom;						//0x3C
+	D2ActiveRoomStrc* pRoom;						//0x3C
 	int nLastLastPortalObjectMode;			//0x40
 	uint8_t unk0x44;						//0x44 TODO
 	uint8_t bPortalToAct5Spawned;			//0x45

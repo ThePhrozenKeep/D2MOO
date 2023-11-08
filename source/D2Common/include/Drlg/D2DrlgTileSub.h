@@ -29,7 +29,7 @@ struct D2UnkOutdoorStrc
 
 struct D2UnkOutdoorStrc2
 {
-	D2RoomExStrc* pRoomEx;										//0x00
+	D2DrlgRoomStrc* pDrlgRoom;									//0x00
 	D2DrlgOutdoorRoomStrc* pOutdoorRooms[DRLG_MAX_WALL_LAYERS];	//0x04
 	D2DrlgGridStrc* pWallsGrids[DRLG_MAX_WALL_LAYERS];			//0x14
 	D2DrlgGridStrc* pFloorGrid;									//0x24
@@ -82,4 +82,4 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvl
 //D2Common.0x6FD8B770
 void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B7E0
-int __fastcall DRLGTILESUB_PickSubThemes(D2RoomExStrc* pRoomEx, int nSubType, int nSubTheme);
+int __fastcall DRLGTILESUB_PickSubThemes(D2DrlgRoomStrc* pDrlgRoom, int nSubType, int nSubTheme);

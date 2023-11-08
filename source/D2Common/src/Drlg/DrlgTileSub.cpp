@@ -304,15 +304,15 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 		{
 			if (nThemeFlag & 1)
 			{
-				DRLGTILESUB_InitializeDrlgFile(a1->pRoomEx->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
+				DRLGTILESUB_InitializeDrlgFile(a1->pDrlgRoom->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
 
 				if (pLvlSubTxtRecord->dwCheckAll)
 				{
 					for (int nCurSubstGroupIndex = 0; nCurSubstGroupIndex < pLvlSubTxtRecord->pDrlgFile->nSubstGroups; ++nCurSubstGroupIndex)
 					{
 						pSubstGroup = &((D2DrlgSubstGroupStrc*)pLvlSubTxtRecord->pDrlgFile->pSubstGroups)[nCurSubstGroupIndex];
-						nWidth = a1->pRoomEx->nTileWidth - pSubstGroup->tBox.nWidth + 1;
-						nHeight = a1->pRoomEx->nTileHeight - pSubstGroup->tBox.nHeight + 1;
+						nWidth = a1->pDrlgRoom->nTileWidth - pSubstGroup->tBox.nWidth + 1;
+						nHeight = a1->pDrlgRoom->nTileHeight - pSubstGroup->tBox.nHeight + 1;
 						if (nWidth > 0 && nHeight > 0)
 						{
 							if (pLvlSubTxtRecord->pDrlgFile->nSubstMethod == DRLGSUBST_FIXED)
@@ -323,7 +323,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 									{
 										if (sub_6FD8B010(i, j, a1, pSubstGroup, pLvlSubTxtRecord))
 										{
-											sub_6FD8ACE0(a1->pRoomEx->pLevel->pDrlg->pMempool, i, j, a1, pSubstGroup, pLvlSubTxtRecord, 0);
+											sub_6FD8ACE0(a1->pDrlgRoom->pLevel->pDrlg->pMempool, i, j, a1, pSubstGroup, pLvlSubTxtRecord, 0);
 										}
 									}
 								}
@@ -335,10 +335,10 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 									for (int i = 0; i < nWidth; ++i)
 									{
 										if (sub_6FD8B130(i, j, a1, pSubstGroup, pLvlSubTxtRecord)
-											&& pLvlSubTxtRecord->nProb[a1->nSubTheme] < (unsigned int)SEED_RollRandomNumber(&a1->pRoomEx->pSeed) % 100)
+											&& pLvlSubTxtRecord->nProb[a1->nSubTheme] < (unsigned int)SEED_RollRandomNumber(&a1->pDrlgRoom->pSeed) % 100)
 										{
-											nRand = SEED_RollLimitedRandomNumber(&a1->pRoomEx->pSeed, pSubstGroup->field_14);
-											sub_6FD8ACE0(a1->pRoomEx->pLevel->pDrlg->pMempool, i, j, a1, pSubstGroup, pLvlSubTxtRecord, (nRand + 1) * (pSubstGroup->tBox.nWidth + 1));
+											nRand = SEED_RollLimitedRandomNumber(&a1->pDrlgRoom->pSeed, pSubstGroup->field_14);
+											sub_6FD8ACE0(a1->pDrlgRoom->pLevel->pDrlg->pMempool, i, j, a1, pSubstGroup, pLvlSubTxtRecord, (nRand + 1) * (pSubstGroup->tBox.nWidth + 1));
 										}
 									}
 								}
@@ -379,7 +379,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 		}
 	}
 
-	DRLGROOMTILE_ReallocRoofTileGrid(pMemPool, a4->pRoomEx->pTileGrid, nCounter);
+	DRLGROOMTILE_ReallocRoofTileGrid(pMemPool, a4->pDrlgRoom->pTileGrid, nCounter);
 
 	for (int j = 0; j < pSubstGroup->tBox.nHeight; ++j)
 	{
@@ -419,7 +419,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 			nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->tBox.nPosX + a7, j + pSubstGroup->tBox.nPosY);
 			if (nFlags & 0x8000000)
 			{
-				DRLGROOMTILE_InitTileShadow(a4->pRoomEx, nX + i + a4->pRoomEx->nTileXPos, nY + j + a4->pRoomEx->nTileYPos, nFlags);
+				DRLGROOMTILE_InitTileShadow(a4->pDrlgRoom, nX + i + a4->pDrlgRoom->nTileXPos, nY + j + a4->pDrlgRoom->nTileYPos, nFlags);
 			}
 		}
 	}
@@ -437,7 +437,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 	{
 		if (pPresetUnit->nXpos > nMinX && pPresetUnit->nXpos < nMinX + nMaxX && pPresetUnit->nYpos > nMinY && pPresetUnit->nYpos < nMinY + nMaxY)
 		{
-			DRLGROOM_AllocPresetUnit(a4->pRoomEx, pMemPool, pPresetUnit->nUnitType, pPresetUnit->nIndex, pPresetUnit->nMode, nX + pPresetUnit->nXpos - nMinX, nY + pPresetUnit->nYpos - nMinY);
+			DRLGROOM_AllocPresetUnit(a4->pDrlgRoom, pMemPool, pPresetUnit->nUnitType, pPresetUnit->nIndex, pPresetUnit->nMode, nX + pPresetUnit->nXpos - nMinX, nY + pPresetUnit->nYpos - nMinY);
 		}
 	}
 }
@@ -552,11 +552,11 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 	}
 	for (int xyz = 0; xyz < pLvlSubTxtRecord->nMax[pOutdoorLevel->nSubTheme]; ++xyz)
 	{
-		const int substGroupIdx = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pRoomEx->pSeed, pLvlSubTxtRecord->pDrlgFile->nSubstGroups);
+		const int substGroupIdx = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, pLvlSubTxtRecord->pDrlgFile->nSubstGroups);
 		D2DrlgSubstGroupStrc* pSubstGroup = &pLvlSubTxtRecord->pDrlgFile->pSubstGroups[substGroupIdx];
 		
-		const int nAvailableSpaceX = pOutdoorLevel->pRoomEx->nTileWidth - pSubstGroup->tBox.nWidth;
-		const int nAvailableSpaceY = pOutdoorLevel->pRoomEx->nTileHeight - pSubstGroup->tBox.nHeight;
+		const int nAvailableSpaceX = pOutdoorLevel->pDrlgRoom->nTileWidth - pSubstGroup->tBox.nWidth;
+		const int nAvailableSpaceY = pOutdoorLevel->pDrlgRoom->nTileHeight - pSubstGroup->tBox.nHeight;
 		if (nAvailableSpaceX > 0 && nAvailableSpaceY > 0)
 		{
 			const int nTrials = pLvlSubTxtRecord->nTrials[pOutdoorLevel->nSubTheme];
@@ -564,11 +564,11 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 			{
 				for (int i = 0; i < nTrials; ++i)
 				{
-					int nX = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pRoomEx->pSeed, nAvailableSpaceX) + 1;
-					int nY = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pRoomEx->pSeed, nAvailableSpaceY) + 1;
+					int nX = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nAvailableSpaceX) + 1;
+					int nY = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nAvailableSpaceY) + 1;
 					if (sub_6FD8B010(nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord))
 					{
-						sub_6FD8ACE0(pOutdoorLevel->pRoomEx->pLevel->pDrlg->pMempool, nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord, 0);
+						sub_6FD8ACE0(pOutdoorLevel->pDrlgRoom->pLevel->pDrlg->pMempool, nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord, 0);
 						break;
 					}
 				}
@@ -587,8 +587,8 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 				// Randomize positions
 				for (int i = 0; i < nPotentialPositionsArea; ++i)
 				{
-					uint32_t nRand1 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pRoomEx->pSeed, nPotentialPositionsArea);
-					uint32_t nRand2 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pRoomEx->pSeed, nPotentialPositionsArea);
+					uint32_t nRand1 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nPotentialPositionsArea);
+					uint32_t nRand2 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nPotentialPositionsArea);
 
 					int nTemp1 = tCoords[nRand1].nX;
 					int nTemp2 = tCoords[nRand1].nY;
@@ -604,7 +604,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 					const int nY = tCoords[i].nY + 1;
 					if (sub_6FD8B010(nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord))
 					{
-						sub_6FD8ACE0(pOutdoorLevel->pRoomEx->pLevel->pDrlg->pMempool, nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord, 0);
+						sub_6FD8ACE0(pOutdoorLevel->pDrlgRoom->pLevel->pDrlg->pMempool, nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord, 0);
 						break;
 					}
 				}
@@ -678,7 +678,7 @@ void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord)
 }
 
 //D2Common.0x6FD8B7E0
-int __fastcall DRLGTILESUB_PickSubThemes(D2RoomExStrc* pRoomEx, int nSubType, int nSubTheme)
+int __fastcall DRLGTILESUB_PickSubThemes(D2DrlgRoomStrc* pDrlgRoom, int nSubType, int nSubTheme)
 {
 	D2LvlSubTxt* pLvlSubTxtRecord = NULL;
 	int nCounter = 0;
@@ -689,10 +689,10 @@ int __fastcall DRLGTILESUB_PickSubThemes(D2RoomExStrc* pRoomEx, int nSubType, in
 		pLvlSubTxtRecord = DATATBLS_GetLvlSubTxtRecord(nSubType);
 		while (pLvlSubTxtRecord->dwType == nSubType)
 		{
-			if (((unsigned int)SEED_RollRandomNumber(&pRoomEx->pSeed) % 100) < pLvlSubTxtRecord->nProb[nSubTheme])
+			if (((unsigned int)SEED_RollRandomNumber(&pDrlgRoom->pSeed) % 100) < pLvlSubTxtRecord->nProb[nSubTheme])
 			{
 				nMask |= 1 << nCounter;
-				pRoomEx->dwDT1Mask |= pLvlSubTxtRecord->dwDt1Mask;
+				pDrlgRoom->dwDT1Mask |= pLvlSubTxtRecord->dwDt1Mask;
 			}
 
 			++pLvlSubTxtRecord;

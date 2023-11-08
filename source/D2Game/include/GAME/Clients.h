@@ -189,7 +189,7 @@ struct D2ClientStrc
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
 	uint32_t unk0x1B0;							//0x1B0
-	D2RoomStrc* pRoom;							//0x1B4
+	D2ActiveRoomStrc* pRoom;							//0x1B4
 	struct PacketList {
 		D2PacketDataStrc* pHead;				//0x1B8
 		D2PacketDataStrc* pTail;				//0x1BC
@@ -238,7 +238,7 @@ D2UnitStrc* __stdcall CLIENTS_GetPlayerFromClient(D2ClientStrc* pClient, BOOL bI
 //D2Game.0x6FC31EA0
 void __fastcall CLIENTS_SetPlayerInClient(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC31EF0
-void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2RoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
+void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
 //D2Game.0x6FC32220
 void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 //D2Game.0x6FC32260
@@ -254,7 +254,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 //D2Game.0x6FC32FE0
 void __fastcall CLIENTS_FreeClientsFromGame(D2GameStrc* pGame);
 //D2Game.0x6FC33020
-void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom);
+void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC33210
 void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t nUpdateSize);
 //D2Game.0x6FC33510
@@ -268,7 +268,7 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC337B0
 int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId);
 //D2Game.0x6FC337E0
-void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom);
+void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC33830
 void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull);
 //D2Game.0x6FC33890

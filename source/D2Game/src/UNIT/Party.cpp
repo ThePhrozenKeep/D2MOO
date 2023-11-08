@@ -303,7 +303,7 @@ void __fastcall PARTY_IteratePartyMembers(D2GameStrc* pGame, int16_t nPartyId, P
 //D2Game.0x6FCBA190
 void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitStrc* pUnit, PartyCallbackFunction pCallback, void* pArgs)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return pCallback(pGame, pUnit, pArgs);
@@ -327,7 +327,7 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
                 D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                 if (pPartyMember)
                 {
-                    D2RoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
+                    D2ActiveRoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
                     if (pPartyMemberRoom && DUNGEON_GetLevelIdFromRoom(pPartyMemberRoom) == nLevelId)
                     {
                         pCallback(pGame, pPartyMember, pArgs);
@@ -362,7 +362,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
                     D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                     if (pPartyMember && pPartyMember != pUnit)
                     {
-                        D2RoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
+                        D2ActiveRoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
                         if (pPartyMemberRoom && DUNGEON_GetLevelIdFromRoom(pPartyMemberRoom) == nLevelId && pUnit && pUnit->dwAnimMode != PLRMODE_DEATH && pUnit->dwAnimMode != PLRMODE_DEAD)
                         {
                             int32_t nGoldToPick = 0;

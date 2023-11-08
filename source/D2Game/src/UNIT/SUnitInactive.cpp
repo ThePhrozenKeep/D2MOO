@@ -47,7 +47,7 @@ constexpr uint32_t dword_6FD3F464 = 2;
 
 
 //D2Game.0x6FCC3850
-void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &pDrlgCoords);
@@ -138,7 +138,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 									{
 										pCoord.nX = nX;
 										pCoord.nY = nY;
-										D2RoomStrc* ppRoom = nullptr;
+										D2ActiveRoomStrc* ppRoom = nullptr;
 										D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
 										if (ppRoom)
 										{
@@ -150,7 +150,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 								{
 									pCoord.nX = nX;
 									pCoord.nY = nY;
-									D2RoomStrc* ppRoom = nullptr;
+									D2ActiveRoomStrc* ppRoom = nullptr;
 									D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
 									if (ppRoom)
 									{
@@ -474,7 +474,7 @@ void __fastcall SUNITINACTIVE_FreeInactiveMonsterNode(D2GameStrc* pGame, D2Inact
 }
 
 //D2Game.0x6FCC4120
-D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2RoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
+D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
 {
 	D2ItemSaveStrc pItemSave = {};
 	uint8_t* pBitstream = &pInactiveItemNode->pBitstream;
@@ -575,7 +575,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 	int32_t bCompress = 0;
 	int32_t bIsDead = 0;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
@@ -765,7 +765,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 //D2Game.0x6FCC4650
 void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -1121,7 +1121,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinate
 }
 
 //D2Game.0x6FCC4E80
-D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t bAllocNewNode)
+D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t bAllocNewNode)
 {
 	D2DrlgCoordsStrc pCoord = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
@@ -1284,13 +1284,13 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FCC52C0
-int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2RoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId)
+int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId)
 {
 	D2_ASSERT(pGame);
 	D2_ASSERT(pRoomNear);
 	D2_ASSERT(nGameX && nGameY);
 
-	const D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pRoomNear, nGameX, nGameY);
+	const D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pRoomNear, nGameX, nGameY);
 	const uint8_t nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoomNear));
 	if (!pRoom)
 	{

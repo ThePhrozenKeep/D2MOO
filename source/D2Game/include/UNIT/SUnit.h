@@ -36,13 +36,13 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBB160
 D2UnitStrc* __fastcall SUNIT_GetNextUnitFromList(D2UnitStrc* pUnit);
 //D2Game.0x6FCBB190
-void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom);
+void __fastcall sub_6FCBB190(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FCBB440
 void __fastcall SUNIT_WarpPlayer(D2GameStrc* pGame, D2UnitStrc* pTarget, D2UnitStrc* pRoomTile);
 //D2Game.0x6FCBB630
 void __fastcall SUNIT_InitSeed(D2UnitStrc* pUnit, D2SeedStrc* pSeed);
 //D2Game.0x6FCBB6C0
-D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, D2GameStrc* pGame, D2RoomStrc* pRoom, char a7, int32_t nMode, DWORD a3);
+D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, char a7, int32_t nMode, DWORD a3);
 //D2Game.0x6FCBBB00
 D2UnitStrc* __fastcall SUNIT_GetServerUnit(D2GameStrc* pGame, int32_t nUnitType, int32_t nUnitGUID);
 //D2Game.0x6FCBBB70
@@ -50,9 +50,9 @@ D2UnitStrc* __fastcall SUNIT_GetOwner(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBBC00
 D2UnitStrc* __fastcall SUNIT_GetLastAttacker(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBBCB0
-void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t a6);
+void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t a6);
 //D2Game.0x6FCBBFE0
-void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t nX, int32_t nY);
+void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY);
 //D2Game.0x6FCBC280
 void __fastcall SUNIT_InitClientInPlayerData(D2UnitStrc* pUnit, D2ClientStrc* pClient);
 //D2Game.0x6FCBC2E0
@@ -64,11 +64,11 @@ void __fastcall SUNIT_AttachSound(D2UnitStrc* pUnit, int32_t nUpdateType, D2Unit
 //D2Game.0x6FCBC4D0
 void __fastcall sub_6FCBC4D0(D2UnitStrc* pUnit);
 //D2Game.0x6FCBC590
-D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode, int32_t nUnitFlags);
+D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nUnitType, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode, int32_t nUnitFlags);
 //D2Game.0x6FCBC6F0
-void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2RoomStrc* pRoom, D2PresetUnitStrc* pPresetUnit);
+void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2PresetUnitStrc* pPresetUnit);
 //D2Game.0x6FCBC780
-void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2RoomStrc* pRoom);
+void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FCBC7E0
 void __fastcall sub_6FCBC7E0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBC900
@@ -142,6 +142,6 @@ void __fastcall sub_6FCBDE90(D2UnitStrc* pUnit, int32_t bSetUninterruptable);
 //D2Game.0x6FCBDF90
 int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4, int32_t a5);
 //D2Game.0x6FCBDFE0
-int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pInputRoom, int32_t nX, int32_t nY, int32_t a6, int32_t a7);
+int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pInputRoom, int32_t nX, int32_t nY, int32_t a6, int32_t a7);
 //D2Game.0x6FCBE2D0
 int16_t __fastcall SUNIT_GetPartyId(D2UnitStrc* pPlayer);

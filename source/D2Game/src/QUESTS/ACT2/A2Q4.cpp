@@ -274,7 +274,7 @@ void __fastcall ACT2Q4_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -390,7 +390,7 @@ void __fastcall ACT2Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 			if (!pQuestDataEx->bPortalToCanyonOpen && UNITS_GetRoom(pQuestArg->pPlayer) == pQuestDataEx->pRoom)
 			{
-				D2RoomStrc* pRoom = nullptr;
+				D2ActiveRoomStrc* pRoom = nullptr;
 				D2CoordStrc pCoord = {};
 				UNITS_GetCoords(pQuestArg->pPlayer, &pCoord);
 				QUESTS_GetFreePosition(pQuestDataEx->pRoom, &pCoord, 2, 0xBE11, &pRoom, 8);
@@ -580,7 +580,7 @@ void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA2F60
-void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2RoomStrc* pRoom, D2CoordStrc* pCoord)
+void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord)
 {
 	D2Act2Quest4Strc* pQuestDataEx = (D2Act2Quest4Strc*)pQuestData->pQuestDataEx;
 
@@ -623,7 +623,7 @@ void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2Un
 	}
 	pCoord->nY = pCoord->nY - 3;
 
-	D2RoomStrc* pFoundRoom = D2GAME_GetRoom_6FC52070(pRoom, pCoord->nX, pCoord->nY);
+	D2ActiveRoomStrc* pFoundRoom = D2GAME_GetRoom_6FC52070(pRoom, pCoord->nX, pCoord->nY);
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x100, &pFoundRoom, 9);
 
 	D2UnitStrc* pJerhyn = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, -1, 0);
@@ -742,7 +742,7 @@ void __fastcall ACT2Q4_InitializeJerhynStartObject(D2QuestDataStrc* pQuestData, 
 		return;
 	}
 
-	D2RoomStrc* pRoom = pOp->pRoom;
+	D2ActiveRoomStrc* pRoom = pOp->pRoom;
 	D2CoordStrc pCoord = {};
 	pCoord.nX = pOp->nX;
 	pCoord.nY = pOp->nY;
@@ -826,7 +826,7 @@ void __fastcall ACT2Q4_InitializeHaremBlockerObject(D2QuestDataStrc* pQuestData,
 	pQuestDataEx->pHaremBlockerCoords.nX = pCoord.nX - 2;
 	pQuestDataEx->pHaremBlockerCoords.nY = pCoord.nY - 1;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	D2UnitStrc* pHaremBlocker = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_EUNUCH_HAREM_BLOCKER, pQuestDataEx->pHaremBlockerCoords.nX, pQuestDataEx->pHaremBlockerCoords.nY, pQuestData->pGame, pRoom, 1, 0, 0);
 
@@ -1016,7 +1016,7 @@ void __fastcall ACT2Q4_GetAndUpdatePalaceNpcState(D2GameStrc* pGame, D2UnitStrc*
 		D2CoordStrc pCoord = {};
 		UNITS_GetCoords(pHaremBlocker, &pCoord);
 		pCoord.nX += 4;
-		D2RoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);
 
 		if ((COLLISION_GetFreeCoordinates(pRoom, &pCoord, 1, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 2, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x3C01, 0)) && sub_6FCBDFE0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, 0, 0))
 		{
@@ -1118,7 +1118,7 @@ int32_t __fastcall ACT2Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_ARCANESANCTUARY)
 	{
 		return 0;

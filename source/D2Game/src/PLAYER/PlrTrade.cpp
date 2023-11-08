@@ -52,10 +52,10 @@ int32_t __fastcall OBJECTS_OperateFunction32_Bank(D2ObjOperateFnStrc* pOp, int32
 
     if (pOp->nObjectIdx == OBJECT_STASH)
     {
-        D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pOp->pPlayer);
+        D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pOp->pPlayer);
         if (pPlayerRoom && DUNGEON_IsRoomInTown(pPlayerRoom))
         {
-            D2RoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
+            D2ActiveRoomStrc* pObjectRoom = UNITS_GetRoom(pObject);
             if (pObjectRoom && DUNGEON_IsRoomInTown(pObjectRoom))
             {
                 SUNIT_SetInteractInfo(pOp->pPlayer, UNIT_OBJECT, pObject->dwUnitId);
@@ -1256,13 +1256,13 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
             return 0;
         }
         
-        D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
         if (!pPlayerRoom || !DUNGEON_IsRoomInTown(pPlayerRoom))
         {
             return 0;
         }
         
-        D2RoomStrc* pObjectRoom = UNITS_GetRoom(pInteractObject);    
+        D2ActiveRoomStrc* pObjectRoom = UNITS_GetRoom(pInteractObject);    
         if (!pObjectRoom || !DUNGEON_IsRoomInTown(pObjectRoom))
         {
             return 0;

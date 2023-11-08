@@ -130,7 +130,7 @@ void __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -248,7 +248,7 @@ void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			UNITS_GetCoords(pQuestArg->pTarget, &pCoord);
 			pCoord.nX += 5;
 
-			D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+			D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 			QUESTS_GetFreePosition(pRoom, &pCoord, 2, 0x400, &pRoom, 12);
 			if (!pRoom)
 			{
@@ -485,7 +485,7 @@ void __fastcall ACT4Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 	UNITS_GetCoords(pQuestArg->pTarget, &pCoord);
 	pCoord.nX += 5;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 	QUESTS_GetFreePosition(pRoom, &pCoord, 2, 0x400, &pRoom, 12);
 	if (!pRoom)
 	{
@@ -564,7 +564,7 @@ void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 
 		pQuestDataEx->bDiabloKilled = 1;
 
-		D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 		if (!pRoom)
 		{
 			return;
@@ -703,7 +703,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 		const int32_t nX = CLIENTS_GetUnitX(pObject);
 		const int32_t nY = CLIENTS_GetUnitY(pObject);
 
-		D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
 		D2UnitStrc*   pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1, -1, 0);
 		if (!pDiablo) pDiablo = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pRoom, nX, nY, MONSTER_DIABLO, 1,  5, 0);
@@ -814,7 +814,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q2_DIABLO);
 	if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A4Q2, QFLAG_REWARDGRANTED) == 1 || !pRoom || !pQuestData)
 	{
@@ -825,7 +825,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(D2GameStrc* pGame, D2Uni
 
 	if (pRoom != pQuestDataEx->pRoom)
 	{
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -876,7 +876,7 @@ void __fastcall ACT4Q2_KillAllMonstersInCS(D2GameStrc* pGame, D2Act4Quest2Strc* 
 	pQuestDataEx->bSanctumCleared = 1;
 	QUESTS_TriggerFX(pGame, 12);
 
-	for (D2RoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[ACT_IV]); pRoom; pRoom = pRoom->pRoomNext)
+	for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[ACT_IV]); pRoom; pRoom = pRoom->pRoomNext)
 	{
 		if (DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_CHAOSSANCTUM)
 		{
@@ -969,13 +969,13 @@ int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	pQuestDataEx->pSealCoords[0].nX = nX;
 	pQuestDataEx->pSealCoords[0].nY = nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
 	if (!pRoom)
 	{
 		return 0;
 	}
 
-	D2RoomStrc* pNewRoom = nullptr;
+	D2ActiveRoomStrc* pNewRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 13);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
@@ -1012,13 +1012,13 @@ int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	pQuestDataEx->pSealCoords[1].nX = nX;
 	pQuestDataEx->pSealCoords[1].nY = nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
 	if (!pRoom)
 	{
 		return 0;
 	}
 
-	D2RoomStrc* pNewRoom = nullptr;
+	D2ActiveRoomStrc* pNewRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 14);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
@@ -1055,13 +1055,13 @@ int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	pQuestDataEx->pSealCoords[2].nX = nX;
 	pQuestDataEx->pSealCoords[2].nY = nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOp->pObject), nX, nY);
 	if (!pRoom)
 	{
 		return 0;
 	}
 
-	D2RoomStrc* pNewRoom = nullptr;
+	D2ActiveRoomStrc* pNewRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 15);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
@@ -1257,7 +1257,7 @@ int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* 
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
 	if (!pRoom)
 	{
 		return 1;

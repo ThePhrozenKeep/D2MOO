@@ -42,7 +42,7 @@ BOOL PATH_FoWall_TargetLocationHasEnoughRoom(D2PathInfoStrc* pPathInfo)
 	{
 		return TRUE;
 	}
-	D2RoomStrc* pStartRoom = pPathInfo->pStartRoom;
+	D2ActiveRoomStrc* pStartRoom = pPathInfo->pStartRoom;
 	const int nTargetY = pPathInfo->tTargetCoord.Y;
 	const int nTargetX = pPathInfo->tTargetCoord.X;
 	const int32_t nCollisionMask = pPathInfo->nCollisionMask;
