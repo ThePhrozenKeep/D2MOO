@@ -607,7 +607,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 }
 
 //D2Game.0x6FC36570
-void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nExpLost, int32_t a13, int32_t a14)
+void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nLocale, int32_t a13, int32_t a14)
 {
     // TODO: v22
     if (!gpGameDataTbl_6FD45818)
@@ -738,7 +738,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     ARENA_AllocArena(pGame, a2, nFlags, nArenaTemplate);
     CLIENTS_SetGameData(pGame);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nExpLost, a13, a14);
+    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nLocale, a13, a14);
     SERVER_SetClientGameGUID(nClientId, GetHashValueFromGameHandle(hGame));
 
     if (pGame->nGameType == 1)

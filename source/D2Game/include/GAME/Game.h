@@ -254,7 +254,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
 //D2Game.0x6FC36280 (#10007)
 int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t nDatabaseCharacterId);
 //D2Game.0x6FC36570
-void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nExpLost, int32_t a13, int32_t a14);
+void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nLocale, int32_t a13, int32_t a14);
 //D2Game.0x6FC369C0
 void __fastcall sub_6FC369C0(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC36AA0
