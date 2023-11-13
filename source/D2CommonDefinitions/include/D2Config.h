@@ -72,7 +72,7 @@ struct D2ConfigStrc
 	uint32_t dwArena;
 	uint8_t _01E8[6]; // Related to Arena
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
-	BOOL(*pAllowExpansionCallback)(void);
+	BOOL(__stdcall *pAllowExpansionCallback)(void);
 	uint8_t bTxt;
 #endif
 	uint8_t bLog;
