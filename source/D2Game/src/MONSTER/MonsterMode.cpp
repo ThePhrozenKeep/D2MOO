@@ -656,11 +656,11 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
                 else
                 {
                     SUNITDMG_KillMonster(pGame, pUnit, pStatListOwner, 1);
-                    SUNITEVENT_EventFunc_Handler(pGame, UNITEVENTCALLBACK_AIRESET, pUnit, pStatListOwner, 0);
+                    SUNITEVENT_EventFunc_Handler(pGame, EVENT_DEATH, pUnit, pStatListOwner, 0);
 
                     if (pStatListOwner)
                     {
-                        SUNITEVENT_EventFunc_Handler(pGame, UNITEVENTCALLBACK_PERIODICSTATS, pStatListOwner, pUnit, 0);
+                        SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILL, pStatListOwner, pUnit, 0);
                     }
                 }
             }
