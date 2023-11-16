@@ -1390,7 +1390,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 	if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_32) && pDamage->wResultFlags & DAMAGERESULTFLAG_WILLDIE)
 	{
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_DEATH, pDefender, pAttacker, pDamage);
+		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILLED, pDefender, pAttacker, pDamage);
 		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILL, pAttacker, pDefender, pDamage);
 	}
 }
@@ -3120,7 +3120,7 @@ void __fastcall SUNITDMG_AddExperienceForPlayer(D2GameStrc* pGame, D2UnitStrc* p
 	if (nOldLevel != DATATBLS_GetCurrentLevelFromExp(pUnit->dwClassId, nNewExperience))
 	{
 		PLAYERSTATS_LevelUp(pGame, pUnit);
-		SUNITEVENT_EventFunc_Handler(pGame, UNITEVENTCALLBACK_REMOVESTATE, pUnit, 0, 0);
+		SUNITEVENT_EventFunc_Handler(pGame, EVENT_LEVELUP, pUnit, 0, 0);
 	}
 }
 
@@ -3214,7 +3214,7 @@ void __fastcall SUNITDMG_AddExperienceForHireling(D2GameStrc* pGame, D2UnitStrc*
 		MONSTERAI_UpdateMercStatsAndSkills(pGame, pPlayer, pHireling, nNewLevel);
 		MONSTERAI_SendMercStats(pGame, pPlayer, 0);
 		SUNIT_AttachSound(pHireling, 0x5Bu, pPlayer);
-		SUNITEVENT_EventFunc_Handler(pGame, UNITEVENTCALLBACK_REMOVESTATE, pHireling, 0, 0);
+		SUNITEVENT_EventFunc_Handler(pGame, EVENT_LEVELUP, pHireling, 0, 0);
 	}
 }
 
