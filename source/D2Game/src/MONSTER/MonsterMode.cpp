@@ -1011,7 +1011,7 @@ void __fastcall sub_6FC641D0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
     if (pAttacker)
     {
         SUNIT_SetCombatMode(pGame, pAttacker, 12);
-        SUNITEVENT_EventFunc_Handler(pGame, 13, pAttacker, 0, 0);
+        SUNITEVENT_EventFunc_Handler(pGame, EVENT_DEATH, pAttacker, 0, 0);
 
         D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
         if (pMonStatsTxtRecord)

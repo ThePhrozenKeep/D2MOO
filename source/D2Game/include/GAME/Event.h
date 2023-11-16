@@ -27,6 +27,7 @@ enum D2C_EventTypes
 	EVENT_DEATH,
 	EVENT_ABSORBDAMAGE,
 	EVENT_LEVELUP,
+	EVENT_DEATH, // Monster dies
 };
 
 enum D2C_UnitEventCallbackTypes
