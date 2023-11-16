@@ -1390,7 +1390,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 	if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_32) && pDamage->wResultFlags & DAMAGERESULTFLAG_WILLDIE)
 	{
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_DEATH, pDefender, pAttacker, pDamage);
+		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILLED, pDefender, pAttacker, pDamage);
 		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILL, pAttacker, pDefender, pDamage);
 	}
 }
