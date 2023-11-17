@@ -1572,8 +1572,8 @@ void __fastcall CLIENTS_FreeSaveHeader(D2ClientStrc* pClient)
     }
 
     pClient->nSaveHeaderSize = 0;
-    pClient->unk0x184[1] = 0;
-    pClient->unk0x184[0] = 0;
+    pClient->nSaveHeaderDataSentBytes = 0;
+    pClient->unk0x184 = 0;
     pClient->dwFlags &= ~CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1582,8 +1582,8 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    pClient->unk0x184[0] = 5;
-    pClient->unk0x184[1] = 0;
+    pClient->unk0x184 = 5;
+    pClient->nSaveHeaderDataSentBytes = 0;
     pClient->dwFlags |= CLIENTFLAGEX_SAVE_LOADED;
 }
 

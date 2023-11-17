@@ -181,7 +181,8 @@ struct D2ClientStrc
 	uint32_t bUnlockCharacter;					//0x178
 	D2SaveHeaderStrc* pSaveHeader;				//0x17C
 	int32_t nSaveHeaderSize;					//0x180
-	uint32_t unk0x184[2];						//0x184
+	uint32_t unk0x184;							//0x184
+	uint32_t nSaveHeaderDataSentBytes;			//0x188
 	DWORD nSaveChecksum;						//0x18C
 	DWORD unk0x190;								//0x190
 	DWORD unk0x194[5];							//0x194
@@ -189,13 +190,13 @@ struct D2ClientStrc
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
 	uint32_t unk0x1B0;							//0x1B0
-	D2ActiveRoomStrc* pRoom;							//0x1B4
+	D2ActiveRoomStrc* pRoom;					//0x1B4
 	struct PacketList {
 		D2PacketDataStrc* pHead;				//0x1B8
 		D2PacketDataStrc* pTail;				//0x1BC
 		D2PacketDataStrc* pPacketDataPool;		//0x1C0
 	} tPacketDataList;
-	uint32_t unk0x1C4;							//0x1C4
+	uint32_t nSaveHeaderSendFailures;			//0x1C4
 	uint32_t unk0x1C8;							//0x1C8
 	D2ClientUnitUpdateStrc unitUpdate[CLIENTS_MAX_UPDATES]; //0x1CC
 	uint8_t pad0x3BB;							//0x3BB

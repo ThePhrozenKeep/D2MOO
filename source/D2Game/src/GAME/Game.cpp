@@ -1381,7 +1381,7 @@ void __fastcall sub_6FC37B10(D2GameStrc* pGame)
 
                 while (CLIENT_GetSaveHeader_6FC34350(pClient))
                 {
-                    sub_6FC37B90(pGame, pClient);
+					CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                 }
             }
 
@@ -1391,28 +1391,28 @@ void __fastcall sub_6FC37B10(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37B90
-void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     if (!CLIENT_GetSaveHeader_6FC34350(pClient))
     {
         return;
     }
 
-    if (pClient->unk0x184[0])
+    if (pClient->unk0x184)
     {
-        --pClient->unk0x184[0];
+        --pClient->unk0x184;
         return;
     }
 
     const uint8_t* pSaveData = (uint8_t*)pClient->pSaveHeader;
-    pClient->unk0x184[0] = 5;
+    pClient->unk0x184 = 5;
     if (!pSaveData)
     {
         return;
     }
 
-    int32_t nDataSize = pClient->nSaveHeaderSize - pClient->unk0x184[1];
-    const uint8_t* pData = &pSaveData[pClient->unk0x184[1]];
+    int32_t nDataSize = pClient->nSaveHeaderSize - pClient->nSaveHeaderDataSentBytes;
+    const uint8_t* pData = &pSaveData[pClient->nSaveHeaderDataSentBytes];
     if (nDataSize >= 255)
     {
         nDataSize = 255;
@@ -1421,7 +1421,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
     uint8_t* pPacket = (uint8_t*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, 0x107u);
     *pPacket = 0xB2u;
     pPacket[1] = nDataSize;
-    if (pClient->unk0x184[1])
+    if (pClient->nSaveHeaderDataSentBytes)
     {
         pPacket[2] = 0;
     }
@@ -1440,23 +1440,23 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
 
     if (D2NET_10006(0, pClient->dwClientId, pPacket, nDataSize + 7))
     {
-        pClient->unk0x184[1] += nDataSize;
+        pClient->nSaveHeaderDataSentBytes += nDataSize;
 
-        if (pClient->unk0x184[1] == pClient->nSaveHeaderSize)
+        if (pClient->nSaveHeaderDataSentBytes == pClient->nSaveHeaderSize)
         {
             CLIENTS_FreeSaveHeader(pClient);
         }
 
-        pClient->unk0x1C4 = 0;
+        pClient->nSaveHeaderSendFailures = 0;
     }
     else
     {
-        ++pClient->unk0x1C4;
+        ++pClient->nSaveHeaderSendFailures;
     }
 
     D2_FREE_POOL(pClient->pGame->pMemoryPool, pPacket);
 
-    if (pClient->unk0x1C4 >= 3)
+    if (pClient->nSaveHeaderSendFailures >= 3)
     {
         CLIENTS_FreeSaveHeader(pClient);
         GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
@@ -1523,7 +1523,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             {
                 do
                 {
-                    sub_6FC37B90(pGame, pClient);
+					CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                 }
                 while (CLIENT_GetSaveHeader_6FC34350(pClient));
             }
@@ -2269,7 +2269,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
 
     if (pGame->nGameType == 1 || pGame->nGameType == 2)
     {
-        sub_6FC37B90(pGame, pClient);
+		CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
     }
 
     int32_t nCounter = 0;
@@ -2287,16 +2287,16 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             pPacketData->nPacketSize = 0;
             pPacketData->pNext = pClient->tPacketDataList.pPacketDataPool;
             pClient->tPacketDataList.pPacketDataPool = pPacketData;
-            pClient->unk0x1C4 = 0;
+            pClient->nSaveHeaderSendFailures = 0;
             ++nCounter;
         }
         else
         {
             SERVER_WSAGetLastError();
             bError = 1;
-            ++pClient->unk0x1C4;
+            ++pClient->nSaveHeaderSendFailures;
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
-            if (pClient->unk0x1C4 >= 3)
+            if (pClient->nSaveHeaderSendFailures >= 3)
             {
                 GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
                 return;
@@ -2524,7 +2524,7 @@ void __stdcall D2Game_10006()
                 {
                     do
                     {
-                        sub_6FC37B90(pGame, pClient);
+						CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                     }
                     while (CLIENT_GetSaveHeader_6FC34350(pClient));
                 }
