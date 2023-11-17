@@ -288,7 +288,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId);
 //D2Game.0x6FC37B10
 void __fastcall sub_6FC37B10(D2GameStrc* pGame);
 //D2Game.0x6FC37B90
-void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient);
+void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC37CE0
 void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2);
 //D2Game.0x6FC37FB0
