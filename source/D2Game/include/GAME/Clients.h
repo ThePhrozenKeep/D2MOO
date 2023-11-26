@@ -218,10 +218,15 @@ struct D2ClientStrc
 	uint32_t aPingHistory[17];					//0x4B4
 	uint64_t nPingMovingAverage;				//0x4F8
 	uint32_t dwPingsCount;						//0x500
+#ifdef D2_VERSION_113C
+	uint32_t unk0x504;							//0x504
+#endif
 	int32_t nExpLoss;							//0x504
 	uint32_t dwExpLost;							//0x508
 	uint32_t dwLangId;							//0x50C
-	//uint32_t __510[2];						//0x510
+#ifdef D2_VERSION_113C
+	uint32_t pad0x514;							//0x514
+#endif
 };
 
 #pragma pack()
