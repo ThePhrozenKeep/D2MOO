@@ -45,7 +45,7 @@ struct D2ArchiveHandleStrc
 
 // Name comes from D2Lang: Unicode::loadSysMap(struct HD2ARCHIVE__ *hArchive, char *szFileName)
 // Most likely not the same as storm's HARCHIVE and probably D2ArchiveHandleStrc?
-typedef struct HD2ARCHIVE__* HD2ARCHIVE;
+typedef struct HD2ARCHIVE__* HD2ARCHIVE; // NOLINT(bugprone-reserved-identifier)
 
 /**
  * Opens a file in the MPQ archives and returns the handle to the
