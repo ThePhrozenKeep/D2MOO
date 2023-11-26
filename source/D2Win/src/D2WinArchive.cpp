@@ -145,9 +145,9 @@ void __fastcall ARCHIVE_FreeArchives()
 }
 
 //D2Win.0x6F8A5DE0 (#10038)
-void* __stdcall D2Win_GetMemPool()
+HD2ARCHIVE __stdcall D2Win_GetArchive()
 {
-	return 0;
+	return nullptr;
 }
 
 //D2Win.0x6F8A5DF0 (#10185)

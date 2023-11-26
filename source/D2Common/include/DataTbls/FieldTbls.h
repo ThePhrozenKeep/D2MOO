@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <D2BasicTypes.h>
+#include <Archive.h>
 
 struct D2ActiveRoomStrc;
 
@@ -22,7 +23,7 @@ struct D2FieldStrc
 #pragma pack()
 
 //D2Common.0x6FD51FC0
-BOOL __fastcall DATATBLS_LoadExpFieldD2(void* pMemPool);
+BOOL __fastcall DATATBLS_LoadExpFieldD2(HD2ARCHIVE hArchive);
 //D2Common.0x6FD52010 (#11089)
 D2COMMON_DLL_DECL BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize);
 //D2Common.0x6FD520F0 (#11090)

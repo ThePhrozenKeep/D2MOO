@@ -43,6 +43,10 @@ struct D2ArchiveHandleStrc
 };
 #pragma pack(pop)
 
+// Name comes from D2Lang: Unicode::loadSysMap(struct HD2ARCHIVE__ *hArchive, char *szFileName)
+// Most likely not the same as storm's HARCHIVE and probably D2ArchiveHandleStrc?
+typedef struct HD2ARCHIVE__* HD2ARCHIVE;
+
 /**
  * Opens a file in the MPQ archives and returns the handle to the
  * file.
@@ -55,7 +59,7 @@ struct D2ArchiveHandleStrc
  * 1.13c: Inline
  * 1.14c: Game.0x00514B24
  */
-BOOL __fastcall ARCHIVE_OpenFile(void* pMempool, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped);
+BOOL __fastcall ARCHIVE_OpenFile(HD2ARCHIVE hArchive, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped);
 
 /**
  * Closes a file handle to a file from the MPQ archives.
@@ -68,7 +72,7 @@ BOOL __fastcall ARCHIVE_OpenFile(void* pMempool, const char* szFilePath, HSFILE*
  * 1.13c: Inline
  * 1.14c: Game.0x00514B60
  */
-void __fastcall ARCHIVE_CloseFile(void* pMempool, HSFILE hFile);
+void __fastcall ARCHIVE_CloseFile(HD2ARCHIVE hArchive, HSFILE hFile);
 
 /**
  * Gets the uncompressed size of a file in the MPQ archives.
@@ -81,7 +85,7 @@ void __fastcall ARCHIVE_CloseFile(void* pMempool, HSFILE hFile);
  * 1.13c: Inline
  * 1.14c: Game.0x00514B87
  */
-size_t __fastcall ARCHIVE_GetFileSize(void* pMempool, HSFILE hFile, size_t* pdwFileSizeHigh);
+size_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, size_t* pdwFileSizeHigh);
 
 /**
  * Reads a file from the MPQ archives into a specified buffer.
@@ -94,7 +98,7 @@ size_t __fastcall ARCHIVE_GetFileSize(void* pMempool, HSFILE hFile, size_t* pdwF
  * 1.13c: D2Lang.0x6FC07C00
  * 1.14c: Game.0x00514C61
  */
-void __fastcall ARCHIVE_ReadFileToBuffer(void* pMempool, HSFILE hFile, void* pBuffer, size_t dwBytesToRead);
+void __fastcall ARCHIVE_ReadFileToBuffer(HD2ARCHIVE hArchive, HSFILE hFile, void* pBuffer, size_t dwBytesToRead);
 
 /**
  * Reads a file from the MPQ archives into a buffer allocated by
@@ -109,9 +113,9 @@ void __fastcall ARCHIVE_ReadFileToBuffer(void* pMempool, HSFILE hFile, void* pBu
  * 1.13c: D2Lang.0x6FC07EF0
  * 1.14c: Game.0x00514D55
  */
-void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* pMempool, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine);
+void* __fastcall ARCHIVE_ReadFileToAllocBuffer(HD2ARCHIVE hArchive, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine);
 
-#define ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMempool, szFilePath, pBytesWritten) ARCHIVE_ReadFileToAllocBuffer(pMempool, szFilePath, pBytesWritten, __FILE__, __LINE__)
+#define ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, pBytesWritten) ARCHIVE_ReadFileToAllocBuffer(hArchive, szFilePath, pBytesWritten, __FILE__, __LINE__)
 
 using ARCHIVE_ShowMessageFunctionPtr = BOOL (__stdcall*)();
 

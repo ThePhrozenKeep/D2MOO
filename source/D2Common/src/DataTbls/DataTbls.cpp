@@ -147,7 +147,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 }
 
 //D2Common.0x6FD49760
-void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
+void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
 {
 	FILE* pFile = NULL;
 	size_t dwSize = 0;
@@ -167,7 +167,7 @@ void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, vo
 		D2_FREE_POOL(nullptr, *ppFileHandle);
 	}
 
-	*ppFileHandle = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwSize);
+	*ppFileHandle = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwSize);
 	*pSizeEx = dwSize;
 	*pSize = dwSize;
 }
@@ -243,7 +243,7 @@ D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDiff
 }
 
 //D2Common.0x6FD4E500
-void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 {
 	uint32_t* pStateMasks = NULL;
 
@@ -322,7 +322,7 @@ void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pStatesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pStatesTxt = (D2StatesTxt*)DATATBLS_CompileTxt(pMemPool, "states", pTbl, &sgptDataTables->nStatesTxtRecordCount, sizeof(D2StatesTxt));
+	sgptDataTables->pStatesTxt = (D2StatesTxt*)DATATBLS_CompileTxt(hArchive, "states", pTbl, &sgptDataTables->nStatesTxtRecordCount, sizeof(D2StatesTxt));
 
 	if (sgptDataTables->nStatesTxtRecordCount >= 256)
 	{
@@ -446,7 +446,7 @@ D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
 }
 
 //D2Common.0x6FD4F5A0
-void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -474,7 +474,7 @@ void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pPetTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pPetTypeTxt = (D2PetTypeTxt*)DATATBLS_CompileTxt(pMemPool, "pettype", pTbl, &sgptDataTables->nPetTypeTxtRecordCount, sizeof(D2PetTypeTxt));
+	sgptDataTables->pPetTypeTxt = (D2PetTypeTxt*)DATATBLS_CompileTxt(hArchive, "pettype", pTbl, &sgptDataTables->nPetTypeTxtRecordCount, sizeof(D2PetTypeTxt));
 
 	if (sgptDataTables->nPetTypeTxtRecordCount > 0)
 	{
@@ -604,7 +604,7 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize)
+void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize)
 {
 	D2BinFileStrc* pBinFile = NULL;
 	FILE* pFile = NULL;
@@ -628,7 +628,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "levels", ".txt");
 		}
 
-		pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwDataSize);
+		pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwDataSize);
 		D2_ASSERT(pData);
 
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
@@ -664,7 +664,7 @@ void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFie
 		}
 	}
 
-	pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFilePath, &dwDataSize);
+	pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwDataSize);
 	D2_ASSERT(pData);
 
 	if (DATATBLS_LoadFromBin)
@@ -804,7 +804,7 @@ void __stdcall DATATBLS_UnloadAllBins()
 }
 
 //D2Common.0x6FD504B0 (#10576)
-void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3)
+void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -819,69 +819,69 @@ void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	DATATBLS_LoadSomeTxts(pMemPool);
-	DATATBLS_LoadItemTypesTxt(pMemPool);
-	DATATBLS_LoadMonTypeTxt(pMemPool);
-	DATATBLS_LoadSoundsTxt(pMemPool);
-	DATATBLS_LoadPetTypeTxt(pMemPool);
-	DATATBLS_LoadOverlayTxt(pMemPool);
-	DATATBLS_LoadItemStatCostTxt(pMemPool);
-	DATATBLS_LoadPropertiesTxt(pMemPool);
-	DATATBLS_LoadMissilesTxt(pMemPool);
-	DATATBLS_LoadStatesTxt(pMemPool);
-	DATATBLS_LoadSkills_SkillDescTxt(pMemPool);
-	DATATBLS_LoadCharStatsTxt(pMemPool);
-	DATATBLS_LoadArenaTxt(pMemPool);
-	DATATBLS_LoadCharTemplateTxt(pMemPool);
-	DATATBLS_LoadItemsTxt(pMemPool);
-	DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(pMemPool);
-	DATATBLS_LoadRareSuffix_PrefixTxt(pMemPool);
-	DATATBLS_LoadUniqueItemsTxt(pMemPool);
-	DATATBLS_LoadSets_SetItemsTxt(pMemPool);
-	DATATBLS_LoadGemsTxt(pMemPool);
-	DATATBLS_LoadBooksTxt(pMemPool);
-	DATATBLS_LoadQualityItemsTxt(pMemPool);
-	DATATBLS_LoadLowQualityItemsTxt(pMemPool);
-	DATATBLS_LoadRunesTxt(pMemPool);
-	DATATBLS_LoadItemRatioTxt(pMemPool);
-	DATATBLS_LoadGambleTxt(pMemPool);
-	DATATBLS_LoadPlrType_ModeTxt(pMemPool);
-	DATATBLS_LoadMonModeTxt(pMemPool);
-	DATATBLS_LoadObjType_ModeTxt(pMemPool);
-	DATATBLS_LoadCompositTxt(pMemPool);
-	DATATBLS_LoadArmTypeTxt(pMemPool);
+	DATATBLS_LoadSomeTxts(hArchive);
+	DATATBLS_LoadItemTypesTxt(hArchive);
+	DATATBLS_LoadMonTypeTxt(hArchive);
+	DATATBLS_LoadSoundsTxt(hArchive);
+	DATATBLS_LoadPetTypeTxt(hArchive);
+	DATATBLS_LoadOverlayTxt(hArchive);
+	DATATBLS_LoadItemStatCostTxt(hArchive);
+	DATATBLS_LoadPropertiesTxt(hArchive);
+	DATATBLS_LoadMissilesTxt(hArchive);
+	DATATBLS_LoadStatesTxt(hArchive);
+	DATATBLS_LoadSkills_SkillDescTxt(hArchive);
+	DATATBLS_LoadCharStatsTxt(hArchive);
+	DATATBLS_LoadArenaTxt(hArchive);
+	DATATBLS_LoadCharTemplateTxt(hArchive);
+	DATATBLS_LoadItemsTxt(hArchive);
+	DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(hArchive);
+	DATATBLS_LoadRareSuffix_PrefixTxt(hArchive);
+	DATATBLS_LoadUniqueItemsTxt(hArchive);
+	DATATBLS_LoadSets_SetItemsTxt(hArchive);
+	DATATBLS_LoadGemsTxt(hArchive);
+	DATATBLS_LoadBooksTxt(hArchive);
+	DATATBLS_LoadQualityItemsTxt(hArchive);
+	DATATBLS_LoadLowQualityItemsTxt(hArchive);
+	DATATBLS_LoadRunesTxt(hArchive);
+	DATATBLS_LoadItemRatioTxt(hArchive);
+	DATATBLS_LoadGambleTxt(hArchive);
+	DATATBLS_LoadPlrType_ModeTxt(hArchive);
+	DATATBLS_LoadMonModeTxt(hArchive);
+	DATATBLS_LoadObjType_ModeTxt(hArchive);
+	DATATBLS_LoadCompositTxt(hArchive);
+	DATATBLS_LoadArmTypeTxt(hArchive);
 
-	sgptDataTables->pExperienceTxt = (D2ExperienceDataTbl*)DATATBLS_CompileTxt(pMemPool, "experience", pTbl, NULL, sizeof(D2ExperienceTxt));
+	sgptDataTables->pExperienceTxt = (D2ExperienceDataTbl*)DATATBLS_CompileTxt(hArchive, "experience", pTbl, NULL, sizeof(D2ExperienceTxt));
 
-	sgptDataTables->pAnimData = DATATBLS_LoadAnimDataD2(pMemPool);
-	DATATBLS_LoadSomeMonsterTxts(pMemPool);
-	DATATBLS_LoadLevelsTxt(pMemPool);
-	DATATBLS_LoadLevelDefsBin(pMemPool);
-	DATATBLS_LoadLevelTypesTxt(pMemPool);
+	sgptDataTables->pAnimData = DATATBLS_LoadAnimDataD2(hArchive);
+	DATATBLS_LoadSomeMonsterTxts(hArchive);
+	DATATBLS_LoadLevelsTxt(hArchive);
+	DATATBLS_LoadLevelDefsBin(hArchive);
+	DATATBLS_LoadLevelTypesTxt(hArchive);
 	if (a2)
 	{
 		DATATBLS_AllocGlobalTileLibraryHash();
 	}
-	DATATBLS_LoadLvlPrestTxt(pMemPool, a2);
-	DATATBLS_LoadLvlWarpTxt(pMemPool);
-	DATATBLS_LoadLvlMazeTxt(pMemPool);
-	DATATBLS_LoadLvlSubTxt(pMemPool, a2, a3);
-	DATATBLS_LoadAutomapTxt(pMemPool);
-	DATATBLS_LoadObjectsTxt(pMemPool);
-	DATATBLS_LoadObjGroupTxt(pMemPool);
-	DATATBLS_LoadShrinesTxt(pMemPool);
-	DATATBLS_LoadInventoryTxt(pMemPool);
-	DATATBLS_LoadExpFieldD2(pMemPool);
-	DATATBLS_LoadBeltsTxt(pMemPool);
-	DATATBLS_LoadMonItemPercentTxt(pMemPool);
+	DATATBLS_LoadLvlPrestTxt(hArchive, a2);
+	DATATBLS_LoadLvlWarpTxt(hArchive);
+	DATATBLS_LoadLvlMazeTxt(hArchive);
+	DATATBLS_LoadLvlSubTxt(hArchive, a2, a3);
+	DATATBLS_LoadAutomapTxt(hArchive);
+	DATATBLS_LoadObjectsTxt(hArchive);
+	DATATBLS_LoadObjGroupTxt(hArchive);
+	DATATBLS_LoadShrinesTxt(hArchive);
+	DATATBLS_LoadInventoryTxt(hArchive);
+	DATATBLS_LoadExpFieldD2(hArchive);
+	DATATBLS_LoadBeltsTxt(hArchive);
+	DATATBLS_LoadMonItemPercentTxt(hArchive);
 	//DATATBLS_10916_Return();
-	DATATBLS_LoadCubeMainTxt(pMemPool);
-	DATATBLS_LoadDifficultyLevelsTxt(pMemPool);
+	DATATBLS_LoadCubeMainTxt(hArchive);
+	DATATBLS_LoadDifficultyLevelsTxt(hArchive);
 	DATATBLS_UnloadSoundsTxt();
 }
 
 //D2Common.0x6FD507B0
-void __fastcall DATATBLS_LoadSomeTxts(void* pMemPool)
+void __fastcall DATATBLS_LoadSomeTxts(HD2ARCHIVE hArchive)
 {
 	int nRecordCount = 0;
 
@@ -967,59 +967,59 @@ void __fastcall DATATBLS_LoadSomeTxts(void* pMemPool)
 	};
 
 	sgptDataTables->pCompCodeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pCompCodeTxt = (D2CompCodeTxt*)DATATBLS_CompileTxt(pMemPool, "compcode", pCompCodeTbl, &sgptDataTables->nCompCodeTxtRecordCount, sizeof(D2CompCodeTxt));
+	sgptDataTables->pCompCodeTxt = (D2CompCodeTxt*)DATATBLS_CompileTxt(hArchive, "compcode", pCompCodeTbl, &sgptDataTables->nCompCodeTxtRecordCount, sizeof(D2CompCodeTxt));
 
 	if (sgptDataTables->bCompileTxt)
 	{
 		sgptDataTables->pPlayerClassLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pPlayerClassTxt = (D2PlayerClassTxt*)DATATBLS_CompileTxt(pMemPool, "playerclass", pPlayerClassTbl, &nRecordCount, sizeof(D2PlayerClassTxt));
+		sgptDataTables->pPlayerClassTxt = (D2PlayerClassTxt*)DATATBLS_CompileTxt(hArchive, "playerclass", pPlayerClassTbl, &nRecordCount, sizeof(D2PlayerClassTxt));
 
 		sgptDataTables->pBodyLocsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pBodyLocsTxt = (D2BodyLocsTxt*)DATATBLS_CompileTxt(pMemPool, "bodylocs", pBodyLocsTbl, &nRecordCount, sizeof(D2BodyLocsTxt));
+		sgptDataTables->pBodyLocsTxt = (D2BodyLocsTxt*)DATATBLS_CompileTxt(hArchive, "bodylocs", pBodyLocsTbl, &nRecordCount, sizeof(D2BodyLocsTxt));
 
 		sgptDataTables->pStorePageLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pStorePageTxt = (D2StorePageTxt*)DATATBLS_CompileTxt(pMemPool, "storepage", pStorePageTbl, &nRecordCount, sizeof(D2StorePageTxt));
+		sgptDataTables->pStorePageTxt = (D2StorePageTxt*)DATATBLS_CompileTxt(hArchive, "storepage", pStorePageTbl, &nRecordCount, sizeof(D2StorePageTxt));
 
 		sgptDataTables->pElemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pElemTypesTxt = (D2ElemTypesTxt*)DATATBLS_CompileTxt(pMemPool, "elemtypes", pElemTypesTbl, &nRecordCount, sizeof(D2ElemTypesTxt));
+		sgptDataTables->pElemTypesTxt = (D2ElemTypesTxt*)DATATBLS_CompileTxt(hArchive, "elemtypes", pElemTypesTbl, &nRecordCount, sizeof(D2ElemTypesTxt));
 
 		sgptDataTables->pHitClassLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pHitClassTxt = (D2HitClassTxt*)DATATBLS_CompileTxt(pMemPool, "hitclass", pHitClassTbl, &nRecordCount, sizeof(D2HitClassTxt));
+		sgptDataTables->pHitClassTxt = (D2HitClassTxt*)DATATBLS_CompileTxt(hArchive, "hitclass", pHitClassTbl, &nRecordCount, sizeof(D2HitClassTxt));
 
 		sgptDataTables->pColorsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pColorsTxt = (D2ColorsTxt*)DATATBLS_CompileTxt(pMemPool, "colors", pColorsTbl, &nRecordCount, sizeof(D2ColorsTxt));
+		sgptDataTables->pColorsTxt = (D2ColorsTxt*)DATATBLS_CompileTxt(hArchive, "colors", pColorsTbl, &nRecordCount, sizeof(D2ColorsTxt));
 
 		sgptDataTables->pHireDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pHireDescTxt = (D2HireDescTxt*)DATATBLS_CompileTxt(pMemPool, "hiredesc", pHireDescTbl, &nRecordCount, sizeof(D2HireDescTxt));
+		sgptDataTables->pHireDescTxt = (D2HireDescTxt*)DATATBLS_CompileTxt(hArchive, "hiredesc", pHireDescTbl, &nRecordCount, sizeof(D2HireDescTxt));
 
 		sgptDataTables->pMonModeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonModeTxtStub = (D2MonModeTxtStub*)DATATBLS_CompileTxt(pMemPool, "monmode", pMonModeTbl, &nRecordCount, sizeof(D2MonModeTxtStub));
+		sgptDataTables->pMonModeTxtStub = (D2MonModeTxtStub*)DATATBLS_CompileTxt(hArchive, "monmode", pMonModeTbl, &nRecordCount, sizeof(D2MonModeTxtStub));
 
 		sgptDataTables->pPlrModeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pPlrModeTxtStub = (D2PlrModeTxtStub*)DATATBLS_CompileTxt(pMemPool, "plrmode", pPlrModeTbl, &nRecordCount, sizeof(D2PlrModeTxtStub));
+		sgptDataTables->pPlrModeTxtStub = (D2PlrModeTxtStub*)DATATBLS_CompileTxt(hArchive, "plrmode", pPlrModeTbl, &nRecordCount, sizeof(D2PlrModeTxtStub));
 
 		sgptDataTables->pMonAiLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonAiTxt = (D2MonAiTxt*)DATATBLS_CompileTxt(pMemPool, "monai", pMonAiTbl, &sgptDataTables->nMonAiTxtRecordCount, sizeof(D2MonAiTxt));
+		sgptDataTables->pMonAiTxt = (D2MonAiTxt*)DATATBLS_CompileTxt(hArchive, "monai", pMonAiTbl, &sgptDataTables->nMonAiTxtRecordCount, sizeof(D2MonAiTxt));
 
 		sgptDataTables->pMonPlaceLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonPlaceTxt = (D2MonPlaceTxt*)DATATBLS_CompileTxt(pMemPool, "monplace", pMonPlaceTbl, &sgptDataTables->nMonPlaceTxtRecordCount, sizeof(D2MonPlaceTxt));
+		sgptDataTables->pMonPlaceTxt = (D2MonPlaceTxt*)DATATBLS_CompileTxt(hArchive, "monplace", pMonPlaceTbl, &sgptDataTables->nMonPlaceTxtRecordCount, sizeof(D2MonPlaceTxt));
 
 		sgptDataTables->pSkillCalcLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pSkillCalcTxt = (D2SkillCalcTxt*)DATATBLS_CompileTxt(pMemPool, "skillcalc", pSkillCalcTbl, &nRecordCount, sizeof(D2SkillCalcTxt));
+		sgptDataTables->pSkillCalcTxt = (D2SkillCalcTxt*)DATATBLS_CompileTxt(hArchive, "skillcalc", pSkillCalcTbl, &nRecordCount, sizeof(D2SkillCalcTxt));
 
 		sgptDataTables->pMissileCalcLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMissileCalcTxt = (D2MissCalcTxt*)DATATBLS_CompileTxt(pMemPool, "misscalc", pMissCalcTbl, &nRecordCount, sizeof(D2MissCalcTxt));
+		sgptDataTables->pMissileCalcTxt = (D2MissCalcTxt*)DATATBLS_CompileTxt(hArchive, "misscalc", pMissCalcTbl, &nRecordCount, sizeof(D2MissCalcTxt));
 
 		sgptDataTables->iSkillCode = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pSkillCode = (const char*)DATATBLS_CompileTxt(pMemPool, "skills", pSkillCodeTbl, &nRecordCount, 2);
+		sgptDataTables->pSkillCode = (const char*)DATATBLS_CompileTxt(hArchive, "skills", pSkillCodeTbl, &nRecordCount, 2);
 
 		sgptDataTables->pEventsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pEventsTxt = (D2EventsTxt*)DATATBLS_CompileTxt(pMemPool, "events", pEventsTbl, &nRecordCount, sizeof(D2EventsTxt));
+		sgptDataTables->pEventsTxt = (D2EventsTxt*)DATATBLS_CompileTxt(hArchive, "events", pEventsTbl, &nRecordCount, sizeof(D2EventsTxt));
 	}
 }
 
 //D2Common.0x6FD50FB0
-void __fastcall DATATBLS_LoadCharStatsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1097,13 +1097,13 @@ void __fastcall DATATBLS_LoadCharStatsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pCharStatsTxt = (D2CharStatsTxt*)DATATBLS_CompileTxt(pMemPool, "charstats", pTbl, &sgptDataTables->nCharStatsTxtRecordCount, sizeof(D2CharStatsTxt));
+	sgptDataTables->pCharStatsTxt = (D2CharStatsTxt*)DATATBLS_CompileTxt(hArchive, "charstats", pTbl, &sgptDataTables->nCharStatsTxtRecordCount, sizeof(D2CharStatsTxt));
 
 	DATATBLS_InitUnicodeClassNamesInCharStatsTxt();
 }
 
 //D2Common.0x6FD51BF0
-void __fastcall DATATBLS_LoadDifficultyLevelsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1132,7 +1132,7 @@ void __fastcall DATATBLS_LoadDifficultyLevelsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pDifficultyLevelsTxt = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(pMemPool, "difficultylevels", pTbl, &sgptDataTables->nDifficultyLevelsTxtRecordCount, sizeof(D2DifficultyLevelsTxt));
+	sgptDataTables->pDifficultyLevelsTxt = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(hArchive, "difficultylevels", pTbl, &sgptDataTables->nDifficultyLevelsTxtRecordCount, sizeof(D2DifficultyLevelsTxt));
 #define NUM_DIFFICULTY_LEVELS 3
 	D2_ASSERT(sgptDataTables->nDifficultyLevelsTxtRecordCount == NUM_DIFFICULTY_LEVELS);
 }

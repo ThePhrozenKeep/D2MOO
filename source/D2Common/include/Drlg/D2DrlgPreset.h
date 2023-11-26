@@ -4,6 +4,7 @@
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 #include <Path/Path.h>
+#include <Archive.h>
 
 struct D2LvlPrestTxt;
 
@@ -91,9 +92,9 @@ D2COMMON_DLL_DECL int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
 //D2Common.0x6FD859E0 (#11223)
 D2COMMON_DLL_DECL int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t nAct, int nUnitId);
 //D2Common.0x6FD85A10
-void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName);
+void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hArchive, const char* szFileName);
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, const char* szFile);
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, HD2ARCHIVE hArchive, const char* szFile);
 //D2Common.0x6FD86190
 void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile);
 //D2Common.0x6FD86310

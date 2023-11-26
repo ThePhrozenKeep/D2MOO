@@ -3,6 +3,7 @@
 #include "CommonDefinitions.h"
 #include <D2Seed.h>
 #include "D2DrlgDrlgVer.h"
+#include <Archive.h>
 
 #pragma pack(1)
 struct D2TileLibraryEntryStrc; // From D2CMP
@@ -269,7 +270,7 @@ struct D2DrlgStrc
 {
 	D2DrlgLevelStrc* pLevel;				//0x00 Latest added level
 	void* pMempool;							//0x04
-	void* pDS1MemPool;						//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
+	HD2ARCHIVE hArchive;					//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
 	D2DrlgActStrc* pAct;					//0x0C
 	uint8_t nAct;							//0x10
 	uint8_t padding0x11[3];					//0x11
@@ -532,7 +533,7 @@ struct D2DrlgWarpStrc
 #pragma pack()
 
 //D2Common.0x6FD74120 (#10014)
-D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
+D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)
 D2COMMON_DLL_DECL void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD74440

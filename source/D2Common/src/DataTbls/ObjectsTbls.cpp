@@ -3,7 +3,7 @@
 
 
 //D2Common.0x6FD6FDF0
-void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadObjectsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -167,7 +167,7 @@ void __fastcall DATATBLS_LoadObjectsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 	
-	sgptDataTables->pObjectsTxt = (D2ObjectsTxt*)DATATBLS_CompileTxt(pMemPool, "objects", pTbl, &sgptDataTables->nObjectsTxtRecordCount, sizeof(D2ObjectsTxt));
+	sgptDataTables->pObjectsTxt = (D2ObjectsTxt*)DATATBLS_CompileTxt(hArchive, "objects", pTbl, &sgptDataTables->nObjectsTxtRecordCount, sizeof(D2ObjectsTxt));
 
 	for (int i = 0; i < sgptDataTables->nObjectsTxtRecordCount; ++i)
 	{
@@ -206,7 +206,7 @@ void __fastcall DATATBLS_UnloadObjGroupTxt()
 }
 
 //D2Common.0x6FD719A0
-void __fastcall DATATBLS_LoadObjGroupTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadObjGroupTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -239,7 +239,7 @@ void __fastcall DATATBLS_LoadObjGroupTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pObjGroupTxt = (D2ObjGroupTxt*)DATATBLS_CompileTxt(pMemPool, "objgroup", pTbl, &sgptDataTables->nObjGroupTxtRecordCount, sizeof(D2ObjGroupTxt));
+	sgptDataTables->pObjGroupTxt = (D2ObjGroupTxt*)DATATBLS_CompileTxt(hArchive, "objgroup", pTbl, &sgptDataTables->nObjGroupTxtRecordCount, sizeof(D2ObjGroupTxt));
 }
 
 //D2Common.0x6FD71E00 (#10627)
@@ -254,7 +254,7 @@ D2ObjGroupTxt* __stdcall DATATBLS_GetObjGroupTxtRecord(int nId)
 }
 
 //D2Common.0x6FD71E30
-void __fastcall DATATBLS_LoadShrinesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadShrinesTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -271,7 +271,7 @@ void __fastcall DATATBLS_LoadShrinesTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pShrinesTxt = (D2ShrinesTxt*)DATATBLS_CompileTxt(pMemPool, "shrines", pTbl, &sgptDataTables->nShrinesTxtRecordCount, sizeof(D2ShrinesTxt));
+	sgptDataTables->pShrinesTxt = (D2ShrinesTxt*)DATATBLS_CompileTxt(hArchive, "shrines", pTbl, &sgptDataTables->nShrinesTxtRecordCount, sizeof(D2ShrinesTxt));
 }
 
 //D2Common.0x6FD72000 (#10624)

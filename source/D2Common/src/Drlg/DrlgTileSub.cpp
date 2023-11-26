@@ -39,7 +39,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 
 	while (pLvlSubTxtRecord->dwType == a1->nLvlSubId)
 	{
-		DRLGTILESUB_InitializeDrlgFile(a1->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
+		DRLGTILESUB_InitializeDrlgFile(a1->pLevel->pDrlg->hArchive, pLvlSubTxtRecord);
 
 		if (pLvlSubTxtRecord->pDrlgFile->nSubstGroups > 0)
 		{
@@ -304,7 +304,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 		{
 			if (nThemeFlag & 1)
 			{
-				DRLGTILESUB_InitializeDrlgFile(a1->pDrlgRoom->pLevel->pDrlg->pDS1MemPool, pLvlSubTxtRecord);
+				DRLGTILESUB_InitializeDrlgFile(a1->pDrlgRoom->pLevel->pDrlg->hArchive, pLvlSubTxtRecord);
 
 				if (pLvlSubTxtRecord->dwCheckAll)
 				{
@@ -615,7 +615,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 }
 
 //D2Common.0x6FD8B640
-void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvlSubTxtRecord)
+void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt* pLvlSubTxtRecord)
 {
 	D2DrlgFileStrc** ppDrlgFile = NULL;
 	D2DrlgCoordStrc pDrlgCoord = {};
@@ -624,7 +624,7 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvl
 
 	if (!pLvlSubTxtRecord->pDrlgFile)
 	{
-		DRLGPRESET_LoadDrlgFile(ppDrlgFile, pMemPool, pLvlSubTxtRecord->szFile);
+		DRLGPRESET_LoadDrlgFile(ppDrlgFile, hArchive, pLvlSubTxtRecord->szFile);
 
 		pDrlgCoord.nPosX = 0;
 		pDrlgCoord.nPosY = 0;

@@ -129,9 +129,9 @@ static void SkipInt32s(int32_t*& pData, uint32_t nbToSkip)
 }
 
 //D2Common.0x6FD85A10
-void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName)
+void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hArchive, const char* szFileName)
 {
-	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, NULL);
+	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFileName, NULL);
 	pDrlgFile->pDS1File = pDS1File;
 	pDrlgFile->nWidth = pDS1File->nWidth;
 	pDrlgFile->nHeight = pDS1File->nHeight;
@@ -480,7 +480,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPoo
 }
 
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, const char* szFile)
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, HD2ARCHIVE hArchive, const char* szFile)
 {
 	if (gpLvlSubTypeFilesCriticalSection)
 	{
@@ -511,7 +511,7 @@ void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemP
 		pLevelFile->pNext = gpLevelFilesList_6FDEA700;
 		gpLevelFilesList_6FDEA700 = pLevelFile;
 
-		DRLGPRESET_ParseDS1File(*ppDrlgFile, pMemPool, szFile);
+		DRLGPRESET_ParseDS1File(*ppDrlgFile, hArchive, szFile);
 	}
 
 	if (gpLvlSubTypeFilesCriticalSection)
@@ -785,7 +785,7 @@ void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2DrlgRoomStrc* pDrlgRoom)
 	void* pDrlgMemPool = pDrlgRoom->pLevel->pDrlg->pMempool;
 	if (!pMazeMap->pFile)
 	{
-		DRLGPRESET_LoadDrlgFile(&pMazeMap->pFile, pDrlgRoom->pLevel->pDrlg->pDS1MemPool, pMazeMap->pLvlPrestTxtRecord->szFile[pMazeMap->nPickedFile]);
+		DRLGPRESET_LoadDrlgFile(&pMazeMap->pFile, pDrlgRoom->pLevel->pDrlg->hArchive, pMazeMap->pLvlPrestTxtRecord->szFile[pMazeMap->nPickedFile]);
 		DRLGPRESET_AddPresetUnitToDrlgMap(pDrlgMemPool, pMazeMap, &pDrlgRoom->pSeed);
 	}
 
@@ -1310,7 +1310,7 @@ void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridSt
 
 	if (pDrlgMap->pLvlPrestTxtRecord->dwScan || nPresetTxtRecordNumberPops)
 	{
-		DRLGPRESET_LoadDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->pDS1MemPool, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
+		DRLGPRESET_LoadDrlgFile(&pDrlgMap->pFile, pLevel->pDrlg->hArchive, pDrlgMap->pLvlPrestTxtRecord->szFile[pDrlgMap->nPickedFile]);
 
 		DRLGPRESET_AddPresetUnitToDrlgMap(pLevel->pDrlg->pMempool, pDrlgMap, &pLevel->pSeed);
 

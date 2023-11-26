@@ -1294,7 +1294,7 @@ void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int nSeqFrameP
 }
 
 //D2Common.0x6FD6F050
-void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadMonSeqTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1307,7 +1307,7 @@ void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pMonSeqLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pMonSeqTxt = (D2MonSeqTxt*)DATATBLS_CompileTxt(pMemPool, "monseq", pTbl, &sgptDataTables->nMonSeqTxtRecordCount, sizeof(D2MonSeqTxt));
+	sgptDataTables->pMonSeqTxt = (D2MonSeqTxt*)DATATBLS_CompileTxt(hArchive, "monseq", pTbl, &sgptDataTables->nMonSeqTxtRecordCount, sizeof(D2MonSeqTxt));
 
 	if (sgptDataTables->nMonSeqTxtRecordCount > 0)
 	{

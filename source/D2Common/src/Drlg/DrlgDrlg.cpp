@@ -20,14 +20,14 @@ static_assert(DRLGROOMFLAG_SUBSHRINE_ROW1 == (1 << DRLGROOMFLAG_SUBSHRINE_ROWS_F
 static_assert(DRLGROOMFLAG_HAS_WAYPOINT == (1 << DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT), "Waypoint first bit must match of DRLGROOMFLAG_HAS_WAYPOINT");
 
 //D2Common.0x6FD74120 (#10014)
-D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
+D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
 	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_POOL(pAct->pMemPool, D2DrlgStrc);
 
 	pDrlg->pAct = pAct;
 	pDrlg->pMempool = pAct->pMemPool;
-	D2_ASSERT(pDS1MemPool == nullptr);
-	pDrlg->pDS1MemPool = pDS1MemPool; // Always nullptr in the game
+	D2_ASSERT(hArchive == nullptr);
+	pDrlg->hArchive = hArchive; // Always nullptr in the game
 	pDrlg->nAct = nActNo;
 
 	SEED_InitLowSeed(&pDrlg->pSeed, nInitSeed);
