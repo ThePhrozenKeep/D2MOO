@@ -37,7 +37,11 @@
 
 CRITICAL_SECTION gClientListLock_6FD447D0;
 CRITICAL_SECTION gSrvClientListByNameLock_6FD443B8;
+//1.10f: 0x6FD447E8
+//1.13c: 0x6FD31C18
 BOOL gbClientListInitialized_6FD447E8;
+//1.10f: D2Game.0x6FD43FB8
+//1.13c: D2Game.0x6FD307B8
 D2ClientStrc* gpClientList_6FD43FB8[256];
 D2ClientStrc* gpClientListByName_6FD443D0[256];
 
@@ -446,7 +450,8 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     return 0;
 }
 
-//D2Game.0x6FC325E0
+//1.10f: D2Game.0x6FC325E0
+//1.13c: D2Game.0x6FC6A9B0
 D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)

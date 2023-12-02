@@ -423,7 +423,8 @@ int32_t __fastcall sub_6FC7FBB0(D2UnitStrc* pPlayer)
     return 0;
 }
 
-//D2Game.0x6FC7FBD0
+//1.10f: D2Game.0x6FC7FBD0
+//1.13c: D2Game.0x6FC99210
 D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit->pInventory)

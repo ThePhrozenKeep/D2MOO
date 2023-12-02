@@ -249,7 +249,8 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 //D2Game.0x6FC32260
 int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
-//D2Game.0x6FC325E0
+//1.10f: D2Game.0x6FC325E0
+//1.13c: D2Game.0x6FC6A9B0
 D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9);
 //D2Game.0x6FC327E0
 void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame);
