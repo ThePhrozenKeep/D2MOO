@@ -2800,7 +2800,7 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 }
 
 //D2Game.0x6FC3A490 (#10016)
-int32_t __stdcall D2Game_10016(uint16_t nGameId)
+int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 {
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
