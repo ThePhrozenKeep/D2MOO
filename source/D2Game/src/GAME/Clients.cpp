@@ -1826,39 +1826,46 @@ D2ClientPlayerDataStrc* __fastcall CLIENTS_GetClientPlayerData(D2ClientStrc* pCl
     return &pClient->clientPlayerData;
 }
 
+static const uint32_t kWarpAttemptExpirationFrameCount = 90 * DEFAULT_FRAMES_PER_SECOND;
+
+static bool IsWarpAttemptToBeConsideredForDelay(D2GameStrc* pGame, int32_t nLastWarpFrame)
+{
+	return nLastWarpFrame != 0
+		&& (uint32_t)(pGame->dwGameFrame - nLastWarpFrame) <= kWarpAttemptExpirationFrameCount;
+}
+
 //D2Game.0x6FC34700
-void __fastcall sub_6FC34700(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
-    {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
-        {
-            pClient->unk0x3C0[i] = pGame->dwGameFrame;
-            return;
-        }
-    }
+	for (int32_t& rLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
+	{
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, rLastWarpFrameEntry))
+		{
+			rLastWarpFrameEntry = pGame->dwGameFrame;
+		}
+	}
 }
 
 //D2Game.0x6FC347A0
-int32_t __fastcall sub_6FC347A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (const int32_t nLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
     {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, nLastWarpFrameEntry))
         {
-            return 0;
+            return FALSE;
         }
     }
-
-    return 1;
+	// If we had 5 recent warps, delay.
+    return TRUE;
 }

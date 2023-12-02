@@ -201,7 +201,7 @@ struct D2ClientStrc
 	D2ClientUnitUpdateStrc unitUpdate[CLIENTS_MAX_UPDATES]; //0x1CC
 	uint8_t pad0x3BB;							//0x3BB
 	uint32_t nUnitUpdateIndex;					//0x3BC
-	int32_t unk0x3C0[5];						//0x3C0
+	int32_t aLastWarpAttemptsFrame[5];			//0x3C0
 	uint32_t dwFlags;							//0x3D4 D2ClientFlagsEx
 	uint32_t dwLastPacketTick;					//0x3D8
 	D2ClientKeySkillStrc HotkeySkills[16];		//0x3DC
@@ -398,6 +398,6 @@ void __fastcall D2GAME_SetClientsRealmId_6FC346C0(D2ClientStrc* pClient, D2Clien
 //D2Game.0x6FC346D0
 D2ClientPlayerDataStrc* __fastcall CLIENTS_GetClientPlayerData(D2ClientStrc* pClient);
 //D2Game.0x6FC34700
-void __fastcall sub_6FC34700(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC347A0
-int32_t __fastcall sub_6FC347A0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit);
