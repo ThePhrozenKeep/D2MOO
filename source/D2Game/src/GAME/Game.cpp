@@ -1163,12 +1163,15 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, 
 }
 
 //D2Game.0x6FC37450
+_Requires_lock_held_(*pGame->lpCriticalSection)
+_Releases_lock_(*pGame->lpCriticalSection)
 void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
 {
     if (pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvFreeGame:           freeing game %d '%s'", pGame->nServerToken, pGame->szGameName);
     }
+	_Analysis_assume_(pGame != nullptr);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
     
@@ -1672,11 +1675,11 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.field_0x10f = tGameServerInfoEx.field_0xb0;
                 tPacket.field_0x10b = tGameServerInfoEx.field_0xac;
                 tPacket.field_0x117 = tGameServerInfoEx.dwords0xBC[0];
-                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - gnNumAdminConnections_6FD45838;
+                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838,0,0);
                 tPacket.tServerInfo.field_0xac = tGameServerInfoEx.field_0xac + tGameServerInfoEx.field_0xb0;
                 tPacket.tServerInfo.field_0xb0 = tGameServerInfoEx.field_0xb4;
                 tPacket.tServerInfo.field_0xb4 = tGameServerInfoEx.field_0xb8
-                    - gnNumAdminConnections_6FD45838
+                    - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838, 0, 0)
                     + tGameServerInfoEx.dwords0xBC[0];
                 tPacket.tServerInfo.field_0xb8 = tGameServerInfoEx.dwords0xBC[1];
                 tPacket.field_0xbd = tGameServerInfoEx.dwords0xD8;
@@ -2451,6 +2454,8 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
 }
 
 //D2Game.0x6FC397A0
+_Acquires_lock_(*(return->lpCriticalSection))
+_Acquires_lock_(return->lpCriticalSection)
 D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 {
     if (!gpGameDataTbl_6FD45818)
@@ -2958,7 +2963,8 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         // Note: eType is not D2C_UnitTypes
-        D2UnitStrc** pUnitList = eType <= 4 ? pGame->pUnitList[eType] : nullptr;
+		D2_ASSERT(eType <= 4); // Original game uses a switch, and would use nullptr if not true. Then access it which would result in a crash, so assert instead (for static analysis).
+        D2UnitStrc** pUnitList = pGame->pUnitList[eType];
         for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
         {
             for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
