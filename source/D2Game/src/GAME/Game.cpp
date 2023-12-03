@@ -2820,10 +2820,10 @@ int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
     int32_t nUnits = 0;
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
-        for (int32_t i = 0; i < 128; ++i)
+		D2UnitStrc** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
+		for (int32_t i = 0; i < 128; ++i)
         {
-            D2UnitStrc* pFirstUnit = pGame->pUnitList[0][i];
-            if (pFirstUnit)
+            if (D2UnitStrc* pFirstUnit = pUnitLists[i])
             {
                 ++nUnits;
                 for (D2UnitStrc* pUnit = SUNIT_GetNextUnitFromList(pFirstUnit); pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
@@ -2840,16 +2840,17 @@ int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 }
 
 //D2Game.0x6FC3A5A0 (#10017)
-int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount)
+int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount)
 {
     const int32_t nGUID = sub_6FC35840(nGameId);
 
     int32_t nUnitInfoCount = 0;
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
+		D2UnitStrc** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
         for (int32_t i = 0; nUnitInfoCount < nMaxCount && i < 128; ++i)
         {
-            for (D2UnitStrc* j = pGame->pUnitList[0][i]; j; j = SUNIT_GetNextUnitFromList(j))
+            for (D2UnitStrc* j = pUnitLists[i]; j; j = SUNIT_GetNextUnitFromList(j))
             {
                 if (nUnitInfoCount >= nMaxCount)
                 {
@@ -2991,7 +2992,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
                     {
                         pNewNode->nClassId = nUnitClassId;
                         pNewNode->nCount = 1;
-                        pNewNode->dwUnk0x08 = 0;
+                        pNewNode->nDefaultCount = 0;
                         pNewNode->pNext = pUnitDescriptionsList->pNext;
                         pUnitDescriptionsList->pNext = pNewNode;
                     }

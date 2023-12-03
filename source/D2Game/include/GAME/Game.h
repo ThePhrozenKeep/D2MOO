@@ -219,7 +219,16 @@ struct D2GameStatisticsStrc
 
 extern D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 
-
+// Helper function: Missile and items are inverted on purpose here, this is like this in the game
+inline int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
+{
+	switch (nUnitType)
+	{
+	case UNIT_MISSILE: return 4;
+	case UNIT_ITEM: return 3;
+	default: return (int)nUnitType;
+	}
+}
 
 //D2Game.0x6FC356D0
 int32_t __stdcall sub_6FC356D0(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5);
@@ -362,7 +371,7 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 //D2Game.0x6FC3A490
 int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId);
 //D2Game.0x6FC3A5A0
-int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
+int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
 //D2Game.0x6FC3A6F0
 int32_t __stdcall GAME_ReturnArgument(int32_t a1);
 //D2Game.0x6FC3A700

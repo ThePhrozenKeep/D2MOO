@@ -16,7 +16,7 @@ EXPORTS
 	D2Game_10014														@10014
 	GAME_GetGameServerTokens											@10015
 	GAME_GetPlayerUnitsCount											@10016
-	D2Game_10017														@10017
+	GAME_GetPlayerUnitsInfo												@10017
 	D2Game_10018														@10018
 	GAME_GetUnitsDescriptions											@10019
 	GAME_GetStatistics													@10020
