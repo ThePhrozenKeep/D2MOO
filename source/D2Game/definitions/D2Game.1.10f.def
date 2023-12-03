@@ -5,7 +5,7 @@ EXPORTS
 	GAME_ProcessNetworkMessages											@10003
 	GAME_UpdateGamesProgress											@10004
 	GAME_UpdateClients													@10005
-	D2Game_10006														@10006
+	GAME_CloseAllGames													@10006
 	GAME_ReceiveDatabaseCharacter										@10007
 	D2Game_10008														@10008
 	GAME_SetGlobalAct													@10009

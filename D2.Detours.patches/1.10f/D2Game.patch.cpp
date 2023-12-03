@@ -26,7 +26,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ProcessNetworkMessages														@10003
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateGamesProgress														@10004
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateClients														@10005
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10006														@10006
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_CloseAllGames												@10006
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ReceiveDatabaseCharacter										@10007
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10008														@10008
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetGlobalAct													@10009

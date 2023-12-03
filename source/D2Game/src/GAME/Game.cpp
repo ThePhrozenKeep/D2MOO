@@ -2504,7 +2504,7 @@ int32_t __fastcall sub_6FC399A0(int32_t nClientId, D2GSPacketClt6B* pPacket)
 }
 
 //D2Game.0x6FC399C0 (#10006)
-void __stdcall D2Game_10006()
+void __stdcall GAME_CloseAllGames()
 {
     TASK_FreeAllQueueSlots();
 

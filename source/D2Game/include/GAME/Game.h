@@ -349,7 +349,7 @@ void __fastcall sub_6FC39870(int32_t nClientId);
 //D2Game.0x6FC399A0
 int32_t __fastcall sub_6FC399A0(int32_t nClientId, D2GSPacketClt6B* pPacket);
 //D2Game.0x6FC399C0
-void __stdcall D2Game_10006();
+void __stdcall GAME_CloseAllGames();
 //D2Game.0x6FC39B50 (#10012)
 int32_t __fastcall GAME_GetGamesCount();
 //D2Game.0x6FC39B70
