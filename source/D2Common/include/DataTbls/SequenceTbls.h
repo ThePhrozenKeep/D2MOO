@@ -52,6 +52,6 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_ComputeSequenceAnimation(D2MonSeqTxt* 
 //D2Common.0x6FD72990 (#10686)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_GetSequenceEvent(D2MonSeqTxt* pMonSeqTxt, int nSeqFramePoint, int* pEvent);
 //D2Common.0x6FD6F050
-void __fastcall DATATBLS_LoadMonSeqTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadMonSeqTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6F200 (#11262)
 D2COMMON_DLL_DECL D2SeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence);

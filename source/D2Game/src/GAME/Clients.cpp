@@ -37,7 +37,11 @@
 
 CRITICAL_SECTION gClientListLock_6FD447D0;
 CRITICAL_SECTION gSrvClientListByNameLock_6FD443B8;
+//1.10f: 0x6FD447E8
+//1.13c: 0x6FD31C18
 BOOL gbClientListInitialized_6FD447E8;
+//1.10f: D2Game.0x6FD43FB8
+//1.13c: D2Game.0x6FD307B8
 D2ClientStrc* gpClientList_6FD43FB8[256];
 D2ClientStrc* gpClientListByName_6FD443D0[256];
 
@@ -446,7 +450,8 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     return 0;
 }
 
-//D2Game.0x6FC325E0
+//1.10f: D2Game.0x6FC325E0
+//1.13c: D2Game.0x6FC6A9B0
 D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nDatabaseCharacterId, uint32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
@@ -1572,8 +1577,8 @@ void __fastcall CLIENTS_FreeSaveHeader(D2ClientStrc* pClient)
     }
 
     pClient->nSaveHeaderSize = 0;
-    pClient->unk0x184[1] = 0;
-    pClient->unk0x184[0] = 0;
+    pClient->nSaveHeaderDataSentBytes = 0;
+    pClient->unk0x184 = 0;
     pClient->dwFlags &= ~CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1582,8 +1587,8 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    pClient->unk0x184[0] = 5;
-    pClient->unk0x184[1] = 0;
+    pClient->unk0x184 = 5;
+    pClient->nSaveHeaderDataSentBytes = 0;
     pClient->dwFlags |= CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1826,39 +1831,46 @@ D2ClientPlayerDataStrc* __fastcall CLIENTS_GetClientPlayerData(D2ClientStrc* pCl
     return &pClient->clientPlayerData;
 }
 
+static const uint32_t kWarpAttemptExpirationFrameCount = 90 * DEFAULT_FRAMES_PER_SECOND;
+
+static bool IsWarpAttemptToBeConsideredForDelay(D2GameStrc* pGame, int32_t nLastWarpFrame)
+{
+	return nLastWarpFrame != 0
+		&& (uint32_t)(pGame->dwGameFrame - nLastWarpFrame) <= kWarpAttemptExpirationFrameCount;
+}
+
 //D2Game.0x6FC34700
-void __fastcall sub_6FC34700(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
-    {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
-        {
-            pClient->unk0x3C0[i] = pGame->dwGameFrame;
-            return;
-        }
-    }
+	for (int32_t& rLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
+	{
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, rLastWarpFrameEntry))
+		{
+			rLastWarpFrameEntry = pGame->dwGameFrame;
+		}
+	}
 }
 
 //D2Game.0x6FC347A0
-int32_t __fastcall sub_6FC347A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (const int32_t nLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
     {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, nLastWarpFrameEntry))
         {
-            return 0;
+            return FALSE;
         }
     }
-
-    return 1;
+	// If we had 5 recent warps, delay.
+    return TRUE;
 }

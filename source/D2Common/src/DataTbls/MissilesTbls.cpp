@@ -144,7 +144,7 @@ void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffse
 }
 
 //D2Common.0x6FD63180
-void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadMissilesTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -298,7 +298,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pMissilesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pMissilesTxt = (D2MissilesTxt*)DATATBLS_CompileTxt(pMemPool, "missiles", pTbl, &sgptDataTables->nMissilesTxtRecordCount, sizeof(D2MissilesTxt));
+	sgptDataTables->pMissilesTxt = (D2MissilesTxt*)DATATBLS_CompileTxt(hArchive, "missiles", pTbl, &sgptDataTables->nMissilesTxtRecordCount, sizeof(D2MissilesTxt));
 
 	for (int i = 0; i < sgptDataTables->nMissilesTxtRecordCount; ++i)
 	{
@@ -317,7 +317,7 @@ void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool)
 		}
 	}
 
-	DATATBLS_GetBinFileHandle(pMemPool, "misscode", (void**)&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx);
+	DATATBLS_GetBinFileHandle(hArchive, "misscode", (void**)&sgptDataTables->pMissCode, (int*)&sgptDataTables->nMissCodeSize, &sgptDataTables->nMissCodeSizeEx);
 }
 
 //D2Common.0x6FD64B80

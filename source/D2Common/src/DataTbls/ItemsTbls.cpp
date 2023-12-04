@@ -105,7 +105,7 @@ void __fastcall DATATBLS_ItemCalcLinker(char* pSrc, void* pRecord, int nOffset, 
 }
 
 //D2Common.0x6FD55280
-void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadItemsTxt(HD2ARCHIVE hArchive)
 {
 	D2ItemsTxt* pWeapons = NULL;
 	D2ItemsTxt* pArmor = NULL;
@@ -313,9 +313,9 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 
 
 	sgptDataTables->pItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	pWeapons = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "weapons", pTbl, &sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount, sizeof(D2ItemsTxt));
-	pArmor = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "armor", pTbl, &sgptDataTables->pItemDataTables.nArmorTxtRecordCount, sizeof(D2ItemsTxt));
-	pMisc = (D2ItemsTxt*)DATATBLS_CompileTxt(pMemPool, "misc", pTbl, &sgptDataTables->pItemDataTables.nMiscTxtRecordCount, sizeof(D2ItemsTxt));
+	pWeapons = (D2ItemsTxt*)DATATBLS_CompileTxt(hArchive, "weapons", pTbl, &sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount, sizeof(D2ItemsTxt));
+	pArmor = (D2ItemsTxt*)DATATBLS_CompileTxt(hArchive, "armor", pTbl, &sgptDataTables->pItemDataTables.nArmorTxtRecordCount, sizeof(D2ItemsTxt));
+	pMisc = (D2ItemsTxt*)DATATBLS_CompileTxt(hArchive, "misc", pTbl, &sgptDataTables->pItemDataTables.nMiscTxtRecordCount, sizeof(D2ItemsTxt));
 
 	sgptDataTables->pItemDataTables.nItemsTxtRecordCount = sgptDataTables->pItemDataTables.nWeaponsTxtRecordCount + sgptDataTables->pItemDataTables.nMiscTxtRecordCount + sgptDataTables->pItemDataTables.nArmorTxtRecordCount;
 	pItems = (D2ItemsTxt*)D2_ALLOC_POOL(nullptr, sizeof(D2ItemsTxt) * sgptDataTables->pItemDataTables.nItemsTxtRecordCount);
@@ -334,7 +334,7 @@ void __fastcall DATATBLS_LoadItemsTxt(void* pMemPool)
 	DATATBLS_UnloadBin(pArmor);
 	DATATBLS_UnloadBin(pMisc);
 
-	DATATBLS_GetBinFileHandle(pMemPool, "itemscode", (void**)&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx);
+	DATATBLS_GetBinFileHandle(hArchive, "itemscode", (void**)&sgptDataTables->pItemsCode, (int*)&sgptDataTables->nItemsCodeSize, &sgptDataTables->nItemsCodeSizeEx);
 
 	if (!sgptDataTables->bCompileTxt)
 	{
@@ -484,7 +484,7 @@ void __fastcall DATATBLS_ItemParamLinker(char* pSrc, void* pRecord, int nOffset,
 }
 
 //D2Common.0x6FD57820
-void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 
@@ -541,9 +541,9 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	pMagicSuffix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "magicsuffix", pTbl, &nSuffixRecords, sizeof(D2MagicAffixTxt));
-	pMagicPrefix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "magicprefix", pTbl, &nPrefixRecords, sizeof(D2MagicAffixTxt));
-	pAutoMagic = (D2MagicAffixTxt*)DATATBLS_CompileTxt(pMemPool, "automagic", pTbl, &nAutoMagicRecords, sizeof(D2MagicAffixTxt));
+	pMagicSuffix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(hArchive, "magicsuffix", pTbl, &nSuffixRecords, sizeof(D2MagicAffixTxt));
+	pMagicPrefix = (D2MagicAffixTxt*)DATATBLS_CompileTxt(hArchive, "magicprefix", pTbl, &nPrefixRecords, sizeof(D2MagicAffixTxt));
+	pAutoMagic = (D2MagicAffixTxt*)DATATBLS_CompileTxt(hArchive, "automagic", pTbl, &nAutoMagicRecords, sizeof(D2MagicAffixTxt));
 
 	sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount = nSuffixRecords + nPrefixRecords + nAutoMagicRecords;
 	sgptDataTables->pMagicAffixDataTables.pMagicAffixTxt = (D2MagicAffixTxt *)D2_ALLOC_POOL(nullptr, sizeof(D2MagicAffixTxt) * sgptDataTables->pMagicAffixDataTables.nMagicAffixTxtRecordCount);
@@ -598,7 +598,7 @@ D2MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex)
 }
 
 //D2Common.0x6FD58110
-void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 
@@ -626,8 +626,8 @@ void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	pRareSuffix = (D2RareAffixTxt*)DATATBLS_CompileTxt(pMemPool, "raresuffix", pTbl, &nSuffixRecords, sizeof(D2RareAffixTxt));
-	pRarePrefix = (D2RareAffixTxt*)DATATBLS_CompileTxt(pMemPool, "rareprefix", pTbl, &nPrefixRecords, sizeof(D2RareAffixTxt));
+	pRareSuffix = (D2RareAffixTxt*)DATATBLS_CompileTxt(hArchive, "raresuffix", pTbl, &nSuffixRecords, sizeof(D2RareAffixTxt));
+	pRarePrefix = (D2RareAffixTxt*)DATATBLS_CompileTxt(hArchive, "rareprefix", pTbl, &nPrefixRecords, sizeof(D2RareAffixTxt));
 
 	sgptDataTables->pRareAffixDataTables.nRareAffixTxtRecordCount = nPrefixRecords + nSuffixRecords;
 
@@ -678,7 +678,7 @@ D2RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId)
 }
 
 //D2Common.0x6FD584E0
-void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadUniqueItemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 
@@ -755,7 +755,7 @@ void __fastcall DATATBLS_LoadUniqueItemsTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pUniqueItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pUniqueItemsTxt = (D2UniqueItemsTxt*)DATATBLS_CompileTxt(pMemPool, "uniqueitems", pTbl, &sgptDataTables->nUniqueItemsTxtRecordCount, sizeof(D2UniqueItemsTxt));
+	sgptDataTables->pUniqueItemsTxt = (D2UniqueItemsTxt*)DATATBLS_CompileTxt(hArchive, "uniqueitems", pTbl, &sgptDataTables->nUniqueItemsTxtRecordCount, sizeof(D2UniqueItemsTxt));
 
 	if (sgptDataTables->nUniqueItemsTxtRecordCount >= 32767)
 	{
@@ -784,7 +784,7 @@ void __fastcall DATATBLS_UnloadUniqueItemsTxt()
 }
 
 //D2Common.0x6FD59140
-void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadSets_SetItemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 	short nSetId = 0;
@@ -959,7 +959,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pSetsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pSetsTxt = (D2SetsTxt*)DATATBLS_CompileTxt(pMemPool, "sets", pSetsTbl, &sgptDataTables->nSetsTxtRecordCount, sizeof(D2SetsTxt));
+	sgptDataTables->pSetsTxt = (D2SetsTxt*)DATATBLS_CompileTxt(hArchive, "sets", pSetsTbl, &sgptDataTables->nSetsTxtRecordCount, sizeof(D2SetsTxt));
 
 	if (sgptDataTables->nSetsTxtRecordCount >= 32767)
 	{
@@ -967,7 +967,7 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(void* pMemPool)
 	}
 
 	sgptDataTables->pSetItemsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pSetItemsTxt = (D2SetItemsTxt*)DATATBLS_CompileTxt(pMemPool, "setitems", pSetItemsTbl, &sgptDataTables->nSetItemsTxtRecordCount, sizeof(D2SetItemsTxt));
+	sgptDataTables->pSetItemsTxt = (D2SetItemsTxt*)DATATBLS_CompileTxt(hArchive, "setitems", pSetItemsTbl, &sgptDataTables->nSetItemsTxtRecordCount, sizeof(D2SetItemsTxt));
 
 	if (sgptDataTables->nSetItemsTxtRecordCount >= 32767)
 	{
@@ -1044,7 +1044,7 @@ D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId)
 }
 
 //D2Common.0x6FD5AE40
-void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadQualityItemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 
@@ -1074,7 +1074,7 @@ void __fastcall DATATBLS_LoadQualityItemsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pQualityItemDataTables.pQualityItemsTxt = (D2QualityItemsTxt*)DATATBLS_CompileTxt(pMemPool, "qualityitems", pTbl, &sgptDataTables->pQualityItemDataTables.nQualityItemsTxtRecordCount, sizeof(D2QualityItemsTxt));
+	sgptDataTables->pQualityItemDataTables.pQualityItemsTxt = (D2QualityItemsTxt*)DATATBLS_CompileTxt(hArchive, "qualityitems", pTbl, &sgptDataTables->pQualityItemDataTables.nQualityItemsTxtRecordCount, sizeof(D2QualityItemsTxt));
 
 	for (int i = 0; i < sgptDataTables->pQualityItemDataTables.nQualityItemsTxtRecordCount; ++i)
 	{
@@ -1118,7 +1118,7 @@ D2QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex)
 }
 
 //D2Common.0x6FD5B2F0
-void __fastcall DATATBLS_LoadGemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadGemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 	int nItemCode = 0;
@@ -1170,7 +1170,7 @@ void __fastcall DATATBLS_LoadGemsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pGemDataTables.pGemsTxt = (D2GemsTxt*)DATATBLS_CompileTxt(pMemPool, "gems", pTbl, &sgptDataTables->pGemDataTables.nGemsTxtRecordCount, sizeof(D2GemsTxt));
+	sgptDataTables->pGemDataTables.pGemsTxt = (D2GemsTxt*)DATATBLS_CompileTxt(hArchive, "gems", pTbl, &sgptDataTables->pGemDataTables.nGemsTxtRecordCount, sizeof(D2GemsTxt));
 
 
 	for (int i = 0; i < sgptDataTables->pGemDataTables.nGemsTxtRecordCount; ++i)
@@ -1222,7 +1222,7 @@ D2GemsTxt* __stdcall DATATBLS_GetGemsTxtRecord(int nGemId)
 }
 
 //D2Common.0x6FD5BB70
-void __fastcall DATATBLS_LoadBooksTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadBooksTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1238,7 +1238,7 @@ void __fastcall DATATBLS_LoadBooksTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pBookDataTables.pBooksTxt = (D2BooksTxt*)DATATBLS_CompileTxt(pMemPool, "books", pTbl, &sgptDataTables->pBookDataTables.nBooksTxtRecordCount, sizeof(D2BooksTxt));
+	sgptDataTables->pBookDataTables.pBooksTxt = (D2BooksTxt*)DATATBLS_CompileTxt(hArchive, "books", pTbl, &sgptDataTables->pBookDataTables.nBooksTxtRecordCount, sizeof(D2BooksTxt));
 }
 
 //D2Common.0x6FD5BD10
@@ -1270,7 +1270,7 @@ D2BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId)
 }
 
 //D2Common.0x6FD5BDA0
-void __fastcall DATATBLS_LoadLowQualityItemsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadLowQualityItemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =
@@ -1279,7 +1279,7 @@ void __fastcall DATATBLS_LoadLowQualityItemsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLowQualityItemDataTables.pLowQualityItemsTxt = (D2LowQualityItemsTxt *)DATATBLS_CompileTxt(pMemPool, "lowqualityitems", pTbl, &sgptDataTables->pLowQualityItemDataTables.nLowQualityItemsTxtRecordCount, sizeof(D2LowQualityItemsTxt));
+	sgptDataTables->pLowQualityItemDataTables.pLowQualityItemsTxt = (D2LowQualityItemsTxt *)DATATBLS_CompileTxt(hArchive, "lowqualityitems", pTbl, &sgptDataTables->pLowQualityItemDataTables.nLowQualityItemsTxtRecordCount, sizeof(D2LowQualityItemsTxt));
 
 	for (int i = 0; i < sgptDataTables->pLowQualityItemDataTables.nLowQualityItemsTxtRecordCount; ++i)
 	{
@@ -1316,7 +1316,7 @@ D2LowQualityItemsTxt* __stdcall DATATBLS_GetLowQualityItemsTxtRecord(int nId)
 }
 
 //D2Common.0x6FD5BED0
-void __fastcall DATATBLS_LoadItemRatioTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadItemRatioTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1342,7 +1342,7 @@ void __fastcall DATATBLS_LoadItemRatioTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pItemRatioDataTables.pItemRatioTxt = (D2ItemRatioTxt*)DATATBLS_CompileTxt(pMemPool, "itemratio", pTbl, &sgptDataTables->pItemRatioDataTables.nItemRatioTxtRecordCount, sizeof(D2ItemRatioTxt));
+	sgptDataTables->pItemRatioDataTables.pItemRatioTxt = (D2ItemRatioTxt*)DATATBLS_CompileTxt(hArchive, "itemratio", pTbl, &sgptDataTables->pItemRatioDataTables.nItemRatioTxtRecordCount, sizeof(D2ItemRatioTxt));
 }
 
 //D2Common.0x6FD5C200
@@ -1413,7 +1413,7 @@ int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* 
 }
 
 //D2Common.0x6FD5C320
-void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 {
 	uint16_t nOpBase = 0;
 	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = {};
@@ -1475,7 +1475,7 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pItemStatCostLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pItemStatCostTxt = (D2ItemStatCostTxt*)DATATBLS_CompileTxt(pMemPool, "itemstatcost", pTbl, &sgptDataTables->nItemStatCostTxtRecordCount, sizeof(D2ItemStatCostTxt));
+	sgptDataTables->pItemStatCostTxt = (D2ItemStatCostTxt*)DATATBLS_CompileTxt(hArchive, "itemstatcost", pTbl, &sgptDataTables->nItemStatCostTxtRecordCount, sizeof(D2ItemStatCostTxt));
 
 #define MAX_STATS 511
 	D2_ASSERT(sgptDataTables->nItemStatCostTxtRecordCount <= MAX_STATS);
@@ -1624,7 +1624,7 @@ void __fastcall DATATBLS_UnloadItemStatCostTxt()
 }
 
 //D2Common.0x6FD5D0D0
-void __fastcall DATATBLS_LoadPropertiesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadPropertiesTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1661,7 +1661,7 @@ void __fastcall DATATBLS_LoadPropertiesTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pPropertiesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pPropertiesTxt = (D2PropertiesTxt*)DATATBLS_CompileTxt(pMemPool, "properties", pTbl, &sgptDataTables->nPropertiesTxtRecordCount, sizeof(D2PropertiesTxt));
+	sgptDataTables->pPropertiesTxt = (D2PropertiesTxt*)DATATBLS_CompileTxt(hArchive, "properties", pTbl, &sgptDataTables->nPropertiesTxtRecordCount, sizeof(D2PropertiesTxt));
 }
 
 //D2Common.0x6FD5D5E0
@@ -1672,7 +1672,7 @@ void __fastcall DATATBLS_UnloadPropertiesTxt()
 }
 
 //D2Common.0x6FD5D600
-void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadGambleTxt(HD2ARCHIVE hArchive)
 {
 	int nCounter = 0;
 	int nItemId = 0;
@@ -1684,7 +1684,7 @@ void __fastcall DATATBLS_LoadGambleTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	pGambleTxt = (D2GambleTxt*)DATATBLS_CompileTxt(pMemPool, "gamble", pTbl, &sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, sizeof(D2GambleTxt));
+	pGambleTxt = (D2GambleTxt*)DATATBLS_CompileTxt(hArchive, "gamble", pTbl, &sgptDataTables->pGambleDataTables.nGambleTxtRecordCount, sizeof(D2GambleTxt));
 
 	if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 	{
@@ -1831,7 +1831,7 @@ BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nIt
 }
 
 //D2Common.0x6FD5D8C0
-void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadItemTypesTxt(HD2ARCHIVE hArchive)
 {
 	uint32_t* pItemTypesNest = NULL;
 
@@ -1876,7 +1876,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(void* pMemPool)
 	};
 
 	sgptDataTables->pItemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pItemTypesTxt = (D2ItemTypesTxt*)DATATBLS_CompileTxt(pMemPool, "itemtypes", pTbl, &sgptDataTables->nItemTypesTxtRecordCount, sizeof(D2ItemTypesTxt));
+	sgptDataTables->pItemTypesTxt = (D2ItemTypesTxt*)DATATBLS_CompileTxt(hArchive, "itemtypes", pTbl, &sgptDataTables->nItemTypesTxtRecordCount, sizeof(D2ItemTypesTxt));
 
 	if (!sgptDataTables->bCompileTxt && DATATBLS_LoadFromBin)
 	{
@@ -1912,7 +1912,7 @@ void __fastcall DATATBLS_UnloadItemTypesTxt()
 }
 
 //D2Common.0x6FD5E020
-void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadRunesTxt(HD2ARCHIVE hArchive)
 {
 	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
@@ -1972,27 +1972,27 @@ void __fastcall DATATBLS_LoadRunesTxt(void* pMemPool)
 	sgptDataTables->pRunesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".txt");
-	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
+	if (ARCHIVE_OpenFile(hArchive, szPath, &pFileHandle, TRUE))
 	{
-		ARCHIVE_CloseFile(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(hArchive, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.txt in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".bin");
-	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
+	if (ARCHIVE_OpenFile(hArchive, szPath, &pFileHandle, TRUE))
 	{
-		ARCHIVE_CloseFile(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(hArchive, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.bin in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "runessrv", ".xls");
-	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
+	if (ARCHIVE_OpenFile(hArchive, szPath, &pFileHandle, TRUE))
 	{
-		ARCHIVE_CloseFile(pMemPool, pFileHandle);
+		ARCHIVE_CloseFile(hArchive, pFileHandle);
 		FOG_DisplayWarning("Found runessrv.xls in archive - This file should only be in server builds.", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pRuneDataTables.pRunesTxt = (D2RunesTxt*)DATATBLS_CompileTxt(pMemPool, "runes", pTbl, &sgptDataTables->pRuneDataTables.nRunesTxtRecordCount, sizeof(D2RunesTxt));
+	sgptDataTables->pRuneDataTables.pRunesTxt = (D2RunesTxt*)DATATBLS_CompileTxt(hArchive, "runes", pTbl, &sgptDataTables->pRuneDataTables.nRunesTxtRecordCount, sizeof(D2RunesTxt));
 
 	for (int i = 0; i < sgptDataTables->pRuneDataTables.nRunesTxtRecordCount; ++i)
 	{

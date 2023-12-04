@@ -50,7 +50,7 @@ struct D2OverlayTxt
 #pragma pack()
 
 //D2Common.0x6FD720A0
-void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadOverlayTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD72500
 void __fastcall DATATBLS_UnloadOverlayTxt();
 //D2Common.0x6FD72530 (#10674)

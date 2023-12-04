@@ -40,7 +40,7 @@
  * 1.13c: D2Lang.0x6FC10A8C
  * 1.14c: Game.0x00879A64
  */
-static void* gpMemPool = nullptr;
+static HD2ARCHIVE ghArchive = nullptr;
 
 /**
  * 1.00: D2Lang.0x100175F4
@@ -72,7 +72,7 @@ D2C_Language STRTABLE_GetLanguage()
 	}
 	gbTableLanguageInitialized = true;
 	// Read locale from file.
-	unsigned char* pBuffer = (unsigned char*) ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(gpMemPool, "data\\local\\use", nullptr);
+	unsigned char* pBuffer = (unsigned char*) ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(ghArchive, "data\\local\\use", nullptr);
 	gnTableLanguage = static_cast<D2C_Language>(*pBuffer);
 	D2_FREE(pBuffer);
 

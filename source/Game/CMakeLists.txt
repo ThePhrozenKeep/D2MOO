@@ -16,3 +16,4 @@ target_link_libraries(Game
 	D2Sound
 	D2MCPClient
 )
+set_target_properties(Game PROPERTIES OUTPUT_NAME Game.D2MOO)

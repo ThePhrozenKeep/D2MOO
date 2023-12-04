@@ -587,7 +587,7 @@ void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOff
 }
 
 //D2Common.0x6FD53030
-void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadCubeMainTxt(HD2ARCHIVE hArchive)
 {
 	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
@@ -701,18 +701,18 @@ void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool)
 	};
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");
-	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
+	if (ARCHIVE_OpenFile(hArchive, szPath, &pFileHandle, TRUE))
 	{
 		FOG_DisplayWarning("Found cubeserver.bin in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
 	wsprintfA(szPath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.txt");
-	if (ARCHIVE_OpenFile(pMemPool, szPath, &pFileHandle, TRUE))
+	if (ARCHIVE_OpenFile(hArchive, szPath, &pFileHandle, TRUE))
 	{
 		FOG_DisplayWarning("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(pMemPool, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));
+	sgptDataTables->pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(hArchive, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));
 }
 
 //D2Common.0x6FD54250

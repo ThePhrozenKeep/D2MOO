@@ -106,40 +106,42 @@ enum D2C_AsyncDataPriority
 
 enum D2C_AsyncDataFlags : uint32_t
 {
-	ASYNC_DATA_FLAGS_LOADED = 0x01,
+	ASYNC_DATA_FLAGS_LOADED                    = 0x1,
+	ASYNC_DATA_FLAGS_OWNS_BUFFER               = 0x2,
+	ASYNC_DATA_FLAGS_POSTPONED_PRIORITY_CHANGE = 0x8,
 
 	ASYNC_DATA_FLAGS_DEBUG_TAG      = 0x41737960,
 	ASYNC_DATA_FLAGS_DEBUG_TAG_MASK = 0xFFFFFFF0,
 };
 
-struct AsyncDataLoadFileCallback
+struct AsyncDataLoadFileCallback																			   // sizeof(0x1C)
 {
-	DWORD(__stdcall* callback)(int a1, int a3, int C);
-	DWORD userData[6];
+	DWORD(__stdcall* callback)(void* pFileData, size_t nDataLength, AsyncDataLoadFileCallback* pCallbackData); // 0x00
+	DWORD userData[4];																						   // 0x04
+	void* pData;																							   // 0x14
+	size_t nFileSize;																						   // 0x18
 };
 
-struct AsyncDataEventSlot;
-
-struct AsyncData
+struct AsyncData							 // sizeof(0x54)
 {
-	HSFILE hFile;
-	DWORD pMemPool;
-	OVERLAPPED tOverlapped;
-	AsyncDataLoadFileCallback ayncOpDesc;
-	AsyncDataEventSlot* pEventSlot;
-	void* pBuffer;
-	DWORD nFileSize;
-	DWORD nPriority; // D2C_AsyncDataPriority
-	DWORD dwFlags;
-	DWORD dword4C; // Also storing priority ?
-	DWORD dword50;
+	HSFILE hFile;							 // 0x00
+	void* pMemPool;							 // 0x04
+	OVERLAPPED tOverlapped;					 // 0x08
+	AsyncDataLoadFileCallback pAsyncOpDesc;	 // 0x1C
+	struct AsyncDataEventSlot* pEventSlot;	 // 0x38
+	void* pBuffer;							 // 0x3C
+	uint32_t nFileSize;						 // 0x40
+	uint32_t nPriority;						 // 0x44 D2C_AsyncDataPriority
+	uint32_t nFlags;						 // 0x48
+	uint32_t nPreviousPriority;				 // 0x4C
+	AsyncData* pNextPostponedPriorityChange; // 0x50
 };
 
-struct AsyncDataEventSlot
+struct AsyncDataEventSlot  // sizeof(0x0C)
 {
-	HANDLE hEvent;
-	DWORD dw04;
-	AsyncData* pAsyncOp;
+	HANDLE hEvent;		   // 0x00
+	DWORD bSlotAvailable;  // 0x04
+	AsyncData* pAsyncOp;   // 0x08
 };
 
 
@@ -170,7 +172,7 @@ D2FUNC_DLL(FOG, Realloc, void, __fastcall, (void* pMemory, int nSize, const char
 D2FUNC_DLL(FOG, AllocPool, void*, __fastcall, (void* pMemPool, int nSize, const char* szFile, int nLine, int n0), 0x8FF0)							//Fog.#10045
 D2FUNC_DLL(FOG, FreePool, void, __fastcall, (void* pMemPool, void* pFree, const char* szFile, int nLine, int n0), 0x9030)							//Fog.#10046
 D2FUNC_DLL(FOG, ReallocPool, void*, __fastcall, (void* pMemPool, void* pMemory, int nSize, const char* szFile, int nLine, int n0), 0x9060)			//Fog.#10047
-D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)								//Fog.#10050
+D2FUNC_DLL(FOG, 10050_EnterCriticalSection, void, __fastcall, (_Acquires_lock_(*_Curr_) CRITICAL_SECTION* pCriticalSection, int nLine), 0xDC20)		//Fog.#10050
 D2FUNC_DLL(FOG, 10055_GetSyncTime, int32_t, __fastcall, (), 0xA690)																					//Fog.#10055
 // Noop, same as 10048, 10049, 10053, 10054, 10146, 10194, 10195, 10196, 10197, 10220, 10221, 10225, 10232, 10240, 10241, 10242
 D2FUNC_DLL(FOG, 10082_Noop, void, __fastcall, (), 0x1DE0)																						//Fog.#10082
@@ -200,8 +202,9 @@ D2FUNC_DLL(FOG, MPQFileGetSize, size_t, __fastcall, (HSFILE pFileHandle, uint32_
 D2FUNC_DLL(FOG, CreateFileA, HANDLE, __fastcall, (LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile), 0x11680); //Fog.#10107
 D2FUNC_DLL(FOG, DeleteFileA, BOOL, __fastcall, (LPCSTR lpFileName), 0x116B0);																		//Fog.#10108
 D2FUNC_DLL(FOG, CloseFile, BOOL, __fastcall, (HANDLE hFILE), 0x116C0);																				//Fog.#10109
-D2FUNC_DLL(FOG, GetSavePath, size_t, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x1900)													//Fog.#10115
-D2FUNC_DLL(FOG, GetInstallPath, BOOL, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x1900)													//Fog.#10116
+D2FUNC_DLL(FOG, CreatePathHierarchy, BOOL, __fastcall, (char* szPath), 0x11730)																		//Fog.#10114
+D2FUNC_DLL(FOG, GetSavePath, size_t, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x11900)													//Fog.#10115
+D2FUNC_DLL(FOG, GetInstallPath, BOOL, __fastcall, (char* pPathBuffer, size_t nBufferSize), 0x11870)													//Fog.#10116
 D2FUNC_DLL(FOG, UseDirect, BOOL, __fastcall, (), 0x11A10)																							//Fog.#10117
 D2FUNC_DLL(FOG, ComputeStringCRC16, uint16_t, __stdcall, (const char* szString), 0x3DB0)															//Fog.#10137
 D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void** pMemPoolSystem, const char* szName, uint32_t nPools, uint32_t nUnused), 0xA280)			//Fog.#10142
@@ -277,9 +280,9 @@ D2FUNC_DLL(FOG, 10255, char*, __stdcall, (void* pLinker, int nId, int a3), 0xBB2
 // Do NOT use this if the program can recover when expr if false, as it is used as a hint for performance and can impact generated code.
 // For recoverable errors, use D2_VERIFY
 #define D2_DISPLAY_ASSERT_THEN_BREAK(msg) (FOG_DisplayAssert(msg, __FILE__, __LINE__), __debugbreak())
-#define D2_ASSERT(expr) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(#expr), exit(-1) , 0))
-#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(msg), exit(-1) , 0))
-#define D2_CHECK(expr) (void)( (!!(expr)) || (FOG_DisplayWarning(#expr, __FILE__, __LINE__), 0))
+#define D2_ASSERT(expr) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(#expr), exit(-1) , 0)); _Analysis_assume_(expr)
+#define D2_ASSERTM(expr,msg) (void)( (!!(expr)) || (D2_DISPLAY_ASSERT_THEN_BREAK(msg), exit(-1) , 0)); _Analysis_assume_(expr)
+#define D2_CHECK(expr) (void)( (!!(expr)) || (FOG_DisplayWarning(#expr, __FILE__, __LINE__), 0)); _Analysis_assume_(expr)
 
 
 // Assert that an expression must be true, even though the program may be recoverable.

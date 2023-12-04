@@ -1163,12 +1163,15 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 }
 
 //D2Game.0x6FC37450
+_Requires_lock_held_(*pGame->lpCriticalSection)
+_Releases_lock_(*pGame->lpCriticalSection)
 void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
 {
     if (pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvFreeGame:           freeing game %d '%s'", pGame->nGameId, pGame->szGameName);
     }
+	_Analysis_assume_(pGame != nullptr);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
     
@@ -1381,7 +1384,7 @@ void __fastcall sub_6FC37B10(D2GameStrc* pGame)
 
                 while (CLIENT_GetSaveHeader_6FC34350(pClient))
                 {
-                    sub_6FC37B90(pGame, pClient);
+					CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                 }
             }
 
@@ -1391,28 +1394,28 @@ void __fastcall sub_6FC37B10(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37B90
-void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     if (!CLIENT_GetSaveHeader_6FC34350(pClient))
     {
         return;
     }
 
-    if (pClient->unk0x184[0])
+    if (pClient->unk0x184)
     {
-        --pClient->unk0x184[0];
+        --pClient->unk0x184;
         return;
     }
 
     const uint8_t* pSaveData = (uint8_t*)pClient->pSaveHeader;
-    pClient->unk0x184[0] = 5;
+    pClient->unk0x184 = 5;
     if (!pSaveData)
     {
         return;
     }
 
-    int32_t nDataSize = pClient->nSaveHeaderSize - pClient->unk0x184[1];
-    const uint8_t* pData = &pSaveData[pClient->unk0x184[1]];
+    int32_t nDataSize = pClient->nSaveHeaderSize - pClient->nSaveHeaderDataSentBytes;
+    const uint8_t* pData = &pSaveData[pClient->nSaveHeaderDataSentBytes];
     if (nDataSize >= 255)
     {
         nDataSize = 255;
@@ -1421,7 +1424,7 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
     uint8_t* pPacket = (uint8_t*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, 0x107u);
     *pPacket = 0xB2u;
     pPacket[1] = nDataSize;
-    if (pClient->unk0x184[1])
+    if (pClient->nSaveHeaderDataSentBytes)
     {
         pPacket[2] = 0;
     }
@@ -1440,23 +1443,23 @@ void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
 
     if (D2NET_10006(0, pClient->dwClientId, pPacket, nDataSize + 7))
     {
-        pClient->unk0x184[1] += nDataSize;
+        pClient->nSaveHeaderDataSentBytes += nDataSize;
 
-        if (pClient->unk0x184[1] == pClient->nSaveHeaderSize)
+        if (pClient->nSaveHeaderDataSentBytes == pClient->nSaveHeaderSize)
         {
             CLIENTS_FreeSaveHeader(pClient);
         }
 
-        pClient->unk0x1C4 = 0;
+        pClient->nSaveHeaderSendFailures = 0;
     }
     else
     {
-        ++pClient->unk0x1C4;
+        ++pClient->nSaveHeaderSendFailures;
     }
 
     D2_FREE_POOL(pClient->pGame->pMemoryPool, pPacket);
 
-    if (pClient->unk0x1C4 >= 3)
+    if (pClient->nSaveHeaderSendFailures >= 3)
     {
         CLIENTS_FreeSaveHeader(pClient);
         GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
@@ -1523,7 +1526,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             {
                 do
                 {
-                    sub_6FC37B90(pGame, pClient);
+					CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                 }
                 while (CLIENT_GetSaveHeader_6FC34350(pClient));
             }
@@ -1672,11 +1675,11 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.field_0x10f = tGameServerInfoEx.field_0xb0;
                 tPacket.field_0x10b = tGameServerInfoEx.field_0xac;
                 tPacket.field_0x117 = tGameServerInfoEx.dwords0xBC[0];
-                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - gnNumAdminConnections_6FD45838;
+                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838,0,0);
                 tPacket.tServerInfo.field_0xac = tGameServerInfoEx.field_0xac + tGameServerInfoEx.field_0xb0;
                 tPacket.tServerInfo.field_0xb0 = tGameServerInfoEx.field_0xb4;
                 tPacket.tServerInfo.field_0xb4 = tGameServerInfoEx.field_0xb8
-                    - gnNumAdminConnections_6FD45838
+                    - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838, 0, 0)
                     + tGameServerInfoEx.dwords0xBC[0];
                 tPacket.tServerInfo.field_0xb8 = tGameServerInfoEx.dwords0xBC[1];
                 tPacket.field_0xbd = tGameServerInfoEx.dwords0xD8;
@@ -2269,7 +2272,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
 
     if (pGame->nGameType == 1 || pGame->nGameType == 2)
     {
-        sub_6FC37B90(pGame, pClient);
+		CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
     }
 
     int32_t nCounter = 0;
@@ -2287,16 +2290,16 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             pPacketData->nPacketSize = 0;
             pPacketData->pNext = pClient->tPacketDataList.pPacketDataPool;
             pClient->tPacketDataList.pPacketDataPool = pPacketData;
-            pClient->unk0x1C4 = 0;
+            pClient->nSaveHeaderSendFailures = 0;
             ++nCounter;
         }
         else
         {
             SERVER_WSAGetLastError();
             bError = 1;
-            ++pClient->unk0x1C4;
+            ++pClient->nSaveHeaderSendFailures;
             CLIENTS_PacketDataList_Reset(pClient, pPacketData);
-            if (pClient->unk0x1C4 >= 3)
+            if (pClient->nSaveHeaderSendFailures >= 3)
             {
                 GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
                 return;
@@ -2451,6 +2454,8 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
 }
 
 //D2Game.0x6FC397A0
+_Acquires_lock_(*(return->lpCriticalSection))
+_Acquires_lock_(return->lpCriticalSection)
 D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 {
     if (!gpGameDataTbl_6FD45818)
@@ -2524,7 +2529,7 @@ void __stdcall D2Game_10006()
                 {
                     do
                     {
-                        sub_6FC37B90(pGame, pClient);
+						CLIENT_SendSaveHeaderPart_6FC37B90(pGame, pClient);
                     }
                     while (CLIENT_GetSaveHeader_6FC34350(pClient));
                 }
@@ -2800,7 +2805,7 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 }
 
 //D2Game.0x6FC3A490 (#10016)
-int32_t __stdcall D2Game_10016(uint16_t nGameId)
+int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 {
     EnterCriticalSection(&gCriticalSection_6FD45800);
 
@@ -2958,7 +2963,8 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         // Note: eType is not D2C_UnitTypes
-        D2UnitStrc** pUnitList = eType <= 4 ? pGame->pUnitList[eType] : nullptr;
+		D2_ASSERT(eType <= 4); // Original game uses a switch, and would use nullptr if not true. Then access it which would result in a crash, so assert instead (for static analysis).
+        D2UnitStrc** pUnitList = pGame->pUnitList[eType];
         for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
         {
             for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];

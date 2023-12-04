@@ -272,6 +272,8 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
 //D2Game.0x6FC37150
 void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nDatabaseCharacterId, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
+_Requires_lock_held_(*pGame->lpCriticalSection)
+_Releases_lock_(*pGame->lpCriticalSection)
 void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame);
 //D2Game.0x6FC37560
 int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId);
@@ -288,7 +290,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId);
 //D2Game.0x6FC37B10
 void __fastcall sub_6FC37B10(D2GameStrc* pGame);
 //D2Game.0x6FC37B90
-void __fastcall sub_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient);
+void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC37CE0
 void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2);
 //D2Game.0x6FC37FB0
@@ -330,6 +332,8 @@ void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame);
 //D2Game.0x6FC39600
 void __fastcall GAME_CloseGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC397A0
+_Acquires_lock_(*(return->lpCriticalSection))
+_Acquires_lock_(return->lpCriticalSection)
 D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID);
 //D2Game.0x6FC39870
 void __fastcall sub_6FC39870(int32_t nClientId);
@@ -356,7 +360,7 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo);
 //D2Game.0x6FC3A390 (#10015)
 int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount);
 //D2Game.0x6FC3A490
-int32_t __stdcall D2Game_10016(uint16_t nGameId);
+int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId);
 //D2Game.0x6FC3A5A0
 int32_t __stdcall D2Game_10017(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
 //D2Game.0x6FC3A6F0

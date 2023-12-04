@@ -6,13 +6,13 @@
 #include <Archive.h>
 
 //D2Common.0x6FD473C0
-D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool)
+D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(HD2ARCHIVE hArchive)
 {
 	D2AnimDataTableStrc* pAnimDataTable = D2_CALLOC_STRC_POOL(nullptr, D2AnimDataTableStrc);
 
 	char szPath[MAX_PATH] = {};
 	wsprintfA(szPath, "%s\\AnimData.d2", "DATA\\GLOBAL");
-	pAnimDataTable->pBinaryData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szPath, nullptr);
+	pAnimDataTable->pBinaryData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szPath, nullptr);
 ;
 	D2AnimDataBucketStrc* pBucketBinaryData = (D2AnimDataBucketStrc*)pAnimDataTable->pBinaryData;
 	for (int i = 0; i < 256; ++i)

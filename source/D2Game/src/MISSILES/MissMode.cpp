@@ -5079,7 +5079,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                     }
                 }
 
-                SUNITEVENT_EventFunc_Handler(pGame, 0, pUnit, pMissile, nullptr);
+                SUNITEVENT_EventFunc_Handler(pGame, EVENT_HITBYMISSILE, pUnit, pMissile, nullptr);
 
                 if (pMissilesTxtRecord->nAlwaysExplode)
                 {
@@ -5132,7 +5132,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             }
         }
 
-        SUNITEVENT_EventFunc_Handler(pGame, 0, pUnit, pMissile, 0);
+        SUNITEVENT_EventFunc_Handler(pGame, EVENT_HITBYMISSILE, pUnit, pMissile, 0);
 
         const uint16_t nHitFunc = pMissilesTxtRecord->wSrvHitFunc;
         if (nHitFunc > 0 && nHitFunc < std::size(gpMissileSrvHitFnTable_6FD2E718))

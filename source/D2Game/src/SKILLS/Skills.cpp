@@ -4129,7 +4129,7 @@ void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 }
 
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t a3, int32_t a4, int32_t a5, int32_t nEvent, int32_t a7, int32_t a8)
+D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nTimerType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
 {
     constexpr D2UnitEventCallbackFunction gpEventCallbackTable_6FD40D20[] =
     {
@@ -4185,9 +4185,9 @@ D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, u
         nullptr,
     };
 
-    if (nEvent >= 0 && nEvent < std::size(gpEventCallbackTable_6FD40D20) && gpEventCallbackTable_6FD40D20[nEvent])
+    if (nEventFunc >= 0 && nEventFunc < std::size(gpEventCallbackTable_6FD40D20) && gpEventCallbackTable_6FD40D20[nEventFunc])
     {
-        return SUNITEVENT_AllocTimer(pGame, pUnit, a3, a4, a5, gpEventCallbackTable_6FD40D20[nEvent], a7, a8);
+        return SUNITEVENT_AllocTimer(pGame, pUnit, nTimerType, a4, a5, gpEventCallbackTable_6FD40D20[nEventFunc], a7, a8);
     }
 
     return nullptr;

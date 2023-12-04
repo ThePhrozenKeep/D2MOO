@@ -3,7 +3,7 @@
 static const int NUM_ARENA_TYPES = 1;
 
 //D2Common.0x6FD47840
-void __fastcall DATATBLS_LoadArenaTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -17,7 +17,7 @@ void __fastcall DATATBLS_LoadArenaTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	gpArenaTxtTable = (D2ArenaTxt*)DATATBLS_CompileTxt(pMemPool, "arena", pTbl, NULL, sizeof(D2ArenaTxt));
+	gpArenaTxtTable = (D2ArenaTxt*)DATATBLS_CompileTxt(hArchive, "arena", pTbl, NULL, sizeof(D2ArenaTxt));
 }
 
 //D2Common.0x6FD47970 (#10596)
@@ -36,7 +36,7 @@ void __fastcall DATATBLS_UnloadArenaTxt()
 }
 
 //D2Common.0x6FD479D0
-void __fastcall DATATBLS_LoadCharTemplateTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive)
 {
 	int nMaxLevel = 0;
 	int nLevel = 0;
@@ -124,7 +124,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	gpCharTemplateTxtTable = (D2CharTemplateTxt*)DATATBLS_CompileTxt(pMemPool, "chartemplate", pTbl, &gnCharTemplateTxtTableRecordCount, sizeof(D2CharTemplateTxt));
+	gpCharTemplateTxtTable = (D2CharTemplateTxt*)DATATBLS_CompileTxt(hArchive, "chartemplate", pTbl, &gnCharTemplateTxtTableRecordCount, sizeof(D2CharTemplateTxt));
 
 	memset(gnCharTemplateStartIds, 0x00, sizeof(gnCharTemplateStartIds));
 

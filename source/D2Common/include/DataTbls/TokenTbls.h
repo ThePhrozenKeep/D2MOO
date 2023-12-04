@@ -82,15 +82,15 @@ struct D2CompCodeTxt
 #pragma pack()
 
 //D2Common.0x6FD729C0
-void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadPlrType_ModeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD72B30
-void __fastcall DATATBLS_LoadMonModeTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadMonModeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD72E50
-void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadObjType_ModeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD72FC0
-void __fastcall DATATBLS_LoadCompositTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadCompositTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD73040
-void __fastcall DATATBLS_LoadArmTypeTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadArmTypeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD730C0
 void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_ArmtypeTxt();
 //D2Common.0x6FD73150 (#10643)

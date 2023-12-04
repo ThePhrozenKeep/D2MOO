@@ -253,7 +253,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
                             }
                         }
 
-                        BITMANIP_Write(&bitBuffer, 511, 9);
+                        BITMANIP_Write(&bitBuffer, 0x1FF, 9);
                     }
                     else
                     {

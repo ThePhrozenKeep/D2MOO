@@ -3805,10 +3805,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
         return 0;
     }
 
-    sub_6FC34700(pGame, pUnit);
+    CLIENTS_NotifyWarpAttempt(pGame, pUnit);
 
     int32_t nDelay = 125;
-    if (sub_6FC347A0(pGame, pUnit) && !pGame->nGameType)
+    if (CLIENTS_ShouldDelayWarpAttempt(pGame, pUnit) && !pGame->nGameType)
     {
         constexpr int32_t dword_6FD28F80[][2] =
         {
