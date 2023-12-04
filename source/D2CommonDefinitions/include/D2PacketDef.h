@@ -2184,5 +2184,13 @@ struct D2GSPacketSrvFF01 {
 	char nZeroed[74];
 };
 
+struct ClientPacketSaveHeaderPart // sizeof(0x107) 1.10f nHeaderID: 0xB2
+{
+	uint8_t nHeaderId;			  // 0x00
+	uint8_t nPartDataSize;		  // 0x01
+	uint8_t bFirstPart;			  // 0x02
+	uint32_t nSaveHeaderSize;	  // 0x03
+	uint8_t aData[256];			  // 0x07
+};
 
 #pragma pack()

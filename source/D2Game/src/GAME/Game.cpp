@@ -1421,20 +1421,12 @@ void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientSt
         nDataSize = 255;
     }
 
-    uint8_t* pPacket = (uint8_t*)D2_ALLOC_POOL(pClient->pGame->pMemoryPool, 0x107u);
-    *pPacket = 0xB2u;
-    pPacket[1] = nDataSize;
-    if (pClient->nSaveHeaderDataSentBytes)
-    {
-        pPacket[2] = 0;
-    }
-    else
-    {
-        pPacket[2] = 1;
-    }
-
-    uint8_t* pPacketData = pPacket + 7;
-    *(int32_t*)(pPacket + 3) = pClient->nSaveHeaderSize;
+	ClientPacketSaveHeaderPart* pPacket = D2_ALLOC_STRC_POOL(pClient->pGame->pMemoryPool, ClientPacketSaveHeaderPart);
+	pPacket->nHeaderId = 0xB2u;
+	pPacket->nPartDataSize = nDataSize;
+	pPacket->bFirstPart = pClient->nSaveHeaderDataSentBytes == 0;
+	pPacket->nSaveHeaderSize = pClient->nSaveHeaderSize;
+    uint8_t* pPacketData = pPacket->aData;
 
     for (int32_t i = 0; i < nDataSize; ++i)
     {
