@@ -121,12 +121,12 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         }
 
         char szAccountName[16] = {};
-        int32_t nDatabaseCharacterId = 0;
+        int32_t nBNetCharacterId = 0;
         int32_t v18 = 0;
         int32_t v19 = 0;
-        if (GAME_VerifyJoinGme(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nToken, szAccountName, &nDatabaseCharacterId, pPacket67->nLocale, &v19, &v18))
+        if (GAME_VerifyJoinGme(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nToken, szAccountName, &nBNetCharacterId, pPacket67->nLocale, &v19, &v18))
         {
-            GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, nDatabaseCharacterId, pPacket67->nLocale, v19, v18);
+            GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, nBNetCharacterId, pPacket67->nLocale, v19, v18);
         }
         else
         {

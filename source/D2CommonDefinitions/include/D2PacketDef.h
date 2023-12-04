@@ -1645,7 +1645,6 @@ struct D2GSPacketSrv7B		//size of 0x08
 	};
 	uint32_t nItemGUID;			//0x04
 };
-static_assert(sizeof(D2GSPacketSrv7B) == 0x08, "bad D2GSPacketSrv7B size");
 
 struct D2GSPacketSrv7C		//size of 0x06
 {

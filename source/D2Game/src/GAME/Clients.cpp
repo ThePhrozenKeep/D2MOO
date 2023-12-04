@@ -452,7 +452,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
 //1.10f: D2Game.0x6FC325E0
 //1.13c: D2Game.0x6FC6A9B0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nDatabaseCharacterId, uint32_t nLocale, int32_t a8, int32_t a9)
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nBNetCharacterId, uint32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
     {
@@ -484,7 +484,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     SStrCopy(pClient->szName, szClientName, INT_MAX);
     SStrCopy(pClient->szAccount, szAccount, INT_MAX);
 
-    pClient->nDatabaseCharacterId = nDatabaseCharacterId;
+    pClient->nBNetCharacterId = nBNetCharacterId;
     pClient->pClientInfo = 0;
     pClient->dwLocale = nLocale;
     pClient->dwClientState = CLIENTSTATE_JUST_CREATED;
@@ -689,7 +689,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
 						0,
 						0,
-						pClientToRemove->szAccount, pClientToRemove->nDatabaseCharacterId, &pClientToRemove->nPlayerMark);
+						pClientToRemove->szAccount, pClientToRemove->nBNetCharacterId, &pClientToRemove->nLadderGUID);
             }
 
             GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
@@ -714,7 +714,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
 						0,
 						0,
-						pClientToRemove->szAccount, pClientToRemove->nDatabaseCharacterId, &pClientToRemove->nPlayerMark);
+						pClientToRemove->szAccount, pClientToRemove->nBNetCharacterId, &pClientToRemove->nLadderGUID);
             }
         }
 
@@ -1121,8 +1121,8 @@ void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwa
 
     if (pAlwaysNull)
     {
-        pClient->unk0x194[1] = *(int32_t*)pAlwaysNull;
-        pClient->unk0x194[2] = *((int32_t*)(pAlwaysNull) + 3);
+        pClient->unk0x198[0] = *(int32_t*)pAlwaysNull;
+        pClient->unk0x198[1] = *((int32_t*)(pAlwaysNull) + 3);
         pClient->dwFlags |= 2;
     }
     else
@@ -1806,9 +1806,9 @@ void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szA
 }
 
 //D2Game.0x6FC346A0
-void __fastcall D2GAME_GetDatabaseCharacterId_6FC346A0(D2ClientStrc* pClient, int32_t* pDatabaseCharacterId)
+void __fastcall D2GAME_GetBNetCharacterId_6FC346A0(D2ClientStrc* pClient, int32_t* pBNetCharacterId)
 {
-    *pDatabaseCharacterId = pClient->nDatabaseCharacterId;
+    *pBNetCharacterId = pClient->nBNetCharacterId;
 }
 
 //D2Game.0x6FC346B0

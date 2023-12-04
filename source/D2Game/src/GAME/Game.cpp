@@ -515,7 +515,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
 }
 
 //D2Game.0x6FC36280 (#10007)
-int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t nDatabaseCharacterId)
+int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nBNetCharacterId)
 {
     if (nTotalSize && !CLIENTS_AttachSaveFile(nClientId, pSaveData, nSaveSize, nTotalSize, a5 == 0, 1, a6))
     {
@@ -578,7 +578,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    if (pClient->nDatabaseCharacterId != nDatabaseCharacterId)
+    if (pClient->nBNetCharacterId != nBNetCharacterId)
     {
         D2_UNLOCK(pGame->lpCriticalSection);
 
@@ -596,8 +596,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    pClient->nPlayerMark = *(int32_t*)a7;
-    pClient->unk0x194[0] = *(int32_t*)(a7 + 4);
+    pClient->nLadderGUID = *pLadderGUID;
 
     D2_UNLOCK(pGame->lpCriticalSection);
 
@@ -923,7 +922,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 }
 
 //D2Game.0x6FC36DF0
-int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, const char* szAccountName, int32_t* pDatabaseCharacterId, uint8_t nLocale, int32_t* a9, int32_t* a10)
+int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, const char* szAccountName, int32_t* pBNetCharacterId, uint8_t nLocale, int32_t* a9, int32_t* a10)
 {
     if (!CCMD_IsStringZeroTerminated(szClientName, 16))
     {
@@ -1048,7 +1047,7 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
                     exit(-1);
                 }
 
-                if (!gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, pDatabaseCharacterId, a9, a10))
+                if (!gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, pBNetCharacterId, a9, a10))
                 {
                     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Token", szAccountName, szClientName, nGameId, nToken);
                     GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player token %d for client %d '%s' ***", nToken, nClientId, szClientName);
@@ -1075,7 +1074,7 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
 }
 
 //D2Game.0x6FC37150
-void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nDatabaseCharacterId, int32_t nLocale, int32_t a8, int32_t a9)
+void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nBNetCharacterId, int32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gpGameDataTbl_6FD45818)
     {
@@ -1112,7 +1111,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 
     SERVER_SetClientGameGUID(dwClientId, nGUID);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nDatabaseCharacterId, nLocale, a8, a9);
+    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nBNetCharacterId, nLocale, a8, a9);
     if (pClient)
     {
         D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
@@ -1259,7 +1258,7 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
                 const int32_t nExperience = STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0);
                 const int32_t nLevel = STATLIST_GetUnitBaseStat(pPlayer, STAT_LEVEL, 0);
                 const char* szClientName = CLIENTS_GetName(i);
-                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->nPlayerMark);
+                gpD2EventCallbackTable_6FD45830->pfUpdateCharacterLadder(szClientName, pPlayer->dwClassId, nLevel, nExperience, 0, CLIENTS_GetFlags(i), &i->nLadderGUID);
             }
         }
     }
@@ -1508,7 +1507,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
                         STATLIST_GetUnitBaseStat(pUnit, STAT_EXPERIENCE, 0),
                         0,
                         CLIENTS_GetFlags(i),
-                        &i->nPlayerMark
+                        &i->nLadderGUID
                     );
                 }
             }
@@ -2015,7 +2014,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                             STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
                             0,
                             CLIENTS_GetFlags(pClient),
-                            &pClient->nPlayerMark
+                            &pClient->nLadderGUID
                         );
                     }
                 }
@@ -2043,7 +2042,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                         STATLIST_GetUnitBaseStat(pPlayer, STAT_EXPERIENCE, 0),
                         0,
                         CLIENTS_GetFlags(pClient),
-                        &pClient->nPlayerMark
+                        &pClient->nLadderGUID
                     );
                 }
             }
