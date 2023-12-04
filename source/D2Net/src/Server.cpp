@@ -748,9 +748,9 @@ void __stdcall D2NET_10036(int32_t a1, int32_t a2)
 }
 
 //D2Net.0x6FC021D0 (#10026)
-void __stdcall D2NET_10026(int32_t a1)
+void __stdcall SERVER_SetMaxClientsPerGame(int32_t nMaxClients)
 {
-	FOG_10151(gpServer, a1);
+	FOG_SetMaxClientsPerGame(gpServer, nMaxClients);
 }
 
 //D2Net.0x6FC021F0 (#10027)
@@ -760,9 +760,9 @@ int32_t __stdcall D2NET_10027()
 }
 
 //D2Net.0x6FC02200 (#10023)
-void __stdcall D2NET_10023(int32_t a1)
+void __stdcall SERVER_SetHackListEnabled(BOOL bEnabled)
 {
-	FOG_10178(gpServer, a1);
+	FOG_SetHackListEnabled(gpServer, bEnabled);
 }
 
 //D2Net.0x6FC02220 (#10004)
