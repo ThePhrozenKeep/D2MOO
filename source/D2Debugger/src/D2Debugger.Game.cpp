@@ -34,17 +34,6 @@ std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
     return utf8CharBuffer;
 }
 
-// Note: Missile and items are inverted on purpose here, this is like this in the game
-int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
-{
-    switch (nUnitType)
-    {
-    case UNIT_MISSILE: return 4;
-    case UNIT_ITEM: return 3;
-    default: return (int)nUnitType;
-    }
-}
-
 static const char* gActNames[] = {
     "Act 1",
     "Act 2",
