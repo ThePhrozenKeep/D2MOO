@@ -1,7 +1,11 @@
 
-add_library(Fog
-  SHARED
-    src/DllMain.cpp
+D2MOO_prepare_targets(Fog)
+
+target_link_libraries(${FogImplName} PUBLIC D2CommonDefinitions Storm)
+
+target_sources(${FogImplName}
+  PRIVATE
+	src/Fog.cpp
 	src/D2BitManip.cpp
 	src/Safesock.cpp
 	src/Calc.cpp
@@ -18,8 +22,4 @@ if(D2MOO_WITH_STATIC_TESTS)
   )
 endif()
 
-# The definition file that matches functions with their ordinals
-D2MOO_configure_exports(Fog)
-target_include_directories(Fog PUBLIC include)
-
-target_link_libraries(Fog PUBLIC D2CommonDefinitions Storm)
+D2MOO_target_source_group(Fog)

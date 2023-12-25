@@ -5,7 +5,7 @@
 # Creating multiple executables is of course not mandatory, and one could use the same executable with various command lines to filter what tests to run.
 
 add_executable(D2LangTests D2LangTests.cpp)
-target_link_libraries(D2LangTests PRIVATE doctest::doctest D2LangStatic)
+target_link_libraries(D2LangTests PRIVATE doctest::doctest ${D2LangImplName})
 target_compile_definitions(D2LangTests PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_features(D2LangTests PRIVATE cxx_std_17)
 

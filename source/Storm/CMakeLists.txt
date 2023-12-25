@@ -1,8 +1,15 @@
 
-add_library(Storm SHARED src/DllMain.cpp include/Storm.h include/StormHandles.h)
-# The definition file that matches functions with their ordinals
-D2MOO_configure_exports(Storm)
-target_include_directories(Storm PUBLIC include)
+D2MOO_prepare_targets(Storm)
 
-target_link_libraries(Storm PUBLIC D2CommonDefinitions squall::Storm)
-target_compile_definitions(Storm PUBLIC WITH_SQUALL=1)
+target_link_libraries(${StormImplName} PUBLIC D2CommonDefinitions squall::Storm)
+target_compile_definitions(${StormImplName} PUBLIC WITH_SQUALL=1)
+
+target_sources(${StormImplName}
+  PRIVATE
+    src/Storm.cpp
+
+    include/Storm.h
+    include/StormHandles.h
+)
+
+D2MOO_target_source_group(Storm)

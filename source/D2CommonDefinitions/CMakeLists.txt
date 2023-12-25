@@ -17,14 +17,36 @@ target_sources(D2CommonDefinitions
     include/D2Structs.OtherDLLs.h
     include/D2PacketDef.h
     include/D2Dll.h
+    include/D2BuildInformation.h
     include/D2Config.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
 target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)
 
+include(CMakePrintHelpers)
+
 if(D2MOO_ORDINALS_VERSION)
-  string(REPLACE "." "" VERSION_DEFINE_NAME "D2_VERSION_${D2MOO_ORDINALS_VERSION}")
-  string(TOUPPER "${VERSION_DEFINE_NAME}" VERSION_DEFINE_NAME)
-  target_compile_definitions(D2CommonDefinitions INTERFACE ${VERSION_DEFINE_NAME})
+  set(D2_VERSION_REGEX "^([0-9]+)\\.([0-9][0-9])([A-Za-z])(-(.+))?$")
+  if(D2MOO_ORDINALS_VERSION MATCHES ${D2_VERSION_REGEX})
+    set(D2MOO_ORDINAL_VERSION_MAJOR ${CMAKE_MATCH_1})
+    set(D2MOO_ORDINAL_VERSION_MINOR ${CMAKE_MATCH_2})
+    set(D2MOO_ORDINAL_VERSION_PATCH ${CMAKE_MATCH_3})
+    set(D2MOO_ORDINAL_VERSION_SPECIAL ${CMAKE_MATCH_5})
+    set(D2MOO_ORDINAL_VERSION_DEFINE_NAME "D2_VERSION_${D2MOO_ORDINAL_VERSION_MAJOR}${D2MOO_ORDINAL_VERSION_MINOR}${D2MOO_ORDINAL_VERSION_PATCH}")
+    string(TOUPPER "${D2MOO_ORDINAL_VERSION_DEFINE_NAME}" D2MOO_ORDINAL_VERSION_DEFINE_NAME)
+
+    cmake_print_variables(D2MOO_ORDINAL_VERSION_MAJOR D2MOO_ORDINAL_VERSION_MINOR D2MOO_ORDINAL_VERSION_PATCH D2MOO_ORDINAL_VERSION_SPECIAL D2MOO_ORDINAL_VERSION_DEFINE_NAME)
+
+    target_compile_definitions(D2CommonDefinitions
+      INTERFACE 
+        ${D2MOO_ORDINAL_VERSION_DEFINE_NAME}
+        D2_VERSION_MAJOR=${D2MOO_ORDINAL_VERSION_MAJOR}
+        D2_VERSION_MINOR=${D2MOO_ORDINAL_VERSION_MINOR}
+        D2_VERSION_PATCH='${D2MOO_ORDINAL_VERSION_PATCH}' # Allow only single character
+        $<$<NOT:$<STREQUAL:D2MOO_ORDINAL_VERSION_SPECIAL,"">>:D2_VERSION_SPECIAL="${D2MOO_ORDINAL_VERSION_SPECIAL}">
+    )
+  else()
+    message(FATAL_ERROR "Ordinal version format is incorrect. Needs to match '${D2_VERSION_REGEX}'")
+  endif()
 endif()

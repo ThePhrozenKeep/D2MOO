@@ -1,7 +1,11 @@
 
-add_library(D2CMP
-  SHARED
-    src/DllMain.cpp
+D2MOO_prepare_targets(D2CMP)
+target_link_libraries(${D2CMPImplName} PUBLIC D2CommonDefinitions Fog)
+
+target_sources(${D2CMPImplName}
+  PRIVATE
+  
+    src/D2CMP.cpp
     include/D2CMP.h
 
     src/CelCmp.cpp
@@ -43,8 +47,5 @@ add_library(D2CMP
     include/TileProjects.h
 )
 
-# The definition file that matches functions with their ordinals
-D2MOO_configure_exports(D2CMP)
-target_include_directories(D2CMP PUBLIC include)
+D2MOO_target_source_group(D2CMP)
 
-target_link_libraries(D2CMP PUBLIC D2CommonDefinitions Fog)
