@@ -5,12 +5,6 @@
 #include <StormHandles.h>
 #include <stdlib.h>
 
-#ifdef FOG_IMPL
-#define FOG_DLL_DECL 
-#else
-#define FOG_DLL_DECL __declspec( dllimport )
-#endif
-
 //1.10f Image base: 0x6FF50000
 
 #pragma pack(1)

@@ -21,8 +21,7 @@ target_link_libraries(D2Win
 target_include_directories(D2Win PUBLIC include)
 
 # The definition file that matches functions with their ordinals
-target_sources(D2Win PRIVATE definitions/D2Win.${D2MOO_ORDINALS_VERSION}.def)
-
+D2MOO_configure_exports(D2Win)
 
 target_sources(D2Win
   PRIVATE

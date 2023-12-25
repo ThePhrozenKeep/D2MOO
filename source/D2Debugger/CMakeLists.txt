@@ -11,7 +11,7 @@ add_library(D2Debugger SHARED
   include/D2Debugger.h
 )
 target_include_directories(D2Debugger PUBLIC include)
-target_compile_definitions(D2Debugger PRIVATE D2DEBUGGER_IMPL)
+D2MOO_configure_exports(D2Debugger IGNORE_MISSING_DEF)
 
 target_link_libraries(D2Debugger 
   PRIVATE

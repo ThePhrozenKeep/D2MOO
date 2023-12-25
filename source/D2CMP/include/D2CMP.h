@@ -3,12 +3,6 @@
 #include <D2Dll.h>
 #include <D2BasicTypes.h>
 
-#ifdef D2CMP_IMPL
-#define D2CMP_DLL_DECL // We use .def files, not dllexport
-#else
-#define D2CMP_DLL_DECL __declspec( dllimport )
-#endif
-
 //1.10f Image base: 0x6FDF0000
 
 #pragma pack(1)

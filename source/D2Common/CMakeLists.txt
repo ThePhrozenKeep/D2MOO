@@ -14,8 +14,6 @@ target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Hell D2L
 
 target_include_directories(D2CommonStatic PUBLIC include)
 
-target_compile_definitions(D2CommonStatic PRIVATE D2COMMON_IMPL)
-
 # Data tables
 target_sources(D2CommonStatic
   PRIVATE
@@ -227,9 +225,10 @@ add_library(D2Common
   SHARED
   # The DLL entrypoint
   src/DllMain.cpp
-  # The definition file that matches functions with their ordinals  
-  definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def
 )
+# The definition file that matches functions with their ordinals  
+D2MOO_configure_exports(D2Common)
+
 
 target_link_libraries(D2Common
 # D2CommonStatic itself should not be linked by targets linking D2Common, hence why it is PRIVATE

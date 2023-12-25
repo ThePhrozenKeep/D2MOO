@@ -19,10 +19,7 @@ if(D2MOO_WITH_STATIC_TESTS)
 endif()
 
 # The definition file that matches functions with their ordinals
-target_sources(Fog PRIVATE definitions/Fog.${D2MOO_ORDINALS_VERSION}.def)
+D2MOO_configure_exports(Fog)
 target_include_directories(Fog PUBLIC include)
-# If not defined, we use declspec(dllimport), so only define it to build the .dll
-
-target_compile_definitions(Fog PRIVATE FOG_IMPL)
 
 target_link_libraries(Fog PUBLIC D2CommonDefinitions Storm)

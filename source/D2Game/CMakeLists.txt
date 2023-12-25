@@ -11,7 +11,7 @@ target_link_libraries(D2Game PRIVATE D2CommonDefinitions D2CMP D2Common D2Lang D
 target_include_directories(D2Game PUBLIC include)
 
 # The definition file that matches functions with their ordinals
-target_sources(D2Game PRIVATE definitions/D2Game.${D2MOO_ORDINALS_VERSION}.def)
+D2MOO_configure_exports(D2Game)
 
 # Ai
 target_sources(D2Game

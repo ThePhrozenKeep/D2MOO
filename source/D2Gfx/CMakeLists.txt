@@ -11,8 +11,7 @@ target_link_libraries(D2Gfx PRIVATE Fog Storm D2CommonDefinitions)
 target_include_directories(D2Gfx PUBLIC include)
 
 # The definition file that matches functions with their ordinals
-target_sources(D2Gfx PRIVATE definitions/D2Gfx.${D2MOO_ORDINALS_VERSION}.def)
-
+D2MOO_configure_exports(D2Gfx)
 
 target_sources(D2Gfx
   PRIVATE

@@ -14,8 +14,7 @@ target_link_libraries(D2Net PRIVATE D2CommonDefinitions Fog Storm ws2_32)
 target_include_directories(D2Net PUBLIC include)
 
 # The definition file that matches functions with their ordinals
-target_sources(D2Net PRIVATE definitions/D2Net.${D2MOO_ORDINALS_VERSION}.def)
-
+D2MOO_configure_exports(D2Net)
 
 target_sources(D2Net
   PRIVATE
@@ -24,9 +23,6 @@ target_sources(D2Net
     src/D2Net.cpp
     src/Server.cpp
 )
-
-# If not defined, we use declspec(dllimport), so only define it to build the .dll
-target_compile_definitions(D2Net PRIVATE D2NET_IMPL)
 
 get_target_property(D2NetSources D2Net SOURCES)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}

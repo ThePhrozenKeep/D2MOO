@@ -3,14 +3,6 @@
 #include <D2Dll.h>
 #include <cstdint>
 
-#if defined(D2LANG_EXPORT)
-#define D2LANG_DLL_DECL __declspec( dllexport ) // D2Lang uses both .def files and dllexport, otherwise default constructors are not exported correctly
-#elif defined(D2LANG_IMPORT)
-#define D2LANG_DLL_DECL __declspec( dllimport )
-#else
-#define D2LANG_DLL_DECL
-#endif
-
 #pragma pack(1)
 
 struct D2LANG_DLL_DECL Unicode;

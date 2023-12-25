@@ -1,4 +1,43 @@
 
+function(D2MOO_set_dll_decl DLLTargetName PrivateDllDeclValue InterfaceDllDeclValue)
+  if(TARGET ${DLLTargetName}Static)
+    target_compile_definitions(${DLLTargetName}Static 
+      PRIVATE ${DLLTargetNameUpperCase}_DLL_DECL=${PrivateDllDeclValue}  
+      INTERFACE ${DLLTargetNameUpperCase}_DLL_DECL=${PrivateDllDeclValue} # We want to export for any shared lib/executable linking the static library.
+    )
+  endif()
+  target_compile_definitions(${DLLTargetName} 
+    PRIVATE ${DLLTargetNameUpperCase}_DLL_DECL=${PrivateDllDeclValue}
+    INTERFACE ${DLLTargetNameUpperCase}_DLL_DECL=${InterfaceDllDeclValue} # Consuming targets will need to import
+  )
+endfunction()
+
+function(D2MOO_configure_exports DLLTargetName)
+  set(options FORCE_EXPORT IGNORE_MISSING_DEF)
+  cmake_parse_arguments(PARSE_ARGV 1 this "${options}" "" "")
+
+  string(TOUPPER "${DLLTargetName}" DLLTargetNameUpperCase)
+  set(EXPORT_IF_SHARED_LIB "$<$<STREQUAL:$<TARGET_PROPERTY:${DLLTargetName},TYPE>,SHARED_LIBRARY>:__declspec( dllexport )>")
+  set(IMPORT_IF_SHARED_LIB "$<$<STREQUAL:$<TARGET_PROPERTY:${DLLTargetName},TYPE>,SHARED_LIBRARY>:__declspec( dllimport )>")
+  
+  set(DEF_FILE_NAME "${CMAKE_CURRENT_SOURCE_DIR}/definitions/${DLLTargetName}.${D2MOO_ORDINALS_VERSION}.def")
+  
+  if(EXISTS "${DEF_FILE_NAME}")
+    set(ShouldExportIfSharedLib ${this_FORCE_EXPORT})
+    target_sources(${DLLTargetName} PRIVATE "${DEF_FILE_NAME}")
+  else()
+    set(ShouldExportIfSharedLib TRUE)
+	if(NOT this_IGNORE_MISSING_DEF)
+      message(WARNING "Def file '${DEF_FILE_NAME}' not found")
+	endif()
+  endif()
+  
+  if(ShouldExportIfSharedLib)
+    D2MOO_set_dll_decl(${DLLTargetName} "${EXPORT_IF_SHARED_LIB}" "${IMPORT_IF_SHARED_LIB}")
+  else()
+    D2MOO_set_dll_decl(${DLLTargetName} "" "${IMPORT_IF_SHARED_LIB}")
+  endif()
+endfunction()
 
 function(D2MOO_add_detours_patch_to_dll DLLTargetName)
   if(ARGV1)
