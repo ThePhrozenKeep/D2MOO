@@ -465,7 +465,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
 
         if (nDistance <= 8)
         {
-            if (pUnit->dwAnimMode != PLRMODE_DEAD || sub_6FC937A0(pGame, pPlayer) || sub_6FC937A0(pGame, pUnit))
+            if (pUnit->dwAnimMode != PLRMODE_DEAD || D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pPlayer) ||
+				D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
             {
                 PLRTRADE_TryToTrade(pGame, pPlayer, pUnit);
             }
@@ -1857,7 +1858,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x17_DropItemOnGround_6FC84E20(D2Gam
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem && pItem->dwAnimMode == IMODE_ONCURSOR && INVENTORY_GetCursorItem(pUnit->pInventory) == pItem)
         {
-            if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+            if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
             {
                 return 3;
             }
@@ -1915,7 +1916,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
         {
             if (nInvPage == 2)
             {
-                if (!sub_6FC937A0(pGame, pUnit))
+                if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
                 {
                     return 3;
                 }
@@ -3222,7 +3223,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x44_StaffInOrifice_6FC87780(D2GameS
         return 3;
     }
 
-    if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+    if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         return 3;
     }
@@ -3569,7 +3570,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x50_DropGold_6FC88210(D2GameStrc* p
     const int32_t nUnitGUID = *(int32_t*)((char*)pPacket + 1);
     const int32_t nGoldValue = *(int32_t*)((char*)pPacket + 5);
 
-    if (!PLAYER_IsBusy(pUnit) || !sub_6FC937A0(pGame, pUnit))
+    if (!PLAYER_IsBusy(pUnit) || !D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         if (sub_6FC7C260(pGame, pUnit, nUnitGUID, nGoldValue))
         {
@@ -3874,7 +3875,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
 
     const int16_t nBodyLoc = *(int16_t*)((char*)pPacket + 1);
 
-    if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+    if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         FOG_Trace("Player %s should be banned\n", UNITS_GetPlayerData(pUnit)->szName);
         return 3;

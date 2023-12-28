@@ -1386,7 +1386,7 @@ void __fastcall ACT2Q6_UnitIterate_DeleteHoradricItems(D2GameStrc* pGame, D2Unit
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED);
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_PRIMARYGOALDONE);
-	if (sub_6FC937A0(pGame, pUnit))
+	if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
 	{
 		return;
 	}

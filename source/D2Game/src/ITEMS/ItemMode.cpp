@@ -3808,7 +3808,8 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 
     if (pItem->dwAnimMode == IMODE_STORED && ITEMS_CheckIfUseable(pItem))
     {
-        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0) && !sub_6FC937A0(pGame, pUnit))
+        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0) && !D2GAME_PLRTRADE_IsInteractingWithPlayer(
+				pGame, pUnit))
         {
             if (SKILLITEM_pSpell_Handler(pGame, pUnit, pItem, pItem, nX, nY))
             {
@@ -4470,7 +4471,7 @@ int32_t __fastcall sub_6FC49220(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         return 0;
     }
 
-    if (sub_6FC937A0(pGame, pUnit))
+    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         return 0;
     }
@@ -4839,7 +4840,7 @@ int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 		return 0;
 	}
 
-    if (sub_6FC937A0(pGame, pUnit) && ITEMS_GetInvPage(pCube))
+    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && ITEMS_GetInvPage(pCube))
     {
         SUNIT_AttachSound(pUnit, 0x13u, pUnit);
         return 0;

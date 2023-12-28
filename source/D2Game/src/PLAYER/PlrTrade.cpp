@@ -2506,7 +2506,7 @@ int32_t __fastcall sub_6FC93740(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC937A0
-int32_t __fastcall sub_6FC937A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall D2GAME_PLRTRADE_IsInteractingWithPlayer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;

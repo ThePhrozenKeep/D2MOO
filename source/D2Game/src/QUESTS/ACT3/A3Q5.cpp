@@ -315,7 +315,7 @@ void __fastcall ACT3Q5_UnitIterate_DeleteKhalimItems(D2GameStrc* pGame, D2UnitSt
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_REWARDGRANTED);
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_PRIMARYGOALDONE);
 
-	if (!sub_6FC937A0(pGame, pUnit))
+	if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
 	{
 		QUESTS_DeleteItem(pGame, pUnit, ' yeq');
 		QUESTS_DeleteItem(pGame, pUnit, ' rhq');
