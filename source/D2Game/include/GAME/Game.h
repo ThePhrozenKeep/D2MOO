@@ -252,7 +252,7 @@ void __stdcall D2Game_10056(int32_t a1);
 //D2Game.0x6FC35E70
 int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
-int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nBNetCharacterId);
+int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nUnkCharacterId);
 //D2Game.0x6FC36570
 void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nLocale, int32_t a13, int32_t a14);
 //D2Game.0x6FC369C0
@@ -270,7 +270,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId);
 //D2Game.0x6FC36DF0
 int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, const char* szAccountName, int32_t* pBNetCharacterId, uint8_t nLocale, int32_t* a9, int32_t* a10);
 //D2Game.0x6FC37150
-void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nBNetCharacterId, int32_t nLocale, int32_t a8, int32_t a9);
+void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nUnkCharacterId, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
 _Requires_lock_held_(*pGame->lpCriticalSection)
 _Releases_lock_(*pGame->lpCriticalSection)
