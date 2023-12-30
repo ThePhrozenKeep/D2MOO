@@ -610,7 +610,8 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
     }
 }
 
-//D2Game.0x6FC32A30
+//1.00 : D2Game.0x10002150
+//1.10f: D2Game.0x6FC32A30
 void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientIdToRemove, BOOL bTriggerSave)
 {
     D2_ASSERT(pGame);
@@ -1087,8 +1088,8 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
         UNITROOM_RefreshUnit(pPlayer);
     }
 }
-
-//D2Game.0x6FC337B0
+//1.00 : D2Game.0x10002D70
+//1.10f: D2Game.0x6FC337B0
 int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId)
 {
     D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);

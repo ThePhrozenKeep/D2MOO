@@ -41,8 +41,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10018														@10018
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetUnitsDescriptions											@10019
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetStatistics												@10020
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10021														@10021
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10022														@10022
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SendMessageToAllClients										@10021
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SendMessageToGameClients										@10022
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetServerCallbackFunctions									@10023
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10024_RemoveClientFromGame									@10024
     PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetUnitFromTypeAndGUID										@10025

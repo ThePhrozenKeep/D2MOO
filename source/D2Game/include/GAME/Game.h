@@ -65,7 +65,7 @@ using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo
 using FnSaveDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nUnused);
 using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
 using FnEnterGame = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
-using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nToken, WORD nGameId, const char* szAccountName, int32_t* a5, int32_t* a6, int32_t* a7); //TODO: Last 3 args
+using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nToken, WORD nGameId, char* pszOutAccountName, int32_t* pOutValueResolvedUsingToken, int32_t* a6, int32_t* a7); //TODO: Last 3 args
 /*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
 using FnUnlockDatabaseCharacter = void(__fastcall*)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
@@ -239,7 +239,7 @@ void* __fastcall sub_6FC35720();
 //D2Game.0x6FC35740
 void GAME_LogMessage(int32_t a1, const char* szFormat, ...);
 //D2Game.0x6FC357C0
-int32_t __stdcall D2Game_10046();
+D2GAME_DLL_DECL int32_t __stdcall D2Game_10046();
 //D2Game.0x6FC35810
 int32_t __stdcall D2Game_10050();
 //D2Game.0x6FC35840
@@ -249,19 +249,19 @@ void __stdcall GAME_InitGameDataTable(D2GameDataTableStrc* pGameDataTbl, void* p
 //D2Game.0x6FC358E0
 void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2ServerCallbackFunctions);
 //D2Game.0x6FC35920 (#10010)
-void __stdcall GAME_SetInitSeed(int32_t nInitSeed);
+D2GAME_DLL_DECL void __stdcall GAME_SetInitSeed(int32_t nInitSeed);
 //D2Game.0x6FC35930
-uint32_t __fastcall D2Game_10011();
+D2GAME_DLL_DECL uint32_t __fastcall D2Game_10011();
 //D2Game.0x6FC35A10
 void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* szGameName, int32_t a3);
 //D2Game.0x6FC35CB0
 int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket);
 //D2Game.0x6FC35E50
-void __stdcall D2Game_10056(int32_t a1);
-//D2Game.0x6FC35E70
-int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
+D2GAME_DLL_DECL void __stdcall D2Game_10056(int32_t a1);
+//D2Game.0x6FC35E70 (#10047)
+D2GAME_DLL_DECL int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
-int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t a8);
+D2GAME_DLL_DECL int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t a8);
 //D2Game.0x6FC36570
 void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nExpLost, int32_t a13, int32_t a14);
 //D2Game.0x6FC369C0
@@ -313,12 +313,13 @@ int32_t __fastcall sub_6FC38100(int32_t nClientId);
 //D2Game.0x6FC38140
 void __fastcall sub_6FC38140(void* a1, int32_t a2);
 //D2Game.0x6FC38530 (#10003)
-void __fastcall GAME_ProcessNetworkMessages();
+D2GAME_DLL_DECL void __fastcall GAME_ProcessNetworkMessages();
 //D2Game.0x6FC385A0
 void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC38610
 void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame);
-//D2Game.0x6FC386D0
+//1.10f: D2Game.0x6FC386D0
+//1.14d: Game.0x52D870
 void __fastcall GAME_UpdateProgress(D2GameStrc* pGame);
 //D2Game.0x6FC38990
 void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
@@ -327,13 +328,13 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame);
 //D2Game.0x6FC38E00
 void __fastcall sub_6FC38E00();
 //D2Game.0x6FC38E20 (#10004)
-int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1);
+D2GAME_DLL_DECL int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1);
 //D2Game.0x6FC39030
 void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a3, int32_t nUnused);
 //D2Game.0x6FC39270
 void __fastcall sub_6FC39270(D2GameStrc* pGame, int32_t a2);
 //D2Game.0x6FC392A0 (#10005)
-void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2);
+D2GAME_DLL_DECL void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2);
 //D2Game.0x6FC394E0
 D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId);
 //D2Game.0x6FC395B0
@@ -349,29 +350,29 @@ void __fastcall sub_6FC39870(int32_t nClientId);
 //D2Game.0x6FC399A0
 int32_t __fastcall sub_6FC399A0(int32_t nClientId, D2GSPacketClt6B* pPacket);
 //D2Game.0x6FC399C0
-void __stdcall GAME_CloseAllGames();
+D2GAME_DLL_DECL void __stdcall GAME_CloseAllGames();
 //D2Game.0x6FC39B50 (#10012)
-int32_t __fastcall GAME_GetGamesCount();
-//D2Game.0x6FC39B70
-int32_t __stdcall D2Game_10057();
+D2GAME_DLL_DECL int32_t __fastcall GAME_GetGamesCount();
+//D2Game.0x6FC39B70 (#10057)
+D2GAME_DLL_DECL int32_t __stdcall D2Game_10057();
 //D2Game.0x6FC39C70
-void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize);
+D2GAME_DLL_DECL void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize);
 //D2Game.0x6FC39D80
-void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount);
+D2GAME_DLL_DECL void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount);
 //D2Game.0x6FC39EC0
-int32_t __fastcall D2Game_10051();
+D2GAME_DLL_DECL int32_t __fastcall D2Game_10051();
 //D2Game.0x6FC39ED0
-void __stdcall GAME_GetMemoryUsage(int* pCurrentMemoryUsage, int* pPeakMemoryUsageInLast10s);
+D2GAME_DLL_DECL void __stdcall GAME_GetMemoryUsage(int* pCurrentMemoryUsage, int* pPeakMemoryUsageInLast10s);
 //D2Game.0x6FC39EF0
-int32_t __stdcall D2Game_10013(uint16_t nGameId);
+D2GAME_DLL_DECL int32_t __stdcall D2Game_10013(uint16_t nGameId);
 //D2Game.0x6FC39FF0
-int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo);
+D2GAME_DLL_DECL int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo);
 //D2Game.0x6FC3A390 (#10015)
-int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount);
-//D2Game.0x6FC3A490
-int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId);
-//D2Game.0x6FC3A5A0
-int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
+D2GAME_DLL_DECL int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount);
+//D2Game.0x6FC3A490 (#10016)
+D2GAME_DLL_DECL int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId);
+//D2Game.0x6FC3A5A0 (#10017)
+D2GAME_DLL_DECL int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount);
 //D2Game.0x6FC3A6F0
 int32_t __stdcall GAME_ReturnArgument(int32_t a1);
 //D2Game.0x6FC3A700
@@ -385,15 +386,15 @@ void __fastcall GAME_GetItemDescription(char* szDescription, int32_t nClassId);
 //D2Game.0x6FC3A8A0
 void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId);
 //D2Game.0x6FC3A8B0 (#10019)
-void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType);
-//D2Game.0x6FC3AB20
-int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID);
-//D2Game.0x6FC3ACD0
-void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats);
-//D2Game.0x6FC3AE10
-void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMessage);
-//D2Game.0x6FC3AFB0
-void __stdcall D2Game_10022(uint16_t a1, const char* Str2);
+D2GAME_DLL_DECL void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType);
+//D2Game.0x6FC3AB20 (#10018)
+D2GAME_DLL_DECL int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID);
+//D2Game.0x6FC3ACD0 (#10020)
+D2GAME_DLL_DECL void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats);
+//D2Game.0x6FC3AE10 (#10021)
+D2GAME_DLL_DECL void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, const char* szMessage);
+//D2Game.0x6FC3AFB0 (#10022)
+D2GAME_DLL_DECL void __stdcall GAME_SendMessageToGameClients(uint16_t a1, const char* Str2);
 //D2Game.0x6FC3B0E0
 void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pContext);
 //D2Game.0x6FC3B160
@@ -403,7 +404,7 @@ void __fastcall GAME_LeaveGlobalGamesCriticalSection();
 //D2Game.0x6FC3B280
 void __stdcall D2Game_10008(int32_t a1);
 //D2Game.0x6FC3B2A0 (#10009)
-void __stdcall GAME_SetGlobalAct(int32_t nAct);
+D2GAME_DLL_DECL void __stdcall GAME_SetGlobalAct(int32_t nAct);
 //D2Game.0x6FC3B2B0
 void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame);
 //D2Game.0x6FC3B3D0

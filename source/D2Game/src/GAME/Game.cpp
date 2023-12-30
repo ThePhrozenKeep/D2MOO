@@ -1806,7 +1806,8 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
     }
 }
 
-//D2Game.0x6FC386D0
+//1.10f: D2Game.0x6FC386D0
+//1.14d: Game.0x52D870
 void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 {
     // TODO: v2, v6
@@ -3077,7 +3078,7 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
 }
 
 //D2Game.0x6FC3AE10 (#10021)
-void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMessage)
+void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, const char* szMessage)
 {
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
@@ -3116,7 +3117,7 @@ void __stdcall D2Game_10021(int32_t a1, int32_t nPacketParam, const char* szMess
 }
 
 //D2Game.0x6FC3AFB0 (#10022)
-void __stdcall D2Game_10022(uint16_t nGameId, char* a2)
+void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 {
     EnterCriticalSection(&gCriticalSection_6FD45800);
 

@@ -20,8 +20,8 @@ EXPORTS
 	D2Game_10018														@10018
 	GAME_GetUnitsDescriptions											@10019
 	GAME_GetStatistics													@10020
-	D2Game_10021														@10021
-	D2Game_10022														@10022
+	GAME_SendMessageToAllClients										@10021
+	GAME_SendMessageToGameClients										@10022
 	GAME_SetServerCallbackFunctions										@10023
 	D2Game_10024_RemoveClientFromGame									@10024
 	DEBUG_GetUnitFromTypeAndGUID										@10025
