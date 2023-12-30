@@ -923,8 +923,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 }
 
 //D2Game.0x6FC36DF0
-int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, const char* szAccountName, int32_t* a7, uint8_t nLocale, int32_t* a9, int32_t* a10)
-{
+int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, char* szAccountName, int32_t* a7, uint8_t nLocale, int32_t* a9, int32_t* a10) {
     if (!CCMD_IsStringZeroTerminated(szClientName, 16))
     {
         GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", nClientId, nGameId, nToken);
