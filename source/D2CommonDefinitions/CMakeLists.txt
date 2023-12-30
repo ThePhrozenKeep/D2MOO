@@ -27,7 +27,7 @@ target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND
 include(CMakePrintHelpers)
 
 if(D2MOO_ORDINALS_VERSION)
-  set(D2_VERSION_REGEX "^([0-9]+)\\.([0-9][0-9])([A-Za-z])(-(.+))?$")
+  set(D2_VERSION_REGEX "^([0-9]+)\\.([0-9][0-9])([A-Za-z]?)(-(.+))?$")
   if(D2MOO_ORDINALS_VERSION MATCHES ${D2_VERSION_REGEX})
     set(D2MOO_ORDINAL_VERSION_MAJOR ${CMAKE_MATCH_1})
     set(D2MOO_ORDINAL_VERSION_MINOR ${CMAKE_MATCH_2})
