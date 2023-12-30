@@ -35,7 +35,7 @@ jobs:
 
     - name: CMake configure and build
       run: |
-        cmake --preset ${{env.CMAKE_PRESET}} -DD2MOO_ORDINALS_VERSION=${{matrix.version}}
+        cmake --preset ${{env.CMAKE_PRESET}} -DD2MOO_ORDINALS_VERSION="${{matrix.version}}"
         cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}}
       env: # We need to enforce VC++ here as clang is picked otherwise due to clang-tidy being in the path
         CXX: CL
