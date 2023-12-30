@@ -3131,13 +3131,13 @@ void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
     D2GameStrc* pGame = GAME_LockGame(nGUID);
     D2_ASSERT(pGame);
 
-    a2[255] = 0;
-    if (!strncmp("<ABEND> ", a2, 8u))
+	szMessage[255] = 0;
+    if (!strncmp("<ABEND> ", szMessage, 8u))
     {
-        pGame->unk0x1DDC = a2[8] & 0xF;
+        pGame->unk0x1DDC = szMessage[8] & 0xF;
     }
 
-    sub_6FC84CD0(pGame, a2, 1u);
+    sub_6FC84CD0(pGame, szMessage, 1u);
 
     D2_UNLOCK(pGame->lpCriticalSection);
 }
