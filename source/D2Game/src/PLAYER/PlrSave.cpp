@@ -508,7 +508,7 @@ int32_t __fastcall D2GAME_SAVE_CalculateChecksum_6FC8A140(D2SaveHeaderStrc* pSav
 }
 
 //D2Game.0x6FC8A1B0
-int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, const char* szCharName, char* szAccountName, int32_t bInteractsWithPlayer, int32_t nUnkCharacterId, int32_t a7, D2ClientInfoStrc* pClientInfo)
+int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, const char* szCharName, char* szAccountName, int32_t bInteractsWithPlayer, int32_t nCharSaveTransactionToken, int32_t a7, D2ClientInfoStrc* pClientInfo)
 {
     if (!gbWriteSaveFile_6FD30E08)
     {
@@ -627,7 +627,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
             exit(-1);
         }
 
-        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nUnkCharacterId);
+        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nCharSaveTransactionToken);
         CLIENTS_CopySaveDataToClient(pClient, &pSaveData[2], nFileSize);
     }
 
@@ -660,8 +660,8 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     char szAccountName[50] = {};
     CLIENTS_CopyAccountNameToBuffer(pClient, szAccountName);
-    int32_t nUnkCharacterId = 0;
-    D2GAME_GetUnkCharacterId_6FC346A0(pClient, &nUnkCharacterId);
+    int32_t nCharSaveTransactionToken = 0;
+    D2GAME_GetCharSaveTransactionToken_6FC346A0(pClient, &nCharSaveTransactionToken);
     D2ClientInfoStrc* pClientInfo = nullptr;
     D2GAME_GetRealmIdFromClient_6FC346B0(pClient, &pClientInfo);
 
@@ -686,7 +686,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
 
     if (gpD2EventCallbackTable_6FD45830)
     {
-        return D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(pGame, pPlayer, szName, szAccountName, bInteractsWithPlayer, nUnkCharacterId, dwArg, pClientInfo);
+        return D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(pGame, pPlayer, szName, szAccountName, bInteractsWithPlayer, nCharSaveTransactionToken, dwArg, pClientInfo);
     }
 
     if (!gbWriteSaveFile_6FD30E08)

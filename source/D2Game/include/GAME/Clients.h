@@ -170,7 +170,7 @@ struct D2ClientStrc
 	char szName[16];							//0x00D
 	char szAccount[16];							//0x01D
 	uint8_t unk0x2D[51];						//0x02D
-	int32_t nUnkCharacterId;					//0x060
+	int32_t nCharSaveTransactionToken;			//0x060
 	int32_t unk0x64;							//0x064
 	D2ClientInfoStrc* pClientInfo;				//0x068
 	D2CharacterPreviewInfoStrc tCharacterInfo;	//0x06C
@@ -251,7 +251,7 @@ void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
 //1.10f: D2Game.0x6FC325E0
 //1.13c: D2Game.0x6FC6A9B0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nUnkCharacterId, uint32_t nLocale, int32_t a8, int32_t a9);
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC327E0
 void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame);
 //D2Game.0x6FC32810
@@ -391,7 +391,7 @@ D2PacketDataStrc* __fastcall CLIENTS_PacketDataList_GetHead(D2ClientStrc* pClien
 //D2Game.0x6FC34690
 void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szAccount);
 //D2Game.0x6FC346A0
-void __fastcall D2GAME_GetUnkCharacterId_6FC346A0(D2ClientStrc* pClient, int32_t* pUnkCharacterId);
+void __fastcall D2GAME_GetCharSaveTransactionToken_6FC346A0(D2ClientStrc* pClient, int32_t* pCharSaveTransactionToken);
 //D2Game.0x6FC346B0
 void __fastcall D2GAME_GetRealmIdFromClient_6FC346B0(D2ClientStrc* pClient, D2ClientInfoStrc** ppClientInfo);
 //D2Game.0x6FC346C0

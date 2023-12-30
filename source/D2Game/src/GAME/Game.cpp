@@ -515,7 +515,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
 }
 
 //D2Game.0x6FC36280 (#10007)
-int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nUnkCharacterId)
+int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nCharSaveTransactionToken)
 {
     if (nTotalSize && !CLIENTS_AttachSaveFile(nClientId, pSaveData, nSaveSize, nTotalSize, a5 == 0, 1, a6))
     {
@@ -578,7 +578,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    if (pClient->nUnkCharacterId != nUnkCharacterId)
+    if (pClient->nCharSaveTransactionToken != nCharSaveTransactionToken)
     {
         D2_UNLOCK(pGame->lpCriticalSection);
 
@@ -1074,7 +1074,7 @@ int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8
 }
 
 //D2Game.0x6FC37150
-void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nUnkCharacterId, int32_t nLocale, int32_t a8, int32_t a9)
+void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nCharSaveTransactionToken, int32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gpGameDataTbl_6FD45818)
     {
@@ -1111,7 +1111,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 
     SERVER_SetClientGameGUID(dwClientId, nGUID);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nUnkCharacterId, nLocale, a8, a9);
+    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nCharSaveTransactionToken, nLocale, a8, a9);
     if (pClient)
     {
         D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
