@@ -60,7 +60,7 @@ static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2G
 
 
 using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
-using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t a6, uint32_t nFlags, const char* szCharName, const char* a9, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t a14, void* a15); //TODO: Unknown args
+using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t a6, uint32_t nFlags, const char* szCharName, const char* a9, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t a14, uint64_t* pLadderGUID); //TODO: Unknown args
 using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
 using FnSaveDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nUnused);
 using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
@@ -69,7 +69,7 @@ using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t n
 /*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
 using FnUnlockDatabaseCharacter = void(__fastcall*)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
-using FnUpdateCharacterLadder = void(__fastcall*)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, void* pUnknown);
+using FnUpdateCharacterLadder = void(__fastcall*)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, uint64_t* pLadderGUID);
 using FnUpdateGameInformation = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
 using FnHandlePacket = void(__fastcall*)(void* pPacket, int32_t nPacketSize);
 using FnSetGameData = uint32_t(__fastcall*)();
@@ -102,7 +102,7 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 
 struct D2GameInfoStrc
 {
-	int32_t nServerToken;							// 0x00 nGameId
+	int32_t nGameId;								// 0x00
 	uint32_t nInitSeed;								// 0x04
 	int32_t nClients;								// 0x08
 	int32_t nPlayers;								// 0x0C
@@ -147,7 +147,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	void* pMemoryPool;								//0x1C
 	uint32_t nGameData;								//0x20
 	uint32_t unk0x24;								//0x24
-	uint16_t nServerToken;							//0x28
+	uint16_t nGameId;								//0x28
 	char szGameName[16];							//0x2A
 	char szGamePassword[16];						//0x3A
 	char szGameDesc[32];							//0x4A
@@ -261,9 +261,9 @@ D2GAME_DLL_DECL void __stdcall D2Game_10056(int32_t a1);
 //D2Game.0x6FC35E70 (#10047)
 D2GAME_DLL_DECL int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
-D2GAME_DLL_DECL int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, int32_t a7, int32_t a8);
+D2GAME_DLL_DECL int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nCharSaveTransactionToken);
 //D2Game.0x6FC36570
-void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nExpLost, int32_t a13, int32_t a14);
+void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t a2, uint32_t nFlags, int32_t nArenaTemplate, int32_t a9, int32_t a10, uint8_t nDifficulty, uint8_t nLocale, int32_t a13, int32_t a14);
 //D2Game.0x6FC369C0
 void __fastcall sub_6FC369C0(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC36AA0
@@ -277,9 +277,9 @@ void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* s
 //D2Game.0x6FC36C60
 void __fastcall GAME_SendActInit(int32_t nClientId);
 //D2Game.0x6FC36DF0
-int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, char* szAccountName, int32_t* a7, uint8_t nLocale, int32_t* a9, int32_t* a10);
+int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, char* szAccountName, int32_t* pCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10);
 //D2Game.0x6FC37150
-void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t a3, char* szClientName, char* szAccountName, int32_t a6, int32_t a7, int32_t a8, int32_t a9);
+void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nCharSaveTransactionToken, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
 _Requires_lock_held_(*pGame->lpCriticalSection)
 _Releases_lock_(*pGame->lpCriticalSection)

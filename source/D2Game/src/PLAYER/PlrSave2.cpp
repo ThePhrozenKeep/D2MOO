@@ -1467,13 +1467,12 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     for (int32_t i = 0; i < 16; ++i)
     {
-        // TODO: Names
         int32_t nSkillId = 0;
-        int32_t a4 = 0;
-        int32_t v46 = 0;
-        CLIENTS_GetSkillHotKey(pClient, i, &nSkillId, &a4, &v46);
+        int32_t nHand = 0;
+        int32_t nItemIndex = 0;
+        CLIENTS_GetSkillHotKey(pClient, i, &nSkillId, &nHand, &nItemIndex);
 
-        if (v46)
+        if (nItemIndex)
         {
             int32_t nItemGUID = -1;
             if (pUnit->pInventory)
@@ -1482,7 +1481,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
                 
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
-                    if (nCounter == v46)
+                    if (nCounter == nItemIndex)
                     {
                         if (INVENTORY_UnitIsItem(pItem))
                         {
@@ -1495,7 +1494,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
                 }
             }
 
-            CLIENTS_SetSkillHotKey(pClient, i, nSkillId, a4, nItemGUID);
+            CLIENTS_SetSkillHotKey(pClient, i, nSkillId, nHand, nItemGUID);
         }
     }
 

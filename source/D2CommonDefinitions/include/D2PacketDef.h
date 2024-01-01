@@ -1638,9 +1638,12 @@ struct D2GSPacketSrv7A		//size of 0x0D
 struct D2GSPacketSrv7B		//size of 0x08
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01;			//0x01
-	uint16_t unk0x02;			//0x02
-	uint32_t unk0x04;			//0x04
+	uint8_t nSlot;				//0x01
+	struct {					//0x02
+		uint16_t nSkill : 12;
+		uint16_t nHand : 4;
+	};
+	uint32_t nItemGUID;			//0x04
 };
 
 struct D2GSPacketSrv7C		//size of 0x06
@@ -2103,9 +2106,9 @@ struct D2GSPacketSrvB0		//size of 0x01
 struct D2GSPacketSrvB1		//size of 0x35
 {
 	uint8_t nHeader;			//0x00
-	char unk0x01[48];		//0x01
-	uint16_t unk0x31;			//0x31
-	uint16_t unk0x33;			//0x33
+	char szGameName[48];		//0x01
+	uint16_t nClientCount;		//0x31
+	uint16_t nGameId;			//0x33
 };
 
 struct D2GSPacketSrvB2		//variable size

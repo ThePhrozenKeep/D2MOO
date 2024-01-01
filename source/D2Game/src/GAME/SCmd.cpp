@@ -47,15 +47,15 @@ static PacketStatId PACKET_StatToPacketStatId(uint16_t wStat)
 }
 
 //D2Game.0x6FC3C640
-int32_t __fastcall sub_6FC3C640(int32_t nClientId, int16_t a2, int16_t a3, const char* szSource)
+int32_t __fastcall sub_6FC3C640(int32_t nClientId, int16_t nGameId, int16_t nClientCount, const char* szGameName)
 {
     D2GSPacketSrvB1 packetB1 = {};
 
     packetB1.nHeader = 0xB1;
-    packetB1.unk0x33 = a2;
-    packetB1.unk0x31 = a3;
+    packetB1.nGameId = nGameId;
+    packetB1.nClientCount = nClientCount;
 
-    SStrCopy(packetB1.unk0x01, szSource, 0x10u);
+    SStrCopy(packetB1.szGameName, szGameName, 0x10u);
     
     return D2NET_10006(0, nClientId, &packetB1, sizeof(packetB1));
 }
@@ -2138,22 +2138,15 @@ void __fastcall SCMD_Send0x75_PartyRosterUpdate(D2UnitStrc* pLocalPlayer, D2Unit
 }
 
 //D2Game.0x6FC3F720
-void __fastcall D2GAME_PACKETS_SendPacket0x7B_6FC3F720(D2ClientStrc* pClient, BYTE slot, int16_t a3, int32_t a4, int32_t a5)
+void __fastcall D2GAME_PACKETS_SendPacket0x7B_6FC3F720(D2ClientStrc* pClient, BYTE slot, int16_t nSkill, int32_t nHand, int32_t nItemGUID)
 {
     D2GSPacketSrv7B packet7B = {};
 
-    packet7B.nHeader = 0x7Bu;
-    packet7B.unk0x01 = slot;
-    packet7B.unk0x04 = a5;
-
-    if (a4)
-    {
-        packet7B.unk0x02 = (a3 & 0xFFF) | 0x8000;
-    }
-    else
-    {
-        packet7B.unk0x02 = a3 & 0xFFF;
-    }
+	packet7B.nHeader = 0x7Bu;
+	packet7B.nSlot = slot;
+	packet7B.nSkill = nSkill;
+	packet7B.nItemGUID = nItemGUID;
+	packet7B.nHand = nHand ? 0x08 : 0x00;
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet7B, sizeof(packet7B));
 }
