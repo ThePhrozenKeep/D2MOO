@@ -11,11 +11,12 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 endif()
 
 # Standard CMake modules
-include(CMakeDependentOption)           # This is a really useful scripts that creates options that depends on other options. It can even be used with generator expressions !
-include(GNUInstallDirs)                 # This will define the default values for installation directories (all platforms even if named GNU)
-include(CTest)                          # Must be called before adding tests but after calling project(). This automatically calls enable_testing() and configures ctest targets when using Make/Ninja
-include(cmake/D2MOO.ModHelpers.cmake)   # Used to make modders life easier
-include(cmake/D2MOO.D2SE.cmake)   # Used to generate D2SE .ini files
+include(CMakeDependentOption)             # This is a really useful scripts that creates options that depends on other options. It can even be used with generator expressions !
+include(GNUInstallDirs)                   # This will define the default values for installation directories (all platforms even if named GNU)
+include(CTest)                            # Must be called before adding tests but after calling project(). This automatically calls enable_testing() and configures ctest targets when using Make/Ninja
+include(cmake/D2MOO.TargetsHelpers.cmake) # Used to setup targets more easily
+include(cmake/D2MOO.ModHelpers.cmake)     # Used to make modders life easier
+include(cmake/D2MOO.D2SE.cmake)           # Used to generate D2SE .ini files
 
 #####################
 ##  D2MOO OPTIONS  ##
@@ -25,6 +26,9 @@ set(D2MOO_ORDINALS_VERSION "1.10f" CACHE STRING "Name of the version to be used 
 option(ENABLE_D2DETOURS_EMBEDDED_PATCHES "Build the DLL with builtin patching using D2.Detours" ON)
 if(D2MOO_IS_ROOT_PROJECT) # Let parent project decide wether to use its own patches or not
 	set(D2DETOURS_EMBEDDED_PATCHES_DIR "${EMBEDDED_PATCHES_DIR_PREFIX}D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches. Defaults to the root D2.Detours.patches directory")
+	if(NOT DEFINED BUILD_SHARED_LIBS AND D2MOO_ORDINALS_VERSION VERSION_LESS "1.14" )
+		set(BUILD_SHARED_LIBS ON CACHE BOOL "Should we build shared libraries (.DLLs) instead of static libraries.")
+	endif()
 endif()	
 
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
@@ -94,13 +98,16 @@ if(${D2MOO_INSTALL})
   
   install(TARGETS D2.DetoursLauncher D2.Detours)
   
-  install(TARGETS D2Common D2Game D2Debugger
+  set(D2MOO_TARGETS_TO_INSTALL D2Common D2Game D2Debugger)
+  install(TARGETS ${D2MOO_TARGETS_TO_INSTALL}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
   )
-  install(FILES $<TARGET_PDB_FILE:D2Common> $<TARGET_PDB_FILE:D2Game> $<TARGET_PDB_FILE:D2Debugger> 
-    DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
-    OPTIONAL
-  )
+  foreach(TARGET_TO_INSTALL IN LISTS D2MOO_TARGETS_TO_INSTALL)
+    install(FILES "$<$<STREQUAL:$<TARGET_PROPERTY:${TARGET_TO_INSTALL},TYPE>,SHARED_LIBRARY>:$<TARGET_PDB_FILE:${TARGET_TO_INSTALL}>>"
+      DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
+      OPTIONAL
+    )
+  endforeach()
   
   install(FILES README.md TYPE DOC)
   install(DIRECTORY doc/ TYPE DOC)

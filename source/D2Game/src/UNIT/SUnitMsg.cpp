@@ -228,7 +228,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
                             {
                                 if (pItemStatCostTxtRecord->nSendBits < 32u)
                                 {
-                                    if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[1])
+                                    if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_SIGNED])
                                     {
                                         const int32_t nMin = -(1 << (pItemStatCostTxtRecord->nSendBits - 1));
                                         const int32_t nMax = (1 << (pItemStatCostTxtRecord->nSendBits - 1)) - 1;
@@ -329,7 +329,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
                                 {
                                     if (pItemStatCostTxtRecord->nSendBits < 32u)
                                     {
-                                        if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[1])
+                                        if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_SIGNED])
                                         {
                                             const int32_t nMin = -(1 << (pItemStatCostTxtRecord->nSendBits - 1));
                                             const int32_t nMax = (1 << (pItemStatCostTxtRecord->nSendBits - 1)) - 1;

@@ -203,86 +203,86 @@ extern D2GfxSettingsStrc gGfxSettings;
 
 
 //D2Gfx.0x6FA73750 (#10000)
-int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, DisplayType nDisplayType, int32_t bWindowed);
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, DisplayType nDisplayType, int32_t bWindowed);
 //D2Gfx.0x6FA73980
-void __cdecl j_D2GFX_10040_ShowAllWindows();
+D2GFX_DLL_DECL void __cdecl j_D2GFX_10040_ShowAllWindows();
 //D2Gfx.0x6FA73990 (#10002)
-int32_t __stdcall D2GFX_ReturnFalse();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_ReturnFalse();
 //D2Gfx.0x6FA739A0 (#10001)
-int32_t __stdcall D2GFX_Release();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_Release();
 //D2Gfx.0x6FA73AC0 (#10003)
-DisplayType __stdcall D2GFX_GetDisplayType();
+D2GFX_DLL_DECL DisplayType __stdcall D2GFX_GetDisplayType();
 //D2Gfx.0x6FA73AD0 (#10004)
-int32_t __stdcall D2GFX_CheckWindowed();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckWindowed();
 //D2Gfx.0x6FA73AE0 (#10005)
-D2GameResolutionMode __stdcall D2GFX_GetResolutionMode();
+D2GFX_DLL_DECL D2GameResolutionMode __stdcall D2GFX_GetResolutionMode();
 //D2Gfx.0x6FA73AF0 (#10007)
-int32_t __stdcall D2GFX_CheckUnitPerspective();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckUnitPerspective();
 //D2Gfx.0x6FA73B00 (#10008)
-void __stdcall D2GFX_SetUnitPerspective(int32_t bPerspective);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetUnitPerspective(int32_t bPerspective);
 //D2Gfx.0x6FA73B20 (#10047)
-int32_t __stdcall D2GFX_HardwareAcceleratedRenderMode();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_HardwareAcceleratedRenderMode();
 //D2Gfx.0x6FA73B30 (#10009)
-int32_t __stdcall D2GFX_TogglePerspective();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_TogglePerspective();
 //D2Gfx.0x6FA73B50 (#10010)
-int32_t __stdcall D2GFX_CheckPerspective();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckPerspective();
 //D2Gfx.0x6FA73B70 (#10011)
-void __stdcall D2GFX_SetPerspective(int32_t bPerspective);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetPerspective(int32_t bPerspective);
 //D2Gfx.0x6FA73B80 (#10012)
-int32_t __stdcall D2GFX_ToggleBlendedShadows();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_ToggleBlendedShadows();
 //D2Gfx.0x6FA73BA0 (#10013)
-int32_t __stdcall D2GFX_CheckBlendedShadows();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckBlendedShadows();
 //D2Gfx.0x6FA73BB0 (#10014)
-void __stdcall D2GFX_SetBlendShadows(int32_t bBlendedShadows);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetBlendShadows(int32_t bBlendedShadows);
 //D2Gfx.0x6FA73BC0 (#10015)
-int32_t __stdcall D2GFX_ToggleLowQuality();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_ToggleLowQuality();
 //D2Gfx.0x6FA73BE0 (#10016)
-int32_t __stdcall D2GFX_CheckLowQuality();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckLowQuality();
 //D2Gfx.0x6FA73BF0 (#10017)
-void __stdcall D2GFX_SetLowQuality(int32_t bLowQuality);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetLowQuality(int32_t bLowQuality);
 //D2Gfx.0x6FA73C00 (#10018)
-int32_t __stdcall D2GFX_SetGamma(uint32_t dwGamma);
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_SetGamma(uint32_t dwGamma);
 //D2Gfx.0x6FA73C20 (#10019)
-int32_t __stdcall D2GFX_GammaCanBeControlled();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_GammaCanBeControlled();
 //D2Gfx.0x6FA73C30 (#10020)
-void __stdcall D2GFX_EnableVSync();
+D2GFX_DLL_DECL void __stdcall D2GFX_EnableVSync();
 //D2Gfx.0x6FA73C40 (#10021)
-uint32_t* __stdcall D2GFX_GetCacheResults();
+D2GFX_DLL_DECL uint32_t* __stdcall D2GFX_GetCacheResults();
 //D2Gfx.0x6FA73C50 (#10022)
-void __fastcall D2GFX_SetViewMatrixAdjust(int32_t nAdjust);
+D2GFX_DLL_DECL void __fastcall D2GFX_SetViewMatrixAdjust(int32_t nAdjust);
 //D2Gfx.0x6FA73C60 (#10042)
-int32_t __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValue);
+D2GFX_DLL_DECL int32_t __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValue);
 //D2Gfx.0x6FA73C90 (#10044)
-int32_t __stdcall D2GFX_StartDraw(int32_t bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_StartDraw(int32_t bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 //D2Gfx.0x6FA73CB0 (#10045)
-int32_t __stdcall D2GFX_EndScene();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_EndScene();
 //D2Gfx.0x6FA73CD0 (#10046)
-int32_t __stdcall D2GFX_GetBackBuffer(uint8_t* pBuffer);
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_GetBackBuffer(uint8_t* pBuffer);
 //D2Gfx.0x6FA73CE0 (#10051)
-void __stdcall D2GFX_UtilDiamond(RECT* pRect, uint8_t nPaletteIndex);
+D2GFX_DLL_DECL void __stdcall D2GFX_UtilDiamond(RECT* pRect, uint8_t nPaletteIndex);
 //D2Gfx.0x6FA73D00 (#10052)
-void __stdcall D2GFX_UtilRect(RECT* pRect, uint8_t nPaletteIndex);
+D2GFX_DLL_DECL void __stdcall D2GFX_UtilRect(RECT* pRect, uint8_t nPaletteIndex);
 //D2Gfx.0x6FA73D20 (#10053)
-void __stdcall D2GFX_UtilFilledRect(RECT* pRect, uint8_t nPaletteIndex);
+D2GFX_DLL_DECL void __stdcall D2GFX_UtilFilledRect(RECT* pRect, uint8_t nPaletteIndex);
 //D2Gfx.0x6FA73D40 (#10054)
-void __stdcall D2GFX_UtilPoint(POINT* pPoint, uint8_t nSize, uint8_t nPaletteIndex);
+D2GFX_DLL_DECL void __stdcall D2GFX_UtilPoint(POINT* pPoint, uint8_t nSize, uint8_t nPaletteIndex);
 //D2Gfx.0x6FA73D60 (#10055)
-void __stdcall D2GFX_DrawBox(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, DrawMode eDrawMode);
+D2GFX_DLL_DECL void __stdcall D2GFX_DrawBox(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, DrawMode eDrawMode);
 //D2Gfx.0x6FA73DA0 (#10056)
-void __stdcall D2GFX_DrawBoxAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
+D2GFX_DLL_DECL void __stdcall D2GFX_DrawBoxAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint32_t dwColor, uint8_t nAlpha);
 //D2Gfx.0x6FA73DE0 (#10057)
-void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint8_t nColor, uint8_t nAlpha);
+D2GFX_DLL_DECL void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint8_t nColor, uint8_t nAlpha);
 //D2Gfx.0x6FA73E10 (#10058)
-void __stdcall D2GFX_ClearScreen(int32_t bPartial);
+D2GFX_DLL_DECL void __stdcall D2GFX_ClearScreen(int32_t bPartial);
 //D2Gfx.0x6FA73E30 (#10079)
-BOOL __stdcall D2GFX_FloorTileDraw(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
+D2GFX_DLL_DECL BOOL __stdcall D2GFX_FloorTileDraw(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
 //D2Gfx.0x6FA73E70 (#10048)
-void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette);
 //D2Gfx.0x6FA73EB0 (#10049)
-void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables);
 //D2Gfx.0x6FA73ED0 (#10050)
-void __stdcall D2GFX_SetAmbientColor(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetAmbientColor(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 //D2Gfx.0x6FA73EF0 (#10069)
-void __cdecl D2GFX_OutputString(int32_t nXPos, int32_t nYPos, const char* szFormat, ...);
+D2GFX_DLL_DECL void __cdecl D2GFX_OutputString(int32_t nXPos, int32_t nYPos, const char* szFormat, ...);
 //D2Gfx.0x6FA73F10 (#10070)
-void __stdcall D2GFX_DebugDraw(uint32_t* pLight, uint32_t* pPlayerLight, int32_t nXPos, int32_t nYPos);
+D2GFX_DLL_DECL void __stdcall D2GFX_DebugDraw(uint32_t* pLight, uint32_t* pPlayerLight, int32_t nXPos, int32_t nYPos);

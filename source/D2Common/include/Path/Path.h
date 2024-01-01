@@ -225,8 +225,10 @@ D2COMMON_DLL_DECL void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit,
 D2COMMON_DLL_DECL void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDA8450 (#10223)
 D2COMMON_DLL_DECL BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bForce);
-//D2Common.0x6FDA8600
-int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown);
+//1.00:  D2Common.0x10059110 (#10141)
+//1.10f: D2Common.0x6FDA8600 (#10142)
+//1.13c: D2Common.0x6FD86230 (#10334)
+D2COMMON_DLL_DECL int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown);
 //D2Common.0x6FDA8E30
 int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0

@@ -4,6 +4,9 @@
 set(CMAKE_CXX_CLANG_TIDY "")
 set(CMAKE_FOLDER external)
 
+set(BUILD_SHARED_LIBS_BACKUP ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF) # Build external libs as static libs (or their default settings) for now 
+  
 if(ENABLE_D2DETOURS_EMBEDDED_PATCHES)
   add_subdirectory(D2.Detours)
   
@@ -70,3 +73,6 @@ target_include_directories(stb SYSTEM
     stb # note : will expose the parts/ folder...
 )
 add_library(stb::stb ALIAS stb)
+
+# Restore BUILD_SHARED_LIBS
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_BACKUP})

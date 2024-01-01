@@ -63,7 +63,7 @@ int32_t __fastcall SKILLITEM_pSpell01_Initializer(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FD02BF0
 int32_t __fastcall SKILLITEM_pSpell01_IdentifyItem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
-    if (!sub_6FC937A0(pGame, pUnit) && !ITEMS_CheckItemFlag(pTarget, IFLAG_IDENTIFIED, __LINE__, __FILE__) && pUnit->pInventory)
+    if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && !ITEMS_CheckItemFlag(pTarget, IFLAG_IDENTIFIED, __LINE__, __FILE__) && pUnit->pInventory)
     {
         for (D2UnitStrc* pInvItem = INVENTORY_GetFirstItem(pUnit->pInventory); pInvItem; pInvItem = INVENTORY_GetNextItem(pInvItem))
         {

@@ -5,7 +5,7 @@
 # Creating multiple executables is of course not mandatory, and one could use the same executable with various command lines to filter what tests to run.
 
 add_executable(D2CommonTests D2CommonTests.cpp)
-target_link_libraries(D2CommonTests PRIVATE doctest::doctest D2CommonStatic)
+target_link_libraries(D2CommonTests PRIVATE doctest::doctest ${D2CommonImplName})
 target_compile_features(D2CommonTests PRIVATE cxx_std_17)
 
 set_target_properties(D2CommonTests PROPERTIES

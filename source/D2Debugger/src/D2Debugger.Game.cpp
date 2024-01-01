@@ -11,7 +11,9 @@
 #include "IconsFontAwesome6.h"
 
 #include <Windows.h>
-extern HMODULE DLLBASE_D2Game;
+
+#if defined(D2_VERSION_110F)
+#define HAS_SPAWN_FUNCTIONS
 HMODULE delayedD2GameDllBaseGet()
 {
     static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
@@ -21,7 +23,10 @@ HMODULE delayedD2GameDllBaseGet()
 static const int D2GameImageBase = 0x6FC30000;
 D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
 D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
-
+#elif defined(D2_VERSION_114D)
+#else
+#pragma message("Warning: Unsupported D2 version for D2Debugger")
+#endif
 
 // Using a define so that we break inline
 #define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
@@ -32,17 +37,6 @@ std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
     std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3, 0);
     Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2 /*See toUtf doc*/);
     return utf8CharBuffer;
-}
-
-// Note: Missile and items are inverted on purpose here, this is like this in the game
-int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
-{
-    switch (nUnitType)
-    {
-    case UNIT_MISSILE: return 4;
-    case UNIT_ITEM: return 3;
-    default: return (int)nUnitType;
-    }
 }
 
 static const char* gActNames[] = {
@@ -304,7 +298,8 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
             static int currentSuperUniqueSelectionId = 0;
             D2ComboBox("SuperUnique", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount(), GetSuperUniqueUTF8Name);
-            ImGui::SameLine();
+#ifdef HAS_SPAWN_FUNCTIONS
+			ImGui::SameLine();
             if (ImGui::Button("Spawn##SuperUnique"))
             {
                 if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
@@ -316,7 +311,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
-
+#endif
 
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
@@ -328,7 +323,8 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 return GetNOTFOUNDCharBuffer();
             };
             D2ComboBox("Normal", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount(), GetNormalMonsterUTF8Name);
-            ImGui::SameLine();
+#ifdef HAS_SPAWN_FUNCTIONS
+			ImGui::SameLine();
             if (ImGui::Button("Spawn##Normal"))
             {
                 
@@ -341,6 +337,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
+#endif
 
 
 

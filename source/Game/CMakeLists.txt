@@ -4,8 +4,12 @@ add_executable(Game WIN32
   include/Main.h
   
   resources/Game.rc
-  resources/Game.${D2MOO_ORDINALS_VERSION}.rc
 )
+
+if(EXISTS resources/Game.${D2MOO_ORDINALS_VERSION}.rc)
+  target_sources(Game PRIVATE resources/Game.${D2MOO_ORDINALS_VERSION}.rc)
+endif()
+
 target_include_directories(Game PRIVATE include)
 target_link_libraries(Game 
   PRIVATE

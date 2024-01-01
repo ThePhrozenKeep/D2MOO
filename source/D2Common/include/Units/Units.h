@@ -319,8 +319,9 @@ D2COMMON_DLL_DECL void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit);
 D2COMMON_DLL_DECL void __stdcall UNITS_UpdateFrame(D2UnitStrc* pUnit);
 //D2Common.0x6FDBF020 (#10375)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_10375_UNITS_SetFrameNonRate(D2UnitStrc* pUnit, int nRate, int nFailRate);
-//D2Common.0x6FDBF050
-void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine);
+//1.10f: D2Common.0x6FDBF050 (#10376)
+//1.13c: D2Common.0x6FD83110 (#10819)
+D2COMMON_DLL_DECL void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine);
 //D2Common.0x6FDBF8D0 (#10377)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed);
 //D2Common.0x6FDBF910 (#10378)
@@ -485,8 +486,8 @@ D2COMMON_DLL_DECL void __stdcall UNITS_FreeStaticPath(D2UnitStrc* pUnit);
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_CanDualWield(D2UnitStrc* pUnit);
 //D2Common.0x6FDC2860 (#11238)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsCorpseUseable(D2UnitStrc* pUnit);
-//D2Common.0x6FDC2910
-BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObject);
+//D2Common.0x6FDC2910 (#11307)
+D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObject);
 //D2Common.0x6FDC2C80
 struct D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId);
 //1.10f: D2Common.0x6FDC2CB0 (#10399)

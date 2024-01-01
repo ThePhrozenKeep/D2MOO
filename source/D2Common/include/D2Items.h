@@ -451,7 +451,7 @@ D2COMMON_DLL_DECL int __stdcall ITEMS_GetGemApplyType(D2UnitStrc* pItem);
 //D2Common.0x6FD9D9D0 (#10821)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketFiller(D2UnitStrc* pItem);
 //D2Common.0x6FD9D9E0 (#10822) Retrieves the runes.txt record based on the socketed items
-const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pItem);
+D2COMMON_DLL_DECL const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pItem);
 //D2Common.0x6FD9DBA0 (#10729)
 D2COMMON_DLL_DECL //Checks if the given item has a type equivalent to a given item type
 BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType);

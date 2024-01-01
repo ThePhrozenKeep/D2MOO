@@ -5,12 +5,6 @@
 #include <StormHandles.h>
 #include <stdlib.h>
 
-#ifdef FOG_IMPL
-#define FOG_DLL_DECL 
-#else
-#define FOG_DLL_DECL __declspec( dllimport )
-#endif
-
 //1.10f Image base: 0x6FF50000
 
 #pragma pack(1)
@@ -211,7 +205,7 @@ D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void** pMemPoolSystem, cons
 D2FUNC_DLL(FOG, DestroyMemoryPoolSystem, void, __cdecl, (void* pMemoryPoolSystem), 0xA100)															//Fog.#10143
 D2FUNC_DLL(FOG, GetMemoryUsage, DWORD, __cdecl, (void*), 0xA4E0)																					//Fog.#10147
 D2FUNC_DLL(FOG, InitializeServer, QServer*, __stdcall, (int, int, int, int, void*, void*, void*, void*), 0x4150)									//Fog.#10149
-D2FUNC_DLL(FOG, 10151, int, __stdcall, (void*, int), 0x4970)																						//Fog.#10151
+D2FUNC_DLL(FOG, SetMaxClientsPerGame, int, __stdcall, (QServer*, int), 0x4970)																		//Fog.#10151
 D2FUNC_DLL(FOG, 10152, int, __stdcall, (void*, const uint8_t*, int), 0x44F0)																		//Fog.#10152
 D2FUNC_DLL(FOG, WaitForSingleObject, int, __stdcall, (void*, int), 0x4A60)																			//Fog.#10154
 D2FUNC_DLL(FOG, 10156, int, __stdcall, (void*, int, uint8_t*, int), 0x59D0)																			//Fog.#10156
@@ -230,7 +224,7 @@ D2FUNC_DLL(FOG, 10172, int, __stdcall, (void*, int, int), 0x6FD0)															
 D2FUNC_DLL(FOG, 10173, int, __stdcall, (void*, int), 0x7040)																						//Fog.#10173
 D2FUNC_DLL(FOG, 10175, int, __stdcall, (void*, const uint8_t*, int, int), 0x7420)																	//Fog.#10175
 D2FUNC_DLL(FOG, 10177, int, __stdcall, (void*, int), 0x5E60)																						//Fog.#10177
-D2FUNC_DLL(FOG, 10178, int, __stdcall, (void*, int), 0x75A0)																						//Fog.#10178
+D2FUNC_DLL(FOG, SetHackListEnabled, int, __stdcall, (QServer* pServer, BOOL bHacklistEnabled), 0x75A0)												//Fog.#10178
 D2FUNC_DLL(FOG, 10180, int, __stdcall, (void*), 0x4920)																								//Fog.#10180
 D2FUNC_DLL(FOG, 10181, int, __stdcall, (void*, const uint8_t*, int, int), 0x75C0)																	//Fog.#10181
 D2FUNC_DLL(FOG, 10182_Return, int, __stdcall, (void*), 0x1B10)																						//Fog.#10182

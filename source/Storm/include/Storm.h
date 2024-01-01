@@ -2,12 +2,6 @@
 #include <D2Dll.h>
 #include "StormHandles.h"
 
-#ifdef STORM_IMPL
-#define STORM_DLL_DECL // We use .def files, not dllexport
-#else
-#define STORM_DLL_DECL __declspec( dllimport )
-#endif
-
 // Version 1.10f:
 // List of Storm.dll exports (base address 6ffb0000)
 // For each of the other .DLLs, here are the number of imports of the current module exports:

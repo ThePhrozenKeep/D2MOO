@@ -1,5 +1,4 @@
 
-
 function(D2MOO_add_detours_patch_to_dll DLLTargetName)
   if(ARGV1)
     set(PatchCppFile ${ARGV1})
@@ -8,12 +7,20 @@ function(D2MOO_add_detours_patch_to_dll DLLTargetName)
     set(PatchCppFile "${D2MOO_ORDINALS_VERSION}/${DLLTargetName}.patch.cpp")
     set(PatchRcFile "${D2MOO_ORDINALS_VERSION}/${DLLTargetName}.patch.rc")
   endif()
-  message(STATUS "[${DLLTargetName}]PatchCppFile: '${PatchCppFile}'")
-  
-  target_sources(${DLLTargetName} PRIVATE "${PatchCppFile}")
+  if(NOT IS_ABSOLUTE PatchCppFile)
+    set(PatchCppFile ${CMAKE_CURRENT_SOURCE_DIR}/${PatchCppFile})
+  endif()
   if(NOT IS_ABSOLUTE PatchRcFile)
     set(PatchRcFile ${CMAKE_CURRENT_SOURCE_DIR}/${PatchRcFile})
   endif()
+  
+  if(NOT EXISTS "${PatchCppFile}")
+    return()
+  endif()
+  
+  message(STATUS "[${DLLTargetName}]PatchCppFile: '${PatchCppFile}'")
+  
+  target_sources(${DLLTargetName} PRIVATE "${PatchCppFile}")
   if(EXISTS "${PatchRcFile}")
     target_sources(${DLLTargetName} PRIVATE "${PatchRcFile}")
     message(STATUS "[${DLLTargetName}]PatchRcFile: '${PatchRcFile}'")
@@ -79,14 +86,14 @@ endfunction()
 
 macro(D2MOO_add_mod_dll_if_exists dir)
     if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-		D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
-	endif ()
+        D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
+    endif ()
 endmacro()
 
 macro(D2MOO_add_subdirectory_if_exists dir)
-	if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-		add_subdirectory(${dir})
-	endif ()
+    if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
+        add_subdirectory(${dir})
+    endif ()
 endmacro()
 
 

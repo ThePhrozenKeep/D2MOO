@@ -179,7 +179,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10148 @10148
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_InitializeServer @10149
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10150 @10150
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10151 @10151
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_SetMaxClientsPerGame @10151
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10152 @10152
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10153 @10153
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_WaitForSingleObject @10154
@@ -206,7 +206,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10175 @10175
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10176 @10176
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10177 @10177
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10178 @10178
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_SetHackListEnabled @10178
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10179 @10179
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10180 @10180
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10181 @10181

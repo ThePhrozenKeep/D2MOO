@@ -2,9 +2,6 @@
 
 #include <cstdint>
 
-//stubs
-void __cdecl D2MCPClientCloseMCP(){}
-
 // NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {

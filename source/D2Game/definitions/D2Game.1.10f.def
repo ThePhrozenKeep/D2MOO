@@ -5,7 +5,7 @@ EXPORTS
 	GAME_ProcessNetworkMessages											@10003
 	GAME_UpdateGamesProgress											@10004
 	GAME_UpdateClients													@10005
-	D2Game_10006														@10006
+	GAME_CloseAllGames													@10006
 	GAME_ReceiveDatabaseCharacter										@10007
 	D2Game_10008														@10008
 	GAME_SetGlobalAct													@10009
@@ -16,12 +16,12 @@ EXPORTS
 	D2Game_10014														@10014
 	GAME_GetGameServerTokens											@10015
 	GAME_GetPlayerUnitsCount											@10016
-	D2Game_10017														@10017
+	GAME_GetPlayerUnitsInfo												@10017
 	D2Game_10018														@10018
 	GAME_GetUnitsDescriptions											@10019
 	GAME_GetStatistics													@10020
-	D2Game_10021														@10021
-	D2Game_10022														@10022
+	GAME_SendMessageToAllClients										@10021
+	GAME_SendMessageToGameClients										@10022
 	GAME_SetServerCallbackFunctions										@10023
 	D2Game_10024_RemoveClientFromGame									@10024
 	DEBUG_GetUnitFromTypeAndGUID										@10025

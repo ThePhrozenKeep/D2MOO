@@ -1,20 +1,19 @@
 
-add_library(D2Game 
-  # We want to create a detours dll for patching
-  SHARED
-  # The DLL entrypoint
-  src/DllMain.cpp
+D2MOO_prepare_targets(D2Game)
+
+target_link_libraries(${D2GameImplName}
+  PRIVATE
+    D2CommonDefinitions
+    D2CMP
+    D2Common
+    D2Lang
+    D2Net
+    Fog
+    winmm # For timeGetTime()
 )
 
-target_link_libraries(D2Game PRIVATE D2CommonDefinitions D2CMP D2Common D2Lang D2Net Fog)
-
-target_include_directories(D2Game PUBLIC include)
-
-# The definition file that matches functions with their ordinals
-target_sources(D2Game PRIVATE definitions/D2Game.${D2MOO_ORDINALS_VERSION}.def)
-
 # Ai
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/AI/AiBaal.cpp
     src/AI/AiGeneral.cpp
@@ -30,7 +29,7 @@ target_sources(D2Game
 )
 
 # Debug
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/DEBUG/Debug.cpp
 
@@ -38,7 +37,7 @@ target_sources(D2Game
 )
 
 # Game
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/GAME/Arena.cpp
     src/GAME/CCmd.cpp
@@ -62,7 +61,7 @@ target_sources(D2Game
 )
 
 # Inventory
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/INVENTORY/InvMode.cpp
     
@@ -70,7 +69,7 @@ target_sources(D2Game
 )
 
 # Items
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/ITEMS/ItemMode.cpp
     src/ITEMS/Items.cpp
@@ -82,7 +81,7 @@ target_sources(D2Game
 )
 
 # Missiles
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/MISSILES/Missiles.cpp
     src/MISSILES/MissMode.cpp
@@ -92,7 +91,7 @@ target_sources(D2Game
 )
 
 # Monster
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/MONSTER/Monster.cpp
     src/MONSTER/MonsterAI.cpp
@@ -114,7 +113,7 @@ target_sources(D2Game
 )
 
 # Objects
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/OBJECTS/Objects.cpp
     src/OBJECTS/ObjEval.cpp
@@ -128,7 +127,7 @@ target_sources(D2Game
 )
 
 # Player
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/PLAYER/PartyScreen.cpp
     src/PLAYER/Player.cpp
@@ -156,13 +155,13 @@ target_sources(D2Game
 )
 
 # Packets
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     include/D2Packet.h
 )
 
 # Quests
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/Quests.cpp
     src/QUESTS/QuestsFX.cpp
@@ -172,7 +171,7 @@ target_sources(D2Game
 )
 
 # Quests - Act1
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/ACT1/A1Intro.cpp
     src/QUESTS/ACT1/A1Q0.cpp
@@ -196,7 +195,7 @@ target_sources(D2Game
 )
 
 # Quests - Act2
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/ACT2/A2Intro.cpp
     src/QUESTS/ACT2/A2Q0.cpp
@@ -222,7 +221,7 @@ target_sources(D2Game
 )
 
 # Quests - Act3
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/ACT3/A3Intro.cpp
     src/QUESTS/ACT3/A3Q0.cpp
@@ -246,7 +245,7 @@ target_sources(D2Game
 )
 
 # Quests - Act4
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/ACT4/A4Q0.cpp
     src/QUESTS/ACT4/A4Q1.cpp
@@ -262,7 +261,7 @@ target_sources(D2Game
 )
 
 # Quests - Act5
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/QUESTS/ACT5/A5Intro.cpp
     src/QUESTS/ACT5/A5Q1.cpp
@@ -282,7 +281,7 @@ target_sources(D2Game
 )
 
 # Unit
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/UNIT/Friendly.cpp
     src/UNIT/Party.cpp
@@ -306,7 +305,7 @@ target_sources(D2Game
 )
 
 # Skills
-target_sources(D2Game
+target_sources(${D2GameImplName}
   PRIVATE
     src/SKILLS/SkillAma.cpp
     src/SKILLS/SkillAss.cpp
@@ -332,13 +331,10 @@ target_sources(D2Game
 )
 
 if(D2MOO_WITH_STATIC_TESTS)
-  target_sources(D2Game
+  target_sources(${D2GameImplName}
     PRIVATE
       statictests/Clients_staticchecks.cpp
   )
 endif()
 
-get_target_property(D2GameSources D2Game SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
-             FILES ${D2GameSources}
-)
+D2MOO_target_source_group(D2Game)
