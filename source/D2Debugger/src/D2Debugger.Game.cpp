@@ -278,6 +278,7 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
 
 void D2DebugUnitSpawner(D2GameStrc* pGame)
 {
+#ifdef HAS_SPAWN_FUNCTIONS
     if (ImGui::CollapsingHeader("UnitSpawner"))
     {
         D2CoordStrc tCoords{};
@@ -298,7 +299,6 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
             static int currentSuperUniqueSelectionId = 0;
             D2ComboBox("SuperUnique", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount(), GetSuperUniqueUTF8Name);
-#ifdef HAS_SPAWN_FUNCTIONS
 			ImGui::SameLine();
             if (ImGui::Button("Spawn##SuperUnique"))
             {
@@ -311,7 +311,6 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
-#endif
 
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
@@ -323,7 +322,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 return GetNOTFOUNDCharBuffer();
             };
             D2ComboBox("Normal", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount(), GetNormalMonsterUTF8Name);
-#ifdef HAS_SPAWN_FUNCTIONS
+
 			ImGui::SameLine();
             if (ImGui::Button("Spawn##Normal"))
             {
@@ -337,7 +336,6 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
-#endif
 
 
 
@@ -355,6 +353,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
         }
     }
+#endif
 }
 
 static bool bFreezeGame = false;
