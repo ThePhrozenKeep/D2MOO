@@ -505,7 +505,7 @@ struct D2GSPacketClt66		//size of 0x2E
 struct D2GSPacketClt67		//size of 0x1D
 {
 	uint8_t nHeader;			//0x00
-	int32_t nToken;				//0x01
+	int32_t nTokenId;			//0x01
 	uint16_t nGameId;			//0x05
 	uint8_t nPlayerClass;		//0x07
 	int32_t unk0x08;			//0x08

@@ -921,155 +921,152 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
     }
 }
 
+// helper function
+static bool IsClientNameValid(const char* szClientName)
+{
+	bool bContainsSpecialCharacter = false;
+
+	for (int32_t i = 0; i < 16; ++i)
+	{
+		switch (szClientName[i])
+		{
+		case '\'':
+		case '-':
+		case '_':
+			// Only allowed if we didn't have another special chararcter and not first or last character.
+			if (bContainsSpecialCharacter || i == 0 || szClientName[i + 1] == '\0')
+			{
+				return false;
+			}
+			bContainsSpecialCharacter = true;
+			break;
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'G':
+		case 'H':
+		case 'I':
+		case 'J':
+		case 'K':
+		case 'L':
+		case 'M':
+		case 'N':
+		case 'O':
+		case 'P':
+		case 'Q':
+		case 'R':
+		case 'S':
+		case 'T':
+		case 'U':
+		case 'V':
+		case 'W':
+		case 'X':
+		case 'Y':
+		case 'Z':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z':
+			break;
+
+		case '\0':
+			return i != 0;
+		default:
+			return false;
+		}
+	}
+	return false;
+}
+
 //D2Game.0x6FC36DF0
-int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, char* szAccountName, int32_t* pCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10) {
+BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10) {
     if (!CCMD_IsStringZeroTerminated(szClientName, 16))
     {
-        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", nClientId, nGameId, nToken);
+        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", nClientId, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player name for client %d '%s' ***", nClientId, szClientName);
-        return 0;
+        return FALSE;
     }
 
     if (nLocale >= 13)
     {
-        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Locale Enum", nClientId, nGameId, nToken);
+        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Locale Enum", nClientId, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid locale enum for client %d '%s' ***", nClientId, szClientName);
-        return 0;
+        return FALSE;
     }
 
     char szGameName[16] = {};
     if (!sub_6FC33EA0(nClientId, szGameName) || !sub_6FC33F90(szClientName, szGameName))
     {
-        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Already in a Game", szAccountName, szClientName, nGameId, nToken);
+        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Already in a Game", pszInOutAccountName, szClientName, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Client %d '%s' already in game '%s' ***", nClientId, szClientName, szGameName);
-        return 0;
+        return FALSE;
     }
 
     if (!sub_6FC35840(nGameId))
     {
-        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Game ID", szAccountName, szClientName, nGameId, nToken);
+        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Game ID", pszInOutAccountName, szClientName, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid gameId %d given to client %d '%s' ***", nGameId, nClientId, szClientName);
-        return 0;
+        return FALSE;
     }
 
     if (nPlayerClass >= 7u)
     {
-        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Class", szAccountName, szClientName, nGameId, nToken);
+        GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Class", pszInOutAccountName, szClientName, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player class %d for client %d '%s' ***", nPlayerClass, nClientId, szClientName);
-        return 0;
+        return FALSE;
     }
 
-    bool bContainsSpecialCharacter = false;
+	if (IsClientNameValid(szClientName))
+	{
+		if (!gpD2EventCallbackTable_6FD45830)
+		{
+			return TRUE; // Client does not need to do more checks
+		}
 
-    for (int32_t i = 0; i < 16; ++i)
-    {
-        bool bContinue = false;
-
-        switch (szClientName[i])
-        {
-        case '\'':
-        case '-':
-        case '_':
-            if (!bContainsSpecialCharacter && i != 0 && szClientName[i + 1] != '\0')
-            {
-                bContainsSpecialCharacter = true;
-                bContinue = true;
-            }
-            break;
-
-        case 'A':
-        case 'B':
-        case 'C':
-        case 'D':
-        case 'E':
-        case 'F':
-        case 'G':
-        case 'H':
-        case 'I':
-        case 'J':
-        case 'K':
-        case 'L':
-        case 'M':
-        case 'N':
-        case 'O':
-        case 'P':
-        case 'Q':
-        case 'R':
-        case 'S':
-        case 'T':
-        case 'U':
-        case 'V':
-        case 'W':
-        case 'X':
-        case 'Y':
-        case 'Z':
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'e':
-        case 'f':
-        case 'g':
-        case 'h':
-        case 'i':
-        case 'j':
-        case 'k':
-        case 'l':
-        case 'm':
-        case 'n':
-        case 'o':
-        case 'p':
-        case 'q':
-        case 'r':
-        case 's':
-        case 't':
-        case 'u':
-        case 'v':
-        case 'w':
-        case 'x':
-        case 'y':
-        case 'z':
-            bContinue = true;
-            break;
-
-        case '\0':
-            if (i != 0)
-            {
-                if (!gpD2EventCallbackTable_6FD45830)
-                {
-                    return 1;
-                }
-
-                if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfFindPlayerToken))
-                {
-                    FOG_DisplayAssert("ptEventCallbackTable->fpFindPlayerToken", __FILE__, __LINE__);
-                    exit(-1);
-                }
-
-                if (!gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nToken, nGameId, szAccountName, pCharSaveTransactionToken, a9, a10))
-                {
-                    GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Token", szAccountName, szClientName, nGameId, nToken);
-                    GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player token %d for client %d '%s' ***", nToken, nClientId, szClientName);
-                    return 0;
-                }
-
-                return 1;
-            }
-            break;
-
-        default:
-            break;
-        }
-
-        if (!bContinue)
-        {
-            break;
-        }
-    }
-
-    GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", szAccountName, szClientName, nGameId, nToken);
-    GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player name for client %d '%s' ***", nClientId, szClientName);
-    return 0;
+		// Server side token check/retrieval
+		D2_ASSERT(gpD2EventCallbackTable_6FD45830->pfFindPlayerToken);
+		if (gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nTokenId, nGameId, pszInOutAccountName, pOutCharSaveTransactionToken, a9, a10))
+		{
+			return TRUE;
+		}
+		else
+		{
+			GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Token", pszInOutAccountName, szClientName, nGameId, nTokenId);
+			GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player token %d for client %d '%s' ***", nTokenId, nClientId, szClientName);
+			return FALSE;
+		}
+	}
+	else
+	{
+		GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", pszInOutAccountName, szClientName, nGameId, nTokenId);
+		GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid player name for client %d '%s' ***", nClientId, szClientName);
+		return FALSE;
+	}
 }
 
 //D2Game.0x6FC37150

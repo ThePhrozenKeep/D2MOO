@@ -124,7 +124,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         int32_t nCharSaveTransactionToken = 0;
         int32_t v18 = 0;
         int32_t v19 = 0;
-        if (GAME_VerifyJoinGme(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nToken, szAccountName, &nCharSaveTransactionToken, pPacket67->nLocale, &v19, &v18))
+        if (GAME_VerifyJoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nTokenId, szAccountName, &nCharSaveTransactionToken, pPacket67->nLocale, &v19, &v18))
         {
             GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, nCharSaveTransactionToken, pPacket67->nLocale, v19, v18);
         }

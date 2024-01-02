@@ -65,7 +65,7 @@ using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo
 using FnSaveDatabaseCharacter = void(__fastcall*)(int32_t* pRealmId, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nUnused);
 using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
 using FnEnterGame = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
-using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nToken, WORD nGameId, char* pszOutAccountName, int32_t* pOutValueResolvedUsingToken, int32_t* a6, int32_t* a7); //TODO: Last 3 args
+using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutValueResolvedUsingToken, int32_t* a6, int32_t* a7); //TODO: Last 3 args
 /*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
 using FnUnlockDatabaseCharacter = void(__fastcall*)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
@@ -277,7 +277,7 @@ void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* s
 //D2Game.0x6FC36C60
 void __fastcall GAME_SendActInit(int32_t nClientId);
 //D2Game.0x6FC36DF0
-int32_t __fastcall GAME_VerifyJoinGme(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nToken, char* szAccountName, int32_t* pCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10);
+BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10);
 //D2Game.0x6FC37150
 void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nCharSaveTransactionToken, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
