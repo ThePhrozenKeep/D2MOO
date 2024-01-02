@@ -35,7 +35,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGamesCount												@10012
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10013														@10013
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameInformation											@10014
-    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameServerTokens											@10015
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameServerGameIds											@10015
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetPlayerUnitsCount											@10016
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetPlayerUnitsInfo											@10017
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10018														@10018
