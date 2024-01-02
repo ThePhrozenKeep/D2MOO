@@ -6,6 +6,7 @@
 #include <D2Debugger.patch.common.h>
 #include <GAME/Game.h>
 
+
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
 #endif
@@ -23,10 +24,11 @@ PatchAction __cdecl GetPatchAction(int ordinal)
     return PatchAction::Ignore;
 }
 
-static const int D2GameImageBase = 0x6FC30000;
+static const int GameExeImageBase = 0x00400000;
+
 
 static ExtraPatchAction extraPatchActions[] = {
-    { 0x6FC386D0 - D2GameImageBase, &GAME_UpdateProgress_WithDebugger, PatchAction::FunctionReplaceOriginalByPatch, &GAME_UpdateProgress_Original},
+	{ 0x52D870 - GameExeImageBase, &GAME_UpdateProgress_WithDebugger, PatchAction::FunctionReplaceOriginalByPatch, &GAME_UpdateProgress_Original},
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
