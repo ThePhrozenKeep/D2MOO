@@ -40,13 +40,13 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
 
-    const int32_t v6 = sub_6FC35840(1u);
-    if (!v6)
+    const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(1u);
+    if (!nGUID)
     {
         return 6;
     }
 
-    D2GameStrc* pGame = GAME_LockGame(v6);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         return 6;
@@ -193,7 +193,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_DISCONNECT:
     {
-        if (sub_6FC38100(nClientId))
+        if (GAME_VerifyDisconnect(nClientId))
         {
             GAME_DisconnectClientById(nClientId, EVENTTYPE_DISCONNECT);
         }

@@ -138,7 +138,7 @@ int32_t __stdcall D2Game_10046()
     CLIENTS_Initialize();
     D2NET_10019(sub_6FC36B20);
     SUNITPROXY_FillGlobalItemCache();
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC35810
@@ -150,26 +150,21 @@ int32_t __stdcall D2Game_10050()
     gwGameId_6FD2CA04 = 1;
     gpGameDataTbl_6FD45818 = nullptr;
     gnAct_6FD45824 = 0;
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC35840
-int32_t __fastcall sub_6FC35840(uint16_t nGameId)
+D2GameGUID __fastcall GAME_GetGameGUIDFromGameId(uint16_t nGameId)
 {
-    int32_t nResult = 0;
-    
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-    
-    const HGAMEDATA hGame = hGameArray_6FD447F8[nGameId-1];
-    const D2GameGUID nGUID = GetHashValueFromGameHandle(hGame);
-    if (nGUID && nGUID != -1)
-    {
-        nResult = nGUID;
-    }
+	D2GameGUID nGUID = 0;
+	EnterCriticalSection(&gCriticalSection_6FD45800);
+	if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
+	{
+		nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
+	}
 
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
-
-    return nResult;
+	LeaveCriticalSection(&gCriticalSection_6FD45800);
+	return nGUID;
 }
 
 //D2Game.0x6FC35880
@@ -283,38 +278,38 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 }
 
 //D2Game.0x6FC35CB0
-int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
+BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
 {
     if (gpD2EventCallbackTable_6FD45830 && pPacket->nGameType)
     {
-        return 0;
+        return FALSE;
     }
 
     if (!CCMD_IsStringZeroTerminated(pPacket->szClientName, 16))
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  CLIENTID:%d  ERROR: Invalid player name", nClientId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Invalid player name for client %d '%s' ***", nClientId, pPacket->szClientName);
-        return 0;
+        return FALSE;
     }
 
     if (pPacket->nLocale > 13u)
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  CLIENTID:%d  ERROR: Invalid locale code", nClientId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Invalid locale code for client %d '%s' ***", nClientId, pPacket->szClientName);
-        return 0;
+        return FALSE;
     }
 
     if (!CCMD_IsStringZeroTerminated(pPacket->szGameName, 16))
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  ERROR: Invalid game name", pPacket->szGameName);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Invalid game name '%s' for client %d '%s' ***", pPacket->szGameName, nClientId, pPacket->szClientName);
-        return 0;
+        return FALSE;
     }
 
     if (!(pPacket->nGameFlags & 6))
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  GAME:%s  FLAGS:%x  ERROR: Invalid Game Flags", pPacket->szClientName, pPacket->szGameName, pPacket->nGameFlags);
-        return 0;
+        return FALSE;
     }
 
     char szGameName[16] = {};
@@ -322,24 +317,24 @@ int32_t __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* 
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  GAME:%s  ERROR: Client already in a game", pPacket->szClientName, pPacket->szGameName);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Client %d '%s' already in game '%s' ***", nClientId, pPacket->szClientName, szGameName);
-        return 0;
+        return FALSE;
     }
 
     if (!sub_6FC33F90(pPacket->szClientName, szGameName))
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  GAME:%s  ERROR: Client already in a game", pPacket->szClientName, pPacket->szGameName);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Client %d '%s' already in game '%s' ***", nClientId, pPacket->szClientName, szGameName);
-        return 0;
+        return FALSE;
     }
 
     if (pPacket->nPlayerClass >= 7u)
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  GAME:%s  CLASS:%d  ERROR: Invalid player class", pPacket->szClientName, pPacket->szGameName, pPacket->nPlayerClass);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyCreateNewGame: *** Invalid player class %d for client %d '%s' ***", pPacket->nPlayerClass, nClientId, pPacket->szClientName);
-        return 0;
+        return FALSE;
     }
 
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC35E50
@@ -350,12 +345,12 @@ void __stdcall D2Game_10056(int32_t a1)
 }
 
 //D2Game.0x6FC35E70 (#10047)
-int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId)
+BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId)
 {
-    // TODO: v21, v22
+    // TODO: pHGame, v22
     if (!gpGameDataTbl_6FD45818)
     {
-        return 0;
+        return FALSE;
     }
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
@@ -385,7 +380,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
             {
                 LeaveCriticalSection(&gCriticalSection_6FD45800);
                 GAME_LogMessage(6, "[SERVER]  SrvCreateNewEmptyGame: *** Out of game slots! ***");
-                return 0;
+                return FALSE;
             }
 
             if (!hGameArray_6FD447F8[nGameId - 1])
@@ -395,14 +390,14 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
         }
     }
 
-    D2GameGUID* v21 = (D2GameGUID*)&hGameArray_6FD447F8[nGameId - 1];
-    *v21 = -1;
+	HGAMEDATA* pHGame = &hGameArray_6FD447F8[nGameId - 1];
+    *pHGame = D2GameReservedSlotHandle;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     if (!nGameId)
     {
         GAME_LogMessage(6, "[SERVER]  SrvCreateNewEmptyGame: *** Out of game slots! ***");
-        return 0;
+        return FALSE;
     }
 
 
@@ -432,7 +427,7 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     SStrCopy(pGame->szGamePassword, szPassword, 16);
     SStrCopy(pGame->szGameDesc, szGameDescription, 32);
 
-    pGame->nArenaTemplate = a5;
+    pGame->nArenaTemplate = nArenaTemplate;
     pGame->unk0x6C = a6;
     pGame->unk0x6E = a7;
 
@@ -493,12 +488,8 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     QUESTS_QuestInit(pGame);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (*v21 != -1)
-    {
-        FOG_DisplayAssert("hGameArray[wGameId-1] == RESERVED_SLOT", __FILE__, __LINE__);
-        exit(-1);
-    }
-    *v21 = GetHashValueFromGameHandle(hGame);
+	D2_ASSERT(*pHGame == D2GameReservedSlotHandle);
+    *pHGame = hGame;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
     pGame->nSyncTimer = FOG_10055_GetSyncTime();
@@ -511,10 +502,11 @@ int32_t __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPasswo
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nGameId;
 
-    return 1;
+    return TRUE;
 }
 
-//D2Game.0x6FC36280 (#10007)
+//1.00 : D2Game.0x100056D0 (#10007)
+//1.10f: D2Game.0x6FC36280 (#10007)
 int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nCharSaveTransactionToken)
 {
     if (nTotalSize && !CLIENTS_AttachSaveFile(nClientId, pSaveData, nSaveSize, nTotalSize, a5 == 0, 1, a6))
@@ -752,11 +744,8 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     QUESTS_QuestInit(pGame);
 
     EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (hGameArray_6FD447F8[pGame->nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        FOG_DisplayAssert("hGameArray[wGameId-1] == RESERVED_SLOT", __FILE__, __LINE__);
-        exit(-1);
-    }
+	D2_ASSERT(hGameArray_6FD447F8[pGame->nGameId - 1] == D2GameReservedSlotHandle);
+
     hGameArray_6FD447F8[pGame->nGameId - 1] = hGame;
     LeaveCriticalSection(&gCriticalSection_6FD45800);
 
@@ -836,17 +825,17 @@ void __fastcall GAME_SendPacket0x5CToAllConnectedClients(D2GameStrc* pGame, D2Cl
 }
 
 //D2Game.0x6FC36AE0
-int32_t __fastcall GAME_VerifyJoinAct(int32_t nClientId)
+BOOL __fastcall GAME_VerifyJoinAct(int32_t nClientId)
 {
     if (CLIENTS_CheckState(nClientId, CLIENTSTATE_GAME_INIT_SENT))
     {
-        return 1;
+        return TRUE;
     }
 
     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINACT>  CLIENT:%d  ERROR: Invalid state to join act.", nClientId);
     GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinAct:      *** Client %d in invalid state ***", nClientId);
 
-    return 0;
+    return FALSE;
 }
 
 //D2Game.0x6FC36B20
@@ -1027,7 +1016,7 @@ BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t
         return FALSE;
     }
 
-    if (!sub_6FC35840(nGameId))
+    if (!GAME_GetGameGUIDFromGameId(nGameId))
     {
         GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Invalid Game ID", pszInOutAccountName, szClientName, nGameId, nTokenId);
         GAME_LogMessage(6, "[SERVER]  SrvVerifyJoinGame:     *** Invalid gameId %d given to client %d '%s' ***", nGameId, nClientId, szClientName);
@@ -1077,14 +1066,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
         return;
     }
 
-    int32_t nGUID = 0;
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
-    }
-
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
+	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
     if (!nGUID)
     {
@@ -1121,11 +1103,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 
         if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
         {
-            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter))
-            {
-                FOG_DisplayAssert("ptEventCallbackTable->fpGetDatabaseCharacter", __FILE__, __LINE__);
-                exit(-1);
-            }
+			D2_ASSERT(gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter);
 
             gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter(&pClient->pClientInfo, szClientName, dwClientId, szAccountName);
             sub_6FC33910(pClient);
@@ -1141,12 +1119,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
         {
             GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Unable to add client %d '%s' to game %d (unlocking character)", dwClientId, szClientName, nGameId);
 
-            if (IsBadCodePtr((FARPROC)gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter))
-            {
-                FOG_DisplayAssert("ptEventCallbackTable->fpUnlockDatabaseCharacter", __FILE__, __LINE__);
-                exit(-1);
-            }
-
+			D2_ASSERT(gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter);
             gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
         }
 
@@ -1212,17 +1185,17 @@ void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37560
-int32_t __fastcall GAME_VerifyEndGame(int32_t nClientId)
+BOOL __fastcall GAME_VerifyEndGame(int32_t nClientId)
 {
     if (CLIENTS_CheckState(nClientId, CLIENTSTATE_INGAME))
     {
-        return 1;
+        return TRUE;
     }
 
     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_ENDGAME>  CLTID:%d  REASON:Tried to end game they weren't in.", nClientId);
     GAME_LogMessage(6, "[SERVER]  SrvVerifyEndGame:      *** Client %d not in a game? ***", nClientId);
 
-    return 0;
+    return FALSE;
 }
 
 //D2Game.0x6FC375A0
@@ -1316,16 +1289,16 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
 }
 
 //D2Game.0x6FC37880
-int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
+BOOL __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
 {
     const int32_t nClientId = sub_6FC33F20(szClientName);
     if (!nClientId)
     {
-        return 0;
+        return FALSE;
     }
 
     GAME_DisconnectClientById(nClientId, nEventType);
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC379C0
@@ -1613,18 +1586,16 @@ void __fastcall sub_6FC380F0(D2ClientStrc* pClient, void* pArg)
 }
 
 //D2Game.0x6FC38100
-int32_t __fastcall sub_6FC38100(int32_t nClientId)
+BOOL __fastcall GAME_VerifyDisconnect(int32_t nClientId)
 {
-    // TODO: size of v3
-    char v3; // [sp+4h] [bp-10h]@1
-
-    if (sub_6FC33EA0(nClientId, &v3))
+	char szClientName[sizeof(D2ClientStrc::szName)];
+    if (sub_6FC33EA0(nClientId, szClientName))
     {
-        return 1;
+        return TRUE;
     }
 
     GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_DISCONNECT>  CLTID:%d  REASON:Not in game", nClientId);
-    return 0;
+    return FALSE;
 }
 
 //D2Game.0x6FC38140
@@ -2394,7 +2365,7 @@ D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
     D2GameStrc* pGame = GAME_LockGame(nGameGUID);
     if (!pGame)
     {
-        return 0;
+        return nullptr;
     }
 
     if (CLIENTS_IsInGame(pGame, nClientId))
@@ -2644,15 +2615,7 @@ void __stdcall GAME_GetMemoryUsage(int* pCurrentMemoryUsage, int* pPeakMemoryUsa
 //D2Game.0x6FC39EF0 (#10013)
 int32_t __stdcall D2Game_10013(uint16_t nGameId)
 {
-    int32_t nGUID = 0;
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
-    }
-
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
-
+	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     D2_ASSERT(gpGameDataTbl_6FD45818);
 
     D2GameStrc* pGame = GAME_LockGame(nGUID);
@@ -2664,23 +2627,14 @@ int32_t __stdcall D2Game_10013(uint16_t nGameId)
     return nClients;
 }
 
-//D2Game.0x6FC39FF0
-int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
+//D2Game.0x6FC39FF0 (#10014)
+BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
 {
-    int32_t nGUID = 0;
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-
-    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
-    }
-
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
-
+	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
-        return 0;
+        return FALSE;
     }
 
     pGameInfo->nGameId = pGame->nGameId;
@@ -2768,11 +2722,11 @@ int32_t __stdcall D2Game_10014(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
     pGameInfo->pMemoryPool = pGame->pMemoryPool;
 
     D2_UNLOCK(pGame->lpCriticalSection);
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC3A390 (#10015)
-int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxCount)
+int32_t __stdcall GAME_GetGameServerGameIds(uint16_t* pServerToken, int32_t nMaxCount)
 {
     int32_t nServerTokenCount = 0;
     for (int32_t i = 0; nServerTokenCount < nMaxCount && i < std::size(gnGamesGUIDs_6FD447F8); ++i)
@@ -2795,17 +2749,9 @@ int32_t __stdcall GAME_GetGameServerTokens(uint16_t* pServerToken, int32_t nMaxC
 //D2Game.0x6FC3A490 (#10016)
 int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 {
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-
-    int32_t nGUID = 0;
-    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
-    }
-
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
-
-    int32_t nUnits = 0;
+	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
+	
+	int32_t nUnits = 0;
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
 		D2UnitStrc** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
@@ -2830,7 +2776,7 @@ int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 //D2Game.0x6FC3A5A0 (#10017)
 int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount)
 {
-    const int32_t nGUID = sub_6FC35840(nGameId);
+    const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
     int32_t nUnitInfoCount = 0;
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
@@ -2948,7 +2894,7 @@ void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId
 // Note: used by server only to retrieve unit lists
 void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType)
 {
-    const int32_t nGUID = sub_6FC35840(nGameId);
+    const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
     {
         // Note: eType is not D2C_UnitTypes
@@ -3004,7 +2950,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
 //D2Game.0x6FC3AB20 (#10018)
 int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID)
 {
-    const int32_t nGUID = sub_6FC35840(nGameId);
+    const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
     int32_t nUnitInfoCount = 0;
     if (D2GameStrc* pGame = GAME_LockGame(nGUID))
@@ -3018,12 +2964,7 @@ int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoSt
 
                 if (pUnitType[i])
                 {
-                    if (IsBadCodePtr((FARPROC)gpfGetDescription_6FD2CA64[pUnitType[i]]))
-                    {
-                        FOG_DisplayAssert("sgpfnGetDescription[peTOUs[i]]", __FILE__, __LINE__);
-                        exit(-1);
-                    }
-
+					D2_ASSERT(gpfGetDescription_6FD2CA64[pUnitType[i]]);
                     gpfGetDescription_6FD2CA64[pUnitType[i]](pUnitInfo[nUnitInfoCount].szDescription, pUnit->dwClassId);
                 }
 
@@ -3114,16 +3055,7 @@ void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, co
 //D2Game.0x6FC3AFB0 (#10022)
 void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 {
-    EnterCriticalSection(&gCriticalSection_6FD45800);
-
-    int32_t nGUID = 0;
-    if (hGameArray_6FD447F8[nGameId - 1] && hGameArray_6FD447F8[nGameId - 1] != D2GameReservedSlotHandle)
-    {
-        nGUID = GetHashValueFromGameHandle(hGameArray_6FD447F8[nGameId - 1]);
-    }
-
-    LeaveCriticalSection(&gCriticalSection_6FD45800);
-
+	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     D2GameStrc* pGame = GAME_LockGame(nGUID);
     D2_ASSERT(pGame);
 
@@ -3139,15 +3071,10 @@ void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 }
 
 //D2Game.0x6FC3B0E0
-void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, void(__fastcall* pFn)(D2ClientStrc*, void*), void* pContext)
+void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, GAME_ForEachIngameClientCallbackPtr pFn, void* pContext)
 {
     D2_ASSERT(pGame);
-
-    if (IsBadCodePtr((FARPROC)pFn))
-    {
-        FOG_DisplayAssert("pfn", __FILE__, __LINE__);
-        exit(-1);
-    }
+	D2_ASSERT(pFn);
 
     for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
     {
@@ -3198,20 +3125,7 @@ void __stdcall GAME_SetGlobalAct(int32_t nAct)
 void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame)
 {
     D2_ASSERT(pGame);
-
-    if (IsBadCodePtr((FARPROC)sub_6FC3B3D0))
-    {
-        FOG_DisplayAssert("pfn", __FILE__, __LINE__);
-        exit(-1);
-    }
-
-    for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
-    {
-        if (pClient->dwClientState == CLIENTSTATE_INGAME)
-        {
-            sub_6FC3B3D0(pClient, pUnit);
-        }
-    }
+	GAME_ForEachIngameClient(pGame, (GAME_ForEachIngameClientCallbackPtr)sub_6FC3B3D0, pUnit);
 
     SUNIT_RemoveUnit(pGame, pUnit);
 }
