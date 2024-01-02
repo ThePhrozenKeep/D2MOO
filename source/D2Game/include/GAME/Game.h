@@ -259,7 +259,7 @@ BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPa
 //D2Game.0x6FC35E50
 D2GAME_DLL_DECL void __stdcall D2Game_10056(int32_t a1);
 //D2Game.0x6FC35E70 (#10047)
-D2GAME_DLL_DECL BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t a5, uint8_t a6, uint8_t a7, uint16_t* pGameId);
+D2GAME_DLL_DECL BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
 D2GAME_DLL_DECL int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, uint64_t* pLadderGUID, int32_t nCharSaveTransactionToken);
 //D2Game.0x6FC36570
