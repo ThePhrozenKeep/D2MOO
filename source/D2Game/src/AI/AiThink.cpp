@@ -279,7 +279,7 @@ void __fastcall D2GAME_AI_SpecialState02_6FCD1660(D2GameStrc* pGame, D2UnitStrc*
 
 	if ((uint8_t)ITEMS_RollRandomNumber(&pUnit->pSeed) < 77u)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 		return;
 	}
 
@@ -349,7 +349,7 @@ void __fastcall AITHINK_Fn003_Zombie(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		}
 	}
 }
@@ -488,12 +488,12 @@ void __fastcall AITHINK_Fn005_BloodHawk(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	if (!AIRollChanceParam(pGame, pUnit, pAiTickParam, BLOODHAWK_AI_PARAM_WANDER_CHANCE_PCT))
 	{
 		AITACTICS_SetVelocity(pUnit, 0, 0, 0);
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 	}
 	else
 	{
 		AITACTICS_SetVelocity(pUnit, 0, -50, 0);
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 	}
 }
 
@@ -596,7 +596,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 			if (AI_RollPercentage(pUnit) < 30)
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 				return;
 			}
 
@@ -963,7 +963,7 @@ void __fastcall AITHINK_Fn011_Baboon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		{
 			if (!pAiTickParam->bCombat)
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 				return;
 			}
 
@@ -1075,11 +1075,11 @@ void __fastcall AITHINK_Fn014_QuillRat(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		const int nWalkDist = AI_GetParamValue(pGame, pAiTickParam, QUILLRAT_AI_PARAM_WALK_DISTANCE);
 		if (nWalkDist >= 3)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, nWalkDist);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, nWalkDist);
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3);
 		}
 		return;
 	}
@@ -1101,11 +1101,11 @@ void __fastcall AITHINK_Fn014_QuillRat(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 		if (nWalkDist >= 3)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, nWalkDist);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, nWalkDist);
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3);
 		}
 	}
 }
@@ -1755,7 +1755,7 @@ void __fastcall AITHINK_Fn021_Mummy(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 	{
 		if (AIRollChanceParam(pGame, pUnit, pAiTickParam, MUMMY_AI_PARAM_APPROACH_CHANCE_PCT))
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		}
 		else
 		{
@@ -2214,7 +2214,7 @@ void __fastcall AITHINK_Fn024_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	case 1:
 		AITACTICS_SetVelocity(pUnit, 0, 50, 0);
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 
 		++pAiTickParam->pAiControl->dwAiParam[1];
 
@@ -2311,7 +2311,7 @@ static void AITHINK_Fn025_Willowisp_State_NotMoving(D2GameStrc* pGame, D2UnitStr
 	}
 	else
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 	}
 }
 
@@ -2341,7 +2341,7 @@ static void AITHINK_Fn025_Willowisp_State_Moving(D2GameStrc* pGame, D2UnitStrc* 
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 		}
 	}
 }
@@ -2410,7 +2410,7 @@ static bool GetCloseForRitualOrBaptism(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 	{
 		if (AI_RollPercentage(pUnit) < 35)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance + 1);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance + 1);
 		}
 		else
 		{
@@ -2722,7 +2722,7 @@ void __fastcall AITHINK_Fn026_Arach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 				}
 				else
 				{
-					AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+					AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 				}
 				return;
 			}
@@ -3173,7 +3173,7 @@ void __fastcall AITHINK_Fn029_BatDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 					}
 					else
 					{
-						AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+						AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 					}
 				}
 				else
@@ -3973,7 +3973,7 @@ void __fastcall AITHINK_Fn046_ElementalBeast(D2GameStrc* pGame, D2UnitStrc* pUni
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 		}
 		return;
 
@@ -4076,7 +4076,7 @@ void __fastcall AITHINK_Fn048_ZakarumZealot(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 			if (!sub_6FCD06D0(pGame, pUnit, pAiTickParam->pTarget, 8u, 1))
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 			}
 			return;
 		}
@@ -4480,7 +4480,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 			if (!sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 1))
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
 			}
 		}
 		else
@@ -4507,7 +4507,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 			if (!AITACTICS_WalkInRadiusToTarget(pGame, pUnit, pAiTickParam->pTarget, 12, 6))
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
 			}
 		}
 
@@ -4550,7 +4550,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 		if (!sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 1))
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
 		}
 
 		pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
@@ -4569,7 +4569,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	if (nValidSkills <= 0)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 	}
 	else
 	{
@@ -4874,7 +4874,7 @@ void __fastcall AITHINK_Fn053_Summoner(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		}
 	}
 
-	AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+	AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 }
 
 enum D2C_IzualAIParams
@@ -5722,7 +5722,7 @@ void __fastcall AITHINK_Fn071_Regurgitator(D2GameStrc* pGame, D2UnitStrc* pUnit,
 			pAiTickParam->pAiControl->dwAiParam[0] = 0;
 			pAiTickParam->pAiControl->dwAiParam[1] = 0;
 			pAiTickParam->pAiControl->dwAiParam[2] = 0;
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 			return;
 		}
 
@@ -5733,7 +5733,7 @@ void __fastcall AITHINK_Fn071_Regurgitator(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				pAiTickParam->pAiControl->dwAiParam[0] = 0;
 				pAiTickParam->pAiControl->dwAiParam[1] = 0;
 				pAiTickParam->pAiControl->dwAiParam[2] = 0;
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 				return;
 			}
 
@@ -5758,7 +5758,7 @@ void __fastcall AITHINK_Fn071_Regurgitator(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		pAiTickParam->pAiControl->dwAiParam[0] = 0;
 		pAiTickParam->pAiControl->dwAiParam[1] = 0;
 		pAiTickParam->pAiControl->dwAiParam[2] = 0;
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 		return;
 	}
 	case 4:
@@ -5801,7 +5801,7 @@ void __fastcall AITHINK_Fn071_Regurgitator(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				return;
 			}
 
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 			return;
 		}
 
@@ -6722,7 +6722,7 @@ void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		{
 			if (AI_RollPercentage(pUnit) >= 70)
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
 			}
 			else
 			{
@@ -8169,7 +8169,7 @@ void __fastcall AITHINK_Fn122_Imp(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 
 	if (AI_RollPercentage(pUnit) < 20)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 8u);
 		return;
 	}
 
@@ -9013,7 +9013,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) & 127) < 12)
 				{
-					AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+					AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 					return;
 				}
 			}
@@ -9021,7 +9021,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) & 127) < 6)
 				{
-					AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+					AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 					return;
 				}
 			}
@@ -9041,7 +9041,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 		if (bWalk)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 			return;
 		}
 
@@ -9963,7 +9963,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 		AITACTICS_SetVelocity(pUnit, 7, 100, 0);
 
-		if (AITTACTICS_RunCloseToTargetUnit(pGame, pUnit, pAiTickParam->pTarget, nTargetDistance))
+		if (AITACTICS_RunCloseToTargetUnit(pGame, pUnit, pAiTickParam->pTarget, nTargetDistance))
 		{
 			return;
 		}
@@ -10012,7 +10012,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		if (AI_RollPercentage(pUnit) < 5 && nDistance < 50)
 		{
 			AITACTICS_SetVelocity(pUnit, 7, 100, 0);
-			AITTACTICS_RunCloseToTargetUnit(pGame, pUnit, pAiTickParam->pTarget, 12);
+			AITACTICS_RunCloseToTargetUnit(pGame, pUnit, pAiTickParam->pTarget, 12);
 			return;
 		}
 
@@ -10539,7 +10539,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 		{
 			if ((pAiCmd->nCmdParam[1] % 2) != 0)
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, pAiCmd->nCmdParam[2]);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, pAiCmd->nCmdParam[2]);
 				--pAiCmd->nCmdParam[1];
 				return 1;
 			}
@@ -10890,7 +10890,7 @@ void __fastcall AITHINK_Fn081_JarJar(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	{
 		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 1000) < 50)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		}
 
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 120);
@@ -10903,7 +10903,7 @@ void __fastcall AITHINK_Fn081_JarJar(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 		if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 1000) < 50)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		}
 
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 120);
@@ -11134,7 +11134,7 @@ void __fastcall AITHINK_Fn060_GoodNpcRanged(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 	if (AI_RollPercentage(pUnit) < 20)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 		return;
 	}
 
@@ -11159,7 +11159,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 		}
 		return;
 	}
@@ -11175,7 +11175,7 @@ void __fastcall D2GAME_AI_SpecialState06_6FCE7930(D2GameStrc* pGame, D2UnitStrc*
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 		}
 		return;
 	}
@@ -11326,7 +11326,7 @@ void __fastcall D2GAME_AI_SpecialState10_17_6FCE7CF0(D2GameStrc* pGame, D2UnitSt
 
 	if (AI_RollPercentage(pUnit) < 20)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 3u);
 		return;
 	}
 
@@ -11414,7 +11414,7 @@ void __fastcall D2GAME_AI_SpecialState11_6FCE7E80(D2GameStrc* pGame, D2UnitStrc*
 
 			if (!bResult)
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 			}
 		}
 		return;
@@ -12286,7 +12286,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	case 16:
 	{
 		AITACTICS_SetVelocity(pUnit, 0, 20, 0);
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 		pAiTickParam->pAiControl->dwAiParam[0] = 0;
 		return;
 	}
@@ -14464,7 +14464,7 @@ void __fastcall AITHINK_Fn108_Fenris(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		{
 			if (AIRollChanceParam(pGame, pUnit, pAiTickParam, DRUIDWOLF_AI_PARAM_APPROACH_CHANCE_PCT))
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 10u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 10u);
 			}
 			else
 			{
@@ -14614,7 +14614,7 @@ void __fastcall AITHINK_Fn108_SpiritWolf(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		{
 			if (AIRollChanceParam(pGame, pUnit, pAiTickParam, DRUIDWOLF_AI_PARAM_APPROACH_CHANCE_PCT))
 			{
-				AITTACTICS_WalkCloseToUnit(pGame, pUnit, 10u);
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 10u);
 			}
 			else
 			{
@@ -15091,7 +15091,7 @@ void __fastcall AITHINK_Fn131_Wussie(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	}
 	else if (AI_RollPercentage(pUnit) < 10)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 	}
 	else
 	{
@@ -15177,7 +15177,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 		if (pAiTickParam->pMonstatsTxt->nSkill[4] <= 0)
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 			return;
 		}
 
@@ -15190,7 +15190,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
 		}
 		return;
 	}
@@ -16370,7 +16370,7 @@ int32_t __fastcall sub_6FCF0E40_inline(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	if (!arg.pTarget)
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 		return 1;
 	}
 

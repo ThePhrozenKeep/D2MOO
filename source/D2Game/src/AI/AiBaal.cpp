@@ -668,7 +668,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	}
 	case 4:
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 16);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 16);
 		return;
 	}
 	case 5:
