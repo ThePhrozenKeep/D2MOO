@@ -834,11 +834,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 		return;
 	}
 
-	//if (pQuest->nQuest >= 41)
-	//{
-	//	FOG_DisplayAssert("pQuest->eFilter < MAX_QUEST_STATUS", __FILE__, __LINE__);
-	//	exit(-1);
-	//}
+	D2_ASSERT(pQuest->nQuest < MAX_QUEST_STATUS);
 
 	*pQuestList = pQuest->fLastState;
 }
@@ -861,21 +857,13 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	for (D2QuestDataStrc* pQuest = pGame->pQuestControl->pLastQuest; pQuest; pQuest = pQuest->pPrev)
 	{
-		//if (pQuest->nQuestNo >= 41)
-		//{
-		//	FOG_DisplayAssert("pQuest->Id < MAX_QUEST_STATUS", __FILE__, __LINE__);
-		//	exit(-1);
-		//}
+		D2_ASSERT(pQuest->nQuestNo < MAX_QUEST_STATUS);
 
 		if (pQuest->fLastState)
 		{
 			if (pQuest->pfStatusFilter)
 			{
-				if (IsBadCodePtr((FARPROC)pQuest->pfStatusFilter))
-				{
-					FOG_DisplayAssert("pQuest->pStatusFilter", __FILE__, __LINE__);
-					exit(-1);
-				}
+				D2_ASSERT(pQuest->pfStatusFilter);
 
 				uint8_t a5 = 0;
 				if (pQuest->pfStatusFilter(pQuest, pUnit, pGame->pQuestControl->pQuestFlags, pQuestFlags, &a5) == 1)
@@ -892,7 +880,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	bool bSendPacket0x50 = false;
 	D2GSPacketSrv50 packet50 = {};
-	if (packet52.pQuestList[1] && pGame->pQuestControl)
+	if (packet52.pQuestList[QUESTSTATEFLAG_A1Q1] && pGame->pQuestControl)
 	{
 		D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData1 && pQuestData1->nQuestNo != 1)
@@ -907,7 +895,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 	}
 
-	if (packet52.pQuestList[36] && pGame->pQuestControl)
+	if (packet52.pQuestList[QUESTSTATEFLAG_A5Q2] && pGame->pQuestControl)
 	{
 		D2QuestDataStrc* pQuestData32 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData32 && pQuestData32->nQuestNo != QUEST_A5Q2_RESCUESOLDIERS)
@@ -921,23 +909,19 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			packet50.QuestsStatusPayload.nBarbsToBeRescued = ACT5Q2_GetBarbsToBeRescued(pQuestData32);
 		}
 	}
-
 	if ((QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q4, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q4, QFLAG_PRIMARYGOALDONE)) && pGame->pAct[ACT_II])
 	{
+		bSendPacket0x50 = true;
 		packet50.QuestsStatusPayload.nStaffTombLevelOffset = DUNGEON_GetHoradricStaffTombLevelId(pGame->pAct[1]) - LEVEL_TALRASHASTOMB1;
 	}
-	else
+
+	if (bSendPacket0x50)
 	{
-		if (!bSendPacket0x50)
-		{
-			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet52, sizeof(packet52));
-			return;
-		}
+		packet50.nHeader = 0x50;
+		packet50.nQuestId = QUEST_A1Q1_DENOFEVIL; // Used for the 3 progress quests at once.
+		D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet50, sizeof(packet50));
 	}
 
-	packet50.nHeader = 0x50;
-	packet50.nQuestId = QUEST_A1Q1_DENOFEVIL; // Used for the 3 progress quests at once.
-	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet50, sizeof(packet50));
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet52, sizeof(packet52));
 }
 

@@ -3664,7 +3664,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x58_QuestCompleted_6FC883B0(D2GameS
     }
 
     const uint16_t nQuestId = *(uint16_t*)((char*)pPacket + 1);
-    if (nQuestId >= 41)
+    if (nQuestId >= MAX_QUEST_STATUS)
     {
         return 2;
     }

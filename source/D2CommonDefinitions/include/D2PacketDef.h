@@ -1212,10 +1212,10 @@ struct D2GSPacketSrv51		//size of 0x0E
 	uint8_t unk0x0C[2];			//0x0C
 };
 
-struct D2GSPacketSrv52		//size of 0x2A
+struct D2GSPacketSrv52			//size of 0x2A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t pQuestList[41];	//0x01
+	uint8_t pQuestList[41];		//0x01 count:MAX_QUEST_STATUS
 };
 
 struct D2GSPacketSrv53		//size of 0x0A
