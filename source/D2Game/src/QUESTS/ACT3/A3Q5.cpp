@@ -453,7 +453,7 @@ void __fastcall ACT3Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q5_Callback10_PlayerLeavesGame;
 	pQuestData->pfSeqFilter = ACT3Q5_SeqCallback;
 	pQuestData->nSeqId = 20;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q5;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q5;
 	pQuestData->pfActiveFilter = ACT3Q5_ActiveFilterCallback;
 	pQuestData->nInitNo = 6;
 
@@ -478,7 +478,7 @@ void __fastcall ACT3Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		nNpcId = pQuestArg->pTarget->dwClassId;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuest, QFLAG_ENTERAREA))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuestFilter, QFLAG_ENTERAREA))
 	{
 		if (!((D2Act3Quest5Strc*)pQuestData->pQuestDataEx)->bOrbSmashed)
 		{
@@ -530,7 +530,7 @@ void __fastcall ACT3Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_ENTERAREA) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_ENTERAREA) == 1)
 	{
 		return;
 	}

@@ -210,7 +210,7 @@ struct D2QuestDataStrc
 	uint16_t dw9E;							//0x9E 
 	QUESTCALLBACK pfCallback[15];			//0xA0
 	D2NPCMessageTableStrc* pNPCMessages;	//0xDC
-	int32_t nQuest;							//0xE0 - index in quest flag bit array
+	int32_t nQuestFilter;					//0xE0 - index in quest flag bit array, called eFilter in original code
 	QUESTSTATUS pfStatusFilter;				//0xE4
 	QUESTACTIVE pfActiveFilter;				//0xE8
 	QUESTSEQFILTER pfSeqFilter;				//0xEC

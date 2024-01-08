@@ -336,7 +336,7 @@ void __fastcall ACT2Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 
 	D2Act2Quest2Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest2Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q2;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q2;
 	pQuestData->pfStatusFilter = ACT2Q2_StatusFilterCallback;
 	pQuestData->nInitNo = 0;
 	pQuestData->pfActiveFilter = ACT2Q2_ActiveFilterCallback;

@@ -128,7 +128,7 @@ void __fastcall ACT4Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_NPCDEACTIVATE] = ACT4Q1_Callback02_NpcDeactivate;
 	pQuestData->pfCallback[QUESTEVENT_SCROLLMESSAGE] = ACT4Q1_Callback11_ScrollMessage;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT4Q1_Callback13_PlayerStartedGame;
-	pQuestData->nQuest = QUESTSTATEFLAG_A4Q1;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A4Q1;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfStatusFilter = 0;
 	pQuestData->pfActiveFilter = ACT4Q1_ActiveFilterCallback;
@@ -181,9 +181,9 @@ void __fastcall ACT4Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		}
 		else if (pQuestArg->nMessageIndex == 676)
 		{
-			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING))
+			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING))
 			{
-				if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE))
+				if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE))
 				{
 					if (pQuestData->fState != 5)
 					{
@@ -199,12 +199,12 @@ void __fastcall ACT4Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 					}
 
 					pQuestData->pfCallback[QUESTEVENT_NPCDEACTIVATE] = nullptr;
-					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
+					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
 				}
 
-				QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, 0);
-				QUESTRECORD_ClearQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING);
-				QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuest);
+				QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, 0);
+				QUESTRECORD_ClearQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING);
+				QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuestFilter);
 
 				STATLIST_AddUnitStat(pQuestArg->pPlayer, STAT_SKILLPTS, 2, 0);
 				QUESTS_SendLogUpdate(pQuestArg->pPlayer, QUEST_A4Q1_IZUAL);
@@ -220,7 +220,7 @@ void __fastcall ACT4Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		{
 			pQuestDataEx->bIzualGhostActivated = 1;
 			pQuestDataEx->unk0x0F = 1;
-			QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM1);
+			QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM1);
 			if (pQuestData->fLastState != 4)
 			{
 				pQuestData->dwFlags &= 0xFFFFFF00;
@@ -295,14 +295,14 @@ void __fastcall ACT4Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	{
 		nNpcId = pQuestArg->pTarget->dwClassId;
 
-		if (nNpcId == MONSTER_IZUALGHOST && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM1))
+		if (nNpcId == MONSTER_IZUALGHOST && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM1))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_IZUALGHOST, 3);
 			return;
 		}
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 3);
 	}
@@ -310,7 +310,7 @@ void __fastcall ACT4Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 4);
 	}
-	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1 && (pQuestData->fState < 4 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE)))
+	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && (pQuestData->fState < 4 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE)))
 	{
 		if (!pQuestData->bNotIntro)
 		{
@@ -347,7 +347,7 @@ void __fastcall ACT4Q1_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 			{
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A4Q1, QFLAG_PRIMARYGOALDONE);
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A4Q1, QFLAG_REWARDPENDING);
-				QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuest);
+				QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuestFilter);
 			}
 		}
 		pQuestDataEx->bNeedToSpawnIzualGhost = 1;
@@ -485,7 +485,7 @@ void __fastcall ACT4Q1_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 
 	QUESTS_QuickRemovePlayerGUID(pQuestData, pQuestArg);
 
-	if (pQuestData->fState != 2 || QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuest, 0) == 1)
+	if (pQuestData->fState != 2 || QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuestFilter, 0) == 1)
 	{
 		return;
 	}
@@ -526,7 +526,7 @@ void __fastcall ACT4Q1_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

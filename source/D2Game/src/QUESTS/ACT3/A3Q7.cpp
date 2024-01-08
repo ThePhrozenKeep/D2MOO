@@ -129,7 +129,7 @@ void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest7Strc));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 
-	pQuestData->nQuest = 16;
+	pQuestData->nQuestFilter = 16;
 	pQuestData->pfStatusFilter = ACT3Q7_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT3Q7_ActiveFilterCallback;
 

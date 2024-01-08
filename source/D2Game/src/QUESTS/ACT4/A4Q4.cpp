@@ -42,7 +42,7 @@ void __fastcall ACT4Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fState = 0;
 	pQuestData->fLastState = 0;
 	pQuestData->pQuestDataEx = 0;
-	pQuestData->nQuest = QUESTSTATEFLAG_A4Q4;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A4Q4;
 	pQuestData->pfStatusFilter = ACT4Q4_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT4Q4_ActiveFilterCallback;
 }

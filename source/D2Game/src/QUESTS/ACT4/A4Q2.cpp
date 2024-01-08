@@ -188,7 +188,7 @@ void __fastcall ACT4Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERJOINEDGAME] = ACT4Q2_Callback14_PlayerJoinedGame;
 	pQuestData->pNPCMessages = gpAct4Q2NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A4Q2;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A4Q2;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfActiveFilter = ACT4Q2_ActiveFilterCallback;
 
@@ -357,7 +357,7 @@ void __fastcall ACT4Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1)
 	{
 		if (!pQuestData->pGame->bExpansion)
 		{
@@ -393,7 +393,7 @@ void __fastcall ACT4Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		return;
 	}
 
-	if ((pQuestData->fState < 4 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE)) && pQuestData->bNotIntro && pQuestData->fState)
+	if ((pQuestData->fState < 4 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE)) && pQuestData->bNotIntro && pQuestData->fState)
 	{
 		const int32_t nIndex = nIndices[pQuestData->fState];
 		if (nIndex != -1 && nIndex < 7)
@@ -408,7 +408,7 @@ void __fastcall ACT4Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 {
 	if (pQuestArg->nOldLevel == LEVEL_THEPANDEMONIUMFORTRESS && pQuestData->fState == 2)
 	{
-		if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1)
+		if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1)
 		{
 			return;
 		}
@@ -529,7 +529,7 @@ void __fastcall ACT4Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A4Q2, QFLAG_CUSTOM5);
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

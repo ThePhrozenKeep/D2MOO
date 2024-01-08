@@ -399,7 +399,7 @@ void __fastcall ACT3Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fState = 0;
 	pQuestData->pNPCMessages = gpAct3Q1NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q1;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q1;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfStatusFilter = (QUESTSTATUS)ACT3Q1_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT3Q1_ActiveFilterCallback;
@@ -445,7 +445,7 @@ void __fastcall ACT3Q1_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1)
 	{
 		return;
 	}

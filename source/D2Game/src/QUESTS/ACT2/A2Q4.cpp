@@ -308,7 +308,7 @@ void __fastcall ACT2Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->bActive = 1;
 	pQuestData->fState = 0;
 	pQuestData->pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest4Strc);
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q4;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q4;
 	pQuestData->pfStatusFilter = 0;
 	pQuestData->nInitNo = 5;
 	pQuestData->pfActiveFilter = ACT2Q4_ActiveFilterCallback;
@@ -397,7 +397,7 @@ void __fastcall ACT2Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 				if (pRoom && D2GAME_CreatePortalObject_6FD13DF0(pQuestData->pGame, pQuestArg->pPlayer, pRoom, pCoord.nX, pCoord.nY, LEVEL_CANYONOFTHEMAGI, 0, OBJECT_PERMANENT_TOWN_PORTAL, 0))
 				{
 					pQuestDataEx->bPortalToCanyonOpen = 1;
-					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
+					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
 				}
 			}
 		}

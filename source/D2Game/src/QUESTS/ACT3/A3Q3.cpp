@@ -243,7 +243,7 @@ void __fastcall ACT3Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fState = 0;
 	pQuestData->pNPCMessages = gpAct3Q3NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q3;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q3;
 	pQuestData->pfActiveFilter = ACT3Q3_ActiveFilterCallback;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfStatusFilter = ACT3Q3_StatusFilterCallback;
@@ -448,7 +448,7 @@ void __fastcall ACT3Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	if (pQuestData->fState == 2)
 	{
 		D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE) != 1)
+		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE) != 1)
 		{
 			QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT3Q3_UnitIterate_UpdateQuestStateFlags);

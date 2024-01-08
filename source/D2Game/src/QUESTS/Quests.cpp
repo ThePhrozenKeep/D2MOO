@@ -785,7 +785,7 @@ void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallb
 //D2Game.0x6FC94710
 void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestList, D2BitBufferStrc* pQuestFlags)
 {
-	const int32_t bCompletedNow = QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_COMPLETEDNOW);
+	const int32_t bCompletedNow = QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_COMPLETEDNOW);
 
 	if (pQuest->fState < pQuest->nInitNo)
 	{
@@ -797,7 +797,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 				return;
 			}
 
-			if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_PRIMARYGOALDONE))
+			if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_PRIMARYGOALDONE))
 			{
 				*pQuestList = 12;
 				return;
@@ -811,7 +811,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_PRIMARYGOALDONE) != 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_PRIMARYGOALDONE) != 1)
 	{
 		if (pQuest->nQuestNo == 4 && bCompletedNow)
 		{
@@ -834,7 +834,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 		return;
 	}
 
-	D2_ASSERT(pQuest->nQuest < MAX_QUEST_STATUS);
+	D2_ASSERT(pQuest->nQuestFilter < MAX_QUEST_STATUS);
 
 	*pQuestList = pQuest->fLastState;
 }
@@ -868,12 +868,12 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 				uint8_t a5 = 0;
 				if (pQuest->pfStatusFilter(pQuest, pUnit, pGame->pQuestControl->pQuestFlags, pQuestFlags, &a5) == 1)
 				{
-					packet52.pQuestList[pQuest->nQuest] = a5;
+					packet52.pQuestList[pQuest->nQuestFilter] = a5;
 				}
 			}
 			else
 			{
-				QUESTS_RefreshStatus(pQuest, &packet52.pQuestList[pQuest->nQuest], pQuestFlags);
+				QUESTS_RefreshStatus(pQuest, &packet52.pQuestList[pQuest->nQuestFilter], pQuestFlags);
 			}
 		}
 	}
@@ -1001,11 +1001,11 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 		QUESTS_RefreshStatus(pQuestData, &packet5D.nState, pQuestFlags);
 	}
 
-	if (pQuestData->nQuest == 1)
+	if (pQuestData->nQuestFilter == 1)
 	{
 		packet5D.field_4 = ACT1Q1_GetMonstersToBeKilled(pQuestData);
 	}
-	else if (pQuestData->nQuest == 36)
+	else if (pQuestData->nQuestFilter == 36)
 	{
 		packet5D.field_4 = ACT5Q2_GetBarbsToBeRescued(pQuestData);
 	}
@@ -1914,7 +1914,7 @@ void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 
 	D2QuestDataStrc* pQuestData = pQuestChain->pQuestData;
-	if (pQuestData->nQuest != 20 || !pQuestData->bActive)
+	if (pQuestData->nQuestFilter != 20 || !pQuestData->bActive)
 	{
 		return;
 	}
@@ -2476,7 +2476,7 @@ void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCo
 void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pArgs)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pArgs->pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
 	{
 		return;
 	}

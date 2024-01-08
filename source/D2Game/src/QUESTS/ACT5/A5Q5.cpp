@@ -332,7 +332,7 @@ bool __fastcall ACT5Q5_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 		return false;
 	}
 
-	return QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_REWARDGRANTED) == 0;
+	return QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDGRANTED) == 0;
 }
 
 //D2Game.0x6FCB6D60
@@ -352,7 +352,7 @@ void __fastcall ACT5Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	
 	D2Act5Quest5Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act5Quest5Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
-	pQuestData->nQuest = QUESTSTATEFLAG_A5Q5;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A5Q5;
 	pQuestData->pfStatusFilter = 0;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfActiveFilter = ACT5Q5_ActiveFilterCallback;
@@ -484,35 +484,35 @@ void __fastcall ACT5Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 	case MONSTER_LARZUK:
 		if (nMessageIndex == 20167)
 		{
-			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_CUSTOM1);
+			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_CUSTOM1);
 		}
 		break;
 
 	case MONSTER_CAIN6:
 		if (nMessageIndex == 20165)
 		{
-			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_CUSTOM2);
+			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_CUSTOM2);
 		}
 		break;
 
 	case MONSTER_DREHYA:
 		if (nMessageIndex == 20166)
 		{
-			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_CUSTOM3);
+			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_CUSTOM3);
 		}
 		break;
 
 	case MONSTER_MALAH:
 		if (nMessageIndex == 20168)
 		{
-			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_CUSTOM4);
+			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_CUSTOM4);
 		}
 		break;
 
 	case MONSTER_QUAL_KEHK:
 		if (nMessageIndex == 20164)
 		{
-			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_CUSTOM5);
+			QUESTRECORD_SetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_CUSTOM5);
 		}
 		break;
 
@@ -571,7 +571,7 @@ void __fastcall ACT5Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED))
 	{
 		int32_t nFlag = 0;
 		switch (nNpcId)
@@ -600,9 +600,9 @@ void __fastcall ACT5Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, nFlag))
+		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, nFlag))
 		{
-			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE))
+			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE))
 			{
 				QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 3);
 			}
@@ -841,13 +841,13 @@ int32_t __fastcall ACT5Q5_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED))
 	{
 		return 0;
 	}
 
-	QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
-	QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED);
+	QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
+	QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED);
 	ACT5Q5_RewardPlayer(pGame, pUnit);
 
 	const int16_t nPartyId = SUNIT_GetPartyId(pUnit);
@@ -873,7 +873,7 @@ void __fastcall ACT5Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 
 		if (pQuestData->fState == 2)
 		{
-			if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1)
+			if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1)
 			{
 				return;
 			}
@@ -964,16 +964,16 @@ void __fastcall ACT5Q5_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		((D2Act5Quest5Strc*)pQuestData->pQuestDataEx)->bQuestCompletedBefore = 1;
 	}
-	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_LEAVETOWN) == 1)
+	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_LEAVETOWN) == 1)
 	{
 		pQuestData->fLastState = 1;
 		pQuestData->fState = 3;
 	}
-	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_STARTED) == 1)
+	else if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_STARTED) == 1)
 	{
 		pQuestData->fLastState = 1;
 		pQuestData->fState = 2;
@@ -1290,7 +1290,7 @@ int32_t __fastcall OBJECTS_OperateFunction66_AncientsDoor(D2ObjOperateFnStrc* pO
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pOp->pPlayer)->pQuestData[pOp->pGame->nDifficulty];
 
-	if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING))
+	if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING))
 	{
 		SUNIT_AttachSound(pOp->pPlayer, 19, pOp->pPlayer);
 		return 0;

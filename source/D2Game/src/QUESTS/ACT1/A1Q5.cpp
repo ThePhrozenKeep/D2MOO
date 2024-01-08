@@ -291,7 +291,7 @@ void __fastcall ACT1Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT1Q5_Callback10_PlayerLeavesGame;
 	pQuestData->pfCallback[QUESTEVENT_MONSTERKILLED] = ACT1Q5_Callback08_MonsterKilled;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT1Q5_Callback13_PlayerStartedGame;
-	pQuestData->nQuest = QUESTSTATEFLAG_A1Q5;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A1Q5;
 	pQuestData->pNPCMessages = gpAct1Q5NpcMessages;
 	pQuestData->bActive = 1;
 	pQuestData->nInitNo = 4;
@@ -589,7 +589,7 @@ void __fastcall ACT1Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		{
 			if (pQuestData->fState == 2)
 			{
-				if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuest, 0) != 1)
+				if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuestFilter, 0) != 1)
 				{
 					QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 				}
@@ -624,7 +624,7 @@ void __fastcall ACT1Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 			{
 				if (pQuestData->fState == 2)
 				{
-					if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuest, 0) != 1)
+					if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], pQuestData->nQuestFilter, 0) != 1)
 					{
 						QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 					}
@@ -711,7 +711,7 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 
 		pQuestDataEx->bCountessKilled = 1;
 		pQuestData->pfCallback[QUESTEVENT_MONSTERKILLED] = nullptr;
-		QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
+		QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
 		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT1Q5_UnitIterate_SetRewardGranted);
 
 		for (int32_t i = 0; i < pQuestDataEx->tPlayerGUIDs.nPlayerCount; ++i)
@@ -720,10 +720,10 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 			if (pUnit)
 			{
 				D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pQuestArg->pGame->nDifficulty];
-				if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1)
+				if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1)
 				{
-					QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
-					QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED);
+					QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
+					QUESTRECORD_SetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED);
 					SUNIT_AttachSound(pUnit, 37, pUnit);
 				}
 			}
@@ -876,7 +876,7 @@ void __fastcall ACT1Q5_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

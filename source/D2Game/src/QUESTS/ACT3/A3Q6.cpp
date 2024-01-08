@@ -229,7 +229,7 @@ void __fastcall ACT3Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT3Q6_Callback13_PlayerStartedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q6_Callback10_PlayerLeavesGame;
 	pQuestData->pfSeqFilter = ACT3Q6_SeqCallback;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q6;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q6;
 	pQuestData->nInitNo = 6;
 	pQuestData->pfActiveFilter = ACT3Q6_ActiveFilterCallback;
 
@@ -254,7 +254,7 @@ void __fastcall ACT3Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		nNpcId = pQuestArg->pTarget->dwClassId;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuest, QFLAG_CUSTOM7))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuestFilter, QFLAG_CUSTOM7))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 5);
 		return;
@@ -291,7 +291,7 @@ void __fastcall ACT3Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		if (pQuestData->fState > 1 && pQuestData->fState <= 3)
 		{
 			D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM7) != 1)
+			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM7) != 1)
 			{
 				if (pQuestData->fLastState < 3)
 				{

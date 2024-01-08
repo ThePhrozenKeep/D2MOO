@@ -177,7 +177,7 @@ void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->bActive = 1;
 	pQuestData->fLastState = 1;
 	pQuestData->fState = 0;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q2;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q2;
 	pQuestData->nInitNo = 0;
 	pQuestData->pfStatusFilter = ACT3Q2_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT3Q2_ActiveFilterCallback;
