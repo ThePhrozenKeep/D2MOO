@@ -192,7 +192,7 @@ struct D2NPCMessageTableStrc
 	int32_t nMessages;						//0xC0
 };
 
-struct D2QuestDataStrc
+struct D2QuestDataStrc						//sizeof 0xF4
 {
 	int32_t nQuestNo;						//0x00 - internal
 	D2GameStrc* pGame;						//0x04
@@ -207,7 +207,6 @@ struct D2QuestDataStrc
 	uint32_t dwFlags;						//0x14
 	void* pQuestDataEx;						//0x18 - union of 0x29 structs
 	D2QuestGUIDStrc tPlayerGUIDs;			//0x1C
-	uint16_t dw9E;							//0x9E 
 	QUESTCALLBACK pfCallback[15];			//0xA0
 	D2NPCMessageTableStrc* pNPCMessages;	//0xDC
 	int32_t nQuestFilter;					//0xE0 - index in quest flag bit array, called eFilter in original code

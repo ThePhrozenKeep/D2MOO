@@ -334,6 +334,7 @@ if(D2MOO_WITH_STATIC_TESTS)
   target_sources(${D2GameImplName}
     PRIVATE
       statictests/Clients_staticchecks.cpp
+      statictests/Quests_staticchecks.cpp
   )
 endif()
 
