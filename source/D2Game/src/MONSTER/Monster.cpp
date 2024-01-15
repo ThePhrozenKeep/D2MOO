@@ -152,7 +152,7 @@ D2MonPropTxt* __fastcall MONSTER_GetMonPropTxtRecord(int32_t nId)
 //D2Game.0x6FC603D0
 void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData)
 {
-    if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER || !pUnit->pMonsterData || !pUnit->pMonsterData->pMonstatsTxt)
+    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pMonsterData || !pUnit->pMonsterData->pMonstatsTxt)
     {
         return;
     }
