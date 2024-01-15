@@ -2638,7 +2638,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
         return nullptr;
     }
     uint8_t* pMonUmods = MONSTERUNIQUE_GetUMods(pMonster);
-    if (pMonUmods)
+    if (!pMonUmods)
     {
         return pMonster;
     }
