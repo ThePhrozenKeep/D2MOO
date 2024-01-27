@@ -688,14 +688,14 @@ int32_t __fastcall sub_6FCFEDD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nSkillLevel);
 
-    const int32_t nRange = SKILLS_GetProgressiveSkillMissileId(pUnit, nSkillId);
-    if (nRange <= 0)
+    const int32_t nMissileId = SKILLS_GetProgressiveSkillMissileId(pUnit, nSkillId);
+    if (nMissileId <= 0)
     {
         return 1;
     }
 
     D2MissileStrc missileParams = {};
-    missileParams.nMissile = nRange;
+    missileParams.nMissile = nMissileId;
     missileParams.nRange = nTimeout;
     missileParams.dwFlags = 32768;
     missileParams.pOwner = pTarget;
