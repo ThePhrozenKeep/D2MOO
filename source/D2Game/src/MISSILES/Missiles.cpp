@@ -202,7 +202,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     }
 
     int32_t nRange = 0;
-    if (missileParams->dwFlags & 0x8000)
+    if (!(missileParams->dwFlags & 0x8000))
     {
         nRange = pMissilesTxtRecord->wRange + missileParams->nSkillLevel * pMissilesTxtRecord->wLevRange;
         if (missileParams->dwFlags & 8 && pMissilesTxtRecord->nSubLoop)
