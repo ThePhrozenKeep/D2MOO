@@ -1251,8 +1251,8 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 				const int32_t nMana = STATLIST_UnitGetStatValue(pDefender, STAT_MANA, 0);
 				const int32_t nStamina = STATLIST_UnitGetStatValue(pDefender, STAT_STAMINA, 0);
 
-				pDamage->dwLifeLeech <<= 6;
-				pDamage->dwManaLeech <<= 6;
+				pDamage->dwLifeLeech >>= 6;
+				pDamage->dwManaLeech >>= 6;
 
 				const int32_t nLifeLeech = std::min(pDamage->dwLifeLeech, pDamage->dwPhysDamage);
 				const int32_t nManaLeech = std::min(pDamage->dwManaLeech, nMana);
