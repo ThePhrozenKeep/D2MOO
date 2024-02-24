@@ -246,14 +246,14 @@ int32_t __fastcall MONSTERUNIQUE_CalculatePercentage(int32_t a1, int32_t a2, int
 
         if (a3 <= a2 >> 4)
         {
-            return a1 * a2 / a3;
+            return a1 * (a2 / a3);
         }
     }
     else
     {
         if (a3 <= a1 >> 4)
         {
-            return a2 * a1 / a3;
+            return a2 * (a1 / a3);
         }
     }
 
