@@ -2708,7 +2708,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 		}
 	}
 
-	return nSrcDamage * (__int64)nPercentage / 100;
+	return nSrcDamage * (int64_t)nPercentage / 100;
 }
 
 //D2Common.0x6FDB2B00 (#11005)

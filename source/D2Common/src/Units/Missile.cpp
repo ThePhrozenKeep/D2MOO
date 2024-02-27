@@ -938,7 +938,7 @@ int __fastcall MISSILE_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, i
 		}
 	}
 
-	return nSrcDamage * (__int64)nPercentage / 100;
+	return nSrcDamage * (int64_t)nPercentage / 100;
 }
 
 //D2Common.0x6FDBB2E0 (#11218)
