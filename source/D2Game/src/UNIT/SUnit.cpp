@@ -499,7 +499,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
         pGame->dwLastUsedUnitGUID[nUnitType] = nUnitGUID;
     }
 
-    switch (nUnitGUID)
+    switch (nUnitType)
     {
     case UNIT_PLAYER:
     {
