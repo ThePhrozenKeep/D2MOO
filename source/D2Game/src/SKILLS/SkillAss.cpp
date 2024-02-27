@@ -430,6 +430,8 @@ void __fastcall sub_6FCF5870(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
                         sub_6FCF5BC0(pUnit, pStatList, pDamage);
                         break;
                     }
+					default:
+						break;
                     }
                 }
             }

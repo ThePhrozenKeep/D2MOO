@@ -279,6 +279,8 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 				case CMD_BOOLEAN:
 					*(BYTE*)pCfgMember = TRUE;
 					break;
+				default:
+					D2_UNREACHABLE;
 				}
 			}
 		}

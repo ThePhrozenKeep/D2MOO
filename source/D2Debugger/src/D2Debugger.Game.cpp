@@ -377,6 +377,7 @@ bool D2DebugGame(D2GameStrc* pGame)
         case DIFFMODE_NORMAL:ImGui::Text("Normal"); break;
         case DIFFMODE_NIGHTMARE:ImGui::Text("Nightmare"); break;
         case DIFFMODE_HELL:ImGui::Text("Hell"); break;
+		default: D2_UNREACHABLE;
         }
         ImGui::Text("Init seed: 0x%x", pGame->dwInitSeed);
         ImGui::Text("Frame %d", pGame->dwGameFrame);

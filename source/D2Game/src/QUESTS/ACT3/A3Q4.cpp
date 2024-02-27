@@ -131,6 +131,8 @@ bool __fastcall ACT3Q4_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 			return true;
 		}
 		break;
+	default:
+		break;
 	}
 
 	return false;
@@ -455,6 +457,8 @@ void __fastcall ACT3Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		}
 		break;
 	}
+	default:
+		break;
 	}
 }
 

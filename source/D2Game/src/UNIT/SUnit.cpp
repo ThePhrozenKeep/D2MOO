@@ -1878,9 +1878,9 @@ D2UnitStrc** __fastcall SUNIT_GetUnitList(int32_t nUnitType, D2GameStrc* pGame, 
 
     case UNIT_ITEM:
         return &pGame->pUnitList[3][nUnitGUID & 127];
+	default:
+		return nullptr;
     }
-
-    return nullptr;
 }
 
 //D2Game.0x6FCBDA40

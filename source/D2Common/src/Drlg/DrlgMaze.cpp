@@ -2819,6 +2819,8 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		nX += pOuterCloisterLevel->nWidth - pBarracksRoomEx->nTileXPos;
 		nY += pOuterCloisterLevel->nHeight / 2 - pBarracksRoomEx->nTileYPos + 1;
 		break;
+	default:
+		break;
 	}
 
 	if (SEED_RollRandomNumber(&pLevel->pSeed) & 1)

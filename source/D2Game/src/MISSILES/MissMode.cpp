@@ -418,6 +418,8 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
         pDamage->dwFrzLen = STATLIST_UnitGetStatValue(pAttacker, STAT_COLDLENGTH, 0);
         return pDamage->dwColdDamage;
     }
+	default:
+		break;
     }
 
     return 0;
@@ -519,6 +521,8 @@ void __fastcall MISSMODE_AddDamageValue(D2GameStrc* pGame, D2UnitStrc* pMissile,
     case ELEMTYPE_FREEZE:
         pDamage->dwColdDamage = nDamage;
         break;
+	default:
+		break;
     }
 }
 

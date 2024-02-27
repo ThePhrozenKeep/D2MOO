@@ -193,7 +193,7 @@ int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId
         }
         return 1;
     }
+	default:
+		return 0;
     }
-
-    return 0;
 }

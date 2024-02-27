@@ -159,6 +159,8 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 			pUnit->pStaticPath->pRoom = NULL;
 		}
 		break;
+	default:
+		break;
 	}
 }
 

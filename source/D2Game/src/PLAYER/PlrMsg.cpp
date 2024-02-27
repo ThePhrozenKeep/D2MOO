@@ -628,6 +628,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
 
         return 0;
     }
+	default:
+		break;
     }
 
     return 1;

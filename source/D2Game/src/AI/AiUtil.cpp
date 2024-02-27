@@ -598,9 +598,9 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 
 		return nullptr;
 	}
+	default:
+		return nullptr;
 	}
-
-	return nullptr;
 }
 
 //D2Game.0x6FCF20E0

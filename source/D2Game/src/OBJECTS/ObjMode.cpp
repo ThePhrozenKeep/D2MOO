@@ -578,6 +578,8 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
     case 3u:
         UNITS_ChangeAnimMode(pObject, 4);
         break;
+	default:
+		break;
     }
 }
 
@@ -2958,6 +2960,8 @@ int32_t __fastcall OBJECTS_OperateHandler(D2GameStrc* pGame, D2UnitStrc* pPlayer
         case OBJECT_JERHYN_PLACEHOLDER1:
         case OBJECT_JERHYN_PLACEHOLDER2:
             return 0;
+		default:
+			break;
         }
 
         const ObjOperateFunction pOperateFn = gpObjOperateFnTable[pObjectTxtRecord->nOperateFn];
@@ -3643,6 +3647,8 @@ void __fastcall sub_6FC79B50(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             UNITS_ChangeAnimMode(pObject, OBJMODE_NEUTRAL);
             break;
         }
+		default:
+			break;
         }
     }
 

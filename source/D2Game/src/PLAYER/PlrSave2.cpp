@@ -696,6 +696,8 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
             return PLRSAVE2ERROR_HELL_NOT_UNLOCKED;
         }
         break;
+	default:
+		D2_UNREACHABLE;
     }
 
     return 0;

@@ -537,6 +537,8 @@ void __fastcall OBJECTS_InitFunction01_Shrine(D2ObjInitFnStrc* pOp)
     case 16:
         nShrineId = 18;
         break;
+	default:
+		break;
     }
 
     pOp->pObject->pObjectData->InteractType = nShrineId;

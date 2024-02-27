@@ -591,9 +591,9 @@ int32_t __fastcall sub_6FC670A0(int32_t nMonsterId)
     case MONSTER_WINDOW1:
     case MONSTER_WINDOW2:
         return 0;
+	default:
+		return 1;
     }
-
-    return 1;
 }
 
 //D2Game.0x6FC67190
@@ -1049,6 +1049,8 @@ D2MonRegDataStrc* __fastcall sub_6FC67FA0(D2MonsterRegionStrc** ppMonsterRegion,
     case MONSTER_ACT3MALE:
     case MONSTER_ACT3FEMALE:
         return nullptr;
+	default:
+		break;
     }
 
     D2MonsterRegionStrc* pMonsterRegion = ppMonsterRegion[DUNGEON_GetLevelIdFromRoom(pRoom)];

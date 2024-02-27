@@ -3557,6 +3557,8 @@ BOOL __stdcall UNITS_CanDualWield(D2UnitStrc* pUnit)
 				return TRUE;
 			}
 			break;
+		default:
+			break;
 		}
 	}
 

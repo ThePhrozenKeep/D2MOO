@@ -182,6 +182,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 						nMajorDirectionDistance = tSubPathStart.X - (pCurPath->tTargetCoord).X;
 						break;
 					}
+					default:
+						break;
 					}
 
 					if (nMajorDirectionDistance > 0)

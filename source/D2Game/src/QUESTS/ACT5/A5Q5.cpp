@@ -1074,6 +1074,8 @@ void __fastcall OBJECTS_InitFunction65_AncientStatue2(D2ObjInitFnStrc* pOp)
 		case OBJECT_ANCIENTSTATUE2:
 			UNITS_ChangeAnimMode(pOp->pObject, pQuestDataEx->nAncientStatueObjectMode[2]);
 			break;
+		default:
+			break;
 		}
 	}
 	else
@@ -1104,6 +1106,8 @@ void __fastcall OBJECTS_InitFunction63_AncientStatue3(D2ObjInitFnStrc* pOp)
 		case OBJECT_ANCIENTSTATUE2:
 			UNITS_ChangeAnimMode(pOp->pObject, pQuestDataEx->nAncientStatueObjectMode[2]);
 			break;
+		default:
+			break;
 		}
 	}
 	else
@@ -1133,6 +1137,8 @@ void __fastcall OBJECTS_InitFunction64_AncientStatue1(D2ObjInitFnStrc* pOp)
 
 		case OBJECT_ANCIENTSTATUE2:
 			UNITS_ChangeAnimMode(pOp->pObject, pQuestDataEx->nAncientStatueObjectMode[2]);
+			break;
+		default:
 			break;
 		}
 	}

@@ -58,6 +58,9 @@ static void DATATBLS_EvaluateCalcCallback(Fog64IntStack* pCalcStack, const FOGAS
 			// FALLTHROUGH
 		case 0:
 			nResult = pTableData[nTableIndex].fpCallBack(nParam1, nParam2, nParam3, pUserData);
+			break;
+		default:
+			break;
 		}
 	}
 	DATATBLS_IntStackPush(pCalcStack, nResult);

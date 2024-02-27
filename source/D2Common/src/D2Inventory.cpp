@@ -3393,9 +3393,9 @@ int __fastcall UNITS_GetXPosition(D2UnitStrc* pUnit)
 	case UNIT_ITEM:
 	case UNIT_TILE:
 		return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nX : 0;
+	default:
+		return 0;
 	}
-
-	return 0;
 }
 
 //D2Common.0x6FD92610
@@ -3412,7 +3412,7 @@ int __fastcall UNITS_GetYPosition(D2UnitStrc* pUnit)
 	case UNIT_ITEM:
 	case UNIT_TILE:
 		return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nY : 0;
+	default:
+		return 0;
 	}
-
-	return 0;
 }

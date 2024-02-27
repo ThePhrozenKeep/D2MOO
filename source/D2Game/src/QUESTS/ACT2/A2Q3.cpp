@@ -158,6 +158,8 @@ bool __fastcall ACT2Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 		case MONSTER_GEGLASH:
 		case MONSTER_JERHYN:
 			return true;
+		default:
+			break;
 		}
 	}
 

@@ -124,6 +124,8 @@ void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 		}
 		return;
 	}
+	default:
+		break;
 	}
 }
 

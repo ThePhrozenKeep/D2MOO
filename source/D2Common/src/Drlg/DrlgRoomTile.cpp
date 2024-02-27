@@ -1032,6 +1032,8 @@ void __fastcall DRLGROOMTILE_CountWallWarpTiles(D2DrlgRoomStrc* pDrlgRoom, D2Drl
 					++pDrlgRoom->pTileGrid->pTiles.nWalls;
 				}
 				break;
+			default:
+				break;
 			}
 		}
 	}

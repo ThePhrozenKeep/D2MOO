@@ -578,6 +578,8 @@ void __fastcall MONSTERUNIQUE_UMod8_Resistant(D2UnitStrc* pUnit, int32_t nUMod, 
         case 28:
             STATLIST_SetUnitStat(pUnit, STAT_DAMAGERESIST, nDamageResist + 50, 0);
             break;
+		default:
+			break;
         }
     }
 }
@@ -1519,11 +1521,15 @@ void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitS
             QUESTSFX_ShenkTheOverseer(pGame, pUnit);
         }
         break;
-    //case MONSTER_ANCIENTBARB1:
-    //case MONSTER_ANCIENTBARB2:
-    //case MONSTER_ANCIENTBARB3:
-    //    D2Game_10061_Return();
-    //    break;
+#if 0
+    case MONSTER_ANCIENTBARB1:
+    case MONSTER_ANCIENTBARB2:
+    case MONSTER_ANCIENTBARB3:
+        D2Game_10061_Return();
+        break;
+#endif
+	default:
+		break;
     }
 }
 
@@ -2275,9 +2281,9 @@ int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtReco
 
         break;
     }
+	default:
+		return 1;
     }
-
-    return 1;
 }
 
 //D2Game.0x6FC6EE90

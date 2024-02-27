@@ -1035,6 +1035,8 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
         case 2:
             damage.dwHitClass = 64;
             break;
+		default:
+			break;
         }
 
         SKILLS_SetParam1(pSkill, (nElemType + 1) % 3);

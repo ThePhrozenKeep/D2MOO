@@ -1250,6 +1250,8 @@ int __stdcall MONSTERS_GetHirelingTypeId(D2UnitStrc* pHireling)
 		case MONSTER_ACT5HIRE1:
 		case MONSTER_ACT5HIRE2:
 			return 4;
+		default:
+			break;
 		}
 	}
 

@@ -1681,7 +1681,8 @@ const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(
                 return &gMonModeCallbacks[7];
             }
             break;
-
+		default:
+			break;
         }
     }
 

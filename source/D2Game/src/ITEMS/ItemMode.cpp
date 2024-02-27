@@ -6010,6 +6010,8 @@ void __fastcall D2GAME_ITEMMODE_Unk_6FC4BC10(D2GameStrc* pGame, D2UnitStrc* pUni
         ITEMS_RemoveFromAllPlayers(pGame, pItem);
         return;
     }
+	default:
+		break;
     }
 }
 

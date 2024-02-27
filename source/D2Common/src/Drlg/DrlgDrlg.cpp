@@ -73,6 +73,8 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2AR
 		wsprintfA(szPath, "%s\\Tiles\\ACT3\\Kurast\\sets.dt1", "DATA\\GLOBAL");
 		D2CMP_10087_LoadTileLibrarySlot(pDrlg->pTiles, szPath);
 		break;
+	default:
+		break;
 	}
 
 	DRLGACTIVATE_InitializeRoomExStatusLists(pDrlg);
@@ -194,6 +196,8 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 	case DRLGTYPE_OUTDOOR:
 		DRLGOUTDOORS_FreeOutdoorInfo(pLevel, bAlloc);
 		break;
+	default:
+		D2_UNREACHABLE;
 	}
 
 	memset(pLevel->pTileInfo, 0x00, sizeof(pLevel->pTileInfo));
@@ -426,6 +430,8 @@ D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 	case DRLGTYPE_OUTDOOR:
 		DRLGOUTDOORS_AllocOutdoorInfo(pLevel);
 		break;
+	default:
+		D2_UNREACHABLE;
 	}
 
 	pLevel->pNextLevel = pDrlg->pLevel;

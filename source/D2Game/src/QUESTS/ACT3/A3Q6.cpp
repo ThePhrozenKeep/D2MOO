@@ -424,6 +424,8 @@ int32_t __fastcall ACT3Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q6, QFLAG_CUSTOM5);
 		}
 		return 0;
+	default:
+		break;
 	}
 
 	return 0;

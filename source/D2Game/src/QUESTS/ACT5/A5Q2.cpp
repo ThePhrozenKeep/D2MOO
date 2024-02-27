@@ -1089,6 +1089,8 @@ void __fastcall ACT5Q2_UpdatePortalMode(D2QuestDataStrc* pQuestData, D2UnitStrc*
 	case OBJMODE_SPECIAL1:
 		UNITS_ChangeAnimMode(pPortal, OBJMODE_SPECIAL2);
 		break;
+	default:
+		break;
 	}
 
 	EVENT_SetEvent(pQuestData->pGame, pPortal, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);

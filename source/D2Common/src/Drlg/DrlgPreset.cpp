@@ -376,6 +376,8 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hA
 				}
 				nMode = IMODE_ONGROUND;
 				break;
+			default:
+				break;
 			}
 
 			int nX = ReadInt32(pData);

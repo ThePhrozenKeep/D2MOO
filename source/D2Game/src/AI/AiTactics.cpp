@@ -786,9 +786,9 @@ D2UnitStrc* __fastcall AITACTICS_GetTargetMinion(D2GameStrc* pGame, D2UnitStrc* 
 		}
 
 		return pTarget;
+	default:
+		return nullptr;
 	}
-
-	return nullptr;
 }
 
 //D2Game.0x6FCD1490

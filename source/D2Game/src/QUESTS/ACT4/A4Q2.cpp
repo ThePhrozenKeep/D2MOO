@@ -267,6 +267,8 @@ void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			pPortal->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 			return;
 		}
+		default:
+			break;
 		}
 	}
 	else if (pQuestArg->nNPCNo == MONSTER_CAIN4)

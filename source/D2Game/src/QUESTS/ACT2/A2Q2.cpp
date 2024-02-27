@@ -756,6 +756,8 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 	case ' piv':
 		--pQuestDataEx->nAmulets;
 		break;
+	default:
+		break;
 	}
 
 	if (pQuestDataEx->unk0x2B || pQuestDataEx->nCubedStaffs)

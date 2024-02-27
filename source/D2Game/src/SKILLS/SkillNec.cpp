@@ -276,9 +276,9 @@ int32_t __fastcall sub_6FD0B3D0(D2UnitStrc* pUnit, int32_t nStatId, int32_t nRes
         }
 
         return nResist / 5;
+	default:
+		return nResist;
     }
-
-    return nResist;
 }
 
 //D2Game.0x6FD0B450
@@ -308,6 +308,8 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
         case STATE_TAUNT:
             nSpecialAiState = 12;
             break;
+		default:
+			break;
         }
 
         if (!sub_6FD15190(pUnit, nSpecialAiState))
@@ -386,6 +388,8 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
             case STATE_TAUNT:
                 nSpecialAiState = 12;
                 break;
+			default:
+				break;
             }
 
             AITHINK_ExecuteAiFn(v2->pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), nSpecialAiState);

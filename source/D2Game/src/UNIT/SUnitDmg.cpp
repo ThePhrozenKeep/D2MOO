@@ -1920,6 +1920,8 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 				}
 				break;
 			}
+			default:
+				break;
 			}
 		}
 	}

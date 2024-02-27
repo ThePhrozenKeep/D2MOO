@@ -9490,6 +9490,8 @@ void __fastcall sub_6FCE4830(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMons
 		}
 
 		break;
+	default:
+		break;
 	}
 
 	AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);

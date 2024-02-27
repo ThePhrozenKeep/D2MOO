@@ -937,6 +937,8 @@ int32_t __fastcall SKILLS_SrvDo113_Scroll_Book(D2GameStrc* pGame, D2UnitStrc* pU
                     sub_6FC49220(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused, 0);
                     return 1;
                 }
+				default:
+					break;
                 }
 
                 return 0;

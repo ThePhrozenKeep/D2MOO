@@ -1846,6 +1846,8 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 		break;
 	}
+	default:
+		break;
 	}
 }
 
@@ -2889,6 +2891,8 @@ void __fastcall QUESTS_MapPresetSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ma
 
 	case OBJECT_LARZUK_STANDARD:
 		ACT5Q1_ChangeLarzukMapAI(pGame, pUnit, pMapAI);
+		break;
+	default:
 		break;
 	}
 }

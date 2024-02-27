@@ -996,6 +996,8 @@ int32_t __fastcall CLIENTS_GetUnitX(D2UnitStrc* pUnit)
     case UNIT_ITEM:
     case UNIT_TILE:
         return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nX : 0;
+	default:
+		break;
     }
 
     return 0;
@@ -1015,6 +1017,8 @@ int32_t __fastcall CLIENTS_GetUnitY(D2UnitStrc* pUnit)
     case UNIT_ITEM:
     case UNIT_TILE:
         return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nY : 0;
+	default:
+		break;
     }
 
     return 0;

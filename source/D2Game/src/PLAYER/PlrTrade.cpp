@@ -623,6 +623,8 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                 nDupeClassId = pCubeItem[nCounter].nClassId;
                 break;
             }
+			default:
+				break;
             }
 
             if (pDupeItem)
@@ -969,6 +971,8 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                     case ' 2fq':
                         ACT3Q2_UpdateKhalimItemCounts(pGame, pUnit);
                         break;
+					default:
+						break;
                     }
                 }
             }
@@ -1315,6 +1319,8 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
             }
             break;
         }
+		default:
+			break;
         }
     }
     else if (nButton >= TRADEBTN_CLOSECUBE && nButton <= TRADEBTN_TRANSMUTE)
@@ -1341,6 +1347,8 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
             PLRTRADE_HandleCubeInteraction(pGame, pPlayer);
             break;
         }
+		default:
+			break;
         }
     }
     else
@@ -1683,6 +1691,8 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 }
                 break;
             }
+			default:
+				break;
             }
         }
         else
@@ -2170,6 +2180,8 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
             D2GAME_RemoveItem_6FC471F0(pGame, pPlayer1, pCheckedItem, 0);
             break;
         }
+		default:
+			break;
         }
     }
 

@@ -135,6 +135,8 @@ void __fastcall DRLGOUTPLACE_BuildKurast(D2DrlgLevelStrc* pLevel)
 	case LEVEL_UPPERKURAST:
 		DRLGOUTJUNG_BuildUpperKurast(pLevel);
 		break;
+	default:
+		break;
 	}
 
 	switch (pLevel->nLevelId)
@@ -1061,6 +1063,8 @@ void __fastcall sub_6FD81430(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 		case 3:
 			pDrlgCoord2->nPosY += 8;
 			break;
+		default:
+			break;
 		}
 		break;
 
@@ -1276,6 +1280,8 @@ void __fastcall sub_6FD81850(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 
 		case 3:
 			pDrlgCoord2->nPosY -= 8;
+			break;
+		default:
 			break;
 		}
 		break;
