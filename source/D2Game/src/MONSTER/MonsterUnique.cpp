@@ -2950,6 +2950,7 @@ void __fastcall D2GAME_BOSSES_AssignUMod_6FC6FF10(D2GameStrc* pGame, D2UnitStrc*
         {
             pUMods[i] = nUMod;
             sub_6FC6F670(pUnit, nUMod, bUnique);
+			return;
         }
     }
 }
