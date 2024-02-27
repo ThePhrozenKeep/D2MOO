@@ -2282,8 +2282,9 @@ int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtReco
         break;
     }
 	default:
-		return 1;
+		break;
     }
+	return 1;
 }
 
 //D2Game.0x6FC6EE90

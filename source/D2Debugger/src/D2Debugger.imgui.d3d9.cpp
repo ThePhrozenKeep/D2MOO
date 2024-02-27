@@ -315,6 +315,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         ::PostQuitMessage(0);
         return 0;
 	default:
-		return ::DefWindowProcW(hWnd, msg, wParam, lParam);
+		break;
     }
+	return ::DefWindowProcW(hWnd, msg, wParam, lParam);
 }
