@@ -940,7 +940,11 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 	int32_t nValue = *pValue;
 	int32_t nPreviousValue = *pValue;
 
-	*pValue = std::max(*pValue, 0);
+	if (*pValue <= 0)
+	{
+		*pValue = 0;
+		return;
+	}
 
 	int32_t nResValue = 0;
 	if (pDamageStatTableRecord->nResStatId != -1)
