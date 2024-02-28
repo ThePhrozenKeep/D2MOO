@@ -1290,7 +1290,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		STATLIST_SetUnitStat(pDefender, STAT_HITPOINTS, nNewHp, 0);
 	}
 
-	if ((int32_t)pDamage->dwDmgTotal > 0)
+	if (pDamage->dwDmgTotal > 0)
 	{
 		int32_t nNewHp = STATLIST_UnitGetStatValue(pDefender, STAT_HITPOINTS, 0) - pDamage->dwDmgTotal;
 		if (nNewHp < 256)
