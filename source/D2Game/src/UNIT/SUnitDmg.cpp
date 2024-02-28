@@ -1320,13 +1320,13 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		STATLIST_SetUnitStat(pDefender, STAT_STAMINA, nNewStamina, 0);
 	}
 
-	uint32_t nStunLength = pDamage->dwStunLen;
+	int32_t nStunLength = pDamage->dwStunLen;
 	int32_t bApplyStun = 0;
 	if (nStunLength > 0)
 	{
 		if (!pDefender || pDefender->dwUnitType != UNIT_MONSTER)
 		{
-			nStunLength = std::min(nStunLength, 250u);
+			nStunLength = std::min(nStunLength, 250);
 			bApplyStun = 1;
 		}
 
