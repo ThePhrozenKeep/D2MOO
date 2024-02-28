@@ -2659,46 +2659,29 @@ int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 //D2Common.0x6FDB29D0
 int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, int nSrcDamage)
 {
-	int nPercentage = 0;
+	int32_t statId = 0;
 
 	switch (nElemType)
 	{
 	case ELEMTYPE_FIRE:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_FIRE_MASTERY;
+		break;
 	case ELEMTYPE_LTNG:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_LTNG_MASTERY;
+		break;
 	case ELEMTYPE_COLD:
 	case ELEMTYPE_FREEZE:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_COLD_MASTERY;
+		break;
 	case ELEMTYPE_POIS:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_POIS_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-		
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_POIS_MASTERY;
+		break;
 	default:
 		return 0;
 	}
+
+	int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, statId, 0);
+	return DATATBLS_ApplyRatio(nSrcDamage, nPercentage, 100);
 }
 
 //D2Common.0x6FDB2B00 (#11005)
