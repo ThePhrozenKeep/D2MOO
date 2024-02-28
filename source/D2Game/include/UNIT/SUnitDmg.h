@@ -68,25 +68,25 @@ struct D2DamageStrc
 	uint16_t wResultFlags;					//0x04
 	uint16_t wExtra;						//0x06
 	int32_t dwPhysDamage;					//0x08
-	uint32_t dwEnDmgPct;					//0x0C
+	int32_t dwEnDmgPct;						//0x0C
 	int32_t dwFireDamage;					//0x10
 	int32_t dwBurnDamage;					//0x14
-	uint32_t dwBurnLen;						//0x18
+	int32_t dwBurnLen;						//0x18
 	int32_t dwLtngDamage;					//0x1C
 	int32_t dwMagDamage;					//0x20
 	int32_t dwColdDamage;					//0x24
 	int32_t dwPoisDamage;					//0x28
-	uint32_t dwPoisLen;						//0x2C
-	uint32_t dwColdLen;						//0x30
-	uint32_t dwFrzLen;						//0x34
+	int32_t dwPoisLen;						//0x2C
+	int32_t dwColdLen;						//0x30
+	int32_t dwFrzLen;						//0x34
 	int32_t dwLifeLeech;					//0x38
 	int32_t dwManaLeech;					//0x3C
 	int32_t dwStamLeech;					//0x40
-	uint32_t dwStunLen;						//0x44
+	int32_t dwStunLen;						//0x44
 	int32_t dwAbsLife;						//0x48
-	uint32_t dwDmgTotal;					//0x4C
+	int32_t dwDmgTotal;						//0x4C
 	uint32_t unk0x50;						//0x50
-	uint32_t dwPiercePct;					//0x54
+	int32_t dwPiercePct;					//0x54
 	uint32_t dwDamageRate;					//0x58
 	uint32_t unk0x5C;						//0x5C
 	uint32_t dwHitClass;					//0x60
