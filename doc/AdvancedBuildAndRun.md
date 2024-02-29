@@ -43,7 +43,7 @@ cmake --install YOU_BUILD_DIR --config Release --prefix YOUR_INSTALL_FOLDER
 
 ## "Open Folder" and Visual Studio Code
 
-It is also possible to use *Visual Studio* "Open folder" feature or *Visual Studio Code*, however you will need to configure [`Launch.vs.json`](https://learn.microsoft.com/en-us/cpp/build/configure-cmake-debugging-sessions?view=msvc-170#launchvsjson-reference) manually, which is **not practical**.
+It is also possible to use *Visual Studio* "Open folder" feature or *Visual Studio Code*, however you will need to configure [`Launch.vs.json`](https://learn.microsoft.com/en-us/cpp/build/configure-cmake-debugging-sessions?view=msvc-170#launchvsjson-reference) manually, which is **not practical nor recommended** .
 
 # Running in Visual Studio
 
