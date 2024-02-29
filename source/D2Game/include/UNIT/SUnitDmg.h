@@ -87,7 +87,7 @@ struct D2DamageStrc
 	int32_t dwDmgTotal;						//0x4C
 	uint32_t unk0x50;						//0x50
 	int32_t dwPiercePct;					//0x54
-	uint32_t dwDamageRate;					//0x58
+	int32_t dwDamageRate;					//0x58
 	uint32_t unk0x5C;						//0x5C
 	uint32_t dwHitClass;					//0x60
 	uint8_t nHitClassActiveSet;				//0x64
