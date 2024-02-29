@@ -24,9 +24,9 @@ You can generate a VS solution (located in `out/build/VS20XX`) and build using t
 ```sh
 # Configure the CMake project
 cmake --preset VS2019
-# Build the release config
+# Build the release config (Optional. You may do it from Visual Studio itself)
 cmake --build --preset VS2019 --config Release
-# Install (Most people will want to debug instead of install)
+# Install (Optional. Most people will want to debug instead of install)
 cmake --build --preset VS2019 --config Release --target install
 ```
 
