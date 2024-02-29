@@ -26,7 +26,7 @@ You can generate a VS solution (located in `out/build/VS20XX`) and build using t
 cmake --preset VS2019
 # Build the release config
 cmake --build --preset VS2019 --config Release
-# Install
+# Install (Most people will want to debug instead of install)
 cmake --build --preset VS2019 --config Release --target install
 ```
 
