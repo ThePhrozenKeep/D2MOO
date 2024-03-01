@@ -98,9 +98,30 @@ macro(D2MOO_add_subdirectory_if_exists dir)
     endif ()
 endmacro()
 
-
 macro(D2MOO_add_subdirectories_for_d2_known_dlls ModName)
-  set(D2_KNOWN_DLLS    binkw32     Bnclient     D2Client     D2CMP     D2Common     D2DDraw     D2Direct3D     D2Game     D2Gdi     D2gfx     D2Glide     D2Lang     D2Launch     D2MCPClient     D2Multi     D2Net     D2sound     D2Win     Fog     ijl11     SmackW32     Storm 
+  set(D2_KNOWN_DLLS
+    binkw32 
+    Bnclient 
+    D2Client 
+    D2CMP 
+    D2Common 
+    D2DDraw 
+    D2Direct3D 
+    D2Game 
+    D2Gdi 
+    D2gfx 
+    D2Glide 
+    D2Lang 
+    D2Launch 
+    D2MCPClient 
+    D2Multi 
+    D2Net 
+    D2sound 
+    D2Win 
+    Fog 
+    ijl11 
+    SmackW32 
+    Storm 
   )
   # Start by creating all targets so that we can later link to them without caring about order.
   foreach(dllname ${D2_KNOWN_DLLS})
@@ -111,3 +132,4 @@ macro(D2MOO_add_subdirectories_for_d2_known_dlls ModName)
     D2MOO_add_subdirectory_if_exists(${dllname})
   endforeach()
 endmacro()
+
