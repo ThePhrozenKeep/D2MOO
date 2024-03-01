@@ -87,42 +87,50 @@ function(D2MOO_add_mod_dll ModName DLLName)
 endfunction()
 
 macro(D2MOO_add_mod_dll_if_exists dir)
-    if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-        D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
-    endif ()
+  if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
+    D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
+  endif()
 endmacro()
 
 macro(D2MOO_add_subdirectory_if_exists dir)
-    if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-        add_subdirectory(${dir})
-    endif ()
+  if(IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
+   add_subdirectory(${dir})
+  endif()
+endmacro()
+
+set(D2_KNOWN_DLLS
+  binkw32 
+  Bnclient 
+  D2Client 
+  D2CMP 
+  D2Common 
+  D2DDraw 
+  D2Direct3D 
+  D2Game 
+  D2Gdi 
+  D2gfx 
+  D2Glide 
+  D2Lang 
+  D2Launch 
+  D2MCPClient 
+  D2Multi 
+  D2Net 
+  D2sound 
+  D2Win 
+  Fog 
+  ijl11 
+  SmackW32 
+  Storm 
+)
+
+macro(D2MOO_register_D2_DLL_patches)
+  # Start by creating all targets so that we can later link to them without caring about order.
+  foreach(dllname ${D2_KNOWN_DLLS})
+    D2MOO_add_detours_patch_to_dll(${dllname})
+  endforeach()
 endmacro()
 
 macro(D2MOO_add_subdirectories_for_d2_known_dlls ModName)
-  set(D2_KNOWN_DLLS
-    binkw32 
-    Bnclient 
-    D2Client 
-    D2CMP 
-    D2Common 
-    D2DDraw 
-    D2Direct3D 
-    D2Game 
-    D2Gdi 
-    D2gfx 
-    D2Glide 
-    D2Lang 
-    D2Launch 
-    D2MCPClient 
-    D2Multi 
-    D2Net 
-    D2sound 
-    D2Win 
-    Fog 
-    ijl11 
-    SmackW32 
-    Storm 
-  )
   # Start by creating all targets so that we can later link to them without caring about order.
   foreach(dllname ${D2_KNOWN_DLLS})
     D2MOO_add_mod_dll_if_exists(${dllname})
