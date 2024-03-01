@@ -1,5 +1,5 @@
 
-function(D2MOO_add_detours_patch_to_dll DLLTargetName)
+function(D2MOO_register_detours_patch_if_exists DLLTargetName)
   if(ARGV1)
     set(PatchCppFile ${ARGV1})
     set(PatchRcFile ${ARGV2})
@@ -78,7 +78,7 @@ function(D2MOO_add_mod_dll ModName DLLName)
   
   if(ENABLE_D2DETOURS_EMBEDDED_PATCHES AND IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch")
     message(STATUS "Adding patch for ${DLLName} ${D2MOO_ORDINALS_VERSION}")
-    D2MOO_add_detours_patch_to_dll(${target_name} "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch/${DLLName}.${D2MOO_ORDINALS_VERSION}.patch.cpp")
+    D2MOO_register_detours_patch_if_exists(${target_name} "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch/${DLLName}.${D2MOO_ORDINALS_VERSION}.patch.cpp")
   else()
     message(STATUS "Expected to find ${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch")
   endif()
@@ -126,7 +126,7 @@ set(D2_KNOWN_DLLS
 macro(D2MOO_register_D2_DLL_patches)
   # Start by creating all targets so that we can later link to them without caring about order.
   foreach(dllname ${D2_KNOWN_DLLS})
-    D2MOO_add_detours_patch_to_dll(${dllname})
+    D2MOO_register_detours_patch_if_exists(${dllname})
   endforeach()
 endmacro()
 
