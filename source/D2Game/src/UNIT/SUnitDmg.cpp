@@ -700,17 +700,17 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 		case ELEMTYPE_POIS:
 			pDamage->dwPoisDamage += nConvertedDamage / 8;
-			pDamage->dwPoisLen = std::max(pDamage->dwPoisLen, 50u);
+			pDamage->dwPoisLen = std::max(pDamage->dwPoisLen, 50);
 			break;
 
 		case ELEMTYPE_BURN:
 			pDamage->dwFireDamage += nConvertedDamage;
-			pDamage->dwBurnLen = std::max(pDamage->dwBurnLen, 50u);
+			pDamage->dwBurnLen = std::max(pDamage->dwBurnLen, 50);
 			break;
 
 		case ELEMTYPE_FREEZE:
 			pDamage->dwColdDamage += nConvertedDamage;
-			pDamage->dwFrzLen = std::max(pDamage->dwFrzLen, 50u);
+			pDamage->dwFrzLen = std::max(pDamage->dwFrzLen, 50);
 			break;
 
 		default:
@@ -1324,13 +1324,13 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		STATLIST_SetUnitStat(pDefender, STAT_STAMINA, nNewStamina, 0);
 	}
 
-	uint32_t nStunLength = pDamage->dwStunLen;
+	int32_t nStunLength = pDamage->dwStunLen;
 	int32_t bApplyStun = 0;
 	if (nStunLength > 0)
 	{
 		if (!pDefender || pDefender->dwUnitType != UNIT_MONSTER)
 		{
-			nStunLength = std::min(nStunLength, 250u);
+			nStunLength = std::min(nStunLength, 250);
 			bApplyStun = 1;
 		}
 
