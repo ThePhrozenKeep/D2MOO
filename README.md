@@ -43,6 +43,10 @@ If you are using a default Diablo2 install and generated `.sln` through *CMake*,
 
 Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.md) and [Debugging](./doc/Debugging.md) documentation.
 
+## Documentation
+
+An embryo of documentation is available in the repository's [doc](./doc/) folder.
+
 ## D2MOO Debugger (Experimental!)
 
 Start the game with the `-debug` argument.
