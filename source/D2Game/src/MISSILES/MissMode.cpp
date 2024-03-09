@@ -4640,6 +4640,7 @@ void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* p
                 nChance = pMissilesTxtRecord->dwDmgParam[1];
             }
         }
+        break;
     }
     default:
     {
