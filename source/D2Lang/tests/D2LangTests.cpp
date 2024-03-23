@@ -2,6 +2,7 @@
 #include <doctest.h>
 
 #include <D2Unicode.h>
+#include <D2StrGroup.h>
 
 #define D2_USTR(widestr) (const Unicode*)widestr
 
@@ -552,5 +553,74 @@ TEST_CASE("Unicode::toUnicode")
     {
         Unicode::toUnicode(dest, utf8JpDiablo, 3);
         CHECK(wcsncmp((wchar_t*)dest, utf16JpDiablo, 2) == 0);
+    }
+}
+
+TEST_CASE("STR_GroupIntDigits")
+{
+    constexpr size_t dest_capacity = 256;
+    Unicode dest[dest_capacity];
+
+    SUBCASE("0")
+    {
+        STR_GroupIntDigits(dest, 0, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"0") == 0);
+    }
+    SUBCASE("1")
+    {
+        STR_GroupIntDigits(dest, 1, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"1") == 0);
+    }
+    SUBCASE("-1")
+    {
+        STR_GroupIntDigits(dest, -1, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"-1") == 0);
+    }
+    SUBCASE("1234567890")
+    {
+        STR_GroupIntDigits(dest, 1234567890, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"1,234,567,890") == 0);
+    }
+    SUBCASE("-1234567890")
+    {
+        STR_GroupIntDigits(dest, -1234567890, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"-1,234,567,890") == 0);
+    }
+    SUBCASE("Low max length, positive value")
+    {
+        STR_GroupIntDigits(dest, 1234567890, 13);
+        CHECK(wcscmp((wchar_t*)dest, L"*") == 0);
+    }
+    SUBCASE("Low max length, negative value")
+    {
+        STR_GroupIntDigits(dest, -1234567890, 14);
+        CHECK(wcscmp((wchar_t*)dest, L"-*") == 0);
+    }
+}
+
+TEST_CASE("STR_GroupUintDigits")
+{
+    constexpr size_t dest_capacity = 256;
+    Unicode dest[dest_capacity];
+
+    SUBCASE("0")
+    {
+        STR_GroupUintDigits(dest, 0, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"0") == 0);
+    }
+    SUBCASE("1")
+    {
+        STR_GroupUintDigits(dest, 1, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"1") == 0);
+    }
+    SUBCASE("1234567890")
+    {
+        STR_GroupUintDigits(dest, 1234567890, dest_capacity);
+        CHECK(wcscmp((wchar_t*)dest, L"1,234,567,890") == 0);
+    }
+    SUBCASE("Low max length")
+    {
+        STR_GroupUintDigits(dest, 1234567890, 13);
+        CHECK(wcscmp((wchar_t*)dest, L"*") == 0);
     }
 }
