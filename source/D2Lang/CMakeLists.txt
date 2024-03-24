@@ -10,12 +10,10 @@ target_sources(${D2LangImplName}
     src/D2Unicode/D2UnicodeStr.cpp
     src/D2Unicode/D2UnicodeUtf.cpp
     src/D2Unicode/D2UnicodeWin.cpp
-    src/D2StrGroup.cpp
     src/D2StrTable.cpp
 
     include/D2Lang.h
     include/D2Crc16.h
-    include/D2StrGroup.h
     include/D2StrTable.h
     include/D2Unicode.h
 )

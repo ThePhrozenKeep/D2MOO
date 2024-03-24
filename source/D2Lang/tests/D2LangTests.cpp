@@ -2,7 +2,7 @@
 #include <doctest.h>
 
 #include <D2Unicode.h>
-#include <D2StrGroup.h>
+#include <D2StrTable.h>
 
 #define D2_USTR(widestr) (const Unicode*)widestr
 
