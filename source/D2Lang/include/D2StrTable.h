@@ -41,3 +41,38 @@
  * 1.14c: Game.0x00522610
  */
 D2LANG_DLL_DECL D2C_Language STRTABLE_GetLanguage();
+
+/**
+ * Converts an integer value into a into a null-terminated UCS-2 string,
+ * with commas separating every group of three digits. If the required
+ * length of the converted string is greater than the nMaxLength, then
+ * an asterisk character '*' will be written in place of the digits.
+ *
+ * The value of nMaxLength must be greater than 2, or an assertion will
+ * fail.
+ *
+ * 1.00: D2Lang.0x100010AF (#10009)
+ * 1.10: D2Lang.0x6FC140E0 (#10009)
+ * 1.13c: D2Lang.0x6FC09BC0 (#10002)
+ * 1.14c: Game.0x00523510
+ */
+D2LANG_DLL_DECL void __stdcall STR_GroupIntDigits(
+		Unicode* pUnicode, int nValue, int nMaxLength);
+
+/**
+ * Converts a unsigned integer value into a into a null-terminated UCS-2
+ * string, with commas separating every group of three digits. If the
+ * required length of the converted string is greater than the
+ * nMaxLength, then an asterisk character '*' will be written in place
+ * of the digits.
+ *
+ * The value of nMaxLength must be greater than 2, or an assertion will
+ * fail.
+ *
+ * 1.00: D2Lang.0x100010DC (#10010)
+ * 1.10: D2Lang.0x6FC14210 (#10010)
+ * 1.13c: D2Lang.0x6FC09A80 (#10006)
+ * 1.14c: Game.0x005228A0
+ */
+D2LANG_DLL_DECL void __stdcall STR_GroupUintDigits(
+		Unicode* pUnicode, unsigned int dwValue, int nMaxLength);
