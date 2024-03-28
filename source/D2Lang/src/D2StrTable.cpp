@@ -67,8 +67,8 @@ inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMa
 {
 	size_t nBufferLength = strlen(pcSrc);
 
-	int nPuncuatedLength = ((nBufferLength - 1) / 3) + nBufferLength;
-	if (nBufferLength == 0 || nPuncuatedLength <= 0 || nPuncuatedLength >= nMaxLength - 1)
+	int nUnicodeLength = ((nBufferLength - 1) / 3) + nBufferLength;
+	if (nBufferLength == 0 || nUnicodeLength <= 0 || nUnicodeLength >= nMaxLength - 1)
 	{
 		Unicode asteriskStr[2];
 		Unicode::toUnicode(asteriskStr, "*", 2);
@@ -76,13 +76,13 @@ inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMa
 		return;
 	}
 
-	pUnicode[nPuncuatedLength] = '\0';
+	pUnicode[nUnicodeLength] = '\0';
 	int nDistanceToComma = 0;
 	// Like C++ reverse iterators, i and j point to the index after the
 	// insertion index.
 	// i = destination index (naming is to preserve accurate assert msg)
 	// j = source index
-	for (int i = nPuncuatedLength, j = nBufferLength; j > 0; --i, --j)
+	for (int i = nUnicodeLength, j = nBufferLength; j > 0; --i, --j)
 	{
 		D2_ASSERT(i);
 
