@@ -65,7 +65,7 @@ static D2C_Language gnTableLanguage = LANGUAGE_ENGLISH;
 
 inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMaxLength)
 {
-	size_t nBufferLength = strlen(pcSrc);
+	int nBufferLength = strlen(pcSrc);
 
 	int nUnicodeLength = ((nBufferLength - 1) / 3) + nBufferLength;
 	if (nBufferLength == 0 || nUnicodeLength <= 0 || nUnicodeLength >= nMaxLength - 1)
