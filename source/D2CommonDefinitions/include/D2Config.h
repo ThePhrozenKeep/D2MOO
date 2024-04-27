@@ -41,7 +41,7 @@ struct D2ConfigStrc
 	uint8_t bInvincible;
 	uint8_t _0082[48];
 	char szName[24];
-	uint8_t szRealm[256];
+	char szRealm[256];
 	uint8_t _01D0[0x18];
 	uint32_t dwCTemp; // Arena mode character template
 	uint8_t bNoMonsters;
@@ -56,8 +56,11 @@ struct D2ConfigStrc
 	uint8_t bDirect;
 	uint8_t bLowEnd;
 	uint8_t bNoCompress;
-	uint32_t dwArena;
-	uint8_t _01E8[6]; // Related to Arena
+	uint16_t wArena;
+	uint32_t nArenaFlags;
+	uint8_t nArenaTemplate;
+	uint8_t _01E9[2]; // Related to Arena
+	uint8_t nArenaDifficulty;
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	BOOL(__stdcall *pAllowExpansionCallback)(void);
 	uint8_t bTxt;
@@ -78,11 +81,24 @@ struct D2ConfigStrc
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	uint8_t bBuild;
 #endif
-	uint32_t dwComInt;
-	uint8_t _0x0223[28]; // Related to ComInt
-	char szPassword[24];
-	uint8_t _0x0257[256];
+	struct BnClientInterface* pComInterface;	// Can be set by D2Launch to BnClient.dll's QueryInterface()
+	uint32_t nTokenId;							// See D2Client.dll:CONFIG_ApplyNetwork_6FAABBF0
+	char szCharacterRealm[24];
+	char szGamePassword[24];
+	char szGameStatstring[256]; // Description of the game
 	uint8_t bSkipToBNet;
-	uint8_t _0333[112];
+
+	uint8_t nLaunchType;
+	uint8_t bShownLogo;
+	uint8_t bUnk035A;
+	char szCurrentChannelName[32];
+	char szDefaultChannelName[32];
+	uint8_t nComponents[16];
+	uint8_t nComponentsColors[16];
+	uint8_t nCharacterLevel;
+	uint8_t bLadder;
+	uint32_t nAccountPasswordHash;
+	uint32_t nAccountPasswordLength;
+	uint16_t nSaveFlags;
 };
 #pragma pack(pop)

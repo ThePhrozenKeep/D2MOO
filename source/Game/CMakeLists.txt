@@ -21,3 +21,10 @@ target_link_libraries(Game
 	D2MCPClient
 )
 set_target_properties(Game PROPERTIES OUTPUT_NAME Game.D2MOO)
+
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(Game
+    PRIVATE
+      statictests/Game_staticchecks.cpp
+  )
+endif()

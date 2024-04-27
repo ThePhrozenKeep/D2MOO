@@ -15,8 +15,6 @@
 
 // Thanks to galaxyhaxz for providing the base to work on ! https://github.com/galaxyhaxz/d2src
 
-static_assert(sizeof(D2CmdArgStrc) == 0x3C, "Check D2CmdArgStrc matches original size");
-
 #define cmdidx(m)	offsetof(D2ConfigStrc, m)
 //1.10f: Game.0x
 D2CmdArgStrc gaCmdArguments[] = {
@@ -32,7 +30,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "VIDEO",     "FRAMERATE",    "fr",         CMD_INTEGER, cmdidx(dwFramerate),    0 },
 	{ "NETWORK",   "SERVERIP",     "s",          CMD_STRING,  cmdidx(szServerIP),     0 },
 	{ "NETWORK",   "GAMETYPE",     "gametype",   CMD_INTEGER, cmdidx(dwGameType),     0 },
-	{ "NETWORK",   "ARENA",        "arena",      CMD_INTEGER, cmdidx(dwArena),        0 },
+	{ "NETWORK",   "ARENA",        "arena",      CMD_INTEGER, cmdidx(wArena),         0 },
 	{ "NETWORK",   "JOINID",       "joinid",     CMD_INTEGER, cmdidx(wJoinID),        0 },
 	{ "NETWORK",   "GAMENAME",     "gamename",   CMD_STRING,  cmdidx(szGameName),     0 },
 	{ "NETWORK",   "BATTLENETIP",  "bn",         CMD_STRING,  cmdidx(szBattleNetIP),  0 },
@@ -74,7 +72,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "FILEIO",    "DIRECT",       "direct",     CMD_BOOLEAN, cmdidx(bDirect),        0 },
 	{ "FILEIO",    "LOWEND",       "lem",        CMD_BOOLEAN, cmdidx(bLowEnd),        0 },
 	{ "DEBUG",     "QuEsTs",       "questall",   CMD_BOOLEAN, cmdidx(bQuests),        0 },
-	{ "NETWORK",   "COMINT",       "comint",     CMD_INTEGER, cmdidx(dwComInt),       0 },
+	{ "NETWORK",   "COMINT",       "comint",     CMD_INTEGER, cmdidx(pComInterface),  0 },
 	{ "NETWORK",   "SKIPTOBNET",   "skiptobnet", CMD_BOOLEAN, cmdidx(bSkipToBNet),    0 },
 	{ "NETWORK",   "OPENC",        "openc",      CMD_BOOLEAN, cmdidx(bOpenC),         0 },
 	{ "FILEIO",    "NOCOMPRESS",   "nocompress", CMD_BOOLEAN, cmdidx(bNoCompress),    0 },
@@ -493,8 +491,8 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	FOG_AsyncDataDestroy();
 	D2MCPClientCloseMCP();
 
-	if(pCfg->dwComInt)
-		(*(void (**)(void))(pCfg->dwComInt + 12))();
+	if(pCfg->pComInterface)
+		(*(void (**)(void))(ptrdiff_t(pCfg->pComInterface) + 12))();
 
 	FOG_DestroyMemoryPoolSystem(nullptr);
 
