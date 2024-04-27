@@ -1730,7 +1730,7 @@ void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSel
 
 //D2Win.0x6F8A3390 (#10144)
 //TODO: ...
-void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* a3, BYTE* a4)
+void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentsColors)
 {
 	//D2CompositeUnitStrc* v4; // esi@1
 	//D2GfxInfoStrc* v5; // eax@4

@@ -80,7 +80,7 @@ EXPORTS
 	D2Win_10077_EDITBOX_GetText										@10077
 	D2Win_10078_IsNumber											@10078
 	D2Win_10079_IsLetter											@10079
-	D2Win_10080														@10080
+	D2Win_10080_EDITBOX_SetNextEditBox														@10080
 	D2Win_10081														@10081
 	D2Win_10082														@10082
 	D2Win_10083														@10083

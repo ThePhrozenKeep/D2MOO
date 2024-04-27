@@ -353,6 +353,7 @@ int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const Unicode*
 }
 
 //D2Win.0x6F8B0040) --------------------------------------------------------
+// Tooltip ?
 int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, int32_t a3, char a4, int32_t a5)
 {
 	Unicode* v14; // ebp@27

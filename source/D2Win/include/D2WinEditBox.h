@@ -65,7 +65,7 @@ int __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText);
 //D2Win.0x6F8A81E0
 const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A8230
-void __fastcall D2Win_10080(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext);
+void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext);
 //D2Win.0x6F8A82D0
 int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl);
 //D2Win.0x6F8A86C0
