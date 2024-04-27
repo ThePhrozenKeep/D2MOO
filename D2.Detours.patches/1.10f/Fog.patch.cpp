@@ -204,7 +204,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10173 @10173
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10174 @10174
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10175 @10175
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10176 @10176
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_IsWindowsNT @10176
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10177 @10177
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_SetHackListEnabled @10178
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10179 @10179
