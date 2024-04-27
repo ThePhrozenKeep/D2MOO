@@ -344,7 +344,7 @@ int32_t __fastcall SKILLS_Callback_FindTargetForTaunt(D2GameStrc* pGame, D2UnitS
         return 0;
     }
 
-    if (!sub_6FD15190(pUnit, 12) || SUNIT_IsDead(pUnit))
+    if (!sub_6FD15190(pUnit, AISPECIALSTATE_TAUNT) || SUNIT_IsDead(pUnit))
     {
         return 0;
     }
@@ -368,7 +368,7 @@ int32_t __fastcall SKILLS_SrvDo071_Taunt(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     int32_t nUnitGUID = 0;
     int32_t nUnitType = 0;
-    if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || !sub_6FD15190(pTarget, 12) || SUNIT_IsDead(pTarget) || (AIGENERAL_GetOwnerData(pTarget, &nUnitGUID, &nUnitType), nUnitGUID != -1) && nUnitType == UNIT_PLAYER || !sub_6FCBD900(pGame, pUnit, pTarget))
+    if (!pTarget || pTarget->dwUnitType != UNIT_MONSTER || !sub_6FD15190(pTarget, AISPECIALSTATE_TAUNT) || SUNIT_IsDead(pTarget) || (AIGENERAL_GetOwnerData(pTarget, &nUnitGUID, &nUnitType), nUnitGUID != -1) && nUnitType == UNIT_PLAYER || !sub_6FCBD900(pGame, pUnit, pTarget))
     {
         pTarget = SKILLS_FindAuraTarget(pGame, pUnit, 20, SKILLS_Callback_FindTargetForTaunt);
     }

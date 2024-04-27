@@ -2724,7 +2724,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
     {
         STATES_ToggleState(pMonster, STATE_CORPSE_NOSELECT, 1);
         QUESTS_CreateChainRecord(pGame, pMonster, QUEST_A1Q5_COUNTESS);
-        AITHINK_ExecuteAiFn(pGame, pMonster, pMonster->pMonsterData->pAiControl, 13);
+        AITHINK_ExecuteAiFn(pGame, pMonster, pMonster->pMonsterData->pAiControl, AISPECIALSTATE_COUNTESS);
         break;
     }
     case SUPERUNIQUE_ISMAIL_VILEHAND:

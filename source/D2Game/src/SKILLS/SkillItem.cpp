@@ -1795,7 +1795,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
         pAiControl = pRevivedMonster->pMonsterData->pAiControl;
     }
 
-    AITHINK_ExecuteAiFn(pGame, pRevivedMonster, pAiControl, 0);
+    AITHINK_ExecuteAiFn(pGame, pRevivedMonster, pAiControl, AISPECIALSTATE_NONE);
     MONSTER_UpdateAiCallbackEvent(pGame, pRevivedMonster);
     AIGENERAL_SetOwnerData(pGame, pRevivedMonster, pOwner->dwUnitId, pOwner->dwUnitType, 0, 0);
     AIUTIL_SetOwnerGUIDAndType(pRevivedMonster, pOwner);

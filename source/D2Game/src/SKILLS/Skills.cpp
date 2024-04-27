@@ -3611,7 +3611,7 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
 
     D2_ASSERT(!STATES_CheckState(pPet, STATE_UNINTERRUPTABLE));
 
-    AITHINK_ExecuteAiFn(pGame, pPet, AIGENERAL_GetAiControlFromUnit(pPet), pSummonArg->nSpecialAiState);
+    AITHINK_ExecuteAiFn(pGame, pPet, AIGENERAL_GetAiControlFromUnit(pPet), pSummonArg->nAiSpecialState);
     MONSTER_UpdateAiCallbackEvent(pGame, pPet);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, UNITEVENTCALLBACK_AITHINK, 0);
     EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 25, 0, 0);
@@ -3905,11 +3905,11 @@ int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState)
+int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || pUnit->dwClassId < 0)
     {
-        return AIUTIL_CanUnitSwitchAi(pUnit, nSpecialState) != 0;
+        return AIUTIL_CanUnitSwitchAi(pUnit, nAiSpecialState) != 0;
     }
 
     int32_t nClassId = pUnit->dwClassId;
@@ -3928,7 +3928,7 @@ int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState)
     }
     else
     {
-        return AIUTIL_CanUnitSwitchAi(pUnit, nSpecialState) != 0;
+        return AIUTIL_CanUnitSwitchAi(pUnit, nAiSpecialState) != 0;
     }
 }
 

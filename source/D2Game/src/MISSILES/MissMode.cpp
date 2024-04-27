@@ -1171,7 +1171,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
     if (pMonster)
     {
 
-        summonArg.nSpecialAiState = 0;
+        summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
         summonArg.nMonMode = nSpawnMode;
         summonArg.dwFlags = 0xDu;
         summonArg.pOwner = pOwner;

@@ -1442,7 +1442,7 @@ D2UnitStrc* __fastcall sub_6FCF8610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     summonArg.pPosition.nY = nY;
     summonArg.dwFlags = 1;
     summonArg.pOwner = pOwner;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetMax = nPetMax;
 
     D2UnitStrc* pPet = D2GAME_SummonPet_6FD14430(pGame, &summonArg);
@@ -1753,9 +1753,9 @@ int32_t __fastcall SKILLS_AuraCallback_CloakOfShadows(D2AuraCallbackStrc* pAuraC
         }
     }
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && sub_6FD15190(pUnit, 10))
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && sub_6FD15190(pUnit, AISPECIALSTATE_DIMVISION))
     {
-        AITHINK_ExecuteAiFn(pAuraCallback->pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), 10);
+        AITHINK_ExecuteAiFn(pAuraCallback->pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), AISPECIALSTATE_DIMVISION);
     }
 
     return 1;
@@ -1997,7 +1997,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     D2SummonArgStrc summonArg = {};
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nMonMode = nSpawnMode;
     summonArg.nPetType = nPetType;
     summonArg.nPetMax = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPetMax, nSkillId, nSkillLevel);
@@ -2216,7 +2216,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
 {
     D2SrvDo51Strc* pArgs = (D2SrvDo51Strc*)pAuraCallback->pArgs;
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pUnit, 11) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nMonCurseResSubstraction)
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pUnit, AISPECIALSTATE_TERROR) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nMonCurseResSubstraction)
     {
         const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + pArgs->nParam1 + ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, pArgs->nParam2);
         D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION);

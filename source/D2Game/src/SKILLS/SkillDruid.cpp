@@ -65,7 +65,7 @@ int32_t __fastcall SKILLS_SrvDo114_Raven(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     D2SummonArgStrc summonArg = {};
     summonArg.dwFlags = 0;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
     summonArg.nMonMode = nSpawnMode;
@@ -123,7 +123,7 @@ int32_t __fastcall SKILLS_SrvDo115_Vines(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     summonArg.dwFlags = 0;
     summonArg.pOwner = pUnit;
     summonArg.nHcIdx = nSummonId;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nMonMode = 8;
     summonArg.nPetMax = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPetMax, nSkillId, nSkillLevel);
 
@@ -441,7 +441,7 @@ int32_t __fastcall SKILLS_SrvDo119_DruidSummon(D2GameStrc* pGame, D2UnitStrc* pU
 
     D2SummonArgStrc summonArg = {};
     summonArg.dwFlags = 0;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = pSkillsTxtRecord->nPetType;
     summonArg.pOwner = pUnit;
     summonArg.nHcIdx = nSummonId;
@@ -1594,11 +1594,11 @@ void __fastcall sub_6FD00EC0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                 pUnit->dwFlags &= 0xFFFFFFF1u;
                 if (pUnit->pMonsterData)
                 {
-                    AITHINK_ExecuteAiFn(pGame, pUnit, pUnit->pMonsterData->pAiControl, 16);
+                    AITHINK_ExecuteAiFn(pGame, pUnit, pUnit->pMonsterData->pAiControl, AISPECIALSTATE_MOUNTING_UNIT);
                 }
                 else
                 {
-                    AITHINK_ExecuteAiFn(pGame, pUnit, nullptr, 16);
+                    AITHINK_ExecuteAiFn(pGame, pUnit, nullptr, AISPECIALSTATE_MOUNTING_UNIT);
                 }
             }
         }
@@ -1642,11 +1642,11 @@ void __fastcall sub_6FD01010(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 
                 if (pUnit->pMonsterData)
                 {
-                    AITHINK_ExecuteAiFn(pGame, pUnit, pUnit->pMonsterData->pAiControl, 0);
+                    AITHINK_ExecuteAiFn(pGame, pUnit, pUnit->pMonsterData->pAiControl, AISPECIALSTATE_NONE);
                 }
                 else
                 {
-                    AITHINK_ExecuteAiFn(pGame, pUnit, nullptr, 0);
+                    AITHINK_ExecuteAiFn(pGame, pUnit, nullptr, AISPECIALSTATE_NONE);
                 }
             }
             else
@@ -1797,7 +1797,7 @@ int32_t __fastcall SKILLS_SrvDo131_OverseerWhip(D2GameStrc* pGame, D2UnitStrc* p
                     DATATBLS_GetMonsterChainInfo(pTarget->dwClassId, 0, &nChainId);
                     const int32_t nClassId = sub_6FD017F0(nSummonId, nChainId);
                     MONSTER_Reinitialize(pGame, pTarget, nClassId, nSpawnMode);
-                    AITHINK_ExecuteAiFn(pGame, pTarget, AIGENERAL_GetAiControlFromUnit(pTarget), 15);
+                    AITHINK_ExecuteAiFn(pGame, pTarget, AIGENERAL_GetAiControlFromUnit(pTarget), AISPECIALSTATE_WHIPPED);
 
                     D2ModeChangeStrc modeChange = {};
                     MONSTERMODE_GetModeChangeInfo(pTarget, nSpawnMode, &modeChange);

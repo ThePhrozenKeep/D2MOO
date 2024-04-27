@@ -1135,7 +1135,7 @@ int32_t __fastcall SKILLS_SrvDo144_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     summonArg.dwFlags |= 1;
     summonArg.nMonMode = nSpawnMode;
     summonArg.pOwner = pOwner;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetMax = SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwPetMax, nSkillId, nSkillLevel);
 
     constexpr int32_t nXOffsets[] = { -1, 0,  1 };

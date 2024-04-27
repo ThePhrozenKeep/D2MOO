@@ -1249,7 +1249,7 @@ void __fastcall AIUTIL_SetOwnerGUIDAndType(D2UnitStrc* pUnit, D2UnitStrc* pOwner
 //D2Game.0x6FCF2F30
 void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nParam1, int32_t nDuration)
 {
-	if (SUNIT_IsDead(pTarget) || !AIUTIL_CanUnitSwitchAi(pTarget, 11))
+	if (SUNIT_IsDead(pTarget) || !AIUTIL_CanUnitSwitchAi(pTarget, AISPECIALSTATE_TERROR))
 	{
 		return;
 	}
@@ -1268,35 +1268,35 @@ void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUni
 
 	if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pTarget->pMonsterData)
 	{
-		AITHINK_ExecuteAiFn(pGame, pTarget, pTarget->pMonsterData->pAiControl, 11);
+		AITHINK_ExecuteAiFn(pGame, pTarget, pTarget->pMonsterData->pAiControl, AISPECIALSTATE_TERROR);
 		AITACTICS_Idle(pGame, pTarget, 1);
 	}
 }
 
 //D2Game.0x6FCF3000
-int32_t __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, int32_t nSpecialState)
+BOOL __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
-	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || nSpecialState > 19 || STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE) || !UNITS_CanSwitchAI(pUnit->dwClassId))
+	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER 
+		|| nAiSpecialState > AISPECIALSTATE_INVALID
+		|| STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE) 
+		|| !UNITS_CanSwitchAI(pUnit->dwClassId))
 	{
-		return 0;
+		return FALSE;
 	}
 
-	if (pUnit->dwFlags & UNITFLAG_CANBEATTACKED)
+	if ((pUnit->dwFlags & UNITFLAG_CANBEATTACKED) != 0 || SUNIT_IsDead(pUnit))
 	{
-		return 1;
+		if (MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_UNIQUE | MONTYPEFLAG_SUPERUNIQUE))
+		{
+			return FALSE;
+		}
+
+		if (nAiSpecialState == AISPECIALSTATE_INVALID)
+		{
+			return TRUE;
+		}
+
+		return AITHINK_CanUnitSwitchAi(pUnit, MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId), nAiSpecialState, 1);
 	}
-
-	if (!SUNIT_IsDead(pUnit) || MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_UNIQUE | MONTYPEFLAG_SUPERUNIQUE))
-	{
-		return 0;
-	}
-
-	D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-
-	if (nSpecialState == 19 || !pMonStatsTxtRecord)
-	{
-		return 1;
-	}
-
-	return AITHINK_CanUnitSwitchAi(pUnit, pMonStatsTxtRecord, nSpecialState, 1);
+	return FALSE;
 }

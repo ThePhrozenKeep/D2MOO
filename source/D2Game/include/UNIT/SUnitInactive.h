@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
+#include <AI/AiStates.h>
 
 #pragma pack(1)
 
@@ -29,9 +30,9 @@ struct D2InactiveMonsterNodeStrc
 	int32_t nUnitFlagsEx;						//0x14
 	int32_t nTypeFlags;							//0x18
 	int32_t unk0x1C;							//0x1C
-	D2MinionListStrc* pMinionList;			//0x20
-	D2MapAIStrc* pMapAI;					//0x24
-	int32_t nSpecialAiState;					//0x28
+	D2MinionListStrc* pMinionList;				//0x20
+	D2MapAIStrc* pMapAI;						//0x24
+	D2C_AiSpecialState nAiSpecialState;			//0x28
 	int32_t nLevelId;							//0x2C
 	uint16_t nNameSeed;							//0x30
 	uint8_t nMonUMods[9];						//0x32
@@ -44,7 +45,7 @@ struct D2InactiveMonsterNodeStrc
 	int32_t nCmdParam1;							//0x4C
 	int32_t nCmdParam2;							//0x50
 	int32_t nGameFrame;							//0x54
-	D2InactiveMonsterNodeStrc* pNext;		//0x58
+	D2InactiveMonsterNodeStrc* pNext;			//0x58
 };
 
 struct D2InactiveUnitNodeStrc

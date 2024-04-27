@@ -197,7 +197,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 							STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, pInactiveMonsterNode->nMaxHitpoints, 0);
 						}
 
-						AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), pInactiveMonsterNode->nSpecialAiState);
+						AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), pInactiveMonsterNode->nAiSpecialState);
 
 						SUNITINACTIVE_RestoreSpecialMonsterParameters(pGame, pUnit, pInactiveMonsterNode);
 
@@ -795,7 +795,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		pInactiveMonsterNode->nY = CLIENTS_GetUnitY(pUnit);
 		pInactiveMonsterNode->nClassId = pUnit->dwClassId;
 		pInactiveMonsterNode->nGameFrame = pGame->dwGameFrame;
-		pInactiveMonsterNode->nSpecialAiState = AITHINK_GetSpecialStateFromAiControl(AIGENERAL_GetAiControlFromUnit(pUnit));
+		pInactiveMonsterNode->nAiSpecialState = AITHINK_GetSpecialStateFromAiControl(AIGENERAL_GetAiControlFromUnit(pUnit));
 		pInactiveMonsterNode->nNameSeed = MONSTERUNIQUE_GetNameSeed(pUnit);
 		SUNITINACTIVE_SaveSpecialMonsterParameters(pGame, pUnit, pInactiveMonsterNode);
 

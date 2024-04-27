@@ -4,7 +4,7 @@
 #include <Units/Units.h>
 #include <Units/UnitFinds.h>
 #include <UNIT/SUnitDmg.h>
-
+#include <AI/AiStates.h>
 
 struct D2ItemStatCostTxt;
 struct D2MissilesTxt;
@@ -110,7 +110,7 @@ struct D2SummonArgStrc
 	uint32_t dwFlags;						//0x00
 	D2UnitStrc* pOwner;						//0x04
 	int32_t nHcIdx;							//0x08
-	int32_t nSpecialAiState;				//0x0C
+	D2C_AiSpecialState nAiSpecialState;		//0x0C
 	int32_t nMonMode;						//0x10
 	D2CoordStrc pPosition;					//0x14		
 	int32_t nPetType;						//0x1C
@@ -283,7 +283,7 @@ void __fastcall sub_6FD15080(D2UnitStrc* pUnit, int32_t a2);
 //D2Game.0x6FD150A0
 int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget);
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState);
+int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState);
 //D2Game.0x6FD15210
 D2UnitStrc* __fastcall sub_6FD15210(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD15320

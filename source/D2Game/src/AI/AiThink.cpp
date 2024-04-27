@@ -265,7 +265,7 @@ void __fastcall D2GAME_AI_SpecialState02_6FCD1660(D2GameStrc* pGame, D2UnitStrc*
 {
 	if (sub_6FCF2E70(pUnit) || pAiTickParam->nTargetDistance < 4)
 	{
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		return;
 	}
@@ -1240,7 +1240,7 @@ void __fastcall D2GAME_AI_Unk015_6FCD34A0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	}
 
 	const int32_t nParam = pAiTickParam->pAiControl->dwAiParam[2];
-	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 	pAiTickParam->pAiControl->dwAiParam[2] = nParam;
 	sub_6FCD0150(pGame, pUnit, 1);
 }
@@ -3106,7 +3106,7 @@ void __fastcall D2GAME_AI_Unk029_6FCD76F0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		return;
 	}
 
-	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 	AITACTICS_IdleInNeutralMode(pGame, pUnit, 1);
 }
 
@@ -4615,11 +4615,11 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 //D2Game.0x6FCDA910
 void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	const int32_t nSpecialState = pAiTickParam->pAiControl->dwSpecialState;
+	const int32_t nAiSpecialState = pAiTickParam->pAiControl->nAiSpecialState;
 
-	if (nSpecialState == 10 || nSpecialState == 11 || pAiTickParam->pMonstatsTxt->nSkill[0] < 0 || pAiTickParam->pAiControl->dwAiParam[2] < 2)
+	if (nAiSpecialState == AISPECIALSTATE_DIMVISION || nAiSpecialState == AISPECIALSTATE_TERROR || pAiTickParam->pMonstatsTxt->nSkill[0] < 0 || pAiTickParam->pAiControl->dwAiParam[2] < 2)
 	{
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 		AITACTICS_Idle(pGame, pUnit, 1);
 		return;
 	}
@@ -5254,7 +5254,7 @@ void __fastcall D2GAME_AI_SpecialState04_6FCDC170(D2GameStrc* pGame, D2UnitStrc*
 		STATES_ToggleState(pUnit, STATE_INFERNO, 0);
 	}
 
-	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 	AITACTICS_IdleInNeutralMode(pGame, pUnit, 1);
 }
 
@@ -8002,7 +8002,7 @@ void __fastcall D2GAME_AI_SpecialState16_6FCE1DC0(D2GameStrc* pGame, D2UnitStrc*
 	{
 		D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
 
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiControl, AISPECIALSTATE_NONE);
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 1);
 		return;
 	}
@@ -8929,12 +8929,12 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	{
 		if (nClassId == MONSTER_ROGUEHIRE)
 		{
-			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 5);
+			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_ROGUE_HIREABLE_NON_PLAYER_OWNER);
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
 		else
 		{
-			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 6);
+			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_HIREABLE_NON_PLAYER_OWNER);
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		}
 		return;
@@ -9520,7 +9520,7 @@ void __fastcall D2GAME_AI_SpecialState03_6FCE4CC0(D2GameStrc* pGame, D2UnitStrc*
 	if (pCurrentAiCmd && pCurrentAiCmd->nCmdParam[0] == 8)
 	{
 		AIGENERAL_FreeMinionList(pUnit);
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		return;
 	}
@@ -9534,7 +9534,7 @@ void __fastcall D2GAME_AI_SpecialState03_6FCE4CC0(D2GameStrc* pGame, D2UnitStrc*
 		aiCmd.nCmdParam[0] = 8;
 		AIGENERAL_AllocCommandsForMinions(pGame, pUnit, &aiCmd);
 		AIGENERAL_FreeMinionList(pUnit);
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
 		return;
 	}
@@ -11294,7 +11294,7 @@ void __fastcall D2GAME_AI_SpecialState09_6FCE7C40(D2GameStrc* pGame, D2UnitStrc*
 	if (pCurrentAiCmd && pCurrentAiCmd->nCmdParam[0] == 8)
 	{
 		AIGENERAL_FreeMinionList(pUnit);
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 	}
 	else
 	{
@@ -11307,7 +11307,7 @@ void __fastcall D2GAME_AI_SpecialState09_6FCE7C40(D2GameStrc* pGame, D2UnitStrc*
 			aiCmd.nCmdParam[0] = 8;
 			AIGENERAL_AllocCommandsForMinions(pGame, pUnit, &aiCmd);
 			AIGENERAL_FreeMinionList(pUnit);
-			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+			AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 		}
 	}
 
@@ -11363,7 +11363,7 @@ void __fastcall D2GAME_AI_SpecialState11_6FCE7E80(D2GameStrc* pGame, D2UnitStrc*
 {
 	if (!STATES_CheckState(pUnit, STATE_TERROR))
 	{
-		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, AISPECIALSTATE_NONE);
 		AITACTICS_Idle(pGame, pUnit, 1);
 		return;
 	}
@@ -11443,7 +11443,7 @@ void __fastcall D2GAME_AI_SpecialState12_6FCE81B0(D2GameStrc* pGame, D2UnitStrc*
 	D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
 	if (!pTarget || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTarget)))
 	{
-		AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), 0);
+		AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), AISPECIALSTATE_NONE);
 		AITACTICS_Idle(pGame, pUnit, 1);
 		return;
 	}
@@ -11493,7 +11493,7 @@ void __fastcall D2GAME_AI_Unk051_6FCE82F0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		STATES_ToggleState(pUnit, STATE_INFERNO, 0);
 	}
 
-	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 
 	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nParam1 && nParam2)
 	{
@@ -15569,7 +15569,7 @@ void __fastcall AITHINK_Fn134_BaalThrone(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 			D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
 
-			AITHINK_ExecuteAiFn(pGame, pUnit, pAiControl, 0);
+			AITHINK_ExecuteAiFn(pGame, pUnit, pAiControl, AISPECIALSTATE_NONE);
 			STATES_ToggleState(pUnit, STATE_CHANGECLASS, 1);
 
 			int32_t nUnitGUID = 0;
@@ -15880,9 +15880,9 @@ void __fastcall AITHINK_Fn137_PutridDefiler(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FCF06A0
-int32_t __fastcall AITHINK_GetSpecialStateFromAiControl(D2AiControlStrc* pAiControl)
+D2C_AiSpecialState __fastcall AITHINK_GetSpecialStateFromAiControl(D2AiControlStrc* pAiControl)
 {
-	return pAiControl->dwSpecialState;
+	return pAiControl->nAiSpecialState;
 }
 
 //D2Game.0x6FCF06B0
@@ -15910,21 +15910,21 @@ void __fastcall AITHINK_SetAiControlParams(D2AiControlStrc* pAiControl, int32_t 
 }
 
 //D2Game.0x6FCF06E0
-int32_t __fastcall AITHINK_CanUnitSwitchAi(D2UnitStrc* pUnit, D2MonStatsTxt* pMonStatsTxtRecord, int32_t nSpecialState, int32_t bCheckIfSuperUnique)
+BOOL __fastcall AITHINK_CanUnitSwitchAi(D2UnitStrc* pUnit, D2MonStatsTxt* pMonStatsTxtRecord, D2C_AiSpecialState nAiSpecialState, int32_t bCheckIfSuperUnique)
 {
-	if (nSpecialState == 0)
+	if (nAiSpecialState == 0)
 	{
-		return 1;
+		return TRUE;
 	}
 
-	if (nSpecialState != 10 && nSpecialState != 11 && nSpecialState != 12)
+	if (nAiSpecialState != AISPECIALSTATE_DIMVISION && nAiSpecialState != AISPECIALSTATE_TERROR && nAiSpecialState != AISPECIALSTATE_TAUNT)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (bCheckIfSuperUnique && MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_SUPERUNIQUE))
 	{
-		return 0;
+		return FALSE;
 	}
 
 	if (pUnit)
@@ -15936,7 +15936,7 @@ int32_t __fastcall AITHINK_CanUnitSwitchAi(D2UnitStrc* pUnit, D2MonStatsTxt* pMo
 }
 
 //D2Game.0x6FCF0750
-const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, int32_t nSpecialState)
+const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
 	static const D2AiTableStrc gpAiTable_6FD3F990[] =
 	{
@@ -16107,11 +16107,12 @@ const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, int3
 		{ 1,	D2GAME_AI_SpecialState16_6FCE1D30,			D2GAME_AI_SpecialState16_6FCE1DC0,			nullptr },
 		{ 2,	nullptr,									D2GAME_AI_SpecialState10_17_6FCE7CF0,		nullptr },
 	};
+	static_assert(ARRAY_SIZE(gpSpecialAiStateTable_6FD40290) == AISPECIALSTATE_TABLE_COUNT, "Enum and table must match");
 
 
-	if (nSpecialState && (nSpecialState != 10 && nSpecialState != 11 && nSpecialState != 12 || UNITS_CanSwitchAI(pUnit ? pUnit->dwClassId : -1)))
+	if (nAiSpecialState && (nAiSpecialState != AISPECIALSTATE_DIMVISION && nAiSpecialState != AISPECIALSTATE_TERROR && nAiSpecialState != AISPECIALSTATE_TAUNT || UNITS_CanSwitchAI(pUnit ? pUnit->dwClassId : -1)))
 	{
-		return &gpSpecialAiStateTable_6FD40290[nSpecialState];
+		return &gpSpecialAiStateTable_6FD40290[nAiSpecialState];
 	}
 
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
@@ -16127,30 +16128,30 @@ const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, int3
 }
 
 //D2Game.0x6FCF07D0
-void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t nSpecialState)
+void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2C_AiSpecialState nAiSpecialState)
 {
 	if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
 	{
 		FOG_DisplayWarning("! StatsGetState (hUnit, UNIT_STATE_UNINTERRUPTABLE)", __FILE__, __LINE__);
 	}
 
-	if (!pGame || !pUnit || !pAiControl || nSpecialState >= 18 || pUnit->dwUnitType != UNIT_MONSTER)
+	if (!pGame || !pUnit || !pAiControl || nAiSpecialState >= AISPECIALSTATE_TABLE_COUNT || pUnit->dwUnitType != UNIT_MONSTER)
 	{
 		return;
 	}
 
 	if (pUnit->dwClassId >= sgptDataTables->nMonStatsTxtRecordCount)
 	{
-		nSpecialState = 1;
+		nAiSpecialState = AISPECIALSTATE_NO_MON_STATS;
 	}
 
 	const D2AiTableStrc* pAiTableRecord = nullptr;
 	if (pAiControl->pAiParamFn)
 	{
-		pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, pAiControl->dwSpecialState);
+		pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, pAiControl->nAiSpecialState);
 		if (pAiControl->pAiParamFn == pAiTableRecord->pAiParamFn && pAiTableRecord->unk0x0C)
 		{
-			pAiControl->dwSpecialState = nSpecialState;
+			pAiControl->nAiSpecialState = nAiSpecialState;
 			pAiControl->pAiParamFn = pAiTableRecord->unk0x0C;
 			return;
 		}
@@ -16162,7 +16163,7 @@ void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 	AIGENERAL_FreeAllAiCommands(pGame, pUnit);
 
-	pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, nSpecialState);
+	pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, nAiSpecialState);
 
 	if (pAiTableRecord->unk0x04)
 	{
@@ -16185,7 +16186,7 @@ void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 		pAiParamFn = AITHINK_Fn001_100_Idle_Buffy;
 	}
 
-	pAiControl->dwSpecialState = nSpecialState;
+	pAiControl->nAiSpecialState = nAiSpecialState;
 	pAiControl->pAiParamFn = pAiParamFn;
 
 	if (IsBadCodePtr((FARPROC)pAiParamFn))
@@ -16236,7 +16237,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction03_6FCF0A70(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	switch (AITHINK_GetAiTableRecord(pUnit, aiTickParam.pAiControl->dwSpecialState)->unk0x00)
+	switch (AITHINK_GetAiTableRecord(pUnit, aiTickParam.pAiControl->nAiSpecialState)->unk0x00)
 	{
 	case 1:
 		aiTickParam.pTarget = sub_6FCCF9D0(pGame, pUnit, aiTickParam.pAiControl, &aiTickParam.nTargetDistance, &aiTickParam.bCombat);

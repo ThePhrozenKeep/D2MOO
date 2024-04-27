@@ -1,11 +1,13 @@
 #pragma once
 
+#include <GAME/Game.h>
 #include <Units/Units.h>
 #include <UNIT/SUnitInactive.h>
 
-#include "GAME/Game.h"
+#include "AiStates.h"
 
 #pragma pack(1)
+
 
 struct D2AiCmdStrc
 {
@@ -30,7 +32,7 @@ typedef void(__fastcall* AIPARAMFN)(D2GameStrc*, D2UnitStrc*, D2AiTickParamStrc*
 
 struct D2AiControlStrc
 {
-	uint32_t dwSpecialState;				//0x00
+	D2C_AiSpecialState nAiSpecialState;		//0x00
 	AIPARAMFN pAiParamFn;					//0x04
 	uint16_t nAiFlags;						//0x08
 	uint8_t unk0x0A[2];						//0x0A

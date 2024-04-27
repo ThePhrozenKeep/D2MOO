@@ -121,7 +121,7 @@ void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
         pMonster->pMonsterData->pMonstatsTxt = MONSTERMODE_GetMonStatsTxtRecord(pMonster->dwClassId);
 
         MONSTER_InitializeStatsAndSkills(pGame, pRoom, pMonster, sub_6FC67FA0(pGame->pMonReg, pRoom, pMonster));
-        AITHINK_ExecuteAiFn(pGame, pMonster, pMonster->pMonsterData->pAiControl, 0);
+        AITHINK_ExecuteAiFn(pGame, pMonster, pMonster->pMonsterData->pAiControl, AISPECIALSTATE_NONE);
         pMonster->pMonsterData->dwTxtLevelNo = DUNGEON_GetLevelIdFromRoom(pRoom);
 
         const int32_t nAnimMode = pMonster->dwAnimMode;

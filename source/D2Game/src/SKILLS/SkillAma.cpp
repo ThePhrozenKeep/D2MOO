@@ -947,7 +947,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
 
 
     D2SummonArgStrc summonArg = {};
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
@@ -1003,7 +1003,7 @@ int32_t __fastcall SKILLS_SrvDo016_Valkyrie(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 
     D2SummonArgStrc summonArg = {};
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;

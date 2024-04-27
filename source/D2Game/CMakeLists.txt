@@ -23,6 +23,7 @@ target_sources(${D2GameImplName}
 
     include/AI/AiBaal.h
     include/AI/AiGeneral.h
+    include/AI/AiStates.h
     include/AI/AiTactics.h
     include/AI/AiThink.h
     include/AI/AiUtil.h
