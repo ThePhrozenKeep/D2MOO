@@ -331,7 +331,7 @@ int32_t __fastcall sub_6FC33F20(const char* szName);
 //D2Game.0x6FC33F90
 int32_t __fastcall sub_6FC33F90(const char* a1, char* a2);
 //D2Game.0x6FC34020
-int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, int32_t a5, int32_t a6, int32_t a7);
+int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7);
 //D2Game.0x6FC34170
 D2SaveHeaderStrc* __fastcall CLIENTS_GetSaveHeader(D2ClientStrc* pClient);
 //D2Game.0x6FC341A0

@@ -1477,7 +1477,7 @@ int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
 }
 
 //D2Game.0x6FC34020
-int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, int32_t a5, int32_t a6, int32_t a7)
+int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7)
 {
     if (!gbClientListInitialized_6FD447E8)
     {
@@ -1517,7 +1517,7 @@ int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveDa
         memcpy(pDestination, pSaveData, nSize);
 
         pClient->nSaveHeaderSize += nSize;
-        pClient->bUnlockCharacter = a5;
+        pClient->bUnlockCharacter = bUnlockCharacter;
 
         if (pClient->nSaveHeaderSize == nTotalSize)
         {
