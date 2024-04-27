@@ -12,6 +12,7 @@
 #include <D2Monsters.h>
 #include <D2States.h>
 #include <DataTbls/MonsterIds.h>
+#include <DataTbls/MonsterTypes.h>
 #include <DataTbls/MissilesIds.h>
 #include <D2Collision.h>
 #include <D2Items.h>
@@ -2209,16 +2210,16 @@ int32_t __fastcall MONSTERUNIQUE_GetUModCount(uint8_t* pUMods)
 }
 
 //D2Game.0x6FC6EC10
-int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion)
+BOOL __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion)
 {
     if (!pMonUModTxtRecord->nEnabled)
     {
-        return 0;
+        return FALSE;
     }
 
     if (!bExpansion && pMonUModTxtRecord->wVersion >= 100u)
     {
-        return 0;
+        return FALSE;
     }
 
     for (int32_t i = 0; i < 2; ++i)
@@ -2226,13 +2227,17 @@ int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtReco
         const int16_t nExcludeMonType = pMonUModTxtRecord->wExclude[i];
         if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
         {
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-            if (pMonStatsTxtRecord && pMonStatsTxtRecord->wMonType >= 0 && pMonStatsTxtRecord->wMonType < sgptDataTables->nMonTypeTxtRecordCount
-                && nExcludeMonType >= 0 && nExcludeMonType < sgptDataTables->nMonTypeTxtRecordCount
-                && sgptDataTables->pMonTypeNest[(pMonStatsTxtRecord->wMonType >> 5) + nExcludeMonType * sgptDataTables->nMonTypeIndex] & gdwBitMasks[pMonStatsTxtRecord->wMonType & 0x1F])
-            {
-                return 0;
-            }
+			if (D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId))
+			{
+				// SUNITDMG_CheckMonType does not check sgptDataTables->pMonTypeNest if mon type is 0
+				// However original code in this function does. Just in case, trigger the error if this should actually be supported.
+				// This is unlikely since 0 is MONTYPE_NONE.
+				D2_ASSERT(pMonStatsTxtRecord->wMonType != MONTYPE_NONE && nExcludeMonType != MONTYPE_NONE);
+				if (SUNITDMG_CheckMonType(pMonStatsTxtRecord->wMonType, nExcludeMonType))
+				{
+					return FALSE;
+				}
+			}
         }
     }
 
@@ -2242,26 +2247,25 @@ int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtReco
     {
         if (!pUnit)
         {
-            return 0;
+            return FALSE;
         }
 
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-        if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[4]))
-        {
-            return 0;
-        }
-
-        break;
+		return pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_ATTACK1];
     }
     case 2u:
     {
         if (pUnit)
         {
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-            if (pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISMELEE] || pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NOMULTISHOT]))
-            {
-                return 0;
-            }
+			if (D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId))
+			{
+				if (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISMELEE] 
+					|| pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NOMULTISHOT])
+				{
+					return FALSE;
+				}
+			}
+			
         }
 
         break;
@@ -2270,21 +2274,15 @@ int32_t __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtReco
     {
         if (!pUnit)
         {
-            return 0;
+            return FALSE;
         }
-
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-        if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[2]))
-        {
-            return 0;
-        }
-
-        break;
+		return pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_WALK];
     }
 	default:
 		break;
     }
-	return 1;
+	return TRUE;
 }
 
 //D2Game.0x6FC6EE90

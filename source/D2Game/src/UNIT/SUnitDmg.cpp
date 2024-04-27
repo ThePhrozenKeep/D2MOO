@@ -725,7 +725,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 //D2Game.0x6FCBF400
 int32_t __fastcall SUNITDMG_CheckMonType(int32_t nMonType1, int32_t nMonType2)
 {
-	if (nMonType1 > 0 && nMonType1 < sgptDataTables->nMonTypeTxtRecordCount && nMonType2 > 0 && nMonType2 < sgptDataTables->nMonTypeTxtRecordCount)
+	if (nMonType1 > 0 && nMonType1 < sgptDataTables->nMonTypeTxtRecordCount 
+		&& nMonType2 > 0 && nMonType2 < sgptDataTables->nMonTypeTxtRecordCount)
 	{
 		return gdwBitMasks[nMonType1 & 31] & sgptDataTables->pMonTypeNest[(nMonType1 >> 5) + nMonType2 * sgptDataTables->nMonTypeIndex];
 	}
