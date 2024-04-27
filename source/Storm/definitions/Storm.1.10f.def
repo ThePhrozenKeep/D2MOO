@@ -315,7 +315,7 @@ EXPORTS
 	SStrLower @579 NONAME
 	SStrHash64 @580 NONAME
 	SStrVPrintf @581 NONAME
-	SDrawSetClientRect @582 NONAME
+	SHashString @582 NONAME
 
 	SBigAdd @601 NONAME
 	SBigAnd @602 NONAME
