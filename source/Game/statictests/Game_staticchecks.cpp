@@ -3,7 +3,7 @@
 #include <cstddef>
 
 // Thanks to galaxyhaxz for providing the base to work on ! https://github.com/galaxyhaxz/d2src
-#ifdef D2_VERSION_110F // TODO: figure out when this was added
+#ifdef D2_VERSION_110F
 static_assert(offsetof(D2ConfigStrc, szCharacterRealm) == 0x227, "");
 static_assert(offsetof(D2ConfigStrc, szGamePassword) == 0x23F, "");
 
@@ -18,7 +18,7 @@ static_assert(offsetof(D2ConfigStrc, nComponentsColors) == 0x3AB, "");
 static_assert(offsetof(D2ConfigStrc, nCharacterLevel) == 0x3BB, "");
 static_assert(offsetof(D2ConfigStrc, nAccountPasswordHash) == 0x3BD, "");
 static_assert(offsetof(D2ConfigStrc, nSaveFlags) == 0x3C5, "");
-static_assert(sizeof(D2ConfigStrc) == 0x3C7);
+static_assert(sizeof(D2ConfigStrc) == 0x3C7, "");
 
 
 static_assert(sizeof(D2CmdArgStrc) == 0x3C, "Check D2CmdArgStrc matches original size");
