@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <D2BasicTypes.h>
+#include <D2Constants.h>
 #include <D2BuildInformation.h>
 
 #pragma pack(push, 1)
@@ -22,6 +23,16 @@ struct D2CharacterPreviewInfoStrc
 	uint32_t szGuildTag;				//0x21
 	uint8_t pad0x25;					//0x25
 };
+
+enum D2C_LaunchType : uint8_t
+{
+	LAUNCHTYPE_NONE = 0x0,
+	LAUNCHTYPE_LOCAL = MODE_LOCAL + 1,
+	LAUNCHTYPE_REALM = MODE_CLOSED + 1, // Closed BNet
+	LAUNCHTYPE_TCPIP = MODE_TCPIP + 1,
+	LAUNCHTYPE_OPENBNET = MODE_OPEN + 1,
+};
+
 struct D2ConfigStrc
 {
 #if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
@@ -118,7 +129,7 @@ struct D2ConfigStrc
 	char szGameStatstring[256]; // Description of the game
 	uint8_t bSkipToBNet;
 
-	uint8_t nLaunchType;
+	D2C_LaunchType nLaunchType;
 	uint8_t bShownLogo;
 	uint8_t bUnk035A;
 	char szCurrentChannelName[32];

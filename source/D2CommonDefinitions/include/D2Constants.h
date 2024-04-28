@@ -10,10 +10,10 @@ enum D2HarcodedConstants
 
 enum D2GameTypeMode
 {
-	//	MODE_SINGLE = 0,
+	MODE_LOCAL = 0,
 	MODE_CLOSED = 1,
-	MODE_TCP,
-	MODE_OPEN,
+	MODE_TCPIP = 2,
+	MODE_OPEN = 3,
 };
 
 enum D2GameResolutionMode // DISPLAY_RES in original game
