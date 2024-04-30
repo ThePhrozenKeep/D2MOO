@@ -1291,7 +1291,7 @@ void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* 
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
-void __stdcall D2Win_10142(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2638,7 +2638,7 @@ void __stdcall D2Win_10146()
 	while (pCompositeUnit)
 	{
 		D2CompositeUnitStrc* pNext = pCompositeUnit->pNext;
-		D2Win_10142(pCompositeUnit, 0);
+		D2Win_10142_CompUnitDestroy(pCompositeUnit, 0);
 		D2_FREE(pCompositeUnit);
 		pCompositeUnit = pNext;
 	}

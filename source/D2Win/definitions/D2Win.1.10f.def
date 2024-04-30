@@ -142,7 +142,7 @@ EXPORTS
 	LIST_GetSelectedDataIndex										@10139
 	LIST_GetDataFromIndex											@10140
 	D2Win_10141														@10141
-	D2Win_10142														@10142
+	D2Win_10142_CompUnitDestroy										@10142
 	D2Win_10143														@10143
 	D2Win_10144														@10144
 	D2Win_10145														@10145
