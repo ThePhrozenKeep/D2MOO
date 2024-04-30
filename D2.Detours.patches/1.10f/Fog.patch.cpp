@@ -55,9 +55,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Trace @10029
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10030 @10030
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10031 @10031
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10032 @10032
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10033 @10033
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10034 @10034
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_TraceMemory @10032
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_CrashDeadlockDetected @10033
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_CrashDumpThread @10034
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10035 @10035
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10036 @10036
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10037 @10037
