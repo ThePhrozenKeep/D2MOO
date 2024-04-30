@@ -44,7 +44,7 @@
  */
 BOOL __fastcall ARCHIVE_OpenFile(HD2ARCHIVE hArchive, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped)
 {
-	BOOL bFileOpenSucceeded = FOG_MPQFileOpen(szFilePath, phFile);
+	BOOL bFileOpenSucceeded = FOG_FOpenFile(szFilePath, phFile);
 	if (!bFileOpenSucceeded)
 	{
 		DWORD dwLastError = GetLastError();
@@ -69,7 +69,7 @@ BOOL __fastcall ARCHIVE_OpenFile(HD2ARCHIVE hArchive, const char* szFilePath, HS
 void __fastcall ARCHIVE_CloseFile(HD2ARCHIVE hArchive, HSFILE hFile)
 {
 	D2_ASSERT(hFile != nullptr);
-	FOG_MPQFileClose(hFile);
+	FOG_FCloseFile(hFile);
 }
 
 /**
@@ -84,7 +84,7 @@ size_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, size_t*
 {
 	D2_ASSERT(hFile != nullptr);
 
-	size_t dwFileSize = FOG_MPQFileGetSize(hFile, pdwFileSizeHigh);
+	size_t dwFileSize = FOG_FGetFileSize(hFile, pdwFileSizeHigh);
 	if (dwFileSize == 0)
 	{
 		char szArchivePath[MAX_PATH];
@@ -94,6 +94,29 @@ size_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, size_t*
 	}
 
 	return dwFileSize;
+}
+
+/**
+ * Sets the file pointer of a file in the MPQ archives.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.10: D2CMP.0x6FE0047A
+ */
+uint32_t __fastcall ARCHIVE_SetFilePointer(HD2ARCHIVE hArchive, HSFILE hFile, int32_t lDistanceToMove, int32_t* lpDistanceToMoveHigh, uint32_t dwMoveMethod)
+{
+	D2_ASSERT(hFile != nullptr);
+
+	uint32_t result = FOG_FSetFilePointer(hFile, lDistanceToMove, lpDistanceToMoveHigh, dwMoveMethod);
+	if (result == INVALID_SET_FILE_POINTER)
+	{
+		char szArchivePath[MAX_PATH];
+		SFileGetFileName(hFile, szArchivePath, 260);
+		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
+		exit(-1);
+	}
+	return result;
 }
 
 /**
@@ -108,7 +131,7 @@ void __fastcall ARCHIVE_ReadFileToBuffer(HD2ARCHIVE hArchive, HSFILE hFile, void
 	D2_ASSERT(hFile != nullptr);
 
 	size_t dwBytes;
-	BOOL bFileReadSuccess = FOG_MPQFileRead(hFile, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
+	BOOL bFileReadSuccess = FOG_FReadFile(hFile, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
 	if (!bFileReadSuccess)
 	{
 		char szArchivePath[MAX_PATH];

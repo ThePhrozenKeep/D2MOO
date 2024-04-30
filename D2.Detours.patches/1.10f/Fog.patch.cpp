@@ -130,11 +130,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_AsyncDataSetPriority @10099
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_AsyncDataHandlePriorityChanges @10100
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQSetConfig @10101
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileOpen @10102
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileClose @10103
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileRead @10104
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileGetSize @10105
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10106 @10106
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FOpenFile @10102
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FCloseFile @10103
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FReadFile @10104
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FGetFileSize @10105
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FSetFilePointer @10106
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10107 @10107
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10108 @10108
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10109 @10109

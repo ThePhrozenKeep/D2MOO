@@ -111,11 +111,11 @@ EXPORTS
     FOG_AsyncDataSetPriority @10099 NONAME
     FOG_AsyncDataHandlePriorityChanges @10100 NONAME
     FOG_MPQSetConfig @10101 NONAME
-    FOG_MPQFileOpen @10102 NONAME
-    FOG_MPQFileClose @10103 NONAME
-    FOG_MPQFileRead @10104 NONAME
-    FOG_MPQFileGetSize @10105 NONAME
-;   FOG_10106 @10106 NONAME
+    FOG_FOpenFile @10102 NONAME
+    FOG_FCloseFile @10103 NONAME
+    FOG_FReadFile @10104 NONAME
+    FOG_FGetFileSize @10105 NONAME
+    FOG_FSetFilePointer @10106 NONAME
     FOG_CreateFileA @10107 NONAME
     FOG_DeleteFileA @10108 NONAME
     FOG_CloseFile @10109 NONAME

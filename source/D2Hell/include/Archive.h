@@ -84,8 +84,19 @@ void __fastcall ARCHIVE_CloseFile(HD2ARCHIVE hArchive, HSFILE hFile);
  * 1.10: D2Lang.0x6FC145F2 OR D2Common.0x6FDC4152
  * 1.13c: Inline
  * 1.14c: Game.0x00514B87
+ * D2XBeta: D2Server.dll.0x10009C76
  */
 size_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, size_t* pdwFileSizeHigh);
+
+/**
+ * Sets the file pointer of a file in the MPQ archives.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.10: D2CMP.0x6FE0047A
+ */
+uint32_t __fastcall ARCHIVE_SetFilePointer(HD2ARCHIVE hArchive, HSFILE hFile, int32_t lDistanceToMove, int32_t* lpDistanceToMoveHigh, uint32_t dwMoveMethod);
 
 /**
  * Reads a file from the MPQ archives into a specified buffer.
