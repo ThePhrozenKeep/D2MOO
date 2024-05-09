@@ -933,9 +933,12 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     if (pUnit->pInventory)
     {
-        for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
+		D2UnitStrc* pNextItem = nullptr;
+        for (D2UnitStrc* pCurrentItem = INVENTORY_GetFirstItem(pUnit->pInventory); pCurrentItem != nullptr; pCurrentItem = pNextItem)
         {
-            D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(i);
+			pNextItem = INVENTORY_GetNextItem(pCurrentItem); // Needs to be retrieved before deleting current item
+
+            D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pCurrentItem);
             if (pCheckedItem && ITEMS_GetInvPage(pCheckedItem) == INVPAGE_CUBE)
             {
                 int32_t nFlags = 0;
@@ -2342,7 +2345,7 @@ void __fastcall sub_6FC931D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                 int32_t nUnused = 0;
                 if (sub_6FC446B0(pGame, pOtherPlayer, pItemTrade->nItemGUID2, &nUnused, 1, 1, 0, 1))
                 {
-                    //for (i = pItemTrade; i; i = i->pNext)
+                    //for (pCurrentItem = pItemTrade; pCurrentItem; pCurrentItem = pCurrentItem->pNext)
                     //    ;
                 }
                 break;
