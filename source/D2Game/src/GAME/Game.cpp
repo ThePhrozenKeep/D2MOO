@@ -1827,9 +1827,9 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 
     ++pGame->nFramesSinceLastFrameRateUpdate;
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t i = 0; i < NUM_ACTS; ++i)
     {
-        if (pGame->pAct[i] && pGame->pAct[i]->unk0x20)
+        if (pGame->pAct[i] && pGame->pAct[i]->bHasPendingRoomsUpdates)
         {
             for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
             {
@@ -1848,7 +1848,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
                 }
             }
 
-            pGame->pAct[i]->unk0x20 = 0;
+            pGame->pAct[i]->bHasPendingRoomsUpdates = 0;
         }
     }
 

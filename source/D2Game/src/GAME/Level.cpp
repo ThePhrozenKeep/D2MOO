@@ -31,7 +31,7 @@
 void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
     // TODO: v10
-    if (!pGame->pAct[CLIENTS_GetActNo(pClient)]->bUpdate)
+    if (!pGame->pAct[CLIENTS_GetActNo(pClient)]->bHasPendingUnitListUpdates)
     {
         return;
     }
@@ -122,17 +122,17 @@ void __fastcall LEVEL_RemoveUnitsExceptClientPlayer(D2ActiveRoomStrc* pRoom, D2C
 //D2Game.0x6FC3BDE0
 void __fastcall LEVEL_FreeDrlgDeletes(D2GameStrc* pGame)
 {
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t i = 0; i < NUM_ACTS; ++i)
     {
         D2DrlgActStrc* pAct = pGame->pAct[i];
-        if (pAct && pAct->bUpdateEx)
+        if (pAct && pAct->bHasPendingRoomDeletions)
         {
             for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pAct); pRoom; pRoom = pRoom->pRoomNext)
             {
                 DUNGEON_FreeDrlgDelete(pRoom);
             }
 
-            pAct->bUpdateEx = 0;
+            pAct->bHasPendingRoomDeletions = FALSE;
         }
     }
 }
@@ -385,10 +385,10 @@ void __fastcall LEVEL_RemoveAllUnits(D2GameStrc* pGame)
 //D2Game.0x6FC3C5B0
 void __fastcall LEVEL_UpdateQueuedUnitsInAllActs(D2GameStrc* pGame)
 {
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t i = 0; i < NUM_ACTS; ++i)
     {
         D2DrlgActStrc* pAct = pGame->pAct[i];
-        if (pAct && pAct->bUpdate)
+        if (pAct && pAct->bHasPendingUnitListUpdates)
         {
             for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pAct); pRoom; pRoom = pRoom->pRoomNext)
             {
@@ -400,7 +400,7 @@ void __fastcall LEVEL_UpdateQueuedUnitsInAllActs(D2GameStrc* pGame)
                 UNITROOM_ClearUpdateQueue(pRoom);
             }
 
-            pAct->bUpdate = 0;
+            pAct->bHasPendingUnitListUpdates = FALSE;
         }
     }
 

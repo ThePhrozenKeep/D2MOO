@@ -190,7 +190,7 @@ D2ActiveRoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2DrlgRoomSt
 	pRoom->pRoomTiles = pRoomTiles;
 	pRoom->pRoomNext = pAct->pRoom;
 	pAct->pRoom = pRoom;
-	pAct->unk0x20 = 1;
+	pAct->bHasPendingRoomsUpdates = TRUE;
 	pRoom->pAct = pAct;
 
 	DRLGROOM_SetRoom(pDrlgRoom, pRoom);
@@ -489,7 +489,7 @@ D2UnitStrc** __fastcall DUNGEON_GetUnitUpdateListFromRoom(D2ActiveRoomStrc* pRoo
 
 	if (bUpdate)
 	{
-		pRoom->pAct->bUpdate = TRUE;
+		pRoom->pAct->bHasPendingUnitListUpdates = TRUE;
 	}
 
 	return &pRoom->pUnitUpdate;
@@ -621,7 +621,7 @@ void __stdcall DUNGEON_AllocDrlgDelete(D2ActiveRoomStrc* pRoom, int nUnitType, D
 		pDrlgDelete->nUnitGUID = nUnitGUID;
 		pDrlgDelete->pNext = pRoom->pDrlgDelete;
 		pRoom->pDrlgDelete = pDrlgDelete;
-		pRoom->pAct->bUpdateEx = TRUE;
+		pRoom->pAct->bHasPendingRoomDeletions = TRUE;
 	}
 }
 

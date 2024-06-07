@@ -329,9 +329,9 @@ struct D2DrlgActStrc
 	D2DrlgEnvironmentStrc* pEnvironment;	//0x14
 	ACTCALLBACKFN pfnActCallBack;			//0x18
 	BOOL bClient;							//0x1C
-	BOOL unk0x20;							//0x20
-	BOOL bUpdateEx;							//0x24
-	BOOL bUpdate;							//0x28
+	BOOL bHasPendingRoomsUpdates;			//0x20
+	BOOL bHasPendingRoomDeletions;			//0x24
+	BOOL bHasPendingUnitListUpdates;		//0x28
 	D2DrlgTileDataStrc pTileData;			//0x2C
 	void* pMemPool;							//0x5C
 };
