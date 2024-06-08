@@ -15,7 +15,7 @@ set_target_properties(D2LangTests PROPERTIES
 
 add_test(
     # Use some per-module/project prefix so that it is easier to run only tests for this module
-    NAME ${PROJECT_OPTIONS_PREFIX}.unittests
+    NAME D2LangTests.unittests
     COMMAND D2LangTests ${TEST_RUNNER_PARAMS}
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2LangTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )

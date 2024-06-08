@@ -14,7 +14,7 @@ set_target_properties(D2CommonTests PROPERTIES
 
 add_test(
     # Use some per-module/project prefix so that it is easier to run only tests for this module
-    NAME ${PROJECT_OPTIONS_PREFIX}.unittests
+    NAME D2CommonTests.unittests
     COMMAND D2CommonTests ${TEST_RUNNER_PARAMS}
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2CommonTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )
