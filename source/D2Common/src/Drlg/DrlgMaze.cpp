@@ -109,9 +109,12 @@ D2DrlgRoomStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomSouth(D2DrlgLevelStrc*
 }
 
 //D2Common.0x6FD78F70
+//Named sSetChamberPreset in the original code ?
 void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFlag)
 {
-	static const int dword_6FDCE710[][3] =
+	//D2Common.0x6FDCE710
+	//Remapping of presets for harem, basement and spider cave. Effictively preventing any non diagonal presets since not every direction exists.
+	static const int nHardcodedPresetsRemapping[][3] =
 	{
 		{ LVLPREST_NONE,					LVLPREST_NONE,				LVLPREST_NONE },
 		{ LVLPREST_NONE,					LVLPREST_NONE,				LVLPREST_NONE },
@@ -130,8 +133,9 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFl
 		{ LVLPREST_NONE,					LVLPREST_NONE,				LVLPREST_NONE },
 		{ LVLPREST_NONE,					LVLPREST_NONE,				LVLPREST_NONE },
 	};
-
-	static const int dword_6FDCE7D0[][2] =
+	//D2Common.0x6FDCE7D0
+	//Remapping of presets for Nilhatak's temple and the lava maps (infernal pit) since not every direction exists.
+	static const int nExpansionHardcodedPresetsRemapping[][2] =
 	{
 		{ LVLPREST_NONE,				LVLPREST_NONE },
 		{ LVLPREST_NONE,				LVLPREST_ACT5_LAVA_W },
@@ -206,11 +210,11 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFl
 		break;
 
 	case LVLTYPE_ACT2_HAREM:
-		nLevelPrest = dword_6FDCE710[nLevelPrest][0];
+		nLevelPrest = nHardcodedPresetsRemapping[nLevelPrest][0];
 		break;
 
 	case LVLTYPE_ACT2_BASEMENT:
-		nLevelPrest = dword_6FDCE710[nLevelPrest][1];
+		nLevelPrest = nHardcodedPresetsRemapping[nLevelPrest][1];
 		if (pDrlgRoom->pLevel->nLevelId == LEVEL_PALACECELLARLEV1 && nLevelPrest == LVLPREST_ACT2_BASEMENT_NW)
 		{
 			nPickedFile = 2;
@@ -239,7 +243,7 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFl
 		break;
 
 	case LVLTYPE_ACT3_SPIDER:
-		nLevelPrest = dword_6FDCE710[nLevelPrest][2];
+		nLevelPrest = nHardcodedPresetsRemapping[nLevelPrest][2];
 		if (pDrlgRoom->pLevel->nLevelId == LEVEL_SPIDERCAVE && nLevelPrest == LVLPREST_ACT3_SPIDER_NE)
 		{
 			nLevelPrest = LVLPREST_ACT3_SPIDER_CHEST_NE;
@@ -274,7 +278,7 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFl
 		break;
 
 	case LVLTYPE_ACT5_TEMPLE:
-		nLevelPrest = dword_6FDCE7D0[nLevelPrest][0];
+		nLevelPrest = nExpansionHardcodedPresetsRemapping[nLevelPrest][0];
 		break;
 
 	case LVLTYPE_ACT5_BAAL:
@@ -282,7 +286,7 @@ void __fastcall DRLGMAZE_PickRoomPreset(D2DrlgRoomStrc* pDrlgRoom, BOOL bResetFl
 		break;
 
 	case LVLTYPE_ACT5_LAVA:
-		nLevelPrest = dword_6FDCE7D0[nLevelPrest][1];
+		nLevelPrest = nExpansionHardcodedPresetsRemapping[nLevelPrest][1];
 		break;
 
 	default:
