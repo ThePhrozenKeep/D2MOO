@@ -12,7 +12,7 @@ static bool DRLGMAZE_CheckIfRoomOverlapsOrth(D2DrlgRoomStrc* pNewRoomEx, D2DrlgO
 {
 	while (pDrlgOrth)
 	{
-		if (DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0) == 0)
+		if (DRLG_CheckNotOverlappingUsingManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0) == 0)
 		{
 			return true;
 		}
@@ -957,7 +957,7 @@ D2DrlgRoomStrc* __fastcall DRLGMAZE_AddAdjacentMazeRoom(D2DrlgRoomStrc* pDrlgRoo
 
 	for (D2DrlgOrthStrc* i = pDrlgRoom->pDrlgOrth; i; i = i->pNext)
 	{
-		if (!DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, i->pBox, 0))
+		if (!DRLG_CheckNotOverlappingUsingManhattanDistance(&pNewRoomEx->pDrlgCoord, i->pBox, 0))
 		{
 			DRLGROOM_FreeRoomEx(pNewRoomEx);
 			return 0;
@@ -981,7 +981,7 @@ D2DrlgRoomStrc* __fastcall DRLGMAZE_AddAdjacentMazeRoom(D2DrlgRoomStrc* pDrlgRoo
 				nX = 0;
 				nY = 0;
 
-				if (!sub_6FD77740(&pNewRoomEx->pDrlgCoord, &i->pDrlgCoord, 1, &nX, &nY))
+				if (!DRLG_GetRectanglesManhattanDistanceAndCheckNotOverlapping(&pNewRoomEx->pDrlgCoord, &i->pDrlgCoord, 1, &nX, &nY))
 				{
 					if (nX != nY)
 					{
@@ -1175,7 +1175,7 @@ BOOL __fastcall DRLGMAZE_LinkMazeRooms(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStr
 	
 	for (D2DrlgOrthStrc* pDrlgOrth = pDrlgRoom2->pDrlgOrth; pDrlgOrth; pDrlgOrth = pDrlgOrth->pNext)
 	{
-		if (!DRLG_ComputeRectanglesManhattanDistance(&pDrlgRoom1->pDrlgCoord, pDrlgOrth->pBox, 0))
+		if (!DRLG_CheckNotOverlappingUsingManhattanDistance(&pDrlgRoom1->pDrlgCoord, pDrlgOrth->pBox, 0))
 		{
 			return FALSE;
 		}
@@ -1201,7 +1201,7 @@ void __fastcall DRLGMAZE_MergeMazeRooms(D2DrlgRoomStrc* pDrlgRoom)
 				nX = 0;
 				nY = 0;
 
-				if (!sub_6FD77740(&pDrlgRoom->pDrlgCoord, &i->pDrlgCoord, 1, &nX, &nY))
+				if (!DRLG_GetRectanglesManhattanDistanceAndCheckNotOverlapping(&pDrlgRoom->pDrlgCoord, &i->pDrlgCoord, 1, &nX, &nY))
 				{
 					if (nX != nY)
 					{
@@ -1325,7 +1325,7 @@ void __fastcall DRLGMAZE_BuildBasicMaze(D2DrlgLevelStrc* pLevel)
 			}
 
 			pDrlgOrth = pRandomRoomEx->pDrlgOrth;
-			while (pDrlgOrth && DRLG_ComputeRectanglesManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
+			while (pDrlgOrth && DRLG_CheckNotOverlappingUsingManhattanDistance(&pNewRoomEx->pDrlgCoord, pDrlgOrth->pBox, 0))
 			{
 				pDrlgOrth = pDrlgOrth->pNext;
 			}

@@ -361,98 +361,69 @@ BOOL __fastcall sub_6FD776B0(D2DrlgOrthStrc* pDrlgOrth1, D2DrlgOrthStrc* pDrlgOr
 	return TRUE;
 }
 
-//D2Common.0x6FD77740
-BOOL __fastcall sub_6FD77740(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance, int* pX, int* pY)
+// Helper function
+void DRLG_ComputeManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int* pDistanceX, int* pDistanceY)
 {
+	// Negative distance means we are "inside" the other rectangle
 	if (pDrlgCoord1->nPosX >= pDrlgCoord2->nPosX)
 	{
-		*pX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
+		*pDistanceX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
 	}
 	else
 	{
-		*pX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
+		*pDistanceX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
 	}
 
 	if (pDrlgCoord1->nPosY >= pDrlgCoord2->nPosY)
 	{
-		*pY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
+		*pDistanceY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
 	}
 	else
 	{
-		*pY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
+		*pDistanceY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
 	}
+}
 
-	return *pX >= nMaxDistance || *pY >= nMaxDistance;
+
+//D2Common.0x6FD77740
+// Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMargin
+BOOL __fastcall DRLG_GetRectanglesManhattanDistanceAndCheckNotOverlapping(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance, int* pDistanceX, int* pDistanceY)
+{
+	DRLG_ComputeManhattanDistance(pDrlgCoord1, pDrlgCoord2, pDistanceX, pDistanceY);
+	return *pDistanceX >= nMaxDistance || *pDistanceY >= nMaxDistance;
 }
 
 //D2Common.0x6FD777B0
 // Compute manhattan distance between rectangles and returns true if distance is greater or equal than nMargin
-BOOL __fastcall DRLG_ComputeRectanglesManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
+BOOL __fastcall DRLG_CheckNotOverlappingUsingManhattanDistance(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistanceToAssumeCollision)
 {
 	int nSignedDistanceX = 0;
 	int nSignedDistanceY = 0;
-
-	// Negative distance means we are "inside" the other rectangle
-	if (pDrlgCoord1->nPosX >= pDrlgCoord2->nPosX)
-	{
-		nSignedDistanceX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
-	}
-	else
-	{
-		nSignedDistanceX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
-	}
-
-	if (pDrlgCoord1->nPosY >= pDrlgCoord2->nPosY)
-	{
-		nSignedDistanceY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
-	}
-	else
-	{
-		nSignedDistanceY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
-	}
-
-	return nSignedDistanceX >= nMaxDistanceToAssumeCollision || nSignedDistanceY >= nMaxDistanceToAssumeCollision;
+	return DRLG_GetRectanglesManhattanDistanceAndCheckNotOverlapping(pDrlgCoord1, pDrlgCoord2, nMaxDistanceToAssumeCollision, &nSignedDistanceX, &nSignedDistanceY);
 }
 
 //D2Common.0x6FD77800
-BOOL __fastcall sub_6FD77800(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nMaxDistance)
+BOOL __fastcall DRLG_CheckOverlappingWithOrthogonalMargin(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2, int nOrthogonalDistanceMax)
 {
-	int nX = 0;
-	int nY = 0;
+	int nSignedDistanceX = 0;
+	int nSignedDistanceY = 0;
+	DRLG_ComputeManhattanDistance(pDrlgCoord1, pDrlgCoord2, &nSignedDistanceX, &nSignedDistanceY);
 
-	if (pDrlgCoord1->nPosX > pDrlgCoord2->nPosX)
+	if (nOrthogonalDistanceMax)
 	{
-		nX = pDrlgCoord1->nPosX - pDrlgCoord2->nWidth - pDrlgCoord2->nPosX;
-	}
-	else
-	{
-		nX = pDrlgCoord2->nPosX - pDrlgCoord1->nWidth - pDrlgCoord1->nPosX;
-	}
-
-	if (pDrlgCoord1->nPosY > pDrlgCoord2->nPosY)
-	{
-		nY = pDrlgCoord1->nPosY - pDrlgCoord2->nHeight - pDrlgCoord2->nPosY;
-	}
-	else
-	{
-		nY = pDrlgCoord2->nPosY - pDrlgCoord1->nHeight - pDrlgCoord1->nPosY;
-	}
-
-	if (nMaxDistance)
-	{
-		if (!nX && nY <= nMaxDistance)
+		if (nSignedDistanceX == 0 && nSignedDistanceY <= nOrthogonalDistanceMax)
 		{
 			return TRUE;
 		}
 
-		if (!nY && nX <= nMaxDistance)
+		if (nSignedDistanceY == 0 && nSignedDistanceX <= nOrthogonalDistanceMax)
 		{
 			return TRUE;
 		}
 	}
 	else
 	{
-		if (nX <= 0 && nY <= 0)
+		if (nSignedDistanceX <= 0 && nSignedDistanceY <= 0)
 		{
 			return TRUE;
 		}
@@ -464,32 +435,11 @@ BOOL __fastcall sub_6FD77800(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrl
 //D2Common.0x6FD77890
 BOOL __fastcall DRLGMAZE_CheckRoomNotOverlaping(D2DrlgLevelStrc* pLevel, D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pIgnoredRoom, int nMargin)
 {
-	int nX = 0;
-	int nY = 0;
-
 	for (D2DrlgRoomStrc* pCurrentRoomEx = pLevel->pFirstRoomEx; pCurrentRoomEx; pCurrentRoomEx = pCurrentRoomEx->pDrlgRoomNext)
 	{
 		if (pCurrentRoomEx != pDrlgRoom1 && pCurrentRoomEx != pIgnoredRoom)
 		{
-			if (pDrlgRoom1->nTileXPos >= pCurrentRoomEx->nTileXPos)
-			{
-				nX = pDrlgRoom1->nTileXPos - pCurrentRoomEx->nTileWidth - pCurrentRoomEx->nTileXPos;
-			}
-			else
-			{
-				nX = pCurrentRoomEx->nTileXPos - pDrlgRoom1->nTileWidth - pDrlgRoom1->nTileXPos;
-			}
-
-			if (pDrlgRoom1->nTileYPos >= pCurrentRoomEx->nTileYPos)
-			{
-				nY = pDrlgRoom1->nTileYPos - pCurrentRoomEx->nTileHeight - pCurrentRoomEx->nTileYPos;
-			}
-			else
-			{
-				nY = pCurrentRoomEx->nTileYPos - pDrlgRoom1->nTileHeight - pDrlgRoom1->nTileYPos;
-			}
-
-			if (nX < nMargin && nY < nMargin)
+			if (!DRLG_CheckNotOverlappingUsingManhattanDistance(&pDrlgRoom1->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, nMargin))
 			{
 				return FALSE;
 			}

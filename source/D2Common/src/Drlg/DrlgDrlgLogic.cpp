@@ -242,7 +242,7 @@ void __fastcall sub_6FD769B0(D2DrlgRoomStrc* pDrlgRoom)
 		{
 			if (pCurrentRoomEx->pLogicalRoomInfo)
 			{
-				if (!DRLG_ComputeRectanglesManhattanDistance(&pDrlgRoom->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, 1))
+				if (!DRLG_CheckNotOverlappingUsingManhattanDistance(&pDrlgRoom->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, 1))
 				{
 					for (int j = pDrlgRoom->pDrlgCoord.nPosX; j <= pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth; ++j)
 					{
