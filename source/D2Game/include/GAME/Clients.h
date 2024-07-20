@@ -220,8 +220,8 @@ struct D2ClientStrc
 	uint32_t nCreateTime;						//0x488
 	D2ClientPlayerDataStrc clientPlayerData;	//0x48C
 	D2ClientStrc* pNext;						//0x4A8
-	D2ClientStrc* pListNext;					//0x4AC
-	D2ClientStrc* pNextByName;					//0x4B0
+	D2ClientStrc* pServerNext;					//0x4AC
+	D2ClientStrc* pServerNextByName;			//0x4B0
 	uint32_t aPingHistory[17];					//0x4B4
 	uint64_t nPingMovingAverage;				//0x4F8
 	uint32_t dwPingsCount;						//0x500

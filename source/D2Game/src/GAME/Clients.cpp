@@ -88,7 +88,7 @@ int32_t __stdcall CLIENTS_GetExpansionClientCount()
 
     for (int32_t i = 0; i < 256; ++i)
     {
-        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[i]; pClient; pClient = pClient->pListNext)
+        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[i]; pClient; pClient = pClient->pServerNext)
         {
             if (pClient->tSaveFlags.bExpansion)
             {
@@ -104,27 +104,28 @@ int32_t __stdcall CLIENTS_GetExpansionClientCount()
 
 // Helper Function
 // Returns the removed client
-static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListWithId(D2ClientStrc** ppClientListHead, int32_t nClientIdToRemove)
+typedef D2ClientStrc* D2ClientStrc::* D2ClientListPtr;
+static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListWithId(D2ClientStrc** ppClientListHead, int32_t nClientIdToRemove, D2ClientListPtr pListMemberPtr)
 {
     if ((*ppClientListHead)->dwClientId == nClientIdToRemove)
     {
         D2ClientStrc* pClientToRemove = *ppClientListHead;
-        *ppClientListHead = pClientToRemove->pListNext;
+		*ppClientListHead = pClientToRemove->*pListMemberPtr;
         return pClientToRemove;
     }
     else
     {
         D2ClientStrc* pPreviousClient = (*ppClientListHead);
-        for (D2ClientStrc* pCurrentClient = pPreviousClient->pListNext; ; pCurrentClient = pCurrentClient->pListNext)
+        for (D2ClientStrc* pCurrentClient = pPreviousClient->*pListMemberPtr; ; pCurrentClient = pCurrentClient->pServerNext)
         {
             if (pCurrentClient->dwClientId == nClientIdToRemove)
             {
                 // Unlink client
-                pPreviousClient->pListNext = pCurrentClient->pListNext;
+                pPreviousClient->*pListMemberPtr = pCurrentClient->*pListMemberPtr;
                 return pCurrentClient;
             }
             pPreviousClient = pCurrentClient;
-            D2_ASSERT(pCurrentClient->pListNext != nullptr);
+            D2_ASSERT(pCurrentClient->*pListMemberPtr != nullptr);
         }
         D2_UNREACHABLE;
     }
@@ -136,18 +137,18 @@ static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListByName(D2ClientStrc*
     if (0 == SStrCmpI((*ppClientListHead)->szName, szClientToRemoveName, 16))
     {
         D2ClientStrc* pClientToRemove = *ppClientListHead;
-        *ppClientListHead = pClientToRemove->pNextByName;
+        *ppClientListHead = pClientToRemove->pServerNextByName;
         return pClientToRemove;
     }
     else
     {
         D2ClientStrc* pPreviousClient = (*ppClientListHead);
-        for (D2ClientStrc* pCurrentClient = pPreviousClient->pNextByName; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pNextByName)
+        for (D2ClientStrc* pCurrentClient = pPreviousClient->pServerNextByName; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pServerNextByName)
         {
             if (0 == SStrCmpI(pCurrentClient->szName, szClientToRemoveName, 16))
             {
                 // Unlink client
-                pPreviousClient->pNextByName = pCurrentClient->pNextByName;
+                pPreviousClient->pServerNextByName = pCurrentClient->pServerNextByName;
                 return pCurrentClient;
             }
             pPreviousClient = pCurrentClient;
@@ -503,14 +504,14 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     pGame->pClientList = pClient;
 
     EnterCriticalSection(&gClientListLock_6FD447D0);
-    pClient->pListNext = gpClientList_6FD43FB8[(uint8_t)nClientId];
+    pClient->pServerNext = gpClientList_6FD43FB8[(uint8_t)nClientId];
     gpClientList_6FD43FB8[(uint8_t)nClientId] = pClient;
     LeaveCriticalSection(&gClientListLock_6FD447D0);
 
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szClientName);
 
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
-    pClient->pNextByName = gpClientListByName_6FD443D0[nIndex];
+    pClient->pServerNextByName = gpClientListByName_6FD443D0[nIndex];
     gpClientListByName_6FD443D0[nIndex] = pClient;
     LeaveCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
@@ -629,7 +630,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     if (gbClientListInitialized_6FD447E8)
     {
         D2_LOCK(&gClientListLock_6FD447D0);
-        D2ClientStrc* pClientToRemove = CLIENTS_RemoveClientFromListWithId(&gpClientList_6FD43FB8[nClientIdToRemove & 0xFF], nClientIdToRemove);
+        D2ClientStrc* pClientToRemove = CLIENTS_RemoveClientFromListWithId(&gpClientList_6FD43FB8[nClientIdToRemove & 0xFF], nClientIdToRemove, &D2ClientStrc::pServerNext);
         D2_ASSERT(pClientToRemove);
         strcpy(szName, pClientToRemove->szName); // NOLINT(clang-diagnostic-deprecated-declarations)
         D2_UNLOCK(&gClientListLock_6FD447D0);
@@ -638,7 +639,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     D2ClientStrc* pClientToRemove = nullptr;
     if (pGame->pClientList)
     {
-        pClientToRemove = CLIENTS_RemoveClientFromListWithId(&pGame->pClientList, nClientIdToRemove);
+        pClientToRemove = CLIENTS_RemoveClientFromListWithId(&pGame->pClientList, nClientIdToRemove, &D2ClientStrc::pNext);
     }
 
     if (gbClientListInitialized_6FD447E8)
@@ -1324,7 +1325,7 @@ BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, D2ClientState nExpectedCli
     {
         EnterCriticalSection(&gClientListLock_6FD447D0);
 
-        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pListNext)
+        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pServerNext)
         {
             if (pClient->dwClientId == nClientId)
             {
@@ -1398,7 +1399,7 @@ int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName)
     int32_t nResult = 1;
     EnterCriticalSection(&gClientListLock_6FD447D0);
 
-    for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pListNext)
+    for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pServerNext)
     {
         if (!nResult)
         {
@@ -1428,7 +1429,7 @@ int32_t __fastcall sub_6FC33F20(const char* szName)
 
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
-    for (D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex]; pClient; pClient = pClient->pNextByName)
+    for (D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex]; pClient; pClient = pClient->pServerNextByName)
     {
         if (nClientId)
         {
@@ -1457,7 +1458,7 @@ int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
     {
         while (SStrCmpI(pClient->szName, a1, sizeof(pClient->szName)))
         {
-            pClient = pClient->pNextByName;
+            pClient = pClient->pServerNextByName;
             if (!pClient)
             {
                 LeaveCriticalSection(&gSrvClientListByNameLock_6FD443B8);
