@@ -6,6 +6,10 @@
 
 //1.10f Image Base: 0x6FC00000
 
+#ifdef D2_VERSION_110F
+constexpr int D2NetImageBase = 0x6FC00000;
+#endif
+
 constexpr int32_t GAME_PORT = 4000;
 
 

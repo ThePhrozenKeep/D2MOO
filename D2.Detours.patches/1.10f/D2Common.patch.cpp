@@ -1371,10 +1371,9 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int D2CommonImageBase = 0x6FD40000;
-
 static ExtraPatchAction extraPatchActions[] = {
-    // We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
+#ifdef D2_VERSION_110F
+	// We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
     //{ 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplaceOriginalByPatch },
     { 0x6FD86050 - D2CommonImageBase, &DRLGPRESET_LoadDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FD86190 - D2CommonImageBase, &DRLGPRESET_FreeDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
@@ -1410,7 +1409,7 @@ static ExtraPatchAction extraPatchActions[] = {
     
     // this is the one that leads to issues
     //{ 0x6FD73450 - D2CommonImageBase, &DRLGACTIVATE_RoomExSetStatus_ClientInSight, PatchAction::FunctionReplacePatchByOriginal},
-
+#endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 

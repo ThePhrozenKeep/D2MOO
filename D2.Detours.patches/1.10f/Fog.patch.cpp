@@ -312,8 +312,6 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int FogImageBase = 0x6FF50000;
-
 #ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
 void* __fastcall FOG_Debug_AllocPool_Impl(void* pMemPool, int nSize, const char* szFile, int nLine)
 {
@@ -360,7 +358,8 @@ void* __fastcall FOG_Debug_ReallocPool(void* pMemPool, void* pMemory, int nSize,
 
 static ExtraPatchAction extraPatchActions[] = {    
 #ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
-    { 0x6FF58F50 - FogImageBase, &FOG_Debug_Alloc, PatchAction::FunctionReplaceOriginalByPatch },
+#ifdef D2_VERSION_110F
+	{ 0x6FF58F50 - FogImageBase, &FOG_Debug_Alloc, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58F90 - FogImageBase, &FOG_Debug_Free, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58FB0 - FogImageBase, &FOG_Debug_Realloc, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58FF0 - FogImageBase, &FOG_Debug_AllocPool, PatchAction::FunctionReplaceOriginalByPatch },
@@ -369,6 +368,7 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FF59310 - FogImageBase, &FOG_Debug_AllocPool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF599C0 - FogImageBase, &FOG_Debug_FreePool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF59BE0 - FogImageBase, &FOG_Debug_ReallocPoolImpl, PatchAction::FunctionReplaceOriginalByPatch },
+#endif
 #endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
