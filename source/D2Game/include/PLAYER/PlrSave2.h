@@ -125,9 +125,16 @@ int32_t __fastcall PLRSAVE2_WriteCorpsesSection(D2GameStrc* pGame, D2UnitStrc* p
 int32_t __fastcall PLRSAVE2_WriteIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
 //D2Game.0x6FC8D940
 int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t a6, int32_t a7);
-//D2Game.0x6FC8DC20
+//1.10f: D2Game.0x6FC8DC20
+//1.13c: D2Game.0x6FD0BAF0
+#define PLRSAVE2_CHECK_LADDER_TIMESTAMP !(D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 13)
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient);
+#else
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags);
-//D2Game.0x6FC8DD00
+#endif
+//1.10f: D2Game.0x6FC8DD00
+//1.13c: D2Game.0x6FD0D250
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
 //D2Game.0x6FC8E070
 int32_t __fastcall PLRSAVE2_ReadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);

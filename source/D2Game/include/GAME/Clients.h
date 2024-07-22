@@ -191,7 +191,7 @@ struct D2ClientStrc
 	uint32_t unk0x184;							//0x184
 	uint32_t nSaveHeaderDataSentBytes;			//0x188
 	DWORD nSaveChecksum;						//0x18C
-	uint64_t nLadderGUID;						//0x190
+	FILETIME nSaveCreationTimestamp;			//0x190
 	DWORD unk0x198[4];							//0x198
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC

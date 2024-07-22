@@ -627,39 +627,58 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
     return 0;
 }
 
-//D2Game.0x6FC8DC20
+//1.10f: D2Game.0x6FC8DC20
+//1.13c: D2Game.0x6FD0BAF0
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient)
+#else
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
+#endif
 {
-    if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
-    {
-        if (!pGame->bExpansion)
-        {
-            return PLRSAVE2ERROR_NOTEXPANSIONGAME;
-        }
-    }
-    else
-    {
-        if (pGame->bExpansion)
-        {
-            return PLRSAVE2ERROR_EXPANSIONGAME;
-        }
-    }
+	if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
+	{
+		if (!pGame->bExpansion)
+		{
+			return PLRSAVE2ERROR_NOTEXPANSIONGAME;
+		}
+	}
+	else
+	{
+		if (pGame->bExpansion)
+		{
+			return PLRSAVE2ERROR_EXPANSIONGAME;
+		}
+	}
 
-    if (dwFlags & CLIENTSAVEFLAG_LADDER)
-    {
-        if (!pGame->dwGameType)
-        {
-            return PLRSAVE2ERROR_NOTLADDERGAME;
-        }
-    }
-    else
-    {
-        if (pGame->dwGameType)
-        {
-            return PLRSAVE2ERROR_LADDERGAME;
-        }
-    }
-
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	// 1.13+
+	//if (gbHasServerCallback_6FD31C40)
+	{
+		//TODO:
+		//FILETIME tLastLadderStart;
+		//(*(void(__fastcall**)(FILETIME*))(gpServerCallbacks_6FD31C3C + 84))(&tLastLadderStart);
+		//const bool bCurrentLadder = CompareFileTime(&pClient->nSaveCreationTimestamp, &tLastLadderStart) > 0;
+		const bool bCurrentLadder = true;
+		if (dwFlags & CLIENTSAVEFLAG_LADDER && bCurrentLadder)
+#else
+		if (dwFlags & CLIENTSAVEFLAG_LADDER)
+#endif
+		{
+			if (!pGame->dwGameType)
+			{
+				return PLRSAVE2ERROR_NOTLADDERGAME;
+			}
+		}
+		else
+		{
+			if (pGame->dwGameType)
+			{
+				return PLRSAVE2ERROR_LADDERGAME;
+			}
+		}
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	}
+#endif
     if (dwFlags & CLIENTSAVEFLAG_HARDCORE)
     {
         if (dwFlags & CLIENTSAVEFLAG_DEAD)
@@ -703,7 +722,8 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
     return 0;
 }
 
-//D2Game.0x6FC8DD00
+//1.10f: D2Game.0x6FC8DD00
+//1.13c: D2Game.0x6FD0D250
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer)
 {
     *ppPlayer = nullptr;
@@ -1034,7 +1054,8 @@ int32_t __fastcall PLRSAVE2_ReadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint
     return 0;
 }
 
-//D2Game.0x6FC8E330
+//1.10f: D2Game.0x6FC8E330
+//1.13c: D2Game.0x6FD0CA60
 int32_t __fastcall PLRSAVE2_ReadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nSkills)
 {
     uint8_t* pData = *ppSection + 2;
