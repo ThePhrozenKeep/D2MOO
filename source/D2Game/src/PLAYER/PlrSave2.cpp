@@ -770,7 +770,11 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         return PLRSAVE2ERROR_NOT_COMPATIBLE;
     }
 
-    const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags, pClient);
+#else
+	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
+#endif
     if (nResult)
     {
         return nResult;
