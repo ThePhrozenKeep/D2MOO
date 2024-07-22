@@ -16,9 +16,7 @@
 #endif
 
 extern "C" {
-    __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
-    __declspec(dllexport)
     constexpr int __cdecl GetLastOrdinal() { return 11'307; }
     constexpr int GetOrdinalCount() { return GetLastOrdinal() - GetBaseOrdinal() + 1; }
 }
@@ -1356,7 +1354,6 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 
 extern "C" {
 
-__declspec(dllexport)
 PatchAction __cdecl GetPatchAction(int ordinal)
 {
 #ifdef DISABLE_ALL_PATCHES
@@ -1413,7 +1410,6 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
-__declspec(dllexport)
 constexpr int __cdecl GetExtraPatchActionsCount() { 
 #ifdef DISABLE_ALL_PATCHES
     return 0;
@@ -1422,10 +1418,16 @@ constexpr int __cdecl GetExtraPatchActionsCount() {
 #endif
 }
 
-__declspec(dllexport)
 ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
 {
     return &extraPatchActions[index];
+}
+
+__declspec(dllexport)
+PatchInformationFunctions __cdecl GetPatchInformationFunctions(const wchar_t* dllName)
+{
+	D2_MAYBE_UNUSED(dllName);
+	return { &GetBaseOrdinal, &GetLastOrdinal, &GetPatchAction, &GetExtraPatchActionsCount, &GetExtraPatchAction };
 }
 
 }
@@ -1438,3 +1440,5 @@ static_assert(std::is_same<decltype(GetPatchAction)*, GetPatchActionType>::value
 
 static_assert(std::is_same<decltype(GetExtraPatchActionsCount)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
 static_assert(std::is_same<decltype(GetExtraPatchAction)*, GetExtraPatchActionType>::value, "Ensure calling convention doesn't change");
+
+static_assert(std::is_same<decltype(GetPatchInformationFunctions)*, GetPatchInformationFunctionsType>::value, "Ensure calling convention doesn't change");
