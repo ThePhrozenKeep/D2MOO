@@ -4,48 +4,58 @@
 
 #include <D2Debugger.h>
 #include <D2Debugger.patch.common.h>
-#include <GAME/Game.h>
+#include <D2Game.h>
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
 #endif
 
 extern "C" {
-    __declspec(dllexport)
-    constexpr int __cdecl GetBaseOrdinal() { return 0; }
-    __declspec(dllexport)
-    constexpr int __cdecl GetLastOrdinal() { return -1; }
-    constexpr int GetOrdinalCount() { return GetLastOrdinal() - GetBaseOrdinal() + 1; }
 
-__declspec(dllexport)
-PatchAction __cdecl GetPatchAction(int ordinal)
-{
-    return PatchAction::Ignore;
-}
-
-static const int D2GameImageBase = 0x6FC30000;
-
-static ExtraPatchAction extraPatchActions[] = {
-    { 0x6FC386D0 - D2GameImageBase, &GAME_UpdateProgress_WithDebugger, PatchAction::FunctionReplaceOriginalByPatch, &GAME_UpdateProgress_Original},
+static ExtraPatchAction D2GameExtraPatchActions[] = {
+#ifdef D2_VERSION_110F
+	{ 0x6FC386D0 - D2GameImageBase, &GAME_UpdateProgress_WithDebugger, PatchAction::FunctionReplaceOriginalByPatch, &GAME_UpdateProgress_Original},
+#endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
-__declspec(dllexport)
-constexpr int __cdecl GetExtraPatchActionsCount() { return sizeof(extraPatchActions) / sizeof(ExtraPatchAction); }
+static const int D2ClientImageBase = 0x6FC30000;
 
-__declspec(dllexport)
-ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
+static ExtraPatchAction D2ClientExtraPatchActions[] = {
+	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
+};
+
+ExtraPatchAction* __cdecl D2ClientGetExtraPatchAction(int index)
 {
-    return &extraPatchActions[index];
+	return &D2ClientExtraPatchActions[index];
 }
 
+__declspec(dllexport)
+uint32_t __cdecl DllPreLoadHook(HookContext* ctx, const wchar_t* dllName)
+{
+	if (wcsicmp(dllName, L"D2Game.dll") == 0)
+	{
+		for (auto& p : D2GameExtraPatchActions)
+		{
+			ctx->ApplyPatchAction(ctx, p.originalDllOffset, p.patchData, p.action, (void**)p.detouredPatchedFunctionPointerStorageAddress);
+		}
+	}
+	else if (wcsicmp(dllName, L"D2Client.dll") == 0)
+	{
+		for (auto& p : D2ClientExtraPatchActions)
+		{
+			ctx->ApplyPatchAction(ctx, p.originalDllOffset, p.patchData, p.action, (void**)p.detouredPatchedFunctionPointerStorageAddress);
+		}
+	}
+	else
+	{
+		__debugbreak(); // Insert other dlls here if you added them in the .rc.
+		return {};
+	}
+	return 0;
 }
+
+} // extern "C"
 
 #include <type_traits>
-static_assert(std::is_same<decltype(GetBaseOrdinal)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
-static_assert(std::is_same<decltype(GetLastOrdinal)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
-static_assert(std::is_same<decltype(GetPatchAction)*, GetPatchActionType>::value, "Ensure calling convention doesn't change");
-
-
-static_assert(std::is_same<decltype(GetExtraPatchActionsCount)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
-static_assert(std::is_same<decltype(GetExtraPatchAction)*, GetExtraPatchActionType>::value, "Ensure calling convention doesn't change");
+static_assert(std::is_same<decltype(DllPreLoadHook)*, DllPreLoadHookType>::value, "Ensure calling convention doesn't change");
