@@ -2,6 +2,7 @@
 
 #include <Units/Units.h>
 
+#include "D2Config.h"
 #include "D2PacketDef.h"
 
 #pragma warning(push)
@@ -10,8 +11,6 @@
 #include <storm/hash/Hashkey.hpp>
 #include <storm/hash/TSExportTableSyncReuse.hpp>
 #include <storm/thread/CCritSect.hpp>
-
-#include "D2Config.h"
 #pragma warning(pop)
 
 struct D2ClientInfoStrc;
