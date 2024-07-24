@@ -627,7 +627,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
             exit(-1);
         }
 
-        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nCharSaveTransactionToken);
+        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter(&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nCharSaveTransactionToken);
         CLIENTS_CopySaveDataToClient(pClient, &pSaveData[2], nFileSize);
     }
 

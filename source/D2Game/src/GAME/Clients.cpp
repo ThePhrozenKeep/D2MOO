@@ -688,7 +688,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						pGame->nGameId,
 						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
 						pClientToRemove->tSaveFlags.nPackedValue, pClientToRemove->szName,
-						(const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
+						&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
 						0,
 						0,
 						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
