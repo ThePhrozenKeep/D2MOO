@@ -2649,7 +2649,7 @@ inline int INVENTORY_GetComponentArrayIndexFromArmTypeTxtRecord(D2ArmTypeTxt* pA
 }
 
 //D2Common.0x6FD912F0 (#10298)
-void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, uint8_t* pColor)
+void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pComponents, uint8_t* pColor)
 {
 	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
 	{
@@ -2676,7 +2676,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 					{
 						if (nComponent < NUM_COMPONENTS)
 						{
-							a2[nComponent] = -1;
+							pComponents[nComponent] = -1;
 							pColor[nComponent] = -1;
 						}
 					}
@@ -2692,9 +2692,9 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 						}
 						else if (nComponent < NUM_COMPONENTS)
 						{
-							a2[nComponent] = nIndex;
+							pComponents[nComponent] = nIndex;
 
-							sub_6FD917B0(pPlayer, a2, pColor, pItem);
+							sub_6FD917B0(pPlayer, pComponents, pColor, pItem);
 
 							uint8_t* pComponentColor = &pColor[nComponent];
 							if (ITEMS_GetColor(pPlayer, pItem, pComponentColor, 0))
@@ -2730,7 +2730,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 
 							if (nIndex < ARRAY_SIZE(gTxtComponentItemTypeMap))
 							{
-								a2[i] = nIndex;
+								pComponents[i] = nIndex;
 
 								uint8_t* pComponentColor = &pColor[i];
 								if (ITEMS_GetColor(pPlayer, pItem, pComponentColor, 0))
@@ -2744,13 +2744,13 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, ui
 							}
 							else
 							{
-								a2[i] = -1;
+								pComponents[i] = -1;
 								pColor[i] = -1;
 							}
 						}
 						else
 						{
-							a2[i] = -1;
+							pComponents[i] = -1;
 							pColor[i] = -1;
 						}
 					}

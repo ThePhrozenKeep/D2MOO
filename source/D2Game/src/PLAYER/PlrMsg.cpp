@@ -356,7 +356,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         }
         else if (pClientPlayerData->nStaminaPoints != (uint16_t)nStamina)
         {
-            sub_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
+            D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
 
             pClientPlayerData->nPosX = nUnitX;
             pClientPlayerData->nPosY = nUnitY;
@@ -384,7 +384,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
                 }
                 else
                 {
-                    sub_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
+                    D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
 
                     pClientPlayerData->nPosX = nUnitX;
                     pClientPlayerData->nPosY = nUnitY;
