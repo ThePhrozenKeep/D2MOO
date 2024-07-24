@@ -930,7 +930,7 @@ void __fastcall sub_6FC3D9A0(D2ClientStrc* pClient, uint16_t a2, uint16_t a3, ui
 }
 
 //D2Game.0x6FC3DA90
-void __fastcall sub_6FC3DA90(D2ClientStrc* pClient, uint16_t a2, uint16_t a3, uint16_t a4, uint8_t a5, uint8_t a6)
+void __fastcall D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(D2ClientStrc* pClient, uint16_t a2, uint16_t a3, uint16_t a4, uint8_t a5, uint8_t a6)
 {
     D2GSPacketSrv96 packet96 = {};
     D2BitBufferStrc bitBuffer = {};

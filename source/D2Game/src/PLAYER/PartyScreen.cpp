@@ -120,7 +120,7 @@ void __fastcall PARTYSCREEN_SendEventUpdateToClient(D2ClientStrc* pClient, int32
 }
 
 //D2Game.0x6FC7AD10
-void __fastcall D2GAME_PARTYSCREEN_Command2_6FC7AD10(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleIgnore(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
     PLAYERLIST_AllocPlayerList(pGame, pPlayer1, pPlayer2);
@@ -136,7 +136,7 @@ void __fastcall D2GAME_PARTYSCREEN_Command2_6FC7AD10(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC7AD70
-void __fastcall D2GAME_PARTYSCREEN_Command3_6FC7AD70(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleSquelch(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
     PLAYERLIST_AllocPlayerList(pGame, pPlayer1, pPlayer2);
@@ -318,7 +318,7 @@ void __fastcall PARTYSCREEN_PartyIterate_PlayerLeftParty(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FC7B1D0
-void __fastcall D2GAME_PARTYSCREEN_Command4_6FC7B1D0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleHostile(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer1);
     if (!pRoom || !DUNGEON_IsRoomInTown(pRoom) || STATLIST_GetUnitBaseStat(pPlayer1, STAT_LEVEL, 0) < 9 || STATLIST_GetUnitBaseStat(pPlayer2, STAT_LEVEL, 0) < 9)
@@ -430,9 +430,9 @@ int32_t __fastcall PARTYSCREEN_CommandHandler(D2GameStrc* pGame, D2UnitStrc* pUn
     {
         nullptr,
         PARTYSCREEN_ToggleLootability,
-        D2GAME_PARTYSCREEN_Command2_6FC7AD10,
-        D2GAME_PARTYSCREEN_Command3_6FC7AD70,
-        D2GAME_PARTYSCREEN_Command4_6FC7B1D0,
+        PARTYSCREEN_ToggleIgnore,
+        PARTYSCREEN_ToggleSquelch,
+        PARTYSCREEN_ToggleHostile,
         nullptr,
         PARTYSCREEN_ReceivedInvitation,
         PARTYSCREEN_InvitationCancelled,

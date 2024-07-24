@@ -2391,7 +2391,7 @@ int32_t __fastcall SKILLS_SrvDo111_FetishAura(D2GameStrc* pGame, D2UnitStrc* pUn
     for (int32_t i = 0; i < pUnitFindData->nIndex; ++i)
     {
         D2UnitStrc* pFoundUnit = pUnitFindData->pUnitsArray[i];
-        if (!sub_6FCBD900(pGame, pUnit, pFoundUnit) && pFoundUnit 
+        if (!sub_6FCBD900(pGame, pUnit, pFoundUnit) && pFoundUnit
             && (pFoundUnit->dwClassId >= MONSTER_FETISHBLOW1 && pFoundUnit->dwClassId <= MONSTER_FETISHBLOW5 || pFoundUnit->dwClassId >= MONSTER_FETISH1 && pFoundUnit->dwClassId <= MONSTER_FETISH5)
             && sub_6FD0B2B0(pGame, pUnit, pFoundUnit))
         {

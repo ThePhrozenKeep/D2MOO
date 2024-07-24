@@ -315,7 +315,7 @@ D2COMMON_DLL_DECL D2UnitGUID __stdcall INVENTORY_GetUnitGUIDFromCorpse(D2CorpseS
 //D2Common.0x6FDB18D0 (#10315)
 D2COMMON_DLL_DECL int __stdcall D2Common_10315(D2CorpseStrc* pCorpse);
 //D2Common.0x6FD912F0 (#10298)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* a2, uint8_t* pColor);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pComponents, uint8_t* pColor);
 //D2Common.0x6FD915C0
 void __fastcall INVENTORY_InitializeComponentArray();
 //D2Common.0x6FD917B0
