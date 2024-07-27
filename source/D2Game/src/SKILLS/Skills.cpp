@@ -2682,7 +2682,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD13220
-int32_t __fastcall sub_6FD13220(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
 {
     int32_t nDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
     if (nDelay <= 5)
@@ -2699,13 +2699,7 @@ int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
-        int32_t nPerDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
-        if (nPerDelay <= 5)
-        {
-            nPerDelay = 5;
-        }
-
-        const int32_t nExpireFrame = nPerDelay * (pGame->dwGameFrame + nPerDelay - 1) / nPerDelay + 1;
+		const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a5)
         {
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
@@ -2729,13 +2723,7 @@ int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
-        int32_t nPerDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
-        if (nPerDelay <= 5)
-        {
-            nPerDelay = 5;
-        }
-
-        const int32_t nExpireFrame = nPerDelay * (pGame->dwGameFrame + nPerDelay - 1) / nPerDelay + 1;
+        const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a6)
         {
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);

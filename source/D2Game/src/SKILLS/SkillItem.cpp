@@ -965,7 +965,7 @@ void __fastcall SKILLITEM_ActivateAura(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a5);
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel), a5, nSkillId);
+    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel), a5, nSkillId);
 
     if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_IMMEDIATE])
     {

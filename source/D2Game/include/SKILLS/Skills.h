@@ -221,7 +221,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FD12FD0
 int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD13220
-int32_t __fastcall sub_6FD13220(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel);
+int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD13260
 int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5);
 //D2Game.0x6FD13330

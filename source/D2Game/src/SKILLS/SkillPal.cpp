@@ -238,7 +238,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
     D2BasicAuraParamStrc args = {};
     args.nSkillId = nSkillId;
     args.nSkillLevel = nSkillLevel;
-    args.nDuration = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
+    args.nDuration = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
 
     if (pSkillsTxtRecord->nPassiveState > 0)
     {
@@ -491,7 +491,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
     const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
-    const int32_t nFrame = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
+    const int32_t nFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
     
     D2BasicAuraParamStrc args1 = {};
     args1.nSkillId = nSkillId;
@@ -1312,7 +1312,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
 
     const int32_t nManaCost = SKILLS_GetManaCosts(nSkillId, nSkillLevel);
     const int32_t nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
-    const int32_t nFrame = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
+    const int32_t nFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
     
     D2BasicAuraParamStrc args1 = {};
     args1.nSkillId = nSkillId;
@@ -1494,7 +1494,7 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
     D2BasicAuraParamStrc args1 = {};
     args1.nSkillId = nSkillId;
     args1.nSkillLevel = nSkillLevel;
-    args1.nDuration = sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
+    args1.nDuration = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel) - pGame->dwGameFrame + 1;
     args1.nAuraState = pSkillsTxtRecord->nAuraState;
 
     for (int32_t i = 0; i < 5; ++i)
