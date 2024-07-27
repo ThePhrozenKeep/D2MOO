@@ -487,6 +487,7 @@ D2EventTimerStrc* EVENT_AllocateTimer(D2GameStrc* pGame)
 	pEventTimerArray->pFreeEventTimerListHead = pNewTimer->pNextFreeEventTimer;
 
 	memset(pNewTimer, 0, sizeof(D2EventTimerStrc));
+	return pNewTimer;
 }
 
 
