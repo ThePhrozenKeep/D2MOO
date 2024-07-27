@@ -19,6 +19,7 @@ target_link_libraries(D2Debugger
   PRIVATE
     D2Common
     D2Game
+    D2Client
     imgui::imgui d3d9
 )
 # These are required because somehow loading a .dll that loads DirectX during LoadLibrary crashes.
