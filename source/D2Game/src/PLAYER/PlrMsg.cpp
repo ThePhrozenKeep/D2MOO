@@ -504,8 +504,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             {
                 D2Common_10153(pUnit->pDynamicPath);
                 AIGENERAL_SetAiControlParam(pUnit, 1, 40);
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 2, 0);
-                EVENT_SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 1, 0, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
             }
         }
 
@@ -1539,7 +1539,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x14_HandleOverheadChat_6FC84690(D2G
                 nTimeout = pGame->dwGameFrame + 1;
             }
 
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, nTimeout, 0, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, nTimeout, 0, 0);
         }
 
         return 0;
@@ -3698,8 +3698,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x59_MakeEntityMove_6FC88400(D2GameS
                         D2Common_10153(pNpc->pDynamicPath);
                     }
 
-                    D2GAME_EVENTS_Delete_6FC34840(pGame, pNpc, 2, 0);
-                    EVENT_SetEvent(pGame, pNpc, 2, pGame->dwGameFrame + 1, 0, 0);
+                    D2GAME_EVENTS_Delete_6FC34840(pGame, pNpc, EVENTTYPE_AITHINK, 0);
+                    EVENT_SetEvent(pGame, pNpc, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
                     AIGENERAL_SetAiControlParam(pNpc, 1, 40);
                     AIGENERAL_SetAiControlParam(pNpc, 2, v8);
                     AIGENERAL_SetAiControlParam(pNpc, 3, a3);
@@ -3841,7 +3841,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
     D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
     return 0;
 }
 
@@ -4097,8 +4097,8 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
 
     D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pMerc, 0, 0);
     //D2Game_10034_Return(0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMerc, UNITEVENTCALLBACK_STATREGEN, 0);
-    EVENT_SetEvent(pGame, pMerc, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMerc, EVENTTYPE_STATREGEN, 0);
+    EVENT_SetEvent(pGame, pMerc, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 
     return 1;
 }

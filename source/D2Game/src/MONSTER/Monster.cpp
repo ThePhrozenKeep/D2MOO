@@ -375,15 +375,15 @@ void __fastcall MONSTER_Free(D2GameStrc* pGame, D2UnitStrc* pMonster)
 //D2Game.0x6FC60CD0
 void __fastcall MONSTER_UpdateAiCallbackEvent(D2GameStrc* pGame, D2UnitStrc* pMonster)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
 
     if (pMonster)
     {
         const int32_t nAnimMode = pMonster->dwAnimMode;
         if (nAnimMode == MONMODE_NEUTRAL)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-            EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 2, 0, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+            EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 2, 0, 0);
         }
         else if (nAnimMode == MONMODE_DEAD || nAnimMode == MONMODE_DEATH)
         {
@@ -396,8 +396,8 @@ void __fastcall MONSTER_UpdateAiCallbackEvent(D2GameStrc* pGame, D2UnitStrc* pMo
         case MONSTER_WILLOWISP1:
         case MONSTER_BATDEMON1:
         case MONSTER_FROGDEMON1:
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-            EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 2, 0, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+            EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 2, 0, 0);
             break;
 
         default:
@@ -409,8 +409,8 @@ void __fastcall MONSTER_UpdateAiCallbackEvent(D2GameStrc* pGame, D2UnitStrc* pMo
 //D2Game.0x6FC60E50
 void __fastcall MONSTER_DeleteEvents(D2GameStrc* pGame, D2UnitStrc* pMonster)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_STATREGEN, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_STATREGEN, 0);
 }
 
 //D2Game.0x6FC60E70

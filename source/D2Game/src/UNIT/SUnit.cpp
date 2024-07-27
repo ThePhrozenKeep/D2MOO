@@ -198,7 +198,7 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
         break;
     }
 
-    SUNITEVENT_FreeTimerList(pGame, pUnit);
+    SUNITEVENT_FreeEventList(pGame, pUnit);
     D2GAME_SUNITMSG_FreeUnitMessages_6FCC6790(pUnit);
     UNITS_FreeUnit(pUnit);
 }
@@ -1311,8 +1311,8 @@ D2EventTimerStrc* __fastcall SUNIT_GetTimerFromUnit(D2UnitStrc* pUnit)
 //D2Game.0x6FCBCE50
 void __fastcall D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 }
 
 //D2Game.0x6FCBCE70
@@ -1366,13 +1366,13 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 case 2:
                 case 4:
                 {
-                    EVENT_SetEvent(pGame, pUnit, 0, nFrame, nEvent, nParam);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, nFrame, nEvent, nParam);
                     ++nParam;
                     break;
                 }
                 case 3:
                 {
-                    EVENT_SetEvent(pGame, pUnit, 0, nFrame, nEvent, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, nFrame, nEvent, 0);
                     break;
                 }
                 default:
@@ -1388,20 +1388,20 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
             ++nFrame;
         }
 
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, nFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, nFrame + 1, 0, 0);
         pUnit->nSeqCurrentFramePrecise = pGame->dwGameFrame << 8;
     }
     else
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
 //D2Game.0x6FCBCFD0
 void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     const int32_t nCalc = (100 - a3) * (pGame->dwGameFrame - (pUnit->nSeqCurrentFramePrecise >> 8)) / 100;
     pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
@@ -1443,7 +1443,7 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 
                 if (nEvent > 0 && nEvent <= 4)
                 {
-                    EVENT_SetEvent(pGame, pUnit, 0, nFrame, nEvent, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, nFrame, nEvent, 0);
                 }
 
                 ++nIndex;
@@ -1457,11 +1457,11 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
             ++nFrame;
         }
 
-        EVENT_SetEvent(pGame, pUnit, 1, nFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, nFrame + 1, 0, 0);
     }
     else
     {
-        EVENT_SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -1473,8 +1473,8 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         return;
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 0, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     const int32_t nCalc = pGame->dwGameFrame - (pUnit->nSeqCurrentFramePrecise >> 8) - a3;
     pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - nCalc) << 8;
@@ -1516,7 +1516,7 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 
                 if (nEvent > 0 && nEvent <= 4)
                 {
-                    EVENT_SetEvent(pGame, pUnit, 0, nFrame, nEvent, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, nFrame, nEvent, 0);
                 }
 
                 ++nIndex;
@@ -1530,19 +1530,19 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
             ++nFrame;
         }
 
-        EVENT_SetEvent(pGame, pUnit, 1, nFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, nFrame + 1, 0, 0);
     }
     else
     {
-        EVENT_SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
 //D2Game.0x6FCBD260
 void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     pUnit->nSeqCurrentFramePrecise = (pGame->dwGameFrame - a3) << 8;
 
@@ -1581,7 +1581,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
 
                 if (nEvent > 0 && nEvent <= 4)
                 {
-                    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, nFrame + 1, nEvent, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, nFrame + 1, nEvent, 0);
                 }
 
                 ++nIndex;
@@ -1596,19 +1596,19 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
             ++nFrame;
         }
 
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, nFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, nFrame + 1, 0, 0);
     }
     else
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
 //D2Game.0x6FCBD3A0
 void __fastcall sub_6FCBD3A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-    sub_6FC35570(pGame, pUnit, 0, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    sub_6FC35570(pGame, pUnit, EVENTTYPE_MODECHANGE, 0, 0);
 }
 
 //D2Game.0x6FCBD3D0
@@ -2118,7 +2118,7 @@ void __fastcall sub_6FCBDE90(D2UnitStrc* pUnit, int32_t bSetUninterruptable)
 
     if (pUnit->dwUnitType == UNIT_MONSTER)
     {
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
     }
 }
 
@@ -2138,7 +2138,7 @@ int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 
     pPlayerData->unk0xA8[40] = 0;
     pPlayerData->unk0xA8[41] = 0;
-    sub_6FC349B0(pGame, pPlayer, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, sub_6FCBDF90);
+    sub_6FC349B0(pGame, pPlayer, EVENTTYPE_REMOVESKILLCOOLDOWN, sub_6FCBDF90);
     return 1;
 }
 
@@ -2209,7 +2209,7 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRo
             pPlayerData->unk0xA0 = 0;
         }
 
-        j_D2GAME_InitTimer_6FC351D0(pGame, pUnit, UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, sub_6FCBDF90, 0, 0);
+        j_D2GAME_InitTimer_6FC351D0(pGame, pUnit, EVENTTYPE_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, sub_6FCBDF90, 0, 0);
         sub_6FC7E310(pGame, pUnit, coords.nX, coords.nY);
     }
     else

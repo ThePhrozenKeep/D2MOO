@@ -138,8 +138,8 @@ void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2
 		nAIDelay = 15;
 	}
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-	EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nAIDelay + pGame->dwGameFrame, 0, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+	EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nAIDelay + pGame->dwGameFrame, 0, 0);
 }
 
 //D2Game.0x6FCBE420
@@ -659,7 +659,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 	if ((pAttacker->dwUnitType == UNIT_PLAYER || nHirelingTypeId) && !(pDamage->wResultFlags & DAMAGERESULTFLAG_32))
 	{
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_ATTACKEDINMELEE, pDefender, pAttacker, pDamage);
+		SUNITEVENT_Trigger(pGame, UNITEVENT_ATTACKEDINMELEE, pDefender, pAttacker, pDamage);
 	}
 
 	if (pDamage->nConvType)
@@ -861,7 +861,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		}
 	}
 
-	SUNITEVENT_EventFunc_Handler(pGame, EVENT_ABSORBDAMAGE, pDefender, pAttacker, pDamage);
+	SUNITEVENT_Trigger(pGame, UNITEVENT_ABSORBDAMAGE, pDefender, pAttacker, pDamage);
 
 	if (damageInfo.pDamage->dwColdLen > 0 || damageInfo.pDamage->dwFrzLen > 0)
 	{
@@ -1133,15 +1133,15 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 			{
 				if (!(pDamage->dwHitFlags & DAMAGEHITFLAG_128))
 				{
-					SUNITEVENT_EventFunc_Handler(pGame, EVENT_DOMISSILEDMG, pAttacker, pDefender, pDamage);
+					SUNITEVENT_Trigger(pGame, UNITEVENT_DOMISSILEDMG, pAttacker, pDefender, pDamage);
 				}
-				SUNITEVENT_EventFunc_Handler(pGame, EVENT_DAMAGEDBYMISSILE, pDefender, pAttacker, pDamage);
+				SUNITEVENT_Trigger(pGame, UNITEVENT_DAMAGEDBYMISSILE, pDefender, pAttacker, pDamage);
 			}
 		}
 		else
 		{
-			SUNITEVENT_EventFunc_Handler(pGame, EVENT_DOMELEEDMG, pAttacker, pDefender, pDamage);
-			SUNITEVENT_EventFunc_Handler(pGame, EVENT_DAMAGEDINMELEE, pDefender, pAttacker, pDamage);
+			SUNITEVENT_Trigger(pGame, UNITEVENT_DOMELEEDMG, pAttacker, pDefender, pDamage);
+			SUNITEVENT_Trigger(pGame, UNITEVENT_DAMAGEDINMELEE, pDefender, pAttacker, pDamage);
 		}
 	}
 
@@ -1356,12 +1356,12 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 			if (pStatList)
 			{
 				STATLIST_SetExpireFrame(pStatList, nStunEndFrame);
-				EVENT_SetEvent(pAttacker->pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nStunEndFrame, 0, 0);
+				EVENT_SetEvent(pAttacker->pGame, pDefender, EVENTTYPE_REMOVESTATE, nStunEndFrame, 0, 0);
 			}
 			else
 			{
 				D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pAttacker->pGame->pMemoryPool, 2u, nStunEndFrame, pAttacker->dwUnitType, pAttacker->dwUnitId);
-				EVENT_SetEvent(pAttacker->pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nStunEndFrame, 0, 0);
+				EVENT_SetEvent(pAttacker->pGame, pDefender, EVENTTYPE_REMOVESTATE, nStunEndFrame, 0, 0);
 				STATLIST_SetState(pNewStatList, STATE_STUNNED);
 				STATLIST_SetStatRemoveCallback(pNewStatList, sub_6FD10E50);
 				D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
@@ -1386,8 +1386,8 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		{
 			if (STATLIST_UnitGetStatValue(pDefender, STAT_HPREGEN, 0))
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, 0);
-				EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
+				EVENT_SetEvent(pGame, pDefender, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 			}
 			sub_6FCF8DD0(pDefender);
 		}
@@ -1395,8 +1395,8 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 	if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_32) && pDamage->wResultFlags & DAMAGERESULTFLAG_WILLDIE)
 	{
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILLED, pDefender, pAttacker, pDamage);
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILL, pAttacker, pDefender, pDamage);
+		SUNITEVENT_Trigger(pGame, UNITEVENT_KILLED, pDefender, pAttacker, pDamage);
+		SUNITEVENT_Trigger(pGame, UNITEVENT_KILL, pAttacker, pDefender, pDamage);
 	}
 }
 
@@ -1465,8 +1465,8 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 	D2GameStrc* pGame = pAttacker->pGame;
 	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, 0);
-		EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
+		EVENT_SetEvent(pGame, pDefender, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 	}
 
 	const int32_t nExpireFrame = nPoisonLength + pGame->dwGameFrame;
@@ -1475,7 +1475,7 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 		if (-STATLIST_GetStatValue(pStatList, STAT_HPREGEN, 0) <= nPoisonDamage)
 		{
 			D2COMMON_10476(pStatList, nExpireFrame);
-			EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+			EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 			STATLIST_SetStatIfListIsValid(pStatList, STAT_HPREGEN, -nPoisonDamage, 0);
 		}
 		return;
@@ -1492,7 +1492,7 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 	}
 
 	D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
-	EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nPoisonDamage, 0);
 	STATLIST_SetState(pNewStatList, STATE_POISON);
@@ -1512,8 +1512,8 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 	D2GameStrc* pGame = pAttacker->pGame;
 	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, 0);
-		EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
+		EVENT_SetEvent(pGame, pDefender, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 	}
 
 	const int32_t nExpireFrame = nBurnLength + pGame->dwGameFrame;
@@ -1522,7 +1522,7 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 		if (-STATLIST_GetStatValue(pStatList, STAT_HPREGEN, 0) <= nBurnDamage)
 		{
 			D2COMMON_10476(pStatList, nExpireFrame);
-			EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+			EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 			STATLIST_SetStatIfListIsValid(pStatList, STAT_HPREGEN, -nBurnDamage, 0);
 		}
 		return;
@@ -1539,7 +1539,7 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 	}
 
 	D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
-	EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nBurnDamage, 0);
 	STATLIST_SetState(pNewStatList, STATE_BURNING);
@@ -1581,7 +1581,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 		if (STATLIST_GetExpireFrame(pStatList) < nExpireFrame)
 		{
 			STATLIST_SetExpireFrame(pStatList, nExpireFrame);
-			EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+			EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 		}
 	}
 	else
@@ -1597,7 +1597,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 		}
 
 		D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
-		EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+		EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 		STATLIST_SetState(pNewStatList, STATE_COLD);
 		STATLIST_SetStatRemoveCallback(pNewStatList, SUNITDMG_RemoveShatterState);
@@ -1720,15 +1720,15 @@ void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDe
 		D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
 	}
 
-	EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 	if (!pDefender || pDefender->dwUnitType != UNIT_MONSTER)
 	{
 		FOG_DisplayWarning("UnitGetType (hTarget) == UNIT_MONSTER", __FILE__, __LINE__);
 	}
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, UNITEVENTCALLBACK_AITHINK, 0);
-	EVENT_SetEvent(pGame, pDefender, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + nFreezeLength + 1, 0, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_AITHINK, 0);
+	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_AITHINK, pGame->dwGameFrame + nFreezeLength + 1, 0, 0);
 }
 
 //D2Game.0x6FCC0E20
@@ -2370,8 +2370,8 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 		}
 	}
 
-	SUNITEVENT_EventFunc_Handler(pGame, EVENT_DOMELEEATTACK, pAttacker, pDefender, &damageCopy);
-	SUNITEVENT_EventFunc_Handler(pGame, EVENT_ATTACKEDINMELEE, pDefender, pAttacker, &damageCopy);
+	SUNITEVENT_Trigger(pGame, UNITEVENT_DOMELEEATTACK, pAttacker, pDefender, &damageCopy);
+	SUNITEVENT_Trigger(pGame, UNITEVENT_ATTACKEDINMELEE, pDefender, pAttacker, &damageCopy);
 
 	if (damageCopy.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
 	{
@@ -3127,7 +3127,7 @@ void __fastcall SUNITDMG_AddExperienceForPlayer(D2GameStrc* pGame, D2UnitStrc* p
 	if (nOldLevel != DATATBLS_GetCurrentLevelFromExp(pUnit->dwClassId, nNewExperience))
 	{
 		PLAYERSTATS_LevelUp(pGame, pUnit);
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_LEVELUP, pUnit, 0, 0);
+		SUNITEVENT_Trigger(pGame, UNITEVENT_LEVELUP, pUnit, 0, 0);
 	}
 }
 
@@ -3221,7 +3221,7 @@ void __fastcall SUNITDMG_AddExperienceForHireling(D2GameStrc* pGame, D2UnitStrc*
 		MONSTERAI_UpdateMercStatsAndSkills(pGame, pPlayer, pHireling, nNewLevel);
 		MONSTERAI_SendMercStats(pGame, pPlayer, 0);
 		SUNIT_AttachSound(pHireling, 0x5Bu, pPlayer);
-		SUNITEVENT_EventFunc_Handler(pGame, EVENT_LEVELUP, pHireling, 0, 0);
+		SUNITEVENT_Trigger(pGame, UNITEVENT_LEVELUP, pHireling, 0, 0);
 	}
 }
 

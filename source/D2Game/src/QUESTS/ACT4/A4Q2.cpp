@@ -1092,7 +1092,7 @@ int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 7), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 7), 0, 0);
 
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A4Q2_DIABLO);
 	if (!pQuestData)
@@ -1196,7 +1196,7 @@ void __fastcall ACT4Q2_SpawnSealBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	if (!QUESTS_SpawnMonster(pGame, pUnit, pSealCoords, 2, nMonId))
 	{
-		EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pGame->dwGameFrame + 10, 0, 0);
+		EVENT_SetEvent(pGame, pUnit, EVENTTYPE_QUESTFN, pGame->dwGameFrame + 10, 0, 0);
 	}
 }
 

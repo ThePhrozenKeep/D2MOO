@@ -585,7 +585,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
 
     if (!STATES_CheckState(pUnit, STATE_PREVENTHEAL) || nHpRegen < 0)
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 
         if (nHpRegen)
         {
@@ -604,7 +604,7 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
             if (nNewHp > nMaxHp)
             {
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_STATREGEN, 0);
                 nNewHp = nMaxHp;
             }
 
@@ -656,18 +656,18 @@ void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2Uni
                 else
                 {
                     SUNITDMG_KillMonster(pGame, pUnit, pStatListOwner, 1);
-                    SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILLED, pUnit, pStatListOwner, 0);
+                    SUNITEVENT_Trigger(pGame, UNITEVENT_KILLED, pUnit, pStatListOwner, 0);
 
                     if (pStatListOwner)
                     {
-                        SUNITEVENT_EventFunc_Handler(pGame, EVENT_KILL, pStatListOwner, pUnit, 0);
+                        SUNITEVENT_Trigger(pGame, UNITEVENT_KILL, pStatListOwner, pUnit, 0);
                     }
                 }
             }
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_STATREGEN, 0);
         }
     }
 }
@@ -855,7 +855,7 @@ void __fastcall sub_6FC63A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC63B20
 int32_t __fastcall D2GAME_RemoveModeChangeEventCallback_6FC63B20(D2GameStrc* pGame, D2UnitStrc* pMonster)
 {
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_MODECHANGE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_MODECHANGE, 0);
     return 1;
 }
 
@@ -995,7 +995,7 @@ void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
             D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), 0x3C01u, 0);
             if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pRoom && AITACTICS_UseSkill(pGame, pMonster, pMonStatsTxtRecord->nSkillMode[0], pMonStatsTxtRecord->nSkill[0], 0, pCoord.nX, pCoord.nY))
             {
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, 2, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
             }
             else
             {
@@ -1011,7 +1011,7 @@ void __fastcall sub_6FC641D0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
     if (pAttacker)
     {
         SUNIT_SetCombatMode(pGame, pAttacker, 12);
-        SUNITEVENT_EventFunc_Handler(pGame, EVENT_DEATH, pAttacker, 0, 0);
+        SUNITEVENT_Trigger(pGame, UNITEVENT_DEATH, pAttacker, 0, 0);
 
         D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
         if (pMonStatsTxtRecord)
@@ -1068,8 +1068,8 @@ int32_t __fastcall sub_6FC642C0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
     }
 
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 12);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pModeChange->pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pModeChange->pUnit, UNITEVENTCALLBACK_PERIODICSTATS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pModeChange->pUnit, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pModeChange->pUnit, EVENTTYPE_PERIODICSTATS, 0);
 
     return 1;
 }
@@ -1079,11 +1079,11 @@ int32_t __fastcall sub_6FC64310(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 1);
 
-    if (EVENT_GetEventFrame(pGame, pModeChange->pUnit, UNITEVENTCALLBACK_AITHINK) <= (int32_t)pGame->dwGameFrame)
+    if (EVENT_GetEventFrame(pGame, pModeChange->pUnit, EVENTTYPE_AITHINK) <= (int32_t)pGame->dwGameFrame)
     {
         if (STATES_CheckState(pModeChange->pUnit, STATE_STUNNED))
         {
-            EVENT_SetEvent(pGame, pModeChange->pUnit, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 45, 0, 0);
+            EVENT_SetEvent(pGame, pModeChange->pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 45, 0, 0);
             return 1;
         }
 
@@ -1107,7 +1107,7 @@ int32_t __fastcall sub_6FC64310(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
                     nAiDelay = 15;
                 }
 
-                EVENT_SetEvent(pGame, pModeChange->pUnit, UNITEVENTCALLBACK_AITHINK, nAiDelay + pGame->dwGameFrame, 0, 0);
+                EVENT_SetEvent(pGame, pModeChange->pUnit, EVENTTYPE_AITHINK, nAiDelay + pGame->dwGameFrame, 0, 0);
             }
         }
     }
@@ -1139,7 +1139,7 @@ int32_t __fastcall sub_6FC643E0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 int32_t __fastcall sub_6FC64410(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 11);
-    EVENT_SetEvent(pGame, pModeChange->pUnit, 2, pGame->dwGameFrame + 15, 0, 0);
+    EVENT_SetEvent(pGame, pModeChange->pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
     return 1;
 }
 
@@ -1529,11 +1529,11 @@ void __fastcall sub_6FC64CD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
             {
                 if (!STATES_CheckState(pUnit, STATE_STUNNED))
                 {
-                    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 15, 0, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
                 }
                 else
                 {
-                    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 45, 0, 0);
+                    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 45, 0, 0);
                 }
                 return;
             }
@@ -1550,7 +1550,7 @@ void __fastcall sub_6FC64CD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     else
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -2097,7 +2097,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction07_6FC658B0(D2GameStrc* pGame, D2UnitS
     const int32_t nTimeout = CHAT_GetTimeoutFromHoverMsg(pUnit->pHoverText);
     if (nTimeout > pGame->dwGameFrame)
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, nTimeout, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, nTimeout, 0, 0);
     }
     else
     {

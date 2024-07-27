@@ -832,7 +832,7 @@ int32_t __fastcall OBJECTS_OperateFunction31_GidbinnDecoy(D2ObjOperateFnStrc* pO
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 	pQuestDataEx->bGidbinnObjectActivated = 1;
 	if (!pQuestDataEx->bSpawnTimerStarted)
@@ -971,7 +971,7 @@ void __fastcall ACT3Q3_SetAltarMode(D2GameStrc* pGame)
 
 	UNITS_ChangeAnimMode(pAltar, OBJMODE_OPERATING);
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pAltar->dwClassId);
-	EVENT_SetEvent(pGame, pAltar, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pGame->dwGameFrame + 1, 0, 0);
+	EVENT_SetEvent(pGame, pAltar, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pGame->dwGameFrame + 1, 0, 0);
 	pQuestDataEx->nAltarObjectMode = OBJMODE_OPENED;
 }
 

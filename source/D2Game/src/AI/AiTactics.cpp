@@ -261,8 +261,8 @@ void __fastcall AITACTICS_Idle(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nFr
 		nFrames = 1;
 	}
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-	EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+	EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
 }
 
 //D2Game.0x6FCD0150
@@ -273,11 +273,11 @@ void __fastcall sub_6FCD0150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nFram
 		nFrames = 1;
 	}
 
-	const uint32_t dwEventFrame = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_AITHINK);
+	const uint32_t dwEventFrame = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_AITHINK);
 	if (!dwEventFrame || dwEventFrame == pGame->dwGameFrame || dwEventFrame >= nFrames + pGame->dwGameFrame)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-		EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+		EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
 	}
 }
 
@@ -340,7 +340,7 @@ int32_t __fastcall AITACTICS_MoveToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	if (nFlags & 4)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	if (nFlags & 1)
@@ -661,7 +661,7 @@ void __fastcall AITACTICS_AddMessage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Uni
 				pUnit->dwFlags |= UNITFLAG_HASTXTMSG;
 			}
 
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, CHAT_GetTimeoutFromHoverMsg(pHoverMsg), 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, CHAT_GetTimeoutFromHoverMsg(pHoverMsg), 0, 0);
 		}
 	}
 }

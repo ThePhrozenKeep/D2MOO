@@ -434,7 +434,7 @@ void __fastcall MONSTERUNIQUE_UMod41_AlwaysRun(D2UnitStrc* pUnit, int32_t nUMod,
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pGame)
     {
-        EVENT_SetEvent(pUnit->pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, pUnit->pGame->dwGameFrame + 75, 0, 0);
+        EVENT_SetEvent(pUnit->pGame, pUnit, EVENTTYPE_MONUMOD, pUnit->pGame->dwGameFrame + 75, 0, 0);
     }
 }
 
@@ -1042,7 +1042,7 @@ void __fastcall MONSTERUNIQUE_FireEnchantedModeChange(D2GameStrc* pGame, D2UnitS
 {
     if (bUnique && (!pBoss || pBoss->dwAnimMode == MONMODE_DEATH))
     {
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
     }
 }
 
@@ -1299,7 +1299,7 @@ void __fastcall MONSTERUNIQUE_ScarabModeChange(D2GameStrc* pGame, D2UnitStrc* pB
 {
     if (!pBoss || pBoss->dwAnimMode == MONMODE_GETHIT || pBoss->dwAnimMode == MONMODE_DEATH)
     {
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 2, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 2, 0, 0);
     }
 }
 
@@ -1638,7 +1638,7 @@ void __fastcall MONSTERUNIQUE_LightningEnchantedModeChange(D2GameStrc* pGame, D2
 {
     if (bUnique && pBoss && pBoss->dwAnimMode == MONMODE_GETHIT)
     {
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 2, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 2, 0, 0);
     }
 }
 
@@ -1647,7 +1647,7 @@ void __fastcall MONSTERUNIQUE_ColdEnchantedModeChange(D2GameStrc* pGame, D2UnitS
 {
     if ((bUnique || nUMod != 18) && (!pBoss || pBoss->dwAnimMode == MONMODE_DEATH))
     {
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
     }
 }
 
@@ -1665,11 +1665,11 @@ void __fastcall sub_6FC6DD20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
     }
 
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MONUMOD, 0);
 
     if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pMonStatsTxtRecord->wAiParam[7][pGame->nDifficulty])
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 10 * pMonStatsTxtRecord->wAiParam[0][pGame->nDifficulty] + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 10 * pMonStatsTxtRecord->wAiParam[0][pGame->nDifficulty] + 1, 0, 0);
     }
 }
 
@@ -1682,7 +1682,7 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
     }
 
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
     if (!SUNIT_IsDead(pUnit) || STATES_CheckStateMaskUdeadOnUnit(pUnit))
     {
@@ -1701,7 +1701,7 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
 
     if (COLLISION_CheckMaskWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1, 0x3C01u))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 10 * pMonStatsTxtRecord->wAiParam[0][pGame->nDifficulty] + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 10 * pMonStatsTxtRecord->wAiParam[0][pGame->nDifficulty] + 1, 0, 0);
     }
     else if (AIGENERAL_GetAiControlParam(pUnit, 1) < 2 && D2COMMON_11017_CheckUnitIfConsumeable(pUnit, 0))
     {
@@ -1711,8 +1711,8 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
             pUnit->dwFlags &= 0xFBFDFFFFu;
             const int32_t nParam = AIGENERAL_GetAiControlParam(pUnit, 1);
             AIGENERAL_SetAiControlParam(pUnit, 1, nParam + 1);
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 51, 0, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 51, 0, 0);
         }
     }
 }
@@ -1736,7 +1736,7 @@ void __fastcall sub_6FC6DFC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
 
     if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 3, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 3, 0, 0);
     }
     else
     {
@@ -1837,7 +1837,7 @@ void __fastcall MONSTERUNIQUE_SuicideModeChange(D2GameStrc* pGame, D2UnitStrc* p
 {
     if (!pBoss || pBoss->dwAnimMode == MONMODE_DEATH || pBoss->dwAnimMode == MONMODE_DEAD)
     {
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
         return;
     }
 
@@ -1846,7 +1846,7 @@ void __fastcall MONSTERUNIQUE_SuicideModeChange(D2GameStrc* pGame, D2UnitStrc* p
         D2ModeChangeStrc modeChange = {};
         MONSTERMODE_GetModeChangeInfo(pBoss, MONMODE_DEATH, &modeChange);
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
-        EVENT_SetEvent(pGame, pBoss, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
+        EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
     }
 }
 
@@ -1924,7 +1924,7 @@ void __fastcall sub_6FC6E730(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
     }
 
     MONSTER_UpdateAiCallbackEvent(pGame, pUnit);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 75, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 75, 0, 0);
 }
 
 //D2Game.0x6FC6E770

@@ -1227,11 +1227,11 @@ void __fastcall sub_6FC91050(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), 0xCu);
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer2, __FILE__, __LINE__), 0xCu);
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer1, UNITEVENTCALLBACK_UPDATETRADE, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer2, UNITEVENTCALLBACK_UPDATETRADE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer1, EVENTTYPE_UPDATETRADE, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer2, EVENTTYPE_UPDATETRADE, 0);
 
-    EVENT_SetEvent(pGame, pPlayer1, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
-    EVENT_SetEvent(pGame, pPlayer2, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer1, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer2, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 }
 
 //D2Game.0x6FC91250
@@ -1602,8 +1602,8 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 pPlayerData->dwTradeState = 9;
                 pInteractPlayerData->dwTradeState = 9;
 
-                EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
-                EVENT_SetEvent(pGame, pInteractPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+                EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+                EVENT_SetEvent(pGame, pInteractPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 
                 if (sub_6FC92A90(pGame, pPlayer, pInteractPlayer) && sub_6FC92A90(pGame, pInteractPlayer, pPlayer))
                 {
@@ -2107,8 +2107,8 @@ void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     sub_6FC4B830(pGame, pPlayer1);
     sub_6FC4B830(pGame, pPlayer2);
 
-    EVENT_SetEvent(pGame, pPlayer1, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
-    EVENT_SetEvent(pGame, pPlayer2, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer1, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer2, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 }
 
 //D2Game.0x6FC92A90
@@ -2221,7 +2221,7 @@ void __fastcall PLRTRADE_StopAllPlayerInteractions(D2GameStrc* pGame, D2UnitStrc
     }
 
     UNITS_GetPlayerData(pPlayer)->dwTradeState = 9;
-    EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 
     sub_6FC90AE0(pGame, pPlayer, 0);
     sub_6FC90AE0(pGame, pOtherPlayer, 1);
@@ -2233,7 +2233,7 @@ void __fastcall PLRTRADE_StopAllPlayerInteractions(D2GameStrc* pGame, D2UnitStrc
     SUNIT_ResetInteractInfo(pOtherPlayer);
 
     UNITS_GetPlayerData(pOtherPlayer)->dwTradeState = 9;
-    EVENT_SetEvent(pGame, pOtherPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pOtherPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 }
 
 //D2Game.0x6FC92EE0
@@ -2489,8 +2489,8 @@ int32_t __fastcall sub_6FC93430(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     pPlayerData1->dwTradeState = 7;
     pPlayerData2->dwTradeState = 7;
 
-    EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
-    EVENT_SetEvent(pGame, pOtherPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pOtherPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), UPDATEUI_OPENTRADE);
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pOtherPlayer, __FILE__, __LINE__), UPDATEUI_OPENTRADE);
@@ -2540,7 +2540,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     case 5:
     {
         pPlayerData->dwTradeState = 6;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
         return;
     }
     case 6:
@@ -2555,7 +2555,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     case 7:
     {
         pPlayerData->dwTradeState = 8;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
         return;
     }
     case 8:
@@ -2568,7 +2568,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
         if (pTrade->nNextUpdateTick)
         {
             pPlayerData->dwTradeState = 11;
-            EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 125, 0, 0);
+            EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 125, 0, 0);
         }
         else
         {
@@ -2579,7 +2579,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     case 9:
     {
         pPlayerData->dwTradeState = 10;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
         return;
     }
     case 10:
@@ -2595,7 +2595,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     {
         if (pTrade->nNextUpdateTick >= GetTickCount())
         {
-            EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 25, 0, 0);
+            EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 25, 0, 0);
             return;
         }
 
@@ -2613,7 +2613,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     {
         FOG_TraceF("TRADE", "  time: %d", pGame->dwGameFrame);
         pPlayerData->dwTradeState = 13;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 4, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 4, 0, 0);
         return;
     }
     case 13:
@@ -2632,7 +2632,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
     case 14:
     {
         pPlayerData->dwTradeState = 15;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
         return;
     }
     case 15:
@@ -2643,7 +2643,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
         }
 
         pPlayerData->dwTradeState = 16;
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 5, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 5, 0, 0);
         return;
     }
     case 16:
@@ -2677,7 +2677,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
             }
         }
 
-        EVENT_SetEvent(pGame, pPlayer, UNITEVENTCALLBACK_UPDATETRADE, pGame->dwGameFrame + 5, 0, 0);
+        EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 5, 0, 0);
         return;
     }
     default:

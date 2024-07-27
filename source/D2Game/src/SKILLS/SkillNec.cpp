@@ -219,7 +219,7 @@ void __fastcall sub_6FD0B250(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* 
     if (pUnit)
     {
         D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
-        SUNITEVENT_FreeTimer(pGame, pUnit, 1, nState);
+        SUNITEVENT_Unregister(pGame, pUnit, 1, nState);
 
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
@@ -410,13 +410,13 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
 
     if (v2->nAuraEvent[0] >= 0 && v2->nAuraEventFunc[0] > 0)
     {
-        SUNITEVENT_FreeTimer(v2->pGame, pUnit, 1, v2->nAuraTargetState);
+        SUNITEVENT_Unregister(v2->pGame, pUnit, 1, v2->nAuraTargetState);
         
         for (int32_t i = 0; i < 3; ++i)
         {
             if (v2->nAuraEvent[0] >= 0 && v2->nAuraEventFunc[0] > 0)
             {
-                sub_6FD156A0(v2->pGame, pUnit, v2->nAuraEvent[i], v2->nSkillId, v2->nSkillLevel, v2->nAuraEventFunc[i], 1, v2->nAuraTargetState);
+                sub_6FD156A0(v2->pGame, pUnit, D2C_UnitEventTypes(v2->nAuraEvent[i]), v2->nSkillId, v2->nSkillLevel, v2->nAuraEventFunc[i], 1, v2->nAuraTargetState);
             }
         }
     }
@@ -641,7 +641,7 @@ int32_t __fastcall sub_6FD0BDA0(D2UnitStrc* pUnit, void* pArg)
         }
 
         sub_6FC61E30(pUnit, nParam, pParam->nUnitGUID);
-        EVENT_SetEvent(pParam->pGame, pUnit, 10, pParam->nLength + pParam->pGame->dwGameFrame, 0, 0);
+        EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nLength + pParam->pGame->dwGameFrame, 0, 0);
         return 1;
     }
 
@@ -814,7 +814,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
     sub_6FCBDD30(pUnit, 1u, 1);
     sub_6FC40280(pParam->pGame, pUnit, 0, 9);
     sub_6FC61E30(pUnit, 3, 0);
-    EVENT_SetEvent(pParam->pGame, pUnit, UNITEVENTCALLBACK_AIRESET, pParam->nDuration + pParam->pGame->dwGameFrame, 0, 0);
+    EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nDuration + pParam->pGame->dwGameFrame, 0, 0);
 
     return 1;
 }
@@ -953,14 +953,14 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
                 if (pItemStatCostTxtRecord->wItemEvent[0] > 0)
                 {
                     const int32_t nPetGUID = pPet ? pPet->dwUnitId : -1;
-                    if (!SUNITEVENT_GetTimer(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->nPassiveStat[i]))
+                    if (!SUNITEVENT_GetEvent(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->nPassiveStat[i]))
                     {
                         const int32_t nLayer_StatId = pSkillsTxtRecord->nPassiveStat[i] << 16;
-                        sub_6FD156A0(pGame, pPet, pItemStatCostTxtRecord->wItemEvent[0], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nPetGUID);
+                        sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nPetGUID);
 
                         if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                         {
-                            sub_6FD156A0(pGame, pPet, pItemStatCostTxtRecord->wItemEvent[1], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nPetGUID);
+                            sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nPetGUID);
                         }
                     }
                 }
@@ -1003,13 +1003,13 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
                     if (pItemStatCostTxtRecord->wItemEvent[0] > 0)
                     {
                         const int32_t nPetGUID = pPet ? pPet->dwUnitId : -1;
-                        if (!SUNITEVENT_GetTimer(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->wAuraStat[i]))
+                        if (!SUNITEVENT_GetEvent(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->wAuraStat[i]))
                         {
                             const int32_t nLayer_StatId = pSkillsTxtRecord->wAuraStat[i] << 16;
-                            sub_6FD156A0(pGame, pPet, pItemStatCostTxtRecord->wItemEvent[0], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nPetGUID);
+                            sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nPetGUID);
                             if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                             {
-                                sub_6FD156A0(pGame, pPet, pItemStatCostTxtRecord->wItemEvent[1], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nPetGUID);
+                                sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nPetGUID);
                             }
                         }
                     }
@@ -1052,7 +1052,7 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
 
     if (pSkillsTxtRecord->wAuraEvent[0] >= 0)
     {
-        SUNITEVENT_FreeTimer(pGame, pPet, 1, pSkillsTxtRecord->nAuraState);
+        SUNITEVENT_Unregister(pGame, pPet, 1, pSkillsTxtRecord->nAuraState);
 
         for (int32_t i = 0; i < 3; ++i)
         {
@@ -1061,7 +1061,7 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
                 break;
             }
 
-            sub_6FD156A0(pGame, pPet, pSkillsTxtRecord->wAuraEvent[i], nSkillId, nSkillLevel, pSkillsTxtRecord->wAuraEventFunc[i], 1, pSkillsTxtRecord->nAuraState);
+            sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pSkillsTxtRecord->wAuraEvent[i]), nSkillId, nSkillLevel, pSkillsTxtRecord->wAuraEventFunc[i], 1, pSkillsTxtRecord->nAuraState);
         }
     }
 
@@ -1547,7 +1547,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 
         sub_6FD154D0(pTarget);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pTarget, 8, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pTarget, EVENTTYPE_PERIODICSKILLS, 0);
         if (UNITS_GetRightSkill(pTarget))
         {
             SKILLS_SetRightActiveSkill(pTarget, 0, -1);
@@ -1602,8 +1602,8 @@ void __fastcall sub_6FD0DF40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 
         AIGENERAL_SetOwnerData(pGame, pMonster, nUnitGUID, nUnitType, 0, 0);
         AIUTIL_SetOwnerGUIDAndType(pMonster, pUnit);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-        EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 15, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+        EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
         sub_6FCBDD30(pMonster, 2u, 0);
         sub_6FC61F00(pMonster);
 
@@ -1618,7 +1618,7 @@ void __fastcall sub_6FD0DF40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         if (nDuration > 0)
         {
             D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pMonster, 21, 0);
-            EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_MONUMOD, nDuration + pGame->dwGameFrame, 0, 0);
+            EVENT_SetEvent(pGame, pMonster, EVENTTYPE_MONUMOD, nDuration + pGame->dwGameFrame, 0, 0);
         }
     }
 }

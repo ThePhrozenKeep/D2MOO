@@ -161,7 +161,7 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
                 UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
 
                 D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject ? pOp->pObject->dwClassId : -1);
-                EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+                EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
             }
 
             D2_FREE_POOL(pOp->pGame->pMemoryPool, pObjectRoomCoord);

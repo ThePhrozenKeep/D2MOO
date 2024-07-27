@@ -769,7 +769,7 @@ void __fastcall ACT2Q4_InitializeJerhynPalaceObject(D2QuestDataStrc* pQuestData,
 		sub_6FC6A090(pQuestData->pGame, pOp->pRoom, pQuestDataEx->pGuardCoords.nX, pQuestDataEx->pGuardCoords.nY, MONSTER_ACT2GUARD2, 1, 0);
 	}
 
-	EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
+	EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
 
 	D2CoordStrc pCoord = {};
 	pCoord.nX = pOp->nX;
@@ -1070,7 +1070,7 @@ int32_t __fastcall OBJECTS_OperateFunction42_SanctuaryTome(D2ObjOperateFnStrc* p
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 		D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-		EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
@@ -1171,7 +1171,7 @@ void __fastcall OBJECTS_InitFunction29_ArcaneSanctuaryPortal(D2ObjInitFnStrc* pO
 			if (pOp->pObject)
 			{
 				D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject->dwClassId);
-				EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 	}
@@ -1185,7 +1185,7 @@ void __fastcall OBJECTS_InitFunction29_ArcaneSanctuaryPortal(D2ObjInitFnStrc* pO
 			if (pOp->pObject)
 			{
 				D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject->dwClassId);
-				EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 	}

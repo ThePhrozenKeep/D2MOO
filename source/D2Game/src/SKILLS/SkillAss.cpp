@@ -239,7 +239,7 @@ int32_t __fastcall SKILLS_SrvDo034_TigerStrike_CobraStrike_RoyalStrike(D2GameStr
         }
 
         D2COMMON_10476(pStatList, nExpireFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
         const int32_t nOldValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
 
@@ -1505,8 +1505,8 @@ int32_t __fastcall SKILLS_SrvDo044_BladeSentinel(D2GameStrc* pGame, D2UnitStrc* 
 
     AIGENERAL_CopyAiCommand(pGame, pMonster, &aiCmd);
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 1, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
     pMonster->dwFlags &= 0xFFFFFFF7;
 
     return 1;
@@ -1840,7 +1840,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
     if (pStatList)
     {
         D2COMMON_10476(pStatList, pGame->dwGameFrame + 7);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 7, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 7, 0, 0);
 
         if (SKILLS_GetParam1(pSkill) <= pGame->dwGameFrame)
         {
@@ -1876,7 +1876,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 21, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 21, 0, 0);
     D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
     STATLIST_SetStatRemoveCallback(pStatList, SKILLS_StatRemoveCallback_RemoveState);
     STATLIST_SetState(pStatList, STATE_INFERNO);
@@ -2063,8 +2063,8 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     }
 
     sub_6FCF9580(pGame, pUnit, pPet, nSkillId, nSkillLevel, nItemLevel, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, 2, 0);
-    EVENT_SetEvent(pGame, pPet, 2, pGame->dwGameFrame + 20, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_AITHINK, pGame->dwGameFrame + 20, 0, 0);
 
     if (pSkillsTxtRecord->nAuraState > 0 && pSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount)
     {
@@ -2076,7 +2076,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     const int32_t nLength = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     if (nLength > 0)
     {
-        EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + nLength, 0, 0);
+        EVENT_SetEvent(pGame, pPet, EVENTTYPE_MONUMOD, pGame->dwGameFrame + nLength, 0, 0);
         D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, MONUMOD_TEMPSUMMON, 0);
     }
 
@@ -2243,7 +2243,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
         if (pConversionStatList)
         {
             D2COMMON_10476(pConversionStatList, nExpireFrame);
-            EVENT_SetEvent(pAuraCallback->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+            EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
             sub_6FD154D0(pUnit);
             sub_6FCBDD30(pUnit, 2u, 1);
             D2GAME_UpdateSummonAI_6FC401F0(pAuraCallback->pGame, pUnit, 0, pAuraCallback->pOwner->dwNodeIndex);

@@ -170,7 +170,7 @@ void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 	}
 
 	D2Common_10153(pNihlathak->pDynamicPath);
-	D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 	STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 	
 	D2ModeChangeStrc modeChange = {};
@@ -935,7 +935,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 			}
 
 			D2Common_10153(pNihlathak->pDynamicPath);
-			D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 			STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 
 			D2ModeChangeStrc modeChange = {};
@@ -951,7 +951,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 			D2UnitStrc* pNihlathakInTown = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nNihlathakObjectInTownGUID);
 			if (pNihlathakInTown)
 			{
-				EVENT_SetEvent(pQuestData->pGame, pNihlathakInTown, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pQuestData->pGame, pNihlathakInTown, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 		else
@@ -1373,7 +1373,7 @@ void __fastcall OBJECTS_InitFunction66_DrehyaStartInTown(D2ObjInitFnStrc* pOp)
 	D2QuestDataStrc* pQuestData34 = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q4_NIHLATHAK);
 	if (pQuestData34 && ((D2Act5Quest4Strc*)pQuestData34->pQuestDataEx)->bNeedsToOpenPortal)
 	{
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 12, 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 12, 0, 0);
 	}
 }
 
@@ -1406,7 +1406,7 @@ void __fastcall ACT5Q3_SpawnFrozenDrehya(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	else
 	{
-		EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 	}
 }
 
@@ -1429,7 +1429,7 @@ void __fastcall OBJECTS_InitFunction67_DrehyaStartOutsideTown(D2ObjInitFnStrc* p
 
 	if (!pQuestDataEx->bFrozenAnyaObjectSpawned)
 	{
-		EVENT_SetEvent(pQuestData->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 	}
 }
 
@@ -1540,7 +1540,7 @@ void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2Uni
 		UNITS_ChangeAnimMode(pUnit, OBJMODE_SPECIAL2);
 	}
 
-	EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+	EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FCB51C0

@@ -1638,7 +1638,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 		if (pAct5Quest4->bPortalCreated)
 		{
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
 			return;
 		}
 
@@ -1652,7 +1652,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 		else
 		{
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
 		}
 		break;
 	}
@@ -1670,7 +1670,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			D2Act1Quest5Strc* pAct1Quest5 = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
 			if (pAct1Quest5->bCountessKilled && !pAct1Quest5->bDeathMissilesCreated)
 			{
-				EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+				EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 			}
 		}
 		break;
@@ -1693,7 +1693,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 						D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pFoundUnit->dwClassId);
 						if (pObjectsTxtRecord)
 						{
-							EVENT_SetEvent(pQuestData->pGame, pFoundUnit, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+							EVENT_SetEvent(pQuestData->pGame, pFoundUnit, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 						}
 					}
 				}
@@ -1724,7 +1724,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 				--pAct1Quest4->nGoldPilesToDropFromWirtsBody;
 				if (pAct1Quest4->nGoldPilesToDropFromWirtsBody > 0)
 				{
-					EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 				}
 			}
 		}
@@ -1824,7 +1824,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 						pFoundUnit = pFoundUnit->pRoomNext;
 						if (!pFoundUnit)
 						{
-							EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
+							EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
 							return;
 						}
 					}
@@ -1842,7 +1842,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 					}
 				}
 			}
-			EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
 		}
 		break;
 	}
@@ -2643,7 +2643,7 @@ int32_t __fastcall QUESTS_SetObjectSelection(D2ObjOperateFnStrc* pOp)
 	else
 	{
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 
 	pObject->dwFlags &= ~UNITFLAG_TARGETABLE;

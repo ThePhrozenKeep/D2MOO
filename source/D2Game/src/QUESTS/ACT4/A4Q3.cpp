@@ -157,7 +157,7 @@ int32_t __fastcall OBJECTS_OperateFunction49_HellForge(D2ObjOperateFnStrc* pOp, 
 		if (ITEMS_FindQuestItem(pOp->pGame, pOp->pPlayer, ' ssm'))
 		{
 			UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
-			EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+			EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 			pQuestDataEx->nHellforgeObjectMode = OBJMODE_OPENED;
 			pQuestData->dwFlags &= 0xFFFFFF00;
@@ -219,7 +219,7 @@ int32_t __fastcall OBJECTS_OperateFunction49_HellForge(D2ObjOperateFnStrc* pOp, 
 		pQuestData->dwFlags &= 0xFFFFFF00;
 		QUESTS_UnitIterate(pQuestData, 13, 0, ACT4Q3_UnitIterate_StatusCyclerEx, 1);
 
-		EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[3] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[3] >> 8), 0, 0);
 		SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT4Q3_UnitIterate_SetCompletionFlag);
 		QUESTS_TriggerFX(pOp->pGame, 14);
 	}
@@ -666,7 +666,7 @@ void __fastcall ACT4Q3_CreateReward(D2QuestDataStrc* pQuestData, D2UnitStrc* pUn
 				--pQuestDataEx->nGemDropTier;
 				if (pQuestDataEx->nGemDropTier > 0)
 				{
-					EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 20, 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 20, 0, 0);
 				}
 				else
 				{

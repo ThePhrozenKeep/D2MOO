@@ -2933,7 +2933,7 @@ int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
     STATES_ToggleGfxStateFlag(pUnit, pSkillsTxtRecord->wAuraTargetState, 1);
     D2COMMON_10476(pStatList, nLength + pGame->dwGameFrame);
-    EVENT_SetEvent(pGame, pUnit, 12, nLength + pGame->dwGameFrame, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nLength + pGame->dwGameFrame, 0, 0);
     return 0;
 }
 
@@ -3048,7 +3048,7 @@ int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(D2GameStrc* pGame, D2UnitS
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
     STATES_ToggleGfxStateFlag(pUnit, pSkillsTxtRecord->wAuraTargetState, 1);
     D2COMMON_10476(pStatList, nTimeout);
-    EVENT_SetEvent(pGame, pUnit, 12, nTimeout, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nTimeout, 0, 0);
     return 3;
 }
 
@@ -3651,7 +3651,7 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
         D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
         if (pObjectsTxtRecord)
         {
-            EVENT_SetEvent(pGame, pObject, 1, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+            EVENT_SetEvent(pGame, pObject, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
         }
     }
 
@@ -5076,7 +5076,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                     D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
                     if (pStatList)
                     {
-                        EVENT_SetEvent(pMissile->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nDelay, 0, 0);
+                        EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
                         STATLIST_SetState(pStatList, STATE_JUSTHIT);
                         STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
                         D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -5084,7 +5084,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                     }
                 }
 
-                SUNITEVENT_EventFunc_Handler(pGame, EVENT_HITBYMISSILE, pUnit, pMissile, nullptr);
+                SUNITEVENT_Trigger(pGame, UNITEVENT_HITBYMISSILE, pUnit, pMissile, nullptr);
 
                 if (pMissilesTxtRecord->nAlwaysExplode)
                 {
@@ -5129,7 +5129,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
             if (pStatList)
             {
-                EVENT_SetEvent(pMissile->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nDelay, 0, 0);
+                EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
                 STATLIST_SetState(pStatList, STATE_JUSTHIT);
                 STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
                 D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -5137,7 +5137,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             }
         }
 
-        SUNITEVENT_EventFunc_Handler(pGame, EVENT_HITBYMISSILE, pUnit, pMissile, 0);
+        SUNITEVENT_Trigger(pGame, UNITEVENT_HITBYMISSILE, pUnit, pMissile, 0);
 
         const uint16_t nHitFunc = pMissilesTxtRecord->wSrvHitFunc;
         if (nHitFunc > 0 && nHitFunc < std::size(gpMissileSrvHitFnTable_6FD2E718))

@@ -836,7 +836,7 @@ void __fastcall ACT2Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		{
 			UNITS_ChangeAnimMode(pTyraelsDoor, OBJMODE_OPERATING);
 			D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pTyraelsDoor->dwClassId);
-			EVENT_SetEvent(pQuestData->pGame, pTyraelsDoor, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pTyraelsDoor, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 		}
 	}
 	pQuestDataEx->nTyraelsDoorObjectMode = OBJMODE_OPENED;
@@ -1316,7 +1316,7 @@ bool __fastcall ACT2Q6_Timer_UpdateObjects(D2GameStrc* pGame, D2QuestDataStrc* p
 				{
 					UNITS_ChangeAnimMode(pUnusedObject, OBJMODE_OPERATING);
 					D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pUnusedObject->dwClassId);
-					EVENT_SetEvent(pQuestData->pGame, pUnusedObject, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pUnusedObject, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 				}
 			}
 		}

@@ -963,15 +963,15 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
     }
 
     const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
     }
 
     const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0);
-    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
     }
 
     return pItem;
@@ -1683,9 +1683,9 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         nDurability = std::min(nDurability, STATLIST_GetMaxDurabilityFromUnit(pItem));
 
         const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
         {
-            EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
         }
 
         STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nDurability, 0);
@@ -1731,9 +1731,9 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
     if (ITEMS_GetTotalMaxStack(pItem) > 0)
     {
         const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
         {
-            EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
         }
     }
 }
@@ -2031,9 +2031,9 @@ D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2U
 void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_DURABILITY, 0);
-    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -2041,9 +2041,9 @@ void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 void __fastcall sub_6FC51310(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_QUANTITY, 0);
-    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
     }
 }
 

@@ -357,7 +357,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                         {
                             const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + MONSTERUNIQUE_CalculatePercentage(D2COMMON_10473(pPoisonStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j], 100);
                             D2COMMON_10476(pPoisonStatList, nExpireFrame);
-                            EVENT_SetEvent(pAuraCallback->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+                            EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                             bPoisonedOrCursed = 1;
                         }
                     }
@@ -374,7 +374,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                                 {
                                     const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + MONSTERUNIQUE_CalculatePercentage(D2COMMON_10473(pCurseStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j], 100);
                                     D2COMMON_10476(pCurseStatList, nExpireFrame);
-                                    EVENT_SetEvent(pAuraCallback->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+                                    EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                                 }
                                 bPoisonedOrCursed = 1;
                             }
@@ -770,8 +770,8 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
             pTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, -1, 0);
             if (!pTarget)
             {
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-                EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
                 return 0;
             }
         }
@@ -890,8 +890,8 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         //    }
         //}
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
 
         return 0;
     }
@@ -902,8 +902,8 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         SKILLS_SetFlags(pSkill, 1);
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 1, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 1, 1, 0);
 
     pUnit->dwFlags &= 0xFFFFFFBF;
 
@@ -1169,7 +1169,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
     }
 
     D2COMMON_10476(pStatList, nExpireFrame);
-    EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+    EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
     sub_6FD154D0(pTarget);
     sub_6FCBDD30(pTarget, 2u, 1);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pTarget, 0, pUnit->dwNodeIndex);

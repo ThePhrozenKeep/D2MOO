@@ -23,13 +23,13 @@ __forceinline int32_t EVENT_MapUnitTypeToIndex(int32_t nUnitType)
 
 
 //D2Game.0x6FC34840
-void __fastcall D2GAME_EVENTS_Delete_6FC34840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t nSkillId)
+void __fastcall D2GAME_EVENTS_Delete_6FC34840(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nEventCustomId)
 {
     D2EventTimerStrc* pEventTimer = SUNIT_GetTimerFromUnit(pUnit);
     while (pEventTimer)
     {
         D2EventTimerStrc* pNextTimer = pEventTimer->pNext;
-        if (pEventTimer->nEvent == nEvent && (!nSkillId || pEventTimer->nSkillId == nSkillId))
+        if (pEventTimer->nEventType == nEventType && (!nEventCustomId || pEventTimer->dwEventCustomId == nEventCustomId))
         {
             sub_6FC34890(pGame, pEventTimer);
         }
@@ -106,7 +106,7 @@ void __fastcall sub_6FC349B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEven
     while (pEventTimer)
     {
         D2EventTimerStrc* pNext = pEventTimer->pNext;
-        if (pEventTimer->nEvent == nEvent)
+        if (pEventTimer->nEventType == nEvent)
         {
             if (pCallback == pEventTimer->pCallback)
             {
@@ -143,7 +143,8 @@ void __fastcall D2GAME_DeleteTimersOnUnit_6FC34A30(D2GameStrc* pGame, D2UnitStrc
     SUNIT_SetTimerOnUnit(pUnit, nullptr);
 }
 
-//D2Game.0x6FC34A80
+//1.10f: D2Game.0x6FC34A80
+//1.13c: D2Game.6FCAE4D0
 void __fastcall EVENT_FreeEventQueue(D2GameStrc* pGame)
 {
     if (!pGame->pTimerQueue)
@@ -220,11 +221,11 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
                 pTimer->nFlags |= EVENTFLAG_0x1;
                 if (pTimer->pCallback)
                 {
-                    pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEvent, pTimer->nSkillId, pTimer->nSkillLevel);
+                    pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
                 }
                 else
                 {
-                    pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEvent, pTimer->nSkillId, pTimer->nSkillLevel);
+                    pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
                 }
                 pTimer->nFlags &= ~EVENTFLAG_0x1;
 
@@ -243,11 +244,11 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
             pTimer->nFlags |= EVENTFLAG_0x1;
             if (pTimer->pCallback)
             {
-                pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEvent, pTimer->nSkillId, pTimer->nSkillLevel);
+                pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
             }
             else
             {
-                pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEvent, pTimer->nSkillId, pTimer->nSkillLevel);
+                pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
             }
             pTimer->nFlags &= ~EVENTFLAG_0x1;
 
@@ -312,7 +313,7 @@ int32_t __fastcall EVENT_GetEventFrame(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     while (pEventTimer)
     {
         D2EventTimerStrc* pNext = pEventTimer->pNext;
-        if (pEventTimer->nEvent == nEvent)
+        if (pEventTimer->nEventType == nEvent)
         {
             const int32_t nFrame = pEventTimer->nExpireFrame;
             if (nFrame > 0 && (nFrame < nEventFrame || !nEventFrame))
@@ -327,16 +328,16 @@ int32_t __fastcall EVENT_GetEventFrame(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 }
 
 //D2Game.0x6FC351B0
-void __fastcall EVENT_SetEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerType, int32_t nExpireFrame, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall EVENT_SetEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
-    D2GAME_InitTimer_6FC351D0(pGame, pUnit, nTimerType, nExpireFrame, nullptr, nSkillId, nSkillLevel);
+    D2GAME_InitTimer_6FC351D0(pGame, pUnit, nEventType, nExpireFrame, nullptr, dwEventCustomId, dwEventCustomParam);
 }
 
 //D2Game.0x6FC351D0
-void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
     // TODO: v19
-    if (nTimerType >= 15)
+    if (nEventType >= 15)
     {
         return;
     }
@@ -345,13 +346,13 @@ void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     D2EventTimerStrc** ppEventTimer = nullptr;
     if (nExpireFrame == -1)
     {
-        pEventTimer = sub_6FC35460(pGame, pUnit);
+        pEventTimer = EVENT_AllocateUnitTimer(pGame, pUnit);
         pEventTimer->nFlags |= 4u;
-        pEventTimer->nSkillLevel = nSkillLevel;
-        pEventTimer->nEvent = nTimerType;
+        pEventTimer->nEventType = nEventType;
         pEventTimer->nExpireFrame = -1;
-        pEventTimer->nSkillId = nSkillId;
         pEventTimer->pCallback = nullptr;
+        pEventTimer->dwEventCustomId = dwEventCustomId;
+        pEventTimer->dwEventCustomParam = dwEventCustomParam;
 
         ppEventTimer = sub_6FC353D0(pGame, pUnit ? pUnit->dwUnitType : 6, -1);
         pEventTimer->unk0x20 = nullptr;
@@ -370,15 +371,15 @@ void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         nExpireFrame = pGame->dwGameFrame + 1;
     }
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && nTimerType == UNITEVENTCALLBACK_AITHINK && STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && nEventType == EVENTTYPE_AITHINK && STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
     {
         sub_6FCBDE90(pUnit, 0);
     }
 
-    pEventTimer = sub_6FC35460(pGame, pUnit);
-    pEventTimer->nSkillId = nSkillId;
-    pEventTimer->nEvent = nTimerType;
-    pEventTimer->nSkillLevel = nSkillLevel;
+    pEventTimer = EVENT_AllocateUnitTimer(pGame, pUnit);
+    pEventTimer->dwEventCustomId = dwEventCustomId;
+    pEventTimer->nEventType = nEventType;
+    pEventTimer->dwEventCustomParam = dwEventCustomParam;
     pEventTimer->nExpireFrame = nExpireFrame;
     pEventTimer->pCallback = pfCallBack;
 
@@ -411,7 +412,8 @@ D2EventTimerStrc** __fastcall sub_6FC353D0(D2GameStrc* pGame, int32_t nUnitType,
     return (D2EventTimerStrc**)((char*)pGame->pTimerQueue->unk0x04 + 4 * (nExpireFrame % 64 + (nIndex << 6)));
 }
 
-//D2Game.0x6FC35410
+//1.10f: D2Game.0x6FC35410
+//1.13c: D2Game.0x6FCAE420
 D2EventTimerSlabListStrc* __fastcall EVENT_AllocTimerSlab(D2GameStrc* pGame)
 {
     D2EventTimerSlabListStrc* pSlab = D2_ALLOC_STRC_POOL(pGame->pMemoryPool,D2EventTimerSlabListStrc);
@@ -433,123 +435,88 @@ D2EventTimerSlabListStrc* __fastcall EVENT_AllocTimerSlab(D2GameStrc* pGame)
     return pSlab;
 }
 
-//D2Game.0x6FC35460
-D2EventTimerStrc* __fastcall sub_6FC35460(D2GameStrc* pGame, D2UnitStrc* pUnit)
+// Helper function
+static void EVENT_AssignTimerToUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, D2EventTimerStrc* pTimer)
 {
-    D2EventTimerSlabListStrc* pEventTimerArray = pGame->pTimerQueue->pSlabListHead;
-    while (pEventTimerArray)
-    {
-        if (pEventTimerArray->pFreeEventTimerListHead)
-        {
-            break;
-        }
+	pTimer->pUnit = pUnit;
+	pTimer->pPrevious = nullptr;
+	pTimer->pNext = SUNIT_GetTimerFromUnit(pUnit);
+	if (pTimer->pNext)
+	{
+		pTimer->pNext->pPrevious = pTimer;
+	}
+	SUNIT_SetTimerOnUnit(pUnit, pTimer);
 
-        pEventTimerArray = pEventTimerArray->pNextSlab;
-    }
-    
-    if (!pEventTimerArray)
-    {
-        pEventTimerArray = EVENT_AllocTimerSlab(pGame);
-        pEventTimerArray->pNextSlab = pGame->pTimerQueue->pSlabListHead->pNextSlab;
-        pGame->pTimerQueue->pSlabListHead->pNextSlab = pEventTimerArray;
-    }
+	if (pUnit)
+	{
+		pTimer->nUnitType = pUnit->dwUnitType;
+		pTimer->nUnitGUID = pUnit->dwUnitId;
+	}
+	else
+	{
+		pTimer->nUnitType = UNIT_TYPES_COUNT;
+		pTimer->nUnitGUID = D2UnitInvalidGUID;
+	}
 
-    D2EventTimerStrc* pNewTimer = pEventTimerArray->pFreeEventTimerListHead;
-    pEventTimerArray->pFreeEventTimerListHead = pNewTimer->pNextFreeEventTimer;
+}
 
-    memset(pNewTimer, 0, sizeof(D2EventTimerStrc));
+//1.10f: Inlined
+//1.13c: D2Game.0x6FCAE540
+D2EventTimerStrc* EVENT_AllocateTimer(D2GameStrc* pGame)
+{
+	D2EventTimerSlabListStrc* pEventTimerArray = pGame->pTimerQueue->pSlabListHead;
+	D2_ASSERT(pEventTimerArray); // Event queue always has at least one slab, that will always be the head
+	while (pEventTimerArray)
+	{
+		if (pEventTimerArray->pFreeEventTimerListHead)
+		{
+			break;
+		}
 
-    pNewTimer->pUnit = pUnit;
-    D2EventTimerStrc* pOldTimer = SUNIT_GetTimerFromUnit(pUnit);
-    pNewTimer->pNext = pOldTimer;
-    if (pOldTimer)
-    {
-        pOldTimer->pPrevious = pNewTimer;
-    }
+		pEventTimerArray = pEventTimerArray->pNextSlab;
+	}
 
-    pNewTimer->pPrevious = nullptr;
+	if (!pEventTimerArray)
+	{
+		pEventTimerArray = EVENT_AllocTimerSlab(pGame);
+		pEventTimerArray->pNextSlab = pGame->pTimerQueue->pSlabListHead->pNextSlab;
+		pGame->pTimerQueue->pSlabListHead->pNextSlab = pEventTimerArray;
+	}
 
-    SUNIT_SetTimerOnUnit(pUnit, pNewTimer);
+	D2EventTimerStrc* pNewTimer = pEventTimerArray->pFreeEventTimerListHead;
+	pEventTimerArray->pFreeEventTimerListHead = pNewTimer->pNextFreeEventTimer;
 
-    pNewTimer->nFlags &= 0xFFFDu;
-    if (pUnit)
-    {
-        pNewTimer->nUnitType = pUnit->dwUnitType;
-        pNewTimer->nUnitGUID = pUnit->dwUnitId;
-    }
-    else
-    {
-        pNewTimer->nUnitType = 6;
-        pNewTimer->nUnitGUID = -1;
-    }
+	memset(pNewTimer, 0, sizeof(D2EventTimerStrc));
+}
 
+
+//1.10f: D2Game.0x6FC35460
+//1.13c: D2Game.0x6FCAE680
+D2EventTimerStrc* __fastcall EVENT_AllocateUnitTimer(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2EventTimerStrc* pNewTimer = EVENT_AllocateTimer(pGame);
+	EVENT_AssignTimerToUnit(pGame, pUnit, pNewTimer);
+
+    pNewTimer->nFlags &= (~EVENTFLAG_0x2);
     return pNewTimer;
 }
 
 //D2Game.0x6FC35570
-void __fastcall sub_6FC35570(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall sub_6FC35570(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
-    if (nEvent >= 15)
+    if (nEventType >= EVENTTYPE_COUNT)
     {
         return;
     }
-
-    D2EventTimerSlabListStrc* pEventTimerArray = pGame->pTimerQueue->pSlabListHead;
-    while (pEventTimerArray)
-    {
-        if (pEventTimerArray->pFreeEventTimerListHead)
-        {
-            break;
-        }
-
-        pEventTimerArray = pEventTimerArray->pNextSlab;
-    }
-    
-    if (!pEventTimerArray)
-    {
-        pEventTimerArray = EVENT_AllocTimerSlab(pGame);
-        pEventTimerArray->pNextSlab = pGame->pTimerQueue->pSlabListHead->pNextSlab;
-        pGame->pTimerQueue->pSlabListHead->pNextSlab = pEventTimerArray;
-    }
-
-    D2EventTimerStrc* pNewTimer = pEventTimerArray->pFreeEventTimerListHead;
-    pEventTimerArray->pFreeEventTimerListHead = pNewTimer->pNextFreeEventTimer;
-
-    memset(pNewTimer, 0, sizeof(D2EventTimerStrc));
-
-    pNewTimer->pUnit = pUnit;
-
-    D2EventTimerStrc* pOldTimer = SUNIT_GetTimerFromUnit(pUnit);
-    pNewTimer->pNext = pOldTimer;
-    if (pOldTimer)
-    {
-        pOldTimer->pPrevious = pNewTimer;
-    }
-
-    pNewTimer->pPrevious = nullptr;
-
-    SUNIT_SetTimerOnUnit(pUnit, pNewTimer);
-
-    if (pUnit)
-    {
-        pNewTimer->nUnitType = pUnit->dwUnitType;
-        pNewTimer->nUnitGUID = pUnit->dwUnitId;
-    }
-    else
-    {
-        pNewTimer->nUnitType = 6;
-        pNewTimer->nUnitGUID = -1;
-    }
-
-    pNewTimer->nEvent = nEvent;
+	D2EventTimerStrc* pNewTimer = EVENT_AllocateUnitTimer(pGame, pUnit);
+    pNewTimer->nEventType = nEventType;
     pNewTimer->nExpireFrame = -1;
-    pNewTimer->nFlags &= 0xFFFD;
     pNewTimer->nFlags |= 4;
-    pNewTimer->nSkillId = nSkillId;
-    pNewTimer->nSkillLevel = nSkillLevel;
+    pNewTimer->dwEventCustomId = dwEventCustomId;
+    pNewTimer->dwEventCustomParam = dwEventCustomParam;
     pNewTimer->pCallback = nullptr;
 
-    D2EventTimerStrc** ppEventTimer = sub_6FC353D0(pGame, pUnit ? pUnit->dwUnitType : 6, -1);
+    D2EventTimerStrc** ppEventTimer = sub_6FC353D0(pGame, pUnit ? pUnit->dwUnitType : UNIT_TYPES_COUNT, -1);
     pNewTimer->unk0x20 = nullptr;
     pNewTimer->pNextFreeEventTimer = *ppEventTimer;
     if (pNewTimer->pNextFreeEventTimer)
@@ -561,7 +528,7 @@ void __fastcall sub_6FC35570(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEven
 }
 
 //D2Game.0x6FC351D0
-void __fastcall j_D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall j_D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2GAME_InitTimer_6FC351D0(pGame, pUnit, nTimerType, nExpireFrame, pfCallBack, nSkillId, nSkillLevel);
+    D2GAME_InitTimer_6FC351D0(pGame, pUnit, nEventType, nExpireFrame, pfCallBack, nSkillId, nSkillLevel);
 }

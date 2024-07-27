@@ -472,7 +472,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2A
 
         if (nMonsterId == MONSTER_REANIMATEDHORDE3)
         {
-            EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + ITEMS_RollRandomNumber(&pMonster->pSeed) % 50 + 250, 0, 0);
+            EVENT_SetEvent(pGame, pMonster, EVENTTYPE_MONUMOD, pGame->dwGameFrame + ITEMS_RollRandomNumber(&pMonster->pSeed) % 50 + 250, 0, 0);
         }
 
         if (!pMonster || nMode != MONMODE_DEAD)

@@ -154,7 +154,7 @@ void __fastcall ACT5Q5_SpawnAncientMonsters(D2QuestDataStrc* pQuestData, D2UnitS
 	D2UnitStrc* pAncient = QUESTS_SpawnMonster(pQuestData->pGame, pUnit, &pCoord, 2, nMonsterId);
 	if (!pAncient)
 	{
-		EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 		return;
 	}
 
@@ -457,7 +457,7 @@ void __fastcall ACT5Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 						{
 							UNITS_ChangeAnimMode(pUnit[k], OBJMODE_SPECIAL1);
 							UNITS_FreeCollisionPath(pUnit[k]);
-							EVENT_SetEvent(pQuestData->pGame, pUnit[k], UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 20, 0, 0);
+							EVENT_SetEvent(pQuestData->pGame, pUnit[k], EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 20, 0, 0);
 							pQuestDataEx->nAncientStatueObjectMode[k] = OBJMODE_SPECIAL1;
 						}
 
@@ -788,7 +788,7 @@ bool __fastcall ACT5Q5_Timer_RespawnAncientStatueObjects(D2GameStrc* pGame, D2Qu
 				UNITS_ChangeAnimMode(pAncientStatue, OBJMODE_OPERATING);
 
 				D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pAncientStatue->dwClassId);
-				EVENT_SetEvent(pGame, pAncientStatue, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+				EVENT_SetEvent(pGame, pAncientStatue, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 				pQuestDataEx->bAncienStatueRespawned[i] = 0;
 				pQuestDataEx->nAncientStatueObjectMode[i] = OBJMODE_OPENED;
@@ -1318,7 +1318,7 @@ int32_t __fastcall OBJECTS_OperateFunction66_AncientsDoor(D2ObjOperateFnStrc* pO
 	{
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 		DUNGEON_ToggleHasPortalFlag(UNITS_GetRoom(pObject), 0);
-		EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 	else if (pObject->dwAnimMode == OBJMODE_OPENED)
 	{

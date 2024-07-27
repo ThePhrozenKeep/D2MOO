@@ -492,7 +492,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         return 0;
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     if (pUnit->nActionFrame == 2)
     {
@@ -688,7 +688,7 @@ int32_t __fastcall SKILLS_SrvSt49_Nest_EvilHutSpawner(D2GameStrc* pGame, D2UnitS
 
     COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, 0x100u);
     sub_6FCBDE90(pUnit, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
     return 1;
 }
 
@@ -707,7 +707,7 @@ int32_t __fastcall SKILLS_SrvDo091_Nest_EvilHutSpawner(D2GameStrc* pGame, D2Unit
         return 0;
     }
     
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
     sub_6FCBDE90(pUnit, 0);
     const int32_t nMonsterId = SKILLS_GetParam1(pSkill);
     const int32_t nX = SKILLS_GetParam2(pSkill);
@@ -1009,8 +1009,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1026,8 +1026,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1042,9 +1042,9 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
             nAnimLength = 1;
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
     else
     {
@@ -1057,8 +1057,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
 
     return 1;
@@ -1136,8 +1136,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1153,8 +1153,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1169,9 +1169,9 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
             nAnimLength = 1;
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
     else
     {
@@ -1185,8 +1185,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
             }
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
 
     return 1;

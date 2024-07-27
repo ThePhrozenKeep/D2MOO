@@ -931,7 +931,7 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 					pQuestDataEx->bPortalSpawned[i] = 1;
 					pQuestDataEx->nPortalGUIDs[i] = pPortal->dwUnitId;
 
-					EVENT_SetEvent(pQuestData->pGame, pPortal, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pPortal, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 					DUNGEON_ToggleHasPortalFlag(UNITS_GetRoom(pPortal), 0);
 				}
 
@@ -1093,7 +1093,7 @@ void __fastcall ACT5Q2_UpdatePortalMode(D2QuestDataStrc* pQuestData, D2UnitStrc*
 		break;
 	}
 
-	EVENT_SetEvent(pQuestData->pGame, pPortal, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+	EVENT_SetEvent(pQuestData->pGame, pPortal, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FCB33B0

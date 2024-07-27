@@ -821,7 +821,7 @@ void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
             D2COMMON_10475_PostStatToStatList(pTarget, pStatList, 1);
             STATES_ToggleState(pTarget, nState, 1);
-            EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, nAuraLength + pGame->dwGameFrame, 0, 0);
+            EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nAuraLength + pGame->dwGameFrame, 0, 0);
             sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nSkillLevel);
         }
     }
@@ -1243,7 +1243,7 @@ void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindDat
 void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
-    SUNITEVENT_FreeTimer(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
+    SUNITEVENT_Unregister(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
 
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
     {
@@ -1326,7 +1326,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
                 if (pCurse->nDuration)
                 {
                     STATLIST_SetExpireFrame(pStatList, pGame->dwGameFrame + pCurse->nDuration);
-                    EVENT_SetEvent(pGame, pCurse->pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
+                    EVENT_SetEvent(pGame, pCurse->pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
                 }
 
                 return pStatList;
@@ -1351,7 +1351,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
     {
         nStatListFlags |= 2u;
         nExpireFrame = pGame->dwGameFrame + pCurse->nDuration;
-        EVENT_SetEvent(pGame, pCurse->pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
+        EVENT_SetEvent(pGame, pCurse->pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
     }
 
     if (STATES_CheckStateMaskExpByStateId(pCurse->nState))
@@ -1762,7 +1762,7 @@ void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(D2GameStrc* pGame, D2UnitStrc* p
         }
 
         D2COMMON_10476(pStatList, nExpireFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
     }
 }
 
@@ -2151,7 +2151,7 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
                 }
             }
 
-            EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nLength, 0, 0);
+            EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nLength, 0, 0);
             STATES_ToggleState(pTarget, pSkillsTxtRecord->wAuraTargetState, 1);
             STATLIST_SetState(pStatList, pSkillsTxtRecord->wAuraTargetState);
             D2COMMON_10475_PostStatToStatList(pTarget, pStatList, 1);
@@ -2419,7 +2419,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     {
         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PERIODIC])
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
         }
         return 1;
     }
@@ -2434,7 +2434,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PERIODIC])
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
         }
     }
 
@@ -2702,13 +2702,13 @@ int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 		const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a5)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, -1, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, -1, 0);
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nSkillId);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, nSkillId, nSkillLevel);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillId);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, nSkillId, nSkillLevel);
         }
 
         return 1;
@@ -2726,13 +2726,13 @@ int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5
         const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a6)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, -1, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, -1, 0);
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a5);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nExpireFrame, a5, nSkillId);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a5);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSTATS, nExpireFrame, a5, nSkillId);
         }
 
         return 1;
@@ -2762,7 +2762,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         D2SkillStrc* pSkill = UNITS_GetRightSkill(pUnit);
         if (!pSkill)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, -1);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
             return;
         }
 
@@ -2776,7 +2776,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, -1);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
         }
     }
     else if (nSkillIdArg > 0)
@@ -2784,14 +2784,14 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillIdArg);
         if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
             return;
         }
         
         D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
         if (!pStatList)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
             return;
         }
 
@@ -2803,7 +2803,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
         }
     }
 }
@@ -2814,7 +2814,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || SUNIT_IsDead(pUnit))
     {
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a3);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a3);
     }
     else
     {
@@ -2826,7 +2826,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a3);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a3);
         }
     }
 }
@@ -2945,7 +2945,7 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
                         STATES_ToggleState(pUnit, pRightSkillsTxtRecord->nAuraState, 0);
                     }
 
-                    D2GAME_EVENTS_Delete_6FC34840(SUNIT_GetGameFromUnit(pUnit), pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
+                    D2GAME_EVENTS_Delete_6FC34840(SUNIT_GetGameFromUnit(pUnit), pUnit, EVENTTYPE_PERIODICSKILLS, -1);
                 }
             }
         }
@@ -3601,8 +3601,8 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
 
     AITHINK_ExecuteAiFn(pGame, pPet, AIGENERAL_GetAiControlFromUnit(pPet), pSummonArg->nAiSpecialState);
     MONSTER_UpdateAiCallbackEvent(pGame, pPet);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 25, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_AITHINK, pGame->dwGameFrame + 25, 0, 0);
 
     return pPet;
 }
@@ -3838,14 +3838,14 @@ void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc*
         if (pStatList)
         {
             D2COMMON_10476(pStatList, pGame->dwGameFrame + nDelay);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
         }
         else
         {
             pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, pGame->dwGameFrame + 100, pUnit->dwUnitType, pUnit->dwUnitId);
             if (pStatList)
             {
-                EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 100, 0, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 100, 0, 0);
                 STATLIST_SetState(pStatList, STATE_STUNNED);
                 STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
                 D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -4117,9 +4117,9 @@ void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 }
 
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nTimerType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
+D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
 {
-    constexpr D2UnitEventCallbackFunction gpEventCallbackTable_6FD40D20[] =
+    constexpr D2EVENTTYPE_Function gpEventCallbackTable_6FD40D20[] =
     {
         nullptr,
         SKILLS_EventFunc01_ChillingArmor,
@@ -4175,7 +4175,7 @@ D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, u
 
     if (nEventFunc >= 0 && nEventFunc < std::size(gpEventCallbackTable_6FD40D20) && gpEventCallbackTable_6FD40D20[nEventFunc])
     {
-        return SUNITEVENT_AllocTimer(pGame, pUnit, nTimerType, a4, a5, gpEventCallbackTable_6FD40D20[nEventFunc], a7, a8);
+        return SUNITEVENT_Register(pGame, pUnit, nUnitEventType, a4, a5, gpEventCallbackTable_6FD40D20[nEventFunc], a7, a8);
     }
 
     return nullptr;

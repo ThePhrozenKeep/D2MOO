@@ -93,18 +93,18 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
     {
         if (nNewValue)
         {
-            if (!SUNITEVENT_GetTimer(pGame, pOwner, 2, nLayer_StatId, nLayer_StatId))
+            if (!SUNITEVENT_GetEvent(pGame, pOwner, 2, nLayer_StatId, nLayer_StatId))
             {
-                sub_6FD156A0(pGame, pOwner, pItemStatCostTxtRecord->wItemEvent[0], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
+                sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
                 if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                 {
-                    sub_6FD156A0(pGame, pOwner, pItemStatCostTxtRecord->wItemEvent[1], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
+                    sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
                 }
             }
         }
         else
         {
-            SUNITEVENT_FreeTimer(pGame, pOwner, 2, nLayer_StatId);
+            SUNITEVENT_Unregister(pGame, pOwner, 2, nLayer_StatId);
         }
     }
 
@@ -5014,7 +5014,7 @@ int32_t __fastcall sub_6FC4A350(D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nL
         nDuration = 125;
     }
 
-    EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + nDuration, 0, 0);
+    EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, pGame->dwGameFrame + nDuration, 0, 0);
 
     return 1;
 }

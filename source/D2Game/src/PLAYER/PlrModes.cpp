@@ -126,7 +126,7 @@ int32_t __fastcall D2GAME_PLRMODES_First_6FC7F340(D2GameStrc* pGame, D2UnitStrc*
         case PLRMODE_THROW:
         case PLRMODE_SPECIAL1:
         case PLRMODE_SEQUENCE:
-            if (pGame->dwGameFrame <= EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM) + 5)
+            if (pGame->dwGameFrame <= EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ENDANIM) + 5)
             {
                 return 1;
             }
@@ -755,8 +755,8 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     STATES_UpdateStayDeathFlags(pDefender, 0);
     D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pDefender, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_PERIODICSTATS, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
     sub_6FCBCE70(pGame, pDefender);
@@ -811,8 +811,8 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
     PATH_SetUnitDeadCollision(pUnit, 1);
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, 0);
 
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
@@ -1249,7 +1249,7 @@ void __fastcall EVENTS_ManaRegen(D2UnitStrc* pUnit)
 //D2Game.0x6FC80F80
 void __fastcall D2GAME_EVENTS_StatRegen_6FC80F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
 {
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, a3, a4);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, a3, a4);
 
     if (SUNIT_IsDead(pUnit))
     {
@@ -1383,8 +1383,8 @@ void __fastcall sub_6FC814F0(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pPlayer, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_PERIODICSTATS, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
 }
 
@@ -1694,7 +1694,7 @@ void __fastcall sub_6FC81B20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     const int32_t nTimeout = CHAT_GetTimeoutFromHoverMsg(pUnit->pHoverText);
     if (nTimeout > pGame->dwGameFrame)
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, nTimeout, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, nTimeout, 0, 0);
     }
     else
     {
@@ -1710,7 +1710,7 @@ void __fastcall sub_6FC81B90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
 {
     PARTY_SynchronizeWithClient(pGame, pUnit);
     sub_6FC7E640(pGame, pUnit);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_DELAYEDPORTAL, pGame->dwGameFrame + 30, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_DELAYEDPORTAL, pGame->dwGameFrame + 30, 0, 0);
 }
 
 //D2Game.0x6FC81BD0

@@ -383,7 +383,7 @@ int32_t __fastcall OBJECTS_OperateFunction53_CompellingOrb(D2ObjOperateFnStrc* p
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 	const int32_t nObjectId = pObject ? pObject->dwClassId : -1;
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nObjectId);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	pQuestDataEx->bOrbSmashed = 1;
 
 	QUESTS_TriggerFX(pQuestData->pGame, 10);

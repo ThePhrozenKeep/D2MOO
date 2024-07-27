@@ -440,12 +440,12 @@ void __fastcall OBJECTS_InitFunction10_Unused(D2ObjInitFnStrc* pOp)
 {
     if (DUNGEON_GetLevelIdFromRoom(pOp->pRoom) == LEVEL_ROGUEENCAMPMENT)
     {
-        EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_PERIODICSKILLS, pOp->pGame->dwGameFrame + 60, 0, 0);
+        EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_PERIODICSKILLS, pOp->pGame->dwGameFrame + 60, 0, 0);
     }
     else
     {
         UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPENED);
-        EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_MODECHANGE, pOp->pGame->dwGameFrame + 25, 0, 0);
+        EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_MODECHANGE, pOp->pGame->dwGameFrame + 25, 0, 0);
     }
 }
 
@@ -592,7 +592,7 @@ void __fastcall OBJECTS_InitFunction22_Fire(D2ObjInitFnStrc* pOp)
         }
     }
 
-    EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_MODECHANGE, pOp->pGame->dwGameFrame + 25, 0, 0);
+    EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_MODECHANGE, pOp->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FC70CF0
@@ -604,7 +604,7 @@ void __fastcall OBJECTS_InitFunction16_Well(D2ObjInitFnStrc* pOp)
 //D2Game.0x6FC70D10
 void __fastcall OBJECTS_InitFunction24_SpikeFloorTrap(D2ObjInitFnStrc* pOp)
 {
-    EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_STATREGEN, pOp->pGame->dwGameFrame + 25, 0, 0);
+    EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_STATREGEN, pOp->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FC70D30
@@ -704,7 +704,7 @@ void __fastcall OBJECTS_InitFunction57_SparklyChest(D2ObjInitFnStrc* pOp)
 //D2Game.0x6FC71060
 void __fastcall OBJECTS_InitFunction58_Fissure(D2ObjInitFnStrc* pOp)
 {
-    EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_PERIODICSKILLS, pOp->pGame->dwGameFrame + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) % 250 + 25, 0, 0);
+    EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_PERIODICSKILLS, pOp->pGame->dwGameFrame + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) % 250 + 25, 0, 0);
 }
 
 //D2Game.0x6FC710B0
@@ -716,8 +716,8 @@ void __fastcall OBJECTS_InitFunction59_VileDogAfterglow(D2ObjInitFnStrc* pOp)
     }
 
     UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
-    EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_MONUMOD, pOp->pGame->dwGameFrame + 27, 0, 0);
-    EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_MONUMOD, pOp->pGame->dwGameFrame + 27, 0, 0);
+    EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
 }
 
 //D2Game.0x6FC71110
@@ -727,7 +727,7 @@ void __fastcall OBJECTS_InitFunction12_PermanentPortal(D2ObjInitFnStrc* pOp)
     {
         UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
         UNITS_BlockCollisionPath(pOp->pObject, pOp->pRoom, pOp->nX, pOp->nY);
-        EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
     }
 
     switch (DUNGEON_GetLevelIdFromRoom(pOp->pRoom))
@@ -784,7 +784,7 @@ void __fastcall OBJECTS_InitFunction12_PermanentPortal(D2ObjInitFnStrc* pOp)
         if (pOp->pObject->pObjectData->InteractType != LEVEL_HELL1)
         {
             pOp->pObject->pObjectData->InteractType = LEVEL_HELL1;
-            EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
         }
         return;
 
@@ -792,7 +792,7 @@ void __fastcall OBJECTS_InitFunction12_PermanentPortal(D2ObjInitFnStrc* pOp)
         if (pOp->pObject->pObjectData->InteractType != LEVEL_HELL2)
         {
             pOp->pObject->pObjectData->InteractType = LEVEL_HELL2;
-            EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
         }
         return;
 
@@ -800,7 +800,7 @@ void __fastcall OBJECTS_InitFunction12_PermanentPortal(D2ObjInitFnStrc* pOp)
         if (pOp->pObject->pObjectData->InteractType != LEVEL_HELL3)
         {
             pOp->pObject->pObjectData->InteractType = LEVEL_HELL3;
-            EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_DELAYEDPORTAL, pOp->pGame->dwGameFrame + 1, 0, 0);
         }
         return;
 
@@ -847,7 +847,7 @@ void __fastcall OBJECTS_InitFunction11_Portal(D2ObjInitFnStrc* pOp)
     if (pOp->pObject && pOp->pObject->dwAnimMode == OBJMODE_OPERATING)
     {
         UNITS_BlockCollisionPath(pOp->pObject, pOp->pRoom, pOp->nX, pOp->nY);
-        EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pOp->pObjectTxt->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -862,7 +862,7 @@ void __fastcall OBJECTS_InitFunction51_TrappedSoul(D2ObjInitFnStrc* pOp)
     const int32_t nAnimMode = pOp->pObject->dwAnimMode;
     if (nAnimMode == OBJMODE_OPENED || nAnimMode == OBJMODE_OPERATING)
     {
-        EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_PERIODICSTATS, pOp->pGame->dwGameFrame + 35, 0, 0);
+        EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_PERIODICSTATS, pOp->pGame->dwGameFrame + 35, 0, 0);
     }
 }
 

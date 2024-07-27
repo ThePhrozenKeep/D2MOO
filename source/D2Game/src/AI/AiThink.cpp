@@ -513,7 +513,7 @@ void __fastcall AITHINK_Fn006_Fallen(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 		return;
 	}
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
@@ -2547,7 +2547,7 @@ static void AITHINK_Fn025_Willowisp_State_Ritual(D2GameStrc* pGame, D2UnitStrc* 
 				{
 					STATLIST_SetStatIfListIsValid(pStatList, STAT_ITEM_MAGICBONUS, 50 * (pGame->nDifficulty + 1), 0);
 					D2COMMON_10476(pStatList, nBuffEndFrame);
-					EVENT_SetEvent(pGame, pAiTickParam->pTarget, UNITEVENTCALLBACK_REMOVESTATE, nBuffEndFrame, 0, 0);
+					EVENT_SetEvent(pGame, pAiTickParam->pTarget, EVENTTYPE_REMOVESTATE, nBuffEndFrame, 0, 0);
 					D2COMMON_10475_PostStatToStatList(pAiTickParam->pTarget, pStatList, 1);
 				}
 			}
@@ -2792,7 +2792,7 @@ void __fastcall AITHINK_Fn027_ThornHulk(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	{
 		AITACTICS_UseSkill(pGame, pUnit, MONMODE_ATTACK2, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 
-		const int32_t nEventFrame = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM);
+		const int32_t nEventFrame = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ENDANIM);
 		if (nEventFrame > pGame->dwGameFrame)
 		{
 			AITACTICS_Idle(pGame, pUnit, nEventFrame + AI_GetParamValue(pGame, pAiTickParam, THORNHULK_AI_PARAM_FRENZY_SPEED) - pGame->dwGameFrame);
@@ -2826,7 +2826,7 @@ void __fastcall AITHINK_Fn027_ThornHulk(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		{
 			AITACTICS_UseSkill(pGame, pUnit, MONMODE_ATTACK2, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 
-			const int32_t nEventFrame = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM);
+			const int32_t nEventFrame = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ENDANIM);
 			if (nEventFrame > pGame->dwGameFrame)
 			{
 				AITACTICS_Idle(pGame, pUnit, nEventFrame + AI_GetParamValue(pGame, pAiTickParam, THORNHULK_AI_PARAM_FRENZY_SPEED) - pGame->dwGameFrame);
@@ -3962,7 +3962,7 @@ void __fastcall AITHINK_Fn046_ElementalBeast(D2GameStrc* pGame, D2UnitStrc* pUni
 		if (pAiTickParam->bCombat)
 		{
 			AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_SKILL1, pAiTickParam->pTarget);
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 1, 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 1, 0, 0);
 			pAiTickParam->pAiControl->dwAiParam[0] = 2;
 			return;
 		}
@@ -4503,7 +4503,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 		if (!D2GAME_AICORE_WalkToOwner_6FCD0B60(pGame, pUnit, pAiTickParam->pTarget, 6u))
 		{
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 			if (!AITACTICS_WalkInRadiusToTarget(pGame, pUnit, pAiTickParam->pTarget, 12, 6))
 			{
@@ -8318,7 +8318,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 {
 	//TODO: Names
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 	if (!pAiTickParam->pAiControl->dwAiParam[0])
 	{
@@ -8473,7 +8473,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 			nIndex = (nIndex + 1) & 7;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		if (sub_6FCD09D0(pGame, pUnit, pOwner, 4u) || bRun && AITACTICS_RunToTargetCoordinatesDeleteAiEvent(pGame, pUnit, (nUnitX + nOwnerX) / 2, (nUnitY + nOwnerY) / 2) || AITACTICS_WalkToTargetCoordinatesDeleteAiEvent(pGame, pUnit, (nOwnerX + nUnitX) / 2, (nUnitY + nOwnerY) / 2))
 		{
@@ -8541,7 +8541,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 					}
 				}
 
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 				AITACTICS_SetVelocity(pUnit, 15, nVelocity, 100);
 
 				if (bRun)
@@ -8611,7 +8611,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 			return 1;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		AITACTICS_SetVelocity(pUnit, 0, 0, 40);
 
@@ -8657,11 +8657,11 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 			return 1;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		if (!D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pOwner, a7, 1))
 		{
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 			if (!sub_6FCD09D0(pGame, pUnit, pOwner, a7))
 			{
@@ -8680,7 +8680,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 			return 1;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		if (D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pOwner, a7, 1))
 		{
@@ -9065,7 +9065,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	}
 	else
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	AITACTICS_IdleInNeutralMode(pGame, pUnit, 5);
@@ -9113,7 +9113,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 			nIndex = (nIndex + 1) & 7;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 		sub_6FCD09D0(pGame, pUnit, pOwner, 4u);
 		return 1;
 	}
@@ -9161,7 +9161,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 					return 1;
 				}
 
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 				AITACTICS_SetVelocity(pUnit, 15, nSpeed, 100);
 
 				if (bRun)
@@ -9179,7 +9179,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 					}
 				}
 
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 				if (!bVelocityParamsSet)
 				{
@@ -9202,7 +9202,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 						}
 					}
 
-					D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+					D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 				}
 			}
 		}
@@ -9227,7 +9227,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		{
 			if (!sub_6FCD09D0(pGame, pUnit, pOwner, ITEMS_RollRandomNumber(&pUnit->pSeed) % 3 + 3))
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 				AITACTICS_SetVelocity(pUnit, 0, 0, 40);
 				AITACTICS_WalkToTargetCoordinates(pGame, pUnit, v11, v12);
 			}
@@ -9270,11 +9270,11 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		}
 		else
 		{
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 			if (!D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pOwner, bSteps, 1))
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 				sub_6FCD09D0(pGame, pUnit, pOwner, bSteps);
 			}
 		}
@@ -9285,7 +9285,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		AITACTICS_SetVelocity(pUnit, 7, 0, 0);
 		if (!D2GAME_AICORE_WalkToOwner_6FCD0B60(pGame, pUnit, pOwner, bSteps))
 		{
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 			if (!D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pOwner, bSteps, 1))
 			{
 				AITACTICS_SetVelocity(pUnit, 0, 0, 40);
@@ -9381,7 +9381,7 @@ void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClas
 
 	if (!D2GAME_AICORE_WalkToOwner_6FCD0B60(pGame, pUnit, pOwner, 4u))
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		if (!D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pTarget, 4u, 1))
 		{
@@ -9717,7 +9717,7 @@ void __fastcall D2GAME_AI_SpecialState13_6FCE5080(D2GameStrc* pGame, D2UnitStrc*
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	const int32_t nTargetX = CLIENTS_GetUnitX(pAiTickParam->pTarget);
@@ -9741,7 +9741,7 @@ void __fastcall D2GAME_AI_SpecialState13_6FCE5080(D2GameStrc* pGame, D2UnitStrc*
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	if (AIUTIL_GetDistanceToCoordinates(pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]) > 40)
@@ -9753,7 +9753,7 @@ void __fastcall D2GAME_AI_SpecialState13_6FCE5080(D2GameStrc* pGame, D2UnitStrc*
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	if (sub_6FCE5520(pGame, pUnit, pAiTickParam))
@@ -9941,7 +9941,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 				return;
 			}
 
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 		}
 
 		if (pAiTickParam->pAiControl->dwAiParam[2] && (uint32_t)AIUTIL_GetDistanceToCoordinates_HalfUnitSize(pUnit, pCurrentAiCmd->nCmdParam[1], pCurrentAiCmd->nCmdParam[2]) > 5)
@@ -9953,7 +9953,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 				return;
 			}
 
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 		}
 
 		pAiTickParam->pAiControl->dwAiParam[2] = 0;
@@ -9970,7 +9970,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	pAiTickParam->pAiControl->dwAiParam[0] += 3;
@@ -10050,7 +10050,7 @@ void __fastcall AITHINK_Fn059_BloodRaven(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
@@ -11424,7 +11424,7 @@ void __fastcall D2GAME_AI_SpecialState11_6FCE7E80(D2GameStrc* pGame, D2UnitStrc*
 
 	pAiTickParam->pAiControl->dwAiParam[2] = 1;
 	sub_6FC61F00(pUnit);
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	AITACTICS_SetVelocity(pUnit, 2, nVel, 0);
 
 	D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
@@ -12217,7 +12217,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			return;
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		const int32_t nX = CLIENTS_GetUnitX(pUnit);
 		const int32_t nY = CLIENTS_GetUnitY(pUnit);
@@ -12248,7 +12248,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 		if (!AITACTICS_WalkToTargetCoordinatesDeleteAiEvent(pGame, pUnit, pCurrentAiCmd->nCmdParam[1] + nXSign * (nOffset >> 1), pCurrentAiCmd->nCmdParam[2] + nYSign * (nOffset >> 1)))
 		{
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 2);
 			pAiTickParam->pAiControl->dwAiParam[0] = 0;
 			return;
@@ -12554,7 +12554,7 @@ void __fastcall AITHINK_Fn101_AssassinSentry(D2GameStrc* pGame, D2UnitStrc* pUni
 
 	if (AIRollChanceParam(pGame, pUnit, pAiTickParam, ASSASSINSENTRY_AI_PARAM_ATTACK_CHANCE_PCT) && !AITHINK_AssasinSentryHasLostTarget(pGame, pUnit, pAiTickParam, 1))
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 		AITACTICS_UseSkill(pGame, pUnit, SKILLS_GetSkillMode(pSkill), pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
 		return;
 	}
@@ -12858,7 +12858,7 @@ void __fastcall AITHINK_Fn105_ShadowWarrior(D2GameStrc* pGame, D2UnitStrc* pUnit
 {
 	D2UnitStrc* pTarget = pAiTickParam->pTarget;
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 	D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 	if (!pOwner)
@@ -13204,7 +13204,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 	}
 
 	D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 	const int16_t nBossLeashDistance = pAiTickParam->pMonstatsTxt->wAiParam[SHADOWMASTER_AI_PARAM_RANDOM_PICK_IGNORE_RANGE_BOSS_LEASH][2];
 	if (pOwner && AITHINK_GetSquaredDistance(pUnit, pOwner) > nBossLeashDistance * nBossLeashDistance && sub_6FCE34E0(pGame, pUnit, 0, pOwner, pAiTickParam->bCombat, pAiTickParam, 0, 6))
@@ -14327,7 +14327,7 @@ void __fastcall AITHINK_Fn108_Fenris(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			if (pOwner && pAiTickParam->pMonstatsTxt->nSkill[1] >= 0)
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], 0, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
-				EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 6, 0, 0);
+				EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 6, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 8);
 				return;
 			}
@@ -14393,7 +14393,7 @@ void __fastcall AITHINK_Fn108_Fenris(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	if (pAiTickParam->pMonstatsTxt->nSkill[1] >= 0 && nDistanceToOwner > 50)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], 0, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
-		EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 2, 0, 0);
+		EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 2, 0, 0);
 		AITACTICS_Idle(pGame, pUnit, 10);
 		return;
 	}
@@ -14494,7 +14494,7 @@ void __fastcall AITHINK_Fn108_SpiritWolf(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 			if (pOwner && pAiTickParam->pMonstatsTxt->nSkill[0] >= 0)
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], 0, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
-				EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 6, 0, 0);
+				EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 6, 0, 0);
 				AITACTICS_Idle(pGame, pUnit, 8);
 				return;
 			}
@@ -14554,7 +14554,7 @@ void __fastcall AITHINK_Fn108_SpiritWolf(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && nDistanceToOwner > 50)
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], 0, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
-		EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + 4, 0, 0);
+		EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + 4, 0, 0);
 		AITACTICS_Idle(pGame, pUnit, 10);
 		return;
 	}
@@ -15079,7 +15079,7 @@ void __fastcall AITHINK_Fn131_Wussie(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	{
 		ACT5Q2_UpdateWussieCounters(pGame, 0, pUnit);
 		D2Common_10153(pUnit->pDynamicPath);
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 		DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pUnit), pUnit->dwUnitType, pUnit->dwUnitId);
 		UNITS_FreeCollisionPath(pUnit);
 		UNITROOM_RemoveUnitFromRoom(pUnit);
@@ -15691,7 +15691,7 @@ void __fastcall AITHINK_Fn138_BaalToStairs(D2GameStrc* pGame, D2UnitStrc* pUnit,
 	ACT5Q6_OpenWorldStoneChamber(pGame);
 	STATES_ToggleState(pUnit, STATE_INVIS, 1);
 	D2Common_10153(pUnit->pDynamicPath);
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pUnit), pUnit->dwUnitType, pUnit->dwUnitId);
 	UNITS_FreeCollisionPath(pUnit);
 	UNITROOM_RemoveUnitFromRoom(pUnit);

@@ -335,7 +335,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						{
 							nFrame = pGame->dwGameFrame + 1;
 						}
-						EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nFrame, 0, 0);
+						EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ACTIVESTATE, nFrame, 0, 0);
 					}
 
 					pUnit->pObjectData->InteractType = pInactiveUnitNode->nInteractType;
@@ -369,7 +369,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 								int32_t nCounter = v45 - v46;
 								do
 								{
-									EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
+									EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
 
 									nOffset += nFrameDelta;
 									--nCounter;
@@ -407,7 +407,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 									int32_t nCounter = v45 - v46;
 									do
 									{
-										EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
+										EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
 
 										nOffset += nFrameDelta;
 										--nCounter;
@@ -700,7 +700,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 		{
 			if (STATES_CheckState(pUnit, STATE_PLAYERBODY))
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 				pUnit->dwFlagEx |= UNITFLAGEX_HASBEENDELETED;
 				SUNITINACTIVE_CompressInactiveUnit(pGame, pUnit);
 				UNITROOM_UpdatePath(pUnit);
@@ -719,7 +719,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 		{
 			if (pUnit->dwClassId == OBJECT_TOWN_PORTAL || pUnit->dwClassId == OBJECT_PERMANENT_TOWN_PORTAL)
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 				pUnit->dwFlagEx |= UNITFLAGEX_HASBEENDELETED;
 				SUNITINACTIVE_CompressInactiveUnit(pGame, pUnit);
 				UNITROOM_UpdatePath(pUnit);
@@ -737,7 +737,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 				bCompress = 0;
 			}
 
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
 			if (bCompress)
 			{
@@ -786,7 +786,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 			}
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		D2InactiveMonsterNodeStrc* pInactiveMonsterNode = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2InactiveMonsterNodeStrc);
 
@@ -964,7 +964,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 				if (UNITS_IsShrine(pUnit))
 				{
-					const uint32_t nData = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
+					const uint32_t nData = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ACTIVESTATE);
 					pInactiveUnitNode->nUnitId = (uint32_t)nData >> 16;
 					pInactiveUnitNode->nFrame = (WORD)nData;
 				}

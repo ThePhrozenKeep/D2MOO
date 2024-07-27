@@ -180,7 +180,7 @@ void __fastcall OBJECTS_InitFunction45_MephistoBridge(D2ObjInitFnStrc* pOp)
 
 	if (pQuestDataEx->nMephistoBridgeObjectMode != OBJMODE_OPENED)
 	{
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 20, 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 20, 0, 0);
 	}
 }
 
@@ -562,7 +562,7 @@ void __fastcall ACT3Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		{
 			UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 			D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
-			EVENT_SetEvent(pQuestData->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pObject, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 		}
 	}
 	pQuestDataEx->nHellGatePortalObjectMode = OBJMODE_OPENED;

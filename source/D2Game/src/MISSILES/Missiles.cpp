@@ -51,7 +51,7 @@ void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int
     pMissile->dwUnitId = nUnitGUID;
     pMissile->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_ISVALIDTARGET);
     D2GAME_DeleteTimersOnUnit_6FC34A30(pGame, pMissile);
-    sub_6FC35570(pGame, pMissile, 0, 0, 0);
+    sub_6FC35570(pGame, pMissile, EVENTTYPE_MODECHANGE, 0, 0);
 }
 
 //D2Game.0x6FC55340

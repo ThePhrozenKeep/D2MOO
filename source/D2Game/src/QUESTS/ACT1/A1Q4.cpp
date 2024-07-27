@@ -547,7 +547,7 @@ int32_t __fastcall OBJECTS_OperateFunction10_CainGibbet(D2ObjOperateFnStrc* pOp,
 	}
 
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 	if (pQuestDataEx)
 	{
@@ -562,7 +562,7 @@ int32_t __fastcall OBJECTS_OperateFunction10_CainGibbet(D2ObjOperateFnStrc* pOp,
 		pQuestDataEx->nPlayerGUID = nPlayerId;
 	}
 
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_MONUMOD, pOp->pGame->dwGameFrame + 17, 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_MONUMOD, pOp->pGame->dwGameFrame + 17, 0, 0);
 	DUNGEON_ToggleHasPortalFlag(UNITS_GetRoom(pObject), 0);
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE);
@@ -1912,7 +1912,7 @@ int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 void __fastcall OBJECTS_InitFunction61_CainPortal(D2ObjInitFnStrc* pOp)
 {
 	UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
-	EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 25, 0, 0);
+	EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FC9C710
@@ -1957,7 +1957,7 @@ void __fastcall ACT1Q4_UpdatePortalInTown(D2QuestDataStrc* pQuestData, D2UnitStr
 		UNITS_ChangeAnimMode(pUnit, OBJMODE_SPECIAL2);
 	}
 
-	EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+	EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FC9C7A0

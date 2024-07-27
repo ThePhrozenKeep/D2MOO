@@ -91,7 +91,7 @@ int32_t __fastcall OBJECTS_OperateFunction06_TowerTome(D2ObjOperateFnStrc* pOp, 
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 		D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-		EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A1Q5_COUNTESS);
@@ -740,7 +740,7 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 
 	if (!pQuestDataEx->bDeathMissilesCreated)
 	{
-		EVENT_SetEvent(pQuestData->pGame, pQuestArg->pTarget, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pQuestArg->pTarget, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 	}
 }
 
@@ -950,7 +950,7 @@ void __fastcall OBJECTS_InitFunction47_CountessChest(D2ObjInitFnStrc* pOp)
 
 		if (pQuestDataEx->bCountessKilled && !pQuestDataEx->bDeathMissilesCreated)
 		{
-			EVENT_SetEvent(pQuestData->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 		}
 	}
 	else
@@ -971,7 +971,7 @@ void __fastcall OBJECTS_InitFunction47_CountessChest(D2ObjInitFnStrc* pOp)
 
 				if (pQuestDataEx->bCountessKilled && !pQuestDataEx->bDeathMissilesCreated)
 				{
-					EVENT_SetEvent(pQuestData->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 				}
 				return;
 			}

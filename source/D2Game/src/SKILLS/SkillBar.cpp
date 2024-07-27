@@ -278,7 +278,7 @@ int32_t __fastcall SKILLS_ApplyWarcryStats(D2GameStrc* pGame, D2UnitStrc* a2, D2
 
     STATES_ToggleGfxStateFlag(a2, pSkillsTxtRecord->nAuraState, 1);
     D2COMMON_10476(pStatList, nExpireFrame);
-    EVENT_SetEvent(pGame, a2, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+    EVENT_SetEvent(pGame, a2, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nSkillLevel);
     sub_6FD14C30(a2);
     return 1;
@@ -417,8 +417,8 @@ int32_t __fastcall SKILLS_SrvDo071_Taunt(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     AITHINK_SetAiControlParams(pAiControl, -666, -666, -666);
     AIUTIL_SetOwnerGUIDAndType(pTarget, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pTarget, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 1, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pTarget, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pTarget, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
     UNITS_SetTargetUnitForDynamicUnit(pTarget, pUnit);
     return 1;
 }
@@ -691,7 +691,7 @@ void __fastcall SKILLS_ApplyFrenzyStats(D2GameStrc* pGame, D2UnitStrc* pUnit, in
     if (pStatList)
     {
         D2COMMON_10476(pStatList, nFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nFrame, 0, 0);
         STATES_ToggleGfxStateFlag(pUnit, pSkillsTxtRecord->nAuraState, 1);
 
         int32_t nValue = STATLIST_GetStatValue(pStatList, STAT_SKILL_FRENZY, 0) + 1;
@@ -738,7 +738,7 @@ void __fastcall SKILLS_CurseStateCallback_Whirlwind(D2UnitStrc* pUnit, int32_t n
     D2_MAYBE_UNUSED(pStatList);
     D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
 
-    SUNITEVENT_FreeTimer(pGame, pUnit, 1, nState);
+    SUNITEVENT_Unregister(pGame, pUnit, 1, nState);
 
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
     {
@@ -856,7 +856,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     if (pSkillsTxtRecord->wAuraEvent[0] >= 0)
     {
-        SUNITEVENT_FreeTimer(pGame, pUnit, 1, pSkillsTxtRecord->nAuraState);
+        SUNITEVENT_Unregister(pGame, pUnit, 1, pSkillsTxtRecord->nAuraState);
 
         for (int32_t i = 0; i < 3; ++i)
         {
@@ -865,7 +865,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
                 break;
             }
 
-            sub_6FD156A0(pGame, pUnit, pSkillsTxtRecord->wAuraEvent[i], nSkillId, nSkillLevel, pSkillsTxtRecord->wAuraEventFunc[0], 1, pSkillsTxtRecord->nAuraState);
+            sub_6FD156A0(pGame, pUnit, D2C_UnitEventTypes(pSkillsTxtRecord->wAuraEvent[i]), nSkillId, nSkillLevel, pSkillsTxtRecord->wAuraEventFunc[0], 1, pSkillsTxtRecord->nAuraState);
         }
     }
 
@@ -1181,7 +1181,7 @@ int32_t __fastcall SKILLS_SrvSt39_Berserk(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     }
 
     D2COMMON_10476(pStatList, nFrame);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nFrame, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nFrame, 0, 0);
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nSkillLevel);
     return 1;
 }
@@ -1377,7 +1377,7 @@ int32_t __fastcall SKILLS_SrvDo077_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         return 0;
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     const int32_t nUnitType = pUnit ? pUnit->dwUnitType : 6;
 
@@ -1530,8 +1530,8 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
             PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_WALKING_UNIT);
             PATH_SetType(pUnit->pDynamicPath, PATHTYPE_UNKNOWN_7);
             SKILLS_SetFlags(pSkill, 0x200);
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 1, 0, 0);
         }
 
         sub_6FCBDE90(pUnit, 0);
@@ -1633,8 +1633,8 @@ int32_t __fastcall SKILLS_SrvDo078_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUn
         {
             if (!SKILLS_FindLeapAttackTarget(pGame, pUnit, pSkill))
             {
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
-                EVENT_SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + 4, 0, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + 4, 0, 0);
                 return 0;
             }
 
