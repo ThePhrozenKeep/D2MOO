@@ -19,8 +19,6 @@ static ExtraPatchAction D2GameExtraPatchActions[] = {
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
-static const int D2ClientImageBase = 0x6FC30000;
-
 static ExtraPatchAction D2ClientExtraPatchActions[] = {
 	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
@@ -33,6 +31,7 @@ ExtraPatchAction* __cdecl D2ClientGetExtraPatchAction(int index)
 __declspec(dllexport)
 uint32_t __cdecl DllPreLoadHook(HookContext* ctx, const wchar_t* dllName)
 {
+	if (!IsDebuggerEnabled()) return 0;
 	if (wcsicmp(dllName, L"D2Game.dll") == 0)
 	{
 		for (auto& p : D2GameExtraPatchActions)
