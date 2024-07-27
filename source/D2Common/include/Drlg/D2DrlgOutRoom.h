@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include "D2DrlgDrlgGrid.h"
 
 struct D2DrlgRoomStrc;

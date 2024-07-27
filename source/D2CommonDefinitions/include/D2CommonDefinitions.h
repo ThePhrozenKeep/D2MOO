@@ -3,7 +3,6 @@
 #include <D2BasicTypes.h>
 
 #include <D2Constants.h>
-#include <D2Common.h>
 
 // Use for empty/duplicated functions
 #define REMOVE_LATER_Trace FOG_Trace
@@ -15,8 +14,6 @@
 #define UNIMPLEMENTED() D2_ASSERTM(false, __FUNCTION__ "is not implemented yet.")
 #endif
 
-
-#include <Fog.h>
 #define D2_MAX_PATH 260
 
 

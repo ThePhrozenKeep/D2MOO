@@ -1,5 +1,5 @@
 #include "D2Text.h"
-
+#include <Fog.h>
 
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 #include <Units/Units.h>
 

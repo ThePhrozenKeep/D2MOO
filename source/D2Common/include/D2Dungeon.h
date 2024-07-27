@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include <Drlg/D2DrlgDrlg.h>
 
 #pragma pack(1)

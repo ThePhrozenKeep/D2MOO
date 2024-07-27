@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 
 struct D2DrlgStrc;
 struct D2DrlgLevelStrc;

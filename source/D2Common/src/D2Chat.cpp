@@ -3,6 +3,7 @@
 #include <D2Chat.h>
 #include <D2Lang.h>
 #include <D2StrTable.h>
+#include <Fog.h>
 
 //D2Common.0x6FDC3BF0 (#10892)
 D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText, int nTimeout)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include "Item.h"
 #include "Missile.h"
 #include "Monster.h"
