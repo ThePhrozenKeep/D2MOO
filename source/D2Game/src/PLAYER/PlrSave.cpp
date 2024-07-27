@@ -605,7 +605,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
 
                 if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter)
                 {
-                    gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName);
+                    gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter(&pClientInfo, szCharName, szAccountName);
                 }
 
                 D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
@@ -627,7 +627,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
             exit(-1);
         }
 
-        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter((int32_t*)&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nCharSaveTransactionToken);
+        gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter(&pClientInfo, szCharName, szAccountName, pSaveData, nFileSize + 2, nCharSaveTransactionToken);
         CLIENTS_CopySaveDataToClient(pClient, &pSaveData[2], nFileSize);
     }
 
