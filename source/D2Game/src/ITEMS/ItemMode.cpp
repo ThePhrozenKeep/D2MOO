@@ -5030,34 +5030,32 @@ void __fastcall ITEMMODE_EventFn4_Return(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC4A460
-void __fastcall sub_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventType)
+void __fastcall D2GAME_Items_EventsHandler_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType)
 {
-    void(__fastcall* dword_6FD27DDC[])(D2GameStrc*, D2UnitStrc*) =
-    {
-        nullptr,
-        nullptr,
-        nullptr,
-        sub_6FC4A2E0,
-        ITEMMODE_EventFn4_Return,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        sub_6FC4A450,
-        nullptr,
-        nullptr,
-    };
+	using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
 
-    if (IsBadCodePtr((FARPROC)dword_6FD27DDC[nEventType]))
-    {
-        FOG_DisplayAssert("scpfnEventFunctions[eEventType]", __FILE__, __LINE__);
-        exit(-1);
-    }
+	static const EventCallbackFunction scpfnItemEventFunctions_6FD27DDC[] =
+	{
+		nullptr,
+		nullptr,
+		nullptr,
+		sub_6FC4A2E0,
+		ITEMMODE_EventFn4_Return,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		sub_6FC4A450,
+		nullptr,
+		nullptr,
+	};
+	static_assert(EVENTTYPE_COUNT == std::size(scpfnItemEventFunctions_6FD27DDC), "missing callbacks");
 
-    dword_6FD27DDC[nEventType](pGame, pUnit);
+	D2_ASSERT(scpfnItemEventFunctions_6FD27DDC[nEventType]);
+    scpfnItemEventFunctions_6FD27DDC[nEventType](pGame, pUnit);
 }
 
 //D2Game.0x6FC4A4B0

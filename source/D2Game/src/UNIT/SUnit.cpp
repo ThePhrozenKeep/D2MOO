@@ -2123,8 +2123,9 @@ void __fastcall sub_6FCBDE90(D2UnitStrc* pUnit, int32_t bSetUninterruptable)
 }
 
 //D2Game.0x6FCBDF90
-int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4, int32_t a5)
+int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2C_EventTypes nEventType, int32_t a4, int32_t a5)
 {
+	D2_MAYBE_UNUSED(nEventType);
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER)
     {
         return 0;

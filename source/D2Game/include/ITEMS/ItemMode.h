@@ -4,6 +4,7 @@
 
 #include <DataTbls/ItemsTbls.h>
 #include "Items.h"
+#include <GAME/Event.h>
 
 #pragma pack(push, 1)
 struct D2UnkItemModeStrc
@@ -156,7 +157,7 @@ int32_t __fastcall sub_6FC4A350(D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nL
 //D2Game.0x6FC4A450
 void __fastcall sub_6FC4A450(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC4A460
-void __fastcall sub_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventType);
+void __fastcall D2GAME_Items_EventsHandler_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType);
 //D2Game.0x6FC4A4B0
 int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC4A660

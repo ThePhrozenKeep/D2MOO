@@ -49,7 +49,7 @@ struct D2TimerArgStrc
 	uint32_t dwUnitId;
 };
 
-using EventTimerCallback = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
+using EventTimerCallback = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
 struct D2EventTimerStrc
 {
 	D2C_EventTypes nEventType;

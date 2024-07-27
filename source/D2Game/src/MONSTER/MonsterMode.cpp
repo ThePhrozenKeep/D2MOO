@@ -70,12 +70,12 @@ constexpr D2MonModeInfoTableStrc stru_6FD28738[16] =
 };
 
 using MonEventFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
-constexpr MonEventFunc monEvents[15] =
+constexpr MonEventFunc gpMonsterEventFunctions[] =
 {
     D2GAME_MONSTERS_AiFunction01_6FC65080,
     D2GAME_MONSTERS_AiFunction02_6FC65150,
     D2GAME_MONSTERS_AiFunction03_6FCF0A70,
-    D2GAME_ApplyPeriodicStatDamage_6FC63440,
+    D2GAME_MONSTER_ApplyStatRegen_6FC63440,
     nullptr,
     D2GAME_MONSTERS_AiFunction06_6FD14370,
     D2GAME_MONSTERS_AiFunction07_6FC658B0,
@@ -88,6 +88,7 @@ constexpr MonEventFunc monEvents[15] =
     nullptr,
     nullptr,
 };
+static_assert(EVENTTYPE_COUNT == std::size(gpMonsterEventFunctions), "missing callbacks");
 
 constexpr D2MonModeCallbackTableStrc gMonModeCallbacks[16] =
 {
@@ -572,7 +573,7 @@ void __fastcall sub_6FC631B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a7, D
 }
 
 //D2Game.0x6FC63440
-void __fastcall D2GAME_ApplyPeriodicStatDamage_6FC63440(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
 {
     pUnit = pUnit;
 
@@ -754,9 +755,9 @@ void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
         if (returnEarly)
         {
-            if ((!STATES_CheckState(pUnit, STATE_FREEZE) || SUNIT_IsDead(pUnit)) && monEvents[2])
+            if ((!STATES_CheckState(pUnit, STATE_FREEZE) || SUNIT_IsDead(pUnit)) && gpMonsterEventFunctions[EVENTTYPE_AITHINK])
             {
-                monEvents[2](pGame, pUnit, 0, 0);
+                gpMonsterEventFunctions[EVENTTYPE_AITHINK](pGame, pUnit, 0, 0);
             }
             return;
         }
@@ -765,7 +766,7 @@ void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
     if (pUnit->dwAnimMode == MONMODE_WALK || pUnit->dwAnimMode == MONMODE_RUN)
     {
         UNITS_ChangeAnimMode(pUnit, MONMODE_NEUTRAL);
-        MONSTERMODE_EventHandler(pGame, pUnit, 2, 0, 0);
+        MONSTERMODE_EventHandler(pGame, pUnit, EVENTTYPE_AITHINK, 0, 0);
     }
     else
     {
@@ -812,9 +813,9 @@ void __fastcall sub_6FC63940(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (!STATES_CheckState(pUnit, STATE_FREEZE) || SUNIT_IsDead(pUnit))
     {
-        if (monEvents[2])
+        if (gpMonsterEventFunctions[EVENTTYPE_AITHINK])
         {
-            monEvents[2](pGame, pUnit, 0, 0);
+            gpMonsterEventFunctions[EVENTTYPE_AITHINK](pGame, pUnit, 0, 0);
         }
     }
 }
@@ -845,9 +846,9 @@ void __fastcall sub_6FC63A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (!STATES_CheckState(pUnit, STATE_FREEZE) || SUNIT_IsDead(pUnit))
     {
-        if (monEvents[2])
+        if (gpMonsterEventFunctions[EVENTTYPE_AITHINK])
         {
-            monEvents[2](pGame, pUnit, 0, 0);
+            gpMonsterEventFunctions[EVENTTYPE_AITHINK](pGame, pUnit, 0, 0);
         }
     }
 }
@@ -2115,20 +2116,20 @@ void __fastcall D2GAME_MONSTERS_AiFunction11_6FC65920(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC65930
-void __fastcall MONSTERMODE_EventHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall MONSTERMODE_EventHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t nSkillId, int32_t nSkillLevel)
 {
-    if (nEvent < 0 || nEvent >= 15)
+    if (nEvent < 0 || nEvent >= EVENTTYPE_COUNT)
     {
         return;
     }
 
     switch (nEvent)
     {
-    case 3:
-    case 4:
-    case 5:
-    case 8:
-    case 12:
+    case EVENTTYPE_STATREGEN:
+    case EVENTTYPE_TRAP:
+    case EVENTTYPE_RESET:
+    case EVENTTYPE_PERIODICSKILLS:
+    case EVENTTYPE_REMOVESTATE:
         break;
     default:
         if (STATES_CheckState(pUnit, STATE_FREEZE) && !SUNIT_IsDead(pUnit))
@@ -2138,7 +2139,7 @@ void __fastcall MONSTERMODE_EventHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         break;
     }
 
-    const MonEventFunc pfMonEvent = monEvents[nEvent];
+    const MonEventFunc pfMonEvent = gpMonsterEventFunctions[nEvent];
     if (pfMonEvent)
     {
         pfMonEvent(pGame, pUnit, nSkillId, nSkillLevel);

@@ -5196,8 +5196,10 @@ void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, D2Sta
 }
 
 //D2Game.0x6FC60090
-void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnused)
+void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType)
 {
+	D2_MAYBE_UNUSED(nEventType);
+
     using MissileSrvDoFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
     constexpr MissileSrvDoFunc gMissileSrvDoFuncTable[] =
     {

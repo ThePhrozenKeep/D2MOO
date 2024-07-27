@@ -1714,7 +1714,7 @@ void __fastcall sub_6FC81B90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
 }
 
 //D2Game.0x6FC81BD0
-void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t dwArg, int32_t dwArgEx)
+void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t dwArg, int32_t dwArgEx)
 {
     using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 
@@ -1733,8 +1733,10 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         nullptr,
         sub_6FC81B90,
         D2GAME_MONSTERS_AiFunction13_6FC65890,
-        D2GAME_PLRTRADE_Last_6FC937F0
+        D2GAME_PLRTRADE_Last_6FC937F0,
+		nullptr
     };
+	static_assert(EVENTTYPE_COUNT == std::size(off_6FD28F40), "missing callbacks");
 
     if (nEvent >= 0 && nEvent <= std::size(off_6FD28F40))
     {

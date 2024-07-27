@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
-
+#include <GAME/Event.h>
 
 #pragma pack(push, 1)
 struct D2UnkPlrModeStrc2
@@ -86,4 +86,4 @@ void __fastcall sub_6FC81B20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
 //D2Game.0x6FC81B90
 void __fastcall sub_6FC81B90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4);
 //D2Game.0x6FC81BD0
-void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t dwArg, int32_t dwArgEx);
+void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t dwArg, int32_t dwArgEx);

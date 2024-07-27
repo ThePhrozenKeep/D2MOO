@@ -586,7 +586,8 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
 //D2Game.0x6FC75250
 void __fastcall D2GAME_OBJMODE_InvokeEventFunction_6FC75250(D2GameStrc* pGame, D2UnitStrc* pObject, int32_t nEventType)
 {
-    void(__fastcall* gpEventFunctions_6FD28CD8[])(D2GameStrc*, D2UnitStrc*) =
+	using ObjEventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+    static ObjEventCallbackFunction gpEventFunctions_6FD28CD8[]=
     {
         sub_6FC74D10,
         sub_6FC74AC0,
@@ -603,10 +604,10 @@ void __fastcall D2GAME_OBJMODE_InvokeEventFunction_6FC75250(D2GameStrc* pGame, D
         nullptr,
         nullptr,
         nullptr,
-        nullptr,
     };
+	static_assert(EVENTTYPE_COUNT == std::size(gpEventFunctions_6FD28CD8), "missing callbacks");
 
-    if (IsBadCodePtr((FARPROC)gpEventFunctions_6FD28CD8[nEventType]))
+	if (IsBadCodePtr((FARPROC)gpEventFunctions_6FD28CD8[nEventType]))
     {
         FOG_DisplayAssert("scpfnEventFunctions[eEventType]", __FILE__, __LINE__);
         exit(-1);

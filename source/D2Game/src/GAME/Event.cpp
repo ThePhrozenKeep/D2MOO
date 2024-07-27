@@ -204,7 +204,7 @@ void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 }
 
 // Only differs from EventTimerCallback by return type
-using ExecuteEventCallback = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
+using ExecuteEventCallback = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
 // Helper function
 static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCallback, D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
@@ -278,7 +278,7 @@ void __fastcall EVENT_ExecuteMonsterEvents(D2GameStrc* pGame, D2EventTimerQueueS
 void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
     EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pObject, int32_t nEventType, int32_t, int32_t) {
+        [](D2GameStrc* pGame, D2UnitStrc* pObject, D2C_EventTypes nEventType, int32_t, int32_t) {
             D2GAME_OBJMODE_InvokeEventFunction_6FC75250(pGame, pObject, nEventType);
         }, pGame, pTimerQueue, pEventTimer, a4 
     );
@@ -288,7 +288,7 @@ void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueSt
 void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
     EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nEventType, int32_t, int32_t) {
+        [](D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType, int32_t, int32_t) {
             MISSMODE_SrvDoHandler(pGame, pMissile, nEventType);
         }, pGame, pTimerQueue, pEventTimer, a4 
     );
@@ -298,8 +298,8 @@ void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueS
 void __fastcall EVENT_ExecuteItemEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
     EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventType, int32_t, int32_t) {
-            sub_6FC4A460(pGame, pUnit, nEventType);
+        [](D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t, int32_t) {
+            D2GAME_Items_EventsHandler_6FC4A460(pGame, pUnit, nEventType);
         }, pGame, pTimerQueue, pEventTimer, a4
     );
     

@@ -2,6 +2,7 @@
 
 #include <Units/Units.h>
 #include <UNIT/SUnitDmg.h>
+#include <GAME/Event.h>
 
 
 #pragma pack(push, 1)
@@ -283,4 +284,4 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 //D2Game.0x6FC60080
 void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FC60090
-void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnused);
+void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType);
