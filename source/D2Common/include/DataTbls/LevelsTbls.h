@@ -107,12 +107,12 @@ struct D2LevelsTxt
 	uint8_t nQuest;						//0x30
 	uint8_t nRangedSpawn;				//0x31
 	uint8_t nNumMon;					//0x32
-	uint8_t nNumNormMon;				//0x33
-	uint8_t nNumNMon;					//0x34
-	uint8_t nNumUMon;					//0x35
-	short wMon[25];						//0x36
-	short wNMon[25];					//0x68
-	short wUMon[25];					//0x9A
+	uint8_t nNumNormalMonsters;			//0x33
+	uint8_t nNumNightmareHellMonsters;	//0x34
+	uint8_t nNumUniqueMonsters;			//0x35
+	int16_t wNormalMonsters[25];		//0x36 Mon1 to Mon25
+	int16_t wNightmareHellMonsters[25];	//0x68 NMon1 to NMon25
+	int16_t wUniqueMonsters[25];		//0x9A UMon1 to UMon25
 	uint16_t wCMon[4];					//0xCC
 	uint16_t wCPct[4];					//0xD4
 	uint16_t wCAmt[4];					//0xDC

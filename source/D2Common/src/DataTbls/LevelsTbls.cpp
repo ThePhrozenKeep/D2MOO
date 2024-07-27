@@ -247,38 +247,38 @@ void __fastcall DATATBLS_LoadLevelsTxt(HD2ARCHIVE hArchive)
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wNormalMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumNormMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumNormalMonsters = nMonsterCounter;
 
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wNMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wNightmareHellMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumNMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumNightmareHellMonsters = nMonsterCounter;
 
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wUMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wUniqueMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumUMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumUniqueMonsters = nMonsterCounter;
 	}
 }
 

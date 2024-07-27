@@ -1550,23 +1550,23 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
 int32_t __fastcall MONSTERSPAWN_SpawnRandomMonsterForLevel(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
     D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
-    if (!pLevelsTxtRecord->nNumNormMon)
+    if (!pLevelsTxtRecord->nNumNormalMonsters)
     {
         FOG_DisplayWarning("ptLevelData->bMonTot", __FILE__, __LINE__);
         return 0;
     }
 
-    int32_t nIndex = ITEMS_RollLimitedRandomNumber(pRoom ? &pRoom->pSeed : nullptr, pLevelsTxtRecord->nNumNormMon);
+    int32_t nIndex = ITEMS_RollLimitedRandomNumber(pRoom ? &pRoom->pSeed : nullptr, pLevelsTxtRecord->nNumNormalMonsters);
 
-    for (int32_t i = 0; i < pLevelsTxtRecord->nNumNormMon; ++i)
+    for (int32_t i = 0; i < pLevelsTxtRecord->nNumNormalMonsters; ++i)
     {
         ++nIndex;
-        if (nIndex >= pLevelsTxtRecord->nNumNormMon)
+        if (nIndex >= pLevelsTxtRecord->nNumNormalMonsters)
         {
             nIndex = 0;
         }
 
-        const int32_t nMonsterId = pLevelsTxtRecord->wMon[nIndex];
+        const int32_t nMonsterId = pLevelsTxtRecord->wNormalMonsters[nIndex];
         D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
 
         if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISSPAWN])

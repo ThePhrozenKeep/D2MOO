@@ -1144,7 +1144,7 @@ int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId)
 
 	pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
 
-	if (pLevelsTxtRecord && pLevelsTxtRecord->nNumNormMon)
+	if (pLevelsTxtRecord && pLevelsTxtRecord->nNumNormalMonsters)
 	{
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
 		if (pMonStatsTxtRecord)
@@ -1154,11 +1154,11 @@ int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId)
 			pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
 			if (pMonStatsTxtRecord)
 			{
-				for (int i = 0; i < pLevelsTxtRecord->nNumNormMon; ++i)
+				for (int i = 0; i < pLevelsTxtRecord->nNumNormalMonsters; ++i)
 				{
-					if (MONSTERS_GetBaseIdFromMonsterId(pLevelsTxtRecord->wMon[i]) == nClassId)
+					if (MONSTERS_GetBaseIdFromMonsterId(pLevelsTxtRecord->wNormalMonsters[i]) == nClassId)
 					{
-						return pLevelsTxtRecord->wMon[i];
+						return pLevelsTxtRecord->wNormalMonsters[i];
 					}
 				}
 

@@ -156,13 +156,13 @@ int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2Monster
     if (bSpawnUMon && pGame->nDifficulty == DIFFMODE_NORMAL)
     {
         D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(pMonsterRegion->dwlevel);
-        if (!pLevelsTxtRecord->nNumUMon)
+        if (!pLevelsTxtRecord->nNumUniqueMonsters)
         {
             *ppMonStatsTxtRecord = nullptr;
             return 0;
         }
 
-        const int32_t nMonsterId = pLevelsTxtRecord->wUMon[ITEMS_RollLimitedRandomNumber(pSeed, pLevelsTxtRecord->nNumUMon)];
+        const int32_t nMonsterId = pLevelsTxtRecord->wUniqueMonsters[ITEMS_RollLimitedRandomNumber(pSeed, pLevelsTxtRecord->nNumUniqueMonsters)];
         *ppMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
         return nMonsterId;
     }

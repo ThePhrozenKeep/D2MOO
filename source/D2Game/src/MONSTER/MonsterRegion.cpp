@@ -942,35 +942,35 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
             pMonsterRegion->dwDungeonLevelEx = pLevelsTxtRecord->wMonLvl[nDifficulty];
         }
 
-        int32_t nNumMon = std::min(pLevelsTxtRecord->nNumMon, 13ui8);
-        int32_t nNumNMon = pLevelsTxtRecord->nNumNormMon;
+        int32_t nNumMonstersToSpawn = std::min(pLevelsTxtRecord->nNumMon, 13ui8);
+        int32_t nNumMonstersInSpawnList = pLevelsTxtRecord->nNumNormalMonsters;
         if (nDifficulty > 0)
         {
-            nNumNMon = pLevelsTxtRecord->nNumNMon;
+            nNumMonstersInSpawnList = pLevelsTxtRecord->nNumNightmareHellMonsters;
         }
 
-        nNumMon = std::min(nNumMon, nNumNMon);
+        nNumMonstersToSpawn = std::min(nNumMonstersToSpawn, nNumMonstersInSpawnList);
 
-        int16_t monsterIds[26] = {};
+        int16_t monsterIds[ARRAY_SIZE(D2LevelsTxt::wNormalMonsters)] = {};
         D2MonRegDataStrc* pMonRegData = pMonsterRegion->pMonData;
         if (nDifficulty > 0)
         {
-            if (pLevelsTxtRecord->nNumNMon > 0)
+            if (pLevelsTxtRecord->nNumNightmareHellMonsters > 0)
             {
-                memcpy(monsterIds, pLevelsTxtRecord->wNMon, pLevelsTxtRecord->nNumNMon);
+                memcpy(monsterIds, pLevelsTxtRecord->wNightmareHellMonsters, sizeof(monsterIds[0]) * pLevelsTxtRecord->nNumNightmareHellMonsters);
             }
         }
         else
         {
-            if (pLevelsTxtRecord->nNumNormMon > 0)
+            if (pLevelsTxtRecord->nNumNormalMonsters > 0)
             {
-                memcpy(monsterIds, pLevelsTxtRecord->wMon, pLevelsTxtRecord->nNumNormMon);
+                memcpy(monsterIds, pLevelsTxtRecord->wNormalMonsters, sizeof(monsterIds[0]) * pLevelsTxtRecord->nNumNormalMonsters);
             }
         }
 
-        for (int32_t i = 0; i < nNumMon && nNumNMon > 0; ++i)
+        for (int32_t i = 0; i < nNumMonstersToSpawn && nNumMonstersInSpawnList > 0; ++i)
         {
-            int32_t nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumNMon);
+            int32_t nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumMonstersInSpawnList);
             int32_t nMonsterId = monsterIds[nIndex];
             if (!i && pLevelsTxtRecord->nRangedSpawn)
             {
@@ -982,19 +982,21 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
                         break;
                     }
 
-                    nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumNMon);
+                    nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumMonstersInSpawnList);
                     nMonsterId = monsterIds[nIndex];
                 }
             }
-
-            --nNumNMon;
-            if (nNumNMon > nIndex)
+			// Remove monster from list
+			const int32_t nPreviousNumMonstersInSpawnList = nNumMonstersInSpawnList;
+            --nNumMonstersInSpawnList;
+            if (nPreviousNumMonstersInSpawnList > (nIndex+1))
             {
-                memcpy(&monsterIds[nIndex], &monsterIds[nIndex + 1], 2 * (nNumNMon - nIndex));
+				// Note: original game does a memcpy here, but we have overlapping inputs.
+                memmove(&monsterIds[nIndex], &monsterIds[nIndex + 1], sizeof(monsterIds[0]) * (nNumMonstersInSpawnList - nIndex));
             }
 
             D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
-            if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISSPAWN])
+            if (pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISSPAWN]))
             {
                 pMonRegData->nMonHcIdx = nMonsterId;
                 pMonRegData->nRarity = pMonStatsTxtRecord->nRarity;
