@@ -4,7 +4,7 @@
 #include "GAME/Event.h"
 #include "SUnitDmg.h"
 
-using D2EVENTTYPE_Function = int32_t(__fastcall*)(D2GameStrc*, int32_t, D2UnitStrc*, D2UnitStrc*, D2DamageStrc*, int32_t, int32_t);
+using D2UnitEventCallbackFunction = int32_t(__fastcall*)(D2GameStrc*, int32_t, D2UnitStrc*, D2UnitStrc*, D2DamageStrc*, int32_t, int32_t);
 
 enum D2C_UnitEventTypes: uint8_t // Events.txt
 {
@@ -38,7 +38,7 @@ struct D2UnitEventStrc
 	int32_t unk0x08;						//0x08
 	int32_t nGUID1;							//0x0C First identifier
 	int32_t nGUID2;							//0x10 Second identifier
-	D2EVENTTYPE_Function pCallback;	//0x14
+	D2UnitEventCallbackFunction pCallback;	//0x14
 	D2UnitEventStrc* pPrevious;				//0x18  Seems to be any kind of id, not necessariyl the prevtimer ?
 	D2UnitEventStrc* pNext;					//0x1C
 };
@@ -46,7 +46,7 @@ struct D2UnitEventStrc
 //D2Game.0x6FCC3610
 void __fastcall SUNITEVENT_FreeEventList(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCC3650
-D2UnitEventStrc* __fastcall SUNITEVENT_Register(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEvent, int32_t nGUID1, int32_t nGUID2, D2EVENTTYPE_Function pCallback, uint32_t nQueueNo, int32_t a8);
+D2UnitEventStrc* __fastcall SUNITEVENT_Register(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEvent, int32_t nGUID1, int32_t nGUID2, D2UnitEventCallbackFunction pCallback, uint32_t nQueueNo, int32_t a8);
 //D2Game.0x6FCC36D0
 void __fastcall SUNITEVENT_Unregister(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerQueueNo, int32_t a4);
 //D2Game.0x6FCC3750

@@ -4119,7 +4119,7 @@ void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 //D2Game.0x6FD156A0
 D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
 {
-    constexpr D2EVENTTYPE_Function gpEventCallbackTable_6FD40D20[] =
+    constexpr D2UnitEventCallbackFunction gpEventCallbackTable_6FD40D20[] =
     {
         nullptr,
         SKILLS_EventFunc01_ChillingArmor,
