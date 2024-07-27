@@ -200,7 +200,7 @@ D2FUNC_DLL(FOG, MPQSetConfig, BOOL, __fastcall, (int dwDirectAccessFlags, int bE
 D2FUNC_DLL(FOG, FOpenFile, BOOL, __fastcall, (const char* szFile, HSFILE* pFileHandle), 0x11600)													//Fog.#10102
 D2FUNC_DLL(FOG, FCloseFile, void, __fastcall, (HSFILE pFile), 0x11610)																				//Fog.#10103
 D2FUNC_DLL(FOG, FReadFile, BOOL, __fastcall, (HSFILE pFile, void* pBuffer, size_t nSize, int* nBytesRead, uint32_t, uint32_t, uint32_t), 0x11620)	//Fog.#10104
-D2FUNC_DLL(FOG, FGetFileSize, size_t, __fastcall, (HSFILE pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)											//Fog.#10105
+D2FUNC_DLL(FOG, FGetFileSize, uint32_t, __fastcall, (HSFILE pFileHandle, uint32_t* lpFileSizeHigh), 0x11650)										//Fog.#10105
 D2FUNC_DLL(FOG, FSetFilePointer, size_t, __fastcall, (HSFILE hFile, int32_t lDistanceToMove, int32_t* lpDistanceToMoveHigh, uint32_t dwMoveMethod), 0x11660)//Fog.#10106
 D2FUNC_DLL(FOG, CreateFileA, HANDLE, __fastcall, (LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile), 0x11680); //Fog.#10107
 D2FUNC_DLL(FOG, DeleteFileA, BOOL, __fastcall, (LPCSTR lpFileName), 0x116B0);																		//Fog.#10108

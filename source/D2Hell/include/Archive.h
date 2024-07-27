@@ -86,7 +86,7 @@ void __fastcall ARCHIVE_CloseFile(HD2ARCHIVE hArchive, HSFILE hFile);
  * 1.14c: Game.0x00514B87
  * D2XBeta: D2Server.dll.0x10009C76
  */
-size_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, size_t* pdwFileSizeHigh);
+uint32_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, uint32_t* pdwFileSizeHigh);
 
 /**
  * Sets the file pointer of a file in the MPQ archives.
