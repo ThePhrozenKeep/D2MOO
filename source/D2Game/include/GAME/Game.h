@@ -61,7 +61,7 @@ static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2G
 
 
 using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
-using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint32_t nExperienceLow, int32_t nExperienceHigh, uint32_t nFlags, const char* szCharName, D2CharacterPreviewInfoStrc* pPreviewInfoStrc, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken, FILETIME* pSaveCreationTimestamp);
+using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint64_t nExperience, uint32_t nFlags, const char* szCharName, const char* pPreviewInfoSerialized, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken, FILETIME* pSaveCreationTimestamp);
 using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
 using FnSaveDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nCharSaveTransactionToken);
 using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
