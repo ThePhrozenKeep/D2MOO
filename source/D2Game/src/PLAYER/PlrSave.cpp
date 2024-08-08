@@ -573,12 +573,12 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
                 *(uint32_t*)&pSaveData[173] = 0;
             }
 
-            int32_t bDataMismatch = 0;
+            bool bDataSameAsPreviousSave = true;
             for (int32_t i = 0; i < nOldFileSize; ++i)
             {
                 if (((uint8_t*)pOldSaveData)[i] != pSaveData[i + 2])
                 {
-                    bDataMismatch = 1;
+					bDataSameAsPreviousSave = false;
                     break;
                 }
             }
@@ -599,8 +599,9 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
                 *(uint32_t*)&pSaveData[173] = nNewMapSeed;
             }
 
-            if (bDataMismatch)
+            if (bDataSameAsPreviousSave)
             {
+				// Since we have the same save file, relock instead of saving
                 ++dword_6FD4DC28;
 
                 if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter)
@@ -609,7 +610,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
                 }
 
                 D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
-                return 0;
+                return FALSE;
             }
         }
 
@@ -631,7 +632,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
         CLIENTS_CopySaveDataToClient(pClient, &pSaveData[2], nFileSize);
     }
 
-    return 1;
+    return TRUE;
 }
 
 //D2Game.0x6FC8A500
