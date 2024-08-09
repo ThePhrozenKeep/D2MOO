@@ -686,9 +686,9 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
 						&pClientToRemove->pClientInfo,
 						pGame->nGameId,
-						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
+						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience,
 						pClientToRemove->tSaveFlags.nPackedValue, pClientToRemove->szName,
-						&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
+						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
 						0,
 						0,
 						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
@@ -711,9 +711,8 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
 						&pClientToRemove->pClientInfo,
 						pGame->nGameId,
-						0, 0, 0, 0,
-						0, pClientToRemove->szName,
-						&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
+						0, 0, 0,0, pClientToRemove->szName,
+						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
 						0,
 						0,
 						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
