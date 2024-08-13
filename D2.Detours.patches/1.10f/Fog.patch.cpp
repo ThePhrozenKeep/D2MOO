@@ -13,7 +13,7 @@ extern "C" {
     __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
     __declspec(dllexport)
-    constexpr int __cdecl GetLastOrdinal() { return 10'267; }
+    constexpr int __cdecl GetLastOrdinal() { return 10'264; }
     constexpr int GetOrdinalCount() { return GetLastOrdinal() - GetBaseOrdinal() + 1; }
 }
 

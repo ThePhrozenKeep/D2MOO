@@ -1,14 +1,14 @@
 LIBRARY		FOG
 EXPORTS
-;   FOG_10168 @10168 ;PERFORMANCE_
-;   FOG_10169 @10169 ;PERFORMANCE_
-;   FOG_10256 @10256 ;PERFORMANCE_
-;   FOG_10257 @10257 ;PERFORMANCE_
-;   FOG_10258 @10258 ;gcsCriticalS
+UnimplementedOrdinal_10168=UnimplementedOrdinal @10168;   FOG_10168 @10168 ;PERFORMANCE_
+UnimplementedOrdinal_10169=UnimplementedOrdinal @10169;   FOG_10169 @10169 ;PERFORMANCE_
+UnimplementedOrdinal_10256=UnimplementedOrdinal @10256;   FOG_10256 @10256 ;PERFORMANCE_
+UnimplementedOrdinal_10257=UnimplementedOrdinal @10257;   FOG_10257 @10257 ;PERFORMANCE_
+UnimplementedOrdinal_10258=UnimplementedOrdinal @10258;   FOG_10258 @10258 ;gcsCriticalS
     gdwBitMasks                 @10259
     gdwInvBitMasks              @10260
-;   FOG_10261 @10261 ;gfTimeCritic
-;   FOG_10264 @10264 ;gqwCriticalS
+UnimplementedOrdinal ;   FOG_10261 @10261 ;gfTimeCritic
+UnimplementedOrdinal ;   FOG_10264 @10264 ;gqwCriticalS
     FOG_SOCKET_CloseSocket @10000 NONAME
     FOG_SOCKET_WSAStartup @10001 NONAME
     FOG_SOCKET_WSACleanup @10002 NONAME
@@ -29,68 +29,68 @@ EXPORTS
     FOG_SOCKET_SetBlockingMode @10017 NONAME
     FOG_csprintf @10018 NONAME
     FOG_InitErrorMgr @10019 NONAME
-;   FOG_10020 @10020 NONAME
+UnimplementedOrdinal_10020=UnimplementedOrdinal @10020;   FOG_10020 @10020 NONAME
     FOG_SetLogPrefix @10021 NONAME
     FOG_GetSystemInfo @10022 NONAME
     FOG_DisplayAssert @10023 NONAME
     FOG_DisplayHalt @10024 NONAME
     FOG_DisplayWarning @10025 NONAME
     FOG_DisplayError @10026 NONAME
-;   FOG_10027 @10027 NONAME
-;   FOG_10028 @10028 NONAME
+UnimplementedOrdinal_10027=UnimplementedOrdinal @10027;   FOG_10027 @10027 NONAME
+UnimplementedOrdinal_10028=UnimplementedOrdinal @10028;   FOG_10028 @10028 NONAME
     FOG_Trace @10029 NONAME
     FOG_TraceF @10030 NONAME
     FOG_TraceAppend @10031 NONAME
     FOG_TraceMemory @10032 NONAME
     FOG_CrashDeadlockDetected @10033 NONAME
-;   FOG_CrashDumpThread @10034 NONAME
-;   FOG_10035 @10035 NONAME
-;   FOG_10036 @10036 NONAME
-;   FOG_10037 @10037 NONAME
-;   FOG_10038 @10038 NONAME
+UnimplementedOrdinal_10034=UnimplementedOrdinal @10034;   FOG_CrashDumpThread @10034 NONAME
+UnimplementedOrdinal_10035=UnimplementedOrdinal @10035;   FOG_10035 @10035 NONAME
+UnimplementedOrdinal_10036=UnimplementedOrdinal @10036;   FOG_10036 @10036 NONAME
+UnimplementedOrdinal_10037=UnimplementedOrdinal @10037;   FOG_10037 @10037 NONAME
+UnimplementedOrdinal_10038=UnimplementedOrdinal @10038;   FOG_10038 @10038 NONAME
     FOG_IsHandlingError @10039 NONAME
-;   FOG_10040 @10040 NONAME
-;   FOG_10041 @10041 NONAME
+UnimplementedOrdinal_10040=UnimplementedOrdinal @10040;   FOG_10040 @10040 NONAME
+UnimplementedOrdinal_10041=UnimplementedOrdinal @10041;   FOG_10041 @10041 NONAME
     FOG_Alloc @10042 NONAME
     FOG_Free @10043 NONAME
     FOG_Realloc @10044 NONAME
     FOG_AllocPool @10045 NONAME
     FOG_FreePool @10046 NONAME
     FOG_ReallocPool @10047 NONAME
-;   FOG_10048 @10048 NONAME
-;   FOG_10049 @10049 NONAME
+UnimplementedOrdinal_10048=UnimplementedOrdinal @10048;   FOG_10048 @10048 NONAME
+UnimplementedOrdinal_10049=UnimplementedOrdinal @10049;   FOG_10049 @10049 NONAME
    FOG_10050_EnterCriticalSection @10050 NONAME
-;   FOG_10051 @10051 NONAME
+UnimplementedOrdinal_10051=UnimplementedOrdinal @10051;   FOG_10051 @10051 NONAME
     FOG_GetMemoryUsage @10052 NONAME
-;   FOG_10053 @10053 NONAME
-;   FOG_10054 @10054 NONAME
+UnimplementedOrdinal_10053=UnimplementedOrdinal @10053;   FOG_10053 @10053 NONAME
+UnimplementedOrdinal_10054=UnimplementedOrdinal @10054;   FOG_10054 @10054 NONAME
     FOG_10055_GetSyncTime @10055 NONAME
-;   FOG_10056 @10056 NONAME
-;   FOG_10057 @10057 NONAME
-;   FOG_10058 @10058 NONAME
-;   FOG_10059 @10059 NONAME
-;   FOG_10060 @10060 NONAME
-;   FOG_10061 @10061 NONAME
-;   FOG_10062 @10062 NONAME
-;   FOG_10063 @10063 NONAME
-;   FOG_10064 @10064 NONAME
-;   FOG_10065 @10065 NONAME
-;   FOG_10066 @10066 NONAME
-;   FOG_10067 @10067 NONAME
-;   FOG_10068 @10068 NONAME
-;   FOG_10069 @10069 NONAME
-;   FOG_10070 @10070 NONAME
-;   FOG_10071 @10071 NONAME
-;   FOG_10072 @10072 NONAME
-;   FOG_10073 @10073 NONAME
-;   FOG_10074 @10074 NONAME
-;   FOG_10075 @10075 NONAME
-;   FOG_10076 @10076 NONAME
-;   FOG_10077 @10077 NONAME
-;   FOG_10078 @10078 NONAME
-;   FOG_10079 @10079 NONAME
-;   FOG_10080 @10080 NONAME
-;   FOG_10081 @10081 NONAME
+UnimplementedOrdinal_10056=UnimplementedOrdinal @10056;   FOG_10056 @10056 NONAME
+UnimplementedOrdinal_10057=UnimplementedOrdinal @10057;   FOG_10057 @10057 NONAME
+UnimplementedOrdinal_10058=UnimplementedOrdinal @10058;   FOG_10058 @10058 NONAME
+UnimplementedOrdinal_10059=UnimplementedOrdinal @10059;   FOG_10059 @10059 NONAME
+UnimplementedOrdinal_10060=UnimplementedOrdinal @10060;   FOG_10060 @10060 NONAME
+UnimplementedOrdinal_10061=UnimplementedOrdinal @10061;   FOG_10061 @10061 NONAME
+UnimplementedOrdinal_10062=UnimplementedOrdinal @10062;   FOG_10062 @10062 NONAME
+UnimplementedOrdinal_10063=UnimplementedOrdinal @10063;   FOG_10063 @10063 NONAME
+UnimplementedOrdinal_10064=UnimplementedOrdinal @10064;   FOG_10064 @10064 NONAME
+UnimplementedOrdinal_10065=UnimplementedOrdinal @10065;   FOG_10065 @10065 NONAME
+UnimplementedOrdinal_10066=UnimplementedOrdinal @10066;   FOG_10066 @10066 NONAME
+UnimplementedOrdinal_10067=UnimplementedOrdinal @10067;   FOG_10067 @10067 NONAME
+UnimplementedOrdinal_10068=UnimplementedOrdinal @10068;   FOG_10068 @10068 NONAME
+UnimplementedOrdinal_10069=UnimplementedOrdinal @10069;   FOG_10069 @10069 NONAME
+UnimplementedOrdinal_10070=UnimplementedOrdinal @10070;   FOG_10070 @10070 NONAME
+UnimplementedOrdinal_10071=UnimplementedOrdinal @10071;   FOG_10071 @10071 NONAME
+UnimplementedOrdinal_10072=UnimplementedOrdinal @10072;   FOG_10072 @10072 NONAME
+UnimplementedOrdinal_10073=UnimplementedOrdinal @10073;   FOG_10073 @10073 NONAME
+UnimplementedOrdinal_10074=UnimplementedOrdinal @10074;   FOG_10074 @10074 NONAME
+UnimplementedOrdinal_10075=UnimplementedOrdinal @10075;   FOG_10075 @10075 NONAME
+UnimplementedOrdinal_10076=UnimplementedOrdinal @10076;   FOG_10076 @10076 NONAME
+UnimplementedOrdinal_10077=UnimplementedOrdinal @10077;   FOG_10077 @10077 NONAME
+UnimplementedOrdinal_10078=UnimplementedOrdinal @10078;   FOG_10078 @10078 NONAME
+UnimplementedOrdinal_10079=UnimplementedOrdinal @10079;   FOG_10079 @10079 NONAME
+UnimplementedOrdinal_10080=UnimplementedOrdinal @10080;   FOG_10080 @10080 NONAME
+UnimplementedOrdinal_10081=UnimplementedOrdinal @10081;   FOG_10081 @10081 NONAME
     FOG_10082_Noop @10082 NONAME
     FOG_10083_Cos_LUT @10083 NONAME
     FOG_10084_Sin_LUT @10084 NONAME
@@ -107,7 +107,7 @@ EXPORTS
     FOG_AsyncDataGetBufferSize @10095 NONAME
     FOG_AsyncDataSetResults @10096 NONAME
     FOG_AsyncDataFree @10097 NONAME
-;   FOG_10098 @10098 NONAME ; NOOP, same as 10192
+UnimplementedOrdinal_10098=UnimplementedOrdinal @10098;   FOG_10098 @10098 NONAME ; NOOP, same as 10192
     FOG_AsyncDataSetPriority @10099 NONAME
     FOG_AsyncDataHandlePriorityChanges @10100 NONAME
     FOG_MPQSetConfig @10101 NONAME
@@ -119,69 +119,69 @@ EXPORTS
     FOG_CreateFileA @10107 NONAME
     FOG_DeleteFileA @10108 NONAME
     FOG_CloseFile @10109 NONAME
-;   FOG_10110 @10110 NONAME
-;   FOG_10111 @10111 NONAME
-;   FOG_10112 @10112 NONAME
-;   FOG_10113 @10113 NONAME
-;   FOG_10114 @10114 NONAME
+UnimplementedOrdinal_10110=UnimplementedOrdinal @10110;   FOG_10110 @10110 NONAME
+UnimplementedOrdinal_10111=UnimplementedOrdinal @10111;   FOG_10111 @10111 NONAME
+UnimplementedOrdinal_10112=UnimplementedOrdinal @10112;   FOG_10112 @10112 NONAME
+UnimplementedOrdinal_10113=UnimplementedOrdinal @10113;   FOG_10113 @10113 NONAME
+UnimplementedOrdinal_10114=UnimplementedOrdinal @10114;   FOG_10114 @10114 NONAME
     FOG_GetSavePath @10115 NONAME
     FOG_GetInstallPath @10116 NONAME
     FOG_UseDirect @10117 NONAME
     BITMANIP_SetBitState        @10118 NONAME
     BITMANIP_GetBitState        @10119 NONAME
     BITMANIP_MaskBitstate       @10120 NONAME
-;   FOG_10121 @10121 NONAME
-;   FOG_10122 @10122 NONAME
-;   FOG_10123 @10123 NONAME
-;   FOG_10124 @10124 NONAME
-;   FOG_10125 @10125 NONAME
+UnimplementedOrdinal_10121=UnimplementedOrdinal @10121;   FOG_10121 @10121 NONAME
+UnimplementedOrdinal_10122=UnimplementedOrdinal @10122;   FOG_10122 @10122 NONAME
+UnimplementedOrdinal_10123=UnimplementedOrdinal @10123;   FOG_10123 @10123 NONAME
+UnimplementedOrdinal_10124=UnimplementedOrdinal @10124;   FOG_10124 @10124 NONAME
+UnimplementedOrdinal_10125=UnimplementedOrdinal @10125;   FOG_10125 @10125 NONAME
     BITMANIP_Initialize         @10126 NONAME
     BITMANIP_GetSize            @10127 NONAME
     BITMANIP_Write              @10128 NONAME
     BITMANIP_ReadSigned         @10129 NONAME
     BITMANIP_Read               @10130 NONAME
     BITMANIP_GoToNextByte       @10131 NONAME
-;   FOG_10132 @10132 NONAME
-;   FOG_10133 @10133 NONAME
-;   FOG_10134 @10134 NONAME
-;   FOG_10135 @10135 NONAME
-;   FOG_10136 @10136 NONAME
+UnimplementedOrdinal_10132=UnimplementedOrdinal @10132;   FOG_10132 @10132 NONAME
+UnimplementedOrdinal_10133=UnimplementedOrdinal @10133;   FOG_10133 @10133 NONAME
+UnimplementedOrdinal_10134=UnimplementedOrdinal @10134;   FOG_10134 @10134 NONAME
+UnimplementedOrdinal_10135=UnimplementedOrdinal @10135;   FOG_10135 @10135 NONAME
+UnimplementedOrdinal_10136=UnimplementedOrdinal @10136;   FOG_10136 @10136 NONAME
     FOG_ComputeStringCRC16 @10137 NONAME
-;   FOG_10138 @10138 NONAME
-;   FOG_10139 @10139 NONAME
-;   FOG_10140 @10140 NONAME
-;   FOG_10141 @10141 NONAME
+UnimplementedOrdinal_10138=UnimplementedOrdinal @10138;   FOG_10138 @10138 NONAME
+UnimplementedOrdinal_10139=UnimplementedOrdinal @10139;   FOG_10139 @10139 NONAME
+UnimplementedOrdinal_10140=UnimplementedOrdinal @10140;   FOG_10140 @10140 NONAME
+UnimplementedOrdinal_10141=UnimplementedOrdinal @10141;   FOG_10141 @10141 NONAME
     FOG_CreateNewPoolSystem @10142 NONAME
     FOG_DestroyMemoryPoolSystem @10143 NONAME
-;   FOG_10144 @10144 NONAME
-;   FOG_10145 @10145 NONAME
-;   FOG_10146 @10146 NONAME
-;   FOG_10147 @10147 NONAME
-;   FOG_10148 @10148 NONAME
+UnimplementedOrdinal_10144=UnimplementedOrdinal @10144;   FOG_10144 @10144 NONAME
+UnimplementedOrdinal_10145=UnimplementedOrdinal @10145;   FOG_10145 @10145 NONAME
+UnimplementedOrdinal_10146=UnimplementedOrdinal @10146;   FOG_10146 @10146 NONAME
+UnimplementedOrdinal_10147=UnimplementedOrdinal @10147;   FOG_10147 @10147 NONAME
+UnimplementedOrdinal_10148=UnimplementedOrdinal @10148;   FOG_10148 @10148 NONAME
     FOG_InitializeServer @10149 NONAME
-;   FOG_10150 @10150 NONAME
+UnimplementedOrdinal_10150=UnimplementedOrdinal @10150;   FOG_10150 @10150 NONAME
     FOG_SetMaxClientsPerGame @10151 NONAME
     FOG_10152 @10152 NONAME
-;   FOG_10153 @10153 NONAME
+UnimplementedOrdinal_10153=UnimplementedOrdinal @10153;   FOG_10153 @10153 NONAME
     FOG_WaitForSingleObject @10154 NONAME
-;   FOG_10155 @10155 NONAME
+UnimplementedOrdinal_10155=UnimplementedOrdinal @10155;   FOG_10155 @10155 NONAME
     FOG_10156 @10156 NONAME
     FOG_10157 @10157 NONAME
     FOG_10158 @10158 NONAME
     FOG_10159 @10159 NONAME
-;   FOG_10160 @10160 NONAME
+UnimplementedOrdinal_10160=UnimplementedOrdinal @10160;   FOG_10160 @10160 NONAME
     FOG_10161 @10161 NONAME
     FOG_10162 @10162 NONAME
     FOG_10163 @10163 NONAME
     FOG_10164 @10164 NONAME
     FOG_10165 @10165 NONAME
     FOG_10166 @10166 NONAME
-;   FOG_10167 @10167 NONAME
+UnimplementedOrdinal_10167=UnimplementedOrdinal @10167;   FOG_10167 @10167 NONAME
     FOG_10170 @10170 NONAME
     FOG_10171 @10171 NONAME
     FOG_10172 @10172 NONAME
     FOG_10173 @10173 NONAME
-;   FOG_10174 @10174 NONAME
+UnimplementedOrdinal_10174=UnimplementedOrdinal @10174;   FOG_10174 @10174 NONAME
     FOG_10175 @10175 NONAME
     FOG_IsWindowsNT @10176 NONAME
     FOG_10177 @10177 NONAME
@@ -191,29 +191,29 @@ EXPORTS
     FOG_10181 @10181 NONAME
     FOG_10182_Return @10182 NONAME
     FOG_10183_Return @10183 NONAME
-;   FOG_10184 @10184 NONAME
-;   FOG_10185 @10185 NONAME
+UnimplementedOrdinal_10184=UnimplementedOrdinal @10184;   FOG_10184 @10184 NONAME
+UnimplementedOrdinal_10185=UnimplementedOrdinal @10185;   FOG_10185 @10185 NONAME
     FOG_10186 @10186 NONAME
     FOG_10187 @10187 NONAME
-;   FOG_10188 @10188 NONAME
-;   FOG_10189 @10189 NONAME
-;   FOG_10190 @10190 NONAME
-;   FOG_10191 @10191 NONAME
-;   FOG_10192 @10192 NONAME
-;   FOG_10193 @10193 NONAME
-;   FOG_10194 @10194 NONAME
-;   FOG_10195 @10195 NONAME
-;   FOG_10196 @10196 NONAME
-;   FOG_10197 @10197 NONAME
-;   FOG_10198 @10198 NONAME
-;   FOG_10199 @10199 NONAME
-;   FOG_10200 @10200 NONAME
-;   FOG_10201 @10201 NONAME
-;   FOG_10202 @10202 NONAME
-;   FOG_10203 @10203 NONAME
-;   FOG_10204 @10204 NONAME
-;   FOG_10205 @10205 NONAME
-;   FOG_10206 @10206 NONAME
+UnimplementedOrdinal_10188=UnimplementedOrdinal @10188;   FOG_10188 @10188 NONAME
+UnimplementedOrdinal_10189=UnimplementedOrdinal @10189;   FOG_10189 @10189 NONAME
+UnimplementedOrdinal_10190=UnimplementedOrdinal @10190;   FOG_10190 @10190 NONAME
+UnimplementedOrdinal_10191=UnimplementedOrdinal @10191;   FOG_10191 @10191 NONAME
+UnimplementedOrdinal_10192=UnimplementedOrdinal @10192;   FOG_10192 @10192 NONAME
+UnimplementedOrdinal_10193=UnimplementedOrdinal @10193;   FOG_10193 @10193 NONAME
+UnimplementedOrdinal_10194=UnimplementedOrdinal @10194;   FOG_10194 @10194 NONAME
+UnimplementedOrdinal_10195=UnimplementedOrdinal @10195;   FOG_10195 @10195 NONAME
+UnimplementedOrdinal_10196=UnimplementedOrdinal @10196;   FOG_10196 @10196 NONAME
+UnimplementedOrdinal_10197=UnimplementedOrdinal @10197;   FOG_10197 @10197 NONAME
+UnimplementedOrdinal_10198=UnimplementedOrdinal @10198;   FOG_10198 @10198 NONAME
+UnimplementedOrdinal_10199=UnimplementedOrdinal @10199;   FOG_10199 @10199 NONAME
+UnimplementedOrdinal_10200=UnimplementedOrdinal @10200;   FOG_10200 @10200 NONAME
+UnimplementedOrdinal_10201=UnimplementedOrdinal @10201;   FOG_10201 @10201 NONAME
+UnimplementedOrdinal_10202=UnimplementedOrdinal @10202;   FOG_10202 @10202 NONAME
+UnimplementedOrdinal_10203=UnimplementedOrdinal @10203;   FOG_10203 @10203 NONAME
+UnimplementedOrdinal_10204=UnimplementedOrdinal @10204;   FOG_10204 @10204 NONAME
+UnimplementedOrdinal_10205=UnimplementedOrdinal @10205;   FOG_10205 @10205 NONAME
+UnimplementedOrdinal_10206=UnimplementedOrdinal @10206;   FOG_10206 @10206 NONAME
     FOG_10207 @10207 NONAME
     FOG_CreateBinFile @10208 NONAME
     FOG_FreeBinFile @10209 NONAME
@@ -225,43 +225,43 @@ EXPORTS
     FOG_10215 @10215 NONAME
     FOG_10216_AddRecordToLinkingTable @10216 NONAME
     FOG_GetRowFromTxt @10217 NONAME
-;   FOG_10218 @10218 NONAME
+UnimplementedOrdinal_10218=UnimplementedOrdinal @10218;   FOG_10218 @10218 NONAME
     FOG_10219 @10219 NONAME
-;   FOG_10220 @10220 NONAME
-;   FOG_10221 @10221 NONAME
+UnimplementedOrdinal_10220=UnimplementedOrdinal @10220;   FOG_10220 @10220 NONAME
+UnimplementedOrdinal_10221=UnimplementedOrdinal @10221;   FOG_10221 @10221 NONAME
     FOG_10222 @10222 NONAME
     FOG_10223 @10223 NONAME
     FOG_10224 @10224 NONAME
-;   FOG_10225 @10225 NONAME
-;   FOG_10226 @10226 NONAME
+UnimplementedOrdinal_10225=UnimplementedOrdinal @10225;   FOG_10225 @10225 NONAME
+UnimplementedOrdinal_10226=UnimplementedOrdinal @10226;   FOG_10226 @10226 NONAME
     FOG_IsExpansion @10227 NONAME
-;   FOG_10228 @10228 NONAME
+UnimplementedOrdinal_10228=UnimplementedOrdinal @10228;   FOG_10228 @10228 NONAME
     FOG_ComputeChecksum @10229 NONAME
     FOG_PopCount @10230 NONAME
-;   FOG_10231 @10231 NONAME
-;   FOG_10232 @10232 NONAME
+UnimplementedOrdinal_10231=UnimplementedOrdinal @10231;   FOG_10231 @10231 NONAME
+UnimplementedOrdinal_10232=UnimplementedOrdinal @10232;   FOG_10232 @10232 NONAME
     FOG_10233 @10233 NONAME
-;   FOG_10234 @10234 NONAME
-;   FOG_10235 @10235 NONAME
-;   FOG_10236 @10236 NONAME
-;   FOG_10237 @10237 NONAME
-;   FOG_10238 @10238 NONAME
-;   FOG_10239 @10239 NONAME
-;   FOG_10240 @10240 NONAME
-;   FOG_10241 @10241 NONAME
-;   FOG_10242 @10242 NONAME
-;   FOG_10243 @10243 NONAME
-;   FOG_10244 @10244 NONAME
-;   FOG_10245 @10245 NONAME
-;   FOG_10246 @10246 NONAME
-;   FOG_10247 @10247 NONAME
-;   FOG_10248 @10248 NONAME
-;   FOG_10249 @10249 NONAME
-;   FOG_10250 @10250 NONAME
-;   FOG_10251 @10251 NONAME
+UnimplementedOrdinal_10234=UnimplementedOrdinal @10234;   FOG_10234 @10234 NONAME
+UnimplementedOrdinal_10235=UnimplementedOrdinal @10235;   FOG_10235 @10235 NONAME
+UnimplementedOrdinal_10236=UnimplementedOrdinal @10236;   FOG_10236 @10236 NONAME
+UnimplementedOrdinal_10237=UnimplementedOrdinal @10237;   FOG_10237 @10237 NONAME
+UnimplementedOrdinal_10238=UnimplementedOrdinal @10238;   FOG_10238 @10238 NONAME
+UnimplementedOrdinal_10239=UnimplementedOrdinal @10239;   FOG_10239 @10239 NONAME
+UnimplementedOrdinal_10240=UnimplementedOrdinal @10240;   FOG_10240 @10240 NONAME
+UnimplementedOrdinal_10241=UnimplementedOrdinal @10241;   FOG_10241 @10241 NONAME
+UnimplementedOrdinal_10242=UnimplementedOrdinal @10242;   FOG_10242 @10242 NONAME
+UnimplementedOrdinal_10243=UnimplementedOrdinal @10243;   FOG_10243 @10243 NONAME
+UnimplementedOrdinal_10244=UnimplementedOrdinal @10244;   FOG_10244 @10244 NONAME
+UnimplementedOrdinal_10245=UnimplementedOrdinal @10245;   FOG_10245 @10245 NONAME
+UnimplementedOrdinal_10246=UnimplementedOrdinal @10246;   FOG_10246 @10246 NONAME
+UnimplementedOrdinal_10247=UnimplementedOrdinal @10247;   FOG_10247 @10247 NONAME
+UnimplementedOrdinal_10248=UnimplementedOrdinal @10248;   FOG_10248 @10248 NONAME
+UnimplementedOrdinal_10249=UnimplementedOrdinal @10249;   FOG_10249 @10249 NONAME
+UnimplementedOrdinal_10250=UnimplementedOrdinal @10250;   FOG_10250 @10250 NONAME
+UnimplementedOrdinal_10251=UnimplementedOrdinal @10251;   FOG_10251 @10251 NONAME
     FOG_LeadingZeroesCount @10252 NONAME
     DATATBLS_CalcEvaluateExpression @10253 NONAME
     DATATBLS_CompileExpression @10254 NONAME
     FOG_10255 @10255 NONAME
-;   FOG_10262 @10262 NONAME
-;   FOG_10263 @10263 NONAME
+UnimplementedOrdinal_10262=UnimplementedOrdinal @10262;   FOG_10262 @10262 NONAME
+UnimplementedOrdinal_10263=UnimplementedOrdinal @10263;   FOG_10263 @10263 NONAME

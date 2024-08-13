@@ -1,4 +1,11 @@
 #include <Windows.h>
+#include <Fog.h>
+#include <D2CommonDefinitions.h>
+
+void UnimplementedOrdinal()
+{
+	UNIMPLEMENTED();
+}
 
 // NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
