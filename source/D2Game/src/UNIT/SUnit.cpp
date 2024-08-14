@@ -1349,7 +1349,7 @@ void __fastcall sub_6FCBCE70(D2GameStrc* pGame, D2UnitStrc* pUnit)
                     break;
                 }
 
-                D2MonSeqTxt* pSequence = (D2MonSeqTxt*)pUnit->pAnimSeq;
+                D2AnimSeqTxt* pSequence = (D2AnimSeqTxt*)pUnit->pAnimSeq;
                 int32_t nEvent = 0;
                 if (pSequence)
                 {
@@ -1431,7 +1431,7 @@ void __fastcall sub_6FCBCFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
             int32_t nEvent = 0;
             while (nIndex <= (nAnimFrame >> 8))
             {
-                D2MonSeqTxt* pSequence = (D2MonSeqTxt*)pUnit->pAnimSeq;
+                D2AnimSeqTxt* pSequence = (D2AnimSeqTxt*)pUnit->pAnimSeq;
                 if (pSequence)
                 {
                     DATATBLS_GetSequenceEvent(pSequence, nIndex << 8, &nEvent);
@@ -1504,7 +1504,7 @@ void __fastcall sub_6FCBD120(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
             int32_t nEvent = 0;
             while (nIndex <= (nAnimFrame >> 8))
             {
-                D2MonSeqTxt* pSequence = (D2MonSeqTxt*)pUnit->pAnimSeq;
+                D2AnimSeqTxt* pSequence = (D2AnimSeqTxt*)pUnit->pAnimSeq;
                 if (pSequence)
                 {
                     DATATBLS_GetSequenceEvent(pSequence, nIndex << 8, &nEvent);
@@ -1568,7 +1568,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
         {
             while (nIndex <= (nAnimFrame >> 8))
             {
-                D2MonSeqTxt* pSequence = (D2MonSeqTxt*)pUnit->pAnimSeq;
+                D2AnimSeqTxt* pSequence = (D2AnimSeqTxt*)pUnit->pAnimSeq;
                 int32_t nEvent = 0;
                 if (pSequence)
                 {

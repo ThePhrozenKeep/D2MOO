@@ -1999,7 +1999,7 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
         for (int32_t i = nCurrent + 1; i < nMax; ++i)
         {
             int32_t nEvent = 0;
-            DATATBLS_GetSequenceEvent((D2MonSeqTxt*)pUnit->pAnimSeq, nCurrent << 8, &nEvent);
+            DATATBLS_GetSequenceEvent((D2AnimSeqTxt*)pUnit->pAnimSeq, nCurrent << 8, &nEvent);
             if (nEvent)
             {
                 return nEvent;

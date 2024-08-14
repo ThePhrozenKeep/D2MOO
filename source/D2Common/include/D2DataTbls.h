@@ -381,10 +381,10 @@ struct D2DataTablesStrc
 	int nMissilesTxtRecordCount;						//0xB6C
 	D2MonLvlTxt* pMonLvlTxt;							//0xB70
 	int nMonLvlTxtRecordCount;							//0xB74
-	D2MonSeqTxt* pMonSeqTxt;							//0xB78
+	D2AnimSeqTxt* pMonSeqTxt;							//0xB78
 	D2TxtLinkStrc* pMonSeqLinker;						//0xB7C
 	int nMonSeqTxtRecordCount;							//0xB80
-	D2SeqRecordStrc* pMonSeqTable;						//0xB84
+	D2AnimSeqRecordStrc* pMonSeqTable;						//0xB84
 	int nMonSeqTableRecordCount;						//0xB88
 	D2SkillDescTxt* pSkillDescTxt;						//0xB8C
 	D2TxtLinkStrc* pSkillDescLinker;					//0xB90

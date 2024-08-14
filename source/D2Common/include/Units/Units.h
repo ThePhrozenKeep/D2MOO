@@ -137,7 +137,7 @@ struct D2UnitStrc
 		D2DynamicPathStrc* pDynamicPath;
 		D2StaticPathStrc* pStaticPath;
 	};
-	struct D2MonSeqTxt* pAnimSeq;				//0x30
+	struct D2AnimSeqTxt* pAnimSeq;				//0x30
 	uint32_t dwSeqFrameCount;					//0x34
 	int32_t dwSeqFrame;							//0x38
 	uint32_t dwSeqSpeed;						//0x3C
@@ -219,7 +219,7 @@ struct D2UnitStrc
 #pragma pack()
 
 // Helper function
-inline D2MonSeqTxt* UNITS_GetAnimSeq(D2UnitStrc* pUnit) { 
+inline D2AnimSeqTxt* UNITS_GetAnimSeq(D2UnitStrc* pUnit) { 
 	return (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER) ? pUnit->pAnimSeq : nullptr;
 }
 

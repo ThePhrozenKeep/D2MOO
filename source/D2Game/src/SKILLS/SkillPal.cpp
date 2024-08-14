@@ -729,7 +729,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     //    DATATBLS_GetSeqFrameCount(pUnit);
 
     int32_t nEventFrame = 7;
-    D2MonSeqTxt* pMonSeqTxtRecord = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
+    D2AnimSeqTxt* pMonSeqTxtRecord = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
     if (pMonSeqTxtRecord)
     {
         const int32_t v8 = DATATBLS_GetSeqFrameCount(pUnit);

@@ -615,7 +615,7 @@ int __stdcall D2Common_11050(D2UnitStrc* pUnit, int a2)
 		nCounter = nStart;
 		while (nCounter <= nFrame)
 		{
-			if (UNITS_GetEventFrameInfo(pUnit, nCounter) == MONSEQ_EVENT_MISSILE_ATTACK || UNITS_GetEventFrameInfo(pUnit, nCounter) == MONSEQ_EVENT_MELEE_ATTACK)
+			if (UNITS_GetEventFrameInfo(pUnit, nCounter) == ANIMSEQ_EVENT_MISSILE_ATTACK || UNITS_GetEventFrameInfo(pUnit, nCounter) == ANIMSEQ_EVENT_MELEE_ATTACK)
 			{
 				break;
 			}
