@@ -69,7 +69,7 @@ struct D2HitFunc22ParamStrc
 #pragma pack(pop)
 
 
-D2MissileUnitFindTableStrc stru_6FD2E5F8[9] =
+D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
 {
     /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
     /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER                   },
@@ -81,7 +81,7 @@ D2MissileUnitFindTableStrc stru_6FD2E5F8[9] =
     /*[7]*/{ MISSMODE_UnitFindCallback_CanMissileDestroy              , COLLIDE_MISSILE                                    },
     /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL },
 };
-
+static_assert(ARRAY_SIZE(stru_6FD2E5F8) == MISSMODE_COUNT, "Missile functions table needs to match missiles modes");
 
 //D2Game.0x6FC55CE0
 int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* pUnit, void* pArgument)
@@ -674,8 +674,8 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 1);
     }
 
-    const int32_t nAnimMode = pMissile->dwAnimMode;
-    if (!nAnimMode)
+    const int32_t nMissileMode = pMissile->dwMissileMode;
+    if (nMissileMode == MISSMODE_NOCOLLIDE)
     {
         return 1;
     }
@@ -692,12 +692,12 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 2;
     }
 
-    if (nAnimMode == 6 || MISSILE_GetCurrentFrame(pMissile) > MISSILE_GetActivateFrame(pMissile) || !nFlags)
+    if (nMissileMode == MISSMODE_BARRIERCOLLIDE || MISSILE_GetCurrentFrame(pMissile) > MISSILE_GetActivateFrame(pMissile) || !nFlags)
     {
         return 1;
     }
 
-    if (!stru_6FD2E5F8[nAnimMode].pfUnitFindCallback)
+    if (!stru_6FD2E5F8[nMissileMode].pfUnitFindCallback)
     {
         return 2;
     }
@@ -717,10 +717,10 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
     {
         const uint16_t nX = pathPoints[i].X;
         const uint16_t nY = pathPoints[i].Y;
-        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nAnimMode].nCollisionMask);
+        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nMissileMode].nCollisionMask);
         if (nCollisionMask)
         {
-            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nAnimMode].pfUnitFindCallback, &unitFindArg, nSize);
+            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
             if (pTarget)
             {
                 return MISSMODE_SrvDmgHitHandler(pGame, pMissile, pTarget, 0);
@@ -3645,7 +3645,7 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
 
-    if (pObject->dwAnimMode == 0)
+    if (pObject->dwMissileMode == 0)
     {
         UNITS_ChangeAnimMode(pObject, 1);
         D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
@@ -5006,23 +5006,18 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 
         MISSILE_SetOwner(pMissile, pUnit);
 
-        int32_t nAnimMode = 0;
-        if (pMissile)
+        const int32_t nMissileMode = pMissile ? pMissile->dwMissileMode : MISSMODE_NOCOLLIDE;
+        switch (nMissileMode)
         {
-            nAnimMode = pMissile->dwAnimMode;
-        }
-
-        switch (nAnimMode)
-        {
-        case 0:
+        case MISSMODE_NOCOLLIDE:
             return 1;
-        case 1:
+        case MISSMODE_PLAYERKILL:
             if (pUnit->dwUnitType != UNIT_PLAYER)
             {
                 return 1;
             }
             break;
-        case 2:
+        case MISSMODE_MONSTERKILL:
             if (pUnit->dwUnitType != UNIT_MONSTER)
             {
                 return 1;
