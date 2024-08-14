@@ -8989,7 +8989,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 
 	if (nDistance > nMinDistance)
 	{
-		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TWALK)
+		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TOWNWALK)
 		{
 			D2GAME_PETAI_PetMove_6FCE3EE0(pGame, pOwner, pUnit, 0, 0, 0, 0);
 			return;
@@ -14412,7 +14412,7 @@ void __fastcall AITHINK_Fn108_Fenris(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 			return;
 		}
 
-		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TWALK)
+		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TOWNWALK)
 		{
 			D2GAME_AI_PetMove_6FCE2BA0(pGame, pOwner, pUnit, 0, 0, 0, 0);
 			return;
@@ -14569,7 +14569,7 @@ void __fastcall AITHINK_Fn108_SpiritWolf(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 	if (nDistanceToOwner > AI_GetParamValue(pGame, pAiTickParam, DRUIDWOLF_SPIRITWOLF_AI_PARAM_FOLLOW_OWNER_DISTANCE))
 	{
-		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TWALK)
+		if (pOwner->dwAnimMode == PLRMODE_WALK || pOwner->dwAnimMode == PLRMODE_TOWNWALK)
 		{
 			if (D2GAME_AI_PetMove_6FCE2BA0(pGame, pOwner, pUnit, 0, 0, 0, 0))
 			{
@@ -14831,7 +14831,7 @@ void __fastcall AITHINK_Fn109_Totem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 	if (nDistance > AI_GetParamValue(pGame, pAiTickParam, TOTEM_AI_PARAM_FOLLOW_OWNER_DISTANCE))
 	{
 		const int32_t nOwnerAnimMode = pOwner->dwAnimMode;
-		if (((nOwnerAnimMode == PLRMODE_WALK || nOwnerAnimMode == PLRMODE_TWALK) && D2GAME_AI_PetMove_6FCE2BA0(pGame, pOwner, pUnit, 0, 0, 0, 0))
+		if (((nOwnerAnimMode == PLRMODE_WALK || nOwnerAnimMode == PLRMODE_TOWNWALK) && D2GAME_AI_PetMove_6FCE2BA0(pGame, pOwner, pUnit, 0, 0, 0, 0))
 			|| (nOwnerAnimMode == PLRMODE_RUN && D2GAME_AI_PetMove_6FCE2BA0(pGame, pOwner, pUnit, 0, 0, 60, 0)))
 		{
 			return;

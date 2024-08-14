@@ -2998,7 +2998,7 @@ BOOL __stdcall UNITS_IsInMovingMode(D2UnitStrc* pUnit)
 		{
 		case PLRMODE_WALK:
 		case PLRMODE_RUN:
-		case PLRMODE_TWALK:
+		case PLRMODE_TOWNWALK:
 			return TRUE;
 		default:
 			return FALSE;

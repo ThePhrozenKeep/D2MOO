@@ -163,7 +163,7 @@ void __fastcall PLRMODE_StartXY_Neutral(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 
     if (pRoom)
     {
-        nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TNEUTRAL : PLRMODE_NEUTRAL;
+        nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TOWNNEUTRAL : PLRMODE_NEUTRAL;
     }
 
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -196,14 +196,14 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
     case PLRMODE_RUN:
         if (!STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0))
         {
-            nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TWALK : PLRMODE_WALK;
+            nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TOWNWALK : PLRMODE_WALK;
         }
         break;
 
     case PLRMODE_WALK:
-    case PLRMODE_TWALK:
+    case PLRMODE_TOWNWALK:
     {
-        nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TWALK : PLRMODE_WALK;
+        nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TOWNWALK : PLRMODE_WALK;
         break;
     }
 
@@ -342,7 +342,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
-            nMode = PLRMODE_TNEUTRAL;
+            nMode = PLRMODE_TOWNNEUTRAL;
         }
 
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -375,7 +375,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
-            nMode = PLRMODE_TNEUTRAL;
+            nMode = PLRMODE_TOWNNEUTRAL;
         }
 
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -1144,7 +1144,7 @@ void __fastcall EVENTS_StaminaRegen(D2UnitStrc* pUnit)
     switch (pUnit ? pUnit->dwAnimMode : 0)
     {
     case PLRMODE_NEUTRAL:
-    case PLRMODE_TNEUTRAL:
+    case PLRMODE_TOWNNEUTRAL:
         break;
 
     case PLRMODE_WALK:
@@ -1155,7 +1155,7 @@ void __fastcall EVENTS_StaminaRegen(D2UnitStrc* pUnit)
         }
         break;
 
-    case PLRMODE_TWALK:
+    case PLRMODE_TOWNWALK:
         nShift = 9;
         break;
 
@@ -1366,7 +1366,7 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (pRoom)
         {
-            nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TNEUTRAL : PLRMODE_NEUTRAL;
+            nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TOWNNEUTRAL : PLRMODE_NEUTRAL;
         }
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
         SUNIT_SetCombatMode(pGame, pUnit, nCombatMode);
@@ -1576,7 +1576,7 @@ int32_t __fastcall sub_6FC81890(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     {
     case PLRMODE_DEATH:
     case PLRMODE_NEUTRAL:
-    case PLRMODE_TNEUTRAL:
+    case PLRMODE_TOWNNEUTRAL:
     case PLRMODE_DEAD:
         return 1;
 

@@ -2355,7 +2355,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
             if (pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2469,7 +2469,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
 
                 if (pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
 
                 return 0;
@@ -2599,7 +2599,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2610,7 +2610,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
             {
                 if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
                 return 0;
             }
@@ -2666,7 +2666,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
