@@ -2695,8 +2695,9 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
         pGameInfo->nPathTowardPct = 100 * pGame->dwPathTypesCount[PATHTYPE_TOWARD] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathClockPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CW] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathCounterPct = 100 * pGame->dwPathTypesCount[PATHTYPE_MON_CIRCLE_CCW] / pGame->nTotalPathTypesCount;
-        pGameInfo->nPathFoWallPct = 100 * pGame->dwPathTypesCount[PATHTYPE_FOLLOW_WALL] / pGame->nTotalPathTypesCount;
-        pGameInfo->nPathAStarPct = 100 * pGame->dwPathTypesCount[PATHTYPE_WF] / pGame->nTotalPathTypesCount;
+		// Note: Names are inverted between fowall and astar in d2server
+        pGameInfo->nPathAStarPct = 100 * pGame->dwPathTypesCount[PATHTYPE_ASTAR] / pGame->nTotalPathTypesCount;
+        pGameInfo->nPathFoWallPct = 100 * pGame->dwPathTypesCount[PATHTYPE_WALL_FOLLOW] / pGame->nTotalPathTypesCount;
         pGameInfo->nPathTotalCalls = pGame->nTotalPathTypesCount;
         if (pGame->nTotalPathTypesCount > 200 && pGameInfo->nPathTotalCalls)
         {

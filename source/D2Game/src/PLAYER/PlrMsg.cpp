@@ -3772,7 +3772,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
     PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_WALL | COLLIDE_NOPLAYER | COLLIDE_OBJECT);
-    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WF);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WALL_FOLLOW);
     PATH_SetNewDistance(pUnit->pDynamicPath, 77);
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, pPacket5F->nX, pPacket5F->nY);
 

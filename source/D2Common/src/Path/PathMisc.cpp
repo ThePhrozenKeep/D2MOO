@@ -4,7 +4,7 @@
 #include "D2Dungeon.h"
 #include "Path/Path.h"
 #include "Path/IDAStar.h"
-#include "Path/FollowWall.h"
+#include "Path/AStar.h"
 #include "Path/PathUtil.h"
 #include "Path/Step.h"
 #include "Units/UnitRoom.h"
@@ -111,7 +111,7 @@ int __fastcall sub_6FDAA720(D2PathInfoStrc* pPathInfo)
 	int nbPathPoints = pDynamicPath->dwPathPoints;
 	if (pPathInfo->nDistMax > 0)
 	{
-		const int nDirectionOffset = pDynamicPath->dwUnitTypeRelated;
+		const int nDirectionOffset = pDynamicPath->nDirOffset;
 		const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
 		int nPrevDirection = PATH_DIR_NULL;
 		D2PathPointStrc tLastSegmentEndCoord = pPathInfo->tStartCoord;
@@ -269,7 +269,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
 	pPath->dwCurrentPointIdx = 0;
 	pPath->dwPathPoints = 0;
-	if (pPath->dwUnitTypeRelated)
+	if (pPath->nDirOffset)
 		return sub_6FDAA720(pPathInfo);
 	D2PathPointStrc nNextPoint = pPathInfo->tTargetCoord;
 	pPath->PathPoints[0] = nNextPoint;
@@ -546,15 +546,14 @@ int __fastcall sub_6FDAB0B0(D2PathInfoStrc* pPathInfo)
 }
 
 //D2Common.0x6FDAB0C0
-//TODO: result + v5
-int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_BackupTurn_Compute(D2PathInfoStrc* pPathInfo)
 {
 	int result = 0;
 	int v5 = 0;
 
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 
-	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
+	pPathInfo->pDynamicPath->nDirOffset = -4;
 
 	result = sub_6FDAA720(pPathInfo);
 	if (!result)
@@ -564,24 +563,24 @@ int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo)
 
 	pPathInfo->pDynamicPath->dwPathPoints = result;
 
-	pPathInfo->pDynamicPath->dwUnitTypeRelated = -2;
+	pPathInfo->pDynamicPath->nDirOffset = -2;
 
 	v5 = sub_6FDAA720(pPathInfo) - result;
 	if (!v5)
 	{
-		pPathInfo->pDynamicPath->dwUnitTypeRelated = 2;
+		pPathInfo->pDynamicPath->nDirOffset = 2;
 
 		v5 = sub_6FDAA720(pPathInfo) - result;
 	}
 
-	pPathInfo->pDynamicPath->dwUnitTypeRelated = -4;
+	pPathInfo->pDynamicPath->nDirOffset = -4;
 
 	return result + v5;
 }
 
 //1.10f: D2Common.0x6FDAB130
 //1.13c: D2Common.0x6FDB7AD0
-int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_Straight_Compute(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->pDynamicPath->dwCurrentPointIdx = 0;
 	pPathInfo->pDynamicPath->dwPathPoints = 0;
@@ -608,9 +607,9 @@ int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo)
 
 	if (nSquaredDistance <= nMaxDistSquared)
 	{
-		if (int nFoWallPathPoints = PATH_FoWall_ComputePath(pPathInfo))
+		if (int nAStarPathPoints = PATH_AStar_ComputePath(pPathInfo))
 		{
-			return nFoWallPathPoints;
+			return nAStarPathPoints;
 		}
 		else if(nPathPoints) // Recompute the previous path result if a path was found
 		{
@@ -747,7 +746,7 @@ int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicP
 	nPrevPoint.Y = pDynamicPath->tGameCoords.wPosY;
 
 	int v16[3];
-	PATH_GetDirections_6FDAB790(v16, nPrevPoint, pDynamicPath->SP1);
+	PATH_GetDirections_6FDAB790(v16, nPrevPoint, pDynamicPath->tTargetCoord);
 
 	int nMaxPathPoints = pDynamicPath->nDistMax >> 1;
 	for (int nCurPointIdx = 0; nCurPointIdx < nMaxPathPoints; nCurPointIdx++)
@@ -1091,26 +1090,26 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 		PATH_AddToDistance(pDynamicPath, -pDynamicPath->dwCurrentPointIdx);
 	}
 
-	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_MON_OTHER_2 && pDynamicPath->dwPathType != PATHTYPE_WF)
+	if (pDynamicPath->dwPathType != PATHTYPE_TOWARD && pDynamicPath->dwPathType != PATHTYPE_TOWARD_FINISH && pDynamicPath->dwPathType != PATHTYPE_WALL_FOLLOW)
 	{
 		return D2Common_10142(pDynamicPath, pUnit, 0);
 	}
 
 	if (a2)
 	{
-		pDynamicPath->dwPathType = PATHTYPE_MON_OTHER_2;
+		pDynamicPath->dwPathType = PATHTYPE_TOWARD_FINISH;
 	}
 	else
 	{
 		pDynamicPath->dwPathType = PATHTYPE_TOWARD;
-		pDynamicPath->SP1.X = pDynamicPath->SP3.X;
-		pDynamicPath->SP1.Y = pDynamicPath->SP3.Y;
+		pDynamicPath->tTargetCoord.X = pDynamicPath->tFinalTargetCoord.X;
+		pDynamicPath->tTargetCoord.Y = pDynamicPath->tFinalTargetCoord.Y;
 	}
 
 	nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	if (!nResult)
 	{
-		pDynamicPath->dwPathType = PATHTYPE_WF;
+		pDynamicPath->dwPathType = PATHTYPE_WALL_FOLLOW;
 		nResult = D2Common_10142(pDynamicPath, pUnit, 0);
 	}
 
@@ -1128,8 +1127,8 @@ void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 	// Actually assumed to be deceleration?
 	if (int nAcceleration = pDynamicPath->dwAcceleration)
 	{
-		pDynamicPath->unk0x8C++;
-		if (pDynamicPath->unk0x8C >= 5)
+		pDynamicPath->dwAccelerationsCounter++;
+		if (pDynamicPath->dwAccelerationsCounter >= 5)
 		{
 			const int nOldVelocity = pDynamicPath->dwMaxVelocity;
 			pDynamicPath->dwVelocity = nAcceleration + pDynamicPath->dwVelocity;
@@ -1145,7 +1144,7 @@ void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 					pDynamicPath->dwVelocity = 0;
 				}
 			}
-			pDynamicPath->unk0x8C = 0;
+			pDynamicPath->dwAccelerationsCounter = 0;
 		}
 	}
 	const int nVelocityMagnitude = (signed int)(nBaseVelocity * pDynamicPath->dwVelocity) >> 6;
@@ -1167,7 +1166,7 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 	if (!pTargetUnit)
 	{
 		if (pDynamicPath->dwCurrentPointIdx >= pDynamicPath->dwPathPoints
-			&& pDynamicPath->tGameCoords.ToPathPoint() != pDynamicPath->SP3)
+			&& pDynamicPath->tGameCoords.ToPathPoint() != pDynamicPath->tFinalTargetCoord)
 		{
 			return D2Common_10236(pDynamicPath->pUnit, FALSE);
 		}
@@ -1185,12 +1184,12 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 	{
 		if (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER)
 		{
-			const int nAbsDiffX = std::abs(pDynamicPath->SP2.X - a3.X);
-			const int nAbsDiffY = std::abs(pDynamicPath->SP2.Y - a3.Y);
+			const int nAbsDiffX = std::abs(pDynamicPath->tPrevTargetCoord.X - a3.X);
+			const int nAbsDiffY = std::abs(pDynamicPath->tPrevTargetCoord.Y - a3.Y);
 			if (nAbsDiffX <= 5 && nAbsDiffY <= 5)
 			{
 				if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
-					|| pDynamicPath->SP3 == pDynamicPath->tGameCoords.ToPathPoint() )
+					|| pDynamicPath->tFinalTargetCoord == pDynamicPath->tGameCoords.ToPathPoint() )
 				{
 					return TRUE;
 				}
@@ -1279,7 +1278,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 		}
 		else
 		{
-			return pDynamicPath->tGameCoords.wPosX == pDynamicPath->SP1.X && pDynamicPath->tGameCoords.wPosY == pDynamicPath->SP1.Y;
+			return pDynamicPath->tGameCoords.wPosX == pDynamicPath->tTargetCoord.X && pDynamicPath->tGameCoords.wPosY == pDynamicPath->tTargetCoord.Y;
 		}
 	}
 	else

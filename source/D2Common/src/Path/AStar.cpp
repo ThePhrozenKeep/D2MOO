@@ -1,5 +1,5 @@
 #include "Path/Path.h"
-#include "Path/FollowWall.h"
+#include "Path/AStar.h"
 
 #include "D2Collision.h"
 #include "D2Dungeon.h"
@@ -36,7 +36,7 @@ const int gaIdaStar_PointCacheHashMaskY[D2PathFoWallContextStrc::CACHE_SIZE] =
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDCB2C0
-BOOL PATH_FoWall_TargetLocationHasEnoughRoom(D2PathInfoStrc* pPathInfo)
+BOOL PATH_AStar_TargetLocationHasEnoughRoom(D2PathInfoStrc* pPathInfo)
 {
 	if (!pPathInfo->pDynamicPath->pTargetUnit)
 	{
@@ -75,7 +75,7 @@ static D2PathFoWallNodeStrc* PATH_IdaStar_FindSortedByFScoreInsertionPoint(D2Pat
 }
 
 // Helper function
-static D2PathFoWallNodeStrc* PATH_FoWall_RemoveFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pToRemove)
+static D2PathFoWallNodeStrc* PATH_AStar_RemoveFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pToRemove)
 {
 	D2PathFoWallNodeStrc* pPreviousPoint = nullptr;
 
@@ -111,15 +111,15 @@ static D2PathFoWallNodeStrc* PATH_FoWall_RemoveFromPendingCache(D2PathFoWallCont
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDCB220
 // TODO: rename?
-D2PathFoWallNodeStrc* PATH_FoWall_PopBestScoreForVisit(D2PathFoWallContextStrc* pContext)
+D2PathFoWallNodeStrc* PATH_AStar_PopBestScoreForVisit(D2PathFoWallContextStrc* pContext)
 {
 	D2PathFoWallNodeStrc* pPopped = pContext->pSortedListByFScore;
 	if (pPopped)
 	{
 		// pop from sorted list
 		pContext->pSortedListByFScore = pPopped->pNextSortedByFScore;
-		PATH_FoWall_RemoveFromPendingCache(pContext, pPopped);
-		PATH_FoWall_PushToVisitedCache(pContext, pPopped);
+		PATH_AStar_RemoveFromPendingCache(pContext, pPopped);
+		PATH_AStar_PushToVisitedCache(pContext, pPopped);
 	}
 	return pPopped;
 }
@@ -127,9 +127,9 @@ D2PathFoWallNodeStrc* PATH_FoWall_PopBestScoreForVisit(D2PathFoWallContextStrc* 
 //1.00:  D2Common.0x10056EC0
 //1.10f: D2Common.0x6FDA69E0
 //1.13c: D2Common.0x6FDCB630
-int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_AStar_ComputePath(D2PathInfoStrc* pPathInfo)
 {
-	if (!PATH_FoWall_TargetLocationHasEnoughRoom(pPathInfo))
+	if (!PATH_AStar_TargetLocationHasEnoughRoom(pPathInfo))
 	{
 		return 0;
 	}
@@ -140,16 +140,16 @@ int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo)
 	D2PathFoWallContextStrc tContext{};
 	tContext.nNodesCount = 1;
 
-	const int nDistToTarget = PATH_FoWall_Heuristic(tTargetCoord, tStartCoord);
+	const int nDistToTarget = PATH_AStar_Heuristic(tTargetCoord, tStartCoord);
 	tContext.aNodesStorage[0].nBestDistanceFromStart = 0;
 	tContext.aNodesStorage[0].nHeuristicDistanceToTarget = nDistToTarget;
 	tContext.aNodesStorage[0].nFScore = nDistToTarget;
 	tContext.aNodesStorage[0].tPoint = tStartCoord;
-	PATH_FoWall_MakeCandidate(&tContext, &tContext.aNodesStorage[0]);
+	PATH_AStar_MakeCandidate(&tContext, &tContext.aNodesStorage[0]);
 	D2PathFoWallNodeStrc* pBestNode = 0;
-	for (D2PathFoWallNodeStrc* pCurNodeToVisit = PATH_FoWall_PopBestScoreForVisit(&tContext);
+	for (D2PathFoWallNodeStrc* pCurNodeToVisit = PATH_AStar_PopBestScoreForVisit(&tContext);
 		pCurNodeToVisit != nullptr;
-		pCurNodeToVisit = PATH_FoWall_PopBestScoreForVisit(&tContext)
+		pCurNodeToVisit = PATH_AStar_PopBestScoreForVisit(&tContext)
 		)
 	{
 		if (pBestNode == nullptr
@@ -164,7 +164,7 @@ int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo)
 		if (// If reached target point
 			pCurNodeToVisit->nHeuristicDistanceToTarget == 0
 			// or can't allocate new nodes
-			|| !PATH_FoWall_ExploreChildren(pPathInfo, &tContext, pCurNodeToVisit, tTargetCoord)
+			|| !PATH_AStar_ExploreChildren(pPathInfo, &tContext, pCurNodeToVisit, tTargetCoord)
 			)
 		{
 			break; // Then stop here
@@ -172,13 +172,13 @@ int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo)
 	}
 	if (pBestNode)
 	{
-		return PATH_FoWall_FlushNodeToDynamicPath(pBestNode, pPathInfo);
+		return PATH_AStar_FlushNodeToDynamicPath(pBestNode, pPathInfo);
 	}
 	return 0;
 }
 
 //D2Common.0x6FDA6D10
-int __fastcall PATH_FoWall_PushToVisitedCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode)
+int __fastcall PATH_AStar_PushToVisitedCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode)
 {
 	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pNode->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pNode->tPoint.Y & 0x7F]) & 0x7F;
 	pNode->pNextCachePoint = pContext->aVisitedCache[nHash];
@@ -188,7 +188,7 @@ int __fastcall PATH_FoWall_PushToVisitedCache(D2PathFoWallContextStrc* pContext,
 
 //1.10f: D2Common.0x6FDA6D50
 //1.13c: D2Common.0x6FDCB3C0
-BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* a3, D2PathPointStrc tTargetCoord)
+BOOL __fastcall PATH_AStar_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* a3, D2PathPointStrc tTargetCoord)
 {
 	static const D2CoordStrc aOffsets[] =
 	{
@@ -209,7 +209,7 @@ BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoW
 		tNewPointCoord.Y += tOffset.nY;
 
 		if (!COLLISION_CheckAnyCollisionWithPattern(pPathInfo->pStartRoom, tNewPointCoord.X, tNewPointCoord.Y, pPathInfo->nCollisionPattern, pPathInfo->nCollisionMask) &&
-			!PATH_FoWall_EvaluateNeighbor(pPathInfo, pContext, a3, tNewPointCoord, tTargetCoord))
+			!PATH_AStar_EvaluateNeighbor(pPathInfo, pContext, a3, tNewPointCoord, tTargetCoord))
 		{
 			return FALSE;
 		}
@@ -231,7 +231,7 @@ BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoW
 // |2 3 5 7
 // |0 2 4 6
 // +-------dX
-int __stdcall PATH_FoWall_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2)
+int __stdcall PATH_AStar_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2)
 {
 	const int nDiffX = std::abs(tPoint1.X - tPoint2.X);
 	const int nDiffY = std::abs(tPoint1.Y - tPoint2.Y);
@@ -246,7 +246,7 @@ int __stdcall PATH_FoWall_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPo
 }
 
 // Helper function
-int16_t PATH_FoWall_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor)
+int16_t PATH_AStar_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor)
 {
 	if (tPoint.X == tNeighbor.X || tPoint.Y == tNeighbor.Y)
 	{
@@ -261,7 +261,7 @@ int16_t PATH_FoWall_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc
 //1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA7280
 //1.13c: D2Common.0x6FDCAF20
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNodeFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint)
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_GetNodeFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint)
 {
 	const uint8_t nHash = uint8_t((gaIdaStar_PointCacheHashMaskX[tPathPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[tPathPoint.Y & 0x7F]) & 0x7F);
 	for (D2PathFoWallNodeStrc* pNode = pContext->aPendingCache[nHash];
@@ -279,7 +279,7 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNodeFromPendingCache(D2PathFoWal
 //1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA72D0
 //1.13c: D2Common.0x6FDCAED0
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_FindPointInVisitedCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint)
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_FindPointInVisitedCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint)
 {
 	const uint8_t nHash = uint8_t((gaIdaStar_PointCacheHashMaskX[tPathPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[tPathPoint.Y & 0x7F]) & 0x7F);
 	for (D2PathFoWallNodeStrc* pNode = pContext->aVisitedCache[nHash];
@@ -296,7 +296,7 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_FindPointInVisitedCache(D2PathFoWal
 
 //1.10f: D2Common.0x6FDA7320
 //1.13c: D2Common.0x6FDCAE20
-void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode)
+void __fastcall PATH_AStar_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode)
 {
 	const uint8_t nHash = (gaIdaStar_PointCacheHashMaskX[pNode->tPoint.X & 0x7F] + gaIdaStar_PointCacheHashMaskY[pNode->tPoint.Y & 0x7F]) & 0x7F;
 	pNode->pNextCachePoint = pContext->aPendingCache[nHash];
@@ -317,7 +317,7 @@ void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2P
 //1.10f: D2Common.0x6FDA7390
 //1.13c: D2Common.0x6FDCAC50
 //Should be __thiscall but we have to use __fastcall, hence nUnused
-void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode)
+void __fastcall PATH_AStar_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode)
 {
 	D2_MAYBE_UNUSED(nUnused);
 
@@ -331,7 +331,7 @@ void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc
 			{
 				break;
 			}
-			const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbor(pCurrentPoint->tPoint, pChild->tPoint);
+			const int16_t nDistanceBetweenPoints = PATH_AStar_HeuristicForNeighbor(pCurrentPoint->tPoint, pChild->tPoint);
 			const int16_t nDistanceFromStart = nDistanceBetweenPoints + pCurrentPoint->nBestDistanceFromStart;
 			if (nDistanceFromStart < pChild->nBestDistanceFromStart)
 			{
@@ -346,7 +346,7 @@ void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc
 
 //1.10f: D2Common.0x6FDA7450
 //1.13c: Inlined
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc* pContext)
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_GetNewNode(D2PathFoWallContextStrc* pContext)
 {
 	if (pContext->nNodesCount == ARRAY_SIZE(pContext->aNodesStorage))
 	{
@@ -358,7 +358,7 @@ D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc*
 }
 
 // Helper function
-static void PATH_FoWall_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWallNodeStrc* pChild)
+static void PATH_AStar_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWallNodeStrc* pChild)
 {
 	for (D2PathFoWallNodeStrc*& pChildRef : pNode->pChildren)
 	{
@@ -372,13 +372,13 @@ static void PATH_FoWall_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWall
 
 //1.10f: D2Common.0x6FDA7490
 //1.13c: D2Common.0x6FDCAFB0
-BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord)
+BOOL __fastcall PATH_AStar_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord)
 {
-	const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbor(pCurrentNode->tPoint, tNewPointCoord);
+	const int16_t nDistanceBetweenPoints = PATH_AStar_HeuristicForNeighbor(pCurrentNode->tPoint, tNewPointCoord);
 	const int16_t nNewPointDistance = pCurrentNode->nBestDistanceFromStart + nDistanceBetweenPoints;
-	if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_GetNodeFromPendingCache(pContext, tNewPointCoord))
+	if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_GetNodeFromPendingCache(pContext, tNewPointCoord))
 	{
-		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
+		PATH_AStar_AddChildToNode(pCurrentNode, pNewNode);
 		if (nNewPointDistance < pNewNode->nBestDistanceFromStart)
 		{
 			pNewNode->pBestParent = pCurrentNode;
@@ -387,29 +387,29 @@ BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFo
 		}
 		return TRUE;
 	}
-	else if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_FindPointInVisitedCache(pContext, tNewPointCoord))
+	else if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_FindPointInVisitedCache(pContext, tNewPointCoord))
 	{
-		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
+		PATH_AStar_AddChildToNode(pCurrentNode, pNewNode);
 		if (nNewPointDistance < pNewNode->nBestDistanceFromStart)
 		{
 			pNewNode->pBestParent = pCurrentNode;
 			pNewNode->nBestDistanceFromStart = nNewPointDistance;
 			pNewNode->nFScore = nNewPointDistance + pNewNode->nHeuristicDistanceToTarget;
-			PATH_FoWall_PropagateNewFScoreToChildren(pContext,/*unused*/0, pNewNode);
+			PATH_AStar_PropagateNewFScoreToChildren(pContext,/*unused*/0, pNewNode);
 		}
 		return TRUE;
 	}
-	else if (D2PathFoWallNodeStrc* pNewNode = PATH_FoWall_GetNewNode(pContext))
+	else if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_GetNewNode(pContext))
 	{
-		PATH_FoWall_AddChildToNode(pCurrentNode, pNewNode);
+		PATH_AStar_AddChildToNode(pCurrentNode, pNewNode);
 
 		pNewNode->tPoint = tNewPointCoord;
-		pNewNode->nHeuristicDistanceToTarget = PATH_FoWall_Heuristic(tNewPointCoord, tTargetCoord);
+		pNewNode->nHeuristicDistanceToTarget = PATH_AStar_Heuristic(tNewPointCoord, tTargetCoord);
 
 		pNewNode->pBestParent = pCurrentNode;
 		pNewNode->nBestDistanceFromStart = nNewPointDistance;
 		pNewNode->nFScore = pNewNode->nBestDistanceFromStart + pNewNode->nHeuristicDistanceToTarget;
-		PATH_FoWall_MakeCandidate(pContext, pNewNode);
+		PATH_AStar_MakeCandidate(pContext, pNewNode);
 		return TRUE;
 	}
 	else
@@ -423,7 +423,7 @@ BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFo
 // Takes a node list, and builds the path using straight lines into the path info.
 // Note that the node list stores the path from the end to the beginning (in reverse order).
 // It also seems like it won't copy the last point of the path list (first of the array), not sure if it's intended or not.
-signed int __fastcall PATH_FoWall_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* pNode, D2PathInfoStrc* pPathInfo)
+signed int __fastcall PATH_AStar_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* pNode, D2PathInfoStrc* pPathInfo)
 {
 	if (!pNode)
 	{

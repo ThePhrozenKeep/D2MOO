@@ -160,11 +160,11 @@ void D2DebugPath(D2DynamicPathStrc* pDynamicPath)
     ImGui::BulletText("Type=%d Flags=0x%x", pDynamicPath->dwPathType, pDynamicPath->dwFlags);
     ImGui::BulletText("Game  (X,Y)=(%5d,%5d)", pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
     ImGui::SameLine(); ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
-    ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->SP1.X, pDynamicPath->SP1.Y);
-    if (pDynamicPath->SP2 != D2PathPointStrc{0,0})
-        ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->SP2.X, pDynamicPath->SP2.Y);
-    if (pDynamicPath->SP3 != D2PathPointStrc{0,0})
-        ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->SP3.X, pDynamicPath->SP3.Y);
+    ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->tTargetCoord.X, pDynamicPath->tTargetCoord.Y);
+    if (pDynamicPath->tPrevTargetCoord != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->tPrevTargetCoord.X, pDynamicPath->tPrevTargetCoord.Y);
+    if (pDynamicPath->tFinalTargetCoord != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->tFinalTargetCoord.X, pDynamicPath->tFinalTargetCoord.Y);
     ImGui::BulletText   ("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
 
 }

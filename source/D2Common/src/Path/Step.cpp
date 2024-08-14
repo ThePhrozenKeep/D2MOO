@@ -458,7 +458,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			if (v43)
 				pDynamicPath->SavedSteps[pDynamicPath->nSavedStepsCount] = v46;
 			pDynamicPath->nSavedStepsCount++;
-			if (pDynamicPath->nSavedStepsCount >= PATH_MAX_STEP_LEN)
+			if (pDynamicPath->nSavedStepsCount >= D2DynamicPathStrc::PATH_MAX_STEP_LEN)
 			{
 				v24 = v50;
 				v25 = v51;

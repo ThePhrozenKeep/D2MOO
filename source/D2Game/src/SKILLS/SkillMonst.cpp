@@ -616,7 +616,7 @@ int32_t __fastcall SKILLS_SrvSt48_SwarmMove(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 1;
     }
     
-    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_ASTAR);
     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
     if (PATH_GetNumberOfPathPoints(pUnit->pDynamicPath))
     {
@@ -1655,7 +1655,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
         }
 
         PATH_SetVelocity(pUnit->pDynamicPath, MONSTERUNIQUE_CalculatePercentage(nBaseVelocity, STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0), 100), __FILE__, __LINE__);
-        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
+        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_ASTAR);
         D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
         SKILLS_SetFlags(pSkill, 1);
         return 1;

@@ -124,16 +124,16 @@ target_sources(${D2CommonImplName}
 # Path
 target_sources(${D2CommonImplName}
   PRIVATE
+    src/Path/AStar.cpp
     src/Path/IDAStar.cpp
-    src/Path/FollowWall.cpp
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
     src/Path/PathUtil.cpp
     src/Path/PathWF.cpp
     src/Path/Step.cpp
 
+    include/Path/AStar.h
     include/Path/IDAStar.h
-    include/Path/FollowWall.h
     include/Path/Path.h
     include/Path/PathMisc.h
     include/Path/PathUtil.h

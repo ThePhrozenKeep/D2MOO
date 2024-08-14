@@ -233,7 +233,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetMaxDistance                                                 @10189
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10190_PATH_SetDistance                                             @10190
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10191_PATH_GetDistance                                             @10191
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10192_PathSetIDAMax                                        @10192
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetIDAStarInitFScore											@10192
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10193_PATH_AdjustDirection                                 @10193
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionX                                                  @10194
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionY                                                  @10195

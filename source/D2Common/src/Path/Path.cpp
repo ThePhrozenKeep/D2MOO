@@ -15,7 +15,7 @@
 #include "Path/PathMisc.h"
 #include "Path/PathUtil.h"
 #include "Path/PathWF.h"
-#include "Path/FollowWall.h"
+#include "Path/AStar.h"
 #include "Path/Step.h"
 #include <cmath>
 #include <utility>
@@ -54,66 +54,67 @@ static const uint32_t dword_6FDD1F88[PATH_NB_DIRECTIONS] =
 
 static const int gaPathTypeFlags_6FDD2088[] =
 {
-	0x21900,
-	0x1900,
-	0,
-	0,
-	0x60000,
-	0,
-	0,
-	0x21900,
-	0x1E600,
-	0x1E800,
-	0x60000,
-	0x1E604,
-	0,
-	0x100,
-	0x60000,
-	0x800,
-	0,
-	0,
+/*[ 0]*/0x21900,
+/*[ 1]*/0x1900,
+/*[ 2]*/0,
+/*[ 3]*/0,
+/*[ 4]*/0x60000,
+/*[ 5]*/0,
+/*[ 6]*/0,
+/*[ 7]*/0x21900,
+/*[ 8]*/0x1E600,
+/*[ 9]*/0x1E800,
+/*[10]*/0x60000,
+/*[11]*/0x1E604,
+/*[12]*/0,
+/*[13]*/0x100,
+/*[14]*/0x60000,
+/*[15]*/0x800,
+/*[16]*/0,
+/*[17]*/0,
 };
-
-static const int32_t gaOffsetForPathType_6FDD20D0[] =
+static_assert(ARRAY_SIZE(gaPathTypeFlags_6FDD2088) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
+// 1.10f: D2Common.0x6FDD20D0
+static const int32_t gaOffsetForPathType[] =
 {
-	0,
-	0,
-	0,
-	0,
-	0,
-	2,
-	-2,
-	0,
-	0,
-	0,
-	0,
-	0,
-	-4,
-	0,
-	0,
-	0,
-	0,
-	0,
+/*[ 0]*/0,
+/*[ 1]*/0,
+/*[ 2]*/0,
+/*[ 3]*/0,
+/*[ 4]*/0,
+/*[ 5]*/2,
+/*[ 6]*/-2,
+/*[ 7]*/0,
+/*[ 8]*/0,
+/*[ 9]*/0,
+/*[10]*/0,
+/*[11]*/0,
+/*[12]*/-4,
+/*[13]*/0,
+/*[14]*/0,
+/*[15]*/0,
+/*[16]*/0,
+/*[17]*/0,
 };
-static_assert(ARRAY_SIZE(gaOffsetForPathType_6FDD20D0) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
+static_assert(ARRAY_SIZE(gaOffsetForPathType) == PATHTYPE_COUNT, "This array must have PATHTYPE_COUNT entries");
 
 typedef int(__fastcall* PathFunctionType)(D2PathInfoStrc*);
 
 //D2Common.0x6FDD1F40
 static const PathFunctionType scpfnPathFunction[] = {
-/*[0]*/PATH_IdaStar_6FDA7970
-/*[1]*/,PATH_FoWall_ComputePath
-/*[2]*/,PATH_Toward_6FDAA9F0
-/*[3]*/,sub_6FDAB0B0
-/*[4]*/,nullptr
-/*[5]*/,PATH_Toward_6FDAA9F0
-/*[6]*/,PATH_Toward_6FDAA9F0
-/*[7]*/,sub_6FDAB130
-/*[8]*/,PATH_Knockback_Server
-/*[9]*/,PATH_Leap_6FDAB1E0
+/*[ 0]*/PATH_IdaStar_6FDA7970
+/*[ 1]*/,PATH_AStar_ComputePath
+/*[ 2]*/,PATH_Toward_6FDAA9F0
+/*[ 3]*/,sub_6FDAB0B0
+/*[ 4]*/,nullptr
+/*[ 5]*/,PATH_Toward_6FDAA9F0
+/*[ 6]*/,PATH_Toward_6FDAA9F0
+/*[ 7]*/,PATH_Straight_Compute
+/*[ 8]*/,PATH_Knockback_Server
+/*[ 9]*/,PATH_Leap_6FDAB1E0
 /*[10]*/,nullptr
 /*[11]*/,PATH_Knockback_Client
-/*[12]*/,sub_6FDAB0C0
+/*[12]*/,PATH_BackupTurn_Compute
 /*[13]*/,PATH_Toward_6FDAA9F0
 /*[14]*/,nullptr
 /*[15]*/,PATH_ComputePathOrSlideAlongObstacles
@@ -315,10 +316,10 @@ uint8_t PATH_UpdateTargetUnit(D2PathInfoStrc* pPathInfo)
 	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
 	if (D2UnitStrc* pPathTargetUnit = pPath->pTargetUnit)
 	{
-		pPath->SP1.X = UNITS_GetXPosition(pPathTargetUnit);
-		pPath->SP1.Y = UNITS_GetYPosition(pPathTargetUnit);
+		pPath->tTargetCoord.X = UNITS_GetXPosition(pPathTargetUnit);
+		pPath->tTargetCoord.Y = UNITS_GetYPosition(pPathTargetUnit);
 
-		if (pPath->SP1 == D2PathPointStrc{ 0,0 })
+		if (pPath->tTargetCoord == D2PathPointStrc{ 0,0 })
 		{
 			return 0;
 		}
@@ -384,12 +385,12 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 		tPathInfo.pDynamicPath = pPath;
 		tPathInfo.nCollisionMask = pPath->nMoveTestCollisionMask;
 		tPathInfo.nDistMax = pPath->nDistMax;
-		tPathInfo.nMinimumFScoreToEvaluate = pPath->unk0x92;
+		tPathInfo.nMinimumFScoreToEvaluate = pPath->nIDAStarInitFScore;
 		tPathInfo.field_14 = PATH_UpdateTargetUnit(&tPathInfo);
 
-		if (pPath->SP1 != D2PathPointStrc{ 0,0 })
+		if (pPath->tTargetCoord != D2PathPointStrc{ 0,0 })
 		{
-			tPathInfo.tTargetCoord = pPath->SP1;
+			tPathInfo.tTargetCoord = pPath->tTargetCoord;
 			if (tPathInfo.tStartCoord != tPathInfo.tTargetCoord
 				&& std::abs(tPathInfo.tStartCoord.X - tPathInfo.tTargetCoord.X) <= 100
 				&& std::abs(tPathInfo.tStartCoord.Y - tPathInfo.tTargetCoord.Y) <= 100
@@ -429,7 +430,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 
 					pPath->dwCurrentPointIdx = 0;
 					pPath->dwPathPoints = 0;
-					pPath->SP3 = tPathInfo.tTargetCoord;
+					pPath->tFinalTargetCoord = tPathInfo.tTargetCoord;
 					if (bUpdatePath)
 					{
 						D2_ASSERT(scpfnPathFunction[tPathInfo.nPathType]);
@@ -451,11 +452,11 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 					if (pPath->dwCurrentPointIdx < pPath->dwPathPoints)
 					{
 						sub_6FDA8220(pPath);
-						pPath->SP2 = pPath->SP1;
+						pPath->tPrevTargetCoord = pPath->tTargetCoord;
 						pPath->unk0x38 = 0;
 						if ((pPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0 && !pPath->pTargetUnit)
 						{
-							pPath->SP1 = pPath->PathPoints[pPath->dwPathPoints - 1];
+							pPath->tTargetCoord = pPath->PathPoints[pPath->dwPathPoints - 1];
 						}
 
 						if (pPath->dwPathPoints)
@@ -500,11 +501,11 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 	{
 		UNITS_GetCoords(pDynamicPath->pTargetUnit, &pCoords);
 
-		pDynamicPath->SP1.X = pCoords.nX;
-		pDynamicPath->SP1.Y = pCoords.nY;
+		pDynamicPath->tTargetCoord.X = pCoords.nX;
+		pDynamicPath->tTargetCoord.Y = pCoords.nY;
 	}
 
-	nXDistance = nOldX - pDynamicPath->SP1.X;
+	nXDistance = nOldX - pDynamicPath->tTargetCoord.X;
 	if (nXDistance < 0)
 	{
 		nXDistance = -nXDistance;
@@ -512,7 +513,7 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 
 	D2_ASSERTM(nXDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
-	nYDistance = nOldY - pDynamicPath->SP1.Y;
+	nYDistance = nOldY - pDynamicPath->tTargetCoord.Y;
 	if (nYDistance < 0)
 	{
 		nYDistance = -nYDistance;
@@ -520,16 +521,16 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 
 	D2_ASSERTM(nYDistance < 100, FOG_csprintf(szText, "Missile Firing too far : %d", pUnit ? pUnit->dwClassId : -1));
 
-	if (pDynamicPath->SP1.X && pDynamicPath->SP1.Y)
+	if (pDynamicPath->tTargetCoord.X && pDynamicPath->tTargetCoord.Y)
 	{
-		pDynamicPath->PathPoints[0].X = pDynamicPath->SP1.X;
-		pDynamicPath->PathPoints[0].Y = pDynamicPath->SP1.Y;
+		pDynamicPath->PathPoints[0].X = pDynamicPath->tTargetCoord.X;
+		pDynamicPath->PathPoints[0].Y = pDynamicPath->tTargetCoord.Y;
 
 		pDynamicPath->dwPathPoints = 1;
 		pDynamicPath->unk0x38 = 0;
 		PATH_ComputeVelocityAndDirectionVectorsToNextPoint(pDynamicPath, 1, 1);
 
-		if (!(pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->SP1.X, pDynamicPath->SP1.Y)))
+		if (!(pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tTargetCoord.X, pDynamicPath->tTargetCoord.Y)))
 		{
 			pDynamicPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 		}
@@ -586,22 +587,22 @@ uint8_t __fastcall PATH_AdvanceToDoor(D2PathInfoStrc* pPathInfo)
 	{
 		if (pPathInfo->pDynamicPath->tGameCoords.wPosX >= UNITS_GetXPosition(pTargetUnit))
 		{
-			pPathInfo->pDynamicPath->SP1.X += 2;
+			pPathInfo->pDynamicPath->tTargetCoord.X += 2;
 		}
 		else
 		{
-			pPathInfo->pDynamicPath->SP1.X -= 2;
+			pPathInfo->pDynamicPath->tTargetCoord.X -= 2;
 		}
 	}
 	else
 	{
 		if (pPathInfo->pDynamicPath->tGameCoords.wPosY >= UNITS_GetYPosition(pTargetUnit))
 		{
-			pPathInfo->pDynamicPath->SP1.Y += 2;
+			pPathInfo->pDynamicPath->tTargetCoord.Y += 2;
 		}
 		else
 		{
-			pPathInfo->pDynamicPath->SP1.Y -= 2;
+			pPathInfo->pDynamicPath->tTargetCoord.Y -= 2;
 		}
 	}
 
@@ -719,9 +720,9 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, in
 	{
 		pDynamicPath->nFootprintCollisionMask = COLLIDE_PLAYER;
 		pDynamicPath->nMoveTestCollisionMask = COLLIDE_MASK_PLAYER_PATH;
-		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
+		PATH_SetType(pDynamicPath, PATHTYPE_STRAIGHT);
 		pDynamicPath->nDistMax = 73;
-		pDynamicPath->unk0x92 = 70;
+		pDynamicPath->nIDAStarInitFScore = 70;
 	}
 	else if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
@@ -1152,28 +1153,28 @@ void __fastcall PATH_SetClientCoordY(D2DynamicPathStrc* pDynamicPath, int nTarge
 //TODO: Check name
 int __stdcall D2COMMON_10175_PathGetFirstPointX(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->SP1.X;
+	return pDynamicPath->tTargetCoord.X;
 }
 
 //D2Common.0x6FDA9DF0 (#10176)
 //TODO: Check name
 int __stdcall D2COMMON_10176_PathGetFirstPointY(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->SP1.Y;
+	return pDynamicPath->tTargetCoord.Y;
 }
 
 //D2Common.0x6FDA9E00 (#10224)
 //TODO: Find a name
 int __stdcall D2Common_10224(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->SP3.X;
+	return pDynamicPath->tFinalTargetCoord.X;
 }
 
 //D2Common.0x6FDA9E10 (#10225)
 //TODO: Find a name
 int __stdcall D2Common_10225(D2DynamicPathStrc* pDynamicPath)
 {
-	return pDynamicPath->SP3.Y;
+	return pDynamicPath->tFinalTargetCoord.Y;
 }
 
 //D2Common.0x6FDA9E20 (#10177)
@@ -1228,8 +1229,8 @@ void __stdcall D2COMMON_10170_PathSetTargetPos(D2DynamicPathStrc* pDynamicPath, 
 {
 	if (pDynamicPath)
 	{
-		pDynamicPath->SP1.X = nX;
-		pDynamicPath->SP1.Y = nY;
+		pDynamicPath->tTargetCoord.X = nX;
+		pDynamicPath->tTargetCoord.Y = nY;
 		pDynamicPath->pTargetUnit = NULL;
 	}
 }
@@ -1372,14 +1373,14 @@ void __stdcall PATH_SetType(D2DynamicPathStrc* pDynamicPath, int nPathType)
 		pDynamicPath->dwPrevPathType = pDynamicPath->dwPathType;
 	}
 
-	if ((nFlag & PATH_UNKNOWN_FLAG_0x08000) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x10000))
+	if ((nFlag & PATH_WITH_PREVIOUS_VELOCITY) && !(pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x10000))
 	{
-		pDynamicPath->unk0x80 = pDynamicPath->dwVelocity;
+		pDynamicPath->nPreviousVelocity = pDynamicPath->dwVelocity;
 	}
 
 	pDynamicPath->dwPathType = nPathType;
 	pDynamicPath->dwFlags = nFlag | pDynamicPath->dwFlags & 0xFFF800FF;
-	pDynamicPath->dwUnitTypeRelated = gaOffsetForPathType_6FDD20D0[nPathType];
+	pDynamicPath->nDirOffset = gaOffsetForPathType[nPathType];
 
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_CLIENT);
 	D2_ASSERT(pDynamicPath->dwPrevPathType != PATHTYPE_KNOCKBACK_SERVER);
@@ -1391,9 +1392,9 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath)
 {
 	D2_ASSERT(pDynamicPath->pUnit);
 
-	if (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x08000)
+	if (pDynamicPath->dwFlags & PATH_WITH_PREVIOUS_VELOCITY)
 	{
-		pDynamicPath->dwVelocity = pDynamicPath->unk0x80;
+		pDynamicPath->dwVelocity = pDynamicPath->nPreviousVelocity;
 	}
 
 	if (pDynamicPath->pUnit->dwUnitType != UNIT_PLAYER)
@@ -1405,7 +1406,7 @@ void __stdcall PATH_ResetToPreviousType(D2DynamicPathStrc* pDynamicPath)
 	}
 	else
 	{
-		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
+		PATH_SetType(pDynamicPath, PATHTYPE_STRAIGHT);
 	}
 }
 
@@ -1470,12 +1471,11 @@ uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Common.0x6FDAA310 (#10192)
-//TODO: Check name
-void __stdcall D2COMMON_10192_PathSetIDAMax(D2DynamicPathStrc* pDynamicPath, int a2)
+void __stdcall PATH_SetIDAStarInitFScore(D2DynamicPathStrc* pDynamicPath, int nIDAStarInitFScore)
 {
 	D2_ASSERT(pDynamicPath->dwPathType != PATHTYPE_IDASTAR);
 
-	pDynamicPath->unk0x92 = a2;
+	pDynamicPath->nIDAStarInitFScore = nIDAStarInitFScore;
 }
 
 //D2Common.0x6FDAA350 (#10198)
@@ -1537,8 +1537,8 @@ void __stdcall D2COMMON_10203_PATH_SetRotateFlag(D2DynamicPathStrc* pDynamicPath
 //TODO: Check name
 void __stdcall D2COMMON_10204_PATH_ClearPoint2(D2DynamicPathStrc* pDynamicPath)
 {
-	pDynamicPath->SP2.X = 0;
-	pDynamicPath->SP2.Y = 0;
+	pDynamicPath->tPrevTargetCoord.X = 0;
+	pDynamicPath->tPrevTargetCoord.Y = 0;
 }
 
 //D2Common.0x6FDAA480 (#10205)

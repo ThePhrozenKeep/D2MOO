@@ -34,7 +34,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc* pPathInfo);
 //1.10f: D2Common.0x6FDAABF0
 BOOL __fastcall PATH_CheckCollisionsToNextPosition(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pGameCoord);
 //D2Common.0x6FDAB130
-int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_Straight_Compute(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB270
 int __fastcall PATH_Knockback_Server(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB1E0
@@ -42,7 +42,7 @@ int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB240
 int __fastcall PATH_Knockback_Client(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB0C0
-int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_BackupTurn_Compute(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB790
 void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 

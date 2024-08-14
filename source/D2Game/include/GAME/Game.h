@@ -117,8 +117,8 @@ struct D2GameInfoStrc
 	int32_t nPathTowardPct;							// 0x40
 	int32_t nPathClockPct;							// 0x44
 	int32_t nPathCounterPct;						// 0x48
-	int32_t nPathFoWallPct;							// 0x4C
-	int32_t nPathAStarPct;							// 0x50
+	int32_t nPathAStarPct;							// 0x4C Note: Inverted with FoWall in D2Server
+	int32_t nPathFoWallPct;							// 0x50
 	int32_t nPathTotalCalls;						// 0x54
 	int32_t nFrames;								// 0x58 Frames / 100
 	int32_t nTime;									// 0x5C Time (minutes) since game creation (bugged, actually returns machine uptime)

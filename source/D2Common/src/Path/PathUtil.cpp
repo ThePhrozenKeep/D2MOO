@@ -14,8 +14,8 @@ void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath
 	uint16_t v4 = (uint16_t)nSpeed << 8;
 	const float nDistance = nSpeed;
 	const uint16_t nAngleRad512 = (8 * nDirection - v4) & 0x1FF;
-	ptPath->SP1.X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
-	ptPath->SP1.Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
+	ptPath->tTargetCoord.X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
+	ptPath->tTargetCoord.Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
 }
 
 //1.10f: D2Common.0x6FDAB940

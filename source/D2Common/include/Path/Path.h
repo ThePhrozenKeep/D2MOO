@@ -7,26 +7,33 @@ struct D2UnitStrc;
 
 #pragma pack(1)
 
+enum D2PathConstants {
+	PATH_NB_DIRECTIONS = 64,
+	PATH_DIR_NULL = 255,
+	PATH_MAX_STEPNUM = 20,
+	PATH_MAXDESTSHIFT = 8, // Used in DRLG_OutFlr.cpp
+};
+
 enum D2PathTypes
 {
 	PATHTYPE_IDASTAR = 0,
-	PATHTYPE_FOLLOW_WALL = 1,
+	PATHTYPE_ASTAR = 1,
 	PATHTYPE_TOWARD = 2,
-	PATHTYPE_UNKNOWN_3 = 3,
-	PATHTYPE_MISSILE = 4,
-	PATHTYPE_MON_CIRCLE_CW = 5, // Clock-wise
-	PATHTYPE_MON_CIRCLE_CCW = 6,// Counter-clock-wise
-	PATHTYPE_UNKNOWN_7 = 7,
+	PATHTYPE_UNKNOWN_3 = 3,			// Same as PATHTYPE_TOWARD, unused ?
+	PATHTYPE_MISSILE = 4,			// Requires PATH_MISSILE_MASK
+	PATHTYPE_MON_CIRCLE_CW = 5,		// Clock-wise
+	PATHTYPE_MON_CIRCLE_CCW = 6,	// Counter-clock-wise
+	PATHTYPE_STRAIGHT = 7,			// Goes in a straight line except once close enough, will try to use AStar
 	PATHTYPE_KNOCKBACK_SERVER = 8,
 	PATHTYPE_LEAP = 9,
-	PATHTYPE_CHARGEDBOLT = 10,
+	PATHTYPE_CHARGEDBOLT = 10,		// Requires PATH_MISSILE_MASK
 	PATHTYPE_KNOCKBACK_CLIENT = 11,
-	PATHTYPE_UNKNOWN_12 = 12,
-	PATHTYPE_MON_OTHER_2 = 13,
-	PATHTYPE_BLESSEDHAMMER = 14,
-	PATHTYPE_WF = 15,         // Wrongly called AStar server side ? Value could have changed between versions.
-	PATHTYPE_MISSILE_STREAM = 16, // Missile streams seems to be unused in the game even though the code exists?
-	PATHTYPE_UNKNOWN_17 = 17,
+	PATHTYPE_BACKUP_TURN = 12,		// Turns when colliding before reaching destination.
+	PATHTYPE_TOWARD_FINISH = 13,
+	PATHTYPE_BLESSEDHAMMER = 14,	// Requires PATH_MISSILE_MASK
+	PATHTYPE_WALL_FOLLOW = 15,		// PATH_WF
+	PATHTYPE_MISSILE_STREAM = 16,	// Missile streams seems to be unused in the game even though the code exists?
+	PATHTYPE_UNKNOWN_17 = 17,		// Unused, stubbed?
 
 	PATHTYPE_COUNT = 18
 };
@@ -44,7 +51,7 @@ enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x01000 = 0x01000,
 	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
 	PATH_UNKNOWN_FLAG_0x04000 = 0x04000,
-	PATH_UNKNOWN_FLAG_0x08000 = 0x08000,
+	PATH_WITH_PREVIOUS_VELOCITY = 0x08000,
 	PATH_UNKNOWN_FLAG_0x10000 = 0x10000,
 	PATH_SAVE_STEPS_MASK      = 0x20000,
 	PATH_MISSILE_MASK         = 0x40000,
@@ -87,12 +94,14 @@ union D2FP32_16
 struct D2DynamicPathStrc
 {
 	static const size_t MAXPATHLEN = 78;
+	static const size_t PATH_MAX_STEP_LEN = 10;
+
 	D2FP32_16 tGameCoords;						//0x00
 	int32_t dwClientCoordX;						//0x08
 	int32_t dwClientCoordY;						//0x0C
-	D2PathPointStrc SP1;						//0x10 tTargetCoord in original code
-	D2PathPointStrc SP2;						//0x14
-	D2PathPointStrc SP3;						//0x18
+	D2PathPointStrc tTargetCoord;				//0x10
+	D2PathPointStrc tPrevTargetCoord;			//0x14
+	D2PathPointStrc tFinalTargetCoord;			//0x18
 	D2ActiveRoomStrc* pRoom;					//0x1C
 	D2ActiveRoomStrc* pPreviousRoom;			//0x20
 	int32_t dwCurrentPointIdx;					//0x24
@@ -108,7 +117,7 @@ struct D2DynamicPathStrc
 	uint32_t nFootprintCollisionMask;			//0x4C
 	uint32_t nMoveTestCollisionMask;			//0x50
 	uint16_t nCollidedWithMask;					//0x54
-	uint16_t unk0x56;							//0x56
+	uint16_t padding0x56;						//0x56
 	D2UnitStrc* pTargetUnit;					//0x58
 	uint32_t dwTargetType;						//0x5C
 	uint32_t dwTargetId;						//0x60
@@ -120,23 +129,22 @@ struct D2DynamicPathStrc
 	uint8_t unk0x69;							//0x69
 	D2CoordStrc tDirectionVector;				//0x6A
 	D2CoordStrc tVelocityVector;				//0x72
-	char unk0x7A[2];							//0x7A
+	char padding0x7A[2];						//0x7A
 	int32_t dwVelocity;							//0x7C
-	uint32_t unk0x80;							//0x80
+	uint32_t nPreviousVelocity;					//0x80
 	int32_t dwMaxVelocity;						//0x84
 	int32_t dwAcceleration;						//0x88
-	int32_t unk0x8C;							//0x8C
+	int32_t dwAccelerationsCounter;				//0x8C Incremented each time we want to accelerate. Used to accelerate only 1 out 5 times
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
-	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
+	uint8_t nIDAStarInitFScore;					//0x92 // Used only with PATHTYPE_IDASTAR
 	uint8_t nStepNum;							//0x93
 	uint8_t nDistance;							//0x94
-	char unk0x95[3];							//0x95
-	int32_t dwUnitTypeRelated;					//0x98
+	char padding0x95[3];						//0x95
+	int32_t nDirOffset;							//0x98 See gaOffsetForPathType
 	D2PathPointStrc PathPoints[MAXPATHLEN];		//0x9C
 	int32_t nSavedStepsCount;					//0x1D4
-	D2PathPointStrc SavedSteps[7];				//0x1D8
-	char unk0x1DC[12];							//0x1DC
+	D2PathPointStrc SavedSteps[PATH_MAX_STEP_LEN];//0x1D8
 };
 
 struct D2PathInfoStrc
@@ -207,12 +215,6 @@ inline uint32_t PATH_FP16FitToCenter(uint32_t value)
 	return (value & 0xFFFF0000) + (1 << 15);
 }
 
-enum D2PathConstants {
-	PATH_NB_DIRECTIONS = 64,
-	PATH_DIR_NULL = 255,
-	PATH_MAX_STEPNUM = 20,
-	PATH_MAX_STEP_LEN = 10,
-};
 // Helper functions
 inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
 void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath);
@@ -374,7 +376,7 @@ D2COMMON_DLL_DECL uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicP
 //D2Common.0x6FDAA300 (#10202)
 D2COMMON_DLL_DECL uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA310 (#10192)
-D2COMMON_DLL_DECL void __stdcall D2COMMON_10192_PathSetIDAMax(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetIDAStarInitFScore(D2DynamicPathStrc* pDynamicPath, int nIDAStarInitFScore);
 //D2Common.0x6FDAA350 (#10198)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_10198_PathGetSaveStep(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc** ppPathPoints);
 //D2Common.0x6FDAA390 (#10199)

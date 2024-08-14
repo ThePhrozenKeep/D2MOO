@@ -1855,11 +1855,11 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
             if (nPathType == 101)
             {
-                nPathType = PATHTYPE_MON_OTHER_2;
+                nPathType = PATHTYPE_TOWARD_FINISH;
             }
 
             nNewPathType = sub_6FC65680(pUnit, nPathType, pAiParam, dwNewDist);
-            if (nNewPathType != PATHTYPE_FOLLOW_WALL && PATH_GetTargetUnit(pUnit->pDynamicPath))
+            if (nNewPathType != PATHTYPE_ASTAR && PATH_GetTargetUnit(pUnit->pDynamicPath))
             {
                 v13 = 10;
             }
@@ -2031,14 +2031,14 @@ int32_t __fastcall sub_6FC65680(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamS
         switch (nPathType)
         {
         case PATHTYPE_TOWARD:
-        case PATHTYPE_UNKNOWN_7:
+        case PATHTYPE_STRAIGHT:
         case PATHTYPE_LEAP:
-        case PATHTYPE_MON_OTHER_2:
+        case PATHTYPE_TOWARD_FINISH:
             UNITROOM_RefreshUnit(pUnit);
             pUnit->dwFlags |= UNITFLAG_DOUPDATE;
-            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WF);
+            PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WALL_FOLLOW);
             D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
-            return PATHTYPE_WF;
+            return PATHTYPE_WALL_FOLLOW;
 
         default:
             break;
