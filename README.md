@@ -71,7 +71,12 @@ The code was originally extracted using a reverse engineering tool, and slowly c
 Yes this is now possible! However it is not guaranteed to be bugfree, so you may want to patch the functions you use instead.
 We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the current status of each ordinal.
 
-This is not the case yet for other .dlls.
+This is **NOT** the case yet for other .dlls.
+
+### Can I replace the game .dll files directly with the ones from D2MOO ?
+
+NO !
+As mentioned in the previous question, it only works with D2Common.dll (and is not bugfree).
 
 ### Why are some DLLs missing ?
 
