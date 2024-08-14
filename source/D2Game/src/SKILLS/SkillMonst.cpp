@@ -556,7 +556,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         sub_6FCBDE90(pUnit, 0);
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
         PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
-        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
+        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_PATH);
         PATH_SetType(pUnit->pDynamicPath, 101); // This is a bug in the original game, this value seems to be used by monmodes but should be converted to PATHTYPE_MON_OTHER_2?
 
         if (pUnit->dwUnitType == UNIT_MONSTER)
@@ -1315,7 +1315,7 @@ int32_t __fastcall SKILLS_SrvDo097_Resurrect(D2GameStrc* pGame, D2UnitStrc* pUni
     const int32_t nY = CLIENTS_GetUnitY(pTarget);
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
-    if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? 0x3C01u : 0x1C09u))
+    if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? COLLIDE_MASK_MONSTER_PATH : 0x1C09u))
     {
         PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
         SKILLS_ResurrectUnit(pGame, pTarget);

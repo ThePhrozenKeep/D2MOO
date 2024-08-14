@@ -5,6 +5,7 @@
 #include <D2BitManip.h>
 #include <D2Math.h>
 
+#include <D2Collision.h>
 #include <D2Combat.h>
 #include <D2DataTbls.h>
 #include <D2Dungeon.h>
@@ -2857,7 +2858,7 @@ int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGam
 	{
 		D2UnitStrc* pFoundUnit = unitFindData.pUnitsArray[i];
 
-		if ((pOwnerOwner != pFoundUnit || a8) && (pUnitOwner != pFoundUnit || a7) && sub_6FCBD900(pGame, pUnitOwner, pFoundUnit) && D2Common_11026(nX, nY, pFoundUnit, 0x805u))
+		if ((pOwnerOwner != pFoundUnit || a8) && (pUnitOwner != pFoundUnit || a7) && sub_6FCBD900(pGame, pUnitOwner, pFoundUnit) && D2Common_11026(nX, nY, pFoundUnit, COLLIDE_MASK_RADIAL_BARRIER))
 		{
 			memcpy(&damageCopy, pDamage, sizeof(damageCopy));
 

@@ -1013,7 +1013,7 @@ D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         coords1.nY = coords2.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return 0;
@@ -1132,7 +1132,7 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Coord
         coords1.nY = coords2.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return;
@@ -1198,7 +1198,7 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoom
         coords1.nY = coords2.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1269,7 +1269,7 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoo
         coords1.nY = coords2.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1338,7 +1338,7 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         coords1.nY = coords2.nY;
     }
     
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1424,7 +1424,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
         coords1.nY = unitCoords.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1825,7 +1825,7 @@ void __fastcall ITEMS_DropGoldPile(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_
             spawnCoords.nY = unitCoords.nY;
         }
 
-        pRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &spawnCoords, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+        pRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &spawnCoords, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
         if (pRoom)
         {
             D2UnitStrc* pGoldPile = D2GAME_CreateItemUnit_6FC501A0(pUnit, nGoldItemId, pGame, 4u, ITEMQUAL_NORMAL, 1u, 1u, 1u, 0, 0, 0);
@@ -1892,7 +1892,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
         coords1.nY = unitCoords.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return;
@@ -2502,7 +2502,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                             itemCoords.nY = coords.nY;
                         }
 
-                        D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &itemCoords, &coords, 1, 0x3E01u, 0x801u, 1);
+                        D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &itemCoords, &coords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
                         if (pFreeCoordsRoom)
                         {
                             D2ItemDropStrc itemDrop = {};

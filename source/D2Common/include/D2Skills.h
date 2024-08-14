@@ -344,7 +344,7 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, 
 //D2Common.0x6FDB3910 (#11025)
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6);
 //D2Common.0x6FDB3960 (#11026)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, uint16_t nColMask);
 //D2Common.0x6FDB3A10 (#11027)
 D2COMMON_DLL_DECL int __stdcall SKILLS_GetShiftedManaCosts(int nSkillId, int nLevel);
 //D2Common.0x6FDB3A90 (#11028)

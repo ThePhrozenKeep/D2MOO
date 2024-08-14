@@ -549,7 +549,7 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             return 1;
         }
 
-        if (!UNITS_IsObjectInInteractRange(pPlayer, pUnit) || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, 0x804u))
+        if (!UNITS_IsObjectInInteractRange(pPlayer, pUnit) || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, COLLIDE_MASK_PLAYER_FLYING))
         {
             D2GAME_PLAYERMODE_Change_6FC81A00(pGame, pPlayer, 0, 3, UNIT_OBJECT, nUnitGUID, 0);
             UNITS_SetInteractData(pPlayer, -(a4 != 0) - 1, UNIT_OBJECT, nUnitGUID);
@@ -579,7 +579,7 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             return 1;
         }
 
-        if (nDistance > 4 || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, 0x804))
+        if (nDistance > 4 || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, COLLIDE_MASK_PLAYER_FLYING))
         {
             D2GAME_PLAYERMODE_Change_6FC81A00(pGame, pPlayer, 0, 3, UNIT_ITEM, nUnitGUID, 0);
             UNITS_SetInteractData(pPlayer, -(a4 != 0) - 1, UNIT_ITEM, nUnitGUID);
@@ -3771,7 +3771,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_WALL | COLLIDE_NOPLAYER | COLLIDE_OBJECT);
     PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WF);
     PATH_SetNewDistance(pUnit->pDynamicPath, 77);
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, pPacket5F->nX, pPacket5F->nY);

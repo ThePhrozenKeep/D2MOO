@@ -5,6 +5,7 @@
 #include <DataTbls/ObjectsIds.h>
 #include <DataTbls/ObjectsTbls.h>
 #include <Drlg/D2DrlgDrlg.h>
+#include <D2Collision.h>
 #include <D2DataTbls.h>
 #include <D2Dungeon.h>
 #include <D2QuestRecord.h>
@@ -978,7 +979,7 @@ int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	}
 
 	D2ActiveRoomStrc* pNewRoom = nullptr;
-	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 13);
+	QUESTS_GetFreePosition(pRoom, pCoord, 3, COLLIDE_MASK_PLACEMENT, &pNewRoom, 13);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
 		DUNGEON_ToggleHasPortalFlag(pNewRoom, 0);
@@ -1021,7 +1022,7 @@ int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	}
 
 	D2ActiveRoomStrc* pNewRoom = nullptr;
-	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 14);
+	QUESTS_GetFreePosition(pRoom, pCoord, 3, COLLIDE_MASK_PLACEMENT, &pNewRoom, 14);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
 		DUNGEON_ToggleHasPortalFlag(pNewRoom, 0);
@@ -1064,7 +1065,7 @@ int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(D2ObjOperateFnStrc* pOp,
 	}
 
 	D2ActiveRoomStrc* pNewRoom = nullptr;
-	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x3F11, &pNewRoom, 15);
+	QUESTS_GetFreePosition(pRoom, pCoord, 3, COLLIDE_MASK_PLACEMENT, &pNewRoom, 15);
 	if (pNewRoom && SUNIT_AllocUnitData(UNIT_OBJECT, 131, pCoord->nX, pCoord->nY, pOp->pGame, pNewRoom, 1, 0, 0))
 	{
 		DUNGEON_ToggleHasPortalFlag(pNewRoom, 0);

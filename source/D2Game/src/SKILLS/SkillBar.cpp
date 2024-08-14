@@ -791,7 +791,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    const int32_t a2 = nUnitType == UNIT_PLAYER ? COLLIDE_MASK_WALKING_UNIT : COLLIDE_MASK_MONSTER_DEFAULT;
+    const int32_t a2 = nUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
     PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_PLAYER_WW);
     PATH_SetType(pUnit->pDynamicPath, PATHTYPE_UNKNOWN_7);
 
@@ -803,7 +803,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 
     PATH_SetVelocity(pUnit->pDynamicPath, sub_6FD15500(pUnit), __FILE__, __LINE__);
-    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_BLANK | COLLIDE_UNIT_RELATED);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_WALL | COLLIDE_MISSILE_BARRIER | COLLIDE_BLANK | COLLIDE_NO_PATH);
 
     D2PathPointStrc* ppPathPoints = nullptr;
     const int32_t nPathPoints = PATH_GetPathPoints(pUnit->pDynamicPath, &ppPathPoints);
@@ -888,7 +888,7 @@ int32_t __fastcall SKILLS_RemoveWhirlwindStats(D2GameStrc* pGame, D2UnitStrc* pU
     }
 
     const int32_t v9 = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_PLAYER : COLLIDE_MONSTER;
-    const int32_t pUnita = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_MASK_WALKING_UNIT : COLLIDE_MASK_MONSTER_DEFAULT;
+    const int32_t pUnita = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
     if (nX && nY)
     {
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), v9);
@@ -1243,7 +1243,7 @@ int32_t __fastcall SKILLS_SrvSt40_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         coords.nX = nX;
         coords.nY = nY;
 
-        if (!COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coords, UNITS_GetUnitSizeX(pUnit), 0x3C01, 0))
+        if (!COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coords, UNITS_GetUnitSizeX(pUnit), COLLIDE_MASK_MONSTER_PATH, 0))
         {
             UNITS_SetUsedSkill(pUnit, 0);
             return 0;
@@ -1338,7 +1338,7 @@ int32_t __fastcall SKILLS_FindLeapTargetPosition(D2UnitStrc* pUnit, int32_t nSki
         D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), coords.nX, coords.nY), &coords, UNITS_GetUnitSizeX(pUnit), 0x1C09u, 1);
         nX = coords.nX;
         nY = coords.nY;
-        if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x1C09) && D2Common_11025(nUnitX, nUnitY, nX, nY, pRoom, 0x804) && UNITS_GetDistanceToCoordinates(pUnit, nX, nY) <= nAuraRange)
+        if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x1C09) && D2Common_11025(nUnitX, nUnitY, nX, nY, pRoom, COLLIDE_MASK_PLAYER_FLYING) && UNITS_GetDistanceToCoordinates(pUnit, nX, nY) <= nAuraRange)
         {
             *pX = nX;
             *pY = nY;
@@ -1486,7 +1486,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
         {
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
-            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
+            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_PATH);
             PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
 
             if (nBaseId == MONSTER_SANDLEAPER1)
@@ -1527,7 +1527,7 @@ int32_t __fastcall SKILLS_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc
         {
             COLLISION_ResetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x80u);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_PLAYER);
-            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_WALKING_UNIT);
+            PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_PLAYER_PATH);
             PATH_SetType(pUnit->pDynamicPath, PATHTYPE_UNKNOWN_7);
             SKILLS_SetFlags(pSkill, 0x200);
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);

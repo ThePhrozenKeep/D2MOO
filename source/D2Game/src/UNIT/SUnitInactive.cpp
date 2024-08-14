@@ -139,7 +139,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 										pCoord.nX = nX;
 										pCoord.nY = nY;
 										D2ActiveRoomStrc* ppRoom = nullptr;
-										D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
+										D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 										if (ppRoom)
 										{
 											pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
@@ -151,7 +151,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 									pCoord.nX = nX;
 									pCoord.nY = nY;
 									D2ActiveRoomStrc* ppRoom = nullptr;
-									D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
+									D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 									if (ppRoom)
 									{
 										pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);

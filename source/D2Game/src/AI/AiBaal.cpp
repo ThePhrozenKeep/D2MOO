@@ -261,7 +261,7 @@ int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget,
 	{
 		nCollisionRangeWeight = 100;
 	}
-	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
+	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER))
 	{
 		nCollisionRangeWeight = 75;
 	}
@@ -353,7 +353,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 	}
 
 	const int32_t bInMeleeRange = UNITS_IsInMeleeRange(pUnit, pTarget, 0);
-	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0;
+	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER) == 0;
 	if (bInMeleeRange)
 	{
 		int32_t aiParams[16] = { 0, 50, 0, 0, 0, 0, 0, 0, 20, 30, 150, 10, 10, 70, 40, 0 };

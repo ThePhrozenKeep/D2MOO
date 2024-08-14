@@ -1967,7 +1967,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 	if (!nParam && !AIGENERAL_GetMinionOwner(pUnit) && pAiTickParam->pTarget && nDistance > 144 && AI_RollPercentage(pUnit) < 60)
 	{
 		pUnit->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET);
-		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
+		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_NO_PATH);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
 		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
@@ -1991,7 +1991,7 @@ void __fastcall AITHINK_Fn023_Vulture(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 		if (!arg.pTarget && (pAiTickParam->nTargetDistance >= 6 || AI_RollPercentage(pUnit) >= 15))
 		{
 			pUnit->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET);
-			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
+			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_NO_PATH);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 
 			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
@@ -2142,7 +2142,7 @@ int32_t __fastcall sub_6FCD55D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, COLLIDE_MONSTER);
 	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_UNIT_PRESENCE);
-	PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
+	PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_PATH);
 	AITACTICS_Idle(pGame, pUnit, 12);
 	return 1;
 }
@@ -4221,7 +4221,7 @@ void __fastcall AITHINK_Fn049_ZakarumPriest(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return;
 	}
 
-	if (UNITS_TestCollisionWithUnit(pUnit, pAiTickParam->pTarget, COLLIDE_BARRIER))
+	if (UNITS_TestCollisionWithUnit(pUnit, pAiTickParam->pTarget, COLLIDE_MISSILE_BARRIER))
 	{
 		if (AIRollChanceParam(pGame, pUnit, pAiTickParam, ZAKARUMPRIEST_AI_PARAM_ATTACK_CHANCE_PCT) && pAiTickParam->pMonstatsTxt->nSkill[3] >= 0
 			&& pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[1] && AIRollChanceParam(pGame, pUnit, pAiTickParam, ZAKARUMPRIEST_AI_PARAM_BLIZZARD_CHANCE_PCT))
@@ -4577,7 +4577,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		const uint32_t nRand = AI_RollPercentage(pUnit);
 
 		int32_t bUseBlizzard = 0;
-		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
+		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER))
 		{
 			bUseBlizzard = 1;
 		}
@@ -4637,7 +4637,7 @@ void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
-	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
+	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_NO_PATH);
 	COLLISION_ResetMask(pRoom, nX, nY, COLLIDE_MONSTER);
 	PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 	PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
@@ -4670,7 +4670,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 			pUnit->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET);
 
-			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
+			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_NO_PATH);
 			COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 			PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 			PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
@@ -4685,7 +4685,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			return;
 		}
 
-		if (!COLLISION_CheckMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_BLOCK_PLAYER | COLLIDE_OBJECT | COLLIDE_DOOR))
+		if (!COLLISION_CheckMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_WALL | COLLIDE_OBJECT | COLLIDE_DOOR))
 		{
 			pAiTickParam->pAiControl->dwAiParam[2] = 2;
 		}
@@ -4716,7 +4716,7 @@ void __fastcall AITHINK_Fn052_FrogDemon(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			pUnit->dwFlags &= 0xFFFFFFF1;
 		}
 
-		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_UNIT_RELATED);
+		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_NO_PATH);
 		COLLISION_ResetMask(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), COLLIDE_MONSTER);
 		PATH_SetUnitCollisionPattern(pUnit, COLLISION_PATTERN_SMALL_NO_PRESENCE);
 		PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_NONE);
@@ -8359,7 +8359,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	if (!pTarget || nDistance > 15)
 	{
 		pTarget = nullptr;
-		if (pPotentialTarget && !UNITS_TestCollisionWithUnit(pUnit, pPotentialTarget, COLLIDE_BARRIER))
+		if (pPotentialTarget && !UNITS_TestCollisionWithUnit(pUnit, pPotentialTarget, COLLIDE_MISSILE_BARRIER))
 		{
 			nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pPotentialTarget);
 			if (nDistance < 20)
@@ -11559,7 +11559,7 @@ int32_t __fastcall AITHINK_GetTargetScore(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	{
 		nRangeValue = 100;
 	}
-	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
+	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER))
 	{
 		nRangeValue = 75;
 	}
@@ -11794,7 +11794,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 				}
 			}
 
-			const int32_t bColliding = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER);
+			const int32_t bColliding = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER);
 			const int32_t nFireResist = STATLIST_UnitGetStatValue(pTarget, STAT_FIRERESIST, 0);
 			const int32_t nLightResist = STATLIST_UnitGetStatValue(pTarget, STAT_LIGHTRESIST, 0);
 
@@ -13381,7 +13381,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 			bProgressiveState = 1;
 		}
 
-		const bool bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0);
+		const bool bNotColliding = (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER) == 0);
 
 		if (arg.unk0x0C > 3 && (ITEMS_RollRandomNumber(&pUnit->pSeed) & 31) < 2 * arg.unk0x0C)
 		{

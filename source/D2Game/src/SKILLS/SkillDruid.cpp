@@ -1135,7 +1135,7 @@ int32_t __fastcall SKILLS_SrvDo146_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     {
         const int32_t nX = CLIENTS_GetUnitX(pUnit) + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2 * nRange + 1) - nRange;
         const int32_t nY = CLIENTS_GetUnitY(pUnit) + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2 * nRange + 1) - nRange;
-        if (D2Common_11026(nX, nY, pUnit, 0x805u))
+        if (D2Common_11026(nX, nY, pUnit, COLLIDE_MASK_RADIAL_BARRIER))
         {
             D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
             if (pTargetRoom && !COLLISION_CheckMask(pTargetRoom, nX, nY, 1u))

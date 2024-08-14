@@ -2384,19 +2384,19 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
             switch (pSkillsTxtRecord->nLineOfSight)
             {
             case SKILLSLOS_MISSILE_BARRIER:
-                nCollisionMask = COLLIDE_BARRIER;
+                nCollisionMask = COLLIDE_MISSILE_BARRIER;
                 break;
             case SKILLSLOS_PLAYER_PATH:
-                nCollisionMask = COLLIDE_MASK_WALKING_UNIT;
+                nCollisionMask = COLLIDE_MASK_PLAYER_PATH;
                 break;
             case SKILLSLOS_PLAYER_MONSTER:
                 nCollisionMask = COLLIDE_PLAYER | COLLIDE_MONSTER;
                 break;
             case SKILLSLOS_PLAYER_FLYING:
-                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER;
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER;
                 break;
             case SKILLSLOS_RADIAL_BARRIER:
-                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER;
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL;
                 break;
             default:
                 return 0;
@@ -3100,7 +3100,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
     coords.nY = nY;
     if (!bPerm)
     {
-        if (!COLLISION_GetFreeCoordinatesWithField(pRoom, &coords, &coords, 3, 0x3E01u, 0xC01u, 0))
+        if (!COLLISION_GetFreeCoordinatesWithField(pRoom, &coords, &coords, 3, COLLIDE_MASK_SPAWN, 0xC01u, 0))
         {
             return 0;
         }

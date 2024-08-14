@@ -469,7 +469,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		const bool bIsMissilePath = pDynamicPath->dwFlags & PATH_MISSILE_MASK;
 		uint32_t nMoveTestColMask = pDynamicPath->nMoveTestCollisionMask;
 		if (nMoveTestColMask == COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS)
-			nMoveTestColMask = COLLIDE_MASK_MONSTER_DEFAULT;
+			nMoveTestColMask = COLLIDE_MASK_MONSTER_PATH;
 		if (bIsMissilePath)
 			nCollidedWithMask = COLLISION_TryMoveUnitCollisionMask(
 				pDynamicPath->pRoom,
@@ -502,7 +502,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			v28 = v52;
 			goto LABEL_53;
 		}
-		if ((pDynamicPath->nCollidedWithMask & (COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER)) != 0)
+		if ((pDynamicPath->nCollidedWithMask & (COLLIDE_WALL | COLLIDE_MISSILE_BARRIER)) != 0)
 		{
 		LABEL_49:
 			a2->dwPrecisionX = PATH_FP16FitToCenter(v23);

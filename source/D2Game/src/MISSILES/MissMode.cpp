@@ -72,14 +72,14 @@ struct D2HitFunc22ParamStrc
 D2MissileUnitFindTableStrc stru_6FD2E5F8[9] =
 {
     /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
-    /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_BARRIER                   },
-    /*[2]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
-    /*[3]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER },
+    /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER                   },
+    /*[2]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_MISSILE_BARRIER                  },
+    /*[3]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER },
     /*[4]*/{ nullptr                                                  , COLLIDE_NONE                                       },
-    /*[5]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
-    /*[6]*/{ nullptr                                                  , COLLIDE_BARRIER                                    },
+    /*[5]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_MISSILE_BARRIER                  },
+    /*[6]*/{ nullptr                                                  , COLLIDE_MISSILE_BARRIER                                    },
     /*[7]*/{ MISSMODE_UnitFindCallback_CanMissileDestroy              , COLLIDE_MISSILE                                    },
-    /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER },
+    /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL },
 };
 
 

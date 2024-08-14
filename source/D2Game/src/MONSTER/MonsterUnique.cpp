@@ -1699,7 +1699,7 @@ void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         return;
     }
 
-    if (COLLISION_CheckMaskWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1, 0x3C01u))
+    if (COLLISION_CheckMaskWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1, COLLIDE_MASK_MONSTER_PATH))
     {
         EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 10 * pMonStatsTxtRecord->wAiParam[0][pGame->nDifficulty] + 1, 0, 0);
     }
@@ -2409,7 +2409,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
                         pCoord.nY = nY;
 
                         D2ActiveRoomStrc* pTargetRoom = nullptr;
-                        D2Common_10136(pRoom, &pCoord, 1, 0x3C01u, &pTargetRoom);
+                        D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &pTargetRoom);
 
                         if (!pTargetRoom)
                         {

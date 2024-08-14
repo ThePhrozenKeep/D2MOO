@@ -3184,7 +3184,7 @@ BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomSt
 }
 
 //D2Common.0x6FDB3960 (#11026)
-BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4)
+BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, uint16_t nColMask)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -3194,7 +3194,7 @@ BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4)
 	
 	UNITS_GetCoords(pUnit, &pCoords2);
 
-	return COLLISION_RayTrace(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, a4) == 0;
+	return COLLISION_RayTrace(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, nColMask) == 0;
 }
 
 //D2Common.0x6FDB3A10 (#11027)
@@ -3306,19 +3306,19 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 		pRoom = UNITS_GetRoom(pUnit1);
 		D2_ASSERT(pRoom);
 
-		if (COLLISION_CheckAnyCollisionWithPattern(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_WALKING_UNIT))
+		if (COLLISION_CheckAnyCollisionWithPattern(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_PLAYER_PATH))
 		{
 			pCoord.nX = pCoords2.nX;
 			pCoord.nY = pCoords2.nY;
 
-			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), COLLIDE_MASK_WALKING_UNIT, 0);
+			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), COLLIDE_MASK_PLAYER_PATH, 0);
 			if (!pRoom)
 			{
 				return FALSE;
 			}
 		}
 		
-		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_BARRIER))
+		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER))
 		{
 			*pX = pCoord.nX;
 			*pY = pCoord.nY;

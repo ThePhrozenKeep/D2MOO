@@ -993,7 +993,7 @@ void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
             D2CoordStrc pCoord = {};
             pCoord.nX = CLIENTS_GetUnitX(pMonster);
             pCoord.nY = CLIENTS_GetUnitY(pMonster);
-            D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), 0x3C01u, 0);
+            D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pMonster), &pCoord, UNITS_GetUnitSizeX(pMonster), COLLIDE_MASK_MONSTER_PATH, 0);
             if (STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pRoom && AITACTICS_UseSkill(pGame, pMonster, pMonStatsTxtRecord->nSkillMode[0], pMonStatsTxtRecord->nSkill[0], 0, pCoord.nX, pCoord.nY))
             {
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);

@@ -1110,7 +1110,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitSt
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
-        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
+        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
 
         if (ppRoom)
         {
@@ -1128,7 +1128,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2Unit
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
-        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
+        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
 
         if (ppRoom)
         {
@@ -1146,7 +1146,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitSt
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
-        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
+        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
 
         if (ppRoom)
         {
@@ -1164,7 +1164,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler4_6FC75E20(D2GameStrc* pGame, D2UnitSt
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
-        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, 0x3F11u, &ppRoom);
+        D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
         
         if (ppRoom)
         {
@@ -3026,7 +3026,7 @@ void __fastcall sub_6FC78BB0(D2GameStrc* pGame, int32_t nUnused, int32_t nObject
     {
         if (nAnimMode == OBJMODE_OPENED || nAnimMode == OBJMODE_SPECIAL3)
         {
-            if (COLLISION_CheckMaskWithSizeXY(UNITS_GetRoom(pObject), pCoord.nX, pCoord.nY, nUnitSizeX, nUnitSizeY, 0x8180u))
+            if (COLLISION_CheckMaskWithSizeXY(UNITS_GetRoom(pObject), pCoord.nX, pCoord.nY, nUnitSizeX, nUnitSizeY, COLLIDE_MASK_BLOCKS_DOOR))
             {
                 if (nAnimMode != OBJMODE_SPECIAL3)
                 {
@@ -3044,7 +3044,7 @@ void __fastcall sub_6FC78BB0(D2GameStrc* pGame, int32_t nUnused, int32_t nObject
     }
     //else
     //{
-    //    COLLISION_CheckMaskWithSizeXY(UNITS_GetRoom(pObject), pCoord.nX, pCoord.nY, nUnitSizeX, nUnitSizeY, 0x8180u);
+    //    COLLISION_CheckMaskWithSizeXY(UNITS_GetRoom(pObject), pCoord.nX, pCoord.nY, nUnitSizeX, nUnitSizeY, COLLIDE_MASK_BLOCKS_DOOR);
     //}
 }
 

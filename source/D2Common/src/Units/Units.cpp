@@ -517,7 +517,7 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 			}
 			else if(pUnit->pObjectData->pObjectTxt->nBlockMissile)
 			{
-				return COLLIDE_DOOR | COLLIDE_BARRIER;
+				return COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER;
 			}
 			else
 			{
@@ -532,7 +532,7 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 			}
 			else if (pUnit->pObjectData->pObjectTxt->nBlockMissile)
 			{
-				return COLLIDE_OBJECT | COLLIDE_BARRIER;
+				return COLLIDE_OBJECT | COLLIDE_MISSILE_BARRIER;
 			}
 			else
 			{
@@ -544,7 +544,7 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 		return COLLIDE_ITEM;
 
 	case UNIT_TILE:
-		return COLLIDE_BLOCK_PLAYER;
+		return COLLIDE_WALL;
 
 	default:
 		return PATH_GetFootprintCollisionMask(pUnit->pDynamicPath);
@@ -2977,7 +2977,7 @@ BOOL __stdcall UNITS_IsInMeleeRange(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int 
 
 		if (UNITS_GetMeleeRange(pUnit1) + nRangeBonus + 1 >= nDistance)
 		{
-			return UNITS_TestCollisionWithUnit(pUnit1, pUnit2, 0x804) == 0;
+			return UNITS_TestCollisionWithUnit(pUnit1, pUnit2, COLLIDE_MASK_PLAYER_FLYING) == 0;
 		}
 	}
 

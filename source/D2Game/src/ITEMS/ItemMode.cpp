@@ -6091,12 +6091,12 @@ D2ActiveRoomStrc* __fastcall D2GAME_GetFreeSpaceEx_6FC4BF00(D2ActiveRoomStrc* pR
     {
         pReturnCoords->nX = nX;
         pReturnCoords->nY = nY;
-        return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, 0x3E01u, 0x801u, 1);
+        return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, COLLIDE_MASK_SPAWN, 0x801u, 1);
     }
 
     pReturnCoords->nX = pCoords->nX;
     pReturnCoords->nY = pCoords->nY;
-    return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, 0x3E01u, 0x801u, 1);
+    return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, COLLIDE_MASK_SPAWN, 0x801u, 1);
 }
 
 //D2Game.0x6FC4BFF0

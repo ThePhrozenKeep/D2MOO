@@ -2,6 +2,7 @@
 
 #include <D2BitManip.h>
 
+#include <D2Collision.h>
 #include <D2StatList.h>
 #include <D2States.h>
 #include <D2DataTbls.h>
@@ -883,7 +884,7 @@ int32_t __fastcall SKILLS_SrvDo027_Teleport(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 
     D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
-    if (pLevelsTxtRecord && pLevelsTxtRecord->nTeleport != 0 && (pLevelsTxtRecord->nTeleport != 2 || !UNITS_TestCollisionByCoordinates(pUnit, nTargetX, nTargetY, 0x804)))
+    if (pLevelsTxtRecord && pLevelsTxtRecord->nTeleport != 0 && (pLevelsTxtRecord->nTeleport != 2 || !UNITS_TestCollisionByCoordinates(pUnit, nTargetX, nTargetY, COLLIDE_MASK_PLAYER_FLYING)))
     {
         return sub_6FCBDFE0(pGame, pUnit, 0, nTargetX, nTargetY, 0, 0);
     }

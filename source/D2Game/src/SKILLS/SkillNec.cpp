@@ -1532,7 +1532,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
     COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pTarget), coords.nX, coords.nY, PATH_GetUnitCollisionPattern(pTarget), 0x8000u);
 
-    D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pTarget), &coords, UNITS_GetUnitSizeX(pTarget), 0x3C01u, 1);
+    D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pTarget), &coords, UNITS_GetUnitSizeX(pTarget), COLLIDE_MASK_MONSTER_PATH, 1);
     if (pRoom)
     {
         MONSTERUNIQUE_ToggleUnitFlag(pTarget, UNITFLAG_CANBEATTACKED, 1);

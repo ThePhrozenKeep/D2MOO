@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include <D2Collision.h>
 #include <D2Dungeon.h>
 #include <D2StatList.h>
 #include <D2States.h>
@@ -16,7 +17,7 @@ void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSr
 {
     D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
 
-    if (DUNGEON_IsRoomInTown(pTargetRoom) || UNITS_TestCollisionBetweenInteractingUnits(pTargetUnit, pSrcUnit, 0x804u))
+    if (DUNGEON_IsRoomInTown(pTargetRoom) || UNITS_TestCollisionBetweenInteractingUnits(pTargetUnit, pSrcUnit, COLLIDE_MASK_PLAYER_FLYING))
     {
         return;
     }

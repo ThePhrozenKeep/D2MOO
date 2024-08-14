@@ -718,7 +718,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, in
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
 		pDynamicPath->nFootprintCollisionMask = COLLIDE_PLAYER;
-		pDynamicPath->nMoveTestCollisionMask = COLLIDE_MASK_WALKING_UNIT;
+		pDynamicPath->nMoveTestCollisionMask = COLLIDE_MASK_PLAYER_PATH;
 		PATH_SetType(pDynamicPath, PATHTYPE_UNKNOWN_7);
 		pDynamicPath->nDistMax = 73;
 		pDynamicPath->unk0x92 = 70;
@@ -739,7 +739,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, in
 		if (nClassId == MONSTER_WRAITH1)
 		{
 			pDynamicPath->dwCollisionPattern = COLLISION_PATTERN_SMALL_NO_PRESENCE;
-			pDynamicPath->nMoveTestCollisionMask = COLLIDE_BARRIER | COLLIDE_DOOR;
+			pDynamicPath->nMoveTestCollisionMask = COLLIDE_MISSILE_BARRIER | COLLIDE_DOOR;
 			pDynamicPath->nDistMax = 14;
 		}
 		else
@@ -755,7 +755,7 @@ void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, in
 				pDynamicPath->nMoveTestCollisionMask = 
 					(pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_OPENDOORS]) != 0) 
 					? COLLIDE_MASK_MONSTER_THAT_CAN_OPEN_DOORS
-					: COLLIDE_MASK_MONSTER_DEFAULT;
+					: COLLIDE_MASK_MONSTER_PATH;
 			}
 		}
 	}

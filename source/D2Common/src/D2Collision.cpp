@@ -251,15 +251,15 @@ void __fastcall sub_6FD413E0(D2RoomCollisionGridStrc* pCollisionGrid, D2RoomColl
 			nFlags = 0;
 			if (pTiles[i].dwFlags & 2)
 			{
-				nFlags = COLLIDE_ALTERNATE_FLOOR;
+				nFlags = COLLIDE_PRESET;
 			}
 			if (pTiles[i].dwFlags & 0x40)
 			{
-				nFlags |= COLLIDE_BLOCK_PLAYER;
+				nFlags |= COLLIDE_WALL;
 			}
 			if (pTiles[i].dwFlags & 0x80)
 			{
-				nFlags |= COLLIDE_BARRIER;
+				nFlags |= COLLIDE_MISSILE_BARRIER;
 			}
 
 			if (nFlags && pCollisionGrid->pCollisionMask)
@@ -876,7 +876,7 @@ void __stdcall COLLISION_SetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int
 
 		if (nMask)
 		{
-			COLLISION_SetCollisionMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
+			COLLISION_SetCollisionMask(pRoom, nX, nY, COLLIDE_NO_PATH);
 		}
 		break;
 
@@ -886,11 +886,11 @@ void __stdcall COLLISION_SetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int
 
 		if (nMask)
 		{
-			COLLISION_SetCollisionMask(pRoom, nX - 1, nY, COLLIDE_UNIT_RELATED);
-			COLLISION_SetCollisionMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
-			COLLISION_SetCollisionMask(pRoom, nX + 1, nY, COLLIDE_UNIT_RELATED);
-			COLLISION_SetCollisionMask(pRoom, nX, nY - 1, COLLIDE_UNIT_RELATED);
-			COLLISION_SetCollisionMask(pRoom, nX, nY + 1, COLLIDE_UNIT_RELATED);
+			COLLISION_SetCollisionMask(pRoom, nX - 1, nY, COLLIDE_NO_PATH);
+			COLLISION_SetCollisionMask(pRoom, nX, nY, COLLIDE_NO_PATH);
+			COLLISION_SetCollisionMask(pRoom, nX + 1, nY, COLLIDE_NO_PATH);
+			COLLISION_SetCollisionMask(pRoom, nX, nY - 1, COLLIDE_NO_PATH);
+			COLLISION_SetCollisionMask(pRoom, nX, nY + 1, COLLIDE_NO_PATH);
 		}
 		break;
 
@@ -1021,7 +1021,7 @@ void __stdcall COLLISION_ResetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, i
 
 			if (nMask)
 			{
-				COLLISION_ResetCollisionMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
+				COLLISION_ResetCollisionMask(pRoom, nX, nY, COLLIDE_NO_PATH);
 			}
 			break;
 
@@ -1031,11 +1031,11 @@ void __stdcall COLLISION_ResetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, i
 
 			if (nMask)
 			{
-				COLLISION_ResetCollisionMask(pRoom, nX - 1, nY, COLLIDE_UNIT_RELATED);
-				COLLISION_ResetCollisionMask(pRoom, nX, nY, COLLIDE_UNIT_RELATED);
-				COLLISION_ResetCollisionMask(pRoom, nX + 1, nY, COLLIDE_UNIT_RELATED);
-				COLLISION_ResetCollisionMask(pRoom, nX, nY - 1, COLLIDE_UNIT_RELATED);
-				COLLISION_ResetCollisionMask(pRoom, nX, nY + 1, COLLIDE_UNIT_RELATED);
+				COLLISION_ResetCollisionMask(pRoom, nX - 1, nY, COLLIDE_NO_PATH);
+				COLLISION_ResetCollisionMask(pRoom, nX, nY, COLLIDE_NO_PATH);
+				COLLISION_ResetCollisionMask(pRoom, nX + 1, nY, COLLIDE_NO_PATH);
+				COLLISION_ResetCollisionMask(pRoom, nX, nY - 1, COLLIDE_NO_PATH);
+				COLLISION_ResetCollisionMask(pRoom, nX, nY + 1, COLLIDE_NO_PATH);
 			}
 			break;
 
@@ -1158,7 +1158,7 @@ uint16_t __fastcall COLLISION_TryMoveUnitCollisionMask(D2ActiveRoomStrc* pRoom, 
 	
 	const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithSize(pRoom, nX2, nY2, nUnitSize, nMoveConditionMask);
 
-	if (nCollidedWithMask & (COLLIDE_BLOCK_PLAYER|COLLIDE_BARRIER))
+	if (nCollidedWithMask & (COLLIDE_WALL|COLLIDE_MISSILE_BARRIER))
 	{
 		COLLISION_SetMaskWithSize(pRoom, nX1, nY1, nUnitSize, nCollisionMask);
 	}

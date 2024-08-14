@@ -1018,7 +1018,7 @@ void __fastcall ACT2Q4_GetAndUpdatePalaceNpcState(D2GameStrc* pGame, D2UnitStrc*
 		pCoord.nX += 4;
 		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);
 
-		if ((COLLISION_GetFreeCoordinates(pRoom, &pCoord, 1, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 2, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x3C01, 0)) && sub_6FCBDFE0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, 0, 0))
+		if ((COLLISION_GetFreeCoordinates(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 2, COLLIDE_MASK_MONSTER_PATH, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, COLLIDE_MASK_MONSTER_PATH, 0)) && sub_6FCBDFE0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, 0, 0))
 		{
 			pQuestDataEx->unk0x0F = 1;
 			pQuestDataEx->unk0x14 = 1;

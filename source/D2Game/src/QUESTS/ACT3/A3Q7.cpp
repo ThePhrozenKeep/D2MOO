@@ -2,6 +2,7 @@
 
 #include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
+#include <D2Collision.h>
 #include <D2Dungeon.h>
 #include <D2QuestRecord.h>
 
@@ -42,7 +43,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 
 	pQuestDataEx->bWandererCoordsCalculated = 1;
 
-	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, 0x3C01))
+	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, COLLIDE_MASK_MONSTER_PATH))
 	{
 		pQuestDataEx->nDarkWandererX = pCoord->nX;
 		pQuestDataEx->nDarkWandererY = pCoord->nY;
@@ -50,7 +51,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 	}
 
 	pCoord->nY += 9;
-	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, 0x3C01))
+	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, COLLIDE_MASK_MONSTER_PATH))
 	{
 		pQuestDataEx->nDarkWandererX = pCoord->nX;
 		pQuestDataEx->nDarkWandererY = pCoord->nY;
@@ -58,7 +59,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 	}
 
 	pCoord->nX += 2;
-	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, 0x3C01))
+	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, COLLIDE_MASK_MONSTER_PATH))
 	{
 		pQuestDataEx->nDarkWandererX = pCoord->nX;
 		pQuestDataEx->nDarkWandererY = pCoord->nY;
@@ -66,7 +67,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 	}
 
 	pCoord->nX -= 4;
-	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, 0x3C01))
+	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, COLLIDE_MASK_MONSTER_PATH))
 	{
 		pQuestDataEx->nDarkWandererX = pCoord->nX;
 		pQuestDataEx->nDarkWandererY = pCoord->nY;
@@ -75,7 +76,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 
 	pCoord->nX = pQuestDataEx->nDarkWandererX;
 	pCoord->nY = pQuestDataEx->nDarkWandererY - 8;
-	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, 0x3C01))
+	if (!UNITS_TestCollisionByCoordinates(pUnit, pCoord->nX, pCoord->nY, COLLIDE_MASK_MONSTER_PATH))
 	{
 		pQuestDataEx->nDarkWandererX = pCoord->nX;
 		pQuestDataEx->nDarkWandererY = pCoord->nY;
@@ -218,7 +219,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 		pCoords.nY += pAdjustCoords[i].nY;
 		pCoords.nX += pAdjustCoords[i].nX;
 		D2ActiveRoomStrc* pRoom = nullptr;
-		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, 0x3F11, &pRoom, 11);
+		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, COLLIDE_MASK_PLACEMENT, &pRoom, 11);
 
 		if (pRoom)
 		{

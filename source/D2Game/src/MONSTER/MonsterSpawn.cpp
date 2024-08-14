@@ -46,13 +46,13 @@ int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int
     case MONSTER_CROWNEST1:
         nSpawnX = nX;
         nSpawnY = nY + 3;
-        nMask = 0x3C01;
+        nMask = COLLIDE_MASK_MONSTER_PATH;
         break;
 
     case MONSTER_SARCOPHAGUS:
         nSpawnX = nX;
         nSpawnY = nY + 2;
-        nMask = 0x3C01;
+        nMask = COLLIDE_MASK_MONSTER_PATH;
         break;
 
     case MONSTER_VILEMOTHER1:
@@ -63,7 +63,7 @@ int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int
 
         nSpawnX = nX;
         nSpawnY = nY;
-        nMask = 0x3C01;
+        nMask = COLLIDE_MASK_MONSTER_PATH;
         break;
 
     case MONSTER_SUCKERNEST1:
@@ -75,7 +75,7 @@ int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int
     case MONSTER_EVILHUT:
         nSpawnX = nX + 2;
         nSpawnY = nY + 4;
-        nMask = 0x3C01;
+        nMask = COLLIDE_MASK_MONSTER_PATH;
         break;
 
     default:
@@ -109,7 +109,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     {
         if (pTarget && pTarget->dwFlags & UNITFLAG_TARGETABLE)
         {
-            return COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), PATH_GetUnitCollisionPattern(pTarget), 0x3C01u) == 0;
+            return COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), PATH_GetUnitCollisionPattern(pTarget), COLLIDE_MASK_MONSTER_PATH) == 0;
         }
 
         return 0;
@@ -138,8 +138,8 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         coords.nX = nTargetX;
         coords.nY = nTargetY;
         
-        D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coords, UNITS_GetUnitSizeX(pUnit), 0x3C01u, 0);
-        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nTargetX, nTargetY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
+        D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coords, UNITS_GetUnitSizeX(pUnit), COLLIDE_MASK_MONSTER_PATH, 0);
+        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nTargetX, nTargetY, PATH_GetUnitCollisionPattern(pUnit), COLLIDE_MASK_MONSTER_PATH))
         {
             return 0;
         }
@@ -160,7 +160,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         }
 
         D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
-        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x3C01u))
+        if (!pRoom || DUNGEON_IsRoomInTown(pRoom) || COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), COLLIDE_MASK_MONSTER_PATH))
         {
             return 0;
         }
@@ -197,7 +197,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
             return 0;
         }
 
-        return D2Common_11025(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), nX, nY, pRoom, 0x805) != 0;
+        return D2Common_11025(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), nX, nY, pRoom, COLLIDE_MASK_RADIAL_BARRIER) != 0;
     }
 
     return 1;
@@ -390,13 +390,13 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //        nCollisionFlags = 0x1C0u;
 //        break;
 //    case 2:
-//        nCollisionFlags = 0x3F11u;
+//        nCollisionFlags = COLLIDE_MASK_PLACEMENT;
 //        break;
 //    case 3:
 //        nCollisionFlags = 0;
 //        break;
 //    default:
-//        nCollisionFlags = 0x3C01u;
+//        nCollisionFlags = COLLIDE_MASK_MONSTER_PATH;
 //        break;
 //    }
 //    v12 = v1->pRoomCoordList;
