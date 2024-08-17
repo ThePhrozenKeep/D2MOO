@@ -572,7 +572,7 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         if (nPlayerLevel != 0 && nPlayerLevel <= 99)
         {
-            pCharacterPreviewInfo->nLevel = nPlayerClassId;
+            pCharacterPreviewInfo->nLevel = nPlayerLevel;
         }
         else
         {
