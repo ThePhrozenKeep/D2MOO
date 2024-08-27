@@ -208,7 +208,7 @@ int32_t __fastcall SKILLS_SrvDo150_Smite(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
         damage.dwHitFlags = 2;
         damage.dwStunLen = nStunLength;
-        damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, 0, 0) | 1;
+        damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, 0, 0) | DAMAGERESULTFLAG_SUCCESSFULHIT;
     }
 
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
