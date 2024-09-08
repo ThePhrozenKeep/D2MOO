@@ -225,7 +225,7 @@ UnimplementedOrdinal_10206=UnimplementedOrdinal @10206;   FOG_10206 @10206 NONAM
     FOG_10215 @10215 NONAME
     FOG_10216_AddRecordToLinkingTable @10216 NONAME
     FOG_GetRowFromTxt @10217 NONAME
-UnimplementedOrdinal_10218=UnimplementedOrdinal @10218;   FOG_10218 @10218 NONAME
+    FOG_10218 @10218 NONAME
     FOG_10219 @10219 NONAME
 UnimplementedOrdinal_10220=UnimplementedOrdinal @10220;   FOG_10220 @10220 NONAME
 UnimplementedOrdinal_10221=UnimplementedOrdinal @10221;   FOG_10221 @10221 NONAME

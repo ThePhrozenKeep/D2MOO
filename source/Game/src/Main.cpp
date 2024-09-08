@@ -373,6 +373,7 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	FOG_MPQSetConfig(pCfg->bDirect, FALSE);
 	FOG_AsyncDataInitialize(TRUE);
 	FOG_10082_Noop();
+	FOG_10218();
 
 	if(geModState != MODULE_SERVER)
 	{

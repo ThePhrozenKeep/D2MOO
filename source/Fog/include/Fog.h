@@ -251,6 +251,7 @@ D2FUNC_DLL(FOG, GetStringFromLinkIndex, int, __stdcall, (void* pLinker, int nInd
 D2FUNC_DLL(FOG, 10215, int, __stdcall, (void* pBin, int a2), 0xB990)																				//Fog.#10215
 D2FUNC_DLL(FOG, 10216_AddRecordToLinkingTable, int, __stdcall, (void* pBin, const char* a2), 0xBD80)														//Fog.#10216
 D2FUNC_DLL(FOG, GetRowFromTxt, int, __stdcall, (void* pBin, char* szText, int nColumn), 0xBC20)														//Fog.#10217
+D2FUNC_DLL(FOG, 10218, int, __fastcall, (), 0xCC40)																									//Fog.#10218
 D2FUNC_DLL(FOG, 10219, int, __fastcall, (uint8_t*), 0xC9E0)																							//Fog.#10219
 D2FUNC_DLL(FOG, 10222, int, __fastcall, (const uint8_t*, int), 0xCC90)																				//Fog.#10222
 D2FUNC_DLL(FOG, 10223, int, __fastcall, (uint8_t*, int, const uint8_t*, int), 0xCD50)																//Fog.#10223
