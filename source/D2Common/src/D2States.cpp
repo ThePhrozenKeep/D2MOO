@@ -433,7 +433,7 @@ BOOL __stdcall STATES_CheckStateMaskOnUnit(D2UnitStrc* pUnit, int nStateMask)
 
 	if (pUnit && nStateMask >= 0 && nStateMask < 40)
 	{
-		uint32_t* pStatFlags = pStatFlags = D2COMMON_STATES_GetStatFlags_6FDB8A90(pUnit);
+		uint32_t* pStatFlags = D2COMMON_STATES_GetStatFlags_6FDB8A90(pUnit);
 
 		if (pStatFlags)
 		{
