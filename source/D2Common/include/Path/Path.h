@@ -2,31 +2,38 @@
 
 #include "CommonDefinitions.h"
 
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2UnitStrc;
 
 #pragma pack(1)
 
+enum D2PathConstants {
+	PATH_NB_DIRECTIONS = 64,
+	PATH_DIR_NULL = 255,
+	PATH_MAX_STEPNUM = 20,
+	PATH_MAXDESTSHIFT = 8, // Used in DRLG_OutFlr.cpp
+};
+
 enum D2PathTypes
 {
 	PATHTYPE_IDASTAR = 0,
-	PATHTYPE_FOLLOW_WALL = 1,
+	PATHTYPE_ASTAR = 1,
 	PATHTYPE_TOWARD = 2,
-	PATHTYPE_UNKNOWN_3 = 3,
-	PATHTYPE_MISSILE = 4,
-	PATHTYPE_MON_CIRCLE_CW = 5, // Clock-wise
-	PATHTYPE_MON_CIRCLE_CCW = 6,// Counter-clock-wise
-	PATHTYPE_UNKNOWN_7 = 7,
+	PATHTYPE_UNKNOWN_3 = 3,			// Same as PATHTYPE_TOWARD, unused ?
+	PATHTYPE_MISSILE = 4,			// Requires PATH_MISSILE_MASK
+	PATHTYPE_MON_CIRCLE_CW = 5,		// Clock-wise
+	PATHTYPE_MON_CIRCLE_CCW = 6,	// Counter-clock-wise
+	PATHTYPE_STRAIGHT = 7,			// Goes in a straight line except once close enough, will try to use AStar
 	PATHTYPE_KNOCKBACK_SERVER = 8,
 	PATHTYPE_LEAP = 9,
-	PATHTYPE_CHARGEDBOLT = 10,
+	PATHTYPE_CHARGEDBOLT = 10,		// Requires PATH_MISSILE_MASK
 	PATHTYPE_KNOCKBACK_CLIENT = 11,
-	PATHTYPE_UNKNOWN_12 = 12,
-	PATHTYPE_MON_OTHER_2 = 13,
-	PATHTYPE_BLESSEDHAMMER = 14,
-	PATHTYPE_WF = 15,         // Wrongly called AStar server side ? Value could have changed between versions.
-	PATHTYPE_MISSILE_STREAM = 16, // Missile streams seems to be unused in the game even though the code exists?
-	PATHTYPE_UNKNOWN_17 = 17,
+	PATHTYPE_BACKUP_TURN = 12,		// Turns when colliding before reaching destination.
+	PATHTYPE_TOWARD_FINISH = 13,
+	PATHTYPE_BLESSEDHAMMER = 14,	// Requires PATH_MISSILE_MASK
+	PATHTYPE_WALL_FOLLOW = 15,		// PATH_WF
+	PATHTYPE_MISSILE_STREAM = 16,	// Missile streams seems to be unused in the game even though the code exists?
+	PATHTYPE_UNKNOWN_17 = 17,		// Unused, stubbed?
 
 	PATHTYPE_COUNT = 18
 };
@@ -44,7 +51,7 @@ enum D2PathFlags : uint32_t {
 	PATH_UNKNOWN_FLAG_0x01000 = 0x01000,
 	PATH_UNKNOWN_FLAG_0x02000 = 0x02000,
 	PATH_UNKNOWN_FLAG_0x04000 = 0x04000,
-	PATH_UNKNOWN_FLAG_0x08000 = 0x08000,
+	PATH_WITH_PREVIOUS_VELOCITY = 0x08000,
 	PATH_UNKNOWN_FLAG_0x10000 = 0x10000,
 	PATH_SAVE_STEPS_MASK      = 0x20000,
 	PATH_MISSILE_MASK         = 0x40000,
@@ -87,14 +94,16 @@ union D2FP32_16
 struct D2DynamicPathStrc
 {
 	static const size_t MAXPATHLEN = 78;
+	static const size_t PATH_MAX_STEP_LEN = 10;
+
 	D2FP32_16 tGameCoords;						//0x00
 	int32_t dwClientCoordX;						//0x08
 	int32_t dwClientCoordY;						//0x0C
-	D2PathPointStrc SP1;						//0x10 tTargetCoord in original code
-	D2PathPointStrc SP2;						//0x14
-	D2PathPointStrc SP3;						//0x18
-	D2RoomStrc* pRoom;							//0x1C
-	D2RoomStrc* pPreviousRoom;					//0x20
+	D2PathPointStrc tTargetCoord;				//0x10
+	D2PathPointStrc tPrevTargetCoord;			//0x14
+	D2PathPointStrc tFinalTargetCoord;			//0x18
+	D2ActiveRoomStrc* pRoom;					//0x1C
+	D2ActiveRoomStrc* pPreviousRoom;			//0x20
 	int32_t dwCurrentPointIdx;					//0x24
 	int32_t dwPathPoints;						//0x28
 	void* unk0x2C;								//0x2C
@@ -108,7 +117,7 @@ struct D2DynamicPathStrc
 	uint32_t nFootprintCollisionMask;			//0x4C
 	uint32_t nMoveTestCollisionMask;			//0x50
 	uint16_t nCollidedWithMask;					//0x54
-	uint16_t unk0x56;							//0x56
+	uint16_t padding0x56;						//0x56
 	D2UnitStrc* pTargetUnit;					//0x58
 	uint32_t dwTargetType;						//0x5C
 	uint32_t dwTargetId;						//0x60
@@ -120,31 +129,30 @@ struct D2DynamicPathStrc
 	uint8_t unk0x69;							//0x69
 	D2CoordStrc tDirectionVector;				//0x6A
 	D2CoordStrc tVelocityVector;				//0x72
-	char unk0x7A[2];							//0x7A
+	char padding0x7A[2];						//0x7A
 	int32_t dwVelocity;							//0x7C
-	uint32_t unk0x80;							//0x80
+	uint32_t nPreviousVelocity;					//0x80
 	int32_t dwMaxVelocity;						//0x84
 	int32_t dwAcceleration;						//0x88
-	int32_t unk0x8C;							//0x8C
+	int32_t dwAccelerationsCounter;				//0x8C Incremented each time we want to accelerate. Used to accelerate only 1 out 5 times
 	uint8_t nDist;								//0x90
 	uint8_t nDistMax;							//0x91
-	uint8_t unk0x92;							//0x92 // Used only with PATHTYPE_IDASTAR
+	uint8_t nIDAStarInitFScore;					//0x92 // Used only with PATHTYPE_IDASTAR
 	uint8_t nStepNum;							//0x93
 	uint8_t nDistance;							//0x94
-	char unk0x95[3];							//0x95
-	int32_t dwUnitTypeRelated;					//0x98
+	char padding0x95[3];						//0x95
+	int32_t nDirOffset;							//0x98 See gaOffsetForPathType
 	D2PathPointStrc PathPoints[MAXPATHLEN];		//0x9C
 	int32_t nSavedStepsCount;					//0x1D4
-	D2PathPointStrc SavedSteps[7];				//0x1D8
-	char unk0x1DC[12];							//0x1DC
+	D2PathPointStrc SavedSteps[PATH_MAX_STEP_LEN];//0x1D8
 };
 
 struct D2PathInfoStrc
 {
 	D2PathPointStrc tStartCoord;				//0x00
 	D2PathPointStrc tTargetCoord;				//0x04
-	D2RoomStrc* pStartRoom;						//0x08
-	D2RoomStrc* pTargetRoom;					//0x0C
+	D2ActiveRoomStrc* pStartRoom;				//0x08
+	D2ActiveRoomStrc* pTargetRoom;				//0x0C
 	int32_t field_10;							//0x10
 	uint8_t field_14;							//0x14
 	uint8_t field_15;							//0x15
@@ -166,7 +174,7 @@ struct D2PathInfoStrc
 
 struct D2StaticPathStrc
 {
-	D2RoomStrc* pRoom;						//0x00
+	D2ActiveRoomStrc* pRoom;				//0x00
 	int32_t dwClientCoordX;					//0x04
 	int32_t dwClientCoordY;					//0x08
 	D2CoordStrc tGameCoords;				//0x0C
@@ -178,14 +186,14 @@ struct D2StaticPathStrc
 
 struct D2MapAIPathPositionStrc
 {
-	int32_t nMapAIAction;						//0x00
-	int32_t nX;									//0x04
-	int32_t nY;									//0x08
+	int32_t nMapAIAction;					//0x00
+	int32_t nX;								//0x04
+	int32_t nY;								//0x08
 };
 
 struct D2MapAIStrc
 {
-	int32_t nPathNodes;							//0x00
+	int32_t nPathNodes;						//0x00
 	D2MapAIPathPositionStrc* pPosition;		//0x04
 };
 
@@ -207,12 +215,6 @@ inline uint32_t PATH_FP16FitToCenter(uint32_t value)
 	return (value & 0xFFFF0000) + (1 << 15);
 }
 
-enum D2PathConstants {
-	PATH_NB_DIRECTIONS = 64,
-	PATH_DIR_NULL = 255,
-	PATH_MAX_STEPNUM = 20,
-	PATH_MAX_STEP_LEN = 10,
-};
 // Helper functions
 inline uint8_t PATH_NormalizeDirection(uint8_t nDirection) { return nDirection % PATH_NB_DIRECTIONS; }
 void PATH_UpdateClientCoords(D2DynamicPathStrc* pDynamicPath);
@@ -225,8 +227,10 @@ D2COMMON_DLL_DECL void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit,
 D2COMMON_DLL_DECL void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDA8450 (#10223)
 D2COMMON_DLL_DECL BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bForce);
-//D2Common.0x6FDA8600
-int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown);
+//1.00:  D2Common.0x10059110 (#10141)
+//1.10f: D2Common.0x6FDA8600 (#10142)
+//1.13c: D2Common.0x6FD86230 (#10334)
+D2COMMON_DLL_DECL int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bAllowInTown);
 //D2Common.0x6FDA8E30
 int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit);
 //D2Common.0x6FDA8FE0
@@ -242,7 +246,7 @@ D2COMMON_DLL_DECL int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitSt
 //D2Common.0x6FDA92F0 (#10214)
 D2COMMON_DLL_DECL void __stdcall D2Common_10214(D2UnitStrc* pUnit);
 //D2Common.0x6FDA9480 (#10152)
-D2COMMON_DLL_DECL void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2RoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag);
+D2COMMON_DLL_DECL void __stdcall PATH_AllocDynamicPath(void* pMemPool, D2ActiveRoomStrc* pRoom, int nX, int nY, D2UnitStrc* pUnit, BOOL bSetFlag);
 //D2Common.0x6FDA9720
 void __fastcall sub_6FDA9720(D2DynamicPathStrc* pDynamicPath, uint8_t nDirection);
 //D2Common.0x6FDA9770 (#10193)
@@ -322,11 +326,11 @@ D2COMMON_DLL_DECL int __stdcall D2COMMON_10177_PATH_GetLastPointX(D2DynamicPathS
 //D2Common.0x6FDA9E40 (#10178)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_10178_PATH_GetLastPointY(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDB9C10 (#10166)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall PATH_GetRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E60 (#10167)
-D2COMMON_DLL_DECL void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall PATH_SetRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pRoom);
 //D2Common.0x6FDA9E70 (#10168)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall PATH_GetNextRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E80 (#10169)
 D2COMMON_DLL_DECL void __stdcall PATH_ClearNextRoom(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDA9E90 (#10170)
@@ -372,7 +376,7 @@ D2COMMON_DLL_DECL uint16_t __stdcall D2Common_10201(D2DynamicPathStrc* pDynamicP
 //D2Common.0x6FDAA300 (#10202)
 D2COMMON_DLL_DECL uint16_t __stdcall D2Common_10202(D2DynamicPathStrc* pDynamicPath);
 //D2Common.0x6FDAA310 (#10192)
-D2COMMON_DLL_DECL void __stdcall D2COMMON_10192_PathSetIDAMax(D2DynamicPathStrc* pDynamicPath, int a2);
+D2COMMON_DLL_DECL void __stdcall PATH_SetIDAStarInitFScore(D2DynamicPathStrc* pDynamicPath, int nIDAStarInitFScore);
 //D2Common.0x6FDAA350 (#10198)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_10198_PathGetSaveStep(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc** ppPathPoints);
 //D2Common.0x6FDAA390 (#10199)

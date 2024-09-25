@@ -129,7 +129,7 @@ void __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -170,7 +170,7 @@ void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 	}
 
 	D2Common_10153(pNihlathak->pDynamicPath);
-	D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, UNITEVENTCALLBACK_AITHINK, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 	STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 	
 	D2ModeChangeStrc modeChange = {};
@@ -190,12 +190,12 @@ bool __fastcall ACT5Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 {
 	if (nNpcId == MONSTER_MALAH)
 	{
-		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_REWARDPENDING) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_CUSTOM4))
+		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDPENDING) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_CUSTOM4))
 		{
 			return true;
 		}
 
-		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_REWARDPENDING))
+		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDPENDING))
 		{
 			return false;
 		}
@@ -219,7 +219,7 @@ bool __fastcall ACT5Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 	}
 	else if (nNpcId == MONSTER_DREHYA)
 	{
-		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_REWARDPENDING))
+		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDPENDING))
 		{
 			return false;
 		}
@@ -322,7 +322,7 @@ void __fastcall ACT5Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	
 	D2Act5Quest3Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act5Quest3Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
-	pQuestData->nQuest = 37;
+	pQuestData->nQuestFilter = 37;
 	pQuestData->pfStatusFilter = ACT5Q3_StatusFilterCallback;
 	pQuestData->nInitNo = 5;
 	pQuestData->pfActiveFilter = ACT5Q3_ActiveFilterCallback;
@@ -580,10 +580,10 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		{
 			if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_REWARDPENDING) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_REWARDGRANTED))
 			{
-				if ((QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+				if ((QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 					&& !pQuestDataEx->bRewarded
 					&& QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_CUSTOM4)
-					&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM3)
+					&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM3)
 					&& !ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' 2rt')
 					&& QUESTS_CreateItem(pQuestArg->pGame, pQuestArg->pPlayer, ' 2rt', 0, ITEMQUAL_NORMAL, 1))
 				{
@@ -847,7 +847,7 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 	const int32_t nX = pCoord.nX;
 	const int32_t nY = pCoord.nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pDrehya), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pDrehya), nX, nY);
 	if (pRoom)
 	{
 		D2UnitStrc* pDrehyaPortal = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_CAINPORTAL, pCoord.nX, pCoord.nY, pQuestData->pGame, pRoom, 1, 1, 0);
@@ -935,7 +935,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 			}
 
 			D2Common_10153(pNihlathak->pDynamicPath);
-			D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, UNITEVENTCALLBACK_AITHINK, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 			STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 
 			D2ModeChangeStrc modeChange = {};
@@ -951,7 +951,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 			D2UnitStrc* pNihlathakInTown = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nNihlathakObjectInTownGUID);
 			if (pNihlathakInTown)
 			{
-				EVENT_SetEvent(pQuestData->pGame, pNihlathakInTown, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pQuestData->pGame, pNihlathakInTown, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 		else
@@ -1007,17 +1007,17 @@ void __fastcall ACT5Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		if ((QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+		if ((QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 			&& !pQuestDataEx->bRewarded
 			&& QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_CUSTOM4)
-			&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM3)
+			&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM3)
 			&& !ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' 2rt'))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_MALAH, 5);
 		}
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING))
 	{
 		if (nNpcId == MONSTER_DREHYA)
 		{
@@ -1044,7 +1044,7 @@ void __fastcall ACT5Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || (pQuestData->fState >= 5 && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE)) || !pQuestData->bNotIntro)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || (pQuestData->fState >= 5 && !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE)) || !pQuestData->bNotIntro)
 	{
 		return;
 	}
@@ -1125,7 +1125,7 @@ void __fastcall ACT5Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		if (pQuestData->fState == 2)
 		{
 			D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING) == 1)
+			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING) == 1)
 			{
 				return;
 			}
@@ -1182,7 +1182,7 @@ void __fastcall ACT5Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		pQuestDataEx->unk0x84 = 2;
 		pQuestDataEx->unk0x88 = 1;
@@ -1194,13 +1194,13 @@ void __fastcall ACT5Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_LEAVETOWN))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_LEAVETOWN))
 	{
 		pQuestData->fState = 3;
 	}
 	else
 	{
-		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_STARTED))
+		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_STARTED))
 		{
 			if (pQuestDataEx->nDefrostPotionsInGame)
 			{
@@ -1265,11 +1265,11 @@ bool __fastcall ACT5Q3_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 
 	if (QUESTRECORD_GetQuestState(pFlags, QUESTSTATEFLAG_A5Q3, QFLAG_REWARDPENDING) || QUESTRECORD_GetQuestState(pFlags, QUESTSTATEFLAG_A5Q3, QFLAG_PRIMARYGOALDONE))
 	{
-		if (QUESTRECORD_GetQuestState(pFlags, pQuest->nQuest, QFLAG_CUSTOM4) && !QUESTRECORD_GetQuestState(pFlags, pQuest->nQuest, QFLAG_CUSTOM5))
+		if (QUESTRECORD_GetQuestState(pFlags, pQuest->nQuestFilter, QFLAG_CUSTOM4) && !QUESTRECORD_GetQuestState(pFlags, pQuest->nQuestFilter, QFLAG_CUSTOM5))
 		{
 			*pStatus = 6;
 		}
-		else if (!QUESTRECORD_GetQuestState(pFlags, pQuest->nQuest, QFLAG_CUSTOM4))
+		else if (!QUESTRECORD_GetQuestState(pFlags, pQuest->nQuestFilter, QFLAG_CUSTOM4))
 		{
 			*pStatus = 5;
 		}
@@ -1373,7 +1373,7 @@ void __fastcall OBJECTS_InitFunction66_DrehyaStartInTown(D2ObjInitFnStrc* pOp)
 	D2QuestDataStrc* pQuestData34 = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q4_NIHLATHAK);
 	if (pQuestData34 && ((D2Act5Quest4Strc*)pQuestData34->pQuestDataEx)->bNeedsToOpenPortal)
 	{
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 12, 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 12, 0, 0);
 	}
 }
 
@@ -1406,7 +1406,7 @@ void __fastcall ACT5Q3_SpawnFrozenDrehya(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	else
 	{
-		EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 	}
 }
 
@@ -1429,7 +1429,7 @@ void __fastcall OBJECTS_InitFunction67_DrehyaStartOutsideTown(D2ObjInitFnStrc* p
 
 	if (!pQuestDataEx->bFrozenAnyaObjectSpawned)
 	{
-		EVENT_SetEvent(pQuestData->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+		EVENT_SetEvent(pQuestData->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 	}
 }
 
@@ -1512,7 +1512,7 @@ void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2Uni
 	else if (pUnit->dwAnimMode == OBJMODE_OPENED)
 	{
 		D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		if (DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_HARROGATH)
 		{
 			++pQuestDataEx->nObjectUpdateInvocations;
@@ -1540,7 +1540,7 @@ void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2Uni
 		UNITS_ChangeAnimMode(pUnit, OBJMODE_SPECIAL2);
 	}
 
-	EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
+	EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 25, 0, 0);
 }
 
 //D2Game.0x6FCB51C0
@@ -1566,7 +1566,7 @@ int32_t __fastcall ACT5Q3_SpawnDrehyaPortalOutsideTown(D2GameStrc* pGame, D2Unit
 	const int32_t nX = pQuestDataEx->pDrehyaPortalCoords.nX;
 	const int32_t nY = pQuestDataEx->pDrehyaPortalCoords.nY;
 
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 	if (!pRoom)
 	{
 		pQuestDataEx->pDrehyaPortalCoords.nX += 3;
@@ -1720,8 +1720,8 @@ int32_t __fastcall OBJECTS_OperateFunction67_FrozenAnya(D2ObjOperateFnStrc* pOp,
 	{
 		D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pOp->pPlayer)->pQuestData[pOp->pGame->nDifficulty];
 
-		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED)
-			&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING)
+		if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED)
+			&& !QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING)
 			&& ITEMS_FindQuestItem(pOp->pGame, pOp->pPlayer, ' eci'))
 		{
 			--pQuestDataEx->nDefrostPotionsInGame;

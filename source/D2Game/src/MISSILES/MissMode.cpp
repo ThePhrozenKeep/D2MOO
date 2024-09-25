@@ -69,19 +69,19 @@ struct D2HitFunc22ParamStrc
 #pragma pack(pop)
 
 
-D2MissileUnitFindTableStrc stru_6FD2E5F8[9] =
+D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
 {
     /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
-    /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_BARRIER                   },
-    /*[2]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
-    /*[3]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER },
+    /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER                   },
+    /*[2]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_MISSILE_BARRIER                  },
+    /*[3]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER },
     /*[4]*/{ nullptr                                                  , COLLIDE_NONE                                       },
-    /*[5]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_BARRIER                  },
-    /*[6]*/{ nullptr                                                  , COLLIDE_BARRIER                                    },
+    /*[5]*/{ MISSMODE_UnitFindCallback_CanCollideWithMonster          , COLLIDE_MONSTER | COLLIDE_MISSILE_BARRIER                  },
+    /*[6]*/{ nullptr                                                  , COLLIDE_MISSILE_BARRIER                                    },
     /*[7]*/{ MISSMODE_UnitFindCallback_CanMissileDestroy              , COLLIDE_MISSILE                                    },
-    /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER },
+    /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL },
 };
-
+static_assert(ARRAY_SIZE(stru_6FD2E5F8) == MISSMODE_COUNT, "Missile functions table needs to match missiles modes");
 
 //D2Game.0x6FC55CE0
 int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* pUnit, void* pArgument)
@@ -418,6 +418,8 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
         pDamage->dwFrzLen = STATLIST_UnitGetStatValue(pAttacker, STAT_COLDLENGTH, 0);
         return pDamage->dwColdDamage;
     }
+	default:
+		break;
     }
 
     return 0;
@@ -519,6 +521,8 @@ void __fastcall MISSMODE_AddDamageValue(D2GameStrc* pGame, D2UnitStrc* pMissile,
     case ELEMTYPE_FREEZE:
         pDamage->dwColdDamage = nDamage;
         break;
+	default:
+		break;
     }
 }
 
@@ -612,7 +616,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
         {
             const int32_t nX = nUnitX + x;
             const int32_t nY = nUnitY + y;
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (pRoom && x * x + y * y <= a3 * a3)
             {
                 D2CoordStrc coord1 = {};
@@ -625,7 +629,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
 
                 if (!COLLISION_RayTrace(pRoom, &coord1, &coord2, 4u))
                 {
-                    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+                    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
                     if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))
                     {
                         if (nRange)
@@ -670,13 +674,13 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 1);
     }
 
-    const int32_t nAnimMode = pMissile->dwAnimMode;
-    if (!nAnimMode)
+    const int32_t nMissileMode = pMissile->dwMissileMode;
+    if (nMissileMode == MISSMODE_NOCOLLIDE)
     {
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
     if (!pRoom || !pMissile->pDynamicPath)
     {
         return 2;
@@ -688,12 +692,12 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 2;
     }
 
-    if (nAnimMode == 6 || MISSILE_GetCurrentFrame(pMissile) > MISSILE_GetActivateFrame(pMissile) || !nFlags)
+    if (nMissileMode == MISSMODE_BARRIERCOLLIDE || MISSILE_GetCurrentFrame(pMissile) > MISSILE_GetActivateFrame(pMissile) || !nFlags)
     {
         return 1;
     }
 
-    if (!stru_6FD2E5F8[nAnimMode].pfUnitFindCallback)
+    if (!stru_6FD2E5F8[nMissileMode].pfUnitFindCallback)
     {
         return 2;
     }
@@ -713,10 +717,10 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
     {
         const uint16_t nX = pathPoints[i].X;
         const uint16_t nY = pathPoints[i].Y;
-        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nAnimMode].nCollisionMask);
+        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nMissileMode].nCollisionMask);
         if (nCollisionMask)
         {
-            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nAnimMode].pfUnitFindCallback, &unitFindArg, nSize);
+            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
             if (pTarget)
             {
                 return MISSMODE_SrvDmgHitHandler(pGame, pMissile, pTarget, 0);
@@ -1167,7 +1171,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
     if (pMonster)
     {
 
-        summonArg.nSpecialAiState = 0;
+        summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
         summonArg.nMonMode = nSpawnMode;
         summonArg.dwFlags = 0xDu;
         summonArg.pOwner = pOwner;
@@ -1333,7 +1337,7 @@ int32_t __fastcall MISSMODE_SrvDo17_CairnStones(D2GameStrc* pGame, D2UnitStrc* p
     {
         MISSILE_SetTargetX(pMissile, 1);
         D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -1395,7 +1399,7 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
             pCoord.nY += ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, 2 * nRange + 1) - nRange;
 
             D2CoordStrc returnCoords = {};
-            D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
+            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
             if (pRoom)
             {
                 D2ItemDropStrc itemDrop = {};
@@ -2929,7 +2933,7 @@ int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
     STATES_ToggleGfxStateFlag(pUnit, pSkillsTxtRecord->wAuraTargetState, 1);
     D2COMMON_10476(pStatList, nLength + pGame->dwGameFrame);
-    EVENT_SetEvent(pGame, pUnit, 12, nLength + pGame->dwGameFrame, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nLength + pGame->dwGameFrame, 0, 0);
     return 0;
 }
 
@@ -3044,7 +3048,7 @@ int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(D2GameStrc* pGame, D2UnitS
     sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
     STATES_ToggleGfxStateFlag(pUnit, pSkillsTxtRecord->wAuraTargetState, 1);
     D2COMMON_10476(pStatList, nTimeout);
-    EVENT_SetEvent(pGame, pUnit, 12, nTimeout, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nTimeout, 0, 0);
     return 3;
 }
 
@@ -3598,7 +3602,7 @@ int32_t __fastcall MISSMODE_SrvHit32_CairnStones(D2GameStrc* pGame, D2UnitStrc* 
     {
         MISSILE_SetTargetX(pMissile, 1);
         D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -3611,7 +3615,7 @@ int32_t __fastcall MISSMODE_SrvHit33_TowerChestSpawner(D2GameStrc* pGame, D2Unit
 {
     if (!pUnit)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (pRoom)
         {
             DUNGEON_ToggleHasPortalFlag(pRoom, 1);
@@ -3635,19 +3639,19 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pObject);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
     if (pRoom)
     {
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
 
-    if (pObject->dwAnimMode == 0)
+    if (pObject->dwMissileMode == 0)
     {
         UNITS_ChangeAnimMode(pObject, 1);
         D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
         if (pObjectsTxtRecord)
         {
-            EVENT_SetEvent(pGame, pObject, 1, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+            EVENT_SetEvent(pGame, pObject, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
         }
     }
 
@@ -4636,6 +4640,7 @@ void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* p
                 nChance = pMissilesTxtRecord->dwDmgParam[1];
             }
         }
+        break;
     }
     default:
     {
@@ -4790,7 +4795,7 @@ int32_t __fastcall MISSMODE_SrvDo36_BaalFxControl(D2GameStrc* pGame, D2UnitStrc*
     if (!MISSILE_GetTargetX(pMissile) && nFrame <= 100)
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -4808,7 +4813,7 @@ int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(D2GameStrc* pGame, D2UnitStrc
     if (!pUnit && !MISSILE_GetTargetX(pMissile))
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -5001,23 +5006,18 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 
         MISSILE_SetOwner(pMissile, pUnit);
 
-        int32_t nAnimMode = 0;
-        if (pMissile)
+        const int32_t nMissileMode = pMissile ? pMissile->dwMissileMode : MISSMODE_NOCOLLIDE;
+        switch (nMissileMode)
         {
-            nAnimMode = pMissile->dwAnimMode;
-        }
-
-        switch (nAnimMode)
-        {
-        case 0:
+        case MISSMODE_NOCOLLIDE:
             return 1;
-        case 1:
+        case MISSMODE_PLAYERKILL:
             if (pUnit->dwUnitType != UNIT_PLAYER)
             {
                 return 1;
             }
             break;
-        case 2:
+        case MISSMODE_MONSTERKILL:
             if (pUnit->dwUnitType != UNIT_MONSTER)
             {
                 return 1;
@@ -5071,7 +5071,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                     D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
                     if (pStatList)
                     {
-                        EVENT_SetEvent(pMissile->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nDelay, 0, 0);
+                        EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
                         STATLIST_SetState(pStatList, STATE_JUSTHIT);
                         STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
                         D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -5079,7 +5079,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                     }
                 }
 
-                SUNITEVENT_EventFunc_Handler(pGame, 0, pUnit, pMissile, nullptr);
+                SUNITEVENT_Trigger(pGame, UNITEVENT_HITBYMISSILE, pUnit, pMissile, nullptr);
 
                 if (pMissilesTxtRecord->nAlwaysExplode)
                 {
@@ -5106,7 +5106,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                 return 1;
             }
 
-            D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
             if (pRoom)
             {
                 COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5124,7 +5124,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
             if (pStatList)
             {
-                EVENT_SetEvent(pMissile->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nDelay, 0, 0);
+                EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
                 STATLIST_SetState(pStatList, STATE_JUSTHIT);
                 STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
                 D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -5132,7 +5132,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
             }
         }
 
-        SUNITEVENT_EventFunc_Handler(pGame, 0, pUnit, pMissile, 0);
+        SUNITEVENT_Trigger(pGame, UNITEVENT_HITBYMISSILE, pUnit, pMissile, 0);
 
         const uint16_t nHitFunc = pMissilesTxtRecord->wSrvHitFunc;
         if (nHitFunc > 0 && nHitFunc < std::size(gpMissileSrvHitFnTable_6FD2E718))
@@ -5174,7 +5174,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
     if (pRoom)
     {
         COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5191,8 +5191,10 @@ void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, D2Sta
 }
 
 //D2Game.0x6FC60090
-void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnused)
+void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType)
 {
+	D2_MAYBE_UNUSED(nEventType);
+
     using MissileSrvDoFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
     constexpr MissileSrvDoFunc gMissileSrvDoFuncTable[] =
     {
@@ -5262,7 +5264,7 @@ void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, i
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_SRCTOWN])
     {

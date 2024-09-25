@@ -13,6 +13,8 @@ BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 		break;
 	case DLL_THREAD_DETACH:
 		break;
+	default:
+		break;
 	}
 	return TRUE;
 }

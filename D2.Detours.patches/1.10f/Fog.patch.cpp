@@ -55,9 +55,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Trace @10029
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10030 @10030
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10031 @10031
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10032 @10032
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10033 @10033
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10034 @10034
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_TraceMemory @10032
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_CrashDeadlockDetected @10033
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_CrashDumpThread @10034
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10035 @10035
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10036 @10036
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10037 @10037
@@ -130,11 +130,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_AsyncDataSetPriority @10099
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_AsyncDataHandlePriorityChanges @10100
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQSetConfig @10101
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileOpen @10102
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileClose @10103
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileRead @10104
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_MPQFileGetSize @10105
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10106 @10106
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FOpenFile @10102
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FCloseFile @10103
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FReadFile @10104
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FGetFileSize @10105
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_FSetFilePointer @10106
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10107 @10107
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10108 @10108
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10109 @10109
@@ -179,7 +179,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10148 @10148
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_InitializeServer @10149
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10150 @10150
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10151 @10151
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_SetMaxClientsPerGame @10151
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10152 @10152
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10153 @10153
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_WaitForSingleObject @10154
@@ -204,9 +204,9 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10173 @10173
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10174 @10174
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10175 @10175
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10176 @10176
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_IsWindowsNT @10176
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10177 @10177
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10178 @10178
+    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_SetHackListEnabled @10178
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10179 @10179
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10180 @10180
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10181 @10181
@@ -312,8 +312,6 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int FogImageBase = 0x6FF50000;
-
 #ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
 void* __fastcall FOG_Debug_AllocPool_Impl(void* pMemPool, int nSize, const char* szFile, int nLine)
 {
@@ -360,7 +358,8 @@ void* __fastcall FOG_Debug_ReallocPool(void* pMemPool, void* pMemory, int nSize,
 
 static ExtraPatchAction extraPatchActions[] = {    
 #ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
-    { 0x6FF58F50 - FogImageBase, &FOG_Debug_Alloc, PatchAction::FunctionReplaceOriginalByPatch },
+#ifdef D2_VERSION_110F
+	{ 0x6FF58F50 - FogImageBase, &FOG_Debug_Alloc, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58F90 - FogImageBase, &FOG_Debug_Free, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58FB0 - FogImageBase, &FOG_Debug_Realloc, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF58FF0 - FogImageBase, &FOG_Debug_AllocPool, PatchAction::FunctionReplaceOriginalByPatch },
@@ -369,6 +368,7 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FF59310 - FogImageBase, &FOG_Debug_AllocPool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF599C0 - FogImageBase, &FOG_Debug_FreePool_Impl, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FF59BE0 - FogImageBase, &FOG_Debug_ReallocPoolImpl, PatchAction::FunctionReplaceOriginalByPatch },
+#endif
 #endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };

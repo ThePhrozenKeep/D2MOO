@@ -1,12 +1,5 @@
 #include <Windows.h>
 
-#include <D2Dll.h>
-
-#undef D2FUNC_DLL
-#define D2FUNC_DLL D2FUNC_DLL_STUB
-
-#include <Fog.h>
-
 // NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 {
@@ -19,6 +12,8 @@ BOOL __stdcall DllMain(HINSTANCE hModule, DWORD dwReason, void* lpReserved)
 	case DLL_THREAD_ATTACH:
 		break;
 	case DLL_THREAD_DETACH:
+		break;
+	default:
 		break;
 	}
 	return TRUE;

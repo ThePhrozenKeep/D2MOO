@@ -8,7 +8,7 @@
 struct D2Act5Quest1Strc						//sizeof 0x18
 {
 	D2MapAIStrc* pLarzukMapAI;					//0x00
-	D2RoomStrc* pRoom;							//0x04
+	D2ActiveRoomStrc* pRoom;							//0x04
 	uint8_t bLarzukStartActivated;					//0x08
 	uint8_t unused0x09[7];							//0x09
 	int nLarzukGUID;							//0x10

@@ -59,7 +59,7 @@ void __fastcall ACT5Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fState = 0;
 	pQuestData->fLastState = 0;
 	pQuestData->pQuestDataEx = 0;
-	pQuestData->nQuest = 41;
+	pQuestData->nQuestFilter = MAX_QUEST_STATUS;
 	pQuestData->pfStatusFilter = ACT5Intro_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT5Intro_ActiveFilterCallback;
 }
@@ -124,6 +124,8 @@ void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 		}
 		return;
 	}
+	default:
+		break;
 	}
 }
 

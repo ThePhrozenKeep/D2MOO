@@ -75,7 +75,7 @@ D2PetListStrc* __fastcall PLAYERPETS_GetPetListFromPetType(D2PlayerPetStrc* pPla
 //D2Game.0x6FC7E310
 void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4);
 //D2Game.0x6FC7E550
-void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2RoomStrc* pRoom, int32_t a5, int32_t a6);
+void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t a5, int32_t a6);
 //D2Game.0x6FC7E640
 void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 //D2Game.0x6FC7E7C0

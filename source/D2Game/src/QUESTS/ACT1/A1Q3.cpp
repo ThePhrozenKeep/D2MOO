@@ -353,7 +353,7 @@ void __fastcall ACT1Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfSeqFilter = ACT1Q3_SeqCallback;
 	pQuestData->pNPCMessages = gpAct1Q3NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A1Q3;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A1Q3;
 
 	D2Act1Quest3Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act1Quest3Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
@@ -545,7 +545,7 @@ void __fastcall ACT1Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING) == 1)
 	{
 		return;
 	}
@@ -714,7 +714,7 @@ void __fastcall ACT1Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

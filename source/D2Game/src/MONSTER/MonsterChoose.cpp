@@ -145,7 +145,7 @@ void __stdcall sub_6FC62020(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, in
 }
 
 //D2Game.0x6FC62420
-int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2MonsterRegionStrc* pMonsterRegion, D2RoomStrc* pRoom, D2MonStatsTxt** ppMonStatsTxtRecord, uint8_t nChance, int32_t bSpawnUMon)
+int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2MonsterRegionStrc* pMonsterRegion, D2ActiveRoomStrc* pRoom, D2MonStatsTxt** ppMonStatsTxtRecord, uint8_t nChance, int32_t bSpawnUMon)
 {
     D2SeedStrc* pSeed = nullptr;
     if (pRoom)
@@ -156,13 +156,13 @@ int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2Monster
     if (bSpawnUMon && pGame->nDifficulty == DIFFMODE_NORMAL)
     {
         D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(pMonsterRegion->dwlevel);
-        if (!pLevelsTxtRecord->nNumUMon)
+        if (!pLevelsTxtRecord->nNumUniqueMonsters)
         {
             *ppMonStatsTxtRecord = nullptr;
             return 0;
         }
 
-        const int32_t nMonsterId = pLevelsTxtRecord->wUMon[ITEMS_RollLimitedRandomNumber(pSeed, pLevelsTxtRecord->nNumUMon)];
+        const int32_t nMonsterId = pLevelsTxtRecord->wUniqueMonsters[ITEMS_RollLimitedRandomNumber(pSeed, pLevelsTxtRecord->nNumUniqueMonsters)];
         *ppMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
         return nMonsterId;
     }
@@ -198,7 +198,7 @@ int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2Monster
 }
 
 //D2Game.0x6FC62640
-D2UnkMonCreateStrc2* __fastcall sub_6FC62640(D2RoomStrc* pRoom)
+D2UnkMonCreateStrc2* __fastcall sub_6FC62640(D2ActiveRoomStrc* pRoom)
 {
     if (pRoom)
     {
@@ -209,7 +209,7 @@ D2UnkMonCreateStrc2* __fastcall sub_6FC62640(D2RoomStrc* pRoom)
 }
 
 //D2Game.0x6FC62670
-int32_t __fastcall MONSTERCHOOSE_GetBossSpawnType(D2MonsterRegionStrc* pMonsterRegion, D2RoomStrc* pRoom)
+int32_t __fastcall MONSTERCHOOSE_GetBossSpawnType(D2MonsterRegionStrc* pMonsterRegion, D2ActiveRoomStrc* pRoom)
 {
     if (pMonsterRegion->dwUniqueCount < pMonsterRegion->nBossMin && pMonsterRegion->unk0x0C && (ITEMS_RollRandomNumber(&pRoom->pSeed) % 100) < 100 * pMonsterRegion->unk0x04 / pMonsterRegion->unk0x0C)
     {

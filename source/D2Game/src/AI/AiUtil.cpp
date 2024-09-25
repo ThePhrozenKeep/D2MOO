@@ -124,9 +124,9 @@ int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	const int32_t nOffsetX = D2signum(CLIENTS_GetUnitX(pUnit1) - nX2) * nOffset;
 	const int32_t nOffsetY = D2signum(CLIENTS_GetUnitY(pUnit1) - nY2) * nOffset;
 
-	if (UNITS_TestCollisionByCoordinates(pUnit1, nX2, nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR)
-		&& UNITS_TestCollisionByCoordinates(pUnit1, nX2 - nOffsetY, nOffsetX + nY2, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR)
-		&& UNITS_TestCollisionByCoordinates(pUnit1, nOffsetY + nX2, nY2 - nOffsetX, COLLIDE_BLOCK_PLAYER | COLLIDE_BARRIER | COLLIDE_DOOR))
+	if (UNITS_TestCollisionByCoordinates(pUnit1, nX2, nY2, COLLIDE_WALL | COLLIDE_MISSILE_BARRIER | COLLIDE_DOOR)
+		&& UNITS_TestCollisionByCoordinates(pUnit1, nX2 - nOffsetY, nOffsetX + nY2, COLLIDE_WALL | COLLIDE_MISSILE_BARRIER | COLLIDE_DOOR)
+		&& UNITS_TestCollisionByCoordinates(pUnit1, nOffsetY + nX2, nY2 - nOffsetX, COLLIDE_WALL | COLLIDE_MISSILE_BARRIER | COLLIDE_DOOR))
 	{
 		return 0;
 	}
@@ -245,7 +245,7 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		}
 	}
 
-	if (pArg->unk0x08 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+	if (pArg->unk0x08 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 	{
 		return nullptr;
 	}
@@ -339,7 +339,7 @@ D2UnitStrc* __fastcall sub_6FCF1980(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		}
 	}
 
-	if (!UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+	if (!UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 	{
 		if (nThreat > 1)
 		{
@@ -408,7 +408,7 @@ D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
 	if (pTarget->dwUnitType == UNIT_PLAYER)
 	{
-		if (nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+		if (nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -417,7 +417,7 @@ D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 	else if (pTarget->dwUnitType == UNIT_MONSTER)
 	{
 		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
-		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && !UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -551,10 +551,10 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	}
 	case 1:
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 		if (pRoom)
 		{
-			D2RoomStrc** ppRoomList = nullptr;
+			D2ActiveRoomStrc** ppRoomList = nullptr;
 			int32_t nNumRooms = 0;
 			DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -598,9 +598,9 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 
 		return nullptr;
 	}
+	default:
+		return nullptr;
 	}
-
-	return nullptr;
 }
 
 //D2Game.0x6FCF20E0
@@ -623,7 +623,7 @@ void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 //D2Game.0x6FCF2110
 D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t* pDistance, int32_t* pCombat)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
@@ -711,7 +711,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 					if (pUnit->nAct == pTargetNode->pUnit->nAct)
 					{
-						D2RoomStrc* pTargetRoom = UNITS_GetRoom(pTargetNode->pUnit);
+						D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetNode->pUnit);
 						if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))
 						{
 							int32_t nDistance = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
@@ -729,7 +729,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 								while (1)
 								{
-									if (nDistance < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
+									if (nDistance < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_MISSILE_BARRIER)))
 									{
 										nDistanceToTarget = nDistance;
 										pTargetUnit = pTargetNode->pUnit;
@@ -754,7 +754,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 				if (pUnit->nAct == pTargetNode->pUnit->nAct)
 				{
 					const int32_t nTemp = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
-					if (nTemp < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
+					if (nTemp < nDistanceToTarget && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_MISSILE_BARRIER)))
 					{
 						nDistanceToTarget = nTemp;
 						pTargetUnit = pTargetNode->pUnit;
@@ -775,7 +775,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 					if (pUnit->nAct == pTargetNode->pUnit->nAct)
 					{
 						const int32_t nTemp = AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTargetNode->pUnit, nUnitX, nUnitY);
-						if (nTemp < nMinDistance && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_BARRIER)))
+						if (nTemp < nMinDistance && (!v66 || !UNITS_TestCollisionWithUnit(pUnit, pTargetNode->pUnit, COLLIDE_MISSILE_BARRIER)))
 						{
 							nMinDistance = nTemp;
 							pPotentialTarget = pTargetNode->pUnit;
@@ -898,7 +898,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -917,7 +917,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -936,7 +936,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_BARRIER))
+		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -1047,13 +1047,13 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 //D2Game.0x6FCF2B80
 D2UnitStrc* __fastcall AIUTIL_FindTargetInAdjacentRooms(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArg, D2UnitStrc* (__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*))
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
 	}
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -1080,13 +1080,13 @@ D2UnitStrc* __fastcall AIUTIL_FindTargetInAdjacentActiveRooms(D2GameStrc* pGame,
 		return nullptr;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return nullptr;
 	}
 
-	D2RoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
 	int32_t nNumRooms = 0;
 	DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -1249,7 +1249,7 @@ void __fastcall AIUTIL_SetOwnerGUIDAndType(D2UnitStrc* pUnit, D2UnitStrc* pOwner
 //D2Game.0x6FCF2F30
 void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nParam1, int32_t nDuration)
 {
-	if (SUNIT_IsDead(pTarget) || !AIUTIL_CanUnitSwitchAi(pTarget, 11))
+	if (SUNIT_IsDead(pTarget) || !AIUTIL_CanUnitSwitchAi(pTarget, AISPECIALSTATE_TERROR))
 	{
 		return;
 	}
@@ -1268,35 +1268,35 @@ void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUni
 
 	if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pTarget->pMonsterData)
 	{
-		AITHINK_ExecuteAiFn(pGame, pTarget, pTarget->pMonsterData->pAiControl, 11);
+		AITHINK_ExecuteAiFn(pGame, pTarget, pTarget->pMonsterData->pAiControl, AISPECIALSTATE_TERROR);
 		AITACTICS_Idle(pGame, pTarget, 1);
 	}
 }
 
 //D2Game.0x6FCF3000
-int32_t __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, int32_t nSpecialState)
+BOOL __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
-	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || nSpecialState > 19 || STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE) || !UNITS_CanSwitchAI(pUnit->dwClassId))
+	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER 
+		|| nAiSpecialState > AISPECIALSTATE_INVALID
+		|| STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE) 
+		|| !UNITS_CanSwitchAI(pUnit->dwClassId))
 	{
-		return 0;
+		return FALSE;
 	}
 
-	if (pUnit->dwFlags & UNITFLAG_CANBEATTACKED)
+	if ((pUnit->dwFlags & UNITFLAG_CANBEATTACKED) != 0 || SUNIT_IsDead(pUnit))
 	{
-		return 1;
+		if (MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_UNIQUE | MONTYPEFLAG_SUPERUNIQUE))
+		{
+			return FALSE;
+		}
+
+		if (nAiSpecialState == AISPECIALSTATE_INVALID)
+		{
+			return TRUE;
+		}
+
+		return AITHINK_CanUnitSwitchAi(pUnit, MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId), nAiSpecialState, 1);
 	}
-
-	if (!SUNIT_IsDead(pUnit) || MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_UNIQUE | MONTYPEFLAG_SUPERUNIQUE))
-	{
-		return 0;
-	}
-
-	D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-
-	if (nSpecialState == 19 || !pMonStatsTxtRecord)
-	{
-		return 1;
-	}
-
-	return AITHINK_CanUnitSwitchAi(pUnit, pMonStatsTxtRecord, nSpecialState, 1);
+	return FALSE;
 }

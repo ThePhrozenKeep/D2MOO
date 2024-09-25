@@ -1,20 +1,9 @@
 
-add_library(D2Gfx 
-  # We want to create a detours dll for patching
-  SHARED
-  # The DLL entrypoint
-  src/DllMain.cpp
-)
+D2MOO_prepare_targets(D2Gfx)
 
-target_link_libraries(D2Gfx PRIVATE Fog Storm D2CommonDefinitions)
+target_link_libraries(${D2GfxImplName} PRIVATE Fog Storm D2CommonDefinitions)
 
-target_include_directories(D2Gfx PUBLIC include)
-
-# The definition file that matches functions with their ordinals
-target_sources(D2Gfx PRIVATE definitions/D2Gfx.${D2MOO_ORDINALS_VERSION}.def)
-
-
-target_sources(D2Gfx
+target_sources(${D2GfxImplName}
   PRIVATE
     src/CmnSubtile.cpp
     src/D2Gfx.cpp
@@ -33,7 +22,4 @@ target_sources(D2Gfx
     include/Window.h
 )
 
-get_target_property(D2GfxSources D2Gfx SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
-             FILES ${D2GfxSources}
-)
+D2MOO_target_source_group(D2Gfx)

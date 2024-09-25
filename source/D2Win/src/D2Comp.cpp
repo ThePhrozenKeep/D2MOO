@@ -295,7 +295,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			if (dword_6F8FD654)
 //				*(DWORD*)(dword_6F8FD654 + 28) = v16;
 //			dword_6F8FD654 = (int)v16;
-//			v18 = D2Win_GetMemPool();
+//			v18 = D2Win_GetArchive();
 //			v19 = D2Hell_ARCHIVE_OpenFile_6F8B22F8(//				v18, //				&v29, //				(int)((char*)v16 + 16), //				__FILE__, __LINE__//				992);
 //			if (!v19)
 //			{
@@ -1291,7 +1291,7 @@ void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* 
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
-void __stdcall D2Win_10142(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -1420,7 +1420,7 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 }
 
 //D2Win.0x6F8A2CE0
-void* __stdcall sub_6F8A2CE0(void* pMempool, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
+void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
 {
 	char szFilename[260] = {};
 
@@ -1438,7 +1438,7 @@ void* __stdcall sub_6F8A2CE0(void* pMempool, const char* szName, D2BinFieldStrc*
 	}
 
 	unsigned int nFileSize = 0;
-	void* pFileData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMempool, szFilename, &nFileSize);
+	void* pFileData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilename, &nFileSize);
 
 	D2_ASSERT(pFileData);
 
@@ -1730,7 +1730,7 @@ void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSel
 
 //D2Win.0x6F8A3390 (#10144)
 //TODO: ...
-void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* a3, BYTE* a4)
+void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentsColors)
 {
 	//D2CompositeUnitStrc* v4; // esi@1
 	//D2GfxInfoStrc* v5; // eax@4
@@ -2151,7 +2151,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //		v152 = 0;
 //		v153 = 0;
 //		dword_6F8FD240 = Fog_10211(__FILE__, __LINE__);
-//		v1 = D2Win_GetMemPool();
+//		v1 = D2Win_GetArchive();
 //		dword_6F8FD244 = sub_6F8A2CE0(v1, "itemtypes", (int)&v34, (int)&unk_6F8FD248, 228);
 //		v24 = (int)"code";
 //		v25 = 10;
@@ -2164,9 +2164,9 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //		v32 = 0;
 //		v33 = 0;
 //		dword_6F8FD238 = Fog_10211(__FILE__, __LINE__);
-//		v2 = D2Win_GetMemPool();
+//		v2 = D2Win_GetArchive();
 //		dword_6F8FD234 = sub_6F8A2CE0(v2, "hitclass", (int)&v24, 0, 4);
-//		v3 = D2Win_GetMemPool();
+//		v3 = D2Win_GetArchive();
 //		sub_6F8A2E70(v3);
 //		dword_6F8C1530 = dword_6F8BCF98[0];
 //		dword_6F8C153C = dword_6F8BCF98[0];
@@ -2638,7 +2638,7 @@ void __stdcall D2Win_10146()
 	while (pCompositeUnit)
 	{
 		D2CompositeUnitStrc* pNext = pCompositeUnit->pNext;
-		D2Win_10142(pCompositeUnit, 0);
+		D2Win_10142_CompUnitDestroy(pCompositeUnit, 0);
 		D2_FREE(pCompositeUnit);
 		pCompositeUnit = pNext;
 	}
@@ -3308,6 +3308,8 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 				return "Conqueror ";
 			case 6:
 				return "Guardian ";
+			default:
+				break;
 			}
 			break;
 
@@ -3326,6 +3328,8 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 				return "Conqueror ";
 			case 6:
 				return "Guardian ";
+			default:
+				break;
 			}
 			break;
 		}
@@ -3352,6 +3356,8 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 				return "Duchess ";
 			case 6:
 				return "Queen ";
+			default:
+				break;
 			}
 			break;
 
@@ -3370,6 +3376,8 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 				return "Duke ";
 			case 6:
 				return "King ";
+			default:
+				break;
 			}
 			break;
 		}

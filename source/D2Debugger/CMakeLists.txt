@@ -3,15 +3,17 @@ add_library(D2Debugger SHARED
   src/D2Debugger.cpp
   src/D2Debugger.Game.cpp
   src/D2Debugger.imgui.d3d9.cpp
+  src/D2Debugger.patch.common.cpp
   
   # Font awesome 6
   #src/fa-solid-900.cpp
   src/IconsFontAwesome6.h
   
   include/D2Debugger.h
+  include/D2Debugger.patch.common.h
 )
 target_include_directories(D2Debugger PUBLIC include)
-target_compile_definitions(D2Debugger PRIVATE D2DEBUGGER_IMPL)
+D2MOO_configure_exports(D2Debugger IGNORE_MISSING_DEF)
 
 target_link_libraries(D2Debugger 
   PRIVATE

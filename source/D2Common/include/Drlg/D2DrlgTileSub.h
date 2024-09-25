@@ -29,7 +29,7 @@ struct D2UnkOutdoorStrc
 
 struct D2UnkOutdoorStrc2
 {
-	D2RoomExStrc* pRoomEx;										//0x00
+	D2DrlgRoomStrc* pDrlgRoom;									//0x00
 	D2DrlgOutdoorRoomStrc* pOutdoorRooms[DRLG_MAX_WALL_LAYERS];	//0x04
 	D2DrlgGridStrc* pWallsGrids[DRLG_MAX_WALL_LAYERS];			//0x14
 	D2DrlgGridStrc* pFloorGrid;									//0x24
@@ -78,8 +78,8 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 //D2Common.0x6FD8B290
 void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B640
-void __fastcall DRLGTILESUB_InitializeDrlgFile(void* pMemPool, D2LvlSubTxt* pLvlSubTxtRecord);
+void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B770
 void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord);
 //D2Common.0x6FD8B7E0
-int __fastcall DRLGTILESUB_PickSubThemes(D2RoomExStrc* pRoomEx, int nSubType, int nSubTheme);
+int __fastcall DRLGTILESUB_PickSubThemes(D2DrlgRoomStrc* pDrlgRoom, int nSubType, int nSubTheme);

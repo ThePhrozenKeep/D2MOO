@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
+#include <GAME/Clients.h>
 
 #pragma pack(1)
 
@@ -70,7 +71,13 @@ struct D2SaveHeaderStrc
 	uint32_t dwChecksum;					//0x0C
 	uint32_t dwWeaponSwitch;				//0x10
 	char szName[16];						//0x14
-	uint32_t dwSaveFlags;					//0x24
+	union {
+		uint32_t dwSaveFlags;				//0x24 D2ClientSaveFlags
+		struct {
+			D2PackedClientSaveFlags tPackedSaveFlags;
+			uint16_t nUnk; // Padding ? Unused in D2Launch
+		};
+	};
 	uint8_t nClass;							//0x28
 	uint8_t nStats;							//0x29
 	uint8_t nSkills;						//0x2A
@@ -118,9 +125,16 @@ int32_t __fastcall PLRSAVE2_WriteCorpsesSection(D2GameStrc* pGame, D2UnitStrc* p
 int32_t __fastcall PLRSAVE2_WriteIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
 //D2Game.0x6FC8D940
 int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t a6, int32_t a7);
-//D2Game.0x6FC8DC20
+//1.10f: D2Game.0x6FC8DC20
+//1.13c: D2Game.0x6FD0BAF0
+#define PLRSAVE2_CHECK_LADDER_TIMESTAMP !(D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 13)
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient);
+#else
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags);
-//D2Game.0x6FC8DD00
+#endif
+//1.10f: D2Game.0x6FC8DD00
+//1.13c: D2Game.0x6FD0D250
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
 //D2Game.0x6FC8E070
 int32_t __fastcall PLRSAVE2_ReadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);

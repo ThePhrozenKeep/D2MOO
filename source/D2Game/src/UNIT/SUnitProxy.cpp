@@ -545,7 +545,7 @@ void __fastcall SUNITPROXY_CountPlayersInLevel(D2GameStrc* pGame, D2UnitStrc* pU
 {
     D2UnitProxyArgStrc* pUnitProxyArg = (D2UnitProxyArgStrc*)pArg;
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom && pUnitProxyArg->nLevelId == DUNGEON_GetLevelIdFromRoom(pRoom))
     {
         ++pUnitProxyArg->nCounter;
@@ -560,7 +560,7 @@ void __fastcall SUNITPROXY_OnClientRemovedFromGame(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return;

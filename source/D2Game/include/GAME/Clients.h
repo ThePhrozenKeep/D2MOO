@@ -1,6 +1,5 @@
 #pragma once
 
-#include <D2Config.h>
 #include "D2PacketDef.h"
 #include <Units/Units.h>
 #include "Game.h"
@@ -82,7 +81,7 @@ union D2PackedClientSaveFlags
 		uint16_t bExpansion : 1;	// BIT(5)
 		uint16_t bLadder : 1;		// BIT(6)
 		uint16_t bUnkFlag0x80 : 1;	// BIT(7)
-		// Encodes completed acts 
+		// Encodes completed acts
 		// => 0 No act completed
 		// => Acts 1-5 Normal (values 1-5), then 1-5 NM (values 6-10), then 1-5 Hell (values 11-15) for Expansion
 		// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic

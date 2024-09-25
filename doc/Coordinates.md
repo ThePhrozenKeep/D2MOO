@@ -74,8 +74,8 @@ Note that in the `(Static|Dynamic)PathStrc` structures, both Game and Client coo
 | Game Tile     | Game Subtile             | DUNGEON_GameTileToSubtileCoords                  | D2Common@10113 | N/A                                             | N/A            |
 | Game subtile  | Fractional               | PATH_ToFP16Corner/PATH_ToFP16Center              | N/A            | PATH_FromFP16                                   | N/A            |
 | Fractional    | Client pixel             | PATH_UpdateClientCoords                          | N/A            | N/A                                             | N/A            |
-| Game tile     | Client (Render position) | DUNGEON_GameToClientTileRenderPositionCoords*    | D2Common@10115 | DUNGEON_ClientRenderPositionToGameCoords*       | D2Common@10114 |
-| Game subtile  | Client (Render position) | DUNGEON_GameToClientSubtileRenderPositionCoords* | D2Common@10117 | DUNGEON_ClientSubileRenderPositionToGameCoords* | D2Common@10116 |
+| Game tile     | Client (Render position) | DUNGEON_GameToClientTileDrawPositionCoords*      | D2Common@10115 | DUNGEON_ClientTileDrawPositionToGameCoords*     | D2Common@10114 |
+| Game subtile  | Client (Render position) | DUNGEON_GameToClientSubtileDrawPositionCoords*   | D2Common@10117 | DUNGEON_ClientSubileDrawPositionToGameCoords*   | D2Common@10116 |
 
 *The `Client(Sub)TileRenderPosition` functions will provide the draw position in Client space of the source unit.
 

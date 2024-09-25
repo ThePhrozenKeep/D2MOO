@@ -24,9 +24,9 @@ You can generate a VS solution (located in `out/build/VS20XX`) and build using t
 ```sh
 # Configure the CMake project
 cmake --preset VS2019
-# Build the release config
+# Build the release config (Optional. You may do it from Visual Studio itself)
 cmake --build --preset VS2019 --config Release
-# Install
+# Install (Optional. Most people will want to debug instead of install)
 cmake --build --preset VS2019 --config Release --target install
 ```
 
@@ -42,6 +42,10 @@ Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) document
 If you are using a default Diablo2 install and generated `.sln` through *CMake*, you are good to go, simply build and run with `F5`!
 
 Otherwise have a look at the [Advanced build and run](./doc/AdvancedBuildAndRun.md) and [Debugging](./doc/Debugging.md) documentation.
+
+## Documentation
+
+An embryo of documentation is available in the repository's [doc](./doc/) folder.
 
 ## D2MOO Debugger (Experimental!)
 
@@ -67,7 +71,12 @@ The code was originally extracted using a reverse engineering tool, and slowly c
 Yes this is now possible! However it is not guaranteed to be bugfree, so you may want to patch the functions you use instead.
 We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the current status of each ordinal.
 
-This is not the case yet for other .dlls.
+This is **NOT** the case yet for other .dlls.
+
+### Can I replace the game .dll files directly with the ones from D2MOO ?
+
+NO !
+As mentioned in the previous question, it only works with D2Common.dll (and is not bugfree).
 
 ### Why are some DLLs missing ?
 

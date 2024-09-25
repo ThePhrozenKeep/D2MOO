@@ -3,13 +3,11 @@
 #include <D2Dll.h>
 #include <cstdint>
 
-#ifdef D2SOUND_IMPL
-#define D2SOUND_DLL_DECL // We use .def files, not dllexport
-#else
-#define D2SOUND_DLL_DECL __declspec( dllimport )
-#endif
-
 //1.10f Image Base: 0x6F980000
+
+#ifdef D2_VERSION_110F
+constexpr int D2SoundImageBase = 0x6F980000;
+#endif
 
 D2FUNC_DLL(D2SOUND, OpenSoundSystem, void, __fastcall, (BOOL), 0x10E0)								//D2Sound.#10000
 D2FUNC_DLL(D2SOUND, CloseSoundSystem, void, __fastcall, (), 0x21C0)									//D2Sound.#10001

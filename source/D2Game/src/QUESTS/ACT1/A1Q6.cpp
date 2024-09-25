@@ -88,7 +88,7 @@ void __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -171,7 +171,7 @@ void __fastcall ACT1Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT1Q6_Callback13_PlayerStartedGame;
 	pQuestData->pfSeqFilter = ACT1Q6_SeqCallback;
 
-	pQuestData->nQuest = QUESTSTATEFLAG_A1Q6;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A1Q6;
 	pQuestData->pNPCMessages = gpAct1Q6NpcMessages;
 	pQuestData->bActive = 1;
 	pQuestData->fLastState = 0;
@@ -306,6 +306,8 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		}
 		return;
 	}
+	default:
+		break;
 	}
 }
 
@@ -500,7 +502,7 @@ void __fastcall ACT1Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDPENDING) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDPENDING) == 1)
 	{
 		return;
 	}
@@ -608,7 +610,7 @@ void __fastcall ACT1Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 int32_t __fastcall ACT1Q6_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_COMPLETEDBEFORE) == 1)
 	{
@@ -698,7 +700,7 @@ bool __fastcall ACT1Q6_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 //D2Game.0x6FC9EE00
 int32_t __fastcall ACT1Q6_UnitIterate_CreatePortalToTown(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_CATACOMBSLEV4)
 	{
@@ -738,7 +740,7 @@ void __fastcall ACT1Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

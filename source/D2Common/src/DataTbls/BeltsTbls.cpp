@@ -2,7 +2,7 @@
 
 
 //D2Common.0x6FD48880
-void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadBeltsTxt(HD2ARCHIVE hArchive)
 {
 	int nRecordCount = 0;
 	D2BinFieldStrc pTbl[] =
@@ -75,7 +75,7 @@ void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	gpBeltsTxtTable = (D2BeltsTxt*)DATATBLS_CompileTxt(pMemPool, "belts", pTbl, &nRecordCount, sizeof(D2BeltsTxt));
+	gpBeltsTxtTable = (D2BeltsTxt*)DATATBLS_CompileTxt(hArchive, "belts", pTbl, &nRecordCount, sizeof(D2BeltsTxt));
 
 	D2_ASSERT((nRecordCount / NUM_GAME_RESOLUTIONS) == BELT_IDX_COUNT_PER_RESOLUTION);
 }

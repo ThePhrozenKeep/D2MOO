@@ -118,7 +118,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 //D2Common.0x6FD52FC0
 void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD53030
-void __fastcall DATATBLS_LoadCubeMainTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadCubeMainTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD54250
 void __fastcall DATATBLS_UnloadCubeMainTxt();
 //D2Common.0x6FD54260 (#11232)

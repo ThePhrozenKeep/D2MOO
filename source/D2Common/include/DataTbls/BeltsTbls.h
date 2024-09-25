@@ -37,7 +37,7 @@ struct D2BeltsTxt
 #pragma pack()
 
 //D2Common.0x6FD48880
-void __fastcall DATATBLS_LoadBeltsTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadBeltsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD493A0
 void __fastcall DATATBLS_UnloadBeltsTxt();
 //D2Common.0x6FD493B0 (#10638)

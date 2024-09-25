@@ -42,9 +42,9 @@
  * 1.13c: Inline
  * 1.14c: Game.0x00514B24
  */
-BOOL __fastcall ARCHIVE_OpenFile(void* pMempool, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped)
+BOOL __fastcall ARCHIVE_OpenFile(HD2ARCHIVE hArchive, const char* szFilePath, HSFILE* phFile, BOOL bFileNotFoundLogSkipped)
 {
-	BOOL bFileOpenSucceeded = FOG_MPQFileOpen(szFilePath, phFile);
+	BOOL bFileOpenSucceeded = FOG_FOpenFile(szFilePath, phFile);
 	if (!bFileOpenSucceeded)
 	{
 		DWORD dwLastError = GetLastError();
@@ -66,10 +66,10 @@ BOOL __fastcall ARCHIVE_OpenFile(void* pMempool, const char* szFilePath, HSFILE*
  * 1.13c: Inline
  * 1.14c: Game.0x00514B60
  */
-void __fastcall ARCHIVE_CloseFile(void* pMempool, HSFILE hFile)
+void __fastcall ARCHIVE_CloseFile(HD2ARCHIVE hArchive, HSFILE hFile)
 {
 	D2_ASSERT(hFile != nullptr);
-	FOG_MPQFileClose(hFile);
+	FOG_FCloseFile(hFile);
 }
 
 /**
@@ -78,12 +78,13 @@ void __fastcall ARCHIVE_CloseFile(void* pMempool, HSFILE hFile)
  * 1.10: D2Lang.0x6FC145F2 OR D2Common.0x6FDC4152
  * 1.13c: Inline
  * 1.14c: Game.0x00514B87
+ * D2XBeta: D2Server.dll.0x10009C76
  */
-size_t __fastcall ARCHIVE_GetFileSize(void* pMempool, HSFILE hFile, size_t* pdwFileSizeHigh)
+uint32_t __fastcall ARCHIVE_GetFileSize(HD2ARCHIVE hArchive, HSFILE hFile, uint32_t* pdwFileSizeHigh)
 {
 	D2_ASSERT(hFile != nullptr);
 
-	size_t dwFileSize = FOG_MPQFileGetSize(hFile, pdwFileSizeHigh);
+	uint32_t dwFileSize = FOG_FGetFileSize(hFile, pdwFileSizeHigh);
 	if (dwFileSize == 0)
 	{
 		char szArchivePath[MAX_PATH];
@@ -96,18 +97,41 @@ size_t __fastcall ARCHIVE_GetFileSize(void* pMempool, HSFILE hFile, size_t* pdwF
 }
 
 /**
+ * Sets the file pointer of a file in the MPQ archives.
+ *
+ * hArchive is the first parameter, but it is effectively unused.
+ *
+ * Static library; may be defined in multiple places than ones listed:
+ * 1.10: D2CMP.0x6FE0047A
+ */
+uint32_t __fastcall ARCHIVE_SetFilePointer(HD2ARCHIVE hArchive, HSFILE hFile, int32_t lDistanceToMove, int32_t* lpDistanceToMoveHigh, uint32_t dwMoveMethod)
+{
+	D2_ASSERT(hFile != nullptr);
+
+	uint32_t result = FOG_FSetFilePointer(hFile, lDistanceToMove, lpDistanceToMoveHigh, dwMoveMethod);
+	if (result == INVALID_SET_FILE_POINTER)
+	{
+		char szArchivePath[MAX_PATH];
+		SFileGetFileName(hFile, szArchivePath, 260);
+		FOG_DisplayError(3, szArchivePath, __FILE__, __LINE__);
+		exit(-1);
+	}
+	return result;
+}
+
+/**
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10004EE3
  * 1.10: D2Lang.0x6FC14661 OR D2Common.0x6FDC41C1
  * 1.13c: D2Lang.0x6FC07C00
  * 1.14c: Game.0x00514C61
  */
-void __fastcall ARCHIVE_ReadFileToBuffer(void* pMempool, HSFILE hFile, void* pBuffer, size_t dwBytesToRead)
+void __fastcall ARCHIVE_ReadFileToBuffer(HD2ARCHIVE hArchive, HSFILE hFile, void* pBuffer, size_t dwBytesToRead)
 {
 	D2_ASSERT(hFile != nullptr);
 
 	size_t dwBytes;
-	BOOL bFileReadSuccess = FOG_MPQFileRead(hFile, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
+	BOOL bFileReadSuccess = FOG_FReadFile(hFile, pBuffer, dwBytesToRead, (int*)&dwBytes, 0, 0, 0);
 	if (!bFileReadSuccess)
 	{
 		char szArchivePath[MAX_PATH];
@@ -128,26 +152,26 @@ void __fastcall ARCHIVE_ReadFileToBuffer(void* pMempool, HSFILE hFile, void* pBu
  * 1.13c: D2Lang.0x6FC07EF0
  * 1.14c: Game.0x00514D55
  */
-void* __fastcall ARCHIVE_ReadFileToAllocBuffer(void* pMempool, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine)
+void* __fastcall ARCHIVE_ReadFileToAllocBuffer(HD2ARCHIVE hArchive, const char* szFilePath, size_t* pdwBytesWritten, const char* szSrcPath, int nLine)
 {
 	HSFILE hFile;
 	
-	BOOL bOpenFileSucceeded = ARCHIVE_OpenFile(pMempool, szFilePath, &hFile, FALSE);
+	BOOL bOpenFileSucceeded = ARCHIVE_OpenFile(hArchive, szFilePath, &hFile, FALSE);
 	if (!bOpenFileSucceeded)
 	{
 		return nullptr;
 	}
 
 	size_t dwFileSizeHigh;
-	size_t dwFileSize = ARCHIVE_GetFileSize(pMempool, hFile, &dwFileSizeHigh);
+	size_t dwFileSize = ARCHIVE_GetFileSize(hArchive, hFile, &dwFileSizeHigh);
 	void* pBuffer = FOG_Alloc(dwFileSize + 800, szSrcPath, nLine, 0);
 	if (pBuffer == nullptr)
 	{
 		return nullptr;
 	}
 
-	ARCHIVE_ReadFileToBuffer(pMempool, hFile, pBuffer, dwFileSize);
-	ARCHIVE_CloseFile(pMempool, hFile);
+	ARCHIVE_ReadFileToBuffer(hArchive, hFile, pBuffer, dwFileSize);
+	ARCHIVE_CloseFile(hArchive, hFile);
 
 	if (pdwBytesWritten != nullptr)
 	{

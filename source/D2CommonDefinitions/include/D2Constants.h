@@ -10,10 +10,10 @@ enum D2HarcodedConstants
 
 enum D2GameTypeMode
 {
-	//	MODE_SINGLE = 0,
+	MODE_LOCAL = 0,
 	MODE_CLOSED = 1,
-	MODE_TCP,
-	MODE_OPEN,
+	MODE_TCPIP = 2,
+	MODE_OPEN = 3,
 };
 
 enum D2GameResolutionMode // DISPLAY_RES in original game
@@ -499,6 +499,7 @@ enum D2C_SRV2CLT77_PARAMS
 	UPDATEUI_CHECKBOX = 14,
 	UPDATEUI_NORMCHECKBOX = 15,
 	UPDATEUI_OPENSTASH = 16,
+	UPDATEUI_CLOSESTASH = 17,
 	UPDATEUI_OPENCUBE = 21
 };
 

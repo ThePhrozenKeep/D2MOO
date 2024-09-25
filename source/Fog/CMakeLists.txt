@@ -1,14 +1,42 @@
 
-add_library(Fog
-  SHARED
-    src/DllMain.cpp
-	src/D2BitManip.cpp
+D2MOO_prepare_targets(Fog)
+
+target_link_libraries(${FogImplName} PUBLIC D2CommonDefinitions Storm)
+
+target_sources(${FogImplName}
+  PRIVATE
+	src/Fog.cpp
+	
+	# Official file names
+	src/AsyncData.cpp
+	src/BitManip/BitManip.cpp
+	src/BitManip/StringPack.cpp
+	src/D2QSQueue.cpp
+	src/D2QSSocket.cpp
+	src/DataArrays.cpp
+	src/ErrorManager.cpp
+	src/ErrorManager.cpp
+	src/Excel/Excel.cpp
+	src/Exceptions.cpp
+	src/Gamma.cpp
+	src/IFF.cpp
+	src/LogManager.cpp
+	src/Mem/mem.cpp
+	src/QServer/QServer.cpp
+	src/QServer/QServer98.cpp
+	src/QServer/QServerNT.cpp
 	src/Safesock.cpp
+	src/String/FogString.cpp
+	src/System/System.cpp
+	
+	# Made up filename
 	src/Calc.cpp
 	
+	# Headers
 	include/Fog.h
 	include/D2BitManip.h
 	include/Safesock.h
+	include/System/System.h
 )
 
 if(D2MOO_WITH_STATIC_TESTS)
@@ -18,11 +46,4 @@ if(D2MOO_WITH_STATIC_TESTS)
   )
 endif()
 
-# The definition file that matches functions with their ordinals
-target_sources(Fog PRIVATE definitions/Fog.${D2MOO_ORDINALS_VERSION}.def)
-target_include_directories(Fog PUBLIC include)
-# If not defined, we use declspec(dllimport), so only define it to build the .dll
-
-target_compile_definitions(Fog PRIVATE FOG_IMPL)
-
-target_link_libraries(Fog PUBLIC D2CommonDefinitions Storm)
+D2MOO_target_source_group(Fog)

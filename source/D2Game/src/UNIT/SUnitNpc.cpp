@@ -1949,6 +1949,8 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
                     }
                     break;
                 }
+				default:
+					break;
                 }
             }
 
@@ -1957,6 +1959,8 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
         }
         break;
     }
+	default:
+		break;
     }
 }
 
@@ -2132,7 +2136,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
             D2CoordStrc coords = {};
             UNITS_GetCoords(pPlayer, &coords);
             D2CoordStrc returnCoords = {};
-            D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
+            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
             D2GAME_DropItem_6FC52260(pGame, 0, pOutput, pRoom, returnCoords.nX, returnCoords.nY);
         }
 
@@ -2296,7 +2300,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
             D2CoordStrc coords = {};
             UNITS_GetCoords(pPlayer, &coords);
             D2CoordStrc returnCoords = {};
-            D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
+            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
             D2GAME_DropItem_6FC52260(pGame, 0, pOutput, pRoom, returnCoords.nX, returnCoords.nY);
         }
 
@@ -2372,7 +2376,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
             D2CoordStrc coords = {};
             UNITS_GetCoords(pPlayer, &coords);
             D2CoordStrc returnCoords = {};
-            D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
+            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &coords, &returnCoords, 1);
             D2GAME_DropItem_6FC52260(pGame, 0, pOutput, pRoom, returnCoords.nX, returnCoords.nY);
         }
 
@@ -2392,9 +2396,10 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         }
         return 0;
     }
+	default:
+		return 0;
     }
 
-    return 0;
 }
 
 //D2Game.0x6FCCA990
@@ -2631,6 +2636,8 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCCAE20(D2GameStrc* pGame, D2Un
                 case MONSTER_QUAL_KEHK:
                     D2GAME_NPC_FirstFn_6FCC67D0(pGame, nNpcClassId, pNpcRecord);
                     break;
+				default:
+					break;
                 }
 
                 pNpcRecord->npcTrade.bHireInit = 1;
@@ -2790,6 +2797,8 @@ void __fastcall D2GAME_NPC_Heal_6FCCB220(D2GameStrc* pGame, D2UnitStrc* pUnit, D
         case MONSTER_MALAH:
             D2GAME_NPC_HealPlayer_6FCCB080(pGame, pUnit, pNpc);
             break;
+		default:
+			break;
         }
     }
     else

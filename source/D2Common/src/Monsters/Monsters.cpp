@@ -519,7 +519,7 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	const uint32_t* pCode = NULL;
 	int nMonsterId = 0;
 	int nLevelId = 0;
@@ -615,7 +615,7 @@ int __stdcall D2Common_11050(D2UnitStrc* pUnit, int a2)
 		nCounter = nStart;
 		while (nCounter <= nFrame)
 		{
-			if (UNITS_GetEventFrameInfo(pUnit, nCounter) == MONSEQ_EVENT_MISSILE_ATTACK || UNITS_GetEventFrameInfo(pUnit, nCounter) == MONSEQ_EVENT_MELEE_ATTACK)
+			if (UNITS_GetEventFrameInfo(pUnit, nCounter) == ANIMSEQ_EVENT_MISSILE_ATTACK || UNITS_GetEventFrameInfo(pUnit, nCounter) == ANIMSEQ_EVENT_MELEE_ATTACK)
 			{
 				break;
 			}
@@ -1133,7 +1133,7 @@ uint8_t __stdcall MONSTERS_GetMaximalLightRadius(D2UnitStrc* pMonster)
 }
 
 //D2Common.0x6FDA64B0 (#11063)
-int __stdcall D2Common_11063(D2RoomStrc* pRoom, int nMonsterId)
+int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId)
 {
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2LevelsTxt* pLevelsTxtRecord = NULL;
@@ -1144,7 +1144,7 @@ int __stdcall D2Common_11063(D2RoomStrc* pRoom, int nMonsterId)
 
 	pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
 
-	if (pLevelsTxtRecord && pLevelsTxtRecord->nNumNormMon)
+	if (pLevelsTxtRecord && pLevelsTxtRecord->nNumNormalMonsters)
 	{
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nMonsterId);
 		if (pMonStatsTxtRecord)
@@ -1154,11 +1154,11 @@ int __stdcall D2Common_11063(D2RoomStrc* pRoom, int nMonsterId)
 			pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClassId);
 			if (pMonStatsTxtRecord)
 			{
-				for (int i = 0; i < pLevelsTxtRecord->nNumNormMon; ++i)
+				for (int i = 0; i < pLevelsTxtRecord->nNumNormalMonsters; ++i)
 				{
-					if (MONSTERS_GetBaseIdFromMonsterId(pLevelsTxtRecord->wMon[i]) == nClassId)
+					if (MONSTERS_GetBaseIdFromMonsterId(pLevelsTxtRecord->wNormalMonsters[i]) == nClassId)
 					{
-						return pLevelsTxtRecord->wMon[i];
+						return pLevelsTxtRecord->wNormalMonsters[i];
 					}
 				}
 
@@ -1250,6 +1250,8 @@ int __stdcall MONSTERS_GetHirelingTypeId(D2UnitStrc* pHireling)
 		case MONSTER_ACT5HIRE1:
 		case MONSTER_ACT5HIRE2:
 			return 4;
+		default:
+			break;
 		}
 	}
 

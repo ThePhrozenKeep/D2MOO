@@ -16,9 +16,7 @@
 #endif
 
 extern "C" {
-    __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
-    __declspec(dllexport)
     constexpr int __cdecl GetLastOrdinal() { return 11'307; }
     constexpr int GetOrdinalCount() { return GetLastOrdinal() - GetBaseOrdinal() + 1; }
 }
@@ -235,7 +233,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetMaxDistance                                                 @10189
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10190_PATH_SetDistance                                             @10190
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10191_PATH_GetDistance                                             @10191
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10192_PathSetIDAMax                                        @10192
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetIDAStarInitFScore											@10192
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10193_PATH_AdjustDirection                                 @10193
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionX                                                  @10194
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionY                                                  @10195
@@ -1356,7 +1354,6 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 
 extern "C" {
 
-__declspec(dllexport)
 PatchAction __cdecl GetPatchAction(int ordinal)
 {
 #ifdef DISABLE_ALL_PATCHES
@@ -1371,10 +1368,9 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int D2CommonImageBase = 0x6FD40000;
-
 static ExtraPatchAction extraPatchActions[] = {
-    // We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
+#ifdef D2_VERSION_110F
+	// We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
     //{ 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplaceOriginalByPatch },
     { 0x6FD86050 - D2CommonImageBase, &DRLGPRESET_LoadDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FD86190 - D2CommonImageBase, &DRLGPRESET_FreeDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
@@ -1410,11 +1406,10 @@ static ExtraPatchAction extraPatchActions[] = {
     
     // this is the one that leads to issues
     //{ 0x6FD73450 - D2CommonImageBase, &DRLGACTIVATE_RoomExSetStatus_ClientInSight, PatchAction::FunctionReplacePatchByOriginal},
-
+#endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
-__declspec(dllexport)
 constexpr int __cdecl GetExtraPatchActionsCount() { 
 #ifdef DISABLE_ALL_PATCHES
     return 0;
@@ -1423,10 +1418,16 @@ constexpr int __cdecl GetExtraPatchActionsCount() {
 #endif
 }
 
-__declspec(dllexport)
 ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
 {
     return &extraPatchActions[index];
+}
+
+__declspec(dllexport)
+PatchInformationFunctions __cdecl GetPatchInformationFunctions(const wchar_t* dllName)
+{
+	D2_MAYBE_UNUSED(dllName);
+	return { &GetBaseOrdinal, &GetLastOrdinal, &GetPatchAction, &GetExtraPatchActionsCount, &GetExtraPatchAction };
 }
 
 }
@@ -1439,3 +1440,5 @@ static_assert(std::is_same<decltype(GetPatchAction)*, GetPatchActionType>::value
 
 static_assert(std::is_same<decltype(GetExtraPatchActionsCount)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
 static_assert(std::is_same<decltype(GetExtraPatchAction)*, GetExtraPatchActionType>::value, "Ensure calling convention doesn't change");
+
+static_assert(std::is_same<decltype(GetPatchInformationFunctions)*, GetPatchInformationFunctionsType>::value, "Ensure calling convention doesn't change");

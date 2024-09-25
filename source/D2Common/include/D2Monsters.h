@@ -5,7 +5,7 @@
 
 
 struct D2UnitStrc;
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2MonStatsTxt;
 
 #pragma pack(1)
@@ -201,7 +201,7 @@ D2COMMON_DLL_DECL void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonste
 //D2Common.0x6FDA6410 (#11051)
 D2COMMON_DLL_DECL uint8_t __stdcall MONSTERS_GetMaximalLightRadius(D2UnitStrc* pMonster);
 //D2Common.0x6FDA64B0 (#11063)
-D2COMMON_DLL_DECL int __stdcall D2Common_11063(D2RoomStrc* pRoom, int nMonsterId);
+D2COMMON_DLL_DECL int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId);
 //D2Common.0x6FDA6620 (#11065)
 D2COMMON_DLL_DECL BOOL __stdcall MONSTERS_IsPrimeEvil(D2UnitStrc* pMonster);
 //D2Common.0x6FDA6680 (#11066)

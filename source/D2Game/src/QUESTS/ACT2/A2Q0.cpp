@@ -45,7 +45,7 @@ void __fastcall ACT2Q0_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT2Q0_Callback13_PlayerStartedGame;
 	pQuestData->pNPCMessages = gpAct2Q0NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q0;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q0;
 	pQuestData->pfStatusFilter = ACT2Q0_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT2Q0_ActiveFilterCallback;
 

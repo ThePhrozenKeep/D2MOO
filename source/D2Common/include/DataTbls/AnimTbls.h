@@ -2,6 +2,7 @@
 
 #include <D2Common.h>
 #include <D2BasicTypes.h>
+#include <Archive.h>
 
 #pragma pack(1)
 
@@ -33,7 +34,7 @@ struct D2InventoryStrc;
 #pragma pack()
 
 //D2Common.0x6FD473C0
-D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(void* pMemPool);
+D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(HD2ARCHIVE hArchive);
 //D2Common.0x6FD47460
 void __fastcall DATATBLS_UnloadAnimDataD2(D2AnimDataTableStrc* pAnimData);
 //D2Common.0x6FD474A0

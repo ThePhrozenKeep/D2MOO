@@ -230,7 +230,7 @@ D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId)
 }
 
 //D2Game.0x6FC93BD0
-void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t bDebug)
+void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t bDebug)
 {
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (!nLevelId)
@@ -579,7 +579,7 @@ void __fastcall QUESTS_EventCallback(D2QuestArgStrc* pArgs, bool bCheckActive, b
 	int8_t nAct = -1;
 	if (bCheckAct)
 	{
-		D2RoomStrc* pRoom = UNITS_GetRoom(pArgs->pPlayer);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pArgs->pPlayer);
 		if (pRoom)
 		{
 			nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
@@ -785,7 +785,7 @@ void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallb
 //D2Game.0x6FC94710
 void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestList, D2BitBufferStrc* pQuestFlags)
 {
-	const int32_t bCompletedNow = QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_COMPLETEDNOW);
+	const int32_t bCompletedNow = QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_COMPLETEDNOW);
 
 	if (pQuest->fState < pQuest->nInitNo)
 	{
@@ -797,7 +797,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 				return;
 			}
 
-			if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_PRIMARYGOALDONE))
+			if (!QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_PRIMARYGOALDONE))
 			{
 				*pQuestList = 12;
 				return;
@@ -811,7 +811,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 		return;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, QFLAG_PRIMARYGOALDONE) != 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_PRIMARYGOALDONE) != 1)
 	{
 		if (pQuest->nQuestNo == 4 && bCompletedNow)
 		{
@@ -834,11 +834,7 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 		return;
 	}
 
-	//if (pQuest->nQuest >= 41)
-	//{
-	//	FOG_DisplayAssert("pQuest->eFilter < MAX_QUEST_STATUS", __FILE__, __LINE__);
-	//	exit(-1);
-	//}
+	D2_ASSERT(pQuest->nQuestFilter < MAX_QUEST_STATUS);
 
 	*pQuestList = pQuest->fLastState;
 }
@@ -861,38 +857,30 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	for (D2QuestDataStrc* pQuest = pGame->pQuestControl->pLastQuest; pQuest; pQuest = pQuest->pPrev)
 	{
-		//if (pQuest->nQuestNo >= 41)
-		//{
-		//	FOG_DisplayAssert("pQuest->Id < MAX_QUEST_STATUS", __FILE__, __LINE__);
-		//	exit(-1);
-		//}
+		D2_ASSERT(pQuest->nQuestNo < MAX_QUEST_STATUS);
 
 		if (pQuest->fLastState)
 		{
 			if (pQuest->pfStatusFilter)
 			{
-				if (IsBadCodePtr((FARPROC)pQuest->pfStatusFilter))
-				{
-					FOG_DisplayAssert("pQuest->pStatusFilter", __FILE__, __LINE__);
-					exit(-1);
-				}
+				D2_ASSERT(pQuest->pfStatusFilter);
 
 				uint8_t a5 = 0;
 				if (pQuest->pfStatusFilter(pQuest, pUnit, pGame->pQuestControl->pQuestFlags, pQuestFlags, &a5) == 1)
 				{
-					packet52.pQuestList[pQuest->nQuest] = a5;
+					packet52.pQuestList[pQuest->nQuestFilter] = a5;
 				}
 			}
 			else
 			{
-				QUESTS_RefreshStatus(pQuest, &packet52.pQuestList[pQuest->nQuest], pQuestFlags);
+				QUESTS_RefreshStatus(pQuest, &packet52.pQuestList[pQuest->nQuestFilter], pQuestFlags);
 			}
 		}
 	}
 
 	bool bSendPacket0x50 = false;
 	D2GSPacketSrv50 packet50 = {};
-	if (packet52.pQuestList[1] && pGame->pQuestControl)
+	if (packet52.pQuestList[QUESTSTATEFLAG_A1Q1] && pGame->pQuestControl)
 	{
 		D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData1 && pQuestData1->nQuestNo != 1)
@@ -907,7 +895,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 	}
 
-	if (packet52.pQuestList[36] && pGame->pQuestControl)
+	if (packet52.pQuestList[QUESTSTATEFLAG_A5Q2] && pGame->pQuestControl)
 	{
 		D2QuestDataStrc* pQuestData32 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData32 && pQuestData32->nQuestNo != QUEST_A5Q2_RESCUESOLDIERS)
@@ -921,23 +909,19 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			packet50.QuestsStatusPayload.nBarbsToBeRescued = ACT5Q2_GetBarbsToBeRescued(pQuestData32);
 		}
 	}
-
 	if ((QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q4, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q4, QFLAG_PRIMARYGOALDONE)) && pGame->pAct[ACT_II])
 	{
+		bSendPacket0x50 = true;
 		packet50.QuestsStatusPayload.nStaffTombLevelOffset = DUNGEON_GetHoradricStaffTombLevelId(pGame->pAct[1]) - LEVEL_TALRASHASTOMB1;
 	}
-	else
+
+	if (bSendPacket0x50)
 	{
-		if (!bSendPacket0x50)
-		{
-			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet52, sizeof(packet52));
-			return;
-		}
+		packet50.nHeader = 0x50;
+		packet50.nQuestId = QUEST_A1Q1_DENOFEVIL; // Used for the 3 progress quests at once.
+		D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet50, sizeof(packet50));
 	}
 
-	packet50.nHeader = 0x50;
-	packet50.nQuestId = QUEST_A1Q1_DENOFEVIL; // Used for the 3 progress quests at once.
-	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet50, sizeof(packet50));
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet52, sizeof(packet52));
 }
 
@@ -978,7 +962,7 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 	}
 
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-	D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 	if (!pRoom)
 	{
 		return;
@@ -1017,11 +1001,11 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 		QUESTS_RefreshStatus(pQuestData, &packet5D.nState, pQuestFlags);
 	}
 
-	if (pQuestData->nQuest == 1)
+	if (pQuestData->nQuestFilter == 1)
 	{
 		packet5D.field_4 = ACT1Q1_GetMonstersToBeKilled(pQuestData);
 	}
-	else if (pQuestData->nQuest == 36)
+	else if (pQuestData->nQuestFilter == 36)
 	{
 		packet5D.field_4 = ACT5Q2_GetBarbsToBeRescued(pQuestData);
 	}
@@ -1609,7 +1593,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		nUnitId = pUnit->dwClassId;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	switch (nUnitId)
 	{
@@ -1654,7 +1638,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 		if (pAct5Quest4->bPortalCreated)
 		{
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
 			return;
 		}
 
@@ -1668,7 +1652,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 		else
 		{
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_QUESTFN, pGame->dwGameFrame + 12, 0, 0);
 		}
 		break;
 	}
@@ -1686,7 +1670,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			D2Act1Quest5Strc* pAct1Quest5 = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
 			if (pAct1Quest5->bCountessKilled && !pAct1Quest5->bDeathMissilesCreated)
 			{
-				EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+				EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 			}
 		}
 		break;
@@ -1709,7 +1693,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 						D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pFoundUnit->dwClassId);
 						if (pObjectsTxtRecord)
 						{
-							EVENT_SetEvent(pQuestData->pGame, pFoundUnit, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+							EVENT_SetEvent(pQuestData->pGame, pFoundUnit, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 						}
 					}
 				}
@@ -1740,7 +1724,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 				--pAct1Quest4->nGoldPilesToDropFromWirtsBody;
 				if (pAct1Quest4->nGoldPilesToDropFromWirtsBody > 0)
 				{
-					EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
+					EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
 				}
 			}
 		}
@@ -1840,7 +1824,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 						pFoundUnit = pFoundUnit->pRoomNext;
 						if (!pFoundUnit)
 						{
-							EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
+							EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
 							return;
 						}
 					}
@@ -1858,10 +1842,12 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 					}
 				}
 			}
-			EVENT_SetEvent(pQuestData->pGame, pUnit, UNITEVENTCALLBACK_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 24, 0, 0);
 		}
 		break;
 	}
+	default:
+		break;
 	}
 }
 
@@ -1892,7 +1878,7 @@ void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(D2ObjInitFnStrc* pOp)
 //D2Game.0x6FC95D10
 void __fastcall QUESTS_SetJadeFigurineBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
@@ -1922,7 +1908,7 @@ void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
@@ -1930,7 +1916,7 @@ void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 
 	D2QuestDataStrc* pQuestData = pQuestChain->pQuestData;
-	if (pQuestData->nQuest != 20 || !pQuestData->bActive)
+	if (pQuestData->nQuestFilter != 20 || !pQuestData->bActive)
 	{
 		return;
 	}
@@ -1989,7 +1975,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 		{
 			D2CoordStrc pCoord = {};
 			UNITS_GetCoords(pPlayer, &pCoord);
-			D2RoomStrc* pRoom = nullptr;
+			D2ActiveRoomStrc* pRoom = nullptr;
 			QUESTS_GetFreePosition(UNITS_GetRoom(pPlayer), &pCoord, 1, 0x3E01, &pRoom, 5);
 			D2GAME_DropItem_6FC52260(pGame, nullptr, pItem, pRoom, pCoord.nX, pCoord.nY);
 			return pItem;
@@ -2432,7 +2418,7 @@ void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArg
 }
 
 //D2Game.0x6FC96940
-void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2RoomStrc** ppRoom, int32_t nRadius)
+void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2ActiveRoomStrc** ppRoom, int32_t nRadius)
 {
 	const uint32_t nCenterX = pCoord->nX - (nSize >> 1);
 	const uint32_t nCenterY = pCoord->nY - (nSize >> 1);
@@ -2449,7 +2435,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 		{
 			const int32_t nY = y + nCenterY;
 
-			D2RoomStrc* pRoom1 = pRoom;
+			D2ActiveRoomStrc* pRoom1 = pRoom;
 			if (nY < drlgCoords.nSubtileY || nY >= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
 			{
 				pRoom1 = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
@@ -2463,7 +2449,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 
 					nX = x + nCenterX;
 
-					D2RoomStrc* pRoom2 = pRoom1;
+					D2ActiveRoomStrc* pRoom2 = pRoom1;
 					if (nX < drlgCoords.nSubtileX || nX /*TODO: was nY instead, but most likely wrong*/ >= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
 					{
 						pRoom2 = D2GAME_GetRoom_6FC52070(pRoom1, nX, nY);
@@ -2492,7 +2478,7 @@ void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, u
 void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pArgs)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pArgs->pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuest, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
 	{
 		return;
 	}
@@ -2627,7 +2613,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FC97020
-int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2RoomStrc** ppRoom)
+int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2ActiveRoomStrc** ppRoom)
 {
 	if (nLevel == LEVEL_DURIELSLAIR)
 	{
@@ -2657,7 +2643,7 @@ int32_t __fastcall QUESTS_SetObjectSelection(D2ObjOperateFnStrc* pOp)
 	else
 	{
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 
 	pObject->dwFlags &= ~UNITFLAG_TARGETABLE;
@@ -2683,7 +2669,7 @@ void __fastcall QUESTS_SendLogUpdate(D2UnitStrc* pUnit, uint8_t nQuestId)
 //D2Game.0x6FC97120
 void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, uint8_t nAct)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 	if (pRoom)
 	{
 		const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -2704,9 +2690,9 @@ void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, ui
 }
 
 //D2Game.0x6FC97190
-D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2RoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster)
+D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2ActiveRoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster)
 {
-	D2RoomStrc* ppRoom = pRoom;
+	D2ActiveRoomStrc* ppRoom = pRoom;
 	D2DrlgCoordsStrc drlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
@@ -2741,7 +2727,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 
 	QUESTS_GetFreePosition(pRoom, &coord, 2, 0x100u, &ppRoom, 6);
 
-	D2RoomStrc* pTargetRoom = ppRoom;
+	D2ActiveRoomStrc* pTargetRoom = ppRoom;
 	int32_t nTargetX = 0;
 	int32_t nTargetY = 0;
 	if (ppRoom)
@@ -2838,7 +2824,7 @@ void __fastcall QUESTS_MonsterSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (DUNGEON_GetLevelIdFromRoom(pRoom) < 108)
 	{
 		ACT3Q5_SpawnCouncil(pGame, pUnit);
@@ -2875,7 +2861,7 @@ int32_t __fastcall QUESTS_LevelWarpCheck(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 //D2Game.0x6FC974B0
 D2UnitStrc* __fastcall QUESTS_SpawnMonster(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pPosition, int32_t nType, int32_t nIndex)
 {
-	D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
+	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
 
 	if (pRoom)
 	{
@@ -2905,6 +2891,8 @@ void __fastcall QUESTS_MapPresetSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ma
 
 	case OBJECT_LARZUK_STANDARD:
 		ACT5Q1_ChangeLarzukMapAI(pGame, pUnit, pMapAI);
+		break;
+	default:
 		break;
 	}
 }

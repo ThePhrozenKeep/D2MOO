@@ -14,6 +14,8 @@ BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 		break;
 	case DLL_THREAD_DETACH:
 		break;
+	default:
+		break;
 	}
 
 	return TRUE;

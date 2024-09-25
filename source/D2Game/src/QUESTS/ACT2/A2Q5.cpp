@@ -115,7 +115,7 @@ void __fastcall ACT2Q5_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -141,7 +141,7 @@ void __fastcall ACT2Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 
 	D2Act2Quest5Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest5Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q5;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q5;
 	pQuestData->pfStatusFilter = nullptr;
 	pQuestData->nInitNo = 2;
 	pQuestData->pfActiveFilter = ACT2Q5_ActiveFilterCallback;
@@ -218,6 +218,7 @@ void __fastcall ACT2Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 	case 427:
 	case 428:
 	case 429:
+	{
 		D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 		if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q5, QFLAG_REWARDPENDING))
 		{
@@ -234,6 +235,9 @@ void __fastcall ACT2Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q5, QFLAG_REWARDPENDING);
 		}
 		QUESTS_NPCActivateSpeeches(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
+		break;
+	}
+	default:
 		break;
 	}
 }
@@ -284,7 +288,7 @@ void __fastcall ACT2Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 int32_t __fastcall ACT2Q5_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -297,7 +301,7 @@ int32_t __fastcall ACT2Q5_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 
 	if (pRoom != pQuestDataEx->pRoom)
 	{
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -353,7 +357,7 @@ int32_t __fastcall ACT2Q5_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_ARCANESANCTUARY)
 	{
 		return 0;
@@ -408,7 +412,7 @@ void __fastcall ACT2Q5_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE))
 	{
 		return;
 	}

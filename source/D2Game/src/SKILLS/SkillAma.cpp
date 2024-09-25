@@ -947,7 +947,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
 
 
     D2SummonArgStrc summonArg = {};
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
@@ -968,7 +968,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
     STATLIST_SetUnitStat(pPet, STAT_LEVEL, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 0);
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
-    EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_MONUMOD, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel) + pGame->dwGameFrame, 0, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_MONUMOD, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel) + pGame->dwGameFrame, 0, 0);
     D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, 21, 0);
     UNITS_SetOverlay(pPet, 171, 0);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pPet, 0, pUnit->dwNodeIndex);
@@ -1003,7 +1003,7 @@ int32_t __fastcall SKILLS_SrvDo016_Valkyrie(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 
     D2SummonArgStrc summonArg = {};
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
@@ -1018,8 +1018,8 @@ int32_t __fastcall SKILLS_SrvDo016_Valkyrie(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel));
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 20, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_AITHINK, pGame->dwGameFrame + 20, 0, 0);
     STATES_ToggleState(pPet, STATE_VALKYRIE, 1);
     UNITS_StoreOwner(pPet, pUnit);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pPet, 0, pUnit->dwNodeIndex);

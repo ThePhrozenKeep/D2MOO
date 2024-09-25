@@ -444,7 +444,7 @@ int32_t __fastcall SKILLS_SrvSt47_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         SKILLS_SetParam4(pSkill, -1);
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -492,7 +492,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         return 0;
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
     if (pUnit->nActionFrame == 2)
     {
@@ -556,7 +556,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         sub_6FCBDE90(pUnit, 0);
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
         PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
-        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_DEFAULT);
+        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_PATH);
         PATH_SetType(pUnit->pDynamicPath, 101); // This is a bug in the original game, this value seems to be used by monmodes but should be converted to PATHTYPE_MON_OTHER_2?
 
         if (pUnit->dwUnitType == UNIT_MONSTER)
@@ -616,7 +616,7 @@ int32_t __fastcall SKILLS_SrvSt48_SwarmMove(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 1;
     }
     
-    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_ASTAR);
     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
     if (PATH_GetNumberOfPathPoints(pUnit->pDynamicPath))
     {
@@ -684,11 +684,11 @@ int32_t __fastcall SKILLS_SrvSt49_Nest_EvilHutSpawner(D2GameStrc* pGame, D2UnitS
     SKILLS_SetParam3(pSkill, nY);
     SKILLS_SetParam4(pSkill, nSpawnMode);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
     COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, 0x100u);
     sub_6FCBDE90(pUnit, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
     return 1;
 }
 
@@ -707,14 +707,14 @@ int32_t __fastcall SKILLS_SrvDo091_Nest_EvilHutSpawner(D2GameStrc* pGame, D2Unit
         return 0;
     }
     
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 1, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
     sub_6FCBDE90(pUnit, 0);
     const int32_t nMonsterId = SKILLS_GetParam1(pSkill);
     const int32_t nX = SKILLS_GetParam2(pSkill);
     const int32_t nY = SKILLS_GetParam3(pSkill);
     const int32_t nAnimMode = SKILLS_GetParam4(pSkill);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom || !nX || !nY)
     {
         return 0;
@@ -1009,8 +1009,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1026,8 +1026,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1042,9 +1042,9 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
             nAnimLength = 1;
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
     else
     {
@@ -1057,8 +1057,8 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
 
     return 1;
@@ -1136,8 +1136,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1153,8 +1153,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
                 nAnimLength = pMonStats2TxtRecord->nInfernoLen;
             }
         }
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
         return 0;
     }
 
@@ -1169,9 +1169,9 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
             nAnimLength = 1;
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
     else
     {
@@ -1185,8 +1185,8 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
             }
         }
 
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ENDANIM, pGame->dwGameFrame + nAnimLength, 0, 0);
     }
 
     return 1;
@@ -1252,7 +1252,7 @@ int32_t __fastcall SKILLS_SrvDo096_ZakarumHeal_Bestow(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FD08850
 int32_t __fastcall SKILLS_ResurrectUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;
@@ -1314,8 +1314,8 @@ int32_t __fastcall SKILLS_SrvDo097_Resurrect(D2GameStrc* pGame, D2UnitStrc* pUni
     const int32_t nX = CLIENTS_GetUnitX(pTarget);
     const int32_t nY = CLIENTS_GetUnitY(pTarget);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
-    if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? 0x3C01u : 0x1C09u))
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
+    if (pRoom && !COLLISION_CheckAnyCollisionWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pTarget), pTarget->dwUnitType != UNIT_PLAYER ? COLLIDE_MASK_MONSTER_PATH : 0x1C09u))
     {
         PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
         SKILLS_ResurrectUnit(pGame, pTarget);
@@ -1346,7 +1346,7 @@ int32_t __fastcall SKILLS_SrvDo098_MonTeleport(D2GameStrc* pGame, D2UnitStrc* pU
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
@@ -1655,7 +1655,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
         }
 
         PATH_SetVelocity(pUnit->pDynamicPath, MONSTERUNIQUE_CalculatePercentage(nBaseVelocity, STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0), 100), __FILE__, __LINE__);
-        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_FOLLOW_WALL);
+        PATH_SetType(pUnit->pDynamicPath, PATHTYPE_ASTAR);
         D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
         SKILLS_SetFlags(pSkill, 1);
         return 1;
@@ -1737,7 +1737,7 @@ int32_t __fastcall SKILLS_SrvDo104_DiabPrison(D2GameStrc* pGame, D2UnitStrc* pUn
         pTarget = pObject;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pTarget);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
     if (pRoom && !DUNGEON_IsRoomInTown(pRoom))
     {
         sub_6FC6A810(pGame, pRoom, 0, 0, pTarget, nSummonId, 0);
@@ -1999,7 +1999,7 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
         for (int32_t i = nCurrent + 1; i < nMax; ++i)
         {
             int32_t nEvent = 0;
-            DATATBLS_GetSequenceEvent((D2MonSeqTxt*)pUnit->pAnimSeq, nCurrent << 8, &nEvent);
+            DATATBLS_GetSequenceEvent((D2AnimSeqTxt*)pUnit->pAnimSeq, nCurrent << 8, &nEvent);
             if (nEvent)
             {
                 return nEvent;
@@ -2391,7 +2391,7 @@ int32_t __fastcall SKILLS_SrvDo111_FetishAura(D2GameStrc* pGame, D2UnitStrc* pUn
     for (int32_t i = 0; i < pUnitFindData->nIndex; ++i)
     {
         D2UnitStrc* pFoundUnit = pUnitFindData->pUnitsArray[i];
-        if (!sub_6FCBD900(pGame, pUnit, pFoundUnit) && pFoundUnit 
+        if (!sub_6FCBD900(pGame, pUnit, pFoundUnit) && pFoundUnit
             && (pFoundUnit->dwClassId >= MONSTER_FETISHBLOW1 && pFoundUnit->dwClassId <= MONSTER_FETISHBLOW5 || pFoundUnit->dwClassId >= MONSTER_FETISH1 && pFoundUnit->dwClassId <= MONSTER_FETISH5)
             && sub_6FD0B2B0(pGame, pUnit, pFoundUnit))
         {

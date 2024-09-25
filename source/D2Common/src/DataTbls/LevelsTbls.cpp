@@ -78,7 +78,7 @@ D2SeedStrc* gpAutomapSeed = &sgptDataTables->pAutomapSeed;
 LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
 //D2Common.0x6FD5EAE0
-void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadLevelsTxt(HD2ARCHIVE hArchive)
 {
 	int nMonsterCounter = 0;
 
@@ -228,7 +228,7 @@ void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLevelsTxt = (D2LevelsTxt*)DATATBLS_CompileTxt(pMemPool, "levels", pTbl, &sgptDataTables->nLevelsTxtRecordCount, sizeof(D2LevelsTxt));
+	sgptDataTables->pLevelsTxt = (D2LevelsTxt*)DATATBLS_CompileTxt(hArchive, "levels", pTbl, &sgptDataTables->nLevelsTxtRecordCount, sizeof(D2LevelsTxt));
 
 #define MAX_LEVEL_ID 1024
 	D2_ASSERT(sgptDataTables->nLevelsTxtRecordCount < MAX_LEVEL_ID);
@@ -247,38 +247,38 @@ void __fastcall DATATBLS_LoadLevelsTxt(void* pMemPool)
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wNormalMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumNormMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumNormalMonsters = nMonsterCounter;
 
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wNMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wNightmareHellMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumNMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumNightmareHellMonsters = nMonsterCounter;
 
 		nMonsterCounter = 0;
 		do
 		{
-			if (sgptDataTables->pLevelsTxt[i].wUMon[nMonsterCounter] < 0)
+			if (sgptDataTables->pLevelsTxt[i].wUniqueMonsters[nMonsterCounter] < 0)
 			{
 				break;
 			}
 			++nMonsterCounter;
 		}
 		while (nMonsterCounter < 25);
-		sgptDataTables->pLevelsTxt[i].nNumUMon = nMonsterCounter;
+		sgptDataTables->pLevelsTxt[i].nNumUniqueMonsters = nMonsterCounter;
 	}
 }
 
@@ -368,7 +368,7 @@ int* __fastcall DATATBLS_GetPortalLevels(int* pnPortalLevels)
 }
 
 //D2Common.0x6FD60570
-void __fastcall DATATBLS_LoadLevelDefsBin(void* pMemPool)
+void __fastcall DATATBLS_LoadLevelDefsBin(HD2ARCHIVE hArchive)
 {
 	int nPortalIndex = 0;
 
@@ -419,7 +419,7 @@ void __fastcall DATATBLS_LoadLevelDefsBin(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLevelDefBin = (D2LevelDefBin*)DATATBLS_CompileTxt(pMemPool, "leveldefs", pTbl, 0, sizeof(D2LevelDefBin));
+	sgptDataTables->pLevelDefBin = (D2LevelDefBin*)DATATBLS_CompileTxt(hArchive, "leveldefs", pTbl, 0, sizeof(D2LevelDefBin));
 
 	sgptDataTables->nPortalLevels = 0;
 	sgptDataTables->pPortalLevels = NULL;
@@ -475,7 +475,7 @@ D2LevelDefBin* __fastcall DATATBLS_GetLevelDefRecord(int nLevelId)
 }
 
 //D2Common.0x6FD60DC0
-void __fastcall DATATBLS_LoadLevelTypesTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadLevelTypesTxt(HD2ARCHIVE hArchive)
 {	
 	int nLen = 0;
 	char szFile[60] = {};
@@ -519,7 +519,7 @@ void __fastcall DATATBLS_LoadLevelTypesTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLvlTypesTxt = (D2LvlTypesTxt*)DATATBLS_CompileTxt(pMemPool, "lvltypes", pTbl, &sgptDataTables->nLvlTypesTxtRecordCount, sizeof(D2LvlTypesTxt));
+	sgptDataTables->pLvlTypesTxt = (D2LvlTypesTxt*)DATATBLS_CompileTxt(hArchive, "lvltypes", pTbl, &sgptDataTables->nLvlTypesTxtRecordCount, sizeof(D2LvlTypesTxt));
 
 	for (int i = 0; i < sgptDataTables->nLvlTypesTxtRecordCount; ++i)
 	{
@@ -587,7 +587,7 @@ void __stdcall DATATBLS_GetFileNameFromLevelTypeAndFileId(int nLevelType, int nF
 }
 
 //D2Common.0x6FD61570
-void __fastcall DATATBLS_LoadLvlPrestTxt(void* pMemPool, int a2)
+void __fastcall DATATBLS_LoadLvlPrestTxt(HD2ARCHIVE hArchive, int a2)
 {
 	int nLength = 0;
 
@@ -621,7 +621,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(void* pMemPool, int a2)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLvlPrestTxt = (D2LvlPrestTxt*)DATATBLS_CompileTxt(pMemPool, "lvlprest", pTbl, &sgptDataTables->nLvlPrestTxtRecordCount, sizeof(D2LvlPrestTxt));
+	sgptDataTables->pLvlPrestTxt = (D2LvlPrestTxt*)DATATBLS_CompileTxt(hArchive, "lvlprest", pTbl, &sgptDataTables->nLvlPrestTxtRecordCount, sizeof(D2LvlPrestTxt));
 
 	if (a2)
 	{
@@ -714,7 +714,7 @@ D2LvlPrestTxt* __fastcall DATATBLS_GetLvlPrestTxtRecordFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD61BC0
-void __fastcall DATATBLS_LoadLvlWarpTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadLvlWarpTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -733,7 +733,7 @@ void __fastcall DATATBLS_LoadLvlWarpTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLvlWarpTxt = (D2LvlWarpTxt*)DATATBLS_CompileTxt(pMemPool, "lvlwarp", pTbl, &sgptDataTables->nLvlWarpTxtRecordCount, sizeof(D2LvlWarpTxt));
+	sgptDataTables->pLvlWarpTxt = (D2LvlWarpTxt*)DATATBLS_CompileTxt(hArchive, "lvlwarp", pTbl, &sgptDataTables->nLvlWarpTxtRecordCount, sizeof(D2LvlWarpTxt));
 }
 
 //D2Common.0x6FD61DD0
@@ -763,7 +763,7 @@ D2LvlWarpTxt* __fastcall DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(int
 }
 
 //D2Common.0x6FD61E60
-void __fastcall DATATBLS_LoadLvlMazeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadLvlMazeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -777,7 +777,7 @@ void __fastcall DATATBLS_LoadLvlMazeTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLvlMazeTxt = (D2LvlMazeTxt*)DATATBLS_CompileTxt(pMemPool, "lvlmaze", pTbl, &sgptDataTables->nLvlMazeTxtRecordCount, sizeof(D2LvlMazeTxt));
+	sgptDataTables->pLvlMazeTxt = (D2LvlMazeTxt*)DATATBLS_CompileTxt(hArchive, "lvlmaze", pTbl, &sgptDataTables->nLvlMazeTxtRecordCount, sizeof(D2LvlMazeTxt));
 }
 
 //D2Common.0x6FD61F90
@@ -803,7 +803,7 @@ D2LvlMazeTxt* __fastcall DATATBLS_GetLvlMazeTxtRecordFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD62020
-void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
+void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 {
 	int nLength = 0;
 	uint32_t dwType = 0;
@@ -837,7 +837,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(void* pMemPool, int a2, int a3)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pLvlSubTxt = (D2LvlSubTxt*)DATATBLS_CompileTxt(pMemPool, "lvlsub", pTbl, &sgptDataTables->nLvlSubTxtRecordCount, sizeof(D2LvlSubTxt));
+	sgptDataTables->pLvlSubTxt = (D2LvlSubTxt*)DATATBLS_CompileTxt(hArchive, "lvlsub", pTbl, &sgptDataTables->nLvlSubTxtRecordCount, sizeof(D2LvlSubTxt));
 
 	if (sgptDataTables->nLvlSubTxtRecordCount > 0)
 	{
@@ -1012,7 +1012,7 @@ void __fastcall DATATBLS_FreeGlobalTileLibraryHash()
 }
 
 //D2Common.0x6FD628C0
-void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadAutomapTxt(HD2ARCHIVE hArchive)
 {
 	D2AutomapShortStrc* pAutomap = NULL;
 	D2AutomapTxt* pAutomapTxt = NULL;
@@ -1039,7 +1039,7 @@ void __fastcall DATATBLS_LoadAutomapTxt(void* pMemPool)
 	SEED_InitSeed(gpAutomapSeed);
 	SEED_InitLowSeed(gpAutomapSeed, 0);
 
-	pAutomapTxt = (D2AutomapTxt*)DATATBLS_CompileTxt(pMemPool, "automap", pTbl, &nAutomapTxtRecordCount, sizeof(D2AutomapTxt));
+	pAutomapTxt = (D2AutomapTxt*)DATATBLS_CompileTxt(hArchive, "automap", pTbl, &nAutomapTxtRecordCount, sizeof(D2AutomapTxt));
 
 	pAutomap = (D2AutomapShortStrc*)D2_CALLOC_POOL(nullptr, sizeof(D2AutomapShortStrc) * nAutomapTxtRecordCount);
 

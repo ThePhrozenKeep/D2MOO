@@ -15,8 +15,8 @@ enum D2C_PlayerModes
 	PLRMODE_WALK,		// WL
 	PLRMODE_RUN,		// RN
 	PLRMODE_GETHIT,		// GH
-	PLRMODE_TNEUTRAL,	// TN
-	PLRMODE_TWALK,		// TW
+	PLRMODE_TOWNNEUTRAL,// TN
+	PLRMODE_TOWNWALK,	// TW
 	PLRMODE_ATTACK1,	// A1
 	PLRMODE_ATTACK2,	// A2
 	PLRMODE_BLOCK,		// BL
@@ -68,7 +68,9 @@ struct D2PlayerTradeStrc
 	int32_t nSaveLength;						//0x00
 	uint8_t* pSaveData;							//0x04
 	D2ItemTradeStrc* pItemTrade;				//0x08
-	int32_t unk0x0C[3];							//0x0C
+	int32_t nGoldInTrade;						//0x0C
+	int32_t nGoldInTradeOtherPlayer;			//0x10
+	int32_t nNextUpdateTick;					//0x14
 };
 
 struct D2PlrIntroStrc

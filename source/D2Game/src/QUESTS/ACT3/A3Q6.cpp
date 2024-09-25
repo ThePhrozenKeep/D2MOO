@@ -130,7 +130,7 @@ void __fastcall ACT3Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -180,7 +180,7 @@ void __fastcall OBJECTS_InitFunction45_MephistoBridge(D2ObjInitFnStrc* pOp)
 
 	if (pQuestDataEx->nMephistoBridgeObjectMode != OBJMODE_OPENED)
 	{
-		EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 20, 0, 0);
+		EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 20, 0, 0);
 	}
 }
 
@@ -229,7 +229,7 @@ void __fastcall ACT3Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT3Q6_Callback13_PlayerStartedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q6_Callback10_PlayerLeavesGame;
 	pQuestData->pfSeqFilter = ACT3Q6_SeqCallback;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q6;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q6;
 	pQuestData->nInitNo = 6;
 	pQuestData->pfActiveFilter = ACT3Q6_ActiveFilterCallback;
 
@@ -254,7 +254,7 @@ void __fastcall ACT3Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		nNpcId = pQuestArg->pTarget->dwClassId;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuest, QFLAG_CUSTOM7))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuestFilter, QFLAG_CUSTOM7))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 5);
 		return;
@@ -291,7 +291,7 @@ void __fastcall ACT3Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		if (pQuestData->fState > 1 && pQuestData->fState <= 3)
 		{
 			D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_CUSTOM7) != 1)
+			if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_CUSTOM7) != 1)
 			{
 				if (pQuestData->fLastState < 3)
 				{
@@ -424,6 +424,8 @@ int32_t __fastcall ACT3Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q6, QFLAG_CUSTOM5);
 		}
 		return 0;
+	default:
+		break;
 	}
 
 	return 0;
@@ -560,7 +562,7 @@ void __fastcall ACT3Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		{
 			UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 			D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
-			EVENT_SetEvent(pQuestData->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+			EVENT_SetEvent(pQuestData->pGame, pObject, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 		}
 	}
 	pQuestDataEx->nHellGatePortalObjectMode = OBJMODE_OPENED;
@@ -584,7 +586,7 @@ void __fastcall ACT3Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 int32_t __fastcall ACT3Q6_UnitIterate_UpdateQuestStateAfterMonsterKill(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q6, QFLAG_REWARDGRANTED) || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_DURANCEOFHATELEV3)
 	{
 		return 0;

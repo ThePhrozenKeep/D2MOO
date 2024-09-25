@@ -2,12 +2,6 @@
 #include <D2Dll.h>
 #include "StormHandles.h"
 
-#ifdef STORM_IMPL
-#define STORM_DLL_DECL // We use .def files, not dllexport
-#else
-#define STORM_DLL_DECL __declspec( dllimport )
-#endif
-
 // Version 1.10f:
 // List of Storm.dll exports (base address 6ffb0000)
 // For each of the other .DLLs, here are the number of imports of the current module exports:
@@ -981,7 +975,7 @@ D2FUNC_DLL_NP(STORM, SStrHash64, int, __stdcall, (int a1, int a2, int a3, int a4
 D2FUNC_DLL_NP(STORM, SStrVPrintf, int, __cdecl, (char *DstBuf, size_t MaxCount, char *Format, va_list ArgList), 0x2a610);  //Storm.#581
 
 /// Imported by ['D2Launch.dll', 'D2Multi.dll']
-D2FUNC_DLL_NP(STORM, SDrawSetClientRect, void, __stdcall, (LPRECT lpRect), 0x2b1d0);  //Storm.#582
+D2FUNC_DLL_NP(STORM, SHashString, uint32_t, __stdcall, (const char* szStr), 0x2b1d0);  //Storm.#582
 
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SBigAdd, int, __stdcall, (void *buffer, const void *buffer2, const void *buffer3), 0x10b0);  //Storm.#601

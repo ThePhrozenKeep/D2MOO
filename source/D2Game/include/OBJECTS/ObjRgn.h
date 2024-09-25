@@ -15,7 +15,7 @@ D2ObjectControlStrc* __fastcall OBJRGN_GetObjectControlFromGame(D2GameStrc* pGam
 //D2Game.0x6FC7A6D0
 D2ShrineDataStrc* __fastcall OBJRGN_GetShrineDataFromGame(D2GameStrc* pGame);
 //D2Game.0x6FC7A6E0
-void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom);
+void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC7A780
 void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp);
 //D2Game.0x6FC7A860

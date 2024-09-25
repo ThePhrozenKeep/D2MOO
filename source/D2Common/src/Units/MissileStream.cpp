@@ -44,7 +44,7 @@ void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int n
 {
 	D2PathPointStrc* ppPathPoints = NULL;
 	D2UnitStrc* pTargetUnit = NULL;
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	int nPathPoints = 0;
 
 	PATH_SetType(pUnit->pDynamicPath, PATHTYPE_MISSILE_STREAM);

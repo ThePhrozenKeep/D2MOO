@@ -2659,46 +2659,29 @@ int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 //D2Common.0x6FDB29D0
 int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, int nSrcDamage)
 {
-	int nPercentage = 0;
+	int32_t statId = 0;
 
 	switch (nElemType)
 	{
 	case ELEMTYPE_FIRE:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_FIRE_MASTERY;
+		break;
 	case ELEMTYPE_LTNG:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_LTNG_MASTERY;
+		break;
 	case ELEMTYPE_COLD:
 	case ELEMTYPE_FREEZE:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_COLD_MASTERY;
+		break;
 	case ELEMTYPE_POIS:
-		nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_POIS_MASTERY, 0);
-		if (!nPercentage)
-		{
-			return 0;
-		}
-		
-		return nSrcDamage * nPercentage / 100;
+		statId = STAT_PASSIVE_POIS_MASTERY;
+		break;
 	default:
 		return 0;
 	}
+
+	int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, statId, 0);
+	return DATATBLS_ApplyRatio(nSrcDamage, nPercentage, 100);
 }
 
 //D2Common.0x6FDB2B00 (#11005)
@@ -3187,7 +3170,7 @@ int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, i
 }
 
 //D2Common.0x6FDB3910 (#11025)
-BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2RoomStrc* pRoom, int a6)
+BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -3201,7 +3184,7 @@ BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2RoomStrc* pR
 }
 
 //D2Common.0x6FDB3960 (#11026)
-BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4)
+BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, uint16_t nColMask)
 {
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -3211,7 +3194,7 @@ BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, int a4)
 	
 	UNITS_GetCoords(pUnit, &pCoords2);
 
-	return COLLISION_RayTrace(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, a4) == 0;
+	return COLLISION_RayTrace(UNITS_GetRoom(pUnit), &pCoords1, &pCoords2, nColMask) == 0;
 }
 
 //D2Common.0x6FDB3A10 (#11027)
@@ -3290,7 +3273,7 @@ int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nS
 //D2Common.0x6FDB3CB0 (#11037)
 BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY)
 {
-	D2RoomStrc* pRoom = NULL;
+	D2ActiveRoomStrc* pRoom = NULL;
 	int nDivisor = 0;
 	D2CoordStrc pCoords1 = {};
 	D2CoordStrc pCoords2 = {};
@@ -3323,19 +3306,19 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 		pRoom = UNITS_GetRoom(pUnit1);
 		D2_ASSERT(pRoom);
 
-		if (COLLISION_CheckAnyCollisionWithPattern(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_WALKING_UNIT))
+		if (COLLISION_CheckAnyCollisionWithPattern(pRoom, pCoord.nX, pCoord.nY, PATH_GetUnitCollisionPattern(pUnit1), COLLIDE_MASK_PLAYER_PATH))
 		{
 			pCoord.nX = pCoords2.nX;
 			pCoord.nY = pCoords2.nY;
 
-			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), COLLIDE_MASK_WALKING_UNIT, 0);
+			pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pUnit1), COLLIDE_MASK_PLAYER_PATH, 0);
 			if (!pRoom)
 			{
 				return FALSE;
 			}
 		}
 		
-		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_BARRIER))
+		if (!COLLISION_RayTrace(pRoom, &pCoords1, &pCoord, COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER))
 		{
 			*pX = pCoord.nX;
 			*pY = pCoord.nY;

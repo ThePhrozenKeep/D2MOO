@@ -2,11 +2,26 @@
 
 #include <Units/Units.h>
 #include <UNIT/SUnitDmg.h>
+#include <GAME/Event.h>
 
 
 #pragma pack(push, 1)
 struct D2AuraCallbackStrc;
 struct D2MissilesTxt;
+
+enum D2C_MissileModes
+{
+	MISSMODE_NOCOLLIDE,
+	MISSMODE_PLAYERKILL,
+	MISSMODE_MONSTERKILL,
+	MISSMODE_ALLKILL,
+	MISSMODE_NOKILL,
+	MISSMODE_SAFE,
+	MISSMODE_BARRIERCOLLIDE,
+	MISSMODE_MISSILEKILL,
+	MISSMODE_WALLKILL,
+	MISSMODE_COUNT,
+};
 
 struct D2MissileUnitFindArgStrc
 {
@@ -283,4 +298,4 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 //D2Game.0x6FC60080
 void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 //D2Game.0x6FC60090
-void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnused);
+void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType);

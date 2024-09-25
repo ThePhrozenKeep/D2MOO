@@ -3,6 +3,7 @@
 #include "CommonDefinitions.h"
 #include <D2Seed.h>
 #include "D2DrlgDrlgVer.h"
+#include <Archive.h>
 
 #pragma pack(1)
 struct D2TileLibraryEntryStrc; // From D2CMP
@@ -16,7 +17,7 @@ struct D2DrlgTileGridStrc;
 struct D2DrlgTileDataStrc;
 struct D2RoomTileStrc;
 struct D2DrlgLogicalRoomInfoStrc;
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2DrlgRoomTilesStrc;
 struct D2DrlgActStrc;
 struct D2DrlgWarpStrc;
@@ -88,41 +89,41 @@ enum D2DrlgRoomStatus : uint8_t
 	ROOMSTATUS_COUNT,
 };
 
-enum D2RoomExFlags
+enum D2DrlgRoomFlags
 {
-	ROOMEXFLAG_INACTIVE = 0x00000002,
-	ROOMEXFLAG_HAS_WARP_0 = 0x00000010,
-	ROOMEXFLAG_HAS_WARP_1 = 0x00000020,
-	ROOMEXFLAG_HAS_WARP_2 = 0x00000040,
-	ROOMEXFLAG_HAS_WARP_3 = 0x00000080,
-	ROOMEXFLAG_HAS_WARP_4 = 0x00000100,
-	ROOMEXFLAG_HAS_WARP_5 = 0x00000200,
-	ROOMEXFLAG_HAS_WARP_6 = 0x00000400,
-	ROOMEXFLAG_HAS_WARP_7 = 0x00000800,
-	ROOMEXFLAG_SUBSHRINE_ROW1 = 0x00001000,
-	ROOMEXFLAG_SUBSHRINE_ROW2 = 0x00002000,
-	ROOMEXFLAG_SUBSHRINE_ROW3 = 0x00004000,
-	ROOMEXFLAG_SUBSHRINE_ROW4 = 0x00008000,
-	ROOMEXFLAG_HAS_WAYPOINT = 0x00010000,			//outdoors with subtheme and subwaypoint
-	ROOMEXFLAG_HAS_WAYPOINT_SMALL = 0x00020000,		//waypoint small
-	ROOMEXFLAG_AUTOMAP_REVEAL = 0x00040000,
-	ROOMEXFLAG_NO_LOS_DRAW = 0x00080000,
-	ROOMEXFLAG_HAS_ROOM = 0x00100000,				//an active pRoom structure is attached to this RoomEx
-	ROOMEXFLAG_ROOM_FREED_SRV = 0x00200000,			//set after freeing the pRoom
-	ROOMEXFLAG_HASPORTAL = 0x00400000,				//prevents room deletion
-	ROOMEXFLAG_POPULATION_ZERO = 0x00800000,		//set for towns, also set if a ds1 has populate=0 // nospawn region
-	ROOMEXFLAG_TILELIB_LOADED = 0x01000000,
-	ROOMEXFLAG_PRESET_UNITS_ADDED = 0x02000000,		//refers to DRLGMap or DRLGFile; adds the hardcoded preset units
-	ROOMEXFLAG_PRESET_UNITS_SPAWNED = 0x04000000,	//set after RoomEx preset units have been spawned / prevents respawning them on room reactivation
-	ROOMEXFLAG_ANIMATED_FLOOR = 0x08000000,			//animated floors (river of flame, hell act5)
+	DRLGROOMFLAG_INACTIVE = 0x00000002,
+	DRLGROOMFLAG_HAS_WARP_0 = 0x00000010,
+	DRLGROOMFLAG_HAS_WARP_1 = 0x00000020,
+	DRLGROOMFLAG_HAS_WARP_2 = 0x00000040,
+	DRLGROOMFLAG_HAS_WARP_3 = 0x00000080,
+	DRLGROOMFLAG_HAS_WARP_4 = 0x00000100,
+	DRLGROOMFLAG_HAS_WARP_5 = 0x00000200,
+	DRLGROOMFLAG_HAS_WARP_6 = 0x00000400,
+	DRLGROOMFLAG_HAS_WARP_7 = 0x00000800,
+	DRLGROOMFLAG_SUBSHRINE_ROW1 = 0x00001000,
+	DRLGROOMFLAG_SUBSHRINE_ROW2 = 0x00002000,
+	DRLGROOMFLAG_SUBSHRINE_ROW3 = 0x00004000,
+	DRLGROOMFLAG_SUBSHRINE_ROW4 = 0x00008000,
+	DRLGROOMFLAG_HAS_WAYPOINT = 0x00010000,				//outdoors with subtheme and subwaypoint
+	DRLGROOMFLAG_HAS_WAYPOINT_SMALL = 0x00020000,		//waypoint small
+	DRLGROOMFLAG_AUTOMAP_REVEAL = 0x00040000,
+	DRLGROOMFLAG_NO_LOS_DRAW = 0x00080000,
+	DRLGROOMFLAG_HAS_ROOM = 0x00100000,					//an active pRoom structure is attached to this RoomEx
+	DRLGROOMFLAG_ROOM_FREED_SRV = 0x00200000,			//set after freeing the pRoom
+	DRLGROOMFLAG_HASPORTAL = 0x00400000,				//prevents room deletion
+	DRLGROOMFLAG_POPULATION_ZERO = 0x00800000,			//set for towns, also set if a ds1 has populate=0 // nospawn region
+	DRLGROOMFLAG_TILELIB_LOADED = 0x01000000,
+	DRLGROOMFLAG_PRESET_UNITS_ADDED = 0x02000000,		//refers to DRLGMap or DRLGFile; adds the hardcoded preset units
+	DRLGROOMFLAG_PRESET_UNITS_SPAWNED = 0x04000000,		//set after RoomEx preset units have been spawned / prevents respawning them on room reactivation
+	DRLGROOMFLAG_ANIMATED_FLOOR = 0x08000000,			//animated floors (river of flame, hell act5)
 
-	ROOMEXFLAG_HAS_WARP_MASK = ROOMEXFLAG_HAS_WARP_0 | ROOMEXFLAG_HAS_WARP_1 | ROOMEXFLAG_HAS_WARP_2 | ROOMEXFLAG_HAS_WARP_3 | ROOMEXFLAG_HAS_WARP_4 | ROOMEXFLAG_HAS_WARP_5 | ROOMEXFLAG_HAS_WARP_6 | ROOMEXFLAG_HAS_WARP_7,
-	ROOMEXFLAG_SUBSHRINE_ROWS_MASK = ROOMEXFLAG_SUBSHRINE_ROW1 | ROOMEXFLAG_SUBSHRINE_ROW2 | ROOMEXFLAG_SUBSHRINE_ROW3 | ROOMEXFLAG_SUBSHRINE_ROW4,
-	ROOMEXFLAG_HAS_WAYPOINT_MASK = ROOMEXFLAG_HAS_WAYPOINT | ROOMEXFLAG_HAS_WAYPOINT_SMALL,
+	DRLGROOMFLAG_HAS_WARP_MASK = DRLGROOMFLAG_HAS_WARP_0 | DRLGROOMFLAG_HAS_WARP_1 | DRLGROOMFLAG_HAS_WARP_2 | DRLGROOMFLAG_HAS_WARP_3 | DRLGROOMFLAG_HAS_WARP_4 | DRLGROOMFLAG_HAS_WARP_5 | DRLGROOMFLAG_HAS_WARP_6 | DRLGROOMFLAG_HAS_WARP_7,
+	DRLGROOMFLAG_SUBSHRINE_ROWS_MASK = DRLGROOMFLAG_SUBSHRINE_ROW1 | DRLGROOMFLAG_SUBSHRINE_ROW2 | DRLGROOMFLAG_SUBSHRINE_ROW3 | DRLGROOMFLAG_SUBSHRINE_ROW4,
+	DRLGROOMFLAG_HAS_WAYPOINT_MASK = DRLGROOMFLAG_HAS_WAYPOINT | DRLGROOMFLAG_HAS_WAYPOINT_SMALL,
 
-	ROOMEXFLAG_HAS_WARP_FIRST_BIT = 4,
-	ROOMEXFLAG_SUBSHRINE_ROWS_FIRST_BIT = 12,
-	ROOMEXFLAG_HAS_WAYPOINT_FIRST_BIT = 16,
+	DRLGROOMFLAG_HAS_WARP_FIRST_BIT = 4,
+	DRLGROOMFLAG_SUBSHRINE_ROWS_FIRST_BIT = 12,
+	DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT = 16,
 };
 
 enum D2DrlgLevelFlags
@@ -166,7 +167,7 @@ struct D2DrlgCoordsStrc
 	int32_t nTileHeight;			//0x1C
 };
 
-struct D2RoomExStrc
+struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
 {
 	D2DrlgLevelStrc* pLevel;					//0x00
 	union
@@ -180,7 +181,7 @@ struct D2RoomExStrc
 		};
 		D2DrlgCoordStrc pDrlgCoord;				//0x04
 	};
-	uint32_t dwFlags;							//0x14 D2RoomExFlags
+	uint32_t dwFlags;							//0x14 D2DrlgRoomFlags
 	uint32_t dwOtherFlags;						//0x18
 	int32_t nType;								//0x1C
 	union
@@ -194,9 +195,9 @@ struct D2RoomExStrc
 	uint8_t fRoomStatus;						//0xAC D2DrlgRoomStatus
 	uint8_t unk0xAD;							//0xAD
 	uint16_t wRoomsInList[ROOMSTATUS_COUNT + 1];//0xAE
-	D2RoomExStrc* pStatusNext;					//0xB8
-	D2RoomExStrc* pStatusPrev;					//0xBC
-	D2RoomExStrc** ppRoomsNear;					//0xC0 // names pptVisibleRooms in the original game
+	D2DrlgRoomStrc* pStatusNext;				//0xB8
+	D2DrlgRoomStrc* pStatusPrev;				//0xBC
+	D2DrlgRoomStrc** ppRoomsNear;				//0xC0 // names pptVisibleRooms in the original game
 	int32_t nRoomsNear;							//0xC4
 	D2RoomTileStrc* pRoomTiles;					//0xC8
 	D2PresetUnitStrc* pPresetUnits;				//0xCC
@@ -204,11 +205,11 @@ struct D2RoomExStrc
 	D2SeedStrc pSeed;							//0xD4
 	uint32_t dwInitSeed;						//0xDC
 	D2DrlgLogicalRoomInfoStrc* pLogicalRoomInfo;//0xE0 aka pCoordList (in other RE sources) or pRoomCoords (Mentor's notes). This seems to be the official name.
-	D2RoomStrc* pRoom;							//0xE4
-	D2RoomExStrc* pRoomExNext;					//0xE8
+	D2ActiveRoomStrc* pRoom;					//0xE4
+	D2DrlgRoomStrc* pDrlgRoomNext;				//0xE8
 };
 
-typedef int32_t(__stdcall* ROOMCALLBACKFN)(D2RoomStrc*, void*);
+typedef int32_t(__stdcall* ROOMCALLBACKFN)(D2ActiveRoomStrc*, void*);
 
 struct D2DrlgDeleteStrc
 {
@@ -217,16 +218,16 @@ struct D2DrlgDeleteStrc
 	D2DrlgDeleteStrc* pNext;					//0x08
 };
 
-struct D2RoomStrc
+struct D2ActiveRoomStrc // Used to be called D2RoomStrc
 {
 	D2DrlgCoordsStrc tCoords;				//0x00
 	D2DrlgRoomTilesStrc* pRoomTiles;		//0x20
-	D2RoomStrc** ppRoomList;				//0x24
+	D2ActiveRoomStrc** ppRoomList;			//0x24
 	int32_t nNumRooms;						//0x28
 	D2UnitStrc* pUnitFirst;					//0x2C
 	D2UnitStrc* pUnitUpdate;				//0x30
 	D2RoomCollisionGridStrc* pCollisionGrid;//0x34
-	D2RoomExStrc* pRoomEx;					//0x38
+	D2DrlgRoomStrc* pDrlgRoom;				//0x38
 	D2SeedStrc pSeed;						//0x3C
 	D2DrlgDeleteStrc* pDrlgDelete;			//0x44
 	uint32_t dwFlags;						//0x48
@@ -240,12 +241,12 @@ struct D2RoomStrc
 	uint8_t pad0x65[3];						//0x65
 	D2UnitGUID nLastDeadGUIDs[4];			//0x68
 	D2DrlgActStrc* pAct;					//0x78
-	D2RoomStrc* pRoomNext;					//0x7C
+	D2ActiveRoomStrc* pRoomNext;			//0x7C
 };
 
 struct D2RoomTileStrc
 {
-	D2RoomExStrc* pRoomEx;					//0x00
+	D2DrlgRoomStrc* pDrlgRoom;				//0x00
 	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
 	BOOL bEnabled;							//0x08
 	D2DrlgTileDataStrc* unk0x0C;			//0x0C
@@ -253,20 +254,8 @@ struct D2RoomTileStrc
 	D2RoomTileStrc* pNext;					//0x14
 };
 
-typedef void(__stdcall* AUTOMAPFN)(D2RoomStrc*);
+typedef void(__stdcall* AUTOMAPFN)(D2ActiveRoomStrc*);
 typedef void(__stdcall* TOWNAUTOMAPFN)(int32_t, int32_t, int32_t, int32_t);
-
-//struct D2RoomCoordStrc
-//{
-//	int32_t nSubtileX;							//0x00
-//	int32_t nSubtileY;							//0x04
-//	int32_t nSubtileWidth;						//0x08
-//	int32_t nSubtileHeight;						//0x0C
-//	int32_t nTileXPos;							//0x10
-//	int32_t nTileYPos;							//0x14
-//	int32_t nTileWidth;							//0x18
-//	int32_t nTileHeight;						//0x1C
-//};
 
 struct D2RoomCoordListStrc
 {
@@ -281,7 +270,7 @@ struct D2DrlgStrc
 {
 	D2DrlgLevelStrc* pLevel;				//0x00 Latest added level
 	void* pMempool;							//0x04
-	void* pDS1MemPool;						//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
+	HD2ARCHIVE hArchive;					//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
 	D2DrlgActStrc* pAct;					//0x0C
 	uint8_t nAct;							//0x10
 	uint8_t padding0x11[3];					//0x11
@@ -289,8 +278,8 @@ struct D2DrlgStrc
 	uint32_t dwStartSeed;					//0x1C
 	uint32_t dwGameLowSeed;					//0x20
 	uint32_t dwFlags;						//0x24 D2DrlgFlags
-	D2RoomExStrc tStatusRoomsLists[ROOMSTATUS_COUNT];		//0x28
-	D2RoomExStrc* pRoomEx;					//0x3D8
+	D2DrlgRoomStrc tStatusRoomsLists[ROOMSTATUS_COUNT];	//0x28
+	D2DrlgRoomStrc* pDrlgRoom;				//0x3D8
 	uint8_t nRoomsInitSinceLastUpdate;		//0x3DC
 	uint8_t nRoomsInitTimeout;				//0x3DD
 	uint8_t padding0x3DE[2];				//0x3DE
@@ -327,22 +316,22 @@ struct D2DrlgTileDataStrc
 	int32_t unk0x2C;						//0x2C
 };
 
-typedef void(__fastcall* ACTCALLBACKFN)(D2RoomStrc*);
+typedef void(__fastcall* ACTCALLBACKFN)(D2ActiveRoomStrc*);
 
 struct D2DrlgActStrc
 {
 	uint8_t nAct;							//0x00
 	uint8_t pad0x01[3];						//0x01
-	D2RoomStrc* pRoom;						//0x04
+	D2ActiveRoomStrc* pRoom;				//0x04
 	D2DrlgStrc* pDrlg;						//0x08
 	uint32_t dwInitSeed;					//0x0C
 	int32_t nTownId;						//0x10
 	D2DrlgEnvironmentStrc* pEnvironment;	//0x14
 	ACTCALLBACKFN pfnActCallBack;			//0x18
 	BOOL bClient;							//0x1C
-	BOOL unk0x20;							//0x20
-	BOOL bUpdateEx;							//0x24
-	BOOL bUpdate;							//0x28
+	BOOL bHasPendingRoomsUpdates;			//0x20
+	BOOL bHasPendingRoomDeletions;			//0x24
+	BOOL bHasPendingUnitListUpdates;		//0x28
 	D2DrlgTileDataStrc pTileData;			//0x2C
 	void* pMemPool;							//0x5C
 };
@@ -411,7 +400,7 @@ struct D2DrlgLevelStrc
 		};
 		D2DrlgCoordStrc pLevelCoords;			//0x20
 	};
-	D2RoomExStrc* pFirstRoomEx;					//0x30
+	D2DrlgRoomStrc* pFirstRoomEx;				//0x30
 	int32_t nRooms;								//0x34
 	union
 	{
@@ -471,7 +460,7 @@ struct D2DrlgOrthStrc
 {
 	union
 	{
-		D2RoomExStrc* pRoomEx;				//0x00
+		D2DrlgRoomStrc* pDrlgRoom;			//0x00
 		D2DrlgLevelStrc* pLevel;			//0x00
 	};
 	uint8_t nDirection;						//0x04
@@ -544,13 +533,13 @@ struct D2DrlgWarpStrc
 #pragma pack()
 
 //D2Common.0x6FD74120 (#10014)
-D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, void* pDS1MemPool, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
+D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)
 D2COMMON_DLL_DECL void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD74440
 void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAlloc);
 //D2Common.0x6FD745C0
-void __fastcall sub_6FD745C0(D2RoomExStrc* pRoomEx1, D2RoomExStrc* pRoomEx2);
+void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2);
 //D2Common.0x6FD74700
 void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD748D0 (#10013)
@@ -562,9 +551,9 @@ int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD749E0
 int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2);
 //D2Common.0x6FD74A40
-void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomEx);
+void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD74B30
-int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2RoomExStrc* pRoomEx);
+int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD74B40
 void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD74C10 (#10006)
@@ -576,9 +565,9 @@ void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, i
 //D2Common.0x6FD74E10
 void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD74EF0
-D2RoomExStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* pLevel, int nX, int nY);
+D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* pLevel, int nX, int nY);
 //D2Common.0x6FD74F70
-D2RoomExStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2RoomExStrc* pRoomEx, D2DrlgLevelStrc* pLevel);
+D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom, D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD751C0
 BOOL __fastcall DRLG_IsTownLevel(int nLevelId);
 //D2Common.0x6FD75260 (#10000)

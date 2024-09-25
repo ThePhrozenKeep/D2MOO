@@ -15,8 +15,6 @@
 
 // Thanks to galaxyhaxz for providing the base to work on ! https://github.com/galaxyhaxz/d2src
 
-static_assert(sizeof(D2CmdArgStrc) == 0x3C, "Check D2CmdArgStrc matches original size");
-
 #define cmdidx(m)	offsetof(D2ConfigStrc, m)
 //1.10f: Game.0x
 D2CmdArgStrc gaCmdArguments[] = {
@@ -32,7 +30,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "VIDEO",     "FRAMERATE",    "fr",         CMD_INTEGER, cmdidx(dwFramerate),    0 },
 	{ "NETWORK",   "SERVERIP",     "s",          CMD_STRING,  cmdidx(szServerIP),     0 },
 	{ "NETWORK",   "GAMETYPE",     "gametype",   CMD_INTEGER, cmdidx(dwGameType),     0 },
-	{ "NETWORK",   "ARENA",        "arena",      CMD_INTEGER, cmdidx(dwArena),        0 },
+	{ "NETWORK",   "ARENA",        "arena",      CMD_INTEGER, cmdidx(wArena),         0 },
 	{ "NETWORK",   "JOINID",       "joinid",     CMD_INTEGER, cmdidx(wJoinID),        0 },
 	{ "NETWORK",   "GAMENAME",     "gamename",   CMD_STRING,  cmdidx(szGameName),     0 },
 	{ "NETWORK",   "BATTLENETIP",  "bn",         CMD_STRING,  cmdidx(szBattleNetIP),  0 },
@@ -74,7 +72,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "FILEIO",    "DIRECT",       "direct",     CMD_BOOLEAN, cmdidx(bDirect),        0 },
 	{ "FILEIO",    "LOWEND",       "lem",        CMD_BOOLEAN, cmdidx(bLowEnd),        0 },
 	{ "DEBUG",     "QuEsTs",       "questall",   CMD_BOOLEAN, cmdidx(bQuests),        0 },
-	{ "NETWORK",   "COMINT",       "comint",     CMD_INTEGER, cmdidx(dwComInt),       0 },
+	{ "NETWORK",   "COMINT",       "comint",     CMD_INTEGER, cmdidx(pComInterface),  0 },
 	{ "NETWORK",   "SKIPTOBNET",   "skiptobnet", CMD_BOOLEAN, cmdidx(bSkipToBNet),    0 },
 	{ "NETWORK",   "OPENC",        "openc",      CMD_BOOLEAN, cmdidx(bOpenC),         0 },
 	{ "FILEIO",    "NOCOMPRESS",   "nocompress", CMD_BOOLEAN, cmdidx(bNoCompress),    0 },
@@ -279,6 +277,8 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 				case CMD_BOOLEAN:
 					*(BYTE*)pCfgMember = TRUE;
 					break;
+				default:
+					D2_UNREACHABLE;
 				}
 			}
 		}
@@ -358,6 +358,8 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	BOOL bSoundStarted = FALSE;
 	BOOL bGfxStarted = FALSE;
 
+	geModState = nModType;
+
 	FOG_MPQSetConfig(pCfg->bDirect, FALSE);
 	FOG_AsyncDataInitialize(TRUE);
 	FOG_10082_Noop();
@@ -386,7 +388,7 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	else if (pCfg->bD3D) dwRenderMode = DISPLAYTYPE_DIRECT3D;
 	else dwRenderMode = DISPLAYTYPE_DDRAW;
 
-	if(nModType != MODULE_SERVER)
+	if(geModState != MODULE_SERVER)
 	{
 		if(!D2Win_CreateWindow(hInstance, dwRenderMode, pCfg->bWindow, !pCfg->bNoCompress))
 			return 0;
@@ -436,7 +438,7 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 		SRegSaveValue("Diablo II", "Resolution", 0, 0);
 	}
 
-	if(!pCfg->bNoSound && nModType != MODULE_SERVER)
+	if(!pCfg->bNoSound && geModState != MODULE_SERVER)
 	{
 		D2SOUND_OpenSoundSystem(pCfg->bIsExpansion);
 		bSoundStarted = TRUE;
@@ -444,7 +446,7 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 
 	while(geModState != MODULE_NONE)
 	{
-		if(nModType == MODULE_SERVER)
+		if(geModState == MODULE_SERVER)
 		{
 			if(bSoundStarted)
 			{
@@ -489,8 +491,8 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	FOG_AsyncDataDestroy();
 	D2MCPClientCloseMCP();
 
-	if(pCfg->dwComInt)
-		(*(void (**)(void))(pCfg->dwComInt + 12))();
+	if(pCfg->pComInterface)
+		(*(void (**)(void))(ptrdiff_t(pCfg->pComInterface) + 12))();
 
 	FOG_DestroyMemoryPoolSystem(nullptr);
 
@@ -567,6 +569,11 @@ void MoveBetaSettingsToRelease()
 	}
 
 }
+//1.10f: Game.0x401D00
+BOOL __stdcall AllowExpansion()
+{
+	return TRUE;
+}
 
 //1.10f: Game.0x401970
 int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
@@ -575,7 +582,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 	char **lpszModType;
 	const char *lpArgvCmd;
 	char szRegPathVid[sizeof(REG_PATH_VIDEO)];
-	D2ConfigStrc pCfg;
+	D2ConfigStrc tCfg;
 
 	lpArgvCmd = &lpZero;
 
@@ -624,9 +631,12 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 	}
 
 	D2_FREE(lpArgvDupe);
-	ParseCmdLine(&pCfg, lpArgvCmd);
+	ParseCmdLine(&tCfg, lpArgvCmd);
+#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
+	tCfg.pAllowExpansionCallback = AllowExpansion;
+#endif
 
-	if(!pCfg.b3DFX && !pCfg.bWindow && !pCfg.bOpenGL && !pCfg.bD3D)
+	if(!tCfg.b3DFX && !tCfg.bWindow && !tCfg.bOpenGL && !tCfg.bD3D)
 	{
 		memcpy(szRegPathVid, REG_PATH_VIDEO, sizeof(REG_PATH_VIDEO));
 
@@ -642,16 +652,16 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 				switch(dwValue)
 				{
 					case 1:
-						pCfg.bD3D = TRUE;
+						tCfg.bD3D = TRUE;
 						break;
 					case 2:
-						pCfg.bOpenGL = TRUE;
+						tCfg.bOpenGL = TRUE;
 						break;
 					case 3:
-						pCfg.b3DFX = TRUE;
+						tCfg.b3DFX = TRUE;
 						break;
 					case 4:
-						pCfg.bWindow = TRUE;
+						tCfg.bWindow = TRUE;
 						break;
 					default: // Rave
 						break;
@@ -662,7 +672,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 		}
 	}
 
-	return GameStart(ghCurrentProcess, &pCfg, MODULE_LAUNCHER);
+	return GameStart(ghCurrentProcess, &tCfg, MODULE_LAUNCHER);
 }
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, INT nShowCmd)

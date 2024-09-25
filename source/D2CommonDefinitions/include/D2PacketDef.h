@@ -495,7 +495,7 @@ struct D2GSPacketClt66		//size of 0x2E
 	int8_t nTemplate;			//0x13
 	int8_t nDifficulty ;		//0x14
 	char szClientName[16];		//0x15
-	int16_t unk0x25;			//0x25
+	int16_t dwArena;			//0x25
 	uint32_t nGameFlags;		//0x27
 	int8_t unk0x2B;				//0x2B
 	int8_t unk0x2C;				//0x2C
@@ -505,7 +505,7 @@ struct D2GSPacketClt66		//size of 0x2E
 struct D2GSPacketClt67		//size of 0x1D
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01;			//0x01
+	int32_t nTokenId;			//0x01
 	uint16_t nGameId;			//0x05
 	uint8_t nPlayerClass;		//0x07
 	int32_t unk0x08;			//0x08
@@ -646,7 +646,7 @@ struct D2GSPacketSrv0C		//size of 0x09
 	uint8_t nUnitType;			//0x01
 	uint32_t dwUnitGUID;		//0x02
 	uint8_t unk0x06;			//0x06
-	uint8_t unk0x07;			//0x07
+	uint8_t nHitClass;			//0x07
 	uint8_t nLife;				//0x08
 };
 
@@ -1212,10 +1212,10 @@ struct D2GSPacketSrv51		//size of 0x0E
 	uint8_t unk0x0C[2];			//0x0C
 };
 
-struct D2GSPacketSrv52		//size of 0x2A
+struct D2GSPacketSrv52			//size of 0x2A
 {
 	uint8_t nHeader;			//0x00
-	uint8_t pQuestList[41];	//0x01
+	uint8_t pQuestList[41];		//0x01 count:MAX_QUEST_STATUS
 };
 
 struct D2GSPacketSrv53		//size of 0x0A
@@ -1498,11 +1498,11 @@ struct D2GSPacketSrv69		//size of 0x0C
 struct D2GSPacketSrv6A		//size of 0x0C
 {
 	uint8_t nHeader;			//0x00
-	uint32_t unk0x01;			//0x01
+	uint32_t nUnitGUID;			//0x01
 	uint8_t unk0x05;			//0x05
-	uint8_t unk0x06;			//0x06
-	uint32_t unk0x07;			//0x07
-	uint8_t unk0x0B;			//0x0B
+	uint8_t nTargetUnitType;	//0x06
+	uint32_t nTargetUnitGuid;	//0x07
+	uint8_t nDirection;			//0x0B
 };
 
 struct D2GSPacketSrv6B		//size of 0x10
@@ -1638,9 +1638,12 @@ struct D2GSPacketSrv7A		//size of 0x0D
 struct D2GSPacketSrv7B		//size of 0x08
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01;			//0x01
-	uint16_t unk0x02;			//0x02
-	uint32_t unk0x04;			//0x04
+	uint8_t nSlot;				//0x01
+	struct {					//0x02
+		uint16_t nSkill : 12;
+		uint16_t nHand : 4;
+	};
+	uint32_t nItemGUID;			//0x04
 };
 
 struct D2GSPacketSrv7C		//size of 0x06
@@ -2103,9 +2106,9 @@ struct D2GSPacketSrvB0		//size of 0x01
 struct D2GSPacketSrvB1		//size of 0x35
 {
 	uint8_t nHeader;			//0x00
-	char unk0x01[48];		//0x01
-	uint16_t unk0x31;			//0x31
-	uint16_t unk0x33;			//0x33
+	char szGameName[48];		//0x01
+	uint16_t nClientCount;		//0x31
+	uint16_t nGameId;			//0x33
 };
 
 struct D2GSPacketSrvB2		//variable size
@@ -2184,5 +2187,13 @@ struct D2GSPacketSrvFF01 {
 	char nZeroed[74];
 };
 
+struct ClientPacketSaveHeaderPart // sizeof(0x107) 1.10f nHeaderID: 0xB2
+{
+	uint8_t nHeaderId;			  // 0x00
+	uint8_t nPartDataSize;		  // 0x01
+	uint8_t bFirstPart;			  // 0x02
+	uint32_t nSaveHeaderSize;	  // 0x03
+	uint8_t aData[256];			  // 0x07
+};
 
 #pragma pack()

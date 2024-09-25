@@ -93,18 +93,18 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
     {
         if (nNewValue)
         {
-            if (!SUNITEVENT_GetTimer(pGame, pOwner, 2, nLayer_StatId, nLayer_StatId))
+            if (!SUNITEVENT_GetEvent(pGame, pOwner, 2, nLayer_StatId, nLayer_StatId))
             {
-                sub_6FD156A0(pGame, pOwner, pItemStatCostTxtRecord->wItemEvent[0], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
+                sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
                 if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                 {
-                    sub_6FD156A0(pGame, pOwner, pItemStatCostTxtRecord->wItemEvent[1], nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
+                    sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
                 }
             }
         }
         else
         {
-            SUNITEVENT_FreeTimer(pGame, pOwner, 2, nLayer_StatId);
+            SUNITEVENT_Unregister(pGame, pOwner, 2, nLayer_StatId);
         }
     }
 
@@ -1206,7 +1206,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
             return 0;
         }
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             DUNGEON_AllocDrlgDelete(pRoom, pItem->dwUnitType, pItem->dwUnitId);
@@ -1333,7 +1333,7 @@ int32_t __fastcall sub_6FC437F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
                     sub_6FC43AF0(pUnit, pStackItem, nQuantity1);
                 }
 
-                D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+                D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
                 if (pRoom)
                 {
                     int32_t nUnitGUID = -1;
@@ -1458,7 +1458,7 @@ int32_t __fastcall sub_6FC43BF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
         sub_6FC43AF0(pUnit, pBook, nSrcValue);
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             int32_t nUnitGUID = -1;
@@ -1514,7 +1514,7 @@ int32_t __fastcall sub_6FC43E60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
     if (bRemove)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
         if (pRoom)
         {
             int32_t nUnitGUID = -1;
@@ -1599,7 +1599,7 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
     D2CoordStrc returnCoords = {};
     D2CoordStrc coords = {};
     UNITS_GetCoords(pUnit, &coords);
-    D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
     if (!pRoom)
     {
         return;
@@ -2618,7 +2618,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                 UNITS_GetCoords(pUnit, &coords);
 
                 D2CoordStrc returnCoords = {};
-                D2RoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
+                D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
                 if (pRoom)
                 {
                     D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, pBeltItem, pUnit, 0, 1);
@@ -3808,7 +3808,8 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 
     if (pItem->dwAnimMode == IMODE_STORED && ITEMS_CheckIfUseable(pItem))
     {
-        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0) && !sub_6FC937A0(pGame, pUnit))
+        if ((ITEMS_GetItemType(pItem) != ITEMTYPE_BOOK || STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) > 0) && !D2GAME_PLRTRADE_IsInteractingWithPlayer(
+				pGame, pUnit))
         {
             if (SKILLITEM_pSpell_Handler(pGame, pUnit, pItem, pItem, nX, nY))
             {
@@ -4470,7 +4471,7 @@ int32_t __fastcall sub_6FC49220(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         return 0;
     }
 
-    if (sub_6FC937A0(pGame, pUnit))
+    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         return 0;
     }
@@ -4790,7 +4791,7 @@ int32_t __fastcall sub_6FC49AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     }
     else
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pScroll);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pScroll);
         if (pRoom)
         {
             DUNGEON_AllocDrlgDelete(pRoom, pScroll->dwUnitType, pScroll->dwUnitId);
@@ -4839,7 +4840,7 @@ int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 		return 0;
 	}
 
-    if (sub_6FC937A0(pGame, pUnit) && ITEMS_GetInvPage(pCube))
+    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && ITEMS_GetInvPage(pCube))
     {
         SUNIT_AttachSound(pUnit, 0x13u, pUnit);
         return 0;
@@ -5013,7 +5014,7 @@ int32_t __fastcall sub_6FC4A350(D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nL
         nDuration = 125;
     }
 
-    EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + nDuration, 0, 0);
+    EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, pGame->dwGameFrame + nDuration, 0, 0);
 
     return 1;
 }
@@ -5029,34 +5030,32 @@ void __fastcall ITEMMODE_EventFn4_Return(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC4A460
-void __fastcall sub_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventType)
+void __fastcall D2GAME_Items_EventsHandler_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType)
 {
-    void(__fastcall* dword_6FD27DDC[])(D2GameStrc*, D2UnitStrc*) =
-    {
-        nullptr,
-        nullptr,
-        nullptr,
-        sub_6FC4A2E0,
-        ITEMMODE_EventFn4_Return,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        sub_6FC4A450,
-        nullptr,
-        nullptr,
-    };
+	using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
 
-    if (IsBadCodePtr((FARPROC)dword_6FD27DDC[nEventType]))
-    {
-        FOG_DisplayAssert("scpfnEventFunctions[eEventType]", __FILE__, __LINE__);
-        exit(-1);
-    }
+	static const EventCallbackFunction scpfnItemEventFunctions_6FD27DDC[] =
+	{
+		nullptr,
+		nullptr,
+		nullptr,
+		sub_6FC4A2E0,
+		ITEMMODE_EventFn4_Return,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		nullptr,
+		sub_6FC4A450,
+		nullptr,
+		nullptr,
+	};
+	static_assert(EVENTTYPE_COUNT == std::size(scpfnItemEventFunctions_6FD27DDC), "missing callbacks");
 
-    dword_6FD27DDC[nEventType](pGame, pUnit);
+	D2_ASSERT(scpfnItemEventFunctions_6FD27DDC[nEventType]);
+    scpfnItemEventFunctions_6FD27DDC[nEventType](pGame, pUnit);
 }
 
 //D2Game.0x6FC4A4B0
@@ -6009,6 +6008,8 @@ void __fastcall D2GAME_ITEMMODE_Unk_6FC4BC10(D2GameStrc* pGame, D2UnitStrc* pUni
         ITEMS_RemoveFromAllPlayers(pGame, pItem);
         return;
     }
+	default:
+		break;
     }
 }
 
@@ -6053,7 +6054,7 @@ int32_t __fastcall D2GAME_RechargeItem_6FC4BD50(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC4BE80
-void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnitGUID, D2RoomStrc* pRoom)
+void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnitGUID, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit)
     {
@@ -6080,22 +6081,22 @@ void __fastcall sub_6FC4BE80(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nUnit
 }
 
 //D2Game.0x6FC4BF00
-D2RoomStrc* __fastcall D2GAME_GetFreeSpaceEx_6FC4BF00(D2RoomStrc* pRoom, D2CoordStrc* pCoords, D2CoordStrc* pReturnCoords, int32_t nUnitSize)
+D2ActiveRoomStrc* __fastcall D2GAME_GetFreeSpaceEx_6FC4BF00(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2CoordStrc* pReturnCoords, int32_t nUnitSize)
 {
     const int32_t nX = pCoords->nX + 2;
     const int32_t nY = pCoords->nY + 3;
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
     if (pTargetRoom)
     {
         pReturnCoords->nX = nX;
         pReturnCoords->nY = nY;
-        return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, 0x3E01u, 0x801u, 1);
+        return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, COLLIDE_MASK_SPAWN, 0x801u, 1);
     }
 
     pReturnCoords->nX = pCoords->nX;
     pReturnCoords->nY = pCoords->nY;
-    return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, 0x3E01u, 0x801u, 1);
+    return COLLISION_GetFreeCoordinatesWithField(pRoom, pReturnCoords, pCoords, nUnitSize, COLLIDE_MASK_SPAWN, 0x801u, 1);
 }
 
 //D2Game.0x6FC4BFF0

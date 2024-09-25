@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Units/Units.h>
-
+#include "AiStates.h"
 
 #pragma pack(push, 1)
 struct D2BaalThroneAiCallbackArgStrc
@@ -136,4 +136,4 @@ void __fastcall AIUTIL_SetOwnerGUIDAndType(D2UnitStrc* pUnit, D2UnitStrc* pOwner
 //D2Game.0x6FCF2F30
 void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nParam1, int32_t nDuration);
 //D2Game.0x6FCF3000
-int32_t __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, int32_t nSpecialState);
+BOOL __fastcall AIUTIL_CanUnitSwitchAi(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState);

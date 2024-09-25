@@ -51,7 +51,7 @@ void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int
     pMissile->dwUnitId = nUnitGUID;
     pMissile->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_ISVALIDTARGET);
     D2GAME_DeleteTimersOnUnit_6FC34A30(pGame, pMissile);
-    sub_6FC35570(pGame, pMissile, 0, 0, 0);
+    sub_6FC35570(pGame, pMissile, EVENTTYPE_MODECHANGE, 0, 0);
 }
 
 //D2Game.0x6FC55340
@@ -98,7 +98,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         nY = CLIENTS_GetUnitY(missileParams->pOrigin);
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -202,7 +202,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     }
 
     int32_t nRange = 0;
-    if (missileParams->dwFlags & 0x8000)
+    if (!(missileParams->dwFlags & 0x8000))
     {
         nRange = pMissilesTxtRecord->wRange + missileParams->nSkillLevel * pMissilesTxtRecord->wLevRange;
         if (missileParams->dwFlags & 8 && pMissilesTxtRecord->nSubLoop)

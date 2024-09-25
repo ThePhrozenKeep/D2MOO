@@ -787,7 +787,7 @@ uint32_t __fastcall ITEMS_RollRandomNumber(D2SeedStrc* pSeed)
 }
 
 //D2Game.0x6FC4EC10
-D2UnitStrc* __fastcall sub_6FC4EC10(D2GameStrc* pGame, D2RoomStrc* pRoom, BYTE* pBitstream, uint32_t nBufferSize, int32_t bCheckForHeader, D2ItemSaveStrc* pItemSave, uint32_t* pSize, uint32_t dwVersion)
+D2UnitStrc* __fastcall sub_6FC4EC10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, BYTE* pBitstream, uint32_t nBufferSize, int32_t bCheckForHeader, D2ItemSaveStrc* pItemSave, uint32_t* pSize, uint32_t dwVersion)
 {
     if (!pGame)
     {
@@ -963,22 +963,22 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
     }
 
     const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
     }
 
     const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_QUANTITY, 0);
-    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
     }
 
     return pItem;
 }
 
 //D2Game.0x6FC4F290
-D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* pCoords, D2ItemDropStrc* pItemDrop)
+D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2ItemDropStrc* pItemDrop)
 {
     int32_t nItemLevel = DATATBLS_GetMonsterLevelInArea(DUNGEON_GetLevelIdFromRoom(pRoom), pGame->nDifficulty, pGame->bExpansion);
     if (nItemLevel > 1)
@@ -1013,7 +1013,7 @@ D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Coor
         coords1.nY = coords2.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return 0;
@@ -1096,7 +1096,7 @@ int32_t __fastcall sub_6FC4F4A0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nL
 }
 
 //D2Game.0x6FC4F640
-void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* pCoords)
+void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords)
 {
     int32_t nItemLevel = DATATBLS_GetMonsterLevelInArea(DUNGEON_GetLevelIdFromRoom(pRoom), pGame->nDifficulty, pGame->bExpansion);
     if (nItemLevel > 1)
@@ -1132,7 +1132,7 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* 
         coords1.nY = coords2.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return;
@@ -1162,7 +1162,7 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* 
 }
 
 //D2Game.0x6FC4F830
-D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
+D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
 {
     int32_t nItemLevel = DATATBLS_GetMonsterLevelInArea(DUNGEON_GetLevelIdFromRoom(pRoom), pGame->nDifficulty, pGame->bExpansion);
     if (nItemLevel > 1)
@@ -1198,7 +1198,7 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2RoomStrc* 
         coords1.nY = coords2.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1224,7 +1224,7 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2RoomStrc* 
 }
 
 //D2Game.0x6FC4FA50
-D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
+D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
 {    
     int32_t nItemLevel = DATATBLS_GetMonsterLevelInArea(DUNGEON_GetLevelIdFromRoom(pRoom), pGame->nDifficulty, pGame->bExpansion);
     if (nItemLevel > 1)
@@ -1269,7 +1269,7 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2RoomStrc*
         coords1.nY = coords2.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1295,7 +1295,7 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2RoomStrc*
 }
 
 //D2Game.0x6FC4FCA0
-D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2RoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
+D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit)
 {
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
     int32_t nItemLevel = 1;
@@ -1338,7 +1338,7 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Coor
         coords1.nY = coords2.nY;
     }
     
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &coords2, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1412,7 +1412,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
 
     UNITS_GetCoords(pUnit, &unitCoords);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (D2GAME_GetRoom_6FC52070(pRoom, unitCoords.nX + 2, unitCoords.nY + 3))
     {
         coords1.nX = unitCoords.nX + 2;
@@ -1424,7 +1424,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
         coords1.nY = unitCoords.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return nullptr;
@@ -1683,9 +1683,9 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         nDurability = std::min(nDurability, STATLIST_GetMaxDurabilityFromUnit(pItem));
 
         const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
         {
-            EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
         }
 
         STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nDurability, 0);
@@ -1731,9 +1731,9 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
     if (ITEMS_GetTotalMaxStack(pItem) > 0)
     {
         const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_REPLENISH_DURABILITY, 0);
-        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, UNITEVENTCALLBACK_STATREGEN))
+        if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pItem, EVENTTYPE_STATREGEN))
         {
-            EVENT_SetEvent(pGame, pItem, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+            EVENT_SetEvent(pGame, pItem, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
         }
     }
 }
@@ -1796,7 +1796,7 @@ void __fastcall ITEMS_DropGoldPile(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_
         return;
     }
     
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     uint32_t nRemainingGold = nValue;
     
     uint32_t nDroppedGold = 0;
@@ -1825,7 +1825,7 @@ void __fastcall ITEMS_DropGoldPile(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_
             spawnCoords.nY = unitCoords.nY;
         }
 
-        pRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &spawnCoords, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+        pRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &spawnCoords, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
         if (pRoom)
         {
             D2UnitStrc* pGoldPile = D2GAME_CreateItemUnit_6FC501A0(pUnit, nGoldItemId, pGame, 4u, ITEMQUAL_NORMAL, 1u, 1u, 1u, 0, 0, 0);
@@ -1880,7 +1880,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     UNITS_GetCoords(pUnit, &unitCoords);
     
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (D2GAME_GetRoom_6FC52070(pRoom, unitCoords.nX + 2, unitCoords.nY + 3))
     {
         coords1.nX = unitCoords.nX + 2;
@@ -1892,7 +1892,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
         coords1.nY = unitCoords.nY;
     }
 
-    D2RoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, 0x3E01u, 0x801u, 1);
+    D2ActiveRoomStrc* pTargetRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &coords1, &unitCoords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
     if (!pTargetRoom)
     {
         return;
@@ -1922,7 +1922,7 @@ int32_t __fastcall ITEMS_GetHealthPotionDropCode(D2UnitStrc* pUnit)
         ' 1ph', ' 2ph', ' 3ph', ' 4ph'
     };
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     D2_ASSERT(pRoom);
 
     int32_t nIndex = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
@@ -1947,7 +1947,7 @@ int32_t __fastcall ITEMS_GetManaPotionDropCode(D2UnitStrc* pUnit)
         ' 1pm', ' 2pm', ' 3pm', ' 4pm'
     };
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     D2_ASSERT(pRoom);
 
     int32_t nIndex = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
@@ -2031,9 +2031,9 @@ D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2U
 void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     const int32_t nReplenishDurability = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_DURABILITY, 0);
-    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishDurability && !EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, 2500 / nReplenishDurability + pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -2041,9 +2041,9 @@ void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 void __fastcall sub_6FC51310(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     const int32_t nReplenishQuantity = STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_REPLENISH_QUANTITY, 0);
-    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN))
+    if (nReplenishQuantity && !EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_STATREGEN))
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, 2500 / nReplenishQuantity + pGame->dwGameFrame + 1, 0, 0);
     }
 }
 
@@ -2490,7 +2490,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                         UNITS_GetCoords(pMonster, &coords);
 
                         D2CoordStrc itemCoords = {};
-                        D2RoomStrc* pRoom = UNITS_GetRoom(pMonster);
+                        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMonster);
                         if (D2GAME_GetRoom_6FC52070(pRoom, coords.nX + 2, coords.nY + 3))
                         {
                             itemCoords.nX = coords.nX + 2;
@@ -2502,7 +2502,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                             itemCoords.nY = coords.nY;
                         }
 
-                        D2RoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &itemCoords, &coords, 1, 0x3E01u, 0x801u, 1);
+                        D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &itemCoords, &coords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
                         if (pFreeCoordsRoom)
                         {
                             D2ItemDropStrc itemDrop = {};
@@ -2567,7 +2567,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 }
 
 //D2Game.0x6FC52070
-D2RoomStrc* __fastcall D2GAME_GetRoom_6FC52070(D2RoomStrc* pRoom, int32_t nSubtileX, int32_t nSubtileY)
+D2ActiveRoomStrc* __fastcall D2GAME_GetRoom_6FC52070(D2ActiveRoomStrc* pRoom, int32_t nSubtileX, int32_t nSubtileY)
 {
     return DUNGEON_GetRoomAtPosition(pRoom, nSubtileX, nSubtileY);
 }
@@ -2626,7 +2626,7 @@ int32_t __fastcall ITEMS_GetGroundRemovalTime(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC52260
-void __fastcall D2GAME_DropItem_6FC52260(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2RoomStrc* pRoom, int32_t nX, int32_t nY)
+void __fastcall D2GAME_DropItem_6FC52260(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
     if (!pRoom)
     {
@@ -2666,7 +2666,7 @@ void __fastcall ITEMS_DeleteInactiveItems(D2GameStrc* pGame, int32_t nAct)
         return;
     }
 
-    for (D2RoomStrc* i = DUNGEON_GetRoomFromAct(pGame->pAct[nAct]); i; i = i->pRoomNext)
+    for (D2ActiveRoomStrc* i = DUNGEON_GetRoomFromAct(pGame->pAct[nAct]); i; i = i->pRoomNext)
     {
         D2UnitStrc* pItem = i->pUnitFirst;
         while (pItem)
@@ -2677,7 +2677,7 @@ void __fastcall ITEMS_DeleteInactiveItems(D2GameStrc* pGame, int32_t nAct)
                 const int32_t nDeletionFrame = pItem->pItemData->dwActionStamp;
                 if (nDeletionFrame && pGame->dwGameFrame >= nDeletionFrame)
                 {
-                    D2RoomStrc* pRoom = UNITS_GetRoom(pItem);
+                    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pItem);
                     if (pRoom)
                     {
                         DUNGEON_AllocDrlgDelete(pRoom, pItem->dwUnitType, pItem->dwUnitId);

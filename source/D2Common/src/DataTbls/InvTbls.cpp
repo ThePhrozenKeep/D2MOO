@@ -2,7 +2,7 @@
 #include <D2DataTbls.h>
 
 //D2Common.0x6FD542D0
-void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadInventoryTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -81,7 +81,7 @@ void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pInventoryTxt = (D2InventoryTxt*)DATATBLS_CompileTxt(pMemPool, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(D2InventoryTxt));
+	sgptDataTables->pInventoryTxt = (D2InventoryTxt*)DATATBLS_CompileTxt(hArchive, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(D2InventoryTxt));
 	D2_ASSERT(sgptDataTables->nInventoryTxtRecordCount == NUM_INVENTORY_PAGE_STATS * NUM_GAME_RESOLUTIONS);
 }
 

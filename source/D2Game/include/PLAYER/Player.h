@@ -30,7 +30,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit);
 void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //1.10f: D2Game.0x6FC7BFC0
 //1.13c: D2Game.0x6FC57B10
-void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nPlayerGUID, D2CoordStrc* pCoord);
+void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nPlayerGUID, D2CoordStrc* pCoord);
 //D2Game.0x6FC7C0C0
 void __fastcall PLAYER_SetUniqueIdInPlayerData(D2UnitStrc* pPlayer, int32_t nUnitGUID);
 //D2Game.0x6FC7C120

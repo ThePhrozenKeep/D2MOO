@@ -72,21 +72,21 @@ Function:		BITMANIP_SetBitState
 Address:		Fog.#10118
 Notes:
 */
-void __stdcall BITMANIP_SetBitState(uint8_t* pBitStream, int nBit);
+FOG_DLL_DECL void __stdcall BITMANIP_SetBitState(uint8_t* pBitStream, int nBit);
 
 /*
 Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10119
 Notes:
 */
-int __stdcall BITMANIP_GetBitState(uint8_t* pBitStream, int nBit);
+FOG_DLL_DECL int __stdcall BITMANIP_GetBitState(uint8_t* pBitStream, int nBit);
 
 /*
 Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10120
 Notes:
 */
-void __stdcall BITMANIP_MaskBitstate(uint8_t* pBitStream, int nBit);
+FOG_DLL_DECL void __stdcall BITMANIP_MaskBitstate(uint8_t* pBitStream, int nBit);
 
 
 // Sets bits of the mask to newBitValue, and returns wether the value changed

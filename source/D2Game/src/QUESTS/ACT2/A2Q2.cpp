@@ -336,7 +336,7 @@ void __fastcall ACT2Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 
 	D2Act2Quest2Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest2Strc);
 	pQuestData->pQuestDataEx = pQuestDataEx;
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q2;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q2;
 	pQuestData->pfStatusFilter = ACT2Q2_StatusFilterCallback;
 	pQuestData->nInitNo = 0;
 	pQuestData->pfActiveFilter = ACT2Q2_ActiveFilterCallback;
@@ -478,7 +478,7 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 
 	pQuestData->dwFlags &= 0xFFFFFF00;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
 	// TODO: Remove useless code
@@ -755,6 +755,8 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 
 	case ' piv':
 		--pQuestDataEx->nAmulets;
+		break;
+	default:
 		break;
 	}
 

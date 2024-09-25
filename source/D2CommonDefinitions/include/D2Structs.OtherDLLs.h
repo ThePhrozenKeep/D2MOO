@@ -1,6 +1,63 @@
 
 // Archive of types that are probably coming from other DLLs.
 
+// BnClient 
+
+struct BnClientInterface
+{
+	int(__stdcall* field0x00)();
+	HANDLE(__stdcall* OpenBNetConnection)();
+	int(__fastcall* Logon)(int a1, int a2);
+	int(__stdcall* GetLogonInfo)();
+	int(__stdcall* CloseBNetConnection)();
+	BOOL(__thiscall* ChatCommand)(const char* this);
+	void* (__stdcall* field_18)();
+	int(__fastcall* JoinChannel)(_BYTE* a1, int a2, int a3);
+	int(__thiscall* GetChannelList)(void* this);
+	int(__fastcall* BnMessQueue_Read)(_DWORD* a1, void* a2);
+	int(__thiscall* BnMessageQueueGetLastError)(_DWORD* errInfo);
+	int(__fastcall* field_2C)(int a1, int a2);
+	int(__stdcall* CheckAd)();
+	int(__fastcall* field_34)(char* a1, char* a2, int a3, int a4);
+	int(__fastcall* GetGamesList)(int a1, int a2, int a3, int a4);
+	int(__fastcall* NotifyJoinedGame)(int a1, int a2);
+	int(__stdcall* SendRealmList)();
+	int(__fastcall* field_44)(int a1, const char* a2);
+	int(__thiscall* PatchUnk)(_DWORD* this);
+	int(__stdcall* field_4C)();
+	uintptr_t(__fastcall* PatchUnk0x4C)(_BYTE* source, size_t size);
+	int(__fastcall* EnterChat)(int ecx0, int a2, int a3, _BYTE* a1, char a5);
+	int(__stdcall* LeaveChat)();
+	int(__stdcall* GetVersion)();
+	int(__fastcall* CreateAccount)(int a1, int a2);
+	int(__thiscall* GetCreateAccountResult)(_DWORD* this);
+	int(__stdcall* field_68)();
+	int(__fastcall* OnAdClick)(int a1, int a2);
+	int(__stdcall* UnkSet)();
+	int(__fastcall* BattleWriteUserData)(int a1, unsigned int a2, int a3, int a4);
+	BOOL(__fastcall* BattleRequestReadUserData)(int a1, unsigned int a2, int a3, int a4);
+	int(__fastcall* GetBattleReadUserData)(int a1, int a2, int a3, int a4);
+	int(__thiscall* GetConnectionState)(_DWORD* pState);
+	void (*LOG_Write)(char* Format, ...);
+	int(__cdecl* StartLogging)(int a1, int a2);
+	int(__thiscall* GetGameListStatusUpdateResults)(int* this);
+	int(__stdcall* SendKeepAlivePacket)();
+	int(__stdcall* field_94)();
+	BNGatewayAccess* (__stdcall* GetBnGatewayAccess)();
+	int(__fastcall* ChangePassword)(int ecx0, int a2, int a1);
+	int(__thiscall* GetChangePasswordResult)(int* this);
+	int(__thiscall* QueryAdUrl)(void* this);
+	int(__fastcall* LoadBNetNews)(int(__fastcall* a1)(_DWORD, _DWORD), int (*a2)(void));
+	int(__stdcall* FreeBNetNews)();
+	char(__stdcall* GetBuild)();
+	int(__stdcall* field_B4)();
+	BOOL(__thiscall* SetEmail)(const void* szEmail);
+	BOOL(__fastcall* ResetPassword)(_BYTE* szAccountName, _BYTE* szEmailAddress);
+	BOOL(__fastcall* ChangeEmail)(_BYTE* a1, _BYTE* a2, _BYTE* a3);
+	int(__stdcall* LeaveGame)();
+};
+
+
 // ---------- D2Client ----------
 
 struct D2AltDrawStrc
@@ -217,60 +274,4 @@ struct SMSGHANDLER_PARAMS
 	uint32_t dwArg;							//0x14
 	BOOL bReturn;							//0x18
 	LRESULT lResult;						//0x1C
-};
-
-// ---------- D2Launch ----------
-
-struct D2BnetClientDataStrc
-{
-	uint32_t dwExpansion;						//0x000
-	uint8_t nWindowed;							//0x004
-	uint8_t nFixAspectRatio;					//0x005
-	uint8_t n3DFXMode;							//0x006
-	uint8_t nOpenGLMode;						//0x007
-	uint8_t nRaveMode;							//0x008
-	uint8_t nDirect3DMode;						//0x009
-	uint8_t nUsePerspective;					//0x00A
-	uint8_t nLowQuality;						//0x00B
-	uint32_t dwGamma;							//0x00C
-	uint8_t nVSync;							//0x010
-	uint32_t dwFrameRate;						//0x011
-	uint32_t dwGameType;						//0x015
-	uint16_t nJoinId;							//0x019
-	char szGameName[24];					//0x01B
-	char szServerAddress[24];				//0x033
-	char szBattleNetAddress[24];			//0x04B
-	char szMCPAddress[24];					//0x063
-	uint32_t unk0x07B;							//0x07B
-	uint8_t nNoPK;								//0x07F
-	uint8_t nOpenCharacter;					//0x080
-	uint8_t nClasses[7];						//0x081
-	uint8_t nInvincible;						//0x088
-	char szAccount[48];						//0x089
-	char szCharName[24];					//0x0B9
-	char szRealmName[32];					//0x0D1
-	uint8_t unk0x0F1[249];						//0x0F1
-	uint8_t nCharClass;						//0x1EA
-	uint8_t nCharFlags;						//0x1EB
-	uint8_t nLastCompleteDiff;					//0x1EC
-	uint8_t nNoMonsters;						//0x1ED
-	uint8_t __1ED[23];							//0x1EE
-	//uint8_t bDirect;							//0x200
-	//uint8_t bNoCompress;						//0x202
-	uint32_t dwArenaFlags;						//0x205
-	uint8_t nTemplate;							//0x209
-	uint16_t __20A;								//0x20A
-	uint8_t nDifficulty;						//0x20C
-	uint8_t __20D[52];							//0x20D
-	//uint8_t bNoSound;						//0x21C
-	char szGamePassword[24];				//0x241
-	char szGameDesc[32];					//0x259
-	uint8_t __279[226];						//0x279
-	char szChannel[32];						//0x35B
-	uint8_t __37B[64];							//0x37B
-	uint8_t nCharacterLevel;					//0x3BB
-	uint8_t nLadder;							//0x3BC
-	uint32_t dwPasswordHash;					//0x3BD
-	uint8_t nPasswordLength;					//0x3C1
-	uint8_t __3C2[6];							//0x3C2
 };

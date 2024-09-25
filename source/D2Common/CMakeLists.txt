@@ -1,23 +1,20 @@
 
-add_library(D2CommonStatic 
-  # We want to create a static library for tests or easier integration in user mods
-  STATIC
-  # Ordinals that correspond to empty functions due to removed (debug) code
-  src/UselessOrdinals.cpp
-  include/UselessOrdinals.h
-  # Misc
-  include/D2Common.h
-  include/Imports/DllBases.h
+D2MOO_prepare_targets(D2Common)
+
+target_link_libraries(${D2CommonImplName} PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog)
+
+target_sources(${D2CommonImplName}
+  PRIVATE
+    # Ordinals that correspond to empty functions due to removed (debug) code
+    src/UselessOrdinals.cpp
+    include/UselessOrdinals.h
+    # Misc
+    include/D2Common.h
+    include/Imports/DllBases.h
 )
 
-target_link_libraries(D2CommonStatic PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog)
-
-target_include_directories(D2CommonStatic PUBLIC include)
-
-target_compile_definitions(D2CommonStatic PRIVATE D2COMMON_IMPL)
-
 # Data tables
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/DataTbls/AnimTbls.cpp
     src/DataTbls/ArenaTbls.cpp
@@ -59,13 +56,14 @@ target_sources(D2CommonStatic
     include/DataTbls/LevelsIds.h
     include/DataTbls/MissilesIds.h
     include/DataTbls/MonsterIds.h
+    include/DataTbls/MonsterTypes.h
     include/DataTbls/ObjectsIds.h
     include/DataTbls/StringIds.h
     include/DataTbls/SkillsIds.h
 )
 
 # Dynamic Random Level Generation
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/Drlg/DrlgActivate.cpp
     src/Drlg/DrlgDrlg.cpp
@@ -109,14 +107,14 @@ target_sources(D2CommonStatic
 )
 
 # Items
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/Items/Items.cpp
     src/Items/ItemMods.cpp
 )
 
 # Monsters
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/Monsters/Monsters.cpp
     src/Monsters/MonsterRegion.cpp
@@ -124,18 +122,18 @@ target_sources(D2CommonStatic
 )
 
 # Path
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
+    src/Path/AStar.cpp
     src/Path/IDAStar.cpp
-    src/Path/FollowWall.cpp
     src/Path/Path.cpp
     src/Path/PathMisc.cpp
     src/Path/PathUtil.cpp
     src/Path/PathWF.cpp
     src/Path/Step.cpp
 
+    include/Path/AStar.h
     include/Path/IDAStar.h
-    include/Path/FollowWall.h
     include/Path/Path.h
     include/Path/PathMisc.h
     include/Path/PathUtil.h
@@ -144,7 +142,7 @@ target_sources(D2CommonStatic
 )
 
 # Units
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/Units/Missile.cpp
     src/Units/MissileStream.cpp
@@ -164,7 +162,7 @@ target_sources(D2CommonStatic
 )
 
 # Remaining files that were not placed into subfolders
-target_sources(D2CommonStatic
+target_sources(${D2CommonImplName}
   PRIVATE
     src/D2Chat.cpp
     src/D2Collision.cpp
@@ -204,7 +202,7 @@ target_sources(D2CommonStatic
 )
 
 if(D2MOO_WITH_STATIC_TESTS)
-  target_sources(D2CommonStatic
+  target_sources(${D2CommonImplName}
     PRIVATE
       statictests/D2StatList_staticchecks.cpp
       statictests/D2PacketDef_staticchecks.cpp
@@ -212,29 +210,4 @@ if(D2MOO_WITH_STATIC_TESTS)
   )
 endif()
 
-if(D2MOO_BUILD_TESTS)
-    add_subdirectory(tests)
-endif()
-
-get_target_property(D2CommonSources D2CommonStatic SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
-             FILES ${D2CommonSources}
-)
-
-# The D2Common.dll
-add_library(D2Common
-  # We want to create a detours dll for patching
-  SHARED
-  # The DLL entrypoint
-  src/DllMain.cpp
-  # The definition file that matches functions with their ordinals  
-  definitions/D2Common.${D2MOO_ORDINALS_VERSION}.def
-)
-
-target_link_libraries(D2Common
-# D2CommonStatic itself should not be linked by targets linking D2Common, hence why it is PRIVATE
-  PRIVATE D2CommonStatic
-# But we still its dependencies to be propagated so that users can consume them
-  PUBLIC D2CommonDefinitions D2CMP D2Hell D2Lang Fog winmm
-)
-target_include_directories(D2Common INTERFACE include)
+D2MOO_target_source_group(D2Common)

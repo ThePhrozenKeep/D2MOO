@@ -192,7 +192,7 @@ EXPORTS
 	PATH_GetMaxDistance													@10189
 	D2COMMON_10190_PATH_SetDistance										@10190
 	D2COMMON_10191_PATH_GetDistance										@10191
-	D2COMMON_10192_PathSetIDAMax										@10192
+	PATH_SetIDAStarInitFScore											@10192
 	D2COMMON_10193_PATH_AdjustDirection									@10193
 	PATH_GetPrecisionX													@10194
 	PATH_GetPrecisionY													@10195

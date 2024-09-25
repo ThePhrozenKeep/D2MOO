@@ -792,7 +792,7 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
         return;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
@@ -853,9 +853,9 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
 }
 
 //D2Game.0x6FC7E550
-void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2RoomStrc* pRoom, int32_t a5, int32_t a6)
+void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t a5, int32_t a6)
 {
-    D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
     if (pRoom)
     {
         if (pPlayer->nAct != DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)))

@@ -63,7 +63,7 @@ int32_t __fastcall SKILLITEM_pSpell01_Initializer(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FD02BF0
 int32_t __fastcall SKILLITEM_pSpell01_IdentifyItem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
-    if (!sub_6FC937A0(pGame, pUnit) && !ITEMS_CheckItemFlag(pTarget, IFLAG_IDENTIFIED, __LINE__, __FILE__) && pUnit->pInventory)
+    if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && !ITEMS_CheckItemFlag(pTarget, IFLAG_IDENTIFIED, __LINE__, __FILE__) && pUnit->pInventory)
     {
         for (D2UnitStrc* pInvItem = INVENTORY_GetFirstItem(pUnit->pInventory); pInvItem; pInvItem = INVENTORY_GetNextItem(pInvItem))
         {
@@ -85,7 +85,7 @@ int32_t __fastcall SKILLITEM_pSpell02_CastPortal(D2GameStrc* pGame, D2UnitStrc* 
     {
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
 
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
         const int32_t nTownLevelId = DUNGEON_GetTownLevelIdFromActNo(DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)));
         if (!DUNGEON_IsRoomInTown(pRoom))
@@ -261,8 +261,8 @@ int32_t __fastcall SKILLITEM_pSpell03_Potion(D2GameStrc* pGame, D2UnitStrc* pUni
 
                         if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
                         {
-                            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
-                            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+                            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_STATREGEN, 0);
+                            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
                         }
 
                         STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
@@ -277,7 +277,7 @@ int32_t __fastcall SKILLITEM_pSpell03_Potion(D2GameStrc* pGame, D2UnitStrc* pUni
                     const int32_t nTimeDependentValue = nAddValue + nRemainingDuration * STATLIST_GetStatValue(pStatList, nStatId, 0);
                     if (!i)
                     {
-                        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+                        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                     }
 
                     if (nRemainingDuration + nLength > 0)
@@ -406,8 +406,8 @@ int32_t __fastcall SKILLITEM_pSpell04_Unused(D2GameStrc* pGame, D2UnitStrc* pUni
 
                         if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
                         {
-                            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
-                            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+                            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_STATREGEN, 0);
+                            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
                         }
 
                         STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
@@ -422,7 +422,7 @@ int32_t __fastcall SKILLITEM_pSpell04_Unused(D2GameStrc* pGame, D2UnitStrc* pUni
                     const int32_t nTimeDependentValue = nAddValue + nRemainingDuration * STATLIST_GetStatValue(pStatList, nStatId, 0);
                     if (!i)
                     {
-                        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+                        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                     }
 
                     if (nRemainingDuration + nLength > 0)
@@ -534,8 +534,8 @@ int32_t __fastcall SKILLITEM_pSpell05_RejuvPotion(D2GameStrc* pGame, D2UnitStrc*
 
                             if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
                             {
-                                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
-                                EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+                                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_STATREGEN, 0);
+                                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
                             }
 
                             STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
@@ -550,7 +550,7 @@ int32_t __fastcall SKILLITEM_pSpell05_RejuvPotion(D2GameStrc* pGame, D2UnitStrc*
                         const int32_t nTimeDependentValue = nAddValue + nRemainingDuration * STATLIST_GetStatValue(pStatList, nStatId, 0);
                         if (!i)
                         {
-                            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+                            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                         }
 
                         if (nRemainingDuration + nLength > 0)
@@ -640,7 +640,7 @@ int32_t __fastcall SKILLITEM_pSpell09_StaminaPotion(D2GameStrc* pGame, D2UnitStr
     if (nEndFrame)
     {
         D2COMMON_10476(pStatList, nEndFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nEndFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nEndFrame, 0, 0);
     }
 
     for (int32_t i = 0; i < 3; ++i)
@@ -937,6 +937,8 @@ int32_t __fastcall SKILLS_SrvDo113_Scroll_Book(D2GameStrc* pGame, D2UnitStrc* pU
                     sub_6FC49220(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused, 0);
                     return 1;
                 }
+				default:
+					break;
                 }
 
                 return 0;
@@ -961,9 +963,9 @@ void __fastcall SKILLITEM_ActivateAura(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         return;
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a5);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a5);
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, sub_6FD13220(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel), a5, nSkillId);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSTATS, SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel), a5, nSkillId);
 
     if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_IMMEDIATE])
     {
@@ -994,7 +996,7 @@ void __fastcall SKILLITEM_DeactivateAura(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         STATLIST_FreeStatList(pStatList);
     }
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a4);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a4);
 }
 
 //D2Game.0x6FD043F0
@@ -1765,7 +1767,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
     const int32_t nX = CLIENTS_GetUnitX(pSource);
     const int32_t nY = CLIENTS_GetUnitY(pSource);
 
-    D2RoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pSource), nX, nY);
+    D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pSource), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -1793,17 +1795,17 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
         pAiControl = pRevivedMonster->pMonsterData->pAiControl;
     }
 
-    AITHINK_ExecuteAiFn(pGame, pRevivedMonster, pAiControl, 0);
+    AITHINK_ExecuteAiFn(pGame, pRevivedMonster, pAiControl, AISPECIALSTATE_NONE);
     MONSTER_UpdateAiCallbackEvent(pGame, pRevivedMonster);
     AIGENERAL_SetOwnerData(pGame, pRevivedMonster, pOwner->dwUnitId, pOwner->dwUnitType, 0, 0);
     AIUTIL_SetOwnerGUIDAndType(pRevivedMonster, pOwner);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pRevivedMonster, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pRevivedMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 25, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pRevivedMonster, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pRevivedMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 25, 0, 0);
     sub_6FCBDD30(pRevivedMonster, 2u, 0);
     pRevivedMonster->dwFlags |= UNITFLAG_ISREVIVE;
     STATES_ToggleState(pRevivedMonster, STATE_REVIVE, 1);
     D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pRevivedMonster, 21, 0);
-    EVENT_SetEvent(pGame, pRevivedMonster, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + 1500, 0, 0);
+    EVENT_SetEvent(pGame, pRevivedMonster, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 1500, 0, 0);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pRevivedMonster, 0, pOwner->dwNodeIndex);
     D2Common_10214(pRevivedMonster);
 
@@ -1843,7 +1845,7 @@ int32_t __fastcall SKILLITEM_EventFunc31_Reanimate(D2GameStrc* pGame, int32_t nE
     {
         if (i->dwUnitType == UNIT_PLAYER)
         {
-            SUNITEVENT_AllocTimer(pGame, pUnit, 13, (uint16_t)nSkillId, i->dwUnitId, SKILLITEM_TimerCallback_ReanimateMonster, 0, i->dwUnitId);
+			SUNITEVENT_Register(pGame, pUnit, UNITEVENT_DEATH, (uint16_t)nSkillId, i->dwUnitId, SKILLITEM_TimerCallback_ReanimateMonster, 0, i->dwUnitId);
             return 1;
         }
     }
@@ -1859,7 +1861,7 @@ int32_t __fastcall SKILLITEM_FindTargetPosition(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;

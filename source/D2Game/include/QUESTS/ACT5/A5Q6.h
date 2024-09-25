@@ -13,7 +13,7 @@ struct D2Act5Quest6Strc						//sizeof 0xA8
 	uint8_t bWorldStoneChamberOpen;			//0x86
 	uint8_t pad0x87;						//0x87
 	int nPlayersInWorldStoneChamber;		//0x88
-	D2RoomStrc* pRoom;						//0x8C
+	D2ActiveRoomStrc* pRoom;						//0x8C
 	uint8_t bQuestStarted;					//0x90
 	uint8_t pad0x91[3];						//0x91
 	int nBaalPortalObjectMode;				//0x94
@@ -83,6 +83,6 @@ void __fastcall OBJECTS_InitFunction79_Zoo(D2ObjInitFnStrc* pOp);
 //D2Game.0x6FCB94C0
 int32_t __fastcall ACT5Q6_UnitIterate_SendZooMonsterIdToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FCB9520
-void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pUnit);
+void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit);
 //
 void __fastcall ACT5Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);

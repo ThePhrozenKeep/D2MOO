@@ -43,19 +43,19 @@ cmake --install YOU_BUILD_DIR --config Release --prefix YOUR_INSTALL_FOLDER
 
 ## "Open Folder" and Visual Studio Code
 
-It is also possible to use *Visual Studio* "Open folder" feature or *Visual Studio Code*, however you will need to configure [`Launch.vs.json`](https://learn.microsoft.com/en-us/cpp/build/configure-cmake-debugging-sessions?view=msvc-170#launchvsjson-reference) manually, which is **not practical**.
+It is also possible to use *Visual Studio* "Open folder" feature or *Visual Studio Code*, however you will need to configure [`Launch.vs.json`](https://learn.microsoft.com/en-us/cpp/build/configure-cmake-debugging-sessions?view=msvc-170#launchvsjson-reference) manually, which is **not practical nor recommended** .
 
 # Running in Visual Studio
 
 If you are using a default Diablo2 install and generated `.sln` through *CMake*, you are good to go!
 
-Otherwise have a look at the [Debugging](Debugging.md) documentation.
+Otherwise (for example if you need to configure your installation folder) have a look at the [Debugging](Debugging.md) documentation.
 
-# Running manually
+# Running manually (For advanced users)
 
 Launch *Diablo2* (or *D2SE*) by using the command `D2.DetoursLauncher [Path to Game.exe or D2SE.exe]`.
 - If the `Game.exe`/`D2SE.exe` executable is omitted, `D2.DetoursLauncher` will look for executables using the registry, working directory and `PATH`.
-- The *detours* .dll expects patch `.dll`s to be under the `./patch` folder of the current working directory. This can be overriden using the `DIABLO2_PATCH` environment variable.
 - You can pass the executable parameters by using the `--` parameter.  
   For example: `D2.DetoursLauncher [Game.exe] -- -direct -txt -w`.
+- The *detours* .dll expects patch `.dll`s to be under the `./patch` folder of the current working directory. This can be overriden using the `DIABLO2_PATCH` environment variable. CMake will set this variable by default for debugging.
 
