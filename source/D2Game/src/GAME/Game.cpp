@@ -1320,7 +1320,7 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
 //D2Game.0x6FC37880
 int32_t __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
 {
-    const int32_t nClientId = sub_6FC33F20(szClientName);
+    const int32_t nClientId = CLIENTS_GetClientIdByName(szClientName);
     if (!nClientId)
     {
         return 0;

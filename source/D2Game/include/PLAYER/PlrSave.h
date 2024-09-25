@@ -43,7 +43,7 @@ int32_t __stdcall D2GAME_10029_SAVE_WriteFileInterface(D2GameStrc* pGame, D2Unit
 //D2Game.0x6FC89AD0
 int32_t __stdcall D2GAME_SAVE_SerializeItem_6FC89AD0(D2UnitStrc* pItem, uint8_t* pBitstream, uint32_t nBitstreamSize, int32_t n0, int32_t a5);
 //D2Game.0x6FC89B50
-int32_t __stdcall sub_6FC89B50(D2InventoryStrc* pInventory, uint8_t* pBitstream, uint32_t nBitstreamSize, int32_t a4, int32_t a5);
+int32_t __stdcall PLRSAVE_WriteItems_6FC89B50(D2InventoryStrc* pInventory, uint8_t* pBitstream, uint32_t nBitstreamSize, int32_t a4, int32_t a5);
 //D2Game.0x6FC8A0F0
 int32_t __fastcall sub_6FC8A0F0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* pSection, int32_t nSize, int32_t a5, int32_t a6);
 //D2Game.0x6FC8A140
@@ -67,11 +67,11 @@ int32_t __fastcall sub_6FC8B3D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, BYTE* pS
 //D2Game.0x6FC8B680
 int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedItemStrc* pSavedItem, D2UnitStrc** ppItem, int32_t* a5);
 //D2Game.0x6FC8B8A0
-int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pSection, uint32_t dwVersion, int32_t a5, int32_t a6, int32_t* pSize);
+int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pSection, uint32_t dwVersion, int32_t nSize, int32_t a6, int32_t* pSize);
 //D2Game.0x6FC8BAA0
 int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc* a4);
 //D2Game.0x6FC8BC70
-int32_t __fastcall sub_6FC8BC70(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* pSection, uint32_t dwVersion, int32_t a5, int32_t a6, int32_t* a7);
+int32_t __fastcall sub_6FC8BC70(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* pSection, uint32_t dwVersion, int32_t nSize, int32_t a6, int32_t* pSize);
 //D2Game.0x6FC8BCC0
 int32_t __fastcall sub_6FC8BCC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pSection, uint32_t dwVersion, int32_t nRemainingSize, int32_t* pSize);
 //D2Game.0x6FC8BEE0
@@ -85,4 +85,4 @@ int32_t __fastcall sub_6FC8C890(D2GameStrc* pGame, D2ClientStrc* pClient, D2Unit
 //D2Game.0x6FC8C9D0
 int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc* pClient, const char* szName, D2UnitStrc** ppPlayer, DWORD dw1, DWORD dw2, DWORD dw3);
 //D2Game.0x6FC8CB40
-int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D2ClientStrc* pClient, const char* szName, int32_t a4, D2UnitStrc** ppPlayer, DWORD dw1, DWORD dw2, DWORD dw3);
+int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D2ClientStrc* pClient, const char* szName, int32_t a4, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);

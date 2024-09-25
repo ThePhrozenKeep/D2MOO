@@ -559,7 +559,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
             D2UnitStrc* pDupedItem = ITEMS_Duplicate(pGame, pItem, pUnit, 1);
             if (nBodyLoc == -1)
             {
-                if (INVENTORY_PlaceItemAtFreePosition(pDeadBody->pInventory, pDupedItem, UNITS_GetInventoryRecordId(pDeadBody, 0, pGame->bExpansion), 0, 0, __FILE__, __LINE__) 
+                if (INVENTORY_PlaceItemAtFreePosition(pDeadBody->pInventory, pDupedItem, UNITS_GetInventoryRecordId(pDeadBody, INVPAGE_INVENTORY, pGame->bExpansion), 0, 0, __FILE__, __LINE__)
                     && INVENTORY_PlaceItemInSocket(pDeadBody->pInventory, pDupedItem, 1))
                 {
                     if (pDupedItem)

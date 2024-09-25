@@ -316,7 +316,7 @@ void __fastcall sub_6FC32220(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC32260
-int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6)
+int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pClient);
@@ -325,7 +325,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
     D2UnitStrc* ppUnit = nullptr;
 
-    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, a4, a5, a6);
+    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, pRoomArg, nXArg, nYArg);
     if (nError)
     {
         FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", pClient->szName, nError, "nError");
@@ -1410,7 +1410,7 @@ int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName)
 }
 
 //D2Game.0x6FC33F20
-int32_t __fastcall sub_6FC33F20(const char* szName)
+int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName)
 {
     int32_t nClientId = 0;
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
@@ -1435,16 +1435,16 @@ int32_t __fastcall sub_6FC33F20(const char* szName)
 }
 
 //D2Game.0x6FC33F90
-int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
+int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName)
 {
     int32_t result = 1;
-    const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(a1);
+    const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
     D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex];
     if (pClient)
     {
-        while (SStrCmpI(pClient->szName, a1, sizeof(pClient->szName)))
+        while (SStrCmpI(pClient->szName, szName, sizeof(pClient->szName)))
         {
             pClient = pClient->pNextByName;
             if (!pClient)
@@ -1454,9 +1454,9 @@ int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
             }
         }
 
-        if (a2)
+        if (szGameName)
         {
-            SStrCopy(a2, pClient->szName, sizeof(pClient->szName));
+            SStrCopy(szGameName, pClient->szName, sizeof(pClient->szName));
         }
 
         result = 0;

@@ -655,11 +655,11 @@ struct D2GSPacketSrv0D		//size of 0x0D
 	uint8_t nHeader;			//0x00
 	uint8_t nUnitType;			//0x01
 	uint32_t dwUnitGUID;		//0x02
-	uint8_t unk0x06;			//0x06
-	uint16_t unk0x07;			//0x07
-	uint16_t unk0x09;			//0x09
-	uint8_t unk0x0B;			//0x0B
-	uint8_t unk0x0C;			//0x0C
+	uint8_t nHitClass;			//0x06
+	uint16_t nX;				//0x07
+	uint16_t nY;				//0x09
+	uint8_t nHitType;			//0x0B
+	uint8_t nUnitLifePct;		//0x0C
 };
 
 struct D2GSPacketSrv0E		//size of 0x0C
