@@ -222,13 +222,13 @@ void __fastcall D2GAME_PACKETS_SendPacket0x0D_6FC3C920(D2ClientStrc* pClient, ch
     D2GSPacketSrv0D packet0D = {};
 
     packet0D.nHeader = nPacketId;
-    packet0D.dwUnitGUID = nUnitId;
-    packet0D.unk0x06 = a5;
-    packet0D.unk0x07 = nX;
-    packet0D.unk0x09 = nY;
-    packet0D.unk0x0B = a8;
     packet0D.nUnitType = nUnitType;
-    packet0D.unk0x0C = nLife;
+    packet0D.dwUnitGUID = nUnitId;
+    packet0D.nHitClass = a5;
+    packet0D.nX = nX;
+    packet0D.nY = nY;
+    packet0D.nHitType = a8;
+    packet0D.nUnitLifePct = nLife;
 
     if ((uint8_t)nUnitType >= 6u)
     {
@@ -1504,7 +1504,7 @@ void __fastcall D2GAME_SendPacket0x9D_6FC3E6F0(D2ClientStrc* pClient, D2UnitStrc
         for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItem->pInventory); i; i = INVENTORY_GetNextItem(i))
         {
             ITEMS_SetOrRemoveFlag(&nFlags, 8, 1);
-            D2GAME_SendPacket0x9D_6FC3E6F0(pClient, pItem, INVENTORY_UnitIsItem(i), 0x13u, nFlags, 0);
+            D2GAME_SendPacket0x9D_6FC3E6F0(pClient, pItem, INVENTORY_UnitIsItem(i), ITEMACTION_ITEMINSOCKET, nFlags, 0);
         }
     }
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <D2Config.h>
 #include "D2PacketDef.h"
 #include <Units/Units.h>
 #include "Game.h"
@@ -82,7 +81,7 @@ union D2PackedClientSaveFlags
 		uint16_t bExpansion : 1;	// BIT(5)
 		uint16_t bLadder : 1;		// BIT(6)
 		uint16_t bUnkFlag0x80 : 1;	// BIT(7)
-		// Encodes completed acts 
+		// Encodes completed acts
 		// => 0 No act completed
 		// => Acts 1-5 Normal (values 1-5), then 1-5 NM (values 6-10), then 1-5 Hell (values 11-15) for Expansion
 		// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic
@@ -255,7 +254,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 //D2Game.0x6FC32220
 void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 //D2Game.0x6FC32260
-int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
+int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
 //1.10f: D2Game.0x6FC325E0
 //1.13c: D2Game.0x6FC6A9B0
 D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t a8, int32_t a9);
@@ -334,9 +333,9 @@ void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
 //D2Game.0x6FC33EA0
 int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName);
 //D2Game.0x6FC33F20
-int32_t __fastcall sub_6FC33F20(const char* szName);
+int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName);
 //D2Game.0x6FC33F90
-int32_t __fastcall sub_6FC33F90(const char* a1, char* a2);
+int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName);
 //D2Game.0x6FC34020
 int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7);
 //D2Game.0x6FC34170
