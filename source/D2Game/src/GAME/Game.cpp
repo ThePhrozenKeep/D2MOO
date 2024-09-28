@@ -2102,7 +2102,8 @@ void __fastcall sub_6FC38E00()
     gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
-//D2Game.0x6FC38E20 (#10004)
+//1.10f:D2Game.0x6FC38E20 (#10004)
+//1.13c:D2Game.0x6FC4E1E0 (#10008)
 int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 {
     // TODO: Names

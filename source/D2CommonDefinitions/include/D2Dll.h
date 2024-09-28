@@ -38,7 +38,7 @@ constexpr auto default_or_void<void>() -> void {}
 	typedef TYPE DLL##_##NAME##_vt; \
 	static DLL##_##NAME##_vt * DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
-#define D2PTR(DLL, NAME, OFFSET) \
-	static PVOID NAME = (uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
+#define D2PTR(DLL, NAME, TYPE, OFFSET) \
+	static TYPE* DLL##_##NAME = (TYPE*)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 // NOLINTEND

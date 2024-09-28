@@ -11,6 +11,7 @@ add_library(D2CommonDefinitions INTERFACE)
 
 target_sources(D2CommonDefinitions
   ${SOURCES_TRANSITIVE_USAGE}
+    include/BnClient.h
     include/D2BasicTypes.h
     include/D2Constants.h
     include/D2CommonDefinitions.h

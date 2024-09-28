@@ -328,7 +328,8 @@ void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame);
 //D2Game.0x6FC38E00
 void __fastcall sub_6FC38E00();
-//D2Game.0x6FC38E20 (#10004)
+//1.10f:D2Game.0x6FC38E20 (#10004)
+//1.13c:D2Game.0x6FC4E1E0 (#10008)
 D2GAME_DLL_DECL int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1);
 //D2Game.0x6FC39030
 void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a3, int32_t nUnused);
