@@ -19,6 +19,11 @@
 //1.10f: Game.0x
 D2CmdArgStrc gaCmdArguments[] = {
 	{ "VIDEO",     "WINDOW",       "w",          CMD_BOOLEAN, cmdidx(bWindow),        0 },
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	{ "VIDEO",     "WINDOW",       "window",     CMD_BOOLEAN, cmdidx(bWindow),        0 },
+	{ "VIDEO",     "WINDOW",       "windowed",   CMD_BOOLEAN, cmdidx(bWindow),        0 },
+	{ "VIDEO",     "ASPECT",       "nofixaspect",CMD_BOOLEAN, cmdidx(bNoFixedAspect), 0 },
+#endif
 	{ "VIDEO",     "3DFX",         "3dfx",       CMD_BOOLEAN, cmdidx(b3DFX),          0 },
 	{ "VIDEO",     "OPENGL",       "opengl",     CMD_BOOLEAN, cmdidx(bOpenGL),        0 },
 	{ "VIDEO",     "D3D",          "d3d",        CMD_BOOLEAN, cmdidx(bD3D),           0 },
@@ -80,6 +85,11 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "TXT",       "TXT",          "txt",        CMD_BOOLEAN, cmdidx(bTxt),           0 },
 	{ "BUILD",     "BUILD",        "build",      CMD_BOOLEAN, cmdidx(bBuild),         0 },
 #endif
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	{ "DEBUG",     "NOSOUND",      "nosound",    CMD_BOOLEAN, cmdidx(bNoSound),       0 },
+	{ "DEBUG",     "SOUNDBKG",     "sndbkg",     CMD_BOOLEAN, cmdidx(bSoundBackground), 0 },
+#endif
+
 };
 #undef cmdidx
 
@@ -432,7 +442,16 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 	{
 		D2GFX_EnableVSync();
 	}
-	
+
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	DWORD bRegistryFixedAspectRatio = 1;
+	SRegLoadValue("Diablo II", "Fixed Aspect Ratio", 0, &bRegistryFixedAspectRatio);
+	if (pCfg->bNoFixedAspect || bRegistryFixedAspectRatio != 1)
+	{
+		// D2gfx_10066(); // TODO
+	}
+#endif
+
 	if (!pCfg->bIsExpansion)
 	{
 		SRegSaveValue("Diablo II", "Resolution", 0, 0);
@@ -440,7 +459,11 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 
 	if(!pCfg->bNoSound && geModState != MODULE_SERVER)
 	{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+		D2SOUND_OpenSoundSystem(pCfg->bIsExpansion, pCfg->bSoundBackground);
+#else
 		D2SOUND_OpenSoundSystem(pCfg->bIsExpansion);
+#endif
 		bSoundStarted = TRUE;
 	}
 

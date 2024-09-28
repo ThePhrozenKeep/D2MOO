@@ -39,6 +39,9 @@ struct D2ConfigStrc
 	BOOL bIsExpansion;
 #endif
 	uint8_t bWindow;
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	uint8_t bNoFixedAspect;
+#endif
 	uint8_t b3DFX;
 	uint8_t bOpenGL;
 	uint8_t bRave;
@@ -121,6 +124,9 @@ struct D2ConfigStrc
 	
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	uint8_t bBuild;
+#endif
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	uint8_t bSoundBackground;
 #endif
 	struct BnClientInterface* pComInterface;	// Can be set by D2Launch to BnClient.dll's QueryInterface()
 	uint32_t nTokenId;							// See D2Client.dll:CONFIG_ApplyNetwork_6FAABBF0

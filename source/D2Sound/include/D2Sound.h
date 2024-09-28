@@ -9,7 +9,11 @@
 constexpr int D2SoundImageBase = 0x6F980000;
 #endif
 
-D2FUNC_DLL(D2SOUND, OpenSoundSystem, void, __fastcall, (BOOL), 0x10E0)								//D2Sound.#10000
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+D2FUNC_DLL(D2SOUND, OpenSoundSystem, void, __fastcall, (BOOL bExpansion, BOOL bSoundBackground), 0x0000/*TODO*/)	//D2Sound.#10002
+#else
+D2FUNC_DLL(D2SOUND, OpenSoundSystem, void, __fastcall, (BOOL bExpansion), 0x10E0)					//D2Sound.#10000
+#endif
 D2FUNC_DLL(D2SOUND, CloseSoundSystem, void, __fastcall, (), 0x21C0)									//D2Sound.#10001
 D2FUNC_DLL(D2SOUND, 10034, void, __fastcall, (int), 0x4D60)											//D2Sound.#10034
 D2FUNC_DLL(D2SOUND, 10039, void, __fastcall, (const char*), 0x2800)									//D2Sound.#10039
