@@ -13,7 +13,7 @@ The original game assets and binaries is required to use this project.
 
 ### Dependencies
 
-For the patching we rely on the [D2.Detours](https://github.com/Lectem/D2.Detours.git) project, which is included as a git submodule. (use the `git submodule update --init` command, or clone this project with `git clone --recursive`)
+For the patching we rely on the [D2.Detours](https://github.com/Lectem/D2.Detours.git) project, which is included as a git submodule. (use the `git submodule update --init --recursive` command, or clone this project with `git clone --recursive`)
 You will also need to install the [CMake](https://cmake.org) build system and Visual C++ (or any C++ compiler that can generate .DLLs on Windows) which are freely available.
 
 ### Build the project
