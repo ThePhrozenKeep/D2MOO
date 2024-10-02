@@ -1069,7 +1069,10 @@ void __fastcall sub_6FCF77E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2DamageStrc*
                             nValue = 3;
                         }
 
+						D2SeedStrc tSeedBackup;
+						SEED_GetSeeds(&pUnit->pSeed, &tSeedBackup.nLowSeed, &tSeedBackup.nHighSeed);
                         const int32_t nX = ITEMS_RollRandomNumber(&pUnit->pSeed);
+						SEED_SetSeeds(&pUnit->pSeed, tSeedBackup.nLowSeed, tSeedBackup.nHighSeed);
 
                         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PRGSTACK])
                         {
