@@ -415,12 +415,12 @@ int __stdcall D2COMMON_11068_GetCompInfo(D2UnitStrc* pMonster, int nComponent)
 {
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 
-	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && nComponent < ARRAY_SIZE(pMonStats2TxtRecord->unk0x15))
+	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && nComponent < ARRAY_SIZE(pMonStats2TxtRecord->nComponentChoiceCounts))
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pMonster->dwClassId);
 		if (pMonStats2TxtRecord)
 		{
-			return pMonStats2TxtRecord->unk0x15[nComponent];
+			return pMonStats2TxtRecord->nComponentChoiceCounts[nComponent];
 		}
 	}
 
@@ -525,10 +525,10 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 	int nLevelId = 0;
 	uint32_t dwCode = 0;
 
-	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && nIndex < ARRAY_SIZE(pMonStats2TxtRecord->unk0x15))
+	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && nIndex < ARRAY_SIZE(pMonStats2TxtRecord->nComponentChoiceCounts))
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(pMonster->dwClassId);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->unk0x15[nIndex] > nComponent)
+		if (pMonStats2TxtRecord && pMonStats2TxtRecord->nComponentChoiceCounts[nIndex] > nComponent)
 		{
 			dwCode = DATATBLS_GetCodeFromCompCodeTxt(pMonStats2TxtRecord->unk0x26[nIndex].nComposit[nComponent]);
 
@@ -579,10 +579,10 @@ int __stdcall D2Common_11070(int nMonsterId, unsigned int nComponent, unsigned i
 {
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 
-	if (nComponent < ARRAY_SIZE(pMonStats2TxtRecord->unk0x15))
+	if (nComponent < ARRAY_SIZE(pMonStats2TxtRecord->nComponentChoiceCounts))
 	{
 		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
-		if (pMonStats2TxtRecord && pMonStats2TxtRecord->unk0x15[nComponent] > a3)
+		if (pMonStats2TxtRecord && pMonStats2TxtRecord->nComponentChoiceCounts[nComponent] > a3)
 		{
 			return DATATBLS_GetCodeFromCompCodeTxt(pMonStats2TxtRecord->unk0x26[nComponent].nComposit[a3]);
 		}

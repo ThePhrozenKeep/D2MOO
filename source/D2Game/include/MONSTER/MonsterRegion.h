@@ -11,8 +11,8 @@ struct D2MonRegDataStrc
 {
 	uint16_t nMonHcIdx;							//0x00
 	uint8_t nRarity;							//0x02
-	uint8_t unk0x03;							//0x03
-	uint8_t unk0x04[3][16];						//0x04
+	uint8_t nComponentVariantsMax;				//0x03
+	uint8_t nComponentVariants[3][16];			//0x04
 };
 
 struct D2MonsterRegionStrc
