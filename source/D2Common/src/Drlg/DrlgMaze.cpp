@@ -3155,6 +3155,8 @@ void __fastcall DRLGMAZE_RollAct_1_2_3_BasicPresets(D2DrlgLevelStrc* pLevel)
 		return;
 	}
 
+	nIndex = (unsigned int)SEED_RollRandomNumber(&pLevel->pSeed) % 15;
+
 	for (int i = 0; i < 15; ++i)
 	{
 		nIndex2 = (unsigned int)SEED_RollRandomNumber(&pLevel->pSeed) % 15;
@@ -3166,9 +3168,7 @@ void __fastcall DRLGMAZE_RollAct_1_2_3_BasicPresets(D2DrlgLevelStrc* pLevel)
 		pOffsets[nIndex2] = nTemp1;
 		pOffsets[nIndex1] = nTemp2;
 	}
-
-	nIndex = (unsigned int)SEED_RollRandomNumber(&pLevel->pSeed) % 15;
-
+	
 	nCounter1 = pLevel->nRooms / 5 + 1;
 	if (nCounter1 <= 2)
 	{
