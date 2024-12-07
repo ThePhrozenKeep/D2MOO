@@ -444,7 +444,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		}
 		if ((pDynamicPath->dwFlags & 4) != 0)
 		{
-			D2_CHECK(pDynamicPath->pUnit && (pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pDynamicPath->pUnit->dwUnitType != UNIT_MONSTER));
+			D2_CHECK(pDynamicPath->pUnit && (pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 			COLLISION_SetUnitCollisionMask(
 				pDynamicPath->pRoom,
 				v45.X,
