@@ -2690,7 +2690,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 						{
 							nComponent = COMPOSIT_LEFTHAND;
 						}
-						else if (nComponent < NUM_COMPONENTS)
+						if (nComponent < NUM_COMPONENTS)
 						{
 							pComponents[nComponent] = nIndex;
 
