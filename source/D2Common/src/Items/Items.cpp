@@ -3691,7 +3691,7 @@ int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E710 (#10829)
-uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColor, int nTransType)
+uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColorIndex, int nTransType)
 {
 	D2UniqueItemsTxt* pUniqueItemsTxtRecord = NULL;
 	D2MagicAffixTxt* pMagicAffixTxtRecord = NULL;
@@ -3757,11 +3757,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 				pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 				if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pMagicAffixTxtRecord->nTransformColor >= 21)
 				{
-					*pColor = 0;
+					*pColorIndex = 0;
 				}
 				else
 				{
-					*pColor = (pMagicAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
+					*pColorIndex = (pMagicAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
 				}
 
 				if (nTransType)
@@ -3787,11 +3787,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 				pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 				if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pMagicAffixTxtRecord->nTransformColor >= 21)
 				{
-					*pColor = 0;
+					*pColorIndex = 0;
 				}
 				else
 				{
-					*pColor = (pMagicAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
+					*pColorIndex = (pMagicAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
 				}
 
 				if (nTransType)
@@ -3831,11 +3831,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 					{
 						if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pUniqueItemsTxtRecord->nChrTransform < 0 || pUniqueItemsTxtRecord->nChrTransform >= 21)
 						{
-							*pColor = 0;
+							*pColorIndex = 0;
 						}
 						else
 						{
-							*pColor = (pUniqueItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
+							*pColorIndex = (pUniqueItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
 						}
 
 						return D2CMP_MixPalette(pItemsTxtRecord->nInvTrans, pUniqueItemsTxtRecord->nInvTransform);
@@ -3847,11 +3847,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 					{
 						if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pUniqueItemsTxtRecord->nChrTransform < 0 || pUniqueItemsTxtRecord->nChrTransform >= 21)
 						{
-							*pColor = 0;
+							*pColorIndex = 0;
 						}
 						else
 						{
-							*pColor = (pUniqueItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
+							*pColorIndex = (pUniqueItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
 						}
 
 						return D2CMP_MixPalette(pItemsTxtRecord->nTransform, pUniqueItemsTxtRecord->nChrTransform);
@@ -3883,11 +3883,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 					{
 						if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pSetItemsTxtRecord->nChrTransform < 0 || pSetItemsTxtRecord->nChrTransform >= 21)
 						{
-							*pColor = 0;
+							*pColorIndex = 0;
 						}
 						else
 						{
-							*pColor = (pSetItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
+							*pColorIndex = (pSetItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
 						}
 
 						return D2CMP_MixPalette(pItemsTxtRecord->nInvTrans, pSetItemsTxtRecord->nInvTransform);
@@ -3899,11 +3899,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 					{
 						if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pSetItemsTxtRecord->nChrTransform < 0 || pSetItemsTxtRecord->nChrTransform >= 21)
 						{
-							*pColor = 0;
+							*pColorIndex = 0;
 						}
 						else
 						{
-							*pColor = (pSetItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
+							*pColorIndex = (pSetItemsTxtRecord->nChrTransform & 31) + 32 * pItemsTxtRecord->nTransform;
 						}
 
 						return D2CMP_MixPalette(pItemsTxtRecord->nTransform, pSetItemsTxtRecord->nChrTransform);
@@ -3960,11 +3960,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 								pGemsTxtRecord = DATATBLS_GetGemsTxtRecord(pGemItemsTxtRecord->dwGemOffset);
 								if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pGemsTxtRecord->nTransForm >= 21)
 								{
-									*pColor = 0;
+									*pColorIndex = 0;
 								}
 								else
 								{
-									*pColor = (pGemsTxtRecord->nTransForm & 31) + 32 * pItemsTxtRecord->nTransform;
+									*pColorIndex = (pGemsTxtRecord->nTransForm & 31) + 32 * pItemsTxtRecord->nTransform;
 								}
 
 								if (nTransType)
@@ -3996,11 +3996,11 @@ uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_
 		pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 		if (pItemsTxtRecord->nTransform <= 0 || pItemsTxtRecord->nTransform >= 9 || pAutoAffixTxtRecord->nTransformColor >= 21)
 		{
-			*pColor = 0;
+			*pColorIndex = 0;
 		}
 		else
 		{
-			*pColor = (pAutoAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
+			*pColorIndex = (pAutoAffixTxtRecord->nTransformColor & 31) + 32 * pItemsTxtRecord->nTransform;
 		}
 
 		if (nTransType)

@@ -59,11 +59,11 @@ struct D2CellFileStrc
 	D2GfxCellStrc* pGfxCells;				//0x18
 };
 
-struct D2GfxDataStrc
+struct D2GfxDataStrc // Aka CelContext
 {
-	D2GfxCellStrc* pCurrentCell;			//0x00
+	D2GfxCellStrc* pCurrentCell;			//0x00 aka hCel
 	D2CellFileStrc* pCellFile;				//0x04
-	uint32_t nFrame;							//0x08
+	uint32_t nFrame;							//0x08 aka dwCel
 	uint32_t nDirection;						//0x0C
 	int32_t nMaxDirections;						//0x10
 	int32_t nMaxFrames;							//0x14

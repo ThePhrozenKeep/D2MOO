@@ -514,15 +514,15 @@ D2FUNC_DLL_NP(STORM, SMemReAlloc, void*, __stdcall, (void *location, int amount,
 #endif
 
 
-struct SMSGHANDLER_PARAMS {
-    HWND    hWindow;
-    UINT    nMessage;
-    WPARAM  wParam;
-    LPARAM  lParam;
-    UINT    nNotifyCode;
-    LPVOID  pExtra;
-    BOOL    bUseResult;
-    LRESULT lResult;
+struct SMSGHANDLER_PARAMS { // Size 0x20
+    HWND    hWindow;		// 0x00
+    UINT    nMessage;		// 0x04
+    WPARAM  wParam;			// 0x08
+    LPARAM  lParam;			// 0x0C For mouse position (x,y), use LOWORD and HIWORD. See Win32 GET_X_LPARAM and GET_Y_LPARAM 
+    UINT    nNotifyCode;	// 0x10
+    LPVOID  pExtra;			// 0x14
+    BOOL    bUseResult;		// 0x18
+    LRESULT lResult;		// 0x1C
 };
 typedef BOOL(CALLBACK* SMSGIDLEPROC)(DWORD);
 typedef void (CALLBACK* SMSGHANDLER)(SMSGHANDLER_PARAMS*);

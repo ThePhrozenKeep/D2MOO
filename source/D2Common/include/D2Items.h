@@ -337,9 +337,9 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t*
 //D2Common.0x6FD99540 (#10750)
 D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem); // D2C_ItemTypes
 //D2Common.0x6FD99640 (#10752)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId); // D2C_ItemTypes
 //D2Common.0x6FD99680 (#10753)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemQlvl(const D2UnitStrc* pItem);
 //D2Common.0x6FD99700 (#10754)
@@ -504,7 +504,8 @@ D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem)
 //D2Common.0x6FD9E670 (#10828)
 D2COMMON_DLL_DECL int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem);
 //D2Common.0x6FD9E710 (#10829)
-D2COMMON_DLL_DECL uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColor, int nTransType);
+// Returns the palette, and color index in pColor
+D2COMMON_DLL_DECL uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColorIndex, int nTransType);
 //D2Common.0x6FD9EE70
 D2SetItemsTxt* __fastcall ITEMS_GetSetItemsTxtRecord(int nRecordId);
 //D2Common.0x6FD9EEA0 (#10830)

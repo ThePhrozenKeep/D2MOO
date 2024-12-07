@@ -158,19 +158,21 @@ inline bool TileTypeIsAWallWithDoor(int32_t nTileType)
 }
 
 
-D2FUNC_DLL(D2CMP, GetNearestPaletteIndex, int, __stdcall, (PALETTEENTRY* pPalette, int nPaletteSize, int nRed, int nGreen, int nBlue), 0xAB20)									//D2Cmp.#10004
+D2FUNC_DLL(D2CMP, GetNearestPaletteIndex, int, __stdcall, (PALETTEENTRY* pPalette, int nPaletteSize, int nRed, int nGreen, int nBlue), 0xAB20)							//D2Cmp.#10004
+// Operates on the celfile inline. ppOutFile is set to pFile if loaded to the hardware.
 D2FUNC_DLL(D2CMP, CelFileNormalize, void, __stdcall, (D2CellFileStrc* pFile, D2CellFileStrc** ppOutFile, const char* szFile, int nLine, int nSpecVersion, int nUnused), 0x1EA0)		//D2Cmp.#10024
 D2FUNC_DLL(D2CMP, CelFileFreeHardware, BOOL, __stdcall, (D2CellFileStrc* pFile), 0x2750)																				//D2Cmp.#10032
-D2FUNC_DLL(D2CMP, CelGetHandle, D2CellFileStrc*, __stdcall, (D2GfxDataStrc*), 0x2540)																					//D2Cmp.#10036
-D2FUNC_DLL(D2CMP, CelGetWidth, int, __stdcall, (D2CellFileStrc* pCelFile), 0x25E0)																						//D2Cmp.#10037
-D2FUNC_DLL(D2CMP, CelGetHeight, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2610)																						//D2Cmp.#10038
-D2FUNC_DLL(D2CMP, CelGetOffsetX, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2640)																					//D2Cmp.#10039
-D2FUNC_DLL(D2CMP, CelGetOffsetY, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2670)																					//D2Cmp.#10040
+D2FUNC_DLL(D2CMP, CelGetHandle, D2GfxCellStrc*, __stdcall, (D2GfxDataStrc*), 0x2540)																					//D2Cmp.#10036
+D2FUNC_DLL(D2CMP, CelGetWidth, int, __stdcall, (D2GfxCellStrc* pCelFile), 0x25E0)																						//D2Cmp.#10037
+D2FUNC_DLL(D2CMP, CelGetHeight, int, __stdcall, (D2GfxCellStrc* pCelFile), 0x2610)																						//D2Cmp.#10038
+D2FUNC_DLL(D2CMP, CelGetOffsetX, int, __stdcall, (D2GfxCellStrc* pCelFile), 0x2640)																						//D2Cmp.#10039
+D2FUNC_DLL(D2CMP, CelGetOffsetY, int, __stdcall, (D2GfxCellStrc* pCelFile), 0x2670)																						//D2Cmp.#10040
 D2FUNC_DLL(D2CMP, CelFileGetCelsPerDirection, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2700)																		//D2Cmp.#10046
 D2FUNC_DLL(D2CMP, GetGfxFileExtension, const char*, __stdcall, (BOOL bAllowCompressed), 0xB930)																			//D2Cmp.#10051
 D2FUNC_DLL(D2CMP, InitSpriteCache, void, __stdcall, (void* pMemPool, int dwSpriteCacheSize, int dwSize, unsigned int dwMemoryOverride), 0xB9F0)							//D2Cmp.#10052
 D2FUNC_DLL(D2CMP, FlushSpriteCache, void, __stdcall, (BOOL bRealloc), 0xBBF0)																							//D2Cmp.#10053
 D2FUNC_DLL(D2CMP, SetCompressedDataMode, void, __stdcall, (BOOL bAllowCompressedMode), 0xB9C0)																			//D2Cmp.#10054
+D2FUNC_DLL(D2CMP, SpriteValidate, BOOL, __stdcall, (D2GfxDataStrc*, BOOL bAsyncWait, BOOL bAsyncLoad), 0xBD40)															//D2Cmp.#10055
 D2FUNC_DLL(D2CMP, 10077_GetTileType, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFFF0)																//D2Cmp.#10077
 D2FUNC_DLL(D2CMP, 10078_GetTileStyle, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFF30)																//D2Cmp.#10078
 // Material flags

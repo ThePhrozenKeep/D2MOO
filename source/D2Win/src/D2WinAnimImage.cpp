@@ -104,7 +104,7 @@ int32_t __fastcall ANIMIMAGE_ShouldMouseInputBeHandled(D2WinControlStrc* pContro
 		gfxData.pCellFile = *ppCellFile;
 	}
 
-	D2CellFileStrc* pGfxCell = D2CMP_CelGetHandle(&gfxData);
+	D2GfxCellStrc* pGfxCell = D2CMP_CelGetHandle(&gfxData);
 
 	const int32_t nX = gMousePosition_6F8FE234.x - D2CMP_CelGetOffsetX(pGfxCell);
 	const int32_t nY = gMousePosition_6F8FE234.y - D2CMP_CelGetOffsetY(pGfxCell);
@@ -215,7 +215,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		gfxData.nDirection = 0;
 		gfxData.nFrame = 0;
 
-		D2CellFileStrc* v26 = D2CMP_CelGetHandle(&gfxData);
+		D2GfxCellStrc* v26 = D2CMP_CelGetHandle(&gfxData);
 		nX -= D2CMP_CelGetOffsetX(v26);
 		nY -= D2CMP_CelGetOffsetY(v26);
 		eDrawMode = pAnimImage->eDrawMode;
