@@ -956,7 +956,8 @@ D2DrlgEnvironmentStrc* __fastcall DUNGEON_GetEnvironmentFromAct(D2DrlgActStrc* p
 	return pAct->pEnvironment;
 }
 
-//D2Common.0x6FD8D090 (#10088)
+//1.10f: D2Common.0x6FD8D090 (#10088)
+//1.13c: D2Common.? (#10047)
 D2DrlgStrc* __stdcall DUNGEON_GetDrlgFromAct(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -1199,7 +1200,8 @@ void __stdcall DUNGEON_ToggleHasPortalFlag(D2ActiveRoomStrc* pRoom, BOOL bReset)
 	}
 }
 
-//D2Common.0x6FD8D560 (#10104)
+//1.10f: D2Common.0x6FD8D560 (#10104)
+//1.13c: D2Common.0x6FD8D560 (#11125)
 void __stdcall DUNGEON_AnimateTiles(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)

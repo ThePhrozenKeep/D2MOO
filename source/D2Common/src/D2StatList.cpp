@@ -52,7 +52,7 @@ static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, D2SLaye
 
 		if (nLayer_StatId < pStatsArray->pStat[nMidPoint].nPackedValue)
 		{
-			nMax = nMin + (nMax - nMin) / 2;
+			nMax = nMidPoint;
 		}
 		else if (nLayer_StatId > pStatsArray->pStat[nMidPoint].nPackedValue)
 		{

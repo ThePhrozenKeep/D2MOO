@@ -2132,7 +2132,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 
     dword_6FD45844 = nSysTimeMs - v5;
     
-    int32_t bQueryPerformance = 0;
+    bool bHasSimulatedGame = false;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
     {
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
@@ -2140,7 +2140,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
         {
             if (D2GameStrc* pGame = GAME_LockGame(nGUID))
             {
-                bQueryPerformance = 1;
+				bHasSimulatedGame = true;
 
                 if (dword_6FD2CA10)
                 {
@@ -2164,7 +2164,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
         }
     }
 
-    if (!bQueryPerformance)
+    if (!bHasSimulatedGame)
     {
         return 0;
     }

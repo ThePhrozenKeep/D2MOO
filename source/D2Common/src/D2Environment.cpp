@@ -212,7 +212,8 @@ void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, D2DrlgEnvironmen
 	D2_FREE_POOL(pMemPool, pEnvironment);
 }
 
-//D2Common.0x6FD8DC00 (#10923)
+//1.10f: D2Common.0x6FD8DC00 (#10923)
+//1.13c: D2Common.? (#10135)
 BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
