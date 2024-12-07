@@ -11,7 +11,10 @@ target_link_libraries(${D2GameImplName}
     Fog
     winmm # For timeGetTime()
 )
-
+target_sources(${D2GameImplName}
+  PRIVATE
+    include/D2Game.h
+)
 # Ai
 target_sources(${D2GameImplName}
   PRIVATE

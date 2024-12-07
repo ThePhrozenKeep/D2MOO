@@ -3,6 +3,12 @@
 #include <D2Dll.h>
 #include <D2CommonDefinitions.h>
 
+// 1.10f Base address: 0x6FAA0000
+
+#ifdef D2_VERSION_110F
+constexpr int D2ClientImageBase = 0x6FAA0000;
+#endif
+
 #pragma pack(1)
 
 struct D2ClientInterface
