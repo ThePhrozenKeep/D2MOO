@@ -495,7 +495,7 @@ struct D2GSPacketClt66		//size of 0x2E
 	int8_t nTemplate;			//0x13
 	int8_t nDifficulty ;		//0x14
 	char szClientName[16];		//0x15
-	int16_t dwArena;			//0x25
+	int16_t wArena;				//0x25
 	uint32_t nGameFlags;		//0x27
 	int8_t unk0x2B;				//0x2B
 	int8_t unk0x2C;				//0x2C
