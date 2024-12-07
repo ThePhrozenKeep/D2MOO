@@ -2011,7 +2011,7 @@ void __fastcall DATATBLS_MonStats2CompositLinker(char* pSrc, void* pRecord, int 
 	pMonStats2TxtRecord = (D2MonStats2Txt*)pRecord;
 	if (pMonStats2TxtRecord && nOffset >= 0 && nOffset < 16)
 	{
-		pMonStats2TxtRecord->unk0x15[nOffset] = 0;
+		pMonStats2TxtRecord->nComponentChoiceCounts[nOffset] = 0;
 
 		memset(&pMonStats2TxtRecord->unk0x26[nOffset], -1, sizeof(D2UnkMonCompStrc));
 
@@ -2065,16 +2065,16 @@ void __fastcall DATATBLS_MonStats2CompositLinker(char* pSrc, void* pRecord, int 
 				}
 			}
 
-			pMonStats2TxtRecord->unk0x15[nOffset] = nCounter;
+			pMonStats2TxtRecord->nComponentChoiceCounts[nOffset] = nCounter;
 
 			if (nOffset == 15)
 			{
 				nSum = 0;
 				for (int i = 0; i < 16; ++i)
 				{
-					if (pMonStats2TxtRecord->unk0x15[i] > 1)
+					if (pMonStats2TxtRecord->nComponentChoiceCounts[i] > 1)
 					{
-						nSum += pMonStats2TxtRecord->unk0x15[i] - 1;
+						nSum += pMonStats2TxtRecord->nComponentChoiceCounts[i] - 1;
 					}
 				}
 

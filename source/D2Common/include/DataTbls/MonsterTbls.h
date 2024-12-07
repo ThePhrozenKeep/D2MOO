@@ -453,7 +453,29 @@ struct D2MonStats2Txt
 	int32_t nBaseW;							//0x10 - Maybe union?
 	//char szBaseW[4];						//0x10
 	uint8_t nHitClass;						//0x14
-	uint8_t unk0x15[16];					//0x15 - see CompositLinker
+	union
+	{
+		struct
+		{
+			uint8_t nHD_ChoiceCount;					//0x15
+			uint8_t nTR_ChoiceCount;					//0x16
+			uint8_t nLG_ChoiceCount;					//0x17
+			uint8_t nRa_ChoiceCount;					//0x18
+			uint8_t nLa_ChoiceCount;					//0x19
+			uint8_t nRH_ChoiceCount;					//0x1A
+			uint8_t nLH_ChoiceCount;					//0x1B
+			uint8_t nSH_ChoiceCount;					//0x1C
+			uint8_t nS1_ChoiceCount;					//0x1D
+			uint8_t nS2_ChoiceCount;					//0x1E
+			uint8_t nS3_ChoiceCount;					//0x1F
+			uint8_t nS4_ChoiceCount;					//0x20
+			uint8_t nS5_ChoiceCount;					//0x21
+			uint8_t nS6_ChoiceCount;					//0x22
+			uint8_t nS7_ChoiceCount;					//0x23
+			uint8_t nS8_ChoiceCount;					//0x24
+		};
+		uint8_t nComponentChoiceCounts[16];		//0x15 - see CompositLinker
+	};
 	uint8_t unk0x25;						//0x25 - see CompositLinker
 	D2UnkMonCompStrc unk0x26[16];			//0x26 - see CompositLinker
 	uint8_t pad0xE6[2];						//0xE6

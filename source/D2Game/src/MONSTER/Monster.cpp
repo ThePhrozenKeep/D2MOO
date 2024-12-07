@@ -496,9 +496,9 @@ void __fastcall MONSTER_SetComponents(D2MonRegDataStrc* pMonRegData, D2UnitStrc*
         return;
     }
 
-    if (pMonRegData && pMonRegData->unk0x03 > 0)
+    if (pMonRegData && pMonRegData->nComponentVariantsMax > 0)
     {
-        const uint8_t* pComponentData = pMonRegData->unk0x04[ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pMonRegData->unk0x03)];
+        const uint8_t* pComponentData = pMonRegData->nComponentVariants[ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pMonRegData->nComponentVariantsMax)];
         memcpy(pMonsterData->nComponent, pComponentData, sizeof(pMonsterData->nComponent));
     }
     else
