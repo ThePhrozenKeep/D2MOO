@@ -19,7 +19,7 @@ BOOL __fastcall DATATBLS_LoadExpFieldD2(HD2ARCHIVE hArchive)
 	size_t nSize = 0;
 
 	wsprintfA(szPath, "%s\\expfield.d2", "DATA\\GLOBAL");
-	pExpField = (char*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szPath, &nSize);
+	pExpField = (char*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szPath, &nSize);
 
 	return DATATBLS_InitializeCollisionFieldTable(pExpField, nSize);
 }

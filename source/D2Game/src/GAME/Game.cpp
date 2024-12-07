@@ -251,7 +251,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 {
     if (!GAME_FindGameWithName(szGameName))
     {
-        SStrCopy(pGameToSanitize->szGameName, szGameName, 0x7FFFFFFFu);
+        SStrCopy(pGameToSanitize->szGameName, szGameName, STORM_MAX_STR);
     }
     else // Name conflicts
     {
@@ -273,7 +273,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
         }
         while (GAME_FindGameWithName(szGameNameWithID) != nullptr); //Note: Original game had a slightly different version of the find loop here, but it did the same thing.
         // Use the new name
-        SStrCopy(pGameToSanitize->szGameName, szGameNameWithID, 0x7FFFFFFFu);
+        SStrCopy(pGameToSanitize->szGameName, szGameNameWithID, STORM_MAX_STR);
     }
 }
 
@@ -2445,7 +2445,7 @@ void __fastcall sub_6FC39870(int32_t nClientId)
                 const uint32_t nClientCount = pGame->nClients;
                 const uint16_t nGameId = pGame->nGameId;
                 char szGameName[16] = {};
-                SStrCopy(szGameName, pGame->szGameName, 0x7FFFFFFFu);
+                SStrCopy(szGameName, pGame->szGameName, STORM_MAX_STR);
                 
                 D2_UNLOCK(pGame->lpCriticalSection);
 

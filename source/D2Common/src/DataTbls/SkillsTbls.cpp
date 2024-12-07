@@ -792,7 +792,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
 	size_t dwSize;
-	sgptDataTables->pSkillsCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFileName, &dwSize);
+	sgptDataTables->pSkillsCode = (FOGASTNodeStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFileName, &dwSize);
 	sgptDataTables->nSkillsCodeSizeEx = dwSize;
 	sgptDataTables->nSkillsCodeSize = dwSize;
 
@@ -809,7 +809,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	sgptDataTables->pSkillDescCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFileName, &dwSize);
+	sgptDataTables->pSkillDescCode = (FOGASTNodeStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFileName, &dwSize);
 	sgptDataTables->nSkillDescCodeSizeEx = dwSize;
 	sgptDataTables->nSkillDescCodeSize = dwSize;
 

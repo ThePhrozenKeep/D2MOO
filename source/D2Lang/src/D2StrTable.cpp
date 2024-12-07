@@ -119,7 +119,7 @@ D2C_Language STRTABLE_GetLanguage()
 	}
 	gbTableLanguageInitialized = true;
 	// Read locale from file.
-	unsigned char* pBuffer = (unsigned char*) ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(ghArchive, "data\\local\\use", nullptr);
+	unsigned char* pBuffer = (unsigned char*) ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(ghArchive, "data\\local\\use", nullptr);
 	gnTableLanguage = static_cast<D2C_Language>(*pBuffer);
 	D2_FREE(pBuffer);
 

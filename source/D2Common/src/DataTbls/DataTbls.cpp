@@ -167,7 +167,7 @@ void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFil
 		D2_FREE_POOL(nullptr, *ppFileHandle);
 	}
 
-	*ppFileHandle = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwSize);
+	*ppFileHandle = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFilePath, &dwSize);
 	*pSizeEx = dwSize;
 	*pSize = dwSize;
 }
@@ -628,7 +628,7 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 			wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "levels", ".txt");
 		}
 
-		pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwDataSize);
+		pData = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFilePath, &dwDataSize);
 		D2_ASSERT(pData);
 
 		pBinFile = FOG_CreateBinFile(pData, dwDataSize);
@@ -664,7 +664,7 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 		}
 	}
 
-	pData = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFilePath, &dwDataSize);
+	pData = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFilePath, &dwDataSize);
 	D2_ASSERT(pData);
 
 	if (DATATBLS_LoadFromBin)

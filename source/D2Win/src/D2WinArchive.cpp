@@ -40,7 +40,7 @@ D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, 
 	strcpy_s(szPath, szFile);
 	strcat_s(szPath, D2CMP_GetGfxFileExtension(nType));
 
-	void* pFile = ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(nullptr, szPath, pFileSize);
+	void* pFile = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(nullptr, szPath, pFileSize);
 
 	D2CellFileStrc* pCellFile = nullptr;
 	D2CMP_CelFileNormalize((D2CellFileStrc*)pFile, &pCellFile, __FILE__, __LINE__, -1, 0);

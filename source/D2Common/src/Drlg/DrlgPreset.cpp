@@ -131,7 +131,7 @@ static void SkipInt32s(int32_t*& pData, uint32_t nbToSkip)
 //D2Common.0x6FD85A10
 void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hArchive, const char* szFileName)
 {
-	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(hArchive, szFileName, NULL);
+	D2DS1FileStrc* pDS1File = (D2DS1FileStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFileName, NULL);
 	pDrlgFile->pDS1File = pDS1File;
 	pDrlgFile->nWidth = pDS1File->nWidth;
 	pDrlgFile->nHeight = pDS1File->nHeight;

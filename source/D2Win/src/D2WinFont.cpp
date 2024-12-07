@@ -222,7 +222,7 @@ void __fastcall sub_6F8A9E90(int a1)
 		D2_FREE(stru_6F8FD8C0[a1].pFontInfo[0]);
 	}
 
-	D2FontStrc* pFont = (D2FontStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetArchive(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
+	D2FontStrc* pFont = (D2FontStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
 	stru_6F8FD8C0[a1].pFontInfo[1] = pFont;
 	stru_6F8FD8C0[a1].pCharInfo = pFont->pChars;
 }
