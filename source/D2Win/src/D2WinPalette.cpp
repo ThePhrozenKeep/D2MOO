@@ -56,7 +56,7 @@ uint32_t dword_6F96A7C4;
 
 
 //D2Win.0x6F8AE550 (#10177)
-int32_t __fastcall D2Win_10177(uint8_t nAct)
+int32_t __fastcall PALETTTE_LoadForAct(uint8_t nAct)
 {
 	int32_t nActNo = nAct + 1;
 	if (nActNo < 1 || nActNo > 5)

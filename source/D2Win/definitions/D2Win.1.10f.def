@@ -177,7 +177,7 @@ EXPORTS
 	ARCHIVE_ShowInsertPlayDiscMessage								@10174
 	D2Win_10175_GetPL2Shift											@10175
 	D2Win_10176														@10176
-	D2Win_10177														@10177
+	PALETTTE_LoadForAct												@10177
 	D2Win_10178														@10178
 	D2Win_10179														@10179
 	D2Win_10180														@10180

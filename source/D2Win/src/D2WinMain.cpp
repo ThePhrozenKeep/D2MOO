@@ -178,7 +178,7 @@ int __fastcall D2Win_10015()
 	D2Win_10157();
 	gpfWndProc_6F8FE268 = nullptr;
 	WREGISTER_RegisterCommands(WINDOW_GetWindow(), gpCommandRegister_6F8BDE28, std::size(gpCommandRegister_6F8BDE28));
-	D2Win_10177(0);
+	PALETTTE_LoadForAct(0);
 	dword_6F8FE27C = nullptr;
 	return 1;
 }
