@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 #include <Drlg/D2DrlgDrlg.h>
+#include <D2Config.h>
 
 #pragma pack(push, 1)
 enum eD2GameTypes : uint32_t
@@ -98,3 +99,16 @@ int __fastcall D2Client_Main_sub_6FAAB370();
 //1.10f:D2Client.0x6FB283D0
 D2UnitStrc* __fastcall D2CLIENT_GetPlayerUnit_6FB283D0();
 
+
+// Helper function
+eD2GameTypes GAME_GetGameType();
+// Helper function
+D2ConfigStrc* CONFIG_GetConfig();
+//1.10f:D2Client.0x6FAAB250
+BOOL __fastcall sub_6FAAB250();
+//1.10f:D2Client.0x6FAAB290
+BOOL __fastcall sub_6FAAB290();
+//1.10f:D2Client.0x6FAAB2E0
+BOOL __fastcall sub_6FAAB2E0();
+//1.10f:D2Client.0x6FAAB320
+BOOL __fastcall sub_6FAAB320();

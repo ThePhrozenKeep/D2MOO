@@ -1,4 +1,5 @@
 #pragma once 
+#include <D2BasicTypes.h>
 #include <D2Dll.h>
 #include "StormHandles.h"
 
