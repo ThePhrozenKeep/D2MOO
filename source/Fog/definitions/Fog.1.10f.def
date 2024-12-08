@@ -153,10 +153,10 @@ UnimplementedOrdinal_10140=UnimplementedOrdinal @10140;   FOG_10140 @10140 NONAM
 UnimplementedOrdinal_10141=UnimplementedOrdinal @10141;   FOG_10141 @10141 NONAME
     FOG_CreateNewPoolSystem @10142 NONAME
     FOG_DestroyMemoryPoolSystem @10143 NONAME
-UnimplementedOrdinal_10144=UnimplementedOrdinal @10144;   FOG_10144 @10144 NONAME
+	FOG_FlushMemoryPoolSystem @10144 NONAME
 	FOG_SetMemoryPoolSystemMode @10145;   FOG_10145 @10145 NONAME
 UnimplementedOrdinal_10146=UnimplementedOrdinal @10146;   FOG_10146 @10146 NONAME
-UnimplementedOrdinal_10147=UnimplementedOrdinal @10147;   FOG_10147 @10147 NONAME
+	FOG_GetMemoryUsage @10147 NONAME
 UnimplementedOrdinal_10148=UnimplementedOrdinal @10148;   FOG_10148 @10148 NONAME
     FOG_InitializeServer @10149 NONAME
 UnimplementedOrdinal_10150=UnimplementedOrdinal @10150;   FOG_10150 @10150 NONAME

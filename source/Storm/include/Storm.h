@@ -706,13 +706,20 @@ D2FUNC_DLL_NP(STORM, SCmdGetNum, int, __stdcall, (int a1), 0x80c0);  //Storm.#47
 D2FUNC_DLL_NP(STORM, SCmdGetString, BOOL, __stdcall, (int a1, char *dest, size_t size), 0x8100);  //Storm.#474
 
 /// Imported by ['D2Client.dll']
-D2FUNC_DLL_NP(STORM, SCmdProcess, BOOL, __stdcall, (const char **string, int a2, int a3, int a4), 0x8180);  //Storm.#475
+D2FUNC_DLL_NP(STORM, SCmdProcess, BOOL, __stdcall, (char *string, int a2, BOOL(__stdcall* a3)(int), BOOL(__stdcall* a4)(int)), 0x8180);  //Storm.#475
+
+struct SCmdArg
+{
+	DWORD dword0;
+	DWORD dword4;
+	char* argString;
+	int(__stdcall* callback)(int, int);
+};
+/// Imported by ['D2Client.dll']
+D2FUNC_DLL_NP(STORM, SCmdRegisterArgList, BOOL, __stdcall, (SCmdArg* pArgs, int nArgsCount), 0x8b30);  //Storm.#476
 
 /// Imported by ['D2Client.dll']
-D2FUNC_DLL_NP(STORM, SCmdRegisterArgList, BOOL, __stdcall, (int, int), 0x8b30);  //Storm.#476
-
-/// Imported by ['D2Client.dll']
-D2FUNC_DLL_NP(STORM, SCmdRegisterArgument, BOOL, __stdcall, (int a1, int a2, char *str, int a4, int a5, int a6, int a7, int a8), 0x8b90);  //Storm.#477
+D2FUNC_DLL_NP(STORM, SCmdRegisterArgument, BOOL, __stdcall, (int a1, int a2, char *str, void* pOutBuffer, int nSize, int a6, int a7, int a8), 0x8b90);  //Storm.#477
 
 /// Not imported by any .dll
 D2FUNC_DLL_NP(STORM, SCmdStringExists, int, __stdcall, (int), 0x7f90);  //Storm.#478
@@ -785,7 +792,7 @@ D2FUNC_DLL_NP(STORM, SStrNCat, int, __stdcall, (char *base, const char *append, 
 
 #if !WITH_SQUALL
 /// Imported by ['D2Client.dll']
-D2FUNC_DLL_NP(STORM, SStrTokenize, void, __stdcall, (const char** string, char* buffer, size_t bufferchars, const char* delimiter, BOOL* quoted), 0x2abe0); //Storm.#504
+D2FUNC_DLL_NP(STORM, SStrTokenize, void, __stdcall, (char** string, char* buffer, size_t bufferchars, const char* delimiter, BOOL* quoted), 0x2abe0); //Storm.#504
 #endif
 
 /// Not imported by any .dll

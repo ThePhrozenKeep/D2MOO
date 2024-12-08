@@ -24,6 +24,9 @@ struct D2WindowProcCallbackStrc
 //1.10f:D2Client.0x6FAB5750
 int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels();
 
+//1.10f:D2Client.0x6FAA2550
+LRESULT __stdcall WNDPROC_WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+
 //1.00 :D2Client.0x
 //1.10f:D2Client.0x6FAA25D0
 //1.13c:D2Client.0x

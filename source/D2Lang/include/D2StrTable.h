@@ -29,8 +29,18 @@
 #pragma once
 
 #include <D2Constants.h>
+#include <D2BasicTypes.h>
 
 #include "D2Lang.h"
+
+// 1.10f: D2Lang.0x6FC12F90 (#10000)
+D2LANG_DLL_DECL BOOL __fastcall STRTABLE_LoadStringTables(void* hArchive, char* szLanguageString, BOOL bLoadExpansion);
+
+// 1.10f: D2Lang.0x6FC12F90 (#10001)
+D2LANG_DLL_DECL void __fastcall STRTABLE_FreeStringTables();
+
+// 1.10f: D2Lang.0x6FC13FB0 (#10006)
+D2LANG_DLL_DECL void __stdcall STRTABLE_GetLanguageString(char* szLangString, int nUnk);
 
 /**
  * Returns the string table language.

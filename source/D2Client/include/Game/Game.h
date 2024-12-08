@@ -102,8 +102,6 @@ D2UnitStrc* __fastcall D2CLIENT_GetPlayerUnit_6FB283D0();
 
 // Helper function
 eD2GameTypes GAME_GetGameType();
-// Helper function
-D2ConfigStrc* CONFIG_GetConfig();
 //1.10f:D2Client.0x6FAAB250
 BOOL __fastcall sub_6FAAB250();
 //1.10f:D2Client.0x6FAAB290

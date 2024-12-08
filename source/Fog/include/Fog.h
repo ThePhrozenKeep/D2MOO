@@ -212,6 +212,7 @@ D2FUNC_DLL(FOG, UseDirect, BOOL, __fastcall, (), 0x11A10)																							
 D2FUNC_DLL(FOG, ComputeStringCRC16, uint16_t, __stdcall, (const char* szString), 0x3DB0)															//Fog.#10137
 D2FUNC_DLL(FOG, CreateNewPoolSystem, void, __cdecl, (void** pMemPoolSystem, const char* szName, uint32_t nPools, uint32_t nUnused), 0xA280)			//Fog.#10142
 D2FUNC_DLL(FOG, DestroyMemoryPoolSystem, void, __cdecl, (void* pMemoryPoolSystem), 0xA100)															//Fog.#10143
+D2FUNC_DLL(FOG, FlushMemoryPoolSystem, void, __cdecl, (void* pMemoryPoolSystem), 0x9E90)															//Fog.#10144
 D2FUNC_DLL(FOG, SetMemoryPoolSystemMode, void, __cdecl, (void* pMemoryPoolSystem, BOOL bFreePoolAlloc), 0xA4A0)										//Fog.#10145
 D2FUNC_DLL(FOG, GetMemoryUsage, DWORD, __cdecl, (void*), 0xA4E0)																					//Fog.#10147
 D2FUNC_DLL(FOG, InitializeServer, QServer*, __stdcall, (int, int, int, int, void*, void*, void*, void*), 0x4150)									//Fog.#10149

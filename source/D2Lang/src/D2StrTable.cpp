@@ -36,6 +36,7 @@
 #include <D2Lang.h>
 #include <D2Unicode.h>
 #include <Fog.h>
+#include <D2CommonDefinitions.h>
 
 /**
  * This variable is never set.
@@ -104,6 +105,26 @@ inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMa
 		--i;
 	}
 }
+
+
+// 1.10f: D2Lang.0x6FC12F90 (#10000)
+BOOL __fastcall STRTABLE_LoadStringTables(void* hArchive, char* szLanguageString, BOOL bLoadExpansion)
+{
+	UNIMPLEMENTED();
+}
+
+// 1.10f: D2Lang.0x6FC12F90 (#10001)
+D2LANG_DLL_DECL void __fastcall STRTABLE_FreeStringTables()
+{
+	UNIMPLEMENTED();
+}
+
+// 1.10f: D2Lang.0x6FC13FB0 (#10006)
+void __stdcall STRTABLE_GetLanguageString(char* szLangString, int nUnk)
+{
+	UNIMPLEMENTED();
+}
+
 
 /**
  * 1.00: D2Lang.0x100010B9 (#10007)

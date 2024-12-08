@@ -31,14 +31,14 @@ constexpr auto default_or_void<void>() -> void {}
 
 // Useful if you do not have an import library or want to use LoadLibray
 #define D2FUNC(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
-	typedef RETURN(CONV* DLL##_##NAME##_t) ARGS; \
+	typedef RETURN(CONV* const DLL##_##NAME##_t) ARGS; \
 	static DLL##_##NAME##_t DLL##_##NAME = (DLL##_##NAME##_t)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 #define D2VAR(DLL, NAME, TYPE, OFFSET) \
 	typedef TYPE DLL##_##NAME##_vt; \
-	static DLL##_##NAME##_vt * DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
+	static DLL##_##NAME##_vt * const DLL##_##NAME = (DLL##_##NAME##_vt *)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 #define D2PTR(DLL, NAME, TYPE, OFFSET) \
-	static TYPE* DLL##_##NAME = (TYPE*)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
+	static TYPE* const DLL##_##NAME = (TYPE*)(uintptr_t(delayed##DLL##DllBaseGet()) + (OFFSET));
 
 // NOLINTEND

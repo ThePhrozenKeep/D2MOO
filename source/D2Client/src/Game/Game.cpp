@@ -28,6 +28,7 @@
 #include <UI/CmdTbl.h>
 #include <D2CMP.h>
 #include <Game/Msg.h>
+#include <Core/WINMAIN.h>
 
 static const int D2MCPClientImageBase = 0x6F9F0000;
 
@@ -81,8 +82,6 @@ D2CLIENTSTUB(D2CLIENT_GAMEVIEW_GetViewRadius, 6FAB7180, void, __fastcall, (D2Gam
 D2CLIENTSTUB(sub, 6FAB7C50, void, __fastcall, (int* a1, int* a2));
 
 D2PTR(D2CLIENT, pgpConfigComInterface_6FBA7944, BnClientInterface*, 0x6FBA7944 - D2ClientImageBase);
-D2PTR(D2CLIENT, pgpConfig_6FB9A948, D2ConfigStrc*, 0x6FB9A948 - D2ClientImageBase); //1.13c:0x6FBCB980
-D2ConfigStrc* CONFIG_GetConfig() { return *D2CLIENT_pgpConfig_6FB9A948; }
 
 D2VAR(D2CLIENT, pgpView_6FBA7990, D2GameViewStrc*, 0x6FBA7990 - D2ClientImageBase);
 D2CLIENTDWORDSTUB(6FB758D8);
@@ -868,19 +867,20 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 //1.10f:D2Client.0x6FAA1F80
 BnClientInterface* __cdecl GetConfigComInt_6FAA1F80()
 {
-	return (*D2CLIENT_pgpConfig_6FB9A948)->pComInterface;
+	return CONFIG_GetConfig()->pComInterface;
 }
 
 //1.10f:Inlined
 //1.13c:Inlined
 int GetGameTypeFromConfig()
 {
+	const D2ConfigStrc* pCfg = CONFIG_GetConfig();
 	int nGameType = 0;
-	if ((*D2CLIENT_pgpConfig_6FB9A948)->nArenaDifficulty == 1)
+	if (pCfg->nArenaDifficulty == 1)
 		nGameType = 1;
-	if ((*D2CLIENT_pgpConfig_6FB9A948)->nArenaDifficulty == 2)
+	if (pCfg->nArenaDifficulty == 2)
 		nGameType = nGameType | 2;
-	uint16_t v9 = HIWORD((*D2CLIENT_pgpConfig_6FB9A948)->dwCTemp);
+	uint16_t v9 = HIWORD(pCfg->dwCTemp);
 	if ((v9 & 4) != 0)
 		nGameType = nGameType | 4;
 	if ((v9 & 0x20) != 0)
@@ -925,10 +925,11 @@ signed int __stdcall OpenServerThreadProc(int a1)
 						if (nCurrentPlayerCount < *D2CLIENT_pgnMaxPlayerCountForGameRefresh)
 						{
 							const int nGameType = GetGameTypeFromConfig();
+							D2ConfigStrc* pCfg = CONFIG_GetConfig();
 							pBnClient->RefreshGame(
-								(*D2CLIENT_pgpConfig_6FB9A948)->szGameName,
-								(*D2CLIENT_pgpConfig_6FB9A948)->szGamePassword,
-								(*D2CLIENT_pgpConfig_6FB9A948)->szGameStatstring,
+								pCfg->szGameName,
+								pCfg->szGamePassword,
+								pCfg->szGameStatstring,
 								nGameType);
 						}
 						nPreviousPlayerCount = nCurrentPlayerCount;
@@ -1244,7 +1245,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	BOOL v17 = 1;
 	if (*D2CLIENT_pdword_6FBA797C)
 	{
-		int v18 = HIBYTE((*D2CLIENT_pgpConfig_6FB9A948)->dwCTemp) & 0x1F;
+		int v18 = HIBYTE(CONFIG_GetConfig()->dwCTemp) & 0x1F;
 		if ((*D2CLIENT_pgnDifficulty_6FBA795C))
 		{
 			if ((*D2CLIENT_pgnDifficulty_6FBA795C) != 1)
@@ -1259,8 +1260,8 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	LABEL_73:
 		v17 = 0;
 	LABEL_74:
-		(*D2CLIENT_pgpConfig_6FB9A948)->unpackedCTemp.nCharacterSaveFlags = 
-			((*D2CLIENT_pgpConfig_6FB9A948)->unpackedCTemp.nCharacterSaveFlags & 0xE0FF) 
+		CONFIG_GetConfig()->unpackedCTemp.nCharacterSaveFlags =
+			(CONFIG_GetConfig()->unpackedCTemp.nCharacterSaveFlags & 0xE0FF)
 			| (((*D2CLIENT_pgnDifficulty_6FBA795C) << 10)
 			+ 1280);
 		if (v17) {

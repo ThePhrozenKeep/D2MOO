@@ -11,6 +11,7 @@
 #include <Fog.h>
 #include <Game/Game.h>
 #include <Engine/Cursor.h>
+#include <Core/WINMAIN.h>
 
 extern "C" {
     __declspec(dllexport)
@@ -99,6 +100,8 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FAA9AF0 - D2ClientImageBase, &MainLoop_6FAA9AF0, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAA9640 - D2ClientImageBase, &D2CLIENT_DrawGameScene, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAAB370 - D2ClientImageBase, &D2Client_Main_sub_6FAAB370, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAA2050 - D2ClientImageBase, &D2ClientEntrypoint, PatchAction::FunctionReplaceOriginalByPatch},
+
 
 	{ 0x6FB57330 - D2ClientImageBase, &CLIENT_OnMouseMove, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57450 - D2ClientImageBase, &CLIENT_OnNonClientMouseMove, PatchAction::FunctionReplaceOriginalByPatch},

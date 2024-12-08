@@ -6,6 +6,7 @@
 #include <D2StrTable.h>
 #include <D2Net.h>
 #include <Client.h>
+#include <Core/WINMAIN.h>
 
 D2CLIENTSTUB(sub, 6FAA6A00, uint32_t, __fastcall, ());
 D2CLIENTSTUB(CONFIG_GetCTemp, 6FAA69F0, uint32_t, __fastcall, ());
