@@ -30,6 +30,8 @@
 #include <Game/Msg.h>
 #include <Core/WINMAIN.h>
 
+#ifdef D2_VERSION_110F
+
 static const int D2MCPClientImageBase = 0x6F9F0000;
 
 HMODULE delayedD2CLIENTDllBaseGet()
@@ -1332,3 +1334,4 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	return 6;
 }
 
+#endif //D2_VERSION_110F

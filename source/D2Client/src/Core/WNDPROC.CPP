@@ -6,6 +6,7 @@
 #include <Window.h>
 #include <tracy/Tracy.hpp>
 
+#ifdef D2_VERSION_110F
 D2CLIENTDWORDSTUB(6FBAB990);
 D2VAR(D2CLIENT, gpbWindowHasFocus, DWORD, 0x6FB747C0 - D2ClientImageBase);
 
@@ -258,3 +259,4 @@ void __fastcall D2CLIENT_INPUT_UnregisterCallbacks(HWND hWnd, D2WindowProcCallba
 		}
 	}
 }
+#endif //D2_VERSION_110F

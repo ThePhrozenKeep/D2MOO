@@ -8,6 +8,7 @@
 #include <Client.h>
 #include <Core/WINMAIN.h>
 
+#ifdef D2_VERSION_110F
 D2CLIENTSTUB(sub, 6FAA6A00, uint32_t, __fastcall, ());
 D2CLIENTSTUB(CONFIG_GetCTemp, 6FAA69F0, uint32_t, __fastcall, ());
 D2VAR(D2CLIENT, peConfigCharacterPlayerClass, uint32_t, 0x6FBA7894 - D2ClientImageBase);
@@ -59,3 +60,4 @@ void __fastcall SendNewGamePacket(const char* szGameName)
 	*D2CLIENT_pdword_6FBC1AF4 += sizeof(D2GSPacketClt66);
 	++(*D2CLIENT_pdword_6FBC1AFC);
 }
+#endif // D2_VERSION_110F

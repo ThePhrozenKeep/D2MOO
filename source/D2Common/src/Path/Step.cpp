@@ -817,7 +817,7 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Act
 		pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 	}
 #ifdef D2_VERSION_113C
-	PATH_RecacheRoomIfNeeded(pPath, PATH_ToFP16Center(nTargetX), PATH_ToFP16Center(nTargetY), pDestRoom);
+	PATH_RecacheRoomAtCoordIfNeeded(pPath, pDestRoom, PATH_ToFP16Center(nTargetX), PATH_ToFP16Center(nTargetY));
 #endif
 	D2_ASSERT(COLLISION_GetRoomBySubTileCoordinates(pDestRoom, nTargetX, nTargetY));
 	PATH_ResetMovement(pPath);

@@ -12,6 +12,7 @@
 #include <D2DataTbls.h>
 #include <D2Log.h>
 
+#ifdef D2_VERSION_110F
 int32_t __stdcall D2Game_10050(); // TODO: Prevent conflict of Game/ folders betwen D2Client and D2Game
 
 D2PTR(D2CLIENT, pgpConfig_6FB9A948, D2ConfigStrc*, 0x6FB9A948 - D2ClientImageBase); //1.13c:0x6FBCB980
@@ -285,3 +286,5 @@ int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 		}
 	}
 }
+
+#endif //D2_VERSION_110F

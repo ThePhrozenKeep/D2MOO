@@ -12,6 +12,7 @@
 #include <Units/Units.h>
 #include <D2CMP.h>
 
+#ifdef D2_VERSION_110F
 HMODULE delayedD2CLIENTDllBaseGet();
 
 D2FUNC(D2CLIENT, GetItemGfxData_6FB5EC80, int, __fastcall, (D2GfxDataStrc* pData, D2UnitStrc* pItem, D2CellFileStrc* pCellFile, int nDirection, int nFrame, DWORD* a6, int nComponent, int a8), 0x6FB5EC80 - D2ClientImageBase);
@@ -438,3 +439,7 @@ uint32_t __fastcall CLIENT_CursorGetDword0x6FBC1AD4()
 {
 	return *D2CLIENT_pgnCursorState;
 }
+
+
+#endif //D2_VERSION_110F
+

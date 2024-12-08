@@ -5,6 +5,8 @@
 #include <Core/WNDPROC.h>
 #include <Game/Game.h>
 
+#ifdef D2_VERSION_110F
+
 HMODULE delayedD2CLIENTDllBaseGet();
 //1.10f:D2Client.0x6FB78500
 HotkeyMappingEntry gDefaultCommandTable[] = {
@@ -264,3 +266,5 @@ bool COMMAND_KeyHasBeenPressed(int nHotkey, bool bPrimaryHotkey)
 	}
 	return false;
 }
+
+#endif //D2_VERSION_110F
