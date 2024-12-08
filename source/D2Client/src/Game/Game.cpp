@@ -101,7 +101,6 @@ void __fastcall sub_6FAB71B0(D2GameViewStrc* pView, int nOffsetX, int nOffsetY)
 D2CLIENTSTUB(sub, 6FAB7200, void, __fastcall, (D2GameViewStrc*, int a2));
 D2CLIENTSTUB(ENV_Update, 6FAA7940, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAB5960, void, __fastcall, ());
-D2CLIENTSTUB(D2CLIENT_GetGlobalUiStateNbPanels, 6FAB5750, int, __fastcall, ());
 D2CLIENTSTUB(ENV_DrawBackground, 6FAB7260, int, __fastcall, (D2GameViewStrc* pView));
 D2CLIENTSTUB(D2CLIENT_UI_DrawUI, 6FB21B70, int, __fastcall, (D2GameViewStrc* pView));
 void D2CLIENT_Return_6FAA1500(){}
@@ -179,7 +178,6 @@ D2VAR(D2CLIENT, pgnMaxPlayerCountForGameRefresh, DWORD, 0x6FB7591C - D2ClientIma
 
 
 D2VAR(D2CLIENT, pgnDifficulty_6FBA795C, uint8_t, 0x6FBA795C - D2ClientImageBase);
-D2VAR(D2CLIENT, gpbWindowHasFocus, DWORD, 0x6FB747C0 - D2ClientImageBase);
 D2VAR(D2CLIENT, gptOpenServerThreadLock_6FBA77D4, _RTL_CRITICAL_SECTION, 0x6FBA77D4 - D2ClientImageBase);// 1.13c: 0x6FBC97C8
 D2VAR(D2CLIENT, gphOpenServerThread_6FBA7824, HANDLE, 0x6FBA7824 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnOpenServerThreadId, DWORD, 0x6FBA774C - D2ClientImageBase);
@@ -836,7 +834,7 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 	{
 		D2Win_10179();
 		sub_6FAB5960();
-		if (D2CLIENT_GetGlobalUiStateNbPanels_6FAB5750() != 3)
+		if (D2CLIENT_GetGlobalUiStateNbPanels() != 3)
 		{
 			ZoneScopedN("ENV_DrawBackground");
 			ENV_DrawBackground_6FAB7260(*D2CLIENT_pgpView_6FBA7990);

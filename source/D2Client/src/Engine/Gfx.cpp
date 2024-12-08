@@ -6,8 +6,6 @@
 #include <D2Items.h>
 #include <D2StatList.h>
 
-HMODULE delayedD2CLIENTDllBaseGet();
-
 D2FUNC(D2CLIENT, GetItemGfxData_6FB5EC80, int, __fastcall, (D2GfxDataStrc* pData, D2UnitStrc* pItem, D2CellFileStrc* pCellFile, int nDirection, int nFrame, DWORD* a6, int nComponent, int a8), 0x6FB5EC80 - D2ClientImageBase);
 D2FUNC(D2CLIENT, UNITDRAW_DrawOverlays, void, __fastcall, (D2UnitStrc* pUnit, DWORD dwColorTint, BOOL bBack, int nXpos, int nYpos, BOOL bPerspectiveDisabled), 0x6FB5A490 - D2ClientImageBase);
 

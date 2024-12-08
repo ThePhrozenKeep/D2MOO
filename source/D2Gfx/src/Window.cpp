@@ -50,8 +50,8 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
         rect.bottom = 480;
         break;
 
+    case D2GAMERES_UNK:
     case D2GAMERES_800x600:
-    case NUM_GAME_RESOLUTIONS:
         rect.right = 800;
         rect.bottom = 600;
         break;

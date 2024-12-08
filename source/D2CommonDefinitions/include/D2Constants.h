@@ -19,9 +19,10 @@ enum D2GameTypeMode
 enum D2GameResolutionMode // DISPLAY_RES in original game
 {
 	D2GAMERES_640x480,
+	D2GAMERES_UNK,
 	D2GAMERES_800x600,
-	NUM_GAME_RESOLUTIONS,
-	D2GAMERES_1344x700 = 3, // Not actually supported ?
+	D2GAMERES_1344x700 = 3, // Not actually supported, but still present in WINDOW_Create ?
+	NUM_GAME_RESOLUTIONS = 2,
 };
 
 enum D2C_SaveMagicHeaders : uint32_t
