@@ -1,11 +1,15 @@
 #include <DetoursPatch.h>
 #include <ProfilingPatchHelpers.h>
 #include <D2Client.h>
+#include <Game/Record.h>
 #include <Game/SCmd.h>
 #include <Game/Select.h>
 #include <Unit/Player.h>
 #include <UI/Chat.h>
 #include <UI/UI.h>
+#include <Sound/Sound.h>
+#include <Fog.h>
+#include <Game/Game.h>
 
 extern "C" {
     __declspec(dllexport)
@@ -28,32 +32,51 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   QueryInterface	@10004
 };
 
-signed int __stdcall MainLoop_6FAA9AF0(int a2);
-
 //D2Client.0x6FAA9640
-BOOL __fastcall D2CLIENT_DrawGameScene(DWORD);
+void __fastcall D2CLIENT_DrawGameScene(DWORD);
 //D2Client.0x6FADC180
 BOOL __fastcall D2CLIENT_DrawPleaseInsertGameDisc(DWORD);
 //D2Client.0x6FADC970
 BOOL __fastcall D2CLIENT_DrawPleaseInsertCinematicsDisc(DWORD);
-//D2Client.0x6FB54C60
-void __cdecl SOUND_UpdateEnvironmentSFX();
+
+char* __cdecl RECORD_unk_6FAAEB40() { 
+    UNIMPLEMENTED();
+    return nullptr; 
+}
+
+
+//D2Client.0x6FB23800
+BOOL __fastcall CLIENT_UpdateUIs_6FB23800(int a1, int a2) {
+    UNIMPLEMENTED();
+}
+//1.00 :D2Client.0x10001F73
+//1.10f:D2CLient.0x6FB23860
+int __fastcall D2CLIENT_CheckUIState_6FB23860(int a1) {
+    UNIMPLEMENTED();
+}
+
+//1.00 :D2Client.0x100013C0
+//1.10f:D2CLient.0x6FB54C60
+//1.13c:D2CLient.0x6FB0F020
+void __cdecl SOUND_UpdateEnvironmentSFX() {
+    UNIMPLEMENTED();
+}
+
 
 #define ITERATE_WRAPPERS(x)                                                     \
 /*BEGIN LIST*/                                                                  \
-    x(0x6FB49920, PLAYER_unk_6FB49920, __fastcall)                              \
     x(0x6FB23800, CLIENT_UpdateUIs_6FB23800, __fastcall)                        \
-    x(0x6FAA9640, D2CLIENT_DrawGameScene, __fastcall)                           \
     x(0x6FADC180, D2CLIENT_DrawPleaseInsertGameDisc, __fastcall)                \
     x(0x6FADC970, D2CLIENT_DrawPleaseInsertCinematicsDisc, __fastcall)          \
-    x(0x6FB54C60, SOUND_UpdateEnvironmentSFX, __cdecl)                          \
+//    x(0x6FAA9640, D2CLIENT_DrawGameScene, __fastcall)                           \
+//    x(0x6FB49920, PLAYER_unk_6FB49920, __fastcall)                              \
+//    x(0x6FB54C60, SOUND_UpdateEnvironmentSFX, __cdecl)                          \
 // Following functions are not called only when a frame is active, but in the busy loop.
 // This is a bit heavy so don't instrument those.
 //    x(0x6FAB5D60, CLIENT_UpdateSelectedUnit, __cdecl)          \
 //    x(0x6FAD2FB0, CHAT_Update_6FAD2FB0, __cdecl)                                  \
 //    x(0x6FAB1CB0, D2Client_PACKETS_SendPlayerUpdates_6FAB1CB0, __fastcall)      \
 //    x(0x6FAB50B0, D2CLIENT_PACKETS_Handler_6FAB50B0, __fastcall)                \
-    //x(0x6FAA9AF0, MainLoop_6FAA9AF0, __stdcall)                               \
 /*END LIST*/
 
 
@@ -61,8 +84,22 @@ ITERATE_WRAPPERS(DEFINE_NAME_HELPER)
 
 #define DEFINE_PROFILING_EXTRA_PATCH_D2CLIENT(ADDR, FUNC, CCONV) DEFINE_PROFILING_EXTRA_PATCH(D2Client, ADDR, FUNC, CCONV)
 static ExtraPatchAction extraPatchActions[] = {
+    // Override patch functions first
+    { 0x6FAAEB40 - D2ClientImageBase, &RECORD_unk_6FAAEB40, PatchAction::FunctionReplacePatchByOriginal},
+    { 0x6FB54C60 - D2ClientImageBase, &SOUND_UpdateEnvironmentSFX, PatchAction::FunctionReplacePatchByOriginal},
+    { 0x6FB23800 - D2ClientImageBase, &CLIENT_UpdateUIs_6FB23800, PatchAction::FunctionReplacePatchByOriginal},
+	{ 0x6FB23860 - D2ClientImageBase, &D2CLIENT_CheckUIState_6FB23860, PatchAction::FunctionReplacePatchByOriginal},
+    
+    // Then stub for profiling
     ITERATE_WRAPPERS(DEFINE_PROFILING_EXTRA_PATCH_D2CLIENT)
-    { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
+
+	// Then the ones we rewrote
+    { 0x6FAA25D0 - D2ClientImageBase, &ExecuteMessageLoop_6FAA25D0, PatchAction::FunctionReplaceOriginalByPatch},
+    { 0x6FAA9AF0 - D2ClientImageBase, &MainLoop_6FAA9AF0, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAA9640 - D2ClientImageBase, &D2CLIENT_DrawGameScene, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAAB370 - D2ClientImageBase, &D2Client_Main_sub_6FAAB370, PatchAction::FunctionReplaceOriginalByPatch},
+
+	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
 extern "C" {
