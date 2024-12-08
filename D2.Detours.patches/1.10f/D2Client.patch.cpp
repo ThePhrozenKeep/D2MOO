@@ -10,6 +10,7 @@
 #include <Sound/Sound.h>
 #include <Fog.h>
 #include <Game/Game.h>
+#include <Engine/Cursor.h>
 
 extern "C" {
     __declspec(dllexport)
@@ -90,7 +91,7 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FB23800 - D2ClientImageBase, &CLIENT_UpdateUIs_6FB23800, PatchAction::FunctionReplacePatchByOriginal},
 	{ 0x6FB23860 - D2ClientImageBase, &D2CLIENT_CheckUIState_6FB23860, PatchAction::FunctionReplacePatchByOriginal},
     
-    // Then stub for profiling
+	// Then stub for profiling
     ITERATE_WRAPPERS(DEFINE_PROFILING_EXTRA_PATCH_D2CLIENT)
 
 	// Then the ones we rewrote
@@ -98,6 +99,26 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FAA9AF0 - D2ClientImageBase, &MainLoop_6FAA9AF0, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAA9640 - D2ClientImageBase, &D2CLIENT_DrawGameScene, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAAB370 - D2ClientImageBase, &D2Client_Main_sub_6FAAB370, PatchAction::FunctionReplaceOriginalByPatch},
+
+	{ 0x6FB57330 - D2ClientImageBase, &CLIENT_OnMouseMove, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57450 - D2ClientImageBase, &CLIENT_OnNonClientMouseMove, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57480 - D2ClientImageBase, &CLIENT_UpdateCursorPosInGame, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57500 - D2ClientImageBase, &CLIENT_UpdateCursorOnLeftButtonUp, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57580 - D2ClientImageBase, &CLIENT_SetCursorBuySell, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB575B0 - D2ClientImageBase, &CLIENT_SetCursorItem, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB575E0 - D2ClientImageBase, &CLIENT_GetCursorItem, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB575F0 - D2ClientImageBase, &CLIENT_LoadCursors, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB576B0 - D2ClientImageBase, &CLIENT_UnloadCursors, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB579A0 - D2ClientImageBase, &CLIENT_GetCursorUnk0x08, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57A00 - D2ClientImageBase, &CLIENT_GetCursorFrameDuration, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57BC0 - D2ClientImageBase, &CLIENT_GetMouseX, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57BD0 - D2ClientImageBase, &CLIENT_GetMouseY, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57BE0 - D2ClientImageBase, &CLIENT_SetCursorPos, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57700 - D2ClientImageBase, &CLIENT_DrawCursorMain, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57A60 - D2ClientImageBase, &CLIENT_DrawCursorBuySell, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57AC0 - D2ClientImageBase, &CLIENT_DrawCursorDefault, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57CC0 - D2ClientImageBase, &CLIENT_CursorGetDword0x6FBC1AD4, PatchAction::FunctionReplaceOriginalByPatch},
+	
 
 	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
