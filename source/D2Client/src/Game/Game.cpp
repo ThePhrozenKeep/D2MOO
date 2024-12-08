@@ -179,8 +179,6 @@ D2VAR(D2CLIENT, pgnMaxPlayerCountForGameRefresh, DWORD, 0x6FB7591C - D2ClientIma
 
 
 D2VAR(D2CLIENT, pgnDifficulty_6FBA795C, uint8_t, 0x6FBA795C - D2ClientImageBase);
-D2VAR(D2CLIENT, hAcc_6FB9A710, HACCEL, 0x6FB9A710 - D2ClientImageBase);
-D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
 D2VAR(D2CLIENT, gpbWindowHasFocus, DWORD, 0x6FB747C0 - D2ClientImageBase);
 D2VAR(D2CLIENT, gptOpenServerThreadLock_6FBA77D4, _RTL_CRITICAL_SECTION, 0x6FBA77D4 - D2ClientImageBase);// 1.13c: 0x6FBC97C8
 D2VAR(D2CLIENT, gphOpenServerThread_6FBA7824, HANDLE, 0x6FBA7824 - D2ClientImageBase);
@@ -294,63 +292,6 @@ static_assert(sizeof(ClientGlobalData) == 0x80, "ClientGlobalData must be of siz
 D2VAR(D2CLIENT, psgtGlobalData, ClientGlobalData, 0x6FBA7750 - D2ClientImageBase);
 
 
-//1.00 :D2Client.0x
-//1.10f:D2Client.0x6FAA25D0
-//1.13c:D2Client.0x
-int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall * pLoopBody)(int))
-{
-    int nIterationCount = 0;
-    BOOL v3 = TRUE;
-    do
-    {
-		struct tagMSG Msg;
-		if (PeekMessageA(&Msg, 0, 0, 0, 0))
-        {
-            v3 = GetMessageA(&Msg, 0, 0, 0);
-            if (v3)
-            {
-				HWND v4; // eax
-				HACCEL v8;
-				if (!*D2CLIENT_hAcc_6FB9A710 || (v8 = *D2CLIENT_hAcc_6FB9A710, v4 = WINDOW_GetWindow(), !TranslateAcceleratorA(v4, v8, &Msg)))
-                {
-                    if (*D2CLIENT_dword_6FB9A954)
-                    {
-						HACCEL v9 = *D2CLIENT_dword_6FB9A954;
-                        TranslateAcceleratorA(WINDOW_GetWindow(), v9, &Msg);
-                    }
-                }
-            }
-            TranslateMessage(&Msg);
-            DispatchMessageA(&Msg);
-        }
-        else
-        {
-            if (pLoopBody)
-            {
-				const int result = pLoopBody(nIterationCount++);
-                if (result)
-                    return result;
-            }
-#define FORCE_CPU_SLEEP 1
-#if FORCE_CPU_SLEEP
-			{
-				// Original game will loop only to dequeue packets without ever spinning. To avoid burning the CPU, we insert 1ms sleeps. (which is not a good way to fix it, but better than nothing)
-				ZoneScopedNC("Sleep", 0xFFFFFFFF);
-				Sleep(1u);
-			}
-#else
-            if (!*D2CLIENT_gpbWindowHasFocus
-                && *D2CLIENT_pgnGameType_6FBA7960 != GAMETYPE_OBNET_HOST
-                && *D2CLIENT_pgnGameType_6FBA7960 != GAMETYPE_LAN_HOST)
-            {
-				ZoneScopedNC("Sleep", 0xFFFFFFFF);
-                Sleep(10u);
-            }
-#endif
-        }
-    } while (v3);
-    return 1;
-}
 //1.00 :D2Client.0x10001CA3
 //1.10f:D2Client.0x6FB283D0
 D2UnitStrc* __fastcall D2CLIENT_GetPlayerUnit_6FB283D0()
