@@ -158,9 +158,7 @@ int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int))
 			v3 = GetMessageA(&Msg, 0, 0, 0);
 			if (v3)
 			{
-				HWND v4; // eax
-				HACCEL v8;
-				if (!*D2CLIENT_hAcc_6FB9A710 || (v8 = *D2CLIENT_hAcc_6FB9A710, v4 = WINDOW_GetWindow(), !TranslateAcceleratorA(v4, v8, &Msg)))
+				if (!*D2CLIENT_hAcc_6FB9A710 || (!TranslateAcceleratorA(WINDOW_GetWindow(), *D2CLIENT_hAcc_6FB9A710, &Msg)))
 				{
 					if (*D2CLIENT_dword_6FB9A954)
 					{

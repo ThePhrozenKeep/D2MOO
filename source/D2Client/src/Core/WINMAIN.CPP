@@ -199,7 +199,7 @@ BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig)
 	*D2CLIENT_pgbAppliedConfiguration = TRUE;
 	for (int i = 0; i < 48; ++i)
 	{
-		if (const auto* setupFunc = D2CLIENT_paConfigSetupFunctions[i])
+		if (const auto setupFunc = D2CLIENT_paConfigSetupFunctions[i])
 			setupFunc(pConfig);
 	}
 	return *D2CLIENT_pgbAppliedConfiguration;

@@ -5,7 +5,7 @@
 #include <Game/SCmd.h>
 #include <Game/Select.h>
 #include <Unit/Player.h>
-#include <UI/Chat.h>
+#include <UI/chat.h>
 #include <UI/UI.h>
 #include <Sound/Sound.h>
 #include <Fog.h>
