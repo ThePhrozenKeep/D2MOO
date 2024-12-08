@@ -8,10 +8,12 @@ jobs:
     strategy:
       matrix:
         buildtype: [Debug, RelWithDebInfo]
-        version: ['1.00', '1.10f', '1.14d']
+        version: ['1.00', '1.10f', '1.13c', '1.14d']
         exclude: # Build release only for unmaintained versions.
         - buildtype: Debug
           version: '1.14d'
+        - buildtype: Debug
+          version: '1.13c'
         - buildtype: Debug
           version: '1.00'
     env:
