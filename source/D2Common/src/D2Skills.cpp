@@ -1712,9 +1712,6 @@ BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 //D2Common.0x6FDB1130
 BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int nType)
 {
-	short* pEType = NULL;
-	short* pIType = NULL;
-	int i = 0;
 
 	if (!pItem)
 	{
@@ -1736,7 +1733,7 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 		return FALSE;
 	}
 
-	pEType = &pSkillsTxtRecord->nETypeA[2 * nType];
+	short* pEType = &pSkillsTxtRecord->nETypeA[2 * nType];
 	for (int i = 0; i < 2; ++i)
 	{
 		if (*pEType <= 0)
@@ -1752,8 +1749,8 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 		++pEType;
 	}
 
-	i = 0;
-	pIType = &pSkillsTxtRecord->nITypeA[3 * nType];
+	int i = 0;
+	short* pIType = &pSkillsTxtRecord->nITypeA[3 * nType];
 	while (1)
 	{
 		if (*pIType <= 0)

@@ -387,7 +387,8 @@ BOOL __fastcall PATH_AStar_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoW
 		}
 		return TRUE;
 	}
-	else if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_FindPointInVisitedCache(pContext, tNewPointCoord))
+
+	if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_FindPointInVisitedCache(pContext, tNewPointCoord))
 	{
 		PATH_AStar_AddChildToNode(pCurrentNode, pNewNode);
 		if (nNewPointDistance < pNewNode->nBestDistanceFromStart)
@@ -399,7 +400,8 @@ BOOL __fastcall PATH_AStar_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoW
 		}
 		return TRUE;
 	}
-	else if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_GetNewNode(pContext))
+
+	if (D2PathFoWallNodeStrc* pNewNode = PATH_AStar_GetNewNode(pContext))
 	{
 		PATH_AStar_AddChildToNode(pCurrentNode, pNewNode);
 

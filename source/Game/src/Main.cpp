@@ -250,9 +250,10 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 			szCommand[i + 1] = '\0';
 			strcpy(szCommandNameTestBuf, szCommand); // NOLINT(clang-diagnostic-deprecated-declarations)
 			stoLower(szCommandNameTestBuf);
-			for (size_t i = strlen(szCommandNameTestBuf); i != 0; i--)
+			const size_t szCommandLength = strlen(szCommandNameTestBuf);
+			for (size_t commandCharIndex = szCommandLength; commandCharIndex != 0; commandCharIndex--)
 			{
-				szCommandNameTestBuf[i] = '\0';
+				szCommandNameTestBuf[commandCharIndex] = '\0';
 				nCommandIndex = GetCmdIndex(szCommandNameTestBuf);
 				if (nCommandIndex != -1)
 				{
@@ -701,8 +702,6 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, INT nShowCmd)
 {
-	SC_HANDLE schService;
-
 	ghCurrentProcess = hInstance;
 	gnCmdShow = nShowCmd;
 

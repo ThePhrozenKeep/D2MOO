@@ -822,15 +822,7 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 
 		if (pParentStatList)
 		{
-			D2StatsArrayStrc* pStatsArray = nullptr;
-			if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
-			{
-				pStatsArray = &pStatListEx->FullStats;
-			}
-			else
-			{
-				pStatsArray = &pStatList->Stats;
-			}
+			D2StatsArrayStrc* pStatsArray = STATLIST_IsExtended(pStatList) ? &pStatListEx->FullStats : &pStatList->Stats;
 
 			D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList);
 			// Something looks wrong, seems like some checks were eluded in D2Common.0x6FDB6C10

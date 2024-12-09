@@ -8851,16 +8851,16 @@ void __fastcall sub_6FCE3740(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParam
 		pPotentialTarget = nullptr;
 	}
 
-	int32_t nDistance = 0;
+	int32_t nTargetDistance = 0;
 	int32_t bCombat = 0;
-	D2UnitStrc* pTarget = sub_6FCCFD40(pGame, pUnit, pAiTickParam->pAiControl, &nDistance, &bCombat, 24);
-	if (!pTarget || nDistance > 6)
+	D2UnitStrc* pTarget = sub_6FCCFD40(pGame, pUnit, pAiTickParam->pAiControl, &nTargetDistance, &bCombat, 24);
+	if (!pTarget || nTargetDistance > 6)
 	{
 		pTarget = nullptr;
 		if (pPotentialTarget)
 		{
-			const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pPotentialTarget);
-			if (nDistance < 36)
+			const int32_t nPotentialTargetDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pPotentialTarget);
+			if (nPotentialTargetDistance < 36)
 			{
 				pTarget = pPotentialTarget;
 			}

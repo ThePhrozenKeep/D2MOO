@@ -301,11 +301,11 @@ int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
 
         for (int32_t i = 0; i < std::size(nTrapMonsterIds2); ++i)
         {
-            const int32_t nTrapMonsterId = nTrapMonsterIds2[i];
-            if (nMonsterId >= nTrapMonsterId && nMonsterId < nTrapMonsterId + 4)
+            const int32_t nTrapMonster2Id = nTrapMonsterIds2[i];
+            if (nMonsterId >= nTrapMonster2Id && nMonsterId < nTrapMonster2Id + 4)
             {
-                pObjectRegion->nTrapMonsterId = nTrapMonsterId;
-                return nTrapMonsterId;
+                pObjectRegion->nTrapMonsterId = nTrapMonster2Id;
+                return nTrapMonster2Id;
             }
         }
     }

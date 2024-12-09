@@ -573,28 +573,28 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     if (pClient->nCharSaveTransactionToken != nCharSaveTransactionToken)
     {
         D2_UNLOCK(pGame->lpCriticalSection);
-
-        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
+		// Unlocking then relocking game ? Seems unnecessary
+        if (D2GameStrc* pRelockedGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
-            if (CLIENTS_IsInGame(pGame, nClientId))
+            if (CLIENTS_IsInGame(pRelockedGame, nClientId))
             {
-                CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
+                CLIENTS_RemoveClientFromGame(pRelockedGame, nClientId, 1);
             }
 
-            D2_UNLOCK(pGame->lpCriticalSection);
+            D2_UNLOCK(pRelockedGame->lpCriticalSection);
         }
 
         D2NET_10015(nClientId, __FILE__, __LINE__);
         return 0;
     }
 
-    pClient->nSaveCreationTimestamp = *pSaveCreationTimestamp;
+	pClient->nSaveCreationTimestamp = *pSaveCreationTimestamp;
 
-    D2_UNLOCK(pGame->lpCriticalSection);
+	D2_UNLOCK(pGame->lpCriticalSection);
 
-    D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
-    GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: Sent ACTINITDONE for client %d '%s'", nClientId, pClient->szName);
-    return nTotalSize;
+	D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 2u);
+	GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: Sent ACTINITDONE for client %d '%s'", nClientId, pClient->szName);
+	return nTotalSize;
 }
 
 //D2Game.0x6FC36570
@@ -846,7 +846,7 @@ void __stdcall sub_6FC36B20(int32_t nClientId, const char* szFile, int32_t nLine
     {
         if (D2GameStrc* pGame = GAME_LockGame(nGameGUID))
         {
-            if (CLIENTS_IsInGame(pGame, nClientId)/* && CLIENTS_IsInGame(pGame, nClientId)*/)
+            if (CLIENTS_IsInGame(pGame, nClientId)/* && CLIENTS_IsInGame(pRelockedGame, nClientId)*/)
             {
                 CLIENTS_RemoveClientFromGame(pGame, nClientId, 1);
             }
@@ -1928,7 +1928,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
     }
 
     int32_t bUpdateLadder = 0;
-    int32_t bPlayerDisconnected = 0;
+    bool bPlayerDisconnected = false;
 
     if (!(pGame->dwGameFrame % 8192))
     {
@@ -1939,19 +1939,22 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
     {
         const uint32_t nTickCount = GetTickCount();
         
-        D2ClientStrc* pClient = pGame->pClientList;
-        while (pClient)
-        {
-            D2ClientStrc* pNext = pClient->pNext;
-            if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2EventCallbackTable_6FD45830)
-            {
-                D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
-                bPlayerDisconnected = 1;
-                GAME_LogMessage(6, "[DISCONNECT]  PLAYER:%s  REASON:Heartbeat Timeout", CLIENTS_GetName(pClient));
-                GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
-            }
-            pClient = pNext;
-        }
+		{
+			// Check heartbeat for all clients
+			D2ClientStrc* pClient = pGame->pClientList;
+			while (pClient)
+			{
+				D2ClientStrc* pNext = pClient->pNext;
+				if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2EventCallbackTable_6FD45830)
+				{
+					D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
+					bPlayerDisconnected = true;
+					GAME_LogMessage(6, "[DISCONNECT]  PLAYER:%s  REASON:Heartbeat Timeout", CLIENTS_GetName(pClient));
+					GAME_DisconnectClient(pGame, pClient, EVENTTYPE_DISCONNECT);
+				}
+				pClient = pNext;
+			}
+		}
 
         if (bPlayerDisconnected)
         {

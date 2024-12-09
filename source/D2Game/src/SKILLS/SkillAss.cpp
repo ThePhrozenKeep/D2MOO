@@ -1076,12 +1076,12 @@ void __fastcall sub_6FCF77E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2DamageStrc*
 
                         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PRGSTACK])
                         {
-                            for (int32_t i = 0; i < nValue - 1; ++i)
+                            for (int32_t nPrgFuncIndex = 0; nPrgFuncIndex < nValue - 1; ++nPrgFuncIndex)
                             {
-                                const int32_t nPrgFunc = pSkillsTxtRecord->wSrvPrgFunc[i];
+                                const int32_t nPrgFunc = pSkillsTxtRecord->wSrvPrgFunc[nPrgFuncIndex];
                                 if (nPrgFunc > 0 && nPrgFunc < gnSkillSrvDoFns)
                                 {
-                                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], i + 1, 0);
+                                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], nPrgFuncIndex + 1, 0);
 
                                     const SkillDoFunc pfSkillDo = gpSkillSrvDoFnTable_6FD40A20[nPrgFunc];
                                     if (pfSkillDo)

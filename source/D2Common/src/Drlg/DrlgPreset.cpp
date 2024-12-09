@@ -1666,12 +1666,12 @@ void __fastcall DRLGPRESET_UpdatePops(D2DrlgRoomStrc* pDrlgRoom, int nX, int nY,
 			if (pAdjacentRoom->nType == DRLGTYPE_PRESET)
 			{
 				const D2DrlgMapStrc* pAdjacentRoomMap = pAdjacentRoom->pMaze->pMap;
-				for (int nAdjacentRoomIdx = 0; nAdjacentRoomIdx < pAdjacentRoomMap->nPops; ++nAdjacentRoomIdx)
+				for (int nPopsIdx = 0; nPopsIdx < pAdjacentRoomMap->nPops; ++nPopsIdx)
 				{
-					pAdjacentRoomMap->pPopsOrientation[nAdjacentRoomIdx] = 0;
-					if (pAdjacentRoomMap == pDrlgMap && pAdjacentRoomMap->pPopsIndex[nAdjacentRoomIdx] == nPopIndex)
+					pAdjacentRoomMap->pPopsOrientation[nPopsIdx] = 0;
+					if (pAdjacentRoomMap == pDrlgMap && pAdjacentRoomMap->pPopsIndex[nPopsIdx] == nPopIndex)
 					{
-						pAdjacentRoomMap->pPopsOrientation[nAdjacentRoomIdx] = nTick;
+						pAdjacentRoomMap->pPopsOrientation[nPopsIdx] = nTick;
 					}
 				}
 			}
