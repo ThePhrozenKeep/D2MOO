@@ -2154,21 +2154,21 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCC1870
-int32_t __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass)
+BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass)
 {
 	if (STATES_CheckState(pUnit, STATE_FREEZE))
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (pDamage->dwPoisDamage && pDamage->dwPoisDamage == pDamage->dwDmgTotal)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (pDamage->dwDmgTotal < 256)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -2176,19 +2176,19 @@ int32_t __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_
 	int32_t nDivisor = 0;
 	switch (nHitClass)
 	{
-	case 2:
-	case 6:
-	case 10:
-	case 11:
+	case HITCLASS_OneHandSwingVsSmall:
+	case HITCLASS_OneHandThrust:
+	case HITCLASS_Bow:
+	case HITCLASS_Crossbow:
 		nDivisor = 8;
 		break;
 
-	case 5:
+	case HITCLASS_TwoHandSwingVsLarge:
 		nDivisor = 64;
 		break;
 
-	case 4:
-	case 8:
+	case HITCLASS_TwoHandSwingVsSmall:
+	case HITCLASS_Club:
 		nDivisor = 32;
 		break;
 
@@ -2199,31 +2199,29 @@ int32_t __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_
 
 	if (pDamage->dwDmgTotal < nMaxHp / nDivisor)
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (pDamage->dwDmgTotal < nMaxHp / (nDivisor / 2) && !(ITEMS_RollRandomNumber(&pUnit->pSeed) & 1))
 	{
-		return 1;
+		return TRUE;
 	}
 
 	if (pDamage->dwDmgTotal < nMaxHp / (nDivisor / 4) && !(ITEMS_RollRandomNumber(&pUnit->pSeed) & 3))
 	{
-		return 1;
+		return TRUE;
 	}
 
-	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
+	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
 	{
-		return 1;
+		if (D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId))
+		{
+			return !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_GETHIT]);
+		}
+		return TRUE;
 	}
 
-	D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
-	if (!pMonStats2TxtRecord)
-	{
-		return 1;
-	}
-
-	return !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_GETHIT]);
+	return FALSE;
 }
 
 //D2Game.0x6FCC1A50
