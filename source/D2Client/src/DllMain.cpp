@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <D2CommonDefinitions.h>
 #include <Fog.h>
+#include <Core/WINMAIN.h>
 
 #undef D2FUNC_DLL
 #define D2FUNC_DLL D2FUNC_DLL_STUB
@@ -13,29 +14,17 @@ D2ClientInterface gD2ClientInterface_6FB74108{ &Entrypoint };
 HMODULE hD2ClientModule_6FB9A70C;
 
 //D2Client.0x6FAA11D0
-int __fastcall Entrypoint(int dwParam)
+uint32_t __fastcall Entrypoint(D2ConfigStrc* pConfig)
 {
-	return EntrypointMain(hD2ClientModule_6FB9A70C, dwParam);
+	return D2ClientEntrypoint(hD2ClientModule_6FB9A70C, pConfig);
 }
 
-//D2Client.0x6FAA2050
-int __stdcall EntrypointMain(HMODULE hModule, int)
-{
-	UNIMPLEMENTED();
-	return 0;
-}
 
 D2CLIENT_DLL_DECL D2ClientInterface* __cdecl QueryInterface()
 {
 	return &gD2ClientInterface_6FB74108;
 }
 
-//D2Client.6FAAB370
-int __fastcall D2Client_Main_sub()
-{
-	UNIMPLEMENTED();
-	return 0;
-}
 
 // NOLINTBEGIN(bugprone-branch-clone)
 //D2Client.0x6FAA11A0

@@ -12,6 +12,7 @@ void __fastcall FaultGetString(DWORD dwMessageId, char* buffer, unsigned int iMa
 FaultAssertHandler __fastcall FaultSetAssertHandler(FaultAssertHandler newAssertHandler);
 
 //D2OpenGL.0x10009370
+//D2Client.0x6FB6BB94
 void __fastcall FaultRegisterMessageSource(MessageSource newMessageSource);
 
 //D2OpenGL.0x10009782

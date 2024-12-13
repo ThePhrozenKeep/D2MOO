@@ -11,7 +11,9 @@
 #include <Fog.h>
 #include <Game/Game.h>
 #include <Engine/Cursor.h>
+#include <Core/Lng.h>
 #include <Core/WINMAIN.h>
+#include <Core/WNDPROC.h>
 
 extern "C" {
     __declspec(dllexport)
@@ -101,8 +103,10 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FAA9640 - D2ClientImageBase, &D2CLIENT_DrawGameScene, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAAB370 - D2ClientImageBase, &D2Client_Main_sub_6FAAB370, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAA2050 - D2ClientImageBase, &D2ClientEntrypoint, PatchAction::FunctionReplaceOriginalByPatch},
-
-
+	
+	{ 0x6FAA1210 - D2ClientImageBase, &LNG_Initialize, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAA1300 - D2ClientImageBase, &LNG_Shutdown, PatchAction::FunctionReplaceOriginalByPatch},
+	
 	{ 0x6FB57330 - D2ClientImageBase, &CLIENT_OnMouseMove, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57450 - D2ClientImageBase, &CLIENT_OnNonClientMouseMove, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57480 - D2ClientImageBase, &CLIENT_UpdateCursorPosInGame, PatchAction::FunctionReplaceOriginalByPatch},

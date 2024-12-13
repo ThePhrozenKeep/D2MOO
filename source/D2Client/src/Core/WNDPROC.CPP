@@ -4,6 +4,7 @@
 #include <D2Gfx.h>
 #include <D2WinMain.h>
 #include <Window.h>
+#include <Core/Lng.h>
 #include <tracy/Tracy.hpp>
 
 #ifdef D2_VERSION_110F
@@ -11,7 +12,6 @@ D2CLIENTDWORDSTUB(6FBAB990);
 D2VAR(D2CLIENT, gpbWindowHasFocus, DWORD, 0x6FB747C0 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
-D2VAR(D2CLIENT, hAcc_6FB9A710, HACCEL, 0x6FB9A710 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
@@ -158,7 +158,7 @@ int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int))
 			v3 = GetMessageA(&Msg, 0, 0, 0);
 			if (v3)
 			{
-				if (!*D2CLIENT_hAcc_6FB9A710 || (!TranslateAcceleratorA(WINDOW_GetWindow(), *D2CLIENT_hAcc_6FB9A710, &Msg)))
+				if (!LNG_GetAccelerationTable() || (!TranslateAcceleratorA(WINDOW_GetWindow(), LNG_GetAccelerationTable(), &Msg)))
 				{
 					if (*D2CLIENT_dword_6FB9A954)
 					{

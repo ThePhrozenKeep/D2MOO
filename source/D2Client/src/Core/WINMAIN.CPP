@@ -1,4 +1,5 @@
-#include <Core/WINMAIN.h> 
+#include <Core/WINMAIN.h>
+#include <Core/lng.h> 
 #include <D2CommonDefinitions.h>
 #include <Fog.h>
 #include <Storm.h>
@@ -23,7 +24,6 @@ D2CLIENTDWORDSTUB(6FB74538);
 D2CLIENTDWORDSTUB(6FB9A950);
 
 D2VAR(D2CLIENT, pgnAppMode, int32_t, 0x6FB744D8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgszLanguageName, char, 0x6FB9A718 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgszPlrName, char, 0x6FBA7810 - D2ClientImageBase); //16 bytes
 D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
 
@@ -33,8 +33,6 @@ D2VAR(D2CLIENT, pgbAppliedConfiguration, BOOL, 0x6FB759E4 - D2ClientImageBase);
 
 using AppModeEntryPoint = int(__cdecl* )(int);
 D2VAR(D2CLIENT, pafnAppModeEntryPoints, AppModeEntryPoint, 0x6FB744EC - D2ClientImageBase);
-D2CLIENTSTUB(InitLNG, 6FAA1210, BOOL, __fastcall, ());
-D2CLIENTSTUB(DestroyLNG, 6FAA1300, void, __fastcall, ());
 
 //1.10f:0x6FB9A958 
 BOOL gbHasShownHelp = FALSE;
@@ -181,16 +179,10 @@ SCmdArg aCommandLineOptions[] = {
 	{0			, 0xFFFFFFFF, "p", CmdArg_Play},
 };
 
-//1.10f:D2Client.0x6FAA11E0
-signed int __cdecl RegisterLngCommand()
-{
-	SCmdRegisterArgument(0x20000, -1, "lng", D2CLIENT_pgszLanguageName, 260, 0, 0, 0);
-	return TRUE;
-}
 //1.10f:D2Client.0x6FB6E0C8
-int(__cdecl* gafnCommandsToRegister[])() =
+BOOL(__fastcall* gafnCommandsToRegister[])() =
 {
-	RegisterLngCommand
+	LNG_RegisterCmdLineArguments
 };
 
 //1.10f:D2Client.0x6FAABEE0
@@ -238,11 +230,11 @@ int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 	if (!D2CLIENT_pgszPlrName[0] && !GetUserNameA(D2CLIENT_pgszPlrName, &nPlrNameLength))
 		wsprintfA(D2CLIENT_pgszPlrName, "%s", "noname"); // Why not a simple strncpy ? :shrug:
 	
-	if (!D2CLIENT_InitLNG_6FAA1210())
+	if (!LNG_Initialize())
 		return FALSE;
 	D2Win_10015();
 	D2Win_10014_SetWndProc(WNDPROC_WindowProc);
-	*D2CLIENT_dword_6FB9A954 = LoadAcceleratorsA(ghModule, (LPCSTR)'e');
+	*D2CLIENT_dword_6FB9A954 = LoadAcceleratorsA(ghModule, MAKEINTRESOURCEA(101));
 	BOOL bIsExpansion = FOG_IsExpansion();
 	if (!STRTABLE_LoadStringTables(D2Win_GetArchive(), nullptr, bIsExpansion))
 		return 0;
@@ -262,7 +254,7 @@ int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 	D2Win_10016();
 	DATATBLS_UnloadAllBins();
 	STRTABLE_FreeStringTables();
-	D2CLIENT_DestroyLNG_6FAA1300();
+	LNG_Shutdown();
 	LOG_11105();
 	CLIENT_FreeGame();
 	if (*D2CLIENT_pdword_6FB74538)

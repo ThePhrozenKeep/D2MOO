@@ -2,7 +2,8 @@
 #include <Windows.h>
 #include <Fog.h>
 #include <list>
-
+#include <Storm.h>
+#include <storm/List.hpp>
 
 bool sgfFaultInited = false;
 CRITICAL_SECTION sgcsFault;
@@ -17,28 +18,27 @@ static_assert((MB_TASKMODAL | MB_ICONHAND) == 0x2010, "Make sure we have the cor
 static_assert((MB_RETRYCANCEL | MB_ICONHAND | MB_DEFBUTTON3 | MB_TASKMODAL) == 0x2215, "Make sure we have the correct MessageBox options");
 static_assert((MB_RETRYCANCEL | MB_ICONHAND | MB_DEFBUTTON3 | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST) == 0x52215, "Make sure we have the correct MessageBox options");
 
-#if 1
+
+#define USE_STD_LIST 1
+#if USE_STD_LIST
 // Note: the game uses a TSExplicitList, but there's not much point in rewriting it for now.
 static std::list<MessageSource> sgMessageSourceList;
 #else
-struct TMESSAGESOURCE;
-TMESSAGESOURCE sglFaultMessageSource;
+struct TMESSAGESOURCE
+{
+	TSLink<TMESSAGESOURCE> m_link;
+	MessageSource pMessageSource;
+};
+STORM_EXPLICIT_LIST(TMESSAGESOURCE, m_link) sgMessageSourceList;
+
 #endif
 void __cdecl sFaultAtExit()
 {
     EnterCriticalSection(&sgcsFault);
-#if 1
+#if USE_STD_LIST
     sgMessageSourceList.clear();
 #else
-    TMESSAGESOURCE* v0; // [esp+0h] [ebp-Ch]
-    while (1)
-    {
-        v0 = (TMESSAGESOURCE*)(*((int*)&unk_1005C6A4 + 1) <= 0 ? 0 : *((_DWORD*)&unk_1005C6A4 + 1));
-        if (!v0)
-            break;
-        TMESSAGESOURCE::~TMESSAGESOURCE(v0);
-        SMemFree(v0, ".?AUTMESSAGESOURCE@@", -2, 0);
-    }
+	sgMessageSourceList.Clear();
 #endif
     LeaveCriticalSection(&sgcsFault);
     DeleteCriticalSection(&sgcsFault);
@@ -69,20 +69,14 @@ void __fastcall FaultGetString(DWORD dwMessageId, char* buffer, unsigned int iMa
     if (sgfFaultInited)
     {
         EnterCriticalSection(&sgcsFault);
-#if 1
+#if USE_STD_LIST
         for (MessageSource messageSource : sgMessageSourceList)
         {
 
 #else
-        TMESSAGESOURCE* v3;
-        TMESSAGESOURCE* i;
-        if (*((int*)&unk_1005C6A4 + 1) <= 0)
-            v3 = 0;
-        else
-            v3 = (TMESSAGESOURCE*)*((_DWORD*)&unk_1005C6A4 + 1);
-        for (i = v3; (int)i > 0; i = *(TMESSAGESOURCE**)((char*)i + sglFaultMessageSource + 4))
+		for(auto* pCur = sgMessageSourceList.Head(); pCur; pCur = sgMessageSourceList.Next(pCur))
         {
-            const MessageSource messageSource = (*(MessageSource*)((void**)i + 2));
+            const MessageSource messageSource = pCur->pMessageSource;
 #endif
             if (messageSource(dwMessageId, buffer, iMaxLength))
             {
@@ -95,16 +89,15 @@ void __fastcall FaultGetString(DWORD dwMessageId, char* buffer, unsigned int iMa
     lstrcpynA(buffer, sgszUnknownError, iMaxLength);
 }
 
-
 void __fastcall FaultRegisterMessageSource(MessageSource newMessageSource)
 {
     if (!sgfFaultInited)
         sFaultInit();
     EnterCriticalSection(&sgcsFault);
-#if 1 
+#if USE_STD_LIST
     sgMessageSourceList.push_front(newMessageSource);
 #else
-    *(_DWORD*)(TSList<TMESSAGESOURCE, TSGetExplicitLink<TMESSAGESOURCE>>::NewNode(1, 0, 0) + 8) = a1;
+	sgMessageSourceList.NewNode(1, 0, 0);
 #endif
     LeaveCriticalSection(&sgcsFault);
 }

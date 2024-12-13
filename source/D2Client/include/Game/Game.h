@@ -81,11 +81,6 @@ struct D2GameViewStrc
 };
 #pragma pack(pop)
 
-//1.00 :D2Client.0x10003300
-//1.10f:D2Client.0x6FAA25D0
-//1.13c:D2Client.0x
-int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int));
-
 //1.00 :D2Client.0x10001B7C
 //1.10f:D2Client.0x6FAA9AF0
 //1.13c:D2Client.0x6FAF4B50

@@ -2,6 +2,7 @@
 
 #include <D2Dll.h>
 #include <D2CommonDefinitions.h>
+#include <D2Config.h>
 
 // 1.10f Base address: 0x6FAA0000
 
@@ -20,7 +21,7 @@ HMODULE delayedD2CLIENTDllBaseGet();
 
 struct D2ClientInterface
 {
-	int(__fastcall* pEntrypoint)(int);
+	uint32_t(__fastcall* pEntrypoint)(D2ConfigStrc*);
 };
 
 #pragma pack()
@@ -32,8 +33,4 @@ D2FUNC_DLL(D2CLIENT, ShowWindow, DWORD, __cdecl, (), 0x1F50)											//D2CLIEN
 D2CLIENT_DLL_DECL D2ClientInterface* __cdecl QueryInterface();
 
 //D2Client.0x6FAA11D0
-int __fastcall Entrypoint(int dwParam);
-//D2Client.0x6FAA2050
-int __stdcall EntrypointMain(HMODULE hModule, int);
-//D2Client.6FAAB370
-int __fastcall D2Client_Main_sub();
+uint32_t __fastcall Entrypoint(D2ConfigStrc* pConfig);
