@@ -12,9 +12,10 @@ D2CLIENTDWORDSTUB(6FBAB990);
 D2VAR(D2CLIENT, gpbWindowHasFocus, DWORD, 0x6FB747C0 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);
 
-D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB9A704 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnScreenHeight, uint32_t, 0x6FB740F0 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgSomeObject, uint32_t, 0x6FBB5D4F - D2ClientImageBase);
@@ -31,7 +32,7 @@ D2CLIENTSTUB(sub, 6FAD6DC0, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAF65C0, void, __fastcall, ());
 
 //1.10f:D2Client.0x6FB740F4
-int32_t gnDrawMaxWidth; // unused
+int32_t gnDrawMaxWidth_Unk; // unused
 
 int __fastcall sub_6FAAEB10()
 {
@@ -64,7 +65,8 @@ void __fastcall D2CLIENT_UI_ChangeResolution_6FAA23B0(D2GameResolutionMode nReso
 			break;
 		}
 		*D2CLIENT_pgnDrawMaxHeight = *D2CLIENT_pgnScreenHeight - 40;
-		gnDrawMaxWidth = *D2CLIENT_pgnScreenWidth;
+		*D2CLIENT_pgnDrawMaxWidth = *D2CLIENT_pgnScreenWidth;
+		gnDrawMaxWidth_Unk = *D2CLIENT_pgnScreenWidth;
 
 		D2Win_10005(nResolutionMode);
 		D2CLIENT_UI_AdjustViewMatrix_6FAB5760(D2CLIENT_GetGlobalUiStateNbPanels());
