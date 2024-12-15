@@ -6,7 +6,7 @@
 BOOL __fastcall LNG_RegisterCmdLineArguments();
 
 //1.10f: D2Client.0x6FAA1210
-BOOL __cdecl LNG_Initialize();
+BOOL __fastcall LNG_Initialize();
 
 
 //1.10f: D2Client.0x6FAA1300

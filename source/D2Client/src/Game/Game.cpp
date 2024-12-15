@@ -35,6 +35,7 @@
 #include <Core/WINMAIN.h>
 #include <DataTbls/StringIds.h>
 #include <Server.h>
+#include <Core/MemoryPartitions.h>
 
 #ifdef D2_VERSION_110F
 
@@ -255,7 +256,6 @@ D2CLIENTSTUB(UI_UpdateLoadingScreen, 6FB242E0, void, __fastcall, (BOOL bIncremen
 D2CLIENTSTUB(sub, 6FB6BB88, void*, __fastcall, (void*));
 D2CLIENTSTUB(sub, 6FAA9420, void, __fastcall, ());
 D2CLIENTSTUB(D2Client_PalshiftInit, 6FAADEA0, void, __fastcall, ());
-D2CLIENTSTUB(D2Client_InitAllCaches, 6FAA13A0, void, __fastcall, (void* pMemPoolSystem, int bInitTileCache));
 D2CLIENTSTUB(sub, 6FB3F330, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FABA580, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FB28020, void, __fastcall, ());
@@ -409,7 +409,7 @@ void __fastcall D2Client_InitGame()
 	sub_6FB6BB88(sub_6FAA9420);
 	D2Client_PalshiftInit_6FAADEA0();
 	D2CMP_CreateItemPaletteCache();
-	D2Client_InitAllCaches_6FAA13A0(D2CLIENT_psgtGlobalData->pMemPoolSystem, TRUE);
+	CLIENT_InitMemoryPartitions(D2CLIENT_psgtGlobalData->pMemPoolSystem, TRUE);
 	*D2CLIENT_pdword_6FBA7970 = sub_6FAADC90() != 0;
 	*D2CLIENT_pdword_6FBA77D0 = GetTickCount();
 	*D2CLIENT_pdword_6FBA7948 = GetTickCount();
@@ -1578,7 +1578,7 @@ D2C_AppMode __fastcall APPMODE_Game()
 		}
 	}
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
-	D2CLIENT_SoundInit_6FB0EF90((*D2CLIENT_pgpConfig_6FB9A948)->bSoundBackground);
+	D2CLIENT_SoundInit_6FB0EF90(CONFIG_GetConfig()->bSoundBackground);
 #else
 	D2CLIENT_SoundInit_6FB53D90();
 #endif

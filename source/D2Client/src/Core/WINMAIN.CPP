@@ -251,6 +251,7 @@ static HMODULE ghModule;
 //1.10f: D2Client.0x6FB9A830 
 static char gszModuleFilename[280];
 
+//1.00 : D2Client.0x10006F10
 //1.10f: D2Client.0x6FAA2050
 int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 {

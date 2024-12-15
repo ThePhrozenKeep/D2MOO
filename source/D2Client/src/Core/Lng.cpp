@@ -15,6 +15,7 @@ HACCEL sghLNGAccTable = NULL;
 
 HACCEL LNG_GetAccelerationTable() { return sghLNGAccTable; }
 
+//1.00 : D2Client.0x10006180
 //1.10f: D2Client.0x6FAA11E0
 BOOL __fastcall LNG_RegisterCmdLineArguments()
 {
@@ -31,8 +32,9 @@ BOOL __fastcall PromptErrorOrCancel(LPCSTR lpText)
 //D2Client.0x6FBC345C
 static BOOL sgbLNGInitFailed = FALSE;
 
+//1.00 : D2Client.0x100061C0
 //1.10f: D2Client.0x6FAA1210
-BOOL __cdecl LNG_Initialize()
+BOOL __fastcall LNG_Initialize()
 {
 	if (gszLNGDllName[0])
 	{
@@ -67,6 +69,7 @@ BOOL __cdecl LNG_Initialize()
 	}
 }
 
+//1.00 : D2Client.0x100062F0
 //1.10f: D2Client.0x6FAA1300
 void __fastcall LNG_Shutdown()
 {
@@ -76,6 +79,7 @@ void __fastcall LNG_Shutdown()
 	sghLNGAccTable = NULL;
 }
 
+//1.00 : D2Client.0x10006330
 //1.10f: D2Client.0x6FAA1330
 BOOL __stdcall LNG_MessageSource(DWORD dwMessageId, char* buffer, unsigned int iMaxLength)
 {
