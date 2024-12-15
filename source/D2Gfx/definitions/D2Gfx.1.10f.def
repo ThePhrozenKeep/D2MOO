@@ -45,7 +45,7 @@ EXPORTS
 	D2GFX_SetOption							@10042 NONAME
 	WINDOW_Activate							@10043 NONAME
 	D2GFX_StartDraw							@10044 NONAME
-	D2GFX_EndScene							@10045 NONAME
+	D2GFX_EndDraw							@10045 NONAME
 	D2GFX_GetBackBuffer						@10046 NONAME
 	D2GFX_HardwareAcceleratedRenderMode		@10047 NONAME
 	D2GFX_SetPalette						@10048 NONAME

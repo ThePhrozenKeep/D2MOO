@@ -239,10 +239,10 @@ int32_t __fastcall sub_6FC35700();
 void* __fastcall sub_6FC35720();
 //D2Game.0x6FC35740
 void GAME_LogMessage(int32_t a1, const char* szFormat, ...);
-//D2Game.0x6FC357C0
-D2GAME_DLL_DECL int32_t __stdcall D2Game_10046();
-//D2Game.0x6FC35810
-int32_t __stdcall D2Game_10050();
+//D2Game.0x6FC357C0 (#10046)
+D2GAME_DLL_DECL BOOL __stdcall D2Game_Initialize();
+//1.10f: D2Game.0x6FC35810 (#10050)
+D2GAME_DLL_DECL BOOL __stdcall D2Game_Shutdown();
 //D2Game.0x6FC35840
 D2GameGUID __fastcall GAME_GetGameGUIDFromGameId(uint16_t nGameId);
 //D2Game.0x6FC35880
@@ -328,8 +328,8 @@ void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame);
 //D2Game.0x6FC38E00
 void __fastcall sub_6FC38E00();
-//1.10f:D2Game.0x6FC38E20 (#10004)
-//1.13c:D2Game.0x6FC4E1E0 (#10008)
+//1.10f: D2Game.0x6FC38E20 (#10004)
+//1.13c: D2Game.0x6FC4E1E0 (#10008)
 D2GAME_DLL_DECL int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1);
 //D2Game.0x6FC39030
 void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a3, int32_t nUnused);

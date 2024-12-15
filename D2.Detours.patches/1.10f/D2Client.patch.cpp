@@ -36,8 +36,6 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   QueryInterface	@10004
 };
 
-//D2Client.0x6FAA9640
-void __fastcall D2CLIENT_DrawGameScene(DWORD);
 //D2Client.0x6FADC180
 BOOL __fastcall D2CLIENT_DrawPleaseInsertGameDisc(DWORD);
 //D2Client.0x6FADC970
@@ -88,7 +86,8 @@ ITERATE_WRAPPERS(DEFINE_NAME_HELPER)
 
 #define DEFINE_PROFILING_EXTRA_PATCH_D2CLIENT(ADDR, FUNC, CCONV) DEFINE_PROFILING_EXTRA_PATCH(D2Client, ADDR, FUNC, CCONV)
 static ExtraPatchAction extraPatchActions[] = {
-    // Override patch functions first
+#ifdef D2_VERSION_110F
+	// Override patch functions first
     { 0x6FAAEB40 - D2ClientImageBase, &RECORD_unk_6FAAEB40, PatchAction::FunctionReplacePatchByOriginal},
     { 0x6FB54C60 - D2ClientImageBase, &SOUND_UpdateEnvironmentSFX, PatchAction::FunctionReplacePatchByOriginal},
     { 0x6FB23800 - D2ClientImageBase, &CLIENT_UpdateUIs_6FB23800, PatchAction::FunctionReplacePatchByOriginal},
@@ -99,9 +98,16 @@ static ExtraPatchAction extraPatchActions[] = {
 
 	// Then the ones we rewrote
     { 0x6FAA25D0 - D2ClientImageBase, &ExecuteMessageLoop_6FAA25D0, PatchAction::FunctionReplaceOriginalByPatch},
-    { 0x6FAA9AF0 - D2ClientImageBase, &MainLoop_6FAA9AF0, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAA9450 - D2ClientImageBase, &D2Client_InitGame, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAA9AF0 - D2ClientImageBase, &ClientGameLoop, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAA9640 - D2ClientImageBase, &D2CLIENT_DrawGameScene, PatchAction::FunctionReplaceOriginalByPatch},
-	{ 0x6FAAB370 - D2ClientImageBase, &D2Client_Main_sub_6FAAB370, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAAB370 - D2ClientImageBase, &APPMODE_Game, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAADD00 - D2ClientImageBase, &APPMODE_JoinGame, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAAA4E0 - D2ClientImageBase, &APPMODE_Startup, PatchAction::FunctionReplaceOriginalByPatch},
+	
+	{ 0x6FAABBF0 - D2ClientImageBase, &CONFIG_ApplyGameInformation, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAABC50 - D2ClientImageBase, &CONFIG_Apply_BattleNetIP, PatchAction::FunctionReplaceOriginalByPatch},
+
 	{ 0x6FAA2050 - D2ClientImageBase, &D2ClientEntrypoint, PatchAction::FunctionReplaceOriginalByPatch},
 	
 	{ 0x6FAA1210 - D2ClientImageBase, &LNG_Initialize, PatchAction::FunctionReplaceOriginalByPatch},
@@ -126,7 +132,7 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FB57AC0 - D2ClientImageBase, &CLIENT_DrawCursorDefault, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57CC0 - D2ClientImageBase, &CLIENT_CursorGetDword0x6FBC1AD4, PatchAction::FunctionReplaceOriginalByPatch},
 	
-
+#endif
 	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 

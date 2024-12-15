@@ -333,7 +333,7 @@ int32_t __stdcall D2GFX_StartDraw(int32_t bClear, uint8_t nRed, uint8_t nGreen, 
 }
 
 //D2Gfx.0x6FA73CB0 (#10045)
-int32_t __stdcall D2GFX_EndScene()
+int32_t __stdcall D2GFX_EndDraw()
 {
     gpGraphicsInterface->pfEndDraw();
     gpGraphicsInterface->pfBlit();

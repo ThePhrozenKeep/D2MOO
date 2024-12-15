@@ -15,12 +15,12 @@ D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);
 
-D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB9A704 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnScreenHeight, uint32_t, 0x6FB740F0 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgSomeObject, uint32_t, 0x6FBB5D4F - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpSomeDialog_6FBB5D43, uint32_t, 0x6FBB5D43 - D2ClientImageBase);
-//1.10f:D2Client.0x6FBAB9C4
+//1.10f: D2Client.0x6FBAB9C4
 D2VAR(D2CLIENT, pgdwUiNbPanels, int32_t, 0x6FBAB9C4 - D2ClientImageBase);
 
 D2CLIENTSTUB(RECORD_sub, 6FAAE5B0, void, __fastcall, (UINT Msg, WPARAM wParam, LPARAM lParam));
@@ -45,7 +45,14 @@ int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels()
 	return *D2CLIENT_pgdwUiNbPanels;
 }
 
-void __fastcall D2CLIENT_UI_ChangeResolution_6FAA23B0(D2GameResolutionMode nResolutionMode)
+//1.10f: D2Client.0x6FAB5760
+void __fastcall UI_AdjustViewMatrix(int nGlobalUiState)
+{
+	UI_AdjustViewMatrix_6FAB5760(nGlobalUiState);
+}
+
+//1.10f: D2Client.0x6FAA23B0
+void __fastcall D2CLIENT_UI_ChangeResolution(D2GameResolutionMode nResolutionMode)
 {
 	if (nResolutionMode != D2GFX_GetResolutionMode())
 	{

@@ -16,13 +16,13 @@ enum D2EnvironmentPeriodOfDay
 	NUM_ENVIRONMENT_PERIODS_OF_DAY
 };
 
-enum D2EnvironmentDayCycles : int32_t {
-	ENVCYCLE_SUNRISE,
-	ENVCYCLE_MORNING,
-	ENVCYCLE_NOON,
-	ENVCYCLE_AFTERNOON,
-	ENVCYCLE_SUNSET,
-	ENVCYCLE_NIGHT,
+enum D2EnvironmentDayCycles : int32_t { // Debug strings from 1.00: D2Client.0x100F6458
+	ENVCYCLE_SUNRISE,				    // 'End of night, start of dawn'
+	ENVCYCLE_MORNING,				    // 'End of dawn, start of day'
+	ENVCYCLE_NOON,					    // 'Daytime'
+	ENVCYCLE_AFTERNOON,				    // 'End of day, start of dusk'
+	ENVCYCLE_SUNSET,				    // 'End of dusk, start of night'
+	ENVCYCLE_NIGHT,					    // 'Nightime'
 	NUM_ENVIRONMENT_CYCLES
 };
 

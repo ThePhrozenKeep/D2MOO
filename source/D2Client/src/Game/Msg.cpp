@@ -16,7 +16,9 @@ D2VAR(D2CLIENT, pgszPlayerName, char, 0x6FBA7810 - D2ClientImageBase);//16 bytes
 D2CLIENTDWORDSTUB(6FBC1AF4);
 D2CLIENTDWORDSTUB(6FBC1AFC);
 
-//1.10f:D2Client.0x6FAAD260
+D2CLIENTSTUB(MSG_Send_D2CLTSYS_OPENCHAR, 6FAAD560, void, __fastcall, (BOOL));
+
+//1.10f: D2Client.0x6FAAD260
 void __fastcall SendNewGamePacket(const char* szGameName)
 {
 	D2GSPacketClt66 tPacketClt66;
@@ -60,4 +62,11 @@ void __fastcall SendNewGamePacket(const char* szGameName)
 	*D2CLIENT_pdword_6FBC1AF4 += sizeof(D2GSPacketClt66);
 	++(*D2CLIENT_pdword_6FBC1AFC);
 }
+
+void __fastcall MSG_Send_D2CLTSYS_OPENCHAR(BOOL bUnk)
+{
+	MSG_Send_D2CLTSYS_OPENCHAR_6FAAD560(bUnk);
+}
+
+
 #endif // D2_VERSION_110F

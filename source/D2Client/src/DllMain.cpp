@@ -8,10 +8,12 @@
 #include <D2Client.h>
 
 
-//D2Client.0x6FB74108
-D2ClientInterface gD2ClientInterface_6FB74108{ &Entrypoint };
 //D2Client.0x6FB9A70C
 HMODULE hD2ClientModule_6FB9A70C;
+
+#ifdef D2_VERSION_110F
+//D2Client.0x6FB74108
+D2ClientInterface gD2ClientInterface_6FB74108{ &Entrypoint };
 
 //D2Client.0x6FAA11D0
 uint32_t __fastcall Entrypoint(D2ConfigStrc* pConfig)
@@ -24,6 +26,7 @@ D2CLIENT_DLL_DECL D2ClientInterface* __cdecl QueryInterface()
 {
 	return &gD2ClientInterface_6FB74108;
 }
+#endif
 
 
 // NOLINTBEGIN(bugprone-branch-clone)

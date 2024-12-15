@@ -402,6 +402,7 @@ void __fastcall DRLGACTIVATE_GetRoomsAllocationStats(int* pOutStatsClientAllocat
 	*pOutStatsFreedRooms = gStatsFreedRooms;
 }
 
+//1.00 : D2Common.? (#10003)
 //1.10f: D2Common.0x6FD73F20 (#10003)
 //1.13c: D2Common.? (#10715)
 void __stdcall DRLGACTIVATE_Update(D2DrlgStrc* pDrlg)

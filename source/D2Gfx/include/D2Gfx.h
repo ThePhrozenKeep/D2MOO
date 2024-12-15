@@ -255,7 +255,7 @@ D2GFX_DLL_DECL int32_t __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValu
 //D2Gfx.0x6FA73C90 (#10044)
 D2GFX_DLL_DECL int32_t __stdcall D2GFX_StartDraw(int32_t bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 //D2Gfx.0x6FA73CB0 (#10045)
-D2GFX_DLL_DECL int32_t __stdcall D2GFX_EndScene();
+D2GFX_DLL_DECL int32_t __stdcall D2GFX_EndDraw();
 //D2Gfx.0x6FA73CD0 (#10046)
 D2GFX_DLL_DECL int32_t __stdcall D2GFX_GetBackBuffer(uint8_t* pBuffer);
 //D2Gfx.0x6FA73CE0 (#10051)

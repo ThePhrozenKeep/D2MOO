@@ -129,8 +129,8 @@ void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
     }
 }
 
-//D2Game.0x6FC357C0
-int32_t __stdcall D2Game_10046()
+//D2Game.0x6FC357C0 (#10046)
+BOOL __stdcall D2Game_Initialize()
 {
     SRegLoadValue("Diablo II", "PlayerPos", 0, &dword_6FD4582C);
     memset(gnGamesGUIDs_6FD447F8, 0, sizeof(gnGamesGUIDs_6FD447F8));
@@ -141,8 +141,8 @@ int32_t __stdcall D2Game_10046()
     return TRUE;
 }
 
-//D2Game.0x6FC35810
-int32_t __stdcall D2Game_10050()
+//1.10f: D2Game.0x6FC35810 (#10050)
+BOOL __stdcall D2Game_Shutdown()
 {
     CLIENTS_Release();
     DeleteCriticalSection(&gCriticalSection_6FD45800);
@@ -2105,8 +2105,8 @@ void __fastcall sub_6FC38E00()
     gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
-//1.10f:D2Game.0x6FC38E20 (#10004)
-//1.13c:D2Game.0x6FC4E1E0 (#10008)
+//1.10f: D2Game.0x6FC38E20 (#10004)
+//1.13c: D2Game.0x6FC4E1E0 (#10008)
 int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 {
     // TODO: Names

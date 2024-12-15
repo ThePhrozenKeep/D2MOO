@@ -45,11 +45,11 @@ EXPORTS
 	D2Game_10043														@10043
 	D2Game_10044														@10044
 	TASK_ProcessGame													@10045
-	D2Game_10046														@10046
+	D2Game_Initialize													@10046
 	GAME_CreateNewEmptyGame												@10047
 	D2Game_10048_Return1												@10048
 	D2Game_10049_Return1												@10049
-	D2Game_10050														@10050
+	D2Game_Shutdown														@10050
 	D2Game_10051														@10051
 	GAME_GetMemoryUsage													@10052
 	D2Game_10053														@10053

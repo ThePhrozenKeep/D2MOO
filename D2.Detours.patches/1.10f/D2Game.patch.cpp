@@ -70,11 +70,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10043														@10043
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10044														@10044
     PatchAction::FunctionReplacePatchByOriginal,     //   TASK_ProcessGame													@10045
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10046														@10046
+    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_Initialize														@10046
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_CreateNewEmptyGame											@10047
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10048_Return1												@10048
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10049_Return1												@10049
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10050														@10050
+    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_Shutdown														@10050
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10051														@10051
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetMemoryUsage												@10052
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10053														@10053

@@ -160,8 +160,8 @@ void __fastcall sub_6F8AFCC0(Font nFontSize)
 	}
 }
 
-//1.10f:D2Win.0x6F8AFDC0 (#10043)
-//1.13c:D2Win.0x? (#10178)
+//1.10f: D2Win.0x6F8AFDC0 (#10043)
+//1.13c: D2Win.0x? (#10178)
 int32_t __fastcall D2Win_10043_TEXTBOX_Destroy(D2WinTextBoxStrc* pTextBox)
 {
 	D2_ASSERT(pTextBox);

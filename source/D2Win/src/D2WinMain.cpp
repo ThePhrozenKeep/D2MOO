@@ -898,7 +898,7 @@ void __stdcall D2Win_10019()
 			TEXTURE_CelDraw(&gfxData, nX, nY - 1, -1, DRAWMODE_NORMAL, 0);
 		}
 
-		D2GFX_EndScene();
+		D2GFX_EndDraw();
 	}
 
 	if (dword_6F8FE254 <= 0)

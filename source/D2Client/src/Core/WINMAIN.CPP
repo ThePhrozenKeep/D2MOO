@@ -15,25 +15,67 @@
 #include <D2Log.h>
 
 #ifdef D2_VERSION_110F
-int32_t __stdcall D2Game_10050(); // TODO: Prevent conflict of Game/ folders betwen D2Client and D2Game
 
 D2PTR(D2CLIENT, pgpConfig_6FB9A948, D2ConfigStrc*, 0x6FB9A948 - D2ClientImageBase); //1.13c:0x6FBCB980
 D2ConfigStrc* CONFIG_GetConfig() { return *D2CLIENT_pgpConfig_6FB9A948; }
 
-D2CLIENTDWORDSTUB(6FBA7C08); 
+//1.10f: D2Client.0x6FBA7C08
+BOOL sgbGameInitialized = FALSE;
 D2CLIENTDWORDSTUB(6FB74538);
 D2CLIENTDWORDSTUB(6FB9A950);
 
-D2VAR(D2CLIENT, pgnAppMode, int32_t, 0x6FB744D8 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnAppMode, D2C_AppMode, 0x6FB744D8 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgszPlrName, char, 0x6FBA7810 - D2ClientImageBase); //16 bytes
 D2VAR(D2CLIENT, dword_6FB9A954, HACCEL, 0x6FB9A954 - D2ClientImageBase);
 
-using ConfigSetupFunction = BOOL(__fastcall*)(D2ConfigStrc* pConfig);
-D2VAR(D2CLIENT, paConfigSetupFunctions, ConfigSetupFunction, 0x6FB759E8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgbAppliedConfiguration, BOOL, 0x6FB759E4 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgtGameDataTbl_6FBA7828, struct D2GameDataTableStrc, 0x6FBA7828 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgtGameList_6FBA7980, void*, 0x6FBA7980 - D2ClientImageBase);
 
-using AppModeEntryPoint = int(__cdecl* )(int);
-D2VAR(D2CLIENT, pafnAppModeEntryPoints, AppModeEntryPoint, 0x6FB744EC - D2ClientImageBase);
+using AppModeEntryPoint = D2C_AppMode(__fastcall*)();
+
+//1.00 : D2Client.0x100F53C0
+//1.10f: D2Client.0x6FB744EC
+AppModeEntryPoint afnAppModeEntryPoints[]
+{
+	nullptr,
+	nullptr,
+	APPMODE_Game,
+	APPMODE_Startup,
+	APPMODE_CloseWindow,
+	APPMODE_JoinGame,
+	APPMODE_LeaveGame,
+};
+
+//1.00 : D2Client.0x1011ED3C
+//1.10f: D2Client.0x6FB9A934
+D2C_AppMode sgaAppModeStack[APPMODE_STACK_SIZE];
+//1.00 : D2Client.0x1011ED64
+//1.10f: D2Client.0x6FB9A95C
+int sgnLastAppmode = 0;
+
+//1.00 : D2Client.0x10006A20
+//1.10f: D2Client.0x6FAA1D00
+void __fastcall APPMODE_Enqueue(D2C_AppMode nAppMode)
+{
+	D2_ASSERT(sgnLastAppmode < APPMODE_STACK_SIZE);
+	sgaAppModeStack[sgnLastAppmode] = nAppMode;
+	sgnLastAppmode++;
+}
+
+//1.10f: Inlined
+D2C_AppMode __fastcall APPMODE_Dequeue()
+{
+	D2_ASSERT(sgnLastAppmode);
+	const D2C_AppMode nNextAppMode = sgaAppModeStack[0];
+	for (int i = 1; i < APPMODE_STACK_SIZE; i++)
+	{
+		sgaAppModeStack[i - 1] = sgaAppModeStack[i];
+	}
+	sgnLastAppmode--;
+	return nNextAppMode;
+}
+
+
 
 //1.10f:0x6FB9A958 
 BOOL gbHasShownHelp = FALSE;
@@ -94,15 +136,16 @@ int __stdcall CmdArg_Set(int a1, int _unused)
 	return SRegSaveString("Diablo II", "Default Command Line", 0, *(const char**)(a1 + 24));
 }
 
-//1.10f:D2Client.0x6FB74508
+//1.10f: D2Client.0x6FB74508
 const char* gszModeNames[] = {
 	nullptr,
 	nullptr,
-	"Game",
+	"Game", // This starts directly in the game loop instead of going through 
 	nullptr,
 	nullptr,
 	nullptr,
 	nullptr,
+	// The following modes have been removed
 	"Tyler",
 	"Path",
 	"Test",
@@ -120,7 +163,7 @@ BOOL __stdcall CmdArg_Mode(int a1, int _unused)
 	{
 		if (gszModeNames[i] && 0 == _strcmpi(gszModeNames[i], *(const char**)(a1 + 24)))
 		{
-			*D2CLIENT_pgnAppMode = i;
+			*D2CLIENT_pgnAppMode = D2C_AppMode(i);
 			return TRUE;
 		}
 	}
@@ -166,16 +209,8 @@ signed int __stdcall CmdArg_Play(int _unused, int _unused2)
 	return TRUE;
 }
 
-//1.10f:D2Client.0x6FAADC70
-int __cdecl CLIENT_FreeGame()
-{
-	if (!*D2CLIENT_pdword_6FBA7C08)
-		return 0;
-	*D2CLIENT_pdword_6FBA7C08 = 0;
-	return D2Game_10050();
-}
-
-//1.10f:D2Client.0x6FB6E0D0
+//1.00 : D2Client.0x100EE028
+//1.10f: D2Client.0x6FB6E0D0
 SCmdArg aCommandLineOptions[] = {
 	{0			, 0xFFFFFFFF, "?", CmdArg_DisplayHelp},
 	{0			, 0xFFFFFFFF, "h", CmdArg_DisplayHelp},
@@ -193,25 +228,30 @@ BOOL(__fastcall* gafnCommandsToRegister[])() =
 	LNG_RegisterCmdLineArguments
 };
 
-//1.10f: D2Client.0x6FAABEE0
-BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig)
+
+//1.10f: Inlined in D2Client.0x6FAADD00 APPMODE_JoinGame
+void CLIENT_InitGame()
 {
-	*D2CLIENT_pgbAppliedConfiguration = TRUE;
-	for (int i = 0; i < 48; ++i)
-	{
-		if (const auto setupFunc = D2CLIENT_paConfigSetupFunctions[i])
-			setupFunc(pConfig);
-	}
-	return *D2CLIENT_pgbAppliedConfiguration;
+	GAME_InitGameDataTable(D2CLIENT_pgtGameDataTbl_6FBA7828, D2CLIENT_pgtGameList_6FBA7980);
+	sgbGameInitialized = 1;
+	D2Game_Initialize();
 }
 
+//1.10f: D2Client.0x6FAADC70
+BOOL __fastcall CLIENT_FreeGame()
+{
+	if (!sgbGameInitialized)
+		return FALSE;
+	sgbGameInitialized = FALSE;
+	return D2Game_Shutdown();
+}
 
-//1.10f:D2Client.0x6FB9A94C
+//1.10f: D2Client.0x6FB9A94C
 static HMODULE ghModule;
-//1.10f:D2Client.0x6FB9A830 
+//1.10f: D2Client.0x6FB9A830 
 static char gszModuleFilename[280];
 
-//1.10f:D2Client.0x6FAA2050
+//1.10f: D2Client.0x6FAA2050
 int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 {
 	*D2CLIENT_pgpConfig_6FB9A948 = pConfig;
@@ -252,13 +292,13 @@ int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig)
 
 	DATATBLS_LoadAllTxts(D2Win_GetArchive(), 0, pConfig->dwGameType == GAMETYPE_OBNET_HOST);
 	*D2CLIENT_pdword_6FB74538 = 1;
-	*D2CLIENT_pgnAppMode = APPMODE_3;
+	*D2CLIENT_pgnAppMode = APPMODE_STARTUP;
 	do
 	{
-		*D2CLIENT_pgnAppMode = D2CLIENT_pafnAppModeEntryPoints[*D2CLIENT_pgnAppMode](bIsExpansion);
+		*D2CLIENT_pgnAppMode = afnAppModeEntryPoints[*D2CLIENT_pgnAppMode]();
 		D2_ASSERT(*D2CLIENT_pgnAppMode < APPMODE_LAST);
 		D2_ASSERT(*D2CLIENT_pgnAppMode > APPMODE_CONTINUE);
-	} while (*D2CLIENT_pgnAppMode != 1);
+	} while (*D2CLIENT_pgnAppMode != APPMODE_SHOULDQUIT);
 	D2Win_10016();
 	DATATBLS_UnloadAllBins();
 	STRTABLE_FreeStringTables();

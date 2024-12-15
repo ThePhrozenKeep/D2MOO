@@ -76,12 +76,12 @@ D2CLIENTSTUB(CHAT_Update, 6FAD2FB0, void, __cdecl, ());
 D2CLIENTSTUB(CLIENT_SpawnMonsters, 6FB3EFB0, void, __thiscall, (D2ActiveRoomStrc* pRoom));
 D2CLIENTSTUB(CLIENT_SpawnPresetUnits, 6FB27E70, void, __thiscall, (D2ActiveRoomStrc* pRoom));
 D2CLIENTSTUB(CLIENT_QUEST_SpawnQuestsFX, 6FABA0D0, void, __thiscall, (D2ActiveRoomStrc* pRoom));
-D2CLIENTSTUB(D2Client_UI_Automap_sub, 6FACBAF0, D2ActiveRoomStrc*, __cdecl, ()); //1.13c:0x6FB12AF0
+D2CLIENTSTUB(CLIENT_UI_AutomapUpdate, 6FACBAF0, D2ActiveRoomStrc*, __cdecl, ()); //1.00:0x10001FDC 1.13c:0x6FB12AF0
 
-D2CLIENTSTUB(CLIENT_UpdateUnits, 6FB280F0, void, __cdecl, ());
-D2CLIENTSTUB(sub, 6FABA270, void, __cdecl, ());
-D2CLIENTSTUB(sub, 6FB29390, void, __cdecl, ());
-D2CLIENTSTUB(sub, 6FB5B210, DWORD, __fastcall, (BOOL));
+D2CLIENTSTUB(CLIENT_ProcessUnits, 6FB280F0, void, __cdecl, ());//1.00:0x10001BAE
+D2CLIENTSTUB(CLIENT_QuestUpdate, 6FABA270, void, __cdecl, ());//1.00:0x10002D7E
+D2CLIENTSTUB(CLIENT_EnvironmentUpdate, 6FB29390, void, __cdecl, ());//1.00:0x10002ED7
+D2CLIENTSTUB(CLIENT_GfxProcess, 6FB5B210, DWORD, __fastcall, (BOOL));//1.00:0x10001343
 D2CLIENTSTUB(sub, 6FB49910, void, __cdecl, ()); //1.13c:0x6FAC8550
 D2CLIENTSTUB(CLIENT_UpdateUnitUnderMouse, 6FAB5D60, void, __cdecl, ());//1.13c:0x6FB01E80
 D2CLIENTSTUB(UI_FreeLoadingScreenProgress, 6FB245C0, DWORD, __cdecl, ());
@@ -89,6 +89,7 @@ D2CLIENTSTUB(UI_FreeLoadingScreenProgress, 6FB245C0, DWORD, __cdecl, ());
 D2CLIENTSTUB(D2CLIENT_GAMEVIEW_GetViewRadius, 6FAB7180, void, __fastcall, (D2GameViewStrc* pGameView, int* a2, int* a3, int* a4, int* a5));
 D2CLIENTSTUB(sub, 6FAB7C50, void, __fastcall, (int* a1, int* a2));
 
+D2VAR(D2CLIENT, pgbAppliedConfiguration, BOOL, 0x6FB759E4 - D2ClientImageBase);
 D2PTR(D2CLIENT, pgpConfigComInterface_6FBA7944, BnClientInterface*, 0x6FBA7944 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, pgpView_6FBA7990, D2GameViewStrc*, 0x6FBA7990 - D2ClientImageBase);
@@ -116,29 +117,25 @@ D2CLIENTSTUB(D2CLIENT_DrawFPSInfo, 6FAA28E0, void, __fastcall, ());
 
 D2CLIENTDWORDSTUB(6FB75814);
 
-//1.10f:D2Client.0x6FBBC200
-//1.13c:D2Client.0x6FBCBBFC
+//1.10f: D2Client.0x6FBBC200
+//1.13c: D2Client.0x6FBCBBFC
 //D2UnitStrc* gpPlayerUnit_6FBBC200;
 D2VAR(D2CLIENT, pgpPlayerUnit_6FBBC200, D2UnitStrc*, 0x6FBBC200 - D2ClientImageBase);
 
 //D2Client.0x6FBA7960
 //eD2GameTypes *D2CLIENT_pgnGameType_6FBA7960;
 D2VAR(D2CLIENT, pgnGameType_6FBA7960, eD2GameTypes, 0x6FBA7960 - D2ClientImageBase);
+
+
 eD2GameTypes GAME_GetGameType() { return *D2CLIENT_pgnGameType_6FBA7960; }
 
 
 using DrawFunc = BOOL(__fastcall*)(DWORD);
-//D2Client.0x6FBA7754
-//DrawFunc pfDraw_6FBA7754;
-D2VAR(D2CLIENT, ppfDraw_6FBA7754, DrawFunc, 0x6FBA7754 - D2ClientImageBase);
 
 
-D2VAR(D2CLIENT, pnNextNetUpdateTickCount_6FBA776C, DWORD, 0x6FBA776C - D2ClientImageBase);
-D2VAR(D2CLIENT, pgnFpsSkipped_6FBA7780, DWORD, 0x6FBA7780 - D2ClientImageBase); //1.13c:0x6FBC9810
 D2VAR(D2CLIENT, pgpCurrentAct_6FBA7984, D2DrlgActStrc*, 0x6FBA7984 - D2ClientImageBase); //1.13c:0x6FBCC3B8
 
 
-D2VAR(D2CLIENT, pgnPreviousFrameStartTickCount_6FBA7760, DWORD, 0x6FBA7760 - D2ClientImageBase); // 1.13c:0x6FBC97F0
 D2CLIENTDWORDSTUB(6FBA79A8);
 D2CLIENTDWORDSTUB(6FB7580C);
 
@@ -148,41 +145,34 @@ D2CLIENTDWORDSTUB(6FBA79C4);
 D2CLIENTDWORDSTUB(6FBA79B4);
 D2CLIENTDWORDSTUB(6FBA79B8);
 D2VAR(D2CLIENT, pgbRequestedToStandStill_6FBA79BC, DWORD, 0x6FBA79BC - D2ClientImageBase);
-D2VAR(D2CLIENT, pgnFramesElapsed_6FBA7768, DWORD, 0x6FBA7768 - D2ClientImageBase);//1.13c:0x6FBC97F8
-D2VAR(D2CLIENT, pgnFrameStartTickCount_6FBA775C, DWORD, 0x6FBA775C - D2ClientImageBase); //1.13c:0x6FBC97EC
-D2VAR(D2CLIENT, pgnLastNetUpdateBeginTickCount_6FBA7770, DWORD, 0x6FBA7770 - D2ClientImageBase);
 
 D2CLIENTDWORDSTUB(6FBA79AC);
 D2CLIENTDWORDSTUB(6FB75810);
 D2CLIENTDWORDSTUB(6FBA79C8);
-D2CLIENTDWORDSTUB(6FBA7770);
-D2CLIENTDWORDSTUB(6FBA7788);
-//1.10f:D2CLient.0x6FB75460
-//1.13c:D2CLient.0x6FBA4318
+//1.10f: D2CLient.0x6FB75460
+//1.13c: D2CLient.0x6FBA4318
 static int gnTargetFrameDurationMs = 40; // Never modified by the game code. 25FPS.
 D2CLIENTDWORDSTUB(6FB75460);
 
-D2VAR(D2CLIENT, pgnFPSRendered_6FBA7778, DWORD, 0x6FBA7778 - D2ClientImageBase); //1.13c:0x6FBC9808
-D2VAR(D2CLIENT, pgnFramesSkippedSinceLastCheck_6FBA7784, DWORD, 0x6FBA7784 - D2ClientImageBase); //1.13c:0x6FBC980C
-D2CLIENTDWORDSTUB(6FBA7780);
-D2VAR(D2CLIENT, pgnRenderedFramesSinceLastCheck_6FBA777C, DWORD, 0x6FBA777C - D2ClientImageBase); //1.13c:0x6FBC980C
 D2VAR(D2CLIENT, pgnFramesSinceLastUpdate_6FBA79E0, DWORD, 0x6FBA79E0 - D2ClientImageBase); //1.13c:0x6FBD3490
-D2CLIENTDWORDSTUB(6FBA778C);
-D2CLIENTDWORDSTUB(6FBA77EC);
 D2CLIENTDWORDSTUB(6FBA7968);
 D2CLIENTDWORDSTUB(6FBA7970);
-D2CLIENTDWORDSTUB(6FBA799C);
+//1.10f:0x6FBA799C
+uint32_t gnLoopIterationsRemaining = 0;
 D2CLIENTDWORDSTUB(6FBA7954);
+D2CLIENTDWORDSTUB(6FBA7958);
 D2CLIENTDWORDSTUB(6FBA7978);
 D2CLIENTDWORDSTUB(6FBA797C);
 D2CLIENTDWORDSTUB(6FBA77D0);
 D2CLIENTDWORDSTUB(6FBA7974);
 D2CLIENTDWORDSTUB(6FBA7948);
-D2CLIENTDWORDSTUB(6FBA7764);
 D2CLIENTDWORDSTUB(6FBAF978); // 1.13c: 0x6FBCC2E0
 D2CLIENTDWORDSTUB(6FBA79A4);
+D2CLIENTDWORDSTUB(6FBA7BFC);
+D2CLIENTDWORDSTUB(6FBA79D4);
 D2VAR(D2CLIENT, pgnMaxPlayerCountForGameRefresh, DWORD, 0x6FB7591C - D2ClientImageBase); // Default value: 4, not modified anywhere. 1.13c:0x6FBA9F58
 
+D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, pgnDifficulty_6FBA795C, uint8_t, 0x6FBA795C - D2ClientImageBase);
 D2VAR(D2CLIENT, gptOpenServerThreadLock_6FBA77D4, _RTL_CRITICAL_SECTION, 0x6FBA77D4 - D2ClientImageBase);// 1.13c: 0x6FBC97C8
@@ -192,6 +182,10 @@ D2VAR(D2CLIENT, psgbShutDownOpenServerThread_6FBA79A0, BOOL, 0x6FBA79A0 - D2Clie
 
 D2CLIENTSTUB(D2Client_InitGouraudTables, 6FAB6AC0, void, __fastcall, ()); //1.13c:0x6FB3A600
 D2CLIENTSTUB(D2Client_FreeGouraudTables, 6FAB6EB0, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAAE910, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAAF4E0, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAB14C0, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAA2850, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAA1CB0, void, __fastcall, ()); //1.13c:Inlined
 D2CLIENTSTUB(sub, 6FAA2840, void, __fastcall, ()); //1.13c:Inlined
 D2CLIENTSTUB(sub, 6FB575F0, BOOL, __fastcall, (DWORD)); //1.13c:Inlined
@@ -236,11 +230,9 @@ D2CLIENTSTUB(sub, 6FAAEB00, BOOL, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAAEAF0, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAAEAD0, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FB54CB0, void, __fastcall, ());
-D2CLIENTSTUB(DisplayErrorLoop, 6FAA98C0, BOOL, __stdcall, (int nIteration)); //1.13c:0x6FAF3A40
 D2CLIENTSTUB(sub, 6FAAE810, void, __fastcall, ());
 D2CLIENTDWORDSTUB(6FBA7950);
 D2CLIENTSTUB(PlayVideo, 6FAA1680, void, __fastcall, (int nVideoId));
-D2CLIENTSTUB(D2CLIENT_UI_ChangeResolution, 6FAA23B0, void, __fastcall, (int nResolutionMode));
 
 D2CLIENTSTUB(Slideshow, 6FAAA560, BOOL, __stdcall, (int nIteration));
 D2CLIENTSTUB(ShowEndGameMenu, 6FAAA980, BOOL, __stdcall, (int nIteration));
@@ -252,43 +244,94 @@ D2CLIENTSTUB(CLIENT_FreeGameView, 6FAB70D0, void, __fastcall, (D2GameViewStrc* p
 D2CLIENTSTUB(CLIENT_DestroyUI, 6FB202C0, void, __fastcall, ());
 D2CLIENTSTUB(CLIENT_FreeLightMap, 6FAA5DC0, void, __fastcall, ());
 D2CLIENTSTUB(ENV_Shutdown, 6FAA6AB0, void, __fastcall, ());
-D2VAR(D2CLIENT, pgpMemoryPoolSystem, void*, 0x6FBA7758 - D2ClientImageBase);
 D2VAR(D2CLIENT, psgpGlobalSeed, D2SeedStrc*, 0x6FBA7988 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgbDataLocalColorUseGreenBlood, BOOL, 0x6FBA794C - D2ClientImageBase);
+
 D2CLIENTSTUB(D2Client_ShutdownSound, 6FB54860, void, __fastcall, ());
-D2CLIENTSTUB(D2CLIENT_PushAppMode, 6FAA1D00, void, __fastcall, (uint32_t nAppMode));
+D2CLIENTSTUB(CLIENT_SetPlayerUnit, 6FB28390, void, __fastcall, (D2UnitStrc* pPlayerUnit));
+D2CLIENTSTUB(D2CLIENT_OpenFile, 6FB6B91C, BOOL, __fastcall, (int a1, const char* pzFileName, HANDLE* pOutHandle, int a4));
+D2CLIENTSTUB(UI_LoadingScreenInit, 6FB241A0, void, __fastcall, ());
+D2CLIENTSTUB(UI_UpdateLoadingScreen, 6FB242E0, void, __fastcall, (BOOL bIncrementLoadingScreenFrame));
+D2CLIENTSTUB(sub, 6FB6BB88, void*, __fastcall, (void*));
+D2CLIENTSTUB(sub, 6FAA9420, void, __fastcall, ());
+D2CLIENTSTUB(D2Client_PalshiftInit, 6FAADEA0, void, __fastcall, ());
+D2CLIENTSTUB(D2Client_InitAllCaches, 6FAA13A0, void, __fastcall, (void* pMemPoolSystem, int bInitTileCache));
+D2CLIENTSTUB(sub, 6FB3F330, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FABA580, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FB28020, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAA46A0, void, __fastcall, ());
+D2CLIENTSTUB(InitEnvironment, 6FAA6A10, void, __fastcall, ());
+D2CLIENTSTUB(sub, 6FAD2F60, void, __fastcall, ());
 
 
+//1.10f: D2Client.0x6FB758E0
+uint32_t /*D2C_StringIndices*/ aErrorStrIndices[] = {
+	STR_IDX_5365_Unable_to_enter_game_Bad_character_versi,
+	STR_IDX_5366_Unable_to_enter_game_Bad_character_quest,
+	STR_IDX_5367_Unable_to_enter_game_Bad_character_waypo,
+	STR_IDX_5368_Unable_to_enter_game_Bad_character_stats,
+	STR_IDX_5369_Unable_to_enter_game_Bad_character_skill,
+	STR_IDX_5371_Unable_to_enter_game,
+	STR_IDX_5370_failed_to_join_game,
+	STR_IDX_5357_Your_connection_has_been_interrupted,
+	STR_IDX_5358_The_Host_of_this_game_has_left,
+	STR_IDX_5372_unknown_failure,
+	STR_IDX_5373_Unable_to_enter_game_Bad_inventory_data,
+	STR_IDX_5374_Unable_to_enter_game_bad_dead_bodies,
+	STR_IDX_5375_Unable_to_enter_game_bad_header,
+	STR_IDX_5376_Unable_to_enter_game_bad_hireables,
+	STR_IDX_5377_Unable_to_enter_game_bad_intro_data,
+	STR_IDX_5378_Unable_to_enter_game_bad_item,
+	STR_IDX_5379_Unable_to_enter_game_bad_dead_body_item,
+	STR_IDX_5380_Unable_to_enter_game_generic_bad_file,
+	STR_IDX_5381_Game_is_full,
+	STR_IDX_5360_Versions_do_not_match_Please_log_onto_ba,
+	STR_IDX_5364_Unable_to_enter_game_Your_character_must,
+	STR_IDX_5363_Unable_to_enter_game_Your_character_must,
+	STR_IDX_5362_Unable_to_enter_game_A_normal_character_,
+	STR_IDX_5361_Unable_to_enter_game_A_hardcore_characte,
+	STR_IDX_5359_A_dead_hardcore_character_cannot_join_or,
+	STR_IDX_10101_x_NORMAL_CANT_JOIN_EXP_GAME,
+	STR_IDX_10102_x_EXP_CANT_JOIN_NORMAL_GAME,
+	STR_IDX_5370_failed_to_join_game,
+	STR_IDX_5371_Unable_to_enter_game,
+};
+#ifdef D2_VERSION_110F
+static_assert(D2JOINERR_COUNT == 29 && ARRAY_SIZE(aErrorStrIndices) == D2JOINERR_COUNT, "There are 29 error types in the original game");
+#endif//D2_VERSION_110F
+//1.10f: D2Client.0x6FBA77EC
+D2C_JoinErrors gdwErrorMessageIndex;
 
 #pragma pack(push, 1)
-struct ClientGlobalData
+struct ClientGlobalData								//Size:0x80
 {
-	int field_0;
-	BOOL(__fastcall* pfDraw_6FBA7754)(DWORD);
-	int field_8;
-	int gnFrameStartTickCount_6FBA775C;
-	int gnPreviousFrameStartTickCount_6FBA7760;
-	int field_14;
-	DWORD gnFramesElapsed_6FBA7768;
-	int nNextNetUpdateTickCount_6FBA776C;
-	int gnLastNetUpdateBeginTickCount_6FBA7770;
-	int gnPing_6FBA7774;
-	int gnFPSRendered_6FBA7778;
-	int gnRenderedFramesSinceLastCheck_6FBA777C;
-	int gnFpsSkipped_6FBA7780;
-	int gnSkippedFrameSinceLastCheck_6FBA7784;
-	int field_38;
-	int field_3C;
-	BYTE gap40[4];
-	int field_44;
-	int field_48;
-	int field_4C;
-	int field_50;
-	BYTE gap54[16];
-	int field_64;
-	BYTE gap68[12];
-	int gnExpansionFlag_6FBA77C4;
-	int gnLadderFlag_6FBA77C8;
-	int field_7C;
+	int field_0;									//0x00
+	void(__fastcall* pfDraw)(DWORD);				//0x04
+	void* pMemPoolSystem;							//0x08
+	int gnFrameStartTickCount_6FBA775C;				//0x0C
+	int gnPreviousFrameStartTickCount_6FBA7760;		//0x10
+	int field_14;									//0x14
+	DWORD gnFramesElapsed_6FBA7768;					//0x18
+	int nNextNetUpdateTickCount_6FBA776C;			//0x1C
+	int gnLastNetUpdateBeginTickCount_6FBA7770;		//0x20
+	int gnPing_6FBA7774;							//0x24
+	int gnFPSRendered_6FBA7778;						//0x28
+	int gnRenderedFramesSinceLastCheck_6FBA777C;	//0x2C
+	int gnFpsSkipped_6FBA7780;						//0x30
+	int gnFramesSkippedSinceLastCheck_6FBA7784;		//0x34
+	int nUnkFameStartTickCount;						//0x38
+	int field_3C;									//0x3C
+	BYTE gap40[4];									//0x40
+	int field_44;									//0x44
+	int field_48;									//0x48
+	int field_4C;									//0x4C
+	int field_50;									//0x50
+	BYTE gap54[16];									//0x54
+	int field_64;									//0x64
+	BYTE gap68[12];									//0x68
+	int gnExpansionFlag_6FBA77C4;					//0x74
+	int gnLadderFlag_6FBA77C8;						//0x78
+	int field_7C;									//0x7C
 };
 #ifdef D2_VERSION_110F
 static_assert(sizeof(ClientGlobalData) == 0x80, "ClientGlobalData must be of size 0x80");
@@ -314,8 +357,85 @@ D2ActiveRoomStrc* __fastcall D2CLIENT_GetCurrentRoom_6FB29370()
     return nullptr;
 }
 
+//1.10f: D2Client.0x6FB09C90
+void __fastcall D2CLIENT_InitResolution()
+{
+	BOOL b800x600 = FALSE;
+	SRegLoadValue("Diablo II", "Resolution", 0, (DWORD*)&b800x600);
+	D2CLIENT_UI_ChangeResolution(b800x600 ? D2GAMERES_800x600 : D2GAMERES_640x480);
+}
+
+int __fastcall sub_6FAADC90()
+{
+	return *D2CLIENT_pdword_6FBA7BFC;
+}
+
+//1.10f: D2Client.0x6FAA9450
+void __fastcall D2Client_InitGame()
+{
+	memset(D2CLIENT_psgtGlobalData, 0, sizeof(*D2CLIENT_psgtGlobalData));
+	gnLoopIterationsRemaining = 0;
+	*D2CLIENT_pdword_6FBA797C = 0;
+	*D2CLIENT_pdword_6FBA7978 = 0;
+	*D2CLIENT_pdword_6FBA7958 = 0;
+	*D2CLIENT_pdword_6FBA7974 = 0;
+	*D2CLIENT_pgbRequestedToStandStill_6FBA79BC = FALSE;
+	FOG_CreateNewPoolSystem(&D2CLIENT_psgtGlobalData->pMemPoolSystem, "Client Pool System", 0x40000, 0x1000);
+	CLIENT_SetPlayerUnit_6FB28390(nullptr);
+	if (!*D2CLIENT_pgbDataLocalColorUseGreenBlood)
+	{
+		HSFILE hColorTxtFile;
+		if (ARCHIVE_OpenFile(0, "Data\\Local\\Color.txt", &hColorTxtFile, TRUE))
+		{
+			uint8_t bColorFromFile;
+			ARCHIVE_ReadFileToBuffer(0, hColorTxtFile, &bColorFromFile, 1);
+			ARCHIVE_CloseFile(0, hColorTxtFile);
+			if (bColorFromFile == '1')
+				*D2CLIENT_pgbDataLocalColorUseGreenBlood = TRUE;
+		}
+	}
+	if (!(*D2CLIENT_pgpView_6FBA7990))
+		(*D2CLIENT_pgpView_6FBA7990) = GAMEVIEW_AllocateGameView();
+	D2CLIENT_InitResolution();
+	UI_LoadingScreenInit_6FB241A0();
+	UI_UpdateLoadingScreen_6FB242E0(TRUE);
+	if (*D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_OBNET_JOIN
+		|| *D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_LAN_JOIN
+		|| *D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_OBNET_HOST
+		|| *D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_LAN_HOST)
+	{
+		MSG_Send_D2CLTSYS_OPENCHAR(TRUE);
+	}
+	sub_6FB6BB88(sub_6FAA9420);
+	D2Client_PalshiftInit_6FAADEA0();
+	D2CMP_CreateItemPaletteCache();
+	D2Client_InitAllCaches_6FAA13A0(D2CLIENT_psgtGlobalData->pMemPoolSystem, TRUE);
+	*D2CLIENT_pdword_6FBA7970 = sub_6FAADC90() != 0;
+	*D2CLIENT_pdword_6FBA77D0 = GetTickCount();
+	*D2CLIENT_pdword_6FBA7948 = GetTickCount();
+	D2CLIENT_psgtGlobalData->pfDraw = D2CLIENT_DrawGameScene;
+	D2CLIENT_psgtGlobalData->gnFramesElapsed_6FBA7768 = 0;
+	D2CLIENT_psgtGlobalData->field_14 = 0;
+	sub_6FAB71B0(*D2CLIENT_pgpView_6FBA7990, 0, 0);
+	UI_AdjustViewMatrix(0);
+	D2CLIENT_psgtGlobalData->field_7C = 0;
+	sub_6FB3F330();
+	D2CLIENT_Return_6FAA1500();
+	sub_6FABA580();
+	
+	*D2CLIENT_psgpGlobalSeed = D2_ALLOC_STRC(D2SeedStrc);
+	sub_6FB28020();
+	sub_6FAA46A0();
+	InitEnvironment_6FAA6A10();
+	sub_6FAD2F60();
+	*D2CLIENT_pdword_6FBA79D4 = 0;
+	*D2CLIENT_pgbIsInGame_6FBA796C = 0;
+}
+
+//1.00 : Inlined
+//1.10f: Inlined
 //1.13c: D2Client.0x6FAF40C0
-void D2CLIENT_DoRoomsSpawning()
+void D2CLIENT_PopulateRooms()
 {
     for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(*D2CLIENT_pgpCurrentAct_6FBA7984); 
         pRoom != nullptr; 
@@ -354,32 +474,51 @@ void D2CLIENT_UpdatePlayerMousePosition(int nUpdateType)
         D2CLIENT_PLAYER_unk_6FB49920(nUpdateType, nMouseX, nMouseY, nFlags);
     }
 }
+
+
+//1.00 : D2Client.0x100105D0
 //1.10f: inlined
 //1.13c: D2Client.0x6FAF4A80
+// Note: 1.00 Actually has some kind of profiling builtin which could dump timings to a file called `ClientLoopTimes.txt`. See D2Client.0x10007EC0
 void D2CLIENT_MainUpdate()
 {
 	ZoneScoped;
-    *D2CLIENT_pgnFrameStartTickCount_6FBA775C = GetTickCount();
+	D2CLIENT_psgtGlobalData->gnFrameStartTickCount_6FBA775C = GetTickCount();
 
-    D2CLIENT_DoRoomsSpawning();
-
-	CLIENT_UpdateUnits_6FB280F0();
-    DUNGEON_AnimateTiles(D2CLIENT_GetCurrentRoom_6FB29370());
-    sub_6FABA270();
-    sub_6FB5B210(1);
+	{
+		ZoneScopedN("Populate");
+		D2CLIENT_PopulateRooms();
+	}
+	{
+		ZoneScopedN("Process");
+		CLIENT_ProcessUnits_6FB280F0();
+	}
+	{
+		ZoneScopedN("Animate");
+		DUNGEON_AnimateTiles(D2CLIENT_GetCurrentRoom_6FB29370());
+	}
+	{
+		ZoneScopedN("QuestUpdate");
+		CLIENT_QuestUpdate_6FABA270();
+	}
+	{
+		ZoneScopedN("GfxProcess");
+		CLIENT_GfxProcess_6FB5B210(1);
+	}
     {
 		ZoneScopedN("Update env");
         if (ENVIRONMENT_UpdatePeriodOfDay(*D2CLIENT_pgpCurrentAct_6FBA7984, D2CLIENT_GetCurrentRoom_6FB29370()))
-            sub_6FB29390();
+			CLIENT_EnvironmentUpdate_6FB29390();
     }
-    D2DrlgStrc* v33 = DUNGEON_GetDrlgFromAct(*D2CLIENT_pgpCurrentAct_6FBA7984);
-
     {
-		ZoneScopedN("DRLGACTIVATE_Update");
-        DRLGACTIVATE_Update(v33);
+		ZoneScopedN("DungeonUpdate");
+        DRLGACTIVATE_Update(DUNGEON_GetDrlgFromAct(*D2CLIENT_pgpCurrentAct_6FBA7984));
     }
-    D2Client_UI_Automap_sub_6FACBAF0();
-    if (!(++ * D2CLIENT_pgnFramesElapsed_6FBA7768 % 13))
+	{
+		ZoneScopedN("AutomapUpdate");
+		CLIENT_UI_AutomapUpdate_6FACBAF0();
+	}
+    if (!(++D2CLIENT_psgtGlobalData->gnFramesElapsed_6FBA7768 % 13))
     {
 		ZoneScopedN("DUNGEON_UpdateAndFreeInactiveRooms");
         DUNGEON_UpdateAndFreeInactiveRooms(*D2CLIENT_pgpCurrentAct_6FBA7984);
@@ -456,36 +595,90 @@ void D2Client_UpdateStandStill()
 }
 
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF23A0
+//1.13c: D2Client.0x6FAF23A0
 void D2Client_ComputeFPS()
 {
-	if ((*D2CLIENT_pgnFrameStartTickCount_6FBA775C - *D2CLIENT_pdword_6FBA7788) > (3 * 1000))
+	if ((D2CLIENT_psgtGlobalData->gnFrameStartTickCount_6FBA775C - D2CLIENT_psgtGlobalData->nUnkFameStartTickCount) > (3 * 1000))
 	{
-		*D2CLIENT_pgnFPSRendered_6FBA7778 = *D2CLIENT_pgnRenderedFramesSinceLastCheck_6FBA777C / 3;
-		*D2CLIENT_pgnFpsSkipped_6FBA7780 = *D2CLIENT_pgnFramesSkippedSinceLastCheck_6FBA7784 / 3;
-		*D2CLIENT_pdword_6FBA7788 = *D2CLIENT_pgnFrameStartTickCount_6FBA775C;
-		*D2CLIENT_pgnRenderedFramesSinceLastCheck_6FBA777C = 0;
-		*D2CLIENT_pgnFramesSkippedSinceLastCheck_6FBA7784 = 0;
+		D2CLIENT_psgtGlobalData->gnFPSRendered_6FBA7778 = D2CLIENT_psgtGlobalData->gnRenderedFramesSinceLastCheck_6FBA777C / 3;
+		D2CLIENT_psgtGlobalData->gnFpsSkipped_6FBA7780 = D2CLIENT_psgtGlobalData->gnFramesSkippedSinceLastCheck_6FBA7784 / 3;
+		D2CLIENT_psgtGlobalData->nUnkFameStartTickCount = D2CLIENT_psgtGlobalData->gnFrameStartTickCount_6FBA775C;
+		D2CLIENT_psgtGlobalData->gnRenderedFramesSinceLastCheck_6FBA777C = 0;
+		D2CLIENT_psgtGlobalData->gnFramesSkippedSinceLastCheck_6FBA7784 = 0;
 	}
 
 }
 
-//1.10f:D2Client.0x6FAA9850
-//1.13c:D2Client.0x6FAF35D0
-void D2Client_UpdateUIsIfNeeded(DWORD val)
+//1.10f: D2Client.0x6FAA9850
+//1.13c: D2Client.0x6FAF35D0
+void D2Client_MoveToErrorScreen(D2C_JoinErrors nError)
 {
-	if (!*D2CLIENT_pdword_6FBA799C && !*D2CLIENT_pdword_6FBA7954 && !*D2CLIENT_pdword_6FBA797C)
+	if (!gnLoopIterationsRemaining && !*D2CLIENT_pdword_6FBA7954 && !*D2CLIENT_pdword_6FBA797C)
 	{
-		if (val >= 29) *D2CLIENT_pdword_6FBA77EC = 9;
-		else *D2CLIENT_pdword_6FBA77EC = val;
+		if (nError >= D2JOINERR_COUNT) gdwErrorMessageIndex = D2JOINERR_unknown_failure;
+		else gdwErrorMessageIndex = nError;
 
 		CLIENT_UpdateUIs_6FB23800(1, 0);
-		*D2CLIENT_pdword_6FBA799C = 600;
+		gnLoopIterationsRemaining = 600;
 		*D2CLIENT_pdword_6FBA7970 = 1;
 		*D2CLIENT_pgbIsInGame_6FBA796C = 0;
 		*D2CLIENT_pdword_6FBA7968 = 0;
 		sub_6FAA2040(0);
 	}
+}
+
+//1.10f: D2Client.0x6FAA98C0
+//1.13c: D2Client.0x6FAF3A40
+signed int __stdcall DisplayErrorLoop(int nIteration)
+{
+	if (!gnLoopIterationsRemaining)
+		return FALSE;
+	if (!WINDOW_GetState() && D2GFX_StartDraw(1, 0, 0, 0))
+	{
+		D2GFX_ClearScreen(0);
+		D2Win_10127_SetFont(D2FONT_FONT42);
+		const Unicode* szErrorString = D2LANG_GetStringFromTblIndex(aErrorStrIndices[gdwErrorMessageIndex]);
+		if ((CONFIG_GetConfig()->unpackedCTemp.nCharacterSaveFlags & CLIENTSAVEFLAG_EXPANSION) != 0)
+		{
+			if (gdwErrorMessageIndex == D2JOINERR_NightmareNotUnlocked)
+			{
+				szErrorString = D2LANG_GetStringFromTblIndex(STR_IDX_21794_x);
+			}
+			else if (gdwErrorMessageIndex == D2JOINERR_HellNotUnlocked)
+			{
+				szErrorString = D2LANG_GetStringFromTblIndex(STR_IDX_21793_x);
+			}
+		}
+
+		int nTextWidth = D2Win_10121_GetTextWidth(szErrorString);
+		if (nTextWidth >= (*D2CLIENT_pgnDrawMaxWidth) - 40)
+		{
+			D2Win_10127_SetFont(D2FONT_FONT30);
+			int nLines;
+			D2SplittedTextStrc* pSplittedText = D2Win_10199(szErrorString, &nLines, 600);
+			D2SplittedTextStrc* pCurrentTextLine = pSplittedText;
+			for (int nLineIdx = 0; nLineIdx < nLines; ++nLineIdx)
+			{
+				int nTextX = ((*D2CLIENT_pgnDrawMaxWidth) - D2Win_10121_GetTextWidth(pCurrentTextLine->wszLine)) / 2;
+				D2Win_10117_DrawText(pCurrentTextLine->wszLine, nTextX, 2 * nLineIdx * D2Win_10125() + 200, 0, 0);
+				pCurrentTextLine = pCurrentTextLine->pNextLine;
+			}
+			D2Win_10200(pSplittedText);
+		}
+		else
+		{
+			D2Win_10117_DrawText(szErrorString, ((*D2CLIENT_pgnDrawMaxWidth) - nTextWidth) / 2, 200, 0, 0);
+		}
+		D2Win_10019();
+		D2GFX_EndDraw();
+	}
+	gnLoopIterationsRemaining--;
+	if (gnLoopIterationsRemaining == 0)
+	{
+		UI_FreeLoadingScreenProgress_6FB245C0();
+		return TRUE;
+	}
+	return FALSE;
 }
 
 //1.10f:Inlined
@@ -498,15 +691,15 @@ void D2Client_MultiUpdateUIsIfNeeded()
 	const DWORD nTickCount = GetTickCount();
 	if (!D2NET_10017() && !*D2CLIENT_pdword_6FBA7970 && *D2CLIENT_pgbIsInGame_6FBA796C)
 	{
-		D2Client_UpdateUIsIfNeeded(7);
+		D2Client_MoveToErrorScreen(D2JOINERR_Your_connection_has_been_interrupted);
 	}
 	if (*D2CLIENT_pdword_6FBA7974 && (nTickCount - *D2CLIENT_pdword_6FBA77D0 > 180000))
 	{
-		D2Client_UpdateUIsIfNeeded(7);
+		D2Client_MoveToErrorScreen(D2JOINERR_Your_connection_has_been_interrupted);
 	}
 	if ((nTickCount - *D2CLIENT_pdword_6FBA7948) > 30000 && !*D2CLIENT_pgbIsInGame_6FBA796C && !*D2CLIENT_pdword_6FBA7970 && !*D2CLIENT_pdword_6FBA7974)
 	{
-		D2Client_UpdateUIsIfNeeded(6);
+		D2Client_MoveToErrorScreen(D2JOINERR_failed_to_join_game_6);
 	}
 	if (!*D2CLIENT_pdword_6FBA7968
 		&& !*D2CLIENT_pgbIsInGame_6FBA796C
@@ -515,7 +708,7 @@ void D2Client_MultiUpdateUIsIfNeeded()
 		&& (*D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_LAN_JOIN || *D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_OBNET_JOIN)
 		)
 	{
-		D2Client_UpdateUIsIfNeeded(6);
+		D2Client_MoveToErrorScreen(D2JOINERR_failed_to_join_game_6);
 	}
 }
 
@@ -538,10 +731,10 @@ int __fastcall D2Client_FramesToSkipOrSomething(int nMissedFrames, int nRendered
 	return result;
 }
 
-//1.00 :D2Client.0x10001B7C
-//1.10f:D2Client.0x6FAA9AF0
-//1.13c:D2Client.0x6FAF4B50
-signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
+//1.00 : D2Client.0x10001B7C (thunk) D2Client.0x1000FC40 (impl)
+//1.10f: D2Client.0x6FAA9AF0
+//1.13c: D2Client.0x6FAF4B50
+signed int __stdcall ClientGameLoop(int nIteration)
 {
     BOOL bIsNewFrame = FALSE;
     BOOL bDidClientUpdate = FALSE;
@@ -553,15 +746,15 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
     {
         if (WINDOW_GetState())
         {
-            *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 = GetTickCount();
+			D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = GetTickCount();
             return 0;
         }
         if ((D2CLIENT_CheckUIState_6FB23860(9) || D2CLIENT_CheckUIState_6FB23860(11))
             && pPlayerUnit
             && D2CLIENT_GetCurrentRoom_6FB29370())
         {
-            *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 = GetTickCount();
-            (*D2CLIENT_ppfDraw_6FBA7754)(0);
+			D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = GetTickCount();
+			D2CLIENT_psgtGlobalData->pfDraw(0);
             SOUND_UpdateEnvironmentSFX();
             return 0;
         }
@@ -580,30 +773,30 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
 	// Network update
 	{
 		const DWORD nBeforeNetworkUpdateTickCount = GetTickCount();
-		if (*D2CLIENT_pnNextNetUpdateTickCount_6FBA776C < nBeforeNetworkUpdateTickCount)
+		if (D2CLIENT_psgtGlobalData->nNextNetUpdateTickCount_6FBA776C < nBeforeNetworkUpdateTickCount)
 		{
 			NetUpdate_6FAAD3B0();
-			*D2CLIENT_pgnLastNetUpdateBeginTickCount_6FBA7770 = nBeforeNetworkUpdateTickCount;
-			*D2CLIENT_pnNextNetUpdateTickCount_6FBA776C = nBeforeNetworkUpdateTickCount + 5000;
+			D2CLIENT_psgtGlobalData->gnLastNetUpdateBeginTickCount_6FBA7770 = nBeforeNetworkUpdateTickCount;
+			D2CLIENT_psgtGlobalData->nNextNetUpdateTickCount_6FBA776C = nBeforeNetworkUpdateTickCount + 5000;
 		}
 	}
 
     const DWORD nFrameStartTickCount = GetTickCount();
-    *D2CLIENT_pgnFrameStartTickCount_6FBA775C = nFrameStartTickCount;
+    D2CLIENT_psgtGlobalData->gnFrameStartTickCount_6FBA775C = nFrameStartTickCount;
     
-	if (!*D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760) // Init
+	if (!D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760) // Init
     {
-        *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount - gnTargetFrameDurationMs;
+		D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount - gnTargetFrameDurationMs;
     }
 
 	D2Client_ComputeFPS();
 
-	unsigned int nTimeSincePreviousFrameStart = nTimeSincePreviousFrameStart = nFrameStartTickCount - *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760;
-    if ((nFrameStartTickCount - *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760) >= gnTargetFrameDurationMs)
+	unsigned int nTimeSincePreviousFrameStart = nTimeSincePreviousFrameStart = nFrameStartTickCount - D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760;
+    if ((nFrameStartTickCount - D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760) >= gnTargetFrameDurationMs)
     {
-        *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount;
+		D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount;
         bIsNewFrame = TRUE;
-        if (nFrameStartTickCount < *D2CLIENT_pdword_6FBA778C)
+        if (nFrameStartTickCount < D2CLIENT_psgtGlobalData->field_3C)
         {
             int v18 = nTimeSincePreviousFrameStart - gnTargetFrameDurationMs;
             int v19 = gnTargetFrameDurationMs - 1;
@@ -611,12 +804,12 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
                 v19 = v18;
             *D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = 0;
             nTimeSincePreviousFrameStart = gnTargetFrameDurationMs;
-            *D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount - v19;
-            *D2CLIENT_pdword_6FBA7788 = nFrameStartTickCount;
-            *D2CLIENT_pgnFPSRendered_6FBA7778 = 25;
-            *D2CLIENT_pgnFpsSkipped_6FBA7780 = 0;
-            *D2CLIENT_pgnRenderedFramesSinceLastCheck_6FBA777C = 0;
-            *D2CLIENT_pgnFramesSkippedSinceLastCheck_6FBA7784 = 0;
+			D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = nFrameStartTickCount - v19;
+            D2CLIENT_psgtGlobalData->nUnkFameStartTickCount = nFrameStartTickCount;
+            D2CLIENT_psgtGlobalData->gnFPSRendered_6FBA7778 = 25;
+            D2CLIENT_psgtGlobalData->gnFpsSkipped_6FBA7780 = 0;
+            D2CLIENT_psgtGlobalData->gnRenderedFramesSinceLastCheck_6FBA777C = 0;
+            D2CLIENT_psgtGlobalData->gnFramesSkippedSinceLastCheck_6FBA7784 = 0;
         }
         if (*D2CLIENT_pgbIsInGame_6FBA796C)
             sub_6FB4EE70(pPlayerUnit);
@@ -681,12 +874,12 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
 					if (nTimeSincePreviousFrameStart >= 2 * gnTargetFrameDurationMs)
 					{
 						*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = *D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 <= 1;
-						*D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 -= (gnTargetFrameDurationMs - 1);
+						D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 -= (gnTargetFrameDurationMs - 1);
 					}
 					else
 					{
 						*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = 0;
-						*D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 -= (nTimeSincePreviousFrameStart - gnTargetFrameDurationMs);
+						D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 -= (nTimeSincePreviousFrameStart - gnTargetFrameDurationMs);
 					}
 				}
 				else
@@ -707,15 +900,15 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
 				D2CLIENT_MainUpdate();
 				bDidClientUpdate = TRUE;
 
-				*D2CLIENT_pgnPreviousFrameStartTickCount_6FBA7760 += gnTargetFrameDurationMs - nTimeSincePreviousFrameStart;
-				int v28 = D2Client_FramesToSkipOrSomething(nTimeSincePreviousFrameStart / gnTargetFrameDurationMs, *D2CLIENT_pgnFPSRendered_6FBA7778);
-				if (*D2CLIENT_pgnFPSRendered_6FBA7778 > 28)
-					v28 = 0;
-				*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = *D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 <= v28;
+				D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 += gnTargetFrameDurationMs - nTimeSincePreviousFrameStart;
+				int nFramesToSkip = D2Client_FramesToSkipOrSomething(nTimeSincePreviousFrameStart / gnTargetFrameDurationMs, D2CLIENT_psgtGlobalData->gnFPSRendered_6FBA7778);
+				if (D2CLIENT_psgtGlobalData->gnFPSRendered_6FBA7778 > 28)
+					nFramesToSkip = 0;
+				*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = *D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 <= nFramesToSkip;
 			}
 			else
 			{
-				*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = *D2CLIENT_pgnFPSRendered_6FBA7778 <= 22;
+				*D2CLIENT_pgnFramesSinceLastUpdate_6FBA79E0 = D2CLIENT_psgtGlobalData->gnFPSRendered_6FBA7778 <= 22;
 			}
 		}
 		if (*D2CLIENT_pgbIsInGame_6FBA796C)		
@@ -735,17 +928,17 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
 				if (bIsNewFrame)
 				{
 					//sgbNewFrameMarkerNeeded = true;
-					++*D2CLIENT_pgnFramesSkippedSinceLastCheck_6FBA7784;
+					++D2CLIENT_psgtGlobalData->gnFramesSkippedSinceLastCheck_6FBA7784;
 				}
 			}
 			else if (D2CLIENT_GetCurrentRoom_6FB29370())
 			{
 				ZoneScopedN("Draw");
-				(*D2CLIENT_ppfDraw_6FBA7754)(0);
+				D2CLIENT_psgtGlobalData->pfDraw(0);
 				sgbNewFrameMarkerNeeded = true;
 
-				++(*D2CLIENT_pdword_6FBA7764);
-				++(*D2CLIENT_pgnRenderedFramesSinceLastCheck_6FBA777C);
+				D2CLIENT_psgtGlobalData->field_14++;
+				D2CLIENT_psgtGlobalData->gnRenderedFramesSinceLastCheck_6FBA777C++;
 			}
 			if (bDidClientUpdate)
 			{
@@ -868,8 +1061,8 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 					"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Client\\GAME\\Game.cpp");
 			}
 		}
-		ZoneScopedN("D2GFX_EndScene");
-		D2GFX_EndScene();
+		ZoneScopedN("D2GFX_EndDraw");
+		D2GFX_EndDraw();
 	}
 }
 
@@ -1076,6 +1269,44 @@ BOOL __fastcall sub_6FAAB320()
 }
 
 
+//1.10f: D2Client.0x6FB75570
+char gszBattleNetIP[D2_MAX_PATH] = "207.82.87.139";
+
+//1.10f: D2Client.0x6FB75468
+char gszServerIP[D2_MAX_PATH] = "207.82.87.243";
+
+//1.10f: D2Client.0x6FAABBF0
+void __fastcall CONFIG_ApplyGameInformation(D2ConfigStrc* pConfig)
+{
+	if (strcmp(pConfig->szServerIP, "0"))
+		lstrcpyA(gszServerIP, pConfig->szServerIP);
+	lstrcpyA(D2CLIENT_pgszGameName, pConfig->szGameName);
+	*D2CLIENT_pgnGameType_6FBA7960 = eD2GameTypes(pConfig->dwGameType);
+	*D2CLIENT_pgwJoinId = pConfig->wJoinID;
+	*D2CLIENT_pgnTokenId = pConfig->nTokenId;
+}
+
+//1.10f: D2Client.0x6FAABC50
+void __fastcall CONFIG_Apply_BattleNetIP(D2ConfigStrc* pConfig)
+{
+	if (strcmp(pConfig->szBattleNetIP, "0"))
+		lstrcpyA(gszBattleNetIP, pConfig->szServerIP);
+}
+
+using ConfigSetupFunction = BOOL(__fastcall*)(D2ConfigStrc* pConfig);
+D2VAR(D2CLIENT, paConfigSetupFunctions, ConfigSetupFunction, 0x6FB759E8 - D2ClientImageBase);
+//1.10f: D2Client.0x6FAABEE0
+BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig)
+{
+	*D2CLIENT_pgbAppliedConfiguration = TRUE;
+	for (int i = 0; i < 48; ++i)
+	{
+		if (const auto setupFunc = D2CLIENT_paConfigSetupFunctions[i])
+			setupFunc(pConfig);
+	}
+	return *D2CLIENT_pgbAppliedConfiguration;
+}
+
 //1.10f:Inlined
 void __fastcall WNDPROC_RegisterGlobalCallbacks()
 {
@@ -1142,16 +1373,174 @@ void __fastcall WNDPROC_UnregisterMouseWheelCallbacks()
 	}
 }
 
+//1.00 : D2Client.0x100F67C4
+//1.10f: D2Client.0x6FB7545C
+//Note: Unused except in APPMODE_Startup. Leftover of the -mode commandline ?
+static D2C_AppMode gnAppModeAfterStartup = APPMODE_JOIN_GAME;
 
+//1.00 : D2Client.0x10001F7D (thunk) D2Client.0x10010B90 (impl)
+//1.10f: D2Client.0x6FAAA4E0
+D2C_AppMode __fastcall APPMODE_Startup()
+{
+	if (gnAppModeAfterStartup == APPMODE_JOIN_GAME)
+	{
+		APPMODE_Enqueue(APPMODE_GAME);
+	}
+	return gnAppModeAfterStartup;
+}
 
-//1.10f:D2Client.0x6FAAB370
-//1.13c:D2Client.0x6FAF4F40
-int __fastcall D2Client_Main_sub_6FAAB370()
+//1.00 : D2Client.0x1000219E (thunk) D2Client.0x10012360 (impl)
+//1.10f: D2Client.0x6FAABB40
+D2C_AppMode __fastcall APPMODE_CloseWindow()
+{
+	D2Client_FreeGouraudTables_6FAB6EB0();
+	CLIENT_UnloadCursors();
+	sub_6FAAE910();
+	sub_6FAAF4E0();
+	sub_6FAB14C0();
+	sub_6FAA2850();
+	return APPMODE_SHOULDQUIT;
+}
+
+//1.10f: D2Client.0x6FAADCA0
+BOOL __stdcall CLIENT_NetworkConnectionWaitMessageLoop(int a1)
+{
+	if ((GAME_GetGameType() == GAMETYPE_SINGLEPLAYER || GAME_GetGameType() == GAMETYPE_SINGLEPLAYER_UNCAPPED)
+		&& WINDOW_GetState())
+	{
+		return FALSE;
+	}
+	int32_t v1 = D2NET_10025();
+	if (v1)
+	{
+		return v1 == 2;
+	}
+	else
+	{
+		D2Client_MoveToErrorScreen(D2JOINERR_failed_to_join_game_6);
+		*D2CLIENT_pdword_6FBA7BFC = 1;
+		*D2CLIENT_pdword_6FBA7968 = 0;
+		return TRUE;
+	}
+}
+
+//1.10f: D2Client.0x6FBA7C00
+DWORD gnGameJoinStartTickCount;
+
+//1.10f: D2Client.0x6FAADBC0
+BOOL __stdcall CLIENT_JoinGameMessageLoop(int a1)
+{
+	if (! ((GAME_GetGameType() == GAMETYPE_SINGLEPLAYER || GAME_GetGameType() == GAMETYPE_SINGLEPLAYER_UNCAPPED) && WINDOW_GetState()) )
+	{
+		if (GetTickCount() - gnGameJoinStartTickCount > 10000)
+		{
+			D2Client_MoveToErrorScreen(D2JOINERR_failed_to_join_game_6);
+			*D2CLIENT_pdword_6FBA7BFC = 1;
+			*D2CLIENT_pdword_6FBA7968 = 0;
+			return TRUE;
+		}
+		if (!D2NET_10017())
+			return TRUE;
+	}
+	uint8_t aPacketBuffer[512];
+	int32_t nReceivedPacketsSize = CLIENT_DequeueSystemPacket(aPacketBuffer, ARRAY_SIZE(aPacketBuffer));
+	D2Client_PACKETS_SendPlayerUpdates_6FAB1CB0(aPacketBuffer, nReceivedPacketsSize);
+	return *D2CLIENT_pdword_6FBA7968 != 0;
+}
+
+//1.00 : D2Client.0x10015F60 (thunk) D2Client.0x10015F60 (impl)
+//1.10f: D2Client.0x6FAADD00
+D2C_AppMode __fastcall APPMODE_JoinGame()
+{
+	switch (GAME_GetGameType())
+	{
+	case GAMETYPE_SINGLEPLAYER:
+		SERVER_Initialize(1, 1);
+		CLIENT_Initialize(1, nullptr);
+		ExecuteMessageLoop_6FAA25D0(CLIENT_NetworkConnectionWaitMessageLoop);
+		SERVER_SetHackListEnabled(0);
+		CLIENT_InitGame();
+		break;
+	case GAMETYPE_SINGLEPLAYER_UNCAPPED:
+		SERVER_Initialize(2, 1);
+		CLIENT_Initialize(2, nullptr);
+		ExecuteMessageLoop_6FAA25D0(CLIENT_NetworkConnectionWaitMessageLoop);
+		SERVER_SetHackListEnabled(0);
+		CLIENT_InitGame();
+		break;
+	case GAMETYPE_BNET_INTERNAL:
+		CLIENT_Initialize(0, gszBattleNetIP);
+		ExecuteMessageLoop_6FAA25D0(CLIENT_NetworkConnectionWaitMessageLoop);
+		break;
+	case GAMETYPE_OBNET_HOST: // FALLTHROUGH
+	case GAMETYPE_LAN_HOST:
+		SERVER_Initialize(0, 1);
+		SERVER_SetMaxClientsPerGame(8);
+		SERVER_SetHackListEnabled(0);
+		CLIENT_Initialize(1, gszServerIP);
+		ExecuteMessageLoop_6FAA25D0(CLIENT_NetworkConnectionWaitMessageLoop);
+		CLIENT_InitGame();
+		break;
+
+	case GAMETYPE_BNET_BETA:
+	case GAMETYPE_BNET:
+	case GAMETYPE_BNET_UNUSED:
+	case GAMETYPE_OBNET_JOIN:
+	case GAMETYPE_LAN_JOIN:
+	default:
+		CLIENT_Initialize(0, gszServerIP);
+		ExecuteMessageLoop_6FAA25D0(CLIENT_NetworkConnectionWaitMessageLoop);
+		break;
+	}
+
+	gnGameJoinStartTickCount = GetTickCount();
+	*D2CLIENT_pdword_6FBA7BFC = 0;
+	ExecuteMessageLoop_6FAA25D0(CLIENT_JoinGameMessageLoop);
+	return APPMODE_Dequeue();
+}
+
+//1.10f: D2Client.0x6FBA7C04
+DWORD gnGameLeaveStartTickCount;
+
+//1.10f: D2Client.0x6FAADDF0
+BOOL __stdcall CLIENT_LeaveGameMessageLoop(int a1)
+{
+	if (GAME_GetGameType() == GAMETYPE_SINGLEPLAYER || GAME_GetGameType() == GAMETYPE_SINGLEPLAYER_UNCAPPED)
+		GAME_ProcessNetworkMessages();	
+
+	uint8_t aPacketBuffer[512];
+	int32_t nReceivedPacketsSize = CLIENT_DequeueSystemPacket(aPacketBuffer, ARRAY_SIZE(aPacketBuffer));
+	D2Client_PACKETS_SendPlayerUpdates_6FAB1CB0(aPacketBuffer, nReceivedPacketsSize);
+
+	return (GetTickCount() - gnGameLeaveStartTickCount) > 10000 || *D2CLIENT_pdword_6FBA7968 == 0;
+}
+
+//1.00 : D2Client.0x10002EEB (thunk) D2Client.0x10016120 (impl)
+//1.10f: D2Client.0x6FAADE60
+D2C_AppMode __fastcall APPMODE_LeaveGame()
+{
+	gnGameLeaveStartTickCount = GetTickCount();
+	ExecuteMessageLoop_6FAA25D0(CLIENT_LeaveGameMessageLoop);
+	CLIENT_Release();
+	if (GAME_GetGameType() == GAMETYPE_SINGLEPLAYER
+		|| GAME_GetGameType() == GAMETYPE_SINGLEPLAYER_UNCAPPED
+		|| GAME_GetGameType() == GAMETYPE_OBNET_HOST
+		|| GAME_GetGameType() == GAMETYPE_LAN_HOST)
+	{
+		SERVER_Release();
+	}
+	return APPMODE_Dequeue();
+}
+
+//
+//1.10f: D2Client.0x6FAAB370
+//1.13c: D2Client.0x6FAF4F40
+D2C_AppMode __fastcall APPMODE_Game()
 {
 	BOOL(__stdcall * v0)(LPMSG, HWND, UINT, UINT, UINT); // esi
 	struct tagMSG Msg; // [esp+14h] [ebp-1Ch] BYREF
 
-	if (!*D2CLIENT_pdword_6FBA799C)
+	if (!gnLoopIterationsRemaining)
 		sub_6FAA2040(1);
 	DWORD v1 = GetTickCount();
 	FOG_Trace("[D2CLIENT]  Start entering at %d\n", v1);
@@ -1218,13 +1607,13 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	DWORD v37 = GetTickCount() - v1;
 	DWORD v3 = GetTickCount();
 	FOG_Trace("[D2CLIENT]  Finish entering at %d.  Elapsed: %d\n", v3, v37);
-	ExecuteMessageLoop_6FAA25D0(MainLoop_6FAA9AF0);// This is the main loop
+	ExecuteMessageLoop_6FAA25D0(ClientGameLoop);// This is the main loop
 	DWORD nBeginTickCount = GetTickCount();
 	FOG_Trace("[D2CLIENT]  Start closing at %d.\n", nBeginTickCount);
 	D2Sound_10029(180);
 	sub_6FB54CB0();
-	if (*D2CLIENT_pdword_6FBA799C && !*D2CLIENT_pdword_6FBA7954 && !*D2CLIENT_pdword_6FBA797C)
-		ExecuteMessageLoop_6FAA25D0(DisplayErrorLoop_6FAA98C0);
+	if (gnLoopIterationsRemaining && !*D2CLIENT_pdword_6FBA7954 && !*D2CLIENT_pdword_6FBA797C)
+		ExecuteMessageLoop_6FAA25D0(DisplayErrorLoop);
 	if (sub_6FAAEAA0())
 		sub_6FAAE810();
 	if (*D2CLIENT_pdword_6FBA7950)
@@ -1241,7 +1630,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 		PlayVideo_6FAA1680(5);
 		WNDPROC_UnregisterGlobalCallbacks();
 		WNDPROC_UnregisterMouseWheelCallbacks();
-		D2CLIENT_UI_ChangeResolution_6FAA23B0(0);
+		D2CLIENT_UI_ChangeResolution(D2GAMERES_640x480);
 		D2CLIENT_INPUT_RegisterCallbacks(WINDOW_GetWindow(), aUnkCallbacks_6FB75978, ARRAY_SIZE(aUnkCallbacks_6FB75978));
 		ExecuteMessageLoop_6FAA25D0(ShowEndGameMenu_6FAAA980);
 	}
@@ -1276,7 +1665,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 		if (v17) {
 			WNDPROC_UnregisterGlobalCallbacks();
 			WNDPROC_UnregisterMouseWheelCallbacks();
-			D2CLIENT_UI_ChangeResolution_6FAA23B0(2);
+			D2CLIENT_UI_ChangeResolution(D2GAMERES_800x600);
 			D2CLIENT_INPUT_RegisterCallbacks(WINDOW_GetWindow(), aUnkCallbacks_6FB75978, ARRAY_SIZE(aUnkCallbacks_6FB75978));
 			ExecuteMessageLoop_6FAA25D0(ShowEndGameMenu_6FAAA980);
 		}
@@ -1298,7 +1687,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	D2CLIENT_Return_6FAA1500();
 	CLIENT_FreeLightMap_6FAA5DC0();
 	ENV_Shutdown_6FAA6AB0();
-	FOG_DestroyMemoryPoolSystem(*D2CLIENT_pgpMemoryPoolSystem);
+	FOG_DestroyMemoryPoolSystem(D2CLIENT_psgtGlobalData->pMemPoolSystem);
 	memset(D2CLIENT_psgtGlobalData, 0, sizeof(ClientGlobalData));
 	D2_FREE(*D2CLIENT_psgpGlobalSeed);
 	DWORD nGameCloseEndTickCount = GetTickCount();
@@ -1307,7 +1696,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 	D2Client_FreeGouraudTables_6FAB6EB0();
 	CLIENT_UnloadCursors();
 	D2Win_10006_ClearDrawCaches();
-	D2CLIENT_PushAppMode_6FAA1D00(4);
+	APPMODE_Enqueue(APPMODE_CLOSEWINDOW);
 	if (*D2CLIENT_pdword_6FBA7950)
 	{
 		D2CLIENT_INPUT_UnregisterCallbacks(WINDOW_GetWindow(), aUnkCallbacks_6FB75920, ARRAY_SIZE(aUnkCallbacks_6FB75920));
@@ -1338,7 +1727,7 @@ int __fastcall D2Client_Main_sub_6FAAB370()
 		if (*D2CLIENT_pgpConfigComInterface_6FBA7944)
 			(*D2CLIENT_pgpConfigComInterface_6FBA7944)->LeaveGame();
 	}
-	return 6;
+	return APPMODE_LEAVE_GAME;
 }
 
 #endif //D2_VERSION_110F
