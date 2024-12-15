@@ -4,8 +4,8 @@
 #include <Archive.h>
 #include <D2WinArchive.h>
 
-//1.10f:D2Client.0x6FAA1000
-//1.13c:D2Client.0x6FADB420
+//1.10f: D2Client.0x6FAA1000
+//1.13c: D2Client.0x6FADB420
 D2CellFileStrc* __fastcall D2CLIENT_CELLFILE_GetCellFile(char* szFilename, BOOL bAllowCompressed)
 {
 	char szPathBuffer[MAX_PATH];
@@ -17,7 +17,7 @@ D2CellFileStrc* __fastcall D2CLIENT_CELLFILE_GetCellFile(char* szFilename, BOOL 
 	return pOutCelFile;
 }
 
-//1.10f:D2Client.0x6FAA1140
+//1.10f: D2Client.0x6FAA1140
 void D2CLIENT_CELLFILE_FreeCellFile(D2CellFileStrc* pCellFile)
 {
 	D2CMP_CelFileFreeHardware(pCellFile);

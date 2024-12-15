@@ -241,7 +241,7 @@ struct KeyFunctions
 
 #pragma pack(pop)
 
-//1.10f:D2Client.0x6FAD4F00
+//1.10f: D2Client.0x6FAD4F00
 BOOL __fastcall COMMAND_HasKeyMapping(int nHotkeyIdx, BOOL bPrimaryHotkey);
 
 //Helper function

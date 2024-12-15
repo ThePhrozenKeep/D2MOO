@@ -1,6 +1,7 @@
 #pragma once  
 
 #include <D2BasicTypes.h>
+#include <D2Constants.h>
 #include <Storm.h>
 
 #pragma pack(push, 1)
@@ -21,19 +22,26 @@ struct D2WindowProcCallbackStrc
 #pragma pack(pop)
 
 
-//1.10f:D2Client.0x6FAB5750
+//1.10f: D2Client.0x6FAB5750
 int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels();
 
-//1.10f:D2Client.0x6FAA2550
+
+//1.10f: D2Client.0x6FAB5760
+void __fastcall UI_AdjustViewMatrix(int nGlobalUiState);
+
+//1.10f: D2Client.0x6FAA23B0
+void __fastcall D2CLIENT_UI_ChangeResolution(D2GameResolutionMode nResolutionMode);
+
+//1.10f: D2Client.0x6FAA2550
 LRESULT __stdcall WNDPROC_WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
-//1.00 :D2Client.0x
-//1.10f:D2Client.0x6FAA25D0
-//1.13c:D2Client.0x
+//1.00 : D2Client.0x
+//1.10f: D2Client.0x6FAA25D0
+//1.13c: D2Client.0x
 int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int));
 
-//1.10f:D2Client.0x6FAA26C0
+//1.10f: D2Client.0x6FAA26C0
 void __fastcall D2CLIENT_INPUT_RegisterCallbacks(HWND hWnd, D2WindowProcCallbackStrc* pCallbacks, size_t nCallbacks);
 
-//1.10f:D2Client.0x6FAA2780
+//1.10f: D2Client.0x6FAA2780
 void __fastcall D2CLIENT_INPUT_UnregisterCallbacks(HWND hWnd, D2WindowProcCallbackStrc* pCallbacks, size_t nCallbacks);

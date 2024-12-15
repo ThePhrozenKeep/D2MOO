@@ -68,14 +68,16 @@ void __stdcall DisplayHelp()
 
 	}
 }
-//1.10f:D2Client.0x6FAA2340 D2Client.0x6FAA22D0 
+//1.10f: D2Client.0x6FAA2340 D2Client.0x6FAA22D0 
 BOOL __stdcall SCmd_DisplayHelp(int _unused)
 {
 	D2_MAYBE_UNUSED(_unused);
 	DisplayHelp();
 	return FALSE;
 }
-//1.10f:D2Client.0x6FAA1DA0
+
+//1.00 : D2Client.0x10006AE0
+//1.10f: D2Client.0x6FAA1DA0
 BOOL __stdcall CmdArg_DisplayHelp(int _unused, int _unused2)
 {
 	D2_MAYBE_UNUSED(_unused);
@@ -84,7 +86,8 @@ BOOL __stdcall CmdArg_DisplayHelp(int _unused, int _unused2)
 	return FALSE;
 }
 
-//1.10f:D2Client.0x6FAA1E80
+//1.00 : D2Client.0x10006C20
+//1.10f: D2Client.0x6FAA1E80
 int __stdcall CmdArg_Set(int a1, int _unused)
 {
 	D2_MAYBE_UNUSED(_unused);
@@ -108,7 +111,8 @@ const char* gszModeNames[] = {
 #ifdef D2_VERSION_110F
 static_assert(ARRAY_SIZE(gszModeNames) == 11, "gszModeNames has 11 values in original game.");
 #endif
-//1.10f:D2Client.0x6FAA1EA0
+//1.00 : D2Client.0x10006C50
+//1.10f: D2Client.0x6FAA1EA0
 BOOL __stdcall CmdArg_Mode(int a1, int _unused)
 {
 	D2_MAYBE_UNUSED(_unused);
@@ -124,7 +128,8 @@ BOOL __stdcall CmdArg_Mode(int a1, int _unused)
 	return FALSE;
 }
 
-//1.10f:D2Client.0x6FAA1E10
+//1.00 : D2Client.0x10006B70
+//1.10f: D2Client.0x6FAA1E10
 // Allocates and touches 0x6000 contiguous pages (4kB) by setting first byte to 0
 // Presumably this is used to reduce page faults ?
 signed int __stdcall CmdArg_PreCache(int _unused, int _unused2)
@@ -141,7 +146,8 @@ signed int __stdcall CmdArg_PreCache(int _unused, int _unused2)
     return TRUE;
 }
 
-//1.10f:D2Client.0x6FAA1E60
+//1.00 : D2Client.0x10006BE0
+//1.10f: D2Client.0x6FAA1E60
 signed int __stdcall CmdArg_Record(int _unused, int _unused2)
 {
 	D2_MAYBE_UNUSED(_unused);
@@ -150,7 +156,8 @@ signed int __stdcall CmdArg_Record(int _unused, int _unused2)
 	return TRUE;
 }
 
-//1.10f:D2Client.0x6FAA1E70
+//1.00 : D2Client.0x10006C00
+//1.10f: D2Client.0x6FAA1E70
 signed int __stdcall CmdArg_Play(int _unused, int _unused2)
 {
 	D2_MAYBE_UNUSED(_unused);
@@ -180,13 +187,13 @@ SCmdArg aCommandLineOptions[] = {
 	{0			, 0xFFFFFFFF, "p", CmdArg_Play},
 };
 
-//1.10f:D2Client.0x6FB6E0C8
+//1.10f: D2Client.0x6FB6E0C8
 BOOL(__fastcall* gafnCommandsToRegister[])() =
 {
 	LNG_RegisterCmdLineArguments
 };
 
-//1.10f:D2Client.0x6FAABEE0
+//1.10f: D2Client.0x6FAABEE0
 BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig)
 {
 	*D2CLIENT_pgbAppliedConfiguration = TRUE;

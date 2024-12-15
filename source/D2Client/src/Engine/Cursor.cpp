@@ -49,16 +49,16 @@ D2VAR(D2CLIENT, pgpHeldItem, D2UnitStrc*, 0x6FBC1AA4 - D2ClientImageBase); //1.1
  
 
 
-//1.10f:D2Client.0x6FB96B30
-//1.13c:D2Client.0x6FBA8530
+//1.10f: D2Client.0x6FB96B30
+//1.13c: D2Client.0x6FBA8530
 D2WindowProcCallbackStrc atCursorCallbacks[] = {
 	{D2_WINPROC_MESSAGE, WM_MOUSEMOVE,	CLIENT_OnMouseMove},
 	{D2_WINPROC_MESSAGE, WM_NCMOUSEMOVE,CLIENT_OnNonClientMouseMove},
 	{D2_WINPROC_MESSAGE, WM_LBUTTONUP,	CLIENT_UpdateCursorOnLeftButtonUp},
 };
 
-//1.10f:D2Client.0x6FB96B58
-//1.13c:D2Client.0x6FBA8558
+//1.10f: D2Client.0x6FB96B58
+//1.13c: D2Client.0x6FBA8558
 const CursorDescStrc atCursorDescs_6FB96B58[NUM_CURSORS]{
 	{0,      0,      1,      0,      1, CLIENT_DrawCursorMain, "Gaunt"},
 	{1,      0,      8,      0,      1, CLIENT_DrawCursorMain, "Grasp"},
@@ -68,11 +68,11 @@ const CursorDescStrc atCursorDescs_6FB96B58[NUM_CURSORS]{
 	{1,      1,      8,   0x40,      1, CLIENT_DrawCursorMain, "protate"},
 	{0,      0,      1,      0,      0, CLIENT_DrawCursorBuySell, "buysell"},
 };
-//1.10f:D2Client.0x6FB96C1C
+//1.10f: D2Client.0x6FB96C1C
 const uint32_t gnCursorTableSize = NUM_CURSORS;
 
-//1.10f:D2Client.0x6FBC1AA8
-//1.13c:D2Client.0x6FBCB838
+//1.10f: D2Client.0x6FBC1AA8
+//1.13c: D2Client.0x6FBCB838
 D2CellFileStrc* apCursorCellFiles[NUM_CURSORS];
 
 //1.10f:Inlined
@@ -83,22 +83,22 @@ const CursorDescStrc& __fastcall CLIENT_GetCursorDescChecked(int Type)
 	return atCursorDescs_6FB96B58[Type];
 }
 
-//1.10f:D2Client.0x6FB579A0
-//1.13c:D2Client.0x6FAC6130
+//1.10f: D2Client.0x6FB579A0
+//1.13c: D2Client.0x6FAC6130
 uint32_t __fastcall CLIENT_GetCursorUnk0x08(D2C_CursorTypes Type)
 {
 	return CLIENT_GetCursorDescChecked(Type).unk0x08;
 }
 
-//1.10f:D2Client.0x6FB57A00
+//1.10f: D2Client.0x6FB57A00
 //1.13f:D2Client.0x6FAC60E0
 uint32_t __fastcall CLIENT_GetCursorFrameDuration(D2C_CursorTypes Type)
 {
 	return CLIENT_GetCursorDescChecked(Type).unk0x0C << 8;
 }
 
-//1.10f:D2Client.0x6FB57330
-//1.13c:D2Client.0x6FAC63D0
+//1.10f: D2Client.0x6FB57330
+//1.13c: D2Client.0x6FAC63D0
 void __stdcall CLIENT_OnMouseMove(SMSGHANDLER_PARAMS* pMsg)
 {
 	gnMouseX = (int)(int16_t)LOWORD(pMsg->lParam); // GET_X_LPARAM
@@ -134,8 +134,8 @@ void __stdcall CLIENT_OnMouseMove(SMSGHANDLER_PARAMS* pMsg)
 	pMsg->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FB57450
-//1.13c:D2Client.0x6FAC60A0
+//1.10f: D2Client.0x6FB57450
+//1.13c: D2Client.0x6FAC60A0
 void __stdcall CLIENT_OnNonClientMouseMove(SMSGHANDLER_PARAMS* pMsg)
 {
 	if (pMsg->wParam == HTCAPTION)
@@ -144,8 +144,8 @@ void __stdcall CLIENT_OnNonClientMouseMove(SMSGHANDLER_PARAMS* pMsg)
 	pMsg->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FB57480
-//1.13c:D2Client.0x6FAC6360
+//1.10f: D2Client.0x6FB57480
+//1.13c: D2Client.0x6FAC6360
 void __stdcall CLIENT_UpdateCursorPosInGame(SMSGHANDLER_PARAMS* pMsg)
 {
 	gnMouseX = (int)(int16_t)LOWORD(pMsg->lParam); // GET_X_LPARAM
@@ -164,8 +164,8 @@ void __stdcall CLIENT_UpdateCursorPosInGame(SMSGHANDLER_PARAMS* pMsg)
 	pMsg->bUseResult = FALSE;
 }
 
-//1.10f:D2Client.0x6FB57500
-//1.13c:D2Client.0x6FAC6300
+//1.10f: D2Client.0x6FB57500
+//1.13c: D2Client.0x6FAC6300
 void __stdcall CLIENT_UpdateCursorOnLeftButtonUp(SMSGHANDLER_PARAMS* pMsg)
 {
 	gnMouseX = (int)(int16_t)LOWORD(pMsg->lParam); // GET_X_LPARAM
@@ -180,8 +180,8 @@ void __stdcall CLIENT_UpdateCursorOnLeftButtonUp(SMSGHANDLER_PARAMS* pMsg)
 	pMsg->bUseResult = FALSE;
 }
 
-//1.10f:D2Client.0x6FB57580
-//1.13c:D2Client.0x
+//1.10f: D2Client.0x6FB57580
+//1.13c: D2Client.0x
 void __fastcall CLIENT_SetCursorBuySell(int nFrame, BOOL bUnknown)
 {
 	*D2CLIENT_pgpHeldItem = nullptr;
@@ -190,8 +190,8 @@ void __fastcall CLIENT_SetCursorBuySell(int nFrame, BOOL bUnknown)
 	*D2CLIENT_pgnCursorState = bUnknown ? CURSORSTATE_ItemRelated8 : CURSORSTATE_ItemRelated7; // Always set to FALSE => 7
 }
 
-//1.10f:D2Client.0x6FB575B0
-//1.13c:D2Client.0x
+//1.10f: D2Client.0x6FB575B0
+//1.13c: D2Client.0x
 void __fastcall CLIENT_SetCursorItem(D2UnitStrc* pItem)
 {
 	*D2CLIENT_pgpHeldItem = pItem;
@@ -209,8 +209,8 @@ D2UnitStrc* __cdecl CLIENT_GetCursorItem()
 	return *D2CLIENT_pgpHeldItem;
 }
 
-//1.10f:D2Client.0x6FB575F0
-//1.13c:D2Client.0x6FAC66C0
+//1.10f: D2Client.0x6FB575F0
+//1.13c: D2Client.0x6FAC66C0
 BOOL __fastcall CLIENT_LoadCursors(uint32_t nCursorClickOffsetX)
 {
 	gnCursorClickOffsetX = nCursorClickOffsetX;
@@ -234,7 +234,7 @@ BOOL __fastcall CLIENT_LoadCursors(uint32_t nCursorClickOffsetX)
 	return 1;
 }
 
-//1.10f:D2Client.0x6FB576B0
+//1.10f: D2Client.0x6FB576B0
 void __fastcall CLIENT_UnloadCursors()
 {
 	D2CLIENT_INPUT_UnregisterCallbacks(WINDOW_GetWindow(), atCursorCallbacks, ARRAY_SIZE(atCursorCallbacks));
@@ -247,22 +247,22 @@ void __fastcall CLIENT_UnloadCursors()
 	}
 }
 
-//1.10f:D2Client.0x6FB57BC0
-//1.13c:D2Client.0x6FAC5FB0
+//1.10f: D2Client.0x6FB57BC0
+//1.13c: D2Client.0x6FAC5FB0
 int __fastcall CLIENT_GetMouseX()
 {
 	return gnMouseX;
 }
 
-//1.10f:D2Client.0x6FB57BD0
-//1.13c:D2Client.0x6FAC5FA0
+//1.10f: D2Client.0x6FB57BD0
+//1.13c: D2Client.0x6FAC5FA0
 int __fastcall CLIENT_GetMouseY()
 {
 	return gnMouseY;
 }
 
-//1.10f:D2Client.0x6FB57BE0
-//1.13c:D2Client.0x6FAC61B0
+//1.10f: D2Client.0x6FB57BE0
+//1.13c: D2Client.0x6FAC61B0
 void __fastcall CLIENT_SetCursorPos(int nX, int nY)
 {
 	D2_ASSERT(nX >= 0);
@@ -283,8 +283,8 @@ void __fastcall CLIENT_SetCursorPos(int nX, int nY)
 	gnMouseY = nX;
 }
 
-//1.10f:D2Client.Inlined
-//1.13c:D2Client.0x6FAC6250
+//1.10f: D2Client.Inlined
+//1.13c: D2Client.0x6FAC6250
 void sub_6FAC6250()
 {
 	*D2CLIENT_pgnCursorFrame -= 64;
@@ -303,8 +303,8 @@ void sub_6FAC6250()
 	}
 }
 
-//1.10f:D2Client.Inlined
-//1.13c:D2Client.0x6FAC64F0
+//1.10f: D2Client.Inlined
+//1.13c: D2Client.0x6FAC64F0
 void __fastcall sub_6FAC64F0()
 {
 	const D2C_CursorTypes nCursorType = (D2C_CursorTypes)(*D2CLIENT_pgnCursorType);
@@ -348,7 +348,7 @@ void __fastcall sub_6FAC64F0()
 	}
 }
 
-//1.10f:D2Client.Inlined
+//1.10f: D2Client.Inlined
 //1.13f:D2CLient.0x6FAC6870
 void __fastcall CLIENT_UpdateCursors()
 {
@@ -376,8 +376,8 @@ void __fastcall CLIENT_UpdateCursors()
 	}
 }
 
-//1.10f:D2CLient.0x6FB57700
-//1.13c:D2CLient.0x6FAC67D0
+//1.10f: D2CLient.0x6FB57700
+//1.13c: D2CLient.0x6FAC67D0
 void __fastcall CLIENT_DrawCursorMain()
 {
 	int32_t cursorOffsetX = gnCursorClickOffsetX;
@@ -392,8 +392,8 @@ void __fastcall CLIENT_DrawCursorMain()
 	CLIENT_UpdateCursors();
 }
 
-//1.10f:D2Client.0x6FB57A60
-//1.13c:D2CLient.0x6FAC5FC0
+//1.10f: D2Client.0x6FB57A60
+//1.13c: D2CLient.0x6FAC5FC0
 void __fastcall CLIENT_DrawCursorBuySell()
 {
 	D2GfxDataStrc tCelContext;
@@ -404,7 +404,7 @@ void __fastcall CLIENT_DrawCursorBuySell()
 	TEXTURE_CelDraw(&tCelContext, gnMouseX + gnCursorClickOffsetX, gnMouseY+ 33, -1, DRAWMODE_NORMAL, 0);
 }
 
-//1.10f:D2Client.0x6FB57AC0
+//1.10f: D2Client.0x6FB57AC0
 void __fastcall CLIENT_DrawCursorDefault()
 {
 	if (dword_6FBC1B04)

@@ -31,7 +31,7 @@ D2CLIENTSTUB(UI_ReopenMsgLog, 6FB1F320, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAD6DC0, void, __fastcall, ());
 D2CLIENTSTUB(sub, 6FAF65C0, void, __fastcall, ());
 
-//1.10f:D2Client.0x6FB740F4
+//1.10f: D2Client.0x6FB740F4
 int32_t gnDrawMaxWidth_Unk; // unused
 
 int __fastcall sub_6FAAEB10()
@@ -39,7 +39,7 @@ int __fastcall sub_6FAAEB10()
 	return *D2CLIENT_pdword_6FBAB990;
 }
 
-//1.10f:D2Client.0x6FAB5750
+//1.10f: D2Client.0x6FAB5750
 int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels()
 {
 	return *D2CLIENT_pgdwUiNbPanels;
@@ -88,7 +88,7 @@ void __fastcall D2CLIENT_UI_ChangeResolution_6FAA23B0(D2GameResolutionMode nReso
 	}
 }
 
-//1.10f:D2Client.0x6FAA2460
+//1.10f: D2Client.0x6FAA2460
 void __stdcall sub_6FAA2460(SMSGHANDLER_PARAMS* pParams)
 {
 	PostQuitMessage(0);
@@ -96,21 +96,21 @@ void __stdcall sub_6FAA2460(SMSGHANDLER_PARAMS* pParams)
 	pParams->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FAA2480
+//1.10f: D2Client.0x6FAA2480
 void __stdcall sub_6FAA2480(SMSGHANDLER_PARAMS* pParams)
 {
 	*D2CLIENT_gpbWindowHasFocus = pParams->wParam != 0;
 	pParams->bUseResult = 0;
 }
 
-//1.10f:D2Client.0x6FAA24A0
+//1.10f: D2Client.0x6FAA24A0
 void __stdcall sub_6FAA24A0(SMSGHANDLER_PARAMS* pParams)
 {
 	pParams->bUseResult = TRUE;
 	pParams->lResult = DefWindowProcA(pParams->hWindow, pParams->nMessage, pParams->wParam, pParams->lParam);
 }
 
-//1.10f:D2Client.0x6FAA24D0
+//1.10f: D2Client.0x6FAA24D0
 void __stdcall sub_6FAA24D0(SMSGHANDLER_PARAMS* pParams)
 {
 	SendMessageA(pParams->hWindow, 0x10u, 0, 0);
@@ -118,14 +118,14 @@ void __stdcall sub_6FAA24D0(SMSGHANDLER_PARAMS* pParams)
 	pParams->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FAA2500
+//1.10f: D2Client.0x6FAA2500
 void __stdcall sub_6FAA2500(SMSGHANDLER_PARAMS* pParams)
 {
 	pParams->bUseResult = TRUE;
 	pParams->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FAA2520
+//1.10f: D2Client.0x6FAA2520
 void __stdcall sub_6FAA2520(SMSGHANDLER_PARAMS* pParams)
 {
 	SendMessageA(pParams->hWindow, 0x400u, 0, 0);
@@ -133,7 +133,7 @@ void __stdcall sub_6FAA2520(SMSGHANDLER_PARAMS* pParams)
 	pParams->lResult = 0;
 }
 
-//1.10f:D2Client.0x6FAA2550
+//1.10f: D2Client.0x6FAA2550
 LRESULT __stdcall WNDPROC_WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL bUseResult = FALSE;
@@ -145,9 +145,9 @@ LRESULT __stdcall WNDPROC_WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM 
 		return DefWindowProcA(hWnd, Msg, wParam, lParam);
 }
 
-//1.00 :D2Client.0x
-//1.10f:D2Client.0x6FAA25D0
-//1.13c:D2Client.0x
+//1.00 : D2Client.0x
+//1.10f: D2Client.0x6FAA25D0
+//1.13c: D2Client.0x
 int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int))
 {
 	int nIterationCount = 0;
@@ -201,7 +201,7 @@ int __fastcall ExecuteMessageLoop_6FAA25D0(int(__stdcall* pLoopBody)(int))
 	return 1;
 }
 
-//1.10f:D2Client.0x6FAA26C0
+//1.10f: D2Client.0x6FAA26C0
 void __fastcall D2CLIENT_INPUT_RegisterCallbacks(HWND hWnd, D2WindowProcCallbackStrc* pCallbacks, size_t nCallbacks)
 {
 	D2_ASSERT(hWnd);
@@ -230,7 +230,7 @@ void __fastcall D2CLIENT_INPUT_RegisterCallbacks(HWND hWnd, D2WindowProcCallback
 	}
 }
 
-//1.10f:D2Client.0x6FAA2780
+//1.10f: D2Client.0x6FAA2780
 void __fastcall D2CLIENT_INPUT_UnregisterCallbacks(HWND hWnd, D2WindowProcCallbackStrc* pCallbacks, size_t nCallbacks)
 {
 	D2_ASSERT(hWnd);

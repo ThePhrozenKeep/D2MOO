@@ -8,7 +8,7 @@
 #ifdef D2_VERSION_110F
 
 HMODULE delayedD2CLIENTDllBaseGet();
-//1.10f:D2Client.0x6FB78500
+//1.10f: D2Client.0x6FB78500
 HotkeyMappingEntry gDefaultCommandTable[] = {
 	{ HOTKEY_STATSCREEN, D2VK_A, 1 },
 	{ HOTKEY_STATSCREEN, D2VK_C, 0 },
@@ -130,11 +130,11 @@ HotkeyMappingEntry gDefaultCommandTable[] = {
 static_assert(ARRAY_SIZE(gDefaultCommandTable) == 114, "gDefaultCommandTable has 114 values in original game.");
 #endif
 
-//1.10f:D2Client.0x6FBB2D38
+//1.10f: D2Client.0x6FBB2D38
 //HotkeyMappingEntry sgCurrCmdMapping[ARRAY_SIZE(gDefaultCommandTable)];
 D2VAR(D2CLIENT, psgCurrCmdMapping, decltype(gDefaultCommandTable), 0x6FBB2D38 - D2ClientImageBase);
 
-//1.10f:D2Client.0x6FB78978
+//1.10f: D2Client.0x6FB78978
 D2VAR(D2CLIENT, sgtKeyFunctions, KeyFunctions, 0x6FB78978 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, sgpfMouse3DownFn, FARPROC, 0x6FBB3624 - D2ClientImageBase);
@@ -147,7 +147,7 @@ D2VAR(D2CLIENT, sgpfMouseWheelUpFn, FARPROC, 0x6FBB362C - D2ClientImageBase);
 D2VAR(D2CLIENT, sgpfMouseWheelDownFn, FARPROC, 0x6FBB2D30 - D2ClientImageBase);
 
 
-//1.10f:D2Client.0x6FAD4160
+//1.10f: D2Client.0x6FAD4160
 void __fastcall COMMAND_HandleMouseWheel_6FAD4160(int a1)
 {
 	if (a1 < 0 && *D2CLIENT_sgpfMouseWheelDownFn)
@@ -199,7 +199,7 @@ void UpdateMouseFunction(HotkeyMappingEntry& mappingEntry,  FARPROC* KeyDownFn, 
 	if(KeyLiftFn) *KeyLiftFn = D2CLIENT_sgtKeyFunctions[mappingEntry.eCmd].FKeyLift;
 }
 
-//1.10f:D2Client.0x6FAD4470
+//1.10f: D2Client.0x6FAD4470
 void __fastcall D2Client_COMMAND_PrepareMouseMappings()
 {
 	*D2CLIENT_sgpfMouseWheelUpFn = nullptr;
@@ -237,7 +237,7 @@ void __fastcall D2Client_COMMAND_PrepareMouseMappings()
 	}
 }
 
-//1.10f:D2Client.0x6FAD4B60
+//1.10f: D2Client.0x6FAD4B60
 D2VirtualKeys __fastcall COMMAND_FindVirtualKeyCode_6FAD4B60(int nHotkeyIdx, BOOL bPrimaryHotkey)
 {
 	for (const HotkeyMappingEntry& entry : *D2CLIENT_psgCurrCmdMapping)
@@ -250,7 +250,7 @@ D2VirtualKeys __fastcall COMMAND_FindVirtualKeyCode_6FAD4B60(int nHotkeyIdx, BOO
 	return D2VK_INVALID;
 }
 
-//1.10f:D2Client.0x6FAD4F00
+//1.10f: D2Client.0x6FAD4F00
 BOOL __fastcall COMMAND_HasKeyMapping(int nHotkeyIdx, BOOL bPrimaryHotkey)
 {
 	return COMMAND_FindVirtualKeyCode_6FAD4B60(nHotkeyIdx, bPrimaryHotkey) != D2VK_INVALID;

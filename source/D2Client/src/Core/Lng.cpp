@@ -6,23 +6,23 @@
 #define XFAULT_MODULE_NAME "D2Client.dll"
 #include <Fault.h>
 
-//1.10f:D2Client.0x6FB9A718
+//1.10f: D2Client.0x6FB9A718
 CHAR gszLNGDllName[D2_MAX_PATH];
-//1.10f:D2Client.0x6FB9A718
+//1.10f: D2Client.0x6FB9A718
 HMODULE sghLNGInstance = NULL;
-//1.10f:D2Client.0x6FB9A710
+//1.10f: D2Client.0x6FB9A710
 HACCEL sghLNGAccTable = NULL;
 
 HACCEL LNG_GetAccelerationTable() { return sghLNGAccTable; }
 
-//1.10f:D2Client.0x6FAA11E0
+//1.10f: D2Client.0x6FAA11E0
 BOOL __fastcall LNG_RegisterCmdLineArguments()
 {
 	SCmdRegisterArgument(0x20000, -1, "lng", gszLNGDllName, D2_MAX_PATH, 0, 0, 0);
 	return 1;
 }
 
-//1.10f:D2Client.0x6FB6BC27
+//1.10f: D2Client.0x6FB6BC27
 BOOL __fastcall PromptErrorOrCancel(LPCSTR lpText)
 {
 	return MessageBoxA(0, lpText, XFAULT_MODULE_NAME, (MB_OKCANCEL | MB_ICONERROR | MB_TASKMODAL)) == IDCANCEL;
@@ -31,7 +31,7 @@ BOOL __fastcall PromptErrorOrCancel(LPCSTR lpText)
 //D2Client.0x6FBC345C
 static BOOL sgbLNGInitFailed = FALSE;
 
-//1.10f:D2Client.0x6FAA1210
+//1.10f: D2Client.0x6FAA1210
 BOOL __cdecl LNG_Initialize()
 {
 	if (gszLNGDllName[0])
@@ -67,7 +67,7 @@ BOOL __cdecl LNG_Initialize()
 	}
 }
 
-//1.10f:D2Client.0x6FAA1300
+//1.10f: D2Client.0x6FAA1300
 void __fastcall LNG_Shutdown()
 {
 	if (sghLNGInstance)
@@ -76,7 +76,7 @@ void __fastcall LNG_Shutdown()
 	sghLNGAccTable = NULL;
 }
 
-//1.10f:D2Client.0x6FAA1330
+//1.10f: D2Client.0x6FAA1330
 BOOL __stdcall LNG_MessageSource(DWORD dwMessageId, char* buffer, unsigned int iMaxLength)
 {
 	D2_ASSERT(sghLNGInstance);

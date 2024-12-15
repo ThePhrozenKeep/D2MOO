@@ -14,5 +14,5 @@ enum D2C_AppMode {
 // Helper function
 D2ConfigStrc* CONFIG_GetConfig();
 
-//1.10f:D2Client.0x6FAA2050
+//1.10f: D2Client.0x6FAA2050
 int __stdcall D2ClientEntrypoint(HMODULE hModule, D2ConfigStrc* pConfig);

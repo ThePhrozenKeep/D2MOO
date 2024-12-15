@@ -13,7 +13,7 @@ D2FUNC(D2CLIENT, UNITDRAW_DrawOverlays, void, __fastcall, (D2UnitStrc* pUnit, DW
 D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnScreenHeight, uint32_t, 0x6FB740F0 - D2ClientImageBase);
 
-//1.10f:D2Client.0x6FB5EC80
+//1.10f: D2Client.0x6FB5EC80
 BOOL __fastcall CLIENT_GetItemGfxData(D2GfxDataStrc* pData, D2UnitStrc* pItem, D2CellFileStrc* pCellFile, int nDirection, int nFrame, DWORD* a6, int nComponent, int a8)
 {
 	return D2CLIENT_GetItemGfxData_6FB5EC80(pData, pItem, pCellFile, nDirection, nFrame, a6, nComponent, a8);
@@ -41,7 +41,7 @@ BOOL __fastcall CelCullTestInScreen(D2GfxCellStrc* pCel, int nLeftX, int nTopY, 
 	return FALSE;
 }
 
-//1.10f:D2Client.0x6FB5A320
+//1.10f: D2Client.0x6FB5A320
 BOOL __fastcall CLIENT_DrawItem(D2UnitStrc* pItem, int nXpos, int nYpos)
 {
 	if (!pItem || pItem->dwUnitType != UNIT_ITEM)

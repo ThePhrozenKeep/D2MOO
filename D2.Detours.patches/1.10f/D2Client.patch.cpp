@@ -53,15 +53,15 @@ char* __cdecl RECORD_unk_6FAAEB40() {
 BOOL __fastcall CLIENT_UpdateUIs_6FB23800(int a1, int a2) {
     UNIMPLEMENTED();
 }
-//1.00 :D2Client.0x10001F73
-//1.10f:D2CLient.0x6FB23860
+//1.00 : D2Client.0x10001F73
+//1.10f: D2CLient.0x6FB23860
 int __fastcall D2CLIENT_CheckUIState_6FB23860(int a1) {
     UNIMPLEMENTED();
 }
 
-//1.00 :D2Client.0x100013C0
-//1.10f:D2CLient.0x6FB54C60
-//1.13c:D2CLient.0x6FB0F020
+//1.00 : D2Client.0x100013C0
+//1.10f: D2CLient.0x6FB54C60
+//1.13c: D2CLient.0x6FB0F020
 void __cdecl SOUND_UpdateEnvironmentSFX() {
     UNIMPLEMENTED();
 }

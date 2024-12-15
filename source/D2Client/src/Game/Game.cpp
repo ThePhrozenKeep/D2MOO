@@ -297,14 +297,14 @@ static_assert(sizeof(ClientGlobalData) == 0x80, "ClientGlobalData must be of siz
 D2VAR(D2CLIENT, psgtGlobalData, ClientGlobalData, 0x6FBA7750 - D2ClientImageBase);
 
 
-//1.00 :D2Client.0x10001CA3
-//1.10f:D2Client.0x6FB283D0
+//1.00 : D2Client.0x10001CA3
+//1.10f: D2Client.0x6FB283D0
 D2UnitStrc* __fastcall D2CLIENT_GetPlayerUnit_6FB283D0()
 {
     return *D2CLIENT_pgpPlayerUnit_6FBBC200;
 }
-//1.00 :D2Client.0x10002F13
-//1.10f:D2Client.0x6FB29370
+//1.00 : D2Client.0x10002F13
+//1.10f: D2Client.0x6FB29370
 D2ActiveRoomStrc* __fastcall D2CLIENT_GetCurrentRoom_6FB29370()
 {
     if (D2CLIENT_GetPlayerUnit_6FB283D0())
@@ -412,7 +412,7 @@ struct ScopedDiscontinuousFrameMarker {
 };
 
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF4880
+//1.13c: D2Client.0x6FAF4880
 void D2Client_UpdateMouse1()
 {
 	*D2CLIENT_pdword_6FB7580C = 8;
@@ -427,7 +427,7 @@ void D2Client_UpdateMouse1()
 }
 
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF46B0
+//1.13c: D2Client.0x6FAF46B0
 void D2Client_UpdateMouse4()
 {
 	*D2CLIENT_pdword_6FB75810 = 8;
@@ -439,7 +439,7 @@ void D2Client_UpdateMouse4()
 }
 
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF3310
+//1.13c: D2Client.0x6FAF3310
 void D2Client_UpdateStandStill()
 {
 	if (!COMMAND_KeyHasBeenPressed(HOTKEY_STANDSTILL, true))
@@ -489,7 +489,7 @@ void D2Client_UpdateUIsIfNeeded(DWORD val)
 }
 
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF35D0
+//1.13c: D2Client.0x6FAF35D0
 void D2Client_MultiUpdateUIsIfNeeded()
 {
 	if (*D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_SINGLEPLAYER || *D2CLIENT_pgnGameType_6FBA7960 == GAMETYPE_SINGLEPLAYER_UNCAPPED)
@@ -519,8 +519,9 @@ void D2Client_MultiUpdateUIsIfNeeded()
 	}
 }
 
+//1.00 :Inlined
 //1.10f:Inlined
-//1.13c:D2Client.0x6FAF2400
+//1.13c: D2Client.0x6FAF2400
 int __fastcall D2Client_FramesToSkipOrSomething(int nMissedFrames, int nRenderedFPS)
 {
 	int result = 0;
@@ -784,7 +785,7 @@ signed int __stdcall MainLoop_6FAA9AF0(int nIteration)
     return 1;
 }
 
-//1.10f:D2Client.0x6FAA9640
+//1.10f: D2Client.0x6FAA9640
 void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 {
 	UI_FreeLoadingScreenProgress_6FB245C0();
@@ -872,7 +873,7 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 	}
 }
 
-//1.10f:D2Client.0x6FAA1F80
+//1.10f: D2Client.0x6FAA1F80
 BnClientInterface* __cdecl GetConfigComInt_6FAA1F80()
 {
 	return CONFIG_GetConfig()->pComInterface;
@@ -896,8 +897,8 @@ int GetGameTypeFromConfig()
 	return nGameType;
 }
 
-//1.10f:D2Client.0x6FAAA3B0
-//1.13c:D2Client.0x6FAF31B0
+//1.10f: D2Client.0x6FAAA3B0
+//1.13c: D2Client.0x6FAF31B0
 signed int __stdcall OpenServerThreadProc(int a1)
 {
 	int nPreviousPlayerCount = 0;
@@ -959,7 +960,7 @@ signed int __stdcall OpenServerThreadProc(int a1)
 	return 1;
 }
 
-//1.10f:D2Client.0x6FAA90E0
+//1.10f: D2Client.0x6FAA90E0
 void __stdcall WNDPROC_BreakHandlerChainCallback(SMSGHANDLER_PARAMS* pMsg)
 {
 	pMsg->bUseResult = TRUE;
@@ -993,7 +994,7 @@ D2WindowProcCallbackStrc stru_6FB758B4[2] = {
 };
 
 D2WindowProcCallbackStrc stru_6FB758CC{ D2_WINPROC_MESSAGE, WM_NULL, sub_6FAA8F20 };
-//1.10f:D2Client.0x6FB75920
+//1.10f: D2Client.0x6FB75920
 D2WindowProcCallbackStrc aUnkCallbacks_6FB75920[] = {
 	{ D2_WINPROC_MESSAGE, WM_LBUTTONDOWN,	sub_6FAAA500 },
 	{ D2_WINPROC_MESSAGE, WM_RBUTTONDOWN,	sub_6FAAA500 },
@@ -1004,7 +1005,7 @@ D2WindowProcCallbackStrc aUnkCallbacks_6FB75920[] = {
 	{ D2_WINPROC_KEYDOWN, WM_ACTIVATEAPP,	WNDPROC_BreakHandlerChainCallback },
 };
 
-//1.10f:D2Client.0x6FB75920
+//1.10f: D2Client.0x6FB75920
 D2WindowProcCallbackStrc aUnkCallbacks_6FB75978[] = {
 	{ D2_WINPROC_MESSAGE, WM_LBUTTONDOWN, sub_6FAAA7D0 },
 	{ D2_WINPROC_MESSAGE, WM_RBUTTONDOWN, sub_6FAAA7D0 },
@@ -1018,11 +1019,11 @@ D2WindowProcCallbackStrc aUnkCallbacks_6FB75978[] = {
 };
 
 
-//1.10f:D2Client.0x6FBA7998
-//1.13c:D2Client.0x6FBCC3CC
+//1.10f: D2Client.0x6FBA7998
+//1.13c: D2Client.0x6FBCC3CC
 D2VAR(D2CLIENT, pgbHasOsVersion, BOOL, 0x6FBA7998 - D2ClientImageBase);
-//1.10f:D2Client.0x6FBA78B0
-//1.13c:D2Client.0x6FBC9888
+//1.10f: D2Client.0x6FBA78B0
+//1.13c: D2Client.0x6FBC9888
 D2VAR(D2CLIENT, pgtVersionInformation, _OSVERSIONINFOA, 0x6FBA78B0 - D2ClientImageBase);
 
 //1.10c:D2Client.0x6FB758D0
@@ -1035,7 +1036,7 @@ void D2CLIENT_InitOSVersion()
 		*D2CLIENT_pgbHasOsVersion = 1;
 }
 
-//1.10f:D2Client.0x6FAAB250
+//1.10f: D2Client.0x6FAAB250
 BOOL __fastcall sub_6FAAB250()
 {
 	return GetSystemMetrics(75)
@@ -1043,7 +1044,7 @@ BOOL __fastcall sub_6FAAB250()
 		&& D2CLIENT_pgtVersionInformation->dwPlatformId == 1
 		&& D2CLIENT_pgtVersionInformation->dwMinorVersion == 0;
 }
-//1.10f:D2Client.0x6FAAB290
+//1.10f: D2Client.0x6FAAB290
 BOOL __fastcall sub_6FAAB290()
 {
 	_OSVERSIONINFOA& verInfo = *D2CLIENT_pgtVersionInformation;
@@ -1055,7 +1056,7 @@ BOOL __fastcall sub_6FAAB290()
 			);
 }
 
-//1.10f:D2Client.0x6FAAB2E0
+//1.10f: D2Client.0x6FAAB2E0
 BOOL __fastcall sub_6FAAB2E0()
 {
 	if (!*D2CLIENT_pgbHasOsVersion) return FALSE;
@@ -1064,7 +1065,7 @@ BOOL __fastcall sub_6FAAB2E0()
 		|| verInfo.dwPlatformId == 2 && (verInfo.dwMajorVersion == 4 || verInfo.dwMajorVersion == 5);
 }
 
-//1.10f:D2Client.0x6FAAB320
+//1.10f: D2Client.0x6FAAB320
 BOOL __fastcall sub_6FAAB320()
 {
 	return *D2CLIENT_pgbHasOsVersion
@@ -1086,8 +1087,8 @@ void __fastcall WNDPROC_UnregisterGlobalCallbacks()
 	D2CLIENT_INPUT_UnregisterCallbacks(WINDOW_GetWindow(), gatGlobalWindowCallbacks_6FB75818, ARRAY_SIZE(gatGlobalWindowCallbacks_6FB75818));
 }
 
-//1.10f:D2Client.0x6FAAC1B0
-//1.13c:D2Client.0x6FAF2880
+//1.10f: D2Client.0x6FAAC1B0
+//1.13c: D2Client.0x6FAF2880
 void __fastcall WNDPROC_RegisterMouseWheelCallbacks()
 {
 	if (sub_6FAAB290())
@@ -1116,8 +1117,8 @@ void __fastcall WNDPROC_RegisterMouseWheelCallbacks()
 	}
 }
 
-//1.10f:D2Client.0x6FAAC0A0 and Inlined
-//1.13c:D2Client.0x6FAF29C0
+//1.10f: D2Client.0x6FAAC0A0 and Inlined
+//1.13c: D2Client.0x6FAF29C0
 void __fastcall WNDPROC_UnregisterMouseWheelCallbacks()
 {
 	if (sub_6FAAB290())
