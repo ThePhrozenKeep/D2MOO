@@ -87,12 +87,14 @@ target_sources(${D2ClientImplName}
 target_sources(${D2ClientImplName}
   PRIVATE
     src/Skills/Skills.cpp
+    src/Skills/SkillItem.cpp
     src/Skills/SkillsAma.cpp
     src/Skills/SkillsBar.cpp
     src/Skills/SkillsEMon.cpp
     src/Skills/SkillsMon.cpp
     src/Skills/SkillsNec.cpp
     src/Skills/SkillsPal.cpp
+    src/Skills/SkillsSor.cpp
 
     include/Skills/Skills.h
     include/Skills/SkillsAma.h
@@ -110,6 +112,7 @@ target_sources(${D2ClientImplName}
     src/UI/CmdTbl.cpp
     src/UI/dialog.cpp
     src/UI/editbox.cpp
+    src/UI/GuildStone.cpp
     src/UI/Hireables.cpp
     src/UI/inv.cpp
     src/UI/LISTBOX.CPP
@@ -156,6 +159,7 @@ target_sources(${D2ClientImplName}
   PRIVATE
     src/Unit/CUnit.cpp
     src/Unit/CUnitEvent.cpp
+    src/Unit/Friendly.cpp
     src/Unit/Item.cpp
     src/Unit/Missile.cpp
     src/Unit/Monster.cpp
@@ -185,8 +189,10 @@ target_sources(${D2ClientImplName}
 target_sources(${D2ClientImplName}
   PRIVATE
     src/Sound/SoundChan.cpp
+    src/Sound/SoundEnv.cpp
     src/Sound/SoundHdr.cpp
     src/Sound/SoundInst.cpp
+    src/Sound/SoundSong.cpp
 
     include/Sound/SoundChan.h
     include/Sound/SoundHdr.h
@@ -194,6 +200,7 @@ target_sources(${D2ClientImplName}
 )
 target_sources(${D2ClientImplName}
   PRIVATE
+    src/Engine/CapAVI.cpp
     src/Engine/Cursor.cpp
     src/Engine/Gfx.cpp
     src/Engine/GfxUtil.cpp
@@ -204,6 +211,13 @@ target_sources(${D2ClientImplName}
     include/Engine/GfxUtil.h
     include/Engine/Particle.h
 )
-
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/CREATE/Create.cpp
+)
+target_sources(${D2ClientImplName}
+  PRIVATE
+    src/DEBUG/ClientSpotTiming.cpp
+)
 D2MOO_target_source_group(D2Client)
 

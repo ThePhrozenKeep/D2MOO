@@ -7,6 +7,7 @@ add_library(D2Hell
     src/CRC.cpp
     src/Fault.cpp
     src/File.cpp
+    src/Window.cpp
 
     include/Archive.h
     include/CRC.h
