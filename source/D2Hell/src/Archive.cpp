@@ -38,7 +38,7 @@
 /**
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: Inline
- * 1.10: Inline OR D2Common.0x6FDC40F0
+ * 1.10: Inline OR D2Common.0x6FDC40F0 OR D2Client.0x6FB6B91C
  * 1.13c: Inline
  * 1.14c: Game.0x00514B24
  */
@@ -62,7 +62,7 @@ BOOL __fastcall ARCHIVE_OpenFile(HD2ARCHIVE hArchive, const char* szFilePath, HS
 /**
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: Inline
- * 1.10: Inline OR D2Common.0x6FDC412C
+ * 1.10: Inline OR D2Common.0x6FDC412C OR D2Client.0x6FB6B958
  * 1.13c: Inline
  * 1.14c: Game.0x00514B60
  */
@@ -122,7 +122,7 @@ uint32_t __fastcall ARCHIVE_SetFilePointer(HD2ARCHIVE hArchive, HSFILE hFile, in
 /**
  * Static library; may be defined in multiple places than ones listed:
  * 1.00: D2Lang.0x10004EE3
- * 1.10: D2Lang.0x6FC14661 OR D2Common.0x6FDC41C1
+ * 1.10: D2Lang.0x6FC14661 OR D2Common.0x6FDC41C1 OR D2Client.0x6FB6B9ED
  * 1.13c: D2Lang.0x6FC07C00
  * 1.14c: Game.0x00514C61
  */
