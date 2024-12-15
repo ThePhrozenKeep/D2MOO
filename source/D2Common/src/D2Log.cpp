@@ -14,9 +14,9 @@ void __cdecl LOG_11101(int nGame, int nFrame, int nClient, int a4, int nSize, co
 	REMOVE_LATER_Trace("LOG_11101: Useless");
 }
 
-void __fastcall LOG_11102(void* a1)
+void __fastcall LOG_SetEnabled(BOOL bEnabled)
 {
-	REMOVE_LATER_Trace("LOG_11102: Useless");
+	REMOVE_LATER_Trace("LOG_SetEnabled: Useless");
 }
 
 void __fastcall LOG_11103(void* a1)

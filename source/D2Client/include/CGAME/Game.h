@@ -67,12 +67,6 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1);
 //1.13c: D2Client.0x6FAF4B50
 signed int __stdcall ClientGameLoop(int nIteration);
 
-//1.10f: D2Client.0x6FAABBF0
-void __fastcall CONFIG_ApplyGameInformation(D2ConfigStrc* pConfig);
-
-//1.10f: D2Client.0x6FAABC50
-void __fastcall CONFIG_Apply_BattleNetIP(D2ConfigStrc* pConfig);
-
 //1.10f: D2Client.0x6FAABEE0
 BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig);
 
@@ -112,3 +106,4 @@ BOOL __fastcall sub_6FAAB290();
 BOOL __fastcall sub_6FAAB2E0();
 //1.10f: D2Client.0x6FAAB320
 BOOL __fastcall sub_6FAAB320();
+

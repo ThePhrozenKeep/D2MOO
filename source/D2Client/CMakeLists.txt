@@ -39,10 +39,12 @@ target_sources(${D2ClientImplName}
 )
 target_sources(${D2ClientImplName}
   PRIVATE
+    src/Draw/Draw.cpp
     src/Draw/dFloor.cpp
     src/Draw/dLightMap.cpp
     src/Draw/dWall.cpp
 
+    include/Draw/Draw.h
     include/Draw/dFloor.h
     include/Draw/dLightMap.h
     include/Draw/dWall.h	

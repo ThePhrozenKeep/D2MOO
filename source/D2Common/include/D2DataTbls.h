@@ -596,7 +596,7 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* p
 //D2Common.0x6FD4FD70 (#10578)
 D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
 //D2Common.0x6FD500F0 (#11242)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bNoTxt);
 //D2Common.0x6FD50110 (#10579)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_UnloadBin(void* pBinFile);
 //D2Common.0x6FD50150 (#10575)

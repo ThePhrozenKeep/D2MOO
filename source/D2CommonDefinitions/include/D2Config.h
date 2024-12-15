@@ -95,7 +95,7 @@ struct D2ConfigStrc
 	uint8_t bRare;
 	uint8_t bUnique;
 	uint8_t _01DA[2]; // Possibly Set/Magic
-	uint32_t dwAct;
+	int32_t dwAct;
 	uint8_t bNoPreload;
 	uint8_t bDirect;
 	uint8_t bLowEnd;

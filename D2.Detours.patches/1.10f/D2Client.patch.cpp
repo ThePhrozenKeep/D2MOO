@@ -105,8 +105,7 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FAADD00 - D2ClientImageBase, &APPMODE_JoinGame, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FAAA4E0 - D2ClientImageBase, &APPMODE_Startup, PatchAction::FunctionReplaceOriginalByPatch},
 	
-	{ 0x6FAABBF0 - D2ClientImageBase, &CONFIG_ApplyGameInformation, PatchAction::FunctionReplaceOriginalByPatch},
-	{ 0x6FAABC50 - D2ClientImageBase, &CONFIG_Apply_BattleNetIP, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FAABEE0 - D2ClientImageBase, &ApplyConfiguration, PatchAction::FunctionReplaceOriginalByPatch},
 
 	{ 0x6FAA2050 - D2ClientImageBase, &D2ClientEntrypoint, PatchAction::FunctionReplaceOriginalByPatch},
 	

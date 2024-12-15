@@ -36,6 +36,10 @@
 #include <DataTbls/StringIds.h>
 #include <Server.h>
 #include <Core/MemoryPartitions.h>
+#include <D2DataTbls.h>
+#include <PLAYER/PlrSave.h>
+#include <D2Log.h>
+#include <Draw/Draw.h>
 
 #ifdef D2_VERSION_110F
 
@@ -93,6 +97,8 @@ D2CLIENTSTUB(sub, 6FAB7C50, void, __fastcall, (int* a1, int* a2));
 D2VAR(D2CLIENT, pgbAppliedConfiguration, BOOL, 0x6FB759E4 - D2ClientImageBase);
 D2PTR(D2CLIENT, pgpConfigComInterface_6FBA7944, BnClientInterface*, 0x6FBA7944 - D2ClientImageBase);
 
+D2VAR(D2CLIENT, peConfigCharacterPlayerClass, uint32_t, 0x6FBA7894 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgszPlayerName, char, 0x6FBA7810 - D2ClientImageBase);//16 bytes
 D2VAR(D2CLIENT, pgpView_6FBA7990, D2GameViewStrc*, 0x6FBA7990 - D2ClientImageBase);
 D2CLIENTDWORDSTUB(6FB758D8);
 D2CLIENTDWORDSTUB(6FB758DC);
@@ -139,6 +145,8 @@ D2VAR(D2CLIENT, pgpCurrentAct_6FBA7984, D2DrlgActStrc*, 0x6FBA7984 - D2ClientIma
 
 D2CLIENTDWORDSTUB(6FBA79A8);
 D2CLIENTDWORDSTUB(6FB7580C);
+D2CLIENTDWORDSTUB(6FB751B4);
+D2VAR(D2CLIENT, pdwCTemp_6FB751B8, DWORD, 0x6FB751B8 - D2ClientImageBase); // 1.13c:0x6FBCC3A0
 
 D2VAR(D2CLIENT, pgbIsInGame_6FBA796C, DWORD, 0x6FBA796C - D2ClientImageBase); // 1.13c:0x6FBCC3A0
 D2CLIENTDWORDSTUB(6FBA79B0);
@@ -1269,12 +1277,26 @@ BOOL __fastcall sub_6FAAB320()
 }
 
 
-//1.10f: D2Client.0x6FB75570
-char gszBattleNetIP[D2_MAX_PATH] = "207.82.87.139";
+//1.10f: D2Client.0x6FAABB70
+void __fastcall CONFIG_Apply_bNoSave(D2ConfigStrc* pConfig)
+{
+	if (pConfig->bNoSave)
+		D2GAME_10036_PLRSAVE_EnableSaveFileWriting(0);
+}
+
+//1.10f: D2Client.0x6FAABB90
+void __fastcall CONFIG_Apply_Act(D2ConfigStrc* pConfig)
+{
+	if (pConfig->dwAct)
+	{
+		D2_ASSERT(pConfig->dwAct < NUM_ACTS + 1);
+		D2_ASSERT(pConfig->dwAct > 0);
+		GAME_SetGlobalAct(pConfig->dwAct - 1);
+	}
+}
 
 //1.10f: D2Client.0x6FB75468
 char gszServerIP[D2_MAX_PATH] = "207.82.87.243";
-
 //1.10f: D2Client.0x6FAABBF0
 void __fastcall CONFIG_ApplyGameInformation(D2ConfigStrc* pConfig)
 {
@@ -1286,6 +1308,8 @@ void __fastcall CONFIG_ApplyGameInformation(D2ConfigStrc* pConfig)
 	*D2CLIENT_pgnTokenId = pConfig->nTokenId;
 }
 
+//1.10f: D2Client.0x6FB75570
+char gszBattleNetIP[D2_MAX_PATH] = "207.82.87.139";
 //1.10f: D2Client.0x6FAABC50
 void __fastcall CONFIG_Apply_BattleNetIP(D2ConfigStrc* pConfig)
 {
@@ -1293,16 +1317,168 @@ void __fastcall CONFIG_Apply_BattleNetIP(D2ConfigStrc* pConfig)
 		lstrcpyA(gszBattleNetIP, pConfig->szServerIP);
 }
 
-using ConfigSetupFunction = BOOL(__fastcall*)(D2ConfigStrc* pConfig);
-D2VAR(D2CLIENT, paConfigSetupFunctions, ConfigSetupFunction, 0x6FB759E8 - D2ClientImageBase);
+//1.10f: D2Client.0x6FB75570
+char gszMCPIP[D2_MAX_PATH] = "207.82.87.133";
+//1.10f: D2Client.0x6FAABC80
+void __fastcall CONFIG_Apply_MCPIP(D2ConfigStrc* pConfig)
+{
+	if (strcmp(pConfig->szMCPIP, "0"))
+		lstrcpyA(gszMCPIP, pConfig->szMCPIP);
+}
+
+
+//1.10f: D2Client.0x6FAABCB0
+void __fastcall CONFIG_Apply_CharClass(D2ConfigStrc* pConfig)
+{
+	if (pConfig->bAmazon) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_AMAZON;
+	if (pConfig->bPaladin) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_PALADIN;
+	if (pConfig->bSorceress) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_SORCERESS;
+	if (pConfig->bNecromancer) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_NECROMANCER;
+	if (pConfig->bBarbarian) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_BARBARIAN;
+	if (pConfig->bDruid) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_DRUID;
+	if (pConfig->bAssassin) *D2CLIENT_peConfigCharacterPlayerClass = PCLASS_ASSASSIN;
+}
+
+
+//1.10f: D2Client.0x6FAABDA0
+void __fastcall CONFIG_Apply_Log(D2ConfigStrc* pConfig)
+{
+	if (pConfig->bLog) LOG_SetEnabled(TRUE);
+}
+
+//1.10f: D2Client.0x6FAABDC0
+void __fastcall CONFIG_Apply_Seed(D2ConfigStrc* pConfig)
+{
+	if (pConfig->dwSeed) GAME_SetInitSeed(pConfig->dwSeed);
+}
+
+//1.10f: D2Client.0x6FAABDE0
+void __fastcall CONFIG_Apply_PlrName(D2ConfigStrc* pConfig)
+{
+	if (strcmp(pConfig->szName, "0") != 0)
+	{
+		const size_t nBufferLen = 16;
+		memset(D2CLIENT_pgszPlayerName, 0, 16);
+#ifdef NO_BUG_FIX
+		int nBufferLen = strlen(pConfig->szName) + 1;
+		if (nBufferLen > 16)
+			nBufferLen = 16;
+		strncpy(D2CLIENT_pgszPlayerName, pConfig->szName, nBufferLen);
+#else // Original code would not mandate a null terminated string, but the game assumes it is. Classic strncpy misuse.
+		strncpy(D2CLIENT_pgszPlayerName, pConfig->szName, nBufferLen - 1);
+#endif
+	}
+}
+
+//1.10f: D2Client.0x6FBA77F0
+char gszRealm[32];
+//1.10f: D2Client.0x6FAABE40
+void __fastcall CONFIG_Apply_Realm(D2ConfigStrc* pConfig)
+{
+	SStrCopy(gszRealm, pConfig->szRealm, ARRAY_SIZE(gszRealm));
+}
+
+//1.10f: D2Client.0x6FAABE60
+void __fastcall CONFIG_Apply_UnkFlag(D2ConfigStrc* pConfig)
+{
+	*D2CLIENT_pdword_6FB751B4 |= 1u;
+}
+
+//1.10f: D2Client.0x6FAABE70
+void __fastcall CONFIG_Apply_CTemp(D2ConfigStrc* pConfig)
+{
+	*D2CLIENT_pdwCTemp_6FB751B8 = pConfig->unpackedCTemp.nUnk;
+}
+
+//1.10f: D2Client.0x6FAABE80
+void __fastcall CONFIG_ApplyComInterface(D2ConfigStrc* pConfig)
+{
+	if (pConfig->pComInterface) *D2CLIENT_pgpConfigComInterface_6FBA7944 = pConfig->pComInterface;
+}
+
+//1.10f: D2Client.0x6FAABEA0
+void __fastcall CONFIG_Apply_NoCompress(D2ConfigStrc* pConfig)
+{
+	// Apparently inverted?
+	if (pConfig->bNoCompress) D2CMP_SetCompressedDataMode(pConfig->bNoCompress);
+}
+
+//1.10f: D2Client.0x6FAABEC0
+void __fastcall CONFIG_Apply_Txt(D2ConfigStrc* pConfig)
+{
+	DATATBLS_ToggleCompileTxtFlag(pConfig->bTxt == 0);
+}
+
+//1.10f:D2Client.0x6FAABE90
+void __fastcall CONFIG_Noop(D2ConfigStrc* pConfig){}
+
+using ConfigSetupFunction = void(__fastcall*)(D2ConfigStrc* pConfig);
+//1.10f: D2Client.0x6FB759E8
+ConfigSetupFunction aConfigSetupFunctions[] =
+{
+	CONFIG_Apply_GDI,
+	CONFIG_Apply_Glide,
+	CONFIG_Apply_OpenGL,
+	CONFIG_Apply_D3D,
+	CONFIG_Apply_Rave,
+	CONFIG_Noop,
+	CONFIG_Apply_Gamma,
+	CONFIG_Apply_VSync,
+	CONFIG_Noop,
+	CONFIG_ApplyGameInformation,
+	CONFIG_ApplyGameInformation,
+	CONFIG_ApplyGameInformation,
+	CONFIG_ApplyGameInformation,
+	CONFIG_ApplyGameInformation,
+	CONFIG_Apply_BattleNetIP,
+	CONFIG_Apply_MCPIP,
+	CONFIG_Apply_CharClass,
+	CONFIG_Apply_CharClass,
+	CONFIG_Apply_CharClass,
+	CONFIG_Apply_CharClass,
+	CONFIG_Apply_CharClass,
+	CONFIG_Noop,
+	CONFIG_Apply_PlrName,
+	CONFIG_Apply_Realm,
+	CONFIG_Apply_CTemp,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Apply_Act,
+	CONFIG_Apply_Log,
+	CONFIG_Noop,
+	CONFIG_Apply_bNoSave,
+	CONFIG_Apply_Seed,
+	CONFIG_Apply_UnkFlag,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	nullptr,
+	CONFIG_Noop,
+	CONFIG_Noop,
+	CONFIG_ApplyComInterface,
+	CONFIG_ApplyGameInformation,
+	nullptr,
+	CONFIG_Apply_NoCompress,
+	CONFIG_Apply_Txt,
+}; 
+#ifdef D2_VERSION_110F
+static_assert(ARRAY_SIZE(aConfigSetupFunctions) == 48, "There are 48 config functions in the original game");
+#endif//D2_VERSION_110F
+
 //1.10f: D2Client.0x6FAABEE0
 BOOL __fastcall ApplyConfiguration(D2ConfigStrc* pConfig)
 {
 	*D2CLIENT_pgbAppliedConfiguration = TRUE;
-	for (int i = 0; i < 48; ++i)
+	for (const auto setupFunc : aConfigSetupFunctions)
 	{
-		if (const auto setupFunc = D2CLIENT_paConfigSetupFunctions[i])
+		if (setupFunc)
+		{
 			setupFunc(pConfig);
+		}
 	}
 	return *D2CLIENT_pgbAppliedConfiguration;
 }

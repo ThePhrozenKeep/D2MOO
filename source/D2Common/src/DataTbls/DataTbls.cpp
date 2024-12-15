@@ -690,9 +690,9 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 }
 
 //D2Common.0x6FD500F0 (#11242)
-void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent)
+void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bNoTxt)
 {
-	sgptDataTables->bCompileTxt = !bSilent;
+	sgptDataTables->bCompileTxt = !bNoTxt;
 }
 
 //D2Common.0x6FD50110 (#10579)

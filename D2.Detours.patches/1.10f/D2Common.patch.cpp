@@ -1143,7 +1143,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11099                                                      @11099
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11100                                                           @11100
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11101                                                           @11101
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11102                                                           @11102
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_SetEnabled                                                           @11102
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11103                                                           @11103
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11104                                                           @11104
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   LOG_11105                                                           @11105
