@@ -6,8 +6,9 @@
 #include <D2Client.h>
 #include <D2WinMain.h>
 #include <D2WinArchive.h>
-#include <Game/Game.h>
-#include <Game/Record.h>
+#include <GAME/Game.h>
+#include <CGAME/Game.h>
+#include <CGAME/Record.h>
 #include <Core/WNDPROC.h>
 #include <D2StrTable.h>
 #include <D2DataTbls.h>

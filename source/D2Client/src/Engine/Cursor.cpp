@@ -8,7 +8,7 @@
 #include <D2Math.h>
 #include <Texture.h>
 #include <Fog.h>
-#include <Game/Game.h>
+#include <CGAME/Game.h>
 #include <Units/Units.h>
 #include <D2CMP.h>
 

@@ -1,10 +1,15 @@
-#undef WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <tracy/Tracy.hpp>
 
-#include <Game/Game.h>
 #include <D2Client.h>
-#include <Game/Record.h>
+// D2Game
+#include <GAME/Game.h>
+#include <GAME/Clients.h>
+ // D2Client
+#include <CGAME/Msg.h>
+#include <CGAME/Game.h>
+#include <CGAME/Record.h>
+#include <CGAME/View.h>
 #include <D2CommonDefinitions.h>
 #include <D2Gfx.h>
 #include <Window.h>
@@ -13,12 +18,12 @@
 #include <D2Environment.h>
 #include <Drlg/D2DrlgDrlg.h>
 #include <Drlg/D2DrlgActivate.h>
-#include <../../D2Game/include/GAME/Game.h>
 #include <UI/UI.h>
 #include <Sound/Sound.h>
 #include <Client.h>
 #include <D2WinPalette.h>
 #include <D2WinMain.h>
+#include <D2WinFont.h>
 #include <DataTbls/LevelsTbls.h>
 #include <D2Sound.h>
 #include <BnClient.h>
@@ -27,8 +32,9 @@
 #include <D2StrTable.h>
 #include <UI/CmdTbl.h>
 #include <D2CMP.h>
-#include <Game/Msg.h>
 #include <Core/WINMAIN.h>
+#include <DataTbls/StringIds.h>
+#include <Server.h>
 
 #ifdef D2_VERSION_110F
 

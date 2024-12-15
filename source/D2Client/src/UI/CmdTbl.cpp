@@ -3,7 +3,7 @@
 #include <D2Client.h>
 #include <Fog.h>
 #include <Core/WNDPROC.h>
-#include <Game/Game.h>
+#include <CGAME/Game.h>
 
 #ifdef D2_VERSION_110F
 

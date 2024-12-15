@@ -1,7 +1,7 @@
-#include <Game/Msg.h> 
+#include <CGAME/Msg.h> 
 #include <D2PacketDef.h>
 #include <Storm.h>
-#include <Game/Game.h>
+#include <CGAME/Game.h>
 #include <D2Client.h>
 #include <D2StrTable.h>
 #include <D2Net.h>

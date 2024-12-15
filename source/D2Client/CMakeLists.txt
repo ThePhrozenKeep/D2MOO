@@ -62,18 +62,19 @@ target_sources(${D2ClientImplName}
     src/Game/View.cpp
     src/Game/Wall2.cpp
 
-    include/Game/Env.h
-    include/Game/Game.h
-    include/Game/Msg.h
-    include/Game/PalShift.h
-    include/Game/Record.h
-    include/Game/Roster.h
-    include/Game/RosterPets.h
-    include/Game/SCmd.h
-    include/Game/scroll.h
-    include/Game/Select.h
-    include/Game/View.h
-    include/Game/Wall2.h
+    # Forced to use CGame to differentiate between D2Client and D2Game because Blizz chose to have the same include names
+    include/CGame/Env.h
+    include/CGame/Game.h
+    include/CGame/Msg.h
+    include/CGame/PalShift.h
+    include/CGame/Record.h
+    include/CGame/Roster.h
+    include/CGame/RosterPets.h
+    include/CGame/SCmd.h
+    include/CGame/scroll.h
+    include/CGame/Select.h
+    include/CGame/View.h
+    include/CGame/Wall2.h
 )
 target_sources(${D2ClientImplName}
   PRIVATE

@@ -1,4 +1,4 @@
-#include <Game/Record.h> 
+#include <CGAME/Record.h> 
 #include <D2Client.h>
 #include <Fog.h>
 #include <D2CommonDefinitions.h>
