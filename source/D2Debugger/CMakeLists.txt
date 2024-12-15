@@ -27,3 +27,8 @@ target_link_libraries(D2Debugger
 if(MSVC)
     target_link_options(D2Debugger PRIVATE "/DELAYLOAD:d3d9.dll" "Delayimp.lib")
 endif()
+
+set_target_properties(D2Debugger
+    PROPERTIES
+      VS_DEBUGGER_COMMAND_ARGUMENTS "-- -debug"
+)
