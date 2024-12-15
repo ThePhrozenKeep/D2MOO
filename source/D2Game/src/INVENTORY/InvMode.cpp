@@ -269,7 +269,7 @@ void __fastcall D2GAME_ResetSomeItemFlags_6FC415F0(D2GameStrc* pGame, D2UnitStrc
 //D2Game.0x6FC41660
 int32_t __fastcall sub_6FC41660(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    if (pUnit && (pUnit->dwFlagEx & 0x400000 || pUnit->dwFlagEx & 0x800000))
+    if (pUnit && ((pUnit->dwFlagEx & 0x400000) || (pUnit->dwFlagEx & 0x800000)))
     {
         return 1;
     }
