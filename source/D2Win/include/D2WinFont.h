@@ -81,15 +81,15 @@ int __stdcall D2Win_10125();
 //D2Win.0x6F8AA310
 void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6, int32_t a7);
 //D2Win.0x6F8AA510
-void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6);
+void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int32_t nColorShift, int32_t nPaddingX, int32_t nMaxWidth);
 //D2Win.0x6F8AA6E0
 void __stdcall D2Win_10124();
 //D2Win.0x6F8AA910
-int __fastcall sub_6F8AA910(const Unicode* pStr);
+int __fastcall FONT_GetMultilineTextWidth(const Unicode* pStr);
 //D2Win.0x6F8AA9E0
-void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t nGlobalPaletteShift, int32_t a6);
+void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int32_t nCenterPaddingX, int32_t nColorShift, int32_t bCenter);
 //D2Win.0x6F8AABB0
-int __fastcall sub_6F8AABB0(const Unicode* pStr);
+int __fastcall FONT_GetSinglelineTextWidth(const Unicode* pStr);
 //D2Win.0x6F8AAC60
 void __fastcall D2Win_10129_DrawFramedText(const Unicode* wszText, int nX, int nY, int nTextColor, int nAlign);
 //D2Win.0x6F8AACD0
@@ -97,7 +97,7 @@ void __fastcall D2Win_10130_DrawFramedTextEx(const Unicode* wszText, int nX, int
 //D2Win.0x6F8AAD40
 void __fastcall D2Win_10117_DrawText(const Unicode* wszText, int nX, int nY, int nColor, BOOL bCentered);
 //D2Win.0x6F8AAD80
-void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t bCentered, DrawMode eDrawMode);
+void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, int32_t nY, int32_t nColorShift, int32_t bCentered, DrawMode eDrawMode);
 //D2Win.0x6F8AAF80
 void __fastcall D2Win_10126_DrawTextFromCache(Unicode *wszText, int nX, int nY);
 //D2Win.0x6F8AB080
