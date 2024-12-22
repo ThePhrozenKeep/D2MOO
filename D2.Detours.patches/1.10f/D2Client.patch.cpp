@@ -7,6 +7,7 @@
 #include <Unit/Player.h>
 #include <UI/chat.h>
 #include <UI/UI.h>
+#include <Unit/Item.h>
 #include <Sound/Sound.h>
 #include <Fog.h>
 #include <CGAME/Game.h>
@@ -53,7 +54,7 @@ BOOL __fastcall CLIENT_UpdateUIs_6FB23800(int a1, int a2) {
 }
 //1.00 : D2Client.0x10001F73
 //1.10f: D2CLient.0x6FB23860
-int __fastcall D2CLIENT_CheckUIState_6FB23860(int a1) {
+int __fastcall D2CLIENT_CheckUIState_6FB23860(D2C_UIIds nUIId) {
     UNIMPLEMENTED();
 }
 
@@ -62,6 +63,9 @@ int __fastcall D2CLIENT_CheckUIState_6FB23860(int a1) {
 //1.13c: D2CLient.0x6FB0F020
 void __cdecl SOUND_UpdateEnvironmentSFX() {
     UNIMPLEMENTED();
+}
+BOOL __fastcall D2CLIENT_UI_Handler_6FB23260(D2C_UIIds nUIId, D2C_UiStates nUIState, BOOL a3){
+	UNIMPLEMENTED();
 }
 
 
@@ -92,7 +96,10 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FB54C60 - D2ClientImageBase, &SOUND_UpdateEnvironmentSFX, PatchAction::FunctionReplacePatchByOriginal},
     { 0x6FB23800 - D2ClientImageBase, &CLIENT_UpdateUIs_6FB23800, PatchAction::FunctionReplacePatchByOriginal},
 	{ 0x6FB23860 - D2ClientImageBase, &D2CLIENT_CheckUIState_6FB23860, PatchAction::FunctionReplacePatchByOriginal},
+	{ 0x6FB23260 - D2ClientImageBase, &D2CLIENT_UI_Handler_6FB23260, PatchAction::FunctionReplacePatchByOriginal},
     
+	
+
 	// Then stub for profiling
     ITERATE_WRAPPERS(DEFINE_PROFILING_EXTRA_PATCH_D2CLIENT)
 
@@ -117,7 +124,7 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FB57480 - D2ClientImageBase, &CLIENT_UpdateCursorPosInGame, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57500 - D2ClientImageBase, &CLIENT_UpdateCursorOnLeftButtonUp, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57580 - D2ClientImageBase, &CLIENT_SetCursorBuySell, PatchAction::FunctionReplaceOriginalByPatch},
-	{ 0x6FB575B0 - D2ClientImageBase, &CLIENT_SetCursorItem, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB575B0 - D2ClientImageBase, &CLIENT_SetCursorHeldItem, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB575E0 - D2ClientImageBase, &CLIENT_GetCursorItem, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB575F0 - D2ClientImageBase, &CLIENT_LoadCursors, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB576B0 - D2ClientImageBase, &CLIENT_UnloadCursors, PatchAction::FunctionReplaceOriginalByPatch},
@@ -130,7 +137,11 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FB57A60 - D2ClientImageBase, &CLIENT_DrawCursorBuySell, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57AC0 - D2ClientImageBase, &CLIENT_DrawCursorDefault, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57CC0 - D2ClientImageBase, &CLIENT_CursorGetDword0x6FBC1AD4, PatchAction::FunctionReplaceOriginalByPatch},
+	// Needed if patching cursor functions as it's inlined in CLIENT_SetCursorUsingItem and references globals
+	{ 0x6FB2E880 - D2ClientImageBase, &UIHandleCursorItemPacket, PatchAction::FunctionReplaceOriginalByPatch},
 	
+	
+
 #endif
 	{ 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };

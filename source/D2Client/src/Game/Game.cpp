@@ -757,7 +757,7 @@ signed int __stdcall ClientGameLoop(int nIteration)
 			D2CLIENT_psgtGlobalData->gnPreviousFrameStartTickCount_6FBA7760 = GetTickCount();
             return 0;
         }
-        if ((D2CLIENT_CheckUIState_6FB23860(9) || D2CLIENT_CheckUIState_6FB23860(11))
+        if ((D2CLIENT_CheckUIState_6FB23860(UI_ESCMENU) || D2CLIENT_CheckUIState_6FB23860(UI_CONFIG))
             && pPlayerUnit
             && D2CLIENT_GetCurrentRoom_6FB29370())
         {

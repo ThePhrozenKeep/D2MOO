@@ -185,7 +185,7 @@ enum D2Vendors
 #endif // CONSTANTS_DATATABLES
 
 #ifndef CONSTANTS_UI //Pseudo-Macro to group all constants
-enum D2C_UIvars
+enum D2C_UIIds
 {
 	UI_GAME = 0x00,				//Game
 	UI_INVENTORY = 0x01,		//Player Inventory
@@ -224,7 +224,8 @@ enum D2C_UIvars
 	UI_HELPBUTTON = 0x22,		//Help Button
 	UI_HIREICONS = 0x23,		//Party Icons
 	UI_MERCINV = 0x24,			//Mercenary Inventory
-	UI_RECIPESCROLL = 0x25		//Unused Recipe Scroll
+	UI_RECIPESCROLL = 0x25,		//Unused Recipe Scroll
+	NUM_UI = 38
 };
 
 enum D2C_UiStates

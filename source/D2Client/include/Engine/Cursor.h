@@ -23,6 +23,7 @@ enum D2C_CursorState {
 	CURSORSTATE_HandClosing = 3,
 	CURSORSTATE_HandOpened = 4,
 	CURSORSTATE_ButtonPressed = 5,
+	CURSORSTATE_ItemSelected = 6,
 	CURSORSTATE_ItemRelated7 = 7,
 	CURSORSTATE_ItemRelated8 = 8,
 };
@@ -57,12 +58,16 @@ void __stdcall CLIENT_UpdateCursorOnLeftButtonUp(SMSGHANDLER_PARAMS* pMsg);
 
 
 //1.10f: D2Client.0x6FB57580
-//1.13c: D2Client.0x
+//1.13c: D2Client.0x6FAC6030
 void __fastcall CLIENT_SetCursorBuySell(int nFrame, BOOL bUnknown);
 
+//1.10f: Inlined in D2CLient.0x6FB2E880
+//1.13c: D2Client.0x6FAC6070
+void __fastcall CLIENT_SetCursorUsingItem(int nFrame, D2UnitStrc* pItem);
+
 //1.10f: D2Client.0x6FB575B0
-//1.13c: D2Client.0x
-void __fastcall CLIENT_SetCursorItem(D2UnitStrc* pItem);
+//1.13c: D2Client.0x6FAC62D0
+void __fastcall CLIENT_SetCursorHeldItem(D2UnitStrc* pItem);
 
 //1.10f:0x6FB575E0
 D2UnitStrc* __cdecl CLIENT_GetCursorItem();
