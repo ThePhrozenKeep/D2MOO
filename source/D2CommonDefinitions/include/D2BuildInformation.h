@@ -4,7 +4,7 @@
 #define D2_VERSION_110F
 #define D2_VERSION_MAJOR 1
 #define D2_VERSION_MINOR 10
-#define D2_VERSION_PATCH 'F'
+#define D2_VERSION_PATCH 'f'
 #endif
 
 #if !defined(D2_IS_MONOLITHIC)

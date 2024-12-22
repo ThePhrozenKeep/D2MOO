@@ -221,5 +221,16 @@ target_sources(${D2ClientImplName}
   PRIVATE
     src/DEBUG/ClientSpotTiming.cpp
 )
+
+
+
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(${D2ClientImplName}
+    PRIVATE
+      statictests/D2Client_staticchecks.cpp
+  )
+endif()
+
+
 D2MOO_target_source_group(D2Client)
 

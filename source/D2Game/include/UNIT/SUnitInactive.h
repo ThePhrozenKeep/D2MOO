@@ -52,7 +52,7 @@ struct D2InactiveUnitNodeStrc
 {
 	int32_t nX;									//0x00
 	int32_t nY;									//0x04
-	int32_t nUnitType;							//0x08
+	D2C_UnitTypes nUnitType;					//0x08
 	int32_t nClassId;							//0x0C
 	int32_t nAnimMode;							//0x10
 	int32_t nGameFrame;							//0x14

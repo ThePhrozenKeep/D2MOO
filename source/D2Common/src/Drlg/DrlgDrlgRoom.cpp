@@ -832,7 +832,7 @@ BOOL __fastcall sub_6FD77F00(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t
 }
 
 //D2Common.0x6FD780E0
-D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY)
+D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, D2C_UnitTypes nUnitType, int nIndex, int nMode, int nX, int nY)
 {
 	D2PresetUnitStrc* pPresetUnit = D2_CALLOC_STRC_POOL(pMemPool, D2PresetUnitStrc);
 

@@ -58,6 +58,14 @@ typedef int32_t BOOL;
 
 #define D2_MAYBE_UNUSED(x) (void)(x)
 
+#define D2_ASSERT_SIZE(STRUCT, EXPECTEDSIZE, ...) static_assert(sizeof(STRUCT) == EXPECTEDSIZE, #STRUCT " should have a size of "  #EXPECTEDSIZE " bytes. " __VA_ARGS__)
+
+#ifdef D2_VERSION_110F
+#define D2_ASSERT_SIZE_110F(STRUCT, EXPECTEDSIZE) D2_ASSERT_SIZE(STRUCT, EXPECTEDSIZE, "Version 1.10f")
+#else
+#define D2_ASSERT_SIZE_110F(STRUCT, EXPECTEDSIZE)
+#endif
+
 #pragma pack(push, 1)
 
 using D2UnitGUID = uint32_t;

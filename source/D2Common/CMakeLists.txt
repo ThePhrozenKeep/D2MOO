@@ -204,9 +204,11 @@ target_sources(${D2CommonImplName}
 if(D2MOO_WITH_STATIC_TESTS)
   target_sources(${D2CommonImplName}
     PRIVATE
+      statictests/D2Drlg_staticchecks.cpp
       statictests/D2StatList_staticchecks.cpp
       statictests/D2PacketDef_staticchecks.cpp
       statictests/Path_staticchecks.cpp
+      statictests/Units_staticchecks.cpp
   )
 endif()
 

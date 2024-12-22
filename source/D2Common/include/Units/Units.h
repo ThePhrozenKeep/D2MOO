@@ -23,7 +23,7 @@ struct D2GfxLightStrc;
 
 #pragma pack(1)
 
-enum D2C_UnitTypes
+enum D2C_UnitTypes : uint32_t
 {
 	UNIT_PLAYER,
 	UNIT_MONSTER,
@@ -107,9 +107,9 @@ struct D2UnitPacketListStrc
 	//uint8_t nData[255];
 };
 
-struct D2UnitStrc
+struct D2UnitStrc								// Size: 0xF4
 {
-	uint32_t dwUnitType;						//0x00 D2C_UnitTypes
+	D2C_UnitTypes dwUnitType;					//0x00
 	int32_t dwClassId;							//0x04
 	void* pMemoryPool;							//0x08
 	D2UnitGUID dwUnitId;						//0x0C
@@ -186,10 +186,10 @@ struct D2UnitStrc
 			D2UnitEventStrc* pCltTimerList;		//0x090
 		};
 	};
-	uint32_t dwOwnerType;						//0x94
+	D2C_UnitTypes dwOwnerType;					//0x94
 	D2UnitGUID dwOwnerGUID;						//0x98
 	uint32_t dwKillerType;						//0x09C
-	D2UnitGUID dwKillerGUID;						//0x0A0
+	D2UnitGUID dwKillerGUID;					//0x0A0
 	D2HoverTextStrc* pHoverText;				//0xA4
 	D2SkillListStrc* pSkills;					//0xA8
 	struct D2CombatStrc* pCombat;				//0xAC
@@ -198,7 +198,7 @@ struct D2UnitStrc
 	uint32_t dwDropItemCode;					//0xB8
 	uint32_t unk0xBC[2];						//0xBC
 	uint32_t dwFlags;							//0xC4
-	uint32_t dwFlagEx;							//0xC8
+	uint32_t dwFlagEx;							//0xC8 D2C_UnitFlagsEx
 	void* pUnused0xCC;							//0xCC may be quest related ?
 
 	uint32_t dwNodeIndex;						//0xD0
@@ -236,7 +236,7 @@ D2COMMON_DLL_DECL void __stdcall UNITS_SetUsedSkill(D2UnitStrc* pUnit, D2SkillSt
 //D2Common.0x6FDBD670 (#10323)
 D2COMMON_DLL_DECL D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD6B0 (#11259)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, D2C_UnitTypes nUnitType);
 //D2Common.0x6FDBD720 (#11260)
 D2COMMON_DLL_DECL void __stdcall UNITS_FreeUnit(D2UnitStrc* pUnit);
 //D2Common.0x6FDBD780 (#10327)
@@ -355,9 +355,9 @@ D2COMMON_DLL_DECL void __stdcall UNITS_UpdateDirectionAndSpeed(D2UnitStrc* pUnit
 //D2Common.0x6FDBFDD0 (#10414)
 D2COMMON_DLL_DECL int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit);
 //D2Common.0x6FDBFF20 (#10416)
-D2COMMON_DLL_DECL void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, D2UnitGUID nOwnerId);
+D2COMMON_DLL_DECL void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, D2C_UnitTypes nOwnerType, D2UnitGUID nOwnerId);
 //D2Common.0x6FDBFF40
-void __fastcall UNITS_StoreOwnerInfo(D2UnitStrc* pUnit, int nOwnerType, int nOwnerId);
+void __fastcall UNITS_StoreOwnerInfo(D2UnitStrc* pUnit, D2C_UnitTypes nOwnerType, D2UnitGUID nOwnerId);
 //D2Common.0x6FDBFFE0 (#10415)
 D2COMMON_DLL_DECL void __stdcall UNITS_StoreOwner(D2UnitStrc* pUnit, D2UnitStrc* pOwner);
 //D2Common.0x6FDC0060 (#10417)

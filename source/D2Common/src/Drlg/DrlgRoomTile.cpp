@@ -33,7 +33,7 @@ struct D2UnkDrlgRoomTileStrc2
 	int nTileSequence;
 	BOOL bIsRightWallWithDoor;
 	int nUnitId;
-	int nUnitType;
+	D2C_UnitTypes nUnitType;
 	int nX;
 	int nY;
 };

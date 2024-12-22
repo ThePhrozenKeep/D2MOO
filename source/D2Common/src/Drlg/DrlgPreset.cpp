@@ -37,7 +37,7 @@ void DRLGPRESET_AddPresetUnitToMap(D2DrlgMapStrc* pMazeMap, D2PresetUnitStrc* pN
 	pMazeMap->pPresetUnit = pNewPresetUnit;
 	pNewPresetUnit->bSpawned |= bSpawned;
 }
-D2PresetUnitStrc* DRLGPRESET_AllocateAndAddPresetUnitToMap(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY, D2DrlgMapStrc* pMazeMap, BOOL bSpawned)
+D2PresetUnitStrc* DRLGPRESET_AllocateAndAddPresetUnitToMap(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, D2C_UnitTypes nUnitType, int nIndex, int nMode, int nX, int nY, D2DrlgMapStrc* pMazeMap, BOOL bSpawned)
 {
 	D2PresetUnitStrc* pPresetUnit = DRLGROOM_AllocPresetUnit(pDrlgRoom, pMemPool, nUnitType, nIndex, nMode, nX, nY);
 	DRLGPRESET_AddPresetUnitToMap(pMazeMap, pPresetUnit, bSpawned);
@@ -239,7 +239,7 @@ void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hA
 
 		for (int i = 0; i < nUnits; ++i)
 		{
-			int nUnitType = ReadInt32(pData);
+			D2C_UnitTypes nUnitType = static_cast<D2C_UnitTypes>(ReadInt32(pData));
 			int nUnitId = ReadInt32(pData);
 
 			int nMode = 0;

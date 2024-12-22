@@ -18,7 +18,7 @@ void __fastcall UIHandleCursorItemPacket(D2GSPacketSrv3F* pPacket)
 	{
 		if (pPacket->nCursor == 0xFF)
 		{
-			if (D2UnitStrc* pUnit = D2CLIENT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
+			if (D2UnitStrc* pUnit = CUNIT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
 			{
 				ITEMS_SetItemFlag(pUnit, 4u, 0);
 				if (D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_UNINTERRUPTABLE))
@@ -38,7 +38,7 @@ void __fastcall UIHandleCursorItemPacket(D2GSPacketSrv3F* pPacket)
 				if (pPacket->nCursor == gaItemCursors[i] && !D2CLIENT_CheckUIState_6FB23860(UI_INVENTORY))
 					D2CLIENT_UI_Handler_6FB23260(UI_INVENTORY, UI_TURNON, 0);
 			}
-			if (D2UnitStrc* pItem = D2CLIENT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
+			if (D2UnitStrc* pItem = CUNIT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
 			{
 				ITEMS_SetItemFlag(pItem, 4u, 1);
 				CLIENT_SetCursorUsingItem(pPacket->nCursor, pItem);
@@ -52,7 +52,7 @@ void __fastcall UIHandleCursorItemPacket(D2GSPacketSrv3F* pPacket)
 			if (pPacket->nCursor == gaItemCursors[i] && !D2CLIENT_CheckUIState_6FB23860(UI_INVENTORY))
 				D2CLIENT_UI_Handler_6FB23260(UI_INVENTORY, UI_TURNON, 0);
 		}
-		if (D2UnitStrc* pItem = D2CLIENT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
+		if (D2UnitStrc* pItem = CUNIT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
 		{
 			CLIENT_SetCursorUsingItem(pPacket->nCursor, pItem);
 		}

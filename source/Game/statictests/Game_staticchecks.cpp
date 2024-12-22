@@ -18,9 +18,8 @@ static_assert(offsetof(D2ConfigStrc, nComponentsColors) == 0x3AB, "");
 static_assert(offsetof(D2ConfigStrc, nCharacterLevel) == 0x3BB, "");
 static_assert(offsetof(D2ConfigStrc, nAccountPasswordHash) == 0x3BD, "");
 static_assert(offsetof(D2ConfigStrc, nSaveFlags) == 0x3C5, "");
-static_assert(sizeof(D2ConfigStrc) == 0x3C7, "");
 
-
-static_assert(sizeof(D2CmdArgStrc) == 0x3C, "Check D2CmdArgStrc matches original size");
+D2_ASSERT_SIZE_110F(D2ConfigStrc,  0x3C7);
+D2_ASSERT_SIZE_110F(D2CmdArgStrc, 0x3C);
 #endif
 

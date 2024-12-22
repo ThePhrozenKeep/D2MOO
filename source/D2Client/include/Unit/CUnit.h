@@ -5,4 +5,4 @@
 
 
 //1.10f: D2Client.0x6FB269F0
-D2UnitStrc* __fastcall D2CLIENT_GetClientUnit(int nGUID, D2C_UnitTypes nUnitType);
+D2UnitStrc* __fastcall CUNIT_GetClientUnit(int nGUID, D2C_UnitTypes nUnitType);

@@ -2,6 +2,7 @@
 
 #include "D2CommonDefinitions.h"
 #include <Drlg/D2DrlgDrlgVer.h>
+#include <Units/Units.h>
 
 struct D2DrlgStrc;
 struct D2ActiveRoomStrc;
@@ -70,7 +71,7 @@ void __fastcall DRLGROOM_SortRoomListByPosition(D2DrlgRoomStrc** ppRoomList, int
 //D2Common.0x6FD77F00
 BOOL __fastcall sub_6FD77F00(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t nWarpId, D2DrlgRoomStrc* pDrlgRoom2, char nWarpFlag, int nDirection);
 //D2Common.0x6FD780E0
-D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY);
+D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, D2C_UnitTypes nUnitType, int nIndex, int nMode, int nX, int nY);
 //D2Common.0x6FD78160
 D2PresetUnitStrc* __fastcall DRLGROOM_GetPresetUnits(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD78190

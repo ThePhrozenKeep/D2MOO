@@ -1,5 +1,5 @@
 #include <D2PacketDef.h>
+#include <D2BasicTypes.h>
 
-static_assert(sizeof(D2GSPacketClt32) == 0x11, "size mismatch");
-
-static_assert(sizeof(D2GSPacketSrv7B) == 0x08, "size mismatch");
+D2_ASSERT_SIZE_110F(D2GSPacketClt32, 0x11);
+D2_ASSERT_SIZE_110F(D2GSPacketSrv7B, 0x08);

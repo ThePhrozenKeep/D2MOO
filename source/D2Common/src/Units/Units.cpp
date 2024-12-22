@@ -77,7 +77,7 @@ D2SkillStrc* __stdcall UNITS_GetUsedSkill(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD6B0 (#11259)
-D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, int nUnitType)
+D2UnitStrc* __stdcall UNITS_AllocUnit(void* pMemPool, D2C_UnitTypes nUnitType)
 {
 	D2UnitStrc* pUnit = D2_CALLOC_STRC_POOL(pMemPool, D2UnitStrc);
 
@@ -105,8 +105,8 @@ void __stdcall UNITS_FreeUnit(D2UnitStrc* pUnit)
 			D2_FREE_POOL(pUnit->pMemoryPool, pUnit->pMonsterData);
 		}
 
-		pUnit->dwUnitType = 6;
-		pUnit->dwUnitId = -1;
+		pUnit->dwUnitType = UNIT_TYPES_COUNT;
+		pUnit->dwUnitId = D2UnitInvalidGUID;
 
 		D2_FREE_POOL(pUnit->pMemoryPool, pUnit);
 	}
@@ -2015,13 +2015,13 @@ int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBFF20 (#10416)
-void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, int nOwnerType, D2UnitGUID nOwnerId)
+void __stdcall UNITS_StoreOwnerTypeAndGUID(D2UnitStrc* pUnit, D2C_UnitTypes nOwnerType, D2UnitGUID nOwnerId)
 {
 	UNITS_StoreOwnerInfo(pUnit, nOwnerType, nOwnerId);
 }
 
 //D2Common.0x6FDBFF40
-void __fastcall UNITS_StoreOwnerInfo(D2UnitStrc* pUnit, int nOwnerType, int nOwnerId)
+void __fastcall UNITS_StoreOwnerInfo(D2UnitStrc* pUnit, D2C_UnitTypes nOwnerType, D2UnitGUID nOwnerId)
 {
 	D2StatListStrc* pStatList = NULL;
 
@@ -2067,7 +2067,8 @@ void __stdcall UNITS_StoreOwner(D2UnitStrc* pUnit, D2UnitStrc* pOwner)
 	{
 		if (pUnit)
 		{
-			pUnit->dwOwnerType = 0;
+			// Should probably be some UNIT_TYPES_COUNT and D2UnitInvalidGUID, but UNITFLAGEX_STOREOWNERINFO prevents issues
+			pUnit->dwOwnerType = D2C_UnitTypes(0);
 			pUnit->dwOwnerGUID = 0;
 
 			if (pUnit->pStatListEx)

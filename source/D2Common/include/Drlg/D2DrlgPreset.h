@@ -5,6 +5,7 @@
 #include "D2DrlgDrlgGrid.h"
 #include <Path/Path.h>
 #include <Archive.h>
+#include <Units/Units.h>
 
 struct D2LvlPrestTxt;
 
@@ -25,9 +26,9 @@ struct D2LevelFileListStrc
 	D2LevelFileListStrc* pNext;				//0x10C
 };
 
-struct D2PresetUnitStrc
+struct D2PresetUnitStrc						// Size: 0x20
 {
-	int32_t nUnitType;						//0x00
+	D2C_UnitTypes nUnitType;				//0x00
 	int32_t nIndex;							//0x04 see D2Common.#11278
 	int32_t nMode;							//0x08
 	int32_t nXpos;							//0x0C
