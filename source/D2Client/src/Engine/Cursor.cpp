@@ -332,7 +332,7 @@ void __fastcall sub_6FAC64F0()
 {
 	const D2C_CursorTypes nCursorType = (D2C_CursorTypes)(gnCursorType);
 	const auto& cursorDesc = CLIENT_GetCursorDescChecked(nCursorType);
-	if (D2UnitStrc* pPlayerUnit = D2CLIENT_GetPlayerUnit_6FB283D0())
+	if (D2UnitStrc* pPlayerUnit = D2CLIENT_GetControlUnit())
 	{
 		if (gnCursorState == CURSORSTATE_Default)
 		{

@@ -126,8 +126,8 @@ D2CLIENTDWORDSTUB(6FB75814);
 
 //1.10f: D2Client.0x6FBBC200
 //1.13c: D2Client.0x6FBCBBFC
-//D2UnitStrc* gpPlayerUnit_6FBBC200;
-D2VAR(D2CLIENT, pgpPlayerUnit_6FBBC200, D2UnitStrc*, 0x6FBBC200 - D2ClientImageBase);
+//D2UnitStrc* gpControlUnit_6FBBC200;
+D2VAR(D2CLIENT, pgpControlUnit_6FBBC200, D2UnitStrc*, 0x6FBBC200 - D2ClientImageBase);
 
 //D2Client.0x6FBA7960
 //eD2GameTypes *D2CLIENT_pgnGameType_6FBA7960;
@@ -350,17 +350,17 @@ D2VAR(D2CLIENT, psgtGlobalData, ClientGlobalData, 0x6FBA7750 - D2ClientImageBase
 
 //1.00 : D2Client.0x10001CA3
 //1.10f: D2Client.0x6FB283D0
-D2UnitStrc* __fastcall D2CLIENT_GetPlayerUnit_6FB283D0()
+D2UnitStrc* __fastcall D2CLIENT_GetControlUnit()
 {
-    return *D2CLIENT_pgpPlayerUnit_6FBBC200;
+    return *D2CLIENT_pgpControlUnit_6FBBC200;
 }
 //1.00 : D2Client.0x10002F13
 //1.10f: D2Client.0x6FB29370
 D2ActiveRoomStrc* __fastcall D2CLIENT_GetCurrentRoom_6FB29370()
 {
-    if (D2CLIENT_GetPlayerUnit_6FB283D0())
+    if (D2CLIENT_GetControlUnit())
     {
-        return UNITS_GetRoom(D2CLIENT_GetPlayerUnit_6FB283D0());
+        return UNITS_GetRoom(D2CLIENT_GetControlUnit());
     }
     return nullptr;
 }
@@ -467,7 +467,7 @@ void D2CLIENT_PopulateRooms()
 
 void D2CLIENT_UpdatePlayerMousePosition(int nUpdateType)
 {
-    D2UnitStrc* pPlayerUnit = D2CLIENT_GetPlayerUnit_6FB283D0();
+    D2UnitStrc* pPlayerUnit = D2CLIENT_GetControlUnit();
     uint32_t nFlags = 0;
     if (*D2CLIENT_pdword_6FBA79B4)
         nFlags = 8;
@@ -746,7 +746,7 @@ signed int __stdcall ClientGameLoop(int nIteration)
 {
     BOOL bIsNewFrame = FALSE;
     BOOL bDidClientUpdate = FALSE;
-	D2UnitStrc* pPlayerUnit = D2CLIENT_GetPlayerUnit_6FB283D0();
+	D2UnitStrc* pPlayerUnit = D2CLIENT_GetControlUnit();
 	
 	ScopedDiscontinuousFrameMarker scopedDiscontinousMarker;
 
@@ -1001,7 +1001,7 @@ void __fastcall D2CLIENT_DrawGameScene(DWORD a1)
 	int nViewRight;
 	int nViewBottom;
 	D2CLIENT_GAMEVIEW_GetViewRadius_6FAB7180(*D2CLIENT_pgpView_6FBA7990, &nViewLeft, &nViewTop, &nViewRight, &nViewBottom);
-	D2UnitStrc* ptPlayer = D2CLIENT_GetPlayerUnit_6FB283D0();
+	D2UnitStrc* ptPlayer = D2CLIENT_GetControlUnit();
 	const int nTargetX = UNITS_GetClientCoordX(ptPlayer);
 	const int nTargetY = UNITS_GetClientCoordY(ptPlayer);
 	int nOffsetX = nTargetX - (nViewRight - nViewLeft) / 2;

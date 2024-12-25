@@ -6,6 +6,7 @@
 #include <D2BitManip.h>
 #include <Units/Units.h>
 #include <D2Monsters.h>
+#include <Storm.h>
 
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText)
@@ -2715,7 +2716,7 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(HD2ARCHIVE hArchive)
 			for (int k = 0; k < 3; ++k)
 			{
 				// Note: Game actually uses Storm.dll SStrVPrintf
-				wsprintfA(szChest, "Act %d%s Chest %s", j + 1, szDifficulties[i], szTreasureClassVariants[k]);
+				SStrPrintf(szChest, ARRAY_SIZE(szChest), "Act %d%s Chest %s", j + 1, szDifficulties[i], szTreasureClassVariants[k]);
 
 				nTxtRow = FOG_GetRowFromTxt(sgptDataTables->pTreasureClassExLinker, szChest, 0);
 				if (nTxtRow >= 0)
@@ -2786,8 +2787,7 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 			{
 				if (FOG_GetStringFromLinkIndex(sgptDataTables->pItemTypesLinker, i, v37))
 				{
-					// Note: Game actually uses Storm.dll SStrVPrintf
-					wsprintfA(dest, "%s%d", v37, nLevel);
+					SStrPrintf(dest, ARRAY_SIZE(dest), "%s%d", v37, nLevel);
 					FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, dest);
 
 					if (!(sgptDataTables->nTreasureClassEx % 16))
