@@ -97,7 +97,7 @@ void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 
-	const int nIndex = nInventoryTxtId + 16 * bHigherRes;
+	const int nIndex = nInventoryTxtId + NUM_INVENTORY_PAGE_STATS * bHigherRes;
 	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
 	const D2InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
@@ -112,7 +112,7 @@ void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2
 void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo)
 {
 	D2InventoryTxt* pInventoryTxtRecord = NULL;
-	int nIndex = nInventoryTxtId + 16 * bHigherRes;
+	int nIndex = nInventoryTxtId + NUM_INVENTORY_PAGE_STATS * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
@@ -125,7 +125,7 @@ void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes
 //D2Common.0x6FD55030 (#10637)
 void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent)
 {
-	int nIndex = nInventoryTxtId + 16 * bHigherRes;
+	int nIndex = nInventoryTxtId + NUM_INVENTORY_PAGE_STATS * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);

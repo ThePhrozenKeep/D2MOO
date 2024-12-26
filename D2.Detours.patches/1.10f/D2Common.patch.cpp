@@ -869,7 +869,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetTransmogrify                                               @10825
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_IsMagSetRarUniCrfOrTmp                                        @10826
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetHitClassFromItem                                           @10827
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_Is1Or2Handed                                                  @10828
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_Is1Or2HandedForBarbarian                                      @10828
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetColor                                                      @10829
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_IsImbueable                                                   @10830
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_IsSocketable                                                  @10831

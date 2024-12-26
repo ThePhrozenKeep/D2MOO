@@ -828,7 +828,7 @@ EXPORTS
 	ITEMS_GetTransmogrify												@10825
 	ITEMS_IsMagSetRarUniCrfOrTmp										@10826
 	ITEMS_GetHitClassFromItem											@10827
-	ITEMS_Is1Or2Handed													@10828
+	ITEMS_Is1Or2HandedForBarbarian										@10828
 	ITEMS_GetColor														@10829
 	ITEMS_IsImbueable													@10830
 	ITEMS_IsSocketable													@10831

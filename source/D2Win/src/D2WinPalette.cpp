@@ -232,7 +232,7 @@ int32_t __stdcall D2Win_10028(const char* pszPalDatFilename, const char* pszPalP
 //D2Win.0x6F8AEA80 (#10034)
 uint8_t __stdcall D2Win_10034_MixRGB(uint8_t nRed, uint8_t nGreen, uint8_t nBlue)
 {
-	return D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, nRed, nGreen, nBlue);
+	return D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, ARRAY_SIZE(gRGBAPalette_6F9622C0), nRed, nGreen, nBlue);
 }
 
 //D2Win.0x6F8AEAC0 (#10178)

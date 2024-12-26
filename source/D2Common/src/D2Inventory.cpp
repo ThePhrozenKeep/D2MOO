@@ -2387,7 +2387,8 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2InventoryStrc* pInventory, 
 }
 
 //D2Common.0x6FD91050 (#10291)
-int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory)
+//1.13c: D2Common.0x? (#10051)
+D2C_WieldType __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory)
 {
 	if (pInventory)
 	{
@@ -2404,66 +2405,27 @@ int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInve
 			}
 		}
 
-		if (!pLeftHandItem)
+		if (pLeftHandItem && pRightHandItem)
 		{
-			if (!pRightHandItem)
-			{
-				return -1;
-			}
-
-			if (ITEMS_CheckWeaponIfTwoHanded(pRightHandItem))
-			{
-				return 2;
-			}
-
-			if (ITEMS_Is1Or2Handed(pPlayer, pRightHandItem))
-			{
-				return 2;
-			}
-			else
-			{
-				return -1;
-			}
+			if (ITEMS_Is1Or2HandedForBarbarian(pPlayer, pLeftHandItem) || ITEMS_Is1Or2HandedForBarbarian(pPlayer, pRightHandItem))
+				return WEILDTYPE_ONE_HANDED;
 		}
-
-		if (!pRightHandItem)
+		else if (pLeftHandItem)
 		{
 			if (ITEMS_CheckWeaponIfTwoHanded(pLeftHandItem))
-			{
-				return 2;
-			}
-
-			if (ITEMS_Is1Or2Handed(pPlayer, pLeftHandItem))
-			{
-				return 2;
-			}
-			else
-			{
-				return -1;
-			}
+				return WEILDTYPE_TWO_HANDED;
+			if (ITEMS_Is1Or2HandedForBarbarian(pPlayer, pLeftHandItem))
+				return WEILDTYPE_TWO_HANDED;
 		}
-
-		if (ITEMS_Is1Or2Handed(pPlayer, pLeftHandItem) || ITEMS_Is1Or2Handed(pPlayer, pRightHandItem))
+		else if (pRightHandItem)
 		{
-			return 1;
-		}
-
-		if (ITEMS_CheckWeaponIfTwoHanded(pLeftHandItem))
-		{
-			return 2;
-		}
-
-		if (ITEMS_CheckWeaponIfTwoHanded(pRightHandItem))
-		{
-			return 2;
-		}
-		else
-		{
-			return -1;
+			if (ITEMS_CheckWeaponIfTwoHanded(pRightHandItem))
+				return WEILDTYPE_TWO_HANDED;
+			if (ITEMS_Is1Or2HandedForBarbarian(pPlayer, pRightHandItem))
+				return WEILDTYPE_TWO_HANDED;
 		}
 	}
-
-	return -1;
+	return WEILDTYPE_BAREHANDED;
 }
 
 //D2Common.0x6FD91140 (#10292)
@@ -3074,9 +3036,9 @@ BOOL __fastcall sub_6FD91E80(D2UnitStrc* pUnit, D2UnitStrc* pItem1, D2UnitStrc* 
 		return FALSE;
 	}
 
-	if (!ITEMS_CheckWeaponIfTwoHanded(pItem1) || ITEMS_Is1Or2Handed(pUnit, pItem1))
+	if (!ITEMS_CheckWeaponIfTwoHanded(pItem1) || ITEMS_Is1Or2HandedForBarbarian(pUnit, pItem1))
 	{
-		if (!ITEMS_CheckWeaponIfTwoHanded(pItem2) || ITEMS_Is1Or2Handed(pUnit, pItem2))
+		if (!ITEMS_CheckWeaponIfTwoHanded(pItem2) || ITEMS_Is1Or2HandedForBarbarian(pUnit, pItem2))
 		{
 			if (ITEMS_CheckItemTypeId(pItem1, ITEMTYPE_WEAPON) && ITEMS_CheckItemTypeId(pItem2, ITEMTYPE_WEAPON))
 			{

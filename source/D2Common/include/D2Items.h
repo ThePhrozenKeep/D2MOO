@@ -502,7 +502,7 @@ D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsNotQuestItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E5F0 (#10827)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E670 (#10828)
-D2COMMON_DLL_DECL int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_Is1Or2HandedForBarbarian(D2UnitStrc* pPlayer, D2UnitStrc* pItem);
 //D2Common.0x6FD9E710 (#10829)
 // Returns the palette, and color index in pColor
 D2COMMON_DLL_DECL uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColorIndex, int nTransType);

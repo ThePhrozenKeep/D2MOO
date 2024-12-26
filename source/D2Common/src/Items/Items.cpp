@@ -3667,14 +3667,14 @@ uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E670 (#10828)
-int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+int __stdcall ITEMS_Is1Or2HandedForBarbarian(D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
 
 	D2_ASSERT(pItem);
 	D2_ASSERT(pPlayer);
 
-	if (pPlayer->dwUnitType || pPlayer->dwClassId != PCLASS_BARBARIAN)
+	if (!(pPlayer->dwUnitType == UNIT_PLAYER && pPlayer->dwClassId == PCLASS_BARBARIAN))
 	{
 		return FALSE;
 	}

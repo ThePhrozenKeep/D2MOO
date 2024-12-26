@@ -31,7 +31,8 @@ enum D2C_PlayerBodyLocs
 	BODYLOC_GLOVES,		//Gloves
 	BODYLOC_SWRARM,		//Right-Hand on Switch
 	BODYLOC_SWLARM,		//Left-Hand on Switch
-	NUM_BODYLOC
+	NUM_BODYLOC,
+	NUM_BODYLOC_NO_SWITCH = BODYLOC_SWRARM,
 };
 
 #define D2C_InventoryHeader 0x1020304
@@ -84,7 +85,9 @@ enum D2C_InventoryRecords
 	INVENTORYRECORD_BIG_BANK_PAGE2,
 	INVENTORYRECORD_HIRELING2,
 	INVENTORYRECORD_DRUID2,
-	INVENTORYRECORD_ASSASSIN2
+	INVENTORYRECORD_ASSASSIN2,
+
+	INVENTORYRECORD_INVALID = -1
 };
 
 enum D2C_NodePages
@@ -105,6 +108,14 @@ enum D2TradeStates
 {
 	TRADESTATE_OTHERNOROOM,
 	TRADESTATE_SELFNOROOM,
+};
+
+enum D2C_WieldType
+{
+	WEILDTYPE_BAREHANDED = -1,
+	WEILDTYPE_UNKNOWN = 0,
+	WEILDTYPE_ONE_HANDED = 1,
+	WEILDTYPE_TWO_HANDED = 2,
 };
 
 struct D2InventoryGridStrc
@@ -294,8 +305,9 @@ D2COMMON_DLL_DECL int __stdcall INVENTORY_GetSetItemEquipCountByFileIndex(D2Inve
 D2COMMON_DLL_DECL void __stdcall INVENTORY_UpdateWeaponGUIDOnInsert(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Common.0x6FD90F80 (#10290)
 D2COMMON_DLL_DECL void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
-//D2Common.0x6FD91050 (#10291)
-D2COMMON_DLL_DECL int __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory);
+//1.10f: D2Common.0x6FD91050 (#10291)
+//1.13c: D2Common.0x? (#10051)
+D2COMMON_DLL_DECL D2C_WieldType __stdcall INVENTORY_GetWieldType(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory);
 //D2Common.0x6FD91140 (#10292)
 D2COMMON_DLL_DECL void __stdcall INVENTORY_SetOwnerId(D2InventoryStrc* pInventory, D2UnitGUID nOwnerGuid);
 //D2Common.0x6FD91160 (#10293)

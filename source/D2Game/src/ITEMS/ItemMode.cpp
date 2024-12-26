@@ -5326,7 +5326,7 @@ int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
             return ITEMS_CheckItemTypeId(pItem, nQuiverType) != 0;
         }
 
-        if (ITEMS_CheckWeaponIfTwoHanded(pItem) && !ITEMS_Is1Or2Handed(pPlayer, pItem) || ITEMS_CheckWeaponIfTwoHanded(*ppItem2) && !ITEMS_Is1Or2Handed(pPlayer, *ppItem2))
+        if (ITEMS_CheckWeaponIfTwoHanded(pItem) && !ITEMS_Is1Or2HandedForBarbarian(pPlayer, pItem) || ITEMS_CheckWeaponIfTwoHanded(*ppItem2) && !ITEMS_Is1Or2HandedForBarbarian(pPlayer, *ppItem2))
         {
             return 0;
         }

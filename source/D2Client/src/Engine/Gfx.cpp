@@ -20,6 +20,7 @@ BOOL __fastcall CLIENT_GetItemGfxData(D2GfxDataStrc* pData, D2UnitStrc* pItem, D
 }
 
 //1.10f: D2Client.0x6FB5E170
+//1.13c: D2Client.0x6FB1D280
 BOOL __fastcall CelCullTestInScreen(D2GfxCellStrc* pCel, int nLeftX, int nTopY, int bMaybeRotating)
 {
 	const int nTestPosY = nTopY + D2CMP_CelGetOffsetY(pCel);

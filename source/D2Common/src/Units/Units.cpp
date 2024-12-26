@@ -915,9 +915,9 @@ void __stdcall UNITS_RefreshInventory(D2UnitStrc* pUnit, BOOL bSetFlag)
 }
 
 //D2Common.0x6FDBEBE0 (#10409)
-int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL bLoD)
+D2C_InventoryRecords __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL bLoD)
 {
-	static const int nInventoryRecordMappings[NUMBER_OF_PLAYERCLASSES] =
+	static const D2C_InventoryRecords nInventoryRecordMappings[NUMBER_OF_PLAYERCLASSES] =
 	{
 		INVENTORYRECORD_AMAZON,
 		INVENTORYRECORD_SORCERESS,
@@ -950,7 +950,7 @@ int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL b
 			{
 				return nInventoryRecordMappings[pUnit->dwClassId];
 			}
-			return -1;
+			return INVENTORYRECORD_INVALID;
 		}
 	}
 	else if (pUnit->dwUnitType == UNIT_MONSTER)
@@ -969,7 +969,7 @@ int __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL b
 		}
 	}
 
-	return -1;
+	return INVENTORYRECORD_INVALID;
 }
 
 //D2Common.0x6FDBECD0 (#10383)
