@@ -7,6 +7,10 @@
 
 #pragma pack()
 
+
+//1.10f: D2Client.0x6FB20100
+struct D2CellFileStrc* __fastcall D2CLIENT_CELLFILE_GetCellFileFromUIFolder(const char* szName);
+
 //D2Client.0x6FB23800
 BOOL __fastcall CLIENT_UpdateUIs_6FB23800(int a1, int a2);
 //D2CLient.0x6FB23860
