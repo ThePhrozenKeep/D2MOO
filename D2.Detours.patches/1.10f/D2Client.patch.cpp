@@ -136,7 +136,7 @@ static ExtraPatchAction extraPatchActions[] = {
 	{ 0x6FB57700 - D2ClientImageBase, &CLIENT_DrawCursorMain, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57A60 - D2ClientImageBase, &CLIENT_DrawCursorBuySell, PatchAction::FunctionReplaceOriginalByPatch},
 	{ 0x6FB57AC0 - D2ClientImageBase, &CLIENT_DrawCursorDefault, PatchAction::FunctionReplaceOriginalByPatch},
-	{ 0x6FB57CC0 - D2ClientImageBase, &CLIENT_CursorGetDword0x6FBC1AD4, PatchAction::FunctionReplaceOriginalByPatch},
+	{ 0x6FB57CC0 - D2ClientImageBase, &CLIENT_GetCursorState, PatchAction::FunctionReplaceOriginalByPatch},
 	// Needed if patching cursor functions as it's inlined in CLIENT_SetCursorUsingItem and references globals
 	{ 0x6FB2E880 - D2ClientImageBase, &UIHandleCursorItemPacket, PatchAction::FunctionReplaceOriginalByPatch},
 	

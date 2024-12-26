@@ -6,6 +6,7 @@
 #include <Window.h>
 #include <Core/Lng.h>
 #include <tracy/Tracy.hpp>
+#include <CGAME/scroll.h>
 
 #ifdef D2_VERSION_110F
 D2CLIENTDWORDSTUB(6FBAB990);
@@ -21,10 +22,9 @@ D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgSomeObject, uint32_t, 0x6FBB5D4F - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpSomeDialog_6FBB5D43, uint32_t, 0x6FBB5D43 - D2ClientImageBase);
 //1.10f: D2Client.0x6FBAB9C4
-D2VAR(D2CLIENT, pgdwUiNbPanels, int32_t, 0x6FBAB9C4 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgdwUiNbPanels, D2C_GlobalUiStates, 0x6FBAB9C4 - D2ClientImageBase);
 
 D2CLIENTSTUB(RECORD_sub, 6FAAE5B0, void, __fastcall, (UINT Msg, WPARAM wParam, LPARAM lParam));
-D2CLIENTSTUB(UI_AdjustViewMatrix, 6FAB5760, void, __fastcall, (int nGlobalUiState));
 D2CLIENTSTUB(sub, 6FACB6E0, int, __fastcall, (BOOL));
 void D2CLIENT_Return_6FAA1500();
 D2CLIENTSTUB(UI_ReopenMsgLog, 6FB1F320, void, __fastcall, ());
@@ -40,15 +40,9 @@ int __fastcall sub_6FAAEB10()
 }
 
 //1.10f: D2Client.0x6FAB5750
-int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels()
+D2C_GlobalUiStates __fastcall D2CLIENT_GetGlobalUiStateNbPanels()
 {
 	return *D2CLIENT_pgdwUiNbPanels;
-}
-
-//1.10f: D2Client.0x6FAB5760
-void __fastcall UI_AdjustViewMatrix(int nGlobalUiState)
-{
-	UI_AdjustViewMatrix_6FAB5760(nGlobalUiState);
 }
 
 //1.10f: D2Client.0x6FAA23B0
@@ -76,7 +70,7 @@ void __fastcall D2CLIENT_UI_ChangeResolution(D2GameResolutionMode nResolutionMod
 		gnDrawMaxWidth_Unk = *D2CLIENT_pgnScreenWidth;
 
 		D2Win_10005(nResolutionMode);
-		D2CLIENT_UI_AdjustViewMatrix_6FAB5760(D2CLIENT_GetGlobalUiStateNbPanels());
+		UI_AdjustViewMatrix(D2CLIENT_GetGlobalUiStateNbPanels());
 		sub_6FACB6E0(1);
 		D2CLIENT_Return_6FAA1500();
 		D2CLIENT_UI_ReopenMsgLog_6FB1F320();

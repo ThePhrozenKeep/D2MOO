@@ -458,7 +458,7 @@ void __fastcall CLIENT_DrawCursorDefault()
 }
 
 //1.10f:0x6FB57CC0
-uint32_t __fastcall CLIENT_CursorGetDword0x6FBC1AD4()
+D2C_CursorState __fastcall CLIENT_GetCursorState()
 {
 	return gnCursorState;
 }

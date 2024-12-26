@@ -40,6 +40,7 @@
 #include <PLAYER/PlrSave.h>
 #include <D2Log.h>
 #include <Draw/Draw.h>
+#include <CGAME/scroll.h>
 
 #ifdef D2_VERSION_110F
 
@@ -150,7 +151,7 @@ D2VAR(D2CLIENT, pdwCTemp_6FB751B8, DWORD, 0x6FB751B8 - D2ClientImageBase); // 1.
 
 D2VAR(D2CLIENT, pgbIsInGame_6FBA796C, DWORD, 0x6FBA796C - D2ClientImageBase); // 1.13c:0x6FBCC3A0
 D2CLIENTDWORDSTUB(6FBA79B0);
-D2CLIENTDWORDSTUB(6FBA79C4);
+D2VAR(D2CLIENT, pgbPreventBeltUsage, BOOL, 0x6FBA79C4 - D2ClientImageBase);
 D2CLIENTDWORDSTUB(6FBA79B4);
 D2CLIENTDWORDSTUB(6FBA79B8);
 D2VAR(D2CLIENT, pgbRequestedToStandStill_6FBA79BC, DWORD, 0x6FBA79BC - D2ClientImageBase);
@@ -425,7 +426,7 @@ void __fastcall D2Client_InitGame()
 	D2CLIENT_psgtGlobalData->gnFramesElapsed_6FBA7768 = 0;
 	D2CLIENT_psgtGlobalData->field_14 = 0;
 	sub_6FAB71B0(*D2CLIENT_pgpView_6FBA7990, 0, 0);
-	UI_AdjustViewMatrix(0);
+	UI_AdjustViewMatrix(UISTATE_NONE);
 	D2CLIENT_psgtGlobalData->field_7C = 0;
 	sub_6FB3F330();
 	D2CLIENT_Return_6FAA1500();
@@ -567,7 +568,7 @@ void D2Client_UpdateMouse1()
 	{
 		if (!*D2CLIENT_pdword_6FBA79B0)
 		{
-			*D2CLIENT_pdword_6FBA79C4 = TRUE;
+			*D2CLIENT_pgbPreventBeltUsage = TRUE;
 			D2CLIENT_UpdatePlayerMousePosition(1);
 		}
 	}

@@ -23,11 +23,7 @@ struct D2WindowProcCallbackStrc
 
 
 //1.10f: D2Client.0x6FAB5750
-int32_t __fastcall D2CLIENT_GetGlobalUiStateNbPanels();
-
-
-//1.10f: D2Client.0x6FAB5760
-void __fastcall UI_AdjustViewMatrix(int nGlobalUiState);
+D2C_GlobalUiStates __fastcall D2CLIENT_GetGlobalUiStateNbPanels();
 
 //1.10f: D2Client.0x6FAA23B0
 void __fastcall D2CLIENT_UI_ChangeResolution(D2GameResolutionMode nResolutionMode);
