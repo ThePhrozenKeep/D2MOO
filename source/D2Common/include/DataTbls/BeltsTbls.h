@@ -30,7 +30,8 @@ struct D2BeltsTxt
 {
 	uint8_t nIndex;						//0x00
 	uint8_t pad0x01[3];					//0x01
-	int32_t nBoxes;						//0x04
+	uint8_t nBoxes;						//0x04
+	uint8_t pad0x05[3];					//0x05
 	D2InvRectStrc beltBoxes[16];		//0x08
 };
 

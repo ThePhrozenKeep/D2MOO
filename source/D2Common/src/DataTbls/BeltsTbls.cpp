@@ -107,8 +107,5 @@ void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2Inv
 	const D2InvRectStrc* ptBoxStats = &ptBeltsTxtRecord->beltBoxes[nBoxId];
 	D2_ASSERT(ptBoxStats);
 
-	pInvRect->nLeft = ptBoxStats->nLeft;
-	pInvRect->nRight = ptBoxStats->nRight;
-	pInvRect->nTop = ptBoxStats->nTop;
-	pInvRect->nBottom = ptBoxStats->nBottom;
+	*pInvRect = *ptBoxStats;
 }
