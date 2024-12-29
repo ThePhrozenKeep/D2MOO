@@ -28,6 +28,18 @@ enum D2C_CursorState {
 	CURSORSTATE_ItemRelated8 = 8,
 };
 
+enum D2C_CursorBuySellFrame {
+	CURSORBUYSELLFRAME_IDENTIFY = 0,
+	CURSORBUYSELLFRAME_REPAIR = 1,
+	CURSORBUYSELLFRAME_DOUBLE_WIGGLY_ARROW = 2,
+	CURSORBUYSELLFRAME_BUY = 3,
+	CURSORBUYSELLFRAME_SELL = 4,
+	CURSORBUYSELLFRAME_EXCHANGE = 5,
+	CURSORBUYSELLFRAME_WIGGLY_ARROW = 6,
+	CURSORBUYSELLFRAME_POTION = 7,
+	CURSORBUYSELLFRAME_TELEKINESIS = 8,
+};
+
 struct CursorDescStrc
 {
 	uint32_t unk0x04;
@@ -59,11 +71,11 @@ void __stdcall CLIENT_UpdateCursorOnLeftButtonUp(SMSGHANDLER_PARAMS* pMsg);
 
 //1.10f: D2Client.0x6FB57580
 //1.13c: D2Client.0x6FAC6030
-void __fastcall CLIENT_SetCursorBuySell(int nFrame, BOOL bUnknown);
+void __fastcall CLIENT_SetCursorBuySell(D2C_CursorBuySellFrame nFrame, BOOL bUnknown);
 
 //1.10f: Inlined in D2CLient.0x6FB2E880
 //1.13c: D2Client.0x6FAC6070
-void __fastcall CLIENT_SetCursorUsingItem(int nFrame, D2UnitStrc* pItem);
+void __fastcall CLIENT_SetCursorUsingItem(D2C_CursorBuySellFrame nFrame, D2UnitStrc* pItem);
 
 //1.10f: D2Client.0x6FB575B0
 //1.13c: D2Client.0x6FAC62D0

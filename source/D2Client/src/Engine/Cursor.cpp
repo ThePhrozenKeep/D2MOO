@@ -193,17 +193,17 @@ void __stdcall CLIENT_UpdateCursorOnLeftButtonUp(SMSGHANDLER_PARAMS* pMsg)
 
 //1.10f: D2Client.0x6FB57580
 //1.13c: D2Client.0x6FAC6030
-void __fastcall CLIENT_SetCursorBuySell(int nFrame, BOOL bUnknown)
+void __fastcall CLIENT_SetCursorBuySell(D2C_CursorBuySellFrame nFrame, BOOL bUnknown)
 {
 	gpCursorItem = nullptr;
 	gnCursorType = CURSOR_Buysell;
-	gnCursorFrame = nFrame; // Buy = 3 Sell = 4
+	gnCursorFrame = nFrame;
 	gnCursorState = bUnknown ? CURSORSTATE_ItemRelated8 : CURSORSTATE_ItemRelated7; // Always set to FALSE => 7
 }
 
 //1.10f: Inlined in D2CLient.0x6FB2E880
 //1.13c: D2Client.0x6FAC6070
-void __fastcall CLIENT_SetCursorUsingItem(int nFrame, D2UnitStrc* pItem)
+void __fastcall CLIENT_SetCursorUsingItem(D2C_CursorBuySellFrame nFrame, D2UnitStrc* pItem)
 {
 	gpCursorItem = pItem;
 	gnCursorType = CURSOR_Buysell;

@@ -337,6 +337,7 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t*
 //D2Common.0x6FD99540 (#10750)
 D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)
+//aka ITEMSGetType in original code
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem); // D2C_ItemTypes
 //D2Common.0x6FD99640 (#10752)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId); // D2C_ItemTypes
