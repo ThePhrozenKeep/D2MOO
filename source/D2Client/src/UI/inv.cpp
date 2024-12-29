@@ -17,7 +17,11 @@
 #include <Core/ARCHIVE.h>
 
 static const int kBuySellButtonSize = 32;
+#ifdef NO_BUG_FIX
 static const int kBuySellButtonSizeForTrade = 45; // Note this is incorrect... real size is 32
+#else
+static const int kBuySellButtonSizeForTrade = kBuySellButtonSize;
+#endif
 static const int kButtonTextOffsetY = 9;
 
 static const int kGoldAmountTextOffsetX = 165;
