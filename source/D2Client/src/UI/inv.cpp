@@ -61,11 +61,11 @@ using BodyLocsInvCompGrids = D2InvCompGridStrc[NUM_BODYLOC_NO_SWITCH];
 
 D2VAR(D2CLIENT, pgtCharInvRect,		D2InvRectStrc,				0x6FBB38C8 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpCharInvGridInfo,	D2InventoryGridInfoStrc,	0x6FBB3710 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgaCharInvCompGrids,BodyLocsInvCompGrids,		0x6FBB5958 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgaCharInvCompGrids,BodyLocsInvCompGrids,		0x6FBB5958 - D2ClientImageBase); //1.13c: D2Client.0x6FBCBCA0
 
 D2VAR(D2CLIENT, pgtHirelingInvRect,		D2InvRectStrc,			0x6FBB3780 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpHirelingInvGridInfo,	D2InventoryGridInfoStrc,0x6FBB36F8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgaHirelingInvCompGrids,BodyLocsInvCompGrids,	0x6FBB5A88 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgaHirelingInvCompGrids,BodyLocsInvCompGrids,	0x6FBB5A88 - D2ClientImageBase); //1.13c: D2Client.0x6FBCBD80
 
 
 
@@ -261,6 +261,29 @@ void __fastcall UI_INV_RefreshPositions() {
 			gbHasRetrievedNpcInvPositions = TRUE;
 		}
 	}
+}
+
+//1.10f: D2Client.0x6FAE17D0
+//1.13c: D2Client.0x6FB3C2B0
+BOOL __fastcall UI_INV_CheckIfCursorItemCanBePutIntoSocket(D2UnitStrc* pCursorItem, D2UnitStrc* pEquippedItem)
+{
+	if (!pCursorItem || !pEquippedItem)
+		return FALSE;
+	if (*D2CLIENT_pgnInventoryMode == VENDORMODE_PLRTRADE_OLD || *D2CLIENT_pgnInventoryMode == VENDORMODE_PLRTRADE)
+		return FALSE;
+	if (!ITEMS_IsSocketFiller(pCursorItem))
+		return FALSE;
+	if (!ITEMS_CHECK_FLAG(pEquippedItem, IFLAG_SOCKETED))
+		return FALSE;
+	if (!ITEMS_CheckIfSocketable(pEquippedItem))
+		return FALSE;
+	if (!ITEMS_GetMaxSockets(pEquippedItem))
+		return FALSE;
+	if (!ITEMS_CHECK_FLAG(pEquippedItem,IFLAG_IDENTIFIED) || ITEMS_CHECK_FLAG(pEquippedItem, IFLAG_BROKEN))
+		return FALSE;
+	if (!pEquippedItem->pInventory)
+		return FALSE;
+	return INVENTORY_GetItemCount(pEquippedItem->pInventory) < ITEMS_GetSockets(pEquippedItem);
 }
 
 //1.10f: D2Client.0x6FAE9FC0
