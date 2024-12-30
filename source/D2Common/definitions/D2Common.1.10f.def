@@ -1278,7 +1278,7 @@ EXPORTS
 	D2Common_11275														@11275
 	SKILLS_EvaluateSkillFormula											@11276
 	D2COMMON_11277_Return												@11277
-	INVENTORY_GetItemsXPosition											@11278
+	INVENTORY_GetItemBodyLoc											@11278
 	UNITROOM_AddUnitToRoomEx											@11279
 	MONSTERS_GetSpawnMode_XY											@11280
 	D2Common_11281_CollisionPatternFromSize								@11281

@@ -316,7 +316,7 @@ int32_t __stdcall PLRSAVE_WriteItems_6FC89B50(D2InventoryStrc* pInventory, uint8
     {
         D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
 
-        const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pCheckedItem);
+        const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pCheckedItem);
         if (INVENTORY_GetItemNodePage(pItem) != 3 || nBodyLoc != BODYLOC_RARM && nBodyLoc != BODYLOC_LARM)
         {
             nSize = D2GAME_SAVE_SerializeItem_6FC89AD0(pCheckedItem, pData, nBitstreamSize + pBitstream - pData, a4, a5);
@@ -1117,7 +1117,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
         if (ITEMS_CheckIfFlagIsSet(pSavedItem->nItemFlags, IFLAG_COMPACTSAVE))
         {
             pSavedItem->nItemFormat = (uint8_t)BITMANIP_Read(&bitBuffer, 10);
-            pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
+            pSavedItem->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->nItemLevel = 1;
             pSavedItem->nSpawnType = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nX = (uint8_t)BITMANIP_Read(&bitBuffer, 5);
@@ -1144,7 +1144,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
         {
             pSavedItem->nItemFormat = (uint8_t)BITMANIP_Read(&bitBuffer, 10);
             pSavedItem->nItemCode = BITMANIP_Read(&bitBuffer, 32);
-            pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
+            pSavedItem->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->unk0x01 = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemLevel = (uint8_t)BITMANIP_Read(&bitBuffer, 12);
             pSavedItem->nSpawnType = BITMANIP_Read(&bitBuffer, 3);
@@ -1169,7 +1169,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
         
         if (ITEMS_CheckIfFlagIsSet(pSavedItem->nItemFlags, IFLAG_ISEAR))
         {
-            pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
+            pSavedItem->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->nItemLevel = 1;
             BITMANIP_ReadSigned(&bitBuffer, 10);
             pSavedItem->nItemId = DATATBLS_GetItemIdFromItemCode(' rae');
@@ -1193,7 +1193,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
         }
         else
         {
-            pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
+            pSavedItem->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->unk0x01 = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemLevel = (uint8_t)BITMANIP_Read(&bitBuffer, 12);
             const int32_t nItemId = BITMANIP_ReadSigned(&bitBuffer, 10);
@@ -1343,7 +1343,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
     }
     case IMODE_EQUIP:
     {
-        const int32_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
+        const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
         if (!nBodyLoc || !INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, nBodyLoc))
         {
             return SYSERROR_INVENTORY;
@@ -1528,14 +1528,14 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     }
     case IMODE_EQUIP:
     {
-        const int32_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
-        if (!nBodyLoc || !INVENTORY_PlaceItemInBodyLoc(pPlayer->pInventory, pItem, nBodyLoc))
+        const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
+        if (nBodyLoc == BODYLOC_NONE || !INVENTORY_PlaceItemInBodyLoc(pPlayer->pInventory, pItem, nBodyLoc))
         {
             return 13;
         }
 
         int32_t nUnused = 3;
-        if (nBodyLoc == 11 || nBodyLoc == 12)
+        if (nBodyLoc == BODYLOC_SWRARM || nBodyLoc == BODYLOC_SWLARM)
         {
             nUnused = 4;
         }

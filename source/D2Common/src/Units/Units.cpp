@@ -2544,7 +2544,7 @@ D2UnitStrc* __stdcall D2Common_10434(D2UnitStrc* pUnit, BOOL a2)
 	D2UnitStrc* pHandItem = NULL;
 	D2UnitStrc* pWeapon = NULL;
 	D2UnitStrc* pItem = NULL;
-	int nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
 	int nFrame = 0;
 	int v14; // ecx@22
 	BOOL bIsLeftHandItem = FALSE;
@@ -2646,7 +2646,7 @@ D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pMonster)
 {
 	D2UnitStrc* pItem = NULL;
 	BOOL bIsLeftHandItem = FALSE;
-	int nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
 
 	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pInventory)
 	{
@@ -2736,7 +2736,7 @@ int __stdcall UNITS_GetMeleeRange(D2UnitStrc* pUnit)
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
 	BOOL bIsLeftHandItem = FALSE;
 	int nWeaponClass = 0;
-	int nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
 
 	D2_ASSERT(pUnit);
 
@@ -3174,7 +3174,7 @@ uint8_t __stdcall UNITS_GetItemComponentId(D2UnitStrc* pUnit, D2UnitStrc* pItem)
 {
 	D2UnitStrc* pRightHandItem = NULL;
 	D2UnitStrc* pLeftHandItem = NULL;
-	int nBodyloc = 0;
+	D2C_PlayerBodyLocs nBodyloc = BODYLOC_NONE;
 	int nClassId = 0;
 
 	nBodyloc = ITEMS_GetBodyLocation(pItem);

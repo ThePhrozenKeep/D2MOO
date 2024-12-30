@@ -1319,7 +1319,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11275                                                      @11275
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_EvaluateSkillFormula                                         @11276
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_11277_Return                                               @11277
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemsXPosition                                         @11278
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemBodyLoc											@11278
     PatchAction::FunctionReplacePatchByOriginal,       //   UNITROOM_AddUnitToRoomEx                                            @11279
     PatchAction::FunctionReplacePatchByOriginal,       //   MONSTERS_GetSpawnMode_XY                                            @11280
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_11281_CollisionPatternFromSize                                               @11281

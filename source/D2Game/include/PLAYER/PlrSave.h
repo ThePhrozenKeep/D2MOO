@@ -6,7 +6,7 @@
 #pragma pack(push, 1)
 struct D2SavedItemStrc
 {
-    uint8_t nBodyLoc;
+    D2C_PlayerBodyLocs nBodyLoc;
     uint8_t unk0x01;
     int32_t nItemLevel;
     int32_t nItemId;

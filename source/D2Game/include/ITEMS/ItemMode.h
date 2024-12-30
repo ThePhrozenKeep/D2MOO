@@ -65,7 +65,7 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
 //D2Game.0x6FC42DD0
 void __fastcall D2GAME_PickupGold_6FC42DD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pGoldPile);
 //D2Game.0x6FC42F20
-int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pBodyLoc, int32_t bSkipRequirementCheck);
+int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2C_PlayerBodyLocs* pBodyLoc, int32_t bSkipRequirementCheck);
 //D2Game.0x6FC43160
 void __fastcall sub_6FC43160(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2ItemModeArgStrc* pItemModeArg);
 //D2Game.0x6FC43280
@@ -95,19 +95,19 @@ void __fastcall sub_6FC44FB0(D2UnitStrc* pUnit, D2UnkItemModeStrc* a2);
 //D2Game.0x6FC45050
 void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC45050(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t bRefresh);
 //D2Game.0x6FC45060
-int32_t __fastcall sub_6FC45060(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
+int32_t __fastcall sub_6FC45060(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
 //D2Game.0x6FC45300
 void __fastcall sub_6FC45300(D2UnitStrc* pUnit);
 //D2Game.0x6FC45550
-int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
+int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
 //D2Game.0x6FC45930
 void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FC45B30
-int32_t __fastcall sub_6FC45B30(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nBodyLoc, int32_t bSetQuantityFlag, int32_t* a5);
+int32_t __fastcall sub_6FC45B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_PlayerBodyLocs nBodyLoc, int32_t bSetQuantityFlag, int32_t* a5);
 //D2Game.0x6FC45E60
-int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
+int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6);
 //D2Game.0x6FC46270
-int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t* a5);
+int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t* a5);
 //D2Game.0x6FC46840
 int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a3);
 //D2Game.0x6FC46D40
@@ -149,7 +149,7 @@ int32_t __fastcall sub_6FC49AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 //D2Game.0x6FC49DC0
 int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, int32_t nCubeGUID, int32_t* a5);
 //D2Game.0x6FC49F80
-int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc);
+int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc);
 //D2Game.0x6FC4A2E0
 void __fastcall sub_6FC4A2E0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC4A350
@@ -163,9 +163,9 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
 //D2Game.0x6FC4A660
 int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FC4A9B0
-int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, uint8_t nBodyLoc);
+int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Game.0x6FC4AB10
-int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, int32_t* pBodyLoc);
+int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, D2C_PlayerBodyLocs* pBodyLoc);
 //D2Game.0x6FC4AD80
 int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pCorpse);
 //D2Game.0x6FC4B240

@@ -2225,7 +2225,7 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     }
 
     D2UnitStrc* pWeapon = nullptr;
-    int32_t nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
     int32_t bIsLeftHandItem = 0;
     if (!INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pWeapon, &nBodyLoc, &bIsLeftHandItem))
     {
@@ -2283,7 +2283,7 @@ int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* 
     }
 
     D2UnitStrc* pWeapon = nullptr;
-    int32_t nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
     int32_t bIsLeftHandItem = 0;
     if (!INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pWeapon, &nBodyLoc, &bIsLeftHandItem))
     {

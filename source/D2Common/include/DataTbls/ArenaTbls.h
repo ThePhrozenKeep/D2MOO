@@ -2,6 +2,7 @@
 
 #include <D2Common.h>
 #include <D2BasicTypes.h>
+#include <D2Inventory.h>
 
 #pragma pack(1)
 
@@ -26,7 +27,7 @@ struct D2ArenaTxt
 struct D2CharItemStrc
 {
 	uint32_t dwItemCode;				//0x00
-	uint8_t nBodyLoc;					//0x04
+	D2C_PlayerBodyLocs nBodyLoc;		//0x04
 	int8_t nItemCount;					//0x05
 	uint16_t pad0x06;					//0x06
 };

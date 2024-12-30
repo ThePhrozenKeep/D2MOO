@@ -1309,7 +1309,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 }
 
 //D2Common.0x6FD8FAB0 (#10253)
-BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc)
+BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc)
 {
 	if (pInventory && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
@@ -1320,7 +1320,7 @@ BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitS
 }
 
 //D2Common.0x6FD8FAE0 (#10257)
-D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, int nBodyLoc)
+D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, D2C_PlayerBodyLocs nBodyLoc)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
@@ -1335,7 +1335,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, 
 }
 
 //D2Common.0x6FD8FB20 (#10255)
-void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int nBodyLoc)
+void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, D2C_PlayerBodyLocs nBodyLoc)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory) && !*ppItem && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
@@ -1504,14 +1504,14 @@ int __stdcall INVENTORY_GetBodyLocFromEquippedItem(D2InventoryStrc* pInventory, 
 }
 
 //D2Common.0x6FD8FED0 (#11278)
-int __stdcall INVENTORY_GetItemsXPosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
+D2C_PlayerBodyLocs __stdcall INVENTORY_GetItemBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_UnitIsItem(pItem))
 	{
-		return pItem->pStaticPath->tGameCoords.nX;
+		return D2C_PlayerBodyLocs(pItem->pStaticPath->tGameCoords.nX);
 	}
 
-	return 0;
+	return BODYLOC_NONE;
 }
 
 //D2Common.0x6FD8FF20 (#10261)
@@ -1921,7 +1921,7 @@ BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc* pInventory, D2UnitSt
 }
 
 //D2Common.0x6FD90760 (#10274)
-BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int* pBodyLoc, BOOL* pIsLeftHandItem)
+BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitStrc** ppItem, D2C_PlayerBodyLocs* pBodyLoc, BOOL* pIsLeftHandItem)
 {
 	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
@@ -1987,7 +1987,7 @@ BOOL __stdcall INVENTORY_HasBodyArmorEquipped(D2InventoryStrc* pInventory)
 }
 
 //D2Common.0x6FD908A0 (#10276)
-BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc, int nInventoryRecordId)
+BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc, int nInventoryRecordId)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 	{
@@ -2363,7 +2363,7 @@ void __stdcall INVENTORY_UpdateWeaponGUIDOnRemoval(D2InventoryStrc* pInventory, 
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
 		if (pInventoryGrid)
 		{
-			const int nBodyLoc = ITEMS_GetBodyLocation(pItem);
+			const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
 			D2UnitStrc* pWeapon = nullptr;
 			if (nBodyLoc == BODYLOC_RARM)
 			{
@@ -2620,7 +2620,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 			D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 			D2_ASSERT(pItemsTxtRecord);
 
-			const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
+			const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
 			if (nBodyLoc == BODYLOC_HEAD || nBodyLoc == BODYLOC_RARM || nBodyLoc == BODYLOC_LARM)
 			{
 				if (!ITEMS_CheckType(pItemsTxtRecord->wType[0], ITEMTYPE_CIRCLET) && pPlayer->pInventory)
@@ -2813,7 +2813,7 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 	D2_ASSERT(pUnit);
 	D2_ASSERT(pItem);
 
-	const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
+	const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
 	if (nBodyLoc == BODYLOC_RARM || nBodyLoc == BODYLOC_LARM)
 	{
 		int nWeaponClass = 0;
@@ -2875,7 +2875,7 @@ void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2
 
 //D2Common.0x6FD91B60 (#10299)
 //TODO: Find a name
-int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem, BOOL bDontCheckReqs)
+int __stdcall D2Common_10299(D2UnitStrc* pUnit, D2C_PlayerBodyLocs nBodyLoc, D2UnitStrc* pItem, BOOL bDontCheckReqs)
 {
 	if (pUnit && pUnit->pInventory)
 	{
@@ -2885,7 +2885,7 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 
 			D2UnitStrc* pItem1 = nullptr;
 			D2UnitStrc* pItem2 = nullptr;
-			int nOtherBodyLoc = 0;
+			D2C_PlayerBodyLocs nOtherBodyLoc = BODYLOC_NONE;
 
 			switch (nBodyLoc)
 			{
@@ -2967,7 +2967,7 @@ int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem,
 
 //D2Common.0x6FD91D50
 //TODO: Find names for function and arguments
-int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, int nBodyLoc, D2UnitStrc* a3, D2UnitStrc* a4, D2UnitStrc* pItem, int nUnused)
+int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, D2C_PlayerBodyLocs nBodyLoc, D2UnitStrc* a3, D2UnitStrc* a4, D2UnitStrc* pItem, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
 	if (!a3)

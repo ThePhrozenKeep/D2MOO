@@ -7,7 +7,7 @@
 struct Unk
 {
     int32_t nItemCode;
-    uint8_t nBodyLoc;
+    D2C_PlayerBodyLocs nBodyLoc;
     uint8_t unk0x05;
     uint8_t unk0x06;
     uint8_t unk0x07;

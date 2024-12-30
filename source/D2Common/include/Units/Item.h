@@ -32,7 +32,7 @@ struct D2ItemDataStrc
 	uint16_t wAutoAffix;					//0x36
 	uint16_t wMagicPrefix[ITEMS_MAX_MODS];	//0x38
 	uint16_t wMagicSuffix[ITEMS_MAX_MODS];	//0x3E
-	uint8_t nBodyLoc;						//0x44					// location on body = xpos of item (only if on body) (spread)
+	D2C_PlayerBodyLocs nBodyLoc;			//0x44					// location on body = xpos of item (only if on body) (spread)
 	uint8_t nInvPage;						//0x45					// 0 = inventory,  3= cube, 4=stash (spread)
 	uint8_t nCellOverlap;					//0x46
 	uint8_t nItemCell;						//0x47

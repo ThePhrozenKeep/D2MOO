@@ -46,7 +46,7 @@ void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98430 (#10689)
-uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
+D2C_PlayerBodyLocs __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
 {
 	if (D2ItemDataStrc * pItemData = ITEMS_GetItemData(pItem))
 	{
@@ -57,7 +57,7 @@ uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98450 (#10690)
-void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc)
+void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc)
 {
 	if (D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem))
 	{
@@ -916,7 +916,7 @@ void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* 
 }
 
 //D2Common.0x6FD99540 (#10750)
-void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2)
+void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, D2C_PlayerBodyLocs* pBodyLoc1, D2C_PlayerBodyLocs* pBodyLoc2)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -938,8 +938,8 @@ void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLo
 		}
 	}
 
-	*pBodyLoc1 = 0;
-	*pBodyLoc2 = 0;
+	*pBodyLoc1 = BODYLOC_NONE;
+	*pBodyLoc2 = BODYLOC_NONE;
 }
 
 //D2Common.0x6FD995D0 (#10751)
@@ -1447,12 +1447,12 @@ int __stdcall ITEMS_GetLevelRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD9A400 (#10758)
-BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc)
+BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	uint8_t nBodyLoc1 = 0;
-	uint8_t nBodyLoc2 = 0;
+	D2C_PlayerBodyLocs nBodyLoc1 = BODYLOC_NONE;
+	D2C_PlayerBodyLocs nBodyLoc2 = BODYLOC_NONE;
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -4243,7 +4243,6 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 	int nItemType = 0;
 	int nMaxStack = 0;
 	int nCounter = 0;
-	int nBodyLoc = 0;
 	int nStats = 0;
 	D2StatStrc pStat[64] = {};
 
@@ -4252,9 +4251,9 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 		return 0;
 	}
 
-	while (nBodyLoc < NUM_BODYLOC)
+	for(int nBodyLoc = 0; nBodyLoc < NUM_BODYLOC; nBodyLoc++)
 	{
-		pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
+		pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(nBodyLoc));
 		if (pItem)
 		{
 			bCanBeRepaired = FALSE;
@@ -4340,8 +4339,6 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 				}
 			}
 		}
-
-		++nBodyLoc;
 	}
 
 	return nRepairCosts;
@@ -4745,7 +4742,7 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t
 		}
 		else
 		{
-			pItemSave->nBodyloc = (uint8_t)BITMANIP_Read(&pBuffer, 4);
+			pItemSave->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&pBuffer, 4);
 			pItemSave->nX = (uint16_t)BITMANIP_Read(&pBuffer, 4);
 			pItemSave->nY = (uint16_t)BITMANIP_Read(&pBuffer, 4);
 			pItemSave->nStorePage = (uint8_t)BITMANIP_Read(&pBuffer, 3) - 1;
@@ -4866,7 +4863,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 	}
 	else
 	{
-		pItemData->nBodyLoc = (uint8_t)BITMANIP_Read(pBuffer, 4);
+		pItemData->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(pBuffer, 4);
 		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 		pItemData->nInvPage = (uint8_t)BITMANIP_Read(pBuffer, 3) - 1;
@@ -5024,7 +5021,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 	}
 	else
 	{
-		pItemData->nBodyLoc = (uint8_t)BITMANIP_Read(pBuffer, 4);
+		pItemData->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(pBuffer, 4);
 
 		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
@@ -6502,7 +6499,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	int nInvGfx = 0;
 	int nVarInvGfx = 0;
 	int nAnimMode = 0;
-	int nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
 	int nStatCounter = 0;
 	int nSetItemMask = 0;
 	int nMagicPrefix = 0;
@@ -6591,16 +6588,16 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	else
 	{
 		nBodyLoc = pItemData->nBodyLoc;
-		if (nBodyLoc > 0)
+		if (nBodyLoc > BODYLOC_NONE)
 		{
 			if (nBodyLoc >= 15)
 			{
-				nBodyLoc = 15;
+				nBodyLoc = D2C_PlayerBodyLocs(15);
 			}
 		}
 		else
 		{
-			nBodyLoc = 0;
+			nBodyLoc = BODYLOC_NONE;
 		}
 		BITMANIP_Write(pBuffer, nBodyLoc, 4);
 

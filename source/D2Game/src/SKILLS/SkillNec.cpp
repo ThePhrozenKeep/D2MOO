@@ -1472,8 +1472,8 @@ int32_t __fastcall SKILLS_SrvDo057_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUni
     UNITS_FreeCollisionPath(pTargetUnit);
     UNITROOM_RemoveUnitFromRoom(pTargetUnit);
 
-    uint8_t nBodyLoc1 = 0;
-    uint8_t nBodyLoc2 = 0;
+    D2C_PlayerBodyLocs nBodyLoc1 = BODYLOC_NONE;
+    D2C_PlayerBodyLocs nBodyLoc2 = BODYLOC_NONE;
     ITEMS_GetAllowedBodyLocations(pTargetUnit, &nBodyLoc1, &nBodyLoc2);
     UNITS_ChangeAnimMode(pTargetUnit, IMODE_ONCURSOR);
     sub_6FC45060(pGame, pPet, pTargetUnit->dwUnitId, nBodyLoc1, 1, 0);

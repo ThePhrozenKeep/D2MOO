@@ -222,7 +222,7 @@ D2COMMON_DLL_DECL int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStr
 //D2Common.0x6FDB0F50
 BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2SkillStrc* pSkill);
 //D2Common.0x6FDB1050
-D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, int nBodyLoc);
+D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FDB1070
 BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill);
 //D2Common.0x6FDB1130

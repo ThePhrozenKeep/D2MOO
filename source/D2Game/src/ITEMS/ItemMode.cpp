@@ -929,7 +929,7 @@ void __fastcall D2GAME_PickupGold_6FC42DD0(D2GameStrc* pGame, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FC42F20
-int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pBodyLoc, int32_t bSkipRequirementCheck)
+int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2C_PlayerBodyLocs* pBodyLoc, int32_t bSkipRequirementCheck)
 {
     D2_ASSERT(pUnit);
     D2_ASSERT(pItem);
@@ -957,8 +957,8 @@ int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* p
         }
     }
 
-    uint8_t nBodyLoc1 = 0;
-    uint8_t nBodyLoc2 = 0;
+	D2C_PlayerBodyLocs nBodyLoc1 = BODYLOC_NONE;
+	D2C_PlayerBodyLocs nBodyLoc2 = BODYLOC_NONE;
     ITEMS_GetAllowedBodyLocations(pItem, &nBodyLoc1, &nBodyLoc2);
 
     if (nBodyLoc1 == nBodyLoc2)
@@ -1197,7 +1197,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    int32_t nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
     if (sub_6FC42F20(pUnit, pItem, &nBodyLoc, 0))
     {
         if (D2Common_10299(pUnit, nBodyLoc, pItem, 0) != 1)
@@ -1214,7 +1214,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
             UNITROOM_RemoveUnitFromRoom(pItem);
         }
 
-        if (sub_6FC4A9B0(pGame, pUnit, pItem, 0))
+        if (sub_6FC4A9B0(pGame, pUnit, pItem, BODYLOC_NONE))
         {
             QUESTS_ItemPickedUp(pGame, pUnit, pItem);
             return 1;
@@ -1977,7 +1977,7 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
 
                 if (pUnit->pInventory)
                 {
-                    const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
+                    const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
                     if (nBodyLoc != BODYLOC_SWRARM && nBodyLoc != BODYLOC_SWLARM)
                     {
                         INVENTORY_UpdateWeaponGUIDOnInsert(pUnit->pInventory, pItem);
@@ -1993,9 +1993,9 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
         pItem = INVENTORY_GetNextItem(pItem);
     }
 
-    for (int32_t i = 0; i < 11; ++i)
+    for (int32_t i = 0; i < NUM_BODYLOC_NO_SWITCH; ++i)
     {
-        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, i);
+        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(i));
         if (pBodyLocItem
             && (!ITEMS_CHECK_FLAG(pBodyLocItem, IFLAG_BROKEN) || STATLIST_GetOwner(pBodyLocItem, 0))
             && (!ITEMS_CHECK_FLAG(pBodyLocItem, IFLAG_NOEQUIP) || STATLIST_GetOwner(pBodyLocItem, 0)))
@@ -2039,9 +2039,9 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
     {
         bContinue = 0;
         
-        for (int32_t i = 0; i < 11; ++i)
+        for (int32_t i = 0; i < NUM_BODYLOC_NO_SWITCH; ++i)
         {
-            D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, i);
+            D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(i));
             if (pBodyLocItem
                 && !ITEMS_CHECK_FLAG(pBodyLocItem, IFLAG_BROKEN)
                 && (ITEMS_CHECK_FLAG(pBodyLocItem, IFLAG_NOEQUIP) || !STATLIST_GetOwner(pBodyLocItem, 0))
@@ -2072,7 +2072,7 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
 
                     if (pUnit->pInventory)
                     {
-                        const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pBodyLocItem);
+                        const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pBodyLocItem);
                         if (nBodyLoc != BODYLOC_SWRARM && nBodyLoc != BODYLOC_SWLARM)
                         {
                             INVENTORY_UpdateWeaponGUIDOnInsert(pUnit->pInventory, pBodyLocItem);
@@ -2090,9 +2090,9 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
     }
     while (bContinue);
 
-    for (int32_t i = 0; i < 11; ++i)
+    for (int32_t i = 0; i < NUM_BODYLOC_NO_SWITCH; ++i)
     {
-        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, i);
+        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(i));
         if (pBodyLocItem
             && ITEMS_GetItemQuality(pBodyLocItem) == ITEMQUAL_SET
             && !ITEMS_CHECK_FLAG(pBodyLocItem, IFLAG_BROKEN)
@@ -2199,7 +2199,7 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC45050(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FC45060
-int32_t __fastcall sub_6FC45060(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
+int32_t __fastcall sub_6FC45060(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
 {
     int32_t bIsSwitchWeapon = 0;
     if (nBodyLoc == BODYLOC_SWRARM || nBodyLoc == BODYLOC_SWLARM)
@@ -2435,7 +2435,7 @@ void __fastcall sub_6FC45300(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC45550
-int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
+int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -2475,7 +2475,7 @@ int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         return 0;
     }
 
-    uint8_t nOtherBodyLoc = 0;
+	D2C_PlayerBodyLocs nOtherBodyLoc = BODYLOC_NONE;
     if (nBodyLoc == BODYLOC_LARM)
     {
         nOtherBodyLoc = BODYLOC_RARM;
@@ -2630,7 +2630,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 }
 
 //D2Game.0x6FC45B30
-int32_t __fastcall sub_6FC45B30(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nBodyLoc, int32_t bSetQuantityFlag, int32_t* a5)
+int32_t __fastcall sub_6FC45B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_PlayerBodyLocs nBodyLoc, int32_t bSetQuantityFlag, int32_t* a5)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -2741,7 +2741,7 @@ int32_t __fastcall sub_6FC45B30(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nB
 }
 
 //D2Game.0x6FC45E60
-int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
+int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t bSkipRequirementCheck, int32_t* a6)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -2883,7 +2883,7 @@ int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 }
 
 //D2Game.0x6FC46270
-int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc, int32_t* a5)
+int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc, int32_t* a5)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -3118,10 +3118,10 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
 
     for (int32_t i = 0; i < std::size(v49); ++i)
     {
-        v49[i].pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, v49[i].nBodyLoc);
+        v49[i].pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(v49[i].nBodyLoc));
         if (v49[i].pItem)
         {
-            INVENTORY_GetSecondWieldingWeapon(pUnit, pUnit->pInventory, &v49[i].pItem, v49[i].nBodyLoc);
+            INVENTORY_GetSecondWieldingWeapon(pUnit, pUnit->pInventory, &v49[i].pItem, D2C_PlayerBodyLocs(v49[i].nBodyLoc));
 
             if (!v49[i].pItem || v49[i].pItem->dwAnimMode != IMODE_EQUIP)
             {
@@ -3175,7 +3175,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         D2UnitStrc* pItem = v49[i].pItem;
         if (pItem)
         {
-            if (!INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, v49[i].nSwitchBodyLoc))
+            if (!INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, D2C_PlayerBodyLocs(v49[i].nSwitchBodyLoc)))
             {
                 *a3 = 1;
                 return 0;
@@ -3187,7 +3187,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
                 return 0;
             }
 
-            ITEMS_SetBodyLocation(pItem, v49[i].nSwitchBodyLoc);
+            ITEMS_SetBodyLocation(pItem, D2C_PlayerBodyLocs(v49[i].nSwitchBodyLoc));
 
             if (v49[i].nSwitchBodyLoc == BODYLOC_RARM || v49[i].nSwitchBodyLoc == BODYLOC_LARM)
             {
@@ -4880,7 +4880,7 @@ int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 }
 
 //D2Game.0x6FC49F80
-int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, uint8_t nBodyLoc)
+int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, D2C_PlayerBodyLocs nBodyLoc)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pUnit);
@@ -5169,9 +5169,9 @@ int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC4A9B0
-int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, uint8_t nBodyLoc)
+int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc)
 {
-    int32_t a3 = 0;
+	D2C_PlayerBodyLocs a3 = BODYLOC_NONE;
     if (!sub_6FC42F20(pUnit, pItem, &a3, nBodyLoc))
     {
         return 0;
@@ -5222,7 +5222,7 @@ int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FC4AB10
-int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, int32_t* pBodyLoc)
+int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, D2C_PlayerBodyLocs* pBodyLoc)
 {
     if (!pPlayer || !pItem || pItem->dwUnitType != UNIT_ITEM)
     {
@@ -5244,7 +5244,7 @@ int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
         }
     }
 
-    int32_t nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
     switch (*pBodyLoc)
     {
     case BODYLOC_RARM:
@@ -5266,7 +5266,7 @@ int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
         nBodyLoc = BODYLOC_SWRARM;
         break;
     default:
-        nBodyLoc = 0;
+        nBodyLoc = BODYLOC_NONE;
         break;
     }
 
@@ -5385,17 +5385,17 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     {
         bItemRemoved = 0;
         nCounter = 0;
-        for (int32_t i = 1; i < 13; ++i)
+        for (int32_t i = 1; i < NUM_BODYLOC; ++i)
         {
-            int32_t nBodyLoc = i;
-            D2UnitStrc* pCorpseItem = INVENTORY_GetItemFromBodyLoc(pCorpseInventory, i);
+			D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(i);
+            D2UnitStrc* pCorpseItem = INVENTORY_GetItemFromBodyLoc(pCorpseInventory, nBodyLoc);
             if (pCorpseItem)
             {
                 ++nCounter;
 
                 if (ITEMS_CheckRequirements(pCorpseItem, pPlayer, 0, nullptr, nullptr, nullptr))
                 {
-                    D2UnitStrc* pPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, i);
+                    D2UnitStrc* pPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, nBodyLoc);
                     D2UnitStrc* pOtherPlayerItem = pPlayerItem;
                     switch (i)
                     {
@@ -5507,7 +5507,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             {
                 nResult = 0;
             }
-            else if (sub_6FC4A9B0(pGame, pPlayer, pItem, 0))
+            else if (sub_6FC4A9B0(pGame, pPlayer, pItem, BODYLOC_NONE))
             {
                 ++nCounter;
                 ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
@@ -5730,7 +5730,7 @@ void __fastcall D2GAME_RepairBrokenItem_6FC4B630(D2GameStrc* pGame, D2UnitStrc* 
 
     if (pInventory)
     {
-        const uint8_t nBodyLoc = ITEMS_GetBodyLocation(pItem);
+        const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pItem);
         if (nBodyLoc != BODYLOC_SWRARM && nBodyLoc != BODYLOC_SWLARM)
         {
             INVENTORY_UpdateWeaponGUIDOnInsert(pPlayer->pInventory, pItem);
@@ -5992,7 +5992,7 @@ void __fastcall D2GAME_ITEMMODE_Unk_6FC4BC10(D2GameStrc* pGame, D2UnitStrc* pUni
     case IMODE_EQUIP:
     {
         int32_t nUnused = 0;
-        sub_6FC45B30(pGame, pUnit, INVENTORY_GetItemsXPosition(pUnit->pInventory, pItem), 1, &nUnused);
+        sub_6FC45B30(pGame, pUnit, INVENTORY_GetItemBodyLoc(pUnit->pInventory, pItem), 1, &nUnused);
         return;
     }
     case IMODE_ONCURSOR:

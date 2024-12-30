@@ -8,15 +8,9 @@ struct D2InventoryGridInfoStrc;
 
 #pragma pack(1)
 
-struct D2InvRectStrc
-{
-	int32_t nLeft;		//0x00
-	int32_t nRight;		//0x04
-	int32_t nTop;		//0x08
-	int32_t nBottom;	//0x0C
-};
+using D2InvRectStrc = D2RectStrc;
 
-enum D2C_PlayerBodyLocs
+enum D2C_PlayerBodyLocs : uint8_t
 {
 	BODYLOC_NONE,		//Not Equipped
 	BODYLOC_HEAD,		//Helm
@@ -181,7 +175,7 @@ inline bool INVENTORY_CheckSignature(D2InventoryStrc* pInventory) { return pInve
 // Check if ptr is non null and if header signature is correct.
 inline D2InventoryStrc* INVENTORY_GetPtrIfValid(D2InventoryStrc* pInventory) { return (pInventory && INVENTORY_CheckSignature(pInventory)) ? pInventory : nullptr; }
 // Return true if matches a valid body location
-inline bool INVENTORY_ValidateBodyLoc(int nBodyLoc) { return nBodyLoc >= 0 && nBodyLoc < NUM_BODYLOC; }
+inline bool INVENTORY_ValidateBodyLoc(D2C_PlayerBodyLocs nBodyLoc) { return nBodyLoc >= BODYLOC_NONE && nBodyLoc < NUM_BODYLOC; }
 
 //D2Common.0x6FD8E210
 BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem);
@@ -230,11 +224,11 @@ D2COMMON_DLL_DECL void __stdcall INVENTORY_Return(const char* szFile, int nLine,
 //D2Common.0x6FD8F980 (#10252)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, uint8_t nPage);
 //D2Common.0x6FD8FAB0 (#10253)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD8FAE0 (#10257)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, int nBodyLoc);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromBodyLoc(D2InventoryStrc* pInventory, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD8FB20 (#10255)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int nBodyLoc);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_GetSecondWieldingWeapon(D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc** ppItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD8FBB0 (#10256)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CheckEquipmentForWeaponByClass(D2InventoryStrc* pInventory, int nWeaponClass);
 //D2Common.0x6FD8FC60 (#10258)
@@ -246,7 +240,7 @@ D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetCompositItem(D2InventoryStr
 //D2Common.0x6FD8FE80 (#10260)
 D2COMMON_DLL_DECL int __stdcall INVENTORY_GetBodyLocFromEquippedItem(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Common.0x6FD8FED0 (#11278)
-D2COMMON_DLL_DECL int __stdcall INVENTORY_GetItemsXPosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2C_PlayerBodyLocs __stdcall INVENTORY_GetItemBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Common.0x6FD8FF20 (#10261)
 D2COMMON_DLL_DECL void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Common.0x6FD8FF80 (#10262)
@@ -272,11 +266,11 @@ D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetUseableItemFromBeltSlot(D2Inventor
 //D2Common.0x6FD90690 (#10273)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc* pInventory, D2UnitStrc** ppItem);
 //D2Common.0x6FD90760 (#10274)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitStrc** ppItem, int* pBodyLoc, BOOL* pIsLeftHandItem);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetEquippedWeapon(D2InventoryStrc* pInventory, D2UnitStrc** ppItem, D2C_PlayerBodyLocs* pBodyLoc, BOOL* pIsLeftHandItem);
 //D2Common.0x6FD90850 (#10275)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_HasBodyArmorEquipped(D2InventoryStrc* pInventory);
 //D2Common.0x6FD908A0 (#10276)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nBodyLoc, int nInventoryRecordId);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pInventory, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc, int nInventoryRecordId);
 //D2Common.0x6FD90910 (#10279)
 D2COMMON_DLL_DECL void __stdcall INVENTORY_RemoveInventoryItems(D2InventoryStrc* pInventory);
 //D2Common.0x6FD90940 (#10280)
@@ -333,9 +327,9 @@ void __fastcall INVENTORY_InitializeComponentArray();
 //D2Common.0x6FD917B0
 void __fastcall sub_6FD917B0(D2UnitStrc* pUnit, uint8_t* a2, uint8_t* pColor, D2UnitStrc* pItem);
 //D2Common.0x6FD91B60 (#10299)
-D2COMMON_DLL_DECL int __stdcall D2Common_10299(D2UnitStrc* pUnit, int nBodyLoc, D2UnitStrc* pItem, BOOL bDontCheckReqs);
+D2COMMON_DLL_DECL int __stdcall D2Common_10299(D2UnitStrc* pUnit, D2C_PlayerBodyLocs nBodyLoc, D2UnitStrc* pItem, BOOL bDontCheckReqs);
 //D2Common.0x6FD91D50
-int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, int nBodyLoc, D2UnitStrc* a3, D2UnitStrc* a4, D2UnitStrc* pItem, int nUnused);
+int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, D2C_PlayerBodyLocs nBodyLoc, D2UnitStrc* a3, D2UnitStrc* a4, D2UnitStrc* pItem, int nUnused);
 //D2Common.0x6FD91E80
 BOOL __fastcall sub_6FD91E80(D2UnitStrc* pUnit, D2UnitStrc* pItem1, D2UnitStrc* pItem2);
 //D2Common.0x6FD92080 (#10304)

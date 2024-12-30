@@ -2339,7 +2339,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 			int32_t nTotalWeight = 0;
 			for (int32_t i = 0; i < std::size(sgDurabilityLossWeights); ++i)
 			{
-				D2UnitStrc* pItem = INVENTORY_GetItemFromBodyLoc(pDefender->pInventory, sgDurabilityLossWeights[i].nBodyLoc);
+				D2UnitStrc* pItem = INVENTORY_GetItemFromBodyLoc(pDefender->pInventory, D2C_PlayerBodyLocs(sgDurabilityLossWeights[i].nBodyLoc));
 				if (pItem && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_ARMOR))
 				{
 					pItems[i] = pItem;

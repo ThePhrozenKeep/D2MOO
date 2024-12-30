@@ -77,4 +77,13 @@ struct D2CoordStrc							//sizeof 0x08
 	int nY;									//0x04
 };
 
+
+struct D2RectStrc
+{
+	int32_t nLeft;		//0x00
+	int32_t nRight;		//0x04
+	int32_t nTop;		//0x08
+	int32_t nBottom;	//0x0C
+};
+
 #pragma pack(pop)

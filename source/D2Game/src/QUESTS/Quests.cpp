@@ -2219,7 +2219,7 @@ void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2In
 	else if (nAnimMode == IMODE_EQUIP)
 	{
 		int32_t a5 = 0;
-		sub_6FC45B30(pGame, pPlayer, INVENTORY_GetItemsXPosition(pInventory, pItem), 1, &a5);
+		sub_6FC45B30(pGame, pPlayer, INVENTORY_GetItemBodyLoc(pInventory, pItem), 1, &a5);
 	}
 	else if (nAnimMode == IMODE_ONCURSOR)
 	{

@@ -2009,14 +2009,14 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1A_EquipItem_6FC85280(D2GameStrc* 
     if (nSize == 9)
     {
         const int32_t nItemGUID = *(int32_t*)((char*)pPacket + 1);
-        const int32_t nBodyLoc = *((uint8_t*)pPacket + 5);
+        const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(*((uint8_t*)pPacket + 5));
 
         D2_ASSERT(pGame);
 
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem && pItem->dwAnimMode == IMODE_ONCURSOR && INVENTORY_GetCursorItem(pUnit->pInventory) == pItem)
         {
-            if (nBodyLoc > 0 && nBodyLoc < 11)
+            if (nBodyLoc > BODYLOC_NONE && nBodyLoc < NUM_BODYLOC_NO_SWITCH)
             {
                 int32_t a6 = 0;
                 if (sub_6FC45060(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a6) || !a6)
@@ -2053,7 +2053,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1B_Swap2HandedItem_6FC853C0(D2Game
     if (nSize == 9)
     {
         const int32_t nItemGUID = *(int32_t*)((char*)pPacket + 1);
-        const uint8_t nBodyLoc = *((uint8_t*)pPacket + 5);
+        const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(*((uint8_t*)pPacket + 5));
         
         D2_ASSERT(pGame);
 
@@ -2086,9 +2086,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1C_RemoveBodyItem_6FC854B0(D2GameS
 {
     if (nSize == 3)
     {
-        const uint16_t nBodyLoc = *(uint16_t*)((char*)pPacket + 1);
-        if (nBodyLoc > 0 && nBodyLoc < 11)
+        const uint16_t nBodyLoc16 = *(uint16_t*)((char*)pPacket + 1);
+        if (nBodyLoc16 > BODYLOC_NONE && nBodyLoc16 < NUM_BODYLOC_NO_SWITCH)
         {
+			const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(nBodyLoc16);
             D2UnitStrc* pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
             if (sub_6FC7C3A0(pGame, pUnit, pItem) && (nBodyLoc != BODYLOC_BELT || sub_6FC93740(pGame, pUnit)))
             {
@@ -2114,14 +2115,14 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1D_SwapCursorItemWithBody_6FC85550
     if (nSize == 9)
     {
         const int32_t nItemGUID = *(int32_t*)((char*)pPacket + 1);
-        const int32_t nBodyLoc = *((uint8_t*)pPacket + 5);
+        const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(*((uint8_t*)pPacket + 5));
         
         D2_ASSERT(pGame);
 
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem && pItem->dwAnimMode == 4 && INVENTORY_GetCursorItem(pUnit->pInventory) == pItem)
         {
-            if (nBodyLoc > 0 && nBodyLoc < 11)
+            if (nBodyLoc > BODYLOC_NONE && nBodyLoc < NUM_BODYLOC_NO_SWITCH)
             {
                 if (INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc))
                 {
@@ -2164,14 +2165,14 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1E_SwapTwo1HandedWithOne2HandedIte
     if (nSize == 9)
     {
         const int32_t nItemGUID = *(int32_t*)((char*)pPacket + 1);
-        const int32_t nBodyLoc = *((uint8_t*)pPacket + 5);
+        const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(*((uint8_t*)pPacket + 5));
         
         D2_ASSERT(pGame);
 
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem && pItem->dwAnimMode == IMODE_ONCURSOR && INVENTORY_GetCursorItem(pUnit->pInventory) == pItem)
         {
-            if (nBodyLoc > 0 && nBodyLoc < 11)
+            if (nBodyLoc > BODYLOC_NONE && nBodyLoc < NUM_BODYLOC_NO_SWITCH)
             {
                 if (nBodyLoc == BODYLOC_RARM || nBodyLoc == BODYLOC_LARM)
                 {
@@ -3875,8 +3876,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
         return 3;
     }
 
-    const int16_t nBodyLoc = *(int16_t*)((char*)pPacket + 1);
-
+    const int16_t nBodyLoc16 = *(int16_t*)((char*)pPacket + 1);
     if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         FOG_Trace("Player %s should be banned\n", UNITS_GetPlayerData(pUnit)->szName);
@@ -3982,15 +3982,16 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
         return 0;
     }
 
-    if (nBodyLoc == BODYLOC_NONE)
+    if (nBodyLoc16 == BODYLOC_NONE)
     {
         return 0;
     }
 
-    if (!pGame->bExpansion || !pMerc->pInventory || nBodyLoc <= 0 || nBodyLoc >= 11)
+    if (!pGame->bExpansion || !pMerc->pInventory || nBodyLoc16 <= 0 || nBodyLoc16 >= 11)
     {
         return 3;
     }
+	const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(nBodyLoc16);
 
     D2UnitStrc* pEquippedItem = INVENTORY_GetItemFromBodyLoc(pMerc->pInventory, nBodyLoc);
     if (pEquippedItem && pEquippedItem->dwAnimMode == IMODE_EQUIP && pEquippedItem == INVENTORY_RemoveItemFromInventory(pMerc->pInventory, pEquippedItem))
@@ -4036,14 +4037,14 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
         return 0;
     }
 
-    uint8_t nBodyLoc1 = 0;
-    uint8_t nBodyLoc2 = 0;
+    D2C_PlayerBodyLocs nBodyLoc1 = BODYLOC_NONE;
+    D2C_PlayerBodyLocs nBodyLoc2 = BODYLOC_NONE;
     ITEMS_GetAllowedBodyLocations(pItem, &nBodyLoc1, &nBodyLoc2);
 
     D2UnitStrc* pExchangeItem = INVENTORY_GetItemFromBodyLoc(pMercInventory, nBodyLoc1);
     D2UnitStrc* pTempItem = INVENTORY_GetItemFromBodyLoc(pMercInventory, nBodyLoc2);
 
-    uint8_t nTargetBodyLoc = nBodyLoc1;
+	D2C_PlayerBodyLocs nTargetBodyLoc = nBodyLoc1;
     if (pMerc->dwClassId == MONSTER_ACT3HIRE && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SHIELD))
     {
         pExchangeItem = pTempItem;

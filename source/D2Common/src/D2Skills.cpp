@@ -1387,7 +1387,7 @@ int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 	BOOL bIsLeftHandItem = FALSE;
 	BOOL bContinue = FALSE;
 	int nSkillId = 0;
-	int nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
 
 	D2_ASSERT(pSkill);
 
@@ -1652,7 +1652,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2Skill
 }
 
 //D2Common.0x6FDB1050
-D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, int nBodyLoc)
+D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, D2C_PlayerBodyLocs nBodyLoc)
 {
 	if (nBodyLoc == BODYLOC_LARM)
 	{
@@ -3563,7 +3563,7 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 
 			if (pLeftHandItem)
 			{
-				pRightHandItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, (ITEMS_GetBodyLocation(pLeftHandItem) == BODYLOC_RARM) + 4);
+				pRightHandItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, ITEMS_GetBodyLocation(pLeftHandItem) == BODYLOC_RARM ? BODYLOC_RARM : BODYLOC_LARM);
 			}
 			else
 			{

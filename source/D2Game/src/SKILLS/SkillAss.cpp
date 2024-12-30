@@ -1934,7 +1934,7 @@ void __fastcall sub_6FCF9580(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             }
 
             const uint32_t nIndex = ITEMS_RollLimitedRandomNumber(&pPet->pSeed, nMax);
-            const uint8_t nBodyLoc = pMonEquipTxtRecord->nLoc[nIndex];
+            const D2C_PlayerBodyLocs nBodyLoc = D2C_PlayerBodyLocs(pMonEquipTxtRecord->nLoc[nIndex]);
             if (!INVENTORY_GetItemFromBodyLoc(pPet->pInventory, nBodyLoc))
             {
                 int32_t nMod = pMonEquipTxtRecord->nMod[nIndex];

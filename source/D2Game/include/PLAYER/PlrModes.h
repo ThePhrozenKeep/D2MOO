@@ -36,7 +36,7 @@ int32_t __fastcall sub_6FC7FBB0(D2UnitStrc* pPlayer);
 //1.13c: D2Game.0x6FC99210
 D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC802F0
-void __fastcall sub_6FC802F0(D2GameStrc* pGame, int32_t nBodyloc, D2UnitStrc* pItem, D2UnitStrc* pUnit);
+void __fastcall sub_6FC802F0(D2GameStrc* pGame, D2C_PlayerBodyLocs nBodyloc, D2UnitStrc* pItem, D2UnitStrc* pUnit);
 //D2Game.0x6FC803F0
 void __fastcall sub_6FC803F0(D2GameStrc* pGame, D2UnitStrc* pItem, D2UnitStrc* pPlayer);
 //D2Game.0x6FC80440

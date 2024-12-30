@@ -302,12 +302,12 @@ void __fastcall D2GAME_INVMODE_Last_6FC416D0(D2GameStrc* pGame, D2UnitStrc* pUni
         {
             if (ITEMS_CheckItemCMDFlag(pItem, 0x10u) || ITEMS_CheckItemCMDFlag(pItem, 0x4000u))
             {
-                ITEMS_SetBodyLocation(pItem, 0);
+                ITEMS_SetBodyLocation(pItem, BODYLOC_NONE);
             }
 
             if (ITEMS_CheckItemCMDFlag(pItem, 0x20u) && ITEMS_CHECK_FLAG(pItem, IFLAG_SWITCHOUT))
             {
-                ITEMS_SetBodyLocation(pItem, 0);
+                ITEMS_SetBodyLocation(pItem, BODYLOC_NONE);
             }
 
             D2GAME_ResetSomeItemFlags_6FC415F0(pGame, pItem);

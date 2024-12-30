@@ -2,6 +2,7 @@
 
 #include <D2BasicTypes.h>
 #include <Archive.h>
+#include <D2Inventory.h>
 
 #pragma pack(1)
 
@@ -407,8 +408,8 @@ struct D2ItemTypesTxt
 	int16_t nEquiv2;						//0x06
 	uint8_t nRepair;						//0x08
 	uint8_t nBody;							//0x09
-	uint8_t nBodyLoc1;						//0x0A
-	uint8_t nBodyLoc2;						//0x0B
+	D2C_PlayerBodyLocs nBodyLoc1;			//0x0A
+	D2C_PlayerBodyLocs nBodyLoc2;			//0x0B
 	uint16_t wShoots;						//0x0C
 	uint16_t wQuiver;						//0x0E
 	uint8_t nThrowable;						//0x10

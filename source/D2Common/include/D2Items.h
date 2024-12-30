@@ -3,6 +3,7 @@
 #include "D2CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 #include <Units/Units.h>
+#include <D2Inventory.h>
 
 struct D2GameStrc; // From D2Game
 struct D2StatListStrc;
@@ -202,7 +203,7 @@ struct D2ItemSaveStrc
 	uint8_t pad0x09[3];							//0x09
 	uint32_t dwFlags;							//0x0C
 	uint8_t nStorePage;							//0x10
-	uint8_t nBodyloc;							//0x11
+	D2C_PlayerBodyLocs nBodyLoc;				//0x11
 	uint8_t pad0x12[2];							//0x12
 	int32_t nItemFileIndex;						//0x14
 };
@@ -217,9 +218,9 @@ D2COMMON_DLL_DECL void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc*
 //D2Common.0x6FD983F0 (#10688)
 D2COMMON_DLL_DECL void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem);
 //D2Common.0x6FD98430 (#10689)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2C_PlayerBodyLocs __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem);
 //D2Common.0x6FD98450 (#10690)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD98470 (#10691)
 D2COMMON_DLL_DECL D2SeedStrc* __stdcall ITEMS_GetItemSeed(D2UnitStrc* pItem);
 //D2Common.0x6FD98490 (#10692)
@@ -335,7 +336,7 @@ D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem);
 //D2Common.0x6FD99500 (#10749)
 D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine);
 //D2Common.0x6FD99540 (#10750)
-D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
+D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, D2C_PlayerBodyLocs* pBodyLoc1, D2C_PlayerBodyLocs* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)
 //aka ITEMSGetType in original code
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem); // D2C_ItemTypes
@@ -360,7 +361,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer);
 //D2Common.0x6FD9A3F0 (#10757)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetLevelRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit);
 //D2Common.0x6FD9A400 (#10758)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD9A4F0 (#10762)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckItemTypeIfThrowable(int nItemType);
 //D2Common.0x6FD9A530 (#10759)

@@ -830,7 +830,7 @@ D2UnitStrc* __fastcall sub_6FC7C7B0(D2UnitStrc* pUnit)
     }
 
     D2UnitStrc* pEquippedWeapon = nullptr;
-    int32_t nBodyLoc = 0;
+	D2C_PlayerBodyLocs nBodyLoc = BODYLOC_NONE;
     int32_t bIsLeftHandItem = 0;
     INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pEquippedWeapon, &nBodyLoc, &bIsLeftHandItem);
 

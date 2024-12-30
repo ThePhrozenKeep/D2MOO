@@ -453,7 +453,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
             }
             else
             {
-                pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
+                pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(nBodyLoc));
             }
 
             if (pItem)
@@ -469,7 +469,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                         FOG_DisplayAssert("UnitGetMode(hItem) == ITEM_MODE_INVBODY", __FILE__, __LINE__);
                         exit(-1);
                     }
-                    sub_6FC802F0(pGame, nBodyLoc, pItem, pUnit);
+                    sub_6FC802F0(pGame, D2C_PlayerBodyLocs(nBodyLoc), pItem, pUnit);
                 }
 
                 D2UnitStrc* pDupedItem = ITEMS_Duplicate(pGame, pItem, pUnit, 1);
@@ -530,7 +530,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
+            pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, D2C_PlayerBodyLocs(nBodyLoc));
         }
 
         if (pItem)
@@ -552,7 +552,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                     exit(-1);
                 }
 
-                sub_6FC802F0(pGame, nBodyLoc, pItem, pUnit);
+                sub_6FC802F0(pGame, D2C_PlayerBodyLocs(nBodyLoc), pItem, pUnit);
             }
 
             ITEMS_SetInvPage(pItem, INVPAGE_INVENTORY);
@@ -590,11 +590,11 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
             }
             else
             {
-                if (INVENTORY_PlaceItemInBodyLoc(pDeadBody->pInventory, pDupedItem, nBodyLoc))
+                if (INVENTORY_PlaceItemInBodyLoc(pDeadBody->pInventory, pDupedItem, D2C_PlayerBodyLocs(nBodyLoc)))
                 {
                     if (INVENTORY_PlaceItemInSocket(pDeadBody->pInventory, pDupedItem, nBodyLoc == BODYLOC_SWRARM || nBodyLoc == BODYLOC_SWLARM ? 4 : 3))
                     {
-                        ITEMS_SetBodyLocation(pDupedItem, nBodyLoc);
+                        ITEMS_SetBodyLocation(pDupedItem, D2C_PlayerBodyLocs(nBodyLoc));
 
                         if (pDupedItem)
                         {
@@ -651,7 +651,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC802F0
-void __fastcall sub_6FC802F0(D2GameStrc* pGame, int32_t nBodyloc, D2UnitStrc* pItem, D2UnitStrc* pUnit)
+void __fastcall sub_6FC802F0(D2GameStrc* pGame, D2C_PlayerBodyLocs nBodyloc, D2UnitStrc* pItem, D2UnitStrc* pUnit)
 {
     INVENTORY_UpdateWeaponGUIDOnRemoval(pUnit->pInventory, pItem);
     D2UnitStrc* pRemove = INVENTORY_RemoveItemFromInventory(pUnit->pInventory, pItem);
@@ -965,7 +965,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
             else
             {
                 const int32_t nItemType = ITEMS_GetItemType(pWeapon);
-                const int32_t nBodyLoc = ITEMS_GetBodyLocation(pWeapon);
+                const D2C_PlayerBodyLocs nBodyLoc = ITEMS_GetBodyLocation(pWeapon);
                 UNITS_ChangeAnimMode(pPlayer, 1);
 
                 int32_t a5 = 0;
@@ -1005,7 +1005,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                     if (nWeaponGUID)
                     {
                         D2UnitStrc* pWeaponItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nWeaponGUID);
-                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetInvPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && sub_6FC42F20(pPlayer, pWeaponItem, (int32_t*)&nBodyLoc, 0))
+                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetInvPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && sub_6FC42F20(pPlayer, pWeaponItem, (D2C_PlayerBodyLocs*) &nBodyLoc, 0))
                         {
                             if (INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc))
                             {
