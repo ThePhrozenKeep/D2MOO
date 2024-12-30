@@ -7,14 +7,22 @@
 D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnScreenHeight, uint32_t, 0x6FB740F0 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgdwUiNbPanels, int32_t, 0x6FBAB9C4 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase); // 1.13c: D2Client.0x6FBA9E14
+D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);// 1.13c: D2Client.0x6FBA9E18
 D2VAR(D2CLIENT, pgpView_6FBA7990, D2GameViewStrc*, 0x6FBA7990 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgbPreventBeltUsage, BOOL, 0x6FBA79C4 - D2ClientImageBase);
 D2CLIENTDWORDSTUB(6FBA79A8);
 D2CLIENTDWORDSTUB(6FBAB9C8);
 D2CLIENTDWORDSTUB(6FBA79AC);
 D2CLIENTDWORDSTUB(6FBA79C8);
+
+//Helper function
+bool UI_IsInScreen(D2CoordStrc tScreenPos)
+{
+	return tScreenPos.nX >= 0 && tScreenPos.nX < *D2CLIENT_pgnDrawMaxWidth
+		&& tScreenPos.nY >= 0 && tScreenPos.nY < *D2CLIENT_pgnDrawMaxHeight;
+}
+
 
 //1.10f: D2Client.0x6FAABF60
 void __fastcall sub_6FAABF60()

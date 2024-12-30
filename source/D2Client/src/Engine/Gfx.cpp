@@ -80,4 +80,11 @@ BOOL __fastcall CLIENT_DrawItem(D2UnitStrc* pItem, int nXpos, int nYpos)
 	return FALSE;
 }
 
+
+//1.10f: D2Client.0x6FB5B0F0
+//1.13c: D2Client.0x6FB18970
+void __fastcall GFX_DrawFilledRect(int nXStart, int nYStart, int nWidth, int nHeight, uint8_t dwColorIndex, DrawMode nDrawMode)
+{
+	D2GFX_DrawBox(nXStart, nYStart, nXStart + nWidth, nYStart + nHeight, dwColorIndex, nDrawMode);
+}
 #endif //D2_VERSION_110F

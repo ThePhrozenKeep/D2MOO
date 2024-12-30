@@ -27,3 +27,12 @@ enum UI_BuySellButtonFrames : uint16_t
 	BUYSELLBTN_PARTY_PRESSED = 21,
 
 };
+
+enum UI_ItemBackgroundColor {
+	UI_ItemBgColor_Red,
+	UI_ItemBgColor_Green,
+	UI_ItemBgColor_Navy,
+	UI_ItemBgColor_Olive,
+	UI_ItemBgColor_Brown,
+	UI_ItemBgColor_COUNT
+};

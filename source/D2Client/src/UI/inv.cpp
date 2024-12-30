@@ -15,6 +15,9 @@
 #include <DataTbls/StringIds.h>
 #include <UI/npcmenu.h>
 #include <Core/ARCHIVE.h>
+#include <D2WinPalette.h>
+#include <CGAME/scroll.h>
+#include <Engine/Gfx.h>
 
 static const int kBuySellButtonSize = 32;
 #ifdef NO_BUG_FIX
@@ -52,6 +55,9 @@ D2CLIENTSTUB(sub, 6FAF9E60, void, __fastcall, ());
 
 D2CLIENTSTUB(D2CLIENT_GetDifficulty, 6FAAC090, D2C_Difficulties , __fastcall, ());
 D2CLIENTSTUB(D2CLIENT_GetGlobalQuestHistory, 6FAFBD20, D2BitBufferStrc*, __fastcall, ());
+
+//1.13c: D2Client.0x6FB3C760
+D2CLIENTSTUB(UI_INV_HirelingCanEquip, 6FAED470, BOOL, __fastcall, (D2UnitStrc* pUnit, D2UnitStrc* pItem, BOOL* pbItemTypeCompatible));
 
 D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnInventoryMode, BOOL, 0x6FBB58EC - D2ClientImageBase);
@@ -127,6 +133,15 @@ D2VAR(D2CLIENT, pgbInvInventoryCoinButtonPressed, BOOL, 0x6FBB5B3C - D2ClientIma
 D2VAR(D2CLIENT, pgbInvCloseButtonPressed, BOOL, 0x6FBB5B98 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpCellfile_BUYSELLBUTTONS, D2CellFileStrc*, 0x6FBBA76C - D2ClientImageBase);
 
+D2VAR(D2CLIENT, pgbInvMouseOverEquippedItem, BOOL, 0x6FBCBC2C - D2ClientImageBase);
+D2VAR(D2CLIENT, pgnInvHoveredBodyLoc, D2C_PlayerBodyLocs, 0x6FBCBC68 - D2ClientImageBase);
+
+D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase); // 1.13c: D2Client.0x6FBA9E14
+D2VAR(D2CLIENT, pgnDrawMaxHeight, int32_t, 0x6FB9A700 - D2ClientImageBase);// 1.13c: D2Client.0x6FBA9E18
+
+//1.10f: D2Client.0x6FBB3778
+//1.13c: D2Client.0x6FBBB330
+uint8_t gnBodyLocBgColors[UI_ItemBgColor_COUNT];
 
 #pragma pack(push, 1)
 struct InvButtonInfoStrc
@@ -263,6 +278,17 @@ void __fastcall UI_INV_RefreshPositions() {
 	}
 }
 
+//1.10f: D2Client.0x6FADD2F0
+//1.13c: D2Client.0x6FB3C6B0
+void __fastcall UI_INV_RefreshUsageColors()
+{
+	gnBodyLocBgColors[UI_ItemBgColor_Red] = D2Win_10034_MixRGB(128u, 0, 0);
+	gnBodyLocBgColors[UI_ItemBgColor_Green] = D2Win_10034_MixRGB(0, 128u, 0);
+	gnBodyLocBgColors[UI_ItemBgColor_Navy] = D2Win_10034_MixRGB(0, 0, 128u);
+	gnBodyLocBgColors[UI_ItemBgColor_Olive] = D2Win_10034_MixRGB(128u, 128u, 0);
+	gnBodyLocBgColors[UI_ItemBgColor_Brown] = D2Win_10034_MixRGB(128u, 64u, 64u);
+}
+
 //1.10f: D2Client.0x6FAE17D0
 //1.13c: D2Client.0x6FB3C2B0
 BOOL __fastcall UI_INV_CheckIfCursorItemCanBePutIntoSocket(D2UnitStrc* pCursorItem, D2UnitStrc* pEquippedItem)
@@ -284,6 +310,66 @@ BOOL __fastcall UI_INV_CheckIfCursorItemCanBePutIntoSocket(D2UnitStrc* pCursorIt
 	if (!pEquippedItem->pInventory)
 		return FALSE;
 	return INVENTORY_GetItemCount(pEquippedItem->pInventory) < ITEMS_GetSockets(pEquippedItem);
+}
+
+// Helper function
+void __fastcall UI_INV_DrawItemBackgroundRect(D2CoordStrc tScreenPos, int32_t nWidth, int32_t nHeight, UI_ItemBackgroundColor nBgColor)
+{
+	// Note: This looks like a dumb test, we only the position of the rect, not its extents...
+	if (UI_IsInScreen(tScreenPos))
+	{
+		GFX_DrawFilledRect(
+			tScreenPos.nX, tScreenPos.nY,
+			nWidth, nHeight,
+			gnBodyLocBgColors[nBgColor],
+			DRAWMODE_TRANS25);
+	}
+}
+
+
+//1.10f: Inlined
+//1.13c: D2Client.0x6FB3C5B0
+void __fastcall UI_INV_DrawCompColor(D2InvCompGridStrc *pInvCompGrid, UI_ItemBackgroundColor nBgColor)
+{
+	if (nBgColor != UI_ItemBgColor_Navy)
+	{
+		UI_INV_DrawItemBackgroundRect({ pInvCompGrid->rect.nLeft, pInvCompGrid->rect.nTop }, pInvCompGrid->nWidth, pInvCompGrid->nHeight, nBgColor);
+	}
+}
+
+//1.10f: Inlined
+//1.13c: D2Client.0x6FB3E2F0
+void __fastcall UI_INV_DrawComponentBackground(D2InventoryGridInfoStrc* pGridInfo, D2InventoryStrc* pInventory)
+{
+	const bool bMouseInRightHalfOfScreen = CLIENT_GetMouseX() >= (*D2CLIENT_pgnScreenHeight / 2);
+	if ((*D2CLIENT_pgnInventoryMode != VENDORMODE_TRADE || bMouseInRightHalfOfScreen)
+		&& CLIENT_GetMouseY() < (*D2CLIENT_pgnScreenHeight - 39))
+	{
+		if (bMouseInRightHalfOfScreen)
+		{
+			D2UnitStrc* pCursorItem = INVENTORY_GetCursorItem(pInventory);
+			if (pCursorItem && *D2CLIENT_pgbInvMouseOverEquippedItem)
+			{
+
+				// Note: ITEMS_GetDimensions was called to do some bound test but the test result was unused or optimized away
+				//uint8_t nWidth, nHeight;
+				//ITEMS_GetDimensions(pCursorItem, &nWidth, &nHeight, "..\\Source\\D2Common/CmnItems.h", 1754);
+
+				UI_ItemBackgroundColor nBgColor = UI_ItemBgColor_Red;
+				if ((ITEMS_CheckBodyLocation(pCursorItem, *D2CLIENT_pgnInvHoveredBodyLoc) && ITEMS_CheckRequirements(pCursorItem, D2CLIENT_GetControlUnit(), 0, 0, 0, 0))
+					|| UI_INV_CheckIfCursorItemCanBePutIntoSocket(INVENTORY_GetItemFromBodyLoc(pInventory, *D2CLIENT_pgnInvHoveredBodyLoc), pCursorItem))
+				{
+					nBgColor = UI_ItemBgColor_Green;
+				}
+
+				UI_INV_DrawCompColor(&(*D2CLIENT_pgaCharInvCompGrids)[*D2CLIENT_pgnInvHoveredBodyLoc], nBgColor);
+			}
+		}
+		else
+		{
+			*D2CLIENT_pgnInvHoveredBodyLoc = BODYLOC_NONE;
+		}
+	}
 }
 
 //1.10f: D2Client.0x6FAE9FC0
@@ -491,5 +577,55 @@ void __fastcall UI_INV_DrawCloseButton()
 
 }
 
+//1.10f: D2CLient.0x6FAE1710
+//1.13c: D2CLient.0x6FB3C600
+void __fastcall UI_INV_DrawItemBackgroundOnGrid(
+	D2InventoryGridInfoStrc* pGridInfo,
+	int nItemGridPosX, int nItemGridPosY, 
+	uint8_t nItemGridWidth, uint8_t nItemGridHeight,
+	UI_ItemBackgroundColor nBgColor)
+{
+	const int32_t nEndBoxX = nItemGridPosX + nItemGridWidth;
+	const int32_t nEndBoxY = nItemGridPosY + nItemGridHeight;
+	for (int32_t nCurBoxY = nItemGridPosY; nCurBoxY < nEndBoxY; nCurBoxY++)
+	{
+		for (int32_t nCurBoxX = nItemGridPosX; nCurBoxX < nEndBoxX; ++nCurBoxX)
+		{
+			const int32_t nPosX = pGridInfo->nGridLeft + nCurBoxX * pGridInfo->nGridBoxWidth;
+			const int32_t nPosY = pGridInfo->nGridTop + nCurBoxY * pGridInfo->nGridBoxHeight;
+			UI_INV_DrawItemBackgroundRect({ nPosX, nPosY }, pGridInfo->nGridBoxWidth, pGridInfo->nGridBoxHeight, nBgColor);
+		}
+	}
+}
+
+//1.10f: D2Client.0x6FAED310
+//1.13c: D2Client.0x6FB3E8E0
+void __fastcall UI_INV_DrawHirelingItemBackground(D2UnitStrc* pHireling)
+{
+	if (D2UnitStrc* pCursorItem = INVENTORY_GetCursorItem(D2CLIENT_GetControlUnit()->pInventory))
+	{	
+		for (int nBodyLoc = 0; nBodyLoc < NUM_BODYLOC_NO_SWITCH; nBodyLoc++)
+		{
+			const D2InvCompGridStrc& rInvCompGrid = (*D2CLIENT_pgaHirelingInvCompGrids)[nBodyLoc];
+			D2CoordStrc tMouseCoord = { CLIENT_GetMouseX(), CLIENT_GetMouseY() };
+			if (IsInRectangle(tMouseCoord, rInvCompGrid.rect))
+			{
+				auto nBgColor = UI_ItemBgColor_Red;
+				//Results optimized away
+				//int nItemWidth, nItemHeight;
+				//D2COMMON_10749_GetItemDimensions(pCursorItem, &nItemWidth, &nItemHeight, "..\\D2Common/CmnItems.h", 1754);
+				
+				BOOL bItemTypeCompatible;
+				if (ITEMS_CheckBodyLocation(pCursorItem, D2C_PlayerBodyLocs(nBodyLoc))
+					&& D2CLIENT_UI_INV_HirelingCanEquip_6FAED470(pHireling, pCursorItem, &bItemTypeCompatible)
+					&& ITEMS_CheckRequirements(pCursorItem, pHireling, 0, 0, 0, 0))
+				{
+					nBgColor = UI_ItemBgColor_Green;
+				}
+				UI_INV_DrawItemBackgroundRect({ rInvCompGrid.rect.nLeft, rInvCompGrid.rect.nTop }, rInvCompGrid.nWidth, rInvCompGrid.nHeight, nBgColor);
+			}
+		}
+	}
+}
 
 #endif // D2_VERSION_110F
