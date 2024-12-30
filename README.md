@@ -136,7 +136,7 @@ If you think you should be on this list, reach us on the forum, discord, or open
 ## Legal
 
 
-The source code in this repository is intended for non-commercial use only. However it uses a permissive license so that any modder may use this. Credits to the team are appreciated, and the license must be preserved in derivative work.
+The source code in this repository is intended for non-commercial use only. However it uses a permissive license (MIT) so that any modder may use this. Credits to the team are appreciated, and derivative work must respect the license.
 
 Battle.net(R) - Copyright (C) 1996 Blizzard Entertainment, Inc. All rights reserved. Battle.net and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.
 
