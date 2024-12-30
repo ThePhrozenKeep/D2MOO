@@ -847,7 +847,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                     STATLIST_SetUnitStat(pCurrentOutput, STAT_QUANTITY, nMaxStack, 0);
                 }
 
-                if (ITEMS_CheckItemFlag(pCurrentOutput, IFLAG_BROKEN, __LINE__, __FILE__))
+                if (ITEMS_CHECK_FLAG(pCurrentOutput,  IFLAG_BROKEN))
                 {
                     D2GAME_RepairBrokenItem_6FC4B630(pGame, pUnit, pCurrentOutput);
                 }
@@ -2131,7 +2131,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
                     ITEMS_SetEarLevel(pDupeItem, ITEMS_GetEarLevel(pCheckedItem));
                     ITEMS_SetItemFlag(pDupeItem, IFLAG_NAMED, bSet);
                 }
-                else if (ITEMS_CheckItemFlag(pDupeItem, IFLAG_PERSONALIZED, __LINE__, __FILE__))
+                else if (ITEMS_CHECK_FLAG(pDupeItem,  IFLAG_PERSONALIZED))
                 {
                     ITEMS_SetEarName(pDupeItem, ITEMS_GetEarName(pCheckedItem));
                 }
@@ -2463,7 +2463,7 @@ int32_t __fastcall sub_6FC93430(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         }
         else
         {
-            if (ITEMS_CheckItemFlag(pItem, IFLAG_NOSELL, __LINE__, __FILE__))
+            if (ITEMS_CHECK_FLAG(pItem,  IFLAG_NOSELL))
             {
                 nResult = 0;
             }

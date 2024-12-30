@@ -579,3 +579,6 @@ BOOL __fastcall sub_6FDA4380(D2UnitStrc* pItem, unsigned int nSetItemMask);
 BOOL __fastcall sub_6FDA4490(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3);
 //D2Common.0x6FDA4640 (#10866)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_UpdateSets(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3, int a4);
+
+#define ITEMS_CHECK_FLAG(pItem, dwFlag) ITEMS_CheckItemFlag(pItem, dwFlag, __LINE__, __FILE__)
+

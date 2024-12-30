@@ -193,23 +193,23 @@ int32_t __fastcall sub_6FC410E0(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
         return 1;
     }
 
-    if (ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+    if (ITEMS_CHECK_FLAG(pItem, IFLAG_BROKEN))
     {
         if (pPlayer == pClientPlayer || pItem && pItem->dwAnimMode == 1)
         {
-            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_BROKEN, ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__));
+            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_BROKEN, ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN));
             return 1;
         }
     }
-    else if (ITEMS_CheckItemFlag(pItem, IFLAG_REPAIRED, __LINE__, __FILE__))
+    else if (ITEMS_CHECK_FLAG(pItem, IFLAG_REPAIRED))
     {
         if (pPlayer == pClientPlayer || pItem && pItem->dwAnimMode == 1)
         {
-            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_REPAIRED, ITEMS_CheckItemFlag(pItem, IFLAG_REPAIRED, __LINE__, __FILE__));
+            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_REPAIRED, ITEMS_CHECK_FLAG(pItem,  IFLAG_REPAIRED));
             return 1;
         }
     }
-    else if (ITEMS_CheckItemFlag(pItem, IFLAG_NEWITEM, __LINE__, __FILE__))
+    else if (ITEMS_CHECK_FLAG(pItem, IFLAG_NEWITEM))
     {
         int32_t nAnimMode = 0;
         if (pItem)
@@ -227,7 +227,7 @@ int32_t __fastcall sub_6FC410E0(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
             return 0;
         }
 
-        if (pPlayer != pClientPlayer || !ITEMS_CheckItemFlag(pItem, IFLAG_UNK2, __LINE__, __FILE__))
+        if (pPlayer != pClientPlayer || !ITEMS_CHECK_FLAG(pItem,  IFLAG_UNK2))
         {
             D2GAME_SendP0x9D_ItemAction_UpdateStats_6FC3EFA0(pClient, pPlayer, pItem, 0);
             return 1;
@@ -305,7 +305,7 @@ void __fastcall D2GAME_INVMODE_Last_6FC416D0(D2GameStrc* pGame, D2UnitStrc* pUni
                 ITEMS_SetBodyLocation(pItem, 0);
             }
 
-            if (ITEMS_CheckItemCMDFlag(pItem, 0x20u) && ITEMS_CheckItemFlag(pItem, IFLAG_SWITCHOUT, __LINE__, __FILE__))
+            if (ITEMS_CheckItemCMDFlag(pItem, 0x20u) && ITEMS_CHECK_FLAG(pItem, IFLAG_SWITCHOUT))
             {
                 ITEMS_SetBodyLocation(pItem, 0);
             }

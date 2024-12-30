@@ -185,7 +185,7 @@ int32_t __fastcall SKILLS_SrvSt19_BonePrison(D2GameStrc* pGame, D2UnitStrc* pUni
 int32_t __fastcall SKILLS_SrvSt20_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
-    if (pTarget && pTarget->dwUnitType == UNIT_ITEM && pTarget->dwAnimMode == IMODE_ONGROUND && ITEMS_IsMetalItem(pTarget->dwClassId) && ITEMS_CheckItemFlag(pTarget, 0x10u, __LINE__, __FILE__))
+    if (pTarget && pTarget->dwUnitType == UNIT_ITEM && pTarget->dwAnimMode == IMODE_ONGROUND && ITEMS_IsMetalItem(pTarget->dwClassId) && ITEMS_CHECK_FLAG(pTarget, IFLAG_IDENTIFIED))
     {
         return !STATLIST_GetOwner(pTarget, 0);
     }
@@ -1422,7 +1422,7 @@ int32_t __fastcall SKILLS_SrvDo056_Golem(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 int32_t __fastcall SKILLS_SrvDo057_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
-    if (!pTargetUnit || pTargetUnit->dwUnitType != UNIT_ITEM || pTargetUnit->dwAnimMode != IMODE_ONGROUND || !ITEMS_IsMetalItem(pTargetUnit->dwClassId) || !ITEMS_CheckItemFlag(pTargetUnit, IFLAG_IDENTIFIED, __LINE__, __FILE__) || STATLIST_GetOwner(pTargetUnit, 0))
+    if (!pTargetUnit || pTargetUnit->dwUnitType != UNIT_ITEM || pTargetUnit->dwAnimMode != IMODE_ONGROUND || !ITEMS_IsMetalItem(pTargetUnit->dwClassId) || !ITEMS_CHECK_FLAG(pTargetUnit,  IFLAG_IDENTIFIED) || STATLIST_GetOwner(pTargetUnit, 0))
     {
         return 0;
     }

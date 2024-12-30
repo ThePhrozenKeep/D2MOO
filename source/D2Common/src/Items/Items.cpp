@@ -515,7 +515,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 					pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 					if (pItemTypesTxtRecord && pItemTypesTxtRecord->nRepair)
 					{
-						if (ITEMS_CheckItemTypeIfThrowable(ITEMS_GetItemType(pItem)) && ITEMS_CheckIfStackable(pItem) && !ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__))
+						if (ITEMS_CheckItemTypeIfThrowable(ITEMS_GetItemType(pItem)) && ITEMS_CheckIfStackable(pItem) && !ITEMS_CHECK_FLAG(pItem, IFLAG_ETHEREAL))
 						{
 							return TRUE;
 						}
@@ -4286,7 +4286,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 				pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[nItemType];
 				if (pItemTypesTxtRecord && pItemTypesTxtRecord->nRepair && pItem->dwUnitType == UNIT_ITEM && ITEMS_CheckItemTypeIfThrowable(ITEMS_GetItemType(pItem)))
 				{
-					if (ITEMS_CheckIfStackable(pItem) && !ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__))
+					if (ITEMS_CheckIfStackable(pItem) && !ITEMS_CHECK_FLAG(pItem, IFLAG_ETHEREAL))
 					{
 						pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 						D2_ASSERT(pItemsTxtRecord);
@@ -4370,7 +4370,7 @@ BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc* pItem1, D2UnitStrc* pItem2)
 		return FALSE;
 	}
 	
-	if((ITEMS_CheckItemFlag(pItem1, IFLAG_ETHEREAL, __LINE__, __FILE__) != ITEMS_CheckItemFlag(pItem2, IFLAG_ETHEREAL, __LINE__, __FILE__))
+	if((ITEMS_CHECK_FLAG(pItem1, IFLAG_ETHEREAL) != ITEMS_CHECK_FLAG(pItem2, IFLAG_ETHEREAL))
 		|| !pItem1->pItemData->dwQualityNo || pItem1->pItemData->dwQualityNo > 3 && pItem1->pItemData->dwQualityNo <= 9
 		|| !pItem2->pItemData->dwQualityNo || pItem2->pItemData->dwQualityNo > 3 && pItem2->pItemData->dwQualityNo <= 9
 		|| STATLIST_UnitGetStatValue(pItem1, STAT_MINDAMAGE, 0) != STATLIST_UnitGetStatValue(pItem2, STAT_MINDAMAGE, 0)
@@ -7236,7 +7236,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		}
 
 		bIsRuneword = 0;
-		if (ITEMS_CheckItemFlag(pItem, IFLAG_RUNEWORD, __LINE__, __FILE__))
+		if (ITEMS_CHECK_FLAG(pItem, IFLAG_RUNEWORD))
 		{
 			++nStatLists;
 			bIsRuneword = TRUE;

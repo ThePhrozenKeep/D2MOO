@@ -957,7 +957,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         {
             if (ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_WEAPON) && ITEMS_IsMagSetRarUniCrfOrTmp(pWeapon))
             {
-                if (!ITEMS_CheckItemFlag(pWeapon, IFLAG_BROKEN, __LINE__, __FILE__))
+                if (!ITEMS_CHECK_FLAG(pWeapon,  IFLAG_BROKEN))
                 {
                     sub_6FC4B580(pGame, pPlayer, pWeapon);
                 }
@@ -984,7 +984,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                             nWeaponClassId = pWeapon->dwClassId;
                         }
 
-                        if (nWeaponClassId == pItem->dwClassId && !ITEMS_CheckItemFlag(pItem, 0x100u, __LINE__, __FILE__))
+                        if (nWeaponClassId == pItem->dwClassId && !ITEMS_CHECK_FLAG(pItem, IFLAG_BROKEN))
                         {
                             if (!INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc) && sub_6FC49F80(pGame, pPlayer, pItem->dwUnitId, nBodyLoc))
                             {
@@ -1036,7 +1036,7 @@ void __fastcall sub_6FC80E10(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         {
             if (INVENTORY_GetItemNodePage(pItem) == 3 && INVENTORY_UnitIsItem(pItem) && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON)
                 && ITEMS_HasDurability(pItem) && (int32_t)STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) <= 0 
-                && !ITEMS_CheckItemFlag(pItem, 0x100u, __LINE__, __FILE__))
+                && !ITEMS_CHECK_FLAG(pItem, IFLAG_BROKEN))
             {
                 if (!bChangedToNeutral)
                 {

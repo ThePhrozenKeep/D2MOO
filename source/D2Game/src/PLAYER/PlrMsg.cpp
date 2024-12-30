@@ -3903,8 +3903,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
     if (pItem)
     {
         if (ITEMS_IsQuestItem(pItem) || !pGame->bExpansion 
-            || !ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__) 
-            || ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+            || !ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED) 
+            || ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN))
         {
             return 0;
         }

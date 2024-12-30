@@ -18,6 +18,7 @@
 #include <D2Combat.h>
 #include <D2Monsters.h>
 #include <Calc.h>
+#include <D2Items.h>
 
 //TODO: Find names
 
@@ -1771,7 +1772,7 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 		}
 	}
 
-	if (ITEMS_CheckItemFlag(pItem, IFLAG_NOEQUIP, __LINE__, __FILE__) || ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+	if (ITEMS_CHECK_FLAG(pItem, IFLAG_NOEQUIP) || ITEMS_CHECK_FLAG(pItem, IFLAG_BROKEN))
 	{
 		return pSkillsTxtRecord->nSkillId == 0;
 	}

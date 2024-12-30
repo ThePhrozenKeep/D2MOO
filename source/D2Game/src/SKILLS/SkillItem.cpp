@@ -63,7 +63,7 @@ int32_t __fastcall SKILLITEM_pSpell01_Initializer(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FD02BF0
 int32_t __fastcall SKILLITEM_pSpell01_IdentifyItem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
-    if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && !ITEMS_CheckItemFlag(pTarget, IFLAG_IDENTIFIED, __LINE__, __FILE__) && pUnit->pInventory)
+    if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && !ITEMS_CHECK_FLAG(pTarget,  IFLAG_IDENTIFIED) && pUnit->pInventory)
     {
         for (D2UnitStrc* pInvItem = INVENTORY_GetFirstItem(pUnit->pInventory); pInvItem; pInvItem = INVENTORY_GetNextItem(pInvItem))
         {
@@ -837,7 +837,7 @@ int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    if (gPSpellTable[nPSpell].pfSpellPrepare && !ITEMS_CheckItemFlag(pItem, IFLAG_TARGETING, __LINE__, __FILE__))
+    if (gPSpellTable[nPSpell].pfSpellPrepare && !ITEMS_CHECK_FLAG(pItem,  IFLAG_TARGETING))
     {
         if (!gPSpellTable[nPSpell].pfSpellPrepare(pGame, pUnit, pItem, 0, nX, nY, nSkillId))
         {
@@ -845,7 +845,7 @@ int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit
             {
                 for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
                 {
-                    if (INVENTORY_UnitIsItem(i) && ITEMS_CheckItemFlag(i, IFLAG_TARGETING, __LINE__, __FILE__))
+                    if (INVENTORY_UnitIsItem(i) && ITEMS_CHECK_FLAG(i,  IFLAG_TARGETING))
                     {
                         ITEMS_SetItemFlag(i, IFLAG_TARGETING, 0);
                         D2GAME_PACKETS_SendPacket0x3F_6FC3EDC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), i, -1, 1, 0, -1);
@@ -874,7 +874,7 @@ int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit
         {
             for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
             {
-                if (INVENTORY_UnitIsItem(i) && ITEMS_CheckItemFlag(i, IFLAG_TARGETING, __LINE__, __FILE__))
+                if (INVENTORY_UnitIsItem(i) && ITEMS_CHECK_FLAG(i,  IFLAG_TARGETING))
                 {
                     ITEMS_SetItemFlag(i, IFLAG_TARGETING, 0);
                     D2GAME_PACKETS_SendPacket0x3F_6FC3EDC0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), i, -1, 1, 0, -1);

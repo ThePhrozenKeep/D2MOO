@@ -1985,7 +1985,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 		return nullptr;
 	}
 
-	if (!ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+	if (!ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
 	{
 		D2GAME_ITEMS_Identify_6FC49670(pGame, pPlayer, pItem);
 	}

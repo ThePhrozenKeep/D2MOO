@@ -125,7 +125,7 @@ void __fastcall D2GAME_NPC_RepairItem_6FCC6970(D2GameStrc* pGame, D2UnitStrc* pI
 
         D2GAME_RechargeItem_6FC4BD50(pGame, pPlayer, pItem);
 
-        if (ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+        if (ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN))
         {
             D2GAME_RepairBrokenItem_6FC4B630(pGame, pPlayer, pItem);
         }
@@ -620,7 +620,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
         }
     }
 
-    if (ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+    if (ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN))
     {
         bReSellAble = 0;
     }
@@ -630,12 +630,12 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
         bReSellAble = 0;
     }
 
-    if (ITEMS_CheckItemFlag(pItem, IFLAG_PERSONALIZED, __LINE__, __FILE__))
+    if (ITEMS_CHECK_FLAG(pItem,  IFLAG_PERSONALIZED))
     {
         bReSellAble = 0;
     }
 
-    if (ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__))
+    if (ITEMS_CHECK_FLAG(pItem,  IFLAG_ETHEREAL))
     {
         bReSellAble = 0;
     }
@@ -1852,7 +1852,7 @@ int32_t __fastcall D2GAME_NPC_Repair_6FCC95B0(D2GameStrc* pGame, D2UnitStrc* pUn
         if (nGold > 0 && nDivisor < nGold << 10 && nDivisor > 0)
         {
             const uint32_t nRepairDurability = (nGold << 10) / nDivisor;
-            if (!ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+            if (!ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN))
             {
                 PLRTRADE_AddGold(pUnit, STAT_GOLD, -nGold);
 
@@ -1935,7 +1935,7 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
                 {
                 case 1:
                 {
-                    if ((ITEMS_GetInvPage(pItem) == 0 || ITEMS_GetInvPage(pItem) == 3) && !ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+                    if ((ITEMS_GetInvPage(pItem) == 0 || ITEMS_GetInvPage(pItem) == 3) && !ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
                     {
                         D2GAME_ITEMS_Identify_6FC49670(pGame, pPlayer, pItem);
                     }
@@ -1943,7 +1943,7 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
                 }
                 case 3:
                 {
-                    if (!ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+                    if (!ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
                     {
                         D2GAME_ITEMS_Identify_6FC49670(pGame, pPlayer, pItem);
                     }
@@ -2411,7 +2411,7 @@ void __fastcall D2GAME_NPC_IdentifyBoughtItem_6FCCA990(D2GameStrc* pGame, D2Unit
     }
 
     D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
-    if (!pItem || ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+    if (!pItem || ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
     {
         return;
     }
@@ -2971,7 +2971,7 @@ int32_t __fastcall D2GAME_NPC_IsItemInNpcInventory_6FCCB7D0(D2GameStrc* pGame, D
     D2NpcVendorChainStrc* pNpcVendorChain = SUNITPROXY_GetVendorChain(pGame, pNpcRecord, pPlayer);
     if (!pNpcVendorChain || !pNpcVendorChain->field_4)
     {
-        if (ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+        if (ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
         {
             return 1;
         }

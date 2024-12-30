@@ -72,7 +72,7 @@ BOOL __fastcall CLIENT_DrawItem(D2UnitStrc* pItem, int nXpos, int nYpos)
 		const uint32_t celHeight = D2CMP_CelGetHeight(tCelContext.pCurrentCell);
 		uint8_t colorIdx;
 		uint8_t* pPalette = ITEMS_GetColor(0, pItem, &colorIdx, 1);
-		DrawMode drawMode = ITEMS_CheckItemFlag(pItem, IFLAG_ETHEREAL, __LINE__, __FILE__) ? DRAWMODE_TRANS50 : DRAWMODE_NORMAL;
+		DrawMode drawMode = ITEMS_CHECK_FLAG(pItem, IFLAG_ETHEREAL) ? DRAWMODE_TRANS50 : DRAWMODE_NORMAL;
 		TEXTURE_CelDraw(&tCelContext, nXpos, nYpos + celHeight, -1, drawMode, pPalette);
 		D2CLIENT_UNITDRAW_DrawOverlays(pItem, 0xFFu, 0, nXpos + (celWidth / 2), nYpos + (celHeight / 2), 0);
 		return TRUE;

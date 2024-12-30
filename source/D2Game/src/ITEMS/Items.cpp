@@ -1694,7 +1694,7 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         return;
     }
 
-    if (!bIsWeapon && !ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__))
+    if (!bIsWeapon && !ITEMS_CHECK_FLAG(pItem,  IFLAG_BROKEN))
     {
         sub_6FC4B580(pGame, pUnit, pItem);
         return;
@@ -1781,7 +1781,7 @@ void __fastcall ITEMS_FillItemDrop(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop,
         strcpy_s(pItemDrop->szName, ITEMS_GetEarName(pItem));
         pItemDrop->eEarLvl = ITEMS_GetEarLevel(pItem);
     }
-    else if (ITEMS_CheckItemFlag(pItem, IFLAG_PERSONALIZED, __LINE__, __FILE__))
+    else if (ITEMS_CHECK_FLAG(pItem,  IFLAG_PERSONALIZED))
     {
         strcpy_s(pItemDrop->szName, ITEMS_GetEarName(pItem));
     }

@@ -1898,7 +1898,7 @@ void __fastcall D2GAME_SendP0x9C_ItemAction_AddOrRemoveFromShop_6FC3F260(D2Clien
     if (a3 == 56)
     {
         int32_t bIdentified = 0;
-        if (ITEMS_IsMagSetRarUniCrfOrTmp(pItem) && !ITEMS_CheckItemFlag(pItem, IFLAG_IDENTIFIED, __LINE__, __FILE__))
+        if (ITEMS_IsMagSetRarUniCrfOrTmp(pItem) && !ITEMS_CHECK_FLAG(pItem, IFLAG_IDENTIFIED))
         {
             bIdentified = 1;
         }
