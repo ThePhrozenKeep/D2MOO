@@ -4,6 +4,10 @@
 
 //#define DISABLE_ALL_PATCHES
 //#define REPLACE_FOG_ALLOCS_BY_MALLOC
+#ifndef NDEBUG
+#define ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER
+#endif
+
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
@@ -46,7 +50,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10020 @10020
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10021 @10021
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_GetSystemInfo @10022
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayAssert @10023
+    PatchAction::Ignore,                               //   FOG_DisplayAssert @10023
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayHalt @10024
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayWarning @10025
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayError @10026
@@ -356,6 +360,33 @@ void* __fastcall FOG_Debug_ReallocPool(void* pMemPool, void* pMemory, int nSize,
 }
 #endif
 
+#ifdef ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER
+
+#define PATCH_ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER	\
+	ASSERT_FUNCTION_X(FOG_DisplayAssert, 0xED30)		\
+	ASSERT_FUNCTION_X(FOG_DisplayHalt, 0xED60)			\
+	ASSERT_FUNCTION_X(FOG_DisplayWarning, 0xED90)
+
+
+#define ASSERT_FUNCTION_X(FUNC, OFFSET)												\
+	using FUNC##Type = decltype(FUNC);												\
+	FUNC##Type* FUNC##_Org = nullptr;												\
+	void __cdecl FUNC##_EarlyBreak(const char* szMsg, const char* szFile, int nLine)\
+	{																				\
+		if(IsDebuggerPresent()) DebugBreak();										\
+		FUNC##_Org(szMsg, szFile, nLine);											\
+	}
+// Definitions of the functions
+PATCH_ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER
+#undef ASSERT_FUNCTION_X
+
+// The patches
+#define ASSERT_FUNCTION_X(FUNC, OFFSET) { OFFSET, &FUNC##_EarlyBreak, PatchAction::FunctionReplaceOriginalByPatch, &FUNC##_Org },
+#else
+#define PATCH_ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER
+#endif //ASSERT_FUNCTIONS_EARLY_BREAK
+
+
 static ExtraPatchAction extraPatchActions[] = {    
 #ifdef REPLACE_FOG_ALLOCS_BY_MALLOC
 #ifdef D2_VERSION_110F
@@ -370,6 +401,7 @@ static ExtraPatchAction extraPatchActions[] = {
     { 0x6FF59BE0 - FogImageBase, &FOG_Debug_ReallocPoolImpl, PatchAction::FunctionReplaceOriginalByPatch },
 #endif
 #endif
+	PATCH_ASSERT_FUNCTIONS_EARLY_BREAK_IF_DEBUGGER
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
