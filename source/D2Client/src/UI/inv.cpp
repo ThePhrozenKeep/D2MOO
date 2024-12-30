@@ -57,32 +57,16 @@ D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnInventoryMode, BOOL, 0x6FBB58EC - D2ClientImageBase);
 
 
-D2VAR(D2CLIENT, pgtCharInvRect,				D2InvRectStrc,				0x6FBB38C8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgpCharInvGridInfo,			D2InventoryGridInfoStrc,	0x6FBB3710 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_RARM,	D2InvCompGridStrc,			0x6FBB59A8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_TORSO,	D2InvCompGridStrc,			0x6FBB5994 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_LARM,	D2InvCompGridStrc,			0x6FBB59BC - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_HEAD,	D2InvCompGridStrc,			0x6FBB596C - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_NECK,	D2InvCompGridStrc,			0x6FBB5980 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_RHAND,	D2InvCompGridStrc,			0x6FBB59D0 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_LHAND,	D2InvCompGridStrc,			0x6FBB59E4 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_BELT,	D2InvCompGridStrc,			0x6FBB59F8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_FEET,	D2InvCompGridStrc,			0x6FBB5A0C - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtCharInvCompGrid_GLOVES,	D2InvCompGridStrc,			0x6FBB5A20 - D2ClientImageBase);
+using BodyLocsInvCompGrids = D2InvCompGridStrc[NUM_BODYLOC_NO_SWITCH];
 
-D2VAR(D2CLIENT, pgtHirelingInvRect, D2InvRectStrc,					0x6FBB3780 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgpHirelingInvGridInfo, D2InventoryGridInfoStrc,	0x6FBB36F8 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgtCharInvRect,		D2InvRectStrc,				0x6FBB38C8 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgpCharInvGridInfo,	D2InventoryGridInfoStrc,	0x6FBB3710 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgaCharInvCompGrids,BodyLocsInvCompGrids,		0x6FBB5958 - D2ClientImageBase);
 
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_RARM,	D2InvCompGridStrc,	0x6FBB5A88 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_TORSO,	D2InvCompGridStrc,	0x6FBB5A74 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_LARM,	D2InvCompGridStrc,	0x6FBB5A9C - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_HEAD,	D2InvCompGridStrc,	0x6FBB5A4C - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_NECK,	D2InvCompGridStrc,	0x6FBB5A60 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_RHAND,	D2InvCompGridStrc,	0x6FBB5AB0 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_LHAND,	D2InvCompGridStrc,	0x6FBB5AC4 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_BELT,	D2InvCompGridStrc,	0x6FBB5AD8 - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_FEET,	D2InvCompGridStrc,	0x6FBB5AEC - D2ClientImageBase);
-D2VAR(D2CLIENT, pgtHirelingInvCompGrid_GLOVES,	D2InvCompGridStrc,	0x6FBB5B00 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgtHirelingInvRect,		D2InvRectStrc,			0x6FBB3780 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgpHirelingInvGridInfo,	D2InventoryGridInfoStrc,0x6FBB36F8 - D2ClientImageBase);
+D2VAR(D2CLIENT, pgaHirelingInvCompGrids,BodyLocsInvCompGrids,	0x6FBB5A88 - D2ClientImageBase);
+
 
 
 D2VAR(D2CLIENT, pgtTradePage1Rect,				D2InvRectStrc,				0x6FBB3810 - D2ClientImageBase);
@@ -208,6 +192,20 @@ D2InvRectStrc D2InvRectFromPosAndSize(D2CoordStrc tCoords, int width, int height
 	return { tCoords.nX, tCoords.nY - height, tCoords.nX + width, tCoords.nY };
 }
 
+
+static const D2C_PlayerBodyLocs gaInvComponentToBodyLoc[NUM_INV_COMPS]
+{
+	/*[INV_COMP_RARM]*/BODYLOC_RARM,
+	/*[INV_COMP_TORSO]*/BODYLOC_TORSO,
+	/*[INV_COMP_LARM]*/BODYLOC_LARM,
+	/*[INV_COMP_HEAD]*/BODYLOC_HEAD,
+	/*[INV_COMP_NECK]*/BODYLOC_NECK,
+	/*[INV_COMP_RHAND]*/BODYLOC_RHAND,
+	/*[INV_COMP_LHAND]*/BODYLOC_LHAND,
+	/*[INV_COMP_BELT]*/BODYLOC_BELT,
+	/*[INV_COMP_FEET]*/BODYLOC_FEET,
+	/*[INV_COMP_GLOVES]*/BODYLOC_GLOVES,
+};
 //1.10f: D2Client.0x6FAE0A10
 //1.13c: D2Client.0x6FB408C0
 void __fastcall UI_INV_RefreshPositions() {
@@ -222,29 +220,17 @@ void __fastcall UI_INV_RefreshPositions() {
 		const D2C_InventoryRecords nInvId = UNITS_GetInventoryRecordId(D2CLIENT_GetControlUnit(), INVPAGE_INVENTORY, D2CLIENT_GetExpansionFlag_6FAAC080());
 		DATATBLS_GetInventoryRect(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvRect);
 		DATATBLS_GetInventoryGridInfo(nInvId, *D2CLIENT_pgbIsHigherResolution,		D2CLIENT_pgpCharInvGridInfo);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_RARM, INV_COMP_RARM);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_TORSO, INV_COMP_TORSO);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_LARM, INV_COMP_LARM);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_HEAD, INV_COMP_HEAD);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_NECK, INV_COMP_NECK);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_RHAND, INV_COMP_RHAND);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_LHAND, INV_COMP_LHAND);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_BELT, INV_COMP_BELT);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_FEET, INV_COMP_FEET);
-		DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_GLOVES, INV_COMP_GLOVES);
+		for (int i = 0; i < NUM_INV_COMPS; i++)
+		{
+			DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, &(*D2CLIENT_pgaCharInvCompGrids)[gaInvComponentToBodyLoc[i]], D2InventoryComponent(i));
+		}
 
 		DATATBLS_GetInventoryRect(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtHirelingInvRect);
 		DATATBLS_GetInventoryGridInfo(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgpHirelingInvGridInfo);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_RARM, INV_COMP_RARM);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_TORSO, INV_COMP_TORSO);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_LARM, INV_COMP_LARM);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_HEAD, INV_COMP_HEAD);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_NECK, INV_COMP_NECK);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_RHAND, INV_COMP_RHAND);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_LHAND, INV_COMP_LHAND);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_BELT, INV_COMP_BELT);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_FEET, INV_COMP_FEET);
-		DATATBLS_GetInventoryComponentGrid(INVENTORYRECORD_HIRELING, *D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtCharInvCompGrid_GLOVES, INV_COMP_GLOVES);
+		for (int i = 0; i < NUM_INV_COMPS; i++)
+		{
+			DATATBLS_GetInventoryComponentGrid(nInvId, *D2CLIENT_pgbIsHigherResolution, &(*D2CLIENT_pgaHirelingInvCompGrids)[gaInvComponentToBodyLoc[i]], D2InventoryComponent(i));
+		}
 
 		DATATBLS_GetInventoryRect(		INVENTORYRECORD_TRADE_PAGE_1,			*D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtTradePage1Rect);
 		DATATBLS_GetInventoryGridInfo(	INVENTORYRECORD_TRADE_PAGE_1,			*D2CLIENT_pgbIsHigherResolution, D2CLIENT_pgtTradePage1GridInfo);
