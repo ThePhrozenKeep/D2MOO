@@ -123,7 +123,7 @@ void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes
 }
 
 //D2Common.0x6FD55030 (#10637)
-void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent)
+void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, D2InventoryComponent nComponent)
 {
 	int nIndex = nInventoryTxtId + NUM_INVENTORY_PAGE_STATS * bHigherRes;
 

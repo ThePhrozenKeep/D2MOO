@@ -5253,11 +5253,11 @@ int32_t __fastcall sub_6FC4AB10(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
     case BODYLOC_LARM:
         nBodyLoc = BODYLOC_RARM;
         break;
-    case BODYLOC_RRIN:
-        nBodyLoc = BODYLOC_LRIN;
+    case BODYLOC_RHAND:
+        nBodyLoc = BODYLOC_LHAND;
         break;
-    case BODYLOC_LRIN:
-        nBodyLoc = BODYLOC_RRIN;
+    case BODYLOC_LHAND:
+        nBodyLoc = BODYLOC_RHAND;
         break;
     case BODYLOC_SWRARM:
         nBodyLoc = BODYLOC_SWLARM;
@@ -5405,11 +5405,11 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
                     case BODYLOC_LARM:
                         pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_RARM);
                         break;
-                    case BODYLOC_RRIN:
-                        pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_LRIN);
+                    case BODYLOC_RHAND:
+                        pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_LHAND);
                         break;
-                    case BODYLOC_LRIN:
-                        pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_RRIN);
+                    case BODYLOC_LHAND:
+                        pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_RHAND);
                         break;
                     case BODYLOC_SWRARM:
                         pOtherPlayerItem = INVENTORY_GetItemFromBodyLoc(pPlayerInventory, BODYLOC_SWLARM);

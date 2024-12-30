@@ -10,7 +10,7 @@
 constexpr int D2ClientImageBase = 0x6FAA0000;
 
 #define D2CLIENTSTUB(name, addr, ret, conv, params) \
-    D2FUNC(D2CLIENT, name##_##addr, ret, conv, params, 0x##addr - D2ClientImageBase); auto name##_##addr = D2CLIENT_##name##_##addr;
+    D2FUNC(D2CLIENT, name##_##addr, ret, conv, params, 0x##addr - D2ClientImageBase); static auto name##_##addr = D2CLIENT_##name##_##addr;
 
 #define D2CLIENTDWORDSTUB(addr) \
     D2VAR(D2CLIENT, pdword_##addr, DWORD, 0x##addr - D2ClientImageBase);

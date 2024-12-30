@@ -32,8 +32,6 @@ struct D2InventoryGridInfoStrc
 
 enum D2InventoryComponent
 {
-	//INV_COMP_INV,
-	//INV_COMP_GRID,
 	INV_COMP_RARM,
 	INV_COMP_TORSO,
 	INV_COMP_LARM,
@@ -65,4 +63,4 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, 
 //D2Common.0x6FD54FB0 (#10636)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo);
 //D2Common.0x6FD55030 (#10637)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, D2InventoryComponent nComponent);

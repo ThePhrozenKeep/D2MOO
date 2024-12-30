@@ -6,6 +6,7 @@
 #include <Engine/Cursor.h>
 #include <UI/UI.h>
 
+#ifdef D2_VERSION_110F
 //1.10f: D2CLient.0x6FB90C30
 static int gnItemCursorUIStates;
 //1.10f: D2CLient.0x6FB90C28
@@ -41,7 +42,7 @@ void __fastcall UIHandleCursorItemPacket(D2GSPacketSrv3F* pPacket)
 			if (D2UnitStrc* pItem = CUNIT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
 			{
 				ITEMS_SetItemFlag(pItem, 4u, 1);
-				CLIENT_SetCursorUsingItem(pPacket->nCursor, pItem);
+				CLIENT_SetCursorUsingItem(D2C_CursorBuySellFrame(pPacket->nCursor), pItem);
 			}
 		}
 	}
@@ -54,7 +55,9 @@ void __fastcall UIHandleCursorItemPacket(D2GSPacketSrv3F* pPacket)
 		}
 		if (D2UnitStrc* pItem = CUNIT_GetClientUnit(pPacket->dwItemId, UNIT_ITEM))
 		{
-			CLIENT_SetCursorUsingItem(pPacket->nCursor, pItem);
+			CLIENT_SetCursorUsingItem(D2C_CursorBuySellFrame(pPacket->nCursor), pItem);
 		}
 	}
 }
+
+#endif //D2_VERSION_110F

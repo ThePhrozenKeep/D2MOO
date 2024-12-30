@@ -24,8 +24,8 @@ enum D2C_PlayerBodyLocs
 	BODYLOC_TORSO,		//Body Armor
 	BODYLOC_RARM,		//Right-Hand
 	BODYLOC_LARM,		//Left-Hand
-	BODYLOC_RRIN,		//Right Ring
-	BODYLOC_LRIN,		//Left Ring
+	BODYLOC_RHAND,		//Right Ring
+	BODYLOC_LHAND,		//Left Ring
 	BODYLOC_BELT,		//Belt
 	BODYLOC_FEET,		//Boots
 	BODYLOC_GLOVES,		//Gloves

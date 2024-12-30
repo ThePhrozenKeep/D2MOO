@@ -995,7 +995,7 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
         { ' uov', BODYLOC_RARM, 1, 0, 0 },
         { ' wot', BODYLOC_LARM, 1, 0, 0 },
         { ' xat', BODYLOC_LARM, 1, 0, 0 },
-        { ' nir', BODYLOC_RRIN, 1, 0, 0 },
+        { ' nir', BODYLOC_RHAND, 1, 0, 0 },
         { ' dlf', BODYLOC_TORSO, 1, 0, 0 },
         { ' lgh', BODYLOC_GLOVES, 1, 0, 0 },
         { ' dlf', BODYLOC_TORSO, 1, 0, 0 },
