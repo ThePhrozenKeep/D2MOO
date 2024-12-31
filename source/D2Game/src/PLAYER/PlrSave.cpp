@@ -167,7 +167,7 @@ D2UnitStrc* __fastcall sub_6FC897F0(D2GameStrc* pGame, D2SavedItemStrc* pSavedIt
     if (pItem)
     {
         ITEMS_SetFileIndex(pItem, pSavedItem->nItemIndex);
-        ITEMS_SetInvPage(pItem, pSavedItem->nInvPage);
+        ITEMS_SetPage(pItem, pSavedItem->nInvPage);
     }
 
     return pItem;
@@ -1122,7 +1122,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
             pSavedItem->nSpawnType = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nX = (uint8_t)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->nY = (uint8_t)BITMANIP_Read(&bitBuffer, 3);
-            pSavedItem->nInvPage = BITMANIP_Read(&bitBuffer, 8);
+            pSavedItem->nInvPage = (D2C_ItemInvPage)BITMANIP_Read(&bitBuffer, 8);
             
             if (ITEMS_CheckIfFlagIsSet(pSavedItem->nItemFlags, IFLAG_ISEAR))
             {
@@ -1157,7 +1157,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
             pSavedItem->nItemIndex = BITMANIP_ReadSigned(&bitBuffer, 10);
             pSavedItem->nSeed = BITMANIP_Read(&bitBuffer, 32);
             pSavedItem->nItemSeed = BITMANIP_Read(&bitBuffer, 32);
-            pSavedItem->nInvPage = BITMANIP_Read(&bitBuffer, 8);
+            pSavedItem->nInvPage = (D2C_ItemInvPage)BITMANIP_Read(&bitBuffer, 8);
         }
 
         pSavedItem->nItemId = DATATBLS_GetItemIdFromItemCode(pSavedItem->nItemCode);
@@ -1177,7 +1177,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
             pSavedItem->nX = (uint8_t)BITMANIP_Read(&bitBuffer, 5);
             pSavedItem->nY = (uint8_t)BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemIndex = BITMANIP_ReadSigned(&bitBuffer, 10);
-            pSavedItem->nInvPage = BITMANIP_Read(&bitBuffer, 8);
+            pSavedItem->nInvPage = (D2C_ItemInvPage)BITMANIP_Read(&bitBuffer, 8);
             pSavedItem->nEarLevel = BITMANIP_Read(&bitBuffer, 8);
 
             for (int32_t i = 0; i < 16; ++i)
@@ -1207,7 +1207,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
             pSavedItem->nItemIndex = BITMANIP_ReadSigned(&bitBuffer, 10);
             pSavedItem->nSeed = BITMANIP_Read(&bitBuffer, 32);
             pSavedItem->nItemSeed = BITMANIP_Read(&bitBuffer, 32);
-            pSavedItem->nInvPage = BITMANIP_Read(&bitBuffer, 8);
+            pSavedItem->nInvPage = (D2C_ItemInvPage)BITMANIP_Read(&bitBuffer, 8);
 
             if (nItemId >= 0)
             {
@@ -1363,7 +1363,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         ITEMS_SetBodyLocation(pItem, nBodyLoc);
         pItem->dwFlags &= 0xFFFFFFFDu;
         UNITS_ChangeAnimMode(pItem, 1);
-        ITEMS_SetInvPage(pItem, uint8_t(-1));
+        ITEMS_SetPage(pItem, INVPAGE_NULL);
         ITEMS_SetItemCMDFlag(pItem, 8, 1);
         pItem->dwFlags &= 0xFDFFFFFFu;
         INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
@@ -1553,7 +1553,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         }
 
         UNITS_ChangeAnimMode(pItem, 1);
-        ITEMS_SetInvPage(pItem, 0xFFu);
+        ITEMS_SetPage(pItem, INVPAGE_NULL);
         ITEMS_SetItemCMDFlag(pItem, 8, 1);
 
         if (pItem)

@@ -552,7 +552,7 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
         else
         {
             DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pTarget), pTarget->dwUnitType, pTarget->dwUnitId);
-            ITEMS_SetInvPage(pTarget, 0xFFu);
+            ITEMS_SetPage(pTarget, INVPAGE_NULL);
             pTarget->dwFlags |= UNITFLAG_SENDREFRESHMSG;
             UNITS_ChangeAnimMode(pTarget, IMODE_ONGROUND);
             SUNIT_AttachSound(pUnit, 0x13u, pUnit);

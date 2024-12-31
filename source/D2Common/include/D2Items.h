@@ -202,7 +202,7 @@ struct D2ItemSaveStrc
 	uint8_t nAnimMode;							//0x08
 	uint8_t pad0x09[3];							//0x09
 	uint32_t dwFlags;							//0x0C
-	uint8_t nStorePage;							//0x10
+	D2C_ItemStorePage nStorePage;				//0x10
 	D2C_PlayerBodyLocs nBodyLoc;				//0x11
 	uint8_t pad0x12[2];							//0x12
 	int32_t nItemFileIndex;						//0x14
@@ -270,9 +270,9 @@ D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemLevel(D2UnitStrc* pItem);
 //D2Common.0x6FD988B0 (#10718)
 D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemLevel(D2UnitStrc* pItem, int nItemLevel);
 //D2Common.0x6FD988E0 (#10719)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2C_Page __stdcall ITEMS_GetPage(D2UnitStrc* pItem);
 //D2Common.0x6FD98900 (#10720)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, uint8_t nPage);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetPage(D2UnitStrc* pItem, D2C_Page nPage);
 //D2Common.0x6FD98920 (#10721)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem);
 //D2Common.0x6FD98940 (#10722)
@@ -312,7 +312,7 @@ D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReload(D2UnitStrc* pItem);
 //D2Common.0x6FD98F20 (#10787)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem);
 //D2Common.0x6FD98FA0 (#10788)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2C_ItemStorePage __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem);
 //D2Common.0x6FD99020 (#10789)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem);
 //D2Common.0x6FD990A0 (#10790)

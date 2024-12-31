@@ -94,7 +94,7 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 //D2Game.0x6FC4FEC0
 D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nQuality, int32_t* pItemLevel, D2ItemDropStrc* pItemDrop, int32_t a6, int32_t a7);
 //D2Game.0x6FC501A0
-D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t us1, int32_t alw1, int32_t nItemLevel, int32_t us0, int32_t a1, int32_t alw0);
+D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pOwner, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t us1, int32_t alw1, int32_t nItemLevel, int32_t us0, int32_t a1, int32_t alw0);
 //D2Game.0x6FC502B0
 void __fastcall sub_6FC502B0(D2GameStrc* pGame, D2UnitStrc* pItem);
 //D2Game.0x6FC502E0

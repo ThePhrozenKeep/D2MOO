@@ -655,7 +655,7 @@ D2UnitStrc* __stdcall INVENTORY_GetLastItem(D2InventoryStrc* pInventory)
 }
 
 //D2Common.0x6FD8E7E0 (#10245)
-BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, uint8_t nPage)
+BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, D2C_Page nPage)
 {
 	if (!INVENTORY_GetPtrIfValid(pInventory) || !ITEMS_GetItemData(pItem))
 	{
@@ -673,7 +673,7 @@ BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc
 	D2InventoryGridInfoStrc pInventoryGridInfo = {};
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
-	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + INVGRID_INVENTORY, &pInventoryGridInfo);
+	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, GetInventoryGridIdFromPage(nPage), &pInventoryGridInfo);
 	if (!pInventoryGrid)
 	{
 		return FALSE;
@@ -945,20 +945,20 @@ BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridSt
 }
 
 //D2Common.0x6FD8F1E0 (#10246)
-BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, const char* szFile, int nLine)
+BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, D2C_Page nPage, const char* szFile, int nLine)
 {
 	int nX = 0;
 	int nY = 0;
 	if (pInventory && INVENTORY_UnitIsItem(pItem) && INVENTORY_GetFreePosition(pInventory, pItem, nInventoryRecordId, &nX, &nY, nPage))
 	{
-		return INVENTORY_PlaceItemInGrid(pInventory, pItem, nX, nY, nPage + 2, nInventoryRecordId, bUnused);
+		return INVENTORY_PlaceItemInGrid(pInventory, pItem, nX, nY, GetInventoryGridIdFromPage(nPage), nInventoryRecordId, bUnused);
 	}
 
 	return FALSE;
 }
 
 //D2Common.0x6FD8F250
-BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryGrid, int nInventoryRecordId, BOOL bUnused)
+BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, D2C_InventoryGrids nInventoryGrid, int nInventoryRecordId, BOOL bUnused)
 {
 	D2_MAYBE_UNUSED(bUnused);
 	if (!INVENTORY_GetPtrIfValid(pInventory))
@@ -1085,9 +1085,9 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		ITEMS_SetOwnerId(pItem, -1);
 	}
 	
-	if (nInventoryGrid >= 2)
+	if (nInventoryGrid >= INVGRID_INVENTORY)
 	{
-		ITEMS_SetInvPage(pItem, nInventoryGrid - 2);
+		ITEMS_SetPage(pItem, GetPageFromInventoryGridId(nInventoryGrid));
 	}
 
 	if (nInventoryGrid == INVGRID_BODYLOC)
@@ -1114,7 +1114,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 }
 
 //D2Common.0x6FD8F600 (#10247)
-BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, unsigned int* pHoveredItems, uint8_t nPage)
+BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, unsigned int* pHoveredItems, D2C_Page nPage)
 {
 	*pHoveredItems = 0;
 
@@ -1134,7 +1134,7 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 	D2InventoryGridInfoStrc pInventoryGridInfo = {};
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, FALSE, &pInventoryGridInfo);
 
-	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
+	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, GetInventoryGridIdFromPage(nPage), &pInventoryGridInfo);
 	if (!pInventoryGrid)
 	{
 		return FALSE;
@@ -1179,9 +1179,9 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 }
 
 //D2Common.0x6FD8F780 (#10248)
-BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, uint8_t nPage, BOOL bCheckIfCube)
+BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, D2C_Page nPage, BOOL bCheckIfCube)
 {
-	if (!INVENTORY_GetPtrIfValid(pInventory) || !INVENTORY_UnitIsItem(pItem) || nPage == uint8_t(-1) || nXPos < 0 || nYPos < 0)
+	if (!INVENTORY_GetPtrIfValid(pInventory) || !INVENTORY_UnitIsItem(pItem) || nPage == INVPAGE_NULL || nXPos < 0 || nYPos < 0)
 	{
 		return FALSE;
 	}
@@ -1196,7 +1196,7 @@ BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2Unit
 
 	D2InventoryGridInfoStrc pInventoryGridInfo = {};
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, FALSE, &pInventoryGridInfo);
-	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
+	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, GetInventoryGridIdFromPage(nPage), &pInventoryGridInfo);
 	if (!pInventoryGrid)
 	{
 		return FALSE;
@@ -1246,24 +1246,24 @@ BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2Unit
 }
 
 //D2Common.0x6FD8F930 (#10249)
-BOOL __stdcall INVENTORY_PlaceItemAtInventoryPage(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, BOOL bUnused, uint8_t nPage)
+BOOL __stdcall INVENTORY_PlaceItemAtInventoryPage(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, BOOL bUnused, D2C_Page nPage)
 {
 	if (pInventory)
 	{
-		return INVENTORY_PlaceItemInGrid(pInventory, pItem, nXPos, nYPos, nPage + 2, nInventoryRecordId, bUnused);
+		return INVENTORY_PlaceItemInGrid(pInventory, pItem, nXPos, nYPos, GetInventoryGridIdFromPage(nPage), nInventoryRecordId, bUnused);
 	}
 
 	return FALSE;
 }
 
 //D2Common.0x6FD8F970 (#10250)
-void __stdcall INVENTORY_Return(const char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, uint8_t nPage)
+void __stdcall INVENTORY_Return(const char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, D2C_Page nPage)
 {
 	return;
 }
 
 //D2Common.0x6FD8F980 (#10252)
-D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, uint8_t nPage)
+D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, D2C_Page nPage)
 {
 	if (!INVENTORY_GetPtrIfValid(pInventory))
 	{
@@ -1273,7 +1273,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 	D2InventoryGridInfoStrc pInventoryGridInfo = {};
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
-	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
+	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, GetInventoryGridIdFromPage(nPage), &pInventoryGridInfo);
 	if (pInventoryGrid && nGridX >= 0 && nGridX <= pInventoryGrid->nGridWidth && nGridY >= 0 && nGridY <= pInventoryGrid->nGridHeight)
 	{
 		D2UnitStrc* pItem = pInventoryGrid->ppItems[nGridX + nGridY * pInventoryGrid->nGridWidth];
@@ -1558,7 +1558,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
 		D2InventoryGridInfoStrc pInventoryGridInfo = {};
-		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, 0, TRUE), FALSE, &pInventoryGridInfo);
+		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, INVPAGE_INVENTORY, TRUE), FALSE, &pInventoryGridInfo);
 		pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 	}
 	else
@@ -2126,7 +2126,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventor
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
 		D2InventoryGridInfoStrc pInventoryGridInfo = {};
-		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, 0, 1), 0, &pInventoryGridInfo);
+		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, INVPAGE_INVENTORY, 1), 0, &pInventoryGridInfo);
 		pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 	}
 	else
@@ -2997,7 +2997,7 @@ int __fastcall sub_6FD91D50(D2UnitStrc* pPlayer, int a2, D2C_PlayerBodyLocs nBod
 			return 5;
 		}
 
-		const int nInventoryRecord = UNITS_GetInventoryRecordId(pPlayer, 0, 1);
+		const int nInventoryRecord = UNITS_GetInventoryRecordId(pPlayer, INVPAGE_INVENTORY, 1);
 		if (INVENTORY_GetPtrIfValid(pPlayer->pInventory) && INVENTORY_ValidateBodyLoc(nBodyLoc))
 		{
 			D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pPlayer->pInventory, INVGRID_BODYLOC, &gBodyLocInventoryGridInfo);
@@ -3230,7 +3230,7 @@ BOOL __fastcall INVENTORY_CanItemBePlacedInTradeInventory(D2InventoryStrc* pTrad
 	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
 	{
 		pItem = INVENTORY_UnitIsItem(pItem);
-		if (ITEMS_GetInvPage(pItem) == INVPAGE_TRADE && !INVENTORY_CanItemBePlacedInInventory(pPlayer2, pItem, pTradeInventory))
+		if (ITEMS_GetPage(pItem) == INVPAGE_TRADE && !INVENTORY_CanItemBePlacedInInventory(pPlayer2, pItem, pTradeInventory))
 		{
 			return FALSE;
 		}

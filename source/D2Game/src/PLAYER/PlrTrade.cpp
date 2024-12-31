@@ -102,7 +102,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
 
     for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {
-        if (INVENTORY_UnitIsItem(pItem) && ITEMS_GetInvPage(pItem) == INVPAGE_CUBE)
+        if (INVENTORY_UnitIsItem(pItem) && ITEMS_GetPage(pItem) == INVPAGE_CUBE)
         {
             ++nItemsInCube;
 
@@ -591,7 +591,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         if (pCubeOutput->wItemFlags & CUBEFLAG_OUT_COPYMODS)
         {
             D2UnitStrc* pItem = pCubeItem[nCounter].pItem;
-            ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+            ITEMS_SetPage(pItem, INVPAGE_NULL);
             UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
 
             D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pItem, 0, bRemove[nCounter] == 0);
@@ -636,21 +636,21 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
             D2GAME_InitItemStats_6FC4E520(pGame, &pTempItem, 0, 0);
             pOutputs[nCounter] = pTempItem;
             UNITS_ChangeAnimMode(pTempItem, IMODE_ONCURSOR);
-            ITEMS_SetInvPage(pItem, INVPAGE_CUBE);
+            ITEMS_SetPage(pItem, INVPAGE_CUBE);
         }
         else
         {
             if (nType == CUBEOP_USEITEM)
             {
                 D2UnitStrc* pItem = pCubeItem[nCounter].pItem;
-                ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+                ITEMS_SetPage(pItem, INVPAGE_NULL);
                 UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
 
                 D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pItem, 0, bRemove[nCounter] == 0);
                 pOutputs[nCounter] = pDupeItem;
 
                 UNITS_ChangeAnimMode(pDupeItem, IMODE_ONCURSOR);
-                ITEMS_SetInvPage(pItem, INVPAGE_CUBE);
+                ITEMS_SetPage(pItem, INVPAGE_CUBE);
 
                 if (pCubeOutput->nQuality == ITEMQUAL_TEMPERED)
                 {
@@ -804,7 +804,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                                 D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pCheckedItem, 0, 1);
                                 if (pDupeItem)
                                 {
-                                    ITEMS_SetInvPage(pDupeItem, INVPAGE_NULL);
+                                    ITEMS_SetPage(pDupeItem, INVPAGE_NULL);
                                     UNITS_ChangeAnimMode(pDupeItem, IMODE_ONCURSOR);
                                     pSocketables[nSocketables] = pDupeItem;
                                     ++nSocketables;
@@ -939,7 +939,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
 			pNextItem = INVENTORY_GetNextItem(pCurrentItem); // Needs to be retrieved before deleting current item
 
             D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pCurrentItem);
-            if (pCheckedItem && ITEMS_GetInvPage(pCheckedItem) == INVPAGE_CUBE)
+            if (pCheckedItem && ITEMS_GetPage(pCheckedItem) == INVPAGE_CUBE)
             {
                 int32_t nFlags = 0;
                 ITEMS_SetOrRemoveFlag(&nFlags, 32, 1);
@@ -957,7 +957,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         D2UnitStrc* pOutputItem = pOutputs[i];
         if (pOutputItem)
         {
-            ITEMS_SetInvPage(pOutputItem, INVPAGE_CUBE);
+            ITEMS_SetPage(pOutputItem, INVPAGE_CUBE);
 
             if (D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pOutputItem->dwUnitId, 0, 0, 1, 1, 0))
             {
@@ -991,7 +991,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         D2UnitStrc* pSocketable = pSocketables[i];
         if (pSocketable)
         {
-            ITEMS_SetInvPage(pSocketable, INVPAGE_CUBE);
+            ITEMS_SetPage(pSocketable, INVPAGE_CUBE);
 
             if (D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pSocketable->dwUnitId, 0, 0, 1, 1, 0))
             {
@@ -1571,7 +1571,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
-                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pInteractPlayer, pCheckedItem))
+                    if (ITEMS_GetPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pInteractPlayer, pCheckedItem))
                     {
                         sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
@@ -1585,7 +1585,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pInteractPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
-                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pPlayer, pCheckedItem))
+                    if (ITEMS_GetPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pPlayer, pCheckedItem))
                     {
                         sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
@@ -1723,7 +1723,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
     int32_t nItemsInCube = 0;
     for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {
-        if (ITEMS_GetInvPage(INVENTORY_UnitIsItem(pItem)) == INVPAGE_CUBE)
+        if (ITEMS_GetPage(INVENTORY_UnitIsItem(pItem)) == INVPAGE_CUBE)
         {
             ++nItemsInCube;
         }
@@ -2120,7 +2120,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
     for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {
         D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
-        if (ITEMS_GetInvPage(pCheckedItem) == 2)
+        if (ITEMS_GetPage(pCheckedItem) == 2)
         {
             D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pCheckedItem, 0, 0);
             if (pDupeItem)
@@ -2137,7 +2137,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
                 }
 
                 UNITS_ChangeAnimMode(pDupeItem, 4);
-                ITEMS_SetInvPage(pDupeItem, 0);
+                ITEMS_SetPage(pDupeItem, INVPAGE_INVENTORY);
 
                 if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer2, pDupeItem->dwUnitId, 0, 0, 1, 1, 0))
                 {
@@ -2160,7 +2160,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
     {
         D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
 
-        const uint8_t nInvPage = ITEMS_GetInvPage(pCheckedItem);
+        const uint8_t nInvPage = ITEMS_GetPage(pCheckedItem);
         switch (nInvPage)
         {
         case 1:
@@ -2269,7 +2269,7 @@ void __fastcall sub_6FC92F10(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pItem, 0, 0);
     UNITS_ChangeAnimMode(pDupeItem, 4);
-    ITEMS_SetInvPage(pDupeItem, 1u);
+    ITEMS_SetPage(pDupeItem, INVPAGE_EQUIP);
 
     const int32_t nItemGUID = pDupeItem ? pDupeItem->dwUnitId : -1;
 
@@ -2447,7 +2447,7 @@ int32_t __fastcall sub_6FC93430(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             {
                 for (D2UnitStrc* i = INVENTORY_GetFirstItem(pPlayer->pInventory); i; i = INVENTORY_GetNextItem(i))
                 {
-                    if (ITEMS_GetInvPage(INVENTORY_UnitIsItem(i)) == INVPAGE_CUBE)
+                    if (ITEMS_GetPage(INVENTORY_UnitIsItem(i)) == INVPAGE_CUBE)
                     {
                         nResult = 0;
                         PLRTRADE_SendEventPacketToPlayer(pPlayer, EVENTTYPE_HASITEMSINBOX, nullptr);

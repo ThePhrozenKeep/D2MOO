@@ -1838,7 +1838,7 @@ void __fastcall DATATBLS_LoadItemTypesTxt(HD2ARCHIVE hArchive)
 	D2BinFieldStrc pTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pItemTypesLinker },
-		{ "equiv1", TXTFIELD_CODETOWORD, 0, TXTFIELD_BYTE, &sgptDataTables->pItemTypesLinker },
+		{ "equiv1", TXTFIELD_CODETOWORD, 0, 4, &sgptDataTables->pItemTypesLinker },
 		{ "equiv2", TXTFIELD_CODETOWORD, 0, 6, &sgptDataTables->pItemTypesLinker },
 		{ "repair", TXTFIELD_BYTE, 0, 8, NULL },
 		{ "body", TXTFIELD_BYTE, 0, 9, NULL },

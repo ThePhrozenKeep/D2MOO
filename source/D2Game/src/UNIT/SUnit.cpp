@@ -1677,7 +1677,7 @@ void __fastcall SUNIT_RemoveAllItemsFromInventory(D2GameStrc* pGame, D2UnitStrc*
             //}
             //else if (ITEMS_IsCharmUsable(pItem, pUnit))
             //{
-            //    const uint8_t nPage = ITEMS_GetInvPage(pItem);
+            //    const uint8_t nPage = ITEMS_GetPage(pItem);
             //    INVENTORY_Return(__FILE__, __LINE__, pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), UNITS_GetInventoryRecordId(pUnit, nPage, pGame->bExpansion), 0, nPage);
             //}
         }

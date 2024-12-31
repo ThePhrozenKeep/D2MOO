@@ -399,6 +399,51 @@ enum D2C_VendorInventoryModes
 	VENDORMODE_CUBE = 14,
 	VENDORMODE_IMBUE = 19,
 };
+
+enum D2C_PlayerBodyLocs : uint8_t
+{
+	BODYLOC_NONE,		//Not Equipped
+	BODYLOC_HEAD,		//Helm
+	BODYLOC_NECK,		//Amulet
+	BODYLOC_TORSO,		//Body Armor
+	BODYLOC_RARM,		//Right-Hand
+	BODYLOC_LARM,		//Left-Hand
+	BODYLOC_RHAND,		//Right Ring
+	BODYLOC_LHAND,		//Left Ring
+	BODYLOC_BELT,		//Belt
+	BODYLOC_FEET,		//Boots
+	BODYLOC_GLOVES,		//Gloves
+	BODYLOC_SWRARM,		//Right-Hand on Switch
+	BODYLOC_SWLARM,		//Left-Hand on Switch
+	NUM_BODYLOC,
+	NUM_BODYLOC_NO_SWITCH = BODYLOC_SWRARM,
+};
+
+using D2C_Page = uint8_t;
+
+// When owner is a player
+enum D2C_ItemInvPage : D2C_Page
+{
+	INVPAGE_INVENTORY = 0,
+	INVPAGE_EQUIP = 1,
+	INVPAGE_TRADE = 2,
+	INVPAGE_CUBE = 3,
+	INVPAGE_STASH = 4,
+	INVPAGE_BELT = 5,
+	INVPAGE_NULL = 255
+};
+
+// When owner is a NPC
+enum D2C_ItemStorePage : D2C_Page
+{
+	STOREPAGE_ARMOR = 0,
+	STOREPAGE_WEAPON = 1,
+	STOREPAGE_MAGIC = 2,
+	STOREPAGE_MISC = 3,
+	STOREPAGE_NULL = 255
+};
+
+
 #endif // CONSTANTS_UI
 
 #ifndef CONSTANTS_STRINGS //Pseudo-Macro to group all constants

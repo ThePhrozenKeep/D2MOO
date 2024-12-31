@@ -330,22 +330,22 @@ void __stdcall ITEMS_SetItemLevel(D2UnitStrc* pItem, int nItemLevel)
 }
 
 //D2Common.0x6FD988E0 (#10719)
-uint8_t __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem)
+D2C_Page __stdcall ITEMS_GetPage(D2UnitStrc* pItem)
 {
 	if (D2ItemDataStrc * pItemData = ITEMS_GetItemData(pItem))
 	{
-		return pItemData->nInvPage;
+		return pItemData->nPage;
 	}
 
-	return -1;
+	return INVPAGE_NULL;
 }
 
 //D2Common.0x6FD98900 (#10720)
-void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, uint8_t nPage)
+void __stdcall ITEMS_SetPage(D2UnitStrc* pItem, D2C_Page nPage)
 {
 	if (D2ItemDataStrc * pItemData = ITEMS_GetItemData(pItem))
 	{
-		pItemData->nInvPage = nPage;
+		pItemData->nPage = nPage;
 	}
 }
 
@@ -680,7 +680,7 @@ uint32_t __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD98FA0 (#10788)
-uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
+D2C_ItemStorePage __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -700,7 +700,7 @@ uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem)
 		}
 	}
 
-	return -1;
+	return STOREPAGE_NULL;
 }
 
 //D2Common.0x6FD99020 (#10789)
@@ -4745,7 +4745,7 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t
 			pItemSave->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(&pBuffer, 4);
 			pItemSave->nX = (uint16_t)BITMANIP_Read(&pBuffer, 4);
 			pItemSave->nY = (uint16_t)BITMANIP_Read(&pBuffer, 4);
-			pItemSave->nStorePage = (uint8_t)BITMANIP_Read(&pBuffer, 3) - 1;
+			pItemSave->nStorePage = (D2C_ItemStorePage)(BITMANIP_Read(&pBuffer, 3) - 1);
 		}
 
 		if (pItemSave->dwFlags & IFLAG_ISEAR)
@@ -4866,7 +4866,7 @@ int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferSt
 		pItemData->nBodyLoc = (D2C_PlayerBodyLocs)BITMANIP_Read(pBuffer, 4);
 		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
-		pItemData->nInvPage = (uint8_t)BITMANIP_Read(pBuffer, 3) - 1;
+		pItemData->nInvPage = (D2C_ItemInvPage)(BITMANIP_Read(pBuffer, 3) - 1);
 	}
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
 
@@ -5026,7 +5026,7 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 		UNITS_SetXForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 		UNITS_SetYForStaticUnit(pItem, BITMANIP_Read(pBuffer, 4));
 
-		pItemData->nInvPage = (uint8_t)(BITMANIP_Read(pBuffer, 3) - 1);
+		pItemData->nInvPage = (D2C_ItemInvPage)(BITMANIP_Read(pBuffer, 3) - 1);
 	}
 
 	UNITS_ChangeAnimMode(pItem, nAnimMode);
@@ -6327,7 +6327,7 @@ void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* p
 		}
 		ITEMS_WriteBitsToBitstream(pBuffer, nY, 4);
 
-		ITEMS_WriteBitsToBitstream(pBuffer, (ITEMS_GetInvPage(pItem) + 1), 3);
+		ITEMS_WriteBitsToBitstream(pBuffer, (ITEMS_GetPage(pItem) + 1), 3);
 	}
 
 	if (ITEMS_GetItemFlags(pItem) & IFLAG_ISEAR)
@@ -6517,7 +6517,7 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	int nStats = 0;
 	int nValue = 0;
 	int nGold = 0;
-	uint8_t nStorePage = 0;
+	D2C_Page nPage = STOREPAGE_ARMOR;
 	BOOL bIsRuneword = FALSE;
 	BOOL bInvalid = FALSE;
 	D2CoordStrc pCoords = {};
@@ -6629,19 +6629,19 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 		}
 		BITMANIP_Write(pBuffer, pCoords.nY, 4);
 
-		nStorePage = pItemData->nInvPage + 1;
-		if (nStorePage > 0)
+		nPage = pItemData->nPage + 1;
+		if (nPage > 0)
 		{
-			if (nStorePage >= 7)
+			if (nPage >= 7)
 			{
-				nStorePage = 7;
+				nPage = 7;
 			}
 		}
 		else
 		{
-			nStorePage = 0;
+			nPage = 0;
 		}
-		BITMANIP_Write(pBuffer, nStorePage, 3);
+		BITMANIP_Write(pBuffer, nPage, 3);
 	}
 
 	pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);

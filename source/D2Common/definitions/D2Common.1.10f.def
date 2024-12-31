@@ -719,8 +719,8 @@ EXPORTS
 ;------------------------UNUSED------------------------						@10716
 	ITEMS_GetItemLevel													@10717
 	ITEMS_SetItemLevel													@10718
-	ITEMS_GetInvPage													@10719
-	ITEMS_SetInvPage													@10720
+	ITEMS_GetPage														@10719
+	ITEMS_SetPage														@10720
 	ITEMS_GetCellOverlap												@10721
 	ITEMS_SetCellOverlap												@10722
 	ITEMS_GetEarName													@10723

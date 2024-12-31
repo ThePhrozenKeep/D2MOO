@@ -555,7 +555,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                 sub_6FC802F0(pGame, D2C_PlayerBodyLocs(nBodyLoc), pItem, pUnit);
             }
 
-            ITEMS_SetInvPage(pItem, INVPAGE_INVENTORY);
+            ITEMS_SetPage(pItem, INVPAGE_INVENTORY);
 
             D2UnitStrc* pDupedItem = ITEMS_Duplicate(pGame, pItem, pUnit, 1);
             if (nBodyLoc == -1)
@@ -602,7 +602,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                         }
 
                         UNITS_ChangeAnimMode(pDupedItem, IMODE_EQUIP);
-                        ITEMS_SetInvPage(pDupedItem, INVPAGE_NULL);
+                        ITEMS_SetPage(pDupedItem, INVPAGE_NULL);
                         ITEMS_SetItemCMDFlag(pDupedItem, 8, 1);
 
                         if (pDupedItem)
@@ -1005,7 +1005,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                     if (nWeaponGUID)
                     {
                         D2UnitStrc* pWeaponItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nWeaponGUID);
-                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetInvPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && sub_6FC42F20(pPlayer, pWeaponItem, (D2C_PlayerBodyLocs*) &nBodyLoc, 0))
+                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && sub_6FC42F20(pPlayer, pWeaponItem, (D2C_PlayerBodyLocs*) &nBodyLoc, 0))
                         {
                             if (INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc))
                             {

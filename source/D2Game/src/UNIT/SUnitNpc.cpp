@@ -247,25 +247,25 @@ D2UnitStrc* __fastcall D2GAME_NPC_GenerateStoreItem_6FCC6A60(D2UnitStrc* pNpc, i
         return nullptr;
     }
 
-    const uint8_t nStorePage = ITEMS_GetStorePage(pItem);
-    if (nStorePage == 0xFF)
+    const D2C_ItemStorePage nStorePage = ITEMS_GetStorePage(pItem);
+    if (nStorePage == STOREPAGE_NULL)
     {
         ITEMS_RemoveFromAllPlayers(pGame, pItem);
         return nullptr;
     }
 
-    ITEMS_SetInvPage(pItem, nStorePage);
+    ITEMS_SetPage(pItem, nStorePage);
     D2GAME_NPC_RepairItem_6FCC6970(pGame, pItem, 0);
 
     if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pNpc, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), 1, 1, 0))
     {
-        if (nStorePage != 1)
+        if (nStorePage != STOREPAGE_WEAPON)
         {
             SUNITPROXY_AllocNpcEvent(pNpc, pGame, pItem, 0);
             return nullptr;
         }
 
-        ITEMS_SetInvPage(pItem, 2u);
+        ITEMS_SetPage(pItem, INVPAGE_TRADE);
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pNpc, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), 1, 1, 0))
         {
@@ -695,10 +695,10 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
 
             UNITS_ChangeAnimMode(pDupeItem, 4);
 
-            const uint8_t nStorePage = ITEMS_GetStorePage(pDupeItem);
-            if (nStorePage != 0xFF)
+            const D2C_ItemStorePage nStorePage = ITEMS_GetStorePage(pDupeItem);
+            if (nStorePage != STOREPAGE_NULL)
             {
-                ITEMS_SetInvPage(pDupeItem, nStorePage);
+                ITEMS_SetPage(pDupeItem, nStorePage);
 
                 if (D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pNpc, pDupeItem->dwUnitId, CLIENTS_GetUnitX(pDupeItem), CLIENTS_GetUnitY(pDupeItem), 1, 1, 0))
                 {
@@ -717,9 +717,9 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
                     STATLIST_SetUnitStat(pDupeItem, STAT_DURABILITY, STATLIST_GetMaxDurabilityFromUnit(pDupeItem), 0);
                     STATLIST_SetUnitStat(pDupeItem, STAT_QUANTITY, ITEMS_GetTotalMaxStack(pDupeItem), 0);
                 }
-                else if (nStorePage == 1)
+                else if (nStorePage == STOREPAGE_WEAPON)
                 {
-                    ITEMS_SetInvPage(pDupeItem, 2u);
+                    ITEMS_SetPage(pDupeItem, INVPAGE_TRADE);
 
                     if (D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pNpc, pDupeItem->dwUnitId, CLIENTS_GetUnitX(pDupeItem), CLIENTS_GetUnitY(pDupeItem), 1, 1, 0))
                     {
@@ -828,7 +828,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
             }
         }
 
-        ITEMS_SetItemCell(pItem, ITEMS_GetInvPage(pItem));
+        ITEMS_SetItemCell(pItem, ITEMS_GetPage(pItem));
         D2GAME_UpdateClientItem_6FC3E9D0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), pPlayer, pItem, 0x20);
         D2GAME_RemoveItem_6FC471F0(pGame, pPlayer, pItem, 0);
     }
@@ -1570,7 +1570,7 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 //        }
 //
 //LABEL_115:
-//        if (v70 || (ITEMS_SetInvPage(v36, 0), (v84 = D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, v65, v9, v36->dwUnitId, 0, 0, 1, 1, 0)) == 0))
+//        if (v70 || (ITEMS_SetPage(v36, 0), (v84 = D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, v65, v9, v36->dwUnitId, 0, 0, 1, 1, 0)) == 0))
 //        {
 //            v48 = STATLIST_UnitGetStatValue(v9, STAT_GOLD, 0);
 //            if (v73 != v48)
@@ -1935,7 +1935,7 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
                 {
                 case 1:
                 {
-                    if ((ITEMS_GetInvPage(pItem) == 0 || ITEMS_GetInvPage(pItem) == 3) && !ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
+                    if ((ITEMS_GetPage(pItem) == 0 || ITEMS_GetPage(pItem) == 3) && !ITEMS_CHECK_FLAG(pItem,  IFLAG_IDENTIFIED))
                     {
                         D2GAME_ITEMS_Identify_6FC49670(pGame, pPlayer, pItem);
                     }
@@ -2122,7 +2122,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
         sub_6FC4BBB0(pGame, pOutput, pPlayer);
-        ITEMS_SetInvPage(pOutput, INVPAGE_INVENTORY);
+        ITEMS_SetPage(pOutput, INVPAGE_INVENTORY);
 
         if (bInputIsPersonalized)
         {
@@ -2292,7 +2292,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
         sub_6FC4BBB0(pGame, pOutput, pPlayer);
-        ITEMS_SetInvPage(pOutput, 0);
+        ITEMS_SetPage(pOutput, INVPAGE_INVENTORY);
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pOutput->dwUnitId, 0, 0, 1, 1, 0))
         {
@@ -2368,7 +2368,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
         sub_6FC4BBB0(pGame, pOutput, pPlayer);
-        ITEMS_SetInvPage(pOutput, INVPAGE_INVENTORY);
+        ITEMS_SetPage(pOutput, INVPAGE_INVENTORY);
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, (pOutput ? pOutput->dwUnitId : -1), 0, 0, 1, 1, 0))
         {
@@ -2562,7 +2562,7 @@ void __fastcall D2GAME_STORES_FillGamble_6FCCA9F0(D2GameStrc* pGame, D2UnitStrc*
         D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pNpc, nItemId, pGame, 4u, nItemQuality, 0, 1u, nItemLevel, 0, 0, 0);
         if (pItem)
         {
-            ITEMS_SetInvPage(pItem, 0);
+            ITEMS_SetPage(pItem, INVPAGE_INVENTORY);
             D2GAME_NPC_RepairItem_6FCC6970(pGame, pItem, 0);
             ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 0);
 

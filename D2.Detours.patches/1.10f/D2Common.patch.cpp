@@ -760,8 +760,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::Ignore,                         /*C*/ //; ------------------------UNUSED------------------------               @10716
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetItemLevel                                                  @10717
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetItemLevel                                                  @10718
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetInvPage                                                    @10719
-    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetInvPage                                                    @10720
+    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetPage                                                    @10719
+    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetPage                                                    @10720
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetCellOverlap                                                @10721
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_SetCellOverlap                                                @10722
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetEarName                                                    @10723

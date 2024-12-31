@@ -915,7 +915,7 @@ void __stdcall UNITS_RefreshInventory(D2UnitStrc* pUnit, BOOL bSetFlag)
 }
 
 //D2Common.0x6FDBEBE0 (#10409)
-D2C_InventoryRecords __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int nInvPage, BOOL bLoD)
+D2C_InventoryRecords __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, D2C_Page nPage, BOOL bLoD)
 {
 	static const D2C_InventoryRecords nInventoryRecordMappings[NUMBER_OF_PLAYERCLASSES] =
 	{
@@ -931,7 +931,7 @@ D2C_InventoryRecords __stdcall UNITS_GetInventoryRecordId(D2UnitStrc* pUnit, int
 
 	if (pUnit->dwUnitType == UNIT_PLAYER)
 	{
-		switch ((uint8_t)nInvPage)
+		switch ((D2C_ItemInvPage)nPage)
 		{
 		case INVPAGE_EQUIP:
 			return INVENTORYRECORD_TRADE_PAGE_1;

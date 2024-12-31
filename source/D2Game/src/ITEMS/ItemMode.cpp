@@ -767,13 +767,13 @@ int32_t __fastcall sub_6FC428F0(D2UnitStrc* pItem, D2ItemsTxt* pItemsTxtRecordAr
 
         if (pCheckedItem)
         {
-            if (nUniqueId >= 0 && ITEMS_GetInvPage(pCheckedItem) != 1 && ITEMS_GetItemQuality(pCheckedItem) == ITEMQUAL_UNIQUE && ITEMS_GetFileIndex(pCheckedItem) == nUniqueId)
+            if (nUniqueId >= 0 && ITEMS_GetPage(pCheckedItem) != 1 && ITEMS_GetItemQuality(pCheckedItem) == ITEMQUAL_UNIQUE && ITEMS_GetFileIndex(pCheckedItem) == nUniqueId)
             {
                 return 1;
             }
 
             D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pCheckedItem->dwClassId);
-            if (pItemsTxtRecord->nQuest && ITEMS_GetInvPage(pCheckedItem) != 1 && pItemsTxtRecord->nQuest == pItemsTxtRecordArg->nQuest)
+            if (pItemsTxtRecord->nQuest && ITEMS_GetPage(pCheckedItem) != 1 && pItemsTxtRecord->nQuest == pItemsTxtRecordArg->nQuest)
             {
                 uint32_t nCode1 = pItemsTxtRecordArg->dwCode;
                 uint32_t nCode2 = pItemsTxtRecord->dwCode;
@@ -853,7 +853,7 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
                 INVENTORY_SetCursorItem(pInventory, pItem);
                 UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
                 ITEMS_SetItemCMDFlag(pItem, 64, 1);
-                ITEMS_SetInvPage(pItem, 0xFFu);
+                ITEMS_SetPage(pItem, INVPAGE_NULL);
                 UNITS_RefreshInventory(pUnit, 1);
                 pItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
                 INVENTORY_AddItemToTradeInventory(pInventory, pItem);
@@ -865,7 +865,7 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
         else
         {
             DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pItem), pItem->dwUnitType, pItem->dwUnitId);
-            ITEMS_SetInvPage(pItem, 0xFFu);
+            ITEMS_SetPage(pItem, INVPAGE_NULL);
             pItem->dwFlags |= UNITFLAG_SENDREFRESHMSG;
             UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
             SUNIT_AttachSound(pUnit, 0x13u, pUnit);
@@ -1155,7 +1155,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
     if (!sub_6FC425F0(pGame, pUnit, pItem))
     {
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pItem), pItem->dwUnitType, pItem->dwUnitId);
-        ITEMS_SetInvPage(pItem, 0xFFu);
+        ITEMS_SetPage(pItem, INVPAGE_NULL);
         pItem->dwFlags |= UNITFLAG_SENDREFRESHMSG;
         UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
         SUNIT_AttachSound(pUnit, 0x13u, pUnit);
@@ -1225,13 +1225,13 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
 
     if (!ITEMS_CheckIfBeltable(pItem) || !ITEMS_CheckIfAutoBeltable(pUnit->pInventory, pItem) || !INVENTORY_PlaceItemInFreeBeltSlot(pUnit->pInventory, pItem))
     {
-        if (sub_6FC43E60(pGame, pUnit, pItem, 1, 0, __FILE__, __LINE__))
+        if (sub_6FC43E60(pGame, pUnit, pItem, 1, INVPAGE_INVENTORY, __FILE__, __LINE__))
         {
             return 1;
         }
 
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pItem), pItem->dwUnitType, pItem->dwUnitId);
-        ITEMS_SetInvPage(pItem, 0xFFu);
+        ITEMS_SetPage(pItem, INVPAGE_NULL);
         pItem->dwFlags |= UNITFLAG_SENDREFRESHMSG;
         UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
         SUNIT_AttachSound(pUnit, 0x17u, pUnit);
@@ -1265,7 +1265,7 @@ int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUn
 
     pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pItem, IMODE_INBELT);
-    ITEMS_SetInvPage(pItem, 0xFFu);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     ITEMS_SetItemCMDFlag(pItem, 0x2000u, 1);
     pItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
     INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
@@ -1500,7 +1500,7 @@ int32_t __fastcall sub_6FC43BF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FC43E60
-int32_t __fastcall sub_6FC43E60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t bRemove, int32_t nPage, const char* szFile, int32_t nLine)
+int32_t __fastcall sub_6FC43E60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t bRemove, D2C_ItemInvPage nPage, const char* szFile, int32_t nLine)
 {
     D2_ASSERT(pGame);
 
@@ -1557,7 +1557,7 @@ int32_t __fastcall sub_6FC43E60(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     INVENTORY_AddItemToTradeInventory(pInventory, pItem);
     UNITS_RefreshInventory(pUnit, 1);
     pItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
-    ITEMS_SetInvPage(pItem, nPage);
+    ITEMS_SetPage(pItem, nPage);
     QUESTS_ItemPickedUp(pGame, pUnit, pItem);
     
     if (ITEMS_IsCharmUsable(pItem, pUnit))
@@ -1631,7 +1631,7 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
     while (pInvItem)
     {
         D2UnitStrc* pNext = INVENTORY_GetNextItem(pInvItem);
-        if (INVENTORY_UnitIsItem(pInvItem) && ITEMS_GetInvPage(pInvItem) == INVPAGE_CUBE)
+        if (INVENTORY_UnitIsItem(pInvItem) && ITEMS_GetPage(pInvItem) == INVPAGE_CUBE)
         {
             ITEMS_SetItemCell(pItem, 3);
             D2GAME_UpdateClientItem_6FC3E9D0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pUnit, pInvItem, 0x20);
@@ -1640,15 +1640,15 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
             D2_ASSERT(pRemove);
             D2_ASSERT(pInvItem == pRemove);
 
-            //const uint8_t nInvPage = ITEMS_GetInvPage(pInvItem);
+            //const uint8_t nInvPage = ITEMS_GetPage(pInvItem);
             //INVENTORY_Return(__FILE__, __LINE__, pUnit->pInventory, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), UNITS_GetInventoryRecordId(pUnit, nInvPage, pGame->bExpansion), 0, nInvPage);
 
             UNITS_ChangeAnimMode(pRemove, IMODE_ONCURSOR);
-            ITEMS_SetInvPage(pInvItem, INVPAGE_INVENTORY);
+            ITEMS_SetPage(pInvItem, INVPAGE_INVENTORY);
 
             if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pInvItem->dwUnitId, 0, 0, 1, 1, 0))
             {
-                ITEMS_SetInvPage(pInvItem, INVPAGE_NULL);
+                ITEMS_SetPage(pInvItem, INVPAGE_NULL);
                 UNITS_GetCoords(pUnit, &coords);
                 
                 pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
@@ -1664,23 +1664,23 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
 }
 
 //D2Game.0x6FC44410
-int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nUnitId, int32_t nX, int32_t nY, int32_t a8, int32_t a9, D2InventoryStrc* pInventory)
+int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, D2GameStrc* pGame, D2UnitStrc* pItemOwner, int32_t nUnitId, int32_t nX, int32_t nY, int32_t a8, int32_t a9, D2InventoryStrc* pInventory)
 {
-    if (!pGame || !pPlayer)
+    if (!pGame || !pItemOwner)
     {
         return 0;
     }
 
-    if (pPlayer->pInventory)
+    if (pItemOwner->pInventory)
     {
-        for (D2UnitStrc* i = INVENTORY_GetFirstItem(pPlayer->pInventory); i; i = INVENTORY_GetNextItem(i))
+        for (D2UnitStrc* i = INVENTORY_GetFirstItem(pItemOwner->pInventory); i; i = INVENTORY_GetNextItem(i))
         {
             if (INVENTORY_UnitIsItem(i) && ITEMS_CHECK_FLAG(i, IFLAG_TARGETING))
             {
                 ITEMS_SetItemFlag(i, IFLAG_TARGETING, 0);
-                if (pPlayer->dwUnitType == UNIT_PLAYER)
+                if (pItemOwner->dwUnitType == UNIT_PLAYER)
                 {
-                    D2GAME_PACKETS_SendPacket0x3F_6FC3EDC0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), i, -1, 1, 0, -1);
+                    D2GAME_PACKETS_SendPacket0x3F_6FC3EDC0(SUNIT_GetClientFromPlayer(pItemOwner, __FILE__, __LINE__), i, -1, 1, 0, -1);
                 }
             }
         }
@@ -1692,10 +1692,10 @@ int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, 
         return 0;
     }
     
-    const uint8_t nPage = ITEMS_GetInvPage(pItem);    
+    const D2C_Page nPage = ITEMS_GetPage(pItem);
     if (!pInventory)
     {
-        pInventory = pPlayer->pInventory;
+        pInventory = pItemOwner->pInventory;
         if (!pInventory)
         {
             return 0;
@@ -1704,8 +1704,8 @@ int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, 
     
     int32_t bTrade = 0;
     int32_t bEquip = 1;
-    const int32_t nRecordId = UNITS_GetInventoryRecordId(pPlayer, nPage, pGame->bExpansion);
-    if (pPlayer->dwUnitType == UNIT_PLAYER)
+    const int32_t nRecordId = UNITS_GetInventoryRecordId(pItemOwner, nPage, pGame->bExpansion);
+    if (pItemOwner->dwUnitType == UNIT_PLAYER)
     {
         if (nPage == INVPAGE_EQUIP)
         {
@@ -1737,16 +1737,16 @@ int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, 
         return 0;
     }
 
-    if (ITEMS_GetInvPage(pItem) != INVPAGE_STASH && pPlayer->dwUnitType == UNIT_PLAYER)
+    if (pItemOwner->dwUnitType == UNIT_PLAYER && ITEMS_GetPage(pItem) != INVPAGE_STASH)
     {
-        sub_6FC42120(pPlayer, pItem, 1);
+        sub_6FC42120(pItemOwner, pItem, 1);
     }
 
     pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
 
-    if (ITEMS_IsCharmUsable(pItem, pPlayer))
+    if (ITEMS_IsCharmUsable(pItem, pItemOwner))
     {
-        D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pPlayer, 0);
+        D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pItemOwner, 0);
     }
 
     if (bEquip)
@@ -1770,19 +1770,19 @@ int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, 
             ITEMS_SetItemFlag(pItem, IFLAG_NOEQUIP, 0);
         }
 
-        UNITS_RefreshInventory(pPlayer, 1);
+        UNITS_RefreshInventory(pItemOwner, 1);
         INVENTORY_AddItemToTradeInventory(pInventory, pItem);
     }
 
     if (bTrade == 1)
     {
-        sub_6FC92F10(pGame, pPlayer, pItem);
+        sub_6FC92F10(pGame, pItemOwner, pItem);
     }
 
-    if (ITEMS_IsCharmUsable(pItem, pPlayer))
+    if (ITEMS_IsCharmUsable(pItem, pItemOwner))
     {
-        D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(pGame, pPlayer, 0);
-        UNITS_RefreshInventory(pPlayer, 1);
+        D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(pGame, pItemOwner, 0);
+        UNITS_RefreshInventory(pItemOwner, 1);
     }
 
     return 1;
@@ -1821,7 +1821,7 @@ int32_t __fastcall sub_6FC446B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         return 0;
     }
 
-    if (pUnit->dwUnitType == UNIT_PLAYER && !PLAYER_IsBusy(pUnit) && ITEMS_GetInvPage(pItem))
+    if (pUnit->dwUnitType == UNIT_PLAYER && !PLAYER_IsBusy(pUnit) && ITEMS_GetPage(pItem))
     {
         *a4 = 1;
         return 0;
@@ -1868,7 +1868,7 @@ int32_t __fastcall sub_6FC446B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         sub_6FC42120(pUnit, pItem, 0);
     }
 
-    const uint8_t nInvPage = ITEMS_GetInvPage(pItem);
+    const D2C_ItemInvPage nInvPage = (D2C_ItemInvPage)ITEMS_GetPage(pItem);
     const int32_t nInventoryRecordId = UNITS_GetInventoryRecordId(pUnit, nInvPage, pGame->bExpansion);
     
     int32_t bTrade = 0;
@@ -1887,7 +1887,7 @@ int32_t __fastcall sub_6FC446B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     INVENTORY_Return(__FILE__, __LINE__, pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem),  nInventoryRecordId, 0, nInvPage);
 
     ITEMS_SetItemCell(pItem, nInvPage);
-    ITEMS_SetInvPage(pItem, 0xFFu);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
 
     if (bEquip)
     {
@@ -2302,7 +2302,7 @@ int32_t __fastcall sub_6FC45060(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
             pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
 
             UNITS_ChangeAnimMode(pItem, IMODE_EQUIP);
-            ITEMS_SetInvPage(pItem, 0xFFu);
+            ITEMS_SetPage(pItem, INVPAGE_NULL);
             ITEMS_SetItemCMDFlag(pItem, 8, 1);
             ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
 
@@ -2567,7 +2567,7 @@ int32_t __fastcall sub_6FC45550(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pUnit, 0);
     pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pItem, IMODE_EQUIP);
-    ITEMS_SetInvPage(pItem, 0xFFu);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     ITEMS_SetItemCMDFlag(pItem, 0x10000u, 1);
     ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
 
@@ -2610,7 +2610,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                 sub_6FC42120(pUnit, pBeltItem, 0);
             }
 
-            ITEMS_SetInvPage(pBeltItem, INVPAGE_INVENTORY);
+            ITEMS_SetPage(pBeltItem, INVPAGE_INVENTORY);
 
             if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pBeltItem->dwUnitId, 0, 0, 1, 1, 0))
             {
@@ -2864,7 +2864,7 @@ int32_t __fastcall sub_6FC45E60(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pUnit, 0);
     pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pItem, IMODE_EQUIP);
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     ITEMS_SetItemFlag(pItem, IFLAG_SWITCHIN, 1);
     ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
     ITEMS_SetItemCMDFlag(pItem, 0x20u, 1);
@@ -2911,7 +2911,7 @@ int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         }
     }
 
-    const int32_t nInventoryRecordId = UNITS_GetInventoryRecordId(pUnit, 0, pGame->bExpansion);
+    const int32_t nInventoryRecordId = UNITS_GetInventoryRecordId(pUnit, INVPAGE_INVENTORY, pGame->bExpansion);
     D2UnitStrc* pOpposite = nullptr;
     if (nBodyLoc == BODYLOC_LARM)
     {
@@ -2955,7 +2955,7 @@ int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
             return 0;
         }
 
-        ITEMS_SetInvPage(pRemove, INVPAGE_INVENTORY);
+        ITEMS_SetPage(pRemove, INVPAGE_INVENTORY);
         pRemove->dwFlags &= ~UNITFLAG_TARGETABLE;
         INVENTORY_SetCursorItem(pUnit->pInventory, nullptr);
         UNITS_ChangeAnimMode(pRemove, IMODE_STORED);
@@ -3033,7 +3033,7 @@ int32_t __fastcall sub_6FC46270(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pUnit, 0);
     pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pItem, IMODE_EQUIP);
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     ITEMS_SetItemFlag(pItem, IFLAG_DELETED, 1);
     ITEMS_SetItemCMDFlag(pItem, 8, 1);
     ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
@@ -3157,7 +3157,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
                 return 0;
             }
 
-            ITEMS_SetInvPage(pRemove, INVPAGE_NULL);
+            ITEMS_SetPage(pRemove, INVPAGE_NULL);
             ITEMS_SetItemCMDFlag(pRemove, 0x200000u, 1);
             ITEMS_SetItemFlag(pRemove, IFLAG_NEWITEM, 1);
 
@@ -3299,7 +3299,7 @@ int32_t __fastcall sub_6FC46D40(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nC
         return 0;
     }
 
-    const uint8_t nInvPage = ITEMS_GetInvPage(pGridItem);
+    const D2C_ItemInvPage nInvPage = (D2C_ItemInvPage)ITEMS_GetPage(pGridItem);
     if (nInvPage == INVPAGE_CUBE)
     {
         if (!gbBoxItemIdInitialized)
@@ -3336,7 +3336,7 @@ int32_t __fastcall sub_6FC46D40(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nC
     D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, pGridItem, pUnit, 0, 1);
     //INVENTORY_Return(__FILE__, __LINE__, pUnit->pInventory, CLIENTS_GetUnitX(pGridItem), CLIENTS_GetUnitY(pGridItem), UNITS_GetInventoryRecordId(pUnit, nInvPage, pGame->bExpansion), 0, nInvPage);
 
-    ITEMS_SetInvPage(pGridItem, INVPAGE_NULL);
+    ITEMS_SetPage(pGridItem, INVPAGE_NULL);
     INVENTORY_SetCursorItem(pUnit->pInventory, pGridItem);
 
     if (pUnit->dwUnitType == UNIT_PLAYER)
@@ -3368,7 +3368,7 @@ int32_t __fastcall sub_6FC46D40(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nC
     }
 
     ITEMS_SetCellOverlap(pCursorItem, 0);
-    ITEMS_SetInvPage(pCursorItem, nInvPage);
+    ITEMS_SetPage(pCursorItem, nInvPage);
     UNITS_SetXForStaticUnit(pCursorItem, nX);
     UNITS_SetYForStaticUnit(pCursorItem, nY);
 
@@ -3437,9 +3437,9 @@ void __fastcall D2GAME_RemoveItem_6FC471F0(D2GameStrc* pGame, D2UnitStrc* pUnit,
     D2_ASSERT(pRemove);
     D2_ASSERT(pItem == pRemove);
 
-    //INVENTORY_Return(__FILE__, __LINE__, pUnit->pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), UNITS_GetInventoryRecordId(pUnit, ITEMS_GetInvPage(pItem), pGame->bExpansion), 0, nPage);
+    //INVENTORY_Return(__FILE__, __LINE__, pUnit->pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), UNITS_GetInventoryRecordId(pUnit, ITEMS_GetPage(pItem), pGame->bExpansion), 0, nPage);
     
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
 
     if (bSendPacket)
     {
@@ -4039,7 +4039,7 @@ int32_t __fastcall sub_6FC484E0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
         return 0;
     }
 
-    if (ITEMS_GetInvPage(pItem2) == INVPAGE_TRADE)
+    if (ITEMS_GetPage(pItem2) == INVPAGE_TRADE)
     {
         *a5 = 1;
         return 0;
@@ -4191,7 +4191,7 @@ int32_t __fastcall sub_6FC48940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
             return 0;
         }
 
-        ITEMS_SetInvPage(pItem, 0xFFu);
+        ITEMS_SetPage(pItem, INVPAGE_NULL);
     }
 
     if (!INVENTORY_PlaceItemInSocket(pUnit->pInventory, pItem, 2))
@@ -4215,7 +4215,7 @@ int32_t __fastcall sub_6FC48940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     }
 
     UNITS_ChangeAnimMode(pItem, IMODE_INBELT);
-    ITEMS_SetInvPage(pItem, 0xFFu);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     ITEMS_SetItemCMDFlag(pItem, 0x400u, 1);
     UNITS_RefreshInventory(pUnit, 1);
     INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
@@ -4377,7 +4377,7 @@ int32_t __fastcall sub_6FC48D50(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nC
     }
 
     UNITS_ChangeAnimMode(pCursorItem, IMODE_INBELT);
-    ITEMS_SetInvPage(pCursorItem, INVPAGE_NULL);
+    ITEMS_SetPage(pCursorItem, INVPAGE_NULL);
     ITEMS_SetItemCMDFlag(pCursorItem, 0x1000u, 1);
     INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pCursorItem);
     D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(pGame, pUnit, 0);
@@ -4840,7 +4840,7 @@ int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 		return 0;
 	}
 
-    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && ITEMS_GetInvPage(pCube))
+    if (D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit) && ITEMS_GetPage(pCube))
     {
         SUNIT_AttachSound(pUnit, 0x13u, pUnit);
         return 0;
@@ -4868,7 +4868,7 @@ int32_t __fastcall sub_6FC49DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     {
         if (pCube->dwAnimMode == IMODE_STORED)
         {
-            ITEMS_SetInvPage(pItem, INVPAGE_CUBE);
+            ITEMS_SetPage(pItem, INVPAGE_CUBE);
             D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pItem->dwUnitId, 0, 0, 1, 1, nullptr);
             return 1;
         }
@@ -4912,7 +4912,7 @@ int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     D2_ASSERT(pRemove);
     D2_ASSERT(pGridItem == pRemove);
 
-    ITEMS_SetInvPage(pGridItem, 0xFFu);
+    ITEMS_SetPage(pGridItem, INVPAGE_NULL);
 
     if (!INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pGridItem, nBodyLoc))
     {
@@ -4936,7 +4936,7 @@ int32_t __fastcall sub_6FC49F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pGridItem, pUnit, 0);
     pGridItem->dwFlags &= ~UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pGridItem, 1);
-    ITEMS_SetInvPage(pGridItem, 0xFFu);
+    ITEMS_SetPage(pGridItem, INVPAGE_NULL);
     ITEMS_SetItemCMDFlag(pGridItem, 0x8000, 1);
 
     if (pGridItem->dwUnitType == UNIT_ITEM && ITEMS_CheckIfSocketable(pGridItem) && pGridItem->pInventory && INVENTORY_GetItemCount(pGridItem->pInventory))
@@ -5085,7 +5085,7 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
     for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
     {
         D2UnitStrc* pItem = INVENTORY_UnitIsItem(i);
-        if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_KEY) && ITEMS_GetInvPage(pItem) == 0)
+        if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_KEY) && ITEMS_GetPage(pItem) == 0)
         {
             if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) - 1 <= 0)
             {
@@ -5157,7 +5157,7 @@ int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* p
     }
 
     STATLIST_SetUnitStat(pNewItem, STAT_QUANTITY, nQuantity, 0);
-    ITEMS_SetInvPage(pNewItem, INVPAGE_INVENTORY);
+    ITEMS_SetPage(pNewItem, INVPAGE_INVENTORY);
 
     if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pNewItem->dwUnitId, itemDrop.nX, itemDrop.nY, 0, 1, 0)
         && !D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pNewItem->dwUnitId, 0, 0, 1, 1, 0))
@@ -5215,7 +5215,7 @@ int32_t __fastcall sub_6FC4A9B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 
     INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
     UNITS_RefreshInventory(pUnit, 1);
-    ITEMS_SetInvPage(pItem, 0xFFu);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     sub_6FC45300(pUnit);
 
     return 1;
@@ -5443,7 +5443,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
                                 INVENTORY_AddItemToTradeInventory(pPlayerInventory, pCorpseItem);
                                 UNITS_RefreshInventory(pPlayer, 1);
                                 pCorpseItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
-                                ITEMS_SetInvPage(pCorpseItem, INVPAGE_NULL);
+                                ITEMS_SetPage(pCorpseItem, INVPAGE_NULL);
 
                                 if (nSocketType == 3)
                                 {
@@ -5470,7 +5470,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
                     }
                     else
                     {
-                        if (sub_6FC43E60(pGame, pPlayer, pCorpseItem, 0, 0, __FILE__, __LINE__))
+                        if (sub_6FC43E60(pGame, pPlayer, pCorpseItem, 0, INVPAGE_INVENTORY, __FILE__, __LINE__))
                         {
                             sub_6FC512C0(pGame, pCorpseItem);
                             sub_6FC51310(pGame, pCorpseItem);
@@ -5533,7 +5533,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
                     UNITS_ChangeAnimMode(pItem, IMODE_INBELT);
                     pItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
                     ITEMS_SetItemCMDFlag(pItem, 0x2000u, 1);
-                    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+                    ITEMS_SetPage(pItem, INVPAGE_NULL);
                     INVENTORY_AddItemToTradeInventory(pPlayerInventory, pItem);
                     UNITS_RefreshInventory(pPlayer, 1);
                     ++nCounter;
@@ -5542,7 +5542,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             }
             else if (v22)
             {
-                if (sub_6FC43E60(pGame, pPlayer, pItem, 0, 0, __FILE__, __LINE__))
+                if (sub_6FC43E60(pGame, pPlayer, pItem, 0, INVPAGE_INVENTORY, __FILE__, __LINE__))
                 {
                     ++nCounter;
                     ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
@@ -5654,7 +5654,7 @@ D2UnitStrc* __fastcall sub_6FC4B430(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
     for (D2UnitStrc* j = INVENTORY_GetFirstItem(pUnit->pInventory); j; j = INVENTORY_GetNextItem(j))
     {
-        if (INVENTORY_UnitIsItem(j) && ITEMS_GetItemType(j) == ITEMTYPE_BOOK && ITEMS_GetInvPage(j) == 0)
+        if (INVENTORY_UnitIsItem(j) && ITEMS_GetItemType(j) == ITEMTYPE_BOOK && ITEMS_GetPage(j) == 0)
         {
             int32_t bSkip = 0;
             for (int32_t i = 0; i < 3; ++i)
@@ -5847,7 +5847,7 @@ void __fastcall sub_6FC4B830(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 }
             }
 
-            if (ITEMS_GetInvPage(pItem) == INVPAGE_INVENTORY)
+            if (ITEMS_GetPage(pItem) == INVPAGE_INVENTORY)
             {
                 ++nInventoryItemCounter;
             }
@@ -5864,7 +5864,7 @@ void __fastcall sub_6FC4B830(D2GameStrc* pGame, D2UnitStrc* pUnit)
             D2UnitStrc* pNextItem = INVENTORY_GetNextItem(pItem);
             if (!INVENTORY_UnitIsItem(pItem) || pItem->dwAnimMode == IMODE_STORED)
             {
-                if (ITEMS_GetInvPage(pItem) == INVPAGE_INVENTORY)
+                if (ITEMS_GetPage(pItem) == INVPAGE_INVENTORY)
                 {
                     sub_6FC42120(pUnit, pItem, 1);
 
@@ -5975,7 +5975,7 @@ void __fastcall D2GAME_ITEMMODE_Unk_6FC4BC10(D2GameStrc* pGame, D2UnitStrc* pUni
     {
     case IMODE_STORED:
     {
-        ITEMS_SetItemCell(pItem, ITEMS_GetInvPage(pItem));
+        ITEMS_SetItemCell(pItem, ITEMS_GetPage(pItem));
 
         if (pUnit->dwUnitType == UNIT_PLAYER)
         {

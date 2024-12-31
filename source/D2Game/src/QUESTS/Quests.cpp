@@ -1967,7 +1967,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 		STATLIST_SetUnitStat(pItem, STAT_DURABILITY, nMaxDurability, 0);
 	}
 
-	ITEMS_SetInvPage(pItem, INVPAGE_INVENTORY);
+	ITEMS_SetPage(pItem, INVPAGE_INVENTORY);
 
 	if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pItem->dwUnitId, 0, 0, 1, 1, 0))
 	{
@@ -2212,7 +2212,7 @@ void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2In
 
 	if (nAnimMode == IMODE_STORED)
 	{
-		ITEMS_SetItemCell(pItem, ITEMS_GetInvPage(pItem));
+		ITEMS_SetItemCell(pItem, ITEMS_GetPage(pItem));
 		D2GAME_UpdateClientItem_6FC3E9D0(pClient, pPlayer, pItem, 0x20);
 		D2GAME_RemoveItem_6FC471F0(pGame, pPlayer, pItem, 0);
 	}

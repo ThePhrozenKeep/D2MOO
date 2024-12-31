@@ -10,37 +10,7 @@ struct D2InventoryGridInfoStrc;
 
 using D2InvRectStrc = D2RectStrc;
 
-enum D2C_PlayerBodyLocs : uint8_t
-{
-	BODYLOC_NONE,		//Not Equipped
-	BODYLOC_HEAD,		//Helm
-	BODYLOC_NECK,		//Amulet
-	BODYLOC_TORSO,		//Body Armor
-	BODYLOC_RARM,		//Right-Hand
-	BODYLOC_LARM,		//Left-Hand
-	BODYLOC_RHAND,		//Right Ring
-	BODYLOC_LHAND,		//Left Ring
-	BODYLOC_BELT,		//Belt
-	BODYLOC_FEET,		//Boots
-	BODYLOC_GLOVES,		//Gloves
-	BODYLOC_SWRARM,		//Right-Hand on Switch
-	BODYLOC_SWLARM,		//Left-Hand on Switch
-	NUM_BODYLOC,
-	NUM_BODYLOC_NO_SWITCH = BODYLOC_SWRARM,
-};
-
 #define D2C_InventoryHeader 0x1020304
-
-enum D2C_ItemInvPage
-{
-	INVPAGE_INVENTORY = 0,
-	INVPAGE_EQUIP = 1,
-	INVPAGE_TRADE = 2,
-	INVPAGE_CUBE = 3,
-	INVPAGE_STASH = 4,
-	INVPAGE_BELT = 5,
-	INVPAGE_NULL = 255
-};
 
 enum D2C_InventoryRecords
 {
@@ -96,7 +66,11 @@ enum D2C_InventoryGrids
 	INVGRID_BODYLOC,
 	INVGRID_BELT,
 	INVGRID_INVENTORY,
+	// Note: Grids starting at INVGRID_INVENTORY correspond to pages, to access them: D2C_ItemInvPage + INVGRID_INVENTORY
 };
+
+inline D2C_InventoryGrids GetInventoryGridIdFromPage(D2C_Page nPage) { return D2C_InventoryGrids(nPage + INVGRID_INVENTORY); }
+inline D2C_Page GetPageFromInventoryGridId(D2C_InventoryGrids nGridId) { return D2C_Page(nGridId - INVGRID_INVENTORY); }
 
 enum D2TradeStates
 {
@@ -196,7 +170,7 @@ D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetFirstItem(D2InventoryStrc* 
 //D2Common.0x6FD8E7C0 (#10278)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetLastItem(D2InventoryStrc* pInventory);
 //D2Common.0x6FD8E7E0 (#10245)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, uint8_t nPage);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, int* pFreeX, int* pFreeY, D2C_Page nPage);
 //D2Common.0x6FD8EAF0
 D2InventoryGridStrc* __fastcall INVENTORY_GetGrid(D2InventoryStrc* pInventory, int nInventoryGrid, D2InventoryGridInfoStrc* pInventoryGridInfo);
 //D2Common.0x6FD8EC70
@@ -210,19 +184,19 @@ BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRightWithWeight(D2Inven
 //D2Common.0x6FD8F0E0
 BOOL __fastcall INVENTORY_FindFreePositionTopLeftToBottomRight(D2InventoryGridStrc* pInventoryGrid, int* pFreeX, int* pFreeY, uint8_t nItemWidth, uint8_t nItemHeight);
 //D2Common.0x6FD8F1E0 (#10246)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, uint8_t nPage, const char* szFile, int nLine);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtFreePosition(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nInventoryRecordId, BOOL bUnused, D2C_Page nPage, const char* szFile, int nLine);
 //D2Common.0x6FD8F250
-BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryGrid, int nInventoryRecordId, BOOL bUnused);
+BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, D2C_InventoryGrids nInventoryGrid, int nInventoryRecordId, BOOL bUnused);
 //D2Common.0x6FD8F600 (#10247)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, unsigned int* pHoveredItems, uint8_t nPage);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, unsigned int* pHoveredItems, D2C_Page nPage);
 //D2Common.0x6FD8F780 (#10248)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, uint8_t nPage, BOOL bCheckIfCube);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, D2UnitStrc** ppExchangeItem, D2C_Page nPage, BOOL bCheckIfCube);
 //D2Common.0x6FD8F930 (#10249)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtInventoryPage(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, BOOL bUnused, uint8_t nPage);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemAtInventoryPage(D2InventoryStrc* pInventory, D2UnitStrc* pItem, int nXPos, int nYPos, int nInventoryRecordId, BOOL bUnused, D2C_Page nPage);
 //D2Common.0x6FD8F970 (#10250)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_Return(const char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, uint8_t nPage);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_Return(const char* szFile, int nLine, D2InventoryStrc* pInventory, int nX, int nY, int nInventoryRecordId, BOOL bClient, D2C_Page nPage);
 //D2Common.0x6FD8F980 (#10252)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, uint8_t nPage);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInventory, int nGridX, int nGridY, int* pX, int* pY, int nInventoryRecordId, D2C_Page nPage);
 //D2Common.0x6FD8FAB0 (#10253)
 D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_PlaceItemInBodyLoc(D2InventoryStrc* pInventory, D2UnitStrc* pItem, D2C_PlayerBodyLocs nBodyLoc);
 //D2Common.0x6FD8FAE0 (#10257)

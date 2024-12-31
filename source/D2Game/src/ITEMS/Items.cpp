@@ -870,7 +870,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
         ITEMS_SetItemFlag(pItem, IFLAG_INSTORE, 1);
     }
 
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
 
     if (!D2GAME_InitItemStats_6FC4E520(pGame, &pItem, pItemDrop, 1))
     {
@@ -1456,7 +1456,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC501A0
-D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t us1, int32_t alw1, int32_t nItemLevel, int32_t us0, int32_t a1, int32_t alw0)
+D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pOwner, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t us1, int32_t alw1, int32_t nItemLevel, int32_t us0, int32_t a1, int32_t alw0)
 {
     nItemLevel = std::max(nItemLevel, 1);
 
@@ -1465,7 +1465,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32
     itemDrop.nId = nItemId;
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.nQuality = nQuality;
-    itemDrop.pUnit = pPlayer;
+    itemDrop.pUnit = pOwner;
     itemDrop.pSeed = nullptr;
     itemDrop.pGame = pGame;
     itemDrop.nX = 0;
@@ -1478,7 +1478,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32
 
     if (nItemLevel == -1)
     {
-        itemDrop.nItemLvl = ITEMS_GetItemLevelForNewItem(pPlayer, 0);
+        itemDrop.nItemLvl = ITEMS_GetItemLevelForNewItem(pOwner, 0);
     }
     else
     {
@@ -1607,7 +1607,7 @@ D2UnitStrc* __fastcall ITEMS_FindQuestItem(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
     for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {
-        if (INVENTORY_UnitIsItem(pItem) && dwItemCode == ITEMS_GetBaseCode(pItem) && ITEMS_GetInvPage(pItem) != INVPAGE_EQUIP)
+        if (INVENTORY_UnitIsItem(pItem) && dwItemCode == ITEMS_GetBaseCode(pItem) && ITEMS_GetPage(pItem) != INVPAGE_EQUIP)
         {
             D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
             if (!pItemsTxtRecord || !pItemsTxtRecord->nQuest || !pItemsTxtRecord->nQuestDiffCheck || pGame->nDifficulty <= STATLIST_UnitGetStatValue(pItem, STAT_QUESTITEMDIFFICULTY, 0))
@@ -1909,7 +1909,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
     UNITROOM_AddUnitToRoom(pItem, pTargetRoom);
     pItem->dwFlags |= UNITFLAG_SENDREFRESHMSG | UNITFLAG_TARGETABLE;
     UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
     pItem->dwFlags |= IFLAG_LOWQUALITY;
     pItem->pItemData->dwActionStamp = ITEMS_GetGroundRemovalTime(pGame, pItem);
 }
@@ -2643,7 +2643,7 @@ void __fastcall D2GAME_DropItem_6FC52260(D2GameStrc* pGame, D2UnitStrc* pUnit, D
     }
 
     UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
-    ITEMS_SetInvPage(pItem, INVPAGE_NULL);
+    ITEMS_SetPage(pItem, INVPAGE_NULL);
 
     if (pItem)
     {

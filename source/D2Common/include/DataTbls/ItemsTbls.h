@@ -1,8 +1,8 @@
 #pragma once 
 
 #include <D2BasicTypes.h>
+#include <D2Constants.h>
 #include <Archive.h>
-#include <D2Inventory.h>
 
 #pragma pack(1)
 
@@ -430,7 +430,7 @@ struct D2ItemTypesTxt
 	uint8_t nStaffMods;						//0x1F
 	uint8_t nCostFormula;					//0x20
 	uint8_t nClass;							//0x21
-	uint8_t nStorePage;						//0x22
+	D2C_ItemStorePage nStorePage;			//0x22
 	uint8_t nVarInvGfx;						//0x23
 	char szInvGfx[6][32];					//0x24
 };

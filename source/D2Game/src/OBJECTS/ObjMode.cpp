@@ -1838,7 +1838,7 @@ int32_t __fastcall sub_6FC76A60(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
         {
             int32_t nFlags = 0;
             ITEMS_SetOrRemoveFlag(&nFlags, 32, 1);
-            ITEMS_SetItemCell(pItem, ITEMS_GetInvPage(pItem));
+            ITEMS_SetItemCell(pItem, ITEMS_GetPage(pItem));
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
             D2GAME_UpdateClientItem_6FC3E9D0(pClient, pPlayer, pItem, nFlags);
             D2GAME_RemoveItem_6FC471F0(pGame, pPlayer, pItem, 0);

@@ -21,7 +21,11 @@ struct D2SavedItemStrc
     int32_t nItemFlags;
     int32_t nSeed;
     int32_t nItemSeed;
-    uint8_t nInvPage;
+	union {
+		D2C_Page nPage;
+		D2C_ItemInvPage nInvPage;
+		D2C_ItemStorePage nStorePage;
+	};
     uint8_t nEarLevel;
     char szName[16];
     uint16_t nItemFormat;

@@ -1938,7 +1938,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
         }
     }
 
-    ITEMS_SetInvPage(pItem, nInvPage);
+    ITEMS_SetPage(pItem, nInvPage);
 
     if (D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, nItemGUID, nX, nY, 0, 1, 0))
     {
@@ -1974,7 +1974,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x19_RemoveItemFromBuffer_6FC850C0(D
             }
             else
             {
-                if (ITEMS_GetInvPage(pItem) == 1)
+                if (ITEMS_GetPage(pItem) == 1)
                 {
                     GAME_LogMessage(3, "[sRemoveItemGrid] Tried to remove item from page 1");
                     return 3;
@@ -2223,12 +2223,12 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1F_SwapCursorBufferItems_6FC857C0(
             D2UnitStrc* pInventoryItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nInventoryItemGUID);
             if (pInventoryItem && pInventoryItem->dwAnimMode == IMODE_STORED && INVENTORY_CompareWithItemsParentInventory(pUnit->pInventory, pInventoryItem))
             {
-                if (ITEMS_GetInvPage(pInventoryItem) == 1)
+                if (ITEMS_GetPage(pInventoryItem) == 1)
                 {
                     FOG_Trace("Tried to swap item from page 1\n");
                     return 3;
                 }
-                else if (ITEMS_GetInvPage(pInventoryItem) == 2)
+                else if (ITEMS_GetPage(pInventoryItem) == 2)
                 {
                     FOG_Trace("Tried to swap item from page 2\n");
                     return 3;
@@ -4068,7 +4068,7 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
             INVENTORY_PlaceItemInSocket(pMercInventory, pExchangeItem, 3);
             ITEMS_SetBodyLocation(pExchangeItem, nTargetBodyLoc);
             UNITS_ChangeAnimMode(pExchangeItem, IMODE_EQUIP);
-            ITEMS_SetInvPage(pExchangeItem, 0xFFu);
+            ITEMS_SetPage(pExchangeItem, 0xFFu);
             D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pExchangeItem, pMerc, 0);
             //D2Game_10034_Return(0);
             return 0;
@@ -4141,7 +4141,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
         return 2;
     }
 
-    if (ITEMS_GetInvPage(pItem) != 0)
+    if (ITEMS_GetPage(pItem) != 0)
     {
         FOG_Trace("Tried to remove item from non-main page\n");
         return 3;
@@ -4152,7 +4152,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
     {
         D2_ASSERT(pUnit->pInventory);
 
-        if (ITEMS_GetInvPage(pItem) || pItem->dwAnimMode != IMODE_STORED)
+        if (ITEMS_GetPage(pItem) || pItem->dwAnimMode != IMODE_STORED)
         {
             return 2;
         }
@@ -4163,10 +4163,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
 
         D2_ASSERT(pItem == pRemove);
 
-        const int32_t nPage = ITEMS_GetInvPage(pItem);
+        const int32_t nPage = ITEMS_GetPage(pItem);
         //INVENTORY_Return(__FILE__, __LINE__, pUnit->pInventory, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), UNITS_GetInventoryRecordId(pUnit, nPage, pGame->bExpansion), 0, nPage);
         ITEMS_SetItemCell(pItem, nPage);
-        ITEMS_SetInvPage(pItem, 0xFFu);
+        ITEMS_SetPage(pItem, 0xFFu);
 
         D2GAME_UpdateClientItem_6FC3E9D0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pUnit, pItem, 0);
 
@@ -4178,7 +4178,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x63_ShiftLeftClickItemToBelt_6FC88F
 
         if (INVENTORY_PlaceItemInBeltSlot(pUnit->pInventory, pItem, nFreeSlotId))
         {
-            ITEMS_SetInvPage(pItem, 0xFFu);
+            ITEMS_SetPage(pItem, 0xFFu);
 
             if (INVENTORY_PlaceItemInSocket(pUnit->pInventory, pItem, 2))
             {

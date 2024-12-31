@@ -10,21 +10,35 @@
 #include <D2Lang.h>
 
 #include <D2Gfx.h>
+#include <D2CommonDefinitions.h>
 
 #include "D2WinArchive.h"
 #include "D2WinPalette.h"
 
+// Hack to get access to txt files structures...
+// Need to find a decent way to do this. Should datatables structures and Ids be moved to D2CommonDefinitions?
+#undef D2COMMON_DLL_DECL
+#define D2COMMON_DLL_DECL
+#include <../../D2Common/include/DataTbls/ItemsTbls.h>
 
-// TODO: Use right one
-struct D2ItemTypesTxt
+//1.10f: D2Win.0x6F8A2CE0
+void* __stdcall D2WIN_DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize);
+
+struct D2HitClassTxt
 {
-	int32_t nEquiv1;
-	int32_t nEquiv2;
+	uint32_t dwCode;						//0x00
 };
-
 
 D2CompositeUnitStrc* dword_6F8FD650;
 D2CofNodeStrc* dword_6F8FD654;
+
+//1.10f: D2Win.0x6F8FD248
+int32_t gnItemTypesTxtRecordCount;
+//1.10f: D2Win.0x6F8FD244
+D2ItemTypesTxt* gpItemTypesTxt;
+
+//1.10f: D2Win.0x6F8FD234
+D2HitClassTxt* gpHitClassTxt;
 
 uint8_t byte_6F8FD218[10];
 uint8_t byte_6F8FD224[10];
@@ -35,9 +49,8 @@ D2CellFileStrc* ghSquelchCelFile_6F8FD65C;
 int gnSquelchCelFileFrameCount_6F8FD660;
 D2CellFileStrc* ghSelectedCelFile_6F8FD668;
 int gnSelectedCelFileFrameCount_6F8FD66C;
-
-int dword_6F8BCF94 = 1;
-D2ItemTypesTxt* gpItemTypesTxt_6F8FD244;
+//1.10f: D2Win.0x6F8BCF94
+BOOL gDATATBLS_LoadFromBin = TRUE;
 int dword_6F8BC0A4;
 int gnPlayerModeTokenTblSize_6F8BC0F8;
 int dword_6F8BC154[15] =
@@ -1419,12 +1432,12 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 	return FALSE;
 }
 
-//D2Win.0x6F8A2CE0
-void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
+//1.10f: D2Win.0x6F8A2CE0
+void* __stdcall D2WIN_DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
 {
 	char szFilename[260] = {};
 
-	if (dword_6F8BCF94)
+	if (gDATATBLS_LoadFromBin)
 	{
 		wsprintfA(szFilename, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".bin");
 	}
@@ -1444,7 +1457,7 @@ void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinField
 
 	void* pBinData = nullptr;
 	int nRecordCount = 0;
-	if (dword_6F8BCF94)
+	if (gDATATBLS_LoadFromBin)
 	{
 		nRecordCount = *(int*)pFileData;
 		pBinData = (char*)pFileData + 4;
@@ -1699,7 +1712,7 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 				return TRUE;
 			}
 
-			D2ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt_6F8FD244[v5];
+			D2ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt[v5];
 			if (pItemTypesTxtRecord->nEquiv1)
 			{
 				++nStackIndex;
@@ -1867,428 +1880,199 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 	return 1;
 }
 
-////D2Win.0x6F8A3680) --------------------------------------------------------
-//int __cdecl sub_6F8A3680()
-//{
-//	int result; // eax@1
-//	int v1; // eax@2
-//	int v2; // eax@2
-//	int v3; // eax@2
-//	signed int v4; // ebp@2
-//	int v5; // edi@4
-//	int v6; // ebx@5
-//	signed int v7; // eax@13
-//	int v8; // ecx@14
-//	signed int i; // ebx@18
-//	int v10; // edx@27
-//	unsigned int v11; // ecx@27
-//	int v12; // ecx@30
-//	unsigned int v13; // eax@31
-//	int v14; // edi@32
-//	int v15; // eax@37
-//	bool v16; // sf@42
-//	unsigned __int8 v17; // of@42
-//	signed int v18; // [sp+10h] [bp-220h]@2
-//	int v19; // [sp+14h] [bp-21Ch]@3
-//	signed int v20; // [sp+18h] [bp-218h]@3
-//	int v21; // [sp+1Ch] [bp-214h]@5
-//	signed int v22; // [sp+20h] [bp-210h]@7
-//	int v23; // [sp+24h] [bp-20Ch]@2
-//	int v24; // [sp+28h] [bp-208h]@2
-//	int v25; // [sp+2Ch] [bp-204h]@2
-//	int v26; // [sp+30h] [bp-200h]@2
-//	int v27; // [sp+34h] [bp-1FCh]@2
-//	int *v28; // [sp+38h] [bp-1F8h]@2
-//	char v29[4]; // [sp+3Ch] [bp-1F4h]@2
-//	int v30; // [sp+40h] [bp-1F0h]@2
-//	int v31; // [sp+44h] [bp-1ECh]@2
-//	int v32; // [sp+48h] [bp-1E8h]@2
-//	int v33; // [sp+4Ch] [bp-1E4h]@2
-//	int v34; // [sp+50h] [bp-1E0h]@2
-//	int v35; // [sp+54h] [bp-1DCh]@2
-//	int v36; // [sp+58h] [bp-1D8h]@2
-//	int v37; // [sp+5Ch] [bp-1D4h]@2
-//	int *v38; // [sp+60h] [bp-1D0h]@2
-//	int v39; // [sp+64h] [bp-1CCh]@2
-//	int v40; // [sp+68h] [bp-1C8h]@2
-//	int v41; // [sp+6Ch] [bp-1C4h]@2
-//	int v42; // [sp+70h] [bp-1C0h]@2
-//	int *v43; // [sp+74h] [bp-1BCh]@2
-//	int v44; // [sp+78h] [bp-1B8h]@2
-//	int v45; // [sp+7Ch] [bp-1B4h]@2
-//	int v46; // [sp+80h] [bp-1B0h]@2
-//	int v47; // [sp+84h] [bp-1ACh]@2
-//	int *v48; // [sp+88h] [bp-1A8h]@2
-//	int v49; // [sp+8Ch] [bp-1A4h]@2
-//	int v50; // [sp+90h] [bp-1A0h]@2
-//	int v51; // [sp+94h] [bp-19Ch]@2
-//	int v52; // [sp+98h] [bp-198h]@2
-//	int v53; // [sp+9Ch] [bp-194h]@2
-//	int v54; // [sp+A0h] [bp-190h]@2
-//	int v55; // [sp+A4h] [bp-18Ch]@2
-//	int v56; // [sp+A8h] [bp-188h]@2
-//	int v57; // [sp+ACh] [bp-184h]@2
-//	int v58; // [sp+B0h] [bp-180h]@2
-//	int v59; // [sp+B4h] [bp-17Ch]@2
-//	int v60; // [sp+B8h] [bp-178h]@2
-//	int v61; // [sp+BCh] [bp-174h]@2
-//	int v62; // [sp+C0h] [bp-170h]@2
-//	int *v63; // [sp+C4h] [bp-16Ch]@2
-//	int v64; // [sp+C8h] [bp-168h]@2
-//	int v65; // [sp+CCh] [bp-164h]@2
-//	int v66; // [sp+D0h] [bp-160h]@2
-//	int v67; // [sp+D4h] [bp-15Ch]@2
-//	int *v68; // [sp+D8h] [bp-158h]@2
-//	int v69; // [sp+DCh] [bp-154h]@2
-//	int v70; // [sp+E0h] [bp-150h]@2
-//	int v71; // [sp+E4h] [bp-14Ch]@2
-//	int v72; // [sp+E8h] [bp-148h]@2
-//	int v73; // [sp+ECh] [bp-144h]@2
-//	int v74; // [sp+F0h] [bp-140h]@2
-//	int v75; // [sp+F4h] [bp-13Ch]@2
-//	int v76; // [sp+F8h] [bp-138h]@2
-//	int v77; // [sp+FCh] [bp-134h]@2
-//	int v78; // [sp+100h] [bp-130h]@2
-//	int v79; // [sp+104h] [bp-12Ch]@2
-//	int v80; // [sp+108h] [bp-128h]@2
-//	int v81; // [sp+10Ch] [bp-124h]@2
-//	int v82; // [sp+110h] [bp-120h]@2
-//	int v83; // [sp+114h] [bp-11Ch]@2
-//	int v84; // [sp+118h] [bp-118h]@2
-//	int v85; // [sp+11Ch] [bp-114h]@2
-//	int v86; // [sp+120h] [bp-110h]@2
-//	int v87; // [sp+124h] [bp-10Ch]@2
-//	int v88; // [sp+128h] [bp-108h]@2
-//	int v89; // [sp+12Ch] [bp-104h]@2
-//	int v90; // [sp+130h] [bp-100h]@2
-//	int v91; // [sp+134h] [bp-FCh]@2
-//	int v92; // [sp+138h] [bp-F8h]@2
-//	int v93; // [sp+13Ch] [bp-F4h]@2
-//	int v94; // [sp+140h] [bp-F0h]@2
-//	int v95; // [sp+144h] [bp-ECh]@2
-//	int v96; // [sp+148h] [bp-E8h]@2
-//	int v97; // [sp+14Ch] [bp-E4h]@2
-//	int v98; // [sp+150h] [bp-E0h]@2
-//	int v99; // [sp+154h] [bp-DCh]@2
-//	int v100; // [sp+158h] [bp-D8h]@2
-//	int v101; // [sp+15Ch] [bp-D4h]@2
-//	int v102; // [sp+160h] [bp-D0h]@2
-//	int v103; // [sp+164h] [bp-CCh]@2
-//	char v104[4]; // [sp+168h] [bp-C8h]@2
-//	int v105; // [sp+16Ch] [bp-C4h]@2
-//	int v106; // [sp+170h] [bp-C0h]@2
-//	int v107; // [sp+174h] [bp-BCh]@2
-//	int v108; // [sp+178h] [bp-B8h]@2
-//	int v109; // [sp+17Ch] [bp-B4h]@2
-//	int v110; // [sp+180h] [bp-B0h]@2
-//	int v111; // [sp+184h] [bp-ACh]@2
-//	int v112; // [sp+188h] [bp-A8h]@2
-//	int v113; // [sp+18Ch] [bp-A4h]@2
-//	int v114; // [sp+190h] [bp-A0h]@2
-//	int v115; // [sp+194h] [bp-9Ch]@2
-//	int v116; // [sp+198h] [bp-98h]@2
-//	int v117; // [sp+19Ch] [bp-94h]@2
-//	int v118; // [sp+1A0h] [bp-90h]@2
-//	int v119; // [sp+1A4h] [bp-8Ch]@2
-//	int v120; // [sp+1A8h] [bp-88h]@2
-//	int v121; // [sp+1ACh] [bp-84h]@2
-//	int v122; // [sp+1B0h] [bp-80h]@2
-//	int v123; // [sp+1B4h] [bp-7Ch]@2
-//	int v124; // [sp+1B8h] [bp-78h]@2
-//	int v125; // [sp+1BCh] [bp-74h]@2
-//	int v126; // [sp+1C0h] [bp-70h]@2
-//	int v127; // [sp+1C4h] [bp-6Ch]@2
-//	int v128; // [sp+1C8h] [bp-68h]@2
-//	int v129; // [sp+1CCh] [bp-64h]@2
-//	int v130; // [sp+1D0h] [bp-60h]@2
-//	int v131; // [sp+1D4h] [bp-5Ch]@2
-//	int v132; // [sp+1D8h] [bp-58h]@2
-//	int v133; // [sp+1DCh] [bp-54h]@2
-//	int v134; // [sp+1E0h] [bp-50h]@2
-//	int v135; // [sp+1E4h] [bp-4Ch]@2
-//	int v136; // [sp+1E8h] [bp-48h]@2
-//	int v137; // [sp+1ECh] [bp-44h]@2
-//	int v138; // [sp+1F0h] [bp-40h]@2
-//	int v139; // [sp+1F4h] [bp-3Ch]@2
-//	int v140; // [sp+1F8h] [bp-38h]@2
-//	int v141; // [sp+1FCh] [bp-34h]@2
-//	int v142; // [sp+200h] [bp-30h]@2
-//	int v143; // [sp+204h] [bp-2Ch]@2
-//	int v144; // [sp+208h] [bp-28h]@2
-//	int v145; // [sp+20Ch] [bp-24h]@2
-//	int v146; // [sp+210h] [bp-20h]@2
-//	int v147; // [sp+214h] [bp-1Ch]@2
-//	int v148; // [sp+218h] [bp-18h]@2
-//	char v149[4]; // [sp+21Ch] [bp-14h]@2
-//	int v150; // [sp+220h] [bp-10h]@2
-//	int v151; // [sp+224h] [bp-Ch]@2
-//	int v152; // [sp+228h] [bp-8h]@2
-//	int v153; // [sp+22Ch] [bp-4h]@2
-//
-//	result = dword_6F8FD674;
-//	if (!dword_6F8FD674)
-//	{
-//		memset(dword_6F8C1520, 0, 0xBF4u);
-//		dword_6F8FD674 = 1;
-//		v34 = (int)"code";
-//		v35 = 10;
-//		v36 = 0;
-//		v37 = 0;
-//		v38 = &dword_6F8FD240;
-//		v39 = (int)"equiv1";
-//		v40 = 15;
-//		v41 = 0;
-//		v42 = 4;
-//		v43 = &dword_6F8FD240;
-//		v44 = (int)"equiv2";
-//		v45 = 15;
-//		v46 = 0;
-//		v47 = 6;
-//		v48 = &dword_6F8FD240;
-//		v49 = (int)"repair";
-//		v50 = 4;
-//		v51 = 0;
-//		v52 = 8;
-//		v53 = 0;
-//		v54 = (int)"body";
-//		v55 = 4;
-//		v56 = 0;
-//		v57 = 9;
-//		v58 = 0;
-//		v59 = (int)"shoots";
-//		v60 = 15;
-//		v61 = 0;
-//		v62 = 12;
-//		v63 = &dword_6F8FD240;
-//		v64 = (int)"quiver";
-//		v65 = 15;
-//		v66 = 0;
-//		v67 = 14;
-//		v68 = &dword_6F8FD240;
-//		v69 = (int)"throwable";
-//		v70 = 4;
-//		v71 = 0;
-//		v72 = 16;
-//		v73 = 0;
-//		v74 = (int)"reload";
-//		v75 = 4;
-//		v76 = 0;
-//		v77 = 17;
-//		v78 = 0;
-//		v79 = (int)"reequip";
-//		v80 = 4;
-//		v81 = 0;
-//		v82 = 18;
-//		v83 = 0;
-//		v84 = (int)"autostack";
-//		v85 = 4;
-//		v86 = 0;
-//		v87 = 19;
-//		v88 = 0;
-//		v89 = (int)"magic";
-//		v90 = 4;
-//		v91 = 0;
-//		v92 = 20;
-//		v93 = 0;
-//		v94 = (int)"normal";
-//		v95 = 4;
-//		v96 = 0;
-//		v97 = 22;
-//		v98 = 0;
-//		v99 = (int)"charm";
-//		v100 = 4;
-//		v101 = 0;
-//		v102 = 23;
-//		v103 = 0;
-//		*(DWORD*)v104 = "gem";
-//		v105 = 4;
-//		v106 = 0;
-//		v107 = 24;
-//		v108 = 0;
-//		v109 = (int)"beltable";
-//		v110 = 4;
-//		v111 = 0;
-//		v112 = 25;
-//		v113 = 0;
-//		v114 = (int)"costformula";
-//		v115 = 4;
-//		v116 = 0;
-//		v117 = 32;
-//		v118 = 0;
-//		v119 = (int)"varinvgfx";
-//		v120 = 4;
-//		v121 = 0;
-//		v122 = 35;
-//		v123 = 0;
-//		v124 = (int)"invgfx1";
-//		v125 = 1;
-//		v126 = 31;
-//		v127 = 36;
-//		v128 = 0;
-//		v129 = (int)"invgfx2";
-//		v130 = 1;
-//		v131 = 31;
-//		v132 = 68;
-//		v133 = 0;
-//		v134 = (int)"invgfx3";
-//		v135 = 1;
-//		v136 = 31;
-//		v137 = 100;
-//		v138 = 0;
-//		v139 = (int)"invgfx4";
-//		v140 = 1;
-//		v141 = 31;
-//		v142 = 132;
-//		v143 = 0;
-//		v144 = (int)"invgfx5";
-//		v145 = 1;
-//		v146 = 31;
-//		v147 = 164;
-//		v148 = 0;
-//		*(DWORD*)v149 = "end";
-//		v150 = 0;
-//		v151 = 0;
-//		v152 = 0;
-//		v153 = 0;
-//		dword_6F8FD240 = Fog_10211(__FILE__, __LINE__);
-//		v1 = D2Win_GetArchive();
-//		dword_6F8FD244 = sub_6F8A2CE0(v1, "itemtypes", (int)&v34, (int)&unk_6F8FD248, 228);
-//		v24 = (int)"code";
-//		v25 = 10;
-//		v26 = 0;
-//		v27 = 0;
-//		v28 = &dword_6F8FD238;
-//		*(DWORD*)v29 = "end";
-//		v30 = 0;
-//		v31 = 0;
-//		v32 = 0;
-//		v33 = 0;
-//		dword_6F8FD238 = Fog_10211(__FILE__, __LINE__);
-//		v2 = D2Win_GetArchive();
-//		dword_6F8FD234 = sub_6F8A2CE0(v2, "hitclass", (int)&v24, 0, 4);
-//		v3 = D2Win_GetArchive();
-//		sub_6F8A2E70(v3);
-//		dword_6F8C1530 = dword_6F8BCF98[0];
-//		dword_6F8C153C = dword_6F8BCF98[0];
-//		dword_6F8C1548 = dword_6F8BCF98[0];
-//		result = dword_6F8C14F8;
-//		v4 = 4;
-//		dword_6F8C152C = ' til';
-//		dword_6F8C1534 = 3;
-//		dword_6F8C1538 = ' dem';
-//		dword_6F8C1540 = 3;
-//		dword_6F8C1544 = ' yvh';
-//		dword_6F8C154C = 3;
-//		v18 = 4;
-//		v23 = 0;
-//		if (dword_6F8C14F8 > 0)
-//		{
-//			v20 = 48;
-//			v19 = 0;
-//			do
-//			{
-//				v5 = v19 + dword_6F8C14FC;
-//				if (*(DWORD*)(v19 + dword_6F8C14FC + 144))
-//				{
-//					v6 = *(DWORD*)(v19 + dword_6F8C14FC + 144);
-//					v21 = *(DWORD*)(v19 + dword_6F8C14FC + 144);
-//				}
-//				else
-//				{
-//					v21 = *(DWORD*)(v5 + 128);
-//					v6 = *(DWORD*)(v5 + 128);
-//				}
-//				v22 = 1;
-//				if (!sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 3)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 51)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 37)
-//					|| sub_6F8A32B0(*(WORD*)(v5 + 286), 75))
-//					v22 = 0;
-//				v7 = 0;
-//				if (v20 <= 0)
-//				{
-//LABEL_17:
-//					if (v22 == 1)
-//					{
-//						for (i = v20;
-//							 sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 45)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//							 || sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 50)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 50)
-//							 || *(int*)((char*)dword_6F8C1520 + i);
-//							 i += 12)
-//							++v4;
-//						if (v4 >= 255)
-//							v4 = v18;
-//						dword_6F8C1520[3 * v4] = v21;
-//						v10 = dword_6F8BCF90;
-//						dword_6F8C1528[3 * v4] = *(WORD*)(v5 + 286);
-//						v11 = 0;
-//						if ((unsigned int)v10 <= 0)
-//						{
-//LABEL_30:
-//							v12 = 0;
-//						}
-//						else
-//						{
-//							while (*(DWORD*)(v5 + 192) != dword_6F8BCF28[2 * v11])
-//							{
-//								++v11;
-//								if (v11 >= v10)
-//									goto LABEL_30;
-//							}
-//							v12 = dword_6F8BCF2C[2 * v11];
-//						}
-//						dword_6F8C1524[3 * v4] = dword_6F8BCF98[v12];
-//						v13 = 0;
-//						if ((unsigned int)v10 <= 0)
-//						{
-//LABEL_38:
-//							v15 = 0;
-//						}
-//						else
-//						{
-//							v14 = *(DWORD*)(v5 + 196);
-//							while (v14 != dword_6F8BCF28[2 * v13])
-//							{
-//								++v13;
-//								if (v13 >= v10)
-//									goto LABEL_38;
-//							}
-//							v15 = dword_6F8BCF2C[2 * v13];
-//						}
-//						dword_6F8FD250[v4] = dword_6F8BCF98[v15];
-//						if (v18 == v4)
-//						{
-//							++v18;
-//							v20 += 12;
-//						}
-//						v4 = v18;
-//					}
-//				}
-//				else
-//				{
-//					v8 = (int)dword_6F8C1520;
-//					while (*(DWORD*)v8 != v6)
-//					{
-//						++v7;
-//						v8 += 12;
-//						if (v7 >= v4)
-//							goto LABEL_17;
-//					}
-//				}
-//				result = v23 + 1;
-//				v17 = __OFSUB__(v23 + 1, dword_6F8C14F8);
-//				v16 = v23++ + 1 - dword_6F8C14F8 < 0;
-//				v19 += 424;
-//			}
-//			while (v16 ^ v17);
-//		}
-//		dword_6F8FD230 = 255;
-//	}
-//	return result;
-//}
+
+char gtUnk_6F8C1520[0xBF4u];
+//1.10f:DWin.0x6F8FD240
+D2TxtLinkStrc* gpItemTypesLinker = nullptr;
+//1.10f:D2Win.0x6F8FD238
+D2TxtLinkStrc* gpHitClassLinker = nullptr;
+
+//1.10f:DWin.0x6F8FD674
+BOOL gbLoadedCompTxts = FALSE;
+
+//D2Win.0x6F8A3680
+void sub_6F8A3680()
+{
+	if (!gbLoadedCompTxts)
+	{
+		memset(gtUnk_6F8C1520, 0, sizeof(gtUnk_6F8C1520));
+		gbLoadedCompTxts= TRUE;
+
+		D2BinFieldStrc pTbl[] =
+		{
+			{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &gpItemTypesLinker },
+			{ "equiv1", TXTFIELD_CODETOWORD, 0, TXTFIELD_BYTE, &gpItemTypesLinker },
+			{ "equiv2", TXTFIELD_CODETOWORD, 0, 6, &gpItemTypesLinker },
+			{ "repair", TXTFIELD_BYTE, 0, 8, NULL },
+			{ "body", TXTFIELD_BYTE, 0, 9, NULL },
+			//{ "bodyloc1", TXTFIELD_CODETOBYTE, 0, 10, &sgptDataTables->pBodyLocsLinker },
+			//{ "bodyloc2", TXTFIELD_CODETOBYTE, 0, 11, &sgptDataTables->pBodyLocsLinker },
+			{ "shoots", TXTFIELD_CODETOWORD, 0, 12, &gpItemTypesLinker },
+			{ "quiver", TXTFIELD_CODETOWORD, 0, 14, &gpItemTypesLinker },
+			{ "throwable", TXTFIELD_BYTE, 0, 16, NULL },
+			{ "reload", TXTFIELD_BYTE, 0, 17, NULL },
+			{ "reequip", TXTFIELD_BYTE, 0, 18, NULL },
+			{ "autostack", TXTFIELD_BYTE, 0, 19, NULL },
+			{ "magic", TXTFIELD_BYTE, 0, 20, NULL },
+			//{ "rare", TXTFIELD_BYTE, 0, 21, NULL },
+			{ "normal", TXTFIELD_BYTE, 0, 22, NULL },
+			{ "charm", TXTFIELD_BYTE, 0, 23, NULL },
+			{ "gem", TXTFIELD_BYTE, 0, 24, NULL },
+			{ "beltable", TXTFIELD_BYTE, 0, 25, NULL },
+			//{ "maxsock1", TXTFIELD_BYTE, 0, 26, NULL },
+			//{ "maxsock25", TXTFIELD_BYTE, 0, 27, NULL },
+			//{ "maxsock40", TXTFIELD_BYTE, 0, 28, NULL },
+			//{ "treasureclass", TXTFIELD_BYTE, 0, 29, NULL },
+			//{ "rarity", TXTFIELD_BYTE, 0, 30, NULL },
+			//{ "staffmods", TXTFIELD_CODETOBYTE, 0, 31, &sgptDataTables->pPlayerClassLinker },
+			{ "costformula", TXTFIELD_BYTE, 0, 32, NULL },
+			//{ "class", TXTFIELD_CODETOBYTE, 0, 33, &sgptDataTables->pPlayerClassLinker },
+			//{ "storepage", TXTFIELD_CODETOBYTE, 0, 34, &sgptDataTables->pStorePageLinker },
+			{ "varinvgfx", TXTFIELD_BYTE, 0, 35, NULL },
+			{ "invgfx1", TXTFIELD_ASCII, 31, 36, NULL },
+			{ "invgfx2", TXTFIELD_ASCII, 31, 68, NULL },
+			{ "invgfx3", TXTFIELD_ASCII, 31, 100, NULL },
+			{ "invgfx4", TXTFIELD_ASCII, 31, 132, NULL },
+			{ "invgfx5", TXTFIELD_ASCII, 31, 164, NULL },
+			//{ "invgfx6", TXTFIELD_ASCII, 31, 196, NULL },
+			{ "end", TXTFIELD_NONE, 0, 0, NULL },
+		};
+
+		gpItemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+		gpItemTypesTxt = (D2ItemTypesTxt*)D2WIN_DATATBLS_CompileTxt(D2Win_GetArchive(), "itemtypes", pTbl, &gnItemTypesTxtRecordCount, sizeof(D2ItemTypesTxt));
+
+		D2BinFieldStrc pHitClassTbl[] =
+		{
+			{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &gpHitClassLinker },
+			{ "end", TXTFIELD_NONE, 0, 0, NULL },
+		};
+		gpHitClassLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+		int nRecordCount;
+		gpHitClassTxt = (D2HitClassTxt*)D2WIN_DATATBLS_CompileTxt(D2Win_GetArchive(), "hitclass", pHitClassTbl, &nRecordCount, sizeof(D2HitClassTxt));
+
+		UNIMPLEMENTED();
+#if 0 // TODO !
+		sub_6F8A2E70(D2Win_GetArchive());
+		dword_6F8C1530 = dword_6F8BCF98[0];
+		dword_6F8C153C = dword_6F8BCF98[0];
+		dword_6F8C1548 = dword_6F8BCF98[0];
+		result = dword_6F8C14F8;
+		v4 = 4;
+		dword_6F8C152C = ' til';
+		dword_6F8C1534 = 3;
+		dword_6F8C1538 = ' dem';
+		dword_6F8C1540 = 3;
+		dword_6F8C1544 = ' yvh';
+		dword_6F8C154C = 3;
+		v18 = 4;
+		v23 = 0;
+		if (dword_6F8C14F8 > 0)
+		{
+			v20 = 48;
+			v19 = 0;
+			do
+			{
+				v5 = v19 + dword_6F8C14FC;
+				if (*(_DWORD*)(v19 + dword_6F8C14FC + 144))
+				{
+					v6 = *(_DWORD*)(v19 + dword_6F8C14FC + 144);
+					v21 = v6;
+				}
+				else
+				{
+					v21 = *(_DWORD*)(v5 + 128);
+					v6 = v21;
+				}
+				v22 = 1;
+				if (!sub_6F8A32B0(*(__int16*)(v5 + 286), 45)
+					&& !sub_6F8A32B0(*(__int16*)(v5 + 286), 3)
+					&& !sub_6F8A32B0(*(__int16*)(v5 + 286), 51)
+					&& !sub_6F8A32B0(*(__int16*)(v5 + 286), 37)
+					|| sub_6F8A32B0(*(__int16*)(v5 + 286), 75))
+				{
+					v22 = 0;
+				}
+				v7 = 0;
+				if (v20 <= 0)
+				{
+				LABEL_17:
+					if (v22 == 1)
+					{
+						for (i = v20;
+							sub_6F8A32B0(*(int*)((char*)&dword_6F8BC1E0 + i), 45) && sub_6F8A32B0(*(__int16*)(v5 + 286), 45)
+							|| sub_6F8A32B0(*(int*)((char*)&dword_6F8BC1E0 + i), 50) && sub_6F8A32B0(*(__int16*)(v5 + 286), 50)
+							|| *(int*)((char*)dword_6F8C1520 + i);
+							i += 12)
+						{
+							++v4;
+						}
+						if (v4 >= 255)
+							v4 = v18;
+						v10 = 3 * v4;
+						dword_6F8C1520[v10] = v21;
+						v11 = dword_6F8BCF90;
+						dword_6F8C1528[v10] = *(__int16*)(v5 + 286);
+						v12 = 0;
+						if (v11)
+						{
+							while (*(_DWORD*)(v5 + 192) != dword_6F8BCF28[2 * v12])
+							{
+								if (++v12 >= v11)
+									goto LABEL_30;
+							}
+							v13 = dword_6F8BCF2C[2 * v12];
+						}
+						else
+						{
+						LABEL_30:
+							v13 = 0;
+						}
+						dword_6F8C1524[3 * v4] = dword_6F8BCF98[v13];
+						v14 = 0;
+						if (v11)
+						{
+							v15 = *(_DWORD*)(v5 + 196);
+							while (v15 != dword_6F8BCF28[2 * v14])
+							{
+								if (++v14 >= v11)
+									goto LABEL_38;
+							}
+							v16 = dword_6F8BCF2C[2 * v14];
+						}
+						else
+						{
+						LABEL_38:
+							v16 = 0;
+						}
+						dword_6F8FD250[v4] = dword_6F8BCF98[v16];
+						if (v18 == v4)
+						{
+							++v18;
+							v20 += 12;
+						}
+						v4 = v18;
+					}
+				}
+				else
+				{
+					v8 = dword_6F8C1520;
+					while (*v8 != v6)
+					{
+						++v7;
+						v8 += 3;
+						if (v7 >= v4)
+							goto LABEL_17;
+					}
+				}
+				result = v23 + 1;
+				v17 = ++v23 < dword_6F8C14F8;
+				v19 += 424;
+			} while (v17);
+		}
+		dword_6F8FD230 = 255;
+#endif
+	}
+}
 
 ////D2Win.0x6F8A3DC0) --------------------------------------------------------
 //signed int __fastcall sub_6F8A3DC0(int a1, int a2)

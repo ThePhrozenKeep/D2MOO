@@ -271,7 +271,7 @@ void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlay
     D2_ASSERT(pItem);
     D2_ASSERT(pPlayer);
 
-    ITEMS_SetInvPage(pItem, INVPAGE_INVENTORY);
+    ITEMS_SetPage(pItem, INVPAGE_INVENTORY);
 
     D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), a8, 1, nullptr);
 }

@@ -1554,10 +1554,10 @@ void __fastcall D2GAME_UpdateClientItem_6FC3E9D0(D2ClientStrc* pClient, D2UnitSt
 {
     D2_ASSERT(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__) == pClient);
 
-    const uint8_t nPage = ITEMS_GetInvPage(pItem);
-    ITEMS_SetInvPage(pItem, ITEMS_GetItemCell(pItem));
+    const D2C_Page nPage = ITEMS_GetPage(pItem);
+    ITEMS_SetPage(pItem, ITEMS_GetItemCell(pItem));
     D2GAME_SendPacket0x9D_6FC3E6F0(pClient, pPlayer, pItem, ITEMACTION_REMOVEFROMCONTAINER, dwCmdFlag, 0);
-    ITEMS_SetInvPage(pItem, nPage);
+    ITEMS_SetPage(pItem, nPage);
 }
 
 //D2Game.0x6FC3EA50
@@ -1906,10 +1906,10 @@ void __fastcall D2GAME_SendP0x9C_ItemAction_AddOrRemoveFromShop_6FC3F260(D2Clien
     }
     else if (a3 == 57)
     {
-        const uint8_t nPage = ITEMS_GetInvPage(pItem);
-        ITEMS_SetInvPage(pItem, ITEMS_GetItemCell(pItem));
+        const D2C_Page nPage = ITEMS_GetPage(pItem);
+        ITEMS_SetPage(pItem, ITEMS_GetItemCell(pItem));
         D2GAME_SendPacket0x9C_6FC3E570(pClient, pItem, ITEMACTION_REMOVEFROMSHOP, 0, 0);
-        ITEMS_SetInvPage(pItem, nPage);
+        ITEMS_SetPage(pItem, nPage);
     }
 }
 
