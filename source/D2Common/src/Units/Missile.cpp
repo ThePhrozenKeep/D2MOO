@@ -12,6 +12,7 @@
 #include <D2BitManip.h>
 #include <D2Combat.h>
 #include <Calc.h>
+#include <D2Math.h>
 
 D2CalcCallbackInfoStrc off_6FDE5A50[] =
 {
@@ -911,7 +912,7 @@ int __fastcall MISSILE_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, i
 	}
 
 	int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, statId, 0);
-	return DATATBLS_ApplyRatio(nSrcDamage, nPercentage, 100);
+	return D2_ComputePercentage(nSrcDamage, nPercentage);
 }
 
 //D2Common.0x6FDBB2E0 (#11218)
@@ -1039,7 +1040,7 @@ int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = D2_ComputePercentage(nDamage, nPercentage);
 
 					nDamage += (int)nBonus;
 				}
@@ -1094,7 +1095,7 @@ int __stdcall MISSILE_GetMaxDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = D2_ComputePercentage(nDamage, nPercentage);
 
 					nDamage += (int)nBonus;
 				}
@@ -1162,7 +1163,7 @@ int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = D2_ComputePercentage(nDamage, nPercentage);
 
 					nDamage += (int)nBonus;
 				}
@@ -1217,7 +1218,7 @@ int __stdcall MISSILE_GetMaxElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = D2_ComputePercentage(nDamage, nPercentage);
 
 					nDamage += (int)nBonus;
 				}

@@ -1091,9 +1091,8 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 	int nReqDexBonus = 0;
 	if (int nReqPctBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_REQ_PERCENT, 0))
 	{
-		// It seems the original game has some additional logic to handle overflow here
-		nReqStrBonus = nBaseReqStr * int64_t(nReqPctBonus) / 100;
-		nReqDexBonus = nBaseReqDex * int64_t(nReqPctBonus) / 100;
+		nReqStrBonus = D2_ComputePercentage(nBaseReqStr, nReqPctBonus);
+		nReqDexBonus = D2_ComputePercentage(nBaseReqDex, nReqPctBonus);
 	}
 
 	if (pItemData && pItemData->dwItemFlags & IFLAG_ETHEREAL)
@@ -2501,11 +2500,11 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		{
 			if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
 			{
-				nCost = nRepCost - DATATBLS_ApplyRatio(nRepCost, nReducePricePct, 100);
+				nCost = nRepCost - D2_ComputePercentage(nRepCost, nReducePricePct);
 			}
 			else
 			{
-				nCost = nSellCost - DATATBLS_ApplyRatio(nSellCost, nReducePricePct, 100);
+				nCost = nSellCost - D2_ComputePercentage(nSellCost, nReducePricePct);
 			}
 		}
 
@@ -3547,7 +3546,7 @@ BOOL __stdcall ITEMS_IsClassValid(D2UnitStrc* pItem)
 }
 
 //D2Common.0x6FD9E390 (#10739)
-int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
+D2C_PlayerClasses __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 {
 	D2ItemTypesTxt* pItemTypesTxtRecord = NULL;
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -3562,7 +3561,7 @@ int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem)
 			pItemTypesTxtRecord = &sgptDataTables->pItemTypesTxt[pItemsTxtRecord->wType[0]];
 			if (pItemTypesTxtRecord && pItemTypesTxtRecord->nClass < NUMBER_OF_PLAYERCLASSES)
 			{
-				return pItemTypesTxtRecord->nClass;
+				return D2C_PlayerClasses(pItemTypesTxtRecord->nClass);
 			}
 		}
 	}

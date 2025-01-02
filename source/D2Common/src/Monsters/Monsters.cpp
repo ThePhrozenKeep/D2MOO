@@ -12,6 +12,7 @@
 #include <D2Lang.h>
 #include <D2BitManip.h>
 #include <DataTbls/MonsterIds.h>
+#include <D2Math.h>
 
 
 //TODO: Check names
@@ -1289,8 +1290,8 @@ void __stdcall MONSTERS_ApplyClassicScaling(D2UnitStrc* pMonster, BOOL bExpansio
 			{
 				const int32_t nValue = STATLIST_UnitGetStatValue(pMonster, rAdjustment.nStatID, 0);
 				const int32_t nAdjustedValue = nDifficulty == DIFFMODE_NIGHTMARE
-					? DATATBLS_ApplyRatio(nValue, rAdjustment.nNightmareMultiplier, rAdjustment.nNightmareDivisor)
-					: DATATBLS_ApplyRatio(nValue, rAdjustment.nHellMultiplier, rAdjustment.nHellDivisor);
+					? D2_ApplyRatio(nValue, rAdjustment.nNightmareMultiplier, rAdjustment.nNightmareDivisor)
+					: D2_ApplyRatio(nValue, rAdjustment.nHellMultiplier, rAdjustment.nHellDivisor);
 				STATLIST_SetUnitStat(pMonster, rAdjustment.nStatID, nAdjustedValue, 0);
 			}
 			STATLIST_SetUnitStat(pMonster, STAT_LEVEL, 25 * nDifficulty + pMonStatsTxtRecord->nLevel[0], 0);

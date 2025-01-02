@@ -30,3 +30,39 @@ int32_t D2signum(T x) {
     return D2signum(x, std::is_signed<T>());
 }
 
+// Recreating the way D2 applies multiplication overflows.
+// Today it would be faster to simply always extend to 64 bits.
+inline int D2_ApplyRatio(int32_t nValue, int32_t nMultiplier, int32_t nDivisor)
+{
+	if (nDivisor)
+	{
+		if (nValue <= 0x100'000)
+		{
+			if (nMultiplier <= 0x10'000)
+			{
+				return nMultiplier * nValue / nDivisor;
+			}
+
+			if (nDivisor <= (nMultiplier >> 4))
+			{
+				return nValue * (nMultiplier / nDivisor);
+			}
+		}
+		else
+		{
+			if (nDivisor <= (nValue >> 4))
+			{
+				return nMultiplier * (nValue / nDivisor);
+			}
+		}
+
+		return ((int64_t)nMultiplier * (int64_t)nValue) / nDivisor;
+	}
+
+	return 0;
+}
+
+inline int32_t D2_ComputePercentage(int32_t nValue, int32_t nPercentage)
+{
+	return D2_ApplyRatio(nValue, nPercentage, 100);
+}

@@ -7,6 +7,7 @@
 #include "D2Items.h"
 #include "D2States.h"
 #include "Units/Units.h"
+#include <D2Math.h>
 //TODO: Find names
 
 
@@ -157,10 +158,10 @@ static void STATLIST_SetUnitStatNewValue(D2StatListExStrc* pStatListEx, D2StatsA
 // Helper function
 static int ComputeStatPercentage(int nValue, D2StatListExStrc* pStatListEx, uint16_t opStatId)
 {
-	int nOpStatValue = sub_6FDB5830(pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(opStatId).nPackedValue);
+	int32_t nOpStatValue = sub_6FDB5830(pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(opStatId).nPackedValue);
 	if (nOpStatValue)
 	{
-		return nValue * (nOpStatValue / 100.0);
+		return D2_ComputePercentage(nValue, nOpStatValue);
 	}
 	return 0;
 }
@@ -274,7 +275,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 								if (nRecursiveValue)
 								{
 									int nTemp = (nShiftedVal * nRecursiveValue) >> opStatData.nOpParam;
-									nAccumulatedValue += nTemp * nPreviousOpStatValue / 100.0;
+									nAccumulatedValue += D2_ComputePercentage(nTemp, nPreviousOpStatValue);
 								}
 							}
 						}
@@ -322,7 +323,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 							if (nRecursiveValue)
 							{
 								int nTemp = (nTmp * nRecursiveValue) >> opStatData.nOpParam;
-								nAccumulatedValue += nPreviousOpStatValue * nTemp / 100.0;
+								nAccumulatedValue += D2_ComputePercentage(nPreviousOpStatValue, nTemp);
 							}
 						}
 					}
@@ -349,7 +350,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 				{
 					int nBaseTime = 0;
 					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
-					nAccumulatedValue += nAccumulatedValue * ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL) / 100.0;
+					nAccumulatedValue += D2_ComputePercentage(nAccumulatedValue, ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL));
 				}
 			}
 			break;

@@ -490,7 +490,7 @@ D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsClassValidByItemId(int nItemId);
 //D2Common.0x6FD9E310 (#10737)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsClassValid(D2UnitStrc* pItem);
 //D2Common.0x6FD9E390 (#10739)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL D2C_PlayerClasses __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem);
 //D2Common.0x6FD9E410 (#10823)
 D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem);
 //D2Common.0x6FD9E480 (#10824)

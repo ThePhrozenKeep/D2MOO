@@ -7,6 +7,7 @@
 #include <Units/Units.h>
 #include <D2Monsters.h>
 #include <Storm.h>
+#include <D2Math.h>
 
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText)
@@ -599,8 +600,8 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nMinHP = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwHP[nDifficulty + nOffset], pMonStatsTxtRecord->nMinHP[nDifficulty], 100);
-						pMonStatsInit->nMaxHP = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwHP[nDifficulty + nOffset], pMonStatsTxtRecord->nMaxHP[nDifficulty], 100);
+						pMonStatsInit->nMinHP = D2_ComputePercentage(pMonLvlTxtRecord->dwHP[nDifficulty + nOffset], pMonStatsTxtRecord->nMinHP[nDifficulty]);
+						pMonStatsInit->nMaxHP = D2_ComputePercentage(pMonLvlTxtRecord->dwHP[nDifficulty + nOffset], pMonStatsTxtRecord->nMaxHP[nDifficulty]);
 					}
 				}
 
@@ -612,7 +613,7 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nAC = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwAC[nDifficulty + nOffset], pMonStatsTxtRecord->nAC[nDifficulty], 100);
+						pMonStatsInit->nAC = D2_ComputePercentage(pMonLvlTxtRecord->dwAC[nDifficulty + nOffset], pMonStatsTxtRecord->nAC[nDifficulty]);
 					}
 				}
 
@@ -624,7 +625,7 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nExp = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwXP[nDifficulty + nOffset], pMonStatsTxtRecord->nExp[nDifficulty], 100);
+						pMonStatsInit->nExp = D2_ComputePercentage(pMonLvlTxtRecord->dwXP[nDifficulty + nOffset], pMonStatsTxtRecord->nExp[nDifficulty]);
 					}
 				}
 
@@ -638,9 +639,9 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nTH = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nA1TH[nDifficulty], 100);
-						pMonStatsInit->nA1MinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA1MinD[nDifficulty], 100);
-						pMonStatsInit->nA1MaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA1MaxD[nDifficulty], 100);
+						pMonStatsInit->nTH = D2_ComputePercentage(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nA1TH[nDifficulty]);
+						pMonStatsInit->nA1MinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA1MinD[nDifficulty]);
+						pMonStatsInit->nA1MaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA1MaxD[nDifficulty]);
 					}
 				}
 
@@ -654,9 +655,9 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nTH = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nA2TH[nDifficulty], 100);
-						pMonStatsInit->nA2MinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA2MinD[nDifficulty], 100);
-						pMonStatsInit->nA2MaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA2MaxD[nDifficulty], 100);
+						pMonStatsInit->nTH = D2_ComputePercentage(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nA2TH[nDifficulty]);
+						pMonStatsInit->nA2MinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA2MinD[nDifficulty]);
+						pMonStatsInit->nA2MaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nA2MaxD[nDifficulty]);
 					}
 				}
 
@@ -670,9 +671,9 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nTH = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nS1TH[nDifficulty], 100);
-						pMonStatsInit->nS1MinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nS1MinD[nDifficulty], 100);
-						pMonStatsInit->nS1MaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nS1MaxD[nDifficulty], 100);
+						pMonStatsInit->nTH = D2_ComputePercentage(pMonLvlTxtRecord->dwTH[nDifficulty + nOffset], pMonStatsTxtRecord->nS1TH[nDifficulty]);
+						pMonStatsInit->nS1MinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nS1MinD[nDifficulty]);
+						pMonStatsInit->nS1MaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nS1MaxD[nDifficulty]);
 					}
 				}
 
@@ -685,8 +686,8 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nElMinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[0][nDifficulty], 100);
-						pMonStatsInit->nElMaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[0][nDifficulty], 100);
+						pMonStatsInit->nElMinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[0][nDifficulty]);
+						pMonStatsInit->nElMaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[0][nDifficulty]);
 					}
 
 					pMonStatsInit->nElDur = pMonStatsTxtRecord->nElDur[0][nDifficulty];
@@ -701,8 +702,8 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nElMinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[1][nDifficulty], 100);
-						pMonStatsInit->nElMaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[1][nDifficulty], 100);
+						pMonStatsInit->nElMinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[1][nDifficulty]);
+						pMonStatsInit->nElMaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[1][nDifficulty]);
 					}
 
 					pMonStatsInit->nElDur = pMonStatsTxtRecord->nElDur[1][nDifficulty];
@@ -717,8 +718,8 @@ BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameTy
 					}
 					else
 					{
-						pMonStatsInit->nElMinD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[2][nDifficulty], 100);
-						pMonStatsInit->nElMaxD = DATATBLS_ApplyRatio(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[2][nDifficulty], 100);
+						pMonStatsInit->nElMinD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMinD[2][nDifficulty]);
+						pMonStatsInit->nElMaxD = D2_ComputePercentage(pMonLvlTxtRecord->dwDM[nDifficulty + nOffset], pMonStatsTxtRecord->nElMaxD[2][nDifficulty]);
 					}
 
 					pMonStatsInit->nElDur = pMonStatsTxtRecord->nElDur[2][nDifficulty];
@@ -931,32 +932,7 @@ void __fastcall DATATBLS_UpdateTreasureClassProbabilities(D2TCExShortStrc* pTCEx
 //D2Common.0x6FD68D40
 int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, signed int nDivisor)
 {
-	if (nDivisor)
-	{
-		if (nValue <= 0x100'000)
-		{
-			if (nMultiplier <= 0x10'000)
-			{
-				return nMultiplier * nValue / nDivisor;
-			}
-
-			if (nDivisor <= (nMultiplier >> 4))
-			{
-				return nValue * (nMultiplier / nDivisor);
-			}
-		}
-		else
-		{
-			if (nDivisor <= (nValue >> 4))
-			{
-				return nMultiplier * (nValue / nDivisor);
-			}
-		}
-
-		return nMultiplier * (int64_t)nValue / nDivisor;
-	}
-
-	return 0;
+	return D2_ApplyRatio(nValue, nMultiplier, nDivisor);
 }
 
 //D2Common.0x6FD68DC0 (#10658)

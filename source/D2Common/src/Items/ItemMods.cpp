@@ -13,6 +13,7 @@
 #include "Units/Units.h"
 #include <D2States.h>
 #include <Calc.h>
+#include <D2Math.h>
 
 /*
 Date: Sun Apr 08 09:12:50 2012
@@ -3361,7 +3362,7 @@ int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 			nMaxDamage = pItemsTxtRecord->nMaxDam;
 		}
 
-		nBonus = nMin * (long long int)nMaxDamage / 100;
+		nBonus = D2_ComputePercentage(nMin, nMaxDamage);
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON) && nMaxDamage + nBonus <= nMaxDamage)
 		{

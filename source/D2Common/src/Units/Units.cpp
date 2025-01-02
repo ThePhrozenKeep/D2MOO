@@ -2389,7 +2389,7 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 		return nTotalDefense;
 	}
 
-	return nTotalDefense + (int)((long long int)nTotalDefense * (long long int)nArmorOverridePercent / 100);
+	return nTotalDefense + D2_ComputePercentage(nTotalDefense, nArmorOverridePercent);
 }
 
 //D2Common.0x6FDC0AC0 (#10432)

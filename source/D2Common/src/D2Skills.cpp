@@ -19,6 +19,7 @@
 #include <D2Monsters.h>
 #include <Calc.h>
 #include <D2Items.h>
+#include <D2Math.h>
 
 //TODO: Find names
 
@@ -2542,7 +2543,7 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 				if (nBonus)
 				{
-					nDamage += nDamage * nBonus / 100;
+					nDamage += D2_ComputePercentage(nDamage, nBonus);
 				}
 			}
 
@@ -2609,7 +2610,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 				if (nBonus)
 				{
-					nDamage += nDamage * nBonus / 100;
+					nDamage += D2_ComputePercentage(nDamage, nBonus);
 				}
 			}
 
@@ -2639,7 +2640,7 @@ int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 			if (nBonus)
 			{
-				nDamage += nDamage * nBonus / 100;
+				nDamage += D2_ComputePercentage(nDamage, nBonus);
 			}
 		}
 
@@ -2679,7 +2680,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 	}
 
 	int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, statId, 0);
-	return DATATBLS_ApplyRatio(nSrcDamage, nPercentage, 100);
+	return D2_ComputePercentage(nSrcDamage, nPercentage);
 }
 
 //D2Common.0x6FDB2B00 (#11005)
@@ -2701,7 +2702,7 @@ int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 			if (nBonus)
 			{
-				nDamage += nDamage * nBonus / 100;
+				nDamage += D2_ComputePercentage(nDamage, nBonus);
 			}
 		}
 
@@ -2755,7 +2756,7 @@ int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSk
 
 		if (nBonus)
 		{
-			nLength += nLength * nBonus / 100;
+			nLength += D2_ComputePercentage(nLength, nBonus);
 		}
 	}
 
@@ -3596,13 +3597,13 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 					nStrBonus = ITEMS_GetStrengthBonus(pBoots);
 					if (nStrBonus)
 					{
-						nDamagePercent += nStrBonus * STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0) / 100;
+						nDamagePercent += D2_ComputePercentage(STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0), nStrBonus);
 					}
 
 					nDexBonus = ITEMS_GetDexBonus(pBoots);
 					if (nDexBonus)
 					{
-						nDamagePercent += nDexBonus * STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) / 100;
+						nDamagePercent += D2_ComputePercentage(STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0), nDexBonus);
 					}
 
 					nDamagePercent += STATLIST_UnitGetStatValue(pUnit, STAT_DAMAGEPERCENT, 0);
