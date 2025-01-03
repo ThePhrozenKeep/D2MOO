@@ -43,6 +43,7 @@
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitEvent.h"
 #include "UNIT/SUnitMsg.h"
+#include <D2Math.h>
 
 
 //D2Game.0x6FD02BA0
@@ -498,7 +499,7 @@ int32_t __fastcall SKILLITEM_pSpell05_RejuvPotion(D2GameStrc* pGame, D2UnitStrc*
             if (nPercentage > 0)
             {
                 const int32_t nMaxValue = STATLIST_UnitGetStatValue(pUnit, pItemStatCostTxtRecord->wMaxStat, 0);
-                int32_t nAddValue = MONSTERUNIQUE_CalculatePercentage(nMaxValue, nPercentage, 100);
+                int32_t nAddValue = D2_ComputePercentage(nMaxValue, nPercentage);
 
                 if (nStatId == STAT_HITPOINTS)
                 {
@@ -1207,7 +1208,7 @@ int32_t __fastcall SKILLITEM_EventFunc13_DamageToMana(D2GameStrc* pGame, int32_t
             const int32_t nMana = STATLIST_UnitGetStatValue(pAttacker, STAT_MANA, 0);
             if (nMana < nMaxMana)
             {
-                int32_t nNewMana = nMana + MONSTERUNIQUE_CalculatePercentage(pDamage->dwDmgTotal, nPercentage, 100);
+                int32_t nNewMana = nMana + D2_ComputePercentage(pDamage->dwDmgTotal, nPercentage);
                 if (nNewMana < 0)
                 {
                     nNewMana = 0;
@@ -1403,7 +1404,7 @@ int32_t __fastcall SKILLITEM_EventFunc16_CrushingBlow(D2GameStrc* pGame, int32_t
             const int32_t nHpBonus = MONSTER_GetHpBonus(nPlayerCount);
             if (nHpBonus)
             {
-                nDivisor += MONSTERUNIQUE_CalculatePercentage(nDivisor, nHpBonus, 100);
+                nDivisor += D2_ComputePercentage(nDivisor, nHpBonus);
             }
         }
     }
@@ -1424,7 +1425,7 @@ int32_t __fastcall SKILLITEM_EventFunc16_CrushingBlow(D2GameStrc* pGame, int32_t
 
     if (nDamageResist > 0)
     {
-        nCrushingBlowHp -= MONSTERUNIQUE_CalculatePercentage(nCrushingBlowHp, nDamageResist, 100);
+        nCrushingBlowHp -= D2_ComputePercentage(nCrushingBlowHp, nDamageResist);
     }
 
     int32_t nNewHp = nHitpoints - nCrushingBlowHp;

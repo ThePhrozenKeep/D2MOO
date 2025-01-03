@@ -25,7 +25,7 @@
 #include "SKILLS/Skills.h"
 #include "SKILLS/SkillSor.h"
 #include "SKILLS/Skills.h"
-
+#include <D2Math.h>
 
 #pragma pack(push, 1)
 struct D2SrvDo06Strc
@@ -961,7 +961,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
     }
 
     UNITS_StoreOwner(pPet, pUnit);
-    const int32_t nHitpoints = MONSTERUNIQUE_CalculatePercentage(STATLIST_GetMaxLifeFromUnit(pUnit), SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel), 100);
+    const int32_t nHitpoints = D2_ComputePercentage(STATLIST_GetMaxLifeFromUnit(pUnit), SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel));
 
     STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, nHitpoints, 0);
     STATLIST_SetUnitStat(pPet, STAT_MAXHP, nHitpoints, 0);

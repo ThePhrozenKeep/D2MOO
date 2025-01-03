@@ -225,8 +225,8 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
 
     if (nTotalMaxDamage > 0)
     {
-        nTotalMinDamage += MONSTERUNIQUE_CalculatePercentage(nTotalMinDamage, nDamagePct + STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_MINDAMAGE_PERCENT, 0), 100);
-        nTotalMaxDamage += MONSTERUNIQUE_CalculatePercentage(nTotalMaxDamage, nDamagePct + STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_MAXDAMAGE_PERCENT, 0), 100);
+        nTotalMinDamage += D2_ComputePercentage(nTotalMinDamage, nDamagePct + STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_MINDAMAGE_PERCENT, 0));
+		nTotalMaxDamage += D2_ComputePercentage(nTotalMaxDamage, nDamagePct + STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_MAXDAMAGE_PERCENT, 0));
 
         nDamage += nTotalMinDamage;
         if (nTotalMaxDamage > nTotalMinDamage)
@@ -242,7 +242,7 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
         return nDamage;
     }
 
-    return MONSTERUNIQUE_CalculatePercentage(nDamage, nSrcDam, 128);
+    return D2_ApplyRatio(nDamage, nSrcDam, 128);
 }
 
 //D2Game.0x6FCBE7E0
@@ -407,8 +407,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 			const int32_t nMastery = STATLIST_UnitGetStatValue(pAttacker, STAT_PASSIVE_FIRE_MASTERY, 0);
 			if (nMaxDamage > 0)
 			{
-				nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMastery, 100);
-				nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMastery, 100);
+				nMinDamage += D2_ComputePercentage(nMinDamage, nMastery);
+				nMaxDamage += D2_ComputePercentage(nMaxDamage, nMastery);
 
 				pDamage->dwFireDamage += nMinDamage;
 				if (nMaxDamage > nMinDamage)
@@ -427,8 +427,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 			const int32_t nMastery = STATLIST_UnitGetStatValue(pAttacker, STAT_PASSIVE_LTNG_MASTERY, 0);
 			if (nMaxDamage > 0)
 			{
-				nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMastery, 100);
-				nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMastery, 100);
+				nMinDamage += D2_ComputePercentage(nMinDamage, nMastery);
+				nMaxDamage += D2_ComputePercentage(nMaxDamage, nMastery);
 
 				pDamage->dwLtngDamage += nMinDamage;
 				if (nMaxDamage > nMinDamage)
@@ -447,8 +447,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 			const int32_t nMastery = STATLIST_UnitGetStatValue(pAttacker, STAT_PASSIVE_COLD_MASTERY, 0);
 			if (nMaxDamage > 0)
 			{
-				nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMastery, 100);
-				nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMastery, 100);
+				nMinDamage += D2_ComputePercentage(nMinDamage, nMastery);
+				nMaxDamage += D2_ComputePercentage(nMaxDamage, nMastery);
 
 				pDamage->dwColdDamage += nMinDamage;
 				if (nMaxDamage > nMinDamage)
@@ -467,8 +467,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 			const int32_t nMastery = STATLIST_UnitGetStatValue(pAttacker, STAT_PASSIVE_MAG_MASTERY, 0);
 			if (nMaxDamage > 0)
 			{
-				nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMastery, 100);
-				nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMastery, 100);
+				nMinDamage += D2_ComputePercentage(nMinDamage, nMastery);
+				nMaxDamage += D2_ComputePercentage(nMaxDamage, nMastery);
 
 				pDamage->dwMagDamage += nMinDamage;
 				if (nMaxDamage > nMinDamage)
@@ -597,8 +597,8 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 	{
 		const int32_t nMastery = STATLIST_UnitGetStatValue(pAttacker, STAT_PASSIVE_POIS_MASTERY, 0);
 
-		nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMastery, 100);
-		nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMastery, 100);
+		nMinDamage += D2_ComputePercentage(nMinDamage, nMastery);
+		nMaxDamage += D2_ComputePercentage(nMaxDamage, nMastery);
 
 		pDamage->dwPoisDamage += nMinDamage;
 
@@ -659,7 +659,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 	if (pDamage->nConvType)
 	{
-		const int32_t nConvertedDamage = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, pDamage->dwConvPct, 100);
+		const int32_t nConvertedDamage = D2_ComputePercentage(pDamage->dwPhysDamage, pDamage->dwConvPct);
 
 		pDamage->dwPhysDamage -= nConvertedDamage;
 
@@ -734,9 +734,9 @@ int32_t __fastcall SUNITDMG_RollDamageValueInRange(D2UnitStrc* pUnit, int32_t nM
 {
 	if (nMaxDamage > 0)
 	{
-		nMinDamage += MONSTERUNIQUE_CalculatePercentage(nMinDamage, nMinDamageBonusPct, 100);
+		nMinDamage += D2_ComputePercentage(nMinDamage, nMinDamageBonusPct);
 
-		nMaxDamage += MONSTERUNIQUE_CalculatePercentage(nMaxDamage, nMaxDamageBonusPct, 100);
+		nMaxDamage += D2_ComputePercentage(nMaxDamage, nMaxDamageBonusPct);
 
 		nDamage += nMinDamage;
 
@@ -794,14 +794,14 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 	int32_t nDamageReduction = STATLIST_UnitGetStatValue(pDefender, STAT_NORMAL_DAMAGE_REDUCTION, 0) << 8;
 	if (nDamageReduction > 0 && pDamage->dwPiercePct > 0)
 	{
-		nDamageReduction = MONSTERUNIQUE_CalculatePercentage(nDamageReduction, pDamage->dwPiercePct, 1024);
+		nDamageReduction = D2_ApplyRatio(nDamageReduction, pDamage->dwPiercePct, 1024);
 	}
 	damageInfo.nDamageReduction[1] = nDamageReduction;
 
 	int32_t nMagicDamageReduction = STATLIST_UnitGetStatValue(pDefender, STAT_MAGIC_DAMAGE_REDUCTION, 0) << 8;
 	if (nMagicDamageReduction > 0 && pDamage->dwPiercePct > 0)
 	{
-		nMagicDamageReduction = MONSTERUNIQUE_CalculatePercentage(nMagicDamageReduction, pDamage->dwPiercePct, 1024);
+		nMagicDamageReduction = D2_ApplyRatio(nMagicDamageReduction, pDamage->dwPiercePct, 1024);
 	}
 	damageInfo.nDamageReduction[2] = nMagicDamageReduction;
 
@@ -849,7 +849,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 					int32_t* pDamageValue = (int32_t*)((char*)damageInfo.pDamage + pDamageStatTableRecord->nOffsetInDamageStrc);
 					if (*pDamageValue > 0)
 					{
-						*pDamageValue = MONSTERUNIQUE_CalculatePercentage(*pDamageValue, nDamagePercent, 100);
+						*pDamageValue = D2_ComputePercentage(*pDamageValue, nDamagePercent);
 					}
 				}
 			}
@@ -1015,7 +1015,7 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 	if (nValue > 0 && nResValue)
 	{
 		nResValue = std::min(nResValue, 100);
-		nValue = MONSTERUNIQUE_CalculatePercentage(nValue, 100 - nResValue, 100);
+		nValue = D2_ComputePercentage(nValue, 100 - nResValue);
 	}
 
 	//D2GAME_Return_6FCCD440(pDamageInfo->pDefender, nPreviousValue, nResValue, pDamageInfo->nDamageReduction[pDamageStatTableRecord->nDamageReductionType], nValue, pDamageStatTableRecord->szName, pDamageStatTableRecord->field_28);
@@ -1034,7 +1034,7 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 		if (nAbsorbPctValue > 0)
 		{
 			nAbsorbPctValue = std::min(nAbsorbPctValue, 40);
-			const int32_t nDamageAbsorbed = MONSTERUNIQUE_CalculatePercentage(nValue, nAbsorbPctValue, 100);
+			const int32_t nDamageAbsorbed = D2_ComputePercentage(nValue, nAbsorbPctValue);
 
 			nValue -= nDamageAbsorbed;
 			pDamageInfo->pDamage->dwAbsLife += nDamageAbsorbed;
@@ -1205,10 +1205,10 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 				{
 					if (pDamage->dwManaLeech)
 					{
-						int32_t nLeechedMana = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, pDamage->dwManaLeech, 100);
+						int32_t nLeechedMana = D2_ComputePercentage(pDamage->dwPhysDamage, pDamage->dwManaLeech);
 						if (nDrain != 100)
 						{
-							nLeechedMana = MONSTERUNIQUE_CalculatePercentage(nLeechedMana, nDrain, 100);
+							nLeechedMana = D2_ComputePercentage(nLeechedMana, nDrain);
 						}
 
 						SUNITDMG_AddLeechedMana(pAttacker, nLeechedMana / 64);
@@ -1216,10 +1216,10 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 					if (pDamage->dwLifeLeech)
 					{
-						int32_t nLeechedHp = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, pDamage->dwLifeLeech, 100);
+						int32_t nLeechedHp = D2_ComputePercentage(pDamage->dwPhysDamage, pDamage->dwLifeLeech);
 						if (nDrain != 100)
 						{
-							nLeechedHp = MONSTERUNIQUE_CalculatePercentage(nLeechedHp, nDrain, 100);
+							nLeechedHp = D2_ComputePercentage(nLeechedHp, nDrain);
 						}
 
 						SUNITDMG_AddLeechedLife(pAttacker, nLeechedHp / 64);
@@ -1262,7 +1262,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 				{
 					if (nDrain != 100)
 					{
-						nTotalLeech = MONSTERUNIQUE_CalculatePercentage(nTotalLeech, nDrain, 100);
+						nTotalLeech = D2_ComputePercentage(nTotalLeech, nDrain);
 					}
 
 					const int32_t nMissingHp = STATLIST_GetMaxLifeFromUnit(pAttacker) - STATLIST_UnitGetStatValue(pAttacker, STAT_HITPOINTS, 0);
@@ -2453,7 +2453,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 			}
 
 			nFractionalTargetAc = D2Clamp(nFractionalTargetAc, 0, 100);
-			nTotalDefense -= MONSTERUNIQUE_CalculatePercentage(nTotalDefense, nFractionalTargetAc, 100);
+			nTotalDefense -= D2_ComputePercentage(nTotalDefense, nFractionalTargetAc);
 		}
 
 		const int32_t nDemonToHit = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_DEMON_TOHIT, 0);
@@ -2502,7 +2502,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 	}
 
 	int32_t nDefense = nTotalDefense;
-	int32_t nToHit = nAttackRate + MONSTERUNIQUE_CalculatePercentage(nAttackRate, nToHitPercent, 100);
+	int32_t nToHit = nAttackRate + D2_ComputePercentage(nAttackRate, nToHitPercent);
 	if (nTotalDefense < 0)
 	{
 		nToHit -= nTotalDefense;
@@ -3029,7 +3029,7 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 		const int32_t nFactor = experienceFactors[nIndex];
 		if (nFactor != 256)
 		{
-			nResult = MONSTERUNIQUE_CalculatePercentage(nDefenderExperience, nFactor, 256);
+			nResult = D2_ApplyRatio(nDefenderExperience, nFactor, 256);
 		}
 	}
 	else if (nAttackerLevel < 25 || nDefenderLevel <= 0)
@@ -3043,12 +3043,12 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 		const int32_t nFactor = experienceFactors[nIndex];
 		if (nFactor != 256)
 		{
-			nResult = MONSTERUNIQUE_CalculatePercentage(nDefenderExperience, nFactor, 256);
+			nResult = D2_ApplyRatio(nDefenderExperience, nFactor, 256);
 		}
 	}
 	else
 	{
-		nResult = MONSTERUNIQUE_CalculatePercentage(nDefenderExperience, nAttackerLevel, nDefenderLevel);
+		nResult = D2_ApplyRatio(nDefenderExperience, nAttackerLevel, nDefenderLevel);
 	}
 
 	if (nResult > 0)
@@ -3071,7 +3071,7 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 	const int32_t nAddExpPct = STATLIST_UnitGetStatValue(pAttacker, STAT_ITEM_ADDEXPERIENCE, 0);
 	if (nAddExpPct)
 	{
-		nResult += MONSTERUNIQUE_CalculatePercentage(nResult, nAddExpPct, 100);
+		nResult += D2_ComputePercentage(nResult, nAddExpPct);
 	}
 
 	if (pAttacker && pAttacker->dwUnitType == UNIT_PLAYER)

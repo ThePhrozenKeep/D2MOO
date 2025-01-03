@@ -32,7 +32,7 @@
 #include "QUESTS/ACT4/A4Q2.h"
 #include "SKILLS/Skills.h"
 #include "UNIT/SUnit.h"
-
+#include <D2Math.h>
 
 #pragma warning(disable: 28159)
 
@@ -556,12 +556,12 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         {
             if (pCubeOutput->nPLvl)
             {
-                nOutputLevel = pCubeOutput->nPLvl * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 100;
+                nOutputLevel = D2_ComputePercentage(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), pCubeOutput->nPLvl);
             }
 
             if (pCubeOutput->nILvl)
             {
-                nOutputLevel += pCubeOutput->nILvl * pCubeItem[nCounter].nItemLevel / 100;
+                nOutputLevel += D2_ComputePercentage(pCubeItem[nCounter].nItemLevel, pCubeOutput->nILvl);
             }
         }
 

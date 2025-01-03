@@ -18,7 +18,7 @@
 #include <D2Skills.h>
 #include <D2Combat.h>
 #include <DataTbls/MissilesIds.h>
-
+#include <D2Math.h>
 
 #include "AI/AiGeneral.h"
 #include "AI/AiTactics.h"
@@ -895,8 +895,8 @@ int32_t __fastcall sub_6FC63B30(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
                     D2MonStatsInitStrc monStatsInit = {};
                     DATATBLS_CalculateMonsterStatsByLevel(pModeChange->pUnit->dwClassId, pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pModeChange->pUnit, STAT_LEVEL, 0), 1, &monStatsInit);
 
-                    const int32_t nMaxDamage = MONSTERUNIQUE_CalculatePercentage(monStatsInit.nMaxHP, pDifficultyLevelsTxtRecord->dwMonsterCEDmgPercent, 100);
-                    const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(nMaxDamage, 60, 100);
+                    const int32_t nMaxDamage = D2_ComputePercentage(monStatsInit.nMaxHP, pDifficultyLevelsTxtRecord->dwMonsterCEDmgPercent);
+                    const int32_t nMinDamage = D2_ComputePercentage(nMaxDamage, 60);
                     
                     D2DamageStrc damage = {};
                     damage.dwPhysDamage = (nMinDamage + ITEMS_RollLimitedRandomNumber(&pModeChange->pUnit->pSeed, nMaxDamage - nMinDamage)) << 7;

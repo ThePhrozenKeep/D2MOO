@@ -305,8 +305,8 @@ int32_t __fastcall MISSMODE_RollDamageValue(D2UnitStrc* pUnit, int32_t nMinDamSt
         const int32_t nMastery = STATLIST_UnitGetStatValue(pUnit, nMasteryStat, 0);
         if (nMastery)
         {
-            nMinDam += MONSTERUNIQUE_CalculatePercentage(nMinDam, nMastery, 100);
-            nMaxDam += MONSTERUNIQUE_CalculatePercentage(nMaxDam, nMastery, 100);
+            nMinDam += D2_ComputePercentage(nMinDam, nMastery);
+            nMaxDam += D2_ComputePercentage(nMaxDam, nMastery);
         }
     }
 
@@ -1761,7 +1761,7 @@ int32_t __fastcall MISSMODE_SrvDo29_RecyclerDelay(D2GameStrc* pGame, D2UnitStrc*
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner) >> 8;
             if (nHitpoints < nMaxHp)
             {
-                const int32_t nNewHp = std::min(MONSTERUNIQUE_CalculatePercentage(nMaxHp, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile)), 100) + nHitpoints, nMaxHp);
+                const int32_t nNewHp = std::min(D2_ComputePercentage(nMaxHp, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile))) + nHitpoints, nMaxHp);
                 STATLIST_SetUnitStat(pOwner, STAT_HITPOINTS, nNewHp << 8, 0);
 
                 if (pMissilesTxtRecord->wProgOverlay > 0 && pMissilesTxtRecord->wProgOverlay < sgptDataTables->nOverlayTxtRecordCount)
@@ -1805,7 +1805,7 @@ int32_t __fastcall MISSMODE_SrvDo33_VineRecyclerDelay(D2GameStrc* pGame, D2UnitS
             const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pOwner) >> 8;
             if (nMana < nMaxMana)
             {
-                const int32_t nNewMana = std::min(MONSTERUNIQUE_CalculatePercentage(nMaxMana, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile)), 100) + nMana, nMaxMana);
+                const int32_t nNewMana = std::min(D2_ComputePercentage(nMaxMana, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile))) + nMana, nMaxMana);
                 STATLIST_SetUnitStat(pOwner, STAT_MANA, nNewMana << 8, 0);
 
                 if (pMissilesTxtRecord->wProgOverlay > 0 && pMissilesTxtRecord->wProgOverlay < sgptDataTables->nOverlayTxtRecordCount)
@@ -4161,7 +4161,7 @@ int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* p
     }
 
     const int32_t nPercentage = D2Clamp(pMissilesTxtRecord->dwHitPar[0], 1u, 100u);
-    const int32_t nLostMana = D2Clamp(MONSTERUNIQUE_CalculatePercentage(nCurrentMana, nPercentage, 100), 1, nCurrentMana);
+    const int32_t nLostMana = D2Clamp(D2_ComputePercentage(nCurrentMana, nPercentage), 1, nCurrentMana);
     STATLIST_SetUnitStat(pUnit, STAT_MANA, nCurrentMana - nLostMana, 0);
     return 2;
 }
@@ -4332,7 +4332,7 @@ void __fastcall MISSMODE_SrvDmg01_FireArrow_MagicArrow_ColdArrow(D2GameStrc* pGa
 
     nPercentage = std::min(nPercentage, 100);
 
-    const int32_t nDamageReduction = std::min(MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, nPercentage, 100), pDamage->dwPhysDamage);
+    const int32_t nDamageReduction = std::min(D2_ComputePercentage(pDamage->dwPhysDamage, nPercentage), pDamage->dwPhysDamage);
 
     pDamage->dwPhysDamage -= nDamageReduction;
     MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, nDamageReduction);
@@ -4360,7 +4360,7 @@ void __fastcall MISSMODE_SrvDmg12_LightningJavelin(D2GameStrc* pGame, D2UnitStrc
 
     nPercentage = std::min(nPercentage, 100);
 
-    const int32_t nDamageBonus = std::min(MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, nPercentage, 100), pDamage->dwPhysDamage);
+    const int32_t nDamageBonus = std::min(D2_ComputePercentage(pDamage->dwPhysDamage, nPercentage), pDamage->dwPhysDamage);
     const int32_t nFinalDamage = MISSMODE_GetDamageValue(pGame, pMissile, pUnit, pDamage) + nDamageBonus;
     MISSMODE_ResetDamageParams(pGame, pMissile, pDamage);
     MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, nFinalDamage);
@@ -4378,7 +4378,7 @@ void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(D2GameStrc* pGame, D
     if (pMissilesTxtRecord)
     {
         const int32_t nPercentage = std::max(pMissilesTxtRecord->dwDmgParam[0], 0);
-        pDamage->dwFrzLen = MONSTERUNIQUE_CalculatePercentage(STATLIST_UnitGetStatValue(pMissile, STAT_COLDLENGTH, 0), nPercentage, 100);
+        pDamage->dwFrzLen = D2_ComputePercentage(STATLIST_UnitGetStatValue(pMissile, STAT_COLDLENGTH, 0), nPercentage);
         pDamage->dwColdLen = 0;
     }
 }
@@ -4429,12 +4429,12 @@ void __fastcall MISSMODE_SrvDmg05_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* p
     const int32_t nBaseDamage = MISSMODE_GetDamageValue(pGame, pMissile, pUnit, pDamage);
     if (pMissilesTxtRecord->dwDmgParam[0] > 0 && MONSTERS_IsUndead(pUnit))
     {
-        MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, MONSTERUNIQUE_CalculatePercentage(nBaseDamage, pMissilesTxtRecord->dwDmgParam[0], 100));
+        MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, D2_ComputePercentage(nBaseDamage, pMissilesTxtRecord->dwDmgParam[0]));
     }
 
     if (pMissilesTxtRecord->dwDmgParam[1] > 0 && MONSTERS_IsDemon(pUnit))
     {
-        MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, MONSTERUNIQUE_CalculatePercentage(nBaseDamage, pMissilesTxtRecord->dwDmgParam[1], 100));
+        MISSMODE_AddDamageValue(pGame, pMissile, pUnit, pDamage, D2_ComputePercentage(nBaseDamage, pMissilesTxtRecord->dwDmgParam[1]));
     }
 }
 

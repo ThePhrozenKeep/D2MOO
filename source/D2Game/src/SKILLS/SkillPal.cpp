@@ -31,7 +31,7 @@
 #include "UNIT/SUnit.h"
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitMsg.h"
-
+#include <D2Math.h>
 
 #pragma pack(push, 1)
 struct D2AuraBaseStrc
@@ -127,7 +127,7 @@ int32_t __fastcall SKILLS_SrvDo064_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUni
                     nBaseDamage = nHitpoints;
                 }
 
-                const int32_t nDamage = MONSTERUNIQUE_CalculatePercentage(nBaseDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel), 100);
+                const int32_t nDamage = D2_ComputePercentage(nBaseDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel));
                 damage.dwPhysDamage = nDamage;
                 damage.dwDmgTotal = nDamage;
                 SUNITDMG_ExecuteEvents(pGame, pUnit, pUnit, 0, &damage);
@@ -355,7 +355,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                         D2StatListStrc* pPoisonStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_POISON);
                         if (pPoisonStatList)
                         {
-                            const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + MONSTERUNIQUE_CalculatePercentage(D2COMMON_10473(pPoisonStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j], 100);
+                            const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + D2_ComputePercentage(D2COMMON_10473(pPoisonStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j]);
                             D2COMMON_10476(pPoisonStatList, nExpireFrame);
                             EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                             bPoisonedOrCursed = 1;
@@ -372,7 +372,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                             {
                                 if (STATES_CheckStateMaskCurableByStateId(nCurseStateId))
                                 {
-                                    const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + MONSTERUNIQUE_CalculatePercentage(D2COMMON_10473(pCurseStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j], 100);
+                                    const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + D2_ComputePercentage(D2COMMON_10473(pCurseStatList) - pAuraCallback->pGame->dwGameFrame, pArgs->nAuraStatCalcValue[j]);
                                     D2COMMON_10476(pCurseStatList, nExpireFrame);
                                     EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
                                 }
@@ -699,7 +699,7 @@ int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         nVelocityPercent = 50;
     }
 
-    PATH_SetVelocity(pUnit->pDynamicPath, MONSTERUNIQUE_CalculatePercentage(nBaseVelocity, pSkillsTxtRecord->dwParam[0] + nVelocityPercent, 100), __FILE__, __LINE__);
+    PATH_SetVelocity(pUnit->pDynamicPath, D2_ComputePercentage(nBaseVelocity, pSkillsTxtRecord->dwParam[0] + nVelocityPercent), __FILE__, __LINE__);
     D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
     SKILLS_SetFlags(pSkill, 0x1001u);
     STATES_ToggleState(pUnit, STATE_SKILL_MOVE, 1);
@@ -991,11 +991,11 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
             const int32_t nFireMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0);
             if (nFireMastery)
             {
-                nFireDamagePercent += MONSTERUNIQUE_CalculatePercentage(nFireDamagePercent, nFireMastery, 100);
+                nFireDamagePercent += D2_ComputePercentage(nFireDamagePercent, nFireMastery);
             }
         }
 
-        damage.dwFireDamage += MONSTERUNIQUE_CalculatePercentage(nBaseDamage, nFireDamagePercent, 100);
+        damage.dwFireDamage += D2_ComputePercentage(nBaseDamage, nFireDamagePercent);
 
         int32_t nColdDamagePercent = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         if (nColdDamagePercent)
@@ -1003,11 +1003,11 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
             const int32_t nColdMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_COLD_MASTERY, 0);
             if (nColdMastery)
             {
-                nColdDamagePercent += MONSTERUNIQUE_CalculatePercentage(nColdDamagePercent, nColdMastery, 100);
+                nColdDamagePercent += D2_ComputePercentage(nColdDamagePercent, nColdMastery);
             }
         }
 
-        damage.dwColdDamage += MONSTERUNIQUE_CalculatePercentage(nBaseDamage, nColdDamagePercent, 100);
+        damage.dwColdDamage += D2_ComputePercentage(nBaseDamage, nColdDamagePercent);
 
         int32_t nLightningDamagePercent = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
         if (nLightningDamagePercent)
@@ -1015,11 +1015,11 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
             const int32_t nLightningMastery = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_LTNG_MASTERY, 0);
             if (nLightningMastery)
             {
-                nLightningDamagePercent += MONSTERUNIQUE_CalculatePercentage(nLightningDamagePercent, nLightningMastery, 100);
+                nLightningDamagePercent += D2_ComputePercentage(nLightningDamagePercent, nLightningMastery);
             }
         }
 
-        damage.dwLtngDamage += MONSTERUNIQUE_CalculatePercentage(nBaseDamage, nLightningDamagePercent, 100);
+        damage.dwLtngDamage += D2_ComputePercentage(nBaseDamage, nLightningDamagePercent);
 
         damage.dwColdLen += SKILLS_GetElementalLength(pUnit, nSkillId, nSkillLevel, 1);
 
@@ -1081,9 +1081,9 @@ int32_t __fastcall SKILLS_SrvDo073_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* 
                 const int32_t nPercentage = SKILLS_GetConcentrationDamageBonus(pUnit, nSkillId) + 100;
                 if (nPercentage != 100)
                 {
-                    const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(STATLIST_GetUnitBaseStat(pMissile, STAT_MAGICMINDAM, 0), nPercentage, 100);
+                    const int32_t nMinDamage = D2_ComputePercentage(STATLIST_GetUnitBaseStat(pMissile, STAT_MAGICMINDAM, 0), nPercentage);
                     STATLIST_SetUnitStat(pMissile, STAT_MAGICMINDAM, nMinDamage, 0);
-                    const int32_t nMaxDamage = MONSTERUNIQUE_CalculatePercentage(STATLIST_GetUnitBaseStat(pMissile, STAT_MAGICMAXDAM, 0), nPercentage, 100);
+                    const int32_t nMaxDamage = D2_ComputePercentage(STATLIST_GetUnitBaseStat(pMissile, STAT_MAGICMAXDAM, 0), nPercentage);
                     STATLIST_SetUnitStat(pMissile, STAT_MAGICMAXDAM, nMaxDamage, 0);
                 }
 
@@ -1196,8 +1196,8 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
             STATLIST_SetStatIfListIsValid(pConversionStatList, STAT_CONVERSION_LEVEL, nTargetLevel, 0);
             STATLIST_SetStatIfListIsValid(pConversionStatList, STAT_CONVERSION_MAXHP, nTargetMaxHp, 0);
 
-            int32_t nNewTargetHp = MONSTERUNIQUE_CalculatePercentage(nTargetHp, nLevel, nTargetLevel) << 8;
-            int32_t nNewTargetMaxHp = MONSTERUNIQUE_CalculatePercentage(nTargetMaxHp, nLevel, nTargetLevel) << 8;
+            int32_t nNewTargetHp = D2_ApplyRatio(nTargetHp, nLevel, nTargetLevel) << 8;
+            int32_t nNewTargetMaxHp = D2_ApplyRatio(nTargetMaxHp, nLevel, nTargetLevel) << 8;
 
             if (nNewTargetMaxHp < 1)
             {
@@ -1244,7 +1244,7 @@ void __fastcall SKILLS_StatRemoveCallback_Conversion(D2UnitStrc* pUnit, int32_t 
     int32_t nNewHp = 1;
     if (nMaxHp)
     {
-        nNewHp = MONSTERUNIQUE_CalculatePercentage(nConversionMaxHp, nHitpoints >> 8, nMaxHp);
+        nNewHp = D2_ApplyRatio(nConversionMaxHp, nHitpoints >> 8, nMaxHp);
     }
 
     STATLIST_SetUnitStat(pUnit, STAT_LEVEL, nConversionLevel, 0);
@@ -1571,7 +1571,7 @@ void __fastcall SKILLS_ApplyThornsDamage(D2GameStrc* pGame, D2UnitStrc* pAttacke
     }
 
     D2DamageStrc damage = {};
-    damage.dwPhysDamage = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, nThornsPercent, 100);
+    damage.dwPhysDamage = D2_ComputePercentage(pDamage->dwPhysDamage, nThornsPercent);
     damage.dwHitClass = 0x8Du;
     damage.wResultFlags = 0x4021u;
     SUNITDMG_ExecuteEvents(pGame, pDefender, pAttacker, 1, &damage);

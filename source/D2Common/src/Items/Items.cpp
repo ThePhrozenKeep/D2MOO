@@ -2577,7 +2577,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 			if (nReducePricePct)
 			{
-				return nCost - DATATBLS_ApplyRatio(nCost, nReducePricePct, 100);
+				return nCost - D2_ComputePercentage(nCost, nReducePricePct);
 			}
 			else
 			{

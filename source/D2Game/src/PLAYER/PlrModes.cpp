@@ -40,7 +40,7 @@
 #include "SKILLS/SkillAss.h"
 #include "SKILLS/Skills.h"
 #include "SKILLS/SkillSor.h"
-
+#include <D2Math.h>
 
 #pragma warning(disable: 28159)
 
@@ -513,7 +513,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
 
     const int32_t nExpLoss = CLIENTS_GetExperienceLoss(pClient);
     CLIENTS_SetExperienceLoss(pClient, 0);
-    STATLIST_SetUnitStat(pDeadBody, STAT_EXPERIENCE, 75 * nExpLoss / 100, 0);
+    STATLIST_SetUnitStat(pDeadBody, STAT_EXPERIENCE, D2_ComputePercentage(nExpLoss, 75), 0);
 
     INVENTORY_CreateCorpseForPlayer(pUnit->pInventory, pDeadBody->dwUnitId, 0, 1);
 
@@ -1215,7 +1215,7 @@ void __fastcall EVENTS_ManaRegen(D2UnitStrc* pUnit)
                 nManaMultiplier = 1;
             }
 
-            nManaRecoveryBonus = MONSTERUNIQUE_CalculatePercentage(nManaMultiplier, STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERYBONUS, 0) + 100, 100);
+            nManaRecoveryBonus = D2_ComputePercentage(nManaMultiplier, STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERYBONUS, 0) + 100);
         }
 
         int32_t nManaRecovery = STATLIST_UnitGetStatValue(pUnit, STAT_MANARECOVERY, 0) + nManaRecoveryBonus;

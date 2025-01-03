@@ -1028,7 +1028,7 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
     }
 
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pPet);
-    const int32_t nNewMaxHp = MONSTERUNIQUE_CalculatePercentage(nMaxHp, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100) + nMaxHp;
+    const int32_t nNewMaxHp = D2_ComputePercentage(nMaxHp, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel)) + nMaxHp;
     STATLIST_SetUnitStat(pPet, STAT_MAXHP, nNewMaxHp, 0);
     STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, nNewMaxHp, 0);
 
@@ -1323,8 +1323,8 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
     const int32_t nHalfRange = nAuraRange / 2;
     const int32_t nRange = (nAuraRange + 1) / 2;
-    const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), nMaxHp, 100);
-    const int32_t nMaxDamage = MONSTERUNIQUE_CalculatePercentage(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel), nMaxHp, 100);
+    const int32_t nMinDamage = D2_ComputePercentage(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), nMaxHp);
+    const int32_t nMaxDamage = D2_ComputePercentage(SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel), nMaxHp);
     
     int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pTarget->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
     
@@ -1333,7 +1333,7 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
 
     if (nTargetLevel && nUnitLevel < nTargetLevel)
     {
-        nDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, nUnitLevel, nTargetLevel);
+        nDamage = D2_ApplyRatio(nDamage, nUnitLevel, nTargetLevel);
     }
 
     D2DamageStrc damage = {};
@@ -1350,9 +1350,9 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
 
     if (nPercentage > 0 && pSkillsTxtRecord->nEType)
     {
-        sub_6FD11E40(pUnit, &damage, pSkillsTxtRecord->nEType, MONSTERUNIQUE_CalculatePercentage(nDamage, nPercentage, 100), SKILLS_GetElementalLength(pUnit, nSkillId, nSkillLevel, 1), 0, 0);
+        sub_6FD11E40(pUnit, &damage, pSkillsTxtRecord->nEType, D2_ComputePercentage(nDamage, nPercentage), SKILLS_GetElementalLength(pUnit, nSkillId, nSkillLevel, 1), 0, 0);
 
-        nDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, 100 - nPercentage, 100);
+        nDamage = D2_ComputePercentage(nDamage, 100 - nPercentage);
     }
 
     damage.dwPhysDamage = nDamage;
@@ -1567,7 +1567,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     const int32_t nTargetLevel = STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0);
     if (nTargetLevel && nUnitLevel < nTargetLevel)
     {
-        int32_t nHitpoints = MONSTERUNIQUE_CalculatePercentage(nNewHp, nUnitLevel, nTargetLevel);
+        int32_t nHitpoints = D2_ApplyRatio(nNewHp, nUnitLevel, nTargetLevel);
         if (nHitpoints < 1)
         {
             nHitpoints = 1;
@@ -1915,7 +1915,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
     }
 
     D2DamageStrc damage = {};
-    damage.dwPhysDamage = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, nDamagePercent, 100);
+    damage.dwPhysDamage = D2_ComputePercentage(pDamage->dwPhysDamage, nDamagePercent);
     damage.wResultFlags |= pSkillsTxtRecord->wResultFlags | 0x20;
     damage.dwHitFlags |= pSkillsTxtRecord->dwHitFlags;
     damage.dwHitClass = pSkillsTxtRecord->dwHitClass;
@@ -1936,7 +1936,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
     int32_t nBaseDamage = damage.dwPhysDamage;
     if (nDrain != 100)
     {
-        nBaseDamage = MONSTERUNIQUE_CalculatePercentage(damage.dwPhysDamage, nDrain, 100);
+        nBaseDamage = D2_ComputePercentage(damage.dwPhysDamage, nDrain);
     }
 
     D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
@@ -1945,7 +1945,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
         return 1;
     }
 
-    int32_t nDamage = MONSTERUNIQUE_CalculatePercentage(nBaseDamage, 20, 100);
+    int32_t nDamage = D2_ComputePercentage(nBaseDamage, 20);
     if (nDamage <= 0)
     {
         return 1;
@@ -1953,7 +1953,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
 
     if (pOwner)
     {
-        int32_t nReducedDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, 50, 100);
+        int32_t nReducedDamage = D2_ComputePercentage(nDamage, 50);
         if (nReducedDamage > 0)
         {
             const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
@@ -2052,7 +2052,7 @@ int32_t __fastcall D2GAME_EventFunc05_6FD0EDE0(D2GameStrc* pGame, int32_t nEvent
     }
 
     D2UnitStrc* pOwner = SUNIT_GetServerUnit(pGame, STATLIST_GetOwnerType(pStatList), STATLIST_GetOwnerGUID(pStatList));
-    const int32_t nHeal = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100);
+    const int32_t nHeal = D2_ComputePercentage(pDamage->dwPhysDamage, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel));
 
     const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -2137,7 +2137,7 @@ int32_t __fastcall D2GAME_EventFunc22_6FD0F000(D2GameStrc* pGame, int32_t nEvent
                             return 1;
                         }
 
-                        const int32_t nParam = MONSTERUNIQUE_CalculatePercentage(nValue0, 100, nValue1);
+                        const int32_t nParam = D2_ApplyRatio(nValue0, 100, nValue1);
                         int32_t nParamDiff = nParam - STATLIST_GetStatValue(pStatList, STAT_UNSENTPARAM1, 0);
                         nParamDiff = std::abs(nParamDiff);
 
@@ -2188,7 +2188,7 @@ int32_t __fastcall D2GAME_EventFunc23_6FD0F1F0(D2GameStrc* pGame, int32_t nEvent
     int32_t nDamage = pDamage->dwPhysDamage;
     if (nDrain != 100)
     {
-        nDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, nDrain, 100);
+        nDamage = D2_ComputePercentage(nDamage, nDrain);
     }
 
     const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
@@ -2209,7 +2209,7 @@ int32_t __fastcall D2GAME_EventFunc23_6FD0F1F0(D2GameStrc* pGame, int32_t nEvent
         return 0;
     }
 
-    int32_t nBaseDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, nPercentage, 100);
+    int32_t nBaseDamage = D2_ComputePercentage(nDamage, nPercentage);
     if (nBaseDamage <= 0)
     {
         return 0;
@@ -2224,7 +2224,7 @@ int32_t __fastcall D2GAME_EventFunc23_6FD0F1F0(D2GameStrc* pGame, int32_t nEvent
 
     if (pOwner && nParam > 0)
     {
-        nBaseDamage -= sub_6FD0F590(pOwner, MONSTERUNIQUE_CalculatePercentage(nBaseDamage, nParam, 100));
+        nBaseDamage -= sub_6FD0F590(pOwner, D2_ComputePercentage(nBaseDamage, nParam));
     }
 
     const int32_t nFinalDamage = nBaseDamage - sub_6FD0F590(pAttacker, nBaseDamage);
@@ -2297,7 +2297,7 @@ int32_t __fastcall D2GAME_EventFunc26_6FD0F5E0(D2GameStrc* pGame, int32_t nEvent
         nPercentage = pSkillsTxtRecord->dwParam[4];
     }
 
-    const int32_t nReducedDamage = MONSTERUNIQUE_CalculatePercentage(pDamage->dwDmgTotal, nPercentage, 100);
+    const int32_t nReducedDamage = D2_ComputePercentage(pDamage->dwDmgTotal, nPercentage);
 
     int32_t nNewHp = nHitpoints - nReducedDamage;
     if (nNewHp < 256)

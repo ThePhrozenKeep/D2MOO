@@ -246,7 +246,7 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
         const int32_t nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
 
-        int32_t nNewHp = MONSTERUNIQUE_CalculatePercentage(nPercentage, nHitpoints, 100) + nHitpoints;
+        int32_t nNewHp = D2_ComputePercentage(nPercentage, nHitpoints) + nHitpoints;
         if (nNewHp >= nMaxHp)
         {
             nNewHp = nMaxHp;
@@ -1234,7 +1234,7 @@ int32_t __fastcall SKILLS_SrvDo096_ZakarumHeal_Bestow(D2GameStrc* pGame, D2UnitS
 
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pTarget);
     const int32_t nPercentage = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nMax - nMin) + nMin;
-    int32_t nNewHp = MONSTERUNIQUE_CalculatePercentage(nMaxHp, nPercentage, 100) + STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0);
+    int32_t nNewHp = D2_ComputePercentage(nMaxHp, nPercentage) + STATLIST_UnitGetStatValue(pTarget, STAT_HITPOINTS, 0);
     if (nNewHp < 1)
     {
         nNewHp = 1;
@@ -1654,7 +1654,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
             nBaseVelocity = 256;
         }
 
-        PATH_SetVelocity(pUnit->pDynamicPath, MONSTERUNIQUE_CalculatePercentage(nBaseVelocity, STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0), 100), __FILE__, __LINE__);
+        PATH_SetVelocity(pUnit->pDynamicPath, D2_ComputePercentage(nBaseVelocity, STATLIST_UnitGetStatValue(pUnit, STAT_VELOCITYPERCENT, 0)), __FILE__, __LINE__);
         PATH_SetType(pUnit->pDynamicPath, PATHTYPE_ASTAR);
         D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
         SKILLS_SetFlags(pSkill, 1);
@@ -1926,7 +1926,7 @@ int32_t __fastcall SKILLS_SrvDo107_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     const int32_t nPercentage = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-    int32_t nNewHp = MONSTERUNIQUE_CalculatePercentage(damage.dwPhysDamage, nPercentage, 100) + STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, STAT_STRENGTH);
+    int32_t nNewHp = D2_ComputePercentage(damage.dwPhysDamage, nPercentage) + STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, STAT_STRENGTH);
     if (nNewHp > nMaxHp)
     {
         nNewHp = nMaxHp;
@@ -1970,7 +1970,7 @@ int32_t __fastcall SKILLS_SrvDo108_RegurgitatorEat(D2GameStrc* pGame, D2UnitStrc
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
         if (nTargetMaxHp > 0)
         {
-            int32_t nNewHp = MONSTERUNIQUE_CalculatePercentage(nTargetMaxHp, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100) + nHitpoints;
+            int32_t nNewHp = D2_ComputePercentage(nTargetMaxHp, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel)) + nHitpoints;
             if (nNewHp < 1)
             {
                 nNewHp = 1;

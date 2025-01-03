@@ -35,6 +35,7 @@
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitEvent.h"
 #include "UNIT/SUnitMsg.h"
+#include <D2Math.h>
 
 
 #pragma pack(push, 1)
@@ -447,14 +448,14 @@ int32_t __fastcall SKILLS_AuraCallback_StaticField(D2AuraCallbackStrc* pAuraCall
 
     if (pStaticFieldCallbackArg->nStaticFieldMin)
     {
-        const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(STATLIST_GetMaxLifeFromUnit(pDefender) >> 8, pStaticFieldCallbackArg->nStaticFieldMin, 100);
+        const int32_t nMinDamage = D2_ComputePercentage(STATLIST_GetMaxLifeFromUnit(pDefender) >> 8, pStaticFieldCallbackArg->nStaticFieldMin);
         if (nHitpoints <= nMinDamage)
         {
             return 0;
         }
     }
 
-    int32_t nShiftedDamage = MONSTERUNIQUE_CalculatePercentage(nHitpoints, pStaticFieldCallbackArg->nDamagePct, 100);
+    int32_t nShiftedDamage = D2_ComputePercentage(nHitpoints, pStaticFieldCallbackArg->nDamagePct);
     if (nShiftedDamage > nHitpoints - 1)
     {
         nShiftedDamage = nHitpoints - 1;
@@ -476,7 +477,7 @@ int32_t __fastcall SKILLS_AuraCallback_StaticField(D2AuraCallbackStrc* pAuraCall
         const int32_t nValue = STATLIST_UnitGetStatValue(pDefender, nStatId, 0);
         if (nValue < 0)
         {
-            nDamage = MONSTERUNIQUE_CalculatePercentage(100, nDamage, 100 - nValue);
+            nDamage = D2_ApplyRatio(100, nDamage, 100 - nValue);
         }
     }
 
@@ -1035,15 +1036,15 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
             int32_t* pDamageValue = (int32_t*)((char*)pDamage + pEnergyShieldData->nDamageOffset);
             if (*pDamageValue > 0)
             {
-                int32_t nAbsorb = MONSTERUNIQUE_CalculatePercentage(*pDamageValue, nMultiplier, 100);
-                const int32_t nMax = MONSTERUNIQUE_CalculatePercentage(nMana, 16, nDivisor);
+                int32_t nAbsorb = D2_ComputePercentage(*pDamageValue, nMultiplier);
+                const int32_t nMax = D2_ApplyRatio(nMana, 16, nDivisor);
 
                 if (nAbsorb >= nMax)
                 {
                     nAbsorb = nMax;
                 }
 
-                nMana -= MONSTERUNIQUE_CalculatePercentage(nAbsorb, nDivisor, 16);
+                nMana -= D2_ApplyRatio(nAbsorb, nDivisor, 16);
                 *pDamageValue -= nAbsorb;
                 nAbsorbedDamage += nAbsorb;
 

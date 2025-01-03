@@ -929,12 +929,6 @@ void __fastcall DATATBLS_UpdateTreasureClassProbabilities(D2TCExShortStrc* pTCEx
 	}
 }
 
-//D2Common.0x6FD68D40
-int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, signed int nDivisor)
-{
-	return D2_ApplyRatio(nValue, nMultiplier, nDivisor);
-}
-
 //D2Common.0x6FD68DC0 (#10658)
 D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText)
 {

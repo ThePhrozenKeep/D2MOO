@@ -39,7 +39,7 @@
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitInactive.h"
 #include "UNIT/SUnitMsg.h"
-
+#include <D2Math.h>
 
 
 //D2Game.0x6FCFDCF0
@@ -900,7 +900,7 @@ int32_t __fastcall SKILLS_SrvDo122_Hunger(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
         SUNITDMG_FillDamageValues(pGame, pUnit, pTarget, &damage, 0, pSkillsTxtRecord->nSrcDam);
         D2GAME_RollElementalDamage_6FD14DD0(pUnit, &damage, nSkillId, nSkillLevel);
-        damage.dwPhysDamage += MONSTERUNIQUE_CalculatePercentage(damage.dwPhysDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100);
+        damage.dwPhysDamage += D2_ComputePercentage(damage.dwPhysDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel));
         damage.dwLifeLeech += SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         damage.dwManaLeech += SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
         SUNITDMG_AllocCombat(pGame, pUnit, pTarget, &damage, 128);
@@ -1233,7 +1233,7 @@ int32_t __fastcall D2GAME_EventFunc25_6FD00140(D2GameStrc* pGame, int32_t nEvent
     }
 
     const int32_t nOldParamValue = STATLIST_GetStatValue(pStatList, STAT_UNSENTPARAM1, 0);
-    const int32_t nNewParamValue = MONSTERUNIQUE_CalculatePercentage(100, nValue0, nValue1);
+    const int32_t nNewParamValue = D2_ApplyRatio(100, nValue0, nValue1);
     if (nNewParamValue - nOldParamValue >= 5)
     {
         STATES_ToggleGfxStateFlag(pAttacker, pSkillsTxtRecord->nAuraState, 1);
@@ -1449,7 +1449,7 @@ int32_t __fastcall SKILLS_SrvSt60_SuckBlood(D2GameStrc* pGame, D2UnitStrc* pUnit
         }
 
         SUNITDMG_RollSuckBloodDamage(pGame, pUnit, pTarget, nSkillId, nSkillLevel, &damage);
-        damage.dwPhysDamage += MONSTERUNIQUE_CalculatePercentage(damage.dwPhysDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100);
+        damage.dwPhysDamage += D2_ComputePercentage(damage.dwPhysDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel));
         damage.dwLifeLeech += SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         damage.dwManaLeech += SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
         SUNITDMG_AllocCombat(pGame, pUnit, pTarget, &damage, 128);
@@ -1509,7 +1509,7 @@ int32_t __fastcall SKILLS_SrvDo127_SuckBlood(D2GameStrc* pGame, D2UnitStrc* pUni
             nDamage = nTargetHitpoints;
         }
 
-        int32_t nNewHp = nOwnerHitpoints + MONSTERUNIQUE_CalculatePercentage(nDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), 100);
+        int32_t nNewHp = nOwnerHitpoints + D2_ComputePercentage(nDamage, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel));
         if (nNewHp < 1)
         {
             nNewHp = 1;

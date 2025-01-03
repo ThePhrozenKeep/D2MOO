@@ -202,7 +202,7 @@ void __fastcall MONSTERUNIQUE_UMod2_HealthBonus(D2UnitStrc* pUnit, int32_t nUMod
             const int32_t nPercentage = pMonUModTxtRecord ? pMonUModTxtRecord->dwConstants : 0;
 
             nHitpoints = STATLIST_GetMaxLifeFromUnit(pUnit);
-            nHitpoints += MONSTERUNIQUE_CalculatePercentage(nHitpoints, nPercentage, 100);
+            nHitpoints += D2_ComputePercentage(nHitpoints, nPercentage);
         }
         else
         {
@@ -210,7 +210,7 @@ void __fastcall MONSTERUNIQUE_UMod2_HealthBonus(D2UnitStrc* pUnit, int32_t nUMod
             const int32_t nPercentage = pMonUModTxtRecord ? pMonUModTxtRecord->dwConstants : 0;
 
             nHitpoints = STATLIST_GetMaxLifeFromUnit(pUnit);
-            nHitpoints += MONSTERUNIQUE_CalculatePercentage(nHitpoints, nPercentage, 100);
+            nHitpoints += D2_ComputePercentage(nHitpoints, nPercentage);
         }
 
         STATLIST_SetUnitStat(pUnit, STAT_MAXHP, nHitpoints, 0);
@@ -223,42 +223,11 @@ void __fastcall MONSTERUNIQUE_UMod2_HealthBonus(D2UnitStrc* pUnit, int32_t nUMod
         const int32_t nPercentage = pMonUModTxtRecord ? pMonUModTxtRecord->dwConstants : 0;
 
         int32_t nHitpoints = STATLIST_GetMaxLifeFromUnit(pUnit);
-        nHitpoints += MONSTERUNIQUE_CalculatePercentage(nHitpoints, nPercentage, 100);
+        nHitpoints += D2_ComputePercentage(nHitpoints, nPercentage);
 
         STATLIST_SetUnitStat(pUnit, STAT_MAXHP, nHitpoints, 0);
         STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nHitpoints, 0);
     }
-}
-
-//D2Game.0x6FC6AF70
-int32_t __fastcall MONSTERUNIQUE_CalculatePercentage(int32_t a1, int32_t a2, int32_t a3)
-{
-    if (!a3)
-    {
-        return 0;
-    }
-
-    if (a1 <= 1048576)
-    {
-        if (a2 <= 65536)
-        {
-            return a2 * a1 / a3;
-        }
-
-        if (a3 <= a2 >> 4)
-        {
-            return a1 * (a2 / a3);
-        }
-    }
-    else
-    {
-        if (a3 <= a1 >> 4)
-        {
-            return a2 * (a1 / a3);
-        }
-    }
-
-    return a2 * (int64_t)a1 / a3;
 }
 
 //D2Game.0x6FC6AFF0
@@ -415,7 +384,7 @@ void __fastcall MONSTERUNIQUE_UMod39_Berserk(D2UnitStrc* pUnit, int32_t nUMod, i
     }
 
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-    const int32_t nNewHp = MONSTERUNIQUE_CalculatePercentage(nMaxHp, -75, 100) + nMaxHp;
+    const int32_t nNewHp = D2_ComputePercentage(nMaxHp, -75) + nMaxHp;
     STATLIST_SetUnitStat(pUnit, STAT_MAXHP, nNewHp, 0);
     STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nNewHp, 0);
 
@@ -1067,8 +1036,8 @@ void __fastcall MONSTERUNIQUE_CastCorpseExplode(D2GameStrc* pGame, D2UnitStrc* p
         return;
     }
 
-    const int32_t nMaxDamage = MONSTERUNIQUE_CalculatePercentage(monStatsInit.nMaxHP, pDifficultyLevelsTxtRecord->dwMonsterCEDmgPercent, 100);
-    const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(nMaxDamage, 60, 100);
+    const int32_t nMaxDamage = D2_ComputePercentage(monStatsInit.nMaxHP, pDifficultyLevelsTxtRecord->dwMonsterCEDmgPercent);
+    const int32_t nMinDamage = D2_ComputePercentage(nMaxDamage, 60);
     const int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nMaxDamage - nMinDamage);
 
     D2DamageStrc damage = {};

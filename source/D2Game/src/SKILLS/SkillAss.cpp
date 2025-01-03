@@ -35,7 +35,7 @@
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitInactive.h"
 #include "UNIT/SUnitMsg.h"
-
+#include <D2Math.h>
 
 #pragma pack(push, 1)
 struct D2SrvDo47Strc
@@ -492,7 +492,7 @@ void __fastcall sub_6FCF5BC0(D2UnitStrc* pUnit, D2StatListStrc* pStatList, D2Dam
                     nPercentage = std::min(nPercentage, 100);
 
                     const int32_t nBaseDamage = pDamage->dwPhysDamage;
-                    const int32_t nDamage = std::min(MONSTERUNIQUE_CalculatePercentage(nBaseDamage, nPercentage, 100), nBaseDamage);
+                    const int32_t nDamage = std::min(D2_ComputePercentage(nBaseDamage, nPercentage), nBaseDamage);
                     pDamage->dwPhysDamage = nBaseDamage - nDamage;
                     sub_6FD11E40(pUnit, pDamage, pSkillsTxtRecord->nEType, nDamage, 0, 0, 0);
                 }
@@ -1197,16 +1197,16 @@ void __fastcall sub_6FCF7CE0(D2GameStrc* pGame, D2DamageStrc* pDamage, D2UnitStr
     const int32_t nMinBasePhysDamage = SKILLS_GetMinPhysDamage(pUnit, nSkillId, nSkillLevel, 0);
     const int32_t nMaxBasePhysDamage = SKILLS_GetMaxPhysDamage(pUnit, nSkillId, nSkillLevel, 0);
 
-    const int32_t nMinBaseDamage = nMinBasePhysDamage + MONSTERUNIQUE_CalculatePercentage(nMinBasePhysDamage, pDamage->dwEnDmgPct, 100);
-    const int32_t nMaxBaseDamage = nMaxBasePhysDamage + MONSTERUNIQUE_CalculatePercentage(nMaxBasePhysDamage, pDamage->dwEnDmgPct, 100);
+    const int32_t nMinBaseDamage = nMinBasePhysDamage + D2_ComputePercentage(nMinBasePhysDamage, pDamage->dwEnDmgPct);
+	const int32_t nMaxBaseDamage = nMaxBasePhysDamage + D2_ComputePercentage(nMaxBasePhysDamage, pDamage->dwEnDmgPct);
 
     int32_t nMinKickDamage = 0;
     int32_t nMaxKickDamage = 0;
     int32_t nDamagePercent = pDamage->dwEnDmgPct;
     SKILLS_CalculateKickDamage(pUnit, &nMinKickDamage, &nMaxKickDamage, &nDamagePercent);
 
-    const int32_t nMinDamage = nMinBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMinKickDamage << 8, nDamagePercent, 100) + (nMinKickDamage << 8);
-    const int32_t nMaxDamage = nMaxBaseDamage + MONSTERUNIQUE_CalculatePercentage(nMaxKickDamage << 8, nDamagePercent, 100) + (nMaxKickDamage << 8);
+    const int32_t nMinDamage = nMinBaseDamage + D2_ComputePercentage(nMinKickDamage << 8, nDamagePercent) + (nMinKickDamage << 8);
+    const int32_t nMaxDamage = nMaxBaseDamage + D2_ComputePercentage(nMaxKickDamage << 8, nDamagePercent) + (nMaxKickDamage << 8);
     pDamage->dwPhysDamage += ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
 
     D2GAME_RollElementalDamage_6FD14DD0(pUnit, pDamage, nSkillId, nSkillLevel);
@@ -2017,7 +2017,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     if (nSkillLevel > 1)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pPet);
-        const int32_t nHitpoints = MONSTERUNIQUE_CalculatePercentage(nMaxHp, pSkillsTxtRecord->dwParam[0] * (nSkillLevel - 1), 100) + nMaxHp;
+        const int32_t nHitpoints = D2_ComputePercentage(nMaxHp, pSkillsTxtRecord->dwParam[0] * (nSkillLevel - 1)) + nMaxHp;
         STATLIST_SetUnitStat(pPet, STAT_MAXHP, nHitpoints, 0);
         STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, nHitpoints, 0);
 
@@ -2163,7 +2163,7 @@ int32_t __fastcall SKILLS_SrvDo050_DragonTail(D2GameStrc* pGame, D2UnitStrc* pUn
 
     const int32_t nPercentage = STATLIST_UnitGetStatValue(pUnit, STAT_PASSIVE_FIRE_MASTERY, 0) + SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
 
-    fireDamage.dwFireDamage = MONSTERUNIQUE_CalculatePercentage(physDamage.dwPhysDamage, nPercentage, 100);
+    fireDamage.dwFireDamage = D2_ComputePercentage(physDamage.dwPhysDamage, nPercentage);
     fireDamage.wResultFlags = 9;
     sub_6FD10200(pGame, pUnit, CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel), &fireDamage, 0);
 
@@ -2189,7 +2189,7 @@ void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t n
         int32_t nMaxHp = 1;
         if (nNewHp)
         {
-            nMaxHp = MONSTERUNIQUE_CalculatePercentage(nConversionMaxHp, nHitpoints, nNewHp);
+            nMaxHp = D2_ApplyRatio(nConversionMaxHp, nHitpoints, nNewHp);
             if (nMaxHp < 1)
             {
                 nMaxHp = 1;
@@ -2280,8 +2280,8 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
             STATLIST_SetStatIfListIsValid(pConversionSaveStatList, STAT_CONVERSION_LEVEL, nLevel, 0);
             STATLIST_SetStatIfListIsValid(pConversionSaveStatList, STAT_CONVERSION_MAXHP, nMaxHp, 0);
 
-            int32_t nNewHitpoints = MONSTERUNIQUE_CalculatePercentage(nHitpoints, nOwnerLevel, nLevel) << 8;
-            int32_t nNewMaxHp = MONSTERUNIQUE_CalculatePercentage(nMaxHp, nOwnerLevel, nLevel) << 8;
+            int32_t nNewHitpoints = D2_ApplyRatio(nHitpoints, nOwnerLevel, nLevel) << 8;
+            int32_t nNewMaxHp = D2_ApplyRatio(nMaxHp, nOwnerLevel, nLevel) << 8;
             if (nNewMaxHp < 1)
             {
                 nNewMaxHp = 1;

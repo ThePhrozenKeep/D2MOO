@@ -706,8 +706,6 @@ D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueAppellation
 void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount);
 //D2Common.0x6FD68C40
 void __fastcall DATATBLS_UpdateTreasureClassProbabilities(D2TCExShortStrc* pTCExShort, D2TCExInfoStrc* pTCExInfo, int nProbability, BOOL bExpansion);
-//D2Common.0x6FD68D40
-int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, signed int nDivisor);
 //D2Common.0x6FD68DC0 (#10658)
 D2COMMON_DLL_DECL D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText);
 //D2Common.0x6FD68DF0 (#10659)

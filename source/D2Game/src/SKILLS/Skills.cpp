@@ -59,6 +59,7 @@
 #include "UNIT/SUnitDmg.h"
 #include "UNIT/SUnitEvent.h"
 #include "UNIT/SUnitInactive.h"
+#include <D2Math.h>
 
 
 constexpr SkillStartFunc gpSkillSrvStartFnTable_6FD408B0[] =
@@ -1295,7 +1296,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
 
         if (nCurseResistance)
         {
-            pCurse->nDuration -= MONSTERUNIQUE_CalculatePercentage(pCurse->nDuration, nCurseResistance, 100);
+            pCurse->nDuration -= D2_ComputePercentage(pCurse->nDuration, nCurseResistance);
         }
 
         if (STATES_CheckState(pCurse->pTarget, STATE_ATTRACT))

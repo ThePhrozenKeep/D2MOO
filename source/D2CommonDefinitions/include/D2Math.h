@@ -32,6 +32,8 @@ int32_t D2signum(T x) {
 
 // Recreating the way D2 applies multiplication overflows.
 // Today it would be faster to simply always extend to 64 bits.
+//1.10f: D2Common.0x6FD68D40
+//1.10f: D2Game.0x6FC6AF70
 inline int D2_ApplyRatio(int32_t nValue, int32_t nMultiplier, int32_t nDivisor)
 {
 	if (nDivisor)
