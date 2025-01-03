@@ -638,25 +638,19 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		pDamage->dwStunLen += nSrcDam * STATLIST_UnitGetStatValue(pAttacker, STAT_STUNLENGTH, 0) / 128;
 	}
 
-	//TODO: Burn damage
-
-	//v90 = nSrcDam * pDamage->dwBurnDamage;
-	//v91 = DAMAGE_CalculatePercentageValue(316, 0) + 316;
-	//v92 = DAMAGE_CalculatePercentageValue(317, 0) + 317;
-	//v93 = v91 + v90;
-	//if (v92 > v91)
-	//{
-	//	v93 += ITEMS_RollLimitedRandomNumber(&pAttacker->pSeed, v92 - v91);
-	//}
-
-	//v94 = v93 & ((v93 < 0) - 1);
-	//v95 = (((BYTE4(v94) & 0x7F) + (int32_t)v94) >> 7) + pDamage->dwBurnDamage;
-	//LODWORD(v94) = pDamage->dwBurnLen;
-	//pDamage->dwBurnDamage = v95;
-	//if ((_DWORD)v94)
-	//{
-	//	pDamage->dwBurnLen += nSrcDam * STATLIST_UnitGetStatValue(pAttacker, STAT_FIRELENGTH, 0) / 128;
-	//}
+	nMinDamage = D2_ComputePercentage(316, 0) + 316;
+	nMaxDamage = D2_ComputePercentage(317, 0) + 317;
+	const int32_t nBurnDmgBase = nSrcDam * pDamage->dwBurnDamage;
+	int32_t nBurnDmg = nBurnDmgBase + nMinDamage;
+	if (nMaxDamage > nMinDamage)
+	{
+		nBurnDmg += ITEMS_RollLimitedRandomNumber(&pAttacker->pSeed, nMaxDamage - nMinDamage);
+	}
+	pDamage->dwBurnDamage += std::max(nBurnDmg, 0) / 128;
+	if (pDamage->dwBurnLen)
+	{
+		pDamage->dwBurnLen += nSrcDam * STATLIST_UnitGetStatValue(pAttacker, STAT_FIRELENGTH, 0) / 128;
+	}
 
 	if ((pAttacker->dwUnitType == UNIT_PLAYER || nHirelingTypeId) && !(pDamage->wResultFlags & DAMAGERESULTFLAG_32))
 	{
