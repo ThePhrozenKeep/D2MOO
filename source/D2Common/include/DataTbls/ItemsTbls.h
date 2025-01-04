@@ -62,7 +62,7 @@ struct D2RareAffixTxt
 
 struct D2SetItemsTxt
 {
-	uint16_t wSetItemId;					//0x00
+	int16_t wSetItemId;						//0x00
 	char szName[32];						//0x02
 	uint16_t wVersion;						//0x22
 	uint16_t wStringId;						//0x24

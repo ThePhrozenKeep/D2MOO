@@ -884,7 +884,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   ITEMS_IsCharmUsable                                                 @10840
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetBonusLifeBasedOnClass                                      @10841
     PatchAction::FunctionReplacePatchByOriginal,       //   ITEMS_GetBonusManaBasedOnClass                                      @10842
-    PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10843_GetByTimeAdjustment                                  @10843
+    PatchAction::FunctionReplacePatchByOriginal,       //   ITEMMODS_GetByTimeAdjustment										@10843
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10844_ITEMMODS_First                                       @10844
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10845                                                      @10845
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10846                                                      @10846

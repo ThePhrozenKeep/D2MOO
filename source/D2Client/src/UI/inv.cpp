@@ -5,6 +5,7 @@
 #include <D2StatList.h>
 #include <D2WinFont.h>
 #include <UI/inv.h>
+#include <UI/text.h>
 #include <UI/UI.h>
 #include <Units/Units.h>
 #include <DataTbls/InvTbls.h>
@@ -18,6 +19,14 @@
 #include <D2WinPalette.h>
 #include <CGAME/scroll.h>
 #include <Engine/Gfx.h>
+#include <D2Combat.h>
+#include <D2Environment.h>
+#include <D2ItemMods.h>
+#include <D2Math.h>
+#include <D2Skills.h>
+#include <D2States.h>
+#include <DataTbls/SkillsIds.h>
+#include <D2DataTbls.h>
 
 static const int kBuySellButtonSize = 32;
 #ifdef NO_BUG_FIX
@@ -55,13 +64,19 @@ D2CLIENTSTUB(sub, 6FAF9E60, void, __fastcall, ());
 
 D2CLIENTSTUB(D2CLIENT_GetDifficulty, 6FAAC090, D2C_Difficulties , __fastcall, ());
 D2CLIENTSTUB(D2CLIENT_GetGlobalQuestHistory, 6FAFBD20, D2BitBufferStrc*, __fastcall, ());
+//1.13c: D2Client.0x6FB414F0
+D2CLIENTSTUB(D2CLIENT_GetItemName, 6FADD360, void, __fastcall, (D2UnitStrc* pItem, Unicode* pOutBuffer, int nBufferSize));
+//1.13c: D2Client.0x6FB05B20
+D2CLIENTSTUB(ITEMDESC_Mods, 6FAF19C0, void, __fastcall, (D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize, BOOL bUndeadDamage, D2C_States nState1, D2C_States nState2, D2C_StatlistFlags fFilter, int bAppendNewline));
+
+D2CLIENTSTUB(D2CLIENT_FormatStats, 6FADCFE0, void, __fastcall, (Unicode* wszFormat, ...));
+
 
 //1.13c: D2Client.0x6FB3C760
-D2CLIENTSTUB(UI_INV_HirelingCanEquip, 6FAED470, BOOL, __fastcall, (D2UnitStrc* pUnit, D2UnitStrc* pItem, BOOL* pbItemTypeCompatible));
+D2CLIENTSTUB(UI_INV_HirelingCanEquip, 6FAED470, BOOL, __fastcall, (D2UnitStrc* pOwner, D2UnitStrc* pItem, BOOL* pbItemTypeCompatible));
 
 D2VAR(D2CLIENT, pgbIsHigherResolution, BOOL, 0x6FB9A708 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnInventoryMode, BOOL, 0x6FBB58EC - D2ClientImageBase);
-
 
 using BodyLocsInvCompGrids = D2InvCompGridStrc[NUM_BODYLOC_NO_SWITCH];
 
@@ -97,14 +112,22 @@ D2CLIENTDWORDSTUB(6FBB5BA8);
 D2CLIENTDWORDSTUB(6FBB388C);
 D2CLIENTDWORDSTUB(6FBB3894);
 D2CLIENTDWORDSTUB(6FBB58E0);
-D2CLIENTDWORDSTUB(6FBB58E4);
+D2VAR(D2CLIENT, pgbInvMouseOverEquippedItem, BOOL, 0x6FBB58E4 - D2ClientImageBase);
 D2CLIENTDWORDSTUB(6FBB58F4);
 D2CLIENTDWORDSTUB(6FB79290);
 D2CLIENTDWORDSTUB(6FB79294);
 D2CLIENTDWORDSTUB(6FB79298);
 D2CLIENTDWORDSTUB(6FB7929C);
 
-D2VAR(D2CLIENT, pgpSelectedItem_6FBB58F0, D2UnitStrc*, 0x6FBB58F0 - D2ClientImageBase); // aka sghSelItem
+D2VAR(D2CLIENT, pgpSelectedItem, D2UnitStrc*, 0x6FBB58F0 - D2ClientImageBase); // aka sghSelItem 1.13c: 0x6FBCBC38
+D2VAR(D2CLIENT, pgbSelectedItemIsOwned, BOOL, 0x6FB7928C - D2ClientImageBase); // 1.13c: 0x6FB90EA4
+D2VAR(D2CLIENT, pgnSelectedItemDescTopPosY, int32_t, 0x6FB79294 - D2ClientImageBase); // 1.13c: 0x6FB90EAC
+D2VAR(D2CLIENT, pgnSelectedItemDescBottomPosY, int32_t, 0x6FB7929C - D2ClientImageBase); // 1.13c: 0x6FB90EB4
+D2VAR(D2CLIENT, pgnSelectedItemDescTopPosX, int32_t, 0x6FB79290 - D2ClientImageBase); // 1.13c: 0x6FB90EA8
+D2VAR(D2CLIENT, pgnSelectedItemDescBottomPosX, int32_t, 0x6FB79298 - D2ClientImageBase); // 1.13c: 0x6FB90EB0
+
+
+
 D2VAR(D2CLIENT, pqword_6FB792A0, int64_t, 0x6FB792A0 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, pgnScreenWidth, uint32_t, 0x6FB740EC - D2ClientImageBase);
@@ -133,7 +156,6 @@ D2VAR(D2CLIENT, pgbInvInventoryCoinButtonPressed, BOOL, 0x6FBB5B3C - D2ClientIma
 D2VAR(D2CLIENT, pgbInvCloseButtonPressed, BOOL, 0x6FBB5B98 - D2ClientImageBase);
 D2VAR(D2CLIENT, pgpCellfile_BUYSELLBUTTONS, D2CellFileStrc*, 0x6FBBA76C - D2ClientImageBase);
 
-D2VAR(D2CLIENT, pgbInvMouseOverEquippedItem, BOOL, 0x6FBCBC2C - D2ClientImageBase);
 D2VAR(D2CLIENT, pgnInvHoveredBodyLoc, D2C_PlayerBodyLocs, 0x6FBCBC68 - D2ClientImageBase);
 
 D2VAR(D2CLIENT, pgnDrawMaxWidth, int32_t, 0x6FB9A704 - D2ClientImageBase); // 1.13c: D2Client.0x6FBA9E14
@@ -207,6 +229,54 @@ D2InvRectStrc D2InvRectFromPosAndSize(D2CoordStrc tCoords, int width, int height
 	return { tCoords.nX, tCoords.nY - height, tCoords.nX + width, tCoords.nY };
 }
 
+// TODO: move those to headers, which means seperate structure definitions from functions declaration since it needs sgptDataTables
+// Inlined
+D2SetsTxt* __stdcall CLIENT_DATATBLS_GetSetsTxtRecord(int nSetId)
+{
+	if (nSetId >= 0 && nSetId < sgptDataTables->nSetsTxtRecordCount)
+	{
+		return &sgptDataTables->pSetsTxt[nSetId];
+	}
+	return nullptr;
+}
+// Inlined
+D2SetItemsTxt* __stdcall CLIENT_DATATBLS_GetSetItemsTxtRecord(int nSetItemId)
+{
+	if (nSetItemId >= 0 && nSetItemId < sgptDataTables->nSetItemsTxtRecordCount)
+	{
+		return &sgptDataTables->pSetItemsTxt[nSetItemId];
+	}
+	return nullptr;
+}
+// Inlined
+D2SetsTxt* __stdcall CLIENT_DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId)
+{
+	if (D2SetItemsTxt* pSetItemTxt = CLIENT_DATATBLS_GetSetItemsTxtRecord(nSetItemId))
+	{
+		return CLIENT_DATATBLS_GetSetsTxtRecord(pSetItemTxt->nSetId);
+	}
+	return nullptr;
+}
+// Inlined
+D2CharStatsTxt* __fastcall CLIENT_DATATBLS_GetCharStatsTxtRecord(int nRecordId)
+{
+	if (nRecordId >= 0 && nRecordId < sgptDataTables->nCharStatsTxtRecordCount)
+	{
+		return &sgptDataTables->pCharStatsTxt[nRecordId];
+	}
+
+	return NULL;
+}
+// Inlined
+D2ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId)
+{
+	if (nStatId >= 0 && nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
+	{
+		return &sgptDataTables->pItemStatCostTxt[nStatId];
+	}
+
+	return NULL;
+}
 
 static const D2C_PlayerBodyLocs gaInvComponentToBodyLoc[NUM_INV_COMPS]
 {
@@ -393,8 +463,8 @@ void __stdcall UI_INPUT_NpcShop_VKEscSpace(SMSGHANDLER_PARAMS* pMsg)
 		*D2CLIENT_pdword_6FBB388C = 0;
 		*D2CLIENT_pdword_6FBB3894 = 0;
 		*D2CLIENT_pdword_6FBB58E0 = 0;
-		*D2CLIENT_pdword_6FBB58E4 = 0;
-		*D2CLIENT_pgpSelectedItem_6FBB58F0 = nullptr;
+		*D2CLIENT_pgbInvMouseOverEquippedItem = 0;
+		*D2CLIENT_pgpSelectedItem = nullptr;
 		*D2CLIENT_pdword_6FBB58F4 = 0;
 		*D2CLIENT_pdword_6FB79290 = -1;
 		*D2CLIENT_pdword_6FB79294 = -1;
@@ -627,5 +697,1052 @@ void __fastcall UI_INV_DrawHirelingItemBackground(D2UnitStrc* pHireling)
 		}
 	}
 }
+
+
+//1.10f: D2Client.0x6FAE4060
+//1.13c: D2Client.0x6FB40770
+void __fastcall ITEMDESC_Durability(D2UnitStrc* pUnit, Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt)
+{
+	D2_MAYBE_UNUSED(pItemTxt);
+
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	if (ITEMS_HasDurability(pUnit) && STATLIST_GetMaxDurabilityFromUnit(pUnit) > 0 && !ITEMS_CheckIfThrowable(pUnit))
+	{
+		char szBuffer[10];
+		Unicode wszBuffer[10];
+		Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3457_ItemStats1d));
+		SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", STATLIST_UnitGetStatValue(pUnit, STAT_DURABILITY, 0));
+		Unicode::strcat(pOutBuffer, wszSpace);
+		Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+		Unicode::strcat(pOutBuffer, wszBuffer);
+		Unicode::strcat(pOutBuffer, wszSpace);
+		Unicode::strcat(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3463_ItemStats1j));
+		Unicode::strcat(pOutBuffer, wszSpace);
+		SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", STATLIST_GetMaxDurabilityFromUnit(pUnit));
+		Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(szBuffer)-1);
+		if (STATLIST_GetUnitStatBonus(pUnit, STAT_ITEM_MAXDURABILITY_PERCENT, 0) != 0)
+			TEXT_ApplyColorCode(wszBuffer, 3);
+		Unicode::strcat(pOutBuffer, wszBuffer);
+		Unicode::strcat(pOutBuffer, wszNewline);
+	}
+}
+
+//1.10f: D2Client.0x6FAE41B0
+//1.13c: D2Client.0x6FB3DE40
+void __fastcall ITEMDESC_RequiredLevel(Unicode* pOutBuffer, int nReqLvl)
+{
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+
+	char szBuffer[10];
+	Unicode wszBuffer[10];
+	Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3469_ItemStats1p));
+	SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nReqLvl);
+	Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+	Unicode::strcat(pOutBuffer, wszSpace);
+	Unicode::strcat(pOutBuffer, wszBuffer);
+	Unicode::strcat(pOutBuffer, wszNewline);
+}
+
+//1.10f: D2Client.0x6FAE4250
+//1.13c: D2Client.0x6FB3DD80
+void __fastcall ITEMDESC_RequiredStrength(Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt, int nRequiredStr)
+{
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+
+	nRequiredStr += pItemTxt->wReqStr;
+
+	if (nRequiredStr > 0)
+	{
+		char szBuffer[10];
+		Unicode wszBuffer[10];
+		Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3458_ItemStats1e));
+		SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nRequiredStr);
+		Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+		Unicode::strcat(pOutBuffer, wszSpace);
+		Unicode::strcat(pOutBuffer, wszBuffer);
+		Unicode::strcat(pOutBuffer, wszNewline);
+	}
+	else
+	{
+		*pOutBuffer = L'\0';
+	}
+}
+
+//1.10f: D2Client.0x6FAE4310
+//1.13c: D2Client.0x6FB3DCC0
+void __fastcall ITEMDESC_RequiredDexterity(Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt, int nRequiredDex)
+{
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+
+	nRequiredDex += pItemTxt->wReqDex;
+
+	if (nRequiredDex > 0)
+	{
+		char szBuffer[10];
+		Unicode wszBuffer[10];
+		Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3459_ItemStats1f));
+		SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nRequiredDex);
+		Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+		Unicode::strcat(pOutBuffer, wszSpace);
+		Unicode::strcat(pOutBuffer, wszBuffer);
+		Unicode::strcat(pOutBuffer, wszNewline);
+	}
+	else
+	{
+		*pOutBuffer = L'\0';
+	}
+}
+
+
+#pragma pack(push, 1)
+struct WeaponClassDesc
+{
+	D2C_ItemTypes nItemType;
+	D2C_StringIndices nStringId;
+};
+#pragma pack(pop)
+
+WeaponClassDesc gWeaponClassDescs_6FB792D8[] = {
+	{ ITEMTYPE_STAFF, STR_IDX_4085_WeaponDescStaff },
+	{ ITEMTYPE_AXE, STR_IDX_4078_WeaponDescAxe },
+	{ ITEMTYPE_SWORD, STR_IDX_4079_WeaponDescSword },
+	{ ITEMTYPE_KNIFE, STR_IDX_4080_WeaponDescDagger },
+	{ ITEMTYPE_MISSILE_POTION, STR_IDX_4081_WeaponDescThrownPotion },
+	{ ITEMTYPE_JAVELIN, STR_IDX_4082_WeaponDescJavelin },
+	{ ITEMTYPE_SPEAR, STR_IDX_4083_WeaponDescSpear },
+	{ ITEMTYPE_BOW, STR_IDX_4084_WeaponDescBow },
+	{ ITEMTYPE_POLEARM, STR_IDX_4086_WeaponDescPoleArm },
+	{ ITEMTYPE_CROSSBOW, STR_IDX_4087_WeaponDescCrossBow },
+	{ ITEMTYPE_HAND_TO_HAND, STR_IDX_21258_WeaponDescH2H },
+	{ ITEMTYPE_HAND_TO_HAND_2, STR_IDX_21258_WeaponDescH2H },
+	{ ITEMTYPE_ORB, STR_IDX_4085_WeaponDescStaff },
+	{ ITEMTYPE_WAND, STR_IDX_4085_WeaponDescStaff },
+	{ ITEMTYPE_BLUNT, STR_IDX_4077_WeaponDescMace },
+};
+
+#pragma pack(push, 1)
+struct WeaponSpeedInfo
+{
+	int32_t nSpeedId;
+	D2C_StringIndices nStringId;
+};
+#pragma pack(pop)
+
+WeaponSpeedInfo gnWeaponSpeedsDesc_6FB79334[]{
+	{ 0, STR_IDX_4088_WeaponAttackFastest },
+	{ 1, STR_IDX_4089_WeaponAttackVeryFast },
+	{ 2, STR_IDX_4090_WeaponAttackFast },
+	{ 3, STR_IDX_4091_WeaponAttackNormal },
+	{ 4, STR_IDX_4092_WeaponAttackSlow },
+	{ 5, STR_IDX_4093_WeaponAttackVerySlow },
+	{ 6, STR_IDX_4094_WeaponAttackSlowest },
+};
+int ganWeaponSpeedClassToSpeedDescIdx_6FB79360[18][5] = {
+	{ 1, 1, 1, 1, 1},
+	{ 1, 1, 1, 1, 1},
+	{ 1, 1, 1, 1, 1},
+	{ 1, 1, 2, 1, 1},
+	{ 2, 1, 2, 2, 1},
+	{ 2, 1, 2, 2, 2},
+	{ 2, 2, 3, 2, 2},
+	{ 3, 2, 3, 3, 2},
+	{ 3, 2, 3, 3, 3},
+	{ 3, 2, 4, 3, 3},
+	{ 4, 3, 4, 4, 3},
+	{ 4, 3, 4, 4, 4},
+	{ 4, 3, 5, 4, 4},
+	{ 5, 4, 5, 5, 4},
+	{ 5, 4, 5, 5, 5},
+	{ 5, 4, 5, 5, 5},
+	{ 5, 5, 5, 5, 5},
+	{ 5, 5, 5, 5, 5},
+};
+int gaClassAndDistanceToSpeedClass_6FB794C8[NUMBER_OF_PLAYERCLASSES][2] = {
+	{ 0, 2 },
+	{ 1, 4 },
+	{ 1, 4 },
+	{ 0, 3 },
+	{ 0, 3 },
+	{ 1, 4 },
+	{ 0, 3 },
+};
+
+//1.10f: D2Client.0x6FAE5570
+//1.13c: D2Client.0x6FB3F9E0
+void __fastcall ITEMDESC_AttackSpeed_WeaponClass(D2UnitStrc* pItem, Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt)
+{
+
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	const Unicode* wszDash = D2LANG_GetStringFromTblIndex(STR_IDX_3996_dash);
+	const int32_t nWeaponAttackSpeed = ITEMS_GetWeaponAttackSpeed(D2CLIENT_GetControlUnit(), pItem);
+	int nSpeedTextIdx = 0;
+	if (nWeaponAttackSpeed >= 28)
+	{
+		nSpeedTextIdx = 5;
+	}
+	else if (nWeaponAttackSpeed >= 10)
+	{
+		const bool bIsDistanceWeapon = ITEMS_CheckItemTypeId(pItem, ITEMTYPE_CROSSBOW) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOW);
+		const int dwClassId = D2CLIENT_GetControlUnit() ? D2CLIENT_GetControlUnit()->dwClassId : -1;
+		nSpeedTextIdx = ganWeaponSpeedClassToSpeedDescIdx_6FB79360[nWeaponAttackSpeed - 10][gaClassAndDistanceToSpeedClass_6FB794C8[dwClassId][bIsDistanceWeapon]];
+	}
+	else
+	{
+		nSpeedTextIdx = 1;
+	}
+
+	for (auto& rWeaponClassDesc : gWeaponClassDescs_6FB792D8)
+	{
+		if (ITEMS_CheckItemTypeId(pItem, rWeaponClassDesc.nItemType))
+		{
+			Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(rWeaponClassDesc.nStringId));
+			Unicode::strcat(pOutBuffer, wszSpace);
+			Unicode::strcat(pOutBuffer, wszDash);
+			Unicode::strcat(pOutBuffer, wszSpace);
+			break;
+		}
+	}
+	Unicode wszSpeedDesc[256];
+	Unicode::strcpy(wszSpeedDesc, D2LANG_GetStringFromTblIndex(gnWeaponSpeedsDesc_6FB79334[nSpeedTextIdx].nStringId));
+	if (STATLIST_GetUnitStatBonus(pItem, STAT_ITEM_FASTERATTACKRATE, 0) != 0)
+		TEXT_ApplyColorCode(wszSpeedDesc, 3);
+	Unicode::strcat(pOutBuffer, wszSpeedDesc);
+	Unicode::strcat(pOutBuffer, wszNewline);
+}
+
+//1.10f: D2Client.0x6FAE4C60
+//1.13c: D2Client.0x6FB3DAD0
+void __fastcall ITEMDESC_GetMinMaxStats(
+	D2UnitStrc* pPlayer, D2UnitStrc* pItem, 
+	D2C_ItemStats nMinStatId, D2C_ItemStats nMaxStatId, 
+	int32_t* pMinValue, int32_t* pMaxValue,	BOOL* bHasBonus)
+{
+	*pMinValue = 1;
+	*pMaxValue = 2;
+	if (pPlayer && pItem)
+	{
+		BOOL bDynamic = 0;
+		D2UnitStrc* pItemOwner = STATLIST_GetOwner(*D2CLIENT_pgpSelectedItem, &bDynamic);
+		if (pItemOwner && pItemOwner != pPlayer)
+		{
+			pPlayer = pItemOwner;
+		}
+		STATLIST_MergeStatLists(pPlayer, pItem, TRUE);
+		int32_t nMinValue = STATLIST_UnitGetStatValue(pItem, nMinStatId, 0);
+		int32_t nMaxValue = STATLIST_UnitGetStatValue(pItem, nMaxStatId, 0);
+		if (pItemOwner)
+			STATLIST_MergeStatLists(pPlayer, pItem, bDynamic);
+		else
+			STATLIST_ExpireUnitStatlist(pPlayer, pItem);
+		const int32_t nBaseStatMinValue = STATLIST_GetUnitBaseStat(pItem, nMinStatId, 0);
+		const int32_t nBaseStatMaxValue = STATLIST_GetUnitBaseStat(pItem, nMaxStatId, 0);
+		if (nBaseStatMinValue < nMinValue || nBaseStatMaxValue < nMaxValue)
+			*bHasBonus = TRUE;
+		if (nMaxValue <= nMinValue)
+			nMaxValue = nMinValue;
+		const int32_t nMaxDmgByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_MAXDAMAGE_BYTIME, 0);
+		if (nMaxDmgByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_BYTIME) && pPlayer->pDrlgAct)
+		{
+			int32_t nBaseTime = 0;
+			const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pPlayer->pDrlgAct, &nBaseTime);
+			const int32_t nByTimeAdjustment = ITEMMODS_GetByTimeAdjustment(nMaxDmgByTime, nDayTimeFromAct, nBaseTime, nullptr, nullptr, nullptr);
+			nMaxValue += nByTimeAdjustment;
+			if (nByTimeAdjustment)
+				*bHasBonus = TRUE;
+		}
+		const int32_t nMaxDmgPercByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME, 0);
+		if (nMaxDmgPercByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME) && pPlayer->pDrlgAct)
+		{
+			int nBaseTime = 0;
+			int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pPlayer->pDrlgAct, &nBaseTime);
+			int nByTimeAdjustment = ITEMMODS_GetByTimeAdjustment(nMaxDmgPercByTime, nDayTimeFromAct, nBaseTime, nullptr, nullptr, nullptr);
+			nMaxValue += D2_ComputePercentage(nMaxValue, nByTimeAdjustment);
+			if (nByTimeAdjustment)
+				*bHasBonus = TRUE;
+		}
+		*pMinValue = nMinValue;
+		*pMaxValue = nMaxValue;
+	}
+}
+
+//1.10f: D2Client.0x6FAE43D0
+//1.13c: D2Client.0x6FB3FF20
+void __fastcall ITEMDESC_Damage(D2UnitStrc* pItem, Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt)
+{
+	char szBuffer[256];
+	Unicode wszMinMaxDmg[256];
+
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	D2UnitStrc* hControlUnit = D2CLIENT_GetControlUnit();
+	if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_MISSILE_POTION))
+	{
+		Unicode wszDescBuffer[256];
+		const int nItemMissileType = ITEMS_GetMissileType(pItem);
+		int32_t nMinElemDmgFP = MISSILE_GetMinElemDamage(0, hControlUnit, nItemMissileType, 1);
+		int32_t nMaxElemDmgFP = MISSILE_GetMaxElemDamage(0, hControlUnit, nItemMissileType, 1);
+		Unicode::strcpy(wszDescBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3467_ItemStats1n));
+		TEXT_ApplyColorCode(wszDescBuffer, 0);
+		int nMinMaxDmgColorIdx = 0;
+		switch ((D2C_ElemTypes)MISSILE_GetElemTypeFromMissileId(nItemMissileType))
+		{
+		case ELEMTYPE_FIRE:
+			nMinMaxDmgColorIdx = 1;
+			break;
+		case ELEMTYPE_LTNG:
+			nMinMaxDmgColorIdx = 4;
+			break;
+		case ELEMTYPE_COLD:
+			nMinMaxDmgColorIdx = 3;
+			break;
+		case ELEMTYPE_POIS:
+		{
+			nMinMaxDmgColorIdx = 2;
+			int32_t nPoisonLength = MISSILE_GetElementalLength(0, hControlUnit, nItemMissileType, 1) / 25;
+			if (nPoisonLength <= 0)
+				nPoisonLength = 1;
+			nMinElemDmgFP /= nPoisonLength;
+			nMaxElemDmgFP /= nPoisonLength;
+			break;
+		}
+		default:
+			break;
+		}
+		const int32_t nMinDmgFP = nMinElemDmgFP + MISSILE_GetMinDamage(0, hControlUnit, nItemMissileType, 1);
+		const int32_t nMaxDmgFP = nMaxElemDmgFP + MISSILE_GetMaxDamage(0, hControlUnit, nItemMissileType, 1);
+		const int32_t nMinDmg = nMinDmgFP >> 8;
+		int32_t nMaxDmg = nMaxDmgFP >> 8;
+		if (nMaxDmg <= nMinDmg)
+			nMaxDmg = nMinDmg;
+		SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDmg);
+		Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+		TEXT_ApplyColorCode(wszMinMaxDmg, nMinMaxDmgColorIdx);
+		Unicode::strcat(wszDescBuffer, wszSpace);
+		Unicode::strcat(wszDescBuffer, wszMinMaxDmg);
+		if (nMinDmgFP != nMaxDmg)
+		{
+			Unicode::strcat(wszDescBuffer, wszSpace);
+			Unicode::strcat(wszDescBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+			TEXT_ApplyColorCode(wszMinMaxDmg, nMinMaxDmgColorIdx);
+			Unicode::strcat(wszDescBuffer, wszSpace);
+			Unicode::strcat(wszDescBuffer, wszMinMaxDmg);
+		}
+		Unicode::strcat(wszDescBuffer, wszNewline);
+		Unicode::strcpy(pOutBuffer, wszDescBuffer);
+	}
+	else
+	{
+		int nMinDmg, nMaxDmg;
+		BOOL bHasBonus = FALSE;
+		if (ITEMS_Is1Or2HandedForBarbarian(hControlUnit, pItem))
+		{
+			ITEMDESC_GetMinMaxStats(
+				hControlUnit, pItem,
+				STAT_SECONDARY_MINDAMAGE, STAT_SECONDARY_MAXDAMAGE,
+				&nMinDmg,&nMaxDmg, &bHasBonus);
+			Unicode wszBufferSecondary[128];
+			Unicode::strcpy(wszBufferSecondary, D2LANG_GetStringFromTblIndex(STR_IDX_3466_ItemStats1m));
+			Unicode::strcat(wszBufferSecondary, wszSpace);
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 5);
+			if (bHasBonus) TEXT_ApplyColorCode(wszMinMaxDmg, 3);
+			Unicode::strcat(wszBufferSecondary, wszMinMaxDmg);
+			Unicode::strcat(wszBufferSecondary, wszSpace);
+			Unicode::strcat(wszBufferSecondary, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 5);
+			Unicode::strcat(wszBufferSecondary, wszSpace);
+			Unicode::strcat(wszBufferSecondary, wszMinMaxDmg);
+			Unicode::strcat(wszBufferSecondary, wszNewline);
+
+			ITEMDESC_GetMinMaxStats(
+				hControlUnit, pItem,
+				STAT_MINDAMAGE, STAT_MAXDAMAGE,
+				&nMinDmg, &nMaxDmg, &bHasBonus);
+			Unicode wszBufferPrimary[128];
+			Unicode::strcpy(wszBufferPrimary, D2LANG_GetStringFromTblIndex(STR_IDX_3465_ItemStats1l));
+			Unicode::strcat(wszBufferPrimary, wszSpace);
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 5);
+			if (bHasBonus) TEXT_ApplyColorCode(wszMinMaxDmg, 3);
+			Unicode::strcat(wszBufferPrimary, wszMinMaxDmg);
+			Unicode::strcat(wszBufferPrimary, wszSpace);
+			Unicode::strcat(wszBufferPrimary, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 5);
+			Unicode::strcat(wszBufferPrimary, wszSpace);
+			Unicode::strcat(wszBufferPrimary, wszMinMaxDmg);
+			Unicode::strcat(wszBufferPrimary, wszNewline);
+
+			TEXT_ApplyColorCode(wszBufferSecondary, 0);
+			TEXT_ApplyColorCode(wszBufferPrimary, 0);
+			Unicode::strcpy(pOutBuffer, wszBufferSecondary);
+			Unicode::strcat(pOutBuffer, wszBufferPrimary);
+		}
+		else
+		{
+			D2C_StringIndices nStringIdx;
+			if (ITEMS_CheckWeaponIfTwoHanded(pItem))
+			{
+				ITEMDESC_GetMinMaxStats(
+					hControlUnit, pItem,
+					STAT_SECONDARY_MINDAMAGE, STAT_SECONDARY_MAXDAMAGE,
+					&nMinDmg, &nMaxDmg, &bHasBonus);
+				nStringIdx = STR_IDX_3466_ItemStats1m;
+			}
+			else
+			{
+				ITEMDESC_GetMinMaxStats(
+					hControlUnit, pItem,
+					STAT_MINDAMAGE, STAT_MAXDAMAGE,
+					&nMinDmg, &nMaxDmg, &bHasBonus);
+				nStringIdx = STR_IDX_3465_ItemStats1l;
+			}
+			if (nMaxDmg <= nMinDmg + 1)
+				nMaxDmg = nMinDmg + 1;
+			Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(nStringIdx));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+			Unicode::strcat(pOutBuffer, wszSpace);
+			if (bHasBonus) TEXT_ApplyColorCode(wszMinMaxDmg, 3);
+			Unicode::strcat(pOutBuffer, wszMinMaxDmg);
+			Unicode::strcat(pOutBuffer, wszSpace);
+			Unicode::strcat(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+			Unicode::strcat(pOutBuffer, wszSpace);
+			Unicode::strcat(pOutBuffer, wszMinMaxDmg);
+			Unicode::strcat(pOutBuffer, wszNewline);
+		}
+		bHasBonus = STATLIST_GetUnitStatBonus(pItem, STAT_ITEM_MINDAMAGE_PERCENT, 0)
+			|| STATLIST_GetUnitStatBonus(pItem, STAT_ITEM_MAXDAMAGE_PERCENT, 0)
+			|| STATLIST_GetUnitStatBonus(pItem, STAT_ITEM_THROW_MINDAMAGE, 0)
+			|| STATLIST_GetUnitStatBonus(pItem, STAT_ITEM_THROW_MAXDAMAGE, 0)
+			;
+		if (ITEMS_CheckIfThrowable(pItem))
+		{
+			Unicode wszBuffer[128];
+			Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3467_ItemStats1n));
+			TEXT_ApplyColorCode(wszBuffer, 0);
+			ITEMDESC_GetMinMaxStats(
+				hControlUnit, pItem,
+				STAT_ITEM_THROW_MINDAMAGE, STAT_ITEM_THROW_MAXDAMAGE,
+				&nMinDmg, &nMaxDmg, &bHasBonus);
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+			TEXT_ApplyColorCode(wszMinMaxDmg, bHasBonus ? 3 : 0);
+			Unicode::strcat(wszBuffer, wszSpace);
+			Unicode::strcat(wszBuffer, wszMinMaxDmg);
+			Unicode::strcat(wszBuffer, wszSpace);
+			Unicode::strcat(wszBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+			SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDmg);
+			Unicode::win2Unicode(wszMinMaxDmg, szBuffer, 9);
+			TEXT_ApplyColorCode(wszMinMaxDmg, bHasBonus ? 3 : 0);
+			Unicode::strcat(wszBuffer, wszSpace);
+			Unicode::strcat(wszBuffer, wszMinMaxDmg);
+			Unicode::strcat(wszBuffer, wszNewline);
+			Unicode::strcat(pOutBuffer, wszBuffer);
+		}
+	}
+}
+
+//1.10f: D2Client.0x6FAE5040
+//1.13c: D2Client.0x6FB3D940
+void __fastcall ITEMDESC_SmiteAndKickDamage(D2UnitStrc* pItem, Unicode* pOutBuffer, const D2ItemsTxt* pItemTxt)
+{
+	char szBuffer[10];
+	Unicode wszBuffer[10];
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	int32_t nMinDam = pItemTxt->nMinDam;
+	int32_t nMaxDam = pItemTxt->nMaxDam;
+
+	D2C_StringIndices nDescId = STR_IDX_21782_ModStre10k;
+	if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_SHIELD))
+	{
+		nDescId = STR_IDX_3468_ItemStats1o;
+		D2UnitStrc* hControlUnit = D2CLIENT_GetControlUnit();
+		if (D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(hControlUnit, SKILL_HOLYSHIELD))
+		{
+			if (STATES_CheckState(hControlUnit, STATE_HOLYSHIELD))
+			{
+				const int32_t nSkillLevel = SKILLS_GetSkillLevel(hControlUnit, pSkill, 1);
+				nMinDam += SKILLS_GetMinPhysDamage(hControlUnit, SKILL_HOLYSHIELD, nSkillLevel, 1) >> 8;
+				nMaxDam += SKILLS_GetMaxPhysDamage(hControlUnit, SKILL_HOLYSHIELD, nSkillLevel, 1) >> 8;
+			}
+		}
+	}
+	else if (!ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOTS))
+	{
+			return;
+	}
+	Unicode::strcpy(pOutBuffer, D2LANG_GetStringFromTblIndex(nDescId));
+	SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMinDam);
+	Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+	Unicode::strcat(pOutBuffer, wszSpace);
+	Unicode::strcat(pOutBuffer, wszBuffer);
+	Unicode::strcat(pOutBuffer, wszSpace);
+	Unicode::strcat(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3464_ItemStast1k));
+	SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nMaxDam);
+	Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+	Unicode::strcat(pOutBuffer, wszSpace);
+	Unicode::strcat(pOutBuffer, wszBuffer);
+	Unicode::strcat(pOutBuffer, wszNewline);
+}
+
+//1.10f: D2Client.0x6FAE4EE0
+//1.13c: D2Client.0x6FB3FDC0
+void __fastcall ITEMDESC_Blockchance(D2UnitStrc* pUnit, Unicode* pBuffer, const D2ItemsTxt* pItemTxt)
+{
+	char szBuffer[32];
+	Unicode wszBlockBuffer[256];
+	Unicode wszBuffer[32];
+
+	int32_t nBlock = STATLIST_UnitGetStatValue(pUnit, STAT_TOBLOCK, 0);
+
+	if (D2UnitStrc* hControlUnit = D2CLIENT_GetControlUnit())
+	{
+		nBlock += CLIENT_DATATBLS_GetCharStatsTxtRecord(hControlUnit->dwClassId)->nBlockFactor;
+		D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(hControlUnit, SKILL_HOLYSHIELD);
+		if (pSkill && STATES_CheckState(hControlUnit, STATE_HOLYSHIELD))
+		{
+			int32_t nSkillLevel = SKILLS_GetSkillLevel(hControlUnit, pSkill, 1);
+			nBlock += D2COMMON_11036_GetMonCurseResistanceSubtraction(nSkillLevel, SKILL_HOLYSHIELD);
+		}
+	}
+
+	if (nBlock > 75)
+	{
+		nBlock = 75;
+	}
+	else if (nBlock == 0)
+	{
+		return;
+	}
+	SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%d%%\n", nBlock);
+	Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer));
+	if (nBlock > pItemTxt->nBlock)
+		TEXT_ApplyColorCode(wszBuffer, 3);
+	Unicode::strcpy(wszBlockBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_11018_ItemStats1r));
+	TEXT_ApplyColorCode(wszBlockBuffer, 0);
+	Unicode::strcpy(pBuffer, wszBlockBuffer);
+	Unicode::strcat(pBuffer, wszBuffer);
+}
+
+//1.10f: D2Client.0x6FAE51D0
+//1.13c: D2Client.0x6FB3FB80
+void __fastcall ITEMDESC_Defense(D2UnitStrc* pUnit, D2UnitStrc* pItem, Unicode* pBuffer, const D2ItemsTxt* pItemTxt)
+{
+	if (!pUnit) return;
+		
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	BOOL bDynamic = 0;
+	D2UnitStrc* pOwner = STATLIST_GetOwner(*D2CLIENT_pgpSelectedItem, &bDynamic);
+	;
+	if (pOwner && pUnit != pOwner)
+		pUnit = pOwner;
+	STATLIST_MergeStatLists(pUnit, *D2CLIENT_pgpSelectedItem, TRUE);
+	int32_t nItemDefense = STATLIST_GetDefenseFromUnit(*D2CLIENT_pgpSelectedItem);
+	if (pOwner)
+		STATLIST_MergeStatLists(pOwner, *D2CLIENT_pgpSelectedItem, bDynamic);
+	else
+		STATLIST_ExpireUnitStatlist(pUnit, *D2CLIENT_pgpSelectedItem);
+	bool bHasBonus = STATLIST_GetUnitBaseStat(pItem, STAT_ARMORCLASS, 0) != nItemDefense;
+
+	int32_t nArmorByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_ARMOR_BYTIME, 0);
+	if (nArmorByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_ARMOR_BYTIME) && pUnit->pDrlgAct)
+	{
+		int nBaseTime = 0;
+		const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+		const int nByTimeAdjustment = ITEMMODS_GetByTimeAdjustment(nArmorByTime, nDayTimeFromAct, nBaseTime, 0, 0, 0);
+		nItemDefense += nByTimeAdjustment;
+		if (nByTimeAdjustment)
+			bHasBonus = true;
+	}
+	int32_t nArmorPctByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_ARMORPERCENT_BYTIME, 0);
+	if (nArmorPctByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_ARMORPERCENT_BYTIME) && pUnit->pDrlgAct)
+	{
+		int nBaseTime = 0;
+		const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+		const int nByTimeAdjustment = ITEMMODS_GetByTimeAdjustment(nArmorPctByTime, nDayTimeFromAct, nBaseTime, 0, 0, 0);
+		nItemDefense += D2_ComputePercentage(nItemDefense, nByTimeAdjustment);
+		if (nByTimeAdjustment)
+			bHasBonus = true;
+	}
+	Unicode::strcpy(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3461_ItemStats1h));
+	Unicode::strcat(pBuffer, wszSpace);
+	char szBuffer[10];
+	SStrPrintf(szBuffer, ARRAY_SIZE(szBuffer), "%i", nItemDefense);
+	Unicode wszBuffer[10];
+	Unicode::win2Unicode(wszBuffer, szBuffer, ARRAY_SIZE(wszBuffer) - 1);
+	if (bHasBonus)
+		TEXT_ApplyColorCode(wszBuffer, 3);
+	Unicode::strcat(pBuffer, wszBuffer);
+	Unicode::strcat(pBuffer, wszNewline);
+}
+
+//1.10f: D2Client.0x6FAE3EE0
+//1.13c: D2Client.0x6FB3E180
+void __fastcall ITEMDESC_SocketsAndEthereality(D2UnitStrc* pItem, Unicode* pOutBuffer)
+{
+	Unicode wszBuffer[16];
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	
+	Unicode::win2Unicode(wszBuffer, "", ARRAY_SIZE(wszBuffer) - 1);
+	Unicode::strcpy(pOutBuffer, wszBuffer);
+	const bool bIsEthereal = ITEMS_CHECK_FLAG(pItem, IFLAG_ETHEREAL);
+	if (bIsEthereal)
+	{
+		Unicode::win2Unicode(wszBuffer, "Ethereal", ARRAY_SIZE(wszBuffer) - 1);
+		Unicode::strcat(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_22745_X_Ethereal_CanNotBeRepaired));
+	}
+	if (ITEMS_CHECK_FLAG(pItem, IFLAG_SOCKETED))
+	{
+		if (bIsEthereal)
+		{
+			Unicode::win2Unicode(wszBuffer, ", ", ARRAY_SIZE(wszBuffer) - 1);
+			Unicode::strcat(pOutBuffer, wszBuffer);
+		}
+		Unicode::strcat(pOutBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_3453_Socketable));
+		char szSocketDesc[10];
+		Unicode wszSocketsDesc[10];
+		const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+		int32_t nItemSockets = ITEMS_GetSockets(pItem);
+		SStrPrintf(szSocketDesc, ARRAY_SIZE(szSocketDesc), "(%i)", nItemSockets);
+		Unicode::win2Unicode(wszSocketsDesc, szSocketDesc, ARRAY_SIZE(wszSocketsDesc) - 1);
+		Unicode::strcat(pOutBuffer, wszSpace);
+		Unicode::strcat(pOutBuffer, wszSocketsDesc);
+		Unicode::strcat(pOutBuffer, wszNewline);
+	}
+	else if (bIsEthereal)
+	{
+		Unicode::strcat(pOutBuffer, wszNewline);
+	}
+}
+
+static int UnicodeFindLastNewline(Unicode* wszStr, int nLastChar)
+{
+	int nIdx = nLastChar;
+	while (nIdx > 0)
+	{
+		if (wszStr[nIdx].ch != L'\n')
+		{
+			return nIdx;
+		}
+		nIdx--;
+	}
+	return 0;
+}
+
+//1.10f: D2Client.0x6FAF3160
+//1.13c: D2Client.0x6FB060B0
+void __fastcall ITEMDESC_RunewordMods(
+	D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize, BOOL bAppendNewLine, Unicode* pDescString)
+{
+	Unicode wszModDesc[1024];
+	wszModDesc[0] = 0;
+	ITEMDESC_Mods_6FAF19C0(pItem, wszModDesc, ARRAY_SIZE(wszModDesc), 1, STATE_NONE, STATE_RUNEWORD, STATLIST_MAGIC, bAppendNewLine);
+	if (!pDescString || !wszModDesc[0].ch)
+	{
+		Unicode::strcat(pBuffer, wszModDesc);
+	}
+	else
+	{
+		// The following code outputs the mod desc but inserting the desc before the last line.
+		const int nStrLen = Unicode::strlen(wszModDesc);
+		int nLineBeginIdx = UnicodeFindLastNewline(wszModDesc, nStrLen - 2);
+		if (nLineBeginIdx > 0)
+		{
+			const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+			const Unicode* wszComma = D2LANG_GetStringFromTblIndex(STR_IDX_3852_KeyComma);
+			wszModDesc[nLineBeginIdx] = 0;
+			Unicode::strcat(pBuffer, wszModDesc);
+			Unicode::strcat(pBuffer, wszNewline);
+			Unicode::strcat(pBuffer, pDescString);
+			if (wszModDesc[nStrLen - 1].ch == L'\n')
+				wszModDesc[nStrLen - 1] = L'\0';
+			Unicode::strcat(pBuffer, &wszModDesc[nLineBeginIdx + 1]);
+			Unicode::strcat(pBuffer, wszComma);
+			Unicode::strcat(pBuffer, wszNewline);
+		}
+		else
+		{
+			Unicode::strcat(pBuffer, pDescString);
+			Unicode::strcat(pBuffer, wszModDesc);
+		}
+	}
+}
+
+
+//1.10f: D2Client.0x6FB6FA38
+D2C_States gaSetItemsStates[6] =
+{
+	STATE_ITEMSET1,
+	STATE_ITEMSET2,
+	STATE_ITEMSET3,
+	STATE_ITEMSET4,
+	STATE_ITEMSET5,
+	STATE_ITEMSET6,
+};
+//1.10f: D2Client.0x6FB6FA50
+int gaBitCount[64]
+{
+/*0b000000*/ 0,
+/*0b000001*/ 1,
+/*0b00001X*/ 1, 2,
+/*0b0001XX*/ 1, 2, 2, 3,
+/*0b001XXX*/ 1, 2, 2, 3, 2, 3, 3, 4,
+/*0b01XXXX*/ 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
+/*0b1XXXXX*/ 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+};
+
+//1.10f: D2Client.0x6FAF32B0
+//1.13c: D2Client.0x6FB05FB0
+void __fastcall ITEMDESC_SingleSetBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize)
+{
+	if (pItem && pItem->dwUnitType == UNIT_ITEM && ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET)
+	{
+		if (D2SetItemsTxt* pSetItemsTxt = ITEMS_GetSetItemsTxtRecordFromItem(pItem))
+		{
+			if (pSetItemsTxt->nAddFunc == 1) // Props are added depending on which set item is equipped	(See Civerb's Ward)
+			{
+				uint32_t nSetItemMask = ITEMS_GetSetItemsMask(pUnit, pItem, 0);
+				int nIndexOfCurrentItemInSet = ITEMS_GetNoOfSetItemsFromItem(pItem);
+				for (int nSetItemIdx = 0; nSetItemIdx < 6; ++nSetItemIdx)
+				{
+					if (nSetItemIdx != nIndexOfCurrentItemInSet)
+					{
+						int nSetItemStateIdx = nSetItemIdx;
+						if (nSetItemIdx > nIndexOfCurrentItemInSet)
+							nSetItemStateIdx = nSetItemIdx - 1; // Don't count the current item
+
+						if (((1 << nSetItemIdx) & nSetItemMask) != 0)
+						{
+							ITEMDESC_Mods_6FAF19C0(pItem, pBuffer, nBufferSize,
+								0, gaSetItemsStates[nSetItemStateIdx], 
+								STATE_NONE, STATLIST_BASE, 1);
+						}
+					}
+				}
+			}
+			else if (pSetItemsTxt->nAddFunc == 2) // Props are added depending on the number of set items equipped
+			{
+				uint32_t nSetItemsMask = ITEMS_GetSetItemsMask(pUnit, pItem, 1);
+				int nItems = (nSetItemsMask < 64 ? gaBitCount[nSetItemsMask] : 0);
+				int nItemsExcludingCurrentOne = nItems - 1;
+				for (int nSetItemStateIdx = 0; nSetItemStateIdx < nItemsExcludingCurrentOne; ++nSetItemStateIdx)
+				{
+					ITEMDESC_Mods_6FAF19C0(pItem, pBuffer, nBufferSize,
+						0, gaSetItemsStates[nSetItemStateIdx],
+						STATE_NONE, STATLIST_BASE, 1);
+				}
+			}
+		}
+	}
+}
+
+//1.10f: D2Client.0x6FAF33C0
+//1.13c: D2Client.0x6FB05F10
+void __fastcall ITEMDESC_FullSetBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize)
+{
+	if (ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET)
+	{
+		int nFileIdx = ITEMS_GetFileIndex(pItem);
+		if (const D2SetItemsTxt* pSetItemsTxt = CLIENT_DATATBLS_GetSetItemsTxtRecord(nFileIdx))
+		{
+			for (int nSetItemIdx = 0; nSetItemIdx < 6; ++nSetItemIdx)
+			{
+				D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, gaSetItemsStates[nSetItemIdx]);
+				if (pStatList && STATLIST_GetStatValue(pStatList, STAT_VALUE, 0) == pSetItemsTxt->nSetId)
+				{
+					ITEMDESC_Mods_6FAF19C0(pUnit, pBuffer, nBufferSize,
+						0, gaSetItemsStates[nSetItemIdx],
+						STATE_NONE, STATLIST_BASE, 1);
+				}
+			}
+		}
+	}
+}
+
+//1.10f: D2Client.0x6FAE5990
+//1.13c: D2Client.0x6FB3D430
+D2UnitStrc* __fastcall INV_FindSetItem(D2InventoryStrc* pInventory, int nSetItemId)
+{
+	for(D2UnitStrc* pCurrentInvItem = INVENTORY_GetFirstItem(pInventory); 
+		pCurrentInvItem != nullptr; 
+		pCurrentInvItem = INVENTORY_GetNextItem(pCurrentInvItem))
+	{
+		if (INVENTORY_UnitIsItem(pCurrentInvItem) && ITEMS_GetItemQuality(pCurrentInvItem) == ITEMQUAL_SET)
+		{
+			D2C_ItemInvPage nInvPage = (D2C_ItemInvPage)ITEMS_GetPage(pCurrentInvItem);
+			if (nInvPage == INVPAGE_INVENTORY || nInvPage == INVPAGE_CUBE || nInvPage == INVPAGE_STASH || nInvPage == INVPAGE_NULL)
+			{
+				int nNodePage = INVENTORY_GetItemNodePage(pCurrentInvItem);
+				if (nNodePage == 1 || nNodePage == 3 || nNodePage == 4)
+				{
+					int nFileIdx = ITEMS_GetFileIndex(pCurrentInvItem);
+					if (const D2SetItemsTxt* pSetItemsTxt = CLIENT_DATATBLS_GetSetItemsTxtRecord(nFileIdx))
+					{
+						if (pSetItemsTxt->wSetItemId == nSetItemId)
+						{
+							return pCurrentInvItem;
+						}
+					}
+				}
+			}
+		}
+	}
+	return nullptr;
+}
+
+//1.10f: D2Client.0x6FAE20C8(Inlined)
+//1.13c: D2Client.0x6FB428C0
+void __fastcall UI_INV_DrawSetItemDesc(D2UnitStrc* pOwner)
+{
+	const Unicode* wszNewLine = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	D2UnitStrc* pUnitForStatsComputation = pOwner;
+	if (pOwner->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pOwner))
+		pUnitForStatsComputation = D2CLIENT_GetControlUnit();
+
+	if ((*D2CLIENT_pgbInvMouseOverEquippedItem || *D2CLIENT_pdword_6FBB58E0)
+		&& *D2CLIENT_pgpSelectedItem
+		&& !INVENTORY_GetCursorItem(pOwner->pInventory))
+	{
+		int32_t nClassId = -1;
+		if (*D2CLIENT_pgpSelectedItem)
+			nClassId = (*D2CLIENT_pgpSelectedItem)->dwClassId;
+
+		const D2ItemsTxt* ptItemStats = DATATBLS_GetItemsTxtRecord(nClassId);
+		D2_ASSERT(ptItemStats);
+		const int32_t nFileIdx = ITEMS_GetFileIndex(*D2CLIENT_pgpSelectedItem);
+		if (const D2SetsTxt* pSetsRecord = CLIENT_DATATBLS_GetSetsTxtRecordFromSetItemId(nFileIdx))
+		{
+			Unicode wszFullText[2048];
+			Unicode wszSetName[256];
+			Unicode wszSetBonusesDesc[1024];
+			Unicode wszStatsDesc[1024];
+			Unicode wszDescription[1024];
+
+			Unicode wszDurability[256];
+
+			Unicode wszLevelRequirement[256];
+			uint8_t nLevelRequirementColorIndex = 0;
+			Unicode wszStrRequirement[256];
+			uint8_t nStrRequirementColorIndex = 0;
+			Unicode wszDexRequirement[256];
+			uint8_t nDexRequirementColorIndex = 0;
+
+			Unicode::strcpy(wszSetName, D2LANG_GetStringFromTblIndex(pSetsRecord->wStringId));
+			Unicode::strcat(wszSetName, wszNewLine);
+			BOOL bStrength;
+			BOOL bDexterity;
+			BOOL bTrade;
+			ITEMS_CheckRequirements(*D2CLIENT_pgpSelectedItem, pUnitForStatsComputation, FALSE, &bStrength, &bDexterity, &bTrade);
+			ITEMDESC_Durability(*D2CLIENT_pgpSelectedItem, wszDurability, ptItemStats);
+			int nRequiredLevel = ITEMS_GetLevelRequirement(*D2CLIENT_pgpSelectedItem, pUnitForStatsComputation);
+			if (nRequiredLevel > 1)
+			{
+				if (!bTrade)
+					nLevelRequirementColorIndex = 1;
+				ITEMDESC_RequiredLevel(wszLevelRequirement, nRequiredLevel);
+			}
+			if (ITEMS_CheckItemTypeId(*D2CLIENT_pgpSelectedItem, ITEMTYPE_WEAPON)
+				|| ITEMS_CheckItemTypeId(*D2CLIENT_pgpSelectedItem, ITEMTYPE_ANY_ARMOR))
+			{
+				int nRequiredStr = 0;
+				int nRequiredDex = 0;
+				if (const int32_t nReqPct = STATLIST_UnitGetItemStatOrSkillStatValue(*D2CLIENT_pgpSelectedItem, STAT_ITEM_REQ_PERCENT, 0))
+				{
+					nRequiredStr = D2_ComputePercentage(ptItemStats->wReqStr, nReqPct);
+					nRequiredDex = D2_ComputePercentage(ptItemStats->wReqDex, nReqPct);
+				}
+				if (ITEMS_CHECK_FLAG(*D2CLIENT_pgpSelectedItem, IFLAG_ETHEREAL))
+				{
+					nRequiredStr -= 10;
+					nRequiredDex -= 10;
+				}
+				if (ptItemStats->wReqStr)
+				{
+					if (!bStrength)
+						nStrRequirementColorIndex = 1;
+					ITEMDESC_RequiredStrength(wszStrRequirement, ptItemStats, nRequiredStr);
+				}
+				if (ptItemStats->wReqDex)
+				{
+					if (!bDexterity)
+						nDexRequirementColorIndex = 1;
+					ITEMDESC_RequiredDexterity(wszDexRequirement, ptItemStats, nRequiredDex);
+				}
+			}
+			Unicode::strcpy(wszDescription, TEXT_ApplyColorCode(wszLevelRequirement, nLevelRequirementColorIndex));
+			Unicode::strcat(wszDescription, TEXT_ApplyColorCode(wszStrRequirement, nStrRequirementColorIndex));
+			Unicode::strcat(wszDescription, TEXT_ApplyColorCode(wszDexRequirement, nDexRequirementColorIndex));
+
+			const D2C_PlayerClasses nClassSpecific = ITEMS_GetClassOfClassSpecificItem(*D2CLIENT_pgpSelectedItem);
+			if (nClassSpecific != PCLASS_INVALID)
+			{
+				Unicode wszClassRequirement[256];
+				Unicode::strcat(wszClassRequirement, D2LANG_GetStringFromTblIndex(nClassSpecific + STR_IDX_10917_AmaOnly));
+				Unicode::strcat(wszClassRequirement, wszNewLine);
+				uint8_t nClassRequirementColorIndex = 0;
+				if (pUnitForStatsComputation
+					&& pUnitForStatsComputation->dwUnitType == UNIT_PLAYER
+					&& pUnitForStatsComputation->dwClassId != nClassSpecific)
+				{
+					nClassRequirementColorIndex = 1;
+				}
+				Unicode::strcat(wszDescription, TEXT_ApplyColorCode(wszClassRequirement, nClassRequirementColorIndex));
+			}
+
+			Unicode::strcat(wszDescription, TEXT_ApplyColorCode(wszDurability, 0));
+
+			if (ITEMS_CheckItemTypeId(*D2CLIENT_pgpSelectedItem, ITEMTYPE_WEAPON))
+			{
+				Unicode wszAttackSpeed[256];
+				ITEMDESC_AttackSpeed_WeaponClass(*D2CLIENT_pgpSelectedItem, wszAttackSpeed, ptItemStats);
+				TEXT_ApplyColorCode(wszAttackSpeed, 0);
+				Unicode::strcat(wszDescription, wszAttackSpeed);
+
+				if (STATLIST_GetMinDamageFromUnit(*D2CLIENT_pgpSelectedItem, 0) >= 0
+					&& STATLIST_GetMaxDamageFromUnit(*D2CLIENT_pgpSelectedItem, 0) >= 0)
+				{
+					Unicode wszMinMaxDamage[256];
+					ITEMDESC_Damage(*D2CLIENT_pgpSelectedItem, wszMinMaxDamage, ptItemStats);
+					TEXT_ApplyColorCode(wszMinMaxDamage, 0);
+					Unicode::strcat(wszDescription, wszMinMaxDamage);
+				}
+			}
+			if (ITEMS_CheckItemTypeId(*D2CLIENT_pgpSelectedItem, ITEMTYPE_ANY_SHIELD))
+			{
+				if (pUnitForStatsComputation
+					&& pUnitForStatsComputation->dwUnitType == UNIT_PLAYER
+					&& pUnitForStatsComputation->dwClassId == PCLASS_PALADIN
+					&& (!ITEMS_IsClassValid(*D2CLIENT_pgpSelectedItem)
+						|| ITEMS_GetClassOfClassSpecificItem(*D2CLIENT_pgpSelectedItem) == PCLASS_PALADIN))
+				{
+					Unicode wszSmiteDamage[256];
+					ITEMDESC_SmiteAndKickDamage(*D2CLIENT_pgpSelectedItem, wszSmiteDamage, ptItemStats);
+					TEXT_ApplyColorCode(wszSmiteDamage, 0);
+					Unicode::strcat(wszDescription, wszSmiteDamage);
+				}
+				Unicode wszBlockChance[256];
+				ITEMDESC_Blockchance(*D2CLIENT_pgpSelectedItem, wszBlockChance, ptItemStats);
+				TEXT_ApplyColorCode(wszBlockChance, 0);
+				Unicode::strcat(wszDescription, wszBlockChance);
+			}
+			if (ITEMS_CheckItemTypeId(*D2CLIENT_pgpSelectedItem, ITEMTYPE_ANY_ARMOR)
+				&& STATLIST_GetDefenseFromUnit(*D2CLIENT_pgpSelectedItem) > 0)
+			{
+				Unicode wszDefense[256];
+				ITEMDESC_Defense(pUnitForStatsComputation, *D2CLIENT_pgpSelectedItem, wszDefense, ptItemStats);
+				TEXT_ApplyColorCode(wszDefense, 0);
+				Unicode::strcat(wszDescription, wszDefense);
+			}
+
+			Unicode wszItemName[256];
+			D2CLIENT_GetItemName_6FADD360(*D2CLIENT_pgpSelectedItem, wszItemName, 256);
+			uint8_t nItemNameColor = 1;
+			if (!ITEMS_CHECK_FLAG(*D2CLIENT_pgpSelectedItem, IFLAG_BROKEN))
+				nItemNameColor = 2;
+			TEXT_ApplyColorCode(wszItemName, nItemNameColor);
+			Unicode::strcat(wszDescription, wszItemName);
+			wszStatsDesc[0] = 0;
+			if (ITEMS_CHECK_FLAG(*D2CLIENT_pgpSelectedItem, IFLAG_SOCKETED))
+			{
+				Unicode wszSocketDesc[300];
+				ITEMDESC_SocketsAndEthereality(*D2CLIENT_pgpSelectedItem, wszSocketDesc);
+				Unicode::strcpy(wszStatsDesc, wszSocketDesc);
+			}
+			ITEMDESC_RunewordMods(*D2CLIENT_pgpSelectedItem, wszStatsDesc, ARRAY_SIZE(wszStatsDesc), 1, 0);
+			Unicode wszSingleSetBonus[512];
+			wszSingleSetBonus[0] = 0;
+			ITEMDESC_SingleSetBonus(pUnitForStatsComputation, *D2CLIENT_pgpSelectedItem, wszSingleSetBonus, 512);
+			Unicode wszFullSetBonus[512];
+			wszFullSetBonus[0] = 0;
+			if (*D2CLIENT_pgpSelectedItem && (*D2CLIENT_pgpSelectedItem)->dwItemMode == IMODE_EQUIP)
+				ITEMDESC_FullSetBonus(pUnitForStatsComputation, *D2CLIENT_pgpSelectedItem, wszFullSetBonus, 512);
+
+			Unicode wszSetItemsBonusesDesc[512];
+			for (int nSetItemIdx = 0; nSetItemIdx < pSetsRecord->nSetItems; nSetItemIdx++)
+			{
+				D2SetItemsTxt* pCurrentSetItem = pSetsRecord->pSetItem[nSetItemIdx];
+				if (!pCurrentSetItem)
+					break;
+
+				if (pCurrentSetItem->wStringId)
+				{
+					D2CLIENT_FormatStats_6FADCFE0(wszSetBonusesDesc, D2LANG_GetStringFromTblIndex(STR_IDX_10089_SetItemFormatX), D2LANG_GetStringFromTblIndex(pCurrentSetItem->wStringId), 0);
+					Unicode::strcat(wszSetBonusesDesc, wszNewLine);
+				}
+				uint8_t nSetItemBonusColorIndex = 2;
+				if (!INV_FindSetItem(pOwner->pInventory, pCurrentSetItem->wSetItemId))
+					nSetItemBonusColorIndex = 1;
+				TEXT_ApplyColorCode(wszSetBonusesDesc, nSetItemBonusColorIndex);
+				Unicode::strcat(wszSetItemsBonusesDesc, wszSetBonusesDesc);
+			}
+			Unicode::strcpy(wszSetBonusesDesc, TEXT_ApplyColorCode(wszSetItemsBonusesDesc, 2));
+			Unicode::strcat(wszSetBonusesDesc, TEXT_ApplyColorCode(wszSetName, 4));
+			if (wszFullSetBonus[0])
+			{
+				Unicode::strcat(wszSetBonusesDesc, wszNewLine);
+				Unicode::strcat(wszSetBonusesDesc, TEXT_ApplyColorCode(wszFullSetBonus, 4));
+			}
+			Unicode::strcat(wszSetBonusesDesc, wszNewLine);
+			if (wszSingleSetBonus[0])
+			{
+				Unicode::strcat(wszSetBonusesDesc, TEXT_ApplyColorCode(wszSingleSetBonus, 2));
+			}
+			Unicode::strcat(wszSetBonusesDesc, TEXT_ApplyColorCode(wszStatsDesc, 3));
+			Unicode::strcat(wszSetBonusesDesc, wszDescription);
+
+			if (*D2CLIENT_pgnInventoryMode <= VENDORMODE_NONE || *D2CLIENT_pgnInventoryMode > VENDORMODE_CLOSE)
+			{
+				Unicode::strcpy(wszFullText, wszSetBonusesDesc);
+			}
+			else
+			{
+				Unicode wszTransactionCost[64];
+				int nTransactionCost;
+				if (NPCMENU_TransactionCost(*D2CLIENT_pgpSelectedItem, *D2CLIENT_pgbSelectedItemIsOwned, &nTransactionCost, wszTransactionCost, ARRAY_SIZE(wszTransactionCost)))
+				{
+					Unicode::strcpy(wszFullText, wszSetBonusesDesc);
+					if (wszTransactionCost[0])
+						Unicode::strcat(wszFullText, wszNewLine);
+					Unicode::strcat(wszFullText, wszTransactionCost);
+				}
+				else
+				{
+					Unicode::strcpy(wszFullText, wszSetBonusesDesc);
+					if (*D2CLIENT_pgnInventoryMode != VENDORMODE_REPAIR)
+					{
+						Unicode wszPriceless[64];
+						Unicode::strcpy(wszPriceless, D2LANG_GetStringFromTblIndex(STR_IDX_3333_priceless));
+						Unicode::strcat(wszFullText, wszNewLine);
+						Unicode::strcat(wszFullText, TEXT_ApplyColorCode(wszPriceless, 1));
+					}
+				}
+			}
+			int nTextWidth, nTextHeight;
+			D2Win_10131_GetTextDimensions(wszFullText, &nTextWidth, &nTextHeight);
+			if ((*D2CLIENT_pgnSelectedItemDescTopPosY - nTextHeight) > 0)
+			{
+				D2Win_10129_DrawFramedText(wszFullText, *D2CLIENT_pgnSelectedItemDescTopPosX, *D2CLIENT_pgnSelectedItemDescTopPosY, 0, 1);
+			}
+			else
+			{
+				D2Win_10129_DrawFramedText(wszFullText, *D2CLIENT_pgnSelectedItemDescBottomPosX, *D2CLIENT_pgnSelectedItemDescBottomPosY + nTextHeight, 0, 1);
+			}
+		}
+	}
+}
+
 
 #endif // D2_VERSION_110F
