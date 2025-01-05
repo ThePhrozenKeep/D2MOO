@@ -25,6 +25,7 @@
 #include <D2Math.h>
 #include <D2Skills.h>
 #include <D2States.h>
+#include <D2StrTable.h>
 #include <DataTbls/SkillsIds.h>
 #include <D2DataTbls.h>
 
@@ -64,12 +65,10 @@ D2CLIENTSTUB(sub, 6FAF9E60, void, __fastcall, ());
 
 D2CLIENTSTUB(D2CLIENT_GetDifficulty, 6FAAC090, D2C_Difficulties , __fastcall, ());
 D2CLIENTSTUB(D2CLIENT_GetGlobalQuestHistory, 6FAFBD20, D2BitBufferStrc*, __fastcall, ());
-//1.13c: D2Client.0x6FB414F0
-D2CLIENTSTUB(D2CLIENT_GetItemName, 6FADD360, void, __fastcall, (D2UnitStrc* pItem, Unicode* pOutBuffer, int nBufferSize));
 //1.13c: D2Client.0x6FB05B20
 D2CLIENTSTUB(ITEMDESC_Mods, 6FAF19C0, void, __fastcall, (D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize, BOOL bUndeadDamage, D2C_States nState1, D2C_States nState2, D2C_StatlistFlags fFilter, int bAppendNewline));
 
-D2CLIENTSTUB(D2CLIENT_FormatStats, 6FADCFE0, void, __fastcall, (Unicode* wszFormat, ...));
+D2CLIENTSTUB(D2CLIENT_FormatStats, 6FADCFE0, void, __fastcall, (const Unicode* wszFormat, ...));
 
 
 //1.13c: D2Client.0x6FB3C760
@@ -125,7 +124,6 @@ D2VAR(D2CLIENT, pgnSelectedItemDescTopPosY, int32_t, 0x6FB79294 - D2ClientImageB
 D2VAR(D2CLIENT, pgnSelectedItemDescBottomPosY, int32_t, 0x6FB7929C - D2ClientImageBase); // 1.13c: 0x6FB90EB4
 D2VAR(D2CLIENT, pgnSelectedItemDescTopPosX, int32_t, 0x6FB79290 - D2ClientImageBase); // 1.13c: 0x6FB90EA8
 D2VAR(D2CLIENT, pgnSelectedItemDescBottomPosX, int32_t, 0x6FB79298 - D2ClientImageBase); // 1.13c: 0x6FB90EB0
-
 
 
 D2VAR(D2CLIENT, pqword_6FB792A0, int64_t, 0x6FB792A0 - D2ClientImageBase);
@@ -265,10 +263,10 @@ D2CharStatsTxt* __fastcall CLIENT_DATATBLS_GetCharStatsTxtRecord(int nRecordId)
 		return &sgptDataTables->pCharStatsTxt[nRecordId];
 	}
 
-	return NULL;
+	return nullptr;
 }
 // Inlined
-D2ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId)
+D2ItemStatCostTxt* __fastcall CLIENT_DATATBLS_GetItemStatCostTxtRecord(int nStatId)
 {
 	if (nStatId >= 0 && nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
 	{
@@ -276,6 +274,16 @@ D2ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId)
 	}
 
 	return NULL;
+}
+// Inlined
+D2UniqueItemsTxt* __fastcall CLIENT_DATATBLS_GetUniqueItemsTxtRecord(int nUniqueItemId)
+{
+	if (nUniqueItemId >= 0 && nUniqueItemId < sgptDataTables->nUniqueItemsTxtRecordCount)
+	{
+		return &sgptDataTables->pUniqueItemsTxt[nUniqueItemId];
+	}
+
+	return nullptr;
 }
 
 static const D2C_PlayerBodyLocs gaInvComponentToBodyLoc[NUM_INV_COMPS]
@@ -946,7 +954,7 @@ void __fastcall ITEMDESC_GetMinMaxStats(
 		if (nMaxValue <= nMinValue)
 			nMaxValue = nMinValue;
 		const int32_t nMaxDmgByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_MAXDAMAGE_BYTIME, 0);
-		if (nMaxDmgByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_BYTIME) && pPlayer->pDrlgAct)
+		if (nMaxDmgByTime && CLIENT_DATATBLS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_BYTIME) && pPlayer->pDrlgAct)
 		{
 			int32_t nBaseTime = 0;
 			const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pPlayer->pDrlgAct, &nBaseTime);
@@ -956,7 +964,7 @@ void __fastcall ITEMDESC_GetMinMaxStats(
 				*bHasBonus = TRUE;
 		}
 		const int32_t nMaxDmgPercByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME, 0);
-		if (nMaxDmgPercByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME) && pPlayer->pDrlgAct)
+		if (nMaxDmgPercByTime && CLIENT_DATATBLS_GetItemStatCostTxtRecord(STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME) && pPlayer->pDrlgAct)
 		{
 			int nBaseTime = 0;
 			int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pPlayer->pDrlgAct, &nBaseTime);
@@ -1258,7 +1266,7 @@ void __fastcall ITEMDESC_Defense(D2UnitStrc* pUnit, D2UnitStrc* pItem, Unicode* 
 	bool bHasBonus = STATLIST_GetUnitBaseStat(pItem, STAT_ARMORCLASS, 0) != nItemDefense;
 
 	int32_t nArmorByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_ARMOR_BYTIME, 0);
-	if (nArmorByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_ARMOR_BYTIME) && pUnit->pDrlgAct)
+	if (nArmorByTime && CLIENT_DATATBLS_GetItemStatCostTxtRecord(STAT_ITEM_ARMOR_BYTIME) && pUnit->pDrlgAct)
 	{
 		int nBaseTime = 0;
 		const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
@@ -1268,7 +1276,7 @@ void __fastcall ITEMDESC_Defense(D2UnitStrc* pUnit, D2UnitStrc* pItem, Unicode* 
 			bHasBonus = true;
 	}
 	int32_t nArmorPctByTime = STATLIST_UnitGetStatValue(pItem, STAT_ITEM_ARMORPERCENT_BYTIME, 0);
-	if (nArmorPctByTime && ITEMS_GetItemStatCostTxtRecord(STAT_ITEM_ARMORPERCENT_BYTIME) && pUnit->pDrlgAct)
+	if (nArmorPctByTime && CLIENT_DATATBLS_GetItemStatCostTxtRecord(STAT_ITEM_ARMORPERCENT_BYTIME) && pUnit->pDrlgAct)
 	{
 		int nBaseTime = 0;
 		const int nDayTimeFromAct = ENVIRONMENT_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
@@ -1328,18 +1336,18 @@ void __fastcall ITEMDESC_SocketsAndEthereality(D2UnitStrc* pItem, Unicode* pOutB
 	}
 }
 
-static int UnicodeFindLastNewline(Unicode* wszStr, int nLastChar)
+static int UnicodeFindLastChar(const Unicode* wszStr, int nLastCharIdx, Unicode wCharacter)
 {
-	int nIdx = nLastChar;
-	while (nIdx > 0)
+	int nIdx = nLastCharIdx;
+	while (nIdx >= 0)
 	{
-		if (wszStr[nIdx].ch != L'\n')
+		if (wszStr[nIdx].ch != wCharacter)
 		{
 			return nIdx;
 		}
 		nIdx--;
 	}
-	return 0;
+	return nIdx;
 }
 
 //1.10f: D2Client.0x6FAF3160
@@ -1358,7 +1366,7 @@ void __fastcall ITEMDESC_RunewordMods(
 	{
 		// The following code outputs the mod desc but inserting the desc before the last line.
 		const int nStrLen = Unicode::strlen(wszModDesc);
-		int nLineBeginIdx = UnicodeFindLastNewline(wszModDesc, nStrLen - 2);
+		int nLineBeginIdx = UnicodeFindLastChar(wszModDesc, nStrLen - 2, L'\n');
 		if (nLineBeginIdx > 0)
 		{
 			const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
@@ -1501,6 +1509,397 @@ D2UnitStrc* __fastcall INV_FindSetItem(D2InventoryStrc* pInventory, int nSetItem
 		}
 	}
 	return nullptr;
+}
+
+//1.10f: Inline
+//1.13c: D2Client.0x6FB3C720
+const Unicode* ITEMDESC_StripBracketPrefix(const Unicode* wszString)
+{
+	int nStrLen = Unicode::strlen(wszString);
+	int nClosingBracketIdx = UnicodeFindLastChar(wszString, nStrLen, L']');
+	if (nClosingBracketIdx >= 3 && wszString[nClosingBracketIdx - 3] == L'[')
+		return &wszString[nClosingBracketIdx + 1];
+	else
+		return wszString;
+}
+
+//1.10f: Inline
+//1.13c: D2Client.0x6FB3E080
+BOOL ITEMDESC_GetPersonalizedName(D2UnitStrc* pItem, Unicode* pOutBuffer)
+{
+	Unicode wszName[512];
+	Unicode wszBuffer[512];
+
+	if (!ITEMS_CHECK_FLAG(pItem, IFLAG_PERSONALIZED)) // line 1770
+		return FALSE;
+	int ItemQuality = ITEMS_GetItemQuality(pItem);
+	if (ItemQuality >= ITEMQUAL_SET && ItemQuality <= ITEMQUAL_TEMPERED)
+		return FALSE;
+	
+	Unicode v12[32];
+	D2_MAYBE_UNUSED(v12);
+
+	Unicode::win2Unicode(wszName, ITEMS_GetEarName(pItem), 32);
+	Unicode::Personalize(wszBuffer, wszName, pOutBuffer, 512, STRTABLE_GetLanguage());
+	Unicode::strcpy(pOutBuffer, wszBuffer);
+	return TRUE;
+}
+
+//1.10f: Inline
+//1.13c: D2Client.0x6FB3DFB0
+BOOL ITEMDESC_GetPersonalizedName2(D2UnitStrc* pItem, Unicode* pOutBuffer, const Unicode* a3)
+{
+	Unicode wszName[512];
+	Unicode v14[512];
+	D2_MAYBE_UNUSED(v14);
+
+	if (!ITEMS_CHECK_FLAG(pItem, IFLAG_PERSONALIZED))// line 1803
+		return FALSE;
+	
+	Unicode v12[32];
+	D2_MAYBE_UNUSED(v12);
+
+	Unicode::win2Unicode(wszName, ITEMS_GetEarName(pItem), 32);
+	Unicode::Personalize(pOutBuffer, wszName, a3, 512, STRTABLE_GetLanguage());
+	return TRUE;
+}
+
+const Unicode* GetPlayerClassName(int nClass)
+{
+	D2_ASSERT(nClass >= PCLASS_AMAZON && nClass < NUMBER_OF_PLAYERCLASSES);
+	switch (nClass)
+	{
+	case PCLASS_AMAZON:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_4011_Amazon);
+	case PCLASS_SORCERESS:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_4010_Sorceress);
+	case PCLASS_NECROMANCER:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_4009_Necromancer);
+	case PCLASS_PALADIN:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_4008_Paladin);
+	case PCLASS_BARBARIAN:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_4007_Barbarian);
+	case PCLASS_DRUID:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_10097_Druid);
+	case PCLASS_ASSASSIN:
+		return D2LANG_GetStringFromTblIndex(STR_IDX_10098_Assassin);
+	default:
+		return nullptr;
+	}
+}
+
+//1.10f: D2Client.0x6FADD360
+//1.13c: D2Client.0x6FB414F0
+void __fastcall INV_GetItemName(D2UnitStrc* pItem, Unicode* pBuffer, int nBufferSize)
+{
+	Unicode wszDest[512];
+	if (!pItem)
+		return;
+	Unicode wszSuffix[512];
+	Unicode wszPrefixBuffer[512];
+	int nNameLength = 0;
+	const Unicode* wszSpace = D2LANG_GetStringFromTblIndex(STR_IDX_3995_space);
+	const Unicode* wszNewline = D2LANG_GetStringFromTblIndex(STR_IDX_3998_newline);
+	D2ItemsTxt* pItemStats = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
+	D2_ASSERT(pItemStats);
+	int32_t nItemTypeFromItem = ITEMS_GetItemType(pItem);
+	if (ITEMS_CHECK_FLAG(pItem, IFLAG_RUNEWORD))
+	{
+		Unicode wszBuffer[512];
+		Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex((D2C_StringIndices)pItemStats->wNameStr));
+		Unicode::strcpy(wszDest, ITEMDESC_StripBracketPrefix(wszBuffer));
+		Unicode::strcat(wszDest, wszNewline);
+		const Unicode* wszPrefix = D2LANG_GetStringFromTblIndex(ITEMS_GetPrefixId(pItem, 0));
+		Unicode::strcpy(wszSuffix, wszPrefix ? wszPrefix : wszSpace);
+		Unicode::strcat(wszPrefixBuffer, wszSuffix);
+		TEXT_ApplyColorCode(wszPrefixBuffer, 4);
+		Unicode::strcat(pBuffer, wszDest);
+		Unicode::strcat(pBuffer, wszPrefixBuffer);
+	}
+	else if (!ITEMS_CHECK_FLAG(pItem, IFLAG_IDENTIFIED))
+	{
+		Unicode wszBuffer[512];
+		Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+		Unicode::strcpy(pBuffer, ITEMDESC_StripBracketPrefix(wszBuffer));
+	}
+	else 
+	{
+		switch (ITEMS_GetItemQuality(pItem))
+		{
+		case ITEMQUAL_INFERIOR:
+			if (D2LowQualityItemsTxt* pLowQualityItemTxt = DATATBLS_GetLowQualityItemsTxtRecord(ITEMS_GetFileIndex(pItem)))
+			{
+				D2CLIENT_FormatStats_6FADCFE0(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_1712_LowqualityFormat), D2LANG_GetStringFromTblIndex(pLowQualityItemTxt->wTblId), D2LANG_GetStringFromTblIndex(pItemStats->wNameStr), 0);
+			}
+			break;
+		case ITEMQUAL_NORMAL:
+			if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_SCROLL) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOOK))
+			{
+				int nSuffixId = ITEMS_GetSuffixId(pItem, 0);
+				if (nSuffixId == 0 || nSuffixId == 1)
+				{
+					int nStrId;
+					if (nSuffixId == 0)
+					{
+						nStrId = nItemTypeFromItem != ITEMTYPE_BOOK ? STR_IDX_2200_tsc : STR_IDX_2199_tbk;
+					}
+					else
+					{
+						nStrId = nItemTypeFromItem != ITEMTYPE_BOOK ? STR_IDX_2202_isc : STR_IDX_2201_ibk;
+					}
+					Unicode::strcpy(pBuffer, D2LANG_GetStringFromTblIndex(nStrId));
+				}
+			}
+			else if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_PLAYER_BODY_PART))
+			{
+				Unicode wszEarName[256];
+				Unicode wszEarLevel[3];
+				char szEarLevel[3] = { 0 };
+				SStrPrintf(szEarLevel, ARRAY_SIZE(szEarLevel), "%d", ITEMS_GetEarLevel(pItem));
+				Unicode::win2Unicode(wszEarLevel, szEarLevel, ARRAY_SIZE(wszEarLevel));
+				Unicode wszBuffer[256];
+				char szEarName[256];
+				strcpy(szEarName, ITEMS_GetEarName(pItem));
+				Unicode::win2Unicode(wszEarName, szEarName, ARRAY_SIZE(wszEarName));
+				if (ITEMS_CHECK_FLAG(pItem, IFLAG_NAMED))
+				{
+					Unicode::strcpy(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_5126_Hardcore));
+					Unicode::strcat(pBuffer, wszNewline);
+					Unicode::strcat(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_4141_level));
+				}
+				else
+				{
+					Unicode::strcpy(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_4141_level));
+				}
+				Unicode::strcat(pBuffer, wszSpace);
+				Unicode::strcat(pBuffer, wszEarLevel);
+				Unicode::strcat(pBuffer, wszNewline);
+				Unicode::strcat(pBuffer, GetPlayerClassName(ITEMS_GetFileIndex(pItem)));
+				Unicode::strcat(pBuffer, wszNewline);
+				Unicode v200[100];
+				Unicode v202[512];
+				Unicode::strcpy(v202, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+				Unicode::Personalize(v200, wszEarName, v202, ARRAY_SIZE(v200), STRTABLE_GetLanguage());
+				Unicode::strcat(pBuffer, v200);
+			}
+			else if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BODY_PART))
+			{
+				D2MonStatsTxt* pMonStatsTxt = DATATBLS_GetMonStatsTxtRecord(ITEMS_GetFileIndex(pItem));
+				D2CLIENT_FormatStats_6FADCFE0(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_1716_BodyPartsFormat), D2LANG_GetStringFromTblIndex(pMonStatsTxt->wNameStr), D2LANG_GetStringFromTblIndex(pItemStats->wNameStr), 0);
+			}
+			else if (ITEMS_CHECK_FLAG(pItem, IFLAG_SOCKETED)
+				&& pItem->pInventory
+				&& INVENTORY_GetItemCount(pItem->pInventory))
+			{
+				D2CLIENT_FormatStats_6FADCFE0(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_1715_GemmedNormalName), D2LANG_GetStringFromTblIndex(STR_IDX_1728_Gemmed), D2LANG_GetStringFromTblIndex(pItemStats->wNameStr), 0);
+			}
+			else
+			{
+				Unicode wszBuffer[512];
+				Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+				Unicode::strcpy(pBuffer, ITEMDESC_StripBracketPrefix(wszBuffer));
+			}
+			break;
+		case ITEMQUAL_SUPERIOR:
+			D2CLIENT_FormatStats_6FADCFE0(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_1711_HiqualityFormat), D2LANG_GetStringFromTblIndex(STR_IDX_1727_Hiquality), D2LANG_GetStringFromTblIndex(pItemStats->wNameStr), 0);
+			break;
+		case ITEMQUAL_MAGIC:
+		{
+			if (D2MagicAffixTxt* pPrefixTxt = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetPrefixId(pItem, 0)))
+			{
+				if (pPrefixTxt->wTblIndex)
+				{
+					nNameLength = Unicode::strlen(D2LANG_GetStringFromTblIndex(pPrefixTxt->wTblIndex));
+					Unicode::strcpy(wszDest, D2LANG_GetStringFromTblIndex(pPrefixTxt->wTblIndex));
+				}
+				else
+				{
+					char szSource[6] = { 0 };
+					strcpy(szSource, "(");
+					strcat(szSource, pPrefixTxt->szName);
+					strcat(szSource, ")");
+					nNameLength = strlen(szSource);
+					Unicode::toUnicode(wszDest, szSource, ARRAY_SIZE(wszDest));
+				}
+			}
+			else
+			{
+				wszDest[0] = 0;
+			}
+			if (D2MagicAffixTxt* pSuffixTxt = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetSuffixId(pItem, 0)))
+			{
+				if (pSuffixTxt->wTblIndex)
+				{
+					nNameLength += Unicode::strlen(D2LANG_GetStringFromTblIndex(pSuffixTxt->wTblIndex));
+					Unicode::strcat(wszSuffix, D2LANG_GetStringFromTblIndex(pSuffixTxt->wTblIndex));
+				}
+				else
+				{
+					char szSource[6] = { 0 };
+					strcpy(szSource, "(");
+					strcat(szSource, pSuffixTxt->szName);
+					strcat(szSource, ")");
+					nNameLength += strlen(szSource);
+					Unicode wszSuffixBuffer[512];
+					Unicode::toUnicode(wszSuffixBuffer, szSource, ARRAY_SIZE(wszSuffixBuffer));
+					Unicode::strcat(wszSuffix, wszSuffixBuffer);
+				}
+			}
+			else
+			{
+				wszSuffix[0] = 0;
+			}
+			int32_t Len = nNameLength + Unicode::strlen(D2LANG_GetStringFromTblIndex(pItemStats->wNameStr)) + 3;
+			D2_ASSERT(Len < nBufferSize);
+			D2CLIENT_FormatStats_6FADCFE0(pBuffer, D2LANG_GetStringFromTblIndex(STR_IDX_1714_MagicFormat), wszDest, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr), wszSuffix, 0);
+			break;
+		}
+		case ITEMQUAL_SET:
+			if (D2SetItemsTxt* pSetItemRecord = CLIENT_DATATBLS_GetSetItemsTxtRecord(ITEMS_GetFileIndex(pItem)))
+			{
+				Unicode wszBuffer[512];
+				Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+				Unicode::strcpy(pBuffer, ITEMDESC_StripBracketPrefix(wszBuffer));
+				Unicode::strcat(pBuffer, wszNewline);
+				if (pSetItemRecord->wStringId)
+				{
+					Unicode szSource[512];
+					Unicode v202[512];
+					Unicode::strcpy(v202, D2LANG_GetStringFromTblIndex(pSetItemRecord->wStringId));
+					if (ITEMDESC_GetPersonalizedName2(pItem, szSource, v202))
+					{
+						Unicode::strcat(pBuffer, szSource);
+					}
+					else
+					{
+						Unicode v200[100] = {};
+						D2CLIENT_FormatStats_6FADCFE0(v200, D2LANG_GetStringFromTblIndex(STR_IDX_10089_SetItemFormatX), v202, 0);
+						Unicode::strcat(pBuffer, v200);
+					}
+				}
+			}
+			break;
+		case ITEMQUAL_RARE:
+		case ITEMQUAL_CRAFT:
+		case ITEMQUAL_TEMPERED:
+		{
+			D2RareAffixTxt* pRarePrefix = DATATBLS_GetRareAffixTxtRecord(ITEMS_GetRarePrefixId(pItem));
+			if (pRarePrefix)
+			{
+				if (pRarePrefix->wStringId)
+				{
+					nNameLength = Unicode::strlen(D2LANG_GetStringFromTblIndex(pRarePrefix->wStringId));
+					Unicode::strcpy(wszDest, D2LANG_GetStringFromTblIndex(pRarePrefix->wStringId));
+				}
+				else
+				{
+					char szSource[6] = { 0 };
+					strcpy(szSource, "(");
+					strcat(szSource, pRarePrefix->szName);
+					strcat(szSource, ")");
+					nNameLength = strlen(szSource);
+					Unicode::toUnicode(wszDest, szSource, ARRAY_SIZE(wszDest));
+				}
+			}
+			else
+			{
+				wszDest[0] = 0;
+			}
+			if (D2RareAffixTxt* pRareSuffix = DATATBLS_GetRareAffixTxtRecord(ITEMS_GetRareSuffixId(pItem)))
+			{
+				const Unicode* wszRareSuffix;
+				if (pRareSuffix->wStringId)
+				{
+					nNameLength += Unicode::strlen(D2LANG_GetStringFromTblIndex(pRareSuffix->wStringId));
+					wszRareSuffix = D2LANG_GetStringFromTblIndex(pRareSuffix->wStringId);
+				}
+				else
+				{
+					Unicode wszRareSuffixBuffer[512];
+					char szRareSuffixBuffer[6] = { 0 };
+					strcpy(szRareSuffixBuffer, "(");
+					strcat(szRareSuffixBuffer, pRareSuffix->szName);
+					strcat(szRareSuffixBuffer, ")");
+					Unicode::toUnicode(wszRareSuffixBuffer, szRareSuffixBuffer, ARRAY_SIZE(wszRareSuffixBuffer));
+					nNameLength += Unicode::strlen(wszRareSuffixBuffer);
+					wszRareSuffix = wszRareSuffixBuffer;
+				}
+				if (pRarePrefix)
+					Unicode::strcat(wszSuffix, wszRareSuffix);
+				else
+					Unicode::strcpy(wszSuffix, wszRareSuffix);
+			}
+			else
+			{
+				wszSuffix[0] = 0;
+			}
+			int Len = nNameLength + Unicode::strlen(D2LANG_GetStringFromTblIndex(pItemStats->wNameStr)) + 3;
+			D2_ASSERT(Len < nBufferSize);
+			Unicode wszBuffer[512];
+			Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+			Unicode::strcpy(wszPrefixBuffer, ITEMDESC_StripBracketPrefix(wszBuffer));
+			Unicode::strcat(wszPrefixBuffer, wszNewline);
+			Unicode v200[100];
+			D2CLIENT_FormatStats_6FADCFE0(v200, D2LANG_GetStringFromTblIndex(STR_IDX_1718_RareFormat), wszDest, wszSuffix, 0);
+			Unicode v203[512];
+			if (ITEMDESC_GetPersonalizedName2(pItem, v203, v200))
+			{
+				Unicode::strcat(wszPrefixBuffer, v203);
+			}
+			else
+			{
+				Unicode::strcat(wszPrefixBuffer, v200);
+			}
+			Unicode::strcat(pBuffer, wszPrefixBuffer);
+			break;
+		}
+		case ITEMQUAL_UNIQUE:
+		{
+			Unicode wszBuffer[512];
+			Unicode::strcpy(wszBuffer, D2LANG_GetStringFromTblIndex(pItemStats->wNameStr));
+			const Unicode* wszUniqueName = wszBuffer;
+			if (ITEMS_GetFileIndex(pItem) >= 0)
+			{
+				if (D2UniqueItemsTxt* pUniqueItemRecord = CLIENT_DATATBLS_GetUniqueItemsTxtRecord(ITEMS_GetFileIndex(pItem)))
+				{
+					if (!pItemStats->nSkipName)
+					{
+						Unicode::strcpy(pBuffer, ITEMDESC_StripBracketPrefix(wszBuffer));
+						Unicode::strcat(pBuffer, wszNewline);
+					}
+					Unicode v202[512];
+					if (ITEMDESC_GetPersonalizedName2(pItem, v202, ITEMDESC_StripBracketPrefix(D2LANG_GetStringFromTblIndex(pUniqueItemRecord->wTblIndex))))
+					{
+						Unicode::strcat(pBuffer, v202);
+						break;
+					}
+					else
+					{
+						wszUniqueName = D2LANG_GetStringFromTblIndex(pUniqueItemRecord->wTblIndex);
+					}
+				}
+			}
+			Unicode::strcpy(pBuffer, ITEMDESC_StripBracketPrefix(wszUniqueName));
+			break;
+		}
+		default:
+			D2_UNREACHABLE;
+			return;
+		}
+	}
+	ITEMDESC_GetPersonalizedName(pItem, pBuffer);
+	if (pItemStats->nQuest)
+	{
+		if (pItemStats->nQuestDiffCheck
+			&& (STATLIST_UnitGetStatValue(pItem, STAT_QUESTITEMDIFFICULTY, 0) < D2CLIENT_GetDifficulty_6FAAC090()))
+		{
+			TEXT_ApplyColorCode(pBuffer, 1);
+		}
+		else if (pItemStats->dwCode != ' gel')
+		{
+			TEXT_ApplyColorCode(pBuffer, 4);
+		}
+	}
 }
 
 //1.10f: D2Client.0x6FAE20C8(Inlined)
@@ -1648,7 +2047,7 @@ void __fastcall UI_INV_DrawSetItemDesc(D2UnitStrc* pOwner)
 			}
 
 			Unicode wszItemName[256];
-			D2CLIENT_GetItemName_6FADD360(*D2CLIENT_pgpSelectedItem, wszItemName, 256);
+			INV_GetItemName(*D2CLIENT_pgpSelectedItem, wszItemName, ARRAY_SIZE(wszItemName));
 			uint8_t nItemNameColor = 1;
 			if (!ITEMS_CHECK_FLAG(*D2CLIENT_pgpSelectedItem, IFLAG_BROKEN))
 				nItemNameColor = 2;
