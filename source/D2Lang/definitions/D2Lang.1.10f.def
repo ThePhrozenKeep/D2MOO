@@ -4,7 +4,7 @@ EXPORTS
     ??4Unicode@@QAEAAU0@ABU0@@Z @10015 ; Unicode& Unicode::Unicode(const Unicode&)
     ??BUnicode@@QBEGXZ @10016 ; Unicode::unsigned short() const
     ??_FUnicode@@QAEXXZ @10017 ; Unicode::`default constructor closure` 
-;   D2LANG_10018 @10018 ; ?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z
+	?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z ; Unicode::Personalize
     ?_toLowerTable@Unicode@@0PAGA @10019 ; Unicode::_toLowerTable
     ?_toUpperTable@Unicode@@0PAGA @10020 ; Unicode::_toUpperTable
     ?compare@Unicode@@QBEHU1@@Z @10021 ; Unicode::compare

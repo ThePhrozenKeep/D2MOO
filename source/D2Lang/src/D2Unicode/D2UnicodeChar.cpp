@@ -24,6 +24,8 @@
 
 #include <D2Unicode.h>
 #include <D2StrTable.h>
+#include <D2CommonDefinitions.h>
+#include <Fog.h>
 
 unsigned short Unicode::_toLowerTable[256] = {
   // C0 Controls
@@ -258,6 +260,10 @@ Unicode::Direction Unicode::directionality() {
   }
 
   return DIR_NEUTRAL;
+}
+
+void __fastcall Unicode::Personalize(Unicode* pOutBuffer, const Unicode* a2, const Unicode* a3, int a4, D2C_Language nLanguage) {
+	UNIMPLEMENTED();
 }
 
 BOOL Unicode::isASCII() const {

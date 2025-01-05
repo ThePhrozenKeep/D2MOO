@@ -31,6 +31,7 @@
 #include <wchar.h>
 
 #include <D2BasicTypes.h>
+#include <D2Constants.h>
 
 #include "D2Lang.h"
 
@@ -302,6 +303,9 @@ struct D2LANG_DLL_DECL Unicode {
 
   // D2Lang.0x6FC11C50 (#10023) ?directionality@Unicode@@QAE?AW4Direction@1@XZ
   Direction directionality();
+
+  // D2Lang.0x6FC11D50 (#10018) public ?Personalize@Unicode@@SIXPAU1@PBU1@1HW4ELANGUAGE@@@Z
+  static void __fastcall Personalize(Unicode* pOutBuffer, const Unicode* a2, const Unicode* a3, int a4, ELANGUAGE nLanguage);
 
   /**
    * Returns whether or not this Unicode character is in 
