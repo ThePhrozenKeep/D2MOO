@@ -19,7 +19,7 @@ jobs:
       CMAKE_PRESET: ${{ matrix.buildtype == 'Debug' && 'clang-tidy' || 'ninja' }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -52,6 +52,6 @@ jobs:
 
     - name: Artifact
       if: env.BUILD_TYPE == 'RelWithDebInfo'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: '${{github.workspace}}\out\install\${{env.CMAKE_PRESET}}\'
