@@ -281,11 +281,6 @@ BOOL __stdcall STATES_IsUnitShapeShifted(D2UnitStrc* pUnit)
 //D2Common.0x6FDB4E80 (#10497)
 BOOL __stdcall STATES_CheckStateMaskCurseByStateId(int nState)
 {
-	if (nState >= 0 && nState < sgptDataTables->nStatesTxtRecordCount)
-	{
-		return sgptDataTables->fStateMasks[11][nState >> 5] & gdwBitMasks[nState & 31];
-	}
-
 	return STATES_CheckStateMaskByStateId(nState, STATEMASK_CURSE);
 }
 
