@@ -1249,10 +1249,8 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 
 	D2GAME_SendPacket0x28_6FC3F2F0(pClient, 0x28u, 6u, 0, pQuestFlags, 0);
 
-	D2_ASSERT(pGame->pQuestControl->bPickedSet);
-
-	sub_6FC3F370(pClient, pGame->pQuestControl->pQuestFlags);
-
+	QUESTS_SendCurrentFlags(pGame, pClient);
+	
 	D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
 	while (pQuestData1 && pQuestData1->nQuestNo != 1)
 	{
@@ -1296,9 +1294,13 @@ int32_t __stdcall QUESTS_CheckNotIntroQuest(D2GameStrc* pGame, int32_t nQuestId)
 //D2Game.0x6FC95430
 void __fastcall QUESTS_SendCurrentFlags(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
-	D2_ASSERT(pGame && pGame->pQuestControl && pGame->pQuestControl->bPickedSet);
+	const D2QuestInfoStrc* pQuestHead = pGame->pQuestControl;
+	D2_ASSERT(pQuestHead->bPickedSet);
 
-	sub_6FC3F370(pClient, pGame->pQuestControl->pQuestFlags);
+	D2GSPacketSrv29 packet29 = {};
+	packet29.nHeader = 0x29u;
+	QUESTRECORD_CopyRecordToBuffer(pQuestHead->pQuestFlags, packet29.pData, sizeof(packet29.pData), 0);
+	D2GAME_PACKETS_SendPacket0x29_6FC3F370(pClient, &packet29);
 }
 
 //D2Game.0x6FC95490
@@ -2606,10 +2608,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
 	D2_ASSERT(pQuestInfo->bPickedSet);
 
-	D2GSPacketSrv29 packet29 = {};
-	packet29.nHeader = 0x29u;
-	QUESTRECORD_CopyRecordToBuffer(pQuestInfo->pQuestFlags, packet29.pData, sizeof(packet29.pData), 0);
-	sub_6FC3F370(pClient, &packet29);
+	QUESTS_SendCurrentFlags(pGame, pClient);
 }
 
 //D2Game.0x6FC97020

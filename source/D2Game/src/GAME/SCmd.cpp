@@ -1941,9 +1941,12 @@ void __fastcall sub_6FC3F340(D2ClientStrc* pClient, BYTE nHeader, BYTE nUnitType
 }
 
 //D2Game.0x6FC3F370
-void __fastcall sub_6FC3F370(D2ClientStrc* pClient, void* a2)
+void __fastcall D2GAME_PACKETS_SendPacket0x29_6FC3F370(D2ClientStrc* pClient, D2GSPacketSrv29* pPacket)
 {
-    D2GAME_PACKETS_SendPacket_6FC3C710(pClient, a2, 0x61u);
+#ifdef D2_VERSION_110F
+	static_assert(sizeof(* pPacket) == 0x61, "Packet D2GSPacketSrv29 should be of size 0x61");
+#endif // D2_VERSION_110F
+	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, pPacket, sizeof(*pPacket));
 }
 
 //D2Game.0x6FC3F380
