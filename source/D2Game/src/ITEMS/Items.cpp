@@ -1986,10 +1986,12 @@ D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2U
     ITEMS_SetItemFlag(pDupe, IFLAG_INIT, 1);
     ITEMS_SetItemFlag(pDupe, IFLAG_INSTORE, 0);
 
-    if (bDuplicateSocketFillers && itemSave.nItemFileIndex)
+	const int32_t nItemFileIndex = itemSave.nItemFileIndex;
+    if (bDuplicateSocketFillers && nItemFileIndex)
     {
-        for (int32_t i = 0; i < itemSave.nItemFileIndex; ++i)
+        for (int32_t i = 0; i < nItemFileIndex; ++i)
         {
+			// Note: Modifies itemSave.nItemFileIndex
             ITEMS_GetCompactItemDataFromBitstream(pBitstream, nRemainingSize, 1, &itemSave);
             
             D2UnitStrc* pDupedSocketable = sub_6FC4EC10(pGame, 0, pBitstream, nRemainingSize, 1, &itemSave, &nSize, 96);
