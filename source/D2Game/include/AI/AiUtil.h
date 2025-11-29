@@ -70,6 +70,20 @@ struct UnkAiStrc5
 {
 	int32_t nMaxDistance;
 };
+
+#ifdef D2_VERSION_111_UBERS
+struct D2UbersAiCallbackArgStrc
+{
+	int32_t nUberMephisto; // BOOL
+	int32_t nUberDiablo; // BOOL
+	int32_t nUberBaal; // BOOL
+	int32_t nDistance;
+	int32_t nOtherMonsters;
+	int32_t nDiabloSpawner;
+	int32_t nBaalMinions;
+	int32_t nDiabloMinions;
+};
+#endif
 #pragma pack(pop)
 
 

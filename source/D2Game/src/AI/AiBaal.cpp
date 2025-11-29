@@ -96,6 +96,103 @@ void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	AITACTICS_Idle(pGame, pUnit, 25);
 }
 
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x005FD0F0
+void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2CoordStrc coord;
+	coord.nX = CLIENTS_GetUnitX(pUnit);
+	coord.nY = CLIENTS_GetUnitY(pUnit);
+
+	// Note: doesn't pick willow wisps (they thought it was too hard?)
+	// change the 2 to 3 to enable them
+	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2);
+	const int32_t nMinionTypes[3] = { MONSTER_WRAITH9, MONSTER_VAMPIRE9, MONSTER_WILLOWISP8 };
+	const int32_t nMinionModes[3] = { MONMODE_NEUTRAL, MONMODE_CAST, MONMODE_SKILL1 };
+
+	D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coord, 2, 0x100, 0);
+	if (pRoom)
+	{
+		D2UnitStrc* pMinion = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, coord.nX, coord.nY, nMinionTypes[nChoice], nMinionModes[nChoice], -1, 0);
+		if (pMinion)
+		{
+			pMinion->dwFlags |= UNITFLAG_NOXP; // Added in 1.13
+			STATES_ToggleState(pMinion, 184, 1);
+		}
+	}
+}
+
+//1.14d: 0x005FD200
+void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	int32_t nCount = 0;
+	int32_t nMax = 0;
+
+	D2UnitStrc* pTarget = AIBAAL_GetTarget(pGame, pUnit, &nMax, &nCount, nullptr, AIBAAL_CullPotentialTargets);
+
+	// UBER TWEAK START
+	D2UbersAiCallbackArgStrc arg_target = {};
+	arg_target.nDistance = INT_MAX;
+	sub_6FCF1E80(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
+	BOOL bAlone = (arg_target.nUberDiablo == 0 && arg_target.nUberMephisto == 0);
+	if (bAlone && pTarget)
+	{
+		D2UbersAiCallbackArgStrc arg_self = {};
+		arg_self.nDistance = INT_MAX,
+		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1),
+		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
+	}
+	if ((bAlone && arg_target.nBaalMinions < 15 && SEED_RollPercentage(&pUnit->pSeed) < 45)
+	|| (arg_target.nBaalMinions < 7 && SEED_RollPercentage(&pUnit->pSeed) < 30))
+	{
+		AIBAAL_SpawnUberBaalMinion(pGame, pUnit);
+	}
+
+	if (pAiTickParam->pMonstatsTxt->nSkill[7] >= 0)
+	{
+		D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pAiTickParam->pMonstatsTxt->nSkill[7]);
+		if (pSkillsTxtRecord
+		&& pSkillsTxtRecord->nAuraState >= 0
+		&& !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[7], pAiTickParam->pMonstatsTxt->nSkill[7], 0, 0, 0);
+			return;
+		}
+	}
+	// UBER TWEAK END
+
+	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
+	if (!pAiCmd)
+	{
+		D2AiCmdStrc aiCmd = {};
+		aiCmd.nCmdParam[0] = 10;
+		aiCmd.nCmdParam[1] = CLIENTS_GetUnitX(pUnit);
+		aiCmd.nCmdParam[2] = CLIENTS_GetUnitY(pUnit);
+		AIGENERAL_CopyAiCommand(pGame, pUnit, &aiCmd);
+		pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
+	}
+
+	int32_t nParam = AIBAAL_RollRandomAiParam(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nMax, nCount, pAiCmd);
+
+	// UBER TWEAK START
+	if (!pTarget)
+	{
+		return;
+	}
+	if (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_VISIBLE | COLLIDE_MISSILE_BARRIER))
+	{
+		const int32_t nX = CLIENTS_GetUnitX(pTarget);
+		const int32_t nY = CLIENTS_GetUnitY(pTarget);
+		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[4], pAiTickParam->pMonstatsTxt->nSkill[4], 0, nX, nY);
+		return;
+	}
+	// UBER TWEAK END
+
+	AIBAAL_MainSkillHandler(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nParam, pAiCmd);
+	AITACTICS_Idle(pGame, pUnit, 25);
+}
+#endif
+
 //D2Game.0x6FCCD630
 D2UnitStrc* __fastcall AIBAAL_GetTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pMax, int32_t* pCount, void* pArgs, int32_t(__fastcall* pfCull)(D2UnitStrc*, D2UnitStrc*))
 {

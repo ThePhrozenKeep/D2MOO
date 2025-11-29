@@ -603,6 +603,52 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	}
 }
 
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x005DD140
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_Ubers(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+{
+	D2UbersAiCallbackArgStrc* pArg = (D2UbersAiCallbackArgStrc*)pCallbackArg;
+
+	if (pTarget
+	&& pTarget->dwUnitType == UNIT_MONSTER
+	&& !SUNIT_IsDead(pTarget)
+	&& AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget) <= pArg->nDistance)
+	{
+		switch (pTarget->dwClassId)
+		{
+		case MONSTER_UBERMEPHISTO:
+			pArg->nUberMephisto++;
+			//pArg->nUberMephisto = TRUE;
+			break;
+		case MONSTER_UBERDIABLO:
+			pArg->nUberDiablo++;
+			//pArg->nUberDiablo = TRUE;
+			break;
+		case MONSTER_UBERBAAL:
+			pArg->nUberBaal++;
+			//pArg->nUberBaal = TRUE;
+			break;
+		case MONSTER_DEMONHOLE:
+			pArg->nDiabloSpawner++;
+			break;
+		case MONSTER_MEGADEMON6:
+			pArg->nDiabloMinions++;
+			break;
+		case MONSTER_WRAITH9:
+		case MONSTER_VAMPIRE9:
+		case MONSTER_WILLOWISP8:
+			pArg->nBaalMinions++;
+			break;
+		default:
+			pArg->nOtherMonsters++;
+			break;
+		}
+	}
+
+	return nullptr;
+}
+#endif
+
 //D2Game.0x6FCF20E0
 void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 {

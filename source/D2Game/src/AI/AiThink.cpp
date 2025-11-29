@@ -16084,6 +16084,12 @@ const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_
 		{ 1,	nullptr,									AITHINK_Fn141_BaalMinion,					nullptr },
 		{ 1,	nullptr,									AITHINK_Fn142_ClawViperEx,					nullptr },
 		{ 2,	D2GAME_AI_Unk143_6FCEB1B0,					AITHINK_Fn106_143_ShadowMaster,				nullptr },
+#ifdef D2_VERSION_111_UBERS
+		{ 1,	nullptr,									AITHINK_Fn144_UberIzual,					nullptr },
+		{ 1,	nullptr,									AITHINK_Fn145_UberBaal,						D2GAME_AI_Unk135_140_6FCCD470 },
+		{ 1,	nullptr,									AITHINK_Fn146_UberMephisto,					nullptr },
+		{ 1,	nullptr,									AITHINK_Fn147_UberDiablo,					D2GAME_AI_Unk051_6FCE82F0 },
+#endif
 	};
 
 	static const D2AiTableStrc gpSpecialAiStateTable_6FD40290[] =
@@ -16118,7 +16124,9 @@ const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
 	{
 		const int32_t nAi = pUnit->pMonsterData->pMonstatsTxt->wAI;
-		if (nAi >= 0 && nAi < 144)
+		// 1.10: 144 entries
+		// 1.11+: 148 entries
+		if (nAi >= 0 && nAi < ARRAY_SIZE(gpAiTable_6FD3F990))
 		{
 			return &gpAiTable_6FD3F990[nAi];
 		}
