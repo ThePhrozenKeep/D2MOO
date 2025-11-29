@@ -4612,6 +4612,338 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
 }
 
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x005F7F10
+void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
+{
+	// unused
+	const int32_t nX = CLIENTS_GetUnitX(pUnit);
+	const int32_t nY = CLIENTS_GetUnitY(pUnit);
+
+	const int32_t nMinionTypes[8] = {
+		MONSTER_SKELETON8,
+		MONSTER_SKELETON8,
+		MONSTER_SK_ARCHER11,
+		MONSTER_SK_ARCHER11,
+		MONSTER_SKMAGE_FIRE7,
+		MONSTER_SKMAGE_LTNG7,
+		MONSTER_SKMAGE_COLD6,
+		MONSTER_SKMAGE_POIS7
+	};
+	const int32_t nMinionModes[8] = {
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1,
+		MONMODE_SKILL1
+	};
+	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 8);
+
+	D2UnitStrc* pMinion = sub_6FC68D70(pGame, pTarget ? pTarget : pUnit, nMinionTypes[nChoice], nMinionModes[nChoice], 4, 0);
+	if (pMinion)
+	{
+		pMinion->dwFlags |= UNITFLAG_NOXP; // Added in 1.13
+		STATES_ToggleState(pMinion, 184, 1);
+	}
+}
+
+//1.14d: 0x005F8010
+D2UnitStrc* __fastcall AITHINK_GetTargetForUberMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2UnitStrc* pTarget = nullptr;
+
+	const int32_t nX = CLIENTS_GetUnitX(pUnit);
+	const int32_t nY = CLIENTS_GetUnitY(pUnit);
+
+	int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pUnit));
+	for (int32_t i = 0; i < 8; i++)
+	{
+		D2TargetNodeStrc* pTargetNode = pGame->pTargetNodes[i];
+		if (pTargetNode)
+		{
+			D2UnitStrc* pPlayer = pTargetNode->pUnit;
+			if (DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pPlayer)) == nLevelId
+			&& !SUNIT_IsDead(pPlayer)
+			&& AIUTIL_GetDistanceToCoordinates_NoUnitSize(pPlayer, nX, nY) < 1020)
+			{
+				D2_ASSERT(pPlayer && pPlayer->dwUnitType == UNIT_PLAYER);
+				const int32_t nClassChance[7] = {
+					35, // Amazon
+					40, // Sorceress
+					30, // Necromancer
+					20, // Paladin
+					0,  // Barbarian
+					25, // Druid
+					10  // Assassin
+				};
+				// This check always returns a positive value, is it a bug?
+				if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 20) + nClassChance[pPlayer->dwClassId] > -1)
+				{
+					pTarget = pPlayer;
+				}
+			}
+		}
+	}
+
+	return pTarget;
+}
+
+//1.14d: 0x005F81C0
+void __fastcall AITHINK_Fn146_UberMephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	const int32_t nLifePercentage = UNITS_GetCurrentLifePercentage(pUnit);
+	const int32_t nLifeChance = std::max((100 - nLifePercentage) / 5, 0);
+	int32_t nAiState = pAiTickParam->pAiControl->dwAiParam[2];
+
+	// UBER TWEAK START
+	D2UbersAiCallbackArgStrc arg_target = {};
+	arg_target.nDistance = INT_MAX;
+	sub_6FCF1E80(pGame, pAiTickParam->pTarget ? pAiTickParam->pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
+	BOOL bAlone = (arg_target.nUberBaal == 0 && arg_target.nUberDiablo == 0);
+	if (bAlone && pAiTickParam->pTarget)
+	{
+		D2UbersAiCallbackArgStrc arg_self = {};
+		// arg_self.nDistance = INT_MAX; // BUG: this field isn't initialized?
+		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
+		bAlone = (arg_self.nUberBaal == 0 && arg_self.nUberDiablo == 0);
+	}
+	if ((bAlone && arg_target.nOtherMonsters < 30) || (arg_target.nOtherMonsters < 15))
+	{
+		AITHINK_SpawnUberMephistoMinion(pGame, pUnit, AITHINK_GetTargetForUberMinion(pGame, pUnit));
+	}
+	// UBER TWEAK END
+
+	if (pAiTickParam->bCombat)
+	{
+		if (AI_RollPercentage(pUnit) <= AI_GetParamValue(pGame, pAiTickParam, MEPHISTO_AI_PARAM_STATE_2_OR_3_CHANCE_PCT))
+		{
+			nAiState = 2;
+			pAiTickParam->pAiControl->dwAiParam[0] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 3 + 3;
+		}
+		else
+		{
+			nAiState = 3;
+		}
+	}
+	else
+	{
+		if (pAiTickParam->nTargetDistance <= 20)
+		{
+			if (!pAiTickParam->pAiControl->dwAiParam[2])
+			{
+				if (nLifePercentage <= 20 && pAiTickParam->nTargetDistance < 5 && (AI_RollPercentage(pUnit) < 40))
+				{
+					nAiState = 1;
+				}
+				else
+				{
+					if (AI_RollPercentage(pUnit) >= nLifeChance + 50)
+					{
+						if (AI_RollPercentage(pUnit) >= 65)
+						{
+							AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
+						}
+						else
+						{
+							if (AI_RollPercentage(pUnit) < 65 || pAiTickParam->nTargetDistance > 5)
+							{
+								sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
+							}
+							else
+							{
+								AITACTICS_SetVelocity(pUnit, 0, 0, 4u);
+								AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 7);
+							}
+						}
+
+						pAiTickParam->pAiControl->dwAiParam[2] = 0;
+						return;
+					}
+
+					nAiState = 2;
+					pAiTickParam->pAiControl->dwAiParam[0] = ITEMS_RollRandomNumber(&pUnit->pSeed) % 3 + 3;
+				}
+			}
+		}
+		else
+		{
+			nAiState = 4;
+		}
+	}
+
+	switch (nAiState)
+	{
+	case 0:
+		AITACTICS_IdleInNeutralMode(pGame, pUnit, 5);
+		pAiTickParam->pAiControl->dwAiParam[2] = 4;
+		return;
+
+	case 1:
+		nAiState = 0;
+		AITACTICS_SetVelocity(pUnit, 0, 50, 0);
+
+		if (D2GAME_AICORE_Escape_6FCD0560(pGame, pUnit, pAiTickParam->pTarget, 8u, 1))
+		{
+			pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
+			return;
+		}
+
+		if (pAiTickParam->bCombat)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], pAiTickParam->pTarget, 0, 0);
+
+			pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
+			return;
+		}
+
+		break;
+
+	case 2:
+		break;
+
+	case 3:
+		if (AI_RollPercentage(pUnit) >= nLifeChance + 80)
+		{
+			AITACTICS_SetVelocity(pUnit, 0, 50, 0);
+
+			if (!sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 1))
+			{
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+			}
+		}
+		else
+		{
+			if (AI_RollPercentage(pUnit) >= 80 - nLifeChance)
+			{
+				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], pAiTickParam->pTarget, 0, 0);
+			}
+			else
+			{
+				AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
+			}
+		}
+
+		pAiTickParam->pAiControl->dwAiParam[2] = 0;
+		return;
+
+	case 4:
+		AITACTICS_SetVelocity(pUnit, 0, 50, 0);
+
+		if (!D2GAME_AICORE_WalkToOwner_6FCD0B60(pGame, pUnit, pAiTickParam->pTarget, 6u))
+		{
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+
+			if (!AITACTICS_WalkInRadiusToTarget(pGame, pUnit, pAiTickParam->pTarget, 12, 6))
+			{
+				AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+			}
+		}
+
+		pAiTickParam->pAiControl->dwAiParam[2] = 0;
+		return;
+
+
+	default:
+		if (AI_RollPercentage(pUnit) >= 65)
+		{
+			AITACTICS_IdleInNeutralMode(pGame, pUnit, 10);
+		}
+		else
+		{
+			if (AI_RollPercentage(pUnit) < 65 || pAiTickParam->nTargetDistance > 5)
+			{
+				sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 4u, 0);
+			}
+			else
+			{
+				AITACTICS_SetVelocity(pUnit, 0, 0, 4u);
+				AITACTICS_WalkToTargetUnitWithFlags(pGame, pUnit, pAiTickParam->pTarget, 7);
+			}
+		}
+
+		pAiTickParam->pAiControl->dwAiParam[2] = 0;
+		return;
+	}
+
+	--pAiTickParam->pAiControl->dwAiParam[0];
+
+	if (!pAiTickParam->pAiControl->dwAiParam[0])
+	{
+		nAiState = 0;
+	}
+
+	if (!pAiTickParam->pAiControl->dwAiParam[1])
+	{
+		pAiTickParam->pAiControl->dwAiParam[1] = 2;
+
+		if (!sub_6FCD0E80(pGame, pUnit, pAiTickParam->pTarget, 3u, 1))
+		{
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 12);
+		}
+
+		pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
+		return;
+	}
+
+	++pAiTickParam->pAiControl->dwAiParam[1];
+
+	D2UnitStrc* pTarget = AITHINK_FindTargetForMephisto(pGame, pUnit, pAiTickParam->pMonstatsTxt, pAiTickParam->pTarget);
+
+	int32_t nValidSkills = 0;
+	while (nValidSkills < 8 && pAiTickParam->pMonstatsTxt->nSkill[nValidSkills] >= 0)
+	{
+		++nValidSkills;
+	}
+
+	if (nValidSkills <= 0)
+	{
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 6u);
+	}
+	else
+	{
+		const int32_t nSkillChance = 100 / nValidSkills;
+		const uint32_t nRand = AI_RollPercentage(pUnit);
+
+		int32_t bUseBlizzard = 0;
+		if (pGame->nDifficulty && pTarget && UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER))
+		{
+			bUseBlizzard = 1;
+		}
+
+		if (pGame->nDifficulty && (bUseBlizzard || pAiTickParam->nTargetDistance > 30))
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[5], pAiTickParam->pMonstatsTxt->nSkill[5], pTarget, 0, 0);
+		}
+		else if (pAiTickParam->nTargetDistance < 15 && nRand < nSkillChance && pGame->nDifficulty)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[4], pAiTickParam->pMonstatsTxt->nSkill[4], pTarget, 0, 0);
+		}
+		else if (nRand < 2 * nSkillChance)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[3], pAiTickParam->pMonstatsTxt->nSkill[3], pTarget, 0, 0);
+		}
+		else if (nRand < 3 * nSkillChance)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[1], pAiTickParam->pMonstatsTxt->nSkill[1], pTarget, 0, 0);
+		}
+		else
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pTarget, 0, 0);
+		}
+	}
+
+	if (AI_RollPercentage(pUnit) < 50 - nLifeChance)
+	{
+		pAiTickParam->pAiControl->dwAiParam[1] = 0;
+	}
+
+	pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
+}
+#endif
+
 //D2Game.0x6FCDA910
 void __fastcall D2GAME_AI_Unk052_6FCDA910(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
@@ -12321,7 +12653,11 @@ int32_t __fastcall AITHINK_CullPotentialTargetsForDiablo(D2UnitStrc* pUnit, D2Un
 
 	if (pUnit->nAct == pTarget->nAct)
 	{
+#ifdef D2_VERSION_111_UBERS
+		return (uint32_t)AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)) < 1020;
+#else
 		return (uint32_t)AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)) < 55;
+#endif
 	}
 
 	return 0;

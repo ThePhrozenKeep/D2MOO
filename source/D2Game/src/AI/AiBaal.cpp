@@ -104,11 +104,11 @@ void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	coord.nX = CLIENTS_GetUnitX(pUnit);
 	coord.nY = CLIENTS_GetUnitY(pUnit);
 
+	const int32_t nMinionTypes[3] = { MONSTER_WRAITH9, MONSTER_VAMPIRE9, MONSTER_WILLOWISP8 };
+	const int32_t nMinionModes[3] = { MONMODE_NEUTRAL, MONMODE_CAST, MONMODE_SKILL1 };
 	// Note: doesn't pick willow wisps (they thought it was too hard?)
 	// change the 2 to 3 to enable them
 	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2);
-	const int32_t nMinionTypes[3] = { MONSTER_WRAITH9, MONSTER_VAMPIRE9, MONSTER_WILLOWISP8 };
-	const int32_t nMinionModes[3] = { MONMODE_NEUTRAL, MONMODE_CAST, MONMODE_SKILL1 };
 
 	D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coord, 2, 0x100, 0);
 	if (pRoom)
@@ -138,8 +138,8 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	if (bAlone && pTarget)
 	{
 		D2UbersAiCallbackArgStrc arg_self = {};
-		arg_self.nDistance = INT_MAX,
-		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1),
+		arg_self.nDistance = INT_MAX;
+		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
 		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
 	}
 	if ((bAlone && arg_target.nBaalMinions < 15 && SEED_RollPercentage(&pUnit->pSeed) < 45)
@@ -389,7 +389,11 @@ int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pT
 
 	if (pBaal->nAct == pTarget->nAct)
 	{
+#ifdef D2_VERSION_111_UBERS
+		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 1020;
+#else
 		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 55;
+#endif
 	}
 
 	return 0;
