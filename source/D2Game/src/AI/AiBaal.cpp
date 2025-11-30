@@ -97,6 +97,223 @@ void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 }
 
 #ifdef D2_VERSION_111_UBERS
+//Inlined
+int32_t __fastcall AIBAAL_RollRandomUberAiParamForNonCollidingUnit(D2GameStrc* pGame, D2AiControlStrc* pAiControl, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nCount, int32_t bInMediumRange, int32_t bInFarRange, int32_t bInCloseRange, int32_t nMax)
+{
+	// UBER TWEAK START
+	int32_t aiParams[16] = { 0, 0, 80, 5, 0, 0, 20, 0, 10, 10, 0, 70, 80, 60, 80, 0 };
+	// UBER TWEAK END
+
+	aiParams[15] = 10 * (2 - pAiControl->dwAiParam[1]);
+	if (aiParams[15] < 0)
+	{
+		aiParams[15] = 0;
+	}
+
+	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget);
+	if (nDistance > 35)
+	{
+		// UBER TWEAK START
+		aiParams[6] = 30;
+		// UBER TWEAK END
+		aiParams[13] = 0;
+	}
+
+	if (nDistance > 25)
+	{
+		// UBER TWEAK START
+		aiParams[14] = 180;
+		// UBER TWEAK END
+		aiParams[11] = 0;
+	}
+
+	if (nCount < 2)
+	{
+		aiParams[11] -= 10;
+	}
+
+	if (nCount > 3)
+	{
+		aiParams[13] += 25;
+	}
+
+	if (nMax > 60)
+	{
+		// UBER TWEAK START
+		aiParams[8] = 40;
+		// UBER TWEAK END
+	}
+
+	D2PlayerCountBonusStrc playerCountBonus = {};
+	MONSTER_GetPlayerCountBonus(pGame, &playerCountBonus, UNITS_GetRoom(pUnit), pUnit);
+
+	if (nCount < 2 && playerCountBonus.nDifficulty < 2)
+	{
+		aiParams[8] = 0;
+	}
+
+	// UBER TWEAK START
+	if (AI_CheckSpecialSkillsOnPrimeEvil(pTarget))
+	{
+		if (!bInMediumRange)
+		{
+			aiParams[6] += 30;
+			aiParams[11] += 10;
+			aiParams[14] += 100;
+		}
+	}
+
+	if (bInMediumRange)
+	{
+		aiParams[2] = 0;
+		aiParams[6] += 25;
+		aiParams[14] += 100;
+	}
+
+	if (bInFarRange)
+	{
+		aiParams[14] += 100;
+	}
+	// UBER TWEAK END
+
+	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+}
+
+//Inlined
+int32_t __fastcall AIBAAL_RollRandomUberAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2UnitStrc* pTarget, int32_t nMax, int32_t nCount, D2AiCmdStrc* pAiCmd)
+{
+	if (pAiControl->dwAiParam[0])
+	{
+		return pAiControl->dwAiParam[0];
+	}
+
+	if (!pTarget)
+	{
+		if (COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 2, COLLIDE_MISSILE))
+		{
+			return 4;
+		}
+		else
+		{
+			return 8 * ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 8) + 1;
+		}
+	}
+
+	if (!pGame)
+	{
+		pGame = pUnit->pGame;
+	}
+
+	int32_t bInCloseRange = 0;
+	if (pTarget->dwUnitType == UNIT_PLAYER)
+	{
+		D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, PLAYER_GetUniqueIdFromPlayerData(pTarget));
+		if (pObject && DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pObject)) == LEVEL_THEWORLDSTONECHAMBER)
+		{
+			// UBER TWEAK START
+			if (!pAiCmd)
+			{
+				bInCloseRange = 0;
+			}
+			// UBER TWEAK END
+		}
+	}
+
+	int32_t bInMediumRange = 0;
+	int32_t bInFarRange = 0;
+	if (pAiCmd)
+	{
+		// UBER TWEAK START
+		const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
+		// UBER TWEAK END
+		if (nDistance > 75)
+		{
+			bInMediumRange = 1;
+		}
+
+		if (nDistance > 100)
+		{
+			bInFarRange = 1;
+		}
+	}
+
+	const int32_t bInMeleeRange = UNITS_IsInMeleeRange(pUnit, pTarget, 0);
+	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER) == 0;
+	if (bInMeleeRange)
+	{
+		// UBER TWEAK START
+		int32_t aiParams[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 20, 10, 150, 10, 10, 70, 0, 0 };
+		// UBER TWEAK END
+
+		if (UNITS_GetCurrentLifePercentage(pTarget) < 33)
+		{
+			aiParams[10] += 50;
+		}
+
+		aiParams[1] += 100 - UNITS_GetCurrentLifePercentage(pUnit);
+
+		if (STATES_CheckState(pTarget, STATE_COLD))
+		{
+			aiParams[8] = 0;
+			aiParams[13] = 0;
+			aiParams[11] = 0;
+		}
+
+		if (!bNotCollidingWithWall)
+		{
+			aiParams[11] = 0;
+			aiParams[13] = 0;
+			aiParams[12] = 0;
+		}
+
+		return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	}
+
+	if (bNotCollidingWithWall)
+	{
+		return AIBAAL_RollRandomUberAiParamForNonCollidingUnit(pGame, pAiControl, pUnit, pTarget, nCount, bInMediumRange, bInFarRange, bInCloseRange, nMax);
+	}
+
+	// UBER TWEAK START
+	int32_t aiParams[16] = { 0, 0, 50, 0, 0, 0, 20, 0, 10, 10, 0, 0, 0, 0, 100, 0 };
+	// UBER TWEAK END
+
+	if (nCount < 2)
+	{
+		// UBER TWEAK START
+		aiParams[2] = 75;
+		// UBER TWEAK END
+		aiParams[10] = 25;
+	}
+
+	// UBER TWEAK START
+	if (AI_CheckSpecialSkillsOnPrimeEvil(pTarget))
+	{
+		if (!bInMediumRange)
+		{
+			aiParams[14] += 50;
+			aiParams[13] += 50;
+		}
+	}
+
+	if (bInMediumRange)
+	{
+		aiParams[2] = 0;
+		aiParams[6] = 0;
+		aiParams[14] += 100;
+		aiParams[11] += 25;
+		aiParams[13] += 25;
+	}
+
+	if (bInFarRange)
+	{
+		aiParams[14] += 100;
+	}
+	// UBER TWEAK END
+
+	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+}
+
 //1.14d: 0x005FD0F0
 void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
@@ -172,7 +389,7 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 		pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	}
 
-	int32_t nParam = AIBAAL_RollRandomAiParam(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nMax, nCount, pAiCmd);
+	int32_t nParam = AIBAAL_RollRandomUberAiParam(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nMax, nCount, pAiCmd);
 
 	// UBER TWEAK START
 	if (!pTarget)
