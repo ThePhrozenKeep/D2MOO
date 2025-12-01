@@ -66,6 +66,16 @@ static D2DrlgLinkStrc gAct2CanyonDrlgLink[15] =
 	{ NULL, 0, -1, -1 },
 };
 
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x006F0B10
+static D2DrlgLinkStrc gAct5UbersDrlgLink[15] =
+{
+	{ sub_6FD81330, LEVEL_PANDEMONIUMRUN2, -1, -1 },
+	{ sub_6FD81330, LEVEL_PANDEMONIUMFINALE, -1, -1 },
+	{ NULL, 0, -1, -1 },
+};
+#endif
+
 //D2Common.0x6FDD0200
 static D2DrlgLinkStrc gAct4OutdoorDrlgLink[15] =
 {
@@ -1505,6 +1515,9 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 		sub_6FD826D0(pDrlg, LEVEL_BLOODYFOOTHILLS, LEVEL_ID_ACT5_BARRICADE_1);
 
 		sub_6FD826D0(pDrlg, LEVEL_HARROGATH, LEVEL_BLOODYFOOTHILLS);
+#ifdef D2_VERSION_111_UBERS
+		sub_6FD823C0(pDrlg, gAct5UbersDrlgLink, DRLGOUTPLACE_LinkAct5Ubers, NULL);
+#endif
 		break;
 
 	default:
@@ -1619,6 +1632,24 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Canyon(D2DrlgLevelLinkDataStrc* pLevelLinkD
 
 	return TRUE;
 }
+
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x00677030
+BOOL __fastcall DRLGOUTPLACE_LinkAct5Ubers(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration)
+{
+	int nLevelLink = gAct5UbersDrlgLink[nIteration].nLevelLink;
+
+	for (int i = 0; i < nIteration; ++i)
+	{
+		if (i != nLevelLink && !DRLG_CheckNotOverlappingUsingManhattanDistance(&pLevelLinkData->pLevelCoord[nIteration], &pLevelLinkData->pLevelCoord[i], 0))
+		{
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+#endif
 
 //D2Comon.0x6FD822A0
 BOOL __fastcall DRLGOUTPLACE_LinkAct4Outdoors(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration)
