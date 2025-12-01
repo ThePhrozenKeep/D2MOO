@@ -201,7 +201,18 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	uint32_t unk0x1DD4;								//0x1DD4
 	uint32_t unk0x1DD8;								//0x1DD8
 	uint32_t unk0x1DDC;								//0x1DDC
-};
+	uint32_t unk0x1DE0;								//0x1DE0
+	uint32_t unk0x1DE4;								//0x1DE4
+
+#ifdef D2_VERSION_111_UBERS
+	BOOL bUberPortalRuns[3];						//0x1DD4
+	BOOL bUberPortalFinale;							//0x1DE0
+	uint32_t dwUberSandsCounter;					//0x1DE4
+	BOOL bUberBaalKilled;							//0x1DE8
+	BOOL bUberDiabloKilled;							//0x1DEC
+	BOOL bUberMephistoKilled;						//0x1DF0
+#endif
+}; // Size = 0x1DE8 (1.10), 0x1DF4 (1.11-1.14)
 
 struct D2GameDataTableStrc
 {
