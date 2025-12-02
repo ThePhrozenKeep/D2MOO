@@ -1016,7 +1016,18 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 		break;
 
 	case MONSTER_EVILHOLE1:
+#ifdef D2_VERSION_111_UBERS
+		if (pMonster && pMonster->dwClassId == MONSTER_DEMONHOLE)
+		{
+			*pId = MONSTERS_ValidateMonsterId(MONSTER_MEGADEMON6);
+		}
+		else
+		{
+			*pId = MONSTERS_ValidateMonsterId(MONSTER_FALLEN1);
+		}
+#else
 		*pId = MONSTERS_ValidateMonsterId(MONSTER_FALLEN1);
+#endif
 
 		UNITS_GetCoords(pMonster, &pCoords);
 

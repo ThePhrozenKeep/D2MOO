@@ -6700,6 +6700,13 @@ void __fastcall AITHINK_Fn076_EvilHole(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				--pAiTickParam->pAiControl->dwAiParam[1];
 				pMonster->dwFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
+#ifdef D2_VERSION_111_UBERS
+				if (pUnit && pUnit->dwClassId == MONSTER_DEMONHOLE)
+				{
+					STATES_ToggleState(pMonster, STATE_UBERMINION, 1);
+					UNITS_SetOverlay(pMonster, 202, 0);
+				}
+#endif
 			}
 		}
 
