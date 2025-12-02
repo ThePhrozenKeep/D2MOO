@@ -2412,6 +2412,31 @@ bool __stdcall D2Game_10033(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
 	return *a2 >= *a3;
 }
 
+//1.10: Inlined
+//1.14d: 0x0057D810
+void __fastcall SUNITDMG_PreventMonsterHeal(D2UnitStrc* pAttacker, D2UnitStrc* pDefender)
+{
+	if (pAttacker->dwUnitType == UNIT_PLAYER && pDefender->dwUnitType == UNIT_MONSTER && STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_PREVENTHEAL, 0))
+	{
+#ifdef D2_VERSION_111_UBERS
+		if (pDefender->dwClassId >= MONSTER_FIRST_UBER && pDefender->dwClassId <= MONSTER_LAST_UBER)
+		{
+			return;
+		}
+#endif
+		D2CurseStrc curse = {};
+		curse.pUnit = pAttacker;
+		curse.pTarget = pDefender;
+		curse.nSkill = 0;
+		curse.nSkillLevel = 1;
+		curse.nDuration = 120000;
+		curse.nStat = STAT_ARMORCLASS;
+		curse.nStatValue = 0;
+		curse.nState = STATE_PREVENTHEAL;
+		sub_6FD10EC0(&curse);
+	}
+}
+
 //D2Game.0x6FCC1E70
 int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t bMissile)
 {
@@ -2539,19 +2564,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 		return 0;
 	}
 
-	if (pAttacker->dwUnitType == UNIT_PLAYER && pDefender->dwUnitType == UNIT_MONSTER && STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_PREVENTHEAL, 0))
-	{
-		D2CurseStrc curse = {};
-		curse.pUnit = pAttacker;
-		curse.pTarget = pDefender;
-		curse.nSkill = 0;
-		curse.nSkillLevel = 1;
-		curse.nDuration = 120000;
-		curse.nStat = STAT_ARMORCLASS;
-		curse.nStatValue = 0;
-		curse.nState = STATE_PREVENTHEAL;
-		sub_6FD10EC0(&curse);
-	}
+	SUNITDMG_PreventMonsterHeal(pAttacker, pDefender);
 
 	return 1;
 }
