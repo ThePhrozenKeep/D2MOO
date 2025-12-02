@@ -1537,8 +1537,18 @@ void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitS
         D2Game_10061_Return();
         break;
 #endif
-	default:
-		break;
+#ifdef D2_VERSION_111_UBERS
+    case MONSTER_UBERMEPHISTO:
+    case MONSTER_UBERDIABLO:
+    case MONSTER_UBERBAAL:
+        if (pUnit->dwAnimMode == MONMODE_DEATH)
+        {
+            QUESTSFX_UberPrimeEvil(pGame, pUnit);
+        }
+        break;
+#endif
+    default:
+        break;
     }
 }
 

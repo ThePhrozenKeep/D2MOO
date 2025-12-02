@@ -140,3 +140,49 @@ void __fastcall QUESTSFX_ShenkTheOverseer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 25, 125, 0);
 }
+
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x005E0070
+void __fastcall QUESTSFX_UberPrimeEvil(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+    int32_t nMonsterId;
+
+    if (pUnit)
+    {
+        nMonsterId = pUnit->dwClassId;
+    }
+    else
+    {
+        nMonsterId = -1;
+    }
+
+    switch (nMonsterId)
+    {
+    case MONSTER_UBERMEPHISTO:
+        pGame->bUberMephistoKilled = 1;
+        break;
+    case MONSTER_UBERDIABLO:
+        pGame->bUberDiabloKilled = 1;
+        break;
+    case MONSTER_UBERBAAL:
+        pGame->bUberBaalKilled = 1;
+        break;
+    default:
+        //ASSERT();
+        return;
+    }
+
+    if (pGame->bUberMephistoKilled && pGame->bUberDiabloKilled && pGame->bUberBaalKilled)
+    {
+        int32_t nItemLevel;
+        pUnit->dwDropItemCode = ' 2mc';
+        D2UnitStrc* pItem = D2GAME_DropItemAtUnit_6FC4FEC0(pGame, pUnit, ITEMQUAL_UNIQUE, &nItemLevel, 0, -1, 0);
+        D2GAME_RechargeItem_6FC4BD50(pGame, nullptr, pItem);
+        pUnit->dwDropItemCode = ' dts';
+        for (int32_t i = 0; i < pGame->nClients; i++)
+        {
+            D2GAME_DropItemAtUnit_6FC4FEC0(pGame, pUnit, ITEMQUAL_NORMAL, &nItemLevel, 0, -1, 0);
+        }
+    }
+}
+#endif
