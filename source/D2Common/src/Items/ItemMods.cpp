@@ -469,7 +469,10 @@ static const D2PropertyAssignStrc stru_6FDE3160[] =
 };
 
 
-static const PROPERTYASSIGNFN off_6FDE3920[36] =
+// 1.10: 36 entries, 1.11-1.14: 37 entries
+//1.10: 0x6FDE3920
+//1.14d: 0x007462F8
+static const PROPERTYASSIGNFN off_6FDE3920[] =
 {
 	NULL,
 	ITEMMODS_PropertyFunc01,
@@ -495,7 +498,21 @@ static const PROPERTYASSIGNFN off_6FDE3920[36] =
 	ITEMMODS_PropertyFunc21,
 	ITEMMODS_PropertyFunc22,
 	ITEMMODS_PropertyFunc23,
-	ITEMMODS_PropertyFunc24
+	ITEMMODS_PropertyFunc24,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+#ifdef D2_VERSION_111_UBERS
+	ITEMMODS_PropertyFunc36
+#endif
 };
 static const int dword_6FDE39B0 = ARRAY_SIZE(off_6FDE3920);
 
@@ -2780,6 +2797,41 @@ void __stdcall ITEMMODS_AddCraftPropertyList(D2UnitStrc* pItem, D2PropertyStrc* 
 	}
 }
 
+//1.10: Inlined
+//1.14d: 0x0065E9E0
+int __fastcall ITEMMODS_RollRandomValueInRange(D2UnitStrc* pItem, int nMin, int nMax)
+{
+	int nPossibleRolls;
+
+	if (nMax == nMin)
+	{
+		return nMin;
+	}
+	if (nMax < nMin)
+	{
+		int temp = nMax;
+		nMax = nMin;
+		nMin = temp;
+	}
+	if (pItem && pItem->dwUnitType == UNIT_ITEM)
+	{
+		if (nMin < nMax)
+		{
+			nPossibleRolls = nMax - nMin + 1;
+			return nMin + SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nPossibleRolls);
+		}
+	}
+	else
+	{
+		if (nMin < nMax)
+		{
+			nPossibleRolls = nMax - nMin + 1;
+			return nMin + SEED_RollLimitedRandomNumber(&pItem->pSeed, nPossibleRolls);
+		}
+	}
+	return nMin;
+}
+
 //D2Common.0x6FD95FC0
 int __fastcall ITEMMODS_PropertyFunc01(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
 {
@@ -4078,6 +4130,21 @@ int __fastcall ITEMMODS_PropertyFunc21(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 
 	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, nLayer, nMin, nState, fStatList, a11);
 }
+
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x0065FBA0
+int __fastcall ITEMMODS_PropertyFunc36(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+{
+	if (!pProperty)
+	{
+		return 0;
+	}
+
+	int nMin = ITEMMODS_RollRandomValueInRange(pItem, pProperty->nMin, pProperty->nMax);
+
+	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, nMin, nLayer, nState, fStatList, a11);
+}
+#endif
 
 //D2Common.0x6FD97D50
 //TODO: nLayer always (in all functions and structs) 16 Bit, i.e. uint16_t??
