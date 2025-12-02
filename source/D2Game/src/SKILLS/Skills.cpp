@@ -3081,10 +3081,22 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
         *ppSourceUnit = nullptr;
     }
 
-    if (pUnit && DUNGEON_IsRoomInTown(pRoom) && (nDestLevel != LEVEL_MOOMOOFARM || nObjectId != OBJECT_PERMANENT_TOWN_PORTAL))
+    if (pUnit && DUNGEON_IsRoomInTown(pRoom))
     {
-        SUNIT_AttachSound(pUnit, 0x18u, pUnit);
-        return 0;
+#ifdef D2_VERSION_111_UBERS
+        if ((nDestLevel != LEVEL_MOOMOOFARM
+        && nDestLevel != LEVEL_PANDEMONIUMFINALE
+        && nDestLevel != LEVEL_PANDEMONIUMRUN1
+        && nDestLevel != LEVEL_PANDEMONIUMRUN2
+        && nDestLevel != LEVEL_PANDEMONIUMRUN3)
+        || nObjectId != OBJECT_PERMANENT_TOWN_PORTAL)
+#else
+        if (nDestLevel != LEVEL_MOOMOOFARM || nObjectId != OBJECT_PERMANENT_TOWN_PORTAL)
+#endif
+        {
+            SUNIT_AttachSound(pUnit, 0x18u, pUnit);
+            return 0;
+        }
     }
 
     const int32_t nAct = DRLG_GetActNoFromLevelId(nDestLevel);

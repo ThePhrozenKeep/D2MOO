@@ -521,6 +521,20 @@ int32_t __fastcall PLRTRADE_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit
     return ACT1Q4_CreateCowPortal(pGame, pUnit);
 }
 
+#ifdef D2_VERSION_111_UBERS
+//1.14d: 0x00565A90
+int32_t __fastcall PLRTRADE_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+    return ACT1Q4_CreateUberRunPortal(pGame, pUnit);
+}
+
+//1.14d: 0x00565AA0
+int32_t __fastcall PLRTRADE_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+    return ACT1Q4_CreateUberFinalePortal(pGame, pUnit);
+}
+#endif
+
 //D2Game.0x6FC90010
 void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CubeMainTxt* pCubeMainTxt, D2CubeItemStrc* pCubeItem)
 {
@@ -528,7 +542,11 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
     constexpr CubeOutputFunc dword_6FD2933C[] =
     {
         nullptr,
-        PLRTRADE_CreateCowPortal
+        PLRTRADE_CreateCowPortal,
+#ifdef D2_VERSION_111_UBERS
+        PLRTRADE_CreateUberRunPortal,
+        PLRTRADE_CreateUberFinalePortal
+#endif
     };
 
     int32_t nSocketables = 0;
