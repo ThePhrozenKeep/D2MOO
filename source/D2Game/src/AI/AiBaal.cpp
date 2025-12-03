@@ -1060,6 +1060,14 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		int32_t nFinalX = nX + (25 * (nX - nTargetX)) / nDistance;
 		int32_t nFinalY = nY + (25 * (nY - nTargetY)) / nDistance;
 
+#ifdef D2_VERSION_111_UBERS
+		if (pUnit->dwClassId == MONSTER_UBERBAAL)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pMonstatsTxtRecord->nSkillMode[4], pMonstatsTxtRecord->nSkill[4], 0, nTargetX, nTargetY);
+			return;
+		}
+#endif
+
 		if (sub_6FC66260(pGame, UNITS_GetRoom(pUnit), 0, pUnit->dwClassId, &nFinalX, &nFinalY, 0))
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pMonstatsTxtRecord->nSkillMode[4], pMonstatsTxtRecord->nSkill[4], 0, nFinalX, nFinalY);
