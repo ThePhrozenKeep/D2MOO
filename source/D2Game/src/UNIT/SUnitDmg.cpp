@@ -2096,7 +2096,11 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_SOFTHIT))
 			{
+#ifdef D2_VERSION_111_UBERS
+				if (pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE && pUnit->dwClassId != MONSTER_UBERDIABLO)
+#else
 				if (pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE)
+#endif
 				{
 					D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
 					if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_BLOCK])
