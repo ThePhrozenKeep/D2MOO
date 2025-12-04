@@ -458,6 +458,17 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     pGame->dwLastUsedUnitGUID[4] = 0;
     pGame->dwLastUsedUnitGUID[5] = 0;
 
+#ifdef D2_VERSION_111_UBERS
+    pGame->bUberPortalRuns[0] = 0;
+    pGame->bUberPortalRuns[1] = 0;
+    pGame->bUberPortalRuns[2] = 0;
+    pGame->bUberPortalFinale = 0;
+    pGame->dwUberSandsCounter = 0;
+    pGame->bUberBaalKilled = 0;
+    pGame->bUberDiabloKilled = 0;
+    pGame->bUberMephistoKilled = 0;
+#endif
+
     pGame->nDifficulty = (nFlags & GAMEFLAG_DIFFICULTY_MASK) >> GAMEFLAG_DIFFICULTY_BIT;
 
     if (nInitSeed_6FDC2CA08 == -1)
