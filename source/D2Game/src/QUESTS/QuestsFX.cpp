@@ -16,6 +16,7 @@
 
 #include "GAME/Clients.h"
 #include "GAME/Event.h"
+#include "ITEMS/ItemMode.h"
 #include "ITEMS/Items.h"
 #include "MISSILES/Missiles.h"
 #include "MONSTER/MonsterUnique.h"
