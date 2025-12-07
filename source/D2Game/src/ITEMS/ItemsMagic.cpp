@@ -835,7 +835,7 @@ int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
     for (int32_t i = 0; i < sgptDataTables->nSetItemsTxtRecordCount; ++i)
     {
         D2SetItemsTxt* pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[i];
-        if ((pSetItemsTxtRecord->wVersion < 100 || nItemFormat >= 100) && pSetItemsTxtRecord->wLvl <= nItemLevel && pItemsTxtRecord->dwCode == pSetItemsTxtRecord->szItemCode && (pSetItemsTxtRecord->nSetId != 29 || pItemDrop->dwFlags2 & 1))
+        if ((pSetItemsTxtRecord->wVersion < 100 || nItemFormat >= 100) && pSetItemsTxtRecord->wLvl <= nItemLevel && pItemsTxtRecord->dwCode == pSetItemsTxtRecord->szItemCode && (pSetItemsTxtRecord->nSetId != 29 || pItemDrop->dwFlags2 & ITEMDROPFLAG_HELLBOVINE))
         {
             if (pItemDrop->nItemIndex && pItemDrop->nItemIndex - 1 == i)
             {

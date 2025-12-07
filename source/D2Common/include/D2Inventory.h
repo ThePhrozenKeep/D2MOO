@@ -159,8 +159,8 @@ struct D2ItemExtraDataStrc
 	char nNodePos;							//0x0C
 	char nNodePosOther;						//0x0D
 	uint16_t unk0x0E;						//0x0E
-	D2UnitStrc* unk0x10;					//0x10
-	D2UnitStrc* unk0x14;					//0x14
+	D2UnitStrc* pPreviousGridItem;			//0x10
+	D2UnitStrc* pNextGridItem;				//0x14
 };
 #pragma pack()
 
@@ -329,7 +329,7 @@ BOOL __fastcall sub_6FD91E80(D2UnitStrc* pUnit, D2UnitStrc* pItem1, D2UnitStrc* 
 //D2Common.0x6FD92080 (#10304)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_GetNextItem(D2UnitStrc* pItem);
 //Inlined at various places
-D2UnitStrc* __stdcall INVENTORY_GetUnknownItem(D2UnitStrc* pItem);
+D2UnitStrc* __stdcall INVENTORY_GetNextGridItem(D2UnitStrc* pItem);
 //D2Common.0x6FD920C0 (#10305)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall INVENTORY_UnitIsItem(D2UnitStrc* pItem);
 //D2Common.0x6FD920E0 (#10306)
