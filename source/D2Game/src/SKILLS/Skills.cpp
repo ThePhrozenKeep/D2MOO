@@ -3083,7 +3083,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
 
     if (pUnit && DUNGEON_IsRoomInTown(pRoom))
     {
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
         if ((nDestLevel != LEVEL_MOOMOOFARM
         && nDestLevel != LEVEL_PANDEMONIUMFINALE
         && nDestLevel != LEVEL_PANDEMONIUMRUN1

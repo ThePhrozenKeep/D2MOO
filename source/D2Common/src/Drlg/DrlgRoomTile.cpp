@@ -581,7 +581,7 @@ void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2Drlg
 				{
 					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pDrlgRoom, nTileType, nTileInformation.nPackedValue);
 					D2DrlgTileDataStrc* pWallTileData = DRLGROOMTILE_InitWallTileData(pDrlgRoom, nullptr, nTilePosX, nTilePosY, nTileInformation.nPackedValue, pTileCache, nTileType);
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 					if ((nTileType == TILETYPE_WALL_RIGHT_EXIT || nTileType == TILETYPE_WALL_LEFT_EXIT)
 					&& pDrlgRoom->pLevel->nLevelId != LEVEL_PANDEMONIUMRUN1)
 #else

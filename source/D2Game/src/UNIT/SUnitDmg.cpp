@@ -2096,7 +2096,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_SOFTHIT))
 			{
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 				if (pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE && pUnit->dwClassId != MONSTER_UBERDIABLO)
 #else
 				if (pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE)
@@ -2422,7 +2422,7 @@ void __fastcall SUNITDMG_PreventMonsterHeal(D2UnitStrc* pAttacker, D2UnitStrc* p
 {
 	if (pAttacker->dwUnitType == UNIT_PLAYER && pDefender->dwUnitType == UNIT_MONSTER && STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_PREVENTHEAL, 0))
 	{
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		if (pDefender->dwClassId >= MONSTER_FIRST_UBER && pDefender->dwClassId <= MONSTER_LAST_UBER)
 		{
 			return;

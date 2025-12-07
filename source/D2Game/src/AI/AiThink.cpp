@@ -4612,7 +4612,7 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	pAiTickParam->pAiControl->dwAiParam[2] = nAiState;
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x005F7F10
 void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
@@ -4645,8 +4645,10 @@ void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* p
 	D2UnitStrc* pMinion = sub_6FC68D70(pGame, pTarget ? pTarget : pUnit, nMinionTypes[nChoice], nMinionModes[nChoice], 4, 0);
 	if (pMinion)
 	{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 		pMinion->dwFlags |= UNITFLAG_NOXP; // Added in 1.13
-		STATES_ToggleState(pMinion, 184, 1);
+#endif
+		STATES_ToggleState(pMinion, STATE_UBERMINION, TRUE);
 	}
 }
 
@@ -5304,7 +5306,7 @@ void __fastcall AITHINK_Fn055_Izual(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 	AITACTICS_ChangeModeAndTargetUnit(pGame, pUnit, MONMODE_ATTACK1, pAiTickParam->pTarget);
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x005F8C80
 void __fastcall AITHINK_Fn144_UberIzual(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
@@ -6700,7 +6702,7 @@ void __fastcall AITHINK_Fn076_EvilHole(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 			{
 				--pAiTickParam->pAiControl->dwAiParam[1];
 				pMonster->dwFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 				if (pUnit && pUnit->dwClassId == MONSTER_DEMONHOLE)
 				{
 					STATES_ToggleState(pMonster, STATE_UBERMINION, 1);
@@ -12752,7 +12754,7 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 	}
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x005E9DD0
 void __fastcall AITHINK_SpawnUberDiabloMinion(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
@@ -13422,7 +13424,7 @@ int32_t __fastcall AITHINK_CullPotentialTargetsForDiablo(D2UnitStrc* pUnit, D2Un
 
 	if (pUnit->nAct == pTarget->nAct)
 	{
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		return (uint32_t)AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)) < 1020;
 #else
 		return (uint32_t)AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)) < 55;
@@ -17189,7 +17191,7 @@ const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_
 		{ 1,	nullptr,									AITHINK_Fn141_BaalMinion,					nullptr },
 		{ 1,	nullptr,									AITHINK_Fn142_ClawViperEx,					nullptr },
 		{ 2,	D2GAME_AI_Unk143_6FCEB1B0,					AITHINK_Fn106_143_ShadowMaster,				nullptr },
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		{ 1,	nullptr,									AITHINK_Fn144_UberIzual,					nullptr },
 		{ 1,	nullptr,									AITHINK_Fn145_UberBaal,						D2GAME_AI_Unk135_140_6FCCD470 },
 		{ 1,	nullptr,									AITHINK_Fn146_UberMephisto,					nullptr },

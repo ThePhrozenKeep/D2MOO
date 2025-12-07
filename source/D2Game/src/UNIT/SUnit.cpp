@@ -1090,7 +1090,7 @@ void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc
     }
 
     D2PresetUnitStrc* pPresetUnit = DUNGEON_GetPresetUnitsFromRoom(pRoom);
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
     int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
     BOOL bSpawnPrimeEvils = 0;

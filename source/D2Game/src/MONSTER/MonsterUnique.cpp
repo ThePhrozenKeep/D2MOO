@@ -637,7 +637,7 @@ void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nU
     SEED_InitLowSeed(&seed, MONSTERUNIQUE_GetNameSeed(pUnit));
 
     const int32_t nIndex = MONSTERUNIQUE_GetBossHcIdx(pUnit) != SUPERUNIQUE_LORD_DE_SEIS ? ITEMS_RollLimitedRandomNumber(&seed, nMax) : 5;
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
     if (pUnit->dwClassId == MONSTER_UBERMEPHISTO)
     {
         D2GAME_SetSkills_6FD14C60(pUnit, SKILL_CONVICTION, 20, 1);
@@ -1537,7 +1537,7 @@ void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitS
         D2Game_10061_Return();
         break;
 #endif
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
     case MONSTER_UBERMEPHISTO:
     case MONSTER_UBERDIABLO:
     case MONSTER_UBERBAAL:

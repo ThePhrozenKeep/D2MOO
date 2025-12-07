@@ -66,7 +66,7 @@ static D2DrlgLinkStrc gAct2CanyonDrlgLink[15] =
 	{ NULL, 0, -1, -1 },
 };
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x006F0B10
 static D2DrlgLinkStrc gAct5UbersDrlgLink[15] =
 {
@@ -1515,7 +1515,7 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 		sub_6FD826D0(pDrlg, LEVEL_BLOODYFOOTHILLS, LEVEL_ID_ACT5_BARRICADE_1);
 
 		sub_6FD826D0(pDrlg, LEVEL_HARROGATH, LEVEL_BLOODYFOOTHILLS);
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		sub_6FD823C0(pDrlg, gAct5UbersDrlgLink, DRLGOUTPLACE_LinkAct5Ubers, NULL);
 #endif
 		break;
@@ -1633,7 +1633,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Canyon(D2DrlgLevelLinkDataStrc* pLevelLinkD
 	return TRUE;
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x00677030
 BOOL __fastcall DRLGOUTPLACE_LinkAct5Ubers(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration)
 {

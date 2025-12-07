@@ -102,7 +102,7 @@ void __fastcall DRLGOUTDESR_InitAct2OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		DRLGOUTDESR_PlaceFillsInCanyon(pLevel);
 		break;
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 	case LEVEL_PANDEMONIUMRUN2:
 		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 4, 4, LVLPREST_ACT2_DESERT_VALLEY_WARP, -1, 0);
 		DRLGOUTDESR_PlaceBorders(pLevel);

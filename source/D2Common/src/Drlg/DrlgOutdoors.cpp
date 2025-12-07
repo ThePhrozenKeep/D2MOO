@@ -735,7 +735,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 	while (pVertex != *ppVertex);
 
 	int nAct = DRLG_GetActNoFromLevelId(pLevel->nLevelId);
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 	if (pLevel->nLevelId == LEVEL_PANDEMONIUMRUN2)
 	{
 		nAct = ACT_II;

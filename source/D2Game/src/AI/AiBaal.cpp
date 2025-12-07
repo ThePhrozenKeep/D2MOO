@@ -96,7 +96,7 @@ void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	AITACTICS_Idle(pGame, pUnit, 25);
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //Inlined
 int32_t __fastcall AIBAAL_RollRandomUberAiParamForNonCollidingUnit(D2GameStrc* pGame, D2AiControlStrc* pAiControl, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nCount, int32_t bInMediumRange, int32_t bInFarRange, int32_t bInCloseRange, int32_t nMax)
 {
@@ -327,14 +327,16 @@ void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	// change the 2 to 3 to enable them
 	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2);
 
-	D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coord, 2, 0x100, 0);
+	D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coord, 2, COLLIDE_MONSTER, 0);
 	if (pRoom)
 	{
 		D2UnitStrc* pMinion = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, coord.nX, coord.nY, nMinionTypes[nChoice], nMinionModes[nChoice], -1, 0);
 		if (pMinion)
 		{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 			pMinion->dwFlags |= UNITFLAG_NOXP; // Added in 1.13
-			STATES_ToggleState(pMinion, 184, 1);
+#endif
+			STATES_ToggleState(pMinion, STATE_UBERMINION, TRUE);
 		}
 	}
 }
@@ -606,7 +608,7 @@ int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pT
 
 	if (pBaal->nAct == pTarget->nAct)
 	{
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 1020;
 #else
 		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 55;
@@ -1060,7 +1062,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		int32_t nFinalX = nX + (25 * (nX - nTargetX)) / nDistance;
 		int32_t nFinalY = nY + (25 * (nY - nTargetY)) / nDistance;
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		if (pUnit->dwClassId == MONSTER_UBERBAAL)
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pMonstatsTxtRecord->nSkillMode[4], pMonstatsTxtRecord->nSkill[4], 0, nTargetX, nTargetY);

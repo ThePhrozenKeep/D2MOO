@@ -1643,7 +1643,7 @@ const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(
         {
         case MONSTER_DIABLO:
         case MONSTER_DIABLOCLONE:
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
         case MONSTER_UBERDIABLO:
 #endif
             if (nMode == MONMODE_SKILL4)
@@ -1680,7 +1680,7 @@ const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(
         case MONSTER_BAALTHRONE:
         case MONSTER_BAALCRAB:
         case MONSTER_BAALCLONE:
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
         case MONSTER_UBERBAAL:
 #endif
             if (nMode == MONMODE_SKILL3)

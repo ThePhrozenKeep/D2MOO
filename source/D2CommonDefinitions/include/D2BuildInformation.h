@@ -28,3 +28,7 @@
 #else
 #define D2_HAS_MULTILAN 0
 #endif
+
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+#define D2_VERSION_HAS_UBERS
+#endif

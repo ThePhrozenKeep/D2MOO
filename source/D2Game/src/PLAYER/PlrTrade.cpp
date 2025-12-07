@@ -521,7 +521,7 @@ int32_t __fastcall PLRTRADE_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit
     return ACT1Q4_CreateCowPortal(pGame, pUnit);
 }
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 //1.14d: 0x00565A90
 int32_t __fastcall PLRTRADE_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
@@ -543,7 +543,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
     {
         nullptr,
         PLRTRADE_CreateCowPortal,
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
         PLRTRADE_CreateUberRunPortal,
         PLRTRADE_CreateUberFinalePortal
 #endif

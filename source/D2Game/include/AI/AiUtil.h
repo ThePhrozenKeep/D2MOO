@@ -71,7 +71,7 @@ struct UnkAiStrc5
 	int32_t nMaxDistance;
 };
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 struct D2UbersAiCallbackArgStrc
 {
 	int32_t nUberMephisto; // BOOL

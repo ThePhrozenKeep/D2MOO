@@ -458,7 +458,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     pGame->dwLastUsedUnitGUID[4] = 0;
     pGame->dwLastUsedUnitGUID[5] = 0;
 
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
     pGame->bUberPortalRuns[0] = 0;
     pGame->bUberPortalRuns[1] = 0;
     pGame->bUberPortalRuns[2] = 0;

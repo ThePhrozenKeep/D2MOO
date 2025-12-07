@@ -1016,7 +1016,7 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 		break;
 
 	case MONSTER_EVILHOLE1:
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 		if (pMonster && pMonster->dwClassId == MONSTER_DEMONHOLE)
 		{
 			*pId = MONSTERS_ValidateMonsterId(MONSTER_MEGADEMON6);

@@ -657,7 +657,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 
 		do
 		{
-#ifdef D2_VERSION_111_UBERS
+#ifdef D2_VERSION_HAS_UBERS
 			if ((nFlags & pDrlgRoom->dwFlags) && pDrlgRoom->pLevel->nLevelId != LEVEL_PANDEMONIUMRUN1)
 #else
 			if (nFlags & pDrlgRoom->dwFlags)
