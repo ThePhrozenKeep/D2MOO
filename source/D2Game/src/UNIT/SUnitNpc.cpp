@@ -2086,7 +2086,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2ItemDropStrc itemDrop = {};
         ITEMS_FillItemDrop(pGame, &itemDrop, pInput);
 
-        itemDrop.dwFlags2 |= ITEMDROPFLAG_USEILVL | (ITEMS_IsEthereal(pInput) != 0 ? ITEMDROPFLAG_ALWAYSETH : ITEMDROPFLAG_NEVERETH);
+        itemDrop.dwFlags2 |= ITEMDROPFLAG_STAFFMODUSEILVL | (ITEMS_IsEthereal(pInput) != 0 ? ITEMDROPFLAG_ALWAYSETH : ITEMDROPFLAG_NEVERETH);
         itemDrop.wItemFormat = pGame->wItemFormat;
 
         bool bInputIsPersonalized = false;

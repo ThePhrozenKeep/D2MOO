@@ -2734,7 +2734,7 @@ void __fastcall sub_6FC52410(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
     const int32_t nItemLevel = pItemDrop->nItemLvl;
     if (ITEMS_GetItemFormat(pUnit) != 0)
     {
-        sub_6FC52650(pUnit, nItemLevel, nSkillId, nSkillCount, pItemDrop->dwFlags2 & ITEMDROPFLAG_USEILVL ? pItemDrop->nItemLvl : 0);
+        sub_6FC52650(pUnit, nItemLevel, nSkillId, nSkillCount, pItemDrop->dwFlags2 & ITEMDROPFLAG_STAFFMODUSEILVL ? pItemDrop->nItemLvl : 0);
     }
     else
     {
