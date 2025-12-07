@@ -852,7 +852,7 @@ void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2Uni
         nBaseId = nMonsterId;
     }
 
-    nBaseId = MONSTERS_ValidateMonsterId(nBaseId);
+    nBaseId = (nBaseId >= 0 && nBaseId < sgptDataTables->nMonStatsTxtRecordCount) ? nBaseId : -1;
 
     switch (nBaseId)
     {
@@ -871,7 +871,8 @@ void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2Uni
         return;
     case MONSTER_WARRIV2:
         // this call does nothing
-        //D2GAME_QUESTS_WarrivSpawn_6FC95740(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), MONSTERS_ValidateMonsterId(MONSTER_WARRIV2));
+        //nBaseId = (MONSTER_WARRIV2 >= 0 && MONSTER_WARRIV2 < sgptDataTables->nMonStatsTxtRecordCount) ? MONSTER_WARRIV2 : -1;
+        //D2GAME_QUESTS_WarrivSpawn_6FC95740(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), nBaseId);
         return;
     case MONSTER_DURIEL:
 #ifdef D2_VERSION_111_UBERS
