@@ -558,7 +558,7 @@ int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pIte
         }
     }
 
-    return pItemDrop->dwFlags2 & ITEMDROPFLAG_SUPERIOR ? ITEMQUAL_SUPERIOR : ITEMQUAL_INFERIOR;
+    return (pItemDrop->dwFlags2 & ITEMDROPFLAG_SUPERIOR) ? ITEMQUAL_SUPERIOR : ITEMQUAL_INFERIOR;
 }
 
 //D2Game.0x6FC4E1A0
