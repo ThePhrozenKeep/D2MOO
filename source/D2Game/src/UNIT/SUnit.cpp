@@ -12,6 +12,7 @@
 #include <D2Monsters.h>
 #include <D2Items.h>
 #include <DataTbls/MonsterIds.h>
+#include <DataTbls/ObjectsIds.h>
 #include <DataTbls/LevelsIds.h>
 #include <Path/PathMisc.h>
 
