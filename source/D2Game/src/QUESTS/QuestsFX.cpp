@@ -4,6 +4,7 @@
 
 #include "D2DataTbls.h"
 #include <DataTbls/MissilesIds.h>
+#include <DataTbls/MonsterIds.h>
 #include <DataTbls/ObjectsIds.h>
 #include <DataTbls/ObjectsTbls.h>
 #include <Units/UnitFinds.h>
