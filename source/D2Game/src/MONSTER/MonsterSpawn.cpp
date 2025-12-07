@@ -11,14 +11,18 @@
 #include <DataTbls/SkillsIds.h>
 #include <D2Skills.h>
 #include <D2StatList.h>
+#include <D2States.h>
 
 
 #include "AI/AiGeneral.h"
 #include "GAME/Clients.h"
 #include "ITEMS/Items.h"
+#include "MONSTER/Monster.h"
 #include "MONSTER/MonsterAI.h"
 #include "MONSTER/MonsterMode.h"
 #include "MONSTER/MonsterRegion.h"
+#include "MONSTER/MonsterUnique.h"
+#include "QUESTS/Quests.h"
 #include "SKILLS/SkillAss.h"
 #include "UNIT/SUnit.h"
 
@@ -867,7 +871,7 @@ void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2Uni
         return;
     case MONSTER_WARRIV2:
         // this call does nothing
-        D2GAME_QUESTS_WarrivSpawn_6FC95740(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), MONSTERS_ValidateMonsterId(MONSTER_WARRIV2));
+        //D2GAME_QUESTS_WarrivSpawn_6FC95740(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), MONSTERS_ValidateMonsterId(MONSTER_WARRIV2));
         return;
     case MONSTER_DURIEL:
 #ifdef D2_VERSION_111_UBERS
