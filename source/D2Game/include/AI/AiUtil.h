@@ -121,6 +121,10 @@ D2UnitStrc* __fastcall sub_6FCF1DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 D2UnitStrc* __fastcall sub_6FCF1E30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg);
 //D2Game.0x6FCF1E80
 D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* a3, D2UnitStrc* (__fastcall* a4)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), int32_t nCallbackId);
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x005DD140
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_Ubers(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg);
+#endif
 //D2Game.0x6FCF20E0
 void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit);
 //D2Game.0x6FCF2110

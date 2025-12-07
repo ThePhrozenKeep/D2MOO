@@ -4617,8 +4617,8 @@ void __fastcall AITHINK_Fn050_Mephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
 	// unused
-	const int32_t nX = CLIENTS_GetUnitX(pUnit);
-	const int32_t nY = CLIENTS_GetUnitY(pUnit);
+	//const int32_t nX = CLIENTS_GetUnitX(pUnit);
+	//const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
 	const int32_t nMinionTypes[8] = {
 		MONSTER_SKELETON8,
