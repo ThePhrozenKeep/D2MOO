@@ -1975,7 +1975,7 @@ int32_t __fastcall ACT1Q4_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUn
 		D2CoordStrc pCoord;
 		D2ActiveRoomStrc* pFreeRoom = nullptr;
 		UNITS_GetCoords(pUnit, &pCoord);
-		QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
+		QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
 		D2UnitStrc* pPortal;
 		if (pFreeRoom
 		&& D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pFreeRoom, pCoord.nX, pCoord.nY, nLevelId, &pPortal, OBJECT_PERMANENT_TOWN_PORTAL, 0))
@@ -2016,7 +2016,7 @@ int32_t __fastcall ACT1Q4_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc* 
 		D2CoordStrc pCoord;
 		D2ActiveRoomStrc* pFreeRoom = nullptr;
 		UNITS_GetCoords(pUnit, &pCoord);
-		QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
+		QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
 		D2UnitStrc* pPortal;
 		if (pFreeRoom
 		&& D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pFreeRoom, pCoord.nX, pCoord.nY, LEVEL_PANDEMONIUMFINALE, &pPortal, OBJECT_PERMANENT_TOWN_PORTAL, 0))
