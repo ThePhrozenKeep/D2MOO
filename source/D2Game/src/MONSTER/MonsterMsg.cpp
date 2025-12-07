@@ -91,7 +91,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
                 nHpPct |= 0x80;
             }
 
-            D2GAME_PACKETS_SendPacket0x0C_6FC3C8A0(pClient, 0xCu, 1, pUnit->dwUnitId, 19, pUnit->dwLastHitClass, nHpPct);
+            D2GAME_PACKETS_SendPacket0x0C_6FC3C8A0(pClient, 0xCu, UNIT_MONSTER, pUnit->dwUnitId, 19, pUnit->dwLastHitClass, nHpPct);
         }
     }
 

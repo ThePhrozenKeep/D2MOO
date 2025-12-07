@@ -270,7 +270,8 @@ int32_t __fastcall ARENA_Return0()
     return 0;
 }
 
-//D2Game.0x6FC31790
+//1.10f: D2Game.0x6FC31790
+//1.13c: D2Game.0x6FCD2620
 uint32_t __fastcall ARENA_ShouldTreatClassIdAsTemplateId(D2GameStrc* pGame)
 {
     D2ArenaStrc* pArena = pGame->pArenaCtrl;

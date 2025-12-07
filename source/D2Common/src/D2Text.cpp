@@ -1,5 +1,5 @@
 #include "D2Text.h"
-
+#include <Fog.h>
 
 //D2Common.0x6FDC36E0 (#10901)
 D2TextHeaderStrc* __stdcall TEXT_AllocTextHeader(void* pMemPool)
@@ -233,13 +233,13 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 	// TODO: Replace this with array version of D2_ALLOC_STRC_POOL.
 	D2TextNodeStrc* pNodeList = (D2TextNodeStrc*)D2_ALLOC_POOL(pTextHeader->pMemPool, sizeof(D2TextNodeStrc) * pTextHeader->nCount);
 
-	int i = 0;
+	int nodeIndex = 0;
 	for (D2TextNodeStrc* pNode = pTextHeader->pNode; pNode != nullptr; pNode = pNode->pNext)
 	{
-		pNodeList[i].nStringId = pNode->nStringId;
-		pNodeList[i].nMenu = pNode->nMenu;
+		pNodeList[nodeIndex].nStringId = pNode->nStringId;
+		pNodeList[nodeIndex].nMenu = pNode->nMenu;
 
-		++i;
+		++nodeIndex;
 	}
 
 	// Sort the node list via insertion sort.

@@ -131,6 +131,8 @@ bool __fastcall ACT3Q4_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 			return true;
 		}
 		break;
+	default:
+		break;
 	}
 
 	return false;
@@ -211,7 +213,7 @@ void __fastcall ACT3Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct3Q4NpcMessages;
 	pQuestData->bActive = 1;
 	pQuestData->fState = 0;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q4;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q4;
 	pQuestData->pfActiveFilter = ACT3Q4_ActiveFilterCallback;
 	pQuestData->nInitNo = 0;
 	pQuestData->pfStatusFilter = ACT3Q4_StatusFilterCallback;
@@ -407,7 +409,7 @@ void __fastcall ACT3Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 					QUESTRECORD_ClearQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q4, QFLAG_REWARDPENDING);
 					QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q4, QFLAG_REWARDGRANTED);
 					QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q4, QFLAG_PRIMARYGOALDONE);
-					QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuest);
+					QUESTRECORD_ResetIntermediateStateFlags(pQuestFlags, pQuestData->nQuestFilter);
 					QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q4, QFLAG_CUSTOM1);
 					if (pQuestData->bNotIntro)
 					{
@@ -455,6 +457,8 @@ void __fastcall ACT3Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		}
 		break;
 	}
+	default:
+		break;
 	}
 }
 
@@ -726,7 +730,7 @@ void __fastcall ACT3Q4_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		return;
 	}
 
-	if (pQuestArg->pPlayer && QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuest, QFLAG_REWARDGRANTED))
+	if (pQuestArg->pPlayer && QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty], pQuestData->nQuestFilter, QFLAG_REWARDGRANTED))
 	{
 		return;
 	}

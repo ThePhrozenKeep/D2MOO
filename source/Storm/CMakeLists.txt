@@ -1,11 +1,15 @@
 
-add_library(Storm SHARED src/DllMain.cpp include/Storm.h include/StormHandles.h)
-# The definition file that matches functions with their ordinals
-target_sources(Storm PRIVATE definitions/Storm.${D2MOO_ORDINALS_VERSION}.def)
-target_include_directories(Storm PUBLIC include)
+D2MOO_prepare_targets(Storm)
 
-# If not defined, we use declspec(dllimport), so only define it to build the .dll
-target_compile_definitions(Storm PRIVATE STORM_IMPL)
+target_link_libraries(${StormImplName} PUBLIC D2CommonDefinitions squall::Storm)
+target_compile_definitions(${StormImplName} PUBLIC WITH_SQUALL=1)
 
-target_link_libraries(Storm PUBLIC D2CommonDefinitions squall::Storm)
-target_compile_definitions(Storm PUBLIC WITH_SQUALL=1)
+target_sources(${StormImplName}
+  PRIVATE
+    src/Storm.cpp
+
+    include/Storm.h
+    include/StormHandles.h
+)
+
+D2MOO_target_source_group(Storm)

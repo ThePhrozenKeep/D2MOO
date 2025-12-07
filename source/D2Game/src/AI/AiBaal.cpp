@@ -60,7 +60,7 @@ void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUn
 		STATES_ToggleState(pUnit, STATE_INFERNO, 0);
 	}
 
-	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->dwSpecialState);
+	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 
 	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nParam1 && nParam2)
 	{
@@ -261,7 +261,7 @@ int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget,
 	{
 		nCollisionRangeWeight = 100;
 	}
-	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER))
+	else if (!UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER))
 	{
 		nCollisionRangeWeight = 75;
 	}
@@ -353,7 +353,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 	}
 
 	const int32_t bInMeleeRange = UNITS_IsInMeleeRange(pUnit, pTarget, 0);
-	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_BARRIER) == 0;
+	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER) == 0;
 	if (bInMeleeRange)
 	{
 		int32_t aiParams[16] = { 0, 50, 0, 0, 0, 0, 0, 0, 20, 30, 150, 10, 10, 70, 40, 0 };
@@ -668,7 +668,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	}
 	case 4:
 	{
-		AITTACTICS_WalkCloseToUnit(pGame, pUnit, 16);
+		AITACTICS_WalkCloseToUnit(pGame, pUnit, 16);
 		return;
 	}
 	case 5:
@@ -792,7 +792,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 			nY += CLIENTS_GetUnitY(pUnit);
 		}
 
-		D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+		D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 		if (pRoom)
 		{
 			D2UnitStrc* pBaalClone = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, nMode, -1, 0);

@@ -3,6 +3,7 @@
 #include <D2Common.h>
 #include <D2BasicTypes.h>
 #include <D2Inventory.h>
+#include <Archive.h>
 
 #pragma pack(1)
 
@@ -56,7 +57,7 @@ struct D2InventoryTxt
 #pragma pack()
 
 //D2Common.0x6FD542D0
-void __fastcall DATATBLS_LoadInventoryTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadInventoryTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD54F10
 void __fastcall DATATBLS_UnloadInventoryTxt();
 //D2Common.0x6FD54F20 (#10635)

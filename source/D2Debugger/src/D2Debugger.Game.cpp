@@ -11,7 +11,9 @@
 #include "IconsFontAwesome6.h"
 
 #include <Windows.h>
-extern HMODULE DLLBASE_D2Game;
+
+#if defined(D2_VERSION_110F)
+#define HAS_SPAWN_FUNCTIONS
 HMODULE delayedD2GameDllBaseGet()
 {
     static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
@@ -19,9 +21,12 @@ HMODULE delayedD2GameDllBaseGet()
 }
 
 static const int D2GameImageBase = 0x6FC30000;
-D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
-D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
-
+D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
+D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
+#elif defined(D2_VERSION_114D)
+#else
+#pragma message("Warning: Unsupported D2 version for D2Debugger")
+#endif
 
 // Using a define so that we break inline
 #define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
@@ -32,17 +37,6 @@ std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
     std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3, 0);
     Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2 /*See toUtf doc*/);
     return utf8CharBuffer;
-}
-
-// Note: Missile and items are inverted on purpose here, this is like this in the game
-int GAME_RemapUnitTypeToListIndex(const D2C_UnitTypes nUnitType)
-{
-    switch (nUnitType)
-    {
-    case UNIT_MISSILE: return 4;
-    case UNIT_ITEM: return 3;
-    default: return (int)nUnitType;
-    }
 }
 
 static const char* gActNames[] = {
@@ -166,11 +160,11 @@ void D2DebugPath(D2DynamicPathStrc* pDynamicPath)
     ImGui::BulletText("Type=%d Flags=0x%x", pDynamicPath->dwPathType, pDynamicPath->dwFlags);
     ImGui::BulletText("Game  (X,Y)=(%5d,%5d)", pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
     ImGui::SameLine(); ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
-    ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->SP1.X, pDynamicPath->SP1.Y);
-    if (pDynamicPath->SP2 != D2PathPointStrc{0,0})
-        ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->SP2.X, pDynamicPath->SP2.Y);
-    if (pDynamicPath->SP3 != D2PathPointStrc{0,0})
-        ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->SP3.X, pDynamicPath->SP3.Y);
+    ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->tTargetCoord.X, pDynamicPath->tTargetCoord.Y);
+    if (pDynamicPath->tPrevTargetCoord != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->tPrevTargetCoord.X, pDynamicPath->tPrevTargetCoord.Y);
+    if (pDynamicPath->tFinalTargetCoord != D2PathPointStrc{0,0})
+        ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->tFinalTargetCoord.X, pDynamicPath->tFinalTargetCoord.Y);
     ImGui::BulletText   ("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
 
 }
@@ -284,6 +278,7 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
 
 void D2DebugUnitSpawner(D2GameStrc* pGame)
 {
+#ifdef HAS_SPAWN_FUNCTIONS
     if (ImGui::CollapsingHeader("UnitSpawner"))
     {
         D2CoordStrc tCoords{};
@@ -304,7 +299,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
             static int currentSuperUniqueSelectionId = 0;
             D2ComboBox("SuperUnique", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount(), GetSuperUniqueUTF8Name);
-            ImGui::SameLine();
+			ImGui::SameLine();
             if (ImGui::Button("Spawn##SuperUnique"))
             {
                 if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
@@ -317,7 +312,6 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 }
             }
 
-
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
             {
@@ -328,7 +322,8 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 return GetNOTFOUNDCharBuffer();
             };
             D2ComboBox("Normal", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount(), GetNormalMonsterUTF8Name);
-            ImGui::SameLine();
+
+			ImGui::SameLine();
             if (ImGui::Button("Spawn##Normal"))
             {
                 
@@ -358,6 +353,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
         }
     }
+#endif
 }
 
 static bool bFreezeGame = false;
@@ -381,6 +377,7 @@ bool D2DebugGame(D2GameStrc* pGame)
         case DIFFMODE_NORMAL:ImGui::Text("Normal"); break;
         case DIFFMODE_NIGHTMARE:ImGui::Text("Nightmare"); break;
         case DIFFMODE_HELL:ImGui::Text("Hell"); break;
+		default: D2_UNREACHABLE;
         }
         ImGui::Text("Init seed: 0x%x", pGame->dwInitSeed);
         ImGui::Text("Frame %d", pGame->dwGameFrame);

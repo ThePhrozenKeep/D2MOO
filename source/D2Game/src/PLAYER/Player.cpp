@@ -96,7 +96,7 @@ void __fastcall PLAYER_Destroy(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, INVENTORY_GetUnitGUIDFromCorpse(pCorpse));
         if (pUnit)
         {
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (pRoom)
             {
                 DUNGEON_AllocDrlgDelete(pRoom, pUnit->dwUnitType, pUnit->dwUnitId);
@@ -159,8 +159,8 @@ void __fastcall PLAYER_RemoveAllPlayers(D2GameStrc* pGame)
 void __fastcall sub_6FC7B7A0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY)
 {
     sub_6FC817D0(pGame, pUnit, nullptr, PLRMODE_NEUTRAL, nX, nY, 1);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_DELAYEDPORTAL, pGame->dwGameFrame + 250, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_DELAYEDPORTAL, pGame->dwGameFrame + 250, 0, 0);
 }
 
 //D2Game.0x6FC7B800
@@ -452,7 +452,7 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 //1.10f: D2Game.0x6FC7BFC0
 //1.13c: D2Game.0x6FC57B10
-void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nPlayerGUID, D2CoordStrc* pCoord)
+void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nPlayerGUID, D2CoordStrc* pCoord)
 {
     D2_ASSERT(pRoom);
 
@@ -473,9 +473,9 @@ void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nPlay
     STATES_ToggleState(pPlayer, STATE_PLAYERBODY, 1);
     pPlayer->dwFlags |= UNITFLAG_INITSEEDSET;
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, UNITEVENTCALLBACK_STATREGEN, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, UNITEVENTCALLBACK_TRAP, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, UNITEVENTCALLBACK_FREEHOVER, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_STATREGEN, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_TRAP, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_FREEHOVER, 0);
 
     const int32_t nOwnerGUID = INVENTORY_GetOwnerId(pPlayer->pInventory);
     if (nOwnerGUID != -1)
@@ -523,7 +523,7 @@ void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     ACT5Q5_OnPortalClosed(pGame, pPortal);
 
     D2UnitStrc* pOwner = SUNIT_GetPortalOwner(pGame, pPortal);
-    D2RoomStrc* pPortalRoom = UNITS_GetRoom(pPortal);
+    D2ActiveRoomStrc* pPortalRoom = UNITS_GetRoom(pPortal);
     if (pPortalRoom)
     {
         DUNGEON_AllocDrlgDelete(pPortalRoom, UNIT_OBJECT, pPortal->dwUnitId);
@@ -539,7 +539,7 @@ void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 
     ACT5Q5_OnPortalClosed(pGame, pOwner);
 
-    D2RoomStrc* pOwnerRoom = UNITS_GetRoom(pOwner);
+    D2ActiveRoomStrc* pOwnerRoom = UNITS_GetRoom(pOwner);
     if (pOwnerRoom)
     {
         DUNGEON_AllocDrlgDelete(pOwnerRoom, UNIT_OBJECT, pOwner->dwUnitId);
@@ -576,7 +576,7 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         nGoldValue = 2'000'000'000;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     D2UnitStrc* pItem = sub_6FC4FCA0(pGame, pRoom, &pCoord, 4, 1, pUnit);
     if (!pItem)
     {

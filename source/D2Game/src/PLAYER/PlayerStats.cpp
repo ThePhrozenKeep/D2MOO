@@ -120,7 +120,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation)
     {
-        gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation(pGame->nServerToken, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
+        gpD2EventCallbackTable_6FD45830->pfUpdateGameInformation(pGame->nGameId, UNITS_GetPlayerName(pUnit), nClassId, nNewLevel);
     }
 }
 
@@ -193,7 +193,7 @@ int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId
         }
         return 1;
     }
+	default:
+		return 0;
     }
-
-    return 0;
 }

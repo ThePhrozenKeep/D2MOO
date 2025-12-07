@@ -15,7 +15,7 @@ struct D2Act5Quest4Strc						//sizeof 0x90
 	uint8_t bPortalCreated;					//0x88
 	uint8_t bWaypointNotActivated;			//0x89
 	uint8_t pad0x8A[2];						//0x8A
-	D2RoomStrc* pRoom;						//0x8C
+	D2ActiveRoomStrc* pRoom;						//0x8C
 };
 
 #pragma pack()

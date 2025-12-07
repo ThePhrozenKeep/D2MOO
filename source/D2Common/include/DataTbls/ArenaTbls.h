@@ -57,13 +57,13 @@ struct D2CharTemplateTxt
 #pragma pack()
 
 //D2Common.0x6FD47840
-void __fastcall DATATBLS_LoadArenaTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD47970 (#10596)
 D2COMMON_DLL_DECL D2ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType);
 //D2Common.0x6FD479B0
 void __fastcall DATATBLS_UnloadArenaTxt();
 //D2Common.0x6FD479D0
-void __fastcall DATATBLS_LoadCharTemplateTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD48770
 void __fastcall DATATBLS_UnloadCharTemplateTxt();
 //D2Common.0x6FD48790 (#10664)

@@ -37,7 +37,11 @@
 
 CRITICAL_SECTION gClientListLock_6FD447D0;
 CRITICAL_SECTION gSrvClientListByNameLock_6FD443B8;
+//1.10f: 0x6FD447E8
+//1.13c: 0x6FD31C18
 BOOL gbClientListInitialized_6FD447E8;
+//1.10f: D2Game.0x6FD43FB8
+//1.13c: D2Game.0x6FD307B8
 D2ClientStrc* gpClientList_6FD43FB8[256];
 D2ClientStrc* gpClientListByName_6FD443D0[256];
 
@@ -84,9 +88,9 @@ int32_t __stdcall CLIENTS_GetExpansionClientCount()
 
     for (int32_t i = 0; i < 256; ++i)
     {
-        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[i]; pClient; pClient = pClient->pListNext)
+        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[i]; pClient; pClient = pClient->pServerNext)
         {
-            if (pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION)
+            if (pClient->tSaveFlags.bExpansion)
             {
                 ++result;
             }
@@ -100,27 +104,28 @@ int32_t __stdcall CLIENTS_GetExpansionClientCount()
 
 // Helper Function
 // Returns the removed client
-static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListWithId(D2ClientStrc** ppClientListHead, int32_t nClientIdToRemove)
+typedef D2ClientStrc* D2ClientStrc::* D2ClientListPtr;
+static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListWithId(D2ClientStrc** ppClientListHead, int32_t nClientIdToRemove, D2ClientListPtr pListMemberPtr)
 {
     if ((*ppClientListHead)->dwClientId == nClientIdToRemove)
     {
         D2ClientStrc* pClientToRemove = *ppClientListHead;
-        *ppClientListHead = pClientToRemove->pListNext;
+		*ppClientListHead = pClientToRemove->*pListMemberPtr;
         return pClientToRemove;
     }
     else
     {
         D2ClientStrc* pPreviousClient = (*ppClientListHead);
-        for (D2ClientStrc* pCurrentClient = pPreviousClient->pListNext; ; pCurrentClient = pCurrentClient->pListNext)
+        for (D2ClientStrc* pCurrentClient = pPreviousClient->*pListMemberPtr; ; pCurrentClient = pCurrentClient->pServerNext)
         {
             if (pCurrentClient->dwClientId == nClientIdToRemove)
             {
                 // Unlink client
-                pPreviousClient->pListNext = pCurrentClient->pListNext;
+                pPreviousClient->*pListMemberPtr = pCurrentClient->*pListMemberPtr;
                 return pCurrentClient;
             }
             pPreviousClient = pCurrentClient;
-            D2_ASSERT(pCurrentClient->pListNext != nullptr);
+            D2_ASSERT(pCurrentClient->*pListMemberPtr != nullptr);
         }
         D2_UNREACHABLE;
     }
@@ -132,18 +137,18 @@ static D2ClientStrc* __fastcall CLIENTS_RemoveClientFromListByName(D2ClientStrc*
     if (0 == SStrCmpI((*ppClientListHead)->szName, szClientToRemoveName, 16))
     {
         D2ClientStrc* pClientToRemove = *ppClientListHead;
-        *ppClientListHead = pClientToRemove->pNextByName;
+        *ppClientListHead = pClientToRemove->pServerNextByName;
         return pClientToRemove;
     }
     else
     {
         D2ClientStrc* pPreviousClient = (*ppClientListHead);
-        for (D2ClientStrc* pCurrentClient = pPreviousClient->pNextByName; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pNextByName)
+        for (D2ClientStrc* pCurrentClient = pPreviousClient->pServerNextByName; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pServerNextByName)
         {
             if (0 == SStrCmpI(pCurrentClient->szName, szClientToRemoveName, 16))
             {
                 // Unlink client
-                pPreviousClient->pNextByName = pCurrentClient->pNextByName;
+                pPreviousClient->pServerNextByName = pCurrentClient->pServerNextByName;
                 return pCurrentClient;
             }
             pPreviousClient = pCurrentClient;
@@ -214,14 +219,14 @@ void __fastcall CLIENTS_SetPlayerInClient(D2ClientStrc* pClient, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC31EF0
-void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2RoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
+void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     if (!pGame || !pPlayer || !pClient)
     {
         return;
     }
 
-    D2RoomStrc* pRoom = pRoomArg;
+    D2ActiveRoomStrc* pRoom = pRoomArg;
     int32_t nX = 0;
     int32_t nY = 0;
 
@@ -264,7 +269,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
             if (pCorpsePlayer)
             {
                 D2CoordStrc coords = {};
-                D2RoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
+                D2ActiveRoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
                 sub_6FC7BFC0(pGame, pSpawnLocation, nCorpseUnitGUID, &coords);
             }
 
@@ -316,7 +321,7 @@ void __fastcall sub_6FC32220(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC32260
-int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6)
+int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pClient);
@@ -325,7 +330,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
     D2UnitStrc* ppUnit = nullptr;
 
-    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, a4, a5, a6);
+    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, pRoomArg, nXArg, nYArg);
     if (nError)
     {
         FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", pClient->szName, nError, "nError");
@@ -333,7 +338,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
         return nError;
     }
 
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION)
+    if (pClient->tSaveFlags.bExpansion)
     {
         if (!pGame->bExpansion)
         {
@@ -352,7 +357,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
         }
     }
 
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_LADDER)
+    if (pClient->tSaveFlags.bLadder)
     {
         if (!pGame->dwGameType)
         {
@@ -370,9 +375,9 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
             return SYSERROR_LADDERGAME;
         }
     }
-    if (pClient->nSaveFlags & CLIENTSAVEFLAG_HARDCORE)
+    if (pClient->tSaveFlags.bHardcore)
     {
-        if (pClient->nSaveFlags & CLIENTSAVEFLAG_DEAD)
+        if (pClient->tSaveFlags.bDead)
         {
             FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:SYSERROR_DEADHARDCORE", pClient->szName);
             pClient->pPlayer = nullptr;
@@ -423,7 +428,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     {
         if (pClient->HotkeySkills[i].nSkill >= 0 && pClient->HotkeySkills[i].nSkill < sgptDataTables->nSkillsTxtRecordCount)
         {
-            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].unk0x002, pClient->HotkeySkills[i].dwFlags);
+            D2GAME_PACKETS_SendPacket0x7B_6FC3F720(pClient, i, pClient->HotkeySkills[i].nSkill, (uint8_t)pClient->HotkeySkills[i].nHand, pClient->HotkeySkills[i].nItemGUID);
         }
     }
 
@@ -446,8 +451,9 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     return 0;
 }
 
-//D2Game.0x6FC325E0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9)
+//1.10f: D2Game.0x6FC325E0
+//1.13c: D2Game.0x6FC6A9B0
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t a8, int32_t a9)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
     {
@@ -456,7 +462,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
 
     if (pGame->nClients >= 8)
     {
-        GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Couldn't add client %d '%s' to full game %d '%s'", nClientId, szClientName, pGame->nServerToken, pGame->szGameName);
+        GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Couldn't add client %d '%s' to full game %d '%s'", nClientId, szClientName, pGame->nGameId, pGame->szGameName);
         return 0;
     }
 
@@ -468,7 +474,7 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
 
     if (ARENA_ShouldTreatClassIdAsTemplateId(pGame))
     {
-        pClient->unk0x0C = nClassIdOrCharTemplate;
+        pClient->nCharTemplate = nClassIdOrCharTemplate;
         pClient->nClassId = DATATBLS_GetClassFromCharTemplateTxtRecord(nClassIdOrCharTemplate, ARENA_GetTemplateType(pGame));
     }
     else
@@ -479,9 +485,9 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     SStrCopy(pClient->szName, szClientName, INT_MAX);
     SStrCopy(pClient->szAccount, szAccount, INT_MAX);
 
-    pClient->unk0x60 = a6;
+    pClient->nCharSaveTransactionToken = nCharSaveTransactionToken;
     pClient->pClientInfo = 0;
-    pClient->dwExpLost = nExpLost;
+    pClient->dwLocale = nLocale;
     pClient->dwClientState = CLIENTSTATE_JUST_CREATED;
     pClient->tPacketDataList.pHead = nullptr;
     pClient->tPacketDataList.pTail = nullptr;
@@ -490,28 +496,28 @@ D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId,
     for (int32_t i = 0; i < 16; ++i)
     {
         pClient->HotkeySkills[i].nSkill = -1;
-        pClient->HotkeySkills[i].unk0x002 = 0;
-        pClient->HotkeySkills[i].dwFlags = -1;
+        pClient->HotkeySkills[i].nHand = 0;
+        pClient->HotkeySkills[i].nItemGUID = -1;
     }
 
     pClient->pNext = pGame->pClientList;
     pGame->pClientList = pClient;
 
     EnterCriticalSection(&gClientListLock_6FD447D0);
-    pClient->pListNext = gpClientList_6FD43FB8[(uint8_t)nClientId];
+    pClient->pServerNext = gpClientList_6FD43FB8[(uint8_t)nClientId];
     gpClientList_6FD43FB8[(uint8_t)nClientId] = pClient;
     LeaveCriticalSection(&gClientListLock_6FD447D0);
 
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szClientName);
 
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
-    pClient->pNextByName = gpClientListByName_6FD443D0[nIndex];
+    pClient->pServerNextByName = gpClientListByName_6FD443D0[nIndex];
     gpClientListByName_6FD443D0[nIndex] = pClient;
     LeaveCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
     ++pGame->nClients;
 
-    GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Added client %d '%s' to game %d '%s'", nClientId, szClientName, pGame->nServerToken, pGame->szGameName);
+    GAME_LogMessage(6, "[CLIENT]  ClientAddToGame:       Added client %d '%s' to game %d '%s'", nClientId, szClientName, pGame->nGameId, pGame->szGameName);
 
     return pClient;
 }
@@ -531,7 +537,7 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
 //D2Game.0x6FC32810
 void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2CharacterPreviewInfoStrc* pCharacterPreviewInfo)
 {
-    FOG_Encode14BitsToString(&pCharacterPreviewInfo->unk0x00, 10);
+    FOG_Encode14BitsToString(&pCharacterPreviewInfo->nVersion, 10);
     D2_ASSERT(pClient);
 
     if (D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, FALSE))
@@ -566,7 +572,7 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         if (nPlayerLevel != 0 && nPlayerLevel <= 99)
         {
-            pCharacterPreviewInfo->nLevel = nPlayerClassId;
+            pCharacterPreviewInfo->nLevel = nPlayerLevel;
         }
         else
         {
@@ -575,17 +581,17 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         const uint32_t nPlayerMode = pPlayer->dwAnimMode;
         
-        uint16_t nClientFlags = pClient->nSaveFlags;
-        if ((nPlayerMode == PLRMODE_DEAD || nPlayerMode == PLRMODE_DEATH) && (pClient->nSaveFlags & CLIENTSAVEFLAG_HARDCORE) != 0)
+		D2PackedClientSaveFlags tClientFlags = pClient->tSaveFlags;
+        if ((nPlayerMode == PLRMODE_DEAD || nPlayerMode == PLRMODE_DEATH) && pClient->tSaveFlags.bHardcore)
         {
-            nClientFlags |= CLIENTSAVEFLAG_DEAD;
+			tClientFlags.bDead = true;
         }
         else
         {
-            nClientFlags &= (~CLIENTSAVEFLAG_DEAD);
+			tClientFlags.bDead = false;
         }
 
-        FOG_Encode14BitsToString(&pCharacterPreviewInfo->nClientFlags, nClientFlags);
+        FOG_Encode14BitsToString(&pCharacterPreviewInfo->nClientFlags, tClientFlags.nPackedValue);
         FOG_Encode14BitsToString(&pCharacterPreviewInfo->nGuildFlags, pClient->tGuildInfo.nGuildFlags);
 
         pCharacterPreviewInfo->nGuildEmblemBgColor = pClient->tGuildInfo.nBackgroundColor ? pClient->tGuildInfo.nBackgroundColor : 0xFFu;
@@ -596,16 +602,17 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc* pClient, D2Charac
 
         if (!nPlayerLevel || nPlayerLevel > 99u
             || nPlayerClassId >= NUMBER_OF_PLAYERCLASSES
-            || (nClientFlags & (CLIENTSAVEFLAG_INIT | CLIENTSAVEFLAG_0x2 | CLIENTSAVEFLAG_0x10)) != 0
+            || (tClientFlags.bInit || tClientFlags.bUnkFlag0x02 || tClientFlags.bUnkFlag0x10)
             || SStrLen((const char*)pCharacterPreviewInfo) != 33) // If any member of D2SaveLaunchStrc is 0. Looks like a debug check that is not required since we only fill with non-zero values.
         {
             // If any issue, we return an empty string
-            *((char*)&pCharacterPreviewInfo->unk0x00) = '\0';
+            *((char*)&pCharacterPreviewInfo->nVersion) = '\0';
         }
     }
 }
 
-//D2Game.0x6FC32A30
+//1.00 : D2Game.0x10002150
+//1.10f: D2Game.0x6FC32A30
 void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientIdToRemove, BOOL bTriggerSave)
 {
     D2_ASSERT(pGame);
@@ -623,7 +630,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     if (gbClientListInitialized_6FD447E8)
     {
         D2_LOCK(&gClientListLock_6FD447D0);
-        D2ClientStrc* pClientToRemove = CLIENTS_RemoveClientFromListWithId(&gpClientList_6FD43FB8[nClientIdToRemove & 0xFF], nClientIdToRemove);
+        D2ClientStrc* pClientToRemove = CLIENTS_RemoveClientFromListWithId(&gpClientList_6FD43FB8[nClientIdToRemove & 0xFF], nClientIdToRemove, &D2ClientStrc::pServerNext);
         D2_ASSERT(pClientToRemove);
         strcpy(szName, pClientToRemove->szName); // NOLINT(clang-diagnostic-deprecated-declarations)
         D2_UNLOCK(&gClientListLock_6FD447D0);
@@ -632,7 +639,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     D2ClientStrc* pClientToRemove = nullptr;
     if (pGame->pClientList)
     {
-        pClientToRemove = CLIENTS_RemoveClientFromListWithId(&pGame->pClientList, nClientIdToRemove);
+        pClientToRemove = CLIENTS_RemoveClientFromListWithId(&pGame->pClientList, nClientIdToRemove, &D2ClientStrc::pNext);
     }
 
     if (gbClientListInitialized_6FD447E8)
@@ -646,7 +653,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     if (!pClientToRemove)
     {
         GAME_LogMessage(6, "[CLIENT]  ClientRemoveFromGame:  *** Can't find client %d to remove from game %d '%s' ***",
-            nClientIdToRemove, pGame->nServerToken, pGame->szGameName);
+			nClientIdToRemove, pGame->nGameId, pGame->szGameName);
         return;
     }
 
@@ -662,7 +669,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
         QUESTS_PlayerDroppedWithQuestItem(pGame, pPlayer);
         PLRTRADE_StopAllPlayerInteractions(pGame, pPlayer);
 
-        D2RoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
         if (pPlayerRoom)
         {
             DUNGEON_AllocDrlgDelete(pPlayerRoom, pPlayer->dwUnitType, pPlayer->dwUnitId);
@@ -677,19 +684,19 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
-                    &pClientToRemove->pClientInfo,
-                    pGame->nServerToken,
-                    pPlayer->dwClassId, nPlayerLevel, nPlayerExperience, HIDWORD(nPlayerExperience),
-                    pClientToRemove->nSaveFlags, pClientToRemove->szName,
-                    (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
-                    0,
-                    0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
+						&pClientToRemove->pClientInfo,
+						pGame->nGameId,
+						pPlayer->dwClassId, nPlayerLevel, nPlayerExperience,
+						pClientToRemove->tSaveFlags.nPackedValue, pClientToRemove->szName,
+						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
+						0,
+						0,
+						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
             }
 
-            GAME_LogMessage( 6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
-                pClientToRemove->dwClientId, pClientToRemove->szName,
-                pGame->nServerToken, pGame->szGameName,
+            GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
+				pClientToRemove->dwClientId, pClientToRemove->szName,
+				pGame->nGameId, pGame->szGameName,
                 pClientToRemove->bUnlockCharacter ? " (but unlock character)" : "(don't unlock character)");
         }
     }
@@ -697,29 +704,28 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *(char*)&pClientToRemove->tCharacterInfo.unk0x00 = '\0';
+            *(char*)&pClientToRemove->tCharacterInfo.nVersion = '\0';
 
             if (D2_VERIFY(gpD2EventCallbackTable_6FD45830->pfLeaveGame))
             {
                 gpD2EventCallbackTable_6FD45830->pfLeaveGame(
-                    &pClientToRemove->pClientInfo,
-                    pGame->nServerToken,
-                    0, 0, 0, 0,
-                    0, pClientToRemove->szName,
-                    (const char*)&pClientToRemove->tCharacterInfo, pClientToRemove->bUnlockCharacter,
-                    0,
-                    0,
-                    pClientToRemove->szAccount, pClientToRemove->unk0x60, &pClientToRemove->unk0x190);
+						&pClientToRemove->pClientInfo,
+						pGame->nGameId,
+						0, 0, 0,0, pClientToRemove->szName,
+						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
+						0,
+						0,
+						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
             }
         }
 
-        GAME_LogMessage( 6, "[SERVER]  ClientRemoveFromGame:  no HUNIT to save for client %d '%s' from game %d '%s'%s",
-            pClientToRemove->dwClientId, pClientToRemove->szName,
-            pGame->nServerToken, pGame->szGameName,
+        GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  no HUNIT to save for client %d '%s' from game %d '%s'%s",
+			pClientToRemove->dwClientId, pClientToRemove->szName,
+			pGame->nGameId, pGame->szGameName,
             pClientToRemove->bUnlockCharacter ? " (but unlock character)" : "(don't unlock character)");
     }
 
-    if (D2RoomStrc* pClientRoom = pClientToRemove->pRoom)
+    if (D2ActiveRoomStrc* pClientRoom = pClientToRemove->pRoom)
     {
         LEVEL_RemoveClientFromAdjacentRooms(pClientRoom, pClientToRemove);
     }
@@ -756,7 +762,7 @@ void __fastcall CLIENTS_FreeClientsFromGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC33020
-void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
+void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 {
     if (!pClient || !pClient->pGame || pClient->pRoom == pRoom)
     {
@@ -766,14 +772,14 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
     DUNGEON_ChangeClientRoom(pClient->pRoom, pRoom);
     D2Common_10077(pClient->pRoom, pRoom);
 
-    D2RoomStrc** ppAdjacentRooms = 0;
+    D2ActiveRoomStrc** ppAdjacentRooms = 0;
     int32_t nAdjacentRooms = 0;
     if (pRoom)
     {
         DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppAdjacentRooms, &nAdjacentRooms);
     }
 
-    D2RoomStrc** ppClientAdjacentRooms = 0;
+    D2ActiveRoomStrc** ppClientAdjacentRooms = 0;
     int32_t nClientAdjacentRooms = 0;
     if (pClient->pRoom)
     {
@@ -849,7 +855,7 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom)
 void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t nUpdateSize)
 {
     D2_ASSERT(pClient->pRoom);
-    D2RoomStrc** pAdjacentRoomsList = nullptr;
+    D2ActiveRoomStrc** pAdjacentRoomsList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pClient->pRoom, &pAdjacentRoomsList, &nNumRooms);
     D2_ASSERT(pAdjacentRoomsList);
@@ -990,6 +996,8 @@ int32_t __fastcall CLIENTS_GetUnitX(D2UnitStrc* pUnit)
     case UNIT_ITEM:
     case UNIT_TILE:
         return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nX : 0;
+	default:
+		break;
     }
 
     return 0;
@@ -1009,6 +1017,8 @@ int32_t __fastcall CLIENTS_GetUnitY(D2UnitStrc* pUnit)
     case UNIT_ITEM:
     case UNIT_TILE:
         return pUnit->pStaticPath ? pUnit->pStaticPath->tGameCoords.nY : 0;
+	default:
+		break;
     }
 
     return 0;
@@ -1049,8 +1059,8 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
         return;
     }
 
-    D2RoomStrc* pClientRoom = pClient->pRoom;
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pClientRoom = pClient->pRoom;
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
     LEVEL_RemoveUnitsExceptClientPlayer(pClientRoom, pClient);
     LEVEL_UpdateUnitsInAdjacentRooms(pGame, pClientRoom, pClient);
     D2Common_10513(pPlayer, pPlayer, (void(__fastcall*)(D2UnitStrc*, int32_t, int32_t, D2UnitStrc*))D2GAME_UpdateAttribute_6FC822D0);
@@ -1082,8 +1092,8 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
         UNITROOM_RefreshUnit(pPlayer);
     }
 }
-
-//D2Game.0x6FC337B0
+//1.00 : D2Game.0x10002D70
+//1.10f: D2Game.0x6FC337B0
 int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId)
 {
     D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
@@ -1097,7 +1107,7 @@ int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId)
 }
 
 //D2Game.0x6FC337E0
-void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom)
+void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 {
     D2_ASSERT(pClient);
 
@@ -1116,8 +1126,8 @@ void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwa
 
     if (pAlwaysNull)
     {
-        pClient->unk0x194[1] = *(int32_t*)pAlwaysNull;
-        pClient->unk0x194[2] = *((int32_t*)(pAlwaysNull) + 3);
+        pClient->unk0x198[0] = *(int32_t*)pAlwaysNull;
+        pClient->unk0x198[1] = *((int32_t*)(pAlwaysNull) + 3);
         pClient->dwFlags |= 2;
     }
     else
@@ -1192,13 +1202,13 @@ void __fastcall CLIENTS_SetClassId(D2ClientStrc* pClient, int32_t nClass)
 //D2Game.0x6FC33A20
 void __fastcall CLIENTS_SetFlags(D2ClientStrc* pClient, int32_t nFlags)
 {
-    pClient->nSaveFlags = nFlags;
+    pClient->tSaveFlags.nPackedValue = nFlags;
 }
 
 //D2Game.0x6FC33A30
 int32_t __fastcall CLIENTS_GetFlags(D2ClientStrc* pClient)
 {
-    return pClient->nSaveFlags;
+    return pClient->tSaveFlags.nPackedValue;
 }
 
 //D2Game.0x6FC33A40
@@ -1206,28 +1216,29 @@ void __fastcall CLIENTS_ToggleFlag(D2ClientStrc* pClient, uint16_t nFlag, int32_
 {
     if (bSet)
     {
-        pClient->nSaveFlags |= nFlag;
+        pClient->tSaveFlags.nPackedValue |= nFlag;
     }
     else
     {
-        pClient->nSaveFlags &= ~nFlag;
+        pClient->tSaveFlags.nPackedValue &= ~nFlag;
     }
 }
 
 //D2Game.0x6FC33A60
 int32_t __fastcall CLIENTS_CheckFlag(D2ClientStrc* pClient, uint16_t nFlag)
 {
-    return pClient->nSaveFlags & nFlag;
+    return pClient->tSaveFlags.nPackedValue & nFlag;
 }
 
 //D2Game.0x6FC33A70
 void __fastcall CLIENTS_UpdateCharacterProgression(D2ClientStrc* pClient, uint16_t nAct, uint16_t nDifficulty)
 {
-    int32_t nNewActDifficulty = nAct + nDifficulty * ((pClient->nSaveFlags & CLIENTSAVEFLAG_EXPANSION) ? NUM_ACTS : NUM_ACTS - 1);
+	const int32_t nActsPerDifficulty = pClient->tSaveFlags.bExpansion ? NUM_ACTS : (NUM_ACTS - 1);
+    int32_t nNewActDifficulty = nAct + nDifficulty * nActsPerDifficulty;
 
-    if (nNewActDifficulty >= ((pClient->nSaveFlags& CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK) >> CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT))
+    if (nNewActDifficulty >= pClient->tSaveFlags.nProgression)
     {
-        pClient->nSaveFlags = pClient->nSaveFlags & (~CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK) | (nNewActDifficulty << CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT);
+		pClient->tSaveFlags.nProgression = nNewActDifficulty;
     }
 }
 
@@ -1274,7 +1285,7 @@ D2GameStrc* __fastcall CLIENTS_GetGame(D2ClientStrc* pClient)
 //D2Game.0x6FC33BB0
 int32_t __fastcall CLIENTS_IsInUnitsRoom(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom)
     {
         for (int32_t i = 0; i < pRoom->nNumClients; ++i)
@@ -1313,7 +1324,7 @@ BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, D2ClientState nExpectedCli
     {
         EnterCriticalSection(&gClientListLock_6FD447D0);
 
-        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pListNext)
+        for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pServerNext)
         {
             if (pClient->dwClientId == nClientId)
             {
@@ -1387,7 +1398,7 @@ int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName)
     int32_t nResult = 1;
     EnterCriticalSection(&gClientListLock_6FD447D0);
 
-    for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pListNext)
+    for (D2ClientStrc* pClient = gpClientList_6FD43FB8[(uint8_t)nClientId]; pClient; pClient = pClient->pServerNext)
     {
         if (!nResult)
         {
@@ -1410,14 +1421,14 @@ int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName)
 }
 
 //D2Game.0x6FC33F20
-int32_t __fastcall sub_6FC33F20(const char* szName)
+int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName)
 {
     int32_t nClientId = 0;
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
 
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
-    for (D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex]; pClient; pClient = pClient->pNextByName)
+    for (D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex]; pClient; pClient = pClient->pServerNextByName)
     {
         if (nClientId)
         {
@@ -1435,18 +1446,18 @@ int32_t __fastcall sub_6FC33F20(const char* szName)
 }
 
 //D2Game.0x6FC33F90
-int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
+int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName)
 {
     int32_t result = 1;
-    const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(a1);
+    const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
     EnterCriticalSection(&gSrvClientListByNameLock_6FD443B8);
 
     D2ClientStrc* pClient = gpClientListByName_6FD443D0[nIndex];
     if (pClient)
     {
-        while (SStrCmpI(pClient->szName, a1, sizeof(pClient->szName)))
+        while (SStrCmpI(pClient->szName, szName, sizeof(pClient->szName)))
         {
-            pClient = pClient->pNextByName;
+            pClient = pClient->pServerNextByName;
             if (!pClient)
             {
                 LeaveCriticalSection(&gSrvClientListByNameLock_6FD443B8);
@@ -1454,9 +1465,9 @@ int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
             }
         }
 
-        if (a2)
+        if (szGameName)
         {
-            SStrCopy(a2, pClient->szName, sizeof(pClient->szName));
+            SStrCopy(szGameName, pClient->szName, sizeof(pClient->szName));
         }
 
         result = 0;
@@ -1467,7 +1478,7 @@ int32_t __fastcall sub_6FC33F90(const char* a1, char* a2)
 }
 
 //D2Game.0x6FC34020
-int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, int32_t a5, int32_t a6, int32_t a7)
+int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7)
 {
     if (!gbClientListInitialized_6FD447E8)
     {
@@ -1507,7 +1518,7 @@ int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveDa
         memcpy(pDestination, pSaveData, nSize);
 
         pClient->nSaveHeaderSize += nSize;
-        pClient->bUnlockCharacter = a5;
+        pClient->bUnlockCharacter = bUnlockCharacter;
 
         if (pClient->nSaveHeaderSize == nTotalSize)
         {
@@ -1572,8 +1583,8 @@ void __fastcall CLIENTS_FreeSaveHeader(D2ClientStrc* pClient)
     }
 
     pClient->nSaveHeaderSize = 0;
-    pClient->unk0x184[1] = 0;
-    pClient->unk0x184[0] = 0;
+    pClient->nSaveHeaderDataSentBytes = 0;
+    pClient->unk0x184 = 0;
     pClient->dwFlags &= ~CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1582,8 +1593,8 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    pClient->unk0x184[0] = 5;
-    pClient->unk0x184[1] = 0;
+    pClient->unk0x184 = 5;
+    pClient->nSaveHeaderDataSentBytes = 0;
     pClient->dwFlags |= CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1618,24 +1629,24 @@ D2ClientStrc* __fastcall CLIENTS_GetNext(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC34430
-void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t a4, int32_t nFlags)
+void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t nHand, int32_t nItemGUID)
 {
     if (pClient)
     {
         pClient->HotkeySkills[nHotkeyId].nSkill = nSkillId;
-        pClient->HotkeySkills[nHotkeyId].unk0x002 = a4;
-        pClient->HotkeySkills[nHotkeyId].dwFlags = nFlags;
+        pClient->HotkeySkills[nHotkeyId].nHand = nHand;
+        pClient->HotkeySkills[nHotkeyId].nItemGUID = nItemGUID;
     }
 }
 
 //D2Game.0x6FC34460
-void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* a4, int32_t* pFlags)
+void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* nHand, int32_t* nItemGUID)
 {
     if (pClient)
     {
         *pSkillId = pClient->HotkeySkills[nId].nSkill;
-        *a4 = pClient->HotkeySkills[nId].unk0x002;
-        *pFlags = pClient->HotkeySkills[nId].dwFlags;
+        *nHand = pClient->HotkeySkills[nId].nHand;
+        *nItemGUID = pClient->HotkeySkills[nId].nItemGUID;
     }
 }
 
@@ -1801,9 +1812,9 @@ void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szA
 }
 
 //D2Game.0x6FC346A0
-void __fastcall sub_6FC346A0(D2ClientStrc* pClient, int32_t* a2)
+void __fastcall D2GAME_GetCharSaveTransactionToken_6FC346A0(D2ClientStrc* pClient, int32_t* pCharSaveTransactionToken)
 {
-    *a2 = pClient->unk0x60;
+    *pCharSaveTransactionToken = pClient->nCharSaveTransactionToken;
 }
 
 //D2Game.0x6FC346B0
@@ -1826,39 +1837,46 @@ D2ClientPlayerDataStrc* __fastcall CLIENTS_GetClientPlayerData(D2ClientStrc* pCl
     return &pClient->clientPlayerData;
 }
 
+static const uint32_t kWarpAttemptExpirationFrameCount = 90 * DEFAULT_FRAMES_PER_SECOND;
+
+static bool IsWarpAttemptToBeConsideredForDelay(D2GameStrc* pGame, int32_t nLastWarpFrame)
+{
+	return nLastWarpFrame != 0
+		&& (uint32_t)(pGame->dwGameFrame - nLastWarpFrame) <= kWarpAttemptExpirationFrameCount;
+}
+
 //D2Game.0x6FC34700
-void __fastcall sub_6FC34700(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
-    {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
-        {
-            pClient->unk0x3C0[i] = pGame->dwGameFrame;
-            return;
-        }
-    }
+	for (int32_t& rLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
+	{
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, rLastWarpFrameEntry))
+		{
+			rLastWarpFrameEntry = pGame->dwGameFrame;
+		}
+	}
 }
 
 //D2Game.0x6FC347A0
-int32_t __fastcall sub_6FC347A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (const int32_t nLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
     {
-        if (!pClient->unk0x3C0[i] || (uint32_t)(pGame->dwGameFrame - pClient->unk0x3C0[i]) > 2250)
+		if (!IsWarpAttemptToBeConsideredForDelay(pGame, nLastWarpFrameEntry))
         {
-            return 0;
+            return FALSE;
         }
     }
-
-    return 1;
+	// If we had 5 recent warps, delay.
+    return TRUE;
 }

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include "D2DrlgDrlg.h"
 #include "D2DrlgDrlgGrid.h"
 #include <Path/Path.h>
+#include <Archive.h>
 
 struct D2LvlPrestTxt;
 
@@ -81,9 +82,9 @@ struct D2DrlgPresetRoomStrc
 #pragma pack()
 
 //Helper function
-inline bool DRLGMAZE_HasMapDS1(D2RoomExStrc* pRoomEx)
+inline bool DRLGMAZE_HasMapDS1(D2DrlgRoomStrc* pDrlgRoom)
 {
-	return pRoomEx->pMaze->nFlags & DRLGPRESETROOMFLAG_HAS_MAP_DS1;
+	return pDrlgRoom->pMaze->nFlags & DRLGPRESETROOMFLAG_HAS_MAP_DS1;
 }
 
 //D2Common.0x6FD859A0 (#11222)
@@ -91,9 +92,9 @@ D2COMMON_DLL_DECL int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
 //D2Common.0x6FD859E0 (#11223)
 D2COMMON_DLL_DECL int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t nAct, int nUnitId);
 //D2Common.0x6FD85A10
-void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, void* pMemPool, const char* szFileName);
+void __fastcall DRLGPRESET_ParseDS1File(D2DrlgFileStrc* pDrlgFile, HD2ARCHIVE hArchive, const char* szFileName);
 //D2Common.0x6FD86050
-void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, void* pMemPool, const char* szFile);
+void __fastcall DRLGPRESET_LoadDrlgFile(D2DrlgFileStrc** ppDrlgFile, HD2ARCHIVE hArchive, const char* szFile);
 //D2Common.0x6FD86190
 void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc** ppDrlgFile);
 //D2Common.0x6FD86310
@@ -109,27 +110,27 @@ D2COMMON_DLL_DECL void __fastcall DRLGPRESET_FreeMapAI(void* pMemPool, D2MapAISt
 //D2Common.0x6FD86540
 void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap, D2SeedStrc* pSeed);
 //D2Common.0x6FD867A0
-void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_SpawnHardcodedPresetUnits(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD86AC0
 void __fastcall DRLGPRESET_AddPresetRiverObjects(D2DrlgMapStrc* pDrlgMap, void* pMemPool, int nOffsetX, D2DrlgGridStrc* pDrlgGrid);
 //D2Common.0x6FD86C80
-void __fastcall DRLGPRESET_FreePresetRoomData(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_FreePresetRoomData(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD86CE0
-void __fastcall DRLGPRESET_FreeDrlgGrids(void* pMemPool, D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_FreeDrlgGrids(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD86D60
-void __fastcall DRLGPRESET_FreeDrlgGridsFromPresetRoom(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_FreeDrlgGridsFromPresetRoom(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD86D80
-void __fastcall DRLGPRESET_AllocPresetRoomData(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_AllocPresetRoomData(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD86DC0
-D2RoomExStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, uint32_t dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7);
+D2DrlgRoomStrc* __fastcall DRLGPRESET_InitPresetRoomData(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, D2DrlgCoordStrc* pDrlgCoord, uint32_t dwDT1Mask, int dwRoomFlags, int dwPresetFlags, D2DrlgGridStrc* a7);
 //D2Common.0x6FD86E50
-void __fastcall DRLGPRESET_InitPresetRoomGrids(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_InitPresetRoomGrids(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD870F0
-void __fastcall DRLGPRESET_GetTombStoneTileCoords(D2RoomExStrc* pRoomEx, D2CoordStrc** ppTombStoneTiles, int* pnTombStoneTiles);
+void __fastcall DRLGPRESET_GetTombStoneTileCoords(D2DrlgRoomStrc* pDrlgRoom, D2CoordStrc** ppTombStoneTiles, int* pnTombStoneTiles);
 //D2Common.0x6FD87130
-void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2RoomExStrc* pRoomEx);
+void __fastcall DRLGPRESET_AddPresetRoomMapTiles(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD87560
-D2RoomExStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, int nFlags, BOOL bSingleRoom);
+D2DrlgRoomStrc* __fastcall DRLGPRESET_BuildArea(D2DrlgLevelStrc* pLevel, D2DrlgMapStrc* pDrlgMap, int nFlags, BOOL bSingleRoom);
 //D2Common.0x6FD87760
 void __fastcall DRLGPRESET_BuildPresetArea(D2DrlgLevelStrc* pLevel, D2DrlgGridStrc* pDrlgGrid, int nFlags, D2DrlgMapStrc* pDrlgMap, BOOL bSingleRoom);
 //D2Common.0x6FD87E10
@@ -143,13 +144,13 @@ int __fastcall DRLGPRESET_GetSizeY(int nLvlPrestId);
 //D2Common.0x6FD87F20
 void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap);
 //D2Common.0x6FD881A0 (#10008)
-D2COMMON_DLL_DECL int __fastcall DRLGPRESET_GetLevelPrestIdFromRoomEx(D2RoomExStrc* pRoomEx);
+D2COMMON_DLL_DECL int __fastcall DRLGPRESET_GetLevelPrestIdFromRoomEx(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD881B0 (#10009)
-D2COMMON_DLL_DECL char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc* pRoomEx);
+D2COMMON_DLL_DECL char* __fastcall DRLGPRESET_GetPickedLevelPrestFilePathFromRoomEx(D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD881D0
-void __fastcall DRLGPRESET_UpdatePops(D2RoomExStrc* pRoomEx, int nX, int nY, BOOL bOtherRoom);
+void __fastcall DRLGPRESET_UpdatePops(D2DrlgRoomStrc* pDrlgRoom, int nX, int nY, BOOL bOtherRoom);
 //D2Common.0x6FD88450
-void __fastcall DRLGPRESET_TogglePopsVisibility(D2RoomExStrc* pRoomEx, int nPopSubIndex, D2DrlgCoordStrc* pDrlgCoord, int nTick, BOOL nCellFlags);
+void __fastcall DRLGPRESET_TogglePopsVisibility(D2DrlgRoomStrc* pDrlgRoom, int nPopSubIndex, D2DrlgCoordStrc* pDrlgCoord, int nTick, BOOL nCellFlags);
 //D2Common.0x6FD88610
 void __fastcall DRLGPRESET_InitLevelData(D2DrlgLevelStrc* pLevel);
 //D2Common.0x6FD886F0

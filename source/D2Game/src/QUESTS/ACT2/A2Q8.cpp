@@ -41,7 +41,7 @@ void __fastcall ACT2Q8_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestDataEx->unk0x00[0] = 0;
 	pQuestDataEx->unk0x00[1] = 0;
 
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q8;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q8;
 	pQuestData->pfStatusFilter = ACT2Q8_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT2Q8_ActiveFilterCallback;
 }

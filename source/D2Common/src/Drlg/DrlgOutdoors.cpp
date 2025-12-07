@@ -899,16 +899,16 @@ static const uint8_t byte_6FDCF958[] =
 };
 
 //D2Common.0x6FD7EFE0
-void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomExStrc* pRoomEx)
+void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRoomStrc* pDrlgRoom)
 {
 
-	DRLGGRID_InitializeGridCells(pLevel->pDrlg->pMempool, &pRoomEx->pOutdoor->pDirtPathGrid, pRoomEx->nTileWidth + 3, pRoomEx->nTileHeight + 3);
+	DRLGGRID_InitializeGridCells(pLevel->pDrlg->pMempool, &pDrlgRoom->pOutdoor->pDirtPathGrid, pDrlgRoom->nTileWidth + 3, pDrlgRoom->nTileHeight + 3);
 
 	D2DrlgCoordStrc tDrlgCoord = {};
-	tDrlgCoord.nPosX = pRoomEx->nTileXPos - 1;
-	tDrlgCoord.nPosY = pRoomEx->nTileYPos - 1;
-	tDrlgCoord.nWidth = pRoomEx->nTileWidth + 3;
-	tDrlgCoord.nHeight = pRoomEx->nTileHeight + 3;
+	tDrlgCoord.nPosX = pDrlgRoom->nTileXPos - 1;
+	tDrlgCoord.nPosY = pDrlgRoom->nTileYPos - 1;
+	tDrlgCoord.nWidth = pDrlgRoom->nTileWidth + 3;
+	tDrlgCoord.nHeight = pDrlgRoom->nTileHeight + 3;
 
 	for (int i = 0; i < pLevel->pOutdoors->nVertices; ++i)
 	{
@@ -916,14 +916,14 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 		{
 			if (pVertex->pNext)
 			{
-				sub_6FD75F60(&pRoomEx->pOutdoor->pDirtPathGrid, pVertex, &tDrlgCoord, 1, FLAG_OPERATION_OR, 2);
+				sub_6FD75F60(&pDrlgRoom->pOutdoor->pDirtPathGrid, pVertex, &tDrlgCoord, 1, FLAG_OPERATION_OR, 2);
 			}
 		}
 	}
 
-	D2DrlgGridStrc* pDirtPathGrid = &pRoomEx->pOutdoor->pDirtPathGrid;
+	D2DrlgGridStrc* pDirtPathGrid = &pDrlgRoom->pOutdoor->pDirtPathGrid;
 
-	for (int nX = 1; nX <= pRoomEx->pDrlgCoord.nWidth; ++nX)
+	for (int nX = 1; nX <= pDrlgRoom->pDrlgCoord.nWidth; ++nX)
 	{
 		static const int nBoxDimension = 3;
 		int aFlags[nBoxDimension * nBoxDimension] = {};
@@ -935,7 +935,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 			return nBoxX * nBoxDimension + nBoxY;
 		};
 
-		const int nStartY = pRoomEx->pDrlgCoord.nHeight + 1;
+		const int nStartY = pDrlgRoom->pDrlgCoord.nHeight + 1;
 		for (int nOffsetX = -1; nOffsetX <= 1; nOffsetX++)
 		{
 			for (int nOffsetY = -1; nOffsetY <= 1; nOffsetY++)
@@ -968,7 +968,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2RoomEx
 					if (const uint32_t v19 = byte_6FDCF958[nDirectionsWithPathFlags])
 					{
 						const uint32_t nNewFloorFLags = ((v19 << 8) | 0x82);
-						DRLGGRID_AlterGridFlag(&pRoomEx->pOutdoor->pFloorGrid, nX - 1, nY - 1, nNewFloorFLags, FLAG_OPERATION_OVERWRITE);
+						DRLGGRID_AlterGridFlag(&pDrlgRoom->pOutdoor->pFloorGrid, nX - 1, nY - 1, nNewFloorFLags, FLAG_OPERATION_OVERWRITE);
 					}
 				}
 			}

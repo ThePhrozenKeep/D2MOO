@@ -26,7 +26,7 @@
 
 
 //D2Game.0x6FC66260
-int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t* pX, int32_t* pY, int32_t a7)
+int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t* pX, int32_t* pY, int32_t a7)
 {
     int32_t nLeft = 0;
     int32_t nTop = 0;
@@ -138,7 +138,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
 }
 
 //D2Game.0x6FC66560
-D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode)
+D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode)
 {
     if (nClassId < 0)
     {
@@ -472,7 +472,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2R
 
         if (nMonsterId == MONSTER_REANIMATEDHORDE3)
         {
-            EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + ITEMS_RollRandomNumber(&pMonster->pSeed) % 50 + 250, 0, 0);
+            EVENT_SetEvent(pGame, pMonster, EVENTTYPE_MONUMOD, pGame->dwGameFrame + ITEMS_RollRandomNumber(&pMonster->pSeed) % 50 + 250, 0, 0);
         }
 
         if (!pMonster || nMode != MONMODE_DEAD)
@@ -591,13 +591,13 @@ int32_t __fastcall sub_6FC670A0(int32_t nMonsterId)
     case MONSTER_WINDOW1:
     case MONSTER_WINDOW2:
         return 0;
+	default:
+		return 1;
     }
-
-    return 1;
 }
 
 //D2Game.0x6FC67190
-void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     // TODO: v24
     D2MonsterRegionStrc* pMonsterRegion = MONSTERREGION_GetMonsterRegionFromLevelId(pGame->pMonReg, DUNGEON_GetLevelIdFromRoom(pRoom));
@@ -731,7 +731,7 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2RoomStrc* pRoo
 }
 
 //D2Game.0x6FC67570
-int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2UnkMonCreateStrc2* a5, int32_t* pX, int32_t* pY)
+int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2UnkMonCreateStrc2* a5, int32_t* pX, int32_t* pY)
 {
     int32_t nLeft = 0;
     int32_t nTop = 0;
@@ -812,7 +812,7 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoor
 }
 
 //D2Game.0x6FC677D0
-D2UnitStrc* __fastcall sub_6FC677D0(D2GameStrc* pGame, D2RoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMin, uint8_t nMax)
+D2UnitStrc* __fastcall sub_6FC677D0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMin, uint8_t nMax)
 {
     if (!nMin || !nMax || nMax < nMin)
     {
@@ -851,7 +851,7 @@ D2UnitStrc* __fastcall sub_6FC677D0(D2GameStrc* pGame, D2RoomStrc* pRoom, D2Room
 }
 
 //D2Game.0x6FC679F0
-void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     constexpr int32_t dword_6FD2EE44[] = { MONSTER_ROGUE2 };
     constexpr uint8_t byte_6FD2EE48[10] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -942,35 +942,35 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
             pMonsterRegion->dwDungeonLevelEx = pLevelsTxtRecord->wMonLvl[nDifficulty];
         }
 
-        int32_t nNumMon = std::min(pLevelsTxtRecord->nNumMon, 13ui8);
-        int32_t nNumNMon = pLevelsTxtRecord->nNumNormMon;
+        int32_t nNumMonstersToSpawn = std::min(pLevelsTxtRecord->nNumMon, 13ui8);
+        int32_t nNumMonstersInSpawnList = pLevelsTxtRecord->nNumNormalMonsters;
         if (nDifficulty > 0)
         {
-            nNumNMon = pLevelsTxtRecord->nNumNMon;
+            nNumMonstersInSpawnList = pLevelsTxtRecord->nNumNightmareHellMonsters;
         }
 
-        nNumMon = std::min(nNumMon, nNumNMon);
+        nNumMonstersToSpawn = std::min(nNumMonstersToSpawn, nNumMonstersInSpawnList);
 
-        int16_t monsterIds[26] = {};
+        int16_t monsterIds[ARRAY_SIZE(D2LevelsTxt::wNormalMonsters)] = {};
         D2MonRegDataStrc* pMonRegData = pMonsterRegion->pMonData;
         if (nDifficulty > 0)
         {
-            if (pLevelsTxtRecord->nNumNMon > 0)
+            if (pLevelsTxtRecord->nNumNightmareHellMonsters > 0)
             {
-                memcpy(monsterIds, pLevelsTxtRecord->wNMon, pLevelsTxtRecord->nNumNMon);
+                memcpy(monsterIds, pLevelsTxtRecord->wNightmareHellMonsters, sizeof(monsterIds[0]) * pLevelsTxtRecord->nNumNightmareHellMonsters);
             }
         }
         else
         {
-            if (pLevelsTxtRecord->nNumNormMon > 0)
+            if (pLevelsTxtRecord->nNumNormalMonsters > 0)
             {
-                memcpy(monsterIds, pLevelsTxtRecord->wMon, pLevelsTxtRecord->nNumNormMon);
+                memcpy(monsterIds, pLevelsTxtRecord->wNormalMonsters, sizeof(monsterIds[0]) * pLevelsTxtRecord->nNumNormalMonsters);
             }
         }
 
-        for (int32_t i = 0; i < nNumMon && nNumNMon > 0; ++i)
+        for (int32_t i = 0; i < nNumMonstersToSpawn && nNumMonstersInSpawnList > 0; ++i)
         {
-            int32_t nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumNMon);
+            int32_t nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumMonstersInSpawnList);
             int32_t nMonsterId = monsterIds[nIndex];
             if (!i && pLevelsTxtRecord->nRangedSpawn)
             {
@@ -982,19 +982,21 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
                         break;
                     }
 
-                    nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumNMon);
+                    nIndex = ITEMS_RollLimitedRandomNumber(pSeed, nNumMonstersInSpawnList);
                     nMonsterId = monsterIds[nIndex];
                 }
             }
-
-            --nNumNMon;
-            if (nNumNMon > nIndex)
+			// Remove monster from list
+			const int32_t nPreviousNumMonstersInSpawnList = nNumMonstersInSpawnList;
+            --nNumMonstersInSpawnList;
+            if (nPreviousNumMonstersInSpawnList > (nIndex+1))
             {
-                memcpy(&monsterIds[nIndex], &monsterIds[nIndex + 1], 2 * (nNumNMon - nIndex));
+				// Note: original game does a memcpy here, but we have overlapping inputs.
+                memmove(&monsterIds[nIndex], &monsterIds[nIndex + 1], sizeof(monsterIds[0]) * (nNumMonstersInSpawnList - nIndex));
             }
 
             D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
-            if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISSPAWN])
+            if (pMonStatsTxtRecord && (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_ISSPAWN]))
             {
                 pMonRegData->nMonHcIdx = nMonsterId;
                 pMonRegData->nRarity = pMonStatsTxtRecord->nRarity;
@@ -1034,7 +1036,7 @@ D2MonsterRegionStrc* __fastcall MONSTERREGION_GetMonsterRegionFromLevelId(D2Mons
 }
 
 //D2Game.0x6FC67FA0
-D2MonRegDataStrc* __fastcall sub_6FC67FA0(D2MonsterRegionStrc** ppMonsterRegion, D2RoomStrc* pRoom, D2UnitStrc* pUnit)
+D2MonRegDataStrc* __fastcall sub_6FC67FA0(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
     int32_t nClassId = -1;
     if (pUnit)
@@ -1049,6 +1051,8 @@ D2MonRegDataStrc* __fastcall sub_6FC67FA0(D2MonsterRegionStrc** ppMonsterRegion,
     case MONSTER_ACT3MALE:
     case MONSTER_ACT3FEMALE:
         return nullptr;
+	default:
+		break;
     }
 
     D2MonsterRegionStrc* pMonsterRegion = ppMonsterRegion[DUNGEON_GetLevelIdFromRoom(pRoom)];
@@ -1100,7 +1104,7 @@ void __fastcall sub_6FC68110(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC68180
-void __fastcall sub_6FC68180(D2MonsterRegionStrc** ppMonsterRegion, D2RoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bToggleFlag)
+void __fastcall sub_6FC68180(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bToggleFlag)
 {
     if (bToggleFlag)
     {

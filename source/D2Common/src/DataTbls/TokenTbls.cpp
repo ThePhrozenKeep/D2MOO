@@ -7,7 +7,7 @@
 
 
 //D2Common.0x6FD729C0
-void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadPlrType_ModeTxt(HD2ARCHIVE hArchive)
 {
 	D2PlrModeTypeTxt* pPlrModeTypeTxt = NULL;
 	D2PlrModeTypeTxt* pPlrType = NULL;
@@ -22,8 +22,8 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
-	pPlrType = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "plrtype", pTbl, &nTypeRecords, sizeof(D2PlrModeTypeTxt));
-	pPlrMode = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "plrmode", pTbl, &nModeRecords, sizeof(D2PlrModeTypeTxt));
+	pPlrType = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(hArchive, "plrtype", pTbl, &nTypeRecords, sizeof(D2PlrModeTypeTxt));
+	pPlrMode = (D2PlrModeTypeTxt*)DATATBLS_CompileTxt(hArchive, "plrmode", pTbl, &nModeRecords, sizeof(D2PlrModeTypeTxt));
 
 	sgptDataTables->pPlrModeDataTables.nPlrModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
@@ -42,7 +42,7 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(void* pMemPool)
 }
 
 //D2Common.0x6FD72B30
-void __fastcall DATATBLS_LoadMonModeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadMonModeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -67,14 +67,14 @@ void __fastcall DATATBLS_LoadMonModeTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pMonModeDataTables.pMonModeTxt = (D2MonModeTxt*)DATATBLS_CompileTxt(pMemPool, "monmode", pTbl, &sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount, sizeof(D2MonModeTxt));
+	sgptDataTables->pMonModeDataTables.pMonModeTxt = (D2MonModeTxt*)DATATBLS_CompileTxt(hArchive, "monmode", pTbl, &sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount, sizeof(D2MonModeTxt));
 
 	sgptDataTables->pMonModeDataTables.pMonMode[0] = sgptDataTables->pMonModeDataTables.pMonModeTxt;
 	sgptDataTables->pMonModeDataTables.pMonMode[1] = sgptDataTables->pMonModeDataTables.pMonModeTxt;
 }
 
 //D2Common.0x6FD72E50
-void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadObjType_ModeTxt(HD2ARCHIVE hArchive)
 {
 	D2ObjModeTypeTxt* pObjModeTypeTxt = NULL;
 
@@ -90,8 +90,8 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
-	pObjType = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "objtype", pTbl, &nTypeRecords, sizeof(D2ObjModeTypeTxt));
-	pObjMode = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(pMemPool, "objmode", pTbl, &nModeRecords, sizeof(D2ObjModeTypeTxt));
+	pObjType = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(hArchive, "objtype", pTbl, &nTypeRecords, sizeof(D2ObjModeTypeTxt));
+	pObjMode = (D2ObjModeTypeTxt*)DATATBLS_CompileTxt(hArchive, "objmode", pTbl, &nModeRecords, sizeof(D2ObjModeTypeTxt));
 
 	sgptDataTables->pObjModeDataTables.nObjModeTypeTxtRecordCount = nModeRecords + nTypeRecords;
 
@@ -109,7 +109,7 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(void* pMemPool)
 }
 
 //D2Common.0x6FD72FC0
-void __fastcall DATATBLS_LoadCompositTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadCompositTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -118,11 +118,11 @@ void __fastcall DATATBLS_LoadCompositTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
-	sgptDataTables->pCompositTxt = (D2CompositTxt*)DATATBLS_CompileTxt(pMemPool, "composit", pTbl, NULL, sizeof(D2CompositTxt));
+	sgptDataTables->pCompositTxt = (D2CompositTxt*)DATATBLS_CompileTxt(hArchive, "composit", pTbl, NULL, sizeof(D2CompositTxt));
 }
 
 //D2Common.0x6FD73040
-void __fastcall DATATBLS_LoadArmTypeTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadArmTypeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -131,7 +131,7 @@ void __fastcall DATATBLS_LoadArmTypeTxt(void* pMemPool)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL }
 	};
 
-	sgptDataTables->pArmTypeTxt = (D2ArmTypeTxt*)DATATBLS_CompileTxt(pMemPool, "armtype", pTbl, NULL, sizeof(D2ArmTypeTxt));
+	sgptDataTables->pArmTypeTxt = (D2ArmTypeTxt*)DATATBLS_CompileTxt(hArchive, "armtype", pTbl, NULL, sizeof(D2ArmTypeTxt));
 }
 
 //D2Common.0x6FD730C0

@@ -53,7 +53,7 @@ enum D2C_MissilesTxtCollideTypes
 	MISSILESCOLLIDE_PLAYER_AND_MONSTER = 3,
 	MISSILESCOLLIDE_NONE4 = 4, // Same as 0
 	MISSILESCOLLIDE_MONSTER_5 = 5, // Same as 2
-	MISSILESCOLLIDE_BARRIER = 6, // Missile barriers, Doors, ...
+	MISSILESCOLLIDE_MISSILE_BARRIER = 6, // Missile barriers, Doors, ...
 	MISSILESCOLLIDE_MISSILE = 7,
 	MISSILESCOLLIDE_PLAYER_MONSTER_BARRIER_WALL = 8,
 };
@@ -169,7 +169,7 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber);
 //D2Common.0x6FD630F0
 void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD63180
-void __fastcall DATATBLS_LoadMissilesTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadMissilesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD64B80
 void __fastcall DATATBLS_UnloadMissilesTxt();
 //D2Common.0x6FD64BE0 (#10590)

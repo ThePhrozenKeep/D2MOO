@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include <DataTbls/ItemsTbls.h>
 
 struct D2UnitStrc;

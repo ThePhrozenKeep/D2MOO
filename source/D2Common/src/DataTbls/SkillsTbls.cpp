@@ -322,7 +322,7 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 }
 
 //D2Common.0x6FD49F60
-void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 {
 	D2PetTypeTxt* pPetTypeTxtRecord = NULL;
 	D2TxtLinkStrc* pSkillDescLinker = NULL;
@@ -723,14 +723,14 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 		pMonStatsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
 		int nTmpRecordCount;
-		pTmpMonStatsTxt = DATATBLS_CompileTxt(pMemPool, "monstats", pTmpMonStatsTbl, &nTmpRecordCount, 2);
+		pTmpMonStatsTxt = DATATBLS_CompileTxt(hArchive, "monstats", pTmpMonStatsTbl, &nTmpRecordCount, 2);
 
 		pSkillDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		pTmpSkillDescTxt = DATATBLS_CompileTxt(pMemPool, "skilldesc", pTmpSkillDescTbl, &nTmpRecordCount, 2);
+		pTmpSkillDescTxt = DATATBLS_CompileTxt(hArchive, "skilldesc", pTmpSkillDescTbl, &nTmpRecordCount, 2);
 	}
 
 	sgptDataTables->pSkillsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pSkillsTxt = (D2SkillsTxt*)DATATBLS_CompileTxt(pMemPool, "skills", pSkillTbl, &sgptDataTables->nSkillsTxtRecordCount, sizeof(D2SkillsTxt));
+	sgptDataTables->pSkillsTxt = (D2SkillsTxt*)DATATBLS_CompileTxt(hArchive, "skills", pSkillTbl, &sgptDataTables->nSkillsTxtRecordCount, sizeof(D2SkillsTxt));
 	if (sgptDataTables->nSkillsTxtRecordCount >= 32767)
 	{
 		FOG_DisplayWarning("Skills table exceeded maximum number of entries.", __FILE__, __LINE__);
@@ -739,7 +739,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	sgptDataTables->nPassiveSkills = 0;
 
 	sgptDataTables->pSkillDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pSkillDescTxt = (D2SkillDescTxt*)DATATBLS_CompileTxt(pMemPool, "skilldesc", pSkillDescTbl, &sgptDataTables->nSkillDescTxtRecordCount, sizeof(D2SkillDescTxt));
+	sgptDataTables->pSkillDescTxt = (D2SkillDescTxt*)DATATBLS_CompileTxt(hArchive, "skilldesc", pSkillDescTbl, &sgptDataTables->nSkillDescTxtRecordCount, sizeof(D2SkillDescTxt));
 	if (sgptDataTables->nSkillDescTxtRecordCount >= 32767)
 	{
 		FOG_DisplayWarning("SkillDesc table exceeded maximum number of entries.", __FILE__, __LINE__);
@@ -792,7 +792,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skillscode", ".bin");
 	size_t dwSize;
-	sgptDataTables->pSkillsCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->pSkillsCode = (FOGASTNodeStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFileName, &dwSize);
 	sgptDataTables->nSkillsCodeSizeEx = dwSize;
 	sgptDataTables->nSkillsCodeSize = dwSize;
 
@@ -809,7 +809,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(void* pMemPool)
 	}
 
 	wsprintfA(szFileName, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", "skilldesccode", ".bin");
-	sgptDataTables->pSkillDescCode = (FOGASTNodeStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(pMemPool, szFileName, &dwSize);
+	sgptDataTables->pSkillDescCode = (FOGASTNodeStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFileName, &dwSize);
 	sgptDataTables->nSkillDescCodeSizeEx = dwSize;
 	sgptDataTables->nSkillDescCodeSize = dwSize;
 

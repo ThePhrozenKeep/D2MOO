@@ -41,7 +41,7 @@ D2UnitStrc* __fastcall sub_6FCCF9D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 		D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
 		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_WALK])
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 			return nullptr;
 		}
 	}
@@ -79,7 +79,7 @@ D2UnitStrc* __fastcall sub_6FCCFC00(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 		D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
 		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_WALK])
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 5u);
 			return nullptr;
 		}
 	}
@@ -261,8 +261,8 @@ void __fastcall AITACTICS_Idle(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nFr
 		nFrames = 1;
 	}
 
-	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-	EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
+	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+	EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
 }
 
 //D2Game.0x6FCD0150
@@ -273,11 +273,11 @@ void __fastcall sub_6FCD0150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nFram
 		nFrames = 1;
 	}
 
-	const uint32_t dwEventFrame = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_AITHINK);
+	const uint32_t dwEventFrame = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_AITHINK);
 	if (!dwEventFrame || dwEventFrame == pGame->dwGameFrame || dwEventFrame >= nFrames + pGame->dwGameFrame)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-		EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+		EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nFrames + pGame->dwGameFrame, 0, 0);
 	}
 }
 
@@ -340,7 +340,7 @@ int32_t __fastcall AITACTICS_MoveToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	if (nFlags & 4)
 	{
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	}
 
 	if (nFlags & 1)
@@ -360,7 +360,7 @@ int32_t __fastcall AITACTICS_MoveToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		}
 		else
 		{
-			AITTACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
+			AITACTICS_WalkCloseToUnit(pGame, pUnit, 4u);
 		}
 
 		return 1;
@@ -500,7 +500,7 @@ int32_t __fastcall sub_6FCD06D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FCD0840
-int32_t __fastcall AITTACTICS_WalkCloseToUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMaxDistance)
+int32_t __fastcall AITACTICS_WalkCloseToUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMaxDistance)
 {
 	int32_t nOffsetX = 0;
 	int32_t nOffsetY = 0;
@@ -535,7 +535,7 @@ int32_t __fastcall AITTACTICS_WalkCloseToUnit(D2GameStrc* pGame, D2UnitStrc* pUn
 //D2Game.0x6FCD09D0
 int32_t __fastcall sub_6FCD09D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nMaxDistance)
 {
-	return AITTACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance);
+	return AITACTICS_WalkCloseToUnit(pGame, pUnit, nMaxDistance);
 }
 
 //D2Game.0x6FCD0B60
@@ -543,14 +543,14 @@ int32_t __fastcall D2GAME_AICORE_WalkToOwner_6FCD0B60(D2GameStrc* pGame, D2UnitS
 {
 	if (!pOwner)
 	{
-		return AITTACTICS_WalkCloseToUnit(pGame, pUnit, 2);
+		return AITACTICS_WalkCloseToUnit(pGame, pUnit, 2);
 	}
 
 	return sub_6FCD09D0(pGame, pUnit, pOwner, nMaxDistance);
 }
 
 //D2Game.0x6FCD0D00
-int32_t __fastcall AITTACTICS_RunCloseToTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nMaxDistance)
+int32_t __fastcall AITACTICS_RunCloseToTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nMaxDistance)
 {
 	int32_t nOffsetX = 0;
 	int32_t nOffsetY = 0;
@@ -661,7 +661,7 @@ void __fastcall AITACTICS_AddMessage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Uni
 				pUnit->dwFlags |= UNITFLAG_HASTXTMSG;
 			}
 
-			EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, CHAT_GetTimeoutFromHoverMsg(pHoverMsg), 0, 0);
+			EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, CHAT_GetTimeoutFromHoverMsg(pHoverMsg), 0, 0);
 		}
 	}
 }
@@ -786,9 +786,9 @@ D2UnitStrc* __fastcall AITACTICS_GetTargetMinion(D2GameStrc* pGame, D2UnitStrc* 
 		}
 
 		return pTarget;
+	default:
+		return nullptr;
 	}
-
-	return nullptr;
 }
 
 //D2Game.0x6FCD1490

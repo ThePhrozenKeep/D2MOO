@@ -223,7 +223,7 @@ void __fastcall ACT3Q3_UnitIterate_SetGidbinnBroughtBackQuestState(D2GameStrc* p
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -243,7 +243,7 @@ void __fastcall ACT3Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->fState = 0;
 	pQuestData->pNPCMessages = gpAct3Q3NpcMessages;
 	pQuestData->bActive = 1;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q3;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q3;
 	pQuestData->pfActiveFilter = ACT3Q3_ActiveFilterCallback;
 	pQuestData->nInitNo = 4;
 	pQuestData->pfStatusFilter = ACT3Q3_StatusFilterCallback;
@@ -448,7 +448,7 @@ void __fastcall ACT3Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	if (pQuestData->fState == 2)
 	{
 		D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_COMPLETEDBEFORE) != 1)
+		if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_COMPLETEDBEFORE) != 1)
 		{
 			QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT3Q3_UnitIterate_UpdateQuestStateFlags);
@@ -832,7 +832,7 @@ int32_t __fastcall OBJECTS_OperateFunction31_GidbinnDecoy(D2ObjOperateFnStrc* pO
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 	pQuestDataEx->bGidbinnObjectActivated = 1;
 	if (!pQuestDataEx->bSpawnTimerStarted)
@@ -849,8 +849,8 @@ bool __fastcall ACT3Q3_SpawnGidbinnBoss(D2GameStrc* pGame, D2QuestDataStrc* pQue
 {
 	D2Act3Quest3Strc* pQuestDataEx = nullptr;
 	D2UnitStrc* pFetishBoss = nullptr;
-	D2RoomStrc** ppRoomList = nullptr;
-	D2RoomStrc* pRoom = nullptr;
+	D2ActiveRoomStrc** ppRoomList = nullptr;
+	D2ActiveRoomStrc* pRoom = nullptr;
 	D2UnitStrc* pUnit = nullptr;
 	int32_t nNumRooms = 0;
 	int32_t nCounter = 0;
@@ -971,7 +971,7 @@ void __fastcall ACT3Q3_SetAltarMode(D2GameStrc* pGame)
 
 	UNITS_ChangeAnimMode(pAltar, OBJMODE_OPERATING);
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pAltar->dwClassId);
-	EVENT_SetEvent(pGame, pAltar, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pGame->dwGameFrame + 1, 0, 0);
+	EVENT_SetEvent(pGame, pAltar, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pGame->dwGameFrame + 1, 0, 0);
 	pQuestDataEx->nAltarObjectMode = OBJMODE_OPENED;
 }
 

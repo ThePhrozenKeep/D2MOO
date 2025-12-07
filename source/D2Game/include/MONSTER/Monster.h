@@ -17,9 +17,9 @@ int32_t __fastcall MONSTER_CheckSummonerFlag(D2UnitStrc* pMonster, uint16_t nFla
 //D2Game.0x6FC60270
 void __fastcall MONSTER_ToggleSummonerFlag(D2UnitStrc* pMonster, uint16_t nFlag, int32_t bSet);
 //D2Game.0x6FC602A0
-void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pMonster, int32_t nUnitGUID);
+void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pMonster, int32_t nUnitGUID);
 //D2Game.0x6FC603D0
-void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2RoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData);
+void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData);
 //D2Game.0x6FC60B10
 int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc* pMonster, int32_t nX, int32_t nY, int32_t a5);
 //D2Game.0x6FC60BC0
@@ -35,7 +35,7 @@ int32_t __fastcall MONSTER_GetHpBonus(int32_t nPlayerCount);
 //Inlined in D2Game.0x6FC60E90
 int32_t __fastcall MONSTER_GetExperienceBonus(int32_t nPlayerCount);
 //D2Game.0x6FC60E90
-void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonusStrc* pPlayerCountBonus, D2RoomStrc* pRoom, D2UnitStrc* pMonster);
+void __fastcall MONSTER_GetPlayerCountBonus(D2GameStrc* pGame, D2PlayerCountBonusStrc* pPlayerCountBonus, D2ActiveRoomStrc* pRoom, D2UnitStrc* pMonster);
 //D2Game.0x6FC60F70
 void __fastcall MONSTER_SetComponents(D2MonRegDataStrc* pMonRegData, D2UnitStrc* pUnit);
 //D2Game.0x6FC610C0

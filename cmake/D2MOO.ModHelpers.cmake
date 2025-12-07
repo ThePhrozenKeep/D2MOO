@@ -1,6 +1,5 @@
 
-
-function(D2MOO_add_detours_patch_to_dll DLLTargetName)
+function(D2MOO_register_detours_patch_if_exists DLLTargetName)
   if(ARGV1)
     set(PatchCppFile ${ARGV1})
     set(PatchRcFile ${ARGV2})
@@ -8,14 +7,24 @@ function(D2MOO_add_detours_patch_to_dll DLLTargetName)
     set(PatchCppFile "${D2MOO_ORDINALS_VERSION}/${DLLTargetName}.patch.cpp")
     set(PatchRcFile "${D2MOO_ORDINALS_VERSION}/${DLLTargetName}.patch.rc")
   endif()
-  message(STATUS "[${DLLTargetName}]PatchCppFile: '${PatchCppFile}'")
-  
-  target_sources(${DLLTargetName} PRIVATE "${PatchCppFile}")
+  if(NOT IS_ABSOLUTE PatchCppFile)
+    set(PatchCppFile ${CMAKE_CURRENT_SOURCE_DIR}/${PatchCppFile})
+  endif()
   if(NOT IS_ABSOLUTE PatchRcFile)
     set(PatchRcFile ${CMAKE_CURRENT_SOURCE_DIR}/${PatchRcFile})
   endif()
+  
+  if(NOT EXISTS "${PatchCppFile}")
+    return()
+  endif()
+  
+  message(STATUS "[${DLLTargetName}]PatchCppFile: '${PatchCppFile}'")
+  
+  target_sources(${DLLTargetName} PRIVATE "${PatchCppFile}")
+  source_group(patch FILES "${PatchCppFile}")
   if(EXISTS "${PatchRcFile}")
     target_sources(${DLLTargetName} PRIVATE "${PatchRcFile}")
+    source_group(patch FILES "${PatchRcFile}")
     message(STATUS "[${DLLTargetName}]PatchRcFile: '${PatchRcFile}'")
   endif()
   target_link_libraries(${DLLTargetName} PRIVATE D2.Detours)
@@ -69,7 +78,7 @@ function(D2MOO_add_mod_dll ModName DLLName)
   
   if(ENABLE_D2DETOURS_EMBEDDED_PATCHES AND IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch")
     message(STATUS "Adding patch for ${DLLName} ${D2MOO_ORDINALS_VERSION}")
-    D2MOO_add_detours_patch_to_dll(${target_name} "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch/${DLLName}.${D2MOO_ORDINALS_VERSION}.patch.cpp")
+    D2MOO_register_detours_patch_if_exists(${target_name} "${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch/${DLLName}.${D2MOO_ORDINALS_VERSION}.patch.cpp")
   else()
     message(STATUS "Expected to find ${CMAKE_CURRENT_LIST_DIR}/${DLLName}/patch")
   endif()
@@ -78,21 +87,50 @@ function(D2MOO_add_mod_dll ModName DLLName)
 endfunction()
 
 macro(D2MOO_add_mod_dll_if_exists dir)
-    if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-		D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
-	endif ()
+  if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
+    D2MOO_add_mod_dll(${PROJECT_NAME} ${dir})
+  endif()
 endmacro()
 
 macro(D2MOO_add_subdirectory_if_exists dir)
-	if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
-		add_subdirectory(${dir})
-	endif ()
+  if(IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${dir}")
+   add_subdirectory(${dir})
+  endif()
 endmacro()
 
+set(D2_KNOWN_DLLS
+  binkw32 
+  Bnclient 
+  D2Client 
+  D2CMP 
+  D2Common 
+  D2DDraw 
+  D2Direct3D 
+  D2Game 
+  D2Gdi 
+  D2gfx 
+  D2Glide 
+  D2Lang 
+  D2Launch 
+  D2MCPClient 
+  D2Multi 
+  D2Net 
+  D2sound 
+  D2Win 
+  Fog 
+  ijl11 
+  SmackW32 
+  Storm 
+)
+
+macro(D2MOO_register_D2_DLL_patches)
+  # Start by creating all targets so that we can later link to them without caring about order.
+  foreach(dllname ${D2_KNOWN_DLLS})
+    D2MOO_register_detours_patch_if_exists(${dllname})
+  endforeach()
+endmacro()
 
 macro(D2MOO_add_subdirectories_for_d2_known_dlls ModName)
-  set(D2_KNOWN_DLLS    binkw32     Bnclient     D2Client     D2CMP     D2Common     D2DDraw     D2Direct3D     D2Game     D2Gdi     D2gfx     D2Glide     D2Lang     D2Launch     D2MCPClient     D2Multi     D2Net     D2sound     D2Win     Fog     ijl11     SmackW32     Storm 
-  )
   # Start by creating all targets so that we can later link to them without caring about order.
   foreach(dllname ${D2_KNOWN_DLLS})
     D2MOO_add_mod_dll_if_exists(${dllname})
@@ -102,3 +140,4 @@ macro(D2MOO_add_subdirectories_for_d2_known_dlls ModName)
     D2MOO_add_subdirectory_if_exists(${dllname})
   endforeach()
 endmacro()
+

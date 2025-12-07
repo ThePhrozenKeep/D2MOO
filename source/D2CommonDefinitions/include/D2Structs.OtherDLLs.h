@@ -1,5 +1,7 @@
+#pragma once
 
 // Archive of types that are probably coming from other DLLs.
+
 
 // ---------- D2Client ----------
 
@@ -217,60 +219,4 @@ struct SMSGHANDLER_PARAMS
 	uint32_t dwArg;							//0x14
 	BOOL bReturn;							//0x18
 	LRESULT lResult;						//0x1C
-};
-
-// ---------- D2Launch ----------
-
-struct D2BnetClientDataStrc
-{
-	uint32_t dwExpansion;						//0x000
-	uint8_t nWindowed;							//0x004
-	uint8_t nFixAspectRatio;					//0x005
-	uint8_t n3DFXMode;							//0x006
-	uint8_t nOpenGLMode;						//0x007
-	uint8_t nRaveMode;							//0x008
-	uint8_t nDirect3DMode;						//0x009
-	uint8_t nUsePerspective;					//0x00A
-	uint8_t nLowQuality;						//0x00B
-	uint32_t dwGamma;							//0x00C
-	uint8_t nVSync;							//0x010
-	uint32_t dwFrameRate;						//0x011
-	uint32_t dwGameType;						//0x015
-	uint16_t nJoinId;							//0x019
-	char szGameName[24];					//0x01B
-	char szServerAddress[24];				//0x033
-	char szBattleNetAddress[24];			//0x04B
-	char szMCPAddress[24];					//0x063
-	uint32_t unk0x07B;							//0x07B
-	uint8_t nNoPK;								//0x07F
-	uint8_t nOpenCharacter;					//0x080
-	uint8_t nClasses[7];						//0x081
-	uint8_t nInvincible;						//0x088
-	char szAccount[48];						//0x089
-	char szCharName[24];					//0x0B9
-	char szRealmName[32];					//0x0D1
-	uint8_t unk0x0F1[249];						//0x0F1
-	uint8_t nCharClass;						//0x1EA
-	uint8_t nCharFlags;						//0x1EB
-	uint8_t nLastCompleteDiff;					//0x1EC
-	uint8_t nNoMonsters;						//0x1ED
-	uint8_t __1ED[23];							//0x1EE
-	//uint8_t bDirect;							//0x200
-	//uint8_t bNoCompress;						//0x202
-	uint32_t dwArenaFlags;						//0x205
-	uint8_t nTemplate;							//0x209
-	uint16_t __20A;								//0x20A
-	uint8_t nDifficulty;						//0x20C
-	uint8_t __20D[52];							//0x20D
-	//uint8_t bNoSound;						//0x21C
-	char szGamePassword[24];				//0x241
-	char szGameDesc[32];					//0x259
-	uint8_t __279[226];						//0x279
-	char szChannel[32];						//0x35B
-	uint8_t __37B[64];							//0x37B
-	uint8_t nCharacterLevel;					//0x3BB
-	uint8_t nLadder;							//0x3BC
-	uint32_t dwPasswordHash;					//0x3BD
-	uint8_t nPasswordLength;					//0x3C1
-	uint8_t __3C2[6];							//0x3C2
 };

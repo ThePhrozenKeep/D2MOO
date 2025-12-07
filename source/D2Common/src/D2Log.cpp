@@ -1,6 +1,7 @@
 #include "D2Log.h"
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
+#include <Fog.h>
 
 
 void __cdecl LOG_11100(int a1, int a2, int a3, int a4, const char* szFile, int nLine, const char* szFormat, ...)

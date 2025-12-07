@@ -263,7 +263,7 @@ void __fastcall ACT3Q5_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -300,7 +300,7 @@ void __fastcall ACT3Q5_UnitIterate_DeleteKhalimItems(D2GameStrc* pGame, D2UnitSt
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -315,7 +315,7 @@ void __fastcall ACT3Q5_UnitIterate_DeleteKhalimItems(D2GameStrc* pGame, D2UnitSt
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_REWARDGRANTED);
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_PRIMARYGOALDONE);
 
-	if (!sub_6FC937A0(pGame, pUnit))
+	if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
 	{
 		QUESTS_DeleteItem(pGame, pUnit, ' yeq');
 		QUESTS_DeleteItem(pGame, pUnit, ' rhq');
@@ -383,7 +383,7 @@ int32_t __fastcall OBJECTS_OperateFunction53_CompellingOrb(D2ObjOperateFnStrc* p
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 	const int32_t nObjectId = pObject ? pObject->dwClassId : -1;
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nObjectId);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	pQuestDataEx->bOrbSmashed = 1;
 
 	QUESTS_TriggerFX(pQuestData->pGame, 10);
@@ -453,7 +453,7 @@ void __fastcall ACT3Q5_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT3Q5_Callback10_PlayerLeavesGame;
 	pQuestData->pfSeqFilter = ACT3Q5_SeqCallback;
 	pQuestData->nSeqId = 20;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q5;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q5;
 	pQuestData->pfActiveFilter = ACT3Q5_ActiveFilterCallback;
 	pQuestData->nInitNo = 6;
 
@@ -478,7 +478,7 @@ void __fastcall ACT3Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		nNpcId = pQuestArg->pTarget->dwClassId;
 	}
 
-	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuest, QFLAG_ENTERAREA))
+	if (QUESTRECORD_GetQuestState(pQuestFlags, (D2QuestStateFlagIds)pQuestData->nQuestFilter, QFLAG_ENTERAREA))
 	{
 		if (!((D2Act3Quest5Strc*)pQuestData->pQuestDataEx)->bOrbSmashed)
 		{
@@ -530,7 +530,7 @@ void __fastcall ACT3Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	}
 
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
-	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuest, QFLAG_ENTERAREA) == 1)
+	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_ENTERAREA) == 1)
 	{
 		return;
 	}
@@ -823,7 +823,7 @@ void __fastcall ACT3Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 int32_t __fastcall ACT3Q5_UnitIterate_UpdateQuestStateAfterMonsterKill(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (!pRoom || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q5, QFLAG_REWARDGRANTED) || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q5, QFLAG_ENTERAREA))
 	{
@@ -843,7 +843,7 @@ int32_t __fastcall ACT3Q5_UnitIterate_UpdateQuestStateAfterMonsterKill(D2GameStr
 		return 0;
 	}
 
-	D2RoomStrc* pTargetRoom = UNITS_GetRoom(pTarget);
+	D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTarget);
 	if (!pTargetRoom)
 	{
 		return 0;
@@ -851,7 +851,7 @@ int32_t __fastcall ACT3Q5_UnitIterate_UpdateQuestStateAfterMonsterKill(D2GameStr
 
 	if (pRoom != pTargetRoom)
 	{
-		D2RoomStrc** ppRoomList = nullptr;
+		D2ActiveRoomStrc** ppRoomList = nullptr;
 		int32_t nNumRooms = 0;
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -930,7 +930,7 @@ int32_t __fastcall ACT3Q5_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 //D2Game.0x6FCAC110
 int32_t __fastcall ACT3Q5_UnitIterate_DetermineFlailAndCubeDropCounts(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return 0;
@@ -968,7 +968,7 @@ int32_t __fastcall ACT3Q5_UnitIterate_DetermineFlailAndCubeDropCounts(D2GameStrc
 int32_t __fastcall ACT3Q5_IsDuranceOfHateClosed(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q5_TRAVINCAL);
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (pRoom && DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_DURANCEOFHATELEV2 || !pQuestData)
 	{

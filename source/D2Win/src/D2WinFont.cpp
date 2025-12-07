@@ -52,8 +52,8 @@ int gnFramedText_Y_6F8FE1F4;
 int gnFramedText_TextColor_6F8FE1F8;
 int gnFramedText_Align_6F8FE1FC;
 int gnFramedText_RectangleColor_6F8FE200;
-Unicode word_6F8FE204[2];
-Unicode word_6F8FE208[2];
+Unicode gMonsterIndicatorCodeUnicodeChar_6F8FE204[2]; // Contains L"m"
+Unicode gColorCodeUnicodeChar_6F8FE208[2]; // Contains L"c"
 D2CharStrc* (__fastcall* dword_6F8FE20C)(Unicode);
 D2FontCacheStrc* gpFontCache;
 DWORD gdwLastShiftedTickCount_6F8FE214;
@@ -70,13 +70,13 @@ void __stdcall sub_6F8A9B00()
 //D2Win.0x6F8A9B20
 void __stdcall sub_6F8A9B20()
 {
-	memset(word_6F8FE208, 0, sizeof(word_6F8FE208));
+	memset(gColorCodeUnicodeChar_6F8FE208, 0, sizeof(gColorCodeUnicodeChar_6F8FE208));
 }
 
 //D2Win.0x6F8A9B40
 void __stdcall sub_6F8A9B40()
 {
-	memset(word_6F8FE204, 0, sizeof(word_6F8FE204));
+	memset(gMonsterIndicatorCodeUnicodeChar_6F8FE204, 0, sizeof(gMonsterIndicatorCodeUnicodeChar_6F8FE204));
 }
 
 //D2Win.0x6F8A9B60 (#10115)
@@ -168,8 +168,8 @@ void __fastcall D2Win_10115_FONT()
 
 	gpFontCache = &stru_6F8FD8C0[1];
 
-	Unicode::toUnicode(word_6F8FE208, "c", 2);
-	Unicode::toUnicode(word_6F8FE204, "m", 2);
+	Unicode::toUnicode(gColorCodeUnicodeChar_6F8FE208, "c", 2);
+	Unicode::toUnicode(gMonsterIndicatorCodeUnicodeChar_6F8FE204, "m", 2);
 }
 
 //D2Win.0x6F8A9DC0
@@ -222,7 +222,7 @@ void __fastcall sub_6F8A9E90(int a1)
 		D2_FREE(stru_6F8FD8C0[a1].pFontInfo[0]);
 	}
 
-	D2FontStrc* pFont = (D2FontStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetMemPool(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
+	D2FontStrc* pFont = (D2FontStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
 	stru_6F8FD8C0[a1].pFontInfo[1] = pFont;
 	stru_6F8FD8C0[a1].pCharInfo = pFont->pChars;
 }
@@ -437,25 +437,48 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 
 	D2GfxDataStrc gfxData = {};
 	gfxData.nDirection = 0;
+		
+	const int32_t nLineStartX = nX;
+	const int32_t nTextLength = Unicode::strlen(wszText);
 
-	const Unicode* v7 = wszText;
-	const Unicode* v11 = v7 - 1;
-	
-	int32_t v8 = nX;
-
-	int32_t v9 = 0;
-	const int32_t v28 = Unicode::strlen(v7);
-	while (v9 < v28)
+	int32_t nCharIdx = 0;
+	while(nCharIdx < nTextLength)
 	{
-		const Unicode v12 = wszText[v9];
-		++v11;
-		++v9;
+		const Unicode currentChar = wszText[nCharIdx];
+		++nCharIdx;
 
-		if (*v11 >= 0x100u || *v11 != 0xFF)
+		if (/*currentChar < 256 && */ currentChar == 0xFF) // currentChar is ASCII and equal ÿ
 		{
-			if (v12 != '\n')
+			const Unicode v28 = wszText[nCharIdx];
+			++nCharIdx;
+
+			if (0 == Unicode::strncmp(&v28, gColorCodeUnicodeChar_6F8FE208, 1)) // If equal L"c" it is color code, skip
 			{
-				D2CharStrc* v16 = dword_6F8FE20C(v12);
+				++nCharIdx;
+			}
+			else if (0 == Unicode::strncmp(&v28, gMonsterIndicatorCodeUnicodeChar_6F8FE204, 1)) // If equal L"m" draw monster indicator
+			{
+				const Unicode v13 = wszText[nCharIdx];
+				++nCharIdx;
+
+				D2CharStrc* v14 = dword_6F8FE20C(v13);
+				gfxData.pCellFile = ghCellfileFontMonsterIndicators_6F8FD9EC;
+				gfxData.nFrame = v14->nImageIndex;
+				TEXTURE_CelDraw(&gfxData, nX, nY, -1u, DRAWMODE_NORMAL, 0);
+
+				nY += 16 * stru_6F8FD8C0[gnFontSize_6F8BDB24].pFontInfo[1]->nHeight / 10;
+			}
+		}
+		else
+		{
+			if (currentChar == '\n') // newline
+			{
+				nX = nLineStartX;
+				nY -= (16 * stru_6F8FD8C0[gnFontSize_6F8BDB24].pFontInfo[1]->nHeight / 10 + 1);
+			}
+			else
+			{
+				D2CharStrc* v16 = dword_6F8FE20C(currentChar);
 				if (nDisplayType != DISPLAYTYPE_DIRECT3D)
 				{
 					gfxData.pCellFile = gpFontCache->pCellFile;
@@ -464,45 +487,15 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 					const int32_t v18 = D2CMP_CelGetHeight(D2CMP_CelGetHandle(&gfxData));
 					if (a6 + a5 > v18)
 					{
-						TEXTURE_CelDrawEx(&gfxData, v8, nY, 0, v18, DRAWMODE_NORMAL);
+						TEXTURE_CelDrawEx(&gfxData, nX, nY, 0, v18, DRAWMODE_NORMAL);
 					}
 					else
 					{
-						TEXTURE_CelDrawEx(&gfxData, v8, nY, a5, a6, DRAWMODE_NORMAL);
+						TEXTURE_CelDrawEx(&gfxData, nX, nY, a5, a6, DRAWMODE_NORMAL);
 					}
 				}
 
-				v8 += v16->nWidth;
-			}
-			else
-			{
-				v8 = nX;
-				nY += -(16 * stru_6F8FD8C0[gnFontSize_6F8BDB24].pFontInfo[1]->nHeight / 10 + 1);
-			}
-		}
-		else
-		{
-			const Unicode v28 = wszText[v9];
-			++v9;
-			++v11;
-
-			if (!Unicode::strncmp(&v28, word_6F8FE208, 1))
-			{
-				++v9;
-				++v11;
-			}
-			else if (!Unicode::strncmp(&v28, word_6F8FE204, 1))
-			{
-				const Unicode v13 = *v11;
-				++v9;
-				++v11;
-				
-				D2CharStrc* v14 = dword_6F8FE20C(v13);
-				gfxData.pCellFile = ghCellfileFontMonsterIndicators_6F8FD9EC;
-				gfxData.nFrame = v14->nImageIndex;
-				TEXTURE_CelDraw(&gfxData, v8, nY, -1u, DRAWMODE_NORMAL, 0);
-
-				nY += 16 * stru_6F8FD8C0[gnFontSize_6F8BDB24].pFontInfo[1]->nHeight / 10;
+				nX += v16->nWidth;
 			}
 		}
 	}
@@ -560,7 +553,7 @@ void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int
 			++v10;
 			++v7;
 
-			if (Unicode::strncmp(&v17, word_6F8FE208, 1) != 0)
+			if (Unicode::strncmp(&v17, gColorCodeUnicodeChar_6F8FE208, 1) != 0)
 			{
 				--v10;
 				--v7;
@@ -738,9 +731,9 @@ int __fastcall sub_6F8AA910(const Unicode* pStr)
 		{
 			if (*v1 < 0x100u && *v1 == 0xFF)
 			{
-				if (!Unicode::strnicmp(v1 + 1, word_6F8FE204, 1))
+				if (!Unicode::strnicmp(v1 + 1, gMonsterIndicatorCodeUnicodeChar_6F8FE204, 1))
 				{
-					v2 += dword_6F8FE20C(word_6F8FE204[0])->nWidth;
+					v2 += dword_6F8FE20C(gMonsterIndicatorCodeUnicodeChar_6F8FE204[0])->nWidth;
 				}
 
 				v1 += 3;
@@ -817,7 +810,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 			++v8;
 			++v10;
 
-			if (Unicode::strncmp(&v24, word_6F8FE208, 1) != 0)
+			if (Unicode::strncmp(&v24, gColorCodeUnicodeChar_6F8FE208, 1) != 0)
 			{
 				--v8;
 				--v10;
@@ -873,9 +866,9 @@ int __fastcall sub_6F8AABB0(const Unicode* pStr)
 		}
 		else
 		{
-			if (!Unicode::strnicmp(v1 + 1, word_6F8FE204, 1))
+			if (!Unicode::strnicmp(v1 + 1, gMonsterIndicatorCodeUnicodeChar_6F8FE204, 1))
 			{
-				v2 += dword_6F8FE20C(word_6F8FE204[0])->nWidth;
+				v2 += dword_6F8FE20C(gMonsterIndicatorCodeUnicodeChar_6F8FE204[0])->nWidth;
 			}
 
 			v3 += 2;
@@ -987,7 +980,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 			++v6;
 			++v11;
 
-			if (Unicode::strncmp(&v19, word_6F8FE208, 1) != 0)
+			if (Unicode::strncmp(&v19, gColorCodeUnicodeChar_6F8FE208, 1) != 0)
 			{
 				--v6;
 				--v11;

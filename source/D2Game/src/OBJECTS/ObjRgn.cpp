@@ -136,7 +136,7 @@ D2ShrineDataStrc* __fastcall OBJRGN_GetShrineDataFromGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7A6E0
-void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom)
+void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
 {
     D2ObjectRoomCoordStrc* pObjectRoomCoord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2ObjectRoomCoordStrc);
 
@@ -161,7 +161,7 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
                 UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
 
                 D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject ? pOp->pObject->dwClassId : -1);
-                EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+                EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
             }
 
             D2_FREE_POOL(pOp->pGame->pMemoryPool, pObjectRoomCoord);
@@ -301,11 +301,11 @@ int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
 
         for (int32_t i = 0; i < std::size(nTrapMonsterIds2); ++i)
         {
-            const int32_t nTrapMonsterId = nTrapMonsterIds2[i];
-            if (nMonsterId >= nTrapMonsterId && nMonsterId < nTrapMonsterId + 4)
+            const int32_t nTrapMonster2Id = nTrapMonsterIds2[i];
+            if (nMonsterId >= nTrapMonster2Id && nMonsterId < nTrapMonster2Id + 4)
             {
-                pObjectRegion->nTrapMonsterId = nTrapMonsterId;
-                return nTrapMonsterId;
+                pObjectRegion->nTrapMonsterId = nTrapMonster2Id;
+                return nTrapMonster2Id;
             }
         }
     }

@@ -5,6 +5,7 @@
 #include <Calc.h>
 
 #include <stdio.h> // for FILE
+#include <Archive.h>
 
 #include "DataTbls/AnimTbls.h"
 #include "DataTbls/ArenaTbls.h"
@@ -380,10 +381,10 @@ struct D2DataTablesStrc
 	int nMissilesTxtRecordCount;						//0xB6C
 	D2MonLvlTxt* pMonLvlTxt;							//0xB70
 	int nMonLvlTxtRecordCount;							//0xB74
-	D2MonSeqTxt* pMonSeqTxt;							//0xB78
+	D2AnimSeqTxt* pMonSeqTxt;							//0xB78
 	D2TxtLinkStrc* pMonSeqLinker;						//0xB7C
 	int nMonSeqTxtRecordCount;							//0xB80
-	D2SeqRecordStrc* pMonSeqTable;						//0xB84
+	D2AnimSeqRecordStrc* pMonSeqTable;						//0xB84
 	int nMonSeqTableRecordCount;						//0xB88
 	D2SkillDescTxt* pSkillDescTxt;						//0xB8C
 	D2TxtLinkStrc* pSkillDescLinker;					//0xB90
@@ -565,7 +566,7 @@ D2COMMON_DLL_DECL int __stdcall DATATBLS_GetMaxLevel(int nClass);
 //D2Common.0x6FD49710 (#10630)
 D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience);
 //D2Common.0x6FD49760
-void __fastcall DATATBLS_GetBinFileHandle(void* pMemPool, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
+void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx);
 //D2Common.0x6FD49850
 int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSizeEx, void* pBuffer, int nBufferSize);
 
@@ -579,13 +580,13 @@ D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData();
 //D2Common.0x6FD4E4D0 (#10655)
 D2COMMON_DLL_DECL D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
 //D2Common.0x6FD4E500
-void __fastcall DATATBLS_LoadStatesTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD4F4A0
 void __fastcall DATATBLS_UnloadStatesTxt();
 // Helper function
 D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId);
 //D2Common.0x6FD4F5A0
-void __fastcall DATATBLS_LoadPetTypeTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD4F990 (#11298)
 D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName);
 //D2Common.0x6FD4FB50 (#11299)
@@ -593,7 +594,7 @@ D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int
 //D2Common.0x6FD4FCF0 (#10580)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(void* pMemPool, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
 //D2Common.0x6FD500F0 (#11242)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)
@@ -601,13 +602,13 @@ D2COMMON_DLL_DECL void __stdcall DATATBLS_UnloadBin(void* pBinFile);
 //D2Common.0x6FD50150 (#10575)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_UnloadAllBins();
 //D2Common.0x6FD504B0 (#10576)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_LoadAllTxts(void* pMemPool, int a2, int a3);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3);
 //D2Common.0x6FD507B0
-void __fastcall DATATBLS_LoadSomeTxts(void* pMemPool);
+void __fastcall DATATBLS_LoadSomeTxts(HD2ARCHIVE hArchive);
 //D2Common.0x6FD50FB0
-void __fastcall DATATBLS_LoadCharStatsTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD51BF0
-void __fastcall DATATBLS_LoadDifficultyLevelsTxt(void* pMemPool);
+void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive);
 
 
 //Inlined at various places

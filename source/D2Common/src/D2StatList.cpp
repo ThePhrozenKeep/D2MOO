@@ -42,7 +42,7 @@ static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, D2SLaye
 	{
 		*pAlreadyInArray = false;
 	}
-	// Find by dichotomy, stats are sorted by nPackedValue
+	// Find by dichotomic search, stats are sorted by nPackedValue
 	int nMin = 0;
 	int nMax = pStatsArray->nStatCount;
 
@@ -72,7 +72,7 @@ static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, D2SLaye
 }
 
 template<class T>
-int StatArray_DichotomySearch(const T* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId)
+int StatArray_DichotomicSearch(const T* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId)
 {
 	bool alreadyInArray = false;
 	int insertionIdx = StatArray_FindInsertionIndex(pStatArray, nLayer_StatId, &alreadyInArray);
@@ -439,7 +439,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 //D2Common.0x6FDB6300
 int __fastcall STATLIST_FindStatIndex_6FDB6300(D2StatsArrayStrc* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId)
 {
-	return StatArray_DichotomySearch(pStatArray, nLayer_StatId);
+	return StatArray_DichotomicSearch(pStatArray, nLayer_StatId);
 }
 
 // Helper function
@@ -822,15 +822,7 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 
 		if (pParentStatList)
 		{
-			D2StatsArrayStrc* pStatsArray = nullptr;
-			if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
-			{
-				pStatsArray = &pStatListEx->FullStats;
-			}
-			else
-			{
-				pStatsArray = &pStatList->Stats;
-			}
+			D2StatsArrayStrc* pStatsArray = STATLIST_IsExtended(pStatList) ? &pStatListEx->FullStats : &pStatList->Stats;
 
 			D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList);
 			// Something looks wrong, seems like some checks were eluded in D2Common.0x6FDB6C10
@@ -1665,7 +1657,7 @@ void __stdcall D2Common_10512(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nStatI
 
 	const D2SLayerStatIdStrc nLayerId = D2SLayerStatIdStrc::MakeFromStatId(nStatId);
 
-	if (StatArray_DichotomySearch(&pUnit1->pStatListEx->ModStats, nLayerId.nPackedValue) < 0)
+	if (StatArray_DichotomicSearch(&pUnit1->pStatListEx->ModStats, nLayerId.nPackedValue) < 0)
 	{
 		return;
 	}

@@ -2,8 +2,8 @@
 
 #include <D2Dll.h>
 
-#ifdef D2COMMON_IMPL
-#define D2COMMON_DLL_DECL // We use .def files, not dllexport
-#else
-#define D2COMMON_DLL_DECL __declspec( dllimport )
+// 1.10f Base address: 0x6FD40000
+
+#ifdef D2_VERSION_110F
+constexpr int D2CommonImageBase = 0x6FD40000;
 #endif

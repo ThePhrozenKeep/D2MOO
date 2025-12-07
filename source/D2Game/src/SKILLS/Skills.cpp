@@ -585,7 +585,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 
     if (nAuraFilter & 0x200)
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pAttacker);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pAttacker);
         if (!pRoom || !UNITS_GetRoom(pTarget))
         {
             return 0;
@@ -652,7 +652,7 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
         return;
     }
 
-    D2RoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
     if (!pCurrentRoom)
     {
         return;
@@ -675,12 +675,12 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
     auraCallback.pGame = pGame;
     auraCallback.nCounter = 0;
 
-    D2RoomStrc** ppRoomList = nullptr;
+    D2ActiveRoomStrc** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pCurrentRoom, &ppRoomList, &nNumRooms);
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        D2RoomStrc* pRoom = ppRoomList[i];
+        D2ActiveRoomStrc* pRoom = ppRoomList[i];
         if (!(nAuraFilter & 0x2000) || !DUNGEON_IsRoomInTown(pRoom))
         {
             D2DrlgCoordsStrc drlgCoords = {};
@@ -821,7 +821,7 @@ void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
             D2COMMON_10475_PostStatToStatList(pTarget, pStatList, 1);
             STATES_ToggleState(pTarget, nState, 1);
-            EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, nAuraLength + pGame->dwGameFrame, 0, 0);
+            EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nAuraLength + pGame->dwGameFrame, 0, 0);
             sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nSkillLevel);
         }
     }
@@ -855,13 +855,13 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
         return 0;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
     }
 
-    D2RoomStrc** ppRoomList = nullptr;
+    D2ActiveRoomStrc** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -1243,7 +1243,7 @@ void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindDat
 void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
-    SUNITEVENT_FreeTimer(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
+    SUNITEVENT_Unregister(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
 
     if (!SUNIT_IsDead(pUnit) || !STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
     {
@@ -1326,7 +1326,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
                 if (pCurse->nDuration)
                 {
                     STATLIST_SetExpireFrame(pStatList, pGame->dwGameFrame + pCurse->nDuration);
-                    EVENT_SetEvent(pGame, pCurse->pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
+                    EVENT_SetEvent(pGame, pCurse->pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
                 }
 
                 return pStatList;
@@ -1351,7 +1351,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
     {
         nStatListFlags |= 2u;
         nExpireFrame = pGame->dwGameFrame + pCurse->nDuration;
-        EVENT_SetEvent(pGame, pCurse->pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
+        EVENT_SetEvent(pGame, pCurse->pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + pCurse->nDuration, 0, 0);
     }
 
     if (STATES_CheckStateMaskExpByStateId(pCurse->nState))
@@ -1762,7 +1762,7 @@ void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(D2GameStrc* pGame, D2UnitStrc* p
         }
 
         D2COMMON_10476(pStatList, nExpireFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
     }
 }
 
@@ -2151,7 +2151,7 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
                 }
             }
 
-            EVENT_SetEvent(pGame, pTarget, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nLength, 0, 0);
+            EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nLength, 0, 0);
             STATES_ToggleState(pTarget, pSkillsTxtRecord->wAuraTargetState, 1);
             STATLIST_SetState(pStatList, pSkillsTxtRecord->wAuraTargetState);
             D2COMMON_10475_PostStatToStatList(pTarget, pStatList, 1);
@@ -2348,14 +2348,14 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, nullptr);
 
             if (pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2384,19 +2384,19 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
             switch (pSkillsTxtRecord->nLineOfSight)
             {
             case SKILLSLOS_MISSILE_BARRIER:
-                nCollisionMask = COLLIDE_BARRIER;
+                nCollisionMask = COLLIDE_MISSILE_BARRIER;
                 break;
             case SKILLSLOS_PLAYER_PATH:
-                nCollisionMask = COLLIDE_MASK_WALKING_UNIT;
+                nCollisionMask = COLLIDE_MASK_PLAYER_PATH;
                 break;
             case SKILLSLOS_PLAYER_MONSTER:
                 nCollisionMask = COLLIDE_PLAYER | COLLIDE_MONSTER;
                 break;
             case SKILLSLOS_PLAYER_FLYING:
-                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER;
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER;
                 break;
             case SKILLSLOS_RADIAL_BARRIER:
-                nCollisionMask = COLLIDE_DOOR | COLLIDE_BARRIER | COLLIDE_BLOCK_PLAYER;
+                nCollisionMask = COLLIDE_DOOR | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL;
                 break;
             default:
                 return 0;
@@ -2419,7 +2419,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     {
         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PERIODIC])
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
         }
         return 1;
     }
@@ -2434,7 +2434,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PERIODIC])
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
         }
     }
 
@@ -2462,14 +2462,14 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
         D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit);
         if (pUsedSkill && !(SKILLS_GetFlags(pUsedSkill) & 1) && !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
         {
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
             {
                 UNITS_SetUsedSkill(pUnit, nullptr);
 
                 if (pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
 
                 return 0;
@@ -2599,7 +2599,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2610,7 +2610,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
             {
                 if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
                 return 0;
             }
@@ -2659,14 +2659,14 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, 0);
 
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TNEUTRAL, 0, 0, 1);
+                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2682,7 +2682,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD13220
-int32_t __fastcall sub_6FD13220(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
 {
     int32_t nDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
     if (nDelay <= 5)
@@ -2699,22 +2699,16 @@ int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
-        int32_t nPerDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
-        if (nPerDelay <= 5)
-        {
-            nPerDelay = 5;
-        }
-
-        const int32_t nExpireFrame = nPerDelay * (pGame->dwGameFrame + nPerDelay - 1) / nPerDelay + 1;
+		const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a5)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, -1, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, -1, 0);
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nSkillId);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, nSkillId, nSkillLevel);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillId);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, nSkillId, nSkillLevel);
         }
 
         return 1;
@@ -2729,22 +2723,16 @@ int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
-        int32_t nPerDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
-        if (nPerDelay <= 5)
-        {
-            nPerDelay = 5;
-        }
-
-        const int32_t nExpireFrame = nPerDelay * (pGame->dwGameFrame + nPerDelay - 1) / nPerDelay + 1;
+        const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
         if (a6)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nExpireFrame, -1, 0);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nExpireFrame, -1, 0);
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a5);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nExpireFrame, a5, nSkillId);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a5);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_PERIODICSTATS, nExpireFrame, a5, nSkillId);
         }
 
         return 1;
@@ -2774,7 +2762,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         D2SkillStrc* pSkill = UNITS_GetRightSkill(pUnit);
         if (!pSkill)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, -1);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
             return;
         }
 
@@ -2788,7 +2776,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, -1);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
         }
     }
     else if (nSkillIdArg > 0)
@@ -2796,14 +2784,14 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillIdArg);
         if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
             return;
         }
         
         D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
         if (!pStatList)
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
             return;
         }
 
@@ -2815,7 +2803,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, nSkillIdArg);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
         }
     }
 }
@@ -2826,7 +2814,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || SUNIT_IsDead(pUnit))
     {
-        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a3);
+        D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a3);
     }
     else
     {
@@ -2838,7 +2826,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
         }
         else
         {
-            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, a3);
+            D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a3);
         }
     }
 }
@@ -2957,7 +2945,7 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
                         STATES_ToggleState(pUnit, pRightSkillsTxtRecord->nAuraState, 0);
                     }
 
-                    D2GAME_EVENTS_Delete_6FC34840(SUNIT_GetGameFromUnit(pUnit), pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
+                    D2GAME_EVENTS_Delete_6FC34840(SUNIT_GetGameFromUnit(pUnit), pUnit, EVENTTYPE_PERIODICSKILLS, -1);
                 }
             }
         }
@@ -3020,8 +3008,8 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     const uint8_t nAct = DRLG_GetActNoFromLevelId(nDestLevel);
     int32_t nX = 0;
     int32_t nY = 0;
-    D2RoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
-    D2RoomStrc* pDestinationRoom = pRoom;
+    D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
+    D2ActiveRoomStrc* pDestinationRoom = pRoom;
 
     sub_6FC385A0(pGame, pRoom);
 
@@ -3084,7 +3072,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FD13DF0
-int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
+int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
 {
     D2_ASSERT(pRoom);
 
@@ -3112,7 +3100,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
     coords.nY = nY;
     if (!bPerm)
     {
-        if (!COLLISION_GetFreeCoordinatesWithField(pRoom, &coords, &coords, 3, 0x3E01u, 0xC01u, 0))
+        if (!COLLISION_GetFreeCoordinatesWithField(pRoom, &coords, &coords, 3, COLLIDE_MASK_SPAWN, 0xC01u, 0))
         {
             return 0;
         }
@@ -3121,7 +3109,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
         nTargetY = coords.nY;
     }
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
     if (!pTargetRoom)
     {
         return 0;
@@ -3549,7 +3537,7 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
         nY = pSummonArg->pPosition.nY;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
     if (!pRoom)
     {
         return nullptr;
@@ -3611,10 +3599,10 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
 
     D2_ASSERT(!STATES_CheckState(pPet, STATE_UNINTERRUPTABLE));
 
-    AITHINK_ExecuteAiFn(pGame, pPet, AIGENERAL_GetAiControlFromUnit(pPet), pSummonArg->nSpecialAiState);
+    AITHINK_ExecuteAiFn(pGame, pPet, AIGENERAL_GetAiControlFromUnit(pPet), pSummonArg->nAiSpecialState);
     MONSTER_UpdateAiCallbackEvent(pGame, pPet);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 25, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_AITHINK, pGame->dwGameFrame + 25, 0, 0);
 
     return pPet;
 }
@@ -3670,7 +3658,7 @@ void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUni
         unitFindArg.nY = nY;
         unitFindArg.nSize = nRange;
 
-        D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+        D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
         if (pRoom)
         {
             D2UnitFindDataStrc unitFindData = {};
@@ -3715,7 +3703,7 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
     unitFindArg.nY = pEffect->nY;
     unitFindArg.nSize = nParam;
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
     if (pRoom)
     {
         D2UnitFindDataStrc unitFindData = {};
@@ -3850,14 +3838,14 @@ void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc*
         if (pStatList)
         {
             D2COMMON_10476(pStatList, pGame->dwGameFrame + nDelay);
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
         }
         else
         {
             pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, pGame->dwGameFrame + 100, pUnit->dwUnitType, pUnit->dwUnitId);
             if (pStatList)
             {
-                EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 100, 0, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 100, 0, 0);
                 STATLIST_SetState(pStatList, STATE_STUNNED);
                 STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
                 D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -3905,11 +3893,11 @@ int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState)
+int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || pUnit->dwClassId < 0)
     {
-        return AIUTIL_CanUnitSwitchAi(pUnit, nSpecialState) != 0;
+        return AIUTIL_CanUnitSwitchAi(pUnit, nAiSpecialState) != 0;
     }
 
     int32_t nClassId = pUnit->dwClassId;
@@ -3928,7 +3916,7 @@ int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState)
     }
     else
     {
-        return AIUTIL_CanUnitSwitchAi(pUnit, nSpecialState) != 0;
+        return AIUTIL_CanUnitSwitchAi(pUnit, nAiSpecialState) != 0;
     }
 }
 
@@ -3982,7 +3970,7 @@ int32_t __fastcall sub_6FD15340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
     D2_ASSERT(pMissilesTxtRecord);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom)
     {
         D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
@@ -4129,7 +4117,7 @@ void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 }
 
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t a3, int32_t a4, int32_t a5, int32_t nEvent, int32_t a7, int32_t a8)
+D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
 {
     constexpr D2UnitEventCallbackFunction gpEventCallbackTable_6FD40D20[] =
     {
@@ -4185,9 +4173,9 @@ D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, u
         nullptr,
     };
 
-    if (nEvent >= 0 && nEvent < std::size(gpEventCallbackTable_6FD40D20) && gpEventCallbackTable_6FD40D20[nEvent])
+    if (nEventFunc >= 0 && nEventFunc < std::size(gpEventCallbackTable_6FD40D20) && gpEventCallbackTable_6FD40D20[nEventFunc])
     {
-        return SUNITEVENT_AllocTimer(pGame, pUnit, a3, a4, a5, gpEventCallbackTable_6FD40D20[nEvent], a7, a8);
+        return SUNITEVENT_Register(pGame, pUnit, nUnitEventType, a4, a5, gpEventCallbackTable_6FD40D20[nEventFunc], a7, a8);
     }
 
     return nullptr;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include "Item.h"
 #include "Missile.h"
 #include "Monster.h"
@@ -117,7 +117,7 @@ struct D2UnitStrc
 	{
 		uint32_t dwAnimMode;					//Player, Monster, Object
 		uint32_t dwItemMode;					//Items, see D2C_ItemModes
-		uint32_t dwCollideType;					//Missiles
+		uint32_t dwMissileMode;					// see D2C_MissileModes
 	};
 	union										//0x14
 	{
@@ -137,7 +137,7 @@ struct D2UnitStrc
 		D2DynamicPathStrc* pDynamicPath;
 		D2StaticPathStrc* pStaticPath;
 	};
-	struct D2MonSeqTxt* pAnimSeq;				//0x30
+	struct D2AnimSeqTxt* pAnimSeq;				//0x30
 	uint32_t dwSeqFrameCount;					//0x34
 	int32_t dwSeqFrame;							//0x38
 	uint32_t dwSeqSpeed;						//0x3C
@@ -165,8 +165,8 @@ struct D2UnitStrc
 			BOOL bSparkChest;					//0x078
 			void* pTimerParams;					//0x07C
 			D2GameStrc* pGame;					//0x080
-			uint32_t unk0x084[3];					//0x084
-			D2UnitEventStrc* pSrvTimerList;			//0x090
+			uint32_t unk0x084[3];				//0x084
+			D2UnitEventStrc* pSrvUnitEventsList;//0x090
 		};
 
 		struct									//Client Unit
@@ -219,7 +219,7 @@ struct D2UnitStrc
 #pragma pack()
 
 // Helper function
-inline D2MonSeqTxt* UNITS_GetAnimSeq(D2UnitStrc* pUnit) { 
+inline D2AnimSeqTxt* UNITS_GetAnimSeq(D2UnitStrc* pUnit) { 
 	return (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER) ? pUnit->pAnimSeq : nullptr;
 }
 
@@ -272,13 +272,13 @@ D2COMMON_DLL_DECL int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit);
 //D2Common.0x6FDBDEC0 (#10352)
 D2COMMON_DLL_DECL void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE060 (#10351)
-D2COMMON_DLL_DECL void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY);
+D2COMMON_DLL_DECL void __stdcall UNITS_BlockCollisionPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FDBE1A0 (#10350)
-D2COMMON_DLL_DECL void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2RoomStrc* pRoom, int nX, int nY);
+D2COMMON_DLL_DECL void __stdcall UNITS_InitializeStaticPath(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nX, int nY);
 //D2Common.0x6FDBE210 (#10343)
 D2COMMON_DLL_DECL void __stdcall UNITS_ResetRoom(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE270 (#10342)
-D2COMMON_DLL_DECL D2RoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL D2ActiveRoomStrc* __stdcall UNITS_GetRoom(D2UnitStrc* pUnit);
 //D2Common.0x6FDBE2D0 (#10344)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetTargetUnitForDynamicUnit(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit);
 //D2Common.0x6FDBE330 (#10345)
@@ -319,8 +319,9 @@ D2COMMON_DLL_DECL void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit);
 D2COMMON_DLL_DECL void __stdcall UNITS_UpdateFrame(D2UnitStrc* pUnit);
 //D2Common.0x6FDBF020 (#10375)
 D2COMMON_DLL_DECL void __stdcall D2COMMON_10375_UNITS_SetFrameNonRate(D2UnitStrc* pUnit, int nRate, int nFailRate);
-//D2Common.0x6FDBF050
-void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine);
+//1.10f: D2Common.0x6FDBF050 (#10376)
+//1.13c: D2Common.0x6FD83110 (#10819)
+D2COMMON_DLL_DECL void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine);
 //D2Common.0x6FDBF8D0 (#10377)
 D2COMMON_DLL_DECL void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed);
 //D2Common.0x6FDBF910 (#10378)
@@ -412,7 +413,7 @@ D2COMMON_DLL_DECL int __stdcall UNITS_GetMeleeRange(D2UnitStrc* pUnit);
 //D2Common.0x6FDC1230 (#10364)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int nY, int nFlags);
 //D2Common.0x6FDC13D0
-BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2RoomStrc* pRoom, int nCollisionMask);
+BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2ActiveRoomStrc* pRoom, int nCollisionMask);
 //D2Common.0x6FDC14C0 (#10362)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask);
 //D2Common.0x6FDC1760
@@ -485,8 +486,8 @@ D2COMMON_DLL_DECL void __stdcall UNITS_FreeStaticPath(D2UnitStrc* pUnit);
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_CanDualWield(D2UnitStrc* pUnit);
 //D2Common.0x6FDC2860 (#11238)
 D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsCorpseUseable(D2UnitStrc* pUnit);
-//D2Common.0x6FDC2910
-BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObject);
+//D2Common.0x6FDC2910 (#11307)
+D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsObjectInInteractRange(D2UnitStrc* pUnit, D2UnitStrc* pObject);
 //D2Common.0x6FDC2C80
 struct D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId);
 //1.10f: D2Common.0x6FDC2CB0 (#10399)
@@ -501,6 +502,6 @@ D2COMMON_DLL_DECL BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc*
 //D2Common.0x6FDC3090 (#10406)
 D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10406(D2UnitStrc* pUnit, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a3);
 //D2Common.0x6FDC33C0 (#10407)
-D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2RoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6);
+D2COMMON_DLL_DECL D2UnitStrc* __stdcall D2Common_10407(D2ActiveRoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6);
 //D2Common.0x6FDC3680 (#10419)
 D2COMMON_DLL_DECL void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnitType, D2UnitGUID nUnitGUID);

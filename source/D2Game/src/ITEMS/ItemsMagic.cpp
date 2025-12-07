@@ -318,6 +318,8 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
             case ITEMQUAL_TEMPERED:
                 // Ignore magic-only affixes for rare/crafted objects.
                 continue;
+			default:
+				break;
             }
         }
 

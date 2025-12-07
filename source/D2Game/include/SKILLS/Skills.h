@@ -4,7 +4,8 @@
 #include <Units/Units.h>
 #include <Units/UnitFinds.h>
 #include <UNIT/SUnitDmg.h>
-
+#include <UNIT/SUnitEvent.h>
+#include <AI/AiStates.h>
 
 struct D2ItemStatCostTxt;
 struct D2MissilesTxt;
@@ -110,7 +111,7 @@ struct D2SummonArgStrc
 	uint32_t dwFlags;						//0x00
 	D2UnitStrc* pOwner;						//0x04
 	int32_t nHcIdx;							//0x08
-	int32_t nSpecialAiState;				//0x0C
+	D2C_AiSpecialState nAiSpecialState;		//0x0C
 	int32_t nMonMode;						//0x10
 	D2CoordStrc pPosition;					//0x14		
 	int32_t nPetType;						//0x1C
@@ -221,7 +222,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FD12FD0
 int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD13220
-int32_t __fastcall sub_6FD13220(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel);
+int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD13260
 int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5);
 //D2Game.0x6FD13330
@@ -239,7 +240,7 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
 //D2Game.0x6FD13B20
 D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2UnitStrc* pPortal, int32_t nDestLevel, int32_t nSourceLevel);
 //D2Game.0x6FD13DF0
-int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm);
+int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm);
 //D2Game.0x6FD14020
 int32_t __fastcall D2GAME_GetXAndYFromTargetUnit_6FD14020(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pX, int32_t* pY);
 //D2Game.0x6FD140D0
@@ -283,7 +284,7 @@ void __fastcall sub_6FD15080(D2UnitStrc* pUnit, int32_t a2);
 //D2Game.0x6FD150A0
 int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget);
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, int32_t nSpecialState);
+int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState);
 //D2Game.0x6FD15210
 D2UnitStrc* __fastcall sub_6FD15210(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD15320
@@ -305,7 +306,7 @@ void __fastcall sub_6FD155E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 //D2Game.0x6FD15650
 void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, uint16_t wResultFlags, int32_t a5, D2DamageStrc* pDamage, int32_t a7);
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t a3, int32_t a4, int32_t a5, int32_t nEvent, int32_t a7, int32_t a8);
+D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8);
 
 //D2Game.0x6FC808D0
 int32_t __fastcall SKILLS_SrvSt18_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);

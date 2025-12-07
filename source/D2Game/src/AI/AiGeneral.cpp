@@ -43,6 +43,8 @@ void __fastcall AIGENERAL_SetAiControlParam(D2UnitStrc* pMonster, int32_t nIndex
 	case 3:
 		pAiControl->dwAiParam[2] = nParamValue;
 		break;
+	default:
+		break;
 	}
 }
 
@@ -65,6 +67,8 @@ int32_t __fastcall AIGENERAL_GetAiControlParam(D2UnitStrc* pUnit, int32_t nIndex
 
 	case 3:
 		return pAiControl->dwAiParam[2];
+	default:
+		break;
 	}
 
 	return 0;

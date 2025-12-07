@@ -126,7 +126,7 @@ int32_t __fastcall D2GAME_PLRMODES_First_6FC7F340(D2GameStrc* pGame, D2UnitStrc*
         case PLRMODE_THROW:
         case PLRMODE_SPECIAL1:
         case PLRMODE_SEQUENCE:
-            if (pGame->dwGameFrame <= EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM) + 5)
+            if (pGame->dwGameFrame <= EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ENDANIM) + 5)
             {
                 return 1;
             }
@@ -158,12 +158,12 @@ int32_t __fastcall D2GAME_PLRMODES_First_6FC7F340(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FC7F550
 void __fastcall PLRMODE_StartXY_Neutral(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMode, int32_t nX, int32_t nY)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
     int32_t nCombatMode = nMode;
 
     if (pRoom)
     {
-        nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TNEUTRAL : PLRMODE_NEUTRAL;
+        nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TOWNNEUTRAL : PLRMODE_NEUTRAL;
     }
 
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -196,14 +196,14 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
     case PLRMODE_RUN:
         if (!STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0))
         {
-            nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TWALK : PLRMODE_WALK;
+            nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TOWNWALK : PLRMODE_WALK;
         }
         break;
 
     case PLRMODE_WALK:
-    case PLRMODE_TWALK:
+    case PLRMODE_TOWNWALK:
     {
-        nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TWALK : PLRMODE_WALK;
+        nCombatMode = DUNGEON_IsRoomInTown(UNITS_GetRoom(pPlayer)) != 0 ? PLRMODE_TOWNWALK : PLRMODE_WALK;
         break;
     }
 
@@ -339,10 +339,10 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     if (v28 < 0)
     {
         int32_t nMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
-            nMode = PLRMODE_TNEUTRAL;
+            nMode = PLRMODE_TOWNNEUTRAL;
         }
 
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -372,10 +372,10 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     else
     {
         int32_t nMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
         if (pRoom && DUNGEON_IsRoomInTown(pRoom))
         {
-            nMode = PLRMODE_TNEUTRAL;
+            nMode = PLRMODE_TOWNNEUTRAL;
         }
 
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
@@ -423,8 +423,9 @@ int32_t __fastcall sub_6FC7FBB0(D2UnitStrc* pPlayer)
     return 0;
 }
 
-//D2Game.0x6FC7FBD0
-D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2RoomStrc* pRoom)
+//1.10f: D2Game.0x6FC7FBD0
+//1.13c: D2Game.0x6FC99210
+D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit->pInventory)
     {
@@ -485,7 +486,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
         return nullptr;
     }
 
-    D2RoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
     if (!pTargetRoom)
     {
         char szMessage[256] = {};
@@ -559,7 +560,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
             D2UnitStrc* pDupedItem = ITEMS_Duplicate(pGame, pItem, pUnit, 1);
             if (nBodyLoc == -1)
             {
-                if (INVENTORY_PlaceItemAtFreePosition(pDeadBody->pInventory, pDupedItem, UNITS_GetInventoryRecordId(pDeadBody, 0, pGame->bExpansion), 0, 0, __FILE__, __LINE__) 
+                if (INVENTORY_PlaceItemAtFreePosition(pDeadBody->pInventory, pDupedItem, UNITS_GetInventoryRecordId(pDeadBody, INVPAGE_INVENTORY, pGame->bExpansion), 0, 0, __FILE__, __LINE__)
                     && INVENTORY_PlaceItemInSocket(pDeadBody->pInventory, pDupedItem, 1))
                 {
                     if (pDupedItem)
@@ -754,8 +755,8 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     STATES_UpdateStayDeathFlags(pDefender, 0);
     D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pDefender, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_PERIODICSTATS, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
     sub_6FCBCE70(pGame, pDefender);
@@ -810,8 +811,8 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
     PATH_SetUnitDeadCollision(pUnit, 1);
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, 0);
 
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
@@ -1143,7 +1144,7 @@ void __fastcall EVENTS_StaminaRegen(D2UnitStrc* pUnit)
     switch (pUnit ? pUnit->dwAnimMode : 0)
     {
     case PLRMODE_NEUTRAL:
-    case PLRMODE_TNEUTRAL:
+    case PLRMODE_TOWNNEUTRAL:
         break;
 
     case PLRMODE_WALK:
@@ -1154,7 +1155,7 @@ void __fastcall EVENTS_StaminaRegen(D2UnitStrc* pUnit)
         }
         break;
 
-    case PLRMODE_TWALK:
+    case PLRMODE_TOWNWALK:
         nShift = 9;
         break;
 
@@ -1248,7 +1249,7 @@ void __fastcall EVENTS_ManaRegen(D2UnitStrc* pUnit)
 //D2Game.0x6FC80F80
 void __fastcall D2GAME_EVENTS_StatRegen_6FC80F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
 {
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, a3, a4);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, a3, a4);
 
     if (SUNIT_IsDead(pUnit))
     {
@@ -1362,10 +1363,10 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     else
     {
         int32_t nCombatMode = PLRMODE_NEUTRAL;
-        D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
         if (pRoom)
         {
-            nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TNEUTRAL : PLRMODE_NEUTRAL;
+            nCombatMode = DUNGEON_IsRoomInTown(pRoom) != 0 ? PLRMODE_TOWNNEUTRAL : PLRMODE_NEUTRAL;
         }
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
         SUNIT_SetCombatMode(pGame, pUnit, nCombatMode);
@@ -1382,8 +1383,8 @@ void __fastcall sub_6FC814F0(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     D2GAME_SetClientDead_6FC33830(pClient, nullptr);
     PATH_SetUnitDeadCollision(pPlayer, 1);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 8, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, 9, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_PERIODICSKILLS, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPlayer, EVENTTYPE_PERIODICSTATS, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
 }
 
@@ -1575,7 +1576,7 @@ int32_t __fastcall sub_6FC81890(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     {
     case PLRMODE_DEATH:
     case PLRMODE_NEUTRAL:
-    case PLRMODE_TNEUTRAL:
+    case PLRMODE_TOWNNEUTRAL:
     case PLRMODE_DEAD:
         return 1;
 
@@ -1693,7 +1694,7 @@ void __fastcall sub_6FC81B20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     const int32_t nTimeout = CHAT_GetTimeoutFromHoverMsg(pUnit->pHoverText);
     if (nTimeout > pGame->dwGameFrame)
     {
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, nTimeout, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, nTimeout, 0, 0);
     }
     else
     {
@@ -1709,11 +1710,11 @@ void __fastcall sub_6FC81B90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
 {
     PARTY_SynchronizeWithClient(pGame, pUnit);
     sub_6FC7E640(pGame, pUnit);
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_DELAYEDPORTAL, pGame->dwGameFrame + 30, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_DELAYEDPORTAL, pGame->dwGameFrame + 30, 0, 0);
 }
 
 //D2Game.0x6FC81BD0
-void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEvent, int32_t dwArg, int32_t dwArgEx)
+void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t dwArg, int32_t dwArgEx)
 {
     using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 
@@ -1732,8 +1733,10 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         nullptr,
         sub_6FC81B90,
         D2GAME_MONSTERS_AiFunction13_6FC65890,
-        D2GAME_PLRTRADE_Last_6FC937F0
+        D2GAME_PLRTRADE_Last_6FC937F0,
+		nullptr
     };
+	static_assert(EVENTTYPE_COUNT == std::size(off_6FD28F40), "missing callbacks");
 
     if (nEvent >= 0 && nEvent <= std::size(off_6FD28F40))
     {

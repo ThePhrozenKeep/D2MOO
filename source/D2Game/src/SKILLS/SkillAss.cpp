@@ -4,6 +4,7 @@
 
 #include <D2BitManip.h>
 
+#include <D2Collision.h>
 #include <D2StatList.h>
 #include <D2Dungeon.h>
 #include <D2States.h>
@@ -76,13 +77,13 @@ int32_t __fastcall SKILLS_SrvSt22_PsychicHammer(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    D2RoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
     if (DUNGEON_IsRoomInTown(pUnitRoom))
     {
         return 0;
     }
 
-    D2RoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
+    D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
     if (DUNGEON_IsRoomInTown(pTargetRoom))
     {
         return 0;
@@ -239,7 +240,7 @@ int32_t __fastcall SKILLS_SrvDo034_TigerStrike_CobraStrike_RoyalStrike(D2GameStr
         }
 
         D2COMMON_10476(pStatList, nExpireFrame);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
         const int32_t nOldValue = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
 
@@ -430,6 +431,8 @@ void __fastcall sub_6FCF5870(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
                         sub_6FCF5BC0(pUnit, pStatList, pDamage);
                         break;
                     }
+					default:
+						break;
                     }
                 }
             }
@@ -651,7 +654,7 @@ int32_t __fastcall SKILLS_SrvDo039_FistsOfFire_BladesOfIce_ProgressiveFn3(D2Game
     D2SeedStrc seed = {};
     SEED_InitLowSeed(&seed, nRand);
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     const int32_t nArea = nRange * nRange;
     for (int32_t i = 0; i < nArea; ++i)
     {
@@ -1066,16 +1069,19 @@ void __fastcall sub_6FCF77E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2DamageStrc*
                             nValue = 3;
                         }
 
+						D2SeedStrc tSeedBackup;
+						SEED_GetSeeds(&pUnit->pSeed, &tSeedBackup.nLowSeed, &tSeedBackup.nHighSeed);
                         const int32_t nX = ITEMS_RollRandomNumber(&pUnit->pSeed);
+						SEED_SetSeeds(&pUnit->pSeed, tSeedBackup.nLowSeed, tSeedBackup.nHighSeed);
 
                         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_PRGSTACK])
                         {
-                            for (int32_t i = 0; i < nValue - 1; ++i)
+                            for (int32_t nPrgFuncIndex = 0; nPrgFuncIndex < nValue - 1; ++nPrgFuncIndex)
                             {
-                                const int32_t nPrgFunc = pSkillsTxtRecord->wSrvPrgFunc[i];
+                                const int32_t nPrgFunc = pSkillsTxtRecord->wSrvPrgFunc[nPrgFuncIndex];
                                 if (nPrgFunc > 0 && nPrgFunc < gnSkillSrvDoFns)
                                 {
-                                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], i + 1, 0);
+                                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], nPrgFuncIndex + 1, 0);
 
                                     const SkillDoFunc pfSkillDo = gpSkillSrvDoFnTable_6FD40A20[nPrgFunc];
                                     if (pfSkillDo)
@@ -1426,7 +1432,7 @@ D2UnitStrc* __fastcall sub_6FCF8610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
         return 0;
     }
 
-    D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOwner), nX, nY);
+    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pOwner), nX, nY);
     if (!pRoom || !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]) && DUNGEON_IsRoomInTown(pRoom))
     {
         return 0;
@@ -1440,7 +1446,7 @@ D2UnitStrc* __fastcall sub_6FCF8610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     summonArg.pPosition.nY = nY;
     summonArg.dwFlags = 1;
     summonArg.pOwner = pOwner;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetMax = nPetMax;
 
     D2UnitStrc* pPet = D2GAME_SummonPet_6FD14430(pGame, &summonArg);
@@ -1503,8 +1509,8 @@ int32_t __fastcall SKILLS_SrvDo044_BladeSentinel(D2GameStrc* pGame, D2UnitStrc* 
 
     AIGENERAL_CopyAiCommand(pGame, pMonster, &aiCmd);
 
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
-    EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, pGame->dwGameFrame + 1, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
     pMonster->dwFlags &= 0xFFFFFFF7;
 
     return 1;
@@ -1751,9 +1757,9 @@ int32_t __fastcall SKILLS_AuraCallback_CloakOfShadows(D2AuraCallbackStrc* pAuraC
         }
     }
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && sub_6FD15190(pUnit, 10))
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && sub_6FD15190(pUnit, AISPECIALSTATE_DIMVISION))
     {
-        AITHINK_ExecuteAiFn(pAuraCallback->pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), 10);
+        AITHINK_ExecuteAiFn(pAuraCallback->pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), AISPECIALSTATE_DIMVISION);
     }
 
     return 1;
@@ -1838,7 +1844,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
     if (pStatList)
     {
         D2COMMON_10476(pStatList, pGame->dwGameFrame + 7);
-        EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 7, 0, 0);
+        EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 7, 0, 0);
 
         if (SKILLS_GetParam1(pSkill) <= pGame->dwGameFrame)
         {
@@ -1874,7 +1880,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + 21, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 21, 0, 0);
     D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
     STATLIST_SetStatRemoveCallback(pStatList, SKILLS_StatRemoveCallback_RemoveState);
     STATLIST_SetState(pStatList, STATE_INFERNO);
@@ -1995,7 +2001,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     D2SummonArgStrc summonArg = {};
     summonArg.nHcIdx = nSummonId;
     summonArg.pOwner = pUnit;
-    summonArg.nSpecialAiState = 0;
+    summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nMonMode = nSpawnMode;
     summonArg.nPetType = nPetType;
     summonArg.nPetMax = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPetMax, nSkillId, nSkillLevel);
@@ -2061,8 +2067,8 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     }
 
     sub_6FCF9580(pGame, pUnit, pPet, nSkillId, nSkillLevel, nItemLevel, 0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, 2, 0);
-    EVENT_SetEvent(pGame, pPet, 2, pGame->dwGameFrame + 20, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pPet, EVENTTYPE_AITHINK, 0);
+    EVENT_SetEvent(pGame, pPet, EVENTTYPE_AITHINK, pGame->dwGameFrame + 20, 0, 0);
 
     if (pSkillsTxtRecord->nAuraState > 0 && pSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount)
     {
@@ -2074,7 +2080,7 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
     const int32_t nLength = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     if (nLength > 0)
     {
-        EVENT_SetEvent(pGame, pPet, UNITEVENTCALLBACK_MONUMOD, pGame->dwGameFrame + nLength, 0, 0);
+        EVENT_SetEvent(pGame, pPet, EVENTTYPE_MONUMOD, pGame->dwGameFrame + nLength, 0, 0);
         D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, MONUMOD_TEMPSUMMON, 0);
     }
 
@@ -2214,7 +2220,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
 {
     D2SrvDo51Strc* pArgs = (D2SrvDo51Strc*)pAuraCallback->pArgs;
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pUnit, 11) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nMonCurseResSubstraction)
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pUnit, AISPECIALSTATE_TERROR) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nMonCurseResSubstraction)
     {
         const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + pArgs->nParam1 + ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, pArgs->nParam2);
         D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION);
@@ -2241,7 +2247,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
         if (pConversionStatList)
         {
             D2COMMON_10476(pConversionStatList, nExpireFrame);
-            EVENT_SetEvent(pAuraCallback->pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, nExpireFrame, 0, 0);
+            EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
             sub_6FD154D0(pUnit);
             sub_6FCBDD30(pUnit, 2u, 1);
             D2GAME_UpdateSummonAI_6FC401F0(pAuraCallback->pGame, pUnit, 0, pAuraCallback->pOwner->dwNodeIndex);
@@ -2391,7 +2397,7 @@ int32_t __fastcall SKILLS_SrvDo052_DragonFlight(D2GameStrc* pGame, D2UnitStrc* p
         return 1;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return 0;
@@ -2407,7 +2413,7 @@ int32_t __fastcall SKILLS_SrvDo052_DragonFlight(D2GameStrc* pGame, D2UnitStrc* p
     }
 
     D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
-    if (!pLevelsTxtRecord || pLevelsTxtRecord->nTeleport == 0 || (pLevelsTxtRecord->nTeleport == 2 && UNITS_TestCollisionByCoordinates(pUnit, nX, nY, 0x804)))
+    if (!pLevelsTxtRecord || pLevelsTxtRecord->nTeleport == 0 || (pLevelsTxtRecord->nTeleport == 2 && UNITS_TestCollisionByCoordinates(pUnit, nX, nY, COLLIDE_MASK_PLAYER_FLYING)))
     {
         return 0;
     }
@@ -2555,7 +2561,7 @@ int32_t __fastcall SKILLS_SrvDo054_BladeShield(D2GameStrc* pGame, D2UnitStrc* pU
         return 0;
     }
 
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!DUNGEON_IsRoomInTown(pRoom))
     {
         SKILLS_SrvDo142_Unused(pGame, pUnit, nSkillId, nSkillLevel);

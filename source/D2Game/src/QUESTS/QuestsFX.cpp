@@ -57,7 +57,7 @@ void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
             if ((!bCheckIfUndead || MONSTERS_IsUndead(pMonster)) && bAllied)
             {
-                EVENT_SetEvent(pGame, pMonster, UNITEVENTCALLBACK_MONUMOD, nDelayMin + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nDelayMax - nDelayMin) + pGame->dwGameFrame, 0, 0);
+                EVENT_SetEvent(pGame, pMonster, EVENTTYPE_MONUMOD, nDelayMin + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nDelayMax - nDelayMin) + pGame->dwGameFrame, 0, 0);
                 D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pMonster, MONUMOD_TEMPSUMMON, 0);
             }
         }
@@ -125,7 +125,7 @@ void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc
     {
         UNITS_ChangeAnimMode(pStairs, OBJMODE_OPERATING);
         D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(386u);
-        EVENT_SetEvent(pGame, pStairs, UNITEVENTCALLBACK_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+        EVENT_SetEvent(pGame, pStairs, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
     }
 }
 

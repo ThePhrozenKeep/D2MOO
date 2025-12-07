@@ -274,7 +274,7 @@ void __fastcall ACT2Q4_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -308,7 +308,7 @@ void __fastcall ACT2Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->bActive = 1;
 	pQuestData->fState = 0;
 	pQuestData->pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest4Strc);
-	pQuestData->nQuest = QUESTSTATEFLAG_A2Q4;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q4;
 	pQuestData->pfStatusFilter = 0;
 	pQuestData->nInitNo = 5;
 	pQuestData->pfActiveFilter = ACT2Q4_ActiveFilterCallback;
@@ -390,14 +390,14 @@ void __fastcall ACT2Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 			if (!pQuestDataEx->bPortalToCanyonOpen && UNITS_GetRoom(pQuestArg->pPlayer) == pQuestDataEx->pRoom)
 			{
-				D2RoomStrc* pRoom = nullptr;
+				D2ActiveRoomStrc* pRoom = nullptr;
 				D2CoordStrc pCoord = {};
 				UNITS_GetCoords(pQuestArg->pPlayer, &pCoord);
 				QUESTS_GetFreePosition(pQuestDataEx->pRoom, &pCoord, 2, 0xBE11, &pRoom, 8);
 				if (pRoom && D2GAME_CreatePortalObject_6FD13DF0(pQuestData->pGame, pQuestArg->pPlayer, pRoom, pCoord.nX, pCoord.nY, LEVEL_CANYONOFTHEMAGI, 0, OBJECT_PERMANENT_TOWN_PORTAL, 0))
 				{
 					pQuestDataEx->bPortalToCanyonOpen = 1;
-					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuest, QFLAG_PRIMARYGOALDONE);
+					QUESTS_SetGlobalState(pQuestArg->pGame, pQuestData->nQuestFilter, QFLAG_PRIMARYGOALDONE);
 				}
 			}
 		}
@@ -580,7 +580,7 @@ void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA2F60
-void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2RoomStrc* pRoom, D2CoordStrc* pCoord)
+void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord)
 {
 	D2Act2Quest4Strc* pQuestDataEx = (D2Act2Quest4Strc*)pQuestData->pQuestDataEx;
 
@@ -623,7 +623,7 @@ void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2Un
 	}
 	pCoord->nY = pCoord->nY - 3;
 
-	D2RoomStrc* pFoundRoom = D2GAME_GetRoom_6FC52070(pRoom, pCoord->nX, pCoord->nY);
+	D2ActiveRoomStrc* pFoundRoom = D2GAME_GetRoom_6FC52070(pRoom, pCoord->nX, pCoord->nY);
 	QUESTS_GetFreePosition(pRoom, pCoord, 3, 0x100, &pFoundRoom, 9);
 
 	D2UnitStrc* pJerhyn = D2GAME_SpawnMonster_6FC69F10(pQuestData->pGame, pFoundRoom, pCoord->nX, pCoord->nY, MONSTER_JERHYN, 1, -1, 0);
@@ -742,7 +742,7 @@ void __fastcall ACT2Q4_InitializeJerhynStartObject(D2QuestDataStrc* pQuestData, 
 		return;
 	}
 
-	D2RoomStrc* pRoom = pOp->pRoom;
+	D2ActiveRoomStrc* pRoom = pOp->pRoom;
 	D2CoordStrc pCoord = {};
 	pCoord.nX = pOp->nX;
 	pCoord.nY = pOp->nY;
@@ -769,7 +769,7 @@ void __fastcall ACT2Q4_InitializeJerhynPalaceObject(D2QuestDataStrc* pQuestData,
 		sub_6FC6A090(pQuestData->pGame, pOp->pRoom, pQuestDataEx->pGuardCoords.nX, pQuestDataEx->pGuardCoords.nY, MONSTER_ACT2GUARD2, 1, 0);
 	}
 
-	EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
+	EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
 
 	D2CoordStrc pCoord = {};
 	pCoord.nX = pOp->nX;
@@ -826,7 +826,7 @@ void __fastcall ACT2Q4_InitializeHaremBlockerObject(D2QuestDataStrc* pQuestData,
 	pQuestDataEx->pHaremBlockerCoords.nX = pCoord.nX - 2;
 	pQuestDataEx->pHaremBlockerCoords.nY = pCoord.nY - 1;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	D2UnitStrc* pHaremBlocker = SUNIT_AllocUnitData(UNIT_OBJECT, OBJECT_EUNUCH_HAREM_BLOCKER, pQuestDataEx->pHaremBlockerCoords.nX, pQuestDataEx->pHaremBlockerCoords.nY, pQuestData->pGame, pRoom, 1, 0, 0);
 
@@ -1016,9 +1016,9 @@ void __fastcall ACT2Q4_GetAndUpdatePalaceNpcState(D2GameStrc* pGame, D2UnitStrc*
 		D2CoordStrc pCoord = {};
 		UNITS_GetCoords(pHaremBlocker, &pCoord);
 		pCoord.nX += 4;
-		D2RoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);
+		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);
 
-		if ((COLLISION_GetFreeCoordinates(pRoom, &pCoord, 1, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 2, 0x3C01, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x3C01, 0)) && sub_6FCBDFE0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, 0, 0))
+		if ((COLLISION_GetFreeCoordinates(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 2, COLLIDE_MASK_MONSTER_PATH, 0) || COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, COLLIDE_MASK_MONSTER_PATH, 0)) && sub_6FCBDFE0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, 0, 0))
 		{
 			pQuestDataEx->unk0x0F = 1;
 			pQuestDataEx->unk0x14 = 1;
@@ -1070,7 +1070,7 @@ int32_t __fastcall OBJECTS_OperateFunction42_SanctuaryTome(D2ObjOperateFnStrc* p
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 		D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-		EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+		EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 	}
 
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
@@ -1118,7 +1118,7 @@ int32_t __fastcall ACT2Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 		return 0;
 	}
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom || DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_ARCANESANCTUARY)
 	{
 		return 0;
@@ -1171,7 +1171,7 @@ void __fastcall OBJECTS_InitFunction29_ArcaneSanctuaryPortal(D2ObjInitFnStrc* pO
 			if (pOp->pObject)
 			{
 				D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject->dwClassId);
-				EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 	}
@@ -1185,7 +1185,7 @@ void __fastcall OBJECTS_InitFunction29_ArcaneSanctuaryPortal(D2ObjInitFnStrc* pO
 			if (pOp->pObject)
 			{
 				D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject->dwClassId);
-				EVENT_SetEvent(pOp->pGame, pOp->pObject, UNITEVENTCALLBACK_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
+				EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, (pObjectsTxtRecord->dwFrameCnt[1] >> 8) + pOp->pGame->dwGameFrame + 1, 0, 0);
 			}
 		}
 	}

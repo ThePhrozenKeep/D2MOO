@@ -177,7 +177,7 @@ void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->bActive = 1;
 	pQuestData->fLastState = 1;
 	pQuestData->fState = 0;
-	pQuestData->nQuest = QUESTSTATEFLAG_A3Q2;
+	pQuestData->nQuestFilter = QUESTSTATEFLAG_A3Q2;
 	pQuestData->nInitNo = 0;
 	pQuestData->pfStatusFilter = ACT3Q2_StatusFilterCallback;
 	pQuestData->pfActiveFilter = ACT3Q2_ActiveFilterCallback;
@@ -768,10 +768,10 @@ int32_t __fastcall OBJECTS_OperateFunction45_SewerLever(D2ObjOperateFnStrc* pOp,
 	UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 
 	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
 
 	pQuestDataEx->nSewerStairsObjectMode = OBJMODE_OPENED;
-	EVENT_SetEvent(pOp->pGame, pObject, UNITEVENTCALLBACK_QUESTFN, pOp->pGame->dwGameFrame + 30, 0, 0);
+	EVENT_SetEvent(pOp->pGame, pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 30, 0, 0);
 
 	QUESTS_TriggerFX(pQuestData->pGame, 9);
 	return 1;

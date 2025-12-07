@@ -4,8 +4,12 @@ add_executable(Game WIN32
   include/Main.h
   
   resources/Game.rc
-  resources/Game.${D2MOO_ORDINALS_VERSION}.rc
 )
+
+if(EXISTS resources/Game.${D2MOO_ORDINALS_VERSION}.rc)
+  target_sources(Game PRIVATE resources/Game.${D2MOO_ORDINALS_VERSION}.rc)
+endif()
+
 target_include_directories(Game PRIVATE include)
 target_link_libraries(Game 
   PRIVATE
@@ -16,3 +20,11 @@ target_link_libraries(Game
 	D2Sound
 	D2MCPClient
 )
+set_target_properties(Game PROPERTIES OUTPUT_NAME Game.D2MOO)
+
+if(D2MOO_WITH_STATIC_TESTS)
+  target_sources(Game
+    PRIVATE
+      statictests/Game_staticchecks.cpp
+  )
+endif()

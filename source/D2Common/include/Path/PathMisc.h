@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include <D2Seed.h>
 #include "Path.h"
 #pragma pack(1)
@@ -34,7 +34,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc* pPathInfo);
 //1.10f: D2Common.0x6FDAABF0
 BOOL __fastcall PATH_CheckCollisionsToNextPosition(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pGameCoord);
 //D2Common.0x6FDAB130
-int __fastcall sub_6FDAB130(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_Straight_Compute(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB270
 int __fastcall PATH_Knockback_Server(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB1E0
@@ -42,7 +42,7 @@ int __fastcall PATH_Leap_6FDAB1E0(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB240
 int __fastcall PATH_Knockback_Client(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB0C0
-int __fastcall sub_6FDAB0C0(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_BackupTurn_Compute(D2PathInfoStrc* pPathInfo);
 //D2Common.0x6FDAB790
 void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2);
 
@@ -60,7 +60,7 @@ int __fastcall PATH_ComputePathChargedBolt_6FDAB4A0(D2DynamicPathStrc* pDynamicP
 int __fastcall sub_6FDAB610(int nX1, int nY1, int nX2, int nY2);
 
 //D2Common.0x6FDAC700 (#10215)
-int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2);
+D2COMMON_DLL_DECL int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2);
 
 //D2Common.0x6FDAC760
 int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY);
@@ -73,17 +73,17 @@ void __fastcall PATH_ComputeVelocityAndDirectionVectorsToNextPoint(D2DynamicPath
 
 //1.10f: D2Common.0x6FDAC8F0 (#10236)
 //1.13c: D2Common.0x6FD5D820 (#10831)
-int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
+D2COMMON_DLL_DECL int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2);
 
 //D2Common.0x6FDAC9A0 (#10226)
-BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2);
 
 
 //D2Common.0x6FDAD530 (#10227)
-BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit);
 
 //D2Common.0x6FDAD590 (#10229)
-BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2RoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_10229(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit, D2ActiveRoomStrc* pDestRoom, uint32_t nDestX, uint32_t nDestY);
 
 //D2Common.0x6FDADA20
-void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2RoomStrc* pHintRoom);
+void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom);

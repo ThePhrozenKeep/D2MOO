@@ -213,7 +213,7 @@ void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, D2DrlgEnvironmen
 }
 
 //D2Common.0x6FD8DC00 (#10923)
-BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2RoomStrc* pRoom)
+BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
@@ -383,7 +383,7 @@ int __stdcall ENVIRONMENT_GetUnusedMember(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DE90 (#10929) - UNUSED
-void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2RoomStrc* pRoom)
+void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 	
@@ -424,7 +424,7 @@ int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DF40 (#10932)
-void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse)
+void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse)
 {
 	D2_ASSERT(nIndex >= 0);
 	D2_ASSERT(nIndex < NUM_ENVIRONMENT_CYCLES);
@@ -507,7 +507,7 @@ int __stdcall ENVIRONMENT_GetTimeRateFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8E100 (#10935) - UNUSED
-void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2RoomStrc* pRoom)
+void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);

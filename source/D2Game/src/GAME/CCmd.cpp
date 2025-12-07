@@ -40,13 +40,13 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
 
-    const int32_t v6 = sub_6FC35840(1u);
-    if (!v6)
+    const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(1u);
+    if (!nGUID)
     {
         return 6;
     }
 
-    D2GameStrc* pGame = GAME_LockGame(v6);
+    D2GameStrc* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         return 6;
@@ -98,7 +98,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         D2GSPacketClt66* pPacket66 = (D2GSPacketClt66*)pPacket;
         if (GAME_VerifyCreateNewGame(nClientId, pPacket66))
         {
-            GAME_SendGameInit(nClientId, pPacket66->szGameName, pPacket66->nGameType, pPacket66->nPlayerClass, pPacket66->szClientName, pPacket66->unk0x25, pPacket66->nGameFlags, pPacket66->nTemplate, pPacket66->unk0x2B, pPacket66->unk0x2C, pPacket66->nDifficulty, pPacket66->nLocale, 0, 0);
+            GAME_SendGameInit(nClientId, pPacket66->szGameName, pPacket66->nGameType, pPacket66->nPlayerClass, pPacket66->szClientName, pPacket66->wArena, pPacket66->nGameFlags, pPacket66->nTemplate, pPacket66->unk0x2B, pPacket66->unk0x2C, pPacket66->nDifficulty, pPacket66->nLocale, 0, 0);
         }
         else
         {
@@ -121,12 +121,12 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         }
 
         char szAccountName[16] = {};
-        int32_t v17 = 0;
+        int32_t nCharSaveTransactionToken = 0;
         int32_t v18 = 0;
         int32_t v19 = 0;
-        if (GAME_VerifyJoinGme(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->unk0x01, szAccountName, &v17, pPacket67->nLocale, &v19, &v18))
+        if (GAME_VerifyJoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nTokenId, szAccountName, &nCharSaveTransactionToken, pPacket67->nLocale, &v19, &v18))
         {
-            GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, v17, pPacket67->nLocale, v19, v18);
+            GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, nCharSaveTransactionToken, pPacket67->nLocale, v19, v18);
         }
         else
         {
@@ -193,7 +193,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_DISCONNECT:
     {
-        if (sub_6FC38100(nClientId))
+        if (GAME_VerifyDisconnect(nClientId))
         {
             GAME_DisconnectClientById(nClientId, EVENTTYPE_DISCONNECT);
         }

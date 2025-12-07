@@ -47,7 +47,7 @@ constexpr uint32_t dword_6FD3F464 = 2;
 
 
 //D2Game.0x6FCC3850
-void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc* pRoom)
+void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &pDrlgCoords);
@@ -138,8 +138,8 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 									{
 										pCoord.nX = nX;
 										pCoord.nY = nY;
-										D2RoomStrc* ppRoom = nullptr;
-										D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
+										D2ActiveRoomStrc* ppRoom = nullptr;
+										D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 										if (ppRoom)
 										{
 											pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
@@ -150,8 +150,8 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 								{
 									pCoord.nX = nX;
 									pCoord.nY = nY;
-									D2RoomStrc* ppRoom = nullptr;
-									D2Common_10136(pRoom, &pCoord, 1, 0x3C01, &ppRoom);
+									D2ActiveRoomStrc* ppRoom = nullptr;
+									D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 									if (ppRoom)
 									{
 										pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
@@ -197,7 +197,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 							STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, pInactiveMonsterNode->nMaxHitpoints, 0);
 						}
 
-						AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), pInactiveMonsterNode->nSpecialAiState);
+						AITHINK_ExecuteAiFn(pGame, pUnit, AIGENERAL_GetAiControlFromUnit(pUnit), pInactiveMonsterNode->nAiSpecialState);
 
 						SUNITINACTIVE_RestoreSpecialMonsterParameters(pGame, pUnit, pInactiveMonsterNode);
 
@@ -335,7 +335,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 						{
 							nFrame = pGame->dwGameFrame + 1;
 						}
-						EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, nFrame, 0, 0);
+						EVENT_SetEvent(pGame, pUnit, EVENTTYPE_ACTIVESTATE, nFrame, 0, 0);
 					}
 
 					pUnit->pObjectData->InteractType = pInactiveUnitNode->nInteractType;
@@ -369,7 +369,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 								int32_t nCounter = v45 - v46;
 								do
 								{
-									EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
+									EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
 
 									nOffset += nFrameDelta;
 									--nCounter;
@@ -407,7 +407,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2RoomStrc
 									int32_t nCounter = v45 - v46;
 									do
 									{
-										EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
+										EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
 
 										nOffset += nFrameDelta;
 										--nCounter;
@@ -474,7 +474,7 @@ void __fastcall SUNITINACTIVE_FreeInactiveMonsterNode(D2GameStrc* pGame, D2Inact
 }
 
 //D2Game.0x6FCC4120
-D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2RoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
+D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
 {
 	D2ItemSaveStrc pItemSave = {};
 	uint8_t* pBitstream = &pInactiveItemNode->pBitstream;
@@ -575,7 +575,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 	int32_t bCompress = 0;
 	int32_t bIsDead = 0;
 
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
 	if (pUnit->dwUnitType == UNIT_MONSTER)
 	{
@@ -700,7 +700,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 		{
 			if (STATES_CheckState(pUnit, STATE_PLAYERBODY))
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 				pUnit->dwFlagEx |= UNITFLAGEX_HASBEENDELETED;
 				SUNITINACTIVE_CompressInactiveUnit(pGame, pUnit);
 				UNITROOM_UpdatePath(pUnit);
@@ -719,7 +719,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 		{
 			if (pUnit->dwClassId == OBJECT_TOWN_PORTAL || pUnit->dwClassId == OBJECT_PERMANENT_TOWN_PORTAL)
 			{
-				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+				D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 				pUnit->dwFlagEx |= UNITFLAGEX_HASBEENDELETED;
 				SUNITINACTIVE_CompressInactiveUnit(pGame, pUnit);
 				UNITROOM_UpdatePath(pUnit);
@@ -737,7 +737,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 				bCompress = 0;
 			}
 
-			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+			D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
 
 			if (bCompress)
 			{
@@ -765,7 +765,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 //D2Game.0x6FCC4650
 void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-	D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
 	{
 		return;
@@ -786,7 +786,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 			}
 		}
 
-		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
+		D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 		D2InactiveMonsterNodeStrc* pInactiveMonsterNode = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2InactiveMonsterNodeStrc);
 
@@ -795,7 +795,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		pInactiveMonsterNode->nY = CLIENTS_GetUnitY(pUnit);
 		pInactiveMonsterNode->nClassId = pUnit->dwClassId;
 		pInactiveMonsterNode->nGameFrame = pGame->dwGameFrame;
-		pInactiveMonsterNode->nSpecialAiState = AITHINK_GetSpecialStateFromAiControl(AIGENERAL_GetAiControlFromUnit(pUnit));
+		pInactiveMonsterNode->nAiSpecialState = AITHINK_GetSpecialStateFromAiControl(AIGENERAL_GetAiControlFromUnit(pUnit));
 		pInactiveMonsterNode->nNameSeed = MONSTERUNIQUE_GetNameSeed(pUnit);
 		SUNITINACTIVE_SaveSpecialMonsterParameters(pGame, pUnit, pInactiveMonsterNode);
 
@@ -908,15 +908,16 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		if (pUnit->dwUnitType == UNIT_ITEM)
 		{
 			uint8_t pBitstream[1024] = {};
-
 			const size_t nBitstreamSize = ITEMS_SerializeItemToBitstream(pUnit, pBitstream, ARRAY_SIZE(pBitstream), 1, 1, 0);
-
-			D2InactiveItemNodeStrc* pInactiveItemNode = (D2InactiveItemNodeStrc*)D2_ALLOC_POOL(pGame->pMemoryPool, nBitstreamSize + 15);
+#ifdef D2_VERSION_110F
+			static_assert(sizeof(D2InactiveItemNodeStrc) == 15, "Game considers this structure to be 15bytes");
+#endif
+			D2InactiveItemNodeStrc* pInactiveItemNode = (D2InactiveItemNodeStrc*)D2_ALLOC_POOL(pGame->pMemoryPool, sizeof(D2InactiveItemNodeStrc) + nBitstreamSize);
 			pInactiveItemNode->pNext = nullptr;
 			pInactiveItemNode->nFrame = ITEMS_GetGroundRemovalTime(pGame, pUnit);
 			pInactiveItemNode->nOwnerId = ITEMS_GetOwnerId(pUnit);
 			pInactiveItemNode->nBitstreamSize = nBitstreamSize;
-			memcpy(&pInactiveItemNode->pBitstream, pBitstream, nBitstreamSize + 1);
+			memcpy(&pInactiveItemNode->pBitstream, pBitstream, nBitstreamSize);
 
 			if (ITEMS_CheckIfSocketable(pUnit) && pUnit->pInventory)
 			{
@@ -964,7 +965,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 				if (UNITS_IsShrine(pUnit))
 				{
-					const uint32_t nData = EVENT_GetEventFrame(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
+					const uint32_t nData = EVENT_GetEventFrame(pGame, pUnit, EVENTTYPE_ACTIVESTATE);
 					pInactiveUnitNode->nUnitId = (uint32_t)nData >> 16;
 					pInactiveUnitNode->nFrame = (WORD)nData;
 				}
@@ -1121,7 +1122,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinate
 }
 
 //D2Game.0x6FCC4E80
-D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2RoomStrc* pRoom, int32_t bAllocNewNode)
+D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t bAllocNewNode)
 {
 	D2DrlgCoordsStrc pCoord = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
@@ -1284,13 +1285,13 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FCC52C0
-int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2RoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId)
+int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId)
 {
 	D2_ASSERT(pGame);
 	D2_ASSERT(pRoomNear);
 	D2_ASSERT(nGameX && nGameY);
 
-	const D2RoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pRoomNear, nGameX, nGameY);
+	const D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pRoomNear, nGameX, nGameY);
 	const uint8_t nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoomNear));
 	if (!pRoom)
 	{

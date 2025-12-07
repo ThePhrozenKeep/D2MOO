@@ -82,7 +82,7 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 {
 	D2PaletteTableStrc paletteTable = {};
 
-	uint8_t* pDatFile = (uint8_t*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetMemPool(), szDatFileName, nullptr);
+	uint8_t* pDatFile = (uint8_t*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szDatFileName, nullptr);
 	for (int32_t i = 0; i < std::size(paletteTable.datFilePalette); ++i)
 	{
 		paletteTable.datFilePalette[i].peBlue = *pDatFile++;
@@ -91,7 +91,7 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 		paletteTable.datFilePalette[i].peFlags = 0;
 	}
 
-	D2PL2FileStrc* pPL2File = (D2PL2FileStrc*)ARCHIVE_READ_FILE_TO_ALLOC_BUFFER(D2Win_GetMemPool(), szPL2FileName, nullptr);
+	D2PL2FileStrc* pPL2File = (D2PL2FileStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szPL2FileName, nullptr);
 	memcpy(gRGBAPalette_6F9622C0, pPL2File->rgbaPalette, sizeof(gRGBAPalette_6F9622C0));
 	memcpy(gTransPalette_6F922198, pPL2File->trans, sizeof(gTransPalette_6F922198));
 	memcpy(&gShadowsLightGammaPalette_6F91E298.shadowsPalette, pPL2File->shadows, sizeof(gShadowsLightGammaPalette_6F91E298.shadowsPalette));

@@ -17,7 +17,7 @@ struct D2Act2Quest3Strc						//sizeof 0xA0
 	uint8_t pad0x07;						//0x07
 	int nAltarMode;							//0x08
 	int nAltarGUID;							//0x0C
-	D2RoomStrc* pRoom;						//0x10
+	D2ActiveRoomStrc* pRoom;						//0x10
 	D2QuestGUIDStrc tPlayerGUIDs;					//0x14
 	int nAltarLevelId;						//0x98
 	int nViperAmuletDropCount;				//0x9C

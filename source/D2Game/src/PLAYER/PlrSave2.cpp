@@ -165,12 +165,12 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
     saveHeader.dwSaveFlags = CLIENTS_GetFlags(pClient);
     if (pGame->bExpansion)
     {
-        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_EXPANSION;
+        saveHeader.tPackedSaveFlags.bExpansion = true;
     }
 
     if (pGame->dwGameType)
     {
-        saveHeader.dwSaveFlags |= CLIENTSAVEFLAG_LADDER;
+		saveHeader.tPackedSaveFlags.bLadder = true;
     }
 
     saveHeader.nClass = CLIENTS_GetClassId(pClient);
@@ -627,39 +627,58 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
     return 0;
 }
 
-//D2Game.0x6FC8DC20
+//1.10f: D2Game.0x6FC8DC20
+//1.13c: D2Game.0x6FD0BAF0
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient)
+#else
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
+#endif
 {
-    if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
-    {
-        if (!pGame->bExpansion)
-        {
-            return PLRSAVE2ERROR_NOTEXPANSIONGAME;
-        }
-    }
-    else
-    {
-        if (pGame->bExpansion)
-        {
-            return PLRSAVE2ERROR_EXPANSIONGAME;
-        }
-    }
+	if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
+	{
+		if (!pGame->bExpansion)
+		{
+			return PLRSAVE2ERROR_NOTEXPANSIONGAME;
+		}
+	}
+	else
+	{
+		if (pGame->bExpansion)
+		{
+			return PLRSAVE2ERROR_EXPANSIONGAME;
+		}
+	}
 
-    if (dwFlags & CLIENTSAVEFLAG_LADDER)
-    {
-        if (!pGame->dwGameType)
-        {
-            return PLRSAVE2ERROR_NOTLADDERGAME;
-        }
-    }
-    else
-    {
-        if (pGame->dwGameType)
-        {
-            return PLRSAVE2ERROR_LADDERGAME;
-        }
-    }
-
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	// 1.13+
+	//if (gbHasServerCallback_6FD31C40)
+	{
+		//TODO:
+		//FILETIME tLastLadderStart;
+		//(*(void(__fastcall**)(FILETIME*))(gpServerCallbacks_6FD31C3C + 84))(&tLastLadderStart);
+		//const bool bCurrentLadder = CompareFileTime(&pClient->nSaveCreationTimestamp, &tLastLadderStart) > 0;
+		const bool bCurrentLadder = true;
+		if (dwFlags & CLIENTSAVEFLAG_LADDER && bCurrentLadder)
+#else
+		if (dwFlags & CLIENTSAVEFLAG_LADDER)
+#endif
+		{
+			if (!pGame->dwGameType)
+			{
+				return PLRSAVE2ERROR_NOTLADDERGAME;
+			}
+		}
+		else
+		{
+			if (pGame->dwGameType)
+			{
+				return PLRSAVE2ERROR_LADDERGAME;
+			}
+		}
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	}
+#endif
     if (dwFlags & CLIENTSAVEFLAG_HARDCORE)
     {
         if (dwFlags & CLIENTSAVEFLAG_DEAD)
@@ -696,12 +715,15 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
             return PLRSAVE2ERROR_HELL_NOT_UNLOCKED;
         }
         break;
+	default:
+		D2_UNREACHABLE;
     }
 
     return 0;
 }
 
-//D2Game.0x6FC8DD00
+//1.10f: D2Game.0x6FC8DD00
+//1.13c: D2Game.0x6FD0D250
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer)
 {
     *ppPlayer = nullptr;
@@ -748,7 +770,11 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         return PLRSAVE2ERROR_NOT_COMPATIBLE;
     }
 
-    const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
+#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
+	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags, pClient);
+#else
+	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
+#endif
     if (nResult)
     {
         return nResult;
@@ -762,12 +788,11 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
 
     CLIENTS_SetClassId(pClient, nClass);
 
-    uint32_t nFlags = pSaveHeader->dwSaveFlags;
-    if (nFlags & CLIENTSAVEFLAG_INIT)
+	D2PackedClientSaveFlags& rPackedFlags = pSaveHeader->tPackedSaveFlags;
+    if (rPackedFlags.bInit)
     {
-        nFlags &= (~CLIENTSAVEFLAG_INIT);
-        pSaveHeader->dwSaveFlags = nFlags;
-        CLIENTS_SetFlags(pClient, (uint16_t)nFlags);
+		rPackedFlags.bInit = false;
+        CLIENTS_SetFlags(pClient, rPackedFlags.nPackedValue);
 
         *ppSection += sizeof(D2SaveHeaderStrc);
         return PLRSAVE2ERROR_NEWBIE_SAVE;
@@ -1033,7 +1058,8 @@ int32_t __fastcall PLRSAVE2_ReadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint
     return 0;
 }
 
-//D2Game.0x6FC8E330
+//1.10f: D2Game.0x6FC8E330
+//1.13c: D2Game.0x6FD0CA60
 int32_t __fastcall PLRSAVE2_ReadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nSkills)
 {
     uint8_t* pData = *ppSection + 2;
@@ -1467,13 +1493,12 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     for (int32_t i = 0; i < 16; ++i)
     {
-        // TODO: Names
         int32_t nSkillId = 0;
-        int32_t a4 = 0;
-        int32_t v46 = 0;
-        CLIENTS_GetSkillHotKey(pClient, i, &nSkillId, &a4, &v46);
+        int32_t nHand = 0;
+        int32_t nItemIndex = 0;
+        CLIENTS_GetSkillHotKey(pClient, i, &nSkillId, &nHand, &nItemIndex);
 
-        if (v46)
+        if (nItemIndex)
         {
             int32_t nItemGUID = -1;
             if (pUnit->pInventory)
@@ -1482,7 +1507,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
                 
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
-                    if (nCounter == v46)
+                    if (nCounter == nItemIndex)
                     {
                         if (INVENTORY_UnitIsItem(pItem))
                         {
@@ -1495,7 +1520,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
                 }
             }
 
-            CLIENTS_SetSkillHotKey(pClient, i, nSkillId, a4, nItemGUID);
+            CLIENTS_SetSkillHotKey(pClient, i, nSkillId, nHand, nItemGUID);
         }
     }
 
@@ -1528,7 +1553,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FC8EF20
-int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, int32_t nUnused1, int32_t nUnused2, int32_t nUnused3)
+int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     constexpr int32_t dwErrorCodesRemap_6FD292D0[] =
     {

@@ -38,7 +38,7 @@ EXPORTS
 	CONTROL_GetType													@10035
 	ARCHIVE_FreeArchives											@10036
 	ARCHIVE_LoadArchives											@10037
-	D2Win_GetMemPool												@10038
+	D2Win_GetArchive												@10038
 	ARCHIVE_LoadCellFile											@10039
 	ARCHIVE_LoadCellFileWithFileSize								@10040
 	ARCHIVE_FreeCellFile											@10041
@@ -80,7 +80,7 @@ EXPORTS
 	D2Win_10077_EDITBOX_GetText										@10077
 	D2Win_10078_IsNumber											@10078
 	D2Win_10079_IsLetter											@10079
-	D2Win_10080														@10080
+	D2Win_10080_EDITBOX_SetNextEditBox														@10080
 	D2Win_10081														@10081
 	D2Win_10082														@10082
 	D2Win_10083														@10083
@@ -142,7 +142,7 @@ EXPORTS
 	LIST_GetSelectedDataIndex										@10139
 	LIST_GetDataFromIndex											@10140
 	D2Win_10141														@10141
-	D2Win_10142														@10142
+	D2Win_10142_CompUnitDestroy										@10142
 	D2Win_10143														@10143
 	D2Win_10144														@10144
 	D2Win_10145														@10145

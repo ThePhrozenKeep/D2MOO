@@ -2,7 +2,7 @@
 
 
 //D2Common.0x6FD720A0
-void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool)
+void __fastcall DATATBLS_LoadOverlayTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
 	{
@@ -36,7 +36,7 @@ void __fastcall DATATBLS_LoadOverlayTxt(void* pMemPool)
 
 	sgptDataTables->pOverlayLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
 
-	sgptDataTables->pOverlayTxt = (D2OverlayTxt*)DATATBLS_CompileTxt(pMemPool, "overlay", pTbl, &sgptDataTables->nOverlayTxtRecordCount, sizeof(D2OverlayTxt));
+	sgptDataTables->pOverlayTxt = (D2OverlayTxt*)DATATBLS_CompileTxt(hArchive, "overlay", pTbl, &sgptDataTables->nOverlayTxtRecordCount, sizeof(D2OverlayTxt));
 }
 
 //D2Common.0x6FD72500

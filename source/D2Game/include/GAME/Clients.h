@@ -47,11 +47,12 @@ enum D2ClientState : uint32_t
 	CLIENTSTATE_CHANGING_ACT = 5,
 };
 
+
 // Character information flags
 enum D2ClientSaveFlags
 {
 	CLIENTSAVEFLAG_INIT = 0x1, // Newbie save
-	CLIENTSAVEFLAG_0x2 = 0x2,
+	CLIENTSAVEFLAG_0x2 = 0x2, // Set at character creation for realm characters.
 	CLIENTSAVEFLAG_HARDCORE = 0x4,
 	CLIENTSAVEFLAG_DEAD = 0x8,
 	CLIENTSAVEFLAG_0x10 = 0x10,
@@ -66,7 +67,28 @@ enum D2ClientSaveFlags
 	// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT = 8,
 	CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK = (0x1F) << CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT,
+};
 
+union D2PackedClientSaveFlags
+{
+	uint16_t nPackedValue;			// D2ClientSaveFlags
+	struct {
+		uint16_t bInit : 1;			// BIT(0)
+		uint16_t bUnkFlag0x02 : 1;	// BIT(1)
+		uint16_t bHardcore : 1;		// BIT(2)
+		uint16_t bDead : 1;			// BIT(3)
+		uint16_t bUnkFlag0x10 : 1;	// BIT(4)
+		uint16_t bExpansion : 1;	// BIT(5)
+		uint16_t bLadder : 1;		// BIT(6)
+		uint16_t bUnkFlag0x80 : 1;	// BIT(7)
+		// Encodes completed acts
+		// => 0 No act completed
+		// => Acts 1-5 Normal (values 1-5), then 1-5 NM (values 6-10), then 1-5 Hell (values 11-15) for Expansion
+		// => Acts 1-4 Normal (values 1-4), then 1-4 NM (values 5-8), then 1-4 Hell  (values 9-12) for Classic
+		uint16_t nProgression : 5;	// BIT(8-12)
+		uint16_t bWeaponSwitch : 1;	// BIT(13)
+		uint16_t nDONOTUSEBITS : 2; // BIT(14-15) Will not be propagated to character preview info string due to encoding with FOG_Encode14BitsToString
+	};
 };
 
 // Internal management flags
@@ -81,22 +103,6 @@ enum D2ClientFlagsEx
 enum D2ClientsConstants
 {
 	CLIENTS_MAX_UPDATES = 55,
-};
-
-struct D2CharacterPreviewInfoStrc // This is used as string, values are encoded so that they are != 0
-{
-	uint16_t unk0x00;					//0x00 lower byte is cleared if invalid data was found => empty string
-	uint8_t pComponents[11];			//0x02
-	uint8_t nClass;						//0x0D
-	uint8_t pComponentColors[11];		//0x0C
-	uint8_t nLevel;						//0x19
-	uint16_t nClientFlags;				//0x1A
-	uint16_t nGuildFlags;				//0x1C
-	uint8_t nGuildEmblemBgColor;		//0x1E
-	uint8_t nGuildEmblemFgColor;		//0x1F
-	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
-	uint32_t szGuildTag;				//0x21
-	uint8_t pad0x25;					//0x25
 };
 
 struct D2ClientInfoStrc
@@ -145,8 +151,8 @@ struct D2ClientUnitUpdateSortStrc
 struct D2ClientKeySkillStrc
 {
 	int16_t nSkill;								//0x00
-	int16_t unk0x002;								//0x02
-	uint32_t dwFlags;							//0x04
+	int16_t nHand;								//0x02
+	uint32_t nItemGUID;							//0x04
 };
 
 struct D2GuildInformationStrc
@@ -165,12 +171,12 @@ struct D2ClientStrc
 	D2ClientState dwClientState;				//0x004
 	uint8_t nClassId;							//0x008
 	uint8_t unk0x09;							//0x009
-	uint16_t nSaveFlags;						//0x00A D2ClientSaveFlags
-	uint8_t unk0x0C;							//0x00C
+	D2PackedClientSaveFlags tSaveFlags;			//0x00A
+	uint8_t nCharTemplate;						//0x00C
 	char szName[16];							//0x00D
 	char szAccount[16];							//0x01D
 	uint8_t unk0x2D[51];						//0x02D
-	int32_t unk0x60;							//0x060
+	int32_t nCharSaveTransactionToken;			//0x060
 	int32_t unk0x64;							//0x064
 	D2ClientInfoStrc* pClientInfo;				//0x068
 	D2CharacterPreviewInfoStrc tCharacterInfo;	//0x06C
@@ -181,26 +187,27 @@ struct D2ClientStrc
 	uint32_t bUnlockCharacter;					//0x178
 	D2SaveHeaderStrc* pSaveHeader;				//0x17C
 	int32_t nSaveHeaderSize;					//0x180
-	uint32_t unk0x184[2];						//0x184
+	uint32_t unk0x184;							//0x184
+	uint32_t nSaveHeaderDataSentBytes;			//0x188
 	DWORD nSaveChecksum;						//0x18C
-	DWORD unk0x190;								//0x190
-	DWORD unk0x194[5];							//0x194
+	FILETIME nSaveCreationTimestamp;			//0x190
+	DWORD unk0x198[4];							//0x198
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
 	uint32_t unk0x1B0;							//0x1B0
-	D2RoomStrc* pRoom;							//0x1B4
+	D2ActiveRoomStrc* pRoom;					//0x1B4
 	struct PacketList {
 		D2PacketDataStrc* pHead;				//0x1B8
 		D2PacketDataStrc* pTail;				//0x1BC
 		D2PacketDataStrc* pPacketDataPool;		//0x1C0
 	} tPacketDataList;
-	uint32_t unk0x1C4;							//0x1C4
+	uint32_t nSaveHeaderSendFailures;			//0x1C4
 	uint32_t unk0x1C8;							//0x1C8
 	D2ClientUnitUpdateStrc unitUpdate[CLIENTS_MAX_UPDATES]; //0x1CC
 	uint8_t pad0x3BB;							//0x3BB
 	uint32_t nUnitUpdateIndex;					//0x3BC
-	int32_t unk0x3C0[5];						//0x3C0
+	int32_t aLastWarpAttemptsFrame[5];			//0x3C0
 	uint32_t dwFlags;							//0x3D4 D2ClientFlagsEx
 	uint32_t dwLastPacketTick;					//0x3D8
 	D2ClientKeySkillStrc HotkeySkills[16];		//0x3DC
@@ -212,15 +219,20 @@ struct D2ClientStrc
 	uint32_t nCreateTime;						//0x488
 	D2ClientPlayerDataStrc clientPlayerData;	//0x48C
 	D2ClientStrc* pNext;						//0x4A8
-	D2ClientStrc* pListNext;					//0x4AC
-	D2ClientStrc* pNextByName;					//0x4B0
+	D2ClientStrc* pServerNext;					//0x4AC
+	D2ClientStrc* pServerNextByName;			//0x4B0
 	uint32_t aPingHistory[17];					//0x4B4
 	uint64_t nPingMovingAverage;				//0x4F8
 	uint32_t dwPingsCount;						//0x500
+#ifdef D2_VERSION_113C
+	uint32_t unk0x504;							//0x504
+#endif
 	int32_t nExpLoss;							//0x504
-	uint32_t dwExpLost;							//0x508
+	uint32_t dwLocale;							//0x508
 	uint32_t dwLangId;							//0x50C
-	//uint32_t __510[2];						//0x510
+#ifdef D2_VERSION_113C
+	uint32_t pad0x514;							//0x514
+#endif
 };
 
 #pragma pack()
@@ -238,13 +250,14 @@ D2UnitStrc* __stdcall CLIENTS_GetPlayerFromClient(D2ClientStrc* pClient, BOOL bI
 //D2Game.0x6FC31EA0
 void __fastcall CLIENTS_SetPlayerInClient(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC31EF0
-void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2RoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
+void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
 //D2Game.0x6FC32220
 void __fastcall sub_6FC32220(D2ClientStrc* pClient);
 //D2Game.0x6FC32260
-int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
-//D2Game.0x6FC325E0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t a6, uint32_t nExpLost, int32_t a8, int32_t a9);
+int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
+//1.10f: D2Game.0x6FC325E0
+//1.13c: D2Game.0x6FC6A9B0
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC327E0
 void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame);
 //D2Game.0x6FC32810
@@ -254,7 +267,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 //D2Game.0x6FC32FE0
 void __fastcall CLIENTS_FreeClientsFromGame(D2GameStrc* pGame);
 //D2Game.0x6FC33020
-void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2RoomStrc* pRoom);
+void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC33210
 void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t nUpdateSize);
 //D2Game.0x6FC33510
@@ -268,7 +281,7 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient);
 //D2Game.0x6FC337B0
 int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId);
 //D2Game.0x6FC337E0
-void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2RoomStrc* pRoom);
+void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC33830
 void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull);
 //D2Game.0x6FC33890
@@ -320,11 +333,11 @@ void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
 //D2Game.0x6FC33EA0
 int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName);
 //D2Game.0x6FC33F20
-int32_t __fastcall sub_6FC33F20(const char* szName);
+int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName);
 //D2Game.0x6FC33F90
-int32_t __fastcall sub_6FC33F90(const char* a1, char* a2);
+int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName);
 //D2Game.0x6FC34020
-int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, int32_t a5, int32_t a6, int32_t a7);
+int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7);
 //D2Game.0x6FC34170
 D2SaveHeaderStrc* __fastcall CLIENTS_GetSaveHeader(D2ClientStrc* pClient);
 //D2Game.0x6FC341A0
@@ -344,9 +357,9 @@ uint32_t __fastcall CLIENT_IsSaveLoaded(D2ClientStrc* pClient);
 //D2Game.0x6FC34420
 D2ClientStrc* __fastcall CLIENTS_GetNext(D2ClientStrc* pClient);
 //D2Game.0x6FC34430
-void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t a4, int32_t nFlags);
+void __fastcall CLIENTS_SetSkillHotKey(D2ClientStrc* pClient, int32_t nHotkeyId, int16_t nSkillId, uint8_t nHand, int32_t nItemGUID);
 //D2Game.0x6FC34460
-void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* a4, int32_t* pFlags);
+void __fastcall CLIENTS_GetSkillHotKey(D2ClientStrc* pClient, int32_t nId, int32_t* pSkillId, int32_t* nHand, int32_t* nItemGUID);
 //D2Game.0x6FC344A0
 int16_t __fastcall CLIENTS_GetGuildFlags(D2ClientStrc* pClient);
 //D2Game.0x6FC344B0
@@ -384,7 +397,7 @@ D2PacketDataStrc* __fastcall CLIENTS_PacketDataList_GetHead(D2ClientStrc* pClien
 //D2Game.0x6FC34690
 void __fastcall CLIENTS_CopyAccountNameToBuffer(D2ClientStrc* pClient, char* szAccount);
 //D2Game.0x6FC346A0
-void __fastcall sub_6FC346A0(D2ClientStrc* pClient, int32_t* a2);
+void __fastcall D2GAME_GetCharSaveTransactionToken_6FC346A0(D2ClientStrc* pClient, int32_t* pCharSaveTransactionToken);
 //D2Game.0x6FC346B0
 void __fastcall D2GAME_GetRealmIdFromClient_6FC346B0(D2ClientStrc* pClient, D2ClientInfoStrc** ppClientInfo);
 //D2Game.0x6FC346C0
@@ -392,6 +405,6 @@ void __fastcall D2GAME_SetClientsRealmId_6FC346C0(D2ClientStrc* pClient, D2Clien
 //D2Game.0x6FC346D0
 D2ClientPlayerDataStrc* __fastcall CLIENTS_GetClientPlayerData(D2ClientStrc* pClient);
 //D2Game.0x6FC34700
-void __fastcall sub_6FC34700(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC347A0
-int32_t __fastcall sub_6FC347A0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit);

@@ -1056,7 +1056,7 @@ const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox
 }
 
 //D2Win.0x6F8A8230 (#10080)
-void __fastcall D2Win_10080(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext)
+void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);

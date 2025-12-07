@@ -69,10 +69,11 @@ enum D2QuestStateFlagIds
 	QUESTSTATEFLAG_A5Q5 = 39,
 	QUESTSTATEFLAG_A5Q6 = 40,
 
-	QUESTSTATEFLAG_A1INTRO = 41,
-	QUESTSTATEFLAG_A2INTRO = 41,
-	QUESTSTATEFLAG_A3INTRO = 41,
-	QUESTSTATEFLAG_A5INTRO = 41,
+	MAX_QUEST_STATUS = 41,
+	QUESTSTATEFLAG_A1INTRO = MAX_QUEST_STATUS,
+	QUESTSTATEFLAG_A2INTRO = MAX_QUEST_STATUS,
+	QUESTSTATEFLAG_A3INTRO = MAX_QUEST_STATUS,
+	QUESTSTATEFLAG_A5INTRO = MAX_QUEST_STATUS,
 };
 
 enum D2Quests
@@ -191,7 +192,7 @@ struct D2NPCMessageTableStrc
 	int32_t nMessages;						//0xC0
 };
 
-struct D2QuestDataStrc
+struct D2QuestDataStrc						//sizeof 0xF4
 {
 	int32_t nQuestNo;						//0x00 - internal
 	D2GameStrc* pGame;						//0x04
@@ -206,10 +207,9 @@ struct D2QuestDataStrc
 	uint32_t dwFlags;						//0x14
 	void* pQuestDataEx;						//0x18 - union of 0x29 structs
 	D2QuestGUIDStrc tPlayerGUIDs;			//0x1C
-	uint16_t dw9E;							//0x9E 
 	QUESTCALLBACK pfCallback[15];			//0xA0
 	D2NPCMessageTableStrc* pNPCMessages;	//0xDC
-	int32_t nQuest;							//0xE0 - index in quest flag bit array
+	int32_t nQuestFilter;					//0xE0 - index in quest flag bit array, called eFilter in original code
 	QUESTSTATUS pfStatusFilter;				//0xE4
 	QUESTACTIVE pfActiveFilter;				//0xE8
 	QUESTSEQFILTER pfSeqFilter;				//0xEC
@@ -264,7 +264,7 @@ void __fastcall QUESTS_FreeChainRecord(D2GameStrc* pGame, D2QuestChainStrc* pRec
 //D2Game.0x6FC93B90
 D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId);
 //D2Game.0x6FC93BD0
-void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2RoomStrc* pRoom, int32_t bDebug);
+void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t bDebug);
 //D2Game.0x6FC93C40
 int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nQuestId);
 //D2Game.0x6FC93D60
@@ -376,7 +376,7 @@ void __fastcall QUESTS_ResetPlayerGUIDCount(D2QuestGUIDStrc* pGUIDs);
 //D2Game.0x6FC968F0
 void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC96940
-void __fastcall QUESTS_GetFreePosition(D2RoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2RoomStrc** ppRoom, int32_t nRadius);
+void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2ActiveRoomStrc** ppRoom, int32_t nRadius);
 //D2Game.0x6FC96C80
 void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pArgs);
 //D2Game.0x6FC96D20
@@ -392,7 +392,7 @@ int32_t __fastcall QUESTS_FXIterate(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 //D2Game.0x6FC96F10
 void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pTarget);
 //D2Game.0x6FC97020
-int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2RoomStrc** ppRoom);
+int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2ActiveRoomStrc** ppRoom);
 //D2Game.0x6FC97040
 int32_t __fastcall QUESTS_SetObjectSelection(D2ObjOperateFnStrc* pOp);
 //D2Game.0x6FC970E0
@@ -400,7 +400,7 @@ void __fastcall QUESTS_SendLogUpdate(D2UnitStrc* pUnit, uint8_t nQuestId);
 //D2Game.0x6FC97120
 void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, uint8_t nAct);
 //D2Game.0x6FC97190
-D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2RoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster);
+D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2ActiveRoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster);
 //D2Game.0x6FC973D0
 void __fastcall QUESTS_MonsterSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC97400

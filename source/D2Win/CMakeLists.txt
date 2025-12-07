@@ -1,11 +1,6 @@
-add_library(D2Win 
-  # We want to create a detours dll for patching
-  SHARED
-  # The DLL entrypoint
-  src/DllMain.cpp
-)
+D2MOO_prepare_targets(D2Win)
 
-target_link_libraries(D2Win 
+target_link_libraries(${D2WinImplName}
   PRIVATE 
     Fog 
     D2CMP
@@ -18,13 +13,7 @@ target_link_libraries(D2Win
     D2Hell
 )
 
-target_include_directories(D2Win PUBLIC include)
-
-# The definition file that matches functions with their ordinals
-target_sources(D2Win PRIVATE definitions/D2Win.${D2MOO_ORDINALS_VERSION}.def)
-
-
-target_sources(D2Win
+target_sources(${D2WinImplName}
   PRIVATE
     src/D2Comp.cpp
     src/D2WinAccountList.cpp
@@ -69,7 +58,4 @@ target_sources(D2Win
     include/D2WRegister.h
 )
 
-get_target_property(D2WinSources D2Win SOURCES)
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}
-             FILES ${D2WinSources}
-)
+D2MOO_target_source_group(D2Win)

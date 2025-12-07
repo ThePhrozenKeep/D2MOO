@@ -1,6 +1,7 @@
 #include <ctime>
 #include <D2Seed.h>
-#include <CommonDefinitions.h>
+#include <D2CommonDefinitions.h>
+#include <Fog.h>
 
 //D2Common.0x6FDA5260 (#10916)
 void __stdcall SEED_Return()

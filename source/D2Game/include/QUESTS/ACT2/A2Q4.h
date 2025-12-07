@@ -10,7 +10,7 @@ struct D2Act2Quest4Strc							//sizeof 0x48
 	uint8_t unused0x00[4];						//0x00
 	uint8_t bDrognanActivated;					//0x04
 	uint8_t pad0x05[3];							//0x05
-	D2RoomStrc* pRoom;							//0x08
+	D2ActiveRoomStrc* pRoom;							//0x08
 	uint8_t bJerhynStartInitialized;			//0x0C
 	uint8_t bJerhynPalaceInitialized;			//0x0D
 	uint8_t bPalaceOpen;						//0x0E
@@ -65,7 +65,7 @@ void __fastcall ACT2Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 //D2Game.0x6FCA2D90
 void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FCA2F60
-void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2RoomStrc* pRoom, D2CoordStrc* pCoord);
+void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord);
 //D2Game.0x6FCA3160
 bool __fastcall ACT2Q4_SeqCallback(D2QuestDataStrc* pQuestData);
 //D2Game.0x6FCA31E0

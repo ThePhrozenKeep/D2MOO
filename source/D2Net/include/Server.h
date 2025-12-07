@@ -39,11 +39,11 @@ D2NET_DLL_DECL int32_t __stdcall D2NET_10035(int32_t nIndex, int32_t nValue);
 //D2Net.0x6FC021B0 (#10036)
 D2NET_DLL_DECL void __stdcall D2NET_10036(int32_t a1, int32_t a2);
 //D2Net.0x6FC021D0 (#10026)
-D2NET_DLL_DECL void __stdcall D2NET_10026(int32_t a1);
+D2NET_DLL_DECL void __stdcall SERVER_SetMaxClientsPerGame(int32_t nMaxClients);
 //D2Net.0x6FC021F0 (#10027)
 D2NET_DLL_DECL int32_t __stdcall D2NET_10027();
 //D2Net.0x6FC02200 (#10023)
-D2NET_DLL_DECL void __stdcall D2NET_10023(int32_t a1);
+D2NET_DLL_DECL void __stdcall SERVER_SetHackListEnabled(BOOL bEnabled);
 //D2Net.0x6FC02220 (#10004)
 D2NET_DLL_DECL void __stdcall SERVER_Release();
 //D2Net.0x6FC02250 (#10010)

@@ -2,28 +2,46 @@
 
 #include <Windows.h>
 #include <D2BasicTypes.h>
-
-
-#define D2_VERSION_EXPANSION 1
-#define D2_VERSION_MAJOR 1
-#define D2_VERSION_MINOR 10
-#define D2_HAS_OPENGL 0
-#define D2_HAS_RAVE 0
-
-// TODO: figure out when this was removed
-#ifdef D2_VERSION_100
-#define D2_HAS_MULTILAN 1
-#else
-#define D2_HAS_MULTILAN 0
-#endif
+#include <D2Constants.h>
+#include <D2BuildInformation.h>
 
 #pragma pack(push, 1)
+
+// Whole structure is used as string, values are encoded so that they are != 0
+struct D2CharacterPreviewInfoStrc 
+{
+	uint16_t nVersion;					//0x00 lower byte is cleared if invalid data was found => empty string. Otherwise contains FOG_Encode14BitsToString(10)
+	uint8_t pComponents[11];			//0x02
+	uint8_t nClass;						//0x0D Encoded using +1
+	uint8_t pComponentColors[11];		//0x0C
+	uint8_t nLevel;						//0x19
+	uint16_t nClientFlags;				//0x1A D2ClientSaveFlags. Encoded via FOG_Encode14BitsToString
+	uint16_t nGuildFlags;				//0x1C Encoded via FOG_Encode14BitsToString
+	uint8_t nGuildEmblemBgColor;		//0x1E
+	uint8_t nGuildEmblemFgColor;		//0x1F
+	uint8_t nGuildEmblemType;			//0x20 maps to D2DATA.MPQ/data/global/ui/Emblems/icon(nGuildEmblemType-1)a.dc6
+	uint32_t szGuildTag;				//0x21
+	uint8_t pad0x25;					//0x25
+};
+
+enum D2C_LaunchType : uint8_t
+{
+	LAUNCHTYPE_NONE = 0x0,
+	LAUNCHTYPE_LOCAL = MODE_LOCAL + 1,
+	LAUNCHTYPE_REALM = MODE_CLOSED + 1, // Closed BNet
+	LAUNCHTYPE_TCPIP = MODE_TCPIP + 1,
+	LAUNCHTYPE_OPENBNET = MODE_OPEN + 1,
+};
+
 struct D2ConfigStrc
 {
 #if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
 	BOOL bIsExpansion;
 #endif
 	uint8_t bWindow;
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	uint8_t bNoFixedAspect;
+#endif
 	uint8_t b3DFX;
 	uint8_t bOpenGL;
 	uint8_t bRave;
@@ -54,9 +72,22 @@ struct D2ConfigStrc
 	uint8_t bInvincible;
 	uint8_t _0082[48];
 	char szName[24];
-	uint8_t szRealm[256];
+	char szRealm[24];
+	D2CharacterPreviewInfoStrc tCharPreviewInfo;
+	char szUnk[194];
 	uint8_t _01D0[0x18];
-	uint32_t dwCTemp; // Arena mode character template
+	
+	union
+	{
+		uint32_t dwCTemp;
+		struct
+		{
+			uint8_t nUnk;
+			uint8_t nCharacterClassId;		// D2C_PlayerClasses
+			uint16_t nCharacterSaveFlags;	// D2PackedClientSaveFlags
+		} unpackedCTemp;
+	};
+
 	uint8_t bNoMonsters;
 	uint32_t dwMonsterClass;
 	uint8_t bMonsterInfo;
@@ -69,10 +100,13 @@ struct D2ConfigStrc
 	uint8_t bDirect;
 	uint8_t bLowEnd;
 	uint8_t bNoCompress;
-	uint32_t dwArena;
-	uint8_t _01E8[6]; // Related to Arena
+	uint16_t wArena;
+	uint32_t nArenaFlags; // D2GameFlags
+	uint8_t nArenaTemplate;
+	uint8_t _01E9[2]; // Related to Arena
+	uint8_t nArenaDifficulty;
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
-	BOOL(*pAllowExpansionCallback)(void);
+	BOOL(__stdcall *pAllowExpansionCallback)(void);
 	uint8_t bTxt;
 #endif
 	uint8_t bLog;
@@ -91,11 +125,27 @@ struct D2ConfigStrc
 #ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	uint8_t bBuild;
 #endif
-	uint32_t dwComInt;
-	uint8_t _0x0223[28]; // Related to ComInt
-	char szPassword[24];
-	uint8_t _0x0257[256];
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+	uint8_t bSoundBackground;
+#endif
+	struct BnClientInterface* pComInterface;	// Can be set by D2Launch to BnClient.dll's QueryInterface()
+	uint32_t nTokenId;							// See D2Client.dll:CONFIG_ApplyNetwork_6FAABBF0
+	char szCharacterRealm[24];
+	char szGamePassword[24];
+	char szGameStatstring[256]; // Description of the game
 	uint8_t bSkipToBNet;
-	uint8_t _0333[112];
+
+	D2C_LaunchType nLaunchType;
+	uint8_t bShownLogo;
+	uint8_t bUnk035A;
+	char szCurrentChannelName[32];
+	char szDefaultChannelName[32];
+	uint8_t nComponents[16];
+	uint8_t nComponentsColors[16];
+	uint8_t nCharacterLevel;
+	uint8_t bLadder;
+	uint32_t nAccountPasswordHash;
+	uint32_t nAccountPasswordLength;
+	uint16_t nSaveFlags;
 };
 #pragma pack(pop)

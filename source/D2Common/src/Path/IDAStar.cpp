@@ -1,7 +1,7 @@
 #include "Path/Path.h"
 #include "Path/IDAStar.h"
 #include "Path/PathMisc.h"
-#include "Path/FollowWall.h"
+#include "Path/AStar.h"
 #include "Units/Units.h"
 
 #include "D2Collision.h"
@@ -65,7 +65,7 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
 
     D2PathIDAStarNodeStrc tStartNode;
     tStartNode.nBestDistanceFromStart = 0;
-    tStartNode.nHeuristicDistanceToTarget = PATH_FoWall_Heuristic(tStartCoord, tTargetCoord);
+    tStartNode.nHeuristicDistanceToTarget = PATH_AStar_Heuristic(tStartCoord, tTargetCoord);
     tStartNode.nFScore = tStartNode.nHeuristicDistanceToTarget;
     tStartNode.tCoord = tStartCoord;
     tStartNode.nEvaluationsCount = -3;
@@ -244,13 +244,13 @@ D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextSt
 
         if(bMayEvaluateNode)
         {
-            const int16_t nDistanceBetweenPoints = PATH_FoWall_HeuristicForNeighbor(pCurrentNode->tCoord, tNeighborCoords);
+            const int16_t nDistanceBetweenPoints = PATH_AStar_HeuristicForNeighbor(pCurrentNode->tCoord, tNeighborCoords);
             const int16_t nNewDistanceFromStart = nDistanceBetweenPoints + pCurrentNode->nBestDistanceFromStart;
             if (*pNeighborBestDistanceToStart == 0 || (unsigned int)nNewDistanceFromStart >= *pNeighborBestDistanceToStart )
             {
                 *pNeighborBestDistanceToStart = nNewDistanceFromStart;
 
-                const int16_t nHeuristicDistanceToTarget = PATH_FoWall_Heuristic(pPathInfo->tTargetCoord, tNeighborCoords);
+                const int16_t nHeuristicDistanceToTarget = PATH_AStar_Heuristic(pPathInfo->tTargetCoord, tNeighborCoords);
                 const int16_t nNewNodeFSCore = nHeuristicDistanceToTarget + nNewDistanceFromStart;
                 if (nNewNodeFSCore <= nFScoreCutoff)
                 {

@@ -356,7 +356,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
         }
         else if (pClientPlayerData->nStaminaPoints != (uint16_t)nStamina)
         {
-            sub_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
+            D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
 
             pClientPlayerData->nPosX = nUnitX;
             pClientPlayerData->nPosY = nUnitY;
@@ -384,7 +384,7 @@ int32_t __fastcall sub_6FC82360(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t b
                 }
                 else
                 {
-                    sub_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
+                    D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(pClient, nStamina, nUnitX, nUnitY, nX, nY);
 
                     pClientPlayerData->nPosX = nUnitX;
                     pClientPlayerData->nPosY = nUnitY;
@@ -465,7 +465,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
 
         if (nDistance <= 8)
         {
-            if (pUnit->dwAnimMode != PLRMODE_DEAD || sub_6FC937A0(pGame, pPlayer) || sub_6FC937A0(pGame, pUnit))
+            if (pUnit->dwAnimMode != PLRMODE_DEAD || D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pPlayer) ||
+				D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
             {
                 PLRTRADE_TryToTrade(pGame, pPlayer, pUnit);
             }
@@ -503,8 +504,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             {
                 D2Common_10153(pUnit->pDynamicPath);
                 AIGENERAL_SetAiControlParam(pUnit, 1, 40);
-                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, 2, 0);
-                EVENT_SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 1, 0, 0);
+                D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
+                EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
             }
         }
 
@@ -548,7 +549,7 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             return 1;
         }
 
-        if (!UNITS_IsObjectInInteractRange(pPlayer, pUnit) || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, 0x804u))
+        if (!UNITS_IsObjectInInteractRange(pPlayer, pUnit) || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, COLLIDE_MASK_PLAYER_FLYING))
         {
             D2GAME_PLAYERMODE_Change_6FC81A00(pGame, pPlayer, 0, 3, UNIT_OBJECT, nUnitGUID, 0);
             UNITS_SetInteractData(pPlayer, -(a4 != 0) - 1, UNIT_OBJECT, nUnitGUID);
@@ -578,7 +579,7 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
             return 1;
         }
 
-        if (nDistance > 4 || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, 0x804))
+        if (nDistance > 4 || UNITS_TestCollisionBetweenInteractingUnits(pPlayer, pUnit, COLLIDE_MASK_PLAYER_FLYING))
         {
             D2GAME_PLAYERMODE_Change_6FC81A00(pGame, pPlayer, 0, 3, UNIT_ITEM, nUnitGUID, 0);
             UNITS_SetInteractData(pPlayer, -(a4 != 0) - 1, UNIT_ITEM, nUnitGUID);
@@ -627,6 +628,8 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
 
         return 0;
     }
+	default:
+		break;
     }
 
     return 1;
@@ -1536,7 +1539,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x14_HandleOverheadChat_6FC84690(D2G
                 nTimeout = pGame->dwGameFrame + 1;
             }
 
-            EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, nTimeout, 0, 0);
+            EVENT_SetEvent(pGame, pUnit, EVENTTYPE_FREEHOVER, nTimeout, 0, 0);
         }
 
         return 0;
@@ -1857,7 +1860,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x17_DropItemOnGround_6FC84E20(D2Gam
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem && pItem->dwAnimMode == IMODE_ONCURSOR && INVENTORY_GetCursorItem(pUnit->pInventory) == pItem)
         {
-            if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+            if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
             {
                 return 3;
             }
@@ -1904,7 +1907,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
 
         if (nInvPage == 4)
         {
-            D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || !DUNGEON_IsRoomInTown(pRoom))
             {
                 FOG_TraceF(gszEmptyString_6FD447EC, " Player %s insert itemgrid error #1\n", UNITS_GetPlayerData(pUnit)->szName);
@@ -1915,7 +1918,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x18_InsertItemInBuffer_6FC84ED0(D2G
         {
             if (nInvPage == 2)
             {
-                if (!sub_6FC937A0(pGame, pUnit))
+                if (!D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
                 {
                     return 3;
                 }
@@ -2681,7 +2684,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x2C_2D_52_6FC867B0(D2GameStrc* pGam
 //D2Game.0x6FC867C0
 void __fastcall D2GAME_PlayerChangeAct_6FC867C0(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDestLvl, DWORD nTileCalc)
 {
-    D2RoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     const uint8_t nSourceAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
     const uint8_t nDestAct = DRLG_GetActNoFromLevelId(dwDestLvl);
 
@@ -3222,7 +3225,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x44_StaffInOrifice_6FC87780(D2GameS
         return 3;
     }
 
-    if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+    if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         return 3;
     }
@@ -3569,7 +3572,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x50_DropGold_6FC88210(D2GameStrc* p
     const int32_t nUnitGUID = *(int32_t*)((char*)pPacket + 1);
     const int32_t nGoldValue = *(int32_t*)((char*)pPacket + 5);
 
-    if (!PLAYER_IsBusy(pUnit) || !sub_6FC937A0(pGame, pUnit))
+    if (!PLAYER_IsBusy(pUnit) || !D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         if (sub_6FC7C260(pGame, pUnit, nUnitGUID, nGoldValue))
         {
@@ -3663,7 +3666,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x58_QuestCompleted_6FC883B0(D2GameS
     }
 
     const uint16_t nQuestId = *(uint16_t*)((char*)pPacket + 1);
-    if (nQuestId >= 41)
+    if (nQuestId >= MAX_QUEST_STATUS)
     {
         return 2;
     }
@@ -3695,8 +3698,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x59_MakeEntityMove_6FC88400(D2GameS
                         D2Common_10153(pNpc->pDynamicPath);
                     }
 
-                    D2GAME_EVENTS_Delete_6FC34840(pGame, pNpc, 2, 0);
-                    EVENT_SetEvent(pGame, pNpc, 2, pGame->dwGameFrame + 1, 0, 0);
+                    D2GAME_EVENTS_Delete_6FC34840(pGame, pNpc, EVENTTYPE_AITHINK, 0);
+                    EVENT_SetEvent(pGame, pNpc, EVENTTYPE_AITHINK, pGame->dwGameFrame + 1, 0, 0);
                     AIGENERAL_SetAiControlParam(pNpc, 1, 40);
                     AIGENERAL_SetAiControlParam(pNpc, 2, v8);
                     AIGENERAL_SetAiControlParam(pNpc, 3, a3);
@@ -3768,8 +3771,8 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
     const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
-    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_BLOCK_PLAYER | COLLIDE_BLOCK_LEAP | COLLIDE_OBJECT);
-    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WF);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_WALL | COLLIDE_NOPLAYER | COLLIDE_OBJECT);
+    PATH_SetType(pUnit->pDynamicPath, PATHTYPE_WALL_FOLLOW);
     PATH_SetNewDistance(pUnit->pDynamicPath, 77);
     D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, pPacket5F->nX, pPacket5F->nY);
 
@@ -3805,10 +3808,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
         return 0;
     }
 
-    sub_6FC34700(pGame, pUnit);
+    CLIENTS_NotifyWarpAttempt(pGame, pUnit);
 
     int32_t nDelay = 125;
-    if (sub_6FC347A0(pGame, pUnit) && !pGame->nGameType)
+    if (CLIENTS_ShouldDelayWarpAttempt(pGame, pUnit) && !pGame->nGameType)
     {
         constexpr int32_t dword_6FD28F80[][2] =
         {
@@ -3838,7 +3841,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
     STATLIST_SetStatRemoveCallback(pStatList, MISSMODE_ToggleStateOff);
     D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
 
-    EVENT_SetEvent(pGame, pUnit, UNITEVENTCALLBACK_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
+    EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + nDelay, 0, 0);
     return 0;
 }
 
@@ -3874,7 +3877,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
 
     const int16_t nBodyLoc = *(int16_t*)((char*)pPacket + 1);
 
-    if (PLAYER_IsBusy(pUnit) && sub_6FC937A0(pGame, pUnit))
+    if (PLAYER_IsBusy(pUnit) && D2GAME_PLRTRADE_IsInteractingWithPlayer(pGame, pUnit))
     {
         FOG_Trace("Player %s should be banned\n", UNITS_GetPlayerData(pUnit)->szName);
         return 3;
@@ -4094,8 +4097,8 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
 
     D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pMerc, 0, 0);
     //D2Game_10034_Return(0);
-    D2GAME_EVENTS_Delete_6FC34840(pGame, pMerc, UNITEVENTCALLBACK_STATREGEN, 0);
-    EVENT_SetEvent(pGame, pMerc, UNITEVENTCALLBACK_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
+    D2GAME_EVENTS_Delete_6FC34840(pGame, pMerc, EVENTTYPE_STATREGEN, 0);
+    EVENT_SetEvent(pGame, pMerc, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 
     return 1;
 }

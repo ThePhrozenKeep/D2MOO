@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 #include "Path.h"
 #include "D2Seed.h"
 
@@ -40,46 +40,46 @@ struct D2PathFoWallContextStrc						  //sizeof 0x32EC
 #pragma pack()
 
 //D2Common.0x6FDA69E0
-int __fastcall PATH_FoWall_ComputePath(D2PathInfoStrc* pPathInfo);
+int __fastcall PATH_AStar_ComputePath(D2PathInfoStrc* pPathInfo);
 
 //D2Common.0x6FDA6D10
-int __fastcall PATH_FoWall_PushToVisitedCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode);
+int __fastcall PATH_AStar_PushToVisitedCache(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode);
 
 //1.10f: D2Common.0x6FDA6D50
 //1.13c: D2Common.0x6FDCB3C0
-BOOL __fastcall PATH_FoWall_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* a3, D2PathPointStrc tTargetCoord);
+BOOL __fastcall PATH_AStar_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* a3, D2PathPointStrc tTargetCoord);
 
 //1.10f: D2Common.0x6FDA7230
 //1.13c: D2Common.0x6FDCAF70
-int __stdcall PATH_FoWall_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2);
+int __stdcall PATH_AStar_Heuristic(D2PathPointStrc tPoint1, D2PathPointStrc tPoint2);
 // Helper function
-int16_t PATH_FoWall_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor);
+int16_t PATH_AStar_HeuristicForNeighbor(D2PathPointStrc tPoint, D2PathPointStrc tNeighbor);
 
 //1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA7280
 //1.13c: D2Common.0x6FDCAF20
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNodeFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint);
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_GetNodeFromPendingCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint);
 //1.00:  D2Common.0x10057A10
 //1.10f: D2Common.0x6FDA72D0
 //1.13c: D2Common.0x6FDCAED0
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_FindPointInVisitedCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint);
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_FindPointInVisitedCache(D2PathFoWallContextStrc* pContext, D2PathPointStrc tPathPoint);
 
 //1.10f: D2Common.0x6FDA7320
 //1.13c: D2Common.0x6FDCAE20
-void __fastcall PATH_FoWall_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode);
+void __fastcall PATH_AStar_MakeCandidate(D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pNode);
 
 //1.10f: D2Common.0x6FDA7390
 //1.13c: D2Common.0x6FDCAC50
-void __fastcall PATH_FoWall_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode);
+void __fastcall PATH_AStar_PropagateNewFScoreToChildren(D2PathFoWallContextStrc* pContext, int nUnused, D2PathFoWallNodeStrc* pNewNode);
 
 //1.10f: D2Common.0x6FDA7450
 //1.13c: Inlined
-D2PathFoWallNodeStrc* __fastcall PATH_FoWall_GetNewNode(D2PathFoWallContextStrc* pContext);
+D2PathFoWallNodeStrc* __fastcall PATH_AStar_GetNewNode(D2PathFoWallContextStrc* pContext);
 
 //1.10f: D2Common.0x6FDA7490
 //1.13c: D2Common.0x6FDCAFB0
-BOOL __fastcall PATH_FoWall_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord);
+BOOL __fastcall PATH_AStar_EvaluateNeighbor(D2PathInfoStrc* pPathInfo, D2PathFoWallContextStrc* pContext, D2PathFoWallNodeStrc* pCurrentNode, D2PathPointStrc tNewPointCoord, D2PathPointStrc tTargetCoord);
 
 //D2Common.0x6FDA78A0
-signed int __fastcall PATH_FoWall_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* pNode, D2PathInfoStrc* pPathInfo);
+signed int __fastcall PATH_AStar_FlushNodeToDynamicPath(D2PathFoWallNodeStrc* pNode, D2PathInfoStrc* pPathInfo);
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CommonDefinitions.h"
+#include "D2CommonDefinitions.h"
 
-struct D2RoomStrc;
+struct D2ActiveRoomStrc;
 struct D2DrlgActStrc;
 
 #pragma pack(1)
@@ -74,7 +74,7 @@ void __fastcall ENVIRONMENT_UpdateLightColor(D2DrlgEnvironmentStrc* pEnvironment
 //D2Common.6FD8DBE0
 void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, D2DrlgEnvironmentStrc* pEnvironment);
 //D2Common.0x6FD8DC00 (#10923)
-D2COMMON_DLL_DECL BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom);
 //D2Common.0x6FD8DC70
 void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int nActNo);
 //D2Common.0x6FD8DD60 (#10924)
@@ -88,11 +88,11 @@ D2COMMON_DLL_DECL int __stdcall ENVIRONMENT_GetPeriodOfDayFromAct(D2DrlgActStrc*
 //D2Common.0x6FD8DE70 (#10928)
 D2COMMON_DLL_DECL int __stdcall ENVIRONMENT_GetUnusedMember(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8DE90 (#10929)
-D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom);
 //D2Common.0x6FD8DF30 (#10930)
 D2COMMON_DLL_DECL int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8DF40 (#10932)
-D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2RoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse);
+D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse);
 //D2Common.0x6FD8E080 (#10931)
 D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc* pAct, int* pCycleIndex, int* pTicks, BOOL* pEclipse);
 //D2Common.0x6FD8E0B0 (#10925)
@@ -100,7 +100,7 @@ D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_GetStatistics(D2DrlgActStrc* pAct, 
 //D2Common.0x6FD8E0F0 (#10934)
 D2COMMON_DLL_DECL int __stdcall ENVIRONMENT_GetTimeRateFromAct(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8E100 (#10935)
-D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2RoomStrc* pRoom);
+D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom);
 //D2Common.0x6FD8E1B0 (#10936)
 D2COMMON_DLL_DECL void __stdcall ENVIRONMENT_TaintedSunBegin(D2DrlgActStrc* pAct);
 //D2Common.0x6FD8E1E0 (#10937)

@@ -16,9 +16,7 @@
 #endif
 
 extern "C" {
-    __declspec(dllexport)
     constexpr int __cdecl GetBaseOrdinal() { return 10'000; }
-    __declspec(dllexport)
     constexpr int __cdecl GetLastOrdinal() { return 11'307; }
     constexpr int GetOrdinalCount() { return GetLastOrdinal() - GetBaseOrdinal() + 1; }
 }
@@ -235,7 +233,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetMaxDistance                                                 @10189
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10190_PATH_SetDistance                                             @10190
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   _10191_PATH_GetDistance                                             @10191
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10192_PathSetIDAMax                                        @10192
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_SetIDAStarInitFScore											@10192
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2COMMON_10193_PATH_AdjustDirection                                 @10193
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionX                                                  @10194
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   PATH_GetPrecisionY                                                  @10195
@@ -354,11 +352,11 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10308_Return                                               @10308
     PatchAction::Ignore,                         /*C*/ //   D2COMMON_10309_Return0                                              @10309
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_IsItemInInventory                                         @10310
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetNextNode                                               @10311
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetNextNode  Same as 10314 10947 10948 (comdat folding)   @10311
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemGUIDFromNode                                       @10312
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetNextCorpse                                             @10313
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetUnitGUIDFromCorpse                                     @10314
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10315                                                      @10315
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetUnitGUIDFromCorpse  Same as 10311 10947 10948			@10314
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10315   Same as 10975 (comdat folding)						@10315
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   D2Common_10316                                                      @10316
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_CanSwitchAI                                                   @10317
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   UNITS_IsInMovingMode                                                @10318
@@ -515,7 +513,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10469                                                      @10469
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_AllocStatList                                              @10470
     PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetOwnerType                                               @10471
-    PatchAction::FunctionReplacePatchByOriginal,       //   STATLIST_GetOwnerGUID                                               @10472
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   STATLIST_GetOwnerGUID Same as 10313 and 10089 due to comdat folding @10472
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10473                                                      @10473
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10474                                                      @10474
     PatchAction::FunctionReplacePatchByOriginal,       //   D2COMMON_10475_PostStatToStatList                                   @10475
@@ -940,7 +938,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_GetDisplayTimeFromHoverMsg                                     @10894
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_GetTimeoutFromHoverMsg                                         @10895
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_CopyHoverMsgToBuffer                                           @10896
-    PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_GetUsedFromHoverMsg                                            @10897
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   CHAT_GetUsedFromHoverMsg  Same as 10165 due to comdat folding       @10897
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_SetUsedInHoverMsg                                              @10898
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_GetLangIdFromHoverMsg                                          @10899
     PatchAction::FunctionReplacePatchByOriginal,       //   CHAT_SetLangIdInHoverMsg                                            @10900
@@ -990,8 +988,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetRange                                                     @10944
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_AllocSkillList                                               @10945
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_InitSkillList                                                @10946
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetNextSkill                                                 @10947
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetFirstSkillFromSkillList                                   @10948
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetNextSkill Same as 10311 10314 10948 (comdat folding)		@10947
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetFirstSkillFromSkillList Same as 10311 10314 10947			@10948
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetSkillById                                                 @10949
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetHighestLevelSkillFromUnitAndId                            @10950
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_RemoveSkill                                                  @10951
@@ -1018,7 +1016,7 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10972                                                      @10972
     PatchAction::FunctionReplacePatchByOriginal,       //   D2Common_10973                                                      @10973
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_SetSkillMode                                                 @10974
-    PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetSkillMode                                                 @10975
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   SKILLS_GetSkillMode Same as 10315 (comdat folding)					@10975
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetParam1                                                    @10976
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetParam2                                                    @10977
     PatchAction::FunctionReplacePatchByOriginal,       //   SKILLS_GetParam3                                                    @10978
@@ -1356,7 +1354,6 @@ static PatchAction patchActions[GetOrdinalCount()] = {
 
 extern "C" {
 
-__declspec(dllexport)
 PatchAction __cdecl GetPatchAction(int ordinal)
 {
 #ifdef DISABLE_ALL_PATCHES
@@ -1371,10 +1368,9 @@ PatchAction __cdecl GetPatchAction(int ordinal)
 #endif
 }
 
-static const int D2CommonImageBase = 0x6FD40000;
-
 static ExtraPatchAction extraPatchActions[] = {
-    // We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
+#ifdef D2_VERSION_110F
+	// We need to cover all usage of gpLevelFilesList_6FDEA700 and gpLvlSubTypeFilesCriticalSection
     //{ 0x6FDEA700 - D2CommonImageBase, &gpLevelFilesList_6FDEA700, PatchAction::PointerReplaceOriginalByPatch },
     { 0x6FD86050 - D2CommonImageBase, &DRLGPRESET_LoadDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
     { 0x6FD86190 - D2CommonImageBase, &DRLGPRESET_FreeDrlgFile, PatchAction::FunctionReplaceOriginalByPatch },
@@ -1410,11 +1406,10 @@ static ExtraPatchAction extraPatchActions[] = {
     
     // this is the one that leads to issues
     //{ 0x6FD73450 - D2CommonImageBase, &DRLGACTIVATE_RoomExSetStatus_ClientInSight, PatchAction::FunctionReplacePatchByOriginal},
-
+#endif
     { 0, 0, PatchAction::Ignore}, // Here because we need at least one element in the array
 };
 
-__declspec(dllexport)
 constexpr int __cdecl GetExtraPatchActionsCount() { 
 #ifdef DISABLE_ALL_PATCHES
     return 0;
@@ -1423,10 +1418,16 @@ constexpr int __cdecl GetExtraPatchActionsCount() {
 #endif
 }
 
-__declspec(dllexport)
 ExtraPatchAction* __cdecl GetExtraPatchAction(int index)
 {
     return &extraPatchActions[index];
+}
+
+__declspec(dllexport)
+PatchInformationFunctions __cdecl GetPatchInformationFunctions(const wchar_t* dllName)
+{
+	D2_MAYBE_UNUSED(dllName);
+	return { &GetBaseOrdinal, &GetLastOrdinal, &GetPatchAction, &GetExtraPatchActionsCount, &GetExtraPatchAction };
 }
 
 }
@@ -1439,3 +1440,5 @@ static_assert(std::is_same<decltype(GetPatchAction)*, GetPatchActionType>::value
 
 static_assert(std::is_same<decltype(GetExtraPatchActionsCount)*, GetIntegerFunctionType>::value, "Ensure calling convention doesn't change");
 static_assert(std::is_same<decltype(GetExtraPatchAction)*, GetExtraPatchActionType>::value, "Ensure calling convention doesn't change");
+
+static_assert(std::is_same<decltype(GetPatchInformationFunctions)*, GetPatchInformationFunctionsType>::value, "Ensure calling convention doesn't change");
