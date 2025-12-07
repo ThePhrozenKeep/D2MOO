@@ -165,6 +165,12 @@ void __fastcall ACT1Q4_UpdateQuestStateOnActChange(D2GameStrc* pGame, D2UnitStrc
 void __fastcall OBJECTS_InitFunction54_CainStartPosition(D2ObjInitFnStrc* pOp);
 //D2Game.0x6FC9C5B0
 int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit);
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x00594270
+int32_t __fastcall ACT1Q4_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUnit);
+//1.14d: 0x00594280
+int32_t __fastcall ACT1Q4_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc* pUnit);
+#endif
 //D2Game.0x6FC9C6E0
 void __fastcall OBJECTS_InitFunction61_CainPortal(D2ObjInitFnStrc* pOp);
 //D2Game.0x6FC9C710

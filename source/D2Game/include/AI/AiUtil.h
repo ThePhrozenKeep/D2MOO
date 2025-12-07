@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AiGeneral.h"
 #include <Units/Units.h>
 #include "AiStates.h"
 

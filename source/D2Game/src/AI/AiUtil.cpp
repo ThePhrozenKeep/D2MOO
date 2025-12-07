@@ -5,6 +5,7 @@
 #include <D2Collision.h>
 #include <D2Dungeon.h>
 #include <D2Math.h>
+#include <DataTbls/MonsterIds.h>
 #include <DataTbls/MonsterTbls.h>
 #include <DataTbls/ObjectsIds.h>
 #include <DataTbls/SkillsIds.h>
