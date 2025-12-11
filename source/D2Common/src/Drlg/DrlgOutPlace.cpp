@@ -1436,7 +1436,8 @@ BOOL __fastcall sub_6FD81CA0(D2DrlgLevelLinkDataStrc* pLevelLinkData)
 	return TRUE;
 }
 
-//D2Common.0x6FD81D60
+//1.10: D2Common.0x6FD81D60
+//1.14d: 0x00678AD0
 void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t nAct)
 {
 	D2LevelDefBin* pLevelDefBinRecord = NULL;

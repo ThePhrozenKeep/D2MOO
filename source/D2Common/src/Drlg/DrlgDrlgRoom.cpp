@@ -596,7 +596,8 @@ int __fastcall DRLGROOM_ReorderNearRoomList(D2DrlgRoomStrc* pDrlgRoom, D2ActiveR
 	return nRooms;
 }
 
-//D2Common.0x6FD77BB0
+//1.10: D2Common.0x6FD77BB0
+//1.14d: 0x0066C370
 void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 {
 	D2DrlgRoomStrc* ppNearRooms[30] = {};

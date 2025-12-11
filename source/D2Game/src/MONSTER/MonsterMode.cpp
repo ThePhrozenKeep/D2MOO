@@ -1617,7 +1617,8 @@ int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
     return 1;
 }
 
-//D2Game.0x6FC64F50
+//1.10: D2Game.0x6FC64F50
+//1.14d: 0x005A78A0
 const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(D2UnitStrc* pUnit, int32_t nMode)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)

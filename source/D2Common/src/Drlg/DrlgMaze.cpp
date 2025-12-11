@@ -309,7 +309,8 @@ void __fastcall DRLGMAZE_InitLevelData(D2DrlgLevelStrc* pLevel)
 	DRLG_SetLevelPositionAndSize(pLevel->pDrlg, pLevel);
 }
 
-//D2Common.0x6FD794A0
+//1.10: D2Common.0x6FD794A0
+//1.14d: 0x00673B30
 void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 {
 	static const D2MazeLevelIdStrc nAct1CavePrevIds[] =

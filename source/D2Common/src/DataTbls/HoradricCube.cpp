@@ -259,7 +259,8 @@ void __fastcall DATATBLS_CubeMainOutputLinker(char* pSrc, void* pRecord, int nOf
 	}
 }
 
-//D2Common.0x6FD52910
+//1.10: D2Common.0x6FD52910
+//1.14d: 0x00668A90
 BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam, char* szOutput, int nTxtRow, int nItemId)
 {
 	char* szOutputModifier = NULL;

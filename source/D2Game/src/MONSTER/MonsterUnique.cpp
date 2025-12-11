@@ -596,7 +596,8 @@ void __fastcall MONSTERUNIQUE_UMod26_Teleport(D2UnitStrc* pUnit, int32_t nUMod, 
     }
 }
 
-//D2Game.0x6FC6B910
+//1.10: D2Game.0x6FC6B910
+//1.14d: 0x005A1650
 void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     constexpr D2AuraModStrc gAuraMods[8] =
@@ -1484,7 +1485,8 @@ void __fastcall MONSTERUNIQUE_StealBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 }
 
-//D2Game.0x6FC6D800
+//1.10: D2Game.0x6FC6D800
+//1.14d: 0x005A3250
 void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit)

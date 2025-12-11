@@ -673,7 +673,8 @@ void __fastcall DRLGOUTDOORS_AllocOutdoorInfo(D2DrlgLevelStrc* pLevel)
 	pLevel->pOutdoors = D2_CALLOC_STRC_POOL(pLevel->pDrlg->pMempool, D2DrlgOutdoorInfoStrc);
 }
 
-//D2Common.0x6FD7EBD0
+//1.10: D2Common.0x6FD7EBD0
+//1.14d: 0x00675360
 //TODO: a6a, v13, v14
 void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 {

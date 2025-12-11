@@ -6643,7 +6643,8 @@ enum D2C_EvilHoleAIParams
 	EVILHOLE_AI_PARAM_SPAWN_DELAY = 1,
 };
 
-//D2Game.0x6FCDE2B0
+//1.10: D2Game.0x6FCDE2B0
+//1.14d: 0x005FB410
 void __fastcall AITHINK_Fn076_EvilHole(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 	int32_t nAnimMode = 0;
@@ -13416,7 +13417,8 @@ void __fastcall AITHINK_Fn147_UberDiablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 }
 #endif
 
-//D2Game.0x6FCE97C0
+//1.10: D2Game.0x6FCE97C0
+//1.14d: 0x005E8EB0
 int32_t __fastcall AITHINK_CullPotentialTargetsForDiablo(D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
 	D2_ASSERT(pUnit);
@@ -17042,7 +17044,8 @@ BOOL __fastcall AITHINK_CanUnitSwitchAi(D2UnitStrc* pUnit, D2MonStatsTxt* pMonSt
 	return UNITS_CanSwitchAI(-1);
 }
 
-//D2Game.0x6FCF0750
+//1.10: D2Game.0x6FCF0750
+//1.14d: 0x005B15D0
 const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
 	static const D2AiTableStrc gpAiTable_6FD3F990[] =

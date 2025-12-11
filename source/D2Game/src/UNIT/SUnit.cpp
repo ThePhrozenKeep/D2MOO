@@ -1185,23 +1185,26 @@ void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc
             }
         }
     }
+	else
+	{
+		if (bSpawnPrimeEvils)
+		{
+			D2PresetUnitStrc uber;
+			uber.nUnitType = UNIT_MONSTER;
+			uber.pMapAI = nullptr;
+			uber.nXpos = nX;
+			uber.nYpos = nY;
+			uber.bSpawned = 0;
+			uber.nMode = MONMODE_NEUTRAL;
+			uber.nIndex = MONSTER_UBERMEPHISTO;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+			uber.nIndex = MONSTER_UBERBAAL;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+			uber.nIndex = MONSTER_UBERDIABLO;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+		}
+	}
 
-    if (bSpawnPrimeEvils)
-    {
-        D2PresetUnitStrc uber;
-        uber.nUnitType = UNIT_MONSTER;
-        uber.pMapAI = nullptr;
-        uber.nXpos = nX;
-        uber.nYpos = nY;
-        uber.bSpawned = 0;
-        uber.nMode = MONMODE_NEUTRAL;
-        uber.nIndex = MONSTER_UBERMEPHISTO;
-        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
-        uber.nIndex = MONSTER_UBERBAAL;
-        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
-        uber.nIndex = MONSTER_UBERDIABLO;
-        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
-    }
     if (bSpawnUberIzual)
     {
         D2PresetUnitStrc uber;

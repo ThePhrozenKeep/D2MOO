@@ -600,7 +600,8 @@ int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget,
 	return nTotalScore;
 }
 
-//D2Game.0x6FCCDBB0
+//1.10: D2Game.0x6FCCDBB0
+//1.14d: 0x005FC000
 int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pTarget)
 {
 	D2_ASSERT(pBaal);
@@ -943,7 +944,8 @@ int32_t __fastcall AIBAAL_RollRandomAiParamForNonCollidingUnit(D2GameStrc* pGame
 	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
 }
 
-//D2Game.0x6FCCE450
+//1.10: D2Game.0x6FCCE450
+//1.14d: 0x005FCB60
 void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2UnitStrc* pTarget, int32_t nParam, D2AiCmdStrc* pAiCmd)
 {
 	if (!pUnit)

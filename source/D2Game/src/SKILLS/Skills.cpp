@@ -3071,7 +3071,8 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     return pLinkPortal;
 }
 
-//D2Game.0x6FD13DF0
+//1.10: D2Game.0x6FD13DF0
+//1.14d: 0x0056D130
 int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
 {
     D2_ASSERT(pRoom);

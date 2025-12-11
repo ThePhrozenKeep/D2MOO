@@ -1929,7 +1929,8 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 	}
 }
 
-//D2Game.0x6FCC1260
+//1.10: D2Game.0x6FCC1260
+//1.14d: 0x0057CEE0
 void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
