@@ -345,7 +345,7 @@ void __stdcall D2Game_10056(int32_t a1)
 }
 
 //D2Game.0x6FC35E70 (#10047)
-BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId)
+BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t nMaxLevelDifference, uint8_t nMaxPlayers, uint16_t* pGameId)
 {
     // TODO: pHGame, v22
     if (!gpGameDataTbl_6FD45818)
@@ -428,8 +428,8 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     SStrCopy(pGame->szGameDesc, szGameDescription, 32);
 
     pGame->nArenaTemplate = nArenaTemplate;
-    pGame->unk0x6C = a6;
-    pGame->unk0x6E = a7;
+    pGame->nMaxLevelDifference = nMaxLevelDifference;
+    pGame->nMaxPlayers = nMaxPlayers;
 
     if (nFlags & GAMEFLAG_ARENA_EXPANSION)
     {
@@ -2717,8 +2717,8 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nFrames = pGame->dwGameFrame / 100;
     pGameInfo->nFrameRate = pGame->nFrameRate;
     pGameInfo->nArenaTemplate = pGame->nArenaTemplate;
-    pGameInfo->unk0xA5 = pGame->unk0x6C;
-    pGameInfo->unk0xA6 = pGame->unk0x6E;
+    pGameInfo->nMaxLevelDifference = pGame->nMaxLevelDifference;
+    pGameInfo->nMaxPlayers = pGame->nMaxPlayers;
 
     SStrCopy(pGameInfo->szGamePassword, pGame->szGamePassword, 16u);
     SStrCopy(pGameInfo->szGameDescription, pGame->szGameDesc, 32u);
