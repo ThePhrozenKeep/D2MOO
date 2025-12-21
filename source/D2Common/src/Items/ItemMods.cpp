@@ -2367,7 +2367,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 			{
 				for (int i = 0; i < ARRAY_SIZE(pUniqueItemsTxtRecord->pProperties); ++i)
 				{
-					sub_6FD95810(3, NULL, pItem, NULL, 0, 0, nApplyType, &pUniqueItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+					ITEMMODE_ApplyProperty(3, NULL, pItem, NULL, 0, 0, nApplyType, &pUniqueItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 				}
 			}
 		}
@@ -2387,7 +2387,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 				{
 					for (int i = 0; i < ARRAY_SIZE(pSetItemsTxtRecord->pProperties); ++i)
 					{
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 					}
 
 					for (int i = 0; i < ARRAY_SIZE(pSetItemsTxtRecord->pPartialBoni); ++i)
@@ -2403,14 +2403,14 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 							nFlag = 0x40;
 						}
 
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[i], nState, nFlag, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[i], nState, nFlag, 0);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < 2; ++i)
 					{
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 					}
 				}
 			}
@@ -2483,12 +2483,12 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 			break;
 		}
 
-		sub_6FD95810(nType, NULL, pItem, pMods, nMod, nPropSet, nApplyType, pProperty, 0, 0x40, a2);
+		ITEMMODE_ApplyProperty(nType, NULL, pItem, pMods, nMod, nPropSet, nApplyType, pProperty, 0, 0x40, a2);
 	}
 }
 
 //D2Common.0x6FD95810
-void __fastcall sub_6FD95810(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, int nApplyType, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a11)
+void __fastcall ITEMMODE_ApplyProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int32_t nIndex, int32_t nPropSet, int32_t nApplyType, const D2PropertyStrc* pProperty, int32_t nState, int32_t fStatlist, D2UnitStrc* pSecondItem)
 {
 	if (ITEMS_GetItemFormat(pItem) < 1)
 	{
@@ -2496,15 +2496,15 @@ void __fastcall sub_6FD95810(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 
 		if (pProperty->nProperty >= 0 && pProperty->nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 		{
-			if (stru_6FDE3160[pProperty->nProperty].pfAssign)
+			if (sgtItemModCall[pProperty->nProperty].pfFunction)
 			{
-				stru_6FDE3160[pProperty->nProperty].pfAssign(nType, pUnit, pItem, pProperty, stru_6FDE3160[pProperty->nProperty].nStatId, nApplyType, nState, fStatlist, a11);
+				sgtItemModCall[pProperty->nProperty].pfFunction(nType, pUnit, pItem, pProperty, sgtItemModCall[pProperty->nProperty].nStatId, nApplyType, nState, fStatlist, pSecondItem);
 			}
 		}
 	}
 	else
 	{
-		D2COMMON_11292_ItemAssignProperty(nType, pUnit, pItem, pMods, nIndex, nPropSet, pProperty, nState, fStatlist, a11);
+		ITEMMODS_ItemAssignProperty(nType, pUnit, pItem, pMods, nIndex, nPropSet, pProperty, nState, fStatlist, pSecondItem);
 	}
 }
 
@@ -2551,7 +2551,7 @@ BOOL __stdcall ITEMMODS_UpdateRuneword(D2UnitStrc* pUnit, D2UnitStrc* pItem, int
 				break;
 			}
 
-			D2COMMON_11292_ItemAssignProperty(PROPMODE_RUNEWORD, pUnit, pItem, NULL, i, 0, pProperty, STATE_RUNEWORD, STATLIST_MAGIC, NULL);
+			ITEMMODS_ItemAssignProperty(PROPMODE_RUNEWORD, pUnit, pItem, NULL, i, 0, pProperty, STATE_RUNEWORD, STATLIST_MAGIC, NULL);
 		}
 
 		return TRUE;
@@ -2608,7 +2608,7 @@ void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 
 						if (pProperty->nProperty >= 0)
 						{
-							sub_6FD95810(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
+							ITEMMODE_ApplyProperty(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
 						}
 					}
 
@@ -2623,7 +2623,7 @@ void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 								break;
 							}
 
-							sub_6FD95810(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
+							ITEMMODE_ApplyProperty(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
 						}
 					}
 				}
@@ -2776,7 +2776,7 @@ void __stdcall ITEMMODS_AddCraftPropertyList(D2UnitStrc* pItem, D2PropertyStrc* 
 	D2_MAYBE_UNUSED(nUnused);
 	if (pItem)
 	{
-		sub_6FD95810(PROPMODE_UNUSED, NULL, pItem, pProperty, 0, 0, 0, pProperty, 0, STATLIST_MAGIC, NULL);
+		ITEMMODE_ApplyProperty(PROPMODE_UNUSED, NULL, pItem, pProperty, 0, 0, 0, pProperty, 0, STATLIST_MAGIC, NULL);
 	}
 }
 
@@ -4208,7 +4208,7 @@ int __fastcall ITEMMODS_PropertyFunc23(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 //D2Common.0x6FD98160 (#11292)
-void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
+void __stdcall ITEMMODS_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
 {
 	D2PropertiesTxt* pPropertiesTxtRecord = NULL;
 	PROPERTYASSIGNFN pfAssign = NULL;
