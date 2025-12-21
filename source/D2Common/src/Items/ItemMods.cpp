@@ -3587,71 +3587,35 @@ int __fastcall ITEMMODS_PropertyFunc10(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 //D2Common.0x6FD972E0
-int __fastcall ITEMMODS_PropertyFunc11(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int __fastcall ITEMMODS_SetSkillOnAttack(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* pSecondItem)
 {
-	int nStatValue = 0;
-	int nDivisor = 0;
-	int nMaxLevel = 0;
-	int nLevel = 0;
-	int nTmp = 0;
+	if (pProperty == nullptr || DATATBLS_GetSkillsTxtRecord(pProperty->nLayer) == nullptr)
+		return 0;
 
-	if (pProperty && DATATBLS_GetSkillsTxtRecord(pProperty->nLayer))
+	int32_t nChance = std::max(pProperty->nMin, 0, 5);
+	int32_t nLevel = pProperty->nMax;
+	int32_t nRequiredLevel = SKILLS_GetRequiredLevel(pProperty->nLayer);
+	int32_t nItemLevel = ITEMS_GetItemLevel(pItem);
+	if (nLevel > 0)
 	{
-		nStatValue = pProperty->nMin;
-		if (nStatValue <= 0)
+		if (nLevel < 0)
 		{
-			nStatValue = 5;
+			int32_t nAnvailableLevels = std::max(99 - nRequiredLevel, 1);
+			int32_t nDivisor = std::max(-(nAnvailableLevels / nLevel), 1);
+
+			nLevel = (nItemLevel - nRequiredLevel) / nDivisor;
+			nLevel = std::max(nLevel, 1);
 		}
-
-		nLevel = pProperty->nMax;
-		if (nLevel)
-		{
-			if (nLevel < 0)
-			{
-				nTmp = 99 - SKILLS_GetRequiredLevel(pProperty->nLayer);
-				if (nTmp < 1)
-				{
-					nTmp = 1;
-				}
-
-				nDivisor = -(nTmp / nLevel);
-				if (nDivisor < 1)
-				{
-					nDivisor = 1;
-				}
-
-				nLevel = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(pProperty->nLayer)) / nDivisor;
-				if (nLevel <= 0)
-				{
-					nLevel = 1;
-				}
-			}
-		}
-		else
-		{
-			nLevel = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(pProperty->nLayer)) / 4 + 1;
-
-			nMaxLevel = sgptDataTables->pSkillsTxt[pProperty->nLayer].wMaxLvl;
-			if (nMaxLevel <= 0)
-			{
-				nMaxLevel = 20;
-			}
-
-			if (nLevel <= 1)
-			{
-				nLevel = 1;
-			}
-
-			if (nLevel >= nMaxLevel)
-			{
-				nLevel = nMaxLevel;
-			}
-		}
-
-		return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (nLevel & 63) + (pProperty->nLayer << 6), nStatValue, nState, fStatList, a11);
+	}
+	else
+	{
+		nLevel = (nItemLevel - nRequiredLevel) / 4 + 1;
+		int32_t nMaxLevel = sgptDataTables->pSkillsTxt[pProperty->nLayer].wMaxLvl;
+		nMaxLevel = std::max(nMaxLevel, 20);
+		nLevel = D2Clamp<int32_t>(nLevel, 1, nMaxLevel);
 	}
 
-	return 0;
+	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (nLevel & 63) + (pProperty->nLayer << 6), nChance, nState, fStatList, pSecondItem);
 }
 
 //D2Common.0x6FD97430
