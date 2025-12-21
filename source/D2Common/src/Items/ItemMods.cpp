@@ -14,6 +14,9 @@
 #include <D2States.h>
 #include <Calc.h>
 
+#define ITEM_BYTIME_VAL_BITS 10
+
+
 /*
 Date: Sun Apr 08 09:12:50 2012
 Author: Necrolis
@@ -1767,8 +1770,6 @@ BOOL __fastcall sub_6FD943C0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 	D2_ASSERT(pStatList);
 
 	D2_ASSERT(nPeriod >= 0 && nPeriod <= 3);
-
-#define ITEM_BYTIME_VAL_BITS 10
 	D2_ASSERT(nMin >= 0 && nMin < (1 << ITEM_BYTIME_VAL_BITS));
 	D2_ASSERT(nMax >= 0 && nMax < (1 << ITEM_BYTIME_VAL_BITS));
 
@@ -3702,176 +3703,83 @@ int __fastcall ITEMMODS_PropertyFunc14(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	return 0;
 }
 
+#define MAX_CHARGES 255
+
 //D2Common.0x6FD975F0
-int __fastcall ITEMMODS_PropertyFunc19(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int32_t __fastcall ITEMMODS_SetChargedSkill(int32_t nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int32_t nSet, int16_t nStatId, int32_t nLayer, int32_t nValue, int32_t nState, int32_t fStatList, D2UnitStrc* pSecondItem)
 {
-	D2StatListStrc* pStatList = NULL;
-	unsigned int nRand = 0;
-	int nRequiredSkillLevel = 0;
-	int nMaxLevel = 0;
-	int nSkillId = 0;
-	int nLevel = 0;
-	int nTemp = 0;
-	int nMin = 0;
-
-	if (!pProperty || !pItem || pItem->dwUnitType != UNIT_ITEM)
-	{
+	if (pProperty == nullptr || pItem == nullptr || pItem->dwUnitType != UNIT_ITEM)
 		return 0;
-	}
 
-	nSkillId = pProperty->nLayer;
-	if (!DATATBLS_GetSkillsTxtRecord(nSkillId))
-	{
+	int32_t nSkillId = pProperty->nLayer;
+	if (DATATBLS_GetSkillsTxtRecord(nSkillId) == nullptr)
 		return 0;
-	}
 
+	int32_t nRequiredSkillLevel = SKILLS_GetRequiredLevel(nSkillId);
+	int32_t nItemLevel = ITEMS_GetItemLevel(pItem);
+	int32_t nMaxCharges = 0;
+	int32_t nSkillLevel = 0;
+	int32_t nMaxLevel = 0;
 	if (pProperty->nMax == 0)
 	{
-		nTemp = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(nSkillId)) / 4 + 1;
-
-		nMaxLevel = sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl;
-		if (nMaxLevel <= 0)
-		{
-			nMaxLevel = 20;
-		}
-
-		if (nTemp <= 1)
-		{
-			nTemp = 1;
-		}
-
-		if (nTemp >= nMaxLevel)
-		{
-			nLevel = nMaxLevel;
-		}
-		else
-		{
-			nLevel = nTemp;
-		}
+		nMaxCharges = std::max((nItemLevel - nRequiredSkillLevel) / 4 + 1, 1);
+		nMaxLevel = std::max<int32_t>(sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl, 20);
+		nSkillLevel = std::min(nMaxCharges, nMaxLevel);
 	}
 	else if (pProperty->nMax < 0)
 	{
-		nRequiredSkillLevel = SKILLS_GetRequiredLevel(nSkillId);
-
-		nTemp = 99 - nRequiredSkillLevel;
-		if (nTemp < 1)
-		{
-			nTemp = 1;
-		}
-
-		nTemp = -(nTemp / pProperty->nMax);
-		if (nTemp < 1)
-		{
-			nTemp = 1;
-		}
-
-		nLevel = (ITEMS_GetItemLevel(pItem) - nRequiredSkillLevel) / nTemp;
-		if (nLevel <= 0)
-		{
-			nLevel = 1;
-		}
+		nMaxCharges = std::max(99 - nRequiredSkillLevel, 1);
+		nMaxCharges = std::max(-(nMaxCharges / pProperty->nMax), 1);
+		nSkillLevel = std::max((nItemLevel - nRequiredSkillLevel) / nMaxCharges, 1);
 	}
 	else
 	{
-		nLevel = pProperty->nMax;
+		nSkillLevel = pProperty->nMax;
 	}
 
-	nMin = pProperty->nMin;
-	if (!nMin)
+	int32_t nStatValue = pProperty->nMin;
+	if (nStatValue == 0)
 	{
-		nTemp = 5;
+		nMaxCharges = 5;
 	}
 	else
 	{
-		if (nMin < 0)
-		{
-			nMin = nLevel * -nMin / 8 - nMin;
-		}
+		if (nStatValue < 0)
+			nStatValue = nSkillLevel * -nStatValue / 8 - nStatValue;
 
-		if (nMin > 1)
-		{
-			if (nMin >= 255)
-			{
-				nTemp = 255;
-			}
-			else
-			{
-				nTemp = nMin;
-			}
-		}
-		else
-		{
-			nTemp = 1;
-		}
+		nMaxCharges = D2Clamp<int32_t>(nStatValue, 1, MAX_CHARGES);
 	}
 
-	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
+	uint32_t nCharges = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nMaxCharges - nMaxCharges / 8) + nMaxCharges / 8 + 1;
+	uint16_t nLayer = (nSkillLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff);
+	D2StatListStrc* pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nMaxCharges << 8) + nCharges, nLayer);
 
-	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
-
-	return nTemp;
+	return nMaxCharges;
 }
 
 //D2Common.0x6FD97830
-int __fastcall ITEMMODS_PropertyFunc18(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int32_t __fastcall ITEMMODS_SetByTime(int32_t nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int32_t nSet, int16_t nStatId, int32_t nLayer, int32_t nValue, int32_t nState, int32_t fStatList, D2UnitStrc* pSecondItem)
 {
-	D2StatListStrc* pStatList = NULL;
-	int nPropLayer = 0;
-	int nMin = 0;
-	int nMax = 0;
+	if (pProperty == nullptr)
+		return 0;
 
-	if (pProperty)
+	if (ITEMS_GetItemStatCostTxtRecord(nStatId) != nullptr)
+		return 0;
+
+	int32_t nPeroid = D2Clamp<int32_t>(pProperty->nLayer, 0, 3);
+	int32_t nMin = D2Clamp<int32_t>(pProperty->nMin + 256, 0, 1023);
+	int32_t nMax = D2Clamp<int32_t>(pProperty->nMax + 256, 0, 1023);
+
+	D2_ASSERT(nPeroid >= 0 && nPeroid <= 3);
+	D2_ASSERT(nMin >= 0 && nMin < (1 << ITEM_BYTIME_VAL_BITS));
+	D2_ASSERT(nMax >= 0 && nMax < (1 << ITEM_BYTIME_VAL_BITS));
+
+	D2StatListStrc* pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
+	if (pStatList != nullptr)
 	{
-		if (ITEMS_GetItemStatCostTxtRecord(nStatId))
-		{
-			nPropLayer = pProperty->nLayer;
-			nMin = pProperty->nMin + 256;
-			nMax = pProperty->nMax + 256;
-
-			if (nPropLayer > 0)
-			{
-				if (nPropLayer >= 3)
-				{
-					nPropLayer = 3;
-				}
-			}
-			else
-			{
-				nPropLayer = 0;
-			}
-
-			if (nMin > 0)
-			{
-				if (nMin >= 1023)
-				{
-					nMin = 1023;
-				}
-			}
-			else
-			{
-				nMin = 0;
-			}
-
-			if (nMax > 0)
-			{
-				if (nMax >= 1023)
-				{
-					nMax = 1023;
-				}
-			}
-			else
-			{
-				nMax = 0;
-			}
-
-			pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-			if (pStatList)
-			{
-				STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPropLayer + 4 * (nMin + (nMax << 10)), 0);
-				return nMax;
-			}
-		}
+		STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPeroid + 4 * (nMin + (nMax << ITEM_BYTIME_VAL_BITS)), 0);
+		return nMax;
 	}
 
 	return 0;
