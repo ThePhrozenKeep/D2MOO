@@ -1613,7 +1613,7 @@ BOOL __fastcall sub_6FD93CB0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 }
 
 //D2Common.0x6FD94060
-void __fastcall sub_6FD94060(int nStatId, int* pValue)
+void __fastcall ITEMMODS_ShiftBaseStats(int32_t nStatId, int32_t* pValue)
 {
 	switch (nStatId)
 	{
@@ -1893,7 +1893,7 @@ BOOL __fastcall sub_6FD944E0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 			nTemp = nMin;
 			if (nMin)
 			{
-				sub_6FD94060(STAT_SECONDARY_MINDAMAGE, &nTemp);
+				ITEMMODS_ShiftBaseStats(STAT_SECONDARY_MINDAMAGE, &nTemp);
 				pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
 				D2_ASSERT(pStatList);
 
@@ -1917,7 +1917,7 @@ BOOL __fastcall sub_6FD944E0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 			nTemp = nMax;
 			if (nMax)
 			{
-				sub_6FD94060(STAT_SECONDARY_MAXDAMAGE, &nTemp);
+				ITEMMODS_ShiftBaseStats(STAT_SECONDARY_MAXDAMAGE, &nTemp);
 				pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
 				D2_ASSERT(pStatList);
 
