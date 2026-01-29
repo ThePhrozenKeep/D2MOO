@@ -1798,7 +1798,7 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 		const int32_t v36 = D2Win_10121_GetTextWidth(wszText);
 
 		char v38[256] = {};
-		Unicode::unicode2Win(v38, pEditBox->wszText, ARRAYSIZE(v38));
+		Unicode::unicode2Win(v38, pEditBox->wszText, ARRAY_SIZE(v38));
 		const char* v30 = v38;
 		const char* v13 = v38;
 		int32_t v26 = 0;

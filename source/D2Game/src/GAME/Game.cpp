@@ -2918,7 +2918,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
         // Note: eType is not D2C_UnitTypes
 		D2_ASSERT(eType <= 4); // Original game uses a switch, and would use nullptr if not true. Then access it which would result in a crash, so assert instead (for static analysis).
         D2UnitStrc** pUnitList = pGame->pUnitList[eType];
-        for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
+        for (int nUnitIndex = 0; nUnitIndex < ARRAY_SIZE(pGame->pUnitList[eType]); nUnitIndex++)
         {
             for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
                 pUnit != nullptr;
