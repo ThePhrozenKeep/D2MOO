@@ -71,7 +71,7 @@ uint32_t __fastcall ITEMS_HasUniqueBeenDroppedAlready(D2GameStrc* pGame, int32_t
         return 0;
     }
 
-    if (nUniqueItemId < 0 || nUniqueItemId > 4096)
+    if (nUniqueItemId < 0 || nUniqueItemId >= 4096)
     {
         return 1;
     }
