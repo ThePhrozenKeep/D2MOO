@@ -4640,7 +4640,7 @@ void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* p
 		MONMODE_SKILL1,
 		MONMODE_SKILL1
 	};
-	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 8);
+	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, ARRAY_SIZE(nMinionTypes));
 
 	D2UnitStrc* pMinion = sub_6FC68D70(pGame, pTarget ? pTarget : pUnit, nMinionTypes[nChoice], nMinionModes[nChoice], 4, 0);
 	if (pMinion)

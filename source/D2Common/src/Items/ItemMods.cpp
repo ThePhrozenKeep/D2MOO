@@ -13,6 +13,7 @@
 #include "Units/Units.h"
 #include <D2States.h>
 #include <Calc.h>
+#include <utility>
 
 /*
 Date: Sun Apr 08 09:12:50 2012
@@ -2812,25 +2813,13 @@ int __fastcall ITEMMODS_RollRandomValueInRange(D2UnitStrc* pItem, int nMin, int 
 	}
 	if (nMax < nMin)
 	{
-		int temp = nMax;
-		nMax = nMin;
-		nMin = temp;
+		std::swap(nMin, nMax);
 	}
-	if (pItem && pItem->dwUnitType == UNIT_ITEM)
+	D2SeedStrc* pSeed = (pItem && pItem->dwUnitType == UNIT_ITEM) ? ITEMS_GetItemSeed(pItem) : &pItem->pSeed;
+	if (nMin < nMax)
 	{
-		if (nMin < nMax)
-		{
-			nPossibleRolls = nMax - nMin + 1;
-			return nMin + SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nPossibleRolls);
-		}
-	}
-	else
-	{
-		if (nMin < nMax)
-		{
-			nPossibleRolls = nMax - nMin + 1;
-			return nMin + SEED_RollLimitedRandomNumber(&pItem->pSeed, nPossibleRolls);
-		}
+		nPossibleRolls = nMax - nMin + 1;
+		return nMin + SEED_RollLimitedRandomNumber(pSeed, nPossibleRolls);
 	}
 	return nMin;
 }
