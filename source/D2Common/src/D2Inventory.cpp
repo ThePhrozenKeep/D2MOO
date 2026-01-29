@@ -337,35 +337,35 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 		{
 			D2InventoryGridStrc* pInventoryGrid = &pItemExtraData->pParentInv->pGrids[nNodePos];
 
-			if (pItemExtraData->unk0x10)
+			if (pItemExtraData->pPreviousGridItem)
 			{
-				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x10);
+				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pPreviousGridItem);
 				if (pExtraData)
 				{
-					pExtraData->unk0x14 = pItemExtraData->unk0x14;
+					pExtraData->pNextGridItem = pItemExtraData->pNextGridItem;
 				}
 			}
 			else
 			{
 				if (pInventoryGrid->pItem == pItem)
 				{
-					pInventoryGrid->pItem = pItemExtraData->unk0x14;
+					pInventoryGrid->pItem = pItemExtraData->pNextGridItem;
 				}
 			}
 
-			if (pItemExtraData->unk0x14)
+			if (pItemExtraData->pNextGridItem)
 			{
-				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->unk0x14);
+				D2ItemExtraDataStrc* pExtraData = INVENTORY_GetItemExtraDataFromItem(pItemExtraData->pNextGridItem);
 				if (pExtraData)
 				{
-					pExtraData->unk0x10 = pItemExtraData->unk0x10;
+					pExtraData->pPreviousGridItem = pItemExtraData->pPreviousGridItem;
 				}
 			}
 			else
 			{
 				if (pInventoryGrid->pLastItem == pItem)
 				{
-					pInventoryGrid->pLastItem = pItemExtraData->unk0x10;
+					pInventoryGrid->pLastItem = pItemExtraData->pPreviousGridItem;
 				}
 			}
 
@@ -396,8 +396,8 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 				}
 			}
 
-			pItemExtraData->unk0x14 = nullptr;
-			pItemExtraData->unk0x10 = nullptr;
+			pItemExtraData->pNextGridItem = nullptr;
+			pItemExtraData->pPreviousGridItem = nullptr;
 			pItemExtraData->nNodePos = 0;
 		}
 	}
@@ -1051,7 +1051,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		D2ItemExtraDataStrc* pLastItemExtraData = INVENTORY_GetItemExtraDataFromItem(pInventoryGrid->pLastItem);
 		if (pLastItemExtraData)
 		{
-			pLastItemExtraData->unk0x14 = pItem;
+			pLastItemExtraData->pNextGridItem = pItem;
 		}
 	}
 	else
@@ -1059,7 +1059,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 		pInventoryGrid->pItem = pItem;
 	}
 
-	pItemExtraData->unk0x10 = pInventoryGrid->pLastItem;
+	pItemExtraData->pPreviousGridItem = pInventoryGrid->pLastItem;
 	pInventoryGrid->pLastItem = pItem;
 
 	for (int y = 0; y < nHeight; ++y)
@@ -1581,7 +1581,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -1592,7 +1592,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -1622,7 +1622,7 @@ D2UnitStrc* __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc* pInven
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -1633,7 +1633,7 @@ D2UnitStrc* __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc* pInven
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -1674,7 +1674,7 @@ D2UnitStrc* __stdcall INVENTORY_FindFillableBook(D2InventoryStrc* pInventory, D2
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -1685,7 +1685,7 @@ D2UnitStrc* __stdcall INVENTORY_FindFillableBook(D2InventoryStrc* pInventory, D2
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -2149,10 +2149,10 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventor
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	while (pItem)
@@ -2162,7 +2162,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventor
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -2192,7 +2192,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc* pInventor
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -2203,7 +2203,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByType(D2InventoryStrc* pInventor
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -2234,7 +2234,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByCode(D2InventoryStrc* pInventor
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -2245,7 +2245,7 @@ D2UnitStrc* __stdcall INVENTORY_GetEquippedItemByCode(D2InventoryStrc* pInventor
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -2276,7 +2276,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByCode(D2InventoryStrc* pInventor
 				break;
 			}
 
-			pItem = INVENTORY_GetUnknownItem(pItem);
+			pItem = INVENTORY_GetNextGridItem(pItem);
 		}
 	}
 
@@ -2287,7 +2287,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByCode(D2InventoryStrc* pInventor
 			return pItem;
 		}
 
-		pItem = INVENTORY_GetUnknownItem(pItem);
+		pItem = INVENTORY_GetNextGridItem(pItem);
 	}
 
 	return nullptr;
@@ -2305,7 +2305,7 @@ int __stdcall INVENTORY_GetSetItemEquipCountByFileIndex(D2InventoryStrc* pInvent
 	if (pInventoryGrid)
 	{
 		int nCounter = 0;
-		for (D2UnitStrc* pItem = pInventoryGrid->pItem; ITEMS_GetItemData(pItem) != nullptr; pItem = pItem->pItemData->pExtraData.unk0x14)
+		for (D2UnitStrc* pItem = pInventoryGrid->pItem; ITEMS_GetItemData(pItem) != nullptr; pItem = pItem->pItemData->pExtraData.pNextGridItem)
 		{
 			if (ITEMS_GetItemQuality(pItem) == ITEMQUAL_SET && ITEMS_GetFileIndex(pItem) == nItemFileIndex)
 			{
@@ -3163,12 +3163,12 @@ D2UnitStrc* __stdcall INVENTORY_GetNextItem(D2UnitStrc* pItem)
 }
 
 //Inlined at various places
-D2UnitStrc* __stdcall INVENTORY_GetUnknownItem(D2UnitStrc* pItem)
+D2UnitStrc* __stdcall INVENTORY_GetNextGridItem(D2UnitStrc* pItem)
 {
 	D2ItemExtraDataStrc* pItemExtraData = INVENTORY_GetItemExtraDataFromItem(pItem);
 	if (pItemExtraData)
 	{
-		return pItemExtraData->unk0x14;
+		return pItemExtraData->pNextGridItem;
 	}
 
 	return nullptr;

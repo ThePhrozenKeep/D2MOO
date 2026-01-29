@@ -127,8 +127,8 @@ struct D2GameInfoStrc
 	char szGamePassword[16];						// 0x74
 	char szGameDescription[32];						// 0x84 Before 1.10f (unsure what version), struct used to have desc of 24 chars, and end here.
 	uint8_t nArenaTemplate;							// 0xA4
-	uint8_t unk0xA5;								// 0xA5
-	uint8_t unk0xA6;								// 0xA6
+	uint8_t nMaxLevelDifference;					// 0xA5 0xFF for no limit
+	uint8_t nMaxPlayers;							// 0xA6
 	uint8_t padding0xA7;							// 0xA7
 	uint32_t nArenaFlags;							// 0xA8 D2GameFlags
 	void* pMemoryPool;								// 0xAC
@@ -154,9 +154,9 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	char szGameDesc[32];							//0x4A
 	uint8_t nGameType;								//0x6A
 	uint8_t nArenaTemplate;							//0x6B
-	uint8_t unk0x6C;								//0x6C
+	uint8_t nMaxLevelDifference;					//0x6C 0xFF for no limit
 	uint8_t nDifficulty;							//0x6D
-	uint8_t unk0x6E;								//0x6E
+	uint8_t nMaxPlayers;							//0x6E
 	uint8_t unk0x6F;								//0x6F
 	BOOL bExpansion;								//0x70
 	uint32_t dwGameType;							//0x74 1=Ladder
@@ -195,13 +195,29 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	uint32_t nTickCountSinceNoClients;				//0x1DC0
 	uint32_t nSyncTimer;							//0x1DC4
 
-	uint32_t unk0x1DC8;								//0x1DC8
-	uint32_t unk0x1DCC;								//0x1DCC
-	uint32_t unk0x1DD0;								//0x1DD0
-	uint32_t unk0x1DD4;								//0x1DD4
-	uint32_t unk0x1DD8;								//0x1DD8
+#if D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 10
+	uint32_t unk0x1DC8;								//0x1DC8 (Unused? Removed in 1.11)
+	uint32_t unk0x1DCC;								//0x1DCC (Unused? Removed in 1.11)
+	uint32_t unk0x1DD0;								//0x1DD0 (Unused? Removed in 1.11)
+	uint32_t unk0x1DD4;								//0x1DD4 (Unused? Removed in 1.11)
+	uint32_t unk0x1DD8;								//0x1DD8 (Unused? Removed in 1.11)
 	uint32_t unk0x1DDC;								//0x1DDC
-};
+	int32_t nWorldEventState;						//0x1DE0
+	int32_t dwWorldEventLastMessageFrame;			//0x1DE4
+#else // 1.11+
+	uint32_t unk0x1DDC;								//0x1DC8
+	int32_t nWorldEventState;						//0x1DCC
+	int32_t dwWorldEventLastMessageFrame;			//0x1DD0
+// #ifdef D2_VERSION_HAS_UBERS
+	BOOL bUberPortalRuns[3];						//0x1DD4
+	BOOL bUberPortalFinale;							//0x1DE0
+	uint32_t dwUberSandsCounter;					//0x1DE4
+	BOOL bUberBaalKilled;							//0x1DE8
+	BOOL bUberDiabloKilled;							//0x1DEC
+	BOOL bUberMephistoKilled;						//0x1DF0
+// #endif
+#endif
+}; // Size = 0x1DE8 (1.10), 0x1DF4 (1.11-1.14)
 
 struct D2GameDataTableStrc
 {
@@ -260,7 +276,7 @@ BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPa
 //D2Game.0x6FC35E50
 D2GAME_DLL_DECL void __stdcall D2Game_10056(int32_t a1);
 //D2Game.0x6FC35E70 (#10047)
-D2GAME_DLL_DECL BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId);
+D2GAME_DLL_DECL BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t nMaxLevelDifference, uint8_t nMaxPlayers, uint16_t* pGameId);
 //D2Game.0x6FC36280 (#10007)
 D2GAME_DLL_DECL int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t* pSaveData, uint16_t nSaveSize, uint16_t nTotalSize, int32_t a5, int32_t a6, FILETIME* pSaveCreationTimestamp, int32_t nCharSaveTransactionToken);
 //D2Game.0x6FC36570

@@ -12,6 +12,7 @@
 #include <D2Monsters.h>
 #include <D2Items.h>
 #include <DataTbls/MonsterIds.h>
+#include <DataTbls/ObjectsIds.h>
 #include <DataTbls/LevelsIds.h>
 #include <Path/PathMisc.h>
 
@@ -1080,7 +1081,8 @@ void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom
     }
 }
 
-//D2Game.0x6FCBC780
+//1.10: D2Game.0x6FCBC780
+//1.14d: 0x005559A0
 void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     if (!pGame)
@@ -1089,6 +1091,157 @@ void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc
     }
 
     D2PresetUnitStrc* pPresetUnit = DUNGEON_GetPresetUnitsFromRoom(pRoom);
+#ifdef D2_VERSION_HAS_UBERS
+    int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
+
+    BOOL bSpawnPrimeEvils = 0;
+    BOOL bSpawnUberAndariel = 0;
+    BOOL bSpawnUberDuriel = 0;
+    BOOL bSpawnUberIzual = 0;
+    int32_t nX = 0;
+    int32_t nY = 0;
+
+    for (D2PresetUnitStrc *i = pPresetUnit; i; i = i->pNext)
+    {
+        if (i->nUnitType != UNIT_MONSTER && !(i->bSpawned & 1))
+        {
+            if (nLevelId == LEVEL_PANDEMONIUMFINALE)
+            {
+                if (i->nUnitType != UNIT_OBJECT
+                || (i->nIndex != OBJECT_WIRTSBODY
+                && i->nIndex != OBJECT_GOLD_PLACEHOLDER
+                && i->nIndex != OBJECT_CAINGIBBET))
+                {
+                    SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+                }
+                if (i->nIndex == OBJECT_CAINGIBBET && DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_PANDEMONIUMFINALE)
+                {
+                    bSpawnPrimeEvils = 1;
+                    nX = i->nXpos;
+                    nY = i->nYpos;
+                }
+            }
+            else if (nLevelId == LEVEL_PANDEMONIUMRUN1)
+            {
+                if (i->nUnitType == UNIT_OBJECT && i->nIndex == OBJECT_SPARKLY_CHEST)
+                {
+                    bSpawnUberAndariel = 1;
+                    nX = i->nXpos;
+                    nY = i->nYpos;
+                }
+                else
+                {
+                    SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+                }
+            }
+            else if (nLevelId == LEVEL_PANDEMONIUMRUN2)
+            {
+                if (i->nUnitType != UNIT_OBJECT)
+                {
+                    SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+                }
+                else if (i->nIndex != OBJECT_VALLEY_WAYPOINT)
+                {
+                    pGame->dwUberSandsCounter++;
+                    if (pGame->dwUberSandsCounter == (pGame->dwInitSeed % 3) + 3)
+                    {
+                        bSpawnUberDuriel = 1;
+                        nX = i->nXpos;
+                        nY = i->nYpos;
+                    }
+                    else
+                    {
+                        SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+                    }
+                }
+            }
+            else if (nLevelId == LEVEL_PANDEMONIUMRUN3)
+            {
+                if (i->nUnitType == UNIT_OBJECT && i->nIndex == OBJECT_SPARKLY_CHEST)
+                {
+                    bSpawnUberIzual = 1;
+                    nX = i->nXpos;
+                    nY = i->nYpos;
+                }
+                else
+                {
+                    SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+                }
+            }
+            else
+            {
+                SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+            }
+        }
+    }
+
+    if (nLevelId != LEVEL_PANDEMONIUMFINALE)
+    {
+        for (D2PresetUnitStrc *i = pPresetUnit; i; i = i->pNext)
+        {
+            if (i->nUnitType == UNIT_MONSTER && !(i->bSpawned & 1))
+            {
+                SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+            }
+        }
+    }
+	else
+	{
+		if (bSpawnPrimeEvils)
+		{
+			D2PresetUnitStrc uber;
+			uber.nUnitType = UNIT_MONSTER;
+			uber.pMapAI = nullptr;
+			uber.nXpos = nX;
+			uber.nYpos = nY;
+			uber.bSpawned = 0;
+			uber.nMode = MONMODE_NEUTRAL;
+			uber.nIndex = MONSTER_UBERMEPHISTO;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+			uber.nIndex = MONSTER_UBERBAAL;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+			uber.nIndex = MONSTER_UBERDIABLO;
+			SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+		}
+	}
+
+    if (bSpawnUberIzual)
+    {
+        D2PresetUnitStrc uber;
+        uber.nUnitType = UNIT_MONSTER;
+        uber.pMapAI = nullptr;
+        uber.nXpos = nX;
+        uber.nYpos = nY;
+        uber.bSpawned = 0;
+        uber.nMode = MONMODE_NEUTRAL;
+        uber.nIndex = MONSTER_UBERIZUAL;
+        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+    }
+    if (bSpawnUberAndariel)
+    {
+        D2PresetUnitStrc uber;
+        uber.nUnitType = UNIT_MONSTER;
+        uber.pMapAI = nullptr;
+        uber.nXpos = nX;
+        uber.nYpos = nY;
+        uber.bSpawned = 0;
+        uber.nMode = MONMODE_NEUTRAL;
+        uber.nIndex = MONSTER_UBERANDARIEL;
+        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+    }
+    if (bSpawnUberDuriel)
+    {
+        D2PresetUnitStrc uber;
+        uber.nUnitType = UNIT_MONSTER;
+        uber.pMapAI = nullptr;
+        uber.nXpos = 0; // nX not used
+        uber.nYpos = 0; // nY not used
+        uber.bSpawned = 0;
+        uber.nMode = MONMODE_NEUTRAL;
+        uber.nIndex = MONSTER_UBERDURIEL;
+        SUNIT_SpawnPresetUnit(pGame, pRoom, &uber);
+    }
+#else
     for (D2PresetUnitStrc* i = pPresetUnit; i; i = i->pNext)
     {
         if (i->nUnitType != UNIT_MONSTER && !(i->bSpawned & 1))
@@ -1104,6 +1257,7 @@ void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc
             SUNIT_SpawnPresetUnit(pGame, pRoom, i);
         }
     }
+#endif
 }
 
 //D2Game.0x6FCBC7E0

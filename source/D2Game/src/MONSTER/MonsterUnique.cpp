@@ -596,7 +596,8 @@ void __fastcall MONSTERUNIQUE_UMod26_Teleport(D2UnitStrc* pUnit, int32_t nUMod, 
     }
 }
 
-//D2Game.0x6FC6B910
+//1.10: D2Game.0x6FC6B910
+//1.14d: 0x005A1650
 void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     constexpr D2AuraModStrc gAuraMods[8] =
@@ -637,6 +638,14 @@ void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nU
     SEED_InitLowSeed(&seed, MONSTERUNIQUE_GetNameSeed(pUnit));
 
     const int32_t nIndex = MONSTERUNIQUE_GetBossHcIdx(pUnit) != SUPERUNIQUE_LORD_DE_SEIS ? ITEMS_RollLimitedRandomNumber(&seed, nMax) : 5;
+#ifdef D2_VERSION_HAS_UBERS
+    if (pUnit->dwClassId == MONSTER_UBERMEPHISTO)
+    {
+        D2GAME_SetSkills_6FD14C60(pUnit, SKILL_CONVICTION, 20, 1);
+        D2GAME_AssignSkill_6FD13800(pUnit, 0, SKILL_CONVICTION, -1);
+        return;
+    }
+#endif
     const int32_t nSkillLevel = D2Clamp(gAuraMods[nIndex].nMultiplier * (nLevel + gAuraMods[nIndex].nLevelOffset) / gAuraMods[nIndex].nDivisor, 1, 99);
     D2GAME_SetSkills_6FD14C60(pUnit, gAuraMods[nIndex].nSkillId, nSkillLevel, 1);
     D2GAME_AssignSkill_6FD13800(pUnit, 0, gAuraMods[nIndex].nSkillId, -1);
@@ -1476,7 +1485,8 @@ void __fastcall MONSTERUNIQUE_StealBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit
     }
 }
 
-//D2Game.0x6FC6D800
+//1.10: D2Game.0x6FC6D800
+//1.14d: 0x005A3250
 void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit)
@@ -1529,8 +1539,18 @@ void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitS
         D2Game_10061_Return();
         break;
 #endif
-	default:
-		break;
+#ifdef D2_VERSION_HAS_UBERS
+    case MONSTER_UBERMEPHISTO:
+    case MONSTER_UBERDIABLO:
+    case MONSTER_UBERBAAL:
+        if (pUnit->dwAnimMode == MONMODE_DEATH)
+        {
+            QUESTSFX_UberPrimeEvil(pGame, pUnit);
+        }
+        break;
+#endif
+    default:
+        break;
     }
 }
 

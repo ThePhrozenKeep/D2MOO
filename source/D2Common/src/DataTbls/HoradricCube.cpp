@@ -259,7 +259,9 @@ void __fastcall DATATBLS_CubeMainOutputLinker(char* pSrc, void* pRecord, int nOf
 	}
 }
 
-//D2Common.0x6FD52910
+//1.10f: D2Common.0x6FD52910
+//1.11 : D2Common.0x6FDAD210
+//1.14d: 0x00668A90
 BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam, char* szOutput, int nTxtRow, int nItemId)
 {
 	char* szOutputModifier = NULL;
@@ -300,6 +302,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 	{
 		pCubeOutputParam->nType = CUBEOP_COWPORTAL;
 	}
+#ifdef D2_VERSION_HAS_UBERS
 	else if (!_strcmpi(szOutput, "Pandemonium Portal"))
 	{
 		pCubeOutputParam->nType = CUBEOP_UBERDUNGEON;
@@ -308,6 +311,7 @@ BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam
 	{
 		pCubeOutputParam->nType = CUBEOP_UBERTRISTRAM;
 	}
+#endif
 	else if (DATATBLS_AreStringsEqual(szOutput, "usetype"))
 	{
 		pCubeOutputParam->nType = CUBEOP_USETYPE;

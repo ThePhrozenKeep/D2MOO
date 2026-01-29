@@ -521,14 +521,33 @@ int32_t __fastcall PLRTRADE_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit
     return ACT1Q4_CreateCowPortal(pGame, pUnit);
 }
 
-//D2Game.0x6FC90010
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x00565A90
+int32_t __fastcall PLRTRADE_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+    return ACT1Q4_CreateUberRunPortal(pGame, pUnit);
+}
+
+//1.14d: 0x00565AA0
+int32_t __fastcall PLRTRADE_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+    return ACT1Q4_CreateUberFinalePortal(pGame, pUnit);
+}
+#endif
+
+//1.10: D2Game.0x6FC90010
+//1.14d: 0x00565AB0
 void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CubeMainTxt* pCubeMainTxt, D2CubeItemStrc* pCubeItem)
 {
     using CubeOutputFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
     constexpr CubeOutputFunc dword_6FD2933C[] =
     {
         nullptr,
-        PLRTRADE_CreateCowPortal
+        PLRTRADE_CreateCowPortal,
+#ifdef D2_VERSION_HAS_UBERS
+        PLRTRADE_CreateUberRunPortal,
+        PLRTRADE_CreateUberFinalePortal
+#endif
     };
 
     int32_t nSocketables = 0;
@@ -758,20 +777,20 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
                     if (!(pCubeOutput->wItemFlags & CUBEFLAG_OUT_SOCKET) || pCubeOutput->nQuantity)
                     {
-                        pItemDrop.dwFlags2 |= 8;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_NOSOCKETS;
                     }
                     else
                     {
-                        pItemDrop.dwFlags2 |= 0x10;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_ALWAYSSOCKETS;
                     }
 
                     if (!(pCubeOutput->wItemFlags & CUBEFLAG_OUT_ETHEREAL))
                     {
-                        pItemDrop.dwFlags2 |= 2;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_NEVERETH;
                     }
                     else
                     {
-                        pItemDrop.dwFlags2 |= 4;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_ALWAYSETH;
                     }
 
                     pOutputs[nCounter] = D2GAME_CreateItemEx_6FC4ED80(pGame, &pItemDrop, 0);

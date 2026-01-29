@@ -13,6 +13,7 @@
 #include "Units/Units.h"
 #include <D2States.h>
 #include <Calc.h>
+#include <utility>
 
 #define ITEM_BYTIME_VAL_BITS 10
 
@@ -472,7 +473,11 @@ static const D2PropertyAssignStrc stru_6FDE3160[] =
 };
 
 
-static const PROPERTYASSIGNFN off_6FDE3920[36] =
+// 1.10: 36 entries, 1.11-1.14: 37 entries
+//1.10: D2Common.0x6FDE3920
+//1.11: D2Common.0x6FDEB590
+//1.14d: 0x007462F8
+static const PROPERTYASSIGNFN off_6FDE3920[] =
 {
 	NULL,
 	ITEMMODS_PropertyFunc01,
@@ -498,7 +503,21 @@ static const PROPERTYASSIGNFN off_6FDE3920[36] =
 	ITEMMODS_PropertyFunc21,
 	ITEMMODS_PropertyFunc22,
 	ITEMMODS_PropertyFunc23,
-	ITEMMODS_PropertyFunc24
+	ITEMMODS_PropertyFunc24,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+#ifdef D2_VERSION_HAS_UBERS
+	ITEMMODS_PropertyFunc36
+#endif
 };
 static const int dword_6FDE39B0 = ARRAY_SIZE(off_6FDE3920);
 
@@ -2524,7 +2543,8 @@ void __stdcall ITEMMODS_ApplyEthereality(D2UnitStrc* pItem)
 	}
 }
 
-//D2Common.0x6FD959F0 (#10867)
+//1.10f:D2Common.0x6FD959F0 (#10867)
+//1.11: D2Common.0x6FDA3570(#11129)
 BOOL __stdcall ITEMMODS_UpdateRuneword(D2UnitStrc* pUnit, D2UnitStrc* pItem, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
@@ -2772,6 +2792,30 @@ void __stdcall ITEMMODS_AddCraftPropertyList(D2UnitStrc* pItem, D2PropertyStrc* 
 	{
 		ITEMMODE_ApplyProperty(PROPMODE_UNUSED, NULL, pItem, pProperty, 0, 0, 0, pProperty, 0, STATLIST_MAGIC, NULL);
 	}
+}
+
+//1.10f: Inlined
+//1.11 : Inlined
+//1.14d: 0x0065E9E0
+int __fastcall ITEMMODS_RollRandomValueInRange(D2UnitStrc* pItem, int nMin, int nMax)
+{
+	int nPossibleRolls;
+
+	if (nMax == nMin)
+	{
+		return nMin;
+	}
+	if (nMax < nMin)
+	{
+		std::swap(nMin, nMax);
+	}
+	D2SeedStrc* pSeed = (pItem && pItem->dwUnitType == UNIT_ITEM) ? ITEMS_GetItemSeed(pItem) : &pItem->pSeed;
+	if (nMin < nMax)
+	{
+		nPossibleRolls = nMax - nMin + 1;
+		return nMin + SEED_RollLimitedRandomNumber(pSeed, nPossibleRolls);
+	}
+	return nMin;
 }
 
 //D2Common.0x6FD95FC0
@@ -3944,6 +3988,22 @@ int __fastcall ITEMMODS_PropertyFunc21(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, nLayer, nMin, nState, fStatList, a11);
 }
 
+#ifdef D2_VERSION_HAS_UBERS
+//1.11 : D2Common.0x6FDA5190
+//1.14d: 0x0065FBA0
+int __fastcall ITEMMODS_PropertyFunc36(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+{
+	if (!pProperty)
+	{
+		return 0;
+	}
+
+	int nMin = ITEMMODS_RollRandomValueInRange(pItem, pProperty->nMin, pProperty->nMax);
+
+	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, nMin, nLayer, nState, fStatList, a11);
+}
+#endif
+
 //D2Common.0x6FD97D50
 //TODO: nLayer always (in all functions and structs) 16 Bit, i.e. uint16_t??
 int __fastcall ITEMMODS_PropertyFunc22(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
@@ -4108,7 +4168,8 @@ int __fastcall ITEMMODS_PropertyFunc23(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	return FALSE;
 }
 
-//D2Common.0x6FD98160 (#11292)
+//1.10f:D2Common.0x6FD98160 (#11292)
+//1.11: D2Common.0x6FDA2900 (#10116)
 void __stdcall ITEMMODS_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
 {
 	D2PropertiesTxt* pPropertiesTxtRecord = NULL;

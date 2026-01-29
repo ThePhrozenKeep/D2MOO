@@ -344,8 +344,10 @@ void __stdcall D2Game_10056(int32_t a1)
     dword_6FD4581C = a1;
 }
 
-//D2Game.0x6FC35E70 (#10047)
-BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId)
+//1.10f: D2Game.0x6FC35E70 (#10047)
+//1.11: D2Game.0x6FD01F60 (#10024)
+//1.14d: 0x00530930
+BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t nMaxLevelDifference, uint8_t nMaxPlayers, uint16_t* pGameId)
 {
     // TODO: pHGame, v22
     if (!gpGameDataTbl_6FD45818)
@@ -428,8 +430,8 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     SStrCopy(pGame->szGameDesc, szGameDescription, 32);
 
     pGame->nArenaTemplate = nArenaTemplate;
-    pGame->unk0x6C = a6;
-    pGame->unk0x6E = a7;
+    pGame->nMaxLevelDifference = nMaxLevelDifference;
+    pGame->nMaxPlayers = nMaxPlayers;
 
     if (nFlags & GAMEFLAG_ARENA_EXPANSION)
     {
@@ -457,6 +459,17 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     pGame->dwLastUsedUnitGUID[3] = 0;
     pGame->dwLastUsedUnitGUID[4] = 0;
     pGame->dwLastUsedUnitGUID[5] = 0;
+
+#ifdef D2_VERSION_HAS_UBERS
+    pGame->bUberPortalRuns[0] = 0;
+    pGame->bUberPortalRuns[1] = 0;
+    pGame->bUberPortalRuns[2] = 0;
+    pGame->bUberPortalFinale = 0;
+    pGame->dwUberSandsCounter = 0;
+    pGame->bUberBaalKilled = 0;
+    pGame->bUberDiabloKilled = 0;
+    pGame->bUberMephistoKilled = 0;
+#endif
 
     pGame->nDifficulty = (nFlags & GAMEFLAG_DIFFICULTY_MASK) >> GAMEFLAG_DIFFICULTY_BIT;
 
@@ -2717,8 +2730,8 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nFrames = pGame->dwGameFrame / 100;
     pGameInfo->nFrameRate = pGame->nFrameRate;
     pGameInfo->nArenaTemplate = pGame->nArenaTemplate;
-    pGameInfo->unk0xA5 = pGame->unk0x6C;
-    pGameInfo->unk0xA6 = pGame->unk0x6E;
+    pGameInfo->nMaxLevelDifference = pGame->nMaxLevelDifference;
+    pGameInfo->nMaxPlayers = pGame->nMaxPlayers;
 
     SStrCopy(pGameInfo->szGamePassword, pGame->szGamePassword, 16u);
     SStrCopy(pGameInfo->szGameDescription, pGame->szGameDesc, 32u);
@@ -2905,7 +2918,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
         // Note: eType is not D2C_UnitTypes
 		D2_ASSERT(eType <= 4); // Original game uses a switch, and would use nullptr if not true. Then access it which would result in a crash, so assert instead (for static analysis).
         D2UnitStrc** pUnitList = pGame->pUnitList[eType];
-        for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
+        for (int nUnitIndex = 0; nUnitIndex < ARRAY_SIZE(pGame->pUnitList[eType]); nUnitIndex++)
         {
             for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
                 pUnit != nullptr;
