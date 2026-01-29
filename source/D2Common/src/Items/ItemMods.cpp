@@ -15,6 +15,9 @@
 #include <Calc.h>
 #include <utility>
 
+#define ITEM_BYTIME_VAL_BITS 10
+
+
 /*
 Date: Sun Apr 08 09:12:50 2012
 Author: Necrolis
@@ -418,42 +421,42 @@ static const D2PropertyAssignStrc stru_6FDE3160[] =
 	{ sub_6FD95200, -1 },
 	{ sub_6FD95200, -1 },
 	{ sub_6FD95200, -1 },
-	{ sub_6FD943C0, STAT_ITEM_ARMOR_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ARMORPERCENT_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_HP_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_MANA_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_MAXDAMAGE_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_STRENGTH_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_DEXTERITY_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ENERGY_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_VITALITY_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_TOHIT_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_TOHITPERCENT_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_COLD_DAMAGEMAX_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_FIRE_DAMAGEMAX_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_LTNG_DAMAGEMAX_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_POIS_DAMAGEMAX_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_RESIST_COLD_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_RESIST_FIRE_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_RESIST_LTNG_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_RESIST_POIS_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ABSORB_COLD_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ABSORB_FIRE_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ABSORB_LTNG_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_ABSORB_POIS_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_FIND_GOLD_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_FIND_MAGIC_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_REGENSTAMINA_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_STAMINA_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_DAMAGE_DEMON_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_DAMAGE_UNDEAD_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_TOHIT_DEMON_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_TOHIT_UNDEAD_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_CRUSHINGBLOW_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_OPENWOUNDS_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_KICK_DAMAGE_BYTIME },
-	{ sub_6FD943C0, STAT_ITEM_DEADLYSTRIKE_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ARMOR_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ARMORPERCENT_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_HP_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_MANA_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_MAXDAMAGE_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_MAXDAMAGE_PERCENT_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_STRENGTH_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_DEXTERITY_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ENERGY_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_VITALITY_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_TOHIT_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_TOHITPERCENT_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_COLD_DAMAGEMAX_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_FIRE_DAMAGEMAX_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_LTNG_DAMAGEMAX_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_POIS_DAMAGEMAX_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_RESIST_COLD_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_RESIST_FIRE_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_RESIST_LTNG_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_RESIST_POIS_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ABSORB_COLD_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ABSORB_FIRE_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ABSORB_LTNG_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_ABSORB_POIS_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_FIND_GOLD_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_FIND_MAGIC_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_REGENSTAMINA_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_STAMINA_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_DAMAGE_DEMON_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_DAMAGE_UNDEAD_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_TOHIT_DEMON_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_TOHIT_UNDEAD_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_CRUSHINGBLOW_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_OPENWOUNDS_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_KICK_DAMAGE_BYTIME },
+	{ ITEMMODS_LegacySetByTime, STAT_ITEM_DEADLYSTRIKE_BYTIME },
 	{ sub_6FD95200, -1 },
 	{ sub_6FD95200, -1 },
 	{ sub_6FD95200, -1 },
@@ -1629,7 +1632,7 @@ BOOL __fastcall sub_6FD93CB0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 }
 
 //D2Common.0x6FD94060
-void __fastcall sub_6FD94060(int nStatId, int* pValue)
+void __fastcall ITEMMODS_ShiftBaseStats(int32_t nStatId, int32_t* pValue)
 {
 	switch (nStatId)
 	{
@@ -1769,30 +1772,21 @@ BOOL __fastcall sub_6FD94190(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 }
 
 //D2Common.0x6FD943C0
-BOOL __fastcall sub_6FD943C0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nStatId, int nApplyType, int nState, int fStatList, D2UnitStrc* a9)
+BOOL __fastcall ITEMMODS_LegacySetByTime(int32_t nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int32_t nStatId, int32_t nApplyType, int32_t nState, int32_t fStatList, D2UnitStrc* pSecondItem)
 {
-	D2StatListStrc* pStatList = NULL;
-	int nPeriod = 0;
-	int nMin = 0;
-	int nMax = 0;
-
 	D2_ASSERT(pProperty->nMin <= pProperty->nMax);
 
-	nPeriod = pProperty->nLayer;
-	nMin = pProperty->nMin + 256;
-	nMax = pProperty->nMax + 256;
+	int32_t nPeriod = pProperty->nLayer;
+	int32_t nMin = pProperty->nMin + 256;
+	int32_t nMax = pProperty->nMax + 256;
 
-	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
+	D2StatListStrc* pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
 	D2_ASSERT(pStatList);
-
 	D2_ASSERT(nPeriod >= 0 && nPeriod <= 3);
-
-#define ITEM_BYTIME_VAL_BITS 10
 	D2_ASSERT(nMin >= 0 && nMin < (1 << ITEM_BYTIME_VAL_BITS));
 	D2_ASSERT(nMax >= 0 && nMax < (1 << ITEM_BYTIME_VAL_BITS));
 
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPeriod + 4 * (nMin + (nMax << 10)), 0);
-
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPeriod + 4 * (nMin + (nMax << ITEM_BYTIME_VAL_BITS)), 0);
 	return TRUE;
 }
 
@@ -1918,7 +1912,7 @@ BOOL __fastcall sub_6FD944E0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 			nTemp = nMin;
 			if (nMin)
 			{
-				sub_6FD94060(STAT_SECONDARY_MINDAMAGE, &nTemp);
+				ITEMMODS_ShiftBaseStats(STAT_SECONDARY_MINDAMAGE, &nTemp);
 				pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
 				D2_ASSERT(pStatList);
 
@@ -1942,7 +1936,7 @@ BOOL __fastcall sub_6FD944E0(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 			nTemp = nMax;
 			if (nMax)
 			{
-				sub_6FD94060(STAT_SECONDARY_MAXDAMAGE, &nTemp);
+				ITEMMODS_ShiftBaseStats(STAT_SECONDARY_MAXDAMAGE, &nTemp);
 				pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
 				D2_ASSERT(pStatList);
 
@@ -2386,7 +2380,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 			{
 				for (int i = 0; i < ARRAY_SIZE(pUniqueItemsTxtRecord->pProperties); ++i)
 				{
-					sub_6FD95810(3, NULL, pItem, NULL, 0, 0, nApplyType, &pUniqueItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+					ITEMMODE_ApplyProperty(3, NULL, pItem, NULL, 0, 0, nApplyType, &pUniqueItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 				}
 			}
 		}
@@ -2406,7 +2400,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 				{
 					for (int i = 0; i < ARRAY_SIZE(pSetItemsTxtRecord->pProperties); ++i)
 					{
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 					}
 
 					for (int i = 0; i < ARRAY_SIZE(pSetItemsTxtRecord->pPartialBoni); ++i)
@@ -2422,14 +2416,14 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 							nFlag = 0x40;
 						}
 
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[i], nState, nFlag, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[i], nState, nFlag, 0);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < 2; ++i)
 					{
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
+						ITEMMODE_ApplyProperty(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 					}
 				}
 			}
@@ -2502,12 +2496,12 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 			break;
 		}
 
-		sub_6FD95810(nType, NULL, pItem, pMods, nMod, nPropSet, nApplyType, pProperty, 0, 0x40, a2);
+		ITEMMODE_ApplyProperty(nType, NULL, pItem, pMods, nMod, nPropSet, nApplyType, pProperty, 0, 0x40, a2);
 	}
 }
 
 //D2Common.0x6FD95810
-void __fastcall sub_6FD95810(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, int nApplyType, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a11)
+void __fastcall ITEMMODE_ApplyProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int32_t nIndex, int32_t nPropSet, int32_t nApplyType, const D2PropertyStrc* pProperty, int32_t nState, int32_t fStatlist, D2UnitStrc* pSecondItem)
 {
 	if (ITEMS_GetItemFormat(pItem) < 1)
 	{
@@ -2515,15 +2509,15 @@ void __fastcall sub_6FD95810(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 
 		if (pProperty->nProperty >= 0 && pProperty->nProperty < sgptDataTables->nPropertiesTxtRecordCount)
 		{
-			if (stru_6FDE3160[pProperty->nProperty].pfAssign)
+			if (sgtItemModCall[pProperty->nProperty].pfFunction)
 			{
-				stru_6FDE3160[pProperty->nProperty].pfAssign(nType, pUnit, pItem, pProperty, stru_6FDE3160[pProperty->nProperty].nStatId, nApplyType, nState, fStatlist, a11);
+				sgtItemModCall[pProperty->nProperty].pfFunction(nType, pUnit, pItem, pProperty, sgtItemModCall[pProperty->nProperty].nStatId, nApplyType, nState, fStatlist, pSecondItem);
 			}
 		}
 	}
 	else
 	{
-		D2COMMON_11292_ItemAssignProperty(nType, pUnit, pItem, pMods, nIndex, nPropSet, pProperty, nState, fStatlist, a11);
+		ITEMMODS_ItemAssignProperty(nType, pUnit, pItem, pMods, nIndex, nPropSet, pProperty, nState, fStatlist, pSecondItem);
 	}
 }
 
@@ -2571,7 +2565,7 @@ BOOL __stdcall ITEMMODS_UpdateRuneword(D2UnitStrc* pUnit, D2UnitStrc* pItem, int
 				break;
 			}
 
-			D2COMMON_11292_ItemAssignProperty(PROPMODE_RUNEWORD, pUnit, pItem, NULL, i, 0, pProperty, STATE_RUNEWORD, STATLIST_MAGIC, NULL);
+			ITEMMODS_ItemAssignProperty(PROPMODE_RUNEWORD, pUnit, pItem, NULL, i, 0, pProperty, STATE_RUNEWORD, STATLIST_MAGIC, NULL);
 		}
 
 		return TRUE;
@@ -2628,7 +2622,7 @@ void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 
 						if (pProperty->nProperty >= 0)
 						{
-							sub_6FD95810(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
+							ITEMMODE_ApplyProperty(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
 						}
 					}
 
@@ -2643,7 +2637,7 @@ void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 								break;
 							}
 
-							sub_6FD95810(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
+							ITEMMODE_ApplyProperty(PROPMODE_SET, pUnit, pItem, 0, i, 0, 0, pProperty, nState, 0, 0);
 						}
 					}
 				}
@@ -2796,7 +2790,7 @@ void __stdcall ITEMMODS_AddCraftPropertyList(D2UnitStrc* pItem, D2PropertyStrc* 
 	D2_MAYBE_UNUSED(nUnused);
 	if (pItem)
 	{
-		sub_6FD95810(PROPMODE_UNUSED, NULL, pItem, pProperty, 0, 0, 0, pProperty, 0, STATLIST_MAGIC, NULL);
+		ITEMMODE_ApplyProperty(PROPMODE_UNUSED, NULL, pItem, pProperty, 0, 0, 0, pProperty, 0, STATLIST_MAGIC, NULL);
 	}
 }
 
@@ -3631,71 +3625,35 @@ int __fastcall ITEMMODS_PropertyFunc10(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 //D2Common.0x6FD972E0
-int __fastcall ITEMMODS_PropertyFunc11(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int __fastcall ITEMMODS_SetSkillOnAttack(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* pSecondItem)
 {
-	int nStatValue = 0;
-	int nDivisor = 0;
-	int nMaxLevel = 0;
-	int nLevel = 0;
-	int nTmp = 0;
+	if (pProperty == nullptr || DATATBLS_GetSkillsTxtRecord(pProperty->nLayer) == nullptr)
+		return 0;
 
-	if (pProperty && DATATBLS_GetSkillsTxtRecord(pProperty->nLayer))
+	int32_t nChance = std::max(pProperty->nMin, 0, 5);
+	int32_t nLevel = pProperty->nMax;
+	int32_t nRequiredLevel = SKILLS_GetRequiredLevel(pProperty->nLayer);
+	int32_t nItemLevel = ITEMS_GetItemLevel(pItem);
+	if (nLevel > 0)
 	{
-		nStatValue = pProperty->nMin;
-		if (nStatValue <= 0)
+		if (nLevel < 0)
 		{
-			nStatValue = 5;
+			int32_t nAnvailableLevels = std::max(99 - nRequiredLevel, 1);
+			int32_t nDivisor = std::max(-(nAnvailableLevels / nLevel), 1);
+
+			nLevel = (nItemLevel - nRequiredLevel) / nDivisor;
+			nLevel = std::max(nLevel, 1);
 		}
-
-		nLevel = pProperty->nMax;
-		if (nLevel)
-		{
-			if (nLevel < 0)
-			{
-				nTmp = 99 - SKILLS_GetRequiredLevel(pProperty->nLayer);
-				if (nTmp < 1)
-				{
-					nTmp = 1;
-				}
-
-				nDivisor = -(nTmp / nLevel);
-				if (nDivisor < 1)
-				{
-					nDivisor = 1;
-				}
-
-				nLevel = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(pProperty->nLayer)) / nDivisor;
-				if (nLevel <= 0)
-				{
-					nLevel = 1;
-				}
-			}
-		}
-		else
-		{
-			nLevel = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(pProperty->nLayer)) / 4 + 1;
-
-			nMaxLevel = sgptDataTables->pSkillsTxt[pProperty->nLayer].wMaxLvl;
-			if (nMaxLevel <= 0)
-			{
-				nMaxLevel = 20;
-			}
-
-			if (nLevel <= 1)
-			{
-				nLevel = 1;
-			}
-
-			if (nLevel >= nMaxLevel)
-			{
-				nLevel = nMaxLevel;
-			}
-		}
-
-		return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (nLevel & 63) + (pProperty->nLayer << 6), nStatValue, nState, fStatList, a11);
+	}
+	else
+	{
+		nLevel = (nItemLevel - nRequiredLevel) / 4 + 1;
+		int32_t nMaxLevel = sgptDataTables->pSkillsTxt[pProperty->nLayer].wMaxLvl;
+		nMaxLevel = std::max(nMaxLevel, 20);
+		nLevel = D2Clamp<int32_t>(nLevel, 1, nMaxLevel);
 	}
 
-	return 0;
+	return ITEMMODS_AddPropertyToItemStatList(nType, pUnit, pItem, pProperty, nSet, nStatId, (nLevel & 63) + (pProperty->nLayer << 6), nChance, nState, fStatList, pSecondItem);
 }
 
 //D2Common.0x6FD97430
@@ -3782,176 +3740,83 @@ int __fastcall ITEMMODS_PropertyFunc14(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	return 0;
 }
 
+#define MAX_CHARGES 255
+
 //D2Common.0x6FD975F0
-int __fastcall ITEMMODS_PropertyFunc19(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int32_t __fastcall ITEMMODS_SetChargedSkill(int32_t nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int32_t nSet, int16_t nStatId, int32_t nLayer, int32_t nValue, int32_t nState, int32_t fStatList, D2UnitStrc* pSecondItem)
 {
-	D2StatListStrc* pStatList = NULL;
-	unsigned int nRand = 0;
-	int nRequiredSkillLevel = 0;
-	int nMaxLevel = 0;
-	int nSkillId = 0;
-	int nLevel = 0;
-	int nTemp = 0;
-	int nMin = 0;
-
-	if (!pProperty || !pItem || pItem->dwUnitType != UNIT_ITEM)
-	{
+	if (pProperty == nullptr || pItem == nullptr || pItem->dwUnitType != UNIT_ITEM)
 		return 0;
-	}
 
-	nSkillId = pProperty->nLayer;
-	if (!DATATBLS_GetSkillsTxtRecord(nSkillId))
-	{
+	int32_t nSkillId = pProperty->nLayer;
+	if (DATATBLS_GetSkillsTxtRecord(nSkillId) == nullptr)
 		return 0;
-	}
 
+	int32_t nRequiredSkillLevel = SKILLS_GetRequiredLevel(nSkillId);
+	int32_t nItemLevel = ITEMS_GetItemLevel(pItem);
+	int32_t nMaxCharges = 0;
+	int32_t nSkillLevel = 0;
+	int32_t nMaxLevel = 0;
 	if (pProperty->nMax == 0)
 	{
-		nTemp = (ITEMS_GetItemLevel(pItem) - SKILLS_GetRequiredLevel(nSkillId)) / 4 + 1;
-
-		nMaxLevel = sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl;
-		if (nMaxLevel <= 0)
-		{
-			nMaxLevel = 20;
-		}
-
-		if (nTemp <= 1)
-		{
-			nTemp = 1;
-		}
-
-		if (nTemp >= nMaxLevel)
-		{
-			nLevel = nMaxLevel;
-		}
-		else
-		{
-			nLevel = nTemp;
-		}
+		nMaxCharges = std::max((nItemLevel - nRequiredSkillLevel) / 4 + 1, 1);
+		nMaxLevel = std::max<int32_t>(sgptDataTables->pSkillsTxt[nSkillId].wMaxLvl, 20);
+		nSkillLevel = std::min(nMaxCharges, nMaxLevel);
 	}
 	else if (pProperty->nMax < 0)
 	{
-		nRequiredSkillLevel = SKILLS_GetRequiredLevel(nSkillId);
-
-		nTemp = 99 - nRequiredSkillLevel;
-		if (nTemp < 1)
-		{
-			nTemp = 1;
-		}
-
-		nTemp = -(nTemp / pProperty->nMax);
-		if (nTemp < 1)
-		{
-			nTemp = 1;
-		}
-
-		nLevel = (ITEMS_GetItemLevel(pItem) - nRequiredSkillLevel) / nTemp;
-		if (nLevel <= 0)
-		{
-			nLevel = 1;
-		}
+		nMaxCharges = std::max(99 - nRequiredSkillLevel, 1);
+		nMaxCharges = std::max(-(nMaxCharges / pProperty->nMax), 1);
+		nSkillLevel = std::max((nItemLevel - nRequiredSkillLevel) / nMaxCharges, 1);
 	}
 	else
 	{
-		nLevel = pProperty->nMax;
+		nSkillLevel = pProperty->nMax;
 	}
 
-	nMin = pProperty->nMin;
-	if (!nMin)
+	int32_t nStatValue = pProperty->nMin;
+	if (nStatValue == 0)
 	{
-		nTemp = 5;
+		nMaxCharges = 5;
 	}
 	else
 	{
-		if (nMin < 0)
-		{
-			nMin = nLevel * -nMin / 8 - nMin;
-		}
+		if (nStatValue < 0)
+			nStatValue = nSkillLevel * -nStatValue / 8 - nStatValue;
 
-		if (nMin > 1)
-		{
-			if (nMin >= 255)
-			{
-				nTemp = 255;
-			}
-			else
-			{
-				nTemp = nMin;
-			}
-		}
-		else
-		{
-			nTemp = 1;
-		}
+		nMaxCharges = D2Clamp<int32_t>(nStatValue, 1, MAX_CHARGES);
 	}
 
-	nRand = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTemp - nTemp / 8);
+	uint32_t nCharges = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nMaxCharges - nMaxCharges / 8) + nMaxCharges / 8 + 1;
+	uint16_t nLayer = (nSkillLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff);
+	D2StatListStrc* pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nMaxCharges << 8) + nCharges, nLayer);
 
-	pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nTemp << 8) + ((nRand + nTemp / 8 + 1) & 0xFF), (nLevel & ((uint16_t)sgptDataTables->nShiftedStuff)) + (nSkillId << sgptDataTables->nStuff));
-
-	return nTemp;
+	return nMaxCharges;
 }
 
 //D2Common.0x6FD97830
-int __fastcall ITEMMODS_PropertyFunc18(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
+int32_t __fastcall ITEMMODS_SetByTime(int32_t nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int32_t nSet, int16_t nStatId, int32_t nLayer, int32_t nValue, int32_t nState, int32_t fStatList, D2UnitStrc* pSecondItem)
 {
-	D2StatListStrc* pStatList = NULL;
-	int nPropLayer = 0;
-	int nMin = 0;
-	int nMax = 0;
+	if (pProperty == nullptr)
+		return 0;
 
-	if (pProperty)
+	if (ITEMS_GetItemStatCostTxtRecord(nStatId) != nullptr)
+		return 0;
+
+	int32_t nPeroid = D2Clamp<int32_t>(pProperty->nLayer, 0, 3);
+	int32_t nMin = D2Clamp<int32_t>(pProperty->nMin + 256, 0, 1023);
+	int32_t nMax = D2Clamp<int32_t>(pProperty->nMax + 256, 0, 1023);
+
+	D2_ASSERT(nPeroid >= 0 && nPeroid <= 3);
+	D2_ASSERT(nMin >= 0 && nMin < (1 << ITEM_BYTIME_VAL_BITS));
+	D2_ASSERT(nMax >= 0 && nMax < (1 << ITEM_BYTIME_VAL_BITS));
+
+	D2StatListStrc* pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
+	if (pStatList != nullptr)
 	{
-		if (ITEMS_GetItemStatCostTxtRecord(nStatId))
-		{
-			nPropLayer = pProperty->nLayer;
-			nMin = pProperty->nMin + 256;
-			nMax = pProperty->nMax + 256;
-
-			if (nPropLayer > 0)
-			{
-				if (nPropLayer >= 3)
-				{
-					nPropLayer = 3;
-				}
-			}
-			else
-			{
-				nPropLayer = 0;
-			}
-
-			if (nMin > 0)
-			{
-				if (nMin >= 1023)
-				{
-					nMin = 1023;
-				}
-			}
-			else
-			{
-				nMin = 0;
-			}
-
-			if (nMax > 0)
-			{
-				if (nMax >= 1023)
-				{
-					nMax = 1023;
-				}
-			}
-			else
-			{
-				nMax = 0;
-			}
-
-			pStatList = ITEMMODS_GetOrCreateStatList(pUnit, pItem, nState, fStatList);
-			if (pStatList)
-			{
-				STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPropLayer + 4 * (nMin + (nMax << 10)), 0);
-				return nMax;
-			}
-		}
+		STATLIST_SetStatIfListIsValid(pStatList, nStatId, nPeroid + 4 * (nMin + (nMax << ITEM_BYTIME_VAL_BITS)), 0);
+		return nMax;
 	}
 
 	return 0;
@@ -4305,7 +4170,7 @@ int __fastcall ITEMMODS_PropertyFunc23(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 
 //1.10f:D2Common.0x6FD98160 (#11292)
 //1.11: D2Common.0x6FDA2900 (#10116)
-void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
+void __stdcall ITEMMODS_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
 {
 	D2PropertiesTxt* pPropertiesTxtRecord = NULL;
 	PROPERTYASSIGNFN pfAssign = NULL;
