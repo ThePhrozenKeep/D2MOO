@@ -193,9 +193,9 @@ void __fastcall sub_6FC4D6B0(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStr
     if (ITEMS_GetItemFormat(pItem) >= 100 || !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ARMOR))
     {
         uint32_t nChance = ITEMS_RollRandomNumber(ITEMS_GetItemSeed(pItem)) % 100;
-        if (!(pItemDrop->dwFlags2 & 8))
+        if (!(pItemDrop->dwFlags2 & ITEMDROPFLAG_NOSOCKETS))
         {
-            if (pItemDrop->dwFlags2 & 0x10)
+            if (pItemDrop->dwFlags2 & ITEMDROPFLAG_ALWAYSSOCKETS)
             {
                 nChance = 0;
             }
@@ -227,7 +227,7 @@ void __fastcall sub_6FC4D6B0(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStr
 //D2Game.0x6FC4D800
 void __fastcall ITEMS_MakeEthereal(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
-    if (pItemDrop->dwFlags2 & 2 || (!ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON) && !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_ARMOR)) || !ITEMS_HasDurability(pItem))
+    if (pItemDrop->dwFlags2 & ITEMDROPFLAG_NEVERETH || (!ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON) && !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_ARMOR)) || !ITEMS_HasDurability(pItem))
     {
         return;
     }
@@ -249,7 +249,7 @@ void __fastcall ITEMS_MakeEthereal(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
         bApplyEthereality = 1;
     }
 
-    if (pItemDrop->dwFlags2 & 4 || bApplyEthereality)
+    if (pItemDrop->dwFlags2 & ITEMDROPFLAG_ALWAYSETH || bApplyEthereality)
     {
         ITEMMODS_ApplyEthereality(pItem);
 
@@ -558,7 +558,7 @@ int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pIte
         }
     }
 
-    return (pItemDrop->dwFlags2 & 0x40 | 0x20u) >> 5;
+    return (pItemDrop->dwFlags2 & ITEMDROPFLAG_SUPERIOR) ? ITEMQUAL_SUPERIOR : ITEMQUAL_INFERIOR;
 }
 
 //D2Game.0x6FC4E1A0
@@ -824,7 +824,7 @@ D2UnitStrc* __fastcall sub_6FC4EC10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 }
 
 //D2Game.0x6FC4ED80
-D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, int32_t a3)
+D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, int32_t bUseSeed)
 {    
     if (!pGame->bExpansion)
     {
@@ -851,7 +851,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
 
     ITEMS_SetItemFormat(pItem, pItemDrop->wItemFormat);
 
-    if (a3 || pItemDrop->bForce)
+    if (bUseSeed || pItemDrop->bForce)
     {
         pItem->dwInitSeed = pItemDrop->dwSeed;
         SEED_InitLowSeed(&pItem->pSeed, pItemDrop->dwSeed);
@@ -1213,7 +1213,7 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoom
     itemDrop.pRoom = pTargetRoom;
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.nItemLvl = nItemLevel;
-    itemDrop.dwFlags2 |= 0x40u;
+    itemDrop.dwFlags2 |= ITEMDROPFLAG_SUPERIOR;
     itemDrop.pGame = pGame;
     itemDrop.nSpawnType = 3;
     itemDrop.nX = coords1.nX;
@@ -1284,7 +1284,7 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoo
     itemDrop.pRoom = pTargetRoom;
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.nItemLvl = nItemLevel;
-    itemDrop.dwFlags2 |= 0x40u;
+    itemDrop.dwFlags2 |= ITEMDROPFLAG_SUPERIOR;
     itemDrop.pGame = pGame;
     itemDrop.nSpawnType = 3;
     itemDrop.nX = coords1.nX;
@@ -1456,7 +1456,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC501A0
-D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t us1, int32_t alw1, int32_t nItemLevel, int32_t us0, int32_t a1, int32_t alw0)
+D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t bNoSockets, int32_t bNoEthereal, int32_t nItemLevel, int32_t bUseSeed, int32_t dwSeed, int32_t dwItemSeed)
 {
     nItemLevel = std::max(nItemLevel, 1);
 
@@ -1472,9 +1472,9 @@ D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32
     itemDrop.nY = 0;
     itemDrop.pRoom = nullptr;
     itemDrop.wUnitInitFlags = 1;
-    itemDrop.dwFlags2 |= (alw1 != 0 ? 2 : 0) | (us1 != 0 ? 8 : 0);
-    itemDrop.dwSeed = a1;
-    itemDrop.dwItemSeed = alw0;
+    itemDrop.dwFlags2 |= (bNoEthereal != 0 ? ITEMDROPFLAG_NEVERETH : 0) | (bNoSockets != 0 ? ITEMDROPFLAG_NOSOCKETS : 0);
+    itemDrop.dwSeed = dwSeed;
+    itemDrop.dwItemSeed = dwItemSeed;
 
     if (nItemLevel == -1)
     {
@@ -1487,7 +1487,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32
 
     itemDrop.nItemLvl = std::max(itemDrop.nItemLvl, 1);
 
-    D2UnitStrc* pItem = D2GAME_CreateItemEx_6FC4ED80(pGame, &itemDrop, us0);
+    D2UnitStrc* pItem = D2GAME_CreateItemEx_6FC4ED80(pGame, &itemDrop, bUseSeed);
     if (pItem)
     {
         ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 1);
@@ -2524,7 +2524,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 
                             if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->dwClassId == MONSTER_HELLBOVINE)
                             {
-                                itemDrop.dwFlags2 = 1;
+                                itemDrop.dwFlags2 = ITEMDROPFLAG_HELLBOVINE;
                             }
 
                             itemDrop.dwFlags2 |= nFlags;
@@ -2734,7 +2734,7 @@ void __fastcall sub_6FC52410(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
     const int32_t nItemLevel = pItemDrop->nItemLvl;
     if (ITEMS_GetItemFormat(pUnit) != 0)
     {
-        sub_6FC52650(pUnit, nItemLevel, nSkillId, nSkillCount, pItemDrop->dwFlags2 & 0x20 ? pItemDrop->nItemLvl : 0);
+        sub_6FC52650(pUnit, nItemLevel, nSkillId, nSkillCount, pItemDrop->dwFlags2 & ITEMDROPFLAG_STAFFMODUSEILVL ? pItemDrop->nItemLvl : 0);
     }
     else
     {

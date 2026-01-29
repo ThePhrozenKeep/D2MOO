@@ -777,20 +777,20 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
                     if (!(pCubeOutput->wItemFlags & CUBEFLAG_OUT_SOCKET) || pCubeOutput->nQuantity)
                     {
-                        pItemDrop.dwFlags2 |= 8;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_NOSOCKETS;
                     }
                     else
                     {
-                        pItemDrop.dwFlags2 |= 0x10;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_ALWAYSSOCKETS;
                     }
 
                     if (!(pCubeOutput->wItemFlags & CUBEFLAG_OUT_ETHEREAL))
                     {
-                        pItemDrop.dwFlags2 |= 2;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_NEVERETH;
                     }
                     else
                     {
-                        pItemDrop.dwFlags2 |= 4;
+                        pItemDrop.dwFlags2 |= ITEMDROPFLAG_ALWAYSETH;
                     }
 
                     pOutputs[nCounter] = D2GAME_CreateItemEx_6FC4ED80(pGame, &pItemDrop, 0);
