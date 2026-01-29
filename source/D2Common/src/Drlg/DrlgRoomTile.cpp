@@ -437,7 +437,8 @@ void __fastcall DRLGROOMTILE_InitTileShadow(D2DrlgRoomStrc* pDrlgRoom, int nX, i
 	DRLGROOMTILE_InitShadowTileData(pDrlgRoom, nullptr, nX, nY, nPackedTileInformation, DRLGROOMTILE_GetTileCache(pDrlgRoom, TILETYPE_SHADOW, nPackedTileInformation));
 }
 
-//D2Common.0x6FD89000
+//1.10: D2Common.0x6FD89000
+//1.14d: 0x0066E9B0
 void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pTilePackedInfoGrid, D2DrlgGridStrc* pTileTypeGrid, BOOL bFillBlanks, BOOL bKillEdgeX, BOOL bKillEdgeY)
 {
 	void* pMemPool = pDrlgRoom->pLevel->pDrlg->pMempool;
@@ -581,7 +582,12 @@ void __fastcall DRLGROOMTILE_LoadInitRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2Drlg
 				{
 					D2TileLibraryEntryStrc* pTileCache = DRLGROOMTILE_GetTileCache(pDrlgRoom, nTileType, nTileInformation.nPackedValue);
 					D2DrlgTileDataStrc* pWallTileData = DRLGROOMTILE_InitWallTileData(pDrlgRoom, nullptr, nTilePosX, nTilePosY, nTileInformation.nPackedValue, pTileCache, nTileType);
+#ifdef D2_VERSION_HAS_UBERS
+					if ((nTileType == TILETYPE_WALL_RIGHT_EXIT || nTileType == TILETYPE_WALL_LEFT_EXIT)
+					&& pDrlgRoom->pLevel->nLevelId != LEVEL_PANDEMONIUMRUN1)
+#else
 					if (nTileType == TILETYPE_WALL_RIGHT_EXIT || nTileType == TILETYPE_WALL_LEFT_EXIT)
+#endif
 					{
 						DRLGROOMTILE_LoadWallWarpTiles(pDrlgRoom, pWallTileData, nTileInformation.nPackedValue, nTileType);
 					}

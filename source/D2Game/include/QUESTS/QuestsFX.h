@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GAME/Game.h>
 #include <Units/Units.h>
 
 
@@ -19,3 +20,7 @@ void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc
 void __fastcall QUESTSFX_Izual(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCB9A40
 void __fastcall QUESTSFX_ShenkTheOverseer(D2GameStrc* pGame, D2UnitStrc* pUnit);
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x005E0070
+void __fastcall QUESTSFX_UberPrimeEvil(D2GameStrc* pGame, D2UnitStrc* pUnit);
+#endif

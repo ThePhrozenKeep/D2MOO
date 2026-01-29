@@ -1908,6 +1908,133 @@ int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	return 0;
 }
 
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x00594270
+int32_t __fastcall ACT1Q4_CreateUberRunPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+
+	if (pGame->bUberPortalRuns[0] && pGame->bUberPortalRuns[1] && pGame->bUberPortalRuns[2])
+	{
+		SUNIT_AttachSound(pUnit, 20, pUnit);
+		return 0;
+	}
+
+	int32_t nLevelId;
+	int32_t nRand = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 3);
+	if (nRand == 0)
+	{
+		if (!pGame->bUberPortalRuns[0])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN1;
+		}
+		else if (!pGame->bUberPortalRuns[1])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN2;
+		}
+		else
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN3;
+		}
+	}
+	else if (nRand == 1)
+	{
+		if (!pGame->bUberPortalRuns[1])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN2;
+		}
+		else if (!pGame->bUberPortalRuns[2])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN3;
+		}
+		else
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN1;
+		}
+	}
+	else
+	{
+		if (!pGame->bUberPortalRuns[2])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN3;
+		}
+		else if (!pGame->bUberPortalRuns[0])
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN1;
+		}
+		else
+		{
+			nLevelId = LEVEL_PANDEMONIUMRUN2;
+		}
+	}
+
+	if (pRoom
+	&& DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_HARROGATH
+	&& pGame->nDifficulty == 2)
+	{
+		D2CoordStrc pCoord;
+		D2ActiveRoomStrc* pFreeRoom = nullptr;
+		UNITS_GetCoords(pUnit, &pCoord);
+		QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
+		D2UnitStrc* pPortal;
+		if (pFreeRoom
+		&& D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pFreeRoom, pCoord.nX, pCoord.nY, nLevelId, &pPortal, OBJECT_PERMANENT_TOWN_PORTAL, 0))
+		{
+			if (pPortal && pPortal->dwUnitType == UNIT_OBJECT)
+			{
+				pPortal->pObjectData->InteractType = nLevelId;
+			}
+			switch (nLevelId)
+			{
+			case LEVEL_PANDEMONIUMRUN1:
+				pGame->bUberPortalRuns[0] = 1;
+				break;
+			case LEVEL_PANDEMONIUMRUN2:
+				pGame->bUberPortalRuns[1] = 1;
+				break;
+			case LEVEL_PANDEMONIUMRUN3:
+				pGame->bUberPortalRuns[2] = 1;
+				break;
+			}
+			return 1;
+		}
+	}
+
+	SUNIT_AttachSound(pUnit, 20, pUnit);
+	return 0;
+}
+
+//1.14d: 0x00594280
+int32_t __fastcall ACT1Q4_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	if (pRoom
+	&& DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_HARROGATH
+	&& pGame->nDifficulty == 2
+	&& !pGame->bUberPortalFinale)
+	{
+		D2CoordStrc pCoord;
+		D2ActiveRoomStrc* pFreeRoom = nullptr;
+		UNITS_GetCoords(pUnit, &pCoord);
+		QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4/*, 100*/);
+		D2UnitStrc* pPortal;
+		if (pFreeRoom
+		&& D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pFreeRoom, pCoord.nX, pCoord.nY, LEVEL_PANDEMONIUMFINALE, &pPortal, OBJECT_PERMANENT_TOWN_PORTAL, 0))
+		{
+			if (pPortal && pPortal->dwUnitType == UNIT_OBJECT)
+			{
+				pPortal->pObjectData->InteractType = LEVEL_PANDEMONIUMFINALE;
+			}
+			pGame->bUberPortalFinale = 1;
+			return 1;
+		}
+	}
+
+	SUNIT_AttachSound(pUnit, 20, pUnit);
+	return 0;
+}
+#endif
+
 //D2Game.0x6FC9C6E0
 void __fastcall OBJECTS_InitFunction61_CainPortal(D2ObjInitFnStrc* pOp)
 {

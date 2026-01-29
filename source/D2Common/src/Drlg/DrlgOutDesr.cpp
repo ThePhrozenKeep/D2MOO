@@ -40,7 +40,8 @@ void __fastcall DRLGOUTDESR_PlaceDesertTransitionToTown(D2DrlgLevelStrc* pLevel)
 	}
 }
 
-//D2Common.0x6FD7D430
+//1.10: D2Common.0x6FD7D430
+//1.14d: 0x0067F980
 void __fastcall DRLGOUTDESR_InitAct2OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {
 	const int nLevelPrestIds1[] = { LVLPREST_ACT2_DESERT_OASIS_1, LVLPREST_ACT2_DESERT_RUINS_08X08, LVLPREST_ACT2_DESERT_FILL_BONE_1, LVLPREST_ACT2_DESERT_FILL_BONE_2, LVLPREST_ACT2_DESERT_FILL_HEAD_1, LVLPREST_ACT2_DESERT_FILL_MESA_1, LVLPREST_ACT2_DESERT_FILL_WAGON_1 };
@@ -101,6 +102,15 @@ void __fastcall DRLGOUTDESR_InitAct2OutdoorLevel(D2DrlgLevelStrc* pLevel)
 		DRLGOUTDOORS_SpawnAct12Shrines(pLevel, 5);
 		DRLGOUTDESR_PlaceFillsInCanyon(pLevel);
 		break;
+
+#ifdef D2_VERSION_HAS_UBERS
+	case LEVEL_PANDEMONIUMRUN2:
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 4, 4, LVLPREST_ACT2_DESERT_VALLEY_WARP, -1, 0);
+		DRLGOUTDESR_PlaceBorders(pLevel);
+		DRLGOUTDESR_PlaceFillsInCanyon(pLevel);
+		DRLGOUTDOORS_SpawnAct12Shrines(pLevel, 5);
+		break;
+#endif
 
 	default:
 		return;

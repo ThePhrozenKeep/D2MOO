@@ -96,6 +96,322 @@ void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	AITACTICS_Idle(pGame, pUnit, 25);
 }
 
+#ifdef D2_VERSION_HAS_UBERS
+//Inlined
+int32_t __fastcall AIBAAL_RollRandomUberAiParamForNonCollidingUnit(D2GameStrc* pGame, D2AiControlStrc* pAiControl, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nCount, int32_t bInMediumRange, int32_t bInFarRange, int32_t bInCloseRange, int32_t nMax)
+{
+	// UBER TWEAK START
+	int32_t aiParams[16] = { 0, 0, 80, 5, 0, 0, 20, 0, 10, 10, 0, 70, 80, 60, 80, 0 };
+	// UBER TWEAK END
+
+	aiParams[15] = 10 * (2 - pAiControl->dwAiParam[1]);
+	if (aiParams[15] < 0)
+	{
+		aiParams[15] = 0;
+	}
+
+	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget);
+	if (nDistance > 35)
+	{
+		// UBER TWEAK START
+		aiParams[6] = 30;
+		// UBER TWEAK END
+		aiParams[13] = 0;
+	}
+
+	if (nDistance > 25)
+	{
+		// UBER TWEAK START
+		aiParams[14] = 180;
+		// UBER TWEAK END
+		aiParams[11] = 0;
+	}
+
+	if (nCount < 2)
+	{
+		aiParams[11] -= 10;
+	}
+
+	if (nCount > 3)
+	{
+		aiParams[13] += 25;
+	}
+
+	if (nMax > 60)
+	{
+		// UBER TWEAK START
+		aiParams[8] = 40;
+		// UBER TWEAK END
+	}
+
+	D2PlayerCountBonusStrc playerCountBonus = {};
+	MONSTER_GetPlayerCountBonus(pGame, &playerCountBonus, UNITS_GetRoom(pUnit), pUnit);
+
+	if (nCount < 2 && playerCountBonus.nDifficulty < 2)
+	{
+		aiParams[8] = 0;
+	}
+
+	// UBER TWEAK START
+	if (AI_CheckSpecialSkillsOnPrimeEvil(pTarget))
+	{
+		if (!bInMediumRange)
+		{
+			aiParams[6] += 30;
+			aiParams[11] += 10;
+			aiParams[14] += 100;
+		}
+	}
+
+	if (bInMediumRange)
+	{
+		aiParams[2] = 0;
+		aiParams[6] += 25;
+		aiParams[14] += 100;
+	}
+
+	if (bInFarRange)
+	{
+		aiParams[14] += 100;
+	}
+	// UBER TWEAK END
+
+	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+}
+
+//Inlined
+int32_t __fastcall AIBAAL_RollRandomUberAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2UnitStrc* pTarget, int32_t nMax, int32_t nCount, D2AiCmdStrc* pAiCmd)
+{
+	if (pAiControl->dwAiParam[0])
+	{
+		return pAiControl->dwAiParam[0];
+	}
+
+	if (!pTarget)
+	{
+		if (COLLISION_CheckAnyCollisionWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 2, COLLIDE_MISSILE))
+		{
+			return 4;
+		}
+		else
+		{
+			return 8 * ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < 8) + 1;
+		}
+	}
+
+	if (!pGame)
+	{
+		pGame = pUnit->pGame;
+	}
+
+	int32_t bInCloseRange = 0;
+	if (pTarget->dwUnitType == UNIT_PLAYER)
+	{
+		D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, PLAYER_GetUniqueIdFromPlayerData(pTarget));
+		if (pObject && DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pObject)) == LEVEL_THEWORLDSTONECHAMBER)
+		{
+			// UBER TWEAK START
+			if (!pAiCmd)
+			{
+				bInCloseRange = 0;
+			}
+			// UBER TWEAK END
+		}
+	}
+
+	int32_t bInMediumRange = 0;
+	int32_t bInFarRange = 0;
+	if (pAiCmd)
+	{
+		// UBER TWEAK START
+		const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
+		// UBER TWEAK END
+		if (nDistance > 75)
+		{
+			bInMediumRange = 1;
+		}
+
+		if (nDistance > 100)
+		{
+			bInFarRange = 1;
+		}
+	}
+
+	const int32_t bInMeleeRange = UNITS_IsInMeleeRange(pUnit, pTarget, 0);
+	const int32_t bNotCollidingWithWall = UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_MISSILE_BARRIER) == 0;
+	if (bInMeleeRange)
+	{
+		// UBER TWEAK START
+		int32_t aiParams[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 20, 10, 150, 10, 10, 70, 0, 0 };
+		// UBER TWEAK END
+
+		if (UNITS_GetCurrentLifePercentage(pTarget) < 33)
+		{
+			aiParams[10] += 50;
+		}
+
+		aiParams[1] += 100 - UNITS_GetCurrentLifePercentage(pUnit);
+
+		if (STATES_CheckState(pTarget, STATE_COLD))
+		{
+			aiParams[8] = 0;
+			aiParams[13] = 0;
+			aiParams[11] = 0;
+		}
+
+		if (!bNotCollidingWithWall)
+		{
+			aiParams[11] = 0;
+			aiParams[13] = 0;
+			aiParams[12] = 0;
+		}
+
+		return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	}
+
+	if (bNotCollidingWithWall)
+	{
+		return AIBAAL_RollRandomUberAiParamForNonCollidingUnit(pGame, pAiControl, pUnit, pTarget, nCount, bInMediumRange, bInFarRange, bInCloseRange, nMax);
+	}
+
+	// UBER TWEAK START
+	int32_t aiParams[16] = { 0, 0, 50, 0, 0, 0, 20, 0, 10, 10, 0, 0, 0, 0, 100, 0 };
+	// UBER TWEAK END
+
+	if (nCount < 2)
+	{
+		// UBER TWEAK START
+		aiParams[2] = 75;
+		// UBER TWEAK END
+		aiParams[10] = 25;
+	}
+
+	// UBER TWEAK START
+	if (AI_CheckSpecialSkillsOnPrimeEvil(pTarget))
+	{
+		if (!bInMediumRange)
+		{
+			aiParams[14] += 50;
+			aiParams[13] += 50;
+		}
+	}
+
+	if (bInMediumRange)
+	{
+		aiParams[2] = 0;
+		aiParams[6] = 0;
+		aiParams[14] += 100;
+		aiParams[11] += 25;
+		aiParams[13] += 25;
+	}
+
+	if (bInFarRange)
+	{
+		aiParams[14] += 100;
+	}
+	// UBER TWEAK END
+
+	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+}
+
+//1.14d: 0x005FD0F0
+void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
+{
+	D2CoordStrc coord;
+	coord.nX = CLIENTS_GetUnitX(pUnit);
+	coord.nY = CLIENTS_GetUnitY(pUnit);
+
+	const int32_t nMinionTypes[3] = { MONSTER_WRAITH9, MONSTER_VAMPIRE9, MONSTER_WILLOWISP8 };
+	const int32_t nMinionModes[3] = { MONMODE_NEUTRAL, MONMODE_CAST, MONMODE_SKILL1 };
+	// Note: doesn't pick willow wisps (they thought it was too hard?)
+	// change the 2 to 3 to enable them
+	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 2);
+
+	D2ActiveRoomStrc* pRoom = COLLISION_GetFreeCoordinates(UNITS_GetRoom(pUnit), &coord, 2, COLLIDE_MONSTER, 0);
+	if (pRoom)
+	{
+		D2UnitStrc* pMinion = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, coord.nX, coord.nY, nMinionTypes[nChoice], nMinionModes[nChoice], -1, 0);
+		if (pMinion)
+		{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+			pMinion->dwFlags |= UNITFLAG_NOXP; // Added in 1.13
+#endif
+			STATES_ToggleState(pMinion, STATE_UBERMINION, TRUE);
+		}
+	}
+}
+
+//1.14d: 0x005FD200
+void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+{
+	int32_t nCount = 0;
+	int32_t nMax = 0;
+
+	D2UnitStrc* pTarget = AIBAAL_GetTarget(pGame, pUnit, &nMax, &nCount, nullptr, AIBAAL_CullPotentialTargets);
+
+	// UBER TWEAK START
+	D2UbersAiCallbackArgStrc arg_target = {};
+	arg_target.nDistance = INT_MAX;
+	sub_6FCF1E80(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
+	BOOL bAlone = (arg_target.nUberDiablo == 0 && arg_target.nUberMephisto == 0);
+	if (bAlone && pTarget)
+	{
+		D2UbersAiCallbackArgStrc arg_self = {};
+		arg_self.nDistance = INT_MAX;
+		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
+		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
+	}
+	if ((bAlone && arg_target.nBaalMinions < 15 && SEED_RollPercentage(&pUnit->pSeed) < 45)
+	|| (arg_target.nBaalMinions < 7 && SEED_RollPercentage(&pUnit->pSeed) < 30))
+	{
+		AIBAAL_SpawnUberBaalMinion(pGame, pUnit);
+	}
+
+	if (pAiTickParam->pMonstatsTxt->nSkill[7] >= 0)
+	{
+		D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pAiTickParam->pMonstatsTxt->nSkill[7]);
+		if (pSkillsTxtRecord
+		&& pSkillsTxtRecord->nAuraState >= 0
+		&& !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[7], pAiTickParam->pMonstatsTxt->nSkill[7], 0, 0, 0);
+			return;
+		}
+	}
+	// UBER TWEAK END
+
+	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
+	if (!pAiCmd)
+	{
+		D2AiCmdStrc aiCmd = {};
+		aiCmd.nCmdParam[0] = 10;
+		aiCmd.nCmdParam[1] = CLIENTS_GetUnitX(pUnit);
+		aiCmd.nCmdParam[2] = CLIENTS_GetUnitY(pUnit);
+		AIGENERAL_CopyAiCommand(pGame, pUnit, &aiCmd);
+		pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
+	}
+
+	int32_t nParam = AIBAAL_RollRandomUberAiParam(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nMax, nCount, pAiCmd);
+
+	// UBER TWEAK START
+	if (!pTarget)
+	{
+		return;
+	}
+	if (UNITS_TestCollisionWithUnit(pUnit, pTarget, COLLIDE_VISIBLE | COLLIDE_MISSILE_BARRIER))
+	{
+		const int32_t nX = CLIENTS_GetUnitX(pTarget);
+		const int32_t nY = CLIENTS_GetUnitY(pTarget);
+		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[4], pAiTickParam->pMonstatsTxt->nSkill[4], 0, nX, nY);
+		return;
+	}
+	// UBER TWEAK END
+
+	AIBAAL_MainSkillHandler(pGame, pUnit, pAiTickParam->pAiControl, pTarget, nParam, pAiCmd);
+	AITACTICS_Idle(pGame, pUnit, 25);
+}
+#endif
+
 //D2Game.0x6FCCD630
 D2UnitStrc* __fastcall AIBAAL_GetTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pMax, int32_t* pCount, void* pArgs, int32_t(__fastcall* pfCull)(D2UnitStrc*, D2UnitStrc*))
 {
@@ -284,7 +600,8 @@ int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget,
 	return nTotalScore;
 }
 
-//D2Game.0x6FCCDBB0
+//1.10: D2Game.0x6FCCDBB0
+//1.14d: 0x005FC000
 int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pTarget)
 {
 	D2_ASSERT(pBaal);
@@ -292,7 +609,11 @@ int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pT
 
 	if (pBaal->nAct == pTarget->nAct)
 	{
+#ifdef D2_VERSION_HAS_UBERS
+		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 1020;
+#else
 		return AIUTIL_GetDistanceToCoordinates_NoUnitSize(pTarget, CLIENTS_GetUnitX(pBaal), CLIENTS_GetUnitY(pBaal)) < 55;
+#endif
 	}
 
 	return 0;
@@ -623,7 +944,8 @@ int32_t __fastcall AIBAAL_RollRandomAiParamForNonCollidingUnit(D2GameStrc* pGame
 	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
 }
 
-//D2Game.0x6FCCE450
+//1.10: D2Game.0x6FCCE450
+//1.14d: 0x005FCB60
 void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2UnitStrc* pTarget, int32_t nParam, D2AiCmdStrc* pAiCmd)
 {
 	if (!pUnit)
@@ -741,6 +1063,14 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		const int32_t nDistance = std::max(UNITS_GetDistanceToOtherUnit(pUnit, pTarget), 1);
 		int32_t nFinalX = nX + (25 * (nX - nTargetX)) / nDistance;
 		int32_t nFinalY = nY + (25 * (nY - nTargetY)) / nDistance;
+
+#ifdef D2_VERSION_HAS_UBERS
+		if (pUnit->dwClassId == MONSTER_UBERBAAL)
+		{
+			AITACTICS_UseSkill(pGame, pUnit, pMonstatsTxtRecord->nSkillMode[4], pMonstatsTxtRecord->nSkill[4], 0, nTargetX, nTargetY);
+			return;
+		}
+#endif
 
 		if (sub_6FC66260(pGame, UNITS_GetRoom(pUnit), 0, pUnit->dwClassId, &nFinalX, &nFinalY, 0))
 		{
