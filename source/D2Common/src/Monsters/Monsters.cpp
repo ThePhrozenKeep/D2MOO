@@ -944,7 +944,9 @@ int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, 
 	return -1;
 }
 
-//D2Common.0x6FDA5B30 (#11061)
+//1.10f: D2Common.0x6FDA5B30 (#11061)
+//1.11: D2Common.0x6FD64390 (#10452)
+//1.14d: 0x0063EFA0
 void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* pX, int* pY, int* pSpawnMode, int nDifficulty, int(__fastcall* pfSpawnClassCallback)(D2UnitStrc*))
 {
 	int nChainId = 0;
@@ -1016,7 +1018,18 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 		break;
 
 	case MONSTER_EVILHOLE1:
+#ifdef D2_VERSION_HAS_UBERS
+		if (pMonster && pMonster->dwClassId == MONSTER_DEMONHOLE)
+		{
+			*pId = MONSTERS_ValidateMonsterId(MONSTER_MEGADEMON6);
+		}
+		else
+		{
+			*pId = MONSTERS_ValidateMonsterId(MONSTER_FALLEN1);
+		}
+#else
 		*pId = MONSTERS_ValidateMonsterId(MONSTER_FALLEN1);
+#endif
 
 		UNITS_GetCoords(pMonster, &pCoords);
 

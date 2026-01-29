@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GAME/Game.h>
 #include <Units/Units.h>
 #include <Drlg/D2DrlgPreset.h>
 

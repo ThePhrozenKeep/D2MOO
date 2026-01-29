@@ -1801,7 +1801,8 @@ D2ActiveRoomStrc* __fastcall COLLISION_GetFreeCoordinatesImpl(D2ActiveRoomStrc* 
 	return COLLISION_GetRoomBySubTileCoordinates(v10, ptSpawnPoint->nX, ptSpawnPoint->nY);
 }
 
-//D2Common.0x6FD46280 (#10134)
+//1.10f:D2Common.0x6FD46280 (#10134)
+//1.11: D2Common.0x? (#10180)
 D2ActiveRoomStrc* __stdcall COLLISION_GetFreeCoordinates(D2ActiveRoomStrc* pRoom, D2CoordStrc* pSpawnPoint, int nUnitSize, unsigned int nMask, BOOL bAllowNeighborRooms)
 {
 	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, NULL, nUnitSize, nMask, nMask, bAllowNeighborRooms, 50, 1);

@@ -19,7 +19,8 @@ static_assert(DRLGROOMFLAG_HAS_WARP_0 == (1 << DRLGROOMFLAG_HAS_WARP_FIRST_BIT),
 static_assert(DRLGROOMFLAG_SUBSHRINE_ROW1 == (1 << DRLGROOMFLAG_SUBSHRINE_ROWS_FIRST_BIT), "Subshrines first bit must match of DRLGROOMFLAG_SUBSHRINE_ROW1");
 static_assert(DRLGROOMFLAG_HAS_WAYPOINT == (1 << DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT), "Waypoint first bit must match of DRLGROOMFLAG_HAS_WAYPOINT");
 
-//D2Common.0x6FD74120 (#10014)
+//1.10f: D2Common.0x6FD74120 (#10014)
+//1.11:  D2Common.0x6FDC7AA0 (#11155)
 D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
 	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_POOL(pAct->pMemPool, D2DrlgStrc);
@@ -400,7 +401,8 @@ void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 	}
 }
 
-//D2Common.0x6FD748D0 (#10013)
+//1.10f: D2Common.0x6FD748D0 (#10013)
+//1.11:  D2Common.0x6FDC74A0 (#10204)
 D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 {
 	D2DrlgLevelStrc* pLevel = D2_CALLOC_STRC_POOL(pDrlg->pMempool, D2DrlgLevelStrc);

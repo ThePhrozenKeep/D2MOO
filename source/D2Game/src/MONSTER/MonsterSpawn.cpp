@@ -11,14 +11,18 @@
 #include <DataTbls/SkillsIds.h>
 #include <D2Skills.h>
 #include <D2StatList.h>
+#include <D2States.h>
 
 
 #include "AI/AiGeneral.h"
 #include "GAME/Clients.h"
 #include "ITEMS/Items.h"
+#include "MONSTER/Monster.h"
 #include "MONSTER/MonsterAI.h"
 #include "MONSTER/MonsterMode.h"
 #include "MONSTER/MonsterRegion.h"
+#include "MONSTER/MonsterUnique.h"
+#include "QUESTS/Quests.h"
 #include "SKILLS/SkillAss.h"
 #include "UNIT/SUnit.h"
 
@@ -250,7 +254,8 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     return D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
 }
 
-//D2Game.0x6FC68E30) --------------------------------------------------------
+//1.10f:D2Game.0x6FC68E30) --------------------------------------------------------
+//1.11: D2Game.0x6FCE79E0
 D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate)
 {
     return nullptr;
@@ -761,221 +766,12 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            }
 //            if (!(v90 & 2))
 //            {
-//                v64 = v58->nMonsterId;
-//                v65 = v58->pGame;
-//                if (v64 >= 0)
-//                {
-//                    if (v64 < sgptDataTables->nMonStatsTxtRecordCount)
-//                    {
-//                        v66 = &sgptDataTables->pMonStatsTxt[v64];
-//                        if (v66)
-//                            v64 = v66->nBaseId;
-//                    }
-//                    if (v64 >= 0 && v64 < sgptDataTables->nMonStatsTxtRecordCount)
-//                    {
-//                        if (v64 > MONSTER_BONEPRISON4)
-//                        {
-//                            switch (v64)
-//                            {
-//                            case MONSTER_TRAP_MELEE:
-//                                goto LABEL_148;
-//                            case MONSTER_ANCIENTBARB1:
-//                            case MONSTER_ANCIENTBARB2:
-//                            case MONSTER_ANCIENTBARB3:
-//                                goto LABEL_150;
-//                            default:
-//                                goto LABEL_152;
-//                            case MONSTER_SUICIDEMINION1:
-//                                v77 = 0;
-//                                v75 = MONUMOD_FREEZINDEATH;
-//                                break;
-//                            case MONSTER_REANIMATEDHORDE1:
-//                                v77 = 0;
-//                                v75 = MONUMOD_SELFRESURRECT;
-//                                break;
-//                            case MONSTER_FROZENHORROR1:
-//                                v77 = 0;
-//                                v75 = MONUMOD_ICESHATTERDEATH;
-//                                break;
-//                            }
-//                        }
-//                        else
-//                        {
-//                            if (v64 >= MONSTER_BONEPRISON1)
-//                            {
-//                                v77 = 0;
-//                                v75 = MONUMOD_KILLMINIONSDEATH;
-//                            }
-//                            else
-//                            {
-//                                if (v64 > MONSTER_MUMMY1)
-//                                {
-//                                    if (v64 == MONSTER_DURIEL)
-//                                    {
-//                                        D2GAME_BOSSES_AssignUMod_6FC6FF10(v65, v60, 11, 0);
-//LABEL_150:
-//                                        v77 = 1;
-//                                        v75 = MONUMOD_QUESTMOD;
-//                                    }
-//                                    else
-//                                    {
-//                                        if (v64 <= MONSTER_EVILHOLE5 || v64 > MONSTER_TRAP_LIGHTNING)
-//                                            goto LABEL_152;
-//LABEL_148:
-//                                        v77 = 0;
-//                                        v75 = MONUMOD_SPCDAMAGE;
-//                                    }
-//                                }
-//                                else
-//                                {
-//                                    if (v64 == MONSTER_MUMMY1)
-//                                    {
-//                                        v77 = 0;
-//                                        v75 = MONUMOD_POISDEATH;
-//                                    }
-//                                    else
-//                                    {
-//                                        if (v64 == MONSTER_BRUTE2)
-//                                        {
-//                                            v77 = 0;
-//                                            v75 = MONUMOD_IGNOREAC;
-//                                        }
-//                                        else
-//                                        {
-//                                            if (v64 != MONSTER_SCARAB1)
-//                                                goto LABEL_152;
-//                                            v77 = 0;
-//                                            v75 = MONUMOD_CHARGEDBOLTS;
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        D2GAME_BOSSES_AssignUMod_6FC6FF10(v65, v60, v75, v77);
-//                    }
-//                }
+//                MONSTERSPAWN_SetupNormalMods(v58, v60)
 //            }
-//LABEL_152:
-//            v67 = v85->nMonsterId;
-//            v68 = v85->pGame;
-//            v69 = v85->pRoom;
-//            v70 = MONSTERMODE_GetMonStatsTxtRecord(v85->nMonsterId);
-//            if (v70)
-//                v71 = v70->nBaseId;
-//            else
-//                v71 = v67;
-//            if (v71 >= 0 && v71 < sgptDataTables->nMonStatsTxtRecordCount)
-//            {
-//                if (v71 > MONSTER_FIREGOLEM)
-//                {
-//                    switch (v71)
-//                    {
-//                    case MONSTER_SMITH:
-//                        goto LABEL_172;
-//                    default:
-//                        goto LABEL_174;
-//                    case MONSTER_COMPELLINGORB:
-//                        QUESTS_CreateChainRecord(v68, v60, 19);
-//                        MONSTERUNIQUE_ToggleUnitFlag(v60, 0x20000u, 1);
-//                        goto LABEL_172;
-//                    case MONSTER_NIHLATHAKBOSS:
-//                        v78 = 34;
-//                        goto LABEL_171;
-//                    case MONSTER_BAALCRAB:
-//                        v78 = 36;
-//LABEL_171:
-//                        QUESTS_CreateChainRecord(v68, v60, v78);
-//                        goto LABEL_172;
-//                    case MONSTER_ANCIENTBARB1:
-//                        MONSTERSPAWN_EquipAncientBarbarians(v60);
-//                        v79 = 1;
-//                        v76 = 41;
-//                        goto LABEL_173;
-//                    case MONSTER_BONEPRISON1:
-//                    case MONSTER_BONEPRISON2:
-//                    case MONSTER_BONEPRISON3:
-//                    case MONSTER_BONEPRISON4:
-//                        MONSTERUNIQUE_ToggleUnitFlag(v60, 0x20000u, 1);
-//                        break;
-//                    case MONSTER_HEPHASTO:
-//                        QUESTS_CreateChainRecord(v68, v60, 24);
-//                        break;
-//                    case MONSTER_FETISH11:
-//                        QUESTS_CreateChainRecord(v68, v60, 17);
-//                        break;
-//                    case MONSTER_PRISONDOOR:
-//                        QUESTS_CreateChainRecord(v68, v60, 32);
-//                        break;
-//                    }
-//                    goto LABEL_174;
-//                }
-//                if (v71 == MONSTER_FIREGOLEM)
-//                {
-//                    v79 = 0;
-//                    v76 = 31;
-//LABEL_173:
-//                    D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, v76, v79);
-//LABEL_174:
-//                    if (!(v90 & 0x40))
-//                        sub_6FC69C00((int32_t)v85, v60);
-//                    return v60;
-//                }
-//            }
-//            else
-//            {
-//                v71 = -1;
-//            }
-//            switch (v71)
-//            {
-//            case MONSTER_DURIEL:
-//                QUESTS_CreateChainRecord(v68, v60, 13);
-//                QUESTS_CreateChainRecord(v68, v60, 9);
-//                goto LABEL_174;
-//            case MONSTER_WARRIV2:
-//                v72 = (uint8_t)(((sgptDataTables->nMonStatsTxtRecordCount <= 175) - 1) & 176) - 1;
-//                v73 = CLIENTS_GetUnitY(v60);
-//                v74 = CLIENTS_GetUnitX(v60);
-//                D2GAME_QUESTS_WarrivSpawn_6FC95740(v68, (D2UnitStrc*)v69, v74, v73, v72);
-//                goto LABEL_174;
-//            case MONSTER_SUMMONER:
-//                QUESTS_CreateChainRecord(v68, v60, 12);
-//                MONSTERUNIQUE_ToggleUnitFlag(v60, 2048, 1);
-//                MONSTER_ToggleSummonerFlag(v60, 1, 1);
-//                goto LABEL_174;
-//            case MONSTER_DIABLO:
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 22, 1);
-//                QUESTS_CreateChainRecord(v68, v60, 23);
-//                goto LABEL_174;
-//            case MONSTER_MEPHISTO:
-//                v78 = 20;
-//                goto LABEL_171;
-//            default:
-//                goto LABEL_174;
-//            case MONSTER_ANDARIEL:
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 22, 1);
-//                QUESTS_CreateChainRecord(v68, v60, 6);
-//                goto LABEL_174;
-//            case MONSTER_IZUAL:
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 22, 1);
-//                QUESTS_CreateChainRecord(v68, v60, 22);
-//                goto LABEL_174;
-//            case MONSTER_RADAMENT:
-//                QUESTS_CreateChainRecord(v68, v60, 8);
-//                goto LABEL_174;
-//            case MONSTER_BLOODRAVEN:
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 12, 1);
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 22, 1);
-//                QUESTS_CreateChainRecord(v68, v60, 2);
-//                STATES_ToggleState(v60, 118, 1);
-//                goto LABEL_174;
-//            case MONSTER_MAGGOTQUEEN1:
-//                D2GAME_BOSSES_AssignUMod_6FC6FF10(v68, v60, 23, 1);
-//                break;
-//            }
-//LABEL_172:
-//            v79 = 1;
-//            v76 = 22;
-//            goto LABEL_173;
+//            MONSTERSPAWN_SetupBossMods(pMonCreate, v60);
+//            if (!(v90 & 0x40))
+//                sub_6FC69C00((int32_t)v85, v60);
+//            return v60;
 //        }
 //    }
 //    return 0;
@@ -1038,6 +834,266 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
         pItemInfo += 3;
     }
 }
+
+//1.10: Inlined
+//1.14d: 0x005B1CF0
+void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+{
+    int32_t nMonsterId = pMonCreate->nMonsterId;
+    D2GameStrc* pGame = pMonCreate->pGame;
+
+    D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
+    int32_t nBaseId;
+    if (pMonStatsTxtRecord)
+    {
+        nBaseId = pMonStatsTxtRecord->nBaseId;
+    }
+    else
+    {
+        nBaseId = nMonsterId;
+    }
+
+    nBaseId = (nBaseId >= 0 && nBaseId < sgptDataTables->nMonStatsTxtRecordCount) ? nBaseId : -1;
+
+    switch (nBaseId)
+    {
+    case MONSTER_ANDARIEL:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERANDARIEL)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_POISONFIELD, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_MULTISHOT, 1);
+            return;
+        }
+#endif
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        QUESTS_CreateChainRecord(pGame, pUnit, 6);
+        return;
+    case MONSTER_WARRIV2:
+        // this call does nothing
+        //nBaseId = (MONSTER_WARRIV2 >= 0 && MONSTER_WARRIV2 < sgptDataTables->nMonStatsTxtRecordCount) ? MONSTER_WARRIV2 : -1;
+        //D2GAME_QUESTS_WarrivSpawn_6FC95740(CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), nBaseId);
+        return;
+    case MONSTER_DURIEL:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERDURIEL)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_COLDCHANT, 1);
+            return;
+        }
+#endif
+        QUESTS_CreateChainRecord(pGame, pUnit, 13);
+        QUESTS_CreateChainRecord(pGame, pUnit, 9);
+        return;
+    case MONSTER_RADAMENT:
+        QUESTS_CreateChainRecord(pGame, pUnit, 8);
+        return;
+    case MONSTER_MEPHISTO:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERMEPHISTO)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_AURACHANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_LIGHTCHANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_MAGICRESISTANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            return;
+        }
+#endif
+        QUESTS_CreateChainRecord(pGame, pUnit, 20);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    case MONSTER_DIABLO:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERDIABLO)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_MAGICRESISTANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            return;
+        }
+#endif
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        QUESTS_CreateChainRecord(pGame, pUnit, 23);
+        return;
+    case MONSTER_SUMMONER:
+        QUESTS_CreateChainRecord(pGame, pUnit, 12);
+        MONSTERUNIQUE_ToggleUnitFlag(pUnit, 0x800, 1);
+        MONSTER_ToggleSummonerFlag(pUnit, 1, 1);
+        return;
+    case MONSTER_IZUAL:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERIZUAL)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_COLDCHANT, 1);
+            return;
+        }
+#endif
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        QUESTS_CreateChainRecord(pGame, pUnit, 22);
+        return;
+    case MONSTER_BLOODRAVEN:
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_BRAVENDEATH, 1);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        QUESTS_CreateChainRecord(pGame, pUnit, 2);
+        STATES_ToggleState(pUnit, STATE_CORPSE_NOSELECT, 1);
+        return;
+    case MONSTER_MAGGOTQUEEN1:
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_POISONFIELD, 1);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    case MONSTER_FIREGOLEM:
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_CORPSEBOOMDEATH, 0);
+        return;
+    case MONSTER_BONEPRISON1:
+    case MONSTER_BONEPRISON2:
+    case MONSTER_BONEPRISON3:
+    case MONSTER_BONEPRISON4:
+        MONSTERUNIQUE_ToggleUnitFlag(pUnit, 0x20000, 1);
+        return;
+    case MONSTER_COMPELLINGORB:
+        QUESTS_CreateChainRecord(pGame, pUnit, 19);
+        MONSTERUNIQUE_ToggleUnitFlag(pUnit, 0x20000, 1);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    case MONSTER_SMITH:
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    case MONSTER_FETISH11:
+        QUESTS_CreateChainRecord(pGame, pUnit, 17);
+        return;
+    case MONSTER_HEPHASTO:
+        QUESTS_CreateChainRecord(pGame, pUnit, 24);
+        return;
+    case MONSTER_PRISONDOOR:
+        QUESTS_CreateChainRecord(pGame, pUnit, 32);
+        return;
+    case MONSTER_NIHLATHAKBOSS:
+        QUESTS_CreateChainRecord(pGame, pUnit, 34);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    case MONSTER_ANCIENTBARB1:
+        MONSTERSPAWN_EquipAncientBarbarians(pUnit);
+        return;
+    case MONSTER_BAALCRAB:
+#ifdef D2_VERSION_HAS_UBERS
+        if (nMonsterId == MONSTER_UBERBAAL)
+        {
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_COLDCHANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_MAGICRESISTANT, 1);
+            D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_EXTRAFAST, 1);
+            return;
+        }
+#endif
+        QUESTS_CreateChainRecord(pGame, pUnit, 36);
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_QUESTMOD, 1);
+        return;
+    }
+}
+
+//1.10: Inlined
+//1.14d: 0x005B21B0
+//void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+//{
+//    v64 = v58->nMonsterId;
+//    v65 = v58->pGame;
+//    if (v64 >= 0)
+//    {
+//        if (v64 < sgptDataTables->nMonStatsTxtRecordCount)
+//        {
+//            v66 = &sgptDataTables->pMonStatsTxt[v64];
+//            if (v66)
+//                v64 = v66->nBaseId;
+//        }
+//        if (v64 >= 0 && v64 < sgptDataTables->nMonStatsTxtRecordCount)
+//        {
+//            if (v64 > MONSTER_BONEPRISON4)
+//            {
+//                switch (v64)
+//                {
+//                case MONSTER_TRAP_MELEE:
+//                    goto LABEL_148;
+//                case MONSTER_ANCIENTBARB1:
+//                case MONSTER_ANCIENTBARB2:
+//                case MONSTER_ANCIENTBARB3:
+//                    goto LABEL_150;
+//                default:
+//                    goto LABEL_152;
+//                case MONSTER_SUICIDEMINION1:
+//                    v77 = 0;
+//                    v75 = MONUMOD_FREEZINDEATH;
+//                    break;
+//                case MONSTER_REANIMATEDHORDE1:
+//                    v77 = 0;
+//                    v75 = MONUMOD_SELFRESURRECT;
+//                    break;
+//                case MONSTER_FROZENHORROR1:
+//                    v77 = 0;
+//                    v75 = MONUMOD_ICESHATTERDEATH;
+//                    break;
+//                }
+//            }
+//            else
+//            {
+//                if (v64 >= MONSTER_BONEPRISON1)
+//                {
+//                    v77 = 0;
+//                    v75 = MONUMOD_KILLMINIONSDEATH;
+//                }
+//                else
+//                {
+//                    if (v64 > MONSTER_MUMMY1)
+//                    {
+//                        if (v64 == MONSTER_DURIEL)
+//                        {
+//                            D2GAME_BOSSES_AssignUMod_6FC6FF10(v65, v60, 11, 0);
+//LABEL_150:
+//                            v77 = 1;
+//                            v75 = MONUMOD_QUESTMOD;
+//                        }
+//                        else
+//                        {
+//                            if (v64 <= MONSTER_EVILHOLE5 || v64 > MONSTER_TRAP_LIGHTNING)
+//                                goto LABEL_152;
+//LABEL_148:
+//                            v77 = 0;
+//                            v75 = MONUMOD_SPCDAMAGE;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        if (v64 == MONSTER_MUMMY1)
+//                        {
+//                            v77 = 0;
+//                            v75 = MONUMOD_POISDEATH;
+//                        }
+//                        else
+//                        {
+//                            if (v64 == MONSTER_BRUTE2)
+//                            {
+//                                v77 = 0;
+//                                v75 = MONUMOD_IGNOREAC;
+//                            }
+//                            else
+//                            {
+//                                if (v64 != MONSTER_SCARAB1)
+//                                    goto LABEL_152;
+//                                v77 = 0;
+//                                v75 = MONUMOD_CHARGEDBOLTS;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            D2GAME_BOSSES_AssignUMod_6FC6FF10(v65, v60, v75, v77);
+//        }
+//    }
+//LABEL_152:
+//}
 
 //D2Game.0x6FC69C00
 void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
@@ -1119,7 +1175,8 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
     }
 }
 
-//D2Game.0x6FC69F10
+//1.10f:D2Game.0x6FC69F10
+//1.11: D2Game.0x6FCE80F0
 D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags)
 {
     D2UnkMonCreateStrc monCreate = {};
