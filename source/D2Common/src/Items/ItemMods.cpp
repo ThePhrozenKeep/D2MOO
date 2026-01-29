@@ -2799,7 +2799,8 @@ void __stdcall ITEMMODS_AddCraftPropertyList(D2UnitStrc* pItem, D2PropertyStrc* 
 	}
 }
 
-//1.10: Inlined
+//1.10f: Inlined
+//1.11 : Inlined
 //1.14d: 0x0065E9E0
 int __fastcall ITEMMODS_RollRandomValueInRange(D2UnitStrc* pItem, int nMin, int nMax)
 {
@@ -4134,6 +4135,7 @@ int __fastcall ITEMMODS_PropertyFunc21(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 #ifdef D2_VERSION_HAS_UBERS
+//1.11 : D2Common.0x6FDA5190
 //1.14d: 0x0065FBA0
 int __fastcall ITEMMODS_PropertyFunc36(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
 {

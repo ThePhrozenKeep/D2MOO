@@ -314,6 +314,7 @@ int32_t __fastcall AIBAAL_RollRandomUberAiParam(D2GameStrc* pGame, D2UnitStrc* p
 	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
 }
 
+//1.11 : D2Game.0x6FD0ACC0
 //1.14d: 0x005FD0F0
 void __fastcall AIBAAL_SpawnUberBaalMinion(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {

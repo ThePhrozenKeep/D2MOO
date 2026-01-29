@@ -4693,6 +4693,7 @@ D2UnitStrc* __fastcall AITHINK_GetTargetForUberMinion(D2GameStrc* pGame, D2UnitS
 	return pTarget;
 }
 
+//1.11 : D2Game.0x6FC90320
 //1.14d: 0x005F81C0
 void __fastcall AITHINK_Fn146_UberMephisto(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
@@ -12765,6 +12766,7 @@ void __fastcall AITHINK_SpawnUberDiabloMinion(D2GameStrc* pGame, D2UnitStrc* pUn
 	}
 }
 
+//1.11 : D2Game.0x6FC9F200
 //1.14d: 0x005E9DF0
 void __fastcall AITHINK_Fn147_UberDiablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {

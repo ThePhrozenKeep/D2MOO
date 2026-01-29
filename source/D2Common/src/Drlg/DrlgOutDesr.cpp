@@ -40,7 +40,8 @@ void __fastcall DRLGOUTDESR_PlaceDesertTransitionToTown(D2DrlgLevelStrc* pLevel)
 	}
 }
 
-//1.10: D2Common.0x6FD7D430
+//1.10f: D2Common.0x6FD7D430
+//1.11 : D2Common.0x6FDD58A0
 //1.14d: 0x0067F980
 void __fastcall DRLGOUTDESR_InitAct2OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {

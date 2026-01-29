@@ -67,6 +67,7 @@ static D2DrlgLinkStrc gAct2CanyonDrlgLink[15] =
 };
 
 #ifdef D2_VERSION_HAS_UBERS
+//1.11 : D2Common.0x6FDDC0B8
 //1.14d: 0x006F0B10
 static D2DrlgLinkStrc gAct5UbersDrlgLink[15] =
 {
@@ -1637,6 +1638,7 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Canyon(D2DrlgLevelLinkDataStrc* pLevelLinkD
 }
 
 #ifdef D2_VERSION_HAS_UBERS
+//1.11 : D2Common.0x6FD6C560
 //1.14d: 0x00677030
 BOOL __fastcall DRLGOUTPLACE_LinkAct5Ubers(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration)
 {
