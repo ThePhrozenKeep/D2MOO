@@ -266,6 +266,8 @@ struct D2RoomCoordListStrc
 	D2RoomCoordListStrc* pNext;				//0x2C
 };
 
+// This was reordered in 1.11 to counter maphack
+#if !(D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11) // <= 1.10f version
 struct D2DrlgStrc
 {
 	D2DrlgLevelStrc* pLevel;				//0x00 Latest added level
@@ -296,6 +298,37 @@ struct D2DrlgStrc
 	int32_t bJungleInterlink;				//0x480
 	D2DrlgWarpStrc* pWarp;					//0x484
 };
+#else // >= v1.11
+struct D2DrlgStrc
+{
+	D2TileLibraryHashStrc* pTiles[32];
+	TOWNAUTOMAPFN pfTownAutomap;
+	D2DrlgActStrc* pAct;
+	int32_t nBossTombLevel;
+	uint32_t dwStartSeed;
+	uint32_t dwGameLowSeed;
+	int32_t nFreedRooms;
+	void* pMempool;
+	D2DrlgRoomStrc tStatusRoomsLists[ROOMSTATUS_COUNT];
+	int32_t bJungleInterlink;
+	uint32_t dwFlags;
+	D2DrlgRoomStrc* pDrlgRoom;
+	AUTOMAPFN pfAutomap;
+	uint8_t nRoomsInitTimeout;
+	uint8_t pad0x45D[7];
+	HD2ARCHIVE hArchive;
+	D2GameStrc* pGame;
+	int32_t nAllocatedRooms;
+	D2DrlgLevelStrc* pLevel;
+	uint8_t nDifficulty;
+	uint8_t nAct;
+	uint8_t pad0x476;
+	uint8_t nRoomsInitSinceLastUpdate;
+	int32_t nStaffTombLevel;
+	D2DrlgWarpStrc* pWarp;
+	D2SeedStrc pSeed;
+};
+#endif
 
 struct D2DrlgTileDataStrc
 {
