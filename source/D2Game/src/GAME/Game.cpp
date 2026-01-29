@@ -344,7 +344,8 @@ void __stdcall D2Game_10056(int32_t a1)
     dword_6FD4581C = a1;
 }
 
-//1.10: D2Game.0x6FC35E70 (#10047)
+//1.10f: D2Game.0x6FC35E70 (#10047)
+//1.11: D2Game.0x6FD01F60 (#10024)
 //1.14d: 0x00530930
 BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword, const char* szGameDescription, uint32_t nFlags, uint8_t nArenaTemplate, uint8_t a6, uint8_t a7, uint16_t* pGameId)
 {

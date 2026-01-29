@@ -17044,10 +17044,13 @@ BOOL __fastcall AITHINK_CanUnitSwitchAi(D2UnitStrc* pUnit, D2MonStatsTxt* pMonSt
 	return UNITS_CanSwitchAI(-1);
 }
 
-//1.10: D2Game.0x6FCF0750
+//1.10f: D2Game.0x6FCF0750
 //1.14d: 0x005B15D0
 const D2AiTableStrc* __fastcall AITHINK_GetAiTableRecord(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
 {
+	//1.10f:D2Game.0x6FD3F990
+	//1.11: D2Game.0x6FD2E7E8
+	//1.14d:0x73CA18
 	static const D2AiTableStrc gpAiTable_6FD3F990[] =
 	{
 		{ 0,	nullptr,									AITHINK_Fn000,								nullptr },

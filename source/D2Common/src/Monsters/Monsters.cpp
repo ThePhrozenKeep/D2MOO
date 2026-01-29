@@ -944,7 +944,8 @@ int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, 
 	return -1;
 }
 
-//1.10: D2Common.0x6FDA5B30 (#11061)
+//1.10f: D2Common.0x6FDA5B30 (#11061)
+//1.11: D2Common.0x6FD64390 (#10452)
 //1.14d: 0x0063EFA0
 void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* pX, int* pY, int* pSpawnMode, int nDifficulty, int(__fastcall* pfSpawnClassCallback)(D2UnitStrc*))
 {

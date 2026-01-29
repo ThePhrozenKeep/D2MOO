@@ -293,7 +293,8 @@ int* __fastcall DRLGWARP_GetWarpIdArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevel
 	return (int*)DATATBLS_GetLevelDefRecord(nLevelId)->dwWarp;
 }
 
-//D2Common.0x6FD78D10
+// 1.10f:D2Common.0x6FD78D10
+// 1.11 :D2Common.0x6FD77400
 int __fastcall DRLGWARP_GetWarpDestinationFromArray(D2DrlgLevelStrc* pLevel, uint8_t nArrayId)
 {
 	return DRLGWARP_GetWarpIdArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId)[nArrayId];

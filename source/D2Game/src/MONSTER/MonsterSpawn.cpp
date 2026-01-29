@@ -254,7 +254,8 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     return D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
 }
 
-//D2Game.0x6FC68E30) --------------------------------------------------------
+//1.10f:D2Game.0x6FC68E30) --------------------------------------------------------
+//1.11: D2Game.0x6FCE79E0
 D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate)
 {
     return nullptr;
@@ -1174,7 +1175,8 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
     }
 }
 
-//D2Game.0x6FC69F10
+//1.10f:D2Game.0x6FC69F10
+//1.11: D2Game.0x6FCE80F0
 D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags)
 {
     D2UnkMonCreateStrc monCreate = {};

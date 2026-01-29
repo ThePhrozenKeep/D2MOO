@@ -93,7 +93,8 @@ static D2DrlgLinkStrc gAct4ChaosSanctumDrlgLink[15] =
 	{ NULL, 0, -1, -1 },
 };
 
-//D2Common.0x6FDD03E0
+//1.10f:D2Common.0x6FDD03E0
+//1.11: D2Common.0x6FDDC388
 static D2DrlgLinkStrc gAct5OutdoorDrlgLink[15] =
 {
 	{ sub_6FD81330, LEVEL_HARROGATH, -1, -1 },
@@ -103,7 +104,8 @@ static D2DrlgLinkStrc gAct5OutdoorDrlgLink[15] =
 	{ NULL, 0, -1, -1 },
 };
 
-//D2Common.0x6FDD04D0
+//1.10f:D2Common.0x6FDD04D0
+//1.11: D2Common.0x6FDDC478
 static D2DrlgLinkStrc gAct5TundraDrlgLink[15] =
 {
 	{ DRLGOUTROOM_LinkLevelsByLevelDef, LEVEL_TUNDRAWASTELANDS, -1, -1 },

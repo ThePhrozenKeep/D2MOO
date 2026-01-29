@@ -742,7 +742,8 @@ void __fastcall DATATBLS_UnloadLvlWarpTxt()
 	DATATBLS_UnloadBin(sgptDataTables->pLvlWarpTxt);
 }
 
-//D2Common.0x6FD61DE0
+//1.10f:D2Common.0x6FD61DE0
+//1.11: D2Common.0x6FD86840
 D2LvlWarpTxt* __fastcall DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(int nLevelId, char szDirection)
 {
 	D2_ASSERT(sgptDataTables->pLvlWarpTxt);

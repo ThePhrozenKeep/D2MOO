@@ -470,7 +470,8 @@ static const D2PropertyAssignStrc stru_6FDE3160[] =
 
 
 // 1.10: 36 entries, 1.11-1.14: 37 entries
-//1.10: 0x6FDE3920
+//1.10: D2Common.0x6FDE3920
+//1.11: D2Common.0x6FDEB590
 //1.14d: 0x007462F8
 static const PROPERTYASSIGNFN off_6FDE3920[] =
 {
@@ -2547,7 +2548,8 @@ void __stdcall ITEMMODS_ApplyEthereality(D2UnitStrc* pItem)
 	}
 }
 
-//D2Common.0x6FD959F0 (#10867)
+//1.10f:D2Common.0x6FD959F0 (#10867)
+//1.11: D2Common.0x6FDA3570(#11129)
 BOOL __stdcall ITEMMODS_UpdateRuneword(D2UnitStrc* pUnit, D2UnitStrc* pItem, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
@@ -4310,7 +4312,8 @@ int __fastcall ITEMMODS_PropertyFunc23(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 	return FALSE;
 }
 
-//D2Common.0x6FD98160 (#11292)
+//1.10f:D2Common.0x6FD98160 (#11292)
+//1.11: D2Common.0x6FDA2900 (#10116)
 void __stdcall D2COMMON_11292_ItemAssignProperty(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const void* pMods, int nIndex, int nPropSet, const D2PropertyStrc* pProperty, int nState, int fStatlist, D2UnitStrc* a10)
 {
 	D2PropertiesTxt* pPropertiesTxtRecord = NULL;
