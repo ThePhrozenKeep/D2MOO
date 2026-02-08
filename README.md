@@ -23,17 +23,17 @@ You can generate a VS solution (located in `out/build/VS20XX`) and build using t
 
 ```sh
 # Configure the CMake project
-cmake --preset VS2019
+cmake --preset DefaultGenerator
 # Build the release config (Optional. You may do it from Visual Studio itself)
-cmake --build --preset VS2019 --config Release
+cmake --build --preset DefaultGenerator --config Release
 # Install (Optional. Most people will want to debug instead of install)
-cmake --build --preset VS2019 --config Release --target install
+cmake --build --preset DefaultGenerator --config Release --target install
 ```
 
 Or using the CMake-gui:
 ![CMake GUI](doc/assets/img/CMake-GUI.png)
 
-Where of course you can replace `VS2019` by `VS2022` if you are using Visual Studio 2022.
+You can replace `DefaultGenerator` by `VS2022` pr `Ninja` if you are using Visual Studio 2022.
 
 Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) documentation.
 

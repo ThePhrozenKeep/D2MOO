@@ -14,17 +14,17 @@ You can generate a VS solution (in `out/build/VS20XX`) using the command-line:
 
 ```sh
 # Configure the CMake project
-cmake --preset VS2019
+cmake --preset DefaultGenerator
 # Build the release config
-cmake --build --preset VS2019 --config Release
+cmake --build --preset DefaultGenerator --config Release
 # Install
-cmake --build --preset VS2019 --config Release --target install
+cmake --build --preset DefaultGenerator --config Release --target install
 ```
 and/or using the CMake GUI to configure and modify compilation options:
 ![CMake GUI](assets/img/CMake-GUI.png)
 
 
-Of course you can replace `VS2019` by `VS2022` if you are using Visual Studio 2022.
+Of course you can replace `DefaultGenerator` by `VS2022` if you are using Visual Studio 2022.
 
 > Note: The `ninja` preset requires to run the `cmake` configuration step to be ran from the *x86 Native Command Prompt*.
 
