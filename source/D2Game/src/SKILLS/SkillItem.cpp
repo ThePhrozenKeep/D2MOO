@@ -78,7 +78,8 @@ int32_t __fastcall SKILLITEM_pSpell01_IdentifyItem(D2GameStrc* pGame, D2UnitStrc
     return 0;
 }
 
-//D2Game.0x6FD02C80
+//1.10f: D2Game.0x6FD02C80
+//1.14d: 0x005BE290
 int32_t __fastcall SKILLITEM_pSpell02_CastPortal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
@@ -88,7 +89,11 @@ int32_t __fastcall SKILLITEM_pSpell02_CastPortal(D2GameStrc* pGame, D2UnitStrc* 
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
         const int32_t nTownLevelId = DUNGEON_GetTownLevelIdFromActNo(DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)));
+#ifdef D2_VERSION_HAS_UBERS
+        if (!DUNGEON_IsRoomInTown(pRoom) && DUNGEON_GetLevelIdFromRoom(pRoom) != LEVEL_PANDEMONIUMFINALE)
+#else
         if (!DUNGEON_IsRoomInTown(pRoom))
+#endif
         {
             sub_6FC7C170(pGame, pUnit);
             
