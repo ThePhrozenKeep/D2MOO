@@ -13,6 +13,7 @@
 #include <D2Collision.h>
 #include <D2Monsters.h>
 #include <D2Skills.h>
+#include <DataTbls/LevelsIds.h>
 #include <DataTbls/SkillsIds.h>
 #include <DataTbls/ObjectsIds.h>
 #include <UselessOrdinals.h>
