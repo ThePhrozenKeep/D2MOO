@@ -2303,7 +2303,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 	D2DamageStrc damageCopy = {};
 	memcpy(&damageCopy, pDamage, sizeof(damageCopy));
 
-	if (!UNITS_IsInMeleeRange(pAttacker, pDefender, 2 * (pAttacker->dwUnitType == UNIT_PLAYER) + 1))
+	if (!UNITS_IsInMeleeRange(pAttacker, pDefender, 2 * (pAttacker->dwUnitType == UNIT_MONSTER) + 1))
 	{
 		SUNITDMG_FreeAttackerDefenderCombatList(pGame, pAttacker, pDefender);
 		return;
