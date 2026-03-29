@@ -1709,7 +1709,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_WIRTSBODY:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q2_KHALIMFLAIL);
+		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q4_CAIN);
 		if (pQuestData)
 		{
 			D2Act1Quest4Strc* pAct1Quest4 = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
