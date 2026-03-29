@@ -78,9 +78,10 @@ struct D2EventTimerSlabListStrc
 struct D2EventTimerQueueStrc
 {
 	int32_t nArrayIndex;
-	D2EventTimerStrc* unk0x04[10][64];
-	D2EventTimerStrc* unk0xA04[5];
-	D2EventTimerStrc* unk0xA18;
+	D2EventTimerStrc* pHead[5][64];			// first event per unit type per frame
+	D2EventTimerStrc* pTail[5][64];			// last event per unit type per frame
+	D2EventTimerStrc* pInfinite[5];			// events with no end frame
+	D2EventTimerStrc* pCurrent;
 	D2EventTimerSlabListStrc* pSlabListHead;
 };
 
