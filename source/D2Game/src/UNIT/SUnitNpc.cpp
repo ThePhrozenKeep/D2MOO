@@ -796,9 +796,9 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
             if (nQuantity >= 0)
             {
                 D2BooksTxt* pBooksTxtRecord = DATATBLS_GetBooksTxtRecord(ITEMS_GetSuffixId(pItem, 0));
-                if (pBooksTxtRecord->dwScrollSkillId >= 0)
+                if (pBooksTxtRecord->dwBookSkillId >= 0)
                 {
-                    D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pPlayer, pBooksTxtRecord->dwScrollSkillId);
+                    D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pPlayer, pBooksTxtRecord->dwBookSkillId);
                     if (pSkill)
                     {
                         int32_t nSkillQuantity = SKILLS_GetQuantity(pSkill) - nQuantity;
