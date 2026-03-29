@@ -2305,7 +2305,7 @@ int32_t __fastcall D2GAME_EventFunc26_6FD0F5E0(D2GameStrc* pGame, int32_t nEvent
         nNewHp = 256;
     }
 
-    STATLIST_SetUnitStat(pAttacker, STAT_HITPOINTS, nNewHp, 0);
+    STATLIST_SetUnitStat(pOwner, STAT_HITPOINTS, nNewHp, 0);
 
     pDamage->dwDmgTotal -= nReducedDamage;
 
