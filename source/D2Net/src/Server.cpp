@@ -195,16 +195,11 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		sizeof(D2GSPacketSrv9B),
 		VARIABLE_PACKET_SIZE,
 		VARIABLE_PACKET_SIZE,
-		//sizeof(D2GSPacketSrv9E),
-		7, // 0x9E
-		//sizeof(D2GSPacketSrv9F),
-		8, // 0x9F
-		//sizeof(D2GSPacketSrvA0),
-		10, // 0xA0
-		//sizeof(D2GSPacketSrvA1),
-		7, // 0xA1
-		//sizeof(D2GSPacketSrvA2),
-		8, // 0xA2
+		sizeof(D2GSPacketSrv9E), // 0x9E
+		sizeof(D2GSPacketSrv9F), // 0x9F
+		sizeof(D2GSPacketSrvA0), // 0xA0
+		sizeof(D2GSPacketSrvA1), // 0xA1
+		sizeof(D2GSPacketSrvA2), // 0xA2
 		sizeof(D2GSPacketSrvA3),
 		sizeof(D2GSPacketSrvA4),
 		sizeof(D2GSPacketSrvA5),
