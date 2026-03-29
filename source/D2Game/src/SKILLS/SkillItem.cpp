@@ -1569,6 +1569,7 @@ int32_t __fastcall SKILLITEM_EventFunc19_Slow(D2GameStrc* pGame, int32_t nEvent,
         {
             nSlowValue = 50;
         }
+        break;
     }
     case UNIT_MONSTER:
     {
@@ -1593,6 +1594,7 @@ int32_t __fastcall SKILLITEM_EventFunc19_Slow(D2GameStrc* pGame, int32_t nEvent,
                 nSlowValue = 90;
             }
         }
+        break;
     }
     default:
         return 0;
