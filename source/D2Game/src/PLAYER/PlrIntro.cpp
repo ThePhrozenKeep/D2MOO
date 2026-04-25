@@ -128,6 +128,7 @@ void __fastcall PLRINTRO_MaskNpcIntroFlag(D2GameStrc* pGame, D2UnitStrc* pPlayer
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {
             BITMANIP_MaskBitstate(pPlayerIntro->pNpcIntroFlags->pBuffer, npcIndexMap[i].nIndex);
+            return;
         }
     }
 
