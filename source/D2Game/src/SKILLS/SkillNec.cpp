@@ -1898,7 +1898,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
 
     D2UnitStrc* pStatListOwner = SUNIT_GetServerUnit(pGame, STATLIST_GetOwnerType(pStatList), STATLIST_GetOwnerGUID(pStatList));
     int32_t nDamagePercent = 0;
-    if (pAttacker->dwUnitType == UNIT_MONSTER || MONSTERS_GetHirelingTypeId(pAttacker))
+    if (pAttacker->dwUnitType == UNIT_PLAYER || MONSTERS_GetHirelingTypeId(pAttacker))
     {
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
