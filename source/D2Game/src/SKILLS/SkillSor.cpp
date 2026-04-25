@@ -1064,9 +1064,8 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
 
     if (pUnit && nAbsorbedDamage > 0 && pSkillsTxtRecord->wPrgOverlay >= 0 && pSkillsTxtRecord->wPrgOverlay <= sgptDataTables->nOverlayTxtRecordCount)
     {
-        int32_t nOverlayData[2] = {};
-        *(int64_t*)nOverlayData = D2Common_11053(UNITS_GetDirectionToCoords(pAttacker, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit))) + pSkillsTxtRecord->wPrgOverlay;
-        UNITS_SetOverlay(pAttacker, nOverlayData[0], nOverlayData[1]);
+        const int32_t nOverlay = D2Common_11053(UNITS_GetDirectionToCoords(pAttacker, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit))) + pSkillsTxtRecord->wPrgOverlay;
+        UNITS_SetOverlay(pAttacker, nOverlay, 0);
     }
 
     if (nMana <= 0)
