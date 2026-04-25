@@ -458,12 +458,12 @@ void __fastcall sub_6FC61B70(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                 SUNIT_ResetInteractInfo(pPlayer);
             }
 
-            D2_FREE_POOL(pGame->pMemoryPool, pInteractInfo);
-
             if (pInteractInfo->nInteract >= 1 && !pMonInteract->pInteractInfo)
             {
                 SUNITPROXY_FreeNpcGamble(pGame, pNpc, pPlayer);
             }
+
+            D2_FREE_POOL(pGame->pMemoryPool, pInteractInfo);
             return;
         }
 
