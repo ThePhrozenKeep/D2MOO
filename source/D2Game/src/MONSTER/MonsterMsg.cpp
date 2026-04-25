@@ -105,7 +105,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         sub_6FCC5F20(pUnit, pClient);
     }
 
-    if (pUnit && pUnit->dwFlags & UNITFLAG_NOTC && MONSTER_CheckSummonerFlag(pUnit, 1u))
+    if (pUnit && pUnit->dwFlags & UNITFLAG_SUMMONER && MONSTER_CheckSummonerFlag(pUnit, 1u))
     {
         const uint8_t* const pUMods = MONSTERUNIQUE_GetUMods(pUnit);
         if (pUMods)
