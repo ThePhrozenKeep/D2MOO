@@ -553,7 +553,7 @@ void __fastcall ACT1Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 	if (pQuestData->fLastState != 1)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
-		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 	}
 
 	QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
