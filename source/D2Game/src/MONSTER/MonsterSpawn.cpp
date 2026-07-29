@@ -1538,7 +1538,7 @@ int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
 //D2Game.0x6FC6A8C0
 int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nCount, int32_t a6, int16_t nFlags)
 {
-    D2CoordStrc stru_6FD28B68[12] =
+    static const D2CoordStrc stru_6FD28B68[12] =
     {
         {-1,-4 },
         { 1, 4 },
@@ -1560,7 +1560,7 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     }
 
     int32_t v9 = a6;
-    if (a6 < 0 || a6 > 2)
+    if (a6 < 0 || a6 > 1)
     {
         v9 = 0;
     }
@@ -1573,21 +1573,22 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     int32_t nParam1 = ITEMS_RollRandomNumber(&pUnit->pSeed) % 6;
     const int32_t nParam2 = 6 * v9;
 
+    D2UnkMonCreateStrc monCreate = {};
+    monCreate.nUnitGUID = 0;
+    monCreate.pRoomCoordList = nullptr;
+    monCreate.field_20 = -1;
+    monCreate.nFlags = nFlags;
+    monCreate.nMonsterId = nMonsterId;
+    monCreate.nAnimMode = nAnimMode;
+    monCreate.pRoom = pRoom;
+    monCreate.pGame = pGame;
+
     for (int32_t i = 0; i < nCount; ++i)
     {
-        const int32_t nIndex = 2 * (nParam1 + nParam2);
+        const int32_t nIndex = nParam1 + nParam2;
 
-        D2UnkMonCreateStrc monCreate = {};
-        monCreate.nUnitGUID = 0;
-        monCreate.pRoomCoordList = nullptr;
-        monCreate.field_20 = -1;
         monCreate.nX = nX + stru_6FD28B68[nIndex].nX;
         monCreate.nY = nY + stru_6FD28B68[nIndex].nY;
-        monCreate.nFlags = nFlags;
-        monCreate.nMonsterId = nMonsterId;
-        monCreate.nAnimMode = nAnimMode;
-        monCreate.pRoom = pRoom;
-        monCreate.pGame = pGame;
 
         nParam1 = (nParam1 + 5) % 6;
 
