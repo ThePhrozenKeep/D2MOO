@@ -462,7 +462,11 @@ void __fastcall ACT1Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 {
 	if (pQuestArg->nNewLevel == LEVEL_BURIALGROUNDS && pQuestData->bNotIntro == 1)
 	{
-		if (pQuestData->fState < 3)
+		// In vanilla the result of the first fState check is kept in a stack
+		// boolean, because QUESTS_StateDebug overwrites fState with 3 and the
+		// second check would otherwise never trigger (D2Game.0x64EE9 in 1.13c)
+		const bool bStateUpdated = pQuestData->fState < 3;
+		if (bStateUpdated)
 		{
 			QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 			pQuestData->dwFlags &= 0xFFFFFF00;
@@ -475,7 +479,7 @@ void __fastcall ACT1Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 			return;
 		}
 
-		if (pQuestData->fState < 3)
+		if (bStateUpdated)
 		{
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT1Q2_UnitIterate_UpdateQuestStateFlags);
 			return;
