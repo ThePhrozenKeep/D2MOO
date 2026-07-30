@@ -799,7 +799,7 @@ void __fastcall DRLGROOMTILE_AddLinkedTileData(void* pMemPool, D2DrlgRoomStrc* p
 		D2DrlgTileLinkStrc* pCurLink;
 		for (pCurLink = pDrlgRoom->pTileGrid->pMapLinks; pCurLink; pCurLink = pCurLink->pNext)
 		{
-			if ((pCurLink->bFloor && nTileType == TILETYPE_FLOOR) || (nTileType != TILETYPE_FLOOR))
+			if ((pCurLink->bFloor && nTileType == TILETYPE_FLOOR) || (!pCurLink->bFloor && nTileType != TILETYPE_FLOOR))
 			{
 				// Use current tile
 				break;
