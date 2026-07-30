@@ -895,13 +895,14 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 		}
 
 		nDirection = pDrlgVertex->nDirection;
-		if (nDirection == 0)
-		{
-			nDirection = pNextVertex->nDirection;
-		}
 		if (nDirection)
 		{
 			tLvlPrestPackedInfo.bHasDirection = true;
+		}
+		else
+		{
+			nDirection = pNextVertex->nDirection;
+			tLvlPrestPackedInfo.bHasDirection = nDirection != 0;
 		}
 
 		switch (pLevel->nLevelType)
