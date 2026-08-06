@@ -1948,19 +1948,20 @@ struct D2GSPacketSrv9D		//variable size
 //};
 
 
-struct D2GSPacketSrvStatAndGuid	//size of 0x08 (originally 0x07)
+template<typename T>
+struct D2GSPacketSrvStatAndGuid
 {
 	uint8_t nHeader;			//0x00
 	PacketStatId nStat;			//0x01
 	uint32_t dwGUID;			//0x03 (Originally 0x02)
-	uint8_t nValue;				//0x07 (Originally 0x06)
+	T nValue;				//0x07 (Originally 0x06)
 };
 
-using D2GSPacketSrv9E = D2GSPacketSrvStatAndGuid;
-using D2GSPacketSrv9F = D2GSPacketSrvStatAndGuid;
-using D2GSPacketSrvA0 = D2GSPacketSrvStatAndGuid;
-using D2GSPacketSrvA1 = D2GSPacketSrvStatAndGuid;
-using D2GSPacketSrvA2 = D2GSPacketSrvStatAndGuid;
+using D2GSPacketSrv9E = D2GSPacketSrvStatAndGuid<uint8_t>;
+using D2GSPacketSrv9F = D2GSPacketSrvStatAndGuid<uint16_t>;
+using D2GSPacketSrvA0 = D2GSPacketSrvStatAndGuid<uint32_t>;
+using D2GSPacketSrvA1 = D2GSPacketSrvStatAndGuid<uint8_t>;
+using D2GSPacketSrvA2 = D2GSPacketSrvStatAndGuid<uint16_t>;
 
 struct D2GSPacketSrvA3		//size of 0x18
 {
