@@ -349,13 +349,13 @@ void __fastcall ACT1Q1_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		{
 			if (pQuestData->fLastState == 4 && pQuestDataEx->nMonstersLeft > 5)
 			{
-				pQuestData->dwFlags |= 0x00000020;
+				pQuestData->dwFlags = 0x00000020;
 				QUESTS_UnitIterate(pQuestData, 4, 0, ACT1Q1_UnitIterate_StatusCyclerEx, 1);
 			}
 		}
 		else
 		{
-			pQuestData->dwFlags |= 0x00000020;
+			pQuestData->dwFlags = 0x00000020;
 			QUESTS_UnitIterate(pQuestData, 4, 0, ACT1Q1_UnitIterate_StatusCyclerEx, 1);
 			pQuestData->pfCallback[QUESTEVENT_NPCDEACTIVATE] = nullptr;
 		}
