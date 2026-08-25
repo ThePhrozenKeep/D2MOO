@@ -932,7 +932,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 
 	D2DrlgGridStrc* pDirtPathGrid = &pDrlgRoom->pOutdoor->pDirtPathGrid;
 
-	for (int nX = 1; nX <= pDrlgRoom->pDrlgCoord.nWidth; ++nX)
+	for (int nX = 1; nX <= pDrlgRoom->pDrlgCoord.nWidth + 1; ++nX)
 	{
 		static const int nBoxDimension = 3;
 		int aFlags[nBoxDimension * nBoxDimension] = {};

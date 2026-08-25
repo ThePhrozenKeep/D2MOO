@@ -48,32 +48,37 @@ static void DRLGACTIVATE_RoomExStatusUnlink(D2DrlgRoomStrc* pDrlgRoom)
 		pDrlgRoom->pStatusNext = nullptr;
 	}
 }
+static void DRLGACTIVATE_ForceRoomExStatusImpl(D2DrlgRoomStrc* pDrlgRoom, D2DrlgRoomStatus nStatus)
+{
+	DRLGACTIVATE_RoomExStatusUnlink(pDrlgRoom);
+	if (nStatus < ROOMSTATUS_COUNT)
+	{
+		DRLGACTIVATE_RoomExStatuslink(&pDrlgRoom->pLevel->pDrlg->tStatusRoomsLists[nStatus], pDrlgRoom);
+	}
+	pDrlgRoom->fRoomStatus = nStatus;
+}
 // Returns true if status changed
 static bool DRLGACTIVATE_UpdateRoomExStatusImpl(D2DrlgRoomStrc* pDrlgRoom, D2DrlgRoomStatus nStatus)
 {
 	// Note: Lower value has priority over others
 	if (pDrlgRoom->fRoomStatus > nStatus)
 	{
-		DRLGACTIVATE_RoomExStatusUnlink(pDrlgRoom);
-		if (nStatus < ROOMSTATUS_COUNT)
-		{
-			DRLGACTIVATE_RoomExStatuslink(&pDrlgRoom->pLevel->pDrlg->tStatusRoomsLists[nStatus], pDrlgRoom);
-		}
-		pDrlgRoom->fRoomStatus = nStatus;
+		DRLGACTIVATE_ForceRoomExStatusImpl(pDrlgRoom, nStatus);
 		return true;
 	}
 	return false;
 }
-static D2DrlgRoomStatus DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(D2DrlgRoomStrc* pDrlgRoom, D2DrlgRoomStatus nMaxStatus)
+// Returns -1 if no status up to nMaxStatus is referenced
+static int DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(D2DrlgRoomStrc* pDrlgRoom, D2DrlgRoomStatus nMaxStatus)
 {
 	for (int nFirstNonEmptyListStatus = 0; nFirstNonEmptyListStatus <= nMaxStatus && nFirstNonEmptyListStatus < ROOMSTATUS_COUNT; nFirstNonEmptyListStatus++)
 	{
 		if (pDrlgRoom->wRoomsInList[nFirstNonEmptyListStatus] != 0)
 		{
-			return (D2DrlgRoomStatus)nFirstNonEmptyListStatus;
+			return nFirstNonEmptyListStatus;
 		}
 	}
-	return nMaxStatus;
+	return -1;
 }
 
 //D2Common.0x6FD733D0
@@ -151,10 +156,11 @@ void __fastcall DRLGACTIVATE_RoomExIdentifyRealStatus(D2DrlgRoomStrc* pDrlgRoom)
 {
 	if (pDrlgRoom->fRoomStatus >= ROOMSTATUS_COUNT || pDrlgRoom->wRoomsInList[pDrlgRoom->fRoomStatus] == 0)
 	{
-		const D2DrlgRoomStatus nFirstStatusWithRefCount = DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pDrlgRoom, ROOMSTATUS_COUNT);
-		if (pDrlgRoom->fRoomStatus != nFirstStatusWithRefCount)
+		const int nFirstStatusWithRefCount = DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pDrlgRoom, ROOMSTATUS_COUNT);
+		const D2DrlgRoomStatus nRealStatus = nFirstStatusWithRefCount < 0 ? ROOMSTATUS_COUNT : D2DrlgRoomStatus(nFirstStatusWithRefCount);
+		if (pDrlgRoom->fRoomStatus != nRealStatus)
 		{
-			DRLGACTIVATE_UpdateRoomExStatusImpl(pDrlgRoom, nFirstStatusWithRefCount);
+			DRLGACTIVATE_ForceRoomExStatusImpl(pDrlgRoom, nRealStatus);
 		}
 	}
 }
@@ -195,8 +201,7 @@ void __fastcall DRLGACTIVATE_RoomExPropagateSetStatus(void* pMemPool, D2DrlgRoom
 
 		if (pNearRoom->fRoomStatus >= nStatus)
 		{
-			const D2DrlgRoomStatus nFirstStatusWithRefCount = DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pNearRoom, D2DrlgRoomStatus(nStatus));
-			if (nFirstStatusWithRefCount == nStatus)
+			if (DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pNearRoom, D2DrlgRoomStatus(nStatus)) < 0)
 			{
 				gRoomExSetStatus[nStatus](pNearRoom);
 			}
@@ -230,8 +235,7 @@ static void DRLGACTIVATE_RoomSetAndPropagateStatus(D2DrlgRoomStrc* pDrlgRoom, D2
 	DRLGACTIVATE_RoomExPropagateSetStatus(pDrlgRoom->pLevel->pDrlg->pMempool, pDrlgRoom, nStatus + 1);
 	if (pDrlgRoom->fRoomStatus >= nStatus)
 	{
-		const D2DrlgRoomStatus nFirstStatusWithRefCount = DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pDrlgRoom, nStatus);
-		if (nFirstStatusWithRefCount == nStatus)
+		if (DRLGACTIVATE_RoomExFindFirstStatusWithRefCount(pDrlgRoom, nStatus) < 0)
 		{
 			gRoomExSetStatus[nStatus](pDrlgRoom);
 		}
@@ -436,18 +440,15 @@ void __stdcall DRLGACTIVATE_Update(D2DrlgStrc* pDrlg)
 
 		if (D2DrlgRoomStrc* pDrlgRoomExListHead = pDrlg->pDrlgRoom)
 		{
-			D2DrlgRoomStrc* pCurRoomEx;
-			for (pCurRoomEx = pDrlgRoomExListHead ; pCurRoomEx != pDrlgRoomExListHead ; pCurRoomEx = pCurRoomEx->pStatusNext)
+			D2DrlgRoomStrc* pCurRoomEx = pDrlgRoomExListHead;
+			do
 			{
 				if (pCurRoomEx != &pDrlg->tStatusRoomsLists[ROOMSTATUS_CLIENT_OUT_OF_SIGHT])
 				{
 					DRLGACTIVATE_RoomEx_EnsureHasRoom(pCurRoomEx, false);
 				}
-				if (pDrlg->nRoomsInitSinceLastUpdate != 0)
-				{
-					break;
-				}
-			}
+				pCurRoomEx = pCurRoomEx->pStatusNext;
+			} while (pCurRoomEx != pDrlgRoomExListHead && pDrlg->nRoomsInitSinceLastUpdate == 0);
 
 			pDrlg->pDrlgRoom = pCurRoomEx;
 			pDrlg->nRoomsInitSinceLastUpdate = 0;

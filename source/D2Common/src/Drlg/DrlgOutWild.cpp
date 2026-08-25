@@ -302,11 +302,12 @@ void __fastcall DRLGOUTWILD_SpawnRiver(D2DrlgLevelStrc* pLevel, int nX)
 
 	if (pLevel->pOutdoors->dwFlags & (OUTDOOR_RIVER|OUTDOOR_BRIDGE))
 	{
-		int nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight - 2);
+		const int nRowRange = pLevel->pOutdoors->nGridHeight - 2;
+		int nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nRowRange);
 
-		for (int i = 0; i < pLevel->pOutdoors->nGridHeight - 2; ++i)
+		for (int i = 0; i < nRowRange; ++i)
 		{
-			int nY = (nRand + i) % (pLevel->pOutdoors->nGridHeight - 1);
+			int nY = (nRand + i) % nRowRange + 1;
 
 			if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX - 1, nY) && ((pLevel->pOutdoors->dwFlags & OUTDOOR_BRIDGE) != 0 || DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX + 2, nY)))
 			{

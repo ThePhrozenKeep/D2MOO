@@ -246,7 +246,7 @@ void __fastcall DRLGOUTSIEGE_PlaceCaves(D2DrlgLevelStrc* pLevel)
 //D2Common.0x6FD84580
 void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pLevel)
 {
-	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+	for (int i = 0; i < pLevel->pOutdoors->nGridWidth; ++i)
 	{
 		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, 0).bLvlLink)
 		{
@@ -255,7 +255,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 		}
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+	for (int i = 0; i < pLevel->pOutdoors->nGridWidth; ++i)
 	{
 		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, pLevel->pOutdoors->nGridHeight - 2).bLvlLink)
 		{
