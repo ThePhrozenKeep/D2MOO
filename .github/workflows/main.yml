@@ -26,8 +26,8 @@ jobs:
     # Find the clang-tidy bundled with MSVC
     - name: Add clang-tidy to PATH
       if: env.BUILD_TYPE == 'Debug'
-      uses: Lectem/vswhere@v1.0
-      with: {file: 'VC\Tools\Llvm\bin\clang-tidy.exe'}
+      uses: Lectem/vswhere@v1.1
+      with: {file: '**\clang-tidy.exe'}
     
     # We need to start cmake from vcvarsall env so that Ninja will pick MSVC
     - uses: ilammy/msvc-dev-cmd@v1
