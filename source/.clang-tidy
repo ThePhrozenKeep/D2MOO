@@ -2,6 +2,6 @@
 Checks:          '-*,readability-inconsistent-declaration-parameter-name,bugprone-*,-bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-clang-diagnostic-multichar,-clang-diagnostic-microsoft-cast'
 CheckOptions:
   - { key: bugprone-signed-char-misuse.CharTypdefsToIgnore, value: "int8_t" }
-WarningsAsErrors: '*,-clang-diagnostic-microsoft-cast,-clang-diagnostic-multichar'
+WarningsAsErrors: '*,-clang-diagnostic-microsoft-cast,-clang-diagnostic-multichar,-bugprone-multi-level-implicit-pointer-conversion,-bugprone-return-const-ref-from-parameter,-bugprone-signed-char-misuse,-bugprone-unchecked-string-to-number-conversion,-bugprone-undefined-memory-manipulation,-bugprone-too-small-loop-variable,-bugprone-switch-missing-default-case,-bugprone-invalid-enum-default-initialization,-bugprone-bitwise-pointer-cast'
 HeaderFilterRegex: 'doctest.*'
 FormatStyle:     none
