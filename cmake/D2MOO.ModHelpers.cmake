@@ -22,6 +22,16 @@ function(D2MOO_register_detours_patch_if_exists DLLTargetName)
   
   target_sources(${DLLTargetName} PRIVATE "${PatchCppFile}")
   source_group(patch FILES "${PatchCppFile}")
+  # The patch sources sit outside source/, so source/.clang-tidy does not apply to
+  # them and they end up with an empty check set. clang-tidy 19 turned that from a
+  # warning into a hard error, which fails the clang-tidy build on files that have
+  # never actually been linted. Say so explicitly instead.
+  if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.27.0") # SKIP_LINTING requires 3.27
+    set_source_files_properties("${PatchCppFile}"
+      TARGET_DIRECTORY ${DLLTargetName}
+      PROPERTIES SKIP_LINTING ON
+    )
+  endif()
   if(EXISTS "${PatchRcFile}")
     target_sources(${DLLTargetName} PRIVATE "${PatchRcFile}")
     source_group(patch FILES "${PatchRcFile}")
