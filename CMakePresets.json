@@ -39,14 +39,14 @@
       "name": "clang-tidy",
       "inherits": "ninja",
       "cacheVariables": {
-        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--extra-arg=-Wno-microsoft-cast;--extra-arg=-Wno-multichar;--header-filter=.*"
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=--target=i686-pc-windows-msvc;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--extra-arg=-Wno-microsoft-cast;--extra-arg=-Wno-multichar;--header-filter=.*"
       }
     },
     {
       "name": "clang-tidy-fix",
       "inherits": "clang-tidy",
       "cacheVariables": {
-        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--extra-arg=-Wno-microsoft-cast;--extra-arg=-Wno-multichar;--header-filter=.*;--fix"
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--extra-arg=--target=i686-pc-windows-msvc;--extra-arg=-D_CRT_USE_BUILTIN_OFFSETOF;--extra-arg=-Wno-microsoft-cast;--extra-arg=-Wno-multichar;--header-filter=.*;--fix"
       }
     }
   ],
