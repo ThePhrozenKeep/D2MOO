@@ -979,7 +979,7 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 					QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q2, QFLAG_ENTERAREA);
 					if (pQuestDataEx->nKilledWussies < 5)
 					{
-						pQuestData->dwFlags |= 0x00000020;
+						pQuestData->dwFlags = 0x00000020;
 						QUESTS_UnitIterate(pQuestData, 2, 0, ACT5Q2_UnitIterate_StatusCyclerEx, 1);
 					}
 					pQuestDataEx->bQualKehkActivated = 0;
