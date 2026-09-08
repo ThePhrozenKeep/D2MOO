@@ -1536,7 +1536,7 @@ int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
 }
 
 //D2Game.0x6FC6A8C0
-int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nCount, int32_t a6, int16_t nFlags)
+int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nCount, int32_t bNonWaterSpawn, int16_t nFlags)
 {
     static const D2CoordStrc stru_6FD28B68[12] =
     {
@@ -1559,8 +1559,13 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
         return 0;
     }
 
-    int32_t v9 = a6;
-    if (a6 < 0 || a6 > 1)
+    int32_t v9 = bNonWaterSpawn;
+#ifdef NO_BUG_FIX
+    // Original game accepts a value of 2 here, which then indexes past the end of stru_6FD28B68 (only 2 sets of 6 coordinates).
+    if (bNonWaterSpawn < 0 || bNonWaterSpawn > 2)
+#else
+    if (bNonWaterSpawn < 0 || bNonWaterSpawn > 1)
+#endif
     {
         v9 = 0;
     }
