@@ -247,7 +247,10 @@ void __fastcall ACT1Q4_SetMonolithOrder(D2QuestDataStrc* pQuestData)
 	pQuestDataEx->nCurrentMonolithNo = 0;
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pQuestData->pGame);
-	for (int32_t i = 0; i < 5; ++i)
+	// The counter only advances once a stone has actually been placed, so the
+	// loop keeps rolling until all five monoliths have a class. Advancing it on
+	// every roll would leave the slots that lost a collision set to zero.
+	for (int32_t i = 0; i < 5;)
 	{
 		const uint32_t nRand = ITEMS_RollRandomNumber(pSeed) % 5;
 		if (!pQuestDataEx->nStoneOrder[nRand])
@@ -256,6 +259,7 @@ void __fastcall ACT1Q4_SetMonolithOrder(D2QuestDataStrc* pQuestData)
 			sprintf(szMessage, "stone %d is class %d", nRand, nMonolithClassIds[i]);
 			QUESTS_DebugOutput(pQuestData->pGame, szMessage, __FILE__, __LINE__);
 			pQuestDataEx->nStoneOrder[nRand] = nMonolithClassIds[i];
+			++i;
 		}
 	}
 }
