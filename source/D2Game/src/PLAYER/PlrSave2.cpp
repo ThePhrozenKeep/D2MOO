@@ -699,7 +699,7 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
         }
     }
 
-    const uint8_t nProgression = (dwFlags >> CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT) & CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK;
+    const uint8_t nProgression = (dwFlags & CLIENTSAVEFLAG_CHARACTER_PROGRESSION_MASK) >> CLIENTSAVEFLAG_CHARACTER_PROGRESSION_BIT;
     switch (pGame->nDifficulty)
     {
     case DIFFMODE_NORMAL: break;
