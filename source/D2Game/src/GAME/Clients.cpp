@@ -528,9 +528,9 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
     pGame->nClients = 0;
     pGame->pClientList = nullptr;
 
-    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSetGameData)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfCreateClientInfo)
     {
-        pGame->nGameData = gpD2EventCallbackTable_6FD45830->pfSetGameData();
+        pGame->pClientInfo = gpD2EventCallbackTable_6FD45830->pfCreateClientInfo();
     }
 }
 
