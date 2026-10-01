@@ -61,12 +61,16 @@ endif() # D2MOO_BUILD_DEBUGGER
 
 # Note: we only use squall for a few headers
 # We may want to use the whole library at some point though.
+# When D2MOO_USE_SQUALL is off, the Storm target uses its own vendored copies of
+# these headers instead, so squall is not built at all.
+if(D2MOO_USE_SQUALL)
 add_library(squallstorm
 	squall/storm/thread/CCritSect.cpp
 )
 target_include_directories(squallstorm SYSTEM PUBLIC squall)
 target_compile_definitions(squallstorm PUBLIC WHOA_SYSTEM_WIN)
 add_library(squall::Storm ALIAS squallstorm)
+endif() # D2MOO_USE_SQUALL
 
 #STB for image writing
 add_library(stb INTERFACE)

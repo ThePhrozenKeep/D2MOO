@@ -46,6 +46,13 @@ cmake --preset VC6
 cmake --build --preset VC6
 ```
 
+The preset also sets `D2MOO_USE_SQUALL=OFF`. D2MOO only ever used a handful of
+[Squall](https://github.com/Lectem/squall) Storm container templates, and Squall
+needs `<cstdint>` and in-class member initialisers, which VC6 does not have. With
+the option off, `source/Storm/include/storm` provides layout-identical,
+VC6-compatible copies instead and Squall is not built at all. The option defaults
+to `ON`, so other toolchains keep using Squall.
+
 Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) documentation.
 
 ## Usage

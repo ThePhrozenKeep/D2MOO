@@ -34,6 +34,10 @@ endif()
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
 option(D2MOO_BUILD_DEBUGGER "Build the D2MOO debugger" ON)
+# Squall needs <cstdint> and in-class member initialisers, so it cannot be built by
+# VC6. Turning this off swaps it for the vendored, layout-identical Storm
+# container templates in source/Storm/include/storm.
+option(D2MOO_USE_SQUALL "Use the Squall Storm containers instead of the vendored copies" ON)
 cmake_dependent_option(D2MOO_BUILD_TESTS
     "Enable D2Moo project tests targets" ON # By default we want tests if CTest is enabled
     "BUILD_TESTING" OFF # Stay coherent with CTest variables
