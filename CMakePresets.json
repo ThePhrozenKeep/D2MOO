@@ -27,6 +27,21 @@
       "generator": "Visual Studio 17 2022"
     },
     {
+      "name": "VC6",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "generator": "NMake Makefiles",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/MSVC6.cmake",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "ENABLE_D2DETOURS_EMBEDDED_PATCHES": "OFF",
+        "D2MOO_BUILD_DEBUGGER": "OFF",
+        "D2MOO_BUILD_TESTS": "OFF",
+        "D2MOO_WITH_STATIC_TESTS": "OFF",
+        "D2MOO_INSTALL": "OFF"
+      }
+    },
+    {
       "name": "ninja",
       "inherits": "DefaultGenerator",
       "generator": "Ninja Multi-Config",
@@ -63,6 +78,10 @@
       "name": "VS2022",
       "configurePreset": "VS2022",
       "inherits": "DefaultGenerator"
+    },
+    {
+      "name": "VC6",
+      "configurePreset": "VC6"
     },
     {
       "name": "ninja",

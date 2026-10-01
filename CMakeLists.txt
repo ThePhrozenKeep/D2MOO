@@ -33,6 +33,7 @@ endif()
 
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
+option(D2MOO_BUILD_DEBUGGER "Build the D2MOO debugger" ON)
 cmake_dependent_option(D2MOO_BUILD_TESTS
     "Enable D2Moo project tests targets" ON # By default we want tests if CTest is enabled
     "BUILD_TESTING" OFF # Stay coherent with CTest variables
@@ -96,9 +97,14 @@ if(${D2MOO_INSTALL})
   include(InstallRequiredSystemLibraries) # Tell CMake that the `install` target needs to install required system libraries (eg: Windows SDK)
   include(GNUInstallDirs)
   
-  install(TARGETS D2.DetoursLauncher D2.Detours)
-  
-  set(D2MOO_TARGETS_TO_INSTALL D2Common D2Game D2Debugger)
+  if(TARGET D2.DetoursLauncher)
+    install(TARGETS D2.DetoursLauncher D2.Detours)
+  endif()
+
+  set(D2MOO_TARGETS_TO_INSTALL D2Common D2Game)
+  if(TARGET D2Debugger)
+    list(APPEND D2MOO_TARGETS_TO_INSTALL D2Debugger)
+  endif()
   install(TARGETS ${D2MOO_TARGETS_TO_INSTALL}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/patch
   )

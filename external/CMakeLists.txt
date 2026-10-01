@@ -33,7 +33,8 @@ target_include_directories(doctest SYSTEM
 )
 add_library(doctest::doctest ALIAS doctest)
 
-add_library(imgui
+if(D2MOO_BUILD_DEBUGGER)
+  add_library(imgui
 	#source files
 	imgui/imgui.cpp
 	imgui/imgui_draw.cpp
@@ -50,12 +51,13 @@ add_library(imgui
 	imgui/backends/imgui_impl_win32.h
 	imgui/backends/imgui_impl_dx9.cpp
 	imgui/backends/imgui_impl_dx9.h
-)
-target_include_directories(imgui SYSTEM
+  )
+  target_include_directories(imgui SYSTEM
 	PUBLIC imgui 
 	PUBLIC imgui/backends/
-)
-add_library(imgui::imgui ALIAS imgui)
+  )
+  add_library(imgui::imgui ALIAS imgui)
+endif() # D2MOO_BUILD_DEBUGGER
 
 # Note: we only use squall for a few headers
 # We may want to use the whole library at some point though.

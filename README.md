@@ -35,6 +35,17 @@ Or using the CMake-gui:
 
 You can replace `DefaultGenerator` by `VS2022` pr `Ninja` if you are using Visual Studio 2022.
 
+### Building with Visual C++ 6.0
+
+The `VC6` preset builds the game DLLs with VC6 (VS98) command line tools.
+Grab the portable toolset from [MSVC600](https://github.com/itsmattkc/MSVC600) and place it at `C:\MSVC600\VC98`,
+or point `MSVC6_ROOT` somewhere else.
+
+```sh
+cmake --preset VC6
+cmake --build --preset VC6
+```
+
 Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) documentation.
 
 ## Usage
