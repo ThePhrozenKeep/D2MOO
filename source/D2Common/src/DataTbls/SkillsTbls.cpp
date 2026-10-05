@@ -54,7 +54,7 @@ int __fastcall sub_6FD49980(int nValue)
 int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 {
 	D2TxtLinkStrc* pLinker = sgptDataTables->pSkillCalcLinker;
-	char szCode[4] = {};
+	char szCode[4] = { 0 };
 	int nRow = 0;
 
 	if (a3 == 1)
@@ -197,7 +197,7 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 	unsigned int nSize = 0;
 	int nBufferSize = 0;
 	FOGASTNodeStrc* pCode = nullptr;
-	FOGASTNodeStrc pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = { (FOGASTType)0 };
 
 	if (pRecord)
 	{
@@ -263,7 +263,7 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 	unsigned int nSize = 0;
 	int nBufferSize = 0;
 	FOGASTNodeStrc* pCode = nullptr;
-	FOGASTNodeStrc pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = { (FOGASTType)0 };
 
 	if (pRecord)
 	{
@@ -335,7 +335,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 	int nHighestClassSkillCount = 0;
 	uint8_t nPetType = 0;
 	uint8_t nClass = 0;
-	char szFileName[260] = {};
+	char szFileName[260] = { 0 };
 
 	D2BinFieldStrc pTmpMonStatsTbl[] =
 	{
@@ -780,7 +780,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 		if (sgptDataTables->bCompileTxt && sgptDataTables->pSkillsCode)
 		{
 			wsprintfA(szFileName, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", "skillscode");
-			fopen_s(&pSkillsCodeBin, szFileName, "wb");
+			pSkillsCodeBin = fopen(szFileName, "wb");
 			if (pSkillsCodeBin)
 			{
 				FileLockAndWrite(sgptDataTables->pSkillsCode, sgptDataTables->nSkillsCodeSize, 1u, pSkillsCodeBin);
@@ -799,7 +799,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 	if (sgptDataTables->bCompileTxt && sgptDataTables->pSkillDescCode)
 	{
 		wsprintfA(szFileName, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", "skilldesccode");
-		fopen_s(&pSkillDescCodeBin, szFileName, "wb");
+		pSkillDescCodeBin = fopen(szFileName, "wb");
 		if (pSkillDescCodeBin)
 		{
 			FileLockAndWrite(sgptDataTables->pSkillDescCode, sgptDataTables->nSkillDescCodeSize, 1, pSkillDescCodeBin);

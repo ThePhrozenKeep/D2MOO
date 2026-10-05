@@ -120,7 +120,7 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 					nPreviousY += 2 * nPreviousDiffY;
 
 					DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nPreviousX, nPreviousY, nLevelPrestId, -1, 0);
-					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb00 = true;
 					DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nPreviousX, nPreviousY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 				}
@@ -133,7 +133,7 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 				const int nY = std::max(pPreviousVertex->nPosY, pDrlgVertex->nPosY);
 				const int nYCapped = (nY - 4 * nPreviousDiffYAbs) & 0xFFFFFFFE;
 
-				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 				tPackedInfo.bLvlLink = true;
 				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped, nYCapped, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nXCapped + 2 * nPreviousDiffXAbs, nYCapped + 2 * nPreviousDiffYAbs, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
@@ -142,7 +142,7 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 			if (const int nRand = sub_6FD80C10(2 * nPreviousDiffX, 2 * nPreviousDiffY, 2 * nCurrentDiffX, 2 * nCurrentDiffY, nLookupId))
 			{
 				DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nCurrentX, nCurrentY, nRand, -1, 0);
-				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 				tPackedInfo.nUnkb00 = true;
 				DRLGGRID_AlterGridFlag(&pOutdoors->pGrid[2], nCurrentX, nCurrentY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
@@ -286,7 +286,7 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 //D2Common.0x6FD846C0
 void __fastcall sub_6FD846C0(D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 	tPackedInfo.bLvlLink = true;
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 4, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], pLevel->pOutdoors->nGridWidth - 2, pLevel->pOutdoors->nGridHeight - 3, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
@@ -296,7 +296,7 @@ void __fastcall sub_6FD846C0(D2DrlgLevelStrc* pLevel)
 //TODO: a1
 void __fastcall DRLGOUTSIEGE_AddACt5SecondaryBorder(D2DrlgLevelStrc* pLevel)
 {
-	D2UnkOutdoorStrc a1 = {};
+	D2UnkOutdoorStrc a1 = { 0 };
 
 	if (pLevel->nLevelId != LEVEL_BLOODYFOOTHILLS)
 	{
@@ -427,13 +427,11 @@ void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 	int nPrisonsPlaced = 0;
 	const int nPrisonsToPlace = 3;
 
-	const auto NeedsMorePrisons = [&] { return nPrisonsPlaced < nPrisonsToPlace; };
-
 	if (pLevel->nLevelId == LEVEL_ID_ACT5_BARRICADE_1)
 	{
 		D2_ASSERT(pLevel->pOutdoors);
 
-		for (int nAttemptNumber = 0; nAttemptNumber < 90 && NeedsMorePrisons(); ++nAttemptNumber)
+		for (int nAttemptNumber = 0; nAttemptNumber < 90 && (nPrisonsPlaced < nPrisonsToPlace); ++nAttemptNumber)
 		{
 			const int nRandX = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
 			const int nRandY = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
@@ -449,9 +447,9 @@ void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 		const int nRandX = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridWidth / 2);
 		const int nRandY = 2 * SEED_RollLimitedRandomNumber(&pLevel->pSeed, pLevel->pOutdoors->nGridHeight / 2);
 
-		for (int j = 0; j < pLevel->pOutdoors->nGridHeight && NeedsMorePrisons(); ++j)
+		for (int j = 0; j < pLevel->pOutdoors->nGridHeight && (nPrisonsPlaced < nPrisonsToPlace); ++j)
 		{
-			for (int i = 0; i < pLevel->pOutdoors->nGridWidth && NeedsMorePrisons(); ++i)
+			for (int i = 0; i < pLevel->pOutdoors->nGridWidth && (nPrisonsPlaced < nPrisonsToPlace); ++i)
 			{
 				const int nX = (i + nRandX) % pLevel->pOutdoors->nGridWidth;
 				const int nY = (j + nRandY) % pLevel->pOutdoors->nGridHeight;
@@ -465,7 +463,7 @@ void __fastcall DRLGOUTSIEGE_PlacePrisons(D2DrlgLevelStrc* pLevel)
 			}
 		}
 
-		if (NeedsMorePrisons())
+		if ((nPrisonsPlaced < nPrisonsToPlace))
 		{
 			FOG_DisplayWarning("Could not place enough prisons for quest 2. Please include seed in bug report.", __FILE__, __LINE__);
 		}

@@ -109,7 +109,7 @@ D2UnitStrc* __fastcall sub_6FCCFD70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 		return nullptr;
 	}
 
-	UnkAiStrc1 pCallbackArg = {};
+	UnkAiStrc1 pCallbackArg = { 0 };
 	pCallbackArg.pTarget = nullptr;
 	pCallbackArg.nDistance = INT_MAX;
 	sub_6FCF1E80(pGame, pUnit, &pCallbackArg, sub_6FCCFDE0, 2);
@@ -171,7 +171,7 @@ D2UnitStrc* __fastcall sub_6FCCFDE0(D2GameStrc* pGame, D2UnitStrc* pNPC, D2UnitS
 //D2Game.0x6FCCFEA0
 int32_t __fastcall AITACTICS_ChangeModeAndTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMode, D2UnitStrc* pTargetUnit)
 {
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	modeChange.pTargetUnit = pTargetUnit;
@@ -181,7 +181,7 @@ int32_t __fastcall AITACTICS_ChangeModeAndTargetUnit(D2GameStrc* pGame, D2UnitSt
 //D2Game.0x6FCCFEE0
 int32_t __fastcall AITACTICS_ChangeModeAndTargetCoordinates(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMode, int32_t nX, int32_t nY)
 {
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	modeChange.nX = nX;
@@ -197,7 +197,7 @@ int32_t __fastcall AITACTICS_UseSequenceSkill(D2GameStrc* pGame, D2UnitStrc* pUn
 		return 0;
 	}
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_SEQUENCE, &modeChange);
 	UNITS_SetUsedSkill(pUnit, SKILLS_GetSkillById(pUnit, nSkillId, -1));
 
@@ -218,7 +218,7 @@ int32_t __fastcall AITACTICS_UseSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, uint
 		return 0;
 	}
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	UNITS_SetUsedSkill(pUnit, SKILLS_GetSkillById(pUnit, nSkillId, -1));
 
@@ -244,7 +244,7 @@ void __fastcall AITACTICS_IdleInNeutralMode(D2GameStrc* pGame, D2UnitStrc* pUnit
 {
 	if (!pUnit || pUnit->dwAnimMode != MONMODE_NEUTRAL)
 	{
-		D2ModeChangeStrc modeChange = {};
+		D2ModeChangeStrc modeChange = { 0 };
 		MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_NEUTRAL, &modeChange);
 		modeChange.pTargetUnit = pUnit;
 		D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
@@ -320,7 +320,7 @@ int32_t __fastcall AITACTICS_MoveToTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 	PATH_SetStepNum(pUnit->pDynamicPath, bStep);
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, nNewMode, &modeChange);
 
 	if (pTarget)
@@ -646,7 +646,7 @@ void __fastcall AITACTICS_AddMessage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Uni
 	{
 		D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pScrollTarget, __FILE__, __LINE__);
 
-		D2GSPacketSrv27 packet27 = {};
+		D2GSPacketSrv27 packet27 = { 0 };
 		packet27.nHeader = 0x27;
 
 		if (pUnit)
@@ -666,8 +666,8 @@ void __fastcall AITACTICS_AddMessage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Uni
 	}
 	else
 	{
-		char szText[12] = {};
-		sprintf_s(szText, "%d", wMessage);
+		char szText[12] = { 0 };
+		sprintf(szText, "%d", wMessage);
 
 		if (pUnit && pUnit->pHoverText)
 		{
@@ -696,7 +696,7 @@ void __fastcall AITACTICS_AddMessage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Uni
 //D2Game.0x6FCD1020
 int32_t __fastcall AITACTICS_ChangeModeAndTargetCoordinatesOneStep(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nMode)
 {
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	PATH_SetStepNum(pUnit->pDynamicPath, 1u);
@@ -708,7 +708,7 @@ int32_t __fastcall AITACTICS_ChangeModeAndTargetCoordinatesOneStep(D2GameStrc* p
 //D2Game.0x6FCD1070
 int32_t __fastcall AITACTICS_ChangeModeAndTargetCoordinatesNoStep(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nMode)
 {
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	PATH_SetStepNum(pUnit->pDynamicPath, 0);
@@ -751,7 +751,7 @@ int32_t __fastcall AITACTICS_MoveInRadiusToTarget(D2GameStrc* pGame, D2UnitStrc*
 	const int32_t nSignX = D2signum(nTargetX - nX);
 	const int32_t nSignY = D2signum(nTargetY - nY);
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, nMode, &modeChange);
 	PATH_SetStepNum(pUnit->pDynamicPath, 1u);
 
@@ -780,7 +780,7 @@ int32_t __fastcall AITACTICS_WalkAroundTargetWithScaledDistance(D2GameStrc* pGam
 	const int32_t nTargetX = CLIENTS_GetUnitX(pTarget);
 	const int32_t nTargetY = CLIENTS_GetUnitY(pTarget);
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_WALK, &modeChange);
 	modeChange.nX = nTargetX + (nScale * (CLIENTS_GetUnitX(pUnit) - nTargetX)) / nDistance;
 	modeChange.nY = nTargetY + (nScale * (CLIENTS_GetUnitY(pUnit) - nTargetY)) / nDistance;

@@ -21,11 +21,11 @@ target_sources(${FogImplName}
 	src/Gamma.cpp
 	src/IFF.cpp
 	src/LogManager.cpp
-	src/Mem/mem.cpp
+	src/Mem/Mem.cpp
 	src/QServer/QServer.cpp
 	src/QServer/QServer98.cpp
 	src/QServer/QServerNT.cpp
-	src/Safesock.cpp
+	src/SafeSock.cpp
 	src/String/FogString.cpp
 	src/System/System.cpp
 	

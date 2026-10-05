@@ -5,6 +5,8 @@
 
 #undef D2FUNC_DLL_NP
 #define D2FUNC_DLL_NP D2FUNC_DLL_NP_STUB
+#undef D2FUNC_DLL_NP_VOID
+#define D2FUNC_DLL_NP_VOID D2FUNC_DLL_NP_VOID_STUB
 
 #include <Storm.h>
 

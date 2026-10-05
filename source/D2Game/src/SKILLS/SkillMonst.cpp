@@ -60,7 +60,7 @@ int32_t __fastcall SKILLS_SrvSt42_FireHit(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         return SKILLS_SrvSt32_Conversion_Bash_Stun_Concentrate_BearSmite(pGame, pUnit, nSkillId, nSkillLevel);
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -262,7 +262,7 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
 int32_t __fastcall SKILLS_SrvDo087_MaggotLay(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     // TODO: Name
-    constexpr int8_t byte_6FD296C8[] =
+    D2_CONSTEXPR int8_t byte_6FD296C8[] =
     {
         10, 8, 22, 20, 18, 16, 14, 12
     };
@@ -329,7 +329,7 @@ int32_t __fastcall SKILLS_SrvSt46_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pU
 int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     // TODO: Names
-    constexpr int8_t byte_6FD296D0[] =
+    D2_CONSTEXPR int8_t byte_6FD296D0[] =
     {
         27, 14, 15, 3, 99, 7, 21, 22, 31,
         26, 12, 13, 2, 99, 6, 19, 20, 30,
@@ -341,7 +341,7 @@ int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* p
         28, 16, 17, 4, 99, 0, 23, 8, 24
     };
 
-    constexpr int8_t byte_6FD29718[] =
+    D2_CONSTEXPR int8_t byte_6FD29718[] =
     {
         29, 28, 27, 26, 25, 24, 31, 30
     };
@@ -401,7 +401,7 @@ int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* p
         nY += nOffsetY;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.nTargetX = nX;
     missileParams.nTargetY = nY;
     missileParams.nSkillLevel = nSkillLevel;
@@ -452,7 +452,7 @@ int32_t __fastcall SKILLS_SrvSt47_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 
     if (pTarget)
     {
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
         damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
         if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
         {
@@ -744,7 +744,7 @@ int32_t __fastcall SKILLS_SrvSt50_QuickStrike(D2GameStrc* pGame, D2UnitStrc* pUn
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
         SUNITDMG_AllocCombat(pGame, pUnit, pTarget, &damage, 128);
         return 1;
     }
@@ -857,7 +857,7 @@ int32_t __fastcall SKILLS_SrvDo093_GargoyleTrap(D2GameStrc* pGame, D2UnitStrc* p
         }
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.pOwner = pUnit;
     missileParams.nTargetY = nY - nUnitY;
     missileParams.dwFlags = 3;
@@ -988,7 +988,7 @@ int32_t __fastcall SKILLS_SrvDo095_MonInferno(D2GameStrc* pGame, D2UnitStrc* pUn
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
 
     missileParams.dwFlags = 0x25u;
     missileParams.pOwner = pUnit;
@@ -1116,7 +1116,7 @@ int32_t __fastcall SKILLS_SrvDo152_DiabLight(D2GameStrc* pGame, D2UnitStrc* pUni
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x25u;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -1323,7 +1323,7 @@ int32_t __fastcall SKILLS_SrvDo097_Resurrect(D2GameStrc* pGame, D2UnitStrc* pUni
         if (pTarget->dwUnitType == UNIT_MONSTER)
         {
             const int32_t nMode = MONSTERSPAWN_GetResurrectMode(pTarget, 1);
-            D2ModeChangeStrc modeChange = {};
+            D2ModeChangeStrc modeChange = { 0 };
             MONSTERMODE_GetModeChangeInfo(pTarget, nMode, &modeChange);
             MONSTERSPAWN_GetResurrectMode(pTarget, 1);
             D2GAME_ModeChange_6FC65220(pGame, &modeChange, nMode != MONMODE_SEQUENCE);
@@ -1369,12 +1369,12 @@ int32_t __fastcall SKILLS_SrvDo098_MonTeleport(D2GameStrc* pGame, D2UnitStrc* pU
 //D2Game.0x6FD08CD0
 int32_t __fastcall SKILLS_SrvDo099_PrimePoisonNova(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    constexpr int32_t dword_6FD29720[] =
+    D2_CONSTEXPR int32_t dword_6FD29720[] =
     {
         0, 1, 2, 2, 2, 2, 2, 1, 0, -1, -2, -2, -2, -2, -2, -1
     };
 
-    constexpr int32_t dword_6FD29760[] =
+    D2_CONSTEXPR int32_t dword_6FD29760[] =
     {
         2, 2, 2, 1, 0, -1, -2, -2, -2, -2, -2, -1, 0, 1, 2, 2
     };
@@ -1396,7 +1396,7 @@ int32_t __fastcall SKILLS_SrvDo099_PrimePoisonNova(D2GameStrc* pGame, D2UnitStrc
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x1F;
     missileParams.pOwner = pUnit;
     missileParams.pOrigin = pUnit;
@@ -1451,7 +1451,7 @@ int32_t __fastcall SKILLS_SrvDo100_DiabCold(D2GameStrc* pGame, D2UnitStrc* pUnit
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
 
         damage.wResultFlags |= pSkillsTxtRecord->wResultFlags | 1;
         damage.dwHitFlags |= pSkillsTxtRecord->dwHitFlags;
@@ -1498,7 +1498,7 @@ int32_t __fastcall SKILLS_SrvDo101_FingerMageSpider(D2GameStrc* pGame, D2UnitStr
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 3;
     missileParams.pOwner = pUnit;
     missileParams.pOrigin = pUnit;
@@ -1546,7 +1546,7 @@ int32_t __fastcall SKILLS_SrvDo102_DiabWall(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     const int32_t nSubMissiles = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -1675,7 +1675,7 @@ int32_t __fastcall SKILLS_SrvDo103_DiabRun(D2GameStrc* pGame, D2UnitStrc* pUnit,
         {
             if (UNITS_IsInMeleeRange(pUnit, pTarget, 0))
             {
-                D2DamageStrc damage = {};
+                D2DamageStrc damage = { 0 };
                 pUnit->nActionFrame = 0;
                 sub_6FD155E0(pGame, pUnit, pTarget, pSkillsTxtRecord, nSkillId, nSkillLevel, &damage, 0);
 
@@ -1798,7 +1798,7 @@ int32_t __fastcall SKILLS_SrvDo105_DesertTurret(D2GameStrc* pGame, D2UnitStrc* p
         nBaseY = 2;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.pOwner = pUnit;
     missileParams.dwFlags = 3;
     missileParams.nSkillLevel = nSkillLevel;
@@ -1866,7 +1866,7 @@ int32_t __fastcall SKILLS_SrvSt55_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit,
         return 0;
     }
 
-    D2SeedStrc seed = {};
+    D2SeedStrc seed = { 0 };
     SEED_InitSeed(&seed);
     int32_t nUnitGUID = -1;
     if (pUnit)
@@ -1912,7 +1912,7 @@ int32_t __fastcall SKILLS_SrvDo107_Mosquito(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     const int32_t nParam = SKILLS_GetParam1(pSkill);
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     const int32_t nMinDamage = SKILLS_GetMinPhysDamage(pUnit, nSkillId, nSkillLevel, 1) >> 8;
     const int32_t nMaxDamage = SKILLS_GetMaxPhysDamage(pUnit, nSkillId, nSkillLevel, 1) >> 8;
@@ -2039,7 +2039,7 @@ int32_t __fastcall SKILLS_RollMonFrenzyDamage(D2GameStrc* pGame, D2UnitStrc* pUn
 
     UNITS_SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTargetUnit, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -2244,11 +2244,11 @@ int32_t __fastcall SKILLS_SrvDo110_Hireable_RogueMissile(D2GameStrc* pGame, D2Un
 //D2Game.0x6FD0A9B0
 int32_t __fastcall SKILLS_SrvDo112_MonCurseCast(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    constexpr int32_t monCurseIds[] = {
+    D2_CONSTEXPR int32_t monCurseIds[] = {
         SKILL_AMPLIFYDAMAGE, SKILL_WEAKEN, SKILL_IRONMAIDEN, SKILL_LIFETAP, SKILL_DECREPIFY, SKILL_LOWERRESIST
     };
 
-    const uint32_t nIndex = ITEMS_RollRandomNumber(&pUnit->pSeed) % std::size(monCurseIds);
+    const uint32_t nIndex = ITEMS_RollRandomNumber(&pUnit->pSeed) % ARRAY_SIZE(monCurseIds);
     const int32_t nCurseSkillId = monCurseIds[nIndex];
 
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -2264,7 +2264,7 @@ int32_t __fastcall SKILLS_SrvDo112_MonCurseCast(D2GameStrc* pGame, D2UnitStrc* p
 
     const int32_t nRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nCurseSkillId, nSkillLevel);
 
-    D2UnkNecSkillStrc args = {};
+    D2UnkNecSkillStrc args = { 0 };
     args.pGame = pGame;
     args.pUnit = pUnit;
     args.unk0x08 = 0;
@@ -2356,7 +2356,7 @@ D2UnitStrc* __fastcall SKILLS_CreateSpiderLayMissile(D2GameStrc* pGame, D2UnitSt
     int32_t a3 = 0;
     D2Common_11055((uint8_t)a1a, &a2a, &a3);
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.nX = CLIENTS_GetUnitY(pUnit) + a2a;
     missileParams.nY = CLIENTS_GetUnitX(pUnit) + a3;
     missileParams.dwFlags = 0x21;

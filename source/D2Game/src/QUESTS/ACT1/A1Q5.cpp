@@ -240,7 +240,7 @@ void __fastcall ACT1Q5_SpawnTowerChestMissiles(D2QuestDataStrc* pQuestData, D2Ac
 		D2UnitStrc* pObject = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nObjectGUIDs[i]);
 		if (pObject)
 		{
-			D2CoordStrc pCoord = {};
+			D2CoordStrc pCoord = { 0 };
 			pCoord.nX = pQuestDataEx->pCoord.nX;
 			pCoord.nY = pQuestDataEx->pCoord.nY;
 

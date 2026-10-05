@@ -76,8 +76,9 @@ struct D2DrlgOutdoorInfoStrc
 //Helper function
 inline D2DrlgOutdoorPackedGrid2InfoStrc DRLGOUTDOORS_GetPackedGrid2Info(D2DrlgOutdoorInfoStrc* pOutdoors, int nX, int nY)
 {
-	uint32_t nPackedValue = DRLGGRID_GetGridEntry(&pOutdoors->pGrid[2], nX, nY);
-	return D2DrlgOutdoorPackedGrid2InfoStrc{ nPackedValue };
+	D2DrlgOutdoorPackedGrid2InfoStrc nResult;
+	nResult.nPackedValue = DRLGGRID_GetGridEntry(&pOutdoors->pGrid[2], nX, nY);
+	return nResult;
 }
 
 //D2Common.0x6FD7DC20

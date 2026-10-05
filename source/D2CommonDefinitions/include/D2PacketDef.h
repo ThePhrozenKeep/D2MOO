@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 #pragma pack(1)
 
@@ -11,9 +11,9 @@
 #endif
 
 #if PACKETS_USE_16BITS_STATID
-using PacketStatId = uint16_t;
+typedef uint16_t PacketStatId;
 #else
-using PacketStatId = uint8_t;
+typedef uint8_t PacketStatId;
 #endif // PACKETS_USE_16BITS_STATID
 
 
@@ -819,11 +819,9 @@ struct D2GSPacketSrvStat	//size of 0x04 (originally 0x03)
 	PacketStatId nStat;		//0x01 
 	uint8_t nValue;			//0x03 (Originally 0x02)
 };
-using D2GSPacketSrv1D = D2GSPacketSrvStat;
-using D2GSPacketSrv1E = D2GSPacketSrvStat;
-using D2GSPacketSrv1F = D2GSPacketSrvStat;
-
-
+typedef D2GSPacketSrvStat D2GSPacketSrv1D;
+typedef D2GSPacketSrvStat D2GSPacketSrv1E;
+typedef D2GSPacketSrvStat D2GSPacketSrv1F;
 struct D2GSPacketSrv20		//size of 0x0B (originally 0x0A)
 {
 	uint8_t nHeader;			//0x00
@@ -1957,12 +1955,11 @@ struct D2GSPacketSrvStatAndGuid
 	T nValue;				//0x07 (Originally 0x06)
 };
 
-using D2GSPacketSrv9E = D2GSPacketSrvStatAndGuid<uint8_t>;
-using D2GSPacketSrv9F = D2GSPacketSrvStatAndGuid<uint16_t>;
-using D2GSPacketSrvA0 = D2GSPacketSrvStatAndGuid<uint32_t>;
-using D2GSPacketSrvA1 = D2GSPacketSrvStatAndGuid<uint8_t>;
-using D2GSPacketSrvA2 = D2GSPacketSrvStatAndGuid<uint16_t>;
-
+typedef D2GSPacketSrvStatAndGuid<uint8_t> D2GSPacketSrv9E;
+typedef D2GSPacketSrvStatAndGuid<uint16_t> D2GSPacketSrv9F;
+typedef D2GSPacketSrvStatAndGuid<uint32_t> D2GSPacketSrvA0;
+typedef D2GSPacketSrvStatAndGuid<uint8_t> D2GSPacketSrvA1;
+typedef D2GSPacketSrvStatAndGuid<uint16_t> D2GSPacketSrvA2;
 struct D2GSPacketSrvA3		//size of 0x18
 {
 	uint8_t nHeader;			//0x00

@@ -206,7 +206,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_RemoveCainFromTristram(D2GameStrc* pGame, 
 		return 1;
 	}
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_DEATH, &modeChange);
 	D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 
@@ -222,7 +222,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_RemoveCainFromTristram(D2GameStrc* pGame, 
 //D2Game.0x6FC99E80
 void __fastcall ACT1Q4_SendPacket0x5DToClient(D2UnitStrc* pUnit)
 {
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A1Q4_CAIN;
@@ -255,7 +255,7 @@ void __fastcall ACT1Q4_SetMonolithOrder(D2QuestDataStrc* pQuestData)
 		const uint32_t nRand = ITEMS_RollRandomNumber(pSeed) % 5;
 		if (!pQuestDataEx->nStoneOrder[nRand])
 		{
-			char szMessage[128] = {};
+			char szMessage[128] = { 0 };
 			sprintf(szMessage, "stone %d is class %d", nRand, nMonolithClassIds[i]);
 			QUESTS_DebugOutput(pQuestData->pGame, szMessage, __FILE__, __LINE__);
 			pQuestDataEx->nStoneOrder[nRand] = nMonolithClassIds[i];
@@ -387,7 +387,7 @@ void __fastcall ACT1Q4_SpawnCainInTristram(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	D2UnitStrc* pCain = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, MONSTER_CAIN1, 1, -1, 0);
 	if (!pCain)
 	{
-		D2CoordStrc pCoord = {};
+		D2CoordStrc pCoord = { 0 };
 		pCoord.nX = nX;
 		pCoord.nY = nY;
 
@@ -810,7 +810,7 @@ int32_t __fastcall OBJECTS_OperateFunction09_Monolith(D2ObjOperateFnStrc* pOp, i
 
 	--pQuestDataEx->nScrollsInGame;
 
-	D2CoordStrc monolithCoords = {};
+	D2CoordStrc monolithCoords = { 0 };
 
 	for (int32_t i = 0; i < 5; ++i)
 	{
@@ -1033,7 +1033,7 @@ void __fastcall ACT1Q4_SendStoneOrderToClient(D2GameStrc* pGame, D2UnitStrc* pUn
 		ACT1Q4_SetMonolithOrder(pQuestData);
 	}
 
-	D2GSPacketSrv50 packet50 = {};
+	D2GSPacketSrv50 packet50 = { 0 };
 	packet50.nHeader = 0x50;
 	packet50.nQuestId = QUEST_A1Q4_CAIN;
 
@@ -1460,13 +1460,13 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoo
 
 	D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
 
-	D2DrlgCoordsStrc pRoomCoord = {};
+	D2DrlgCoordsStrc pRoomCoord = { 0 };
 	DUNGEON_GetRoomCoordinates(pRoom, &pRoomCoord);
 
 	int32_t nTmpX = nX;
 	int32_t nTmpY = nY;
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	pCoord.nX = nX;
 	pCoord.nY = nY;
 
@@ -1898,7 +1898,7 @@ int32_t __fastcall ACT1Q4_CreateCowPortal(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return 0;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pUnit, &pCoord);
 	D2ActiveRoomStrc* pFreeRoom = nullptr;
 	QUESTS_GetFreePosition(pRoom, &pCoord, 3, 0x400, &pFreeRoom, 4);
@@ -2239,7 +2239,7 @@ void __fastcall ACT1Q4_SpawnCainPortalInTown(D2GameStrc* pGame)
 		return;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pCainMonster, &pCoord);
 
 	pRoom = DUNGEON_GetRoomAtPosition(UNITS_GetRoom(pCainMonster), pCoord.nX, pCoord.nY);

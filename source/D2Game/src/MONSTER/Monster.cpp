@@ -184,10 +184,10 @@ void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoom
         pUnit->pMonsterData->nComponent[11] = nRand;
     }
 
-    D2PlayerCountBonusStrc playerCountBonus = {};
+    D2PlayerCountBonusStrc playerCountBonus = { 0 };
     MONSTER_GetPlayerCountBonus(pGame, &playerCountBonus, pRoom, pUnit);
 
-    uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     if (MONSTERS_GetHirelingTypeId(pUnit))
     {
         nDifficulty = 0;
@@ -215,11 +215,12 @@ void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoom
     STATLIST_SetUnitStat(pUnit, STAT_OTHER_ANIMRATE, 100, 0);
     STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, 128, 0);
 
-    D2MonStatsInitStrc monStatsInit = {};
+    D2MonStatsInitStrc monStatsInit = { 0 };
     DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, pGame->nGameType || pGame->dwGameType, nDifficulty, nLevel, 7, &monStatsInit);
 
     const int32_t nBaseHp = monStatsInit.nMinHP + ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, monStatsInit.nMaxHP - monStatsInit.nMinHP + 1);
-    const int32_t nHp = std::min(nBaseHp + MONSTERUNIQUE_CalculatePercentage(nBaseHp, playerCountBonus.nHp, 100), (1 << 23) - 1);
+
+    const int32_t nHp = std::min<int32_t>(nBaseHp + MONSTERUNIQUE_CalculatePercentage(nBaseHp, playerCountBonus.nHp, 100), (1 << 23) - 1);
     const int32_t nShiftedHp = nHp << 8;
     STATLIST_SetUnitStat(pUnit, STAT_MAXHP, nShiftedHp, 0);
     STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nShiftedHp, 0);
@@ -314,7 +315,7 @@ int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc*
 
     UNITS_UpdateAnimRateAndVelocity(pMonster, __FILE__, __LINE__);
 
-    D2ModeChangeStrc modeChange = {};
+    D2ModeChangeStrc modeChange = { 0 };
     MONSTERMODE_GetModeChangeInfo(pMonster, nAnimMode, &modeChange);
     modeChange.nX = nX;
     modeChange.nY = nY;

@@ -54,9 +54,9 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 	uint32_t dwClassToken = 0;
 	uint32_t dwModeToken = 0;
 	int nWeaponClassId = 0;
-	char szWeaponClass[4] = {};
-	char szClass[4] = {};
-	char szMode[4] = {};
+	char szWeaponClass[4] = { 0 };
+	char szClass[4] = { 0 };
+	char szMode[4] = { 0 };
 
 	if (nUnitType == UNIT_PLAYER)
 	{

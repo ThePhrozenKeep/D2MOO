@@ -35,10 +35,10 @@ D2CellFileStrc* __fastcall ARCHIVE_LoadCellFile(const char* szFile, int32_t nTyp
 //D2Win.0x6F8A5A50 (#10040)
 D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, uint32_t* pFileSize, int32_t nType)
 {
-	char szPath[260] = {};
+	char szPath[260] = { 0 };
 
-	strcpy_s(szPath, szFile);
-	strcat_s(szPath, D2CMP_GetGfxFileExtension(nType));
+	strcpy(szPath, szFile);
+	strcat(szPath, D2CMP_GetGfxFileExtension(nType));
 
 	void* pFile = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(nullptr, szPath, pFileSize);
 
@@ -153,17 +153,17 @@ HD2ARCHIVE __stdcall D2Win_GetArchive()
 //D2Win.0x6F8A5DF0 (#10185)
 int32_t __stdcall D2Win_10185()
 {
-	char szPath[260] = {};
+	char szPath[260] = { 0 };
 
-	FOG_GetInstallPath(szPath, std::size(szPath));
-	SStrNCat(szPath, "d2char.mpq", std::size(szPath));
+	FOG_GetInstallPath(szPath, ARRAY_SIZE(szPath));
+	SStrNCat(szPath, "d2char.mpq", ARRAY_SIZE(szPath));
 
 	if (GetFileAttributesA(szPath) != -1)
 	{
 		return 0;
 	}
 
-	SStrCopy(szPath, "d2char.mpq", std::size(szPath));
+	SStrCopy(szPath, "d2char.mpq", ARRAY_SIZE(szPath));
 
 	if (GetFileAttributesA(szPath) != -1)
 	{

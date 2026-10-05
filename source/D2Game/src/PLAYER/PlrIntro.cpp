@@ -17,7 +17,7 @@ struct D2NpcIndexMapStrc
 #pragma pack(pop)
 
 
-constexpr D2NpcIndexMapStrc npcIndexMap[] =
+D2_CONSTEXPR D2NpcIndexMapStrc npcIndexMap[] =
 {
     { -1, 0 },
     { MONSTER_GHEED, 1 },
@@ -56,14 +56,14 @@ constexpr D2NpcIndexMapStrc npcIndexMap[] =
     { MONSTER_CAIN6, 34 },
 };
 
-constexpr uint32_t bufferSize = 8;
+D2_CONSTEXPR uint32_t bufferSize = 8;
 
 //D2Game.0x6FC7F000
 void __fastcall PLRINTRO_SetQuestIntroFlag(D2UnitStrc* pUnit, D2GameStrc* pGame, int32_t nNpcId)
 {
     D2PlrIntroStrc* pPlayerIntro = UNITS_GetPlayerData(pUnit)->pPlayerIntro[pGame->nDifficulty];
 
-    for (int32_t i = 0; i < std::size(npcIndexMap); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(npcIndexMap); ++i)
     {
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {
@@ -79,7 +79,7 @@ int32_t __fastcall PLRINTRO_GetQuestIntroFlag(D2UnitStrc* pUnit, D2GameStrc* pGa
 {
     D2PlrIntroStrc* pPlayerIntro = UNITS_GetPlayerData(pUnit)->pPlayerIntro[pGame->nDifficulty];
 
-    for (int32_t i = 0; i < std::size(npcIndexMap); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(npcIndexMap); ++i)
     {
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {
@@ -93,7 +93,7 @@ int32_t __fastcall PLRINTRO_GetQuestIntroFlag(D2UnitStrc* pUnit, D2GameStrc* pGa
 //D2Game.0x6FC7F0C0
 void __fastcall PLRINTRO_SetNpcIntroFlag(D2PlrIntroStrc* pPlayerIntro, int32_t nNpcId)
 {
-    for (int32_t i = 0; i < std::size(npcIndexMap); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(npcIndexMap); ++i)
     {
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {
@@ -107,7 +107,7 @@ void __fastcall PLRINTRO_SetNpcIntroFlag(D2PlrIntroStrc* pPlayerIntro, int32_t n
 //D2Game.0x6FC7F100
 int32_t __fastcall PLRINTRO_GetNpcIntroFlag(D2PlrIntroStrc* pPlayerIntro, int32_t nNpcId)
 {
-    for (int32_t i = 0; i < std::size(npcIndexMap); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(npcIndexMap); ++i)
     {
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {
@@ -123,7 +123,7 @@ void __fastcall PLRINTRO_MaskNpcIntroFlag(D2GameStrc* pGame, D2UnitStrc* pPlayer
 {
     D2PlrIntroStrc* pPlayerIntro = UNITS_GetPlayerData(pPlayer)->pPlayerIntro[pGame->nDifficulty];
 
-    for (int32_t i = 0; i < std::size(npcIndexMap); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(npcIndexMap); ++i)
     {
         if (npcIndexMap[i].nNpcClassId == nNpcId)
         {

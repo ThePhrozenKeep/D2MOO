@@ -8,6 +8,11 @@
 #include "D2Net.h"
 #include "Server.h"
 
+#if defined(_MSC_VER) && _MSC_VER < 1600
+// SetThreadDescription arrived in the Win10 SDK; the MSVC600 SDK predates it.
+#define SetThreadDescription(hThread, szDescription) ((void)(hThread), (void)(szDescription))
+#endif
+
 
 #pragma warning (disable: 6387)
 #pragma warning (disable: 28159)
@@ -199,13 +204,13 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 
 	while (!dword_6FC0B25C)
 	{
-		fd_set readfds = {};
+		fd_set readfds = { 0 }
 		readfds.fd_array[0] = gClientSocket;
 		readfds.fd_count = 1;
 
-		timeval timeout = {};
+		timeval timeout = { 0 }
 		timeout.tv_sec = 0;
-		timeout.tv_usec = 100'000;
+		timeout.tv_usec = 100000;
 
 		int32_t v4 = select(0, &readfds, nullptr, nullptr, &timeout);
 		if (v4)
@@ -240,7 +245,7 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 				}
 				else
 				{
-					uint8_t buffer[2496] = {};
+					uint8_t buffer[2496] = { 0 };
 
 					const int32_t v5 = recv(gClientSocket, (char*)&buffer[v2], 1460, 0);
 					v4 = v5;
@@ -318,6 +323,10 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 
 	OutputDebugStringA("Client thread close #2\n");
 	ExitThread(0);
+#if defined(_MSC_VER) && _MSC_VER < 1600
+	// VC6 is dumb and does notice ExitThread always being called.
+	return 0;
+#endif
 }
 
 //D2Net.0x6FC015C0
@@ -357,7 +366,7 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			{
 				uint8_t processedData[256] = {};
 
-				for (int32_t i = 0; i < std::size(processedData) / 2; ++i)
+				for (int32_t i = 0; i < ARRAY_SIZE(processedData) / 2; ++i)
 				{
 					const uint8_t element = pPacketBuffer->data[i + 1];
 
@@ -511,7 +520,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 //D2Net.0x6FC019A0 (#10013)
 void __stdcall CLIENT_GetLocalIpAddressString(char* szBuffer)
 {
-	sockaddr_in sa = {};
+	sockaddr_in sa = { 0 };
 	int32_t sa_len = sizeof(sa);
 
 	getsockname(gClientSocket, (sockaddr*)&sa, &sa_len);

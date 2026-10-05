@@ -91,7 +91,7 @@ int32_t __fastcall SKILLS_SrvSt06_PowerStrike_ChargedStrike(D2GameStrc* pGame, D
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, 0, 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -133,7 +133,7 @@ int32_t __fastcall SKILLS_SrvSt07_Impale(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -350,7 +350,7 @@ int32_t __fastcall SKILLS_SrvSt10_LightningStrike(D2GameStrc* pGame, D2UnitStrc*
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, 0, 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -389,7 +389,7 @@ int32_t __fastcall SKILLS_SrvDo006_InnerSight_SlowMissiles(D2GameStrc* pGame, D2
         return 0;
     }
 
-    D2SrvDo06Strc args = {};
+    D2SrvDo06Strc args = { 0 };
 
     args.nSkillId = nSkillId;
     args.nSkillLevel = nSkillLevel;
@@ -407,7 +407,7 @@ int32_t __fastcall SKILLS_AuraCallback_InnerSight_SlowMissiles(D2AuraCallbackStr
 {
     D2SrvDo06Strc* pArgs = (D2SrvDo06Strc*)pAuraCallback->pArgs;
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
 
     curse.pTarget = pUnit;
     curse.pUnit = pAuraCallback->pOwner;
@@ -444,7 +444,7 @@ int32_t __fastcall SKILLS_SrvDo007_Jab(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         sub_6FC627B0(pUnit, 8);
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, nToHit, 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -518,7 +518,7 @@ int32_t __fastcall SKILLS_SrvDo008_MultipleShot_Teeth_ShockWave(D2GameStrc* pGam
             v31 = v9;
         }
 
-        D2MissileStrc missileParams = {};
+        D2MissileStrc missileParams = { 0 };
         missileParams.dwFlags = 2080;
         missileParams.nSkillLevel = nSkillLevel;
         missileParams.pOwner = pUnit;
@@ -602,7 +602,7 @@ int32_t __fastcall SKILLS_SrvDo010_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D2U
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.nSkillLevel = nSkillLevel;
     missileParams.dwFlags = 0x20;
     missileParams.pOwner = pUnit;
@@ -686,7 +686,7 @@ int32_t __fastcall SKILLS_SrvDo011_ChargedStrike(D2GameStrc* pGame, D2UnitStrc* 
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 33;
     missileParams.pOwner = pUnit;
     missileParams.nMissile = nMissileId;
@@ -760,7 +760,7 @@ int32_t __fastcall SKILLS_SrvDo012_Strafe(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
     const int32_t v15 = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -820,7 +820,7 @@ int32_t __fastcall SKILLS_SrvDo013_Fend_Zeal_Fury(D2GameStrc* pGame, D2UnitStrc*
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
@@ -899,7 +899,7 @@ int32_t __fastcall SKILLS_SrvDo014_LightningStrike(D2GameStrc* pGame, D2UnitStrc
 
     const int32_t nParam1 = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x20;
     missileParams.pOwner = pUnit;
     missileParams.pOrigin = pTarget;
@@ -946,7 +946,7 @@ int32_t __fastcall SKILLS_SrvDo015_Dopplezon(D2GameStrc* pGame, D2UnitStrc* pUni
     }
 
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
     summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;
@@ -1002,7 +1002,7 @@ int32_t __fastcall SKILLS_SrvDo016_Valkyrie(D2GameStrc* pGame, D2UnitStrc* pUnit
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
     summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
     summonArg.nHcIdx = nSummonId;

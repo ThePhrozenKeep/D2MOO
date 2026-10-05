@@ -34,7 +34,7 @@ D2HoverTextStrc* __stdcall CHAT_AllocHoverMsg(void* pMemPool, const char* szText
 	pHoverMsg->nLangId = STRTABLE_GetLanguage();
 	pHoverMsg->bUsed = FALSE;
 
-	strncpy_s(pHoverMsg->szMsg, szText, nLength + 1);
+	strncpy(pHoverMsg->szMsg, szText, nLength + 1);
 	pHoverMsg->szMsg[nLength + 1] = '\0';
 
 	return pHoverMsg;

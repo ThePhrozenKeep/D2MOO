@@ -149,7 +149,7 @@ void __fastcall ACT5Q5_SpawnAncientMonsters(D2QuestDataStrc* pQuestData, D2UnitS
 		return;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pUnit, &pCoord);
 	D2UnitStrc* pAncient = QUESTS_SpawnMonster(pQuestData->pGame, pUnit, &pCoord, 2, nMonsterId);
 	if (!pAncient)
@@ -190,7 +190,7 @@ void __fastcall ACT5Q5_DeactivateAncientMonsters(D2GameStrc* pGame, D2QuestDataS
 
 				if (UNITS_GetRoom(pAncientMonster))
 				{
-					D2ModeChangeStrc modeChange = {};
+					D2ModeChangeStrc modeChange = { 0 };
 					MONSTERMODE_GetModeChangeInfo(pAncientMonster, MONMODE_DEAD, &modeChange);
 					D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 
@@ -433,7 +433,7 @@ void __fastcall ACT5Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			return;
 		}
 
-		D2UnitStrc* pUnit[3] = {};
+		D2UnitStrc* pUnit[3] = { 0 };
 		int32_t i = 0;
 		int32_t j = 0; // TODO: Does j need to ne reset inside the loop?
 		while (pQuestDataEx->nAncientStatueObjectMode[i] == OBJMODE_NEUTRAL)
@@ -648,7 +648,7 @@ void __fastcall ACT5Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 	//D2QuestDataStrc* pQuest = nullptr;
 	//D2UnitStrc* pObject = nullptr;
 	//D2UnitStrc* pMissile = nullptr;
-	//D2MissileStrc missileParams = {};
+	//D2MissileStrc missileParams = { 0 };
 	//int32_t nMonsterId = 0;
 	//int32_t nObjectId = 0;
 
@@ -696,7 +696,7 @@ void __fastcall ACT5Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 	D2UnitStrc* pObject = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, nObjectId);
 	if (pObject)
 	{
-		D2MissileStrc missileParams = {};
+		D2MissileStrc missileParams = { 0 };
 		missileParams.dwFlags = 0x420;
 		missileParams.nMissile = 541;
 		missileParams.pOwner = pQuestArg->pTarget;

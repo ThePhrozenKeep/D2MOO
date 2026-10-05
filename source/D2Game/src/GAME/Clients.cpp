@@ -241,7 +241,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 
         D2_ASSERT(pRoom);
 
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
         D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.nTileXPos, (uint16_t)drlgCoords.nTileYPos);
     }
@@ -268,7 +268,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
             D2UnitStrc* pCorpsePlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nCorpseUnitGUID);
             if (pCorpsePlayer)
             {
-                D2CoordStrc coords = {};
+                D2CoordStrc coords = { 0 };
                 D2ActiveRoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
                 sub_6FC7BFC0(pGame, pSpawnLocation, nCorpseUnitGUID, &coords);
             }
@@ -870,7 +870,7 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
     UNITS_GetCoords(pPlayer, &tPlayerCoords);
 
     uint32_t nCurrentMaxManhattanDistance = 0;
-    D2ClientUnitUpdateSortStrc tUnitUpdatesSort[55] = {};
+    D2ClientUnitUpdateSortStrc tUnitUpdatesSort[55] = { 0 };
 
     pClient->nUnitUpdateIndex = 0;
     tUnitUpdatesSort[0].nNextIndex = 0;
@@ -1349,10 +1349,10 @@ void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
         {
             DWORD nTickCount = GetTickCount();
             uint32_t nPing = nTickCount - a2 - arg_0;
-            pClient->aPingHistory[pClient->dwPingsCount % std::size(pClient->aPingHistory)] = nPing;
+            pClient->aPingHistory[pClient->dwPingsCount % ARRAY_SIZE(pClient->aPingHistory)] = nPing;
             
             uint64_t nPingsSum = 0;
-            const uint32_t nPingsCount = std::min(++pClient->dwPingsCount, std::size(pClient->aPingHistory));
+            const uint32_t nPingsCount = std::min(++pClient->dwPingsCount, ARRAY_SIZE(pClient->aPingHistory));
             for (int32_t i = 0; i < nPingsCount; ++i)
             {
                 nPingsSum += pClient->aPingHistory[i];
@@ -1853,8 +1853,9 @@ void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-	for (int32_t& rLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
+	for (size_t nWarpEntry = 0; nWarpEntry < ARRAY_SIZE(pClient->aLastWarpAttemptsFrame); ++nWarpEntry)
 	{
+		int32_t& rLastWarpFrameEntry = pClient->aLastWarpAttemptsFrame[nWarpEntry];
 		if (!IsWarpAttemptToBeConsideredForDelay(pGame, rLastWarpFrameEntry))
 		{
 			rLastWarpFrameEntry = pGame->dwGameFrame;
@@ -1870,8 +1871,9 @@ BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pU
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     D2_ASSERT(pClient);
 
-    for (const int32_t nLastWarpFrameEntry : pClient->aLastWarpAttemptsFrame)
+    for (size_t nWarpEntry = 0; nWarpEntry < ARRAY_SIZE(pClient->aLastWarpAttemptsFrame); ++nWarpEntry)
     {
+        const int32_t nLastWarpFrameEntry = pClient->aLastWarpAttemptsFrame[nWarpEntry];
 		if (!IsWarpAttemptToBeConsideredForDelay(pGame, nLastWarpFrameEntry))
         {
             return FALSE;

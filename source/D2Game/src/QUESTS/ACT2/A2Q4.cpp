@@ -391,7 +391,7 @@ void __fastcall ACT2Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			if (!pQuestDataEx->bPortalToCanyonOpen && UNITS_GetRoom(pQuestArg->pPlayer) == pQuestDataEx->pRoom)
 			{
 				D2ActiveRoomStrc* pRoom = nullptr;
-				D2CoordStrc pCoord = {};
+				D2CoordStrc pCoord = { 0 };
 				UNITS_GetCoords(pQuestArg->pPlayer, &pCoord);
 				QUESTS_GetFreePosition(pQuestDataEx->pRoom, &pCoord, 2, 0xBE11, &pRoom, 8);
 				if (pRoom && D2GAME_CreatePortalObject_6FD13DF0(pQuestData->pGame, pQuestArg->pPlayer, pRoom, pCoord.nX, pCoord.nY, LEVEL_CANYONOFTHEMAGI, 0, OBJECT_PERMANENT_TOWN_PORTAL, 0))
@@ -561,7 +561,7 @@ void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 				D2UnitStrc* pHaremBlocker = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nHaremBlockerGUID);
 				if (pHaremBlocker)
 				{
-					D2CoordStrc pCoord = {};
+					D2CoordStrc pCoord = { 0 };
 					UNITS_GetCoords(pHaremBlocker, &pCoord);
 					ACT2Q4_InitializeJerhynMonster(pQuestData, pHaremBlocker, UNITS_GetRoom(pHaremBlocker), &pCoord);
 				}
@@ -743,7 +743,7 @@ void __fastcall ACT2Q4_InitializeJerhynStartObject(D2QuestDataStrc* pQuestData, 
 	}
 
 	D2ActiveRoomStrc* pRoom = pOp->pRoom;
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	pCoord.nX = pOp->nX;
 	pCoord.nY = pOp->nY;
 
@@ -771,7 +771,7 @@ void __fastcall ACT2Q4_InitializeJerhynPalaceObject(D2QuestDataStrc* pQuestData,
 
 	EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	pCoord.nX = pOp->nX;
 	pCoord.nY = pOp->nY;
 
@@ -815,7 +815,7 @@ int32_t __fastcall ACT2Q4_IsGuardMoving(D2GameStrc* pGame, D2UnitStrc* pUnit)
 void __fastcall ACT2Q4_InitializeHaremBlockerObject(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit)
 {
 	D2Act2Quest4Strc* pQuestDataEx = (D2Act2Quest4Strc*)pQuestData->pQuestDataEx;
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pUnit, &pCoord);
 	if (pQuestDataEx->bPalaceOpen || pQuestDataEx->bHaremBlockerInitialized)
 	{
@@ -1013,7 +1013,7 @@ void __fastcall ACT2Q4_GetAndUpdatePalaceNpcState(D2GameStrc* pGame, D2UnitStrc*
 			return;
 		}
 
-		D2CoordStrc pCoord = {};
+		D2CoordStrc pCoord = { 0 };
 		UNITS_GetCoords(pHaremBlocker, &pCoord);
 		pCoord.nX += 4;
 		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pHaremBlocker);

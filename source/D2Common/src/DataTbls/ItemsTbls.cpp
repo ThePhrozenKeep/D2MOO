@@ -81,7 +81,7 @@ int __fastcall sub_6FD55150(char* szText, int* a2, int a3, int nKeywordNumber)
 void __fastcall DATATBLS_ItemCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	int nBufferSize = 0;
-	FOGASTNodeStrc pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = { (FOGASTType)0 };
 
 	if (pRecord)
 	{
@@ -1122,7 +1122,7 @@ void __fastcall DATATBLS_LoadGemsTxt(HD2ARCHIVE hArchive)
 {
 	const Unicode* pUnicode = NULL;
 	int nItemCode = 0;
-	char szReference[4] = {};
+	char szReference[4] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1416,7 +1416,7 @@ int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* 
 void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 {
 	uint16_t nOpBase = 0;
-	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = {};
+	D2ItemStatCostDescStrc pStatsWithDescFunc[511] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -1528,8 +1528,9 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 			}
 		}
 
-		for (const uint16_t wOpStat : rCurrentStatRecord.wOpStat)
+		for (size_t nOpStatIndex = 0; nOpStatIndex < ARRAY_SIZE(rCurrentStatRecord.wOpStat); ++nOpStatIndex)
 		{
+			const uint16_t wOpStat = rCurrentStatRecord.wOpStat[nOpStatIndex];
 			if (wOpStat >= sgptDataTables->nItemStatCostTxtRecordCount)
 			{
 				break;
@@ -1772,7 +1773,7 @@ D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables()
 //D2Common.0x6FD5D800
 BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nItemType2)
 {
-	int nParentItemTypes[129] = {};
+	int nParentItemTypes[129] = { 0 };
 
 	if (nItemType2 <= 0)
 	{
@@ -1915,7 +1916,7 @@ void __fastcall DATATBLS_UnloadItemTypesTxt()
 void __fastcall DATATBLS_LoadRunesTxt(HD2ARCHIVE hArchive)
 {
 	HSFILE pFileHandle = NULL;
-	char szPath[100] = {};
+	char szPath[100] = { 0 };
 	const Unicode* pUnicode = NULL;
 	D2BinFieldStrc pTbl[] =
 	{

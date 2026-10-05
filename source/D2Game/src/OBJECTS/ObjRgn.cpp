@@ -44,11 +44,11 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
         pGame->pObjectControl->pObjectRegion[0] = pObjectRegion;
     }
 
-    int32_t nShrineSubTypes[8] = {};
+    int32_t nShrineSubTypes[8] = { 0 };
     for (int32_t i = 0; i < DATATBLS_GetShrinesTxtRecordCount(); ++i)
     {
         const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(i)->nEffectClass;
-        if (nEffectClass < std::size(nShrineSubTypes))
+        if (nEffectClass < ARRAY_SIZE(nShrineSubTypes))
         {
             ++nShrineSubTypes[nEffectClass];
         }
@@ -58,7 +58,7 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     memset(pGame->pObjectControl->shrineData.pShrineSubTypeIds, 0, sizeof(pGame->pObjectControl->shrineData.pShrineSubTypeIds));
 
     D2ShrineDataStrc* pShrineData = &pGame->pObjectControl->shrineData;
-    for (int32_t i = 0; i < std::size(nShrineSubTypes); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(nShrineSubTypes); ++i)
     {
         if (nShrineSubTypes[i] > 0)
         {
@@ -71,7 +71,7 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     for (int32_t i = 0; i < DATATBLS_GetShrinesTxtRecordCount(); ++i)
     {
         const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(i)->nEffectClass;
-        if (nEffectClass < std::size(pGame->pObjectControl->shrineData.pShrineSubTypeIds))
+        if (nEffectClass < ARRAY_SIZE(pGame->pObjectControl->shrineData.pShrineSubTypeIds))
         {
             pGame->pObjectControl->shrineData.pShrineSubTypeIds[nEffectClass][pGame->pObjectControl->shrineData.nShrineSubTypes[nEffectClass]] = i;
             ++pGame->pObjectControl->shrineData.nShrineSubTypes[nEffectClass];
@@ -106,7 +106,7 @@ void __fastcall OBJRGN_FreeObjectControl(D2GameStrc* pGame)
         D2_FREE_POOL(pGame->pMemoryPool, pObjectControl->pObjectRegion[i]);
     }
 
-    for (int32_t i = 0; i < std::size(pObjectControl->shrineData.pShrineSubTypeIds); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(pObjectControl->shrineData.pShrineSubTypeIds); ++i)
     {
         if (pObjectControl->shrineData.pShrineSubTypeIds[i])
         {
@@ -225,7 +225,7 @@ bool __fastcall OBJRGN_CanSpawnWell(D2GameStrc* pGame, int32_t nLevelId, int32_t
 void __fastcall OBJRGN_SetWellCoordinates(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
     D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
-    if (pObjectRegion->nWells >= std::size(pObjectRegion->wellCoordinates))
+    if (pObjectRegion->nWells >= ARRAY_SIZE(pObjectRegion->wellCoordinates))
     {
         return;
     }
@@ -254,7 +254,7 @@ bool __fastcall OBJRGN_CanSpawnShrine(D2GameStrc* pGame, int32_t nLevelId, int32
 void __fastcall OBJRGN_SetShrineCoordinates(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
     D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
-    if (pObjectRegion->nShrines >= std::size(pObjectRegion->shrineCoordinates))
+    if (pObjectRegion->nShrines >= ARRAY_SIZE(pObjectRegion->shrineCoordinates))
     {
         return;
     }
@@ -275,8 +275,8 @@ int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
         return pObjectRegion->nTrapMonsterId;
     }
 
-    constexpr int32_t nTrapMonsterIds1[] = { MONSTER_ZOMBIE1, MONSTER_MUMMY1 };
-    constexpr int32_t nTrapMonsterIds2[] = { MONSTER_SKELETON1, MONSTER_SK_ARCHER1, MONSTER_SKMAGE_POIS1, MONSTER_SKMAGE_COLD1, MONSTER_SKMAGE_FIRE1, MONSTER_SKMAGE_LTNG1 };
+    D2_CONSTEXPR int32_t nTrapMonsterIds1[] = { MONSTER_ZOMBIE1, MONSTER_MUMMY1 };
+    D2_CONSTEXPR int32_t nTrapMonsterIds2[] = { MONSTER_SKELETON1, MONSTER_SK_ARCHER1, MONSTER_SKMAGE_POIS1, MONSTER_SKMAGE_COLD1, MONSTER_SKMAGE_FIRE1, MONSTER_SKMAGE_LTNG1 };
     
     const int32_t* pTrapMonsterId = nTrapMonsterIds1;
     if (DRLG_GetActNoFromLevelId(nLevelId) == ACT_II)
@@ -299,7 +299,7 @@ int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
             return nTrapMonsterId;
         }
 
-        for (int32_t i = 0; i < std::size(nTrapMonsterIds2); ++i)
+        for (int32_t i = 0; i < ARRAY_SIZE(nTrapMonsterIds2); ++i)
         {
             const int32_t nTrapMonster2Id = nTrapMonsterIds2[i];
             if (nMonsterId >= nTrapMonster2Id && nMonsterId < nTrapMonster2Id + 4)

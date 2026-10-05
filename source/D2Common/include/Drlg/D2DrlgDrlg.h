@@ -80,7 +80,7 @@ enum D2C_DrlgTileSubstitionMethod
 };
 
 // Note: Lower value has priority over others
-enum D2DrlgRoomStatus : uint8_t
+D2_TYPED_ENUM(D2DrlgRoomStatus, uint8_t)
 {
 	ROOMSTATUS_CLIENT_IN_ROOM = 0,
 	ROOMSTATUS_CLIENT_IN_SIGHT = 1,
@@ -149,7 +149,7 @@ enum D2MapTileFlags
 	MAPTILE_UNK_0x001000 = 0x001000,
 	MAPTILE_LOS = 0x002000,
 	MAPTILE_WALL_LAYER_BIT = 14,
-	MAPTILE_WALL_LAYER_MASK = 0b111 << MAPTILE_WALL_LAYER_BIT, // 0x1C000: 3bits value indicating the wall layer + 1 (0 indicates no wall?)
+	MAPTILE_WALL_LAYER_MASK = 0x7 << MAPTILE_WALL_LAYER_BIT, // 0x1C000: 3bits value indicating the wall layer + 1 (0 indicates no wall?)
 };
 // Helper function
 inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }

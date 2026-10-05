@@ -14,7 +14,7 @@ extern int32_t gnViewMatrixAdjust_6FA8D254;
 extern DisplayType gnDisplayType;
 
 
-constexpr int32_t GOURAUD_SHIFT = 24;
+D2_CONSTEXPR int32_t GOURAUD_SHIFT = 24;
 
 PALETTEENTRY** dword_6FA81448;
 
@@ -57,17 +57,17 @@ uint8_t byte_6FA85220[32][32][32];
 
 
 // TODO: Names
-constexpr int32_t dword_6FA7E064[] =
+D2_CONSTEXPR int32_t dword_6FA7E064[] =
 {
     14, 12, 10, 8, 6, 4, 2, 0, 2, 4, 6, 8, 10, 12, 14
 };
 
-constexpr int32_t dword_6FA7E0A0[] =
+D2_CONSTEXPR int32_t dword_6FA7E0A0[] =
 {
     4, 8, 12, 16, 20, 24, 28, 32, 28, 24, 20, 16, 12, 8, 4
 };
 
-constexpr int32_t dword_6FA7E0DC[] =
+D2_CONSTEXPR int32_t dword_6FA7E0DC[] =
 {
     0, 4, 12, 24, 40, 60, 84, 112, 144, 172, 196, 216, 232, 244, 252
 };
@@ -107,7 +107,7 @@ void __fastcall sub_6FA71070(D2PaletteTableStrc* pPaletteTable)
 {
     memcpy(gpPaletteTable_6FA81460, pPaletteTable, sizeof(gpPaletteTable_6FA81460));
     dword_6FA81448 = gpPaletteTable_6FA81460;
-    for (int32_t i = 0; i < std::size(stru_6FA81580); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(stru_6FA81580); ++i)
     {
         memcpy(&stru_6FA81580[i], gpPaletteTable_6FA81460[i + 3], sizeof(D2PaletteStrc));
     }
@@ -147,7 +147,7 @@ void __fastcall sub_6FA71340(uint8_t* a1, uint8_t* a2, int32_t a3, int32_t a4, i
 {
     uint8_t* v6 = a2;
 
-    for (int32_t i = 0; i < std::size(dword_6FA7E064); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(dword_6FA7E064); ++i)
     {
         const int32_t v8 = dword_6FA7E064[i];
         uint8_t* v9 = (uint8_t*)((char*)byte_6FA85220 + 32 * ((a5 >> 7) + 32 * (a3 >> 7)) + v8);
@@ -502,7 +502,7 @@ void __fastcall sub_6FA72630(int32_t a1, int32_t a2)
 void __fastcall sub_6FA72700()
 {
     int32_t v2 = -32 * dword_6FA81450;
-    for (int32_t i = 0; i < std::size(dword_6FA846A8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(dword_6FA846A8); ++i)
     {
         dword_6FA846A8[i] = v2;
         v2 += dword_6FA81450;

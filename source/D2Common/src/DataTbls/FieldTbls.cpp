@@ -14,7 +14,7 @@ static const int gnFieldYOffsets[] = { -1, -1, 0, 1, 1, 1, 0, -1, 0 };
 //D2Common.0x6FD51FC0
 BOOL __fastcall DATATBLS_LoadExpFieldD2(HD2ARCHIVE hArchive)
 {
-	char szPath[80] = {};
+	char szPath[80] = { 0 };
 	char* pExpField = NULL;
 	size_t nSize = 0;
 

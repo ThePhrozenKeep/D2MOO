@@ -1,6 +1,6 @@
 #include <Windows.h>
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 extern int32_t dword_6FC0B264;
 

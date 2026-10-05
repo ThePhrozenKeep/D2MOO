@@ -201,8 +201,9 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 	char szPath[_MAX_DIR];
 	if(GetD2IniPath(szPath, sizeof(szPath)))
 	{
-		for (const D2CmdArgStrc& rCmdArg : gaCmdArguments)
+		for (size_t nCmdArgIndex = 0; nCmdArgIndex < ARRAY_SIZE(gaCmdArguments); ++nCmdArgIndex)
 		{
+			const D2CmdArgStrc& rCmdArg = gaCmdArguments[nCmdArgIndex];
 			void* pCfgMember = (char*)pCfg + rCmdArg.dwIndex;
 			switch (rCmdArg.dwType)
 			{
@@ -222,9 +223,9 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 
 
 	const size_t nArgvLength = strlen(argv);
-	char szCommandNameTestBuf[24] = {};
-	char szCommandValueBuf[24] = {};
-	char szCommand[48] = {};
+	char szCommandNameTestBuf[24] = { 0 };
+	char szCommandValueBuf[24] = { 0 };
+	char szCommand[48] = { 0 };
 		
 	for (int nCharIndex = 0; nCharIndex < nArgvLength; nCharIndex++)
 	{

@@ -141,7 +141,7 @@ void __fastcall BUTTON_SimulateClick(SMSGHANDLER_PARAMS* pMsg)
 		return;
 	}
 
-	SMSGHANDLER_PARAMS msg = {};
+	SMSGHANDLER_PARAMS msg = { 0 };
 	msg.hWindow = pMsg->hWindow;
 
 	++dword_6F8FE254;
@@ -172,7 +172,7 @@ int32_t __fastcall BUTTON_OnMouseWheelScrolled(D2WinButtonStrc* pButton, int32_t
 		return 0;
 	}
 
-	SMSGHANDLER_PARAMS msg = {};
+	SMSGHANDLER_PARAMS msg = { 0 };
 	msg.hWindow = (HWND)pButton;
 
 	if (pButton->controlHeader.field_34)
@@ -226,7 +226,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 		const int32_t nColumns = (pButton->controlHeader.nWidth + 255) >> 8;
 		const int32_t nRows = ((pButton->controlHeader.nHeight + 255) >> 8) - 1;
 
-		D2GfxDataStrc gfxData = {};
+		D2GfxDataStrc gfxData = { 0 };
 		gfxData.pCellFile = pButton->controlHeader.pCellFile;
 		gfxData.nDirection = 0;
 
@@ -336,7 +336,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 				&& gMousePosition_6F8FE234.y < pButton->controlHeader.nImageY;
 		}
 
-		SMSGHANDLER_PARAMS msg = {};
+		SMSGHANDLER_PARAMS msg = { 0 };
 		msg.hWindow = (HWND)pButton;
 		msg.lParam = pButton->isButtonHovered;
 
@@ -455,7 +455,7 @@ int32_t __stdcall BUTTON_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		return nResult;
 	}
 
-	SMSGHANDLER_PARAMS msg = {};
+	SMSGHANDLER_PARAMS msg = { 0 };
 	msg.hWindow = pMsg->hWindow;
 
 	++dword_6F8FE254;

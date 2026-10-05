@@ -103,7 +103,7 @@ void __fastcall DRLGOUTDOORS_AlterAdjacentPresetGridCells(D2DrlgLevelStrc* pLeve
 void __fastcall DRLGOUTDOORS_SetBlankGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[0], nX, nY, 0, FLAG_OPERATION_OVERWRITE);
-	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 	tPackedInfo.nUnkb08 = true;
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, tPackedInfo.nPackedValue, FLAG_OPERATION_OVERWRITE);
 }
@@ -235,7 +235,7 @@ void __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc* pLevel, 
 	{
 		for (int i = nX; i < nX + nSizeX; ++i)
 		{
-			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 			tPackedInfo.bHasPickedFile = true;
 			tPackedInfo.nPickedFile = nPickedFile;
 
@@ -340,7 +340,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnPresetFarAway(D2DrlgLevelStrc* pLevel, D2DrlgC
 //D2Common.0x6FD7E330
 BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, int nLevelPrestId, int nRand, int nOffset, char nFlags)
 {
-	D2CoordStrc pCoord[256] = {};
+	D2CoordStrc pCoord[256] = { 0 };
 	int nWidth = 0;
 	int nRand1 = 0;
 	int nRand2 = 0;
@@ -403,7 +403,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 		0, -1, 1, 0, -1, 1, -1, 1
 	};
 
-	D2CoordStrc pCoord[256] = {};
+	D2CoordStrc pCoord[256] = { 0 };
 	unsigned int nRand1 = 0;
 	unsigned int nRand2 = 0;
 	int nWidth = 0;
@@ -472,7 +472,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 //D2Common.0x6FD7E6D0
 void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 {
-	D2CoordStrc pCoord[256] = {};
+	D2CoordStrc pCoord[256] = { 0 };
 	int* pVisArray = NULL;
 	int nFlags = 0;
 	int nWidth = 0;
@@ -518,7 +518,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 					}
 
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], j, i, 0x20000, FLAG_OPERATION_OR);
-					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb11 = true;
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], j, i, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 					return;
@@ -563,7 +563,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 				if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX, nY))
 				{
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], nX, nY, 0x10000, FLAG_OPERATION_OR);
-					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb11 = true;
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 					break;
@@ -581,7 +581,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 		0x1000, 0x2000, 0x4000, 0x8000
 	};
 
-	D2CoordStrc pCoord[256] = {};
+	D2CoordStrc pCoord[256] = { 0 };
 	unsigned int nRand1 = 0;
 	unsigned int nRand2 = 0;
 	int nWidth = 0;
@@ -633,7 +633,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 				{
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], nX, nY, dword_6FDCF948[nIndex], FLAG_OPERATION_OR);
 
-					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb12 = true;
 					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 
@@ -649,7 +649,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 //TODO: a1
 void __fastcall DRLGOUTDOORS_AddAct124SecondaryBorder(D2DrlgLevelStrc* pLevel, int nLvlSubId, int nLevelPrestId)
 {
-	D2UnkOutdoorStrc a1 = {};
+	D2UnkOutdoorStrc a1 = { 0 };
 
 	a1.pLevel = pLevel;
 	a1.field_4 = &pLevel->pOutdoors->nWidth;
@@ -678,7 +678,7 @@ void __fastcall DRLGOUTDOORS_AllocOutdoorInfo(D2DrlgLevelStrc* pLevel)
 //TODO: a6a, v13, v14
 void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 {
-	D2DrlgCoordStrc pDrlgCoord = {};
+	D2DrlgCoordStrc pDrlgCoord = { 0 };
 	D2DrlgVertexStrc** ppVertex = NULL;
 	D2DrlgVertexStrc* pNextVertex = NULL;
 	D2DrlgVertexStrc* pVertex = NULL;
@@ -907,13 +907,21 @@ static const uint8_t byte_6FDCF958[] =
 	0x18, 0x18, 0x19, 0x20, 0x18, 0x18, 0x1E, 0x01		
 };
 
+static __forceinline int DRLG_OUTDOORS_MapOffsetToBoxIndex(int nBoxDimension, int nOffsetX, int nOffsetY)
+{
+	const int nHalfBoxDimension = nBoxDimension / 2;
+	const int nBoxX = nHalfBoxDimension + nOffsetX;
+	const int nBoxY = (nBoxDimension - 1) - (nHalfBoxDimension + nOffsetY); // inverted Y
+	return nBoxX * nBoxDimension + nBoxY;
+}
+
 //D2Common.0x6FD7EFE0
 void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRoomStrc* pDrlgRoom)
 {
 
 	DRLGGRID_InitializeGridCells(pLevel->pDrlg->pMempool, &pDrlgRoom->pOutdoor->pDirtPathGrid, pDrlgRoom->nTileWidth + 3, pDrlgRoom->nTileHeight + 3);
 
-	D2DrlgCoordStrc tDrlgCoord = {};
+	D2DrlgCoordStrc tDrlgCoord = { 0 };
 	tDrlgCoord.nPosX = pDrlgRoom->nTileXPos - 1;
 	tDrlgCoord.nPosY = pDrlgRoom->nTileYPos - 1;
 	tDrlgCoord.nWidth = pDrlgRoom->nTileWidth + 3;
@@ -935,27 +943,20 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 	for (int nX = 1; nX <= pDrlgRoom->pDrlgCoord.nWidth + 1; ++nX)
 	{
 		static const int nBoxDimension = 3;
-		int aFlags[nBoxDimension * nBoxDimension] = {};
-		const auto MapOffsetToBoxIndex = [](int nOffsetX, int nOffsetY)
-		{
-			const int nHalfBoxDimension = nBoxDimension / 2;
-			const int nBoxX = nHalfBoxDimension + nOffsetX;
-			const int nBoxY = (nBoxDimension - 1) - (nHalfBoxDimension + nOffsetY); // inverted Y
-			return nBoxX * nBoxDimension + nBoxY;
-		};
+		int aFlags[nBoxDimension * nBoxDimension] = { 0 };
 
 		const int nStartY = pDrlgRoom->pDrlgCoord.nHeight + 1;
 		for (int nOffsetX = -1; nOffsetX <= 1; nOffsetX++)
 		{
 			for (int nOffsetY = -1; nOffsetY <= 1; nOffsetY++)
 			{
-				aFlags[MapOffsetToBoxIndex(nOffsetX,nOffsetY)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
+				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, nOffsetX,nOffsetY)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
 			}
 		}
 
 		for (int nY = nStartY; nY >= 1; nY--)
 		{
-			const int nBoxCenterIndex = MapOffsetToBoxIndex(0, 0);
+			const int nBoxCenterIndex = DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, 0, 0);
 			if (aFlags[nBoxCenterIndex]) // center
 			{
 				uint32_t nDirectionsWithPathFlags = 0;
@@ -987,9 +988,9 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 			{
 				memcpy(aFlags, &aFlags[1], sizeof(aFlags) - sizeof(aFlags[0]));
 
-				aFlags[MapOffsetToBoxIndex(-1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
-				aFlags[MapOffsetToBoxIndex( 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
-				aFlags[MapOffsetToBoxIndex(+1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 1, nY - 2);
+				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, -1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
+				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
+				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, +1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 1, nY - 2);
 			}
 		}
 	}
@@ -1127,7 +1128,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 	{
 		if (sub_6FD80750(pLevel, i))
 		{
-			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 			tPackedInfo.nUnkb07 = true;
 			DRLGGRID_SetVertexGridFlags(&pOutdoors->pGrid[2], pOutdoors->pPathStarts[i], tPackedInfo.nPackedValue);
 			sub_6FD7F810(pLevel, i);

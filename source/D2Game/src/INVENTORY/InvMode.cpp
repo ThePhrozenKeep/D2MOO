@@ -240,12 +240,12 @@ int32_t __fastcall sub_6FC410E0(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
 //D2Game.0x6FC415F0
 void __fastcall D2GAME_ResetSomeItemFlags_6FC415F0(D2GameStrc* pGame, D2UnitStrc* pItem)
 {
-    constexpr uint32_t nItemCmdFlags[21] =
+    D2_CONSTEXPR uint32_t nItemCmdFlags[21] =
     {
         0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x100, 0x40000, 0x400, 0x800, 0x1000, 0x2000, 0x200, 0x4000, 0x8000, 0x10000, 0x20000, 0x80000, 0x100000, 0x200000
     };
 
-    constexpr uint32_t nItemFlags[8] =
+    D2_CONSTEXPR uint32_t nItemFlags[8] =
     {
         IFLAG_QUANTITY, IFLAG_TARGET, IFLAG_DELETED, IFLAG_SWITCHOUT, IFLAG_SWITCHIN, IFLAG_NEWITEM, IFLAG_REPAIRED, IFLAG_UNK2
     };
@@ -255,12 +255,12 @@ void __fastcall D2GAME_ResetSomeItemFlags_6FC415F0(D2GameStrc* pGame, D2UnitStrc
         pItem->dwFlagEx &= ~(UNITFLAGEX_ITEMINIT | UNITFLAGEX_ISVENDORITEM);
     }
     
-    for (size_t i = 0; i < std::size(nItemCmdFlags); ++i)
+    for (size_t i = 0; i < ARRAY_SIZE(nItemCmdFlags); ++i)
     {
         ITEMS_SetItemCMDFlag(pItem, nItemCmdFlags[i], 0);
     }
 
-    for (size_t i = 0; i < std::size(nItemFlags); ++i)
+    for (size_t i = 0; i < ARRAY_SIZE(nItemFlags); ++i)
     {
         ITEMS_SetItemFlag(pItem, nItemFlags[i], 0);
     }

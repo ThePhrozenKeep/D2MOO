@@ -130,7 +130,7 @@ static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
 void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
 {
     // TODO: Names
-    constexpr D2UnkMonMsgStrc stru_6FD28988[16] =
+    D2_CONSTEXPR D2UnkMonMsgStrc stru_6FD28988[16] =
     {
         { 0, 1, 0, 0, 8, 8 },
         { 0, 0, 0, 0, 7, 7 },

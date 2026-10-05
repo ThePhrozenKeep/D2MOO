@@ -142,7 +142,7 @@ void __fastcall LEVEL_AddClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Cl
 {
     D2_ASSERT(pRoom);
 
-    D2DrlgCoordsStrc drlgCoords = {};
+    D2DrlgCoordsStrc drlgCoords = { 0 };
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
     D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.nTileXPos, drlgCoords.nTileYPos);
 
@@ -192,7 +192,7 @@ void __fastcall LEVEL_RemoveClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
         }
     }
 
-    D2DrlgCoordsStrc drlgCoords = {};
+    D2DrlgCoordsStrc drlgCoords = { 0 };
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
     D2GAME_PACKETS_SendPacket0x08_6FC3D160(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), drlgCoords.nTileXPos, drlgCoords.nTileYPos);
 }
@@ -223,7 +223,7 @@ void __fastcall LEVEL_SynchronizeDayNightCycleWithClient(D2GameStrc* pGame, D2Cl
     int32_t nEclipse = 0;
     ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(pGame->pAct[nAct], &nCycleIndex, &nTicks, &nEclipse);
     
-    D2GSPacketSrv53 packet53 = {};
+    D2GSPacketSrv53 packet53 = { 0 };
     packet53.nHeader = 0x53u;
     packet53.unk0x01 = nCycleIndex;
     packet53.unk0x05 = nTicks;
@@ -264,7 +264,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
         return;
     }
 
-    D2CoordStrc spawnPoint = {};
+    D2CoordStrc spawnPoint = { 0 };
     spawnPoint.nX = nX;
     spawnPoint.nY = nY;
 

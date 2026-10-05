@@ -138,7 +138,7 @@ int32_t __fastcall sub_6FC895E0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SavedI
 //D2Game.0x6FC897F0
 D2UnitStrc* __fastcall sub_6FC897F0(D2GameStrc* pGame, D2SavedItemStrc* pSavedItem)
 {
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.nId = pSavedItem->nItemId;
     itemDrop.nItemLvl = pSavedItem->nItemLevel;
@@ -159,7 +159,7 @@ D2UnitStrc* __fastcall sub_6FC897F0(D2GameStrc* pGame, D2SavedItemStrc* pSavedIt
     itemDrop.pRoom = 0;
     itemDrop.dwFlags1 = pSavedItem->nItemFlags;
     
-    strcpy_s(itemDrop.szName, pSavedItem->szName);
+    strcpy(itemDrop.szName, pSavedItem->szName);
 
     itemDrop.eEarLvl = pSavedItem->nEarLevel;
 
@@ -515,7 +515,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
         return 0;
     }
 
-    uint8_t pSaveData[8192] = {};
+    uint8_t pSaveData[8192] = { 0 };
     uint32_t nFileSize = 0;
     PLRSAVE2_CreateSaveFile(pGame, pPlayer, &pSaveData[2], &nFileSize, 8192, bInteractsWithPlayer, a7);
 
@@ -659,14 +659,14 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
     }
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-    char szAccountName[50] = {};
+    char szAccountName[50] = { 0 };
     CLIENTS_CopyAccountNameToBuffer(pClient, szAccountName);
     int32_t nCharSaveTransactionToken = 0;
     D2GAME_GetCharSaveTransactionToken_6FC346A0(pClient, &nCharSaveTransactionToken);
     D2ClientInfoStrc* pClientInfo = nullptr;
     D2GAME_GetRealmIdFromClient_6FC346B0(pClient, &pClientInfo);
 
-    uint8_t pSaveData[8192] = {};
+    uint8_t pSaveData[8192] = { 0 };
     uint32_t nFileSize = 0;
 
     if (pGame->nGameType == 1 || pGame->nGameType == 2)
@@ -695,9 +695,9 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
         return 1;
     }
 
-    char szDirectory[1024] = {};
+    char szDirectory[1024] = { 0 };
     FOG_GetSavePath(szDirectory, 1024);
-    char szFileName[500] = {};
+    char szFileName[500] = { 0 };
     sprintf(szFileName, "%s%s.d2s", szDirectory, szName);
 
     PLRSAVE2_CreateSaveFile(pGame, pPlayer, pSaveData, &nFileSize, 0x2000u, bInteractsWithPlayer, dwArg);
@@ -727,7 +727,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
     // TODO: Names
     *a11 = 0;
 
-    uint8_t saveHeader[130] = {};
+    uint8_t saveHeader[130] = { 0 };
     memcpy(saveHeader, pSavefile, sizeof(saveHeader));
 
     CLIENTS_SetFlags(pClient, 0);
@@ -855,9 +855,9 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
 
     CLIENTS_SetGuildFlags(pClient, *(int32_t*)&saveHeader[89]);
 
-    uint8_t v44[4] = {};
+    uint8_t v44[4] = { 0 };
     *(uint32_t*)v44 = *(uint32_t*)&saveHeader[91];
-    char v47[28] = {};
+    char v47[28] = { 0 };
     memcpy(v47, &saveHeader[95], sizeof(v47));
 
     v44[3] = 0;
@@ -1006,11 +1006,11 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
 //D2Game.0x6FC8AD50
 int32_t __fastcall D2GAME_SAVE_ReadWaypointData_6FC8AD50(D2UnitStrc* pUnit, uint8_t* pSection, int32_t nUnused, int32_t* pSize)
 {
-    constexpr uint32_t WAYPOINT_DATA_SIZE = 80;
+    D2_CONSTEXPR uint32_t WAYPOINT_DATA_SIZE = 80;
 
     *pSize = 0;
 
-    uint8_t pSource[WAYPOINT_DATA_SIZE] = {};
+    uint8_t pSource[WAYPOINT_DATA_SIZE] = { 0 };
     memcpy(pSource, pSection, sizeof(pSource));
 
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
@@ -1107,7 +1107,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
 {
     memset(pSavedItem, 0, sizeof(D2SavedItemStrc));
 
-    D2BitBufferStrc bitBuffer = {};
+    D2BitBufferStrc bitBuffer = { 0 };
     BITMANIP_Initialize(&bitBuffer, pData, 0x40u);
 
     pSavedItem->nItemFlags = BITMANIP_Read(&bitBuffer, 32);
@@ -1251,7 +1251,7 @@ int32_t __fastcall sub_6FC8B3D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t*
     const int32_t nTotal = *((uint16_t*)pSection + 1);
     for (int32_t j = 0; j < nTotal; ++j)
     {
-        D2SavedItemStrc savedItem = {};
+        D2SavedItemStrc savedItem = { 0 };
 
         if (*(uint16_t*)pData != 'MJ')
         {
@@ -1415,7 +1415,7 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
     for (int32_t i = 0; i < nItemCount; ++i)
     {
         const uint32_t nBitstreamSize = pSection - pItemBitstream + nSize;
-        D2ItemSaveStrc itemSave = {};
+        D2ItemSaveStrc itemSave = { 0 };
         ITEMS_GetCompactItemDataFromBitstream(pItemBitstream, nBitstreamSize, 1, &itemSave);
         if (itemSave.nClassId == -1)
         {
@@ -2231,11 +2231,11 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
 {
     *ppPlayer = nullptr;
 
-    char szPath[1024] = {};
+    char szPath[1024] = { 0 };
     FOG_GetSavePath(szPath, sizeof(szPath));
 
-    char szFileName[500] = {};
-    sprintf_s(szFileName, "%s%s.d2s", szPath, szName);
+    char szFileName[500] = { 0 };
+    sprintf(szFileName, "%s%s.d2s", szPath, szName);
 
     FILE* pSaveFile = fopen(szFileName, "rb"); // NOLINT(clang-diagnostic-deprecated-declarations)
     if (!pSaveFile)
@@ -2243,7 +2243,7 @@ int32_t __fastcall D2GAME_SAVE_ReadFile_6FC8C9D0(D2GameStrc* pGame, D2ClientStrc
         return SYSERROR_UNK_14;
     }
 
-    uint8_t saveFile[0x2000] = {};
+    uint8_t saveFile[0x2000] = { 0 };
     const uint32_t nFileSize = FileLockAndRead(saveFile, 1u, 0x2000u, pSaveFile);
     fclose(pSaveFile);
     

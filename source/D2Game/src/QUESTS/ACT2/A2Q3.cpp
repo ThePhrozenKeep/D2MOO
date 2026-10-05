@@ -195,14 +195,14 @@ int32_t __fastcall ACT2Q3_UnitIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc
 		return 0;
 	}
 
-	D2GSPacketSrv53 packet53 = {};
+	D2GSPacketSrv53 packet53 = { 0 };
 	packet53.nHeader = 0x53;
 	packet53.unk0x01 = 5;
 	packet53.unk0x05 = 0;
 	packet53.unk0x09 = 1;
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet53, sizeof(packet53));
 
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 	packet5D.field_4 = 0;
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A2Q3_TAINTEDSUN;
@@ -502,7 +502,7 @@ void __fastcall ACT2Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		}
 		else
 		{
-			D2GSPacketSrv5D packet5D = {};
+			D2GSPacketSrv5D packet5D = { 0 };
 			packet5D.field_4 = 0;
 			pQuestDataEx->bBlackened = 1;
 			packet5D.nHeader = 0x5D;
@@ -716,7 +716,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_SendPacket0x53ToClient(D2GameStrc* pGame, 
 		return 0;
 	}
 
-	D2GSPacketSrv53 pPacket53 = {};
+	D2GSPacketSrv53 pPacket53 = { 0 };
 	pPacket53.nHeader = 0x53;
 	pPacket53.unk0x01 = 2;
 	pPacket53.unk0x05 = 0;

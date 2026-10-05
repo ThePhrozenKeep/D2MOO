@@ -1422,7 +1422,7 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 //D2Win.0x6F8A2CE0
 void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
 {
-	char szFilename[260] = {};
+	char szFilename[260] = { 0 };
 
 	if (dword_6F8BCF94)
 	{
@@ -1685,7 +1685,7 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 
 	if (a1)
 	{
-		int itemTypeStack[65] = {};
+		int itemTypeStack[65] = { 0 };
 
 		itemTypeStack[1] = a1;
 		int nStackIndex = 1;
@@ -2664,7 +2664,7 @@ void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	pCompositeUnit->unk0x04 = D2Clamp(a2, 0ui8, pCompositeUnit->unk0x05);
+	pCompositeUnit->unk0x04 = D2Clamp(a2, (uint8_t)0, pCompositeUnit->unk0x05);
 }
 
 //D2Win.0x6F8A4490 (#10150)
@@ -2734,7 +2734,7 @@ void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2, uint
 		return;
 	}
 
-	char szFile[512] = {};
+	char szFile[512] = { 0 };
 
 	wsprintfA(szFile, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", a2 - 1);
 	pCompositeUnit->pEmblemCellFile = ARCHIVE_LoadCellFile(szFile, 0);
@@ -3194,7 +3194,7 @@ void __stdcall D2Win_10157()
 //D2Win.0x6F8A4C10
 void __stdcall sub_6F8A4C10()
 {
-	constexpr uint8_t byte_6F8BC194[] =
+	D2_CONSTEXPR uint8_t byte_6F8BC194[] =
 	{
 		0xBC, 0x00, 0x00,
 		0xE0, 0x70, 0x20,
@@ -3208,12 +3208,12 @@ void __stdcall sub_6F8A4C10()
 		0xB2, 0x7C, 0x58,
 	};
 
-	for (int32_t i = 0; i < std::size(byte_6F8FD224); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(byte_6F8FD224); ++i)
 	{
 		byte_6F8FD224[i] = D2Win_10034_MixRGB(byte_6F8BC194[3 * i], byte_6F8BC194[3 * i + 1], byte_6F8BC194[3 * i + 2]);
 	}
 
-	constexpr uint8_t byte_6F8BC1B4[] =
+	D2_CONSTEXPR uint8_t byte_6F8BC1B4[] =
 	{
 		0x5C, 0x00, 0x00,
 		0x90, 0x00, 0x00,
@@ -3227,7 +3227,7 @@ void __stdcall sub_6F8A4C10()
 		0x00, 0x00, 0x00,
 	};
 
-	for (int32_t i = 0; i < std::size(byte_6F8FD218); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(byte_6F8FD218); ++i)
 	{
 		byte_6F8FD218[i] = D2Win_10034_MixRGB(byte_6F8BC1B4[3 * i], byte_6F8BC1B4[3 * i + 1], byte_6F8BC1B4[3 * i + 2]);
 	}

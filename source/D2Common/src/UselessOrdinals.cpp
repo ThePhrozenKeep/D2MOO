@@ -86,7 +86,7 @@ int __stdcall D2COMMON_10473(D2StatListStrc* pStatList)
 
 void __stdcall D2COMMON_10476(D2StatListStrc* pStatList, int nExpireFrame)
 {
-	return STATLIST_SetExpireFrame(pStatList, nExpireFrame);
+	STATLIST_SetExpireFrame(pStatList, nExpireFrame);
 }
 
 int __stdcall D2COMMON_10661_Return0(int a1, int a2)

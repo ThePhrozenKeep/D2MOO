@@ -1,4 +1,4 @@
-﻿#include "Drlg/D2DrlgMaze.h"
+#include "Drlg/D2DrlgMaze.h"
 
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgDrlg.h"
@@ -1561,7 +1561,7 @@ void __fastcall DRLGMAZE_PlaceArcaneSanctuary(D2DrlgLevelStrc* pLevel)
 
 	static const int nRoomsPerBranch = 15;
 	static const int nBranchDirections = 4;
-	D2DrlgRoomStrc* pDrlgRoomArray[nRoomsPerBranch * nBranchDirections] = {};
+	D2DrlgRoomStrc* pDrlgRoomArray[nRoomsPerBranch * nBranchDirections] = { 0 };
 
 	for (int nBranchDirection = 0; nBranchDirection < nBranchDirections; ++nBranchDirection)
 	{

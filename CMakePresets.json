@@ -30,7 +30,7 @@
       "name": "VC6",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "generator": "NMake Makefiles",
-      "toolchainFile": "${sourceDir}/cmake/toolchains/MSVC6.cmake",
+      "toolchainFile": "${sourceDir}/cmake/toolchains/VCPP6.cmake",
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",

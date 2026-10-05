@@ -554,7 +554,7 @@ int __fastcall UNITS_GetCollisionMask(D2UnitStrc* pUnit)
 //D2Common.0x6FDBDEC0 (#10352)
 void __stdcall UNITS_FreeCollisionPath(D2UnitStrc* pUnit)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
@@ -1728,31 +1728,31 @@ void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* sz
 
 	if (UNITS_IsSeqAnimSpeedModulatedByFCR(pUnit, nUnitType, nAnimMode))
 	{
-		return UNITS_UpdateCastAnimRateAndVelocity(pUnit);
+		UNITS_UpdateCastAnimRateAndVelocity(pUnit);
 	}
 	else if (UNITS_IsAnimModeBlocking(nUnitType, nAnimMode))
 	{
-		return UNITS_UpdateBlockAnimRateAndVelocity(pUnit);
+		UNITS_UpdateBlockAnimRateAndVelocity(pUnit);
 	}
 	else if (UNITS_IsAnimModeGetHit(nUnitType, nAnimMode))
 	{
-		return UNITS_UpdateGetHitAnimRateAndVelocity(pUnit);
+		UNITS_UpdateGetHitAnimRateAndVelocity(pUnit);
 	}
 	else if (UNITS_IsAnimModeKnockBack(nUnitType, nAnimMode))
 	{
-		return UNITS_UpdateKnockbackAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
+		UNITS_UpdateKnockbackAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
 	}
 	else if (UNITS_CanAnimModeUseVelocityModifier(nUnitType, nAnimMode, pUnit, nClassId))
 	{
-		return UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
+		UNITS_UpdateRunWalkAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId, szFile, nLine);
 	}
 	else if (UNITS_CanAnimModeUseAttackRate(nUnitType, nAnimMode, pUnit, nClassId))
 	{
-		return UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
+		UNITS_UpdateAttackAnimRateAndVelocity(pUnit);
 	}
 	else
 	{
-		return UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
+		UNITS_UpdateOtherAnimRateAndVelocity(pUnit, nAnimMode, nUnitType, nClassId);
 	}
 }
 
@@ -1996,7 +1996,7 @@ int __stdcall UNITS_GetNewDirection(D2UnitStrc* pUnit)
 {
 	int nX = 0;
 	int nY = 0;
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	D2_ASSERT(pUnit);
 
 	UNITS_GetCoords(pUnit, &pCoords);
@@ -2109,7 +2109,7 @@ void __stdcall UNITS_StoreLastAttacker(D2UnitStrc* pUnit, D2UnitStrc* pKiller)
 //D2Common.0x6FDC00E0 (#10418)
 int __stdcall UNITS_GetDirectionToCoords(D2UnitStrc* pUnit, int nNewX, int nNewY)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
@@ -2230,7 +2230,7 @@ void __stdcall UNITS_SetNameInPlayerData(D2UnitStrc* pUnit, char* szName)
 	D2_ASSERT(pUnit->dwUnitType == UNIT_PLAYER);
 
 	// Note: Game actually uses Storm.dll SStrCopy
-	strcpy_s(pUnit->pPlayerData->szName, szName);
+	strcpy(pUnit->pPlayerData->szName, szName);
 }
 
 //D2Common.0x6FDC0530 (#10423)
@@ -2388,7 +2388,7 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 		return nTotalDefense;
 	}
 
-	return nTotalDefense + (int)((long long int)nTotalDefense * (long long int)nArmorOverridePercent / 100);
+	return nTotalDefense + (int)((int64_t)nTotalDefense * (int64_t)nArmorOverridePercent / 100);
 }
 
 //D2Common.0x6FDC0AC0 (#10432)
@@ -2768,7 +2768,7 @@ int __stdcall UNITS_GetMeleeRange(D2UnitStrc* pUnit)
 BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int nY, int nFlags)
 {
 	D2ActiveRoomStrc* pRoom = NULL;
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	if (!pUnit)
 	{
@@ -2789,8 +2789,8 @@ BOOL __stdcall UNITS_TestCollisionByCoordinates(D2UnitStrc* pUnit, int nX, int n
 //D2Common.0x6FDC13D0
 BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int nY2, int nSize2, D2ActiveRoomStrc* pRoom, int nCollisionMask)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 	int nXDiff = 0;
 	int nYDiff = 0;
 
@@ -2864,8 +2864,8 @@ BOOL __fastcall UNITS_TestCollision(int nX1, int nY1, int nSize1, int nX2, int n
 BOOL __stdcall UNITS_TestCollisionWithUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask)
 {
 	D2ActiveRoomStrc* pRoom = NULL;
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 
 	D2_ASSERT(pUnit1);
 	D2_ASSERT(pUnit2);
@@ -2902,8 +2902,8 @@ void __fastcall UNITS_ToggleUnitFlag(D2UnitStrc* pUnit, int nFlag, BOOL bSet)
 //TODO: v4 + v26
 BOOL __stdcall UNITS_TestCollisionBetweenInteractingUnits(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int nCollisionMask)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 	D2ActiveRoomStrc* pRoom = NULL;
 	BOOL bResult = FALSE;
 	int v4 = 0;
@@ -2994,7 +2994,8 @@ BOOL __stdcall UNITS_IsInMovingMode(D2UnitStrc* pUnit)
 	switch (pUnit->dwUnitType)
 	{
 	case UNIT_PLAYER:
-		switch (const int nPlayerMode = pUnit->pAnimSeq ? pUnit->dwSeqMode : pUnit->dwAnimMode)
+		const int nPlayerMode = pUnit->pAnimSeq ? pUnit->dwSeqMode : pUnit->dwAnimMode;
+		switch (nPlayerMode)
 		{
 		case PLRMODE_WALK:
 		case PLRMODE_RUN:
@@ -3708,8 +3709,8 @@ int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	int nX = 0;
 	int nY = 0;
 
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 
 	UNITS_GetCoords(pUnit1, &pCoords1);
 	UNITS_GetCoords(pUnit2, &pCoords2);
@@ -3787,8 +3788,8 @@ int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 //D2Common.0x6FDC2E40 (#10397)
 int __stdcall UNITS_GetDistanceToOtherUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 	int nDistanceX = 0;
 	int nDistanceY = 0;
 	int nSize = 0;
@@ -3838,7 +3839,7 @@ int __stdcall UNITS_GetDistanceToOtherUnit(D2UnitStrc* pUnit1, D2UnitStrc* pUnit
 //D2Common.0x6FDC2F50 (#10398)
 unsigned int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX, int nY)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	int nDistanceX = 0;
 	int nDistanceY = 0;
 
@@ -3879,7 +3880,7 @@ unsigned int __stdcall UNITS_GetDistanceToCoordinates(D2UnitStrc* pUnit, int nX,
 //D2Common.0x6FDC2FF0 (#10400)
 BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc* pCoord, int nDistance)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	int nDistanceX = 0;
 	int nDistanceY = 0;
 
@@ -3904,7 +3905,7 @@ BOOL __stdcall UNITS_IsInRange(D2UnitStrc* pUnit, D2CoordStrc* pCoord, int nDist
 //TODO: Find a name
 D2UnitStrc* __stdcall D2Common_10407_Impl(D2ActiveRoomStrc* pRoom, int nX, int nY, int(__fastcall* pCallback)(D2UnitStrc*, void*), void* a5, int a6, D2UnitStrc* a7)
 {
-	D2DrlgCoordsStrc pDrlgCoords = {};
+	D2DrlgCoordsStrc pDrlgCoords = { 0 };
 	D2ActiveRoomStrc** ppRoomList = NULL;
 	D2UnitStrc* pUnit = NULL;
 	int nNumRooms = 0;

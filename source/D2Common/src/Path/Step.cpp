@@ -203,7 +203,7 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 	if (dwMaxPrecisionY != dwMinPrecisionY)
 		tangent = (int)(127 * (dwMaxPrecisionX - dwMinPrecisionX)) / (int)(dwMaxPrecisionY - dwMinPrecisionY);
 
-	const auto& lutEntry = lutTanToDirection[tangent];
+	const TanToDirectionLutEntryStrc& lutEntry = lutTanToDirection[tangent];
 
 	uint8_t nAngle = (uint8_t)lutEntry.nAngle;
 	if (!bDeltaXGreaterThanY)
@@ -416,7 +416,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 		v43 = v26 & 0x20000;
 		while (1)
 		{
-			if (D2PathPointStrc{ v27.X, v45.Y } == v38)
+			if (v27.X == v38.X && v45.Y == v38.Y)
 			{
 			LABEL_58:
 				if (pDynamicPath->nSavedStepsCount)
@@ -432,7 +432,7 @@ BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2U
 			v52 = v48 + v23;
 			v46.X = (v48 + v23) >> 16;
 			v46.Y = (v22 + v49) >> 16;
-			if (D2PathPointStrc{ v27.X,v45.Y } != v46)
+			if (v27.X != v46.X || v45.Y != v46.Y)
 				break;
 		LABEL_56:
 			v22 = v53;
@@ -532,7 +532,7 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* 
 	D2UnitStrc* pUnit = pDynamicPath->pUnit;
 	if (pUnit && pUnit->dwUnitType == UNIT_MISSILE)
 	{
-		if (tDest == D2PathPointStrc{ 0, 0 })
+		if (tDest == sgctZeroGameCoord)
 		{
 			COLLISION_ResetMaskWithSize(
 				pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY,
@@ -751,7 +751,10 @@ BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2ActiveRoom
 int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2ActiveRoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
 	D2_MAYBE_UNUSED(pUnit_unused);
-	D2Common_10231_Impl(pDynamicPath, pRooms, D2PathPointStrc{ pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY });
+	D2PathPointStrc tDest = { 0 };
+	tDest.X = pDynamicPath->tGameCoords.wPosX;
+	tDest.Y = pDynamicPath->tGameCoords.wPosY;
+	D2Common_10231_Impl(pDynamicPath, pRooms, tDest);
 	pDynamicPath->dwPathPoints = 0;
 	return TRUE;
 }

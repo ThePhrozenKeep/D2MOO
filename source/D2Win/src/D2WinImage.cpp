@@ -147,7 +147,7 @@ int32_t __fastcall IMAGE2_Draw(D2WinControlStrc* pControl)
 	const int32_t nColumns = (pImage->controlHeader.nWidth + 255) >> 8;
 	const int32_t nRows = ((pImage->controlHeader.nHeight + 255) >> 8) - 1;
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 
 	gfxData.pCellFile = pImage->controlHeader.pCellFile;
 	gfxData.nDirection = 0;
@@ -182,7 +182,7 @@ int32_t __fastcall IMAGE_Draw(D2WinControlStrc* pControl)
 	//TODO: Names
 	D2_ASSERT(pImage->controlHeader.nType == D2WIN_IMAGE);
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.pCellFile = pImage->controlHeader.pCellFile;
 	gfxData.nDirection = 0;
 	gfxData.nFrame = 0;
@@ -219,8 +219,8 @@ int32_t __fastcall IMAGE_Draw(D2WinControlStrc* pControl)
 		256
 	};
 
-	D2CropRectStrc v37 = {};
-	D2CropRectStrc v41 = {};
+	D2CropRectStrc v37 = { 0 };
+	D2CropRectStrc v41 = { 0 };
 
 	for (int32_t v10 = 0; v10 < 3; ++v10)
 	{

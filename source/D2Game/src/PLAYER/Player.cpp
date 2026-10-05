@@ -290,7 +290,7 @@ void __fastcall PLAYER_CreateStartItemsFromCharStatsTxt(D2UnitStrc* pPlayer, D2G
         return;
     }
 
-    for (int32_t i = 0; i < std::size(pCharStatsTxtRecord->pItems); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(pCharStatsTxtRecord->pItems); ++i)
     {
         PLAYER_CreateStartItem(pGame, pPlayer, pCharStatsTxtRecord, i, &pCharStatsTxtRecord->pItems[i]);
     }
@@ -353,13 +353,13 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
     int32_t nUnitGUID = 0;
     if (!SUNIT_GetInteractInfo(pUnit, &nUnitType, &nUnitGUID))
     {
-        return ACT5Q5_OnPlayerDied(pGame, pUnit);
+        ACT5Q5_OnPlayerDied(pGame, pUnit);
     }
 
     D2UnitStrc* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
     if (!pInteractUnit)
     {
-        return ACT5Q5_OnPlayerDied(pGame, pUnit);
+        ACT5Q5_OnPlayerDied(pGame, pUnit);
     }
 
     switch (nUnitType)
@@ -391,7 +391,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
         break;
     }
 
-    return ACT5Q5_OnPlayerDied(pGame, pUnit);
+    ACT5Q5_OnPlayerDied(pGame, pUnit);
 }
 
 //D2Game.0x6FC7BEC0
@@ -567,13 +567,13 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         return 1;
     }
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
 
     uint32_t nGoldValue = nValue;
-    if (nValue > 2'000'000'000)
+    if (nValue > 2000000000)
     {
-        nGoldValue = 2'000'000'000;
+        nGoldValue = 2000000000;
     }
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -802,7 +802,7 @@ int32_t __fastcall D2GAME_IteratePlayers_6FC7C750(D2GameStrc* pGame, D2UnitStrc*
         return 0;
     }
 
-    D2RosterIterateStrc rosterIterate = {};
+    D2RosterIterateStrc rosterIterate = { 0 };
 
     rosterIterate.bFlag = 0;
     rosterIterate.pUnit = pUnit;

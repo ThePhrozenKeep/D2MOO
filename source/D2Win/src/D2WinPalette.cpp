@@ -64,11 +64,11 @@ int32_t __fastcall D2Win_10177(uint8_t nAct)
 		nActNo = 1;
 	}
 
-	char szPL2Filename[260] = {};
-	char szDatFilename[260] = {};
+	char szPL2Filename[260] = { 0 };
+	char szDatFilename[260] = { 0 };
 
-	sprintf_s(szDatFilename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.dat");
-	sprintf_s(szPL2Filename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.pl2");
+	sprintf(szDatFilename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.dat");
+	sprintf(szPL2Filename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.pl2");
 
 	const int32_t nResult = sub_6F8AE5E0(szDatFilename, szPL2Filename);
 
@@ -80,10 +80,10 @@ int32_t __fastcall D2Win_10177(uint8_t nAct)
 //D2Win.0x6F8AE5E0
 int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2FileName)
 {
-	D2PaletteTableStrc paletteTable = {};
+	D2PaletteTableStrc paletteTable = { 0 };
 
 	uint8_t* pDatFile = (uint8_t*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szDatFileName, nullptr);
-	for (int32_t i = 0; i < std::size(paletteTable.datFilePalette); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.datFilePalette); ++i)
 	{
 		paletteTable.datFilePalette[i].peBlue = *pDatFile++;
 		paletteTable.datFilePalette[i].peGreen = *pDatFile++;
@@ -105,12 +105,12 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 	memcpy(gStandardColorsPalette_6F962298, pPL2File->standardColors, sizeof(gStandardColorsPalette_6F962298));
 	memcpy(gStandardShiftsPalette_6F921498, pPL2File->standardShifts, sizeof(gStandardShiftsPalette_6F921498));
 
-	for (int32_t i = 0; i < std::size(gRGBAPalette_6F9622C0); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++i)
 	{
 		gRGBAPalette_6F9622C0[i].peFlags = 5;
 	}
 
-	for (int32_t i = 0; i < std::size(gRGBAPalette_6F9622C0); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++i)
 	{
 		const uint8_t red = std::min(170 * gRGBAPalette_6F9622C0[i].peRed / 100, 255);
 		const uint8_t green = std::min(170 * gRGBAPalette_6F9622C0[i].peGreen / 100, 255);
@@ -120,17 +120,17 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 		byte_6F952198[i] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, gRGBAPalette_6F9622C0[i].peRed, 0, 0);
 	}
 
-	for (int32_t i = 0; i < std::size(paletteTable.transPalettes); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.transPalettes); ++i)
 	{
 		paletteTable.transPalettes[i] = &gTransPalette_6F922198[i];
 	}
 
-	for (int32_t i = 0; i < std::size(paletteTable.shadowLightGammaPalettes); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.shadowLightGammaPalettes); ++i)
 	{
 		paletteTable.shadowLightGammaPalettes[i] = &gShadowsLightGammaPalette_6F91E298.palettes[i];
 	}
 
-	for (int32_t i = 0; i < std::size(paletteTable.standardShiftPalettes); ++i)
+	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.standardShiftPalettes); ++i)
 	{
 		paletteTable.standardShiftPalettes[i] = &gStandardShiftsPalette_6F921498[i];
 	}
@@ -217,8 +217,8 @@ int32_t __stdcall D2Win_10028(const char* pszPalDatFilename, const char* pszPalP
 		return 1;
 	}
 
-	char szPalDatFilename[260] = {};
-	char szPalPL2Filename[260] = {};
+	char szPalDatFilename[260] = { 0 };
+	char szPalPL2Filename[260] = { 0 };
 
 	wsprintfA(szPalDatFilename, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.dat");
 	wsprintfA(szPalPL2Filename, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.pl2");

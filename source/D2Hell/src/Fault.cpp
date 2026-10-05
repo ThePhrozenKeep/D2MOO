@@ -70,8 +70,10 @@ void __fastcall FaultGetString(DWORD dwMessageId, char* buffer, unsigned int iMa
     {
         EnterCriticalSection(&sgcsFault);
 #if 1
-        for (MessageSource messageSource : sgMessageSourceList)
+        for (std::list<MessageSource>::const_iterator itMessageSource = sgMessageSourceList.begin();
+             itMessageSource != sgMessageSourceList.end(); ++itMessageSource)
         {
+            const MessageSource messageSource = *itMessageSource;
 
 #else
         TMESSAGESOURCE* v3;

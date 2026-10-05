@@ -351,7 +351,7 @@ void __stdcall DUNGEON_GetSubtileRect(D2ActiveRoomStrc* pRoom, RECT* pRect)
 //D2Common.0x6FD8C210 (#10054)
 void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2ActiveRoomStrc* pRoom, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
-	return DRLGROOM_GetRGB_IntensityFromRoomEx(pRoom->pDrlgRoom, pIntensity, pRed, pGreen, pBlue);
+	DRLGROOM_GetRGB_IntensityFromRoomEx(pRoom->pDrlgRoom, pIntensity, pRed, pGreen, pBlue);
 }
 
 //D2Common.0x6FD8C240 (#10041)
@@ -392,7 +392,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, 
 {
 	D2ActiveRoomStrc* pNearRoom = NULL;
 	D2ActiveRoomStrc* pRoom = NULL;
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	int nX = 0;
 	int nY = 0;
 
@@ -1076,7 +1076,7 @@ void __stdcall DUNGEON_UpdatePops(D2ActiveRoomStrc* pRoom, int nX, int nY, BOOL 
 //D2Common.0x6FD8D2E0 (#10094)
 void __stdcall DUNGEON_GetTombStoneTileCoords(D2ActiveRoomStrc* pRoom, D2CoordStrc** ppTombStoneTiles, int* pnTombStoneTiles)
 {
-	return DRLGPRESET_GetTombStoneTileCoords(pRoom->pDrlgRoom, ppTombStoneTiles, pnTombStoneTiles);
+	DRLGPRESET_GetTombStoneTileCoords(pRoom->pDrlgRoom, ppTombStoneTiles, pnTombStoneTiles);
 }
 
 //D2Common.0x6FD8D300 (#10095)
@@ -1124,7 +1124,7 @@ void __stdcall DUNGEON_GetPortalLevelArrayFromPortalFlags(void* pMemPool, int nF
 	int* pPortalLevels = NULL;
 	int nPortalLevels = 0;
 	int nCurrentFlag = 0;
-	int pLevels[32] = {};
+	int pLevels[32] = { 0 };
 
 	nCurrentFlag = 1;
 

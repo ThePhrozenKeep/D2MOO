@@ -52,9 +52,8 @@ struct D2AuraModStrc
     int32_t nSkillId;
 };
 
-using UModInitFunc = void(__fastcall*)(D2UnitStrc*, int32_t, int32_t);
-
-using MonUModFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
+typedef void (__fastcall * UModInitFunc)(D2UnitStrc*, int32_t, int32_t);
+typedef void (__fastcall * MonUModFunc)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 struct D2UnkUModStrc
 {
     MonUModFunc unk0x00[6];
@@ -353,7 +352,7 @@ void __fastcall MONSTERUNIQUE_UMod36_Ghostly(D2UnitStrc* pUnit, int32_t nUMod, i
     STATLIST_SetUnitStat(pUnit, STAT_DAMAGERESIST, 80, 0);
     MONSTERUNIQUE_UMod16_Champion(pUnit, nUMod, bUnique);
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
 
@@ -600,7 +599,7 @@ void __fastcall MONSTERUNIQUE_UMod26_Teleport(D2UnitStrc* pUnit, int32_t nUMod, 
 //1.14d: 0x005A1650
 void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    constexpr D2AuraModStrc gAuraMods[8] =
+    D2_CONSTEXPR D2AuraModStrc gAuraMods[8] =
     {
         {   0, 0, 1, 6, SKILL_MIGHT },
         {   0, 0, 1, 6, SKILL_HOLYFIRE },
@@ -633,7 +632,7 @@ void __fastcall MONSTERUNIQUE_UMod30_AuraEnchanted(D2UnitStrc* pUnit, int32_t nU
         nMax = 1;
     }
 
-    D2SeedStrc seed = {};
+    D2SeedStrc seed = { 0 };
     SEED_InitSeed(&seed);
     SEED_InitLowSeed(&seed, MONSTERUNIQUE_GetNameSeed(pUnit));
 
@@ -727,7 +726,7 @@ void __fastcall MONSTERUNIQUE_UMod9_FireEnchanted(D2UnitStrc* pUnit, int32_t nUM
         return;
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -779,7 +778,7 @@ void __fastcall MONSTERUNIQUE_UMod17_LightningEnchanted(D2UnitStrc* pUnit, int32
         return;
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -831,7 +830,7 @@ void __fastcall MONSTERUNIQUE_UMod18_ColdEnchanted(D2UnitStrc* pUnit, int32_t nU
         return;
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -885,7 +884,7 @@ void __fastcall MONSTERUNIQUE_UMod23_PoisonEnchanted(D2UnitStrc* pUnit, int32_t 
         return;
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -939,7 +938,7 @@ void __fastcall MONSTERUNIQUE_UMod25_ManaSteal(D2UnitStrc* pUnit, int32_t nUMod,
         return;
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -1015,7 +1014,7 @@ void __fastcall MONSTERUNIQUE_CurseCallback_ApplyAmplifyDamage(D2GameStrc* pGame
         return;
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
 
     curse.pTarget = pTarget;
     curse.pUnit = pUnit;
@@ -1067,7 +1066,7 @@ void __fastcall MONSTERUNIQUE_CastCorpseExplode(D2GameStrc* pGame, D2UnitStrc* p
         return;
     }
 
-    D2MonStatsInitStrc monStatsInit = {};
+    D2MonStatsInitStrc monStatsInit = { 0 };
     DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, &monStatsInit);
 
     D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
@@ -1080,7 +1079,7 @@ void __fastcall MONSTERUNIQUE_CastCorpseExplode(D2GameStrc* pGame, D2UnitStrc* p
     const int32_t nMinDamage = MONSTERUNIQUE_CalculatePercentage(nMaxDamage, 60, 100);
     const int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nMaxDamage - nMinDamage);
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.dwPhysDamage = (nMinDamage + nDamage) << 6;
     damage.dwFireDamage = damage.dwPhysDamage;
     SUNITDMG_SetMissileDamageFlagsForNearbyUnits(pGame, pMissile, nX, nY, pGame->nDifficulty + 4, &damage, 0, 0, nullptr, 0x581u);
@@ -1098,7 +1097,7 @@ void __fastcall MONSTERUNIQUE_CastCorpseExplode2(D2GameStrc* pGame, D2UnitStrc* 
         return;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.dwPhysDamage = 0x6400u;
     damage.dwFireDamage = 0x6400u;
     SUNITDMG_SetMissileDamageFlagsForNearbyUnits(pGame, pMissile, nX, nY, 6, &damage, 0, 0, nullptr, 0x583);
@@ -1161,7 +1160,7 @@ void __fastcall MONSTERUNIQUE_CastLightUniqueMissile(D2GameStrc* pGame, D2UnitSt
         pUnit->pMonsterData->nLastAnimMode |= 1u;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
 
     missileParams.nSkillLevel = std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 2, 1);
     missileParams.dwFlags = 0x21;
@@ -1171,8 +1170,8 @@ void __fastcall MONSTERUNIQUE_CastLightUniqueMissile(D2GameStrc* pGame, D2UnitSt
     missileParams.nMissile = MISSILE_LIGHTUNIQUE;
     missileParams.pInitFunc = SKILLS_MissileInit_ChargedBolt;
 
-    constexpr int32_t nXOffsets[] = { 0, 1, 0, -1 };
-    constexpr int32_t nYOffsets[] = { -1, 0, 1, 0 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { 0, 1, 0, -1 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { -1, 0, 1, 0 };
 
     for (int32_t i = 0; i < 4; ++i)
     {
@@ -1238,7 +1237,7 @@ void __fastcall MONSTERUNIQUE_KillMinions(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         return;
     }
 
-    D2ModeChangeStrc modeChange = {};
+    D2ModeChangeStrc modeChange = { 0 };
     MONSTERMODE_GetModeChangeInfo(pOwner, MONMODE_DEATH, &modeChange);
     D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 }
@@ -1252,7 +1251,7 @@ void __fastcall MONSTERUNIQUE_MinionCallback_KillMinion(D2UnitStrc* pUnit, void*
 
     if (pUnit && pUnit->dwAnimMode != MONMODE_DEATH)
     {
-        D2ModeChangeStrc modeChange = {};
+        D2ModeChangeStrc modeChange = { 0 };
 
         MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_DEATH, &modeChange);
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
@@ -1315,7 +1314,7 @@ void __fastcall MONSTERUNIQUE_ScarabModeChange(D2GameStrc* pGame, D2UnitStrc* pB
 //D2Game.0x6FC6D060
 void __fastcall MONSTERUNIQUE_CastBugLightningMissile(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
 
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
@@ -1325,8 +1324,8 @@ void __fastcall MONSTERUNIQUE_CastBugLightningMissile(D2GameStrc* pGame, D2UnitS
     missileParams.nSkillLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
     missileParams.pInitFunc = SKILLS_MissileInit_ChargedBolt;
 
-    constexpr int32_t nXOffsets[] = { 0, 1, 0, -1 };
-    constexpr int32_t nYOffsets[] = { -1, 0, 1, 0 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { 0, 1, 0, -1 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { -1, 0, 1, 0 };
 
     for (int32_t i = 0; i < 4; ++i)
     {
@@ -1346,7 +1345,7 @@ void __fastcall MONSTERUNIQUE_CastBugLightningMissile(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FC6D1C0
 void __fastcall MONSTERUNIQUE_ApplyElementalDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    constexpr int32_t dword_6FD28C38[5][3] =
+    D2_CONSTEXPR int32_t dword_6FD28C38[5][3] =
     {
         { STAT_FIREMINDAM, STAT_FIREMAXDAM, -1 },
         { STAT_LIGHTMINDAM, STAT_LIGHTMAXDAM, -1 },
@@ -1374,7 +1373,7 @@ void __fastcall MONSTERUNIQUE_ApplyElementalDamage(D2GameStrc* pGame, D2UnitStrc
         }
     }
 
-    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, 0ui8, 2ui8);
+    const uint8_t nDifficulty = D2Clamp(pGame->nDifficulty, (uint8_t)0, (uint8_t)2);
     const int32_t nGameType = pGame->nGameType || pGame->dwGameType;
     const int32_t nLevel = D2Clamp(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1, sgptDataTables->nMonLvlTxtRecordCount - 1);
     D2MonLvlTxt* pMonLvlTxtRecord = &sgptDataTables->pMonLvlTxt[nLevel];
@@ -1468,10 +1467,10 @@ void __fastcall MONSTERUNIQUE_StealBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit
             if (pBeltItem->dwUnitType == UNIT_ITEM && pBeltItem->dwAnimMode == IMODE_INBELT && !INVENTORY_GetCursorItem(pTarget->pInventory))
             {
                 D2UnitStrc* pDupeItem = ITEMS_Duplicate(pGame, pBeltItem, pTarget, 1);
-                D2CoordStrc pCoord = {};
+                D2CoordStrc pCoord = { 0 };
                 UNITS_GetCoords(pTarget, &pCoord);
 
-                D2CoordStrc pReturnCoords = {};
+                D2CoordStrc pReturnCoords = { 0 };
                 D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pTarget), &pCoord, &pReturnCoords, 1);
                 D2_ASSERT(pRoom);
 
@@ -1557,7 +1556,7 @@ void __fastcall MONSTERUNIQUE_QuestCompleteModeChange(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FC6D8B0
 void __fastcall MONSTERUNIQUE_CastQueenPoisonCloudMissile(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -1566,8 +1565,8 @@ void __fastcall MONSTERUNIQUE_CastQueenPoisonCloudMissile(D2GameStrc* pGame, D2U
     missileParams.nSkillLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
     missileParams.pInitFunc = SKILLS_MissileInit_ChargedBolt;
 
-    constexpr int32_t nXOffsets[] = { 0, 1, 0, -1 };
-    constexpr int32_t nYOffsets[] = { -1, 0, 1, 0 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { 0, 1, 0, -1 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { -1, 0, 1, 0 };
 
     for (int32_t j = 0; j < 4; ++j)
     {
@@ -1624,7 +1623,7 @@ void __fastcall sub_6FC6DA40(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
     }
 
-    D2SeedStrc seed = {};
+    D2SeedStrc seed = { 0 };
     SEED_InitSeed(&seed);
     SEED_InitLowSeed(&seed, 'SEIS');
     seed.nHighSeed = pOwner->dwUnitId;
@@ -1763,7 +1762,7 @@ void __fastcall sub_6FC6DFC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
         if (!pOwner || pOwner->dwUnitType != UNIT_PLAYER)
         {
-            D2ModeChangeStrc modeChange = {};
+            D2ModeChangeStrc modeChange = { 0 };
             MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_DEATH, &modeChange);
             D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
         }
@@ -1846,7 +1845,7 @@ void __fastcall sub_6FC6E240(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
         return;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.dwFireDamage = (ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pMonStatsTxtRecord->nElMaxD[0][0] - pMonStatsTxtRecord->nElMinD[0][0]) + pMonStatsTxtRecord->nElMinD[0][0]) << 8;
 
     SUNITDMG_SetMissileDamageFlagsForNearbyUnits(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), pMonStatsTxtRecord->wAiParam[2][pGame->nDifficulty] * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), &damage, 0, 0, nullptr, 0);
@@ -1863,7 +1862,7 @@ void __fastcall MONSTERUNIQUE_SuicideModeChange(D2GameStrc* pGame, D2UnitStrc* p
 
     if (pBoss->dwAnimMode == MONMODE_GETHIT)
     {
-        D2ModeChangeStrc modeChange = {};
+        D2ModeChangeStrc modeChange = { 0 };
         MONSTERMODE_GetModeChangeInfo(pBoss, MONMODE_DEATH, &modeChange);
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
         EVENT_SetEvent(pGame, pBoss, EVENTTYPE_MONUMOD, pGame->dwGameFrame + 4, 0, 0);
@@ -1886,10 +1885,10 @@ void __fastcall MONSTERUNIQUE_CastSuicideExplodeMissile(D2GameStrc* pGame, D2Uni
         nGameType = 1;
     }
 
-    D2MonStatsInitStrc monStatsInit = {};
+    D2MonStatsInitStrc monStatsInit = { 0 };
     DATATBLS_CalculateMonsterStatsByLevel(pUnit->dwClassId, nGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 8, &monStatsInit);
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags |= 8u;
 
@@ -1956,7 +1955,7 @@ void __fastcall sub_6FC6E770(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC6E780
 void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nIndex)
 {
-    constexpr D2UnkUModStrc stru_6FD2F0C8[43] =
+    D2_CONSTEXPR D2UnkUModStrc stru_6FD2F0C8[43] =
     {
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
@@ -2130,7 +2129,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 
             int32_t nAccumulatedPicks = 0;
             int32_t nPickCount = 0;
-            int32_t picks[512] = {};
+            int32_t picks[512] = { 0 };
 
             for (int32_t i = 0; i < sgptDataTables->nMonUModTxtRecordCount; ++i)
             {
@@ -2182,7 +2181,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     }
 
     D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount < 256);
-    uint8_t bUModUsageTable[256] = {};
+    uint8_t bUModUsageTable[256] = { 0 };
 
     for (int32_t i = 0; i < nIndex; ++i)
     {
@@ -2315,7 +2314,7 @@ int32_t __fastcall sub_6FC6EE90(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* a
 
     int32_t nPickCount = 0;
     int32_t nAccumulatedPicks = 0;
-    int32_t picks[512] = {};
+    int32_t picks[512] = { 0 };
 
     for (int32_t i = 0; i < sgptDataTables->nMonUModTxtRecordCount; ++i)
     {
@@ -2424,7 +2423,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
 
                     if (!pMonster)
                     {
-                        D2CoordStrc pCoord = {};
+                        D2CoordStrc pCoord = { 0 };
                         pCoord.nX = nX;
                         pCoord.nY = nY;
 
@@ -2542,12 +2541,12 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
         }
     }
 
-    constexpr uint8_t mods[4] =
+    D2_CONSTEXPR uint8_t mods[4] =
     {
         1, 2, 3, 4
     };
 
-    for (int32_t i = 0; i < std::size(mods); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(mods); ++i)
     {
         sub_6FC6F670(pUnit, mods[i], TRUE);
 
@@ -2574,7 +2573,7 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
 //D2Game.0x6FC6F670
 void __fastcall sub_6FC6F670(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    constexpr UModInitFunc dword_6FD2F018[] =
+    D2_CONSTEXPR UModInitFunc dword_6FD2F018[] =
     {
         nullptr,
         MONSTERUNIQUE_UMod1_RandomName,
@@ -2681,7 +2680,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
     }
 
     D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount < 256);
-    uint8_t bUModUsageTable[256] = {};
+    uint8_t bUModUsageTable[256] = { 0 };
 
     int32_t bAuraEnchanted = 0;
 
@@ -2929,7 +2928,7 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         pMonster->pMonsterData->nTypeFlag |= MONTYPEFLAG_MINION;
     }
 
-    constexpr int32_t mods[] = { 1, 2, 3, 4 };
+    D2_CONSTEXPR int32_t mods[] = { 1, 2, 3, 4 };
     for (int32_t i = 0; i < 4; ++i)
     {
         sub_6FC6F670(pMonster, mods[i], 0);

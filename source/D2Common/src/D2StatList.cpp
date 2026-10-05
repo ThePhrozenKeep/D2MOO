@@ -82,10 +82,9 @@ int StatArray_DichotomicSearch(const T* pStatArray, D2SLayerStatIdStrc::PackedTy
 }
 
 // Helper function
-template<class T>
-decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArray, D2SLayerStatIdStrc::PackedType nLayer_StatId, int insertionIdx)
+template<class T, class StatType>
+StatType __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArray, D2SLayerStatIdStrc::PackedType nLayer_StatId, int insertionIdx)
 {
-	typedef decltype(T::pStat) StatType;
 
 	if (pStatsArray->nStatCount >= pStatsArray->nCapacity)
 	{
@@ -99,7 +98,7 @@ decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArra
 		memmove(&pStatsArray->pStat[insertionIdx + 1], &pStatsArray->pStat[insertionIdx], (pStatsArray->nStatCount - insertionIdx) * sizeof(D2StatStrc));
 	}
 
-	pStatsArray->pStat[insertionIdx] = {}; // Default init to 0
+	pStatsArray->pStat[insertionIdx] = D2StatStrc(); // Default init to 0
 	pStatsArray->pStat[insertionIdx].nPackedValue = nLayer_StatId;
 	++pStatsArray->nStatCount;
 
@@ -118,7 +117,7 @@ static D2StatStrc* __fastcall STATLIST_GetOrInsertStat(void* pMemPool, D2StatsAr
 	}
 	else
 	{
-		return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		return StatArray_InsertStat<D2StatsArrayStrc, D2StatStrc*>(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 }
 
@@ -648,7 +647,7 @@ D2StatStrc* __fastcall STATLIST_InsertStatOrFail_6FDB6970(void* pMemPool, D2Stat
 	{
 		return nullptr;
 	}
-	return StatArray_InsertStat(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+	return StatArray_InsertStat<D2StatsArrayStrc, D2StatStrc*>(pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 }
 
 //D2Common.0x6FDB6A30
@@ -688,7 +687,7 @@ void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, 
 	}
 	else if (nNewValue != 0)
 	{
-		pStat = StatArray_InsertStat(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
+		pStat = StatArray_InsertStat<D2StatsArrayStrc, D2StatStrc*>(pStatListEx->pMemPool, pStatsArray, nLayer_StatId, insertionIdx);
 	}
 
 	if (pStat == nullptr)
@@ -799,7 +798,7 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 			
 		if (pStatListEx && pStatList->dwFlags & STATLIST_PERMANENT)
 		{
-			D2SLayerStatIdStrc nLayer_StatIds[16] = {};
+			D2SLayerStatIdStrc nLayer_StatIds[16] = { 0 };
 			int nCounter = 0;
 			for (D2StatStrc* i = pStatListEx->FullStats.pStat; i < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++i)
 			{
@@ -1113,7 +1112,7 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 				pOwner = pStatListEx->pOwner;
 
 				int nCounter = 0;
-				D2SLayerStatIdStrc nLayer_StatIds[16] = {};
+				D2SLayerStatIdStrc nLayer_StatIds[16] = { 0 };
 				for (D2StatStrc* pCurStat = pStatListEx->FullStats.pStat; pCurStat < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++pCurStat)
 				{
 					D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(pCurStat->nStat);
@@ -1220,7 +1219,7 @@ void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList,
 			bool alreadyInArray = false;
 			int insertIdx = StatArray_FindInsertionIndex(&pStatListEx->ModStats, nLayer_StatId, &alreadyInArray);
 			if (!alreadyInArray)
-				StatArray_InsertStat(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId, insertIdx);
+				StatArray_InsertStat<D2ModStatsArrayStrc, D2SLayerStatIdStrc*>(pStatListEx->pMemPool, &pStatListEx->ModStats, nLayer_StatId, insertIdx);
 		}
 	}
 }
@@ -1258,7 +1257,7 @@ BOOL __stdcall STATLIST_SetBaseStat(D2StatListStrc* pStatList, int nStatId, int 
 		{
 			return FALSE;
 		}
-		StatArray_InsertStat(pStatList->pMemPool, pBaseStatsArray, nLayer_StatId.nPackedValue, insertionIdx);
+		StatArray_InsertStat<D2StatsArrayStrc, D2StatStrc*>(pStatList->pMemPool, pBaseStatsArray, nLayer_StatId.nPackedValue, insertionIdx);
 	}
 	D2StatStrc* pStat = &pBaseStatsArray->pStat[insertionIdx];
 
@@ -2039,8 +2038,9 @@ void __stdcall D2Common_10525(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 		D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(j->nStat);
 		if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->nOp >= 6 && pItemStatCostTxtRecord->nOp <= 7)
 		{
-			for (uint16_t wOpStat : pItemStatCostTxtRecord->wOpStat)
+			for (size_t nOpStatIndex = 0; nOpStatIndex < ARRAY_SIZE(pItemStatCostTxtRecord->wOpStat); ++nOpStatIndex)
 			{
+				const uint16_t wOpStat = pItemStatCostTxtRecord->wOpStat[nOpStatIndex];
 				if (wOpStat == uint16_t(-1))
 				{
 					break;

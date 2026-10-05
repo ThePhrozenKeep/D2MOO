@@ -73,7 +73,7 @@ int32_t __fastcall SKILLS_DoInferno(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
             nRange = 1;
         }
 
-        D2MissileStrc missileParams = {};
+        D2MissileStrc missileParams = { 0 };
         missileParams.nSkillLevel = nSkillLevel;
         missileParams.nMissile = nMissileId;
         missileParams.nTargetX = nX;
@@ -295,7 +295,7 @@ int32_t __fastcall SKILLS_SrvDo017_ChargedBolt_BoltSentry(D2GameStrc* pGame, D2U
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
@@ -350,7 +350,7 @@ int32_t __fastcall SKILLS_SrvDo018_DefensiveBuff(D2GameStrc* pGame, D2UnitStrc* 
 
     sub_6FD11C90(pUnit, pSkillsTxtRecord->nAuraState, 1);
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pUnit;
     curse.pTarget = pUnit;
     curse.nSkill = nSkillId;
@@ -417,7 +417,7 @@ int32_t __fastcall SKILLS_SrvDo020_StaticField(D2GameStrc* pGame, D2UnitStrc* pU
 		return 0;
 	}
 
-    D2StaticFieldCallbackArgStrc staticField = {};
+    D2StaticFieldCallbackArgStrc staticField = { 0 };
     staticField.nMinDamage = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
 	staticField.nDamagePct = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
 
@@ -466,7 +466,7 @@ int32_t __fastcall SKILLS_AuraCallback_StaticField(D2AuraCallbackStrc* pAuraCall
         nDamage = pStaticFieldCallbackArg->nMinDamage;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     int32_t nStatId = -1;
     int32_t nElementalType = pStaticFieldCallbackArg->nElementalType;
     sub_6FD11E40(pAuraCallback->pOwner, &damage, nElementalType, nDamage, pStaticFieldCallbackArg->nElementalLength, &nStatId, &nElementalType);
@@ -520,7 +520,7 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
             return 0;
         }
 
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
         D2GAME_RollPhysicalDamage_6FD14EC0(pUnit, &damage, nSkillId, nSkillLevel);
         D2GAME_RollElementalDamage_6FD14DD0(pUnit, &damage, nSkillId, nSkillLevel);
 
@@ -609,7 +609,7 @@ int32_t __fastcall SKILLS_SrvDo023_Blaze_EnergyShield_SpiderLay(D2GameStrc* pGam
         return 0;
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pUnit;
     curse.pTarget = pUnit;
     curse.nSkill = nSkillId;
@@ -679,7 +679,7 @@ void __fastcall SKILLS_CreateBlazeMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.nX = CLIENTS_GetUnitX(pUnit);
     missileParams.nY = CLIENTS_GetUnitY(pUnit);
     missileParams.nMissile = nMissileId;
@@ -729,7 +729,7 @@ int32_t __fastcall SKILLS_SrvDo024_FireWall(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
 
     missileParams.nMissile = pSkillsTxtRecord->wSrvMissileA;
     missileParams.dwFlags = 0x21;
@@ -777,7 +777,7 @@ int32_t __fastcall SKILLS_SrvDo025_Enchant(D2GameStrc* pGame, D2UnitStrc* pUnit,
         pTarget = pUnit;
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pUnit;
     curse.pTarget = pTarget;
     curse.nSkill = nSkillId;
@@ -931,7 +931,7 @@ int32_t __fastcall SKILLS_SrvDo029_ThunderStorm(D2GameStrc* pGame, D2UnitStrc* p
 
     if (!STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState) || SKILLS_GetParam2(pSkill))
     {
-        D2CurseStrc curse = {};
+        D2CurseStrc curse = { 0 };
         curse.pUnit = pUnit;
         curse.pTarget = pUnit;
         curse.nSkill = nSkillId;
@@ -1014,7 +1014,7 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
         bIsPlayer = 0;
     }
 
-    constexpr D2EnergyShieldDataStrc gEnergyShieldData_6FD29AD8[8] =
+    D2_CONSTEXPR D2EnergyShieldDataStrc gEnergyShieldData_6FD29AD8[8] =
     {
         { offsetof(D2DamageStrc, dwPhysDamage), 0 },
         { offsetof(D2DamageStrc, dwFireDamage), 0 },
@@ -1130,7 +1130,7 @@ int32_t __fastcall SKILLS_SrvDo144_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         nParam += pSkillsTxtRecord->dwParam[0] + (nSkillLevel - 1) * pSkillsTxtRecord->dwParam[1];
     }
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
     summonArg.nPetType = pSkillsTxtRecord->nPetType;
     summonArg.dwFlags |= 1;
     summonArg.nMonMode = nSpawnMode;
@@ -1138,8 +1138,8 @@ int32_t __fastcall SKILLS_SrvDo144_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetMax = SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwPetMax, nSkillId, nSkillLevel);
 
-    constexpr int32_t nXOffsets[] = { -1, 0,  1 };
-    constexpr int32_t nYOffsets[] = { -1, 0, -1 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { -1, 0,  1 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { -1, 0, -1 };
 
     int32_t bResult = 0;
     for (int32_t i = 0; i < 3; ++i)
@@ -1208,7 +1208,7 @@ int32_t __fastcall SKILLS_EventFunc01_ChillingArmor(D2GameStrc* pGame, int32_t n
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.nSkill = nSkillId;
     missileParams.dwFlags = 0x20;
     missileParams.pOwner = pAttacker;
@@ -1240,7 +1240,7 @@ int32_t __fastcall SKILLS_EventFunc02_FrozenArmor(D2GameStrc* pGame, int32_t nEv
         nSkillLevel = 1;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags |= 0x20u;
     damage.dwFrzLen = SKILLS_EvaluateSkillFormula(pAttacker, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     SUNITDMG_ExecuteEvents(pGame, pAttacker, pUnit, 1, &damage);
@@ -1272,7 +1272,7 @@ int32_t __fastcall SKILLS_EventFunc03_ShiverArmor(D2GameStrc* pGame, int32_t nEv
         nSkillLevel = 1;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     D2GAME_RollElementalDamage_6FD14DD0(pAttacker, &damage, nSkillId, nSkillLevel);
     damage.nHitClassActiveSet = 1;
     damage.dwHitClass |= 0xDu;

@@ -121,7 +121,7 @@ int32_t __fastcall SKILLS_SrvSt16_PoisonDagger(D2GameStrc* pGame, D2UnitStrc* pU
             D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
             if (pSkillsTxtRecord)
             {
-                D2DamageStrc damage = {};
+                D2DamageStrc damage = { 0 };
                 damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
                 if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
                 {
@@ -344,7 +344,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
         return 0;
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
 
     curse.pUnit = v2->pUnit;
     curse.nDuration = v2->nDuration;
@@ -468,7 +468,7 @@ int32_t __fastcall SKILLS_SrvDo030_Curse(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     }
 
     // TODO: v29
-    D2UnkNecSkillStrc v29 = {};
+    D2UnkNecSkillStrc v29 = { 0 };
     v29.pUnit = pUnit;
     v29.pGame = pGame;
     v29.nSkillLevel = nSkillLevel;
@@ -523,7 +523,7 @@ void __fastcall sub_6FD0B9F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         nLength /= pDifficultyLevelsTxtRecord->dwAiCurseDiv;
     }
 
-    D2UnkNecSkillStrc args = {};
+    D2UnkNecSkillStrc args = { 0 };
 
     args.nDuration = nLength;
     args.pGame = pGame;
@@ -598,7 +598,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
         nLength /= pDifficultyLevelsTxtRecord->dwAiCurseDiv;
     }
 
-    D2UnkNecSkillStrc3 arg = {};
+    D2UnkNecSkillStrc3 arg = { 0 };
     arg.pGame = pGame;
     arg.pUnit = pUnit;
     arg.nSkillId = nSkillId;
@@ -608,7 +608,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
     arg.nUnitGUID = pTargetUnit->dwUnitId;
     sub_6FD10360(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nAuraRange, sub_6FD0BDA0, &arg);
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pUnit;
     curse.pTarget = pTargetUnit;
     curse.nSkill = nSkillId;
@@ -683,7 +683,7 @@ int32_t __fastcall SKILLS_SrvDo061_Confuse(D2GameStrc* pGame, D2UnitStrc* pUnit,
     }
 
     // TODO: v25
-    D2UnkNecSkillStrc v25 = {};
+    D2UnkNecSkillStrc v25 = { 0 };
 
     v25.nSkillLevel = nSkillLevel;
     v25.pGame = pGame;
@@ -758,7 +758,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
         break;
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
 
     curse.pUnit = pParam->pUnit;
     curse.nSkill = pParam->nSkillId;
@@ -872,7 +872,7 @@ void __fastcall D2GAME_SetSummonResistance_6FD0C2E0(D2UnitStrc* pUnit, D2UnitStr
 //D2Game.0x6FD0C3A0
 void __fastcall D2GAME_SetUnitComponent_6FD0C3A0(D2UnitStrc* pUnit, D2UnitStrc* pPet, int32_t nLevel, int32_t bHasShield, int32_t bSpecial)
 {
-    constexpr D2NecroSkeletonComponentStrc necroSkeletonComponents[11] =
+    D2_CONSTEXPR D2NecroSkeletonComponentStrc necroSkeletonComponents[11] =
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -1159,7 +1159,7 @@ int32_t __fastcall SKILLS_SrvDo031_RaiseSkeleton_Mage(D2GameStrc* pGame, D2UnitS
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
 
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
 
         damage.wResultFlags |= 4u;
         damage.dwHitFlags |= 0x1000u;
@@ -1188,7 +1188,7 @@ int32_t __fastcall SKILLS_SrvDo031_RaiseSkeleton_Mage(D2GameStrc* pGame, D2UnitS
     DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pTarget), pTarget->dwUnitType, pTarget->dwUnitId);
     SUNIT_RemoveUnit(pGame, pTarget);
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
 
     summonArg.nHcIdx = nSummonId;
     summonArg.pPosition.nX = nX;
@@ -1274,7 +1274,7 @@ int32_t __fastcall sub_6FD0D000(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
     D2UnkNecSkillStrc2* pArg = (D2UnkNecSkillStrc2*)pAuraCallback->pArgs;
     if (pArg)
     {
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
         memcpy(&damage, pArg->pDamage, sizeof(damage));
 
         if (pArg->unk0x0C < PATH_ComputeSquaredDistance(pArg->nX, pArg->nY, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)))
@@ -1312,7 +1312,7 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
     int32_t nMaxHp = STATLIST_GetUnitBaseStat(pTarget, STAT_MAXHP, 0);
     if (pTarget->dwUnitType == UNIT_MONSTER)
     {
-        D2MonStatsInitStrc monStatsInit = {};
+        D2MonStatsInitStrc monStatsInit = { 0 };
         DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
         nMaxHp = (monStatsInit.nMaxHP + monStatsInit.nMinHP) << 7;
     }
@@ -1336,7 +1336,7 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
         nDamage = MONSTERUNIQUE_CalculatePercentage(nDamage, nUnitLevel, nTargetLevel);
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     int32_t nPercentage = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel);
     if (nPercentage < 0)
@@ -1357,7 +1357,7 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
 
     damage.dwPhysDamage = nDamage;
 
-    D2UnkNecSkillStrc2 args = {};
+    D2UnkNecSkillStrc2 args = { 0 };
 
     args.pDamage = &damage;
     args.nX = nX;
@@ -1395,7 +1395,7 @@ int32_t __fastcall SKILLS_SrvDo056_Golem(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         nSumMode = 1;
     }
 
-    D2SummonArgStrc pSummonArg = {};
+    D2SummonArgStrc pSummonArg = { 0 };
     pSummonArg.dwFlags = 0;
     pSummonArg.pOwner = pUnit;
     pSummonArg.nAiSpecialState = AISPECIALSTATE_NONE;
@@ -1451,7 +1451,7 @@ int32_t __fastcall SKILLS_SrvDo057_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUni
         nPetType = 0;
     }
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
     summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nMonMode = nSpawnMode;
     summonArg.pOwner = pUnit;
@@ -1516,7 +1516,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && pUnit->dwClassId == PCLASS_PALADIN)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
 
         damage.wResultFlags |= 4u;
         damage.dwHitFlags |= 0x1000u;
@@ -1526,7 +1526,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         SUNITDMG_ExecuteMissileDamage(pGame, pUnit, pUnit, &damage);
     }
 
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
     coords.nX = CLIENTS_GetUnitX(pTarget);
     coords.nY = CLIENTS_GetUnitY(pTarget);
 
@@ -1542,7 +1542,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         MONSTERUNIQUE_ToggleUnitFlag(pTarget, UNITFLAG_NOTC, 1);
         MONSTER_UpdateAiCallbackEvent(pGame, pTarget);
 
-        D2ModeChangeStrc modeChange = {};
+        D2ModeChangeStrc modeChange = { 0 };
         MONSTERMODE_GetModeChangeInfo(pTarget, MONMODE_NEUTRAL, &modeChange);
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 
@@ -1556,7 +1556,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         sub_6FCBDFE0(pGame, pTarget, pRoom, coords.nX, coords.nY, 0, 0);
     }
 
-    D2MonStatsInitStrc monStatsInit = {};
+    D2MonStatsInitStrc monStatsInit = { 0 };
     DATATBLS_CalculateMonsterStatsByLevel(pTarget->dwClassId, pGame->nGameType || pGame->dwGameType, pGame->nDifficulty, STATLIST_UnitGetStatValue(pTarget, STAT_LEVEL, 0), 1, &monStatsInit);
 
     const int32_t nNewHp = (ITEMS_RollLimitedRandomNumber(&pTarget->pSeed, monStatsInit.nMaxHP - monStatsInit.nMinHP + 1) + monStatsInit.nMinHP) << 8;
@@ -1663,7 +1663,7 @@ int32_t __fastcall SKILLS_SrvDo060_BoneWall(D2GameStrc* pGame, D2UnitStrc* pUnit
         nPetType = 0;
     }
 
-    D2SummonArgStrc summonArg = {};
+    D2SummonArgStrc summonArg = { 0 };
 
     summonArg.nAiSpecialState = AISPECIALSTATE_NONE;
     summonArg.nPetType = nPetType;
@@ -1707,7 +1707,7 @@ int32_t __fastcall SKILLS_SrvDo060_BoneWall(D2GameStrc* pGame, D2UnitStrc* pUnit
     {
         if (pSkillsTxtRecord->wSrvMissileA >= 0 && pSkillsTxtRecord->wSrvMissileA < sgptDataTables->nMissilesTxtRecordCount)
         {
-            D2MissileStrc missileParams = {};
+            D2MissileStrc missileParams = { 0 };
 
             missileParams.nX = nTargetX;
             missileParams.nY = nTargetY;
@@ -1750,12 +1750,12 @@ int32_t __fastcall SKILLS_SrvDo060_BoneWall(D2GameStrc* pGame, D2UnitStrc* pUnit
 //D2Game.0x6FD0E4C0
 int32_t __fastcall SKILLS_SrvDo062_BonePrison(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    constexpr int32_t xOffsets[] =
+    D2_CONSTEXPR int32_t xOffsets[] =
     {
         -1, 1, 3, 4, 4, 3, -1, 1, -3, -4, -4, -3
     };
     
-    constexpr int32_t yOffsets[] =
+    D2_CONSTEXPR int32_t yOffsets[] =
     {
         -4, -4, -3, -1, 1, 3, 4, 4, 3, -1, 1, -3
     };
@@ -1793,7 +1793,7 @@ int32_t __fastcall SKILLS_SrvDo062_BonePrison(D2GameStrc* pGame, D2UnitStrc* pUn
 
                 if (!DUNGEON_IsRoomInTown(D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY)))
                 {
-                    D2SummonArgStrc summonArg = {};
+                    D2SummonArgStrc summonArg = { 0 };
                     summonArg.nHcIdx = nSummonId;
                     summonArg.nMonMode = nSpawnMode;
                     summonArg.dwFlags = 9;
@@ -1914,7 +1914,7 @@ int32_t __fastcall D2GAME_EventFunc04_6FD0E840(D2GameStrc* pGame, int32_t nEvent
         nDamagePercent = SKILLS_EvaluateSkillFormula(pStatListOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.dwPhysDamage = MONSTERUNIQUE_CalculatePercentage(pDamage->dwPhysDamage, nDamagePercent, 100);
     damage.wResultFlags |= pSkillsTxtRecord->wResultFlags | 0x20;
     damage.dwHitFlags |= pSkillsTxtRecord->dwHitFlags;
@@ -2361,7 +2361,7 @@ int32_t __fastcall D2GAME_EventFunc27_6FD0F7A0(D2GameStrc* pGame, int32_t nEvent
         }
     }
 
-    D2CurseStrc pCurse = {};
+    D2CurseStrc pCurse = { 0 };
     pCurse.pUnit = pAttacker;
     pCurse.pTarget = pUnit;
     pCurse.nSkill = 0;

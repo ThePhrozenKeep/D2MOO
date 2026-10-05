@@ -709,7 +709,7 @@ int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nB
 
 	// Calculate the time difference. Each period of day occupies an
 	// equal share of unit in a day.
-	constexpr int PERIOD_OF_DAY_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY;
+	D2_CONSTEXPR int PERIOD_OF_DAY_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY;
 	int nTimeDiff = nBaseTime - (nTempItemModPeriodOfDay * PERIOD_OF_DAY_UNITS);
 	if (nTimeDiff < 0)
 	{
@@ -722,7 +722,7 @@ int __stdcall ITEMMODS_GetByTimeAdjustment(int nAmount, int nPeriodOfDay, int nB
 	 * achieved by:
 	 * Add half the divisor -> divide -> multiply.
 	 */
-	constexpr int ROUND_TIME_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY / NUM_ENVIRONMENT_CYCLES;
+	D2_CONSTEXPR int ROUND_TIME_UNITS = ENV_FULL_CIRCLE_DEGREES / NUM_ENVIRONMENT_PERIODS_OF_DAY / NUM_ENVIRONMENT_CYCLES;
 	int nRoundedTimeDiff = ((nTimeDiff + (ROUND_TIME_UNITS / 2)) / ROUND_TIME_UNITS) * ROUND_TIME_UNITS;
 
 	// Clamp the time diff range to [0, ENV_FULL_CIRCLE_DEGREES).
@@ -2352,7 +2352,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 
 	D2UniqueItemsTxt* pUniqueItemsTxtRecord = NULL;
 	D2SetItemsTxt* pSetItemsTxtRecord = NULL;
-	D2PropertyStrc* pProperties[3] = {};
+	D2PropertyStrc* pProperties[3] = { 0 };
 	D2PropertyStrc* pProperty = NULL;
 	int nProperties = 0;
 	int nFileIndex = 0;
@@ -3328,7 +3328,7 @@ int __fastcall ITEMMODS_PropertyFunc06(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
-	long long int nBonus = 0;
+	int64_t nBonus = 0;
 	int nPossibleRolls = 0;
 	int nMaxDamage = 0;
 	int nMin = 0;
@@ -3405,7 +3405,7 @@ int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 			nMaxDamage = pItemsTxtRecord->nMaxDam;
 		}
 
-		nBonus = nMin * (long long int)nMaxDamage / 100;
+		nBonus = nMin * (int64_t)nMaxDamage / 100;
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON) && nMaxDamage + nBonus <= nMaxDamage)
 		{
@@ -4401,7 +4401,7 @@ static int __fastcall ITEMMODS_GetCalcParamValue_Return0(int, void*)
 //D2Common.0x6FD98300 (#11300)
 int __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc* pUnit, D2UnitStrc* pItem, unsigned int nCalc)
 {
-	D2ItemCalcStrc pItemCalc = {};
+	D2ItemCalcStrc pItemCalc = { 0 };
 
 	if (sgptDataTables->pItemsCode && nCalc < sgptDataTables->nItemsCodeSize)
 	{

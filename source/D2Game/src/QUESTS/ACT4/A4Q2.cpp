@@ -245,7 +245,7 @@ void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 				return;
 			}
 
-			D2CoordStrc pCoord = {};
+			D2CoordStrc pCoord = { 0 };
 			UNITS_GetCoords(pQuestArg->pTarget, &pCoord);
 			pCoord.nX += 5;
 
@@ -484,7 +484,7 @@ void __fastcall ACT4Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 		return;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pQuestArg->pTarget, &pCoord);
 	pCoord.nX += 5;
 
@@ -675,7 +675,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 		return 0;
 	}
 
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 	packet5D.nHeader = 0x5D;
 	packet5D.field_4 = 0;
 	packet5D.nQuestId = QUEST_A4Q2_DIABLO;
@@ -778,7 +778,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2Uni
 	{
 		LEVEL_WarpUnit(pGame, pUnit, LEVEL_THEPANDEMONIUMFORTRESS, 0);
 
-		D2GSPacketSrv5D packet5D = {};
+		D2GSPacketSrv5D packet5D = { 0 };
 		packet5D.nHeader = 0x5D;
 		packet5D.field_4 = 0;
 		packet5D.nQuestId = QUEST_A4Q2_DIABLO;
@@ -787,7 +787,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2Uni
 	}
 	else
 	{
-		D2GSPacketSrv50 packet50 = {};
+		D2GSPacketSrv50 packet50 = { 0 };
 		packet50.nHeader = 0x50;
 		packet50.nQuestId = QUEST_A4Q2_DIABLO;
 		D2GAME_PACKETS_SendPacket_6FC3C710(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet50, sizeof(packet50));
@@ -887,7 +887,7 @@ void __fastcall ACT4Q2_KillAllMonstersInCS(D2GameStrc* pGame, D2Act4Quest2Strc* 
 			{
 				if (pUnit->dwUnitType == UNIT_MONSTER && pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE && !SUNIT_IsDead(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
 				{
-					D2ModeChangeStrc modeChange = {};
+					D2ModeChangeStrc modeChange = { 0 };
 					MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_DEATH, &modeChange);
 					D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 				}
@@ -1162,7 +1162,7 @@ int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(D2ObjOperateFnStrc* pOp,
 //D2Game.0x6FCAFCB0
 void __fastcall ACT4Q2_SpawnSealBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 
 	UNITS_GetCoords(pUnit, &pCoord);
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q2_DIABLO);
@@ -1283,13 +1283,13 @@ int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* 
 			SUNIT_ResetInteractInfo(pOp->pPlayer);
 			pPlayerData->bBusy = 1;
 
-			D2GSPacketSrv5D packet5D = {};
+			D2GSPacketSrv5D packet5D = { 0 };
 			packet5D.nHeader = 0x5D;
 			packet5D.nQuestId = QUEST_A4Q2_DIABLO;
 			packet5D.nFlags = 2;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet5D, sizeof(packet5D));
 
-			D2GSPacketSrv61 packet61 = {};
+			D2GSPacketSrv61 packet61 = { 0 };
 			packet61.nHeader = 0x61;
 			packet61.unk0x001 = 5;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));

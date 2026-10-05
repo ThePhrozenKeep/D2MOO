@@ -464,7 +464,7 @@ BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem)
 	int nItemType = 0;
 	int nCounter = 0;
 	int nStats = 0;
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData && pItem->pItemData->dwItemFlags & IFLAG_IDENTIFIED && !(pItem->pItemData->dwItemFlags & IFLAG_ETHEREAL))
 	{
@@ -1225,7 +1225,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 	int nLevelRequirement = 0;
 	int nRequiredLevel = 0;
 	int nCraftBonus = 0;
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 	
 	D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem);
 	if (!pItemData)
@@ -1269,7 +1269,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 		break;
 	case ITEMQUAL_RARE:
-		for(int i = 0; i < ITEMS_MAX_MODS; ++i)
+		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
 		{
 			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
 			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
@@ -1797,7 +1797,7 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 	int nBase = 0;
 	int nAdd = 0;
 	int nMax = 0;
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 
 	nStats = STATLIST_CopyStats(pUnit, STAT_ITEM_CHARGED_SKILL, pStat, ARRAY_SIZE(pStat));
 	if (nStats > 0)
@@ -1854,7 +1854,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 	int nItemPeriodOfDay = 0;
 	int nMinValue = 0;
 	int nMaxValue = 0;
-	D2StatStrc pStat[511] = {};
+	D2StatStrc pStat[511] = { D2StatStrc() };
 
 	nStats = STATLIST_GetFullStatsDataFromUnit(pItem, pStat, ARRAY_SIZE(pStat));
 
@@ -2007,7 +2007,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 	nLevel = STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0);
 
-	if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR && !ITEMS_IsRepairable(pItem))
+	if (nTransactionType == TRANSACTIONTYPE_REPAIR && !ITEMS_IsRepairable(pItem))
 	{
 		return 0;
 	}
@@ -2030,7 +2030,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 		nReducePricePct = 99;
 	}
 
-	if (nTransactionType != D2C_TransactionTypes::TRANSACTIONTYPE_GAMBLE)
+	if (nTransactionType != TRANSACTIONTYPE_GAMBLE)
 	{
 		nSellCost = 0;
 		nBuyCost = 0;
@@ -2339,7 +2339,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			}
 		}
 
-		if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_SELL)
+		if (nTransactionType == TRANSACTIONTYPE_SELL)
 		{
 			if (pItemData->dwItemFlags & IFLAG_ETHEREAL && !pItemsTxtRecord->nNoDurability && pItemsTxtRecord->nDurability && STATLIST_GetMaxDurabilityFromUnit(pItem) && STATLIST_UnitGetStatValue(pItem, STAT_ITEM_INDESCTRUCTIBLE, 0) <= 0)
 			{
@@ -2349,7 +2349,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 				}
 			}
 		}
-		else if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
+		else if (nTransactionType == TRANSACTIONTYPE_REPAIR)
 		{
 			pItemTypesTxtRecord = DATATBLS_GetItemTypesTxtRecord(pItemsTxtRecord->wType[0]);
 			if (!pItemTypesTxtRecord || !pItemTypesTxtRecord->wQuiver || !pItemTypesTxtRecord->nThrowable)
@@ -2484,7 +2484,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 
 		nCost = nBuyCost;
 
-		if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
+		if (nTransactionType == TRANSACTIONTYPE_REPAIR)
 		{
 			if (!(pItemData->dwItemFlags & IFLAG_ETHEREAL))
 			{
@@ -2497,9 +2497,9 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 			nCost = pNpcTxtRecord->nMaxBuy[nDifficulty];
 		}
 
-		if (nTransactionType != D2C_TransactionTypes::TRANSACTIONTYPE_SELL)
+		if (nTransactionType != TRANSACTIONTYPE_SELL)
 		{
-			if (nTransactionType == D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR)
+			if (nTransactionType == TRANSACTIONTYPE_REPAIR)
 			{
 				nCost = nRepCost - DATATBLS_ApplyRatio(nRepCost, nReducePricePct, 100);
 			}
@@ -2602,7 +2602,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, in
 	unsigned int nBuy = 0;
 	unsigned int nRep = 0;
 	int nStats = 0;
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 
 	if (pItem && pItem->dwUnitType == UNIT_ITEM)
 	{
@@ -3266,7 +3266,7 @@ const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pI
 
 	if (!DATATBLS_GetItemsTxtRecord(pItem->dwClassId)->nQuest && pItem->pInventory)
 	{
-		int nSocketableIds[6] = {};
+		int nSocketableIds[6] = { 0 };
 		int nSocketedItems = 0;
 
 		for (D2UnitStrc* pInventoryItem = INVENTORY_GetFirstItem(pItem->pInventory); pInventoryItem && INVENTORY_UnitIsItem(pInventoryItem); pInventoryItem = INVENTORY_GetNextItem(pInventoryItem))
@@ -4245,7 +4245,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 	int nCounter = 0;
 	int nBodyLoc = 0;
 	int nStats = 0;
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 
 	if (!pUnit || !pUnit->pInventory)
 	{
@@ -4310,7 +4310,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 			{
 				if (bCanBeRepaired)
 				{
-					nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR);
+					nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, TRANSACTIONTYPE_REPAIR);
 
 					if (pfCallback)
 					{
@@ -4328,7 +4328,7 @@ int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int 
 					{
 						if (bCanBeRepaired)
 						{
-							nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, D2C_TransactionTypes::TRANSACTIONTYPE_REPAIR);
+							nRepairCosts += ITEMS_CalculateTransactionCost(pUnit, pItem, nDifficulty, pQuestFlags, nNpcId, TRANSACTIONTYPE_REPAIR);
 
 							if (pfCallback)
 							{
@@ -4635,7 +4635,7 @@ int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
 	int nWeaponClass = 0;
 	int v11 = 0;
 	int v13 = 0;
-	char szPath[8] = {};
+	char szPath[8] = { 0 };
 
 	int nLength = 0;
 
@@ -4667,7 +4667,7 @@ int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon)
 //D2Common.0x6FDA02B0 (#10879)
 int __stdcall ITEMS_HasUsedCharges(D2UnitStrc* pItem, BOOL* pHasChargedSkills)
 {
-	D2StatStrc pStat[64] = {};
+	D2StatStrc pStat[64] = { D2StatStrc() };
 	int nCounter = 0;
 	int nStats = 0;
 
@@ -4721,7 +4721,7 @@ BOOL __stdcall ITEMS_IsEthereal(D2UnitStrc* pItem)
 //D2Common.0x6FDA0370 (#10883)
 BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave)
 {
-	D2BitBufferStrc pBuffer = {};
+	D2BitBufferStrc pBuffer = { 0 };
 	int dwCode = 0;
 
 	BITMANIP_Initialize(&pBuffer, pBitstream, nSize);
@@ -4778,7 +4778,7 @@ BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t
 //D2Common.0x6FDA0490 (#10882)
 size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, uint32_t dwVersion, BOOL* pFail)
 {
-	D2BitBufferStrc pBuffer = {};
+	D2BitBufferStrc pBuffer = { 0 };
 	uint32_t dwFlags = 0;
 	BOOL bGamble = FALSE;
 
@@ -6246,7 +6246,7 @@ void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2Stat
 //D2Common.0x6FDA2BA0 (#10881)
 size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble)
 {
-	D2BitBufferStrc pBuffer = {};
+	D2BitBufferStrc pBuffer = { 0 };
 
 	BITMANIP_Initialize(&pBuffer, pBitstream, nSize);
 
@@ -6471,7 +6471,7 @@ void __fastcall ITEMS_WriteBitsToBitstream(D2BitBufferStrc* pBuffer, int nData, 
 		}
 	}
 
-	return BITMANIP_Write(pBuffer, nData, nBits);
+	/*return */BITMANIP_Write(pBuffer, nData, nBits);
 }
 
 //D2Common.0x6FDA3010
@@ -6523,9 +6523,9 @@ void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* 
 	uint8_t nStorePage = 0;
 	BOOL bIsRuneword = FALSE;
 	BOOL bInvalid = FALSE;
-	D2CoordStrc pCoords = {};
-	int nStatValues[511] = {};
-	D2StatStrc pStat[511] = {};
+	D2CoordStrc pCoords = { 0 };
+	int nStatValues[511] = { 0 };
+	D2StatStrc pStat[511] = { D2StatStrc() };
 
 	D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem);
 	D2_ASSERT(pItemData);

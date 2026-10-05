@@ -353,7 +353,7 @@ int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem
         return 1;
     }
 
-    char szCode[4] = {};
+    char szCode[4] = { 0 };
 
     const uint32_t nItemBaseCode = ITEMS_GetBaseCode(pItem);
     szCode[0] = (BYTE)nItemBaseCode == ' ' ? '\0' : (BYTE)nItemBaseCode;
@@ -426,7 +426,7 @@ void __fastcall sub_6FC4DC20(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStr
 //D2Game.0x6FC4DE00
 int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
-    constexpr int32_t nItemQualities[] =
+    D2_CONSTEXPR int32_t nItemQualities[] =
     {
         ITEMQUAL_UNIQUE, ITEMQUAL_RARE, ITEMQUAL_SET, ITEMQUAL_MAGIC, ITEMQUAL_SUPERIOR, ITEMQUAL_NORMAL
     };
@@ -467,7 +467,7 @@ int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pIte
     int32_t nChance = 0;
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
-        for (int32_t i = 0; i < std::size(nItemQualities); ++i)
+        for (int32_t i = 0; i < ARRAY_SIZE(nItemQualities); ++i)
         {
             switch (nItemQualities[i])
             {
@@ -513,7 +513,7 @@ int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pIte
     }
     else
     {
-        for (int32_t i = 0; i < std::size(nItemQualities); ++i)
+        for (int32_t i = 0; i < ARRAY_SIZE(nItemQualities); ++i)
         {
             switch (nItemQualities[i])
             {
@@ -655,7 +655,7 @@ int32_t __fastcall D2GAME_InitItemStats_6FC4E520(D2GameStrc* pGame, D2UnitStrc**
             STATLIST_SetUnitStat(*ppUnit, STAT_VELOCITYPERCENT, -pItemsTxtRecord->dwSpeed, 0);
             const uint32_t nDurability = (uint32_t)pItemsTxtRecord->nDurability >> 1;
             STATLIST_SetUnitStat(*ppUnit, STAT_DURABILITY, std::min(ITEMS_RollLimitedRandomNumber(&(*ppUnit)->pSeed, nDurability) + nDurability, 255u), 0);
-            STATLIST_SetUnitStat(*ppUnit, STAT_MAXDURABILITY, std::min(pItemsTxtRecord->nDurability, 255ui8), 0);
+            STATLIST_SetUnitStat(*ppUnit, STAT_MAXDURABILITY, std::min(pItemsTxtRecord->nDurability, (uint8_t)255), 0);
 
             const int32_t nACValue = pItemsTxtRecord->dwMinAc + ITEMS_RollLimitedRandomNumber(&(*ppUnit)->pSeed, pItemsTxtRecord->dwMaxAc - pItemsTxtRecord->dwMinAc + 1);
             D2_ASSERT(nACValue <= pItemsTxtRecord->dwMaxAc);
@@ -683,7 +683,7 @@ int32_t __fastcall D2GAME_InitItemStats_6FC4E520(D2GameStrc* pGame, D2UnitStrc**
 
             const uint32_t nDurability = (uint32_t)pItemsTxtRecord->nDurability >> 1;
             STATLIST_SetUnitStat(*ppUnit, STAT_DURABILITY, std::min(ITEMS_RollLimitedRandomNumber(&(*ppUnit)->pSeed, nDurability) + nDurability, 255u), 0);
-            STATLIST_SetUnitStat(*ppUnit, STAT_MAXDURABILITY, std::min(pItemsTxtRecord->nDurability, 255ui8), 0);
+            STATLIST_SetUnitStat(*ppUnit, STAT_MAXDURABILITY, std::min(pItemsTxtRecord->nDurability, (uint8_t)255), 0);
 
             if (pItemsTxtRecord->nMaxDam)
             {
@@ -996,8 +996,8 @@ D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 
     const int32_t nItemId = sub_6FC4F4A0(pGame, pSeed, nItemLevel, -1, 0, 0);
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc coords2 = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc coords2 = { 0 };
 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
@@ -1019,7 +1019,7 @@ D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         return 0;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.pSeed = pSeed;
@@ -1047,7 +1047,7 @@ D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 //D2Game.0x6FC4F4A0
 int32_t __fastcall sub_6FC4F4A0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t a4, int32_t a5, int32_t a6)
 {
-    constexpr int32_t BASE_GOLD_RAND = 65;
+    D2_CONSTEXPR int32_t BASE_GOLD_RAND = 65;
 
     if (!gbGoldItemIdInitialized)
     {
@@ -1115,8 +1115,8 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Coord
         DATATBLS_GetItemRecordFromItemCode(' dlg', &dword_6FD4DC18);
     }
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc coords2 = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc coords2 = { 0 };
 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
@@ -1138,7 +1138,7 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Coord
         return;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.pSeed = pSeed;
@@ -1181,8 +1181,8 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoom
         return 0;
     }
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc coords2 = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc coords2 = { 0 };
 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
@@ -1204,7 +1204,7 @@ D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoom
         return nullptr;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.pSeed = pSeed;
     itemDrop.nId = nItemId;
@@ -1252,8 +1252,8 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoo
         return 0;
     }
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc coords2 = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc coords2 = { 0 };
 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
@@ -1275,7 +1275,7 @@ D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoo
         return nullptr;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.pSeed = pSeed;
     itemDrop.nId = nItemId;
@@ -1321,8 +1321,8 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 
     const int32_t nItemId = sub_6FC4C3D0(pGame, pSeed, nItemLevel, a4, a5, bIsMonster);
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc coords2 = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc coords2 = { 0 };
 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
@@ -1344,7 +1344,7 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         return nullptr;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.pSeed = pSeed;
     itemDrop.pUnit = pUnit;
@@ -1407,8 +1407,8 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
         }
     }
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc unitCoords = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc unitCoords = { 0 };
 
     UNITS_GetCoords(pUnit, &unitCoords);
 
@@ -1430,7 +1430,7 @@ D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitS
         return nullptr;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
 
     itemDrop.pSeed = 0;
     itemDrop.pRoom = pTargetRoom;
@@ -1460,7 +1460,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32
 {
     nItemLevel = std::max(nItemLevel, 1);
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
     itemDrop.nSpawnType = nSpawnTarget;
     itemDrop.nId = nItemId;
     itemDrop.wItemFormat = pGame->wItemFormat;
@@ -1778,12 +1778,12 @@ void __fastcall ITEMS_FillItemDrop(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop,
 
     if (ITEMS_GetItemType(pItem) == ITEMTYPE_PLAYER_BODY_PART)
     {
-        strcpy_s(pItemDrop->szName, ITEMS_GetEarName(pItem));
+        strcpy(pItemDrop->szName, ITEMS_GetEarName(pItem));
         pItemDrop->eEarLvl = ITEMS_GetEarLevel(pItem);
     }
     else if (ITEMS_CheckItemFlag(pItem, IFLAG_PERSONALIZED, __LINE__, __FILE__))
     {
-        strcpy_s(pItemDrop->szName, ITEMS_GetEarName(pItem));
+        strcpy(pItemDrop->szName, ITEMS_GetEarName(pItem));
     }
 }
 
@@ -1802,18 +1802,18 @@ void __fastcall ITEMS_DropGoldPile(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_
     uint32_t nDroppedGold = 0;
     while (nDroppedGold < nValue)
     {
-        const uint32_t nPileValue = std::min(nRemainingGold, 2'000'000'000u);
+        const uint32_t nPileValue = std::min(nRemainingGold, 2000000000u);
 
         nDroppedGold += nPileValue;
         nRemainingGold -= nPileValue;
 
-        D2CoordStrc unitCoords = {};
+        D2CoordStrc unitCoords = { 0 };
         UNITS_GetCoords(pUnit, &unitCoords);
 
         const int32_t nX = unitCoords.nX + 2;
         const int32_t nY = unitCoords.nY + 3;
 
-        D2CoordStrc spawnCoords = {};
+        D2CoordStrc spawnCoords = { 0 };
         if (D2GAME_GetRoom_6FC52070(pRoom, nX, nY))
         {
             spawnCoords.nX = nX;
@@ -1875,8 +1875,8 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2CoordStrc coords1 = {};
-    D2CoordStrc unitCoords = {};
+    D2CoordStrc coords1 = { 0 };
+    D2CoordStrc unitCoords = { 0 };
 
     UNITS_GetCoords(pUnit, &unitCoords);
     
@@ -1917,7 +1917,7 @@ void __fastcall ITEMS_DropPlayerEar(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC50F70
 int32_t __fastcall ITEMS_GetHealthPotionDropCode(D2UnitStrc* pUnit)
 {
-    constexpr int32_t healthPotionCodes[] =
+    D2_CONSTEXPR int32_t healthPotionCodes[] =
     {
         ' 1ph', ' 2ph', ' 3ph', ' 4ph'
     };
@@ -1931,7 +1931,7 @@ int32_t __fastcall ITEMS_GetHealthPotionDropCode(D2UnitStrc* pUnit)
         nIndex += 2;
     }
 
-    if (nIndex < std::size(healthPotionCodes))
+    if (nIndex < ARRAY_SIZE(healthPotionCodes))
     {
         return healthPotionCodes[nIndex];
     }
@@ -1942,7 +1942,7 @@ int32_t __fastcall ITEMS_GetHealthPotionDropCode(D2UnitStrc* pUnit)
 //D2Game.0x6FC50FF0
 int32_t __fastcall ITEMS_GetManaPotionDropCode(D2UnitStrc* pUnit)
 {
-    constexpr int32_t manaPotionCodes[] =
+    D2_CONSTEXPR int32_t manaPotionCodes[] =
     {
         ' 1pm', ' 2pm', ' 3pm', ' 4pm'
     };
@@ -1956,7 +1956,7 @@ int32_t __fastcall ITEMS_GetManaPotionDropCode(D2UnitStrc* pUnit)
         nIndex += 2;
     }
 
-    if (nIndex < std::size(manaPotionCodes))
+    if (nIndex < ARRAY_SIZE(manaPotionCodes))
     {
         return manaPotionCodes[nIndex];
     }
@@ -1967,8 +1967,8 @@ int32_t __fastcall ITEMS_GetManaPotionDropCode(D2UnitStrc* pUnit)
 //D2Game.0x6FC51070
 D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2UnitStrc* pOwner, int32_t bDuplicateSocketFillers)
 {
-    D2ItemSaveStrc itemSave = {};
-    uint8_t bitstream[1024] = {};
+    D2ItemSaveStrc itemSave = { 0 };
+    uint8_t bitstream[1024] = { 0 };
 
     const uint32_t nNextFreePos = ITEMS_SerializeItemToBitstream(pItem, bitstream, sizeof(bitstream), 1, 1, 0);
     ITEMS_GetCompactItemDataFromBitstream(bitstream, nNextFreePos, 1, &itemSave);
@@ -2079,7 +2079,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
         nMaxItems = 6;
     }
 
-    D2TCArrayStrc tcArray[64] = {};
+    D2TCArrayStrc tcArray[64] = { 0 };
 
     tcArray[0].pTC = pTCTxtRecord;
     tcArray[0].nPicks = std::max(std::abs(pTCTxtRecord->nPicks), 1);
@@ -2488,10 +2488,10 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
 
                     if (nId >= 0)
                     {
-                        D2CoordStrc coords = {};
+                        D2CoordStrc coords = { 0 };
                         UNITS_GetCoords(pMonster, &coords);
 
-                        D2CoordStrc itemCoords = {};
+                        D2CoordStrc itemCoords = { 0 };
                         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMonster);
                         if (D2GAME_GetRoom_6FC52070(pRoom, coords.nX + 2, coords.nY + 3))
                         {
@@ -2507,7 +2507,7 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                         D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinatesWithField(pRoom, &itemCoords, &coords, 1, COLLIDE_MASK_SPAWN, 0x801u, 1);
                         if (pFreeCoordsRoom)
                         {
-                            D2ItemDropStrc itemDrop = {};
+                            D2ItemDropStrc itemDrop = { 0 };
                             itemDrop.pSeed = nullptr;
                             itemDrop.pRoom = pFreeCoordsRoom;
                             itemDrop.nId = nId;

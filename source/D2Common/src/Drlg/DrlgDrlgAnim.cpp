@@ -14,7 +14,7 @@
 //D2Common.0x6FD75480
 void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData)
 {
-	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
+	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = { 0 };
 	int nSequence = 0;
 	int nStyle = 0;
 
@@ -48,14 +48,14 @@ void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileD
 //D2Common.0x6FD75560
 void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pDrlgGrid, D2DrlgGridStrc* pTileTypeGrid, int nTileType, int nTileX, int nTileY)
 {
-	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
+	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = { 0 };
 
 	for (int nY = 0; nY < pDrlgRoom->nTileHeight + (nTileY == 0); ++nY)
 	{
 		for (int nX = 0; nX < pDrlgRoom->nTileWidth + (nTileX == 0); ++nX)
 		{
 			const uint32_t nGridEntry = DRLGGRID_GetGridEntry(pDrlgGrid, nX, nY);
-			const D2C_PackedTileInformation nTileInfo{ nGridEntry };
+			const D2C_PackedTileInformation nTileInfo = { nGridEntry };
 			if (nTileInfo.bShadow || nTileInfo.bIsWall || nTileInfo.bIsFloor)
 			{
 				if (pTileTypeGrid)
@@ -167,7 +167,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 		nAnimationSpeed = 80;
 	}
 
-	D2TileLibraryEntryStrc* pTileLibraryEntries[40] = {};
+	D2TileLibraryEntryStrc* pTileLibraryEntries[40] = { 0 };
 
 	for (int i = 0; i < nTiles; ++i)
 	{
@@ -177,7 +177,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 
 			const int32_t nGridIdx = GetMapTileLayer(pCurrentTileData.dwFlags);
 			const uint32_t nGridEntry = DRLGGRID_GetGridEntry(&pDrlgGrid[nGridIdx], pCurrentTileData.nPosX, pCurrentTileData.nPosY);
-			const D2C_PackedTileInformation nPackedTileInformation{ nGridEntry };
+			const D2C_PackedTileInformation nPackedTileInformation = { nGridEntry };
 
 			const uint8_t nStyle = nPackedTileInformation.nTileStyle;
 			const uint8_t nSeq = nPackedTileInformation.nTileSequence;

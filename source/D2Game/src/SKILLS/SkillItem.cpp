@@ -791,7 +791,7 @@ int32_t __fastcall SKILLITEM_pSpell11_CastFireBallToCoordinates(D2GameStrc* pGam
 //D2Game.0x6FD03E40
 int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY)
 {
-    constexpr D2pSpellTblStrc gPSpellTable[31] = {
+    D2_CONSTEXPR D2pSpellTblStrc gPSpellTable[31] = {
         { nullptr, nullptr },
         { SKILLITEM_pSpell01_Initializer, SKILLITEM_pSpell01_IdentifyItem },
         { nullptr, SKILLITEM_pSpell02_CastPortal },
@@ -838,7 +838,7 @@ int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit
         }
     }
 
-    if (nPSpell >= std::size(gPSpellTable))
+    if (nPSpell >= ARRAY_SIZE(gPSpellTable))
     {
         return 0;
     }
@@ -1013,7 +1013,7 @@ int32_t __fastcall SKILLITEM_EventFunc06_AttackerTakesDamage(D2GameStrc* pGame, 
         const int32_t nDamage = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, (uint32_t)nSkillId >> 16, nSkillId);
         if (nDamage > 0)
         {
-            D2DamageStrc damage = {};
+            D2DamageStrc damage = { 0 };
             damage.wResultFlags |= 0x4021u;
             damage.dwPhysDamage = nDamage << 8;
             damage.dwHitClass = 0x8D;
@@ -1034,7 +1034,7 @@ int32_t __fastcall SKILLITEM_EventFunc10_AttackerTakesLightDamage(D2GameStrc* pG
         const int32_t nDamage = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, (uint32_t)nSkillId >> 16, nSkillId);
         if (nDamage > 0)
         {
-            D2DamageStrc damage = {};
+            D2DamageStrc damage = { 0 };
             damage.wResultFlags |= 0x4021u;
             damage.dwLtngDamage = nDamage << 8;
             damage.dwHitClass = 0x4D;
@@ -1061,7 +1061,7 @@ int32_t __fastcall SKILLITEM_EventFunc11_ApplyFireDamage(D2GameStrc* pGame, int3
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags |= 0x4021u;
     damage.dwFireDamage = nDamage << 8;
     damage.dwHitClass = 0x2D;
@@ -1092,7 +1092,7 @@ int32_t __fastcall SKILLITEM_EventFunc12_ApplyColdDamage(D2GameStrc* pGame, int3
         nLength += 10 * (nAttackerLevel - nDefenderLevel);
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags |= 0x4021u;
     damage.dwColdLen = nLength;
     damage.dwColdDamage = nDamage << 8;
@@ -1283,7 +1283,7 @@ int32_t __fastcall SKILLITEM_EventFunc14_Freeze(D2GameStrc* pGame, int32_t nEven
             nLength = 250;
         }
 
-        D2DamageStrc damage = {};
+        D2DamageStrc damage = { 0 };
         damage.dwFrzLen = nLength;
         SUNITDMG_ExecuteEvents(pGame, pAttacker, pUnit, 1, &damage);
         return 1;
@@ -1355,7 +1355,7 @@ int32_t __fastcall SKILLITEM_EventFunc15_OpenWounds(D2GameStrc* pGame, int32_t n
         nHpRegen /= 2;
     }
 
-    D2CurseStrc pCurse = {};
+    D2CurseStrc pCurse = { 0 };
     pCurse.pUnit = pAttacker;
     pCurse.pTarget = pUnit;
     pCurse.nSkill = 0;
@@ -1606,7 +1606,7 @@ int32_t __fastcall SKILLITEM_EventFunc19_Slow(D2GameStrc* pGame, int32_t nEvent,
         return 0;
     }
 
-    D2CurseStrc pCurse = {};
+    D2CurseStrc pCurse = { 0 };
     pCurse.pUnit = pAttacker;
     pCurse.pTarget = pUnit;
     pCurse.nSkill = 0;
@@ -1819,7 +1819,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
 
     if (pMonStats2TxtRecord->nResurrectMode == MONMODE_SEQUENCE)
     {
-        D2ModeChangeStrc pModeChange = {};
+        D2ModeChangeStrc pModeChange = { 0 };
         MONSTERMODE_GetModeChangeInfo(pRevivedMonster, MONMODE_SEQUENCE, &pModeChange);
         UNITS_SetUsedSkill(pRevivedMonster, SKILLS_GetSkillById(pRevivedMonster, SKILL_SKELETONRAISE, -1));
         PATH_SetStepNum(pRevivedMonster->pDynamicPath, 1u);

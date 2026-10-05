@@ -193,7 +193,7 @@ int32_t __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox)
 	{
 		pNext = pLine->pNext;
 
-		for (int32_t i = 0; i < std::size(pLine->pColumns); ++i)
+		for (int32_t i = 0; i < ARRAY_SIZE(pLine->pColumns); ++i)
 		{
 			if (pLine->pColumns[i])
 			{
@@ -226,22 +226,22 @@ int32_t __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t a2, int32_t a
 //D2Win.0x6F8AFF30 (#10045)
 void __fastcall D2Win_10045(D2WinTextBoxStrc* pTextBox, const char* szText)
 {
-	Unicode wszText[1024] = {};
+	Unicode wszText[1024] = { 0 };
 
 	D2_ASSERT(pTextBox);
 
-	Unicode::win2Unicode(wszText, szText, std::size(wszText));
+	Unicode::win2Unicode(wszText, szText, ARRAY_SIZE(wszText));
 	D2Win_10051(pTextBox, wszText, 4, 0, 0);
 }
 
 //D2Win.0x6F8AFFB0 (#10046)
 int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t a3)
 {
-	Unicode wszText[1024] = {};
+	Unicode wszText[1024] = { 0 };
 
 	D2_ASSERT(pTextBox);
 
-	Unicode::utf8ToUnicode(wszText, szText, std::size(wszText));
+	Unicode::utf8ToUnicode(wszText, szText, ARRAY_SIZE(wszText));
 	return D2Win_10051(pTextBox, wszText, a3, 0, 0);
 }
 
@@ -377,7 +377,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, in
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	Unicode v58[1024] = {};
+	Unicode v58[1024] = { 0 };
 
 	Unicode::strcpy(v58, a2);
 
@@ -534,9 +534,9 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText,
 //D2Win.0x6F8B0750 (#10057)
 int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* a2, int32_t a3, int32_t a4)
 {
-	Unicode wszText[1024] = {};
+	Unicode wszText[1024] = { 0 };
 
-	Unicode::win2Unicode(wszText, a2, std::size(wszText));
+	Unicode::win2Unicode(wszText, a2, ARRAY_SIZE(wszText));
 	return D2Win_10058_0(pTextBox, wszText, a3, a4);
 }
 
@@ -547,7 +547,7 @@ int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pTex
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 	D2_ASSERT(pTextBox->nNumColumns > nColumn);
 
-	Unicode wszText[1024] = {};
+	Unicode wszText[1024] = { 0 };
 
 	Unicode::strcpy(wszText, pText);
 
@@ -596,7 +596,7 @@ void __fastcall D2Win_10197(D2WinTextBoxStrc* pTextBox, int32_t nLineNum)
 	D2_ASSERT(pLine);
 	D2_ASSERT(i == nLineNum);
 
-	for (int32_t j = 0; j < std::size(pLine->pColumns); ++j)
+	for (int32_t j = 0; j < ARRAY_SIZE(pLine->pColumns); ++j)
 	{
 		if (pLine->pColumns[j])
 		{
@@ -719,7 +719,7 @@ Unicode* __fastcall D2Win_10196(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, in
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 	D2_ASSERT(nLineNum <= pTextBox->nNumLines);
-	D2_ASSERT(nColumnNum < std::size(pTextBox->unk0x68));
+	D2_ASSERT(nColumnNum < ARRAY_SIZE(pTextBox->unk0x68));
 
 	D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine;
 	int32_t i = 0;
@@ -745,7 +745,7 @@ void __fastcall D2Win_10056(D2WinTextBoxStrc* pTextBox, int32_t nNumColumns)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
-	D2_ASSERT((nNumColumns > 0) && (nNumColumns <= std::size(pTextBox->unk0x68)));
+	D2_ASSERT((nNumColumns > 0) && (nNumColumns <= ARRAY_SIZE(pTextBox->unk0x68)));
 	D2_ASSERT(pTextBox->nNumColumns <= nNumColumns);
 
 	pTextBox->nNumColumns = nNumColumns;
@@ -868,7 +868,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 	D2CellFileStrc* pCellFile = pTextBox->controlHeader.pCellFile;
 	if (pCellFile)
 	{
-		D2GfxDataStrc gfxData = {};
+		D2GfxDataStrc gfxData = { 0 };
 		gfxData.pCellFile = pCellFile;
 		gfxData.nDirection = 0;
 		gfxData.nFrame = 0;
@@ -978,7 +978,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				}
 			}
 
-			Unicode wszText[1024] = {};
+			Unicode wszText[1024] = { 0 };
 			Unicode::strcpy(wszText, pCurrentLine->pColumns[i]);
 
 			int32_t j = 0;

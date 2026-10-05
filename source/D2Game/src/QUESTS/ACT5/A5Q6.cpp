@@ -247,7 +247,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_CreateLastPortal(D2GameStrc* pGame, D2Unit
 		return 0;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pUnit, &pCoord);
 	pCoord.nX += 5;
 	pRoom = UNITS_GetRoom(pUnit);
@@ -532,7 +532,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 		return 0;
 	}
 
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A5Q6_BAAL;
 	packet5D.nFlags = 2;
@@ -583,7 +583,7 @@ void __fastcall ACT5Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 {
 	if (pQuestArg->nNewLevel == LEVEL_HARROGATH)
 	{
-		D2GSPacketSrv50 packet50 = {};
+		D2GSPacketSrv50 packet50 = { 0 };
 		packet50.nHeader = 0x50;
 		packet50.nQuestId = QUEST_A5Q6_BAAL;
 		packet50.A5Q6_BaalPayload.nZooMonsterId = ((D2Act5Quest6Strc*)QUESTS_GetQuestData(pQuestArg->pGame, QUEST_A5Q6_BAAL)->pQuestDataEx)->nZooMonsterId;
@@ -832,7 +832,7 @@ int32_t __fastcall OBJECTS_OperateFunction72_LastPortal(D2ObjOperateFnStrc* pOp,
 			SUNIT_ResetInteractInfo(pOp->pPlayer);
 			pPlayerData->bBusy = 1;
 
-			D2GSPacketSrv61 packet61 = {};
+			D2GSPacketSrv61 packet61 = { 0 };
 			packet61.nHeader = 0x61;
 			packet61.unk0x001 = 7;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
@@ -892,7 +892,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_SendZooMonsterIdToClient(D2GameStrc* pGame
 {
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
 
-	D2GSPacketSrv50 packet50 = {};
+	D2GSPacketSrv50 packet50 = { 0 };
 	packet50.nHeader = 0x50u;
 	packet50.nQuestId = QUEST_A5Q6_BAAL;
 	packet50.A5Q6_BaalPayload.nZooMonsterId = ((D2Act5Quest6Strc*)QUESTS_GetQuestData(pGame, QUEST_A5Q6_BAAL)->pQuestDataEx)->nZooMonsterId;
@@ -904,7 +904,7 @@ int32_t __fastcall ACT5Q6_UnitIterate_SendZooMonsterIdToClient(D2GameStrc* pGame
 //D2Game.0x6FCB9520
 void __fastcall ACT5Q6_SpawnTyrael(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
-	D2CoordStrc coord = {};
+	D2CoordStrc coord = { 0 };
 	UNITS_GetCoords(pUnit, &coord);
 	coord.nX -= 5;
 	coord.nY -= 5;

@@ -96,7 +96,7 @@ int32_t __fastcall ANIMIMAGE_ShouldMouseInputBeHandled(D2WinControlStrc* pContro
 
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	
 	D2CellFileStrc** ppCellFile = pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType].ppCellFile1;
 	if (ppCellFile)
@@ -126,7 +126,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.nDirection = 0;
 
 	int32_t nX = pAnimImage->controlHeader.nImageX;
@@ -141,7 +141,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 			pAnimImage->nAnimType = v5;
 			if (nAnimType != v5)
 			{
-				SMSGHANDLER_PARAMS msg = {};
+				SMSGHANDLER_PARAMS msg = { 0 };
 				msg.hWindow = (HWND)pAnimImage;
 				msg.wParam = v5 == 1;
 

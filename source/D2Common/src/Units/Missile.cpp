@@ -917,7 +917,7 @@ int __fastcall MISSILE_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, i
 //D2Common.0x6FDBB2E0 (#11218)
 void __stdcall MISSILE_SetDamageStats(D2UnitStrc* pOwner, D2UnitStrc* pMissile, D2MissileDamageDataStrc* pMissileDamageData, int nLevel)
 {
-	D2StatStrc pStat[128] = {};
+	D2StatStrc pStat[128] = { D2StatStrc() };
 	int nStats = 0;
 
 	if (pMissile && pMissile->dwUnitType == UNIT_MISSILE)
@@ -1001,7 +1001,7 @@ void __stdcall MISSILE_SetDamageStats(D2UnitStrc* pOwner, D2UnitStrc* pMissile, 
 int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
-	long long int nBonus = 0;
+	int64_t nBonus = 0;
 	int nMissileIdLevel = 0;
 	int nPercentage = 0;
 	int nMissile = 0;
@@ -1056,7 +1056,7 @@ int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 int __stdcall MISSILE_GetMaxDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
-	long long int nBonus = 0;
+	int64_t nBonus = 0;
 	int nMissileIdLevel = 0;
 	int nPercentage = 0;
 	int nMissile = 0;
@@ -1124,7 +1124,7 @@ uint8_t __stdcall MISSILE_GetElemTypeFromMissileId(int nMissileId)
 int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
-	long long int nBonus = 0;
+	int64_t nBonus = 0;
 	int nMissileIdLevel = 0;
 	int nPercentage = 0;
 	int nMissile = 0;
@@ -1179,7 +1179,7 @@ int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 int __stdcall MISSILE_GetMaxElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
-	long long int nBonus = 0;
+	int64_t nBonus = 0;
 	int nMissileIdLevel = 0;
 	int nPercentage = 0;
 	int nMissile = 0;
@@ -1497,7 +1497,7 @@ int __fastcall MISSILE_GetSpecialParamValueForSkillMissile(int nSkillId, int nPa
 //D2Common.0x6FDBC170 (#11284)
 int __stdcall MISSILE_EvaluateMissileFormula(D2UnitStrc* pMissile, D2UnitStrc* pOwner, unsigned int nCalc, int nMissileId, int nLevel)
 {
-	D2MissileCalcStrc pMissileCalc = {};
+	D2MissileCalcStrc pMissileCalc = { 0 };
 	int nMissileLevel = 0;
 	int nMissile = 0;
 

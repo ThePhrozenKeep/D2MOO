@@ -26,8 +26,7 @@ struct D2PartyControlStrc
 	D2PartyStrc* pParties;
 };
 
-using PartyCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, void*);
-
+typedef void (__fastcall * PartyCallbackFunction)(D2GameStrc*, D2UnitStrc*, void*);
 #pragma pack()
 
 //D2Game.0x6FCB9B00

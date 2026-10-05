@@ -166,14 +166,14 @@ int32_t __fastcall SCROLLBAR_Draw(D2WinControlStrc* pControl)
 
 	if (pScrollBar->bIsStepIndicatorDragged)
 	{
-		SMSGHANDLER_PARAMS msg = {};
+		SMSGHANDLER_PARAMS msg = { 0 };
 
 		msg.hWindow = (HWND)pScrollBar;
 		msg.nMessage = WM_LBUTTONDOWN;
 		SCROLLBAR_HandleMouseDown(&msg);
 	}
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = pScrollBar->controlHeader.pCellFile;
 	gfxData.nFrame = 2 * (pScrollBar->bIsLowerArrowPressed != 0) + 1;

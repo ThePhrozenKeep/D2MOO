@@ -615,7 +615,7 @@ void __fastcall D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(D2GameStrc* pG
 //D2Game.0x6FC425F0
 int32_t __fastcall sub_6FC425F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem)
 {
-    constexpr int nQuestIds[8] =
+    D2_CONSTEXPR int nQuestIds[8] =
     {
         QUESTSTATEFLAG_A1Q3, QUESTSTATEFLAG_A1Q4,
         QUESTSTATEFLAG_A3Q2, QUESTSTATEFLAG_A3Q1,
@@ -972,8 +972,8 @@ int32_t __fastcall sub_6FC42F20(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* p
         return 1;
     }
 
-    D2ItemModeArgStrc itemModeArg1 = {};
-    D2ItemModeArgStrc itemModeArg2 = {};
+    D2ItemModeArgStrc itemModeArg1 = { 0 };
+    D2ItemModeArgStrc itemModeArg2 = { 0 };
     sub_6FC43160(pUnit, pItem, &itemModeArg1);
 
     D2UnitStrc* pItem1 = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc1);
@@ -1596,8 +1596,8 @@ void __fastcall sub_6FC44030(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItem
         return;
     }
 
-    D2CoordStrc returnCoords = {};
-    D2CoordStrc coords = {};
+    D2CoordStrc returnCoords = { 0 };
+    D2CoordStrc coords = { 0 };
     UNITS_GetCoords(pUnit, &coords);
     D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
     if (!pRoom)
@@ -1930,7 +1930,7 @@ int32_t __fastcall sub_6FC446B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
 //D2Game.0x6FC44A90
 void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bRefresh)
 {
-    D2UnkItemModeStrc a2 = {};
+    D2UnkItemModeStrc a2 = { 0 };
 
     if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && !(pUnit->dwFlags & UNITFLAG_ISMERC)))
     {
@@ -2588,7 +2588,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 {
     D2_ASSERT(pUnit->pInventory);
 
-    D2BeltsTxt beltsTxtRecord = {};
+    D2BeltsTxt beltsTxtRecord = { 0 };
     DATATBLS_GetBeltsTxtRecord(pItem ? UNITS_GetBeltType(pItem) : 2, 0, &beltsTxtRecord);
 
     for (int32_t i = 0; i < 16; ++i)
@@ -2614,10 +2614,10 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 
             if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pUnit, pBeltItem->dwUnitId, 0, 0, 1, 1, 0))
             {
-                D2CoordStrc coords = {};
+                D2CoordStrc coords = { 0 };
                 UNITS_GetCoords(pUnit, &coords);
 
-                D2CoordStrc returnCoords = {};
+                D2CoordStrc returnCoords = { 0 };
                 D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &coords, &returnCoords, 1);
                 if (pRoom)
                 {
@@ -3116,7 +3116,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
     UNITS_InitSwitchRightSkill(pUnit);
     UNITS_InitSwitchLeftSkill(pUnit);
 
-    for (int32_t i = 0; i < std::size(v49); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(v49); ++i)
     {
         v49[i].pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, v49[i].nBodyLoc);
         if (v49[i].pItem)
@@ -3141,7 +3141,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, v49[1].pItem, pUnit, 0, 1);
     }
 
-    for (int32_t i = 0; i < std::size(v49); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(v49); ++i)
     {
         if (v49[i].pItem)
         {
@@ -3170,7 +3170,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         }
     }
 
-    for (int32_t i = 0; i < std::size(v49); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(v49); ++i)
     {
         D2UnitStrc* pItem = v49[i].pItem;
         if (pItem)
@@ -5032,8 +5032,7 @@ void __fastcall ITEMMODE_EventFn4_Return(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC4A460
 void __fastcall D2GAME_Items_EventsHandler_6FC4A460(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType)
 {
-	using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-
+	typedef void (__fastcall * EventCallbackFunction)(D2GameStrc*, D2UnitStrc*);
 	static const EventCallbackFunction scpfnItemEventFunctions_6FD27DDC[] =
 	{
 		nullptr,
@@ -5052,7 +5051,7 @@ void __fastcall D2GAME_Items_EventsHandler_6FC4A460(D2GameStrc* pGame, D2UnitStr
 		nullptr,
 		nullptr,
 	};
-	static_assert(EVENTTYPE_COUNT == std::size(scpfnItemEventFunctions_6FD27DDC), "missing callbacks");
+	static_assert(EVENTTYPE_COUNT == ARRAY_SIZE(scpfnItemEventFunctions_6FD27DDC), "missing callbacks");
 
 	D2_ASSERT(scpfnItemEventFunctions_6FD27DDC[nEventType]);
     scpfnItemEventFunctions_6FD27DDC[nEventType](pGame, pUnit);
@@ -5129,7 +5128,7 @@ int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
     itemDrop.pGame = pGame;
     itemDrop.nItemLvl = ITEMS_GetItemLevel(pItem);
     itemDrop.wItemFormat = pGame->wItemFormat;
@@ -5578,7 +5577,7 @@ void __fastcall D2GAME_UpdatePlayerVitals_6FC4B240(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    D2UnkItemModeStrc unused = {};
+    D2UnkItemModeStrc unused = { 0 };
     sub_6FC44F00(pUnit, &unused);
 
     D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory);
@@ -6028,8 +6027,8 @@ int32_t __fastcall D2GAME_RechargeItem_6FC4BD50(D2GameStrc* pGame, D2UnitStrc* p
     }
 
     int32_t bRecharged = 0;
-    D2StatStrc stats[64] = {};
-    const int32_t nStats = STATLIST_CopyStats(pItem, STAT_ITEM_CHARGED_SKILL, stats, std::size(stats));
+    D2StatStrc stats[64] = { D2StatStrc() };
+    const int32_t nStats = STATLIST_CopyStats(pItem, STAT_ITEM_CHARGED_SKILL, stats, ARRAY_SIZE(stats));
     for (int32_t i = 0; i < nStats; ++i)
     {
         const int32_t nSkillLevel = stats[i].nLayer & sgptDataTables->nShiftedStuff;
@@ -6117,7 +6116,7 @@ int32_t __fastcall sub_6FC4BFF0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nL
         nLevelId = 1;
     }
 
-    D2ItemUnkStrc data[1024] = {};
+    D2ItemUnkStrc data[1024] = { 0 };
     int32_t nMax = 0;
     for (int32_t i = 0; i < nCount; ++i)
     {
@@ -6168,7 +6167,7 @@ int32_t __fastcall sub_6FC4C1E0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nL
         nLevelId = 1;
     }
 
-    D2ItemUnkStrc data[1024] = {};
+    D2ItemUnkStrc data[1024] = { 0 };
     int32_t nMax = 0;
     for (int32_t i = 0; i < nCount; ++i)
     {
@@ -6219,7 +6218,7 @@ int32_t __fastcall sub_6FC4C3D0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nL
         nLevelId = 1;
     }
 
-    D2ItemUnkStrc data[1024] = {};
+    D2ItemUnkStrc data[1024] = { 0 };
     int32_t nMax = 0;
     for (int32_t i = 0; i < nCount; ++i)
     {

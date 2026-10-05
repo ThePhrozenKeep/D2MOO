@@ -64,7 +64,7 @@ void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUn
 
 	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nParam1 && nParam2)
 	{
-		D2AiCmdStrc aiCmd = {};
+		D2AiCmdStrc aiCmd = { 0 };
 		aiCmd.nCmdParam[0] = 10;
 		aiCmd.nCmdParam[1] = nParam1;
 		aiCmd.nCmdParam[2] = nParam2;
@@ -84,7 +84,7 @@ void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	if (!pAiCmd)
 	{
-		D2AiCmdStrc aiCmd = {};
+		D2AiCmdStrc aiCmd = { 0 };
 		aiCmd.nCmdParam[0] = 10;
 		aiCmd.nCmdParam[1] = CLIENTS_GetUnitX(pUnit);
 		aiCmd.nCmdParam[2] = CLIENTS_GetUnitY(pUnit);
@@ -144,7 +144,7 @@ int32_t __fastcall AIBAAL_RollRandomUberAiParamForNonCollidingUnit(D2GameStrc* p
 		// UBER TWEAK END
 	}
 
-	D2PlayerCountBonusStrc playerCountBonus = {};
+	D2PlayerCountBonusStrc playerCountBonus = { 0 };
 	MONSTER_GetPlayerCountBonus(pGame, &playerCountBonus, UNITS_GetRoom(pUnit), pUnit);
 
 	if (nCount < 2 && playerCountBonus.nDifficulty < 2)
@@ -176,7 +176,7 @@ int32_t __fastcall AIBAAL_RollRandomUberAiParamForNonCollidingUnit(D2GameStrc* p
 	}
 	// UBER TWEAK END
 
-	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 }
 
 //Inlined
@@ -266,7 +266,7 @@ int32_t __fastcall AIBAAL_RollRandomUberAiParam(D2GameStrc* pGame, D2UnitStrc* p
 			aiParams[12] = 0;
 		}
 
-		return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+		return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 	}
 
 	if (bNotCollidingWithWall)
@@ -311,7 +311,7 @@ int32_t __fastcall AIBAAL_RollRandomUberAiParam(D2GameStrc* pGame, D2UnitStrc* p
 	}
 	// UBER TWEAK END
 
-	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 }
 
 //1.11 : D2Game.0x6FD0ACC0
@@ -351,13 +351,13 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	D2UnitStrc* pTarget = AIBAAL_GetTarget(pGame, pUnit, &nMax, &nCount, nullptr, AIBAAL_CullPotentialTargets);
 
 	// UBER TWEAK START
-	D2UbersAiCallbackArgStrc arg_target = {};
+	D2UbersAiCallbackArgStrc arg_target = { 0 };
 	arg_target.nDistance = INT_MAX;
 	sub_6FCF1E80(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
 	BOOL bAlone = (arg_target.nUberDiablo == 0 && arg_target.nUberMephisto == 0);
 	if (bAlone && pTarget)
 	{
-		D2UbersAiCallbackArgStrc arg_self = {};
+		D2UbersAiCallbackArgStrc arg_self = { 0 };
 		arg_self.nDistance = INT_MAX;
 		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
 		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
@@ -384,7 +384,7 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	if (!pAiCmd)
 	{
-		D2AiCmdStrc aiCmd = {};
+		D2AiCmdStrc aiCmd = { 0 };
 		aiCmd.nCmdParam[0] = 10;
 		aiCmd.nCmdParam[1] = CLIENTS_GetUnitX(pUnit);
 		aiCmd.nCmdParam[2] = CLIENTS_GetUnitY(pUnit);
@@ -707,7 +707,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 			aiParams[12] = 0;
 		}
 
-		return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+		return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 	}
 
 	if (bNotCollidingWithWall)
@@ -741,7 +741,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 				aiParams[5] += 60;
 			}
 
-			return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+			return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 		}
 	}
 	else
@@ -753,7 +753,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 				aiParams[5] += 60;
 			}
 
-			return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+			return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 		}
 	}
 
@@ -768,7 +768,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 		aiParams[5] += 60;
 	}
 
-	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 }
 
 //D2Game.0x6FCCE040
@@ -897,7 +897,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParamForNonCollidingUnit(D2GameStrc* pGame
 		aiParams[8] = 70;
 	}
 
-	D2PlayerCountBonusStrc playerCountBonus = {};
+	D2PlayerCountBonusStrc playerCountBonus = { 0 };
 	MONSTER_GetPlayerCountBonus(pGame, &playerCountBonus, UNITS_GetRoom(pUnit), pUnit);
 
 	if (nCount < 2 && playerCountBonus.nDifficulty < 2)
@@ -942,7 +942,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParamForNonCollidingUnit(D2GameStrc* pGame
 		aiParams[7] = 0;
 	}
 
-	return AI_GetRandomArrayIndex(aiParams, std::size(aiParams), pUnit, 1);
+	return AI_GetRandomArrayIndex(aiParams, ARRAY_SIZE(aiParams), pUnit, 1);
 }
 
 //1.10: D2Game.0x6FCCE450
@@ -1179,7 +1179,7 @@ void __fastcall AITHINK_Fn140_BaalCrabClone(D2GameStrc* pGame, D2UnitStrc* pUnit
 	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	if (!pAiCmd)
 	{
-		D2AiCmdStrc aiCmd = {};
+		D2AiCmdStrc aiCmd = { 0 };
 		aiCmd.nCmdParam[0] = 10;
 		aiCmd.nCmdParam[1] = CLIENTS_GetUnitX(pUnit);
 		aiCmd.nCmdParam[2] = CLIENTS_GetUnitY(pUnit);

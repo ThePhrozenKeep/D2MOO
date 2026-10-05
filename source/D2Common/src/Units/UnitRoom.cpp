@@ -19,10 +19,10 @@ int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoo
 	D2_ASSERT(pRoom);
 
 	//Note: tRoomCoord is unused but filled in the original code
-	//D2DrlgCoordsStrc tRoomCoord = {};
+	//D2DrlgCoordsStrc tRoomCoord = { 0 };
 	//DUNGEON_GetRoomCoordinates(pRoom, &tRoomCoord);
 
-	D2CoordStrc tCoord = {};
+	D2CoordStrc tCoord = { 0 };
 	UNITS_GetCoords(pUnit, &tCoord);
 	D2_ASSERT(DungeonTestRoomGame(pRoom, tCoord.nX, tCoord.nY));
 

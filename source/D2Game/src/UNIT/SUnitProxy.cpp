@@ -41,10 +41,10 @@ struct D2NpcInitStrc
 #pragma pack(pop)
 
 
-constexpr uint32_t MAX_NPC = 64;
-constexpr uint32_t MAX_NPC_INVENTORY = 17;
-uint8_t gbUnitProxyItemCacheInitialized[MAX_NPC_INVENTORY] = {};
-D2UnitProxyStrc gUnitProxyItemCache[MAX_NPC_INVENTORY] = {};
+D2_CONSTEXPR uint32_t MAX_NPC = 64;
+D2_CONSTEXPR uint32_t MAX_NPC_INVENTORY = 17;
+uint8_t gbUnitProxyItemCacheInitialized[MAX_NPC_INVENTORY] = { 0 };
+D2UnitProxyStrc gUnitProxyItemCache[MAX_NPC_INVENTORY] = { 0 };
 
 int32_t dword_6FD4DD80;
 int32_t dword_6FD4DD84;
@@ -99,7 +99,7 @@ void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2
 //D2Game.0x6FCCBA30
 void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
 {
-    constexpr D2NpcInitStrc dword_6FD3F640[] =
+    D2_CONSTEXPR D2NpcInitStrc dword_6FD3F640[] =
     {
         { MONSTER_AKARA,        1, ACT_I,   1, 0 },
         { MONSTER_CAIN1,        0, ACT_I,   0, 0 },
@@ -194,7 +194,7 @@ void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
 
             ++pNpcControl->nArraySize;
 
-            for (size_t j = 0; j < std::size(dword_6FD3F640); ++j)
+            for (size_t j = 0; j < ARRAY_SIZE(dword_6FD3F640); ++j)
             {
                 if (dword_6FD3F640[j].nNpcClassId == i)
                 {
@@ -426,7 +426,7 @@ void __fastcall SUNITPROXY_ClearNpcRecordData(D2GameStrc* pGame, D2NpcRecordStrc
 //D2Game.0x6FCCC2E0
 void __fastcall SUNITPROXY_UpdateNpcsOnActChange(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nCurrentLevelId, int32_t nDestLevelId)
 {
-    D2UnitProxyArgStrc unitProxyArg = {};
+    D2UnitProxyArgStrc unitProxyArg = { 0 };
     unitProxyArg.nLevelId = nCurrentLevelId;
     unitProxyArg.nCounter = 0;
 
@@ -568,7 +568,7 @@ void __fastcall SUNITPROXY_OnClientRemovedFromGame(D2GameStrc* pGame, D2UnitStrc
 
     uint8_t nAct = 0;
 
-    D2UnitProxyArgStrc unitProxyArg = {};
+    D2UnitProxyArgStrc unitProxyArg = { 0 };
     unitProxyArg.nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
     unitProxyArg.nCounter = 0;
 

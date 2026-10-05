@@ -7,7 +7,7 @@
 
 #pragma pack(1)
 
-enum FOGCalcExpressionParserTokenType : uint8_t
+D2_TYPED_ENUM(FOGCalcExpressionParserTokenType, uint8_t)
 {
 	TOKEN_PAREN_OPEN = 0,
 	TOKEN_PAREN_CLOSE = 1,
@@ -30,7 +30,7 @@ enum FOGCalcExpressionParserTokenType : uint8_t
 	TOKEN_CUSTOM_FUNCTION_TABLE = 18,
 };
 
-enum FOGASTType : uint8_t
+D2_TYPED_ENUM(FOGASTType, uint8_t)
 {
 	AST_None = 0,
 	AST_CallbackTable = 1,
@@ -89,7 +89,7 @@ struct FOGExpressionParserContextStrc
 
 struct Fog64IntStack
 {
-  static const int32_t nCapacity = 64;
+  enum { nCapacity = 64 };
   
   int32_t tData[nCapacity];
   int32_t nSize;

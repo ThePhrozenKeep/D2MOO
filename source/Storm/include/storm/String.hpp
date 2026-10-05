@@ -4,6 +4,7 @@
 
 // As with storm/Memory.hpp, the retail Storm string entry points are declared in
 // D2MOO's own Storm.h.
+#include <D2BasicTypes.h>
 #include <Storm.h>
 
 #define STORM_MAX_PATH 260

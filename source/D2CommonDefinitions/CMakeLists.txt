@@ -21,8 +21,12 @@ target_sources(D2CommonDefinitions
     include/D2Dll.h
     include/D2BuildInformation.h
     include/D2Config.h
+    include/D2StdInt.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
+# <D2StdInt.h> includes <VCPP6.h>, the VC6 compiler shims. On VC6 the toolchain file
+# force-includes it too, so that vendored and third-party code gets the shims as well.
+target_include_directories(D2CommonDefinitions INTERFACE "${PROJECT_SOURCE_DIR}/cmake/toolchains")
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
 target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)
 

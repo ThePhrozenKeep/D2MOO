@@ -11,8 +11,7 @@ struct D2UnitStrc;
 
 #define UNIT_FIND_ARRAY_SIZE 15
 
-using UNITFINDTEST = int32_t(__fastcall*)(D2UnitStrc* pUnit, struct D2UnitFindArgStrc* pUnitFindArg);
-
+typedef int32_t (__fastcall * UNITFINDTEST)(D2UnitStrc* pUnit, struct D2UnitFindArgStrc* pUnitFindArg);
 struct D2UnitFindArgStrc
 {
 	int32_t nFlags;								//0x00

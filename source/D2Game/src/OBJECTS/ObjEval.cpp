@@ -54,7 +54,7 @@ void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSr
         return;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     switch (nDamageType)
     {
     case 1:

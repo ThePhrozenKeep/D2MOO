@@ -14,7 +14,7 @@
 
 #pragma warning(disable: 28159)
 
-constexpr int32_t CHARACTER_SAVE_SIZE = 0x2000;
+D2_CONSTEXPR int32_t CHARACTER_SAVE_SIZE = 0x2000;
 
 
 //D2Game.0x6FC317F0
@@ -120,7 +120,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
             }
         }
 
-        char szAccountName[16] = {};
+        char szAccountName[16] = { 0 };
         int32_t nCharSaveTransactionToken = 0;
         int32_t v18 = 0;
         int32_t v19 = 0;

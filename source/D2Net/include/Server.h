@@ -6,10 +6,9 @@
 #include "D2Net.h"
 #include "Packet.h"
 
-using D2NET_Unk_Callback = void (__stdcall*) (int32_t nClientId, const char* szFile, int32_t nLine);
-using D2NET_CLIENT_SendFunctionType = int32_t (__stdcall*) (int32_t nUnused, const uint8_t* pBuffer, int32_t nBufferSize);
-using D2NET_SERVER_GetClientGameGUIDFunctionType = int32_t(__stdcall*)(int32_t nClientId);
-
+typedef void (__stdcall* D2NET_Unk_Callback)(int32_t nClientId, const char* szFile, int32_t nLine);
+typedef int32_t (__stdcall* D2NET_CLIENT_SendFunctionType)(int32_t nUnused, const uint8_t* pBuffer, int32_t nBufferSize);
+typedef int32_t (__stdcall* D2NET_SERVER_GetClientGameGUIDFunctionType)(int32_t nClientId);
 //D2Net.0x6FC01B30 (#10024)
 D2NET_DLL_DECL int32_t __stdcall SERVER_WSAGetLastError();
 //D2Net.0x6FC01B60 (#10030)

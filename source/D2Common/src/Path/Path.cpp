@@ -20,6 +20,8 @@
 #include <cmath>
 #include <utility>
 
+static const D2PathPointStrc sgkZeroPathPoint = { 0, 0 };
+
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
 	COLLISION_PATTERN_NONE,
@@ -194,7 +196,7 @@ void __stdcall PATH_GetClientCoordsVelocity(D2UnitStrc* pUnit, int* pX, int* pY)
 //D2Common.0x6FDA8320 (#10222)
 void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	UNITS_GetCoords(pUnit, &pCoords);
 
@@ -215,7 +217,7 @@ void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit)
 //D2Common.0x6FDA8450 (#10223)
 BOOL __stdcall PATH_RemoveCollisionFootprintForUnit(D2UnitStrc* pUnit, BOOL bForce)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	UNITS_GetCoords(pUnit, &pCoords);
 
 	switch (pUnit->dwUnitType)
@@ -319,7 +321,7 @@ uint8_t PATH_UpdateTargetUnit(D2PathInfoStrc* pPathInfo)
 		pPath->tTargetCoord.X = UNITS_GetXPosition(pPathTargetUnit);
 		pPath->tTargetCoord.Y = UNITS_GetYPosition(pPathTargetUnit);
 
-		if (pPath->tTargetCoord == D2PathPointStrc{ 0,0 })
+		if (pPath->tTargetCoord == sgkZeroPathPoint)
 		{
 			return 0;
 		}
@@ -375,10 +377,10 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 		return 0;
 	}
 
-	D2PathInfoStrc tPathInfo{};
+	D2PathInfoStrc tPathInfo = { 0 };
 	D2PathPointStrc tStart = { pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY };
 	tPathInfo.tStartCoord = tStart;
-	if (tPathInfo.tStartCoord != D2PathPointStrc{ 0,0 })
+	if (tPathInfo.tStartCoord != sgkZeroPathPoint)
 	{
 		tPathInfo.nUnitSize = pPath->dwUnitSize;
 		tPathInfo.nCollisionPattern = pPath->dwCollisionPattern;
@@ -388,7 +390,7 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 		tPathInfo.nMinimumFScoreToEvaluate = pPath->nIDAStarInitFScore;
 		tPathInfo.field_14 = PATH_UpdateTargetUnit(&tPathInfo);
 
-		if (pPath->tTargetCoord != D2PathPointStrc{ 0,0 })
+		if (pPath->tTargetCoord != sgkZeroPathPoint)
 		{
 			tPathInfo.tTargetCoord = pPath->tTargetCoord;
 			if (tPathInfo.tStartCoord != tPathInfo.tTargetCoord
@@ -487,10 +489,10 @@ int __fastcall PATH_ComputePathClassicMissile(D2DynamicPathStrc* pDynamicPath, D
 	int nYDistance = 0;
 	int nOldX = 0;
 	int nOldY = 0;
-	char szText[256] = {};
+	char szText[256] = { 0 };
 	D2_MAYBE_UNUSED(szText);
 
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	nOldX = pDynamicPath->tGameCoords.wPosX;
 	nOldY = pDynamicPath->tGameCoords.wPosY;

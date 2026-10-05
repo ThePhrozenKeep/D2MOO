@@ -233,7 +233,10 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
 	D2_ASSERT(!(pPath->dwFlags & PATH_MISSILE_MASK));
 
-	D2PathPointStrc aTestDirPathPoints[3] = { pPathInfo->tTargetCoord, pPathInfo->tTargetCoord, pPathInfo->tTargetCoord };
+	D2PathPointStrc aTestDirPathPoints[3];
+	aTestDirPathPoints[0] = pPathInfo->tTargetCoord;
+	aTestDirPathPoints[1] = pPathInfo->tTargetCoord;
+	aTestDirPathPoints[2] = pPathInfo->tTargetCoord;
 
 	sub_6FDAB7D0(pTestDir, 0 /*unused*/, pPathInfo->tTargetCoord, pPathInfo->tStartCoord);
 	while (1)
@@ -340,7 +343,7 @@ int __fastcall PATH_Toward_6FDAA9F0(D2PathInfoStrc *pPathInfo)
 //1.13c: D2Common.0x6FDB7630
 BOOL __fastcall PATH_CheckCollisionsToNextPosition(D2DynamicPathStrc* pDynamicPath, D2PathPointStrc* pGameCoord)
 {
-	D2PathPointStrc pPoint = {};
+	D2PathPointStrc pPoint = { 0 };
 
 	D2_ASSERT(pDynamicPath->pUnit && (pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 
@@ -989,7 +992,7 @@ int __fastcall PATH_SimplifyToLines_6FDAC170(D2PathPointStrc* pOutPathPoints, D2
 //D2Common.0x6FDAC700 (#10215)
 int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	int nDirection = 0;
 
 	PATH_GetDirectionVector(&pCoords, &nDirection, PATH_ToFP16Center(nX1), PATH_ToFP16Center(nY1), PATH_ToFP16Center(nX2), PATH_ToFP16Center(nY2));
@@ -1000,7 +1003,7 @@ int __stdcall PATH_ComputeDirection(int nX1, int nY1, int nX2, int nY2)
 //D2Common.0x6FDAC760
 int __stdcall PATH_ComputeDirectionFromPreciseCoords_6FDAC760(DWORD dwStartPrecisionX, DWORD dwStartPrecisionY, DWORD dwTargetPrecisionX, DWORD dwTargetPrecisionY)
 {
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 	int nDirection = 0;
 
 	PATH_GetDirectionVector(&pCoords, &nDirection, dwStartPrecisionX, dwStartPrecisionY, dwTargetPrecisionX, dwTargetPrecisionY);
@@ -1202,6 +1205,21 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 //1.00:  D2Common.0x1005EEB0 (#10223)
 //1.10f: D2Common.0x6FDAC9A0 (#10226)
 //1.13c: D2Common.0x6FD5E230 (#10342)
+// TODO name
+static bool PATH_IsUnitSomething(D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath)
+{
+	switch (pUnit->dwUnitType)
+	{
+	case UNIT_PLAYER:
+		return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0;
+	case UNIT_MONSTER:
+		return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0
+			&& (pUnit->dwFlags & UNITFLAG_ISASYNC) == 0;
+	default:
+		return false;
+	}
+}
+
 BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 {
 	D2DynamicPathStrc* pDynamicPath = pUnit->pDynamicPath;
@@ -1220,19 +1238,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 	{
 #ifdef D2_VERSION_113C // Optimisation added in 1.13c ? Not compatible with 1.10f
 	// TODO name
-		auto IsUnitSomething = [](D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath) -> bool {
-			switch (pUnit->dwUnitType)
-			{
-			case UNIT_PLAYER:
-				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0;
-			case UNIT_MONSTER:
-				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0
-					&& (pUnit->dwFlags & UNITFLAG_ISASYNC) == 0;
-			default:
-				return false;
-			}
-			};
-		if (IsUnitSomething(pUnit, pDynamicPath))
+		if (PATH_IsUnitSomething(pUnit, pDynamicPath))
 #endif
 		{
 			if(((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0 || sub_6FD5DB70(pDynamicPath))

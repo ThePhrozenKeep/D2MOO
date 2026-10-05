@@ -24,7 +24,7 @@ D2InventoryGridInfoStrc gBodyLocInventoryGridInfo = { 13, 1, 0, 0, 0, 0, 0, 0, 0
 D2InventoryGridInfoStrc gBeltInventoryGridInfo = { 16, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 //D2Common.0x6FDE2820
-D2InventoryComponentItemTypeStrc gComponentItemTypeMap[]
+D2InventoryComponentItemTypeStrc gComponentItemTypeMap[] =
 {
 	{ 0, ITEMTYPE_NONE_2 },
 	{ ' til', ITEMTYPE_NONE_2 },
@@ -312,7 +312,7 @@ D2InventoryComponentItemTypeStrc gComponentItemTypeMap[]
 };
 
 //D2Common.0x6FDEA708
-D2InventoryComponentItemTypeStrc gTxtComponentItemTypeMap[255] = {};
+D2InventoryComponentItemTypeStrc gTxtComponentItemTypeMap[255] = { 0 };
 
 //D2Common.0x6FDEAF00
 int gnComponentArrayRecordCount;
@@ -371,7 +371,7 @@ BOOL __fastcall INVENTORY_RemoveItem(D2UnitStrc* pItem)
 
 			if (pInventoryGrid->ppItems)
 			{
-				D2CoordStrc pCoords = {};
+				D2CoordStrc pCoords = { 0 };
 
 				UNITS_GetCoords(pItem, &pCoords);
 
@@ -670,7 +670,7 @@ BOOL __stdcall INVENTORY_GetFreePosition(D2InventoryStrc* pInventory, D2UnitStrc
 		return FALSE;
 	}
 
-	D2InventoryGridInfoStrc pInventoryGridInfo = {};
+	D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
 	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + INVGRID_INVENTORY, &pInventoryGridInfo);
@@ -996,7 +996,7 @@ BOOL __fastcall INVENTORY_PlaceItemInGrid(D2InventoryStrc* pInventory, D2UnitStr
 	}
 	else
 	{
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 		if (nXPos < 0 || nXPos + nWidth > pInventoryGridInfo.nGridX || nYPos < 0 || nYPos + nHeight > pInventoryGridInfo.nGridY)
 		{
@@ -1131,7 +1131,7 @@ BOOL __stdcall INVENTORY_CanItemBePlaced(D2InventoryStrc* pInventory, D2UnitStrc
 		return FALSE;
 	}
 
-	D2InventoryGridInfoStrc pInventoryGridInfo = {};
+	D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, FALSE, &pInventoryGridInfo);
 
 	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
@@ -1194,7 +1194,7 @@ BOOL __stdcall INVENTORY_CanItemsBeExchanged(D2InventoryStrc* pInventory, D2Unit
 		return FALSE;
 	}
 
-	D2InventoryGridInfoStrc pInventoryGridInfo = {};
+	D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, FALSE, &pInventoryGridInfo);
 	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
 	if (!pInventoryGrid)
@@ -1270,7 +1270,7 @@ D2UnitStrc* __stdcall INVENTORY_GetItemFromInventoryPage(D2InventoryStrc* pInven
 		return nullptr;
 	}
 
-	D2InventoryGridInfoStrc pInventoryGridInfo = {};
+	D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 	DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
 	D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, nPage + 2, &pInventoryGridInfo);
@@ -1557,7 +1557,7 @@ D2UnitStrc* __stdcall INVENTORY_FindBackPackItemForStack(D2InventoryStrc* pInven
 	D2InventoryGridStrc* pInventoryGrid = nullptr;
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, 0, TRUE), FALSE, &pInventoryGridInfo);
 		pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 	}
@@ -1650,7 +1650,7 @@ D2UnitStrc* __stdcall INVENTORY_FindFillableBook(D2InventoryStrc* pInventory, D2
 	D2InventoryGridStrc* pInventoryGrid = nullptr;
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, INVPAGE_INVENTORY, TRUE), FALSE, &pInventoryGridInfo);
 		pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 	}
@@ -1764,7 +1764,7 @@ BOOL __stdcall INVENTORY_GetFreeBeltSlot(D2InventoryStrc* pInventory, D2UnitStrc
 		nBeltType = UNITS_GetBeltType(pBelt);
 	}
 
-	D2BeltsTxt pBeltsTxtRecord = {};
+	D2BeltsTxt pBeltsTxtRecord = { 0 };
 	DATATBLS_GetBeltsTxtRecord(nBeltType, 0, &pBeltsTxtRecord);
 
 	pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_BELT, &gBeltInventoryGridInfo);
@@ -2125,7 +2125,7 @@ D2UnitStrc* __stdcall INVENTORY_GetBackPackItemByType(D2InventoryStrc* pInventor
 	D2InventoryGridStrc* pInventoryGrid = nullptr;
 	if (pInventory->pOwner && pInventory->pOwner->dwUnitType == UNIT_PLAYER)
 	{
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(UNITS_GetInventoryRecordId(pInventory->pOwner, 0, 1), 0, &pInventoryGridInfo);
 		pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
 	}
@@ -2711,7 +2711,7 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 			}
 			else if (nBodyLoc == BODYLOC_TORSO)
 			{
-				uint8_t pArmorComponents[6] = {};
+				uint8_t pArmorComponents[6] = { 0 };
 				for(int i = 0; i < 6; ++i)
 				{
 					pArmorComponents[i] = pItemsTxtRecord->nArmorComp[i];
@@ -3318,7 +3318,7 @@ BOOL __fastcall INVENTORY_CopyUnitItemsToTradeInventory(D2InventoryStrc* pTradeI
 	if (INVENTORY_GetPtrIfValid(pTradeInventory))
 	{
 		const int nInventoryRecordId = UNITS_GetInventoryRecordId(pUnit, INVPAGE_INVENTORY, TRUE);
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
 		D2InventoryGridStrc* pTradeInventoryGrid = INVENTORY_GetGrid(pTradeInventory, INVGRID_INVENTORY, &pInventoryGridInfo);
@@ -3347,7 +3347,7 @@ BOOL __fastcall INVENTORY_CanItemBePlacedInInventory(D2UnitStrc* pPlayer, D2Unit
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
 		const int nInventoryRecordId = UNITS_GetInventoryRecordId(pPlayer, INVPAGE_INVENTORY, TRUE);
-		D2InventoryGridInfoStrc pInventoryGridInfo = {};
+		D2InventoryGridInfoStrc pInventoryGridInfo = { 0 };
 		DATATBLS_GetInventoryGridInfo(nInventoryRecordId, 0, &pInventoryGridInfo);
 
 		D2InventoryGridStrc* pInventoryGrid = INVENTORY_GetGrid(pInventory, INVGRID_INVENTORY, &pInventoryGridInfo);

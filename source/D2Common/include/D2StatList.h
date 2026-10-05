@@ -391,7 +391,7 @@ enum D2C_PropertySets
 	PROPSET_SHIELD,
 };
 
-enum D2C_StatlistFlags : uint32_t
+D2_TYPED_ENUM(D2C_StatlistFlags, uint32_t)
 {
 	STATLIST_BASE = 0x0,
 	STATLIST_BASIC = 0x1,
@@ -416,8 +416,7 @@ struct D2SLayerStatIdStrc
 {
 	// We can not use a struct as function parameters here as it has a different effect when using the __fastcall calling convetion.
 	// Instead we just use D2SLayerStatIdStrc::PackedType so that we may easily change it later
-	using PackedType = int32_t;
-
+	typedef int32_t PackedType;
 	union
 	{
 		struct
@@ -428,8 +427,8 @@ struct D2SLayerStatIdStrc
 		PackedType nPackedValue;			//0x00
 	};
 
-	static D2SLayerStatIdStrc Make(uint16_t wLayer, uint16_t wStatId) { return { wLayer, wStatId }; }
-	static D2SLayerStatIdStrc MakeFromStatId(uint16_t wStatId) { return { 0, wStatId }; }
+	static D2SLayerStatIdStrc Make(uint16_t wLayer, uint16_t wStatId) { D2SLayerStatIdStrc ls = { 0 }; ls.nLayer = wLayer; ls.nStat = wStatId; return ls; }
+	static D2SLayerStatIdStrc MakeFromStatId(uint16_t wStatId) { D2SLayerStatIdStrc ls = { 0 }; ls.nStat = wStatId; return ls; }
 	static D2SLayerStatIdStrc FromPackedType(PackedType nPackedValue) {
 		D2SLayerStatIdStrc ls;
 		ls.nPackedValue = nPackedValue;
@@ -447,8 +446,8 @@ struct D2StatsArrayStrc
 	D2StatStrc* pStat;						//0x00 An Array[wStatCount]
 	uint16_t nStatCount;					//0x04
 	uint16_t nCapacity;						//0x06
-	static const int nGrowthAmount = 4;
-	static const int nShrinkThreshold = 8;
+	enum { nGrowthAmount = 4 };
+	enum { nShrinkThreshold = 8 };
 };
 
 struct D2ModStatsArrayStrc
@@ -456,12 +455,11 @@ struct D2ModStatsArrayStrc
 	D2SLayerStatIdStrc* pStat;				//0x00 An Array[wStatCount]
 	uint16_t nStatCount;					//0x04
 	uint16_t nCapacity;						//0x06
-	static const int nGrowthAmount = 4;
-	static const int nShrinkThreshold = 8;
+	enum { nGrowthAmount = 4 };
+	enum { nShrinkThreshold = 8 };
 };
 
-using StatListRemoveCallback = void(__fastcall*)(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
-
+typedef void (__fastcall* StatListRemoveCallback)(D2UnitStrc* pUnit, int32_t nState, struct D2StatListStrc* pStatList);
 struct D2StatListStrc
 {
 	void* pMemPool;							//0x00
@@ -480,8 +478,7 @@ struct D2StatListStrc
 	StatListRemoveCallback fpStatRemove;	//0x38
 };
 
-using StatListValueChangeFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
-
+typedef void (__fastcall* StatListValueChangeFunc)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t, int32_t);
 struct D2StatListExStrc : public D2StatListStrc
 {
 	D2StatListStrc* pMyLastList;			//0x3C

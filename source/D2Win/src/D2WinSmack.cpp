@@ -46,10 +46,10 @@ int32_t __stdcall SMACK_Decode(D2WinSmackStrc* pSmack, const char* szFileName, i
 {
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 
-	strncpy_s(pSmack->szFileName, szFileName, std::size(pSmack->szFileName));
+	strncpy(pSmack->szFileName, szFileName, ARRAY_SIZE(pSmack->szFileName));
 	WINDOW_CloseSmacker(&pSmack->field_140);
 	WINDOW_DecodeSmacker(pSmack->szFileName, (uint8_t*)&pSmack->field_140, nVersion);
-	strncpy_s(gszSmackFileName, szFileName, std::size(gszSmackFileName));
+	strncpy(gszSmackFileName, szFileName, ARRAY_SIZE(gszSmackFileName));
 	gnSmackVersion = nVersion;
 	return 1;
 }

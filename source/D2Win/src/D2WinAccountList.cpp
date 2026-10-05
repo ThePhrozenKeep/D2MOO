@@ -72,7 +72,7 @@ void __fastcall ACCOUNTLIST_AllocData(D2WinAccountListStrc* pAccountList, const 
 	D2_ASSERT(pAccountList->controlHeader.nType == D2WIN_ACCOUNTLIST);
 
 	D2WinAccountListDataStrc* pData = D2_ALLOC_STRC(D2WinAccountListDataStrc);
-	strncpy_s(pData->szText, szText, std::size(pData->szText));
+	strncpy(pData->szText, szText, ARRAY_SIZE(pData->szText));
 
 	D2WinAccountListDataStrc* pList = pAccountList->pDataList;
 	if (pList)
@@ -132,7 +132,7 @@ int32_t __fastcall ACCOUNTLIST_GetTextFromSelectedEntry(D2WinAccountListStrc* pA
 		return 0;
 	}
 
-	strcpy_s(szBuffer, std::size(pAccountList->pSelectedDataEntry->szText), szText);
+	strcpy(szBuffer, szText);
 
 	return 1;
 }
@@ -163,8 +163,8 @@ int32_t __fastcall ACCOUNTLIST_Draw(D2WinControlStrc* pControl)
 			const int32_t nY = nBaseY + 20 * nCounter / 6;
 			D2GFX_DrawBox(nX, nY - 14, nX + 28, nY, 0x55u, DRAWMODE_NORMAL);
 
-			Unicode wszText[256] = {};
-			Unicode::win2Unicode(wszText, pData->szText, std::size(wszText));
+			Unicode wszText[256] = { 0 };
+			Unicode::win2Unicode(wszText, pData->szText, ARRAY_SIZE(wszText));
 			D2Win_10117_DrawText(wszText, nX + 32, nY, 0, 0);
 
 			if (pData == pAccountList->pSelectedDataEntry)

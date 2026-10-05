@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 
-enum D2C_EventFlags : uint16_t
+D2_TYPED_ENUM(D2C_EventFlags, uint16_t)
 {
 	EVENTFLAG_0x1 = 0x1, // Some kind of lock or to prevent reentrancy ?
 	EVENTFLAG_0x2 = 0x2,
@@ -12,7 +12,7 @@ enum D2C_EventFlags : uint16_t
 	EVENTFLAG_0x8 = 0x8,
 };
 
-enum D2C_EventTypes : uint8_t
+D2_TYPED_ENUM(D2C_EventTypes, uint8_t)
 {
 	EVENTTYPE_MODECHANGE = 0,
 	EVENTTYPE_ENDANIM = 1,
@@ -49,7 +49,7 @@ struct D2TimerArgStrc
 	uint32_t dwUnitId;
 };
 
-using EventTimerCallback = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
+typedef int32_t (__fastcall * EventTimerCallback)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
 struct D2EventTimerStrc
 {
 	D2C_EventTypes nEventType;

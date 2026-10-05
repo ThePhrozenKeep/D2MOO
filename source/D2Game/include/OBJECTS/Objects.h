@@ -16,8 +16,7 @@ struct D2ObjInitFnStrc
 	int32_t nX;								//0x14
 	int32_t nY;								//0x18
 };
-using ObjInitFunction = void(__fastcall*)(D2ObjInitFnStrc*);
-
+typedef void (__fastcall * ObjInitFunction)(D2ObjInitFnStrc*);
 #pragma pack()
 
 //D2Game.0x6FC70180

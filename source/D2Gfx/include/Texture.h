@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 #include "DrawMode.h"
 

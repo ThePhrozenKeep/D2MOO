@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 
 //D2Gfx.0x6FA73F30 (#10059)

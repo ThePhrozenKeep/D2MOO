@@ -49,8 +49,8 @@ enum D2GameFlags
 	GAMEFLAG_DIFFICULTY_MASK			= (0x7) << GAMEFLAG_DIFFICULTY_BIT,
 };
 
-using D2GameGUID = uint32_t;
-constexpr D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
+typedef uint32_t D2GameGUID;
+D2_CONSTEXPR D2GameGUID D2GameInvalidGUID = (D2GameGUID)-1;
 DECLARE_STRICT_HANDLE(HGAMEDATA);
 DECLARE_STRICT_HANDLE(GAMEDATALOCKEDHANDLE);
 
@@ -60,22 +60,22 @@ inline HGAMEDATA GetGameHandleFromHashValue(D2GameGUID nGameGUID) { return (HGAM
 static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2GameInvalidGUID);
 
 
-using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
-using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint64_t nExperience, uint32_t nFlags, const char* szCharName, const char* pPreviewInfoSerialized, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken, FILETIME* pSaveCreationTimestamp);
-using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
-using FnSaveDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nCharSaveTransactionToken);
-using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
-using FnEnterGame = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
-using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7); //TODO: Last 2 args
-/*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
-using FnUnlockDatabaseCharacter = void(__fastcall*)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
-/*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
-using FnUpdateCharacterLadder = void(__fastcall*)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, FILETIME* pSaveCreationTimestamp);
-using FnUpdateGameInformation = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
-using FnHandlePacket = void(__fastcall*)(void* pPacket, int32_t nPacketSize);
-using FnSetGameData = uint32_t(__fastcall*)();
-using FnRelockDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
-/*UNUSED*/	using FnLoadComplete = int32_t(__stdcall*)(int32_t);
+typedef void (__fastcall * FnCloseGame)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
+typedef void (__fastcall * FnLeaveGame)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint64_t nExperience, uint32_t nFlags, const char* szCharName, const char* pPreviewInfoSerialized, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken, FILETIME* pSaveCreationTimestamp);
+typedef void (__fastcall * FnGetDatabaseCharacter)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
+typedef void (__fastcall * FnSaveDatabaseCharacter)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nCharSaveTransactionToken);
+typedef void (*FnServerLogMessage)(int32_t nLogLevel, const char* szFormat, ...);
+typedef void (__fastcall * FnEnterGame)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
+typedef int32_t (__fastcall * FnFindPlayerToken)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7); //TODO: Last 2 args
+/*UNUSED*/	typedef int (__fastcall * FnSaveDatabaseGuild)(const char*, char*, size_t);
+typedef void (__fastcall * FnUnlockDatabaseCharacter)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
+/*UNUSED*/	typedef int (__fastcall * FnUnk0x24)(int, int);
+typedef void (__fastcall * FnUpdateCharacterLadder)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, FILETIME* pSaveCreationTimestamp);
+typedef void (__fastcall * FnUpdateGameInformation)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
+typedef void (__fastcall * FnHandlePacket)(void* pPacket, int32_t nPacketSize);
+typedef uint32_t (__fastcall * FnSetGameData)();
+typedef void (__fastcall * FnRelockDatabaseCharacter)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
+/*UNUSED*/	typedef int32_t (__stdcall * FnLoadComplete)(int32_t);
 
 extern char gszEmptyString_6FD447EC[8];
 
@@ -413,7 +413,7 @@ D2GAME_DLL_DECL void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats);
 D2GAME_DLL_DECL void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, const char* szMessage);
 //D2Game.0x6FC3AFB0 (#10022)
 D2GAME_DLL_DECL void __stdcall GAME_SendMessageToGameClients(uint16_t a1, const char* Str2);
-using GAME_ForEachIngameClientCallbackPtr = void(__fastcall*)(D2ClientStrc*, void*);
+typedef void (__fastcall * GAME_ForEachIngameClientCallbackPtr)(D2ClientStrc*, void*);
 //D2Game.0x6FC3B0E0
 void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, GAME_ForEachIngameClientCallbackPtr pFn, void* pContext);
 //D2Game.0x6FC3B160

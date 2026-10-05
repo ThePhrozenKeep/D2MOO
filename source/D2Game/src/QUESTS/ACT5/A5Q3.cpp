@@ -173,7 +173,7 @@ void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 	D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 	STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 	
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pNihlathak, MONMODE_DEAD, &modeChange);
 
 	modeChange.nX = 0;
@@ -408,7 +408,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1ma', ' 2ma', ' 3ma', ' 4ma', ' 5ma',
 	};
 
-	static const uint32_t gdwExceptionalAmazonRewardCodes[]
+	static const uint32_t gdwExceptionalAmazonRewardCodes[] =
 	{
 		' 6ma', ' 7ma', ' 8ma', ' 9ma', ' ama',
 	};
@@ -423,7 +423,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1ab', ' 2ab', ' 3ab', ' 4ab', ' 5ab',
 	};
 
-	static const uint32_t gdwExceptionalBarbarianRewardCodes[]
+	static const uint32_t gdwExceptionalBarbarianRewardCodes[] =
 	{
 		' 6ab', ' 7ab', ' 8ab', ' 9ab', ' aab',
 	};
@@ -438,7 +438,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1en', ' 2en', ' 3en', ' 4en', ' 5en',
 	};
 
-	static const uint32_t gdwExceptionalNecromancerRewardCodes[]
+	static const uint32_t gdwExceptionalNecromancerRewardCodes[] =
 	{
 		' 6en', ' 7en', ' 8en', ' 9en', ' aen',
 	};
@@ -453,7 +453,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1ap', ' 2ap', ' 3ap', ' 4ap', ' 5ap',
 	};
 
-	static const uint32_t gdwExceptionalPaladinRewardCodes[]
+	static const uint32_t gdwExceptionalPaladinRewardCodes[] =
 	{
 		' 6ap', ' 7ap', ' 8ap', ' 9ap', ' aap',
 	};
@@ -468,7 +468,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1bo', ' 2bo', ' 3bo', ' 4bo', ' 5bo',
 	};
 
-	static const uint32_t gdwExceptionalSorceressRewardCodes[]
+	static const uint32_t gdwExceptionalSorceressRewardCodes[] =
 	{
 		' 6bo', ' 7bo', ' 8bo', ' 9bo', ' abo',
 	};
@@ -483,7 +483,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' 1rd', ' 2rd', ' 3rd', ' 4rd', ' 5rd',
 	};
 
-	static const uint32_t gdwExceptionalDruidRewardCodes[]
+	static const uint32_t gdwExceptionalDruidRewardCodes[] =
 	{
 		' 6rd', ' 7rd', ' 8rd', ' 9rd', ' ard',
 	};
@@ -498,7 +498,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		' rtk', ' brw', ' fxa', ' sec', ' wlc', ' ltb', ' rks',
 	};
 
-	static const uint32_t gdwExceptionalAssasinRewardCodes[]
+	static const uint32_t gdwExceptionalAssasinRewardCodes[] =
 	{
 		' ra9', ' bw9', ' fx9', ' sc9', ' wl9', ' wt9', ' rq9',
 	};
@@ -510,35 +510,35 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 	static const D2PrisonOfIceRewardStrc pNormalRewards[] =
 	{
-		{ gdwNormalAmazonRewardCodes, std::size(gdwNormalAmazonRewardCodes) },
-		{ gdwNormalSorceressRewardCodes, std::size(gdwNormalSorceressRewardCodes) },
-		{ gdwNormalNecromancerRewardCodes, std::size(gdwNormalNecromancerRewardCodes) },
-		{ gdwNormalPaladinRewardCodes, std::size(gdwNormalPaladinRewardCodes) },
-		{ gdwNormalBarbarianRewardCodes, std::size(gdwNormalBarbarianRewardCodes) },
-		{ gdwNormalDruidRewardCodes, std::size(gdwNormalDruidRewardCodes) },
-		{ gdwNormalAssasinRewardCodes, std::size(gdwNormalAssasinRewardCodes) },
+		{ gdwNormalAmazonRewardCodes, ARRAY_SIZE(gdwNormalAmazonRewardCodes) },
+		{ gdwNormalSorceressRewardCodes, ARRAY_SIZE(gdwNormalSorceressRewardCodes) },
+		{ gdwNormalNecromancerRewardCodes, ARRAY_SIZE(gdwNormalNecromancerRewardCodes) },
+		{ gdwNormalPaladinRewardCodes, ARRAY_SIZE(gdwNormalPaladinRewardCodes) },
+		{ gdwNormalBarbarianRewardCodes, ARRAY_SIZE(gdwNormalBarbarianRewardCodes) },
+		{ gdwNormalDruidRewardCodes, ARRAY_SIZE(gdwNormalDruidRewardCodes) },
+		{ gdwNormalAssasinRewardCodes, ARRAY_SIZE(gdwNormalAssasinRewardCodes) },
 	};
 
 	static const D2PrisonOfIceRewardStrc pExceptionalRewards[] =
 	{
-		{ gdwExceptionalAmazonRewardCodes, std::size(gdwExceptionalAmazonRewardCodes) },
-		{ gdwExceptionalSorceressRewardCodes, std::size(gdwExceptionalSorceressRewardCodes) },
-		{ gdwExceptionalNecromancerRewardCodes, std::size(gdwExceptionalNecromancerRewardCodes) },
-		{ gdwExceptionalPaladinRewardCodes, std::size(gdwExceptionalPaladinRewardCodes) },
-		{ gdwExceptionalBarbarianRewardCodes, std::size(gdwExceptionalBarbarianRewardCodes) },
-		{ gdwExceptionalDruidRewardCodes, std::size(gdwExceptionalDruidRewardCodes) },
-		{ gdwExceptionalAssasinRewardCodes, std::size(gdwExceptionalAssasinRewardCodes) },
+		{ gdwExceptionalAmazonRewardCodes, ARRAY_SIZE(gdwExceptionalAmazonRewardCodes) },
+		{ gdwExceptionalSorceressRewardCodes, ARRAY_SIZE(gdwExceptionalSorceressRewardCodes) },
+		{ gdwExceptionalNecromancerRewardCodes, ARRAY_SIZE(gdwExceptionalNecromancerRewardCodes) },
+		{ gdwExceptionalPaladinRewardCodes, ARRAY_SIZE(gdwExceptionalPaladinRewardCodes) },
+		{ gdwExceptionalBarbarianRewardCodes, ARRAY_SIZE(gdwExceptionalBarbarianRewardCodes) },
+		{ gdwExceptionalDruidRewardCodes, ARRAY_SIZE(gdwExceptionalDruidRewardCodes) },
+		{ gdwExceptionalAssasinRewardCodes, ARRAY_SIZE(gdwExceptionalAssasinRewardCodes) },
 	};
 
 	static const D2PrisonOfIceRewardStrc pEliteRewards[] =
 	{
-		{ gdwEliteAmazonRewardCodes, std::size(gdwEliteAmazonRewardCodes) },
-		{ gdwEliteSorceressRewardCodes, std::size(gdwEliteSorceressRewardCodes) },
-		{ gdwEliteNecromancerRewardCodes, std::size(gdwEliteNecromancerRewardCodes) },
-		{ gdwElitePaladinRewardCodes, std::size(gdwElitePaladinRewardCodes) },
-		{ gdwEliteBarbarianRewardCodes, std::size(gdwEliteBarbarianRewardCodes) },
-		{ gdwEliteDruidRewardCodes, std::size(gdwEliteDruidRewardCodes) },
-		{ gdwEliteAssasinRewardCodes, std::size(gdwEliteAssasinRewardCodes) },
+		{ gdwEliteAmazonRewardCodes, ARRAY_SIZE(gdwEliteAmazonRewardCodes) },
+		{ gdwEliteSorceressRewardCodes, ARRAY_SIZE(gdwEliteSorceressRewardCodes) },
+		{ gdwEliteNecromancerRewardCodes, ARRAY_SIZE(gdwEliteNecromancerRewardCodes) },
+		{ gdwElitePaladinRewardCodes, ARRAY_SIZE(gdwElitePaladinRewardCodes) },
+		{ gdwEliteBarbarianRewardCodes, ARRAY_SIZE(gdwEliteBarbarianRewardCodes) },
+		{ gdwEliteDruidRewardCodes, ARRAY_SIZE(gdwEliteDruidRewardCodes) },
+		{ gdwEliteAssasinRewardCodes, ARRAY_SIZE(gdwEliteAssasinRewardCodes) },
 	};
 
 	D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
@@ -563,7 +563,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 				{
 					++pQuestDataEx->nDefrostPotionsInGame;
 
-					D2GSPacketSrv5D packet5D = {};
+					D2GSPacketSrv5D packet5D = { 0 };
 					packet5D.nHeader = 0x5D;
 					packet5D.nQuestId = QUEST_A5Q3_PRISONOFICE;
 					packet5D.nFlags = 1;
@@ -596,7 +596,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 				{
 					QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A5Q3, QFLAG_CUSTOM4);
 
-					D2GSPacketSrv5D packet5D = {};
+					D2GSPacketSrv5D packet5D = { 0 };
 					packet5D.nHeader = 0x5D;
 					packet5D.nQuestId = QUEST_A5Q3_PRISONOFICE;
 					packet5D.nFlags = 2;
@@ -710,7 +710,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		return;
 	}
 
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A5Q3_PRISONOFICE;
 	packet5D.nFlags = 16;
@@ -786,7 +786,7 @@ int32_t __fastcall ACT5Q3_RemoveDrehyaIced(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		return 1;
 	}
 
-	D2ModeChangeStrc modeChange = {};
+	D2ModeChangeStrc modeChange = { 0 };
 	MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_DEAD, &modeChange);
 	D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 
@@ -802,7 +802,7 @@ int32_t __fastcall ACT5Q3_RemoveDrehyaIced(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //D2Game.0x6FCB4150
 void __fastcall ACT5Q3_SendPacket0x5DToClient(D2UnitStrc* pUnit)
 {
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A5Q3_PRISONOFICE;
@@ -841,7 +841,7 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 		DRLGPRESET_ChangeMapAI(&pQuestDataEx->pDrehyaMapAI, AIGENERAL_GetMapAiFromUnit(pDrehya));
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pDrehya, &pCoord);
 
 	const int32_t nX = pCoord.nX;
@@ -902,7 +902,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 				D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pDrehya, 0);
 			}
 
-			D2ModeChangeStrc modeChange = {};
+			D2ModeChangeStrc modeChange = { 0 };
 			MONSTERMODE_GetModeChangeInfo(pDrehya, MONMODE_DEAD, &modeChange);
 			D2GAME_ModeChange_6FC65220(pQuestData->pGame, &modeChange, 1);
 
@@ -938,7 +938,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 			D2GAME_EVENTS_Delete_6FC34840(pQuestData->pGame, pNihlathak, EVENTTYPE_AITHINK, 0);
 			STATLIST_SetUnitStat(pNihlathak, STAT_HITPOINTS, 0, 0);
 
-			D2ModeChangeStrc modeChange = {};
+			D2ModeChangeStrc modeChange = { 0 };
 			MONSTERMODE_GetModeChangeInfo(pNihlathak, MONMODE_DEAD, &modeChange);
 
 			modeChange.nX = 0;
@@ -989,7 +989,7 @@ void __fastcall ACT5Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	{
 		if (pQuestData->fState == 6)
 		{
-			D2ModeChangeStrc modeChange = {};
+			D2ModeChangeStrc modeChange = { 0 };
 			MONSTERMODE_GetModeChangeInfo(pQuestArg->pTarget, MONMODE_DEAD, &modeChange);
 			D2GAME_ModeChange_6FC65220(pQuestArg->pGame, &modeChange, 1);
 		}

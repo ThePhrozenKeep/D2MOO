@@ -16,7 +16,7 @@ struct D2DebuggerData
 {
     LPDIRECT3D9              pD3D = nullptr;
     LPDIRECT3DDEVICE9        pd3dDevice = nullptr;
-    D3DPRESENT_PARAMETERS    d3dpp = {};
+    D3DPRESENT_PARAMETERS    d3dpp = { 0 };
     HWND                     hWindow = nullptr;
     WNDCLASSEXW              windowClassEx;
     bool                     bShowDemo = true;

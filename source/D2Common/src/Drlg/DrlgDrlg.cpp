@@ -41,7 +41,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2AR
 	pDrlg->pfAutomap = pfAutoMap;
 	pDrlg->pfTownAutomap = pfTownAutoMap;
 
-	char szPath[MAX_PATH] = {};
+	char szPath[MAX_PATH] = { 0 };
 	szPath[0] = sgptDataTables->szDefaultString;
 
 	switch (nActNo)
@@ -506,7 +506,7 @@ int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2
 //D2Common.0x6FD74A40
 void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom)
 {
-	D2DrlgCoordsStrc pDrlgCoords = {};
+	D2DrlgCoordsStrc pDrlgCoords = { 0 };
 	uint32_t dwFlags = 0;
 
 	pDrlgCoords.nTileXPos = pDrlgRoom->nTileXPos;

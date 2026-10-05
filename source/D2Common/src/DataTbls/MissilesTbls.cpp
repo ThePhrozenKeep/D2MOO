@@ -36,7 +36,7 @@ int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
 int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 {
 	D2TxtLinkStrc* pLinker = sgptDataTables->pMissileCalcLinker;
-	char szCode[4] = {};
+	char szCode[4] = { 0 };
 	int nRow = 0;
 
 	if (a3 == 1)
@@ -120,7 +120,7 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	int nBufferSize = 0;
-	FOGASTNodeStrc pBuffer[1024] = {};
+	FOGASTNodeStrc pBuffer[1024] = { (FOGASTType)0 };
 
 	if (pRecord)
 	{

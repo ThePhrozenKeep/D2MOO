@@ -29,7 +29,7 @@ uint32_t dword_6F8FE220;
 D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, void* a5, Font* pFont)
 {
 	// TODO: a5, pFont, nWidtha, v24
-	constexpr int32_t nFontHeight[] =
+	D2_CONSTEXPR int32_t nFontHeight[] =
 	{
 		8, 16, 30, 42, 0, 0, 0, 0, 0, 0, 0
 	};
@@ -63,7 +63,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 			D2WinListDataStrc* pData = D2_ALLOC_STRC(D2WinListDataStrc);
 			const Unicode* pText = D2LANG_GetStringFromTblIndex(*((WORD*)nWidtha - 2));
 
-			D2_ASSERT(Unicode::strlen(pText) < std::size(pData->wszText));
+			D2_ASSERT(Unicode::strlen(pText) < ARRAY_SIZE(pData->wszText));
 
 			Unicode::strcpy(pData->wszText, pText);
 
@@ -136,9 +136,9 @@ int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
 //D2Win.0x6F8AC4F0 (#10138)
 void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
-	Unicode wszText[256] = {};
+	Unicode wszText[256] = { 0 };
 
-	Unicode::win2Unicode(wszText, szText, std::size(wszText));
+	Unicode::win2Unicode(wszText, szText, ARRAY_SIZE(wszText));
 	D2Win_10137(pList, wszText, a3, a4, a5, a6, a7);
 }
 
@@ -258,7 +258,7 @@ void __stdcall LIST_LoadPentspinCellfile()
 {
 	D2_ASSERT(ghPentagramCellFile == nullptr);
 
-	char szFile[260] = {};
+	char szFile[260] = { 0 };
 	wsprintfA(szFile, "%s\\UI\\CURSOR\\Pentspin", "DATA\\GLOBAL");
 	ghPentagramCellFile = ARCHIVE_LoadCellFile(szFile, 0);
 }
@@ -288,7 +288,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 		}
 	}
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.pCellFile = ghPentagramCellFile;
 	gfxData.nDirection = 0;
 	gfxData.nFrame = pList->field_5C;

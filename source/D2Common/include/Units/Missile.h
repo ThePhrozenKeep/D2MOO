@@ -93,7 +93,7 @@ struct D2MissileDataStrc
 	D2MissileStreamStrc* pStream;			//0x30
 };
 
-using MissileInitFunc = void(__fastcall*)(D2UnitStrc*, int32_t);
+typedef void (__fastcall * MissileInitFunc)(D2UnitStrc*, int32_t);
 struct D2MissileStrc
 {
 	uint32_t dwFlags;							//0x00

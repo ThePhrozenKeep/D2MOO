@@ -97,7 +97,7 @@ D2UnitStrc* __stdcall UNITFINDS_GetNearestTestedUnit(D2UnitStrc* pUnit, int nX, 
 	int nSmallestDistance = 0;
 	int nDistance = 0;
 	int nNumRooms = 0;
-	D2DrlgCoordsStrc pRoomCoord = {};
+	D2DrlgCoordsStrc pRoomCoord = { 0 };
 
 	pRoom = UNITS_GetRoom(pUnit);
 	D2_ASSERT(pRoom);
@@ -177,7 +177,7 @@ void __stdcall UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(D2UnitFindDataStr
 	int nSize = 0;
 	int nX = 0;
 	int nY = 0;
-	D2DrlgCoordsStrc pRoomCoord = {};
+	D2DrlgCoordsStrc pRoomCoord = { 0 };
 
 	D2_ASSERT(pUnitFindData);
 
@@ -254,7 +254,7 @@ int __stdcall UNITFINDS_TestUnit(D2UnitStrc* pUnit, D2UnitFindArgStrc* pUnitFind
 	D2ActiveRoomStrc* pRoom = NULL;
 	int nX = 0;
 	int nY = 0;
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	if (pUnitFindArg && (!(pUnitFindArg->nFlags & 0x40) || pUnitFindArg->nIndex < pUnitFindArg->nMaxArrayEntries))
 	{

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include <cstdint>
+#include <D2StdInt.h>
 
 #include "DrawMode.h"
 #include "Font.h"
@@ -119,9 +119,9 @@ void __fastcall D2Win_10200(D2SplittedTextStrc* pSplitText);
 //D2Win.0x6F8AB770
 D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode *wszText, int *pLines, int nMaxLength);
 
-using DrawFramedTextPtr = decltype(D2Win_10129_DrawFramedText)*;
+typedef void (__fastcall* DrawFramedTextPtr)(const Unicode* wszText, int nX, int nY, int nTextColor, int nAlign);
 //D2Win.0x6F8ABA70
 DrawFramedTextPtr __stdcall D2Win_10206();
-using GetTextDimensionsPtr = decltype(D2Win_10131_GetTextDimensions)*;
+typedef void (__fastcall* GetTextDimensionsPtr)(const Unicode* pText, int* pWidth, int* pHeight);
 //D2Win.0x6F8ABA80
 GetTextDimensionsPtr __stdcall D2Win_10207();

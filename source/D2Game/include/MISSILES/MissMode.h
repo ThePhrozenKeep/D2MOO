@@ -31,7 +31,7 @@ struct D2MissileUnitFindArgStrc
     D2MissilesTxt* pMissilesTxtRecord;
 };
 
-using MissileUnitFindFunc = int32_t(__fastcall*)(D2UnitStrc*, void*);
+typedef int32_t (__fastcall * MissileUnitFindFunc)(D2UnitStrc*, void*);
 struct D2MissileUnitFindTableStrc
 {
     MissileUnitFindFunc pfUnitFindCallback;

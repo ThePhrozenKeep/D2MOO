@@ -51,33 +51,46 @@ static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
 };
 
+static BOOL PATH_HasCollisionForNewTarget(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
+{
+	pMov->tTargetCoord.X = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nX + (pMov->tCurrentCoord).X;
+	pMov->tTargetCoord.Y = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nY + (pMov->tCurrentCoord).Y;
+	return COLLISION_CheckAnyCollisionWithPattern(pInfo->pStartRoom, pMov->tTargetCoord.X, pMov->tTargetCoord.Y, pInfo->nCollisionPattern, (uint16_t)pInfo->nCollisionMask);
+}
+
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD686D0
 BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
 {
 	D2_ASSERT(pInfo && pMov && pInfo->pDynamicPath->pUnit && (pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 
-	auto HasCollisionForNewTarget = [&] {
-		pMov->tTargetCoord.X = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nX + (pMov->tCurrentCoord).X;
-		pMov->tTargetCoord.Y = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nY + (pMov->tCurrentCoord).Y;
-		return COLLISION_CheckAnyCollisionWithPattern(pInfo->pStartRoom, pMov->tTargetCoord.X, pMov->tTargetCoord.Y, pInfo->nCollisionPattern, (uint16_t)pInfo->nCollisionMask);
-	};
-
 	pMov->bReachedDeadEnd = FALSE;
-	if (!HasCollisionForNewTarget()) { return TRUE; }
+	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
-	if (!HasCollisionForNewTarget()) { return TRUE; }
+	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
-	if (!HasCollisionForNewTarget()) { return TRUE; }
+	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
 	// We circled back to the original direction.
 	pMov->bReachedDeadEnd = TRUE;
-	return !HasCollisionForNewTarget();
+	return !PATH_HasCollisionForNewTarget(pInfo, pMov);
 }
 
+
+static int PATH_ComputeSquaredDistToTarget(D2PathInfoStrc* pInfo, const D2PathMovStrc& rPath)
+{
+	// Note: original game does not clamp the index, and would use memory from pCache1.bWithCollision, which would be set to 0
+	// This means the distance would be the norm of tTargetCoord, which means we would have the bigger distance of the two paths
+	// It makes more sense to use INT_MAX as it means we will never pick this path.
+	if (rPath.nPoints > 0)
+	{
+		return rPath.pPoints[rPath.nPoints - 1].SquaredDistance(pInfo->tTargetCoord);
+	}
+	return INT_MAX;
+}
 
 // D2Common.0x6FDABAC0 (1.10f)
 // D2Common.0x6FD68830 (1.13C)
@@ -120,8 +133,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		6,0,0,2,2,4,4,6
 	};
 
-	D2PathMovStrc tCache2 = {};
-	D2PathMovStrc tCache1 = {};
+	D2PathMovStrc tCache2 = { 0 };
+	D2PathMovStrc tCache1 = { 0 };
 
 	tCache1.pPrevDirection = gnPreviousDirection1;
 	tCache1.pNextDirection = gnNextDirection1;
@@ -271,19 +284,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		return 0;
 	}
 
-	auto ComputeSquaredDistToTarget = [&](const D2PathMovStrc& rPath) {
-		// Note: original game does not clamp the index, and would use memory from pCache1.bWithCollision, which would be set to 0
-		// This means the distance would be the norm of tTargetCoord, which means we would have the bigger distance of the two paths
-		// It makes more sense to use INT_MAX as it means we will never pick this path.
-		if (rPath.nPoints > 0)
-		{
-			return rPath.pPoints[rPath.nPoints - 1].SquaredDistance(pInfo->tTargetCoord);
-		}
-		return INT_MAX;
-	};
-
-	const int nSquaredDist1 = ComputeSquaredDistToTarget(tCache1);
-	const int nSquaredDist2 = ComputeSquaredDistToTarget(tCache2);
+	const int nSquaredDist1 = PATH_ComputeSquaredDistToTarget(pInfo, tCache1);
+	const int nSquaredDist2 = PATH_ComputeSquaredDistToTarget(pInfo, tCache2);
 	const int nSquaredDistStartToTarget = pInfo->tStartCoord.SquaredDistance(pInfo->tTargetCoord);
 
 	D2PathMovStrc* pBestPath;
@@ -509,7 +511,7 @@ int __fastcall PATH_ComputePathOrSlideAlongObstacles(D2PathInfoStrc* ptPathInfo)
 	}
 
 	int nMajorDirection = 0;
-	D2PathPointStrc aPathPoints[D2DynamicPathStrc::MAXPATHLEN] = {}; // Could actually be D2DynamicPathStrc::MAXPATHLEN + 1 ? Why is 6FDABAC0 using 80 as maxlen?!
+	D2PathPointStrc aPathPoints[D2DynamicPathStrc::MAXPATHLEN] = { 0 }; // Could actually be D2DynamicPathStrc::MAXPATHLEN + 1 ? Why is 6FDABAC0 using 80 as maxlen?!
 	D2PathPointStrc pStartPoint = ptPathInfo->tStartCoord;
 	int nMovementPoints = PATH_BresenhamLine(pStartPoint, ptPathInfo->tTargetCoord, nDist, &nMajorDirection, aPathPoints);
 	if (nMovementPoints > 2)

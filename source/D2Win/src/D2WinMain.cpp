@@ -177,7 +177,7 @@ int __fastcall D2Win_10015()
 	LIST_LoadPentspinCellfile();
 	D2Win_10157();
 	gpfWndProc_6F8FE268 = nullptr;
-	WREGISTER_RegisterCommands(WINDOW_GetWindow(), gpCommandRegister_6F8BDE28, std::size(gpCommandRegister_6F8BDE28));
+	WREGISTER_RegisterCommands(WINDOW_GetWindow(), gpCommandRegister_6F8BDE28, ARRAY_SIZE(gpCommandRegister_6F8BDE28));
 	D2Win_10177(0);
 	dword_6F8FE27C = nullptr;
 	return 1;
@@ -261,7 +261,7 @@ int __stdcall D2Win_10016()
 
 	LIST_UnloadPentspinCellfile();
 	D2Win_10116();
-	WREGISTER_UnregisterCommands(WINDOW_GetWindow(), gpCommandRegister_6F8BDE28, std::size(gpCommandRegister_6F8BDE28));
+	WREGISTER_UnregisterCommands(WINDOW_GetWindow(), gpCommandRegister_6F8BDE28, ARRAY_SIZE(gpCommandRegister_6F8BDE28));
 	return 1;
 }
 
@@ -326,7 +326,7 @@ int __stdcall D2Win_10008(void(__stdcall* pCallback)(DWORD))
 
 	while (dword_6F8BDF78)
 	{
-		struct tagMSG Msg = {};
+		struct tagMSG Msg = { 0 };
 
 		if (PeekMessageA(&Msg, 0, 0, 0, 0))
 		{
@@ -816,7 +816,7 @@ void __stdcall D2Win_10019()
 
 		if (gpBackgroundCellFile)
 		{
-			D2GfxDataStrc gfxData = {};
+			D2GfxDataStrc gfxData = { 0 };
 			gfxData.pCellFile = gpBackgroundCellFile;
 			gfxData.nDirection = 0;
 			gfxData.nFrame = 0;
@@ -891,7 +891,7 @@ void __stdcall D2Win_10019()
 				nY = 0;
 			}
 
-			D2GfxDataStrc gfxData = {};
+			D2GfxDataStrc gfxData = { 0 };
 			gfxData.nDirection = 0;
 			gfxData.pCellFile = gpCursorCellFile;
 			gfxData.nFrame = gnCursorFrame;
@@ -1168,10 +1168,10 @@ void __stdcall D2Win_10168_WINMAIN_CreateScreenshot()
 
 	if (D2GFX_GetBackBuffer(pBuffer))
 	{
-		char szFilename[256] = {};
+		char szFilename[256] = { 0 };
 		while (1)
 		{
-			sprintf_s(szFilename, "Screenshot%03d.jpg", gnScreenshotCounter_6F8BDE1C++);
+			sprintf(szFilename, "Screenshot%03d.jpg", gnScreenshotCounter_6F8BDE1C++);
 			const HANDLE v3 = FOG_CreateFileA(szFilename, 0x80000000u, 0, 0, 3, 128, 0);
 			if (v3 == INVALID_HANDLE_VALUE)
 			{

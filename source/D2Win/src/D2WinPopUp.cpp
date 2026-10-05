@@ -154,7 +154,7 @@ int32_t __fastcall POPUP_Draw(D2WinControlStrc* pControl)
 		return 0;
 	}
 
-	RECT rect = {};
+	RECT rect = { 0 };
 	rect.left = pPopUp->controlHeader.nImageX - 5;
 	rect.bottom = pPopUp->controlHeader.nImageY + 5;
 	rect.top = pPopUp->controlHeader.nImageY - pPopUp->controlHeader.nHeight - 5;

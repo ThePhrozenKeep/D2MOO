@@ -21,7 +21,7 @@
 #pragma warning (disable : 28159)
 
 
-constexpr const char* gszFontNames_6F8BA534[NUM_FONTS] =
+D2_CONSTEXPR const char* gszFontNames_6F8BA534[NUM_FONTS] =
 {
 	"Font8",
 	"Font16",
@@ -95,7 +95,7 @@ void __fastcall D2Win_10115_FONT()
 	case LANGUAGE_FRENCH:
 	case LANGUAGE_PORTUGUESE:
 	case LANGUAGE_ITALIAN:
-		strcpy_s(byte_6F8FD9D8, "Latin\\");
+		strcpy(byte_6F8FD9D8, "Latin\\");
 		dword_6F8BDB2C = 16;
 		dword_6F8FE20C = sub_6F8AA100;
 		break;
@@ -104,13 +104,13 @@ void __fastcall D2Win_10115_FONT()
 		dword_6F8BDB28 = 14;
 		dword_6F8BDB2C = 15;
 		dword_6F8BDB30 = 5;
-		strcpy_s(byte_6F8FD9D8, "JPN\\");
+		strcpy(byte_6F8FD9D8, "JPN\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 
 	case LANGUAGE_KOREAN:
 		dword_6F8BDB30 = 5;
-		strcpy_s(byte_6F8FD9D8, "KOR\\");
+		strcpy(byte_6F8FD9D8, "KOR\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 
@@ -119,37 +119,37 @@ void __fastcall D2Win_10115_FONT()
 		dword_6F8BDB30 = 2;
 		dword_6F8BDB28 = 14;
 		dword_6F8BDB2C = 14;
-		strcpy_s(byte_6F8FD9D8, "CHI\\");
+		strcpy(byte_6F8FD9D8, "CHI\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 
 	case LANGUAGE_POLISH:
 		dword_6F8BDB28 = 13;
 		dword_6F8BDB2C = 13;
-		strcpy_s(byte_6F8FD9D8, "LATIN2\\");
+		strcpy(byte_6F8FD9D8, "LATIN2\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 
 	case LANGUAGE_RUSSIAN:
-		strcpy_s(byte_6F8FD9D8, "CYR\\");
+		strcpy(byte_6F8FD9D8, "CYR\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 
 	case LANGUAGE_ENGLISHKOR:
 		byte_6F8FE21A = 1;
-		strcpy_s(byte_6F8FD9D8, "LATIN\\");
+		strcpy(byte_6F8FD9D8, "LATIN\\");
 		dword_6F8FE20C = sub_6F8AA100;
 		break;
 
 	default:
-		strcpy_s(byte_6F8FD9D8, "Latin\\");
+		strcpy(byte_6F8FD9D8, "Latin\\");
 		dword_6F8FE20C = sub_6F8AA140;
 		break;
 	}
 
 	if (!stru_6F8FD8C0[1].pCellFile)
 	{
-		char szFile[80] = {};
+		char szFile[80] = { 0 };
 
 		D2Win_FONT_6F8A9DC0(1, szFile, 79);
 		stru_6F8FD8C0[1].pCellFile = ARCHIVE_LoadCellFile(szFile, 0);
@@ -158,7 +158,7 @@ void __fastcall D2Win_10115_FONT()
 
 	if (!ghCellfileFontMonsterIndicators_6F8FD9EC)
 	{
-		char szPath[260] = {};
+		char szPath[260] = { 0 };
 
 		wsprintfA(szPath, "%s\\UI\\Font\\MonsterIndicators", "DATA\\GLOBAL");
 		ghCellfileFontMonsterIndicators_6F8FD9EC = ARCHIVE_LoadCellFile(szPath, 0);
@@ -175,7 +175,7 @@ void __fastcall D2Win_10115_FONT()
 //D2Win.0x6F8A9DC0
 void __fastcall D2Win_FONT_6F8A9DC0(int nFont, char* pBuffer, int nLength)
 {
-	char szFileName[260] = {};
+	char szFileName[260] = { 0 };
 
 	wsprintfA(szFileName, "%s\\%s\\", "DATA\\LOCAL", "Font");
 
@@ -201,8 +201,8 @@ void __fastcall D2Win_FONT_6F8A9DC0(int nFont, char* pBuffer, int nLength)
 //D2Win.0x6F8A9E90
 void __fastcall sub_6F8A9E90(int a1)
 {
-	char szFilename[80] = {};
-	char szPath[260] = {};
+	char szFilename[80] = { 0 };
+	char szPath[260] = { 0 };
 
 	wsprintfA(szPath, "%s\\%s\\", "DATA\\LOCAL", "Font");
 
@@ -268,7 +268,7 @@ Font __fastcall D2Win_10127_SetFont(Font nFontSize)
 
 		if (!stru_6F8FD8C0[nFontSize].pCellFile)
 		{
-			char szFile[80] = {};
+			char szFile[80] = { 0 };
 
 			D2Win_FONT_6F8A9DC0(nFontSize, szFile, 79);
 			stru_6F8FD8C0[nFontSize].pCellFile = ARCHIVE_LoadCellFile(szFile, 0);
@@ -435,7 +435,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 
 	const int32_t nDisplayType = D2GFX_GetDisplayType();
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.nDirection = 0;
 		
 	const int32_t nLineStartX = nX;
@@ -505,7 +505,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6)
 {
 	// TODO: Names
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.pCellFile = gpFontCache->pCellFile;
 	gfxData.nDirection = 0;
 
@@ -767,7 +767,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 		v6 += (a4 - sub_6F8AABB0(wszText)) >> 1;
 	}
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = gpFontCache->pCellFile;
 
@@ -935,7 +935,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 		v7 += ((v21 - sub_6F8AABB0(wszText)) >> 1);
 	}
 
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = gpFontCache->pCellFile;
 
@@ -1015,7 +1015,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 //D2Win.0x6F8AAF80 (#10126)
 void __fastcall D2Win_10126_DrawTextFromCache(const Unicode* pText, int nX, int nY)
 {
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 	gfxData.pCellFile = gpFontCache->pCellFile;
 	gfxData.nDirection = 0;
 
@@ -1217,7 +1217,7 @@ void __fastcall sub_6F8AB360(const Unicode* pStr, int nX, int nY, int nBoxWidth,
 //D2Win.0x6F8AB480 (#10134)
 void __fastcall D2Win_10134_DrawCellFile(D2CellFileStrc* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor)
 {
-	D2GfxDataStrc gfxData = {};
+	D2GfxDataStrc gfxData = { 0 };
 
 	gfxData.pCellFile = pCellFile;
 	gfxData.nDirection = 0;

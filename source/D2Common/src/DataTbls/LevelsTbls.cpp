@@ -478,7 +478,7 @@ D2LevelDefBin* __fastcall DATATBLS_GetLevelDefRecord(int nLevelId)
 void __fastcall DATATBLS_LoadLevelTypesTxt(HD2ARCHIVE hArchive)
 {	
 	int nLen = 0;
-	char szFile[60] = {};
+	char szFile[60] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -538,7 +538,7 @@ void __fastcall DATATBLS_LoadLevelTypesTxt(HD2ARCHIVE hArchive)
 			if (nLen > 1)
 			{
 				wsprintfA(szFile, "%s\\%s", "DATA\\GLOBAL\\TILES", sgptDataTables->pLvlTypesTxt[i].szFile[j]);
-				strcpy_s(sgptDataTables->pLvlTypesTxt[i].szFile[j], sizeof(sgptDataTables->pLvlTypesTxt[i].szFile[j]), szFile);
+				strcpy(sgptDataTables->pLvlTypesTxt[i].szFile[j], szFile);
 			}
 		}
 	}
@@ -582,7 +582,7 @@ void __stdcall DATATBLS_GetFileNameFromLevelTypeAndFileId(int nLevelType, int nF
 
 	if (pLevelTypesTxtRecord && nFile < 32)
 	{
-		strcpy_s(szFile, sizeof(pLevelTypesTxtRecord->szFile[nFile]), pLevelTypesTxtRecord->szFile[nFile]);
+		strcpy(szFile, pLevelTypesTxtRecord->szFile[nFile]);
 	}
 }
 
@@ -591,7 +591,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(HD2ARCHIVE hArchive, int a2)
 {
 	int nLength = 0;
 
-	char szBuffer[60] = {};
+	char szBuffer[60] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -646,7 +646,7 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(HD2ARCHIVE hArchive, int a2)
 				if (nLength > 1)
 				{
 					wsprintfA(szBuffer, "%s\\%s", "DATA\\GLOBAL\\TILES", sgptDataTables->pLvlPrestTxt[i].szFile[j]);
-					strcpy_s(sgptDataTables->pLvlPrestTxt[i].szFile[j], szBuffer);
+					strcpy(sgptDataTables->pLvlPrestTxt[i].szFile[j], szBuffer);
 				}
 
 				if (a2)
@@ -809,7 +809,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 	int nLength = 0;
 	uint32_t dwType = 0;
 	char* szFile = NULL;
-	char szBuffer[60] = {};
+	char szBuffer[60] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -896,7 +896,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 		if (nLength > 1)
 		{
 			wsprintfA(szBuffer, "%s\\%s", "DATA\\GLOBAL\\TILES", szFile);
-			strcpy_s(sgptDataTables->pLvlSubTxt[i].szFile, szBuffer);
+			strcpy(sgptDataTables->pLvlSubTxt[i].szFile, szBuffer);
 		}
 
 		if ((FOG_IsExpansion() || !sgptDataTables->pLvlSubTxt[i].dwExpansion) && (a2 || a3))

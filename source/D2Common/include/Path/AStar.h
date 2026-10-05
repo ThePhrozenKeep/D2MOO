@@ -23,9 +23,9 @@ struct D2PathFoWallNodeStrc					    //sizeof 0x38
 
 struct D2PathFoWallContextStrc						  //sizeof 0x32EC
 {
-	static const size_t CACHE_SIZE = 128;
-	static const size_t STORAGE_SIZE = 200;
-	static const size_t STACK_SIZE = 200;
+	enum { CACHE_SIZE = 128 };
+	enum { STORAGE_SIZE = 200 };
+	enum { STACK_SIZE = 200 };
 
 	D2PathFoWallNodeStrc* aPendingCache[CACHE_SIZE];  //0x0000 Open set
 	D2PathFoWallNodeStrc* aVisitedCache[CACHE_SIZE];  //0x0200 Closed set

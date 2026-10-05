@@ -53,7 +53,7 @@ struct D2PlrModeCallbackStrc
 };
 #pragma pack(pop)
 
-constexpr D2PlrModeCallbackStrc stru_6FD28EA0[] =
+D2_CONSTEXPR D2PlrModeCallbackStrc stru_6FD28EA0[] =
 {
     { nullptr,                                              PLRMODE_StartID_Death },
     { PLRMODE_StartXY_Neutral,                              nullptr },
@@ -473,9 +473,9 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                 }
 
                 D2UnitStrc* pDupedItem = ITEMS_Duplicate(pGame, pItem, pUnit, 1);
-                D2CoordStrc pCoord = {};
+                D2CoordStrc pCoord = { 0 };
                 UNITS_GetCoords(pUnit, &pCoord);
-                D2CoordStrc pReturnCoords = {};
+                D2CoordStrc pReturnCoords = { 0 };
                 D2GAME_DropItem_6FC52260(pGame, pUnit, pDupedItem, D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pCoord, &pReturnCoords, 1), pReturnCoords.nX, pReturnCoords.nY);
             }
         }
@@ -489,7 +489,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
     D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
     if (!pTargetRoom)
     {
-        char szMessage[256] = {};
+        char szMessage[256] = { 0 };
         FOG_DisplayAssert(FOG_csprintf(szMessage, "Server tried to place a player in an invalid room %d %d", nX, nY), __FILE__, __LINE__);
         exit(-1);
     }
@@ -582,9 +582,9 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                 }
                 else
                 {
-                    D2CoordStrc pCoord = {};
+                    D2CoordStrc pCoord = { 0 };
                     UNITS_GetCoords(pUnit, &pCoord);
-                    D2CoordStrc pReturnCoords = {};
+                    D2CoordStrc pReturnCoords = { 0 };
                     D2GAME_DropItem_6FC52260(pGame, pUnit, pDupedItem, D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pReturnCoords, &pCoord, 1), pReturnCoords.nX, pReturnCoords.nY);
                 }
             }
@@ -616,9 +616,9 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                     }
                     else
                     {
-                        D2CoordStrc pCoord = {};
+                        D2CoordStrc pCoord = { 0 };
                         UNITS_GetCoords(pUnit, &pCoord);
-                        D2CoordStrc pReturnCoords = {};
+                        D2CoordStrc pReturnCoords = { 0 };
                         D2GAME_DropItem_6FC52260(pGame, pUnit, pDupedItem, D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pCoord, &pReturnCoords, 1), pReturnCoords.nX, pReturnCoords.nY);
                     }
                 }
@@ -632,7 +632,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
 
     if (nGold > 0)
     {
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pDeadBody, &pCoord);
         D2UnitStrc* pGold = sub_6FC4FCA0(pGame, UNITS_GetRoom(pDeadBody), &pCoord, 4, 1, pUnit);
         if (pGold)
@@ -1294,7 +1294,7 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     {
         if (pUnit->dwUnitType == UNIT_PLAYER && pUnit->pInventory)
         {
-            D2UnkPlrModeStrc2 a2 = {};
+            D2UnkPlrModeStrc2 a2 = { 0 };
 
             D2SkillStrc* pLeftSkill = UNITS_GetLeftSkill(pUnit);
             if (pLeftSkill)
@@ -1716,9 +1716,8 @@ void __fastcall sub_6FC81B90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
 //D2Game.0x6FC81BD0
 void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t dwArg, int32_t dwArgEx)
 {
-    using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
-
-    constexpr EventCallbackFunction off_6FD28F40[] =
+    typedef void (__fastcall * EventCallbackFunction)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
+    D2_CONSTEXPR EventCallbackFunction off_6FD28F40[] =
     {
         sub_6FC81600,
         sub_6FC81250,
@@ -1736,9 +1735,9 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         D2GAME_PLRTRADE_Last_6FC937F0,
 		nullptr
     };
-	static_assert(EVENTTYPE_COUNT == std::size(off_6FD28F40), "missing callbacks");
+	static_assert(EVENTTYPE_COUNT == ARRAY_SIZE(off_6FD28F40), "missing callbacks");
 
-    if (nEvent >= 0 && nEvent <= std::size(off_6FD28F40))
+    if (nEvent >= 0 && nEvent <= ARRAY_SIZE(off_6FD28F40))
     {
         EventCallbackFunction pCallback = off_6FD28F40[nEvent];
         if (pCallback)

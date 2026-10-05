@@ -156,7 +156,7 @@ int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlay
         return 1;
     }
 
-    D2SaveHeaderStrc saveHeader = {};
+    D2SaveHeaderStrc saveHeader = { 0 };
     memset(&saveHeader, 0, sizeof(D2SaveHeaderStrc));
 
     saveHeader.dwHeaderMagic = D2SMAGIC_HEADER;
@@ -258,7 +258,7 @@ int32_t __fastcall PLRSAVE2_WriteWaypointData(D2GameStrc* pGame, D2UnitStrc* pUn
         return 2;
     }
 
-    D2WaypointSaveDataStrc waypointSaveData = {};
+    D2WaypointSaveDataStrc waypointSaveData = { 0 };
     waypointSaveData.nHeader = 'SW';
     waypointSaveData.unk0x02 = 1;
     waypointSaveData.nRecordSize = sizeof(D2WaypointSaveDataStrc);
@@ -288,7 +288,7 @@ int32_t __fastcall PLRSAVE2_WritePlrIntroSection(D2GameStrc* pGame, D2UnitStrc* 
         return 2;
     }
 
-    D2PlrIntroSaveStrc plrIntroSave = {};
+    D2PlrIntroSaveStrc plrIntroSave = { 0 };
     plrIntroSave.nHeader = 0x7701u;
     plrIntroSave.nLength = sizeof(D2PlrIntroSaveStrc);
 
@@ -315,12 +315,12 @@ int32_t __fastcall PLRSAVE2_WritePlayerStats(D2GameStrc* pGame, D2UnitStrc* pPla
 
     *(uint16_t*)*ppSection = 0x6667u;
 
-    D2BitBufferStrc bitBuffer = {};
+    D2BitBufferStrc bitBuffer = { 0 };
     BITMANIP_Initialize(&bitBuffer, pData, pEnd - pData);
 
     if (pPlayer->pStatListEx)
     {
-        D2StatStrc statBuffer[512] = {};
+        D2StatStrc statBuffer[512] = { D2StatStrc() };
         const int32_t nStats = STATLIST_GetBaseStatsData((D2StatListStrc*)pPlayer->pStatListEx, statBuffer, 512);
         
         for (int32_t i = 0; i < nStats; ++i)
@@ -531,7 +531,7 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
         return 2;
     }
 
-    uint8_t pQuestDataBuffer[298] = {};
+    uint8_t pQuestDataBuffer[298] = { 0 };
     *(uint32_t*)pQuestDataBuffer = '!ooW';
     *(uint32_t*)&pQuestDataBuffer[4] = 6;
     *(uint16_t*)&pQuestDataBuffer[8] = 298;
@@ -979,7 +979,7 @@ int32_t __fastcall PLRSAVE2_ReadStatsEx(D2GameStrc* pGame, D2UnitStrc* pUnit, ui
         return 18;
     }
 
-    D2BitBufferStrc bitBuffer = {};
+    D2BitBufferStrc bitBuffer = { 0 };
     BITMANIP_Initialize(&bitBuffer, pData, pEnd - pData);
     
     for (int32_t nStatId = BITMANIP_Read(&bitBuffer, 9); nStatId < 511; nStatId = BITMANIP_Read(&bitBuffer, 9))
@@ -1213,7 +1213,7 @@ D2UnitStrc* __fastcall PLRSAVE2_ReadMercData(D2GameStrc* pGame, D2UnitStrc* pPla
         return nullptr;
     }
 
-    D2MercSaveDataStrc hirelingData = {};
+    D2MercSaveDataStrc hirelingData = { 0 };
     memcpy(&hirelingData, pData, sizeof(hirelingData));
 
     D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, hirelingData.nHirelingId, 1);
@@ -1234,7 +1234,7 @@ D2UnitStrc* __fastcall PLRSAVE2_ReadMercData(D2GameStrc* pGame, D2UnitStrc* pPla
         return nullptr;
     }
 
-    D2PetInfoStrc petInfo = {};
+    D2PetInfoStrc petInfo = { 0 };
     petInfo.nSeed = hirelingData.nSeed;
     petInfo.wName = hirelingData.wName;
     petInfo.nHirelingId = hirelingData.nHirelingId;
@@ -1343,7 +1343,7 @@ int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
     uint8_t* pSection = *ppSection;
     uint32_t nSize = pEnd - pSection;
 
-    D2ItemSaveStrc pItemSave = {};
+    D2ItemSaveStrc pItemSave = { 0 };
     ITEMS_GetCompactItemDataFromBitstream(pSection, nSize, 1, &pItemSave);
 
     if (pItemSave.nClassId == -1)
@@ -1555,7 +1555,7 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 //D2Game.0x6FC8EF20
 int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
-    constexpr int32_t dwErrorCodesRemap_6FD292D0[] =
+    D2_CONSTEXPR int32_t dwErrorCodesRemap_6FD292D0[] =
     {
         SYSERROR_SUCCESS,                   // PLRSAVE2ERROR_SUCCESS = 0
         SYSERROR_UNK_14,                    // PLRSAVE2ERROR_UNKNOWN = 1

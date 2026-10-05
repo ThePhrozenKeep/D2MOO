@@ -1,16 +1,19 @@
 #pragma once
 
-#include <cstdint>
+// <cstdint> on a modern toolchain, plain typedefs on VC6, which has no <cstdint>.
+#include <D2StdInt.h>
 #include <Windows.h>
 
 typedef int32_t BOOL;
 
 // We want all of the structures to be packed since they come from reverse engineering
 // This also means that if we use external headers, they should be included before this header.
+#if !defined(_MSC_VER) || _MSC_VER >= 1600
 #pragma warning(error:4820 4121)
 #pragma warning(error:4189) // A variable is declared and initialized but not used.
 #pragma warning(error:4456) // declaration of 'identifier' hides previous local declaration
 #pragma warning(disable:28612) // "The enum type 'xxxx' is unscoped. Prefer 'enum class' over 'enum'"
+#endif
 
 // Windows.h defines its own, replace it
 #undef LOBYTE
@@ -56,12 +59,18 @@ typedef int32_t BOOL;
 
 #define ARRAY_SIZE(Array) (sizeof((Array)) / sizeof((Array)[0]))
 
+// ARRAY_SIZE for an array-typed data member named through its type: VC6 rejects
+// sizeof on a qualified non-static data member (C2070) but accepts the same member
+// through a pointer, which is never dereferenced.
+#define ARRAY_SIZE_OF_MEMBER(Type, Member) \
+	(sizeof(((Type*)0)->Member) / sizeof(((Type*)0)->Member[0]))
+
 #define D2_MAYBE_UNUSED(x) (void)(x)
 
 #pragma pack(push, 1)
 
-using D2UnitGUID = uint32_t;
-constexpr D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
+typedef uint32_t D2UnitGUID;
+D2_CONSTEXPR D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
 struct D2CoordStrc							//sizeof 0x08
 {

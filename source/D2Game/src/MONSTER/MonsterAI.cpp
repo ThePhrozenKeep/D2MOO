@@ -111,13 +111,13 @@ void __fastcall sub_6FC61270(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         SUNIT_RemoveUnit(pGame, pPet);
     }
 
-    D2HirelingInitStrc hirelingInit = {};
+    D2HirelingInitStrc hirelingInit = { 0 };
     if (!MONSTERS_HirelingInit(pGame->bExpansion, pPlayer, pMercData->dwSeed, MONSTERS_GetActFromHirelingTxt(pGame->bExpansion, 0, pMercData->nMercName), pGame->nDifficulty, &hirelingInit))
     {
         return;
     }
 
-    D2PetInfoStrc petInfo = {};
+    D2PetInfoStrc petInfo = { 0 };
     petInfo.nSeed = pMercData->dwSeed;
     petInfo.wName = pMercData->nMercName;
     petInfo.nHirelingId = hirelingInit.nId;
@@ -235,7 +235,7 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     const int32_t nDexterity = std::max(pHirelingTxtRecord->nDex + nLevelUps * pHirelingTxtRecord->nDexPerLvl / 8, 10);
     STATLIST_SetUnitStat(pHireling, STAT_DEXTERITY, nDexterity, 0);
 
-    const int32_t nHitpoints = std::max((pHirelingTxtRecord->dwHitpoints << 8) + nLevelUps * (pHirelingTxtRecord->dwHitpointsPerLvl << 8), (40u << 8));
+    const int32_t nHitpoints = std::max<uint32_t>((pHirelingTxtRecord->dwHitpoints << 8) + nLevelUps * (pHirelingTxtRecord->dwHitpointsPerLvl << 8), (40u << 8));
     STATLIST_SetUnitStat(pHireling, STAT_MAXHP, nHitpoints, 0);
     STATLIST_SetUnitStat(pHireling, STAT_HITPOINTS, nHitpoints, 0);
 
@@ -519,7 +519,7 @@ void __fastcall sub_6FC61C70(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
     D2TextHeaderStrc* pTextHeader = TEXT_AllocTextHeader(pGame->pMemoryPool);
     QUESTS_NPCActivate(pClient, pUnit, pTarget, pTextHeader);
 
-    D2GSPacketSrv27 packet27 = {};
+    D2GSPacketSrv27 packet27 = { 0 };
     packet27.nHeader = 0x27u;
     packet27.nUnitType = pTarget->dwUnitType;
     packet27.dwUnitGUID = pTarget->dwUnitId;

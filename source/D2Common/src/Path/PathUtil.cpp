@@ -41,7 +41,8 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 		}
 		else
 		{
-			*pOutPathPoint = { 0,0 };
+			pOutPathPoint->X = 0;
+			pOutPathPoint->Y = 0;
 		}
 	}
 

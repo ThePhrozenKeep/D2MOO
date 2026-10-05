@@ -71,8 +71,8 @@ int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int 
 	int nRecord = 0;
 	int nLevel = 0;
 	int nRand = 0;
-	D2HirelingTxt* pRecords[16] = {};
-	D2SeedStrc pSeed = {};
+	D2HirelingTxt* pRecords[16] = { 0 };
+	D2SeedStrc pSeed = { 0 };
 
 	SEED_InitSeed(&pSeed);
 	SEED_InitLowSeed(&pSeed, nLowSeed);
@@ -282,7 +282,7 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 0, 1, 3, 8, 0, 0 },
 	};
 
-	D2SeedStrc pSeed = {};
+	D2SeedStrc pSeed = { 0 };
 	int nIndex = 0;
 
 	if (nLowSeed && pHirelingInit && a3 <= 2 && pHirelingInit->nId >= 0 && pHirelingInit->nId <= 3)
@@ -880,7 +880,7 @@ int __stdcall MONSTERS_GetSpawnMode_XY(D2UnitStrc* pMonster, BOOL bFromMonster, 
 	D2_MAYBE_UNUSED(nSkillLevel);
 	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	if (bFromMonster && pMonster && pMonster->dwUnitType == UNIT_MONSTER)
 	{
@@ -951,7 +951,7 @@ void __stdcall MONSTERS_GetMinionSpawnInfo(D2UnitStrc* pMonster, int* pId, int* 
 {
 	int nChainId = 0;
 	int nBaseId = 0;
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	if (pMonster && pMonster->dwUnitType == UNIT_MONSTER)
 	{
@@ -1281,7 +1281,7 @@ struct D2ClassicStatAdjustmentStrc
 };
 
 //1.10f: D2Common.0x6FDD179C
-static D2ClassicStatAdjustmentStrc aClassicStatAdjustments[]
+static D2ClassicStatAdjustmentStrc aClassicStatAdjustments[] =
 {
 	{STAT_MAXHP, 1, 2, 1, 2},
 	{STAT_ARMORCLASS, 10, 12, 10, 12},
@@ -1298,8 +1298,9 @@ void __stdcall MONSTERS_ApplyClassicScaling(D2UnitStrc* pMonster, BOOL bExpansio
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pMonster->dwClassId);
 		if (pMonStatsTxtRecord && pMonStatsTxtRecord->nAlign != MONALIGN_GOOD)
 		{
-			for (const auto& rAdjustment : aClassicStatAdjustments)
+			for (size_t nAdjustment = 0; nAdjustment < ARRAY_SIZE(aClassicStatAdjustments); ++nAdjustment)
 			{
+				const D2ClassicStatAdjustmentStrc& rAdjustment = aClassicStatAdjustments[nAdjustment];
 				const int32_t nValue = STATLIST_UnitGetStatValue(pMonster, rAdjustment.nStatID, 0);
 				const int32_t nAdjustedValue = nDifficulty == DIFFMODE_NIGHTMARE
 					? DATATBLS_ApplyRatio(nValue, rAdjustment.nNightmareMultiplier, rAdjustment.nNightmareDivisor)

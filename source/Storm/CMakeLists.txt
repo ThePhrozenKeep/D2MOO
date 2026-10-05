@@ -17,13 +17,31 @@ else()
 	# `#include <storm/...>` resolves to them without touching any consumer.
 	# WITH_SQUALL=0 also makes Storm.h declare the retail Storm imports itself
 	# instead of pulling them in from Squall's headers.
-	target_link_libraries(${StormImplName} PUBLIC D2CommonDefinitions)
+	#
+	# Two of the vendored classes have out-of-line members (CCritSect wraps a
+	# CRITICAL_SECTION, HASHKEY_STR owns a Storm allocation), so they cannot be
+	# header-only. They go into a static library that every consumer of
+	# <storm/...> links, which is exactly how the squallstorm target supplies
+	# the real squall's CCritSect.cpp; without it the consumers -- D2Game
+	# embeds a CCritSect by value in its game-data table -- would have nothing
+	# to link the member functions against.
+	add_library(stormvendored STATIC
+	    src/CCritSect.cpp
+	    include/storm/hash/Hashkey.cpp
+	)
+	target_include_directories(stormvendored PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+	target_link_libraries(stormvendored PUBLIC D2CommonDefinitions)
+	target_compile_definitions(stormvendored PUBLIC WITH_SQUALL=0)
+	# Hashkey.cpp goes through Storm.h, which annotates the retail imports with
+	# this. Consumers get the same value from Storm's own interface, so it only
+	# has to be set while compiling these two files.
+	target_compile_definitions(stormvendored PRIVATE STORM_DLL_DECL= "__declspec( dllimport )")
+
+	target_link_libraries(${StormImplName} PUBLIC D2CommonDefinitions stormvendored)
 	target_compile_definitions(${StormImplName} PUBLIC WITH_SQUALL=0)
 	target_sources(${StormImplName}
 	  PRIVATE
 	    src/Storm.cpp
-	    src/CCritSect.cpp
-	    include/storm/hash/Hashkey.cpp
 
 	    include/Storm.h
 	    include/StormHandles.h

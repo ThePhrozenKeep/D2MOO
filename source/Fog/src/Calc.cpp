@@ -1,4 +1,4 @@
-#include <cstdint>
+#include <D2StdInt.h>
 #include <limits>
 
 #include <Calc.h>
@@ -163,6 +163,10 @@ static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGASTTyp
 	}
 }
 
+static bool Calc_ReachedEndOfBuffer(const FOGASTNodeStrc* pCurrentPos, const FOGASTNodeStrc* pStart, int32_t nBufferSize)
+{
+	return pCurrentPos - pStart >= nBufferSize;
+}
 
 //1.10f: 0x6FF51E30 (#10253)
 //1.13c: 0x6FF69E90 (#10253)
@@ -177,10 +181,7 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionB
 
 	// Note: This actually does not prevent reading more than 1 byte, which means that some of the functions below may read out of bounds...
 	//       Not fixing it to keep game behaviour
-	auto ReachedEndOfBuffer = [&]()
-	{
-		return pBufferCurrentPos - pExpressionBuffer >= nExpressionBufferSize;
-	};
+	#define ReachedEndOfBuffer() Calc_ReachedEndOfBuffer(pBufferCurrentPos, pExpressionBuffer, nExpressionBufferSize)
 
 	Fog64IntStack tCalcStack;
 	tCalcStack.nSize = 0;
@@ -250,7 +251,7 @@ static FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTN
 {
 	FOGASTNodeStrc* pNewExpressionBufferPos;
 
-	if (std::numeric_limits<int8_t>::lowest() <= nValue && nValue <= std::numeric_limits<int8_t>::max())
+	if (std::numeric_limits<int8_t>::min() <= nValue && nValue <= std::numeric_limits<int8_t>::max())
 	{
 		const int nPayloadSize = 1 + sizeof(int8_t);
 		if (pExpressionBufferPos - pExpressionBufferStart >= szBufferSize) // Can overflow...
@@ -262,7 +263,7 @@ static FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTN
 		pExpressionBufferPos[1].nRawValue = nValue;
 		pNewExpressionBufferPos = pExpressionBufferPos + nPayloadSize;
 	}
-	else if (std::numeric_limits<int16_t>::lowest() <= nValue && nValue <= std::numeric_limits<int16_t>::max())
+	else if (std::numeric_limits<int16_t>::min() <= nValue && nValue <= std::numeric_limits<int16_t>::max())
 	{
 		const int nPayloadSize = 1 + sizeof(int16_t);
 		if (pExpressionBufferPos - pExpressionBufferStart + nPayloadSize >= szBufferSize)

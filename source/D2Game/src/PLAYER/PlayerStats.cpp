@@ -18,7 +18,7 @@
 //D2Game.0x6FC7EA50
 void __fastcall PLAYERSTATS_SetStatsForStartingAct(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nAct)
 {
-    constexpr int32_t nTargetLevels[] =
+    D2_CONSTEXPR int32_t nTargetLevels[] =
     {
         1, 15, 20, 26, 32
     };
@@ -63,7 +63,7 @@ void __fastcall PLAYERSTATS_SetStatsForStartingAct(D2GameStrc* pGame, D2UnitStrc
     }
 
     int32_t nIndex = nAct;
-    if (nIndex >= std::size(nTargetLevels))
+    if (nIndex >= ARRAY_SIZE(nTargetLevels))
     {
         nIndex = 0;
     }

@@ -72,7 +72,7 @@ int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
 
     D2PartyControlStrc* pPartyControl = pGame->pPartyControl;
 
-    int16_t nPartyId = std::max(pPartyControl->field_0, 3i16);
+    int16_t nPartyId = std::max(pPartyControl->field_0, (int16_t)3);
 
     while (1)
     {
@@ -89,7 +89,7 @@ int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
 
         ++nPartyId;
 
-        nPartyId = std::max(nPartyId, 3i16);
+        nPartyId = std::max(nPartyId, (int16_t)3);
     }
 
     pPartyControl->field_0 = nPartyId + 1;
@@ -306,14 +306,14 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
-        return pCallback(pGame, pUnit, pArgs);
+        pCallback(pGame, pUnit, pArgs);
     }
 
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
     const int32_t nPartyId = SUNIT_GetPartyId(pUnit);
     if (nPartyId == -1)
     {
-        return pCallback(pGame, pUnit, pArgs);
+        pCallback(pGame, pUnit, pArgs);
     }
 
     D2_ASSERT(pGame->pPartyControl);

@@ -1,9 +1,8 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
-
-constexpr uint32_t MAX_MSG_SIZE = 516;
+D2_CONSTEXPR uint32_t MAX_MSG_SIZE = 516;
 
 
 #pragma pack(push, 1)

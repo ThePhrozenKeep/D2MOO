@@ -82,7 +82,7 @@ void __stdcall sub_6FC62020(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, in
         return;
     }
 
-    uint8_t indices[16] = {};
+    uint8_t indices[16] = { 0 };
     int32_t nMaxIndex = 0;
     for (int32_t i = 0; i < 16; ++i)
     {

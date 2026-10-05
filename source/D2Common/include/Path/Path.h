@@ -38,7 +38,7 @@ enum D2PathTypes
 	PATHTYPE_COUNT = 18
 };
 
-enum D2PathFlags : uint32_t {
+D2_TYPED_ENUM(D2PathFlags, uint32_t) {
 	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
 	PATH_CURRENT_ROOM_INVALID = 0x00002,
 	PATH_UNUSED_FLAG_0x00004  = 0x00004, // This is unused
@@ -88,13 +88,13 @@ union D2FP32_16
 		uint32_t dwPrecisionX;				//0x00
 		uint32_t dwPrecisionY;				//0x04
 	};
-	D2PathPointStrc ToPathPoint() const { return { wPosX,wPosY }; }
+	D2PathPointStrc ToPathPoint() const { D2PathPointStrc tPoint = { 0 }; tPoint.X = wPosX; tPoint.Y = wPosY; return tPoint; }
 };
 
 struct D2DynamicPathStrc
 {
-	static const size_t MAXPATHLEN = 78;
-	static const size_t PATH_MAX_STEP_LEN = 10;
+	enum { MAXPATHLEN = 78 };
+	enum { PATH_MAX_STEP_LEN = 10 };
 
 	D2FP32_16 tGameCoords;						//0x00
 	int32_t dwClientCoordX;						//0x08

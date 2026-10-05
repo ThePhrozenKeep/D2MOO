@@ -212,7 +212,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 	D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
 	//UNITS_GetCoords(pDarkWanderer, &pCoord); // TODO: Was this meant to be used on pCoords?
 
-	D2CoordStrc pCoords = {};
+	D2CoordStrc pCoords = { 0 };
 
 	for (int32_t i = SEED_RollRandomNumber(pSeed) & 1; i < ARRAY_SIZE(pAdjustCoords); ++i)
 	{

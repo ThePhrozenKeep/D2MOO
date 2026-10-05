@@ -33,7 +33,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 	int nArea = 0;
 	int nX = 0;
 	int nY = 0;
-	D2CoordStrc pCoord[256] = {};
+	D2CoordStrc pCoord[256] = { 0 };
 
 	pLvlSubTxtRecord = DATATBLS_GetLvlSubTxtRecord(a1->nLvlSubId);
 
@@ -575,7 +575,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 			}
 			else
 			{
-				D2CoordStrc tCoords[256] = {};
+				D2CoordStrc tCoords[256] = { 0 };
 
 				const int nPotentialPositionsArea = nAvailableSpaceX * nAvailableSpaceY;
 				for (int i = 0; i < nPotentialPositionsArea; ++i)
@@ -618,7 +618,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt* pLvlSubTxtRecord)
 {
 	D2DrlgFileStrc** ppDrlgFile = NULL;
-	D2DrlgCoordStrc pDrlgCoord = {};
+	D2DrlgCoordStrc pDrlgCoord = { 0 };
 
 	ppDrlgFile = &pLvlSubTxtRecord->pDrlgFile;
 

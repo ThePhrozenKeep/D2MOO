@@ -253,7 +253,7 @@ int32_t __fastcall ACT5Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 //D2Game.0x6FCB2230
 void __fastcall ACT5Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	constexpr uint32_t gdwAct5Q2RuneCodes[] =
+	D2_CONSTEXPR uint32_t gdwAct5Q2RuneCodes[] =
 	{
 		' 70r', ' 80r', ' 90r'
 	};
@@ -330,7 +330,7 @@ void __fastcall ACT5Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 					D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pQuestArg->pPlayer, __FILE__, __LINE__);
 
-					D2GSPacketSrv5D packet5D = {};
+					D2GSPacketSrv5D packet5D = { 0 };
 					packet5D.nHeader = 0x5D;
 					packet5D.nQuestId = QUEST_A5Q2_RESCUESOLDIERS;
 					packet5D.nFlags = 2;
@@ -863,7 +863,7 @@ void __fastcall ACT5Q2_UpdateQuestState(D2GameStrc* pGame, D2UnitStrc* pPlayer, 
 					return;
 				}
 
-				D2CoordStrc pCoord = {}; pCoord.nX = pQuestDataEx->pWussieCoords[i].nX + 12;
+				D2CoordStrc pCoord = { 0 }; pCoord.nX = pQuestDataEx->pWussieCoords[i].nX + 12;
 				pCoord.nY = pQuestDataEx->pWussieCoords[i].nY;
 				D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pWussie);
 				D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);

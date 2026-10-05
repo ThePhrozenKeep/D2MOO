@@ -10,7 +10,7 @@
 //Inlined in some functions
 uint32_t __fastcall DATATBLS_StringToCode(char* szText)
 {
-	char dwCode[4] = {};
+	char dwCode[4] = { 0 };
 
 	if (szText[0])
 	{
@@ -98,7 +98,7 @@ void __fastcall DATATBLS_MonStatsSkillModeLinker(char* pSrc, void* pRecord, int 
 	unsigned int nInverseLength = 0;
 	char szCurrentChar = 0;
 	char nMode = 0;
-	char szMode[4] = {};
+	char szMode[4] = { 0 };
 
 	pMonStatsTxtRecord = (D2MonStatsTxt*)pRecord;
 	if (pRecord && nOffset >= 0 && nOffset < 8)
@@ -154,7 +154,7 @@ void __fastcall DATATBLS_MonStatsSkillModeLinker(char* pSrc, void* pRecord, int 
 //D2Common.0x6FD64DF0
 void __fastcall DATATBLS_LoadMonStatsTxt(HD2ARCHIVE hArchive)
 {
-	long long v21 = 0; //TODO: Check / Remove
+	int64_t v21 = 0; //TODO: Check / Remove
 
 	char* szMonsterName = NULL;
 	int nNextInClass = 0;
@@ -932,9 +932,9 @@ int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, si
 {
 	if (nDivisor)
 	{
-		if (nValue <= 0x100'000)
+		if (nValue <= 0x100000)
 		{
-			if (nMultiplier <= 0x10'000)
+			if (nMultiplier <= 0x10000)
 			{
 				return nMultiplier * nValue / nDivisor;
 			}
@@ -2231,7 +2231,7 @@ int __fastcall DATATBLS_CheckNestedMonsterTypes(int nMonType1, int nMonType2)
 	D2MonTypeTxt* pMonTypeTxtRecord = NULL;
 	int nMonsterType = 0;
 	int nIndex = 0;
-	int nParentMonsterTypes[129] = {};
+	int nParentMonsterTypes[129] = { 0 };
 
 	if (nMonType2 <= 0)
 	{
@@ -2687,7 +2687,7 @@ void __fastcall DATATBLS_LoadSomeMonsterTxts(HD2ARCHIVE hArchive)
 	D2TCExShortStrc** ppTCEx = NULL;
 	int nTxtRow = 0;
 
-	char szChest[256] = {};
+	char szChest[256] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{
@@ -2758,8 +2758,8 @@ void __fastcall DATATBLS_CreateItemTypeTreasureClasses()
 	int nLevel = 0;
 	int nTypes = 0;
 
-	char v37[8] = {};
-	char dest[32] = {};
+	char v37[8] = { 0 };
+	char dest[32] = { 0 };
 
 	FOG_10216_AddRecordToLinkingTable(sgptDataTables->pTreasureClassExLinker, &sgptDataTables->szDefaultString);
 

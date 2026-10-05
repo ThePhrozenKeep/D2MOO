@@ -651,7 +651,7 @@ void __fastcall DRLGOUTPLACE_SetBlankBorderGridCells(D2DrlgLevelStrc* pLevel)
 		{
 			for (int i = nX; !DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, j).nUnkb00; i += nDirX)
 			{
-				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 				tPackedInfo.nUnkb08 = true;
 				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], i, j, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 			}
@@ -670,7 +670,7 @@ void __fastcall DRLGOUTPLACE_SetOutGridLinkFlags(D2DrlgLevelStrc* pLevel)
 		if (pVertex->dwFlags & 1)
 		{
 			sub_6FD75DE0(&pLevel->pOutdoors->pGrid[1], pVertex, DRLGOUTDOORS_GetOutLinkVisFlag(pLevel, pVertex), FLAG_OPERATION_OR, 1);
-			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo{ 0 };
+			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 			tPackedInfo.nUnkb00 = true;
 			tPackedInfo.bHasDirection = pVertex->nDirection != 0;
 			sub_6FD75DE0(&pLevel->pOutdoors->pGrid[2], pVertex, tPackedInfo.nPackedValue, FLAG_OPERATION_OR, 1);
@@ -720,7 +720,7 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 	pDrlgVertex = pLevel->pOutdoors->pVertex;
 	pNextVertex = pDrlgVertex->pNext;
 
-	D2DrlgOutdoorPackedGrid2InfoStrc tLvlPrestPackedInfo{ 0 };
+	D2DrlgOutdoorPackedGrid2InfoStrc tLvlPrestPackedInfo = { 0 };
 
 	do
 	{
@@ -827,7 +827,7 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 				}
 				nY += nCurrentDiffYAbs * nDiff / 2;
 
-				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd{ 0 };
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd = { 0 };
 				tPackedInfoToAdd.bLvlLink = true;
 				tPackedInfoToAdd.nPickedFile = (pLevel->nLevelId == LEVEL_BURIALGROUNDS) ? 4 : 3;
 				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
@@ -856,7 +856,7 @@ void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 				}
 				nY += nCurrentDiffYAbs * nDiff / 2;
 
-				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd{ 0 };
+				D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfoToAdd = { 0 };
 				tPackedInfoToAdd.bLvlLink = true;
 				tPackedInfoToAdd.nPickedFile = 3;
 				DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nX, nY, 0xF0000, FLAG_OPERATION_AND_NEGATED);
@@ -1734,7 +1734,7 @@ void __fastcall sub_6FD82360(D2DrlgLevelStrc* pLevel, int nIteration, int* pRand
 //TODO: v28 stuff
 void __fastcall sub_6FD823C0(D2DrlgStrc* pDrlg, D2DrlgLinkStrc* pDrlgLink, int(__fastcall* a3)(D2DrlgLevelLinkDataStrc*, int), void(__fastcall* a4)(D2DrlgLevelStrc*, int, int*))
 {
-	D2DrlgLevelLinkDataStrc pLevelLinkData = {};
+	D2DrlgLevelLinkDataStrc pLevelLinkData = { 0 };
 	D2LevelDefBin* pLevelDefBinRecord = NULL;
 	D2DrlgPresetInfoStrc* pPresetInfo = NULL;
 	D2DrlgWarpStrc* pDrlgWarp1 = NULL;
@@ -2146,6 +2146,24 @@ static void DRLG_GenerateJunglesAttachPoints(
 	}
 }
 
+static void DRLG_JungleUpdateAccordingToPreset1(
+	const int32_t* pPreset0,
+	const int32_t* pPreset1,
+	int32_t nPreset0CurrentValue,
+	int32_t* pLastDirPreset1Value,
+	int32_t* pFlags,
+	int32_t nPresetIndex,
+	int32_t nDirectionFlag)
+{
+	const int32_t nPreset1Value = pPreset1[nPresetIndex];
+	if (nPreset1Value != 0 && nPreset1Value < *pLastDirPreset1Value
+		&& pPreset0[nPresetIndex] == nPreset0CurrentValue)
+	{
+		*pFlags = nDirectionFlag;
+		*pLastDirPreset1Value = nPreset1Value;
+	}
+}
+
 static void DRLG_JungleComputeConnexity(
 	D2DrlgStrc* pDrlg,
 	int32_t nPresetsWidth,
@@ -2178,21 +2196,10 @@ static void DRLG_JungleComputeConnexity(
 			{
 				const int32_t nPreset0CurrentValue = pPreset0[nCurrentPresetIndex];
 
-				auto UpdateAccordingToPreset1 = [pPreset0, pPreset1, nPreset0CurrentValue, &nLastDirPreset1Value, &nFlags](int32_t nPresetIndex, int32_t nDirectionFlag)
-				{
-					const int32_t nPreset1Value = pPreset1[nPresetIndex];
-					if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value
-						&& pPreset0[nPresetIndex] == nPreset0CurrentValue)
-					{
-						nFlags = nDirectionFlag;
-						nLastDirPreset1Value = nPreset1Value;
-					}
-				};
-
-				UpdateAccordingToPreset1(nTopPresetIndex, JUNGLE_FLAG_TOP_);
-				UpdateAccordingToPreset1(nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_);
-				UpdateAccordingToPreset1(nRightPresetIndex, JUNGLE_FLAG_RIGHT_);
-				UpdateAccordingToPreset1(nLeftPresetIndex, JUNGLE_FLAG_LEFT_);
+				DRLG_JungleUpdateAccordingToPreset1(pPreset0, pPreset1, nPreset0CurrentValue, &nLastDirPreset1Value, &nFlags, nTopPresetIndex, JUNGLE_FLAG_TOP_);
+				DRLG_JungleUpdateAccordingToPreset1(pPreset0, pPreset1, nPreset0CurrentValue, &nLastDirPreset1Value, &nFlags, nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_);
+				DRLG_JungleUpdateAccordingToPreset1(pPreset0, pPreset1, nPreset0CurrentValue, &nLastDirPreset1Value, &nFlags, nRightPresetIndex, JUNGLE_FLAG_RIGHT_);
+				DRLG_JungleUpdateAccordingToPreset1(pPreset0, pPreset1, nPreset0CurrentValue, &nLastDirPreset1Value, &nFlags, nLeftPresetIndex, JUNGLE_FLAG_LEFT_);
 
 
 
@@ -2244,6 +2251,83 @@ static void DRLG_JungleComputeConnexity(
 }
 
 
+// The three checks DRLG_JungleLookForDirection runs against each preset it
+// walks past, and the state they share.
+struct D2JungleDirectionScanStrc
+{
+	int32_t* pPreset0;					//0x00
+	const int32_t* pPreset2;			//0x04
+	const int32_t* pLevelPresetId;		//0x08
+	int32_t nPreset0CurrentValue;		//0x0C
+	int32_t* pCurrentPresetLevelId;		//0x10
+	bool* pLookAtNextDirection;			//0x14
+};
+
+typedef void (DRLG_JungleCheckDirection_t)(D2JungleDirectionScanStrc* pScan, int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd);
+
+static void DRLG_JungleCheckSamePreset0(D2JungleDirectionScanStrc* pScan, int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd)
+{
+	if (pScan->pPreset0[nPresetIndex] == pScan->nPreset0CurrentValue
+		&& pScan->pLevelPresetId[nPresetIndex] && pScan->pLevelPresetId[nPresetIndex] < 15)
+	{
+		*pScan->pCurrentPresetLevelId |= (nFlagToAdd << 4);
+		*pScan->pLookAtNextDirection = false;
+	}
+}
+
+static void DRLG_JungleCheckAttachPoint(D2JungleDirectionScanStrc* pScan, int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd)
+{
+	if (pScan->pPreset0[nPresetIndex] != pScan->nPreset0CurrentValue
+		&& pScan->pPreset2[nPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
+	{
+		*pScan->pCurrentPresetLevelId |= (nFlagToAdd << 4);
+		*pScan->pLookAtNextDirection = false;
+	}
+}
+
+static void DRLG_JungleCheckNewDirection(D2JungleDirectionScanStrc* pScan, int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd)
+{
+	if (pScan->pLevelPresetId[nPresetIndex] && pScan->pLevelPresetId[nPresetIndex] < 15
+		&& ((*pScan->pCurrentPresetLevelId & (nFlagToAdd << 4)) == 0)
+		)
+	{
+		*pScan->pCurrentPresetLevelId |= (nFlagToAdd << 4);
+		*pScan->pLookAtNextDirection = false;
+	}
+}
+
+static void DRLG_JungleLookForDirection(
+	DRLG_JungleCheckDirection_t pCheckDirectionFunction,
+	D2JungleDirectionScanStrc* pScan,
+	int32_t nDirectionBase,
+	int32_t nTopPresetIndex,
+	int32_t nBottomPresetIndex,
+	int32_t nRightPresetIndex,
+	int32_t nLeftPresetIndex)
+{
+	for (int i = 0; i < DIRECTION_COUNT && *pScan->pLookAtNextDirection; i++)
+	{
+		switch ((nDirectionBase + i) % DIRECTION_COUNT)
+		{
+		case DIRECTION_SOUTHWEST:
+			pCheckDirectionFunction(pScan, nTopPresetIndex, JUNGLE_FLAG_TOP_);
+			break;
+		case DIRECTION_NORTHWEST:
+			pCheckDirectionFunction(pScan, nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_);
+			break;
+		case DIRECTION_SOUTHEAST:
+			pCheckDirectionFunction(pScan, nRightPresetIndex, JUNGLE_FLAG_RIGHT_);
+			break;
+		case DIRECTION_NORTHEAST:
+			pCheckDirectionFunction(pScan, nLeftPresetIndex, JUNGLE_FLAG_LEFT_);
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+
 // Returns false if we need to generate a new map due to invalid attach points
 static bool DRLG_JungleUpdateAttachPointsDirections(
 	D2DrlgStrc* pDrlg,
@@ -2276,41 +2360,17 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 				bool bHadNoPresetLeveld = nCurrentPresetLevelId == 0;
 
 				bool bLookAtNextDirection;
-				auto LookForDirection = [&](auto&& CheckDirectionFunction)
-				{
-					for (int i = 0; i < DIRECTION_COUNT && bLookAtNextDirection; i++)
-					{
-						switch ((nDirectionBase + i) % DIRECTION_COUNT)
-						{
-						case DIRECTION_SOUTHWEST:
-							CheckDirectionFunction(nTopPresetIndex, JUNGLE_FLAG_TOP_);
-							break;
-						case DIRECTION_NORTHWEST:
-							CheckDirectionFunction(nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_);
-							break;
-						case DIRECTION_SOUTHEAST:
-							CheckDirectionFunction(nRightPresetIndex, JUNGLE_FLAG_RIGHT_);
-							break;
-						case DIRECTION_NORTHEAST:
-							CheckDirectionFunction(nLeftPresetIndex, JUNGLE_FLAG_LEFT_);
-							break;
-						default:
-							break;
-						}
-					}
-				};
+				D2JungleDirectionScanStrc tScan = { 0 };
+				tScan.pPreset0 = pPreset0;
+				tScan.pPreset2 = pPreset2;
+				tScan.pLevelPresetId = pLevelPresetId;
+				tScan.nPreset0CurrentValue = nPreset0CurrentValue;
+				tScan.pCurrentPresetLevelId = &nCurrentPresetLevelId;
+				tScan.pLookAtNextDirection = &bLookAtNextDirection;
 
 
 				bLookAtNextDirection = true;
-				LookForDirection([&](int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd) {
-					if (pPreset0[nPresetIndex] == nPreset0CurrentValue
-						&& pLevelPresetId[nPresetIndex] && pLevelPresetId[nPresetIndex] < 15)
-					{
-						nCurrentPresetLevelId |= (nFlagToAdd << 4);
-						bLookAtNextDirection = false;
-					}
-					}
-				);
+				DRLG_JungleLookForDirection(DRLG_JungleCheckSamePreset0, &tScan, nDirectionBase, nTopPresetIndex, nBottomPresetIndex, nRightPresetIndex, nLeftPresetIndex);
 
 				// If we found nothing, start generation all over
 				if (!nCurrentPresetLevelId)
@@ -2320,33 +2380,14 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 				if (bHadNoPresetLeveld)
 				{
 					bLookAtNextDirection = true;
-					LookForDirection([&](int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd) {
-
-						if (pPreset0[nPresetIndex] != nPreset0CurrentValue
-							&& pPreset2[nPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
-						{
-							nCurrentPresetLevelId |= (nFlagToAdd << 4);
-							bLookAtNextDirection = false;
-						}
-						}
-					);
+					DRLG_JungleLookForDirection(DRLG_JungleCheckAttachPoint, &tScan, nDirectionBase, nTopPresetIndex, nBottomPresetIndex, nRightPresetIndex, nLeftPresetIndex);
 
 					bLookAtNextDirection = SEED_RollLimitedRandomNumber(&pDrlg->pSeed, 2) != 0 && bLookAtNextDirection;
 
 					// Roll a new direction start
 					nDirectionBase = SEED_RollLimitedRandomNumber(&pDrlg->pSeed, DIRECTION_COUNT);
 
-					LookForDirection([&](int32_t nPresetIndex, D2JunglePresetFlags nFlagToAdd) {
-
-						if (pLevelPresetId[nPresetIndex] && pLevelPresetId[nPresetIndex] < 15
-							&& ((nCurrentPresetLevelId & (nFlagToAdd << 4)) == 0)
-							)
-						{
-							nCurrentPresetLevelId |= (nFlagToAdd << 4);
-							bLookAtNextDirection = false;
-						}
-						}
-					);
+					DRLG_JungleLookForDirection(DRLG_JungleCheckNewDirection, &tScan, nDirectionBase, nTopPresetIndex, nBottomPresetIndex, nRightPresetIndex, nLeftPresetIndex);
 				}
 
 				if ((nCurrentPresetLevelId & (JUNGLE_FLAG_TOP_ << 4)) != 0)
@@ -2406,6 +2447,12 @@ static D2C_LvlPrestIds DRLG_JungleNormalizeLevelPresetId(int32_t nLevelPresetId)
 		if (nPDef == LVLPREST_NONE) FOG_DisplayWarning("nPDef != PRESET_DEF_NONE", __FILE__, __LINE__);
 	}
 	return (D2C_LvlPrestIds)nPDef;
+}
+
+// Order from higher to lower nPosY
+static bool DRLG_JungleSortByYDescending(const D2JungleStrc& lhs, const D2JungleStrc& rhs)
+{
+	return lhs.pDrlgCoord.nPosY > rhs.pDrlgCoord.nPosY;
 }
 
 // D2Common.0x6FD82820
@@ -2536,11 +2583,7 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		}
 	}
 
-	std::sort(tJungles, tJungles + JUNGLE_MAX_ATTACH, 
-		[](const auto& lhs, const auto& rhs) 
-		{ // Order from higher to lower nPosY
-			return lhs.pDrlgCoord.nPosY > rhs.pDrlgCoord.nPosY; 
-		});
+	std::sort(tJungles, tJungles + JUNGLE_MAX_ATTACH, DRLG_JungleSortByYDescending);
 
 	D2DrlgLevelStrc* pJungleLevel = nullptr;
 	for (int i = 0; i < JUNGLE_MAX_ATTACH; ++i)
@@ -2618,7 +2661,7 @@ void __fastcall sub_6FD83970(D2DrlgCoordStrc* pDrlgCoord, D2JungleStrc* pJungle,
 //D2Common.0x6FD83A20
 void __fastcall DRLGOUTPLACE_InitOutdoorRoomGrids(D2DrlgRoomStrc* pDrlgRoom)
 {
-	D2UnkOutdoorStrc2 a1 = {};
+	D2UnkOutdoorStrc2 a1 = { 0 };
 
 	D2LevelDefBin* pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(pDrlgRoom->pLevel->nLevelId);
 

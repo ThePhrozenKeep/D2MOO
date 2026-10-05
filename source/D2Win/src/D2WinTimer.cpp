@@ -66,7 +66,7 @@ int32_t __fastcall sub_6F8B1C60(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	SMSGHANDLER_PARAMS msg = {};
+	SMSGHANDLER_PARAMS msg = { 0 };
 	msg.hWindow = (HWND)pTimer;
 
 	if (pTimer->controlHeader.field_34)
@@ -95,7 +95,7 @@ int32_t __fastcall sub_6F8B1CF0(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	SMSGHANDLER_PARAMS pMsg = {};
+	SMSGHANDLER_PARAMS pMsg = { 0 };
 	pMsg.hWindow = (HWND)pTimer;
 
 	if (pTimer->controlHeader.field_34)

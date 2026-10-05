@@ -76,7 +76,7 @@
 
 
 //D2Game.0x6FD2FB78
-constexpr ObjOperateFunction gpObjOperateFnTable[] =
+D2_CONSTEXPR ObjOperateFunction gpObjOperateFnTable[] =
 {
     nullptr,
     OBJECTS_OperateFunction01_Casket,
@@ -264,7 +264,7 @@ void __fastcall sub_6FC74B00(D2GameStrc* pGame, D2UnitStrc* pObject)
 //D2Game.0x6FC74B40
 void __fastcall sub_6FC74B40(D2GameStrc* pGame, D2UnitStrc* pObject)
 {
-    constexpr uint8_t nObjectRegenerateModes = 2;
+    D2_CONSTEXPR uint8_t nObjectRegenerateModes = 2;
     const uint8_t nLeft = pObject->pObjectData->InteractType;
 
     D2ObjectsTxt* pObjectsTxtRecord = UNITS_GetObjectTxtRecordFromObject(pObject);
@@ -336,7 +336,7 @@ void __fastcall sub_6FC74D10(D2GameStrc* pGame, D2UnitStrc* pObject)
 
     D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject ? pObject->dwClassId : -1);
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pObject, &pCoord);
 
     for (D2UnitStrc* i = UNITS_GetRoom(pObject)->pUnitFirst; i; i = i->pRoomNext)
@@ -371,7 +371,7 @@ void __fastcall sub_6FC74DF0(D2GameStrc* pGame, D2UnitStrc* pObject)
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
     const uint8_t nTrapType = pObject->pObjectData->InteractType & 127;
-    if (nTrapType >= std::size(gpObjectTrapHandlerTable_6FD2FB48))
+    if (nTrapType >= ARRAY_SIZE(gpObjectTrapHandlerTable_6FD2FB48))
     {
         return;
     }
@@ -464,7 +464,7 @@ void __fastcall D2GAME_SpikeTraps_6FC74F60(D2GameStrc* pGame, D2UnitStrc* pObjec
         v10 = 1;
     }
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pObject, &pCoord);
 
     int32_t v8 = 0;
@@ -544,7 +544,7 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
 
             D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
-            D2CoordStrc pCoord = {};
+            D2CoordStrc pCoord = { 0 };
             UNITS_GetCoords(pObject, &pCoord);
 
             for (D2UnitStrc* i = pRoom->pUnitFirst; i; i = i->pRoomNext)
@@ -559,7 +559,7 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
         }
         else
         {
-            D2ObjOperateFnStrc pOp = {};
+            D2ObjOperateFnStrc pOp = { 0 };
             pOp.pGame = pGame;
             pOp.pObject = pObject;
             pOp.pPlayer = nullptr;
@@ -586,7 +586,7 @@ void __fastcall sub_6FC750D0(D2GameStrc* pGame, D2UnitStrc* pObject)
 //D2Game.0x6FC75250
 void __fastcall D2GAME_OBJMODE_InvokeEventFunction_6FC75250(D2GameStrc* pGame, D2UnitStrc* pObject, int32_t nEventType)
 {
-	using ObjEventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+	typedef void (__fastcall * ObjEventCallbackFunction)(D2GameStrc*, D2UnitStrc*);
     static ObjEventCallbackFunction gpEventFunctions_6FD28CD8[]=
     {
         sub_6FC74D10,
@@ -605,7 +605,7 @@ void __fastcall D2GAME_OBJMODE_InvokeEventFunction_6FC75250(D2GameStrc* pGame, D
         nullptr,
         nullptr,
     };
-	static_assert(EVENTTYPE_COUNT == std::size(gpEventFunctions_6FD28CD8), "missing callbacks");
+	static_assert(EVENTTYPE_COUNT == ARRAY_SIZE(gpEventFunctions_6FD28CD8), "missing callbacks");
 
 	if (IsBadCodePtr((FARPROC)gpEventFunctions_6FD28CD8[nEventType]))
     {
@@ -743,13 +743,13 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
             }
         }
 
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pUnit, &pCoord);
         if (COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x1C09, 0) && pPlayer && sub_6FCBDFE0(pPlayer->pGame, pPlayer, pRoom, pCoord.nX, pCoord.nY, 0, 0))
         {
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
-            D2GSPacketSrv07 packet07 = {};
+            D2GSPacketSrv07 packet07 = { 0 };
             packet07.nHeader = 0x07;
             packet07.nX = (WORD)pRoom->tCoords.nTileXPos;
             packet07.nY = (WORD)pRoom->tCoords.nTileYPos;
@@ -799,7 +799,7 @@ int32_t __fastcall OBJECTS_OperateFunction08_Door(D2ObjOperateFnStrc* pOp, int32
     D2UnitStrc* pObject = pOp->pObject;
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pObject, &pCoord);
     
     const int32_t nSizeX = UNITS_GetUnitSizeX(pObject);
@@ -967,7 +967,7 @@ int32_t __fastcall OBJECTS_OperateFunction61_HarrogathMainGate(D2ObjOperateFnStr
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pObject, &pCoord);
 
     const uint32_t nTickCount = GetTickCount();
@@ -1043,7 +1043,7 @@ int32_t __fastcall OBJECTS_OperateFunction29_SlimeDoor(D2ObjOperateFnStrc* pOp, 
 //D2Game.0x6FC75AC0
 void __fastcall D2GAME_OBJECTS_TrapHandler8_9_6FC75AC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2ObjOperateFnStrc op = {};
+    D2ObjOperateFnStrc op = { 0 };
     
     op.pObject = pUnit;
     op.pObjectregion = OBJRGN_GetObjectControlFromGame(pGame);
@@ -1080,7 +1080,7 @@ void __fastcall D2GAME_SpawnTrapMonster_6FC75B40(D2ObjOperateFnStrc* pOp, int32_
 //D2Game.0x6FC75BC0
 void __fastcall D2GAME_OBJECTS_TrapHandler5_7_6FC75BC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
     
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -1090,7 +1090,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler5_7_6FC75BC0(D2GameStrc* pGame, D2Unit
         D2GAME_SetSparkChest_6FCBD7C0(pFireLarge, 2);
     }
 
-    D2DrlgCoordsStrc drlgCoords = {};
+    D2DrlgCoordsStrc drlgCoords = { 0 };
     DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
     const int32_t nX = pCoord.nX + 1;
@@ -1104,7 +1104,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler5_7_6FC75BC0(D2GameStrc* pGame, D2Unit
 //D2Game.0x6FC75C70
 void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 136))
@@ -1122,7 +1122,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitSt
 //D2Game.0x6FC75D00
 void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {    
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 136))
@@ -1140,7 +1140,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2Unit
 //D2Game.0x6FC75D90
 void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
    
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 136))
@@ -1158,7 +1158,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitSt
 //D2Game.0x6FC75E20
 void __fastcall D2GAME_OBJECTS_TrapHandler4_6FC75E20(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {    
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
 
     if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 136))
@@ -1180,7 +1180,7 @@ void __fastcall sub_6FC75EB0(D2ObjOperateFnStrc* pOp)
     {
         D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
 
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pOp->pObject, &pCoord);
 
         OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
@@ -1546,8 +1546,8 @@ int32_t __fastcall OBJECTS_OperateFunction04_Chest(D2ObjOperateFnStrc* pOp, int3
 //D2Game.0x6FC764B0
 void __fastcall  D2GAME_SetTrapCallback_6FC764B0(D2ObjOperateFnStrc* pOp, uint8_t nTrapType)
 {
-    using TrapFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-    constexpr TrapFunc gpObjectTrapHandlerTable_6FD2FB48[] =
+    typedef void (__fastcall * TrapFunc)(D2GameStrc*, D2UnitStrc*);
+    D2_CONSTEXPR TrapFunc gpObjectTrapHandlerTable_6FD2FB48[] =
     {
         nullptr,
         D2GAME_OBJECTS_TrapHandler1_6FC75C70,
@@ -1561,7 +1561,7 @@ void __fastcall  D2GAME_SetTrapCallback_6FC764B0(D2ObjOperateFnStrc* pOp, uint8_
         D2GAME_OBJECTS_TrapHandler8_9_6FC75AC0
     };
 
-    if (nTrapType < std::size(gpObjectTrapHandlerTable_6FD2FB48) && gpObjectTrapHandlerTable_6FD2FB48[nTrapType])
+    if (nTrapType < ARRAY_SIZE(gpObjectTrapHandlerTable_6FD2FB48) && gpObjectTrapHandlerTable_6FD2FB48[nTrapType])
     {
         if (IsBadCodePtr((FARPROC)gpObjectTrapHandlerTable_6FD2FB48[nTrapType]))
         {
@@ -1628,7 +1628,7 @@ int32_t __fastcall OBJECTS_OperateFunction17_Obelisk(D2ObjOperateFnStrc* pOp, in
             SUNIT_SetInteractInfo(pPlayer, UNIT_OBJECT, nObjectGUID);
             UNITS_ChangeAnimMode(pObject, OBJMODE_SPECIAL1);
 
-            D2GSPacketSrv58 packet58 = {};
+            D2GSPacketSrv58 packet58 = { 0 };
             packet58.nHeader = 0x58;
             packet58.nUnitId = nObjectGUID;
             //packet58.unk0x05 = 0;
@@ -1718,7 +1718,7 @@ void __fastcall D2GAME_SHRINES_Enirhs_6FC76850(D2ObjOperateFnStrc* pOp, D2Shrine
 void __fastcall D2GAME_SHRINES_Portal_6FC76880(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
     D2_MAYBE_UNUSED(pShrinesTxtRecord);
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pOp->pPlayer, &pCoord);
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pPlayer);
@@ -1804,14 +1804,14 @@ void __fastcall D2GAME_SHRINES_Gem_6FC76910(D2ObjOperateFnStrc* pOp, D2ShrinesTx
 //D2Game.0x6FC76A60
 int32_t __fastcall sub_6FC76A60(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nItemId, D2UnitStrc* pItem)
 {
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pPlayer, &pCoord);
    
-    D2CoordStrc pReturnCoords = {};
+    D2CoordStrc pReturnCoords = { 0 };
     D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pPlayer), &pCoord, &pReturnCoords, 1);
     if (pRoom)
     {
-        D2ItemDropStrc itemDrop = {};
+        D2ItemDropStrc itemDrop = { 0 };
         itemDrop.pUnit = 0;
         itemDrop.pSeed = 0;
         itemDrop.nId = nItemId;
@@ -1856,13 +1856,13 @@ void __fastcall D2GAME_SHRINES_Storm_6FC76BC0(D2ObjOperateFnStrc* pOp, D2Shrines
     const int32_t nX = CLIENTS_GetUnitX(pOp->pObject);
     const int32_t nY = CLIENTS_GetUnitY(pOp->pObject);
 
-    D2UnitFindArgStrc unitFindArg = {};
+    D2UnitFindArgStrc unitFindArg = { 0 };
     unitFindArg.nX = nX;
     unitFindArg.nY = nY;
     unitFindArg.nSize = pShrinesTxtRecord->dwArg1;
     unitFindArg.nFlags = 0x583u;
 
-    D2UnitFindDataStrc unitFindData = {};
+    D2UnitFindDataStrc unitFindData = { 0 };
     UNITFINDS_InitializeUnitFindData(pOp->pGame->pMemoryPool, &unitFindData, UNITS_GetRoom(pOp->pObject), nX, nY, pShrinesTxtRecord->dwArg1, sub_6FC76E90, &unitFindArg);
     UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
 
@@ -1882,7 +1882,7 @@ void __fastcall D2GAME_SHRINES_Storm_6FC76BC0(D2ObjOperateFnStrc* pOp, D2Shrines
     {
         for (int32_t y = 1; y < 5; ++y)
         {
-            D2MissileStrc missileParams = {};
+            D2MissileStrc missileParams = { 0 };
             missileParams.dwFlags = 3;
             missileParams.nX = nX;
             missileParams.nY = nY;
@@ -2003,13 +2003,13 @@ void __fastcall D2GAME_SHRINES_Exploding_6FC770D0(D2ObjOperateFnStrc* pOp, D2Shr
 
         D2_ASSERT(nItemIndex != -1);
 
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pOp->pPlayer, &pCoord);
-        D2CoordStrc pReturnCoords = {};
+        D2CoordStrc pReturnCoords = { 0 };
         D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
         if (pRoom)
         {
-            D2ItemDropStrc itemDrop = {};
+            D2ItemDropStrc itemDrop = { 0 };
             itemDrop.pUnit = nullptr;
             itemDrop.pSeed = nullptr;
             itemDrop.pGame = pOp->pGame;
@@ -2036,12 +2036,13 @@ void __fastcall D2GAME_SHRINES_Exploding_6FC770D0(D2ObjOperateFnStrc* pOp, D2Shr
         }
     }
 
-    constexpr int32_t nXOffsets[] = { -6, -6, 0, 0, 6, 6 };
-    constexpr int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { -6, -6, 0, 0, 6, 6 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
+
 
     for (int32_t i = 0; i < 6; ++i)
     {
-        D2MissileStrc missileParams = {};
+        D2MissileStrc missileParams = { 0 };
         missileParams.dwFlags = 1312;
         missileParams.nX = CLIENTS_GetUnitX(pOp->pObject);
         missileParams.nY = CLIENTS_GetUnitY(pOp->pObject);
@@ -2076,13 +2077,13 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
 
         D2_ASSERT(nItemIndex != -1);
 
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pOp->pPlayer, &pCoord);
-        D2CoordStrc pReturnCoords = {};
+        D2CoordStrc pReturnCoords = { 0 };
         D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pOp->pPlayer), &pCoord, &pReturnCoords, 1);
         if (pRoom)
         {
-            D2ItemDropStrc itemDrop = {};
+            D2ItemDropStrc itemDrop = { 0 };
             itemDrop.pUnit = nullptr;
             itemDrop.pSeed = nullptr;
             itemDrop.pGame = pOp->pGame;
@@ -2109,12 +2110,12 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
         }
     }
 
-    constexpr int32_t nXOffsets[] = { -6, -6, 0, 0, 6, 6 };
-    constexpr int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
+    D2_CONSTEXPR int32_t nXOffsets[] = { -6, -6, 0, 0, 6, 6 };
+    D2_CONSTEXPR int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
 
     for (int32_t i = 0; i < 6; ++i)
     {
-        D2MissileStrc missileParams = {};
+        D2MissileStrc missileParams = { 0 };
         missileParams.dwFlags = 1312;
         missileParams.nX = CLIENTS_GetUnitX(pOp->pObject);
         missileParams.nY = CLIENTS_GetUnitY(pOp->pObject);
@@ -2139,7 +2140,7 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
     }
 }
 
-constexpr D2ShrineTableStrc gpShrineTable_6FD28D18[] =
+D2_CONSTEXPR D2ShrineTableStrc gpShrineTable_6FD28D18[] =
 {
     { nullptr, -1, 0 },
     { D2GAME_SHRINES_Refill_6FC76730, -1, 0 },
@@ -2170,13 +2171,13 @@ constexpr D2ShrineTableStrc gpShrineTable_6FD28D18[] =
 //D2Game.0x6FC77690
 void __fastcall D2GAME_SHRINES_CombatBoost_6FC77690(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    D2_ASSERT(pShrinesTxtRecord->nCode < std::size(gpShrineTable_6FD28D18));
+    D2_ASSERT(pShrinesTxtRecord->nCode < ARRAY_SIZE(gpShrineTable_6FD28D18));
 
     const D2ShrineTableStrc* pShrineRecord = &gpShrineTable_6FD28D18[pShrinesTxtRecord->nCode];
 
     const int32_t nValue = sub_6FC77750(pShrinesTxtRecord, 19, pShrinesTxtRecord->dwArg0, pOp->pPlayer);
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pTarget = pOp->pPlayer;
     curse.pUnit = pOp->pObject;
     curse.nState = pShrineRecord->unk0x08;
@@ -2274,13 +2275,13 @@ int32_t __fastcall sub_6FC77750(D2ShrinesTxt* pShrinesTxtRecord, int32_t nStatId
 //D2Game.0x6FC779C0
 void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    D2_ASSERT(pShrinesTxtRecord->nCode < std::size(gpShrineTable_6FD28D18));
+    D2_ASSERT(pShrinesTxtRecord->nCode < ARRAY_SIZE(gpShrineTable_6FD28D18));
 
     const D2ShrineTableStrc* pShrineRecord = &gpShrineTable_6FD28D18[pShrinesTxtRecord->nCode];
 
     STATLIST_SetUnitStat(pOp->pPlayer, 10, STATLIST_GetMaxStaminaFromUnit(pOp->pPlayer), 0);
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pTarget = pOp->pPlayer;
     curse.pUnit = pOp->pObject;
     curse.nStatValue = sub_6FC77750(pShrinesTxtRecord, pShrineRecord->unk0x04, pShrinesTxtRecord->dwArg0, pOp->pPlayer);
@@ -2306,7 +2307,7 @@ void __fastcall sub_6FC77AB0(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* 
 //D2Game.0x6FC77AE0
 void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    D2_ASSERT(pShrinesTxtRecord->nCode < std::size(gpShrineTable_6FD28D18));
+    D2_ASSERT(pShrinesTxtRecord->nCode < ARRAY_SIZE(gpShrineTable_6FD28D18));
 
     const D2ShrineTableStrc* pShrineRecord = &gpShrineTable_6FD28D18[pShrinesTxtRecord->nCode];
 
@@ -2316,7 +2317,7 @@ void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, 
         nStatValue = sub_6FC77750(pShrinesTxtRecord, pShrineRecord->unk0x04, pShrinesTxtRecord->dwArg0, pOp->pPlayer);
     }
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pOp->pObject;
     curse.nDuration = pShrinesTxtRecord->dwDurationInFrames;
     curse.pTarget = pOp->pPlayer;
@@ -2333,7 +2334,7 @@ void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, 
 //D2Game.0x6FC77BA0
 void __fastcall D2GAME_SHRINES_SkillBoost_6FC77BA0(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord)
 {
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
 
     curse.pUnit = pOp->pObject;
     curse.nSkill = 0;
@@ -2388,7 +2389,7 @@ int32_t __fastcall OBJECTS_OperateFunction02_Shrine(D2ObjOperateFnStrc* pOp, int
         CHAT_FreeHoverMsg(pOp->pGame->pMemoryPool, pObject->pHoverText);
     }
 
-    char szText[256] = {};
+    char szText[256] = { 0 };
     wsprintfA(szText, "%d", (WORD)(pObjectData->InteractType + 3683));
 
     D2HoverTextStrc* pHoverText = CHAT_AllocHoverMsg(pOp->pGame->pMemoryPool, szText, pOp->pGame->dwGameFrame);
@@ -2615,7 +2616,7 @@ int32_t __fastcall OBJECTS_OperateFunction14_Corpse(D2ObjOperateFnStrc* pOp, int
 //D2Game.0x6FC78340
 void __fastcall sub_6FC78340(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    D2ObjOperateFnStrc op = {};
+    D2ObjOperateFnStrc op = { 0 };
 
     op.pGame = pGame;
     op.pObject = pUnit;
@@ -2739,7 +2740,7 @@ int32_t __fastcall OBJECTS_OperateFunction19_ArmorStand(D2ObjOperateFnStrc* pOp,
 
     if (pObject->dwAnimMode == OBJMODE_NEUTRAL)
     {
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pObject, &pCoord);
 
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
@@ -2764,7 +2765,7 @@ int32_t __fastcall OBJECTS_OperateFunction20_WeaponRack(D2ObjOperateFnStrc* pOp,
 
     if (pObject->dwAnimMode == OBJMODE_NEUTRAL)
     {
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pObject, &pCoord);
 
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
@@ -2840,10 +2841,10 @@ int32_t __fastcall OBJECTS_OperateFunction07_ExplodingBarrel(D2ObjOperateFnStrc*
         UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
         pObject->dwFlags &= ~(UNITFLAG_TARGETABLE);
 
-        D2ObjOperateFnStrc pNewOp = {};
+        D2ObjOperateFnStrc pNewOp = { 0 };
         memcpy(&pNewOp, pOp, sizeof(pNewOp));
         
-        D2CoordStrc pCoord = {};
+        D2CoordStrc pCoord = { 0 };
         UNITS_GetCoords(pObject, &pCoord);
 
         for (D2UnitStrc* i = UNITS_GetRoom(pObject)->pUnitFirst; i; i = i->pRoomNext)
@@ -2953,7 +2954,7 @@ int32_t __fastcall OBJECTS_OperateHandler(D2GameStrc* pGame, D2UnitStrc* pPlayer
 
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER || !SUNIT_GetInteractInfo(pPlayer, &nObjectType, &nObjectGUID) && pPlayer->pPlayerData && !pPlayer->pPlayerData->bBusy && (!INVENTORY_GetCursorItem(pPlayer->pInventory) || pObject->dwClassId == OBJECT_STASH))
     {
-        D2_ASSERT(pObjectTxtRecord->nOperateFn < std::size(gpObjOperateFnTable));
+        D2_ASSERT(pObjectTxtRecord->nOperateFn < ARRAY_SIZE(gpObjOperateFnTable));
 
         switch (pObject->dwClassId)
         {
@@ -2969,7 +2970,7 @@ int32_t __fastcall OBJECTS_OperateHandler(D2GameStrc* pGame, D2UnitStrc* pPlayer
 
         D2_ASSERT(pOperateFn);
 
-        D2ObjOperateFnStrc pObjOperate = {};
+        D2ObjOperateFnStrc pObjOperate = { 0 };
 
         pObjOperate.pGame = pGame;
         pObjOperate.pObject = pObject;
@@ -3016,7 +3017,7 @@ void __fastcall sub_6FC78BB0(D2GameStrc* pGame, int32_t nUnused, int32_t nObject
     D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, nObjectGUID);
     D2_ASSERT(pObject);
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pObject, &pCoord);
 
     const int32_t nUnitSizeX = UNITS_GetUnitSizeX(pObject);
@@ -3201,7 +3202,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
                 }
             }
 
-            D2CoordStrc pCoord = {}; 
+            D2CoordStrc pCoord = { 0 }; 
             D2ActiveRoomStrc* pRoom = nullptr;
             if (pPortalOwner)
             {
@@ -3313,7 +3314,7 @@ int32_t __fastcall OBJECTS_OperateFunction43_DurielPortal(D2ObjOperateFnStrc* pO
 
     D2_ASSERT(pRoom);
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     pCoord.nX = nX;
     pCoord.nY = nY;
 
@@ -3364,7 +3365,7 @@ int32_t __fastcall OBJECTS_OperateFunction23_Waypoint(D2ObjOperateFnStrc* pOp, i
                 return 0;
             }
 
-            D2GSPacketSrv63 packet63 = {};
+            D2GSPacketSrv63 packet63 = { 0 };
             packet63.nHeader = 0x63;
             packet63.dwUnitId = pObject->dwUnitId;
             WAYPOINTS_ValidateAndCopyWaypointData(pWaypointFlags, (D2WaypointDataStrc*)packet63.pData);
@@ -3389,7 +3390,7 @@ void __fastcall D2GAME_WAYPOINT_Unk_6FC79600(D2GameStrc* pGame, D2UnitStrc* pPla
         if (pObjectsTxtRecord)
         {
             const int32_t nOperateFn = pObjectsTxtRecord->nOperateFn;
-            if (nOperateFn < std::size(gpObjOperateFnTable) && gpObjOperateFnTable[nOperateFn] == OBJECTS_OperateFunction23_Waypoint)
+            if (nOperateFn < ARRAY_SIZE(gpObjOperateFnTable) && gpObjOperateFnTable[nOperateFn] == OBJECTS_OperateFunction23_Waypoint)
             {
                 const int32_t nWaypointLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pWaypoint));
 
@@ -3414,7 +3415,7 @@ void __fastcall D2GAME_WAYPOINT_Unk_6FC79600(D2GameStrc* pGame, D2UnitStrc* pPla
                         if (pRoom && pRoom == DUNGEON_FindActSpawnLocation(pGame->pAct[DRLG_GetActNoFromLevelId(nLevelId)], nLevelId, nParam, &nX, &nY))
                         {
                             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-                            D2CoordStrc pCoord = {};
+                            D2CoordStrc pCoord = { 0 };
                             UNITS_GetCoords(pPlayer, &pCoord);
                             sub_6FC817D0(pGame, pPlayer, 0, 2, pCoord.nX, pCoord.nY, 0);
                             D2GAME_PACKETS_SendPacket0x0D_6FC3C920(pClient, 0xDu, 0, pPlayer ? pPlayer->dwUnitId : -1, 1, pCoord.nX + 3, pCoord.nY + 3, 0, 0);
@@ -3484,7 +3485,7 @@ int32_t __fastcall OBJMODE_ObeliskPowerUp_IncreaseSkillpoints(D2GameStrc* pGame,
 //D2Game.0x6FC798C0
 int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayerGUID, int32_t nObjectGUID, int32_t nItemGUID, int16_t nState)
 {
-    constexpr D2ObeliskPowerUpStrc gpObeliskPowerUpTable[21] =
+    D2_CONSTEXPR D2ObeliskPowerUpStrc gpObeliskPowerUpTable[21] =
     {
         { OBJMODE_ObeliskPowerUp_IncreaseMana, 100, 1 },
         { OBJMODE_ObeliskPowerUp_IncreaseMana, 100, 1 },
@@ -3531,7 +3532,7 @@ int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayer
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
-    D2GSPacketSrv58 packet58 = {};
+    D2GSPacketSrv58 packet58 = { 0 };
     packet58.nHeader = 0x58;
     packet58.nUnitId = nObjectGUID;
 
@@ -3583,7 +3584,7 @@ int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayer
         {
             const uint8_t nSubType = pItemsTxtRecord->nSubType;
 
-            if (nSubType < std::size(gpObeliskPowerUpTable) && ITEMS_RollRandomNumber(&pPlayer->pSeed) % 100 < gpObeliskPowerUpTable[nSubType].nChance)
+            if (nSubType < ARRAY_SIZE(gpObeliskPowerUpTable) && ITEMS_RollRandomNumber(&pPlayer->pSeed) % 100 < gpObeliskPowerUpTable[nSubType].nChance)
             {
                 if (IsBadCodePtr((FARPROC)gpObeliskPowerUpTable[nSubType].pPowerUpCallback))
                 {
@@ -3876,17 +3877,17 @@ D2UnitStrc* __fastcall OBJMODE_DropItemWithCodeAndQuality(D2GameStrc* pGame, D2U
         return 0;
     }
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     UNITS_GetCoords(pUnit, &pCoord);
 
-    D2CoordStrc pReturnCoords = {};
+    D2CoordStrc pReturnCoords = { 0 };
     D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pUnit), &pCoord, &pReturnCoords, 1);
     if (!pRoom)
     {
         return 0;
     }
 
-    D2ItemDropStrc itemDrop = {};
+    D2ItemDropStrc itemDrop = { 0 };
     itemDrop.pSeed = nullptr;
     itemDrop.nX = pReturnCoords.nX;
     itemDrop.nY = pReturnCoords.nY;
@@ -3906,7 +3907,7 @@ D2UnitStrc* __fastcall OBJMODE_DropItemWithCodeAndQuality(D2GameStrc* pGame, D2U
 //D2Game.0x6FC7A220
 D2UnitStrc* __fastcall OBJMODE_DropFromChestTCWithQuality(D2ObjOperateFnStrc* pOp, int32_t nItemQuality)
 {
-    constexpr int32_t nLevelIds[] =
+    D2_CONSTEXPR int32_t nLevelIds[] =
     {
         2, 37,
         41, 73,
@@ -3952,7 +3953,7 @@ D2UnitStrc* __fastcall OBJMODE_DropFromChestTCWithQuality(D2ObjOperateFnStrc* pO
     }
 
     int32_t nItemDropCount = 0;
-    D2UnitStrc* ppDroppableItems[6] = {};
+    D2UnitStrc* ppDroppableItems[6] = { 0 };
     D2GAME_DropTC_6FC51360(pGame, pOp->pObject, pOp->pPlayer, pTCExRecord, nItemQuality, nTCIndex, 0, ppDroppableItems, &nItemDropCount, 6);
     return ppDroppableItems[0];
 }

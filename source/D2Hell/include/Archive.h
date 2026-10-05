@@ -128,8 +128,7 @@ void* __fastcall ARCHIVE_AllocateBufferAndReadFile(HD2ARCHIVE hArchive, const ch
 
 #define ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szFilePath, pBytesWritten) ARCHIVE_AllocateBufferAndReadFile(hArchive, szFilePath, pBytesWritten, __FILE__, __LINE__)
 
-using ARCHIVE_ShowMessageFunctionPtr = BOOL (__stdcall*)();
-
+typedef BOOL (__stdcall* ARCHIVE_ShowMessageFunctionPtr)();
 //1.10f: D2Win.0x6F8B2399
 D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority);
 //1.10f: D2Win.0x6F8B2548

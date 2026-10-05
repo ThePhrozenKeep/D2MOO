@@ -110,7 +110,7 @@ uint32_t __fastcall AIUTIL_GetDistanceToCoordinates(D2UnitStrc* pUnit, int32_t n
 //D2Game.0x6FCF14D0
 int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {
-	constexpr uint8_t nOffsets[25] = { 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+	D2_CONSTEXPR uint8_t nOffsets[25] = { 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
 
 	if (!pUnit1 || !pUnit2)
 	{
@@ -118,7 +118,7 @@ int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 	}
 
 	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit1, pUnit2);
-	const int32_t nOffset = nDistance < std::size(nOffsets) ? nOffsets[nDistance] : 3;
+	const int32_t nOffset = nDistance < ARRAY_SIZE(nOffsets) ? nOffsets[nDistance] : 3;
 	const int32_t nX2 = CLIENTS_GetUnitX(pUnit2);
 	const int32_t nY2 = CLIENTS_GetUnitY(pUnit2);
 
@@ -586,7 +586,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 		D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 		if (pOwner && pOwner->dwUnitType == UNIT_MONSTER)
 		{
-			D2PartyCallbackArgStrc partyCallbackArg = {};
+			D2PartyCallbackArgStrc partyCallbackArg = { 0 };
 			partyCallbackArg.pfCallback = pfCallback;
 			partyCallbackArg.pGame = pGame;
 			partyCallbackArg.pUnit = pUnit;
@@ -712,7 +712,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 	{
 		if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
 		{
-			D2UnkAiCallbackArgStrc arg = {};
+			D2UnkAiCallbackArgStrc arg = { 0 };
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.unk0x08 = v66;
@@ -899,7 +899,7 @@ int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_
 		return 0;
 	}
 
-	D2AiCallback7ArgStrc arg = {};
+	D2AiCallback7ArgStrc arg = { 0 };
 	arg.pTarget = nullptr;
 	arg.nDistance = INT_MAX;
 	arg.unk0x08 = *ppTarget;
@@ -1022,7 +1022,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		if (a4)
 		{
-			D2UnkAiCallbackArgStrc2 arg = {};
+			D2UnkAiCallbackArgStrc2 arg = { 0 };
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.pAlternativeTarget = nullptr;
@@ -1035,7 +1035,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 		}
 		else
 		{
-			D2UnkAiCallbackArgStrc arg = {};
+			D2UnkAiCallbackArgStrc arg = { 0 };
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.unk0x08 = a3;
@@ -1163,7 +1163,7 @@ D2UnitStrc* __fastcall sub_6FCF2CC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 
 	if (!sub_6FCF2920(pGame, pUnit, 0, 1, &pTarget, &nDistance))
 	{
-		D2UnkAiCallbackArgStrc2 arg = {};
+		D2UnkAiCallbackArgStrc2 arg = { 0 };
 		arg.pTarget = nullptr;
 		arg.nDistance = INT_MAX;
 		arg.pAlternativeTarget = nullptr;
@@ -1301,7 +1301,7 @@ void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUni
 		return;
 	}
 
-	D2CurseStrc curse = {};
+	D2CurseStrc curse = { 0 };
 	curse.pUnit = pUnit;
 	curse.pTarget = pTarget;
 	curse.nSkillLevel = 1;

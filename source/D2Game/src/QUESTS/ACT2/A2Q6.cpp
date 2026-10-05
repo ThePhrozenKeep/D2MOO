@@ -1094,7 +1094,7 @@ void __fastcall ACT2Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 void __fastcall ACT2Q6_SendTombIdToClient(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
-	D2GSPacketSrv50 packet50 = {};
+	D2GSPacketSrv50 packet50 = { 0 };
 	packet50.nHeader = 0x50;
 	packet50.nQuestId = QUEST_A2Q6_DURIEL;
 
@@ -1438,7 +1438,7 @@ int32_t __fastcall OBJECTS_OperateFunction25_StaffOrifice(D2ObjOperateFnStrc* pO
 
 		D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pOp->pPlayer, "..\\D2Game/Quests/a2q6.cpp", 1589);
 
-		D2GSPacketSrv58 packet58 = {};
+		D2GSPacketSrv58 packet58 = { 0 };
 		packet58.nHeader = 0x58;
 		packet58.nUnitId = pObject->dwUnitId;
 		D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet58, sizeof(D2GSPacketSrv58));

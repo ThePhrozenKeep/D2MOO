@@ -2,7 +2,11 @@
 
 #include <algorithm>
 
+#if !defined(_MSC_VER) || _MSC_VER >= 1600
 #include <timeapi.h>
+#else
+#include <mmsystem.h>
+#endif
 
 #include <D2Lang.h>
 #include <cstdio>
@@ -81,7 +85,36 @@ int32_t dword_6FD27D88;
 
 volatile LONG gnNumAdminConnections_6FD45838;
 
-constexpr void(__fastcall* gpfGetDescription_6FD2CA64[5])(char*, int32_t) =
+#if defined(_MSC_VER) && _MSC_VER < 1600
+// The MSVC600 Win32 headers declare these with non-volatile pointer parameters, and
+// InterlockedCompareExchange even returns void* rather than the value it read. These
+// wrappers restore the modern signatures around the same lock-prefixed instruction.
+static LONG __stdcall GAME_InterlockedIncrement(volatile LONG* pCounter)
+{
+	return InterlockedIncrement((LONG*)pCounter);
+}
+
+static LONG __stdcall GAME_InterlockedDecrement(volatile LONG* pCounter)
+{
+	return InterlockedDecrement((LONG*)pCounter);
+}
+
+static LONG __stdcall GAME_InterlockedReadCounter(volatile LONG* pCounter)
+{
+	return (LONG)InterlockedCompareExchange((void**)pCounter, 0, 0);
+}
+#else
+#define GAME_InterlockedIncrement(pCounter) InterlockedIncrement(pCounter)
+#define GAME_InterlockedDecrement(pCounter) InterlockedDecrement(pCounter)
+#define GAME_InterlockedReadCounter(pCounter) InterlockedCompareExchange(pCounter, 0, 0)
+#endif
+
+typedef void (__fastcall FnGetDescription)(char*, int32_t);
+// The pointer type is named in a typedef because D2_CONSTEXPR expands to `const` on
+// VC6, where `const void(__fastcall* p[5])(...)` reads as a pointer to a
+// const-returning function (C2440). Named, the const lands on the array instead:
+// static storage, read-only, which is what both spellings meant.
+static FnGetDescription* const gpfGetDescription_6FD2CA64[5] =
 {
     GAME_GetPlayerDescription,
     GAME_GetMonsterDescription,
@@ -113,7 +146,7 @@ void* __fastcall sub_6FC35720()
 //D2Game.0x6FC35740
 void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
 {
-    char szMessage[4096] = {};
+    char szMessage[4096] = { 0 };
     va_list va = nullptr;
 
     va_start(va, szFormat);
@@ -227,13 +260,14 @@ uint32_t __fastcall D2Game_10011()
 // Helper function
 D2GameStrc* GAME_FindGameWithName(const char* szGameName)
 {
-    for (int nCurrentGameGUID : gnGamesGUIDs_6FD447F8)
+    for (size_t nGameIndex = 0; nGameIndex < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++nGameIndex)
     {
+        const int32_t nCurrentGameGUID = gnGamesGUIDs_6FD447F8[nGameIndex];
         if (nCurrentGameGUID && nCurrentGameGUID != D2GameInvalidGUID)
         {
             if (D2GameStrc* pCurrentGame = GAME_LockGame(nCurrentGameGUID))
             {
-                bool bGameNameMatches = SStrCmpI(szGameName, pCurrentGame->szGameName, ARRAY_SIZE(D2GameStrc::szGameName)) == 0;
+                bool bGameNameMatches = SStrCmpI(szGameName, pCurrentGame->szGameName, ARRAY_SIZE_OF_MEMBER(D2GameStrc, szGameName)) == 0;
                 D2_UNLOCK(pCurrentGame->lpCriticalSection);
 
                 if (bGameNameMatches)
@@ -256,14 +290,14 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
     else // Name conflicts
     {
         const int nCharactersForSuffix = 3;
-        if (strlen(szGameName) + nCharactersForSuffix >= ARRAY_SIZE(D2GameStrc::szGameName))
+        if (strlen(szGameName) + nCharactersForSuffix >= ARRAY_SIZE_OF_MEMBER(D2GameStrc, szGameName))
         {
             // Truncate so that we have enough space for the game ID
             // Somehow the original game truncated at 10 characters instead of 11 ?
-            szGameName[ARRAY_SIZE(D2GameStrc::szGameName) - 1 - nCharactersForSuffix] = '\0';
+            szGameName[ARRAY_SIZE_OF_MEMBER(D2GameStrc, szGameName) - 1 - nCharactersForSuffix] = '\0';
         }
 
-        char szGameNameWithID[ARRAY_SIZE(D2GameStrc::szGameName)];
+        char szGameNameWithID[ARRAY_SIZE_OF_MEMBER(D2GameStrc, szGameName)];
         int nGameNumber = 0;
         do
         {
@@ -312,7 +346,7 @@ BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPa
         return FALSE;
     }
 
-    char szGameName[16] = {};
+    char szGameName[16] = { 0 };
     if (!sub_6FC33EA0(nClientId, szGameName))
     {
         GAME_LogMessage(3, "[HACKLIST]  <D2CLTSYS_CREATEGAME>  PLAYER:%s  GAME:%s  ERROR: Client already in a game", pPacket->szClientName, pPacket->szGameName);
@@ -477,7 +511,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     {
         pGame->InitSeed = 0;
 
-        LARGE_INTEGER seed = {};
+        LARGE_INTEGER seed = { 0 };
         QueryPerformanceCounter(&seed);
         SEED_InitSeed(&pGame->pGameSeed);
         SEED_InitLowSeed(&pGame->pGameSeed, SEED_GetRandomValue(seed.LowPart));
@@ -724,7 +758,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     {
         pGame->InitSeed = 0;
 
-        LARGE_INTEGER seed = {};
+        LARGE_INTEGER seed = { 0 };
         QueryPerformanceCounter(&seed);
         SEED_InitSeed(&pGame->pGameSeed);
         SEED_InitLowSeed(&pGame->pGameSeed, SEED_GetRandomValue(seed.LowPart));
@@ -1021,7 +1055,7 @@ BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t
         return FALSE;
     }
 
-    char szGameName[16] = {};
+    char szGameName[16] = { 0 };
     if (!sub_6FC33EA0(nClientId, szGameName) || !sub_6FC33F90(szClientName, szGameName))
     {
         GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  ACCT:%s  CLIENT:%s  GAMEID:%d  TOKEN:%x  ERROR: Already in a Game", pszInOutAccountName, szClientName, nGameId, nTokenId);
@@ -1256,7 +1290,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 
     const int32_t nClientId = CLIENTS_GetClientId(pClient);
 
-    D2GSPacketSrv5A packet5A = {};
+    D2GSPacketSrv5A packet5A = { 0 };
     packet5A.nHeader = 0x5Au;
     packet5A.nType = nEventType;
     packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1333,7 +1367,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
     if (CLIENTS_IsInGame(pGame, nClientId))
     {
         D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
-        D2GSPacketSrv5A packet5A = {};
+        D2GSPacketSrv5A packet5A = { 0 };
         packet5A.nHeader = 0x5Au;
         packet5A.nType = EVENTTYPE_DISCONNECT;
         packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1509,7 +1543,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             sub_6FC3C690(nClientId);
             sub_6FC39030(pGame, pClient, 0, 0);
 
-            D2GSPacketSrv5A packet5A = {};
+            D2GSPacketSrv5A packet5A = { 0 };
             packet5A.nHeader = 0x5Au;
             packet5A.nType = EVENTTYPE_PLAYERLEFT;
             packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1601,7 +1635,7 @@ void __fastcall sub_6FC380F0(D2ClientStrc* pClient, void* pArg)
 //D2Game.0x6FC38100
 BOOL __fastcall GAME_VerifyDisconnect(int32_t nClientId)
 {
-	char szClientName[sizeof(D2ClientStrc::szName)];
+	char szClientName[ARRAY_SIZE_OF_MEMBER(D2ClientStrc, szName)];
     if (sub_6FC33EA0(nClientId, szClientName))
     {
         return TRUE;
@@ -1641,16 +1675,16 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.tServerInfo.field_0x20 = tGameServerInfoEx.field_0x20;
                 tPacket.tServerInfo.field_0x18 = tGameServerInfoEx.field_0x18;
                 tPacket.tServerInfo.field_0x24 = tGameServerInfoEx.field_0x24;
-                SStrCopy(tPacket.tServerInfo.szCompilationData, tGameServerInfoEx.szCompilationData, sizeof(D2GameServerInfoStrc::szCompilationData));
+                SStrCopy(tPacket.tServerInfo.szCompilationData, tGameServerInfoEx.szCompilationData, ARRAY_SIZE_OF_MEMBER(D2GameServerInfoStrc, szCompilationData));
                 tPacket.tServerInfo.field_0xa8 = tGameServerInfoEx.field_0xa8;
                 tPacket.field_0x10f = tGameServerInfoEx.field_0xb0;
                 tPacket.field_0x10b = tGameServerInfoEx.field_0xac;
                 tPacket.field_0x117 = tGameServerInfoEx.dwords0xBC[0];
-                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838,0,0);
+                tPacket.field_0x113 = tGameServerInfoEx.field_0xb8 - GAME_InterlockedReadCounter(&gnNumAdminConnections_6FD45838);
                 tPacket.tServerInfo.field_0xac = tGameServerInfoEx.field_0xac + tGameServerInfoEx.field_0xb0;
                 tPacket.tServerInfo.field_0xb0 = tGameServerInfoEx.field_0xb4;
                 tPacket.tServerInfo.field_0xb4 = tGameServerInfoEx.field_0xb8
-                    - InterlockedCompareExchange(&gnNumAdminConnections_6FD45838, 0, 0)
+                    - GAME_InterlockedReadCounter(&gnNumAdminConnections_6FD45838)
                     + tGameServerInfoEx.dwords0xBC[0];
                 tPacket.tServerInfo.field_0xb8 = tGameServerInfoEx.dwords0xBC[1];
                 tPacket.field_0xbd = tGameServerInfoEx.dwords0xD8;
@@ -1668,7 +1702,7 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
             break;
         case PACKET_ADMIN_CONNECT:
             SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
-            InterlockedIncrement(&gnNumAdminConnections_6FD45838);
+            GAME_InterlockedIncrement(&gnNumAdminConnections_6FD45838);
             a3[0] = PACKET_ADMIN_CONNECT;
             D2NET_10006(2, nClientIdx, a3, 16);
             break;
@@ -1677,7 +1711,7 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
             a3[0] = PACKET_ADMIN_DISCONNECT;
             D2NET_10006(2, nClientIdx, a3, 16);
             D2NET_10016(nClientIdx);
-            InterlockedDecrement(&gnNumAdminConnections_6FD45838);
+            GAME_InterlockedDecrement(&gnNumAdminConnections_6FD45838);
             break;
         case PACKET_ADMIN_GETIP:
             SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
@@ -1693,7 +1727,7 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
 //D2Game.0x6FC38530 (#10003)
 void __fastcall GAME_ProcessNetworkMessages()
 {
-    uint8_t buffer[520] = {};
+    uint8_t buffer[520] = { 0 };
 
     while (1)
     {
@@ -1762,7 +1796,7 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
             int32_t nEclipse = 0;
             ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(pGame->pAct[i], &nTimeIndex, &nTicks, &nEclipse);
 
-            D2GSPacketSrv53 packet53 = {};
+            D2GSPacketSrv53 packet53 = { 0 };
             packet53.nHeader = 0x53u;
             packet53.unk0x01 = nTimeIndex;
             packet53.unk0x05 = nTicks;
@@ -2061,14 +2095,14 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 }
 
                 
-                D2GSPacketSrv5A packet5A = {};
+                D2GSPacketSrv5A packet5A = { 0 };
                 packet5A.nHeader = 0x5A;
                 packet5A.nType = EVENTTYPE_PLAYERJOIN;
                 packet5A.nColor = STRCOLOR_DARK_GOLD;
                 packet5A.dwParam = 0;
                 packet5A.szText[16] = '\0';
                 
-                char szAccountName[256] = {};
+                char szAccountName[256] = { 0 };
                 CLIENTS_CopyAccountNameToBuffer(pClient, szAccountName);
                 if (strlen(szAccountName) != 0)
                 {
@@ -2123,7 +2157,7 @@ void __fastcall sub_6FC38E00()
 int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 {
     // TODO: Names
-    LARGE_INTEGER start = {};
+    LARGE_INTEGER start = { 0 };
     QueryPerformanceCounter(&start);
 
     const uint32_t nSysTimeMs = timeGetTime() & 0x7FFFFFFF;
@@ -2146,7 +2180,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
     dword_6FD45844 = nSysTimeMs - v5;
     
     int32_t bQueryPerformance = 0;
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
         if (nGUID && nGUID != -1)
@@ -2182,7 +2216,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
         return 0;
     }
 
-    LARGE_INTEGER end = {};
+    LARGE_INTEGER end = { 0 };
     QueryPerformanceCounter(&end);
     start.HighPart = (uint64_t)(end.QuadPart - start.QuadPart) >> 32;
     return end.QuadPart - start.QuadPart;
@@ -2300,7 +2334,7 @@ void __fastcall sub_6FC39270(D2GameStrc* pGame, int32_t a2)
 //D2Game.0x6FC392A0 (#10005)
 void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 {
-    LARGE_INTEGER start = {};
+    LARGE_INTEGER start = { 0 };
     QueryPerformanceCounter(&start);
     const uint32_t nTickCount = GetTickCount();
     
@@ -2315,7 +2349,7 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
     }
 
     int32_t bQueryPerformance = 0;
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
         if (nGUID && nGUID != -1)
@@ -2368,7 +2402,7 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 
     if (bQueryPerformance)
     {
-        LARGE_INTEGER end = {};
+        LARGE_INTEGER end = { 0 };
         QueryPerformanceCounter(&end);
         start.HighPart = (uint64_t)(end.QuadPart - start.QuadPart) >> 32;
     }
@@ -2452,7 +2486,7 @@ D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 //D2Game.0x6FC39870
 void __fastcall sub_6FC39870(int32_t nClientId)
 {
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -2460,7 +2494,7 @@ void __fastcall sub_6FC39870(int32_t nClientId)
             {
                 const uint32_t nClientCount = pGame->nClients;
                 const uint16_t nGameId = pGame->nGameId;
-                char szGameName[16] = {};
+                char szGameName[16] = { 0 };
                 SStrCopy(szGameName, pGame->szGameName, STORM_MAX_STR);
                 
                 D2_UNLOCK(pGame->lpCriticalSection);
@@ -2484,7 +2518,7 @@ void __stdcall GAME_CloseAllGames()
 {
     TASK_FreeAllQueueSlots();
 
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -2528,7 +2562,7 @@ int32_t __fastcall GAME_GetGamesCount()
 {
     int32_t nResult = 0;
 
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] != 0 && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -2543,7 +2577,7 @@ int32_t __fastcall GAME_GetGamesCount()
 int32_t __stdcall D2Game_10057()
 {
     int32_t nExpansionGames = 0;
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -2594,7 +2628,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 {
     memset(a1, 0, sizeof(*a1) * nMaxCount);
 
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -2747,7 +2781,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
 int32_t __stdcall GAME_GetGameServerGameIds(uint16_t* pServerToken, int32_t nMaxCount)
 {
     int32_t nServerTokenCount = 0;
-    for (int32_t i = 0; nServerTokenCount < nMaxCount && i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; nServerTokenCount < nMaxCount && i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -3004,7 +3038,7 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
     pStats->nInactiveMonsters = 0;
     pStats->nPlayersCount = 0;
 
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -3034,7 +3068,7 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
 //D2Game.0x6FC3AE10 (#10021)
 void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, const char* szMessage)
 {
-    for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gnGamesGUIDs_6FD447F8); ++i)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
@@ -3042,7 +3076,7 @@ void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, co
             D2_ASSERT(pGame);
             if (a1 == 1)
             {
-                D2GSPacketSrv5A packet5A = {};
+                D2GSPacketSrv5A packet5A = { 0 };
                 packet5A.nHeader = 0x5Au;
                 packet5A.nType = EVENTTYPE_REALMGOINGDOWN;
                 packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -3058,7 +3092,7 @@ void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, co
                 }
                 else
                 {
-                    char szCopy[256] = {};
+                    char szCopy[256] = { 0 };
                     strncpy(szCopy, szMessage, 255); // NOLINT(clang-diagnostic-deprecated-declarations)
                     szCopy[255] = '\0';
                     sub_6FC84CD0(pGame, szCopy, 1u);
@@ -3123,7 +3157,7 @@ D2GameStrc* __fastcall sub_6FC3B160()
 //D2Game.0x6FC3B220
 void __fastcall GAME_LeaveGlobalGamesCriticalSection()
 {
-    return GAME_LeaveGamesCriticalSection(gpGame_6FD457FC);
+    GAME_LeaveGamesCriticalSection(gpGame_6FD457FC);
 }
 
 //D2Game.0x6FC3B280

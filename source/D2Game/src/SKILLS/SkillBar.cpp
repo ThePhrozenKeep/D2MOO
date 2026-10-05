@@ -73,7 +73,7 @@ int32_t __fastcall SKILLS_SrvSt32_Conversion_Bash_Stun_Concentrate_BearSmite(D2G
 
     sub_6FD15470(pUnit, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[2], nSkillId, nSkillLevel));
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -165,7 +165,7 @@ int32_t __fastcall SKILLS_SrvSt33_FindPotion_GrimWard(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FCFAE90
 int32_t __fastcall SKILLS_SrvDo069_FindPotion(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    constexpr D2PotionCodeStrc gdwPotionsTable[15] = {
+    D2_CONSTEXPR D2PotionCodeStrc gdwPotionsTable[15] = {
         {' 2ph', ' 2pm', ' svr'},
         {' 3ph', ' 3pm', ' svr'},
         {' 3ph', ' 3pm', ' svr'},
@@ -218,7 +218,7 @@ int32_t __fastcall SKILLS_SrvDo069_FindPotion(D2GameStrc* pGame, D2UnitStrc* pUn
     }
 
     const int32_t nIndex = nAct + 5 * pGame->nDifficulty;
-    if (nIndex >= std::size(gdwPotionsTable))
+    if (nIndex >= ARRAY_SIZE(gdwPotionsTable))
     {
         OBJMODE_DropItemWithCodeAndQuality(pGame, pTarget, 0, 2);
         return 1;
@@ -378,7 +378,7 @@ int32_t __fastcall SKILLS_SrvDo071_Taunt(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         return 0;
     }
 
-    D2UnkNecSkillStrc curseData = {};
+    D2UnkNecSkillStrc curseData = { 0 };
 
     curseData.nDuration = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     curseData.pGame = pGame;
@@ -542,7 +542,7 @@ int32_t __fastcall SKILLS_SrvDo075_GrimWard(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
     coords.nX = CLIENTS_GetUnitX(pTarget);
     coords.nY = CLIENTS_GetUnitY(pTarget);
     
@@ -573,7 +573,7 @@ int32_t __fastcall SKILLS_SrvDo075_GrimWard(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    D2MissileStrc missileParams = { 0 };
     missileParams.dwFlags = 1;
     missileParams.nMissile = nMissileId;
     missileParams.pOwner = pUnit;
@@ -601,7 +601,7 @@ int32_t __fastcall SKILLS_RollFrenzyDamage(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
     UNITS_SetTargetUnitForDynamicUnit(pUnit, pTarget);
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -833,7 +833,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     sub_6FD11C90(pUnit, pSkillsTxtRecord->nAuraState, 0);
 
-    D2CurseStrc curse = {};
+    D2CurseStrc curse = { 0 };
     curse.pUnit = pUnit;
     curse.pTarget = pUnit;
     curse.nSkill = nSkillId;
@@ -1053,7 +1053,7 @@ int32_t __fastcall SKILLS_SrvDo076_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUni
         {
             SKILLS_SetParam3(pSkill, pTarget->dwUnitId);
 
-            D2DamageStrc damage = {};
+            D2DamageStrc damage = { 0 };
             damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
             if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
             {
@@ -1113,7 +1113,7 @@ int32_t __fastcall SKILLS_SrvSt39_Berserk(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -1209,7 +1209,7 @@ int32_t __fastcall SKILLS_SrvSt40_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 
     int32_t nX = 0;
     int32_t nY = 0;
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
 
     if (nUnitType == UNIT_MONSTER)
     {
@@ -1328,7 +1328,7 @@ int32_t __fastcall SKILLS_FindLeapTargetPosition(D2UnitStrc* pUnit, int32_t nSki
     int32_t nX = *pX;
     int32_t nDiffX = D2Clamp(nUnitX - *pX, -2, 2);
 
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
     coords.nX = nX;
     coords.nY = nY;
 
@@ -1386,7 +1386,7 @@ int32_t __fastcall SKILLS_SrvDo077_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, in
     {
         if (SKILLS_Leap(pGame, pUnit, pSkill) && nUnitType != UNIT_MONSTER)
         {
-            D2DamageStrc damage = {};
+            D2DamageStrc damage = { 0 };
             damage.wResultFlags = 9;
             sub_6FD10200(pGame, pUnit, 0, 0, SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel), &damage, 0);
             return 1;
@@ -1667,7 +1667,7 @@ int32_t __fastcall SKILLS_SrvDo078_LeapAttack(D2GameStrc* pGame, D2UnitStrc* pUn
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    D2DamageStrc damage = { 0 };
 
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pDefender, SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel), 0);
     if (damage.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)

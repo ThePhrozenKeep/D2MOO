@@ -572,7 +572,7 @@ void __fastcall ACT3Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pQuestArg->pPlayer, __FILE__, __LINE__);
 
-	D2GSPacketSrv5D packet5D = {};
+	D2GSPacketSrv5D packet5D = { 0 };
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = QUEST_A3Q2_KHALIMFLAIL;
 	packet5D.nFlags = (uint8_t)pQuestData->dwFlags;

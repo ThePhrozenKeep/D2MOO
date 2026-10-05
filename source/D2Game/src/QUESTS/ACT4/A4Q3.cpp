@@ -598,14 +598,14 @@ void __fastcall ACT4Q3_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 //D2Game.0x6FCB0C40
 void __fastcall ACT4Q3_CreateReward(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit)
 {
-	constexpr int32_t runeRewardCodes[3][11] =
+	D2_CONSTEXPR int32_t runeRewardCodes[3][11] =
 	{
 		{ ' 10r', ' 20r', ' 30r', ' 40r', ' 50r', ' 60r', ' 70r', ' 80r', ' 90r', ' 01r', ' 11r' },
 		{ ' 21r', ' 31r', ' 41r', ' 51r', ' 61r', ' 71r', ' 81r', ' 91r', ' 02r', ' 12r', ' 22r' },
 		{ ' 51r', ' 61r', ' 71r', ' 81r', ' 91r', ' 02r', ' 12r', ' 22r', ' 32r', ' 42r', ' 52r' },
 	};
 
-	constexpr int32_t gemRewardCodes[3][7] =
+	D2_CONSTEXPR int32_t gemRewardCodes[3][7] =
 	{
 		{ ' vpg', ' rpg', ' bpg', ' ypg', ' gpg', ' wpg', ' zks' },
 		{ ' vzg', ' rlg', ' blg', ' ylg', ' glg', ' wlg', ' lks' },
@@ -650,7 +650,7 @@ void __fastcall ACT4Q3_CreateReward(D2QuestDataStrc* pQuestData, D2UnitStrc* pUn
 			return;
 		}
 
-		pUnit->dwDropItemCode = gemRewardCodes[nId][ITEMS_RollRandomNumber(pSeed) % std::size(gemRewardCodes[0])];
+		pUnit->dwDropItemCode = gemRewardCodes[nId][ITEMS_RollRandomNumber(pSeed) % ARRAY_SIZE(gemRewardCodes[0])];
 		int32_t nItemLevel = 50;
 		if (D2GAME_DropItemAtUnit_6FC4FEC0(pQuestData->pGame, pUnit, ITEMQUAL_NORMAL, &nItemLevel, nullptr, -1, 0))
 		{
@@ -673,7 +673,7 @@ void __fastcall ACT4Q3_CreateReward(D2QuestDataStrc* pQuestData, D2UnitStrc* pUn
 					pQuestDataEx->bRewardDropsPending = 0;
 					if (pQuestData->pGame->bExpansion)
 					{
-						pUnit->dwDropItemCode = runeRewardCodes[pQuestData->pGame->nDifficulty][ITEMS_RollRandomNumber(pSeed) % std::size(runeRewardCodes[0])];
+						pUnit->dwDropItemCode = runeRewardCodes[pQuestData->pGame->nDifficulty][ITEMS_RollRandomNumber(pSeed) % ARRAY_SIZE(runeRewardCodes[0])];
 						D2GAME_DropItemAtUnit_6FC4FEC0(pQuestData->pGame, pUnit, ITEMQUAL_NORMAL, &nItemLevel, nullptr, -1, 0);
 					}
 				}

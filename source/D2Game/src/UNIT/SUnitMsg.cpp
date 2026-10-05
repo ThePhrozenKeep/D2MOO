@@ -43,7 +43,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
         return;
     }
 
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
     UNITS_GetCoords(pUnit, &coords);
 
     D2UnitStrc* pLocalPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
@@ -177,9 +177,9 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
 //D2Game.0x6FCC58E0
 void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
-    D2BitBufferStrc bitBuffer = {};
-    uint32_t nFlags[8] = {};
-    D2StatStrc stats[16] = {};
+    D2BitBufferStrc bitBuffer = { 0 };
+    uint32_t nFlags[8] = { 0 };
+    D2StatStrc stats[16] = { D2StatStrc() };
 
     if (!pUnit || !pClient)
     {
@@ -189,7 +189,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
     const int32_t nTotalStatFlagCount = (sgptDataTables->nStatesTxtRecordCount + 31) / 32;
     memcpy(nFlags, D2COMMON_10494_STATES_GetStatFlags(pUnit), sizeof(uint32_t) * nTotalStatFlagCount);
 
-    D2GSPacketSrvAA packetAA = {};
+    D2GSPacketSrvAA packetAA = { 0 };
     packetAA.nHeader = 0xAAu;
     packetAA.nUnitType = pUnit->dwUnitType;
     packetAA.nUnitId = pUnit->dwUnitId;
@@ -212,7 +212,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
                 D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nStateId);
                 if (pStatList)
                 {
-                    const int32_t nStatCount = STATLIST_GetBaseStatsData(pStatList, stats, std::size(stats));
+                    const int32_t nStatCount = STATLIST_GetBaseStatsData(pStatList, stats, ARRAY_SIZE(stats));
                     if (nStatCount > 0)
                     {
                         BITMANIP_Write(&bitBuffer, 1, 1);
@@ -279,8 +279,8 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
 //D2Game.0x6FCC5BE0
 void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
-    uint32_t nFlags[8] = {};
-    D2StatStrc stats[16] = {};
+    uint32_t nFlags[8] = { 0 };
+    D2StatStrc stats[16] = { D2StatStrc() };
 
     if (!pUnit || !pClient)
     {
@@ -290,7 +290,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
     const int32_t nTotalStatFlagCount = (sgptDataTables->nStatesTxtRecordCount + 31) / 32;
     memcpy(nFlags, STATES_GetGfxStateFlags(pUnit), sizeof(uint32_t) * nTotalStatFlagCount);
 
-    D2BitBufferStrc bitBuffer = {};
+    D2BitBufferStrc bitBuffer = { 0 };
     for (int32_t i = 0; i < nTotalStatFlagCount; ++i)
     {
         int32_t nBit = FOG_LeadingZeroesCount(nFlags[i]);
@@ -310,7 +310,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
                         const int32_t nStatCount = STATLIST_GetBaseStatsData(pStatList, stats, 16);
                         if (nStatCount > 0)
                         {
-                            D2GSPacketSrvA8 packetA8 = {};
+                            D2GSPacketSrvA8 packetA8 = { 0 };
 
                             packetA8.nHeader = 0xA8u;
                             packetA8.nUnitType = pUnit->dwUnitType;
@@ -439,7 +439,7 @@ void __fastcall sub_6FCC5FA0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
     D2UnitStrc* pClientPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (!pClientPlayer || pUnit->dwUnitType != UNIT_PLAYER || !PLAYERLIST_CheckFlag(pClientPlayer, pUnit, 4) && !PLAYERLIST_CheckFlag(pUnit, pClientPlayer, 2))
     {
-        D2GSPacketSrv26 packet26 = {};
+        D2GSPacketSrv26 packet26 = { 0 };
         packet26.nHeader = 0x26u;
         packet26.nMessageType = 5;
         packet26.nLang = CHAT_GetLangIdFromHoverMsg(pUnit->pHoverText);
@@ -457,7 +457,7 @@ void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pC
 {
     if (!pPlayer->pUpdateUnit || CLIENTS_GetPlayerFromClient(pClient, 0) == pPlayer->pUpdateUnit)
     {
-        D2GSPacketSrv2C packet2C = {};
+        D2GSPacketSrv2C packet2C = { 0 };
         packet2C.nHeader = 0x2Cu;
         packet2C.dwUnitGUID = pPlayer->dwUnitId;
         packet2C.nUnitType = pPlayer->dwUnitType;

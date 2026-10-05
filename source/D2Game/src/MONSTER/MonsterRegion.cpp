@@ -35,7 +35,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
 
     if (pRoomCoordList)
     {
-        D2DrlgCoordStrc drlgCoord = {};
+        D2DrlgCoordStrc drlgCoord = { 0 };
         memcpy(&drlgCoord, &pRoomCoordList->pBox[1], sizeof(drlgCoord));
         DUNGEON_GameTileToSubtileCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
         DUNGEON_GameTileToSubtileCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
@@ -46,7 +46,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
     }
     else
     {
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
         nLeft = drlgCoords.nSubtileX + 1;
         nTop = drlgCoords.nSubtileY + 1;
@@ -642,7 +642,7 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc
     {
         if (pRoomCoordList->nIndex && !pRoomCoordList->bNode)
         {
-            D2DrlgCoordStrc drlgCoord = {};
+            D2DrlgCoordStrc drlgCoord = { 0 };
             memcpy(&drlgCoord, &pRoomCoordList->pBox[1], sizeof(D2DrlgCoordStrc));
 
             if (drlgCoord.nPosX || drlgCoord.nWidth)
@@ -740,7 +740,7 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
 
     if (pRoomCoordList)
     {
-        D2DrlgCoordStrc drlgCoord = {};
+        D2DrlgCoordStrc drlgCoord = { 0 };
         memcpy(&drlgCoord, &pRoomCoordList->pBox[1], sizeof(drlgCoord));
         DUNGEON_GameTileToSubtileCoords(&drlgCoord.nPosX, &drlgCoord.nPosY);
         DUNGEON_GameTileToSubtileCoords(&drlgCoord.nWidth, &drlgCoord.nHeight);
@@ -751,7 +751,7 @@ int32_t __fastcall sub_6FC67570(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
     }
     else
     {
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
         nLeft = drlgCoords.nSubtileX + 1;
         nTop = drlgCoords.nSubtileY + 1;
@@ -853,8 +853,8 @@ D2UnitStrc* __fastcall sub_6FC677D0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 //D2Game.0x6FC679F0
 void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
-    constexpr int32_t dword_6FD2EE44[] = { MONSTER_ROGUE2 };
-    constexpr uint8_t byte_6FD2EE48[10] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    D2_CONSTEXPR int32_t dword_6FD2EE44[] = { MONSTER_ROGUE2 };
+    D2_CONSTEXPR uint8_t byte_6FD2EE48[10] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     if (!pRoom || ITEMS_RollRandomNumber(&pRoom->pSeed) & 0x7FFF || pRoom->nNumClients)
     {
@@ -942,7 +942,7 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
             pMonsterRegion->dwDungeonLevelEx = pLevelsTxtRecord->wMonLvl[nDifficulty];
         }
 
-        int32_t nNumMonstersToSpawn = std::min(pLevelsTxtRecord->nNumMon, 13ui8);
+        int32_t nNumMonstersToSpawn = std::min(pLevelsTxtRecord->nNumMon, (uint8_t)13);
         int32_t nNumMonstersInSpawnList = pLevelsTxtRecord->nNumNormalMonsters;
         if (nDifficulty > 0)
         {
@@ -951,7 +951,7 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
 
         nNumMonstersToSpawn = std::min(nNumMonstersToSpawn, nNumMonstersInSpawnList);
 
-        int16_t monsterIds[ARRAY_SIZE(D2LevelsTxt::wNormalMonsters)] = {};
+        int16_t monsterIds[ARRAY_SIZE(pLevelsTxtRecord->wNormalMonsters)] = { 0 };
         D2MonRegDataStrc* pMonRegData = pMonsterRegion->pMonData;
         if (nDifficulty > 0)
         {
@@ -1094,7 +1094,7 @@ D2MonRegDataStrc* __fastcall sub_6FC67FA0(D2MonsterRegionStrc** ppMonsterRegion,
 //D2Game.0x6FC68110
 void __fastcall sub_6FC68110(D2GameStrc* pGame)
 {
-    D2SeedStrc seed = {};
+    D2SeedStrc seed = { 0 };
     SEED_InitSeed(&seed);
 
     const int32_t nSeed = ITEMS_RollRandomNumber(&pGame->pGameSeed);

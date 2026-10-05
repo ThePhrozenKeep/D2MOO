@@ -41,7 +41,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
     gbIsWindowed = bWindowed;
     gnResolutionMode = nResolution;
 
-    RECT rect = {};
+    RECT rect = { 0 };
 
     switch (nResolution)
     {
@@ -95,11 +95,11 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
 
     if (gbIsWindowed == 1)
     {
-        RECT desktopRect = {};
+        RECT desktopRect = { 0 };
         GetClientRect(GetDesktopWindow(), &desktopRect);
 
-        nX = std::max((desktopRect.right - nWidth) / 2, 0l);
-        nY = std::max((desktopRect.bottom - nHeight)  / 2, 0l);
+        nX = std::max<long>((desktopRect.right - nWidth) / 2, 0l);
+        nY = std::max<long>((desktopRect.bottom - nHeight)  / 2, 0l);
     }
     else if (gnDisplayType == DISPLAYTYPE_GLIDE)
     {
@@ -109,7 +109,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
 
     if (GetSystemMetrics(0) < 800)
     {
-        DEVMODEA deviceMode = {};
+        DEVMODEA deviceMode = { 0 };
         deviceMode.dmSize = sizeof(DEVMODEA);
         deviceMode.dmBitsPerPel = 8;
         deviceMode.dmPelsWidth = 800;
@@ -316,7 +316,7 @@ int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution, int32_t bForce
 
     if (gbIsWindowed == 1)
     {
-        RECT Rect = {};
+        RECT Rect = { 0 };
 
         switch (nResolution)
         {
@@ -349,7 +349,7 @@ int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution, int32_t bForce
         const int32_t nHeight = Rect.bottom - Rect.top;
         //dword_6FA8D740 = nHeight - dword_6FA8D740;
 
-        RECT ClientRect = {};
+        RECT ClientRect = { 0 };
         GetClientRect(GetDesktopWindow(), &ClientRect);
 
         SetWindowPos(ghWnd, HWND_NOTOPMOST, 0, 0, nWidth, nHeight, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
@@ -425,7 +425,7 @@ void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, D2GameResolutionMode
 {
     D2_ASSERT(gpGraphicsInterface);
 
-    return gpGraphicsInterface->pfOpenSmackCutscene(szFile, nResolution, pfFrame);
+    gpGraphicsInterface->pfOpenSmackCutscene(szFile, nResolution, pfFrame);
 }
 
 //D2Gfx.0x6FA74E20 (#10035)
@@ -441,7 +441,7 @@ void __stdcall WINDOW_DecodeSmacker(const char* szSmacker, uint8_t* pBuffer, int
 {
     D2_ASSERT(gpGraphicsInterface);
 
-    return gpGraphicsInterface->pfDecodeSmacker(szSmacker, pBuffer, nVersion);
+    gpGraphicsInterface->pfDecodeSmacker(szSmacker, pBuffer, nVersion);
 }
 
 //D2Gfx.0x6FA74E90 (#10037)
@@ -449,7 +449,8 @@ void __stdcall WINDOW_PlaySmacker(void* pContext)
 {
     D2_ASSERT(gpGraphicsInterface);
 
-    return gpGraphicsInterface->pfPlaySmacker(pContext);
+    gpGraphicsInterface->pfPlaySmacker(pContext);
+
 }
 
 //D2Gfx.0x6FA74ED0 (#10038)
@@ -457,7 +458,7 @@ void __stdcall WINDOW_CloseSmacker(void* pContext)
 {
     D2_ASSERT(gpGraphicsInterface);
 
-    return gpGraphicsInterface->pfCloseSmacker(pContext);
+    gpGraphicsInterface->pfCloseSmacker(pContext);
 }
 
 //D2Gfx.0x6FA74F10 (#10039)
@@ -468,11 +469,11 @@ void __stdcall WINDOW_UpdatePlacement()
         return;
     }
 
-    _AppBarData pData = {};
+    _AppBarData pData = { 0 };
     pData.cbSize = sizeof(pData);
     pData.hWnd = ghWnd;
 
-    for (int32_t i = 0; i < std::size(gWindowPlacement); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gWindowPlacement); ++i)
     {
         pData.uEdge = i;
 
@@ -497,7 +498,7 @@ void __stdcall WINDOW_ShowAll()
         return;
     }
 
-    for (int32_t i = 0; i < std::size(gWindowPlacement); ++i)
+    for (int32_t i = 0; i < ARRAY_SIZE(gWindowPlacement); ++i)
     {
         D2WindowPlacementStrc* pWindowPlacement = &gWindowPlacement[i];
 

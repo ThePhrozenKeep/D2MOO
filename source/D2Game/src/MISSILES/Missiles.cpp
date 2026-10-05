@@ -305,7 +305,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     MISSILE_SetLevel(pMissile, missileParams->nSkillLevel);
 
     sub_6FC7C900(missileParams->pOwner, 0);
-    D2MissileDamageDataStrc missileDamageData = {};
+    D2MissileDamageDataStrc missileDamageData = { 0 };
     MISSILE_CalculateDamageData(&missileDamageData, missileParams->pOwner, missileParams->pOrigin, pMissile, missileParams->nSkillLevel);
     MISSILE_SetDamageStats(missileParams->pOwner, pMissile, &missileDamageData, missileParams->nSkillLevel);
 
@@ -321,7 +321,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
             const int32_t nPierceValue = STATLIST_UnitGetItemStatOrSkillStatValue(missileParams->pOwner, STAT_ITEM_PIERCE, 0) + STATLIST_UnitGetStatValue(missileParams->pOwner, STAT_SKILL_PIERCE, 0);
             if (nPierceValue)
             {
-                D2SeedStrc seed = {};
+                D2SeedStrc seed = { 0 };
                 SEED_InitLowSeed(&seed, STATLIST_GetUnitBaseStat(missileParams->pOwner, STAT_PIERCE_IDX, 0));
                 
                 int32_t nPierceIndex = 0;
@@ -375,7 +375,7 @@ void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, 
         return;
     }
 
-    D2GSPacketSrv73 packet73 = {};
+    D2GSPacketSrv73 packet73 = { 0 };
     packet73.nHeader = 0x73;
     packet73.nMissileId = MISSILE_GetClassId(pMissile);
     packet73.nX = CLIENTS_GetUnitX(pMissile);

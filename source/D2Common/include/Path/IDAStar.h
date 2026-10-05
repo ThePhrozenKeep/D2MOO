@@ -26,7 +26,7 @@ struct D2PathIDAStarNodeStrc             // sizeof 0x1C
 
 struct D2PathIDAStarContextStrc                           // sizof 0x36FD8
 {
-	static const size_t STORAGE_SIZE = 900;
+	enum { STORAGE_SIZE = 900 };
 
 	D2PathIDAStarNodeStrc* pCurrentNode;				  // 0x00000
 	D2PathIDAStarNodeStrc aNodesStorage[STORAGE_SIZE];	  // 0x00004

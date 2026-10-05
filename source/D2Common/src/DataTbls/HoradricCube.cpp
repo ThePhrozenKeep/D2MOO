@@ -594,7 +594,7 @@ void __fastcall DATATBLS_CubeMainParamLinker(char* pSrc, void* pRecord, int nOff
 void __fastcall DATATBLS_LoadCubeMainTxt(HD2ARCHIVE hArchive)
 {
 	HSFILE pFileHandle = NULL;
-	char szPath[100] = {};
+	char szPath[100] = { 0 };
 
 	D2BinFieldStrc pTbl[] =
 	{

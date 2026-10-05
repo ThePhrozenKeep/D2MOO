@@ -600,7 +600,7 @@ int __fastcall DRLGROOM_ReorderNearRoomList(D2DrlgRoomStrc* pDrlgRoom, D2ActiveR
 //1.14d: 0x0066C370
 void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 {
-	D2DrlgRoomStrc* ppNearRooms[30] = {};
+	D2DrlgRoomStrc* ppNearRooms[30] = { 0 };
 	D2DrlgLevelStrc* pLevel = NULL;
 	int* pDestinationVisArray = 0;
 	int* pSourceVisArray = 0;

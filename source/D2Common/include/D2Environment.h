@@ -16,7 +16,7 @@ enum D2EnvironmentPeriodOfDay
 	NUM_ENVIRONMENT_PERIODS_OF_DAY
 };
 
-enum D2EnvironmentDayCycles : int32_t {
+D2_TYPED_ENUM(D2EnvironmentDayCycles, int32_t) {
 	ENVCYCLE_SUNRISE,
 	ENVCYCLE_MORNING,
 	ENVCYCLE_NOON,

@@ -87,7 +87,7 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
             D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
             if (pPet)
             {
-                D2PetArgStrc petArg = {};
+                D2PetArgStrc petArg = { 0 };
                 petArg.nPetGUID = pPetData->nUnitGUID;
                 SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &petArg);
                 DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pPet), UNIT_MONSTER, pPet->dwUnitId);
@@ -101,7 +101,7 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
                         pPetList->pPetData = pPetData;
                         if (UNITS_GetRoom(pPet))
                         {
-                            D2ModeChangeStrc pModeChange = {};
+                            D2ModeChangeStrc pModeChange = { 0 };
                             MONSTERMODE_GetModeChangeInfo(pPet, MONMODE_DEATH, &pModeChange);
                             pModeChange.pTargetUnit = SUNIT_GetOwner(pGame, pPet);
                             D2GAME_ModeChange_6FC65220(pGame, &pModeChange, 1);
@@ -166,14 +166,14 @@ void __fastcall sub_6FC7CF50(D2GameStrc* pGame, int32_t nPetGUID)
         }
         else
         {
-            D2ModeChangeStrc pModeChange = {};
+            D2ModeChangeStrc pModeChange = { 0 };
             MONSTERMODE_GetModeChangeInfo(pPet, MONMODE_DEATH, &pModeChange);
             pModeChange.pTargetUnit = SUNIT_GetOwner(pGame, pPet);
             D2GAME_ModeChange_6FC65220(pGame, &pModeChange, 1);
         }
     }
 
-    D2PetArgStrc arg = {};
+    D2PetArgStrc arg = { 0 };
     arg.nPetGUID = nPetGUID;
     SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 }
@@ -250,7 +250,7 @@ void __fastcall sub_6FC7D260(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPe
     {
         PLAYERPETS_RemovePetFromList(pGame, pPetList, nPetGUID, a4);
 
-        D2PetArgStrc arg = {};
+        D2PetArgStrc arg = { 0 };
         arg.nPetGUID = nPetGUID;
         SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
     }
@@ -273,7 +273,7 @@ void __fastcall PLAYERPETS_RemovePetFromList(D2GameStrc* pGame, D2PetListStrc* p
                 pPetList->pPetData = pPetData->pNext;
             }
 
-            D2PetArgStrc arg = {};
+            D2PetArgStrc arg = { 0 };
             arg.nPetGUID = nUnitGUID;
             SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 
@@ -348,7 +348,7 @@ void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         }
     }
 
-    D2PetArgStrc arg = {};
+    D2PetArgStrc arg = { 0 };
     arg.nPetGUID = nPetGUID;
     SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 }
@@ -441,7 +441,7 @@ void __fastcall sub_6FC7D7A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     sub_6FC7D150(pGame, pPlayer, nPetType, nPetMax);
 
-    D2PetInfoStrc petInfo = {};
+    D2PetInfoStrc petInfo = { 0 };
     sub_6FC7DBF0(pGame, pPlayer, pPet, nPetType, &petInfo);
 }
 
@@ -560,7 +560,7 @@ void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         return;
     }
 
-    D2PetInfoStrc petInfo = {};
+    D2PetInfoStrc petInfo = { 0 };
     petInfo.nSeed = pPetInfo->nSeed;
     petInfo.wName = pPetInfo->wName;
     petInfo.unk0x06 = pPetInfo->unk0x06;
@@ -568,7 +568,7 @@ void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     if (sub_6FC7DA40(pGame, pPlayer, pPetList, pPet, &petInfo))
     {
-        D2PetArgStrc pArg = {};
+        D2PetArgStrc pArg = { 0 };
         pArg.nPetType = nPetType;
         if (pPet)
         {
@@ -649,7 +649,7 @@ int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
                 {
                     pPetData->nFlags &= 0xFFFFFFFEu;
 
-                    D2PetArgStrc arg = {};
+                    D2PetArgStrc arg = { 0 };
 
                     arg.nPetType = nPetType;
                     arg.nPetGUID = pPetData->nUnitGUID;
@@ -729,7 +729,7 @@ void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         return;
     }
 
-    int32_t nPetCounters[256] = {};
+    int32_t nPetCounters[256] = { 0 };
 
     D2SkillStrc* pSkill = SKILLS_GetFirstSkillFromSkillList(pPlayer->pSkills);
     while (pSkill)

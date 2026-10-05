@@ -38,7 +38,7 @@
  * More information regarding the generation of the table:
  * https://en.wikipedia.org/wiki/Computation_of_cyclic_redundancy_checks#Generating_the_tables
  */
-static constexpr unsigned short GenerateCrc(unsigned char i) {
+static D2_CONSTEXPR_FN unsigned short GenerateCrc(unsigned char i) {
   unsigned short crc = i;
 
   for (size_t bit = 0; bit < 16; ++bit) {
@@ -53,7 +53,25 @@ static constexpr unsigned short GenerateCrc(unsigned char i) {
 }
 
 /* [6FC1D7F0 to 6FC1D9F0) */
-static constexpr unsigned short sgCrc16LookupTable[CRC_LOOKUP_TABLE_COUNT] = {
+#if defined(_MSC_VER) && _MSC_VER < 1600
+static unsigned short sgCrc16LookupTable[CRC_LOOKUP_TABLE_COUNT];
+static bool sgCrc16LookupTableBuilt = false;
+
+static unsigned short D2Crc16_Lookup(size_t nIndex)
+{
+	if (!sgCrc16LookupTableBuilt)
+	{
+		for (int nEntry = 0; nEntry < CRC_LOOKUP_TABLE_COUNT; nEntry++)
+		{
+			sgCrc16LookupTable[nEntry] = GenerateCrc((unsigned char)nEntry);
+		}
+		sgCrc16LookupTableBuilt = true;
+	}
+
+	return sgCrc16LookupTable[nIndex];
+}
+#else
+static D2_CONSTEXPR unsigned short sgCrc16LookupTable[CRC_LOOKUP_TABLE_COUNT] = {
     GenerateCrc(0), GenerateCrc(1), GenerateCrc(2), GenerateCrc(3),
     GenerateCrc(4), GenerateCrc(5), GenerateCrc(6), GenerateCrc(7),
     GenerateCrc(8), GenerateCrc(9), GenerateCrc(10), GenerateCrc(11),
@@ -120,6 +138,12 @@ static constexpr unsigned short sgCrc16LookupTable[CRC_LOOKUP_TABLE_COUNT] = {
     GenerateCrc(252), GenerateCrc(253), GenerateCrc(254), GenerateCrc(255),
 };
 
+static inline unsigned short D2Crc16_Lookup(size_t nIndex)
+{
+	return sgCrc16LookupTable[nIndex];
+}
+#endif
+
 void __stdcall CRC16_CalculateChecksum(
     unsigned short* crc16_checksum_out,
     const unsigned char* data,
@@ -138,6 +162,6 @@ void __stdcall CRC16_CalculateChecksum(
     lookup_index = high_byte ^ data[i];
 
     *crc16_checksum_out <<= 8;
-    *crc16_checksum_out ^= sgCrc16LookupTable[lookup_index];
+    *crc16_checksum_out ^= D2Crc16_Lookup(lookup_index);
   }
 }

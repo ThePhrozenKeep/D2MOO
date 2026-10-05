@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 enum D2HarcodedConstants
 {
@@ -24,7 +24,7 @@ enum D2GameResolutionMode // DISPLAY_RES in original game
 	D2GAMERES_1344x700 = 3, // Not actually supported ?
 };
 
-enum D2C_SaveMagicHeaders : uint32_t
+D2_TYPED_ENUM(D2C_SaveMagicHeaders, uint32_t)
 {
 	D2SMAGIC_HEADER = 0xAA55AA55,
 	D2SMAGIC_QUESTINFO = 0x576F6F21,

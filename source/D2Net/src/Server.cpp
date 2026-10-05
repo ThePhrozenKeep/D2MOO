@@ -15,7 +15,7 @@ QServer* gpServer;
 int32_t gnLocalClientGameGuid_6FC0B26C;
 
 
-constexpr int32_t VARIABLE_PACKET_SIZE = -1;
+D2_CONSTEXPR int32_t VARIABLE_PACKET_SIZE = -1;
 
 
 //D2Net.0x6FC01B30 (#10024)
@@ -27,7 +27,7 @@ int32_t __stdcall SERVER_WSAGetLastError()
 //D2Net.0x6FC01B60 (#10030)
 int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
-	constexpr int32_t gServerPacketSizeTable[] =
+	D2_CONSTEXPR int32_t gServerPacketSizeTable[] =
 	{
 		sizeof(D2GSPacketSrv00),
 		sizeof(D2GSPacketSrv01),
@@ -228,7 +228,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 	}
 
 	const uint8_t nHeader = pBuffer->data[0];
-	if (nHeader >= std::size(gServerPacketSizeTable))
+	if (nHeader >= ARRAY_SIZE(gServerPacketSizeTable))
 	{
 		return 0;
 	}
@@ -394,7 +394,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 //D2Net.0x6FC01E60 (#10031)
 int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
-	constexpr int32_t gClientPacketSizeTable[] =
+	D2_CONSTEXPR int32_t gClientPacketSizeTable[] =
 	{
 		0,
 		sizeof(D2GSPacketClt01),
@@ -560,7 +560,7 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 		return 1;
 	}
 
-	if (nHeader >= std::size(gClientPacketSizeTable))
+	if (nHeader >= ARRAY_SIZE(gClientPacketSizeTable))
 	{
 		return 0;
 	}
@@ -814,7 +814,7 @@ uint32_t __stdcall D2NET_10006(int8_t a1, int32_t nClientId, void* pBufferArg, u
 		return FOG_10157(gpServer, nClientId, pBuffer, nBufferSize) != 0 ? nBufferSize : 0;
 	}
 
-	uint8_t data[1036] = {};
+	uint8_t data[1036] = { 0 };
 	const uint32_t nSize = FOG_10223(&data[2], 1032, pBuffer, nBufferSize);
 	D2_ASSERT(nSize);
 

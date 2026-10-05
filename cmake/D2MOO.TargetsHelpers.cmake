@@ -72,6 +72,8 @@ function(D2MOO_prepare_targets LibraryName)
    # Expose the lib name to the parent scope
   set(${LibraryName}ImplName ${${LibraryName}ImplName} PARENT_SCOPE)
 
+  target_link_libraries(${LibraryName} PUBLIC D2CommonDefinitions)
+
   # Always add the include directory by default
   target_include_directories(${${LibraryName}ImplName} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -90,6 +92,16 @@ function(D2MOO_prepare_targets LibraryName)
   #if(NOT TargetSources)
   #  target_sources(${LibraryName} PRIVATE ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/dummy.cpp)
   #endif()
+endfunction()
+
+# VC6's back-end global optimiser (implied by /O2) crashes with an internal
+# compiler error on some of D2MOO's larger functions. Only /Og- avoids it; /Od,
+# /O1, /Ot and dropping /Ob1 or /Oy all hit the same bug.
+# TODO: Some sort of workaround will be needed for byte-matching
+function(D2MOO_disable_msvc6_global_opt)
+  if(MSVC AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 1600)
+    set_source_files_properties(${ARGN} PROPERTIES COMPILE_FLAGS "/Og-")
+  endif()
 endfunction()
 
 function(D2MOO_target_source_group LibraryName)

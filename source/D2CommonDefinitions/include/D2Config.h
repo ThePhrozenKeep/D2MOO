@@ -24,7 +24,7 @@ struct D2CharacterPreviewInfoStrc
 	uint8_t pad0x25;					//0x25
 };
 
-enum D2C_LaunchType : uint8_t
+D2_TYPED_ENUM(D2C_LaunchType, uint8_t)
 {
 	LAUNCHTYPE_NONE = 0x0,
 	LAUNCHTYPE_LOCAL = MODE_LOCAL + 1,

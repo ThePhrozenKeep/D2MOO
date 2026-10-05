@@ -406,7 +406,7 @@ int16_t __fastcall ITEMS_RollTemperedItemAffix(D2UnitStrc* pItem, int32_t bPrefi
     const int32_t nAffixCount = pRareAffixTxtRecordEnd - pRareAffixTxtRecordBegin;
     const int32_t nAffixTableOffset = pRareAffixTxtRecordBegin - pRareAffixDataTbl->pRareAffixTxt;
 
-    D2RareAffixIndexAndPtrStrc tPotentialRareAffixesPtrAndId[512] = {};
+    D2RareAffixIndexAndPtrStrc tPotentialRareAffixesPtrAndId[512] = { 0 };
     int32_t nPotentialRareAffixes = 0;
     for (int32_t i = 0; i < nAffixCount; ++i)
     {
@@ -458,7 +458,7 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
 
     D2SeedStrc* pSeed = ITEMS_GetItemSeed(pItem);
 
-    constexpr int32_t dword_6FD27E70[] =
+    D2_CONSTEXPR int32_t dword_6FD27E70[] =
     {
         3, 4, 4, 5, 5, 5, 6, 6
     };
@@ -585,7 +585,7 @@ int16_t __fastcall D2GAME_RollRareAffix_6FC53610(D2UnitStrc* pItem, int32_t bPre
         nCount = pRareAffixDataTbl->pRarePrefix - pRareAffixDataTbl->pRareSuffix;
     }
 
-    D2RareAffixIndexAndPtrStrc data[512] = {};
+    D2RareAffixIndexAndPtrStrc data[512] = { 0 };
     int32_t nMax = 0;
     for (int32_t i = 0; i < nCount; ++i)
     {
@@ -832,7 +832,7 @@ int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
     int32_t nIndex = -1;
     const int32_t nItemFormat = ITEMS_GetItemFormat(pItem);
     const int32_t nItemLevel = ITEMS_GetItemLevel(pItem);
-    int32_t rarityData[512] = {};
+    int32_t rarityData[512] = { 0 };
 
     for (int32_t i = 0; i < sgptDataTables->nSetItemsTxtRecordCount; ++i)
     {
@@ -971,7 +971,7 @@ int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
         nCount = 4;
     }
 
-    uint8_t bRecordChecked[12] = {}; // TODO: There's no overflow check here, if the record count of QualityItems.txt is > 12
+    uint8_t bRecordChecked[12] = { 0 }; // TODO: There's no overflow check here, if the record count of QualityItems.txt is > 12
     int32_t nFileIndex = 0;
 
     while (1)

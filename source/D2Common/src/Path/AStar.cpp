@@ -137,7 +137,7 @@ int __fastcall PATH_AStar_ComputePath(D2PathInfoStrc* pPathInfo)
 	const D2PathPointStrc tStartCoord = pPathInfo->tStartCoord;
 	const D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
 
-	D2PathFoWallContextStrc tContext{};
+	D2PathFoWallContextStrc tContext = { 0 };
 	tContext.nNodesCount = 1;
 
 	const int nDistToTarget = PATH_AStar_Heuristic(tTargetCoord, tStartCoord);
@@ -202,8 +202,9 @@ BOOL __fastcall PATH_AStar_ExploreChildren(D2PathInfoStrc* pPathInfo, D2PathFoWa
 		{0,1}
 	};
 
-	for (D2CoordStrc tOffset : aOffsets)
+	for (size_t nOffset = 0; nOffset < ARRAY_SIZE(aOffsets); ++nOffset)
 	{
+		const D2CoordStrc& tOffset = aOffsets[nOffset];
 		D2PathPointStrc tNewPointCoord = a3->tPoint;
 		tNewPointCoord.X += tOffset.nX;
 		tNewPointCoord.Y += tOffset.nY;
@@ -325,8 +326,9 @@ void __fastcall PATH_AStar_PropagateNewFScoreToChildren(D2PathFoWallContextStrc*
 	while (pContext->nStackCount != 0)
 	{
 		D2PathFoWallNodeStrc* pCurrentPoint = pContext->aPointsStack[--pContext->nStackCount];
-		for (D2PathFoWallNodeStrc* pChild : pCurrentPoint->pChildren)
+		for (size_t nChildIndex = 0; nChildIndex < ARRAY_SIZE(pCurrentPoint->pChildren); ++nChildIndex)
 		{
+			D2PathFoWallNodeStrc* const pChild = pCurrentPoint->pChildren[nChildIndex];
 			if (!pChild)
 			{
 				break;
@@ -360,11 +362,11 @@ D2PathFoWallNodeStrc* __fastcall PATH_AStar_GetNewNode(D2PathFoWallContextStrc* 
 // Helper function
 static void PATH_AStar_AddChildToNode(D2PathFoWallNodeStrc* pNode, D2PathFoWallNodeStrc* pChild)
 {
-	for (D2PathFoWallNodeStrc*& pChildRef : pNode->pChildren)
+	for (size_t nChildIndex = 0; nChildIndex < ARRAY_SIZE(pNode->pChildren); ++nChildIndex)
 	{
-		if (pChildRef == nullptr)
+		if (pNode->pChildren[nChildIndex] == nullptr)
 		{
-			pChildRef = pChild;
+			pNode->pChildren[nChildIndex] = pChild;
 			break;
 		}
 	}

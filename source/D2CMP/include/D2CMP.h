@@ -6,12 +6,12 @@
 //1.10f Image base: 0x6FDF0000
 
 #ifdef D2_VERSION_110F
-constexpr int D2CMPImageBase = 0x6FDF0000;
+D2_CONSTEXPR int D2CMPImageBase = 0x6FDF0000;
 #endif
 
 #pragma pack(1)
 
-enum D2TileMaterialFlags : uint16_t 
+D2_TYPED_ENUM(D2TileMaterialFlags, uint16_t) 
 {
 	TILE_FLAGS_OTHER = 0x1,
 	TILE_FLAGS_WATER = 0x2,
@@ -159,7 +159,7 @@ inline bool TileTypeIsAWallWithDoor(int32_t nTileType)
 
 
 D2FUNC_DLL(D2CMP, GetNearestPaletteIndex, int, __stdcall, (PALETTEENTRY* pPalette, int nPaletteSize, int nRed, int nGreen, int nBlue), 0xAB20)									//D2Cmp.#10004
-D2FUNC_DLL(D2CMP, CelFileNormalize, void, __stdcall, (D2CellFileStrc* pFile, D2CellFileStrc** ppOutFile, const char* szFile, int nLine, int nSpecVersion, int nUnused), 0x1EA0)		//D2Cmp.#10024
+D2FUNC_DLL_VOID(D2CMP, CelFileNormalize, __stdcall, (D2CellFileStrc* pFile, D2CellFileStrc** ppOutFile, const char* szFile, int nLine, int nSpecVersion, int nUnused), 0x1EA0)		//D2Cmp.#10024
 D2FUNC_DLL(D2CMP, CelFileFreeHardware, BOOL, __stdcall, (D2CellFileStrc* pFile), 0x2750)																				//D2Cmp.#10032
 D2FUNC_DLL(D2CMP, CelGetHandle, D2CellFileStrc*, __stdcall, (D2GfxDataStrc*), 0x2540)																					//D2Cmp.#10036
 D2FUNC_DLL(D2CMP, CelGetWidth, int, __stdcall, (D2CellFileStrc* pCelFile), 0x25E0)																						//D2Cmp.#10037
@@ -168,9 +168,9 @@ D2FUNC_DLL(D2CMP, CelGetOffsetX, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2
 D2FUNC_DLL(D2CMP, CelGetOffsetY, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2670)																					//D2Cmp.#10040
 D2FUNC_DLL(D2CMP, CelFileGetCelsPerDirection, int, __stdcall, (D2CellFileStrc* pCelFile), 0x2700)																		//D2Cmp.#10046
 D2FUNC_DLL(D2CMP, GetGfxFileExtension, const char*, __stdcall, (BOOL bAllowCompressed), 0xB930)																			//D2Cmp.#10051
-D2FUNC_DLL(D2CMP, InitSpriteCache, void, __stdcall, (void* pMemPool, int dwSpriteCacheSize, int dwSize, unsigned int dwMemoryOverride), 0xB9F0)							//D2Cmp.#10052
-D2FUNC_DLL(D2CMP, FlushSpriteCache, void, __stdcall, (BOOL bRealloc), 0xBBF0)																							//D2Cmp.#10053
-D2FUNC_DLL(D2CMP, SetCompressedDataMode, void, __stdcall, (BOOL bAllowCompressedMode), 0xB9C0)																			//D2Cmp.#10054
+D2FUNC_DLL_VOID(D2CMP, InitSpriteCache, __stdcall, (void* pMemPool, int dwSpriteCacheSize, int dwSize, unsigned int dwMemoryOverride), 0xB9F0)							//D2Cmp.#10052
+D2FUNC_DLL_VOID(D2CMP, FlushSpriteCache, __stdcall, (BOOL bRealloc), 0xBBF0)																							//D2Cmp.#10053
+D2FUNC_DLL_VOID(D2CMP, SetCompressedDataMode, __stdcall, (BOOL bAllowCompressedMode), 0xB9C0)																			//D2Cmp.#10054
 D2FUNC_DLL(D2CMP, 10077_GetTileType, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFFF0)																//D2Cmp.#10077
 D2FUNC_DLL(D2CMP, 10078_GetTileStyle, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFF30)																//D2Cmp.#10078
 // Material flags
@@ -178,8 +178,8 @@ D2FUNC_DLL(D2CMP, 10079_GetTileFlags, int, __stdcall, (D2TileLibraryEntryStrc* p
 D2FUNC_DLL(D2CMP, 10081_GetTileRarity, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFFC0)																//D2Cmp.#10081
 D2FUNC_DLL(D2CMP, 10082_GetTileSequence, int, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0xFFF0)															//D2Cmp.#10082
 D2FUNC_DLL(D2CMP, 10085_GetTileFlagArray, uint8_t*, __stdcall, (D2TileLibraryEntryStrc* pTileLibraryEntry), 0x10080)													//D2Cmp.#10085
-D2FUNC_DLL(D2CMP, 10087_LoadTileLibrarySlot, void, __stdcall, (D2TileLibraryHashStrc** ppTileLibraryHash, const char* szFileName), 0xFDE0)								//D2Cmp.#10087
+D2FUNC_DLL_VOID(D2CMP, 10087_LoadTileLibrarySlot, __stdcall, (D2TileLibraryHashStrc** ppTileLibraryHash, const char* szFileName), 0xFDE0)								//D2Cmp.#10087
 D2FUNC_DLL(D2CMP, 10088_GetTiles, int, __stdcall, (D2TileLibraryHashStrc** ppTileLibraryHash, int nType, int nStyle, int nSequence, D2TileLibraryEntryStrc** pTileList, int nTileListSize), 0xFE70)//D2Cmp.#10088
 D2FUNC_DLL(D2CMP, MixPalette, uint8_t*, __stdcall, (uint8_t nTrans, int nColor), 0xB760)																				//D2Cmp.#10098
-D2FUNC_DLL(D2CMP, SpriteFreeAsyncLoads, void, __stdcall, (), 0xE000)																									//D2Cmp.#10099
-D2FUNC_DLL(D2CMP, TileFreeAsyncLoads, void, __stdcall, (), 0xE860)																										//D2Cmp.#10102
+D2FUNC_DLL_VOID(D2CMP, SpriteFreeAsyncLoads, __stdcall, (), 0xE000)																									//D2Cmp.#10099
+D2FUNC_DLL_VOID(D2CMP, TileFreeAsyncLoads, __stdcall, (), 0xE860)																										//D2Cmp.#10102

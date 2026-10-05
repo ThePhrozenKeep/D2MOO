@@ -39,9 +39,9 @@
 #include "UNIT/SUnit.h"
 
 
-constexpr uint32_t dword_6FD3F45C = 0xDEADDEAD;
-constexpr uint32_t dword_6FD3F460 = 1;
-constexpr uint32_t dword_6FD3F464 = 2;
+D2_CONSTEXPR uint32_t dword_6FD3F45C = 0xDEADDEAD;
+D2_CONSTEXPR uint32_t dword_6FD3F460 = 1;
+D2_CONSTEXPR uint32_t dword_6FD3F464 = 2;
 
 
 
@@ -49,7 +49,7 @@ constexpr uint32_t dword_6FD3F464 = 2;
 //D2Game.0x6FCC3850
 void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
-	D2DrlgCoordsStrc pDrlgCoords = {};
+	D2DrlgCoordsStrc pDrlgCoords = { 0 };
 	DUNGEON_GetRoomCoordinates(pRoom, &pDrlgCoords);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	const uint8_t nAct = DRLG_GetActNoFromLevelId(nLevelId);
@@ -130,7 +130,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 
 							if (!pUnit)
 							{
-								D2CoordStrc pCoord = {};
+								D2CoordStrc pCoord = { 0 };
 								if (sub_6FC66260(pGame, pRoom, 0, nClassId, &pCoord.nX, &pCoord.nY, 0))
 								{
 									pUnit = sub_6FC6A0F0(pGame, pRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
@@ -476,7 +476,7 @@ void __fastcall SUNITINACTIVE_FreeInactiveMonsterNode(D2GameStrc* pGame, D2Inact
 //D2Game.0x6FCC4120
 D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
 {
-	D2ItemSaveStrc pItemSave = {};
+	D2ItemSaveStrc pItemSave = { 0 };
 	uint8_t* pBitstream = &pInactiveItemNode->pBitstream;
 	ITEMS_GetCompactItemDataFromBitstream(pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave);
 
@@ -907,7 +907,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 		if (pUnit->dwUnitType == UNIT_ITEM)
 		{
-			uint8_t pBitstream[1024] = {};
+			uint8_t pBitstream[1024] = { 0 };
 			const size_t nBitstreamSize = ITEMS_SerializeItemToBitstream(pUnit, pBitstream, ARRAY_SIZE(pBitstream), 1, 1, 0);
 #ifdef D2_VERSION_110F
 			static_assert(sizeof(D2InactiveItemNodeStrc) == 15, "Game considers this structure to be 15bytes");
@@ -1124,7 +1124,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinate
 //D2Game.0x6FCC4E80
 D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t bAllocNewNode)
 {
-	D2DrlgCoordsStrc pCoord = {};
+	D2DrlgCoordsStrc pCoord = { 0 };
 	DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
 
 	return SUNITINACTIVE_GetListNodeFromActAndCoordinates(pGame, DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)), pCoord.nSubtileX, pCoord.nSubtileY, bAllocNewNode);

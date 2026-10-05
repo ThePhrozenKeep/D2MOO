@@ -707,7 +707,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_CreatePortalToTown(D2GameStrc* pGame, D2Un
 		return 0;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	UNITS_GetCoords(pUnit, &pCoord);
 	D2GAME_CreatePortalObject_6FD13DF0(pGame, pUnit, pRoom, pCoord.nX, pCoord.nY, LEVEL_ROGUEENCAMPMENT, 0, 59, 0);
 	return 1;

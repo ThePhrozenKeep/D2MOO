@@ -204,7 +204,7 @@ void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 }
 
 // Only differs from EventTimerCallback by return type
-using ExecuteEventCallback = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
+typedef void (__fastcall * ExecuteEventCallback)(D2GameStrc*, D2UnitStrc*, D2C_EventTypes, int32_t, int32_t);
 // Helper function
 static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCallback, D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
@@ -274,35 +274,37 @@ void __fastcall EVENT_ExecuteMonsterEvents(D2GameStrc* pGame, D2EventTimerQueueS
     EVENT_ExecuteEventsImpl(MONSTERMODE_EventHandler, pGame, pTimerQueue, pEventTimer, a4);
 }
 
+static void __fastcall EVENT_ExecuteObjectEvents_Callback(D2GameStrc* pGame, D2UnitStrc* pObject, D2C_EventTypes nEventType, int32_t, int32_t)
+{
+    D2GAME_OBJMODE_InvokeEventFunction_6FC75250(pGame, pObject, nEventType);
+}
+
 //D2Game.0x6FC34EA0
 void __fastcall EVENT_ExecuteObjectEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
-    EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pObject, D2C_EventTypes nEventType, int32_t, int32_t) {
-            D2GAME_OBJMODE_InvokeEventFunction_6FC75250(pGame, pObject, nEventType);
-        }, pGame, pTimerQueue, pEventTimer, a4 
-    );
+    EVENT_ExecuteEventsImpl(EVENT_ExecuteObjectEvents_Callback, pGame, pTimerQueue, pEventTimer, a4);
+}
+
+static void __fastcall EVENT_ExecuteMissileEvents_Callback(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType, int32_t, int32_t)
+{
+    MISSMODE_SrvDoHandler(pGame, pMissile, nEventType);
 }
 
 //D2Game.0x6FC34F90
 void __fastcall EVENT_ExecuteMissileEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
-    EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType, int32_t, int32_t) {
-            MISSMODE_SrvDoHandler(pGame, pMissile, nEventType);
-        }, pGame, pTimerQueue, pEventTimer, a4 
-    );
+    EVENT_ExecuteEventsImpl(EVENT_ExecuteMissileEvents_Callback, pGame, pTimerQueue, pEventTimer, a4);
+}
+
+static void __fastcall EVENT_ExecuteItemEvents_Callback(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t, int32_t)
+{
+    D2GAME_Items_EventsHandler_6FC4A460(pGame, pUnit, nEventType);
 }
 
 //D2Game.0x6FC35080
 void __fastcall EVENT_ExecuteItemEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
-    EVENT_ExecuteEventsImpl(
-        [](D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t, int32_t) {
-            D2GAME_Items_EventsHandler_6FC4A460(pGame, pUnit, nEventType);
-        }, pGame, pTimerQueue, pEventTimer, a4
-    );
-    
+    EVENT_ExecuteEventsImpl(EVENT_ExecuteItemEvents_Callback, pGame, pTimerQueue, pEventTimer, a4);
 }
 
 //D2Game.0x6FC35170

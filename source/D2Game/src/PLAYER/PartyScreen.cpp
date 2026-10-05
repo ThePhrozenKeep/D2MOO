@@ -77,7 +77,7 @@ void __fastcall PARTYSCREEN_ToggleLootability(D2GameStrc* pGame, D2UnitStrc* pPl
 //D2Game.0x6FC7AC20
 void __fastcall PARTYSCREEN_SendEventUpdateToClient(D2ClientStrc* pClient, int32_t nUnitGUID, uint8_t nType)
 {
-    D2GSPacketSrv5A packet5A = {};
+    D2GSPacketSrv5A packet5A = { 0 };
     packet5A.nHeader = 0x5A;
     packet5A.nType = EVENTTYPE_PVPSTATUS;
     packet5A.dwParam = nUnitGUID;
@@ -185,7 +185,7 @@ void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(D2GameStrc* pGame, D2UnitSt
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
     PARTYSCREEN_SendEventUpdateToClient(pClient, pPlayer2 ? pPlayer2->dwUnitId : -1, PARTYSCREENTYPE_NOW_ALLIED_WITH);
 
-    D2PartyScreenCallbackStrc arg = {};
+    D2PartyScreenCallbackStrc arg = { 0 };
     arg.pPlayer1 = pPlayer2;
     arg.pPlayer2 = pPlayer1;
     arg.nPartyId = nPartyId;
@@ -426,7 +426,8 @@ void __fastcall sub_6FC7B460(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg
 //D2Game.0x6FC7B4C0
 int32_t __fastcall PARTYSCREEN_CommandHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nCallbackId, int32_t nOtherPlayerGUID, int32_t nParam)
 {
-    constexpr void(__fastcall* gpfPartyCommands_6FD28E60[10])(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t*) =
+    typedef void (__fastcall FnPartyCommand)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t*);
+    static FnPartyCommand* const gpfPartyCommands_6FD28E60[10] =
     {
         nullptr,
         PARTYSCREEN_ToggleLootability,

@@ -152,7 +152,7 @@ void __fastcall COLLISION_AllocRoomCollisionGrid(void* pMemPool, D2ActiveRoomStr
 	D2ActiveRoomStrc** ppRoomList = NULL;
 	int nAdjacentRooms = 0;
 	int nTiles = 0;
-	D2DrlgCoordsStrc pDrlgCoords = {};
+	D2DrlgCoordsStrc pDrlgCoords = { 0 };
 
 	if (pRoom)
 	{
@@ -323,19 +323,19 @@ uint16_t __stdcall COLLISION_CheckMask(D2ActiveRoomStrc* pRoom, int nX, int nY, 
 //D2Common.0x6FD41720 (#10127)
 void __stdcall COLLISION_SetMask(D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t nMask)
 {
-	return COLLISION_SetCollisionMask(pRoom, nX, nY, nMask);
+	COLLISION_SetCollisionMask(pRoom, nX, nY, nMask);
 }
 
 //D2Common.0x6FD417F0 (#10123)
 void __stdcall COLLISION_ResetMask(D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t nMask)
 {
-	return COLLISION_ResetCollisionMask(pRoom, nX, nY, nMask);
+	COLLISION_ResetCollisionMask(pRoom, nX, nY, nMask);
 }
 
 //D2Common.0x6FD418C0 (#10120)
 uint16_t __stdcall COLLISION_CheckMaskWithSizeXY(D2ActiveRoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	if ((int)nSizeX <= 1 && (int)nSizeY <= 1)
 	{
@@ -420,7 +420,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2Acti
 	{
 		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			D2BoundingBoxStrc pBoundingBoxes[3] = { 0 };
 			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 			if (nBoundingBoxes > 0)
 			{
@@ -442,7 +442,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMaskForBoundingBoxRecursively(D2Acti
 //D2Common.0x6FD41DE0 (#10121)
 uint16_t __stdcall COLLISION_CheckMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	switch (nCollisionPattern)
 	{
@@ -560,7 +560,7 @@ uint16_t __fastcall COLLISION_CheckCollisionMask(D2ActiveRoomStrc* pRoom, int nX
 //D2Common.0x6FD42740 (#10122)
 int __stdcall COLLISION_CheckAnyCollisionWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	switch (nCollisionPattern)
 	{
@@ -590,7 +590,7 @@ BOOL __fastcall COLLISION_CheckAnyCollisionForBoundingBoxRecursively(D2ActiveRoo
 	{
 		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			D2BoundingBoxStrc pBoundingBoxes[3] = { 0 };
 			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 			if (nBoundingBoxes > 0 && !COLLISION_CheckCollisionMaskForBoundingBox(pCollisionGrid, &pBoundingBoxes[0], nMask))
 			{
@@ -774,7 +774,7 @@ BOOL __fastcall COLLISION_CheckAnyCollisionWithAdjacentCells(D2ActiveRoomStrc* p
 //D2Common.0x6FD43080 (#10119)
 uint16_t __stdcall COLLISION_CheckMaskWithSize(D2ActiveRoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	switch (nUnitSize)
 	{
@@ -797,7 +797,7 @@ uint16_t __stdcall COLLISION_CheckMaskWithSize(D2ActiveRoomStrc* pRoom, int nX, 
 //D2Common.0x6FD432A0 (#10128)
 void __stdcall COLLISION_SetMaskWithSize(D2ActiveRoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	switch (nUnitSize)
 	{
@@ -845,7 +845,7 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2ActiveRoom
 	{
 		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			D2BoundingBoxStrc pBoundingBoxes[3] = { 0 };
 			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 			if (nBoundingBoxes > 0)
 			{
@@ -863,7 +863,7 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2ActiveRoom
 //D2Common.0x6FD436F0 (#10130)
 void __stdcall COLLISION_SetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
-	D2BoundingBoxStrc tBoundingBox = {};
+	D2BoundingBoxStrc tBoundingBox = { 0 };
 
 	switch (nCollisionPattern)
 	{
@@ -937,7 +937,7 @@ void __stdcall COLLISION_SetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int
 //D2Common.0x6FD439D0 (#10124)
 void __stdcall COLLISION_ResetMaskWithSize(D2ActiveRoomStrc* pRoom, int nX, int nY, int nUnitSize, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	if (pRoom)
 	{
@@ -988,7 +988,7 @@ void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2ActiveRo
 	{
 		if (D2RoomCollisionGridStrc* pCollisionGrid = DUNGEON_GetCollisionGridFromRoom(pRoom))
 		{
-			D2BoundingBoxStrc pBoundingBoxes[3] = {};
+			D2BoundingBoxStrc pBoundingBoxes[3] = { 0 };
 			int nBoundingBoxes = COLLISION_AdaptBoundingBoxToGrid(pRoom, pBoundingBox, pBoundingBoxes);
 			if (nBoundingBoxes > 0)
 			{
@@ -1006,7 +1006,7 @@ void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2ActiveRo
 //D2Common.0x6FD43E60 (#10126)
 void __stdcall COLLISION_ResetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	if (pRoom)
 	{
@@ -1083,7 +1083,7 @@ void __stdcall COLLISION_ResetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, i
 //D2Common.0x6FD44140 (#10125)
 void __stdcall COLLISION_ResetMaskWithSizeXY(D2ActiveRoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	if ((int)nSizeX > 0 && (int)nSizeY > 0)
 	{
@@ -1120,7 +1120,7 @@ void __fastcall COLLISION_ResetCollisionMaskForBoundingBox(D2RoomCollisionGridSt
 //D2Common.0x6FD443E0 (#10129)
 void __stdcall COLLISION_SetMaskWithSizeXY(D2ActiveRoomStrc* pRoom, int nX, int nY, unsigned int nSizeX, unsigned int nSizeY, uint16_t nMask)
 {
-	D2BoundingBoxStrc pBoundingBox = {};
+	D2BoundingBoxStrc pBoundingBox = { 0 };
 
 	if (nSizeX != 1 || nSizeY != 1)
 	{

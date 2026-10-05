@@ -49,8 +49,8 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
 void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt()
 {
-	Unicode wszClass[512] = {};
-	Unicode wszName[512] = {};
+	Unicode wszClass[512] = { 0 };
+	Unicode wszName[512] = { 0 };
 
 	for (int i = 0; i < sgptDataTables->nCharStatsTxtRecordCount; ++i)
 	{
@@ -151,13 +151,13 @@ void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFil
 {
 	FILE* pFile = NULL;
 	size_t dwSize = 0;
-	char szFilePath[MAX_PATH] = {};
+	char szFilePath[MAX_PATH] = { 0 };
 
 	wsprintfA(szFilePath, "%s\\%s.bin", "DATA\\GLOBAL\\EXCEL", szFile);
 
 	if (sgptDataTables->bCompileTxt && *ppFileHandle)
 	{
-		fopen_s(&pFile, szFilePath, "wb");
+		pFile = fopen(szFilePath, "wb");
 		if (pFile)
 		{
 			FileLockAndWrite(*ppFileHandle, *pSize, 1, pFile);
@@ -360,6 +360,7 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 	sgptDataTables->pColourStates = (short*)D2_CALLOC_POOL(nullptr, sizeof(short) * sgptDataTables->nStatesTxtRecordCount);
 	sgptDataTables->nColourStates = 0;
 	
+	{
 	for (int i = 0; i < sgptDataTables->nStatesTxtRecordCount; ++i)
 	{
 		if (sgptDataTables->pStatesTxt[i].dwStateFlags & gdwBitMasks[STATEMASK_PGSV])
@@ -391,6 +392,7 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 			sgptDataTables->pColourStates[sgptDataTables->nColourStates] = i;
 			++sgptDataTables->nColourStates;
 		}
+	}
 	}
 }
 
@@ -525,16 +527,16 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 			pCharStatsTxtRecord = &sgptDataTables->pCharStatsTxt[nClassId];
 			if (pCharStatsTxtRecord && pCharStatsTxtRecord->szClassName[0])
 			{
-				strcpy_s(szName, 64, pCharStatsTxtRecord->szClassName);
+				strcpy(szName, pCharStatsTxtRecord->szClassName);
 			}
 			else
 			{
-				sprintf_s(szName, 64, "player %d", nClassId);
+				sprintf(szName, "player %d", nClassId);
 			}
 		}
 		else
 		{
-			sprintf_s(szName, 64, "player %d", nClassId);
+			sprintf(szName, "player %d", nClassId);
 		}
 		break;
 
@@ -546,7 +548,7 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 		}
 		else
 		{
-			sprintf_s(szName, 64, "monster %d", nClassId);
+			sprintf(szName, "monster %d", nClassId);
 		}
 		break;
 
@@ -554,16 +556,16 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 		pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nClassId);
 		if (pObjectsTxtRecord && pObjectsTxtRecord->szName[0])
 		{
-			strcpy_s(szName, 64, pObjectsTxtRecord->szName);
+			strcpy(szName, pObjectsTxtRecord->szName);
 		}
 		else
 		{
-			sprintf_s(szName, 64, "object %d", nClassId);
+			sprintf(szName, "object %d", nClassId);
 		}
 		break;
 
 	case UNIT_MISSILE:
-		sprintf_s(szName, 64, "missile %d", nClassId);
+		sprintf(szName, "missile %d", nClassId);
 		break;
 
 	case UNIT_ITEM:
@@ -574,12 +576,12 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 		}
 		else
 		{
-			sprintf_s(szName, 64, "item %d", nClassId);
+			sprintf(szName, "item %d", nClassId);
 		}
 		break;
 
 	default:
-		sprintf_s(szName, 64, "Invalid Unit");
+		sprintf(szName, "Invalid Unit");
 		break;
 	}
 
@@ -590,11 +592,11 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount)
 {
 	FILE* pFile = NULL;
-	char szFilePath[MAX_PATH] = {};
+	char szFilePath[MAX_PATH] = { 0 };
 
 	wsprintfA(szFilePath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", szFileName);
 
-	fopen_s(&pFile, szFilePath, "wb");
+	pFile = fopen(szFilePath, "wb");
 	if (pFile)
 	{
 		FileLockAndWrite(&nRecordCount, sizeof(nRecordCount), 1, pFile);
@@ -612,7 +614,7 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 	void* pTxt = NULL;
 	int nRecordCount = 0;
 	size_t dwDataSize = 0;
-	char szFilePath[MAX_PATH] = {};
+	char szFilePath[MAX_PATH] = { 0 };
 
 	dwDataSize = 0;
 	if (sgptDataTables->bCompileTxt)
@@ -638,7 +640,7 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 		FOG_FreeBinFile(pBinFile);
 
 		wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szName, ".bin");
-		fopen_s(&pFile, szFilePath, "wb");
+		pFile = fopen(szFilePath, "wb");
 		if (pFile)
 		{
 			FileLockAndWrite(&nRecordCount, 4, 1, pFile);

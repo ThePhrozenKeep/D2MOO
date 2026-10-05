@@ -67,7 +67,7 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	D2SkillStrc* pSkill = NULL;
 	int nMissileId = 0;
-	D2SkillCalcStrc pSkillCalc = {};
+	D2SkillCalcStrc pSkillCalc = { 0 };
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	if (pSkillsTxtRecord)
@@ -477,7 +477,7 @@ int __fastcall sub_6FDAF7A0(int nSkillId, int a2, int a3, void* pUserData)
 //D2Common.0x6FDAF7E0 (#11276)
 int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
 {
-	D2SkillCalcStrc pSkillCalc = {};
+	D2SkillCalcStrc pSkillCalc = { 0 };
 
 	if (sgptDataTables->pSkillsCode && nCalc < sgptDataTables->nSkillsCodeSize)
 	{
@@ -494,7 +494,7 @@ int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc,
 //D2Common.0x6FDAF850 (#11302)
 int __stdcall SKILLS_EvaluateSkillDescFormula(D2UnitStrc* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
 {
-	D2SkillCalcStrc pSkillCalc = {};
+	D2SkillCalcStrc pSkillCalc = { 0 };
 
 	if (sgptDataTables->pSkillDescCode && nCalc < sgptDataTables->nSkillDescCodeSize)
 	{
@@ -3016,7 +3016,7 @@ int __stdcall D2Common_11024(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2SkillStrc* 
 {
 	int nStatId = 0;
 	int nValue = 0;
-	D2StatStrc pStat[32] = {};
+	D2StatStrc pStat[32] = { D2StatStrc() };
 
 	if (pHasThrowBonus)
 	{
@@ -3077,7 +3077,7 @@ int __stdcall SKILLS_GetWeaponMasteryBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 	int nStatId = 0;
 	int nValue = 0;
 	BOOL bHasThrowBonus = FALSE;
-	D2StatStrc pStat[32] = {};
+	D2StatStrc pStat[32] = { D2StatStrc() };
 
 	if (pUnit && pItem)
 	{
@@ -3131,7 +3131,7 @@ int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, i
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
 	int nThrowStatId = 0;
 	int nMeleeStatId = 0;
-	D2SkillCalcStrc pSkillCalc = {};
+	D2SkillCalcStrc pSkillCalc = { 0 };
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	if (pSkillsTxtRecord && nSkillLevel > 0)
@@ -3169,8 +3169,8 @@ int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, i
 //D2Common.0x6FDB3910 (#11025)
 BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 
 	pCoords1.nX = nX1;
 	pCoords1.nY = nY1;
@@ -3183,8 +3183,8 @@ BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomSt
 //D2Common.0x6FDB3960 (#11026)
 BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, uint16_t nColMask)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
 
 	pCoords1.nX = nX;
 	pCoords1.nY = nY;
@@ -3272,9 +3272,9 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 {
 	D2ActiveRoomStrc* pRoom = NULL;
 	int nDivisor = 0;
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoords1 = { 0 };
+	D2CoordStrc pCoords2 = { 0 };
+	D2CoordStrc pCoord = { 0 };
 
 	if (pUnit2 && UNITS_IsInMeleeRange(pUnit1, pUnit2, 0))
 	{

@@ -368,7 +368,7 @@ void __fastcall SUNIT_WarpPlayer(D2GameStrc* pGame, D2UnitStrc* pTarget, D2UnitS
         return;
     }
 
-    D2CoordStrc pCoord = {};
+    D2CoordStrc pCoord = { 0 };
     D2ActiveRoomStrc* pWarpTileRoom = UNITS_GetRoom(pWarpTile);
     pCoord.nX = CLIENTS_GetUnitX(pWarpTile);
     pCoord.nY = CLIENTS_GetUnitY(pWarpTile);
@@ -731,7 +731,7 @@ void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc*
         {
             if (i->dwUnitId == pUnit->dwUnitId)
             {
-                char szMessage[256] = {};
+                char szMessage[256] = { 0 };
                 FOG_DisplayAssert(FOG_csprintf(szMessage, "Tried to add a duplicate unit - Type:%d Class:%d Id:%u\n", pUnit->dwUnitType, pUnit->dwClassId, pUnit->dwUnitId), __FILE__, __LINE__);
                 exit(-1);
             }
@@ -1035,7 +1035,7 @@ D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2ActiveRoomStr
                 return nullptr;
             }
 
-            D2ItemDropStrc itemDrop = {};
+            D2ItemDropStrc itemDrop = { 0 };
             itemDrop.nQuality = ITEMQUAL_NORMAL;
             itemDrop.nItemLvl = DUNGEON_GetLevelIdFromRoom(pRoom);
             if (!D2GAME_InitItemStats_6FC4E520(pGame, &pUnit, &itemDrop, 1))
@@ -1057,7 +1057,7 @@ D2UnitStrc* __fastcall SUNIT_CreatePresetUnit(D2GameStrc* pGame, D2ActiveRoomStr
 //D2Game.0x6FCBC6F0
 void __fastcall SUNIT_SpawnPresetUnit(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2PresetUnitStrc* pPresetUnit)
 {
-    D2DrlgCoordsStrc pCoord = {};
+    D2DrlgCoordsStrc pCoord = { 0 };
 
     DUNGEON_GetRoomCoordinates(pRoom, &pCoord);
 
@@ -1346,7 +1346,7 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
     D2ActiveRoomStrc* pSecondRoom = UNITS_GetRoom(pSecond);
     if (pSecondRoom)
     {
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
         DUNGEON_GetRoomCoordinates(pSecondRoom, &drlgCoords);
         pFirst->pObjectData->DestRoomCooords.nX = drlgCoords.nTileXPos;
         pFirst->pObjectData->DestRoomCooords.nY = drlgCoords.nTileYPos;
@@ -1355,7 +1355,7 @@ void __fastcall sub_6FCBC9C0(D2UnitStrc* pFirst, D2UnitStrc* pSecond)
     D2ActiveRoomStrc* pFirstRoom = UNITS_GetRoom(pFirst);
     if (pFirstRoom)
     {
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
         DUNGEON_GetRoomCoordinates(pFirstRoom, &drlgCoords);
         pSecond->pObjectData->DestRoomCooords.nX = drlgCoords.nTileXPos;
         pSecond->pObjectData->DestRoomCooords.nY = drlgCoords.nTileYPos;
@@ -1777,7 +1777,7 @@ void __fastcall SUNIT_FillUnitInfo(D2UnitStrc* pUnit, D2UnitInfoStrc* pInfo)
         D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
         if (pPlayerData)
         {
-            strcpy_s(pInfo->szDescription, pPlayerData->szName);
+            strcpy(pInfo->szDescription, pPlayerData->szName);
         }
     }
 
@@ -1917,7 +1917,7 @@ void __stdcall SUNIT_SetInteractInfo(D2UnitStrc* pUnit, int32_t nInteractUnitTyp
             D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
             if (pPlayerData)
             {
-                char szMessage[80] = {};
+                char szMessage[80] = { 0 };
                 sprintf(szMessage, "Player %s attempted to operate while busy\n", pPlayerData->szName);
             }
         }
@@ -2260,7 +2260,7 @@ void __fastcall sub_6FCBDE90(D2UnitStrc* pUnit, int32_t bSetUninterruptable)
         D2UnitStrc* pAttacker = SUNIT_GetLastAttacker(pGame, pUnit);
         if (pAttacker)
         {
-            D2DamageStrc damage = {};
+            D2DamageStrc damage = { 0 };
             damage.wResultFlags |= DAMAGERESULTFLAG_WILLDIE;
             SUNITDMG_ExecuteMissileDamage(pGame, pAttacker, pUnit, &damage);
         }
@@ -2313,7 +2313,7 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRo
         }
     }
 
-    D2CoordStrc coords = {};
+    D2CoordStrc coords = { 0 };
     coords.nX = nX;
     coords.nY = nY;
 
@@ -2331,7 +2331,7 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRo
     {
         D2ClientStrc* pClient = UNITS_GetPlayerData(pUnit)->pClient;
 
-        D2DrlgCoordsStrc drlgCoords = {};
+        D2DrlgCoordsStrc drlgCoords = { 0 };
 
         DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
         D2GAME_PACKETS_SendPacket0x07_6FC3D120(pClient, DUNGEON_GetLevelIdFromRoom(pRoom), (uint16_t)drlgCoords.nTileXPos, (uint16_t)drlgCoords.nTileYPos);

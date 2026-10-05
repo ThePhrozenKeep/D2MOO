@@ -480,11 +480,11 @@ int16_t __fastcall PLRTRADE_RollRandomItemClassOfSameType(D2GameStrc* pGame, int
         return 0;
     }
 
-    int16_t nIndices[256] = {};
+    int16_t nIndices[256] = { 0 };
     int32_t nCounter = 0;
     do
     {
-        if (nCounter >= std::size(nIndices))
+        if (nCounter >= ARRAY_SIZE(nIndices))
         {
             break;
         }
@@ -539,8 +539,8 @@ int32_t __fastcall PLRTRADE_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc
 //1.14d: 0x00565AB0
 void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CubeMainTxt* pCubeMainTxt, D2CubeItemStrc* pCubeItem)
 {
-    using CubeOutputFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-    constexpr CubeOutputFunc dword_6FD2933C[] =
+    typedef int32_t (__fastcall * CubeOutputFunc)(D2GameStrc*, D2UnitStrc*);
+    D2_CONSTEXPR CubeOutputFunc dword_6FD2933C[] =
     {
         nullptr,
         PLRTRADE_CreateCowPortal,
@@ -554,9 +554,9 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
     int32_t bSuccess = 0;
     int32_t bAddCraftStats = 1;
 
-    D2UnitStrc* pSocketables[18] = {};
-    D2UnitStrc* pOutputs[3] = {};
-    int32_t bRemove[3] = {};
+    D2UnitStrc* pSocketables[18] = { 0 };
+    D2UnitStrc* pOutputs[3] = { 0 };
+    int32_t bRemove[3] = { 0 };
 
     for (int32_t nCounter = 0; nCounter < 3; ++nCounter)
     {
@@ -598,7 +598,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         int32_t nLevel = nOutputLevel;
 
         const int32_t nType = pCubeOutput->nType;
-        if (nType && nType < std::size(dword_6FD2933C))
+        if (nType && nType < ARRAY_SIZE(dword_6FD2933C))
         {
             CubeOutputFunc pOperateFn = dword_6FD2933C[nType];
             if (pOperateFn)
@@ -727,7 +727,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
                 if (bCreateItem)
                 {
-                    D2ItemDropStrc pItemDrop = {};
+                    D2ItemDropStrc pItemDrop = { 0 };
                     pItemDrop.pGame = pGame;
                     pItemDrop.nItemIndex = nItemId;
                     pItemDrop.wItemFormat = pGame->wItemFormat;
@@ -748,9 +748,11 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                         pItemDrop.nPrefix[i] = pCubeOutput->wPrefixId[i];
                     }
 
+                    {
                     for (int32_t i = 0; i < 3; ++i)
                     {
                         pItemDrop.nSuffix[i] = pCubeOutput->wSuffixId[i];
+                    }
                     }
 
                     //nPrefixCounter = 0;
@@ -842,7 +844,7 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
                     {
                         if (pCubeOutput->pParam[i].nModChance == 0 || pCubeOutput->pParam[i].nModChance >= 100 || (ITEMS_RollRandomNumber(&pCurrentOutput->pSeed) % 100) <= pCubeOutput->pParam[i].nModChance)
                         {
-                            D2PropertyStrc itemProperty = {};
+                            D2PropertyStrc itemProperty = { 0 };
                             itemProperty.nProperty = pCubeOutput->pParam[i].nMod;
                             itemProperty.nLayer = pCubeOutput->pParam[i].nModParam;
                             itemProperty.nMin = pCubeOutput->pParam[i].nModMin;
@@ -1127,7 +1129,7 @@ void __fastcall sub_6FC90C20(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 //D2Game.0x6FC90D70
 void __fastcall PLRTRADE_SendEventPacketToPlayer(D2UnitStrc* pPlayer, D2C_SRV2CLT5A_TYPES nType, char* szSource)
 {
-    D2GSPacketSrv5A packet5A = {};
+    D2GSPacketSrv5A packet5A = { 0 };
     packet5A.nHeader = 0x5A;
     packet5A.nType = nType;
     packet5A.nColor = STRCOLOR_WHITE;
@@ -1452,14 +1454,14 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
 
                 if (PLRTRADE_AllocPlayerTrade(pGame, pInteractPlayer))
                 {
-                    D2GSPacketSrv78 packet78 = {};
+                    D2GSPacketSrv78 packet78 = { 0 };
 
                     packet78.nHeader = 0x78u;
-                    strcpy_s(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__)));
+                    strcpy(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__)));
                     packet78.dwPlayerGUID = pInteractPlayer->dwUnitId;
                     sub_6FC3E0D0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), &packet78);
 
-                    strcpy_s(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__)));
+                    strcpy(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__)));
                     packet78.dwPlayerGUID = pPlayer->dwUnitId;
                     sub_6FC3E0D0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), &packet78);
                     return 0;
@@ -1753,7 +1755,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
         return;
     }
 
-    _SYSTEMTIME systemTime = {};
+    _SYSTEMTIME systemTime = { 0 };
     GetLocalTime(&systemTime);
     const uint16_t wDayOfWeek = systemTime.wDayOfWeek + 1;
     const uint16_t wDay = systemTime.wDay;
@@ -2004,8 +2006,8 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
 
             if (bOpConditionsFulfilled && pUnit->pInventory)
             {
-                D2CubeItemStrc a5[3] = {};
-                int32_t a6[48] = {};
+                D2CubeItemStrc a5[3] = { 0 };
+                int32_t a6[48] = { 0 };
 
                 int32_t nInputs = 0;
                 while (PLRTRADE_CheckCubeInput(pGame, pUnit->pInventory, pCubeMainTxtRecord, nInputs, a5, a6))

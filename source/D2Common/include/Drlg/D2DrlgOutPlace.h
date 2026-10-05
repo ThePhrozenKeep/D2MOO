@@ -14,10 +14,10 @@ enum D2Jungle {
 
 enum D2JunglePresetFlags {
 	// Related to pPreset1 having a value in the direction
-	JUNGLE_FLAG_LEFT_	= 0b0001, // West : deltaX < 0
-	JUNGLE_FLAG_RIGHT_	= 0b0010, // East : deltaX > 0
-	JUNGLE_FLAG_BOTTOM_	= 0b0100, // South: deltaY > 0
-	JUNGLE_FLAG_TOP_	= 0b1000, // North: deltaY < 0
+	JUNGLE_FLAG_LEFT_	= 0x1, // West : deltaX < 0
+	JUNGLE_FLAG_RIGHT_	= 0x2, // East : deltaX > 0
+	JUNGLE_FLAG_BOTTOM_	= 0x4, // South: deltaY > 0
+	JUNGLE_FLAG_TOP_	= 0x8, // North: deltaY < 0
 };
 
 struct D2JungleStrc

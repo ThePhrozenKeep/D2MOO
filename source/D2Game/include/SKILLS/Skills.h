@@ -12,11 +12,9 @@ struct D2MissilesTxt;
 struct D2PetTypeTxt;
 struct D2StatesTxt;
 
-using CurseCallbackFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t);
-
-
-using SkillStartFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
-using SkillDoFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
+typedef void (__fastcall * CurseCallbackFunc)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t);
+typedef int32_t (__fastcall * SkillStartFunc)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
+typedef int32_t (__fastcall * SkillDoFunc)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 extern const SkillDoFunc gpSkillSrvDoFnTable_6FD40A20[];
 extern const int32_t gnSkillSrvDoFns;
 

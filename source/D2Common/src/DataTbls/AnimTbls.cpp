@@ -10,7 +10,7 @@ D2AnimDataTableStrc* __fastcall DATATBLS_LoadAnimDataD2(HD2ARCHIVE hArchive)
 {
 	D2AnimDataTableStrc* pAnimDataTable = D2_CALLOC_STRC_POOL(nullptr, D2AnimDataTableStrc);
 
-	char szPath[MAX_PATH] = {};
+	char szPath[MAX_PATH] = { 0 };
 	wsprintfA(szPath, "%s\\AnimData.d2", "DATA\\GLOBAL");
 	pAnimDataTable->pBinaryData = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(hArchive, szPath, nullptr);
 ;
@@ -87,7 +87,7 @@ static D2AnimDataRecordStrc* DATATBLS_GetAnimDataRecordFromPath(char* szPath)
 const D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pUnit, int nClassId, int nMode, int nUnitType, D2InventoryStrc* pInventory)
 {
 	int nWeaponClassCode = 0;
-	char szPath[8] = {};
+	char szPath[8] = { 0 };
 	D2Common_10884_COMPOSIT_unk(pUnit, nClassId, nMode, nUnitType, pInventory, szPath, &nWeaponClassCode, FALSE, 1);
 	if (D2AnimDataRecordStrc* pFound = DATATBLS_GetAnimDataRecordFromPath(szPath))
 	{
@@ -103,7 +103,7 @@ const D2AnimDataRecordStrc* __fastcall DATATBLS_GetAnimDataRecord(D2UnitStrc* pU
 void __stdcall DATATBLS_UnitAnimInfoDebugSet(D2UnitStrc* pUnit, int nAnimSpeed)
 {
 	int nWeaponClassCode = 0;
-	char szPath[8] = {};
+	char szPath[8] = { 0 };
 	D2Common_10885_COMPOSIT_unk(pUnit, szPath, &nWeaponClassCode, 0, 1, pUnit->pInventory, -1);
 	if (D2AnimDataRecordStrc* pRecord = DATATBLS_GetAnimDataRecordFromPath(szPath))
 	{

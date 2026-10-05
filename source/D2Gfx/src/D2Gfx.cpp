@@ -15,7 +15,7 @@ extern int32_t gbNoWindowCreated_6FA8D848;
 extern HINSTANCE ghInstance;
 
 
-constexpr const char* gszDriverDllNames[NUMBER_OF_DISPLAYTYPES] = { "", "D2Gdi.dll", "", "D2DDraw.dll", "D2Glide.dll", "D2OpenGL.dll", "D2Direct3D.dll", "D2Rave.dll" };
+D2_CONSTEXPR const char* gszDriverDllNames[NUMBER_OF_DISPLAYTYPES] = { "", "D2Gdi.dll", "", "D2DDraw.dll", "D2Glide.dll", "D2OpenGL.dll", "D2Direct3D.dll", "D2Rave.dll" };
 
 WNDPROC gpfWndProc;
 PALETTEENTRY gpPalette_6FA8D278[256];
@@ -27,7 +27,7 @@ int32_t gnViewMatrixAdjust_6FA8D254;
 
 D2GfxSettingsStrc gGfxSettings = { 0, 1, 0, 155, 1, 1 };
 
-constexpr D2GfxHelperStrc gpGfxHelpers =
+D2_CONSTEXPR D2GfxHelperStrc gpGfxHelpers =
 {
     D2GFX_FillYBufferTable_6FA71010,
     D2GFX_DrawVisTile_6FA72730,
@@ -45,7 +45,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
     gpfWndProc = pfWndProc;
     ghInstance = hInstance;
 
-    WNDCLASSA wndClass = {};
+    WNDCLASSA wndClass = { 0 };
     if (nDisplayType == DISPLAYTYPE_OPENGL)
     {
         wndClass.style = CS_OWNDC;
@@ -77,7 +77,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
     gnDisplayType = nDisplayType;
     gbIsWindowed = bWindowed;
 
-    if (nDisplayType < 0 || nDisplayType >= std::size(gszDriverDllNames))
+    if (nDisplayType < 0 || nDisplayType >= ARRAY_SIZE(gszDriverDllNames))
     {
         FOG_Trace("Unsupported video mode - %d", nDisplayType);
         return 0;
@@ -86,7 +86,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
     ghRenderModule = LoadLibraryA(gszDriverDllNames[nDisplayType]);
     if (!ghRenderModule)
     {
-        char szErrorMessage[256] = {};
+        char szErrorMessage[256] = { 0 };
         wsprintfA(szErrorMessage, "Can't find DLL: %s", gszDriverDllNames[nDisplayType]);
         FOG_DisplayHalt(szErrorMessage, __FILE__, __LINE__);
         exit(-1);
@@ -98,7 +98,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
 
     if (!pfGetGraphicsInterface)
     {
-        char szErrorMessage[256] = {};
+        char szErrorMessage[256] = { 0 };
         wsprintfA(szErrorMessage, "Error interfacing with Gfx DLL #%i", GetLastError());
         FOG_DisplayHalt(szErrorMessage, __FILE__, __LINE__);
         exit(-1);
@@ -349,25 +349,29 @@ int32_t __stdcall D2GFX_GetBackBuffer(uint8_t* pBuffer)
 //D2Gfx.0x6FA73CE0 (#10051)
 void __stdcall D2GFX_UtilDiamond(RECT* pRect, uint8_t nPaletteIndex)
 {
-    return gpGraphicsInterface->pfUtilDiamond(pRect, nPaletteIndex);
+    gpGraphicsInterface->pfUtilDiamond(pRect, nPaletteIndex);
+    return;
 }
 
 //D2Gfx.0x6FA73D00 (#10052)
 void __stdcall D2GFX_UtilRect(RECT* pRect, uint8_t nPaletteIndex)
 {
-    return gpGraphicsInterface->pfUtilRect(pRect, nPaletteIndex);
+    gpGraphicsInterface->pfUtilRect(pRect, nPaletteIndex);
+    return;
 }
 
 //D2Gfx.0x6FA73D20 (#10053)
 void __stdcall D2GFX_UtilFilledRect(RECT* pRect, uint8_t nPaletteIndex)
 {
-    return gpGraphicsInterface->pfUtilFilledRect(pRect, nPaletteIndex);
+    gpGraphicsInterface->pfUtilFilledRect(pRect, nPaletteIndex);
+    return;
 }
 
 //D2Gfx.0x6FA73D40 (#10054)
 void __stdcall D2GFX_UtilPoint(POINT* pPoint, uint8_t nSize, uint8_t nPaletteIndex)
 {
-    return gpGraphicsInterface->pfUtilPoint(pPoint, nSize, nPaletteIndex);
+    gpGraphicsInterface->pfUtilPoint(pPoint, nSize, nPaletteIndex);
+    return;
 }
 
 //D2Gfx.0x6FA73D60 (#10055)
@@ -391,13 +395,15 @@ void __stdcall D2GFX_DrawBoxAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEn
 //D2Gfx.0x6FA73DE0 (#10057)
 void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, uint8_t nColor, uint8_t nAlpha)
 {
-    return gpGraphicsInterface->pfDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, nAlpha);
+    gpGraphicsInterface->pfDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, nAlpha);
+    return;
 }
 
 //D2Gfx.0x6FA73E10 (#10058)
 void __stdcall D2GFX_ClearScreen(int32_t bPartial)
 {
-    return gpGraphicsInterface->pfClearScreen(bPartial);
+    gpGraphicsInterface->pfClearScreen(bPartial);
+    return;
 }
 
 //D2Gfx.0x6FA73E30 (#10079)
@@ -430,7 +436,8 @@ void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables)
 //D2Gfx.0x6FA73ED0 (#10050)
 void __stdcall D2GFX_SetAmbientColor(uint8_t nRed, uint8_t nGreen, uint8_t nBlue)
 {
-    return gpGraphicsInterface->pfSetAmbientColor(nRed, nGreen, nBlue);
+    gpGraphicsInterface->pfSetAmbientColor(nRed, nGreen, nBlue);
+    return;
 }
 
 //D2Gfx.0x6FA73EF0 (#10069)
@@ -439,11 +446,13 @@ void __cdecl D2GFX_OutputString(int32_t nXPos, int32_t nYPos, const char* szForm
     va_list va;
 
     va_start(va, szFormat);
-    return gpGraphicsInterface->pfOutputString(nXPos, nYPos, szFormat, va);
+    gpGraphicsInterface->pfOutputString(nXPos, nYPos, szFormat, va);
+    return;
 }
 
 //D2Gfx.0x6FA73F10 (#10070)
 void __stdcall D2GFX_DebugDraw(uint32_t* pLight, uint32_t* pPlayerLight, int32_t nXPos, int32_t nYPos)
 {
-    return gpGraphicsInterface->pfDebugDraw(pLight, pPlayerLight, nXPos, nYPos);
+    gpGraphicsInterface->pfDebugDraw(pLight, pPlayerLight, nXPos, nYPos);
+    return;
 }

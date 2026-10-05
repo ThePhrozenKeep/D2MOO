@@ -486,7 +486,7 @@ TEST_CASE("Unicode::toUpper")
 
 TEST_CASE("Unicode::toUtf")
 {
-    constexpr size_t dest_capacity = 256;
+    D2_CONSTEXPR size_t dest_capacity = 256;
     char dest[dest_capacity];
 
     // The official name of Diablo in Japanese
@@ -522,7 +522,7 @@ TEST_CASE("Unicode::toUtf")
 
 TEST_CASE("Unicode::toUnicode")
 {
-    constexpr size_t dest_capacity = 256;
+    D2_CONSTEXPR size_t dest_capacity = 256;
     Unicode dest[dest_capacity];
 
     // The official name of Diablo in Japanese
@@ -558,7 +558,7 @@ TEST_CASE("Unicode::toUnicode")
 
 TEST_CASE("STR_GroupIntDigits")
 {
-    constexpr size_t dest_capacity = 256;
+    D2_CONSTEXPR size_t dest_capacity = 256;
     Unicode dest[dest_capacity];
 
     SUBCASE("0")
@@ -600,7 +600,7 @@ TEST_CASE("STR_GroupIntDigits")
 
 TEST_CASE("STR_GroupUintDigits")
 {
-    constexpr size_t dest_capacity = 256;
+    D2_CONSTEXPR size_t dest_capacity = 256;
     Unicode dest[dest_capacity];
 
     SUBCASE("0")

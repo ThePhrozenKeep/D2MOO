@@ -21,9 +21,9 @@ struct D2ModeChangeStrc
 };
 
 // TODO: Better names
-using MonModeCallback1 = int32_t(__fastcall*)(D2GameStrc*, D2ModeChangeStrc*);
-using MonModeCallback2 = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-using MonModeCallback3 = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+typedef int32_t (__fastcall * MonModeCallback1)(D2GameStrc*, D2ModeChangeStrc*);
+typedef int32_t (__fastcall * MonModeCallback2)(D2GameStrc*, D2UnitStrc*);
+typedef void (__fastcall * MonModeCallback3)(D2GameStrc*, D2UnitStrc*);
 struct D2MonModeCallbackTableStrc
 {
 	MonModeCallback1 unk0x00;

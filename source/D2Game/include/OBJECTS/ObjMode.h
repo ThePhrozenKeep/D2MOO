@@ -5,8 +5,7 @@
 
 #pragma pack(1)
 
-using ObeliskPowerUpFunction = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t);
-
+typedef int32_t (__fastcall * ObeliskPowerUpFunction)(D2GameStrc*, D2UnitStrc*, int32_t);
 struct D2ObeliskPowerUpStrc
 {
 	ObeliskPowerUpFunction pPowerUpCallback;//0x00
@@ -23,9 +22,8 @@ struct D2ObjOperateFnStrc
 	D2ObjectControlStrc* pObjectregion;		//0x0C
 	int32_t nObjectIdx;						//0x10
 };
-using ObjOperateFunction = int32_t(__fastcall*)(D2ObjOperateFnStrc*, int32_t);
-
-using ObjShrineFunction = void(__fastcall* )(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
+typedef int32_t (__fastcall * ObjOperateFunction)(D2ObjOperateFnStrc*, int32_t);
+typedef void (__fastcall * ObjShrineFunction)(D2ObjOperateFnStrc* pOp, D2ShrinesTxt* pShrinesTxtRecord);
 struct D2ShrineTableStrc
 {
 	ObjShrineFunction pfShrineCallback;		//0x00

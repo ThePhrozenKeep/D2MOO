@@ -36,8 +36,8 @@ void __fastcall DRLGLOGIC_FreeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom)
 //D2Common.0x6FD764A0
 void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pTileTypeGrid, D2DrlgGridStrc* pFloorGrid, D2DrlgGridStrc* pWallGrid)
 {
-	int nCellPositions[1024] = {};
-	int nCellFlags[256] = {};
+	int nCellPositions[1024] = { 0 };
+	int nCellFlags[256] = { 0 };
 	
 	D2DrlgLogicalRoomInfoStrc* pDrlgCoordList = D2_CALLOC_STRC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, D2DrlgLogicalRoomInfoStrc);
 	pDrlgRoom->pLogicalRoomInfo = pDrlgCoordList;
@@ -64,7 +64,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 
 	int nLists = pDrlgRoom->pLevel->nCoordLists;
 
-	D2DrlgGridStrc pDrlgGrid = {};
+	D2DrlgGridStrc pDrlgGrid = { 0 };
 	DRLGGRID_FillGrid(&pDrlgGrid, pDrlgRoom->nTileWidth + 1, pDrlgRoom->nTileHeight + 1, nCellPositions, nCellFlags);
 
 	pDrlgRoomTiles = &pDrlgRoom->pTileGrid->pTiles;
@@ -103,7 +103,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 		}
 	}
 
-	D2UnkDrlgLogicStrc tDRLGLogicUnkStrc = {};
+	D2UnkDrlgLogicStrc tDRLGLogicUnkStrc = { 0 };
 	memset(&tDRLGLogicUnkStrc, 0x00, sizeof(tDRLGLogicUnkStrc));
 	tDRLGLogicUnkStrc.field_4 = &pDrlgCoordList->pIndexX;
 	tDRLGLogicUnkStrc.pTileTypeGrid = pTileTypeGrid;

@@ -607,7 +607,7 @@ void __fastcall OBJECTS_InitFunction71_LarzukStandard(D2ObjInitFnStrc* pOp)
 		return;
 	}
 
-	D2CoordStrc pCoord = {};
+	D2CoordStrc pCoord = { 0 };
 	pCoord.nY = pOp->nY;
 	pCoord.nX = pOp->nX;
 	D2ActiveRoomStrc* pRoom = nullptr;
