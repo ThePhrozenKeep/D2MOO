@@ -1,4 +1,5 @@
 #include <imgui.h>
+#include <cstdio>
 #include <vector>
 #include "D2Debugger.h"
 #include <GAME/Game.h>
@@ -243,12 +244,22 @@ const std::vector<char>& GetNOTFOUNDCharBuffer()
     return notFoundBuffer;
 }
 
+// Several records can share a display name (e.g. many monsters are "Fallen"), so labels carry the id too.
+template<typename NAMEGETTER>
+std::vector<char> GetIdAndName(int id, NAMEGETTER&& NameGetter)
+{
+    const std::vector<char> name = NameGetter(id);
+    std::vector<char> label(name.size() + 16, 0);
+    std::snprintf(label.data(), label.size(), "%d: %s", id, name.data());
+    return label;
+}
+
 template<typename NAMEGETTER>
 void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& NameGetter)
 {
 
     static bool bWasComboOpen = false;
-    if (ImGui::BeginCombo(Title, NameGetter(selectedID).data()))
+    if (ImGui::BeginCombo(Title, GetIdAndName(selectedID, NameGetter).data()))
     {
         ImGuiListClipper clipper;
         clipper.Begin(count);
@@ -264,7 +275,7 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
             for (int id = clipper.DisplayStart; id < clipper.DisplayEnd; id++)
             {
                 const bool bSelected = selectedID == id;
-                if (ImGui::Selectable(NameGetter(id).data(), bSelected))
+                if (ImGui::Selectable(GetIdAndName(id, NameGetter).data(), bSelected))
                     selectedID = id;
                 if (bSelected)
                     ImGui::SetItemDefaultFocus();
@@ -276,6 +287,18 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
     else
     {
         bWasComboOpen = false;
+    }
+}
+
+// Lets the user type a record id instead of scrolling the combo box to it.
+void D2IdInput(const char* Label, int& selectedID, size_t count)
+{
+    if (ImGui::InputInt(Label, &selectedID) && count > 0)
+    {
+        if (selectedID < 0)
+            selectedID = 0;
+        else if (size_t(selectedID) >= count)
+            selectedID = int(count - 1);
     }
 }
 
@@ -315,6 +338,8 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 }
             }
 
+            D2IdInput("SuperUnique id", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount());
+
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
             {
@@ -340,6 +365,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                 }
             }
 
+            D2IdInput("Normal id", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount());
 
 
             bool bOpened_Unused = true;
