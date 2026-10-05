@@ -34,8 +34,11 @@ D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGam
 std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
 {
     const Unicode* nameUnicode = (const Unicode*)D2LANG_GetStringFromTblIndex(index);
-    std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3, 0);
-    Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2 /*See toUtf doc*/);
+    // toUtf can write a 3-byte character when only (count - 1) bytes are left, plus the terminator,
+    // so it needs 2 bytes past count (see toUtf doc). The 3 extra bytes keep the last character of
+    // a full-width string, and keep the buffer non-empty for an empty string.
+    std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3 + 3, 0);
+    Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2);
     return utf8CharBuffer;
 }
 
