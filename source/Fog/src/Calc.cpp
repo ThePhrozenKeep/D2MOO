@@ -163,11 +163,6 @@ static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGASTTyp
 	}
 }
 
-static bool Calc_ReachedEndOfBuffer(const FOGASTNodeStrc* pCurrentPos, const FOGASTNodeStrc* pStart, int32_t nBufferSize)
-{
-	return pCurrentPos - pStart >= nBufferSize;
-}
-
 //1.10f: 0x6FF51E30 (#10253)
 //1.13c: 0x6FF69E90 (#10253)
 int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData)
@@ -181,7 +176,7 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionB
 
 	// Note: This actually does not prevent reading more than 1 byte, which means that some of the functions below may read out of bounds...
 	//       Not fixing it to keep game behaviour
-	#define ReachedEndOfBuffer() Calc_ReachedEndOfBuffer(pBufferCurrentPos, pExpressionBuffer, nExpressionBufferSize)
+	#define ReachedEndOfBuffer() (pBufferCurrentPos - pExpressionBuffer >= nExpressionBufferSize)
 
 	Fog64IntStack tCalcStack;
 	tCalcStack.nSize = 0;

@@ -575,9 +575,9 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
     }
 
     ppSection += 2;
-    for (int32_t i = 0; i < SKILLS_GetPlayerSkillCount(nClassId); ++i)
+    for (int32_t nSkillIdx = 0; nSkillIdx < SKILLS_GetPlayerSkillCount(nClassId); ++nSkillIdx)
     {
-        *ppSection = SKILLS_GetSkillLevel(pPlayer, SKILLS_GetSkillById(pPlayer, SKILLS_GetClassSkillId(nClassId, i), -1u), 0);
+        *ppSection = SKILLS_GetSkillLevel(pPlayer, SKILLS_GetSkillById(pPlayer, SKILLS_GetClassSkillId(nClassId, nSkillIdx), -1u), 0);
         ++ppSection;
     }
 

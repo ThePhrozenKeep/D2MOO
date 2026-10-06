@@ -829,8 +829,8 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
         }
     }
 
-    D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
-    if (!pItem || pItem->dwUnitType != UNIT_ITEM)
+    D2UnitStrc* pDroppedItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
+    if (!pDroppedItem || pDroppedItem->dwUnitType != UNIT_ITEM)
     {
         return;
     }
@@ -2090,9 +2090,9 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
     }
     while (bContinue);
 
-    for (int32_t i = 0; i < 11; ++i)
+    for (int32_t nBodyLoc = 0; nBodyLoc < 11; ++nBodyLoc)
     {
-        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, i);
+        D2UnitStrc* pBodyLocItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
         if (pBodyLocItem
             && ITEMS_GetItemQuality(pBodyLocItem) == ITEMQUAL_SET
             && !ITEMS_CheckItemFlag(pBodyLocItem, IFLAG_BROKEN, __LINE__, __FILE__)
@@ -3141,17 +3141,17 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, v49[1].pItem, pUnit, 0, 1);
     }
 
-    for (int32_t i = 0; i < ARRAY_SIZE(v49); ++i)
+    for (int32_t nTradeIdx = 0; nTradeIdx < ARRAY_SIZE(v49); ++nTradeIdx)
     {
-        if (v49[i].pItem)
+        if (v49[nTradeIdx].pItem)
         {
-            if (i < 2)
+            if (nTradeIdx < 2)
             {
-                INVENTORY_UpdateWeaponGUIDOnRemoval(pUnit->pInventory, v49[i].pItem);
+                INVENTORY_UpdateWeaponGUIDOnRemoval(pUnit->pInventory, v49[nTradeIdx].pItem);
             }
 
-            D2UnitStrc* pRemove = INVENTORY_RemoveItemFromInventory(pUnit->pInventory, v49[i].pItem);
-            if (!pRemove || pRemove != v49[i].pItem)
+            D2UnitStrc* pRemove = INVENTORY_RemoveItemFromInventory(pUnit->pInventory, v49[nTradeIdx].pItem);
+            if (!pRemove || pRemove != v49[nTradeIdx].pItem)
             {
                 *a3 = 1;
                 return 0;
@@ -3170,26 +3170,26 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         }
     }
 
-    for (int32_t i = 0; i < ARRAY_SIZE(v49); ++i)
+    for (int32_t nPlaceIdx = 0; nPlaceIdx < ARRAY_SIZE(v49); ++nPlaceIdx)
     {
-        D2UnitStrc* pItem = v49[i].pItem;
+        D2UnitStrc* pItem = v49[nPlaceIdx].pItem;
         if (pItem)
         {
-            if (!INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, v49[i].nSwitchBodyLoc))
+            if (!INVENTORY_PlaceItemInBodyLoc(pUnit->pInventory, pItem, v49[nPlaceIdx].nSwitchBodyLoc))
             {
                 *a3 = 1;
                 return 0;
             }
 
-            if (!INVENTORY_PlaceItemInSocket(pUnit->pInventory, pItem, v49[i].nSocketArg))
+            if (!INVENTORY_PlaceItemInSocket(pUnit->pInventory, pItem, v49[nPlaceIdx].nSocketArg))
             {
                 *a3 = 1;
                 return 0;
             }
 
-            ITEMS_SetBodyLocation(pItem, v49[i].nSwitchBodyLoc);
+            ITEMS_SetBodyLocation(pItem, v49[nPlaceIdx].nSwitchBodyLoc);
 
-            if (v49[i].nSwitchBodyLoc == BODYLOC_RARM || v49[i].nSwitchBodyLoc == BODYLOC_LARM)
+            if (v49[nPlaceIdx].nSwitchBodyLoc == BODYLOC_RARM || v49[nPlaceIdx].nSwitchBodyLoc == BODYLOC_LARM)
             {
                 INVENTORY_UpdateWeaponGUIDOnInsert(pUnit->pInventory, pItem);
                 D2GAME_ITEMS_UpdateItemStatlist_6FC42310(pGame, pItem, pUnit, 0);
@@ -3207,7 +3207,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
             ITEMS_SetItemCMDFlag(pItem, 0x200000u, 1);
             ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
 
-            if (i < 2)
+            if (nPlaceIdx < 2)
             {
                 sub_6FC45300(pUnit);
             }
@@ -5081,9 +5081,9 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
+    for (D2UnitStrc* pItemIter = INVENTORY_GetFirstItem(pUnit->pInventory); pItemIter; pItemIter = INVENTORY_GetNextItem(pItemIter))
     {
-        D2UnitStrc* pItem = INVENTORY_UnitIsItem(i);
+        D2UnitStrc* pItem = INVENTORY_UnitIsItem(pItemIter);
         if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_KEY) && ITEMS_GetInvPage(pItem) == 0)
         {
             if (STATLIST_UnitGetStatValue(pItem, STAT_QUANTITY, 0) - 1 <= 0)

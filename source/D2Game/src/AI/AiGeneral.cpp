@@ -290,7 +290,7 @@ void __fastcall AIGENERAL_FreeAiControl(D2GameStrc* pGame, D2AiControlStrc* pAiC
 		D2_FREE_POOL(pGame->pMemoryPool, i);
 	}
 
-	for (D2AiCmdStrc* i = pAiControl->pLastCmd; i; i = pAiControl->pLastCmd)
+	for (D2AiCmdStrc* pCmd = pAiControl->pLastCmd; pCmd; pCmd = pAiControl->pLastCmd)
 	{
 		D2AiCmdStrc* pCurrentCmd = pAiControl->pCurrentCmd;
 		if (!pCurrentCmd)
@@ -305,7 +305,7 @@ void __fastcall AIGENERAL_FreeAiControl(D2GameStrc* pGame, D2AiControlStrc* pAiC
 		}
 		else
 		{
-			if (i == pCurrentCmd)
+			if (pCmd == pCurrentCmd)
 			{
 				pAiControl->pLastCmd = pCurrentCmd->pNextCmd;
 			}

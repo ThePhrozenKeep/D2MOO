@@ -1250,11 +1250,11 @@ void __fastcall SUNIT_SpawnPresetUnitsInRoom(D2GameStrc* pGame, D2ActiveRoomStrc
         }
     }
 
-    for (D2PresetUnitStrc* i = pPresetUnit; i; i = i->pNext)
+    for (D2PresetUnitStrc* pMonsterPresetUnit = pPresetUnit; pMonsterPresetUnit; pMonsterPresetUnit = pMonsterPresetUnit->pNext)
     {
-        if (i->nUnitType == UNIT_MONSTER && !(i->bSpawned & 1))
+        if (pMonsterPresetUnit->nUnitType == UNIT_MONSTER && !(pMonsterPresetUnit->bSpawned & 1))
         {
-            SUNIT_SpawnPresetUnit(pGame, pRoom, i);
+            SUNIT_SpawnPresetUnit(pGame, pRoom, pMonsterPresetUnit);
         }
     }
 #endif

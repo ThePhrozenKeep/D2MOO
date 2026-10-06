@@ -2991,10 +2991,12 @@ BOOL __stdcall UNITS_IsInMovingMode(D2UnitStrc* pUnit)
 	{
 		return false;
 	}
+
+	const int nPlayerMode = pUnit->pAnimSeq ? pUnit->dwSeqMode : pUnit->dwAnimMode;
+
 	switch (pUnit->dwUnitType)
 	{
 	case UNIT_PLAYER:
-		const int nPlayerMode = pUnit->pAnimSeq ? pUnit->dwSeqMode : pUnit->dwAnimMode;
 		switch (nPlayerMode)
 		{
 		case PLRMODE_WALK:

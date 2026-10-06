@@ -107,9 +107,9 @@ void __fastcall DRLGGRID_AlterEdgeGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag
 		gpfFlagOperations[eOperation](&pFlagsLastRow[i], nFlag);
 	}
 
-	for (int i = 1; i < pDrlgGrid->nHeight; ++i)
+	for (int nRowIdx = 1; nRowIdx < pDrlgGrid->nHeight; ++nRowIdx)
 	{
-		const int nCurRowOffset = pDrlgGrid->pCellsRowOffsets[i];
+		const int nCurRowOffset = pDrlgGrid->pCellsRowOffsets[nRowIdx];
 		gpfFlagOperations[eOperation](&pDrlgGrid->pCellsFlags[nCurRowOffset + 0                    ], nFlag);
 		gpfFlagOperations[eOperation](&pDrlgGrid->pCellsFlags[nCurRowOffset + pDrlgGrid->nWidth - 1], nFlag);
 	}

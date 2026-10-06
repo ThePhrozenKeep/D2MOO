@@ -586,7 +586,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 
 		D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
 
-		for (uint32_t i = 0; i < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++i)
+		for (uint32_t nGoldIdx = 0; nGoldIdx < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++nGoldIdx)
 		{
 			OBJMODE_DropItemWithCodeAndQuality(pOp->pGame, pOp->pObject, ' dlg', 2);
 		}
@@ -665,7 +665,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
 
-	for (uint32_t i = 0; i < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++i)
+	for (uint32_t nGoldIdx2 = 0; nGoldIdx2 < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++nGoldIdx2)
 	{
 		OBJMODE_DropItemWithCodeAndQuality(pOp->pGame, pObject, ' dlg', 2);
 	}

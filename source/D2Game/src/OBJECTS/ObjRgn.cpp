@@ -45,9 +45,9 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     }
 
     int32_t nShrineSubTypes[8] = { 0 };
-    for (int32_t i = 0; i < DATATBLS_GetShrinesTxtRecordCount(); ++i)
+    for (int32_t nShrineIdx = 0; nShrineIdx < DATATBLS_GetShrinesTxtRecordCount(); ++nShrineIdx)
     {
-        const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(i)->nEffectClass;
+        const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(nShrineIdx)->nEffectClass;
         if (nEffectClass < ARRAY_SIZE(nShrineSubTypes))
         {
             ++nShrineSubTypes[nEffectClass];
@@ -58,22 +58,22 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     memset(pGame->pObjectControl->shrineData.pShrineSubTypeIds, 0, sizeof(pGame->pObjectControl->shrineData.pShrineSubTypeIds));
 
     D2ShrineDataStrc* pShrineData = &pGame->pObjectControl->shrineData;
-    for (int32_t i = 0; i < ARRAY_SIZE(nShrineSubTypes); ++i)
+    for (int32_t nSubTypeIdx = 0; nSubTypeIdx < ARRAY_SIZE(nShrineSubTypes); ++nSubTypeIdx)
     {
-        if (nShrineSubTypes[i] > 0)
+        if (nShrineSubTypes[nSubTypeIdx] > 0)
         {
-            pShrineData->pShrineSubTypeIds[i] = (int32_t*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(int32_t) * nShrineSubTypes[i]);
+            pShrineData->pShrineSubTypeIds[nSubTypeIdx] = (int32_t*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(int32_t) * nShrineSubTypes[nSubTypeIdx]);
         }
 
-        pShrineData->nShrineSubTypes[i] = 0;
+        pShrineData->nShrineSubTypes[nSubTypeIdx] = 0;
     }
 
-    for (int32_t i = 0; i < DATATBLS_GetShrinesTxtRecordCount(); ++i)
+    for (int32_t nShrineIdx2 = 0; nShrineIdx2 < DATATBLS_GetShrinesTxtRecordCount(); ++nShrineIdx2)
     {
-        const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(i)->nEffectClass;
+        const uint8_t nEffectClass = DATATBLS_GetShrinesTxtRecord(nShrineIdx2)->nEffectClass;
         if (nEffectClass < ARRAY_SIZE(pGame->pObjectControl->shrineData.pShrineSubTypeIds))
         {
-            pGame->pObjectControl->shrineData.pShrineSubTypeIds[nEffectClass][pGame->pObjectControl->shrineData.nShrineSubTypes[nEffectClass]] = i;
+            pGame->pObjectControl->shrineData.pShrineSubTypeIds[nEffectClass][pGame->pObjectControl->shrineData.nShrineSubTypes[nEffectClass]] = nShrineIdx2;
             ++pGame->pObjectControl->shrineData.nShrineSubTypes[nEffectClass];
         }
     }
@@ -106,11 +106,11 @@ void __fastcall OBJRGN_FreeObjectControl(D2GameStrc* pGame)
         D2_FREE_POOL(pGame->pMemoryPool, pObjectControl->pObjectRegion[i]);
     }
 
-    for (int32_t i = 0; i < ARRAY_SIZE(pObjectControl->shrineData.pShrineSubTypeIds); ++i)
+    for (int32_t nSubTypeIdx2 = 0; nSubTypeIdx2 < ARRAY_SIZE(pObjectControl->shrineData.pShrineSubTypeIds); ++nSubTypeIdx2)
     {
-        if (pObjectControl->shrineData.pShrineSubTypeIds[i])
+        if (pObjectControl->shrineData.pShrineSubTypeIds[nSubTypeIdx2])
         {
-            D2_FREE_POOL(pGame->pMemoryPool, pObjectControl->shrineData.pShrineSubTypeIds[i]);
+            D2_FREE_POOL(pGame->pMemoryPool, pObjectControl->shrineData.pShrineSubTypeIds[nSubTypeIdx2]);
         }
     }
 

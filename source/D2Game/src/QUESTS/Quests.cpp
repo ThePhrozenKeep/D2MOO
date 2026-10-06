@@ -368,7 +368,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 		}
 	}
 
-	for (int32_t i = 0; i < ARRAY_SIZE(gpQuestIntroTable); ++i)
+	for (int32_t nIntroQuestIdx = 0; nIntroQuestIdx < ARRAY_SIZE(gpQuestIntroTable); ++nIntroQuestIdx)
 	{
 		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestDataStrc);
 
@@ -376,20 +376,20 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 		pCurrent->bActive = true;
 		pCurrent->fLastState = 0;
 		pCurrent->bNotIntro = false;
-		pCurrent->nQuestNo = i + 37;
-		pCurrent->nActNo = gpQuestIntroTable[i].nAct;
+		pCurrent->nQuestNo = nIntroQuestIdx + 37;
+		pCurrent->nActNo = gpQuestIntroTable[nIntroQuestIdx].nAct;
 		pCurrent->pPrev = pPrev;
 		pPrev = pCurrent;
 
-		if (gpQuestIntroTable[i].pfInit)
+		if (gpQuestIntroTable[nIntroQuestIdx].pfInit)
 		{
-			if (IsBadCodePtr((FARPROC)gpQuestIntroTable[i].pfInit))
+			if (IsBadCodePtr((FARPROC)gpQuestIntroTable[nIntroQuestIdx].pfInit))
 			{
 				FOG_DisplayAssert("sgQuestIntro[Index].pQuestInit", __FILE__, __LINE__);
 				exit(-1);
 			}
 
-			gpQuestIntroTable[i].pfInit(pCurrent);
+			gpQuestIntroTable[nIntroQuestIdx].pfInit(pCurrent);
 		}
 	}
 

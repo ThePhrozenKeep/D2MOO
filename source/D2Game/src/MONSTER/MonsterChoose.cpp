@@ -109,7 +109,7 @@ void __stdcall sub_6FC62020(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, in
     }
 
     uint8_t* pData = pMonRegData->nComponentVariants[pMonRegData->nComponentVariantsMax];
-    for (int32_t i = 0; i < nCount; ++i)
+    for (int32_t nMonIdx = 0; nMonIdx < nCount; ++nMonIdx)
     {
         int32_t nCounter = 3;
         for (int32_t j = 0; j < 16; ++j)

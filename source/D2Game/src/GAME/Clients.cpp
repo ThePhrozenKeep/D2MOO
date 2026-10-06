@@ -805,12 +805,12 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
         }
     }
 
-    for (int32_t i = 0; i < nClientAdjacentRooms; ++i)
+    for (int32_t nClientRoomIdx = 0; nClientRoomIdx < nClientAdjacentRooms; ++nClientRoomIdx)
     {
         int32_t j = 0;
         while (j < nAdjacentRooms)
         {
-            if (ppClientAdjacentRooms[i] == ppAdjacentRooms[j])
+            if (ppClientAdjacentRooms[nClientRoomIdx] == ppAdjacentRooms[j])
             {
                 break;
             }
@@ -820,9 +820,9 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 
         if (j >= nAdjacentRooms)
         {
-            LEVEL_RemoveClient(pClient->pGame, ppClientAdjacentRooms[i], pClient);
+            LEVEL_RemoveClient(pClient->pGame, ppClientAdjacentRooms[nClientRoomIdx], pClient);
 
-            if (pClient->pRoom == ppClientAdjacentRooms[i])
+            if (pClient->pRoom == ppClientAdjacentRooms[nClientRoomIdx])
             {
                 D2UnitStrc* pUnit = nullptr;
                 if (pClient->dwFlags & CLIENTFLAGEX_PLAYER_UNIT_ALIVE)

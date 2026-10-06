@@ -1749,13 +1749,13 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 		++pEType;
 	}
 
-	int i = 0;
+	int nItemTypeIdx = 0;
 	short* pIType = &pSkillsTxtRecord->nITypeA[3 * nType];
 	while (1)
 	{
 		if (*pIType <= 0)
 		{
-			return i == 0;
+			return nItemTypeIdx == 0;
 		}
 
 		if (ITEMS_CheckItemTypeId(pItem, *pIType))
@@ -1763,9 +1763,9 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 			break;
 		}
 
-		++i;
+		++nItemTypeIdx;
 		++pIType;
-		if (i >= 3)
+		if (nItemTypeIdx >= 3)
 		{
 			return FALSE;
 		}

@@ -788,9 +788,9 @@ void __fastcall DUNGEON_UpdateClientListOfRoom(D2ActiveRoomStrc* pRoom)
 		}
 	}
 
-	for (int i = 0; i < pRoom->nNumClients; ++i)
+	for (int nClientIdx = 0; nClientIdx < pRoom->nNumClients; ++nClientIdx)
 	{
-		D2_ASSERT(pRoom->ppClients[i]);
+		D2_ASSERT(pRoom->ppClients[nClientIdx]);
 	}
 }
 

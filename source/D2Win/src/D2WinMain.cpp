@@ -845,20 +845,20 @@ void __stdcall D2Win_10019()
 			}
 		}
 
-		for (void* i = D2Win_10147(); i; i = D2Win_10148(i))
+		for (void* pWindow = D2Win_10147(); pWindow; pWindow = D2Win_10148(pWindow))
 		{
-			sub_6F8A15E0(i);
+			sub_6F8A15E0(pWindow);
 		}
 
-		for (void* i = D2Win_10147(); i; i = D2Win_10148(i))
+		for (void* pWindow2 = D2Win_10147(); pWindow2; pWindow2 = D2Win_10148(pWindow2))
 		{
-			sub_6F8A1890(i, -1);
+			sub_6F8A1890(pWindow2, -1);
 		}
 
-		for (void* i = D2Win_10147(); i; i = D2Win_10148(i))
+		for (void* pWindow3 = D2Win_10147(); pWindow3; pWindow3 = D2Win_10148(pWindow3))
 		{
-			sub_6F8A1D10(i);
-			sub_6F8A2070(i);
+			sub_6F8A1D10(pWindow3);
+			sub_6F8A2070(pWindow3);
 		}
 
 		if (dword_6F8FE278)
@@ -866,11 +866,11 @@ void __stdcall D2Win_10019()
 			D2GFX_DrawBoxAlpha(0, 0, nScreenWidth, nScreenHeight, 0, 127u);
 		}
 
-		for (D2WinControlStrc* i = gpControlList_6F8FE24C; i; i = i->pNext)
+		for (D2WinControlStrc* pControl = gpControlList_6F8FE24C; pControl; pControl = pControl->pNext)
 		{
-			if (i->pfDraw && i->dwFlags & gdwBitMasks[3])
+			if (pControl->pfDraw && pControl->dwFlags & gdwBitMasks[3])
 			{
-				i->pfDraw(i);
+				pControl->pfDraw(pControl);
 			}
 		}
 

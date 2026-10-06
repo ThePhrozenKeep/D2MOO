@@ -77,7 +77,7 @@ target_sources(${D2CommonImplName}
     src/Drlg/DrlgOutDesr.cpp
     src/Drlg/DrlgOutdoors.cpp
     src/Drlg/DrlgOutJung.cpp
-    src/Drlg/DrlgOutPlace.cpp # sub_6FD80750 trips a VC6 code generator bug, see below
+    src/Drlg/DrlgOutPlace.cpp
     src/Drlg/DrlgOutRoom.cpp
     src/Drlg/DrlgOutSiege.cpp
     src/Drlg/DrlgOutWild.cpp
@@ -105,10 +105,6 @@ target_sources(${D2CommonImplName}
     include/Drlg/D2DrlgRoomTile.h
     include/Drlg/D2DrlgTileSub.h
 )
-
-# sub_6FD80750's nested loops with the backward `goto LABEL_16` make VC6's
-# global optimiser die with an internal compiler error.
-D2MOO_disable_msvc6_global_opt(src/Drlg/DrlgOutPlace.cpp)
 
 # Items
 target_sources(${D2CommonImplName}

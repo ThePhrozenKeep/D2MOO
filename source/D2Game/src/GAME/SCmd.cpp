@@ -8,7 +8,7 @@
 // VC6 ships no <intrin.h>, so no _BitScanReverse. Retail built the commented-out code
 // below -- a single bsr, whose zero case retail's own guard (nCompInfo >= 3) rules
 // out. A shift loop would not compile to the same instruction.
-static DWORD __stdcall SCMD_MostSignificantBitIndex(DWORD nValue)
+static __forceinline DWORD mostSignificantBitIndex(DWORD nValue)
 {
 	DWORD nIndex = 0;
 	__asm
@@ -22,7 +22,7 @@ static DWORD __stdcall SCMD_MostSignificantBitIndex(DWORD nValue)
 	}
 	return nIndex;
 }
-#define _BitScanReverse(pnIndex, nValue) (*(pnIndex) = SCMD_MostSignificantBitIndex((DWORD)(nValue)))
+#define _BitScanReverse(pnIndex, nValue) (*(pnIndex) = mostSignificantBitIndex((DWORD)(nValue)))
 #endif
 #include <Fog.h>
 #include <Storm.h>
@@ -1054,10 +1054,10 @@ void __fastcall sub_6FC3DCA0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
     pPacket94->dwUnitGUID = pUnit->dwUnitId;
 
     int32_t i = 0;
-    for (D2SkillStrc* pSkill = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills); pSkill; pSkill = SKILLS_GetNextSkill(pSkill))
+    for (D2SkillStrc* pOutSkill = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills); pOutSkill; pOutSkill = SKILLS_GetNextSkill(pOutSkill))
     {
-        pPacket94->Skills[i].nSkill = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
-        pPacket94->Skills[i].nSkillLevel = SKILLS_GetSkillLevel(pUnit, pSkill, 0);
+        pPacket94->Skills[i].nSkill = SKILLS_GetSkillIdFromSkill(pOutSkill, __FILE__, __LINE__);
+        pPacket94->Skills[i].nSkillLevel = SKILLS_GetSkillLevel(pUnit, pOutSkill, 0);
         ++i;
     }
 

@@ -79,7 +79,7 @@ void __fastcall D2GAME_NPC_FirstFn_6FCC67D0(D2GameStrc* pGame, int32_t nVendorId
         pNpcRecord->pMercData[i].bAvailable = 0;
     }
 
-    for (int32_t i = 0; i < 10; ++i)
+    for (int32_t nMercPickIdx = 0; nMercPickIdx < 10; ++nMercPickIdx)
     {
         const int32_t nStartIndex = ITEMS_RollLimitedRandomNumber(pSeed, nAlternatives);
         int32_t nCounter = nStartIndex;
@@ -468,12 +468,12 @@ void __fastcall D2GAME_NPC_FillStoreInventory_6FCC7100(D2GameStrc* pGame, D2Unit
         }
     }
 
-    for (int32_t i = 0; i < pNpcRecord->npcTrade.pProxy.nPerms; ++i)
+    for (int32_t nPermIdx = 0; nPermIdx < pNpcRecord->npcTrade.pProxy.nPerms; ++nPermIdx)
     {
-        D2UnitStrc* pStoreItem = D2GAME_NPC_GenerateStoreItem_6FCC6A60(pNpc, pNpcRecord->npcTrade.pProxy.pPermCache[i], pGame, 1, ITEMQUAL_NORMAL, nItemLevel, nLevel);
+        D2UnitStrc* pStoreItem = D2GAME_NPC_GenerateStoreItem_6FCC6A60(pNpc, pNpcRecord->npcTrade.pProxy.pPermCache[nPermIdx], pGame, 1, ITEMQUAL_NORMAL, nItemLevel, nLevel);
         if (pStoreItem)
         {
-            const int32_t nItemCode = DATATBLS_GetItemRecordFromItemCode(pTrade->pProxy.pPermCache[i], &nUnused)->dwCode;
+            const int32_t nItemCode = DATATBLS_GetItemRecordFromItemCode(pTrade->pProxy.pPermCache[nPermIdx], &nUnused)->dwCode;
             if (nItemCode == ' vqc' || nItemCode == ' vqa')
             {
                 STATLIST_SetUnitStat(pStoreItem, STAT_QUANTITY, ITEMS_GetTotalMaxStack(pStoreItem), 0);

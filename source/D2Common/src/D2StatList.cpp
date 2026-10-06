@@ -810,11 +810,11 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 				}
 			}
 
-			for (int i = 0; i < nCounter; ++i)
+			for (int nLayerStatIdx = 0; nLayerStatIdx < nCounter; ++nLayerStatIdx)
 			{
-				if (D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nLayer_StatIds[i].nStat))
+				if (D2ItemStatCostTxt* pItemStatCostTxtRecord = ITEMS_GetItemStatCostTxtRecord(nLayer_StatIds[nLayerStatIdx].nStat))
 				{
-					sub_6FDB64A0(pStatListEx, nLayer_StatIds[i].nPackedValue, pItemStatCostTxtRecord, 0);
+					sub_6FDB64A0(pStatListEx, nLayer_StatIds[nLayerStatIdx].nPackedValue, pItemStatCostTxtRecord, 0);
 				}
 			}
 		}

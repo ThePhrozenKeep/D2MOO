@@ -1791,11 +1791,11 @@ BOOL __stdcall INVENTORY_GetFreeBeltSlot(D2InventoryStrc* pInventory, D2UnitStrc
 			return FALSE;
 		}
 
-		for (int i = 0; i < 4; ++i)
+		for (int nBeltColIdx = 0; nBeltColIdx < 4; ++nBeltColIdx)
 		{
-			if (!pInventoryGrid->ppItems[i])
+			if (!pInventoryGrid->ppItems[nBeltColIdx])
 			{
-				*pFreeSlotId = i;
+				*pFreeSlotId = nBeltColIdx;
 				return TRUE;
 			}
 		}
@@ -2717,11 +2717,11 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 					pArmorComponents[i] = pItemsTxtRecord->nArmorComp[i];
 				}
 
-				for (int i = 0; i < NUM_COMPONENTS; ++i)
+				for (int nComponentIdx = 0; nComponentIdx < NUM_COMPONENTS; ++nComponentIdx)
 				{
-					if (COMPOSIT_IsArmorComponent(i))
+					if (COMPOSIT_IsArmorComponent(nComponentIdx))
 					{
-						D2ArmTypeTxt* pArmTypeTxtRecord = DATATBLS_GetArmTypeTxtRecord(COMPOSIT_GetArmorTypeFromComponent(i, pArmorComponents));
+						D2ArmTypeTxt* pArmTypeTxtRecord = DATATBLS_GetArmTypeTxtRecord(COMPOSIT_GetArmorTypeFromComponent(nComponentIdx, pArmorComponents));
 						if (pItem->dwClassId > 0)
 						{
 							INVENTORY_InitializeComponentArray();
@@ -2730,9 +2730,9 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 
 							if (nIndex < ARRAY_SIZE(gTxtComponentItemTypeMap))
 							{
-								pComponents[i] = nIndex;
+								pComponents[nComponentIdx] = nIndex;
 
-								uint8_t* pComponentColor = &pColor[i];
+								uint8_t* pComponentColor = &pColor[nComponentIdx];
 								if (ITEMS_GetColor(pPlayer, pItem, pComponentColor, 0))
 								{
 									++*pComponentColor;

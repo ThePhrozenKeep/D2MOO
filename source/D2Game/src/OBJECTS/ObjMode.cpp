@@ -2040,14 +2040,14 @@ void __fastcall D2GAME_SHRINES_Exploding_6FC770D0(D2ObjOperateFnStrc* pOp, D2Shr
     D2_CONSTEXPR int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
 
 
-    for (int32_t i = 0; i < 6; ++i)
+    for (int32_t nMissileIdx = 0; nMissileIdx < 6; ++nMissileIdx)
     {
         D2MissileStrc missileParams = { 0 };
         missileParams.dwFlags = 1312;
         missileParams.nX = CLIENTS_GetUnitX(pOp->pObject);
         missileParams.nY = CLIENTS_GetUnitY(pOp->pObject);
-        missileParams.nTargetX = missileParams.nX + nXOffsets[i];
-        missileParams.nTargetY = missileParams.nY + nYOffsets[i];
+        missileParams.nTargetX = missileParams.nX + nXOffsets[nMissileIdx];
+        missileParams.nTargetY = missileParams.nY + nYOffsets[nMissileIdx];
         missileParams.pOwner = pOp->pPlayer;
         missileParams.pOrigin = pOp->pObject;
         missileParams.nGfxArg = 1;
@@ -2113,14 +2113,14 @@ void __fastcall D2GAME_SHRINES_Poison_6FC773B0(D2ObjOperateFnStrc* pOp, D2Shrine
     D2_CONSTEXPR int32_t nXOffsets[] = { -6, -6, 0, 0, 6, 6 };
     D2_CONSTEXPR int32_t nYOffsets[] = { 6, -6, 6, -6, 6, -6 };
 
-    for (int32_t i = 0; i < 6; ++i)
+    for (int32_t nMissileIdx2 = 0; nMissileIdx2 < 6; ++nMissileIdx2)
     {
         D2MissileStrc missileParams = { 0 };
         missileParams.dwFlags = 1312;
         missileParams.nX = CLIENTS_GetUnitX(pOp->pObject);
         missileParams.nY = CLIENTS_GetUnitY(pOp->pObject);
-        missileParams.nTargetX = missileParams.nX + nXOffsets[i];
-        missileParams.nTargetY = missileParams.nY + nYOffsets[i];
+        missileParams.nTargetX = missileParams.nX + nXOffsets[nMissileIdx2];
+        missileParams.nTargetY = missileParams.nY + nYOffsets[nMissileIdx2];
         missileParams.pOwner = pOp->pPlayer;
         missileParams.pOrigin = pOp->pObject;
         missileParams.nGfxArg = 1;

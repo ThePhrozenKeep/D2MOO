@@ -832,12 +832,12 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 	nHighestClassSkillCount = 0;
 	sgptDataTables->nHighestClassSkillCount = 0;
 
-	for (int i = 0; i < 7; ++i)
+	for (int nClassIdx = 0; nClassIdx < 7; ++nClassIdx)
 	{
-		if (sgptDataTables->nClassSkillCount[i] > nHighestClassSkillCount)
+		if (sgptDataTables->nClassSkillCount[nClassIdx] > nHighestClassSkillCount)
 		{
-			nHighestClassSkillCount = sgptDataTables->nClassSkillCount[i];
-			sgptDataTables->nHighestClassSkillCount = sgptDataTables->nClassSkillCount[i];
+			nHighestClassSkillCount = sgptDataTables->nClassSkillCount[nClassIdx];
+			sgptDataTables->nHighestClassSkillCount = sgptDataTables->nClassSkillCount[nClassIdx];
 		}
 	}
 
@@ -848,28 +848,28 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 	sgptDataTables->pPassiveSkills = (uint16_t*)D2_CALLOC_POOL(NULL, sizeof(uint16_t) * sgptDataTables->nPassiveSkills);
 
 	sgptDataTables->nPassiveSkills = 0;
-	for (int i = 0; i < sgptDataTables->nSkillsTxtRecordCount; ++i)
+	for (int nSkillIdx = 0; nSkillIdx < sgptDataTables->nSkillsTxtRecordCount; ++nSkillIdx)
 	{
-		nClass = sgptDataTables->pSkillsTxt[i].nCharClass;
+		nClass = sgptDataTables->pSkillsTxt[nSkillIdx].nCharClass;
 		if (nClass >= 0 && nClass < 7)
 		{
-			sgptDataTables->nClassSkillList[sgptDataTables->nClassSkillCount[nClass] + sgptDataTables->nHighestClassSkillCount * nClass] = i;
+			sgptDataTables->nClassSkillList[sgptDataTables->nClassSkillCount[nClass] + sgptDataTables->nHighestClassSkillCount * nClass] = nSkillIdx;
 			++sgptDataTables->nClassSkillCount[nClass];
 		}
 
-		if (sgptDataTables->pSkillsTxt[i].nPassiveState >= 0)
+		if (sgptDataTables->pSkillsTxt[nSkillIdx].nPassiveState >= 0)
 		{
-			sgptDataTables->pPassiveSkills[sgptDataTables->nPassiveSkills] = i;
+			sgptDataTables->pPassiveSkills[sgptDataTables->nPassiveSkills] = nSkillIdx;
 			++sgptDataTables->nPassiveSkills;
 		}
 
-		nPetType = sgptDataTables->pSkillsTxt[i].nPetType;
+		nPetType = sgptDataTables->pSkillsTxt[nSkillIdx].nPetType;
 		if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)
 		{
 			pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
 			if (pPetTypeTxtRecord->nSkillCount < ARRAY_SIZE(pPetTypeTxtRecord->wSkillIds))
 			{
-				pPetTypeTxtRecord->wSkillIds[pPetTypeTxtRecord->nSkillCount] = i;
+				pPetTypeTxtRecord->wSkillIds[pPetTypeTxtRecord->nSkillCount] = nSkillIdx;
 				++pPetTypeTxtRecord->nSkillCount;
 			}
 		}

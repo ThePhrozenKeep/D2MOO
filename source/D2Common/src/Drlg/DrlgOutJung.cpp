@@ -110,15 +110,15 @@ void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
 		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, 8 * (i == v10) + LVLPREST_ACT3_SLUMS_BORDER_N, -1, 0);
 	}
 
-	for (int i = 1; i < nWidth; i += (i == v5) + 1)
+	for (int nX = 1; nX < nWidth; nX += (nX == v5) + 1)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, nHeight, 8 * (i == v5) + LVLPREST_ACT3_SLUMS_BORDER_S, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nHeight, 8 * (nX == v5) + LVLPREST_ACT3_SLUMS_BORDER_S, -1, 0);
 	}
 
-	for (int i = 1; i < nHeight; ++i)
+	for (int nY = 1; nY < nHeight; ++nY)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, i, LVLPREST_ACT3_SLUMS_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT3_SLUMS_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_SLUMS_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_SLUMS_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_SLUMS_BORDER_NW, -1, 0);
@@ -153,10 +153,10 @@ void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
 		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, nHeight, 8 * (i == v8) + LVLPREST_ACT3_BURBS_BORDER_S, -1, 0);
 	}
 
-	for (int i = 1; i < nHeight; ++i)
+	for (int nY = 1; nY < nHeight; ++nY)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, i, LVLPREST_ACT3_BURBS_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT3_BURBS_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_BURBS_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_BURBS_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_BURBS_BORDER_NW, -1, 0);
@@ -187,15 +187,15 @@ void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
 		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, 8 * (i == nWidth / 2) + LVLPREST_ACT3_METRO_BORDER_N, -1, 0);
 	}
 
-	for (int i = 1; i < nWidth; ++i)
+	for (int nX = 1; nX < nWidth; ++nX)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, nHeight, 8 * (i == v8) + LVLPREST_ACT3_METRO_BORDER_S, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nHeight, 8 * (nX == v8) + LVLPREST_ACT3_METRO_BORDER_S, -1, 0);
 	}
 
-	for (int i = 1; i < nHeight; ++i)
+	for (int nY = 1; nY < nHeight; ++nY)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, i, LVLPREST_ACT3_METRO_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT3_METRO_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_METRO_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_METRO_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_METRO_BORDER_NW, -1, 0);
@@ -231,16 +231,16 @@ void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLeve
 	{
 		v11 = (int*)D2_ALLOC_POOL(pLevel->pDrlg->pMempool, 8 * v8);
 	
-		for (int i = 0; i < v8; ++i)
+		for (int nCellListIdx = 0; nCellListIdx < v8; ++nCellListIdx)
 		{
-			v12 = i / pLevel->pOutdoors->nGridWidth;
-			v13 = i % pLevel->pOutdoors->nGridWidth;
+			v12 = nCellListIdx / pLevel->pOutdoors->nGridWidth;
+			v13 = nCellListIdx % pLevel->pOutdoors->nGridWidth;
 
-			v11[2 * i] = v13;
-			v11[2 * i + 1] = v12;
+			v11[2 * nCellListIdx] = v13;
+			v11[2 * nCellListIdx + 1] = v12;
 		}
 
-		for (int i = 0; i < v8; ++i)
+		for (int nShuffleIdx = 0; nShuffleIdx < v8; ++nShuffleIdx)
 		{
 			v14 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, v8);
 			v19 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, v8);
@@ -255,10 +255,10 @@ void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLeve
 			v11[2 * v19 + 1] = v24;
 		}
 
-		for (int i = 0; i < v8; ++i)
+		for (int nCellIdx = 0; nCellIdx < v8; ++nCellIdx)
 		{
-			a2b = v11[2 * i];
-			a3a = v11[2 * i + 1];
+			a2b = v11[2 * nCellIdx];
+			a3a = v11[2 * nCellIdx + 1];
 
 			v26 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nVariants);
 

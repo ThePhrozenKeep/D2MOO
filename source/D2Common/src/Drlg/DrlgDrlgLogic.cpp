@@ -68,18 +68,18 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 	DRLGGRID_FillGrid(&pDrlgGrid, pDrlgRoom->nTileWidth + 1, pDrlgRoom->nTileHeight + 1, nCellPositions, nCellFlags);
 
 	pDrlgRoomTiles = &pDrlgRoom->pTileGrid->pTiles;
-	for (int i = 0; i < pDrlgRoomTiles->nWalls; ++i)
+	for (int nWallIdx = 0; nWallIdx < pDrlgRoomTiles->nWalls; ++nWallIdx)
 	{
-		D2DrlgTileDataStrc* pWallTileData = &pDrlgRoomTiles->pWallTiles[i];
+		D2DrlgTileDataStrc* pWallTileData = &pDrlgRoomTiles->pWallTiles[nWallIdx];
 		if (GetMapTileLayer(pWallTileData->dwFlags) == 1 && pWallTileData->nTileType != TILETYPE_ROOF && !(pWallTileData->dwFlags &MAPTILE_OBJECT_WALL))
 		{
 			DRLGGRID_AlterGridFlag(&pDrlgGrid, pWallTileData->nPosX, pWallTileData->nPosY, 1, FLAG_OPERATION_OR);
 		}
 	}
 
-	for (int i = 0; i < pDrlgRoom->nRoomsNear; ++i)
+	for (int nNearRoomIdx = 0; nNearRoomIdx < pDrlgRoom->nRoomsNear; ++nNearRoomIdx)
 	{
-		D2DrlgRoomStrc* pDrlgRoomNear = pDrlgRoom->ppRoomsNear[i];
+		D2DrlgRoomStrc* pDrlgRoomNear = pDrlgRoom->ppRoomsNear[nNearRoomIdx];
 		if (pDrlgRoomNear != pDrlgRoom && pDrlgRoomNear->pTileGrid)
 		{
 			for (D2DrlgTileLinkStrc* pDrlgTileLink = pDrlgRoomNear->pTileGrid->pMapLinks; pDrlgTileLink; pDrlgTileLink = pDrlgTileLink->pNext)
@@ -250,10 +250,10 @@ void __fastcall sub_6FD769B0(D2DrlgRoomStrc* pDrlgRoom)
 						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, j, pDrlgRoom->nTileHeight + pDrlgRoom->pDrlgCoord.nPosY);
 					}
 
-					for (int j = pDrlgRoom->pDrlgCoord.nPosY; j <= pDrlgRoom->pDrlgCoord.nPosY + pDrlgRoom->nTileHeight; ++j)
+					for (int nTileYIdx = pDrlgRoom->pDrlgCoord.nPosY; nTileYIdx <= pDrlgRoom->pDrlgCoord.nPosY + pDrlgRoom->nTileHeight; ++nTileYIdx)
 					{
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX, j);
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth, j);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX, nTileYIdx);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth, nTileYIdx);
 					}
 				}
 			}

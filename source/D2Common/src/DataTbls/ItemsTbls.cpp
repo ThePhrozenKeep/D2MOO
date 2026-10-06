@@ -1183,13 +1183,13 @@ void __fastcall DATATBLS_LoadGemsTxt(HD2ARCHIVE hArchive)
 		sgptDataTables->pGemDataTables.pGemsTxt[i].wStringId = D2LANG_GetTblIndex(szReference, &pUnicode);
 	}
 
-	for (int i = 0; i < sgptDataTables->pGemDataTables.nGemsTxtRecordCount; ++i)
+	for (int nGemIdx = 0; nGemIdx < sgptDataTables->pGemDataTables.nGemsTxtRecordCount; ++nGemIdx)
 	{
-		sgptDataTables->pItemDataTables.pItemsTxt[i].dwGemOffset = -1;
-		nItemCode = sgptDataTables->pGemDataTables.pGemsTxt[i].dwItemCode;
+		sgptDataTables->pItemDataTables.pItemsTxt[nGemIdx].dwGemOffset = -1;
+		nItemCode = sgptDataTables->pGemDataTables.pGemsTxt[nGemIdx].dwItemCode;
 		if (nItemCode >= 0)
 		{
-			sgptDataTables->pItemDataTables.pItemsTxt[nItemCode].dwGemOffset = i;
+			sgptDataTables->pItemDataTables.pItemsTxt[nItemCode].dwGemOffset = nGemIdx;
 		}
 	}
 }
@@ -1581,12 +1581,12 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 	}
 
 	int nStatsWithDescFunc = 0;
-	for (int i = 0; i < sgptDataTables->nItemStatCostTxtRecordCount; ++i)
+	for (int nStatCostIdx = 0; nStatCostIdx < sgptDataTables->nItemStatCostTxtRecordCount; ++nStatCostIdx)
 	{
-		if (sgptDataTables->pItemStatCostTxt[i].nDescFunc)
+		if (sgptDataTables->pItemStatCostTxt[nStatCostIdx].nDescFunc)
 		{
-			pStatsWithDescFunc[nStatsWithDescFunc].nRecordId = i;
-			pStatsWithDescFunc[nStatsWithDescFunc].nDescPriority = sgptDataTables->pItemStatCostTxt[i].nDescPriority;
+			pStatsWithDescFunc[nStatsWithDescFunc].nRecordId = nStatCostIdx;
+			pStatsWithDescFunc[nStatsWithDescFunc].nDescPriority = sgptDataTables->pItemStatCostTxt[nStatCostIdx].nDescPriority;
 			++nStatsWithDescFunc;
 		}
 	}
@@ -1595,9 +1595,9 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 	qsort(pStatsWithDescFunc, nStatsWithDescFunc, sizeof(D2ItemStatCostDescStrc), DATATBLS_CompareItemStatCostDescs);
 
 	sgptDataTables->pStatsWithDescFunc = (uint16_t*)D2_ALLOC_POOL(nullptr, sizeof(uint16_t) * sgptDataTables->nStatsWithDescFunc);
-	for (int i = 0; i < sgptDataTables->nStatsWithDescFunc; ++i)
+	for (int nStatWithDescIdx = 0; nStatWithDescIdx < sgptDataTables->nStatsWithDescFunc; ++nStatWithDescIdx)
 	{
-		sgptDataTables->pStatsWithDescFunc[i] = pStatsWithDescFunc[i].nRecordId;
+		sgptDataTables->pStatsWithDescFunc[nStatWithDescIdx] = pStatsWithDescFunc[nStatWithDescIdx].nRecordId;
 	}
 }
 
@@ -1711,21 +1711,21 @@ void __fastcall DATATBLS_LoadGambleTxt(HD2ARCHIVE hArchive)
 
 	sgptDataTables->pGambleDataTables.pGambleChooseLimit[0] = 2;
 
-	for (int i = 1; i < ARRAY_SIZE(sgptDataTables->pGambleDataTables.pGambleChooseLimit); ++i)
+	for (int nGambleLimitIdx = 1; nGambleLimitIdx < ARRAY_SIZE(sgptDataTables->pGambleDataTables.pGambleChooseLimit); ++nGambleLimitIdx)
 	{
-		sgptDataTables->pGambleDataTables.pGambleChooseLimit[i] = sgptDataTables->pGambleDataTables.nGambleTxtRecordCount;
+		sgptDataTables->pGambleDataTables.pGambleChooseLimit[nGambleLimitIdx] = sgptDataTables->pGambleDataTables.nGambleTxtRecordCount;
 
 		if (sgptDataTables->pGambleDataTables.nGambleTxtRecordCount > 0)
 		{
 			nCounter = 0;
-			while (nCounter < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount && i >= pGambleTxt[nCounter].nLevel)
+			while (nCounter < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount && nGambleLimitIdx >= pGambleTxt[nCounter].nLevel)
 			{
 				++nCounter;
 			}
 
 			if (nCounter < sgptDataTables->pGambleDataTables.nGambleTxtRecordCount)
 			{
-				sgptDataTables->pGambleDataTables.pGambleChooseLimit[i] = nCounter;
+				sgptDataTables->pGambleDataTables.pGambleChooseLimit[nGambleLimitIdx] = nCounter;
 			}
 		}
 	}

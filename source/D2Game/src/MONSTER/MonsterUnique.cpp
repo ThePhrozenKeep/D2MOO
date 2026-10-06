@@ -2153,12 +2153,12 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
 
             int32_t nRand = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nAccumulatedPicks);
             nAccumulatedPicks = 0;
-            for (int32_t i = 0; i < nPickCount; ++i)
+            for (int32_t nPickIdx = 0; nPickIdx < nPickCount; ++nPickIdx)
             {
-                const int32_t nPick = picks[2 * i + 1];
+                const int32_t nPick = picks[2 * nPickIdx + 1];
                 if (nRand < nPick)
                 {
-                    nAccumulatedPicks = picks[2 * i];
+                    nAccumulatedPicks = picks[2 * nPickIdx];
                     break;
                 }
 
@@ -2188,7 +2188,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         bUModUsageTable[pMonUmods[i]] = 1;
     }
 
-    for (int32_t i = 0; i < nRandCount; ++i)
+    for (int32_t nUModRandIdx = 0; nUModRandIdx < nRandCount; ++nUModRandIdx)
     {
         uint8_t* pUMod = &pMonUmods[nIndex];
 
@@ -2340,12 +2340,12 @@ int32_t __fastcall sub_6FC6EE90(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* a
     }
 
     uint32_t nRand = (uint32_t)ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nAccumulatedPicks);
-    for (int32_t i = 0; i < nPickCount; ++i)
+    for (int32_t nPickIdx = 0; nPickIdx < nPickCount; ++nPickIdx)
     {
-        const uint32_t nPick = picks[2 * i + 1];
+        const uint32_t nPick = picks[2 * nPickIdx + 1];
         if (nRand < nPick)
         {
-            return picks[2 * i];
+            return picks[2 * nPickIdx];
         }
 
         nRand -= nPick;
@@ -2708,7 +2708,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
         }
     }
 
-    for (int32_t i = 0; i < pGame->nDifficulty; ++i)
+    for (int32_t nDifficultyIdx = 0; nDifficultyIdx < pGame->nDifficulty; ++nDifficultyIdx)
     {
         const int32_t nUMod = sub_6FC6EE90(pGame, pMonster, bUModUsageTable);
         if (!nUMod)
@@ -2929,14 +2929,14 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     }
 
     D2_CONSTEXPR int32_t mods[] = { 1, 2, 3, 4 };
-    for (int32_t i = 0; i < 4; ++i)
+    for (int32_t nModIdx = 0; nModIdx < 4; ++nModIdx)
     {
-        sub_6FC6F670(pMonster, mods[i], 0);
+        sub_6FC6F670(pMonster, mods[nModIdx], 0);
     }
 
-    for (int32_t i = 0; i < 9; ++i)
+    for (int32_t nUModIdx = 0; nUModIdx < 9; ++nUModIdx)
     {
-        sub_6FC6F670(pMonster, pMonUmods[i], 0);
+        sub_6FC6F670(pMonster, pMonUmods[nUModIdx], 0);
     }
     
     return pMonster;

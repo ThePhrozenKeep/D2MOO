@@ -105,11 +105,11 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
     D2_ASSERT(pGame->pPartyControl);
    
     D2PartyStrc* pParty = nullptr;
-    for (D2PartyStrc* i = pGame->pPartyControl->pParties; i; i = i->pNext)
+    for (D2PartyStrc* pPartyIter = pGame->pPartyControl->pParties; pPartyIter; pPartyIter = pPartyIter->pNext)
     {
-        if (i->nPartyId == nPartyId)
+        if (pPartyIter->nPartyId == nPartyId)
         {
-            pParty = i;
+            pParty = pPartyIter;
             break;
         }
     }
@@ -123,9 +123,9 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
         nUnitGUID = pPlayer->dwUnitId;
     }
 
-    for (D2PartyNodeStrc* i = pParty->pPartyNodes; i; i = i->pNext)
+    for (D2PartyNodeStrc* pNodeIter = pParty->pPartyNodes; pNodeIter; pNodeIter = pNodeIter->pNext)
     {
-        if (i->nUnitGUID == nUnitGUID)
+        if (pNodeIter->nUnitGUID == nUnitGUID)
         {
             return 1;
         }
@@ -141,9 +141,9 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
 
     sub_6FC3F8F0(pGame, pPlayer);
 
-    for (D2PartyNodeStrc* i = pPartyNode->pNext; i; i = i->pNext)
+    for (D2PartyNodeStrc* pNextNodeIter = pPartyNode->pNext; pNextNodeIter; pNextNodeIter = pNextNodeIter->pNext)
     {
-        D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, i->nUnitGUID);
+        D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pNextNodeIter->nUnitGUID);
         if (pPartyMember)
         {
             FRIENDLY_RemoveHostility(pGame, pPlayer, pPartyMember);

@@ -88,21 +88,11 @@ volatile LONG gnNumAdminConnections_6FD45838;
 #if defined(_MSC_VER) && _MSC_VER < 1600
 // The MSVC600 Win32 headers declare these with non-volatile pointer parameters, and
 // InterlockedCompareExchange even returns void* rather than the value it read. These
-// wrappers restore the modern signatures around the same lock-prefixed instruction.
-static LONG __stdcall GAME_InterlockedIncrement(volatile LONG* pCounter)
-{
-	return InterlockedIncrement((LONG*)pCounter);
-}
-
-static LONG __stdcall GAME_InterlockedDecrement(volatile LONG* pCounter)
-{
-	return InterlockedDecrement((LONG*)pCounter);
-}
-
-static LONG __stdcall GAME_InterlockedReadCounter(volatile LONG* pCounter)
-{
-	return (LONG)InterlockedCompareExchange((void**)pCounter, 0, 0);
-}
+// casts restore the modern signatures; the lock-prefixed instructions emitted are the
+// same ones.
+#define GAME_InterlockedIncrement(pCounter) InterlockedIncrement((LONG*)(pCounter))
+#define GAME_InterlockedDecrement(pCounter) InterlockedDecrement((LONG*)(pCounter))
+#define GAME_InterlockedReadCounter(pCounter) (LONG)InterlockedCompareExchange((void**)(pCounter), 0, 0)
 #else
 #define GAME_InterlockedIncrement(pCounter) InterlockedIncrement(pCounter)
 #define GAME_InterlockedDecrement(pCounter) InterlockedDecrement(pCounter)
@@ -1211,12 +1201,12 @@ void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
     PARTY_FreePartyControl(pGame);
     ARENA_FreeArena(pGame);
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t nActIdx = 0; nActIdx < 5; ++nActIdx)
     {
-        if (pGame->pAct[i])
+        if (pGame->pAct[nActIdx])
         {
-            DUNGEON_FreeAct(pGame->pAct[i]);
-            pGame->pAct[i] = nullptr;
+            DUNGEON_FreeAct(pGame->pAct[nActIdx]);
+            pGame->pAct[nActIdx] = nullptr;
         }
     }
 
@@ -2697,45 +2687,45 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     }
 
     pGameInfo->nPlayers = 0;
-    for (int32_t i = 0; i < 128; ++i)
+    for (int32_t nPlayerCellIdx = 0; nPlayerCellIdx < 128; ++nPlayerCellIdx)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[0][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (D2UnitStrc* pUnit = pGame->pUnitList[0][nPlayerCellIdx]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nPlayers;
         }
     }
 
     pGameInfo->nMonsters = 0;
-    for (int32_t i = 0; i < 128; ++i)
+    for (int32_t nMonsterCellIdx = 0; nMonsterCellIdx < 128; ++nMonsterCellIdx)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[1][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (D2UnitStrc* pUnit = pGame->pUnitList[1][nMonsterCellIdx]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nMonsters;
         }
     }
 
     pGameInfo->nObjects = 0;
-    for (int32_t i = 0; i < 128; ++i)
+    for (int32_t nObjectCellIdx = 0; nObjectCellIdx < 128; ++nObjectCellIdx)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[2][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (D2UnitStrc* pUnit = pGame->pUnitList[2][nObjectCellIdx]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nObjects;
         }
     }
 
     pGameInfo->nItems = 0;
-    for (int32_t i = 0; i < 128; ++i)
+    for (int32_t nItemCellIdx = 0; nItemCellIdx < 128; ++nItemCellIdx)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[3][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (D2UnitStrc* pUnit = pGame->pUnitList[3][nItemCellIdx]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nItems;
         }
     }
 
     pGameInfo->nMissiles = 0;
-    for (int32_t i = 0; i < 128; ++i)
+    for (int32_t nMissileCellIdx = 0; nMissileCellIdx < 128; ++nMissileCellIdx)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[4][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (D2UnitStrc* pUnit = pGame->pUnitList[4][nMissileCellIdx]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nMissiles;
         }
@@ -3046,12 +3036,12 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
             {
                 for (int32_t j = 0; j < 128; ++j)
                 {
-                    for (D2UnitStrc* k = pGame->pUnitList[UNIT_MONSTER][j]; k; k = SUNIT_GetNextUnitFromList(k))
+                    for (D2UnitStrc* pMonsterUnit = pGame->pUnitList[UNIT_MONSTER][j]; pMonsterUnit; pMonsterUnit = SUNIT_GetNextUnitFromList(pMonsterUnit))
                     {
                         ++pStats->nActiveMonsters;
                     }
 
-                    for (D2UnitStrc* k = pGame->pUnitList[UNIT_PLAYER][j]; k; k = SUNIT_GetNextUnitFromList(k))
+                    for (D2UnitStrc* pPlayerUnit = pGame->pUnitList[UNIT_PLAYER][j]; pPlayerUnit; pPlayerUnit = SUNIT_GetNextUnitFromList(pPlayerUnit))
                     {
                         ++pStats->nPlayersCount;
                     }

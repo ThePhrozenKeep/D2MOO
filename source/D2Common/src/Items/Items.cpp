@@ -1225,6 +1225,7 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 	int nLevelRequirement = 0;
 	int nRequiredLevel = 0;
 	int nCraftBonus = 0;
+	int nModIdx = 0;
 	D2StatStrc pStat[64] = { D2StatStrc() };
 	
 	D2ItemDataStrc* pItemData = ITEMS_GetItemData(pItem);
@@ -1269,10 +1270,10 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 		break;
 	case ITEMQUAL_RARE:
-		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
+		for (nModIdx = 0; nModIdx < ITEMS_MAX_MODS; ++nModIdx)
 		{
-			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
-			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
+			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[nModIdx]);
+			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[nModIdx]);
 
 			if (pPrefixTxtRecord)
 			{
@@ -1305,10 +1306,10 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		break;
 	case ITEMQUAL_CRAFT:
 		nCraftBonus = 10;
-		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
+		for (nModIdx = 0; nModIdx < ITEMS_MAX_MODS; ++nModIdx)
 		{
-			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
-			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
+			pPrefixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[nModIdx]);
+			pSuffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[nModIdx]);
 
 			if (pPrefixTxtRecord)
 			{
@@ -1410,9 +1411,9 @@ int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer)
 		}
 	}
 
-	for (int i = 0; i < STATLIST_CopyStats(pItem, STAT_ITEM_NONCLASSSKILL, pStat, ARRAY_SIZE(pStat)); ++i)
+	for (int nStatIdx = 0; nStatIdx < STATLIST_CopyStats(pItem, STAT_ITEM_NONCLASSSKILL, pStat, ARRAY_SIZE(pStat)); ++nStatIdx)
 	{
-		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pStat[i].nLayer);
+		pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pStat[nStatIdx].nLayer);
 		if (pSkillsTxtRecord)
 		{
 			if (!pPlayer || pPlayer->dwUnitType || pSkillsTxtRecord->nCharClass < 0 || pSkillsTxtRecord->nCharClass >= 7 || (pPlayer->dwClassId & 0xFF) != pSkillsTxtRecord->nCharClass)
@@ -2156,13 +2157,14 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 				}
 			}
 
+			int nModIdx2 = 0;
 			switch (nQuality)
 			{
 			case ITEMQUAL_RARE:
 			case ITEMQUAL_CRAFT:
-				for (int i = 0; i < ITEMS_MAX_MODS; ++i)
+				for (nModIdx2 = 0; nModIdx2 < ITEMS_MAX_MODS; ++nModIdx2)
 				{
-					pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[i]);
+					pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[nModIdx2]);
 					if (pMagicAffixTxtRecord)
 					{
 						if (nSellCost > 65535 && pMagicAffixTxtRecord->dwMultiply)
@@ -2179,7 +2181,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						}
 					}
 
-					pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[i]);
+					pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicSuffix[nModIdx2]);
 					if (pMagicAffixTxtRecord)
 					{
 						if (nSellCost > 65535 && pMagicAffixTxtRecord->dwMultiply)
@@ -4807,10 +4809,10 @@ size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBits
 
 		pItemData->dwItemLevel = 1;
 
-		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
+		for (int nModIdx = 0; nModIdx < ITEMS_MAX_MODS; ++nModIdx)
 		{
-			pItemData->wMagicPrefix[i] = 0;
-			pItemData->wMagicSuffix[i] = 0;
+			pItemData->wMagicPrefix[nModIdx] = 0;
+			pItemData->wMagicSuffix[nModIdx] = 0;
 		}
 
 		pItemData->wRarePrefix = 0;
@@ -5184,37 +5186,37 @@ int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferS
 			pItemData->wRareSuffix = (uint16_t)BITMANIP_Read(pBuffer, 8);
 		}
 
-		for (int i = 0; i < ITEMS_MAX_MODS; ++i)
+		for (int nModIdx = 0; nModIdx < ITEMS_MAX_MODS; ++nModIdx)
 		{
 			if (BITMANIP_Read(pBuffer, 1))
 			{
-				pItemData->wMagicPrefix[i] = (uint16_t)BITMANIP_Read(pBuffer, 11);
+				pItemData->wMagicPrefix[nModIdx] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
-					++pItemData->wMagicPrefix[i];
+					++pItemData->wMagicPrefix[nModIdx];
 				}
 
-				if (pItemData->wMagicPrefix[i])
+				if (pItemData->wMagicPrefix[nModIdx])
 				{
-					pItemData->wMagicPrefix[i] += nMagicPrefixOffset;
+					pItemData->wMagicPrefix[nModIdx] += nMagicPrefixOffset;
 				}
 			}
 			else
 			{
-				pItemData->wMagicPrefix[i] = 0;
+				pItemData->wMagicPrefix[nModIdx] = 0;
 			}
 
 			if (BITMANIP_Read(pBuffer, 1))
 			{
-				pItemData->wMagicSuffix[i] = (uint16_t)BITMANIP_Read(pBuffer, 11);
+				pItemData->wMagicSuffix[nModIdx] = (uint16_t)BITMANIP_Read(pBuffer, 11);
 				if (dwVersion <= 89)
 				{
-					++pItemData->wMagicSuffix[i];
+					++pItemData->wMagicSuffix[nModIdx];
 				}
 			}
 			else
 			{
-				pItemData->wMagicSuffix[i] = 0;
+				pItemData->wMagicSuffix[nModIdx] = 0;
 			}
 		}
 
@@ -7480,9 +7482,9 @@ BOOL __fastcall sub_6FDA4380(D2UnitStrc* pItem, unsigned int nSetItemMask)
 			return TRUE;
 		}
 
-		for(int i = nBonuses - 1; i < 6; ++i)
+		for(int nBonusIdx = nBonuses - 1; nBonusIdx < 6; ++nBonusIdx)
 		{
-			D2Common_10574(pItem, gnItemSetStates[i], TRUE);
+			D2Common_10574(pItem, gnItemSetStates[nBonusIdx], TRUE);
 		}
 	}
 

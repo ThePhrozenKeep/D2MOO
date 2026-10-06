@@ -875,7 +875,7 @@ int32_t __fastcall OBJECTS_OperateFunction57_KhalimChest(D2ObjOperateFnStrc* pOp
 	pQuestDataEx->nItemDropCount = 0;
 	SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT3Q2_UnitIterate_DetermineKhalimHeartDropCount);
 
-	for (int32_t i = 0; i < pQuestDataEx->nItemDropCount; ++i)
+	for (int32_t nDropIdx = 0; nDropIdx < pQuestDataEx->nItemDropCount; ++nDropIdx)
 	{
 		int32_t nItemLevel = 0;
 		if (D2GAME_DropItemAtUnit_6FC4FEC0(pOp->pGame, pObject, ITEMQUAL_NORMAL, &nItemLevel, 0, -1, 1))
@@ -940,7 +940,7 @@ int32_t __fastcall OBJECTS_OperateFunction58_KhalimChest(D2ObjOperateFnStrc* pOp
 	pQuestDataEx->nItemDropCount = 0;
 	SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT3Q2_UnitIterate_DetermineKhalimEyeDropCount);
 
-	for (int32_t i = 0; i < pQuestDataEx->nItemDropCount; ++i)
+	for (int32_t nDropIdx2 = 0; nDropIdx2 < pQuestDataEx->nItemDropCount; ++nDropIdx2)
 	{
 		int32_t nItemLevel = 0;
 		if (D2GAME_DropItemAtUnit_6FC4FEC0(pOp->pGame, pObject, ITEMQUAL_NORMAL, &nItemLevel, 0, -1, 1))
@@ -1006,7 +1006,7 @@ int32_t __fastcall OBJECTS_OperateFunction59_KhalimChest(D2ObjOperateFnStrc* pOp
 	pQuestDataEx->nItemDropCount = 0;
 	SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT3Q2_UnitIterate_DetermineKhalimBrainDropCount);
 
-	for (int32_t i = 0; i < pQuestDataEx->nItemDropCount; ++i)
+	for (int32_t nDropIdx3 = 0; nDropIdx3 < pQuestDataEx->nItemDropCount; ++nDropIdx3)
 	{
 		int32_t nItemLevel = 0;
 		if (D2GAME_DropItemAtUnit_6FC4FEC0(pOp->pGame, pObject, ITEMQUAL_NORMAL, &nItemLevel, 0, -1, 1))

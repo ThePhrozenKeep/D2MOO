@@ -3227,9 +3227,9 @@ void __stdcall sub_6F8A4C10()
 		0x00, 0x00, 0x00,
 	};
 
-	for (int32_t i = 0; i < ARRAY_SIZE(byte_6F8FD218); ++i)
+	for (int32_t nPaletteIdx = 0; nPaletteIdx < ARRAY_SIZE(byte_6F8FD218); ++nPaletteIdx)
 	{
-		byte_6F8FD218[i] = D2Win_10034_MixRGB(byte_6F8BC1B4[3 * i], byte_6F8BC1B4[3 * i + 1], byte_6F8BC1B4[3 * i + 2]);
+		byte_6F8FD218[nPaletteIdx] = D2Win_10034_MixRGB(byte_6F8BC1B4[3 * nPaletteIdx], byte_6F8BC1B4[3 * nPaletteIdx + 1], byte_6F8BC1B4[3 * nPaletteIdx + 2]);
 	}
 }
 

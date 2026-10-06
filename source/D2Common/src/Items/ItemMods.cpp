@@ -2409,12 +2409,12 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pProperties[i], 0, 0x40, 0);
 					}
 
-					for (int i = 0; i < ARRAY_SIZE(pSetItemsTxtRecord->pPartialBoni); ++i)
+					for (int nPartialBonusIdx = 0; nPartialBonusIdx < ARRAY_SIZE(pSetItemsTxtRecord->pPartialBoni); ++nPartialBonusIdx)
 					{
 						if (pSetItemsTxtRecord->nAddFunc)
 						{
-							nFlag = dword_6FDD146C[i / 2 + 2];
-							nState = dword_6FDD1488[i / 2 + 2];
+							nFlag = dword_6FDD146C[nPartialBonusIdx / 2 + 2];
+							nState = dword_6FDD1488[nPartialBonusIdx / 2 + 2];
 						}
 						else
 						{
@@ -2422,7 +2422,7 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 							nFlag = 0x40;
 						}
 
-						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[i], nState, nFlag, 0);
+						sub_6FD95810(4, NULL, pItem, NULL, 0, 0, nApplyType, &pSetItemsTxtRecord->pPartialBoni[nPartialBonusIdx], nState, nFlag, 0);
 					}
 				}
 				else
@@ -2677,14 +2677,14 @@ BOOL __stdcall ITEMMODS_CanItemHaveMagicAffix(D2UnitStrc* pItem, const D2MagicAf
 					}
 				}
 
-				for (int i = 0; i < ARRAY_SIZE(pMagicAffixTxtRecord->wIType); ++i)
+				for (int nITypeIdx = 0; nITypeIdx < ARRAY_SIZE(pMagicAffixTxtRecord->wIType); ++nITypeIdx)
 				{
-					if (pMagicAffixTxtRecord->wIType[i] <= 0)
+					if (pMagicAffixTxtRecord->wIType[nITypeIdx] <= 0)
 					{
 						break;
 					}
 
-					if (ITEMS_CheckItemTypeId(pItem, pMagicAffixTxtRecord->wIType[i]))
+					if (ITEMS_CheckItemTypeId(pItem, pMagicAffixTxtRecord->wIType[nITypeIdx]))
 					{
 						return TRUE;
 					}
@@ -2714,14 +2714,14 @@ BOOL __stdcall ITEMMODS_CanItemHaveRareAffix(D2UnitStrc* pItem, D2RareAffixTxt* 
 			}
 		}
 
-		for (int i = 0; i < ARRAY_SIZE(pRareAffixTxtRecord->wIType); ++i)
+		for (int nITypeIdx = 0; nITypeIdx < ARRAY_SIZE(pRareAffixTxtRecord->wIType); ++nITypeIdx)
 		{
-			if (pRareAffixTxtRecord->wIType[i] <= 0)
+			if (pRareAffixTxtRecord->wIType[nITypeIdx] <= 0)
 			{
 				break;
 			}
 
-			if (ITEMS_CheckItemTypeId(pItem, pRareAffixTxtRecord->wIType[i]))
+			if (ITEMS_CheckItemTypeId(pItem, pRareAffixTxtRecord->wIType[nITypeIdx]))
 			{
 				return TRUE;
 			}

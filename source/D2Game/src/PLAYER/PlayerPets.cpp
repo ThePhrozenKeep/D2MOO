@@ -915,12 +915,12 @@ void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     }
 
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-    for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
+    for (int32_t nCleanPetType = 1; nCleanPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nCleanPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nCleanPetType);
         if (pPetList)
         {
-            D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+            D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nCleanPetType];
             if (pPetTypeTxtRecord && pPetTypeTxtRecord->dwPetFlags & gdwBitMasks[2])
             {
                 for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)

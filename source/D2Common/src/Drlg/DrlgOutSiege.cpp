@@ -255,29 +255,29 @@ void __fastcall DRLGOUTSIEGE_PlaceBarricadeEntrancesAndExits(D2DrlgLevelStrc* pL
 		}
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nGridWidth; ++i)
+	for (int nX = 0; nX < pLevel->pOutdoors->nGridWidth; ++nX)
 	{
-		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, i, pLevel->pOutdoors->nGridHeight - 2).bLvlLink)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, pLevel->pOutdoors->nGridHeight - 2).bLvlLink)
 		{
-			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, pLevel->pOutdoors->nGridHeight - 2, LVLPREST_ACT5_BARRICADE_ENTRANCE_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
+			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, pLevel->pOutdoors->nGridHeight - 2, LVLPREST_ACT5_BARRICADE_ENTRANCE_32X16, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
 		}
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+	for (int nY = 0; nY < pLevel->pOutdoors->nGridHeight; ++nY)
 	{
-		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, 0, i).bLvlLink)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, 0, nY).bLvlLink)
 		{
-			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, i, LVLPREST_ACT5_BARRICADE_EXIT_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
+			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT5_BARRICADE_EXIT_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
 		}
 	}
 
-	for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+	for (int nEntranceY = 0; nEntranceY < pLevel->pOutdoors->nGridHeight; ++nEntranceY)
 	{
-		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, pLevel->pOutdoors->nGridWidth - 2, i).bLvlLink)
+		if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, pLevel->pOutdoors->nGridWidth - 2, nEntranceY).bLvlLink)
 		{
-			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pLevel->pOutdoors->nGridWidth - 2, i, LVLPREST_ACT5_BARRICADE_ENTRANCE_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
+			DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, pLevel->pOutdoors->nGridWidth - 2, nEntranceY, LVLPREST_ACT5_BARRICADE_ENTRANCE_16X32, 2 * (pLevel->nLevelId == LEVEL_BLOODYFOOTHILLS) - 1, 0);
 			break;
 		}
 	}

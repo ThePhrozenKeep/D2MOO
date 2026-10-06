@@ -497,10 +497,10 @@ int32_t __fastcall SKILLS_SrvDo030_Curse(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     v29.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
 
-    for (int32_t i = 0; i < 3; ++i)
+    for (int32_t nAuraEventIdx = 0; nAuraEventIdx < 3; ++nAuraEventIdx)
     {
-        v29.nAuraEvent[i] = pSkillsTxtRecord->wAuraEvent[i];
-        v29.nAuraEventFunc[i] = pSkillsTxtRecord->wAuraEventFunc[i];
+        v29.nAuraEvent[nAuraEventIdx] = pSkillsTxtRecord->wAuraEvent[nAuraEventIdx];
+        v29.nAuraEventFunc[nAuraEventIdx] = pSkillsTxtRecord->wAuraEventFunc[nAuraEventIdx];
     }
 
     return sub_6FD10360(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nRange, sub_6FD0B450, &v29);
@@ -969,14 +969,14 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
     }
 
     D2StatListStrc* pStatList = nullptr;
-    for (int32_t i = 0; i < 6; ++i)
+    for (int32_t nAuraStatIdx = 0; nAuraStatIdx < 6; ++nAuraStatIdx)
     {
-        if (pSkillsTxtRecord->wAuraStat[i] >= 0)
+        if (pSkillsTxtRecord->wAuraStat[nAuraStatIdx] >= 0)
         {
-            D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pSkillsTxtRecord->wAuraStat[i]);
+            D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pSkillsTxtRecord->wAuraStat[nAuraStatIdx]);
             if (pItemStatCostTxtRecord)
             {
-                const int32_t nValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
+                const int32_t nValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[nAuraStatIdx], nSkillId, nSkillLevel);
                 if (nValue)
                 {
                     if (!pStatList)
@@ -998,14 +998,14 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
                         D2COMMON_10475_PostStatToStatList(pPet, pStatList, 1);
                     }
 
-                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[i], nValue, 0);
+                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[nAuraStatIdx], nValue, 0);
 
                     if (pItemStatCostTxtRecord->wItemEvent[0] > 0)
                     {
                         const int32_t nPetGUID = pPet ? pPet->dwUnitId : -1;
-                        if (!SUNITEVENT_GetEvent(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->wAuraStat[i]))
+                        if (!SUNITEVENT_GetEvent(pGame, pPet, 2, nPetGUID, pSkillsTxtRecord->wAuraStat[nAuraStatIdx]))
                         {
-                            const int32_t nLayer_StatId = pSkillsTxtRecord->wAuraStat[i] << 16;
+                            const int32_t nLayer_StatId = pSkillsTxtRecord->wAuraStat[nAuraStatIdx] << 16;
                             sub_6FD156A0(pGame, pPet, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nPetGUID);
                             if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                             {
@@ -1032,19 +1032,19 @@ int32_t __fastcall D2GAME_SetSummonPassiveStats_6FD0C530(D2GameStrc* pGame, D2Un
     STATLIST_SetUnitStat(pPet, STAT_MAXHP, nNewMaxHp, 0);
     STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, nNewMaxHp, 0);
 
-    for (int32_t i = 0; i < 5; ++i)
+    for (int32_t nSumSkillIdx = 0; nSumSkillIdx < 5; ++nSumSkillIdx)
     {
-        D2SkillsTxt* pSummonSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pSkillsTxtRecord->wSumSkill[i]);
+        D2SkillsTxt* pSummonSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pSkillsTxtRecord->wSumSkill[nSumSkillIdx]);
         if (pSummonSkillsTxtRecord)
         {
-            const int32_t nValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwSumSkCalc[i], nSkillId, nSkillLevel);
+            const int32_t nValue = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwSumSkCalc[nSumSkillIdx], nSkillId, nSkillLevel);
             if (nValue > 0)
             {
-                D2GAME_SetSkills_6FD14C60(pPet, pSkillsTxtRecord->wSumSkill[i], nValue, 0);
+                D2GAME_SetSkills_6FD14C60(pPet, pSkillsTxtRecord->wSumSkill[nSumSkillIdx], nValue, 0);
 
                 if (pSummonSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_AURA])
                 {
-                    D2GAME_AssignSkill_6FD13800(pPet, 0, pSkillsTxtRecord->wSumSkill[i], -1);
+                    D2GAME_AssignSkill_6FD13800(pPet, 0, pSkillsTxtRecord->wSumSkill[nSumSkillIdx], -1);
                 }
             }
         }

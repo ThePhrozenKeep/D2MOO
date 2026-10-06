@@ -1180,7 +1180,7 @@ int __stdcall D2Common_11063(D2ActiveRoomStrc* pRoom, int nMonsterId)
 				nResult = nMonsterId;
 				nNextInClass = pMonStatsTxtRecord->nNextInClass;
 
-				for (int i = 0; i < nMonstersInChain; ++i)
+				for (int nChainIdx = 0; nChainIdx < nMonstersInChain; ++nChainIdx)
 				{
 					pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nNextInClass);
 					if (!pMonStatsTxtRecord || pMonStatsTxtRecord->nLevel[0] > pLevelsTxtRecord->wMonLvlEx[0] + 1)

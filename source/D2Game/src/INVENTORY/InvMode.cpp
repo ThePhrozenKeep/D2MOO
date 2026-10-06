@@ -260,9 +260,9 @@ void __fastcall D2GAME_ResetSomeItemFlags_6FC415F0(D2GameStrc* pGame, D2UnitStrc
         ITEMS_SetItemCMDFlag(pItem, nItemCmdFlags[i], 0);
     }
 
-    for (size_t i = 0; i < ARRAY_SIZE(nItemFlags); ++i)
+    for (size_t nItemFlagIdx = 0; nItemFlagIdx < ARRAY_SIZE(nItemFlags); ++nItemFlagIdx)
     {
-        ITEMS_SetItemFlag(pItem, nItemFlags[i], 0);
+        ITEMS_SetItemFlag(pItem, nItemFlags[nItemFlagIdx], 0);
     }
 }
 

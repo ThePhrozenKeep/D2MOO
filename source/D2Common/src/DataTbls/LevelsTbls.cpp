@@ -438,12 +438,12 @@ void __fastcall DATATBLS_LoadLevelDefsBin(HD2ARCHIVE hArchive)
 	}
 
 	nPortalIndex = 0;
-	for (int i = 0; i < sgptDataTables->nLevelsTxtRecordCount; ++i)
+	for (int nLevelIdx = 0; nLevelIdx < sgptDataTables->nLevelsTxtRecordCount; ++nLevelIdx)
 	{
-		if (sgptDataTables->pLevelDefBin[i].dwPortal)
+		if (sgptDataTables->pLevelDefBin[nLevelIdx].dwPortal)
 		{
 			D2_ASSERT(nPortalIndex < sgptDataTables->nPortalLevels);
-			sgptDataTables->pPortalLevels[nPortalIndex] = i;
+			sgptDataTables->pPortalLevels[nPortalIndex] = nLevelIdx;
 			++nPortalIndex;
 		}
 	}

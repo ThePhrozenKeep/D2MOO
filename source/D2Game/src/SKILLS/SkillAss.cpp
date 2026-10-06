@@ -1703,13 +1703,13 @@ int32_t __fastcall SKILLS_SrvDo047_CloakOfShadows(D2GameStrc* pGame, D2UnitStrc*
     args.nDuration = curse.nDuration;
     args.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
     
-    for (int32_t i = 0; i < 6; ++i)
+    for (int32_t nAuraStatIdx = 0; nAuraStatIdx < 6; ++nAuraStatIdx)
     {
-        args.nAuraStat[i] = pSkillsTxtRecord->wAuraStat[i];
-        args.nAuraStatCalcValue[i] = 0;
-        if (pSkillsTxtRecord->wAuraStat[i] >= 0)
+        args.nAuraStat[nAuraStatIdx] = pSkillsTxtRecord->wAuraStat[nAuraStatIdx];
+        args.nAuraStatCalcValue[nAuraStatIdx] = 0;
+        if (pSkillsTxtRecord->wAuraStat[nAuraStatIdx] >= 0)
         {
-            args.nAuraStatCalcValue[i] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
+            args.nAuraStatCalcValue[nAuraStatIdx] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[nAuraStatIdx], nSkillId, nSkillLevel);
         }
     }
 
@@ -2034,11 +2034,11 @@ int32_t __fastcall SKILLS_SrvDo049_ShadowWarrior_Master(D2GameStrc* pGame, D2Uni
                 }
             }
 
-            for (int32_t i = 0; i < 5; ++i)
+            for (int32_t nPassiveStatIdx = 0; nPassiveStatIdx < 5; ++nPassiveStatIdx)
             {
-                if (pSkillsTxtRecord->nPassiveStat[i] >= 0 && pSkillsTxtRecord->nPassiveStat[i] < sgptDataTables->nItemStatCostTxtRecordCount)
+                if (pSkillsTxtRecord->nPassiveStat[nPassiveStatIdx] >= 0 && pSkillsTxtRecord->nPassiveStat[nPassiveStatIdx] < sgptDataTables->nItemStatCostTxtRecordCount)
                 {
-                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->nPassiveStat[i], SKILLS_EvaluateSkillFormula(pPet, pSkillsTxtRecord->dwPassiveCalc[1], nSkillId, nSkillLevel), 0);
+                    STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->nPassiveStat[nPassiveStatIdx], SKILLS_EvaluateSkillFormula(pPet, pSkillsTxtRecord->dwPassiveCalc[1], nSkillId, nSkillLevel), 0);
                 }
             }
 
@@ -2208,10 +2208,10 @@ void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t n
         STATLIST_FreeStatList(pConversionStatList);
     }
 
-    for (D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 8); pStatList; pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 8))
+    for (D2StatListStrc* pItemStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 8); pItemStatList; pItemStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 8))
     {
-        D2Common_10474(pItem, pStatList);
-        STATLIST_FreeStatList(pStatList);
+        D2Common_10474(pItem, pItemStatList);
+        STATLIST_FreeStatList(pItemStatList);
     }
 }
 

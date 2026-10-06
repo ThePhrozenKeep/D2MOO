@@ -280,13 +280,13 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 	}
 
 	// Copy the sorted node list to the input node list.
-	D2TextNodeStrc* pNode = pTextHeader->pNode;
-	for (int i = 0; i < pTextHeader->nCount; ++i)
+	D2TextNodeStrc* pOutNode = pTextHeader->pNode;
+	for (int nNodeIdx = 0; nNodeIdx < pTextHeader->nCount; ++nNodeIdx)
 	{
-		pNode->nStringId = pNodeList[i].nStringId;
-		pNode->nMenu = pNodeList[i].nMenu;
+		pOutNode->nStringId = pNodeList[nNodeIdx].nStringId;
+		pOutNode->nMenu = pNodeList[nNodeIdx].nMenu;
 
-		pNode = pNode->pNext;
+		pOutNode = pOutNode->pNext;
 	}
 
 	D2_FREE_POOL(pTextHeader->pMemPool, pNodeList);

@@ -1007,9 +1007,9 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
             }
         }
 
-        for (int32_t i = 0; i < pMonsterRegion->nMonCount; ++i)
+        for (int32_t nMonIdx = 0; nMonIdx < pMonsterRegion->nMonCount; ++nMonIdx)
         {
-            sub_6FC62020(pSeed, &pMonsterRegion->pMonData[i], 3);
+            sub_6FC62020(pSeed, &pMonsterRegion->pMonData[nMonIdx], 3);
         }
 
         *ppMonsterRegion = pMonsterRegion;

@@ -93,7 +93,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 						pCoord[i].nY = i / nWidth;
 					}
 
-					for (int i = 0; i < nArea; ++i)
+					for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
 					{
 						nRand1 = SEED_RollLimitedRandomNumber(&a1->pLevel->pSeed, nArea);
 						nRand2 = SEED_RollLimitedRandomNumber(&a1->pLevel->pSeed, nArea);
@@ -108,10 +108,10 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 					}
 
 					bBreak = FALSE;
-					for (int i = 0; i < nArea; ++i)
+					for (int nCellIdx = 0; nCellIdx < nArea; ++nCellIdx)
 					{
-						nX = pCoord[i].nX;
-						nY = pCoord[i].nY;
+						nX = pCoord[nCellIdx].nX;
+						nY = pCoord[nCellIdx].nY;
 						if (!bSmallWilderness || nX != 2 || nY != 2)
 						{
 							if (DRLGTILESUB_TestReplaceSubPreset(nX, nY, a1, pSubstGroup, pLvlSubTxtRecord))
@@ -381,13 +381,13 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 
 	DRLGROOMTILE_ReallocRoofTileGrid(pMemPool, a4->pDrlgRoom->pTileGrid, nCounter);
 
-	for (int j = 0; j < pSubstGroup->tBox.nHeight; ++j)
+	for (int nBoxY = 0; nBoxY < pSubstGroup->tBox.nHeight; ++nBoxY)
 	{
 		for (int i = 0; i < pSubstGroup->tBox.nWidth; ++i)
 		{
 			if (pLvlSubTxtRecord->pDrlgFile->nFloorLayers)
 			{
-				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->tBox.nPosX + a7, j + pSubstGroup->tBox.nPosY);
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pFloorGrid, i + pSubstGroup->tBox.nPosX + a7, nBoxY + pSubstGroup->tBox.nPosY);
 			}
 			else
 			{
@@ -397,29 +397,29 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 			if (nFlags & 2)
 			{
 				nFlags |= 0x80;
-				DRLGGRID_AlterGridFlag(a4->pFloorGrid, nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
+				DRLGGRID_AlterGridFlag(a4->pFloorGrid, nX + i, nY + nBoxY, nFlags, FLAG_OPERATION_OVERWRITE);
 			}
 
 			D2_ASSERT(pLvlSubTxtRecord->pDrlgFile->nWallLayers <= DRLG_MAX_WALL_LAYERS);
 			for (int nLayer = 0; nLayer < pLvlSubTxtRecord->pDrlgFile->nWallLayers; ++nLayer)
 			{
-				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pWallGrid[nLayer], i + pSubstGroup->tBox.nPosX + a7, j + pSubstGroup->tBox.nPosY);
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pWallGrid[nLayer], i + pSubstGroup->tBox.nPosX + a7, nBoxY + pSubstGroup->tBox.nPosY);
 				if (nFlags & 1 && a4->pWallsGrids[nLayer])
 				{
-					DRLGGRID_AlterGridFlag(a4->pWallsGrids[nLayer], nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
+					DRLGGRID_AlterGridFlag(a4->pWallsGrids[nLayer], nX + i, nY + nBoxY, nFlags, FLAG_OPERATION_OVERWRITE);
 				}
 
-				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pTileTypeGrid[nLayer], i + pSubstGroup->tBox.nPosX + a7, j + pSubstGroup->tBox.nPosY);
+				nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pTileTypeGrid[nLayer], i + pSubstGroup->tBox.nPosX + a7, nBoxY + pSubstGroup->tBox.nPosY);
 				if (nFlags && a4->pOutdoorRooms[nLayer])
 				{
-					DRLGGRID_AlterGridFlag(&a4->pOutdoorRooms[nLayer]->pTileTypeGrid, nX + i, nY + j, nFlags, FLAG_OPERATION_OVERWRITE);
+					DRLGGRID_AlterGridFlag(&a4->pOutdoorRooms[nLayer]->pTileTypeGrid, nX + i, nY + nBoxY, nFlags, FLAG_OPERATION_OVERWRITE);
 				}
 			}
 
-			nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->tBox.nPosX + a7, j + pSubstGroup->tBox.nPosY);
+			nFlags = DRLGGRID_GetGridEntry(&pLvlSubTxtRecord->pShadowGrid, i + pSubstGroup->tBox.nPosX + a7, nBoxY + pSubstGroup->tBox.nPosY);
 			if (nFlags & 0x8000000)
 			{
-				DRLGROOMTILE_InitTileShadow(a4->pDrlgRoom, nX + i + a4->pDrlgRoom->nTileXPos, nY + j + a4->pDrlgRoom->nTileYPos, nFlags);
+				DRLGROOMTILE_InitTileShadow(a4->pDrlgRoom, nX + i + a4->pDrlgRoom->nTileXPos, nY + nBoxY + a4->pDrlgRoom->nTileYPos, nFlags);
 			}
 		}
 	}
@@ -585,7 +585,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 				}
 
 				// Randomize positions
-				for (int i = 0; i < nPotentialPositionsArea; ++i)
+				for (int nShuffleIdx = 0; nShuffleIdx < nPotentialPositionsArea; ++nShuffleIdx)
 				{
 					uint32_t nRand1 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nPotentialPositionsArea);
 					uint32_t nRand2 = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, nPotentialPositionsArea);
@@ -598,10 +598,10 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 					tCoords[nRand2].nY = nTemp2;
 				}
 
-				for (int i = 0; i < nPotentialPositionsArea; ++i)
+				for (int nPositionIdx = 0; nPositionIdx < nPotentialPositionsArea; ++nPositionIdx)
 				{
-					const int nX = tCoords[i].nX + 1;
-					const int nY = tCoords[i].nY + 1;
+					const int nX = tCoords[nPositionIdx].nX + 1;
+					const int nY = tCoords[nPositionIdx].nY + 1;
 					if (sub_6FD8B010(nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord))
 					{
 						sub_6FD8ACE0(pOutdoorLevel->pDrlgRoom->pLevel->pDrlg->pMempool, nX, nY, pOutdoorLevel, pSubstGroup, pLvlSubTxtRecord, 0);
@@ -642,9 +642,9 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt*
 			DRLGGRID_FillNewCellFlags(NULL, &pLvlSubTxtRecord->pTileTypeGrid[i], (int*)(*ppDrlgFile)->pTileTypeLayer[i], &pDrlgCoord, pDrlgCoord.nWidth);
 		}
 
-		for (int i = 1; i < (*ppDrlgFile)->nWallLayers; ++i)
+		for (int nWallLayerIdx = 1; nWallLayerIdx < (*ppDrlgFile)->nWallLayers; ++nWallLayerIdx)
 		{
-			DRLGGRID_AlterAllGridFlags(&pLvlSubTxtRecord->pWallGrid[i], i << 18, FLAG_OPERATION_OR);
+			DRLGGRID_AlterAllGridFlags(&pLvlSubTxtRecord->pWallGrid[nWallLayerIdx], nWallLayerIdx << 18, FLAG_OPERATION_OR);
 		}
 
 		if ((*ppDrlgFile)->nFloorLayers)

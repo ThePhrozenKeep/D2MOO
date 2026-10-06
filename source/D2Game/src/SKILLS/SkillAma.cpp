@@ -540,7 +540,7 @@ int32_t __fastcall SKILLS_SrvDo008_MultipleShot_Teeth_ShockWave(D2GameStrc* pGam
 
         missileParams.dwFlags &= 0xFFFEFFFF;
 
-        for (int32_t i = 0; i < v31; ++i)
+        for (int32_t nLeftFireIdx = 0; nLeftFireIdx < v31; ++nLeftFireIdx)
         {
             missileParams.nTargetX = nTargetX;
             missileParams.nTargetY = nTargetY;
@@ -551,7 +551,7 @@ int32_t __fastcall SKILLS_SrvDo008_MultipleShot_Teeth_ShockWave(D2GameStrc* pGam
 
         const int32_t v24 = v9 - v21 - v31;
         missileParams.dwFlags |= 0x10000;
-        for (int32_t i = 0; i < v24; ++i)
+        for (int32_t nRightFireIdx = 0; nRightFireIdx < v24; ++nRightFireIdx)
         {
             missileParams.nTargetX = nTargetX;
             missileParams.nTargetY = nTargetY;

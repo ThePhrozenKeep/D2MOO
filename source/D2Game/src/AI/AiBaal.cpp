@@ -839,12 +839,12 @@ int32_t __fastcall AI_GetRandomArrayIndex(int32_t* pArray, int32_t nArraySize, D
 	const int32_t nRand = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nSum);
 
 	int32_t nThreshold = 0;
-	for (int32_t i = 0; i < nArraySize; ++i)
+	for (int32_t nPickIdx = 0; nPickIdx < nArraySize; ++nPickIdx)
 	{
-		nThreshold += pArray[i];
+		nThreshold += pArray[nPickIdx];
 		if (nRand < nThreshold)
 		{
-			return i;
+			return nPickIdx;
 		}
 	}
 

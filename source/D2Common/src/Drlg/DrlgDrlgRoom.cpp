@@ -164,10 +164,10 @@ void __fastcall DRLGROOM_FreeRoomEx(D2DrlgRoomStrc* pDrlgRoom)
 		}
 	}
 
-	for (D2DrlgOrthStrc* pDrlgOrth = pDrlgRoom->pDrlgOrth; pDrlgOrth; pDrlgOrth = pNextDrlgOrth)
+	for (D2DrlgOrthStrc* pOrthToFree = pDrlgRoom->pDrlgOrth; pOrthToFree; pOrthToFree = pNextDrlgOrth)
 	{
-		pNextDrlgOrth = pDrlgOrth->pNext;
-		D2_FREE_POOL(pMemPool, pDrlgOrth);
+		pNextDrlgOrth = pOrthToFree->pNext;
+		D2_FREE_POOL(pMemPool, pOrthToFree);
 	}
 
 	pCurrentRoomEx = pDrlgRoom->pLevel->pFirstRoomEx;
@@ -588,9 +588,9 @@ int __fastcall DRLGROOM_ReorderNearRoomList(D2DrlgRoomStrc* pDrlgRoom, D2ActiveR
 		}
 	}
 
-	for (int i = nRooms; i < pDrlgRoom->nRoomsNear; ++i)
+	for (int nNearRoomIdx = nRooms; nNearRoomIdx < pDrlgRoom->nRoomsNear; ++nNearRoomIdx)
 	{
-		ppRoomList[i] = NULL;
+		ppRoomList[nNearRoomIdx] = NULL;
 	}
 
 	return nRooms;
@@ -693,13 +693,13 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 						}
 					}
 
-					for (int i = 0; i < 8; ++i)
+					for (int nVisIdx = 0; nVisIdx < 8; ++nVisIdx)
 					{
-						if (pDestinationVisArray[i] == pDrlgRoom->pLevel->nLevelId)
+						if (pDestinationVisArray[nVisIdx] == pDrlgRoom->pLevel->nLevelId)
 						{
 							if (nSourceVisCount == nDestinationVisCount)
 							{
-								if (sub_6FD77F00(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, i, nWarpDestination))
+								if (sub_6FD77F00(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, nVisIdx, nWarpDestination))
 								{
 									bSkip = TRUE;
 								}

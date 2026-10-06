@@ -59,9 +59,9 @@ void __fastcall DRLGWARP_UpdateWarpRoomSelect(D2DrlgRoomStrc* pDrlgRoom, int nLe
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x10; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* pTileData = pRoomTile->unk0x10; pTileData; pTileData = pTileData->unk0x20)
 				{
-					i->dwFlags |= 8;
+					pTileData->dwFlags |= 8;
 				}
 			}
 		}
@@ -82,9 +82,9 @@ void __fastcall DRLGWARP_UpdateWarpRoomDeselect(D2DrlgRoomStrc* pDrlgRoom, int n
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* pTileData = pRoomTile->unk0x0C; pTileData; pTileData = pTileData->unk0x20)
 				{
-					i->dwFlags |= 8;
+					pTileData->dwFlags |= 8;
 				}
 			}
 		}
@@ -155,17 +155,17 @@ D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int n
 			nRand = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nMatches) + 1;
 		}
 
-		for (int i = 0; i < pLevel->nTileInfo; ++i)
+		for (int nTileInfoIdx = 0; nTileInfoIdx < pLevel->nTileInfo; ++nTileInfoIdx)
 		{
-			if (nTileIndex == pLevel->pTileInfo[i].nTileIndex || stru_6FDCE6A0[nTileIndex].nX && stru_6FDCE6A0[nTileIndex].nY == stru_6FDCE6A0[pLevel->pTileInfo[i].nTileIndex].nY)
+			if (nTileIndex == pLevel->pTileInfo[nTileInfoIdx].nTileIndex || stru_6FDCE6A0[nTileIndex].nX && stru_6FDCE6A0[nTileIndex].nY == stru_6FDCE6A0[pLevel->pTileInfo[nTileInfoIdx].nTileIndex].nY)
 			{
 				--nRand;
 			}
 
 			if (nRand <= 0)
 			{
-				*pX = pLevel->pTileInfo[i].nPosX;
-				*pY = pLevel->pTileInfo[i].nPosY;
+				*pX = pLevel->pTileInfo[nTileInfoIdx].nPosX;
+				*pY = pLevel->pTileInfo[nTileInfoIdx].nPosY;
 
 				pDrlgRoom = DRLG_GetRoomExFromCoordinates(*pX, *pY, pLevel->pDrlg, 0, pLevel);
 				DRLGACTIVATE_InitializeRoomEx(pDrlgRoom);

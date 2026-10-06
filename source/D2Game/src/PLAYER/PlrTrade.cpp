@@ -1007,9 +1007,9 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         }
     }
 
-    for (int32_t i = 0; i < nSocketables; ++i)
+    for (int32_t nSocketableIdx = 0; nSocketableIdx < nSocketables; ++nSocketableIdx)
     {
-        D2UnitStrc* pSocketable = pSocketables[i];
+        D2UnitStrc* pSocketable = pSocketables[nSocketableIdx];
         if (pSocketable)
         {
             ITEMS_SetInvPage(pSocketable, INVPAGE_CUBE);
@@ -1603,9 +1603,9 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     }
                 }
 
-                for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pInteractPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
+                for (D2UnitStrc* pTheirItem = INVENTORY_GetFirstItem(pInteractPlayer->pInventory); pTheirItem; pTheirItem = INVENTORY_GetNextItem(pTheirItem))
                 {
-                    D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
+                    D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pTheirItem);
                     if (ITEMS_GetInvPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pPlayer, pCheckedItem))
                     {
                         sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
@@ -2177,9 +2177,9 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
         }
     }
 
-    for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
+    for (D2UnitStrc* pSellerItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pSellerItem; pSellerItem = INVENTORY_GetNextItem(pSellerItem))
     {
-        D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
+        D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pSellerItem);
 
         const uint8_t nInvPage = ITEMS_GetInvPage(pCheckedItem);
         switch (nInvPage)

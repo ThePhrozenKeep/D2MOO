@@ -1058,7 +1058,7 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 	}
 
 	D2_ASSERT(pDrlgRoom != nullptr); // Not in original game. Could be nullptr if the last fails to link.
-	for (int i = nRoomsPerDirection - 1; i > 0; --i)
+	for (int nWestRoomIdx = nRoomsPerDirection - 1; nWestRoomIdx > 0; --nWestRoomIdx)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pDrlgRoom->pLevel, DRLGTYPE_PRESET);
 		pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
@@ -1080,7 +1080,7 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 		pDrlgRoom = pNewRoomEx;
 	}
 
-	for (int i = nRoomsPerDirection - 1; i > 0; --i)
+	for (int nSouthRoomIdx = nRoomsPerDirection - 1; nSouthRoomIdx > 0; --nSouthRoomIdx)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pDrlgRoom->pLevel, DRLGTYPE_PRESET);
 		pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
@@ -1102,7 +1102,7 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 		pDrlgRoom = pNewRoomEx;
 	}
 
-	for (int i = nRoomsPerDirection - 2; i > 0; --i)
+	for (int nEastRoomIdx = nRoomsPerDirection - 2; nEastRoomIdx > 0; --nEastRoomIdx)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pDrlgRoom->pLevel, DRLGTYPE_PRESET);
 		pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
@@ -1682,25 +1682,25 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialPreset(D2DrlgLevelStrc* pLevel, const
 		}
 	}
 
-	for (D2DrlgRoomStrc* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+	for (D2DrlgRoomStrc* pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pDrlgRoomNext)
 	{
-		if (!DRLGMAZE_HasMapDS1(i))
+		if (!DRLGMAZE_HasMapDS1(pRoomEx))
 		{
-			pNewRoomEx = DRLGROOM_AllocRoomEx(i->pLevel, DRLGTYPE_PRESET);
+			pNewRoomEx = DRLGROOM_AllocRoomEx(pRoomEx->pLevel, DRLGTYPE_PRESET);
 
 			pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;
 			pNewRoomEx->nTileHeight = pNewRoomEx->pLevel->pMaze->dwSizeY;
 
-			if (!DRLGMAZE_LinkMazeRooms(pNewRoomEx, i, pMazeInit->nDirection))
+			if (!DRLGMAZE_LinkMazeRooms(pNewRoomEx, pRoomEx, pMazeInit->nDirection))
 			{
 				DRLGROOM_FreeRoomEx(pNewRoomEx);
 			}
 			else
 			{
-				DRLGROOM_AllocDrlgOrthsForRooms(i, pNewRoomEx, pMazeInit->nDirection);
-				DRLGROOM_AddRoomExToLevel(i->pLevel, pNewRoomEx);
+				DRLGROOM_AllocDrlgOrthsForRooms(pRoomEx, pNewRoomEx, pMazeInit->nDirection);
+				DRLGROOM_AddRoomExToLevel(pRoomEx->pLevel, pNewRoomEx);
 
-				DRLGMAZE_PickRoomPreset(i, 1);
+				DRLGMAZE_PickRoomPreset(pRoomEx, 1);
 
 				pNewRoomEx->pMaze->nLevelPrest = pMazeInit->nLevelPrestId2;
 				pNewRoomEx->pMaze->nPickedFile = pMazeInit->nPickedFile;
@@ -1767,6 +1767,7 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 	D2DrlgRoomStrc* pDrlgRoom5 = NULL;
 	int nDirection = 0;
 	int nRand = 0;
+	D2DrlgRoomStrc* pRoomEx = NULL;
 
 	nDirection = (2 * (SEED_RollRandomNumber(&pLevel->pSeed) & 1)) | 1;
 	nRand = SEED_RollRandomNumber(&pLevel->pSeed) & 3;
@@ -1775,11 +1776,11 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 	{
 	case LEVEL_SEWERSLEV1:
 		pDrlgRoom1 = NULL;
-		for (D2DrlgRoomStrc* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+		for (pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pDrlgRoomNext)
 		{
-			if ((!pDrlgRoom1 || i->nTileYPos < pDrlgRoom1->nTileYPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(i, ALTDIR_NORTH))
+			if ((!pDrlgRoom1 || pRoomEx->nTileYPos < pDrlgRoom1->nTileYPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_NORTH))
 			{
-				pDrlgRoom1 = i;
+				pDrlgRoom1 = pRoomEx;
 			}
 		}
 
@@ -1805,11 +1806,11 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		}
 
 		pDrlgRoom1 = NULL;
-		for (D2DrlgRoomStrc* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+		for (pRoomEx = pLevel->pFirstRoomEx; pRoomEx; pRoomEx = pRoomEx->pDrlgRoomNext)
 		{
-			if ((!pDrlgRoom1 || i->nTileXPos > pDrlgRoom1->nTileXPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(i, ALTDIR_EAST))
+			if ((!pDrlgRoom1 || pRoomEx->nTileXPos > pDrlgRoom1->nTileXPos) && DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(pRoomEx, ALTDIR_EAST))
 			{
-				pDrlgRoom1 = i;
+				pDrlgRoom1 = pRoomEx;
 			}
 		}
 

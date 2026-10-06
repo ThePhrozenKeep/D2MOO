@@ -359,7 +359,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, in
 			pCoord[i].nY = i / nWidth;
 		}
 
-		for (int i = 0; i < nArea; ++i)
+		for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
 		{
 			nRand1 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
 			nRand2 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
@@ -374,10 +374,10 @@ BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, in
 			pCoord[nRand2].nY = nY;
 		}
 
-		for (int i = 0; i < nArea; ++i)
+		for (int nCellIdx = 0; nCellIdx < nArea; ++nCellIdx)
 		{
-			nX = pCoord[i].nX + 1;
-			nY = pCoord[i].nY + 1;
+			nX = pCoord[nCellIdx].nX + 1;
+			nY = pCoord[nCellIdx].nY + 1;
 
 			if (DRLGOUTDOORS_TestOutdoorLevelPreset(pLevel, nX, nY, nLevelPrestId, nOffset, nFlags))
 			{
@@ -426,7 +426,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 				pCoord[i].nY = i / nWidth;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
 			{
 				nRand1 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
 				nRand2 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
@@ -441,10 +441,10 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 				pCoord[nRand2].nY = nY;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nCellIdx = 0; nCellIdx < nArea; ++nCellIdx)
 			{
-				nX = pCoord[i].nX + 1;
-				nY = pCoord[i].nY + 1;
+				nX = pCoord[nCellIdx].nX + 1;
+				nY = pCoord[nCellIdx].nY + 1;
 
 				if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY).nUnkb07)
 				{
@@ -494,33 +494,33 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 			}
 		}
 
-		for (int i = 0; i < pLevel->pOutdoors->nGridHeight; ++i)
+		for (int nGridY = 0; nGridY < pLevel->pOutdoors->nGridHeight; ++nGridY)
 		{
 			for (int j = 0; j < pLevel->pOutdoors->nGridWidth; ++j)
 			{
-				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[1], j, i) & nFlags && !DRLGOUTDOORS_TestGridCellNonLvlLink(pLevel, j,i))
+				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[1], j, nGridY) & nFlags && !DRLGOUTDOORS_TestGridCellNonLvlLink(pLevel, j,nGridY))
 				{
 					if (!j)
 					{
 						j = 1;
 					}
-					if (!i)
+					if (!nGridY)
 					{
-						i = 1;
+						nGridY = 1;
 					}
 					if (j == pLevel->pOutdoors->nGridWidth - 1)
 					{
 						--j;
 					}
-					if (i == pLevel->pOutdoors->nGridHeight - 1)
+					if (nGridY == pLevel->pOutdoors->nGridHeight - 1)
 					{
-						--i;
+						--nGridY;
 					}
 
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], j, i, 0x20000, FLAG_OPERATION_OR);
+					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], j, nGridY, 0x20000, FLAG_OPERATION_OR);
 					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb11 = true;
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], j, i, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
+					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], j, nGridY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 					return;
 				}
 			}
@@ -540,7 +540,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 				pCoord[i].nY = i / nWidth;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
 			{
 				nRand1 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
 				nRand2 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
@@ -555,10 +555,10 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 				pCoord[nRand2].nY = nY;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nCellIdx = 0; nCellIdx < nArea; ++nCellIdx)
 			{
-				nX = pCoord[i].nX + 1;
-				nY = pCoord[i].nY + 1;
+				nX = pCoord[nCellIdx].nX + 1;
+				nY = pCoord[nCellIdx].nY + 1;
 
 				if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX, nY))
 				{
@@ -604,7 +604,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 				pCoord[i].nY = i / nWidth;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
 			{
 				nRand1 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
 				nRand2 = SEED_RollLimitedRandomNumber(&pLevel->pSeed, nArea);
@@ -619,15 +619,15 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 				pCoord[nRand2].nY = nY;
 			}
 
-			for (int i = 0; i < nArea; ++i)
+			for (int nCellIdx = 0; nCellIdx < nArea; ++nCellIdx)
 			{
 				if (nShrines <= 0)
 				{
 					break;
 				}
 
-				nX = pCoord[i].nX + 1;
-				nY = pCoord[i].nY + 1;
+				nX = pCoord[nCellIdx].nX + 1;
+				nY = pCoord[nCellIdx].nY + 1;
 
 				if (DRLGOUTDOORS_TestGridCellSpawnValid(pLevel, nX, nY))
 				{
@@ -851,9 +851,9 @@ void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeep
 
 	DRLGVER_FreeVertices(pLevel->pDrlg->pMempool, &pLevel->pOutdoors->pVertex);
 
-	for(int i = 0; i < ARRAY_SIZE(pLevel->pOutdoors->pPathStarts); ++i)
+	for(int nPathStartIdx = 0; nPathStartIdx < ARRAY_SIZE(pLevel->pOutdoors->pPathStarts); ++nPathStartIdx)
 	{
-		DRLGVER_FreeVertices(pLevel->pDrlg->pMempool, &pLevel->pOutdoors->pPathStarts[i]);
+		DRLGVER_FreeVertices(pLevel->pDrlg->pMempool, &pLevel->pOutdoors->pPathStarts[nPathStartIdx]);
 	}
 
 	memset(&pLevel->pOutdoors->pVertices[0], 0x00, 0x78);
@@ -907,7 +907,7 @@ static const uint8_t byte_6FDCF958[] =
 	0x18, 0x18, 0x19, 0x20, 0x18, 0x18, 0x1E, 0x01		
 };
 
-static __forceinline int DRLG_OUTDOORS_MapOffsetToBoxIndex(int nBoxDimension, int nOffsetX, int nOffsetY)
+static __forceinline int mapOffsetToBoxIndex(int nBoxDimension, int nOffsetX, int nOffsetY)
 {
 	const int nHalfBoxDimension = nBoxDimension / 2;
 	const int nBoxX = nHalfBoxDimension + nOffsetX;
@@ -950,13 +950,13 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 		{
 			for (int nOffsetY = -1; nOffsetY <= 1; nOffsetY++)
 			{
-				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, nOffsetX,nOffsetY)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
+				aFlags[mapOffsetToBoxIndex(nBoxDimension, nOffsetX, nOffsetY)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + nOffsetX, nStartY + nOffsetY);
 			}
 		}
 
 		for (int nY = nStartY; nY >= 1; nY--)
 		{
-			const int nBoxCenterIndex = DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, 0, 0);
+			const int nBoxCenterIndex = mapOffsetToBoxIndex(nBoxDimension, 0, 0);
 			if (aFlags[nBoxCenterIndex]) // center
 			{
 				uint32_t nDirectionsWithPathFlags = 0;
@@ -988,9 +988,9 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 			{
 				memcpy(aFlags, &aFlags[1], sizeof(aFlags) - sizeof(aFlags[0]));
 
-				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, -1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
-				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
-				aFlags[DRLG_OUTDOORS_MapOffsetToBoxIndex(nBoxDimension, +1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 1, nY - 2);
+				aFlags[mapOffsetToBoxIndex(nBoxDimension, -1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX - 1, nY - 2);
+				aFlags[mapOffsetToBoxIndex(nBoxDimension, 0, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 0, nY - 2);
+				aFlags[mapOffsetToBoxIndex(nBoxDimension, +1, -1)] = DRLGGRID_GetGridEntry(pDirtPathGrid, nX + 1, nY - 2);
 			}
 		}
 	}
@@ -1117,21 +1117,21 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 		}
 	}
 
-	for (int i = 0; i < pOutdoors->nVertices; ++i)
+	for (int nVertexIdx = 0; nVertexIdx < pOutdoors->nVertices; ++nVertexIdx)
 	{
-		DRLGOUTDOORS_CalculatePathCoordinates(pLevel, &pOutdoors->pVertices[i], &pOutdoors->pVertices[6 + i]);
+		DRLGOUTDOORS_CalculatePathCoordinates(pLevel, &pOutdoors->pVertices[nVertexIdx], &pOutdoors->pVertices[6 + nVertexIdx]);
 	}
 
 	sub_6FD7F5B0(pLevel);
 
-	for (int i = 0; i < pOutdoors->nVertices; ++i)
+	for (int nPathStartIdx = 0; nPathStartIdx < pOutdoors->nVertices; ++nPathStartIdx)
 	{
-		if (sub_6FD80750(pLevel, i))
+		if (sub_6FD80750(pLevel, nPathStartIdx))
 		{
 			D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 			tPackedInfo.nUnkb07 = true;
-			DRLGGRID_SetVertexGridFlags(&pOutdoors->pGrid[2], pOutdoors->pPathStarts[i], tPackedInfo.nPackedValue);
-			sub_6FD7F810(pLevel, i);
+			DRLGGRID_SetVertexGridFlags(&pOutdoors->pGrid[2], pOutdoors->pPathStarts[nPathStartIdx], tPackedInfo.nPackedValue);
+			sub_6FD7F810(pLevel, nPathStartIdx);
 		}
 	}
 }

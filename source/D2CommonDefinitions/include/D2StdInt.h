@@ -1,9 +1,8 @@
 #pragma once
 
+#if defined(_MSC_VER) && _MSC_VER < 1600
 // Compiler and stdlib compatibility for VC6, which doesnt <cstdint> (???)
 #include <VCPP6.h>
-
-#if defined(_MSC_VER) && _MSC_VER < 1600
 #include <stddef.h> // C89's header, so every toolchain has it
 
 // VC6 is 32-bit only, so intptr_t/uintptr_t are the same width as int.

@@ -213,15 +213,15 @@ void __fastcall ACT5Q5_DeactivateAncientMonsters(D2GameStrc* pGame, D2QuestDataS
 
 	pQuestDataEx->bAncientsActivated = 0;
 
-	for (int32_t i = 0; i < 3; ++i)
+	for (int32_t nStatueIdx = 0; nStatueIdx < 3; ++nStatueIdx)
 	{
-		pQuestDataEx->bAncienStatueRespawned[i] = 0;
-		D2UnitStrc* pAncientStatue = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nAncientStatueGUID[i]);
+		pQuestDataEx->bAncienStatueRespawned[nStatueIdx] = 0;
+		D2UnitStrc* pAncientStatue = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nAncientStatueGUID[nStatueIdx]);
 		if (pAncientStatue)
 		{
 			UNITS_ChangeAnimMode(pAncientStatue, OBJMODE_NEUTRAL);
 		}
-		pQuestDataEx->nAncientStatueObjectMode[i] = OBJMODE_NEUTRAL;
+		pQuestDataEx->nAncientStatueObjectMode[nStatueIdx] = OBJMODE_NEUTRAL;
 	}
 
 	pQuestDataEx->nAltarObjectMode = OBJMODE_NEUTRAL;

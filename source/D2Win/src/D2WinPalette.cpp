@@ -105,34 +105,34 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 	memcpy(gStandardColorsPalette_6F962298, pPL2File->standardColors, sizeof(gStandardColorsPalette_6F962298));
 	memcpy(gStandardShiftsPalette_6F921498, pPL2File->standardShifts, sizeof(gStandardShiftsPalette_6F921498));
 
-	for (int32_t i = 0; i < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++i)
+	for (int32_t nPaletteIdx = 0; nPaletteIdx < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++nPaletteIdx)
 	{
-		gRGBAPalette_6F9622C0[i].peFlags = 5;
+		gRGBAPalette_6F9622C0[nPaletteIdx].peFlags = 5;
 	}
 
-	for (int32_t i = 0; i < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++i)
+	for (int32_t nNearestIdx = 0; nNearestIdx < ARRAY_SIZE(gRGBAPalette_6F9622C0); ++nNearestIdx)
 	{
-		const uint8_t red = std::min(170 * gRGBAPalette_6F9622C0[i].peRed / 100, 255);
-		const uint8_t green = std::min(170 * gRGBAPalette_6F9622C0[i].peGreen / 100, 255);
-		const uint8_t blue = std::min(170 * gRGBAPalette_6F9622C0[i].peBlue / 100, 255);
+		const uint8_t red = std::min(170 * gRGBAPalette_6F9622C0[nNearestIdx].peRed / 100, 255);
+		const uint8_t green = std::min(170 * gRGBAPalette_6F9622C0[nNearestIdx].peGreen / 100, 255);
+		const uint8_t blue = std::min(170 * gRGBAPalette_6F9622C0[nNearestIdx].peBlue / 100, 255);
 
-		byte_6F96A6C0[i] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, red, green, blue);
-		byte_6F952198[i] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, gRGBAPalette_6F9622C0[i].peRed, 0, 0);
+		byte_6F96A6C0[nNearestIdx] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, red, green, blue);
+		byte_6F952198[nNearestIdx] = D2CMP_GetNearestPaletteIndex(gRGBAPalette_6F9622C0, 0x100u, gRGBAPalette_6F9622C0[nNearestIdx].peRed, 0, 0);
 	}
 
-	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.transPalettes); ++i)
+	for (int32_t nTransPalIdx = 0; nTransPalIdx < ARRAY_SIZE(paletteTable.transPalettes); ++nTransPalIdx)
 	{
-		paletteTable.transPalettes[i] = &gTransPalette_6F922198[i];
+		paletteTable.transPalettes[nTransPalIdx] = &gTransPalette_6F922198[nTransPalIdx];
 	}
 
-	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.shadowLightGammaPalettes); ++i)
+	for (int32_t nShadowPalIdx = 0; nShadowPalIdx < ARRAY_SIZE(paletteTable.shadowLightGammaPalettes); ++nShadowPalIdx)
 	{
-		paletteTable.shadowLightGammaPalettes[i] = &gShadowsLightGammaPalette_6F91E298.palettes[i];
+		paletteTable.shadowLightGammaPalettes[nShadowPalIdx] = &gShadowsLightGammaPalette_6F91E298.palettes[nShadowPalIdx];
 	}
 
-	for (int32_t i = 0; i < ARRAY_SIZE(paletteTable.standardShiftPalettes); ++i)
+	for (int32_t nShiftPalIdx = 0; nShiftPalIdx < ARRAY_SIZE(paletteTable.standardShiftPalettes); ++nShiftPalIdx)
 	{
-		paletteTable.standardShiftPalettes[i] = &gStandardShiftsPalette_6F921498[i];
+		paletteTable.standardShiftPalettes[nShiftPalIdx] = &gStandardShiftsPalette_6F921498[nShiftPalIdx];
 	}
 
 	paletteTable.pScreenPalette = gScreenPalette_6F8FE290;

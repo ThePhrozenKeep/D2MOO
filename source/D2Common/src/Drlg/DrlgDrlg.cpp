@@ -901,10 +901,10 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 	pDrlgWarp->nLevel = nLevelId;
 
 	pLevelDefBin = DATATBLS_GetLevelDefRecord(nLevelId);
-	for (int i = 0; i < 8; ++i)
+	for (int nWarpIdx = 0; nWarpIdx < 8; ++nWarpIdx)
 	{
-		pDrlgWarp->nVis[i] = pLevelDefBin->dwVis[i];
-		pDrlgWarp->nWarp[i] = pLevelDefBin->dwWarp[i];
+		pDrlgWarp->nVis[nWarpIdx] = pLevelDefBin->dwVis[nWarpIdx];
+		pDrlgWarp->nWarp[nWarpIdx] = pLevelDefBin->dwWarp[nWarpIdx];
 	}
 
 	pDrlgWarp->pNext = pDrlg->pWarp;

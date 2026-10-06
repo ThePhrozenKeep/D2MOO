@@ -204,11 +204,11 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 
 	while (!dword_6FC0B25C)
 	{
-		fd_set readfds = { 0 }
+		fd_set readfds = { 0 };
 		readfds.fd_array[0] = gClientSocket;
 		readfds.fd_count = 1;
 
-		timeval timeout = { 0 }
+		timeval timeout = { 0 };
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 100000;
 
@@ -364,7 +364,7 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 
 			if (pPacketBuffer->data[1] == 0x81)
 			{
-				uint8_t processedData[256] = {};
+				uint8_t processedData[256] = { 0 };
 
 				for (int32_t i = 0; i < ARRAY_SIZE(processedData) / 2; ++i)
 				{

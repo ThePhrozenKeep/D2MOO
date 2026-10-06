@@ -784,11 +784,11 @@ D2NpcVendorChainStrc* __fastcall SUNITPROXY_GetVendorChain(D2GameStrc* pGame, D2
         }
     }
 
-    D2NpcVendorChainStrc* pVendorChain = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2NpcVendorChainStrc);
-    pVendorChain->dwGUID = nNpcGUID;
-    pVendorChain->pNext = pNpcRecord->pVendorChain;
-    pNpcRecord->pVendorChain = pVendorChain;
-    return pVendorChain;
+    D2NpcVendorChainStrc* pNewVendorChain = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2NpcVendorChainStrc);
+    pNewVendorChain->dwGUID = nNpcGUID;
+    pNewVendorChain->pNext = pNpcRecord->pVendorChain;
+    pNpcRecord->pVendorChain = pNewVendorChain;
+    return pNewVendorChain;
 }
 
 //D2Game.0x6FCCCC00
@@ -927,9 +927,9 @@ void __fastcall SUNITPROXY_FillIGlobaltemCacheRecordForNpc(int32_t nNpcId)
 
     int32_t nItemCacheIndex = 0;
     int32_t nPermCacheIndex = 0;
-    for (int32_t i = 0; i < pItemDataTbl->nItemsTxtRecordCount; ++i)
+    for (int32_t nItemsTxtIdx = 0; nItemsTxtIdx < pItemDataTbl->nItemsTxtRecordCount; ++nItemsTxtIdx)
     {
-        D2ItemsTxt* pItemsTxtRecord = &pItemDataTbl->pItemsTxt[i];
+        D2ItemsTxt* pItemsTxtRecord = &pItemDataTbl->pItemsTxt[nItemsTxtIdx];
         if (pItemsTxtRecord->nSpawnable && (pItemsTxtRecord->nVendorMax[nNpcId] || pItemsTxtRecord->nVendorMagicMax[nNpcId]))
         {
             if (pItemsTxtRecord->nPermStoreItem)

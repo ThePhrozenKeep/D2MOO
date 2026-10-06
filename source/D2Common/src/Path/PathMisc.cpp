@@ -1205,21 +1205,6 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 //1.00:  D2Common.0x1005EEB0 (#10223)
 //1.10f: D2Common.0x6FDAC9A0 (#10226)
 //1.13c: D2Common.0x6FD5E230 (#10342)
-// TODO name
-static bool PATH_IsUnitSomething(D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath)
-{
-	switch (pUnit->dwUnitType)
-	{
-	case UNIT_PLAYER:
-		return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0;
-	case UNIT_MONSTER:
-		return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0
-			&& (pUnit->dwFlags & UNITFLAG_ISASYNC) == 0;
-	default:
-		return false;
-	}
-}
-
 BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 {
 	D2DynamicPathStrc* pDynamicPath = pUnit->pDynamicPath;
@@ -1238,7 +1223,19 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 	{
 #ifdef D2_VERSION_113C // Optimisation added in 1.13c ? Not compatible with 1.10f
 	// TODO name
-		if (PATH_IsUnitSomething(pUnit, pDynamicPath))
+		auto IsUnitSomething = [](D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath) -> bool {
+			switch (pUnit->dwUnitType)
+			{
+			case UNIT_PLAYER:
+				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0;
+			case UNIT_MONSTER:
+				return (pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00010) == 0
+					&& (pUnit->dwFlags & UNITFLAG_ISASYNC) == 0;
+			default:
+				return false;
+			}
+			};
+		if (IsUnitSomething(pUnit, pDynamicPath))
 #endif
 		{
 			if(((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0 || sub_6FD5DB70(pDynamicPath))

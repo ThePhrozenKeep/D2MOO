@@ -1560,15 +1560,15 @@ void __fastcall DATATBLS_LoadSuperUniquesTxt(HD2ARCHIVE hArchive)
 		}
 	}
 
-	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->nSuperUniqueIds); ++i)
+	for (int nSuperUniqueIdx = 0; nSuperUniqueIdx < ARRAY_SIZE(sgptDataTables->nSuperUniqueIds); ++nSuperUniqueIdx)
 	{
-		if (sgptDataTables->nSuperUniqueIds[i] == -1 && sgptDataTables->bCompileTxt)
+		if (sgptDataTables->nSuperUniqueIds[nSuperUniqueIdx] == -1 && sgptDataTables->bCompileTxt)
 		{
-			FOG_Trace("Missing hcIdx (%d) -- index incomplete", i);
+			FOG_Trace("Missing hcIdx (%d) -- index incomplete", nSuperUniqueIdx);
 		}
 
 		const int SUPERUNIQUE_NONE = -1;
-		D2_ASSERT(sgptDataTables->nSuperUniqueIds[i] != SUPERUNIQUE_NONE);
+		D2_ASSERT(sgptDataTables->nSuperUniqueIds[nSuperUniqueIdx] != SUPERUNIQUE_NONE);
 	}
 }
 
@@ -1677,26 +1677,26 @@ void __fastcall DATATBLS_LoadHirelingTxt(HD2ARCHIVE hArchive)
 		sgptDataTables->nExpansionHirelingStartRecordIds[i] = -1;
 	}
 
-	for (int i = 0; i < sgptDataTables->nHirelingTxtRecordCount; ++i)
+	for (int nHirelingIdx = 0; nHirelingIdx < sgptDataTables->nHirelingTxtRecordCount; ++nHirelingIdx)
 	{
-		sgptDataTables->pHirelingTxt[i].wNameFirst = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[i].szNameFirst, &pUnicode);
-		sgptDataTables->pHirelingTxt[i].wNameLast = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[i].szNameLast, &pUnicode);
+		sgptDataTables->pHirelingTxt[nHirelingIdx].wNameFirst = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[nHirelingIdx].szNameFirst, &pUnicode);
+		sgptDataTables->pHirelingTxt[nHirelingIdx].wNameLast = D2LANG_GetTblIndex(sgptDataTables->pHirelingTxt[nHirelingIdx].szNameLast, &pUnicode);
 
 		if (FOG_IsExpansion())
 		{
-			D2_ASSERT(sgptDataTables->pHirelingTxt[i].wNameFirst > 0);
-			D2_ASSERT(sgptDataTables->pHirelingTxt[i].wNameLast > sgptDataTables->pHirelingTxt[i].wNameFirst);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[nHirelingIdx].wNameFirst > 0);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[nHirelingIdx].wNameLast > sgptDataTables->pHirelingTxt[nHirelingIdx].wNameFirst);
 
 #define MAX_HIRELING_ID 256
-			D2_ASSERT(sgptDataTables->pHirelingTxt[i].nId < MAX_HIRELING_ID);
+			D2_ASSERT(sgptDataTables->pHirelingTxt[nHirelingIdx].nId < MAX_HIRELING_ID);
 		}
 
-		if (sgptDataTables->pHirelingTxt[i].nId < 256)
+		if (sgptDataTables->pHirelingTxt[nHirelingIdx].nId < 256)
 		{
-			nId = sgptDataTables->pHirelingTxt[i].nId + ((sgptDataTables->pHirelingTxt[i].wVersion >= 100) << 8);
+			nId = sgptDataTables->pHirelingTxt[nHirelingIdx].nId + ((sgptDataTables->pHirelingTxt[nHirelingIdx].wVersion >= 100) << 8);
 			if (sgptDataTables->nClassicHirelingStartRecordIds[nId] < 0)
 			{
-				sgptDataTables->nClassicHirelingStartRecordIds[nId] = i;
+				sgptDataTables->nClassicHirelingStartRecordIds[nId] = nHirelingIdx;
 			}
 		}
 	}
@@ -2655,15 +2655,15 @@ void __fastcall DATATBLS_LoadMonEquipTxt(HD2ARCHIVE hArchive)
 		sgptDataTables->pMonStatsTxt[i].nMonEquipTxtRecordId = -1;
 	}
 
-	for (int i = 0; i < sgptDataTables->nMonEquipTxtRecordCount; ++i)
+	for (int nMonEquipIdx = 0; nMonEquipIdx < sgptDataTables->nMonEquipTxtRecordCount; ++nMonEquipIdx)
 	{
-		pMonEquipTxtRecord = &sgptDataTables->pMonEquipTxt[i];
+		pMonEquipTxtRecord = &sgptDataTables->pMonEquipTxt[nMonEquipIdx];
 		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(pMonEquipTxtRecord->nMonster);
 		if (pMonStatsTxtRecord)
 		{
 			if (pMonStatsTxtRecord->nMonEquipTxtRecordId < 0)
 			{
-				pMonStatsTxtRecord->nMonEquipTxtRecordId = i;
+				pMonStatsTxtRecord->nMonEquipTxtRecordId = nMonEquipIdx;
 			}
 
 			for (int j = 0; j < 3; ++j)
@@ -2873,10 +2873,10 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	{
 		DATATBLS_UnloadBin(sgptDataTables->pMonPresetTxt);
 	}
-	for (int i = 0; i < 5; ++i)
+	for (int nActSectionIdx = 0; nActSectionIdx < 5; ++nActSectionIdx)
 	{
-		sgptDataTables->pMonPresetTxtActSections[i] = NULL;
-		sgptDataTables->nMonPresetTxtActRecordCounts[i] = 0;
+		sgptDataTables->pMonPresetTxtActSections[nActSectionIdx] = NULL;
+		sgptDataTables->nMonPresetTxtActRecordCounts[nActSectionIdx] = 0;
 	}
 
 	if (sgptDataTables->pSuperUniquesLinker)
@@ -2942,11 +2942,11 @@ void __fastcall DATATBLS_UnloadSomeMonsterTxts()
 	}
 
 	FOG_FreeLinker(sgptDataTables->pTreasureClassExLinker);
-	for (int i = 0; i < sgptDataTables->nTreasureClassEx; ++i)
+	for (int nTreasureClassExIdx = 0; nTreasureClassExIdx < sgptDataTables->nTreasureClassEx; ++nTreasureClassExIdx)
 	{
-		if (sgptDataTables->pTreasureClassEx[i].pInfo)
+		if (sgptDataTables->pTreasureClassEx[nTreasureClassExIdx].pInfo)
 		{
-			D2_FREE_POOL(nullptr, sgptDataTables->pTreasureClassEx[i].pInfo);
+			D2_FREE_POOL(nullptr, sgptDataTables->pTreasureClassEx[nTreasureClassExIdx].pInfo);
 		}
 	}
 	D2_FREE_POOL(nullptr, sgptDataTables->pTreasureClassEx);

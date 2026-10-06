@@ -94,16 +94,6 @@ function(D2MOO_prepare_targets LibraryName)
   #endif()
 endfunction()
 
-# VC6's back-end global optimiser (implied by /O2) crashes with an internal
-# compiler error on some of D2MOO's larger functions. Only /Og- avoids it; /Od,
-# /O1, /Ot and dropping /Ob1 or /Oy all hit the same bug.
-# TODO: Some sort of workaround will be needed for byte-matching
-function(D2MOO_disable_msvc6_global_opt)
-  if(MSVC AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 1600)
-    set_source_files_properties(${ARGN} PROPERTIES COMPILE_FLAGS "/Og-")
-  endif()
-endfunction()
-
 function(D2MOO_target_source_group LibraryName)
   get_target_property(TargetSources ${${LibraryName}ImplName} SOURCES)
   list(REMOVE_ITEM TargetSources "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/dummy.cpp")

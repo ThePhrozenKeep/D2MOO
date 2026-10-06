@@ -51,7 +51,7 @@ static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
 };
 
-static BOOL PATH_HasCollisionForNewTarget(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
+static __forceinline BOOL hasCollisionForNewTarget(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
 {
 	pMov->tTargetCoord.X = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nX + (pMov->tCurrentCoord).X;
 	pMov->tTargetCoord.Y = gnDirectionsToAdjacentCellOffsets[pMov->nDirectionIndex].nY + (pMov->tCurrentCoord).Y;
@@ -65,22 +65,22 @@ BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2Path
 	D2_ASSERT(pInfo && pMov && pInfo->pDynamicPath->pUnit && (pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 
 	pMov->bReachedDeadEnd = FALSE;
-	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
+	if (!hasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
-	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
+	if (!hasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
-	if (!PATH_HasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
+	if (!hasCollisionForNewTarget(pInfo, pMov)) { return TRUE; }
 
 	pMov->nDirectionIndex = pMov->pNextDirection[pMov->nDirectionIndex];
 	// We circled back to the original direction.
 	pMov->bReachedDeadEnd = TRUE;
-	return !PATH_HasCollisionForNewTarget(pInfo, pMov);
+	return !hasCollisionForNewTarget(pInfo, pMov);
 }
 
 
-static int PATH_ComputeSquaredDistToTarget(D2PathInfoStrc* pInfo, const D2PathMovStrc& rPath)
+static __forceinline int computeSquaredDistToTarget(D2PathInfoStrc* pInfo, const D2PathMovStrc& rPath)
 {
 	// Note: original game does not clamp the index, and would use memory from pCache1.bWithCollision, which would be set to 0
 	// This means the distance would be the norm of tTargetCoord, which means we would have the bigger distance of the two paths
@@ -284,8 +284,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		return 0;
 	}
 
-	const int nSquaredDist1 = PATH_ComputeSquaredDistToTarget(pInfo, tCache1);
-	const int nSquaredDist2 = PATH_ComputeSquaredDistToTarget(pInfo, tCache2);
+	const int nSquaredDist1 = computeSquaredDistToTarget(pInfo, tCache1);
+	const int nSquaredDist2 = computeSquaredDistToTarget(pInfo, tCache2);
 	const int nSquaredDistStartToTarget = pInfo->tStartCoord.SquaredDistance(pInfo->tTargetCoord);
 
 	D2PathMovStrc* pBestPath;
