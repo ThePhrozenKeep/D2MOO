@@ -1034,7 +1034,7 @@ void __fastcall DRLGMAZE_InitBasicMazeLayout(D2DrlgLevelStrc* pLevel, int nRooms
 	pFirstRoomEx = pLevel->pFirstRoomEx;
 	pDrlgRoom = pLevel->pFirstRoomEx;
 
-	for (int i = nRoomsPerDirection - 1; i > 0; --i)
+	for (int nNorthRoomIdx = nRoomsPerDirection - 1; nNorthRoomIdx > 0; --nNorthRoomIdx)
 	{
 		pNewRoomEx = DRLGROOM_AllocRoomEx(pDrlgRoom->pLevel, DRLGTYPE_PRESET);
 		pNewRoomEx->nTileWidth = pNewRoomEx->pLevel->pMaze->dwSizeX;

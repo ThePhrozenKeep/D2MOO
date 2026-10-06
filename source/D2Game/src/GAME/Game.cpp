@@ -87,9 +87,7 @@ volatile LONG gnNumAdminConnections_6FD45838;
 
 #if defined(_MSC_VER) && _MSC_VER < 1600
 // The MSVC600 Win32 headers declare these with non-volatile pointer parameters, and
-// InterlockedCompareExchange even returns void* rather than the value it read. These
-// casts restore the modern signatures; the lock-prefixed instructions emitted are the
-// same ones.
+// InterlockedCompareExchange even returns void* rather than the value it read, so this is needed.
 #define GAME_InterlockedIncrement(pCounter) InterlockedIncrement((LONG*)(pCounter))
 #define GAME_InterlockedDecrement(pCounter) InterlockedDecrement((LONG*)(pCounter))
 #define GAME_InterlockedReadCounter(pCounter) (LONG)InterlockedCompareExchange((void**)(pCounter), 0, 0)

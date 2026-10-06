@@ -3,6 +3,18 @@
 #if defined(_MSC_VER) && _MSC_VER < 1600
 #include <Windows.h>
 
+// MSVC600's CRT declares _lock_file/_unlock_file, but its headers are not C++,
+// so the D2MOO sources cannot call them: passing a volatile LONG* to their
+// non-volatile LPLONG parameter is C2664. These are file-static, so they add no
+// symbol, and they take a real critical section exactly as retail's do.
+//
+// Retail's own pair, at D2Common.0x6FDC599E and 0x6FDC59F0, picks a lock per
+// stream: it range-checks the FILE* against the __iob table (__iob_func's
+// backing array), and if it lands there uses (p - __iob) / sizeof(FILE) as a slot
+// index into the lock table -- `sub ecx / sar eax,5 / add eax,0x1c / push / call
+// _lock` -- otherwise it falls through to EnterCriticalSection(&p->_lock) at
+// +0x20. One section for every stream is coarser than that, so it serializes
+// more but cannot deadlock or lose mutual exclusion.
 static CRITICAL_SECTION sgFileLockSection;
 static BOOL sgFileLockSectionInited = FALSE;
 

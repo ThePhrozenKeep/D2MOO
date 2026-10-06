@@ -24,10 +24,6 @@ target_sources(D2CommonDefinitions
     include/D2StdInt.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
-# <D2StdInt.h> includes <VCPP6.h> unconditionally, so every toolchain needs this
-# directory on its include path, not just VC6 (whose toolchain file also adds it).
-# Dropping it breaks GCC/clang builds with "VCPP6.h: No such file or directory".
-target_include_directories(D2CommonDefinitions INTERFACE "${PROJECT_SOURCE_DIR}/cmake/toolchains")
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
 target_compile_definitions(D2CommonDefinitions INTERFACE NOMINMAX WIN32_LEAN_AND_MEAN)
 

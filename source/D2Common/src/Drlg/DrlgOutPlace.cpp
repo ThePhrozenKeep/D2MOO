@@ -240,10 +240,14 @@ char byte_6FDCFB80[] = { 1, 0, -1, 0 };
 char byte_6FDCFB84[] = { 0, 1, 0, -1 };
 
 //D2Common.0x6FD80750
-// VC6 ICEs in its global optimizer (/Og) on this function: the decompiled
-// control flow jumps back out of two nested loops into the middle of the
-// enclosing one (the `goto LABEL_16`s), and P2 cannot build its CFG.
-#pragma optimize("g", off)
+// The decompiled control flow here jumps backwards out of nested loops into the
+// middle of the enclosing one, which makes VC6's global optimizer ICE (C1001)
+// on this function. The jumps are rewritten below as flag + `continue`, which is
+// exactly what each `goto` meant, so the function builds under /Og and matches
+// retail: retail is 1168 bytes / 396 instructions (0x6FD80750..0x6FD80BE0), and
+// this is now 1188 / 405. With optimization off instead it compiles fine but
+// produces 2365 / 610 -- roughly twice retail, so the restructuring is what
+// closes the gap, not a pragma.
 BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 {
 	int nX1 = (pLevel->pOutdoors->pVertices[6 + nVertexId].nPosX - pLevel->nPosX) / 8;
@@ -310,15 +314,75 @@ BOOL __fastcall sub_6FD80750(D2DrlgLevelStrc* pLevel, int nVertexId)
 			memcpy(pNextOutPlace, &tInitOutPlace, sizeof(D2UnkOutPlaceStrc12));
 			pCurrentOutPlace = pNextOutPlace;
 
-LABEL_16:
+
 			while (pCurrentOutPlace->nX != nX2 || pCurrentOutPlace->nY != nY2)
 			{
 				const int nOffsetsIndex = pCurrentOutPlace->nIndex;
 				const int nTestCoordX = pCurrentOutPlace->nX + byte_6FDCFB80[nOffsetsIndex];
 				const int nTestCoordY = pCurrentOutPlace->nY + byte_6FDCFB84[nOffsetsIndex];
-				if (nTestCoordX == nX2 && nTestCoordY == nY2)
+				BOOL bTakeTarget = (nTestCoordX == nX2 && nTestCoordY == nY2);
+
+				if (!bTakeTarget)
 				{
-LABEL_26:
+					BOOL bWalkedOff = FALSE;
+
+					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, nTestCoordX, nTestCoordY))
+					{
+						if (!DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nTestCoordX, nTestCoordY).bHasPickedFile)
+						{
+							D2UnkOutPlaceStrc12* v28 = pCurrentOutPlace;
+							while (v28->nX != nTestCoordX || v28->nY != nTestCoordY)
+							{
+								v28 = v28->pNext;
+								if (!v28)
+								{
+									bWalkedOff = TRUE;
+									break;
+								}
+							}
+						}
+					}
+
+					if (!bWalkedOff)
+					{
+						if (pCurrentOutPlace->field_14 < 4)
+						{
+							++pCurrentOutPlace->field_18;
+							pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
+						}
+
+						++pCurrentOutPlace->field_14;
+						if (pCurrentOutPlace->field_14 == 3)
+						{
+							BOOL bRestartWalk = FALSE;
+
+							while (pCurrentOutPlace != pNextOutPlace)
+							{
+								pCurrentOutPlace = pCurrentOutPlace->pNext;
+
+								++pCurrentOutPlace->field_18;
+								pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
+								++pCurrentOutPlace->field_14;
+								if (pCurrentOutPlace->field_14 != 3)
+								{
+									bRestartWalk = TRUE;
+									break;
+								}
+							}
+
+							if (bRestartWalk)
+							{
+								continue;
+							}
+
+							pCurrentOutPlace = 0;
+							break;
+						}
+						continue;
+					}
+				}
+
+
 					v29 = 2;
 					if (pCurrentOutPlace->nX != nTestCoordX && pCurrentOutPlace->nY != nTestCoordY)
 					{
@@ -394,6 +458,8 @@ LABEL_26:
 						pCurrentOutPlace->field_14++;
 						if (pCurrentOutPlace->field_14 == 3)
 						{
+							BOOL bRestartWalk = FALSE;
+
 							while (pCurrentOutPlace != pNextOutPlace)
 							{
 								pCurrentOutPlace = pCurrentOutPlace->pNext;
@@ -402,58 +468,19 @@ LABEL_26:
 								pCurrentOutPlace->field_14++;
 								if (pCurrentOutPlace->field_14 != 3)
 								{
-									goto LABEL_16;
+									bRestartWalk = TRUE;
+									break;
 								}
+							}
+
+							if (bRestartWalk)
+							{
+								continue;
 							}
 							pCurrentOutPlace = 0;
 							break;
 						}
 					}
-				}
-				else
-				{
-					if (DRLGROOM_AreXYInsideCoordinates(&pLevel->pOutdoors->pCoord, nTestCoordX, nTestCoordY))
-					{
-						if (!DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nTestCoordX, nTestCoordY).bHasPickedFile)
-						{
-							D2UnkOutPlaceStrc12* v28 = pCurrentOutPlace;
-							while (v28->nX != nTestCoordX || v28->nY != nTestCoordY)
-							{
-								v28 = v28->pNext;
-								if (!v28)
-								{
-									goto LABEL_26;
-								}
-							}
-						}
-					}
-
-					if (pCurrentOutPlace->field_14 < 4)
-					{
-						++pCurrentOutPlace->field_18;
-						pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
-					}
-
-					++pCurrentOutPlace->field_14;
-					if (pCurrentOutPlace->field_14 == 3)
-					{
-						while (pCurrentOutPlace != pNextOutPlace)
-						{
-							pCurrentOutPlace = pCurrentOutPlace->pNext;
-
-							++pCurrentOutPlace->field_18;
-							pCurrentOutPlace->nIndex = (pCurrentOutPlace->nIndex + *pCurrentOutPlace->field_18) & 3;
-							++pCurrentOutPlace->field_14;
-							if (pCurrentOutPlace->field_14 != 3)
-							{
-								goto LABEL_16;
-							}
-						}
-
-						pCurrentOutPlace = 0;
-						break;
-					}
-				}
 			}
 
 			v58 += 5;
@@ -511,8 +538,6 @@ LABEL_26:
 
 	return TRUE;
 }
-
-#pragma optimize("", on)
 
 //TODO: Remove
 //D2FUNC(D2COMMON, 6FD80750, BOOL, __fastcall, (D2DrlgLevelStrc*, int), 0x40750)
@@ -1456,7 +1481,6 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 	int nSizeX = 0;
 	int nSizeY = 0;
 	int nPosY = 0;
-	int nLevelId = 0;
 
 	switch (nAct)
 	{
@@ -1475,36 +1499,36 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 		break;
 
 	case ACT_III:
-		pLevel = DRLG_GetLevel(pDrlg, LEVEL_KURASTDOCKTOWN);
-		pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(LEVEL_KURASTDOCKTOWN);
+			pLevel = DRLG_GetLevel(pDrlg, LEVEL_KURASTDOCKTOWN);
+			pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(LEVEL_KURASTDOCKTOWN);
 
-		pLevel->nPosX = pLevelDefBinRecord->dwOffsetX;
-		pLevel->nPosY = pLevelDefBinRecord->dwOffsetY;
-		pLevel->nWidth = pLevelDefBinRecord->dwSizeX[pDrlg->nDifficulty];
-		pLevel->nHeight = pLevelDefBinRecord->dwSizeY[pDrlg->nDifficulty];
+			pLevel->nPosX = pLevelDefBinRecord->dwOffsetX;
+			pLevel->nPosY = pLevelDefBinRecord->dwOffsetY;
+			pLevel->nWidth = pLevelDefBinRecord->dwSizeX[pDrlg->nDifficulty];
+			pLevel->nHeight = pLevelDefBinRecord->dwSizeY[pDrlg->nDifficulty];
 
-		pLevel = DRLG_GenerateJungles(pLevel);
+			pLevel = DRLG_GenerateJungles(pLevel);
 
-		nPosY = 0;
-		for (nLevelId = LEVEL_LOWERKURAST; nLevelId <= LEVEL_TRAVINCAL; ++nLevelId)
-		{
-			pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(nLevelId);
+			nPosY = 0;
+			for (int nLevelId = LEVEL_LOWERKURAST; nLevelId <= LEVEL_TRAVINCAL; ++nLevelId)
+			{
+				pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(nLevelId);
 
-			nSizeX = pLevelDefBinRecord->dwSizeX[pLevel->pDrlg->nDifficulty];
-			nSizeY = pLevelDefBinRecord->dwSizeY[pLevel->pDrlg->nDifficulty];
+				nSizeX = pLevelDefBinRecord->dwSizeX[pLevel->pDrlg->nDifficulty];
+				nSizeY = pLevelDefBinRecord->dwSizeY[pLevel->pDrlg->nDifficulty];
 
-			nPosY -= nSizeY;
+				nPosY -= nSizeY;
 
-			pAdjacentLevel = DRLG_GetLevel(pLevel->pDrlg, nLevelId);
+				pAdjacentLevel = DRLG_GetLevel(pLevel->pDrlg, nLevelId);
 
-			pAdjacentLevel->nPosX = pLevel->nWidth / 2 + pLevel->nPosX - nSizeX / 2;
-			pAdjacentLevel->nWidth = nSizeX;
-			pAdjacentLevel->nPosY = nPosY + pLevel->nPosY;
-			pAdjacentLevel->nHeight = nSizeY;
-		}
+				pAdjacentLevel->nPosX = pLevel->nWidth / 2 + pLevel->nPosX - nSizeX / 2;
+				pAdjacentLevel->nWidth = nSizeX;
+				pAdjacentLevel->nPosY = nPosY + pLevel->nPosY;
+				pAdjacentLevel->nHeight = nSizeY;
+			}
 
-		sub_6FD826D0(pDrlg, LEVEL_KURASTDOCKTOWN, LEVEL_TRAVINCAL);
-		sub_6FD82750(pDrlg, LEVEL_KURASTDOCKTOWN, LEVEL_TRAVINCAL);
+			sub_6FD826D0(pDrlg, LEVEL_KURASTDOCKTOWN, LEVEL_TRAVINCAL);
+			sub_6FD82750(pDrlg, LEVEL_KURASTDOCKTOWN, LEVEL_TRAVINCAL);
 		break;
 
 	case ACT_IV:
@@ -2152,21 +2176,6 @@ static void DRLG_GenerateJunglesAttachPoints(
 	}
 }
 
-// VC6 has no lambdas, so UpdateAccordingToPreset1 below is a macro rather than a
-// function. do/while(0) keeps each expansion's nPreset1Value in its own scope.
-#define JUNGLE_UPDATE_ACCORDING_TO_PRESET1(nPresetIndex, nDirectionFlag) \
-	do \
-	{ \
-		const int32_t nPreset1Value = pPreset1[(nPresetIndex)]; \
-		if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value \
-			&& pPreset0[(nPresetIndex)] == nPreset0CurrentValue) \
-		{ \
-			nFlags = (nDirectionFlag); \
-			nLastDirPreset1Value = nPreset1Value; \
-		} \
-	} while (0)
-
-
 static void DRLG_JungleComputeConnexity(
 	D2DrlgStrc* pDrlg,
 	int32_t nPresetsWidth,
@@ -2199,10 +2208,38 @@ static void DRLG_JungleComputeConnexity(
 			{
 				const int32_t nPreset0CurrentValue = pPreset0[nCurrentPresetIndex];
 
-				JUNGLE_UPDATE_ACCORDING_TO_PRESET1(nTopPresetIndex, JUNGLE_FLAG_TOP_);
-				JUNGLE_UPDATE_ACCORDING_TO_PRESET1(nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_);
-				JUNGLE_UPDATE_ACCORDING_TO_PRESET1(nRightPresetIndex, JUNGLE_FLAG_RIGHT_);
-				JUNGLE_UPDATE_ACCORDING_TO_PRESET1(nLeftPresetIndex, JUNGLE_FLAG_LEFT_);
+				{
+					const int32_t nPreset1Value = pPreset1[nTopPresetIndex];
+					if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value && pPreset0[nTopPresetIndex] == nPreset0CurrentValue)
+					{
+						nFlags = JUNGLE_FLAG_TOP_;
+						nLastDirPreset1Value = nPreset1Value;
+					}
+				}
+				{
+					const int32_t nPreset1Value = pPreset1[nBottomPresetIndex];
+					if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value && pPreset0[nBottomPresetIndex] == nPreset0CurrentValue)
+					{
+						nFlags = JUNGLE_FLAG_BOTTOM_;
+						nLastDirPreset1Value = nPreset1Value;
+					}
+				}
+				{
+					const int32_t nPreset1Value = pPreset1[nRightPresetIndex];
+					if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value && pPreset0[nRightPresetIndex] == nPreset0CurrentValue)
+					{
+						nFlags = JUNGLE_FLAG_RIGHT_;
+						nLastDirPreset1Value = nPreset1Value;
+					}
+				}
+				{
+					const int32_t nPreset1Value = pPreset1[nLeftPresetIndex];
+					if (nPreset1Value != 0 && nPreset1Value < nLastDirPreset1Value && pPreset0[nLeftPresetIndex] == nPreset0CurrentValue)
+					{
+						nFlags = JUNGLE_FLAG_LEFT_;
+						nLastDirPreset1Value = nPreset1Value;
+					}
+				}
 
 
 
@@ -2254,55 +2291,6 @@ static void DRLG_JungleComputeConnexity(
 }
 
 
-#undef JUNGLE_UPDATE_ACCORDING_TO_PRESET1
-
-// VC6 has no lambdas. LookForDirection and the three checks it was handed are
-// spelled as macros instead, expanding over the locals of
-// DRLG_JungleUpdateAttachPointsDirections. The scan loop and its `default: break`
-// are unchanged.
-#define JUNGLE_LOOK_FOR_DIRECTION(CheckDirection) \
-	do \
-	{ \
-		for (int i = 0; i < DIRECTION_COUNT && bLookAtNextDirection; i++) \
-		{ \
-			switch ((nDirectionBase + i) % DIRECTION_COUNT) \
-			{ \
-			case DIRECTION_SOUTHWEST: CheckDirection(nTopPresetIndex, JUNGLE_FLAG_TOP_); break; \
-			case DIRECTION_NORTHWEST: CheckDirection(nBottomPresetIndex, JUNGLE_FLAG_BOTTOM_); break; \
-			case DIRECTION_SOUTHEAST: CheckDirection(nRightPresetIndex, JUNGLE_FLAG_RIGHT_); break; \
-			case DIRECTION_NORTHEAST: CheckDirection(nLeftPresetIndex, JUNGLE_FLAG_LEFT_); break; \
-			default: \
-				break; \
-			} \
-		} \
-	} while (0)
-
-#define JUNGLE_CHECK_SAME_PRESET0(nPresetIndex, nFlagToAdd) \
-	if (pPreset0[nPresetIndex] == nPreset0CurrentValue \
-		&& pLevelPresetId[nPresetIndex] && pLevelPresetId[nPresetIndex] < 15) \
-	{ \
-		nCurrentPresetLevelId |= ((nFlagToAdd) << 4); \
-		bLookAtNextDirection = false; \
-	}
-
-#define JUNGLE_CHECK_ATTACH_POINT(nPresetIndex, nFlagToAdd) \
-	if (pPreset0[nPresetIndex] != nPreset0CurrentValue \
-		&& pPreset2[nPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT) \
-	{ \
-		nCurrentPresetLevelId |= ((nFlagToAdd) << 4); \
-		bLookAtNextDirection = false; \
-	}
-
-#define JUNGLE_CHECK_NEW_DIRECTION(nPresetIndex, nFlagToAdd) \
-	if (pLevelPresetId[nPresetIndex] && pLevelPresetId[nPresetIndex] < 15 \
-		&& ((nCurrentPresetLevelId & ((nFlagToAdd) << 4)) == 0) \
-		) \
-	{ \
-		nCurrentPresetLevelId |= ((nFlagToAdd) << 4); \
-		bLookAtNextDirection = false; \
-	}
-
-// Returns false if we need to generate a new map due to invalid attach points
 static bool DRLG_JungleUpdateAttachPointsDirections(
 	D2DrlgStrc* pDrlg,
 	int32_t nPresetsWidth,
@@ -2336,7 +2324,46 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 				bool bLookAtNextDirection;
 
 				bLookAtNextDirection = true;
-				JUNGLE_LOOK_FOR_DIRECTION(JUNGLE_CHECK_SAME_PRESET0);
+				for (int nDirectionIdx = 0; nDirectionIdx < DIRECTION_COUNT && bLookAtNextDirection; nDirectionIdx++)
+				{
+					switch ((nDirectionBase + nDirectionIdx) % DIRECTION_COUNT)
+					{
+					case DIRECTION_SOUTHWEST:
+						if (pPreset0[nTopPresetIndex] == nPreset0CurrentValue
+							&& pLevelPresetId[nTopPresetIndex] && pLevelPresetId[nTopPresetIndex] < 15)
+						{
+							nCurrentPresetLevelId |= ((JUNGLE_FLAG_TOP_) << 4);
+							bLookAtNextDirection = false;
+						}
+						break;
+					case DIRECTION_NORTHWEST:
+						if (pPreset0[nBottomPresetIndex] == nPreset0CurrentValue
+							&& pLevelPresetId[nBottomPresetIndex] && pLevelPresetId[nBottomPresetIndex] < 15)
+						{
+							nCurrentPresetLevelId |= ((JUNGLE_FLAG_BOTTOM_) << 4);
+							bLookAtNextDirection = false;
+						}
+						break;
+					case DIRECTION_SOUTHEAST:
+						if (pPreset0[nRightPresetIndex] == nPreset0CurrentValue
+							&& pLevelPresetId[nRightPresetIndex] && pLevelPresetId[nRightPresetIndex] < 15)
+						{
+							nCurrentPresetLevelId |= ((JUNGLE_FLAG_RIGHT_) << 4);
+							bLookAtNextDirection = false;
+						}
+						break;
+					case DIRECTION_NORTHEAST:
+						if (pPreset0[nLeftPresetIndex] == nPreset0CurrentValue
+							&& pLevelPresetId[nLeftPresetIndex] && pLevelPresetId[nLeftPresetIndex] < 15)
+						{
+							nCurrentPresetLevelId |= ((JUNGLE_FLAG_LEFT_) << 4);
+							bLookAtNextDirection = false;
+						}
+						break;
+					default:
+						break;
+					}
+				}
 
 				// If we found nothing, start generation all over
 				if (!nCurrentPresetLevelId)
@@ -2346,14 +2373,96 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 				if (bHadNoPresetLeveld)
 				{
 					bLookAtNextDirection = true;
-					JUNGLE_LOOK_FOR_DIRECTION(JUNGLE_CHECK_ATTACH_POINT);
+					for (int nDirectionIdx2 = 0; nDirectionIdx2 < DIRECTION_COUNT && bLookAtNextDirection; nDirectionIdx2++)
+					{
+						switch ((nDirectionBase + nDirectionIdx2) % DIRECTION_COUNT)
+						{
+						case DIRECTION_SOUTHWEST:
+							if (pPreset0[nTopPresetIndex] != nPreset0CurrentValue
+								&& pPreset2[nTopPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_TOP_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_NORTHWEST:
+							if (pPreset0[nBottomPresetIndex] != nPreset0CurrentValue
+								&& pPreset2[nBottomPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_BOTTOM_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_SOUTHEAST:
+							if (pPreset0[nRightPresetIndex] != nPreset0CurrentValue
+								&& pPreset2[nRightPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_RIGHT_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_NORTHEAST:
+							if (pPreset0[nLeftPresetIndex] != nPreset0CurrentValue
+								&& pPreset2[nLeftPresetIndex] == JUNGLE_PRESET2_ATTACH_POINT)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_LEFT_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						default:
+							break;
+						}
+					}
 
 					bLookAtNextDirection = SEED_RollLimitedRandomNumber(&pDrlg->pSeed, 2) != 0 && bLookAtNextDirection;
 
 					// Roll a new direction start
 					nDirectionBase = SEED_RollLimitedRandomNumber(&pDrlg->pSeed, DIRECTION_COUNT);
 
-					JUNGLE_LOOK_FOR_DIRECTION(JUNGLE_CHECK_NEW_DIRECTION);
+					for (int nDirectionIdx3 = 0; nDirectionIdx3 < DIRECTION_COUNT && bLookAtNextDirection; nDirectionIdx3++)
+					{
+						switch ((nDirectionBase + nDirectionIdx3) % DIRECTION_COUNT)
+						{
+						case DIRECTION_SOUTHWEST:
+							if (pLevelPresetId[nTopPresetIndex] && pLevelPresetId[nTopPresetIndex] < 15
+								&& ((nCurrentPresetLevelId & ((JUNGLE_FLAG_TOP_) << 4)) == 0)
+								)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_TOP_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_NORTHWEST:
+							if (pLevelPresetId[nBottomPresetIndex] && pLevelPresetId[nBottomPresetIndex] < 15
+								&& ((nCurrentPresetLevelId & ((JUNGLE_FLAG_BOTTOM_) << 4)) == 0)
+								)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_BOTTOM_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_SOUTHEAST:
+							if (pLevelPresetId[nRightPresetIndex] && pLevelPresetId[nRightPresetIndex] < 15
+								&& ((nCurrentPresetLevelId & ((JUNGLE_FLAG_RIGHT_) << 4)) == 0)
+								)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_RIGHT_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						case DIRECTION_NORTHEAST:
+							if (pLevelPresetId[nLeftPresetIndex] && pLevelPresetId[nLeftPresetIndex] < 15
+								&& ((nCurrentPresetLevelId & ((JUNGLE_FLAG_LEFT_) << 4)) == 0)
+								)
+							{
+								nCurrentPresetLevelId |= ((JUNGLE_FLAG_LEFT_) << 4);
+								bLookAtNextDirection = false;
+							}
+							break;
+						default:
+							break;
+						}
+					}
 				}
 
 				if ((nCurrentPresetLevelId & (JUNGLE_FLAG_TOP_ << 4)) != 0)
@@ -2382,10 +2491,6 @@ static bool DRLG_JungleUpdateAttachPointsDirections(
 	return true;
 }
 
-#undef JUNGLE_LOOK_FOR_DIRECTION
-#undef JUNGLE_CHECK_SAME_PRESET0
-#undef JUNGLE_CHECK_ATTACH_POINT
-#undef JUNGLE_CHECK_NEW_DIRECTION
 
 static D2C_LvlPrestIds DRLG_JungleNormalizeLevelPresetId(int32_t nLevelPresetId)
 {

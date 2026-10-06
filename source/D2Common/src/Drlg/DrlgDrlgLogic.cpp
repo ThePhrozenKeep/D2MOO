@@ -235,25 +235,25 @@ void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int n
 //D2Common.0x6FD769B0
 void __fastcall sub_6FD769B0(D2DrlgRoomStrc* pDrlgRoom)
 {
-	for (int i = 0; i < pDrlgRoom->nRoomsNear; ++i)
+	for (int nRoomNearIdx = 0; nRoomNearIdx < pDrlgRoom->nRoomsNear; ++nRoomNearIdx)
 	{
-		D2DrlgRoomStrc* pCurrentRoomEx = pDrlgRoom->ppRoomsNear[i];
+		D2DrlgRoomStrc* pCurrentRoomEx = pDrlgRoom->ppRoomsNear[nRoomNearIdx];
 		if (pCurrentRoomEx != pDrlgRoom)
 		{
 			if (pCurrentRoomEx->pLogicalRoomInfo)
 			{
 				if (!DRLG_CheckNotOverlappingUsingManhattanDistance(&pDrlgRoom->pDrlgCoord, &pCurrentRoomEx->pDrlgCoord, 1))
 				{
-					for (int j = pDrlgRoom->pDrlgCoord.nPosX; j <= pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth; ++j)
+					for (int x = pDrlgRoom->pDrlgCoord.nPosX; x <= pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth; ++x)
 					{
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, j, pDrlgRoom->pDrlgCoord.nPosY);
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, j, pDrlgRoom->nTileHeight + pDrlgRoom->pDrlgCoord.nPosY);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, x, pDrlgRoom->pDrlgCoord.nPosY);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, x, pDrlgRoom->nTileHeight + pDrlgRoom->pDrlgCoord.nPosY);
 					}
 
-					for (int nTileYIdx = pDrlgRoom->pDrlgCoord.nPosY; nTileYIdx <= pDrlgRoom->pDrlgCoord.nPosY + pDrlgRoom->nTileHeight; ++nTileYIdx)
+					for (int y = pDrlgRoom->pDrlgCoord.nPosY; y <= pDrlgRoom->pDrlgCoord.nPosY + pDrlgRoom->nTileHeight; ++y)
 					{
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX, nTileYIdx);
-						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth, nTileYIdx);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX, y);
+						sub_6FD76A90(pDrlgRoom, pCurrentRoomEx, pDrlgRoom->pDrlgCoord.nPosX + pDrlgRoom->nTileWidth, y);
 					}
 				}
 			}

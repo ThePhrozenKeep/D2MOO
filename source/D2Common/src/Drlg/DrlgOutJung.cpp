@@ -105,20 +105,20 @@ void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
 		v10 = nWidth - 1;
 	}
 
-	for (int i = 1; i < nWidth; ++i)
+	for (int nNorthXIdx = 1; nNorthXIdx < nWidth; ++nNorthXIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, 8 * (i == v10) + LVLPREST_ACT3_SLUMS_BORDER_N, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nNorthXIdx, 0, 8 * (nNorthXIdx == v10) + LVLPREST_ACT3_SLUMS_BORDER_N, -1, 0);
 	}
 
-	for (int nX = 1; nX < nWidth; nX += (nX == v5) + 1)
+	for (int nSouthXIdx = 1; nSouthXIdx < nWidth; nSouthXIdx += (nSouthXIdx == v5) + 1)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nHeight, 8 * (nX == v5) + LVLPREST_ACT3_SLUMS_BORDER_S, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nSouthXIdx, nHeight, 8 * (nSouthXIdx == v5) + LVLPREST_ACT3_SLUMS_BORDER_S, -1, 0);
 	}
 
-	for (int nY = 1; nY < nHeight; ++nY)
+	for (int nSideYIdx = 1; nSideYIdx < nHeight; ++nSideYIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_SLUMS_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_SLUMS_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nSideYIdx, LVLPREST_ACT3_SLUMS_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nSideYIdx, LVLPREST_ACT3_SLUMS_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_SLUMS_BORDER_NW, -1, 0);
@@ -147,16 +147,16 @@ void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
 		v8 = pLevel->nWidth / 8 - 2;
 	}
 
-	for (int i = 1; i < nWidth; ++i)
+	for (int nBorderXIdx = 1; nBorderXIdx < nWidth; ++nBorderXIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, 8 * (i == v7) + LVLPREST_ACT3_BURBS_BORDER_N, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, nHeight, 8 * (i == v8) + LVLPREST_ACT3_BURBS_BORDER_S, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nBorderXIdx, 0, 8 * (nBorderXIdx == v7) + LVLPREST_ACT3_BURBS_BORDER_N, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nBorderXIdx, nHeight, 8 * (nBorderXIdx == v8) + LVLPREST_ACT3_BURBS_BORDER_S, -1, 0);
 	}
 
-	for (int nY = 1; nY < nHeight; ++nY)
+	for (int nSideYIdx = 1; nSideYIdx < nHeight; ++nSideYIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_BURBS_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_BURBS_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nSideYIdx, LVLPREST_ACT3_BURBS_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nSideYIdx, LVLPREST_ACT3_BURBS_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_BURBS_BORDER_NW, -1, 0);
@@ -182,20 +182,20 @@ void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
 		v8 = 1;
 	}
 
-	for (int i = 1; i < nWidth; i += (i == nWidth / 2) + 1)
+	for (int nNorthXIdx = 1; nNorthXIdx < nWidth; nNorthXIdx += (nNorthXIdx == nWidth / 2) + 1)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, i, 0, 8 * (i == nWidth / 2) + LVLPREST_ACT3_METRO_BORDER_N, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nNorthXIdx, 0, 8 * (nNorthXIdx == nWidth / 2) + LVLPREST_ACT3_METRO_BORDER_N, -1, 0);
 	}
 
-	for (int nX = 1; nX < nWidth; ++nX)
+	for (int nSouthXIdx = 1; nSouthXIdx < nWidth; ++nSouthXIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nX, nHeight, 8 * (nX == v8) + LVLPREST_ACT3_METRO_BORDER_S, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nSouthXIdx, nHeight, 8 * (nSouthXIdx == v8) + LVLPREST_ACT3_METRO_BORDER_S, -1, 0);
 	}
 
-	for (int nY = 1; nY < nHeight; ++nY)
+	for (int nSideYIdx = 1; nSideYIdx < nHeight; ++nSideYIdx)
 	{
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nY, LVLPREST_ACT3_METRO_BORDER_E, -1, 0);
-		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nY, LVLPREST_ACT3_METRO_BORDER_W, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, nWidth, nSideYIdx, LVLPREST_ACT3_METRO_BORDER_E, -1, 0);
+		DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, nSideYIdx, LVLPREST_ACT3_METRO_BORDER_W, -1, 0);
 	}
 
 	DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(pLevel, 0, 0, LVLPREST_ACT3_METRO_BORDER_NW, -1, 0);

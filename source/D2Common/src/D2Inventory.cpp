@@ -2712,9 +2712,9 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 			else if (nBodyLoc == BODYLOC_TORSO)
 			{
 				uint8_t pArmorComponents[6] = { 0 };
-				for(int i = 0; i < 6; ++i)
+				for (int nArmorCompIdx = 0; nArmorCompIdx < 6; ++nArmorCompIdx)
 				{
-					pArmorComponents[i] = pItemsTxtRecord->nArmorComp[i];
+					pArmorComponents[nArmorCompIdx] = pItemsTxtRecord->nArmorComp[nArmorCompIdx];
 				}
 
 				for (int nComponentIdx = 0; nComponentIdx < NUM_COMPONENTS; ++nComponentIdx)
@@ -2744,14 +2744,14 @@ void __stdcall INVENTORY_GetItemSaveGfxInfo(D2UnitStrc* pPlayer, uint8_t* pCompo
 							}
 							else
 							{
-								pComponents[i] = -1;
-								pColor[i] = -1;
+								pComponents[nComponentIdx] = -1;
+								pColor[nComponentIdx] = -1;
 							}
 						}
 						else
 						{
-							pComponents[i] = -1;
-							pColor[i] = -1;
+							pComponents[nComponentIdx] = -1;
+							pColor[nComponentIdx] = -1;
 						}
 					}
 				}

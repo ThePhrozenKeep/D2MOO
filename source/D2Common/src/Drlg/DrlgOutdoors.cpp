@@ -353,10 +353,10 @@ BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, in
 
 	if (nArea)
 	{
-		for (int i = 0; i < nArea; ++i)
+		for (int nCoordIdx = 0; nCoordIdx < nArea; ++nCoordIdx)
 		{
-			pCoord[i].nX = i % nWidth;
-			pCoord[i].nY = i / nWidth;
+			pCoord[nCoordIdx].nX = nCoordIdx % nWidth;
+			pCoord[nCoordIdx].nY = nCoordIdx / nWidth;
 		}
 
 		for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
@@ -420,10 +420,10 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 	{
 		if (nArea > 0)
 		{
-			for (int i = 0; i < nArea; ++i)
+			for (int nCoordIdx = 0; nCoordIdx < nArea; ++nCoordIdx)
 			{
-				pCoord[i].nX = i % nWidth;
-				pCoord[i].nY = i / nWidth;
+				pCoord[nCoordIdx].nX = nCoordIdx % nWidth;
+				pCoord[nCoordIdx].nY = nCoordIdx / nWidth;
 			}
 
 			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
@@ -496,31 +496,31 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 
 		for (int nGridY = 0; nGridY < pLevel->pOutdoors->nGridHeight; ++nGridY)
 		{
-			for (int j = 0; j < pLevel->pOutdoors->nGridWidth; ++j)
+			for (int nGridX = 0; nGridX < pLevel->pOutdoors->nGridWidth; ++nGridX)
 			{
-				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[1], j, nGridY) & nFlags && !DRLGOUTDOORS_TestGridCellNonLvlLink(pLevel, j,nGridY))
+				if (DRLGGRID_GetGridEntry(&pLevel->pOutdoors->pGrid[1], nGridX, nGridY) & nFlags && !DRLGOUTDOORS_TestGridCellNonLvlLink(pLevel, nGridX,nGridY))
 				{
-					if (!j)
+					if (!nGridX)
 					{
-						j = 1;
+						nGridX = 1;
 					}
 					if (!nGridY)
 					{
 						nGridY = 1;
 					}
-					if (j == pLevel->pOutdoors->nGridWidth - 1)
+					if (nGridX == pLevel->pOutdoors->nGridWidth - 1)
 					{
-						--j;
+						--nGridX;
 					}
 					if (nGridY == pLevel->pOutdoors->nGridHeight - 1)
 					{
 						--nGridY;
 					}
 
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], j, nGridY, 0x20000, FLAG_OPERATION_OR);
+					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[1], nGridX, nGridY, 0x20000, FLAG_OPERATION_OR);
 					D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = { 0 };
 					tPackedInfo.nUnkb11 = true;
-					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], j, nGridY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
+					DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[2], nGridX, nGridY, tPackedInfo.nPackedValue, FLAG_OPERATION_OR);
 					return;
 				}
 			}
@@ -534,10 +534,10 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 	{
 		if (nArea > 0)
 		{
-			for (int i = 0; i < nArea; ++i)
+			for (int nCoordIdx = 0; nCoordIdx < nArea; ++nCoordIdx)
 			{
-				pCoord[i].nX = i % nWidth;
-				pCoord[i].nY = i / nWidth;
+				pCoord[nCoordIdx].nX = nCoordIdx % nWidth;
+				pCoord[nCoordIdx].nY = nCoordIdx / nWidth;
 			}
 
 			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
@@ -598,10 +598,10 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 	{
 		if (nArea > 0)
 		{
-			for (int i = 0; i < nArea; ++i)
+			for (int nCoordIdx = 0; nCoordIdx < nArea; ++nCoordIdx)
 			{
-				pCoord[i].nX = i % nWidth;
-				pCoord[i].nY = i / nWidth;
+				pCoord[nCoordIdx].nX = nCoordIdx % nWidth;
+				pCoord[nCoordIdx].nY = nCoordIdx / nWidth;
 			}
 
 			for (int nShuffleIdx = 0; nShuffleIdx < nArea; ++nShuffleIdx)
