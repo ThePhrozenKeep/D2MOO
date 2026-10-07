@@ -1481,6 +1481,7 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 	int nSizeX = 0;
 	int nSizeY = 0;
 	int nPosY = 0;
+	int nLevelId = 0;
 
 	switch (nAct)
 	{
@@ -1510,7 +1511,7 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 			pLevel = DRLG_GenerateJungles(pLevel);
 
 			nPosY = 0;
-			for (int nLevelId = LEVEL_LOWERKURAST; nLevelId <= LEVEL_TRAVINCAL; ++nLevelId)
+			for (nLevelId = LEVEL_LOWERKURAST; nLevelId <= LEVEL_TRAVINCAL; ++nLevelId)
 			{
 				pLevelDefBinRecord = DATATBLS_GetLevelDefRecord(nLevelId);
 
