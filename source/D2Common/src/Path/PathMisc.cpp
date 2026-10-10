@@ -1065,6 +1065,7 @@ void __fastcall PATH_ComputeVelocityAndDirectionVectorsToNextPoint(D2DynamicPath
 
 //1.10f: D2Common.0x6FDAC8F0 (#10236)
 //1.13c: D2Common.0x6FD5D820 (#10831)
+//1.14d: 0x00650350
 //TODO: Find a name
 int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 {
@@ -1154,6 +1155,7 @@ void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FD5DB70
+//1.14d: 0x006503F0
 BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 {
 	if ((pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CW || pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CCW)
@@ -1288,6 +1290,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAD590 (#10229)
+//1.14d: 0x00650BE0
 BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit, D2ActiveRoomStrc *pDestRoom, uint32_t nDestX, uint32_t nDestY)
 {
 	D2PathPointStrc tCoords = { uint16_t(nDestX), uint16_t(nDestY) };

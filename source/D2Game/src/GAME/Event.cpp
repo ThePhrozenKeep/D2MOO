@@ -23,6 +23,7 @@ __forceinline int32_t EVENT_MapUnitTypeToIndex(int32_t nUnitType)
 
 
 //D2Game.0x6FC34840
+//1.14d: 0x00540E60
 void __fastcall D2GAME_EVENTS_Delete_6FC34840(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nEventCustomId)
 {
     D2EventTimerStrc* pEventTimer = SUNIT_GetTimerFromUnit(pUnit);
@@ -176,6 +177,7 @@ void __fastcall EVENT_AllocEventQueue(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC34BD0
+//1.14d: 0x005414D0
 void __fastcall EVENT_IterateEvents(D2GameStrc* pGame)
 {
     D2EventTimerQueueStrc* pTimerQueue = pGame->pTimerQueue;
@@ -269,6 +271,7 @@ void __fastcall EVENT_ExecutePlayerEvents(D2GameStrc* pGame, D2EventTimerQueueSt
 }
 
 //D2Game.0x6FC34DB0
+//1.14d: 0x00541060
 void __fastcall EVENT_ExecuteMonsterEvents(D2GameStrc* pGame, D2EventTimerQueueStrc* pTimerQueue, D2EventTimerStrc* pEventTimer, int32_t a4)
 {
     EVENT_ExecuteEventsImpl(MONSTERMODE_EventHandler, pGame, pTimerQueue, pEventTimer, a4);
@@ -334,6 +337,7 @@ void __fastcall EVENT_SetEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTy
 }
 
 //D2Game.0x6FC351D0
+//1.14d: 0x005416B0
 void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
     // TODO: v19
@@ -503,6 +507,7 @@ D2EventTimerStrc* __fastcall EVENT_AllocateUnitTimer(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC35570
+//1.14d: 0x00541650
 void __fastcall sub_6FC35570(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
     if (nEventType >= EVENTTYPE_COUNT)
