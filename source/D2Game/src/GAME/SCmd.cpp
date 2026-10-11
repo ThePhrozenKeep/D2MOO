@@ -281,6 +281,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, ch
 }
 
 //D2Game.0x6FC3CA90
+//1.14d: 0x0053B5F0
 void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CA90(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int8_t a5, int32_t a6, int8_t a7)
 {
     D2GSPacketSrv68 packet68 = {};
@@ -289,7 +290,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CA90(D2ClientStrc* pClient, ui
     packet68.nUnitGUID = nUnitGUID;
     packet68.unk0x05 = a4;
     packet68.unk0x0A = a5;
-    packet68.unk0x10 = a6;
+    packet68.unk0x0B = a6;
 
     D2UnitStrc* pMonster = SUNIT_GetServerUnit(CLIENTS_GetGame(pClient), UNIT_MONSTER, nUnitGUID);
 
