@@ -127,6 +127,7 @@ static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Game.0x6FC65C70
+//1.14d: 0x00597E20
 void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
 {
     // TODO: Names
@@ -194,7 +195,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
 
     if (pTarget)
     {
-        if (IsPathCircling(nAnimMode,pDynamicPath))
+        if (!IsPathCircling(nAnimMode, pDynamicPath))
         {
             nHeader = 0x68u;
             a4 = v5->unk0x14;
