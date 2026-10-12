@@ -1528,9 +1528,9 @@ BOOL UNITS_IsAnimModeGetHit(int nUnitType, int nAnimMode)
 	switch (nUnitType)
 	{
 	case UNIT_PLAYER:
-		return nAnimMode == PLRMODE_BLOCK;
+		return nAnimMode == PLRMODE_GETHIT;
 	case UNIT_MONSTER:
-		return nAnimMode == MONMODE_BLOCK;
+		return nAnimMode == MONMODE_GETHIT;
 	default:
 		return FALSE;
 
