@@ -6144,11 +6144,13 @@ void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pItem, int nStat)
 //D2Common.0x6FDA29D0
 void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109)
 {
-	int nSaveAdd = n109 ? pItemStatCostTxtRecord->dw09SaveAdd : pItemStatCostTxtRecord->dwSaveAdd;
-	int nParamBits = n109 ? pItemStatCostTxtRecord->dw09SaveParamBits : pItemStatCostTxtRecord->dwSaveParamBits;
-	int nSaveBits = n109 ? pItemStatCostTxtRecord->n09SaveBits : pItemStatCostTxtRecord->nSaveBits;
 	int nParam = 0;
 	int nValue = 0;
+	int nSaveAdd = (&pItemStatCostTxtRecord->dwSaveAdd)[n109];
+	// volatile forces the compiler to materialise the value in memory (as retail does)
+	// instead of keeping it in a register, which is what reproduces retail's codegen here.
+	volatile int nParamBits = (&pItemStatCostTxtRecord->dwSaveParamBits)[n109];
+	int nSaveBits = (&pItemStatCostTxtRecord->nSaveBits)[n109];
 
 	switch (nStatId)
 	{
@@ -6233,16 +6235,14 @@ void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2Stat
 	default:
 		break;
 	}
-	if (nParamBits > 0)
+	int nPBCopy = nParamBits;
+	if (nPBCopy > 0)
 	{
-		nParam = BITMANIP_Read(pBuffer, nParamBits);
+		nParam = BITMANIP_Read(pBuffer, nPBCopy);
 	}
 
 	nValue = BITMANIP_Read(pBuffer, nSaveBits);
-	if (pStatList)
-	{
-		STATLIST_SetStat(pStatList, nStatId, (nValue - nSaveAdd) << pItemStatCostTxtRecord->nValShift, nParam);
-	}
+	STATLIST_SetStatIfListIsValid(pStatList, nStatId, (nValue - nSaveAdd) << pItemStatCostTxtRecord->nValShift, nParam);
 }
 
 //D2Common.0x6FDA2BA0 (#10881)

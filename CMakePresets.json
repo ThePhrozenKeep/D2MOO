@@ -34,6 +34,9 @@
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded",
+        "CMAKE_C_FLAGS_RELWITHDEBINFO": "/O2 /Ob2 /DNDEBUG",
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "/O2 /Ob2 /DNDEBUG",
         "ENABLE_D2DETOURS_EMBEDDED_PATCHES": "OFF",
         "D2MOO_BUILD_DEBUGGER": "OFF",
         "D2MOO_BUILD_TESTS": "OFF",
