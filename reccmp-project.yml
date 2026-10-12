@@ -1,0 +1,145 @@
+targets:
+  D2COMMON:
+    filename: D2Common.dll
+    source_root: .
+    hash:
+      sha256: b9d1a27c6a35992932c7c47438d02e5269f878e899f6e614d507902cecd1beab
+    data_sources:
+      - reccmp-data/D2COMMON.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2GAME:
+    filename: D2Game.dll
+    source_root: .
+    hash:
+      sha256: 2bd92fb25e3e4b8269930712620ba9db00cdc1aa44569d87dc4aba76553272b6
+    data_sources:
+      - reccmp-data/D2GAME.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2LANG:
+    filename: D2Lang.dll
+    source_root: .
+    hash:
+      sha256: 1b6c4d1831fb22ac04caf4fb03d881de619af82c11b8d8c7e91f00a1899bd304
+    data_sources:
+      - reccmp-data/D2LANG.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2WIN:
+    filename: D2Win.dll
+    source_root: .
+    hash:
+      sha256: 9d47815916fc7082ef86fc50705331e3f59d1ffe19e46217ac0551f7d9ee6066
+    data_sources:
+      - reccmp-data/D2WIN.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2GFX:
+    filename: D2gfx.dll
+    source_root: .
+    hash:
+      sha256: b4247efe73169b66fe95c8cc3d085b9646e8fbf171688fee6b69799f791e56b8
+    data_sources:
+      - reccmp-data/D2GFX.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2NET:
+    filename: D2Net.dll
+    source_root: .
+    hash:
+      sha256: 07cf1675c58cec7b62f3ac1ea4a08e21a0517f2b508f9c21cad1d3f3c845c79f
+    data_sources:
+      - reccmp-data/D2NET.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  D2CMP:
+    filename: D2CMP.dll
+    source_root: .
+    hash:
+      sha256: e725036e1118d34b98d2b739525ff75a225e6964b425469e4773c93f0c9cf882
+    data_sources:
+      - reccmp-data/D2CMP.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}
+  GAME:
+    filename: Game.exe
+    source_root: .
+    hash:
+      sha256: 5bfa2d47d8d5521d8e6aafe46fe6d331bf6ee4d1cbdb42d2d39c7fa682ca825f
+    data_sources:
+      - reccmp-data/GAME.csv
+    encoding:
+    ghidra:
+      ignore_types: []
+      ignore_functions: []
+      name_substitutions: []
+      allow_hash_mismatch: false
+    report:
+      ignore_functions: []
+      ignore_variables: []
+      icon:
+    marker_aliases: {}

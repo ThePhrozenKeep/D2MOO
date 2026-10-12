@@ -53,3 +53,8 @@ Testing/
 
 *.aps
 D2.Detours.patches/1.10f/**resource.h
+reccmp-user.yml
+reccmp-build.yml
+reccmp-data/
+__pycache__/
+*.pyc
