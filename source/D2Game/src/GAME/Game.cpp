@@ -1133,7 +1133,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
             GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Unable to add client %d '%s' to game %d (unlocking character)", dwClientId, szClientName, nGameId);
 
 			D2_ASSERT(gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter);
-            gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter(&pGame->nGameData, szClientName, szAccountName);
+            gpD2EventCallbackTable_6FD45830->pfUnlockDatabaseCharacter(&pGame->pClientInfo, szClientName, szAccountName);
         }
 
         D2_UNLOCK(pGame->lpCriticalSection);

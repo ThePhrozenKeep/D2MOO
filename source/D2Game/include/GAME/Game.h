@@ -68,12 +68,15 @@ using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...)
 using FnEnterGame = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
 using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7); //TODO: Last 2 args
 /*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
-using FnUnlockDatabaseCharacter = void(__fastcall*)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
+using FnUnlockDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
 using FnUpdateCharacterLadder = void(__fastcall*)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, FILETIME* pSaveCreationTimestamp);
 using FnUpdateGameInformation = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
 using FnHandlePacket = void(__fastcall*)(void* pPacket, int32_t nPacketSize);
-using FnSetGameData = uint32_t(__fastcall*)();
+// The server hands back a D2ClientInfoStrc*, which is stored in D2GameStrc::pClientInfo
+// and later passed to pfUnlockDatabaseCharacter the same way D2ClientStrc::pClientInfo is
+// passed to the other database callbacks.
+using FnCreateClientInfo = D2ClientInfoStrc*(__fastcall*)();
 using FnRelockDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnLoadComplete = int32_t(__stdcall*)(int32_t);
 
@@ -95,7 +98,7 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 	FnUpdateCharacterLadder pfUpdateCharacterLadder;		//0x28
 	FnUpdateGameInformation pfUpdateGameInformation;		//0x2C
 	FnHandlePacket pfHandlePacket;							//0x30
-	FnSetGameData pfSetGameData;							//0x34
+	FnCreateClientInfo pfCreateClientInfo;				//0x34
 	FnRelockDatabaseCharacter pfRelockDatabaseCharacter;	//0x38
 	FnLoadComplete pfLoadComplete;							//0x3C
 };
@@ -146,7 +149,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 {
 	LPCRITICAL_SECTION lpCriticalSection;			//0x18
 	void* pMemoryPool;								//0x1C
-	uint32_t nGameData;								//0x20
+	D2ClientInfoStrc* pClientInfo;					//0x20
 	uint32_t unk0x24;								//0x24
 	uint16_t nGameId;								//0x28
 	char szGameName[16];							//0x2A
