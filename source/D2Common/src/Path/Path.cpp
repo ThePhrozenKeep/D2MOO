@@ -400,8 +400,8 @@ int __stdcall D2Common_10142(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, int bA
 				tPathInfo.pTargetRoom = COLLISION_GetRoomBySubTileCoordinates(tPathInfo.pStartRoom, tPathInfo.tTargetCoord.X, tPathInfo.tTargetCoord.Y);
 
 				if (tPathInfo.pStartRoom && 
-#if defined(D2_VERSION_113C) || (D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14)
-					tPathInfo.pTargetRoom && // Optimization done in 1.13f, still present in 1.14d
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
+					tPathInfo.pTargetRoom && // Optimization done in 1.13
 #endif
 					(PATH_IsTargetDestinationAllowed(&tPathInfo, pUnit) || bAllowInTown))
 				{
