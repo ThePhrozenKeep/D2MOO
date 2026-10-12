@@ -638,7 +638,7 @@ D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit
 	{
 		for (D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill; pSkill; pSkill = pSkill->pNextSkill)
 		{
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
 			if (pSkill->bExcludeFromHighestLevelLookup)
 			{
 				continue;
@@ -1166,7 +1166,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 					{
 						pSkill->nSkillLevel = nSkillLevel;
 						pSkill->nCharges = nCharges;
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
 						pSkill->bExcludeFromHighestLevelLookup = 1;
 #endif
 					}
@@ -1192,7 +1192,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 						pSkill->nSkillLevel = nSkillLevel;
 						pSkill->nCharges = nCharges;
 						pSkill->nOwnerGUID = nOwnerGUID;
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
 						pSkill->bExcludeFromHighestLevelLookup = 1;
 #endif
 						pSkill->pNextSkill = NULL;
@@ -1264,7 +1264,7 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 	}
 	else
 	{
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
 		pSkill->bExcludeFromHighestLevelLookup = 1;
 #endif
 		pSkill->nCharges = nCharges;
