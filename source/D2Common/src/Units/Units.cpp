@@ -1330,7 +1330,13 @@ BOOL UNITS_CanAnimModeUseAttackRate(int nUnitType, int nAnimMode, D2UnitStrc* pU
 
 	if (pAnimModeModulators->bCanUseSkillAttackRate)
 	{
-		D2SkillsTxt* pSkillsRecord = DATATBLS_GetSkillsTxtRecord(UNITS_GetUsedSkill(pUnit)->pSkillsTxt->nSkillId);
+		D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit);
+		if (!pUsedSkill)
+		{
+			return FALSE;
+		}
+
+		D2SkillsTxt* pSkillsRecord = DATATBLS_GetSkillsTxtRecord(pUsedSkill->pSkillsTxt->nSkillId);
 		return (pSkillsRecord->dwFlags[0] & SKILLSFLAG_USEATTACKRATE) != 0;
 	}
 
