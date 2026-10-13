@@ -95,7 +95,7 @@ struct D2MissilesTxt
 	uint8_t nVelLev;						//0x9B
 	uint8_t nMaxVel;						//0x9C
 	uint8_t pad0x9D;						//0x9D
-	uint16_t wAccel;						//0x9E
+	int16_t wAccel;							//0x9E
 	uint16_t wAnimRate;						//0xA0
 	uint16_t wXoffset;						//0xA2
 	uint16_t wYoffset;						//0xA4
