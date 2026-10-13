@@ -200,6 +200,7 @@ void __stdcall PATH_AddCollisionFootprintForUnit(D2UnitStrc* pUnit)
 
 	switch (pUnit->dwUnitType)
 	{
+	case UNIT_PLAYER:
 	case UNIT_MONSTER:
 		COLLISION_SetMaskWithPattern(UNITS_GetRoom(pUnit), pCoords.nX, pCoords.nY, pUnit->pDynamicPath->dwCollisionPattern, UNITS_GetCollisionMask(pUnit));
 		break;
