@@ -254,6 +254,7 @@ int32_t __fastcall SKILLS_SrvSt14_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, in
 }
 
 //D2Game.0x6FD15E50
+//1.14d: 0x004E2ED0
 void __fastcall SKILLS_MissileInit_ChargedBolt(D2UnitStrc* pMissile, int32_t a2)
 {
     if (!pMissile)
@@ -261,7 +262,7 @@ void __fastcall SKILLS_MissileInit_ChargedBolt(D2UnitStrc* pMissile, int32_t a2)
         return;
     }
 
-    uint8_t nFrames = MISSILE_GetTotalFrames(pMissile);
+    int32_t nFrames = MISSILE_GetTotalFrames(pMissile);
     if (nFrames >= 78)
     {
         nFrames = 77;
@@ -271,7 +272,7 @@ void __fastcall SKILLS_MissileInit_ChargedBolt(D2UnitStrc* pMissile, int32_t a2)
 
     SEED_InitLowSeed(&pMissile->pSeed, a2 + D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath));
     PATH_SetType(pMissile->pDynamicPath, PATHTYPE_CHARGEDBOLT);
-    PATH_SetNewDistance(pMissile->pDynamicPath, nFrames);
+    PATH_SetNewDistance(pMissile->pDynamicPath, static_cast<uint8_t>(nFrames));
     D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 }
 
