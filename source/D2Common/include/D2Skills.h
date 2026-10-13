@@ -114,6 +114,9 @@ struct D2SkillStrc
 	int32_t nQuantity;							//0x30
 	D2UnitGUID nOwnerGUID;						//0x34 -1 = Native Skill
 	int32_t nCharges;							//0x38
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+	int32_t bExcludeFromHighestLevelLookup;		//0x3C Set on charged skills ("Marrowwalk bug" fix)
+#endif
 };
 
 struct D2SkillListStrc
