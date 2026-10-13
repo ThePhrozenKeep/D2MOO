@@ -861,6 +861,7 @@ void __fastcall COLLISION_SetCollisionMaskForBoundingBoxRecursively(D2ActiveRoom
 }
 
 //D2Common.0x6FD436F0 (#10130)
+//1.14d: 0x0064EA90
 void __stdcall COLLISION_SetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
 	D2BoundingBoxStrc tBoundingBox = {};
@@ -1004,6 +1005,7 @@ void __fastcall COLLISION_ResetCollisionMaskForBoundingBoxRecursively(D2ActiveRo
 }
 
 //D2Common.0x6FD43E60 (#10126)
+//1.14d: 0x0064EC10
 void __stdcall COLLISION_ResetMaskWithPattern(D2ActiveRoomStrc* pRoom, int nX, int nY, int nCollisionPattern, uint16_t nMask)
 {
 	D2BoundingBoxStrc pBoundingBox = {};

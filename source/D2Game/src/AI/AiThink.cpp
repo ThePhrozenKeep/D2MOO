@@ -9749,6 +9749,7 @@ enum D2C_HireableAIParams
 };
 
 //D2Game.0x6FCE4610
+//1.14d: 0x005E5050
 void __fastcall sub_6FCE4610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nClassId, D2UnitStrc* pOwner, D2UnitStrc* pTarget, D2SeedStrc* pSeed, D2AiTickParamStrc* pAiTickParam)
 {
 	uint32_t nChance = 0;

@@ -685,6 +685,7 @@ D2MonStatsTxt* __fastcall MONSTERMODE_GetMonStatsTxtRecord(int32_t nMonsterId)
 }
 
 //D2Game.0x6FC63680
+//1.14d: 0x005A8030
 void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
@@ -1157,6 +1158,7 @@ int32_t __fastcall sub_6FC64450(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64480
+//1.14d: 0x005A8490
 int32_t __fastcall sub_6FC64480(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (STATES_CheckState(pUnit, STATE_BLAZE))
@@ -1191,6 +1193,7 @@ int32_t __fastcall sub_6FC644E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64510
+//1.14d: 0x005A84F0
 int32_t __fastcall sub_6FC64510(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (sub_6FCBC930(pGame, pUnit) == 2)
@@ -1583,6 +1586,7 @@ int32_t __fastcall sub_6FC64E60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64E90
+//1.14d: 0x005A8670
 int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
@@ -1698,6 +1702,7 @@ const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(
 }
 
 //D2Game.0x6FC65080
+//1.14d: 0x005A7BA0
 void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
 {
     int32_t nAnimMode = 0;
@@ -1727,6 +1732,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC65150
+//1.14d: 0x005A7BE0
 void __fastcall D2GAME_MONSTERS_AiFunction02_6FC65150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
 {
     int32_t nAnimMode = 0;

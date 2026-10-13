@@ -26,6 +26,7 @@
 
 
 //D2Game.0x6FC66260
+//1.14d: 0x0054DC40
 int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t* pX, int32_t* pY, int32_t a7)
 {
     int32_t nLeft = 0;
