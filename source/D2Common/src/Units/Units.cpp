@@ -1318,6 +1318,7 @@ BOOL UNITS_CanAnimModeUseAttackRate(int nUnitType, int nAnimMode, D2UnitStrc* pU
 		{
 			pAnimModeModulators = &gaMonModesAnimModulators[nAnimMode];
 		}
+		break;
 
 	default:
 		return FALSE;
