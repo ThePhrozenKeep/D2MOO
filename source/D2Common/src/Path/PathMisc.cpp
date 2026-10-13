@@ -1180,21 +1180,21 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 	D2PathPointStrc a3;
 	sub_6FDAB940(&a3, pDynamicPath);
 
-	if (pTargetUnit)
+	// Only a player or monster target that moved re-paths here, any other target keeps the current path
+	if (pTargetUnit && (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER))
 	{
-		if (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER)
+		const int nAbsDiffX = std::abs(pDynamicPath->tPrevTargetCoord.X - a3.X);
+		const int nAbsDiffY = std::abs(pDynamicPath->tPrevTargetCoord.Y - a3.Y);
+		if (nAbsDiffX > 5 || nAbsDiffY > 5)
 		{
-			const int nAbsDiffX = std::abs(pDynamicPath->tPrevTargetCoord.X - a3.X);
-			const int nAbsDiffY = std::abs(pDynamicPath->tPrevTargetCoord.Y - a3.Y);
-			if (nAbsDiffX <= 5 && nAbsDiffY <= 5)
-			{
-				if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
-					|| pDynamicPath->tFinalTargetCoord == pDynamicPath->tGameCoords.ToPathPoint() )
-				{
-					return TRUE;
-				}
-			}
+			return D2Common_10236(pDynamicPath->pUnit, TRUE);
 		}
+	}
+
+	if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
+		|| pDynamicPath->tFinalTargetCoord == pDynamicPath->tGameCoords.ToPathPoint())
+	{
+		return TRUE;
 	}
 	return D2Common_10236(pDynamicPath->pUnit, TRUE);
 }
