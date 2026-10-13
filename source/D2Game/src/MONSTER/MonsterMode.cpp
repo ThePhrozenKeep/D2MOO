@@ -1284,6 +1284,7 @@ int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64790
+//1.14d: 0x005A6D50, 0x005A6B70
 int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
@@ -1373,6 +1374,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
                     D2SeedStrc seed = {};
                     SEED_InitSeed(&seed);
                     SEED_InitLowSeed(&seed, 'SEIS');
+                    seed.nHighSeed = pUnit->dwUnitId;
 
                     const int32_t nParam = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId)->wAiParam[2][pGame->nDifficulty];
                     for (int32_t i = 0; i < nParam; ++i)
