@@ -158,7 +158,7 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 	}
 	else
 	{
-		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * M_PI / ENV_HALF_CIRCLE_DEGREES;
+		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * M_PI / (double)ENV_HALF_CIRCLE_DEGREES;
 
 		pEnvironment->fCos = float(-cos(dAngle));
 		pEnvironment->fSin = float(sin(dAngle));
