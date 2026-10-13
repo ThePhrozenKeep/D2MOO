@@ -649,9 +649,10 @@ int __stdcall PATH_GetCollisionPatternFromMonStats2Txt(int nMonsterId)
 }
 
 //D2Common.0x6FDA9250 (#11281)
+//1.14d: 0x00648580
 int __stdcall D2Common_11281_CollisionPatternFromSize(D2UnitStrc* pUnit, int nSize)
 {
-	if (nSize < 0 && nSize >= COLLISION_UNIT_SIZE_COUNT)
+	if (nSize < 0 || nSize >= COLLISION_UNIT_SIZE_COUNT)
 	{
 		return COLLISION_PATTERN_SMALL_UNIT_PRESENCE;
 	}
