@@ -47,6 +47,13 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 
 	if (ptPath->dwSpeed)
 	{
-		PATHUtil_AdvanceTowardsTarget_6FDAB890(ptPath);
+		// Same lead as PATHUtil_AdvanceTowardsTarget_6FDAB890, but applied to the returned point instead of the path's target
+		const uint8_t nDirection = PATH_GetDirection(pTargetUnit->pDynamicPath);
+		const int nSpeed = ptPath->dwSpeed;
+		uint16_t v4 = (uint16_t)nSpeed << 8;
+		const float nDistance = nSpeed;
+		const uint16_t nAngleRad512 = (8 * nDirection - v4) & 0x1FF;
+		pOutPathPoint->X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
+		pOutPathPoint->Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
 	}
 }
