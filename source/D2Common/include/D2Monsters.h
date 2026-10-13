@@ -35,7 +35,8 @@ enum D2C_MonTypeFlags
 	MONTYPEFLAG_MINION = 0x10,
 	MONTYPEFLAG_POSSESSED = 0x20,
 	MONTYPEFLAG_GHOSTLY = 0x40,
-	MONTYPEFLAG_MULTISHOT = 0x80
+	MONTYPEFLAG_MULTISHOT = 0x80,
+	MONTYPEFLAG_LIGHTNINGUNIQUE = 0x100,	// Set when the lightning enchanted bolts fire, cleared when a hit is throttled
 };
 
 enum D2C_MonModes
