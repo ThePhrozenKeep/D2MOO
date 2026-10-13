@@ -1967,6 +1967,7 @@ int32_t __fastcall SUNIT_IsDead(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBD900
+//1.14d: 0x00554200
 int32_t __fastcall sub_6FCBD900(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
     D2UnitStrc* pTestUnit = pUnit;
@@ -1989,7 +1990,7 @@ int32_t __fastcall sub_6FCBD900(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     }
 
     D2UnitStrc* i = pTarget;
-    while (i && i->dwUnitType == UNIT_PLAYER)
+    while (i && i->dwUnitType == UNIT_MONSTER)
     {
         D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(i);
         if (!pOwner || pOwner == i)
