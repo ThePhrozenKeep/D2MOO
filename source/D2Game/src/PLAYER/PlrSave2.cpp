@@ -511,15 +511,14 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
         return 2;
     }
 
-    int32_t nResult = PLRSAVE2_WriteSaveHeader(pGame, pPlayer, &pData, &pData[nMaxSize]);
+    const uint8_t* pEnd = &pData[nMaxSize];
+    uint8_t* ppSection = pData;
+    int32_t nResult = PLRSAVE2_WriteSaveHeader(pGame, pPlayer, &ppSection, pEnd);
     if (nResult)
     {
         return nResult;
     }
 
-    const uint8_t* pEnd = &pData[nMaxSize];
-    
-    uint8_t* ppSection = pData;
     if (ppSection + 298 > pEnd)
     {
         return 1;
