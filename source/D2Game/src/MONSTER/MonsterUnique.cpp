@@ -2189,10 +2189,9 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         bUModUsageTable[pMonUmods[i]] = 1;
     }
 
+    uint8_t* pUMod = &pMonUmods[nIndex];
     for (int32_t i = 0; i < nRandCount; ++i)
     {
-        uint8_t* pUMod = &pMonUmods[nIndex];
-
         const int32_t nUMod = sub_6FC6EE90(pGame, pUnit, bUModUsageTable);
         if (!nUMod)
         {
