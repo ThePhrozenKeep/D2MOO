@@ -1028,7 +1028,7 @@ static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C
 	{
 		bStatReqMet = TRUE;
 		// Note: Owner was not checked in the original game for STAT_DEXTERITY
-		if (bEquipping && STATLIST_GetOwner(pItem, 0))
+		if (bEquipping && (stat == STAT_DEXTERITY || STATLIST_GetOwner(pItem, 0)))
 		{
 			const int nStatBonusFromSockets = ITEMS_GetBonusStatFromSockets(pItem, stat);
 			if ((nUnitStat - nStatBonusFromSockets) <= 0 || (nUnitStat - nStatBonusFromSockets) < nStatWithPctBonus)
