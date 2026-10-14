@@ -1562,7 +1562,7 @@ int32_t __fastcall SKILLITEM_EventFunc19_Slow(D2GameStrc* pGame, int32_t nEvent,
     }
 
     int32_t nSlowValue = STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, (uint32_t)nSkillId >> 16, nSkillId);
-    if (nSlowValue)
+    if (!nSlowValue)
     {
         return 0;
     }
