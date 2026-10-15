@@ -9,7 +9,7 @@ target_link_libraries(D2CommonTests PRIVATE doctest::doctest ${D2CommonImplName}
 target_compile_features(D2CommonTests PRIVATE cxx_std_17)
 
 set_target_properties(D2CommonTests PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/workingDirectory
+    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/../../testWorkingDirectory
 )
 
 add_test(
@@ -18,5 +18,3 @@ add_test(
     COMMAND D2CommonTests ${TEST_RUNNER_PARAMS}
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2CommonTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )
-
-
