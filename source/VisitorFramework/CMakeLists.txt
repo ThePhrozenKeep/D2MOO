@@ -1,6 +1,7 @@
 add_library(VisitorFramework STATIC 
   include/DifferenceDescriptor.h
   include/DifferenceType.h
+  include/DiffContext.h
 
   src/DifferenceDescriptor.cpp
 )
