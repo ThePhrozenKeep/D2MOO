@@ -4,6 +4,7 @@ add_library(VisitorFramework STATIC
   include/DiffContext.h
   include/DiffVisitor.h
   include/FieldVisitor.h
+  include/TestComparator.h
   include/VisitorTraits.h
 
   src/DifferenceDescriptor.cpp
