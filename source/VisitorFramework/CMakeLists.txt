@@ -2,6 +2,7 @@ add_library(VisitorFramework STATIC
   include/DifferenceDescriptor.h
   include/DifferenceType.h
   include/DiffContext.h
+  include/DiffVisitor.h
   include/FieldVisitor.h
   include/VisitorTraits.h
 
