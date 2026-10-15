@@ -4,6 +4,7 @@ add_library(TestUtilities STATIC
   include/LoadBaseAddress.h
   include/NoOpFixture.h
   include/RandomUnsignedInteger.h
+  include/ReadBinFile.h
 
   src/RandomUnsignedInteger.cpp
 )
