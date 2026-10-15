@@ -1,0 +1,4 @@
+add_library(VisitorFramework STATIC 
+)
+target_include_directories(VisitorFramework PUBLIC include)
+target_compile_features(VisitorFramework PRIVATE cxx_std_17)
