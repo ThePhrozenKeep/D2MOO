@@ -10,7 +10,7 @@ target_compile_definitions(D2LangTests PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
 target_compile_features(D2LangTests PRIVATE cxx_std_17)
 
 set_target_properties(D2LangTests PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/workingDirectory
+    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/../../testWorkingDirectory
 )
 
 add_test(
@@ -19,5 +19,3 @@ add_test(
     COMMAND D2LangTests ${TEST_RUNNER_PARAMS}
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2LangTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )
-
-
