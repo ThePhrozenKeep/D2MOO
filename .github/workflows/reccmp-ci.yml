@@ -1,0 +1,97 @@
+name: Reccmp CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  reccmp:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install reccmp
+      run: |
+        pip install reccmp pyyaml colorama
+
+    - name: Fetch retail binaries (shallow sparse clone)
+      shell: pwsh
+      run: |
+        git clone --depth 1 --filter=blob:none --sparse https://github.com/ChaosMarc/D2VersionChanger.git D2VersionChanger
+        git -C D2VersionChanger sparse-checkout set VersionChanger/LoD/1.10
+        New-Item -ItemType Directory -Force -Path originals | Out-Null
+        Copy-Item -Path "D2VersionChanger/VersionChanger/LoD/1.10/*" -Destination "originals/" -Recurse -Force
+
+    - name: Create reccmp-user.yml
+      run: |
+        $content = @"
+        targets:
+          D2COMMON:
+            path: ${{ github.workspace }}/originals/D2Common.dll
+          D2GAME:
+            path: ${{ github.workspace }}/originals/D2Game.dll
+          D2LANG:
+            path: ${{ github.workspace }}/originals/D2Lang.dll
+          D2WIN:
+            path: ${{ github.workspace }}/originals/D2Win.dll
+          D2GFX:
+            path: ${{ github.workspace }}/originals/D2gfx.dll
+          D2NET:
+            path: ${{ github.workspace }}/originals/D2Net.dll
+          D2CMP:
+            path: ${{ github.workspace }}/originals/D2CMP.dll
+          GAME:
+            path: ${{ github.workspace }}/originals/Game.exe
+        "@
+        Set-Content -Path "reccmp-user.yml" -Value $content
+
+    # The toolchain (cmake/toolchains/VCPP6.cmake) expects the VC6 (VC98) tree at
+    # C:\MSVC600\VC98, with the shared Common\MSDev98 tools sitting alongside it.
+    - name: Fetch MSVC 6.0 SP5 toolchain
+      shell: pwsh
+      run: |
+        git -c core.autocrlf=false clone --depth 1 https://github.com/Purplesmaug96/MSVC600.git C:\MSVC600
+        if (-not (Test-Path "C:\MSVC600\VC98\Bin\cl.exe")) {
+          throw "MSVC600 clone did not produce C:\MSVC600\VC98\Bin\cl.exe"
+        }
+        Get-Item "C:\MSVC600\VC98\Bin\cl.exe" | Select-Object FullName, Length
+
+    - name: Build with VC6
+      run: |
+        $env:VCPP6_ROOT = "C:\MSVC600\VC98"
+        cmake --preset VC6 -DD2MOO_ORDINALS_VERSION="1.10f"
+        cmake --build --preset VC6
+
+    - name: Run reccmp
+      run: |
+        python tools/run_reccmp.py --all --json-dir reccmp-json 2>&1 | tee reccmp-output.txt
+
+    - name: Check for accuracy regressions
+      uses: ./.github/actions/reccmp-regression
+
+    - name: Upload reccmp results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reccmp-results
+        path: |
+          reccmp-output.txt
+          reccmp-data/*.csv
+
+    - name: Upload reccmp JSON reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reccmp-json
+        path: reccmp-json/*.json
+        if-no-files-found: warn

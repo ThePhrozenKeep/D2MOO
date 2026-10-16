@@ -103,6 +103,15 @@ def main() -> int:
         metavar="<address>",
         help="Show verbose diff for a specific function by address (hex)",
     )
+    parser.add_argument(
+        "--json-dir",
+        type=Path,
+        metavar="<dir>",
+        help=(
+            "Write one compact (--json-diet) match summary per target, "
+            "e.g. <dir>/D2COMMON.json, for regression comparison"
+        ),
+    )
     # Everything else is forwarded to asmcmp.
     args, extra = parser.parse_known_args()
 
@@ -143,6 +152,8 @@ def main() -> int:
         return 1
 
     failed = 0
+    if args.json_dir is not None:
+        args.json_dir.mkdir(parents=True, exist_ok=True)
     for target_id in valid:
         cmd = [
             sys.executable,
@@ -151,6 +162,10 @@ def main() -> int:
             "--target",
             target_id,
         ]
+        if args.json_dir is not None:
+            cmd.extend(
+                ["--json", str(args.json_dir / f"{target_id}.json"), "--json-diet"]
+            )
         if args.diff:
             diff_arg = args.diff
             # try to resolve if not hex

@@ -1,0 +1,78 @@
+name: reccmp accuracy gate
+description: >-
+  Fail if any function's reccmp accuracy regressed compared to the latest
+  successful run on the base branch (i.e. the last commit on main).
+
+inputs:
+  current:
+    description: Directory of current <TARGET>.json reports
+    required: false
+    default: reccmp-json
+  baseline:
+    description: Directory to download the baseline reports into
+    required: false
+    default: reccmp-baseline
+  artifact:
+    description: Name of the artifact holding the baseline reports
+    required: false
+    default: reccmp-json
+  tolerance:
+    description: Accuracy drop smaller than this is ignored (0-1)
+    required: false
+    default: '0'
+
+runs:
+  using: composite
+  steps:
+    # Find the newest successful run on the base branch that published a
+    # reccmp-json artifact. On a PR this is the target branch; on a push it is
+    # the branch being pushed.
+    - name: Locate baseline run
+      id: baseline
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        $base = "${{ github.base_ref }}"
+        if (-not $base) { $base = "${{ github.ref_name }}" }
+        $arts = (gh api "repos/${{ github.repository }}/actions/artifacts?name=${{ inputs.artifact }}&per_page=100" | ConvertFrom-Json).artifacts
+        $candidates = $arts |
+          Where-Object {
+            -not $_.expired -and
+            $_.workflow_run.id -ne ${{ github.run_id }} -and
+            $_.workflow_run.head_branch -eq $base
+          } |
+          Sort-Object created_at -Descending
+        # The artifacts API does not expose the run's conclusion, so query the
+        # newest candidates until we find one whose run succeeded. A failed run
+        # (i.e. one that already regressed) must not become the new baseline.
+        $runId = $null
+        foreach ($a in $candidates) {
+          $conclusion = (gh api "repos/${{ github.repository }}/actions/runs/$($a.workflow_run.id)" | ConvertFrom-Json).conclusion
+          if ($conclusion -eq 'success') { $runId = $a.workflow_run.id; break }
+        }
+        if ($runId) {
+          Write-Host "Baseline artifact from successful run $runId on '$base'"
+          "run_id=$runId" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        } else {
+          Write-Host "No successful baseline artifact for '$base' yet (first run on this branch)."
+          "run_id=" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+        }
+
+    - name: Download baseline reports
+      if: steps.baseline.outputs.run_id != ''
+      continue-on-error: true
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact }}
+        run-id: ${{ steps.baseline.outputs.run_id }}
+        github-token: ${{ github.token }}
+        path: ${{ inputs.baseline }}
+
+    - name: Compare accuracy against the baseline
+      shell: pwsh
+      run: |
+        python tools/reccmp_regression.py `
+          --baseline "${{ inputs.baseline }}" `
+          --current "${{ inputs.current }}" `
+          --tolerance ${{ inputs.tolerance }}
