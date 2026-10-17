@@ -835,39 +835,39 @@ void __fastcall D2GAME_PickupItemEx_6FC42B80(D2GameStrc* pGame, D2UnitStrc* pUni
         return;
     }
 
-    if (pItem->dwAnimMode == IMODE_ONGROUND)
+    if (pDroppedItem->dwAnimMode == IMODE_ONGROUND)
     {
-        if (sub_6FC425F0(pGame, pUnit, pItem))
+        if (sub_6FC425F0(pGame, pUnit, pDroppedItem))
         {
-            DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pItem), pItem->dwUnitType, pItem->dwUnitId);
+            DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pDroppedItem), pDroppedItem->dwUnitType, pDroppedItem->dwUnitId);
 
-            if (ITEMS_GetItemType(pItem) == ITEMTYPE_GOLD)
+            if (ITEMS_GetItemType(pDroppedItem) == ITEMTYPE_GOLD)
             {
-                D2GAME_PickupGold_6FC42DD0(pGame, pUnit, pItem);
+                D2GAME_PickupGold_6FC42DD0(pGame, pUnit, pDroppedItem);
             }
             else
             {
-                UNITS_FreeCollisionPath(pItem);
-                UNITROOM_RemoveUnitFromRoom(pItem);
-                pItem->dwFlags &= ~UNITFLAG_TARGETABLE;
-                INVENTORY_SetCursorItem(pInventory, pItem);
-                UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
-                ITEMS_SetItemCMDFlag(pItem, 64, 1);
-                ITEMS_SetInvPage(pItem, 0xFFu);
+                UNITS_FreeCollisionPath(pDroppedItem);
+                UNITROOM_RemoveUnitFromRoom(pDroppedItem);
+                pDroppedItem->dwFlags &= ~UNITFLAG_TARGETABLE;
+                INVENTORY_SetCursorItem(pInventory, pDroppedItem);
+                UNITS_ChangeAnimMode(pDroppedItem, IMODE_ONCURSOR);
+                ITEMS_SetItemCMDFlag(pDroppedItem, 64, 1);
+                ITEMS_SetInvPage(pDroppedItem, 0xFFu);
                 UNITS_RefreshInventory(pUnit, 1);
-                pItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
-                INVENTORY_AddItemToTradeInventory(pInventory, pItem);
-                QUESTS_ItemPickedUp(pGame, pUnit, pItem);
+                pDroppedItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
+                INVENTORY_AddItemToTradeInventory(pInventory, pDroppedItem);
+                QUESTS_ItemPickedUp(pGame, pUnit, pDroppedItem);
             }
 
             SUNIT_AttachSound(pUnit, 1u, pUnit);
         }
         else
         {
-            DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pItem), pItem->dwUnitType, pItem->dwUnitId);
-            ITEMS_SetInvPage(pItem, 0xFFu);
-            pItem->dwFlags |= UNITFLAG_SENDREFRESHMSG;
-            UNITS_ChangeAnimMode(pItem, IMODE_ONGROUND);
+            DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pDroppedItem), pDroppedItem->dwUnitType, pDroppedItem->dwUnitId);
+            ITEMS_SetInvPage(pDroppedItem, 0xFFu);
+            pDroppedItem->dwFlags |= UNITFLAG_SENDREFRESHMSG;
+            UNITS_ChangeAnimMode(pDroppedItem, IMODE_ONGROUND);
             SUNIT_AttachSound(pUnit, 0x13u, pUnit);
         }
     }
