@@ -7,6 +7,3 @@
 [submodule "external/imgui"]
 	path = external/imgui
 	url = https://github.com/ocornut/imgui.git
-[submodule "external/squall"]
-	path = external/squall
-	url = https://github.com/Lectem/squall.git
