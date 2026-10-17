@@ -1,6 +1,8 @@
 #pragma once
 
-#include "storm/StormCompat.hpp"
+#include <stddef.h>
+#include <D2StdInt.h>
+#include <new>
 
 // As with storm/Memory.hpp, the retail Storm error entry points are declared in
 // D2MOO's own Storm.h.

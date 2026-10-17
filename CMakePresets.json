@@ -41,7 +41,6 @@
         "D2MOO_BUILD_DEBUGGER": "OFF",
         "D2MOO_BUILD_TESTS": "OFF",
         "D2MOO_WITH_STATIC_TESTS": "OFF",
-        "D2MOO_USE_SQUALL": "OFF",
         "D2MOO_INSTALL": "OFF"
       }
     },

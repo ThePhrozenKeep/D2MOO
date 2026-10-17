@@ -1,6 +1,8 @@
 #pragma once
 
-#include "storm/StormCompat.hpp"
+#include <stddef.h>
+#include <D2StdInt.h>
+#include <new>
 
 class HASHKEY_PTR
 {

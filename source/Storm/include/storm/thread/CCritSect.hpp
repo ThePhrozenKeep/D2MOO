@@ -1,6 +1,8 @@
 #pragma once
 
-#include "storm/StormCompat.hpp"
+#include <stddef.h>
+#include <D2StdInt.h>
+#include <new>
 #include <Windows.h>
 
 // Layout-critical: embedded by value in D2GameDataTableStrc via

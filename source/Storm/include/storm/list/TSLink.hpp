@@ -1,6 +1,8 @@
 #pragma once
 
-#include "storm/StormCompat.hpp"
+#include <stddef.h>
+#include <D2StdInt.h>
+#include <new>
 
 template <class T>
 class TSLink

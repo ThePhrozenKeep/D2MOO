@@ -1,7 +1,9 @@
 #pragma once
 
 #include "storm/List.hpp"
-#include "storm/StormCompat.hpp"
+#include <stddef.h>
+#include <D2StdInt.h>
+#include <new>
 
 // Layout-critical: D2MOO derives game structures from this and asserts the
 // resulting offsets against the retail game (see D2GameStrc::lpCriticalSection at
