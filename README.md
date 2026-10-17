@@ -9,20 +9,26 @@ To ensure that we stay as close as possible to the original game, we do not prov
 The game assets, main executable code and anything related to hacking or piracy is NOT endorsed by the authors, and as such we will not provide code related to such subjects.
 The original game assets and binaries is required to use this project.
 
-## Accuracy
+## Status
 
-[![reccmp accuracy](https://purplesmaug96.github.io/D2MOO/accuracy-report/accuracy.svg)](https://purplesmaug96.github.io/D2MOO/accuracy-report/)
+<a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2COMMON.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2COMMON.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GAME.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GAME.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2LANG.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2LANG.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2WIN.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2WIN.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GFX.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GFX.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2NET.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2NET.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2CMP.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2CMP.svg" width="50%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/GAME.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/GAME.svg" width="50%"></a>
 
-The 1.10f retail binaries are compared against the DLLs built from this
-repository by [reccmp](https://github.com/reccmp/reccmp).
+The badges compare the 1.10f retail binaries against the DLLs built from this
+repository with [reccmp](https://github.com/reccmp/reccmp). Each one links to the
+full per-function report.
 
-- [Full HTML accuracy report](https://purplesmaug96.github.io/D2MOO/accuracy-report/)
-- [Binaries that were compared](https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip)
+| Binary | reccmp accuracy report |
+| --- | --- |
+| `D2Common.dll` | [D2COMMON.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2COMMON.html) |
+| `D2Game.dll` | [D2GAME.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GAME.html) |
+| `D2Lang.dll` | [D2LANG.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2LANG.html) |
+| `D2Win.dll` | [D2WIN.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2WIN.html) |
+| `D2gfx.dll` | [D2GFX.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GFX.html) |
+| `D2Net.dll` | [D2NET.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2NET.html) |
+| `D2CMP.dll` | [D2CMP.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/D2CMP.html) |
+| `Game.exe` | [GAME.html](https://purplesmaug96.github.io/D2MOO/accuracy-report/GAME.html) |
 
-The report is served from a stable URL that CI refreshes on every successful
-run on `accuracy-thing`; the binaries come from that run's `reccmp-builds`
-artifact via [nightly.link](https://nightly.link). This file never has to be
-edited.
+The compared binaries are available [here](https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip)
 
 ## How to build
 

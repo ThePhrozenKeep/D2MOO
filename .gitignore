@@ -58,6 +58,7 @@ reccmp-build.yml
 reccmp-data/
 reccmp-json/
 reccmp-html/
+reccmp-svg/
 reccmp-builds/
 reccmp-baseline/
 _site/

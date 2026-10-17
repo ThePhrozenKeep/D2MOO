@@ -123,6 +123,15 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--svg-dir",
+        type=Path,
+        metavar="<dir>",
+        help=(
+            "Write a reccmp progress badge (SVG) per target, "
+            "e.g. <dir>/D2COMMON.svg"
+        ),
+    )
+    parser.add_argument(
         "--copy-builds",
         type=Path,
         metavar="<dir>",
@@ -187,6 +196,8 @@ def main() -> int:
         args.json_dir.mkdir(parents=True, exist_ok=True)
     if args.html_dir is not None:
         args.html_dir.mkdir(parents=True, exist_ok=True)
+    if args.svg_dir is not None:
+        args.svg_dir.mkdir(parents=True, exist_ok=True)
     for target_id in valid:
         cmd = [
             sys.executable,
@@ -201,6 +212,8 @@ def main() -> int:
             )
         if args.html_dir is not None:
             cmd.extend(["--html", str(args.html_dir / f"{target_id}.html")])
+        if args.svg_dir is not None:
+            cmd.extend(["--svg", str(args.svg_dir / f"{target_id}.svg")])
         if args.diff:
             diff_arg = args.diff
             # try to resolve if not hex

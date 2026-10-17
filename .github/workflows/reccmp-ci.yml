@@ -84,7 +84,7 @@ jobs:
 
     - name: Run reccmp
       run: |
-        python tools/run_reccmp.py --all --json-dir reccmp-json --html-dir reccmp-html --copy-builds reccmp-builds 2>&1 | tee reccmp-output.txt
+        python tools/run_reccmp.py --all --json-dir reccmp-json --html-dir reccmp-html --svg-dir reccmp-svg --copy-builds reccmp-builds 2>&1 | tee reccmp-output.txt
 
     - name: Check for accuracy regressions
       uses: ./.github/actions/reccmp-regression
@@ -111,7 +111,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: reccmp-html
-        path: reccmp-html/*.html
+        path: |
+          reccmp-html/*.html
+          reccmp-svg/*.svg
         if-no-files-found: warn
 
     - name: Upload compared binaries
@@ -122,10 +124,10 @@ jobs:
         path: reccmp-builds/*
         if-no-files-found: warn
 
-    # Publish the accuracy report to a stable URL. README.md embeds
-    # .../accuracy-report/accuracy.svg and links .../accuracy-report/, and the
-    # compared binaries are linked via nightly.link, so the README never has to
-    # change. This runs for pushes and manual runs (not PRs) of the chosen
+    # Publish the accuracy report to a stable URL. README.md embeds the
+    # .../accuracy-report/<TARGET>.svg badges (each linking .../<TARGET>.html), and
+    # the compared binaries are linked via nightly.link, so the README never has
+    # to change. This runs for pushes and manual runs (not PRs) of the chosen
     # branch and only after the regression gate passed, so a failed run leaves
     # the previous report in place. One-time setup:
     # Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
@@ -135,6 +137,7 @@ jobs:
         python tools/reccmp_site.py `
           --json-dir reccmp-json `
           --html-dir reccmp-html `
+          --svg-dir reccmp-svg `
           --out-dir _site/accuracy-report `
           --binaries-url "https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip" `
           --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
