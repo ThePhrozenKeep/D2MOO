@@ -18,6 +18,12 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: vc6-1.10f
+        max-size: 1G
+
     - uses: actions/setup-python@v5
       with:
         python-version: '3.13'
@@ -79,7 +85,7 @@ jobs:
     - name: Build with VC6
       run: |
         $env:VCPP6_ROOT = "C:\MSVC600\VC98"
-        cmake --preset VC6 -DD2MOO_ORDINALS_VERSION="1.10f"
+        cmake --preset VC6 -DD2MOO_ORDINALS_VERSION="1.10f" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded
         cmake --build --preset VC6
 
     - name: Run reccmp

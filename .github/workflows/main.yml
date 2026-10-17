@@ -23,6 +23,12 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: ${{ github.job }}-${{ matrix.buildtype }}-${{ matrix.version }}
+        max-size: 1G
+
     # Find the clang-tidy bundled with MSVC
     - name: Add clang-tidy to PATH
       if: env.BUILD_TYPE == 'Debug'
@@ -35,7 +41,7 @@ jobs:
 
     - name: CMake configure and build
       run: |
-        cmake --preset ${{env.CMAKE_PRESET}} -DD2MOO_ORDINALS_VERSION="${{matrix.version}}"
+        cmake --preset ${{env.CMAKE_PRESET}} -DD2MOO_ORDINALS_VERSION="${{matrix.version}}" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded
         cmake --build --preset ${{env.CMAKE_PRESET}} --config ${{env.BUILD_TYPE}}
       env: # We need to enforce VC++ here as clang is picked otherwise due to clang-tidy being in the path
         CXX: CL
