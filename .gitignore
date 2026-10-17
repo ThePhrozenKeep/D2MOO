@@ -57,6 +57,9 @@ reccmp-user.yml
 reccmp-build.yml
 reccmp-data/
 reccmp-json/
+reccmp-html/
+reccmp-builds/
 reccmp-baseline/
+_site/
 __pycache__/
 *.pyc

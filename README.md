@@ -9,6 +9,21 @@ To ensure that we stay as close as possible to the original game, we do not prov
 The game assets, main executable code and anything related to hacking or piracy is NOT endorsed by the authors, and as such we will not provide code related to such subjects.
 The original game assets and binaries is required to use this project.
 
+## Accuracy
+
+[![reccmp accuracy](https://purplesmaug96.github.io/D2MOO/accuracy-report/accuracy.svg)](https://purplesmaug96.github.io/D2MOO/accuracy-report/)
+
+The 1.10f retail binaries are compared against the DLLs built from this
+repository by [reccmp](https://github.com/reccmp/reccmp).
+
+- [Full HTML accuracy report](https://purplesmaug96.github.io/D2MOO/accuracy-report/)
+- [Binaries that were compared](https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip)
+
+The report is served from a stable URL that CI refreshes on every successful
+run on `accuracy-thing`; the binaries come from that run's `reccmp-builds`
+artifact via [nightly.link](https://nightly.link). This file never has to be
+edited.
+
 ## How to build
 
 ### Dependencies
@@ -40,35 +55,13 @@ You can replace `DefaultGenerator` by `VS2022` pr `Ninja` if you are using Visua
 The `VC6` preset builds the game DLLs with VC6 (VS98) command line tools, which is
 necessary to match the retail binaries as closely as possible. It doesn't
 depend on a Visual Studio install: grab the thing from
-[MSVC600](https://github.com/itsmattkc/MSVC600) and place it at `C:\MSVC600\VC98`, or
+[MSVC600](https://github.com/Purplesmaug96/MSVC600) and place it at `C:\MSVC600\VC98`, or
 point `VCPP6_ROOT` somewhere else.
 
 ```sh
 cmake --preset VC6
 cmake --build --preset VC6
 ```
-
-This also only builds game DLLs, no tests or anything.
-
-### Building with Visual C++ 6.0
-
-The `VC6` preset builds the game DLLs with VC6 (VS98) command line tools.
-Grab the portable toolset from [MSVC600](https://github.com/itsmattkc/MSVC600) and place it at `C:\MSVC600\VC98`,
-or point `VCPP6_ROOT` somewhere else.
-
-```sh
-cmake --preset VC6
-cmake --build --preset VC6
-```
-
-The preset also sets `D2MOO_USE_SQUALL=OFF`. D2MOO only ever used a handful of
-[Squall](https://github.com/Lectem/squall) Storm container templates, and Squall
-needs `<cstdint>` and in-class member initialisers, which VC6 does not have. With
-the option off, `source/Storm/include/storm` provides layout-identical,
-VC6-compatible copies instead and Squall is not built at all. The option defaults
-to `ON`, so other toolchains keep using Squall.
-
-Read more in the [Advanced build and run](./doc/AdvancedBuildAndRun.md) documentation.
 
 ## Usage
 

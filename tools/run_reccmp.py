@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -112,6 +113,24 @@ def main() -> int:
             "e.g. <dir>/D2COMMON.json, for regression comparison"
         ),
     )
+    parser.add_argument(
+        "--html-dir",
+        type=Path,
+        metavar="<dir>",
+        help=(
+            "Write a self-contained HTML report per target, "
+            "e.g. <dir>/D2COMMON.html"
+        ),
+    )
+    parser.add_argument(
+        "--copy-builds",
+        type=Path,
+        metavar="<dir>",
+        help=(
+            "Copy each compared binary (our build) into <dir>, so it can be "
+            "published alongside the accuracy report"
+        ),
+    )
     # Everything else is forwarded to asmcmp.
     args, extra = parser.parse_known_args()
 
@@ -144,6 +163,18 @@ def main() -> int:
     else:
         valid = write_build_config(build_dir, requested)
 
+    if args.copy_builds is not None:
+        args.copy_builds.mkdir(parents=True, exist_ok=True)
+        copied = 0
+        for target_id in valid:
+            outputs = _built_binary(build_dir, target_id)
+            if outputs is None:
+                continue
+            binary, _pdb = outputs
+            shutil.copy2(binary, args.copy_builds / binary.name)
+            copied += 1
+        print(f"copied {copied} compared binaries to {args.copy_builds}", file=sys.stderr)
+
     if not args.no_markers:
         generate_markers(build_dir, valid)
 
@@ -154,6 +185,8 @@ def main() -> int:
     failed = 0
     if args.json_dir is not None:
         args.json_dir.mkdir(parents=True, exist_ok=True)
+    if args.html_dir is not None:
+        args.html_dir.mkdir(parents=True, exist_ok=True)
     for target_id in valid:
         cmd = [
             sys.executable,
@@ -166,6 +199,8 @@ def main() -> int:
             cmd.extend(
                 ["--json", str(args.json_dir / f"{target_id}.json"), "--json-diet"]
             )
+        if args.html_dir is not None:
+            cmd.extend(["--html", str(args.html_dir / f"{target_id}.html")])
         if args.diff:
             diff_arg = args.diff
             # try to resolve if not hex

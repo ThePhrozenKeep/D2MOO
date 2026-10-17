@@ -84,7 +84,7 @@ jobs:
 
     - name: Run reccmp
       run: |
-        python tools/run_reccmp.py --all --json-dir reccmp-json 2>&1 | tee reccmp-output.txt
+        python tools/run_reccmp.py --all --json-dir reccmp-json --html-dir reccmp-html --copy-builds reccmp-builds 2>&1 | tee reccmp-output.txt
 
     - name: Check for accuracy regressions
       uses: ./.github/actions/reccmp-regression
@@ -105,3 +105,81 @@ jobs:
         name: reccmp-json
         path: reccmp-json/*.json
         if-no-files-found: warn
+
+    - name: Upload reccmp HTML reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reccmp-html
+        path: reccmp-html/*.html
+        if-no-files-found: warn
+
+    - name: Upload compared binaries
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: reccmp-builds
+        path: reccmp-builds/*
+        if-no-files-found: warn
+
+    # Publish the accuracy report to a stable URL. README.md embeds
+    # .../accuracy-report/accuracy.svg and links .../accuracy-report/, and the
+    # compared binaries are linked via nightly.link, so the README never has to
+    # change. This runs for pushes and manual runs (not PRs) of the chosen
+    # branch and only after the regression gate passed, so a failed run leaves
+    # the previous report in place. One-time setup:
+    # Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
+    - name: Build accuracy site
+      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+      run: |
+        python tools/reccmp_site.py `
+          --json-dir reccmp-json `
+          --html-dir reccmp-html `
+          --out-dir _site/accuracy-report `
+          --binaries-url "https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip" `
+          --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+    - name: Upload accuracy site
+      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+      uses: actions/upload-artifact@v4
+      with:
+        name: reccmp-site
+        path: _site
+        if-no-files-found: error
+
+  # Serve the report from a stable URL:
+  # https://<owner>.github.io/<repo>/accuracy-report/
+  # (one-time setup: Settings -> Pages -> Source: GitHub Actions). The Pages
+  # packaging happens here on Linux because actions/upload-pages-artifact
+  # relies on GNU tar.
+  deploy:
+    needs: reccmp
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Download accuracy site
+        uses: actions/download-artifact@v4
+        with:
+          name: reccmp-site
+          path: _site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
