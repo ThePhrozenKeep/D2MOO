@@ -1,0 +1,3 @@
+# Patch files must stay LF so `git apply` matches files written by pip,
+# even on Windows checkouts where core.autocrlf would convert them to CRLF.
+.github/patches/*.patch -text

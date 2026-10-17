@@ -22,7 +22,7 @@ jobs:
 
     - name: Install reccmp
       run: |
-        pip install reccmp pyyaml colorama
+        pip install "reccmp==0.1.7" pyyaml colorama
 
     # reccmp 0.1.7 over-reads the export name table (it decodes with
     # NumberOfFunctions instead of NumberOfNames) and crashes on the retail
