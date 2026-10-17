@@ -9,13 +9,11 @@ To ensure that we stay as close as possible to the original game, we do not prov
 The game assets, main executable code and anything related to hacking or piracy is NOT endorsed by the authors, and as such we will not provide code related to such subjects.
 The original game assets and binaries is required to use this project.
 
-## Status
+## Accuracy Status
 
 <a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2COMMON.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2COMMON.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GAME.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GAME.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2LANG.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2LANG.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2WIN.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2WIN.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GFX.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2GFX.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2NET.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2NET.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2CMP.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/D2CMP.svg" width="25%"></a><a href="https://purplesmaug96.github.io/D2MOO/accuracy-report/GAME.html"><img src="https://purplesmaug96.github.io/D2MOO/accuracy-report/GAME.svg" width="25%"></a>
 
-The badges compare the 1.10f retail binaries against the DLLs built from this
-repository with [reccmp](https://github.com/reccmp/reccmp). Each one links to the
-full per-function report.
+(some of the accuracy percentages may be inaccurate due to the number of implemented functions being wrong)
 
 | Binary | reccmp accuracy report |
 | --- | --- |
