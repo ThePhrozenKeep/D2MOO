@@ -18,11 +18,21 @@ jobs:
 
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.13'
 
     - name: Install reccmp
       run: |
         pip install reccmp pyyaml colorama
+
+    # reccmp 0.1.7 over-reads the export name table (it decodes with
+    # NumberOfFunctions instead of NumberOfNames) and crashes on the retail
+    # DLLs. Upstream still has the bug. Remove this step and
+    # .github/patches/reccmp-exports.patch once upstream is fixed.
+    - name: Patch reccmp export-table bug
+      shell: pwsh
+      run: |
+        $sp = python -c "import reccmp, os; print(os.path.dirname(os.path.dirname(reccmp.__file__)))"
+        git apply -p1 --directory="$sp" --unsafe-paths .github/patches/reccmp-exports.patch
 
     - name: Fetch retail binaries (shallow sparse clone)
       shell: pwsh

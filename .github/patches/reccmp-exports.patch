@@ -1,0 +1,53 @@
+reccmp export-table parsing fix (temporary workaround).
+
+reccmp 0.1.7 decodes the export NAME table using NumberOfFunctions instead
+of NumberOfNames, and ignores the name-ordinal table. That over-reads the
+name table and raises InvalidVirtualReadError on binaries whose name table
+is the last thing in its section (e.g. retail D2Common.dll: 1308 functions,
+1 name). Upstream isledecomp/reccmp still has this bug.
+
+Delete this file and the "Patch reccmp export-table bug" step in
+reccmp.yml / reccmp-ci.yml once upstream is fixed.
+
+--- a/reccmp/formats/pe.py	2026-10-17 08:07:29.565676896 +0800
++++ b/reccmp/formats/pe.py	2026-10-17 08:07:29.575676850 +0800
+@@ -774,9 +774,12 @@
+             *struct.unpack("<2L2H7L", self.read(export_start, 40))
+         )
+ 
+-        # TODO: if the number of functions doesn't match the number of names,
+-        # are the remaining functions ordinals?
++        # The export address table has one entry per ordinal, but the name
++        # pointer table only has one entry per *named* export. They are linked
++        # via the ordinal table, which holds the (zero-based) index into the
++        # address table for each name pointer.
+         n_functions = export_table.address_table_entries
++        n_names = export_table.number_of_name_pointers
+ 
+         func_start = export_start + 40
+         func_addrs: list[int] = [
+@@ -787,13 +790,20 @@
+         name_start = func_start + 4 * n_functions
+         name_addrs: list[int] = [
+             self.imagebase + rva
+-            for rva, in struct.iter_unpack("<L", self.read(name_start, 4 * n_functions))
++            for rva, in struct.iter_unpack("<L", self.read(name_start, 4 * n_names))
++        ]
++
++        ordinal_start = name_start + 4 * n_names
++        ordinals: list[int] = [
++            ordinal
++            for (ordinal,) in struct.iter_unpack(
++                "<H", self.read(ordinal_start, 2 * n_names)
++            )
+         ]
+ 
+-        combined = zip(func_addrs, name_addrs)
+         return [
+-            (func_addr, self.read_string(name_addr))
+-            for (func_addr, name_addr) in combined
++            (func_addrs[ordinal], self.read_string(name_addr))
++            for (ordinal, name_addr) in zip(ordinals, name_addrs)
+         ]
+ 
+     def iter_string(self, encoding: str = "ascii") -> Iterator[tuple[int, str]]:
