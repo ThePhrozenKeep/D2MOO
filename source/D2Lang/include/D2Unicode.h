@@ -56,7 +56,7 @@ struct D2LANG_DLL_DECL Unicode {
    */
 
   // D2Lang.0x6FC11010 (#10014) ??0Unicode@@QAE@G@Z
-  Unicode(unsigned short ch = 0);
+  Unicode(unsigned short ch = 0) noexcept;
 
   // D2Lang.0x6FC111F0 (#10015) ??4Unicode@@QAEAAU0@ABU0@@Z
   Unicode& operator=(const Unicode& str);

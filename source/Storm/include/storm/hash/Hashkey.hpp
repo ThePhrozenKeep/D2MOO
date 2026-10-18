@@ -30,7 +30,9 @@ class HASHKEY_STRI : public HASHKEY_STR
 {
 public:
 	// Member functions
+	// NOLINTNEXTLINE(bugprone-derived-method-shadowing-base-method)
 	HASHKEY_STRI& operator=(const char* str);
+	// NOLINTNEXTLINE(bugprone-derived-method-shadowing-base-method)
 	bool operator==(const char* str) const;
 };
 

@@ -18,6 +18,8 @@ public:
 	TSLink<T> m_linktofull;
 	TKey m_key;
 
+private:
 	// Member functions
 	TSHashObject() : m_hashval(0), m_key() {}
+	friend T;
 };

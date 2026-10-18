@@ -33,7 +33,7 @@ struct CRITICAL_SECTION_WRAPPER
 {
     CRITICAL_SECTION cs;
 
-    CRITICAL_SECTION_WRAPPER() { InitializeCriticalSection(&cs); }
+    CRITICAL_SECTION_WRAPPER() noexcept { InitializeCriticalSection(&cs); }
     ~CRITICAL_SECTION_WRAPPER() { DeleteCriticalSection(&cs); }
 };
 #pragma pack(pop)
