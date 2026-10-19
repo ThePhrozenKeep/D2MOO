@@ -561,7 +561,7 @@ BOOL __stdcall INVENTORY_CompareWithItemsParentInventory(D2InventoryStrc* pInven
 	if (pInventory)
 	{
 		D2ItemExtraDataStrc* pItemExtraData = INVENTORY_GetItemExtraDataFromItem(pItem);
-		return pItemExtraData->pParentInv == pInventory;
+		return pItemExtraData && pItemExtraData->pParentInv == pInventory;
 	}
 
 	return FALSE;
