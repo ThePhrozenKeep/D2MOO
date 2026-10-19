@@ -56,7 +56,7 @@ DECLARE_STRICT_HANDLE(GAMEDATALOCKEDHANDLE);
 
 // TODO: get rid of this and use handles properly where needed
 inline D2GameGUID GetHashValueFromGameHandle(HGAMEDATA hGame) { return (uint32_t)(uintptr_t)hGame; }
-inline HGAMEDATA GetGameHandleFromHashValue(D2GameGUID nGameGUID) noexcept { return (HGAMEDATA)(uintptr_t)nGameGUID; }
+inline HGAMEDATA GetGameHandleFromHashValue(D2GameGUID nGameGUID) throw() { return (HGAMEDATA)(uintptr_t)nGameGUID; }
 static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2GameInvalidGUID);
 
 

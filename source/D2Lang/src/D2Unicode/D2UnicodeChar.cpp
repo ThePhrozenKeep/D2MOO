@@ -138,7 +138,7 @@ unsigned short Unicode::_toUpperTable[256] = {
   0x9F
 };
 
-Unicode::Unicode(unsigned short ch) noexcept : ch(ch) {
+Unicode::Unicode(unsigned short ch) throw() : ch(ch) {
 }
 
 Unicode& Unicode::operator=(const Unicode& str) {
