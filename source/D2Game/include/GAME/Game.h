@@ -68,12 +68,11 @@ typedef void (*FnServerLogMessage)(int32_t nLogLevel, const char* szFormat, ...)
 typedef void (__fastcall * FnEnterGame)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
 typedef int32_t (__fastcall * FnFindPlayerToken)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7); //TODO: Last 2 args
 /*UNUSED*/	typedef int (__fastcall * FnSaveDatabaseGuild)(const char*, char*, size_t);
-typedef void (__fastcall * FnUnlockDatabaseCharacter)(uint32_t* pGameData, const char* szCharName, const char* szAccountName);
+typedef void (__fastcall * FnUnlockDatabaseCharacter)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	typedef int (__fastcall * FnUnk0x24)(int, int);
 typedef void (__fastcall * FnUpdateCharacterLadder)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, FILETIME* pSaveCreationTimestamp);
 typedef void (__fastcall * FnUpdateGameInformation)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
 typedef void (__fastcall * FnHandlePacket)(void* pPacket, int32_t nPacketSize);
-typedef uint32_t (__fastcall * FnSetGameData)();
 // The server hands back a D2ClientInfoStrc*, which is stored in D2GameStrc::pClientInfo
 // and later passed to pfUnlockDatabaseCharacter the same way D2ClientStrc::pClientInfo is
 // passed to the other database callbacks.
