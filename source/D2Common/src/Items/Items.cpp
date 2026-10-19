@@ -2365,7 +2365,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						{
 							if (nDurability < nMaxDura - 1)
 							{
-								nRepCost *= (nMaxDura - 1) / nMaxDura;
+								nRepCost = static_cast<int32_t>(static_cast<uint32_t>(nRepCost) * static_cast<uint32_t>(nMaxDura - 1)) / nMaxDura;
 							}
 							else
 							{
@@ -2374,7 +2374,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						}
 						else
 						{
-							nRepCost *= (nMaxDura - nDurability) / nMaxDura;
+							nRepCost = static_cast<int32_t>(static_cast<uint32_t>(nRepCost) * static_cast<uint32_t>(nMaxDura - nDurability)) / nMaxDura;
 						}
 					}
 					else
