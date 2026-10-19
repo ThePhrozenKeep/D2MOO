@@ -2690,7 +2690,7 @@ int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUni
         nDelay = 5;
     }
 
-    return nDelay * (pGame->dwGameFrame + nDelay - 1) / nDelay + 1;
+    return (pGame->dwGameFrame + nDelay - 1) / nDelay * nDelay + 1;
 }
 
 //D2Game.0x6FD13260
