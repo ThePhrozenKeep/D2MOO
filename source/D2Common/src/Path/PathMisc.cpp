@@ -1068,6 +1068,7 @@ void __fastcall PATH_ComputeVelocityAndDirectionVectorsToNextPoint(D2DynamicPath
 
 //1.10f: D2Common.0x6FDAC8F0 (#10236)
 //1.13c: D2Common.0x6FD5D820 (#10831)
+//1.14d: 0x00650350
 //TODO: Find a name
 int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 {
@@ -1121,6 +1122,7 @@ int __stdcall D2Common_10236(D2UnitStrc* pUnit, int a2)
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FD5CEB0
+//1.14d: 0x006502D0
 void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 {
 	if (nBaseVelocity <= 0)
@@ -1135,7 +1137,7 @@ void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 		{
 			const int nOldVelocity = pDynamicPath->dwMaxVelocity;
 			pDynamicPath->dwVelocity = nAcceleration + pDynamicPath->dwVelocity;
-			if (pDynamicPath->dwVelocity >= nOldVelocity)
+			if (pDynamicPath->dwVelocity > nOldVelocity)
 			{
 				pDynamicPath->dwVelocity = nOldVelocity;
 				pDynamicPath->dwAcceleration = 0;
@@ -1157,6 +1159,7 @@ void sub_6FD5CEB0(D2DynamicPathStrc* pDynamicPath, int nBaseVelocity)
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FD5DB70
+//1.14d: 0x006503F0
 BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 {
 	if ((pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CW || pDynamicPath->dwPathType == PATHTYPE_MON_CIRCLE_CCW)
@@ -1183,21 +1186,21 @@ BOOL sub_6FD5DB70(D2DynamicPathStrc* pDynamicPath)
 	D2PathPointStrc a3;
 	sub_6FDAB940(&a3, pDynamicPath);
 
-	if (pTargetUnit)
+	// Only a player or monster target that moved re-paths here, any other target keeps the current path
+	if (pTargetUnit && (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER))
 	{
-		if (pTargetUnit->dwUnitType == UNIT_PLAYER || pTargetUnit->dwUnitType == UNIT_MONSTER)
+		const int nAbsDiffX = std::abs(pDynamicPath->tPrevTargetCoord.X - a3.X);
+		const int nAbsDiffY = std::abs(pDynamicPath->tPrevTargetCoord.Y - a3.Y);
+		if (nAbsDiffX > 5 || nAbsDiffY > 5)
 		{
-			const int nAbsDiffX = std::abs(pDynamicPath->tPrevTargetCoord.X - a3.X);
-			const int nAbsDiffY = std::abs(pDynamicPath->tPrevTargetCoord.Y - a3.Y);
-			if (nAbsDiffX <= 5 && nAbsDiffY <= 5)
-			{
-				if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
-					|| pDynamicPath->tFinalTargetCoord == pDynamicPath->tGameCoords.ToPathPoint() )
-				{
-					return TRUE;
-				}
-			}
+			return D2Common_10236(pDynamicPath->pUnit, TRUE);
 		}
+	}
+
+	if (pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints
+		|| pDynamicPath->tFinalTargetCoord == pDynamicPath->tGameCoords.ToPathPoint())
+	{
+		return TRUE;
 	}
 	return D2Common_10236(pDynamicPath->pUnit, TRUE);
 }
@@ -1291,6 +1294,7 @@ BOOL __stdcall D2Common_10227(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAD590 (#10229)
+//1.14d: 0x00650BE0
 BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit, D2ActiveRoomStrc *pDestRoom, uint32_t nDestX, uint32_t nDestY)
 {
 	D2PathPointStrc tCoords = { uint16_t(nDestX), uint16_t(nDestY) };

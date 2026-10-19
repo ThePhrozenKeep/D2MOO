@@ -26,6 +26,7 @@
 
 
 //D2Game.0x6FC66260
+//1.14d: 0x0054DC40
 int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t* pX, int32_t* pY, int32_t a7)
 {
     int32_t nLeft = 0;
@@ -71,7 +72,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
         const int32_t nX = ITEMS_RollLimitedRandomNumber(pSeed, nRight) + nLeft;
         const int32_t nY = ITEMS_RollLimitedRandomNumber(pSeed, nBottom) + nTop;
 
-        int32_t bSpawnMonster = 0;
+        int32_t bNearWarp = 0;
         if (a7 && pRoom)
         {
             const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -87,12 +88,12 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
                         const int32_t nYDiff = nY - pWarpCoordinates[j + 9];
                         if (nXDiff * nXDiff + nYDiff * nYDiff < nWarpDist)
                         {
-                            bSpawnMonster = 1;
+                            bNearWarp = 1;
                             break;
                         }
                     }
 
-                    if (!bSpawnMonster)
+                    if (!bNearWarp)
                     {
                         int32_t nSpawnX = 0;
                         int32_t nSpawnY = 0;
@@ -105,8 +106,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
                             const int32_t nYDiff = nY - nSpawnY;
                             if (nXDiff * nXDiff + nYDiff * nYDiff < nWarpDist)
                             {
-                                bSpawnMonster = 1;
-                                break;
+                                bNearWarp = 1;
                             }
                         }
                     }
@@ -114,7 +114,7 @@ int32_t __fastcall sub_6FC66260(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Ro
             }
         }
 
-        if (bSpawnMonster)
+        if (!bNearWarp)
         {
             if (pRoomCoordList)
             {

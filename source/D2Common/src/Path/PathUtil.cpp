@@ -20,6 +20,7 @@ void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath
 
 //1.10f: D2Common.0x6FDAB940
 //1.13c: D2Common.0x6FD8E310
+//1.14d: 0x00679250
 void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* ptPath)
 {
 	D2_ASSERT(ptPath);
@@ -48,6 +49,13 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 
 	if (ptPath->dwSpeed)
 	{
-		PATHUtil_AdvanceTowardsTarget_6FDAB890(ptPath);
+		// Same lead as PATHUtil_AdvanceTowardsTarget_6FDAB890, but applied to the returned point instead of the path's target
+		const uint8_t nDirection = PATH_GetDirection(pTargetUnit->pDynamicPath);
+		const int nSpeed = ptPath->dwSpeed;
+		uint16_t v4 = (uint16_t)nSpeed << 8;
+		const float nDistance = nSpeed;
+		const uint16_t nAngleRad512 = (8 * nDirection - v4) & 0x1FF;
+		pOutPathPoint->X += (int64_t)(FOG_10083_Cos_LUT(nAngleRad512) * nDistance);
+		pOutPathPoint->Y += (int64_t)(FOG_10084_Sin_LUT(nAngleRad512) * nDistance);
 	}
 }

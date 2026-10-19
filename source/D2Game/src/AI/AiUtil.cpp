@@ -668,6 +668,7 @@ void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 }
 
 //D2Game.0x6FCF2110
+//1.14d: 0x005DD7F0
 D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t* pDistance, int32_t* pCombat)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -796,6 +797,8 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 				}
 			}
 
+			// The player loop leaves the next slot's head behind, which is slot 8 after the last player slot.
+			pTargetNode = pGame->pTargetNodes[8];
 			while (pTargetNode)
 			{
 				if (pUnit->nAct == pTargetNode->pUnit->nAct)

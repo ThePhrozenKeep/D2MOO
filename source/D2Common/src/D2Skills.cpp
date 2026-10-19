@@ -629,6 +629,7 @@ void __stdcall SKILLS_RefreshPassiveSkills(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAFC30
+//1.14d: 0x00643810
 D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit, int nSkillId)
 {
 	D2SkillStrc* pHighestLevelSkill = NULL;
@@ -637,6 +638,12 @@ D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit
 	{
 		for (D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill; pSkill; pSkill = pSkill->pNextSkill)
 		{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+			if (pSkill->bExcludeFromHighestLevelLookup)
+			{
+				continue;
+			}
+#endif
 			if (pSkill->pSkillsTxt->nSkillId == nSkillId && (!pHighestLevelSkill || pSkill->nOwnerGUID == D2UnitInvalidGUID || pHighestLevelSkill->nOwnerGUID != D2UnitInvalidGUID && pSkill->nSkillLevel > pHighestLevelSkill->nSkillLevel))
 			{
 				pHighestLevelSkill = pSkill;
@@ -1081,6 +1088,7 @@ void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLev
 }
 
 //D2Common.0x6FDB05E0 (#10954)
+//1.14d: 0x00647320
 void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -1158,6 +1166,9 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 					{
 						pSkill->nSkillLevel = nSkillLevel;
 						pSkill->nCharges = nCharges;
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+						pSkill->bExcludeFromHighestLevelLookup = 1;
+#endif
 					}
 					else
 					{
@@ -1181,6 +1192,9 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 						pSkill->nSkillLevel = nSkillLevel;
 						pSkill->nCharges = nCharges;
 						pSkill->nOwnerGUID = nOwnerGUID;
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+						pSkill->bExcludeFromHighestLevelLookup = 1;
+#endif
 						pSkill->pNextSkill = NULL;
 
 						if (pPreviousSkill)
@@ -1239,6 +1253,7 @@ BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, D2UnitGUID* pOwnerGUID, 
 }
 
 //D2Common.0x6FDB0960 (#10956)
+//1.14d: 0x00643B70
 BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 {
 	D2_ASSERT(pSkill);
@@ -1249,6 +1264,9 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 	}
 	else
 	{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+		pSkill->bExcludeFromHighestLevelLookup = 1;
+#endif
 		pSkill->nCharges = nCharges;
 		return TRUE;
 	}

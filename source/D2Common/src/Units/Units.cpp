@@ -1050,6 +1050,7 @@ void __stdcall UNITS_SetAnimationFrame(D2UnitStrc* pUnit, int nFrame)
 }
 
 //D2Common.0x6FDBEE60 (#10373)
+//1.14d: 0x00623E00
 void __stdcall UNITS_StopSequence(D2UnitStrc* pUnit)
 {
 	pUnit->nActionFrame = 0;
@@ -1318,6 +1319,7 @@ BOOL UNITS_CanAnimModeUseAttackRate(int nUnitType, int nAnimMode, D2UnitStrc* pU
 		{
 			pAnimModeModulators = &gaMonModesAnimModulators[nAnimMode];
 		}
+		break;
 
 	default:
 		return FALSE;
@@ -1330,7 +1332,13 @@ BOOL UNITS_CanAnimModeUseAttackRate(int nUnitType, int nAnimMode, D2UnitStrc* pU
 
 	if (pAnimModeModulators->bCanUseSkillAttackRate)
 	{
-		D2SkillsTxt* pSkillsRecord = DATATBLS_GetSkillsTxtRecord(UNITS_GetUsedSkill(pUnit)->pSkillsTxt->nSkillId);
+		D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit);
+		if (!pUsedSkill)
+		{
+			return FALSE;
+		}
+
+		D2SkillsTxt* pSkillsRecord = DATATBLS_GetSkillsTxtRecord(pUsedSkill->pSkillsTxt->nSkillId);
 		return (pSkillsRecord->dwFlags[0] & SKILLSFLAG_USEATTACKRATE) != 0;
 	}
 
@@ -1528,9 +1536,9 @@ BOOL UNITS_IsAnimModeGetHit(int nUnitType, int nAnimMode)
 	switch (nUnitType)
 	{
 	case UNIT_PLAYER:
-		return nAnimMode == PLRMODE_BLOCK;
+		return nAnimMode == PLRMODE_GETHIT;
 	case UNIT_MONSTER:
-		return nAnimMode == MONMODE_BLOCK;
+		return nAnimMode == MONMODE_GETHIT;
 	default:
 		return FALSE;
 
@@ -1645,6 +1653,7 @@ BOOL UNITS_CanAnimModeUseVelocityModifier(int nUnitType, int nAnimMode, D2UnitSt
 		{
 			pAnimModeModulators = &gaMonModesAnimModulators[nAnimMode];
 		}
+		break;
 
 	default:
 		return FALSE;
@@ -1701,6 +1710,7 @@ __forceinline void __fastcall UNITS_UpdateRunWalkAnimRateAndVelocity(D2UnitStrc*
 
 //1.10f: D2Common.0x6FDBF050 (#10376)
 //1.13c: D2Common.0x6FD83110 (#10819)
+//1.14d: 0x00623F50
 void __stdcall UNITS_UpdateAnimRateAndVelocity(D2UnitStrc* pUnit, const char* szFile, int nLine)
 {
 	if (!pUnit)
@@ -1763,6 +1773,7 @@ void __stdcall UNITS_SetAnimationSpeed(D2UnitStrc* pUnit, int nSpeed)
 }
 
 //D2Common.0x6FDBF910 (#10378)
+//1.14d: 0x006217C0
 int __stdcall UNITS_IsAtEndOfFrameCycle(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);

@@ -373,14 +373,14 @@ struct D2MonStatsTxt
 	int16_t nRun;							//0x34
 	int16_t nWalkAnimSpeed;					//0x36 - Special Velocity (see DATATBLS_LoadMonStatsTxt)
 	int16_t nRunAnimSpeed;						//0x38 - Special RunSpeed (see DATATBLS_LoadMonStatsTxt)
-	uint16_t wMissA1;						//0x3A
-	uint16_t wMissA2;						//0x3C
-	uint16_t wMissS1;						//0x3E
-	uint16_t wMissS2;						//0x40
-	uint16_t wMissS3;						//0x42
-	uint16_t wMissS4;						//0x44
-	uint16_t wMissC;						//0x46
-	uint16_t wMissSQ;						//0x48
+	int16_t wMissA1;						//0x3A
+	int16_t wMissA2;						//0x3C
+	int16_t wMissS1;						//0x3E
+	int16_t wMissS2;						//0x40
+	int16_t wMissS3;						//0x42
+	int16_t wMissS4;						//0x44
+	int16_t wMissC;						//0x46
+	int16_t wMissSQ;						//0x48
 	uint8_t nMaxChainId;					//0x4A
 	uint8_t nChainId;						//0x4B
 	uint8_t nAlign;							//0x4C D2C_MonsterAlignment

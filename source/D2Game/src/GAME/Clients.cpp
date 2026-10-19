@@ -528,9 +528,9 @@ void __fastcall CLIENTS_SetGameData(D2GameStrc* pGame)
     pGame->nClients = 0;
     pGame->pClientList = nullptr;
 
-    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSetGameData)
+    if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfCreateClientInfo)
     {
-        pGame->nGameData = gpD2EventCallbackTable_6FD45830->pfSetGameData();
+        pGame->pClientInfo = gpD2EventCallbackTable_6FD45830->pfCreateClientInfo();
     }
 }
 
@@ -1846,6 +1846,7 @@ static bool IsWarpAttemptToBeConsideredForDelay(D2GameStrc* pGame, int32_t nLast
 }
 
 //D2Game.0x6FC34700
+//1.14d: 0x00539360
 void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
@@ -1859,11 +1860,13 @@ void __fastcall CLIENTS_NotifyWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		if (!IsWarpAttemptToBeConsideredForDelay(pGame, rLastWarpFrameEntry))
 		{
 			rLastWarpFrameEntry = pGame->dwGameFrame;
+			break;
 		}
 	}
 }
 
 //D2Game.0x6FC347A0
+//1.14d: 0x005393F0
 BOOL __fastcall CLIENTS_ShouldDelayWarpAttempt(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);

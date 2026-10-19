@@ -851,6 +851,7 @@ BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
 
 //1.00:  D2Common.0x10060C60 (#10231)
 //1.10f: D2Common.0x6FDAE520 (#10235)
+//1.14d: 0x006505E0
 void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2UnitStrc* pMountUnit)
 {
 	D2_ASSERT(pRiderUnit); // Named hRiderUnit in original game

@@ -74,6 +74,10 @@ typedef void (__fastcall * FnUpdateCharacterLadder)(const char* szCharName, int3
 typedef void (__fastcall * FnUpdateGameInformation)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
 typedef void (__fastcall * FnHandlePacket)(void* pPacket, int32_t nPacketSize);
 typedef uint32_t (__fastcall * FnSetGameData)();
+// The server hands back a D2ClientInfoStrc*, which is stored in D2GameStrc::pClientInfo
+// and later passed to pfUnlockDatabaseCharacter the same way D2ClientStrc::pClientInfo is
+// passed to the other database callbacks.
+typedef D2ClientInfoStrc* (__fastcall * FnCreateClientInfo)();
 typedef void (__fastcall * FnRelockDatabaseCharacter)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	typedef int32_t (__stdcall * FnLoadComplete)(int32_t);
 
@@ -95,7 +99,7 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 	FnUpdateCharacterLadder pfUpdateCharacterLadder;		//0x28
 	FnUpdateGameInformation pfUpdateGameInformation;		//0x2C
 	FnHandlePacket pfHandlePacket;							//0x30
-	FnSetGameData pfSetGameData;							//0x34
+	FnCreateClientInfo pfCreateClientInfo;				//0x34
 	FnRelockDatabaseCharacter pfRelockDatabaseCharacter;	//0x38
 	FnLoadComplete pfLoadComplete;							//0x3C
 };
@@ -146,7 +150,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 {
 	LPCRITICAL_SECTION lpCriticalSection;			//0x18
 	void* pMemoryPool;								//0x1C
-	uint32_t nGameData;								//0x20
+	D2ClientInfoStrc* pClientInfo;					//0x20
 	uint32_t unk0x24;								//0x24
 	uint16_t nGameId;								//0x28
 	char szGameName[16];							//0x2A
