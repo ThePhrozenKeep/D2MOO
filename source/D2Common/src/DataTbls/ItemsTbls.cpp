@@ -1413,6 +1413,7 @@ int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* 
 }
 
 //D2Common.0x6FD5C320
+//1.14d: 0x00637A00
 void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 {
 	uint16_t nOpBase = 0;
@@ -1497,7 +1498,11 @@ void __fastcall DATATBLS_LoadItemStatCostTxt(HD2ARCHIVE hArchive)
 		D2ItemStatCostTxt& rCurrentStatRecord = sgptDataTables->pItemStatCostTxt[nStatId];
 		uint8_t nCurrentStatOp = rCurrentStatRecord.nOp;
 		if (nCurrentStatOp <= 0 || nCurrentStatOp >= 14)
+		{
+			// Both binaries clear an invalid op (1.10f: 0x6FD5CF69, 1.14d: 0x006384F0 mov [op], bl)
+			rCurrentStatRecord.nOp = STAT_OP_NONE;
 			continue;
+		}
 
 		nOpBase = rCurrentStatRecord.wOpBase;
 
