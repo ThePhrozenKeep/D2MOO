@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
@@ -26,6 +27,8 @@ from reccmp.utils import ReccmpDiffJudgement, entity_diff_change
 
 
 SKIP_MARKER = "[reccmp skip]"
+
+COMMIT_MESSAGE_ENV = "RECCMP_COMMIT_MESSAGE"
 
 
 def has_skip_marker(message: str | None) -> bool:
@@ -131,12 +134,17 @@ def main() -> int:
         default=None,
         help=(
             f"commit message to scan for the '{SKIP_MARKER}' marker, which "
-            "skips the comparison entirely (exit 0)"
+            "skips the comparison entirely (exit 0). If omitted, "
+            f"{COMMIT_MESSAGE_ENV} is used instead."
         ),
     )
     args = parser.parse_args()
 
-    if has_skip_marker(args.commit_message):
+    commit_message = args.commit_message
+    if commit_message is None:
+        commit_message = os.environ.get(COMMIT_MESSAGE_ENV)
+
+    if has_skip_marker(commit_message):
         print(
             f"'{SKIP_MARKER}' found in the commit message - "
             "skipping the accuracy regression check."
