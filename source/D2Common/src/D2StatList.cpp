@@ -557,8 +557,6 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 						{
 							if (D2ItemStatCostTxt* pOpItemStatCost = ITEMS_GetItemStatCostTxtRecord(nOpBase))
 							{
-								// Only clears the update (1.10f 0x6FDB67EA / 1.14d 0x00626811: jle past it), and only for a unit with
-								// a stat list
 								if (pStatListEx->pUnit->pStatListEx
 									&& STATLIST_GetTotalStat_6FDB63E0(pStatListEx->pUnit->pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(nOpBase).nPackedValue, pOpItemStatCost) > 0)
 								{
@@ -741,8 +739,6 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::
 		{
 			D2StatStrc* pStat = STATLIST_GetOrInsertStat(pParentStatList->pMemPool, &pParentStatList->FullStats, nLayer_StatId);
 
-			// Unlike STATLIST_SetUnitStatNewValue, the delta is always stored and only a positive sum marks the list
-			// STATLIST_PERMANENT (1.10f 0x6FDB6D1A / 1.14d 0x006250EB: jle past the or)
 			const int nPreviousValue = pStat->nValue;
 			const int nNewValue = nPreviousValue + nValue;
 			pStat->nValue = nNewValue;
@@ -1129,8 +1125,6 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 				pOwner = pStatListEx->pOwner;
 			}
 
-			// The op stats that apply to items are evaluated first only on a list marked STATLIST_PERMANENT
-			// (1.10f 0x6FDB73EF / 1.14d 0x00626EC4: test 20000000h)
 			if (pStatListEx && (pStatListEx->dwFlags & STATLIST_PERMANENT))
 			{
 				int nCounter = 0;
