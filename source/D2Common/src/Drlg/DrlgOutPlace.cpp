@@ -2411,6 +2411,7 @@ static D2C_LvlPrestIds DRLG_JungleNormalizeLevelPresetId(int32_t nLevelPresetId)
 // D2Common.0x6FD82820
 // Checked to be working correctly, but with a single save only
 // See https://web.archive.org/web/20220928163841/http://www.dos486.com/diablo/jungle/ for an overview about act 3 jungles
+//1.14d: 0x00677880
 D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 {
 	D2LevelDefBin* pSpiderForestLevelDef = DATATBLS_GetLevelDefRecord(LEVEL_SPIDERFOREST);
@@ -2459,7 +2460,11 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 		pCurrentJungle->pBasedOnJungle = &tJungles[nBaseOn];
 
 		// Note: this assert used to be done AFTER assignation, which could lead to overriding the next field. We do it before instead
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 		D2_ASSERT(tJungles[nBaseOn].nBranch < JUNGLE_MAX_ATTACH);
+#else
+		D2_CHECK(tJungles[nBaseOn].nBranch < JUNGLE_MAX_ATTACH);
+#endif
 		// Link the jungle we are based on to current jungle
 		tJungles[nBaseOn].pJungleBranches[tJungles[nBaseOn].nBranch++] = &tJungles[nJungleAttachIdx];
 
@@ -2481,9 +2486,14 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
-	// Note: Original game uses FOG_DisplayWarning not FOG_DisplayAssert
+	// 1.10f warns and continues; 1.14d halts on unaligned jungle bounds.
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 	D2_ASSERT((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
 	D2_ASSERT((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
+#else
+	D2_CHECK((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
+	D2_CHECK((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
+#endif
 
 
 	const int32_t nPresetsWidth = (nMaxX - nMinX) / nPresetBlocksDimensions + 2;
