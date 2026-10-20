@@ -85,7 +85,7 @@ jobs:
     - name: Build with VC6
       run: |
         $env:VCPP6_ROOT = "C:\MSVC600\VC98"
-        cmake --preset VC6 -DD2MOO_ORDINALS_VERSION="1.10f" -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded
+        cmake --preset VC6 -DD2MOO_ORDINALS_VERSION="1.10f" -DD2MOO_NO_BUG_FIX=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded
         cmake --build --preset VC6
 
     - name: Run reccmp

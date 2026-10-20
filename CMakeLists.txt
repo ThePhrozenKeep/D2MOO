@@ -39,6 +39,8 @@ cmake_dependent_option(D2MOO_BUILD_TESTS
     "BUILD_TESTING" OFF # Stay coherent with CTest variables
 )
 
+option(D2MOO_NO_BUG_FIX "Keep the original game's bugs. Use only when trying to match the original game, not mods." OFF)
+
 if(CMAKE_GENERATOR MATCHES "Visual Studio" AND MSVC)
   option(D2MOO_ENABLE_PARALLEL_BUILD "Force /MP parallel compilation" ${D2MOO_IS_ROOT_PROJECT})
   if(D2MOO_ENABLE_PARALLEL_BUILD)
@@ -63,6 +65,10 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # 3rd party dependencies
 add_subdirectory(external)
+
+if(D2MOO_NO_BUG_FIX)
+  add_compile_definitions(NO_BUG_FIX)
+endif()
 
 add_subdirectory(source)
 
