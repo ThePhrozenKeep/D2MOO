@@ -5,6 +5,8 @@
 # Usage:
 #     tools/reccmp_regression.py --baseline reccmp-baseline --current reccmp-json
 #
+# Pass --commit-message to honor the "[reccmp skip]" marker.
+#
 # Exit codes:
 #     0  no regressions (or no baseline to compare against)
 #     1  at least one function regressed
@@ -21,6 +23,16 @@ from pathlib import Path
 
 from reccmp.compare.report import deserialize_reccmp_report
 from reccmp.utils import ReccmpDiffJudgement, entity_diff_change
+
+
+SKIP_MARKER = "[reccmp skip]"
+
+
+def has_skip_marker(message: str | None) -> bool:
+    """True if ``message`` carries the skip marker (case-insensitive)."""
+    if not message:
+        return False
+    return SKIP_MARKER in message.lower()
 
 
 def _pct(accuracy: float, is_stub: bool, is_effective: bool) -> str:
@@ -114,7 +126,22 @@ def main() -> int:
         default=0.0,
         help="accuracy drop smaller than this is ignored (default: 0.0)",
     )
+    parser.add_argument(
+        "--commit-message",
+        default=None,
+        help=(
+            f"commit message to scan for the '{SKIP_MARKER}' marker, which "
+            "skips the comparison entirely (exit 0)"
+        ),
+    )
     args = parser.parse_args()
+
+    if has_skip_marker(args.commit_message):
+        print(
+            f"'{SKIP_MARKER}' found in the commit message - "
+            "skipping the accuracy regression check."
+        )
+        return 0
 
     if not args.current.is_dir():
         print(

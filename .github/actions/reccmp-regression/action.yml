@@ -70,9 +70,12 @@ runs:
         path: ${{ inputs.baseline }}
 
     - name: Compare accuracy against the baseline
+      if: ${{ !contains(github.event.head_commit.message || '', '[reccmp skip]') }}
       shell: pwsh
       run: |
         python tools/reccmp_regression.py `
           --baseline "${{ inputs.baseline }}" `
           --current "${{ inputs.current }}" `
-          --tolerance ${{ inputs.tolerance }}
+          --tolerance ${{ inputs.tolerance }} `
+          --commit-message "${{ github.event.head_commit.message }}"
+
