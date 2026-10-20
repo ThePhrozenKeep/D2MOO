@@ -1607,19 +1607,19 @@ int32_t __fastcall CLIENT_GetSaveHeader_6FC34350(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC34390
-void __fastcall CLIENT_SetSaveLoaded_6FC34390(D2ClientStrc* pClient)
+void __fastcall CLIENT_SetGameOwner(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    pClient->dwFlags |= CLIENTFLAGEX_SAVE_LOADED;
+    pClient->dwFlags |= CLIENTFLAGEX_GAME_OWNER;
 }
 
 //D2Game.0x6FC343D0
-uint32_t __fastcall CLIENT_IsSaveLoaded(D2ClientStrc* pClient)
+uint32_t __fastcall CLIENT_IsGameOwner(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    return pClient->dwFlags & CLIENTFLAGEX_SAVE_LOADED;
+    return (pClient->dwFlags & CLIENTFLAGEX_GAME_OWNER) != 0;
 }
 
 //D2Game.0x6FC34420

@@ -69,7 +69,6 @@ void __stdcall TASK_FreeAllQueueSlots()
 //D2Game.0x6FC405B0 (#10041) 
 int __cdecl D2Game_10041_TASK_Create()
 {
-    UNIMPLEMENTED();
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
     if (!gpTaskQueueLink.pPrev)
     {
@@ -349,8 +348,10 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
         const int32_t nSyncTimer = pGame->nSyncTimer;
         if (nSyncTimer == 1 || v7 - nSyncTimer > 1800)// I/O timeout
         {
-            for (D2ClientStrc* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pNext)
+            D2ClientStrc* pNextClient = nullptr;
+            for (D2ClientStrc* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pNextClient)
             {
+                pNextClient = pCurrentClient->pNext;
                 sub_6FC3C690(pCurrentClient->dwClientId);
                 sub_6FC3C6B0(pCurrentClient->dwClientId);
                 CLIENTS_RemoveClientFromGame(pGame, pCurrentClient->dwClientId, 0);
