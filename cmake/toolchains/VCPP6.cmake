@@ -61,8 +61,6 @@ set(VCPP6_LIB_DIRS
   "${VCPP6_ROOT}/MFC/Lib"
 )
 
-# So that <D2StdInt.h>, which includes <CompilerShims.h>, can find it. The /FI below is what
-# makes the shims apply to every TU; this only makes the header reachable by name.
 list(APPEND VCPP6_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}")
 list(TRANSFORM VCPP6_INCLUDE_DIRS PREPEND "/I")
 string(REPLACE ";" " " VCPP6_INCLUDE_FLAGS "${VCPP6_INCLUDE_DIRS}")
