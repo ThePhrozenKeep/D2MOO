@@ -466,15 +466,17 @@ void __fastcall OBJECTS_InitFunction28_GoldPlaceHolder(D2ObjInitFnStrc* pOp)
 
     for (int32_t i = 0; i < nCounter; ++i)
     {
-        const int32_t nX = pOp->nX + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
-        const int32_t nY = pOp->nY + ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
+        const int32_t nOffsetX = ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
+        const int32_t nOffsetY = ITEMS_RollRandomNumber(&pOp->pObjectregion->pSeed) & 3;
 
-        D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pOp->pRoom, nX, nY);
+        // The room is looked up at the last stored position plus the offset,
+        // but the pile is placed at the preset position plus the offset.
+        D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomAtPosition(pOp->pRoom, pCoord.nX + nOffsetX, pCoord.nY + nOffsetY);
 
         if (pRoom == pOp->pRoom)
         {
-            pCoord.nX = nX;
-            pCoord.nY = nY;
+            pCoord.nX = pOp->nX + nOffsetX;
+            pCoord.nY = pOp->nY + nOffsetY;
             if (!COLLISION_CheckMaskWithSizeXY(pRoom, pCoord.nX, pCoord.nY, 1, 1, COLLIDE_MASK_PLACEMENT))
             {
                 sub_6FC4F640(pOp->pGame, pOp->pRoom, &pCoord);
