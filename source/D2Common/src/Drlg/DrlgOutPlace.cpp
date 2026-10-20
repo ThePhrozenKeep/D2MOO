@@ -2486,7 +2486,6 @@ D2DrlgLevelStrc* __fastcall DRLG_GenerateJungles(D2DrlgLevelStrc* pLevel)
 			nMaxX = pCurrentJungle->pDrlgCoord.nWidth + pCurrentJungle->pDrlgCoord.nPosX;
 		// Original game does not change nMinY: error or just never happens ?
 	}
-	// 1.10f warns and continues; 1.14d halts on unaligned jungle bounds.
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 	D2_ASSERT((nMaxX - nMinX) % nPresetBlocksDimensions == 0);
 	D2_ASSERT((nMaxY - nMinY) % nPresetBlocksDimensions == 0);
