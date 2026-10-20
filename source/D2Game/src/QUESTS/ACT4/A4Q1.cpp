@@ -161,7 +161,7 @@ bool __fastcall ACT4Q1_SeqCallback(D2QuestDataStrc* pQuestData)
 		exit(-1);
 	}
 
-	return pQuestData->pfSeqFilter(pQuest);
+	return pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCADA70

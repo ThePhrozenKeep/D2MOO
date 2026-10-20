@@ -640,7 +640,7 @@ void __fastcall ACT2Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 					FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 					exit(-1);
 				}
-				pQuestData->pfSeqFilter(pQuest);
+				pQuest->pfSeqFilter(pQuest);
 			}
 		}
 		else
@@ -1047,7 +1047,7 @@ bool __fastcall ACT2Q6_SeqCallback(D2QuestDataStrc* pQuestData)
 		FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 		exit(-1);
 	}
-	return pQuestData->pfSeqFilter(pQuest);
+	return pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCA5900

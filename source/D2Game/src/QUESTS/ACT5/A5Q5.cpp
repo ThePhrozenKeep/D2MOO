@@ -755,7 +755,7 @@ void __fastcall ACT5Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 			FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 			exit(-1);
 		}
-		pQuestData->pfSeqFilter(pQuest);
+		pQuest->pfSeqFilter(pQuest);
 	}
 
 	if (pQuestData->fLastState != 13)
@@ -956,7 +956,7 @@ bool __fastcall ACT5Q5_SeqCallback(D2QuestDataStrc* pQuestData)
 		FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 		exit(-1);
 	}
-	return pQuestData->pfSeqFilter(pQuest);
+	return pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCB7A60

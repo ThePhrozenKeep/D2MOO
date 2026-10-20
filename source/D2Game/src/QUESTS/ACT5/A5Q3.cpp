@@ -397,7 +397,7 @@ bool __fastcall ACT5Q3_SeqCallback(D2QuestDataStrc* pQuestData)
 		FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 		exit(-1);
 	}
-	return pQuestData->pfSeqFilter(pQuest);
+	return pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCB3B00
@@ -878,7 +878,7 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 		FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 		exit(-1);
 	}
-	pQuestData->pfSeqFilter(pQuest);
+	pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCB4400
@@ -1853,7 +1853,7 @@ bool __fastcall ACT5Q3_SpawnDrehyaIcedMonsterOutsideTown(D2GameStrc* pGame, D2Qu
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			pQuestData->pfSeqFilter(pQuest);
+			pQuest->pfSeqFilter(pQuest);
 		}
 	}
 
