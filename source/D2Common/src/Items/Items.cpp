@@ -1042,6 +1042,7 @@ static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C
 
 
 //D2Common.0x6FD99740 (#10756)
+//1.14d: 0x0062EAF0
 BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOOL bEquipping, BOOL* bStrength, BOOL* bDexterity, BOOL* bLevel)
 {
 	if (bStrength)
@@ -1091,9 +1092,9 @@ BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOO
 	int nReqDexBonus = 0;
 	if (int nReqPctBonus = STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_REQ_PERCENT, 0))
 	{
-		// It seems the original game has some additional logic to handle overflow here
-		nReqStrBonus = nBaseReqStr * int64_t(nReqPctBonus) / 100;
-		nReqDexBonus = nBaseReqDex * int64_t(nReqPctBonus) / 100;
+		// Preserve the binary's threshold-dependent multiplication/division order.
+		nReqStrBonus = DATATBLS_ApplyRatio(nBaseReqStr, nReqPctBonus, 100);
+		nReqDexBonus = DATATBLS_ApplyRatio(nBaseReqDex, nReqPctBonus, 100);
 	}
 
 	if (pItemData && pItemData->dwItemFlags & IFLAG_ETHEREAL)
