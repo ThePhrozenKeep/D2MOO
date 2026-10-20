@@ -542,7 +542,7 @@ bool __fastcall ACT5Q1_SeqCallback(D2QuestDataStrc* pQuestData)
 		FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 		exit(-1);
 	}
-	return pQuestData->pfSeqFilter(pQuest);
+	return pQuest->pfSeqFilter(pQuest);
 }
 
 //D2Game.0x6FCB1C10

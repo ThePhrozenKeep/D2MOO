@@ -577,7 +577,7 @@ bool __fastcall ACT3Q4_SeqCallback(D2QuestDataStrc* pQuestData)
 			FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 			exit(-1);
 		}
-		bResult = pQuestData->pfSeqFilter(pQuest);
+		bResult = pQuest->pfSeqFilter(pQuest);
 	}
 
 	D2QuestDataStrc* pQuestData17 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A3Q3_GIDBINN);
