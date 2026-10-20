@@ -6,6 +6,7 @@
 #include <D2CMP.h>
 
 //D2Common.0x6FD41000
+//1.14d: 0x0064C860
 void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2ActiveRoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry)
 {
 	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
@@ -63,7 +64,7 @@ void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2ActiveRoomStrc* pRoom, D2D
 
 						nIndex = pCollisionGrid->pRoomCoords.nSubtileWidth * nCappedY;
 
-						for (int nYCounter = nCappedX; nYCounter < nY + 5; ++nYCounter)
+						for (int nYCounter = nCappedY; nYCounter < nY + 5; ++nYCounter)
 						{
 							pCollisionMask = &pCollisionGrid->pCollisionMask[nIndex];
 							for (int nXCounter = nCappedX; nXCounter < nX + 5; ++nXCounter)
@@ -1221,6 +1222,7 @@ uint16_t __fastcall COLLISION_TeleportUnitCollisionMask(D2ActiveRoomStrc* pRoom1
 
 //1.10f: D2Common.0x6FD44FF0
 //1.13c: D2Common.0x6FD9D5C0
+//1.14d: 0x0064EF10
 int __fastcall COLLISION_TrySetUnitCollisionMask(D2ActiveRoomStrc* pRoom1, int nX1, int nY1, D2ActiveRoomStrc* pRoom2, int nX2, int nY2, int nCollisionPattern, uint16_t nFootprintCollisionMask, uint16_t nMoveConditionMask)
 {
 	if (pRoom1)
@@ -1228,13 +1230,14 @@ int __fastcall COLLISION_TrySetUnitCollisionMask(D2ActiveRoomStrc* pRoom1, int n
 		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 	}
 
-	if (const uint16_t nCollidedWithMask = COLLISION_CheckMaskWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nMoveConditionMask))
+	// Both binaries test with COLLISION_CheckAnyCollisionWithPattern (inlined in 1.10f at 0x6FD4501D, called at 1.14d 0x0064EF44)
+	if (const int nCollision = COLLISION_CheckAnyCollisionWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
 		if (pRoom1)
 		{
 			COLLISION_SetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 		}
-		return nCollidedWithMask;
+		return nCollision;
 	}
 	else
 	{
