@@ -1230,7 +1230,6 @@ int __fastcall COLLISION_TrySetUnitCollisionMask(D2ActiveRoomStrc* pRoom1, int n
 		COLLISION_ResetMaskWithPattern(pRoom1, nX1, nY1, nCollisionPattern, nFootprintCollisionMask);
 	}
 
-	// Both binaries test with COLLISION_CheckAnyCollisionWithPattern (inlined in 1.10f at 0x6FD4501D, called at 1.14d 0x0064EF44)
 	if (const int nCollision = COLLISION_CheckAnyCollisionWithPattern(pRoom2, nX2, nY2, nCollisionPattern, nMoveConditionMask))
 	{
 		if (pRoom1)

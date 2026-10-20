@@ -752,7 +752,6 @@ BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2ActiveRoom
 int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2ActiveRoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
 	D2_MAYBE_UNUSED(pUnit_unused);
-	// The destination is nX/nY in both binaries (1.10f: arguments 4 and 5, 1.14d: the packed nX | nY << 16 argument)
 	D2Common_10231_Impl(pDynamicPath, pRooms, D2PathPointStrc{ nX, nY });
 	pDynamicPath->dwPathPoints = 0;
 	return TRUE;
@@ -879,8 +878,5 @@ void __stdcall D2Common_10235_PATH_UpdateRiderPath(D2UnitStrc* pRiderUnit, D2Uni
 		pRiderPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 	}
 
-	// Move the rider to the mount's position; a rider whose room may be stale is moved to the room holding it, which
-	// leaves it in place (and in its room's unit list) while its room still contains it
-	// (1.10f inlines it, PATH_RecacheRoom's early out included; 1.14d calls it at 0x00650652).
 	PATH_RecacheRoomAtCoordIfNeeded(pRiderPath, pMountPath->pRoom, pMountPath->tGameCoords.dwPrecisionX, pMountPath->tGameCoords.dwPrecisionY);
 }

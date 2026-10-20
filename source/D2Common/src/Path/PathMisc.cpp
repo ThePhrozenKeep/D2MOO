@@ -1322,8 +1322,6 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomSt
 		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	}
 
-	// Both binaries leave the room (SetRoom(nullptr)) when none contains the position, unless the path is a missile's
-	// (1.10f: test 40000h at 0x6FDADBC2, jz into the inlined SetRoom at 0x6FDADBDA; 1.14d: 0x0064FB3C, jz 0x0064FB54)
 	if (pRoomAtLocation || (pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0)
 	{
 		PATHMISC_SetRoom(pDynamicPath, pRoomAtLocation);
