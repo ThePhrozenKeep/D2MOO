@@ -575,12 +575,12 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         {
             if (pCubeOutput->nPLvl)
             {
-                nOutputLevel = pCubeOutput->nPLvl * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 100;
+                nOutputLevel = DATATBLS_ApplyRatio(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), pCubeOutput->nPLvl, 100);
             }
 
             if (pCubeOutput->nILvl)
             {
-                nOutputLevel += pCubeOutput->nILvl * pCubeItem[nCounter].nItemLevel / 100;
+                nOutputLevel += DATATBLS_ApplyRatio(pCubeItem[nCounter].nItemLevel, pCubeOutput->nILvl, 100);
             }
         }
 
