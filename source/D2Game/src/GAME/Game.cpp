@@ -747,7 +747,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
 
     if (pGame->nGameType == 1)
     {
-        CLIENT_SetSaveLoaded_6FC34390(pClient);
+        CLIENT_SetGameOwner(pClient);
     }
 
     PARTY_AllocPartyControl(pGame);
@@ -1460,7 +1460,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
     }
 
     D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
-    const uint32_t v10 = CLIENT_IsSaveLoaded(pClient);
+    const uint32_t v10 = CLIENT_IsGameOwner(pClient);
     if (v10 || pGame->nGameType)
     {
         D2ClientStrc* i = pGame->pClientList;
@@ -1582,7 +1582,7 @@ void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
 void __fastcall sub_6FC380D0(D2ClientStrc* pClient, void* pArg)
 {
     D2ClientStrc** ppClient = (D2ClientStrc**)pArg;
-    if (CLIENT_IsSaveLoaded(pClient))
+    if (CLIENT_IsGameOwner(pClient))
     {
         *ppClient = pClient;
     }

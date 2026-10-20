@@ -98,7 +98,7 @@ enum D2ClientFlagsEx
 	CLIENTFLAGEX_ARENA_RELATED		= 0x04,
 	CLIENTFLAGEX_HAS_SAVE_CHECKSUM	= 0x08,
 	CLIENTFLAGEX_SAVE_LOADED		= 0x10,
-	CLIENTFLAGEX_GAME_OWNER		= 0x20,
+	CLIENTFLAGEX_GAME_OWNER			= 0x20,
 };
 
 enum D2ClientsConstants
@@ -352,9 +352,9 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient);
 //D2Game.0x6FC34350
 int32_t __fastcall CLIENT_GetSaveHeader_6FC34350(D2ClientStrc* pClient);
 //D2Game.0x6FC34390
-void __fastcall CLIENT_SetSaveLoaded_6FC34390(D2ClientStrc* pClient);
+void __fastcall CLIENT_SetGameOwner(D2ClientStrc* pClient);
 //D2Game.0x6FC343D0
-uint32_t __fastcall CLIENT_IsSaveLoaded(D2ClientStrc* pClient);
+uint32_t __fastcall CLIENT_IsGameOwner(D2ClientStrc* pClient);
 //D2Game.0x6FC34420
 D2ClientStrc* __fastcall CLIENTS_GetNext(D2ClientStrc* pClient);
 //D2Game.0x6FC34430

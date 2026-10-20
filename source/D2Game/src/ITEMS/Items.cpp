@@ -1636,7 +1636,6 @@ int32_t __fastcall ITEMS_GetItemLevelForNewItem(D2UnitStrc* pUnit, int32_t nLeve
 
         nLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pUnit));
     }
-
     else if (!nLevelId)
     {
         return 1;
