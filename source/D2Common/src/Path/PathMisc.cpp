@@ -1312,6 +1312,7 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit
 
 //1.10f: D2Common.0x6FDADA20
 //1.13c: D2Common.0x6FD5D760
+//1.14d: 0x0064FAD0
 void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom)
 {
 	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY))
@@ -1328,11 +1329,11 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomSt
 		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	}
 
-	if (pRoomAtLocation)
+	if (pRoomAtLocation || (pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0)
 	{
 		PATHMISC_SetRoom(pDynamicPath, pRoomAtLocation);
 	}
-	else if((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+	else
 	{
 		pDynamicPath->dwPathPoints = 0;
 	}
