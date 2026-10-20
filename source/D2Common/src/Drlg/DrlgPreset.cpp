@@ -1535,6 +1535,7 @@ int __fastcall DRLGPRESET_GetSizeY(int nLvlPrestId)
 }
 
 //D2Common.0x6FD87F20
+//1.14d: 0x006683D0
 void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap)
 {
 	D2PresetUnitStrc* pNextPresetUnit = NULL;
@@ -1558,7 +1559,7 @@ void __fastcall DRLGPRESET_FreeDrlgMap(void* pMemPool, D2DrlgMapStrc* pDrlgMap)
 		{
 			pNextPresetUnit = pPresetUnit->pNext;
 
-			DRLGPRESET_FreePresetUnit(NULL, pPresetUnit);
+			DRLGPRESET_FreePresetUnit(pMemPool, pPresetUnit);
 
 			pPresetUnit = pNextPresetUnit;
 		}
