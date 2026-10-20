@@ -521,6 +521,8 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
             return 0;
         }
 
+        const int32_t bKnockback = (int32_t)(ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pSkillsTxtRecord->dwParam[1];
+
         D2DamageStrc damage = {};
         D2GAME_RollPhysicalDamage_6FD14EC0(pUnit, &damage, nSkillId, nSkillLevel);
         D2GAME_RollElementalDamage_6FD14DD0(pUnit, &damage, nSkillId, nSkillLevel);
@@ -533,7 +535,7 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
             damage.dwHitClass = pSkillsTxtRecord->dwHitClass;
         }
 
-        if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < pSkillsTxtRecord->dwParam[1])
+        if (bKnockback)
         {
             damage.wResultFlags |= 9u;
         }

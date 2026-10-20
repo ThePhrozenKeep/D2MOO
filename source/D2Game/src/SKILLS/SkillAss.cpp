@@ -316,7 +316,7 @@ void __fastcall sub_6FCF5680(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
             if (pStatList)
             {
                 const int32_t nSkillId = STATLIST_GetStatValue(pStatList, STAT_MODIFIERLIST_SKILL, 0);
-                D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+                D2SkillsTxt* pSkillsTxtRecord = nSkillId > 0 ? SKILLS_GetSkillsTxtRecord(nSkillId) : nullptr;
                 if (pSkillsTxtRecord && pSkillsTxtRecord->nPrgDamage == 1)
                 {
                     const int32_t nMaxLevel = SKILLS_GetSkillLevel(pUnit, SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId), 1);
@@ -361,7 +361,7 @@ void __fastcall sub_6FCF5870(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
             if (pStatList)
             {
                 const int32_t nSkillId = STATLIST_GetStatValue(pStatList, STAT_MODIFIERLIST_SKILL, 0);
-                D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+                D2SkillsTxt* pSkillsTxtRecord = nSkillId > 0 ? SKILLS_GetSkillsTxtRecord(nSkillId) : nullptr;
                 if (pSkillsTxtRecord)
                 {
                     switch (pSkillsTxtRecord->nPrgDamage)
