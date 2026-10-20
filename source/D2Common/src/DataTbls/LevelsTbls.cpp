@@ -804,6 +804,7 @@ D2LvlMazeTxt* __fastcall DATATBLS_GetLvlMazeTxtRecordFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD62020
+//1.14d: 0x0061F500
 void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 {
 	int nLength = 0;
@@ -867,12 +868,16 @@ void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 		}
 	}
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	// The 1.14d loader no longer allocates the subtype-file critical section.
+#else
 	if (!a2)
 	{
 		D2_ASSERT(gpLvlSubTypeFilesCriticalSection == NULL);
 		gpLvlSubTypeFilesCriticalSection = D2_ALLOC_STRC(CRITICAL_SECTION);
 		InitializeCriticalSection(gpLvlSubTypeFilesCriticalSection);
 	}
+#endif
 
 	if (a2 || a3)
 	{
@@ -908,6 +913,7 @@ void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3)
 }
 
 //D2Common.0x6FD62600
+//1.14d: 0x0061F9C0
 void __fastcall DATATBLS_UnloadLvlSubTxt()
 {
 	D2DrlgFileStrc** ppFiles = sgptDataTables->ppLvlSubTypeFiles;
@@ -944,15 +950,20 @@ void __fastcall DATATBLS_UnloadLvlSubTxt()
 		sgptDataTables->pLvlSubTypeStartIds = NULL;
 	}
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	// No corresponding critical section exists in the 1.14d loader.
+#else
 	if (gpLvlSubTypeFilesCriticalSection)
 	{
 		DeleteCriticalSection(gpLvlSubTypeFilesCriticalSection);
 		D2_FREE(gpLvlSubTypeFilesCriticalSection);
 		gpLvlSubTypeFilesCriticalSection = NULL;
 	}
+#endif
 }
 
 //D2Common.0x6FD626F0
+//1.14d: 0x0061FA90
 D2LvlSubTxt* __fastcall DATATBLS_GetLvlSubTxtRecord(int nSubType)
 {
 	D2_ASSERT(nSubType >= 0);
