@@ -233,34 +233,35 @@ void __fastcall MONSTERUNIQUE_UMod2_HealthBonus(D2UnitStrc* pUnit, int32_t nUMod
 }
 
 //D2Game.0x6FC6AF70
-int32_t __fastcall MONSTERUNIQUE_CalculatePercentage(int32_t a1, int32_t a2, int32_t a3)
+//1.14d: 0x00483360
+int32_t __fastcall MONSTERUNIQUE_CalculatePercentage(int32_t nValue, int32_t nMultiplier, int32_t nDivisor)
 {
-    if (!a3)
+    if (!nDivisor)
     {
         return 0;
     }
 
-    if (a1 <= 1048576)
+    if (nValue <= 0x100000)
     {
-        if (a2 <= 65536)
+        if (nMultiplier <= 0x10000)
         {
-            return a2 * a1 / a3;
+            return static_cast<int32_t>(static_cast<uint32_t>(nMultiplier) * static_cast<uint32_t>(nValue)) / nDivisor;
         }
 
-        if (a3 <= a2 >> 4)
+        if (nDivisor <= (nMultiplier >> 4))
         {
-            return a1 * (a2 / a3);
+            return static_cast<int32_t>(static_cast<uint32_t>(nValue) * static_cast<uint32_t>(nMultiplier / nDivisor));
         }
     }
     else
     {
-        if (a3 <= a1 >> 4)
+        if (nDivisor <= (nValue >> 4))
         {
-            return a2 * (a1 / a3);
+            return static_cast<int32_t>(static_cast<uint32_t>(nMultiplier) * static_cast<uint32_t>(nValue / nDivisor));
         }
     }
 
-    return a2 * (int64_t)a1 / a3;
+    return static_cast<int32_t>(nMultiplier * (int64_t)nValue / nDivisor);
 }
 
 //D2Game.0x6FC6AFF0

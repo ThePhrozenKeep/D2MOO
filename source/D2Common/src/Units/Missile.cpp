@@ -998,6 +998,7 @@ void __stdcall MISSILE_SetDamageStats(D2UnitStrc* pOwner, D2UnitStrc* pMissile, 
 }
 
 //D2Common.0x6FDBB5A0 (#11285)
+//1.14d: 0x0064AF20
 int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
@@ -1039,7 +1040,7 @@ int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = DATATBLS_ApplyRatio(nDamage, nPercentage, 100);
 
 					nDamage += (int)nBonus;
 				}
@@ -1053,6 +1054,7 @@ int __stdcall MISSILE_GetMinDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 }
 
 //D2Common.0x6FDBB710 (#11286)
+//1.14d: 0x0064AFF0
 int __stdcall MISSILE_GetMaxDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
@@ -1094,7 +1096,7 @@ int __stdcall MISSILE_GetMaxDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = DATATBLS_ApplyRatio(nDamage, nPercentage, 100);
 
 					nDamage += (int)nBonus;
 				}
@@ -1121,6 +1123,7 @@ uint8_t __stdcall MISSILE_GetElemTypeFromMissileId(int nMissileId)
 }
 
 //D2Common.0x6FDBB8C0 (#11287)
+//1.14d: 0x0064B100
 int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
@@ -1162,7 +1165,7 @@ int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = DATATBLS_ApplyRatio(nDamage, nPercentage, 100);
 
 					nDamage += (int)nBonus;
 				}
@@ -1176,6 +1179,7 @@ int __stdcall MISSILE_GetMinElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 }
 
 //D2Common.0x6FDBBA30 (#11288)
+//1.14d: 0x0064B1D0
 int __stdcall MISSILE_GetMaxElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner, int nMissileId, int nLevel)
 {
 	D2MissilesTxt* pMissilesTxtRecord = NULL;
@@ -1217,7 +1221,7 @@ int __stdcall MISSILE_GetMaxElemDamage(D2UnitStrc* pMissile, D2UnitStrc* pOwner,
 
 				if (nPercentage)
 				{
-					nBonus = nDamage * nPercentage / 100;
+					nBonus = DATATBLS_ApplyRatio(nDamage, nPercentage, 100);
 
 					nDamage += (int)nBonus;
 				}

@@ -154,18 +154,20 @@ static void STATLIST_SetUnitStatNewValue(D2StatListExStrc* pStatListEx, D2StatsA
 	}
 }
 
-// Helper function
-static int ComputeStatPercentage(int nValue, D2StatListExStrc* pStatListEx, uint16_t opStatId)
+//D2Common.0x6FDB6089 (inlined in sub_6FDB5830)
+//1.14d: 0x00626648
+static int32_t STATLIST_ComputeStatPercentage(int32_t nValue, D2StatListExStrc* pStatListEx, uint16_t nOpStatId)
 {
-	int nOpStatValue = sub_6FDB5830(pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(opStatId).nPackedValue);
+	int32_t nOpStatValue = sub_6FDB5830(pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(nOpStatId).nPackedValue);
 	if (nOpStatValue)
 	{
-		return nValue * (nOpStatValue / 100.0);
+		return DATATBLS_ApplyRatio(nValue, nOpStatValue, 100);
 	}
 	return 0;
 }
 
 //D2Common.0x6FDB5830
+//1.14d: 0x00626200
 int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId)
 {
 	int nAccumulatedValue = 0;
@@ -221,7 +223,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 
 				if (nPreviousOpStatValue)
 				{
-					nAccumulatedValue += ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
+					nAccumulatedValue += STATLIST_ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
 				}
 			}
 			break;
@@ -274,7 +276,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 								if (nRecursiveValue)
 								{
 									int nTemp = (nShiftedVal * nRecursiveValue) >> opStatData.nOpParam;
-									nAccumulatedValue += nTemp * nPreviousOpStatValue / 100.0;
+									nAccumulatedValue += DATATBLS_ApplyRatio(nPreviousOpStatValue, nTemp, 100);
 								}
 							}
 						}
@@ -322,7 +324,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 							if (nRecursiveValue)
 							{
 								int nTemp = (nTmp * nRecursiveValue) >> opStatData.nOpParam;
-								nAccumulatedValue += nPreviousOpStatValue * nTemp / 100.0;
+								nAccumulatedValue += DATATBLS_ApplyRatio(nPreviousOpStatValue, nTemp, 100);
 							}
 						}
 					}
@@ -349,7 +351,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 				{
 					int nBaseTime = 0;
 					int nPeriodOfDay = ENVIRONMENT_GetPeriodOfDayFromAct(pStatListEx->pOwner->pDrlgAct, &nBaseTime);
-					nAccumulatedValue += nAccumulatedValue * ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL) / 100.0;
+					nAccumulatedValue += DATATBLS_ApplyRatio(nAccumulatedValue, ITEMMODS_GetByTimeAdjustment(nTmp, nPeriodOfDay, nBaseTime, NULL, NULL, NULL), 100);
 				}
 			}
 			break;
@@ -406,7 +408,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 			{
 				if (pStatListEx->pOwner && (pStatListEx->pOwner->dwUnitType == UNIT_PLAYER || pStatListEx->pOwner->dwUnitType == UNIT_MONSTER))
 				{
-					nAccumulatedValue += ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
+					nAccumulatedValue += STATLIST_ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
 				}
 			}
 			break;
@@ -421,7 +423,7 @@ int __fastcall sub_6FDB5830(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 					
 					if (nPreviousOpStatValue)
 					{
-						nAccumulatedValue += ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
+							nAccumulatedValue += STATLIST_ComputeStatPercentage(nPreviousOpStatValue, pStatListEx, opStatData.nStat);
 					}
 				}
 			}

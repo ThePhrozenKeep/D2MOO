@@ -22,6 +22,7 @@
 #include "ITEMS/ItemMode.h"
 #include "ITEMS/Items.h"
 #include "ITEMS/ItemsMagic.h"
+#include "MONSTER/MonsterUnique.h"
 #include "OBJECTS/Objects.h"
 #include "OBJECTS/ObjMode.h"
 #include "PLAYER/Player.h"
@@ -575,12 +576,12 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         {
             if (pCubeOutput->nPLvl)
             {
-                nOutputLevel = pCubeOutput->nPLvl * STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0) / 100;
+                nOutputLevel = MONSTERUNIQUE_CalculatePercentage(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), pCubeOutput->nPLvl, 100);
             }
 
             if (pCubeOutput->nILvl)
             {
-                nOutputLevel += pCubeOutput->nILvl * pCubeItem[nCounter].nItemLevel / 100;
+                nOutputLevel += MONSTERUNIQUE_CalculatePercentage(pCubeItem[nCounter].nItemLevel, pCubeOutput->nILvl, 100);
             }
         }
 
