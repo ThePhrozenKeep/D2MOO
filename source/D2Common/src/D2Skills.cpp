@@ -2505,6 +2505,7 @@ int __fastcall SKILLS_CalculateDamageBonusByLevel(int nLevel, int* pLevelDamage)
 }
 
 //D2Common.0x6FDB2390 (#11002)
+//1.14d: 0x00647BC0
 int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -2559,7 +2560,7 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 				if (nBonus)
 				{
-					nDamage += nDamage * nBonus / 100;
+					nDamage += DATATBLS_ApplyRatio(nDamage, nBonus, 100);
 				}
 			}
 
@@ -2571,6 +2572,7 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB25D0 (#11003)
+//1.14d: 0x00647D00
 int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -2626,7 +2628,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 				if (nBonus)
 				{
-					nDamage += nDamage * nBonus / 100;
+					nDamage += DATATBLS_ApplyRatio(nDamage, nBonus, 100);
 				}
 			}
 
@@ -2638,6 +2640,7 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB2810 (#11004)
+//1.14d: 0x00644D50
 int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -2656,7 +2659,7 @@ int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 			if (nBonus)
 			{
-				nDamage += nDamage * nBonus / 100;
+				nDamage += DATATBLS_ApplyRatio(nDamage, nBonus, 100);
 			}
 		}
 
@@ -2700,6 +2703,7 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 }
 
 //D2Common.0x6FDB2B00 (#11005)
+//1.14d: 0x00644E40
 int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -2718,7 +2722,7 @@ int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 
 			if (nBonus)
 			{
-				nDamage += nDamage * nBonus / 100;
+				nDamage += DATATBLS_ApplyRatio(nDamage, nBonus, 100);
 			}
 		}
 
@@ -2734,6 +2738,7 @@ int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB2CA0 (#11006)
+//1.14d: 0x00644F20
 int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bUnused)
 {
 	D2_MAYBE_UNUSED(bUnused);
@@ -2772,7 +2777,7 @@ int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSk
 
 		if (nBonus)
 		{
-			nLength += nLength * nBonus / 100;
+			nLength += DATATBLS_ApplyRatio(nLength, nBonus, 100);
 		}
 	}
 
@@ -3233,9 +3238,10 @@ int __stdcall D2Common_11028(int a1)
 }
 
 //D2Common.0x6FDB3AB0 (#11033)
+//1.14d: 0x00645B20
 int __stdcall D2Common_11033(int nLevel, int nParam, int nMax)
 {
-	int nValue = nParam + (nMax - nParam) * 110 * nLevel / (nLevel + 6) / 100;
+	int nValue = nParam + (nMax - nParam) * (110 * nLevel / (nLevel + 6)) / 100;
 
 	if (nValue > nMax)
 	{
@@ -3555,6 +3561,7 @@ int __stdcall SKILLS_GetConcentrationDamageBonus(D2UnitStrc* pUnit, int nSkillId
 }
 
 //D2Common.0x6FDB4260 (#11283)
+//1.14d: 0x00646280
 void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, int* pMaxDamage, int* pDamagePercent)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -3613,13 +3620,13 @@ void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, in
 					nStrBonus = ITEMS_GetStrengthBonus(pBoots);
 					if (nStrBonus)
 					{
-						nDamagePercent += nStrBonus * STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0) / 100;
+						nDamagePercent += DATATBLS_ApplyRatio(STATLIST_UnitGetStatValue(pUnit, STAT_STRENGTH, 0), nStrBonus, 100);
 					}
 
 					nDexBonus = ITEMS_GetDexBonus(pBoots);
 					if (nDexBonus)
 					{
-						nDamagePercent += nDexBonus * STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0) / 100;
+						nDamagePercent += DATATBLS_ApplyRatio(STATLIST_UnitGetStatValue(pUnit, STAT_DEXTERITY, 0), nDexBonus, 100);
 					}
 
 					nDamagePercent += STATLIST_UnitGetStatValue(pUnit, STAT_DAMAGEPERCENT, 0);
