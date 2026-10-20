@@ -305,8 +305,8 @@ void __fastcall MONSTERUNIQUE_UMod16_Champion(D2UnitStrc* pUnit, int32_t nUMod, 
     D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
     if (pDifficultyLevelsTxtRecord)
     {
-        nDamagePercent = nDamagePercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus / 100;
-        nToHitPercent = nToHitPercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus / 100;
+        nDamagePercent = (int32_t)(nDamagePercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus) / 100;
+        nToHitPercent = (int32_t)(nToHitPercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus) / 100;
     }
 
     STATLIST_AddUnitStat(pUnit, STAT_DAMAGEPERCENT, nDamagePercent, 0);
@@ -425,7 +425,7 @@ void __fastcall MONSTERUNIQUE_UMod39_Berserk(D2UnitStrc* pUnit, int32_t nUMod, i
     D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pUnit->pGame->nDifficulty);
     if (pDifficultyLevelsTxtRecord)
     {
-        nDamage = 3 * pDifficultyLevelsTxtRecord->dwChampionDmgBonus;
+        nDamage = (int32_t)(300u * pDifficultyLevelsTxtRecord->dwChampionDmgBonus) / 100;
     }
     STATLIST_AddUnitStat(pUnit, STAT_DAMAGEPERCENT, nDamage, 0);
     STATLIST_AddUnitStat(pUnit, STAT_ITEM_TOHIT_PERCENT, nDamage, 0);
@@ -689,8 +689,8 @@ void __fastcall MONSTERUNIQUE_UMod5_Strong(D2UnitStrc* pUnit, int32_t nUMod, int
     D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
     if (pDifficultyLevelsTxtRecord)
     {
-        nDamagePercent = nDamagePercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus / 100;
-        nToHitPercent = nToHitPercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus / 100;
+        nDamagePercent = (int32_t)(nDamagePercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus) / 100;
+        nToHitPercent = (int32_t)(nToHitPercent * pDifficultyLevelsTxtRecord->dwChampionDmgBonus) / 100;
     }
 
     STATLIST_AddUnitStat(pUnit, STAT_DAMAGEPERCENT, nDamagePercent, 0);

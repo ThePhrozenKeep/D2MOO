@@ -374,7 +374,7 @@ int32_t __fastcall SKILLS_SrvDo117_Firestorm(D2GameStrc* pGame, D2UnitStrc* pUni
     }
 
     const int32_t nParam = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
-    if (nParam >= 0)
+    if (nParam <= 0)
     {
         return 0;
     }
