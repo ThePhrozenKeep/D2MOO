@@ -5433,7 +5433,7 @@ int32_t __fastcall sub_6FC4AD80(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 
                     if (sub_6FC4AB10(pPlayer, pCorpseItem, &pPlayerItem, &pOtherPlayerItem, &nBodyLoc))
                     {
-                        D2_ASSERT(INVENTORY_GetItemFromBodyLoc(pPlayerInventory, nBodyLoc));
+                        D2_ASSERT(!INVENTORY_GetItemFromBodyLoc(pPlayerInventory, nBodyLoc));
 
                         if (INVENTORY_PlaceItemInBodyLoc(pPlayerInventory, pCorpseItem, nBodyLoc))
                         {
@@ -5952,7 +5952,7 @@ void __fastcall sub_6FC4BBB0(D2GameStrc* pGame, D2UnitStrc* pItem, D2UnitStrc* p
 {
     ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 1);
 
-    if (pItem && pItem->dwAnimMode == IMODE_STORED)
+    if (pItem && pItem->dwAnimMode != IMODE_STORED)
     {
         return;
     }

@@ -875,7 +875,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
         return 0;
     }
 
-    CLIENTS_SetWeaponSwitch(pClient, nFlags & CLIENTSAVEFLAG_WEAPON_SWITCH);
+    CLIENTS_SetWeaponSwitch(pClient, (nFlags & CLIENTSAVEFLAG_WEAPON_SWITCH) != 0);
 
     const int32_t nClassId = *(uint16_t*)&saveHeader[34];
     *pValid = 0;
@@ -1455,7 +1455,8 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
             pParentItem = nullptr;
         }
 
-        for (int32_t j = 0; j < itemSave.nItemFileIndex; ++j)
+        const int32_t nSocketedItems = itemSave.nItemFileIndex;
+        for (int32_t j = 0; j < nSocketedItems; ++j)
         {
             const uint32_t nSocketableBitstreamSize = pSection - pItemBitstream + nSize;
             ITEMS_GetCompactItemDataFromBitstream(pItemBitstream, nSocketableBitstreamSize, 1, &itemSave);
