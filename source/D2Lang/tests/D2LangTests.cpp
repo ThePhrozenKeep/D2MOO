@@ -209,8 +209,8 @@ TEST_CASE("Unicode::strchr")
 
     SUBCASE("Not found in Empty")
     {
-        CHECK(Unicode::strchr(D2_USTR(L""), L'D') == NULL);
-        CHECK(Unicode::strchr(D2_USTR(L""), L'\0') == NULL);
+        CHECK(Unicode::strchr(D2_USTR(L""), L'D') == nullptr);
+        CHECK(Unicode::strchr(D2_USTR(L""), L'\0') == nullptr);
     }
     SUBCASE("Found in 'Diablo'")
     {
@@ -220,9 +220,9 @@ TEST_CASE("Unicode::strchr")
     }
     SUBCASE("Not found in 'Diablo'")
     {
-        CHECK(Unicode::strchr(diablo, L'j') == NULL);
-        CHECK(Unicode::strchr(diablo, 0x190) == NULL);
-        CHECK(Unicode::strchr(diablo, L'\0') == NULL);
+        CHECK(Unicode::strchr(diablo, L'j') == nullptr);
+        CHECK(Unicode::strchr(diablo, 0x190) == nullptr);
+        CHECK(Unicode::strchr(diablo, L'\0') == nullptr);
     }
 }
 

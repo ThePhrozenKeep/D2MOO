@@ -1081,11 +1081,13 @@ int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitSt
             return 0;
         }
 
-        int32_t nManaCost = 0;
-        if (nSkillLevel > 1)
+        int32_t nLevelBonus = nSkillLevel - 1;
+        if (nLevelBonus < 0)
         {
-            nManaCost = (pSkillsTxtRecord->wMana + (nSkillLevel - 1) * pSkillsTxtRecord->wLevelMana) << pSkillsTxtRecord->nManaShift;
+            nLevelBonus = 0;
         }
+
+        int32_t nManaCost = (pSkillsTxtRecord->wMana + nLevelBonus * pSkillsTxtRecord->wLevelMana) << pSkillsTxtRecord->nManaShift;
 
         const int32_t nMinManaCost = pSkillsTxtRecord->wMinMana << 8;
         if (nManaCost < nMinManaCost)
@@ -2690,7 +2692,7 @@ int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUni
         nDelay = 5;
     }
 
-    return nDelay * (pGame->dwGameFrame + nDelay - 1) / nDelay + 1;
+    return (pGame->dwGameFrame + nDelay - 1) / nDelay * nDelay + 1;
 }
 
 //D2Game.0x6FD13260

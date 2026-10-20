@@ -1169,9 +1169,8 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
         {
             nMinions += ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pMonStatsTxtRecord->nPartyMax - nMinions + 1);
         }
-        uint32_t nFlags = (uint32_t)pMonCreate->nFlags;
-        nFlags &= (0xFFFFFF00 & ~(uint8_t)pMonCreate->nFlags);
-        sub_6FC6A8C0(pMonCreate->pGame, pUnit, pMonStatsTxtRecord->wMinion[0], 1, nMinions, ((nFlags >> 2) & 1), 0x40u);
+        const uint32_t bNonWaterSpawn = ((~static_cast<uint32_t>(pMonCreate->nFlags)) >> 2) & 1;
+        sub_6FC6A8C0(pMonCreate->pGame, pUnit, pMonStatsTxtRecord->wMinion[0], 1, nMinions, bNonWaterSpawn, 0x40u);
     }
 }
 

@@ -86,7 +86,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
                 --nHpPct;
             }
 
-            if (MONSTERUNIQUE_CheckMonTypeFlag(pUnit, 0x100u))
+            if (MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_LIGHTNINGUNIQUE))
             {
                 nHpPct |= 0x80;
             }
@@ -269,7 +269,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
             --nUnitLife;
         }
 
-        if (MONSTERUNIQUE_CheckMonTypeFlag(pMonster, 0x100u))
+        if (MONSTERUNIQUE_CheckMonTypeFlag(pMonster, MONTYPEFLAG_LIGHTNINGUNIQUE))
         {
             nUnitLife |= 0x80u;
         }

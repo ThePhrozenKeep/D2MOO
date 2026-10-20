@@ -219,6 +219,7 @@ void __stdcall TEXT_CreateTextHeaderFromMessageList(D2TextHeaderStrc* pTextHeade
 }
 
 //D2Common.0x6FDC3A70 (#10911)
+//1.14d: 0x006616E0 (insertion sort 0x006615F0 with the unsigned comparator 0x006615D0, same ordering)
 void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 {
 	D2_ASSERT(pTextHeader != nullptr);
@@ -242,13 +243,13 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 		++nodeIndex;
 	}
 
-	// Sort the node list via insertion sort.
-	short nPreviousStringId = pNodeList[0].nStringId;
+	// Sort the node list via insertion sort. String ids are compared unsigned.
+	uint16_t nPreviousStringId = pNodeList[0].nStringId;
 	int nPreviousMenu = pNodeList[0].nMenu;
 
 	for (size_t i = 0; i + 1 < pTextHeader->nCount; ++i)
 	{
-		short nStringId = pNodeList[i + 1].nStringId;
+		uint16_t nStringId = pNodeList[i + 1].nStringId;
 		int nMenu = pNodeList[i + 1].nMenu;
 
 		// If the current node is sorted, move to the next node.
@@ -266,7 +267,7 @@ void __stdcall TEXT_SortTextNodeListByStringId(D2TextHeaderStrc* pTextHeader)
 		int nId;
 		for (nId = i; nId != 0; --nId)
 		{
-			if (pNodeList[nId - 1].nStringId <= nStringId)
+			if ((uint16_t)pNodeList[nId - 1].nStringId <= nStringId)
 			{
 				break;
 			}

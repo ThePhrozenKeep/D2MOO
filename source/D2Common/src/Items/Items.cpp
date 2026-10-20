@@ -1028,7 +1028,7 @@ static bool ITEMS_CheckStatRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2C
 	{
 		bStatReqMet = TRUE;
 		// Note: Owner was not checked in the original game for STAT_DEXTERITY
-		if (bEquipping && STATLIST_GetOwner(pItem, 0))
+		if (bEquipping && (stat == STAT_DEXTERITY || STATLIST_GetOwner(pItem, 0)))
 		{
 			const int nStatBonusFromSockets = ITEMS_GetBonusStatFromSockets(pItem, stat);
 			if ((nUnitStat - nStatBonusFromSockets) <= 0 || (nUnitStat - nStatBonusFromSockets) < nStatWithPctBonus)
@@ -2367,7 +2367,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						{
 							if (nDurability < nMaxDura - 1)
 							{
-								nRepCost *= (nMaxDura - 1) / nMaxDura;
+								nRepCost = static_cast<int32_t>(static_cast<uint32_t>(nRepCost) * static_cast<uint32_t>(nMaxDura - 1)) / nMaxDura;
 							}
 							else
 							{
@@ -2376,7 +2376,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						}
 						else
 						{
-							nRepCost *= (nMaxDura - nDurability) / nMaxDura;
+							nRepCost = static_cast<int32_t>(static_cast<uint32_t>(nRepCost) * static_cast<uint32_t>(nMaxDura - nDurability)) / nMaxDura;
 						}
 					}
 					else

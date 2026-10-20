@@ -3514,11 +3514,11 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x4B_RequestEntityUpdate_6FC880F0(D2
         const uint32_t nUnitType = *(uint32_t*)((char*)pPacket + 1);
         if (nUnitType < 6)
         {
-            D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, nUnitType, *(int32_t*)((char*)pPacket + 5));
-            if (pUnit && UNITFINDS_AreUnitsInNeighboredRooms(pUnit, pUnit))
+            D2UnitStrc* pTargetUnit = SUNIT_GetServerUnit(pGame, nUnitType, *(int32_t*)((char*)pPacket + 5));
+            if (pTargetUnit && UNITFINDS_AreUnitsInNeighboredRooms(pUnit, pTargetUnit))
             {
-                UNITROOM_RefreshUnit(pUnit);
-                pUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
+                UNITROOM_RefreshUnit(pTargetUnit);
+                pTargetUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
                 return 0;
             }
             

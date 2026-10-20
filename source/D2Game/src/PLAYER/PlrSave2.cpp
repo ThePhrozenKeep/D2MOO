@@ -511,15 +511,14 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
         return 2;
     }
 
-    int32_t nResult = PLRSAVE2_WriteSaveHeader(pGame, pPlayer, &pData, &pData[nMaxSize]);
+    const uint8_t* pEnd = &pData[nMaxSize];
+    uint8_t* ppSection = pData;
+    int32_t nResult = PLRSAVE2_WriteSaveHeader(pGame, pPlayer, &ppSection, pEnd);
     if (nResult)
     {
         return nResult;
     }
 
-    const uint8_t* pEnd = &pData[nMaxSize];
-    
-    uint8_t* ppSection = pData;
     if (ppSection + 298 > pEnd)
     {
         return 1;
@@ -1607,7 +1606,8 @@ int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pCl
 
         uint8_t* pSectionEnd = pSection + 298;
         const uint32_t nVersion = pSaveHeader->dwVersion;
-        if (pSectionEnd > pSaveFileEnd || pSaveHeader->dwHeaderMagic != '!ooW' || nVersion != 6)
+        const D2SaveHeaderStrc* pQuestHeader = (const D2SaveHeaderStrc*)pSection;
+        if (pSectionEnd > pSaveFileEnd || pQuestHeader->dwHeaderMagic != '!ooW' || pQuestHeader->dwVersion != 6)
         {
             nErrorCode = PLRSAVE2ERROR_BAD_QUESTRECORD;
         }
