@@ -1305,6 +1305,7 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit
 
 //1.10f: D2Common.0x6FDADA20
 //1.13c: D2Common.0x6FD5D760
+//1.14d: 0x0064FAD0
 void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom)
 {
 	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY))
@@ -1321,11 +1322,13 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomSt
 		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	}
 
-	if (pRoomAtLocation)
+	// Both binaries leave the room (SetRoom(nullptr)) when none contains the position, unless the path is a missile's
+	// (1.10f: test 40000h at 0x6FDADBC2, jz into the inlined SetRoom at 0x6FDADBDA; 1.14d: 0x0064FB3C, jz 0x0064FB54)
+	if (pRoomAtLocation || (pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0)
 	{
 		PATHMISC_SetRoom(pDynamicPath, pRoomAtLocation);
 	}
-	else if((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+	else
 	{
 		pDynamicPath->dwPathPoints = 0;
 	}
