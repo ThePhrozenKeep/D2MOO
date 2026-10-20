@@ -2185,7 +2185,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         nRandCount = 9 - nIndex;
     }
 
-    D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount < 256);
+    D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount <= 256);
     uint8_t bUModUsageTable[256] = {};
 
     for (int32_t i = 0; i < nIndex; ++i)
@@ -2683,7 +2683,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
         return pMonster;
     }
 
-    D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount < 256);
+    D2_ASSERT(sgptDataTables->nMonUModTxtRecordCount <= 256);
     uint8_t bUModUsageTable[256] = {};
 
     int32_t bAuraEnchanted = 0;

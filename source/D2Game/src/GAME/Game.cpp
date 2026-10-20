@@ -3257,8 +3257,10 @@ void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink)
 void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
 {
     D2_MAYBE_UNUSED(nUnused);
-    //TODO: Fix squall impl
-    D2_ASSERTM(nCount >= pArray->Count(), "Squall's implementation is buggy, and won't work if new size is smaller than old one. (should destroy objects after nCount)");
+    for (uint32_t nIndex = nCount; nIndex < pArray->Count(); ++nIndex)
+    {
+        D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(&(*pArray)[nIndex]);
+    }
     pArray->SetCount(nCount);
 }
  

@@ -3434,6 +3434,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
 
             if (sub_6FC83C60(pUnit, CLIENTS_GetUnitX(pWaypoint), CLIENTS_GetUnitY(pWaypoint), nMaxDistance))
             {
+                if (pWaypoint == SUNIT_GetInteractUnit(pGame, pUnit))
+                {
+                    SUNIT_ResetInteractInfo(pUnit);
+                }
                 return 1;
             }
 
