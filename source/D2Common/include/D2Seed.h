@@ -65,5 +65,5 @@ inline uint32_t __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int n
 
 inline uint32_t SEED_RollPercentage(D2SeedStrc* pSeed)
 {
-	return (SEED_RollRandomNumber(pSeed) % 100);
+	return ((uint32_t)SEED_RollRandomNumber(pSeed) % 100);
 }
