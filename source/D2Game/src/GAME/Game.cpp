@@ -260,7 +260,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
         {
             // Truncate so that we have enough space for the game ID
             // Somehow the original game truncated at 10 characters instead of 11 ?
-            szGameName[ARRAY_SIZE(D2GameStrc::szGameName) - 1 - nCharactersForSuffix] = '\0';
+            szGameName[ARRAY_SIZE(D2GameStrc::szGameName) - 2 - nCharactersForSuffix] = '\0';
         }
 
         char szGameNameWithID[ARRAY_SIZE(D2GameStrc::szGameName)];
@@ -2212,7 +2212,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
                         const int32_t nUpdateSize = (499 - pPacketData->nPacketSize) / 9;
                         if (nUpdateSize > 0)
                         {
-                            D2_ASSERT(nUpdateSize < CLIENTS_MAX_UPDATES);
+                            D2_ASSERT(nUpdateSize <= CLIENTS_MAX_UPDATES);
                             CLIENTS_RefreshUnitsUpdateList(pClient, nUpdateSize);
                             D2GAME_PACKETS_SendPacket0x16_UnitsUpdate(pClient);
                         }
@@ -2565,7 +2565,7 @@ int32_t __stdcall D2Game_10057()
 //D2Game.0x6FC39C70 (#10053)
 void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
 {
-    memset(pCount, 0, nArraySize);
+    memset(pCount, 0, sizeof(*pCount) * (nArraySize + 1));
 
     for (int32_t i = 0; i < 1024; ++i)
     {
