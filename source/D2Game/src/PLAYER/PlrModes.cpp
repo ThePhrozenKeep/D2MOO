@@ -514,7 +514,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
 
     const int32_t nExpLoss = CLIENTS_GetExperienceLoss(pClient);
     CLIENTS_SetExperienceLoss(pClient, 0);
-    STATLIST_SetUnitStat(pDeadBody, STAT_EXPERIENCE, DATATBLS_ApplyRatio(nExpLoss, 75, 100), 0);
+    STATLIST_SetUnitStat(pDeadBody, STAT_EXPERIENCE, MONSTERUNIQUE_CalculatePercentage(nExpLoss, 75, 100), 0);
 
     INVENTORY_CreateCorpseForPlayer(pUnit->pInventory, pDeadBody->dwUnitId, 0, 1);
 

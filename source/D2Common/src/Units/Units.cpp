@@ -2404,7 +2404,6 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDC0AC0 (#10432)
-//1.14d: 0x00622560
 int __stdcall UNITS_GetAttackRate(D2UnitStrc* pAttacker)
 {
 	D2CharStatsTxt* pCharStatsTxtRecord = NULL;

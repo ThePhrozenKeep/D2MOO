@@ -265,7 +265,6 @@ int32_t __fastcall MONSTERUNIQUE_CalculatePercentage(int32_t nValue, int32_t nMu
 }
 
 //D2Game.0x6FC6AFF0
-//1.14d: 0x005A0E40
 void __fastcall MONSTERUNIQUE_UMod4_LevelBonus(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
