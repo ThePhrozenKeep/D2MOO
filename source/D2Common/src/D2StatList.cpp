@@ -96,7 +96,7 @@ decltype(T::pStat) __fastcall StatArray_InsertStat(void* pMemPool, T* pStatsArra
 	if (insertionIdx < pStatsArray->nStatCount)
 	{
 		// Move memory by 1 slot so that we can insert our stat
-		memmove(&pStatsArray->pStat[insertionIdx + 1], &pStatsArray->pStat[insertionIdx], (pStatsArray->nStatCount - insertionIdx) * sizeof(D2StatStrc));
+		memmove(&pStatsArray->pStat[insertionIdx + 1], &pStatsArray->pStat[insertionIdx], (pStatsArray->nStatCount - insertionIdx) * sizeof(*pStatsArray->pStat));
 	}
 
 	pStatsArray->pStat[insertionIdx] = {}; // Default init to 0
@@ -484,6 +484,7 @@ int __fastcall STATLIST_GetTotalStat_6FDB63E0(D2StatListStrc* pStatList, D2SLaye
 }
 
 //D2Common.0x6FDB64A0
+//1.14d: 0x006266C0
 int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, D2ItemStatCostTxt* pItemStatCostTxtRecord, D2UnitStrc* pUnit)
 {
 	int nNewValue = sub_6FDB5830(pStatListEx, nLayer_StatId);
@@ -556,8 +557,13 @@ int __fastcall sub_6FDB64A0(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::P
 						{
 							if (D2ItemStatCostTxt* pOpItemStatCost = ITEMS_GetItemStatCostTxtRecord(nOpBase))
 							{
-								int nOpStatValue = STATLIST_GetTotalStat_6FDB63E0(pStatListEx->pUnit->pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(nOpBase).nPackedValue, pOpItemStatCost);
-								bUpdate = nOpStatValue <= 0;
+								// Only clears the update (1.10f 0x6FDB67EA / 1.14d 0x00626811: jle past it), and only for a unit with
+								// a stat list
+								if (pStatListEx->pUnit->pStatListEx
+									&& STATLIST_GetTotalStat_6FDB63E0(pStatListEx->pUnit->pStatListEx, D2SLayerStatIdStrc::MakeFromStatId(nOpBase).nPackedValue, pOpItemStatCost) > 0)
+								{
+									bUpdate = FALSE;
+								}
 							}
 						}
 					}
@@ -699,6 +705,7 @@ void __fastcall STATLIST_UpdateUnitStat_6FDB6AB0(D2StatListExStrc* pStatListEx, 
 }
 
 //D2Common.0x6FDB6C10
+//1.14d: 0x00626920
 void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::PackedType nLayer_StatId, int nValue, D2UnitStrc* pUnit)
 {
 	if (!nValue)
@@ -734,10 +741,22 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::
 		{
 			D2StatStrc* pStat = STATLIST_GetOrInsertStat(pParentStatList->pMemPool, &pParentStatList->FullStats, nLayer_StatId);
 
-			int nNewValue = pStat->nValue + nValue;
-			D2_ASSERTM(!(nNewValue < 0 && pItemStatCostTxtRecord->bHasOpApplyingToItem), 
-				"Original game does not set STATLIST_PERMANENT if (nNewValue <= 0), while we do when (nNewValue != 0).");
-			STATLIST_SetUnitStatNewValue(pParentStatList, &pParentStatList->FullStats, pStat, nLayer_StatId, nNewValue, pItemStatCostTxtRecord, pUnit);
+			// Unlike STATLIST_SetUnitStatNewValue, the delta is always stored and only a positive sum marks the list
+			// STATLIST_PERMANENT (1.10f 0x6FDB6D1A / 1.14d 0x006250EB: jle past the or)
+			const int nPreviousValue = pStat->nValue;
+			const int nNewValue = nPreviousValue + nValue;
+			pStat->nValue = nNewValue;
+			if (nNewValue > 0 && pItemStatCostTxtRecord->bHasOpApplyingToItem)
+			{
+				pParentStatList->dwFlags |= STATLIST_PERMANENT;
+			}
+
+			if (pStat->nValue == 0 && !pItemStatCostTxtRecord->nKeepZero)
+			{
+				STATLIST_RemoveStat_6FDB6A30(pParentStatList->pMemPool, &pParentStatList->FullStats, pStat);
+			}
+
+			STATLIST_NotifyUnitOfStatValueChange(pItemStatCostTxtRecord, pParentStatList, pUnit, nLayer_StatId, nPreviousValue, nNewValue);
 		}
 		if ((pParentStatList->dwFlags & STATLIST_SET) || (bStatIsDamageRelated && (pParentStatList->dwFlags & STATLIST_DYNAMIC)))
 		{
@@ -749,6 +768,7 @@ void __fastcall sub_6FDB6C10(D2StatListExStrc* pStatListEx, D2SLayerStatIdStrc::
 }
 
 //D2Common.0x6FDB6E30
+//1.14d: 0x006269F0
 void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 {
 	if (!pStatList)
@@ -824,12 +844,7 @@ void __stdcall D2Common_ExpireStatList_6FDB6E30(D2StatListStrc* pStatList)
 		{
 			D2StatsArrayStrc* pStatsArray = STATLIST_IsExtended(pStatList) ? &pStatListEx->FullStats : &pStatList->Stats;
 
-			D2StatListExStrc* pParentStatListEx = STATLIST_StatListExCast(pParentStatList);
-			// Something looks wrong, seems like some checks were eluded in D2Common.0x6FDB6C10
-			// Or inversely, the check above is useless as pParentStatListEx is in fact always an extended statlist
-			// if it exists or when STATLIST_SET is set on the current statlist ?
-			// In any case, we add an assert here
-			D2_ASSERT(pParentStatListEx);
+			D2StatListExStrc* pParentStatListEx = reinterpret_cast<D2StatListExStrc*>(pParentStatList);
 
 			if (pStatList->dwFlags & STATLIST_DYNAMIC)
 			{
@@ -1056,6 +1071,7 @@ int __stdcall STATLIST_GetExpireFrame(D2StatListStrc* pStatList)
 }
 
 //D2Common.0x6FDB7340 (#10475)
+//1.14d: 0x00626E10
 void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListStrc* pStatList, BOOL bResetFlag)
 {
 	if (D2StatListExStrc* pUnitStatListEx = STATLIST_StatListExCast(pUnit->pStatListEx))
@@ -1111,7 +1127,12 @@ void __stdcall D2COMMON_10475_PostStatToStatList(D2UnitStrc* pUnit, D2StatListSt
 			if (pStatListEx)
 			{
 				pOwner = pStatListEx->pOwner;
+			}
 
+			// The op stats that apply to items are evaluated first only on a list marked STATLIST_PERMANENT
+			// (1.10f 0x6FDB73EF / 1.14d 0x00626EC4: test 20000000h)
+			if (pStatListEx && (pStatListEx->dwFlags & STATLIST_PERMANENT))
+			{
 				int nCounter = 0;
 				D2SLayerStatIdStrc nLayer_StatIds[16] = {};
 				for (D2StatStrc* pCurStat = pStatListEx->FullStats.pStat; pCurStat < &pStatListEx->FullStats.pStat[pStatListEx->FullStats.nStatCount]; ++pCurStat)
@@ -1196,6 +1217,7 @@ void __stdcall STATLIST_AddStat(D2StatListStrc* pStatList, int nStatId, int nVal
 }
 
 //D2Common.0x6FDB7690
+//1.14d: 0x00624DD0
 void __fastcall STATLIST_InsertStatModOrFail_6FDB7690(D2StatListStrc* pStatList, D2SLayerStatIdStrc::PackedType nLayer_StatId)
 {
 	if (D2StatListExStrc* pStatListEx = STATLIST_StatListExCast(pStatList))
