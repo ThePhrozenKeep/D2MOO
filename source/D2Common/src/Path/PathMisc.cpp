@@ -20,8 +20,6 @@ struct D2UnkPathStrc
 	int unk0x08;
 };
 
-// Unsigned, as the binaries read them (1.14d 0x00678DF0 movzx): an unused third direction is PATH_DIR_NULL (0xFF),
-// which PATH_CheckTestDirForCollisions skips.
 struct D2UnkPathStrc2
 {
 	uint8_t unk0x00;
@@ -255,8 +253,6 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 		if (PATH_CheckTestDirForCollisions(pPathInfo, pTestDir, aTestDirPathPoints, &nFreeOfCollisionDirectionIndex))
 		{
 			pPathInfo->tTargetCoord = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
-			// The selected point, whichever direction found it, is compared with the start (1.10f D2Common.0x6FDA8C75,
-			// 1.14d 0x006482C7).
 			if (pPathInfo->tStartCoord == pPathInfo->tTargetCoord)
 			{
 				return 0;

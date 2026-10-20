@@ -1281,7 +1281,6 @@ void __stdcall DUNGEON_ClientToGameSubtileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8A0 (#10109)
-//1.14d: 0x00643540
 void __stdcall DUNGEON_ClientToGameCoords(int* pX, int* pY)
 {
 	int nX = 2 * *pY + *pX;
@@ -1303,7 +1302,6 @@ void __stdcall DUNGEON_GameTileToClientCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D630 (#10111)
-//1.14d: 0x00643260
 void __stdcall DUNGEON_GameSubtileToClientCoords(int* pX, int* pY)
 {
 	const int nOutX = 16 * (*pX - *pY);
@@ -1325,7 +1323,6 @@ void __stdcall DUNGEON_GameToClientCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8C0 (#10113)
-//1.14d: 0x00643560
 void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* pY)
 {
 	*pX *= 5;
