@@ -1,8 +1,14 @@
 #include "D2Net.h"
 
+
 #include <algorithm>
+#include <cstdint>
+#include <cstring>
+
+#include <Windows.h>
 
 #include <Fog.h>
+#include <Packet.h>
 
 
 #pragma warning (disable: 28159)
@@ -35,7 +41,7 @@ int32_t __fastcall NET_DequeueFirstPacketFromList(CRITICAL_SECTION* pCriticalSec
 		return -1;
 	}
 
-	memcpy(pBuffer, pPacket, std::min(nBufferSize, MAX_MSG_SIZE));
+	std::memcpy(pBuffer, pPacket, std::min(nBufferSize, MAX_MSG_SIZE));
 
 	const int32_t nPacketSize = pPacket->nPacketSize;
 

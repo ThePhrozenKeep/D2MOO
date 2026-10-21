@@ -1,12 +1,23 @@
 #include "Client.h"
 
-#include <algorithm>
+
+#include <climits>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <iterator>
+
+#include <Windows.h>
+#include <WinSock2.h>
+#include <ws2def.h>
 
 #include <Fog.h>
-#include <Storm.h>
+#include <Safesock.h>
+#include <Storm/String.hpp>
 
-#include "D2Net.h"
-#include "Server.h"
+#include <D2Net.h>
+#include <Packet.h>
+#include <Server.h>
 
 
 #pragma warning (disable: 6387)
@@ -66,7 +77,7 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
 		exit(-1);
 	}
 
-	memset(&gHostSockAddr, 0x00, sizeof(gHostSockAddr));
+	std::memset(&gHostSockAddr, 0x00, sizeof(gHostSockAddr));
 
 	gHostSockAddr.sin_family = AF_INET;
 	gHostSockAddr.sin_port = htons(GAME_PORT);
@@ -113,7 +124,7 @@ int32_t __stdcall D2NET_10025()
 }
 
 //D2Net.0x6FC011B0 (#10000)
-void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
+int32_t __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 {
 	gpGamePacketList = nullptr;
 	gpSystemPacketList = nullptr;
@@ -127,11 +138,12 @@ void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 	if (sub_6FC01A00())
 	{
 		sub_6FC02110();
-		return;
+		return 1;
 	}
 
 	ghClientConnectToHostThreadHandle = CreateThread(nullptr, 0, CLIENT_ConnectToHost, (void*)szIpAddress, 0, &gdwThreadId);
-	SetThreadDescription(ghClientThread, L"D2ClientConnectToHostThread"); // D2Moo only
+	SetThreadDescription(ghClientConnectToHostThreadHandle, L"D2ClientConnectToHostThread"); // D2Moo only
+	return ghClientConnectToHostThreadHandle != nullptr;
 }
 
 //D2Net.0x6FC01240 (#10001)
@@ -196,6 +208,7 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 	// TODO: Names
 	int32_t bPacket0xAEReceived = 0;
 	int32_t v2 = 0;
+	uint8_t buffer[2496] = {};
 
 	while (!dword_6FC0B25C)
 	{
@@ -240,8 +253,6 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 				}
 				else
 				{
-					uint8_t buffer[2496] = {};
-
 					const int32_t v5 = recv(gClientSocket, (char*)&buffer[v2], 1460, 0);
 					v4 = v5;
 					if (v5 > 0)
@@ -414,7 +425,7 @@ int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t n
 	if (sub_6FC01A00())
 	{
 		D2_ASSERT(nBufferSize <= MAX_MSG_SIZE);
-		return SERVER_EnqueuePacketToMessageList(pBuffer, nBufferSize);
+		return SERVER_EnqueuePacketToMessageList(pBuffer, static_cast<uint16_t>(nBufferSize));
 	}
 
 	const int32_t nSentBytes = send(gClientSocket, (const char*)pBuffer, nBufferSize, 0);
