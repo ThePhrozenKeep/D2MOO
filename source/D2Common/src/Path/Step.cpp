@@ -752,7 +752,8 @@ BOOL __stdcall D2Common_10231_Impl(D2DynamicPathStrc* pDynamicPath, D2ActiveRoom
 int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2ActiveRoomStrc* pRooms, uint16_t nX, uint16_t nY)
 {
 	D2_MAYBE_UNUSED(pUnit_unused);
-	D2Common_10231_Impl(pDynamicPath, pRooms, D2PathPointStrc{ nX, nY });
+	D2PathPointStrc tDest = { nX, nY };
+	D2Common_10231_Impl(pDynamicPath, pRooms, tDest);
 	pDynamicPath->dwPathPoints = 0;
 	return TRUE;
 }
