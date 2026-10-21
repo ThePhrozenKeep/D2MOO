@@ -16,10 +16,18 @@
 
 
 QServer* gpServer;
-int32_t gnLocalClientGameGuid_6FC0B26C;
+int32_t gnLocalClientGameGUID;
 
 
 constexpr int32_t VARIABLE_PACKET_SIZE = -1;
+
+constexpr uint8_t CLIENT_PACKET_HEADER_ADMIN = 0xFF;
+
+// Return values of SERVER_ValidateClientPacket
+constexpr int32_t PACKET_VALIDATION_QUEUED = 1;
+constexpr int32_t PACKET_VALIDATION_QUEUED_SYSTEM = 2;
+constexpr int32_t PACKET_VALIDATION_INCOMPLETE = 3;
+constexpr int32_t PACKET_VALIDATION_INVALID = 4;
 
 
 //D2Net.0x6FC01B30 (#10024)
@@ -29,7 +37,7 @@ int32_t __stdcall SERVER_WSAGetLastError()
 }
 
 //D2Net.0x6FC01B60 (#10030)
-int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
+int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
 	constexpr int32_t gServerPacketSizeTable[] =
 	{
@@ -251,21 +259,21 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 			return 0;
 		}
 
-		const char* v6 = (const char*)&pBuffer->data[10];
-		const int32_t v7 = SStrLen(v6) + 11;
-		if (nBufferSize < v7)
+		const char* szName = (const char*)&pBuffer->data[10];
+		const int32_t nSizeUpToMessage = SStrLen(szName) + 11;
+		if (nBufferSize < nSizeUpToMessage)
 		{
 			return 0;
 		}
 
-		const int32_t v8 = SStrLen(v6);
-		const int32_t result = v7 + SStrLen(&v6[v8 + 1]) + 1;
-		if (nBufferSize < result)
+		const char* szMessage = &szName[SStrLen(szName) + 1];
+		const int32_t nPacketSize = nSizeUpToMessage + SStrLen(szMessage) + 1;
+		if (nBufferSize < nPacketSize)
 		{
 			return 0;
 		}
 
-		*pSize = result;
+		*pSize = nPacketSize;
 		return *pSize;
 	}
 	case 0x3Eu:
@@ -385,7 +393,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint3
 }
 
 //D2Net.0x6FC01E60 (#10031)
-int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
+int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
 	constexpr int32_t gClientPacketSizeTable[] =
 	{
@@ -509,7 +517,7 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 	}
 
 	const uint8_t nHeader = pBuffer->data[0];
-	if (nHeader == 0xFF)
+	if (nHeader == CLIENT_PACKET_HEADER_ADMIN)
 	{
 		*pSize = 16;
 		return 1;
@@ -536,28 +544,29 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 			return 0;
 		}
 
-		const char* v7 = (const char*)&pBuffer->data[3];
-		const int32_t v8 = SStrLen(v7) + 4;
-		if (nBufferSize < v8)
+		const char* szMessage = (const char*)&pBuffer->data[3];
+		const int32_t nSizeUpToSecondString = SStrLen(szMessage) + 4;
+		if (nBufferSize < nSizeUpToSecondString)
 		{
 			return 0;
 		}
 
-		const char* v9 = &v7[SStrLen(v7) + 1];
-		const size_t v9Len = SStrLen(v9);
-		const int32_t v10 = v8 + v9Len + 1;
-		if (nBufferSize < v10)
+		const char* szSecondString = &szMessage[SStrLen(szMessage) + 1];
+		const size_t nSecondStringLength = SStrLen(szSecondString);
+		const int32_t nSizeUpToTrailingData = nSizeUpToSecondString + nSecondStringLength + 1;
+		if (nBufferSize < nSizeUpToTrailingData)
 		{
 			return 0;
 		}
 
-		const int32_t result = v10 + v9[v9Len + 1] + 1;
-		if (nBufferSize < result)
+		// Byte following the second string gives the size of the remaining data
+		const int32_t nPacketSize = nSizeUpToTrailingData + szSecondString[nSecondStringLength + 1] + 1;
+		if (nBufferSize < nPacketSize)
 		{
 			return 0;
 		}
 
-		*pSize = result;
+		*pSize = nPacketSize;
 		return *pSize;
 	}
 	case 0x6B:
@@ -579,95 +588,97 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint3
 }
 
 //D2Net.0x6FC01FA0 (#10039)
-D2NET_CLIENT_SendFunctionType __stdcall D2NET_10039()
+D2NET_CLIENT_SendFunctionType __stdcall SERVER_GetClientSendFunction()
 {
 	return CLIENT_Send;
 }
 
 //D2Net.0x6FC01FB0 (#10040)
-D2NET_SERVER_GetClientGameGUIDFunctionType __stdcall D2NET_10040()
+D2NET_SERVER_GetClientGameGUIDFunctionType __stdcall SERVER_GetClientGameGUIDFunction()
 {
 	return SERVER_GetClientGameGUID;
 }
 
 //D2Net.0x6FC01FC0
-int32_t __fastcall SERVER_ReadPacketFromBufferCallback(QServer* nUnused, D2PacketBufferStrc* pPacketBuffer, int32_t nBufferSize)
+int32_t __fastcall SERVER_SendToLocalClientCallback(QServer* pUnused, D2NetReceiveBufferStrc* pPacketBuffer, int32_t nBufferSize)
 {
-	D2_MAYBE_UNUSED(nUnused);
-	CLIENT_ReadPacketFromBuffer(pPacketBuffer, nBufferSize);
+	D2_MAYBE_UNUSED(pUnused);
+	CLIENT_EnqueuePacketsFromLocalServer(pPacketBuffer, nBufferSize);
 	return 1;
 }
 
 //D2Net.0x6FC01FE0
-int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2)
+int32_t __fastcall SERVER_ValidateClientPacket(D2NetReceiveBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* pPacketSize, int32_t* a4, int32_t* pPacketQueue, int32_t* a6, int32_t nUnused1, int32_t nUnused2)
 {
 	int32_t nSize = 0;
 	if (nBufferSize == 0 || !SERVER_GetClientPacketSize(pPacketBuffer, nBufferSize, &nSize))
 	{
-		return 3;
+		return PACKET_VALIDATION_INCOMPLETE;
 	}
 
 	const uint8_t nHeader = pPacketBuffer->data[0];
-	if ((nHeader >= 0x70u && nHeader != 0xFF) || nSize < 0 || nSize > MAX_MSG_SIZE)
+	if ((nHeader >= 0x70u && nHeader != CLIENT_PACKET_HEADER_ADMIN) || nSize < 0 || nSize > MAX_MSG_SIZE)
 	{
-		return 4;
+		return PACKET_VALIDATION_INVALID;
 	}
 
 	if (nSize > nBufferSize)
 	{
-		return 3;
+		return PACKET_VALIDATION_INCOMPLETE;
 	}
 
 	*a4 = 0;
-	*a3 = nSize;
+	*pPacketSize = nSize;
 
 	if (nHeader < 0x66u)
 	{
-		*a5 = 1;
+		*pPacketQueue = SERVER_PACKET_QUEUE_GAME;
 	}
 	else if (nHeader < 0x70u)
 	{
-		*a5 = 0;
+		*pPacketQueue = SERVER_PACKET_QUEUE_SYSTEM;
 	}
 	else
 	{
-		*a5 = 2;
+		*pPacketQueue = SERVER_PACKET_QUEUE_ADMIN;
 	}
 
 	*a6 = 100;
 
-	if (*a5 == 1 || *a5 == 2)
+	if (*pPacketQueue == SERVER_PACKET_QUEUE_GAME || *pPacketQueue == SERVER_PACKET_QUEUE_ADMIN)
 	{
-		return 1;
+		return PACKET_VALIDATION_QUEUED;
 	}
 
-	return 2;
+	return PACKET_VALIDATION_QUEUED_SYSTEM;
 }
 
 //D2Net.0x6FC020B0
-int32_t __fastcall sub_6FC020B0(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4)
+int32_t __fastcall SERVER_OnClientConnectedCallback(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4)
 {
-	uint8_t data[2] = { 0xAE, 1 };
+	// Tell the new client that the stream will be compressed from now on
+	uint8_t compressionInfo[2] = { SERVER_PACKET_HEADER_COMPRESSION_INFO, 1 };
 
-	D2NET_10006(0, nClientId, data, sizeof(data));
+	SERVER_SendPacketToClient(D2NET_SEND_SYSTEM, nClientId, compressionInfo, sizeof(compressionInfo));
 	return 1;
 }
 
 //D2Net.0x6FC020E0
-int32_t __fastcall sub_6FC020E0(int32_t a1, int32_t a2, int32_t a3, int32_t a4)
+int32_t __fastcall SERVER_OnClientDisconnectedCallback(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4)
 {
-	const uint8_t data[1] = { 0x6F };
+	// Enqueue D2CLTSYS_REMOVEFROMGAME on behalf of the disconnected client
+	const uint8_t removeFromGame[1] = { 0x6F };
 
-	FOG_10175(gpServer, data, sizeof(data), a2);
+	FOG_10175(gpServer, removeFromGame, sizeof(removeFromGame), nClientId);
 	return 1;
 }
 
 //D2Net.0x6FC02110
-int32_t __fastcall sub_6FC02110()
+int32_t __fastcall SERVER_DisableLocalClientCompression()
 {
-	uint8_t data[2] = { 0xAE, 0 };
+	uint8_t compressionInfo[2] = { SERVER_PACKET_HEADER_COMPRESSION_INFO, 0 };
 
-	return D2NET_10006(0, 0, data, sizeof(data));
+	return SERVER_SendPacketToClient(D2NET_SEND_SYSTEM, 0, compressionInfo, sizeof(compressionInfo));
 }
 
 //D2Net.0x6FC02130 (#10002)
@@ -679,7 +690,7 @@ int32_t __stdcall SERVER_WaitForSingleObject(uint32_t dwMilliseconds)
 //D2Net.0x6FC02150 (#10003)
 void __stdcall SERVER_Initialize(int32_t a1, int32_t a2)
 {
-	gpServer = FOG_InitializeServer(a1, 3, GAME_PORT, a2, SERVER_ValidateClientPacket, sub_6FC020B0, sub_6FC020E0, SERVER_ReadPacketFromBufferCallback);
+	gpServer = FOG_InitializeServer(a1, 3, GAME_PORT, a2, SERVER_ValidateClientPacket, SERVER_OnClientConnectedCallback, SERVER_OnClientDisconnectedCallback, SERVER_SendToLocalClientCallback);
 }
 
 //D2Net.0x6FC02190 (#10035)
@@ -715,71 +726,70 @@ void __stdcall SERVER_SetHackListEnabled(BOOL bEnabled)
 //D2Net.0x6FC02220 (#10004)
 void __stdcall SERVER_Release()
 {
-	const uint8_t data[1] = { 0xAF };
-	FOG_10152(gpServer, data, sizeof(data));
+	// D2GSPacketSrvAF
+	const uint8_t disconnectPacket[1] = { 0xAF };
+	FOG_10152(gpServer, disconnectPacket, sizeof(disconnectPacket));
 
 	gpServer = nullptr;
 }
 
-// TODO: Better name
 //D2Net.0x6FC02250 (#10010)
-int32_t __stdcall SERVER_ReadFromMessageList1(uint8_t* pBuffer, int32_t nBufferSize)
+int32_t __stdcall SERVER_ReadGamePacket(uint8_t* pBuffer, int32_t nBufferSize)
 {
-	return FOG_10156(gpServer, 1, pBuffer, nBufferSize);
+	return FOG_10156(gpServer, SERVER_PACKET_QUEUE_GAME, pBuffer, nBufferSize);
 }
 
-// TODO: Better name
 //D2Net.0x6FC02270 (#10011)
-int32_t __stdcall SERVER_ReadFromMessageList0(uint8_t* pBuffer, int32_t nBufferSize)
+int32_t __stdcall SERVER_ReadSystemPacket(uint8_t* pBuffer, int32_t nBufferSize)
 {
-	return FOG_10156(gpServer, 0, pBuffer, nBufferSize);
+	return FOG_10156(gpServer, SERVER_PACKET_QUEUE_SYSTEM, pBuffer, nBufferSize);
 }
 
-// TODO: Better name
 //D2Net.0x6FC02290 (#10012)
-int32_t __stdcall SERVER_ReadFromMessageList2(uint8_t* pBuffer, int32_t nBufferSize)
+int32_t __stdcall SERVER_ReadAdminPacket(uint8_t* pBuffer, int32_t nBufferSize)
 {
-	return FOG_10156(gpServer, 2, pBuffer, nBufferSize);
+	return FOG_10156(gpServer, SERVER_PACKET_QUEUE_ADMIN, pBuffer, nBufferSize);
 }
 
 //D2Net.0x6FC022B0 (#10006)
-uint32_t __stdcall D2NET_10006(int8_t a1, int32_t nClientId, void* pBufferArg, uint32_t nBufferSize)
+uint32_t __stdcall SERVER_SendPacketToClient(int8_t nSendMode, int32_t nClientId, void* pPacketArg, uint32_t nPacketSize)
 {
-	const uint8_t* pBuffer = (const uint8_t*)pBufferArg;
+	const uint8_t* pPacket = (const uint8_t*)pPacketArg;
 
-	D2_ASSERT(nBufferSize <= MAX_MSG_SIZE);
+	D2_ASSERT(nPacketSize <= MAX_MSG_SIZE);
 
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
-		CLIENT_ReadPacketFromBuffer((D2PacketBufferStrc*)pBuffer, nBufferSize);
-		return nBufferSize;
+		CLIENT_EnqueuePacketsFromLocalServer((D2NetReceiveBufferStrc*)pPacket, nPacketSize);
+		return nPacketSize;
 	}
 
-	if (!a1 && *pBuffer == 0xAE)
+	if (nSendMode == D2NET_SEND_SYSTEM && *pPacket == SERVER_PACKET_HEADER_COMPRESSION_INFO)
 	{
-		return FOG_10157(gpServer, nClientId, pBuffer, nBufferSize) != 0 ? nBufferSize : 0;
+		return FOG_10157(gpServer, nClientId, pPacket, nPacketSize) != 0 ? nPacketSize : 0;
 	}
 
-	FOG_10222(pBuffer, nBufferSize);
-	if (a1 == 2)
+	FOG_10222(pPacket, nPacketSize);
+	if (nSendMode == D2NET_SEND_UNCOMPRESSED)
 	{
-		return FOG_10157(gpServer, nClientId, pBuffer, nBufferSize) != 0 ? nBufferSize : 0;
+		return FOG_10157(gpServer, nClientId, pPacket, nPacketSize) != 0 ? nPacketSize : 0;
 	}
 
-	uint8_t data[1036] = {};
-	const uint32_t nSize = FOG_10223(&data[2], 1032, pBuffer, nBufferSize);
-	D2_ASSERT(nSize);
+	// Compressed frame, prefixed by its total size on 1 byte (< 0xF0) or on 12 bits spread over 2 bytes (0xFX XX)
+	uint8_t frame[1036] = {};
+	const uint32_t nCompressedSize = FOG_10223(&frame[2], 1032, pPacket, nPacketSize);
+	D2_ASSERT(nCompressedSize);
 
-	if (nSize + 1 < 0xF0)
+	if (nCompressedSize + 1 < 0xF0)
 	{
-		data[1] = nSize + 1;
-		return FOG_10157(gpServer, nClientId, &data[1], nSize + 1) != 0 ? nSize + 1 : 0;
+		frame[1] = nCompressedSize + 1;
+		return FOG_10157(gpServer, nClientId, &frame[1], nCompressedSize + 1) != 0 ? nCompressedSize + 1 : 0;
 	}
 
-	const uint32_t v6 = nSize + 2;
-	data[0] = BYTE1(v6) | 0xF0;
-	data[1] = nSize + 2;
-	return FOG_10157(gpServer, nClientId, data, v6) != 0 ? v6 : 0;
+	const uint32_t nFrameSize = nCompressedSize + 2;
+	frame[0] = BYTE1(nFrameSize) | 0xF0;
+	frame[1] = nCompressedSize + 2;
+	return FOG_10157(gpServer, nClientId, frame, nFrameSize) != 0 ? nFrameSize : 0;
 }
 
 //D2Net.0x6FC02410 (#10014)
@@ -842,9 +852,9 @@ void __stdcall D2NET_10018(int32_t a1)
 }
 
 //D2Net.0x6FC02530 (#10019)
-int32_t __stdcall D2NET_10019(D2NET_Unk_Callback pfCallback)
+int32_t __stdcall SERVER_SetRemoveClientCallback(D2NET_RemoveClientCallback pfRemoveClient)
 {
-	return FOG_10171(gpServer, pfCallback);
+	return FOG_10171(gpServer, pfRemoveClient);
 }
 
 //D2Net.0x6FC02550 (#10020)
@@ -855,7 +865,7 @@ int32_t __stdcall SERVER_SetClientGameGUID(int32_t nClientId, int32_t dwGameGuid
 		return FOG_10172(gpServer, nClientId, dwGameGuid);
 	}
 
-	gnLocalClientGameGuid_6FC0B26C = dwGameGuid;
+	gnLocalClientGameGUID = dwGameGuid;
 
 	return dwGameGuid;
 }
@@ -868,15 +878,16 @@ int32_t __stdcall SERVER_GetClientGameGUID(int32_t nClientId)
 		return FOG_10173(gpServer, nClientId);
 	}
 
-	return gnLocalClientGameGuid_6FC0B26C;
+	return gnLocalClientGameGUID;
 }
 
 //D2Net.0x6FC025A0
-int32_t __fastcall SERVER_EnqueuePacketToMessageList(const uint8_t* pBuffer, uint16_t wSize)
+int32_t __fastcall SERVER_EnqueueLocalClientPacket(const uint8_t* pPacket, uint16_t nPacketSize)
 {
-	D2_ASSERT(wSize <= MAX_MSG_SIZE);
+	D2_ASSERT(nPacketSize <= MAX_MSG_SIZE);
 
-	return FOG_10175(gpServer, pBuffer, wSize, 0) != 0;
+	// The local client always has client id 0
+	return FOG_10175(gpServer, pPacket, nPacketSize, 0) != 0;
 }
 
 //D2Net.0x6FC025F0 (#10022)

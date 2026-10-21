@@ -24,44 +24,44 @@
 #pragma warning (disable: 28159)
 
 
-CRITICAL_SECTION gCriticalSection;
-D2PacketStrc* gpSystemPacketList;
+CRITICAL_SECTION gClientCriticalSection;
+D2NetQueuedPacketStrc* gpSystemPacketList;
 sockaddr_in gHostSockAddr;
-D2PacketStrc* gpGamePacketList;
-D2PacketBufferStrc* gpPacketBuffer;
-HANDLE ghClientThread;
+D2NetQueuedPacketStrc* gpGamePacketList;
+D2NetReceiveBufferStrc* gpReceiveBuffer;
+HANDLE ghReceiveThread;
 SOCKET gClientSocket;
-HANDLE ghClientConnectToHostThreadHandle;
+HANDLE ghConnectThread;
 WSADATA gWSAData;
 DWORD gdwThreadId;
-int32_t dword_6FC0B25C;
-int32_t dword_6FC0B260;
+BOOL gbStopReceiveThread;
+BOOL gbConnected;
 
 
 //D2Net.0x6FC01000 (#10017)
-int32_t __stdcall D2NET_10017()
+int32_t __stdcall CLIENT_IsConnected()
 {
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
 		return 1;
 	}
 
-	if (!gpPacketBuffer)
+	if (!gpReceiveBuffer)
 	{
 		return 0;
 	}
 
-	D2_LOCK(&gCriticalSection);
-	const int32_t v1 = dword_6FC0B260;
-	D2_UNLOCK(&gCriticalSection);
+	D2_LOCK(&gClientCriticalSection);
+	const BOOL bConnected = gbConnected;
+	D2_UNLOCK(&gClientCriticalSection);
 
-	return v1;
+	return bConnected;
 }
 
 //D2Net.0x6FC01040
-DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
+DWORD __stdcall CLIENT_ConnectToHost(void* szHostAddress)
 {
-	dword_6FC0B25C = 0;
+	gbStopReceiveThread = 0;
 
 	if (WSAStartup(MAKEWORD(1, 1), &gWSAData))
 	{
@@ -81,7 +81,7 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
 
 	gHostSockAddr.sin_family = AF_INET;
 	gHostSockAddr.sin_port = htons(GAME_PORT);
-	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_ResolveHostIPAddress((const char*)szIpAddress)); // NOLINT
+	gHostSockAddr.sin_addr.s_addr = inet_addr(FOG_ResolveHostIPAddress((const char*)szHostAddress)); // NOLINT
 
 	if (connect(gClientSocket, (sockaddr*)&gHostSockAddr, sizeof(sockaddr_in)) == -1)
 	{
@@ -92,92 +92,92 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szIpAddress)
 }
 
 //D2Net.0x6FC01120 (#10025)
-int32_t __stdcall D2NET_10025()
+int32_t __stdcall CLIENT_GetConnectionStatus()
 {
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
-		return 2;
+		return CLIENT_CONNECTION_ESTABLISHED;
 	}
 
-	if (WaitForSingleObject(ghClientConnectToHostThreadHandle, 100))
+	if (WaitForSingleObject(ghConnectThread, 100))
 	{
-		return 1;
+		return CLIENT_CONNECTION_PENDING;
 	}
 
 	if (!gClientSocket)
 	{
-		return 0;
+		return CLIENT_CONNECTION_FAILED;
 	}
 
-	if (!sub_6FC01A00())
+	if (!NET_IsLocalConnection())
 	{
-		D2_LOCK(&gCriticalSection);
-		dword_6FC0B260 = 1;
-		D2_UNLOCK(&gCriticalSection);
+		D2_LOCK(&gClientCriticalSection);
+		gbConnected = 1;
+		D2_UNLOCK(&gClientCriticalSection);
 	}
 
-	ghClientThread = CreateThread(nullptr, 0, CLIENT_ThreadProc, nullptr, 0, &gdwThreadId);
-	SetThreadPriority(ghClientThread, 1);
+	ghReceiveThread = CreateThread(nullptr, 0, CLIENT_ReceiveThreadProc, nullptr, 0, &gdwThreadId);
+	SetThreadPriority(ghReceiveThread, 1);
 	
-	SetThreadDescription(ghClientThread, L"D2ClientThread"); // D2Moo only
-	return 2;
+	SetThreadDescription(ghReceiveThread, L"D2ClientThread"); // D2Moo only
+	return CLIENT_CONNECTION_ESTABLISHED;
 }
 
 //D2Net.0x6FC011B0 (#10000)
-int32_t __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
+int32_t __stdcall CLIENT_Initialize(int32_t nConnectionMode, const char* szHostAddress)
 {
 	gpGamePacketList = nullptr;
 	gpSystemPacketList = nullptr;
 
-	InitializeCriticalSection(&gCriticalSection);
+	InitializeCriticalSection(&gClientCriticalSection);
 
-	gpPacketBuffer = D2_CALLOC_STRC(D2PacketBufferStrc);
+	gpReceiveBuffer = D2_CALLOC_STRC(D2NetReceiveBufferStrc);
 
-	sub_6FC01A20(a1);
+	NET_SetConnectionMode(nConnectionMode);
 
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
-		sub_6FC02110();
+		SERVER_DisableLocalClientCompression();
 		return 1;
 	}
 
-	ghClientConnectToHostThreadHandle = CreateThread(nullptr, 0, CLIENT_ConnectToHost, (void*)szIpAddress, 0, &gdwThreadId);
-	SetThreadDescription(ghClientConnectToHostThreadHandle, L"D2ClientConnectToHostThread"); // D2Moo only
-	return ghClientConnectToHostThreadHandle != nullptr;
+	ghConnectThread = CreateThread(nullptr, 0, CLIENT_ConnectToHost, (void*)szHostAddress, 0, &gdwThreadId);
+	SetThreadDescription(ghConnectThread, L"D2ClientConnectToHostThread"); // D2Moo only
+	return ghConnectThread != nullptr;
 }
 
 //D2Net.0x6FC01240 (#10001)
 void __stdcall CLIENT_Release()
 {
-	D2_LOCK(&gCriticalSection);
+	D2_LOCK(&gClientCriticalSection);
 
-	if (gpPacketBuffer)
+	if (gpReceiveBuffer)
 	{
-		D2_FREE(gpPacketBuffer);
+		D2_FREE(gpReceiveBuffer);
 	}
 
-	gpPacketBuffer = nullptr;
+	gpReceiveBuffer = nullptr;
 
-	dword_6FC0B25C = 1;
+	gbStopReceiveThread = 1;
 
-	D2_UNLOCK(&gCriticalSection);
+	D2_UNLOCK(&gClientCriticalSection);
 
-	WaitForSingleObject(ghClientThread, 6000u);
+	WaitForSingleObject(ghReceiveThread, 6000u);
 
-	NET_FreePacketList(&gCriticalSection, &gpSystemPacketList);
-	NET_FreePacketList(&gCriticalSection, &gpGamePacketList);
+	NET_FreePacketList(&gClientCriticalSection, &gpSystemPacketList);
+	NET_FreePacketList(&gClientCriticalSection, &gpGamePacketList);
 
 #ifdef NO_BUG_FIX
 	// Original game would lock the CS here, but it is actually undefined behaviour to then delete it.
 	// "If a critical section is deleted while it is still owned, the state of the threads waiting for ownership of the deleted critical section is undefined."
-	// This never happens because no thread other than the current one should use this critical section after ghClientThread is closed anyway.
+	// This never happens because no thread other than the current one should use this critical section after ghReceiveThread is closed anyway.
 	// Just in case, don't do it.
-	D2_LOCK(&gCriticalSection);
+	D2_LOCK(&gClientCriticalSection);
 #endif
 
-	DeleteCriticalSection(&gCriticalSection);
+	DeleteCriticalSection(&gClientCriticalSection);
 
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
 		return;
 	}
@@ -193,24 +193,24 @@ void __stdcall CLIENT_Release()
 //D2Net.0x6FC01300 (#10007)
 int32_t __stdcall CLIENT_DequeueGamePacket(uint8_t* pBuffer, uint32_t nBufferSize)
 {
-	return NET_DequeueFirstPacketFromList(&gCriticalSection, &gpGamePacketList, pBuffer, nBufferSize);
+	return NET_DequeueFirstPacketFromList(&gClientCriticalSection, &gpGamePacketList, pBuffer, nBufferSize);
 }
 
 //D2Net.0x6FC01310 (#10008)
 int32_t __stdcall CLIENT_DequeueSystemPacket(uint8_t* pBuffer, uint32_t nBufferSize)
 {
-	return NET_DequeueFirstPacketFromList(&gCriticalSection, &gpSystemPacketList, pBuffer, nBufferSize);
+	return NET_DequeueFirstPacketFromList(&gClientCriticalSection, &gpSystemPacketList, pBuffer, nBufferSize);
 }
 
 //D2Net.0x6FC01320
-DWORD __stdcall CLIENT_ThreadProc(void* a1)
+DWORD __stdcall CLIENT_ReceiveThreadProc(void* pUnused)
 {
-	// TODO: Names
-	int32_t bPacket0xAEReceived = 0;
-	int32_t v2 = 0;
-	uint8_t buffer[2496] = {};
+	BOOL bCompressionEnabled = FALSE;
+	// Compressed bytes received from the socket, not yet decompressed into gpReceiveBuffer
+	int32_t nCompressedBytes = 0;
+	uint8_t compressedBuffer[2496] = {};
 
-	while (!dword_6FC0B25C)
+	while (!gbStopReceiveThread)
 	{
 		fd_set readfds = {};
 		readfds.fd_array[0] = gClientSocket;
@@ -220,104 +220,106 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 		timeout.tv_sec = 0;
 		timeout.tv_usec = 100'000;
 
-		int32_t v4 = select(0, &readfds, nullptr, nullptr, &timeout);
-		if (v4)
+		int32_t nResult = select(0, &readfds, nullptr, nullptr, &timeout);
+		if (nResult)
 		{
-			if (v4 == -1)
+			if (nResult == -1)
 			{
 				WSAGetLastError();
-				if (!sub_6FC01A00())
+				if (!NET_IsLocalConnection())
 				{
-					D2_LOCK(&gCriticalSection);
-					dword_6FC0B260 = 0;
-					D2_UNLOCK(&gCriticalSection);
+					D2_LOCK(&gClientCriticalSection);
+					gbConnected = 0;
+					D2_UNLOCK(&gClientCriticalSection);
 				}
 			}
 			else if (__WSAFDIsSet(gClientSocket, &readfds))
 			{
-				if (dword_6FC0B25C)
+				if (gbStopReceiveThread)
 				{
 					OutputDebugStringA("Client thread close #3\n");
 					ExitThread(0);
 				}
 
-				D2_LOCK(&gCriticalSection);
-				if (!bPacket0xAEReceived)
+				D2_LOCK(&gClientCriticalSection);
+				if (!bCompressionEnabled)
 				{
-					const int32_t v10 = recv(gClientSocket, (char*)&gpPacketBuffer->data[gpPacketBuffer->nUsedBytes], 1460, 0);
-					if (v10 > 0)
+					const int32_t nReceivedBytes = recv(gClientSocket, (char*)&gpReceiveBuffer->data[gpReceiveBuffer->nUsedBytes], 1460, 0);
+					if (nReceivedBytes > 0)
 					{
-						gpPacketBuffer->nUsedBytes += v10;
-						bPacket0xAEReceived = CLIENT_ReadPacketsFromStream();
+						gpReceiveBuffer->nUsedBytes += nReceivedBytes;
+						bCompressionEnabled = CLIENT_ParseReceiveBuffer();
 					}
 				}
 				else
 				{
-					const int32_t v5 = recv(gClientSocket, (char*)&buffer[v2], 1460, 0);
-					v4 = v5;
-					if (v5 > 0)
+					const int32_t nReceivedBytes = recv(gClientSocket, (char*)&compressedBuffer[nCompressedBytes], 1460, 0);
+					nResult = nReceivedBytes;
+					if (nReceivedBytes > 0)
 					{
-						v2 += v5;
+						nCompressedBytes += nReceivedBytes;
 
-						int32_t v6 = 0;
-						while (v2 >= 2)
+						// Each compressed frame starts with its total size, encoded on 1 byte (< 0xF0) or on 12 bits spread over 2 bytes (0xFX XX)
+						int32_t nFrameOffset = 0;
+						while (nCompressedBytes >= 2)
 						{
-							uint8_t v7 = buffer[v6];
-							int32_t v8 = 0;
-							if (v7 >= 0xF0u)
+							const uint8_t nFirstByte = compressedBuffer[nFrameOffset];
+							int32_t nFrameSize = 0;
+							if (nFirstByte >= 0xF0u)
 							{
-								v8 = (uint8_t)buffer[v6 + 1] + ((v7 & 0xF) << 8);
+								nFrameSize = (uint8_t)compressedBuffer[nFrameOffset + 1] + ((nFirstByte & 0xF) << 8);
 							}
 							else
 							{
-								v8 = v7;
+								nFrameSize = nFirstByte;
 							}
 
-							if (v2 < v8)
+							if (nCompressedBytes < nFrameSize)
 							{
 								break;
 							}
 
-							v4 = FOG_10224((char*)&gpPacketBuffer->data[gpPacketBuffer->nUsedBytes], int(sizeof(gpPacketBuffer->data) - gpPacketBuffer->nUsedBytes), &buffer[v6] + 2 - ((uint32_t)v8 < 0xF0), v8 - (2 - ((uint32_t)v8 < 0xF0)));
-							v2 -= v8;
-							v6 += v8;
-							if (v4 > 0)
+							const int32_t nFrameHeaderSize = 2 - ((uint32_t)nFrameSize < 0xF0);
+							nResult = FOG_10224((char*)&gpReceiveBuffer->data[gpReceiveBuffer->nUsedBytes], int(sizeof(gpReceiveBuffer->data) - gpReceiveBuffer->nUsedBytes), &compressedBuffer[nFrameOffset] + nFrameHeaderSize, nFrameSize - nFrameHeaderSize);
+							nCompressedBytes -= nFrameSize;
+							nFrameOffset += nFrameSize;
+							if (nResult > 0)
 							{
-								gpPacketBuffer->nUsedBytes += v4;
-								CLIENT_ReadPacketsFromStream();
+								gpReceiveBuffer->nUsedBytes += nResult;
+								CLIENT_ParseReceiveBuffer();
 							}
 						}
 
-						if (v2 && v6)
+						if (nCompressedBytes && nFrameOffset)
 						{
-							memcpy(buffer, &buffer[v6], v2);
+							memcpy(compressedBuffer, &compressedBuffer[nFrameOffset], nCompressedBytes);
 						}
 					}
 				}
 
-				D2_UNLOCK(&gCriticalSection);
+				D2_UNLOCK(&gClientCriticalSection);
 
-				if (v4 == -1)
+				if (nResult == -1)
 				{
 					WSAGetLastError();
-					if (!sub_6FC01A00())
+					if (!NET_IsLocalConnection())
 					{
-						D2_LOCK(&gCriticalSection);
-						dword_6FC0B260 = 0;
-						D2_UNLOCK(&gCriticalSection);
+						D2_LOCK(&gClientCriticalSection);
+						gbConnected = 0;
+						D2_UNLOCK(&gClientCriticalSection);
 					}
 
 					OutputDebugStringA("Client thread close #5\n");
 					ExitThread(0);
 				}
 
-				if (!v4)
+				if (!nResult)
 				{
-					if (!sub_6FC01A00())
+					if (!NET_IsLocalConnection())
 					{
-						D2_LOCK(&gCriticalSection);
-						dword_6FC0B260 = 0;
-						D2_UNLOCK(&gCriticalSection);
+						D2_LOCK(&gClientCriticalSection);
+						gbConnected = 0;
+						D2_UNLOCK(&gClientCriticalSection);
 					}
 
 					OutputDebugStringA("Client thread close #6\n");
@@ -332,11 +334,11 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 }
 
 //D2Net.0x6FC015C0
-int32_t __stdcall CLIENT_ReadPacketsFromStream()
+int32_t __stdcall CLIENT_ParseReceiveBuffer()
 {
-	D2PacketBufferStrc* pPacketBuffer = gpPacketBuffer;
-	int32_t nUsedBytes = gpPacketBuffer->nUsedBytes;
-	int32_t bIsPacket0xAE = 0;
+	D2NetReceiveBufferStrc* pPacketBuffer = gpReceiveBuffer;
+	int32_t nUsedBytes = gpReceiveBuffer->nUsedBytes;
+	BOOL bCompressionEnabled = FALSE;
 
 	while (nUsedBytes >= 1)
 	{
@@ -353,16 +355,16 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			break;
 		}
 
-		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
+		D2NetQueuedPacketStrc* pPacket = D2_ALLOC_STRC(D2NetQueuedPacketStrc);
 		pPacket->nPacketSize = nSize;
-		pPacket->dwTickCount = 0;
+		pPacket->dwReceiveTick = 0;
 		pPacket->pNext = nullptr;
 
 		memcpy(&pPacket->data, pPacketBuffer->data, nSize);
 
-		if (pPacketBuffer->data[0] == 0xAE && pPacketBuffer->data[1])
+		if (pPacketBuffer->data[0] == SERVER_PACKET_HEADER_COMPRESSION_INFO && pPacketBuffer->data[1])
 		{
-			bIsPacket0xAE = 1;
+			bCompressionEnabled = TRUE;
 
 			if (pPacketBuffer->data[1] == 0x81)
 			{
@@ -384,8 +386,8 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			*(uint32_t*)&pPacket->data[13] = GetTickCount();
 		}
 
-		D2PacketStrc** ppLast = nullptr;
-		if (pPacketBuffer->data[0] >= 0xAEu)
+		D2NetQueuedPacketStrc** ppLast = nullptr;
+		if (pPacketBuffer->data[0] >= SERVER_SYSTEM_PACKET_HEADER_MIN)
 		{
 			ppLast = &gpSystemPacketList;
 		}
@@ -394,38 +396,38 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			ppLast = &gpGamePacketList;
 		}
 
-		for (D2PacketStrc* i = *ppLast; i; i = i->pNext)
+		for (D2NetQueuedPacketStrc* pQueuedPacket = *ppLast; pQueuedPacket; pQueuedPacket = pQueuedPacket->pNext)
 		{
-			ppLast = &i->pNext;
+			ppLast = &pQueuedPacket->pNext;
 		}
 		*ppLast = pPacket;
 
-		pPacketBuffer = (D2PacketBufferStrc*)((char*)pPacketBuffer + nSize);
+		pPacketBuffer = (D2NetReceiveBufferStrc*)((char*)pPacketBuffer + nSize);
 		nUsedBytes -= nSize;
 	}
 
-	gpPacketBuffer->nUsedBytes = nUsedBytes;
+	gpReceiveBuffer->nUsedBytes = nUsedBytes;
 
-	if (nUsedBytes && pPacketBuffer != gpPacketBuffer)
+	if (nUsedBytes && pPacketBuffer != gpReceiveBuffer)
 	{
-		memcpy(gpPacketBuffer, pPacketBuffer, nUsedBytes);
+		memcpy(gpReceiveBuffer, pPacketBuffer, nUsedBytes);
 	}
 
-	return bIsPacket0xAE;
+	return bCompressionEnabled;
 }
 
 //D2Net.0x6FC01760 (#10005)
 int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t nBufferSize)
 {
-	if (!gpPacketBuffer)
+	if (!gpReceiveBuffer)
 	{
 		return 0;
 	}
 
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
 		D2_ASSERT(nBufferSize <= MAX_MSG_SIZE);
-		return SERVER_EnqueuePacketToMessageList(pBuffer, static_cast<uint16_t>(nBufferSize));
+		return SERVER_EnqueueLocalClientPacket(pBuffer, static_cast<uint16_t>(nBufferSize));
 	}
 
 	const int32_t nSentBytes = send(gClientSocket, (const char*)pBuffer, nBufferSize, 0);
@@ -435,26 +437,26 @@ int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t n
 	}
 
 	WSAGetLastError();
-	if (sub_6FC01A00())
+	if (NET_IsLocalConnection())
 	{
 		return 0;
 	}
 
-	D2_LOCK(&gCriticalSection);
-	dword_6FC0B260 = 0;
-	D2_UNLOCK(&gCriticalSection);
+	D2_LOCK(&gClientCriticalSection);
+	gbConnected = 0;
+	D2_UNLOCK(&gClientCriticalSection);
 	return 0;
 }
 
 //D2Net.0x6FC01810
-void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t nBufferSize)
+void __fastcall CLIENT_EnqueuePacketsFromLocalServer(D2NetReceiveBufferStrc* pBuffer, int32_t nBufferSize)
 {
-	D2PacketBufferStrc* pPacketBuffer = pBuffer;
+	D2NetReceiveBufferStrc* pPacketBuffer = pBuffer;
 	int32_t nRemainingBytes = nBufferSize;
 
 	while (nRemainingBytes > 0)
 	{
-		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
+		D2NetQueuedPacketStrc* pPacket = D2_ALLOC_STRC(D2NetQueuedPacketStrc);
 
 		int32_t nSize = 0;
 		if (!SERVER_GetServerPacketSize(pPacketBuffer, nRemainingBytes, &nSize))
@@ -468,18 +470,18 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 		memcpy(&pPacket->data, pPacketBuffer->data, nSize);
 
 		pPacket->nPacketSize = nSize;
-		pPacket->dwTickCount = GetTickCount();
+		pPacket->dwReceiveTick = GetTickCount();
 		pPacket->pNext = nullptr;
 
 		const uint8_t nHeader = pPacketBuffer->data[0];
-		if (nHeader >= 0xB4u)
+		if (nHeader >= SERVER_PACKET_HEADER_END)
 		{
 			FOG_DisplayHalt("Bad message type", __FILE__, __LINE__);
 			exit(-1);
 		}
 
-		D2PacketStrc* pLast = nullptr;
-		if (nHeader >= 0xAEu)
+		D2NetQueuedPacketStrc* pLast = nullptr;
+		if (nHeader >= SERVER_SYSTEM_PACKET_HEADER_MIN)
 		{
 			pLast = gpSystemPacketList;
 		}
@@ -490,21 +492,21 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 
 		if (pLast)
 		{
-			for (D2PacketStrc* i = pLast->pNext; i; i = i->pNext)
+			for (D2NetQueuedPacketStrc* pQueuedPacket = pLast->pNext; pQueuedPacket; pQueuedPacket = pQueuedPacket->pNext)
 			{
-				pLast = i;
+				pLast = pQueuedPacket;
 			}
 			pLast->pNext = pPacket;
 		}
 		else
 		{
-			if (nHeader >= 0xB4u)
+			if (nHeader >= SERVER_PACKET_HEADER_END)
 			{
 				FOG_DisplayHalt("Bad message type", __FILE__, __LINE__);
 				exit(-1);
 			}
 
-			if (nHeader >= 0xAEu)
+			if (nHeader >= SERVER_SYSTEM_PACKET_HEADER_MIN)
 			{
 				gpSystemPacketList = pPacket;
 			}
@@ -514,7 +516,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 			}
 		}
 
-		pPacketBuffer = (D2PacketBufferStrc*)((char*)pPacketBuffer + nSize);
+		pPacketBuffer = (D2NetReceiveBufferStrc*)((char*)pPacketBuffer + nSize);
 		nRemainingBytes -= nSize;
 	}
 }
@@ -522,12 +524,12 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 //D2Net.0x6FC019A0 (#10013)
 void __stdcall CLIENT_GetLocalIpAddressString(char* szBuffer)
 {
-	sockaddr_in sa = {};
-	int32_t sa_len = sizeof(sa);
+	sockaddr_in localSockAddr = {};
+	int32_t nLocalSockAddrSize = sizeof(localSockAddr);
 
-	getsockname(gClientSocket, (sockaddr*)&sa, &sa_len);
+	getsockname(gClientSocket, (sockaddr*)&localSockAddr, &nLocalSockAddrSize);
 
-	const char* szLocalIpAddress = inet_ntoa(sa.sin_addr); // NOLINT
+	const char* szLocalIpAddress = inet_ntoa(localSockAddr.sin_addr); // NOLINT
 
 	SStrCopy(szBuffer, szLocalIpAddress, INT_MAX);
 }

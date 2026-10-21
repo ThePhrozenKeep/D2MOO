@@ -136,7 +136,7 @@ int32_t __stdcall D2Game_10046()
     memset(gnGamesGUIDs_6FD447F8, 0, sizeof(gnGamesGUIDs_6FD447F8));
     InitializeCriticalSection(&gCriticalSection_6FD45800);
     CLIENTS_Initialize();
-    D2NET_10019(sub_6FC36B20);
+    SERVER_SetRemoveClientCallback(sub_6FC36B20);
     SUNITPROXY_FillGlobalItemCache();
     return TRUE;
 }
@@ -1414,7 +1414,7 @@ void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientSt
         *pPacketData++ = *pData++;
     }
 
-    if (D2NET_10006(0, pClient->dwClientId, pPacket, nDataSize + 7))
+    if (SERVER_SendPacketToClient(D2NET_SEND_SYSTEM, pClient->dwClientId, pPacket, nDataSize + 7))
     {
         pClient->nSaveHeaderDataSentBytes += nDataSize;
 
@@ -1663,26 +1663,26 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.field_0xf5 = tGameServerInfoEx.word0xD4;
                 memcpy(tPacket.field_0xf6, tGameServerInfoEx.szUnk0xD6, sizeof(tPacket.field_0xf6));
                 memset(tPacket.nZeroed, 0, sizeof(tPacket.nZeroed));
-                D2NET_10006(2, nClientIdx, &tPacket, tPacket.nPacketSubType == 1 ? sizeof(D2GSPacketSrvFF01) : sizeof(D2GSPacketSrvFFFD));
+                SERVER_SendPacketToClient(D2NET_SEND_UNCOMPRESSED, nClientIdx, &tPacket, tPacket.nPacketSubType == 1 ? sizeof(D2GSPacketSrvFF01) : sizeof(D2GSPacketSrvFFFD));
             }
             break;
         case PACKET_ADMIN_CONNECT:
             SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             InterlockedIncrement(&gnNumAdminConnections_6FD45838);
             a3[0] = PACKET_ADMIN_CONNECT;
-            D2NET_10006(2, nClientIdx, a3, 16);
+            SERVER_SendPacketToClient(D2NET_SEND_UNCOMPRESSED, nClientIdx, a3, 16);
             break;
         case PACKET_ADMIN_DISCONNECT:
             SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             a3[0] = PACKET_ADMIN_DISCONNECT;
-            D2NET_10006(2, nClientIdx, a3, 16);
+            SERVER_SendPacketToClient(D2NET_SEND_UNCOMPRESSED, nClientIdx, a3, 16);
             D2NET_10016(nClientIdx);
             InterlockedDecrement(&gnNumAdminConnections_6FD45838);
             break;
         case PACKET_ADMIN_GETIP:
             SERVER_GetIpAddressStringFromClientId(nClientIdx, szIPAddress, 16);
             a3[0] = PACKET_ADMIN_GETIP;
-            D2NET_10006(2, nClientIdx, a3, 16);
+            SERVER_SendPacketToClient(D2NET_SEND_UNCOMPRESSED, nClientIdx, a3, 16);
             break;
         default:
             return;
@@ -1697,7 +1697,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = SERVER_ReadFromMessageList0(buffer, 512);
+        int32_t nSize = SERVER_ReadSystemPacket(buffer, 512);
         if (nSize == -1)
         {
             break;
@@ -1707,7 +1707,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = SERVER_ReadFromMessageList1(buffer, 512);
+        int32_t nSize = SERVER_ReadGamePacket(buffer, 512);
         if (nSize == -1)
         {
             break;
@@ -1717,7 +1717,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 
     while (1)
     {
-        int32_t nSize = SERVER_ReadFromMessageList2(buffer, 512);
+        int32_t nSize = SERVER_ReadAdminPacket(buffer, 512);
         if (nSize == -1)
         {
             break;
@@ -2261,7 +2261,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             break;
         }
 
-        if (D2NET_10006(1, pClient->dwClientId, pPacketData->packetData, pPacketData->nPacketSize))
+        if (SERVER_SendPacketToClient(D2NET_SEND_GAME, pClient->dwClientId, pPacketData->packetData, pPacketData->nPacketSize))
         {
             pPacketData->nPacketSize = 0;
             pPacketData->pNext = pClient->tPacketDataList.pPacketDataPool;
