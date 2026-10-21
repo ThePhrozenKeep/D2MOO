@@ -54,7 +54,6 @@ static const D2EnvironmentCycleStrc* ENVIRONMENT_GetCycle(int nCycle, int nAct, 
 	// Lectem's note: Checks are inconsitents between functions
 	// In most, the act check has priority, but sometimes the eclipse one has it.
 	// Eclipse seems to be only be triggered by the tainted sun quest, make sure it's the case.
-	D2_ASSERT(!(bEclipse && nAct == ACT_IV));
 	if (nAct == ACT_IV)
 	{
 		return &gAct4EnvironmentCycle[nCycle];
@@ -188,7 +187,7 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 
 static uint8_t LerpLightColor(uint8_t nThis, uint8_t nNext, double lerpRatio)
 {
-	return uint8_t(D2Lerp<double>(nThis,nNext,lerpRatio) + 0.5); // Round half up // NOLINT(bugprone-incorrect-roundings)
+	return uint8_t(nThis + int32_t((int32_t(nNext) - int32_t(nThis)) * lerpRatio + 0.5)); // NOLINT(bugprone-incorrect-roundings)
 }
 
 //D2Common.0x6FD8DAC0
@@ -254,7 +253,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 
 			if (nActNo == ACT_III)
 			{
-				pEnvironment->nTicks += 9;
+				pEnvironment->nTicks += 8;
 			}
 		}
 	}
@@ -458,7 +457,6 @@ void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRo
 	ENVIRONMENT_UpdateLightIntensity(pEnvironment, nLevelId, nAct);
 
 	// See ENVIRONMENT_GetCycle
-	D2_ASSERT(!(bEclipse && nAct == ACT_IV));
 	pEnvironment->bEclipse = bEclipse;
 
 	if (bEclipse)

@@ -2252,7 +2252,7 @@ int32_t __fastcall SKILLS_SrvDo112_MonCurseCast(D2GameStrc* pGame, D2UnitStrc* p
     const uint32_t nIndex = ITEMS_RollRandomNumber(&pUnit->pSeed) % ARRAY_SIZE(monCurseIds);
     const int32_t nCurseSkillId = monCurseIds[nIndex];
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nCurseSkillId);
     if (!pSkillsTxtRecord || pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount)
     {
         return 0;

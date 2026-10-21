@@ -130,7 +130,7 @@ short __stdcall TEXT_GetStringIdOfMenuType1Or2Node(D2TextHeaderStrc* pTextHeader
 
 	while (pNode)
 	{
-		if (pNode->nMenu != 0)
+		if (pNode->nMenu == 0)
 		{
 			if (nCounter == nNodeId)
 			{
@@ -156,7 +156,7 @@ short __stdcall TEXT_GetStringIdOfMenuType0Or2Node(D2TextHeaderStrc* pTextHeader
 
 	while (pNode)
 	{
-		if (pNode->nMenu != 1)
+		if (pNode->nMenu == 1)
 		{
 			if (nCounter == nNodeId)
 			{

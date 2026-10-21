@@ -928,6 +928,7 @@ void __fastcall DATATBLS_UpdateTreasureClassProbabilities(D2TCExShortStrc* pTCEx
 }
 
 //D2Common.0x6FD68D40
+//1.14d: 0x00483360
 int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, signed int nDivisor)
 {
 	if (nDivisor)
@@ -936,19 +937,19 @@ int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, si
 		{
 			if (nMultiplier <= 0x10000)
 			{
-				return nMultiplier * nValue / nDivisor;
+				return static_cast<int32_t>(static_cast<uint32_t>(nMultiplier) * static_cast<uint32_t>(nValue)) / nDivisor;
 			}
 
 			if (nDivisor <= (nMultiplier >> 4))
 			{
-				return nValue * (nMultiplier / nDivisor);
+				return static_cast<int32_t>(static_cast<uint32_t>(nValue) * static_cast<uint32_t>(nMultiplier / nDivisor));
 			}
 		}
 		else
 		{
 			if (nDivisor <= (nValue >> 4))
 			{
-				return nMultiplier * (nValue / nDivisor);
+				return static_cast<int32_t>(static_cast<uint32_t>(nMultiplier) * static_cast<uint32_t>(nValue / nDivisor));
 			}
 		}
 

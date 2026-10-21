@@ -3325,6 +3325,7 @@ int __fastcall ITEMMODS_PropertyFunc06(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 }
 
 //D2Common.0x6FD96B00
+//1.14d: 0x0065F010
 int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, const D2PropertyStrc* pProperty, int nSet, short nStatId, int nLayer, int nValue, int nState, int fStatList, D2UnitStrc* a11)
 {
 	D2ItemsTxt* pItemsTxtRecord = NULL;
@@ -3405,7 +3406,7 @@ int __fastcall ITEMMODS_PropertyFunc07(int nType, D2UnitStrc* pUnit, D2UnitStrc*
 			nMaxDamage = pItemsTxtRecord->nMaxDam;
 		}
 
-		nBonus = nMin * (int64_t)nMaxDamage / 100;
+		nBonus = DATATBLS_ApplyRatio(nMaxDamage, nMin, 100);
 
 		if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON) && nMaxDamage + nBonus <= nMaxDamage)
 		{

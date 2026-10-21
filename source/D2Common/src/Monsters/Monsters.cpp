@@ -97,7 +97,7 @@ int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int 
 		pHirelingInit->nId = pHirelingTxtRecord->nId;
 
 		nLevel = STATLIST_UnitGetStatValue(pMonster, STAT_LEVEL, 0);
-		nRand = (int)SEED_RollRandomNumber(&pSeed) % 5;
+		nRand = (uint32_t)SEED_RollRandomNumber(&pSeed) % 5;
 		if (nRand >= nLevel - pHirelingTxtRecord->nHirelingLevel)
 		{
 			nLevelUps = nLevel - pHirelingTxtRecord->nHirelingLevel;

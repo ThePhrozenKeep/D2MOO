@@ -610,7 +610,6 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 	int nFlags = 0;
 	int nX = 0;
 	int nY = 0;
-	BOOL bSkip = FALSE;
 	uint8_t nWarpId = 0;
 
 	pDrlgRoom->nRoomsNear = 0;
@@ -664,6 +663,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 			if (nFlags & pDrlgRoom->dwFlags)
 #endif
 			{
+				BOOL bLinkedWarp = FALSE;
 				if (nWarpId >= 8)
 				{
 					FOG_DisplayWarning("ptRoom1 && bExit1 < LEVEL_VIS_MAX", __FILE__, __LINE__);
@@ -701,7 +701,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 							{
 								if (sub_6FD77F00(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, nVisIdx, nWarpDestination))
 								{
-									bSkip = TRUE;
+									bLinkedWarp = TRUE;
 								}
 								break;
 							}
@@ -711,7 +711,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 					}
 				}
 
-				if (!bSkip)
+				if (!bLinkedWarp)
 				{
 					for (int i = 0; i < 8; ++i)
 					{

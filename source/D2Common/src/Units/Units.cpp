@@ -2345,6 +2345,7 @@ int __stdcall UNITS_GetOverlayHeight(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDC08B0 (#10431)
+//1.14d: 0x006223F0
 int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 {
 	D2SkillsTxt* pSkillsTxtRecord = NULL;
@@ -2399,7 +2400,7 @@ int __stdcall UNITS_GetDefense(D2UnitStrc* pUnit)
 		return nTotalDefense;
 	}
 
-	return nTotalDefense + (int)((int64_t)nTotalDefense * (int64_t)nArmorOverridePercent / 100);
+	return nTotalDefense + DATATBLS_ApplyRatio(nTotalDefense, nArmorOverridePercent, 100);
 }
 
 //D2Common.0x6FDC0AC0 (#10432)

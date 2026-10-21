@@ -22,9 +22,9 @@ struct D2UnkPathStrc
 
 struct D2UnkPathStrc2
 {
-	int8_t unk0x00;
-	int8_t unk0x01;
-	int8_t unk0x02;
+	uint8_t unk0x00;
+	uint8_t unk0x01;
+	uint8_t unk0x02;
 };
 
 //1.10f: D2Common.0x6FDD2158
@@ -62,31 +62,31 @@ static const D2UnkPathStrc stru_6FDD2158[25] =
 //1.13c: D2Common.0x6FDDC450
 static const D2UnkPathStrc2 byte_6FDD2288[25] =
 {
-	{ 4, 6, -1 },
-	{ 4, 6, -1 },
+	{ 4, 6, PATH_DIR_NULL },
+	{ 4, 6, PATH_DIR_NULL },
 	{ 4, 2, 6 },
-	{ 4, 2, -1 },
-	{ 4, 2, -1 },
-	{ 6, 4, -1 },
-	{ 4, 6, -1 },
+	{ 4, 2, PATH_DIR_NULL },
+	{ 4, 2, PATH_DIR_NULL },
+	{ 6, 4, PATH_DIR_NULL },
+	{ 4, 6, PATH_DIR_NULL },
 	{ 4, 2, 6 },
-	{ 4, 2, -1 },
-	{ 2, 4, -1 },
+	{ 4, 2, PATH_DIR_NULL },
+	{ 2, 4, PATH_DIR_NULL },
 	{ 6, 0, 4 },
 	{ 6, 0, 4 },
 	{ 6, 0, 4 },
 	{ 2, 0, 4 },
 	{ 2, 0, 4 },
-	{ 6, 0, -1 },
-	{ 0, 6, -1 },
+	{ 6, 0, PATH_DIR_NULL },
+	{ 0, 6, PATH_DIR_NULL },
 	{ 0, 2, 6 },
-	{ 2, 0, -1 },
-	{ 2, 0, -1 },
-	{ 0, 6, -1 },
-	{ 0, 6, -1 },
+	{ 2, 0, PATH_DIR_NULL },
+	{ 2, 0, PATH_DIR_NULL },
+	{ 0, 6, PATH_DIR_NULL },
+	{ 0, 6, PATH_DIR_NULL },
 	{ 0, 2, 6 },
-	{ 0, 2, -1 },
-	{ 0, 2, -1 },
+	{ 0, 2, PATH_DIR_NULL },
+	{ 0, 2, PATH_DIR_NULL },
 };
 
 // 1.10f: D2Common.0x6FDD1DA0
@@ -225,13 +225,19 @@ BOOL __fastcall PATH_CheckTestDirForCollisions(const D2PathInfoStrc* pPathInfo, 
 }
 
 //1.10f: Inlined
+//D2Common.0x6FDA8600 (inlined in D2Common_10142)
+//1.14d: 0x00648120
 //1.13c: D2Common.0x6FD85E00
 BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 {
 	int pTestDir[3];
 
 	D2DynamicPathStrc* pPath = pPathInfo->pDynamicPath;
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 	D2_ASSERT(!(pPath->dwFlags & PATH_MISSILE_MASK));
+#else
+	D2_CHECK(!(pPath->dwFlags & PATH_MISSILE_MASK));
+#endif
 
 	D2PathPointStrc aTestDirPathPoints[3];
 	aTestDirPathPoints[0] = pPathInfo->tTargetCoord;
@@ -250,7 +256,7 @@ BOOL PATH_PreparePathTargetForPathUpdate(D2PathInfoStrc* pPathInfo)
 		if (PATH_CheckTestDirForCollisions(pPathInfo, pTestDir, aTestDirPathPoints, &nFreeOfCollisionDirectionIndex))
 		{
 			pPathInfo->tTargetCoord = aTestDirPathPoints[nFreeOfCollisionDirectionIndex];
-			if (pPathInfo->tStartCoord == aTestDirPathPoints[0])
+			if (pPathInfo->tStartCoord == pPathInfo->tTargetCoord)
 			{
 				return 0;
 			}
@@ -879,6 +885,7 @@ void __fastcall PATH_GetDirections_6FDAB790(int* pTestDir, D2PathPointStrc pPoin
 //1.10f: D2Common.0x6FDAB7D0
 //1.13c: Inlined
 //Should be __thiscall but we have to use __fastcall, hence nUnused
+//1.14d: 0x00678DF0
 void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
 	D2_MAYBE_UNUSED(nUnused);
@@ -1308,6 +1315,7 @@ BOOL __stdcall D2Common_10229(D2DynamicPathStrc *pDynamicPath, D2UnitStrc *pUnit
 
 //1.10f: D2Common.0x6FDADA20
 //1.13c: D2Common.0x6FD5D760
+//1.14d: 0x0064FAD0
 void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pHintRoom)
 {
 	if (pDynamicPath->pRoom && DungeonTestRoomGame(pDynamicPath->pRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY))
@@ -1324,11 +1332,11 @@ void __fastcall PATH_RecacheRoom(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomSt
 		pRoomAtLocation = DUNGEON_GetRoomAtPosition(pHintRoom, pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
 	}
 
-	if (pRoomAtLocation)
+	if (pRoomAtLocation || (pDynamicPath->dwFlags & PATH_MISSILE_MASK) == 0)
 	{
 		PATHMISC_SetRoom(pDynamicPath, pRoomAtLocation);
 	}
-	else if((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0)
+	else
 	{
 		pDynamicPath->dwPathPoints = 0;
 	}
