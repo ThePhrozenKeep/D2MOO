@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  ACCURACY_REPORT_BRANCH: accuracy-thing
+  ACCURACY_REPORT_BRANCH: ${{ vars.ACCURACY_REPORT_BRANCH || 'accuracy-thing' }}
 
 jobs:
   reccmp:
@@ -166,7 +166,7 @@ jobs:
   # relies on GNU tar.
   deploy:
     needs: reccmp
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == format('refs/heads/{0}', env.ACCURACY_REPORT_BRANCH)
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == format('refs/heads/{0}', vars.ACCURACY_REPORT_BRANCH || 'accuracy-thing')
     runs-on: ubuntu-latest
     permissions:
       actions: read
