@@ -419,7 +419,7 @@ struct D2MonStatsTxt
 	uint16_t nElMinD[3][3];					//0x10E
 	uint16_t nElMaxD[3][3];					//0x120
 	uint16_t nElDur[3][3];					//0x132
-	uint16_t nResistances[6][3];			//0x144
+	int16_t nResistances[6][3];			//0x144
 	int8_t nColdEffect[3];					//0x168
 	uint8_t unk0x16B;						//0x16B
 	uint8_t nSendSkills[4];					//0x16C
