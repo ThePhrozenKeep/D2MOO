@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  ACCURACY_REPORT_BRANCH: accuracy-thing
+
 jobs:
   reccmp:
     runs-on: windows-latest
@@ -138,18 +141,18 @@ jobs:
     # the previous report in place. One-time setup:
     # Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
     - name: Build accuracy site
-      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == format('refs/heads/{0}', env.ACCURACY_REPORT_BRANCH)
       run: |
         python tools/reccmp_site.py `
           --json-dir reccmp-json `
           --html-dir reccmp-html `
           --svg-dir reccmp-svg `
           --out-dir _site/accuracy-report `
-          --binaries-url "https://nightly.link/Purplesmaug96/D2MOO/workflows/reccmp-ci/accuracy-thing/reccmp-builds.zip" `
+          --binaries-url "https://nightly.link/${{ github.repository }}/workflows/reccmp-ci/${{ env.ACCURACY_REPORT_BRANCH }}/reccmp-builds.zip" `
           --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
     - name: Upload accuracy site
-      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == format('refs/heads/{0}', env.ACCURACY_REPORT_BRANCH)
       uses: actions/upload-artifact@v4
       with:
         name: reccmp-site
@@ -163,7 +166,7 @@ jobs:
   # relies on GNU tar.
   deploy:
     needs: reccmp
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/accuracy-thing'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == format('refs/heads/{0}', env.ACCURACY_REPORT_BRANCH)
     runs-on: ubuntu-latest
     permissions:
       actions: read
