@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include <cstdint>
+#include <D2StdInt.h>
 
 #include <D2Gfx.h>
 #include <D2Unicode.h>

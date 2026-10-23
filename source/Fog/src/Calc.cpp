@@ -1,4 +1,4 @@
-#include <cstdint>
+#include <D2StdInt.h>
 #include <limits>
 
 #include <Calc.h>

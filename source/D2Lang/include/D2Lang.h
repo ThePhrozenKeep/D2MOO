@@ -1,7 +1,7 @@
 #pragma once
 
 #include <D2Dll.h>
-#include <cstdint>
+#include <D2StdInt.h>
 
 #pragma pack(1)
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 #include <D2Constants.h>
 #include <Windows.h>

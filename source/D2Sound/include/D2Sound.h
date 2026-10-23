@@ -1,7 +1,7 @@
 #pragma once
 
 #include <D2Dll.h>
-#include <cstdint>
+#include <D2StdInt.h>
 
 //1.10f Image Base: 0x6F980000
 
