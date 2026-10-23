@@ -35,8 +35,8 @@ jobs:
 
     # reccmp 0.1.7 over-reads the export name table (it decodes with
     # NumberOfFunctions instead of NumberOfNames) and crashes on the retail
-    # DLLs. Upstream still has the bug. Remove this step and
-    # .github/patches/reccmp-exports.patch once upstream is fixed.
+    # DLLs. Upstream still has the bug. 
+    # TODO: Remove this step and .github/patches/reccmp-exports.patch once upstream is fixed.
     - name: Patch reccmp export-table bug
       shell: pwsh
       run: |
