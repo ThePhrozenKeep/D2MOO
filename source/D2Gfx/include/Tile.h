@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 
 struct D2GfxLightStrc;

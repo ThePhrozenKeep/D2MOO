@@ -21,6 +21,7 @@ target_sources(D2CommonDefinitions
     include/D2Dll.h
     include/D2BuildInformation.h
     include/D2Config.h
+    include/D2StdInt.h
 )
 target_include_directories(D2CommonDefinitions INTERFACE include)
 # Unless we get rid of <Windows.h> in D2BasicTypes.h, we might as well define this for all consumers.
