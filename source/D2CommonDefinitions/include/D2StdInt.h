@@ -15,5 +15,5 @@ typedef unsigned __int64 uint64_t;
 typedef int intptr_t;
 typedef unsigned int uintptr_t;
 #else
-#include <D2StdInt.h>
+#include <stdint.h>
 #endif
