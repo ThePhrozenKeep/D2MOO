@@ -23,6 +23,8 @@ static __forceinline DWORD mostSignificantBitIndex(DWORD nValue)
 	return nIndex;
 }
 #define _BitScanReverse(pnIndex, nValue) (*(pnIndex) = mostSignificantBitIndex((DWORD)(nValue)))
+#else
+#include <intrin.h>
 #endif
 #include <Fog.h>
 #include <Storm.h>

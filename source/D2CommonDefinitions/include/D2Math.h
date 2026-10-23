@@ -3,10 +3,9 @@
 #include <D2StdInt.h>
 
 #if defined(_MSC_VER) && _MSC_VER < 1600
-// VC6 has no <type_traits>: no true_type/false_type, no is_signed, no SFINAE. All
-// three D2signum call sites pass a plain int, so dispatching on `T(0) < T(-1)` --
-// true exactly for the signed types -- needs only partial specialisation.
-
+// VC6 has no <type_traits>: no true_type/false_type, no is_signed, no SFINAE.
+// Dispatch on `T(-1) < T(0)`, which is true for signed types and false for
+// unsigned types.
 template <bool Signed> struct D2SignedTag
 {
 };
@@ -23,7 +22,7 @@ template <typename T> int32_t D2signum(T x, D2SignedTag<true>)
 
 template <typename T> inline int32_t D2signum(T x)
 {
-    return D2signum(x, D2SignedTag<(T(0) < T(-1))>());
+    return D2signum(x, D2SignedTag<(T(-1) < T(0))>());
 }
 
 #else

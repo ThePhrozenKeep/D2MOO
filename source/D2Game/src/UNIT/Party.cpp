@@ -307,6 +307,7 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
     if (!pRoom)
     {
         pCallback(pGame, pUnit, pArgs);
+        return;
     }
 
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -314,6 +315,7 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
     if (nPartyId == -1)
     {
         pCallback(pGame, pUnit, pArgs);
+        return;
     }
 
     D2_ASSERT(pGame->pPartyControl);

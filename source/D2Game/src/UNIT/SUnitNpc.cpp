@@ -959,6 +959,7 @@ void __fastcall sub_6FCC7FA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     if (!pNpcRecord)
     {
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     int32_t nVendorId = -1;
@@ -973,22 +974,26 @@ void __fastcall sub_6FCC7FA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     if (wName < pHirelingTxtRecord->wNameFirst || wName > pHirelingTxtRecord->wNameLast)
     {
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     D2MercDataStrc* pMercDataRecord = &pNpcRecord->pMercData[wName - pHirelingTxtRecord->wNameFirst];
     if (pMercDataRecord->nMercName != wName)
     {
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     if (pMercDataRecord->bHired)
     {
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     D2HirelingInitStrc hirelingInit = { 0 };
     if (!MONSTERS_HirelingInit(pGame->bExpansion, pPlayer, pMercDataRecord->dwSeed, MONSTERS_GetActFromHirelingTxt(pGame->bExpansion, 0, pMercDataRecord->nMercName), pGame->nDifficulty, &hirelingInit))
     {
+        D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 12, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
         return;
     }
 
@@ -996,6 +1001,7 @@ void __fastcall sub_6FCC7FA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < hirelingInit.nGold)
     {
         D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 12, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     if (nGold < hirelingInit.nGold)
@@ -1015,6 +1021,7 @@ void __fastcall sub_6FCC7FA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         if (!pMerc)
         {
             D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 15, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
         }
     }
 
@@ -1677,6 +1684,7 @@ void __fastcall D2GAME_NPC_ResurrectMerc_6FCC9350(D2GameStrc* pGame, D2UnitStrc*
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     switch (pNpc->dwClassId)
@@ -1691,6 +1699,7 @@ void __fastcall D2GAME_NPC_ResurrectMerc_6FCC9350(D2GameStrc* pGame, D2UnitStrc*
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
     }
 
@@ -1699,6 +1708,7 @@ void __fastcall D2GAME_NPC_ResurrectMerc_6FCC9350(D2GameStrc* pGame, D2UnitStrc*
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2Au, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     const int32_t nHirelingResurrectionCost = MONSTERS_GetHirelingResurrectionCost(pHireling);
@@ -1888,6 +1898,7 @@ void __fastcall D2GAME_NPC_IdentifyAllItems_6FCC9C90(D2GameStrc* pGame, D2UnitSt
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2A, 9, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     switch (pNpc->dwClassId)
@@ -2844,6 +2855,7 @@ void __fastcall D2GAME_NPC_PurchaseHeal_6FCCB280(D2GameStrc* pGame, D2UnitStrc* 
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2A, 14, STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
@@ -2851,6 +2863,7 @@ void __fastcall D2GAME_NPC_PurchaseHeal_6FCCB280(D2GameStrc* pGame, D2UnitStrc* 
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         D2GAME_SendPacket0x2A_6FC3F3B0(pClient, 0x2A, 12, STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0), -1, 0);
+        return;
     }
 
     if (nHealingCost > nGold)

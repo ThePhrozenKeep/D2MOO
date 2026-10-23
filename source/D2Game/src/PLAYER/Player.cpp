@@ -354,12 +354,14 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
     if (!SUNIT_GetInteractInfo(pUnit, &nUnitType, &nUnitGUID))
     {
         ACT5Q5_OnPlayerDied(pGame, pUnit);
+        return;
     }
 
     D2UnitStrc* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
     if (!pInteractUnit)
     {
         ACT5Q5_OnPlayerDied(pGame, pUnit);
+        return;
     }
 
     switch (nUnitType)
@@ -381,7 +383,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     case UNIT_ITEM:
     {
-        if (DATATBLS_GetItemsTxtRecord(pInteractUnit->dwClassId)->dwCode == ' xob')
+        if (pInteractUnit && DATATBLS_GetItemsTxtRecord(pInteractUnit->dwClassId)->dwCode == ' xob')
         {
             sub_6FC92EF0(pGame, pUnit);
         }
