@@ -694,7 +694,9 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			bCompress = 1;
 		}
 
-		switch (pUnit->dwUnitType)
+		// Read before the switch: compressing an item frees it (the original kept the type in a register).
+		const int32_t nUnitType = pUnit->dwUnitType;
+		switch (nUnitType)
 		{
 		case UNIT_PLAYER:
 		{
@@ -755,7 +757,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			break;
 		}
 
-		if (pUnit->dwUnitType != UNIT_ITEM)
+		if (nUnitType != UNIT_ITEM)
 		{
 			SUNIT_RemoveUnit(pGame, pUnit);
 		}
