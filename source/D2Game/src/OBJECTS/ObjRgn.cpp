@@ -41,7 +41,7 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
         pObjectRegion->nAct = pLevelsTxtRecord->nAct;
         pObjectRegion->nPopulatedRooms = INT_MAX;
         pObjectRegion->nTrapMonsterId = -1;
-        pGame->pObjectControl->pObjectRegion[0] = pObjectRegion;
+        pGame->pObjectControl->pObjectRegion[i] = pObjectRegion;
     }
 
     int32_t nShrineSubTypes[8] = {};
