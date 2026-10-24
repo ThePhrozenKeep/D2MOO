@@ -3971,6 +3971,11 @@ int32_t __fastcall sub_6FC47D30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
                         return 1;
                     }
                 }
+                else
+                {
+                    // Original 6FC483A9: any other item code gives up silently (no sound, a6 unchanged).
+                    return 0;
+                }
 
                 SUNIT_AttachSound(pUnit, 19, pUnit);
             }
