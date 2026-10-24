@@ -1625,20 +1625,18 @@ int32_t __fastcall ITEMS_GetItemLevelForNewItem(D2UnitStrc* pUnit, int32_t nLeve
 {
     if (pUnit)
     {
-        int32_t nLevel = 0;
         if (pUnit->dwUnitType == UNIT_MONSTER)
         {
-            nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
+            return std::max(STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0), 1);
         }
         else if (pUnit->dwUnitType == UNIT_PLAYER)
         {
-            nLevel = STATLIST_GetUnitBaseStat(pUnit, STAT_LEVEL, 0);
+            return std::max(STATLIST_GetUnitBaseStat(pUnit, STAT_LEVEL, 0), 1);
         }
 
-        return std::max(nLevel, 1);
+        nLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pUnit));
     }
-
-    if (!nLevelId)
+    else if (!nLevelId)
     {
         return 1;
     }

@@ -119,7 +119,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
 
-                const int32_t nNewHp = D2Clamp((int32_t)(int64_t)((double)nHitpoints / (double)nPreviousValue * (double)nNewValue), 1, nNewValue);
+                const int32_t nNewHp = std::min(std::max((int32_t)(int64_t)((double)nHitpoints / (double)nPreviousValue * (double)nNewValue), 1), nNewValue);
                 STATLIST_SetUnitStat(pOwner, STAT_HITPOINTS, nNewHp, 0);
 
                 if (pOwner->dwUnitType == UNIT_MONSTER && pOwner->pMonsterData)
@@ -143,7 +143,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
 
-                const int32_t nNewMana = D2Clamp((int32_t)(int64_t)((double)nMana / (double)nPreviousValue * (double)nNewValue), 1, nNewValue);
+                const int32_t nNewMana = std::min(std::max((int32_t)(int64_t)((double)nMana / (double)nPreviousValue * (double)nNewValue), 1), nNewValue);
                 STATLIST_SetUnitStat(pOwner, STAT_MANA, nNewMana, 0);
             }
         }
@@ -158,7 +158,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             {
                 nPreviousValue = std::max(nPreviousValue, 256);
 
-                const int32_t nNewStamina = D2Clamp((int32_t)(int64_t)((double)nStamina / (double)nPreviousValue * (double)nNewValue), 1, nNewValue);
+                const int32_t nNewStamina = std::min(std::max((int32_t)(int64_t)((double)nStamina / (double)nPreviousValue * (double)nNewValue), 1), nNewValue);
                 STATLIST_SetUnitStat(pOwner, STAT_STAMINA, nNewStamina, 0);
             }
         }
@@ -4484,7 +4484,7 @@ int32_t __fastcall sub_6FC49220(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nI
     if (bUseOnMerc && pUnit->dwUnitType == UNIT_PLAYER && pGame->bExpansion && (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_HEALING_POTION) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_THAWING_POTION) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANTIDOTE_POTION)))
     {
         D2UnitStrc* pMerc = sub_6FC7E8B0(pGame, pUnit, PETTYPE_HIREABLE, 0);
-        if (pMerc && !SKILLITEM_pSpell_Handler(pGame, pMerc, pItem, pItem, nX, nY))
+        if (!SKILLITEM_pSpell_Handler(pGame, pMerc ? pMerc : pUnit, pItem, pItem, nX, nY))
         {
             return 0;
         }
