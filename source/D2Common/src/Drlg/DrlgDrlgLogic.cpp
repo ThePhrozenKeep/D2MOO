@@ -71,7 +71,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 	for (int i = 0; i < pDrlgRoomTiles->nWalls; ++i)
 	{
 		D2DrlgTileDataStrc* pWallTileData = &pDrlgRoomTiles->pWallTiles[i];
-		if (GetMapTileLayer(pWallTileData->dwFlags) == 1 && pWallTileData->nTileType != TILETYPE_ROOF && !(pWallTileData->dwFlags &MAPTILE_OBJECT_WALL))
+		if (GetMapTileLayer(pWallTileData->dwFlags) == 0 && pWallTileData->nTileType != TILETYPE_ROOF && !(pWallTileData->dwFlags &MAPTILE_OBJECT_WALL))
 		{
 			DRLGGRID_AlterGridFlag(&pDrlgGrid, pWallTileData->nPosX, pWallTileData->nPosY, 1, FLAG_OPERATION_OR);
 		}
@@ -320,7 +320,7 @@ void __fastcall sub_6FD76B90(D2DrlgRoomStrc* pDrlgRoom, int nIndex1, int nIndex2
 //D2Common.0x6FD76C20
 BOOL __fastcall DRLG_CheckLayer1ButNotWallObject(D2DrlgTileDataStrc* pTileData)
 {
-	if (GetMapTileLayer(pTileData->dwFlags) == 1)
+	if (GetMapTileLayer(pTileData->dwFlags) == 0)
 	{
 		if (pTileData->nTileType != TILETYPE_ROOF)
 		{
