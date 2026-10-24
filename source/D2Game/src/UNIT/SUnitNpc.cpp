@@ -1212,7 +1212,330 @@ D2UnitStrc* __fastcall sub_6FCC87C0(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2Un
 }
 
 //D2Game.0x6FCC88B0) --------------------------------------------------------
+extern int32_t dword_6FD4DD80; // class of 'cqv ' (bolts), SUnitProxy.cpp
+extern int32_t dword_6FD4DD84; // class of 'aqv ' (arrows)
+
+// Buy an item from a vendor. Implemented from the decompilation kept in the comment below (variable
+// names in brackets). The tab of the store page comes in nItemMode [v69]; nTransactionType is not
+// used by the original.
 int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bMultibuy)
+{
+    D2_ASSERT(pGame);
+
+    auto reply = [&](char nResult, int32_t nArg, char nArg2)
+    {
+        D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, nResult, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), nArg, nArg2);
+    };
+    auto pay = [&](int32_t nAmount, int32_t nGold, int32_t nBankPart)
+    {
+        if (nAmount > nGold)
+        {
+            PLRTRADE_AddGold(pPlayer, STAT_GOLD, -nGold);
+            PLRTRADE_AddGold(pPlayer, STAT_GOLDBANK, nGold - nBankPart);
+        }
+        else
+        {
+            PLRTRADE_AddGold(pPlayer, STAT_GOLD, -nAmount);
+        }
+    };
+
+    const int32_t nTab = nItemMode;
+    D2UnitStrc* pStoreItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID); // [v10, v72]
+    D2InventoryStrc* pInventory = nullptr;
+    D2UnitStrc* pNewItem = nullptr;
+    int32_t nItemCost = 0, nAvailable = 0, nQuantity = 0, nNewClass = 0, nResult = 0;
+    int32_t bBought = 0, nGoldBefore = 0, nBankBefore = 0, bEquip = 1;
+    D2UnitStrc* pWeapon = nullptr;
+    int32_t nWeaponClass = 0;
+
+    if (!pStoreItem)
+    {
+        reply(7, nItemGUID, 0);
+        return 1;
+    }
+
+    if (nTab)
+    {
+        if (nTab == 2)
+        {
+            D2InventoryStrc* pGambleInventory = SUNITPROXY_GetGambleInventory(pGame, pPlayer, pNpc);
+            if (!pGambleInventory || ITEMS_IsInPlayersInventory(pNpc, pStoreItem, pGambleInventory) != 1)
+            {
+                reply(7, nItemGUID, 0);
+                return 1;
+            }
+        }
+    }
+    else if (!ITEMS_IsInPlayersInventory(pNpc, pStoreItem, nullptr))
+    {
+        reply(7, nItemGUID, 0);
+        return 1;
+    }
+
+    const int32_t nVendorId = pNpc ? pNpc->dwClassId : -1; // [v78]
+    D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty];
+    nItemCost = ITEMS_GetTransactionCost(pPlayer, pStoreItem, (D2C_Difficulties)pGame->nDifficulty, pQuestFlags, nVendorId, (D2C_TransactionTypes)nTab); // [v86]
+    nAvailable = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0) + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0); // [v70]
+    if (nItemCost > nAvailable)
+    {
+        reply(12, -1, 0);
+        return 0;
+    }
+
+    pInventory = pPlayer->pInventory; // [v71]
+    if (INVENTORY_GetCursorItem(pInventory))
+    {
+        reply(7, -1, 0);
+        return 1;
+    }
+
+    // Buying many at once only works for items the vendor always has (and the bigger potions above Normal).
+    {
+        int32_t nIndex = 0;
+        D2NpcRecordStrc* pNpcRecord = SUNITPROXY_GetNpcRecordFromUnit(pGame, pNpc, &nIndex); // [v15]
+        if (!pNpcRecord)
+        {
+            bMultibuy = 0;
+        }
+        else
+        {
+            const uint32_t dwCode = ITEMS_GetBaseCode(pStoreItem); // [v79]
+            if (!(pGame->nDifficulty && (dwCode == ' 4ph' || dwCode == ' 5ph' || dwCode == ' 4pm' || dwCode == ' 5pm')))
+            {
+                int32_t bPermanent = 0;
+                for (int32_t i = 0; i < pNpcRecord->npcTrade.pProxy.nPerms; ++i)
+                {
+                    if (pNpcRecord->npcTrade.pProxy.pPermCache[i] == dwCode)
+                    {
+                        bPermanent = 1;
+                        break;
+                    }
+                }
+                if (!bPermanent)
+                {
+                    bMultibuy = 0;
+                }
+            }
+        }
+    }
+
+    // Scrolls go into a tome when there is one with room.
+    if (ITEMS_CheckItemTypeId(pStoreItem, ITEMTYPE_SCROLL))
+    {
+        int32_t nRoom = 0; // [v68]
+        D2UnitStrc* pBook = sub_6FC4B430(pGame, pPlayer, pStoreItem, &nRoom); // [v66]
+        if (pBook)
+        {
+            int32_t nCount = 1; // [v80]
+            if (bMultibuy)
+            {
+                nCount = (uint32_t)nAvailable / (uint32_t)nItemCost;
+                if (nCount > nRoom)
+                {
+                    nCount = nRoom;
+                }
+            }
+
+            const int32_t nTotal = nItemCost * nCount;
+            const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
+            if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < nTotal)
+            {
+                reply(12, -1, 0);
+                return 0;
+            }
+
+            pay(nTotal, nGold, nTotal);
+            sub_6FC4B520(pGame, pPlayer, pBook, nCount);
+            sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
+            reply(0, pBook->dwUnitId, 5);
+            return 0;
+        }
+    }
+
+    nQuantity = STATLIST_UnitGetStatValue(pStoreItem, STAT_QUANTITY, 0); // [v67]
+    if (bMultibuy && ITEMS_GetAutoStack(pStoreItem))
+    {
+        const int32_t nOldQuantity = STATLIST_UnitGetStatValue(pStoreItem, STAT_QUANTITY, 0);
+        STATLIST_SetUnitStat(pStoreItem, STAT_QUANTITY, 1, 0);
+        const uint32_t nUnitCost = ITEMS_GetTransactionCost(pPlayer, pStoreItem, (D2C_Difficulties)pGame->nDifficulty, pQuestFlags, nVendorId, (D2C_TransactionTypes)0); // [v27, v87]
+        STATLIST_SetUnitStat(pStoreItem, STAT_QUANTITY, nOldQuantity, 0);
+
+        const int32_t nAffordable = (uint32_t)nAvailable / nUnitCost; // [v82]
+        int32_t nStackRoom = 0; // [v70 reused]
+        D2UnitStrc* pStack = sub_6FCC87C0(pGame, pPlayer, pStoreItem, &nStackRoom); // [v28]
+        const int32_t nCount = nStackRoom >= nAffordable ? nAffordable : nStackRoom;
+        if (!pStack)
+        {
+            nQuantity = nCount <= 1 ? 1 : nCount;
+            nItemCost = nUnitCost * nQuantity;
+            goto BUY_NEW_ITEM;
+        }
+
+        // Top up the stack the player already has.
+        if (nCount > 0)
+        {
+            const int32_t nTotal = nUnitCost * nCount;
+            const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
+            if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < nTotal)
+            {
+                reply(12, -1, 0);
+                return 0;
+            }
+
+            pay(nTotal, nGold, nTotal);
+            sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
+            STATLIST_AddUnitStat(pStack, STAT_QUANTITY, nCount, 0);
+            D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), pStack, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pStack, STAT_QUANTITY, 0), 0);
+            reply(0, 5, 0);
+            return 0;
+        }
+
+        reply(12, -1, 0);
+        return 0;
+    }
+
+BUY_NEW_ITEM: // [LABEL_71]
+    nResult = 0; // [v84]
+    bBought = 0; // [v70 reused]
+    if (!ITEMS_CheckIfAutoBeltable(pInventory, pStoreItem))
+    {
+        bMultibuy = 0;
+    }
+
+    while (1)
+    {
+        if (bBought && !bMultibuy)
+        {
+            return 0;
+        }
+
+        nGoldBefore = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0); // [v73]
+        nBankBefore = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0); // [v74]
+        pNewItem = ITEMS_Duplicate(pGame, pStoreItem, pNpc, 1); // [v36]
+        if (!pNewItem)
+        {
+            reply(9, -1, 0);
+            return 1;
+        }
+
+        if (bMultibuy && ITEMS_CheckIfStackable(pNewItem) && nQuantity)
+        {
+            STATLIST_SetUnitStat(pNewItem, STAT_QUANTITY, nQuantity, 0);
+        }
+
+        {
+            const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
+            if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < nCost)
+            {
+                reply(12, -1, 0);
+                return 0;
+            }
+            // As in the original: the bank part uses the computed cost [v86], the rest the client's.
+            pay(nCost, nGold, nItemCost);
+        }
+
+        UNITS_GetPlayerData(pPlayer)->dwBoughtItemId = pNewItem->dwUnitId;
+        UNITS_ChangeAnimMode(pNewItem, IMODE_ONCURSOR);
+        nNewClass = pNewItem->dwClassId; // [v68]
+        if (ITEMS_CheckIfAutoBeltable(pInventory, pNewItem))
+        {
+            int32_t nUnused = 0;
+            nResult = sub_6FC48940(pGame, pPlayer, pNewItem->dwUnitId, 0, 1, &nUnused);
+            if (nResult)
+            {
+                goto ITEM_PLACED;
+            }
+            bMultibuy = 0;
+        }
+
+        if (!nResult)
+        {
+            break;
+        }
+
+ITEM_PLACED: // [LABEL_117]
+        sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
+        ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
+        reply(0, 2, 1);
+        bBought = 1;
+    }
+
+    // Not put in the belt: equip it if it fits (quivers only with the matching weapon), else into the inventory.
+    bEquip = 1; // [v85]
+    pWeapon = INVENTORY_GetLeftHandWeapon(pInventory); // [v44]
+    nWeaponClass = UNITS_GetWeaponClass(pPlayer); // [v45]
+    if (nNewClass == dword_6FD4DD80 && pWeapon && nWeaponClass != 7)
+    {
+        bEquip = 0;
+    }
+
+    if (nNewClass == dword_6FD4DD84)
+    {
+        if (!pWeapon)
+        {
+            goto CHECK_QUIVER; // [LABEL_111]
+        }
+        if (nWeaponClass != 1)
+        {
+            bEquip = 0;
+        }
+    }
+
+    if (pWeapon)
+    {
+        if (!ITEMS_CheckItemTypeId(pNewItem, ITEMTYPE_WEAPON))
+        {
+            goto TRY_EQUIP; // [LABEL_113]
+        }
+        goto TO_INVENTORY; // [LABEL_115]
+    }
+
+CHECK_QUIVER:
+    if (nNewClass != dword_6FD4DD80 && nNewClass != dword_6FD4DD84)
+    {
+TRY_EQUIP:
+        if (bEquip)
+        {
+            nResult = sub_6FC4A9B0(pGame, pPlayer, pNewItem, 0);
+            if (nResult)
+            {
+                bBought = 1;
+                sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
+                ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
+                reply(0, 2, 1);
+                return 0; // [LABEL_117, then the loop ends: bMultibuy is 0 for non-belt items]
+            }
+        }
+    }
+
+TO_INVENTORY:
+    if (bBought || (ITEMS_SetInvPage(pNewItem, 0), (nResult = D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pNewItem->dwUnitId, 0, 0, 1, 1, 0)) == 0))
+    {
+        // No room: give the gold back and drop the copy.
+        if (nGoldBefore != STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0))
+        {
+            PLRTRADE_AddGold(pPlayer, STAT_GOLD, nGoldBefore - STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0));
+        }
+        if (nBankBefore != STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0))
+        {
+            PLRTRADE_AddGold(pPlayer, STAT_GOLDBANK, nBankBefore - STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0));
+        }
+        ITEMS_RemoveFromAllPlayers(pGame, pNewItem);
+        if (!bBought)
+        {
+            reply(10, -1, 0);
+        }
+        return 0;
+    }
+
+    sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
+    ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
+    reply(0, 2, 1);
+    return 0; // [LABEL_117, then the loop ends: bMultibuy is 0 for non-belt items]
+}
+
+// The previous stub, kept for its decompilation comment (the source of the code above).
+[[maybe_unused]] static int32_t sub_6FCC88B0_Decompilation()
 {
     return 0;
 
