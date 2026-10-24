@@ -1327,9 +1327,9 @@ D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     coords2.nX = pCoords->nX;
     coords2.nY = pCoords->nY;
 
-    if (D2GAME_GetRoom_6FC52070(pRoom, pCoords->nY + 2, pCoords->nY + 3))
+    if (D2GAME_GetRoom_6FC52070(pRoom, pCoords->nX + 2, pCoords->nY + 3))
     {
-        coords1.nX = pCoords->nY + 2;
+        coords1.nX = pCoords->nX + 2;
         coords1.nY = pCoords->nY + 3;
     }
     else

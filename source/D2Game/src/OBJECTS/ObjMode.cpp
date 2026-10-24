@@ -2980,7 +2980,7 @@ int32_t __fastcall OBJECTS_OperateHandler(D2GameStrc* pGame, D2UnitStrc* pPlayer
         return pOperateFn(&pObjOperate, pObjectTxtRecord->nOperateFn);
     }
 
-    return 1;
+    return 0;
 }
 
 //D2Game.0x6FC78B20
@@ -3391,6 +3391,8 @@ void __fastcall D2GAME_WAYPOINT_Unk_6FC79600(D2GameStrc* pGame, D2UnitStrc* pPla
             const int32_t nOperateFn = pObjectsTxtRecord->nOperateFn;
             if (nOperateFn < std::size(gpObjOperateFnTable) && gpObjOperateFnTable[nOperateFn] == OBJECTS_OperateFunction23_Waypoint)
             {
+                nLevelId = (uint16_t)nLevelId;
+
                 const int32_t nWaypointLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pWaypoint));
 
                 SUNIT_ResetInteractInfo(pPlayer);
