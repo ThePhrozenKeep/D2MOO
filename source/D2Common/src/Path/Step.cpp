@@ -6,7 +6,9 @@
 #include "Path/PathMisc.h"
 #include "Units/Units.h"
 #include "Units/UnitRoom.h"
+#ifdef NO_BUG_FIX
 #include <cstring>
+#endif
 #include <utility>
 
 D2PathPointStrc sgctZeroGameCoord = { 0,0 };
@@ -153,6 +155,7 @@ TanToDirectionLutEntryStrc lutTanToDirection[] = {
 };
 static_assert(ARRAY_SIZE(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
 
+#ifdef NO_BUG_FIX
 // Native constant prefix for wrapped negative tangent indices.
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 //1.14d: 0x006EB1EC .. 0x006EB7DF (.rdata, Game.exe has a fixed base)
@@ -368,6 +371,8 @@ static TanToDirectionLutEntryStrc PATH_GetTanToDirectionLutEntry(int nTangent)
 	return tEntry;
 }
 
+#endif // NO_BUG_FIX
+
 //1.00:  D2Common.0x1005E6D0
 //1.10f: D2Common.0x6FDAC5E0
 //1.14d: 0x0064FC60
@@ -406,7 +411,11 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 	}
 
 	bool bDeltaXGreaterThanY;
+#ifdef NO_BUG_FIX
 	if ((int)(dwMaxPrecisionX - dwMinPrecisionX) > (int)(dwMaxPrecisionY - dwMinPrecisionY))
+#else
+	if (dwMaxPrecisionX - dwMinPrecisionX > dwMaxPrecisionY - dwMinPrecisionY)
+#endif
 	{
 		std::swap(dwMinPrecisionX, dwMinPrecisionY);
 		std::swap(dwMaxPrecisionX, dwMaxPrecisionY);
@@ -418,9 +427,20 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 	}
 	int tangent = 0;
 	if (dwMaxPrecisionY != dwMinPrecisionY)
+	{
+#ifdef NO_BUG_FIX
 		tangent = (int)(127 * (dwMaxPrecisionX - dwMinPrecisionX)) / (int)(dwMaxPrecisionY - dwMinPrecisionY);
+#else
+		// Widen before multiplying the 16.16 distance so the tangent stays in [0, 127].
+		tangent = static_cast<int>(127ull * (dwMaxPrecisionX - dwMinPrecisionX) / (dwMaxPrecisionY - dwMinPrecisionY));
+#endif
+	}
 
+#ifdef NO_BUG_FIX
 	const TanToDirectionLutEntryStrc lutEntry = PATH_GetTanToDirectionLutEntry(tangent);
+#else
+	const auto& lutEntry = lutTanToDirection[tangent];
+#endif
 
 	uint8_t nAngle = (uint8_t)lutEntry.nAngle;
 	if (!bDeltaXGreaterThanY)
