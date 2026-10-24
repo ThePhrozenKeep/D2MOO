@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <D2StdInt.h>
 
 
 constexpr uint32_t MAX_MSG_SIZE = 516;
