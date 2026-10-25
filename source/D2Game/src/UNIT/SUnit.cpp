@@ -185,7 +185,7 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     case UNIT_ITEM:
     {
-        sub_6FC502B0(pGame, pUnit);
+        ITEMS_FreeSocketInventoryAndTimers(pGame, pUnit);
         ITEMS_FreeItemData(pGame->pMemoryPool, pUnit);
         UNITS_FreeStaticPath(pUnit);
         break;
@@ -531,7 +531,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
     {
         pUnit->dwAnimMode = nMode;
         UNITS_AllocStaticPath(pUnit);
-        sub_6FC4BE80(pUnit, pGame, nUnitGUID, pRoom);
+        ITEMMODE_InitializeItemUnit(pUnit, pGame, nUnitGUID, pRoom);
         break;
     }
     case UNIT_MISSILE:

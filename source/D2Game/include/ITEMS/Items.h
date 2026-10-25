@@ -48,27 +48,27 @@ uint32_t __fastcall ITEMS_HasUniqueBeenDroppedAlready(D2GameStrc* pGame, int32_t
 //D2Game.0x6FC4D4E0
 int32_t __fastcall ITEMS_CanUniqueItemBeDropped(D2GameStrc* pGame, D2UnitStrc* pItem);
 //D2Game.0x6FC4D5E0
-int32_t __fastcall sub_6FC4D5E0(D2UnitStrc** ppItem, D2ItemDropStrc* pItemDrop);
+int32_t __fastcall ITEMS_AssignDropMagicAffixes(D2UnitStrc** ppItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4D6B0
-void __fastcall sub_6FC4D6B0(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
+void __fastcall ITEMS_RollDropSockets(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4D800
 void __fastcall ITEMS_MakeEthereal(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4D900
-void __fastcall sub_6FC4D900(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
+void __fastcall ITEMS_AssignLegacySpecialProperties(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4DA10
 int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4DB60
 void __fastcall D2GAME_ITEMS_AssignSpecial_6FC4DB60(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4DC20
-void __fastcall sub_6FC4DC20(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
+void __fastcall ITEMS_AssignSpecialPropertiesForFormat(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4DE00
 int32_t __fastcall ITEMS_RollItemQuality(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4E1A0
-void __fastcall sub_6FC4E1A0(D2UnitStrc** ppItem);
+void __fastcall ITEMS_ClearAffixesAndFileIndex(D2UnitStrc** ppItem);
 //D2Game.0x6FC4E1F0
-void __fastcall sub_6FC4E1F0(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, D2UnitStrc** ppItem, int32_t nLowSeed);
+void __fastcall ITEMS_ResetToNormalQuality(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, D2UnitStrc** ppItem, int32_t nLowSeed);
 //D2Game.0x6FC4E430
-int32_t __fastcall sub_6FC4E430(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, D2UnitStrc** ppItem, uint32_t* pLowSeed);
+int32_t __fastcall ITEMS_ResetToSuperiorQuality(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, D2UnitStrc** ppItem, uint32_t* pLowSeed);
 //D2Game.0x6FC4E4D0
 uint32_t __fastcall ITEMS_RollLimitedRandomNumber(D2SeedStrc* pSeed, int32_t nMax);
 //D2Game.0x6FC4E520
@@ -76,27 +76,27 @@ int32_t __fastcall D2GAME_InitItemStats_6FC4E520(D2GameStrc* pGame, D2UnitStrc**
 //D2Game.0x6FC4EBF0
 uint32_t __fastcall ITEMS_RollRandomNumber(D2SeedStrc* pSeed);
 //D2Game.0x6FC4EC10
-D2UnitStrc* __fastcall sub_6FC4EC10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, BYTE* pBitstream, uint32_t nBufferSize, int32_t bCheckForHeader, D2ItemSaveStrc* pItemSave, uint32_t* pSize, uint32_t dwVersion);
+D2UnitStrc* __fastcall ITEMS_CreateItemFromBitstream(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, BYTE* pBitstream, uint32_t nBufferSize, int32_t bCheckForHeader, D2ItemSaveStrc* pItemSave, uint32_t* pSize, uint32_t dwVersion);
 //D2Game.0x6FC4ED80
 D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDropStrc* pItemDrop, int32_t bUseSeed);
 //D2Game.0x6FC4F290
-D2UnitStrc* __fastcall sub_6FC4F290(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2ItemDropStrc* pItemDrop);
+D2UnitStrc* __fastcall ITEMS_DropRandomItemAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4F4A0
-int32_t __fastcall sub_6FC4F4A0(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t a4, int32_t a5, int32_t a6);
+int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts);
 //D2Game.0x6FC4F640
-void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord);
+void __fastcall ITEMS_DropGoldAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord);
 //D2Game.0x6FC4F830
-D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit);
+D2UnitStrc* __fastcall D2GAME_DropArmor_6FC4F830(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t nItemType, int32_t bIgnoreRarity, D2UnitStrc* pUnit);
 //D2Game.0x6FC4FA50
-D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t a4, int32_t a5, D2UnitStrc* pUnit);
+D2UnitStrc* __fastcall D2GAME_DropWeapon_6FC4FA50(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, int32_t nItemType, int32_t bIgnoreRarity, D2UnitStrc* pUnit);
 //D2Game.0x6FC4FCA0
-D2UnitStrc* __fastcall sub_6FC4FCA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int32_t a4, int32_t a5, D2UnitStrc* pUnit);
+D2UnitStrc* __fastcall ITEMS_DropMiscItemAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int32_t nItemType, int32_t bIgnoreRarity, D2UnitStrc* pUnit);
 //D2Game.0x6FC4FEC0
-D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nQuality, int32_t* pItemLevel, D2ItemDropStrc* pItemDrop, int32_t a6, int32_t a7);
+D2UnitStrc* __fastcall D2GAME_DropItemAtUnit_6FC4FEC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nQuality, int32_t* pItemLevel, D2ItemDropStrc* pItemDrop, int32_t nItemType, int32_t bIgnoreRarity);
 //D2Game.0x6FC501A0
 D2UnitStrc* __fastcall D2GAME_CreateItemUnit_6FC501A0(D2UnitStrc* pPlayer, int32_t nItemId, D2GameStrc* pGame, int32_t nSpawnTarget, int32_t nQuality, int32_t bNoSockets, int32_t bNoEthereal, int32_t nItemLevel, int32_t bUseSeed, int32_t dwSeed, int32_t dwItemSeed);
 //D2Game.0x6FC502B0
-void __fastcall sub_6FC502B0(D2GameStrc* pGame, D2UnitStrc* pItem);
+void __fastcall ITEMS_FreeSocketInventoryAndTimers(D2GameStrc* pGame, D2UnitStrc* pItem);
 //D2Game.0x6FC502E0
 void __fastcall ITEMS_RemoveAll(D2GameStrc* pGame);
 //D2Game.0x6FC50320
@@ -126,15 +126,15 @@ int32_t __fastcall ITEMS_GetManaPotionDropCode(D2UnitStrc* pUnit);
 //D2Game.0x6FC51070
 D2UnitStrc* __fastcall ITEMS_Duplicate(D2GameStrc* pGame, D2UnitStrc* pItem, D2UnitStrc* pOwner, int32_t bDuplicateSocketFillers);
 //D2Game.0x6FC512C0
-void __fastcall sub_6FC512C0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall ITEMS_ScheduleDurabilityReplenishment(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC51310
-void __fastcall sub_6FC51310(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall ITEMS_ScheduleQuantityReplenishment(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC51360
-void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, D2UnitStrc* pPlayer, D2TCExShortStrc* pTCTxtRecord, int32_t nQuality, int32_t nLvl, int32_t a7, D2UnitStrc** ppItems, int32_t* pnItemsDropped, int32_t nMaxItems);
+void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, D2UnitStrc* pPlayer, D2TCExShortStrc* pTCTxtRecord, int32_t nQuality, int32_t nLvl, int32_t bIgnoreNoDrop, D2UnitStrc** ppItems, int32_t* pnItemsDropped, int32_t nMaxItems);
 //D2Game.0x6FC52070
 D2ActiveRoomStrc* __fastcall D2GAME_GetRoom_6FC52070(D2ActiveRoomStrc* pRoom, int32_t nSubtileX, int32_t nSubtileY);
 //D2Game.0x6FC52110
-void __fastcall sub_6FC52110(D2GameStrc* pGame, D2UnitStrc* pMonster, D2UnitStrc* pPlayer, int32_t nTCId, int32_t nQuality, int32_t nItemLevel, int32_t a7, D2UnitStrc** ppItems, int32_t* pnItemsDropped, int32_t nMaxItems);
+void __fastcall ITEMS_DropTreasureClassById(D2GameStrc* pGame, D2UnitStrc* pMonster, D2UnitStrc* pPlayer, int32_t nTCId, int32_t nQuality, int32_t nItemLevel, int32_t bIgnoreNoDrop, D2UnitStrc** ppItems, int32_t* pnItemsDropped, int32_t nMaxItems);
 //D2Game.0x6FC521D0
 int32_t __fastcall ITEMS_GetGroundRemovalTime(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC52260
@@ -144,6 +144,6 @@ void __fastcall ITEMS_DeleteInactiveItems(D2GameStrc* pGame, int32_t nAct);
 //D2Game.0x6FC523B0
 void __fastcall ITEMS_DestroyRunewordStatList(D2GameStrc* pGame, D2UnitStrc* pItem);
 //D2Game.0x6FC52410
-void __fastcall sub_6FC52410(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop);
+void __fastcall ITEMS_AssignStaffModsForFormat(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC52650
-void __fastcall sub_6FC52650(D2UnitStrc* pUnit, int32_t nItemLvl, int32_t nClassFirstSkillId, int32_t nSkillCount, int32_t nItemDropLvl);
+void __fastcall ITEMS_AssignModernStaffMods(D2UnitStrc* pUnit, int32_t nItemLvl, int32_t nClassFirstSkillId, int32_t nSkillCount, int32_t nItemDropLvl);

@@ -442,7 +442,7 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
 
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
-        return sub_6FC53760(pItem, pItemDrop);
+        return ITEMS_RollLegacyRareItem(pItem, pItemDrop);
     }
 
     int16_t nPrefix = D2GAME_RollRareAffix_6FC53610(pItem, 1);
@@ -551,7 +551,7 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
         }
     }
 
-    sub_6FC52410(pItem, pItemDrop);
+    ITEMS_AssignStaffModsForFormat(pItem, pItemDrop);
     return 1;
 }
 
@@ -704,12 +704,12 @@ static BOOL __fastcall D2GAME_AssignMagicAffixesForRareItem(D2UnitStrc* pItem, D
         }
     }
     
-    sub_6FC52410(pItem, pItemDrop);
+    ITEMS_AssignStaffModsForFormat(pItem, pItemDrop);
     return TRUE;
 }
 
 //D2Game.0x6FC53760
-BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+BOOL __fastcall ITEMS_RollLegacyRareItem(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
@@ -744,7 +744,7 @@ BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 
 
 //D2Game.0x6FC53CD0) --------------------------------------------------------
-int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_RollCraftedItem(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
@@ -787,7 +787,7 @@ int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC54240
-int32_t __fastcall sub_6FC54240(D2UnitStrc* pItem, int32_t bScroll)
+int32_t __fastcall ITEMS_FindBookRecordIndex(D2UnitStrc* pItem, int32_t bScroll)
 {
     D2BookDataTbl* pBookDataTbl = DATATBLS_GetBookDataTables();
     D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
@@ -814,11 +814,11 @@ int32_t __fastcall sub_6FC54240(D2UnitStrc* pItem, int32_t bScroll)
 }
 
 //D2Game.0x6FC542C0
-int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_RollSetItem(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
-        return sub_6FC544A0(pItem);
+        return ITEMS_RollLegacySetItem(pItem);
     }
 
     D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
@@ -893,7 +893,7 @@ int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC544A0
-int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
+int32_t __fastcall ITEMS_RollLegacySetItem(D2UnitStrc* pItem)
 {
     if (!pItem)
     {
@@ -956,7 +956,7 @@ int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
 }
 
 //D2Game.0x6FC54690
-int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_RollSuperiorItem(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
 {
     D2QualityItemDataTbl* pLowQualityItemDataTbl = DATATBLS_GetQualityItemDataTables();
     D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pUnit ? pUnit->dwClassId : -1);
@@ -994,7 +994,7 @@ int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
 
             ITEMMODS_AssignProperty(1, 0, pUnit, pQualityItemsTxtRecord, 0, 0);
 
-            sub_6FC52410(pUnit, pItemDrop);
+            ITEMS_AssignStaffModsForFormat(pUnit, pItemDrop);
             return 1;
         }
 
@@ -1019,7 +1019,7 @@ int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC549F0
-int32_t __fastcall sub_6FC549F0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_ApplyLegacyLowQuality(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     D2_MAYBE_UNUSED(pItemDrop);
 
@@ -1082,21 +1082,21 @@ int32_t __fastcall sub_6FC549F0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC54D00
-int32_t __fastcall sub_6FC54D00(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_ApplyLowQuality(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     if (!pItem)
     {
         return 0;
     }
 
-    const int32_t nResult = sub_6FC549F0(pItem, pItemDrop);
-    sub_6FC52410(pItem, pItemDrop);
+    const int32_t nResult = ITEMS_ApplyLegacyLowQuality(pItem, pItemDrop);
+    ITEMS_AssignStaffModsForFormat(pItem, pItemDrop);
 
     return nResult;
 }
 
 //D2Game.0x6FC55060
-void __fastcall sub_6FC55060(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nClassFirstSkillId, int32_t a4 /*unused?*/)
+void __fastcall ITEMS_AssignLegacyStaffMods(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nClassFirstSkillId, int32_t nUnusedSkillCount /*unused?*/)
 {
     const int32_t nCountRoll = ITEMS_RollRandomNumber(ITEMS_GetItemSeed(pUnit)) % 100;
     int32_t nCount = 0;
@@ -1196,12 +1196,12 @@ void __fastcall sub_6FC55060(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nCla
 }
 
 //D2Game.0x6FC55270
-int32_t __fastcall sub_6FC55270(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMS_ApplyLowQualityForFormat(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
-        return sub_6FC549F0(pItem, pItemDrop);
+        return ITEMS_ApplyLegacyLowQuality(pItem, pItemDrop);
     }
 
-    return sub_6FC54D00(pItem, pItemDrop);
+    return ITEMS_ApplyLowQuality(pItem, pItemDrop);
 }

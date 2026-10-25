@@ -72,7 +72,7 @@ void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMon
     }
 
     int32_t nUnused = 0;
-    if (sub_6FC45060(pGame, pMonster, pItem->dwUnitId, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
+    if (ITEMMODE_EquipCursorItem(pGame, pMonster, pItem->dwUnitId, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
     {
         STATLIST_SetUnitStat(pItem, STAT_DURABILITY, STATLIST_GetMaxDurabilityFromUnit(pItem), 0);
     }

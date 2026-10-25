@@ -1865,7 +1865,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x17_DropItemOnGround_6FC84E20(D2Gam
                 return 3;
             }
 
-            sub_6FC44030(pGame, pUnit, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pUnit, nItemGUID);
             return 0;
         }
 
@@ -1982,7 +1982,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x19_RemoveItemFromBuffer_6FC850C0(D
                 else
                 {
                     int32_t a6 = 0;
-                    if (sub_6FC7C3A0(pGame, pUnit, pItem) && !sub_6FC446B0(pGame, pUnit, nItemGUID, &a6, 1, 0, 0, 0) && a6)
+                    if (sub_6FC7C3A0(pGame, pUnit, pItem) && !ITEMMODE_RemoveStoredItem(pGame, pUnit, nItemGUID, &a6, 1, 0, 0, 0) && a6)
                     {
                         char szName[32] = {};
                         GAME_LogMessage(3, "[sRemoveItemGrid] error #2 item '%s' from player %s", DATATBLS_GetUnitNameFromUnit(pItem, szName), UNITS_GetPlayerData(pUnit)->szName);
@@ -2019,7 +2019,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1A_EquipItem_6FC85280(D2GameStrc* 
             if (nBodyLoc > 0 && nBodyLoc < 11)
             {
                 int32_t a6 = 0;
-                if (sub_6FC45060(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a6) || !a6)
+                if (ITEMMODE_EquipCursorItem(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a6) || !a6)
                 {
                     return 0;
                 }
@@ -2063,7 +2063,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1B_Swap2HandedItem_6FC853C0(D2Game
             if (nBodyLoc > 0 && nBodyLoc < 11)
             {
                 int32_t a5 = 0;
-                if (sub_6FC45550(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a5) || !a5)
+                if (ITEMMODE_ReplaceOppositeHandItem(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a5) || !a5)
                 {
                     return 0;
                 }
@@ -2093,7 +2093,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1C_RemoveBodyItem_6FC854B0(D2GameS
             if (sub_6FC7C3A0(pGame, pUnit, pItem) && (nBodyLoc != BODYLOC_BELT || sub_6FC93740(pGame, pUnit)))
             {
                 int32_t a5 = 0;
-                if (!sub_6FC45B30(pGame, pUnit, nBodyLoc, 0, &a5) && a5)
+                if (!ITEMMODE_UnequipBodyItem(pGame, pUnit, nBodyLoc, 0, &a5) && a5)
                 {
                     return 3;
                 }
@@ -2137,7 +2137,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1D_SwapCursorItemWithBody_6FC85550
                     }
 
                     int32_t a5 = 0;
-                    if (sub_6FC45E60(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a5) || !a5)
+                    if (ITEMMODE_SwapCursorAndBodyItem(pGame, pUnit, nItemGUID, nBodyLoc, 0, &a5) || !a5)
                     {
                         return 0;
                     }
@@ -2183,7 +2183,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1E_SwapTwo1HandedWithOne2HandedIte
 
                     D2UnitStrc* pEquippedItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
                     int32_t a5 = 0;
-                    if (sub_6FC7C3A0(pGame, pUnit, pEquippedItem) && !sub_6FC46270(pGame, pUnit, nItemGUID, nBodyLoc, &a5) && a5)
+                    if (sub_6FC7C3A0(pGame, pUnit, pEquippedItem) && !ITEMMODE_ReplaceHandItemsWithCursorItem(pGame, pUnit, nItemGUID, nBodyLoc, &a5) && a5)
                     {
                         FOG_Trace("sDoubleSwapItemBody Cheat detected for player %s\n", UNITS_GetPlayerData(pUnit)->szName);
                         return 3;
@@ -2235,7 +2235,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x1F_SwapCursorBufferItems_6FC857C0(
                 else
                 {
                     int32_t bPlaced = 0;
-                    if (sub_6FC7C3A0(pGame, pUnit, pInventoryItem) && !sub_6FC46D40(pGame, pUnit, nCursorItemGUID, nInventoryItemGUID, nX, nY, &bPlaced) && bPlaced)
+                    if (sub_6FC7C3A0(pGame, pUnit, pInventoryItem) && !ITEMMODE_SwapCursorAndStoredItem(pGame, pUnit, nCursorItemGUID, nInventoryItemGUID, nX, nY, &bPlaced) && bPlaced)
                     {
                         char szName[32] = {};
                         char szCursorItemName[32] = {};
@@ -2282,7 +2282,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x20_UseGridItem_6FC85990(D2GameStrc
             }
 
             int32_t a5 = 0;
-            if (sub_6FC47D30(pGame, pUnit, nItemGUID, nX, nY, &a5) || !a5)
+            if (ITEMMODE_UseStoredItemAtCoordinates(pGame, pUnit, nItemGUID, nX, nY, &a5) || !a5)
             {
                 return 0;
             }
@@ -2314,7 +2314,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x27_UseItemAction_6FC85B50(D2GameSt
             if (pUseItem && (INVENTORY_CompareWithItemsParentInventory(pUnit->pInventory, pUseItem) || INVENTORY_GetCursorItem(pUnit->pInventory) == pUseItem))
             {
                 int32_t a5 = 0;
-                if (sub_6FC47470(pGame, pUnit, pPacket27->nTargetItemGUID, pPacket27->nUseItemGUID, &a5) || !a5)
+                if (ITEMMODE_UseItemOnItem(pGame, pUnit, pPacket27->nTargetItemGUID, pPacket27->nUseItemGUID, &a5) || !a5)
                 {
                     return 0;
                 }
@@ -2349,7 +2349,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x21_StackItems_6FC85C80(D2GameStrc*
                 if (nItemGUID1 != nItemGUID2)
                 {
                     int32_t a5 = 0;
-                    if (sub_6FC484E0(pGame, pUnit, nItemGUID1, nItemGUID2, &a5) || !a5)
+                    if (ITEMMODE_MergeItemStacks(pGame, pUnit, nItemGUID1, nItemGUID2, &a5) || !a5)
                     {
                         return 0;
                     }
@@ -2408,7 +2408,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x23_ItemToBelt_6FC85E70(D2GameStrc*
         if (pCursorItem && pCursorItem->dwAnimMode == IMODE_ONCURSOR && INVENTORY_GetCursorItem(pUnit->pInventory) == pCursorItem)
         {
             int32_t a5 = 0;
-            if (sub_6FC48940(pGame, pUnit, nCursorItemGUID, v7, 0, &a5) || !a5)
+            if (ITEMMODE_PlaceCursorItemInBelt(pGame, pUnit, nCursorItemGUID, v7, 0, &a5) || !a5)
             {
                 return 0;
             }
@@ -2452,7 +2452,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x24_ItemFromBelt_6FC85F50(D2GameStr
     }
 
     int32_t a5 = 0;
-    if (sub_6FC48B40(pGame, pUnit, nItemGUID, &a5) || !a5)
+    if (ITEMMODE_RemoveBeltItemToCursor(pGame, pUnit, nItemGUID, &a5) || !a5)
     {
         return 0;
     }
@@ -2478,7 +2478,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x25_SwitchBeltItem_6FC86040(D2GameS
             if (pBeltItem && pBeltItem->dwAnimMode == IMODE_INBELT && INVENTORY_CompareWithItemsParentInventory(pUnit->pInventory, pBeltItem))
             {
                 int32_t a5 = 0;
-                if (sub_6FC48D50(pGame, pUnit, nCursorItemGUID, nBeltItemGUID, &a5) || !a5)
+                if (ITEMMODE_SwapCursorAndBeltItem(pGame, pUnit, nCursorItemGUID, nBeltItemGUID, &a5) || !a5)
                 {
                     return 0;
                 }
@@ -2513,7 +2513,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x26_UseBeltItem_6FC86150(D2GameStrc
     }
 
     int32_t a6 = 0;
-    if (sub_6FC49220(pGame, pUnit, pPacket26->nItemGUID, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), &a6, pPacket26->bUseOnMerc) || !a6)
+    if (ITEMMODE_UseBeltItem(pGame, pUnit, pPacket26->nItemGUID, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), &a6, pPacket26->bUseOnMerc) || !a6)
     {
         return 0;
     }
@@ -2585,7 +2585,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x29_ScrollToBook_6FC86450(D2GameStr
         if (pItem && pItem->dwAnimMode == IMODE_STORED && INVENTORY_CompareWithItemsParentInventory(pUnit->pInventory, pItem))
         {
             int32_t a5 = 0;
-            if (sub_6FC49AE0(pGame, pUnit, v7, nItemGUID, &a5) || !a5)
+            if (ITEMMODE_AddScrollToBook(pGame, pUnit, v7, nItemGUID, &a5) || !a5)
             {
                 return 0;
             }
@@ -2661,7 +2661,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x2A_ItemToCubeIndirect_6FC866E0(D2G
         if (pItem && pItem->dwAnimMode == IMODE_STORED && INVENTORY_CompareWithItemsParentInventory(pUnit->pInventory, pItem))
         {
             int32_t a5 = 0;
-            if (sub_6FC49DC0(pGame, pUnit, v7, nItemGUID, &a5) || !a5)
+            if (ITEMMODE_PlaceItemInCube(pGame, pUnit, v7, nItemGUID, &a5) || !a5)
             {
                 return 0;
             }
@@ -3860,7 +3860,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x60_SwapWeapons_6FC888A0(D2GameStrc
         }
         
         int32_t a3 = 0;
-        if (sub_6FC46840(pGame, pUnit, &a3) || !a3)
+        if (ITEMMODE_SwapWeaponSets(pGame, pUnit, &a3) || !a3)
         {
             return 0;
         }
@@ -4006,7 +4006,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
         UNITS_RefreshInventory(pMerc, 1);
         D2UnitStrc* pCursorItem = ITEMS_Duplicate(pGame, pEquippedItem, pUnit, 1);
         INVENTORY_SetCursorItem(pUnit->pInventory, pCursorItem);
-        sub_6FC4B9D0(pGame, pUnit, pCursorItem);
+        ITEMMODE_MarkItemOnCursor(pGame, pUnit, pCursorItem);
         ITEMS_SetItemFlag(pEquippedItem, IFLAG_QUANTITY, 1);
         D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pMerc, 0, 0);
         //D2Game_10034_Return(0);
@@ -4087,7 +4087,7 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
     UNITS_ChangeAnimMode(pDupeItem, IMODE_ONCURSOR);
 
     int32_t nUnused = 0;
-    sub_6FC45060(pGame, pMerc, pDupeItem ? pDupeItem->dwUnitId : -1, nTargetBodyLoc, 1, &nUnused);
+    ITEMMODE_EquipCursorItem(pGame, pMerc, pDupeItem ? pDupeItem->dwUnitId : -1, nTargetBodyLoc, 1, &nUnused);
 
     D2GAME_RemoveItemIfOnCursor_6FC49760(pGame, pPlayer, pItem);
     INVENTORY_SetCursorItem(pPlayer->pInventory, nullptr);
@@ -4096,7 +4096,7 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
     {
         D2UnitStrc* pCursorItem = ITEMS_Duplicate(pGame, pExchangeItem, pPlayer, 1);
         INVENTORY_SetCursorItem(pPlayer->pInventory, pCursorItem);
-        sub_6FC4B9D0(pGame, pPlayer, pCursorItem);
+        ITEMMODE_MarkItemOnCursor(pGame, pPlayer, pCursorItem);
     }
 
     D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pMerc, 0, 0);

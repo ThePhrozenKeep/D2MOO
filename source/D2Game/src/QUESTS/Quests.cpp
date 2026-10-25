@@ -2221,7 +2221,7 @@ void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2In
 	else if (nAnimMode == IMODE_EQUIP)
 	{
 		int32_t nUnequipFailure = 0;
-		sub_6FC45B30(pGame, pPlayer, INVENTORY_GetItemsXPosition(pInventory, pItem), 1, &nUnequipFailure);
+		ITEMMODE_UnequipBodyItem(pGame, pPlayer, INVENTORY_GetItemsXPosition(pInventory, pItem), 1, &nUnequipFailure);
 	}
 	else if (nAnimMode == IMODE_ONCURSOR)
 	{

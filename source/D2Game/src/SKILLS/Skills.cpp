@@ -1440,7 +1440,7 @@ int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     }
 
     STATLIST_SetUnitStat(pItem, STAT_QUANTITY, nQuantity, 0);
-    sub_6FC51310(pGame, pItem);
+    ITEMS_ScheduleQuantityReplenishment(pGame, pItem);
 
     D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, nQuantity, 0);
 

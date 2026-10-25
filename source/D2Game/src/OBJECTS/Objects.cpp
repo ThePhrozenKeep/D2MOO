@@ -479,7 +479,7 @@ void __fastcall OBJECTS_InitFunction28_GoldPlaceHolder(D2ObjInitFnStrc* pOp)
             pCoord.nY = pOp->nY + nOffsetY;
             if (!COLLISION_CheckMaskWithSizeXY(pRoom, pCoord.nX, pCoord.nY, 1, 1, COLLIDE_MASK_PLACEMENT))
             {
-                sub_6FC4F640(pOp->pGame, pOp->pRoom, &pCoord);
+                ITEMS_DropGoldAtCoordinates(pOp->pGame, pOp->pRoom, &pCoord);
             }
         }
     }
@@ -1916,7 +1916,7 @@ int32_t __fastcall OBJECTS_SpawnRandomItemGrid(D2GameStrc* pGame, D2ActiveRoomSt
                 && nY < pDrlgCoords->nSubtileY + pDrlgCoords->nSubtileHeight - 1
                 && !COLLISION_CheckMaskWithSizeXY(pRoom, nX, nY, 3u, 3u, COLLIDE_MASK_PLACEMENT))
             {
-                sub_6FC4F290(pGame, pRoom, &coords, nullptr);
+                ITEMS_DropRandomItemAtCoordinates(pGame, pRoom, &coords, nullptr);
 
                 ++nCounter;
                 if (nCounter >= 32)

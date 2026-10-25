@@ -481,7 +481,7 @@ D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2Ac
 	ITEMS_GetCompactItemDataFromBitstream(pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave);
 
 	uint32_t nSize = 0;
-	D2UnitStrc* pItem = sub_6FC4EC10(pGame, pRoom, pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave, &nSize, 96);
+	D2UnitStrc* pItem = ITEMS_CreateItemFromBitstream(pGame, pRoom, pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave, &nSize, 96);
 	if (!pItem)
 	{
 		return nullptr;
@@ -510,7 +510,7 @@ D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2Ac
 		for (int32_t i = 0; i < pItemSave.nItemFileIndex; ++i)
 		{
 			ITEMS_GetCompactItemDataFromBitstream(pBitstream, nAvailableSize, 1, &pItemSave);
-			D2UnitStrc* pSocketable = sub_6FC4EC10(pGame, nullptr, pBitstream, nAvailableSize, 1, &pItemSave, &nSize, 96);
+			D2UnitStrc* pSocketable = ITEMS_CreateItemFromBitstream(pGame, nullptr, pBitstream, nAvailableSize, 1, &pItemSave, &nSize, 96);
 			if (!pSocketable)
 			{
 				FOG_DisplayWarning("Unable to create item", __FILE__, __LINE__);

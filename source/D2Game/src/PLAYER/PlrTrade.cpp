@@ -63,7 +63,7 @@ int32_t __fastcall OBJECTS_OperateFunction32_Bank(D2ObjOperateFnStrc* pOp, int32
 
                 D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pOp->pPlayer, __FILE__, __LINE__);
                 D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(pClient, UPDATEUI_OPENSTASH);
-                sub_6FC4B830(pOp->pGame, pOp->pPlayer);
+                ITEMMODE_RebuildBookScrollSkillQuantities(pOp->pGame, pOp->pPlayer);
             }
         }
     }
@@ -1065,7 +1065,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         {
             if (pItem->dwAnimMode == IMODE_STORED)
             {
-                sub_6FC4B740(pUnit, pItem);
+                ITEMMODE_ResetBookScrollSkillQuantity(pUnit, pItem);
             }
 
             INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pItem);
@@ -1087,7 +1087,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         }
     }
 
-    sub_6FC4BA50(pGame, pUnit);
+    ITEMMODE_RemoveInventoryItemProperties(pGame, pUnit);
     sub_6FC90C20(pGame, pUnit);
 }
 
@@ -1241,8 +1241,8 @@ void __fastcall sub_6FC91050(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     pPlayerData1->dwTradeState = nTradeState;
     pPlayerData2->dwTradeState = 9;
 
-    sub_6FC4B830(pGame, pPlayer1);
-    sub_6FC4B830(pGame, pPlayer2);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer1);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer2);
 
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), 0xCu);
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer2, __FILE__, __LINE__), 0xCu);
@@ -1304,7 +1304,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 SUNIT_ResetInteractInfo(pPlayer);
             }
 
-            sub_6FC4B830(pGame, pPlayer);
+            ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
             break;
         }
         case TRADEBTN_STASHWITHDRAW:
@@ -1362,7 +1362,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 SUNIT_ResetInteractInfo(pPlayer);
             }
 
-            sub_6FC4B830(pGame, pPlayer);
+            ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
             break;
         }
         case TRADEBTN_TRANSMUTE:
@@ -1591,7 +1591,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
-                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pInteractPlayer, pCheckedItem))
+                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !ITEMMODE_CanPickUpItem(pGame, pInteractPlayer, pCheckedItem))
                     {
                         sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
@@ -1605,7 +1605,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pInteractPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
                 {
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
-                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !sub_6FC425F0(pGame, pPlayer, pCheckedItem))
+                    if (ITEMS_GetInvPage(pCheckedItem) == 2 && !ITEMMODE_CanPickUpItem(pGame, pPlayer, pCheckedItem))
                     {
                         sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
@@ -1653,8 +1653,8 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     PLRTRADE_Free(pGame, pPlayer);
                     PLRTRADE_Free(pGame, pInteractPlayer);
 
-                    sub_6FC4B830(pGame, pPlayer);
-                    sub_6FC4B830(pGame, pInteractPlayer);
+                    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
+                    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pInteractPlayer);
 
                     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 13);
                     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), 13);
@@ -2088,8 +2088,8 @@ void __fastcall PLRTRADE_AddGold(D2UnitStrc* pUnit, int32_t nStat, int32_t nValu
 //D2Game.0x6FC92920
 void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2PlayerDataStrc* pPlayerData1, D2PlayerDataStrc* pPlayerData2)
 {
-    sub_6FC4B830(pGame, pPlayer1);
-    sub_6FC4B830(pGame, pPlayer2);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer1);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer2);
 
     UNITS_RefreshInventory(pPlayer1, 1);
     UNITS_RefreshInventory(pPlayer2, 1);
@@ -2124,8 +2124,8 @@ void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     pPlayerData1->dwTradeState = 5;
     pPlayerData2->dwTradeState = 5;
 
-    sub_6FC4B830(pGame, pPlayer1);
-    sub_6FC4B830(pGame, pPlayer2);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer1);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer2);
 
     EVENT_SetEvent(pGame, pPlayer1, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
     EVENT_SetEvent(pGame, pPlayer2, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
@@ -2166,7 +2166,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
                     return 0;
                 }
 
-                if (D2GAME_CheckHasFilledSockets_6FC4B2D0(pCheckedItem, __FILE__, __LINE__) && !sub_6FC4B310(pGame, pPlayer2, pCheckedItem, pDupeItem, 1u))
+                if (D2GAME_CheckHasFilledSockets_6FC4B2D0(pCheckedItem, __FILE__, __LINE__) && !ITEMMODE_DuplicateSocketFillers(pGame, pPlayer2, pCheckedItem, pDupeItem, 1u))
                 {
                     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), UPDATEUI_BUYERNOROOM);
                     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer2, __FILE__, __LINE__), UPDATEUI_SELLERNOROOM);
@@ -2194,7 +2194,7 @@ int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitS
         }
         case 2:
         {
-            sub_6FC4B740(pPlayer1, pCheckedItem);
+            ITEMMODE_ResetBookScrollSkillQuantity(pPlayer1, pCheckedItem);
 
             int32_t nFlags = 0;
             ITEMS_SetOrRemoveFlag(&nFlags, 32, 1);
@@ -2266,7 +2266,7 @@ void __fastcall sub_6FC92EE0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 void __fastcall sub_6FC92EF0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     SUNIT_ResetInteractInfo(pUnit);
-    sub_6FC4B830(pGame, pUnit);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
 }
 
 //D2Game.0x6FC92F10
@@ -2299,7 +2299,7 @@ void __fastcall sub_6FC92F10(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     {
         if (D2GAME_CheckHasFilledSockets_6FC4B2D0(pItem, __FILE__, __LINE__))
         {
-            sub_6FC4B310(pGame, pOtherPlayer, pItem, pDupeItem, 1u);
+            ITEMMODE_DuplicateSocketFillers(pGame, pOtherPlayer, pItem, pDupeItem, 1u);
         }
 
         if (pPlayerData1 && pPlayerData1->pTrade)
@@ -2363,7 +2363,7 @@ void __fastcall sub_6FC931D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
             if (pItemTrade->nItemGUID1 == nItemGUID)
             {
                 int32_t nUnused = 0;
-                if (sub_6FC446B0(pGame, pOtherPlayer, pItemTrade->nItemGUID2, &nUnused, 1, 1, 0, 1))
+                if (ITEMMODE_RemoveStoredItem(pGame, pOtherPlayer, pItemTrade->nItemGUID2, &nUnused, 1, 1, 0, 1))
                 {
                     //for (pCurrentItem = pItemTrade; pCurrentItem; pCurrentItem = pCurrentItem->pNext)
                     //    ;
