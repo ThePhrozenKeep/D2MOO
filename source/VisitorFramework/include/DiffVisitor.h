@@ -10,6 +10,7 @@
 #include <ios>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <functional>
 #include <ostream>
 #include <string>
@@ -36,7 +37,10 @@ class DiffVisitor : public FieldVisitor<DiffVisitor<T>>
 {
 public:
 
-	DiffVisitor(T& object, DiffContext& context, const std::string& parent_name = "") : m_object(object), m_context(context), m_parent_name(parent_name) {}
+	DiffVisitor(T& object, DiffContext& context, const std::string& parent_name = "")
+		: DiffVisitor(object, context, parent_name.empty() ? nullptr : std::make_shared<DiffFieldPath>(nullptr, parent_name))
+	{
+	}
 
 	void CompareWith(T& other)
 	{
@@ -45,10 +49,37 @@ public:
 
 		VisitorTraits<T>::Visit(*this, other);
 
-		for (const auto& child_visitor : child_visitors)
+		// Children are compared from an explicit stack instead of recursively, so long pointer chains cannot overflow the call stack.
+				// They are pushed in reverse so they are compared in declaration order, depth first.
+		m_context.pending_comparisons.insert(m_context.pending_comparisons.end(), child_visitors.rbegin(), child_visitors.rend());
+		child_visitors.clear();
+
+		// Only the outermost CompareWith() call works through the stack
+		if (m_context.comparing)
 		{
-			child_visitor();
+			return;
 		}
+
+		m_context.comparing = true;
+
+		try
+		{
+			while (!m_context.pending_comparisons.empty())
+			{
+				const auto comparison = std::move(m_context.pending_comparisons.back());
+				m_context.pending_comparisons.pop_back();
+
+				comparison();
+			}
+		}
+		catch (...)
+		{
+			m_context.pending_comparisons.clear();
+			m_context.comparing = false;
+			throw;
+		}
+
+		m_context.comparing = false;
 	}
 
 	template<auto Member>
@@ -59,7 +90,7 @@ public:
 
 		using MemberType = std::remove_cv_t<std::remove_reference_t<decltype(object_member)>>;
 
-		CompareChild<MemberType>(object_member, other_member, FieldName(name));
+		CompareChild<MemberType>(object_member, other_member, name);
 	}
 
 	template<auto Member>
@@ -79,32 +110,12 @@ public:
 	template<auto Member>
 	void VisitPointer(T& other, const char* name)
 	{
-		std::string field_name;
-		if (m_parent_name != "")
-		{
-			field_name = m_parent_name + "->" + name;
-		}
-		else
-		{
-			field_name = name;
-		}
-
 		auto* other_ptr = other.*Member;
 		auto* object_ptr = m_object.*Member;
 
 		if (other_ptr == nullptr || object_ptr == nullptr)
 		{
-			if (other_ptr != object_ptr)
-			{
-				std::stringstream object_stream;
-				object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
-
-				std::stringstream other_stream;
-				other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
-
-				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_stream.str(), other_stream.str() };
-				m_context.differences.push_back(difference_descriptor);
-			}
+			ReportPointerDifference(name, object_ptr, other_ptr);
 
 			return;
 		}
@@ -113,7 +124,7 @@ public:
 
 		using Pointee = std::remove_cv_t<std::remove_pointer_t<PointerType>>;
 
-		CompareChild<Pointee>(*object_ptr, *other_ptr, field_name);
+		CompareChild<Pointee>(*object_ptr, *other_ptr, name);
 	}
 
 	// Shadows FieldVisitor::DynamicArray() to report a difference when only one of the arrays is null or the counts differ.
@@ -189,20 +200,11 @@ public:
 	{
 		using MemberType = std::remove_cv_t<std::remove_reference_t<ObjectElement>>;
 
-		std::string field_name;
-
-		if (m_parent_name != "")
-		{
-			field_name = m_parent_name + "->" + member_name;
-		}
-		else
-		{
-			field_name = member_name;
-		}
+		std::string name = member_name;
 
 		for (const auto index : indices)
 		{
-			field_name += "[" + std::to_string(index) + "]";
+			name += "[" + std::to_string(index) + "]";
 		}
 
 		if constexpr (std::is_pointer_v<MemberType>)
@@ -212,38 +214,27 @@ public:
 
 			if (other_ptr == nullptr || object_ptr == nullptr)
 			{
-				if (other_ptr != object_ptr)
-				{
-					std::stringstream object_stream;
-					object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
-
-					std::stringstream other_stream;
-					other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
-
-					const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_stream.str(), other_stream.str() };
-
-					m_context.differences.push_back(difference_descriptor);
-				}
+				ReportPointerDifference(name, object_ptr, other_ptr);
 
 				return;
 			}
 
 			using Pointee = std::remove_cv_t<std::remove_pointer_t<MemberType>>;
 
-			CompareChild<Pointee>(*object_ptr, *other_ptr, field_name);
+			CompareChild<Pointee>(*object_ptr, *other_ptr, name);
 		}
 		else if constexpr (std::is_arithmetic_v<MemberType>)
 		{
 			if (!AreValuesEqual(object_el, other_el))
 			{
-				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, field_name, FormatValue(object_el), FormatValue(other_el) };
+				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, FieldName(name), FormatValue(object_el), FormatValue(other_el) };
 
 				m_context.differences.push_back(difference_descriptor);
 			}
 		}
 		else if constexpr (HasVisitorTraits_v<MemberType, decltype(*this)>)
 		{
-			CompareChild<MemberType>(object_el, other_el, field_name);
+			CompareChild<MemberType>(object_el, other_el, name);
 		}
 		else
 		{
@@ -273,6 +264,14 @@ public:
 	}
 
 private:
+	template<typename>
+	friend class DiffVisitor;
+
+	DiffVisitor(T& object, DiffContext& context, std::shared_ptr<DiffFieldPath> path)
+		: m_object(object), m_context(context), m_path(std::move(path))
+	{
+	}
+
 	static constexpr double FloatingPointTolerance = 0.0001;
 
 	template<typename Value>
@@ -342,7 +341,7 @@ private:
 	// An object that was already compared with a different object means the object graphs are shaped differently
 	// (e.g. two pointers share an object on one side only), which is reported as a pointer difference.
 	template<typename Type>
-	void CompareChild(const Type& object, const Type& other, const std::string& field_name)
+	void CompareChild(const Type& object, const Type& other, const std::string& name)
 	{
 		const auto type = std::type_index(typeid(Type));
 
@@ -368,7 +367,7 @@ private:
 					other_value += " (compared with " + FormatPointer(other_it->second) + " before)";
 				}
 
-				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_value, other_value };
+				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, FieldName(name), object_value, other_value };
 				m_context.differences.push_back(difference_descriptor);
 			}
 
@@ -377,23 +376,34 @@ private:
 
 		MarkVisited(object, other);
 
+		// Captures the context instead of this, because the comparison runs after this visitor is gone
 		child_visitors.push_back(
-			[this, &object, &other, field_name]()
+			[&context = m_context, &object, &other, path = std::make_shared<DiffFieldPath>(m_path, name)]()
 			{
-				DiffVisitor<Type> child_visitor(const_cast<Type&>(object), m_context, field_name);
+				DiffVisitor<Type> child_visitor(const_cast<Type&>(object), context, path);
 				child_visitor.CompareWith(const_cast<Type&>(other));
 			}
 		);
 	}
 
-	std::string FieldName(const char* name) const
+	std::string FieldName(const std::string& name) const
 	{
-		if (m_parent_name != "")
+		if (m_path != nullptr)
 		{
-			return m_parent_name + "->" + name;
+			return m_path->ToString() + "->" + name;
 		}
 
 		return name;
+	}
+
+	// Reports a difference if exactly one of the pointers is null
+	void ReportPointerDifference(const std::string& name, const void* object_ptr, const void* other_ptr)
+	{
+		if (object_ptr != other_ptr)
+		{
+			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, FieldName(name), FormatPointer(object_ptr), FormatPointer(other_ptr) };
+			m_context.differences.push_back(difference_descriptor);
+		}
 	}
 
 	// Returns true if at least one of the arrays is null, reporting a difference if only one of them is
@@ -408,17 +418,7 @@ private:
 			return false;
 		}
 
-		if (other_ptr != object_ptr)
-		{
-			std::stringstream object_stream;
-			object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
-
-			std::stringstream other_stream;
-			other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
-
-			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, FieldName(name), object_stream.str(), other_stream.str() };
-			m_context.differences.push_back(difference_descriptor);
-		}
+		ReportPointerDifference(name, object_ptr, other_ptr);
 
 		return true;
 	}
@@ -440,7 +440,7 @@ private:
 
 	T& m_object;
 	DiffContext& m_context;
-	std::string m_parent_name;
+	std::shared_ptr<DiffFieldPath> m_path;
 
 	std::vector<std::function<void()>> child_visitors;
 };
