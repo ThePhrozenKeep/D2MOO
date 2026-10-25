@@ -141,7 +141,7 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
     case UNIT_PLAYER:
     {
         D2GAME_FreeUnitNode_6FC40310(pGame, pUnit);
-        sub_6FC7C170(pGame, pUnit);
+        PLAYER_RemoveTownPortal(pGame, pUnit);
         PARTY_LeaveParty(pGame, pUnit);
         PLAYER_Destroy(pGame, pUnit);
 
@@ -398,7 +398,7 @@ void __fastcall SUNIT_WarpPlayer(D2GameStrc* pGame, D2UnitStrc* pTarget, D2UnitS
 
     nX += pLvlWarpTxtRecord->dwExitWalkX;
     nY += pLvlWarpTxtRecord->dwExitWalkY;
-    sub_6FC817D0(pGame, pTarget, 0, 2, nX, nY, 0);
+    PLRMODE_ChangeModeToCoords(pGame, pTarget, 0, 2, nX, nY, 0);
     D2GAME_PACKETS_SendPacket0x0D_6FC3C920(UNITS_GetPlayerData(pTarget)->pClient, 0xDu, pTarget->dwUnitType, pTarget->dwUnitId, 1, nX, nY, 0, UNITS_GetCurrentLifePercentage(pTarget));
 }
 
@@ -648,7 +648,7 @@ void __fastcall SUNIT_Add(D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2GameStrc*
     case UNIT_PLAYER:
     {
         PATH_AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
-        sub_6FC7B7A0(pGame, pUnit, nX, nY);
+        PLAYER_InitializePosition(pGame, pUnit, nX, nY);
         break;
     }
     case UNIT_MONSTER:
@@ -782,7 +782,7 @@ void __fastcall SUNIT_Restore(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoom
         pUnit->pDynamicPath = nullptr;
 
         PATH_AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
-        sub_6FC7B7A0(pGame, pUnit, nX, nY);
+        PLAYER_InitializePosition(pGame, pUnit, nX, nY);
 
         if (pUnit->dwAnimMode == PLRMODE_DEAD || pUnit->dwAnimMode == PLRMODE_DEATH)
         {
@@ -2369,7 +2369,7 @@ int32_t __fastcall SUNIT_TeleportUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ac
         }
 
         j_D2GAME_InitTimer_6FC351D0(pGame, pUnit, EVENTTYPE_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, SUNIT_EventClearTeleportCoordinates, 0, 0);
-        sub_6FC7E310(pGame, pUnit, coords.nX, coords.nY);
+        PLAYERPETS_UpdatePetsForOwnerMove(pGame, pUnit, coords.nX, coords.nY);
     }
     else
     {

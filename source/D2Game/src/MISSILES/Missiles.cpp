@@ -304,12 +304,12 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     MISSILE_SetSkill(pMissile, missileParams->nSkill);
     MISSILE_SetLevel(pMissile, missileParams->nSkillLevel);
 
-    sub_6FC7C900(missileParams->pOwner, 0);
+    PLAYER_ApplyWeaponStatsForSkill(missileParams->pOwner, 0);
     D2MissileDamageDataStrc missileDamageData = {};
     MISSILE_CalculateDamageData(&missileDamageData, missileParams->pOwner, missileParams->pOrigin, pMissile, missileParams->nSkillLevel);
     MISSILE_SetDamageStats(missileParams->pOwner, pMissile, &missileDamageData, missileParams->nSkillLevel);
 
-    sub_6FC7CA10(missileParams->pOwner, 0);
+    PLAYER_RestoreWeaponStats(missileParams->pOwner, 0);
     UNITS_StoreOwner(pMissile, missileParams->pOwner);
 
     pMissile->dwFlags &= ~UNITFLAG_ISVALIDTARGET;

@@ -193,7 +193,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 pParty->pPartyNodes = pPartyNode->pNext;
             }
 
-            sub_6FC7B450(pGame, pUnit);
+            PARTYSCREEN_RefreshPartyRelationsAfterLeave(pGame, pUnit);
             D2GAME_PACKETS_SendPacket0x8D_6FC3F960(pUnit, pUnit);
             D2_FREE_POOL(pGame->pMemoryPool, pPartyNode);
             break;
@@ -237,7 +237,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pNode->nUnitGUID);
                 if (pPartyMember)
                 {
-                    sub_6FC7B450(pGame, pPartyMember);
+                    PARTYSCREEN_RefreshPartyRelationsAfterLeave(pGame, pPartyMember);
                     D2GAME_PACKETS_SendPacket0x8D_6FC3F960(pPartyMember, pPartyMember);
                 }
                 else

@@ -1714,7 +1714,7 @@ void __fastcall ITEMS_UpdateDurability(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
         STATLIST_SetUnitStat(pItem, STAT_QUANTITY, 0, 0);
         D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_QUANTITY, nQuantity, 0);
 
-        sub_6FC80A30(pGame, pUnit);
+        PLRMODE_HandleDepletedWeapons(pGame, pUnit);
     }
     else
     {

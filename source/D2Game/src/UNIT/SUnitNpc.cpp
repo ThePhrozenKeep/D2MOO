@@ -1053,9 +1053,9 @@ void __fastcall SUNITNPC_HireMercenaryFromRoster(D2GameStrc* pGame, D2UnitStrc* 
 //D2Game.0x6FCC8430
 void __fastcall SUNITNPC_UpdateHirelingPosition(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    if (sub_6FC7E8B0(pGame, pUnit, 7, 0))
+    if (PLAYERPETS_GetFirstPetByType(pGame, pUnit, 7, 0))
     {
-        sub_6FC7E310(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
+        PLAYERPETS_UpdatePetsForOwnerMove(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
     }
 }
 
@@ -1067,11 +1067,11 @@ void __fastcall SUNITNPC_ResurrectHireling(D2GameStrc* pGame, D2UnitStrc* pPlaye
         return;
     }
 
-    D2UnitStrc* pHireling = sub_6FC7E8B0(pGame, pPlayer, 7, 0);
+    D2UnitStrc* pHireling = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, 7, 0);
     if (pHireling)
     {
         AIGENERAL_SetOwnerData(pGame, pHireling, -1u, UNIT_MONSTER, 0, 0);
-        sub_6FC7D260(pGame, pPlayer, pHireling->dwUnitId, 0);
+        PLAYERPETS_RemovePet(pGame, pPlayer, pHireling->dwUnitId, 0);
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pHireling), UNIT_MONSTER, pHireling->dwUnitId);
         SUNIT_RemoveUnit(pGame, pHireling);
     }
@@ -1079,7 +1079,7 @@ void __fastcall SUNITNPC_ResurrectHireling(D2GameStrc* pGame, D2UnitStrc* pPlaye
     UNITS_ChangeAnimMode(pPet, MONMODE_NEUTRAL);
     STATLIST_SetUnitStat(pPet, STAT_HITPOINTS, STATLIST_GetMaxLifeFromUnit(pPet), 0);
 
-    sub_6FC7DD90(pGame, pPlayer, pPet);
+    PLAYERPETS_MarkPetAlive(pGame, pPlayer, pPet);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pPet, 0, pPlayer->dwNodeIndex);
     STATES_ToggleState(pPet, STATE_FREEZE, 0);
     STATES_ToggleState(pPet, STATE_SHATTER, 0);
@@ -1088,7 +1088,7 @@ void __fastcall SUNITNPC_ResurrectHireling(D2GameStrc* pGame, D2UnitStrc* pPlaye
     pPet->dwFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     pPet->dwFlagEx &= 0xFFFBFFFF;
 
-    sub_6FC7E310(pGame, pPlayer, CLIENTS_GetUnitX(pPlayer), CLIENTS_GetUnitY(pPlayer));
+    PLAYERPETS_UpdatePetsForOwnerMove(pGame, pPlayer, CLIENTS_GetUnitX(pPlayer), CLIENTS_GetUnitY(pPlayer));
     MONSTERAI_SendMercStats(pGame, pPlayer, 0);
 }
 
@@ -1694,7 +1694,7 @@ void __fastcall D2GAME_NPC_ResurrectMerc_6FCC9350(D2GameStrc* pGame, D2UnitStrc*
     }
     }
 
-    D2UnitStrc* pHireling = sub_6FC7E8B0(pGame, pPlayer, 7, 1);
+    D2UnitStrc* pHireling = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, 7, 1);
     if (!pHireling)
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
@@ -2893,9 +2893,9 @@ void __fastcall D2GAME_NPC_AssignMercenary_6FCCB520(D2GameStrc* pGame, D2UnitStr
         return;
     }
 
-    if (!pGame->bExpansion || !sub_6FC7E8B0(pGame, pPlayer, 7, 1))
+    if (!pGame->bExpansion || !PLAYERPETS_GetFirstPetByType(pGame, pPlayer, 7, 1))
     {
-        if (!pGame->bExpansion && sub_6FC7E8B0(pGame, pPlayer, 7, 0))
+        if (!pGame->bExpansion && PLAYERPETS_GetFirstPetByType(pGame, pPlayer, 7, 0))
         {
             return;
         }

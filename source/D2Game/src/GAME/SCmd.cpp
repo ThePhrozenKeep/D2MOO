@@ -1141,7 +1141,7 @@ void __fastcall sub_6FC3DF80(D2ClientStrc* pClient1, D2UnitStrc* pPlayer, D2Clie
 
     if (pPlayer && pPlayer->dwUnitType == UNIT_PLAYER)
     {
-        D2GAME_PLAYERPETS_Last_6FC7E970(pClient1, pPlayer);
+        PLAYERPETS_SendPetsToClient(pClient1, pPlayer);
     }
 }
 
@@ -2138,7 +2138,7 @@ void __fastcall SCMD_Send0x75_PartyRosterUpdate(D2UnitStrc* pLocalPlayer, D2Unit
     packet75.nPartyId = SUNIT_GetPartyId(pOtherPlayer);
     packet75.nLevel = STATLIST_UnitGetStatValue(pOtherPlayer, STAT_LEVEL, 0);
     packet75.nFlags = PLAYERLIST_GetFlags(pLocalPlayer, pOtherPlayer);
-    packet75.nPartyFlags = sub_6FCBA9D0(pLocalPlayer, pOtherPlayer);
+    packet75.nPartyFlags = PLAYERLIST_GetPartyState(pLocalPlayer, pOtherPlayer);
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet75, sizeof(packet75));
 }

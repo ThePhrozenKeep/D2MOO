@@ -3135,7 +3135,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
 
     if (!PLAYER_IsBusy(pPlayer))
     {
-        if (!D2GAME_IteratePlayers_6FC7C750(pGame, pPlayer) || pPlayer->dwUnitId == OBJECTS_GetUnitIdFromTimerArg(pObject))
+        if (!PLAYER_HasHostilePlayer(pGame, pPlayer) || pPlayer->dwUnitId == OBJECTS_GetUnitIdFromTimerArg(pObject))
         {
             if (PLAYERLIST_GetHostileDelay(pPlayer, 0) + 5000 > GetTickCount())
             {
@@ -3234,7 +3234,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
 
                 D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
                 SUNIT_AttachSound(pPlayer, 8, 0);
-                sub_6FC817D0(pGame, pPlayer, 0, 2, pCoord.nX + 5, pCoord.nY + 5, 0);
+                PLRMODE_ChangeModeToCoords(pGame, pPlayer, 0, 2, pCoord.nX + 5, pCoord.nY + 5, 0);
                 D2GAME_PACKETS_SendPacket0x0D_6FC3C920(pClient, 0xD, pPlayer->dwUnitType, pPlayer->dwUnitId, 1, pCoord.nX + 5, pCoord.nY + 5, 0, 0);
 
                 if (pPortalOwner && pObject->dwClassId != OBJECT_PERMANENT_TOWN_PORTAL)
@@ -3418,7 +3418,7 @@ void __fastcall OBJMODE_TravelViaWaypoint(D2GameStrc* pGame, D2UnitStrc* pPlayer
                             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
                             D2CoordStrc pCoord = {};
                             UNITS_GetCoords(pPlayer, &pCoord);
-                            sub_6FC817D0(pGame, pPlayer, 0, 2, pCoord.nX, pCoord.nY, 0);
+                            PLRMODE_ChangeModeToCoords(pGame, pPlayer, 0, 2, pCoord.nX, pCoord.nY, 0);
                             D2GAME_PACKETS_SendPacket0x0D_6FC3C920(pClient, 0xDu, 0, pPlayer ? pPlayer->dwUnitId : -1, 1, pCoord.nX + 3, pCoord.nY + 3, 0, 0);
                         }
 

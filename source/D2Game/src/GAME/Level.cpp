@@ -70,7 +70,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                 switch (pUnit->dwUnitType)
                 {
                 case UNIT_PLAYER:
-                    sub_6FC81650(pGame, pUnit, pClient, v10);
+                    PLRMODE_SendPlayerUpdates(pGame, pUnit, pClient, v10);
                     break;
 
                 case UNIT_MONSTER:
@@ -305,7 +305,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
 
     if (pUnit->dwUnitType == UNIT_PLAYER)
     {
-        sub_6FC7E310(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
+        PLAYERPETS_UpdatePetsForOwnerMove(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
     }
 }
 

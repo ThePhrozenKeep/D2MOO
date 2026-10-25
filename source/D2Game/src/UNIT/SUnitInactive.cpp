@@ -643,7 +643,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 			if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 			{
-				bUnk = sub_6FC7D5F0(pGame, pOwner, pUnit);
+				bUnk = PLAYERPETS_HandlePetDeactivation(pGame, pOwner, pUnit);
 			}
 			bCompress = 0;
 		}

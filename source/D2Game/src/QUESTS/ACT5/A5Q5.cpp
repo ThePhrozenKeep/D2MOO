@@ -1271,7 +1271,7 @@ int32_t __fastcall ACT5Q5_UnitIterate_ClosePortals(D2GameStrc* pGame, D2UnitStrc
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPortal);
 	if (DUNGEON_GetLevelIdFromRoom(pRoom) == LEVEL_ROCKYSUMMIT)
 	{
-		sub_6FC7C170(pGame, pUnit);
+		PLAYER_RemoveTownPortal(pGame, pUnit);
 	}
 
 	return 0;

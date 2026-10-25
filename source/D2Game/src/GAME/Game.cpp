@@ -2053,7 +2053,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 }
 
                 sub_6FC369C0(pGame, pClient);
-                sub_6FCBAB20(pGame, CLIENTS_GetPlayerFromClient(pClient, 1));
+                PLAYERLIST_InitializePlayerRelations(pGame, CLIENTS_GetPlayerFromClient(pClient, 1));
 
                 if (gpD2EventCallbackTable_6FD45830)
                 {
@@ -2243,7 +2243,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
 
             D2_ASSERT(pPlayer->dwUnitType == UNIT_PLAYER);
 
-            if (sub_6FC82360(pPlayer, pPlayer, bSkipHpCheck))
+            if (PLRMSG_SendPlayerStatUpdates(pPlayer, pPlayer, bSkipHpCheck))
             {
                 pClient->nPlayerSyncCount = 0;
             }

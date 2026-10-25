@@ -72,7 +72,7 @@ int32_t __fastcall OBJECTS_OperateFunction32_Bank(D2ObjOperateFnStrc* pOp, int32
 }
 
 //D2Game.0x6FC8F450
-int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* pInventory, D2CubeMainTxt* pCubeMainTxt, int32_t nInputIndex, D2CubeItemStrc* pCubeItem, int32_t* a6)
+int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* pInventory, D2CubeMainTxt* pCubeMainTxt, int32_t nInputIndex, D2CubeItemStrc* pCubeItem, int32_t* pUsedItems)
 {
     if (!pInventory)
     {
@@ -233,7 +233,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                         continue;
                     }
 
-                    if (nItemsInCube < 48 && a6[nItemsInCube - 1])
+                    if (nItemsInCube < 48 && pUsedItems[nItemsInCube - 1])
                     {
                         continue;
                     }
@@ -242,7 +242,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
                     {
                         if (nItemsInCube < 48)
                         {
-                            a6[nItemsInCube - 1] = 1;
+                            pUsedItems[nItemsInCube - 1] = 1;
                         }
 
                         ++nItemCountWithStacks;
@@ -441,7 +441,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
 
                     if (nItemsInCube < 48)
                     {
-                        a6[nItemsInCube - 1] = 1;
+                        pUsedItems[nItemsInCube - 1] = 1;
                     }
 
                     ++nItemCountWithStacks;
@@ -1048,7 +1048,7 @@ void __fastcall PLRTRADE_Free(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC90AE0
-void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
+void __fastcall PLRTRADE_RestoreInventory(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnused)
 {
     if (!pUnit || !UNITS_GetPlayerData(pUnit)->pTrade)
     {
@@ -1056,7 +1056,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     }
 
     D2GAME_PACKETS_SendPacketSize06_6FC3C850(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0x92, 0, pUnit ? pUnit->dwUnitId : -1);
-    SUNIT_IterateLivingPlayers(pGame, sub_6FC90BE0, pUnit);
+    SUNIT_IterateLivingPlayers(pGame, PLRTRADE_IterateCallback_SendInventoryReset, pUnit);
 
     for (D2UnitStrc* i = INVENTORY_GetFirstItem(pUnit->pInventory); i; i = INVENTORY_GetNextItem(i))
     {
@@ -1088,11 +1088,11 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     }
 
     ITEMMODE_RemoveInventoryItemProperties(pGame, pUnit);
-    sub_6FC90C20(pGame, pUnit);
+    PLRTRADE_RestoreTradeSnapshot(pGame, pUnit);
 }
 
 //D2Game.0x6FC90BE0
-void __fastcall sub_6FC90BE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
+void __fastcall PLRTRADE_IterateCallback_SendInventoryReset(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 {
     D2UnitStrc* pOtherPlayer = (D2UnitStrc*)pArg;
     if (pPlayer != pOtherPlayer)
@@ -1103,7 +1103,7 @@ void __fastcall sub_6FC90BE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 }
 
 //D2Game.0x6FC90C20
-void __fastcall sub_6FC90C20(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall PLRTRADE_RestoreTradeSnapshot(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 {
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
@@ -1112,7 +1112,7 @@ void __fastcall sub_6FC90C20(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     D2_ASSERT(pTrade);
 
     int32_t nUnused = 0;
-    sub_6FC8BC70(pGame, pPlayer, pTrade->pSaveData, 0x60u, 0x2000u, 0, &nUnused);
+    PLRSAVE_ReadItemSection(pGame, pPlayer, pTrade->pSaveData, 0x60u, 0x2000u, 0, &nUnused);
 
     const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
     if (nGold > 0 && pPlayer->dwAnimMode != PLRMODE_DEATH && pPlayer->dwAnimMode != PLRMODE_DEAD)
@@ -1214,7 +1214,7 @@ void __fastcall PLRTRADE_TryToTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2U
 }
 
 //D2Game.0x6FC91050
-void __fastcall sub_6FC91050(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2PlayerDataStrc* pPlayerData1, D2PlayerDataStrc* pPlayerData2, int32_t nTradeState)
+void __fastcall PLRTRADE_CancelTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2PlayerDataStrc* pPlayerData1, D2PlayerDataStrc* pPlayerData2, int32_t nTradeState)
 {
     UNITS_RefreshInventory(pPlayer1, 1);
     UNITS_RefreshInventory(pPlayer2, 1);
@@ -1232,8 +1232,8 @@ void __fastcall sub_6FC91050(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     SUNIT_ResetInteractInfo(pPlayer1);
     SUNIT_ResetInteractInfo(pPlayer2);
 
-    sub_6FC90AE0(pGame, pPlayer1, 1);
-    sub_6FC90AE0(pGame, pPlayer2, 1);
+    PLRTRADE_RestoreInventory(pGame, pPlayer1, 1);
+    PLRTRADE_RestoreInventory(pGame, pPlayer2, 1);
 
     PLRTRADE_Free(pGame, pPlayer1);
     PLRTRADE_Free(pGame, pPlayer2);
@@ -1255,7 +1255,7 @@ void __fastcall sub_6FC91050(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
 }
 
 //D2Game.0x6FC91250
-int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t nButton, int32_t nGoldAmount)
+int32_t __fastcall PLRTRADE_HandleTradeButton(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t nButton, int32_t nGoldAmount)
 {
     if (!pPlayer)
     {
@@ -1400,7 +1400,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     }
                 }
 
-                sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
+                PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
                 
                 const uint32_t nTickCount = GetTickCount();
                 pInteractPlayerData->dwAcceptTradeTick = nTickCount;
@@ -1421,20 +1421,20 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     }
                     else
                     {
-                        sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 12);
+                        PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 12);
                     }
                     return 0;
                 }
 
                 if (ACT4Q2_HasDiabloBeenKilled(pGame))
                 {
-                    sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
+                    PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
                     return 0;
                 }
 
                 if (pPlayerData->dwTradeState != 2 || pInteractPlayerData->dwTradeState != 1)
                 {
-                    sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 12);
+                    PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 12);
                     return 0;
                 }
 
@@ -1482,7 +1482,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
 
                 if (ACT4Q2_HasDiabloBeenKilled(pGame))
                 {
-                    sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9);
+                    PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9);
                     return 0;
                 }
 
@@ -1516,7 +1516,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 {
                     if (STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0) < pPlayerData->pTrade->nGoldInTrade)
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         const uint32_t nTickCount = GetTickCount();
                         pInteractPlayerData->dwAcceptTradeTick = nTickCount;
@@ -1525,7 +1525,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     }
                     else if (pPlayerData->pTrade->nGoldInTrade + STATLIST_UnitGetStatValue(pInteractPlayer, STAT_GOLD, 0) > UNITS_GetInventoryGoldLimit(pInteractPlayer))
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 10);
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), 9u);
@@ -1541,7 +1541,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 {
                     if (STATLIST_UnitGetStatValue(pInteractPlayer, STAT_GOLD, 0) < pInteractPlayerData->pTrade->nGoldInTrade)
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         const uint32_t nTickCount = GetTickCount();
                         pInteractPlayerData->dwAcceptTradeTick = nTickCount;
@@ -1551,7 +1551,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
 
                     if (pInteractPlayerData->pTrade->nGoldInTrade + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0) > UNITS_GetInventoryGoldLimit(pPlayer))
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 9u);
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), 10);
@@ -1573,13 +1573,13 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     {
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), UPDATEUI_BUYERNOROOM);
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), UPDATEUI_SELLERNOROOM);
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
                     }
                     else
                     {
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), UPDATEUI_SELLERNOROOM);
                         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), UPDATEUI_BUYERNOROOM);
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
                     }
 
                     const uint32_t nTickCount = GetTickCount();
@@ -1593,7 +1593,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
                     if (ITEMS_GetInvPage(pCheckedItem) == 2 && !ITEMMODE_CanPickUpItem(pGame, pInteractPlayer, pCheckedItem))
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         const uint32_t nTickCount = GetTickCount();
                         pInteractPlayerData->dwAcceptTradeTick = nTickCount;
@@ -1607,7 +1607,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                     D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
                     if (ITEMS_GetInvPage(pCheckedItem) == 2 && !ITEMMODE_CanPickUpItem(pGame, pPlayer, pCheckedItem))
                     {
-                        sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                        PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
 
                         const uint32_t nTickCount = GetTickCount();
                         pInteractPlayerData->dwAcceptTradeTick = nTickCount;
@@ -1625,7 +1625,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
                 EVENT_SetEvent(pGame, pInteractPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 
-                if (sub_6FC92A90(pGame, pPlayer, pInteractPlayer) && sub_6FC92A90(pGame, pInteractPlayer, pPlayer))
+                if (PLRTRADE_TransferItems(pGame, pPlayer, pInteractPlayer) && PLRTRADE_TransferItems(pGame, pInteractPlayer, pPlayer))
                 {
                     if (pPlayerData->pTrade->nGoldInTrade)
                     {
@@ -1661,7 +1661,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 }
                 else
                 {
-                    sub_6FC92920(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
+                    PLRTRADE_ResetTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData);
                 }
 
                 const uint32_t nTickCount = GetTickCount();
@@ -1709,7 +1709,7 @@ int32_t __fastcall sub_6FC91250(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t
                 {
                     if (!sub_6FC41660(pGame, pPlayer) && !sub_6FC41660(pGame, pInteractPlayer))
                     {
-                        sub_6FC91050(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
+                        PLRTRADE_CancelTrade(pGame, pPlayer, pInteractPlayer, pPlayerData, pInteractPlayerData, 9u);
                     }
                 }
                 break;
@@ -2034,7 +2034,7 @@ int32_t __fastcall PLRTRADE_AllocPlayerTrade(D2GameStrc* pGame, D2UnitStrc* pPla
 
     D2PlayerTradeStrc* pTradeRecord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PlayerTradeStrc);
     pTradeRecord->pSaveData = (BYTE*)D2_ALLOC_POOL(pGame->pMemoryPool, 0x2000u);
-    pTradeRecord->nSaveLength = sub_6FC8A0F0(pGame, pPlayer, pTradeRecord->pSaveData, 0x2000u, 0, 0);
+    pTradeRecord->nSaveLength = PLRSAVE_WriteUnitItems(pGame, pPlayer, pTradeRecord->pSaveData, 0x2000u, 0, 0);
 
     D2_ASSERT(pTradeRecord->nSaveLength > 0);
 
@@ -2086,7 +2086,7 @@ void __fastcall PLRTRADE_AddGold(D2UnitStrc* pUnit, int32_t nStat, int32_t nValu
 }
 
 //D2Game.0x6FC92920
-void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2PlayerDataStrc* pPlayerData1, D2PlayerDataStrc* pPlayerData2)
+void __fastcall PLRTRADE_ResetTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, D2PlayerDataStrc* pPlayerData1, D2PlayerDataStrc* pPlayerData2)
 {
     ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer1);
     ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer2);
@@ -2107,8 +2107,8 @@ void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
     pPlayerData1->pTrade->nGoldInTrade = 0;
     pPlayerData2->pTrade->nGoldInTrade = 0;
 
-    sub_6FC90AE0(pGame, pPlayer1, 1);
-    sub_6FC90AE0(pGame, pPlayer2, 1);
+    PLRTRADE_RestoreInventory(pGame, pPlayer1, 1);
+    PLRTRADE_RestoreInventory(pGame, pPlayer2, 1);
 
     D2ClientStrc* pClient1 = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
     D2GAME_PACKETS_SendPacket0x79_6FC3E1D0(pClient1, 0, 0);
@@ -2132,7 +2132,7 @@ void __fastcall sub_6FC92920(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
 }
 
 //D2Game.0x6FC92A90
-int32_t __fastcall sub_6FC92A90(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
+int32_t __fastcall PLRTRADE_TransferItems(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
     const int32_t bSet = CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE);
@@ -2243,8 +2243,8 @@ void __fastcall PLRTRADE_StopAllPlayerInteractions(D2GameStrc* pGame, D2UnitStrc
     UNITS_GetPlayerData(pPlayer)->dwTradeState = 9;
     EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_UPDATETRADE, pGame->dwGameFrame + 1, 0, 0);
 
-    sub_6FC90AE0(pGame, pPlayer, 0);
-    sub_6FC90AE0(pGame, pOtherPlayer, 1);
+    PLRTRADE_RestoreInventory(pGame, pPlayer, 0);
+    PLRTRADE_RestoreInventory(pGame, pOtherPlayer, 1);
 
     PLRTRADE_Free(pGame, pPlayer);
     PLRTRADE_Free(pGame, pOtherPlayer);
@@ -2257,20 +2257,20 @@ void __fastcall PLRTRADE_StopAllPlayerInteractions(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC92EE0
-void __fastcall sub_6FC92EE0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PLRTRADE_StopInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     PLRTRADE_StopAllPlayerInteractions(pGame, pUnit);
 }
 
 //D2Game.0x6FC92EF0
-void __fastcall sub_6FC92EF0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PLRTRADE_CloseCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     SUNIT_ResetInteractInfo(pUnit);
     ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
 }
 
 //D2Game.0x6FC92F10
-void __fastcall sub_6FC92F10(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+void __fastcall PLRTRADE_AddItemToTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
@@ -2331,12 +2331,12 @@ void __fastcall sub_6FC92F10(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     else
     {
         ITEMS_RemoveFromAllPlayers(pGame, pDupeItem);
-        sub_6FC91050(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 9u);
+        PLRTRADE_CancelTrade(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 9u);
     }
 }
 
 //D2Game.0x6FC931D0
-void __fastcall sub_6FC931D0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+void __fastcall PLRTRADE_RemoveItemFromTrade(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
@@ -2413,7 +2413,7 @@ int32_t __fastcall PLRTRADE_CopyTradeSaveDataToBuffer(D2UnitStrc* pUnit, uint8_t
 }
 
 //D2Game.0x6FC93430
-int32_t __fastcall sub_6FC93430(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+int32_t __fastcall PLRTRADE_PrepareItemChange(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
 {
     D2PlayerDataStrc* pPlayerData1 = UNITS_GetPlayerData(pPlayer);
     int32_t nUnitType = 0;
@@ -2519,7 +2519,7 @@ int32_t __fastcall sub_6FC93430(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 }
 
 //D2Game.0x6FC93740
-int32_t __fastcall sub_6FC93740(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall PLRTRADE_IsTradeInventoryEmpty(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
@@ -2550,7 +2550,7 @@ int32_t __fastcall D2GAME_PLRTRADE_IsInteractingWithPlayer(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FC937F0
-void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4)
+void __fastcall PLRTRADE_UpdateTradeState(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nUnused1, int32_t nUnused2)
 {
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2PlayerTradeStrc* pTrade = pPlayerData->pTrade;
@@ -2679,7 +2679,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
                 D2PlayerDataStrc* pPlayerData2 = UNITS_GetPlayerData(pOtherPlayer);
                 if ((pPlayerData1->dwTradeState == 2 || pPlayerData1->dwTradeState == 1) && (pPlayerData2->dwTradeState == 2 || pPlayerData2->dwTradeState == 1))
                 {
-                    sub_6FC91050(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 12);
+                    PLRTRADE_CancelTrade(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 12);
                     const uint32_t nTickCount = GetTickCount();
                     pPlayerData2->dwAcceptTradeTick = nTickCount;
                     pPlayerData1->dwAcceptTradeTick = nTickCount;
@@ -2688,7 +2688,7 @@ void __fastcall D2GAME_PLRTRADE_Last_6FC937F0(D2GameStrc* pGame, D2UnitStrc* pPl
 
                 if (!sub_6FC41660(pGame, pPlayer) && !sub_6FC41660(pGame, pOtherPlayer))
                 {
-                    sub_6FC91050(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 12);
+                    PLRTRADE_CancelTrade(pGame, pPlayer, pOtherPlayer, pPlayerData1, pPlayerData2, 12);
                     const uint32_t nTickCount = GetTickCount();
                     pPlayerData2->dwAcceptTradeTick = nTickCount;
                     pPlayerData1->dwAcceptTradeTick = nTickCount;

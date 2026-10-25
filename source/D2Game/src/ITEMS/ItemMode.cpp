@@ -1776,7 +1776,7 @@ int32_t __fastcall D2GAME_PlaceItem_6FC44410(const char* szFile, int32_t nLine, 
 
     if (bTrade == 1)
     {
-        sub_6FC92F10(pGame, pPlayer, pItem);
+        PLRTRADE_AddItemToTrade(pGame, pPlayer, pItem);
     }
 
     if (ITEMS_IsCharmUsable(pItem, pPlayer))
@@ -1905,7 +1905,7 @@ int32_t __fastcall ITEMMODE_RemoveStoredItem(D2GameStrc* pGame, D2UnitStrc* pUni
 
         if (bTrade == 1)
         {
-            sub_6FC931D0(pGame, pUnit, pItem);
+            PLRTRADE_RemoveItemFromTrade(pGame, pUnit, pItem);
         }
 
         ITEMS_SetItemCMDFlag(pItem, 4, 1);
@@ -3407,7 +3407,7 @@ int32_t __fastcall ITEMMODE_SwapCursorAndStoredItem(D2GameStrc* pGame, D2UnitStr
 
     if (nInvPage == INVPAGE_TRADE)
     {
-        sub_6FC92F10(pGame, pUnit, pCursorItem);
+        PLRTRADE_AddItemToTrade(pGame, pUnit, pCursorItem);
     }
 
     UNITS_RefreshInventory(pUnit, 1);
@@ -4483,7 +4483,7 @@ int32_t __fastcall ITEMMODE_UseBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit, in
 
     if (bUseOnMerc && pUnit->dwUnitType == UNIT_PLAYER && pGame->bExpansion && (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_HEALING_POTION) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_THAWING_POTION) || ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANTIDOTE_POTION)))
     {
-        D2UnitStrc* pMerc = sub_6FC7E8B0(pGame, pUnit, PETTYPE_HIREABLE, 0);
+        D2UnitStrc* pMerc = PLAYERPETS_GetFirstPetByType(pGame, pUnit, PETTYPE_HIREABLE, 0);
         if (!SKILLITEM_pSpell_Handler(pGame, pMerc ? pMerc : pUnit, pItem, pItem, nX, nY))
         {
             return 0;
