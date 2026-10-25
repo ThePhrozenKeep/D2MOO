@@ -2258,6 +2258,9 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                         ++pOld;
                         ++pCurrent;
                     }
+
+                    // A treasure class entry only pushes the sub-class: its nItemId is a treasure class id, not an item.
+                    continue;
                 }
 
                 const int16_t nItemId = pTCExInfo->nItemId;
