@@ -170,10 +170,10 @@ struct D2DrlgCoordsStrc
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
 {
-	D2DrlgOrthStrc* pDrlgOrth;				//0x00
+	D2DrlgOrthStrc* pDrlgOrth;					//0x00
 	uint32_t dwInitSeed;						//0x04
 	D2DrlgRoomStrc** ppRoomsNear;				//0x08
-	uint16_t wRoomsInList[ROOMSTATUS_COUNT];//0x0C
+	uint16_t wRoomsInList[ROOMSTATUS_COUNT];	//0x0C
 	D2SeedStrc pSeed;							//0x14
 	D2DrlgRoomStrc* pStatusNext;				//0x1C
 	union
@@ -181,7 +181,7 @@ struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
 		D2DrlgPresetRoomStrc* pMaze;			//0x20
 		D2DrlgOutdoorRoomStrc* pOutdoor;		//0x20
 	};
-	D2DrlgRoomStrc* pDrlgRoomNext;			//0x24
+	D2DrlgRoomStrc* pDrlgRoomNext;				//0x24
 	uint32_t dwFlags;							//0x28 D2DrlgRoomFlags
 	int32_t nRoomsNear;							//0x2C
 	D2ActiveRoomStrc* pRoom;					//0x30
@@ -197,7 +197,7 @@ struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
 		D2DrlgCoordStrc pDrlgCoord;				//0x34
 	};
 	uint8_t fRoomStatus;						//0x44 D2DrlgRoomStatus
-	uint8_t pad0x45[3];						//0x45
+	uint8_t pad0x45[3];							//0x45
 	int32_t nType;								//0x48
 	D2RoomTileStrc* pRoomTiles;					//0x4C
 	uint32_t dwDT1Mask;							//0x50
@@ -268,7 +268,7 @@ struct D2ActiveRoomStrc // Used to be called D2RoomStrc
 	D2ActiveRoomStrc** ppRoomList;			//0x00
 	int32_t nMaxClients;					//0x04
 	D2DrlgRoomTilesStrc* pRoomTiles;		//0x08
-	int32_t nTileCount;					//0x0C
+	int32_t nTileCount;						//0x0C
 	D2DrlgRoomStrc* pDrlgRoom;				//0x10
 	uint8_t nCurrentDeathIndex;				//0x14
 	uint8_t pad0x15[3];						//0x15
@@ -359,13 +359,13 @@ struct D2DrlgStrc
 	D2DrlgWarpStrc* pWarp;					//0x90
 	int32_t nStaffTombLevel;				//0x94
 	uint8_t nRoomsInitSinceLastUpdate;		//0x98
-	uint8_t pad0x99[3];					//0x99
+	uint8_t pad0x99[3];						//0x99
 	D2GameStrc* pGame;						//0x9C
 	D2DrlgRoomStrc tStatusRoomsLists[ROOMSTATUS_COUNT]; //0xA0
 	uint8_t nDifficulty;					//0x450
 	uint8_t pad0x451[3];					//0x451
 	AUTOMAPFN pfAutomap;					//0x454
-	uint32_t dwGameLowSeed;				//0x458
+	uint32_t dwGameLowSeed;					//0x458
 	uint8_t nRoomsInitTimeout;				//0x45C
 	uint8_t pad0x45D[3];					//0x45D
 	D2DrlgRoomStrc* pDrlgRoom;				//0x460
@@ -378,7 +378,7 @@ struct D2DrlgStrc
 	D2DrlgLevelStrc* pLevel;				//0x47C
 	uint8_t nAct;							//0x480
 	uint8_t pad0x481[3];					//0x481
-	int32_t nBossTombLevel;				//0x484
+	int32_t nBossTombLevel;					//0x484
 	TOWNAUTOMAPFN pfTownAutomap;			//0x488
 };
 #elif !(D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11) // <= 1.10f version
@@ -561,7 +561,7 @@ struct D2DrlgLevelStrc
 		D2DrlgOutdoorInfoStrc* pOutdoors;		//0x14
 		D2LvlMazeTxt* pMaze;					//0x14
 	};
-	uint8_t pad0x18[4];						//0x18
+	uint8_t pad0x18[4];							//0x18
 	union
 	{
 		struct
@@ -583,11 +583,11 @@ struct D2DrlgLevelStrc
 	D2SeedStrc pSeed;							//0x1C4
 	D2DrlgBuildStrc* pBuild;					//0x1CC
 	int32_t nLevelId;							//0x1D0
-	uint32_t dwInactiveFrames;				//0x1D4
+	uint32_t dwInactiveFrames;					//0x1D4
 	int32_t nTileInfo;							//0x1D8
 	int32_t nCoordLists;						//0x1DC
-	int32_t nRoom_Center_Warp_X[9];			//0x1E0
-	int32_t nRoom_Center_Warp_Y[9];			//0x204
+	int32_t nRoom_Center_Warp_X[9];				//0x1E0
+	int32_t nRoom_Center_Warp_Y[9];				//0x204
 	int32_t nRoomCoords;						//0x228
 	int32_t* pPresetMaps;						//0x22C
 };
