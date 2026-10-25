@@ -1215,9 +1215,10 @@ D2UnitStrc* __fastcall sub_6FCC87C0(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2Un
 extern int32_t dword_6FD4DD80; // class of 'cqv ' (bolts), SUnitProxy.cpp
 extern int32_t dword_6FD4DD84; // class of 'aqv ' (arrows)
 
-// Buy an item from a vendor. Implemented from the decompilation kept in the comment below (variable
-// names in brackets). The tab of the store page comes in nItemMode [v69]; nTransactionType is not
-// used by the original.
+// Buy an item from a vendor. Implemented from the decompilation kept below (variable names in
+// brackets) and checked against 1.10f D2Game.0x6FCC88B0 and 1.14d Game.0x577830: the store tab /
+// transaction type is nTransactionType [v69]; nItemMode and the client's nCost are not used, every
+// price is the server's ITEMS_GetTransactionCost.
 int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bMultibuy)
 {
     D2_ASSERT(pGame);
@@ -1239,7 +1240,7 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         }
     };
 
-    const int32_t nTab = nItemMode;
+    const int32_t nTab = nTransactionType;
     D2UnitStrc* pStoreItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID); // [v10, v72]
     D2InventoryStrc* pInventory = nullptr;
     D2UnitStrc* pNewItem = nullptr;
@@ -1386,7 +1387,7 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
             STATLIST_AddUnitStat(pStack, STAT_QUANTITY, nCount, 0);
             D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), pStack, 1, STAT_QUANTITY, STATLIST_UnitGetStatValue(pStack, STAT_QUANTITY, 0), 0);
-            reply(0, 5, 0);
+            reply(0, pStack->dwUnitId, 5);
             return 0;
         }
 
@@ -1425,13 +1426,12 @@ BUY_NEW_ITEM: // [LABEL_71]
 
         {
             const int32_t nGold = STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0);
-            if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < nCost)
+            if (nGold + STATLIST_UnitGetStatValue(pPlayer, STAT_GOLDBANK, 0) < nItemCost)
             {
                 reply(12, -1, 0);
                 return 0;
             }
-            // As in the original: the bank part uses the computed cost [v86], the rest the client's.
-            pay(nCost, nGold, nItemCost);
+            pay(nItemCost, nGold, nItemCost);
         }
 
         UNITS_GetPlayerData(pPlayer)->dwBoughtItemId = pNewItem->dwUnitId;
@@ -1456,7 +1456,7 @@ BUY_NEW_ITEM: // [LABEL_71]
 ITEM_PLACED: // [LABEL_117]
         sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
         ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
-        reply(0, 2, 1);
+        reply(0, pNewItem->dwUnitId, 4);
         bBought = 1;
     }
 
@@ -1502,7 +1502,7 @@ TRY_EQUIP:
                 bBought = 1;
                 sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
                 ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
-                reply(0, 2, 1);
+                reply(0, pNewItem->dwUnitId, 4);
                 return 0; // [LABEL_117, then the loop ends: bMultibuy is 0 for non-belt items]
             }
         }
@@ -1530,14 +1530,13 @@ TO_INVENTORY:
 
     sub_6FCC7E20(pGame, pNpc, pStoreItem, pPlayer, nTab);
     ITEMS_SetItemFlag(pNewItem, IFLAG_TARGET, 1);
-    reply(0, 2, 1);
+    reply(0, pNewItem->dwUnitId, 4);
     return 0; // [LABEL_117, then the loop ends: bMultibuy is 0 for non-belt items]
 }
 
-// The previous stub, kept for its decompilation comment (the source of the code above).
-[[maybe_unused]] static int32_t sub_6FCC88B0_Decompilation()
+// Decompilation the code above was written from (kept for reference; it is not exact, see above):
+#if 0
 {
-    return 0;
 
 //    D2GameStrc* v8; // ebx@1
 //    D2UnitStrc* v9; // esi@1
@@ -1972,6 +1971,7 @@ TO_INVENTORY:
 //    D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(v9, __FILE__, __LINE__v56), 0x2Au, v58, STATLIST_UnitGetStatValue(v9, STAT_GOLD, 0), v62, v64);
 //    return 0;
 }
+#endif
 
 //D2Game.0x6FCC92A0
 int32_t __fastcall D2GAME_NPC_BuyItemHandler_6FCC92A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nNpcUnitId, int32_t nItemId, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bMultibuy)
