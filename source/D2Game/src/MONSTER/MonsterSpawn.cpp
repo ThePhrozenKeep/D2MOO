@@ -1,7 +1,7 @@
-#include <D2CMP.h>
 #include "MONSTER/MonsterSpawn.h"
 
 #include <D2BitManip.h>
+#include <D2CMP.h>
 
 #include <D2Collision.h>
 #include <D2DataTbls.h>
@@ -255,11 +255,12 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     return D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
 }
 
-//1.10f:D2Game.0x6FC68E30) --------------------------------------------------------
-//1.11: D2Game.0x6FCE79E0
 void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
 void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
 void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
+
+//1.10f:D2Game.0x6FC68E30) --------------------------------------------------------
+//1.11: D2Game.0x6FCE79E0
 
 D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate)
 {
@@ -423,7 +424,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
             for (int32_t i = nStart; i != nStart - 1; i = (i + 1) % nFloorCount)
             {
                 D2DrlgTileDataStrc* pTile = &pFloors[i];
-                if (!pTile->pTile || !(D2CMP_10079_GetTileFlags(pTile->pTile) & 2))
+                if (!pTile->pTile || !(D2CMP_10079_GetTileFlags(pTile->pTile) & TILE_FLAGS_WATER))
                 {
                     continue;
                 }
@@ -452,25 +453,10 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
         }
     }
 
-    // Only the floor-tile path looks the point up in the neighbouring rooms (1.14d Game.0x5B2BBF); the
-    // ring search keeps the requested room even when the point lies outside it.
-    D2ActiveRoomStrc* pSpawnRoom = pRoom;
-    if (bFloorTilePath && nX && nY && !(nX >= pRoom->tCoords.nSubtileX && nX < pRoom->tCoords.nSubtileX + pRoom->tCoords.nSubtileWidth && nY >= pRoom->tCoords.nSubtileY && nY < pRoom->tCoords.nSubtileY + pRoom->tCoords.nSubtileHeight))
-    {
-        D2ActiveRoomStrc** ppRoomList = nullptr;
-        int32_t nNumRooms = 0;
-        DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
-        pSpawnRoom = nullptr;
-        for (int32_t i = 0; i < nNumRooms; ++i)
-        {
-            D2ActiveRoomStrc* pOther = ppRoomList[i];
-            if (pOther && nX >= pOther->tCoords.nSubtileX && nX < pOther->tCoords.nSubtileX + pOther->tCoords.nSubtileWidth && nY >= pOther->tCoords.nSubtileY && nY < pOther->tCoords.nSubtileY + pOther->tCoords.nSubtileHeight)
-            {
-                pSpawnRoom = pOther;
-                break;
-            }
-        }
-    }
+    // Only the floor-tile path looks the point up in the neighbouring rooms (1.14d Game.0x5B2BBF calls
+    // 0x463740, DUNGEON_GetRoomAtPosition); the ring search keeps the requested room even when the point
+    // lies outside it.
+    D2ActiveRoomStrc* pSpawnRoom = bFloorTilePath ? DUNGEON_GetRoomAtPosition(pRoom, nX, nY) : pRoom;
 
     if (!nX || !nY)
     {
@@ -1245,6 +1231,10 @@ void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2Uni
         return;
     case MONSTER_ANCIENTBARB1:
         MONSTERSPAWN_EquipAncientBarbarians(pUnit);
+#if !(D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14)
+        // 1.10f D2Game.0x6FC68E30 also gives the first Ancient UMod 41; 1.14d Game.0x5B1CF0 no longer does.
+        D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, MONUMOD_ALWAYSRUNAI, 1);
+#endif
         return;
     case MONSTER_BAALCRAB:
 #ifdef D2_VERSION_HAS_UBERS
