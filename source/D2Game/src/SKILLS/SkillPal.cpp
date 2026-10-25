@@ -263,7 +263,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
     {
         args.nAuraState = pSkillsTxtRecord->nAuraState;
 
-        sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args);
+        SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args);
 
         if (args.pStatList && nMana > nManaCost && pSkillsTxtRecord->nPassiveState <= 0)
         {
@@ -285,7 +285,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
 
         const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-        sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_BasicAura, &args, 1, __FILE__, __LINE__);
+        SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_BasicAura, &args, 1, __FILE__, __LINE__);
 
         if (nManaCost > 0)
         {
@@ -332,7 +332,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
         curse.pStateRemoveCallback = SKILLS_CurseStateCallback_BasicAura;
     }
 
-    D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
+    D2StatListStrc* pStatList = SKILLS_ApplyStateEffect(&curse);
     if (!pStatList)
     {
         return 0;
@@ -388,7 +388,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                 }
                 else
                 {
-                    int32_t nBonus = sub_6FD0B3D0(pUnit, nStatId, pArgs->nAuraStatCalcValue[j]);
+                    int32_t nBonus = SKILLS_ApplyResistanceImmunityPenalty(pUnit, nStatId, pArgs->nAuraStatCalcValue[j]);
                     if (nBonus)
                     {
                         if (nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
@@ -477,7 +477,7 @@ void __fastcall SKILLS_CurseStateCallback_BasicAura(D2UnitStrc* pUnit, int32_t n
     }
 
     D2GAME_RefreshPassiveSkills_6FD14CC0(pUnit);
-    sub_6FD0FDD0(pUnit);
+    SKILLS_ClampVitalsAndUpdateAnimRate(pUnit);
 }
 
 //D2Game.0x6FD19020
@@ -508,7 +508,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
     
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
@@ -553,7 +553,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
 
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction, &args2, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction, &args2, 0, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && !pUnit->dwUnitType)
     {
@@ -652,7 +652,7 @@ int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, i
             return D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
         }
 
-        return sub_6FD150A0(pGame, pUnit, pTargetUnit);
+        return SKILLS_StartBasicAttack(pGame, pUnit, pTargetUnit);
     }
 
     if (!pTargetUnit || STATES_CheckState(pTargetUnit, STATE_UNINTERRUPTABLE))
@@ -732,8 +732,8 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     D2AnimSeqTxt* pMonSeqTxtRecord = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
     if (pMonSeqTxtRecord)
     {
-        const int32_t v8 = DATATBLS_GetSeqFrameCount(pUnit);
-        for (int32_t i = 0; i < v8; ++i)
+        const int32_t nSequenceFrameCount = DATATBLS_GetSeqFrameCount(pUnit);
+        for (int32_t i = 0; i < nSequenceFrameCount; ++i)
         {
             if (!pMonSeqTxtRecord->nEvent) // TODO: Why is this check inside a loop?
             {
@@ -767,7 +767,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
         if (!pTarget)
         {
-            pTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, -1, 0);
+            pTarget = SKILLS_FindNextAuraTarget(pGame, pUnit, 0, 0, 3, 3, -1, 0);
             if (!pTarget)
             {
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
@@ -852,7 +852,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         SKILLS_SetFlags(pSkill, 0);
         SUNITMSG_QueueSkillStop(pUnit, nSkillId);
 
-        D2UnitStrc* pNewTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, nUnitGUID, 0);
+        D2UnitStrc* pNewTarget = SKILLS_FindNextAuraTarget(pGame, pUnit, 0, 0, 3, 3, nUnitGUID, 0);
         if (pNewTarget && UNITS_IsInMeleeRange(pUnit, pNewTarget, 0))
         {
             SKILLS_SetParam1(pSkill, pNewTarget->dwUnitType);
@@ -1128,7 +1128,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
     }
 
     int32_t v8 = 0;
-    if (SUNITDMG_GetDamageFromUnits(pUnit, pTarget) && !MONSTERS_GetHirelingTypeId(pTarget) && pTarget->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pTarget, AISPECIALSTATE_TERROR))
+    if (SUNITDMG_GetDamageFromUnits(pUnit, pTarget) && !MONSTERS_GetHirelingTypeId(pTarget) && pTarget->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL && SKILLS_CanSwitchAi(pTarget, AISPECIALSTATE_TERROR))
     {
         v8 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     }
@@ -1170,7 +1170,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
 
     D2COMMON_10476(pStatList, nExpireFrame);
     EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
-    sub_6FD154D0(pTarget);
+    SKILLS_ClearMonsterMinionOwnership(pTarget);
     SUNIT_SetAlignment(pTarget, 2u, 1);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pTarget, 0, pUnit->dwNodeIndex);
     UNITS_SetTargetUnitForDynamicUnit(pUnit, 0);
@@ -1330,7 +1330,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
 
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
@@ -1375,7 +1375,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
     
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
     
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFreeze, &args2, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFreeze, &args2, 0, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
@@ -1506,7 +1506,7 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
 
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
@@ -1519,7 +1519,7 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
     
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_Redemption, &args2, 1, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_Redemption, &args2, 1, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {

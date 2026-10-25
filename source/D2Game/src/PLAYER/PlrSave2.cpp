@@ -1094,7 +1094,7 @@ int32_t __fastcall PLRSAVE2_ReadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, u
     }
 
     sub_6FC3DCA0(pClient, pPlayer);
-    sub_6FD14C30(pPlayer);
+    SKILLS_RefreshPassivesAndPetLimits(pPlayer);
 
     *ppSection = &pData[nSkills];
     return 0;

@@ -1341,7 +1341,7 @@ void __fastcall AIUTIL_ApplyTerrorCurseState(D2GameStrc* pGame, D2UnitStrc* pUni
 	curse.nStat = -1;
 	curse.nSkill = SKILL_TERROR;
 	curse.nState = STATE_TERROR;
-	sub_6FD10EC0(&curse);
+	SKILLS_ApplyStateEffect(&curse);
 
 	UNITS_SetTargetUnitForDynamicUnit(pTarget, pUnit);
 

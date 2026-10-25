@@ -13915,7 +13915,7 @@ void __fastcall AITHINK_Fn104_DeathSentry(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 		return;
 	}
 
-	D2UnitStrc* pTarget2 = sub_6FD15210(pUnit, pTarget1, pAiTickParam->pMonstatsTxt->nSkill[0], nSkillLevel);
+	D2UnitStrc* pTarget2 = SKILLS_FindCorpseNearTarget(pUnit, pTarget1, pAiTickParam->pMonstatsTxt->nSkill[0], nSkillLevel);
 
 	D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pAiTickParam->pMonstatsTxt->nSkill[0]);
 	int32_t nMaxDistance = 0;
@@ -16278,7 +16278,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pAiTickParam->pMonstatsTxt->nSkill[2]);
 		if (pSkill && (AIRollChanceParam(pGame, pUnit, pAiTickParam, NIHLATAK_AI_PARAM_SKILL2_CHANCE_PCT)))
 		{
-			D2UnitStrc* pTarget = sub_6FD15210(pUnit, pAiTickParam->pTarget, pAiTickParam->pMonstatsTxt->nSkill[2], SKILLS_GetSkillLevel(pUnit, pSkill, 1));
+			D2UnitStrc* pTarget = SKILLS_FindCorpseNearTarget(pUnit, pAiTickParam->pTarget, pAiTickParam->pMonstatsTxt->nSkill[2], SKILLS_GetSkillLevel(pUnit, pSkill, 1));
 			if (pTarget && AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], pTarget, 0, 0))
 			{
 				return;
@@ -16958,7 +16958,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_PutridDefiler(D2GameStrc* pGame, D
 {
 	D2PutridDefilerAiCallbackArgStrc* pArg = (D2PutridDefilerAiCallbackArgStrc*)pCallbackArg;
 
-	if (sub_6FD01910(pUnit, pTarget) && AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget) <= pArg->nMaxDistance)
+	if (SKILLS_CanImpregnateTarget(pUnit, pTarget) && AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget) <= pArg->nMaxDistance)
 	{
 		return pTarget;
 	}

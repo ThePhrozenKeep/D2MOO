@@ -7,9 +7,9 @@ struct D2AuraCallbackStrc;
 
 
 // Same as #10049
-int32_t __stdcall D2Game_10048_Return1(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
+int32_t __stdcall D2Game_10048_Return1(int32_t nUnusedParam1, int32_t nUnusedParam2, int32_t nUnusedParam3, int32_t nUnusedParam4, int32_t nUnusedParam5, int32_t nUnusedParam6);
 //D2Game.0x6FCF30D0
-int32_t __stdcall D2Game_10049_Return1(int32_t a1, int32_t a2, int32_t a3, int32_t a4, int32_t a5, int32_t a6);
+int32_t __stdcall D2Game_10049_Return1(int32_t nUnusedParam1, int32_t nUnusedParam2, int32_t nUnusedParam3, int32_t nUnusedParam4, int32_t nUnusedParam5, int32_t nUnusedParam6);
 //D2Game.0x6FCF30E0
 int32_t __fastcall SKILLS_SrvSt04_Arrow_Bolt(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FCF3120

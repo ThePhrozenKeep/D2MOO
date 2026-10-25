@@ -2980,10 +2980,10 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x3B_AddSkillPoint_6FC86EF0(D2GameSt
                 }
             }
 
-            if (sub_6FD136E0(pUnit, nSkillId))
+            if (SKILLS_TryIncreaseSkillLevel(pUnit, nSkillId))
             {
                 //D2Game_10034_Return(1);
-                sub_6FD14C30(pUnit);
+                SKILLS_RefreshPassivesAndPetLimits(pUnit);
                 return 0;
             }
 
@@ -3544,7 +3544,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x4C_Transmogrify_6FC88170(D2GameStr
         D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (pItem || nItemGUID == -1)
         {
-            sub_6FD11AE0(pGame, pUnit, pItem);
+            SKILLS_HandleTransmogrify(pGame, pUnit, pItem);
             return 0;
         }
         

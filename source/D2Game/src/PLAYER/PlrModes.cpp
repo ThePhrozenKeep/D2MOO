@@ -859,7 +859,7 @@ void __fastcall PLRMODE_StartXY_AttackCastThrowKickSpecialSequence(D2GameStrc* p
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
     SUNIT_ScheduleAnimationEvents(pGame, pPlayer);
     pPlayer->dwFlags &= ~UNITFLAG_SKSRVDOFUNC;
-    sub_6FD12FD0(pGame, pPlayer);
+    SKILLS_StartUsedSkill(pGame, pPlayer);
 }
 
 //D2Game.0x6FC809B0
@@ -879,7 +879,7 @@ void __fastcall PLRMODE_StartID_AttackCastThrowKickSpecialSequence(D2GameStrc* p
         pPlayer->dwFlags &= 0xFFFFFFBF;
     }
 
-    sub_6FD12FD0(pGame, pPlayer);
+    SKILLS_StartUsedSkill(pGame, pPlayer);
 }
 
 //D2Game.0x6FC80A30
@@ -1080,7 +1080,7 @@ int32_t __fastcall sub_6FC80EE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
         }
     }
 
-    sub_6FD13410(pGame, pPlayer);
+    SKILLS_ExecuteUsedSkill(pGame, pPlayer);
     return (SUNIT_IsDead(pPlayer) != 0) + 1;
 }
 
@@ -1726,11 +1726,11 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         nullptr,
         D2GAME_EVENTS_StatRegen_6FC80F80,
         nullptr,
-        D2GAME_MONSTERS_AiFunction06_6FD14370,
+        SKILLS_EventCallback_ActiveState,
         sub_6FC81B20,
         nullptr,
-        D2GAME_MONSTERS_AiFunction09_6FD13470,
-        D2GAME_MONSTERS_AiFunction10_6FD13610,
+        SKILLS_EventCallback_PeriodicSkillAura,
+        SKILLS_EventCallback_ItemAura,
         nullptr,
         sub_6FC81B90,
         MONSTERMODE_EventUpdateStatListExpirations,

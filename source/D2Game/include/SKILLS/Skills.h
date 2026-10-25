@@ -122,81 +122,81 @@ struct D2SummonArgStrc
 
 
 //D2Game.0x6FD0F8B0
-int32_t __fastcall sub_6FD0F8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nValue);
+int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nValue);
 //D2Game.0x6FD0FA00
-int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t nAuraFilter);
+int32_t __fastcall SKILLS_CheckAuraTarget(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t nAuraFilter);
 //D2Game.0x6FD0FDD0
-void __fastcall sub_6FD0FDD0(D2UnitStrc* pUnit);
+void __fastcall SKILLS_ClampVitalsAndUpdateAnimRate(D2UnitStrc* pUnit);
 //D2Game.0x6FD0FE50
-void __fastcall sub_6FD0FE50(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t(__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pArgs);
+void __fastcall SKILLS_ApplyAuraToSelf(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t(__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pArgs);
 //D2Game.0x6FD0FE80
-void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t(__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pCallbackArgs, int32_t bCheckMonAuraFlag, const char* szFile, int32_t nLine);
+void __fastcall SKILLS_IterateAuraTargets(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t(__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pCallbackArgs, int32_t bCheckMonAuraFlag, const char* szFile, int32_t nLine);
 //D2Game.0x6FD10140
-void __fastcall sub_6FD10140(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nUnused);
+void __fastcall SKILLS_ApplyDamageToTarget(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nUnused);
 //D2Game.0x6FD10200
-int32_t __fastcall sub_6FD10200(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, D2DamageStrc* pDamage, uint32_t nAuraFilter);
+int32_t __fastcall SKILLS_ApplyAreaDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, D2DamageStrc* pDamage, uint32_t nAuraFilter);
 //D2Game.0x6FD10250
-void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nState, int32_t nSkillId, int32_t nSkillLevel);
+void __fastcall SKILLS_ApplyTimedState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nState, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD10360
-int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* pUnit, int32_t nDistance, int32_t(__fastcall* pCallback)(D2UnitStrc*, void*), void* pArgs);
+int32_t __fastcall SKILLS_IterateTargetsAroundTarget(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* pUnit, int32_t nDistance, int32_t(__fastcall* pCallback)(D2UnitStrc*, void*), void* pArgs);
 //D2Game.0x6FD10630
 D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nAuraRange, int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*));
 //D2Game.0x6FD106F0
-int32_t __fastcall sub_6FD106F0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_AuraCallback_FindClosestTarget(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
 //D2Game.0x6FD10790
-int32_t __fastcall sub_6FD10790(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter);
+int32_t __fastcall SKILLS_CountAuraTargets(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter);
 //D2Game.0x6FD107E0
-int32_t __fastcall sub_6FD107E0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_AuraCallback_CountTargets(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
 //D2Game.0x6FD107F0
-D2UnitStrc* __fastcall sub_6FD107F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t a7, int32_t* a8);
+D2UnitStrc* __fastcall SKILLS_FindNextAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t nPreviousTargetGUID, int32_t* pTargetCount);
 //D2Game.0x6FD10880
-int32_t __fastcall sub_6FD10880(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_AuraCallback_FindNextTarget(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
 
 D2PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType);
 //D2Game.0x6FD108D0
-void __fastcall sub_6FD108D0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId);
+void __fastcall SKILLS_UpdatePetLimitForSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId);
 //D2Game.0x6FD10A50
 int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD10C90
 int32_t __fastcall D2GAME_SKILLMANA_AuraConsume_6FD10C90(D2UnitStrc* pUnit, int32_t nManaCost);
 //D2Game.0x6FD10CE0
-int32_t __fastcall sub_6FD10CE0(D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_HasManaOrChargesForUsedSkill(D2UnitStrc* pUnit);
 //D2Game.0x6FD10D90
-D2UnitFindDataStrc* __fastcall sub_6FD10D90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSize, int32_t nX, int32_t nY);
+D2UnitFindDataStrc* __fastcall SKILLS_AllocUnitSearch(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSize, int32_t nX, int32_t nY);
 //D2Game.0x6FD10E20
-void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindData);
+void __fastcall SKILLS_FreeUnitSearch(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindData);
 //D2Game.0x6FD10E50
-void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList);
+void __fastcall SKILLS_RemoveStateAndRefreshPassives(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList);
 //D2Game.0x6FD10EC0
-D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse);
+D2StatListStrc* __fastcall SKILLS_ApplyStateEffect(D2CurseStrc* pCurse);
 //D2Game.0x6FD11260
-D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback);
+D2StatListStrc* __fastcall SKILLS_ApplyStateFromSkillParams(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback);
 //D2Game.0x6FD11340
-int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
+int32_t __fastcall SKILLS_ConsumeItemQuantity(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FD11420
-D2UnitStrc* __fastcall sub_6FD11420(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bCheckItemQuantity);
+D2UnitStrc* __fastcall SKILLS_CreateMissileAtOffset(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bCheckItemQuantity);
 //D2Game.0x6FD115E0
 D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nMissileId, int32_t nX, int32_t nY);
 //D2Game.0x6FD11710
-D2UnitStrc* __fastcall sub_6FD11710(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bSkipCheck);
+D2UnitStrc* __fastcall SKILLS_CreateMissileFromOrigin(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bSkipCheck);
 //D2Game.0x6FD118C0
-int32_t __fastcall sub_6FD118C0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_ConsumeWeaponOrAmmoQuantity(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD119C0
-int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_CanUseWeaponAmmo(D2UnitStrc* pUnit);
 //D2Game.0x6FD11AE0
-void __fastcall sub_6FD11AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
+void __fastcall SKILLS_HandleTransmogrify(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FD11B50
 int32_t __fastcall D2GAME_CheckSkillIfUnitsClassSkill_6FD11B50(D2UnitStrc* pUnit, int32_t nSkillId);
 //D2Game.0x6FD11BA0
-void __fastcall sub_6FD11BA0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
+void __fastcall SKILLS_ApplySkillDelay(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD11C00
 void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDelay);
 //D2Game.0x6FD11C90
-int32_t __fastcall sub_6FD11C90(D2UnitStrc* pUnit, int32_t nStateId, int32_t a3);
+int32_t __fastcall SKILLS_RemoveStatesInGroup(D2UnitStrc* pUnit, int32_t nStateId, int32_t bIncludeState);
 //D2Game.0x6FD11D90
-void __fastcall sub_6FD11D90(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nLength, int32_t nSkillId);
+void __fastcall SKILLS_SetElementalDurationFromSkill(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nLength, int32_t nSkillId);
 //D2Game.0x6FD11E40
-void __fastcall sub_6FD11E40(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nElementalType, int32_t nDamage, int32_t nLength, int32_t* pResistStatId, int32_t* pElementalType);
+void __fastcall SKILLS_AddElementalDamage(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nElementalType, int32_t nDamage, int32_t nLength, int32_t* pResistStatId, int32_t* pElementalType);
 //D2Game.0x6FD11FF0
 int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD12060
@@ -216,27 +216,27 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 //D2Game.0x6FD12800
 int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD12950
-int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5);
+int32_t __fastcall SKILLS_StartSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bSkipCost);
 //D2Game.0x6FD12BA0
-int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5, int32_t a6, int32_t a7);
+int32_t __fastcall SKILLS_ExecuteSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bApplyCosts, int32_t bSkipSkillCheck, int32_t bItemEffect);
 //D2Game.0x6FD12FD0
-int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_StartUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD13220
 int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD13260
-int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5);
+int32_t __fastcall SKILLS_SchedulePeriodicSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseRightSkill);
 //D2Game.0x6FD13330
-int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5, int32_t nSkillId, int32_t nSkillLevel, int32_t a6);
+int32_t __fastcall SKILLS_SchedulePeriodicStat(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventKey, int32_t nSkillId, int32_t nSkillLevel, int32_t bUseRightSkill);
 //D2Game.0x6FD13410
-void __fastcall sub_6FD13410(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall SKILLS_ExecuteUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD13470
-void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillIdArg, int32_t a4);
+void __fastcall SKILLS_EventCallback_PeriodicSkillAura(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillIdArg, int32_t nUnused);
 //D2Game.0x6FD13610
-void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nSkillId);
+void __fastcall SKILLS_EventCallback_ItemAura(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nSkillId);
 //D2Game.0x6FD136E0
-int32_t __fastcall sub_6FD136E0(D2UnitStrc* pUnit, int32_t nSkillId);
+int32_t __fastcall SKILLS_TryIncreaseSkillLevel(D2UnitStrc* pUnit, int32_t nSkillId);
 //D2Game.0x6FD13800
-void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32_t nSkillId, int32_t nFlags);
+void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t bLeftSkill, int32_t nSkillId, int32_t nFlags);
 //D2Game.0x6FD13B20
 D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2UnitStrc* pPortal, int32_t nDestLevel, int32_t nSourceLevel);
 //D2Game.0x6FD13DF0
@@ -244,69 +244,69 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FD14020
 int32_t __fastcall D2GAME_GetXAndYFromTargetUnit_6FD14020(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pX, int32_t* pY);
 //D2Game.0x6FD140D0
-void __fastcall sub_6FD140D0(int32_t* pX, int32_t* pY);
+void __fastcall SKILLS_EnlargeVector(int32_t* pX, int32_t* pY);
 //D2Game.0x6FD14120
-void __fastcall sub_6FD14120(int32_t* pX, int32_t* pY);
+void __fastcall SKILLS_MakeShortPerpendicularVector(int32_t* pX, int32_t* pY);
 //D2Game.0x6FD14170
-void __fastcall sub_6FD14170(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* a3, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nVelocity);
+void __fastcall SKILLS_CreateMissileRing(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pOrigin, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nVelocity);
 //D2Game.0x6FD14260
-void __fastcall sub_6FD14260(D2GameStrc* pGame, int32_t nMissiles, D2MissileStrc* missileParams);
+void __fastcall SKILLS_CreateMissilePattern(D2GameStrc* pGame, int32_t nMissiles, D2MissileStrc* missileParams);
 //D2Game.0x6FD14370
-void __fastcall D2GAME_MONSTERS_AiFunction06_6FD14370(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
+void __fastcall SKILLS_EventCallback_ActiveState(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD14400
-void __fastcall sub_6FD14400(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDoFunc, int32_t nSkillId, int32_t nSkillLevel);
+void __fastcall SKILLS_ExecuteServerDoFunction(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDoFunc, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD14430
 D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgStrc* pSummonArg);
 //D2Game.0x6FD146D0
-void __fastcall sub_6FD146D0(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall SKILLS_RemoveTrackedSummon(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FD14770
-void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUnit, int32_t nSkillLevel, int32_t nRange, CurseCallbackFunc pfCurse);
+void __fastcall SKILLS_ApplyCurseAroundTarget(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUnit, int32_t nSkillLevel, int32_t nRange, CurseCallbackFunc pfCurse);
 //D2Game.0x6FD149B0
-void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect);
+void __fastcall SKILLS_ApplyAreaEffect(D2GameStrc* pGame, D2EffectStrc* pEffect);
 //D2Game.0x6FD14BD0
-void __fastcall sub_6FD14BD0(D2GameStrc* pGame, int32_t nFlags, int32_t nX, int32_t nY, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, void* pfAreaEffect);
+void __fastcall SKILLS_ApplyAreaEffectAtCoordinates(D2GameStrc* pGame, int32_t nFlags, int32_t nX, int32_t nY, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, void* pfAreaEffect);
 //D2Game.0x6FD14C30
-void __fastcall sub_6FD14C30(D2UnitStrc* pUnit);
+void __fastcall SKILLS_RefreshPassivesAndPetLimits(D2UnitStrc* pUnit);
 //D2Game.0x6FD14C60
 void __fastcall D2GAME_SetSkills_6FD14C60(D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bRemove);
 //D2Game.0x6FD14CC0
 void __fastcall D2GAME_RefreshPassiveSkills_6FD14CC0(D2UnitStrc* pUnit);
 //D2Game.0x6FD14D20
-void __fastcall sub_6FD14D20(D2UnitStrc* pUnit, int32_t nUnused, D2MonSkillInfoStrc* pMonSkillInfo);
+void __fastcall SKILLS_FillMinionSkillDamage(D2UnitStrc* pUnit, int32_t nUnused, D2MonSkillInfoStrc* pMonSkillInfo);
 //D2Game.0x6FD14DD0
 int32_t __fastcall D2GAME_RollElementalDamage_6FD14DD0(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD14EC0
 void __fastcall D2GAME_RollPhysicalDamage_6FD14EC0(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD14F70
-void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc* pUnit, int32_t nDelay);
+void __fastcall SKILLS_StunMonster(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc* pUnit, int32_t nDelay);
 //D2Game.0x6FD15080
-void __fastcall sub_6FD15080(D2UnitStrc* pUnit, int32_t a2);
+void __fastcall SKILLS_RewindUnitAnimation(D2UnitStrc* pUnit, int32_t nRewindPercentage);
 //D2Game.0x6FD150A0
-int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget);
+int32_t __fastcall SKILLS_StartBasicAttack(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget);
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState);
+int32_t __fastcall SKILLS_CanSwitchAi(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState);
 //D2Game.0x6FD15210
-D2UnitStrc* __fastcall sub_6FD15210(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel);
+D2UnitStrc* __fastcall SKILLS_FindCorpseNearTarget(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FD15320
-int32_t __fastcall sub_6FD15320(D2UnitStrc* pUnit, D2UnitFindArgStrc* pArg);
+int32_t __fastcall SKILLS_UnitFindTest_Corpse(D2UnitStrc* pUnit, D2UnitFindArgStrc* pArg);
 //D2Game.0x6FD15340
-int32_t __fastcall sub_6FD15340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMissileId);
+int32_t __fastcall SKILLS_IsMissileTargetPositionClear(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMissileId);
 //D2Game.0x6FD15460
-int32_t __fastcall sub_6FD15460(D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_GetMeleeSearchRange(D2UnitStrc* pUnit);
 //D2Game.0x6FD15470
-void __fastcall sub_6FD15470(D2UnitStrc* pUnit, int32_t nAttackRate);
+void __fastcall SKILLS_ApplyAttackRateModifier(D2UnitStrc* pUnit, int32_t nAttackRate);
 //D2Game.0x6FD154D0
-void __fastcall sub_6FD154D0(D2UnitStrc* pUnit);
+void __fastcall SKILLS_ClearMonsterMinionOwnership(D2UnitStrc* pUnit);
 //D2Game.0x6FD15500
-int32_t __fastcall sub_6FD15500(D2UnitStrc* pUnit);
+int32_t __fastcall SKILLS_GetBaseWalkVelocity(D2UnitStrc* pUnit);
 //D2Game.0x6FD15580
 int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(D2UnitStrc* pUnit, int32_t bFromMonster, int32_t nSkillId, int32_t nSkillLevel, int32_t* pSpawnMode, int32_t* pX, int32_t* pY);
 //D2Game.0x6FD155E0
-void __fastcall sub_6FD155E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t a8);
+void __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t nRangeOffset);
 //D2Game.0x6FD15650
-void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, uint16_t wResultFlags, int32_t a5, D2DamageStrc* pDamage, int32_t a7);
+void __fastcall SKILLS_SetDamageResultFlags(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, uint16_t wResultFlags, int32_t nToHitFactor, D2DamageStrc* pDamage, int32_t nRangeOffset);
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8);
+D2UnitEventStrc* __fastcall SKILLS_RegisterUnitEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t nParam1, int32_t nParam2, int32_t nEventFunc, int32_t nEventGroup, int32_t nEventKey);
 
 //D2Game.0x6FC808D0
 int32_t __fastcall SKILLS_SrvSt18_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);

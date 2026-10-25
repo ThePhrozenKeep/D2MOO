@@ -1094,7 +1094,7 @@ int32_t __fastcall sub_6FC8AEC0(D2GameStrc* pGame, D2ClientStrc* pClient, D2Unit
 
         *pSkillCount = SKILLS_GetPlayerSkillCount(nClassId) + 2;
         
-        sub_6FD14C30(pUnit);
+        SKILLS_RefreshPassivesAndPetLimits(pUnit);
         
         return 0;
     }
@@ -2377,6 +2377,6 @@ int32_t __fastcall D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(D2GameStrc* pGame, D
         return SYSERROR_UNK_14;
     }
 
-    sub_6FD14C30(*ppPlayer);
+    SKILLS_RefreshPassivesAndPetLimits(*ppPlayer);
     return 0;
 }
