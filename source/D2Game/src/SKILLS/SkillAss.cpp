@@ -873,18 +873,18 @@ void __fastcall sub_6FCF6D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nLowS
 void __fastcall sub_6FCF7390(D2UnitStrc* pMissile, int32_t nInitSeed)
 {
     // TODO: Names
-    constexpr int32_t dword_6FD29668[] =
+    constexpr int32_t nXStepOffsets[] =
     {
         2, 2, 0, -2, -2, -2, 0, 2
     };
     
-    constexpr int32_t dword_6FD29688[] =
+    constexpr int32_t nYStepOffsets[] =
     {
         0, 2, 2, 2, 0, -2, -2, -2
     };
 
-    constexpr int32_t dword_6FD40504 = 15;
-    constexpr int32_t dword_6FD40508 = 2;
+    constexpr int32_t nTurnInterval = 15;
+    constexpr int32_t nBaseDirectionStep = 2;
 
     if (!pMissile)
     {
@@ -911,20 +911,20 @@ void __fastcall sub_6FCF7390(D2UnitStrc* pMissile, int32_t nInitSeed)
     int32_t nDirection = UNITS_GetDirectionToCoords(pMissile, D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pMissile->pDynamicPath));
 
     int32_t nSign = 2 * ((ITEMS_RollRandomNumber(&pMissile->pSeed) & 1) != 0) - 1;
-    int32_t nStep = dword_6FD40508 + ITEMS_RollRandomNumber(&pMissile->pSeed) % 3;
+    int32_t nStep = nBaseDirectionStep + ITEMS_RollRandomNumber(&pMissile->pSeed) % 3;
     for (int32_t i = 0; i < nFrames; ++i)
     {
         nDirection += nSign * nStep;
         const uint8_t nIndex = (uint8_t)D2Common_11053(nDirection & 63);
-        nX += dword_6FD29668[nIndex];
+        nX += nXStepOffsets[nIndex];
         ppPathPoints[i].X = nX;
-        nY += dword_6FD29688[nIndex];
+        nY += nYStepOffsets[nIndex];
         ppPathPoints[i].Y = nY;
 
-        if (!(i % dword_6FD40504))
+        if (!(i % nTurnInterval))
         {
             nSign = -nSign;
-            nStep = dword_6FD40508 + ITEMS_RollRandomNumber(&pMissile->pSeed) % 3;
+            nStep = nBaseDirectionStep + ITEMS_RollRandomNumber(&pMissile->pSeed) % 3;
         }
     }
 

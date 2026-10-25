@@ -39,9 +39,9 @@
 #include "UNIT/SUnit.h"
 
 
-constexpr uint32_t dword_6FD3F45C = 0xDEADDEAD;
-constexpr uint32_t dword_6FD3F460 = 1;
-constexpr uint32_t dword_6FD3F464 = 2;
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAGS_MARKER = 0xDEADDEAD;
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAG_NOXP = 1;
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAG_NOTC = 2;
 
 
 
@@ -1197,14 +1197,14 @@ void __fastcall SUNITINACTIVE_RestoreSpecialMonsterParameters(D2GameStrc* pGame,
 		}
 	}
 
-	if (pInactiveMonsterNode->nCmdParam1 == dword_6FD3F45C)
+	if (pInactiveMonsterNode->nCmdParam1 == INACTIVE_MONSTER_SAVED_FLAGS_MARKER)
 	{
-		if (pInactiveMonsterNode->nCmdParam2 & dword_6FD3F460)
+		if (pInactiveMonsterNode->nCmdParam2 & INACTIVE_MONSTER_SAVED_FLAG_NOXP)
 		{
 			pUnit->dwFlags |= UNITFLAG_NOXP;
 		}
 
-		if (pInactiveMonsterNode->nCmdParam2 & dword_6FD3F464)
+		if (pInactiveMonsterNode->nCmdParam2 & INACTIVE_MONSTER_SAVED_FLAG_NOTC)
 		{
 			pUnit->dwFlags |= UNITFLAG_NOTC;
 		}
@@ -1220,14 +1220,14 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 
 	if (pUnit->dwFlags & UNITFLAG_NOXP)
 	{
-		pInactiveMonsterNode->nCmdParam1 = dword_6FD3F45C;
-		pInactiveMonsterNode->nCmdParam2 |= dword_6FD3F460;
+		pInactiveMonsterNode->nCmdParam1 = INACTIVE_MONSTER_SAVED_FLAGS_MARKER;
+		pInactiveMonsterNode->nCmdParam2 |= INACTIVE_MONSTER_SAVED_FLAG_NOXP;
 	}
 
 	if (pUnit->dwFlags & UNITFLAG_NOTC)
 	{
-		pInactiveMonsterNode->nCmdParam1 = dword_6FD3F45C;
-		pInactiveMonsterNode->nCmdParam2 |= dword_6FD3F464;
+		pInactiveMonsterNode->nCmdParam1 = INACTIVE_MONSTER_SAVED_FLAGS_MARKER;
+		pInactiveMonsterNode->nCmdParam2 |= INACTIVE_MONSTER_SAVED_FLAG_NOTC;
 	}
 
 	if (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]

@@ -12,7 +12,7 @@
 #include "MONSTER/MonsterSpawn.h"
 
 
-D2UnkMonCreateStrc2 dword_6FD2E9A0 = {
+D2UnkMonCreateStrc2 gtDiamondMonsterFormation = {
     4, 0, 0, 0, 0, 0,
     {
         { 1, 0, 0 },
@@ -21,7 +21,7 @@ D2UnkMonCreateStrc2 dword_6FD2E9A0 = {
         { 1, 2, 0}
     }
 };
-D2UnkMonCreateStrc2* off_6FD2E9DC = &dword_6FD2E9A0;
+D2UnkMonCreateStrc2* gpDiamondMonsterFormation = &gtDiamondMonsterFormation;
 
 
 //D2Game.0x6FC62020
@@ -205,7 +205,7 @@ D2UnkMonCreateStrc2* __fastcall sub_6FC62640(D2ActiveRoomStrc* pRoom)
         ITEMS_RollRandomNumber(&pRoom->pSeed);
     }
 
-    return off_6FD2E9DC;
+    return gpDiamondMonsterFormation;
 }
 
 //D2Game.0x6FC62670

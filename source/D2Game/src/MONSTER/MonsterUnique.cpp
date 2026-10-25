@@ -1350,7 +1350,7 @@ void __fastcall MONSTERUNIQUE_CastBugLightningMissile(D2GameStrc* pGame, D2UnitS
 //D2Game.0x6FC6D1C0
 void __fastcall MONSTERUNIQUE_ApplyElementalDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    constexpr int32_t dword_6FD28C38[5][3] =
+    constexpr int32_t nElementalDamageStats[5][3] =
     {
         { STAT_FIREMINDAM, STAT_FIREMAXDAM, -1 },
         { STAT_LIGHTMINDAM, STAT_LIGHTMAXDAM, -1 },
@@ -1365,9 +1365,9 @@ void __fastcall MONSTERUNIQUE_ApplyElementalDamage(D2GameStrc* pGame, D2UnitStrc
     }
 
     const uint32_t nRand = ITEMS_RollRandomNumber(&pUnit->pSeed) % 5;
-    const int32_t nMinDamageStatId = dword_6FD28C38[nRand][0];
-    const int32_t nMaxDamageStatId = dword_6FD28C38[nRand][1];
-    const int32_t nLengthStatId = dword_6FD28C38[nRand][2];
+    const int32_t nMinDamageStatId = nElementalDamageStats[nRand][0];
+    const int32_t nMaxDamageStatId = nElementalDamageStats[nRand][1];
+    const int32_t nLengthStatId = nElementalDamageStats[nRand][2];
 
     if (pUnit && pUnit->dwUnitType == UNIT_MISSILE)
     {
@@ -1960,7 +1960,7 @@ void __fastcall sub_6FC6E770(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC6E780
 void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nIndex)
 {
-    constexpr D2UnkUModStrc stru_6FD2F0C8[43] =
+    constexpr D2UnkUModStrc tUModCallbacks[43] =
     {
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
@@ -2023,7 +2023,7 @@ void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
     {
         for (int32_t i = 0; i < 9; ++i)
         {
-            MonUModFunc pUModFunc = stru_6FD2F0C8[pUMods[i]].unk0x00[nIndex];
+            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].unk0x00[nIndex];
             if (pUModFunc)
             {
                 pUModFunc(pGame, pMissile, pUMods[i], bUnique);
@@ -2034,7 +2034,7 @@ void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
     {
         for (int32_t i = 0; i < 9; ++i)
         {
-            MonUModFunc pUModFunc = stru_6FD2F0C8[pUMods[i]].unk0x00[nIndex];
+            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].unk0x00[nIndex];
             if (pUModFunc)
             {
                 pUModFunc(pGame, pUnit, pUMods[i], bUnique);
@@ -2577,7 +2577,7 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
 //D2Game.0x6FC6F670
 void __fastcall sub_6FC6F670(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    constexpr UModInitFunc dword_6FD2F018[] =
+    constexpr UModInitFunc tUModInitCallbacks[] =
     {
         nullptr,
         MONSTERUNIQUE_UMod1_RandomName,
@@ -2625,7 +2625,7 @@ void __fastcall sub_6FC6F670(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
         nullptr,
     };
 
-    UModInitFunc pCallback = dword_6FD2F018[nUMod];
+    UModInitFunc pCallback = tUModInitCallbacks[nUMod];
     if (pCallback)
     {
         pCallback(pUnit, nUMod, bUnique);

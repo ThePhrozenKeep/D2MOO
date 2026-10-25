@@ -260,7 +260,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, COLLIDE_NONE);
     }
 
-    PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);
+    PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, gtMissileCollisionModes[pMissilesTxtRecord->nCollideType].nCollisionMask);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CANDESTROY])
     {

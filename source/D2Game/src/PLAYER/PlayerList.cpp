@@ -10,7 +10,7 @@
 #pragma warning(disable: 28159)
 
 
-uint32_t dword_6FD4DC40;
+uint32_t gnUnitInitSeed;
 
 
 //D2Game.0x6FCBA690
@@ -351,5 +351,5 @@ void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* pPl
 //D2Game.0x6FCBAED0
 void __fastcall sub_6FCBAED0()
 {
-    dword_6FD4DC40 = GetTickCount();
+    gnUnitInitSeed = GetTickCount();
 }

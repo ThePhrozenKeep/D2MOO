@@ -784,7 +784,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //D2Game.0x6FC69B60
 void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
 {
-    constexpr Unk dword_6FD28B08[] =
+    constexpr Unk tAncientEquipment[] =
     {
         { ' dsb', BODYLOC_RARM, 1, 0, 0 },
         { ' xat', BODYLOC_RARM, 1, 0, 0 },
@@ -806,7 +806,7 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
     }
 
     D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
-    const Unk* pItemInfo = &dword_6FD28B08[pUnit->dwClassId - MONSTER_ANCIENTBARB1];
+    const Unk* pItemInfo = &tAncientEquipment[pUnit->dwClassId - MONSTER_ANCIENTBARB1];
     const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
     for (int32_t i = 0; i < 4; ++i)
@@ -1515,7 +1515,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
 //D2Game.0x6FC6A810
 int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t a3, int32_t a4, D2UnitStrc* pTargetUnit, int32_t a6, int16_t a7)
 {
-    D2UnkMonCreateStrc2 dword_6FD2EEAC =
+    D2UnkMonCreateStrc2 tBonePrisonFormation =
     {
         4, 0, 1, 0, 0, 0,
         {
@@ -1528,7 +1528,7 @@ int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
 
     if (a6 == MONSTER_BONEPRISON1 && pTargetUnit)
     {
-        return sub_6FC6A350(pGame, pRoom, CLIENTS_GetUnitX(pTargetUnit), CLIENTS_GetUnitY(pTargetUnit), 0, MONSTER_BONEPRISON1, 8, &dword_6FD2EEAC, a7);
+        return sub_6FC6A350(pGame, pRoom, CLIENTS_GetUnitX(pTargetUnit), CLIENTS_GetUnitY(pTargetUnit), 0, MONSTER_BONEPRISON1, 8, &tBonePrisonFormation, a7);
     }
 
     return 0;

@@ -49,7 +49,7 @@ struct D2MonModeInfoTableStrc
 };
 #pragma pack(pop)
 
-constexpr D2MonModeInfoTableStrc stru_6FD28738[16] =
+constexpr D2MonModeInfoTableStrc gtMonsterModeEventPolicies[16] =
 {
     { 0, 1, 0 },
     { 0, 1, 0 },
@@ -159,7 +159,7 @@ void __fastcall sub_6FC62780(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2Gam
 //D2Game.0x6FC627B0
 void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
 {
-    constexpr int32_t dword_6FD2870C[] =
+    constexpr int32_t nPlayerCountDamageBonus[] =
     {
         0, 0, 8, 16, 24, 32, 40, 48, 56
     };
@@ -200,13 +200,13 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
 
         if (pGame->nDifficulty != DIFFMODE_NORMAL && nPlayerCount >= 2)
         {
-            if (nPlayerCount >= std::size(dword_6FD2870C))
+            if (nPlayerCount >= std::size(nPlayerCountDamageBonus))
             {
                 nMultiplier = 8 * nPlayerCount - 16;
             }
             else
             {
-                nMultiplier = dword_6FD2870C[nPlayerCount];
+                nMultiplier = nPlayerCountDamageBonus[nPlayerCount];
             }
         }
     }
@@ -1231,7 +1231,7 @@ int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
     if (pModeChange->pUnit && pModeChange->nMode < 16)
     {
         bool bContinue = false;
-        const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[pModeChange->nMode];
+        const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pModeChange->nMode];
         if (pMonModeInfoTableRecord->unk0x00)
         {
             bContinue = true;
@@ -1296,7 +1296,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             if (pUnit->dwAnimMode < 16)
             {
-                const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[pUnit->dwAnimMode];
+                const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pUnit->dwAnimMode];
                 if (pMonModeInfoTableRecord->unk0x00)
                 {
                     v10 = 1;
@@ -1977,7 +1977,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         }
         else
         {
-            const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[nCurrentAnimMode];
+            const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nCurrentAnimMode];
             if (!pMonModeInfoTableRecord->unk0x00)
             {
                 if (pMonModeInfoTableRecord->unk0x04 || !pMonModeInfoTableRecord->unk0x08)
@@ -2081,7 +2081,7 @@ void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D
         return;
     }
 
-    const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[nMode];
+    const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nMode];
     if (pMonModeInfoTableRecord->unk0x00)
     {
         pModeChange->unk0x14[1] = 101;

@@ -38,7 +38,7 @@
 #pragma warning(disable: 28159)
 
 
-int32_t dword_6FD4DC30;
+int32_t gbEnableAllCubeRecipes;
 
 
 //D2Game.0x6FC8F3D0
@@ -541,7 +541,7 @@ int32_t __fastcall PLRTRADE_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc
 void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CubeMainTxt* pCubeMainTxt, D2CubeItemStrc* pCubeItem)
 {
     using CubeOutputFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-    constexpr CubeOutputFunc dword_6FD2933C[] =
+    constexpr CubeOutputFunc tCubeOutputFunctions[] =
     {
         nullptr,
         PLRTRADE_CreateCowPortal,
@@ -599,9 +599,9 @@ void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit,
         int32_t nLevel = nOutputLevel;
 
         const int32_t nType = pCubeOutput->nType;
-        if (nType && nType < std::size(dword_6FD2933C))
+        if (nType && nType < std::size(tCubeOutputFunctions))
         {
-            CubeOutputFunc pOperateFn = dword_6FD2933C[nType];
+            CubeOutputFunc pOperateFn = tCubeOutputFunctions[nType];
             if (pOperateFn)
             {
                 bSuccess = pOperateFn(pGame, pUnit);
@@ -1767,7 +1767,7 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
             return;
         }
 
-        if ((pCubeMainTxtRecord->nEnabled || dword_6FD4DC30)
+        if ((pCubeMainTxtRecord->nEnabled || gbEnableAllCubeRecipes)
             && (pGame->bExpansion || pCubeMainTxtRecord->wVersion < 100)
             && (pGame->nGameType || pGame->dwGameType || !pCubeMainTxtRecord->nLadder)
             && pCubeMainTxtRecord->nMinDiff <= pGame->nDifficulty

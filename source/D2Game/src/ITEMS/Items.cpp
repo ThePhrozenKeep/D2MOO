@@ -49,7 +49,7 @@ struct D2TCArrayStrc
 
 bool gbGoldItemIdInitialized;
 int32_t gnGoldItemId;
-int32_t dword_6FD4DC18;
+int32_t gnCachedGoldItemId;
 
 
 //D2Game.0x6FC4D470
@@ -1110,9 +1110,9 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Coord
         pSeed = &pRoom->pSeed;
     }
 
-    if (!dword_6FD4DC18)
+    if (!gnCachedGoldItemId)
     {
-        DATATBLS_GetItemRecordFromItemCode(' dlg', &dword_6FD4DC18);
+        DATATBLS_GetItemRecordFromItemCode(' dlg', &gnCachedGoldItemId);
     }
 
     D2CoordStrc coords1 = {};
@@ -1143,7 +1143,7 @@ void __fastcall sub_6FC4F640(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Coord
     itemDrop.wItemFormat = pGame->wItemFormat;
     itemDrop.pSeed = pSeed;
     itemDrop.nX = coords1.nX;
-    itemDrop.nId = dword_6FD4DC18;
+    itemDrop.nId = gnCachedGoldItemId;
     itemDrop.pRoom = pTargetRoom;
     itemDrop.nItemLvl = nItemLevel;
     itemDrop.pUnit = nullptr;

@@ -86,10 +86,10 @@
 #include "UNIT/SUnit.h"
 
 
-uint8_t byte_6FD31270;
+uint8_t gbQuestStateInitializationEnabled;
 
 
-#define dword_6FD4DC34 1
+#define gbQuestDebugEnabled 1
 
 constexpr D2QuestInitTableStrc gpQuestInitTable[] =
 {
@@ -239,7 +239,7 @@ void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUn
 	}
 
 	const int32_t nQuestId = DATATBLS_GetLevelsTxtRecord(nLevelId)->nQuest;
-	if (!nQuestId || QUESTS_CreateChainRecord(pGame, pUnit, nQuestId) != (bDebug == 0) || !dword_6FD4DC34)
+	if (!nQuestId || QUESTS_CreateChainRecord(pGame, pUnit, nQuestId) != (bDebug == 0) || !gbQuestDebugEnabled)
 	{
 		return;
 	}
@@ -928,7 +928,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC94A30
 int32_t __fastcall QUESTS_DebugOutput(D2GameStrc* pGame, const char* szMessage, const char* szFile, int32_t nLine)
 {
-	if (!dword_6FD4DC34)
+	if (!gbQuestDebugEnabled)
 	{
 		return 0;
 	}
@@ -1031,7 +1031,7 @@ int32_t __fastcall QUESTS_StateDebug(D2QuestDataStrc* pQuestData, int32_t nState
 {
 	pQuestData->fState = nState;
 
-	if (!dword_6FD4DC34)
+	if (!gbQuestDebugEnabled)
 	{
 		return 0;
 	}
@@ -1086,7 +1086,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 
 		if (!bGameEnter)
 		{
-			if (byte_6FD31270)
+			if (gbQuestStateInitializationEnabled)
 			{
 				for (int32_t i = 0; i < std::size(gpQuestInitTable); ++i)
 				{
@@ -1578,7 +1578,7 @@ void __fastcall OBJECTS_InitFunction07_CainGibbet(D2ObjInitFnStrc* pOp)
 //D2Game.0x6FC95920
 void __fastcall QUESTS_DisableSequences()
 {
-	byte_6FD31270 = 0;
+	gbQuestStateInitializationEnabled = 0;
 }
 
 //D2Game.0x6FC95930

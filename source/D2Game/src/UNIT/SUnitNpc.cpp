@@ -1537,10 +1537,10 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 //        v85 = 1;
 //        v44 = INVENTORY_GetLeftHandWeapon(v42);
 //        v45 = UNITS_GetWeaponClass(v9);
-//        if (v68 == dword_6FD4DD80 && v44 && v45 != 7)
+//        if (v68 == gnCrossbowQuiverItemId && v44 && v45 != 7)
 //            v85 = 0;
 //
-//        if (v68 == dword_6FD4DD84)
+//        if (v68 == gnArrowQuiverItemId)
 //        {
 //            if (!v44)
 //                goto LABEL_111;
@@ -1558,7 +1558,7 @@ int32_t __fastcall sub_6FCC88B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 //        }
 //
 //LABEL_111:
-//        if (v68 != dword_6FD4DD80 && v68 != dword_6FD4DD84)
+//        if (v68 != gnCrossbowQuiverItemId && v68 != gnArrowQuiverItemId)
 //        {
 //LABEL_113:
 //            if (v85)
