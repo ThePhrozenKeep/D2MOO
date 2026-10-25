@@ -240,28 +240,6 @@ public:
 		{
 			static_assert(sizeof(MemberType) == 0, "Array elements must be pointers, arithmetic or define VisitorTraits.");
 		}
-	}
-
-	template<auto Member, typename Other, typename ArrayType, size_t Dimension>
-	void VisitArrayDimension(Other& other, const char* member_name, std::array<size_t, std::rank_v<ArrayType>>& indices)
-	{
-		constexpr size_t Rank = std::rank_v<ArrayType>;
-		constexpr size_t Count = std::extent_v<ArrayType, Dimension>;
-
-		for (size_t i = 0; i < Count; ++i)
-		{
-			indices[Dimension] = i;
-
-			if constexpr (Dimension + 1 == Rank)
-			{
-				Self().template VisitArrayElement<Member>(object, member_name, indices);
-			}
-			else
-			{
-				VisitArrayDimension<Member, Other, ArrayType, Dimension + 1>(object, member_name, indices);
-			}
-		}
-	}
 
 private:
 	template<typename>
