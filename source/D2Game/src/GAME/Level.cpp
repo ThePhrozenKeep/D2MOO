@@ -225,9 +225,9 @@ void __fastcall LEVEL_SynchronizeDayNightCycleWithClient(D2GameStrc* pGame, D2Cl
     
     D2GSPacketSrv53 packet53 = {};
     packet53.nHeader = 0x53u;
-    packet53.unk0x01 = nCycleIndex;
-    packet53.unk0x05 = nTicks;
-    packet53.unk0x09 = nEclipse;
+    packet53.nIndex = nCycleIndex;
+    packet53.nTicks = nTicks;
+    packet53.bEclipse = nEclipse;
     D2GAME_SendPacket0x53_6FC3DF50(pClient, &packet53);
 }
 
