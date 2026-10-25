@@ -1309,11 +1309,11 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 
 		if (dword_6F8FD654)
 		{
-			--pRemCofNode->unk0x00;
-			if (pRemCofNode->unk0x00 <= 0)
+			--pRemCofNode->nRefCount;
+			if (pRemCofNode->nRefCount <= 0)
 			{
-				D2CofNodeStrc* v8 = pRemCofNode->unk0x1C;
-				D2CofNodeStrc* v9 = pRemCofNode->unk0x18;
+				D2CofNodeStrc* v8 = pRemCofNode->pPrev;
+				D2CofNodeStrc* v9 = pRemCofNode->pNext;
 
 				D2_FREE(pRemCofNode->pCofData);
 				pRemCofNode->pCofData = nullptr;
@@ -1322,12 +1322,12 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 				{
 					if (v9)
 					{
-						v8->unk0x18 = v9;
-						v9->unk0x1C = v8;
+						v8->pNext = v9;
+						v9->pPrev = v8;
 					}
 					else
 					{
-						v8->unk0x18 = nullptr;
+						v8->pNext = nullptr;
 					}
 				}
 				else
@@ -1335,7 +1335,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 					dword_6F8FD654 = v9;
 					if (v9)
 					{
-						v9->unk0x1C = nullptr;
+						v9->pPrev = nullptr;
 					}
 				}
 				D2_FREE(pRemCofNode);
@@ -1357,14 +1357,14 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 
 	if (a2)
 	{
-		D2CompositeUnitStrc* v11 = pCompositeUnit->unk0xC8;
+		D2CompositeUnitStrc* v11 = pCompositeUnit->pPrev;
 		D2CompositeUnitStrc* v12 = pCompositeUnit->pNext;
 		if (v11)
 		{
 			v11->pNext = v12;
 			if (v12)
 			{
-				v12->unk0xC8 = v11;
+				v12->pPrev = v11;
 			}
 		}
 		else
@@ -1372,7 +1372,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 			dword_6F8FD650 = pCompositeUnit->pNext;
 			if (v12)
 			{
-				v12->unk0xC8 = nullptr;
+				v12->pPrev = nullptr;
 			}
 		}
 		D2_FREE(pCompositeUnit);
@@ -1384,12 +1384,12 @@ void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a
 {
 	D2_ASSERT(pCompositeUnit);
 
-	Unicode::strcpy(pCompositeUnit->unk0xCC, a2);
-	Unicode::strcpy(pCompositeUnit->unk0x14C, a3);
-	Unicode::strcpy(pCompositeUnit->unk0x1CC, a4);
-	Unicode::strcpy(pCompositeUnit->unk0x1EC, a5);
-	pCompositeUnit->unk0x22C = a6;
-	pCompositeUnit->unk0x230 = a7;
+	Unicode::strcpy(pCompositeUnit->wszAccountName, a2);
+	Unicode::strcpy(pCompositeUnit->wszCharName, a3);
+	Unicode::strcpy(pCompositeUnit->wszGuildTag, a4);
+	Unicode::strcpy(pCompositeUnit->wszRealmName, a5);
+	pCompositeUnit->nCharLevel = a6;
+	pCompositeUnit->dwProductCode = a7;
 }
 
 //D2Win.0x6F8A2C50 (#10143)
@@ -1407,10 +1407,10 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 			D2_ASSERT(pCofData);
 
 			pCompositeUnit->nMode = nMode;
-			pCompositeUnit->unk0x08 = 0;
-			pCompositeUnit->unk0x0C = pCofData->unk0x01;
-			pCompositeUnit->unk0x10 = pCofData->unk0x18;
-			pCompositeUnit->unk0x05 = pCofData->unk0x02;
+			pCompositeUnit->nFrame = 0;
+			pCompositeUnit->nFrameCount = pCofData->nFramesPerDirection;
+			pCompositeUnit->nAnimSpeed = pCofData->nAnimSpeed;
+			pCompositeUnit->nDirections = pCofData->nDirections;
 
 			return TRUE;
 		}
@@ -2664,7 +2664,7 @@ void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	pCompositeUnit->unk0x04 = D2Clamp(a2, 0ui8, pCompositeUnit->unk0x05);
+	pCompositeUnit->nDirection = D2Clamp(a2, 0ui8, pCompositeUnit->nDirections);
 }
 
 //D2Win.0x6F8A4490 (#10150)
@@ -2672,7 +2672,7 @@ uint8_t __stdcall D2Win_10150(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	return pCompositeUnit->unk0x05;
+	return pCompositeUnit->nDirections;
 }
 
 //D2Win.0x6F8A44C0 (#10169)
@@ -2680,7 +2680,7 @@ int __stdcall D2Win_10169(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	return pCompositeUnit->unk0x0C;
+	return pCompositeUnit->nFrameCount;
 }
 
 //D2Win.0x6F8A44F0 (#10151)
@@ -2688,8 +2688,8 @@ void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	const int nMax = pCompositeUnit->unk0x0C << 8;
-	pCompositeUnit->unk0x08 = D2Clamp(a2, 0, nMax);
+	const int nMax = pCompositeUnit->nFrameCount << 8;
+	pCompositeUnit->nFrame = D2Clamp(a2, 0, nMax);
 }
 
 //D2Win.0x6F8A4540 (#10152)
@@ -2741,20 +2741,20 @@ void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2, uint
 
 	if (a3 >= 1u && a3 <= 10u)
 	{
-		pCompositeUnit->unk0xC0 = byte_6F8FD224[a3 - 1];
+		pCompositeUnit->nEmblemColor1 = byte_6F8FD224[a3 - 1];
 	}
 	else
 	{
-		pCompositeUnit->unk0xC0 = 0;
+		pCompositeUnit->nEmblemColor1 = 0;
 	}
 
 	if (a4 >= 1u && a4 <= 10u)
 	{
-		pCompositeUnit->unk0xC1 = byte_6F8FD218[a4 - 1];
+		pCompositeUnit->nEmblemColor2 = byte_6F8FD218[a4 - 1];
 	}
 	else
 	{
-		pCompositeUnit->unk0xC1 = 0;
+		pCompositeUnit->nEmblemColor2 = 0;
 	}
 }
 
