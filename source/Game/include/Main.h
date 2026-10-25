@@ -106,6 +106,16 @@ struct D2CmdArgStrc				//sizeof(0x3C) (1.14d: 0x5C)
 
 #pragma warning(pop)
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+// 1.14d: the command line table (Game.exe 0x705040) starts with -crash, and string values are read from the ini
+// into 27 bytes (MISC_GetValueFromD2Ini 0x004054C9 push 1Bh)
+#define D2_CMDARG_FIRST_ROWS { "DEBUG", "CRASHAPP", "crash", CMD_BOOLEAN, offsetof(D2ConfigStrc, bCrashApp), 0 },
+constexpr int32_t D2_CMDARG_INI_STRING_SIZE = 27;
+#else
+#define D2_CMDARG_FIRST_ROWS
+constexpr int32_t D2_CMDARG_INI_STRING_SIZE = 16;
+#endif
+
 /*
  *	Prototypes
  */
