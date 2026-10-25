@@ -1,31 +1,31 @@
 LIBRARY		D2Net
 EXPORTS
-	CLIENT_Initialize 						@10000 NONAME
-	CLIENT_Release 							@10001 NONAME
-	SERVER_WaitForSingleObject 				@10002 NONAME
-	SERVER_Initialize 						@10003 NONAME
-	SERVER_Release 							@10004 NONAME
-	CLIENT_Send 							@10005 NONAME
-	D2NET_10006 							@10006 NONAME
-	CLIENT_DequeueGamePacket 				@10007 NONAME
-	CLIENT_DequeueSystemPacket 				@10008 NONAME
+	CLIENT_Initialize						@10000 NONAME
+	CLIENT_Release							@10001 NONAME
+	SERVER_WaitForSingleObject				@10002 NONAME
+	SERVER_Initialize						@10003 NONAME
+	SERVER_Release							@10004 NONAME
+	CLIENT_Send								@10005 NONAME
+	SERVER_SendPacketToClient				@10006 NONAME
+	CLIENT_DequeueGamePacket				@10007 NONAME
+	CLIENT_DequeueSystemPacket				@10008 NONAME
 ;------------------------UNUSED------------------------
-	SERVER_ReadFromMessageList1 			@10010 NONAME
-	SERVER_ReadFromMessageList0 			@10011 NONAME
-	SERVER_ReadFromMessageList2 			@10012 NONAME
-	CLIENT_GetLocalIpAddressString 			@10013 NONAME
-	SERVER_GetIpAddressStringFromClientId 	@10014 NONAME
+	SERVER_ReadGamePacket					@10010 NONAME
+	SERVER_ReadSystemPacket					@10011 NONAME
+	SERVER_ReadAdminPacket					@10012 NONAME
+	CLIENT_GetLocalIpAddressString			@10013 NONAME
+	SERVER_GetIpAddressStringFromClientId	@10014 NONAME
 	D2NET_10015								@10015 NONAME
 	D2NET_10016								@10016 NONAME
-	D2NET_10017								@10017 NONAME
+	CLIENT_IsConnected						@10017 NONAME
 	D2NET_10018								@10018 NONAME
-	D2NET_10019								@10019 NONAME
+	SERVER_SetRemoveClientCallback			@10019 NONAME
 	SERVER_SetClientGameGUID				@10020 NONAME
 	SERVER_GetClientGameGUID				@10021 NONAME
 	D2NET_10022								@10022 NONAME
 	SERVER_SetHackListEnabled				@10023 NONAME
 	SERVER_WSAGetLastError					@10024 NONAME
-	D2NET_10025								@10025 NONAME
+	CLIENT_GetConnectionStatus				@10025 NONAME
 	SERVER_SetMaxClientsPerGame				@10026 NONAME
 	D2NET_10027								@10027 NONAME
 	D2NET_10028_Return						@10028 NONAME
@@ -39,5 +39,5 @@ EXPORTS
 	D2NET_10036								@10036 NONAME
 	SERVER_GetSocketFromClientId			@10037 NONAME
 	SERVER_GetIpAddressFromClientId			@10038 NONAME
-	D2NET_10039								@10039 NONAME
-	D2NET_10040								@10040 NONAME
+	SERVER_GetClientSendFunction			@10039 NONAME
+	SERVER_GetClientGameGUIDFunction		@10040 NONAME
