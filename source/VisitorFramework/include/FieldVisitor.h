@@ -74,7 +74,7 @@ public:
 
 		constexpr size_t count = std::extent_v<ArrayType, Dimension>;
 
-		for (auto i = 0; i < count; ++i)
+		for (size_t i = 0; i < count; ++i)
 		{
 			indices[Dimension] = i;
 

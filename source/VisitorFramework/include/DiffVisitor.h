@@ -227,8 +227,8 @@ public:
 		FieldVisitor<DiffVisitor<T>>::template DynamicArrayWithRegisteredCount<PointerMember>(other, name, count_key);
 	}
 
-	template<auto Member, typename T, size_t Rank>
-	void VisitArrayElement(T& other, const char* member_name, const std::array<size_t, Rank>& indices)
+	template<auto Member, typename Other, size_t Rank>
+	void VisitArrayElement(Other& other, const char* member_name, const std::array<size_t, Rank>& indices)
 	{
 		auto& object_array = m_object.*Member;
 		auto& other_array = other.*Member;
@@ -349,10 +349,14 @@ public:
 				}
 			);
 		}
+		else
+		{
+			static_assert(sizeof(MemberType) == 0, "Array elements must be pointers, arithmetic or define VisitorTraits.");
+		}
 	}
 
-	template<auto Member, typename T, typename ArrayType, size_t Dimension>
-	void VisitArrayDimension(T& object, const char* member_name, std::array<size_t, std::rank_v<ArrayType>>& indices)
+	template<auto Member, typename Other, typename ArrayType, size_t Dimension>
+	void VisitArrayDimension(Other& other, const char* member_name, std::array<size_t, std::rank_v<ArrayType>>& indices)
 	{
 		constexpr size_t Rank = std::rank_v<ArrayType>;
 		constexpr size_t Count = std::extent_v<ArrayType, Dimension>;
@@ -367,7 +371,7 @@ public:
 			}
 			else
 			{
-				VisitArrayDimension<Member, T, ArrayType, Dimension + 1>(object, member_name, indices);
+				VisitArrayDimension<Member, Other, ArrayType, Dimension + 1>(object, member_name, indices);
 			}
 		}
 	}

@@ -31,23 +31,23 @@ struct VisitorTraits<TYPE>																				\
 
 
 #define FIELD(NAME)																						\
-    visitor.Field<&Self::NAME>(object, #NAME);
+    visitor.template Field<&Self::NAME>(object, #NAME);
 
 
 #define OBJECT(NAME)																					\
-    visitor.Object<&Self::NAME>(object, #NAME);
+    visitor.template Object<&Self::NAME>(object, #NAME);
 
 
 #define POINTER(NAME)																					\
-    visitor.Pointer<&Self::NAME>(object, #NAME);
+    visitor.template Pointer<&Self::NAME>(object, #NAME);
 
 
 #define ARRAY(NAME)																						\
-    visitor.Array<&Self::NAME>(object, #NAME);
+    visitor.template Array<&Self::NAME>(object, #NAME);
 
 
 #define DYNAMIC_ARRAY(NAME, COUNT)																		\
-    visitor.DynamicArray<&Self::NAME, &Self::COUNT>(object, #NAME);
+    visitor.template DynamicArray<&Self::NAME, &Self::COUNT>(object, #NAME);
 
 
 // Visits a dynamic array whose count is looked up in the DynamicArrayCountRegistry under KEY.
