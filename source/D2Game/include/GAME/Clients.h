@@ -227,11 +227,13 @@ struct D2ClientStrc
 	uint32_t dwPingsCount;						//0x500
 #ifdef D2_VERSION_113C
 	uint32_t unk0x504;							//0x504
+#elif D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	uint32_t bDisconnectRequested;				//0x504 set by the client's disconnect request; the client timeout check then disconnects the client
 #endif
-	int32_t nExpLoss;							//0x504
-	uint32_t dwLocale;							//0x508
-	uint32_t dwLangId;							//0x50C
-#ifdef D2_VERSION_113C
+	int32_t nExpLoss;							//0x504 (0x508 in 1.13c / 1.14d)
+	uint32_t dwLocale;							//0x508 (0x50C in 1.13c / 1.14d)
+	uint32_t dwLangId;							//0x50C (0x510 in 1.13c / 1.14d)
+#if defined(D2_VERSION_113C) || (D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14)
 	uint32_t pad0x514;							//0x514
 #endif
 };
