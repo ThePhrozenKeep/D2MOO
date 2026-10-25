@@ -84,7 +84,7 @@ void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 //D2Game.0x6FC7E640
 void __fastcall PLAYERPETS_UpdatePetStates(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 //D2Game.0x6FC7E7C0
-void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, void(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), void* a4);
+void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, void(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), void* pArg);
 //D2Game.0x6FC7E8B0
 D2UnitStrc* __fastcall PLAYERPETS_GetFirstPetByType(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetType, int32_t bIncludeDead);
 //D2Game.0x6FC7E930
