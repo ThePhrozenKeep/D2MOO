@@ -94,9 +94,9 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
 
                 if (a5)
                 {
-                    if (!(pPetData->nFlags & 1))
+                    if (!(pPetData->nFlags & PETFLAG_DEAD))
                     {
-                        pPetData->nFlags |= 1;
+                        pPetData->nFlags |= PETFLAG_DEAD;
 
                         pPetList->pPetData = pPetData;
                         if (UNITS_GetRoom(pPet))
@@ -341,7 +341,7 @@ void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
     {
         if (pPetData->nUnitGUID == nPetGUID)
         {
-            pPetData->nFlags |= 1u;
+            pPetData->nFlags |= PETFLAG_DEAD;
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
             D2GAME_PACKETS_SendPacket0x9B_6FC3FB30(pClient, pPetData->petInfo.wName, MONSTERS_GetHirelingResurrectionCost(pPet));
             break;
@@ -647,7 +647,7 @@ int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             {
                 if (pPetData->nUnitGUID == (pPet ? pPet->dwUnitId : -1))
                 {
-                    pPetData->nFlags &= 0xFFFFFFFEu;
+                    pPetData->nFlags &= ~PETFLAG_DEAD;
 
                     D2PetArgStrc arg = {};
 
@@ -806,7 +806,7 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
                 {
                     for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
                     {
-                        if (!(pPetData->nFlags & 1))
+                        if (!(pPetData->nFlags & PETFLAG_DEAD))
                         {
                             D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                             if (pPet)
@@ -822,7 +822,7 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
                     while (pPetData)
                     {
                         D2PetDataStrc* pNext = pPetData->pNext;
-                        if (!(pPetData->nFlags & 1))
+                        if (!(pPetData->nFlags & PETFLAG_DEAD))
                         {
                             D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                             if (pPet && PATH_ComputeSquaredDistance(CLIENTS_GetUnitX(pPlayer), CLIENTS_GetUnitY(pPlayer), CLIENTS_GetUnitX(pPet), CLIENTS_GetUnitY(pPet)) > 1600)
@@ -925,7 +925,7 @@ void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
             {
                 for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
                 {
-                    if (!(pPetData->nFlags & 1))
+                    if (!(pPetData->nFlags & PETFLAG_DEAD))
                     {
                         D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                         if (pPet)
@@ -962,7 +962,7 @@ void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, v
         {
             for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
-                if (!(pPetData->nFlags & 1))
+                if (!(pPetData->nFlags & PETFLAG_DEAD))
                 {
                     D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                     if (pPet)
@@ -992,7 +992,7 @@ D2UnitStrc* __fastcall sub_6FC7E8B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int3
 
     for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
-        if (a4 || !(pPetData->nFlags & 1))
+        if (a4 || !(pPetData->nFlags & PETFLAG_DEAD))
         {
             return SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
         }
@@ -1036,7 +1036,7 @@ void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(D2ClientStrc* pClient, D2UnitStr
         {
             for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
-                if (!(pPetData->nFlags & 1))
+                if (!(pPetData->nFlags & PETFLAG_DEAD))
                 {
                     D2UnitStrc* pPet = SUNIT_GetServerUnit(pPlayer->pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                     if (pPet)

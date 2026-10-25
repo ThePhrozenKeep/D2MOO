@@ -51,7 +51,7 @@ D2WinButtonStrc* __fastcall BUTTON_Create(int32_t nX, int32_t nY, int32_t nWidth
 
 	const int32_t v18 = ((nWidth + 255) >> 8) * ((nHeight + 255) >> 8);
 	pButton->nIsPressedFrameOffset = v18;
-	if (pButton->dwButtonFlags & 0x20)
+	if (pButton->dwButtonFlags & BUTTONFLAG_HAS_DISABLED_FRAMES)
 	{
 		pButton->field_58 = 2 * v18;
 	}
@@ -167,7 +167,7 @@ int32_t __fastcall BUTTON_OnMouseWheelScrolled(D2WinButtonStrc* pButton, int32_t
 		return 0;
 	}
 
-	if ((nMouseWheelIncrement <= 0 || !(pButton->dwButtonFlags & 8)) && (nMouseWheelIncrement >= 0 || !(pButton->dwButtonFlags & 0x10)))
+	if ((nMouseWheelIncrement <= 0 || !(pButton->dwButtonFlags & BUTTONFLAG_WHEEL_UP)) && (nMouseWheelIncrement >= 0 || !(pButton->dwButtonFlags & BUTTONFLAG_WHEEL_DOWN)))
 	{
 		return 0;
 	}
@@ -213,7 +213,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 	if (pButton->controlHeader.pCellFile && pButton->controlHeader.dwFlags & gdwBitMasks[2])
 	{
 		DrawMode eDrawMode;
-		if (pButton->controlHeader.dwFlags & gdwBitMasks[0] || pButton->dwButtonFlags & 0x20)
+		if (pButton->controlHeader.dwFlags & gdwBitMasks[0] || pButton->dwButtonFlags & BUTTONFLAG_HAS_DISABLED_FRAMES)
 		{
 			eDrawMode = DRAWMODE_NORMAL;
 		}
@@ -287,7 +287,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 				nY += 2;
 			}
 
-			if (pButton->dwButtonFlags & 0x40)
+			if (pButton->dwButtonFlags & BUTTONFLAG_SUBTITLE)
 			{
 				nX = nOffsetX + pButton->controlHeader.nImageX;
 
@@ -381,7 +381,7 @@ int32_t __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 		D2SOUND_10039("data\\global\\sfx\\cursor\\button.wav");
 	}
 
-	if (pButton->dwButtonFlags & (BUTTONFLAG_IS_TOGGLE | 1) && pButton->controlHeader.field_34)
+	if (pButton->dwButtonFlags & (BUTTONFLAG_IS_TOGGLE | BUTTONFLAG_CALLBACK_ON_PRESS) && pButton->controlHeader.field_34)
 	{
 		D2_ASSERT(dword_6F8FE254 > 0);
 
@@ -404,7 +404,7 @@ int32_t __stdcall BUTTON_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 	}
 
 
-	if (pButton->dwButtonFlags & (BUTTONFLAG_IS_TOGGLE | 1))
+	if (pButton->dwButtonFlags & (BUTTONFLAG_IS_TOGGLE | BUTTONFLAG_CALLBACK_ON_PRESS))
 	{
 		return 0;
 	}

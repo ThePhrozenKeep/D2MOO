@@ -58,7 +58,7 @@ void __fastcall sub_6FC61190(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItem
         return;
     }
 
-    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pMonster, nItemId, pGame, 4u, dwQuality, 1u, 1u, dwILvl, 0, 0, 0);
+    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pMonster, nItemId, pGame, IMODE_ONCURSOR, dwQuality, 1u, 1u, dwILvl, 0, 0, 0);
     if (!pItem)
     {
         return;

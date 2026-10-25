@@ -58,6 +58,7 @@ enum D2C_UnitFlags
 	UNITFLAG_PREDRAW = 0x00100000,				//pre-draw this unit (like floor tiles, client only)
 	UNITFLAG_ISASYNC = 0x00200000,				//is async unit (critters)
 	UNITFLAG_ISCLIENTUNIT = 0x00400000,			//is client unit
+	UNITFLAG_ROOMFREED = 0x00800000,			//set by DUNGEON_FreeRoom on every unit of the freed room; the client stops updating such a unit and frees it if it is client-only
 	UNITFLAG_ISINIT = 0x01000000,				//set when unit has been initialized
 	UNITFLAG_ISRESURRECT = 0x02000000,			//set for resurrected units and items on floor
 	UNITFLAG_NOXP = 0x04000000,					//no xp gain from killing this unit
@@ -74,6 +75,7 @@ enum D2C_UnitFlagsEx
 	UNITFLAGEX_ISVENDORITEM = 0x00000004,		//set for vendor shop items
 	UNITFLAGEX_ISSHAPESHIFTED = 0x00000008,		//unit is shapeshifted
 	UNITFLAGEX_ITEMINIT = 0x00000010,			//set for items, related to init
+	UNITFLAGEX_REQUESTUPDATE = 0x00000020,		//set by DUNGEON_FreeRoom (with UNITFLAG_ROOMFREED) on non-client units; the client then sends C->S 0x4B (unit type, GUID) once
 	UNITFLAGEX_ISINLOS = 0x00000080,			//unit is in client's line of sight
 	UNITFLAGEX_HASBEENDELETED = 0x00000100,		//unit has been deleted but not free'd yet
 	UNITFLAGEX_STOREOWNERINFO = 0x00000400,		//unit stores info about owner

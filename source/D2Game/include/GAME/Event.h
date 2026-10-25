@@ -6,10 +6,10 @@
 
 enum D2C_EventFlags : uint16_t
 {
-	EVENTFLAG_0x1 = 0x1, // Some kind of lock or to prevent reentrancy ?
-	EVENTFLAG_0x2 = 0x2,
-	EVENTFLAG_0x4 = 0x4,
-	EVENTFLAG_0x8 = 0x8,
+	EVENTFLAG_EXECUTING = 0x1,
+	EVENTFLAG_FREE = 0x2,
+	EVENTFLAG_RECURRING = 0x4,
+	EVENTFLAG_DELETE_PENDING = 0x8,
 };
 
 enum D2C_EventTypes : uint8_t
