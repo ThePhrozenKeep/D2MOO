@@ -53,7 +53,7 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 	}
 
 	pEditBox->controlHeader.pfHandleMouseUp = EDITBOX_HandleMouseUp;
-	pEditBox->field_264 = a8;
+	pEditBox->pfOnReturn = (EditBoxReturnCallback)a8;
 	pEditBox->controlHeader.field_34 = a9;
 	pEditBox->dwEditBoxFlags = nEditBoxFlags;
 
@@ -83,21 +83,21 @@ int32_t __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A6E10 (#10072)
-void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, int32_t a2)
+void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, EditBoxKeyFilterCallback pfKeyFilter)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_268 = a2;
+	pEditBox->pfKeyFilter = pfKeyFilter;
 }
 
 //D2Win.0x6F8A6E60 (#10073)
-void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, void(__stdcall* a2)(int32_t))
+void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, EditBoxChangeCallback pfOnChange)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_26C = a2;
+	pEditBox->pfOnChange = pfOnChange;
 }
 
 //D2Win.0x6F8A6EB0 (#10083)
@@ -1038,9 +1038,9 @@ int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
 
 	sub_6F8A98A0(pEditBox);
 
-	if (pEditBox->field_26C)
+	if (pEditBox->pfOnChange)
 	{
-		pEditBox->field_26C(0);
+		pEditBox->pfOnChange(0);
 	}
 
 	return 1;
