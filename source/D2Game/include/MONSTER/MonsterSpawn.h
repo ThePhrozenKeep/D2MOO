@@ -33,7 +33,7 @@ struct D2MonsterFormationStrc
 	int32_t unk0x04;						//0x04
 	uint8_t nFlags;							//0x08
 	uint8_t pad0x09[3];						//0x09
-	D2MonsterFormationRecordStrc records[4];			//0x0C - Could be variable length, but at both locations where it's used, it's 4
+	D2MonsterFormationRecordStrc records[4];	//0x0C - Could be variable length, but at both locations where it's used, it's 4
 };
 #pragma pack(pop)
 
