@@ -23,8 +23,8 @@ struct D2TblNodeStrc
 	uint8_t bUsed;								//0x00
 	uint16_t nIndexNo;							//0x01
 	uint32_t dwHashValue;						//0x03
-	uint32_t dwStringOffset;					//0x07
-	uint32_t dwKeyOffset;						//0x0B
+	uint32_t dwKeyOffset;						//0x07 offset of the key string, compared by the find-by-key lookup
+	uint32_t dwStringOffset;					//0x0B offset of the localized string (nNameLen bytes)
 	uint16_t nNameLen;							//0x0F
 };
 
