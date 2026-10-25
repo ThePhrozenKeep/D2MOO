@@ -78,7 +78,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                     break;
 
                 case UNIT_OBJECT:
-                    sub_6FC75350(pGame, pUnit, pClient);
+                    OBJMODE_SendObjectUpdates(pGame, pUnit, pClient);
                     break;
 
                 case UNIT_ITEM:

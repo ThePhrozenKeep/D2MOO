@@ -77,7 +77,7 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 }
                 else if (pInteractUnit->dwUnitType == UNIT_OBJECT)
                 {
-                    sub_6FC79C00(pGame, pInteractUnit);
+                    OBJMODE_ResetObjectInteraction(pGame, pInteractUnit);
                 }
 
                 pUnit->dwInteractGUID = -1;

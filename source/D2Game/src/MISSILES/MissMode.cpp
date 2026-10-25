@@ -1380,7 +1380,7 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
             pOp.pPlayer = nullptr;
             pOp.pObjectregion = (D2ObjectControlStrc*)&pObject->pSeed;
             pOp.nObjectIdx = pObject->dwClassId;
-            sub_6FC75EB0(&pOp);
+            OBJMODE_OpenTowerChest(&pOp);
         }
 
         MISSILE_SetTargetY(pMissile, 1);

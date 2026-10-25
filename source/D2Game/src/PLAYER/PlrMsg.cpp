@@ -558,7 +558,7 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
 
         D2Common_10153(pPlayer->pDynamicPath);
 
-        if (sub_6FC78B20(pGame, pPlayer, UNIT_OBJECT, nUnitGUID))
+        if (OBJMODE_OperateObjectInRange(pGame, pPlayer, UNIT_OBJECT, nUnitGUID))
         {
             return 0;
         }
@@ -3041,7 +3041,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x3D_HighlightADoor_6FC870F0(D2GameS
                     return 1;
                 }
 
-                sub_6FC78BB0(pGame, 0, nObjectGUID);
+                OBJMODE_UpdateDoorModeFromCollision(pGame, 0, nObjectGUID);
 
                 return 0;
             }
@@ -3296,7 +3296,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x45_ChangeTpLocation_6FC87930(D2Gam
                     return 1;
                 }
 
-                sub_6FC79C30(pGame, 0, nPortalGUID, nLevelId);
+                OBJMODE_RelocateTownPortal(pGame, 0, nPortalGUID, nLevelId);
                 return 0;
             }
         }
@@ -3443,7 +3443,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
 
             if (!pPacket49->nLevelId)
             {
-                D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
+                OBJMODE_TravelViaWaypoint(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                 return 0;
             }
 
@@ -3466,7 +3466,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x49_TakeOrCloseWp_6FC87E60(D2GameSt
                 {
                     if (WAYPOINTS_IsActivated(pPlayerData->pWaypointData[pGame->nDifficulty], nWaypointNo))
                     {
-                        D2GAME_WAYPOINT_Unk_6FC79600(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
+                        OBJMODE_TravelViaWaypoint(pGame, pUnit, pPacket49->nWaypointGUID, pPacket49->nLevelId);
                         return 0;
                     }
 
