@@ -356,7 +356,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 //D2Game.0x6FC95F30
 void __fastcall QUESTS_UpdateNPCIntros(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nAct);
 //D2Game.0x6FC960C0
-void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pVendor, uint32_t dwDestLvl, uint32_t unk);
+void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pVendor, uint32_t dwDestLvl, uint32_t nUnused);
 //D2Game.0x6FC964B0
 void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Game.0x6FC96580
@@ -386,7 +386,7 @@ void __fastcall QUESTS_GUIDUpdate(D2GameStrc* pGame, D2QuestGUIDStrc* pQuestGUID
 //D2Game.0x6FC96E20
 void __fastcall QUESTS_SendScrollMessage(D2UnitStrc* pPlayer, D2UnitStrc* pUnit, uint16_t nMessage);
 //D2Game.0x6FC96E80
-void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t a2);
+void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t nEvent);
 //D2Game.0x6FC96EA0
 int32_t __fastcall QUESTS_FXIterate(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArg);
 //D2Game.0x6FC96F10

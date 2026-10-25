@@ -531,7 +531,7 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 			if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN))
 			{
 				pQuestData->fLastState = 2;
-				if (!ACT2Q2_IsQuestDone(pQuestData->pGame, pQuestArg->pPlayer))
+				if (!ACT2Q2_ShouldUpdateQuestStatus(pQuestData->pGame, pQuestArg->pPlayer))
 				{
 					return;
 				}
@@ -573,7 +573,7 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA0CF0
-int32_t __fastcall ACT2Q2_IsQuestDone(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall ACT2Q2_ShouldUpdateQuestStatus(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 

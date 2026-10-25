@@ -70,4 +70,4 @@ int32_t __fastcall ACT2Q3_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 //D2Game.0x6FCA2510
 int32_t __fastcall ACT2Q3_UnitIterate_DetermineViperAmuletDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FCA2580
-void __fastcall ACT2Q3_BrightenEnvironment(D2GameStrc* pGame, uint8_t nActNo);
+void __fastcall ACT2Q3_ApplyPendingDarkness(D2GameStrc* pGame, uint8_t nActNo);
