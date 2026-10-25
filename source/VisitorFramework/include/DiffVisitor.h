@@ -3,10 +3,13 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <iomanip>
 #include <ios>
 #include <iostream>
+#include <limits>
 #include <functional>
 #include <ostream>
 #include <string>
@@ -65,50 +68,9 @@ public:
 		auto& object_member = m_object.*Member;
 		auto& other_member = other.*Member;
 
-		using MemberType = std::remove_cv_t<std::remove_reference_t<decltype(object_member)>>;
-		bool not_equal;
-		if constexpr (std::is_floating_point_v<MemberType>)
+		if (!AreValuesEqual(object_member, other_member))
 		{
-			not_equal = std::abs(other_member - object_member) > 0.0001;
-		}
-		else
-		{
-			not_equal = std::memcmp(&other_member, &object_member, sizeof(other_member)) != 0;
-		}
-
-		if (not_equal)
-		{
-			std::string field_name;
-			if (m_parent_name != "")
-			{
-				field_name = m_parent_name + "->" + name;
-			}
-			else
-			{
-				field_name = name;
-			}
-
-			std::stringstream object_stream;
-			if constexpr (std::is_integral_v<MemberType>)
-			{
-				object_stream << static_cast<int>(object_member);
-			}
-			else
-			{
-				object_stream << object_member;
-			}
-
-			std::stringstream other_stream;
-			if constexpr (std::is_integral_v<MemberType>)
-			{
-				other_stream << static_cast<int>(other_member);
-			}
-			else
-			{
-				other_stream << other_member;
-			}
-
-			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, field_name, object_stream.str(), other_stream.str() };
+			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, FieldName(name), FormatValue(object_member), FormatValue(other_member) };
 
 			m_context.differences.push_back(difference_descriptor);
 		}
@@ -272,15 +234,9 @@ public:
 		}
 		else if constexpr (std::is_arithmetic_v<MemberType>)
 		{
-			if (other_el != object_el)
+			if (!AreValuesEqual(object_el, other_el))
 			{
-				std::stringstream object_stream;
-				object_stream << object_el;
-
-				std::stringstream other_stream;
-				other_stream << other_el;
-
-				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, field_name, object_stream.str(), other_stream.str() };
+				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, field_name, FormatValue(object_el), FormatValue(other_el) };
 
 				m_context.differences.push_back(difference_descriptor);
 			}
@@ -317,6 +273,55 @@ public:
 	}
 
 private:
+	static constexpr double FloatingPointTolerance = 0.0001;
+
+	template<typename Value>
+	static bool AreValuesEqual(const Value& object_value, const Value& other_value)
+	{
+		if constexpr (std::is_floating_point_v<Value>)
+		{
+			// Exact match first, so equal infinities compare equal
+			if (object_value == other_value)
+			{
+				return true;
+			}
+
+			if (std::isnan(object_value) || std::isnan(other_value))
+			{
+				return std::isnan(object_value) && std::isnan(other_value);
+			}
+
+			return std::abs(object_value - other_value) <= FloatingPointTolerance;
+		}
+		else
+		{
+			return std::memcmp(&object_value, &other_value, sizeof(Value)) == 0;
+		}
+	}
+
+	template<typename Value>
+	static std::string FormatValue(const Value& value)
+	{
+		std::stringstream stream;
+
+		if constexpr (std::is_integral_v<Value>)
+		{
+			// Unary + promotes character types to integers without truncating wider types
+			stream << +value;
+		}
+		else if constexpr (std::is_floating_point_v<Value>)
+		{
+			// Enough digits to tell apart any two different values
+			stream << std::setprecision(std::numeric_limits<Value>::max_digits10) << value;
+		}
+		else
+		{
+			stream << value;
+		}
+
+		return stream.str();
+	}
+
 	static std::string FormatPointer(const void* pointer)
 	{
 		std::stringstream stream;
