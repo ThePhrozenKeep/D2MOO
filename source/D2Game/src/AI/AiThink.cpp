@@ -8962,8 +8962,8 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 				b5 = 19;
 			}
 
-			const int32_t nX = pPlayerData->nPositionHistory[2 * b5];
-			const int32_t nY = pPlayerData->nPositionHistory[2 * b5 + 1];
+			const int32_t nX = pPlayerData->pPositionHistory[b5].nX;
+			const int32_t nY = pPlayerData->pPositionHistory[b5].nY;
 
 			if (nX && nY && AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) > 5)
 			{
@@ -9594,8 +9594,8 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 				v29 = 19;
 			}
 
-			const int32_t nX = pPlayerData->nPositionHistory[2 * v29];
-			const int32_t nY = pPlayerData->nPositionHistory[2 * v29 + 1];
+			const int32_t nX = pPlayerData->pPositionHistory[v29].nX;
+			const int32_t nY = pPlayerData->pPositionHistory[v29].nY;
 			if (AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) > 5)
 			{
 				AITACTICS_SetVelocity(pUnit, 0, nSpeed, 100);

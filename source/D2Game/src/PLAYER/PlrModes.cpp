@@ -310,10 +310,10 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 
         const int32_t v23 = CLIENTS_GetUnitX(pPlayer);
         const int32_t v25 = CLIENTS_GetUnitY(pPlayer);
-        if (PATH_ComputeSquaredDistance(v23, v25, pPlayerData->nPositionHistory[2 * v46], pPlayerData->nPositionHistory[2 * v46 + 1]) > 45)
+        if (PATH_ComputeSquaredDistance(v23, v25, pPlayerData->pPositionHistory[v46].nX, pPlayerData->pPositionHistory[v46].nY) > 45)
         {
-            pPlayerData->nPositionHistory[2 * v47] = v23;
-            pPlayerData->nPositionHistory[2 * v47 + 1] = v25;
+            pPlayerData->pPositionHistory[v47].nX = v23;
+            pPlayerData->pPositionHistory[v47].nY = v25;
             pPlayerData->dwPositionHistoryTick = nTickCount;
 
             ++pPlayerData->nPositionHistoryIndex;

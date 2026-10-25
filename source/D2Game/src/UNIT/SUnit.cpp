@@ -2359,8 +2359,8 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRo
         pPlayerData->nLastTeleportY = coords.nY;
         pPlayerData->dwPositionHistoryTick = GetTickCount();
 
-        pPlayerData->nPositionHistory[2 * pPlayerData->nPositionHistoryIndex] = coords.nX;
-        pPlayerData->nPositionHistory[2 * pPlayerData->nPositionHistoryIndex + 1] = coords.nY;
+        pPlayerData->pPositionHistory[pPlayerData->nPositionHistoryIndex].nX = coords.nX;
+        pPlayerData->pPositionHistory[pPlayerData->nPositionHistoryIndex].nY = coords.nY;
 
         ++pPlayerData->nPositionHistoryIndex;
         if (pPlayerData->nPositionHistoryIndex >= 20u)

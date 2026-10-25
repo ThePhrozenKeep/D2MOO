@@ -174,7 +174,7 @@ struct D2PlayerDataStrc
 	uint8_t nPositionHistoryIndex;				//0xA0
 	uint8_t unk0xA1[3];							//0xA1
 	uint32_t dwPositionHistoryTick;				//0xA4
-	uint32_t nPositionHistory[40];				//0xA8
+	D2CoordStrc pPositionHistory[20];			//0xA8 last 20 positions, which pets follow
 	uint32_t nLastTeleportX;					//0x148
 	uint32_t nLastTeleportY;					//0x14C
 	BOOL bInteract;								//0x150
