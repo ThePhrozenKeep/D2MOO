@@ -21,12 +21,22 @@ struct D2LinkStrc
     D2LinkStrc* pNext;
 };
 
-struct D2TaskStrc
+// One of the TASKQSLOTS task queues
+struct D2TaskQueueStrc
 {
-	int32_t nQueueIndex;						//0x00
-	int32_t nGameCount;							//0x04 games queued on this task queue
-	D2LinkStrc tGameTasks;						//0x08 the queued games (D2GameStrc task links)
-	D2LinkStrc tQueueLink;						//0x10 link in the global list of task queues
+	int32_t nQueueIndex;						//0x00 index in the task queue slots
+	int32_t nGameCount;							//0x04 number of games queued on this queue
+	D2LinkStrc tGameTasks;						//0x08 the queued games' D2GameTaskStrc::tTaskLink, ordered by nScheduledTime
+	D2LinkStrc tQueueLink;						//0x10 link in the list of task queues
+};
+
+// A game's entry in a task queue (stored right after its D2GameStrc)
+struct D2GameTaskStrc
+{
+	int32_t nScheduledTime;						//0x00 clock time (ms) the game is processed next
+	int32_t nType;								//0x04 D2C_TaskTypes
+	uint32_t nGameHashKey;						//0x08
+	D2LinkStrc tTaskLink;						//0x0C link in D2TaskQueueStrc::tGameTasks
 };
 
 struct CRITICAL_SECTION_WRAPPER
@@ -46,15 +56,15 @@ void __stdcall TASK_FreeAllQueueSlots();
 //D2Game.0x6FC405B0 (#10041)
 int32_t __cdecl TASK_CreateQueue();
 //D2Game.0x6FC407A0 (#10042)
-BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink);
+BOOL __fastcall TASK_QueueGame(D2GameTaskStrc* pTask, int nTaskType, uint32_t nGameHashKey);
 //D2Game.0x6FC40930 (#10043)
-int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, int32_t* pOutBalanceTaskType);
+int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, D2GameTaskStrc** ppTask);
 //D2Game.0x6FC40A40 (#10044)
 int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber);
 //D2Game.0x6FC40B30 (#10045)
-void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask);
+void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask);
 //D2Game.0x6FC40E40
-void __fastcall TASK_QueueIncrement(D2TaskStrc* ptTaskQueue, int32_t* pTaskType, int nTaskTypeIncrement);
+void __fastcall TASK_QueueIncrement(D2TaskQueueStrc* ptTaskQueue, D2GameTaskStrc* pGameTask, int nDelay);
 //D2Game.0x6FC40ED0
 void __fastcall TASK_LinkList_Insert(D2LinkStrc* pPrev, D2LinkStrc* pLink);
 //D2Game.0x6FC40F20

@@ -516,7 +516,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
         pGame->nSyncTimer = 2;
     }
 
-    TASK_QueueGame((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
+    TASK_QueueGame((D2GameTaskStrc*)&pGame[1], 0, (uint32_t)hGame);
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nGameId;
 
@@ -780,7 +780,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
 
     // TODO: 1st argument
-    TASK_QueueGame((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
+    TASK_QueueGame((D2GameTaskStrc*)&pGame[1], 0, (uint32_t)hGame);
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
