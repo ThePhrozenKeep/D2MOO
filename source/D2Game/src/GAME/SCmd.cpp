@@ -2038,8 +2038,10 @@ void __fastcall sub_6FC3F4D0(D2ClientStrc* pClient, int32_t a2, char a3, int16_t
     packet57.dwUnitGUID = a2;
     packet57.nUnitType = a3;
     packet57.nNameSeed = a4;
-    packet57.unk0x08 = a5;
-    packet57.unk0x0A = a6;
+    packet57.nUMods[0] = (uint8_t)a5;
+    packet57.nUMods[1] = (uint8_t)(a5 >> 8);
+    packet57.nUMods[2] = (uint8_t)a6;
+    packet57.nUMods[3] = (uint8_t)(a6 >> 8);
     packet57.bChampion = a7;
 
     D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet57, sizeof(packet57));

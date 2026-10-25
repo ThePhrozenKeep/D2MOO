@@ -1266,8 +1266,7 @@ struct D2GSPacketSrv57		//size of 0x0E
 	uint32_t dwUnitGUID;		//0x01
 	uint8_t nUnitType;			//0x05
 	uint16_t nNameSeed;			//0x06
-	uint16_t unk0x08;			//0x08
-	uint16_t unk0x0A;			//0x0A
+	uint8_t nUMods[4];			//0x08 monster unique mods (the client reads the first three)
 	uint16_t bChampion;			//0x0C
 };
 
