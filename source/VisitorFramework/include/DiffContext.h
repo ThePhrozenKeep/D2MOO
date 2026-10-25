@@ -1,10 +1,12 @@
 #pragma once
 
 
+#include <map>
 #include <ostream>
-#include <set>
 #include <string>
 #include <sstream>
+#include <typeindex>
+#include <utility>
 #include <vector>
 
 #include "DifferenceDescriptor.h"
@@ -14,7 +16,12 @@ struct DiffContext
 {
 	const char* title;
 	std::vector<DifferenceDescriptor> differences;
-	std::set<void*> visited_pointers;
+
+	// Objects already compared, keyed by address and type (a struct and its first member share an address),
+	// mapped to the object they were compared with. Tracked for both sides to detect differently shared objects.
+	using VisitedKey = std::pair<const void*, std::type_index>;
+	std::map<VisitedKey, const void*> visited_objects;
+	std::map<VisitedKey, const void*> visited_other_objects;
 
 	explicit DiffContext(const char* title) : title(title), differences() {}
 
