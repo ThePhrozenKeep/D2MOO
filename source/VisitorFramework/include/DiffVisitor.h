@@ -2,6 +2,7 @@
 
 
 #include <array>
+#include <cstdint>
 #include <cstring>
 #include <ios>
 #include <iostream>
@@ -157,10 +158,10 @@ public:
 			if (other_ptr != object_ptr)
 			{
 				std::stringstream object_stream;
-				object_stream << std::hex << "0x" << (int)(object_ptr);
+				object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
 
 				std::stringstream other_stream;
-				other_stream << std::hex << "0x" << (int)(other_ptr);
+				other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
 
 				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_stream.str(), other_stream.str() };
 				m_context.differences.push_back(difference_descriptor);
