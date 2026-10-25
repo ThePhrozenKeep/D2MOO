@@ -896,7 +896,7 @@ D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUni
     D2_6FD106F0_Strc arg = {};
 
     arg.pUnit = nullptr;
-    arg.nDistance = INT_MAX;
+    arg.nDistanceSquared = INT_MAX;
     arg.nX = CLIENTS_GetUnitX(pUnit);
     arg.nY = CLIENTS_GetUnitY(pUnit);
     arg.pCallback = pCallback;
@@ -917,9 +917,9 @@ int32_t __fastcall sub_6FD106F0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
         const int32_t nYDiff = CLIENTS_GetUnitY(pUnit) - pArgs->nY;
 
         const int32_t nDistance = nXDiff * nXDiff + nYDiff * nYDiff;
-        if (nDistance < pArgs->nDistance)
+        if (nDistance < pArgs->nDistanceSquared)
         {
-            pArgs->nDistance = nDistance;
+            pArgs->nDistanceSquared = nDistance;
             pArgs->pUnit = pUnit;
         }
 
@@ -3701,7 +3701,7 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
     D2_ASSERT(pEffect);
     D2_ASSERT(pEffect->pfAreaEffect);
 
-    int32_t nParam = pEffect->nParam;
+    int32_t nParam = pEffect->nRadius;
     if (!nParam)
     {
         D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pEffect->nSkillId);

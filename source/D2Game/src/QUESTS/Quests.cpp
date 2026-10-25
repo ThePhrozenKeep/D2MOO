@@ -1483,11 +1483,11 @@ void __fastcall OBJECTS_InitFunction20_TaintedAltar(D2ObjInitFnStrc* pOp)
 				{
 					ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 					SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-					pQuestDataEx->bRewarded = 1;
+					pQuestDataEx->bDarknessApplied = 1;
 				}
 				else
 				{
-					pQuestDataEx->bBlackened = 1;
+					pQuestDataEx->bDarknessPending = 1;
 				}
 				pQuestData->fState = 3;
 				pQuestData->dwFlags &= 0xFFFFFF00;

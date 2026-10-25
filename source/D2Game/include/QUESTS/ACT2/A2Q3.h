@@ -9,8 +9,8 @@ struct D2Act2Quest3Strc						//sizeof 0xA0
 {
 	uint8_t unused0x00;						//0x00
 	uint8_t bDarkenTimerCreated;			//0x01
-	uint8_t bRewarded;						//0x02
-	uint8_t bBlackened;						//0x03
+	uint8_t bDarknessApplied;				//0x02
+	uint8_t bDarknessPending;				//0x03
 	uint8_t bAltarDestroyed;				//0x04
 	uint8_t bAltarInitialized;				//0x05
 	uint8_t unk0x06;						//0x06 TODO

@@ -58,7 +58,7 @@ struct D2RosterControlStrc
 struct D2RosterCorpseStrc
 {
 	uint32_t dwCorpseId;					//0x00
-	D2RosterCorpseStrc* pPrev;				//0x04
+	D2RosterCorpseStrc* pNext;				//0x04
 };
 
 struct D2RosterInfoStrc
@@ -78,7 +78,7 @@ struct D2RosterPetStrc
 	uint32_t unk0x14;						//0x14
 	uint32_t unk0x18;						//0x18
 	int32_t nLifePercent;					//0x1C
-	BOOL bDrawIcon;							//0x20
+	BOOL bDead;								//0x20
 	uint32_t dwNameSeed;					//0x24
 	uint32_t dwNameStringId;				//0x28
 	uint32_t nHoverTextState;				//0x2C

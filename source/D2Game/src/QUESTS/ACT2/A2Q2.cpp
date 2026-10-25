@@ -293,7 +293,7 @@ bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 			if (pQuestDataEx->bCubeDropped
 				&& !pQuestDataEx->nHoradricCubes || !pQuestDataEx->nAmulets
 				&& (pQuestData10 = QUESTS_GetQuestData(pQuest->pGame, QUEST_A2Q3_TAINTEDSUN)) != 0 // NOLINT(bugprone-assignment-in-if-condition)
-				&& ((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed || pQuestDataEx->bHoradricScrollDropped && !pQuestDataEx->nBaseStaffs)
+				&& ((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed || pQuestDataEx->bBaseStaffDropped && !pQuestDataEx->nBaseStaffs)
 			{
 				*pStatus = 9;
 			}
@@ -774,7 +774,7 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 		D2QuestDataStrc* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
 		if(pQuestData10 == nullptr || !((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed)
 		{
-			if (!pQuestDataEx->bHoradricScrollDropped || pQuestDataEx->nBaseStaffs)
+			if (!pQuestDataEx->bBaseStaffDropped || pQuestDataEx->nBaseStaffs)
 			{
 				return;
 			}
@@ -895,7 +895,7 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 			{
 				ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 1);
 
-				pQuestDataEx->bHoradricScrollDropped = 1;
+				pQuestDataEx->bBaseStaffDropped = 1;
 				++pQuestDataEx->nHoradricCubes;
 			}
 		}

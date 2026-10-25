@@ -57,7 +57,7 @@ struct D2UnkNecSkillStrc
 struct D2_6FD106F0_Strc
 {
 	D2UnitStrc* pUnit;
-	int32_t nDistance;
+	int32_t nDistanceSquared;
 	int32_t nX;
 	int32_t nY;
 	int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*);
@@ -80,7 +80,7 @@ struct D2EffectStrc
 	int32_t nSkillId;
 	int32_t nX;
 	int32_t nY;
-	int32_t nParam;
+	int32_t nRadius;
 	int32_t nSkillLevel;
 	int32_t nCallbackParam;
 	void* pfAreaEffect;

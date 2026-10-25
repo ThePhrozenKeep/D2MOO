@@ -2386,11 +2386,11 @@ int32_t __fastcall SKILLS_SrvDo141_BaalCorpseExplode(D2GameStrc* pGame, D2UnitSt
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && nSkillLevel > 0)
     {
-        effect.nParam = pSkillsTxtRecord->dwParam[4] + (nSkillLevel - 1) * pSkillsTxtRecord->dwParam[5];
+        effect.nRadius = pSkillsTxtRecord->dwParam[4] + (nSkillLevel - 1) * pSkillsTxtRecord->dwParam[5];
     }
     else
     {
-        effect.nParam = 0;
+        effect.nRadius = 0;
     }
 
     sub_6FD149B0(pGame, &effect);

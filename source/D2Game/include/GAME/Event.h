@@ -61,7 +61,7 @@ struct D2EventTimerStrc
 	int32_t nUnitType;
 	int32_t dwEventCustomId;
 	int32_t dwEventCustomParam;
-	D2EventTimerStrc* pNextFreeEventTimer;
+	D2EventTimerStrc* pNextQueuedTimer;
 	D2EventTimerStrc* pPreviousQueuedTimer;
 	D2EventTimerStrc* pNext;
 	D2EventTimerStrc* pPrevious;
