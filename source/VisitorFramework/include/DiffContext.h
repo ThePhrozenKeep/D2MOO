@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include <functional>
 #include <map>
 #include <ostream>
 #include <string>
@@ -22,6 +23,10 @@ struct DiffContext
 	using VisitedKey = std::pair<const void*, std::type_index>;
 	std::map<VisitedKey, const void*> visited_objects;
 	std::map<VisitedKey, const void*> visited_other_objects;
+
+	// Comparisons of child objects which are still to be done, see DiffVisitor::CompareWith()
+	std::vector<std::function<void()>> pending_comparisons;
+	bool comparing = false;
 
 	explicit DiffContext(const char* title) : title(title), differences() {}
 
