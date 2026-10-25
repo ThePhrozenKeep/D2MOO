@@ -4,6 +4,18 @@
 
 
 enum D2C_ClientSystemMessage {
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	// 1.14d: every id is one higher, there is no REMOVEFROMGAME (0x6F is ignored) and 0x70 is new
+	D2CLTSYS_NEWGAME = 0x67,
+	D2CLTSYS_JOINGAME = 0x68,
+	D2CLTSYS_ENDGAME = 0x69,
+	D2CLTSYS_JOINLIST = 0x6A,
+	D2CLTSYS_JOINACT = 0x6B,
+	D2CLTSYS_OPENCHAR = 0x6C,
+	D2CLTSYS_PING = 0x6D,
+	D2CLTSYS_DISCONNECT = 0x6E,
+	D2CLTSYS_REQUESTDISCONNECT = 0x70, // flags the client; the client timeout check then saves and disconnects it
+#else
 	D2CLTSYS_NEWGAME = 0x66,
 	D2CLTSYS_JOINGAME = 0x67,
 	D2CLTSYS_ENDGAME = 0x68,
@@ -13,6 +25,7 @@ enum D2C_ClientSystemMessage {
 	D2CLTSYS_PING = 0x6C,
 	D2CLTSYS_DISCONNECT = 0x6D,
 	D2CLTSYS_REMOVEFROMGAME = 0x6F,
+#endif
 };
 
 //D2Game.0x6FC317F0

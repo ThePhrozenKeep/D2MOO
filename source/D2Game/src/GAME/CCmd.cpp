@@ -204,11 +204,11 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         }
         break;
     }
-    case D2CLTSYS_REMOVEFROMGAME:
-    {
+#if !(D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14)
+    case D2CLTSYS_REMOVEFROMGAME: // 1.14d has no REMOVEFROMGAME: 0x6F takes the default case
         GAME_RemoveClientById(nClientId);
         break;
-    }
+#endif
     default:
         return;
     }
