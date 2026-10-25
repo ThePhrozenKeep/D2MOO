@@ -208,6 +208,9 @@ if(D2MOO_WITH_STATIC_TESTS)
       statictests/D2PacketDef_staticchecks.cpp
       statictests/Path_staticchecks.cpp
   )
+  if(D2MOO_ORDINALS_VERSION STREQUAL "1.14d")
+    target_sources(${D2CommonImplName} PRIVATE statictests/Drlg_staticchecks.cpp)
+  endif()
 endif()
 
 D2MOO_target_source_group(D2Common)
