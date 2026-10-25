@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <cstring>
@@ -16,6 +17,7 @@
 #include "DiffContext.h"
 #include "DifferenceDescriptor.h"
 #include "DifferenceType.h"
+#include "DynamicArrayCountRegistry.h"
 #include "FieldVisitor.h"
 #include "VisitorTraits.h"
 
@@ -190,41 +192,45 @@ public:
 		);
 	}
 
+	// Shadows FieldVisitor::DynamicArray() to report a difference when only one of the arrays is null or the counts differ.
+	// Only the elements present in both arrays are compared.
+	template<auto PointerMember, auto CountMember>
+	void DynamicArray(T& other, const char* name)
+	{
+		using CountType = std::remove_cv_t<std::remove_reference_t<decltype(other.*CountMember)>>;
+
+		static_assert(
+			std::is_integral_v<CountType>,
+			"DynamicArray() requires the count member to be an integral type."
+		);
+
+		if (CompareNullDynamicArrays<PointerMember>(other, name))
+		{
+			return;
+		}
+
+		const auto object_count = ToElementCount(m_object.*CountMember);
+		const auto other_count = ToElementCount(other.*CountMember);
+
+		if (object_count != other_count)
+		{
+			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Field, FieldName(name), std::to_string(object_count) + " elements", std::to_string(other_count) + " elements" };
+			m_context.differences.push_back(difference_descriptor);
+		}
+
+		this->template VisitDynamicArrayElements<PointerMember>(other, name, std::min(object_count, other_count));
+	}
+
 	// Shadows FieldVisitor::DynamicArrayWithRegisteredCount() to report a difference when only one of the arrays is null
 	template<auto PointerMember>
 	void DynamicArrayWithRegisteredCount(T& other, const char* name, std::string_view count_key)
 	{
-		auto* other_ptr = other.*PointerMember;
-		auto* object_ptr = m_object.*PointerMember;
-
-		if (other_ptr == nullptr || object_ptr == nullptr)
+		if (CompareNullDynamicArrays<PointerMember>(other, name))
 		{
-			if (other_ptr != object_ptr)
-			{
-				std::string field_name;
-				if (m_parent_name != "")
-				{
-					field_name = m_parent_name + "->" + name;
-				}
-				else
-				{
-					field_name = name;
-				}
-
-				std::stringstream object_stream;
-				object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
-
-				std::stringstream other_stream;
-				other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
-
-				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_stream.str(), other_stream.str() };
-				m_context.differences.push_back(difference_descriptor);
-			}
-
 			return;
 		}
 
-		FieldVisitor<DiffVisitor<T>>::template DynamicArrayWithRegisteredCount<PointerMember>(other, name, count_key);
+		this->template VisitDynamicArrayElements<PointerMember>(other, name, DynamicArrayCountRegistry::Instance().GetCount(count_key));
 	}
 
 	template<auto Member, typename Other, size_t Rank>
@@ -377,6 +383,58 @@ public:
 	}
 
 private:
+	std::string FieldName(const char* name) const
+	{
+		if (m_parent_name != "")
+		{
+			return m_parent_name + "->" + name;
+		}
+
+		return name;
+	}
+
+	// Returns true if at least one of the arrays is null, reporting a difference if only one of them is
+	template<auto PointerMember>
+	bool CompareNullDynamicArrays(T& other, const char* name)
+	{
+		auto* other_ptr = other.*PointerMember;
+		auto* object_ptr = m_object.*PointerMember;
+
+		if (other_ptr != nullptr && object_ptr != nullptr)
+		{
+			return false;
+		}
+
+		if (other_ptr != object_ptr)
+		{
+			std::stringstream object_stream;
+			object_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(object_ptr);
+
+			std::stringstream other_stream;
+			other_stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(other_ptr);
+
+			const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, FieldName(name), object_stream.str(), other_stream.str() };
+			m_context.differences.push_back(difference_descriptor);
+		}
+
+		return true;
+	}
+
+	// Negative counts are treated as empty arrays, like FieldVisitor::DynamicArray() does
+	template<typename CountType>
+	static size_t ToElementCount(CountType count)
+	{
+		if constexpr (std::is_signed_v<CountType>)
+		{
+			if (count < 0)
+			{
+				return 0;
+			}
+		}
+
+		return static_cast<size_t>(count);
+	}
+
 	T& m_object;
 	DiffContext& m_context;
 	std::string m_parent_name;
