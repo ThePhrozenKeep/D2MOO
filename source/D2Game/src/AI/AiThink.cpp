@@ -8942,7 +8942,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 			nVelocity = ITEMS_RollRandomNumber(&pUnit->pSeed) % 40 + 40;
 		}
 
-		int32_t b5 = pPlayerData->unk0xA0;
+		int32_t b5 = pPlayerData->nPositionHistoryIndex;
 
 		D2AiParamStrc* pAiParam = nullptr;
 		if (pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
@@ -8962,8 +8962,8 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 				b5 = 19;
 			}
 
-			const int32_t nX = pPlayerData->unk0xA8[2 * b5];
-			const int32_t nY = pPlayerData->unk0xA8[2 * b5 + 1];
+			const int32_t nX = pPlayerData->nPositionHistory[2 * b5];
+			const int32_t nY = pPlayerData->nPositionHistory[2 * b5 + 1];
 
 			if (nX && nY && AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) > 5)
 			{
@@ -9215,7 +9215,7 @@ int32_t __fastcall sub_6FCE34E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 			v28 = 3;
 		}
 
-		if (AIUTIL_GetDistanceToCoordinates(pUnit, pPlayerData->unk0xA8[40], pPlayerData->unk0xA8[41]) < 28)
+		if (AIUTIL_GetDistanceToCoordinates(pUnit, pPlayerData->nLastTeleportX, pPlayerData->nLastTeleportY) < 28)
 		{
 			if (v28 == 1)
 			{
@@ -9574,7 +9574,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 			nSpeed = ITEMS_RollRandomNumber(&pUnit->pSeed) % 15 + 50;
 		}
 
-		int32_t v29 = pPlayerData->unk0xA0;
+		int32_t v29 = pPlayerData->nPositionHistoryIndex;
 		D2AiParamStrc* pAiParam = nullptr;
 		if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
 		{
@@ -9594,8 +9594,8 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 				v29 = 19;
 			}
 
-			const int32_t nX = pPlayerData->unk0xA8[2 * v29];
-			const int32_t nY = pPlayerData->unk0xA8[2 * v29 + 1];
+			const int32_t nX = pPlayerData->nPositionHistory[2 * v29];
+			const int32_t nY = pPlayerData->nPositionHistory[2 * v29 + 1];
 			if (AIUTIL_GetDistanceToCoordinates(pUnit, nX, nY) > 5)
 			{
 				AITACTICS_SetVelocity(pUnit, 0, nSpeed, 100);
@@ -16629,11 +16629,11 @@ void __fastcall AITHINK_Fn134_BaalThrone(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 	D2BaalThroneAiCallbackArgStrc arg = {};
 	arg.pTarget = nullptr;
 	arg.nDistance = 64;
-	arg.unk0x08 = 0;
+	arg.nMonsterCount = 0;
 	arg.nMaxDistance = 64;
 	sub_6FCF1E80(pGame, pUnit, &arg, 0, 3);
 
-	if (arg.unk0x08)
+	if (arg.nMonsterCount)
 	{
 		if (pAiTickParam->pTarget)
 		{
@@ -17279,10 +17279,10 @@ void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 	if (pAiControl->pAiParamFn)
 	{
 		pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, pAiControl->nAiSpecialState);
-		if (pAiControl->pAiParamFn == pAiTableRecord->pAiParamFn && pAiTableRecord->unk0x0C)
+		if (pAiControl->pAiParamFn == pAiTableRecord->pAiParamFn && pAiTableRecord->pTransitionFn)
 		{
 			pAiControl->nAiSpecialState = nAiSpecialState;
-			pAiControl->pAiParamFn = pAiTableRecord->unk0x0C;
+			pAiControl->pAiParamFn = pAiTableRecord->pTransitionFn;
 			return;
 		}
 	}
@@ -17295,7 +17295,7 @@ void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 
 	pAiTableRecord = AITHINK_GetAiTableRecord(pUnit, nAiSpecialState);
 
-	if (pAiTableRecord->unk0x04)
+	if (pAiTableRecord->pInitializeFn)
 	{
 		D2AiTickParamStrc aiTickParam = {};
 		aiTickParam.pAiControl = pAiControl;
@@ -17307,7 +17307,7 @@ void __fastcall AITHINK_ExecuteAiFn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 			return;
 		}
 
-		pAiTableRecord->unk0x04(pGame, pUnit, &aiTickParam);
+		pAiTableRecord->pInitializeFn(pGame, pUnit, &aiTickParam);
 	}
 
 	AIPARAMFN pAiParamFn = pAiTableRecord->pAiParamFn;
@@ -17367,7 +17367,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction03_6FCF0A70(D2GameStrc* pGame, D2UnitS
 		return;
 	}
 
-	switch (AITHINK_GetAiTableRecord(pUnit, aiTickParam.pAiControl->nAiSpecialState)->unk0x00)
+	switch (AITHINK_GetAiTableRecord(pUnit, aiTickParam.pAiControl->nAiSpecialState)->nTargetSelectionMode)
 	{
 	case 1:
 		aiTickParam.pTarget = sub_6FCCF9D0(pGame, pUnit, aiTickParam.pAiControl, &aiTickParam.nTargetDistance, &aiTickParam.bCombat);

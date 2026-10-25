@@ -246,7 +246,7 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     monCreate.pGame = pGame;
     monCreate.pRoomCoordList = nullptr;
     monCreate.pRoom = UNITS_GetRoom(pUnit);
-    monCreate.field_20 = a5;
+    monCreate.nMaxSearchRings = a5;
     monCreate.nFlags = nFlags;
     monCreate.nX = CLIENTS_GetUnitX(pUnit);
     monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -1138,7 +1138,7 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
             monCreate.nUnitGUID = 0;
             monCreate.nAnimMode = 1;
             monCreate.nMonsterId = pMonStatsTxtRecord->wMinion[nMinionIndex];
-            monCreate.field_20 = 4;
+            monCreate.nMaxSearchRings = 4;
             monCreate.pRoomCoordList = nullptr;
             monCreate.pRoom = UNITS_GetRoom(pUnit);
             monCreate.pGame = pMonCreate->pGame;
@@ -1184,7 +1184,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveR
     monCreate.pGame = pGame;
     monCreate.nUnitGUID = 0;
     monCreate.nMonsterId = nMonsterId;
-    monCreate.field_20 = a7;
+    monCreate.nMaxSearchRings = a7;
     monCreate.pRoomCoordList = nullptr;
     monCreate.nX = nX;
     monCreate.nAnimMode = nAnimMode;
@@ -1205,7 +1205,7 @@ D2UnitStrc* __fastcall sub_6FC69F70(D2GameStrc* pGame, D2RoomCoordListStrc* pRoo
     monCreate.pGame = pGame;
     monCreate.pRoomCoordList = pRoomCoordList;
     monCreate.pRoom = UNITS_GetRoom(pUnit);
-    monCreate.field_20 = a6;
+    monCreate.nMaxSearchRings = a6;
     monCreate.nFlags = nFlags;
     monCreate.nX = CLIENTS_GetUnitX(pUnit);
     monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -1222,7 +1222,7 @@ D2UnitStrc* __fastcall sub_6FC6A030(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     monCreate.nMonsterId = nMonsterId;
     monCreate.pGame = pGame;
     monCreate.nAnimMode = nAnimMode;
-    monCreate.field_20 = a8;
+    monCreate.nMaxSearchRings = a8;
     monCreate.pRoomCoordList = pRoomCoordList;
     monCreate.nFlags = nFlags;
     monCreate.nUnitGUID = 0;
@@ -1244,7 +1244,7 @@ D2UnitStrc* __fastcall sub_6FC6A090(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     monCreate.pRoomCoordList = nullptr;
     monCreate.nX = nX;
     monCreate.nAnimMode = nAnimMode;
-    monCreate.field_20 = -1;
+    monCreate.nMaxSearchRings = -1;
     monCreate.nFlags = nFlags;
     monCreate.nY = nY;
 
@@ -1260,7 +1260,7 @@ D2UnitStrc* __fastcall sub_6FC6A0F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     monCreate.nUnitGUID = nUnitId;
     monCreate.pGame = pGame;
     monCreate.nMonsterId = nMonsterId;
-    monCreate.field_20 = a8;
+    monCreate.nMaxSearchRings = a8;
     monCreate.nAnimMode = nMode;
     monCreate.nX = nX;
     monCreate.pRoomCoordList = nullptr;
@@ -1283,7 +1283,7 @@ D2UnitStrc* __fastcall sub_6FC6A150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
         monCreate.pGame = pGame;
         monCreate.pRoomCoordList = nullptr;
         monCreate.pRoom = pRoom;
-        monCreate.field_20 = a5;
+        monCreate.nMaxSearchRings = a5;
         monCreate.nFlags = nFlags;
         monCreate.nX = CLIENTS_GetUnitX(pUnit);
         monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -1314,7 +1314,7 @@ int32_t __fastcall sub_6FC6A230(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t n
     monCreate.pRoomCoordList = nullptr;
     monCreate.pRoom = UNITS_GetRoom(pOwner);
     monCreate.nFlags = nFlags;
-    monCreate.field_20 = a5;
+    monCreate.nMaxSearchRings = a5;
     monCreate.nX = CLIENTS_GetUnitX(pOwner);
     monCreate.nY = CLIENTS_GetUnitY(pOwner);
 
@@ -1371,7 +1371,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
             monCreate.nUnitGUID = 0;
             monCreate.nX = nX + a8->records[i].nXOffset;
             monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = nFlags;
 
             if (D2GAME_SpawnNormalMonster_6FC68E30(&monCreate))
@@ -1392,7 +1392,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
             monCreate.nUnitGUID = 0;
             monCreate.nX = nX + a8->records[i].nXOffset;
             monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = 0;
 
             pUnit = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1414,7 +1414,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
             monCreate.nUnitGUID = 0;
             monCreate.nX = nX + a8->records[i].nXOffset;
             monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = 0;
 
             pUnit = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1438,7 +1438,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
                 monCreate.nUnitGUID = 0;
                 monCreate.nX = nX + a8->records[i].nXOffset;
                 monCreate.nY = nY + a8->records[i].nYOffset;
-                monCreate.field_20 = -1;
+                monCreate.nMaxSearchRings = -1;
                 monCreate.nFlags = 0;
 
                 D2UnitStrc* pMonster = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1462,7 +1462,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
             monCreate.nUnitGUID = 0;
             monCreate.nX = nX + a8->records[i].nXOffset;
             monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = nFlags;
 
             nResult = 1;
@@ -1487,7 +1487,7 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
                 monCreate.nUnitGUID = 0;
                 monCreate.nX = nX + a8->records[i].nXOffset;
                 monCreate.nY = nY + a8->records[i].nYOffset;
-                monCreate.field_20 = -1;
+                monCreate.nMaxSearchRings = -1;
                 monCreate.nFlags = 0;
                 
                 D2UnitStrc* pMonster = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1580,7 +1580,7 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     D2UnkMonCreateStrc monCreate = {};
     monCreate.nUnitGUID = 0;
     monCreate.pRoomCoordList = nullptr;
-    monCreate.field_20 = -1;
+    monCreate.nMaxSearchRings = -1;
     monCreate.nFlags = nFlags;
     monCreate.nMonsterId = nMonsterId;
     monCreate.nAnimMode = nAnimMode;

@@ -74,14 +74,14 @@ struct D2RosterPetStrc
 	int32_t nPetTypeId;						//0x04
 	uint32_t dwUnitId;						//0x08
 	uint32_t dwOwnerId;						//0x0C
-	uint32_t unk0x10;						//0x10
+	uint32_t dwLevelId;						//0x10
 	uint32_t unk0x14;						//0x14
 	uint32_t unk0x18;						//0x18
 	int32_t nLifePercent;					//0x1C
 	BOOL bDrawIcon;							//0x20
-	void* unk0x24;							//0x24
-	uint32_t unk0x28;						//0x28
-	uint32_t unk0x2C;						//0x2C
+	uint32_t dwNameSeed;					//0x24
+	uint32_t dwNameStringId;				//0x28
+	uint32_t nHoverTextState;				//0x2C
 	D2RosterPetStrc* pNext;					//0x30
 };
 
@@ -102,8 +102,9 @@ struct D2RosterUnitStrc
 	D2RosterCorpseStrc* pCorpse;			//0x38
 	D2UnitGUID dwSrcPortalGUID;				//0x3C
 	D2UnitGUID dwDstPortalGUID;				//0x40
-	uint16_t unk0x44;						//0x44
-	uint8_t unk0x46[32];					//0x46
+	uint16_t wGuildFlags;					//0x44
+	char szGuildTag[4];						//0x46
+	char szGuildName[28];					//0x4A
 	char szNameEx[26];						//0x66 - name with clan tag
 	D2RosterUnitStrc* pNext;				//0x80
 };

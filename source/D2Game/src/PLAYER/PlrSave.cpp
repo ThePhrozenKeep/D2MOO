@@ -122,14 +122,14 @@ int32_t __fastcall sub_6FC895E0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SavedI
         return 12;
     }
 
-    if (pSavedItem->unk0x01)
+    if (pSavedItem->nSocketedItems)
     {
         *ppItem = pItem;
     }
 
     if (a5)
     {
-        *a5 = pSavedItem->unk0x01;
+        *a5 = pSavedItem->nSocketedItems;
     }
 
     return 0;
@@ -1145,7 +1145,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
             pSavedItem->nItemFormat = (uint8_t)BITMANIP_Read(&bitBuffer, 10);
             pSavedItem->nItemCode = BITMANIP_Read(&bitBuffer, 32);
             pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
-            pSavedItem->unk0x01 = BITMANIP_Read(&bitBuffer, 3);
+            pSavedItem->nSocketedItems = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemLevel = (uint8_t)BITMANIP_Read(&bitBuffer, 12);
             pSavedItem->nSpawnType = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemQuality = BITMANIP_Read(&bitBuffer, 4);
@@ -1194,7 +1194,7 @@ int32_t __fastcall sub_6FC8AF70(D2SavedItemStrc* pSavedItem, uint8_t* pData)
         else
         {
             pSavedItem->nBodyLoc = BITMANIP_Read(&bitBuffer, 5);
-            pSavedItem->unk0x01 = BITMANIP_Read(&bitBuffer, 3);
+            pSavedItem->nSocketedItems = BITMANIP_Read(&bitBuffer, 3);
             pSavedItem->nItemLevel = (uint8_t)BITMANIP_Read(&bitBuffer, 12);
             const int32_t nItemId = BITMANIP_ReadSigned(&bitBuffer, 10);
             pSavedItem->nSpawnType = BITMANIP_Read(&bitBuffer, 3);
@@ -1392,12 +1392,12 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         return SYSERROR_INVENTORY;
     }
 
-    if (pSavedItem->unk0x01)
+    if (pSavedItem->nSocketedItems)
     {
         *ppItem = pItem;
     }
 
-    *a5 = pSavedItem->unk0x01;
+    *a5 = pSavedItem->nSocketedItems;
     return 0;
 }
 

@@ -21,7 +21,7 @@ struct D2PartyStrc
 
 struct D2PartyControlStrc
 {
-	int16_t field_0;
+	int16_t nNextPartyId;
 	int16_t field_2;
 	D2PartyStrc* pParties;
 };

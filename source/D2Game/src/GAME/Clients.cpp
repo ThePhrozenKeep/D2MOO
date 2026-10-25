@@ -1071,7 +1071,7 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
         //D2Game_10034_Return(1);
     }
 
-    ++pClient->unk0x1B0;
+    ++pClient->nPlayerSyncCount;
 
     if (pClientRoom != pRoom)
     {
@@ -1584,7 +1584,7 @@ void __fastcall CLIENTS_FreeSaveHeader(D2ClientStrc* pClient)
 
     pClient->nSaveHeaderSize = 0;
     pClient->nSaveHeaderDataSentBytes = 0;
-    pClient->unk0x184 = 0;
+    pClient->nSaveHeaderSendDelay = 0;
     pClient->dwFlags &= ~CLIENTFLAGEX_SAVE_LOADED;
 }
 
@@ -1593,7 +1593,7 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
-    pClient->unk0x184 = 5;
+    pClient->nSaveHeaderSendDelay = 5;
     pClient->nSaveHeaderDataSentBytes = 0;
     pClient->dwFlags |= CLIENTFLAGEX_SAVE_LOADED;
 }

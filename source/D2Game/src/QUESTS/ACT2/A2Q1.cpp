@@ -635,9 +635,9 @@ void __fastcall ACT2Q1_OnRadamentActivated(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		pQuestData->dwFlags &= 0xFFFFFF00;
 
 		bool bIterate = false;
-		if (!pQuestDataEx->unk0x09)
+		if (!pQuestDataEx->bRadamentStatusIterated)
 		{
-			pQuestDataEx->unk0x09 = 1;
+			pQuestDataEx->bRadamentStatusIterated = 1;
 			bIterate = true;
 		}
 		QUESTS_UnitIterate(pQuestData, 2, 0, ACT2Q1_UnitIterate_StatusCyclerEx, bIterate);

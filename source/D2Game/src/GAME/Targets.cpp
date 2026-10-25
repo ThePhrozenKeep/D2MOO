@@ -27,7 +27,7 @@ void __fastcall D2GAME_TARGETS_First_6FC40170(D2GameStrc* pGame, D2UnitStrc* pUn
             memset(pTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
             pTargetNode->pUnit = pUnit;
-            pTargetNode->unk0x04 = a3;
+            pTargetNode->nNodeData = a3;
 
             pGame->pTargetNodes[nNodeIndex] = pTargetNode;
             pUnit->dwNodeIndex = nNodeIndex;
@@ -59,14 +59,14 @@ void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pU
     memset(pNewTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
     pNewTargetNode->pUnit = pUnit;
-    pNewTargetNode->unk0x04 = a3;
+    pNewTargetNode->nNodeData = a3;
 
-    pNewTargetNode->unk0x0C = pTargetNode;
+    pNewTargetNode->pPrevious = pTargetNode;
     pNewTargetNode->pNext = pTargetNode->pNext;
 
     if (pTargetNode->pNext)
     {
-        pTargetNode->pNext->unk0x0C = pNewTargetNode;
+        pTargetNode->pNext->pPrevious = pNewTargetNode;
     }
 
     pTargetNode->pNext = pNewTargetNode;
@@ -91,12 +91,12 @@ void __fastcall sub_6FC40280(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     memset(pNewTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
     pNewTargetNode->pUnit = pUnit;
-    pNewTargetNode->unk0x04 = a3;
+    pNewTargetNode->nNodeData = a3;
 
     if (pTargetNode)
     {
         pNewTargetNode->pNext = pTargetNode;
-        pTargetNode->unk0x0C = pNewTargetNode;
+        pTargetNode->pPrevious = pNewTargetNode;
     }
 
     pGame->pTargetNodes[nNodeIndex] = pNewTargetNode;
@@ -170,7 +170,7 @@ void __fastcall D2GAME_TARGETS_Last_6FC40380(D2GameStrc* pGame, D2UnitStrc* pUni
 
             if (pTargetNode->pNext)
             {
-                pTargetNode->pNext->unk0x0C = nullptr;
+                pTargetNode->pNext->pPrevious = nullptr;
             }
 
             D2_FREE_POOL(pGame->pMemoryPool, pTargetNode);
@@ -193,10 +193,10 @@ void __fastcall D2GAME_TARGETS_Last_6FC40380(D2GameStrc* pGame, D2UnitStrc* pUni
         }
     }
 
-    pTargetNode->unk0x0C->pNext = pTargetNode->pNext;
+    pTargetNode->pPrevious->pNext = pTargetNode->pNext;
     if (pTargetNode->pNext)
     {
-        pTargetNode->pNext->unk0x0C = pTargetNode->unk0x0C;
+        pTargetNode->pNext->pPrevious = pTargetNode->pPrevious;
     }
 
     D2_FREE_POOL(pGame->pMemoryPool, pTargetNode);

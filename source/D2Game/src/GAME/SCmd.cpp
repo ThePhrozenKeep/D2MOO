@@ -1286,7 +1286,7 @@ D2UnkMonsterDataStrc* __fastcall sub_6FC3E3D0(D2UnitStrc* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
     {
-        return &pUnit->pMonsterData->unk0x3C;
+        return &pUnit->pMonsterData->tLifeSync;
     }
 
     return nullptr;

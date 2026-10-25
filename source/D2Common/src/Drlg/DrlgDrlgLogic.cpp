@@ -86,7 +86,7 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 			{
 				if (!pDrlgTileLink->bFloor)
 				{
-					for (D2DrlgTileDataStrc* pDrlgTileData = pDrlgTileLink->pMapTile; pDrlgTileData; pDrlgTileData = pDrlgTileData->unk0x20)
+					for (D2DrlgTileDataStrc* pDrlgTileData = pDrlgTileLink->pMapTile; pDrlgTileData; pDrlgTileData = pDrlgTileData->pNext)
 					{
 						if (DRLG_CheckLayer1ButNotWallObject(pDrlgTileData))
 						{
@@ -340,11 +340,11 @@ void __fastcall DRLGLOGIC_SetCoordListForTiles(D2DrlgRoomStrc* pDrlgRoom)
 		{
 			if (pDrlgRoom->pLogicalRoomInfo && !(pDrlgRoom->pLogicalRoomInfo->dwFlags & DRLGLOGIC_ROOMINFO_HAS_COORD_LIST))
 			{
-				pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].unk0x10 = DRLGGRID_GetGridEntry(&pDrlgRoom->pLogicalRoomInfo->pIndexY, pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nPosX, pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nPosY);
+				pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nCoordList = DRLGGRID_GetGridEntry(&pDrlgRoom->pLogicalRoomInfo->pIndexY, pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nPosX, pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nPosY);
 			}
 			else
 			{
-				pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].unk0x10 = 0;
+				pDrlgRoom->pTileGrid->pTiles.pWallTiles[i].nCoordList = 0;
 			}
 		}
 	}

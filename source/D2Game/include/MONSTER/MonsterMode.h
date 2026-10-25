@@ -26,10 +26,10 @@ using MonModeCallback2 = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
 using MonModeCallback3 = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
 struct D2MonModeCallbackTableStrc
 {
-	MonModeCallback1 unk0x00;
-	MonModeCallback2 unk0x04;
-	MonModeCallback3 unk0x08;
-	int32_t unk0x0C;
+	MonModeCallback1 pfStart;
+	MonModeCallback2 pfUpdate;
+	MonModeCallback3 pfEnd;
+	int32_t bScheduleEvents;
 };
 
 #pragma pack(pop)

@@ -4100,9 +4100,9 @@ void __fastcall UNITS_SetInteractData(D2UnitStrc* pUnit, int nSkillId, int nUnit
 {
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && pUnit->pPlayerData)
 	{
-		pUnit->pPlayerData->unk0xA8[42] = 1;
-		pUnit->pPlayerData->unk0xA8[43] = nSkillId;
-		pUnit->pPlayerData->unk0xA8[44] = nUnitType;
-		pUnit->pPlayerData->unk0xA8[45] = nUnitGUID;
+		pUnit->pPlayerData->bInteract = 1;
+		pUnit->pPlayerData->nInteractAction = nSkillId;
+		pUnit->pPlayerData->nInteractUnitType = nUnitType;
+		pUnit->pPlayerData->nInteractUnitGUID = nUnitGUID;
 	}
 }

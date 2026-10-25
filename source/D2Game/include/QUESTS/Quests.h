@@ -253,7 +253,7 @@ struct D2QuestInfoStrc
 	D2QuestTimerStrc* pTimer;				//0x10
 	uint32_t dwTick;						//0x14
 	D2SeedStrc pSeed;						//0x18
-	uint8_t unk0x20;						//0x20
+	uint8_t nQuestFXEvent;					//0x20
 	uint8_t unk0x21[3];						//0x21
 };
 

@@ -952,25 +952,25 @@ D2UnitStrc* __fastcall sub_6FD107F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     // TODO: Names
     D2_6FD10880_Strc args = {};
 
-    args.unk0x0C = a7;
-    args.unk0x10 = a7;
-    args.unk0x00 = 0;
-    args.unk0x04 = -1;
-    args.unk0x08 = 0;
-    args.unk0x14 = 0;
+    args.nFirstTargetGUID = a7;
+    args.nPreviousTargetGUID = a7;
+    args.pNextTarget = 0;
+    args.nNextTargetGUID = -1;
+    args.pFirstTarget = 0;
+    args.nTargetCount = 0;
     sub_6FD0FE80(pGame, pUnit, nX, nY, nAuraRange, nAuraFilter | 0xA783, sub_6FD10880, &args, 0, __FILE__, __LINE__);
 
-    if (!args.unk0x00)
+    if (!args.pNextTarget)
     {
-        return args.unk0x08;
+        return args.pFirstTarget;
     }
     
     if (a8)
     {
-        *a8 = args.unk0x14;
+        *a8 = args.nTargetCount;
     }
 
-    return args.unk0x00;
+    return args.pNextTarget;
 }
 
 //D2Game.0x6FD10880
@@ -984,20 +984,20 @@ int32_t __fastcall sub_6FD10880(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
         nUnitGUID = pUnit->dwUnitId;
     }
 
-    if ((uint32_t)nUnitGUID <= pArgs->unk0x10 || (uint32_t)nUnitGUID >= pArgs->unk0x04)
+    if ((uint32_t)nUnitGUID <= pArgs->nPreviousTargetGUID || (uint32_t)nUnitGUID >= pArgs->nNextTargetGUID)
     {
-        if ((uint32_t)nUnitGUID <= pArgs->unk0x0C)
+        if ((uint32_t)nUnitGUID <= pArgs->nFirstTargetGUID)
         {
-            pArgs->unk0x0C = nUnitGUID;
-            pArgs->unk0x08 = pUnit;
+            pArgs->nFirstTargetGUID = nUnitGUID;
+            pArgs->pFirstTarget = pUnit;
         }
-        ++pArgs->unk0x14;
+        ++pArgs->nTargetCount;
     }
     else
     {
-        pArgs->unk0x04 = nUnitGUID;
-        pArgs->unk0x00 = pUnit;
-        ++pArgs->unk0x14;
+        pArgs->nNextTargetGUID = nUnitGUID;
+        pArgs->pNextTarget = pUnit;
+        ++pArgs->nTargetCount;
     }
 
     return 1;
@@ -3734,7 +3734,7 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
 
         for (int32_t i = 0; i < unitFindData.nIndex; ++i)
         {
-            ((void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t))pEffect->pfAreaEffect)(pGame, pEffect->pUnit, unitFindData.pUnitsArray[i], pEffect->nSkillLevel, pEffect->unk0x1C);
+            ((void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t))pEffect->pfAreaEffect)(pGame, pEffect->pUnit, unitFindData.pUnitsArray[i], pEffect->nSkillLevel, pEffect->nCallbackParam);
         }
 
         UNITFINDS_FreeUnitFindData(&unitFindData);

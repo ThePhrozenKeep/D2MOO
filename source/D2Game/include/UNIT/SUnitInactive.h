@@ -29,7 +29,7 @@ struct D2InactiveMonsterNodeStrc
 	int32_t nUnitFlags;							//0x10
 	int32_t nUnitFlagsEx;						//0x14
 	int32_t nTypeFlags;							//0x18
-	int32_t unk0x1C;							//0x1C
+	int32_t nOwnerGUID;							//0x1C
 	D2MinionListStrc* pMinionList;				//0x20
 	D2MapAIStrc* pMapAI;						//0x24
 	D2C_AiSpecialState nAiSpecialState;			//0x28

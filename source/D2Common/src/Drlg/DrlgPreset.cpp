@@ -1699,12 +1699,12 @@ void __fastcall DRLGPRESET_TogglePopsVisibility(D2DrlgRoomStrc* pDrlgRoom, int n
 		{
 			if (nCellFlags)
 			{
-				pDrlgTileData->unk0x24 |= 4;
-				pDrlgTileData->unk0x2C = nTick;
+				pDrlgTileData->nFadeFlags |= 4;
+				pDrlgTileData->nFadeEndTick = nTick;
 			}
 			else
 			{
-				pDrlgTileData->unk0x24 &= 0xFFFFFFFB;
+				pDrlgTileData->nFadeFlags &= 0xFFFFFFFB;
 				pDrlgTileData->dwFlags &= 0xFFFFFFF7;
 			}
 		}
@@ -1712,33 +1712,33 @@ void __fastcall DRLGPRESET_TogglePopsVisibility(D2DrlgRoomStrc* pDrlgRoom, int n
 		{
 			if (!(pDrlgTileData->dwFlags & 0x100) && D2CMP_10078_GetTileStyle(pDrlgTileData->pTile) == nPopSubIndex && DRLGROOM_AreXYInsideCoordinates(&pDrlgCoords, pDrlgRoom->nTileXPos + pDrlgTileData->nPosX, pDrlgRoom->nTileYPos + pDrlgTileData->nPosY))
 			{
-				pDrlgTileData->unk0x24 |= 2;
+				pDrlgTileData->nFadeFlags |= 2;
 				if (nCellFlags)
 				{
-					pDrlgTileData->nGreen = 0;
-					pDrlgTileData->nBlue = 255;
+					pDrlgTileData->nFadeStartAlpha = 0;
+					pDrlgTileData->nFadeEndAlpha = 255;
 
-					if (pDrlgTileData->nRed)
+					if (pDrlgTileData->nAlpha)
 					{
-						pDrlgTileData->unk0x2C = nTick - 500 * pDrlgTileData->nRed / 255;
+						pDrlgTileData->nFadeEndTick = nTick - 500 * pDrlgTileData->nAlpha / 255;
 					}
 					else
 					{
-						pDrlgTileData->unk0x2C = nTick;
+						pDrlgTileData->nFadeEndTick = nTick;
 					}
 				}
 				else
 				{
-					pDrlgTileData->nGreen = 255;
-					pDrlgTileData->nBlue = 0;
+					pDrlgTileData->nFadeStartAlpha = 255;
+					pDrlgTileData->nFadeEndAlpha = 0;
 
-					if (pDrlgTileData->nRed == 255)
+					if (pDrlgTileData->nAlpha == 255)
 					{
-						pDrlgTileData->unk0x2C = nTick;
+						pDrlgTileData->nFadeEndTick = nTick;
 					}
 					else
 					{
-						pDrlgTileData->unk0x2C = nTick + 500 * (pDrlgTileData->nRed - 255) / 255;
+						pDrlgTileData->nFadeEndTick = nTick + 500 * (pDrlgTileData->nAlpha - 255) / 255;
 					}
 				}
 			}

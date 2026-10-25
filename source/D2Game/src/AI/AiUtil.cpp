@@ -151,7 +151,7 @@ D2UnitStrc* __fastcall sub_6FCF16D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		return nullptr;
 	}
 
-	++pArg->unk0x08;
+	++pArg->nMonsterCount;
 	if (nDistance >= pArg->nDistance)
 	{
 		return nullptr;
@@ -186,14 +186,14 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
 	if ((pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !sub_6FCBD900(pGame, pUnit, pTarget))
 	{
-		if (pTarget->dwUnitType == UNIT_MONSTER && (!pUnit || pUnit->dwUnitType != UNIT_PLAYER) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pArg->unk0x08 && !MONSTERS_IsDead(pTarget))
+		if (pTarget->dwUnitType == UNIT_MONSTER && (!pUnit || pUnit->dwUnitType != UNIT_PLAYER) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && pArg->bCheckTargetCollision && !MONSTERS_IsDead(pTarget))
 		{
 			D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pTarget);
 
 			if (pAiControl->nAiFlags & 8 && pArg->unk0x10 == D2Common_10095(UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget)))
 			{
 				pAiControl->nAiFlags |= 8u;
-				pArg->unk0x08 = 0;
+				pArg->bCheckTargetCollision = 0;
 			}
 		}
 
@@ -246,7 +246,7 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 		}
 	}
 
-	if (pArg->unk0x08 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
+	if (pArg->bCheckTargetCollision && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 	{
 		return nullptr;
 	}
@@ -716,7 +716,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 			D2UnkAiCallbackArgStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
-			arg.unk0x08 = v66;
+			arg.bCheckTargetCollision = v66;
 			arg.nMaxDistance = 35;
 			arg.unk0x10 = D2Common_10095(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
 			arg.pAlternativeTarget = nullptr;
@@ -1041,7 +1041,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 			D2UnkAiCallbackArgStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
-			arg.unk0x08 = a3;
+			arg.bCheckTargetCollision = a3;
 			arg.nMaxDistance = 35;
 			arg.unk0x10 = D2Common_10095(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
 			arg.pAlternativeTarget = nullptr;

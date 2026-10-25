@@ -716,7 +716,7 @@ void __fastcall ACT2Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 		++pQuestDataEx->nCubedStaffs;
 	}
 
-	if (!pQuestDataEx->unk0x2B || pQuestDataEx->nCubedStaffs <= 0 && (!pQuestDataEx->nHoradricCubes || !pQuestDataEx->nAmulets || !pQuestDataEx->nBaseStaffs))
+	if (!pQuestDataEx->bStaffMissingDetected || pQuestDataEx->nCubedStaffs <= 0 && (!pQuestDataEx->nHoradricCubes || !pQuestDataEx->nAmulets || !pQuestDataEx->nBaseStaffs))
 	{
 		return;
 	}
@@ -760,7 +760,7 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 		break;
 	}
 
-	if (pQuestDataEx->unk0x2B || pQuestDataEx->nCubedStaffs)
+	if (pQuestDataEx->bStaffMissingDetected || pQuestDataEx->nCubedStaffs)
 	{
 		return;
 	}
@@ -791,13 +791,13 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 			if (pQuestData13->pGame->nGameType == 3)
 			{
 				pQuestDataEx13->nQuestStatus = 8;
-				pQuestDataEx->unk0x2B = 1;
+				pQuestDataEx->bStaffMissingDetected = 1;
 				return;
 			}
 			pQuestDataEx13->nQuestStatus = 9;
 		}
 	}
-	pQuestDataEx->unk0x2B = 1;
+	pQuestDataEx->bStaffMissingDetected = 1;
 }
 
 //D2Game.0x6FCA10B0

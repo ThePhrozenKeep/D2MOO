@@ -297,7 +297,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
     // TODO: v2
     D2UnkNecSkillStrc* v2 = (D2UnkNecSkillStrc*)pArgs;
 
-    if (v2->unk0x08)
+    if (v2->bApplyAiState)
     {
         if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_NEUTRAL)
         {
@@ -350,7 +350,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
     curse.nDuration = v2->nDuration;
     curse.nSkill = v2->nSkillId;
     curse.nSkillLevel = v2->nSkillLevel;
-    curse.pStateRemoveCallback = v2->unk0x08 ? sub_6FD0B250 : nullptr;
+    curse.pStateRemoveCallback = v2->bApplyAiState ? sub_6FD0B250 : nullptr;
     curse.pTarget = pUnit;
     curse.nStat = v2->nAuraStat[0];
     curse.nStatValue = nValue;
@@ -362,7 +362,7 @@ int32_t __fastcall sub_6FD0B450(D2UnitStrc* pUnit, void* pArgs)
         return 0;
     }
 
-    if (v2->unk0x08)
+    if (v2->bApplyAiState)
     {
         D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(v2->nSkillId);
         if (pSkillsTxtRecord)
@@ -472,7 +472,7 @@ int32_t __fastcall SKILLS_SrvDo030_Curse(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     v29.pUnit = pUnit;
     v29.pGame = pGame;
     v29.nSkillLevel = nSkillLevel;
-    v29.unk0x08 = bIsDimVisionOrTerrorCurse;
+    v29.bApplyAiState = bIsDimVisionOrTerrorCurse;
     v29.nSkillId = nSkillId;
     v29.nDuration = nLength;
     v29.bUpdateAnimRate = 0;
@@ -528,7 +528,7 @@ void __fastcall sub_6FD0B9F0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
     args.nDuration = nLength;
     args.pGame = pGame;
     args.pUnit = pUnit;
-    args.unk0x08 = 1;
+    args.bApplyAiState = 1;
     args.nSkillId = SKILL_DIMVISION;
     args.nSkillLevel = nSkillLevel;
     args.bUpdateAnimRate = 0;

@@ -384,7 +384,7 @@ int32_t __fastcall SKILLS_SrvDo071_Taunt(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     curseData.pGame = pGame;
     curseData.nSkillId = nSkillId;
     curseData.pUnit = pUnit;
-    curseData.unk0x08 = 1;
+    curseData.bApplyAiState = 1;
     curseData.nSkillLevel = nSkillLevel;
     curseData.bUpdateAnimRate = 0;
 

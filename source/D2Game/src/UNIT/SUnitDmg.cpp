@@ -850,7 +850,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			for (int32_t i = 0; i < std::size(sgDamageStatTable); ++i)
 			{
 				const D2DamageStatTableStrc* pDamageStatTableRecord = &sgDamageStatTable[i];
-				if (pDamageStatTableRecord->unk0x20)
+				if (pDamageStatTableRecord->bApplyDamageMultiplier)
 				{
 					int32_t* pDamageValue = (int32_t*)((char*)damageInfo.pDamage + pDamageStatTableRecord->nOffsetInDamageStrc);
 					if (*pDamageValue > 0)
@@ -919,7 +919,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 	for (int32_t i = 0; i < std::size(sgDamageStatTable); ++i)
 	{
 		const D2DamageStatTableStrc* pDamageStatTableRecord = &sgDamageStatTable[i];
-		if (pDamageStatTableRecord->unk0x1C && !damageInfo.bAttackerIsMonster)
+		if (pDamageStatTableRecord->bMonsterDamageOnly && !damageInfo.bAttackerIsMonster)
 		{
 			break;
 		}

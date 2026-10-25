@@ -35,7 +35,7 @@ struct D2Act1Quest4Strc								//sizeof 0x1BC
 	uint8_t bOperatedWithLastCairnStone;			//0x4F
 	uint8_t unk0x50;								//0x50 TODO: Cain rescued?
 	uint8_t bCainInTownSpawned;						//0x51
-	uint8_t unk0x52;								//0x52 TODO: Cain not spawned?
+	uint8_t bCainInTownSpawnPending;				//0x52 TODO: Cain not spawned?
 	uint8_t bAkaraIntroActivated;					//0x53
 	int nCainGibbetObjectMode;						//0x54
 	int unk0x58;									//0x58 TODO

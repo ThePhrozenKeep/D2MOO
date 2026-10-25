@@ -188,7 +188,7 @@ struct D2ClientStrc
 	uint32_t bUnlockCharacter;					//0x178
 	D2SaveHeaderStrc* pSaveHeader;				//0x17C
 	int32_t nSaveHeaderSize;					//0x180
-	uint32_t unk0x184;							//0x184
+	uint32_t nSaveHeaderSendDelay;				//0x184
 	uint32_t nSaveHeaderDataSentBytes;			//0x188
 	DWORD nSaveChecksum;						//0x18C
 	FILETIME nSaveCreationTimestamp;			//0x190
@@ -196,7 +196,7 @@ struct D2ClientStrc
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
-	uint32_t unk0x1B0;							//0x1B0
+	uint32_t nPlayerSyncCount;					//0x1B0
 	D2ActiveRoomStrc* pRoom;					//0x1B4
 	struct PacketList {
 		D2PacketDataStrc* pHead;				//0x1B8

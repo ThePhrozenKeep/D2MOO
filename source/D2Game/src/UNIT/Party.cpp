@@ -24,7 +24,7 @@ void __fastcall PARTY_AllocPartyControl(D2GameStrc* pGame)
     D2PartyControlStrc* pPartyControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PartyControlStrc);
     D2_ASSERT(pPartyControl);
 
-    pPartyControl->field_0 = 3;
+    pPartyControl->nNextPartyId = 3;
     pPartyControl->field_2 = 0;
     pPartyControl->pParties = nullptr;
 
@@ -72,7 +72,7 @@ int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
 
     D2PartyControlStrc* pPartyControl = pGame->pPartyControl;
 
-    int16_t nPartyId = std::max(pPartyControl->field_0, 3i16);
+    int16_t nPartyId = std::max(pPartyControl->nNextPartyId, 3i16);
 
     while (1)
     {
@@ -92,7 +92,7 @@ int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
         nPartyId = std::max(nPartyId, 3i16);
     }
 
-    pPartyControl->field_0 = nPartyId + 1;
+    pPartyControl->nNextPartyId = nPartyId + 1;
     pParty->nPartyId = nPartyId;
     pParty->pNext = pPartyControl->pParties;
     pPartyControl->pParties = pParty;

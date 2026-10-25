@@ -171,10 +171,16 @@ struct D2PlayerDataStrc
 	uint32_t unk0x94;							//0x94
 	D2UnkPlayerDataStrc* unk0x98;				//0x98
 	D2ClientStrc* pClient;						//0x9C
-	uint8_t unk0xA0;							//0xA0
+	uint8_t nPositionHistoryIndex;				//0xA0
 	uint8_t unk0xA1[3];							//0xA1
-	uint32_t unk0xA4;							//0xA4
-	uint32_t unk0xA8[46];						//0xA8
+	uint32_t dwPositionHistoryTick;				//0xA4
+	uint32_t nPositionHistory[40];				//0xA8
+	uint32_t nLastTeleportX;					//0x148
+	uint32_t nLastTeleportY;					//0x14C
+	BOOL bInteract;								//0x150
+	int32_t nInteractAction;					//0x154
+	int32_t nInteractUnitType;					//0x158
+	D2UnitGUID nInteractUnitGUID;				//0x15C
 	uint32_t dwHostileDelay;					//0x160
 	uint32_t unk0x164;							//0x164
 	uint32_t dwGameFrame;						//0x168

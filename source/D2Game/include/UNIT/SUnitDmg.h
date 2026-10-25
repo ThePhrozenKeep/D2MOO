@@ -130,8 +130,8 @@ struct D2DamageStatTableStrc
 	int32_t nAbsorbPctStatId;
 	int32_t nAbsorbStatId;
 	D2DamageReductionType nDamageReductionType;
-	int32_t unk0x1C;
-	int32_t unk0x20;
+	int32_t bMonsterDamageOnly;
+	int32_t bApplyDamageMultiplier;
 	const char* szName;
 	uint8_t unk0x28;
 	uint8_t pad0x29;
