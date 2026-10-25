@@ -11681,7 +11681,14 @@ void __fastcall AITHINK_Fn058_Navi(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTic
 		return;
 	}
 
+#ifdef NO_BUG_FIX
+	// The original game leaves bCloseToTarget uninitialized (1.10f: lea eax, [esp+0Ch] at 0x6FCE7B00, 1.14d: lea eax,
+	// [ebp-4] at 0x005E7E62) and AITACTICS_FindNearbyPlayerOrSelf only ever stores 1 into it. The preceding IsBadCodePtr
+	// call leaves a non-zero value in that slot, so Navi greets any player that function finds (within 15), not only below 4.
+	int32_t bCloseToTarget = 1;
+#else
 	int32_t bCloseToTarget = 0;
+#endif
 	D2UnitStrc* pPlayer = AITACTICS_FindNearbyPlayerOrSelf(pGame, pUnit, &bCloseToTarget);
 	if (pPlayer && pPlayer->dwUnitType == UNIT_PLAYER && !PLAYER_IsBusy(pPlayer) && (ITEMS_RollRandomNumber(&pUnit->pSeed) % 3) && bCloseToTarget)
 	{
