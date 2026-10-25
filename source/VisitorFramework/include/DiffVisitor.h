@@ -223,7 +223,11 @@ public:
 
 			CompareChild<Pointee>(*object_ptr, *other_ptr, name);
 		}
-		else if constexpr (std::is_arithmetic_v<MemberType>)
+		else if constexpr (HasVisitorTraits_v<MemberType, decltype(*this)>)
+		{
+			CompareChild<MemberType>(object_el, other_el, name);
+		}
+		else if constexpr (std::is_trivially_copyable_v<MemberType>)
 		{
 			if (!AreValuesEqual(object_el, other_el))
 			{
@@ -232,13 +236,9 @@ public:
 				m_context.differences.push_back(difference_descriptor);
 			}
 		}
-		else if constexpr (HasVisitorTraits_v<MemberType, decltype(*this)>)
-		{
-			CompareChild<MemberType>(object_el, other_el, name);
-		}
 		else
 		{
-			static_assert(sizeof(MemberType) == 0, "Array elements must be pointers, arithmetic or define VisitorTraits.");
+			static_assert(sizeof(MemberType) == 0, "Array elements must be pointers, trivially copyable or define VisitorTraits.");
 		}
 
 private:
@@ -252,10 +252,29 @@ private:
 
 	static constexpr double FloatingPointTolerance = 0.0001;
 
+	template<typename Value, typename = void>
+	struct IsStreamable : std::false_type {};
+
+	template<typename Value>
+	struct IsStreamable<Value, std::void_t<decltype(std::declval<std::ostream&>() << std::declval<const Value&>())>> : std::true_type {};
+
+	// Values without VisitorTraits (e.g. structs used with FIELD()) are compared bytewise, including any padding
 	template<typename Value>
 	static bool AreValuesEqual(const Value& object_value, const Value& other_value)
 	{
-		if constexpr (std::is_floating_point_v<Value>)
+		if constexpr (std::is_array_v<Value>)
+		{
+			for (size_t i = 0; i < std::extent_v<Value>; ++i)
+			{
+				if (!AreValuesEqual(object_value[i], other_value[i]))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+		else if constexpr (std::is_floating_point_v<Value>)
 		{
 			// Exact match first, so equal infinities compare equal
 			if (object_value == other_value)
@@ -281,19 +300,52 @@ private:
 	{
 		std::stringstream stream;
 
-		if constexpr (std::is_integral_v<Value>)
+		if constexpr (std::is_array_v<Value>)
+		{
+			stream << "{ ";
+
+			for (size_t i = 0; i < std::extent_v<Value>; ++i)
+			{
+				stream << (i == 0 ? "" : ", ") << FormatValue(value[i]);
+			}
+
+			stream << " }";
+		}
+		else if constexpr (std::is_integral_v<Value>)
 		{
 			// Unary + promotes character types to integers without truncating wider types
 			stream << +value;
+		}
+		else if constexpr (std::is_enum_v<Value>)
+		{
+			stream << +static_cast<std::underlying_type_t<Value>>(value);
 		}
 		else if constexpr (std::is_floating_point_v<Value>)
 		{
 			// Enough digits to tell apart any two different values
 			stream << std::setprecision(std::numeric_limits<Value>::max_digits10) << value;
 		}
-		else
+		else if constexpr (std::is_pointer_v<Value>)
+		{
+			// Also covers function pointers, which operator<< would print as a bool
+			uintptr_t address = 0;
+			std::memcpy(&address, &value, sizeof(value));
+			stream << std::hex << "0x" << address;
+		}
+		else if constexpr (IsStreamable<Value>::value)
 		{
 			stream << value;
+		}
+		else
+		{
+			const auto* bytes = reinterpret_cast<const unsigned char*>(&value);
+
+			stream << std::hex << std::setfill('0');
+
+			for (size_t i = 0; i < sizeof(Value); ++i)
+			{
+				stream << (i == 0 ? "" : " ") << std::setw(2) << +bytes[i];
+			}
 		}
 
 		return stream.str();
