@@ -2601,7 +2601,7 @@ void __fastcall sub_6FC45930(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             D2UnitStrc* pRemove = INVENTORY_RemoveItemFromInventory(pUnit->pInventory, pBeltItem);
             D2_ASSERT(pRemove);
 
-            D2_ASSERT(pItem == pRemove);
+            D2_ASSERT(pBeltItem == pRemove);
 
             UNITS_ChangeAnimMode(pRemove, IMODE_ONCURSOR);
 
