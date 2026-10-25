@@ -61,29 +61,47 @@ static const HGAMEDATA D2GameReservedSlotHandle = GetGameHandleFromHashValue(D2G
 
 
 using FnCloseGame = void(__fastcall*)(WORD nGameId, uint32_t nProductCode, uint32_t nSpawnedPlayers, int32_t nFrame);
-using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint64_t nExperience, uint32_t nFlags, const char* szCharName, const char* pPreviewInfoSerialized, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken, FILETIME* pSaveCreationTimestamp);
+// Arguments only the 1.14 server callbacks take; expands to nothing for older versions.
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+#define D2_SERVER_CALLBACK_ARGS_114(...) , __VA_ARGS__
+#else
+#define D2_SERVER_CALLBACK_ARGS_114(...)
+#endif
+
+using FnLeaveGame = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, WORD nGameId, int32_t nClassId, int32_t nLevel, uint64_t nExperience, uint32_t nFlags, const char* szCharName, const char* pPreviewInfoSerialized, int32_t bUnlockChar, int32_t nZero11, int32_t nZero12, const char* szAccountName, int32_t nCharSaveTransactionToken D2_SERVER_CALLBACK_ARGS_114(int32_t nZero14, int32_t nZero15, int32_t nZero16, int32_t nZero17, int32_t nZero18), FILETIME* pSaveCreationTimestamp);
 using FnGetDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, DWORD dwClientId, const char* szAccountName);
 using FnSaveDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName, BYTE* pSaveData, uint32_t nSaveDataSize, int32_t nCharSaveTransactionToken);
 using FnServerLogMessage = void(*)(int32_t nLogLevel, const char* szFormat, ...);
 using FnEnterGame = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nFlags);
-using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7); //TODO: Last 2 args
+// 1.10f GAME_VerifyJoinGame calls this with five stack arguments (0x6FC37073), 1.14d with seven (0x0052C795).
+using FnFindPlayerToken = int32_t(__fastcall*)(const char* szCharName, int32_t nTokenId, WORD nGameId, char* pszOutAccountName, int32_t* pOutCharSaveTransactionToken, int32_t* a6, int32_t* a7 D2_SERVER_CALLBACK_ARGS_114(int32_t* a8, int32_t* a9)); //TODO: Last args
 /*UNUSED*/	using FnSaveDatabaseGuild = int(__fastcall*)(const char*, char*, size_t);
 using FnUnlockDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
 /*UNUSED*/	using FnUnk0x24 = int(__fastcall*)(int, int);
 using FnUpdateCharacterLadder = void(__fastcall*)(const char* szCharName, int32_t nClassId, int32_t nLevel, uint32_t nExperience, int32_t nZero, uint32_t nFlags, FILETIME* pSaveCreationTimestamp);
 using FnUpdateGameInformation = void(__fastcall*)(WORD nGameId, const char* szCharName, int32_t nClassId, int32_t nLevel);
-using FnHandlePacket = void(__fastcall*)(void* pPacket, int32_t nPacketSize);
+// Fills the statistics GAME_ProcessAdminMessage answers PACKET_ADMIN_GETINFO / PACKET_ADMIN_GETGAMEINFO with. Both
+// versions load only ECX (1.10f 0x6FC3822E, 1.14d 0x0052CCFF): EDX is the caller's packet size in 1.10f and the
+// callback address in 1.14d, so a host reads pServerInfo only.
+using FnGetGameServerInfo = void(__fastcall*)(D2GameServerInfoExStrc* pServerInfo, int32_t nPacketSize);
 // The server hands back a D2ClientInfoStrc*, which is stored in D2GameStrc::pClientInfo
 // and later passed to pfUnlockDatabaseCharacter the same way D2ClientStrc::pClientInfo is
 // passed to the other database callbacks.
 using FnCreateClientInfo = D2ClientInfoStrc*(__fastcall*)();
 using FnRelockDatabaseCharacter = void(__fastcall*)(D2ClientInfoStrc** ppClientInfo, const char* szCharName, const char* szAccountName);
-/*UNUSED*/	using FnLoadComplete = int32_t(__stdcall*)(int32_t);
+// 1.10f passes this slot to the no-op D2COMMON_11277_Return when the table is set. 1.14d keeps an uncalled
+// getter (0x0052BFC0) that tail-calls it, or returns an empty string when no table is set.
+/*UNUSED*/	using FnGetString = const char*(__fastcall*)();
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+// 1.14d PLRSAVE2_CheckPlayerFlags (0x00569DCA) reads the ladder epoch through this, ECX = output.
+using FnGetLadderStartTime = void(__fastcall*)(FILETIME* pLadderStartTime);
+#endif
 
 extern char gszEmptyString_6FD447EC[8];
 
 #pragma pack(push, 1)
-struct D2ServerCallbackFunctions							// sizeof 0x40
+// No D2Game code reads 0x1C or 0x24, nor 0x40-0x50 in 1.14d; the size ends at the last slot D2Game reads.
+struct D2ServerCallbackFunctions							// sizeof 0x40 (1.10f), 0x58 (1.14d)
 {
 	FnCloseGame pfCloseGame;								//0x00
 	FnLeaveGame pfLeaveGame;								//0x04
@@ -97,11 +115,30 @@ struct D2ServerCallbackFunctions							// sizeof 0x40
 	FnUnk0x24 unk0x24;										//0x24
 	FnUpdateCharacterLadder pfUpdateCharacterLadder;		//0x28
 	FnUpdateGameInformation pfUpdateGameInformation;		//0x2C
-	FnHandlePacket pfHandlePacket;							//0x30
-	FnCreateClientInfo pfCreateClientInfo;				//0x34
+	FnGetGameServerInfo pfGetGameServerInfo;				//0x30
+	FnCreateClientInfo pfCreateClientInfo;					//0x34
 	FnRelockDatabaseCharacter pfRelockDatabaseCharacter;	//0x38
-	FnLoadComplete pfLoadComplete;							//0x3C
+	FnGetString pfGetString;								//0x3C
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	void* unk0x40;											//0x40
+	void* unk0x44;											//0x44
+	void* unk0x48;											//0x48
+	void* unk0x4C;											//0x4C
+	void* unk0x50;											//0x50
+	FnGetLadderStartTime pfGetLadderStartTime;				//0x54
+#endif
 };
+#pragma pack(pop)
+static_assert(offsetof(D2ServerCallbackFunctions, pfFindPlayerToken) == 0x18, "D2ServerCallbackFunctions layout");
+static_assert(offsetof(D2ServerCallbackFunctions, pfGetGameServerInfo) == 0x30, "D2ServerCallbackFunctions layout");
+static_assert(offsetof(D2ServerCallbackFunctions, pfGetString) == 0x3C, "D2ServerCallbackFunctions layout");
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+static_assert(offsetof(D2ServerCallbackFunctions, pfGetLadderStartTime) == 0x54, "D2ServerCallbackFunctions layout");
+static_assert(sizeof(D2ServerCallbackFunctions) == 0x58, "D2ServerCallbackFunctions layout");
+#else
+static_assert(sizeof(D2ServerCallbackFunctions) == 0x40, "D2ServerCallbackFunctions layout");
+#endif
+#pragma pack(push, 1)
 
 
 struct D2GameInfoStrc
@@ -297,7 +334,7 @@ void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* s
 //D2Game.0x6FC36C60
 void __fastcall GAME_SendActInit(int32_t nClientId);
 //D2Game.0x6FC36DF0
-BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10);
+BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10 D2_SERVER_CALLBACK_ARGS_114(int32_t* a11, int32_t* a12));
 //D2Game.0x6FC37150
 void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nClass, char* szClientName, char* szAccountName, int32_t nCharSaveTransactionToken, int32_t nLocale, int32_t a8, int32_t a9);
 //D2Game.0x6FC37450
