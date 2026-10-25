@@ -691,15 +691,19 @@ struct D2GSPacketClt66		//size of 0x2E
 	int8_t nLocale;				//0x2D
 };
 
-struct D2GSPacketClt67		//size of 0x1D
+struct D2GSPacketClt67		//size of 0x1D (1.14d: 0x25, sent with id 0x68)
 {
 	uint8_t nHeader;			//0x00
 	int32_t nTokenId;			//0x01
 	uint16_t nGameId;			//0x05
 	uint8_t nPlayerClass;		//0x07
 	int32_t dwVersion;			//0x08
-	uint8_t nLocale;			//0x0C
-	char szClientName[16];		//0x0D
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	uint32_t dwProductConstant;	//0x0C one of two constants, picked by expansion / classic
+	uint32_t dwJoinConstant;	//0x10 always 0x91A519B6
+#endif
+	uint8_t nLocale;			//0x0C (1.14d: 0x14)
+	char szClientName[16];		//0x0D (1.14d: 0x15)
 };
 
 struct D2GSPacketClt68		//size of 0x01

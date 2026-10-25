@@ -38,6 +38,9 @@ struct D2ConfigStrc
 #if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
 	BOOL bIsExpansion;
 #endif
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	BOOL bCrashApp; // -crash ([DEBUG] CRASHAPP), first entry of the 1.14d command line table
+#endif
 	uint8_t bWindow;
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	uint8_t bNoFixedAspect;
