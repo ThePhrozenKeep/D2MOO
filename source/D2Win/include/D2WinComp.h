@@ -77,7 +77,6 @@ struct D2CompositeUnitStrc
 	uint32_t unk0xAC;
 	uint32_t unk0xB0;
 	uint32_t unk0xB4;
-	uint32_t unk0xB8;
 	D2GfxInfoStrc* pGfxInfo;
 	D2CellFileStrc* pEmblemCellFile;
 	uint8_t unk0xC0;
@@ -92,7 +91,6 @@ struct D2CompositeUnitStrc
 	Unicode unk0x1EC[32];
 	uint32_t unk0x22C;
 	uint32_t unk0x230;
-	uint32_t unk0x234;
 };
 #pragma pack(pop)
 
