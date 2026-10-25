@@ -79,10 +79,10 @@ struct D2AiParamStrc
 
 struct D2AiTableStrc
 {
-	int32_t unk0x00;						//0x00
-	AIPARAMFN unk0x04;						//0x04
+	int32_t nTargetSelectionMode;			//0x00
+	AIPARAMFN pInitializeFn;				//0x04
 	AIPARAMFN pAiParamFn;					//0x08
-	AIPARAMFN unk0x0C;						//0x0C
+	AIPARAMFN pTransitionFn;				//0x0C
 };
 
 

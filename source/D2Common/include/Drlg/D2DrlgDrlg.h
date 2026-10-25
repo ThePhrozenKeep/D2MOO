@@ -249,8 +249,8 @@ struct D2RoomTileStrc
 	D2DrlgRoomStrc* pDrlgRoom;				//0x00
 	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
 	BOOL bEnabled;							//0x08
-	D2DrlgTileDataStrc* unk0x0C;			//0x0C
-	D2DrlgTileDataStrc* unk0x10;			//0x10
+	D2DrlgTileDataStrc* pSelectedTiles;		//0x0C
+	D2DrlgTileDataStrc* pUnselectedTiles;	//0x10
 	D2RoomTileStrc* pNext;					//0x14
 };
 
@@ -336,17 +336,17 @@ struct D2DrlgTileDataStrc
 	int32_t nHeight;						//0x04
 	int32_t nPosX;							//0x08
 	int32_t nPosY;							//0x0C
-	int32_t unk0x10;						//0x10
+	int32_t nCoordList;						//0x10
 	uint32_t dwFlags;						//0x14 D2MapTileFlags
 	D2TileLibraryEntryStrc* pTile;			//0x18
 	int32_t nTileType;						//0x1C
-	D2DrlgTileDataStrc* unk0x20;			//0x20
-	int32_t unk0x24;						//0x24
-	uint8_t nRed;							//0x28
-	uint8_t nGreen;							//0x29
-	uint8_t nBlue;							//0x2A
+	D2DrlgTileDataStrc* pNext;				//0x20
+	int32_t nFadeFlags;						//0x24
+	uint8_t nAlpha;							//0x28
+	uint8_t nFadeStartAlpha;				//0x29
+	uint8_t nFadeEndAlpha;					//0x2A
 	uint8_t nIntensity;						//0x2B
-	int32_t unk0x2C;						//0x2C
+	int32_t nFadeEndTick;					//0x2C
 };
 
 typedef void(__fastcall* ACTCALLBACKFN)(D2ActiveRoomStrc*);

@@ -1382,14 +1382,14 @@ void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientSt
         return;
     }
 
-    if (pClient->unk0x184)
+    if (pClient->nSaveHeaderSendDelay)
     {
-        --pClient->unk0x184;
+        --pClient->nSaveHeaderSendDelay;
         return;
     }
 
     const uint8_t* pSaveData = (uint8_t*)pClient->pSaveHeader;
-    pClient->unk0x184 = 5;
+    pClient->nSaveHeaderSendDelay = 5;
     if (!pSaveData)
     {
         return;
@@ -2205,7 +2205,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
-                    if (pClient->unk0x1B0 >= 10)
+                    if (pClient->nPlayerSyncCount >= 10)
                     {
                         D2_ASSERT(pPlayer->dwUnitType == UNIT_PLAYER);
 
@@ -2227,12 +2227,12 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
         D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
         if (pPlayer)
         {
-            if (pPacketData && pClient->unk0x1B0 >= 10)
+            if (pPacketData && pClient->nPlayerSyncCount >= 10)
             {
                 bSkipHpCheck = 1;
             }
 
-            if (pClient->unk0x1B0 >= 20)
+            if (pClient->nPlayerSyncCount >= 20)
             {
                 bSkipHpCheck = 1;
             }
@@ -2241,7 +2241,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
 
             if (sub_6FC82360(pPlayer, pPlayer, bSkipHpCheck))
             {
-                pClient->unk0x1B0 = 0;
+                pClient->nPlayerSyncCount = 0;
             }
         }
     }
@@ -3080,7 +3080,7 @@ void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 	szMessage[255] = 0;
     if (!strncmp("<ABEND> ", szMessage, 8u))
     {
-        pGame->unk0x1DDC = szMessage[8] & 0xF;
+        pGame->nDebugBreakTrigger = szMessage[8] & 0xF;
     }
 
     sub_6FC84CD0(pGame, szMessage, 1u);

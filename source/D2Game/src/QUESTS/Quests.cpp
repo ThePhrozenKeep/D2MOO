@@ -1483,11 +1483,11 @@ void __fastcall OBJECTS_InitFunction20_TaintedAltar(D2ObjInitFnStrc* pOp)
 				{
 					ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 					SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-					pQuestDataEx->bRewarded = 1;
+					pQuestDataEx->bDarknessApplied = 1;
 				}
 				else
 				{
-					pQuestDataEx->bBlackened = 1;
+					pQuestDataEx->bDarknessPending = 1;
 				}
 				pQuestData->fState = 3;
 				pQuestData->dwFlags &= 0xFFFFFF00;
@@ -2552,7 +2552,7 @@ void __fastcall QUESTS_SendScrollMessage(D2UnitStrc* pPlayer, D2UnitStrc* pUnit,
 //D2Game.0x6FC96E80
 void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t nEvent)
 {
-	pGame->pQuestControl->unk0x20 = nEvent;
+	pGame->pQuestControl->nQuestFXEvent = nEvent;
 	SUNIT_IterateUnitsOfType(pGame, 0, 0, QUESTS_FXIterate);
 }
 
@@ -2564,7 +2564,7 @@ int32_t __fastcall QUESTS_FXIterate(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	D2GSPacketSrv89 packet89 = {};
 
 	packet89.nHeader = 0x89;
-	packet89.nEvent = pGame->pQuestControl->unk0x20;
+	packet89.nEvent = pGame->pQuestControl->nQuestFXEvent;
 	D2GAME_PACKETS_SendPacket_6FC3C710(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), &packet89, sizeof(packet89));
 
 	return 0;

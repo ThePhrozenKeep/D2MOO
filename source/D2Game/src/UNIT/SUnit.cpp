@@ -2295,8 +2295,8 @@ int32_t __fastcall sub_6FCBDF90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2C_Even
         return 0;
     }
 
-    pPlayerData->unk0xA8[40] = 0;
-    pPlayerData->unk0xA8[41] = 0;
+    pPlayerData->nLastTeleportX = 0;
+    pPlayerData->nLastTeleportY = 0;
     sub_6FC349B0(pGame, pPlayer, EVENTTYPE_REMOVESKILLCOOLDOWN, sub_6FCBDF90);
     return 1;
 }
@@ -2355,17 +2355,17 @@ int32_t __fastcall sub_6FCBDFE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRo
 
         D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
 
-        pPlayerData->unk0xA8[40] = coords.nX;
-        pPlayerData->unk0xA8[41] = coords.nY;
-        pPlayerData->unk0xA4 = GetTickCount();
+        pPlayerData->nLastTeleportX = coords.nX;
+        pPlayerData->nLastTeleportY = coords.nY;
+        pPlayerData->dwPositionHistoryTick = GetTickCount();
 
-        pPlayerData->unk0xA8[2 * pPlayerData->unk0xA0] = coords.nX;
-        pPlayerData->unk0xA8[2 * pPlayerData->unk0xA0 + 1] = coords.nY;
+        pPlayerData->pPositionHistory[pPlayerData->nPositionHistoryIndex].nX = coords.nX;
+        pPlayerData->pPositionHistory[pPlayerData->nPositionHistoryIndex].nY = coords.nY;
 
-        ++pPlayerData->unk0xA0;
-        if (pPlayerData->unk0xA0 >= 20u)
+        ++pPlayerData->nPositionHistoryIndex;
+        if (pPlayerData->nPositionHistoryIndex >= 20u)
         {
-            pPlayerData->unk0xA0 = 0;
+            pPlayerData->nPositionHistoryIndex = 0;
         }
 
         j_D2GAME_InitTimer_6FC351D0(pGame, pUnit, EVENTTYPE_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, sub_6FCBDF90, 0, 0);

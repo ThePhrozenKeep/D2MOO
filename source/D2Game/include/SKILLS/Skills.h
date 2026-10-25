@@ -42,7 +42,7 @@ struct D2UnkNecSkillStrc
 {
 	D2GameStrc* pGame;
 	D2UnitStrc* pUnit;
-	int32_t unk0x08;
+	int32_t bApplyAiState;
 	int32_t bUpdateAnimRate;
 	int32_t nSkillId;
 	int32_t nSkillLevel;
@@ -57,7 +57,7 @@ struct D2UnkNecSkillStrc
 struct D2_6FD106F0_Strc
 {
 	D2UnitStrc* pUnit;
-	int32_t nDistance;
+	int32_t nDistanceSquared;
 	int32_t nX;
 	int32_t nY;
 	int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*);
@@ -65,12 +65,12 @@ struct D2_6FD106F0_Strc
 
 struct D2_6FD10880_Strc
 {
-	D2UnitStrc* unk0x00;
-	int32_t unk0x04;
-	D2UnitStrc* unk0x08;
-	int32_t unk0x0C;
-	int32_t unk0x10;
-	int32_t unk0x14;
+	D2UnitStrc* pNextTarget;
+	int32_t nNextTargetGUID;
+	D2UnitStrc* pFirstTarget;
+	int32_t nFirstTargetGUID;
+	int32_t nPreviousTargetGUID;
+	int32_t nTargetCount;
 };
 
 struct D2EffectStrc
@@ -80,9 +80,9 @@ struct D2EffectStrc
 	int32_t nSkillId;
 	int32_t nX;
 	int32_t nY;
-	int32_t nParam;
+	int32_t nRadius;
 	int32_t nSkillLevel;
-	int32_t unk0x1C;
+	int32_t nCallbackParam;
 	void* pfAreaEffect;
 };
 

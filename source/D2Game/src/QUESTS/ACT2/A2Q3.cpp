@@ -356,7 +356,7 @@ void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		pQuestDataEx->bDarkenTimerCreated = 1;
 	}
 
-	if (pQuestArg->nNewLevel == LEVEL_LUTGHOLEIN && pQuestDataEx->bBlackened == 1)
+	if (pQuestArg->nNewLevel == LEVEL_LUTGHOLEIN && pQuestDataEx->bDarknessPending == 1)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
 		QUESTS_UnitIterate(pQuestData, 1, 0, ACT2Q3_UnitIterate_StatusCyclerEx, 1);
@@ -370,11 +370,11 @@ void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 			ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateQuestStateFlags);
-			pQuestDataEx->bBlackened = 0;
+			pQuestDataEx->bDarknessPending = 0;
 		}
 		else
 		{
-			pQuestDataEx->bBlackened = 1;
+			pQuestDataEx->bDarknessPending = 1;
 		}
 	}
 
@@ -394,7 +394,7 @@ bool __fastcall ACT2Q3_DarkenEnvironment(D2GameStrc* pGame, D2QuestDataStrc* pQu
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
 
 	pQuestDataEx->bDarkenTimerCreated = 0;
-	if (pQuestDataEx->bRewarded)
+	if (pQuestDataEx->bDarknessApplied)
 	{
 		return true;
 	}
@@ -411,12 +411,12 @@ bool __fastcall ACT2Q3_DarkenEnvironment(D2GameStrc* pGame, D2QuestDataStrc* pQu
 	{
 		ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-		pQuestDataEx->bRewarded = 1;
+		pQuestDataEx->bDarknessApplied = 1;
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateQuestStateFlags);
 		return true;
 	}
 
-	pQuestDataEx->bBlackened = 1;
+	pQuestDataEx->bDarknessPending = 1;
 	return true;
 }
 
@@ -498,13 +498,13 @@ void __fastcall ACT2Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		{
 			ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-			pQuestDataEx->bRewarded = 1;
+			pQuestDataEx->bDarknessApplied = 1;
 		}
 		else
 		{
 			D2GSPacketSrv5D packet5D = {};
 			packet5D.field_4 = 0;
-			pQuestDataEx->bBlackened = 1;
+			pQuestDataEx->bDarknessPending = 1;
 			packet5D.nHeader = 0x5D;
 			packet5D.nQuestId = QUEST_A2Q3_TAINTEDSUN;
 			packet5D.nFlags = 1;
@@ -613,7 +613,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 	{
 		if (pQuestData->pGame->pAct[ACT_II])
 		{
-			pQuestDataEx->bRewarded = 0;
+			pQuestDataEx->bDarknessApplied = 0;
 			ENVIRONMENT_TaintedSunEnd(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_SendPacket0x53ToClient);
 		}
@@ -807,12 +807,12 @@ void __fastcall ACT2Q3_ApplyPendingDarkness(D2GameStrc* pGame, uint8_t nActNo)
 	}
 
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
-	if (pQuestDataEx->bBlackened != 1)
+	if (pQuestDataEx->bDarknessPending != 1)
 	{
 		return;
 	}
 
 	ENVIRONMENT_TaintedSunBegin(pGame->pAct[ACT_II]);
-	pQuestDataEx->bBlackened = 0;
-	pQuestDataEx->bRewarded = 1;
+	pQuestDataEx->bDarknessPending = 0;
+	pQuestDataEx->bDarknessApplied = 1;
 }

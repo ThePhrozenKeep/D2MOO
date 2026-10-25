@@ -140,9 +140,9 @@ struct D2GameInfoStrc
 struct D2TargetNodeStrc
 {
 	D2UnitStrc* pUnit;							//0x00
-	int32_t unk0x04;							//0x04
+	int32_t nNodeData;							//0x04
 	D2TargetNodeStrc* pNext;					//0x08
-	D2TargetNodeStrc* unk0x0C;					//0x0C
+	D2TargetNodeStrc* pPrevious;				//0x0C
 };
 
 struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA in original game
@@ -199,16 +199,12 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	uint32_t nSyncTimer;							//0x1DC4
 
 #if D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 10
-	uint32_t unk0x1DC8;								//0x1DC8 (Unused? Removed in 1.11)
-	uint32_t unk0x1DCC;								//0x1DCC (Unused? Removed in 1.11)
-	uint32_t unk0x1DD0;								//0x1DD0 (Unused? Removed in 1.11)
-	uint32_t unk0x1DD4;								//0x1DD4 (Unused? Removed in 1.11)
-	uint32_t unk0x1DD8;								//0x1DD8 (Unused? Removed in 1.11)
-	uint32_t unk0x1DDC;								//0x1DDC
+	uint32_t tGameTask[5];							//0x1DC8 Removed in 1.11
+	uint32_t nDebugBreakTrigger;					//0x1DDC
 	int32_t nWorldEventState;						//0x1DE0
 	int32_t dwWorldEventLastMessageFrame;			//0x1DE4
 #else // 1.11+
-	uint32_t unk0x1DDC;								//0x1DC8
+	uint32_t nDebugBreakTrigger;					//0x1DC8
 	int32_t nWorldEventState;						//0x1DCC
 	int32_t dwWorldEventLastMessageFrame;			//0x1DD0
 // #ifdef D2_VERSION_HAS_UBERS

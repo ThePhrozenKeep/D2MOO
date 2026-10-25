@@ -7,7 +7,7 @@
 struct D2SavedItemStrc
 {
     uint8_t nBodyLoc;
-    uint8_t unk0x01;
+    uint8_t nSocketedItems;
     int32_t nItemLevel;
     int32_t nItemId;
     uint8_t nSpawnType;

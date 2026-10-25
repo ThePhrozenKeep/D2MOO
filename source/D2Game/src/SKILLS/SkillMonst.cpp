@@ -2268,7 +2268,7 @@ int32_t __fastcall SKILLS_SrvDo112_MonCurseCast(D2GameStrc* pGame, D2UnitStrc* p
     D2UnkNecSkillStrc args = {};
     args.pGame = pGame;
     args.pUnit = pUnit;
-    args.unk0x08 = 0;
+    args.bApplyAiState = 0;
     args.nSkillId = nCurseSkillId;
     args.nSkillLevel = nSkillLevel;
     args.nDuration = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nCurseSkillId, nSkillLevel);

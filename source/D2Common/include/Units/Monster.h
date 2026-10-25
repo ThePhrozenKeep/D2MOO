@@ -46,7 +46,7 @@ struct D2MonsterDataStrc
 	D2MonsterInteractStrc* pMonInteract;	//0x30
 	uint32_t unk0x34;							//0x34
 	uint32_t unk0x38;							//0x38
-	D2UnkMonsterDataStrc unk0x3C;				//0x3C
+	D2UnkMonsterDataStrc tLifeSync;				//0x3C
 	uint32_t unk0x4C;							//0x4C
 	uint32_t pVision;							//0x50
 	uint32_t dwAiState;						//0x54

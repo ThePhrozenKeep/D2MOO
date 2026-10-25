@@ -16,7 +16,7 @@ struct D2UnkMonCreateStrc
 	int32_t nUnitGUID;						//0x14
 	int32_t nX;								//0x18
 	int32_t nY;								//0x1C
-	int32_t field_20;						//0x20
+	int32_t nMaxSearchRings;				//0x20
 	int16_t nFlags;							//0x24
 };
 

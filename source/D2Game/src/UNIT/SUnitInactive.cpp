@@ -182,7 +182,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 
 					if (pUnit)
 					{
-						AIGENERAL_SetAiControlInfo(pGame, pUnit, pInactiveMonsterNode->unk0x1C, 1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED2, pInactiveMonsterNode->pMinionList);
+						AIGENERAL_SetAiControlInfo(pGame, pUnit, pInactiveMonsterNode->nOwnerGUID, 1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED2, pInactiveMonsterNode->pMinionList);
 
 						STATLIST_SetUnitStat(pUnit, STAT_EXPERIENCE, pInactiveMonsterNode->nExperience, 0);
 
@@ -792,7 +792,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 		D2InactiveMonsterNodeStrc* pInactiveMonsterNode = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2InactiveMonsterNodeStrc);
 
-		pInactiveMonsterNode->unk0x1C = -1;
+		pInactiveMonsterNode->nOwnerGUID = -1;
 		pInactiveMonsterNode->nX = CLIENTS_GetUnitX(pUnit);
 		pInactiveMonsterNode->nY = CLIENTS_GetUnitY(pUnit);
 		pInactiveMonsterNode->nClassId = pUnit->dwClassId;
@@ -881,7 +881,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 		if (a2 != -1 && a3 == 1)
 		{
-			pInactiveMonsterNode->unk0x1C = a2;
+			pInactiveMonsterNode->nOwnerGUID = a2;
 			pInactiveMonsterNode->pMinionList = pMinionList;
 
 			if (a4)

@@ -1714,9 +1714,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitS
     }
 
     const D2MonModeCallbackTableStrc* pMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nAnimMode);
-    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->unk0x04)
+    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->pfUpdate)
     {
-        pMonModeCallbackTableRecord->unk0x04(pGame, pUnit);
+        pMonModeCallbackTableRecord->pfUpdate(pGame, pUnit);
         return;
     }
 
@@ -1744,9 +1744,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction02_6FC65150(D2GameStrc* pGame, D2UnitS
     }
 
     const D2MonModeCallbackTableStrc* pMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nAnimMode);
-    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->unk0x08)
+    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->pfEnd)
     {
-        pMonModeCallbackTableRecord->unk0x08(pGame, pUnit);
+        pMonModeCallbackTableRecord->pfEnd(pGame, pUnit);
         return;
     }
 
@@ -1895,7 +1895,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
     }
 
     const D2MonModeCallbackTableStrc* pTargetMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nMode);
-    if (!pTargetMonModeCallbackTableRecord || !pTargetMonModeCallbackTableRecord->unk0x00)
+    if (!pTargetMonModeCallbackTableRecord || !pTargetMonModeCallbackTableRecord->pfStart)
     {
         UNITS_SetUsedSkill(pUnit, nullptr);
         if (nMode == MONMODE_DEATH || nMode == MONMODE_DEAD || !SUNIT_IsDead(pUnit))
@@ -1909,7 +1909,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         return 0;
     }
 
-    const int32_t nResult = pTargetMonModeCallbackTableRecord->unk0x00(pGame, pModeChange);
+    const int32_t nResult = pTargetMonModeCallbackTableRecord->pfStart(pGame, pModeChange);
     if (!nResult)
     {
         UNITS_SetUsedSkill(pUnit, nullptr);
@@ -1969,7 +1969,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         return 0;
     }
 
-    if (pCurrentMonModeCallbackTableRecord->unk0x0C)
+    if (pCurrentMonModeCallbackTableRecord->bScheduleEvents)
     {
         if (nCurrentAnimMode >= 16)
         {

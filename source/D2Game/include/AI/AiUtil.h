@@ -9,7 +9,7 @@ struct D2BaalThroneAiCallbackArgStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
-	int32_t unk0x08;
+	int32_t nMonsterCount;
 	int32_t nMaxDistance;
 };
 
@@ -17,7 +17,7 @@ struct D2UnkAiCallbackArgStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
-	int32_t unk0x08;
+	int32_t bCheckTargetCollision;
 	int32_t nMaxDistance;
 	int32_t unk0x10;
 	D2UnitStrc* pAlternativeTarget;

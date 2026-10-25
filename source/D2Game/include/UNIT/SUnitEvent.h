@@ -35,9 +35,9 @@ struct D2UnitEventStrc
 	uint8_t unk0x01;						//0x01
 	uint16_t nFlags;						//0x02 D2C_UnitEventFlags
 	uint32_t nQueueNo;						//0x04
-	int32_t unk0x08;						//0x08
-	int32_t nGUID1;							//0x0C First identifier
-	int32_t nGUID2;							//0x10 Second identifier
+	int32_t nEventKey;						//0x08
+	int32_t nParam1;						//0x0C First identifier
+	int32_t nParam2;						//0x10 Second identifier
 	D2UnitEventCallbackFunction pCallback;	//0x14
 	D2UnitEventStrc* pPrevious;				//0x18  Seems to be any kind of id, not necessariyl the prevtimer ?
 	D2UnitEventStrc* pNext;					//0x1C

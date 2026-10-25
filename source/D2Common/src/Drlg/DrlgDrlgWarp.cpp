@@ -52,14 +52,14 @@ void __fastcall DRLGWARP_UpdateWarpRoomSelect(D2DrlgRoomStrc* pDrlgRoom, int nLe
 	{
 		if (pRoomTile->pLvlWarpTxtRecord->dwLevelId == nLevelId)
 		{
-			if (pRoomTile->unk0x0C)
+			if (pRoomTile->pSelectedTiles)
 			{
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* i = pRoomTile->pSelectedTiles; i; i = i->pNext)
 				{
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x10; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* i = pRoomTile->pUnselectedTiles; i; i = i->pNext)
 				{
 					i->dwFlags |= 8;
 				}
@@ -75,14 +75,14 @@ void __fastcall DRLGWARP_UpdateWarpRoomDeselect(D2DrlgRoomStrc* pDrlgRoom, int n
 	{
 		if (pRoomTile->pLvlWarpTxtRecord->dwLevelId == nLevelId)
 		{
-			if (pRoomTile->unk0x10)
+			if (pRoomTile->pUnselectedTiles)
 			{
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x10; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* i = pRoomTile->pUnselectedTiles; i; i = i->pNext)
 				{
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
+				for (D2DrlgTileDataStrc* i = pRoomTile->pSelectedTiles; i; i = i->pNext)
 				{
 					i->dwFlags |= 8;
 				}

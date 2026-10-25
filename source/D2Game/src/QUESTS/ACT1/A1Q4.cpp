@@ -182,7 +182,7 @@ void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char bUseRemov
 	pQuestDataEx->unk0x50 = 1;
 	if (!pQuestDataEx->bCainInTownSpawned)
 	{
-		pQuestDataEx->unk0x52 = 1;
+		pQuestDataEx->bCainInTownSpawnPending = 1;
 	}
 }
 
@@ -424,7 +424,7 @@ void __fastcall ACT1Q4_SpawnCainInTristram(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 		if (!pQuestDataEx->bCainInTownSpawned)
 		{
-			pQuestDataEx->unk0x52 = 1;
+			pQuestDataEx->bCainInTownSpawnPending = 1;
 		}
 
 		pQuestDataEx->bCainNotCreated = 1;
@@ -1425,7 +1425,7 @@ void __fastcall ACT1Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		if (pQuestDataEx->pPlayerInTristram)
 		{
 			D2UnitStrc* pCain = SUNIT_GetServerUnit(pQuestArg->pGame, UNIT_OBJECT, pQuestDataEx->nCainObjectGUID);
-			if (pCain && pQuestDataEx->unk0x52 == 1 && !pQuestDataEx->bCainInTownSpawned)
+			if (pCain && pQuestDataEx->bCainInTownSpawnPending == 1 && !pQuestDataEx->bCainInTownSpawned)
 			{
 				ACT1Q4_SpawnCainInTown(pQuestArg->pGame, UNITS_GetRoom(pCain), CLIENTS_GetUnitX(pCain), CLIENTS_GetUnitY(pCain));
 			}
@@ -1504,7 +1504,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoo
 	{
 		pCain->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 		pQuestDataEx->bCainInTownSpawned = 1;
-		pQuestDataEx->unk0x52 = 0;
+		pQuestDataEx->bCainInTownSpawnPending = 0;
 		pQuestDataEx->nCainMonsterInTownGUID = pCain->dwUnitId;
 		return;
 	}
@@ -1540,7 +1540,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoo
 		{
 			pCain->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 			pQuestDataEx->bCainInTownSpawned = 1;
-			pQuestDataEx->unk0x52 = 0;
+			pQuestDataEx->bCainInTownSpawnPending = 0;
 			pQuestDataEx->nCainMonsterInTownGUID = pCain->dwUnitId;
 			return;
 		}
@@ -1552,7 +1552,7 @@ void __fastcall ACT1Q4_SpawnCainInTown(D2GameStrc* pGame, D2ActiveRoomStrc* pRoo
 	{
 		pCain->dwFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
 		pQuestDataEx->bCainInTownSpawned = 1;
-		pQuestDataEx->unk0x52 = 0;
+		pQuestDataEx->bCainInTownSpawnPending = 0;
 		pQuestDataEx->nCainMonsterInTownGUID = pCain->dwUnitId;
 	}
 }
@@ -1643,7 +1643,7 @@ void __fastcall ACT1Q4_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		D2QuestDataStrc* pQuest = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A1Q4_CAIN);
 		if (pQuest)
 		{
-			((D2Act1Quest4Strc*)pQuest->pQuestDataEx)->unk0x52 = 1;
+			((D2Act1Quest4Strc*)pQuest->pQuestDataEx)->bCainInTownSpawnPending = 1;
 		}
 
 		QUESTS_SetGlobalState(pQuestData->pGame, QUESTSTATEFLAG_A1Q4, QFLAG_PRIMARYGOALDONE);
@@ -1656,7 +1656,7 @@ void __fastcall ACT1Q4_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		D2QuestDataStrc* pQuest = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A1Q4_CAIN);
 		if (pQuest)
 		{
-			((D2Act1Quest4Strc*)pQuest->pQuestDataEx)->unk0x52 = 1;
+			((D2Act1Quest4Strc*)pQuest->pQuestDataEx)->bCainInTownSpawnPending = 1;
 		}
 
 		pQuest = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A1Q4_CAIN);
@@ -1851,7 +1851,7 @@ void __fastcall OBJECTS_InitFunction54_CainStartPosition(D2ObjInitFnStrc* pOp)
 	pQuestDataEx->pCainStartPositionCoords.nX = pOp->nX;
 	pQuestDataEx->pCainStartPositionCoords.nY = pOp->nY;
 
-	if (pQuestDataEx->unk0x52 == 1 && !pQuestDataEx->bCainInTownSpawned)
+	if (pQuestDataEx->bCainInTownSpawnPending == 1 && !pQuestDataEx->bCainInTownSpawned)
 	{
 		ACT1Q4_SpawnCainInTown(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY);
 	}
@@ -2197,7 +2197,7 @@ void __fastcall ACT1Q4_SpawnCainPortalInTown(D2GameStrc* pGame)
 
 	D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
 	pQuestDataEx->bChangePortalOutsideTownToSpecialMode = 1;
-	pQuestDataEx->unk0x52 = 1;
+	pQuestDataEx->bCainInTownSpawnPending = 1;
 
 	if (pQuestDataEx->bCainObjectInitialized != 1)
 	{
@@ -2220,7 +2220,7 @@ void __fastcall ACT1Q4_SpawnCainPortalInTown(D2GameStrc* pGame)
 	pQuestDataEx->pCainStartPositionCoords.nX = nX;
 	pQuestDataEx->pCainStartPositionCoords.nY = nY;
 
-	if (pQuestDataEx->unk0x52 == 1)
+	if (pQuestDataEx->bCainInTownSpawnPending == 1)
 	{
 		if (!pQuestDataEx->bCainInTownSpawned)
 		{
