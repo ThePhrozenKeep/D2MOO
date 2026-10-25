@@ -69,7 +69,7 @@ D2NPCMessageTableStrc gpAct1Q1NpcMessages[] =
 	},
 	{
 		{
-			{ 1, 0, 0, 2 },
+			{ -1, 0, 0, 2 },
 		},
 		0
 	},
