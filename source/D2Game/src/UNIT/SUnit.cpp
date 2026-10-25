@@ -50,7 +50,7 @@
 #pragma warning(disable: 28159)
 
 
-int32_t gnUnitInitSeed;
+
 
 
 
