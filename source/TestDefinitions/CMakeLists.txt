@@ -64,6 +64,8 @@ target_sources(TestDefinitions
     include/Fixtures/DataTbls/UniquePrefixTxtFixture.h
     include/Fixtures/DataTbls/UniqueSuffixTxtFixture.h
     include/Fixtures/DataTbls/UniqueTitleTxtFixture.h
+
+    include/Fixtures/D2Lang/D2LangStringTblFixture.h
 )
 target_include_directories(TestDefinitions PUBLIC include)
 target_link_libraries(TestDefinitions PRIVATE D2CommonDefinitions D2Common VisitorFramework)
