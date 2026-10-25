@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "DiffContext.h"
+#include "DiffFieldPath.h"
 #include "DifferenceDescriptor.h"
 #include "DifferenceType.h"
 #include "DynamicArrayCountRegistry.h"
@@ -240,6 +241,7 @@ public:
 		{
 			static_assert(sizeof(MemberType) == 0, "Array elements must be pointers, trivially copyable or define VisitorTraits.");
 		}
+	}
 
 private:
 	template<typename>
