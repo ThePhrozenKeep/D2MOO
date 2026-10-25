@@ -4,6 +4,7 @@ target_sources(TestDefinitions
   PRIVATE
     include/DynamicArray.h
     include/EqualityMacros.h
+    include/RepetitionMacros.h
 
     include/Fixtures/DataTbls/Fixtures.h
     include/Fixtures/DataTbls/AnimDataFixture.h
