@@ -41,7 +41,7 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 	pEditBox->field_48 = 256;
 	pEditBox->field_54 = -1;
 
-	if (!(nEditBoxFlags & 8))
+	if (!(nEditBoxFlags & EDITBOX_MULTILINE))
 	{
 		pEditBox->controlHeader.pfDraw = sub_6F8A82D0;
 		pEditBox->controlHeader.pfHandleMouseDown = sub_6F8A9120;
@@ -1110,7 +1110,7 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 		Unicode::strncpy(v48, &pEditBox->wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1);
 
 		//const int32_t v50 = Unicode::strlen(v48);
-		if (pEditBox->dwEditBoxFlags & 1)
+		if (pEditBox->dwEditBoxFlags & EDITBOX_PASSWORD)
 		{
 			Unicode v41[2] = {};
 			Unicode::win2Unicode(v41, "*", 2);

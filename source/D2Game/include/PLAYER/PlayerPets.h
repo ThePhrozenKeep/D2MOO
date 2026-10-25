@@ -27,6 +27,11 @@ enum D2PetTypes
 	PETTYPE_HYDRA,
 };
 
+enum D2PetFlags
+{
+	PETFLAG_DEAD = 0x1,
+};
+
 
 //D2Game.0x6FC7CAF0
 void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer);

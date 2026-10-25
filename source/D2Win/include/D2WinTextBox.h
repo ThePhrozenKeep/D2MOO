@@ -8,6 +8,18 @@
 
 struct D2WinScrollBarStrc;
 
+enum TextBoxFlags
+{
+	TEXTBOXFLAG_SELECTABLE = 1,				// Lines can be selected (mouse / arrow keys, nCurrentLine); implies TEXTBOXFLAG_NO_WORD_WRAP
+	TEXTBOXFLAG_CENTERED = 2,				// Column 0 (without a column offset) is centred in the box
+	TEXTBOXFLAG_SCROLLBAR = 4,				// Create attaches a scroll bar (and shrinks the box by 26 unless a scroll bar rect is given)
+	TEXTBOXFLAG_CLAMP_SELECTION = 8,		// A click below the last line selects the last line instead of nothing
+	TEXTBOXFLAG_RIGHT_ALIGNED = 0x10,		// Column 0 (without a column offset) ends at nImageX
+	TEXTBOXFLAG_NO_WORD_WRAP = 0x20,		// D2Win_10051 never splits a line (set by more than one column too)
+	TEXTBOXFLAG_HORIZONTAL_TICKER = 0x40,	// TEXTBOX_Draw scrolls the top line from right to left
+	TEXTBOXFLAG_VERTICAL_SCROLL = 0x80,		// TEXTBOX_Draw scrolls the lines up
+};
+
 #pragma pack(push, 1)
 struct D2WinTextBoxLineStrc
 {

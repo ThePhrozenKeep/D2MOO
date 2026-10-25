@@ -8,7 +8,12 @@
 
 enum D2EditBoxFlags
 {
-	EDITBOX_PASSWORD = 0x00000001,
+	EDITBOX_PASSWORD = 0x00000001,				// every character is drawn as '*'
+	EDITBOX_RETURN_KEEPS_EDITING = 0x00000002,	// after pfOnReturn, Enter goes on to the caret update and pfOnChange
+	EDITBOX_TAB_TO_KEY_FILTER = 0x00000004,		// Tab (char 9) is only handed to pfKeyFilter, never typed
+	EDITBOX_MULTILINE = 0x00000008,				// Enter types CR LF, Up / Down move between lines, other draw / mouse handlers
+	EDITBOX_ALLOW_CHAR_14 = 0x00000010,			// char 14 may be typed although the font has no glyph for it
+	EDITBOX_ALLOW_COLOR_CODE = 0x00000020,		// char 0xFF (the color code prefix) may be typed
 };
 
 

@@ -185,7 +185,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         }
         break;
     }
-    case D2CLTSYS_0x6C:
+    case D2CLTSYS_PING:
     {
         D2GSPacketClt6C* pPacket6C = (D2GSPacketClt6C*)pPacket;
         CLIENTS_UpdatePing(nClientId, pPacket6C->unk0x01, pPacket6C->unk0x05);

@@ -42,9 +42,9 @@ void __fastcall D2GAME_EVENTS_Delete_6FC34840(D2GameStrc* pGame, D2UnitStrc* pUn
 //D2Game.0x6FC34890
 void __fastcall sub_6FC34890(D2GameStrc* pGame, D2EventTimerStrc* pTimer)
 {
-    if (pTimer->nFlags & EVENTFLAG_0x1)
+    if (pTimer->nFlags & EVENTFLAG_EXECUTING)
     {
-        pTimer->nFlags |= EVENTFLAG_0x8;
+        pTimer->nFlags |= EVENTFLAG_DELETE_PENDING;
         return;
     }
 
@@ -97,7 +97,7 @@ void __fastcall sub_6FC34890(D2GameStrc* pGame, D2EventTimerStrc* pTimer)
     pTimer->unk0x20 = nullptr;
     pTimer->pNextFreeEventTimer = pEventTimerArray->pFreeEventTimerListHead;
     pEventTimerArray->pFreeEventTimerListHead = pTimer;
-    pTimer->nFlags = EVENTFLAG_0x2;
+    pTimer->nFlags = EVENTFLAG_FREE;
 }
 
 //D2Game.0x6FC349B0
@@ -220,7 +220,7 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
             pTimerQueue->pCurrent = pTimer->pNextFreeEventTimer;
             if (pTimer->nExpireFrame == pGame->dwGameFrame)
             {
-                pTimer->nFlags |= EVENTFLAG_0x1;
+                pTimer->nFlags |= EVENTFLAG_EXECUTING;
                 if (pTimer->pCallback)
                 {
                     pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
@@ -229,7 +229,7 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
                 {
                     pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
                 }
-                pTimer->nFlags &= ~EVENTFLAG_0x1;
+                pTimer->nFlags &= ~EVENTFLAG_EXECUTING;
 
                 sub_6FC34890(pGame, pTimer);
             }
@@ -243,7 +243,7 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
         {
             pTimerQueue->pCurrent = pTimer->pNextFreeEventTimer;
 
-            pTimer->nFlags |= EVENTFLAG_0x1;
+            pTimer->nFlags |= EVENTFLAG_EXECUTING;
             if (pTimer->pCallback)
             {
                 pTimer->pCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
@@ -252,9 +252,9 @@ static void __fastcall EVENT_ExecuteEventsImpl(ExecuteEventCallback pDefaultCall
             {
                 pDefaultCallback(pGame, pTimer->pUnit, pTimer->nEventType, pTimer->dwEventCustomId, pTimer->dwEventCustomParam);
             }
-            pTimer->nFlags &= ~EVENTFLAG_0x1;
+            pTimer->nFlags &= ~EVENTFLAG_EXECUTING;
 
-            if (pTimer->nFlags & EVENTFLAG_0x8)
+            if (pTimer->nFlags & EVENTFLAG_DELETE_PENDING)
             {
                 sub_6FC34890(pGame, pTimer);
             }
@@ -351,7 +351,7 @@ void __fastcall D2GAME_InitTimer_6FC351D0(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     if (nExpireFrame == -1)
     {
         pEventTimer = EVENT_AllocateUnitTimer(pGame, pUnit);
-        pEventTimer->nFlags |= 4u;
+        pEventTimer->nFlags |= EVENTFLAG_RECURRING;
         pEventTimer->nEventType = nEventType;
         pEventTimer->nExpireFrame = -1;
         pEventTimer->pCallback = nullptr;
@@ -502,7 +502,7 @@ D2EventTimerStrc* __fastcall EVENT_AllocateUnitTimer(D2GameStrc* pGame, D2UnitSt
 	D2EventTimerStrc* pNewTimer = EVENT_AllocateTimer(pGame);
 	EVENT_AssignTimerToUnit(pGame, pUnit, pNewTimer);
 
-    pNewTimer->nFlags &= (~EVENTFLAG_0x2);
+    pNewTimer->nFlags &= (~EVENTFLAG_FREE);
     return pNewTimer;
 }
 
@@ -517,7 +517,7 @@ void __fastcall sub_6FC35570(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventType
 	D2EventTimerStrc* pNewTimer = EVENT_AllocateUnitTimer(pGame, pUnit);
     pNewTimer->nEventType = nEventType;
     pNewTimer->nExpireFrame = -1;
-    pNewTimer->nFlags |= 4;
+    pNewTimer->nFlags |= EVENTFLAG_RECURRING;
     pNewTimer->dwEventCustomId = dwEventCustomId;
     pNewTimer->dwEventCustomParam = dwEventCustomParam;
     pNewTimer->pCallback = nullptr;

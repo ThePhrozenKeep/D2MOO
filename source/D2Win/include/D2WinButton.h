@@ -8,8 +8,13 @@
 
 enum ButtonFlags
 {
-	BUTTONFLAG_IS_TOGGLE = 2,
+	BUTTONFLAG_CALLBACK_ON_PRESS = 1,		// The callback runs in the mouse down handler (with the press), not on the release
+	BUTTONFLAG_IS_TOGGLE = 2,				// Each press flips bIsPressed / bIsCallbackPending; the callback runs on the press
 	BUTTONFLAG_SKIP_SOUND = 4,
+	BUTTONFLAG_WHEEL_UP = 8,				// A mouse wheel step up over the button runs the callback
+	BUTTONFLAG_WHEEL_DOWN = 0x10,			// A mouse wheel step down over the button runs the callback
+	BUTTONFLAG_HAS_DISABLED_FRAMES = 0x20,	// The cel file holds a third (disabled) set of frames, drawn without transparency
+	BUTTONFLAG_SUBTITLE = 0x40,				// nStringId is drawn as a second text line under wszText
 };
 
 
