@@ -1295,7 +1295,7 @@ void __fastcall PLRMODE_EndAnimation(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
     {
         if (pUnit->dwUnitType == UNIT_PLAYER && pUnit->pInventory)
         {
-            D2UnkPlrModeStrc2 a2 = {};
+            D2WeaponSkillSelectionStrc a2 = {};
 
             D2SkillStrc* pLeftSkill = UNITS_GetLeftSkill(pUnit);
             if (pLeftSkill)
@@ -1390,7 +1390,7 @@ void __fastcall PLRMODE_FinalizeDeath(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC81560
-void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2UnkPlrModeStrc2* pSelection)
+void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2WeaponSkillSelectionStrc* pSelection)
 {
     if (pSelection->nLeftSkillId)
     {

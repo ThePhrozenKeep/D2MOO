@@ -295,7 +295,7 @@ int32_t __fastcall SKILLS_ApplyResistanceImmunityPenalty(D2UnitStrc* pUnit, int3
 int32_t __fastcall SKILLS_AuraCallback_ApplyCurse(D2UnitStrc* pUnit, void* pArgs)
 {
     // pArgs is the curse argument block
-    D2UnkNecSkillStrc* pCurseArgs = (D2UnkNecSkillStrc*)pArgs;
+    D2CurseAuraCallbackArgsStrc* pCurseArgs = (D2CurseAuraCallbackArgsStrc*)pArgs;
 
     if (pCurseArgs->bApplyAiState)
     {
@@ -468,7 +468,7 @@ int32_t __fastcall SKILLS_SrvDo030_Curse(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     }
 
     // TODO: v29
-    D2UnkNecSkillStrc v29 = {};
+    D2CurseAuraCallbackArgsStrc v29 = {};
     v29.pUnit = pUnit;
     v29.pGame = pGame;
     v29.nSkillLevel = nSkillLevel;
@@ -523,7 +523,7 @@ void __fastcall SKILLS_ApplyDimVisionToTarget(D2GameStrc* pGame, D2UnitStrc* pUn
         nLength /= pDifficultyLevelsTxtRecord->dwAiCurseDiv;
     }
 
-    D2UnkNecSkillStrc args = {};
+    D2CurseAuraCallbackArgsStrc args = {};
 
     args.nDuration = nLength;
     args.pGame = pGame;
@@ -683,7 +683,7 @@ int32_t __fastcall SKILLS_SrvDo061_Confuse(D2GameStrc* pGame, D2UnitStrc* pUnit,
     }
 
     // TODO: v25
-    D2UnkNecSkillStrc v25 = {};
+    D2CurseAuraCallbackArgsStrc v25 = {};
 
     v25.nSkillLevel = nSkillLevel;
     v25.pGame = pGame;
@@ -718,7 +718,7 @@ int32_t __fastcall SKILLS_SrvDo061_Confuse(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //D2Game.0x6FD0C060
 int32_t __fastcall SKILLS_AuraCallback_ApplyConfuse(D2UnitStrc* pUnit, void* pArg)
 {
-    D2UnkNecSkillStrc* pParam = (D2UnkNecSkillStrc*)pArg;
+    D2CurseAuraCallbackArgsStrc* pParam = (D2CurseAuraCallbackArgsStrc*)pArg;
 
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL || !SUNIT_AreUnitsHostile(pParam->pGame, pParam->pUnit, pUnit) || SUNIT_IsDead(pUnit) || !SKILLS_CanSwitchAi(pUnit, AISPECIALSTATE_TERROR))
     {

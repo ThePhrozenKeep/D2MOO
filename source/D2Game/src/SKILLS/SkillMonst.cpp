@@ -2265,7 +2265,7 @@ int32_t __fastcall SKILLS_SrvDo112_MonCurseCast(D2GameStrc* pGame, D2UnitStrc* p
 
     const int32_t nRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nCurseSkillId, nSkillLevel);
 
-    D2UnkNecSkillStrc args = {};
+    D2CurseAuraCallbackArgsStrc args = {};
     args.pGame = pGame;
     args.pUnit = pUnit;
     args.bApplyAiState = 0;

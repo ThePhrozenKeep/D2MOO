@@ -1946,7 +1946,7 @@ void __fastcall SKILLS_EquipMonsterFromTable(D2GameStrc* pGame, D2UnitStrc* pUni
                 int32_t nItemCode = pMonEquipTxtRecord->dwItem[nIndex];
                 if (nItemCode != '    ' || !pUnit)
                 {
-                    Unk v28 = {};
+                    D2MonsterEquipmentStrc v28 = {};
                     v28.nItemCode = nItemCode;
                     v28.nBodyLoc = nBodyLoc;
                     v28.unk0x05 = 1;
@@ -1957,7 +1957,7 @@ void __fastcall SKILLS_EquipMonsterFromTable(D2GameStrc* pGame, D2UnitStrc* pUni
                     D2UnitStrc* pItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc);
                     if (pItem)
                     {
-                        Unk v28 = {};
+                        D2MonsterEquipmentStrc v28 = {};
                         v28.nItemCode = ITEMS_GetBaseCode(pItem);
                         v28.nBodyLoc = nBodyLoc;
                         v28.unk0x05 = 1;

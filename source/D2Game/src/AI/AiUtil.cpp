@@ -165,7 +165,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_CountAndFindFriendlyMonster(D2GameS
 //D2Game.0x6FCF1740
 D2UnitStrc* __fastcall AIUTIL_TargetCallback_FindMonsterInDeathMode(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
-	UnkAiStrc5* pArg = (UnkAiStrc5*)pCallbackArg;
+	D2AiDeathModeSearchArgsStrc* pArg = (D2AiDeathModeSearchArgsStrc*)pCallbackArg;
 	if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pTarget->dwAnimMode == MONMODE_DEATH && AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit) < pArg->nMaxDistance)
 	{
 		return pTarget;
@@ -177,7 +177,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_FindMonsterInDeathMode(D2GameStrc* 
 //D2Game.0x6FCF1780
 D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHostileTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
-	D2UnkAiCallbackArgStrc* pArg = (D2UnkAiCallbackArgStrc*)pCallbackArg;
+	D2AiTargetSearchArgsStrc* pArg = (D2AiTargetSearchArgsStrc*)pCallbackArg;
 
 	if (!pTarget)
 	{
@@ -268,7 +268,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHostileTarget(D2GameStrc* pGa
 //D2Game.0x6FCF1980
 D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectEligibleHostileTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
-	D2UnkAiCallbackArgStrc2* pArg = (D2UnkAiCallbackArgStrc2*)pCallbackArg;
+	D2AiEligibleTargetSearchArgsStrc* pArg = (D2AiEligibleTargetSearchArgsStrc*)pCallbackArg;
 
 	if (!AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
 	{
@@ -394,7 +394,7 @@ int32_t __fastcall AIUTIL_CanSelectHostileTarget(D2GameStrc* pGame, D2UnitStrc* 
 //D2Game.0x6FCF1B30
 D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
-	D2AiCallback7ArgStrc* pArg = (D2AiCallback7ArgStrc*)pCallbackArg;
+	D2AiExcludedTargetSearchArgsStrc* pArg = (D2AiExcludedTargetSearchArgsStrc*)pCallbackArg;
 
 	if (pTarget == pArg->pExcludedTarget || !AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
 	{
@@ -431,7 +431,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTarget(D2GameStrc* 
 //D2Game.0x6FCF1BD0
 D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTargetWithClearApproach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
-	D2AiCallback11ArgStrc* pArg = (D2AiCallback11ArgStrc*)pCallbackArg;
+	D2AiLineTargetSearchArgsStrc* pArg = (D2AiLineTargetSearchArgsStrc*)pCallbackArg;
 
 	if (pTarget == pArg->pExcludedTarget || !pTarget || (pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
 	{
@@ -713,7 +713,7 @@ D2UnitStrc* __fastcall AIUTIL_FindAiTarget(D2GameStrc* pGame, D2UnitStrc* pUnit,
 	{
 		if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
 		{
-			D2UnkAiCallbackArgStrc arg = {};
+			D2AiTargetSearchArgsStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.bCheckTargetCollision = v66;
@@ -931,7 +931,7 @@ int32_t __fastcall AIUTIL_ShouldUseAlternativeTarget(D2UnitStrc* pUnit, D2UnitSt
 		return 0;
 	}
 
-	D2AiCallback7ArgStrc arg = {};
+	D2AiExcludedTargetSearchArgsStrc arg = {};
 	arg.pTarget = nullptr;
 	arg.nDistance = INT_MAX;
 	arg.pExcludedTarget = *ppTarget;
@@ -1054,7 +1054,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 
 		if (bUseEligibilityCheck)
 		{
-			D2UnkAiCallbackArgStrc2 arg = {};
+			D2AiEligibleTargetSearchArgsStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.pAlternativeTarget = nullptr;
@@ -1067,7 +1067,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 		}
 		else
 		{
-			D2UnkAiCallbackArgStrc arg = {};
+			D2AiTargetSearchArgsStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
 			arg.bCheckTargetCollision = bCheckCollision;
@@ -1195,7 +1195,7 @@ D2UnitStrc* __fastcall AIUTIL_SelectAiTargetWithCollisionCheck(D2GameStrc* pGame
 
 	if (!AIUTIL_ResolveTargetOverride(pGame, pUnit, 0, 1, &pTarget, &nDistance))
 	{
-		D2UnkAiCallbackArgStrc2 arg = {};
+		D2AiEligibleTargetSearchArgsStrc arg = {};
 		arg.pTarget = nullptr;
 		arg.nDistance = INT_MAX;
 		arg.pAlternativeTarget = nullptr;

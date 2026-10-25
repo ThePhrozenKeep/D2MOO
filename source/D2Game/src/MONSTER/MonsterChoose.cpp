@@ -12,7 +12,7 @@
 #include "MONSTER/MonsterSpawn.h"
 
 
-D2UnkMonCreateStrc2 gtDiamondMonsterFormation = {
+D2MonsterFormationStrc gtDiamondMonsterFormation = {
     4, 0, 0, 0, 0, 0,
     {
         { 1, 0, 0 },
@@ -21,7 +21,7 @@ D2UnkMonCreateStrc2 gtDiamondMonsterFormation = {
         { 1, 2, 0}
     }
 };
-D2UnkMonCreateStrc2* gpDiamondMonsterFormation = &gtDiamondMonsterFormation;
+D2MonsterFormationStrc* gpDiamondMonsterFormation = &gtDiamondMonsterFormation;
 
 
 //D2Game.0x6FC62020
@@ -198,7 +198,7 @@ int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2Monster
 }
 
 //D2Game.0x6FC62640
-D2UnkMonCreateStrc2* __fastcall MONSTERCHOOSE_RollFormation(D2ActiveRoomStrc* pRoom)
+D2MonsterFormationStrc* __fastcall MONSTERCHOOSE_RollFormation(D2ActiveRoomStrc* pRoom)
 {
     if (pRoom)
     {

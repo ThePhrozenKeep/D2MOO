@@ -972,8 +972,8 @@ int32_t __fastcall ITEMMODE_FindFreeBodyLocation(D2UnitStrc* pUnit, D2UnitStrc* 
         return 1;
     }
 
-    D2ItemModeArgStrc itemModeArg1 = {};
-    D2ItemModeArgStrc itemModeArg2 = {};
+    D2EquipmentTraitsStrc itemModeArg1 = {};
+    D2EquipmentTraitsStrc itemModeArg2 = {};
     ITEMMODE_BuildEquipmentTraits(pUnit, pItem, &itemModeArg1);
 
     D2UnitStrc* pItem1 = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, nBodyLoc1);
@@ -1010,12 +1010,12 @@ int32_t __fastcall ITEMMODE_FindFreeBodyLocation(D2UnitStrc* pUnit, D2UnitStrc* 
 }
 
 //D2Game.0x6FC43160
-void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2ItemModeArgStrc* pItemModeArg)
+void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pItemModeArg)
 {
     D2_ASSERT(pItem);
     D2_ASSERT(pUnit);
 
-    memset(pItemModeArg, 0x00, sizeof(D2ItemModeArgStrc));
+    memset(pItemModeArg, 0x00, sizeof(D2EquipmentTraitsStrc));
 
     if (pUnit->dwUnitType == UNIT_PLAYER && pUnit->dwClassId == PCLASS_BARBARIAN)
     {
@@ -1074,7 +1074,7 @@ void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pIt
 }
 
 //D2Game.0x6FC43280
-int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2ItemModeArgStrc* pArg1, D2ItemModeArgStrc* pArg2)
+int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pArg1, D2EquipmentTraitsStrc* pArg2)
 {
     if (pArg1->bIsBow && pArg2->bIsBowQuiver || pArg1->bIsBowQuiver && pArg2->bIsBow)
     {
@@ -1930,7 +1930,7 @@ int32_t __fastcall ITEMMODE_RemoveStoredItem(D2GameStrc* pGame, D2UnitStrc* pUni
 //D2Game.0x6FC44A90
 void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bRefresh)
 {
-    D2UnkItemModeStrc refreshState = {};
+    D2EquipmentRefreshStateStrc refreshState = {};
 
     if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && !(pUnit->dwFlags & UNITFLAG_ISMERC)))
     {
@@ -2131,7 +2131,7 @@ void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FC44F00
-void __fastcall ITEMMODE_SaveEquipmentRefreshState(D2UnitStrc* pUnit, D2UnkItemModeStrc* pRefreshState)
+void __fastcall ITEMMODE_SaveEquipmentRefreshState(D2UnitStrc* pUnit, D2EquipmentRefreshStateStrc* pRefreshState)
 {
     pRefreshState->nHitpoints = STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0);
     pRefreshState->nMana = STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0);
@@ -2163,7 +2163,7 @@ void __fastcall ITEMMODE_SaveEquipmentRefreshState(D2UnitStrc* pUnit, D2UnkItemM
 }
 
 //D2Game.0x6FC44FB0
-void __fastcall ITEMMODE_RestoreSelectedSkills(D2UnitStrc* pUnit, D2UnkItemModeStrc* pRefreshState)
+void __fastcall ITEMMODE_RestoreSelectedSkills(D2UnitStrc* pUnit, D2EquipmentRefreshStateStrc* pRefreshState)
 {
     if (pRefreshState->nLeftSkillId)
     {
@@ -3077,7 +3077,7 @@ __forceinline int32_t ITEMMODE_CheckSkillUseState(D2UnitStrc* pUnit, D2SkillStrc
 int32_t __fastcall ITEMMODE_SwapWeaponSets(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pItemStatus)
 {
     // The four weapon slots and the slot each one swaps with
-    D2UnkItemModeStrc2 aWeaponSwitchItems[4] =
+    D2WeaponSwitchItemStrc aWeaponSwitchItems[4] =
     {
         { BODYLOC_RARM, nullptr, BODYLOC_SWRARM, 4 },
         { BODYLOC_LARM, nullptr, BODYLOC_SWLARM, 4 },
@@ -5593,7 +5593,7 @@ void __fastcall D2GAME_UpdatePlayerVitals_6FC4B240(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    D2UnkItemModeStrc unused = {};
+    D2EquipmentRefreshStateStrc unused = {};
     ITEMMODE_SaveEquipmentRefreshState(pUnit, &unused);
 
     D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory);

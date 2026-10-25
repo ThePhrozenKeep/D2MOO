@@ -38,7 +38,7 @@ struct D2StaticFieldCallbackArgStrc
 	int32_t nElementalType;   //+10
 };
 
-struct D2UnkNecSkillStrc
+struct D2CurseAuraCallbackArgsStrc
 {
 	D2GameStrc* pGame;
 	D2UnitStrc* pUnit;
@@ -54,7 +54,7 @@ struct D2UnkNecSkillStrc
 	int32_t nAuraEventFunc[3];
 };
 
-struct D2_6FD106F0_Strc
+struct D2AuraTargetSearchStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistanceSquared;
@@ -63,7 +63,7 @@ struct D2_6FD106F0_Strc
 	int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*);
 };
 
-struct D2_6FD10880_Strc
+struct D2AuraTargetCycleStrc
 {
 	D2UnitStrc* pNextTarget;
 	int32_t nNextTargetGUID;

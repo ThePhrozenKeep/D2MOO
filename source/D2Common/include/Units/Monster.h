@@ -19,7 +19,7 @@ struct D2MonsterInteractStrc
 	D2InteractInfoStrc* pInteractInfo;		//0x00
 };
 
-struct D2UnkMonsterDataStrc
+struct D2MonsterLifeSyncStrc
 {
 	int32_t unk0x00;						//0x00
 	int32_t nLifePercentage;				//0x04
@@ -60,7 +60,7 @@ struct D2MonsterDataStrc
 	uint32_t unk0x38;							//0x38
 	union										//0x3C
 	{
-		D2UnkMonsterDataStrc tLifeSync;			//Server pMonster
+		D2MonsterLifeSyncStrc tLifeSync;		//Server pMonster
 		struct
 		{
 			D2UnitGUID nOwnerGUID;				//0x3C owner (CMONSTERS_SetOwnerGUID)

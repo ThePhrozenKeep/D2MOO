@@ -7,7 +7,7 @@
 #include <GAME/Event.h>
 
 #pragma pack(push, 1)
-struct D2UnkItemModeStrc
+struct D2EquipmentRefreshStateStrc
 {
 	int32_t nHitpoints;
 	int32_t nMana;
@@ -18,7 +18,7 @@ struct D2UnkItemModeStrc
 	int32_t nLeftSkillOwnerGUID;
 };
 
-struct D2UnkItemModeStrc2
+struct D2WeaponSwitchItemStrc
 {
 	int32_t nBodyLoc;
 	D2UnitStrc* pItem;
@@ -26,7 +26,7 @@ struct D2UnkItemModeStrc2
 	int32_t nSocketArg;
 };
 
-struct D2ItemModeArgStrc
+struct D2EquipmentTraitsStrc
 {
     int32_t bIsBow;
     int32_t bIsCrossBow;
@@ -67,9 +67,9 @@ void __fastcall D2GAME_PickupGold_6FC42DD0(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //D2Game.0x6FC42F20
 int32_t __fastcall ITEMMODE_FindFreeBodyLocation(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pBodyLoc, int32_t bSkipRequirementCheck);
 //D2Game.0x6FC43160
-void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2ItemModeArgStrc* pItemModeArg);
+void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pItemModeArg);
 //D2Game.0x6FC43280
-int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2ItemModeArgStrc* pArg1, D2ItemModeArgStrc* pArg2);
+int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pArg1, D2EquipmentTraitsStrc* pArg2);
 //D2Game.0x6FC43340
 int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, int32_t* pItemStatus);
 //D2Game.0x6FC437F0
@@ -89,9 +89,9 @@ int32_t __fastcall ITEMMODE_RemoveStoredItem(D2GameStrc* pGame, D2UnitStrc* pUni
 //D2Game.0x6FC44A90
 void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC44A90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bRefresh);
 //D2Game.0x6FC44F00
-void __fastcall ITEMMODE_SaveEquipmentRefreshState(D2UnitStrc* pUnit, D2UnkItemModeStrc* pRefreshState);
+void __fastcall ITEMMODE_SaveEquipmentRefreshState(D2UnitStrc* pUnit, D2EquipmentRefreshStateStrc* pRefreshState);
 //D2Game.0x6FC44FB0
-void __fastcall ITEMMODE_RestoreSelectedSkills(D2UnitStrc* pUnit, D2UnkItemModeStrc* pRefreshState);
+void __fastcall ITEMMODE_RestoreSelectedSkills(D2UnitStrc* pUnit, D2EquipmentRefreshStateStrc* pRefreshState);
 //D2Game.0x6FC45050
 void __fastcall D2GAME_ITEMS_UpdateInventoryItems_6FC45050(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnused, int32_t bRefresh);
 //D2Game.0x6FC45060

@@ -4,7 +4,7 @@
 #include <GAME/Event.h>
 
 #pragma pack(push, 1)
-struct D2UnkPlrModeStrc2
+struct D2WeaponSkillSelectionStrc
 {
     int32_t nRightSkillId;
     int32_t nLeftSkillId;
@@ -70,7 +70,7 @@ void __fastcall PLRMODE_EndAnimation(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 //D2Game.0x6FC814F0
 void __fastcall PLRMODE_FinalizeDeath(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 //D2Game.0x6FC81560
-void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2UnkPlrModeStrc2* pSelection);
+void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2WeaponSkillSelectionStrc* pSelection);
 //D2Game.0x6FC81600
 void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
 //D2Game.0x6FC81650

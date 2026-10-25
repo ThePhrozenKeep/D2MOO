@@ -378,7 +378,7 @@ int32_t __fastcall SKILLS_SrvDo071_Taunt(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         return 0;
     }
 
-    D2UnkNecSkillStrc curseData = {};
+    D2CurseAuraCallbackArgsStrc curseData = {};
 
     curseData.nDuration = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
     curseData.pGame = pGame;
