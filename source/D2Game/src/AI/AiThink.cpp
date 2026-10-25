@@ -17356,7 +17356,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction03_6FCF0A70(D2GameStrc* pGame, D2UnitS
 
 		if (arg.pDoor && DATATBLS_GetObjectsTxtRecord(arg.pDoor->dwClassId)->nMonsterOK)
 		{
-			sub_6FC78B20(pGame, pUnit, UNIT_OBJECT, arg.pDoor->dwUnitId);
+			OBJMODE_OperateObjectInRange(pGame, pUnit, UNIT_OBJECT, arg.pDoor->dwUnitId);
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 5);
 			return;
 		}

@@ -1893,7 +1893,7 @@ int32_t __fastcall OBJECTS_SpawnBarrel(D2GameStrc* pGame, D2ActiveRoomStrc* pRoo
 }
 
 //D2Game.0x6FC73C50
-int32_t __fastcall OBJECTS_SpawnNothing2(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords)
+int32_t __fastcall OBJECTS_SpawnRandomItemGrid(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords)
 {
     const uint16_t nXEnd = pDrlgCoords->nSubtileX + std::min(pDrlgCoords->nSubtileWidth, 12);
     const uint16_t nYEnd = pDrlgCoords->nSubtileY + std::min(pDrlgCoords->nSubtileHeight, 12);
@@ -2016,7 +2016,7 @@ void __fastcall OBJECTS_PopulationHandler(D2GameStrc* pGame, D2ActiveRoomStrc* p
         { 1, OBJECTS_SpawnNothing },
         { 1, OBJECTS_SpawnBarrel },
         { 0, nullptr },
-        { 1, OBJECTS_SpawnNothing2 },
+        { 1, OBJECTS_SpawnRandomItemGrid },
         { 1, OBJECTS_SpawnArmorStand },
         { 1, OBJECTS_SpawnWeaponRack }
     };

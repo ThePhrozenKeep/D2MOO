@@ -376,7 +376,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     case UNIT_OBJECT:
     {
-        sub_6FC79B50(pGame, pUnit, pInteractUnit);
+        OBJMODE_CloseObjectInteraction(pGame, pUnit, pInteractUnit);
         break;
     }
     case UNIT_ITEM:
@@ -426,7 +426,7 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     case UNIT_OBJECT:
     {
-        sub_6FC79B50(pGame, pUnit, pInteractUnit);
+        OBJMODE_CloseObjectInteraction(pGame, pUnit, pInteractUnit);
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         sub_6FC3F340(pClient, 0x62u, UNIT_OBJECT, pInteractUnit->dwUnitId, 0);
         return;

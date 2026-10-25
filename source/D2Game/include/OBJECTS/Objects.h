@@ -103,7 +103,7 @@ int32_t __fastcall OBJECTS_SpawnNothing(D2GameStrc* pGame, D2ActiveRoomStrc* pRo
 //D2Game.0x6FC73A80
 int32_t __fastcall OBJECTS_SpawnBarrel(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords);
 //D2Game.0x6FC73C50
-int32_t __fastcall OBJECTS_SpawnNothing2(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords);
+int32_t __fastcall OBJECTS_SpawnRandomItemGrid(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords);
 //D2Game.0x6FC73D80
 int32_t __fastcall OBJECTS_SpawnArmorStand(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pDrlgCoords);
 //D2Game.0x6FC73DA0
