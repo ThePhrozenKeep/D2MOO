@@ -34,7 +34,7 @@ D2DrlgActStrc* __stdcall DEBUG_GetAct(uint8_t nAct)
 }
 
 //D2Game.0x6FCCD350 (#10027)
-int32_t __stdcall DEBUG_GetFreeMonsterIndex()
+int32_t __stdcall DEBUG_GetMonsterCount()
 {
     D2GameStrc* pGame = sub_6FC3B160();
 

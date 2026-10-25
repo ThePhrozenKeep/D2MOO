@@ -130,7 +130,7 @@ void GAME_LogMessage(int32_t a1, const char* szFormat, ...)
 }
 
 //D2Game.0x6FC357C0
-int32_t __stdcall D2Game_10046()
+int32_t __stdcall GAME_Initialize()
 {
     SRegLoadValue("Diablo II", "PlayerPos", 0, &dword_6FD4582C);
     memset(gnGamesGUIDs_6FD447F8, 0, sizeof(gnGamesGUIDs_6FD447F8));
@@ -142,7 +142,7 @@ int32_t __stdcall D2Game_10046()
 }
 
 //D2Game.0x6FC35810
-int32_t __stdcall D2Game_10050()
+int32_t __stdcall GAME_Shutdown()
 {
     CLIENTS_Release();
     DeleteCriticalSection(&gCriticalSection_6FD45800);
@@ -200,7 +200,7 @@ void __stdcall GAME_SetInitSeed(int32_t nInitSeed)
 }
 
 //D2Game.0x6FC35930
-uint32_t __fastcall D2Game_10011()
+uint32_t __fastcall GAME_GetFirstGameInitSeed()
 {
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
@@ -511,7 +511,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
         pGame->nSyncTimer = 2;
     }
 
-    D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
+    TASK_QueueGame((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nGameId;
 
@@ -775,7 +775,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
 
     // TODO: 1st argument
-    D2Game_10042((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
+    TASK_QueueGame((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
@@ -1315,7 +1315,7 @@ BOOL __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT
 }
 
 //D2Game.0x6FC379C0
-void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
+void __stdcall GAME_RemoveClientById(int32_t nClientId)
 {
     if (!nClientId)
     {
@@ -2540,7 +2540,7 @@ int32_t __fastcall GAME_GetGamesCount()
 }
 
 //D2Game.0x6FC39B70 (#10057)
-int32_t __stdcall D2Game_10057()
+int32_t __stdcall GAME_GetExpansionGamesCount()
 {
     int32_t nExpansionGames = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
@@ -2563,7 +2563,7 @@ int32_t __stdcall D2Game_10057()
 }
 
 //D2Game.0x6FC39C70 (#10053)
-void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
+void __stdcall GAME_GetClientCountHistogram(int16_t* pCount, int32_t nArraySize)
 {
     memset(pCount, 0, sizeof(*pCount) * (nArraySize + 1));
 
@@ -2590,7 +2590,7 @@ void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
 }
 
 //D2Game.0x6FC39D80 (#10054)
-void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
+void __stdcall GAME_GetGameAgeHistogram(uint16_t* a1, int32_t nMaxCount)
 {
     memset(a1, 0, sizeof(*a1) * nMaxCount);
 
@@ -2617,7 +2617,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
 }
 
 //D2Game.0x6FC39EC0 (#10051)
-int32_t __fastcall D2Game_10051()
+int32_t __fastcall GAME_GetFrameRate()
 {
     return gnFrameRate_6FD2CA14;
 }
@@ -2630,7 +2630,7 @@ void __stdcall GAME_GetMemoryUsage(int* pCurrentMemoryUsage, int* pPeakMemoryUsa
 }
 
 //D2Game.0x6FC39EF0 (#10013)
-int32_t __stdcall D2Game_10013(uint16_t nGameId)
+int32_t __stdcall GAME_GetClientsCount(uint16_t nGameId)
 {
 	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     D2_ASSERT(gpGameDataTbl_6FD45818);
@@ -2966,7 +2966,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
 }
 
 //D2Game.0x6FC3AB20 (#10018)
-int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID)
+int32_t __stdcall GAME_GetUnitsInfoById(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID)
 {
     const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
@@ -3127,7 +3127,7 @@ void __fastcall GAME_LeaveGlobalGamesCriticalSection()
 }
 
 //D2Game.0x6FC3B280
-void __stdcall D2Game_10008(int32_t a1)
+void __stdcall GAME_SetTargetFrameRate(int32_t a1)
 {
     gnTargetFrameRate_6FD2CA60 = a1;
     gnTargetMsPerFrame_6FD457F8 = 1000 / a1;

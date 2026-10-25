@@ -286,7 +286,7 @@ D2UnitStrc* __fastcall D2GAME_NPC_GenerateStoreItem_6FCC6A60(D2UnitStrc* pNpc, i
         }
 
         UNITS_RefreshInventory(pNpc, 1);
-        INVENTORY_AddItemToTradeInventory(pNpc->pInventory, pItem);
+        INVENTORY_AddItemToCommandQueue(pNpc->pInventory, pItem);
     }
 
     return pItem;
@@ -306,7 +306,7 @@ void __fastcall sub_6FCC6F10(D2UnitStrc* pNpc, D2UnitStrc* pItem, D2GameStrc* pG
     {
         pItem->dwFlagEx |= UNITFLAGEX_ITEMINIT;
         UNITS_RefreshInventory(pNpc, 1);
-        INVENTORY_AddItemToTradeInventory(pNpc->pInventory, pItem);
+        INVENTORY_AddItemToCommandQueue(pNpc->pInventory, pItem);
         ITEMS_SetItemCMDFlag(pItem, 1, 1);
     }
     else
@@ -546,7 +546,7 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCC74F0(D2GameStrc* pGame, D2Un
                         ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
                     }
 
-                    INVENTORY_AddItemToTradeInventory(pNPC->pInventory, pItem);
+                    INVENTORY_AddItemToCommandQueue(pNPC->pInventory, pItem);
                 }
             }
         }
@@ -564,7 +564,7 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCC74F0(D2GameStrc* pGame, D2Un
                     ITEMS_SetItemFlag(pItem, IFLAG_NEWITEM, 1);
                 }
 
-                INVENTORY_AddItemToTradeInventory(pNPC->pInventory, pItem);
+                INVENTORY_AddItemToCommandQueue(pNPC->pInventory, pItem);
             }
         }
     }
@@ -713,7 +713,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
 
                     UNITS_RefreshInventory(pNpc, 1);
 
-                    INVENTORY_AddItemToTradeInventory(pNpc->pInventory, pDupeItem);
+                    INVENTORY_AddItemToCommandQueue(pNpc->pInventory, pDupeItem);
                     STATLIST_SetUnitStat(pDupeItem, STAT_DURABILITY, STATLIST_GetMaxDurabilityFromUnit(pDupeItem), 0);
                     STATLIST_SetUnitStat(pDupeItem, STAT_QUANTITY, ITEMS_GetTotalMaxStack(pDupeItem), 0);
                 }
@@ -734,7 +734,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
 
                         UNITS_RefreshInventory(pNpc, 1);
 
-                        INVENTORY_AddItemToTradeInventory(pNpc->pInventory, pDupeItem);
+                        INVENTORY_AddItemToCommandQueue(pNpc->pInventory, pDupeItem);
                         STATLIST_SetUnitStat(pDupeItem, STAT_DURABILITY, STATLIST_GetMaxDurabilityFromUnit(pDupeItem), 0);
                         STATLIST_SetUnitStat(pDupeItem, STAT_QUANTITY, ITEMS_GetTotalMaxStack(pDupeItem), 0);
                     }
@@ -886,7 +886,7 @@ void __fastcall sub_6FCC7E20(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pI
                             pItem->dwFlagEx |= 0x10u;
 
                             UNITS_RefreshInventory(pNpc, 1);
-                            INVENTORY_AddItemToTradeInventory(pGambleInventory, pItem);
+                            INVENTORY_AddItemToCommandQueue(pGambleInventory, pItem);
                             ITEMS_SetItemCMDFlag(pItem, 1, 1);
                         }
                         else

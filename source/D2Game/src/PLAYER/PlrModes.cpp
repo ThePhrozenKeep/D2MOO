@@ -542,7 +542,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
 
                 INVENTORY_SetCursorItem(pUnit->pInventory, nullptr);
                 ITEMS_SetItemCMDFlag(pItem, 1, 1);
-                INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
+                INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pItem);
                 UNITS_RefreshInventory(pUnit, 1);
             }
             else
@@ -577,7 +577,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                     }
 
                     ITEMS_SetItemCMDFlag(pDupedItem, 2, 1);
-                    INVENTORY_AddItemToTradeInventory(pDeadBody->pInventory, pDupedItem);
+                    INVENTORY_AddItemToCommandQueue(pDeadBody->pInventory, pDupedItem);
                     UNITS_RefreshInventory(pDeadBody, 1);
                     QUESTS_ItemPickedUp(pGame, pDeadBody, pDupedItem);
                 }
@@ -611,7 +611,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
                             pDupedItem->dwFlags &= ~UNITFLAG_ISRESURRECT;
                         }
 
-                        INVENTORY_AddItemToTradeInventory(pDeadBody->pInventory, pDupedItem);
+                        INVENTORY_AddItemToCommandQueue(pDeadBody->pInventory, pDupedItem);
                         UNITS_RefreshInventory(pDeadBody, 1);
                         QUESTS_ItemPickedUp(pGame, pDeadBody, pDupedItem);
                     }
@@ -674,7 +674,7 @@ void __fastcall sub_6FC802F0(D2GameStrc* pGame, int32_t nBodyloc, D2UnitStrc* pI
     ITEMS_SetItemFlag(pItem, IFLAG_QUANTITY, 1);
     ITEMS_SetItemCMDFlag(pItem, 1, 1);
     ITEMS_SetItemCMDFlag(pItem, 16, 1);
-    INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
+    INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pItem);
     UNITS_RefreshInventory(pUnit, 1);
 }
 
@@ -686,7 +686,7 @@ void __fastcall sub_6FC803F0(D2GameStrc* pGame, D2UnitStrc* pItem, D2UnitStrc* p
     D2GAME_PACKETS_SendPacket0x42_6FC3EE40(pClient, pPlayer);
     INVENTORY_SetCursorItem(pPlayer->pInventory, 0);
     ITEMS_SetItemCMDFlag(pItem, 1, 1);
-    INVENTORY_AddItemToTradeInventory(pPlayer->pInventory, pItem);
+    INVENTORY_AddItemToCommandQueue(pPlayer->pInventory, pItem);
     UNITS_RefreshInventory(pPlayer, 1);
 }
 

@@ -2409,7 +2409,7 @@ D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2Un
 }
 
 //D2Game.0x6FCC1DC0
-bool __stdcall D2Game_10033(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
+bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
 {
 	*a2 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a2);
 	*a3 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a3);

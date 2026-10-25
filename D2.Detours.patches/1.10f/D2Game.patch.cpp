@@ -28,32 +28,32 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_UpdateClients												@10005
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_CloseAllGames												@10006
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_ReceiveDatabaseCharacter										@10007
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10008														@10008
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetTargetFrameRate														@10008
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetGlobalAct													@10009
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetInitSeed													@10010
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10011														@10011
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetFirstGameInitSeed														@10011
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGamesCount												@10012
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10013														@10013
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetClientsCount														@10013
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameInformation											@10014
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameServerGameIds											@10015
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetPlayerUnitsCount											@10016
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetPlayerUnitsInfo											@10017
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10018														@10018
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetUnitsInfoById														@10018
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetUnitsDescriptions											@10019
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetStatistics												@10020
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SendMessageToAllClients										@10021
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SendMessageToGameClients										@10022
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_SetServerCallbackFunctions									@10023
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10024_RemoveClientFromGame									@10024
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_RemoveClientById									@10024
     PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetUnitFromTypeAndGUID										@10025
     PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetAct														@10026
-    PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetFreeMonsterIndex											@10027
+    PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetMonsterCount											@10027
     PatchAction::FunctionReplacePatchByOriginal,     //   DEBUG_GetRoomBySubtileCoordinates									@10028
     PatchAction::FunctionReplacePatchByOriginal,     //   D2GAME_10029_SAVE_WriteFileInterface								@10029
     PatchAction::Ignore,                             //   ; Not exported
     PatchAction::Ignore,                             //   ; Not exported
     PatchAction::Ignore,                             //   ; Not exported
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10033														@10033
+    PatchAction::FunctionReplacePatchByOriginal,     //   SUNITDMG_RollAndCompareValues														@10033
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10034_Return												@10034
     PatchAction::FunctionReplacePatchByOriginal,     //   QUESTS_DisableSequences											@10035
     PatchAction::FunctionReplacePatchByOriginal,     //   D2GAME_10036_PLRSAVE_EnableSaveFileWriting						@10036
@@ -62,22 +62,22 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10039														@10039
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10040														@10040
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10041														@10041
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10042														@10042
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10043														@10043
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10044														@10044
+    PatchAction::FunctionReplacePatchByOriginal,     //   TASK_QueueGame														@10042
+    PatchAction::FunctionReplacePatchByOriginal,     //   TASK_DequeueGame														@10043
+    PatchAction::FunctionReplacePatchByOriginal,     //   TASK_GetQueueDelay														@10044
     PatchAction::FunctionReplacePatchByOriginal,     //   TASK_ProcessGame													@10045
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10046														@10046
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_Initialize														@10046
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_CreateNewEmptyGame											@10047
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10048_Return1												@10048
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10049_Return1												@10049
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10050														@10050
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10051														@10051
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_Shutdown														@10050
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetFrameRate														@10051
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetMemoryUsage												@10052
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10053														@10053
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10054														@10054
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetClientCountHistogram														@10053
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetGameAgeHistogram														@10054
     PatchAction::FunctionReplacePatchByOriginal,     //   GAME_DisconnectClientByName										@10055
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10056														@10056
-    PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10057														@10057
+    PatchAction::FunctionReplacePatchByOriginal,     //   GAME_GetExpansionGamesCount														@10057
     PatchAction::FunctionReplacePatchByOriginal,     //   CLIENTS_GetExpansionClientCount									@10058
     PatchAction::FunctionReplacePatchByOriginal,     //   PLAYER_SetVirtualPlayerCount										@10059
     PatchAction::FunctionReplacePatchByOriginal,     //   D2Game_10060_Return												@10060

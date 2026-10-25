@@ -269,13 +269,13 @@ D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_IsItemBodyLocFree(D2InventoryStrc* pI
 //D2Common.0x6FD90910 (#10279)
 D2COMMON_DLL_DECL void __stdcall INVENTORY_RemoveInventoryItems(D2InventoryStrc* pInventory);
 //D2Common.0x6FD90940 (#10280)
-D2COMMON_DLL_DECL D2InventoryNodeStrc* __stdcall INVENTORY_GetTradeInventory(D2InventoryStrc* pInventory);
+D2COMMON_DLL_DECL D2InventoryNodeStrc* __stdcall INVENTORY_GetCommandQueue(D2InventoryStrc* pInventory);
 //D2Common.0x6FD90960 (#10281)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_FreeCommandQueue(D2InventoryStrc* pInventory);
 //D2Common.0x6FD909B0 (#10282)
-D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_CheckForItemInTradeInventory(D2InventoryStrc* pInventory, int nItemId);
+D2COMMON_DLL_DECL BOOL __stdcall INVENTORY_IsItemInCommandQueue(D2InventoryStrc* pInventory, int nItemId);
 //D2Common.0x6FD909F0 (#10283)
-D2COMMON_DLL_DECL void __stdcall INVENTORY_AddItemToTradeInventory(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL void __stdcall INVENTORY_AddItemToCommandQueue(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
 //D2Common.0x6FD90AB0 (#10316)
 D2COMMON_DLL_DECL int __stdcall D2Common_10316(D2CorpseStrc* pCorpse);
 //D2Common.0x6FD90AC0 (#10284)
