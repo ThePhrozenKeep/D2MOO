@@ -2,9 +2,11 @@ add_library(TestDefinitions STATIC src/TestDefinitions.cpp)
 
 target_sources(TestDefinitions
   PRIVATE
+    include/TestDefinitions.h
     include/DynamicArray.h
     include/EqualityMacros.h
     include/RepetitionMacros.h
+    include/WrappedD2BitBufferStrc.h
 
     include/Fixtures/DataTbls/Fixtures.h
     include/Fixtures/DataTbls/AnimDataFixture.h
