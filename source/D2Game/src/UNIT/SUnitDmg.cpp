@@ -2379,12 +2379,12 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 
 	if (damageCopy.wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
 	{
-		if (pAttacker->dwUnitType == UNIT_OBJECT || pAttacker->dwUnitType != UNIT_PLAYER && pAttacker->dwUnitType != UNIT_MONSTER || pAttacker->dwAnimMode)
+		if (pAttacker->dwUnitType != UNIT_OBJECT && (pAttacker->dwUnitType == UNIT_PLAYER || pAttacker->dwUnitType == UNIT_MONSTER) && !pAttacker->dwAnimMode)
 		{
-			SKILLS_ApplyThornsDamage(pGame, pAttacker, pDefender, &damageCopy);
+			return; // The melee events killed the attacker: no damage, no combat list free (1.10f: 0x6FCC1D24, 1.14d: 0x0057D63F)
 		}
+		SKILLS_ApplyThornsDamage(pGame, pAttacker, pDefender, &damageCopy);
 	}
-
 	SUNITDMG_ExecuteMissileDamage(pGame, pAttacker, pDefender, &damageCopy);
 	SUNITDMG_FreeAttackerDefenderCombatList(pGame, pAttacker, pDefender);
 }
