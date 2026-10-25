@@ -12,6 +12,8 @@
 #include <string>
 #include <sstream>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 #include <vector>
 
 #include "DiffContext.h"
@@ -35,6 +37,9 @@ public:
 
 	void CompareWith(T& other)
 	{
+		// No-op for child visitors, whose objects were marked before they were created
+		MarkVisited(m_object, other);
+
 		VisitorTraits<T>::Visit(*this, other);
 
 		for (const auto& child_visitor : child_visitors)
@@ -51,30 +56,7 @@ public:
 
 		using MemberType = std::remove_cv_t<std::remove_reference_t<decltype(object_member)>>;
 
-		std::string field_name;
-		if (m_parent_name != "")
-		{
-			field_name = m_parent_name + "->" + name;
-		}
-		else
-		{
-			field_name = name;
-		}
-
-		if (m_context.visited_pointers.find(&object_member) != m_context.visited_pointers.end())
-		{
-			return;
-		}
-
-		m_context.visited_pointers.insert(&object_member);
-
-		child_visitors.push_back(
-			[this, &object_member, &other_member, field_name]()
-			{
-				DiffVisitor<MemberType> child_visitor(const_cast<MemberType&>(object_member), m_context, field_name);
-				child_visitor.CompareWith(const_cast<MemberType&>(other_member));
-			}
-		);
+		CompareChild<MemberType>(object_member, other_member, FieldName(name));
 	}
 
 	template<auto Member>
@@ -82,13 +64,6 @@ public:
 	{
 		auto& object_member = m_object.*Member;
 		auto& other_member = other.*Member;
-
-		if (m_context.visited_pointers.find(&other_member) != m_context.visited_pointers.end())
-		{
-			return;
-		}
-
-		m_context.visited_pointers.insert(&other_member);
 
 		using MemberType = std::remove_cv_t<std::remove_reference_t<decltype(object_member)>>;
 		bool not_equal;
@@ -174,22 +149,9 @@ public:
 
 		using PointerType = decltype(GetMemberType(Member));
 
-		using Pointee = std::remove_pointer_t<PointerType>;
+		using Pointee = std::remove_cv_t<std::remove_pointer_t<PointerType>>;
 
-		if (m_context.visited_pointers.find(object_ptr) != m_context.visited_pointers.end())
-		{
-			return;
-		}
-
-		m_context.visited_pointers.insert(object_ptr);
-
-		child_visitors.push_back(
-			[this, object_ptr, other_ptr, field_name]()
-			{
-				DiffVisitor<Pointee> child_visitor(*object_ptr, m_context, field_name);
-				child_visitor.CompareWith(*other_ptr);
-			}
-		);
+		CompareChild<Pointee>(*object_ptr, *other_ptr, field_name);
 	}
 
 	// Shadows FieldVisitor::DynamicArray() to report a difference when only one of the arrays is null or the counts differ.
@@ -304,23 +266,9 @@ public:
 				return;
 			}
 
-			using Pointee = std::remove_pointer_t<MemberType>;
+			using Pointee = std::remove_cv_t<std::remove_pointer_t<MemberType>>;
 
-			if (m_context.visited_pointers.find(object_ptr) != m_context.visited_pointers.end())
-			{
-				return;
-			}
-
-			m_context.visited_pointers.insert(object_ptr);
-
-			child_visitors.push_back(
-				[this, object_ptr, other_ptr, field_name]()
-				{
-					DiffVisitor<Pointee> child_visitor(*object_ptr, m_context, field_name);
-
-					child_visitor.CompareWith(*other_ptr);
-				}
-			);
+			CompareChild<Pointee>(*object_ptr, *other_ptr, field_name);
 		}
 		else if constexpr (std::is_arithmetic_v<MemberType>)
 		{
@@ -339,21 +287,7 @@ public:
 		}
 		else if constexpr (HasVisitorTraits_v<MemberType, decltype(*this)>)
 		{
-			if (m_context.visited_pointers.find(&object_el) != m_context.visited_pointers.end())
-			{
-				return;
-			}
-
-			m_context.visited_pointers.insert(&object_el);
-
-			child_visitors.push_back(
-				[this, &object_el, &other_el, field_name]()
-				{
-					DiffVisitor<MemberType> child_visitor(const_cast<MemberType&>(object_el), m_context, field_name);
-
-					child_visitor.CompareWith(const_cast<MemberType&>(other_el));
-				}
-			);
+			CompareChild<MemberType>(object_el, other_el, field_name);
 		}
 		else
 		{
@@ -383,6 +317,70 @@ public:
 	}
 
 private:
+	static std::string FormatPointer(const void* pointer)
+	{
+		std::stringstream stream;
+		stream << std::hex << "0x" << reinterpret_cast<uintptr_t>(pointer);
+		return stream.str();
+	}
+
+	template<typename Type>
+	void MarkVisited(const Type& object, const Type& other)
+	{
+		const auto type = std::type_index(typeid(Type));
+
+		m_context.visited_objects.emplace(DiffContext::VisitedKey{ &object, type }, &other);
+		m_context.visited_other_objects.emplace(DiffContext::VisitedKey{ &other, type }, &object);
+	}
+
+	// Queues the comparison of two objects, unless they were already compared with each other.
+	// An object that was already compared with a different object means the object graphs are shaped differently
+	// (e.g. two pointers share an object on one side only), which is reported as a pointer difference.
+	template<typename Type>
+	void CompareChild(const Type& object, const Type& other, const std::string& field_name)
+	{
+		const auto type = std::type_index(typeid(Type));
+
+		const auto object_it = m_context.visited_objects.find(DiffContext::VisitedKey{ &object, type });
+		const auto other_it = m_context.visited_other_objects.find(DiffContext::VisitedKey{ &other, type });
+
+		const bool object_visited = object_it != m_context.visited_objects.end();
+		const bool other_visited = other_it != m_context.visited_other_objects.end();
+
+		if (object_visited || other_visited)
+		{
+			if (!object_visited || !other_visited || object_it->second != &other)
+			{
+				auto object_value = FormatPointer(&object);
+				if (object_visited)
+				{
+					object_value += " (compared with " + FormatPointer(object_it->second) + " before)";
+				}
+
+				auto other_value = FormatPointer(&other);
+				if (other_visited)
+				{
+					other_value += " (compared with " + FormatPointer(other_it->second) + " before)";
+				}
+
+				const auto difference_descriptor = DifferenceDescriptor{ DifferenceType::Pointer, field_name, object_value, other_value };
+				m_context.differences.push_back(difference_descriptor);
+			}
+
+			return;
+		}
+
+		MarkVisited(object, other);
+
+		child_visitors.push_back(
+			[this, &object, &other, field_name]()
+			{
+				DiffVisitor<Type> child_visitor(const_cast<Type&>(object), m_context, field_name);
+				child_visitor.CompareWith(const_cast<Type&>(other));
+			}
+		);
+	}
+
 	std::string FieldName(const char* name) const
 	{
 		if (m_parent_name != "")
