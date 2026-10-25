@@ -103,7 +103,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_NEWGAME)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -115,7 +115,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
             const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->dwVersion, pPacket67->szClientName);
             if (nErrorCode)
             {
-                sub_6FC3C6D0(nClientId, nErrorCode);
+                D2GAME_PACKETS_SendSystemError(nClientId, nErrorCode);
                 D2NET_10015(nClientId, __FILE__, __LINE__);
             }
         }
@@ -131,7 +131,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINGAME)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -147,12 +147,12 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     {
         if (D2GAME_Return1_6FC41900())
         {
-            sub_6FC39870(nClientId);
+            GAME_SendGameList(nClientId);
         }
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINLIST)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -165,7 +165,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINACT)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -176,12 +176,12 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
 
         if (D2GAME_Return1_6FC41900())
         {
-            sub_6FC399A0(nClientId, pPacket6B);
+            GAME_ReceiveSaveFilePart(nClientId, pPacket6B);
         }
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_OPENCHAR)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -200,7 +200,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_FORCEDISCONNECT)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -234,7 +234,7 @@ void __fastcall CCMD_ProcessClientMessage(void* pData, int32_t nPacketSize)
     if (pPlayer && pPlayer->dwUnitType == UNIT_PLAYER && D2GAME_PACKET_Handler_6FC89320(pGame, pPlayer, pPacket, nPacketSize) >= 3 && pGame->nGameType != 3)
     {
         GAME_LogMessage(3, "[HACKLIST]  ProcessClientMessage: Client %d '%s' believed to be cheating. Command was %d", nClientId, pClient->szName, *pPacket);
-        sub_6FC36C20(pGame, nClientId, __FILE__, __LINE__);
+        GAME_AbortClient(pGame, nClientId, __FILE__, __LINE__);
     }
 
     GAME_LeaveGamesCriticalSection(pGame);

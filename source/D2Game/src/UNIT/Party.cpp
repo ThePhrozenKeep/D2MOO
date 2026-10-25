@@ -436,7 +436,7 @@ void __fastcall PARTY_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pUnit
                 D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                 if (pPartyMember && pPartyMember != pUnit)
                 {
-                    sub_6FC3E200(pClient, pPartyMember);
+                    SCMD_SendUnitLifeAndPositionUpdate(pClient, pPartyMember);
                 }
             }
             return;

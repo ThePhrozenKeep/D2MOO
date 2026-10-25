@@ -219,7 +219,7 @@ void __fastcall CLIENTS_SetPlayerInClient(D2ClientStrc* pClient, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC31EF0
-void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
+void __fastcall CLIENTS_SpawnPlayer(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameStrc* pGame, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     if (!pGame || !pPlayer || !pClient)
     {
@@ -248,7 +248,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 
     if (pRoom != pClient->pRoom)
     {
-        sub_6FC33020(pClient, pRoom);
+        CLIENTS_ChangeRoom(pClient, pRoom);
     }
 
     pClient->pRoom = pRoom;
@@ -313,7 +313,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
 }
 
 //D2Game.0x6FC32220
-void __fastcall sub_6FC32220(D2ClientStrc* pClient)
+void __fastcall CLIENTS_SetPlayerUnitAlive(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
@@ -321,7 +321,7 @@ void __fastcall sub_6FC32220(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC32260
-int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t a3, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
+int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pGame, int32_t bLoadSave, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pClient);
@@ -330,7 +330,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
     D2UnitStrc* ppUnit = nullptr;
 
-    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, a3, &ppUnit, pRoomArg, nXArg, nYArg);
+    const int32_t nError = D2GAME_SAVE_GetUnitDataFromFile_6FC8CB40(pGame, pClient, pClient->szName, bLoadSave, &ppUnit, pRoomArg, nXArg, nYArg);
     if (nError)
     {
         FOG_TraceF(gszEmptyString_6FD447EC, "[PLAYER LOAD]  ClientAddPlayerToGame()  Error Loading:%s  Error:%d=%s", pClient->szName, nError, "nError");
@@ -453,7 +453,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
 
 //1.10f: D2Game.0x6FC325E0
 //1.13c: D2Game.0x6FC6A9B0
-D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t a8, int32_t a9)
+D2ClientStrc* __fastcall CLIENTS_AddToGame(D2GameStrc* pGame, int32_t nClientId, uint8_t nClassIdOrCharTemplate, const char* szClientName, const char* szAccount, int32_t nCharSaveTransactionToken, uint32_t nLocale, int32_t nUnused1, int32_t nUnused2)
 {
     if (!gbClientListInitialized_6FD447E8 || !pGame)
     {
@@ -762,7 +762,7 @@ void __fastcall CLIENTS_FreeClientsFromGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC33020
-void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
+void __fastcall CLIENTS_ChangeRoom(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
 {
     if (!pClient || !pClient->pGame || pClient->pRoom == pRoom)
     {
@@ -875,7 +875,7 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
     pClient->nUnitUpdateIndex = 0;
     tUnitUpdatesSort[0].nNextIndex = 0;
     tUnitUpdatesSort[0].nDistance = 0;
-    int32_t v24 = 0;
+    int32_t nInsertIndex = 0;
 
     for (int32_t nCurrentRoom = 0; nCurrentRoom < nNumRooms; nCurrentRoom++)
     {
@@ -897,7 +897,7 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
             }
 
             int32_t nNextIndex = tUnitUpdatesSort[0].nNextIndex;
-            int32_t v20 = 0;
+            int32_t nPreviousIndex = 0;
             if (tUnitUpdatesSort[0].nNextIndex)
             {
                 nNextIndex = tUnitUpdatesSort[0].nNextIndex;
@@ -905,7 +905,7 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
                 {
                     if (nManhattanDistance <= tUnitUpdatesSort[nNextIndex].nDistance)
                         break;
-                    v20 = nNextIndex;
+                    nPreviousIndex = nNextIndex;
                     nNextIndex = tUnitUpdatesSort[nNextIndex].nNextIndex;
                 }
                 while (nNextIndex);
@@ -923,12 +923,12 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
                     }
                     while (tUnitUpdatesSort[nNextIndex].nNextIndex);
                 }
-                int32_t v23 = nLastIndex;
-                v24 = tUnitUpdatesSort[nLastIndex].nNextIndex;
+                int32_t nPreviousTailIndex = nLastIndex;
+                nInsertIndex = tUnitUpdatesSort[nLastIndex].nNextIndex;
 
                 if (nUnitUpdateIndex)
                 {
-                    if (nManhattanDistance >= tUnitUpdatesSort[v24].nDistance)
+                    if (nManhattanDistance >= tUnitUpdatesSort[nInsertIndex].nDistance)
                     {
                         continue;
                     }
@@ -936,42 +936,42 @@ void __fastcall CLIENTS_RefreshUnitsUpdateList(D2ClientStrc* pClient, uint32_t n
 
                 if (nUnitUpdateIndex == 1)
                 {
-                    tUnitUpdatesSort[v23].nNextIndex = 0;
+                    tUnitUpdatesSort[nPreviousTailIndex].nNextIndex = 0;
                     nNextIndex = tUnitUpdatesSort[0].nNextIndex;
                     nCurrentMaxManhattanDistance = nManhattanDistance;
                 }
                 else
                 {
-                    nCurrentMaxManhattanDistance = tUnitUpdatesSort[v23].nDistance;
-                    tUnitUpdatesSort[v23].nNextIndex = 0;
+                    nCurrentMaxManhattanDistance = tUnitUpdatesSort[nPreviousTailIndex].nDistance;
+                    tUnitUpdatesSort[nPreviousTailIndex].nNextIndex = 0;
                     nNextIndex = tUnitUpdatesSort[0].nNextIndex;
                 }
             }
             else
             {
-                v24 = nUnitUpdateIndex;
+                nInsertIndex = nUnitUpdateIndex;
                 pClient->nUnitUpdateIndex = nUnitUpdateIndex + 1;
             }
 
-            if (v20 || nManhattanDistance >= tUnitUpdatesSort[0].nDistance)
+            if (nPreviousIndex || nManhattanDistance >= tUnitUpdatesSort[0].nDistance)
             {
-                tUnitUpdatesSort[v24].nNextIndex = tUnitUpdatesSort[v20].nNextIndex;
-                tUnitUpdatesSort[v20].nNextIndex = v24;
+                tUnitUpdatesSort[nInsertIndex].nNextIndex = tUnitUpdatesSort[nPreviousIndex].nNextIndex;
+                tUnitUpdatesSort[nPreviousIndex].nNextIndex = nInsertIndex;
             }
             else
             {
                 if (pClient->nUnitUpdateIndex != 1)
                 {
-                    tUnitUpdatesSort[v24].nNextIndex = nNextIndex;
-                    tUnitUpdatesSort[v24].pUnit = tUnitUpdatesSort[0].pUnit;
-                    tUnitUpdatesSort[v24].nDistance = tUnitUpdatesSort[0].nDistance;
+                    tUnitUpdatesSort[nInsertIndex].nNextIndex = nNextIndex;
+                    tUnitUpdatesSort[nInsertIndex].pUnit = tUnitUpdatesSort[0].pUnit;
+                    tUnitUpdatesSort[nInsertIndex].nDistance = tUnitUpdatesSort[0].nDistance;
                 }
-                tUnitUpdatesSort[0].nNextIndex = v24;
-                v24 = 0;
+                tUnitUpdatesSort[0].nNextIndex = nInsertIndex;
+                nInsertIndex = 0;
             }
 
-            tUnitUpdatesSort[v24].nDistance = nManhattanDistance;
-            tUnitUpdatesSort[v24].pUnit = pRoomUnit;
+            tUnitUpdatesSort[nInsertIndex].nDistance = nManhattanDistance;
+            tUnitUpdatesSort[nInsertIndex].pUnit = pRoomUnit;
             if (nManhattanDistance > nCurrentMaxManhattanDistance)
             {
                 nCurrentMaxManhattanDistance = nManhattanDistance;
@@ -1046,7 +1046,7 @@ void __fastcall CLIENTS_SetUnitsUpdateList(D2ClientStrc* pClient, D2ClientUnitUp
 }
 
 //D2Game.0x6FC33670
-void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall CLIENTS_SynchronizePlayer(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     if (!pGame || !pClient)
     {
@@ -1082,7 +1082,7 @@ void __fastcall sub_6FC33670(D2GameStrc* pGame, D2ClientStrc* pClient)
             QUESTS_ChangeLevel(pGame, nSourceLevelId, nDestinationLevelId, pPlayer);
             SUNITPROXY_UpdateNpcsOnActChange(pGame, pPlayer, nSourceLevelId, nDestinationLevelId);
         }
-        sub_6FC33020(pClient, pRoom);
+        CLIENTS_ChangeRoom(pClient, pRoom);
     }
 
     ARENA_SynchronizeWithClients(pGame, pClient);
@@ -1113,7 +1113,7 @@ void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc*
 
     if (pRoom != pClient->pRoom)
     {
-        sub_6FC33020(pClient, pRoom);
+        CLIENTS_ChangeRoom(pClient, pRoom);
     }
 
     pClient->pRoom = pRoom;
@@ -1154,7 +1154,7 @@ void __fastcall CLIENTS_SetActNo(D2ClientStrc* pClient, uint8_t nAct)
 }
 
 //D2Game.0x6FC33910
-void __fastcall sub_6FC33910(D2ClientStrc* pClient)
+void __fastcall CLIENTS_EnableCharacterUnlock(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
@@ -1170,11 +1170,11 @@ uint32_t __fastcall D2GAME_GetSaveChecksumFromClient_6FC33940(D2ClientStrc* pCli
 }
 
 //D2Game.0x6FC33970
-void __fastcall D2GAME_SetSaveFileChecksum_6FC33970(D2ClientStrc* pClient, uint32_t a2)
+void __fastcall D2GAME_SetSaveFileChecksum_6FC33970(D2ClientStrc* pClient, uint32_t nSaveChecksum)
 {
     D2_ASSERT(pClient);
 
-    pClient->nSaveChecksum = a2;
+    pClient->nSaveChecksum = nSaveChecksum;
 }
 
 //D2Game.0x6FC339A0
@@ -1310,7 +1310,7 @@ char* __fastcall CLIENTS_GetName(D2ClientStrc* pClient)
 
 //D2Game.0x6FC33C10
 //note: Mentor uses the name D2CLIENTS_TestOtherClients
-uint32_t __fastcall sub_6FC33C10(D2ClientStrc* pClient)
+uint32_t __fastcall CLIENTS_HasArenaFlag(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
@@ -1341,14 +1341,14 @@ BOOL __fastcall CLIENTS_CheckState(int32_t nClientId, D2ClientState nExpectedCli
 }
 
 //D2Game.0x6FC33CD0
-void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
+void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t nClientTick, int32_t nTickAdjustment)
 {
     if (D2GameStrc* pGame = GAME_GetGameByClientId(nClientId))
     {
         if (D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId))
         {
             DWORD nTickCount = GetTickCount();
-            uint32_t nPing = nTickCount - a2 - arg_0;
+            uint32_t nPing = nTickCount - nClientTick - nTickAdjustment;
             pClient->aPingHistory[pClient->dwPingsCount % std::size(pClient->aPingHistory)] = nPing;
             
             uint64_t nPingsSum = 0;
@@ -1378,7 +1378,7 @@ void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
             {
                 uint32_t nPingsSum = dwPingsCount * pClient->nPingMovingAverage;
                 ++pClient->dwPingsCount;
-                pClient->nPingMovingAverage = (nPingsSum + nTickCount - a2 - arg_0) / pClient->dwPingsCount;
+                pClient->nPingMovingAverage = (nPingsSum + nTickCount - nClientTick - nTickAdjustment) / pClient->dwPingsCount;
             }
             D2GAME_PACKETS_SendPacket0x8F_6FC3FA90(pClient);
             pClient->dwLastPacketTick = nTickCount;
@@ -1388,7 +1388,7 @@ void __fastcall CLIENTS_UpdatePing(int32_t nClientId, int32_t a2, int32_t arg_0)
 }
 
 //D2Game.0x6FC33EA0
-int32_t __fastcall sub_6FC33EA0(int32_t nClientId, char* szName)
+int32_t __fastcall CLIENTS_GetNameById(int32_t nClientId, char* szName)
 {
     if (!gbClientListInitialized_6FD447E8)
     {
@@ -1446,7 +1446,7 @@ int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName)
 }
 
 //D2Game.0x6FC33F90
-int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName)
+int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szGameName)
 {
     int32_t result = 1;
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
@@ -1478,7 +1478,7 @@ int32_t __fastcall sub_6FC33F90(const char* szName, char* szGameName)
 }
 
 //D2Game.0x6FC34020
-int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t a6, int32_t a7)
+int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t nUnused1, int32_t nUnused2)
 {
     if (!gbClientListInitialized_6FD447E8)
     {
@@ -1599,7 +1599,7 @@ void __fastcall D2GAME_SetSaveLoadComplete_6FC34300(D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC34350
-int32_t __fastcall CLIENT_GetSaveHeader_6FC34350(D2ClientStrc* pClient)
+int32_t __fastcall CLIENTS_HasLoadedSave(D2ClientStrc* pClient)
 {
     D2_ASSERT(pClient);
 
@@ -1669,9 +1669,9 @@ void __fastcall CLIENTS_GetGuildTag(D2ClientStrc* pClient, int32_t* pTag)
 }
 
 //D2Game.0x6FC344D0
-void __fastcall CLIENTS_SetGuildTag(D2ClientStrc* pClient, int32_t* a2)
+void __fastcall CLIENTS_SetGuildTag(D2ClientStrc* pClient, int32_t* pTag)
 {
-    pClient->tGuildInfo.szGuildTag = *a2;
+    pClient->tGuildInfo.szGuildTag = *pTag;
 }
 
 //D2Game.0x6FC344E0
@@ -1818,13 +1818,13 @@ void __fastcall D2GAME_GetCharSaveTransactionToken_6FC346A0(D2ClientStrc* pClien
 }
 
 //D2Game.0x6FC346B0
-void __fastcall D2GAME_GetRealmIdFromClient_6FC346B0(D2ClientStrc* pClient, D2ClientInfoStrc** ppClientInfo)
+void __fastcall CLIENTS_GetClientInfo(D2ClientStrc* pClient, D2ClientInfoStrc** ppClientInfo)
 {
     *ppClientInfo = pClient->pClientInfo;
 }
 
 //D2Game.0x6FC346C0
-void __fastcall D2GAME_SetClientsRealmId_6FC346C0(D2ClientStrc* pClient, D2ClientInfoStrc* pClientInfo)
+void __fastcall CLIENTS_SetClientInfo(D2ClientStrc* pClient, D2ClientInfoStrc* pClientInfo)
 {
     pClient->pClientInfo = pClientInfo;
 }

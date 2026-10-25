@@ -154,7 +154,7 @@ void __fastcall SUNIT_RemoveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
     }
     case UNIT_MONSTER:
     {
-        D2GAME_TARGETS_Last_6FC40380(pGame, pUnit);
+        TARGETS_RemoveUnitNode(pGame, pUnit);
 
         if (pUnit->pDynamicPath)
         {
@@ -508,7 +508,7 @@ D2UnitStrc* __fastcall SUNIT_AllocUnitData(int32_t nUnitType, int32_t nClassId, 
 
         if (nMode != PLRMODE_DEAD)
         {
-            D2GAME_TARGETS_First_6FC40170(pGame, pUnit, 0);
+            TARGETS_AllocPlayerNode(pGame, pUnit, 0);
         }
         break;
     }
@@ -1377,7 +1377,7 @@ D2UnitStrc* __fastcall SUNIT_GetPortalOwner(D2GameStrc* pGame, D2UnitStrc* pPort
         D2ActiveRoomStrc* pRoom = DUNGEON_StreamRoomAtCoords(pGame->pAct[nActNo], nX, nY);
         if (pRoom)
         {
-            sub_6FC385A0(pGame, pRoom);
+            GAME_ActivateRoom(pGame, pRoom);
         }
     }
 
@@ -1765,7 +1765,7 @@ void __fastcall D2GAME_SKILLS_RewindSkillEx_6FCBD260(D2GameStrc* pGame, D2UnitSt
 void __fastcall SUNIT_ResetRecurringModeChangeEvent(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_MODECHANGE, 0);
-    sub_6FC35570(pGame, pUnit, EVENTTYPE_MODECHANGE, 0, 0);
+    EVENT_SetRecurringEvent(pGame, pUnit, EVENTTYPE_MODECHANGE, 0, 0);
 }
 
 //D2Game.0x6FCBD3D0
@@ -2297,7 +2297,7 @@ int32_t __fastcall SUNIT_EventClearTeleportCoordinates(D2GameStrc* pGame, D2Unit
 
     pPlayerData->nLastTeleportX = 0;
     pPlayerData->nLastTeleportY = 0;
-    sub_6FC349B0(pGame, pPlayer, EVENTTYPE_REMOVESKILLCOOLDOWN, SUNIT_EventClearTeleportCoordinates);
+    EVENT_DeleteTimersByCallback(pGame, pPlayer, EVENTTYPE_REMOVESKILLCOOLDOWN, SUNIT_EventClearTeleportCoordinates);
     return 1;
 }
 

@@ -930,7 +930,7 @@ void __fastcall PLAYERPETS_UpdatePetStates(D2GameStrc* pGame, D2UnitStrc* pPlaye
                         D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                         if (pPet)
                         {
-                            sub_6FC3E200(pClient, pPet);
+                            SCMD_SendUnitLifeAndPositionUpdate(pClient, pPet);
                         }
                     }
                 }

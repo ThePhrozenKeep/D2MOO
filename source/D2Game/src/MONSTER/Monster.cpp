@@ -369,7 +369,7 @@ void __fastcall MONSTER_Free(D2GameStrc* pGame, D2UnitStrc* pMonster)
         MONSTERAI_FreeMonsterInteract(pGame, pMonster->pMonsterData->pMonInteract);
     }
 
-    sub_6FC349F0(pGame, pMonster);
+    EVENT_FreeUnitTimers(pGame, pMonster);
 }
 
 //D2Game.0x6FC60CD0

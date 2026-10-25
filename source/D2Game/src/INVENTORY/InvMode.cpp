@@ -197,7 +197,7 @@ int32_t __fastcall sub_6FC410E0(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
     {
         if (pPlayer == pClientPlayer || pItem && pItem->dwAnimMode == 1)
         {
-            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_BROKEN, ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__));
+            SCMD_SendItemFlagUpdate(pClient, pPlayer, pItem, IFLAG_BROKEN, ITEMS_CheckItemFlag(pItem, IFLAG_BROKEN, __LINE__, __FILE__));
             return 1;
         }
     }
@@ -205,7 +205,7 @@ int32_t __fastcall sub_6FC410E0(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitSt
     {
         if (pPlayer == pClientPlayer || pItem && pItem->dwAnimMode == 1)
         {
-            sub_6FC3EFC0(pClient, pPlayer, pItem, IFLAG_REPAIRED, ITEMS_CheckItemFlag(pItem, IFLAG_REPAIRED, __LINE__, __FILE__));
+            SCMD_SendItemFlagUpdate(pClient, pPlayer, pItem, IFLAG_REPAIRED, ITEMS_CheckItemFlag(pItem, IFLAG_REPAIRED, __LINE__, __FILE__));
             return 1;
         }
     }

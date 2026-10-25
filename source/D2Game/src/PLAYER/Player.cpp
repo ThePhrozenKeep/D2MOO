@@ -137,7 +137,7 @@ void __fastcall PLAYER_Destroy(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         CHAT_FreeHoverMsg(pGame->pMemoryPool, pPlayer->pHoverText);
     }
 
-    sub_6FC349F0(pGame, pPlayer);
+    EVENT_FreeUnitTimers(pGame, pPlayer);
 }
 
 //D2Game.0x6FC7B750
@@ -421,14 +421,14 @@ void __fastcall PLAYER_CloseInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit)
     {
         D2GAME_NPC_ResetInteract_6FCCB4D0(pGame, pUnit, pInteractUnit);
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-        sub_6FC3F340(pClient, 0x62u, UNIT_MONSTER, pInteractUnit->dwUnitId, 0);
+        SCMD_SendInteractionTarget(pClient, 0x62u, UNIT_MONSTER, pInteractUnit->dwUnitId, 0);
         return;
     }
     case UNIT_OBJECT:
     {
         OBJMODE_CloseObjectInteraction(pGame, pUnit, pInteractUnit);
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-        sub_6FC3F340(pClient, 0x62u, UNIT_OBJECT, pInteractUnit->dwUnitId, 0);
+        SCMD_SendInteractionTarget(pClient, 0x62u, UNIT_OBJECT, pInteractUnit->dwUnitId, 0);
         return;
     }
     case UNIT_ITEM:
@@ -437,14 +437,14 @@ void __fastcall PLAYER_CloseInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             PLRTRADE_CloseCubeInteraction(pGame, pUnit);
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-            sub_6FC3F340(pClient, 0x62u, UNIT_ITEM, pInteractUnit->dwUnitId, 0);
+            SCMD_SendInteractionTarget(pClient, 0x62u, UNIT_ITEM, pInteractUnit->dwUnitId, 0);
         }
         return;
     }
     default:
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-        sub_6FC3F340(pClient, 0x62u, 6, 0, 0);
+        SCMD_SendInteractionTarget(pClient, 0x62u, 6, 0, 0);
         return;
     }
     }

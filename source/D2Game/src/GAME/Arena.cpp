@@ -183,7 +183,7 @@ void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pC
         }
     }
 
-    if (!sub_6FC33C10(pClient))
+    if (!CLIENTS_HasArenaFlag(pClient))
     {
         return;
     }

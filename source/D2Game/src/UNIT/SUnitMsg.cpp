@@ -51,7 +51,7 @@ void __fastcall SUNITMSG_SendUnitToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     {
     case UNIT_PLAYER:
     {
-        sub_6FC3D1F0(pClient, pUnit->dwUnitId, (uint8_t)pUnit->dwClassId, pUnit->pPlayerData->szName, coords.nX, coords.nY);
+        SCMD_SendPlayerSpawnAndPartyRoster(pClient, pUnit->dwUnitId, (uint8_t)pUnit->dwClassId, pUnit->pPlayerData->szName, coords.nX, coords.nY);
         break;
     }
     case UNIT_ITEM:
@@ -462,7 +462,7 @@ void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pC
         packet2C.dwUnitGUID = pPlayer->dwUnitId;
         packet2C.nUnitType = pPlayer->dwUnitType;
         packet2C.nSoundEvent = pPlayer->nUpdateType;
-        sub_6FC3F3F0(pClient, &packet2C);
+        SCMD_SendPacket0x2C(pClient, &packet2C);
     }
 }
 
@@ -694,11 +694,11 @@ void __fastcall SUNITMSG_SendQueuedMessages(D2UnitStrc* pUnit, D2ClientStrc* pCl
             break;
 
         case 0x99:
-            sub_6FC3F0C0(pClient, pUnit->dwUnitType, pUnit->dwUnitId, *(uint8_t*)(i + 11), *(uint32_t*)(i + 12), *(uint16_t*)(i + 8), *(uint8_t*)(i + 16), *(uint8_t*)(i + 10), 1);
+            SCMD_SendSkillUseOnUnit(pClient, pUnit->dwUnitType, pUnit->dwUnitId, *(uint8_t*)(i + 11), *(uint32_t*)(i + 12), *(uint16_t*)(i + 8), *(uint8_t*)(i + 16), *(uint8_t*)(i + 10), 1);
             break;
 
         case 0x9A:
-            sub_6FC3F060(pClient, pUnit->dwUnitType, pUnit->dwUnitId, *(uint16_t*)(i + 12), *(uint16_t*)(i + 14), *(uint16_t*)(i + 8), *(uint8_t*)(i + 16), *(uint8_t*)(i + 10), 1);
+            SCMD_SendUnitActionAtPosition(pClient, pUnit->dwUnitType, pUnit->dwUnitId, *(uint16_t*)(i + 12), *(uint16_t*)(i + 14), *(uint16_t*)(i + 8), *(uint8_t*)(i + 16), *(uint8_t*)(i + 10), 1);
             break;
 
         case 0x9E:

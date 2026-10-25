@@ -609,7 +609,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
                     gpD2EventCallbackTable_6FD45830->pfRelockDatabaseCharacter(&pClientInfo, szCharName, szAccountName);
                 }
 
-                D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
+                CLIENTS_SetClientInfo(pClient, pClientInfo);
                 return FALSE;
             }
         }
@@ -617,7 +617,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
         GAME_LogMessage(7, "[SAVE] *** %s len:%d checksums matched but data didn't ***", szCharName, nFileSize);
     }
 
-    D2GAME_SetClientsRealmId_6FC346C0(pClient, pClientInfo);
+    CLIENTS_SetClientInfo(pClient, pClientInfo);
     D2GAME_SetSaveFileChecksum_6FC33970(pClient, nCalculatedChecksum);
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfSaveDatabaseCharacter)
@@ -664,7 +664,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
     int32_t nCharSaveTransactionToken = 0;
     D2GAME_GetCharSaveTransactionToken_6FC346A0(pClient, &nCharSaveTransactionToken);
     D2ClientInfoStrc* pClientInfo = nullptr;
-    D2GAME_GetRealmIdFromClient_6FC346B0(pClient, &pClientInfo);
+    CLIENTS_GetClientInfo(pClient, &pClientInfo);
 
     uint8_t pSaveData[8192] = {};
     uint32_t nFileSize = 0;
@@ -1090,7 +1090,7 @@ int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pCl
             }
         }
 
-        sub_6FC3DCA0(pClient, pUnit);
+        SCMD_SendSkillList(pClient, pUnit);
 
         *pSkillCount = SKILLS_GetPlayerSkillCount(nClassId) + 2;
         
@@ -2188,7 +2188,7 @@ int32_t __fastcall D2GAME_SAVE_ProcessSaveFile_6FC8C0C0(D2GameStrc* pGame, D2Cli
 //D2Game.0x6FC8C890
 int32_t __fastcall PLRSAVE_CreateNewPlayer(D2GameStrc* pGame, D2ClientStrc* pClient, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
-    sub_6FC32220(pClient);
+    CLIENTS_SetPlayerUnitAlive(pClient);
     D2UnitStrc* pPlayer = SUNIT_AllocUnitData(UNIT_PLAYER, CLIENTS_GetClassId(pClient), 0, 0, pGame, nullptr, 0, 0, 0);
     CLIENTS_SetPlayerInClient(pClient, pPlayer);
     SUNIT_InitClientInPlayerData(pPlayer, pClient);

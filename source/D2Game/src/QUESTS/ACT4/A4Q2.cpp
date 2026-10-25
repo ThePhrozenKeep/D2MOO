@@ -739,7 +739,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 			return true;
 		}
 
-		sub_6FC37FB0(pGame, nullptr);
+		GAME_EndGameForConnectedClient(pGame, nullptr);
 		return true;
 	}
 
@@ -748,7 +748,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 		if (pQuestDataEx->dwTickCount + 75000 < GetTickCount() && !pQuestDataEx->bClientsSaved)
 		{
 			pQuestDataEx->bClientsSaved = 1;
-			sub_6FC37B10(pGame);
+			GAME_SaveAndSendClientSaves(pGame);
 		}
 		return false;
 	}

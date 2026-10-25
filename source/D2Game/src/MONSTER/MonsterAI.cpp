@@ -624,7 +624,7 @@ void __fastcall D2GAME_MONSTERAI_Last_6FC61F70(D2GameStrc* pGame, D2UnitStrc* pM
     {
         D2InteractInfoStrc* pNext = pInteractInfo->pNext;
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pInteractInfo->pUnit, __FILE__, __LINE__);
-        sub_6FC3F340(pClient, 0x62u, UNIT_MONSTER, pMonster->dwUnitId, 0);
+        SCMD_SendInteractionTarget(pClient, 0x62u, UNIT_MONSTER, pMonster->dwUnitId, 0);
         SUNIT_ResetInteractInfo(pInteractInfo->pUnit);
 
         if (pCallback)

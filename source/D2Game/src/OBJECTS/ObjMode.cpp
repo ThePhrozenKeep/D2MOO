@@ -650,7 +650,7 @@ void __fastcall OBJMODE_SendObjectModeAndShrineUpdate(D2UnitStrc* pUnit, D2Clien
             int32_t nOperateGUID = pUnit->pObjectData->dwOperateGUID;
             if (nOperateGUID)
             {
-                sub_6FC3F060(pClient, 2u, pUnit->dwUnitId, 0, 0, nOperateGUID - 1, 0, nCode, 0);
+                SCMD_SendUnitActionAtPosition(pClient, 2u, pUnit->dwUnitId, 0, 0, nOperateGUID - 1, 0, nCode, 0);
             }
         }
     }

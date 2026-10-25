@@ -2167,7 +2167,7 @@ void __fastcall OBJECTS_FreeHoverMessage(D2GameStrc* pGame, D2UnitStrc* pObject)
     }
 
     D2_FREE_POOL(pGame->pMemoryPool, pTimerArg);
-    sub_6FC349F0(pGame, pObject);
+    EVENT_FreeUnitTimers(pGame, pObject);
 }
 
 //D2Game.0x6FC74520

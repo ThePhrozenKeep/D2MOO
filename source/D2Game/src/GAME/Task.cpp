@@ -214,9 +214,9 @@ BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPr
 }
 
 //D2Game.0x6FC40930 (#10043)
-int32_t __fastcall TASK_DequeueGame(int8_t a1, int32_t* pOutBalanceTaskType)
+int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, int32_t* pOutBalanceTaskType)
 {
-    const int8_t nIndex = a1 & 31;
+    const int8_t nIndex = nTaskNumber & 31;
     int32_t nResult = 100;
 
     *pOutBalanceTaskType = 0;
@@ -343,7 +343,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
     if (D2GameStrc* pGame = GAME_LockGame(nGameHashKey))
     {
         GAME_UpdateProgress(pGame);
-        sub_6FC39270(pGame, 0);
+        GAME_SendAllClientPackets(pGame, 0);
         const int32_t v7 = FOG_10055_GetSyncTime();
         const int32_t nSyncTimer = pGame->nSyncTimer;
         if (nSyncTimer == 1 || v7 - nSyncTimer > 1800)// I/O timeout
@@ -352,8 +352,8 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
             for (D2ClientStrc* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pNextClient)
             {
                 pNextClient = pCurrentClient->pNext;
-                sub_6FC3C690(pCurrentClient->dwClientId);
-                sub_6FC3C6B0(pCurrentClient->dwClientId);
+                D2GAME_PACKETS_SendGameLeft(pCurrentClient->dwClientId);
+                D2GAME_PACKETS_SendGameExit(pCurrentClient->dwClientId);
                 CLIENTS_RemoveClientFromGame(pGame, pCurrentClient->dwClientId, 0);
             }
             GAME_LogMessage(6, "[SERVER]  Deleting game from sSrvTaskProcessGame(), I/O timeout");
@@ -459,7 +459,7 @@ void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink)
 
 
 
-void __stdcall D2Game_10034_Return(int a1)
+void __stdcall D2Game_10034_Return(int nUnused)
 {
 }
 

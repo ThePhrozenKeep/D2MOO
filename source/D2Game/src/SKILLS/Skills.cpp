@@ -3013,7 +3013,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
     D2ActiveRoomStrc* pDestinationRoom = pRoom;
 
-    sub_6FC385A0(pGame, pRoom);
+    GAME_ActivateRoom(pGame, pRoom);
 
     if (!pRoom)
     {
