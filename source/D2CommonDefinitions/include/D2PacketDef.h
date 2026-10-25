@@ -212,37 +212,44 @@ struct D2GSPacketClt19		//size of 0x05
 struct D2GSPacketClt1A		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nItemGUID;			//0x01
+	int32_t nBodyLoc;			//0x05
 };
 
 struct D2GSPacketClt1B		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nItemGUID;			//0x01
+	int32_t nBodyLoc;			//0x05
 };
 
 struct D2GSPacketClt1C		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[2];			//0x01
+	uint16_t nBodyLoc;			//0x01
 };
 
 struct D2GSPacketClt1D		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nItemGUID;			//0x01
+	int32_t nBodyLoc;			//0x05
 };
 
 struct D2GSPacketClt1E		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nItemGUID;			//0x01
+	int32_t nBodyLoc;			//0x05
 };
 
 struct D2GSPacketClt1F		//size of 0x11
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[16];		//0x01
+	int32_t nCursorItemGUID;	//0x01
+	int32_t nInventoryItemGUID;	//0x05
+	int32_t nPosX;				//0x09
+	int32_t nPosY;				//0x0D
 };
 
 struct D2GSPacketClt20		//size of 0x0D
@@ -256,32 +263,34 @@ struct D2GSPacketClt20		//size of 0x0D
 struct D2GSPacketClt21		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nCursorItemGUID;	//0x01
+	int32_t nTargetItemGUID;	//0x05
 };
 
 struct D2GSPacketClt22		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nItemGUID;			//0x01
 };
 
 struct D2GSPacketClt23		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01;			//0x01
+	int32_t nCursorItemGUID;	//0x01
 	int32_t nBeltSlotId;		//0x05
 };
 
 struct D2GSPacketClt24		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nItemGUID;			//0x01
 };
 
 struct D2GSPacketClt25		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nCursorItemGUID;	//0x01
+	int32_t nBeltItemGUID;		//0x05
 };
 
 struct D2GSPacketClt26		//size of 0x0D
@@ -302,7 +311,8 @@ struct D2GSPacketClt27		//size of 0x09
 struct D2GSPacketClt28		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nCursorItemGUID;	//0x01
+	int32_t nTargetItemGUID;	//0x05
 };
 
 struct D2GSPacketClt29		//size of 0x09
@@ -335,19 +345,22 @@ struct D2GSPacketClt2E		//size of 0x03
 struct D2GSPacketClt2F		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nUnitType;			//0x01
+	int32_t nUnitGUID;			//0x05
 };
 
 struct D2GSPacketClt30		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t unk0x01;			//0x01
+	int32_t nUnitGUID;			//0x05
 };
 
 struct D2GSPacketClt31		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	int32_t unk0x01[2];			//0x01
+	int32_t nNpcGUID;			//0x01
+	int32_t nMessageId;			//0x05
 };
 
 struct D2GSPacketClt32		//size of 0x11
@@ -376,25 +389,29 @@ struct D2GSPacketClt33		//size of 0x11
 struct D2GSPacketClt34		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nNpcGUID;			//0x01
 };
 
 struct D2GSPacketClt35		//size of 0x11
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[16];		//0x01
+	int32_t nNpcGUID;			//0x01
+	int32_t nItemGUID;			//0x05
+	int32_t unk0x09;			//0x09
+	int32_t unk0x0D;			//0x0D
 };
 
 struct D2GSPacketClt36		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nNpcGUID;			//0x01
+	int32_t nHirelingId;		//0x05
 };
 
 struct D2GSPacketClt37		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nItemGUID;			//0x01
 };
 
 struct D2GSPacketClt38		//size of 0x0D
@@ -440,13 +457,13 @@ struct D2GSPacketClt3D		//size of 0x05
 struct D2GSPacketClt3E		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nItemGUID;			//0x01
 };
 
 struct D2GSPacketClt3F		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[2];			//0x01
+	uint16_t nSoundId;			//0x01
 };
 
 struct D2GSPacketClt40		//size of 0x01
@@ -489,13 +506,17 @@ struct D2GSPacketClt45		//size of 0x09
 struct D2GSPacketClt46		//size of 0x0D
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[12];		//0x01
+	int32_t nMercGUID;			//0x01
+	int32_t nUnitGUID;			//0x05
+	int32_t nUnitType;			//0x09
 };
 
 struct D2GSPacketClt47		//size of 0x0D
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[12];		//0x01
+	int32_t nMercGUID;			//0x01
+	int32_t nPosX;				//0x05
+	int32_t nPosY;				//0x09
 };
 
 struct D2GSPacketClt48		//size of 0x01
@@ -515,19 +536,20 @@ struct D2GSPacketClt49		//size of 0x09
 struct D2GSPacketClt4B		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nUnitType;			//0x01
+	int32_t nUnitGUID;			//0x05
 };
 
 struct D2GSPacketClt4C		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nItemGUID;			//0x01
 };
 
 struct D2GSPacketClt4D		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[2];			//0x01
+	uint16_t nMonStatsId;		//0x01
 };
 
 //Unused: 0x4E
@@ -550,7 +572,8 @@ struct D2GSPacketClt4F		//size of 0x07
 struct D2GSPacketClt50		//size of 0x09
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[8];			//0x01
+	int32_t nUnitGUID;			//0x01
+	int32_t nGold;				//0x05
 };
 
 struct D2GSPacketClt51
@@ -625,13 +648,13 @@ struct D2GSPacketClt60		//size of 0x01
 struct D2GSPacketClt61		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[2];			//0x01
+	uint16_t nBodyLoc;			//0x01
 };
 
 struct D2GSPacketClt62		//size of 0x05
 {
 	uint8_t nHeader;			//0x00
-	uint8_t unk0x01[4];			//0x01
+	int32_t nNpcGUID;			//0x01
 };
 
 struct D2GSPacketClt63		//size of 0x05
