@@ -59,7 +59,7 @@ struct D2WinTextBoxStrc
 
 
 //D2Win.0x6F8AFAA0
-D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int nX, int nY, int nWidth, int nHeight, int nInsetX, int nInsetY, D2CellFileStrc* pCellFile, int(__stdcall* a8)(SMSGHANDLER_PARAMS*), unsigned int dwTextBoxFlags, int pFontInfo, int pScrollBarRect);
+D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int nX, int nY, int nWidth, int nHeight, int nInsetX, int nInsetY, D2CellFileStrc* pCellFile, int(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), unsigned int dwTextBoxFlags, int pFontInfo, int pScrollBarRect);
 //D2Win.0x6F8AFCC0
 void __fastcall sub_6F8AFCC0(Font nFontSize);
 //D2Win.0x6F8AFDC0
@@ -129,7 +129,7 @@ int __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int nCurrentStep);
 //D2Win.0x6F8B1A30
 int __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLinkedTextBox);
 //D2Win.0x6F8B1A80
-int __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(SMSGHANDLER_PARAMS*));
+int __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* pfScrollCallback)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1AD0
 void __fastcall D2Win_10204(D2WinTextBoxStrc* pTextBox, int nPosition);
 //D2Win.0x6F8B1B20
