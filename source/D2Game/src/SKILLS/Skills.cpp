@@ -895,7 +895,7 @@ D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUni
 {
     D2_6FD106F0_Strc arg = {};
 
-    arg.pUnit = nullptr;
+    arg.pTarget = nullptr;
     arg.nDistanceSquared = INT_MAX;
     arg.nX = CLIENTS_GetUnitX(pUnit);
     arg.nY = CLIENTS_GetUnitY(pUnit);
@@ -903,7 +903,7 @@ D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUni
 
     sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, 0x8783u, sub_6FD106F0, &arg, 0, __FILE__, __LINE__);
 
-    return arg.pUnit;
+    return arg.pTarget;
 }
 
 //D2Game.0x6FD106F0
@@ -920,7 +920,7 @@ int32_t __fastcall sub_6FD106F0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
         if (nDistance < pArgs->nDistanceSquared)
         {
             pArgs->nDistanceSquared = nDistance;
-            pArgs->pUnit = pUnit;
+            pArgs->pTarget = pUnit;
         }
 
         return 1;

@@ -70,7 +70,8 @@ struct D2ConfigStrc
 	uint8_t bAssassin;
 #endif
 	uint8_t bInvincible;
-	uint8_t _0082[48];
+	char szAccountName[24];		// written from the Battle.net login screen's account box
+	char szAccountPassword[24];	// and its password box, which is then hashed into nAccountPasswordHash
 	char szName[24];
 	char szRealm[24];
 	D2CharacterPreviewInfoStrc tCharPreviewInfo;
@@ -82,7 +83,7 @@ struct D2ConfigStrc
 		uint32_t dwCTemp;
 		struct
 		{
-			uint8_t nUnk;
+			uint8_t nArenaTemplate;			// passed to the client's arena template setter
 			uint8_t nCharacterClassId;		// D2C_PlayerClasses
 			uint16_t nCharacterSaveFlags;	// D2PackedClientSaveFlags
 		} unpackedCTemp;

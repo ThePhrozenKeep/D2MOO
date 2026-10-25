@@ -7,17 +7,17 @@
 //Countess
 struct D2Act1Quest5Strc						//sizeof 0x120
 {
-	int nUnitGUIDs1[12];					//0x00 TODO: Which UnitGUIDs?
-	short nUnitCount1;						//0x30
+	int nAcknowledgedDialoguePlayerGUIDs[12];	//0x00 players who acknowledged the quest's scroll message (ScrollMessage callback)
+	short nAcknowledgedDialoguePlayerCount;	//0x30
 	uint8_t pad0x32[2];						//0x32
-	int nUnitGUIDs2[12];					//0x34 TODO: Which UnitGUIDs?
-	short nUnitCount2;						//0x64
+	int nPendingDialoguePlayerGUIDs[12];	//0x34 players the message is still pending for
+	short nPendingDialoguePlayerCount;		//0x64
 	uint8_t pad0x66[2];						//0x66
-	int nObjectGUIDs[8];					//0x68 TODO: Which objects?
-	uint16_t nObjectCount;					//0x88
+	int nCountessChestGUIDs[8];				//0x68 the chests in the Countess tower
+	uint16_t nCountessChestCount;			//0x88
 	uint8_t pad0x8A[2];						//0x8A
 	D2QuestGUIDStrc tPlayerGUIDs;					//0x8C
-	D2CoordStrc pCoord;						//0x110
+	D2CoordStrc tCountessDeathCoords;		//0x110
 	uint8_t bCountessKilled;				//0x118
 	uint8_t bDeathMissilesCreated;			//0x119
 	uint8_t bTriggerSeqFilter;				//0x11A

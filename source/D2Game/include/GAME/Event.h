@@ -63,8 +63,8 @@ struct D2EventTimerStrc
 	int32_t dwEventCustomParam;
 	D2EventTimerStrc* pNextQueuedTimer;
 	D2EventTimerStrc* pPreviousQueuedTimer;
-	D2EventTimerStrc* pNext;
-	D2EventTimerStrc* pPrevious;
+	D2EventTimerStrc* pNextUnitTimer;
+	D2EventTimerStrc* pPreviousUnitTimer;
 	EventTimerCallback pCallback;
 };
 
@@ -81,7 +81,7 @@ struct D2EventTimerQueueStrc
 	D2EventTimerStrc* pHead[5][64];			// first event per unit type per frame
 	D2EventTimerStrc* pTail[5][64];			// last event per unit type per frame
 	D2EventTimerStrc* pInfinite[5];			// events with no end frame
-	D2EventTimerStrc* pCurrent;
+	D2EventTimerStrc* pNextTimerToExecute;
 	D2EventTimerSlabListStrc* pSlabListHead;
 };
 

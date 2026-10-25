@@ -185,9 +185,9 @@ bool __fastcall ACT1Q5_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 		nUnitId = pPlayer->dwUnitId;
 	}
 
-	for (int32_t i = 0; i < pQuestDataEx->nUnitCount2; ++i)
+	for (int32_t i = 0; i < pQuestDataEx->nPendingDialoguePlayerCount; ++i)
 	{
-		if (pQuestDataEx->nUnitGUIDs2[i] == nUnitId)
+		if (pQuestDataEx->nPendingDialoguePlayerGUIDs[i] == nUnitId)
 		{
 			if (nNpcId == MONSTER_WARRIV1 || nNpcId == MONSTER_GHEED)
 			{
@@ -235,14 +235,14 @@ void __fastcall ACT1Q5_SpawnTowerChestMissiles(D2QuestDataStrc* pQuestData, D2Ac
 
 	D2UnitStrc* pTrapFirebolt = nullptr;
 
-	for (int32_t i = 0; i < pQuestDataEx->nObjectCount; ++i)
+	for (int32_t i = 0; i < pQuestDataEx->nCountessChestCount; ++i)
 	{
-		D2UnitStrc* pObject = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nObjectGUIDs[i]);
+		D2UnitStrc* pObject = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nCountessChestGUIDs[i]);
 		if (pObject)
 		{
 			D2CoordStrc pCoord = {};
-			pCoord.nX = pQuestDataEx->pCoord.nX;
-			pCoord.nY = pQuestDataEx->pCoord.nY;
+			pCoord.nX = pQuestDataEx->tCountessDeathCoords.nX;
+			pCoord.nY = pQuestDataEx->tCountessDeathCoords.nY;
 
 			if (!pTrapFirebolt)
 			{
@@ -271,7 +271,7 @@ void __fastcall ACT1Q5_SpawnTowerChestMissiles(D2QuestDataStrc* pQuestData, D2Ac
 				D2UnitStrc* pMissile = D2GAME_CreateMissile_6FD115E0(pQuestData->pGame, pTrapFirebolt, 0, 1, 332, CLIENTS_GetUnitX(pObject), CLIENTS_GetUnitY(pObject));
 				if (pMissile)
 				{
-					MISSILE_SetTargetX(pMissile, pQuestDataEx->nObjectGUIDs[i]);
+					MISSILE_SetTargetX(pMissile, pQuestDataEx->nCountessChestGUIDs[i]);
 					MISSILE_SetTargetY(pMissile, 0);
 					DUNGEON_ToggleHasPortalFlag(UNITS_GetRoom(pMissile), 0);
 				}
@@ -368,14 +368,14 @@ void __fastcall ACT1Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 		const int32_t nUnitId = pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1;
 
-		for (int32_t i = 0; i < pQuestDataEx->nUnitCount2; ++i)
+		for (int32_t i = 0; i < pQuestDataEx->nPendingDialoguePlayerCount; ++i)
 		{
-			if (pQuestDataEx->nUnitGUIDs2[i] == nUnitId)
+			if (pQuestDataEx->nPendingDialoguePlayerGUIDs[i] == nUnitId)
 			{
-				if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, nUnitId, 1) && pQuestDataEx->nUnitCount1 < 12)
+				if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, nUnitId, 1) && pQuestDataEx->nAcknowledgedDialoguePlayerCount < 12)
 				{
-					pQuestDataEx->nUnitGUIDs1[pQuestDataEx->nUnitCount1] = nUnitId;
-					++pQuestDataEx->nUnitCount1;
+					pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[pQuestDataEx->nAcknowledgedDialoguePlayerCount] = nUnitId;
+					++pQuestDataEx->nAcknowledgedDialoguePlayerCount;
 				}
 				break;
 			}
@@ -388,15 +388,15 @@ int32_t __fastcall ACT1Q5_UpdateUnitGUIDLists(D2Act1Quest5Strc* pQuestDataEx, in
 {
 	if (bRemovePendingDialogue)
 	{
-		for (int32_t i = 0; i < pQuestDataEx->nUnitCount2; ++i)
+		for (int32_t i = 0; i < pQuestDataEx->nPendingDialoguePlayerCount; ++i)
 		{
-			if (pQuestDataEx->nUnitGUIDs2[i] == nUnitGUID)
+			if (pQuestDataEx->nPendingDialoguePlayerGUIDs[i] == nUnitGUID)
 			{
-				if (i != pQuestDataEx->nUnitCount2 - 1)
+				if (i != pQuestDataEx->nPendingDialoguePlayerCount - 1)
 				{
-					pQuestDataEx->nUnitGUIDs2[i] = pQuestDataEx->nUnitGUIDs2[pQuestDataEx->nUnitCount2 - 1];
+					pQuestDataEx->nPendingDialoguePlayerGUIDs[i] = pQuestDataEx->nPendingDialoguePlayerGUIDs[pQuestDataEx->nPendingDialoguePlayerCount - 1];
 				}
-				--pQuestDataEx->nUnitCount2;
+				--pQuestDataEx->nPendingDialoguePlayerCount;
 
 				return 1;
 			}
@@ -404,15 +404,15 @@ int32_t __fastcall ACT1Q5_UpdateUnitGUIDLists(D2Act1Quest5Strc* pQuestDataEx, in
 	}
 	else
 	{
-		for (int32_t i = 0; i < pQuestDataEx->nUnitCount1; ++i)
+		for (int32_t i = 0; i < pQuestDataEx->nAcknowledgedDialoguePlayerCount; ++i)
 		{
-			if (pQuestDataEx->nUnitGUIDs1[i] == nUnitGUID)
+			if (pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[i] == nUnitGUID)
 			{
-				if (i != pQuestDataEx->nUnitCount1 - 1)
+				if (i != pQuestDataEx->nAcknowledgedDialoguePlayerCount - 1)
 				{
-					pQuestDataEx->nUnitGUIDs1[i] = pQuestDataEx->nUnitGUIDs1[pQuestDataEx->nUnitCount1 - 1];
+					pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[i] = pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[pQuestDataEx->nAcknowledgedDialoguePlayerCount - 1];
 				}
-				--pQuestDataEx->nUnitCount1;
+				--pQuestDataEx->nAcknowledgedDialoguePlayerCount;
 
 				return 1;
 			}
@@ -464,26 +464,26 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 
 	if (pQuestData->fState >= 4)
 	{
-		if (pQuestDataEx->nUnitCount2 > 0)
+		if (pQuestDataEx->nPendingDialoguePlayerCount > 0)
 		{
 			int32_t nCounter1 = 0;
-			while (pQuestDataEx->nUnitGUIDs2[nCounter1] != nUnitId)
+			while (pQuestDataEx->nPendingDialoguePlayerGUIDs[nCounter1] != nUnitId)
 			{
 				++nCounter1;
 
-				if (nCounter1 >= pQuestDataEx->nUnitCount2)
+				if (nCounter1 >= pQuestDataEx->nPendingDialoguePlayerCount)
 				{
-					if (pQuestDataEx->nUnitCount1 <= 0)
+					if (pQuestDataEx->nAcknowledgedDialoguePlayerCount <= 0)
 					{
 						return;
 					}
 
 					int32_t nCounter2 = 0;
-					while (pQuestDataEx->nUnitGUIDs1[nCounter2] != nUnitId)
+					while (pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[nCounter2] != nUnitId)
 					{
 						++nCounter2;
 
-						if (nCounter2 >= pQuestDataEx->nUnitCount1)
+						if (nCounter2 >= pQuestDataEx->nAcknowledgedDialoguePlayerCount)
 						{
 							return;
 						}
@@ -495,17 +495,17 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		}
 		else
 		{
-			if (pQuestDataEx->nUnitCount1 <= 0)
+			if (pQuestDataEx->nAcknowledgedDialoguePlayerCount <= 0)
 			{
 				return;
 			}
 
 			int32_t nCounter2 = 0;
-			while (pQuestDataEx->nUnitGUIDs1[nCounter2] != nUnitId)
+			while (pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[nCounter2] != nUnitId)
 			{
 				++nCounter2;
 
-				if (nCounter2 >= pQuestDataEx->nUnitCount1)
+				if (nCounter2 >= pQuestDataEx->nAcknowledgedDialoguePlayerCount)
 				{
 					return;
 				}
@@ -514,13 +514,13 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	}
 
 	int32_t nCounter1 = 0;
-	if (pQuestDataEx->nUnitCount2 > 0)
+	if (pQuestDataEx->nPendingDialoguePlayerCount > 0)
 	{
-		while (pQuestDataEx->nUnitGUIDs2[nCounter1] != nUnitId)
+		while (pQuestDataEx->nPendingDialoguePlayerGUIDs[nCounter1] != nUnitId)
 		{
 			++nCounter1;
 
-			if (nCounter1 >= pQuestDataEx->nUnitCount2)
+			if (nCounter1 >= pQuestDataEx->nPendingDialoguePlayerCount)
 			{
 				if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_REWARDGRANTED) != 1 || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_PRIMARYGOALDONE) != 1)
 				{
@@ -530,14 +530,14 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 						QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
 					}
 				}
-				else if (pQuestDataEx->nUnitCount1 > 0)
+				else if (pQuestDataEx->nAcknowledgedDialoguePlayerCount > 0)
 				{
 					int32_t nCounter2 = 0;
-					while (pQuestDataEx->nUnitGUIDs1[nCounter2] != nUnitId)
+					while (pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[nCounter2] != nUnitId)
 					{
 						++nCounter2;
 
-						if (nCounter2 >= pQuestDataEx->nUnitCount1)
+						if (nCounter2 >= pQuestDataEx->nAcknowledgedDialoguePlayerCount)
 						{
 							return;
 						}
@@ -562,14 +562,14 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 				QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
 			}
 		}
-		else if (pQuestDataEx->nUnitCount1 > 0)
+		else if (pQuestDataEx->nAcknowledgedDialoguePlayerCount > 0)
 		{
 			int32_t nCounter2 = 0;
-			while (pQuestDataEx->nUnitGUIDs1[nCounter2] != nUnitId)
+			while (pQuestDataEx->nAcknowledgedDialoguePlayerGUIDs[nCounter2] != nUnitId)
 			{
 				++nCounter2;
 
-				if (nCounter2 >= pQuestDataEx->nUnitCount1)
+				if (nCounter2 >= pQuestDataEx->nAcknowledgedDialoguePlayerCount)
 				{
 					return;
 				}
@@ -598,7 +598,7 @@ void __fastcall ACT1Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 			}
 			else if (pQuestData->fState == 5 && pQuestData->bNotIntro)
 			{
-				if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1, 0) && !pQuestDataEx->nUnitCount1 && !pQuestDataEx->nUnitCount2)
+				if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1, 0) && !pQuestDataEx->nAcknowledgedDialoguePlayerCount && !pQuestDataEx->nPendingDialoguePlayerCount)
 				{
 					pQuestData->bActive = 0;
 				}
@@ -633,7 +633,7 @@ void __fastcall ACT1Q5_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 				}
 				else if (pQuestData->fState == 5 && pQuestData->bNotIntro)
 				{
-					if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1, 0) && !pQuestDataEx->nUnitCount1 && !pQuestDataEx->nUnitCount2)
+					if (ACT1Q5_UpdateUnitGUIDLists(pQuestDataEx, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1, 0) && !pQuestDataEx->nAcknowledgedDialoguePlayerCount && !pQuestDataEx->nPendingDialoguePlayerCount)
 					{
 						pQuestData->bActive = 0;
 					}
@@ -691,7 +691,7 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 {
 	D2Act1Quest5Strc* pQuestDataEx = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
 
-	UNITS_GetCoords(pQuestArg->pTarget, &pQuestDataEx->pCoord);
+	UNITS_GetCoords(pQuestArg->pTarget, &pQuestDataEx->tCountessDeathCoords);
 
 	if (pQuestData->bNotIntro)
 	{
@@ -702,7 +702,7 @@ void __fastcall ACT1Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT1Q5_UnitIterate_AttachCompletionSound);
 		QUESTS_SetGlobalState(pQuestData->pGame, QUESTSTATEFLAG_A1Q5, QFLAG_PRIMARYGOALDONE);
 
-		if (pQuestDataEx->nUnitCount2)
+		if (pQuestDataEx->nPendingDialoguePlayerCount)
 		{
 			pQuestData->pfCallback[QUESTEVENT_PLAYERLEAVESGAME] = ACT1Q5_Callback10_PlayerLeavesGame;
 		}
@@ -817,10 +817,10 @@ int32_t __fastcall ACT1Q5_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 	D2Act1Quest5Strc* pQuestDataEx = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
 	const int32_t nUnitId = pUnit ? pUnit->dwUnitId : -1;
 
-	if (pQuestDataEx->nUnitCount2 < 12)
+	if (pQuestDataEx->nPendingDialoguePlayerCount < 12)
 	{
-		pQuestDataEx->nUnitGUIDs2[pQuestDataEx->nUnitCount2] = nUnitId;
-		++pQuestDataEx->nUnitCount2;
+		pQuestDataEx->nPendingDialoguePlayerGUIDs[pQuestDataEx->nPendingDialoguePlayerCount] = nUnitId;
+		++pQuestDataEx->nPendingDialoguePlayerCount;
 	}
 	return 0;
 }
@@ -938,12 +938,12 @@ void __fastcall OBJECTS_InitFunction47_CountessChest(D2ObjInitFnStrc* pOp)
 		nUnitId = pOp->pObject->dwUnitId;
 	}
 
-	if (pQuestDataEx->nObjectCount <= 0)
+	if (pQuestDataEx->nCountessChestCount <= 0)
 	{
-		if (pQuestDataEx->nObjectCount < 8)
+		if (pQuestDataEx->nCountessChestCount < 8)
 		{
-			pQuestDataEx->nObjectGUIDs[pQuestDataEx->nObjectCount] = nUnitId;
-			++pQuestDataEx->nObjectCount;
+			pQuestDataEx->nCountessChestGUIDs[pQuestDataEx->nCountessChestCount] = nUnitId;
+			++pQuestDataEx->nCountessChestCount;
 		}
 
 		ACT1Q5_SpawnTowerChestMissiles(pQuestData, pQuestDataEx);
@@ -956,15 +956,15 @@ void __fastcall OBJECTS_InitFunction47_CountessChest(D2ObjInitFnStrc* pOp)
 	else
 	{
 		int32_t nCounter = 0;
-		while (pQuestDataEx->nObjectGUIDs[nCounter] != nUnitId)
+		while (pQuestDataEx->nCountessChestGUIDs[nCounter] != nUnitId)
 		{
 			++nCounter;
-			if (nCounter >= pQuestDataEx->nObjectCount)
+			if (nCounter >= pQuestDataEx->nCountessChestCount)
 			{
-				if (pQuestDataEx->nObjectCount < 8)
+				if (pQuestDataEx->nCountessChestCount < 8)
 				{
-					pQuestDataEx->nObjectGUIDs[pQuestDataEx->nObjectCount] = nUnitId;
-					++pQuestDataEx->nObjectCount;
+					pQuestDataEx->nCountessChestGUIDs[pQuestDataEx->nCountessChestCount] = nUnitId;
+					++pQuestDataEx->nCountessChestCount;
 				}
 
 				ACT1Q5_SpawnTowerChestMissiles(pQuestData, pQuestDataEx);

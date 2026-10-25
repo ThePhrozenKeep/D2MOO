@@ -23,10 +23,10 @@ struct D2LinkStrc
 
 struct D2TaskStrc
 {
-	int32_t nTaskQ;								//0x00
-	int32_t nType;								//0x04 D2C_TaskTypes, but somehow also used for timeout ?
-	D2LinkStrc pTaskBalanceLink;				//0x08 May actually link to &pTaskQueueLink !
-	D2LinkStrc pTaskQueueLink;					//0x10
+	int32_t nQueueIndex;						//0x00
+	int32_t nGameCount;							//0x04 games queued on this task queue
+	D2LinkStrc tGameTasks;						//0x08 the queued games (D2GameStrc task links)
+	D2LinkStrc tQueueLink;						//0x10 link in the global list of task queues
 };
 
 struct CRITICAL_SECTION_WRAPPER
