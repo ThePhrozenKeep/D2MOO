@@ -306,7 +306,7 @@ void __fastcall ACT4Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 3);
 	}
-	else if (QUESTS_CheckPlayerGUID(pQuestData, pQuestArg->pTarget ? pQuestArg->pTarget->dwUnitId : -1) == 1)
+	else if (QUESTS_CheckPlayerGUID(pQuestData, pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1) == 1)
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, 4);
 	}
