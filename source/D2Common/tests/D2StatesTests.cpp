@@ -1,0 +1,1414 @@
+#include <D2CommonTestDefines.h>
+
+#ifdef STATES_TESTS
+
+#include <doctest.h>
+
+#include <Windows.h>
+
+#include <cstdarg>
+#include <filesystem>
+
+#include <TestDefinitions.h>
+#include <TestUtilities.h>
+
+#include <D2Skills.h>
+#include <D2States.h>
+#include <Units/Units.h>
+
+
+TEST_SUITE("D2StatesTests")
+{
+	const auto working_directory = std::filesystem::current_path();
+	const auto dll_base = reinterpret_cast<uintptr_t>(LoadLibraryA((working_directory / "D2Common.dll").string().c_str()));
+
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4560 (#10486)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_ToggleState, dll_base + 0x00074560);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nState{};
+			BOOL bSet{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			sut(&moo_pUnit, nState, bSet);
+			original(&original_pUnit, nState, bSet);
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB45A0 (#10487)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckState, dll_base + 0x000745A0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nState{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit, nState);
+			const auto original_result = original(&original_pUnit, nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB45F0 (#10488)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_ToggleGfxStateFlag, dll_base + 0x000745F0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nState{};
+			BOOL bSet{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			sut(&moo_pUnit, nState, bSet);
+			original(&original_pUnit, nState, bSet);
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4670 (#10489)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckGfxStateFlag, dll_base + 0x00074670);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nState{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit, nState);
+			const auto original_result = original(&original_pUnit, nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB46C0 (#10491)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_ClearGfxStateFlags, dll_base + 0x000746C0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			sut(&moo_pUnit);
+			original(&original_pUnit);
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4710 (#10490)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_IsAnyGfxStateFlagSet, dll_base + 0x00074710);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4760 (#10492)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_GetGfxStateFlags, dll_base + 0x00074760);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4790 (#10493)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_UpdateStayDeathFlags, dll_base + 0x00074790);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			BOOL bIsBoss{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			sut(&moo_pUnit, bIsBoss);
+			original(&original_pUnit, bIsBoss);
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB48F0 (#10494)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(D2COMMON_10494_STATES_GetStatFlags, dll_base + 0x000748F0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4900 (#10495)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_GetNumberOfStateFlags, dll_base + 0x00074900);
+		
+		SUBCASE("")
+		{
+			// Call both implementations
+			const auto moo_result = sut();
+			const auto original_result = original();
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4920 (#10496)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskAuraByStateId, dll_base + 0x00074920);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4960 (#10503)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskAuraOnUnit, dll_base + 0x00074960);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB49D0 (#10500)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskPgsvByStateId, dll_base + 0x000749D0);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4A10 (#11234)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskPgsvOnUnit, dll_base + 0x00074A10);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4A80 (#10501)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_UpdatePgsvFlags, dll_base + 0x00074A80);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			sut(&moo_pUnit);
+			original(&original_pUnit);
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4B20 (#10558)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskHideByStateId, dll_base + 0x00074B20);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4B50 (#10557)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskHideOnUnit, dll_base + 0x00074B50);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4BC0 (#10502)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskActiveOnUnit, dll_base + 0x00074BC0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4C30 (#11272)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRemHitOnUnit, dll_base + 0x00074C30);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4CA0 (#10538)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskDamBlueOnUnit, dll_base + 0x00074CA0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4D10 (#10545)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskDamRedOnUnit, dll_base + 0x00074D10);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4D80 (#10537)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskAttBlueOnUnit, dll_base + 0x00074D80);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4DF0 (#10544)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskAttRedOnUnit, dll_base + 0x00074DF0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4E60 (#10551)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_IsUnitShapeShifted, dll_base + 0x00074E60);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4E80 (#10497)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskCurseByStateId, dll_base + 0x00074E80);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4EC0 (#10498)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskCurableByStateId, dll_base + 0x00074EC0);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4F00 (#10554)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskStayDeathOnUnitByStateId, dll_base + 0x00074F00);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nState{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit, nState);
+			const auto original_result = original(&original_pUnit, nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4F60" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRestrictOnUnit, dll_base + 0x00074F60);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2SkillStrc moo_pSkill{};
+			D2UnitStrc original_pUnit{};
+			D2SkillStrc original_pSkill{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit,
+				D2SkillStrc& pSkill
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit, moo_pSkill);
+			setup_data(original_pUnit, original_pSkill);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit, &moo_pSkill);
+			const auto original_result = original(&original_pUnit, &original_pSkill);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+			SKIP_MOO_CHECK_EQ(moo_pSkill, original_pSkill, "Comparing pSkill");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB4FC0 (#10536)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskBlueOnUnit, dll_base + 0x00074FC0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5030 (#10539)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskArmBlueOnUnit, dll_base + 0x00075030);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB50A0 (#10540)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRFBlueOnUnit, dll_base + 0x000750A0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5110 (#10541)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRCBlueOnUnit, dll_base + 0x00075110);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5180 (#10542)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRLBlueOnUnit, dll_base + 0x00075180);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB51F0 (#10543)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRPBlueOnUnit, dll_base + 0x000751F0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5260 (#10546)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskArmRedOnUnit, dll_base + 0x00075260);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB52D0 (#10547)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRFRedOnUnit, dll_base + 0x000752D0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5340 (#10548)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRCRedOnUnit, dll_base + 0x00075340);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB53B0 (#10549)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRLRedOnUnit, dll_base + 0x000753B0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5420 (#10550)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskRPRedOnUnit, dll_base + 0x00075420);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5490 (#10552)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskExpOnUnit, dll_base + 0x00075490);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5500 (#10553)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskExpByStateId, dll_base + 0x00075500);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5540 (#10555)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskShatterOnUnit, dll_base + 0x00075540);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB55B0 (#10556)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskShatterByStateId, dll_base + 0x000755B0);
+		
+		SUBCASE("")
+		{
+			int nState{};
+
+			// Call both implementations
+			const auto moo_result = sut(nState);
+			const auto original_result = original(nState);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB55F0 (#10559)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskLifeOnUnit, dll_base + 0x000755F0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5660 (#10560)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskUdeadOnUnit, dll_base + 0x00075660);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB56D0 (#10561)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskGreenOnUnit, dll_base + 0x000756D0);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit);
+			const auto original_result = original(&original_pUnit);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+	
+	TEST_CASE_FIXTURE(NoOpFixture, "D2Common.0x6FDB5740 (#11303)" * doctest::skip(""))
+	{
+		// Set up function pointers
+		const auto [sut, original] = make_function_pair(STATES_CheckStateMaskOnUnit, dll_base + 0x00075740);
+		
+		SUBCASE("")
+		{
+			// Input data
+			D2UnitStrc moo_pUnit{};
+			D2UnitStrc original_pUnit{};
+			int nStateMask{};
+
+			const auto setup_data = [](
+				D2UnitStrc& pUnit
+			) {
+				// TODO: Setup as needed
+			};
+
+			setup_data(moo_pUnit);
+			setup_data(original_pUnit);
+
+			// Call both implementations
+			const auto moo_result = sut(&moo_pUnit, nStateMask);
+			const auto original_result = original(&original_pUnit, nStateMask);
+			
+			// Compare return values
+			SKIP_MOO_CHECK_EQ(moo_result, original_result, "Comparing results");
+
+			// Compare potentially modified input data
+			SKIP_MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
+		}
+	}
+}
+#endif
