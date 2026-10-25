@@ -9,24 +9,38 @@
 #define D2FUNC_DLL_NP(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV NAME ARGS;
 
+#define D2FUNC_DLL_VOID(DLL, NAME, CONV, ARGS, OFFSET) \
+	DLL##_DLL_DECL void CONV DLL##_##NAME ARGS;
 
-template <typename T>
-constexpr auto default_or_void() -> T { return {}; }
-template <>
-constexpr auto default_or_void<void>() -> void {}
+#define D2FUNC_DLL_NP_VOID(DLL, NAME, CONV, ARGS, OFFSET) \
+	DLL##_DLL_DECL void CONV NAME ARGS;
+
+template <typename T> inline T D2StubReturn() { return T(); }
 
 #define D2FUNC_DLL_STUB(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV DLL##_##NAME ARGS {           \
 		OutputDebugStringA(#DLL "_" #NAME);                     \
-		return default_or_void<RETURN>();                      \
+		return D2StubReturn<RETURN>();                      \
 	}													   
 
 // Same as D2FUNC_DLL_STUB but without DLL name prefix
 #define D2FUNC_DLL_NP_STUB(DLL, NAME, RETURN, CONV, ARGS, OFFSET) \
 	DLL##_DLL_DECL RETURN CONV NAME ARGS {          \
 		OutputDebugStringA(#NAME);                     \
-		return default_or_void<RETURN>();             \
+		return D2StubReturn<RETURN>();             \
 	}													   
+
+#define D2FUNC_DLL_STUB_VOID(DLL, NAME, CONV, ARGS, OFFSET) \
+	DLL##_DLL_DECL void CONV DLL##_##NAME ARGS {           \
+		OutputDebugStringA(#DLL "_" #NAME);                     \
+		return;                      \
+	}
+
+#define D2FUNC_DLL_NP_STUB_VOID(DLL, NAME, CONV, ARGS, OFFSET) \
+	DLL##_DLL_DECL void CONV NAME ARGS {          \
+		OutputDebugStringA(#NAME);                     \
+		return;             \
+	}
 
 
 // Useful if you do not have an import library or want to use LoadLibray
