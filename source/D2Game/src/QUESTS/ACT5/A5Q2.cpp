@@ -564,14 +564,16 @@ void __fastcall ACT5Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 {
 	if (pQuestArg->nNewLevel >= LEVEL_ID_ACT5_BARRICADE_1 && pQuestArg->nNewLevel <= LEVEL_ARREATPLATEAU && pQuestData->bNotIntro && ((D2Act5Quest2Strc*)pQuestData->pQuestDataEx)->nKilledWussies < 5)
 	{
+		bool bEnteredState3 = false;
 		if (pQuestData->fState == 1 || pQuestData->fState == 2)
 		{
 			QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
+			bEnteredState3 = true;
 		}
 
 		if (pQuestData->fLastState)
 		{
-			if (pQuestData->fState != 1 && pQuestData->fState != 2)
+			if (!bEnteredState3)
 			{
 				return;
 			}
