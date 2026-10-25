@@ -2,8 +2,10 @@
 
 
 #include <array>
+#include <string_view>
 #include <type_traits>
 
+#include "DynamicArrayCountRegistry.h"
 #include "VisitorTraits.h"
 
 
@@ -104,14 +106,37 @@ public:
 			"DynamicArray() requires the count member to be an integral type."
 		);
 
-		auto* data = Get<PointerMember>(object);
-		auto count = Get<CountMember>(object);
+		const auto count = Get<CountMember>(object);
 
-		for (auto i = 0; i < count; ++i)
+		if constexpr (std::is_signed_v<CountType>)
 		{
-			const auto indices = std::array<size_t, 1>{ static_cast<size_t>(i) };
-			Self().template VisitArrayElement<PointerMember>(object, member_name, indices);
+			if (count < 0)
+			{
+				return;
+			}
 		}
+
+		VisitDynamicArrayElements<PointerMember>(object, member_name, static_cast<size_t>(count));
+	}
+
+	// Visits a dynamic array whose count is not stored in the object, but registered in the DynamicArrayCountRegistry under the given key.
+	// Null arrays are skipped, so the key only has to be registered once an array has actually been allocated.
+	template<auto PointerMember, typename T>
+	void DynamicArrayWithRegisteredCount(T& object, const char* member_name, std::string_view count_key)
+	{
+		using PointerType = std::remove_cv_t<std::remove_reference_t<decltype(Get<PointerMember>(object))>>;
+
+		static_assert(
+			std::is_pointer_v<PointerType>,
+			"DynamicArrayWithRegisteredCount() requires the member to be a pointer."
+		);
+
+		if (Get<PointerMember>(object) == nullptr)
+		{
+			return;
+		}
+
+		VisitDynamicArrayElements<PointerMember>(object, member_name, DynamicArrayCountRegistry::Instance().GetCount(count_key));
 	}
 
 protected:
@@ -129,6 +154,16 @@ protected:
 	decltype(auto) Get(T& object)
 	{
 		return (object.*Member);
+	}
+
+	template<auto PointerMember, typename T>
+	void VisitDynamicArrayElements(T& object, const char* member_name, size_t count)
+	{
+		for (size_t i = 0; i < count; ++i)
+		{
+			const auto indices = std::array<size_t, 1>{ i };
+			Self().template VisitArrayElement<PointerMember>(object, member_name, indices);
+		}
 	}
 
 	template<typename Array, size_t Rank>
