@@ -25,25 +25,25 @@ D2NPCMessageTableStrc gpAct4Q3NpcMessages[] =
 {
 	{
 		{
-			{ MONSTER_CAIN4, 166, 0, 1 },
+			{ MONSTER_CAIN4, 678, 0, 1 },
 		},
 		1
 	},
 	{
 		{
-			{ MONSTER_CAIN4, 167, 0, 1 },
+			{ MONSTER_CAIN4, 679, 0, 1 },
 		},
 		1
 	},
 	{
 		{
-			{ MONSTER_CAIN4, 168, 0, 1 },
+			{ MONSTER_CAIN4, 680, 0, 1 },
 		},
 		1
 	},
 	{
 		{
-			{ MONSTER_CAIN4, 168, 0, 2 },
+			{ MONSTER_CAIN4, 680, 0, 2 },
 		},
 		1
 	},
