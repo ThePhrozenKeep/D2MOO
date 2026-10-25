@@ -918,7 +918,7 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2DrlgRoomStr
 		if (nTileType != TILETYPE_WALL_TOP_CORNER_RIGHT)
 		{
 			pTileData->pNext->dwFlags |= MAPTILE_HIDDEN;
-			D2Common_COLLISION_FirstFn_6FD41000(pDrlgRoom2->pRoom, pTileData->pNext, nullptr);
+			COLLISION_ReplaceTileCollision(pDrlgRoom2->pRoom, pTileData->pNext, nullptr);
 		}
 	}
 	else
@@ -926,7 +926,7 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2DrlgRoomStr
 		if (nTileType == TILETYPE_WALL_TOP_CORNER_RIGHT)
 		{
 			pTileData->dwFlags |= (3 << MAPTILE_WALL_LAYER_BIT) | MAPTILE_HIDDEN;
-			D2Common_COLLISION_FirstFn_6FD41000(pDrlgRoom2->pRoom, pTileData, nullptr);
+			COLLISION_ReplaceTileCollision(pDrlgRoom2->pRoom, pTileData, nullptr);
 			DRLGROOMTILE_AddLinkedTileData(pMemPool, pDrlgRoom1, TILETYPE_WALL_TOP_CORNER_RIGHT, nPackedTileInformation, nX, nY);
 		}
 	}
@@ -939,7 +939,7 @@ void __fastcall DRLGROOMTILE_LinkedTileDataManager(void* pMemPool, D2DrlgRoomStr
 
 		if (pTileCache != pTileData->pTile && pDrlgRoom2->pRoom)
 		{
-			D2Common_COLLISION_FirstFn_6FD41000(pDrlgRoom2->pRoom, pTileData, pTileCache);
+			COLLISION_ReplaceTileCollision(pDrlgRoom2->pRoom, pTileData, pTileCache);
 		}
 
 		pTileData->pTile = pTileCache;

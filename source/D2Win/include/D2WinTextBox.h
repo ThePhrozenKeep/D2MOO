@@ -59,7 +59,7 @@ struct D2WinTextBoxStrc
 
 
 //D2Win.0x6F8AFAA0
-D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int nX, int nY, int nWidth, int nHeight, int a5, int a6, D2CellFileStrc* pCellFile, int(__stdcall* a8)(SMSGHANDLER_PARAMS*), unsigned int dwTextBoxFlags, int a10, int a11);
+D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int nX, int nY, int nWidth, int nHeight, int nInsetX, int nInsetY, D2CellFileStrc* pCellFile, int(__stdcall* a8)(SMSGHANDLER_PARAMS*), unsigned int dwTextBoxFlags, int pFontInfo, int pScrollBarRect);
 //D2Win.0x6F8AFCC0
 void __fastcall sub_6F8AFCC0(Font nFontSize);
 //D2Win.0x6F8AFDC0
@@ -67,21 +67,21 @@ int __fastcall D2Win_10043_TEXTBOX_Destroy(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8AFE30
 int __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8AFED0
-int __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int a2, int a3);
+int __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int nWrappedLineGap, int nLineGap);
 //D2Win.0x6F8AFF30
 void __fastcall D2Win_10045(D2WinTextBoxStrc* pTextBox, const char* szText);
 //D2Win.0x6F8AFFB0
-BOOL __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int a3);
+BOOL __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int nColor);
 //D2Win.0x6F8B0030
 BOOL __fastcall D2Win_10044(D2WinTextBoxStrc* pTextBox, const Unicode* wszText);
 //D2Win.0x6F8B0040
-BOOL __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, int a3, char a4, signed int a5);
+BOOL __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszText, int nColor, char bIsWrapped, signed int nIndent);
 //D2Win.0x6F8B05E0
-int __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int a3, int a4, char a5);
+int __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int nCount, int nColor, char bIsWrapped);
 //D2Win.0x6F8B0750
-int __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* a2, int a3, int a4);
+int __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* szText, int nLine, int nColumn);
 //D2Win.0x6F8B07C0
-int __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int a3, int nColumn);
+int __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int nLine, int nColumn);
 //D2Win.0x6F8B08F0
 void __fastcall D2Win_10197(D2WinTextBoxStrc* pTextBox, int nLineNum);
 //D2Win.0x6F8B09E0
@@ -93,7 +93,7 @@ int __fastcall D2Win_10049(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8B0AD0
 void __fastcall D2Win_10050_TEXTBOX_SetLine(D2WinTextBoxStrc* pTextBox, int nLine);
 //D2Win.0x6F8B0B30
-int __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int a2);
+int __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int nLine);
 //D2Win.0x6F8B0BC0
 int __fastcall D2Win_10055(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8B0C50
@@ -105,13 +105,13 @@ void __fastcall D2Win_10056(D2WinTextBoxStrc* pTextBox, int nNumColumns);
 //D2Win.0x6F8B0E60
 void __fastcall D2Win_10059(D2WinTextBoxStrc* pTextBox, int nColumn, Unicode* pColumn);
 //D2Win.0x6F8B0EE0
-void __fastcall D2Win_10060(D2WinTextBoxStrc* pTextBox, int nColumn, int a3);
+void __fastcall D2Win_10060(D2WinTextBoxStrc* pTextBox, int nColumn, int nAlignFlags);
 //D2Win.0x6F8B0F60
 int __fastcall D2Win_10061(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8B0FC0
 void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int bSet);
 //D2Win.0x6F8B1030
-int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int nLineNum, int a3);
+int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int nLineNum, int nColor);
 //D2Win.0x6F8B1130
 int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8B15A0
@@ -121,16 +121,16 @@ int __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8B18F0
 int __fastcall D2Win_10190(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8B1940
-int __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int a2);
+int __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int nMaxSteps);
 //D2Win.0x6F8B1990
 int __fastcall D2Win_10192(D2WinTextBoxStrc* pTextBox);
 //D2Win.0x6F8B19E0
-int __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int a2);
+int __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int nCurrentStep);
 //D2Win.0x6F8B1A30
-int __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* a2);
+int __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLinkedTextBox);
 //D2Win.0x6F8B1A80
 int __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1AD0
-void __fastcall D2Win_10204(D2WinTextBoxStrc* pTextBox, int a2);
+void __fastcall D2Win_10204(D2WinTextBoxStrc* pTextBox, int nPosition);
 //D2Win.0x6F8B1B20
 int __fastcall D2Win_10203_TEXTBOX(D2WinTextBoxStrc* pTextBox);

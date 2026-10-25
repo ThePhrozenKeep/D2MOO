@@ -99,7 +99,7 @@ void DRLGACTIVATE_RoomEx_EnsureHasRoom(D2DrlgRoomStrc* pDrlgRoom, bool bInitTime
 		D2DrlgStrc* pDrlg = pDrlgRoom->pLevel->pDrlg;
 		if (!pDrlgRoom->nRoomsNear)
 		{
-			sub_6FD77BB0(pDrlg->pMempool, pDrlgRoom);
+			DRLGROOM_InitNearRooms(pDrlg->pMempool, pDrlgRoom);
 		}
 
 		DRLGROOMTILE_InitRoomGrids(pDrlgRoom);
@@ -188,7 +188,7 @@ void __fastcall DRLGACTIVATE_RoomExPropagateSetStatus(void* pMemPool, D2DrlgRoom
 {
 	if (pDrlgRoom->nRoomsNear == 0)
 	{
-		sub_6FD77BB0(pMemPool, pDrlgRoom);
+		DRLGROOM_InitNearRooms(pMemPool, pDrlgRoom);
 	}
 
 	for (int i = 0; i < pDrlgRoom->nRoomsNear; ++i)

@@ -614,77 +614,77 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 }
 
 //D2Win.0x6F8AD450 (#10018)
-int __stdcall CONTROL_Destroy(void* a1)
+int __stdcall CONTROL_Destroy(void* ppControl)
 {
-	//TODO: a1, result
+	//TODO: result
 	int result = 0;
 
-	if (a1)
+	if (ppControl)
 	{
-		D2WinControlStrc* v2 = *(D2WinControlStrc**)a1;
-		if (*(DWORD*)a1)
+		D2WinControlStrc* v2 = *(D2WinControlStrc**)ppControl;
+		if (*(DWORD*)ppControl)
 		{
 			switch (v2->nType)
 			{
 			case D2WIN_IMAGE:
 			case D2WIN_IMAGE2:
 				result = IMAGE_Destroy(v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_ANIMIMAGE:
 				result = ANIMIMAGE_Destroy(v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_SCROLLBAR:
 				result = SCROLLBAR_Destroy(v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_TIMER:
 				result = TIMER_Destroy(v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_PROGRESSBAR:
 				result = PROGRESSBAR_Destroy(v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_TEXTBOX:
 				result = D2Win_10043_TEXTBOX_Destroy((D2WinTextBoxStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_EDITBOX:
 				result = D2Win_10071_EDITBOX_Destroy((D2WinEditBoxStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_BUTTON:
 				result = BUTTON_Destroy((D2WinButtonStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_LIST:
 				result = LIST_Destroy((D2WinListStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_SMACK:
 				result = SMACK_Destroy((D2WinSmackStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_ACCOUNTLIST:
 				result = ACCOUNTLIST_Destroy((D2WinAccountListStrc*)v2);
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 
 			default:
 				result = 0;
-				*(DWORD*)a1 = 0;
+				*(DWORD*)ppControl = 0;
 				break;
 			}
 		}
@@ -927,12 +927,12 @@ LRESULT __stdcall D2Win_MAINWINDOW_WndProc_6F8AD9B0(HWND hWnd, UINT Msg, WPARAM 
 		return 0;
 	}
 
-	int v5 = 0;
-	LRESULT v6 = 0;
+	int bUseResult = 0;
+	LRESULT lResult = 0;
 
-	if (SMsgDispatchMessage(hWnd, Msg, wParam, lParam, &v5, &v6) && v5)
+	if (SMsgDispatchMessage(hWnd, Msg, wParam, lParam, &bUseResult, &lResult) && bUseResult)
 	{
-		return v6;
+		return lResult;
 	}
 
 	return DefWindowProcA(hWnd, Msg, wParam, lParam);
@@ -941,7 +941,7 @@ LRESULT __stdcall D2Win_MAINWINDOW_WndProc_6F8AD9B0(HWND hWnd, UINT Msg, WPARAM 
 //D2Win.0x6F8ADA80
 void __stdcall D2Win_COMMANDS_Char_6F8ADA80(SMSGHANDLER_PARAMS* pMsg)
 {
-	//TODO: v4
+
 	D2WinControlStrc* pControl = dword_6F8FE264;
 	if (dword_6F8FE25C)
 	{
@@ -986,10 +986,10 @@ void __stdcall D2Win_COMMANDS_Char_6F8ADA80(SMSGHANDLER_PARAMS* pMsg)
 			pMsg->hWindow = (HWND)pControl;
 
 			++dword_6F8FE254;
-			const int v4 = pControl->pfHandleCharInput(pMsg);
+			const int bHandled = pControl->pfHandleCharInput(pMsg);
 			--dword_6F8FE254;
 
-			if (v4)
+			if (bHandled)
 			{
 				break;
 			}

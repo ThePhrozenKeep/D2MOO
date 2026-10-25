@@ -59,7 +59,7 @@ signed int __stdcall CONTROL_RemoveFromList(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD260 (#10017)
 D2WIN_DLL_DECL D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit);
 //D2Win.0x6F8AD450 (#10018)
-D2WIN_DLL_DECL int __stdcall CONTROL_Destroy(void*a1);
+D2WIN_DLL_DECL int __stdcall CONTROL_Destroy(void*ppControl);
 //D2Win.0x6F8AD570 (#10025)
 D2WIN_DLL_DECL void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(D2WinControlStrc* pControl, int bSet);
 //D2Win.0x6F8AD5A0 (#10024)

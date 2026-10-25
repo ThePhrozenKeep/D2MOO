@@ -7,11 +7,11 @@
 
 //D2Common.0x6FD41000
 //1.14d: 0x0064C860
-void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2ActiveRoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry)
+void __fastcall COLLISION_ReplaceTileCollision(D2ActiveRoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry)
 {
 	D2RoomCollisionGridStrc* pCollisionGrid = NULL;
 	uint16_t* pCollisionMask = NULL;
-	uint8_t* v17 = NULL;
+	uint8_t* pTileFlags = NULL;
 	uint8_t* pTmp = NULL;
 	int nCappedX = 0;
 	int nCappedY = 0;
@@ -40,7 +40,7 @@ void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2ActiveRoomStrc* pRoom, D2D
 
 					if (pCollisionGrid->pCollisionMask)
 					{
-						v17 = D2CMP_10085_GetTileFlagArray(pTileData->pTile);
+						pTileFlags = D2CMP_10085_GetTileFlagArray(pTileData->pTile);
 
 						if (nX > 0)
 						{
@@ -60,7 +60,7 @@ void __fastcall D2Common_COLLISION_FirstFn_6FD41000(D2ActiveRoomStrc* pRoom, D2D
 							nCappedY = 0;
 						}
 
-						pTmp = &v17[5 * (nY - nCappedY + 4) - nX];
+						pTmp = &pTileFlags[5 * (nY - nCappedY + 4) - nX];
 
 						nIndex = pCollisionGrid->pRoomCoords.nSubtileWidth * nCappedY;
 

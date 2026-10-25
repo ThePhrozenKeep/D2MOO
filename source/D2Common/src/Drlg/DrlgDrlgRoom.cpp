@@ -598,7 +598,7 @@ int __fastcall DRLGROOM_ReorderNearRoomList(D2DrlgRoomStrc* pDrlgRoom, D2ActiveR
 
 //1.10: D2Common.0x6FD77BB0
 //1.14d: 0x0066C370
-void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGROOM_InitNearRooms(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 {
 	D2DrlgRoomStrc* ppNearRooms[30] = {};
 	D2DrlgLevelStrc* pLevel = NULL;
@@ -699,7 +699,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 						{
 							if (nSourceVisCount == nDestinationVisCount)
 							{
-								if (sub_6FD77F00(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, i, nWarpDestination))
+								if (DRLGROOM_LinkNearRoomsByWarp(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, i, nWarpDestination))
 								{
 									bLinkedWarp = TRUE;
 								}
@@ -715,7 +715,7 @@ void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom)
 				{
 					for (int i = 0; i < 8; ++i)
 					{
-						if (pDestinationVisArray[i] == pDrlgRoom->pLevel->nLevelId && sub_6FD77F00(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, i, nWarpDestination))
+						if (pDestinationVisArray[i] == pDrlgRoom->pLevel->nLevelId && DRLGROOM_LinkNearRoomsByWarp(pMemPool, pDrlgRoom, nWarpId, pLevel->pFirstRoomEx, i, nWarpDestination))
 						{
 							break;
 						}
@@ -766,7 +766,7 @@ void __fastcall DRLGROOM_SortRoomListByPosition(D2DrlgRoomStrc** ppRoomList, int
 }
 
 //D2Common.0x6FD77F00
-BOOL __fastcall sub_6FD77F00(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t nWarpId, D2DrlgRoomStrc* pDrlgRoom2, char nWarpFlag, int nDirection)
+BOOL __fastcall DRLGROOM_LinkNearRoomsByWarp(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t nWarpId, D2DrlgRoomStrc* pDrlgRoom2, char nWarpFlag, int nDirection)
 {
 	D2RoomTileStrc* pRoomTile = NULL;
 	int nX = 0;
