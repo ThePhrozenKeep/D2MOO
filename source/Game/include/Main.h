@@ -71,7 +71,7 @@ enum D2_MODULES
 /*
  *	Define command line types
  */
-enum D2ParseCmdArgType : uint8_t
+D2_TYPED_ENUM(D2ParseCmdArgType, uint8_t)
 {
 	CMD_BOOLEAN,
 	CMD_INTEGER,
