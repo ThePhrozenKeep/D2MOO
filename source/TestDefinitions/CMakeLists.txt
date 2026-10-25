@@ -2,6 +2,8 @@ add_library(TestDefinitions STATIC src/TestDefinitions.cpp)
 
 target_sources(TestDefinitions
   PRIVATE
+    include/DynamicArray.h
+
     include/Fixtures/DataTbls/Fixtures.h
     include/Fixtures/DataTbls/AnimDataFixture.h
     include/Fixtures/DataTbls/ArenaTxtFixture.h
