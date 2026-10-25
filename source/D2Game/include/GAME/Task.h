@@ -44,13 +44,13 @@ void __stdcall TASK_InitializeClock();
 //D2Game.0x6FC40500 (#10040)
 void __stdcall TASK_FreeAllQueueSlots();
 //D2Game.0x6FC405B0 (#10041)
-int32_t __cdecl D2Game_10041_TASK_Create();
+int32_t __cdecl TASK_CreateQueue();
 //D2Game.0x6FC407A0 (#10042)
-BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink);
+BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink);
 //D2Game.0x6FC40930 (#10043)
-int32_t __fastcall D2Game_10043(int8_t a1, int32_t* pOutBalanceTaskType);
+int32_t __fastcall TASK_DequeueGame(int8_t a1, int32_t* pOutBalanceTaskType);
 //D2Game.0x6FC40A40 (#10044)
-int32_t __fastcall D2Game_10044(int8_t nTaskNumber);
+int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber);
 //D2Game.0x6FC40B30 (#10045)
 void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask);
 //D2Game.0x6FC40E40

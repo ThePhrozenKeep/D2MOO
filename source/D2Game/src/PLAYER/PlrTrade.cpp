@@ -1068,7 +1068,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
                 sub_6FC4B740(pUnit, pItem);
             }
 
-            INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
+            INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pItem);
             ITEMS_SetItemCMDFlag(pItem, 1, 1);
         }
     }
@@ -1078,7 +1078,7 @@ void __fastcall sub_6FC90AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     {
         if (pCursorItem->dwUnitType == UNIT_ITEM)
         {
-            INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pCursorItem);
+            INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pCursorItem);
             ITEMS_SetItemCMDFlag(pCursorItem, 1, 1);
         }
         else

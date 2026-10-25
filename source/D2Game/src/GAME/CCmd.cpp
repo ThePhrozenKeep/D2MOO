@@ -206,7 +206,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_REMOVEFROMGAME:
     {
-        D2Game_10024_RemoveClientFromGame(nClientId);
+        GAME_RemoveClientById(nClientId);
         break;
     }
     default:

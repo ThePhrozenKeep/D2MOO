@@ -195,7 +195,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 //D2Game.0x6FCC1D70
 D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2UnitStrc* pDefender);
 //D2Game.0x6FCC1DC0
-bool __stdcall D2Game_10033(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3);
+bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3);
 //D2Game.0x6FCC1E70
 int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t bMissile);
 //D2Game.0x6FCC2300

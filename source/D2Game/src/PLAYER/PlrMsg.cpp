@@ -4002,7 +4002,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x61_DropPickupMercItem_6FC88930(D2G
         //D2COMMON_10254_Return0(pMerc->pInventory, nBodyLoc);
         D2GAME_ITEMS_UpdateTransferredProperties_6FC424E0(pGame, pEquippedItem, pMerc, 0, 0);
         ITEMS_SetItemCMDFlag(pEquippedItem, 16, 1);
-        INVENTORY_AddItemToTradeInventory(pMerc->pInventory, pEquippedItem);
+        INVENTORY_AddItemToCommandQueue(pMerc->pInventory, pEquippedItem);
         UNITS_RefreshInventory(pMerc, 1);
         D2UnitStrc* pCursorItem = ITEMS_Duplicate(pGame, pEquippedItem, pUnit, 1);
         INVENTORY_SetCursorItem(pUnit->pInventory, pCursorItem);
@@ -4078,7 +4078,7 @@ int32_t __fastcall D2GAME_MERCS_EquipItem_6FC88D10(D2GameStrc* pGame, D2UnitStrc
         }
 
         ITEMS_SetItemCMDFlag(pExchangeItem, 16, 1);
-        INVENTORY_AddItemToTradeInventory(pMercInventory, pExchangeItem);
+        INVENTORY_AddItemToCommandQueue(pMercInventory, pExchangeItem);
         ITEMS_SetItemFlag(pExchangeItem, IFLAG_QUANTITY, 1);
         UNITS_RefreshInventory(pMerc, 1);
     }

@@ -67,7 +67,7 @@ void __stdcall TASK_FreeAllQueueSlots()
 }
 
 //D2Game.0x6FC405B0 (#10041) 
-int __cdecl D2Game_10041_TASK_Create()
+int __cdecl TASK_CreateQueue()
 {
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
     if (!gpTaskQueueLink.pPrev)
@@ -176,7 +176,7 @@ int __cdecl D2Game_10041_TASK_Create()
 }
 
 //D2Game.0x6FC407A0 (#10042) --------------------------------------------------------
-BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink)
+BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink)
 {
     BOOL nResult = FALSE;
     
@@ -214,7 +214,7 @@ BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrev
 }
 
 //D2Game.0x6FC40930 (#10043)
-int32_t __fastcall D2Game_10043(int8_t a1, int32_t* pOutBalanceTaskType)
+int32_t __fastcall TASK_DequeueGame(int8_t a1, int32_t* pOutBalanceTaskType)
 {
     const int8_t nIndex = a1 & 31;
     int32_t nResult = 100;
@@ -248,7 +248,7 @@ int32_t __fastcall D2Game_10043(int8_t a1, int32_t* pOutBalanceTaskType)
 }
 
 //D2Game.0x6FC40A40 (#10044)
-int32_t __fastcall D2Game_10044(int8_t nTaskNumber)
+int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber)
 {
     const int8_t nIndex = nTaskNumber & 31;
     int32_t nResult = 100;

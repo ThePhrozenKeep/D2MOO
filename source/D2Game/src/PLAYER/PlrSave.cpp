@@ -1366,7 +1366,7 @@ int32_t __fastcall sub_6FC8B680(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SavedIte
         ITEMS_SetInvPage(pItem, uint8_t(-1));
         ITEMS_SetItemCMDFlag(pItem, 8, 1);
         pItem->dwFlags &= 0xFDFFFFFFu;
-        INVENTORY_AddItemToTradeInventory(pUnit->pInventory, pItem);
+        INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pItem);
         UNITS_RefreshInventory(pUnit, 1);
         QUESTS_ItemPickedUp(pGame, pUnit, pItem);
         break;
@@ -1562,7 +1562,7 @@ int32_t __fastcall sub_6FC8BAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
             pItem->dwFlags &= 0xFDFFFFFFu;
         }
 
-        INVENTORY_AddItemToTradeInventory(pPlayer->pInventory, pItem);
+        INVENTORY_AddItemToCommandQueue(pPlayer->pInventory, pItem);
         UNITS_RefreshInventory(pPlayer, 1);
         QUESTS_ItemPickedUp(pGame, pPlayer, pItem);
         return 0;

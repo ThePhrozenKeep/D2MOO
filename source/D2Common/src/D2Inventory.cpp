@@ -2017,7 +2017,7 @@ void __stdcall INVENTORY_RemoveInventoryItems(D2InventoryStrc* pInventory)
 }
 
 //D2Common.0x6FD90940 (#10280)
-D2InventoryNodeStrc* __stdcall INVENTORY_GetTradeInventory(D2InventoryStrc* pInventory)
+D2InventoryNodeStrc* __stdcall INVENTORY_GetCommandQueue(D2InventoryStrc* pInventory)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
@@ -2028,7 +2028,7 @@ D2InventoryNodeStrc* __stdcall INVENTORY_GetTradeInventory(D2InventoryStrc* pInv
 }
 
 //D2Common.0x6FD90960 (#10281)
-void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory)
+void __stdcall INVENTORY_FreeCommandQueue(D2InventoryStrc* pInventory)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
@@ -2045,7 +2045,7 @@ void __stdcall INVENTORY_FreeTradeInventory(D2InventoryStrc* pInventory)
 }
 
 //D2Common.0x6FD909B0 (#10282)
-BOOL __stdcall INVENTORY_CheckForItemInTradeInventory(D2InventoryStrc* pInventory, int nItemId)
+BOOL __stdcall INVENTORY_IsItemInCommandQueue(D2InventoryStrc* pInventory, int nItemId)
 {
 	if (INVENTORY_GetPtrIfValid(pInventory))
 	{
@@ -2062,11 +2062,11 @@ BOOL __stdcall INVENTORY_CheckForItemInTradeInventory(D2InventoryStrc* pInventor
 }
 
 //D2Common.0x6FD909F0 (#10283)
-void __stdcall INVENTORY_AddItemToTradeInventory(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
+void __stdcall INVENTORY_AddItemToCommandQueue(D2InventoryStrc* pInventory, D2UnitStrc* pItem)
 {
 	if (INVENTORY_UnitIsItem(pItem))
 	{
-		if (INVENTORY_CheckForItemInTradeInventory(pInventory, pItem->dwUnitId))
+		if (INVENTORY_IsItemInCommandQueue(pInventory, pItem->dwUnitId))
 		{
 			return;
 		}
