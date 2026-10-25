@@ -194,7 +194,7 @@ int32_t __fastcall SKILLS_SrvDo085_UnholyBolt_ShamanFire(D2GameStrc* pGame, D2Un
 //D2Game.0x6FD06590
 int32_t __fastcall SKILLS_SrvSt44_MaggotUp(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    if (sub_6FCBDFE0(pGame, pUnit, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0, 0))
+    if (SUNIT_TeleportUnit(pGame, pUnit, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0, 0))
     {
         pUnit->dwFlags |= 0xEu;
         COLLISION_SetMaskWithPattern(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1, 0x1000u);
@@ -477,7 +477,7 @@ int32_t __fastcall SKILLS_SrvSt47_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     }
 
     COLLISION_SetMaskWithPattern(pRoom, nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
-    sub_6FCBDE90(pUnit, 1);
+    SUNIT_SetUninterruptable(pUnit, 1);
     SKILLS_SetParam1(pSkill, nX);
     SKILLS_SetParam2(pSkill, nY);
     SKILLS_SetFlags(pSkill, 0x80u);
@@ -554,7 +554,7 @@ int32_t __fastcall SKILLS_SrvDo089_Jump(D2GameStrc* pGame, D2UnitStrc* pUnit, in
     else
     {
         SKILLS_SetFlags(pSkill, 0);
-        sub_6FCBDE90(pUnit, 0);
+        SUNIT_SetUninterruptable(pUnit, 0);
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), 0x100u);
         PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
         PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_MONSTER_PATH);
@@ -688,7 +688,7 @@ int32_t __fastcall SKILLS_SrvSt49_Nest_EvilHutSpawner(D2GameStrc* pGame, D2UnitS
     D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
     COLLISION_SetMaskWithPattern(pRoom, nX, nY, 1, 0x100u);
-    sub_6FCBDE90(pUnit, 1);
+    SUNIT_SetUninterruptable(pUnit, 1);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
     return 1;
 }
@@ -709,7 +709,7 @@ int32_t __fastcall SKILLS_SrvDo091_Nest_EvilHutSpawner(D2GameStrc* pGame, D2Unit
     }
     
     D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
-    sub_6FCBDE90(pUnit, 0);
+    SUNIT_SetUninterruptable(pUnit, 0);
     const int32_t nMonsterId = SKILLS_GetParam1(pSkill);
     const int32_t nX = SKILLS_GetParam2(pSkill);
     const int32_t nY = SKILLS_GetParam3(pSkill);
@@ -1357,7 +1357,7 @@ int32_t __fastcall SKILLS_SrvDo098_MonTeleport(D2GameStrc* pGame, D2UnitStrc* pU
         }
     }
 
-    if (sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
+    if (SUNIT_TeleportUnit(pGame, pUnit, pRoom, nX, nY, 0, 0))
     {
         UNITROOM_RefreshUnit(pUnit);
         pUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
@@ -2392,7 +2392,7 @@ int32_t __fastcall SKILLS_SrvDo111_FetishAura(D2GameStrc* pGame, D2UnitStrc* pUn
     for (int32_t i = 0; i < pUnitFindData->nIndex; ++i)
     {
         D2UnitStrc* pFoundUnit = pUnitFindData->pUnitsArray[i];
-        if (!sub_6FCBD900(pGame, pUnit, pFoundUnit) && pFoundUnit
+        if (!SUNIT_AreUnitsHostile(pGame, pUnit, pFoundUnit) && pFoundUnit
             && (pFoundUnit->dwClassId >= MONSTER_FETISHBLOW1 && pFoundUnit->dwClassId <= MONSTER_FETISHBLOW5 || pFoundUnit->dwClassId >= MONSTER_FETISH1 && pFoundUnit->dwClassId <= MONSTER_FETISH5)
             && sub_6FD0B2B0(pGame, pUnit, pFoundUnit))
         {

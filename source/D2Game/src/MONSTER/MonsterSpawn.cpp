@@ -754,15 +754,15 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            }
 //            if (v94->nAlign == 1)
 //            {
-//                sub_6FCBDD30(v60, 2u, 1);
+//                SUNIT_SetAlignment(v60, 2u, 1);
 //                v60->dwFlags |= UNITFLAG_NOTC;
 //            }
 //            else
 //            {
 //                if (v94->nAlign == 2)
-//                    sub_6FCBDD30(v60, 1u, 1);
+//                    SUNIT_SetAlignment(v60, 1u, 1);
 //                else
-//                    sub_6FCBDD30(v60, 0, 1);
+//                    SUNIT_SetAlignment(v60, 0, 1);
 //            }
 //            if (!(v90 & 2))
 //            {

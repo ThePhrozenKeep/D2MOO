@@ -807,7 +807,7 @@ D2UnitStrc* __fastcall AITACTICS_GetTargetMinion(D2GameStrc* pGame, D2UnitStrc* 
 		return pTarget;
 
 	case UNIT_MONSTER:
-		if (pTarget->dwAnimMode == MONMODE_DEATH || pTarget->dwAnimMode == MONMODE_DEAD || !sub_6FCBD900(pGame, pUnit, pTarget))
+		if (pTarget->dwAnimMode == MONMODE_DEATH || pTarget->dwAnimMode == MONMODE_DEAD || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
 		{
 			return nullptr;
 		}

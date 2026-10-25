@@ -869,7 +869,7 @@ void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataSt
     if (pRoom != pPlayerRoom)
     {
         UNITS_SetCurrentRoomInvalid(pPlayer, 1);
-        sub_6FCBB190(pGame, pPlayer, pPlayerRoom);
+        SUNIT_SynchronizeRoomClients(pGame, pPlayer, pPlayerRoom);
     }
 
     pPlayer->nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pPlayer)));

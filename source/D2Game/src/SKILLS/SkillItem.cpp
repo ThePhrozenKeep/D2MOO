@@ -304,7 +304,7 @@ int32_t __fastcall SKILLITEM_pSpell03_Potion(D2GameStrc* pGame, D2UnitStrc* pUni
         const int32_t nHpPctDiff = std::abs(nLastSentHpPct - nNewSentHpPct);
         if (nHpPctDiff > 4)
         {
-            sub_6FCC6270(pUnit, nNewSentHpPct);
+            SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
             STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
         }
     }
@@ -449,7 +449,7 @@ int32_t __fastcall SKILLITEM_pSpell04_Unused(D2GameStrc* pGame, D2UnitStrc* pUni
         const int32_t nHpPctDiff = std::abs(nLastSentHpPct - nNewSentHpPct);
         if (nHpPctDiff > 4)
         {
-            sub_6FCC6270(pUnit, nNewSentHpPct);
+            SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
             STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
         }
     }
@@ -581,7 +581,7 @@ int32_t __fastcall SKILLITEM_pSpell05_RejuvPotion(D2GameStrc* pGame, D2UnitStrc*
     if (bAffectsHitpoints && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
         const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
-        sub_6FCC6270(pUnit, nNewSentHpPct);
+        SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
         STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
     }
 
@@ -1809,7 +1809,7 @@ int32_t __fastcall SKILLITEM_TimerCallback_ReanimateMonster(D2GameStrc* pGame, i
     AIUTIL_SetOwnerGUIDAndType(pRevivedMonster, pOwner);
     D2GAME_EVENTS_Delete_6FC34840(pGame, pRevivedMonster, EVENTTYPE_AITHINK, 0);
     EVENT_SetEvent(pGame, pRevivedMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 25, 0, 0);
-    sub_6FCBDD30(pRevivedMonster, 2u, 0);
+    SUNIT_SetAlignment(pRevivedMonster, 2u, 0);
     pRevivedMonster->dwFlags |= UNITFLAG_ISREVIVE;
     STATES_ToggleState(pRevivedMonster, STATE_REVIVE, 1);
     D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pRevivedMonster, 21, 0);
@@ -2066,11 +2066,11 @@ int32_t __fastcall SKILLITEM_CastSkillOnTarget(D2UnitStrc* pUnit, int32_t nSkill
 
     if (nTargetUnitType == 6)
     {
-        sub_6FCC60D0(pUnit, nSkillId, nSkillLevel, pTargetUnit->dwUnitType, pTargetUnit->dwUnitId, a5);
+        SUNITMSG_QueueItemSkillOnUnit(pUnit, nSkillId, nSkillLevel, pTargetUnit->dwUnitType, pTargetUnit->dwUnitId, a5);
     }
     else
     {
-        sub_6FCC60D0(pUnit, nSkillId, nSkillLevel, nTargetUnitType, nTargetUnitGUID, a5);
+        SUNITMSG_QueueItemSkillOnUnit(pUnit, nSkillId, nSkillLevel, nTargetUnitType, nTargetUnitGUID, a5);
     }
 
     return 1;
@@ -2096,11 +2096,11 @@ int32_t __fastcall SKILLITEM_CastSkillOnPosition(D2UnitStrc* pUnit, int32_t nSki
 
     if (nTargetX)
     {
-        sub_6FCC6150(pUnit, nSkillId, nSkillLevel, nTargetX, nTargetY, a0);
+        SUNITMSG_QueueItemSkillOnPosition(pUnit, nSkillId, nSkillLevel, nTargetX, nTargetY, a0);
     }
     else
     {
-        sub_6FCC6150(pUnit, nSkillId, nSkillLevel, nX, nY, a0);
+        SUNITMSG_QueueItemSkillOnPosition(pUnit, nSkillId, nSkillLevel, nX, nY, a0);
     }
 
     return 1;

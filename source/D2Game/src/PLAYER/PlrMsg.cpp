@@ -3806,7 +3806,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x5F_UpdatePlayerPos_6FC88530(D2Game
         D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
     }
 
-    if (!bAtSameCoordinates || !sub_6FCBDFE0(pGame, pUnit, 0, pPacket5F->nX, pPacket5F->nY, 0, 1))
+    if (!bAtSameCoordinates || !SUNIT_TeleportUnit(pGame, pUnit, 0, pPacket5F->nX, pPacket5F->nY, 0, 1))
     {
         D2GAME_PACKETS_SendPacket0x15_6FC3D0D0(pClient, 0x15u, pUnit->dwUnitType, pUnit->dwUnitId, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0);
         return 0;

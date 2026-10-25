@@ -35,9 +35,9 @@ void __fastcall PARTY_AllocPartyControl(D2GameStrc* pGame);
 //D2Game.0x6FCB9BA0
 void __fastcall PARTY_FreePartyControl(D2GameStrc* pGame);
 //D2Game.0x6FCB9C40
-int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame);
+int16_t __fastcall PARTY_CreateParty(D2GameStrc* pGame);
 //D2Game.0x6FCB9D10
-int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc* pPlayer);
+int32_t __fastcall PARTY_AddPlayerToParty(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc* pPlayer);
 //D2Game.0x6FCB9E80
 void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBA0C0

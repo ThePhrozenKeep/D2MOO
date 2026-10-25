@@ -1104,7 +1104,7 @@ void __fastcall sub_6FCF77E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2DamageStrc*
                             }
                         }
 
-                        sub_6FCC6300(pUnit, pTarget, nSkillId, nSkillLevel, nX, 0, nValue);
+                        SUNITMSG_QueueSkillEvent(pUnit, pTarget, nSkillId, nSkillLevel, nX, 0, nValue);
                     }
                 }
 
@@ -1457,7 +1457,7 @@ D2UnitStrc* __fastcall sub_6FCF8610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pOwner, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pOwner, pPet, nSkillId, nSkillLevel, 0);
-    sub_6FCBDD30(pPet, 2u, 1);
+    SUNIT_SetAlignment(pPet, 2u, 1);
     
     D2ModeChangeStrc modeChange = {};
     MONSTERMODE_GetModeChangeInfo(pPet, nSpawnMode, &modeChange);
@@ -1497,7 +1497,7 @@ int32_t __fastcall SKILLS_SrvDo044_BladeSentinel(D2GameStrc* pGame, D2UnitStrc* 
 
     const int32_t nX = CLIENTS_GetUnitX(pUnit);
     const int32_t nY = CLIENTS_GetUnitY(pUnit);
-    sub_6FCBDFE0(pGame, pMonster, UNITS_GetRoom(pUnit), nX, nY, 0, 0);
+    SUNIT_TeleportUnit(pGame, pMonster, UNITS_GetRoom(pUnit), nX, nY, 0, 0);
 
     D2AiCmdStrc aiCmd = {};
 
@@ -1819,7 +1819,7 @@ int32_t __fastcall SKILLS_SrvDo048_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUni
 
     if (STATES_CheckState(pUnit, STATE_INFERNO))
     {
-        sub_6FCBD120(pGame, pUnit, 1);
+        SUNIT_RewindAnimationByFrames(pGame, pUnit, 1);
     }
 
     return bMissileCreated;
@@ -1857,7 +1857,7 @@ int32_t __fastcall SKILLS_SrvSt26_BladeFury(D2GameStrc* pGame, D2UnitStrc* pUnit
             return nResult;
         }
 
-        sub_6FCBD120(pGame, pUnit, 1);
+        SUNIT_RewindAnimationByFrames(pGame, pUnit, 1);
         return 1;
     }
 
@@ -2174,7 +2174,7 @@ int32_t __fastcall SKILLS_SrvDo050_DragonTail(D2GameStrc* pGame, D2UnitStrc* pUn
 void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
-    sub_6FCBDD30(pItem, 0, 1);
+    SUNIT_SetAlignment(pItem, 0, 1);
     STATES_ToggleState(pItem, nState, 0);
     D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pItem), pItem);
 
@@ -2249,7 +2249,7 @@ int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallba
             D2COMMON_10476(pConversionStatList, nExpireFrame);
             EVENT_SetEvent(pAuraCallback->pGame, pUnit, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
             sub_6FD154D0(pUnit);
-            sub_6FCBDD30(pUnit, 2u, 1);
+            SUNIT_SetAlignment(pUnit, 2u, 1);
             D2GAME_UpdateSummonAI_6FC401F0(pAuraCallback->pGame, pUnit, 0, pAuraCallback->pOwner->dwNodeIndex);
 
             for (D2StatListStrc* i = STATLIST_GetStatListFromUnitAndFlag(pUnit, 8); i; i = STATLIST_GetStatListFromUnitAndFlag(pUnit, 8))
@@ -2418,7 +2418,7 @@ int32_t __fastcall SKILLS_SrvDo052_DragonFlight(D2GameStrc* pGame, D2UnitStrc* p
         return 0;
     }
 
-    sub_6FCBDFE0(pGame, pUnit, 0, nX, nY, 0, 0);
+    SUNIT_TeleportUnit(pGame, pUnit, 0, nX, nY, 0, 0);
     return 1;
 }
 

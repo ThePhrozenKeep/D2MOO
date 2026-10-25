@@ -246,7 +246,7 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
 }
 
 //D2Game.0x6FCBE7E0
-void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, int32_t a5, uint8_t nSrcDam)
+void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, int32_t bTemporaryWeaponStats, uint8_t nSrcDam)
 {
 	if (!pAttacker || !pDefender)
 	{
@@ -258,7 +258,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		nSrcDam = 128;
 	}
 
-	sub_6FC7C900(pAttacker, a5);
+	sub_6FC7C900(pAttacker, bTemporaryWeaponStats);
 
 	pDamage->dwHitFlags |= DAMAGEHITFLAG_32;
 
@@ -320,7 +320,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 		int32_t nWeaponMastery = 0;
 
-		if (!a5 
+		if (!bTemporaryWeaponStats 
 			&& (nWeaponMastery = SKILLS_GetWeaponMasteryBonus(pAttacker, sub_6FC7C7B0(pAttacker), 0, 2), nWeaponMastery > 0) // NOLINT(bugprone-assignment-in-if-condition)
 			&& (int32_t)(ITEMS_RollRandomNumber(&pAttacker->pSeed) % 100) < nWeaponMastery
 			)
@@ -720,7 +720,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 	}
 
 	D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(pAttacker, pDefender, pDamage);
-	sub_6FC7CA10(pAttacker, a5);
+	sub_6FC7CA10(pAttacker, bTemporaryWeaponStats);
 }
 
 //D2Game.0x6FCBF400
@@ -1064,7 +1064,7 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 //D2Game.0x6FCBFE90
 void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t bMissile, D2DamageStrc* pDamage)
 {
-	if (!sub_6FCBD900(pGame, pAttacker, pDefender) && !(pDamage->dwHitFlags & DAMAGEHITFLAG_4096))
+	if (!SUNIT_AreUnitsHostile(pGame, pAttacker, pDefender) && !(pDamage->dwHitFlags & DAMAGEHITFLAG_4096))
 	{
 		pDamage->wResultFlags &= (uint16_t)(~(DAMAGERESULTFLAG_SUCCESSFULHIT | DAMAGERESULTFLAG_WILLDIE));
 		return;
@@ -2026,7 +2026,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			if (pDamage->wResultFlags & DAMAGERESULTFLAG_GETHIT)
 			{
-				if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !sub_6FCC1870(pUnit, pDamage, pDamage->dwHitClass))
+				if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !SUNITDMG_ShouldSkipHitRecovery(pUnit, pDamage, pDamage->dwHitClass))
 				{
 					sub_6FC817D0(pGame, pUnit, nullptr, 4, pDamage->dwDmgTotal, 0, 0);
 					return;
@@ -2120,7 +2120,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 
 		if (pDamage->wResultFlags & DAMAGERESULTFLAG_GETHIT)
 		{
-			if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !sub_6FCC1870(pUnit, pDamage, pDamage->dwHitClass))
+			if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !SUNITDMG_ShouldSkipHitRecovery(pUnit, pDamage, pDamage->dwHitClass))
 			{
 				D2ModeChangeStrc modeChange = {};
 				MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_GETHIT, &modeChange);
@@ -2159,7 +2159,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCC1870
-BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass)
+BOOL __fastcall SUNITDMG_ShouldSkipHitRecovery(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass)
 {
 	if (STATES_CheckState(pUnit, STATE_FREEZE))
 	{
@@ -2409,12 +2409,12 @@ D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2Un
 }
 
 //D2Game.0x6FCC1DC0
-bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
+bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* pFirstValue, int32_t* pSecondValue)
 {
-	*a2 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a2);
-	*a3 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a3);
+	*pFirstValue = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *pFirstValue);
+	*pSecondValue = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *pSecondValue);
 
-	return *a2 >= *a3;
+	return *pFirstValue >= *pSecondValue;
 }
 
 //1.10: Inlined
@@ -2577,7 +2577,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 //D2Game.0x6FCC2300
 uint16_t __fastcall SUNITDMG_GetResultFlags(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t nRangeOffset)
 {
-	if (!pAttacker || !pDefender || pAttacker->dwUnitType != UNIT_PLAYER && pAttacker->dwUnitType != UNIT_MONSTER || pDefender->dwUnitType != UNIT_PLAYER && pDefender->dwUnitType != UNIT_MONSTER || !sub_6FCBD900(pGame, pAttacker, pDefender))
+	if (!pAttacker || !pDefender || pAttacker->dwUnitType != UNIT_PLAYER && pAttacker->dwUnitType != UNIT_MONSTER || pDefender->dwUnitType != UNIT_PLAYER && pDefender->dwUnitType != UNIT_MONSTER || !SUNIT_AreUnitsHostile(pGame, pAttacker, pDefender))
 	{
 		return 0;
 	}
@@ -2839,12 +2839,12 @@ int32_t __fastcall SUNITDMG_GetWeaponBlock(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCC2910
-int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t a7, int32_t a8, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t a10)
+int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t bIncludeOwner, int32_t bIncludeOwnersOwner, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t nUnitFindFlags)
 {
 	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
-	int32_t nFlags = a10;
-	if (!a10)
+	int32_t nFlags = nUnitFindFlags;
+	if (!nUnitFindFlags)
 	{
 		nFlags = 0x583;
 	}
@@ -2874,7 +2874,7 @@ int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGam
 	{
 		D2UnitStrc* pFoundUnit = unitFindData.pUnitsArray[i];
 
-		if ((pOwnerOwner != pFoundUnit || a8) && (pUnitOwner != pFoundUnit || a7) && sub_6FCBD900(pGame, pUnitOwner, pFoundUnit) && D2Common_11026(nX, nY, pFoundUnit, COLLIDE_MASK_RADIAL_BARRIER))
+		if ((pOwnerOwner != pFoundUnit || bIncludeOwnersOwner) && (pUnitOwner != pFoundUnit || bIncludeOwner) && SUNIT_AreUnitsHostile(pGame, pUnitOwner, pFoundUnit) && D2Common_11026(nX, nY, pFoundUnit, COLLIDE_MASK_RADIAL_BARRIER))
 		{
 			memcpy(&damageCopy, pDamage, sizeof(damageCopy));
 

@@ -673,7 +673,7 @@ void __fastcall OBJMODE_SendObjectUpdates(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
         if ((pUnit->dwFlags >> 8) & 1)
         {
-            sub_6FCC5FA0(pUnit, pClient);
+            SUNITMSG_SendHoverText(pUnit, pClient);
         }
 
         if (pUnit->dwFlagEx & 1)
@@ -682,7 +682,7 @@ void __fastcall OBJMODE_SendObjectUpdates(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         }
     }
 
-    sub_6FCC6540(pUnit, pClient);
+    SUNITMSG_SendQueuedMessages(pUnit, pClient);
 }
 
 //D2Game.0x6FC753E0
@@ -745,7 +745,7 @@ int32_t __fastcall OBJECTS_OperateFunction27_TeleportPad(D2ObjOperateFnStrc* pOp
 
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pUnit, &pCoord);
-        if (COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x1C09, 0) && pPlayer && sub_6FCBDFE0(pPlayer->pGame, pPlayer, pRoom, pCoord.nX, pCoord.nY, 0, 0))
+        if (COLLISION_GetFreeCoordinates(pRoom, &pCoord, 3, 0x1C09, 0) && pPlayer && SUNIT_TeleportUnit(pPlayer->pGame, pPlayer, pRoom, pCoord.nX, pCoord.nY, 0, 0))
         {
             D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
@@ -3226,7 +3226,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
             D2ActiveRoomStrc* pFreeCoordsRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, UNITS_GetUnitSizeX(pPlayer), 0x1C09, 0);
             if (pFreeCoordsRoom)
             {
-                if (!sub_6FCBDFE0(pGame, pPlayer, pFreeCoordsRoom, pCoord.nX, pCoord.nY, 0, 0))
+                if (!SUNIT_TeleportUnit(pGame, pPlayer, pFreeCoordsRoom, pCoord.nX, pCoord.nY, 0, 0))
                 {
                     FOG_DisplayAssert("fRet", __FILE__, __LINE__);
                     exit(-1);
@@ -3318,7 +3318,7 @@ int32_t __fastcall OBJECTS_OperateFunction43_DurielPortal(D2ObjOperateFnStrc* pO
     pCoord.nY = nY;
 
     pRoom = COLLISION_GetFreeCoordinates(pRoom, &pCoord, nSize, 0x1C09, 0);
-    if (pRoom && !sub_6FCBDFE0(pOp->pGame, pPlayer, pRoom, pCoord.nX, pCoord.nY, 0, 0))
+    if (pRoom && !SUNIT_TeleportUnit(pOp->pGame, pPlayer, pRoom, pCoord.nX, pCoord.nY, 0, 0))
     {
         FOG_DisplayAssert("fRet", __FILE__, __LINE__);
         exit(-1);

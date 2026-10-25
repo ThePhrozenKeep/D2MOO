@@ -34,7 +34,7 @@ D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromClassId(D2GameStrc* pGame
 //D2Game.0x6FCCB910
 D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromUnit(D2GameStrc* pGame, D2UnitStrc* pNpc, int32_t* pIndex);
 //D2Game.0x6FCCB980
-void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a4);
+void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nEventParam);
 //D2Game.0x6FCCBA30
 void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame);
 //D2Game.0x6FCCBF50

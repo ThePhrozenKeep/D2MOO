@@ -262,7 +262,7 @@ int32_t __fastcall sub_6FD0B2B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     {
         if (!SUNIT_IsDead(pTarget))
         {
-            return sub_6FCBD900(pGame, pUnit, pTarget) != 0;
+            return SUNIT_AreUnitsHostile(pGame, pUnit, pTarget) != 0;
         }
     }
 
@@ -570,7 +570,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		|| !sub_6FD15190(pTargetUnit, AISPECIALSTATE_INVALID)
 		|| SUNIT_IsDead(pTargetUnit) 
 		|| DUNGEON_IsRoomInTown(UNITS_GetRoom(pTargetUnit)) 
-		|| !sub_6FCBD900(pGame, pUnit, pTargetUnit))
+		|| !SUNIT_AreUnitsHostile(pGame, pUnit, pTargetUnit))
     {
         return 0;
     }
@@ -585,7 +585,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    sub_6FCBDD30(pTargetUnit, 1u, 1);
+    SUNIT_SetAlignment(pTargetUnit, 1u, 1);
     sub_6FC40280(pGame, pTargetUnit, 0, 9);
     sub_6FD154D0(pTargetUnit);
 
@@ -632,7 +632,7 @@ int32_t __fastcall sub_6FD0BDA0(D2UnitStrc* pUnit, void* pArg)
 		&& sub_6FD15190(pUnit, AISPECIALSTATE_INVALID)
 		&& !SUNIT_IsDead(pUnit) 
 		&& !DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)) 
-		&& sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit))
+		&& SUNIT_AreUnitsHostile(pParam->pGame, pParam->pUnit, pUnit))
     {
         int32_t nParam = 1;
         if (pParam->nUnitType != UNIT_PLAYER)
@@ -720,7 +720,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 {
     D2UnkNecSkillStrc* pParam = (D2UnkNecSkillStrc*)pArg;
 
-    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL || !sub_6FCBD900(pParam->pGame, pParam->pUnit, pUnit) || SUNIT_IsDead(pUnit) || !sub_6FD15190(pUnit, AISPECIALSTATE_TERROR))
+    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL || !SUNIT_AreUnitsHostile(pParam->pGame, pParam->pUnit, pUnit) || SUNIT_IsDead(pUnit) || !sub_6FD15190(pUnit, AISPECIALSTATE_TERROR))
     {
         return 0;
     }
@@ -811,7 +811,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
         UNITS_UpdateAnimRateAndVelocity(pUnit, __FILE__, __LINE__);
     }
 
-    sub_6FCBDD30(pUnit, 1u, 1);
+    SUNIT_SetAlignment(pUnit, 1u, 1);
     sub_6FC40280(pParam->pGame, pUnit, 0, 9);
     sub_6FC61E30(pUnit, 3, 0);
     EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nDuration + pParam->pGame->dwGameFrame, 0, 0);
@@ -823,7 +823,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 void __fastcall sub_6FD0C2B0(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
-    sub_6FCBDD30(pUnit, 0, 1);
+    SUNIT_SetAlignment(pUnit, 0, 1);
     STATES_ToggleState(pUnit, nState, 0);
     D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pUnit), pUnit);
 }
@@ -1553,7 +1553,7 @@ int32_t __fastcall SKILLS_SrvDo058_Revive(D2GameStrc* pGame, D2UnitStrc* pUnit, 
             SKILLS_SetRightActiveSkill(pTarget, 0, -1);
         }
 
-        sub_6FCBDFE0(pGame, pTarget, pRoom, coords.nX, coords.nY, 0, 0);
+        SUNIT_TeleportUnit(pGame, pTarget, pRoom, coords.nX, coords.nY, 0, 0);
     }
 
     D2MonStatsInitStrc monStatsInit = {};
@@ -1604,7 +1604,7 @@ void __fastcall sub_6FD0DF40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         AIUTIL_SetOwnerGUIDAndType(pMonster, pUnit);
         D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
         EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
-        sub_6FCBDD30(pMonster, 2u, 0);
+        SUNIT_SetAlignment(pMonster, 2u, 0);
         sub_6FC61F00(pMonster);
 
         if (pMonster)

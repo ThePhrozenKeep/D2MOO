@@ -289,7 +289,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
         }
     }
 
-    sub_6FCC8430(pGame, pPlayer);
+    SUNITNPC_UpdateHirelingPosition(pGame, pPlayer);
 
     const int32_t nIronGolemItemGUID = pClient->nIronGolemItemGUID;
     if (nIronGolemItemGUID && nIronGolemItemGUID != -1)

@@ -553,7 +553,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
             pAttacker = pOwner;
         }
 
-        if (!sub_6FCBD900(SUNIT_GetGameFromUnit(pAttacker), pAttacker, pTarget))
+        if (!SUNIT_AreUnitsHostile(SUNIT_GetGameFromUnit(pAttacker), pAttacker, pTarget))
         {
             return 0;
         }
@@ -2608,7 +2608,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
         if (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_TARGETABLEONLY])
         {
-            if (!sub_6FCBD900(pGame, pUnit, pTarget) && !SUNIT_CanPetBeTargetedBySkill(pGame, pUnit, pTarget, nSkillId) && !SUNIT_CanAllyBeTargetedBySkill(pGame, pUnit, pTarget, nSkillId))
+            if (!SUNIT_AreUnitsHostile(pGame, pUnit, pTarget) && !SUNIT_CanPetBeTargetedBySkill(pGame, pUnit, pTarget, nSkillId) && !SUNIT_CanAllyBeTargetedBySkill(pGame, pUnit, pTarget, nSkillId))
             {
                 if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
                 {
@@ -3066,7 +3066,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     pLinkPortal->pObjectData->InteractType = nLocalLevelId;
     UNITS_SetObjectPortalFlags(pLinkPortal, UNITS_GetObjectPortalFlags(pLinkPortal) | 3);
     UNITS_ChangeAnimMode(pLinkPortal, OBJMODE_OPENED);
-    sub_6FCBC9C0(pPortal, pLinkPortal);
+    SUNIT_LinkPortalCoordinates(pPortal, pLinkPortal);
     UNITS_StoreOwner(pPortal, pLinkPortal);
     UNITS_StoreOwner(pLinkPortal, pPortal);
 
@@ -3583,11 +3583,11 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
         sub_6FD146D0(pGame, pSummonArg->pOwner);
         if (pPet)
         {
-            D2GAME_SetNecropetFlag_6FCBD760(pSummonArg->pOwner, pPet->dwUnitId);
+            SUNIT_SetTrackedSummonGUID(pSummonArg->pOwner, pPet->dwUnitId);
         }
         else
         {
-            D2GAME_SetNecropetFlag_6FCBD760(pSummonArg->pOwner, -1);
+            SUNIT_SetTrackedSummonGUID(pSummonArg->pOwner, -1);
         }
     }
     
@@ -3627,13 +3627,13 @@ void __fastcall sub_6FD146D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pUnit);
 
-    D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, D2GAME_GetNecropetFlag_6FCBD790(pUnit));
+    D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, SUNIT_GetTrackedSummonGUID(pUnit));
     if (pPet)
     {
         if ((pPet->dwFlagEx >> 8) & 1)
         {
             SUNIT_RemoveUnit(pGame, pPet);
-            D2GAME_SetNecropetFlag_6FCBD760(pUnit, -1);
+            SUNIT_SetTrackedSummonGUID(pUnit, -1);
             return;
         }
 
@@ -3642,7 +3642,7 @@ void __fastcall sub_6FD146D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         SUNITDMG_KillMonster(pGame, pPet, pUnit, 1);
     }
 
-    D2GAME_SetNecropetFlag_6FCBD760(pUnit, -1);
+    SUNIT_SetTrackedSummonGUID(pUnit, -1);
 }
 
 //D2Game.0x6FD14770
@@ -3878,7 +3878,7 @@ void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc*
 //D2Game.0x6FD15080
 void __fastcall sub_6FD15080(D2UnitStrc* pUnit, int32_t a2)
 {
-    sub_6FCBCFD0(SUNIT_GetGameFromUnit(pUnit), pUnit, a2);
+    SUNIT_RewindAnimationByPercentage(SUNIT_GetGameFromUnit(pUnit), pUnit, a2);
 }
 
 //D2Game.0x6FD150A0

@@ -151,7 +151,7 @@ void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, st
 //D2Game.0x6FCBE420
 int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetStats, D2UnitStrc* pItem, int32_t nMinDmg, int32_t nMaxDmg, int32_t nDamagePercent, int32_t nDamage, uint8_t nSrcDam);
 //D2Game.0x6FCBE7E0
-void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, int32_t a5, uint8_t nSrcDam);
+void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, int32_t bTemporaryWeaponStats, uint8_t nSrcDam);
 //D2Game.0x6FCBF400
 int32_t __fastcall SUNITDMG_CheckMonType(int32_t nMonType1, int32_t nMonType2);
 //D2Game.0x6FCBF450
@@ -187,7 +187,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 //D2Game.0x6FCC1260
 void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pUnit, D2DamageStrc* pDamage);
 //D2Game.0x6FCC1870
-BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass);
+BOOL __fastcall SUNITDMG_ShouldSkipHitRecovery(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass);
 //D2Game.0x6FCC1A50
 int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHitClass);
 //D2Game.0x6FCC1AC0
@@ -195,7 +195,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 //D2Game.0x6FCC1D70
 D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2UnitStrc* pDefender);
 //D2Game.0x6FCC1DC0
-bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3);
+bool __stdcall SUNITDMG_RollAndCompareValues(D2UnitStrc* pUnit, int32_t* pFirstValue, int32_t* pSecondValue);
 //D2Game.0x6FCC1E70
 int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t bMissile);
 //D2Game.0x6FCC2300
@@ -209,7 +209,7 @@ int32_t __fastcall SUNITDMG_ApplyDodge(D2UnitStrc* pAttacker, D2UnitStrc* pDefen
 //D2Game.0x6FCC2850
 int32_t __fastcall SUNITDMG_GetWeaponBlock(D2UnitStrc* pUnit);
 //D2Game.0x6FCC2910
-int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t a7, int32_t a8, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t a10);
+int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t bIncludeOwner, int32_t bIncludeOwnersOwner, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t a10);
 //D2Game.0x6FCC2BC0
 void __fastcall SUNITDMG_RollDamage(D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage);
 //D2Game.0x6FCC2BF0

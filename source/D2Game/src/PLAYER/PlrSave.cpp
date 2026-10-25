@@ -924,7 +924,7 @@ int32_t __fastcall sub_6FC8A780(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_
     pPlayerData->dwAcceptTradeTick = 0;
     pPlayerData->unk0x54 = 0;
 
-    D2GAME_SUNITMSG_FirstFn_6FCC5520(CLIENTS_GetGame(pClient), *ppPlayer, pClient);
+    SUNITMSG_SendUnitToClient(CLIENTS_GetGame(pClient), *ppPlayer, pClient);
 
     *a7 = 16;
     *a8 = sgptDataTables->nSkillsTxtRecordCount;
@@ -2202,7 +2202,7 @@ int32_t __fastcall sub_6FC8C890(D2GameStrc* pGame, D2ClientStrc* pClient, D2Unit
     pPlayerData->dwAcceptTradeTick = 0;
     pPlayerData->unk0x54 = 0;
 
-    D2GAME_SUNITMSG_FirstFn_6FCC5520(pGame, pPlayer, pClient);
+    SUNITMSG_SendUnitToClient(pGame, pPlayer, pClient);
 
     const uint8_t nAct = CLIENTS_GetActNo(pClient);
     PLAYERSTATS_SetStatsForStartingAct(pGame, pPlayer, nAct);

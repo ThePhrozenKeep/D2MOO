@@ -623,7 +623,7 @@ void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2Unit
 
             if (nHpPctDiff > 4)
             {
-                sub_6FCC6270(pUnit, nNewSentHpPct);
+                SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
                 STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
             }
 
@@ -773,7 +773,7 @@ void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
     {
         if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
         {
-            sub_6FCBDE90(pUnit, 0);
+            SUNIT_SetUninterruptable(pUnit, 0);
 
             if (SUNIT_IsDead(pUnit))
             {
@@ -1047,7 +1047,7 @@ int32_t __fastcall sub_6FC64280(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return 1;
     }
 
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
 
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
@@ -1127,7 +1127,7 @@ int32_t __fastcall sub_6FC643D0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 //D2Game.0x6FC643E0
 int32_t __fastcall sub_6FC643E0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
     {
@@ -1171,7 +1171,7 @@ int32_t __fastcall sub_6FC64480(D2GameStrc* pGame, D2UnitStrc* pUnit)
         SKILLS_CreateSpiderLayMissile(pGame, pUnit);
     }
 
-    if (sub_6FCBC930(pGame, pUnit) == 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
     {
         sub_6FC63680(pGame, pUnit);
         return 2;
@@ -1196,7 +1196,7 @@ int32_t __fastcall sub_6FC644E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 //1.14d: 0x005A84F0
 int32_t __fastcall sub_6FC64510(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    if (sub_6FCBC930(pGame, pUnit) == 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
     {
         sub_6FC63680(pGame, pUnit);
         return 2;
@@ -1314,7 +1314,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
         if (v10)
         {
-            sub_6FCBC930(pGame, pUnit);
+            SUNIT_UpdateUnitPath(pGame, pUnit);
             UNITS_StopSequence(pUnit);
 
             if (UNITS_IsAtEndOfFrameCycle(pUnit))
@@ -1420,9 +1420,9 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return 1;
     }
 
-    sub_6FCBC7E0(pGame, pUnit);
+    SUNIT_ValidateTargetUnit(pGame, pUnit);
 
-    if (sub_6FCBC930(pGame, pUnit) != 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) != 2)
     {
         sub_6FD13410(pGame, pUnit);
         UNITS_StopSequence(pUnit);
@@ -1563,7 +1563,7 @@ void __fastcall sub_6FC64CD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 //D2Game.0x6FC64E20
 int32_t __fastcall sub_6FC64E20(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
     {
@@ -1602,9 +1602,9 @@ int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
     int32_t bCheck = 1;
     if (nSkillFlags & 1)
     {
-        sub_6FCBC7E0(pGame, pUnit);
+        SUNIT_ValidateTargetUnit(pGame, pUnit);
 
-        if (sub_6FCBC930(pGame, pUnit) == 2)
+        if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
         {
             SKILLS_SetFlags(pSkill, nSkillFlags | 2);
             sub_6FD13410(pGame, pUnit);
@@ -1780,7 +1780,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
     if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
     {
-        sub_6FCBDE90(pUnit, 0);
+        SUNIT_SetUninterruptable(pUnit, 0);
 
         if (SUNIT_IsDead(pUnit))
         {
@@ -1923,7 +1923,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
     pUnit->dwFlags |= UNITFLAG_MONMODEISCHANGING;
 
-    sub_6FCBC4D0(pUnit);
+    SUNIT_InitializeAnimation(pUnit);
 
     if (pAiParam && pAiParam->unk0x10)
     {
@@ -1973,7 +1973,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
     {
         if (nCurrentAnimMode >= 16)
         {
-            sub_6FCBCE70(pGame, pUnit);
+            SUNIT_ScheduleAnimationEvents(pGame, pUnit);
         }
         else
         {
@@ -1982,24 +1982,24 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             {
                 if (pMonModeInfoTableRecord->unk0x04 || !pMonModeInfoTableRecord->unk0x08)
                 {
-                    sub_6FCBCE70(pGame, pUnit);
+                    SUNIT_ScheduleAnimationEvents(pGame, pUnit);
                 }
                 else
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
                     if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nCurrentAnimMode >> 3] & gdwBitMasks[nCurrentAnimMode & 7]))
                     {
-                        sub_6FCBCE70(pGame, pUnit);
+                        SUNIT_ScheduleAnimationEvents(pGame, pUnit);
                     }
                     else
                     {
-                        sub_6FCBD3A0(pGame, pUnit);
+                        SUNIT_ResetRecurringModeChangeEvent(pGame, pUnit);
                     }
                 }
             }
             else
             {
-                sub_6FCBD3A0(pGame, pUnit);
+                SUNIT_ResetRecurringModeChangeEvent(pGame, pUnit);
             }
         }
     }

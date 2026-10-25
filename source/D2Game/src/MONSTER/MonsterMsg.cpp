@@ -39,7 +39,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         if (pUnit->dwFlagEx & UNITFLAGEX_TELEPORTED)
         {
             D2GAME_PACKETS_SendPacket0x15_6FC3D0D0(pClient, 0x15u, pUnit->dwUnitType, pUnit->dwUnitId, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1);
-            sub_6FCBB190(pGame, pUnit, 0);
+            SUNIT_SynchronizeRoomClients(pGame, pUnit, 0);
         }
 
         if (pUnit->dwFlags & UNITFLAG_DOUPDATE)
@@ -50,13 +50,13 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         pUnit->dwFlags &= ~UNITFLAG_MONMODEISCHANGING;
     }
 
-    sub_6FCC6540(pUnit, pClient);
+    SUNITMSG_SendQueuedMessages(pUnit, pClient);
 
     if (pUnit)
     {
         if (pUnit->dwFlags & UNITFLAG_HASTXTMSG)
         {
-            sub_6FCC5FA0(pUnit, pClient);
+            SUNITMSG_SendHoverText(pUnit, pClient);
         }
 
         if (pUnit->dwFlagEx & UNITFLAGEX_HASINV)
@@ -102,7 +102,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
     if (D2COMMON_10530_D2CheckStatlistFlagDMGRed(pUnit))
     {
-        sub_6FCC5F20(pUnit, pClient);
+        SUNITMSG_SendOverlay(pUnit, pClient);
     }
 
     if (pUnit && pUnit->dwFlags & UNITFLAG_SUMMONER && MONSTER_CheckSummonerFlag(pUnit, 1u))
