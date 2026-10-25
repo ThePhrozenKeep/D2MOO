@@ -612,7 +612,7 @@ int32_t __fastcall AITACTICS_RunCloseToTargetUnit(D2GameStrc* pGame, D2UnitStrc*
 //D2Game.0x6FCD0E80
 int32_t __fastcall AITACTICS_WalkToTargetWithRandomPathType(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nNewDistance, int32_t bDeleteAiEventCallback)
 {
-	//TODO: nPathType
+	// Path type 5 or 6, half the time each
 	int32_t nPathType = 0;
 	if ((uint8_t)ITEMS_RollRandomNumber(&pUnit->pSeed) < 128u)
 	{
