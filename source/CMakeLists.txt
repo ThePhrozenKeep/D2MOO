@@ -14,5 +14,6 @@ add_subdirectory(D2Win)
 add_subdirectory(D2Debugger)
 add_subdirectory(Game)
 
+add_subdirectory(TestDefinitions)
 add_subdirectory(TestUtilities)
 add_subdirectory(VisitorFramework)
