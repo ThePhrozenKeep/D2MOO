@@ -17,6 +17,15 @@ enum D2EditBoxFlags
 };
 
 
+struct D2WinEditBoxStrc;
+
+// Called on Enter with the box's text, and on Escape with nullptr
+using EditBoxReturnCallback = int32_t(__stdcall*)(const Unicode* wszText);
+// Called with the box, the caret position and the typed character (which it may replace); FALSE refuses the character
+using EditBoxKeyFilterCallback = BOOL(__stdcall*)(D2WinEditBoxStrc* pEditBox, int32_t nPosition, char* pChar);
+// Called with 0 after every change of the text
+using EditBoxChangeCallback = void(__stdcall*)(int32_t nUnused);
+
 #pragma pack(push, 1)
 struct D2WinEditBoxStrc
 {
@@ -31,9 +40,9 @@ struct D2WinEditBoxStrc
 	Unicode wszText[256];							//0x258
 	int32_t field_25C;								//0x25C
 	uint32_t dwEditBoxFlags;						//0x260
-	int32_t field_264;								//0x264
-	int32_t field_268;								//0x268
-	void(__stdcall* field_26C)(int32_t);			//0x26C
+	EditBoxReturnCallback pfOnReturn;				//0x264
+	EditBoxKeyFilterCallback pfKeyFilter;			//0x268
+	EditBoxChangeCallback pfOnChange;				//0x26C
 	Font eFont;										//0x270
 	int32_t nTextColor;								//0x274
 	D2WinEditBoxStrc* pNext;						//0x278
@@ -48,9 +57,9 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 //D2Win.0x6F8A6DC0
 int __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A6E10
-void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, int32_t a2);
+void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, EditBoxKeyFilterCallback pfKeyFilter);
 //D2Win.0x6F8A6E60
-void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, void(__stdcall* a2)(int32_t));
+void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, EditBoxChangeCallback pfOnChange);
 //D2Win.0x6F8A6EB0
 void __fastcall D2Win_10083(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8A6F10
