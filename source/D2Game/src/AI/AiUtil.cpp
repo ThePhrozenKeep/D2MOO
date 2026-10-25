@@ -108,7 +108,7 @@ uint32_t __fastcall AIUTIL_GetDistanceToCoordinates(D2UnitStrc* pUnit, int32_t n
 }
 
 //D2Game.0x6FCF14D0
-int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
+int32_t __fastcall AIUTIL_HasClearApproachToTarget(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {
 	constexpr uint8_t nOffsets[25] = { 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
 
@@ -136,7 +136,7 @@ int32_t __fastcall sub_6FCF14D0(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 }
 
 //D2Game.0x6FCF16D0
-D2UnitStrc* __fastcall sub_6FCF16D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_CountAndFindFriendlyMonster(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2BaalThroneAiCallbackArgStrc* pArg = (D2BaalThroneAiCallbackArgStrc*)pCallbackArg;
 
@@ -163,7 +163,7 @@ D2UnitStrc* __fastcall sub_6FCF16D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1740
-D2UnitStrc* __fastcall sub_6FCF1740(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_FindMonsterInDeathMode(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	UnkAiStrc5* pArg = (UnkAiStrc5*)pCallbackArg;
 	if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pTarget->dwAnimMode == MONMODE_DEATH && AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit) < pArg->nMaxDistance)
@@ -175,7 +175,7 @@ D2UnitStrc* __fastcall sub_6FCF1740(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1780
-D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHostileTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2UnkAiCallbackArgStrc* pArg = (D2UnkAiCallbackArgStrc*)pCallbackArg;
 
@@ -266,11 +266,11 @@ D2UnitStrc* __fastcall sub_6FCF1780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1980
-D2UnitStrc* __fastcall sub_6FCF1980(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectEligibleHostileTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2UnkAiCallbackArgStrc2* pArg = (D2UnkAiCallbackArgStrc2*)pCallbackArg;
 
-	if (!sub_6FCF1A50(pGame, pUnit, pTarget))
+	if (!AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -358,7 +358,7 @@ D2UnitStrc* __fastcall sub_6FCF1980(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1A50
-int32_t __fastcall sub_6FCF1A50(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
+int32_t __fastcall AIUTIL_CanSelectHostileTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
 {
 	if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER) || !pTarget || (pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || SUNIT_IsDead(pUnit))
 	{
@@ -392,11 +392,11 @@ int32_t __fastcall sub_6FCF1A50(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FCF1B30
-D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2AiCallback7ArgStrc* pArg = (D2AiCallback7ArgStrc*)pCallbackArg;
 
-	if (pTarget == pArg->unk0x08 || !sub_6FCF1A50(pGame, pUnit, pTarget))
+	if (pTarget == pArg->unk0x08 || !AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -429,7 +429,7 @@ D2UnitStrc* __fastcall sub_6FCF1B30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1BD0
-D2UnitStrc* __fastcall sub_6FCF1BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTargetWithClearApproach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2AiCallback11ArgStrc* pArg = (D2AiCallback11ArgStrc*)pCallbackArg;
 
@@ -446,7 +446,7 @@ D2UnitStrc* __fastcall sub_6FCF1BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 
 	if (pTarget->dwUnitType == UNIT_PLAYER)
 	{
-		if (nDistance < pArg->nDistance && sub_6FCF14D0(pUnit, pTarget))
+		if (nDistance < pArg->nDistance && AIUTIL_HasClearApproachToTarget(pUnit, pTarget))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -455,7 +455,7 @@ D2UnitStrc* __fastcall sub_6FCF1BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 	else if (pTarget->dwUnitType == UNIT_MONSTER)
 	{
 		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
-		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && sub_6FCF14D0(pUnit, pTarget))
+		if (pMonStatsTxtRecord->nThreat > 1 && nDistance < pArg->nDistance && AIUTIL_HasClearApproachToTarget(pUnit, pTarget))
 		{
 			pArg->pTarget = pTarget;
 			pArg->nDistance = nDistance;
@@ -466,7 +466,7 @@ D2UnitStrc* __fastcall sub_6FCF1BD0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1CB0
-D2UnitStrc* __fastcall sub_6FCF1CB0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_FindClosestClosedDoor(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2DoorObjectAiCallbackArgStrc* pArg = (D2DoorObjectAiCallbackArgStrc*)pCallbackArg;
 
@@ -487,7 +487,7 @@ D2UnitStrc* __fastcall sub_6FCF1CB0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1DC0
-D2UnitStrc* __fastcall sub_6FCF1DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_CountDeadMinions(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2FallenShamanAiCallbackArgStrc* pArg = (D2FallenShamanAiCallbackArgStrc*)pCallbackArg;
 	const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget);
@@ -502,7 +502,7 @@ D2UnitStrc* __fastcall sub_6FCF1DC0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1E30
-D2UnitStrc* __fastcall sub_6FCF1E30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
+D2UnitStrc* __fastcall AIUTIL_TargetCallback_CountLivingMonstersOfClass(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pCallbackArg)
 {
 	D2VileMotherAiCallbackArgStrc* pArg = (D2VileMotherAiCallbackArgStrc*)pCallbackArg;
 	if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pTarget->dwClassId == pArg->nLastInClass && !SUNIT_IsDead(pTarget) && AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pTarget) <= pArg->nMaxDistance)
@@ -514,31 +514,31 @@ D2UnitStrc* __fastcall sub_6FCF1E30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 }
 
 //D2Game.0x6FCF1E80
-D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* a3, D2UnitStrc*(__fastcall* a4)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), int32_t nCallbackId)
+D2UnitStrc* __fastcall AIUTIL_FindTargetWithCallback(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pCallbackArg, D2UnitStrc*(__fastcall* pfFallbackCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), int32_t nCallbackId)
 {
 	D2UnkAiTableStrc tTargetScanEntries[13] =
 	{
 		{ 0, nullptr },
 		{ 0, nullptr },
 		{ 1, nullptr },
-		{ 0, sub_6FCF16D0 },
-		{ 0, sub_6FCF1740 },
-		{ 2, sub_6FCF1780 },
-		{ 0, sub_6FCF1980 },
-		{ 0, sub_6FCF1B30 },
-		{ 0, sub_6FCF1CB0 },
-		{ 3, sub_6FCF1DC0 },
+		{ 0, AIUTIL_TargetCallback_CountAndFindFriendlyMonster },
+		{ 0, AIUTIL_TargetCallback_FindMonsterInDeathMode },
+		{ 2, AIUTIL_TargetCallback_SelectHostileTarget },
+		{ 0, AIUTIL_TargetCallback_SelectEligibleHostileTarget },
+		{ 0, AIUTIL_TargetCallback_SelectHighThreatTarget },
+		{ 0, AIUTIL_TargetCallback_FindClosestClosedDoor },
+		{ 3, AIUTIL_TargetCallback_CountDeadMinions },
 		{ 3, nullptr },
-		{ 2, sub_6FCF1BD0 },
-		{ 0, sub_6FCF1E30 },
+		{ 2, AIUTIL_TargetCallback_SelectHighThreatTargetWithClearApproach },
+		{ 0, AIUTIL_TargetCallback_CountLivingMonstersOfClass },
 	};
 
 	D2UnitStrc*(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*) = tTargetScanEntries[nCallbackId].unk0x04;
 
 	if (!pfCallback)
 	{
-		pfCallback = a4;
-		if (!a4)
+		pfCallback = pfFallbackCallback;
+		if (!pfFallbackCallback)
 		{
 			return nullptr;
 		}
@@ -548,7 +548,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	{
 	case 0:
 	{
-		return AIUTIL_FindTargetInAdjacentRooms(pGame, pUnit, a3, pfCallback);
+		return AIUTIL_FindTargetInAdjacentRooms(pGame, pUnit, pCallbackArg, pfCallback);
 	}
 	case 1:
 	{
@@ -566,7 +566,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 					D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(ppRoomList[i]->ppClients[j], 0);
 					if (pPlayer)
 					{
-						D2UnitStrc* pTarget = pfCallback(pGame, pUnit, pPlayer, a3);
+						D2UnitStrc* pTarget = pfCallback(pGame, pUnit, pPlayer, pCallbackArg);
 						if (pTarget)
 						{
 							return pTarget;
@@ -579,7 +579,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 	}
 	case 2:
 	{
-		return AIUTIL_FindTargetInAdjacentActiveRooms(pGame, pUnit, a3, pfCallback);
+		return AIUTIL_FindTargetInAdjacentActiveRooms(pGame, pUnit, pCallbackArg, pfCallback);
 	}
 	case 3:
 	{
@@ -590,10 +590,10 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 			partyCallbackArg.pfCallback = pfCallback;
 			partyCallbackArg.pGame = pGame;
 			partyCallbackArg.pUnit = pUnit;
-			partyCallbackArg.unk0x0C = a3;
+			partyCallbackArg.unk0x0C = pCallbackArg;
 
 			D2UnitStrc* pTarget = nullptr;
-			AIGENERAL_ExecuteCallbackOnMinions(pOwner, &partyCallbackArg, &pTarget, sub_6FCF20E0);
+			AIGENERAL_ExecuteCallbackOnMinions(pOwner, &partyCallbackArg, &pTarget, AIUTIL_MinionCallback_FindTarget);
 			return pTarget;
 		}
 
@@ -651,7 +651,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_Ubers(D2GameStrc* pGame, D2UnitStrc
 #endif
 
 //D2Game.0x6FCF20E0
-void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
+void __fastcall AIUTIL_MinionCallback_FindTarget(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 {
 	D2PartyCallbackArgStrc* pPartyCallbackArg = (D2PartyCallbackArgStrc*)pArg;
 
@@ -669,7 +669,7 @@ void __fastcall sub_6FCF20E0(D2UnitStrc* pUnit, void* pArg, void* ppUnit)
 
 //D2Game.0x6FCF2110
 //1.14d: 0x005DD7F0
-D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t* pDistance, int32_t* pCombat)
+D2UnitStrc* __fastcall AIUTIL_FindAiTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, int32_t* pDistance, int32_t* pCombat)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 	if (!pRoom)
@@ -709,7 +709,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 	int32_t nDistanceToTarget = 0;
 	int32_t nCurrentDistance = INT_MAX;
 
-	if (!sub_6FCF2920(pGame, pUnit, v66, 0, &pTargetUnit, &nDistanceToTarget))
+	if (!AIUTIL_ResolveTargetOverride(pGame, pUnit, v66, 0, &pTargetUnit, &nDistanceToTarget))
 	{
 		if (STATLIST_GetUnitAlignment(pUnit) != UNIT_ALIGNMENT_EVIL)
 		{
@@ -722,7 +722,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 			arg.pAlternativeTarget = nullptr;
 			arg.nAlternativeDistance = INT_MAX;
 
-			if (sub_6FCF1E80(pGame, pUnit, &arg, nullptr, 5) && arg.pAlternativeTarget && sub_6FCF27B0(pUnit, &arg.pTarget, &arg.nDistance, arg.pAlternativeTarget, arg.nAlternativeDistance))
+			if (AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, nullptr, 5) && arg.pAlternativeTarget && AIUTIL_ShouldUseAlternativeTarget(pUnit, &arg.pTarget, &arg.nDistance, arg.pAlternativeTarget, arg.nAlternativeDistance))
 			{
 				pTargetUnit = arg.pAlternativeTarget;
 				nDistanceToTarget = arg.nAlternativeDistance;
@@ -836,7 +836,7 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 				}
 				while (pTargetNode);
 
-				if (pPotentialTarget && sub_6FCF27B0(pUnit, &pTargetUnit, &nDistanceToTarget, pPotentialTarget, nMinDistance))
+				if (pPotentialTarget && AIUTIL_ShouldUseAlternativeTarget(pUnit, &pTargetUnit, &nDistanceToTarget, pPotentialTarget, nMinDistance))
 				{
 					pTargetUnit = pPotentialTarget;
 					nDistanceToTarget = nMinDistance;
@@ -868,9 +868,9 @@ D2UnitStrc* __fastcall sub_6FCF2110(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCo
 }
 
 //D2Game.0x6FCF27B0
-int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_t* pTargetDistance, D2UnitStrc* a4, int32_t a5)
+int32_t __fastcall AIUTIL_ShouldUseAlternativeTarget(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_t* pTargetDistance, D2UnitStrc* pAlternativeTarget, int32_t nAlternativeDistance)
 {
-	if ((pUnit && pUnit->dwUnitType == UNIT_PLAYER) || !a4)
+	if ((pUnit && pUnit->dwUnitType == UNIT_PLAYER) || !pAlternativeTarget)
 	{
 		return 0;
 	}
@@ -880,7 +880,7 @@ int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_
 		return 1;
 	}
 
-	if (a5 > 5)
+	if (nAlternativeDistance > 5)
 	{
 		return 0;
 	}
@@ -907,7 +907,7 @@ int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_
 	arg.nDistance = INT_MAX;
 	arg.unk0x08 = *ppTarget;
 
-	sub_6FCF1E80(pUnit->pGame, pUnit, &arg, nullptr, 7);
+	AIUTIL_FindTargetWithCallback(pUnit->pGame, pUnit, &arg, nullptr, 7);
 
 	if (!arg.pTarget || arg.nDistance >= 20)
 	{
@@ -921,7 +921,7 @@ int32_t __fastcall sub_6FCF27B0(D2UnitStrc* pUnit, D2UnitStrc** ppTarget, int32_
 }
 
 //D2Game.0x6FCF2920
-int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4, D2UnitStrc** ppUnit, int32_t* pDistance)
+int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bCheckCollision, int32_t bUseEligibilityCheck, D2UnitStrc** ppUnit, int32_t* pDistance)
 {
 	D2UnitStrc* pTarget = nullptr;
 	int32_t nDistance = 0;
@@ -948,7 +948,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
+		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -967,7 +967,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
+		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -986,7 +986,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 
 		nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pTarget, pUnit);
 
-		if (a4 && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
+		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
 			sub_6FC61F00(pUnit);
 			return 0;
@@ -1023,7 +1023,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 			}
 		}
 
-		if (a4)
+		if (bUseEligibilityCheck)
 		{
 			D2UnkAiCallbackArgStrc2 arg = {};
 			arg.pTarget = nullptr;
@@ -1031,7 +1031,7 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 			arg.pAlternativeTarget = nullptr;
 			arg.nAlternativeDistance = INT_MAX;
 
-			sub_6FCF1E80(pGame, pUnit, &arg, nullptr, 6);
+			AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, nullptr, 6);
 
 			pTarget = arg.pTarget;
 			nDistance = arg.nDistance;
@@ -1041,13 +1041,13 @@ int32_t __fastcall sub_6FCF2920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3
 			D2UnkAiCallbackArgStrc arg = {};
 			arg.pTarget = nullptr;
 			arg.nDistance = INT_MAX;
-			arg.bCheckTargetCollision = a3;
+			arg.bCheckTargetCollision = bCheckCollision;
 			arg.nMaxDistance = 35;
 			arg.unk0x10 = D2Common_10095(UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
 			arg.pAlternativeTarget = nullptr;
 			arg.nAlternativeDistance = INT_MAX;
 
-			sub_6FCF1E80(pGame, pUnit, &arg, nullptr, 5);
+			AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, nullptr, 5);
 
 			pTarget = arg.pTarget;
 			nDistance = arg.nDistance;
@@ -1159,12 +1159,12 @@ D2UnitStrc* __fastcall AIUTIL_FindTargetInAdjacentActiveRooms(D2GameStrc* pGame,
 }
 
 //D2Game.0x6FCF2CC0
-D2UnitStrc* __fastcall sub_6FCF2CC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pDistance, int32_t* pInMeleeRange)
+D2UnitStrc* __fastcall AIUTIL_SelectAiTargetWithCollisionCheck(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pDistance, int32_t* pInMeleeRange)
 {
 	D2UnitStrc* pTarget = nullptr;
 	int32_t nDistance = 0;
 
-	if (!sub_6FCF2920(pGame, pUnit, 0, 1, &pTarget, &nDistance))
+	if (!AIUTIL_ResolveTargetOverride(pGame, pUnit, 0, 1, &pTarget, &nDistance))
 	{
 		D2UnkAiCallbackArgStrc2 arg = {};
 		arg.pTarget = nullptr;
@@ -1172,9 +1172,9 @@ D2UnitStrc* __fastcall sub_6FCF2CC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 		arg.pAlternativeTarget = nullptr;
 		arg.nAlternativeDistance = INT_MAX;
 
-		sub_6FCF1E80(pGame, pUnit, &arg, nullptr, 6);
+		AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, nullptr, 6);
 
-		if (sub_6FCF27B0(pUnit, &arg.pTarget, &arg.nDistance, arg.pAlternativeTarget, arg.nAlternativeDistance))
+		if (AIUTIL_ShouldUseAlternativeTarget(pUnit, &arg.pTarget, &arg.nDistance, arg.pAlternativeTarget, arg.nAlternativeDistance))
 		{
 			pTarget = arg.pAlternativeTarget;
 			nDistance = arg.nAlternativeDistance;

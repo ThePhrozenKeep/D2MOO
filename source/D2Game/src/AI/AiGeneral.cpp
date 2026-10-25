@@ -442,7 +442,7 @@ void __fastcall AIGENERAL_FreeMinionList(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCCF4B0
-void __fastcall sub_6FCCF4B0(D2UnitStrc* pUnit)
+void __fastcall AIGENERAL_DetachOwnedMinions(D2UnitStrc* pUnit)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || !pUnit->pMonsterData)
 	{
@@ -492,7 +492,7 @@ void __fastcall AIGENERAL_FreeAllMinionLists(D2GameStrc* pGame, D2MinionListStrc
 }
 
 //D2Game.0x6FCCF5C0
-void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* a2, void* a3, void(__fastcall* pfnParty)(D2UnitStrc*, void*, void*))
+void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfnParty)(D2UnitStrc*, void*, void*))
 {
 	D2_ASSERT(pfnParty);
 
@@ -508,7 +508,7 @@ void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* a2, 
 		D2UnitStrc* pMinion = SUNIT_GetServerUnit(pOwnerAiControl->pGame, UNIT_MONSTER, pMinionList->dwMinionGUID);
 		if (pMinion)
 		{
-			pfnParty(pMinion, a2, a3);
+			pfnParty(pMinion, pCallbackArg1, pCallbackArg2);
 		}
 	}
 }

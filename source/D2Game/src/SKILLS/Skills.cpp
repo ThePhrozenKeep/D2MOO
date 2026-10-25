@@ -4045,7 +4045,7 @@ void __fastcall sub_6FD154D0(D2UnitStrc* pUnit)
     {
         if (pOwner == pUnit)
         {
-            sub_6FCCF4B0(pUnit);
+            AIGENERAL_DetachOwnedMinions(pUnit);
         }
         else
         {
