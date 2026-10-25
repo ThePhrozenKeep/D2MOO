@@ -2064,7 +2064,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pInput = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A1Q3, QFLAG_REWARDPENDING))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2077,7 +2077,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         if (!ITEMS_IsImbueable(pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2099,7 +2099,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         if (!D2GAME_RemoveItemIfOnCursor_6FC49760(pGame, pPlayer, pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2115,7 +2115,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pOutput = D2GAME_CreateItemEx_6FC4ED80(pGame, &itemDrop, 0);
         if (!pOutput)
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             return 0;
         }
@@ -2141,7 +2141,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         }
 
         ACT1Q3_SetRewardGranted(pGame, pPlayer);
-        packet58.unk0x05 = 6;
+        packet58.nAction = 6;
         D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
 
         return 0;
@@ -2234,7 +2234,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pInput = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A5Q1, QFLAG_REWARDPENDING))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2247,7 +2247,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         if (!ITEMS_IsSocketable(pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2256,7 +2256,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pOutput = ITEMS_Duplicate(pGame, pInput, pPlayer, 1);     
         if (!pOutput)
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2264,7 +2264,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         
         if (!D2GAME_RemoveItemIfOnCursor_6FC49760(pGame, pPlayer, pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2305,7 +2305,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         }
 
         ACT5Q1_SetRewardGranted(pGame, pPlayer);
-        packet58.unk0x05 = 6;
+        packet58.nAction = 6;
         D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
         return 0;
     }
@@ -2330,7 +2330,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pInput = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nItemGUID);
         if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A5Q4, QFLAG_REWARDPENDING))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2343,7 +2343,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         if (!ITEMS_IsPersonalizable(pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2352,7 +2352,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         D2UnitStrc* pOutput = ITEMS_Duplicate(pGame, pInput, pPlayer, 1);
         if (!pOutput)
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             // TODO: Missing return 0?
@@ -2360,7 +2360,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
         if (!D2GAME_RemoveItemIfOnCursor_6FC49760(pGame, pPlayer, pInput))
         {
-            packet58.unk0x05 = 7;
+            packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
             sub_6FC44030(pGame, pPlayer, nItemGUID);
             return 0;
@@ -2384,7 +2384,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         ITEMS_SetEarName(pOutput, UNITS_GetPlayerData(pPlayer)->szName);
         ACT5Q4_SetRewardGranted(pGame, pPlayer);
 
-        packet58.unk0x05 = 6;
+        packet58.nAction = 6;
         D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
         return 0;
     }

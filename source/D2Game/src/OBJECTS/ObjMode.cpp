@@ -3539,7 +3539,7 @@ int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayer
 
     if (nState == 2)
     {
-        packet58.unk0x05 = 1;
+        packet58.nAction = 1;
         D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet58, sizeof(packet58));
 
         UNITS_ChangeAnimMode(pObject, OBJMODE_NEUTRAL);
@@ -3569,17 +3569,17 @@ int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayer
 
         if (bFail)
         {
-            packet58.unk0x05 = 4;
+            packet58.nAction = 4;
             D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet58, sizeof(packet58));
             return 1;
         }
 
-        packet58.unk0x05 = 5;
+        packet58.nAction = 5;
         SUNIT_ResetInteractInfo(pPlayer);
 
         if (pObject->dwClassId == OBJECT_ORIFICE)
         {
-            packet58.unk0x06 = 1;
+            packet58.bSuccess = 1;
         }
         else
         {
@@ -3593,13 +3593,13 @@ int32_t __fastcall OBJMODE_MainObeliskHandler(D2GameStrc* pGame, int32_t nPlayer
                     exit(-1);
                 }
 
-                packet58.unk0x06 = gpObeliskPowerUpTable[nSubType].pPowerUpCallback(pGame, pPlayer, gpObeliskPowerUpTable[nSubType].nValue);
+                packet58.bSuccess = gpObeliskPowerUpTable[nSubType].pPowerUpCallback(pGame, pPlayer, gpObeliskPowerUpTable[nSubType].nValue);
             }
         }
 
         D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet58, sizeof(packet58));
 
-        if (packet58.unk0x06 == 1)
+        if (packet58.bSuccess == 1)
         {
             UNITS_ChangeAnimMode(pObject, OBJMODE_OPERATING);
 

@@ -1239,7 +1239,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 
 		D2_ASSERT(pQuest);
 
-		packet5E.unk0x001[i] = pQuest->bNotIntro;
+		packet5E.nQuestIntroFlags[i] = pQuest->bNotIntro;
 	}
 
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);

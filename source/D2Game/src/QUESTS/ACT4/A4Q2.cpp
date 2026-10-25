@@ -1291,7 +1291,7 @@ int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* 
 
 			D2GSPacketSrv61 packet61 = {};
 			packet61.nHeader = 0x61;
-			packet61.unk0x001 = 5;
+			packet61.nCinematic = 5;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
 		}
 	}

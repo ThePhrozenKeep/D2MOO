@@ -112,7 +112,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         D2GSPacketClt67* pPacket67 = (D2GSPacketClt67*)pPacket;
         if (!gpD2EventCallbackTable_6FD45830)
         {
-            const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->unk0x08, pPacket67->szClientName);
+            const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->dwVersion, pPacket67->szClientName);
             if (nErrorCode)
             {
                 sub_6FC3C6D0(nClientId, nErrorCode);
@@ -188,7 +188,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     case D2CLTSYS_0x6C:
     {
         D2GSPacketClt6C* pPacket6C = (D2GSPacketClt6C*)pPacket;
-        CLIENTS_UpdatePing(nClientId, pPacket6C->unk0x01, pPacket6C->unk0x05);
+        CLIENTS_UpdatePing(nClientId, pPacket6C->dwTickCount, pPacket6C->nHalfAveragePing);
         break;
     }
     case D2CLTSYS_DISCONNECT:

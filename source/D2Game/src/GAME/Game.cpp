@@ -1764,9 +1764,9 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
 
             D2GSPacketSrv53 packet53 = {};
             packet53.nHeader = 0x53u;
-            packet53.unk0x01 = nTimeIndex;
-            packet53.unk0x05 = nTicks;
-            packet53.unk0x09 = nEclipse;
+            packet53.nIndex = nTimeIndex;
+            packet53.nTicks = nTicks;
+            packet53.bEclipse = nEclipse;
 
             for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
             {
