@@ -67,6 +67,10 @@
 #include "SKILLS/Skills.h"
 
 
+//D2Game.0x6FD4DD88
+//1.14d: Game.0x0088CADC
+uint32_t gnNpcWalkSequenceCounter = 0;
+
 #pragma pack(push, 1)
 struct D2SandRaiderAiCallbackArgStrc
 {
@@ -10937,8 +10941,7 @@ void __fastcall AITHINK_Fn032_Npc(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 //D2Game.0x6FCE69A0
 uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	//TODO: v18, nNpcWalkSequenceCounter
-	int32_t nNpcWalkSequenceCounter = 0;
+	//TODO: v18
 
 	int32_t nAnimMode = 0;
 	int32_t v18 = 0;
@@ -10948,7 +10951,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 	{
 		if (pAiCmd->nCmdParam[1] && pAiCmd->nCmdParam[2] && (uint32_t)AIUTIL_GetDistanceToCoordinates(pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]) > 3)
 		{
-			if ((nNpcWalkSequenceCounter % 4) == 0)
+			if ((gnNpcWalkSequenceCounter % 4) == 0)
 			{
 				AITACTICS_SetVelocity(pUnit, 5, 0, 0);
 				AITACTICS_WalkToTargetCoordinatesNoSteps(pGame, pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]);
@@ -10959,7 +10962,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 				AITACTICS_WalkToTargetCoordinatesNoSteps(pGame, pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]);
 			}
 
-			++nNpcWalkSequenceCounter;
+			++gnNpcWalkSequenceCounter;
 			--pAiCmd->nCmdParam[3];
 			return 1;
 		}
