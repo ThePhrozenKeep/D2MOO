@@ -1069,9 +1069,9 @@ void __fastcall D2GAME_SpawnTrapMonster_6FC75B40(D2ObjOperateFnStrc* pOp, int32_
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOp->pObject);
         if (nMonsterId != 234 || !pRoom || DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)) != ACT_I)
         {
-            if (!sub_6FC6A150(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, -1, 0) && !sub_6FC6A150(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, 1, 0))
+            if (!MONSTERSPAWN_SpawnLevelVariantAtUnit(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, -1, 0) && !MONSTERSPAWN_SpawnLevelVariantAtUnit(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, 1, 0))
             {
-                sub_6FC6A150(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, 3, 0);
+                MONSTERSPAWN_SpawnLevelVariantAtUnit(pOp->pGame, pOp->pObject, nMonsterId, nAnimMode, 3, 0);
             }
         }
     }
@@ -1107,7 +1107,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler1_6FC75C70(D2GameStrc* pGame, D2UnitSt
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
 
-    if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 136))
+    if (!MONSTERSPAWN_SpawnAtCoordinates(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_LIGHTNING, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
@@ -1125,7 +1125,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler2_6_6FC75D00(D2GameStrc* pGame, D2Unit
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
 
-    if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 136))
+    if (!MONSTERSPAWN_SpawnAtCoordinates(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_FIREBOLT, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
@@ -1143,7 +1143,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler3_6FC75D90(D2GameStrc* pGame, D2UnitSt
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
    
-    if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 136))
+    if (!MONSTERSPAWN_SpawnAtCoordinates(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_POISONCLOUD, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
@@ -1161,7 +1161,7 @@ void __fastcall D2GAME_OBJECTS_TrapHandler4_6FC75E20(D2GameStrc* pGame, D2UnitSt
     D2CoordStrc pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
 
-    if (!sub_6FC6A090(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 136))
+    if (!MONSTERSPAWN_SpawnAtCoordinates(pGame, UNITS_GetRoom(pUnit), pCoord.nX, pCoord.nY, MONSTER_TRAP_NOVA, 1, 136))
     {
         D2ActiveRoomStrc* ppRoom = nullptr;
         D2Common_10136(UNITS_GetRoom(pUnit), &pCoord, 0, COLLIDE_MASK_PLACEMENT, &ppRoom);
@@ -1964,8 +1964,8 @@ void __fastcall D2GAME_SHRINES_Monster_6FC76ED0(D2ObjOperateFnStrc* pOp, D2Shrin
         }
         pMonster->pMonsterData->nTypeFlag |= 8u;
 
-        sub_6FC6E940(pOp->pGame, pMonster, 1);
-        D2GAME_SpawnMinions_6FC6F440(pOp->pGame, UNITS_GetRoom(pMonster), 0, pMonster, 0, 0, 0);
+        MONSTERUNIQUE_AssignRandomUMods(pOp->pGame, pMonster, 1);
+        MONSTERUNIQUE_SpawnMinions(pOp->pGame, UNITS_GetRoom(pMonster), 0, pMonster, 0, 0, 0);
         pMonster->dwFlags |= 0x800;
         MONSTER_ToggleSummonerFlag(pMonster, 1, 1);
     }
@@ -2502,7 +2502,7 @@ int32_t __fastcall OBJECTS_OperateFunction68_EvilUrn(D2ObjOperateFnStrc* pOp, in
                 D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pMonRegData->nMonHcIdx);
                 if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_WALK])
                 {
-                    sub_6FC6E8D0(pOp->pGame, pRoom, 0, pMonRegData->nMonHcIdx, 1, 0, 0, 1);
+                    MONSTERUNIQUE_SpawnUniqueGroup(pOp->pGame, pRoom, 0, pMonRegData->nMonHcIdx, 1, 0, 0, 1);
                     break;
                 }
             }

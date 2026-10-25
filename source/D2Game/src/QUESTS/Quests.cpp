@@ -1781,7 +1781,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 			if (nLevelId == LEVEL_SPIDERFOREST)
 			{
-				sub_6FC68D70(pGame, pUnit, MONSTER_VILECHILD1, 1, -1, 0);
+				MONSTERSPAWN_SpawnAtUnit(pGame, pUnit, MONSTER_VILECHILD1, 1, -1, 0);
 			}
 			else if (nLevelId == LEVEL_CHAOSSANCTUM)
 			{

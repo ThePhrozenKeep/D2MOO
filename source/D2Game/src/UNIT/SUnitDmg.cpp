@@ -1286,7 +1286,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 	if (nAttackerUnitType == UNIT_MONSTER && pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
 	{
-		sub_6FC6E890(pGame, pAttacker);
+		MONSTERUNIQUE_ExecuteUModSuccessfulHitCallbacks(pGame, pAttacker);
 	}
 
 	if (pDamage->dwAbsLife > 0 && !SUNIT_IsDead(pDefender) && !STATES_CheckState(pDefender, STATE_DEATH_DELAY))
@@ -1841,7 +1841,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 
 	if (pAttacker)
 	{
-		sub_6FC62780(pAttacker, pDefender, pGame);
+		MONSTERMODE_DistributeExperienceIfEligible(pAttacker, pDefender, pGame);
 		ARENA_ProcessKillEvent(pGame, pAttacker, pDefender);
 	}
 
@@ -2076,7 +2076,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			}
 		}
 
-		sub_6FC62DF0(pUnit, pDamage);
+		MONSTERMODE_AddSandLeaperKnockback(pUnit, pDamage);
 
 		if (pDamage->wResultFlags & DAMAGERESULTFLAG_WILLDIE)
 		{
@@ -2125,14 +2125,14 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 				D2ModeChangeStrc modeChange = {};
 				MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_GETHIT, &modeChange);
 				D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
-				sub_6FC6E8A0(pGame, pUnit);
+				MONSTERUNIQUE_ExecuteUModDamagedCallbacks(pGame, pUnit);
 				return;
 			}
 
 			UNITROOM_RefreshUnit(pUnit);
 			pUnit->dwFlags |= UNITFLAG_UPGRLIFENHITCLASS;
 			MONSTER_SetAiState(pUnit, 19u);
-			sub_6FC6E8A0(pGame, pUnit);
+			MONSTERUNIQUE_ExecuteUModDamagedCallbacks(pGame, pUnit);
 			return;
 		}
 
@@ -2141,13 +2141,13 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			UNITROOM_RefreshUnit(pUnit);
 			pUnit->dwFlags |= UNITFLAG_UPGRLIFENHITCLASS;
 			MONSTER_SetAiState(pUnit, 19u);
-			sub_6FC6E8A0(pGame, pUnit);
+			MONSTERUNIQUE_ExecuteUModDamagedCallbacks(pGame, pUnit);
 			return;
 		}
 
 		if (pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT && pDamage->dwDmgTotal > 0)
 		{
-			const int32_t nHpDiff = std::abs((int32_t)STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0) - sub_6FC62F50(pUnit));
+			const int32_t nHpDiff = std::abs((int32_t)STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0) - MONSTERMODE_GetHpPercent128(pUnit));
 			if (nHpDiff > 4)
 			{
 				UNITROOM_RefreshUnit(pUnit);

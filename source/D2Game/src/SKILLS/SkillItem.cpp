@@ -300,7 +300,7 @@ int32_t __fastcall SKILLITEM_pSpell03_Potion(D2GameStrc* pGame, D2UnitStrc* pUni
     if (bAffectsHitpoints && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
         const uint8_t nLastSentHpPct = STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0);
-        const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
+        const uint8_t nNewSentHpPct = MONSTERMODE_GetHpPercent128(pUnit);
         const int32_t nHpPctDiff = std::abs(nLastSentHpPct - nNewSentHpPct);
         if (nHpPctDiff > 4)
         {
@@ -445,7 +445,7 @@ int32_t __fastcall SKILLITEM_pSpell04_Unused(D2GameStrc* pGame, D2UnitStrc* pUni
     if (bAffectsHitpoints && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
         const uint8_t nLastSentHpPct = STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0);
-        const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
+        const uint8_t nNewSentHpPct = MONSTERMODE_GetHpPercent128(pUnit);
         const int32_t nHpPctDiff = std::abs(nLastSentHpPct - nNewSentHpPct);
         if (nHpPctDiff > 4)
         {
@@ -580,7 +580,7 @@ int32_t __fastcall SKILLITEM_pSpell05_RejuvPotion(D2GameStrc* pGame, D2UnitStrc*
 
     if (bAffectsHitpoints && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
+        const uint8_t nNewSentHpPct = MONSTERMODE_GetHpPercent128(pUnit);
         SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
         STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
     }

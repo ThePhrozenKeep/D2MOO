@@ -1733,7 +1733,7 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         D2GAME_MONSTERS_AiFunction10_6FD13610,
         nullptr,
         sub_6FC81B90,
-        D2GAME_MONSTERS_AiFunction13_6FC65890,
+        MONSTERMODE_EventUpdateStatListExpirations,
         D2GAME_PLRTRADE_Last_6FC937F0,
 		nullptr
     };

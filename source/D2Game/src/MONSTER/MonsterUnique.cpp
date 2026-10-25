@@ -981,9 +981,9 @@ void __fastcall MONSTERUNIQUE_UMod25_ManaSteal(D2UnitStrc* pUnit, int32_t nUMod,
 }
 
 //D2Game.0x6FC6C4F0
-void __fastcall MONSTERUNIQUE_CastAmplifyDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+void __fastcall MONSTERUNIQUE_CastAmplifyDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnusedUMod, int32_t bUnique)
 {
-    if (!a4 || ((uint8_t)ITEMS_RollRandomNumber(&pUnit->pSeed) & 3u) < 1)
+    if (!bUnique || ((uint8_t)ITEMS_RollRandomNumber(&pUnit->pSeed) & 3u) < 1)
     {
         return;
     }
@@ -1194,7 +1194,7 @@ void __fastcall MONSTERUNIQUE_CastLightUniqueMissile(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC6CD30
-void __fastcall sub_6FC6CD30(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_CastLightUniqueMissileIfNotGetHit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (bUnique && (!pUnit || pUnit->dwAnimMode != MONMODE_GETHIT))
     {
@@ -1264,7 +1264,7 @@ void __fastcall MONSTERUNIQUE_MinionCallback_KillMinion(D2UnitStrc* pUnit, void*
 }
 
 //D2Game.0x6FC6CF10
-void __fastcall sub_6FC6CF10(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_AddSecondaryDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     int32_t nMinDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MINDAMAGE, 0);
     int32_t nMaxDamage = STATLIST_UnitGetStatValue(pUnit, STAT_MAXDAMAGE, 0);
@@ -1280,7 +1280,7 @@ void __fastcall sub_6FC6CF10(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
 }
 
 //D2Game.0x6FC6CF90
-void __fastcall sub_6FC6CF90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_AddRogueHireMissileSecondaryDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MISSILE)
     {
@@ -1437,7 +1437,7 @@ D2MonUModTxt* __fastcall MONSTERUNIQUE_GetMonUModTxtRecord(uint32_t nUMod)
 }
 
 //D2Game.0x6FC6D440
-void __fastcall sub_6FC6D440(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_ApplyMissileElementalDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MISSILE)
     {
@@ -1589,7 +1589,7 @@ void __fastcall MONSTERUNIQUE_CastQueenPoisonCloudMissile(D2GameStrc* pGame, D2U
 }
 
 //D2Game.0x6FC6DA40
-void __fastcall sub_6FC6DA40(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_CreateMultishotMissiles(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!bUnique || !pUnit || pUnit->dwUnitType != UNIT_MISSILE)
     {
@@ -1676,7 +1676,7 @@ void __fastcall MONSTERUNIQUE_ColdEnchantedModeChange(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC6DD20
-void __fastcall sub_6FC6DD20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_ScheduleSelfResurrection(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit)
     {
@@ -1698,7 +1698,7 @@ void __fastcall sub_6FC6DD20(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
 }
 
 //D2Game.0x6FC6DDE0
-void __fastcall sub_6FC6DDE0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_TrySelfResurrection(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit)
     {
@@ -1751,7 +1751,7 @@ void __fastcall MONSTERUNIQUE_ApplyShatterState(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC6DFC0
-void __fastcall sub_6FC6DFC0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_KillUnitOrRemovePet(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (SUNIT_IsDead(pUnit))
     {
@@ -1837,7 +1837,7 @@ void __fastcall MONSTERUNIQUE_SetTrapDamage(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FC6E240
-void __fastcall sub_6FC6E240(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_ApplyCorpseFireDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (!pUnit)
     {
@@ -1934,13 +1934,13 @@ void __fastcall MONSTERUNIQUE_CreatePainWorm(D2GameStrc* pGame, D2UnitStrc* pUni
 {
     if (!pUnit || pUnit->dwAnimMode == MONMODE_DEATH)
     {
-        sub_6FC6A150(pGame, pUnit, MONSTER_PAINWORM1, MONMODE_NEUTRAL, 1, 0);
+        MONSTERSPAWN_SpawnLevelVariantAtUnit(pGame, pUnit, MONSTER_PAINWORM1, MONMODE_NEUTRAL, 1, 0);
         STATES_ToggleState(pUnit, STATE_CORPSE_NODRAW, 1);
     }
 }
 
 //D2Game.0x6FC6E730
-void __fastcall sub_6FC6E730(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_UpdateAiAndScheduleUModEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     if (SUNIT_IsDead(pUnit))
     {
@@ -1952,13 +1952,13 @@ void __fastcall sub_6FC6E730(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod
 }
 
 //D2Game.0x6FC6E770
-void __fastcall sub_6FC6E770(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall MONSTERUNIQUE_ExecuteUModModeStartCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FC6E780(pGame, pUnit, 0, 0);
+    MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 0);
 }
 
 //D2Game.0x6FC6E780
-void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nIndex)
+void __fastcall MONSTERUNIQUE_ExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nIndex)
 {
     constexpr D2UnkUModStrc tUModCallbacks[43] =
     {
@@ -1979,31 +1979,31 @@ void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         { MONSTERUNIQUE_SetTrapDamage,                  nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_KillMinions,                  nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      MONSTERUNIQUE_LightningEnchantedModeChange, MONSTERUNIQUE_CastLightUniqueMissile,       nullptr,                            sub_6FC6CD30,   nullptr },
+        { nullptr,                                      MONSTERUNIQUE_LightningEnchantedModeChange, MONSTERUNIQUE_CastLightUniqueMissile,       nullptr,                            MONSTERUNIQUE_CastLightUniqueMissileIfNotGetHit,   nullptr },
         { nullptr,                                      MONSTERUNIQUE_ColdEnchantedModeChange,      MONSTERUNIQUE_CastColdUniqueMissile,        nullptr,                            nullptr,        nullptr },
-        { sub_6FC6CF10,                                 nullptr,                                    nullptr,                                    nullptr,                            nullptr,        sub_6FC6CF90 },
+        { MONSTERUNIQUE_AddSecondaryDamage,                                 nullptr,                                    nullptr,                                    nullptr,                            nullptr,        MONSTERUNIQUE_AddRogueHireMissileSecondaryDamage },
         { nullptr,                                      MONSTERUNIQUE_ScarabModeChange,             MONSTERUNIQUE_CastBugLightningMissile,      nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      nullptr,                                    sub_6FC6DFC0,                               nullptr,                            nullptr,        nullptr },
+        { nullptr,                                      nullptr,                                    MONSTERUNIQUE_KillUnitOrRemovePet,                               nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_QuestCompleteModeChange,      nullptr,                                    nullptr,                            nullptr,        nullptr },
         { MONSTERUNIQUE_CastQueenPoisonCloudMissile,    nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    MONSTERUNIQUE_StealBeltItem,        nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
-        { MONSTERUNIQUE_ApplyElementalDamage,           nullptr,                                    nullptr,                                    nullptr,                            nullptr,        sub_6FC6D440 },
+        { MONSTERUNIQUE_ApplyElementalDamage,           nullptr,                                    nullptr,                                    nullptr,                            nullptr,        MONSTERUNIQUE_ApplyMissileElementalDamage },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        sub_6FC6DA40 },
+        { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        MONSTERUNIQUE_CreateMultishotMissiles },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_ColdEnchantedModeChange,      MONSTERUNIQUE_CastCorpseExplode2,           nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      MONSTERUNIQUE_ColdEnchantedModeChange,      sub_6FC6E240,                               nullptr,                            nullptr,        nullptr },
+        { nullptr,                                      MONSTERUNIQUE_ColdEnchantedModeChange,      MONSTERUNIQUE_ApplyCorpseFireDamage,                               nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_SuicideModeChange,            MONSTERUNIQUE_CastSuicideExplodeMissile,    nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      sub_6FC6DD20,                               sub_6FC6DDE0,                               nullptr,                            nullptr,        nullptr },
+        { nullptr,                                      MONSTERUNIQUE_ScheduleSelfResurrection,                               MONSTERUNIQUE_TrySelfResurrection,                               nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_ApplyShatterState,            nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_CreatePainWorm,               nullptr,                                    nullptr,                            nullptr,        nullptr },
-        { nullptr,                                      nullptr,                                    sub_6FC6E730,                               nullptr,                            nullptr,        nullptr },
+        { nullptr,                                      nullptr,                                    MONSTERUNIQUE_UpdateAiAndScheduleUModEvent,                               nullptr,                            nullptr,        nullptr },
         { nullptr,                                      MONSTERUNIQUE_ColdEnchantedModeChange,      MONSTERUNIQUE_CastNova,                     nullptr,                            nullptr,        nullptr },
     };
 
@@ -2044,54 +2044,54 @@ void __fastcall sub_6FC6E780(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 }
 
 //D2Game.0x6FC6E860
-void __fastcall sub_6FC6E860(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall MONSTERUNIQUE_ExecuteUModModeChangeCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FC6E780(pGame, pUnit, 0, 1);
+    MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 1);
 }
 
 //D2Game.0x6FC6E870
-void __fastcall D2GAME_MONSTERS_AiFunction08_6FC6E870(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_EventExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
-    sub_6FC6E780(pGame, pUnit, 0, 2);
+    MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 2);
 }
 
 //D2Game.0x6FC6E890
-void __fastcall sub_6FC6E890(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall MONSTERUNIQUE_ExecuteUModSuccessfulHitCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FC6E780(pGame, pUnit, 0, 3);
+    MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 3);
 }
 
 //D2Game.0x6FC6E8A0
-void __fastcall sub_6FC6E8A0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall MONSTERUNIQUE_ExecuteUModDamagedCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FC6E780(pGame, pUnit, 0, 4);
+    MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 4);
 }
 
 //D2Game.0x6FC6E8B0
-void __fastcall sub_6FC6E8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile)
+void __fastcall MONSTERUNIQUE_ExecuteUModMissileCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pMissile)
     {
-        sub_6FC6E780(pGame, pUnit, pMissile, 5);
+        MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, pMissile, 5);
     }
 }
 
 //D2Game.0x6FC6E8D0
-D2UnitStrc* __fastcall sub_6FC6E8D0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t a5, uint16_t nX, uint16_t nY, int32_t a8)
+D2UnitStrc* __fastcall MONSTERUNIQUE_SpawnUniqueGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t bAllowChampion, uint16_t nX, uint16_t nY, int32_t bAvoidWarps)
 {
-    D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC6F220(pGame, pRoom, pRoomCoordList, nX, nY, -1, nSuperUniqueId, a8);
+    D2UnitStrc* pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, pRoomCoordList, nX, nY, -1, nSuperUniqueId, bAvoidWarps);
     if (!pMonster)
     {
         return nullptr;
     }
 
-    sub_6FC6E940(pGame, pMonster, a5);
-    D2GAME_SpawnMinions_6FC6F440(pGame, pRoom, pRoomCoordList, pMonster, 1, 3, 6);
+    MONSTERUNIQUE_AssignRandomUMods(pGame, pMonster, bAllowChampion);
+    MONSTERUNIQUE_SpawnMinions(pGame, pRoom, pRoomCoordList, pMonster, 1, 3, 6);
     return pMonster;
 }
 
 //D2Game.0x6FC6E940
-void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
+void __fastcall MONSTERUNIQUE_AssignRandomUMods(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bAllowChampion)
 {
     if (!pGame || pGame->nDifficulty >= 3u)
     {
@@ -2120,7 +2120,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
         return;
     }
 
-    if (a3)
+    if (bAllowChampion)
     {
         uint32_t nChance = 0;
         if (sgptDataTables->nMonUModTxtRecordCount > 0 && sgptDataTables->pMonUModTxt)
@@ -2139,7 +2139,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
             for (int32_t i = 0; i < sgptDataTables->nMonUModTxtRecordCount; ++i)
             {
                 D2MonUModTxt* pMonUModTxtRecord = &sgptDataTables->pMonUModTxt[i];
-                if (pMonUModTxtRecord->wCPick[pGame->nDifficulty] > 0 && pMonUModTxtRecord->nChampion && sub_6FC6EC10(pUnit, pMonUModTxtRecord, pGame->bExpansion))
+                if (pMonUModTxtRecord->wCPick[pGame->nDifficulty] > 0 && pMonUModTxtRecord->nChampion && MONSTERUNIQUE_CanAssignUMod(pUnit, pMonUModTxtRecord, pGame->bExpansion))
                 {
                     const uint16_t nCPick = pMonUModTxtRecord->wCPick[pGame->nDifficulty];
 
@@ -2196,7 +2196,7 @@ void __fastcall sub_6FC6E940(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
     uint8_t* pUMod = &pMonUmods[nIndex];
     for (int32_t i = 0; i < nRandCount; ++i)
     {
-        const int32_t nUMod = sub_6FC6EE90(pGame, pUnit, bUModUsageTable);
+        const int32_t nUMod = MONSTERUNIQUE_RollNonChampionUMod(pGame, pUnit, bUModUsageTable);
         if (!nUMod)
         {
             break;
@@ -2233,7 +2233,7 @@ int32_t __fastcall MONSTERUNIQUE_GetUModCount(uint8_t* pUMods)
 }
 
 //D2Game.0x6FC6EC10
-BOOL __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion)
+BOOL __fastcall MONSTERUNIQUE_CanAssignUMod(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion)
 {
     if (!pMonUModTxtRecord->nEnabled)
     {
@@ -2309,7 +2309,7 @@ BOOL __fastcall sub_6FC6EC10(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord,
 }
 
 //D2Game.0x6FC6EE90
-int32_t __fastcall sub_6FC6EE90(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* a3)
+int32_t __fastcall MONSTERUNIQUE_RollNonChampionUMod(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* pUsedUMods)
 {
     if (!pGame || pGame->nDifficulty >= 3u)
     {
@@ -2323,9 +2323,9 @@ int32_t __fastcall sub_6FC6EE90(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* a
     for (int32_t i = 0; i < sgptDataTables->nMonUModTxtRecordCount; ++i)
     {
         D2MonUModTxt* pMonUModTxtRecord = &sgptDataTables->pMonUModTxt[i];
-        if (pMonUModTxtRecord->wUPick[pGame->nDifficulty] > 0 && !pMonUModTxtRecord->nChampion && sub_6FC6EC10(pUnit, pMonUModTxtRecord, pGame->bExpansion))
+        if (pMonUModTxtRecord->wUPick[pGame->nDifficulty] > 0 && !pMonUModTxtRecord->nChampion && MONSTERUNIQUE_CanAssignUMod(pUnit, pMonUModTxtRecord, pGame->bExpansion))
         {
-            if (!a3[i])
+            if (!pUsedUMods[i])
             {
                 const uint16_t nUPick = pMonUModTxtRecord->wUPick[pGame->nDifficulty];
                 
@@ -2384,11 +2384,11 @@ uint32_t __fastcall MONSTERUNIQUE_CheckMonStatsFlag(int32_t nMonsterId, int32_t 
 }
 
 //D2Game.0x6FC6F220
-D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nX, int32_t nY, int32_t nUnitGUID, int32_t nClassId, int32_t a8)
+D2UnitStrc* __fastcall MONSTERUNIQUE_SpawnUniqueMonster(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nX, int32_t nY, int32_t nUnitGUID, int32_t nClassId, int32_t bAvoidWarps)
 {
     if (!nX && !nY)
     {
-        if (!sub_6FC66260(pGame, pRoom, pRoomCoordList, nClassId, &nX, &nY, a8))
+        if (!MONSTERREGION_FindSpawnLocation(pGame, pRoom, pRoomCoordList, nClassId, &nX, &nY, bAvoidWarps))
         {
             return nullptr;
         }
@@ -2400,7 +2400,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
     D2UnitStrc* pMonster = nullptr;
     if (pRoomCoordList)
     {
-        pMonster = sub_6FC6A030(pGame, pRoom, pRoomCoordList, nTargetX, nTargetY, nClassId, 1, -1, 64);
+        pMonster = MONSTERSPAWN_SpawnInCoordList(pGame, pRoom, pRoomCoordList, nTargetX, nTargetY, nClassId, 1, -1, 64);
     }
     else
     {
@@ -2414,15 +2414,15 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
         }
         else
         {
-            pMonster = sub_6FC6A0F0(pGame, pRoom, nTargetX, nTargetY, nClassId, 1, nUnitGUID, -1, 98);
+            pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nTargetX, nTargetY, nClassId, 1, nUnitGUID, -1, 98);
             if (!pMonster)
             {
-                pMonster = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, 5, 98);
+                pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, 5, 98);
                 if (!pMonster)
                 {
-                    if (sub_6FC66260(pGame, pRoom, 0, nClassId, &nX, &nY, 0))
+                    if (MONSTERREGION_FindSpawnLocation(pGame, pRoom, 0, nClassId, &nX, &nY, 0))
                     {
-                        pMonster = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
+                        pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
                     }
 
                     if (!pMonster)
@@ -2439,7 +2439,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
                             return nullptr;
                         }
 
-                        pMonster = sub_6FC6A0F0(pGame, pTargetRoom, pCoord.nX, pCoord.nY, nClassId, 1, nUnitGUID, -1, 98);
+                        pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pTargetRoom, pCoord.nX, pCoord.nY, nClassId, 1, nUnitGUID, -1, 98);
                     }
                 }
             }
@@ -2472,7 +2472,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC6F220(D2GameStrc* pGame, D2ActiveR
 }
 
 //D2Game.0x6FC6F440
-void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, D2UnitStrc* pUnit, int32_t bSpawnMinions, int32_t nMinGroup, int32_t nMaxGroup)
+void __fastcall MONSTERUNIQUE_SpawnMinions(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, D2UnitStrc* pUnit, int32_t bSpawnMinions, int32_t nMinGroup, int32_t nMaxGroup)
 {
     if (bSpawnMinions)
     {
@@ -2495,11 +2495,11 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
                     D2UnitStrc* pMinion = nullptr;
                     if (pRoomCoordList)
                     {
-                        pMinion = sub_6FC69F70(pGame, pRoomCoordList, pUnit, nMinionId, 1, 3, 64);
+                        pMinion = MONSTERSPAWN_SpawnAtUnitInCoordList(pGame, pRoomCoordList, pUnit, nMinionId, 1, 3, 64);
                     }
                     else
                     {
-                        pMinion = sub_6FC68D70(pGame, pUnit, nMinionId, 1, 3, 64);
+                        pMinion = MONSTERSPAWN_SpawnAtUnit(pGame, pUnit, nMinionId, 1, 3, 64);
                     }
 
                     if (pMinion)
@@ -2552,9 +2552,9 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
 
     for (int32_t i = 0; i < std::size(mods); ++i)
     {
-        sub_6FC6F670(pUnit, mods[i], TRUE);
+        MONSTERUNIQUE_InitializeUMod(pUnit, mods[i], TRUE);
 
-        AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)mods[i], FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
+        AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)mods[i], FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))MONSTERUNIQUE_InitializeUMod);
     }
 
     if (uint8_t * pMonUmods = MONSTERUNIQUE_GetUMods(pUnit))
@@ -2567,15 +2567,15 @@ void __fastcall D2GAME_SpawnMinions_6FC6F440(D2GameStrc* pGame, D2ActiveRoomStrc
                 break;
             }
 
-            sub_6FC6F670(pUnit, nUMod, TRUE);
+            MONSTERUNIQUE_InitializeUMod(pUnit, nUMod, TRUE);
 
-            AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)nUMod, FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))sub_6FC6F670);
+            AIGENERAL_ExecuteCallbackOnMinions(pUnit, (void*)(uintptr_t)nUMod, FALSE, (void(__fastcall*)(D2UnitStrc*, void*, void*))MONSTERUNIQUE_InitializeUMod);
         }
     }
 }
 
 //D2Game.0x6FC6F670
-void __fastcall sub_6FC6F670(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_InitializeUMod(D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
 {
     constexpr UModInitFunc tUModInitCallbacks[] =
     {
@@ -2654,11 +2654,11 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
     D2UnitStrc* pMonster = nullptr;
     if (pSuperUniquesTxtRecord->nAutopos)
     {
-        pMonster = D2GAME_SpawnMonster_6FC6F220(pGame, pRoom, nullptr, 0, 0, -1, pSuperUniquesTxtRecord->dwClass, 0);
+        pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, nullptr, 0, 0, -1, pSuperUniquesTxtRecord->dwClass, 0);
     }
     else
     {
-        pMonster = D2GAME_SpawnMonster_6FC6F220(pGame, pRoom, nullptr, nX, nY, -1, pSuperUniquesTxtRecord->dwClass, 0);
+        pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, nullptr, nX, nY, -1, pSuperUniquesTxtRecord->dwClass, 0);
     }
 
     if (!pMonster)
@@ -2714,7 +2714,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
 
     for (int32_t i = 0; i < pGame->nDifficulty; ++i)
     {
-        const int32_t nUMod = sub_6FC6EE90(pGame, pMonster, bUModUsageTable);
+        const int32_t nUMod = MONSTERUNIQUE_RollNonChampionUMod(pGame, pMonster, bUModUsageTable);
         if (!nUMod)
         {
             break;
@@ -2734,7 +2734,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
         nMaxGroup += pGame->nDifficulty;
     }
 
-    D2GAME_SpawnMinions_6FC6F440(pGame, pRoom, 0, pMonster, 1, nMinGroup, nMaxGroup);
+    MONSTERUNIQUE_SpawnMinions(pGame, pRoom, 0, pMonster, 1, nMinGroup, nMaxGroup);
 
     if (bAuraEnchanted)
     {
@@ -2775,18 +2775,18 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
         const uint32_t nMinionCount = ITEMS_RollRandomNumber(&pMonster->pSeed) % 5 + 2;
         for (uint32_t i = 0; i < nMinionCount; ++i)
         {
-            sub_6FC68D70(pGame, pMonster, MONSTER_SKELETON5, 1, 4, 64);
+            MONSTERSPAWN_SpawnAtUnit(pGame, pMonster, MONSTER_SKELETON5, 1, 4, 64);
         }
 
-        sub_6FC68D70(pGame, pMonster, MONSTER_SKMAGE_POIS3, 1, 4, 64);
-        sub_6FC68D70(pGame, pMonster, MONSTER_SKMAGE_COLD4, 1, 4, 64);
-        sub_6FC68D70(pGame, pMonster, MONSTER_SKMAGE_FIRE3, 1, 4, 64);
-        sub_6FC68D70(pGame, pMonster, MONSTER_SKMAGE_LTNG3, 1, 4, 64);
+        MONSTERSPAWN_SpawnAtUnit(pGame, pMonster, MONSTER_SKMAGE_POIS3, 1, 4, 64);
+        MONSTERSPAWN_SpawnAtUnit(pGame, pMonster, MONSTER_SKMAGE_COLD4, 1, 4, 64);
+        MONSTERSPAWN_SpawnAtUnit(pGame, pMonster, MONSTER_SKMAGE_FIRE3, 1, 4, 64);
+        MONSTERSPAWN_SpawnAtUnit(pGame, pMonster, MONSTER_SKMAGE_LTNG3, 1, 4, 64);
         break;
     }
     case SUPERUNIQUE_SIEGE_BOSS:
     {
-        sub_6FC6A230(pGame, pMonster, MONSTER_MINION1, 1, 20, 20, 0);
+        MONSTERSPAWN_SpawnLinkedMinionsAtOwner(pGame, pMonster, MONSTER_MINION1, 1, 20, 20, 0);
         QUESTS_CreateChainRecord(pGame, pMonster, QUEST_A5Q1_SHENK);
         QUESTS_MonsterSpawn(pGame, pMonster);
         STATES_ToggleState(pMonster, STATE_CORPSE_NOSELECT, 1);
@@ -2803,13 +2803,13 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
     case SUPERUNIQUE_NIHLATHAK_BOSS:
     {
         AIGENERAL_SetOwnerData(pGame, pMonster, pMonster->dwUnitId, 1, 1, 0);
-        sub_6FC6A230(pGame, pMonster, D2Common_11063(UNITS_GetRoom(pMonster), MONSTER_MINION1), 1, 10, 20, 64);
+        MONSTERSPAWN_SpawnLinkedMinionsAtOwner(pGame, pMonster, D2Common_11063(UNITS_GetRoom(pMonster), MONSTER_MINION1), 1, 10, 20, 64);
         QUESTS_CreateChainRecord(pGame, pMonster, QUEST_A5Q4_NIHLATHAK);
         break;
     }
     case SUPERUNIQUE_BAAL_SUBJECT_2:
     {
-        sub_6FC6A230(pGame, pMonster, MONSTER_SKMAGE_COLD3, 1, 20, 10, 64);
+        MONSTERSPAWN_SpawnLinkedMinionsAtOwner(pGame, pMonster, MONSTER_SKMAGE_COLD3, 1, 20, 10, 64);
         break;
     }
     default:
@@ -2822,9 +2822,9 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
 }
 
 //D2Game.0x6FC6FBA0
-D2UnitStrc* __fastcall sub_6FC6FBA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nUnitGUID, uint16_t nNameSeed, int32_t bChampion, int32_t bSuperUnique, int16_t nBossHcIdx, uint8_t* pUMods)
+D2UnitStrc* __fastcall MONSTERUNIQUE_RestoreUniqueMonster(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nUnitGUID, uint16_t nNameSeed, int32_t bChampion, int32_t bSuperUnique, int16_t nBossHcIdx, uint8_t* pUMods)
 {
-    D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC6F220(pGame, pRoom, 0, nX, nY, nUnitGUID, nClassId, 1);
+    D2UnitStrc* pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, 0, nX, nY, nUnitGUID, nClassId, 1);
     D2MonsterDataStrc* pMonsterData = MONSTERUNIQUE_GetMonsterData(pMonster);
     if (!pMonsterData)
     {
@@ -2850,7 +2850,7 @@ D2UnitStrc* __fastcall sub_6FC6FBA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
         }
     }
 
-    D2GAME_SpawnMinions_6FC6F440(pGame, pRoom, nullptr, pMonster, 0, 0, 0);
+    MONSTERUNIQUE_SpawnMinions(pGame, pRoom, nullptr, pMonster, 0, 0, 0);
 
     pMonsterData->wNameSeed = nNameSeed;
 
@@ -2904,15 +2904,15 @@ D2UnitStrc* __fastcall sub_6FC6FBA0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 }
 
 //D2Game.0x6FC6FDC0
-D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nUnitGUID, uint8_t* pUMods)
+D2UnitStrc* __fastcall MONSTERUNIQUE_RestoreMinion(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nClassId, int32_t nUnitGUID, uint8_t* pUMods)
 {
-    D2UnitStrc* pMonster = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
+    D2UnitStrc* pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
     if (!pMonster)
     {
-        pMonster = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, 4, 98);
-        if (!pMonster && sub_6FC66260(pGame, pRoom, 0, nClassId, &nX, &nY, 1))
+        pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, 4, 98);
+        if (!pMonster && MONSTERREGION_FindSpawnLocation(pGame, pRoom, 0, nClassId, &nX, &nY, 1))
         {
-            pMonster = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
+            pMonster = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, 1, nUnitGUID, -1, 98);
         }
     }
 
@@ -2935,12 +2935,12 @@ D2UnitStrc* __fastcall sub_6FC6FDC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     constexpr int32_t mods[] = { 1, 2, 3, 4 };
     for (int32_t i = 0; i < 4; ++i)
     {
-        sub_6FC6F670(pMonster, mods[i], 0);
+        MONSTERUNIQUE_InitializeUMod(pMonster, mods[i], 0);
     }
 
     for (int32_t i = 0; i < 9; ++i)
     {
-        sub_6FC6F670(pMonster, pMonUmods[i], 0);
+        MONSTERUNIQUE_InitializeUMod(pMonster, pMonUmods[i], 0);
     }
     
     return pMonster;
@@ -2971,14 +2971,14 @@ void __fastcall D2GAME_BOSSES_AssignUMod_6FC6FF10(D2GameStrc* pGame, D2UnitStrc*
         if (!pUMods[i])
         {
             pUMods[i] = nUMod;
-            sub_6FC6F670(pUnit, nUMod, bUnique);
+            MONSTERUNIQUE_InitializeUMod(pUnit, nUMod, bUnique);
 			return;
         }
     }
 }
 
 //D2Game.0x6FC6FFD0
-void __fastcall D2GAME_MONSTERS_Unk_6FC6FFD0(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nUMod)
+void __fastcall MONSTERUNIQUE_PromoteToChampion(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nUMod)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
     {
@@ -3005,7 +3005,7 @@ void __fastcall D2GAME_MONSTERS_Unk_6FC6FFD0(D2GameStrc* pGame, D2UnitStrc* pUni
         if (!pMonsterData->nMonUmod[i])
         {
             pMonsterData->nMonUmod[i] = nUMod;
-            D2GAME_SpawnMinions_6FC6F440(pGame, UNITS_GetRoom(pUnit), nullptr, pUnit, 1, 0, 0);
+            MONSTERUNIQUE_SpawnMinions(pGame, UNITS_GetRoom(pUnit), nullptr, pUnit, 1, 0, 0);
             return;
         }
     }

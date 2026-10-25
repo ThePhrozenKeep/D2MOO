@@ -2449,7 +2449,7 @@ void __fastcall sub_6FC3FC80(D2ClientStrc* pClient, D2UnitStrc* pUnit)
     packetAC.nUnitIndex = pUnit->dwClassId;
     packetAC.nPosX = CLIENTS_GetUnitX(pUnit);
     packetAC.nPosY = CLIENTS_GetUnitY(pUnit);
-    packetAC.nLifePct = sub_6FC62F50(pUnit);
+    packetAC.nLifePct = MONSTERMODE_GetHpPercent128(pUnit);
 
     D2BitBufferStrc bitBuffer = {};
     BITMANIP_Initialize(&bitBuffer, packetAC.bitstream, sizeof(packetAC.bitstream));

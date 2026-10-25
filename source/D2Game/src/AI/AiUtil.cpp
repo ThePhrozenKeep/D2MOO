@@ -931,7 +931,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 		return 0;
 	}
 
-	switch (sub_6FC61EC0(pUnit))
+	switch (MONSTERAI_GetTargetOverrideType(pUnit))
 	{
 	case 0:
 	{
@@ -939,10 +939,10 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 	}
 	case 1:
 	{
-		pTarget = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, sub_6FC61EE0(pUnit));
+		pTarget = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, MONSTERAI_GetTargetOverrideGUID(pUnit));
 		if (!pTarget)
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -950,7 +950,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 
 		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -958,10 +958,10 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 	}
 	case 2:
 	{
-		pTarget = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, sub_6FC61EE0(pUnit));
+		pTarget = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, MONSTERAI_GetTargetOverrideGUID(pUnit));
 		if (!pTarget)
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -969,7 +969,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 
 		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -977,10 +977,10 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 	}
 	case 4:
 	{
-		pTarget = SUNIT_GetServerUnit(pGame, UNIT_MISSILE, sub_6FC61EE0(pUnit));
+		pTarget = SUNIT_GetServerUnit(pGame, UNIT_MISSILE, MONSTERAI_GetTargetOverrideGUID(pUnit));
 		if (!pTarget)
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -988,7 +988,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 
 		if (bUseEligibilityCheck && UNITS_TestCollisionWithUnit(pTarget, pUnit, COLLIDE_MISSILE_BARRIER))
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -1057,14 +1057,14 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 
 		if (!pTarget)
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 		break;
 	}
 	default:
 	{
-		sub_6FC61F00(pUnit);
+		MONSTERAI_ClearTargetOverride(pUnit);
 		return 0;
 	}
 	}
@@ -1075,7 +1075,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 	case UNIT_MONSTER:
 		if (SUNIT_IsDead(pTarget))
 		{
-			sub_6FC61F00(pUnit);
+			MONSTERAI_ClearTargetOverride(pUnit);
 			return 0;
 		}
 
@@ -1089,7 +1089,7 @@ int32_t __fastcall AIUTIL_ResolveTargetOverride(D2GameStrc* pGame, D2UnitStrc* p
 		return 1;
 
 	default:
-		sub_6FC61F00(pUnit);
+		MONSTERAI_ClearTargetOverride(pUnit);
 		return 0;
 	}
 }

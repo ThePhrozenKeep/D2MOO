@@ -426,7 +426,7 @@ void __fastcall OBJECTS_InitFunction60_CompellingOrb(D2ObjInitFnStrc* pOp)
 		return;
 	}
 
-	D2UnitStrc* pCompellingOrb = sub_6FC6A090(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_COMPELLINGORB, 1, 0);
+	D2UnitStrc* pCompellingOrb = MONSTERSPAWN_SpawnAtCoordinates(pOp->pGame, pOp->pRoom, pOp->nX, pOp->nY, MONSTER_COMPELLINGORB, 1, 0);
 	if (!pCompellingOrb)
 	{
 		return;

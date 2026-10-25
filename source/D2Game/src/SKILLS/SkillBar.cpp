@@ -483,7 +483,7 @@ int32_t __fastcall SKILLS_SrvDo072_FindItem(D2GameStrc* pGame, D2UnitStrc* pUnit
         nParam = 4;
     }
 
-    sub_6FC659B0(pGame, pTarget, pUnit, nParam);
+    MONSTERMODE_DropTreasureForFindItem(pGame, pTarget, pUnit, nParam);
     return 1;
 }
 
@@ -1216,8 +1216,8 @@ int32_t __fastcall SKILLS_SrvSt40_Leap(D2GameStrc* pGame, D2UnitStrc* pUnit, int
         D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         if (pTarget)
         {
-            sub_6FC627B0(pUnit, MONMODE_ATTACK1);
-            sub_6FC62D90(pUnit, pGame);
+            MONSTERMODE_UpdateModeAttackStats(pUnit, MONMODE_ATTACK1);
+            MONSTERMODE_AllocateTargetCombat(pUnit, pGame);
             SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
             SKILLS_SetParam3(pSkill, pTarget->dwUnitType);
             SKILLS_SetParam4(pSkill, pTarget->dwUnitId);

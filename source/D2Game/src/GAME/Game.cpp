@@ -495,7 +495,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
     ARENA_AllocArena(pGame, 0, nFlags, 0);
     CLIENTS_SetGameData(pGame);
     PARTY_AllocPartyControl(pGame);
-    sub_6FC68110(pGame);
+    MONSTERREGION_InitializeForGame(pGame);
     pGame->dwObjSeed = OBJRGN_AllocObjectControl(pGame);
     SUNITPROXY_InitializeNpcControl(pGame);
     QUESTS_QuestInit(pGame);
@@ -751,7 +751,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
 
     PARTY_AllocPartyControl(pGame);
-    sub_6FC68110(pGame);
+    MONSTERREGION_InitializeForGame(pGame);
     pGame->dwObjSeed = OBJRGN_AllocObjectControl(pGame);
     SUNITPROXY_InitializeNpcControl(pGame);
     QUESTS_QuestInit(pGame);
@@ -1729,7 +1729,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 //D2Game.0x6FC385A0
 void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
-    sub_6FC679F0(pGame, pRoom);
+    MONSTERREGION_TrySpawnWanderingMonster(pGame, pRoom);
 
     if (pRoom->dwFlags & 1)
     {
@@ -1846,7 +1846,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
         {
             for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
             {
-                sub_6FC679F0(pGame, pRoom);
+                MONSTERREGION_TrySpawnWanderingMonster(pGame, pRoom);
 
                 if (!(pRoom->dwFlags & 1))
                 {

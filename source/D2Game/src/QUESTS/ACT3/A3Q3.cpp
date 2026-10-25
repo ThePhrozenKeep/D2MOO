@@ -781,7 +781,7 @@ void __fastcall OBJECTS_InitFunction25_Gidbinn(D2ObjInitFnStrc* pOp)
 	}
 
 	pQuestDataEx->bBossIsSpawning = 1;
-	D2UnitStrc* pFetishBoss = sub_6FC6E8D0(pOp->pGame, pOp->pRoom, 0, MONSTER_FETISH11, 1, 0, 0, 1);
+	D2UnitStrc* pFetishBoss = MONSTERUNIQUE_SpawnUniqueGroup(pOp->pGame, pOp->pRoom, 0, MONSTER_FETISH11, 1, 0, 0, 1);
 	if (pFetishBoss)
 	{
 		pQuestDataEx->bGidbinnObjectActivated = 0;
@@ -889,7 +889,7 @@ bool __fastcall ACT3Q3_SpawnGidbinnBoss(D2GameStrc* pGame, D2QuestDataStrc* pQue
 				}
 
 				pQuestDataEx->bBossIsSpawning = 1;
-				pFetishBoss = sub_6FC6E8D0(pGame, pRoom, 0, MONSTER_FETISH11, 1, 0, 0, 1);
+				pFetishBoss = MONSTERUNIQUE_SpawnUniqueGroup(pGame, pRoom, 0, MONSTER_FETISH11, 1, 0, 0, 1);
 				if (pFetishBoss)
 				{
 					pQuestDataEx->bGidbinnObjectActivated = 0;

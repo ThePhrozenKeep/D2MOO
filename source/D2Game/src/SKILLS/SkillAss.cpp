@@ -1950,7 +1950,7 @@ void __fastcall sub_6FCF9580(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                     v28.nItemCode = nItemCode;
                     v28.nBodyLoc = nBodyLoc;
                     v28.unk0x05 = 1;
-                    sub_6FC61190(pGame, pPet, &v28, nItemLevel, nMod);
+                    MONSTERAI_CreateAndEquipItem(pGame, pPet, &v28, nItemLevel, nMod);
                 }
                 else if (pUnit->pInventory)
                 {
@@ -1961,7 +1961,7 @@ void __fastcall sub_6FCF9580(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
                         v28.nItemCode = ITEMS_GetBaseCode(pItem);
                         v28.nBodyLoc = nBodyLoc;
                         v28.unk0x05 = 1;
-                        sub_6FC61190(pGame, pPet, &v28, nItemLevel, nMod);
+                        MONSTERAI_CreateAndEquipItem(pGame, pPet, &v28, nItemLevel, nMod);
                     }
                 }
             }

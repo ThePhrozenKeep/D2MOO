@@ -516,11 +516,11 @@ int32_t __fastcall sub_6FC828D0(D2UnitStrc* pPlayer, int32_t nUnitType, int32_t 
                 D2Common_10153(pPlayer->pDynamicPath);
                 if (pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
                 {
-                    sub_6FC61C70(pGame, pPlayer, pUnit, pUnit->pMonsterData->pMonInteract, 0);
+                    MONSTERAI_StartNpcInteraction(pGame, pPlayer, pUnit, pUnit->pMonsterData->pMonInteract, 0);
                     return 0;
                 }
 
-                sub_6FC61C70(pGame, pPlayer, pUnit, 0, 0);
+                MONSTERAI_StartNpcInteraction(pGame, pPlayer, pUnit, 0, 0);
             }
         }
         else if (nDistance < 9)
@@ -2723,7 +2723,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x2F_InitEntityChat_6FC868C0(D2GameS
                         return nResult;
                     }
 
-                    sub_6FC61AB0(pGame, pUnit, pMonster, pMonster->pMonsterData->pMonInteract);
+                    MONSTERAI_ActivateNpcInteraction(pGame, pUnit, pMonster, pMonster->pMonsterData->pMonInteract);
                     return 0;
 
                 }
@@ -2752,7 +2752,7 @@ int32_t __fastcall D2GAME_PACKETCALLBACK_Rcv0x30_TerminateEntityChat_6FC869F0(D2
             {
                 if (DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pUnit))) == DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pMonster))))
                 {
-                    sub_6FC61B70(pGame, pUnit, pMonster, pMonster->pMonsterData->pMonInteract);
+                    MONSTERAI_EndNpcInteraction(pGame, pUnit, pMonster, pMonster->pMonsterData->pMonInteract);
                     return 0;
                 }
                 

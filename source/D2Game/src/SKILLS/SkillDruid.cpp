@@ -1974,7 +1974,7 @@ void __fastcall sub_6FD01B00(D2UnitStrc* pUnit, int32_t nStateId, D2StatListStrc
 
     if (SUNIT_IsDead(pUnit))
     {
-        sub_6FC6A150(SUNIT_GetGameFromUnit(pUnit), pUnit, nSummonId, nMonMode, 1, 0);
+        MONSTERSPAWN_SpawnLevelVariantAtUnit(SUNIT_GetGameFromUnit(pUnit), pUnit, nSummonId, nMonMode, 1, 0);
     }
 }
 

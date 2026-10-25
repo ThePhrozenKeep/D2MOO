@@ -766,7 +766,7 @@ void __fastcall ACT2Q4_InitializeJerhynPalaceObject(D2QuestDataStrc* pQuestData,
 		pQuestDataEx->pGuardCoords.nX = pOp->nX + 1;
 		pQuestDataEx->pGuardCoords.nY = pOp->nY;
 
-		sub_6FC6A090(pQuestData->pGame, pOp->pRoom, pQuestDataEx->pGuardCoords.nX, pQuestDataEx->pGuardCoords.nY, MONSTER_ACT2GUARD2, 1, 0);
+		MONSTERSPAWN_SpawnAtCoordinates(pQuestData->pGame, pOp->pRoom, pQuestDataEx->pGuardCoords.nX, pQuestDataEx->pGuardCoords.nY, MONSTER_ACT2GUARD2, 1, 0);
 	}
 
 	EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_QUESTFN, pOp->pGame->dwGameFrame + 1, 0, 0);
