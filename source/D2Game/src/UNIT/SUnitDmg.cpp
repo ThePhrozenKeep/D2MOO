@@ -2244,12 +2244,12 @@ int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHit
 		{ offsetof(D2DamageStrc, dwPoisDamage), 0x50 },
 	};
 
-	static int32_t dword_6FD4DC44;
+	static int32_t nHitClassRotation;
 
-	int32_t nIndex = dword_6FD4DC44 % 4;
+	int32_t nIndex = nHitClassRotation % 4;
 	const int32_t nEnd = nIndex + 4;
 
-	++dword_6FD4DC44;
+	++nHitClassRotation;
 
 	uint32_t nHitClass = 0;
 	while (nIndex < nEnd)

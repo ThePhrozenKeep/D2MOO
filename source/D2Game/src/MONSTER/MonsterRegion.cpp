@@ -853,8 +853,8 @@ D2UnitStrc* __fastcall sub_6FC677D0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 //D2Game.0x6FC679F0
 void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
-    constexpr int32_t dword_6FD2EE44[] = { MONSTER_ROGUE2 };
-    constexpr uint8_t byte_6FD2EE48[10] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    constexpr int32_t nWanderingMonsterIds[] = { MONSTER_ROGUE2 };
+    constexpr uint8_t nWanderingMonsterRanges[10] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     if (!pRoom || ITEMS_RollRandomNumber(&pRoom->pSeed) & 0x7FFF || pRoom->nNumClients)
     {
@@ -880,12 +880,12 @@ void __fastcall sub_6FC679F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
     }
 
     const uint32_t nIndex = 2 * pLevelsTxtRecord->nAct;
-    if (!byte_6FD2EE48[nIndex + 1])
+    if (!nWanderingMonsterRanges[nIndex + 1])
     {
         return;
     }
 
-    const int32_t nMonsterId = dword_6FD2EE44[ITEMS_RollLimitedRandomNumber(&pRoom->pSeed, byte_6FD2EE48[nIndex + 1]) + byte_6FD2EE48[nIndex]];
+    const int32_t nMonsterId = nWanderingMonsterIds[ITEMS_RollLimitedRandomNumber(&pRoom->pSeed, nWanderingMonsterRanges[nIndex + 1]) + nWanderingMonsterRanges[nIndex]];
     
     int32_t nX = 0;
     int32_t nY = 0;

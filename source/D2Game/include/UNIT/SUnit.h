@@ -6,6 +6,8 @@
 
 #include <GAME/Event.h>
 
+extern uint32_t gnUnitInitSeed;
+
 #pragma pack(push, 1)
 struct D2UnitInfoStrc		// sizeof(0x34)
 {

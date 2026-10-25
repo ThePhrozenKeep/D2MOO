@@ -13,12 +13,12 @@
 
 __forceinline int32_t EVENT_MapUnitTypeToIndex(int32_t nUnitType)
 {
-    static const int32_t dword_6FD27D6C[] =
+    static const int32_t nEventQueueIndexByUnitType[] =
     {
         0, 1, 3, 2, 4, -1, 0
     };
 
-    return dword_6FD27D6C[nUnitType];
+    return nEventQueueIndexByUnitType[nUnitType];
 }
 
 

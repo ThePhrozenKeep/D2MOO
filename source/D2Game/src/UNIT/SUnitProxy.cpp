@@ -46,8 +46,8 @@ constexpr uint32_t MAX_NPC_INVENTORY = 17;
 uint8_t gbUnitProxyItemCacheInitialized[MAX_NPC_INVENTORY] = {};
 D2UnitProxyStrc gUnitProxyItemCache[MAX_NPC_INVENTORY] = {};
 
-int32_t dword_6FD4DD80;
-int32_t dword_6FD4DD84;
+int32_t gnCrossbowQuiverItemId;
+int32_t gnArrowQuiverItemId;
 
 
 //D2Game.0x6FCCB8A0
@@ -99,7 +99,7 @@ void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2
 //D2Game.0x6FCCBA30
 void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
 {
-    constexpr D2NpcInitStrc dword_6FD3F640[] =
+    constexpr D2NpcInitStrc tNpcInitRecords[] =
     {
         { MONSTER_AKARA,        1, ACT_I,   1, 0 },
         { MONSTER_CAIN1,        0, ACT_I,   0, 0 },
@@ -156,14 +156,14 @@ void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
     SEED_InitSeed(&pNpcControl->pSeed);
     SEED_InitLowSeed(&pNpcControl->pSeed, ITEMS_RollRandomNumber(&pGame->pGameSeed));
 
-    if (!dword_6FD4DD80)
+    if (!gnCrossbowQuiverItemId)
     {
-        DATATBLS_GetItemRecordFromItemCode(' vqc', &dword_6FD4DD80);
+        DATATBLS_GetItemRecordFromItemCode(' vqc', &gnCrossbowQuiverItemId);
     }
 
-    if (!dword_6FD4DD84)
+    if (!gnArrowQuiverItemId)
     {
-        DATATBLS_GetItemRecordFromItemCode(' vqa', &dword_6FD4DD84);
+        DATATBLS_GetItemRecordFromItemCode(' vqa', &gnArrowQuiverItemId);
     }
 
     D2ItemDataTbl* pItemDataTbl = DATATBLS_GetItemDataTables();
@@ -194,15 +194,15 @@ void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
 
             ++pNpcControl->nArraySize;
 
-            for (size_t j = 0; j < std::size(dword_6FD3F640); ++j)
+            for (size_t j = 0; j < std::size(tNpcInitRecords); ++j)
             {
-                if (dword_6FD3F640[j].nNpcClassId == i)
+                if (tNpcInitRecords[j].nNpcClassId == i)
                 {
-                    pNpcRecord->npcTrade.nAct = dword_6FD3F640[j].nAct;
-                    pNpcRecord->npcTrade.bTrader = dword_6FD3F640[j].bTrader;
+                    pNpcRecord->npcTrade.nAct = tNpcInitRecords[j].nAct;
+                    pNpcRecord->npcTrade.bTrader = tNpcInitRecords[j].bTrader;
                     pNpcRecord->npcTrade.bLevelRefresh = 0;
                     pNpcRecord->npcTrade.bInited = 0;
-                    pNpcRecord->npcTrade.bForceVendor = dword_6FD3F640[j].bForceVendor;
+                    pNpcRecord->npcTrade.bForceVendor = tNpcInitRecords[j].bForceVendor;
                     pNpcRecord->npcTrade.bRefreshInventory = 0;
 
                     if (pNpcRecord->npcTrade.bTrader == 1)

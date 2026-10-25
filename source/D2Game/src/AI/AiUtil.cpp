@@ -516,7 +516,7 @@ D2UnitStrc* __fastcall sub_6FCF1E30(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Unit
 //D2Game.0x6FCF1E80
 D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* a3, D2UnitStrc*(__fastcall* a4)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), int32_t nCallbackId)
 {
-	D2UnkAiTableStrc stru_6FD29600[13] =
+	D2UnkAiTableStrc tTargetScanEntries[13] =
 	{
 		{ 0, nullptr },
 		{ 0, nullptr },
@@ -533,7 +533,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 		{ 0, sub_6FCF1E30 },
 	};
 
-	D2UnitStrc*(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*) = stru_6FD29600[nCallbackId].unk0x04;
+	D2UnitStrc*(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*) = tTargetScanEntries[nCallbackId].unk0x04;
 
 	if (!pfCallback)
 	{
@@ -544,7 +544,7 @@ D2UnitStrc* __fastcall sub_6FCF1E80(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 		}
 	}
 
-	switch (stru_6FD29600[nCallbackId].unk0x00)
+	switch (tTargetScanEntries[nCallbackId].unk0x00)
 	{
 	case 0:
 	{

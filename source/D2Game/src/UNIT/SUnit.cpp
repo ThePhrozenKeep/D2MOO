@@ -50,7 +50,7 @@
 #pragma warning(disable: 28159)
 
 
-int32_t dword_6FD4DC40;
+
 
 
 
@@ -415,8 +415,8 @@ void __fastcall SUNIT_InitSeed(D2UnitStrc* pUnit, D2SeedStrc* pSeed)
     }
     else
     {
-        pUnit->dwInitSeed = SEED_GetRandomValue(2 * dword_6FD4DC40);
-        ++dword_6FD4DC40;
+        pUnit->dwInitSeed = SEED_GetRandomValue(2 * gnUnitInitSeed);
+        ++gnUnitInitSeed;
     }
 
     SEED_InitLowSeed(&pUnit->pSeed, pUnit->dwInitSeed);

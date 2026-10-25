@@ -40,7 +40,7 @@ struct D2MissileUnitFindTableStrc
 #pragma pack(pop)
 
 
-extern D2MissileUnitFindTableStrc stru_6FD2E5F8[9];
+extern D2MissileUnitFindTableStrc gtMissileCollisionModes[9];
 
 
 //D2Game.0x6FC55CE0

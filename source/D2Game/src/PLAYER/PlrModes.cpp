@@ -53,7 +53,7 @@ struct D2PlrModeCallbackStrc
 };
 #pragma pack(pop)
 
-constexpr D2PlrModeCallbackStrc stru_6FD28EA0[] =
+constexpr D2PlrModeCallbackStrc gtPlayerModeStartCallbacks[] =
 {
     { nullptr,                                              PLRMODE_StartID_Death },
     { PLRMODE_StartXY_Neutral,                              nullptr },
@@ -1422,7 +1422,7 @@ void __fastcall sub_6FC81560(D2UnitStrc* pUnit, D2UnkPlrModeStrc2* a2)
 //D2Game.0x6FC81600
 void __fastcall sub_6FC81600(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    int32_t(__fastcall* off_6FD304B8[])(D2GameStrc*, D2UnitStrc*, int32_t, int32_t) =
+    int32_t(__fastcall* tPlayerModeUpdateCallbacks[])(D2GameStrc*, D2UnitStrc*, int32_t, int32_t) =
     {
         sub_6FC808D0,
         sub_6FC808D0,
@@ -1472,7 +1472,7 @@ void __fastcall sub_6FC81600(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkil
         nAnimMode = pUnit->dwAnimMode;
     }
 
-    if (off_6FD304B8[nAnimMode] && off_6FD304B8[nAnimMode](pGame, pUnit, nSkillId, nSkillLevel) == 2)
+    if (tPlayerModeUpdateCallbacks[nAnimMode] && tPlayerModeUpdateCallbacks[nAnimMode](pGame, pUnit, nSkillId, nSkillLevel) == 2)
     {
         sub_6FC81250(pGame, pUnit, nSkillId, nSkillLevel);
     }
@@ -1550,7 +1550,7 @@ void __fastcall sub_6FC817D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc* 
 
     if (sub_6FC81890(pGame, pUnit, nMode) && (a7 || D2GAME_PLRMODES_First_6FC7F340(pGame, pUnit, nMode, 1, pUsedSkill)))
     {
-        if (IsBadCodePtr((FARPROC)stru_6FD28EA0[nMode].pfnStartXY))
+        if (IsBadCodePtr((FARPROC)gtPlayerModeStartCallbacks[nMode].pfnStartXY))
         {
             FOG_DisplayAssert("cptStartChart->pfnStartXY", __FILE__, __LINE__);
             exit(-1);
@@ -1561,7 +1561,7 @@ void __fastcall sub_6FC817D0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillStrc* 
             UNITS_SetUsedSkill(pUnit, pUsedSkill);
         }
 
-        stru_6FD28EA0[nMode].pfnStartXY(pGame, pUnit, nMode, nX, nY);
+        gtPlayerModeStartCallbacks[nMode].pfnStartXY(pGame, pUnit, nMode, nX, nY);
     }
 }
 
@@ -1664,7 +1664,7 @@ void __fastcall D2GAME_PLAYERMODE_Change_6FC81A00(D2GameStrc* pGame, D2UnitStrc*
                 pPlayer->pPlayerData->unk0xA8[42] = 0;
             }
 
-            if (IsBadCodePtr((FARPROC)stru_6FD28EA0[nMode].pfnStartID))
+            if (IsBadCodePtr((FARPROC)gtPlayerModeStartCallbacks[nMode].pfnStartID))
             {
                 FOG_DisplayAssert("cptStartChart->pfnStartID", __FILE__, __LINE__);
                 exit(-1);
@@ -1675,7 +1675,7 @@ void __fastcall D2GAME_PLAYERMODE_Change_6FC81A00(D2GameStrc* pGame, D2UnitStrc*
                 UNITS_SetUsedSkill(pPlayer, pSkill);
             }
 
-            stru_6FD28EA0[nMode].pfnStartID(pGame, pPlayer, nMode, pTarget);
+            gtPlayerModeStartCallbacks[nMode].pfnStartID(pGame, pPlayer, nMode, pTarget);
         }
     }
     //else
@@ -1719,7 +1719,7 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
 {
     using EventCallbackFunction = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 
-    constexpr EventCallbackFunction off_6FD28F40[] =
+    constexpr EventCallbackFunction tPlayerEventCallbacks[] =
     {
         sub_6FC81600,
         sub_6FC81250,
@@ -1737,11 +1737,11 @@ void __fastcall D2GAME_EVENTS_Callback_6FC81BD0(D2GameStrc* pGame, D2UnitStrc* p
         D2GAME_PLRTRADE_Last_6FC937F0,
 		nullptr
     };
-	static_assert(EVENTTYPE_COUNT == std::size(off_6FD28F40), "missing callbacks");
+	static_assert(EVENTTYPE_COUNT == std::size(tPlayerEventCallbacks), "missing callbacks");
 
-    if (nEvent >= 0 && nEvent <= std::size(off_6FD28F40))
+    if (nEvent >= 0 && nEvent <= std::size(tPlayerEventCallbacks))
     {
-        EventCallbackFunction pCallback = off_6FD28F40[nEvent];
+        EventCallbackFunction pCallback = tPlayerEventCallbacks[nEvent];
         if (pCallback)
         {
             pCallback(pGame, pUnit, dwArg, dwArgEx);

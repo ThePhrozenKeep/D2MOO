@@ -69,7 +69,7 @@ struct D2HitFunc22ParamStrc
 #pragma pack(pop)
 
 
-D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
+D2MissileUnitFindTableStrc gtMissileCollisionModes[] =
 {
     /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
     /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER                   },
@@ -81,7 +81,7 @@ D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
     /*[7]*/{ MISSMODE_UnitFindCallback_CanMissileDestroy              , COLLIDE_MISSILE                                    },
     /*[8]*/{ MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster  , COLLIDE_MONSTER | COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER | COLLIDE_WALL },
 };
-static_assert(ARRAY_SIZE(stru_6FD2E5F8) == MISSMODE_COUNT, "Missile functions table needs to match missiles modes");
+static_assert(ARRAY_SIZE(gtMissileCollisionModes) == MISSMODE_COUNT, "Missile functions table needs to match missiles modes");
 
 //D2Game.0x6FC55CE0
 int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* pUnit, void* pArgument)
@@ -697,7 +697,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 1;
     }
 
-    if (!stru_6FD2E5F8[nMissileMode].pfUnitFindCallback)
+    if (!gtMissileCollisionModes[nMissileMode].pfUnitFindCallback)
     {
         return 2;
     }
@@ -717,10 +717,10 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
     {
         const uint16_t nX = pathPoints[i].X;
         const uint16_t nY = pathPoints[i].Y;
-        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nMissileMode].nCollisionMask);
+        const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, gtMissileCollisionModes[nMissileMode].nCollisionMask);
         if (nCollisionMask)
         {
-            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
+            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, gtMissileCollisionModes[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
             if (pTarget)
             {
                 return MISSMODE_SrvDmgHitHandler(pGame, pMissile, pTarget, 0);

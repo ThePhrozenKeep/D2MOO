@@ -263,7 +263,7 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
 int32_t __fastcall SKILLS_SrvDo087_MaggotLay(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     // TODO: Name
-    constexpr int8_t byte_6FD296C8[] =
+    constexpr int8_t nMaggotLayDirections[] =
     {
         10, 8, 22, 20, 18, 16, 14, 12
     };
@@ -294,7 +294,7 @@ int32_t __fastcall SKILLS_SrvDo087_MaggotLay(D2GameStrc* pGame, D2UnitStrc* pUni
 
     int32_t nOffsetX = 0;
     int32_t nOffsetY = 0;
-    D2Common_11055(byte_6FD296C8[(uint8_t)nIndex], &nOffsetX, &nOffsetY);
+    D2Common_11055(nMaggotLayDirections[(uint8_t)nIndex], &nOffsetX, &nOffsetY);
 
     pUnit->nActionFrame = 0;
 
@@ -330,7 +330,7 @@ int32_t __fastcall SKILLS_SrvSt46_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pU
 int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     // TODO: Names
-    constexpr int8_t byte_6FD296D0[] =
+    constexpr int8_t nAndarielSprayDirections[] =
     {
         27, 14, 15, 3, 99, 7, 21, 22, 31,
         26, 12, 13, 2, 99, 6, 19, 20, 30,
@@ -342,7 +342,7 @@ int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* p
         28, 16, 17, 4, 99, 0, 23, 8, 24
     };
 
-    constexpr int8_t byte_6FD29718[] =
+    constexpr int8_t nAndarielSprayOriginDirections[] =
     {
         29, 28, 27, 26, 25, 24, 31, 30
     };
@@ -376,7 +376,7 @@ int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* p
 
     int32_t nOffsetX = 0;
     int32_t nOffsetY = 0;
-    D2Common_11055(byte_6FD29718[nIndex], &nOffsetX, &nOffsetY);
+    D2Common_11055(nAndarielSprayOriginDirections[nIndex], &nOffsetX, &nOffsetY);
     nX += nOffsetX;
     nY += nOffsetY;
 
@@ -394,7 +394,7 @@ int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* p
         nOffset = 8;
     }
 
-    const int8_t a1 = byte_6FD296D0[9 * nIndex + nOffset];
+    const int8_t a1 = nAndarielSprayDirections[9 * nIndex + nOffset];
     if (a1 != 99)
     {
         D2Common_11055(a1, &nOffsetX, &nOffsetY);
@@ -1370,12 +1370,12 @@ int32_t __fastcall SKILLS_SrvDo098_MonTeleport(D2GameStrc* pGame, D2UnitStrc* pU
 //D2Game.0x6FD08CD0
 int32_t __fastcall SKILLS_SrvDo099_PrimePoisonNova(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    constexpr int32_t dword_6FD29720[] =
+    constexpr int32_t nNovaDirectionX[] =
     {
         0, 1, 2, 2, 2, 2, 2, 1, 0, -1, -2, -2, -2, -2, -2, -1
     };
 
-    constexpr int32_t dword_6FD29760[] =
+    constexpr int32_t nNovaDirectionY[] =
     {
         2, 2, 2, 1, 0, -1, -2, -2, -2, -2, -2, -1, 0, 1, 2, 2
     };
@@ -1416,8 +1416,8 @@ int32_t __fastcall SKILLS_SrvDo099_PrimePoisonNova(D2GameStrc* pGame, D2UnitStrc
 
     for (int32_t i = 0; i < 16; i+= 2)
     {
-        missileParams.nTargetX = dword_6FD29720[i];
-        missileParams.nTargetY = dword_6FD29760[i];
+        missileParams.nTargetX = nNovaDirectionX[i];
+        missileParams.nTargetY = nNovaDirectionY[i];
         MISSILES_CreateMissileFromParams(pGame, &missileParams);
     }
 
@@ -1426,8 +1426,8 @@ int32_t __fastcall SKILLS_SrvDo099_PrimePoisonNova(D2GameStrc* pGame, D2UnitStrc
     {
         for (int32_t i = 0; i < 15; i += nParam)
         {
-            missileParams.nTargetX = dword_6FD29720[i + 1];
-            missileParams.nTargetY = dword_6FD29760[i + 1];
+            missileParams.nTargetX = nNovaDirectionX[i + 1];
+            missileParams.nTargetY = nNovaDirectionY[i + 1];
             MISSILES_CreateMissileFromParams(pGame, &missileParams);
         }
     }

@@ -5571,12 +5571,12 @@ enum D2C_GargoyleTrapAIParams
 //D2Game.0x6FCDBCE0
 void __fastcall AITHINK_Fn063_GargoyleTrap(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	const char byte_6FD29400[] =
+	const char nDirectionToCardinalIndex[] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0
 	};
 
-	const char byte_6FD29440[] =
+	const char nCardinalDirections[] =
 	{
 		31, 49, 0, 17
 	};
@@ -5599,11 +5599,11 @@ void __fastcall AITHINK_Fn063_GargoyleTrap(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 	if (nXDiff >= nYDiff)
 	{
-		PATH_SetDirection(pUnit->pDynamicPath, byte_6FD29440[byte_6FD29400[UNITS_GetDirectionToCoords(pUnit, nTargetX, nY)]]);
+		PATH_SetDirection(pUnit->pDynamicPath, nCardinalDirections[nDirectionToCardinalIndex[UNITS_GetDirectionToCoords(pUnit, nTargetX, nY)]]);
 	}
 	else
 	{
-		PATH_SetDirection(pUnit->pDynamicPath, byte_6FD29440[byte_6FD29400[UNITS_GetDirectionToCoords(pUnit, nX, nTargetY)]]);
+		PATH_SetDirection(pUnit->pDynamicPath, nCardinalDirections[nDirectionToCardinalIndex[UNITS_GetDirectionToCoords(pUnit, nX, nTargetY)]]);
 	}
 
 	if (nXDiff < 6 || nYDiff < 6)
@@ -7049,7 +7049,7 @@ enum D2C_HighPriestAIParams
 //D2Game.0x6FCDED10
 void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	const D2CoordStrc stru_6FD29444[4] =
+	const D2CoordStrc tSkillCastOffsets[4] =
 	{
 		{ -5, -5 },
 		{ 5, -5 },
@@ -7121,8 +7121,8 @@ void __fastcall AITHINK_Fn085_HighPriest(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 		else
 		{
 			const uint32_t nRand = ITEMS_RollRandomNumber(&pUnit->pSeed) & 3;
-			const int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + stru_6FD29444[nRand].nX;
-			const int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + stru_6FD29444[nRand].nY;
+			const int32_t nX = CLIENTS_GetUnitX(pAiTickParam->pTarget) + tSkillCastOffsets[nRand].nX;
+			const int32_t nY = CLIENTS_GetUnitY(pAiTickParam->pTarget) + tSkillCastOffsets[nRand].nY;
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, nX, nY);
 			pAiTickParam->pAiControl->dwAiParam[1] = pGame->dwGameFrame + 100;
 			return;
@@ -8850,7 +8850,7 @@ void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, int32_t a4, int32_t bRun, int32_t nVelocity, int32_t a7)
 {
 	// TODO: Names
-	constexpr uint8_t byte_6FD295C4[] =
+	constexpr uint8_t nPetFollowDirectionOrder[] =
 	{
 		4, 3, 2, 1, 0, 7, 6, 5
 	};
@@ -8878,7 +8878,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 		{
 			int32_t nXOffset = 0;
 			int32_t nYOffset = 0;
-			D2Common_11055(byte_6FD295C4[nIndex], &nXOffset, &nYOffset);
+			D2Common_11055(nPetFollowDirectionOrder[nIndex], &nXOffset, &nYOffset);
 
 			const int32_t nX = v65 + 8 * nXOffset;
 			const int32_t nY = v64 + 8 * nYOffset;
@@ -9518,7 +9518,7 @@ void __fastcall AITHINK_Fn061_Hireable(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, int32_t eMotionType, int32_t bRun, int32_t nSpeed, BYTE bSteps)
 {
 	// TODO: Names
-	constexpr char byte_6FD295BC[] =
+	constexpr char nHirelingFollowDirectionOrder[] =
 	{
 		4, 3, 2, 1, 0, 7, 6, 5
 	};
@@ -9539,7 +9539,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		{
 			int32_t nXOffset = 0;
 			int32_t nYOffset = 0;
-			D2Common_11055(byte_6FD295BC[nIndex], &nXOffset, &nYOffset);
+			D2Common_11055(nHirelingFollowDirectionOrder[nIndex], &nXOffset, &nYOffset);
 
 			const int32_t nX = v11 + 8 * nXOffset;
 			const int32_t nY = v12 + 8 * nYOffset;
@@ -10937,8 +10937,8 @@ void __fastcall AITHINK_Fn032_Npc(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTick
 //D2Game.0x6FCE69A0
 uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	//TODO: v18, dword_6FD4DD88
-	int32_t dword_6FD4DD88 = 0;
+	//TODO: v18, nNpcWalkSequenceCounter
+	int32_t nNpcWalkSequenceCounter = 0;
 
 	int32_t nAnimMode = 0;
 	int32_t v18 = 0;
@@ -10948,7 +10948,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 	{
 		if (pAiCmd->nCmdParam[1] && pAiCmd->nCmdParam[2] && (uint32_t)AIUTIL_GetDistanceToCoordinates(pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]) > 3)
 		{
-			if ((dword_6FD4DD88 % 4) == 0)
+			if ((nNpcWalkSequenceCounter % 4) == 0)
 			{
 				AITACTICS_SetVelocity(pUnit, 5, 0, 0);
 				AITACTICS_WalkToTargetCoordinatesNoSteps(pGame, pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]);
@@ -10959,7 +10959,7 @@ uint8_t __fastcall sub_6FCE69A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickPa
 				AITACTICS_WalkToTargetCoordinatesNoSteps(pGame, pUnit, pAiCmd->nCmdParam[1], pAiCmd->nCmdParam[2]);
 			}
 
-			++dword_6FD4DD88;
+			++nNpcWalkSequenceCounter;
 			--pAiCmd->nCmdParam[3];
 			return 1;
 		}
@@ -11108,7 +11108,7 @@ int32_t __fastcall AITHINK_ExecuteMapAiAction(D2GameStrc* pGame, D2UnitStrc* pUn
 	typedef int32_t(__fastcall* ACTIONFN)(D2GameStrc*, D2UnitStrc*, D2AiTickParamStrc*, D2MapAIPathPositionStrc*);
 
 	//TODO: Name
-	ACTIONFN dword_6FD3F970[] =
+	ACTIONFN tMapAiActions[] =
 	{
 		nullptr,
 		sub_6FCE61E0,
@@ -11131,7 +11131,7 @@ int32_t __fastcall AITHINK_ExecuteMapAiAction(D2GameStrc* pGame, D2UnitStrc* pUn
 		return 0;
 	}
 
-	ACTIONFN pfAction = dword_6FD3F970[pPosition->nMapAIAction];
+	ACTIONFN pfAction = tMapAiActions[pPosition->nMapAIAction];
 	if (pfAction)
 	{
 		return pfAction(pGame, pUnit, pAiTickParam, pPosition);
