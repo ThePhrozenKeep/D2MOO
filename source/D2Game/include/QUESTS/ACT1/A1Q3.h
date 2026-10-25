@@ -62,7 +62,7 @@ void __fastcall ACT1Q3_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 //D2Game.0x6FC99AA0
 void __fastcall ACT1Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC99AD0
-void __fastcall ACT1Q3_Callback06(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT1Q3_Callback06_MalusRemoved(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC99B80
 bool __fastcall ACT1Q3_SeqCallback(D2QuestDataStrc* pQuestData);
 //D2Game.0x6FC99C10

@@ -358,7 +358,7 @@ void __fastcall LEVEL_LoadAct(D2GameStrc* pGame, uint8_t nAct)
     }
 
     pGame->pAct[nAct] = DUNGEON_AllocAct(nAct, pGame->dwInitSeed, 0, pGame, pGame->nDifficulty, pGame->pMemoryPool, nTownLevelId, 0, 0);
-    ACT2Q3_BrightenEnvironment(pGame, nAct);
+    ACT2Q3_ApplyPendingDarkness(pGame, nAct);
 }
 
 //D2Game.0x6FC3C580

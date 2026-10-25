@@ -80,7 +80,7 @@ struct D2Act1Quest4Strc								//sizeof 0x1BC
 
 
 //D2Game.0x6FC99D00
-void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char a2, char a3);
+void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char bUseRemovalTimer, char bMoveCainToTown);
 //D2Game.0x6FC99DE0
 int32_t __fastcall ACT1Q4_UnitIterate_RemoveCainFromTristram(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC99E80
@@ -146,7 +146,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_AddPlayerGUIDs(D2GameStrc* pGame, D2UnitSt
 //D2Game.0x6FC9BF70
 void __fastcall ACT1Q4_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9BFB0
-void __fastcall ACT1Q4_Callback06_6FC9BFB0(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT1Q4_Callback06_ResetInifussTree(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9BFF0
 bool __fastcall ACT1Q4_SeqCallback(D2QuestDataStrc* pQuestData);
 //D2Game.0x6FC9C0A0

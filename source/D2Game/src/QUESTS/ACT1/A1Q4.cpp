@@ -123,7 +123,7 @@ D2NPCMessageTableStrc gpAct1Q4NpcMessages[] =
 
 
 //D2Game.0x6FC99D00
-void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char a2, char a3)
+void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char bUseRemovalTimer, char bMoveCainToTown)
 {
 	D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
 	D2UnitStrc* pCage = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pQuestDataEx->nCainGibbetGUID);
@@ -150,7 +150,7 @@ void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char a2, char 
 		}
 	}
 
-	if (a2)
+	if (bUseRemovalTimer)
 	{
 		if (!pQuestDataEx->bTimerActive)
 		{
@@ -160,7 +160,7 @@ void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char a2, char 
 	}
 	else
 	{
-		if (!a3)
+		if (!bMoveCainToTown)
 		{
 			pQuestDataEx->unk0x50 = 1;
 			return;
@@ -168,7 +168,7 @@ void __fastcall ACT1Q4_UpdateObjects(D2QuestDataStrc* pQuestData, char a2, char 
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 1, 0, ACT1Q4_UnitIterate_RemoveCainFromTristram);
 	}
 
-	if (!a3)
+	if (!bMoveCainToTown)
 	{
 		pQuestDataEx->unk0x50 = 1;
 		return;
@@ -1052,7 +1052,7 @@ void __fastcall ACT1Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pfCallback[QUESTEVENT_CHANGEDLEVEL] = ACT1Q4_Callback03_ChangedLevel;
 	pQuestData->pfCallback[QUESTEVENT_ITEMPICKEDUP] = ACT1Q4_Callback04_ItemPickedUp;
-	pQuestData->pfCallback[6] = ACT1Q4_Callback06_6FC9BFB0;
+	pQuestData->pfCallback[6] = ACT1Q4_Callback06_ResetInifussTree;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERJOINEDGAME] = ACT1Q4_Callback14_PlayerJoinedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT1Q4_Callback09_PlayerDroppedWithQuestItem;
 	pQuestData->pfCallback[QUESTEVENT_MONSTERKILLED] = ACT1Q4_Callback08_MonsterKilled;
@@ -1593,7 +1593,7 @@ void __fastcall ACT1Q4_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FC9BFB0
-void __fastcall ACT1Q4_Callback06_6FC9BFB0(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT1Q4_Callback06_ResetInifussTree(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (((D2Act1Quest4Strc*)pQuestData->pQuestDataEx)->bOperatedWithLastCairnStone != 1 && pQuestData->fState <= 5)
 	{

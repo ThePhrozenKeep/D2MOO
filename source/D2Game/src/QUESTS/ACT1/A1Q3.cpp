@@ -345,7 +345,7 @@ void __fastcall ACT1Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT1Q3_Callback09_PlayerDroppedWithQuestItem;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERJOINEDGAME] = ACT1Q3_Callback14_PlayerJoinedGame;
 	pQuestData->pfCallback[QUESTEVENT_ITEMPICKEDUP] = ACT1Q3_Callback04_ItemPickedUp;
-	pQuestData->pfCallback[6] = ACT1Q3_Callback06;
+	pQuestData->pfCallback[6] = ACT1Q3_Callback06_MalusRemoved;
 	pQuestData->pfCallback[QUESTEVENT_NPCACTIVATE] = ACT1Q3_Callback00_NpcActivate;
 	pQuestData->pfCallback[QUESTEVENT_SCROLLMESSAGE] = ACT1Q3_Callback11_ScrollMessage;
 	pQuestData->pfCallback[QUESTEVENT_NPCDEACTIVATE] = ACT1Q3_Callback02_NpcDeactivate;
@@ -631,7 +631,7 @@ void __fastcall ACT1Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FC99AD0
-void __fastcall ACT1Q3_Callback06(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT1Q3_Callback06_MalusRemoved(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestData->bNotIntro)
 	{

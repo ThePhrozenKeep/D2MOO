@@ -990,10 +990,10 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 			exit(-1);
 		}
 
-		uint8_t a5 = 0;
-		if (pQuestData->pfStatusFilter(pQuestData, pPlayer, pGame->pQuestControl->pQuestFlags, pQuestFlags, &a5) == 1)
+		uint8_t nQuestStatus = 0;
+		if (pQuestData->pfStatusFilter(pQuestData, pPlayer, pGame->pQuestControl->pQuestFlags, pQuestFlags, &nQuestStatus) == 1)
 		{
-			packet5D.nState = a5;
+			packet5D.nState = nQuestStatus;
 		}
 	}
 	else
@@ -2082,7 +2082,7 @@ void __fastcall QUESTS_UpdateNPCIntros(D2GameStrc* pGame, D2UnitStrc* pUnit, uin
 }
 
 //D2Game.0x6FC960C0
-void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pVendor, uint32_t dwDestLvl, uint32_t unk)
+void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pVendor, uint32_t dwDestLvl, uint32_t nUnused)
 {
 	D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
 	D2BitBufferStrc* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
@@ -2220,8 +2220,8 @@ void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2In
 	}
 	else if (nAnimMode == IMODE_EQUIP)
 	{
-		int32_t a5 = 0;
-		sub_6FC45B30(pGame, pPlayer, INVENTORY_GetItemsXPosition(pInventory, pItem), 1, &a5);
+		int32_t nUnequipFailure = 0;
+		sub_6FC45B30(pGame, pPlayer, INVENTORY_GetItemsXPosition(pInventory, pItem), 1, &nUnequipFailure);
 	}
 	else if (nAnimMode == IMODE_ONCURSOR)
 	{
@@ -2550,9 +2550,9 @@ void __fastcall QUESTS_SendScrollMessage(D2UnitStrc* pPlayer, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FC96E80
-void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t a2)
+void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t nEvent)
 {
-	pGame->pQuestControl->unk0x20 = a2;
+	pGame->pQuestControl->unk0x20 = nEvent;
 	SUNIT_IterateUnitsOfType(pGame, 0, 0, QUESTS_FXIterate);
 }
 

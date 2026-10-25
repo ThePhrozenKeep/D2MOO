@@ -318,19 +318,19 @@ void __fastcall ACT1Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 
 	if (nMsgId == 127 && pQuestData->bNotIntro)
 	{
-		bool v6 = 0;
+		bool bUpdateQuestStateFlags = 0;
 		if (pQuestDataEx->bTowerTomeActivated == 1)
 		{
 			if (pQuestData->fLastState < 1)
 			{
-				v6 = 1;
+				bUpdateQuestStateFlags = 1;
 				pQuestData->dwFlags &= 0xFFFFFF00;
 				QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q5_UnitIterate_StatusCyclerEx, 1);
 			}
 
 			if (pQuestData->fLastState == 3)
 			{
-				v6 = 1;
+				bUpdateQuestStateFlags = 1;
 				pQuestData->dwFlags &= 0xFFFFFF00;
 				QUESTS_UnitIterate(pQuestData, 2, 0, ACT1Q5_UnitIterate_StatusCyclerEx, 1);
 				if (pQuestData->fState < 3)
@@ -345,7 +345,7 @@ void __fastcall ACT1Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			QUESTS_StateDebug(pQuestData, 2, __FILE__, __LINE__);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT1Q5_UnitIterate_UpdateQuestStateFlags);
 		}
-		else if (v6)
+		else if (bUpdateQuestStateFlags)
 		{
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT1Q5_UnitIterate_UpdateQuestStateFlags);
 		}
@@ -384,9 +384,9 @@ void __fastcall ACT1Q5_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FC9D5D0
-int32_t __fastcall ACT1Q5_UpdateUnitGUIDLists(D2Act1Quest5Strc* pQuestDataEx, int32_t nUnitGUID, int32_t a3)
+int32_t __fastcall ACT1Q5_UpdateUnitGUIDLists(D2Act1Quest5Strc* pQuestDataEx, int32_t nUnitGUID, int32_t bRemovePendingDialogue)
 {
-	if (a3)
+	if (bRemovePendingDialogue)
 	{
 		for (int32_t i = 0; i < pQuestDataEx->nUnitCount2; ++i)
 		{
