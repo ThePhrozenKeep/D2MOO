@@ -23,9 +23,9 @@ struct ItemsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [weapons_record_count, weapons] = read_bin_file<D2ItemsTxt>(working_directory / "data/global/excel" / "Weapons.bin");
-		auto [armor_record_count, armor] = read_bin_file<D2ItemsTxt>(working_directory / "data/global/excel" / "Armor.bin");
-		auto [misc_record_count, misc] = read_bin_file<D2ItemsTxt>(working_directory / "data/global/excel" / "Misc.bin");
+		auto [weapons_record_count, weapons] = read_bin_file<D2ItemsTxt>("Weapons.bin");
+		auto [armor_record_count, armor] = read_bin_file<D2ItemsTxt>("Armor.bin");
+		auto [misc_record_count, misc] = read_bin_file<D2ItemsTxt>("Misc.bin");
 
 		const auto record_count = weapons_record_count + armor_record_count + misc_record_count;
 

@@ -25,7 +25,7 @@ struct StatesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, states] = read_bin_file<D2StatesTxt>(working_directory / "data/global/excel" / "States.bin");
+		auto [record_count, states] = read_bin_file<D2StatesTxt>("States.bin");
 
 		sgptDataTables->nStatesTxtRecordCount = record_count;
 		sgptDataTables->pStatesTxt = states.get();

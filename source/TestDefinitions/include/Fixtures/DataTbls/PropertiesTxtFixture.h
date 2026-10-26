@@ -23,7 +23,7 @@ struct PropertiesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, properties] = read_bin_file<D2PropertiesTxt>(working_directory / "data/global/excel" / "Properties.bin");
+		auto [record_count, properties] = read_bin_file<D2PropertiesTxt>("Properties.bin");
 
 		sgptDataTables->nPropertiesTxtRecordCount = record_count;
 		sgptDataTables->pPropertiesTxt = properties.get();

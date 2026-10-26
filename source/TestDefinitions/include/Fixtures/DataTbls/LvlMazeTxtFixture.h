@@ -23,7 +23,7 @@ struct LvlMazeTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, lvlmaze] = read_bin_file<D2LvlMazeTxt>(working_directory / "data/global/excel" / "LvlMaze.bin");
+		auto [record_count, lvlmaze] = read_bin_file<D2LvlMazeTxt>("LvlMaze.bin");
 
 		sgptDataTables->nLvlMazeTxtRecordCount = record_count;
 		sgptDataTables->pLvlMazeTxt = lvlmaze.get();

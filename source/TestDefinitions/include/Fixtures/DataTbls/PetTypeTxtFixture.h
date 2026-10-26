@@ -23,7 +23,7 @@ struct PetTypeTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, pettype] = read_bin_file<D2PetTypeTxt>(working_directory / "data/global/excel" / "PetType.bin");
+		auto [record_count, pettype] = read_bin_file<D2PetTypeTxt>("PetType.bin");
 
 		sgptDataTables->nPetTypeTxtRecordCount = record_count;
 		sgptDataTables->pPetTypeTxt = pettype.get();

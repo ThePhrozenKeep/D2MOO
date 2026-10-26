@@ -23,7 +23,7 @@ struct SetsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, sets] = read_bin_file<D2SetsTxt>(working_directory / "data/global/excel" / "Sets.bin");
+		auto [record_count, sets] = read_bin_file<D2SetsTxt>("Sets.bin");
 
 		sgptDataTables->nSetsTxtRecordCount = record_count;
 		sgptDataTables->pSetsTxt = sets.get();

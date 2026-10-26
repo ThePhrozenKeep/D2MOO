@@ -25,7 +25,7 @@ struct SkillsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, skills] = read_bin_file<D2SkillsTxt>(working_directory / "data/global/excel" / "Skills.bin");
+		auto [record_count, skills] = read_bin_file<D2SkillsTxt>("Skills.bin");
 
 		class_skill_counts = std::make_unique<int[]>(7);
 		std::memset(class_skill_counts.get(), 0, 7 * sizeof(int));

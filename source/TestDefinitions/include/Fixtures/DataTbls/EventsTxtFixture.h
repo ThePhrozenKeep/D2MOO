@@ -23,7 +23,7 @@ struct EventsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, events] = read_bin_file<D2EventsTxt>(working_directory / "data/global/excel" / "Events.bin");
+		auto [record_count, events] = read_bin_file<D2EventsTxt>("Events.bin");
 
 		sgptDataTables->pEventsTxt = events.get();
 

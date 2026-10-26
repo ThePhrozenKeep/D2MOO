@@ -23,7 +23,7 @@ struct ElemTypesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, elemtypes] = read_bin_file<D2ElemTypesTxt>(working_directory / "data/global/excel" / "ElemTypes.bin");
+		auto [record_count, elemtypes] = read_bin_file<D2ElemTypesTxt>("ElemTypes.bin");
 
 		sgptDataTables->pElemTypesTxt = elemtypes.get();
 
