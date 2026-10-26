@@ -69,7 +69,13 @@ enum D2QuestStateFlagIds
 	QUESTSTATEFLAG_A5Q5 = 39,
 	QUESTSTATEFLAG_A5Q6 = 40,
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	QUESTSTATEFLAG_RESPEC = 41, // Akara's free skill / stat reset, granted with the Den of Evil
+
+	MAX_QUEST_STATUS = 42,
+#else
 	MAX_QUEST_STATUS = 41,
+#endif
 	QUESTSTATEFLAG_A1INTRO = MAX_QUEST_STATUS,
 	QUESTSTATEFLAG_A2INTRO = MAX_QUEST_STATUS,
 	QUESTSTATEFLAG_A3INTRO = MAX_QUEST_STATUS,
@@ -116,7 +122,11 @@ enum D2Quests
 
 	QUEST_A4Q4_MALACHAI = 29,
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	QUEST_RESPEC = 30, // Akara's free reset, quest record flag QUESTSTATEFLAG_RESPEC
+#else
 	//TODO: 30 unused?
+#endif
 
 	QUEST_A5Q1_SHENK = 31,
 	QUEST_A5Q2_RESCUESOLDIERS = 32,
@@ -192,7 +202,7 @@ struct D2NPCMessageTableStrc
 	int32_t nMessages;						//0xC0
 };
 
-struct D2QuestDataStrc						//sizeof 0xF4
+struct D2QuestDataStrc						//sizeof 0xF4 (1.10f), 0xF8 (1.14d)
 {
 	int32_t nQuestNo;						//0x00 - internal
 	D2GameStrc* pGame;						//0x04
@@ -210,10 +220,13 @@ struct D2QuestDataStrc						//sizeof 0xF4
 	QUESTCALLBACK pfCallback[15];			//0xA0
 	D2NPCMessageTableStrc* pNPCMessages;	//0xDC
 	int32_t nQuestFilter;					//0xE0 - index in quest flag bit array, called eFilter in original code
-	QUESTSTATUS pfStatusFilter;				//0xE4
-	QUESTACTIVE pfActiveFilter;				//0xE8
-	QUESTSEQFILTER pfSeqFilter;				//0xEC
-	D2QuestDataStrc* pPrev;					//0xF0
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	int32_t nRespecQuestFilter;				//0xE4 (1.14d) - quest flag index of the respec reward
+#endif
+	QUESTSTATUS pfStatusFilter;				//0xE4 (1.10f), 0xE8 (1.14d)
+	QUESTACTIVE pfActiveFilter;				//0xE8 (1.10f), 0xEC (1.14d)
+	QUESTSEQFILTER pfSeqFilter;				//0xEC (1.10f), 0xF0 (1.14d)
+	D2QuestDataStrc* pPrev;					//0xF0 (1.10f), 0xF4 (1.14d)
 };
 
 struct D2QuestInitTableStrc
