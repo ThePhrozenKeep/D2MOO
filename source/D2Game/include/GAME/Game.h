@@ -4,6 +4,7 @@
 
 #include "D2Config.h"
 #include "D2PacketDef.h"
+#include "Task.h"
 
 #pragma warning(push)
 #pragma warning(disable: 4820)
@@ -236,7 +237,7 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 	uint32_t nSyncTimer;							//0x1DC4
 
 #if D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 10
-	uint32_t tGameTask[5];							//0x1DC8 Removed in 1.11
+	D2GameTaskStrc tGameTask;						//0x1DC8 Removed in 1.11
 	uint32_t nDebugBreakTrigger;					//0x1DDC
 	int32_t nWorldEventState;						//0x1DE0
 	int32_t dwWorldEventLastMessageFrame;			//0x1DE4
@@ -254,6 +255,9 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 // #endif
 #endif
 }; // Size = 0x1DE8 (1.10), 0x1DF4 (1.11-1.14)
+
+// TODO: 1.10f queues tGameTask and 1.14d a separately allocated task; this one lies past the end of the D2GameStrc
+inline D2GameTaskStrc* GAME_GetTrailingGameTask(D2GameStrc* pGame) { return reinterpret_cast<D2GameTaskStrc*>(&pGame[1]); }
 
 struct D2GameDataTableStrc
 {
