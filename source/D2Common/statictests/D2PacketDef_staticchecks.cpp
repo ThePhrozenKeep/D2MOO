@@ -90,7 +90,11 @@ static_assert(sizeof(D2GSPacketClt63) == 0x05, "size mismatch");
 static_assert(sizeof(D2GSPacketClt64) == 0x09, "size mismatch");
 static_assert(sizeof(D2GSPacketClt65) == 0x11, "size mismatch");
 static_assert(sizeof(D2GSPacketClt66) == 0x2E, "size mismatch");
+#if defined(D2_VERSION_114D)
+static_assert(sizeof(D2GSPacketClt67) == 0x25, "size mismatch");
+#else
 static_assert(sizeof(D2GSPacketClt67) == 0x1D, "size mismatch");
+#endif
 static_assert(sizeof(D2GSPacketClt68) == 0x01, "size mismatch");
 static_assert(sizeof(D2GSPacketClt69) == 0x01, "size mismatch");
 static_assert(sizeof(D2GSPacketClt6A) == 0x01, "size mismatch");

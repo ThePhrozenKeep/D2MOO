@@ -86,14 +86,21 @@ enum D2ParseCmdArgType : uint8_t
 /*
  *	Structure for command line arguments
  */
-struct D2CmdArgStrc				//sizeof(0x3C)
+struct D2CmdArgStrc				//sizeof(0x3C) (1.14d: 0x5C)
 {
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	char szSection[27];			//0x00
+	char szKey[27];				//0x1B
+	char szCommand[27];			//0x36
+	D2ParseCmdArgType dwType;	//0x51
+#else
 	char szSection[16];			//0x00
 	char szKey[16];				//0x10
 	char szCommand[16];			//0x20
 	D2ParseCmdArgType dwType;	//0x30
-	DWORD dwIndex;				//0x34
-	DWORD dwDefault;			//0x38
+#endif
+	DWORD dwIndex;				//0x34 (1.14d: 0x54)
+	DWORD dwDefault;			//0x38 (1.14d: 0x58)
 };
 #pragma pack(pop)
 
