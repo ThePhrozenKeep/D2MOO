@@ -74,7 +74,7 @@ constexpr MonEventFunc gpMonsterEventFunctions[] =
 {
     D2GAME_MONSTERS_AiFunction01_6FC65080,
     D2GAME_MONSTERS_AiFunction02_6FC65150,
-    D2GAME_MONSTERS_AiFunction03_6FCF0A70,
+    AITHINK_ExecuteMonsterAiTick,
     D2GAME_MONSTER_ApplyStatRegen_6FC63440,
     nullptr,
     D2GAME_MONSTERS_AiFunction06_6FD14370,

@@ -43,7 +43,7 @@ void __fastcall AIBAAL_CountLivingMinions(D2UnitStrc* pUnit, void* ppUnitArg, vo
 }
 
 //D2Game.0x6FCCD470
-void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+void __fastcall AIBAAL_RunSpecialAiState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 	int32_t nParam1 = 0;
 	int32_t nParam2 = 0;
@@ -353,13 +353,13 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	// UBER TWEAK START
 	D2UbersAiCallbackArgStrc arg_target = {};
 	arg_target.nDistance = INT_MAX;
-	sub_6FCF1E80(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
+	AIUTIL_FindTargetWithCallback(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
 	BOOL bAlone = (arg_target.nUberDiablo == 0 && arg_target.nUberMephisto == 0);
 	if (bAlone && pTarget)
 	{
 		D2UbersAiCallbackArgStrc arg_self = {};
 		arg_self.nDistance = INT_MAX;
-		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
+		AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
 		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
 	}
 	if ((bAlone && arg_target.nBaalMinions < 15 && SEED_RollPercentage(&pUnit->pSeed) < 45)
@@ -986,7 +986,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	}
 	case 3:
 	{
-		sub_6FCD0E80(pGame, pUnit, pTarget, 6u, 1);
+		AITACTICS_WalkToTargetWithRandomPathType(pGame, pUnit, pTarget, 6u, 1);
 		return;
 	}
 	case 4:
