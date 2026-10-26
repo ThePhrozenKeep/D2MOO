@@ -317,8 +317,8 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber, D2GameTaskSt
         D2TaskQueueStrc* ptTaskQTail = TASK_GetTaskQueueFromLink(gpTaskQueueLink.pPrev);
 
         D2LinkStrc* pNewTaskLink = nullptr;
-        // TODO: 1.10f and 1.14d compare ptTaskQTail->nGameCount, the queue the balancing task is taken from
-        if (TASK_GetTaskQueueFromLink(gpTaskQueueLink.pNext)->nGameCount == (nGameCount + 1))
+        // Take a task from the tail queue when it holds one more game than this one
+        if (ptTaskQTail->nGameCount == (nGameCount + 1))
         {
             EnterCriticalSection(&gtTaskQueuesCriticalSections[ptTaskQTail->nQueueIndex].cs);
 
