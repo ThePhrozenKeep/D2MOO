@@ -36,7 +36,7 @@
 
 
 //D2Game.0x6FCC5520
-void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall SUNITMSG_SendUnitToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
     if (!pUnit)
     {
@@ -115,7 +115,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
             }
 
             D2GAME_STATES_SendUnitStates_6FCC58E0(pUnit, pClient);
-            sub_6FCC6540(pUnit, pClient);
+            SUNITMSG_SendQueuedMessages(pUnit, pClient);
         }
         break;
     }
@@ -150,8 +150,8 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
 
         D2GAME_STATES_SendUnitStates_6FCC58E0(pUnit, pClient);
         sub_6FC82270(pGame, pUnit, pClient);
-        sub_6FCC6540(pUnit, pClient);
-        sub_6FCC5FA0(pUnit, pClient);
+        SUNITMSG_SendQueuedMessages(pUnit, pClient);
+        SUNITMSG_SendHoverText(pUnit, pClient);
         break;
     }
     case UNIT_MONSTER:
@@ -394,7 +394,7 @@ void __fastcall D2GAME_STATES_SendStates_6FCC5F00(D2UnitStrc* pUnit, D2ClientStr
 }
 
 //D2Game.0x6FCC5F20
-void __fastcall sub_6FCC5F20(D2UnitStrc* pItem, D2ClientStrc* pClient)
+void __fastcall SUNITMSG_SendOverlay(D2UnitStrc* pItem, D2ClientStrc* pClient)
 {
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x80);
     if (pStatList)
@@ -421,7 +421,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FCC5F80(D2UnitStrc* 
 }
 
 //D2Game.0x6FCC5FA0
-void __fastcall sub_6FCC5FA0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall SUNITMSG_SendHoverText(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
     if (!pUnit)
     {
@@ -467,7 +467,7 @@ void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pC
 }
 
 //D2Game.0x6FCC60D0
-void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, uint8_t nUnitType, int32_t nUnitGUID, uint8_t a6)
+void __fastcall SUNITMSG_QueueItemSkillOnUnit(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, uint8_t nUnitType, int32_t nUnitGUID, uint8_t nSkillParam)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
@@ -476,7 +476,7 @@ void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
     *((uint8_t*)pMsg + 10) = nSkillLevel;
     *((uint8_t*)pMsg + 11) = nUnitType;
     *((int32_t*)pMsg + 3) = nUnitGUID;
-    *((uint8_t*)pMsg + 16) = a6;
+    *((uint8_t*)pMsg + 16) = nSkillParam;
 
     if (!pUnit->pMsgFirst)
     {
@@ -493,7 +493,7 @@ void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
 }
 
 //D2Game.0x6FCC6150
-void __fastcall sub_6FCC6150(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, int16_t nX, int16_t nY, uint8_t a6)
+void __fastcall SUNITMSG_QueueItemSkillOnPosition(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, int16_t nX, int16_t nY, uint8_t nSkillParam)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
@@ -502,7 +502,7 @@ void __fastcall sub_6FCC6150(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
     *((uint8_t*)pMsg + 10) = nSkillLevel;
     *((int16_t*)pMsg + 6) = nX;
     *((int16_t*)pMsg + 7) = nY;
-    *((uint8_t*)pMsg + 16) = a6;
+    *((uint8_t*)pMsg + 16) = nSkillParam;
 
     if (!pUnit->pMsgFirst)
     {
@@ -545,7 +545,7 @@ void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(D2UnitStrc* pUnit, uint16_t nStat
 }
 
 //D2Game.0x6FCC6270
-void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
+void __fastcall SUNITMSG_QueueLifeUpdate(D2UnitStrc* pUnit, uint8_t nLifePercent)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
 
@@ -553,7 +553,7 @@ void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
     pMsg->nHeader = 0xABu;
     *((uint8_t*)pMsg + 8) = pUnit->dwUnitType;
     *((int32_t*)pMsg + 3) = pUnit->dwUnitId;
-    *((uint8_t*)pMsg + 16) = a2;
+    *((uint8_t*)pMsg + 16) = nLifePercent;
 
     if (!pUnit->pMsgFirst)
     {
@@ -570,13 +570,13 @@ void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
 }
 
 //D2Game.0x6FCC6300
-void __fastcall sub_6FCC6300(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t nSkillId, int16_t nSkillLevel, int32_t nX, int32_t nY, uint8_t a7)
+void __fastcall SUNITMSG_QueueSkillEvent(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t nSkillId, int16_t nSkillLevel, int32_t nX, int32_t nY, uint8_t nSkillParam)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 40);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA3u;
-    *((uint8_t*)pMsg + 8) = a7;
+    *((uint8_t*)pMsg + 8) = nSkillParam;
     *((int16_t*)pMsg + 6) = nSkillLevel;
     *((int16_t*)pMsg + 5) = nSkillId;
     *((int32_t*)pMsg + 4) = pUnit->dwUnitType;
@@ -609,7 +609,7 @@ void __fastcall sub_6FCC6300(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t
 }
 
 //D2Game.0x6FCC63D0
-void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
+void __fastcall SUNITMSG_QueueSkillStop(D2UnitStrc* pUnit, int16_t nSkillId)
 {
     STATES_ToggleState(pUnit, STATE_SKILL_MOVE, 0);
 
@@ -619,7 +619,7 @@ void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
     pMsg->nHeader = 0xA5u;
     *((uint8_t*)pMsg + 8) = pUnit->dwUnitType;
     *((uint32_t*)pMsg + 3) = pUnit->dwUnitId;
-    *((int16_t*)pMsg + 8) = a2;
+    *((int16_t*)pMsg + 8) = nSkillId;
 
     if (!pUnit->pMsgFirst)
     {
@@ -636,12 +636,12 @@ void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
 }
 
 //D2Game.0x6FCC6470
-void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
+void __fastcall SUNITMSG_QueueMonsterPrecache(D2UnitStrc* pUnit, int16_t nMonsterClassId)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 12);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA4u;
-    *((int16_t*)pMsg + 4) = a2;
+    *((int16_t*)pMsg + 4) = nMonsterClassId;
 
     if (!pUnit->pMsgFirst)
     {
@@ -658,7 +658,7 @@ void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
 }
 
 //D2Game.0x6FCC64D0
-void __fastcall sub_6FCC64D0(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSkillId, int32_t nOwnerGUID)
+void __fastcall SUNITMSG_QueueSkillSelection(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSkillId, int32_t nOwnerGUID)
 {
     D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 16);
     pMsg->pNext = nullptr;
@@ -682,7 +682,7 @@ void __fastcall sub_6FCC64D0(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSki
 }
 
 //D2Game.0x6FCC6540
-void __fastcall sub_6FCC6540(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall SUNITMSG_SendQueuedMessages(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 {
     for (D2UnitPacketListStrc* pMsg = pUnit->pMsgFirst; pMsg; pMsg = pMsg->pNext)
     {
@@ -725,7 +725,7 @@ void __fastcall sub_6FCC6540(D2UnitStrc* pUnit, D2ClientStrc* pClient)
             if (!(pUnit->dwFlags & UNITFLAG_UPGRLIFENHITCLASS))
             {
                 D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-                if (pPlayer && sub_6FCBD900(pPlayer->pGame, pPlayer, pUnit))
+                if (pPlayer && SUNIT_AreUnitsHostile(pPlayer->pGame, pPlayer, pUnit))
                 {
                     D2GAME_PACKETS_SendPacket0xAB_6FC3D7B0(pClient, *(uint8_t*)(i + 8), *(uint32_t*)(i + 12), *(uint8_t*)(i + 16));
                 }

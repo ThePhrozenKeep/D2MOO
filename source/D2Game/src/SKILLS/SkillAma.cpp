@@ -128,7 +128,7 @@ int32_t __fastcall SKILLS_SrvSt07_Impale(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         return 0;
     }
 
-    if (!sub_6FCBD900(pGame, pUnit, pTarget))
+    if (!SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
     {
         return 0;
     }

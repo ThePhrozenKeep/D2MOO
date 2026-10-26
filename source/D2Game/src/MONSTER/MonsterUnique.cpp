@@ -1002,7 +1002,7 @@ void __fastcall MONSTERUNIQUE_CastAmplifyDamage(D2GameStrc* pGame, D2UnitStrc* p
 //D2Game.0x6FC6C5B0
 void __fastcall MONSTERUNIQUE_CurseCallback_ApplyAmplifyDamage(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillLevel)
 {
-    if (!sub_6FCBD900(pGame, pUnit, pTarget))
+    if (!SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
     {
         return;
     }

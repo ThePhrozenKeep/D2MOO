@@ -757,7 +757,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         SKILLS_SetFlags(pSkill, 0);
         SKILLS_SetParam1(pSkill, 0);
         SKILLS_SetParam2(pSkill, 0);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
         D2GAME_SKILLS_RewindSkillEx_6FCBD260(pGame, pUnit, nEventFrame);
 
         if (pUnit)
@@ -843,14 +843,14 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     {
         SKILLS_SetFlags(pSkill, 0);
         D2GAME_SKILLS_RewindSkillEx_6FCBD260(pGame, pUnit, nEventFrame + 1);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
         return 1;
     }
 
     if (nSkillFlags & 2)
     {
         SKILLS_SetFlags(pSkill, 0);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
 
         D2UnitStrc* pNewTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, nUnitGUID, 0);
         if (pNewTarget && UNITS_IsInMeleeRange(pUnit, pNewTarget, 0))
@@ -1171,7 +1171,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
     D2COMMON_10476(pStatList, nExpireFrame);
     EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
     sub_6FD154D0(pTarget);
-    sub_6FCBDD30(pTarget, 2u, 1);
+    SUNIT_SetAlignment(pTarget, 2u, 1);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pTarget, 0, pUnit->dwNodeIndex);
     UNITS_SetTargetUnitForDynamicUnit(pUnit, 0);
 
@@ -1227,7 +1227,7 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
 void __fastcall SKILLS_StatRemoveCallback_Conversion(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     STATES_ToggleState(pUnit, nState, 0);
-    sub_6FCBDD30(pUnit, 0, 1);
+    SUNIT_SetAlignment(pUnit, 0, 1);
     D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pUnit), pUnit);
 
     D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION_SAVE);

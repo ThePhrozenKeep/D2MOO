@@ -60,7 +60,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
             }
             else if (pUnit->dwUnitType != UNIT_MISSILE)
             {
-                D2GAME_SUNITMSG_FirstFn_6FCC5520(pGame, pUnit, pClient);
+                SUNITMSG_SendUnitToClient(pGame, pUnit, pClient);
                 v10 = 1;
                 bProcessUnit = 1;
             }
@@ -164,7 +164,7 @@ void __fastcall LEVEL_AddClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Cl
     {
         if (pPlayer != pUnit)
         {
-            D2GAME_SUNITMSG_FirstFn_6FCC5520(pGame, pUnit, pClient);
+            SUNITMSG_SendUnitToClient(pGame, pUnit, pClient);
         }
     }
 }
@@ -283,7 +283,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
         exit(-1);
     }
 
-    sub_6FCBB190(pGame, pUnit, UNITS_GetRoom(pUnit));
+    SUNIT_SynchronizeRoomClients(pGame, pUnit, UNITS_GetRoom(pUnit));
 
     if (!D2Common_10229(pUnit->pDynamicPath, pUnit, pRoom, nX, nY))
     {
@@ -300,7 +300,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
     CLIENTS_SetRoomInClient(pClient, pRoom);
     UNITROOM_RefreshUnit(pUnit);
     pUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
-    sub_6FCBB190(pGame, pUnit, nullptr);
+    SUNIT_SynchronizeRoomClients(pGame, pUnit, nullptr);
     UNITROOM_RefreshUnit(pUnit);
 
     if (pUnit->dwUnitType == UNIT_PLAYER)
@@ -335,7 +335,7 @@ void __fastcall LEVEL_WarpUnit(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t n
     D2ActiveRoomStrc* pSpawnRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nDestinationAct], nDestinationLevelId, nTileCalc, &nX, &nY, UNITS_GetUnitSizeX(pPlayer));
     if (pSpawnRoom)
     {
-        sub_6FCBDFE0(pGame, pPlayer, pSpawnRoom, nX, nY, 0, 0);
+        SUNIT_TeleportUnit(pGame, pPlayer, pSpawnRoom, nX, nY, 0, 0);
     }
 }
 
@@ -394,7 +394,7 @@ void __fastcall LEVEL_UpdateQueuedUnitsInAllActs(D2GameStrc* pGame)
             {
                 for (D2UnitStrc* pUnit = pRoom->pUnitUpdate; pUnit; pUnit = pUnit->pChangeNextUnit)
                 {
-                    sub_6FCBC300(pGame, pUnit);
+                    SUNIT_ClearUpdateData(pGame, pUnit);
                 }
 
                 UNITROOM_ClearUpdateQueue(pRoom);

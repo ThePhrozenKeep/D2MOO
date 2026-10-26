@@ -2139,7 +2139,7 @@ int32_t __fastcall sub_6FCD55D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	const int32_t nX = CLIENTS_GetUnitX(pUnit);
 	const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
-	if (PATH_GetUnitCollisionPattern(pUnit) == COLLISION_PATTERN_SMALL_UNIT_PRESENCE || !sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
+	if (PATH_GetUnitCollisionPattern(pUnit) == COLLISION_PATTERN_SMALL_UNIT_PRESENCE || !SUNIT_TeleportUnit(pGame, pUnit, pRoom, nX, nY, 0, 0))
 	{
 		return 0;
 	}
@@ -4341,7 +4341,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_Mephisto(D2GameStrc* pGame, D2Unit
 {
 	D2MephistoAiCallbackArgStrc* pArg = (D2MephistoAiCallbackArgStrc*)pCallbackArg;
 
-	if (pUnit == pTarget || SUNIT_IsDead(pTarget) || !pTarget || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !sub_6FCBD900(pGame, pUnit, pTarget))
+	if (pUnit == pTarget || SUNIT_IsDead(pTarget) || !pTarget || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -8339,7 +8339,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_Overseer_Nihlathak(D2GameStrc* pGa
 		nClassId = pMonstatsTxtRecord->nBaseId;
 	}
 
-	if (nClassId != MONSTER_MINION1 || MONSTERS_IsDead(pTarget) || sub_6FCBD900(pGame, pUnit, pTarget) || STATES_CheckState(pTarget, STATE_BLOODLUST))
+	if (nClassId != MONSTER_MINION1 || MONSTERS_IsDead(pTarget) || SUNIT_AreUnitsHostile(pGame, pUnit, pTarget) || STATES_CheckState(pTarget, STATE_BLOODLUST))
 	{
 		return nullptr;
 	}
@@ -9081,7 +9081,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 		}
 
 		pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
-		if (pRoom && sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
+		if (pRoom && SUNIT_TeleportUnit(pGame, pUnit, pRoom, nX, nY, 0, 0))
 		{
 			UNITROOM_RefreshUnit(pUnit);
 			pUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
@@ -9692,7 +9692,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		}
 
 		pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
-		if (!pRoom || !sub_6FCBDFE0(pGame, pUnit, pRoom, nX, nY, 0, 0))
+		if (!pRoom || !SUNIT_TeleportUnit(pGame, pUnit, pRoom, nX, nY, 0, 0))
 		{
 			return 0;
 		}
@@ -14419,7 +14419,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 		pOwnerTarget = SUNIT_GetTargetUnit(pGame, pOwner);
 		if (pOwnerTarget)
 		{
-			if (!SUNIT_IsDead(pOwnerTarget) && sub_6FCBD900(pGame, pUnit, pOwnerTarget))
+			if (!SUNIT_IsDead(pOwnerTarget) && SUNIT_AreUnitsHostile(pGame, pUnit, pOwnerTarget))
 			{
 				pTarget = pOwnerTarget;
 			}
@@ -15001,7 +15001,7 @@ D2UnitStrc* __fastcall AITHINK_TargetCallback_ShadowMaster(D2GameStrc* pGame, D2
 		}
 	}
 
-	if (!(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !sub_6FCBD900(pGame, pUnit, pTarget))
+	if (!(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -15942,7 +15942,7 @@ void __fastcall AITHINK_Fn109_Totem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 
 	if (nDistance > AI_GetParamValue(pGame, pAiTickParam, TOTEM_AI_PARAM_TELEPORT_TO_OWNER_DISTANCE))
 	{
-		if (sub_6FCBDFE0(pGame, pUnit, UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner), 0, 0))
+		if (SUNIT_TeleportUnit(pGame, pUnit, UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner), 0, 0))
 		{
 			AITACTICS_IdleInNeutralMode(pGame, pUnit, 25);
 			return;
@@ -16737,15 +16737,15 @@ void __fastcall AITHINK_Fn134_BaalThrone(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 			D2SuperUniquesTxt* pSuperUniquesTxtRecord = DATATBLS_GetSuperUniquesTxtRecord(nSuperUnique);
 			if (pSuperUniquesTxtRecord && pSuperUniquesTxtRecord->dwClass >= 0)
 			{
-				sub_6FCC6470(pUnit, pSuperUniquesTxtRecord->dwClass);
+				SUNITMSG_QueueMonsterPrecache(pUnit, pSuperUniquesTxtRecord->dwClass);
 
 				if (pSuperUniquesTxtRecord->dwClass == MONSTER_FALLENSHAMAN5)
 				{
-					sub_6FCC6470(pUnit, MONSTER_FALLEN5);
+					SUNITMSG_QueueMonsterPrecache(pUnit, MONSTER_FALLEN5);
 				}
 				else if (pSuperUniquesTxtRecord->dwClass == MONSTER_UNRAVELER5)
 				{
-					sub_6FCC6470(pUnit, MONSTER_SKMAGE_COLD3);
+					SUNITMSG_QueueMonsterPrecache(pUnit, MONSTER_SKMAGE_COLD3);
 				}
 			}
 		}
@@ -16858,7 +16858,7 @@ void __fastcall AITHINK_Fn136_BaalTaunt(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	}
 
 	
-	if ((pAiTickParam->nTargetDistance > AI_GetParamValue(pGame, pAiTickParam, BAALTAUNT_AI_PARAM_MAX_TARGET_DISTANCE) && sub_6FCBDFE0(pGame, pUnit, UNITS_GetRoom(pAiTickParam->pTarget), CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget), 0, 0))
+	if ((pAiTickParam->nTargetDistance > AI_GetParamValue(pGame, pAiTickParam, BAALTAUNT_AI_PARAM_MAX_TARGET_DISTANCE) && SUNIT_TeleportUnit(pGame, pUnit, UNITS_GetRoom(pAiTickParam->pTarget), CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget), 0, 0))
 		|| pAiTickParam->nTargetDistance <= AI_GetParamValue(pGame, pAiTickParam, BAALTAUNT_AI_PARAM_IN_RANGE_DISTANCE))
 	{
 		AITACTICS_IdleInNeutralMode(pGame, pUnit, 25);

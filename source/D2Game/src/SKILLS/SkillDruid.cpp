@@ -949,7 +949,7 @@ int32_t __fastcall SKILLS_SrvDo123_Volcano(D2GameStrc* pGame, D2UnitStrc* pUnit,
     }
 
     MISSILE_SetTargetX(pMissile, nRand);
-    sub_6FCC6300(pUnit, 0, nSkillId, nSkillLevel, nTargetX, nTargetY, nRand);
+    SUNITMSG_QueueSkillEvent(pUnit, 0, nSkillId, nSkillLevel, nTargetX, nTargetY, nRand);
     return 1;
 }
 
@@ -1141,7 +1141,7 @@ int32_t __fastcall SKILLS_SrvDo146_Unused(D2GameStrc* pGame, D2UnitStrc* pUnit, 
             if (pTargetRoom && !COLLISION_CheckMask(pTargetRoom, nX, nY, 1u))
             {
                 D2GAME_CreateMissile_6FD115E0(pGame, pUnit, nSkillId, nSkillLevel, nMissileId, nX, nY);
-                sub_6FCC6300(pUnit, 0, nSkillId, nSkillLevel, nX, nY, 0);
+                SUNITMSG_QueueSkillEvent(pUnit, 0, nSkillId, nSkillLevel, nX, nY, 0);
                 return 1;
             }
         }
@@ -1673,7 +1673,7 @@ int32_t __fastcall SKILLS_SrvDo129_ImpTeleport(D2GameStrc* pGame, D2UnitStrc* pU
         int32_t nTargetX = 0;
         int32_t nTargetY = 0;
         D2GAME_GetXAndYFromTargetUnit_6FD14020(pGame, pUnit, &nTargetX, &nTargetY);
-        sub_6FCBDFE0(pGame, pUnit, 0, nTargetX, nTargetY, 0, 0);
+        SUNIT_TeleportUnit(pGame, pUnit, 0, nTargetX, nTargetY, 0, 0);
         sub_6FD01010(pGame, pUnit, pOwner, nSkillId, nSkillLevel);
         return 1;
     }
@@ -1683,7 +1683,7 @@ int32_t __fastcall SKILLS_SrvDo129_ImpTeleport(D2GameStrc* pGame, D2UnitStrc* pU
         return SKILLS_SrvDo098_MonTeleport(pGame, pUnit, nSkillId, nSkillLevel);
     }
 
-    if (SUNIT_GetOwner(pGame, pTarget) || SUNIT_IsDead(pTarget) || !sub_6FCBDFE0(pGame, pUnit, UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), 1, 0))
+    if (SUNIT_GetOwner(pGame, pTarget) || SUNIT_IsDead(pTarget) || !SUNIT_TeleportUnit(pGame, pUnit, UNITS_GetRoom(pTarget), CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), 1, 0))
     {
         return 0;
     }
@@ -2273,7 +2273,7 @@ int32_t __fastcall SKILLS_SrvSt63_Corpse_VineCycler(D2GameStrc* pGame, D2UnitStr
     missileParams.nSkill = nSkillId;
     missileParams.nSkillLevel = nSkillLevel;
     MISSILES_CreateMissileFromParams(pGame, &missileParams);
-    sub_6FCC6300(pUnit, pTarget, nSkillId, 1, 0, 0, 0);
+    SUNITMSG_QueueSkillEvent(pUnit, pTarget, nSkillId, 1, 0, 0, 0);
     return 1;
 }
 
@@ -2421,7 +2421,7 @@ D2UnitStrc* __fastcall SKILLS_FindUseableCorpse(D2GameStrc* pGame, D2UnitStrc* p
     for (int32_t i = 0; i < unitFindData.nIndex; ++i)
     {
         D2UnitStrc* pResult = unitFindData.pUnitsArray[i];
-        if (UNITS_IsCorpseUseable(pResult) && sub_6FCBD900(pGame, pUnit, pResult))
+        if (UNITS_IsCorpseUseable(pResult) && SUNIT_AreUnitsHostile(pGame, pUnit, pResult))
         {
             UNITFINDS_FreeUnitFindData(&unitFindData);
             return pResult;

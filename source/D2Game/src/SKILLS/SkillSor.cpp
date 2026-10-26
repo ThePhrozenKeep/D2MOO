@@ -114,7 +114,7 @@ int32_t __fastcall SKILLS_DoInferno(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     }
     else
     {
-        sub_6FCBD120(pGame, pUnit, 1);
+        SUNIT_RewindAnimationByFrames(pGame, pUnit, 1);
     }
 
     return 1;
@@ -143,7 +143,7 @@ int32_t __fastcall SKILLS_StartInferno(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_INFERNO);
     if (pStatList)
     {
-        sub_6FCBD120(pGame, pUnit, 1);
+        SUNIT_RewindAnimationByFrames(pGame, pUnit, 1);
         D2COMMON_10476(pStatList, pGame->dwGameFrame + 6);
         EVENT_SetEvent(pGame, pUnit, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 6, 0, 0);
         SKILLS_DoInferno(pGame, pUnit, nSkillId, nSkillLevel, a5);
@@ -209,7 +209,7 @@ int32_t __fastcall SKILLS_SrvSt12_Telekinesis_DragonFlight(D2GameStrc* pGame, D2
 
     if (pTarget->dwUnitType == UNIT_PLAYER || pTarget->dwUnitType == UNIT_MONSTER)
     {
-        if (!sub_6FCBD900(pGame, pUnit, pTarget) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTarget)) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
+        if (!SUNIT_AreUnitsHostile(pGame, pUnit, pTarget) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTarget)) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
         {
             return 0;
         }
@@ -516,7 +516,7 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
     case UNIT_PLAYER:
     case UNIT_MONSTER:
     {
-        if (!sub_6FCBD900(pGame, pUnit, pTarget) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTarget)) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
+        if (!SUNIT_AreUnitsHostile(pGame, pUnit, pTarget) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pTarget)) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
         {
             return 0;
         }
@@ -889,7 +889,7 @@ int32_t __fastcall SKILLS_SrvDo027_Teleport(D2GameStrc* pGame, D2UnitStrc* pUnit
     D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));
     if (pLevelsTxtRecord && pLevelsTxtRecord->nTeleport != 0 && (pLevelsTxtRecord->nTeleport != 2 || !UNITS_TestCollisionByCoordinates(pUnit, nTargetX, nTargetY, COLLIDE_MASK_PLAYER_FLYING)))
     {
-        return sub_6FCBDFE0(pGame, pUnit, 0, nTargetX, nTargetY, 0, 0);
+        return SUNIT_TeleportUnit(pGame, pUnit, 0, nTargetX, nTargetY, 0, 0);
     }
 
     return 0;
@@ -963,7 +963,7 @@ int32_t __fastcall SKILLS_SrvDo029_ThunderStorm(D2GameStrc* pGame, D2UnitStrc* p
                 {
                     MISSMODE_SrvDmgHitHandler(pGame, pMissile, pTarget, 1);
                     SUNIT_RemoveUnit(pGame, pMissile);
-                    sub_6FCC6300(pUnit, pTarget, nSkillId, nSkillLevel, 0, 0, 0);
+                    SUNITMSG_QueueSkillEvent(pUnit, pTarget, nSkillId, nSkillLevel, 0, 0, 0);
                 }
             }
 
@@ -1166,7 +1166,7 @@ int32_t __fastcall SKILLS_SrvDo144_Hydra(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
             if (pOwner && pOwner->dwUnitType == UNIT_MONSTER)
             {
-                sub_6FCBDD30(pPet, STATLIST_GetUnitAlignment(pOwner), 1);
+                SUNIT_SetAlignment(pPet, STATLIST_GetUnitAlignment(pOwner), 1);
             }
         }
     }
@@ -1183,7 +1183,7 @@ int32_t __fastcall SKILLS_EventFunc01_ChillingArmor(D2GameStrc* pGame, int32_t n
     }
 
     D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pUnit);
-    if (!pOwner || !sub_6FCBD900(pGame, pAttacker, pOwner))
+    if (!pOwner || !SUNIT_AreUnitsHostile(pGame, pAttacker, pOwner))
     {
         return 0;
     }

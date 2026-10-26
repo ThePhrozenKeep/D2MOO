@@ -224,7 +224,7 @@ void __fastcall sub_6FC7F600(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nMo
     {
         SUNIT_SetCombatMode(pGame, pPlayer, nCombatMode);
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
-        sub_6FCBD3A0(pGame, pPlayer);
+        SUNIT_ResetRecurringModeChangeEvent(pGame, pPlayer);
     }
     else
     {
@@ -246,7 +246,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
 {
     // TODO: Names
 
-    sub_6FCBC7E0(pGame, pPlayer);
+    SUNIT_ValidateTargetUnit(pGame, pPlayer);
 
     if (STATES_CheckState(pPlayer, STATE_BLAZE))
     {
@@ -295,7 +295,7 @@ int32_t __fastcall sub_6FC7F780(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
         }
     }
 
-    const int32_t v44 = sub_6FCBC930(pGame, pPlayer);
+    const int32_t v44 = SUNIT_UpdateUnitPath(pGame, pPlayer);
     const uint32_t nTickCount = GetTickCount();
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (nTickCount > pPlayerData->dwPositionHistoryTick + 25)
@@ -750,7 +750,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     SUNIT_SetCombatMode(pGame, pDefender, 0);
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pDefender, __FILE__, __LINE__);
     CLIENTS_ToggleFlag(pClient, CLIENTSAVEFLAG_DEAD, TRUE);
-    sub_6FCBC4D0(pDefender);
+    SUNIT_InitializeAnimation(pDefender);
     STATLIST_SetUnitStat(pDefender, STAT_HITPOINTS, 0, 0);
     D2Common_10469(pDefender);
     STATES_UpdateStayDeathFlags(pDefender, 0);
@@ -760,7 +760,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
     D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_PERIODICSTATS, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pDefender);
-    sub_6FCBCE70(pGame, pDefender);
+    SUNIT_ScheduleAnimationEvents(pGame, pDefender);
 
     if (!STATES_CheckState(pDefender, STATE_PLAYERBODY) && pDefender)
     {
@@ -803,7 +803,7 @@ void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
     }
 
     SUNIT_SetCombatMode(pGame, pUnit, PLRMODE_DEAD);
-    sub_6FCBC4D0(pUnit);
+    SUNIT_InitializeAnimation(pUnit);
     STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, 0, 0);
     D2Common_10469(pUnit);
     STATES_UpdateStayDeathFlags(pUnit, 0);
@@ -825,10 +825,10 @@ void __fastcall PLRMODE_StartXY_Block(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
     D2_ASSERT(pPlayer);
 
     SUNIT_SetCombatMode(pGame, pPlayer, nMode);
-    sub_6FCBC4D0(pPlayer);
+    SUNIT_InitializeAnimation(pPlayer);
     UNITS_SetUsedSkill(pPlayer, nullptr);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
-    sub_6FCBCE70(pGame, pPlayer);
+    SUNIT_ScheduleAnimationEvents(pGame, pPlayer);
 }
 
 //D2Game.0x6FC808D0
@@ -843,10 +843,10 @@ void __fastcall PLRMODE_StartXY_GetHit(D2GameStrc* pGame, D2UnitStrc* pPlayer, i
     D2_ASSERT(pPlayer);
 
     SUNIT_SetCombatMode(pGame, pPlayer, nMode);
-    sub_6FCBC4D0(pPlayer);
+    SUNIT_InitializeAnimation(pPlayer);
     UNITS_SetUsedSkill(pPlayer, 0);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
-    sub_6FCBCE70(pGame, pPlayer);
+    SUNIT_ScheduleAnimationEvents(pGame, pPlayer);
 }
 
 //D2Game.0x6FC80940
@@ -855,9 +855,9 @@ void __fastcall PLRMODE_StartXY_AttackCastThrowKickSpecialSequence(D2GameStrc* p
     D2COMMON_10170_PathSetTargetPos(pPlayer->pDynamicPath, nX, nY);
     SUNIT_SetCombatMode(pGame, pPlayer, nMode);
     UNITS_SetTargetUnitForDynamicUnit(pPlayer, nullptr);
-    sub_6FCBC4D0(pPlayer);
+    SUNIT_InitializeAnimation(pPlayer);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
-    sub_6FCBCE70(pGame, pPlayer);
+    SUNIT_ScheduleAnimationEvents(pGame, pPlayer);
     pPlayer->dwFlags &= ~UNITFLAG_SKSRVDOFUNC;
     sub_6FD12FD0(pGame, pPlayer);
 }
@@ -870,9 +870,9 @@ void __fastcall PLRMODE_StartID_AttackCastThrowKickSpecialSequence(D2GameStrc* p
     D2_ASSERT(pTarget);
 
     UNITS_SetTargetUnitForDynamicUnit(pPlayer, pTarget);
-    sub_6FCBC4D0(pPlayer);
+    SUNIT_InitializeAnimation(pPlayer);
     D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
-    sub_6FCBCE70(pGame, pPlayer);
+    SUNIT_ScheduleAnimationEvents(pGame, pPlayer);
 
     if (pPlayer)
     {
@@ -1068,7 +1068,7 @@ int32_t __fastcall sub_6FC80EE0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t 
     UNITS_SetAnimationFrame(pPlayer, nSkillLevel);
 
     const uint32_t nSkillFlags = SKILLS_GetFlags(pSkill);
-    if (nSkillFlags & 1 && (sub_6FCBC7E0(pGame, pPlayer), sub_6FCBC930(pGame, pPlayer) == 2))
+    if (nSkillFlags & 1 && (SUNIT_ValidateTargetUnit(pGame, pPlayer), SUNIT_UpdateUnitPath(pGame, pPlayer) == 2))
     {
         SKILLS_SetFlags(pSkill, nSkillFlags | 2);
     }
@@ -1129,7 +1129,7 @@ void __fastcall EVENTS_HpRegen(D2UnitStrc* pUnit)
 
         if (nHpPctDiff > 4)
         {
-            sub_6FCC6270(pUnit, nHpPct);
+            SUNITMSG_QueueLifeUpdate(pUnit, nHpPct);
             STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nHpPct, 0);
         }
     }
@@ -1353,7 +1353,7 @@ void __fastcall sub_6FC81250(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
         }
 
         SUNIT_SetCombatMode(pGame, pUnit, PLRMODE_DEAD);
-        sub_6FCBC4D0(pUnit);
+        SUNIT_InitializeAnimation(pUnit);
         sub_6FC814F0(pGame, pUnit);
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pUnit);
     }
@@ -1506,7 +1506,7 @@ void __fastcall sub_6FC81650(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2ClientStr
         sub_6FC82270(pGame, pPlayer, pClient);
     }
 
-    sub_6FCC6540(pPlayer, pClient);
+    SUNITMSG_SendQueuedMessages(pPlayer, pClient);
 
     if (pPlayer)
     {
@@ -1517,7 +1517,7 @@ void __fastcall sub_6FC81650(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2ClientStr
 
         if (pPlayer->dwFlags & 0x100)
         {
-            sub_6FCC5FA0(pPlayer, pClient);
+            SUNITMSG_SendHoverText(pPlayer, pClient);
         }
 
         if (pPlayer->dwFlags & 0x8000)
@@ -1533,7 +1533,7 @@ void __fastcall sub_6FC81650(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2ClientStr
 
     if (D2COMMON_10530_D2CheckStatlistFlagDMGRed(pPlayer))
     {
-        sub_6FCC5F20(pPlayer, pClient);
+        SUNITMSG_SendOverlay(pPlayer, pClient);
     }
 
     D2Common_10512(pPlayer, pOtherPlayer, STAT_VELOCITYPERCENT, (void(__fastcall*)(D2UnitStrc*, int32_t, int32_t, D2UnitStrc*))D2GAME_UpdateAttribute_6FC822D0);

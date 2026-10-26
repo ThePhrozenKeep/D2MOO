@@ -170,14 +170,14 @@ void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(D2GameStrc* pGame, D2UnitSt
 
     if (nPartyId == -1)
     {
-        nPartyId = sub_6FCB9C40(pGame);
-        sub_6FCB9D10(pGame, nPartyId, pPlayer2);
-        sub_6FCB9D10(pGame, nPartyId, pPlayer1);
+        nPartyId = PARTY_CreateParty(pGame);
+        PARTY_AddPlayerToParty(pGame, nPartyId, pPlayer2);
+        PARTY_AddPlayerToParty(pGame, nPartyId, pPlayer1);
         PLAYERLIST_sub_6FCBAD60(pGame, pPlayer2);
     }
     else
     {
-        sub_6FCB9D10(pGame, nPartyId, pPlayer1);
+        PARTY_AddPlayerToParty(pGame, nPartyId, pPlayer1);
     }
 
     PLAYERLIST_sub_6FCBAD60(pGame, pPlayer1);

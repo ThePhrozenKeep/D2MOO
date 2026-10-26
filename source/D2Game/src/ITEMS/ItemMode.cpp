@@ -3226,7 +3226,7 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
     if (ITEMMODE_CheckSkillUseState(pUnit, pSwitchLeftSkill))
     {
         D2GAME_AssignSkill_6FD13800(pUnit, 1, nSwitchLeftSkillId, nSwitchLeftSkillFlags);
-        sub_6FCC64D0(pUnit, 1, nSwitchLeftSkillId, nSwitchLeftSkillFlags);
+        SUNITMSG_QueueSkillSelection(pUnit, 1, nSwitchLeftSkillId, nSwitchLeftSkillFlags);
     }
     else
     {
@@ -3234,18 +3234,18 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         if (pLeftSkill)
         {
             const int32_t nLeftSkillId = SKILLS_GetSkillIdFromSkill(pLeftSkill, __FILE__, __LINE__);
-            sub_6FCC64D0(pUnit, 1, nLeftSkillId, SKILLS_GetOwnerGUIDFromSkill(pLeftSkill));
+            SUNITMSG_QueueSkillSelection(pUnit, 1, nLeftSkillId, SKILLS_GetOwnerGUIDFromSkill(pLeftSkill));
         }
         else
         {
-            sub_6FCC64D0(pUnit, 1, 0, -1);
+            SUNITMSG_QueueSkillSelection(pUnit, 1, 0, -1);
         }
     }
 
     if (ITEMMODE_CheckSkillUseState(pUnit, pSwitchRightSkill))
     {
         D2GAME_AssignSkill_6FD13800(pUnit, 0, nSwitchRightSkillId, nSwitchRightSkillFlags);
-        sub_6FCC64D0(pUnit, 0, nSwitchRightSkillId, nSwitchRightSkillFlags);
+        SUNITMSG_QueueSkillSelection(pUnit, 0, nSwitchRightSkillId, nSwitchRightSkillFlags);
     }
     else
     {
@@ -3253,11 +3253,11 @@ int32_t __fastcall sub_6FC46840(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* a
         if (pRightSkill)
         {
             const int32_t nRightSkillId = SKILLS_GetSkillIdFromSkill(pRightSkill, __FILE__, __LINE__);
-            sub_6FCC64D0(pUnit, 0, nRightSkillId, SKILLS_GetOwnerGUIDFromSkill(pRightSkill));
+            SUNITMSG_QueueSkillSelection(pUnit, 0, nRightSkillId, SKILLS_GetOwnerGUIDFromSkill(pRightSkill));
         }
         else
         {
-            sub_6FCC64D0(pUnit, 0, 0, -1);
+            SUNITMSG_QueueSkillSelection(pUnit, 0, 0, -1);
         }
     }
 

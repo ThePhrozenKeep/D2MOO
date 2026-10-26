@@ -128,14 +128,14 @@ void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
         if (nAnimMode != MONMODE_DEATH && nAnimMode != MONMODE_DEAD)
         {
             QUESTS_AttachLevelChainRecord(pGame, pMonster, pRoom, 1);
-            sub_6FCBC4D0(pMonster);
+            SUNIT_InitializeAnimation(pMonster);
             return;
         }
 
         SUNIT_SetCombatMode(pGame, pMonster, nAnimMode);
     }
 
-    sub_6FCBC4D0(pMonster);
+    SUNIT_InitializeAnimation(pMonster);
 }
 
 //Inlined in D2Game.0x6FC603D0

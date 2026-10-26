@@ -185,7 +185,7 @@ void __fastcall ACT5Q5_DeactivateAncientMonsters(D2GameStrc* pGame, D2QuestDataS
 			{
 				if (STATES_CheckState(pAncientMonster, STATE_UNINTERRUPTABLE))
 				{
-					sub_6FCBDE90(pAncientMonster, 0);
+					SUNIT_SetUninterruptable(pAncientMonster, 0);
 				}
 
 				if (UNITS_GetRoom(pAncientMonster))
