@@ -277,7 +277,7 @@ void __fastcall ACT2Q5_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		pQuestDataEx->pRoom = UNITS_GetRoom(pQuestArg->pTarget);
 
 		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT2Q5_UnitIterate_SetRewardPending);
-		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT2Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers);
+		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT2Q5_UnitIterate_SetPrimaryGoalDoneForPartyMembers);
 		SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT2Q5_UnitIterate_SetCompletionFlag);
 	}
 
@@ -378,7 +378,7 @@ int32_t __fastcall ACT2Q5_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 	const int16_t nPartyId = SUNIT_GetPartyId(pUnit);
 	if (nPartyId != -1)
 	{
-		PARTY_IteratePartyMembers(pGame, nPartyId, ACT2Q4_UnitIterate_SetPrimaryGoalDone, 0);
+		PARTY_IteratePartyMembers(pGame, nPartyId, ACT2Q5_UnitIterate_SetPrimaryGoalDone, 0);
 	}
 
 	return 0;
