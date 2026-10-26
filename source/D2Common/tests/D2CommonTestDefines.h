@@ -67,5 +67,5 @@
 //#define SKILLS_TESTS
 //#define STATES_TESTS
 //#define STATLIST_TESTS
-//#define TEXT_TESTS
+#define TEXT_TESTS
 //#define WAYPOINTS_TESTS
