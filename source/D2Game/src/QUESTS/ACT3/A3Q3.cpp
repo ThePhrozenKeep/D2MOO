@@ -22,11 +22,12 @@
 
 
 //D2Game.0x6FD38CE0
+//1.14d: 0x0073FB98
 D2NPCMessageTableStrc gpAct3Q3NpcMessages[] =
 {
 	{
 		{
-			{ MONSTER_ALKOR, 0x23B, 0, 1 },
+			{ MONSTER_HRATLI, 0x23B, 0, 1 },
 		},
 		1
 	},
