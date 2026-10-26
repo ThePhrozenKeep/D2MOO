@@ -2281,6 +2281,8 @@ void __fastcall QUESTS_HellPortalActChange(D2GameStrc* pGame, D2UnitStrc* pPlaye
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3COMPLETED, QFLAG_REWARDGRANTED);
 			QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3COMPLETED, QFLAG_PRIMARYGOALDONE);
 			QUESTS_SetIntroFlags(pGame, pPlayer, gpAct3_NPCIds, std::size(gpAct3_NPCIds));
+			//D2Game.0x6FC9674E, 1.14d: 0x00546BE6: QUESTS_UpdatePlayerFlags, inlined
+			QUESTS_UpdatePlayerFlags(pGame, pPlayer);
 
 			if (pPlayerData->bBusy != 1)
 			{

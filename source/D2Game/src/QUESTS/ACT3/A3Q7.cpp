@@ -209,15 +209,17 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pGame);
 
+	const int32_t nFirstIndex = SEED_RollRandomNumber(pSeed) & 1;
+
 	D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
-	//UNITS_GetCoords(pDarkWanderer, &pCoord); // TODO: Was this meant to be used on pCoords?
+	D2CoordStrc pWandererCoords = {};
+	UNITS_GetCoords(pDarkWanderer, &pWandererCoords);
 
-	D2CoordStrc pCoords = {};
-
-	for (int32_t i = SEED_RollRandomNumber(pSeed) & 1; i < ARRAY_SIZE(pAdjustCoords); ++i)
+	for (int32_t i = nFirstIndex; i < ARRAY_SIZE(pAdjustCoords); ++i)
 	{
-		pCoords.nY += pAdjustCoords[i].nY;
-		pCoords.nX += pAdjustCoords[i].nX;
+		D2CoordStrc pCoords = {};
+		pCoords.nX = pWandererCoords.nX + pAdjustCoords[i].nX;
+		pCoords.nY = pWandererCoords.nY + pAdjustCoords[i].nY;
 		D2ActiveRoomStrc* pRoom = nullptr;
 		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, COLLIDE_MASK_PLACEMENT, &pRoom, 11);
 
