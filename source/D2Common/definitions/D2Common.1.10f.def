@@ -281,9 +281,9 @@ EXPORTS
 	INVENTORY_GetLastItem												@10278
 	INVENTORY_RemoveInventoryItems										@10279
 	INVENTORY_GetCommandQueue											@10280
-	INVENTORY_FreeCommandQueue										@10281
-	INVENTORY_IsItemInCommandQueue								@10282
-	INVENTORY_AddItemToCommandQueue									@10283
+	INVENTORY_FreeCommandQueue											@10281
+	INVENTORY_IsItemInCommandQueue										@10282
+	INVENTORY_AddItemToCommandQueue										@10283
 	INVENTORY_GetItemCount												@10284
 	INVENTORY_GetBackPackItemByType										@10285
 	INVENTORY_GetEquippedItemByType										@10286

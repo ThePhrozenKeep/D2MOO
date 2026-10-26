@@ -379,7 +379,7 @@ struct D2MonStatsTxt
 	int16_t wMissS2;						//0x40
 	int16_t wMissS3;						//0x42
 	int16_t wMissS4;						//0x44
-	int16_t wMissC;						//0x46
+	int16_t wMissC;							//0x46
 	int16_t wMissSQ;						//0x48
 	uint8_t nMaxChainId;					//0x4A
 	uint8_t nChainId;						//0x4B
