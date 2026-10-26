@@ -691,7 +691,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
 						0,
 						0,
-						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
+						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken D2_SERVER_CALLBACK_ARGS_114(0, 0, 0, 0, 0), &pClientToRemove->nSaveCreationTimestamp);
             }
 
             GAME_LogMessage(6, "[SERVER]  ClientRemoveFromGame:  save and remove client %d '%s' from game %d '%s'%s",
@@ -715,7 +715,7 @@ void __fastcall CLIENTS_RemoveClientFromGame(D2GameStrc* pGame, int32_t nClientI
 						reinterpret_cast<const char*>(&pClientToRemove->tCharacterInfo), pClientToRemove->bUnlockCharacter,
 						0,
 						0,
-						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken, &pClientToRemove->nSaveCreationTimestamp);
+						pClientToRemove->szAccount, pClientToRemove->nCharSaveTransactionToken D2_SERVER_CALLBACK_ARGS_114(0, 0, 0, 0, 0), &pClientToRemove->nSaveCreationTimestamp);
             }
         }
 

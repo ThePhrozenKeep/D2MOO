@@ -189,7 +189,7 @@ void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2Ser
     {
         gpD2EventCallbackTable_6FD45830 = pD2ServerCallbackFunctions;
         gbD2ServerCallbackFunctionsInitialized_6FD45834 = 1;
-        //D2COMMON_11277_Return((int32_t)pD2ServerCallbackFunctions->pfLoadComplete);
+        //D2COMMON_11277_Return((int32_t)pD2ServerCallbackFunctions->pfGetString);
     }
     else
     {
@@ -1011,7 +1011,7 @@ static bool IsClientNameValid(const char* szClientName)
 }
 
 //D2Game.0x6FC36DF0
-BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10) {
+BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t nPlayerClass, const char* szClientName, int32_t nTokenId, char* pszInOutAccountName, int32_t* pOutCharSaveTransactionToken, uint8_t nLocale, int32_t* a9, int32_t* a10 D2_SERVER_CALLBACK_ARGS_114(int32_t* a11, int32_t* a12)) {
     if (!CCMD_IsStringZeroTerminated(szClientName, 16))
     {
         GAME_LogMessage(3, "[HACKLIST] <D2CLTSYS_JOINGAME>  CLIENT:%d  GAMEID:%d  TOKEN:%x  ERROR: Invalid Player Name", nClientId, nGameId, nTokenId);
@@ -1057,7 +1057,7 @@ BOOL __fastcall GAME_VerifyJoinGame(int32_t nClientId, uint16_t nGameId, uint8_t
 
 		// Server side token check/retrieval
 		D2_ASSERT(gpD2EventCallbackTable_6FD45830->pfFindPlayerToken);
-		if (gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nTokenId, nGameId, pszInOutAccountName, pOutCharSaveTransactionToken, a9, a10))
+		if (gpD2EventCallbackTable_6FD45830->pfFindPlayerToken(szClientName, nTokenId, nGameId, pszInOutAccountName, pOutCharSaveTransactionToken, a9, a10 D2_SERVER_CALLBACK_ARGS_114(a11, a12)))
 		{
 			return TRUE;
 		}
@@ -1630,11 +1630,11 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
         {
         case PACKET_ADMIN_GETINFO:
         case PACKET_ADMIN_GETGAMEINFO:
-            if (gpD2EventCallbackTable_6FD45830->pfHandlePacket && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
+            if (gpD2EventCallbackTable_6FD45830->pfGetGameServerInfo && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
             {
                 D2GSPacketSrvFF01 tPacket;
                 D2GameServerInfoExStrc tGameServerInfoEx;
-                gpD2EventCallbackTable_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
+                gpD2EventCallbackTable_6FD45830->pfGetGameServerInfo(&tGameServerInfoEx, a2);
                 tPacket.nPacketSubType = *((BYTE*)a1 + 5);
                 tPacket.tServerInfo.field_0x4 = tGameServerInfoEx.field_0x4;
                 tPacket.tServerInfo.field_0x8 = tGameServerInfoEx.field_0x8;
