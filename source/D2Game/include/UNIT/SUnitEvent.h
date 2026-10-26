@@ -34,7 +34,7 @@ struct D2UnitEventStrc
 	D2C_UnitEventTypes nUnitEvent;			//0x00 Event from events.txt. NOT the same thing as timer events
 	uint8_t unk0x01;						//0x01
 	uint16_t nFlags;						//0x02 D2C_UnitEventFlags
-	uint32_t nQueueNo;						//0x04
+	uint32_t nEventGroup;					//0x04
 	int32_t nEventKey;						//0x08
 	int32_t nParam1;						//0x0C First identifier
 	int32_t nParam2;						//0x10 Second identifier

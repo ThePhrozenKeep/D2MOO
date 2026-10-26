@@ -37,16 +37,36 @@ struct D2MonsterDataStrc
 	uint32_t dwDurielFlag;						//0x18
 	uint8_t nMonUmod[10];						//0x1C
 	uint16_t wBossHcIdx;						//0x26
-	D2AiControlStrc* pAiControl;			//0x28
-	union									//0x2C
+	union										//0x28
+	{
+		D2AiControlStrc* pAiControl;	//Server pMonster
+		uint16_t wClientFlags;			//Client pMonster: bit 0 = NPC interaction in progress (set by the local player, keeps the NPC still)
+	};
+	union										//0x2C
 	{
 		D2AiParamStrc* pAiParam;	//Server pMonster
 		struct Unicode* wszMonName;	//Client pMonster
 	};
-	D2MonsterInteractStrc* pMonInteract;	//0x30
-	uint32_t unk0x34;							//0x34
+	union										//0x30
+	{
+		D2MonsterInteractStrc* pMonInteract;	//Server pMonster
+		int32_t nCritterAiDelay;				//Client pMonster: critter AI delay (CMONSTERS_GetCritterAiDelay)
+	};
+	union										//0x34
+	{
+		uint32_t unk0x34;						//Server pMonster
+		int32_t nCritterAiState;				//Client pMonster: critter AI state (CMONSTERS_GetCritterAiState)
+	};
 	uint32_t unk0x38;							//0x38
-	D2UnkMonsterDataStrc tLifeSync;				//0x3C
+	union										//0x3C
+	{
+		D2UnkMonsterDataStrc tLifeSync;			//Server pMonster
+		struct
+		{
+			D2UnitGUID nOwnerGUID;				//0x3C owner (CMONSTERS_SetOwnerGUID)
+			int32_t nMinionSpawnClassId;		//0x40 set from packet 0x98
+		} tClient;								//Client pMonster
+	};
 	uint32_t unk0x4C;							//0x4C
 	uint32_t pVision;							//0x50
 	uint32_t dwAiState;						//0x54

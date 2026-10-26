@@ -56,7 +56,7 @@ struct D2UnkNecSkillStrc
 
 struct D2_6FD106F0_Strc
 {
-	D2UnitStrc* pUnit;
+	D2UnitStrc* pTarget;
 	int32_t nDistanceSquared;
 	int32_t nX;
 	int32_t nY;
