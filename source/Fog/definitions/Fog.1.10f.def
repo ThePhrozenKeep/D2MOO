@@ -77,18 +77,18 @@ UnimplementedOrdinal_10064=UnimplementedOrdinal @10064;   FOG_10064 @10064 NONAM
 UnimplementedOrdinal_10065=UnimplementedOrdinal @10065;   FOG_10065 @10065 NONAME
 UnimplementedOrdinal_10066=UnimplementedOrdinal @10066;   FOG_10066 @10066 NONAME
 UnimplementedOrdinal_10067=UnimplementedOrdinal @10067;   FOG_10067 @10067 NONAME
-UnimplementedOrdinal_10068=UnimplementedOrdinal @10068;   FOG_10068 @10068 NONAME
-UnimplementedOrdinal_10069=UnimplementedOrdinal @10069;   FOG_10069 @10069 NONAME
-UnimplementedOrdinal_10070=UnimplementedOrdinal @10070;   FOG_10070 @10070 NONAME
-UnimplementedOrdinal_10071=UnimplementedOrdinal @10071;   FOG_10071 @10071 NONAME
-UnimplementedOrdinal_10072=UnimplementedOrdinal @10072;   FOG_10072 @10072 NONAME
-UnimplementedOrdinal_10073=UnimplementedOrdinal @10073;   FOG_10073 @10073 NONAME
+    FOG_10068_ClientCreate @10068 NONAME
+    FOG_10069_ClientClose @10069 NONAME
+    FOG_10070_ClientSendMessage @10070 NONAME
+    FOG_10071_ClientSendRaw @10071 NONAME
+    FOG_10072_ClientReceive @10072 NONAME
+    FOG_10073_ClientStart @10073 NONAME
 UnimplementedOrdinal_10074=UnimplementedOrdinal @10074;   FOG_10074 @10074 NONAME
-UnimplementedOrdinal_10075=UnimplementedOrdinal @10075;   FOG_10075 @10075 NONAME
+    FOG_10075_ClientDestroy @10075 NONAME
 UnimplementedOrdinal_10076=UnimplementedOrdinal @10076;   FOG_10076 @10076 NONAME
-UnimplementedOrdinal_10077=UnimplementedOrdinal @10077;   FOG_10077 @10077 NONAME
+    FOG_10077_ClientSetMessageCallback @10077 NONAME
 UnimplementedOrdinal_10078=UnimplementedOrdinal @10078;   FOG_10078 @10078 NONAME
-UnimplementedOrdinal_10079=UnimplementedOrdinal @10079;   FOG_10079 @10079 NONAME
+    FOG_10079_ClientGetSafeSock @10079 NONAME
 UnimplementedOrdinal_10080=UnimplementedOrdinal @10080;   FOG_10080 @10080 NONAME
 UnimplementedOrdinal_10081=UnimplementedOrdinal @10081;   FOG_10081 @10081 NONAME
     FOG_10082_Noop @10082 NONAME

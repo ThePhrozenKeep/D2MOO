@@ -44,3 +44,19 @@ D2FUNC_DLL(FOG, inet_ntoa, const char*, __fastcall, (/*IN_ADDR, but cant due to 
 D2FUNC_DLL(FOG, ResolveHostIPAddress, const char*, __fastcall, (const char* szHostName), 0x13A40)							//Fog.#10015
 D2FUNC_DLL(FOG, SOCKET_GetError, BOOL, __fastcall, (FSafeSock* pSafeSock, DWORD* pFogError, int* pWSALastError), 0x13A20)	//Fog.#10016
 D2FUNC_DLL(FOG, SOCKET_SetBlockingMode, BOOL, __fastcall, (FSafeSock* pSafeSock, BOOL bNonBlocking), 0x13B20)				//Fog.#10017
+
+// Message based client connection built on top of FSafeSock, used by D2MCPClient.
+// Names and signatures are deduced from their usage in D2MCPClient.dll, offsets in Fog.dll are not known yet.
+struct FClientConnection;
+// Called by the connection for each received message. Returns TRUE if the message was handled, FALSE to queue it for FOG_10072_ClientReceive.
+typedef BOOL(__fastcall* FClientConnectionMessageCallback)(const uint8_t* pMessage, uint32_t nMessageSize, void* pUserData);
+
+D2FUNC_DLL(FOG, 10068_ClientCreate, FClientConnection*, __stdcall, (const char* szIpAddress, int nPort, const char* szName), 0)			//Fog.#10068
+D2FUNC_DLL(FOG, 10069_ClientClose, void, __stdcall, (FClientConnection* pConnection), 0)													//Fog.#10069
+D2FUNC_DLL(FOG, 10070_ClientSendMessage, BOOL, __stdcall, (FClientConnection* pConnection, const void* pMessage, uint32_t nMessageSize), 0)	//Fog.#10070
+D2FUNC_DLL(FOG, 10071_ClientSendRaw, BOOL, __stdcall, (FClientConnection* pConnection, const void* pData, uint32_t nDataSize), 0)			//Fog.#10071
+D2FUNC_DLL(FOG, 10072_ClientReceive, uint16_t, __stdcall, (FClientConnection* pConnection, uint8_t* pBuffer, uint32_t nBufferSize), 0)		//Fog.#10072
+D2FUNC_DLL(FOG, 10073_ClientStart, void, __stdcall, (FClientConnection* pConnection), 0)													//Fog.#10073
+D2FUNC_DLL(FOG, 10075_ClientDestroy, void, __stdcall, (FClientConnection* pConnection), 0)													//Fog.#10075
+D2FUNC_DLL(FOG, 10077_ClientSetMessageCallback, void, __stdcall, (FClientConnection* pConnection, FClientConnectionMessageCallback pCallback, void* pUserData), 0) //Fog.#10077
+D2FUNC_DLL(FOG, 10079_ClientGetSafeSock, FSafeSock*, __stdcall, (FClientConnection* pConnection), 0)										//Fog.#10079

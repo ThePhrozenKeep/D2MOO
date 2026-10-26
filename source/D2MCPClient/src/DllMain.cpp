@@ -1,6 +1,5 @@
 #include <Windows.h>
 
-#include <cstdint>
 
 // NOLINTBEGIN(bugprone-branch-clone)
 BOOL __stdcall DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
