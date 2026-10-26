@@ -30,7 +30,7 @@ struct D2TaskQueueStrc
 	D2LinkStrc tQueueLink;						//0x10 link in the list of task queues
 };
 
-// A game's entry in a task queue (stored right after its D2GameStrc)
+// A game's entry in a task queue (1.10f: D2GameStrc::tGameTask, 1.14d: allocated on its own)
 struct D2GameTaskStrc
 {
 	int32_t nScheduledTime;						//0x00 clock time (ms) the game is processed next

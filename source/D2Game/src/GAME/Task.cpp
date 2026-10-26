@@ -86,14 +86,14 @@ int __cdecl TASK_CreateQueue()
         pTaskQueue->nGameCount = 0;
         pTaskQueue->tGameTasks.pPrev = &pTaskQueue->tGameTasks;
         pTaskQueue->tGameTasks.pNext = &pTaskQueue->tGameTasks;
-        int v6 = gnNumberOfTasksCreated;
+        int nTasksCreated = gnNumberOfTasksCreated;
         uint32_t nGamesPerQueue = gnGamesCount / (uint32_t)gnNumberOfTasksCreated;
         uint32_t nExtraGames = gnGamesCount % (uint32_t)gnNumberOfTasksCreated;
         gtTaskSlots[nTaskSlotIndex] = pTaskQueue;
-        int v7 = v6 - 1;
-        if (v6 - 1 >= (unsigned int)TASKQSLOTS)
-            v7 = 32;
-        int nQueuesWithExtraGame = v7 - nExtraGames;
+        int nOtherQueueCount = nTasksCreated - 1;
+        if (nTasksCreated - 1 >= (unsigned int)TASKQSLOTS)
+            nOtherQueueCount = 32;
+        int nQueuesWithExtraGame = nOtherQueueCount - nExtraGames;
         for (D2LinkStrc* pLink = gpTaskQueueLink.pNext; pLink != &gpTaskQueueLink; pLink = pLink->pNext)
         {
             bool bNoExtraGame = (int)--nQueuesWithExtraGame < 0;
@@ -115,7 +115,7 @@ int __cdecl TASK_CreateQueue()
             LeaveCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskQueueStrc, tQueueLink)->nQueueIndex].cs);
             if (pMovedLink != pOtherQueuedGames)
             {
-                D2LinkStrc* v14 = pLastMovedLink;
+                D2LinkStrc* pMovedTail = pLastMovedLink;
                 pLastMovedLink->pNext = 0;
                 D2LinkStrc* pInsertAfter;
                 for (pInsertAfter = pGameTasks->pPrev;
@@ -129,39 +129,39 @@ int __cdecl TASK_CreateQueue()
                 {
                 LABEL_22:
                     pMovedLink->pPrev = pInsertAfter;
-                    v14->pNext = pGameTasks;
+                    pMovedTail->pNext = pGameTasks;
                     pInsertAfter->pNext = pMovedLink;
-                    pGameTasks->pPrev = v14;
+                    pGameTasks->pPrev = pMovedTail;
                 }
                 else
                 {
                     while (1)
                     {
-                        D2LinkStrc* v16 = pMovedLink->pNext;
+                        D2LinkStrc* pNextMoved = pMovedLink->pNext;
                         pMovedLink->pPrev = pInsertAfter;
-                        D2LinkStrc* v17 = pInsertAfter->pNext;
-                        pMovedLink->pNext = v17;
-                        v17->pPrev = pMovedLink;
+                        D2LinkStrc* pInsertBefore = pInsertAfter->pNext;
+                        pMovedLink->pNext = pInsertBefore;
+                        pInsertBefore->pPrev = pMovedLink;
                         pInsertAfter->pNext = pMovedLink;
-                        if (!v16)
+                        if (!pNextMoved)
                             break;
                         pInsertAfter = pMovedLink;
-                        pMovedLink = v16;
-                        D2LinkStrc* v18 = pInsertAfter->pNext;
-                        if (v18 != pGameTasks)
+                        pMovedLink = pNextMoved;
+                        D2LinkStrc* pScanLink = pInsertAfter->pNext;
+                        if (pScanLink != pGameTasks)
                         {
-                            D2LinkStrc* v19 = v16[-2u].pNext; // NOLINT TODO proper list
+                            D2LinkStrc* pNextMovedTime = pNextMoved[-2u].pNext; // NOLINT TODO proper list
                             do
                             {
-                                if ((char*)v19 - (char*)v18[-2].pNext <= 0) // NOLINT TODO proper list
+                                if ((char*)pNextMovedTime - (char*)pScanLink[-2].pNext <= 0) // NOLINT TODO proper list
                                     break;
-                                pInsertAfter = v18;
-                                v18 = v18->pNext;
-                            } while (v18 != pGameTasks);
+                                pInsertAfter = pScanLink;
+                                pScanLink = pScanLink->pNext;
+                            } while (pScanLink != pGameTasks);
                         }
                         if (pInsertAfter->pNext == pGameTasks)
                         {
-                            v14 = pLastMovedLink;
+                            pMovedTail = pLastMovedLink;
                             goto LABEL_22;
                         }
                     }
@@ -344,9 +344,9 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask)
     {
         GAME_UpdateProgress(pGame);
         GAME_SendAllClientPackets(pGame, 0);
-        const int32_t v7 = FOG_10055_GetSyncTime();
+        const int32_t nSyncTime = FOG_10055_GetSyncTime();
         const int32_t nSyncTimer = pGame->nSyncTimer;
-        if (nSyncTimer == 1 || v7 - nSyncTimer > 1800)// I/O timeout
+        if (nSyncTimer == 1 || nSyncTime - nSyncTimer > 1800)// I/O timeout
         {
             D2ClientStrc* pNextClient = nullptr;
             for (D2ClientStrc* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pNextClient)
