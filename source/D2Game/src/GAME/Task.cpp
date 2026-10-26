@@ -361,8 +361,8 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask)
     {
         GAME_UpdateProgress(pGame);
         GAME_SendAllClientPackets(pGame, 0);
-        const int32_t nSyncTime = FOG_10055_GetSyncTime();
-        const int32_t nSyncTimer = pGame->nSyncTimer;
+        const uint32_t nSyncTime = FOG_10055_GetSyncTime();
+        const uint32_t nSyncTimer = pGame->nSyncTimer;
         if (nSyncTimer == 1 || nSyncTime - nSyncTimer > 1800)// I/O timeout
         {
             D2ClientStrc* pNextClient = nullptr;
