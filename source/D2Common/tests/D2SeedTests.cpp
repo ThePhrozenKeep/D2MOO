@@ -133,10 +133,10 @@ TEST_SUITE("D2SeedTests")
 
 			const auto setup_data = [low_seed, high_seed](
 				D2SeedStrc& pSeed
-				) {
-					pSeed.nLowSeed = low_seed;
-					pSeed.nHighSeed = high_seed;
-				};
+			) {
+				pSeed.nLowSeed = low_seed;
+				pSeed.nHighSeed = high_seed;
+			};
 
 			setup_data(moo_pSeed);
 			setup_data(original_pSeed);
@@ -204,10 +204,10 @@ TEST_SUITE("D2SeedTests")
 				D2SeedStrc& pSeed,
 				uint32_t& pLowSeed,
 				uint32_t& pHighSeed
-				) {
-					pSeed.nLowSeed = low_seed;
-					pSeed.nHighSeed = high_seed;
-				};
+			) {
+				pSeed.nLowSeed = low_seed;
+				pSeed.nHighSeed = high_seed;
+			};
 
 			setup_data(moo_pSeed, moo_pLowSeed, moo_pHighSeed);
 			setup_data(original_pSeed, original_pLowSeed, original_pHighSeed);
@@ -243,10 +243,10 @@ TEST_SUITE("D2SeedTests")
 
 			const auto setup_data = [low_seed, high_seed](
 				D2SeedStrc& pSeed
-				) {
-					pSeed.nLowSeed = low_seed;
-					pSeed.nHighSeed = high_seed;
-				};
+			) {
+				pSeed.nLowSeed = low_seed;
+				pSeed.nHighSeed = high_seed;
+			};
 
 			setup_data(moo_pSeed);
 			setup_data(original_pSeed);
