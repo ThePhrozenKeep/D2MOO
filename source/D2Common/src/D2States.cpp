@@ -91,7 +91,7 @@ void __stdcall STATES_ClearGfxStateFlags(D2UnitStrc* pUnit)
 
 	if (pGfxFlags)
 	{
-		memset(pGfxFlags, 0x00, sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+		memset(pGfxFlags, 0x00, sizeof(uint32_t) * ((sgptDataTables->nStatesTxtRecordCount + 31) / 32));
 	}
 }
 
@@ -296,7 +296,7 @@ BOOL __stdcall STATES_IsUnitShapeShifted(D2UnitStrc* pUnit)
 {
 	if (pUnit)
 	{
-		return pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED;
+		return (pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) != 0;
 	}
 
 	return FALSE;

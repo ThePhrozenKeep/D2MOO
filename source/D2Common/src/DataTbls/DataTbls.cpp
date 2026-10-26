@@ -346,11 +346,11 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 		FOG_DisplayWarning("Exceeded maximum allowable number of states", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pStateMasks = (uint32_t*)D2_CALLOC_POOL(nullptr, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * (sgptDataTables->nStatesTxtRecordCount + 31) / 32);
+	sgptDataTables->pStateMasks = (uint32_t*)D2_CALLOC_POOL(nullptr, ARRAY_SIZE(sgptDataTables->fStateMasks) * sizeof(uint32_t) * ((sgptDataTables->nStatesTxtRecordCount + 31) / 32));
 	
 	for (int i = 0; i < ARRAY_SIZE(sgptDataTables->fStateMasks); ++i)
 	{
-		pStateMasks = &sgptDataTables->pStateMasks[(sgptDataTables->nStatesTxtRecordCount + 31) / 32 * i];
+		pStateMasks = &sgptDataTables->pStateMasks[((sgptDataTables->nStatesTxtRecordCount + 31) / 32) * i];
 		sgptDataTables->fStateMasks[i] = pStateMasks;
 
 		for (int j = 0; j < sgptDataTables->nStatesTxtRecordCount; ++j)
