@@ -116,3 +116,4 @@ add_test(
     COMMAND D2CommonTests ${TEST_RUNNER_PARAMS}
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2CommonTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )
+set_tests_properties(D2CommonTests.unittests PROPERTIES LABELS "requires-original-dlls")
