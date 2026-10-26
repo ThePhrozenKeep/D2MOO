@@ -890,10 +890,39 @@ int32_t __fastcall AIUTIL_ShouldUseAlternativeTarget(D2UnitStrc* pUnit, D2UnitSt
 	const int32_t nX = D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath);
 	const int32_t nY = D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath);
 
+	// The path keeps its target pointer after that unit has been freed, and the original game restores the saved
+	// pointer with PATH_SetTargetUnit (1.10f: 0x6FCF283D, 1.14d: 0x005DD58A), which reads dwUnitType / dwUnitId from
+	// the freed block. Check the saved target against the type and GUID the path recorded for it first.
+	BOOL bTargetFreed = FALSE;
+	if (pTarget)
+	{
+		int nTargetType = 0;
+		D2UnitGUID nTargetGUID = 0;
+		PATH_GetTargetTypeAndGUID(pUnit->pDynamicPath, &nTargetType, &nTargetGUID);
+		bTargetFreed = nTargetType < UNIT_PLAYER || nTargetType >= UNIT_TYPES_COUNT
+			|| SUNIT_GetServerUnit(pUnit->pGame, nTargetType, nTargetGUID) != pTarget;
+	}
+
 	PATH_SetTargetUnit(pUnit->pDynamicPath, *ppTarget);
 	PATH_SetType(pUnit->pDynamicPath, PATHTYPE_TOWARD);
 	D2Common_10142(pUnit->pDynamicPath, pUnit, 0);
-	PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
+	if (!bTargetFreed)
+	{
+		PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
+	}
+	else
+	{
+#ifdef NO_BUG_FIX
+		// What UNITS_FreeUnit leaves in a freed block the pool has not handed out again: type 6, id -1.
+		D2UnitStrc tFreedUnit = {};
+		tFreedUnit.dwUnitType = UNIT_TYPES_COUNT;
+		tFreedUnit.dwUnitId = (D2UnitGUID)-1;
+		PATH_SetTargetUnit(pUnit->pDynamicPath, &tFreedUnit);
+#else
+		PATH_SetTargetUnit(pUnit->pDynamicPath, nullptr);
+#endif
+	}
+	// Also clears the target pointer, so the path never keeps &tFreedUnit.
 	D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
 	PATH_SetType(pUnit->pDynamicPath, nPathType);
 
