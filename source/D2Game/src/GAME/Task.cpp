@@ -4,6 +4,8 @@
 #include "GAME/Game.h"
 #include "GAME/SCmd.h"
 
+#include <algorithm>
+
 
 //1.10f: D2Game.0x6FD45850
 //1.14d: 0x0088C7A0
@@ -81,7 +83,23 @@ void __stdcall TASK_FreeAllQueueSlots()
     LeaveCriticalSection(&gTaskSlotsCriticalSection.cs);
 }
 
-//D2Game.0x6FC405B0 (#10041) 
+static D2TaskQueueStrc* TASK_GetTaskQueueFromLink(D2LinkStrc* pInTaskQueueLink)
+{
+    return CONTAINING_RECORD(pInTaskQueueLink, D2TaskQueueStrc, tQueueLink);
+}
+static D2GameTaskStrc* TASK_GetGameTaskFromLink(D2LinkStrc* pTaskLink)
+{
+    return CONTAINING_RECORD(pTaskLink, D2GameTaskStrc, tTaskLink);
+}
+
+// Milliseconds from pOtherTaskLink's scheduled time to pTaskLink's, ordered across the clock's wraparound
+static int32_t TASK_GetScheduledTimeDelta(D2LinkStrc* pTaskLink, D2LinkStrc* pOtherTaskLink)
+{
+    return static_cast<int32_t>(static_cast<uint32_t>(TASK_GetGameTaskFromLink(pTaskLink)->nScheduledTime)
+        - static_cast<uint32_t>(TASK_GetGameTaskFromLink(pOtherTaskLink)->nScheduledTime));
+}
+
+//D2Game.0x6FC405B0 (#10041)
 //1.14d: 0x00564960
 int __cdecl TASK_CreateQueue()
 {
@@ -96,95 +114,79 @@ int __cdecl TASK_CreateQueue()
     EnterCriticalSection(pTaskQueueCriticalSection);
     if (!gtTaskSlots[nTaskSlotIndex])
     {
-        D2TaskQueueStrc* pTaskQueue = D2_ALLOC_STRC_POOL(nullptr, D2TaskQueueStrc);
-        D2LinkStrc* pGameTasks = &pTaskQueue->tGameTasks;
-        pTaskQueue->nQueueIndex = nTaskSlotIndex;
-        pTaskQueue->nGameCount = 0;
-        pTaskQueue->tGameTasks.pPrev = &pTaskQueue->tGameTasks;
-        pTaskQueue->tGameTasks.pNext = &pTaskQueue->tGameTasks;
-        int nTasksCreated = gnNumberOfTasksCreated;
-        uint32_t nGamesPerQueue = gnGamesCount / (uint32_t)gnNumberOfTasksCreated;
-        uint32_t nExtraGames = gnGamesCount % (uint32_t)gnNumberOfTasksCreated;
-        gtTaskSlots[nTaskSlotIndex] = pTaskQueue;
-        int nOtherQueueCount = nTasksCreated - 1;
-        if (nTasksCreated - 1 >= (unsigned int)TASKQSLOTS)
-            nOtherQueueCount = 32;
-        int nQueuesWithExtraGame = nOtherQueueCount - nExtraGames;
-        for (D2LinkStrc* pLink = gpTaskQueueLink.pNext; pLink != &gpTaskQueueLink; pLink = pLink->pNext)
+        D2TaskQueueStrc* pNewQueue = D2_ALLOC_STRC_POOL(nullptr, D2TaskQueueStrc);
+        D2LinkStrc* pNewGameTasks = &pNewQueue->tGameTasks;
+        pNewQueue->nQueueIndex = nTaskSlotIndex;
+        pNewQueue->nGameCount = 0;
+        pNewGameTasks->pPrev = pNewGameTasks;
+        pNewGameTasks->pNext = pNewGameTasks;
+        const uint32_t nGamesPerQueue = gnGamesCount / static_cast<uint32_t>(gnNumberOfTasksCreated);
+        const uint32_t nExtraGames = gnGamesCount % static_cast<uint32_t>(gnNumberOfTasksCreated);
+        gtTaskSlots[nTaskSlotIndex] = pNewQueue;
+
+        // Move tasks over from every existing queue
+        const uint32_t nOtherQueueCount = std::min<uint32_t>(gnNumberOfTasksCreated - 1, TASKQSLOTS);
+        int32_t nQueuesWithExtraGame = static_cast<int32_t>(nOtherQueueCount - nExtraGames);
+        for (D2LinkStrc* pQueueLink = gpTaskQueueLink.pNext; pQueueLink != &gpTaskQueueLink; pQueueLink = pQueueLink->pNext)
         {
-            bool bNoExtraGame = (int)--nQueuesWithExtraGame < 0;
-#define D2_PAIR64(high, low) ((uint64_t(uint32_t(high)) << 32) |(uint32_t(low)))
-            int nWalkSteps = (D2_PAIR64(CONTAINING_RECORD(pLink, D2TaskQueueStrc, tQueueLink)->nGameCount, nGamesPerQueue + !bNoExtraGame) - 1) >> 32;
-            EnterCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskQueueStrc, tQueueLink)->nQueueIndex].cs);
-            D2LinkStrc* pOtherGameLink = pLink[-1].pPrev;
-            D2LinkStrc* pOtherQueuedGames = pLink - 1;
-            D2LinkStrc* pLastMovedLink = pOtherGameLink;
-            for (; nWalkSteps; pOtherGameLink = pOtherGameLink->pNext)
+            D2TaskQueueStrc* pQueue = TASK_GetTaskQueueFromLink(pQueueLink);
+            D2LinkStrc* pGameTasks = &pQueue->tGameTasks;
+            const bool bExtraGame = --nQueuesWithExtraGame >= 0;
+            // Native computes ((nGameCount << 32 | nQueueShare) - 1) >> 32: the game count, less one when the share is 0
+            const uint32_t nQueueShare = nGamesPerQueue + (bExtraGame ? 1 : 0);
+            int32_t nWalkSteps = pQueue->nGameCount - (nQueueShare == 0 ? 1 : 0);
+
+            // Detach the tasks after pLastKept: they run from pMoved to the queue's former last task, pLastMoved
+            EnterCriticalSection(&gtTaskQueuesCriticalSections[pQueue->nQueueIndex].cs);
+            D2LinkStrc* pLastMoved = pGameTasks->pPrev;
+            D2LinkStrc* pLastKept = pLastMoved;
+            for (; nWalkSteps; pLastKept = pLastKept->pNext)
             {
                 --nWalkSteps;
-                if (pOtherGameLink == pOtherQueuedGames)
+                if (pLastKept == pGameTasks)
+                {
                     break;
+                }
             }
-            D2LinkStrc* pMovedLink = pOtherGameLink->pNext;
-            pOtherGameLink->pNext = pOtherQueuedGames;
-            pOtherQueuedGames->pPrev = pOtherGameLink;
-            LeaveCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskQueueStrc, tQueueLink)->nQueueIndex].cs);
-            if (pMovedLink != pOtherQueuedGames)
+            D2LinkStrc* pMoved = pLastKept->pNext;
+            pLastKept->pNext = pGameTasks;
+            pGameTasks->pPrev = pLastKept;
+            LeaveCriticalSection(&gtTaskQueuesCriticalSections[pQueue->nQueueIndex].cs);
+            if (pMoved == pGameTasks)
             {
-                D2LinkStrc* pMovedTail = pLastMovedLink;
-                pLastMovedLink->pNext = 0;
-                D2LinkStrc* pInsertAfter;
-                for (pInsertAfter = pGameTasks->pPrev;
-                    pInsertAfter != pGameTasks;
-                    pInsertAfter = pInsertAfter->pPrev)
+                continue;
+            }
+
+            pLastMoved->pNext = nullptr;
+            D2LinkStrc* pInsertAfter = pNewGameTasks->pPrev;
+            while (pInsertAfter != pNewGameTasks && TASK_GetScheduledTimeDelta(pMoved, pInsertAfter) < 0)
+            {
+                pInsertAfter = pInsertAfter->pPrev;
+            }
+
+            // Insert the moved tasks in schedule order, until the rest of them belong at the end of the new queue
+            while (pMoved && pInsertAfter->pNext != pNewGameTasks)
+            {
+                D2LinkStrc* pNextMoved = pMoved->pNext;
+                TASK_LinkList_Insert(pInsertAfter, pMoved);
+                pInsertAfter = pMoved;
+                pMoved = pNextMoved;
+                while (pMoved && pInsertAfter->pNext != pNewGameTasks && TASK_GetScheduledTimeDelta(pMoved, pInsertAfter->pNext) > 0)
                 {
-                    if ((char*)pMovedLink[-2].pNext - (char*)pInsertAfter[-2].pNext >= 0)// [-2].pNext: D2GameTaskStrc::nScheduledTime
-                        break;
+                    pInsertAfter = pInsertAfter->pNext;
                 }
-                if (pInsertAfter->pNext == pGameTasks)
-                {
-                LABEL_22:
-                    pMovedLink->pPrev = pInsertAfter;
-                    pMovedTail->pNext = pGameTasks;
-                    pInsertAfter->pNext = pMovedLink;
-                    pGameTasks->pPrev = pMovedTail;
-                }
-                else
-                {
-                    while (1)
-                    {
-                        D2LinkStrc* pNextMoved = pMovedLink->pNext;
-                        pMovedLink->pPrev = pInsertAfter;
-                        D2LinkStrc* pInsertBefore = pInsertAfter->pNext;
-                        pMovedLink->pNext = pInsertBefore;
-                        pInsertBefore->pPrev = pMovedLink;
-                        pInsertAfter->pNext = pMovedLink;
-                        if (!pNextMoved)
-                            break;
-                        pInsertAfter = pMovedLink;
-                        pMovedLink = pNextMoved;
-                        D2LinkStrc* pScanLink = pInsertAfter->pNext;
-                        if (pScanLink != pGameTasks)
-                        {
-                            D2LinkStrc* pNextMovedTime = pNextMoved[-2u].pNext; // NOLINT TODO proper list
-                            do
-                            {
-                                if ((char*)pNextMovedTime - (char*)pScanLink[-2].pNext <= 0) // NOLINT TODO proper list
-                                    break;
-                                pInsertAfter = pScanLink;
-                                pScanLink = pScanLink->pNext;
-                            } while (pScanLink != pGameTasks);
-                        }
-                        if (pInsertAfter->pNext == pGameTasks)
-                        {
-                            pMovedTail = pLastMovedLink;
-                            goto LABEL_22;
-                        }
-                    }
-                }
+            }
+
+            if (pMoved)
+            {
+                // pInsertAfter is the new queue's last task: append pMoved..pLastMoved as they are
+                pMoved->pPrev = pInsertAfter;
+                pLastMoved->pNext = pNewGameTasks;
+                pInsertAfter->pNext = pMoved;
+                pNewGameTasks->pPrev = pLastMoved;
             }
         }
-        TASK_LinkList_PushFront(&gpTaskQueueLink, &pTaskQueue->tQueueLink);
+        TASK_LinkList_PushFront(&gpTaskQueueLink, &pNewQueue->tQueueLink);
     }
     LeaveCriticalSection(pTaskQueueCriticalSection);
     LeaveCriticalSection(&gTaskSlotsCriticalSection.cs);
@@ -204,14 +206,12 @@ BOOL __fastcall TASK_QueueGame(D2GameTaskStrc* pGameTask, int nTaskType, uint32_
     if (gpTaskQueueLink.pPrev)
     {
         D2LinkStrc* pTaskQueueHeadLink = gpTaskQueueLink.pNext;
-        if (gpTaskQueueLink.pNext != &gpTaskQueueLink && gpTaskQueueLink.pNext)
+        if (pTaskQueueHeadLink != &gpTaskQueueLink && pTaskQueueHeadLink)
         {
-            D2TaskQueueStrc* pTaskQueue = CONTAINING_RECORD(gpTaskQueueLink.pNext, D2TaskQueueStrc, tQueueLink);
+            // Queue the game on the head queue, then rotate that queue to the back
+            D2TaskQueueStrc* pTaskQueue = TASK_GetTaskQueueFromLink(pTaskQueueHeadLink);
             EnterCriticalSection(&gtTaskQueuesCriticalSections[pTaskQueue->nQueueIndex].cs);
-            D2TaskQueueStrc* ptTaskQueueHead = CONTAINING_RECORD(pTaskQueueHeadLink, D2TaskQueueStrc, tQueueLink);
-
-            TASK_LinkList_PushFront(&ptTaskQueueHead->tGameTasks, &pGameTask->tTaskLink);
-
+            TASK_LinkList_PushFront(&pTaskQueue->tGameTasks, &pGameTask->tTaskLink);
             LeaveCriticalSection(&gtTaskQueuesCriticalSections[pTaskQueue->nQueueIndex].cs);
             ++pTaskQueue->nGameCount;
             ++gnGamesCount;
@@ -246,12 +246,13 @@ int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, D2GameTaskStrc** ppTask)
         D2LinkStrc* pLink = pTask->tGameTasks.pNext;
         if (pLink != &pTask->tGameTasks && pLink)
         {
+            D2GameTaskStrc* pGameTask = TASK_GetGameTaskFromLink(pLink);
             const int64_t nTickCount = TASK_GetClockTime();
-            nResult = CONTAINING_RECORD(pLink, D2GameTaskStrc, tTaskLink)->nScheduledTime - nTickCount;
+            nResult = pGameTask->nScheduledTime - nTickCount;
             if (nResult <= 0)
             {
                 TASK_LinkList_Remove(pLink);
-                *ppTask = CONTAINING_RECORD(pLink, D2GameTaskStrc, tTaskLink);
+                *ppTask = pGameTask;
             }
         }
 
@@ -279,7 +280,7 @@ int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber)
         if (pLink != &pTask->tGameTasks && pLink)
         {
             const int64_t nTickCount = TASK_GetClockTime();
-            nResult = CONTAINING_RECORD(pLink, D2GameTaskStrc, tTaskLink)->nScheduledTime - nTickCount;
+            nResult = TASK_GetGameTaskFromLink(pLink)->nScheduledTime - nTickCount;
         }
 
         D2_ASSERT(pTask->nQueueIndex < 32);
@@ -292,23 +293,14 @@ int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber)
     return nResult;
 }
 
-static D2TaskQueueStrc* TASK_GetTaskQueueFromLink(D2LinkStrc* pInTaskQueueLink)
-{
-    return CONTAINING_RECORD(pInTaskQueueLink, D2TaskQueueStrc, tQueueLink);
-}
-static D2GameTaskStrc* TASK_GetGameTaskFromLink(D2LinkStrc* pTaskLink)
-{
-    return CONTAINING_RECORD(pTaskLink, D2GameTaskStrc, tTaskLink);
-}
-
-static bool TASK_LinkList_IsEmpty(D2LinkStrc* pListLink)
+static bool TASK_LinkList_HasEntries(D2LinkStrc* pListLink)
 {
     return pListLink->pNext != pListLink;
 }
 
 static D2LinkStrc* TASK_GetLastTaskFromListHead(D2LinkStrc* pListHead)
 {
-    return TASK_LinkList_IsEmpty(pListHead) ? pListHead->pPrev : nullptr;
+    return TASK_LinkList_HasEntries(pListHead) ? pListHead->pPrev : nullptr;
 }
 
 static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
@@ -325,6 +317,7 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
         D2TaskQueueStrc* ptTaskQTail = TASK_GetTaskQueueFromLink(gpTaskQueueLink.pPrev);
 
         D2LinkStrc* pNewTaskLink = nullptr;
+        // TODO: 1.10f and 1.14d compare ptTaskQTail->nGameCount, the queue the balancing task is taken from
         if (TASK_GetTaskQueueFromLink(gpTaskQueueLink.pNext)->nGameCount == (nGameCount + 1))
         {
             EnterCriticalSection(&gtTaskQueuesCriticalSections[ptTaskQTail->nQueueIndex].cs);
