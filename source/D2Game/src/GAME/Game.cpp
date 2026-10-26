@@ -49,6 +49,11 @@
 
 static_assert(offsetof(D2GameStrc, lpCriticalSection) == 0x18, "Make sure TSHashObject<D2GameStrc,HASHKEY_NONE> has the correct size.");
 static_assert(sizeof(D2GameDataTableStrc) == 0x68, "Make sure D2GameDataTableStrc has the correct size.");
+#if D2_VERSION_MAJOR <= 1 && D2_VERSION_MINOR <= 10
+static_assert(offsetof(D2GameStrc, nDebugBreakTrigger) == 0x1DDC, "GAME_UpdateProgress reads the trigger at 0x1DDC in 1.10f.");
+#else
+static_assert(offsetof(D2GameStrc, nDebugBreakTrigger) == 0x1DC8, "GAME_UpdateProgress reads the trigger at 0x1DC8 in 1.14d.");
+#endif
 
 D2GameStrc* gpGame_6FD457FC;
 int32_t gnAct_6FD45824;
@@ -1791,10 +1796,9 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 {
     // TODO: v2, v6
 
+    const uint32_t nDebugBreakTrigger = pGame->nDebugBreakTrigger;
     ++pGame->dwGameFrame;
 
-    // Debug ?
-    const uint32_t nDebugBreakTrigger = *(uint32_t*)&pGame[1].m_key;
     if (nDebugBreakTrigger == 1)
     {
         *((volatile BYTE*)0) = 0;
