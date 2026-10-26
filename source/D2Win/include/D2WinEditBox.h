@@ -30,15 +30,15 @@ using EditBoxChangeCallback = void(__stdcall*)(int32_t nUnused);
 struct D2WinEditBoxStrc
 {
 	D2WinControlStrc controlHeader;					//0x00
-	int32_t field_40;								//0x40
-	int32_t field_44;								//0x44	
-	int32_t field_48;								//0x48
-	int32_t field_4C;								//0x4C
-	int32_t field_50;								//0x50
-	int32_t field_54;								//0x54
-	int32_t nTextLength;							//0x58
-	Unicode wszText[256];							//0x258
-	int32_t field_25C;								//0x25C
+	int32_t nTextInsetX;							//0x40
+	int32_t nTextInsetY;							//0x44	
+	int32_t nMaxLength;								//0x48
+	int32_t nFirstVisibleChar;						//0x4C
+	int32_t nLastVisibleChar;						//0x50
+	int32_t nSelectionStart;						//0x54
+	int32_t nSelectionEnd;							//0x58
+	Unicode wszText[256];							//0x5C
+	int32_t nCaretPosition;							//0x25C
 	uint32_t dwEditBoxFlags;						//0x260
 	EditBoxReturnCallback pfOnReturn;				//0x264
 	EditBoxKeyFilterCallback pfKeyFilter;			//0x268
@@ -47,7 +47,7 @@ struct D2WinEditBoxStrc
 	int32_t nTextColor;								//0x274
 	D2WinEditBoxStrc* pNext;						//0x278
 	D2WinEditBoxStrc* pPrevious;					//0x27C
-	int32_t field_280;								//0x280
+	int32_t bMouseSelecting;						//0x280
 };
 #pragma pack(pop)
 

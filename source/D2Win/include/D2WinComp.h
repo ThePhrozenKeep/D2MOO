@@ -9,28 +9,28 @@
 #pragma pack(push, 1)
 struct D2CofDataStrc
 {
-	uint8_t unk0x00;
-	uint8_t unk0x01;
-	uint8_t unk0x02;
-	uint8_t unk0x03;
+	uint8_t nLayers;
+	uint8_t nFramesPerDirection;
+	uint8_t nDirections;
+	uint8_t nVersion;
 	uint32_t unk0x04;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
-	uint32_t unk0x10;
-	uint32_t unk0x14;
-	uint32_t unk0x18;
+	uint32_t nBoxLeft;
+	uint32_t nBoxRight;
+	uint32_t nBoxTop;
+	uint32_t nBoxBottom;
+	uint32_t nAnimSpeed;
 };
 
 struct D2CofNodeStrc
 {
-	uint32_t unk0x00;
+	uint32_t nRefCount;
 	uint32_t nMode;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
+	uint32_t nClass;
+	uint32_t dwWeaponClass;
 	uint32_t unk0x10;
 	D2CofDataStrc* pCofData;
-	D2CofNodeStrc* unk0x18;
-	D2CofNodeStrc* unk0x1C;
+	D2CofNodeStrc* pNext;
+	D2CofNodeStrc* pPrev;
 };
 
 struct D2CofInfoStrc
@@ -47,19 +47,19 @@ struct D2GfxInfoStrc
 struct D2CompositeUnitStrc
 {
 	uint32_t dwFlags;
-	uint8_t unk0x04;
-	uint8_t unk0x05;
+	uint8_t nDirection;
+	uint8_t nDirections;
 	uint8_t unk0x06;
 	uint8_t unk0x07;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
-	uint32_t unk0x10;
+	uint32_t nFrame;
+	uint32_t nFrameCount;
+	uint32_t nAnimSpeed;
 	int32_t nX;
 	int32_t nY;
 	int32_t nUnitIndex;
 	int32_t nMode;
 	int32_t nWClassTokenIndex;
-	uint8_t unk0x28[16];
+	uint8_t nComponentColors[16];
 	uint32_t dwArmorType[16];
 	uint32_t unk0x78;
 	uint32_t unk0x7C;
@@ -79,18 +79,18 @@ struct D2CompositeUnitStrc
 	uint32_t unk0xB4;
 	D2GfxInfoStrc* pGfxInfo;
 	D2CellFileStrc* pEmblemCellFile;
-	uint8_t unk0xC0;
-	uint8_t unk0xC1;
+	uint8_t nEmblemColor1;
+	uint8_t nEmblemColor2;
 	uint8_t unk0xC2;
 	uint8_t unk0xC3;
 	D2CompositeUnitStrc* pNext;
-	D2CompositeUnitStrc* unk0xC8;
-	Unicode unk0xCC[64];
-	Unicode unk0x14C[64];
-	Unicode unk0x1CC[16];
-	Unicode unk0x1EC[32];
-	uint32_t unk0x22C;
-	uint32_t unk0x230;
+	D2CompositeUnitStrc* pPrev;
+	Unicode wszAccountName[64];
+	Unicode wszCharName[64];
+	Unicode wszGuildTag[16];
+	Unicode wszRealmName[32];
+	uint32_t nCharLevel;
+	uint32_t dwProductCode;
 };
 #pragma pack(pop)
 
