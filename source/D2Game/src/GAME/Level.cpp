@@ -74,7 +74,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                     break;
 
                 case UNIT_MONSTER:
-                    sub_6FC659E0(pGame, pUnit, pClient, v10);
+                    MONSTERMSG_SendMonsterUpdates(pGame, pUnit, pClient, v10);
                     break;
 
                 case UNIT_OBJECT:

@@ -441,7 +441,7 @@ int32_t __fastcall SKILLS_SrvDo007_Jab(D2GameStrc* pGame, D2UnitStrc* pUnit, int
     const int32_t nToHit = SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
     {
-        sub_6FC627B0(pUnit, 8);
+        MONSTERMODE_UpdateModeAttackStats(pUnit, 8);
     }
 
     D2DamageStrc damage = {};

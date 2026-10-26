@@ -32,7 +32,7 @@ struct D2UnkMonMsgStrc
 
 
 //D2Game.0x6FC659E0
-void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t a4)
+void __fastcall MONSTERMSG_SendMonsterUpdates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t bUnitInitialized)
 {
     if (pUnit)
     {
@@ -44,7 +44,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         if (pUnit->dwFlags & UNITFLAG_DOUPDATE)
         {
-            sub_6FC65C70(pGame, pUnit, pClient);
+            MONSTERMSG_SendMonsterModeUpdate(pGame, pUnit, pClient);
         }
 
         pUnit->dwFlags &= ~UNITFLAG_MONMODEISCHANGING;
@@ -62,7 +62,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         if (pUnit->dwFlagEx & UNITFLAGEX_HASINV)
         {
             D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-            if (pPlayer && sub_6FC61B30(pUnit, pPlayer))
+            if (pPlayer && MONSTERAI_IsTrading(pUnit, pPlayer))
             {
                 SUNITPROXY_UpdateGambleInventory(pGame, pUnit, pPlayer, pClient);
             }
@@ -79,7 +79,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         if (pUnit->dwFlags & UNITFLAG_UPGRLIFENHITCLASS)
         {
-            uint8_t nHpPct = sub_6FC62F50(pUnit);
+            uint8_t nHpPct = MONSTERMODE_GetHpPercent128(pUnit);
             STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nHpPct, 0);
             if (nHpPct > 1u)
             {
@@ -95,7 +95,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         }
     }
 
-    if (!a4 && STATES_IsAnyGfxStateFlagSet(pUnit))
+    if (!bUnitInitialized && STATES_IsAnyGfxStateFlagSet(pUnit))
     {
         D2GAME_STATES_SendStates_6FCC5F00(pUnit, pClient, 0);
     }
@@ -128,7 +128,7 @@ static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
 
 //D2Game.0x6FC65C70
 //1.14d: 0x00597E20
-void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
+void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
 {
     // TODO: Names
     constexpr D2UnkMonMsgStrc stru_6FD28988[16] =
@@ -253,17 +253,17 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
         const int32_t nDistance = D2COMMON_10191_PATH_GetDistance(pDynamicPath);
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, nDistance, sub_6FC62F50(pMonster), pMonster->dwLastHitClass);
+            D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, nDistance, MONSTERMODE_GetHpPercent128(pMonster), pMonster->dwLastHitClass);
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, a4, v8, v9, nDistance, sub_6FC62F50(pMonster), pMonster->dwLastHitClass);
+            D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, a4, v8, v9, nDistance, MONSTERMODE_GetHpPercent128(pMonster), pMonster->dwLastHitClass);
         }
         return;
     }
     case MONMODE_GETHIT:
     {
-        uint8_t nUnitLife = sub_6FC62F50(pMonster);
+        uint8_t nUnitLife = MONSTERMODE_GetHpPercent128(pMonster);
         if (nUnitLife > 1u)
         {
             --nUnitLife;
@@ -282,7 +282,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
         a7 = PATH_GetStepNum(pDynamicPath);
         if (nAnimMode == MONMODE_NEUTRAL)
         {
-            D2GAME_PACKETS_SendPacket0x6D_6FC3D080(pClient, pMonster->dwUnitId, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster), sub_6FC62F50(pMonster));
+            D2GAME_PACKETS_SendPacket0x6D_6FC3D080(pClient, pMonster->dwUnitId, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster), MONSTERMODE_GetHpPercent128(pMonster));
             STATLIST_SetUnitStat(pMonster, STAT_PIERCE_IDX, STATLIST_GetUnitBaseStat(pMonster, STAT_PIERCE_IDX, 0) + 1, 0);
             return;
         }

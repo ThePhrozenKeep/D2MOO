@@ -640,7 +640,7 @@ int32_t __fastcall sub_6FD0BDA0(D2UnitStrc* pUnit, void* pArg)
             nParam = 2;
         }
 
-        sub_6FC61E30(pUnit, nParam, pParam->nUnitGUID);
+        MONSTERAI_SetTargetOverride(pUnit, nParam, pParam->nUnitGUID);
         EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nLength + pParam->pGame->dwGameFrame, 0, 0);
         return 1;
     }
@@ -813,7 +813,7 @@ int32_t __fastcall sub_6FD0C060(D2UnitStrc* pUnit, void* pArg)
 
     SUNIT_SetAlignment(pUnit, 1u, 1);
     sub_6FC40280(pParam->pGame, pUnit, 0, 9);
-    sub_6FC61E30(pUnit, 3, 0);
+    MONSTERAI_SetTargetOverride(pUnit, 3, 0);
     EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nDuration + pParam->pGame->dwGameFrame, 0, 0);
 
     return 1;
@@ -1605,7 +1605,7 @@ void __fastcall sub_6FD0DF40(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
         D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_AITHINK, 0);
         EVENT_SetEvent(pGame, pMonster, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
         SUNIT_SetAlignment(pMonster, 2u, 0);
-        sub_6FC61F00(pMonster);
+        MONSTERAI_ClearTargetOverride(pMonster);
 
         if (pMonster)
         {

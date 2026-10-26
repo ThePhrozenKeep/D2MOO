@@ -1008,10 +1008,10 @@ void __fastcall SUNITNPC_HireMercenaryFromRoster(D2GameStrc* pGame, D2UnitStrc* 
         PLRTRADE_AddGold(pPlayer, STAT_GOLD, -hirelingInit.nGold);
     }
 
-    D2UnitStrc* pMerc = sub_6FC68D70(pGame, pNpc, pHirelingTxtRecord->dwClass, 1, 4, 0);
+    D2UnitStrc* pMerc = MONSTERSPAWN_SpawnAtUnit(pGame, pNpc, pHirelingTxtRecord->dwClass, 1, 4, 0);
     if (!pMerc)
     {
-        pMerc = sub_6FC68D70(pGame, pPlayer, pHirelingTxtRecord->dwClass, 1, 4, 0);
+        pMerc = MONSTERSPAWN_SpawnAtUnit(pGame, pPlayer, pHirelingTxtRecord->dwClass, 1, 4, 0);
         if (!pMerc)
         {
             return D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), 0x2Au, 15, STATLIST_UnitGetStatValue(pPlayer, STAT_GOLD, 0), -1, 0);
@@ -1020,7 +1020,7 @@ void __fastcall SUNITNPC_HireMercenaryFromRoster(D2GameStrc* pGame, D2UnitStrc* 
 
     pMercDataRecord->bHired = 1;
 
-    sub_6FC61270(pGame, pPlayer, pMerc, -1, pMercDataRecord, 0);
+    MONSTERAI_AssignHireling(pGame, pPlayer, pMerc, -1, pMercDataRecord, 0);
 
     D2MonsterInteractStrc* pMonInteract = nullptr;
     if (pNpc && pNpc->dwUnitType == UNIT_MONSTER && pNpc->pMonsterData)
@@ -1150,7 +1150,7 @@ D2UnitStrc* __fastcall D2GAME_MERCS_Create_6FCC8630(D2GameStrc* pGame, D2UnitStr
         D2MercDataStrc mercData = {};
         mercData.dwSeed = nSeed;
         mercData.nMercName = nMercName;
-        sub_6FC61270(pGame, pPlayer, pMerc, wVersion, &mercData, bDead);
+        MONSTERAI_AssignHireling(pGame, pPlayer, pMerc, wVersion, &mercData, bDead);
     }
 
     return pMerc;
@@ -2918,13 +2918,13 @@ void __fastcall D2GAME_NPC_AssignMercenary_6FCCB520(D2GameStrc* pGame, D2UnitStr
 
                 D2GAME_SendPacket0x50_6FC3F440(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), &packet50);
 
-                D2UnitStrc* pMerc = sub_6FC68D70(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 4, 0);
+                D2UnitStrc* pMerc = MONSTERSPAWN_SpawnAtUnit(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 4, 0);
                 if (!pMerc)
                 {
-                    pMerc = sub_6FC68D70(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 6, 0);
+                    pMerc = MONSTERSPAWN_SpawnAtUnit(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 6, 0);
                     if (!pMerc)
                     {
-                        pMerc = sub_6FC68D70(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 12, 0);
+                        pMerc = MONSTERSPAWN_SpawnAtUnit(pGame, pPlayer, pHirelingTxtRecord->dwClass, MONMODE_NEUTRAL, 12, 0);
                     }
                 }
 
@@ -2933,7 +2933,7 @@ void __fastcall D2GAME_NPC_AssignMercenary_6FCCB520(D2GameStrc* pGame, D2UnitStr
                     return;
                 }
 
-                sub_6FC61270(pGame, pPlayer, pMerc, -1, pMercDataRecord, 0);
+                MONSTERAI_AssignHireling(pGame, pPlayer, pMerc, -1, pMercDataRecord, 0);
                 break;
             }
         }

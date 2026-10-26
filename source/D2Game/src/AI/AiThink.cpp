@@ -1155,7 +1155,7 @@ void __fastcall AITHINK_Fn013_FallenShaman(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		AIGENERAL_AllocCommandsForMinions(pGame, pUnit, &aiCmd);
 	}
 
-	if (arg.pTarget && arg.nCounter && AIRollChanceParam(pGame, pUnit, pAiTickParam, FALLENSHAMAN_AI_PARAM_RESURRECT_AND_COMMAND_CHANCE_PCT) && sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], arg.pTarget, 0, 0))
+	if (arg.pTarget && arg.nCounter && AIRollChanceParam(pGame, pUnit, pAiTickParam, FALLENSHAMAN_AI_PARAM_RESURRECT_AND_COMMAND_CHANCE_PCT) && MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], arg.pTarget, 0, 0))
 	{
 		AITACTICS_UseSequenceSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], arg.pTarget, 0, 0);
 		return;
@@ -1382,7 +1382,7 @@ void __fastcall AITHINK_Fn016_ClawViper(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && pAiTickParam->nTargetDistance < AI_GetParamValue(pGame, pAiTickParam, CLAWVIPER_AI_PARAM_CHARGE_DISTANCE)
 		&& AIRollChanceParam(pGame, pUnit, pAiTickParam, CLAWVIPER_AI_PARAM_CHARGE_CHANCE_PCT)
-		&& sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
+		&& MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 
@@ -1456,7 +1456,7 @@ void __fastcall AITHINK_Fn142_ClawViperEx(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 
 		&& pAiTickParam->nTargetDistance < AI_GetParamValue(pGame, pAiTickParam, CLAWVIPEREX_AI_PARAM_CHARGE_DISTANCE) 
 		&& AIRollChanceParam(pGame, pUnit, pAiTickParam, CLAWVIPEREX_AI_PARAM_CHARGE_CHANCE_PCT)
-		&& sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
+		&& MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
 	{
 
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
@@ -1495,7 +1495,7 @@ void __fastcall AITHINK_Fn017_SandLeaper(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 {
 	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && pAiTickParam->nTargetDistance < 5
 		&& AIRollChanceParam(pGame, pUnit, pAiTickParam, SANDLEAPER_AI_PARAM_LEAP_CHANCE_PCT)
-		&& sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0))
+		&& MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0))
 	{
 		AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
 		return;
@@ -1835,7 +1835,7 @@ void __fastcall AITHINK_Fn022_GreaterMummy(D2GameStrc* pGame, D2UnitStrc* pUnit,
 	}
 
 	D2UnitStrc* pReviveTarget = arg.pReviveTarget;
-	if (pReviveTarget && AIRollChanceParam(pGame, pUnit, pAiTickParam, GREATMUMMY_AI_PARAM_RAISE_CHANCE_PCT) && sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pReviveTarget, 0, 0))
+	if (pReviveTarget && AIRollChanceParam(pGame, pUnit, pAiTickParam, GREATMUMMY_AI_PARAM_RAISE_CHANCE_PCT) && MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pReviveTarget, 0, 0))
 	{
 		UNITS_SetTargetUnitForDynamicUnit(pUnit, pReviveTarget);
 		AITACTICS_UseSequenceSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pReviveTarget, 0, 0);
@@ -3830,7 +3830,7 @@ void __fastcall AITHINK_Fn043_FoulCrowNest(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 		pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame;
 
-		if (sub_6FC68350(MONSTER_CROWNEST1, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitX(pUnit), 0))
+		if (MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_CROWNEST1, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitX(pUnit), 0))
 		{
 			++pAiTickParam->pAiControl->dwAiParam[1];
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, 0, 0);
@@ -3920,7 +3920,7 @@ void __fastcall AITHINK_Fn045_Sarcophagus(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 		if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && nFrameDiff >= AI_GetParamValue(pGame, pAiTickParam, SARCOPHAGUS_AI_PARAM_SPAWN_INTERVAL))
 		{
-			if (sub_6FC68350(MONSTER_SARCOPHAGUS, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
+			if (MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_SARCOPHAGUS, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
 			{
 				pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame;
 				++pAiTickParam->pAiControl->dwAiParam[1];
@@ -4198,7 +4198,7 @@ void __fastcall AITHINK_Fn049_ZakarumPriest(D2GameStrc* pGame, D2UnitStrc* pUnit
 			nX = ((nTargetX - nX) << nShift) + nTargetX;
 			nY = ((nTargetY - nY) << nShift) + nTargetY;
 
-			if (sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[2], 0, nX, nY))
+			if (MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[2], 0, nX, nY))
 			{
 				AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[2], pAiTickParam->pMonstatsTxt->nSkill[2], 0, nX, nY);
 				return;
@@ -4646,7 +4646,7 @@ void __fastcall AITHINK_SpawnUberMephistoMinion(D2GameStrc* pGame, D2UnitStrc* p
 	};
 	int32_t nChoice = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, ARRAY_SIZE(nMinionTypes));
 
-	D2UnitStrc* pMinion = sub_6FC68D70(pGame, pTarget ? pTarget : pUnit, nMinionTypes[nChoice], nMinionModes[nChoice], 4, 0);
+	D2UnitStrc* pMinion = MONSTERSPAWN_SpawnAtUnit(pGame, pTarget ? pTarget : pUnit, nMinionTypes[nChoice], nMinionModes[nChoice], 4, 0);
 	if (pMinion)
 	{
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
@@ -5734,7 +5734,7 @@ void __fastcall AITHINK_Fn065_FetishShaman(D2GameStrc* pGame, D2UnitStrc* pUnit,
 		arg.nHealCapability = AI_GetParamValue(pGame, pAiTickParam, FETISHSHAMAN_AI_PARAM_HEAL_CAPABILITY);
 		AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, AITHINK_TargetCallback_FetishShaman, 1);
 
-		if (arg.pClosestDeadTarget && AIRollChanceParam(pGame, pUnit, pAiTickParam, FETISHSHAMAN_AI_PARAM_HEAL_CHANCE_PCT) && sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[2], arg.pClosestDeadTarget, 0, 0))
+		if (arg.pClosestDeadTarget && AIRollChanceParam(pGame, pUnit, pAiTickParam, FETISHSHAMAN_AI_PARAM_HEAL_CHANCE_PCT) && MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[2], arg.pClosestDeadTarget, 0, 0))
 		{
 			D2AiCmdStrc aiCmd = {};
 			aiCmd.nCmdParam[0] = 14;
@@ -5939,7 +5939,7 @@ void __fastcall AITHINK_Fn068_VileMother(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 				const int32_t nFinalX = 3 * nX + CLIENTS_GetUnitX(pUnit);
 				const int32_t nFinalY = 3 * nY + CLIENTS_GetUnitY(pUnit);
 
-				if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && sub_6FC68350(MONSTER_VILEMOTHER1, UNITS_GetRoom(pUnit), nFinalX, nFinalY, 0))
+				if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_VILEMOTHER1, UNITS_GetRoom(pUnit), nFinalX, nFinalY, 0))
 				{
 					AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], 0, nFinalX, nFinalY);
 					++pAiTickParam->pAiControl->dwAiParam[0];
@@ -6967,7 +6967,7 @@ void __fastcall AITHINK_Fn082_InvisoSpawner(D2GameStrc* pGame, D2UnitStrc* pUnit
 
 			int32_t nX = 0;
 			int32_t nY = 0;
-			if (sub_6FC66260(pGame, pRoom, 0, nMonsterId, &nX, &nY, 0) && D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, 2, 66))
+			if (MONSTERREGION_FindSpawnLocation(pGame, pRoom, 0, nMonsterId, &nX, &nY, 0) && D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, 2, 66))
 			{
 				--pAiTickParam->pAiControl->dwAiParam[1];
 				pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame + AI_GetParamValue(pGame, pAiTickParam, SPAWNER_AI_PARAM_DELAY);
@@ -6989,7 +6989,7 @@ void __fastcall AITHINK_Fn083_MosquitoNest(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 	if (pAiTickParam->pAiControl->dwAiParam[1] <= AI_GetParamValue(pGame, pAiTickParam, SPAWNER_AI_PARAM_NUM_TO_SPAWN))
 	{
-		if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[0] && sub_6FC68350(MONSTER_SUCKERNEST1, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
+		if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && pGame->dwGameFrame > pAiTickParam->pAiControl->dwAiParam[0] && MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_SUCKERNEST1, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
 		{
 			pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame + AI_GetParamValue(pGame, pAiTickParam, SPAWNER_AI_PARAM_DELAY);
 			++pAiTickParam->pAiControl->dwAiParam[1];
@@ -7288,9 +7288,9 @@ void __fastcall AITHINK_Fn094_DesertTurret(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 	UNITS_SetTargetUnitForDynamicUnit(pUnit, pAiTickParam->pTarget);
 
-	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, nX, nY))
+	if (pAiTickParam->pMonstatsTxt->nSkill[0] >= 0 && MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, nX, nY))
 	{
-		if (sub_6FC68630(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
+		if (MONSTERSPAWN_CheckSkillPlacement(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkill[0], pAiTickParam->pTarget, CLIENTS_GetUnitX(pAiTickParam->pTarget), CLIENTS_GetUnitY(pAiTickParam->pTarget)))
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[0], pAiTickParam->pMonstatsTxt->nSkill[0], 0, nX, nY);
 			D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX, nY);
@@ -9075,7 +9075,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 
 		int32_t nX = 0;
 		int32_t nY = 0;
-		if (!sub_6FC66260(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner)), MONSTER_NECROSKELETON, &nX, &nY, 0))
+		if (!MONSTERREGION_FindSpawnLocation(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner)), MONSTER_NECROSKELETON, &nX, &nY, 0))
 		{
 			return 0;
 		}
@@ -9686,7 +9686,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pOwner);
 		int32_t nX = 0;
 		int32_t nY = 0;
-		if (!sub_6FC66260(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner)), MONSTER_NECROSKELETON, &nX, &nY, 0))
+		if (!MONSTERREGION_FindSpawnLocation(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner)), MONSTER_NECROSKELETON, &nX, &nY, 0))
 		{
 			return 0;
 		}
@@ -10326,7 +10326,7 @@ void __fastcall AITHINK_Fn129_GenericSpawner(D2GameStrc* pGame, D2UnitStrc* pUni
 		{
 			pAiTickParam->pAiControl->dwAiParam[0] = pGame->dwGameFrame;
 
-			if (sub_6FC68350(MONSTER_EVILHUT, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
+			if (MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_EVILHUT, UNITS_GetRoom(pUnit), CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
 			{
 				++pAiTickParam->pAiControl->dwAiParam[1];
 				AITACTICS_UseSequenceSkill(pGame, pUnit, SKILL_NEST, pAiTickParam->pTarget, 0, 0);
@@ -11793,15 +11793,15 @@ void __fastcall D2GAME_AI_SpecialState11_6FCE7E20(D2GameStrc* pGame, D2UnitStrc*
 
 	if (pTarget->dwUnitType == UNIT_PLAYER)
 	{
-		sub_6FC61E30(pUnit, 1, pTarget->dwUnitId);
+		MONSTERAI_SetTargetOverride(pUnit, 1, pTarget->dwUnitId);
 	}
 	else if (pTarget->dwUnitType == UNIT_MONSTER)
 	{
-		sub_6FC61E30(pUnit, 2, pTarget->dwUnitId);
+		MONSTERAI_SetTargetOverride(pUnit, 2, pTarget->dwUnitId);
 	}
 	else if (pTarget->dwUnitType == UNIT_MISSILE)
 	{
-		sub_6FC61E30(pUnit, 4, pTarget->dwUnitId);
+		MONSTERAI_SetTargetOverride(pUnit, 4, pTarget->dwUnitId);
 	}
 }
 
@@ -11870,7 +11870,7 @@ void __fastcall D2GAME_AI_SpecialState11_6FCE7E80(D2GameStrc* pGame, D2UnitStrc*
 	}
 
 	pAiTickParam->pAiControl->dwAiParam[2] = 1;
-	sub_6FC61F00(pUnit);
+	MONSTERAI_ClearTargetOverride(pUnit);
 	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 	AITACTICS_SetVelocity(pUnit, 2, nVel, 0);
 
@@ -12498,12 +12498,12 @@ void __fastcall AITHINK_Fn051_Diablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 				}
 			}
 
-			if (sub_6FC68630(pTargetGame, pUnit, SKILL_DIABPRISON, pTarget, 0, 0))
+			if (MONSTERSPAWN_CheckSkillPlacement(pTargetGame, pUnit, SKILL_DIABPRISON, pTarget, 0, 0))
 			{
 				chanceArray[9] = 0;
 			}
 
-			if (chanceArray[15] && pTownPortal && !sub_6FC68630(pTargetGame, pUnit, SKILL_DIABPRISON, pTownPortal, 0, 0))
+			if (chanceArray[15] && pTownPortal && !MONSTERSPAWN_CheckSkillPlacement(pTargetGame, pUnit, SKILL_DIABPRISON, pTownPortal, 0, 0))
 			{
 				chanceArray[15] = 0;
 			}
@@ -12766,7 +12766,7 @@ void __fastcall AITHINK_SpawnUberDiabloMinion(D2GameStrc* pGame, D2UnitStrc* pUn
 {
 	if (pTarget)
 	{
-		sub_6FC68D70(pGame, pTarget, MONSTER_DEMONHOLE, MONMODE_NEUTRAL, 4, 64);
+		MONSTERSPAWN_SpawnAtUnit(pGame, pTarget, MONSTER_DEMONHOLE, MONMODE_NEUTRAL, 4, 64);
 	}
 }
 
@@ -13160,12 +13160,12 @@ void __fastcall AITHINK_Fn147_UberDiablo(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 				}
 			}
 
-			if (sub_6FC68630(pTargetGame, pUnit, SKILL_DIABPRISON, pTarget, 0, 0))
+			if (MONSTERSPAWN_CheckSkillPlacement(pTargetGame, pUnit, SKILL_DIABPRISON, pTarget, 0, 0))
 			{
 				chanceArray[9] = 0;
 			}
 
-			if (chanceArray[15] && pTownPortal && !sub_6FC68630(pTargetGame, pUnit, SKILL_DIABPRISON, pTownPortal, 0, 0))
+			if (chanceArray[15] && pTownPortal && !MONSTERSPAWN_CheckSkillPlacement(pTargetGame, pUnit, SKILL_DIABPRISON, pTownPortal, 0, 0))
 			{
 				chanceArray[15] = 0;
 			}
@@ -16306,7 +16306,7 @@ void __fastcall AITHINK_Fn128_Nihlathak(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 
 		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
 
-		if (sub_6FC68350(MONSTER_EVILHUT, pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
+		if (MONSTERSPAWN_CanSpawnAtSpawnerExit(MONSTER_EVILHUT, pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 0))
 		{
 			pAiTickParam->pAiControl->nMinionSpawnClassId = D2Common_11063(pRoom, MONSTER_MINION1);
 			AITACTICS_UseSkill(pGame, pUnit, pAiTickParam->pMonstatsTxt->nSkillMode[4], pAiTickParam->pMonstatsTxt->nSkill[4], pAiTickParam->pTarget, 0, 0);
@@ -17571,7 +17571,7 @@ int32_t __fastcall AITHINK_HandleMonsterAiPreActions(D2GameStrc* pGame, D2UnitSt
 	int32_t nY = 0;
 	if (nLifePercentage >= 30 && (bIsMelee || pAiTickParam->nTargetDistance >= 10u)
 		|| ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) >= 15
-		|| !sub_6FC66260(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)), nBaseId, &nX, &nY, 0))
+		|| !MONSTERREGION_FindSpawnLocation(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)), nBaseId, &nX, &nY, 0))
 	{
 		return sub_6FCF0E40_inline(pGame, pUnit, pAiTickParam);
 	}

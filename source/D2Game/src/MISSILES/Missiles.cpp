@@ -349,7 +349,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         MISSILE_SetFlags(pMissile, MISSILE_GetFlags(pMissile) | 2);
     }
 
-    sub_6FC6E8B0(pGame, missileParams->pOwner, pMissile);
+    MONSTERUNIQUE_ExecuteUModMissileCallbacks(pGame, missileParams->pOwner, pMissile);
     STATLIST_SetUnitStat(pMissile, STAT_DAMAGE_FRAMERATE, pMissilesTxtRecord->dwDamageRate, 0);
 
     return pMissile;

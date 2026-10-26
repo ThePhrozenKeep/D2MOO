@@ -2217,7 +2217,7 @@ void __fastcall SUNIT_SetAlignment(D2UnitStrc* pUnit, uint8_t nAlignNew, int32_t
 
     if (bUpdateMonsterRegion)
     {
-        sub_6FC681C0(pUnit->pGame->pMonReg, pUnit, nAlignment, nAlignNew);
+        MONSTERREGION_UpdateSpawnCountForAlignmentChange(pUnit->pGame->pMonReg, pUnit, nAlignment, nAlignNew);
     }
 
     if (nAlignment == nAlignNew)

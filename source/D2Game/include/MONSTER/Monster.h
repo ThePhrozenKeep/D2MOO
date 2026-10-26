@@ -21,7 +21,7 @@ void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
 //D2Game.0x6FC603D0
 void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, D2MonRegDataStrc* pMonRegData);
 //D2Game.0x6FC60B10
-int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc* pMonster, int32_t nX, int32_t nY, int32_t a5);
+int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc* pMonster, int32_t nX, int32_t nY, int32_t bUnusedSkipRoomUpdate);
 //D2Game.0x6FC60BC0
 void __fastcall MONSTER_RemoveAll(D2GameStrc* pGame);
 //D2Game.0x6FC60C10

@@ -71,7 +71,7 @@ int32_t __fastcall SKILLS_SrvSt42_FireHit(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         {
             damage.dwHitClass = pSkillsTxtRecord->dwHitClass;
         }
-        sub_6FC627B0(pUnit, MONMODE_SKILL1);
+        MONSTERMODE_UpdateModeAttackStats(pUnit, MONMODE_SKILL1);
     }
 
     SUNITDMG_AllocCombat(pGame, pUnit, pTarget, &damage, 128);
@@ -128,7 +128,7 @@ int32_t __fastcall SKILLS_SrvDo084_MaggotEgg(D2GameStrc* pGame, D2UnitStrc* pUni
     if (nCount > 0)
     {
         int32_t nCounter1 = 0;
-        D2UnitStrc* pSummon = sub_6FC68D70(pGame, pUnit, nSummonId, nSpawnMode, -1, 0);
+        D2UnitStrc* pSummon = MONSTERSPAWN_SpawnAtUnit(pGame, pUnit, nSummonId, nSpawnMode, -1, 0);
         if (pSummon)
         {
             nCounter1 = 1;
@@ -143,7 +143,7 @@ int32_t __fastcall SKILLS_SrvDo084_MaggotEgg(D2GameStrc* pGame, D2UnitStrc* pUni
                 break;
             }
 
-            pSummon = sub_6FC68D70(pGame, pUnit, nSummonId, MONMODE_SKILL1, nCounter2, 0);
+            pSummon = MONSTERSPAWN_SpawnAtUnit(pGame, pUnit, nSummonId, MONMODE_SKILL1, nCounter2, 0);
             if (pSummon)
             {
                 ++nCounter1;
@@ -1268,7 +1268,7 @@ int32_t __fastcall SKILLS_ResurrectUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
             pUnit->dwFlags |= UNITFLAG_TARGETABLE | UNITFLAG_CANBEATTACKED | UNITFLAG_ISVALIDTARGET | UNITFLAG_NOTC | UNITFLAG_NOXP;
 
             MONSTER_UpdateAiCallbackEvent(pGame, pUnit);
-            sub_6FC68280(pGame->pMonReg, pUnit);
+            MONSTERREGION_UndoMonsterKill(pGame->pMonReg, pUnit);
             QUESTS_AttachLevelChainRecord(pGame, pUnit, pRoom, 0);
             PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, COLLIDE_MONSTER);
             D2Common_10214(pUnit);
@@ -1741,7 +1741,7 @@ int32_t __fastcall SKILLS_SrvDo104_DiabPrison(D2GameStrc* pGame, D2UnitStrc* pUn
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pTarget);
     if (pRoom && !DUNGEON_IsRoomInTown(pRoom))
     {
-        sub_6FC6A810(pGame, pRoom, 0, 0, pTarget, nSummonId, 0);
+        MONSTERSPAWN_SpawnBonePrison(pGame, pRoom, 0, 0, pTarget, nSummonId, 0);
         return 1;
     }
 

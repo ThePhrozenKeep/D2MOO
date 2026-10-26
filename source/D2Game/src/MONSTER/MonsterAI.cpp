@@ -40,7 +40,7 @@
 
 
 //D2Game.0x6FC61190
-void __fastcall sub_6FC61190(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItemCode, DWORD dwILvl, DWORD dwQuality)
+void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItemCode, DWORD dwILvl, DWORD dwQuality)
 {
     if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER)
     {
@@ -83,7 +83,7 @@ void __fastcall sub_6FC61190(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItem
 }
 
 //D2Game.0x6FC61270
-void __fastcall sub_6FC61270(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nId, D2MercDataStrc* pMercData, int32_t bDead)
+void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nId, D2MercDataStrc* pMercData, int32_t bDead)
 {
     if (!pPlayer || !pUnit || !pMercData || pPlayer->dwUnitType != UNIT_PLAYER)
     {
@@ -375,7 +375,7 @@ void __fastcall MONSTERAI_RemoveInteractInfoFor(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC61AB0
-void __fastcall sub_6FC61AB0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pNpc, D2MonsterInteractStrc* pMonInteract)
+void __fastcall MONSTERAI_ActivateNpcInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pNpc, D2MonsterInteractStrc* pMonInteract)
 {
     for (D2InteractInfoStrc* pInteractInfo = pMonInteract->pInteractInfo; pInteractInfo; pInteractInfo = pInteractInfo->pNext)
     {
@@ -414,7 +414,7 @@ void __fastcall D2GAME_NPCS_SetInteractTrading_6FC61AF0(D2UnitStrc* pNPC, D2Unit
 }
 
 //D2Game.0x6FC61B30
-int32_t __fastcall sub_6FC61B30(D2UnitStrc* pMonster, D2UnitStrc* pPlayer)
+int32_t __fastcall MONSTERAI_IsTrading(D2UnitStrc* pMonster, D2UnitStrc* pPlayer)
 {
     if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER || !pMonster->pMonsterData || !pMonster->pMonsterData->pMonInteract)
     {
@@ -433,7 +433,7 @@ int32_t __fastcall sub_6FC61B30(D2UnitStrc* pMonster, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC61B70
-void __fastcall sub_6FC61B70(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, D2MonsterInteractStrc* pMonInteract)
+void __fastcall MONSTERAI_EndNpcInteraction(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, D2MonsterInteractStrc* pMonInteract)
 {
     QUESTS_NPCDeactivate(pGame, pPlayer, pNpc);
 
@@ -472,7 +472,7 @@ void __fastcall sub_6FC61B70(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 }
 
 //D2Game.0x6FC61C70
-void __fastcall sub_6FC61C70(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2MonsterInteractStrc* pMonInteract, char a5)
+void __fastcall MONSTERAI_StartNpcInteraction(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2MonsterInteractStrc* pMonInteract, char nQuestFlags)
 {
     if (SUNIT_GetInteractUnit(pGame, pUnit))
     {
@@ -532,13 +532,13 @@ void __fastcall sub_6FC61C70(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
     QUESTS_SendCurrentFlags(pGame, pClient);
 
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
-    D2GAME_SendPacket0x28_6FC3F2F0(pClient, 0x28u, UNIT_MONSTER, pTarget->dwUnitId, pPlayerData->pQuestData[pGame->nDifficulty], a5);
+    D2GAME_SendPacket0x28_6FC3F2F0(pClient, 0x28u, UNIT_MONSTER, pTarget->dwUnitId, pPlayerData->pQuestData[pGame->nDifficulty], nQuestFlags);
 }
 
 //D2Game.0x6FC61E30
-int32_t __fastcall sub_6FC61E30(D2UnitStrc* pUnit, int32_t a2, int32_t a3)
+int32_t __fastcall MONSTERAI_SetTargetOverride(D2UnitStrc* pUnit, int32_t nTargetType, int32_t nTargetGUID)
 {
-    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || a2 >= 5)
+    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || nTargetType >= 5)
     {
         return 0;
     }
@@ -546,8 +546,8 @@ int32_t __fastcall sub_6FC61E30(D2UnitStrc* pUnit, int32_t a2, int32_t a3)
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
     if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_SWITCHAI] && pUnit->pMonsterData)
     {
-        pUnit->pMonsterData->unk0x38 = a2;
-        pUnit->pMonsterData->unk0x34 = a3;
+        pUnit->pMonsterData->unk0x38 = nTargetType;
+        pUnit->pMonsterData->unk0x34 = nTargetGUID;
         return 1;
     }
 
@@ -555,7 +555,7 @@ int32_t __fastcall sub_6FC61E30(D2UnitStrc* pUnit, int32_t a2, int32_t a3)
 }
 
 //D2Game.0x6FC61EC0
-int32_t __fastcall sub_6FC61EC0(D2UnitStrc* pMonster)
+int32_t __fastcall MONSTERAI_GetTargetOverrideType(D2UnitStrc* pMonster)
 {
     if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
     {
@@ -566,7 +566,7 @@ int32_t __fastcall sub_6FC61EC0(D2UnitStrc* pMonster)
 }
 
 //D2Game.0x6FC61EE0
-int32_t __fastcall sub_6FC61EE0(D2UnitStrc* pMonster)
+int32_t __fastcall MONSTERAI_GetTargetOverrideGUID(D2UnitStrc* pMonster)
 {
     if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
     {
@@ -577,7 +577,7 @@ int32_t __fastcall sub_6FC61EE0(D2UnitStrc* pMonster)
 }
 
 //D2Game.0x6FC61F00
-void __fastcall sub_6FC61F00(D2UnitStrc* pMonster)
+void __fastcall MONSTERAI_ClearTargetOverride(D2UnitStrc* pMonster)
 {
     if (pMonster && pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
     {

@@ -120,7 +120,7 @@ void __fastcall MONSTER_Initialize(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
         pMonster->pMonsterData->pMonInteract = MONSTERAI_AllocMonsterInteract(pGame);
         pMonster->pMonsterData->pMonstatsTxt = MONSTERMODE_GetMonStatsTxtRecord(pMonster->dwClassId);
 
-        MONSTER_InitializeStatsAndSkills(pGame, pRoom, pMonster, sub_6FC67FA0(pGame->pMonReg, pRoom, pMonster));
+        MONSTER_InitializeStatsAndSkills(pGame, pRoom, pMonster, MONSTERREGION_GetMonsterComponentData(pGame->pMonReg, pRoom, pMonster));
         AITHINK_ExecuteAiFn(pGame, pMonster, pMonster->pMonsterData->pAiControl, AISPECIALSTATE_NONE);
         pMonster->pMonsterData->dwTxtLevelNo = DUNGEON_GetLevelIdFromRoom(pRoom);
 
@@ -302,7 +302,7 @@ void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoom
 }
 
 //D2Game.0x6FC60B10
-int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc* pMonster, int32_t nX, int32_t nY, int32_t a5)
+int32_t __fastcall MONSTER_SetVelocityAndPosition(D2GameStrc* pGame, D2UnitStrc* pMonster, int32_t nX, int32_t nY, int32_t bUnusedSkipRoomUpdate)
 {
     int32_t nAnimMode = 0;
     if (pMonster)

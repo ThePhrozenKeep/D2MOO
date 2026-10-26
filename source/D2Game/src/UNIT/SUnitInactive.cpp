@@ -122,18 +122,18 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 
 					if (nType == 0)
 					{
-						pUnit = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+						pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 
 						if (!pUnit)
 						{
-							pUnit = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, 5, nFlags);
+							pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, 5, nFlags);
 
 							if (!pUnit)
 							{
 								D2CoordStrc pCoord = {};
-								if (sub_6FC66260(pGame, pRoom, 0, nClassId, &pCoord.nX, &pCoord.nY, 0))
+								if (MONSTERREGION_FindSpawnLocation(pGame, pRoom, 0, nClassId, &pCoord.nX, &pCoord.nY, 0))
 								{
-									pUnit = sub_6FC6A0F0(pGame, pRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+									pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 									if (!pUnit)
 									{
 										pCoord.nX = nX;
@@ -142,7 +142,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 										D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 										if (ppRoom)
 										{
-											pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+											pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 										}
 									}
 								}
@@ -154,7 +154,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 									D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 									if (ppRoom)
 									{
-										pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+										pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 									}
 								}
 							}
@@ -162,11 +162,11 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 					}
 					else if (nType == 1)
 					{
-						pUnit = sub_6FC6FBA0(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nNameSeed, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_CHAMPION, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_SUPERUNIQUE, pInactiveMonsterNode->nBossHcIdx, pInactiveMonsterNode->nMonUMods);
+						pUnit = MONSTERUNIQUE_RestoreUniqueMonster(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nNameSeed, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_CHAMPION, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_SUPERUNIQUE, pInactiveMonsterNode->nBossHcIdx, pInactiveMonsterNode->nMonUMods);
 					}
 					else if (nType == 2)
 					{
-						pUnit = sub_6FC6FDC0(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nMonUMods);
+						pUnit = MONSTERUNIQUE_RestoreMinion(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nMonUMods);
 					}
 
 					int32_t nOldAlign = UNIT_ALIGNMENT_EVIL;
@@ -241,7 +241,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						AIGENERAL_FreeAllMinionLists(pGame, pInactiveMonsterNode->pMinionList);
 					}
 
-					sub_6FC682C0(pGame->pMonReg, pInactiveMonsterNode->nLevelId, DUNGEON_GetLevelIdFromRoom(pRoom), nOldAlign, nMode == MONMODE_DEAD, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_UNKSUMMONERFLAG, pUnit);
+					MONSTERREGION_AdjustCountsForInactiveMonster(pGame->pMonReg, pInactiveMonsterNode->nLevelId, DUNGEON_GetLevelIdFromRoom(pRoom), nOldAlign, nMode == MONMODE_DEAD, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_UNKSUMMONERFLAG, pUnit);
 					SUNITINACTIVE_FreeInactiveMonsterNode(pGame, pInactiveMonsterNode);
 				}
 				else

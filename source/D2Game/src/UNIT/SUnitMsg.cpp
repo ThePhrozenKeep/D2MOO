@@ -156,7 +156,7 @@ void __fastcall SUNITMSG_SendUnitToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     }
     case UNIT_MONSTER:
     {
-        sub_6FC65C70(pGame, pUnit, pClient);
+        MONSTERMSG_SendMonsterModeUpdate(pGame, pUnit, pClient);
 
         if (STATES_CheckState(pUnit, STATE_VALKYRIE) || pUnit->dwClassId == MONSTER_IRONGOLEM || pUnit->dwClassId == MONSTER_SHADOWWARRIOR || pUnit->dwClassId == MONSTER_SHADOWMASTER)
         {
