@@ -407,7 +407,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask)
             D2LinkStrc* pPrevGameLink;
             for (pPrevGameLink = ptTaskQ->tGameTasks.pPrev; pPrevGameLink != &ptTaskQ->tGameTasks; pPrevGameLink = pPrevGameLink->pPrev)
             {
-                if (TASK_GetGameTaskFromLink(pPrevGameLink)->nScheduledTime <= ptTask->nScheduledTime)
+                if (TASK_GetScheduledTimeDelta(pPrevGameLink, &ptTask->tTaskLink) <= 0)
                     break;
             }
             // Keep the queue ordered by nScheduledTime
@@ -431,7 +431,7 @@ void __fastcall TASK_QueueIncrement(D2TaskQueueStrc* ptTaskQueue, D2GameTaskStrc
     D2LinkStrc* ptPrev;
     for (ptPrev = pGameTasks->pPrev; ptPrev != pGameTasks; ptPrev = ptPrev->pPrev)
     {
-        if (TASK_GetGameTaskFromLink(ptPrev)->nScheduledTime <= pGameTask->nScheduledTime)
+        if (TASK_GetScheduledTimeDelta(ptPrev, &pGameTask->tTaskLink) <= 0)
             break;
     }
     
