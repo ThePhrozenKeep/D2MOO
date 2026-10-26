@@ -303,7 +303,7 @@ static D2LinkStrc* TASK_GetLastTaskFromListHead(D2LinkStrc* pListHead)
     return TASK_LinkList_HasEntries(pListHead) ? pListHead->pPrev : nullptr;
 }
 
-static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
+static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber, D2GameTaskStrc* ptTask)
 {
     GAME_CloseGame(nGameHashKey);
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
@@ -341,6 +341,10 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
             TASK_LinkList_Remove(pNewTaskLink);
         }
         TASK_LinkList_PushFront(&gpTaskQueueLink, pNewTaskLink);
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+        //1.14d: 0x0056483C frees the task GAME_CreateNewEmptyGame / GAME_SendGameInit allocated
+        D2_FREE(ptTask);
+#endif
     }
     --gnGamesCount;
     LeaveCriticalSection(&gTaskSlotsCriticalSection.cs);
@@ -371,7 +375,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask)
             }
             GAME_LogMessage(6, "[SERVER]  Deleting game from sSrvTaskProcessGame(), I/O timeout");
             GAME_LeaveGamesCriticalSection(pGame);
-            TASK_CloseGame(nGameHashKey, nTaskNumber);
+            TASK_CloseGame(nGameHashKey, nTaskNumber, ptTask);
             return;
         }
         int32_t nTick = GetTickCount();
@@ -388,7 +392,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2GameTaskStrc* ptTask)
             {
                 GAME_LogMessage(6, "[SERVER]  Deleting game from sSrvTaskProcessGame(), empty game");
                 GAME_LeaveGamesCriticalSection(pGame);
-                TASK_CloseGame(nGameHashKey, nTaskNumber);
+                TASK_CloseGame(nGameHashKey, nTaskNumber, ptTask);
                 return;
             }
         }

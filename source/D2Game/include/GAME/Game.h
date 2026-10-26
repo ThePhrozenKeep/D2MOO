@@ -256,9 +256,6 @@ struct D2GameStrc : TSHashObject<D2GameStrc, HASHKEY_NONE> // called SGAMEDATA i
 #endif
 }; // Size = 0x1DE8 (1.10), 0x1DF4 (1.11-1.14)
 
-// TODO: 1.10f queues tGameTask and 1.14d a separately allocated task; this one lies past the end of the D2GameStrc
-inline D2GameTaskStrc* GAME_GetTrailingGameTask(D2GameStrc* pGame) { return reinterpret_cast<D2GameTaskStrc*>(&pGame[1]); }
-
 struct D2GameDataTableStrc
 {
 	TSExportTableSyncReuse<D2GameStrc, HGAMEDATA, GAMEDATALOCKEDHANDLE, CCritSect> tHashTable;
