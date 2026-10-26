@@ -25,8 +25,8 @@ struct D2LinkStrc
 struct D2TaskQueueStrc
 {
 	int32_t nQueueIndex;						//0x00 index in the task queue slots
-	int32_t nGameCount;							//0x04 number of games queued on this queue
-	D2LinkStrc tGameTasks;						//0x08 the queued games' D2GameTaskStrc::tTaskLink, ordered by nScheduledTime
+	int32_t nGameCount;							//0x04
+	D2LinkStrc tGameTasks;						//0x08 D2GameTaskStrc::tTaskLink, ordered by nScheduledTime
 	D2LinkStrc tQueueLink;						//0x10 link in the list of task queues
 };
 
@@ -56,7 +56,7 @@ void __stdcall TASK_FreeAllQueueSlots();
 //D2Game.0x6FC405B0 (#10041)
 int32_t __cdecl TASK_CreateQueue();
 //D2Game.0x6FC407A0 (#10042)
-BOOL __fastcall TASK_QueueGame(D2GameTaskStrc* pTask, int nTaskType, uint32_t nGameHashKey);
+BOOL __fastcall TASK_QueueGame(D2GameTaskStrc* pGameTask, int nTaskType, uint32_t nGameHashKey);
 //D2Game.0x6FC40930 (#10043)
 int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, D2GameTaskStrc** ppTask);
 //D2Game.0x6FC40A40 (#10044)
