@@ -541,7 +541,7 @@ void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 
 				if (MONSTERAI_HasInteractUnit(pMonInteract))
 				{
-					D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pJerhyn, 0);
+					MONSTERAI_CloseNpcInteractions(pQuestData->pGame, pJerhyn, 0);
 				}
 				else
 				{
@@ -597,7 +597,7 @@ void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2Un
 
 			if (MONSTERAI_HasInteractUnit(pMonInteract))
 			{
-				D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pJerhyn, 0);
+				MONSTERAI_CloseNpcInteractions(pQuestData->pGame, pJerhyn, 0);
 				return;
 			}
 

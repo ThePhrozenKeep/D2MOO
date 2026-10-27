@@ -6271,7 +6271,7 @@ int32_t __fastcall ITEMMODE_SelectRandomMiscItemId(D2GameStrc* pGame, D2SeedStrc
 }
 
 //Inlined in D2Game.0x6FC4C5F0
-int32_t __fastcall sub_6FC4C5F0_End(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop, D2ItemsTxt* pItemsTxtRecord)
+int32_t __fastcall ITEMMODE_FinalizeItemQuality(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop, D2ItemsTxt* pItemsTxtRecord)
 {
     const int32_t nItemQuality = ITEMS_GetItemQuality(pItem);
     if (nItemQuality <= 0 || nItemQuality >= 10)
@@ -6586,7 +6586,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                                         ITEMS_SetFileIndex(pItem, i);
                                         ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 0);
                                         ITEMMODS_AssignProperty(3, nullptr, pItem, nullptr, 0, 0);
-                                        return sub_6FC4C5F0_End(pGame, pItem, pItemDrop, pItemsTxtRecord);
+                                        return ITEMMODE_FinalizeItemQuality(pGame, pItem, pItemDrop, pItemsTxtRecord);
                                     }
                                 }
                             }
@@ -6650,7 +6650,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                             {
                                 ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 0);
                                 ITEMMODS_AssignProperty(3, nullptr, pItem, nullptr, 0, 0);
-                                return sub_6FC4C5F0_End(pGame, pItem, pItemDrop, pItemsTxtRecord);
+                                return ITEMMODE_FinalizeItemQuality(pGame, pItem, pItemDrop, pItemsTxtRecord);
                             }
                             else
                             {
@@ -6663,7 +6663,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                 {
                     if (ITEMS_GetUniqueColumnFromItemsTxt(pItem))
                     {
-                        return sub_6FC4C5F0_End(pGame, pItem, pItemDrop, pItemsTxtRecord);
+                        return ITEMMODE_FinalizeItemQuality(pGame, pItem, pItemDrop, pItemsTxtRecord);
                     }
 
                     ITEMS_SetFileIndex(pItem, -1);
@@ -6682,7 +6682,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                     ITEMMODS_AssignProperty(3, nullptr, pItem, nullptr, 0, 0);
                 }
 
-                return sub_6FC4C5F0_End(pGame, pItem, pItemDrop, pItemsTxtRecord);
+                return ITEMMODE_FinalizeItemQuality(pGame, pItem, pItemDrop, pItemsTxtRecord);
             }
         }
 
@@ -6809,5 +6809,5 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
         return 0;
     }
 
-    return sub_6FC4C5F0_End(pGame, pItem, pItemDrop, pItemsTxtRecord);
+    return ITEMMODE_FinalizeItemQuality(pGame, pItem, pItemDrop, pItemsTxtRecord);
 }

@@ -461,6 +461,6 @@ void __fastcall AITHINK_ExecuteMonsterAiTick(D2GameStrc* pGame, D2UnitStrc* pUni
 //D2Game.0x6FCF0D10
 int32_t __fastcall D2GAME_AICORE_MinionLeash_6FCF0D10(D2GameStrc* pGame, D2UnitStrc* pMonster, D2AiTickParamStrc* pAiTickParam);
 //Inlined in D2Game.0x6FCF0E40
-int32_t __fastcall sub_6FCF0E40_inline(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);
+int32_t __fastcall AITHINK_RetargetBlockedApproach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);
 //D2Game.0x6FCF0E40
 int32_t __fastcall AITHINK_HandleMonsterAiPreActions(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam);

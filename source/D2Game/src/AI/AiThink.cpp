@@ -17474,7 +17474,7 @@ int32_t __fastcall D2GAME_AICORE_MinionLeash_6FCF0D10(D2GameStrc* pGame, D2UnitS
 }
 
 //Inlined in D2Game.0x6FCF0E40
-int32_t __fastcall sub_6FCF0E40_inline(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+int32_t __fastcall AITHINK_RetargetBlockedApproach(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 	if (!pUnit)
 	{
@@ -17543,7 +17543,7 @@ int32_t __fastcall AITHINK_HandleMonsterAiPreActions(D2GameStrc* pGame, D2UnitSt
 
 	if (SUNIT_IsDead(pUnit) || !AIUTIL_CheckAiControlFlag(pAiTickParam->pAiControl, 0x20u) || AI_RollPercentage(pUnit) >= 40)
 	{
-		return sub_6FCF0E40_inline(pGame, pUnit, pAiTickParam);
+		return AITHINK_RetargetBlockedApproach(pGame, pUnit, pAiTickParam);
 	}
 
 	int32_t nBaseId = -1;
@@ -17580,13 +17580,13 @@ int32_t __fastcall AITHINK_HandleMonsterAiPreActions(D2GameStrc* pGame, D2UnitSt
 		|| ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) >= 15
 		|| !MONSTERREGION_FindSpawnLocation(pGame, pRoom, D2Common_10096(pRoom, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)), nBaseId, &nX, &nY, 0))
 	{
-		return sub_6FCF0E40_inline(pGame, pUnit, pAiTickParam);
+		return AITHINK_RetargetBlockedApproach(pGame, pUnit, pAiTickParam);
 	}
 
 	pRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
 	if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
 	{
-		return sub_6FCF0E40_inline(pGame, pUnit, pAiTickParam);
+		return AITHINK_RetargetBlockedApproach(pGame, pUnit, pAiTickParam);
 	}
 
 	if (nLifePercentage < 30 && ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < 25 && !STATES_CheckState(pUnit, STATE_PREVENTHEAL))
