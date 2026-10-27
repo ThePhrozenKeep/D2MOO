@@ -304,7 +304,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
                 UNITS_SetYForStaticUnit(pIronGolemItem, CLIENTS_GetUnitY(pPlayer));
                 UNITS_SetTargetUnitForDynamicUnit(pPlayer, pIronGolemItem);
 
-                D2GAME_SKILLS_Handler_6FD12BA0(pGame, pPlayer, SKILL_IRONGOLEM, SKILLS_GetSkillLevel(pPlayer, pSkill, 1), 1, 0, 0);
+                SKILLS_ExecuteSkill(pGame, pPlayer, SKILL_IRONGOLEM, SKILLS_GetSkillLevel(pPlayer, pSkill, 1), 1, 0, 0);
             }
         }
 

@@ -2187,7 +2187,7 @@ void __fastcall D2GAME_SHRINES_CombatBoost_6FC77690(D2ObjOperateFnStrc* pOp, D2S
     curse.nStatValue = pShrinesTxtRecord->dwArg1;
     curse.pStateRemoveCallback = 0;
 
-    STATLIST_SetStat(sub_6FD10EC0(&curse), STAT_TOHIT, nValue, 0);
+    STATLIST_SetStat(SKILLS_ApplyStateEffect(&curse), STAT_TOHIT, nValue, 0);
 }
 
 //1.10f: Inlined
@@ -2291,7 +2291,7 @@ void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2Shrin
     curse.nState = pShrineRecord->unk0x08;
     curse.pStateRemoveCallback = OBJMODE_RemoveStaminaShrine;
 
-    D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
+    D2StatListStrc* pStatList = SKILLS_ApplyStateEffect(&curse);
     STATLIST_SetStat(pStatList, STAT_STAMINA, 2 * curse.nStatValue, 0);
     STATLIST_SetStat(pStatList, STAT_STAMINARECOVERYBONUS, 1000, 0);
 }
@@ -2299,7 +2299,7 @@ void __fastcall D2GAME_SHRINES_Stamina_6FC779C0(D2ObjOperateFnStrc* pOp, D2Shrin
 //D2Game.0x6FC77AB0
 void __fastcall OBJMODE_RemoveStaminaShrine(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
-    sub_6FD10E50(pUnit, nState, pStatList);
+    SKILLS_RemoveStateAndRefreshPassives(pUnit, nState, pStatList);
     STATLIST_SetUnitStat(pUnit, STAT_STAMINA, STATLIST_GetMaxStaminaFromUnit(pUnit), 0);
 }
 
@@ -2327,7 +2327,7 @@ void __fastcall D2GAME_SHRINES_DefensiveBoost_6FC77AE0(D2ObjOperateFnStrc* pOp, 
     curse.nState = pShrineRecord->unk0x08;
     curse.pStateRemoveCallback = 0;
 
-    sub_6FD10EC0(&curse);
+    SKILLS_ApplyStateEffect(&curse);
 }
 
 //D2Game.0x6FC77BA0
@@ -2344,15 +2344,15 @@ void __fastcall D2GAME_SHRINES_SkillBoost_6FC77BA0(D2ObjOperateFnStrc* pOp, D2Sh
     curse.nStat = STAT_MAXSTAMINA;
     curse.pStateRemoveCallback = OBJMODE_RemoveSkillShrine;
     curse.nState = gpShrineTable_6FD28D18[pShrinesTxtRecord->nCode].unk0x08;
-    sub_6FD10EC0(&curse);
-    sub_6FD14C30(pOp->pPlayer);
+    SKILLS_ApplyStateEffect(&curse);
+    SKILLS_RefreshPassivesAndPetLimits(pOp->pPlayer);
 }
 
 //D2Game.0x6FC77C10
 void __fastcall OBJMODE_RemoveSkillShrine(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
-    sub_6FD10E50(pUnit, nState, pStatList);
-    sub_6FD14C30(pUnit);
+    SKILLS_RemoveStateAndRefreshPassives(pUnit, nState, pStatList);
+    SKILLS_RefreshPassivesAndPetLimits(pUnit);
 }
 
 //D2Game.0x6FC77C30
@@ -3268,7 +3268,7 @@ int32_t __fastcall OBJECTS_OperateFunction15_Portal(D2ObjOperateFnStrc* pOp, int
                     EVENT_SetEvent(pGame, pPlayer, EVENTTYPE_REMOVESTATE, pGame->dwGameFrame + 75, 0, 0);
                     STATES_ToggleState(pPlayer, STATE_JUST_PORTALED, 1);
                     STATLIST_SetState(pStatList, STATE_JUST_PORTALED);
-                    STATLIST_SetStatRemoveCallback(pStatList, sub_6FD10E50);
+                    STATLIST_SetStatRemoveCallback(pStatList, SKILLS_RemoveStateAndRefreshPassives);
                     D2COMMON_10475_PostStatToStatList(pPlayer, pStatList, 1);
                 }
             }

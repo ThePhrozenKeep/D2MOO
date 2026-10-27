@@ -95,10 +95,10 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
         {
             if (!SUNITEVENT_GetEvent(pGame, pOwner, 2, nLayer_StatId, nLayer_StatId))
             {
-                sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
+                SKILLS_RegisterUnitEvent(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[0]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[0], 2, nLayer_StatId);
                 if (pItemStatCostTxtRecord->wItemEvent[1] > 0)
                 {
-                    sub_6FD156A0(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
+                    SKILLS_RegisterUnitEvent(pGame, pOwner, D2C_UnitEventTypes(pItemStatCostTxtRecord->wItemEvent[1]), nLayer_StatId, 0, pItemStatCostTxtRecord->wItemEventFunc[1], 2, nLayer_StatId);
                 }
             }
         }
@@ -181,7 +181,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             }
 
             SKILLS_RefreshSkill(pOwner, nSkillId);
-            sub_6FD108D0(pGame, pOwner, nSkillId);
+            SKILLS_UpdatePetLimitForSkill(pGame, pOwner, nSkillId);
 
             if (nNewValue <= 0)
             {
@@ -289,7 +289,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             if (nCharges <= 0 || STATLIST_GetOwner(pOther, nullptr) != pOwner)
             {
                 D2Common_10954(pOwner, nOtherUnitGUID, nSkillId, nSkillLevel, 0, 1);
-                sub_6FD108D0(pGame, pOwner, nSkillId);
+                SKILLS_UpdatePetLimitForSkill(pGame, pOwner, nSkillId);
             }
             else
             {
@@ -307,7 +307,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             {
                 if (!STATES_CheckState(pOwner, nStateId))
                 {
-                    sub_6FD11C90(pOwner, nStateId, 0);
+                    SKILLS_RemoveStatesInGroup(pOwner, nStateId, 0);
                     STATES_ToggleState(pOwner, nStateId, 1);
                     STATES_ToggleGfxStateFlag(pOwner, nStateId, 1);
                 }
@@ -316,7 +316,7 @@ void __fastcall D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910(D2GameStrc* pGam
             {
                 if (STATES_CheckState(pOwner, nStateId))
                 {
-                    sub_6FD11C90(pOwner, nStateId, 1);
+                    SKILLS_RemoveStatesInGroup(pOwner, nStateId, 1);
                     STATES_ToggleState(pOwner, nStateId, 0);
                     STATES_ToggleGfxStateFlag(pOwner, nStateId, 1);
                 }
@@ -419,7 +419,7 @@ int32_t __fastcall ITEMMODE_UpdateBookScrollSkillQuantity(D2UnitStrc* pUnit, D2U
         else
         {
             STATLIST_AddUnitStat(pUnit, STAT_SKILLPTS, nQuantity, 0);
-            sub_6FD136E0(pUnit, nSkillId);
+            SKILLS_TryIncreaseSkillLevel(pUnit, nSkillId);
 
             pSkill = SKILLS_GetSkillById(pUnit, nSkillId, -1u);
             D2_ASSERT(pSkill);

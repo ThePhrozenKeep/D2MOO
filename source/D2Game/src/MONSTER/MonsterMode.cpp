@@ -77,11 +77,11 @@ constexpr MonEventFunc gpMonsterEventFunctions[] =
     AITHINK_ExecuteMonsterAiTick,
     D2GAME_MONSTER_ApplyStatRegen_6FC63440,
     nullptr,
-    D2GAME_MONSTERS_AiFunction06_6FD14370,
+    SKILLS_EventCallback_ActiveState,
     MONSTERMODE_EventFreeHoverText,
     MONSTERUNIQUE_EventExecuteUModCallbacks,
-    D2GAME_MONSTERS_AiFunction09_6FD13470,
-    D2GAME_MONSTERS_AiFunction10_6FD13610,
+    SKILLS_EventCallback_PeriodicSkillAura,
+    SKILLS_EventCallback_ItemAura,
     MONSTERMODE_EventClearTargetOverride,
     nullptr,
     MONSTERMODE_EventUpdateStatListExpirations,
@@ -176,7 +176,7 @@ void __fastcall MONSTERMODE_UpdateModeAttackStats(D2UnitStrc* pUnit, int32_t nMo
     }
     
     D2MonSkillInfoStrc monSkillInfo = {};
-    sub_6FD14D20(pUnit, nMode, &monSkillInfo);
+    SKILLS_FillMinionSkillDamage(pUnit, nMode, &monSkillInfo);
 
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pUnit, 1);
     if (!pStatList)
@@ -887,7 +887,7 @@ int32_t __fastcall MONSTERMODE_StartDeath(D2GameStrc* pGame, D2ModeChangeStrc* p
         {
             const int32_t nX = CLIENTS_GetUnitX(pModeChange->pUnit);
             const int32_t nY = CLIENTS_GetUnitY(pModeChange->pUnit);
-            D2UnitStrc* pMissile = sub_6FD11420(pGame, MISSILE_MONSTERCORPSEEXPLODE, pModeChange->pUnit, 0, 1, 0, 0, nX, nY, 1);
+            D2UnitStrc* pMissile = SKILLS_CreateMissileAtOffset(pGame, MISSILE_MONSTERCORPSEEXPLODE, pModeChange->pUnit, 0, 1, 0, 0, nX, nY, 1);
             if (pMissile)
             {
                 D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
@@ -1277,7 +1277,7 @@ int32_t __fastcall MONSTERMODE_StartAttackOrSkill(D2GameStrc* pGame, D2ModeChang
 
     if (UNITS_GetUsedSkill(pModeChange->pUnit))
     {
-        sub_6FD12FD0(pGame, pModeChange->pUnit);
+        SKILLS_StartUsedSkill(pGame, pModeChange->pUnit);
     }
 
     return 1;
@@ -1347,7 +1347,7 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
                 nSkillLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
             }
 
-            if (sub_6FD11420(pGame, nMissileId, pUnit, 0, nSkillLevel, 0, 0, 0, 0, 1))
+            if (SKILLS_CreateMissileAtOffset(pGame, nMissileId, pUnit, 0, nSkillLevel, 0, 0, 0, 0, 1))
             {
                 const int32_t nBaseId = D2GAME_GetMonsterBaseId_6FC64B10(pUnit);
                 if (nBaseId == MONSTER_QUILLRAT1)
@@ -1390,7 +1390,7 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
                         }
 
                         D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX + nXOffset, nY + nYOffset);
-                        sub_6FD11420(pGame, nMissileId, pUnit, 0, 1, 0, 0, 0, 0, 0);
+                        SKILLS_CreateMissileAtOffset(pGame, nMissileId, pUnit, 0, 1, 0, 0, 0, 0, 0);
                     }
 
                     PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
@@ -1415,7 +1415,7 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
     const int32_t nSkillFlags = SKILLS_GetFlags(pSkill);
     if (!(nSkillFlags & 1))
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
         UNITS_StopSequence(pUnit);
         return 1;
     }
@@ -1424,27 +1424,27 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
 
     if (SUNIT_UpdateUnitPath(pGame, pUnit) != 2)
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
         UNITS_StopSequence(pUnit);
         return 1;
     }
 
     SKILLS_SetFlags(pSkill, nSkillFlags | 2);
 
-    sub_6FD13410(pGame, pUnit);
+    SKILLS_ExecuteUsedSkill(pGame, pUnit);
 
     if (pUnit && pUnit->dwAnimMode == MONMODE_SEQUENCE)
     {
         if (pUnit->dwFlags & UNITFLAG_SKSRVDOFUNC)
         {
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
         }
     }
     else
     {
         if (pUnit->nActionFrame == 1)
         {
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
         }
     }
 
@@ -1584,7 +1584,7 @@ int32_t __fastcall MONSTERMODE_StartSequence(D2GameStrc* pGame, D2ModeChangeStrc
         pModeChange->pUnit->dwFlags &= 0xFFFFFFBF;
     }
 
-    return sub_6FD12FD0(pGame, pModeChange->pUnit);
+    return SKILLS_StartUsedSkill(pGame, pModeChange->pUnit);
 }
 
 //D2Game.0x6FC64E90
@@ -1607,7 +1607,7 @@ int32_t __fastcall MONSTERMODE_UpdateSequence(D2GameStrc* pGame, D2UnitStrc* pUn
         if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
         {
             SKILLS_SetFlags(pSkill, nSkillFlags | 2);
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
             bCheck = 0;
         }
     }
@@ -1615,7 +1615,7 @@ int32_t __fastcall MONSTERMODE_UpdateSequence(D2GameStrc* pGame, D2UnitStrc* pUn
     const int32_t nActionFrame = pUnit->nActionFrame;
     if (nActionFrame == 4 || bCheck && !((pUnit->dwFlags >> 6) & 1) && (nActionFrame == 1 || nActionFrame == 2))
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
     }
 
     UNITS_StopSequence(pUnit);

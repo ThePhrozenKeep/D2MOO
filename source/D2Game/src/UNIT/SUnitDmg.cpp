@@ -1364,7 +1364,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 				D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pAttacker->pGame->pMemoryPool, 2u, nStunEndFrame, pAttacker->dwUnitType, pAttacker->dwUnitId);
 				EVENT_SetEvent(pAttacker->pGame, pDefender, EVENTTYPE_REMOVESTATE, nStunEndFrame, 0, 0);
 				STATLIST_SetState(pNewStatList, STATE_STUNNED);
-				STATLIST_SetStatRemoveCallback(pNewStatList, sub_6FD10E50);
+				STATLIST_SetStatRemoveCallback(pNewStatList, SKILLS_RemoveStateAndRefreshPassives);
 				D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
 				STATES_ToggleState(pDefender, STATE_STUNNED, 1);
 			}
@@ -1390,7 +1390,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 				D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
 				EVENT_SetEvent(pGame, pDefender, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
 			}
-			sub_6FCF8DD0(pDefender);
+			SKILLS_RemoveStatesOnHit(pDefender);
 		}
 	}
 
@@ -1497,7 +1497,7 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nPoisonDamage, 0);
 	STATLIST_SetState(pNewStatList, STATE_POISON);
-	STATLIST_SetStatRemoveCallback(pNewStatList, sub_6FD10E50);
+	STATLIST_SetStatRemoveCallback(pNewStatList, SKILLS_RemoveStateAndRefreshPassives);
 	D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
 }
 
@@ -1544,7 +1544,7 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nBurnDamage, 0);
 	STATLIST_SetState(pNewStatList, STATE_BURNING);
-	STATLIST_SetStatRemoveCallback(pNewStatList, sub_6FD10E50);
+	STATLIST_SetStatRemoveCallback(pNewStatList, SKILLS_RemoveStateAndRefreshPassives);
 	D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
 }
 
@@ -2438,7 +2438,7 @@ void __fastcall SUNITDMG_PreventMonsterHeal(D2UnitStrc* pAttacker, D2UnitStrc* p
 		curse.nStat = STAT_ARMORCLASS;
 		curse.nStatValue = 0;
 		curse.nState = STATE_PREVENTHEAL;
-		sub_6FD10EC0(&curse);
+		SKILLS_ApplyStateEffect(&curse);
 	}
 }
 

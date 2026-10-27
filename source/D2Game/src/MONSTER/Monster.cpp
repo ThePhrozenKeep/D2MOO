@@ -298,7 +298,7 @@ void __fastcall MONSTER_InitializeStatsAndSkills(D2GameStrc* pGame, D2ActiveRoom
         }
     }
 
-    sub_6FCF9580(pGame, nullptr, pUnit, -1, nLevel, nLevel, 1);
+    SKILLS_EquipMonsterFromTable(pGame, nullptr, pUnit, -1, nLevel, nLevel, 1);
 }
 
 //D2Game.0x6FC60B10
