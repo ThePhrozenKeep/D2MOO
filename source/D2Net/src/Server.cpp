@@ -37,6 +37,7 @@ int32_t __stdcall SERVER_WSAGetLastError()
 }
 
 //D2Net.0x6FC01B60 (#10030)
+//1.14d: 0x0052B920
 int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
 	constexpr int32_t gServerPacketSizeTable[] =

@@ -30,6 +30,7 @@ constexpr int32_t SERVER_PACKET_QUEUE_ADMIN = 2;	// Packet 0xFF
 //D2Net.0x6FC01B30 (#10024)
 D2NET_DLL_DECL int32_t __stdcall SERVER_WSAGetLastError();
 //D2Net.0x6FC01B60 (#10030)
+//1.14d: 0x0052B920
 D2NET_DLL_DECL int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);
 //D2Net.0x6FC01E60 (#10031)
 D2NET_DLL_DECL int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);
