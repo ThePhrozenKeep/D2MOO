@@ -18,6 +18,7 @@ uint32_t gnCharTemplateStartIds[64];
 // D2Common.0x6FDE9604
 D2BeltsTxt* gpBeltsTxtTable;
 // D2Common.0x6FDE9608
+//1.14d: 0x0096BC30
 D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
 //1.14d: 0x00744304

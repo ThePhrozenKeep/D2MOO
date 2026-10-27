@@ -21,6 +21,7 @@
 
 
 //D2Game.0x6FD3B380
+//1.14d: 0x0073E140
 D2NPCMessageTableStrc gpAct4Q3NpcMessages[] =
 {
 	{

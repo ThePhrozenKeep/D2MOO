@@ -7,6 +7,7 @@
 
 
 //D2Game.0x6FD3BAE8
+//1.14d: 0x00732FF8
 D2NPCMessageTableStrc gpAct5IntroNpcMessages[] =
 {
 	{
