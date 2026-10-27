@@ -90,6 +90,10 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct2Canyon(D2DrlgLevelLinkDataStrc* pLevelLinkD
 BOOL __fastcall DRLGOUTPLACE_LinkAct4Outdoors(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration);
 //D2Common.0x6FD82300
 BOOL __fastcall DRLGOUTPLACE_LinkAct4ChaosSanctum(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration);
+#ifdef D2_VERSION_HAS_UBERS
+//1.14d: 0x00677030
+BOOL __fastcall DRLGOUTPLACE_LinkAct5Ubers(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration);
+#endif
 //D2Common.0x6FD82360
 void __fastcall sub_6FD82360(D2DrlgLevelStrc* pLevel, int nIteration, int* pRand);
 //D2Common.0x6FD823C0
