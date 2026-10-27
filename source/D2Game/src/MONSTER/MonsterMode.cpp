@@ -1290,8 +1290,8 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
-        // TODO: v10
-        int32_t v10 = 0;
+
+        int32_t bUseRecurringEvent = 0;
         if (pUnit)
         {
             if (pUnit->dwAnimMode < 16)
@@ -1299,20 +1299,20 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
                 const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pUnit->dwAnimMode];
                 if (pMonModeInfoTableRecord->unk0x00)
                 {
-                    v10 = 1;
+                    bUseRecurringEvent = 1;
                 }
                 else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
                     if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pUnit->dwAnimMode >> 3] & gdwBitMasks[pUnit->dwAnimMode & 7])
                     {
-                        v10 = 1;
+                        bUseRecurringEvent = 1;
                     }
                 }
             }
         }
 
-        if (v10)
+        if (bUseRecurringEvent)
         {
             SUNIT_UpdateUnitPath(pGame, pUnit);
             UNITS_StopSequence(pUnit);
@@ -1338,7 +1338,7 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
             }
         }
 
-        int32_t nMissileId = D2Common_11050(pUnit, v10);
+        int32_t nMissileId = D2Common_11050(pUnit, bUseRecurringEvent);
         if (nMissileId >= 0)
         {
             int32_t nSkillLevel = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty)->dwMonsterSkillBonus + 1;
@@ -1766,7 +1766,7 @@ void __fastcall MONSTERMODE_EventEndAnimation(D2GameStrc* pGame, D2UnitStrc* pUn
 //D2Game.0x6FC65220
 int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange, int32_t bClearUsedSkill)
 {
-    // TODO: v12, v13, v31, dwNewDist
+    // TODO: v12, v13, dwNewDist
 
     D2UnitStrc* pUnit = pModeChange->pUnit;
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
@@ -1831,7 +1831,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             pAiParam = pUnit->pMonsterData->pAiParam;
         }
 
-        int32_t v31 = pModeChange->unk0x18;
+        int32_t nVelocityPercent = pModeChange->unk0x18;
         uint8_t nPathType = pModeChange->unk0x14[1];
         uint8_t dwNewDist = pModeChange->unk0x1C;
 
@@ -1842,7 +1842,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
         if (pAiParam->nVelocity)
         {
-            v31 = pAiParam->nVelocity;
+            nVelocityPercent = pAiParam->nVelocity;
         }
 
         if (pAiParam->unk0x20)
@@ -1859,7 +1859,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         if (nPathType == 100)
         {
             nNewPathType = 0;
-            v31 = 0;
+            nVelocityPercent = 0;
         }
         else
         {
@@ -1881,7 +1881,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         }
 
         pAiParam->unk0x14 = v13;
-        pAiParam->unk0x10 = v31;
+        pAiParam->unk0x10 = nVelocityPercent;
 
         ++pGame->dwPathTypesCount[nNewPathType];
 
