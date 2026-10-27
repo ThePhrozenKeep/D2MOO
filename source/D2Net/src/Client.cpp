@@ -24,15 +24,35 @@
 #pragma warning (disable: 28159)
 
 
+//1.10f: D2Net.0x6FC0B088
+//1.14d: 0x00882CE8
 CRITICAL_SECTION gClientCriticalSection;
+//1.10f: D2Net.0x6FC0B0A0
+//1.14d: 0x00882CDC
 D2NetQueuedPacketStrc* gpSystemPacketList;
+//1.10f: D2Net.0x6FC0B0A4
+//1.14d: 0x00882B38
 sockaddr_in gHostSockAddr;
+//1.10f: D2Net.0x6FC0B0B4
+//1.14d: 0x00882CE4
 D2NetQueuedPacketStrc* gpGamePacketList;
+//1.10f: D2Net.0x6FC0B0B8
+//1.14d: 0x00882B34
 D2NetReceiveBufferStrc* gpReceiveBuffer;
+//1.10f: D2Net.0x6FC0B0BC
+//1.14d: 0x00882CD8
 HANDLE ghReceiveThread;
+//1.10f: D2Net.0x6FC0B0C0
+//1.14d: 0x00730AE0
 SOCKET gClientSocket;
+//1.10f: D2Net.0x6FC0B0C4
+//1.14d: 0x00882CE0
 HANDLE ghConnectThread;
+//1.10f: D2Net.0x6FC0B0C8
+//1.14d: 0x00882B48
 WSADATA gWSAData;
+//1.10f: D2Net.0x6FC0B258
+//1.14d: 0x00882B30
 DWORD gdwThreadId;
 BOOL gbStopReceiveThread;
 BOOL gbConnected;

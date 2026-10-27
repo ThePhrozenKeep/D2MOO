@@ -46,6 +46,8 @@ struct D2RosterIterateStrc
 #pragma pack(pop)
 
 
+//1.10f: D2Game.0x6FD4DC1C
+//1.14d: 0x00883D70
 int32_t gnVirtualPlayerCount_6FD4DC1C;
 
 

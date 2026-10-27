@@ -8,6 +8,8 @@
 #pragma warning (disable : 28159)
 
 
+//1.10f: D2Win.0x6F96A8E0
+//1.14d: 0x00841B74
 uint32_t gdwTimeoutTickCount;
 
 

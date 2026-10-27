@@ -20,7 +20,11 @@
 #pragma warning (disable : 28159)
 
 
+//1.10f: D2Win.0x6F8FD8B0
+//1.14d: 0x00841B78
 D2WinEditBoxStrc* dword_6F8FD8B0;
+//1.10f: D2Win.0x6F8FD8B4
+//1.14d: 0x00841B7C
 int dword_6F8FD8B4;
 
 

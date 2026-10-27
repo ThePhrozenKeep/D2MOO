@@ -22,7 +22,11 @@
 #include "D2WinTimer.h"
 
 
+//1.10f: D2Win.0x6F8BE238
+//1.14d: 0x0072DE90
 int32_t dword_6F8BE238;
+//1.10f: D2Win.0x6F96A8DC
+//1.14d: 0x00841B70
 extern int32_t dword_6F96A8DC;
 
 

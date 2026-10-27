@@ -298,6 +298,8 @@ int32_t __fastcall ACT1Q1_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 //1.14d: 0x0058FF90
 void __fastcall ACT1Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
+	//1.10f: D2Game.0x6FD32558
+	//1.14d: 0x00736CD0
 	static const int32_t nIndices[] =
 	{
 		-1, 0, 1, 2, 3, 4
@@ -581,6 +583,8 @@ bool __fastcall ACT1Q1_CanClientFXBeTriggered(D2QuestDataStrc* pQuestData)
 }
 
 //
+//1.10f: D2Game.0x6FCB2610
+//1.14d: 0x005901F0
 void __fastcall ACT1Q1_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_FastRemovePlayerGUID(&pQuestData->tPlayerGUIDs, (pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1));

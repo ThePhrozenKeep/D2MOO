@@ -664,6 +664,8 @@ void __fastcall ACT2Q1_OnRadamentActivated(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //
+//1.10f: D2Game.0x6FCA4D40
+//1.14d: 0x00598980
 void __fastcall ACT2Q1_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pQuestArg);

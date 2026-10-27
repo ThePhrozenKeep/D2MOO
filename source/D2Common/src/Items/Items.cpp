@@ -1066,6 +1066,7 @@ void __stdcall ITEMS_SetOrRemoveFlag(int* pFlags, int nFlag, BOOL bSet)
 	}
 }
 
+//1.14d: 0x0062B450
 static int ITEMS_GetBonusStatFromSockets(D2UnitStrc* pItem, D2C_ItemStats stat)
 {
 	int nStatBonusFromSockets = 0;
@@ -1707,16 +1708,22 @@ uint32_t __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem)
 //1.14d: 0x00628A40
 BOOL __stdcall ITEMS_ComparePotionTypes(D2UnitStrc* pItem1, D2UnitStrc* pItem2)
 {
+	//1.10f: D2Common.0x6FDE3BC8
+	//1.14d: 0x00744684
 	static const int szHealthPotCodes[] =
 	{
 		' 1ph', ' 2ph', ' 3ph', ' 4ph', ' 5ph'
 	};
 
+	//1.10f: D2Common.0x6FDE3BE0
+	//1.14d: 0x0074466C
 	static const int szManaPotCodes[] =
 	{
 		' 1pm', ' 2pm', ' 3pm', ' 4pm', ' 5pm'
 	};
 
+	//1.10f: D2Common.0x6FDE3BF8
+	//1.14d: 0x00744660
 	static const int szRejuvPotCodes[] =
 	{
 		' lvr', ' svr'

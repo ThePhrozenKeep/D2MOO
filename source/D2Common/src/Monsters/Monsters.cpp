@@ -183,46 +183,64 @@ int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int 
 //1.14d: 0x006634F0
 BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, uint8_t a3)
 {
+	//1.10f: D2Common.0x6FDE4A84
+	//1.14d: 0x007484CC
 	static const int dword_6FDE4A84[] =
 	{
 		0, 2, 4, 0
 	};
 
+	//1.10f: D2Common.0x6FDE4A94
+	//1.14d: 0x007484DC
 	static const int dword_6FDE4A94[] =
 	{
 		2, 2, 2, 0, 6
 	};
 
+	//1.10f: D2Common.0x6FDE4AA8
+	//1.14d: 0x007484F0
 	static const int dword_6FDE4AA8[] =
 	{
 		0, 2, 4, 0
 	};
 
+	//1.10f: D2Common.0x6FDE4AB8
+	//1.14d: 0x00748500
 	static const int dword_6FDE4AB8[] =
 	{
 		2, 2, 2, 0, 6
 	};
 
+	//1.10f: D2Common.0x6FDE4ACC
+	//1.14d: 0x00748514
 	static const int dword_6FDE4ACC[] =
 	{
 		0, 2, 4, 0
 	};
 
+	//1.10f: D2Common.0x6FDE4ADC
+	//1.14d: 0x00748524
 	static const int dword_6FDE4ADC[] =
 	{
 		2, 2, 2, 0, 12
 	};
 
+	//1.10f: D2Common.0x6FDE4AF0
+	//1.14d: 0x00748538
 	static const int dword_6FDE4AF0[] =
 	{
 		0, 3, 6, 0
 	};
 
+	//1.10f: D2Common.0x6FDE4B00
+	//1.14d: 0x00748548
 	static const int dword_6FDE4B00[] =
 	{
 		3, 3, 6, 0
 	};
 
+	//1.10f: D2Common.0x6FDE4B10
+	//1.14d: 0x00748558
 	static const D2UnkHireStrc2 stru_6FDE4B10[] =
 	{
 		{ 150, 3 },
@@ -231,6 +249,8 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 0, 0 }
 	};
 
+	//1.10f: D2Common.0x6FDE4B30
+	//1.14d: 0x00748578
 	static const D2UnkHireStrc3 stru_6FDE4B30[] =
 	{
 		{ 0, 30, 0, 0 },
@@ -241,6 +261,8 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 1, 400, 170, 3 },
 	};
 
+	//1.10f: D2Common.0x6FDE4B90
+	//1.14d: 0x007485D8
 	static const D2UnkHireStrc3 stru_6FDE4B90[] =
 	{
 		{ 0, 15, 0, 0 },
@@ -251,6 +273,8 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 1, 150, 125, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDE4D70
+	//1.14d: 0x007487B8
 	static const D2UnkHireStrc stru_6FDE4D70[] =
 	{
 		{ 0, 0, 0, 1, 1, 0, 1 },
@@ -258,6 +282,8 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 120, 60, 40, 3, 3, 5, 3 }
 	};
 
+	//1.10f: D2Common.0x6FDE4C80
+	//1.14d: 0x007486C8
 	static const D2UnkHireStrc4 stru_6FDE4C80[] =
 	{
 		{ 0, 0, 0, 0, 0 },
@@ -274,6 +300,8 @@ BOOL __fastcall D2Common_11081(int nLowSeed, D2HirelingInitStrc* pHirelingInit, 
 		{ 11, 130, 1, 3, 3380 },
 	};
 
+	//1.10f: D2Common.0x6FDE4BF0
+	//1.14d: 0x00748638
 	static const D2UnkHireStrc5 stru_6FDE4BF0[] =
 	{
 		{ 0, 1, 1, 3, 0, 0 },
@@ -440,36 +468,50 @@ int __stdcall D2COMMON_11068_GetCompInfo(D2UnitStrc* pMonster, int nComponent)
 uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, unsigned int nComponent)
 {
 	// NOLINTBEGIN(clang-diagnostic-multichar)
+	//1.10f: D2Common.0x6FDE4DC8
+	//1.14d: 0x007488FC
 	static uint32_t dword_6FDE4DC8[7] =
 	{
 		' til', ' til', ' sed', ' sed', ' yvh', ' yvh', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4DE4
+	//1.14d: 0x00748918
 	static uint32_t dword_6FDE4DE4[3] =
 	{
 		' til', ' sed', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4DF0
+	//1.14d: 0x00748924
 	static uint32_t dword_6FDE4DF0[10] =
 	{
 		' exa', ' exa', ' alf', ' alf', ' xah', ' xah', ' cam', ' cam', ' mcs', 'mcs'
 	};
 
+	//1.10f: D2Common.0x6FDE4E18
+	//1.14d: 0x0074894C
 	static uint32_t dword_6FDE4E18[5] =
 	{
 		0, ' cub', ' grl', ' tik', ' lms'
 	};
 
+	//1.10f: D2Common.0x6FDE4E2C
+	//1.14d: 0x00748960
 	static uint32_t dword_6FDE4E2C[12] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, ' til', ' sed', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4E5C
+	//1.14d: 0x00748990
 	static uint32_t dword_6FDE4E5C[3] =
 	{
 		' til', ' dem', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4E68
+	//1.14d: 0x007489A8
 	static const uint32_t* off_6FDE4E68[16] =
 	{
 		dword_6FDE4DC8,
@@ -490,21 +532,29 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 		NULL,
 	};
 
+	//1.10f: D2Common.0x6FDE4EA8
+	//1.14d: 0x0074899C
 	static uint32_t dword_6FDE4EA8[3] =
 	{
 		' til', ' sed', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4EB4
+	//1.14d: 0x007489E8
 	static uint32_t dword_6FDE4EB4[11] =
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, ' til', ' sed', ' yvh'
 	};
 
+	//1.10f: D2Common.0x6FDE4EE0
+	//1.14d: 0x00748A14
 	static uint32_t dword_6FDE4EE0[2] =
 	{
 		' wbs', 0
 	};
 
+	//1.10f: D2Common.0x6FDE4EE8
+	//1.14d: 0x00748A18
 	static const uint32_t* off_6FDE4EE8[16] =
 	{
 		dword_6FDE4EA8,

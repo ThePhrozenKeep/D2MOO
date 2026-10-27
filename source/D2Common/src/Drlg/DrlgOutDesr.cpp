@@ -144,8 +144,12 @@ void __fastcall DRLGOUTDESR_PlacePresetVariants(D2DrlgLevelStrc* pLevel, const i
 }
 
 //D2Common.6FD7D950
+//1.10f: D2Common.0x6FD7D950
+//1.14d: 0x0067F5C0
 void __fastcall DRLGOUTDESR_PlaceCliffs(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF608
+	//1.14d: 0x006F2390
 	static const D2DrlgOutDesertInitStrc pOutDesertInit[8][5] =
 	{
 		{
@@ -294,8 +298,12 @@ void __fastcall DRLGOUTDESR_PlaceFillsInLostCity(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.6FD7DB70
+//1.10f: D2Common.0x6FD7DB70
+//1.14d: 0x0067F8D0
 void __fastcall DRLGOUTDESR_PlaceTombEntriesInCanyon(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF888
+	//1.14d: 0x006F2610
 	static const D2DrlgOutDesertInitStrc pOutDesertInit[9] =
 	{
 		{ LVLPREST_ACT2_DESERT_CLIFF_RIGHT_KING_ENDS,	0, 8, 0 },

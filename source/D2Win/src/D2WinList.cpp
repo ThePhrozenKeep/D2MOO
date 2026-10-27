@@ -21,7 +21,11 @@
 #pragma warning (disable : 28159)
 
 
+//1.10f: D2Win.0x6F8FE21C
+//1.14d: 0x0087E96C
 D2CellFileStrc* ghPentagramCellFile;
+//1.10f: D2Win.0x6F8FE220
+//1.14d: 0x0087E970
 uint32_t dword_6F8FE220;
 
 

@@ -83,4 +83,6 @@ int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(D2ObjOperateFnStr
 //1.14d: 0x005997C0
 int32_t __fastcall ACT2Q2_UnitIterate_DetermineCubeDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //
+//1.10f: D2Game.0x6FCA4D40
+//1.14d: 0x00599A10
 void __fastcall ACT2Q2_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);

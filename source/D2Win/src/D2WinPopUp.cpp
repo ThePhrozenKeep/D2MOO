@@ -12,6 +12,8 @@
 #include "D2WinPalette.h"
 
 
+//1.10f: D2Win.0x6F96A7C8
+//1.14d: 0x0087E974
 D2WinPopUpStrc* gpPopUp;
 
 

@@ -167,6 +167,7 @@ D2UnitStrc* __fastcall SKILLS_FindNextAuraTarget(D2GameStrc* pGame, D2UnitStrc* 
 //1.14d: 0x0056BCD0
 int32_t __fastcall SKILLS_AuraCallback_FindNextTarget(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit);
 
+//1.14d: 0x00478A20
 D2PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType);
 //D2Game.0x6FD108D0
 //1.14d: 0x0056BD90

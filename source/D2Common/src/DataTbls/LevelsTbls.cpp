@@ -8,6 +8,8 @@
 #include <D2CMP.h>
 
 
+//1.10f: D2Common.0x6FDCE2D0
+//1.14d: 0x006E7D50
 static const char* gszAutomapLevelNames[] =
 {
 	"None",
@@ -48,6 +50,8 @@ static const char* gszAutomapLevelNames[] =
 	"5 Lava"
 };
 
+//1.10f: D2Common.0x6FDCE510
+//1.14d: 0x006E7F90
 static const char* gszAutomapTileNames[] =
 {
 	"fl",
@@ -72,6 +76,8 @@ static const char* gszAutomapTileNames[] =
 	"fi"
 };
 
+//1.10f: D2Common.0x6FDDAF34
+//1.14d: 0x00744504
 D2SeedStrc* gpAutomapSeed = &sgptDataTables->pAutomapSeed;
 
 //D2Common.0x6FDEA704

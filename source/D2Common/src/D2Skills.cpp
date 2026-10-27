@@ -21,6 +21,8 @@
 
 //TODO: Find names
 
+//1.10f: D2Common.0x6FDE5804
+//1.14d: 0x00745774
 D2CalcCallbackInfoStrc off_6FDE5804[] =
 {
 	{ MISSILE_GetMinimum, 2 },
@@ -31,13 +33,19 @@ D2CalcCallbackInfoStrc off_6FDE5804[] =
 	{ sub_6FD982A0, 2 },
 	{ sub_6FDAF7A0, 3 },
 };
+//1.10f: D2Common.0x6FDE583C
+//1.14d: 0x007457AC
 int dword_6FDE583C = ARRAY_SIZE(off_6FDE5804);
 
+//1.10f: D2Common.0x6FDD2B98
+//1.14d: 0x006EB308
 const int dword_6FDD2B98[] =
 {
 	0, 1, 2, 4, 7, 8, 9, 10, 13, 14, 15, 16, 17, 19, 18, 3
 };
 
+//1.10f: D2Common.0x6FDD2BD8
+//1.14d: 0x006EB348
 const int dword_6FDD2BD8[] =
 {
 	0, 1, 2, 15, 3, 1, 2, 4, 5, 6, 7, 4, 11, 8, 9, 10, 11, 12, 14, 13

@@ -239,6 +239,8 @@ void __fastcall DRLGROOMTILE_InitializeTileDataFlags(D2DrlgRoomStrc* pDrlgRoom, 
 //1.14d: 0x0066D9E0
 void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2DrlgRoomStrc* pDrlgRoom, D2DrlgTileDataStrc* pTileData, uint32_t nPackedTileInformation, int nX, int nY, int nTileType)
 {
+	//1.10f: D2Common.0x6FDD0DA8
+	//1.14d: 0x006EEFC8
 	static const D2UnkDrlgRoomTileStrc stru_6FDD0DA8[] =
 	{
 		{ LEVEL_BARRACKS, 0, 3 },
@@ -280,6 +282,8 @@ void __fastcall DRLGROOMTILE_AddTilePresetUnits(D2DrlgRoomStrc* pDrlgRoom, D2Drl
 		{ LEVEL_TUNDRAWASTELANDS, 24, 33 },
 	};
 
+	//1.10f: D2Common.0x6FDD0F68
+	//1.14d: 0x006EF188
 	static const D2UnkDrlgRoomTileStrc2 stru_6FDD0F68[] =
 	{
 		{ 7, 0, true,  OBJECT_DOORGATERIGHT, UNIT_OBJECT, 5, 0 },
@@ -654,6 +658,7 @@ static D2RoomTileStrc* DRLGROOMTILE_FindDestinationWarpTile(D2DrlgRoomStrc* pDrl
 	return pWarpTile;
 }
 
+//1.14d: 0x0066E160
 static D2LvlWarpTxt* DRLGROOMTILE_UpdateAndGetLvlWarpTxtRecord(D2RoomTileStrc* pWarpTile, int nTileType)
 {
 	D2LvlWarpTxt* pLvlWarpTxtRecord = pWarpTile->pLvlWarpTxtRecord;
@@ -716,6 +721,8 @@ void __fastcall DRLGROOMTILE_LoadWallWarpTiles(D2DrlgRoomStrc* pDrlgRoom, D2Drlg
 //1.14d: 0x0066E360
 void __fastcall DRLGROOMTILE_LoadFloorWarpTiles(D2DrlgRoomStrc* pDrlgRoom, int nX, int nY, uint32_t nPackedTileInformation, int nTileType)
 {
+	//1.10f: D2Common.0x6FDD1320
+	//1.14d: 0x006EF554
 	static const D2CoordStrc gWarpTileOffsets_6FDD1320[] =
 	{
 		{ 0, 0 },

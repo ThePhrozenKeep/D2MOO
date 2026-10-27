@@ -11,18 +11,44 @@
 #include <Window.h>
 
 
+//1.10f: D2Win.0x6F8FD67C
+//1.14d: 0x007D5628
 D2ArchiveHandleStrc* gpD2MusicMPQ;
+//1.10f: D2Win.0x6F8FD680
+//1.14d: 0x007D5624
 D2ArchiveHandleStrc* gpD2SpeechMPQ;
+//1.10f: D2Win.0x6F8FD684
+//1.14d: 0x007D5610
 D2ArchiveHandleStrc* gpD2CharMPQ;
+//1.10f: D2Win.0x6F8FD688
+//1.14d: 0x007D5604
 D2ArchiveHandleStrc* gpD2XMusicMPQ;
+//1.10f: D2Win.0x6F8FD68C
+//1.14d: 0x007D561C
 D2ArchiveHandleStrc* gpD2DataMPQ;
+//1.10f: D2Win.0x6F8FD690
+//1.14d: 0x007D5614
 D2ArchiveHandleStrc* gpD2VideoMPQ;
+//1.10f: D2Win.0x6F8FD694
+//1.14d: 0x007D560C
 D2ArchiveHandleStrc* gpD2DeltaMPQ;
+//1.10f: D2Win.0x6F8FD698
+//1.14d: 0x007D5630
 D2ArchiveHandleStrc* gpD2PatchMPQ;
+//1.10f: D2Win.0x6F8FD69C
+//1.14d: 0x007D5620
 D2ArchiveHandleStrc* gpD2kfixupMPQ;
+//1.10f: D2Win.0x6F8FD6A0
+//1.14d: 0x007D562C
 D2ArchiveHandleStrc* gpD2XVideoMPQ;
+//1.10f: D2Win.0x6F8FD6A4
+//1.14d: 0x007D5618
 D2ArchiveHandleStrc* gpD2XTalkMPQ;
+//1.10f: D2Win.0x6F8FD6A8
+//1.14d: 0x007D5634
 D2ArchiveHandleStrc* gpD2ExpMPQ;
+//1.10f: D2Win.0x6F8FD6AC
+//1.14d: 0x007D5608
 D2ArchiveHandleStrc* gpD2SfxMPQ;
 
 

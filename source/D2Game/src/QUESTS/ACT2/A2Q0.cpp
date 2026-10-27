@@ -164,6 +164,8 @@ void __fastcall ACT2Q0_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //
+//1.10f: D2Game.0x6FCA6670
+//1.14d: 0x00598770
 bool __fastcall ACT2Q0_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	return false;

@@ -5,11 +5,19 @@
 #include "GAME/SCmd.h"
 
 
+//1.10f: D2Game.0x6FD45850
+//1.14d: 0x0088C7A0
 BOOL gbHasHighResolutionClock;
+//1.10f: D2Game.0x6FD45860
+//1.14d: 0x0088C790
 LARGE_INTEGER gPerformanceFrequency;
+//1.10f: D2Game.0x6FD45870
+//1.14d: 0x0088CAA8
 CRITICAL_SECTION_WRAPPER gTaskSlotsCriticalSection;
 
 
+//1.10f: D2Game.0x6FD45854
+//1.14d: 0x0088C798
 int32_t gnNumberOfTasksCreated;
 // D2Game.0x6FD45858
 //1.14d: 0x0088C79C
@@ -32,6 +40,7 @@ void __stdcall TASK_InitializeClock()
     gbHasHighResolutionClock = QueryPerformanceFrequency(&gPerformanceFrequency);
 }
 
+//1.14d: 0x00564340
 static int32_t TASK_GetClockTime()
 {
     if (gbHasHighResolutionClock)
@@ -472,6 +481,8 @@ void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink)
 
 
 
+//1.10f: D2Game.0x6FCA4640 (#10034)
+//1.14d: 0x00545990
 void __stdcall D2Game_10034_Return(int nUnused)
 {
 }

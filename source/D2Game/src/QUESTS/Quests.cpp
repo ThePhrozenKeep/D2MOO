@@ -86,11 +86,15 @@
 #include "UNIT/SUnit.h"
 
 
+//1.10f: D2Game.0x6FD31270
+//1.14d: 0x0073150C
 uint8_t gbQuestStateInitializationEnabled;
 
 
 #define gbQuestDebugEnabled 1
 
+//1.10f: D2Game.0x6FD31278
+//1.14d: 0x00731510
 constexpr D2QuestInitTableStrc gpQuestInitTable[] =
 {
 	{ ACT1Q0_InitQuestData, ACT_I,{ 0,0,0 }, 100, 1,{ 0,0,0 }, QUEST_A1Q0_WARRIVGOSSIP, QUESTSTATEFLAG_A1Q0 },
@@ -139,6 +143,8 @@ constexpr D2QuestInitTableStrc gpQuestInitTable[] =
 	{ ACT5Q6_InitQuestData, ACT_V,{ 0,0,0 }, 0x0, 0,{ 0,0,0 }, QUEST_A5Q6_BAAL, QUESTSTATEFLAG_A5Q6 },
 };
 
+//1.10f: D2Game.0x6FD315DC
+//1.14d: 0x0073188C
 constexpr D2QuestIntroTableStrc gpQuestIntroTable[] =
 {
 	{ ACT1Intro_InitQuestData, ACT_I, { 0,0,0 } },
@@ -147,6 +153,8 @@ constexpr D2QuestIntroTableStrc gpQuestIntroTable[] =
 	{ ACT5Intro_InitQuestData, ACT_V, { 0,0,0 } }
 };
 
+//1.10f: D2Game.0x6FD31600
+//1.14d: 0x007318B0
 constexpr int32_t gpAct1_NPCIds[] =
 {
 	MONSTER_AKARA,
@@ -157,6 +165,8 @@ constexpr int32_t gpAct1_NPCIds[] =
 	MONSTER_CAIN5
 };
 
+//1.10f: D2Game.0x6FD31618
+//1.14d: 0x007318C8
 constexpr int32_t gpAct2_NPCIds[] =
 {
 	MONSTER_WARRIV2,
@@ -172,6 +182,8 @@ constexpr int32_t gpAct2_NPCIds[] =
 	MONSTER_CAIN2
 };
 
+//1.10f: D2Game.0x6FD31644
+//1.14d: 0x007318F4
 constexpr int32_t gpAct3_NPCIds[] =
 {
 	MONSTER_CAIN3,
@@ -183,6 +195,8 @@ constexpr int32_t gpAct3_NPCIds[] =
 	MONSTER_NATALYA
 };
 
+//1.10f: D2Game.0x6FD31660
+//1.14d: 0x00731910
 constexpr int32_t gpAct5_NPCIds[] =
 {
 	MONSTER_CAIN6,

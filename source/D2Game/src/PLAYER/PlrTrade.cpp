@@ -38,6 +38,8 @@
 #pragma warning(disable: 28159)
 
 
+//1.10f: D2Game.0x6FD4DC30
+//1.14d: 0x0088CAC0
 int32_t gbEnableAllCubeRecipes;
 
 
@@ -545,6 +547,8 @@ int32_t __fastcall PLRTRADE_CreateUberFinalePortal(D2GameStrc* pGame, D2UnitStrc
 void __fastcall PLRTRADE_CreateCubeOutputs(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CubeMainTxt* pCubeMainTxt, D2CubeItemStrc* pCubeItem)
 {
     using CubeOutputFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+    //1.10f: D2Game.0x6FD2933C
+    //1.14d: 0x006E11C8
     constexpr CubeOutputFunc tCubeOutputFunctions[] =
     {
         nullptr,

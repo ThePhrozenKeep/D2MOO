@@ -96,6 +96,7 @@ D2DrlgRoomStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomNorth(D2DrlgLevelStrc*
 }
 
 // Helper function
+//1.14d: 0x006723E0
 D2DrlgRoomStrc* __fastcall DRLGMAZE_GetFreeLocationForRoomSouth(D2DrlgLevelStrc* pLevel)
 {
 	D2DrlgRoomStrc* pResult = nullptr;
@@ -320,6 +321,8 @@ void __fastcall DRLGMAZE_InitLevelData(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00673B30
 void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCE8D8
+	//1.14d: 0x006EF8A8
 	static const D2MazeLevelIdStrc nAct1CavePrevIds[] =
 	{
 		{ LVLPREST_ACT1_CAVE_N, LVLPREST_ACT1_CAVE_PREV_N, -1, 3 },
@@ -328,6 +331,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CAVE_W, LVLPREST_ACT1_CAVE_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCE918
+	//1.14d: 0x006EF8E8
 	static const D2MazeLevelIdStrc nAct1CaveDOEIds[] =
 	{
 		{ LVLPREST_ACT1_CAVE_N, LVLPREST_ACT1_CAVE_DEN_OF_EVIL_N, -1, 3 },
@@ -336,6 +341,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CAVE_W, LVLPREST_ACT1_CAVE_DEN_OF_EVIL_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCE958
+	//1.14d: 0x006EF928
 	static const D2MazeLevelIdStrc nAct1CaveDownIds[] =
 	{
 		{ LVLPREST_ACT1_CAVE_N, LVLPREST_ACT1_CAVE_DOWN_N, -1, 3 },
@@ -344,6 +351,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CAVE_W, LVLPREST_ACT1_CAVE_DOWN_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCE998
+	//1.14d: 0x006EF968
 	static const D2MazeLevelIdStrc nAct1CaveColdcrowIds[] =
 	{
 		{ LVLPREST_ACT1_CAVE_N, LVLPREST_ACT1_CAVE_COLDCROW_N, -1, 3 },
@@ -352,6 +361,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CAVE_W, LVLPREST_ACT1_CAVE_COLDCROW_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCE9D8
+	//1.14d: 0x006EF9A8
 	static const D2MazeLevelIdStrc nAct1CaveNextIds[] =
 	{
 		{ LVLPREST_ACT1_CAVE_N, LVLPREST_ACT1_CAVE_NEXT_N, -1, 3 },
@@ -360,6 +371,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CAVE_W, LVLPREST_ACT1_CAVE_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEA18
+	//1.14d: 0x006EF9E8
 	static const D2MazeLevelIdStrc nAct1CryptPrevIds[] =
 	{
 		{ LVLPREST_ACT1_CRYPT_N, LVLPREST_ACT1_CRYPT_PREV_N, -1, 3 },
@@ -368,6 +381,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CRYPT_W, LVLPREST_ACT1_CRYPT_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEA58
+	//1.14d: 0x006EFA28
 	static const D2MazeLevelIdStrc nAct1CryptSpecialIds[] =
 	{
 		{ LVLPREST_ACT1_CRYPT_N, LVLPREST_ACT1_CRYPT_BONEBREAK_N, -1, 3 },
@@ -380,6 +395,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CRYPT_W, LVLPREST_ACT1_CRYPT_PORTAL_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEAD8
+	//1.14d: 0x006EFAA8
 	static const D2MazeLevelIdStrc nAct1CryptChestIds[] =
 	{
 		{ LVLPREST_ACT1_CRYPT_N, LVLPREST_ACT1_CRYPT_CHEST_N, -1, 3 },
@@ -388,6 +405,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CRYPT_W, LVLPREST_ACT1_CRYPT_CHEST_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEB18
+	//1.14d: 0x006EFAE8
 	static const D2MazeLevelIdStrc nAct1CryptNextIds[] =
 	{
 		{ LVLPREST_ACT1_CRYPT_N, LVLPREST_ACT1_CRYPT_NEXT_N, -1, 3 },
@@ -396,6 +415,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CRYPT_W, LVLPREST_ACT1_CRYPT_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEB58
+	//1.14d: 0x006EFB28
 	static const D2MazeLevelIdStrc nAct1JailPrevIds[] =
 	{
 		{ LVLPREST_ACT1_JAIL_N, LVLPREST_ACT1_JAIL_PREV_N, -1, 3 },
@@ -404,6 +425,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_JAIL_W, LVLPREST_ACT1_JAIL_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEB98
+	//1.14d: 0x006EFB68
 	static const D2MazeLevelIdStrc nAct1JailCathIds[] =
 	{
 		{ LVLPREST_ACT1_JAIL_N, LVLPREST_ACT1_JAIL_CATH_N, -1, 3 },
@@ -412,6 +435,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_JAIL_W, LVLPREST_ACT1_JAIL_CATH_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEBD8
+	//1.14d: 0x006EFBA8
 	static const D2MazeLevelIdStrc nAct1JailNextIds[] =
 	{
 		{ LVLPREST_ACT1_JAIL_N, LVLPREST_ACT1_JAIL_NEXT_N, -1, 3 },
@@ -420,6 +445,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_JAIL_W, LVLPREST_ACT1_JAIL_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEC18
+	//1.14d: 0x006EFBE8
 	static const D2MazeLevelIdStrc nAct1JailWaypointIds[] =
 	{
 		{ LVLPREST_ACT1_JAIL_N, LVLPREST_ACT1_JAIL_WAYPOINT_N, -1, 3 },
@@ -428,6 +455,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_JAIL_W, LVLPREST_ACT1_JAIL_WAYPOINT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEC58
+	//1.14d: 0x006EFC28
 	static const D2MazeLevelIdStrc nAct1JailPitspawnIds[] =
 	{
 		{ LVLPREST_ACT1_JAIL_N, LVLPREST_ACT1_JAIL_PITSPAWN_N, -1, 3 },
@@ -436,6 +465,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_JAIL_W, LVLPREST_ACT1_JAIL_PITSPAWN_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEC98
+	//1.14d: 0x006EFC68
 	static const D2MazeLevelIdStrc nAct1CatacombsNextIds[] =
 	{
 		{ LVLPREST_ACT1_CATACOMBS_N, LVLPREST_ACT1_CATACOMBS_NEXT_N, -1, 3 },
@@ -444,6 +475,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CATACOMBS_W, LVLPREST_ACT1_CATACOMBS_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCECD8
+	//1.14d: 0x006EFCA8
 	static const D2MazeLevelIdStrc nAct1CatacombsWaypointIds[] =
 	{
 		{ LVLPREST_ACT1_CATACOMBS_N, LVLPREST_ACT1_CATACOMBS_WAYPOINT_N, -1, 3 },
@@ -452,6 +485,8 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_CATACOMBS_W, LVLPREST_ACT1_CATACOMBS_WAYPOINT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF128
+	//1.14d: 0x006F00F8
 	static const D2MazeLevelIdStrc nAct2ArcaneSummonerIds[] =
 	{
 		{ LVLPREST_ACT2_ARCANE_N, LVLPREST_ACT2_ARCANE_SUMMONER_N, -1, 3 },
@@ -1370,6 +1405,8 @@ void __fastcall DRLGMAZE_BuildBasicMaze(D2DrlgLevelStrc* pLevel)
 	}
 }
 
+//1.10f: D2Common.0x6FDCE850
+//1.14d: 0x006EF828
 static const int dword_6FDCE850[][3] =
 {
 	{ LVLPREST_ACT5_LAVA_S, 1, 0 },
@@ -1476,6 +1513,8 @@ void __fastcall DRLGMAZE_FillBlankMazeSpaces(D2DrlgLevelStrc* pLevel, int nLevel
 //1.14d: 0x006718C0
 void __fastcall DRLGMAZE_PlaceAct2TombPrev_Act5BaalPrev(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCE8B4
+	//1.14d: 0x006EF888
 	static const int dword_6FDCE8B4[][2] =
 	{
 		{ LVLPREST_ACT2_TOMB_PREV_NSE, LVLPREST_ACT5_BAAL_PREV_NSE },
@@ -1738,6 +1777,8 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialPreset(D2DrlgLevelStrc* pLevel, const
 //1.14d: 0x00672810
 void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCED18
+	//1.14d: 0x006EFCE8
 	static const D2MazeLevelIdStrc nAct2SewerPrevIds[] =
 	{
 		{ LVLPREST_ACT2_SEWER_N, LVLPREST_ACT2_SEWER_PREV_N, -1, 3 },
@@ -1746,6 +1787,8 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		{ LVLPREST_ACT2_SEWER_W, LVLPREST_ACT2_SEWER_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCED58
+	//1.14d: 0x006EFD28
 	static const D2MazeLevelIdStrc nAct2SewerNextIds[] =
 	{
 		{ LVLPREST_ACT2_SEWER_N, LVLPREST_ACT2_SEWER_NEXT_N, -1, 3 },
@@ -1754,6 +1797,8 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		{ LVLPREST_ACT2_SEWER_W, LVLPREST_ACT2_SEWER_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCED98
+	//1.14d: 0x006EFD68
 	static const D2MazeLevelIdStrc nAct2SewerWaypointIds[] =
 	{
 		{ LVLPREST_ACT2_SEWER_N, LVLPREST_ACT2_SEWER_WAYPOINT_N, -1, 3 },
@@ -1762,6 +1807,8 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		{ LVLPREST_ACT2_SEWER_W, LVLPREST_ACT2_SEWER_WAYPOINT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEDD8
+	//1.14d: 0x006EFDA8
 	static const D2MazeLevelIdStrc nAct2SewerRadamentIds[] =
 	{
 		{ LVLPREST_ACT2_SEWER_N, LVLPREST_ACT2_SEWER_RADAMENTS_LAIR_N, -1, 3 },
@@ -1770,6 +1817,8 @@ void __fastcall DRLGMAZE_ScanReplaceSpecialAct2SewersPresets(D2DrlgLevelStrc* pL
 		{ LVLPREST_ACT2_SEWER_W, LVLPREST_ACT2_SEWER_RADAMENTS_LAIR_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEE18
+	//1.14d: 0x006EFDE8
 	static const D2MazeLevelIdStrc nAct2SewerChestIds[] =
 	{
 		{ LVLPREST_ACT2_SEWER_N, LVLPREST_ACT2_SEWER_CHEST_N, -1, 3 },
@@ -1939,6 +1988,8 @@ BOOL __fastcall DRLGMAZE_CheckIfMayPlaceAdjacentPresetRoom(D2DrlgRoomStrc* pDrlg
 //1.14d: 0x00672BE0
 void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCEE58
+	//1.14d: 0x006EFE28
 	static const D2MazeLevelIdStrc nAct2TombNextIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_NEXT_N, -1, 3 },
@@ -1947,6 +1998,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEE98
+	//1.14d: 0x006EFE68
 	static const D2MazeLevelIdStrc nAct2TombWaypointIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_WAYPOINT_N, -1, 3 },
@@ -1955,6 +2008,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_WAYPOINT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEED8
+	//1.14d: 0x006EFEA8
 	static const D2MazeLevelIdStrc nAct2TombChestIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_CHEST_N, -1, 3 },
@@ -1963,6 +2018,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_CHEST_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEF18
+	//1.14d: 0x006EFEE8
 	static const D2MazeLevelIdStrc nAct2TombLeatherarmIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_LEATHERARM_N, -1, 3 },
@@ -1971,6 +2028,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_LEATHERARM_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEF58
+	//1.14d: 0x006EFF28
 	static const D2MazeLevelIdStrc nAct2TombCubeIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_CUBE_N, -1, 3 },
@@ -1979,6 +2038,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_CUBE_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEF98
+	//1.14d: 0x006EFF68
 	static const D2MazeLevelIdStrc nAct2TombTreasureIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_TREASURE_N, -1, 3 },
@@ -1987,6 +2048,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_TREASURE_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCEFD8
+	//1.14d: 0x006EFFA8
 	static const D2MazeLevelIdStrc nAct2TombTalRashaIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_TALRASHA_N, -1, 3 },
@@ -1995,6 +2058,8 @@ void __fastcall DRLGMAZE_PlaceAct2TombStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_TOMB_W, LVLPREST_ACT2_TOMB_TALRASHA_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF018
+	//1.14d: 0x006EFFE8
 	static const D2MazeLevelIdStrc nAct2TombKaaIds[] =
 	{
 		{ LVLPREST_ACT2_TOMB_N, LVLPREST_ACT2_TOMB_KAA_N, -1, 3 },
@@ -2174,6 +2239,8 @@ D2DrlgRoomStrc* __fastcall DRLGMAZE_InitRoomFixedPreset(D2DrlgRoomStrc* pDrlgRoo
 //1.14d: 0x00672DC0
 void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF058
+	//1.14d: 0x006F0028
 	static const D2MazeLevelIdStrc nAct2LairPrevIds[] =
 	{
 		{ LVLPREST_ACT2_LAIR_N, LVLPREST_ACT2_LAIR_PREV_N, -1, 3 },
@@ -2182,6 +2249,8 @@ void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT2_LAIR_W, LVLPREST_ACT2_LAIR_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF098
+	//1.14d: 0x006F0068
 	static const D2MazeLevelIdStrc nAct2LairSpecialIds[] =
 	{
 		{ LVLPREST_ACT2_LAIR_N, LVLPREST_ACT2_LAIR_NEXT_N, -1, 3 },
@@ -2283,6 +2352,8 @@ void __fastcall DRLGMAZE_PlaceAct2LairStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00672EA0
 void __fastcall DRLGMAZE_PlaceAct3DungeonStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF168
+	//1.14d: 0x006F0138
 	static const D2MazeLevelIdStrc nAct3DungeonPrevIds[] =
 	{
 		{ LVLPREST_ACT3_DUNGEON_N, LVLPREST_ACT3_DUNGEON_PREV_N, -1, 3 },
@@ -2291,6 +2362,8 @@ void __fastcall DRLGMAZE_PlaceAct3DungeonStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT3_DUNGEON_W, LVLPREST_ACT3_DUNGEON_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF1A8
+	//1.14d: 0x006F0178
 	static const D2MazeLevelIdStrc nAct3DungeonNextIds[] =
 	{
 		{ LVLPREST_ACT3_DUNGEON_N, LVLPREST_ACT3_DUNGEON_NEXT_N, -1, 3 },
@@ -2376,6 +2449,8 @@ void __fastcall DRLGMAZE_PlaceAct3DungeonStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00672F00
 void __fastcall DRLGMAZE_PlaceAct3SewerStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF1E8
+	//1.14d: 0x006F01B8
 	static const D2MazeLevelIdStrc nAct3SewerDrainIds[] =
 	{
 		{ LVLPREST_ACT3_SEWER_N, LVLPREST_ACT3_SEWER_DRAIN_N, -1, 3 },
@@ -2384,6 +2459,8 @@ void __fastcall DRLGMAZE_PlaceAct3SewerStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT3_SEWER_W, LVLPREST_ACT3_SEWER_DRAIN_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF228
+	//1.14d: 0x006F01F8
 	static const D2MazeLevelIdStrc nAct3SewerChestIds[] =
 	{
 		{ LVLPREST_ACT3_SEWER_N, LVLPREST_ACT3_SEWER_CHEST_N, -1, 3 },
@@ -2469,6 +2546,8 @@ void __fastcall DRLGMAZE_PlaceAct3SewerStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00672F60
 void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF268
+	//1.14d: 0x006F0238
 	static const D2MazeLevelIdStrc nAct3MephistoPrevIds[] =
 	{
 		{ LVLPREST_ACT3_MEPHISTO_N, LVLPREST_ACT3_MEPHISTO_PREV_N, -1, 3 },
@@ -2477,6 +2556,8 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT3_MEPHISTO_W, LVLPREST_ACT3_MEPHISTO_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF2A8
+	//1.14d: 0x006F0278
 	static const D2MazeLevelIdStrc nAct3MephistoWaypointIds[] =
 	{
 		{ LVLPREST_ACT3_MEPHISTO_N, LVLPREST_ACT3_MEPHISTO_WAYPOINT_N, -1, 3 },
@@ -2485,6 +2566,8 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT3_MEPHISTO_W, LVLPREST_ACT3_MEPHISTO_WAYPOINT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF2E8
+	//1.14d: 0x006F02B8
 	static const D2MazeLevelIdStrc nAct3MephistoNextIds[] =
 	{
 		{ LVLPREST_ACT3_MEPHISTO_N, LVLPREST_ACT3_MEPHISTO_NEXT_N, -1, 3 },
@@ -2582,6 +2665,8 @@ void __fastcall DRLGMAZE_PlaceAct3MephistoStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00673000
 void __fastcall DRLGMAZE_PlaceAct5TempleStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF328
+	//1.14d: 0x006F02F8
 	static const D2MazeLevelIdStrc nAct5TempleSpecialIds[] =
 	{
 		{ LVLPREST_ACT5_TEMPLE_NE, LVLPREST_ACT5_TEMPLE_NE_DOWN, -1, 1 },
@@ -2668,6 +2753,8 @@ void __fastcall DRLGMAZE_PlaceAct5TempleStuff(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x006730B0
 void __fastcall DRLGMAZE_PlaceAct5BaalStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF398
+	//1.14d: 0x006F0368
 	static const D2MazeLevelIdStrc nAct5BaalNextIds[] =
 	{
 		{ LVLPREST_ACT5_BAAL_N, LVLPREST_ACT5_BAAL_NEXT_N, -1, 3 },
@@ -2676,6 +2763,8 @@ void __fastcall DRLGMAZE_PlaceAct5BaalStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT5_BAAL_W, LVLPREST_ACT5_BAAL_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF3D8
+	//1.14d: 0x006F03A8
 	static const D2MazeLevelIdStrc nAct5BaalWaypointIds[] =
 	{
 		{ LVLPREST_ACT5_BAAL_N, LVLPREST_ACT5_BAAL_WAYPOINT_N, -1, 3 },
@@ -2756,6 +2845,8 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		DRLGMAZE_GetFreeLocationForRoomEast,
 	};
 
+	//1.10f: D2Common.0x6FDCF428
+	//1.14d: 0x006F03E8
 	static const D2MazeLevelIdStrc nAct1BarracksNextIds[] =
 	{
 		{ LVLPREST_ACT1_BARRACKS_N, LVLPREST_ACT1_BARRACKS_NEXT_N, -1, 3 },
@@ -2764,6 +2855,8 @@ void __fastcall DRLGMAZE_PlaceAct1Barracks(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT1_BARRACKS_W, LVLPREST_ACT1_BARRACKS_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF468
+	//1.14d: 0x006F0428
 	static const D2MazeLevelIdStrc nAct1BarracksForgeIds[] =
 	{
 		{ LVLPREST_ACT1_BARRACKS_N, LVLPREST_ACT1_BARRACKS_FORGE_N, -1, 3 },
@@ -2918,6 +3011,8 @@ void __fastcall DRLGMAZE_SetRoomSize(D2DrlgRoomStrc* pDrlgRoom)
 //1.14d: 0x00673320
 void __fastcall DRLGMAZE_PlaceAct4Lava(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF4A8
+	//1.14d: 0x006F0474
 	static const D2MazeLevelIdStrc nAct4LavaForgeIds[] =
 	{
 		{ LVLPREST_ACT4_LAVA_W, LVLPREST_ACT4_LAVA_FORGE_W, -1, 2 },
@@ -2999,6 +3094,8 @@ void __fastcall DRLGMAZE_PlaceAct4Lava(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00673530
 void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCF4C8
+	//1.14d: 0x006F0498
 	static const D2MazeLevelIdStrc nAct5IcePrevIds[] =
 	{
 		{ LVLPREST_ACT5_ICE_N, LVLPREST_ACT5_ICE_PREV_N, -1, 3 },
@@ -3007,6 +3104,8 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT5_ICE_W, LVLPREST_ACT5_ICE_PREV_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF508
+	//1.14d: 0x006F04D8
 	static const D2MazeLevelIdStrc nAct5IceNextIds[] =
 	{
 		{ LVLPREST_ACT5_ICE_N, LVLPREST_ACT5_ICE_NEXT_N, -1, 3 },
@@ -3015,6 +3114,8 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT5_ICE_W, LVLPREST_ACT5_ICE_NEXT_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF548
+	//1.14d: 0x006F0518
 	static const D2MazeLevelIdStrc nAct5IceDownIds[] =
 	{
 		{ LVLPREST_ACT5_ICE_N, LVLPREST_ACT5_ICE_DOWN_N, -1, 3 },
@@ -3023,6 +3124,8 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT5_ICE_W, LVLPREST_ACT5_ICE_DOWN_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF588
+	//1.14d: 0x006F0558
 	static const D2MazeLevelIdStrc nAct5IceThemeIds[] =
 	{
 		{ LVLPREST_ACT5_ICE_N, LVLPREST_ACT5_ICE_THEME_N, -1, 3 },
@@ -3031,6 +3134,8 @@ void __fastcall DRLGMAZE_PlaceAct5IceStuff(D2DrlgLevelStrc* pLevel)
 		{ LVLPREST_ACT5_ICE_W, LVLPREST_ACT5_ICE_THEME_W, -1, 2 },
 	};
 
+	//1.10f: D2Common.0x6FDCF5C8
+	//1.14d: 0x006F0598
 	static const D2MazeLevelIdStrc nAct5IceWaypointIds[] =
 	{
 		{ LVLPREST_ACT5_ICE_N, LVLPREST_ACT5_ICE_WAYPOINT_N, -1, 3 },

@@ -3354,6 +3354,7 @@ BOOL __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc* pInventory)
 }
 
 // Helper function
+//1.14d: 0x0063E2E0
 BOOL __fastcall INVENTORY_CanItemBePlacedInTradeInventory(D2InventoryStrc* pTradeInventory, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
 	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer1->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))

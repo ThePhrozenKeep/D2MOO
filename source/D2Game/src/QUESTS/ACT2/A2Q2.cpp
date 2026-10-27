@@ -1021,6 +1021,8 @@ int32_t __fastcall ACT2Q2_UnitIterate_DetermineCubeDropCount(D2GameStrc* pGame, 
 }
 
 //
+//1.10f: D2Game.0x6FCA4D40
+//1.14d: 0x00599A10
 void __fastcall ACT2Q2_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pQuestArg);

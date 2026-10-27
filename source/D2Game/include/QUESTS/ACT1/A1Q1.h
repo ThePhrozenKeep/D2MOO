@@ -74,4 +74,6 @@ void __fastcall ACT1Q1_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 //1.14d: 0x00590810
 bool __fastcall ACT1Q1_CanClientFXBeTriggered(D2QuestDataStrc* pQuestData);
 //
+//1.10f: D2Game.0x6FCB2610
+//1.14d: 0x005901F0
 void __fastcall ACT1Q1_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);

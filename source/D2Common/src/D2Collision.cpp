@@ -1865,6 +1865,8 @@ D2ActiveRoomStrc* __stdcall COLLISION_GetFreeCoordinatesWithField(D2ActiveRoomSt
 	return COLLISION_GetFreeCoordinatesImpl(pRoom, pSpawnPoint, pFieldCoord, nUnitSize, nMask, nFieldMask, bAllowNeighborRooms, 50, 1);
 }
 
+//1.10f: D2Common.0x6FD46310 (#10136)
+//1.14d: 0x0064E840
 void __fastcall D2Common_10136(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int a3, uint16_t nMask, D2ActiveRoomStrc** ppRoom)
 {
 	int v6; // eax@1

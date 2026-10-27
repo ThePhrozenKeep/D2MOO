@@ -35,7 +35,11 @@
 #pragma warning(disable: 28159)
 
 
+//1.10f: D2Game.0x6FD447D0
+//1.14d: 0x008846A8
 CRITICAL_SECTION gClientListLock_6FD447D0;
+//1.10f: D2Game.0x6FD443B8
+//1.14d: 0x008846C0
 CRITICAL_SECTION gSrvClientListByNameLock_6FD443B8;
 //1.10f: 0x6FD447E8
 //1.13c: 0x6FD31C18
@@ -45,6 +49,8 @@ BOOL gbClientListInitialized_6FD447E8;
 //1.13c: D2Game.0x6FD307B8
 //1.14d: 0x008842A8
 D2ClientStrc* gpClientList_6FD43FB8[256];
+//1.10f: D2Game.0x6FD443D0
+//1.14d: 0x00883EA8
 D2ClientStrc* gpClientListByName_6FD443D0[256];
 
 

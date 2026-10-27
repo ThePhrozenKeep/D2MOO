@@ -73,6 +73,7 @@ static int __fastcall StatArray_FindInsertionIndex(const T* pStatsArray, D2SLaye
 }
 
 template<class T>
+//1.14d: 0x00624B90
 int StatArray_DichotomicSearch(const T* pStatArray, D2SLayerStatIdStrc::PackedType nLayer_StatId)
 {
 	bool alreadyInArray = false;
@@ -1386,6 +1387,7 @@ int __stdcall STATLIST_GetUnitBaseStat(D2UnitStrc* pUnit, int nStatId, uint16_t 
 
 // Helper function
 // Different than STATLIST_GetStatValue in that it may use FullStats
+//1.14d: 0x00625420
 static int32_t __stdcall STATLIST_GetTotalStatValue(D2StatListStrc* pStatList, int nStatId, uint16_t nLayer)
 {
 	if (!pStatList)

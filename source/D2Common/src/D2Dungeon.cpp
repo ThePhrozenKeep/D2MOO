@@ -1093,6 +1093,8 @@ int __stdcall D2Common_10084(D2ActiveRoomStrc* pRoom)
 //1.14d: 0x0061AB70
 int __stdcall DUNGEON_GetTownLevelIdFromActNo(uint8_t nAct)
 {
+	//1.10f: D2Common.0x6FDD1438
+	//1.14d: 0x006E7D1C
 	static const int gnTownLevelIds[] = { LEVEL_ROGUEENCAMPMENT, LEVEL_LUTGHOLEIN, LEVEL_KURASTDOCKTOWN, LEVEL_THEPANDEMONIUMFORTRESS, LEVEL_HARROGATH };
 
 	D2_ASSERT(nAct < ARRAY_SIZE(gnTownLevelIds));

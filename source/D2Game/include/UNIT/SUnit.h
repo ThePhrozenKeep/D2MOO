@@ -6,6 +6,8 @@
 
 #include <GAME/Event.h>
 
+//1.10f: D2Game.0x6FD4DC40
+//1.14d: 0x008846E8
 extern uint32_t gnUnitInitSeed;
 
 #pragma pack(push, 1)

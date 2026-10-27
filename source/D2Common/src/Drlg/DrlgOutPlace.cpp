@@ -23,6 +23,8 @@
 #include <cmath>
 #include <algorithm>
 
+//1.10f: D2Common.0x6FDEA6FC
+//1.14d: 0x0096D66C
 int dword_6FDEA6FC;
 
 //D2Common.0x6FDCFE40
@@ -121,6 +123,8 @@ static D2DrlgLinkStrc gAct5TundraDrlgLink[15] =
 	{ NULL, 0, -1, -1 },
 };
 
+//1.10f: D2Common.0x6FDCFC48
+//1.14d: 0x006F06F0
 static const int gnBarricadeCliffBorderIds[14][2] =
 {
 	{ LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1,		LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1_SNOW },
@@ -239,6 +243,8 @@ struct D2UnkOutPlaceStrc12
 };
 #pragma pack()
 
+//1.10f: D2Common.0x6FDCFB70
+//1.14d: 0x006F2840
 uint8_t byte_6FDCFB70[4*4] = { 
 	0, 1, 2, 3,
 	0, 1, 1, 1,
@@ -246,7 +252,11 @@ uint8_t byte_6FDCFB70[4*4] = {
 	0, 3, 2, 1,
 };
 
+//1.10f: D2Common.0x6FDCFB80
+//1.14d: 0x006F2854
 char byte_6FDCFB80[] = { 1, 0, -1, 0 };
+//1.10f: D2Common.0x6FDCFB84
+//1.14d: 0x006F2850
 char byte_6FDCFB84[] = { 0, 1, 0, -1 };
 
 //D2Common.0x6FD80750
@@ -529,6 +539,8 @@ LABEL_26:
 //////////////
 
 
+//1.10f: D2Common.0x6FDCFCA8
+//1.14d: 0x006F0FC0
 static const int nBorderIndices[] =
 {
 	-1,  1, -1,  0, -1,  2, -1,  3, -1,  0,
@@ -547,6 +559,8 @@ static const int nBorderIndices[] =
 static const int nBorderIndicesOffset_sub_6FD80BE0 = 4;
 static const int nBorderIndicesOffset_sub_6FD80C10 = 50;
 
+//1.10f: D2Common.0x6FDCFB78
+//1.14d: 0x006F0620
 static const D2C_LvlPrestIds levelPrestBorder[13][4] = {
 	// In the game we have invalid data in row 0, probably resulting from optimization?
 	// Need to find out if we can actually have index = 0 in those functions or not
@@ -702,6 +716,8 @@ void __fastcall DRLGOUTPLACE_SetOutGridLinkFlags(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00675850
 void __fastcall DRLGOUTPLACE_PlaceAct1245OutdoorBorders(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCFE14
+	//1.14d: 0x006F112C
 	static const int nDesertBorderIds[5][2] =
 	{
 		{ LVLPREST_ACT2_DESERT_BORDER_10,	LVLPREST_ACT2_DESERT_BORDER_9 },
@@ -1561,6 +1577,8 @@ void __fastcall DRLGOUTPLACE_CreateLevelConnections(D2DrlgStrc* pDrlg, uint8_t n
 //1.14d: 0x00676DD0
 BOOL __fastcall sub_6FD82050(D2DrlgLevelLinkDataStrc* pLevelLinkData, int nIteration)
 {
+	//1.10f: D2Common.0x6FDD05C0
+	//1.14d: 0x006F1158
 	static const BOOL dword_6FDD05C0[] =
 	{
 		1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
@@ -1725,6 +1743,8 @@ BOOL __fastcall DRLGOUTPLACE_LinkAct4ChaosSanctum(D2DrlgLevelLinkDataStrc* pLeve
 //1.14d: 0x00677180
 void __fastcall sub_6FD82360(D2DrlgLevelStrc* pLevel, int nIteration, int* pRand)
 {
+	//1.10f: D2Common.0x6FDD06C0
+	//1.14d: 0x006F1258
 	static const D2UnkOutdoorStrc3 stru_6FDD06C0[15] =
 	{
 		{ 0, LEVEL_BLOODMOOR, LEVEL_COLDPLAINS, 1, 0, 0x04 },

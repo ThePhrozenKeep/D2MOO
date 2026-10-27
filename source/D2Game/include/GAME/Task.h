@@ -73,6 +73,8 @@ void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink);
 
 
 
+//1.10f: D2Game.0x6FCA4640 (#10034)
+//1.14d: 0x00545990
 void __stdcall D2Game_10034_Return(int nUnused);
 void __stdcall D2Game_10060_Return();
 void __stdcall D2Game_10061_Return();

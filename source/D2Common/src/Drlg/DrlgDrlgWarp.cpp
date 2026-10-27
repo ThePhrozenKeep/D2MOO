@@ -100,6 +100,8 @@ void __fastcall DRLGWARP_UpdateWarpRoomDeselect(D2DrlgRoomStrc* pDrlgRoom, int n
 //1.14d: 0x0066B2B0
 D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIndex, int* pX, int* pY)
 {
+	//1.10f: D2Common.0x6FDCE6A0
+	//1.14d: 0x006EED88
 	static const D2CoordStrc stru_6FDCE6A0[] =
 	{
 		{ 1, 0 },

@@ -66,9 +66,17 @@ int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
 int32_t dword_6FD45820;
 int32_t dword_6FD4581C;
+//1.10f: D2Game.0x6FD2CA60
+//1.14d: 0x00731014
 int32_t gnTargetFrameRate_6FD2CA60 = DEFAULT_FRAMES_PER_SECOND;
+//1.10f: D2Game.0x6FD457F8
+//1.14d: 0x00883D60
 int32_t gnTargetMsPerFrame_6FD457F8;
+//1.10f: D2Game.0x6FD2CA14
+//1.14d: 0x00731010
 int32_t gnFrameRate_6FD2CA14;
+//1.10f: D2Game.0x6FD45828
+//1.14d: 0x00883D48
 int32_t gnPeakMemoryUsageInLast10s_6FD45828;
 DWORD dword_6FD4582C;
 uint32_t gnPreviousMemUsageUpdateTickCount_6FD45840;

@@ -732,6 +732,7 @@ void __stdcall UNITS_SetAnimData(D2UnitStrc* pUnit, int nUnitType, int nClassId,
 }
 
 //Helper function
+//1.14d: 0x00620E80
 void __stdcall UNITS_CharacterStartRunningOrKnockback(D2UnitStrc* pUnit, int nClassId)
 {
 	D2StatListStrc* pStatList = STATLIST_AllocStatList(pUnit->pMemoryPool, STATLIST_TEMPONLY, 0, pUnit->dwUnitType, pUnit->dwUnitId);
@@ -2529,6 +2530,8 @@ int __stdcall UNITS_GetAttackRate(D2UnitStrc* pAttacker)
 //1.14d: 0x00622720
 int __stdcall UNITS_GetBlockRate(D2UnitStrc* pUnit, BOOL bExpansion)
 {
+	//1.10f: D2Common.0x6FDE5CEC
+	//1.14d: 0x00744580
 	static const int dword_6FDE5CEC[] =
 	{
 		' hct'
@@ -2772,6 +2775,8 @@ D2UnitStrc* __stdcall UNITS_GetEquippedWeaponFromMonster(D2UnitStrc* pMonster)
 //1.14d: 0x00623B10
 int __stdcall UNITS_GetFrameBonus(D2UnitStrc* pUnit)
 {
+	//1.10f: D2Common.0x6FDD3078
+	//1.14d: 0x006E8E60
 	static const int gaClassesWeaponFrameBonus_6FDD3078[NUM_WEAPON_CLASSES][NUMBER_OF_PLAYERCLASSES] =
 	{
 		//AMA,SOR,NEC,PAL,BAR,DRU,ASS
@@ -3838,6 +3843,8 @@ D2CharStatsTxt* __fastcall UNITS_GetCharStatsTxtRecord(int nRecordId)
 //1.14d: 0x00641530
 int __stdcall D2Common_10399(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2)
 {
+	//1.10f: D2Common.0x6FDD3200
+	//1.14d: 0x006EB180
 	static const int dword_6FDD3200[] =
 	{
 		-1, -1, -1, 0, 2, 4, 6, 8,

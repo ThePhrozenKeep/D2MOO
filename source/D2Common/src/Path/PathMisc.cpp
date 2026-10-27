@@ -917,6 +917,8 @@ void __fastcall sub_6FDAB7D0(int* pTestDir, int nUnused, D2PathPointStrc pPoint1
 //1.14d: 0x00679380
 int __stdcall sub_6FDABA50(D2PathPointStrc pPoint1, D2PathPointStrc pPoint2)
 {
+	//1.10f: D2Common.0x6FDD22D8
+	//1.14d: 0x006F1698
 	static const int dword_6FDD22D8[] =
 	{
 		-1, -1, -1, 0, 2, 4, 6, 8,

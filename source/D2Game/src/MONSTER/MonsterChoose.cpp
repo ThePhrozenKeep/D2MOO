@@ -12,6 +12,8 @@
 #include "MONSTER/MonsterSpawn.h"
 
 
+//1.10f: D2Game.0x6FD2E9A0
+//1.14d: 0x007415B4
 D2MonsterFormationStrc gtDiamondMonsterFormation = {
     4, 0, 0, 0, 0, 0,
     {
@@ -21,6 +23,8 @@ D2MonsterFormationStrc gtDiamondMonsterFormation = {
         { 1, 2, 0}
     }
 };
+//1.10f: D2Game.0x6FD2E9DC
+//1.14d: 0x007415F0
 D2MonsterFormationStrc* gpDiamondMonsterFormation = &gtDiamondMonsterFormation;
 
 

@@ -42,6 +42,8 @@
 #pragma warning(disable: 28159)
 
 
+//1.10f: D2Game.0x6FD4DC48
+//1.14d: 0x0088CAC4
 int32_t gnNpcGUID_6FD4DC48;
 
 //D2Game.0x6FCC67D0
@@ -2445,7 +2447,11 @@ void __fastcall D2GAME_NPC_IdentifyBoughtItem_6FCCA990(D2GameStrc* pGame, D2Unit
 //1.14d: 0x00578790
 void __fastcall D2GAME_STORES_FillGamble_6FCCA9F0(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pUnit, D2NpcRecordStrc* pNpcRecord)
 {
+    //1.10f: D2Game.0x6FD4DC4C
+    //1.14d: 0x0088CACC
     static int32_t gnRingItemId = 0;
+    //1.10f: D2Game.0x6FD4DC50
+    //1.14d: 0x0088CAC8
     static int32_t gnAmuItemId = 0;
 
     D2GambleDataTbl* pGambleDataTbl = DATATBLS_GetGambleDataTables();

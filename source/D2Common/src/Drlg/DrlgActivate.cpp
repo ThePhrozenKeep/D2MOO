@@ -6,9 +6,17 @@
 #include "Drlg/D2DrlgRoomTile.h"
 #include <DataTbls/LevelsIds.h>
 
+//1.10f: D2Common.0x6FDEA6EC
+//1.14d: 0x0096C8BC
 static int gStatsClientFreedRooms;
+//1.10f: D2Common.0x6FDEA6F0
+//1.14d: 0x0096C8B8
 static int gStatsClientAllocatedRooms;
+//1.10f: D2Common.0x6FDEA6F4
+//1.14d: 0x0096C8C0
 static int gStatsFreedRooms;
+//1.10f: D2Common.0x6FDEA6F8
+//1.14d: 0x0096C8C4
 static int gStatsAllocatedRooms;
 
 // D2Common.0x6FDE07B0
@@ -240,6 +248,7 @@ void __fastcall DRLGACTIVATE_RoomExPropagateUnsetStatus(D2DrlgRoomStrc* pDrlgRoo
 }
 
 // Helper functions
+//1.14d: 0x0061B490
 static void DRLGACTIVATE_RoomSetAndPropagateStatus(D2DrlgRoomStrc* pDrlgRoom, D2DrlgRoomStatus nStatus)
 {
 	DRLGACTIVATE_RoomExPropagateSetStatus(pDrlgRoom->pLevel->pDrlg->pMempool, pDrlgRoom, nStatus + 1);

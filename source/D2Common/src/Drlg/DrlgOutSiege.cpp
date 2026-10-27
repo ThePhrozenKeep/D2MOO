@@ -55,6 +55,8 @@ int __fastcall sub_6FD84100(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x0067E600
 void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDD09C8
+	//1.14d: 0x006F1FD8
 	static const D2CoordStrc stru_6FDD09C8[] =
 	{
 		{ -1, 0 },
@@ -197,6 +199,8 @@ void __fastcall DRLGOUTSIEGE_InitAct5OutdoorLevel(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x0067DA70
 void __fastcall DRLGOUTSIEGE_PlaceCaves(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDD0988
+	//1.14d: 0x006F1F9C
 	static const D2DrlgOutSiegeInitStrc stru_6FDD0988[] =
 	{
 		{ LEVEL_ARREATPLATEAU,		0, 0, LVLPREST_ACT5_BARRICADE_TO_CAVE_32X16,		LVLPREST_ACT5_BARRICADE_TO_CAVE_16X32 },
@@ -325,6 +329,8 @@ void __fastcall DRLGOUTSIEGE_AddACt5SecondaryBorder(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x0067E000
 int __fastcall sub_6FD84780(D2DrlgLevelStrc* pLevel, int nStyle, int a3)
 {
+	//1.10f: D2Common.0x6FDD0A28
+	//1.14d: 0x006F2038
 	static const D2DrlgOutSiegeInitStrc2 stru_6FDD0A28[] =
 	{
 		{ 49,	1,	16,	LVLPREST_ACT5_BARRICADE_1,					LVLPREST_ACT5_BARRICADE_1_SNOW },
@@ -382,6 +388,7 @@ BOOL __fastcall sub_6FD84820(D2DrlgLevelStrc* pLevel, int nX, int nY, int a4, in
 //1.14d: 0x0067E160
 void __fastcall DRLGOUTSIEGE_PlaceSpecialPresets(D2DrlgLevelStrc* pLevel)
 {
+	//1.14d: 0x006F2100
 	static const D2DrlgOutSiegeInitStrc3 stru_6FDD0AF8[] =
 	{
 		{ LEVEL_ID_ACT5_BARRICADE_1,		LVLPREST_ACT5_BARRICADE_HELL_PORTAL_N,		LVLPREST_ACT5_BARRICADE_HELL_PORTAL_W,		0, 25, 1, 1 },

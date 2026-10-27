@@ -69,4 +69,6 @@ bool __fastcall ACT1Q2_SeqCallback(D2QuestDataStrc* pQuestData);
 //1.14d: 0x00591180
 void __fastcall ACT1Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //
+//1.10f: D2Game.0x6FCB7340
+//1.14d: 0x00590C10
 void __fastcall ACT1Q2_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);

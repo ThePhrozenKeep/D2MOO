@@ -109,6 +109,8 @@ bool __fastcall ACT1Q7_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //
+//1.10f: D2Game.0x6FCA6670
+//1.14d: 0x00596BB0
 bool __fastcall ACT1Q7_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	return false;

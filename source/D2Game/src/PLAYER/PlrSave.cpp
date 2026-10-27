@@ -34,7 +34,11 @@
 #include "UNIT/SUnitNpc.h"
 
 
+//1.10f: D2Game.0x6FD30E08
+//1.14d: 0x007310CC
 int32_t gbWriteSaveFile_6FD30E08;
+//1.10f: D2Game.0x6FD4DC28
+//1.14d: 0x00883D6C
 int32_t dword_6FD4DC28;
 
 

@@ -65,6 +65,8 @@ int __stdcall DRLGPRESET_CountPresetObjectsByAct(uint8_t nAct)
 //1.14d: 0x006658E0
 int __stdcall DRLGPRESET_GetObjectIndexFromObjPreset(uint8_t nAct, int nUnitId)
 {
+	//1.10f: D2Common.0x6FDE1180
+	//1.14d: 0x00748AD8
 	static const int dword_6FDE1180[5][150] =
 	{
 		{
@@ -1877,6 +1879,8 @@ void __fastcall DRLGPRESET_ResetDrlgMap(D2DrlgLevelStrc* pLevel, BOOL bKeepPrese
 int __fastcall DRLGPRESET_MapTileType(int nId)
 {
 	// TODO: use D2TileType
+	//1.10f: D2Common.0x6FDD0D00
+	//1.14d: 0x006EEF20
 	static const int nTileTypeMappingTable[] =
 	{
 		0, 1, 2, 1, 2, 3, 3, 5, 5, 6, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,

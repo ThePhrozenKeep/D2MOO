@@ -20,6 +20,8 @@
 #include <cmath>
 #include <utility>
 
+//1.10f: D2Common.0x6FDD1DE4
+//1.14d: 0x006EB3DC
 static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION_UNIT_SIZE_COUNT] =
 {
 	COLLISION_PATTERN_NONE,
@@ -27,6 +29,8 @@ static const D2C_CollisionPattern gaCollisionPatternsFromSize_6FDD1DE4[COLLISION
 	COLLISION_PATTERN_SMALL_UNIT_PRESENCE,
 	COLLISION_PATTERN_BIG_UNIT_PRESENCE
 };
+//1.10f: D2Common.0x6FDD1DF8
+//1.14d: 0x006EB3F0
 static const int gaOffsetsForSnappingToCardinalDirection[9][9] =
 {
 	{-1,  0,  0,  0, 0, 0, 0, 0, 1},
@@ -40,6 +44,8 @@ static const int gaOffsetsForSnappingToCardinalDirection[9][9] =
 	{-1,  0,  0,  0, 0, 0, 0, 0, 1}
 };
 
+//1.10f: D2Common.0x6FDD1F88
+//1.14d: 0x006EB548
 static const uint32_t dword_6FDD1F88[PATH_NB_DIRECTIONS] =
 {
 	0x00000000, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 0x00000001, 
@@ -52,6 +58,8 @@ static const uint32_t dword_6FDD1F88[PATH_NB_DIRECTIONS] =
 	0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
 };
 
+//1.10f: D2Common.0x6FDD2088
+//1.14d: 0x006EB690
 static const int gaPathTypeFlags_6FDD2088[] =
 {
 /*[ 0]*/0x21900,

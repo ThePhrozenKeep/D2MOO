@@ -23,23 +23,49 @@ struct D2ItemTypesTxt
 };
 
 
+//1.10f: D2Win.0x6F8FD650
+//1.14d: 0x0087E838
 D2CompositeUnitStrc* dword_6F8FD650;
+//1.10f: D2Win.0x6F8FD654
+//1.14d: 0x0087E83C
 D2CofNodeStrc* dword_6F8FD654;
 
+//1.10f: D2Win.0x6F8FD218
+//1.14d: 0x0087E82C
 uint8_t byte_6F8FD218[10];
+//1.10f: D2Win.0x6F8FD224
+//1.14d: 0x0087D810
 uint8_t byte_6F8FD224[10];
 
 char byte_6F8FD678[4];
 
+//1.10f: D2Win.0x6F8FD65C
+//1.14d: 0x0087E844
 D2CellFileStrc* ghSquelchCelFile_6F8FD65C;
+//1.10f: D2Win.0x6F8FD660
+//1.14d: 0x0087E848
 int gnSquelchCelFileFrameCount_6F8FD660;
+//1.10f: D2Win.0x6F8FD668
+//1.14d: 0x0087E850
 D2CellFileStrc* ghSelectedCelFile_6F8FD668;
+//1.10f: D2Win.0x6F8FD66C
+//1.14d: 0x0087E854
 int gnSelectedCelFileFrameCount_6F8FD66C;
 
+//1.10f: D2Win.0x6F8BCF94
+//1.14d: 0x0072EF2C
 int dword_6F8BCF94 = 1;
+//1.10f: D2Win.0x6F8FD244
+//1.14d: 0x0087D82C
 D2ItemTypesTxt* gpItemTypesTxt_6F8FD244;
+//1.10f: D2Win.0x6F8BC0A4
+//1.14d: 0x0072E04C
 int dword_6F8BC0A4;
+//1.10f: D2Win.0x6F8BC0F8
+//1.14d: 0x0072E0B4
 int gnPlayerModeTokenTblSize_6F8BC0F8;
+//1.10f: D2Win.0x6F8BC154
+//1.14d: 0x0072E15C
 int dword_6F8BC154[15] =
 {
 	0,
@@ -58,6 +84,8 @@ int dword_6F8BC154[15] =
 	' 1th',
 	' 2th',
 };
+//1.10f: D2Win.0x6F8BC190
+//1.14d: 0x0072E198
 int dword_6F8BC190 = 15;
 
 

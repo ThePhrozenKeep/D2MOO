@@ -1018,6 +1018,7 @@ int32_t __fastcall SKILLS_AuraCallback_FindNextTarget(D2AuraCallbackStrc* pAuraC
     return 1;
 }
 
+//1.14d: 0x00478A20
 D2PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType)
 {
     if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)

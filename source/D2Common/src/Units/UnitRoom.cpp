@@ -7,7 +7,11 @@
 
 
 //TODO: Find names (used by Path Functions)
+//1.10f: D2Common.0x6FDD2580
+//1.14d: 0x006EB7D4
 int dword_6FDD2580;
+//1.10f: D2Common.0x6FDD2584
+//1.14d: 0x006EB7D8
 int dword_6FDD2584;
 
 //D2Common.0x6FDBCF10 (#11279)

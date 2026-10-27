@@ -73,6 +73,8 @@ int32_t __fastcall MONSTERAI_GetTargetOverrideGUID(D2UnitStrc* pMonster);
 //1.14d: 0x00573120
 void __fastcall MONSTERAI_ClearTargetOverride(D2UnitStrc* pMonster);
 //D2Game.0xFC61F20
+//1.10f: D2Game.0x6FC61F20
+//1.14d: 0x00573140
 int32_t __fastcall MONSTERAI_IsInteractionReady(D2UnitStrc* pMonster, D2UnitStrc* pUnit);
 //D2Game.0x6FC61F70
 void __fastcall MONSTERAI_CloseNpcInteractions(D2GameStrc* pGame, D2UnitStrc* pMonster, void(__fastcall* pCallback)(D2UnitStrc*));

@@ -23,6 +23,8 @@ D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
 //1.14d: 0x00744304
 extern "C" D2DataTablesStrc * sgptDataTables = &gpDataTables;
+//1.10f: D2Common.0x6FDD6A24
+//1.14d: 0x00744308
 BOOL DATATBLS_LoadFromBin = TRUE;
 
 // ARENA & CHARTEMPLATE
@@ -451,6 +453,7 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 	sgptDataTables->pStatesLinker = NULL;
 }
 
+//1.14d: 0x00452040
 D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
 {
 	if (nStateId >= 0 && nStateId < sgptDataTables->nStatesTxtRecordCount)

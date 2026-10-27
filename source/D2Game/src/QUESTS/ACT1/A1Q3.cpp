@@ -498,6 +498,8 @@ void __fastcall ACT1Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 //1.14d: 0x005916A0
 void __fastcall ACT1Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
+	//1.10f: D2Game.0x6FD32EB8
+	//1.14d: 0x00737630
 	static const int32_t nIndices[] =
 	{
 		-1, 0, 1, 2, 3, 4

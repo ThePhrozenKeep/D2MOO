@@ -260,6 +260,8 @@ static D2StatListStrc* GetAuraStateStatList(D2UnitStrc* pUnit, D2SkillsTxt* pSki
 	return nullptr;
 }
 
+//1.10f: D2Game.0x6FC35710
+//1.14d: 0x005B0CC0
 void __fastcall AITHINK_Fn000(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 }

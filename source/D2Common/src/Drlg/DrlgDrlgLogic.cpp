@@ -152,6 +152,8 @@ void __fastcall DRLGLOGIC_InitializeDrlgCoordList(D2DrlgRoomStrc* pDrlgRoom, D2D
 //1.14d: 0x0066C3D0
 void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int nY, int a4)
 {
+	//1.10f: D2Common.0x6FDCE5C8
+	//1.14d: 0x006EEE14
 	static const D2CoordStrc stru_6FDCE5C8[] =
 	{
 		{ 1, 0 },
@@ -165,6 +167,8 @@ void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int n
 		23, 0, 5, 21, 17, 15, 3, 0, 9, 7, 39, 0, 0, 5, 3, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 0
 	};
 
+	//1.10f: D2Common.0x6FDCE650
+	//1.14d: 0x006EEEA0
 	static const int dword_6FDCE650[] =
 	{
 		-1, 0, 1, 2, 2, 0, 1, 3, 0, 1, 0, 1, 4, -1, 4, 0, 0, 0, 0, 0

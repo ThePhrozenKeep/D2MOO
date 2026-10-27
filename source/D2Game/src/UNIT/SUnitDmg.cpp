@@ -2255,6 +2255,8 @@ BOOL __fastcall SUNITDMG_ShouldSkipHitRecovery(D2UnitStrc* pUnit, D2DamageStrc* 
 //1.14d: 0x0057CE30
 int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHitClass)
 {
+	//1.10f: D2Game.0x6FD29360
+	//1.14d: 0x006E16D8
 	constexpr D2DamageHitClassMappingStrc sgDamageHitClassMapping[] =
 	{
 		{ offsetof(D2DamageStrc, dwColdDamage), 0x30 },
@@ -2267,6 +2269,8 @@ int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHit
 		{ offsetof(D2DamageStrc, dwPoisDamage), 0x50 },
 	};
 
+	//1.10f: D2Game.0x6FD4DC44
+	//1.14d: 0x0088CAD0
 	static int32_t nHitClassRotation;
 
 	int32_t nIndex = nHitClassRotation % 4;
@@ -2306,6 +2310,8 @@ int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHit
 //1.14d: 0x0057D4F0
 void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nUnused)
 {
+	//1.10f: D2Game.0x6FD3F2A0
+	//1.14d: 0x00732B90
 	constexpr D2DurabilityLossStrc sgDurabilityLossWeights[7] =
 	{
 		{ BODYLOC_HEAD, 3 },
@@ -3081,6 +3087,8 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 	uint32_t nResult = nDefenderExperience;
 	if (nDefenderLevel <= nAttackerLevel)
 	{
+		//1.10f: D2Game.0x6FD293A4
+		//1.14d: 0x006E1668
 		constexpr int32_t experienceFactors[] =
 		{
 			256, 256, 256, 256, 256, 256, 207, 159, 110, 61, 13
@@ -3095,6 +3103,8 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 	}
 	else if (nAttackerLevel < 25 || nDefenderLevel <= 0)
 	{
+		//1.10f: D2Game.0x6FD293D0
+		//1.14d: 0x006E1694
 		constexpr int32_t experienceFactors[] =
 		{
 			256, 256, 256, 256, 256, 256, 225, 174, 92, 38, 5

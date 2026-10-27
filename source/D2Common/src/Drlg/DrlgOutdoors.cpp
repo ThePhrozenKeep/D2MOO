@@ -22,6 +22,8 @@
 //1.14d: 0x00674040
 int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pDrlgVertex)
 {
+	//1.10f: D2Common.0x6FDCF918
+	//1.14d: 0x006F05D8
 	static const D2CoordStrc pOffsetCoords[] =
 	{
 		{ -4, 4 },
@@ -404,11 +406,15 @@ BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, in
 //1.14d: 0x00674920
 BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int nLvlPrestId, int nRand)
 {
+	//1.10f: D2Common.0x6FDCF938
+	//1.14d: 0x006F0614
 	static const char nOffsetX[] =
 	{
 		-1, 0, 0, 1, -1, 1, 1, -1
 	};
 
+	//1.10f: D2Common.0x6FDCF940
+	//1.14d: 0x006F060C
 	static const char nOffsetY[] =
 	{
 		0, -1, 1, 0, -1, 1, -1, 1
@@ -589,6 +595,8 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00674E40
 void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShrines)
 {
+	//1.10f: D2Common.0x6FDCF948
+	//1.14d: 0x006F061C
 	static const int dword_6FDCF948[] =
 	{
 		0x1000, 0x2000, 0x4000, 0x8000
@@ -887,6 +895,8 @@ void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeep
 	}
 }
 
+//1.10f: D2Common.0x6FDCF958
+//1.14d: 0x006F2700
 static const uint8_t byte_6FDCF958[] =
 {
 	0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x10, 0x10,
@@ -1190,11 +1200,15 @@ void __fastcall DRLGOUTDOORS_CalculatePathCoordinates(D2DrlgLevelStrc* pLevel, D
 //1.14d: 0x00681000
 void __fastcall sub_6FD7F5B0(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCFA58
+	//1.14d: 0x006F2810
 	static const int nXOffsets[] =
 	{
 		-1, 0, 0, 1
 	};
 
+	//1.10f: D2Common.0x6FDCFA68
+	//1.14d: 0x006F2800
 	static const int nYOffsets[] =
 	{
 		0, 1, -1, 0
@@ -1301,11 +1315,15 @@ void __fastcall sub_6FD7F5B0(D2DrlgLevelStrc* pLevel)
 //1.14d: 0x00681240
 void __fastcall sub_6FD7F810(D2DrlgLevelStrc* pLevel, int nVertexId)
 {
+	//1.10f: D2Common.0x6FDCFA78
+	//1.14d: 0x006F2820
 	static const int nXOffsets[] =
 	{
 		1, 0, -1, 0
 	};
 
+	//1.10f: D2Common.0x6FDCFA88
+	//1.14d: 0x006F2830
 	static const int nYOffsets[] =
 	{
 		0, 1, 0, -1
@@ -1370,16 +1388,22 @@ void __fastcall sub_6FD7F810(D2DrlgLevelStrc* pLevel, int nVertexId)
 //1.14d: 0x0067E890
 void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {
+	//1.10f: D2Common.0x6FDCFA98
+	//1.14d: 0x006F22B0
 	static const int nMesaLvlPrestIds[] =
 	{
 		LVLPREST_ACT4_MESA_1_24X24, LVLPREST_ACT4_MESA_2_24X24, LVLPREST_ACT4_MESA_3_24X24
 	};
 
+	//1.10f: D2Common.0x6FDCFAA4
+	//1.14d: 0x006F22A4
 	static const int nPitsLvlPrestIds[] =
 	{
 		LVLPREST_ACT4_PITS_1_16X16, LVLPREST_ACT4_PITS_2_16X16, LVLPREST_ACT4_PITS_2_16X16
 	};
 
+	//1.10f: D2Common.0x6FDCFAB0
+	//1.14d: 0x006F22C0
 	static const int nLavaLvlPrestIds[] =
 	{
 		LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X, LVLPREST_ACT4_LAVA_X,

@@ -45,6 +45,8 @@ void __fastcall DRLGOUTROOM_AllocDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.6FD83E20
+//1.10f: D2Common.0x6FD83E20
+//1.14d: 0x0067D710
 void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
 {
 	DRLGROOMTILE_AllocTileGrid(pDrlgRoom);
@@ -121,6 +123,8 @@ BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelDef(D2DrlgLevelLinkDataStrc* pLevel
 //1.14d: 0x0067D980
 BOOL __fastcall DRLGOUTROOM_LinkLevelsByOffsetCoords(D2DrlgLevelLinkDataStrc* pLevelLinkData)
 {
+	//1.10f: D2Common.0x6FDD0968
+	//1.14d: 0x006F1F7C
 	static const D2CoordStrc pOffsetCoords[4] =
 	{
 		{ 0, -160 },

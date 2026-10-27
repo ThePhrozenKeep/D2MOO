@@ -37,17 +37,25 @@ static const D2CompositStrc stru_6FDCE260[] =
 //1.14d: 0x0064F5B0
 void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nMode, int nUnitType, D2InventoryStrc* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9)
 {
+	//1.10f: D2Common.0x6FDD6088
+	//1.14d: 0x00745900
 	static const D2CompositStrc stru_6FDD6088[] =
 	{
 		{ '  hg', PLRMODE_SEQUENCE },
 		{ '  hg', PLRMODE_KNOCKBACK },
 	};
+	//1.10f: D2Common.0x6FDD6098
+	//1.14d: 0x00745910
 	static const int dword_6FDD6098 = ARRAY_SIZE(stru_6FDD6088);
 
+	//1.10f: D2Common.0x6FDD609C
+	//1.14d: 0x00745914
 	static const D2CompositStrc stru_6FDD609C[] =
 	{
 		{'  hg', MONMODE_KNOCKBACK },
 	};
+	//1.10f: D2Common.0x6FDD60A4
+	//1.14d: 0x0074591C
 	static const int dword_6FDD60A4 = ARRAY_SIZE(stru_6FDD609C);
 
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;

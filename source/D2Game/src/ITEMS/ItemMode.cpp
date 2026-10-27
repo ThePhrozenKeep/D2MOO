@@ -5095,6 +5095,8 @@ void __fastcall ITEMMODE_UpdateItemStatListExpiration(D2GameStrc* pGame, D2UnitS
     STATLIST_UpdateStatListsExpiration(pUnit, pGame->dwGameFrame);
 }
 
+//1.10f: D2Game.0x6FCA6660
+//1.14d: 0x0055F120
 void __fastcall ITEMMODE_EventFn4_Return(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 }

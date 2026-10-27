@@ -208,6 +208,8 @@ struct D2ItemTypeCheckStrc
 	int nItemType;				//0x04
 };
 
+//1.10f: D2Common.0x6FDE3BA0
+//1.14d: 0x0074463C
 D2CalcCallbackInfoStrc off_6FDE3BA0[] =
 {
 	{ MISSILE_GetMinimum, 2},
@@ -215,12 +217,16 @@ D2CalcCallbackInfoStrc off_6FDE3BA0[] =
 	{ sub_6FD98220, 2},
 	{ sub_6FD982A0, 2},
 };
+//1.10f: D2Common.0x6FDE3BC0
+//1.14d: 0x0074465C
 int dword_6FDE3BC0 = ARRAY_SIZE(off_6FDE3BA0);
 
 //TODO: Find names
 
 
 
+//1.10f: D2Common.0x6FDE3160
+//1.14d: 0x00745B58
 static const D2PropertyAssignStrc stru_6FDE3160[] =
 {
 	{ sub_6FD92E80, STAT_ARMORCLASS },
@@ -516,6 +522,8 @@ static const PROPERTYASSIGNFN off_6FDE3920[] =
 	ITEMMODS_PropertyFunc36
 #endif
 };
+//1.10f: D2Common.0x6FDE39B0
+//1.14d: 0x00745B54
 static const int dword_6FDE39B0 = ARRAY_SIZE(off_6FDE3920);
 
 
@@ -2364,6 +2372,8 @@ BOOL __fastcall sub_6FD95210(int nType, D2UnitStrc* pUnit, D2UnitStrc* pItem, co
 //1.14d: 0x0065FEC0
 void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pItem, const void* pMods, int nPropSet, int nApplyType)
 {
+	//1.10f: D2Common.0x6FDD146C
+	//1.14d: 0x006EDB5C
 	static const int dword_6FDD146C[] =
 	{
 		STATLIST_MAGIC,
@@ -2375,6 +2385,8 @@ void __stdcall ITEMMODS_AssignProperty(int nType, D2UnitStrc* a2, D2UnitStrc* pI
 		STATLIST_MAGIC | STATLIST_SET,
 	};
 
+	//1.10f: D2Common.0x6FDD1488
+	//1.14d: 0x006EDB40
 	static const int dword_6FDD1488[] =
 	{
 		0,
@@ -2623,6 +2635,8 @@ BOOL __stdcall ITEMMODS_UpdateRuneword(D2UnitStrc* pUnit, D2UnitStrc* pItem, int
 //1.14d: 0x00660120
 void __fastcall ITEMMODS_UpdateFullSetBoni(D2UnitStrc* pUnit, D2UnitStrc* pItem, int nState)
 {
+	//1.10f: D2Common.0x6FDD14A8
+	//1.14d: 0x006EDA40
 	static const int dword_6FDD14A8[] =
 	{
 		0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
@@ -2815,6 +2829,8 @@ BOOL __stdcall ITEMMODS_CanItemBeHighQuality(D2UnitStrc* pItem, D2QualityItemsTx
 //1.14d: 0x0065E8E0
 void __stdcall ITEMMODS_SetRandomElixirFileIndex(D2UnitStrc* pItem)
 {
+	//1.10f: D2Common.0x6FDE3900
+	//1.14d: 0x0074638C
 	static const uint32_t dwFileIndex[] =
 	{
 		0, 1, 2, 3, 9, 7

@@ -198,6 +198,8 @@ void __fastcall ACT2Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2
 }
 
 //
+//1.10f: D2Game.0x6FCA6B00
+//1.14d: 0x005985B0
 bool __fastcall ACT2Intro_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	*pStatus = 0;
@@ -205,6 +207,8 @@ bool __fastcall ACT2Intro_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitSt
 }
 
 //
+//1.10f: D2Game.0x6FCA6670
+//1.14d: 0x005985C0
 bool __fastcall ACT2Intro_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	return false;

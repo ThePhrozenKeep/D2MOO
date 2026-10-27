@@ -63,6 +63,7 @@ static uint8_t SimpleStringHash(char* str)
 	return nHash;
 }
 
+//1.14d: 0x0066A8F0
 static D2AnimDataRecordStrc* DATATBLS_GetAnimDataRecordFromPath(char* szPath)
 {
 	ToUpperCase(szPath);

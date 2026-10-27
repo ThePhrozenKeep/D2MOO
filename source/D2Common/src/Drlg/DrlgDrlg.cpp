@@ -876,6 +876,8 @@ uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId)
 {
 	//IMPROVEMENT: Lookup the act from Levels.txt
 
+	//1.10f: D2Common.0x6FDCE5B0
+	//1.14d: 0x006EB2F0
 	static const int gnTownIds[] = { LEVEL_ROGUEENCAMPMENT, LEVEL_LUTGHOLEIN, LEVEL_KURASTDOCKTOWN, LEVEL_THEPANDEMONIUMFORTRESS, LEVEL_HARROGATH, 1024 };
 
 	int nAct = 1;

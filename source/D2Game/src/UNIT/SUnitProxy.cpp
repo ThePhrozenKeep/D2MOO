@@ -43,10 +43,18 @@ struct D2NpcInitStrc
 
 constexpr uint32_t MAX_NPC = 64;
 constexpr uint32_t MAX_NPC_INVENTORY = 17;
+//1.10f: D2Game.0x6FD4DC58
+//1.14d: 0x00883E88
 uint8_t gbUnitProxyItemCacheInitialized[MAX_NPC_INVENTORY] = {};
+//1.10f: D2Game.0x6FD4DC70
+//1.14d: 0x00883D78
 D2UnitProxyStrc gUnitProxyItemCache[MAX_NPC_INVENTORY] = {};
 
+//1.10f: D2Game.0x6FD4DD80
+//1.14d: 0x00883E9C
 int32_t gnCrossbowQuiverItemId;
+//1.10f: D2Game.0x6FD4DD84
+//1.14d: 0x00883EA0
 int32_t gnArrowQuiverItemId;
 
 
@@ -103,6 +111,8 @@ void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2
 //1.14d: 0x00536070
 void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame)
 {
+    //1.10f: D2Game.0x6FD3F640
+    //1.14d: 0x00731188
     constexpr D2NpcInitStrc tNpcInitRecords[] =
     {
         { MONSTER_AKARA,        1, ACT_I,   1, 0 },

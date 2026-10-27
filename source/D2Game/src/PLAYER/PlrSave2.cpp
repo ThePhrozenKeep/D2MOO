@@ -1575,6 +1575,8 @@ void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 //1.14d: 0x0056B180
 int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg)
 {
+    //1.10f: D2Game.0x6FD292D0
+    //1.14d: 0x006E1208
     constexpr int32_t dwErrorCodesRemap_6FD292D0[] =
     {
         SYSERROR_SUCCESS,                   // PLRSAVE2ERROR_SUCCESS = 0

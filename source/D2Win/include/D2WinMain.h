@@ -12,7 +12,11 @@ struct D2WinControlInitStrc;
 struct D2WinControlStrc;
 struct SMSGHANDLER_PARAMS;
 
+//1.10f: D2Win.0x6F8FE234
+//1.14d: 0x007D55A4
 extern POINT gMousePosition_6F8FE234;
+//1.10f: D2Win.0x6F8FE254
+//1.14d: 0x007D55C4
 extern int32_t dword_6F8FE254;
 
 
