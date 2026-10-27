@@ -9,6 +9,7 @@
 
 
 //D2Game.0x6FD34038
+//1.14d: 0x00738778
 D2NPCMessageTableStrc gpAct1Q7NpcMessages[] =
 {
 	{
@@ -51,6 +52,7 @@ D2NPCMessageTableStrc gpAct1Q7NpcMessages[] =
 
 
 //D2Game.0x6FC9EF40
+//1.14d: 0x00596C40
 void __fastcall ACT1Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -66,6 +68,7 @@ void __fastcall ACT1Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FC9EFA0
+//1.14d: 0x00596A90
 void __fastcall ACT1Q7_Callback00_NpcActivate(D2QuestDataStrc* pQuest, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_NAVI)
@@ -90,6 +93,7 @@ void __fastcall ACT1Q7_Callback00_NpcActivate(D2QuestDataStrc* pQuest, D2QuestAr
 }
 
 //D2Game.0x6FC9F0A0
+//1.14d: 0x00596BC0
 bool __fastcall ACT1Q7_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId != MONSTER_NAVI || !QUESTS_GetQuestData(pQuest->pGame, QUEST_A1Q1_DENOFEVIL)->bNotIntro || QUESTS_GetGlobalState(pQuest->pGame, QUESTSTATEFLAG_A1Q1, QFLAG_PRIMARYGOALDONE))

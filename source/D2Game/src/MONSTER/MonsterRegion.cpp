@@ -138,6 +138,7 @@ int32_t __fastcall MONSTERREGION_FindSpawnLocation(D2GameStrc* pGame, D2ActiveRo
 }
 
 //D2Game.0x6FC66560
+//1.14d: 0x0054E600
 D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nClassId, int32_t nX, int32_t nY, int32_t nMode)
 {
     if (nClassId < 0)
@@ -539,6 +540,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnPresetMonster_6FC66560(D2GameStrc* pGame, D2A
 }
 
 //D2Game.0x6FC66FC0
+//1.14d: 0x00451FE0
 D2MonStats2Txt* __fastcall MONSTERREGION_GetMonStats2TxtRecord(int32_t nMonsterId)
 {
     if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
@@ -554,6 +556,7 @@ D2MonStats2Txt* __fastcall MONSTERREGION_GetMonStats2TxtRecord(int32_t nMonsterI
 }
 
 //D2Game.0x6FC67010
+//1.14d: 0x004638A0
 uint32_t __fastcall MONSTERREGION_CheckMonStats2Flag(int32_t nMonsterId, int32_t nFlag)
 {
     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(nMonsterId);
@@ -567,6 +570,7 @@ uint32_t __fastcall MONSTERREGION_CheckMonStats2Flag(int32_t nMonsterId, int32_t
 }
 
 //D2Game.0x6FC67080
+//1.14d: 0x00463900
 int32_t __fastcall MONSTERREGION_SanitizeMonsterId(int32_t nMonsterId)
 {
     if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
@@ -578,6 +582,7 @@ int32_t __fastcall MONSTERREGION_SanitizeMonsterId(int32_t nMonsterId)
 }
 
 //D2Game.0x6FC670A0
+//1.14d: 0x0054E3A0
 int32_t __fastcall MONSTERREGION_CanRetryPresetSpawn(int32_t nMonsterId)
 {
     switch (MONSTERREGION_SanitizeMonsterId(nMonsterId))
@@ -597,6 +602,7 @@ int32_t __fastcall MONSTERREGION_CanRetryPresetSpawn(int32_t nMonsterId)
 }
 
 //D2Game.0x6FC67190
+//1.14d: 0x0054EC90
 void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
 
@@ -731,6 +737,7 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc
 }
 
 //D2Game.0x6FC67570
+//1.14d: 0x0054DDC0
 int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2MonsterFormationStrc* pFormation, int32_t* pX, int32_t* pY)
 {
     int32_t nLeft = 0;
@@ -812,6 +819,7 @@ int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC677D0
+//1.14d: 0x0054DF80
 D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMin, uint8_t nMax)
 {
     if (!nMin || !nMax || nMax < nMin)
@@ -851,6 +859,7 @@ D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2Acti
 }
 
 //D2Game.0x6FC679F0
+//1.14d: 0x0054F060
 void __fastcall MONSTERREGION_TrySpawnWanderingMonster(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
     constexpr int32_t nWanderingMonsterIds[] = { MONSTER_ROGUE2 };
@@ -905,6 +914,7 @@ void __fastcall MONSTERREGION_TrySpawnWanderingMonster(D2GameStrc* pGame, D2Acti
 }
 
 //D2Game.0x6FC67B90
+//1.14d: 0x005479C0
 void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc** ppMonsterRegion, D2SeedStrc* pSeed, uint32_t nLowSeed, uint8_t nDifficulty, int32_t bExpansion)
 {
     SEED_InitLowSeed(pSeed, nLowSeed);
@@ -1018,6 +1028,7 @@ void __fastcall MONSTERREGION_InitializeAll(void* pMemPool, D2MonsterRegionStrc*
 }
 
 //D2Game.0x6FC67F30
+//1.14d: 0x00547B50
 void __fastcall MONSTERREGION_FreeAll(void* pMemPool, D2MonsterRegionStrc** ppMonsterRegion)
 {
     for (int32_t i = 1; i < sgptDataTables->nLevelsTxtRecordCount; ++i)
@@ -1030,12 +1041,14 @@ void __fastcall MONSTERREGION_FreeAll(void* pMemPool, D2MonsterRegionStrc** ppMo
 }
 
 //D2Game.0x6FC67F90
+//1.14d: 0x00547BB0
 D2MonsterRegionStrc* __fastcall MONSTERREGION_GetMonsterRegionFromLevelId(D2MonsterRegionStrc** ppMonsterRegion, int32_t nLevelId)
 {
     return ppMonsterRegion[nLevelId];
 }
 
 //D2Game.0x6FC67FA0
+//1.14d: 0x00547BC0
 D2MonRegDataStrc* __fastcall MONSTERREGION_GetMonsterComponentData(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
     int32_t nClassId = -1;
@@ -1092,6 +1105,7 @@ D2MonRegDataStrc* __fastcall MONSTERREGION_GetMonsterComponentData(D2MonsterRegi
 }
 
 //D2Game.0x6FC68110
+//1.14d: 0x00547D20
 void __fastcall MONSTERREGION_InitializeForGame(D2GameStrc* pGame)
 {
     D2SeedStrc seed = {};
@@ -1104,6 +1118,7 @@ void __fastcall MONSTERREGION_InitializeForGame(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC68180
+//1.14d: 0x00547D90
 void __fastcall MONSTERREGION_RegisterSpawnedMonster(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bToggleFlag)
 {
     if (bToggleFlag)
@@ -1118,6 +1133,7 @@ void __fastcall MONSTERREGION_RegisterSpawnedMonster(D2MonsterRegionStrc** ppMon
 }
 
 //D2Game.0x6FC681C0
+//1.14d: 0x00547DD0
 void __fastcall MONSTERREGION_UpdateSpawnCountForAlignmentChange(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit, int32_t nPreviousAlignment, int32_t nNewAlignment)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !SUNIT_IsDead(pUnit) && !MONSTER_CheckSummonerFlag(pUnit, 2u))
@@ -1139,6 +1155,7 @@ void __fastcall MONSTERREGION_UpdateSpawnCountForAlignmentChange(D2MonsterRegion
 }
 
 //D2Game.0x6FC68240
+//1.14d: 0x00547E50
 void __fastcall MONSTERREGION_RecordMonsterKill(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit)
 {
     if (!MONSTER_CheckSummonerFlag(pUnit, 2u))
@@ -1152,6 +1169,7 @@ void __fastcall MONSTERREGION_RecordMonsterKill(D2MonsterRegionStrc** ppMonsterR
 }
 
 //D2Game.0x6FC68280
+//1.14d: 0x00547E90
 void __fastcall MONSTERREGION_UndoMonsterKill(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit)
 {
     if (!MONSTER_CheckSummonerFlag(pUnit, 2u))
@@ -1165,6 +1183,7 @@ void __fastcall MONSTERREGION_UndoMonsterKill(D2MonsterRegionStrc** ppMonsterReg
 }
 
 //D2Game.0x6FC682C0
+//1.14d: 0x00547ED0
 void __fastcall MONSTERREGION_AdjustCountsForInactiveMonster(D2MonsterRegionStrc** ppMonRegion, int32_t nSavedLevelId, int32_t nCurrentLevelId, int32_t nAlignment, int32_t bDead, int32_t bExcludeFromCount, D2UnitStrc* pUnit)
 {
     D2MonsterRegionStrc* pMonsterRegion1 = ppMonRegion[nSavedLevelId];

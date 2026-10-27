@@ -7,6 +7,7 @@
 
 
 //D2Game.0x6FD34698
+//1.14d: 0x00738D60
 D2NPCMessageTableStrc gpAct2IntroNpcMessages[] =
 {
 	{
@@ -47,6 +48,7 @@ D2NPCMessageTableStrc gpAct2IntroNpcMessages[] =
 
 
 //D2Game.0x6FC9F120
+//1.14d: 0x005985D0
 void __fastcall ACT2Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -63,6 +65,7 @@ void __fastcall ACT2Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FC9F180
+//1.14d: 0x005983E0
 void __fastcall ACT2Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	const int16_t nMessageIndex = pQuestArg->nMessageIndex;
@@ -131,6 +134,7 @@ void __fastcall ACT2Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FC9F260
+//1.14d: 0x005984C0
 void __fastcall ACT2Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	int32_t nNpcId = -1;

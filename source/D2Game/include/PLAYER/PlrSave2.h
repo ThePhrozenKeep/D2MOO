@@ -110,20 +110,28 @@ struct D2SaveHeaderStrc
 #pragma pack()
 
 //D2Game.0x6FC8CCD0
+//1.14d: 0x00568E60
 void __fastcall PLRSAVE2_WriteMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SaveHeaderStrc* pMercData);
 //D2Game.0x6FC8CD80
+//1.14d: 0x00568F20
 int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D390
+//1.14d: 0x005693E0
 int32_t __fastcall PLRSAVE2_WriteWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D440
+//1.14d: 0x00569490
 int32_t __fastcall PLRSAVE2_WritePlrIntroSection(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D4F0
+//1.14d: 0x00569540
 int32_t __fastcall PLRSAVE2_WritePlayerStats(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D710
+//1.14d: 0x005697F0
 int32_t __fastcall PLRSAVE2_WriteCorpsesSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t nUnused);
 //D2Game.0x6FC8D880
+//1.14d: 0x00569A00
 int32_t __fastcall PLRSAVE2_WriteIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t nUnused);
 //D2Game.0x6FC8D940
+//1.14d: 0x00569AD0
 int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t bUseTradeInventory, int32_t nUnused);
 //1.10f: D2Game.0x6FC8DC20
 //1.13c: D2Game.0x6FD0BAF0
@@ -135,28 +143,39 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
 #endif
 //1.10f: D2Game.0x6FC8DD00
 //1.13c: D2Game.0x6FD0D250
+//1.14d: 0x0056A090
 int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
 //D2Game.0x6FC8E070
+//1.14d: 0x0056A3E0
 int32_t __fastcall PLRSAVE2_ReadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);
 //D2Game.0x6FC8E0F0
+//1.14d: 0x0056A4F0
 int32_t __fastcall PLRSAVE2_ReadStatsEx(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion);
 //D2Game.0x6FC8E250
+//1.14d: 0x0056A620
 int32_t __fastcall PLRSAVE2_ReadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nStats);
 //D2Game.0x6FC8E330
 int32_t __fastcall PLRSAVE2_LoadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused, int32_t nSkills);
 //D2Game.0x6FC8E420
+//1.14d: 0x0056A830
 int32_t __fastcall PLRSAVE2_ReadCorpses(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t* pDetailError);
 //D2Game.0x6FC8E670
+//1.14d: 0x0056AA50
 D2UnitStrc* __fastcall PLRSAVE2_ReadMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2MercSaveDataStrc* pData, uint32_t dwVersion);
 //D2Game.0x6FC8E850
+//1.14d: 0x0056AC10
 int32_t __fastcall PLRSAVE2_ReadPetSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pMerc, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion, int32_t* pDetailError);
 //D2Game.0x6FC8E920
+//1.14d: 0x0056ACE0
 int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc** ppItem, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
 //D2Game.0x6FC8EAB0
+//1.14d: 0x0056AE50
 int32_t __fastcall PLRSAVE2_ReadIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
 //D2Game.0x6FC8EBA0
+//1.14d: 0x0056AF80
 void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nHitpoints, int32_t nMana);
 //D2Game.0x6FC8EF20
+//1.14d: 0x0056B180
 int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
 //D2Game.0x6FC8F3A0
 D2CharStatsTxt* __fastcall PLRSAVE2_GetCharStatsTxtRecord(int32_t nClass);

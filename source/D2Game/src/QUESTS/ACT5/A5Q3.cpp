@@ -121,6 +121,7 @@ D2NPCMessageTableStrc gpAct5Q3NpcMessages[] =
 
 
 //D2Game.0x6FCB3530
+//1.14d: 0x00589000
 void __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -144,6 +145,7 @@ void __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FCB35A0
+//1.14d: 0x00589540
 void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -186,6 +188,7 @@ void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCB3670
+//1.14d: 0x00589F10
 bool __fastcall ACT5Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId == MONSTER_MALAH)
@@ -234,6 +237,7 @@ bool __fastcall ACT5Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCB3760
+//1.14d: 0x00589FF0
 void __fastcall ACT5Q3_UpdateResistances(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nValue)
 {
 	int32_t nUnitType = 6;
@@ -264,6 +268,7 @@ void __fastcall ACT5Q3_UpdateResistances(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FCB3810
+//1.14d: 0x0058A0A0
 void __fastcall ACT5Q3_ApplyResistanceReward(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
@@ -291,6 +296,7 @@ void __fastcall ACT5Q3_ApplyResistanceReward(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FCB3880
+//1.14d: 0x0058A270
 void __fastcall ACT5Q3_UnitIterate_CheckForDefrostPotion(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!ITEMS_FindQuestItem(pGame, pUnit, ' eci'))
@@ -306,6 +312,7 @@ void __fastcall ACT5Q3_UnitIterate_CheckForDefrostPotion(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCB38B0
+//1.14d: 0x0058A410
 void __fastcall ACT5Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -335,6 +342,7 @@ void __fastcall ACT5Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB39A0
+//1.14d: 0x00588F80
 void __fastcall ACT5Q3_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_MALAH)
@@ -360,6 +368,7 @@ void __fastcall ACT5Q3_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCB3A20
+//1.14d: 0x00588EB0
 int32_t __fastcall ACT5Q3_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -375,6 +384,7 @@ int32_t __fastcall ACT5Q3_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCB3A90
+//1.14d: 0x00589160
 bool __fastcall ACT5Q3_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (pQuestData->fState < 5 && pQuestData->bNotIntro)
@@ -401,6 +411,7 @@ bool __fastcall ACT5Q3_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB3B00
+//1.14d: 0x00589580
 void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const uint32_t gdwNormalAmazonRewardCodes[] =
@@ -740,6 +751,7 @@ void __fastcall ACT5Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCB4040
+//1.14d: 0x00588F10
 int32_t __fastcall ACT5Q3_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -767,6 +779,7 @@ int32_t __fastcall ACT5Q3_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCB40B0
+//1.14d: 0x005890B0
 int32_t __fastcall ACT5Q3_RemoveDrehyaIced(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!pUnit || pUnit->dwClassId != MONSTER_DREHYAICED)
@@ -800,6 +813,7 @@ int32_t __fastcall ACT5Q3_RemoveDrehyaIced(D2GameStrc* pGame, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FCB4150
+//1.14d: 0x00589070
 void __fastcall ACT5Q3_SendPacket0x5DToClient(D2UnitStrc* pUnit)
 {
 	D2GSPacketSrv5D packet5D = {};
@@ -813,6 +827,7 @@ void __fastcall ACT5Q3_SendPacket0x5DToClient(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCB4190
+//1.14d: 0x005891D0
 void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Quest3Strc* pQuestDataEx)
 {
 	if (pQuestDataEx->bDrehyaInTownInitialized != 1)
@@ -883,6 +898,7 @@ void __fastcall ACT5Q3_SpawnDrehyaInTown(D2QuestDataStrc* pQuestData, D2Act5Ques
 
 //D2Game.0x6FCB4400
 //TODO: Find a name
+//1.14d: 0x005893E0
 void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 {
 	D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
@@ -969,6 +985,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB45E0
+//1.14d: 0x00589B00
 void __fastcall ACT5Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const int32_t nIndices[] =
@@ -1057,6 +1074,7 @@ void __fastcall ACT5Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCB4810
+//1.14d: 0x00589D20
 void __fastcall ACT5Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	int32_t nUnitId = -1;
@@ -1077,6 +1095,7 @@ void __fastcall ACT5Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCB4870
+//1.14d: 0x00589D80
 void __fastcall ACT5Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nNewLevel == LEVEL_ARREATPLATEAU)
@@ -1157,6 +1176,7 @@ void __fastcall ACT5Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCB4A10
+//1.14d: 0x00589AA0
 int32_t __fastcall ACT5Q3_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -1173,6 +1193,7 @@ int32_t __fastcall ACT5Q3_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCB4A80
+//1.14d: 0x0058A110
 void __fastcall ACT5Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
@@ -1222,6 +1243,7 @@ void __fastcall ACT5Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCB4B50
+//1.14d: 0x0058A1E0
 void __fastcall ACT5Q3_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' eci'))
@@ -1255,6 +1277,7 @@ void __fastcall ACT5Q3_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCB4BF0
+//1.14d: 0x0058A300
 bool __fastcall ACT5Q3_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	*pStatus = 0;
@@ -1318,6 +1341,7 @@ bool __fastcall ACT5Q3_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 }
 
 //D2Game.0x6FCB4D30
+//1.14d: 0x0058EAC0
 void __fastcall OBJECTS_InitFunction66_DrehyaStartInTown(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData33 = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1378,6 +1402,7 @@ void __fastcall OBJECTS_InitFunction66_DrehyaStartInTown(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCB4EA0
+//1.14d: 0x0058A500
 void __fastcall ACT5Q3_SpawnFrozenDrehya(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1411,6 +1436,7 @@ void __fastcall ACT5Q3_SpawnFrozenDrehya(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCB4FB0
+//1.14d: 0x0058A5B0
 void __fastcall OBJECTS_InitFunction67_DrehyaStartOutsideTown(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1434,6 +1460,7 @@ void __fastcall OBJECTS_InitFunction67_DrehyaStartOutsideTown(D2ObjInitFnStrc* p
 }
 
 //D2Game.0x6FCB5010
+//1.14d: 0x0058A610
 void __fastcall OBJECTS_InitFunction68_NihlathakStartInTown(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1474,6 +1501,7 @@ void __fastcall OBJECTS_InitFunction68_NihlathakStartInTown(D2ObjInitFnStrc* pOp
 }
 
 //D2Game.0x6FCB50C0
+//1.14d: 0x0058A6C0
 void __fastcall OBJECTS_InitFunction69_NihlathakStartOutsideTown(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1498,6 +1526,7 @@ void __fastcall OBJECTS_InitFunction69_NihlathakStartOutsideTown(D2ObjInitFnStrc
 }
 
 //D2Game.0x6FCB5130
+//1.14d: 0x0058A730
 void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit)
 {
 	if (!pUnit)
@@ -1544,6 +1573,7 @@ void __fastcall ACT5Q3_UpdateDrehyaPortalMode(D2QuestDataStrc* pQuestData, D2Uni
 }
 
 //D2Game.0x6FCB51C0
+//1.14d: 0x0058A820
 int32_t __fastcall ACT5Q3_SpawnDrehyaPortalOutsideTown(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1587,6 +1617,7 @@ int32_t __fastcall ACT5Q3_SpawnDrehyaPortalOutsideTown(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FCB5320
+//1.14d: 0x0058A8D0
 int32_t __fastcall ACT5Q3_GetDrehyaPortalCoordinates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pCoord)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1615,6 +1646,7 @@ int32_t __fastcall ACT5Q3_GetDrehyaPortalCoordinates(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCB5390
+//1.14d: 0x0058A940
 int32_t __fastcall ACT5Q3_InitializeDrehyaPortalCoordinates(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1632,6 +1664,7 @@ int32_t __fastcall ACT5Q3_InitializeDrehyaPortalCoordinates(D2GameStrc* pGame, D
 
 //D2Game.0x6FCB53D0
 //TODO: Find a name
+//1.14d: 0x0058A980
 void __fastcall sub_6FCB53D0(D2GameStrc* pGame)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1648,6 +1681,7 @@ void __fastcall sub_6FCB53D0(D2GameStrc* pGame)
 
 //D2Game.0x6FCB5400
 //TODO: Find a name
+//1.14d: 0x0058A9F0
 int32_t __fastcall sub_6FCB5400(D2GameStrc* pGame)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1662,6 +1696,7 @@ int32_t __fastcall sub_6FCB5400(D2GameStrc* pGame)
 
 //D2Game.0x6FCB5430
 //TODO: Find a name
+//1.14d: 0x0058AA10
 void __fastcall sub_6FCB5430(D2GameStrc* pGame)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1674,6 +1709,7 @@ void __fastcall sub_6FCB5430(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCB5470
+//1.14d: 0x0058AA50
 void __fastcall OBJECTS_InitFunction74_FrozenAnya(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1698,6 +1734,7 @@ void __fastcall OBJECTS_InitFunction74_FrozenAnya(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCB54D0
+//1.14d: 0x0058ABC0
 int32_t __fastcall OBJECTS_OperateFunction67_FrozenAnya(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1765,6 +1802,7 @@ int32_t __fastcall OBJECTS_OperateFunction67_FrozenAnya(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCB56D0
+//1.14d: 0x00589A50
 int32_t __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A5Q3, QFLAG_PRIMARYGOALDONE))
@@ -1782,6 +1820,7 @@ int32_t __fastcall ACT5Q3_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 }
 
 //D2Game.0x6FCB5720
+//1.14d: 0x0058AAB0
 bool __fastcall ACT5Q3_SpawnDrehyaIcedMonsterOutsideTown(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act5Quest3Strc* pQuestDataEx = (D2Act5Quest3Strc*)pQuestData->pQuestDataEx;
@@ -1862,6 +1901,7 @@ bool __fastcall ACT5Q3_SpawnDrehyaIcedMonsterOutsideTown(D2GameStrc* pGame, D2Qu
 }
 
 //D2Game.0x6FCB5890
+//1.14d: 0x0058AD80
 void __fastcall ACT5Q3_ChangeDrehyaMapAI(D2GameStrc* pGame, D2UnitStrc* pUnit, D2MapAIStrc* pMapAi)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
@@ -1891,6 +1931,7 @@ void __fastcall ACT5Q3_ChangeDrehyaMapAI(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 }
 
 //D2Game.0x6FCB5920
+//1.14d: 0x0058AE10
 void __fastcall ACT5Q3_ChangeNihlathakMapAI(D2GameStrc* pGame, D2UnitStrc* pUnit, D2MapAIStrc* pMapAi)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);

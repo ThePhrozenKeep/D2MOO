@@ -44,12 +44,17 @@ struct D2UnitEventStrc
 };
 
 //D2Game.0x6FCC3610
+//1.14d: 0x005C0A90
 void __fastcall SUNITEVENT_FreeEventList(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCC3650
+//1.14d: 0x005C0AD0
 D2UnitEventStrc* __fastcall SUNITEVENT_Register(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEvent, int32_t nGUID1, int32_t nGUID2, D2UnitEventCallbackFunction pCallback, uint32_t nQueueNo, int32_t nEventKey);
 //D2Game.0x6FCC36D0
+//1.14d: 0x005C0B50
 void __fastcall SUNITEVENT_Unregister(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerQueueNo, int32_t nEventKey);
 //D2Game.0x6FCC3750
+//1.14d: 0x005C0BE0
 D2UnitEventStrc* __fastcall SUNITEVENT_GetEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nTimerQueueNo, int32_t nEventKey, int32_t nGUID1);
 //D2Game.0x6FCC3790
+//1.14d: 0x005C0C30
 void __fastcall SUNITEVENT_Trigger(D2GameStrc* pGame, D2C_UnitEventTypes nUnitEvent, D2UnitStrc* pUnit, D2UnitStrc* pEventSourceUnit, D2DamageStrc* pDamage);

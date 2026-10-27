@@ -23,42 +23,62 @@ struct D2Act1Quest6Strc			//sizeof 0x198
 
 
 //D2Game.0x6FC9DFF0
+//1.14d: 0x00596320
 void __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9E0E0
+//1.14d: 0x005967F0
 bool __fastcall ACT1Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC);
 //D2Game.0x6FC9E1B0
+//1.14d: 0x00596990
 void __fastcall ACT1Q6_InitQuestData(D2QuestDataStrc* pQuestData);
 //D2Game.0x6FC9E2B0
+//1.14d: 0x00595B80
 void __fastcall ACT1Q6_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9E300
+//1.14d: 0x00595B20
 int32_t __fastcall ACT1Q6_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9E370
+//1.14d: 0x00595C60
 void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9E510
+//1.14d: 0x00595BD0
 int32_t __fastcall ACT1Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9E5A0
+//1.14d: 0x00595E20
 void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9E7A0
+//1.14d: 0x00596010
 void __fastcall ACT1Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9E900
+//1.14d: 0x005965A0
 void __fastcall ACT1Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
 //D2Game.0x6FC9EB50
+//1.14d: 0x00596170
 int32_t __fastcall ACT1Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9EBA0
+//1.14d: 0x005961C0
 void __fastcall ACT1Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pArgs);
 //D2Game.0x6FC9EBF0
+//1.14d: 0x00596260
 int32_t __fastcall ACT1Q6_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9ECD0
+//1.14d: 0x005963E0
 int32_t __fastcall ACT1Q6_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9ED30
+//1.14d: 0x00596440
 int32_t __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9ED80
+//1.14d: 0x00596500
 bool __fastcall ACT1Q6_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQuest);
 //D2Game.0x6FC9EE00
+//1.14d: 0x00596490
 int32_t __fastcall ACT1Q6_UnitIterate_CreatePortalToTown(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
 //D2Game.0x6FC9EE70
+//1.14d: 0x005968E0
 bool __fastcall ACT1Q6_SeqCallback(D2QuestDataStrc* pQuestData);
 //D2Game.0x6FC9EE90
+//1.14d: 0x00596580
 bool __fastcall ACT1Q6_Timer_StateDebug(D2GameStrc* pGame, D2QuestDataStrc* pQuestData);
 //D2Game.0x6FC9EEB0
+//1.14d: 0x00596900
 void __fastcall ACT1Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);

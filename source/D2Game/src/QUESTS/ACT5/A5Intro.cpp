@@ -49,6 +49,7 @@ D2NPCMessageTableStrc gpAct5IntroNpcMessages[] =
 
 
 //D2Game.0x6FCB0FD0
+//1.14d: 0x0058EA50
 void __fastcall ACT5Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -65,6 +66,7 @@ void __fastcall ACT5Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB1030
+//1.14d: 0x0058E990
 void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	const int16_t nMessageIndex = pQuestArg->nMessageIndex;
@@ -130,6 +132,7 @@ void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCB1100
+//1.14d: 0x00586B50
 void __fastcall ACT5Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	int32_t nNpcId = -1;
@@ -188,6 +191,7 @@ void __fastcall ACT5Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2
 }
 
 //D2Game.0x6FCB11D0
+//1.14d: 0x00586C50
 bool __fastcall ACT5Intro_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	return nNpcId == MONSTER_MALAH && !PLRINTRO_GetQuestIntroFlag(pPlayer, pQuest->pGame, MONSTER_MALAH);
