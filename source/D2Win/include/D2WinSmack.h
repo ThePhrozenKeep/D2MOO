@@ -17,20 +17,26 @@ struct D2WinSmackStrc
 
 
 //D2Win.0x6F8AF710
+//1.14d: 0x00506B70
 D2WinSmackStrc* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t(__stdcall* a5)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8AF7E0
 int __stdcall SMACK_Decode(D2WinSmackStrc* pSmack, const char* szFileName, int nVersion, int nUnused, int nUnused2);
 //D2Win.0x6F8AF860
+//1.14d: 0x00506990
 int __stdcall SMACK_DeleteFile(D2WinSmackStrc* pSmack);
 //D2Win.0x6F8AF8B0
+//1.14d: 0x005069F0
 int __stdcall SMACK_SetCoordinates(D2WinSmackStrc* pSmack, int nX, int nY);
 //D2Win.0x6F8AF900
+//1.14d: 0x00506A40
 int __fastcall SMACK_Destroy(D2WinSmackStrc* pSmack);
 //D2Win.0x6F8AF950
+//1.14d: 0x00506A80
 void __stdcall D2Win_10184();
 //D2Win.0x6F8AF960
 int32_t __fastcall SMACK_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8AFA40
+//1.14d: 0x00506B10
 int __stdcall SMACK_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AFA90
 void __fastcall D2Win_10208(int a1);
