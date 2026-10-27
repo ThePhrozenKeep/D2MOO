@@ -295,25 +295,25 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         }
     }
 
-    const int32_t v44 = SUNIT_UpdateUnitPath(pGame, pPlayer);
+    const int32_t nPathResult = SUNIT_UpdateUnitPath(pGame, pPlayer);
     const uint32_t nTickCount = GetTickCount();
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (nTickCount > pPlayerData->dwPositionHistoryTick + 25)
     {
-        const uint8_t v21 = pPlayerData->nPositionHistoryIndex;
+        const uint8_t nHistoryIndex = pPlayerData->nPositionHistoryIndex;
         const uint8_t v47 = pPlayerData->nPositionHistoryIndex;
         uint8_t v46 = 19;
-        if (v21)
+        if (nHistoryIndex)
         {
-            v46 = v21 - 1;
+            v46 = nHistoryIndex - 1;
         }
 
-        const int32_t v23 = CLIENTS_GetUnitX(pPlayer);
-        const int32_t v25 = CLIENTS_GetUnitY(pPlayer);
-        if (PATH_ComputeSquaredDistance(v23, v25, pPlayerData->pPositionHistory[v46].nX, pPlayerData->pPositionHistory[v46].nY) > 45)
+        const int32_t nPlayerX = CLIENTS_GetUnitX(pPlayer);
+        const int32_t nPlayerY = CLIENTS_GetUnitY(pPlayer);
+        if (PATH_ComputeSquaredDistance(nPlayerX, nPlayerY, pPlayerData->pPositionHistory[v46].nX, pPlayerData->pPositionHistory[v46].nY) > 45)
         {
-            pPlayerData->pPositionHistory[v47].nX = v23;
-            pPlayerData->pPositionHistory[v47].nY = v25;
+            pPlayerData->pPositionHistory[v47].nX = nPlayerX;
+            pPlayerData->pPositionHistory[v47].nY = nPlayerY;
             pPlayerData->dwPositionHistoryTick = nTickCount;
 
             ++pPlayerData->nPositionHistoryIndex;
@@ -324,15 +324,15 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         }
     }
 
-    if (v44 != 2)
+    if (nPathResult != 2)
     {
-        return v44;
+        return nPathResult;
     }
 
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER || !pPlayer->pPlayerData || !pPlayer->pPlayerData->bInteract)
     {
         PLRMODE_StartXY_Neutral(pGame, pPlayer, 1, 0, 0);
-        return v44;
+        return nPathResult;
     }
 
     const int32_t v28 = pPlayer->pPlayerData->nInteractAction;
@@ -350,7 +350,7 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         UNITS_SetUsedSkill(pPlayer, 0);
         sub_6FC828D0(pPlayer, PLRMODE_GetInteractUnitType(pPlayer), PLRMODE_GetInteractUnitGUID(pPlayer), v28 == -2, pGame);
         PLRMODE_SetInteractFlag(pPlayer, 0);
-        return v44;
+        return nPathResult;
     }
 
     int32_t nResult = 0;
@@ -381,7 +381,7 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
         SUNIT_SetCombatMode(pGame, pPlayer, nMode);
         UNITS_SetUsedSkill(pPlayer, 0);
-        nResult = v44;
+        nResult = nPathResult;
     }
 
     if (pPlayer->dwUnitType == UNIT_PLAYER && pPlayer->pPlayerData)
