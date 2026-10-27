@@ -379,19 +379,19 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						}
 						else
 						{
-							int32_t v50 = (pGame->dwGameFrame - pInactiveUnitNode->nGameFrame) / nFrameDelta;
-							if (v50 >= 1)
+							int32_t nRegenerateSteps = (pGame->dwGameFrame - pInactiveUnitNode->nGameFrame) / nFrameDelta;
+							if (nRegenerateSteps >= 1)
 							{
-								v50 = 1;
+								nRegenerateSteps = 1;
 							}
 
-							int32_t v71 = (BYTE)(v50 + v46);
-							if (v71 > v45)
+							int32_t nRegeneratedType = (BYTE)(nRegenerateSteps + v46);
+							if (nRegeneratedType > v45)
 							{
-								v71 = v45;
+								nRegeneratedType = v45;
 							}
 
-							pUnit->dwAnimMode = (BYTE)2 - v71 / (int32_t)pObjectsTxtRecord->dwParm[2];
+							pUnit->dwAnimMode = (BYTE)2 - nRegeneratedType / (int32_t)pObjectsTxtRecord->dwParm[2];
 							if (pUnit->dwAnimMode > 2)
 							{
 								pUnit->dwAnimMode = OBJMODE_NEUTRAL;
@@ -399,7 +399,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 							}
 							else
 							{
-								v46 = v71;
+								v46 = nRegeneratedType;
 								pUnit->pObjectData->InteractType = v46;
 								if (v46 < v45 && v45 - v46 > 0)
 								{
@@ -637,13 +637,13 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			bCompress = 0;
 		}
 
-		int32_t bUnk = 0;
+		int32_t bPreserveUnit = 0;
 		if (pUnit->dwFlags & UNITFLAG_ISREVIVE)
 		{
 			D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 			if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 			{
-				bUnk = PLAYERPETS_HandlePetDeactivation(pGame, pOwner, pUnit);
+				bPreserveUnit = PLAYERPETS_HandlePetDeactivation(pGame, pOwner, pUnit);
 			}
 			bCompress = 0;
 		}
@@ -666,7 +666,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			bCompress = 0;
 		}
 
-		if (bUnk)
+		if (bPreserveUnit)
 		{
 			SUNITINACTIVE_SetUnitFlagEx(pUnit, UNITFLAGEX_HASBEENDELETED, 1);
 
@@ -874,22 +874,22 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 		D2MinionListStrc* pMinionList = nullptr;
 		int32_t a2 = 0;
-		int32_t a3 = 0;
-		int32_t a4 = 0;
-		int32_t a5 = 0;
-		AIGENERAL_GetAiControlInfo(pUnit, &a2, &a3, &a4, &a5, &pMinionList);
+		int32_t nOwnerType = 0;
+		int32_t bAiControlFlag1 = 0;
+		int32_t bAiControlFlag2 = 0;
+		AIGENERAL_GetAiControlInfo(pUnit, &a2, &nOwnerType, &bAiControlFlag1, &bAiControlFlag2, &pMinionList);
 
-		if (a2 != -1 && a3 == 1)
+		if (a2 != -1 && nOwnerType == 1)
 		{
 			pInactiveMonsterNode->nOwnerGUID = a2;
 			pInactiveMonsterNode->pMinionList = pMinionList;
 
-			if (a4)
+			if (bAiControlFlag1)
 			{
 				pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_MINIONRELATED1;
 			}
 
-			if (a5)
+			if (bAiControlFlag2)
 			{
 				pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_MINIONRELATED2;
 			}

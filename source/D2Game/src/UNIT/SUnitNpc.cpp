@@ -1979,10 +1979,10 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         return 0;
     }
 
-    int32_t a4 = 0;
+    int32_t bRefreshInventory = 0;
     if (MONSTERAI_GetInteractUnitCount(pMonster->pMonsterData->pMonInteract) == 1)
     {
-        a4 = 1;
+        bRefreshInventory = 1;
     }
 
     const int32_t nClassId = pMonster->dwClassId;
@@ -2009,7 +2009,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         case MONSTER_DREHYA:
         case MONSTER_MALAH:
             D2GAME_NPCS_SetInteractTrading_6FC61AF0(pMonster, pPlayer);
-            D2GAME_STORES_CreateVendorCache_6FCC74F0(pGame, pPlayer, pMonster, a4, 0);
+            D2GAME_STORES_CreateVendorCache_6FCC74F0(pGame, pPlayer, pMonster, bRefreshInventory, 0);
             return 0;
         default:
             return 0;
@@ -2026,7 +2026,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         case MONSTER_DREHYA:
         case MONSTER_NIHLATHAK:
             D2GAME_NPCS_SetInteractTrading_6FC61AF0(pMonster, pPlayer);
-            D2GAME_STORES_CreateVendorCache_6FCC74F0(pGame, pPlayer, pMonster, a4, 1);
+            D2GAME_STORES_CreateVendorCache_6FCC74F0(pGame, pPlayer, pMonster, bRefreshInventory, 1);
             return 0;
         default:
             return 0;
