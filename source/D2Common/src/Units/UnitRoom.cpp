@@ -11,6 +11,7 @@ int dword_6FDD2580;
 int dword_6FDD2584;
 
 //D2Common.0x6FDBCF10 (#11279)
+//1.14d: 0x0064C2C0
 int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
@@ -47,12 +48,14 @@ int __stdcall UNITROOM_AddUnitToRoomEx(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoo
 }
 
 //D2Common.0x6FDBD100 (#10384)
+//1.14d: 0x0064C350
 int __stdcall UNITROOM_AddUnitToRoom(D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
 {
 	return UNITROOM_AddUnitToRoomEx(pUnit, pRoom, 1);
 }
 
 //D2Common.0x6FDBD120 (#10385)
+//1.14d: 0x0064C040
 void __stdcall UNITROOM_RefreshUnit(D2UnitStrc* pUnit)
 {
 
@@ -72,6 +75,7 @@ void __stdcall UNITROOM_RefreshUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD1B0 (#10388)
+//1.14d: 0x0064C0C0
 void __stdcall UNITROOM_SortUnitListByTargetY(D2ActiveRoomStrc* pRoom)
 {
 	D2UnitStrc** ppUnitFirst = NULL;
@@ -125,6 +129,7 @@ void __stdcall UNITROOM_SortUnitListByTargetY(D2ActiveRoomStrc* pRoom)
 
 //1.00:  D2Common.0x1006D1E0 (#10385)
 //1.10f: D2Common.0x6FDBD250 (#10390)
+//1.14d: 0x0064C450
 void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pUnit);
@@ -165,6 +170,7 @@ void __stdcall UNITROOM_UpdatePath(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD2B0 (#10391)
+//1.14d: 0x0064C160
 void __stdcall UNITROOM_ClearUpdateQueue(D2ActiveRoomStrc* pRoom)
 {
 	D2UnitStrc** ppChangeUnit = NULL;
@@ -183,6 +189,7 @@ void __stdcall UNITROOM_ClearUpdateQueue(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FDBD300 (#10386)
+//1.14d: 0x0064C370
 void __stdcall UNITROOM_RemoveUnitFromRoom(D2UnitStrc* pUnit)
 {
 	D2UnitStrc** ppRoomUnit = NULL;
@@ -243,6 +250,7 @@ void __stdcall UNITROOM_RemoveUnitFromRoom(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD400 (#10387)
+//1.14d: 0x0064C1B0
 void __stdcall UNITROOM_RemoveUnitFromUpdateQueue(D2UnitStrc* pUnit)
 {
 	D2UnitStrc** ppChangeUnit = NULL;
@@ -289,6 +297,7 @@ void __stdcall UNITROOM_RemoveUnitFromUpdateQueue(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDBD4C0 (#10389)
+//1.14d: 0x0064C260
 BOOL __stdcall UNITROOM_IsUnitInRoom(D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
 	D2UnitStrc* pRoomUnit = NULL;

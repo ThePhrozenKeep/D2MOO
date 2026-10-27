@@ -17,6 +17,7 @@
 
 
 //D2Common.0x6FD8B8A0 (#10038)
+//1.14d: 0x006194A0
 D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nAct, uint32_t nInitSeed, BOOL bClient, D2GameStrc* pGame, uint8_t nDifficulty, void* pMemPool, int nTownLevelId, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
 	D2DrlgActStrc* pAct = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgActStrc);
@@ -40,6 +41,7 @@ D2DrlgActStrc* __stdcall DUNGEON_AllocAct(uint8_t nAct, uint32_t nInitSeed, BOOL
 }
 
 //D2Common.0x6FD8B950 (#10039)
+//1.14d: 0x0061AFD0
 void __stdcall DUNGEON_FreeAct(D2DrlgActStrc* pAct)
 {
 	D2ActiveRoomStrc* pRoom = NULL;
@@ -71,12 +73,14 @@ void __stdcall DUNGEON_FreeAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8B9D0
+//1.14d: 0x00619550
 void* __fastcall DUNGEON_GetMemPoolFromAct(D2DrlgActStrc* pAct)
 {
 	return pAct->pMemPool;
 }
 
 //D2Common.0x6FD8B9E0 (#10026)
+//1.14d: 0x00619560
 void __stdcall DUNGEON_ToggleRoomTilesEnableFlag(D2ActiveRoomStrc* pRoom, BOOL bEnabled)
 {
 	D2_ASSERT(pRoom);
@@ -85,6 +89,7 @@ void __stdcall DUNGEON_ToggleRoomTilesEnableFlag(D2ActiveRoomStrc* pRoom, BOOL b
 }
 
 //D2Common.0x6FD8BA20 (#10027)
+//1.14d: 0x006195A0
 D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2ActiveRoomStrc* pRoom, int nSourceLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord)
 {
 	D2_ASSERT(pRoom);
@@ -105,6 +110,7 @@ D2UnitStrc* __stdcall DUNGEON_GetWarpTileFromRoomAndSourceLevelId(D2ActiveRoomSt
 }
 
 //D2Common.0x6FD8BAB0 (#10028)
+//1.14d: 0x00619620
 D2LvlWarpTxt* __stdcall DUNGEON_GetLvlWarpTxtRecordFromRoomAndUnit(D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 {
 	D2_ASSERT(pRoom);
@@ -113,6 +119,7 @@ D2LvlWarpTxt* __stdcall DUNGEON_GetLvlWarpTxtRecordFromRoomAndUnit(D2ActiveRoomS
 }
 
 //D2Common.0x6FD8BAF0 (#10030)
+//1.14d: 0x00619660
 D2DrlgTileDataStrc* __stdcall DUNGEON_GetFloorTilesFromRoom(D2ActiveRoomStrc* pRoom, int* pFloorCount)
 {
 	if (pRoom && pRoom->pRoomTiles)
@@ -126,6 +133,7 @@ D2DrlgTileDataStrc* __stdcall DUNGEON_GetFloorTilesFromRoom(D2ActiveRoomStrc* pR
 }
 
 //D2Common.0x6FD8BB20 (#10031)
+//1.14d: 0x006196A0
 D2DrlgTileDataStrc* __stdcall DUNGEON_GetWallTilesFromRoom(D2ActiveRoomStrc* pRoom, int* pWallCount)
 {
 	D2_ASSERT(pRoom);
@@ -135,6 +143,7 @@ D2DrlgTileDataStrc* __stdcall DUNGEON_GetWallTilesFromRoom(D2ActiveRoomStrc* pRo
 }
 
 //D2Common.0x6FD8BB60 (#10032)
+//1.14d: 0x006196E0
 D2DrlgTileDataStrc* __stdcall DUNGEON_GetRoofTilesFromRoom(D2ActiveRoomStrc* pRoom, int* pRoofCount)
 {
 	D2_ASSERT(pRoom);
@@ -144,12 +153,14 @@ D2DrlgTileDataStrc* __stdcall DUNGEON_GetRoofTilesFromRoom(D2ActiveRoomStrc* pRo
 }
 
 //D2Common.0x6FD8BBA0 (#10033)
+//1.14d: 0x00619720
 D2DrlgTileDataStrc* __stdcall DUNGEON_GetTileDataFromAct(D2DrlgActStrc* pAct)
 {
 	return &pAct->pTileData;
 }
 
 //D2Common.0x6FD8BBB0 (#10034)
+//1.14d: 0x00619730
 void __stdcall DUNGEON_GetRoomCoordinates(D2ActiveRoomStrc* pRoom, D2DrlgCoordsStrc* pCoords)
 {
 	D2_ASSERT(pCoords);
@@ -166,6 +177,7 @@ void __stdcall DUNGEON_GetRoomCoordinates(D2ActiveRoomStrc* pRoom, D2DrlgCoordsS
 }
 
 //D2Common.0x6FD8BC10 (#10035)
+//1.14d: 0x00619790
 void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2ActiveRoomStrc* pRoom, D2ActiveRoomStrc*** pppRoomList, int* pNumRooms)
 {
 	D2_ASSERT(pRoom);
@@ -175,6 +187,7 @@ void __stdcall DUNGEON_GetAdjacentRoomsListFromRoom(D2ActiveRoomStrc* pRoom, D2A
 }
 
 //D2Common.0x6FD8BC50
+//1.14d: 0x00619890
 D2ActiveRoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2DrlgRoomStrc* pDrlgRoom, D2DrlgCoordsStrc* pDrlgCoords, D2DrlgRoomTilesStrc* pRoomTiles, int nLowSeed, uint32_t dwFlags)
 {
 	D2_ASSERT(pAct);
@@ -220,6 +233,7 @@ D2ActiveRoomStrc* __fastcall DUNGEON_AllocRoom(D2DrlgActStrc* pAct, D2DrlgRoomSt
 }
 
 //D2Common.0x6FD8BD90 (#10040)
+//1.14d: 0x00619970
 BOOL __stdcall DUNGEON_DoRoomsTouchOrOverlap(D2ActiveRoomStrc* ptFirst, D2ActiveRoomStrc* ptSecond)
 {
 	D2_ASSERT(ptFirst);
@@ -232,6 +246,7 @@ BOOL __stdcall DUNGEON_DoRoomsTouchOrOverlap(D2ActiveRoomStrc* ptFirst, D2Active
 }
 
 //D2Common.0x6FD8BE30 (#10043)
+//1.14d: 0x006199F0
 BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	D2_ASSERT(pRoom);
@@ -241,6 +256,7 @@ BOOL __stdcall DUNGEON_AreTileCoordinatesInsideRoom(D2ActiveRoomStrc* pRoom, int
 }
 
 //D2Common.0x6FD8BE90 (#10048)
+//1.14d: 0x00619A50
 int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2ActiveRoomStrc* pPrimary, D2ActiveRoomStrc* pSecondary)
 {
 	//This was probably meant to check if 2 rooms are overlaping / adjacent, but pSecondary is unused.
@@ -270,6 +286,7 @@ int __stdcall DUNGEON_CheckRoomsOverlapping_BROKEN(D2ActiveRoomStrc* pPrimary, D
 }
 
 //D2Commmon.0x6FD8BF00 (#10051)
+//1.14d: 0x00619B10
 D2ActiveRoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAct, int nX, int nY)
 {
 	for (D2ActiveRoomStrc* pRoom = pAct->pRoom; pRoom; pRoom = pRoom->pRoomNext)
@@ -283,6 +300,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_FindRoomByTileCoordinates(D2DrlgActStrc* pAc
 }
 
 //D2Common.0x6FD8BF50 (#10050)
+//1.14d: 0x00619B60
 D2ActiveRoomStrc* __stdcall DUNGEON_GetAdjacentRoomByTileCoordinates(D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	D2ActiveRoomStrc* pTemp = NULL;
@@ -303,6 +321,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_GetAdjacentRoomByTileCoordinates(D2ActiveRoo
 }
 
 //D2Common.0x6FD8BFF0 (#10049)
+//1.14d: 0x00619BD0
 void __stdcall DUNGEON_CallRoomCallback(D2ActiveRoomStrc* pRoom, ROOMCALLBACKFN pfnRoomCallback, void* pArgs)
 {
 	D2_ASSERT(pRoom);
@@ -319,6 +338,7 @@ void __stdcall DUNGEON_CallRoomCallback(D2ActiveRoomStrc* pRoom, ROOMCALLBACKFN 
 }
 
 //D2Common.0x6FD8C080 (#10052)
+//1.14d: 0x00619C40
 void __stdcall D2Common_10052(D2ActiveRoomStrc* pRoom, RECT* pRect)
 {
 	int nTemp = 0;
@@ -335,6 +355,7 @@ void __stdcall D2Common_10052(D2ActiveRoomStrc* pRoom, RECT* pRect)
 }
 
 //D2Common.0x6FD8C170 (#10053)
+//1.14d: 0x00619D00
 void __stdcall DUNGEON_GetSubtileRect(D2ActiveRoomStrc* pRoom, RECT* pRect)
 {
 	D2_ASSERT(pRoom);
@@ -349,12 +370,14 @@ void __stdcall DUNGEON_GetSubtileRect(D2ActiveRoomStrc* pRoom, RECT* pRect)
 }
 
 //D2Common.0x6FD8C210 (#10054)
+//1.14d: 0x00619D70
 void __stdcall DUNGEON_GetRGB_IntensityFromRoom(D2ActiveRoomStrc* pRoom, uint8_t* pIntensity, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
 	return DRLGROOM_GetRGB_IntensityFromRoomEx(pRoom->pDrlgRoom, pIntensity, pRed, pGreen, pBlue);
 }
 
 //D2Common.0x6FD8C240 (#10041)
+//1.14d: 0x00619DA0
 D2ActiveRoomStrc* __stdcall DUNGEON_FindRoomBySubtileCoordinates(D2DrlgActStrc* pAct, int nX, int nY)
 {
 	if (pAct)
@@ -372,6 +395,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_FindRoomBySubtileCoordinates(D2DrlgActStrc* 
 }
 
 //D2Common.0x6FD8C290
+//1.14d: 0x00619DF0
 BOOL __fastcall DUNGEON_AreSubtileCoordinatesInsideRoom(D2DrlgCoordsStrc* pDrlgCoords, int nX, int nY)
 {
 	D2_ASSERT(pDrlgCoords);
@@ -380,6 +404,7 @@ BOOL __fastcall DUNGEON_AreSubtileCoordinatesInsideRoom(D2DrlgCoordsStrc* pDrlgC
 }
 
 //D2Common.0x6FD8C2F0 (#10046)
+//1.14d: 0x00619E50
 D2ActiveRoomStrc* __stdcall DUNGEON_FindActSpawnLocation(D2DrlgActStrc* pAct, int nLevelId, int nTileIndex, int* pX, int* pY)
 {
 	D2_ASSERT(pAct);
@@ -388,6 +413,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_FindActSpawnLocation(D2DrlgActStrc* pAct, in
 }
 
 //D2Common.0x6FD8C340 (#10045)
+//1.14d: 0x0061B060
 D2ActiveRoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, int nLevelId, int nTileIndex, int* pX, int* pY, int nUnitSize)
 {
 	D2ActiveRoomStrc* pNearRoom = NULL;
@@ -434,6 +460,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_FindActSpawnLocationEx(D2DrlgActStrc* pAct, 
 }
 
 //D2Common.0x6FD8C4A0 (#10029)
+//1.14d: 0x00619EA0
 D2UnitStrc* __stdcall DUNGEON_GetFirstUnitInRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -444,6 +471,7 @@ D2UnitStrc* __stdcall DUNGEON_GetFirstUnitInRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C4E0 (#10100)
+//1.14d: 0x00619EE0
 void __stdcall DUNGEON_IncreaseAlliedCountOfRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -453,6 +481,7 @@ void __stdcall DUNGEON_IncreaseAlliedCountOfRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Comon.0x6FD8C4F0 (#10036)
+//1.14d: 0x00619F00
 int __stdcall DUNGEON_GetAlliedCountFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -464,6 +493,7 @@ int __stdcall DUNGEON_GetAlliedCountFromRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C510 (#10101)
+//1.14d: 0x00619F20
 void __stdcall DUNGEON_DecreaseAlliedCountOfRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -475,6 +505,7 @@ void __stdcall DUNGEON_DecreaseAlliedCountOfRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C550
+//1.14d: 0x00619F60
 D2UnitStrc** __fastcall DUNGEON_GetUnitListFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -483,6 +514,7 @@ D2UnitStrc** __fastcall DUNGEON_GetUnitListFromRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C580
+//1.14d: 0x00619F90
 D2UnitStrc** __fastcall DUNGEON_GetUnitUpdateListFromRoom(D2ActiveRoomStrc* pRoom, BOOL bUpdate)
 {
 	D2_ASSERT(pRoom);
@@ -496,6 +528,7 @@ D2UnitStrc** __fastcall DUNGEON_GetUnitUpdateListFromRoom(D2ActiveRoomStrc* pRoo
 }
 
 //D2Common.0x6FD8C5C0 (#10055)
+//1.14d: 0x00619FD0
 D2PresetUnitStrc* __stdcall DUNGEON_GetPresetUnitsFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -504,6 +537,7 @@ D2PresetUnitStrc* __stdcall DUNGEON_GetPresetUnitsFromRoom(D2ActiveRoomStrc* pRo
 }
 
 //D2Common.0x6FD8C600
+//1.14d: 0x0061A010
 D2RoomCollisionGridStrc* __fastcall DUNGEON_GetCollisionGridFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -512,6 +546,7 @@ D2RoomCollisionGridStrc* __fastcall DUNGEON_GetCollisionGridFromRoom(D2ActiveRoo
 }
 
 //D2Common.0x6FD8C630
+//1.14d: 0x0061A040
 void __fastcall DUNGEON_SetCollisionGridInRoom(D2ActiveRoomStrc* pRoom, D2RoomCollisionGridStrc* pCollisionGrid)
 {
 	D2_ASSERT(pRoom);
@@ -520,6 +555,7 @@ void __fastcall DUNGEON_SetCollisionGridInRoom(D2ActiveRoomStrc* pRoom, D2RoomCo
 }
 
 //D2Common.0x6FD8C660 (#10063)
+//1.14d: 0x0061A070
 void __stdcall DUNGEON_SetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pAct);
@@ -528,6 +564,7 @@ void __stdcall DUNGEON_SetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, int
 }
 
 //D2Common.0x6FD8C6B0 (#10064)
+//1.14d: 0x0061A0C0
 void __stdcall DUNGEON_UnsetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, int nX, int nY, D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pAct);
@@ -536,12 +573,14 @@ void __stdcall DUNGEON_UnsetClientIsInSight(D2DrlgActStrc* pAct, int nLevelId, i
 }
 
 //D2Common.0x6FD8C700 (#10062)
+//1.14d: 0x0061A110
 void __stdcall DUNGEON_ChangeClientRoom(D2ActiveRoomStrc* pRoom1, D2ActiveRoomStrc* pRoom2)
 {
 	DRLGACTIVATE_ChangeClientRoom(pRoom1 ? pRoom1->pDrlgRoom : nullptr, pRoom2 ? pRoom2->pDrlgRoom : nullptr);
 }
 
 //D2Common.0x6FD8C730 (#10065)
+//1.14d: 0x0061A140
 D2ActiveRoomStrc* __stdcall DUNGEON_StreamRoomAtCoords(D2DrlgActStrc* pAct, int nX, int nY)
 {
 	D2_ASSERT(pAct);
@@ -550,6 +589,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_StreamRoomAtCoords(D2DrlgActStrc* pAct, int 
 }
 
 //D2Common.0x6FD8C770 (#10056)
+//1.14d: 0x0061A180
 D2ActiveRoomStrc* __stdcall DUNGEON_GetRoomFromAct(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -558,6 +598,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_GetRoomFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8C7A0 (#10057)
+//1.14d: 0x0061A1B0
 int __stdcall DUNGEON_GetLevelIdFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -569,6 +610,7 @@ int __stdcall DUNGEON_GetLevelIdFromRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C7C0 (#10058)
+//1.14d: 0x0061A1D0
 int __stdcall DUNGEON_GetWarpDestinationLevel(D2ActiveRoomStrc* pRoom, int nSourceLevel)
 {
 	if (pRoom)
@@ -580,6 +622,7 @@ int __stdcall DUNGEON_GetWarpDestinationLevel(D2ActiveRoomStrc* pRoom, int nSour
 }
 
 //D2Common.0x6FD8C7E0 (#10059)
+//1.14d: 0x0061A1F0
 int __stdcall DUNGEON_GetLevelIdFromPopulatedRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -591,6 +634,7 @@ int __stdcall DUNGEON_GetLevelIdFromPopulatedRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C800 (#10060)
+//1.14d: 0x0061A210
 BOOL __stdcall DUNGEON_HasWaypoint(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -599,6 +643,7 @@ BOOL __stdcall DUNGEON_HasWaypoint(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C840 (#10061)
+//1.14d: 0x0061A250
 const char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -610,6 +655,7 @@ const char* __stdcall DUNGEON_GetPickedLevelPrestFilePathFromRoom(D2ActiveRoomSt
 }
 
 //D2Common.0x6FD8C860 (#10066)
+//1.14d: 0x0061A270
 void __stdcall DUNGEON_AllocDrlgDelete(D2ActiveRoomStrc* pRoom, int nUnitType, D2UnitGUID nUnitGUID)
 {
 	D2DrlgDeleteStrc* pDrlgDelete = NULL;
@@ -626,6 +672,7 @@ void __stdcall DUNGEON_AllocDrlgDelete(D2ActiveRoomStrc* pRoom, int nUnitType, D
 }
 
 //D2Common.0x6FD8C8B0 (#10067)
+//1.14d: 0x0061A2C0
 void __stdcall DUNGEON_FreeDrlgDelete(D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgDeleteStrc* pNext = NULL;
@@ -642,6 +689,7 @@ void __stdcall DUNGEON_FreeDrlgDelete(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8C910 (#10068)
+//1.14d: 0x0061A330
 D2DrlgDeleteStrc* __stdcall DUNGEON_GetDrlgDeleteFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -650,6 +698,7 @@ D2DrlgDeleteStrc* __stdcall DUNGEON_GetDrlgDeleteFromRoom(D2ActiveRoomStrc* pRoo
 }
 
 //D2Common.0x6FD8C940 (#10069)
+//1.14d: 0x0061A360
 D2ActiveRoomStrc* __stdcall DUNGEON_GetARoomInClientSight(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -658,6 +707,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_GetARoomInClientSight(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8C980 (#10070)
+//1.14d: 0x0061A3A0
 D2ActiveRoomStrc* __stdcall DUNGEON_GetARoomInSightButWithoutClient(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pAct);
@@ -668,6 +718,7 @@ D2ActiveRoomStrc* __stdcall DUNGEON_GetARoomInSightButWithoutClient(D2DrlgActStr
 }
 
 //D2Common.0x6FD8C9E0 (#10071)
+//1.14d: 0x0061A3F0
 BOOL __stdcall DUNGEON_TestRoomCanUnTile(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pAct);
@@ -678,12 +729,14 @@ BOOL __stdcall DUNGEON_TestRoomCanUnTile(D2DrlgActStrc* pAct, D2ActiveRoomStrc* 
 }
 
 //D2Common.0x6FD8CA60 (#10072)
+//1.14d: 0x0061A440
 bool __stdcall DUNGEON_GetRoomStatusFlags(D2ActiveRoomStrc* pRoom)
 {
 	return DRLGACTIVATE_GetRoomStatusFlags(pRoom->pDrlgRoom) >= 3;
 }
 
 //D2Common.0x6FD8CA80 (#10073)
+//1.14d: 0x0061A460
 BOOL __stdcall D2Common_10073(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -705,6 +758,7 @@ BOOL __stdcall D2Common_10073(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8CAE0 (#10074)
+//1.14d: 0x0061A4D0
 BOOL __stdcall D2Common_10074(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -713,6 +767,7 @@ BOOL __stdcall D2Common_10074(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8CB10 (#10075)
+//1.14d: 0x0061A510
 void __stdcall D2Common_10075(D2ActiveRoomStrc* pRoom, BOOL bSet)
 {
 	D2_ASSERT(pRoom);
@@ -728,6 +783,7 @@ void __stdcall D2Common_10075(D2ActiveRoomStrc* pRoom, BOOL bSet)
 }
 
 //D2Common.0x6FD8CB60 (#10079)
+//1.14d: 0x0061A660
 void __stdcall DUNGEON_AddClientToRoom(D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
 	D2_ASSERT(pRoom);
@@ -754,6 +810,7 @@ void __stdcall DUNGEON_AddClientToRoom(D2ActiveRoomStrc* pRoom, D2ClientStrc* pC
 }
 
 //D2Common.0x6FD8CC50
+//1.14d: 0x0061A5A0
 void __fastcall DUNGEON_UpdateClientListOfRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2ClientStrc* pClient1 = NULL;
@@ -795,6 +852,7 @@ void __fastcall DUNGEON_UpdateClientListOfRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8CD10 (#10080)
+//1.14d: 0x0061A700
 void __stdcall DUNGEON_RemoveClientFromRoom(D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
 	int i = 0;
@@ -825,6 +883,7 @@ void __stdcall DUNGEON_RemoveClientFromRoom(D2ActiveRoomStrc* pRoom, D2ClientStr
 }
 
 //D2Common.0x6FD8CDF0 (#10081)
+//1.14d: 0x0061A790
 int __stdcall D2Common_10081_GetTileCountFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -842,6 +901,7 @@ int __stdcall D2Common_10081_GetTileCountFromRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8CE40
+//1.14d: 0x0061A840
 void __fastcall DUNGEON_FreeRoom(void* pMemPool, D2ActiveRoomStrc* pRoom)
 {
 	for (D2UnitStrc* i = pRoom->pUnitFirst; i; i = pRoom->pUnitFirst)
@@ -869,6 +929,7 @@ void __fastcall DUNGEON_FreeRoom(void* pMemPool, D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8CF10 (#10076)
+//1.14d: 0x0061A910
 void __stdcall DUNGEON_RemoveRoomFromAct(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
 {
 	D2ActiveRoomStrc* pPreviousRoom = NULL;
@@ -926,18 +987,21 @@ void __stdcall DUNGEON_RemoveRoomFromAct(D2DrlgActStrc* pAct, D2ActiveRoomStrc* 
 }
 
 //D2Common.0x6FD8D000 (#10077)
+//1.14d: 0x0061A9F0
 void __stdcall D2Common_10077(D2ActiveRoomStrc* pRoom1, D2ActiveRoomStrc* pRoom2)
 {
 	sub_6FD745C0(pRoom1 ? pRoom1->pDrlgRoom : NULL, pRoom2 ? pRoom2->pDrlgRoom : NULL);
 }
 
 //D2Common.0x6FD8D030 (#10078)
+//1.14d: 0x0061AA20
 void __stdcall DUNGEON_UpdateAndFreeInactiveRooms(D2DrlgActStrc* pAct)
 {
 	DRLG_UpdateAndFreeInactiveRooms(pAct->pDrlg);
 }
 
 //D2Common.0x6FD8D040 (#10044)
+//1.14d: 0x0061AA40
 int __stdcall DUNGEON_CheckLOSDraw(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -949,6 +1013,7 @@ int __stdcall DUNGEON_CheckLOSDraw(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D060
+//1.14d: 0x0061AA60
 D2DrlgEnvironmentStrc* __fastcall DUNGEON_GetEnvironmentFromAct(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -957,6 +1022,7 @@ D2DrlgEnvironmentStrc* __fastcall DUNGEON_GetEnvironmentFromAct(D2DrlgActStrc* p
 }
 
 //D2Common.0x6FD8D090 (#10088)
+//1.14d: 0x0061AA90
 D2DrlgStrc* __stdcall DUNGEON_GetDrlgFromAct(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -965,6 +1031,7 @@ D2DrlgStrc* __stdcall DUNGEON_GetDrlgFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD912D0 (#10089)
+//1.14d: 0x0061AAC0
 int __stdcall DUNGEON_GetInitSeedFromAct(D2DrlgActStrc* pAct)
 {
 	if (pAct)
@@ -976,18 +1043,21 @@ int __stdcall DUNGEON_GetInitSeedFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8D0C0 (#10007)
+//1.14d: 0x0061AAE0
 D2DrlgRoomStrc* __fastcall DUNGEON_GetRoomExFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	return pRoom->pDrlgRoom;
 }
 
 //D2Common.0x6FD8D0D0 (#10086)
+//1.14d: 0x0061AAF0
 BOOL __stdcall DUNGEON_IsTownLevelId(int nLevelId)
 {
 	return DRLG_IsTownLevel(nLevelId);
 }
 
 //D2Common.0x6FD8D0E0 (#10082)
+//1.14d: 0x0061AB00
 BOOL __stdcall DUNGEON_IsRoomInTown(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -999,6 +1069,7 @@ BOOL __stdcall DUNGEON_IsRoomInTown(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D100 (#10083)
+//1.14d: 0x0061AB30
 int __stdcall D2COMMON_10083_Return0(D2ActiveRoomStrc* pRoom)
 {
 	//if (pRoom)
@@ -1012,12 +1083,14 @@ int __stdcall D2COMMON_10083_Return0(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D130 (#10084)
+//1.14d: 0x0061AB60
 int __stdcall D2Common_10084(D2ActiveRoomStrc* pRoom)
 {
 	return pRoom->dwFlags & 4;
 }
 
 //D2Common.0x6FD8D140 (#10085)
+//1.14d: 0x0061AB70
 int __stdcall DUNGEON_GetTownLevelIdFromActNo(uint8_t nAct)
 {
 	static const int gnTownLevelIds[] = { LEVEL_ROGUEENCAMPMENT, LEVEL_LUTGHOLEIN, LEVEL_KURASTDOCKTOWN, LEVEL_THEPANDEMONIUMFORTRESS, LEVEL_HARROGATH };
@@ -1028,6 +1101,7 @@ int __stdcall DUNGEON_GetTownLevelIdFromActNo(uint8_t nAct)
 }
 
 //D2Common.0x6FD8D180 (#10087)
+//1.14d: 0x0061ABB0
 int __stdcall D2Common_10087(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -1036,12 +1110,14 @@ int __stdcall D2Common_10087(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D1C0 (#10090)
+//1.14d: 0x0061ABF0
 int __stdcall DUNGEON_GetNumberOfPopulatedRoomsInLevel(D2DrlgActStrc* pAct, int nLevelId)
 {
 	return DRLG_GetNumberOfPopulatedRoomsInLevel(pAct->pDrlg, nLevelId);
 }
 
 //D2Common.0x6FD8D1E0 (#10025)
+//1.14d: 0x0061AC10
 int* __stdcall DUNGEON_GetWarpCoordinatesFromRoom(D2ActiveRoomStrc* pRoom)
 {
 	D2_ASSERT(pRoom);
@@ -1050,6 +1126,7 @@ int* __stdcall DUNGEON_GetWarpCoordinatesFromRoom(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D220 (#10091)
+//1.14d: 0x0061AC50
 void __stdcall DUNGEON_UpdateWarpRoomSelect(D2ActiveRoomStrc* pRoom, int nLevelId)
 {
 	D2_ASSERT(pRoom);
@@ -1058,6 +1135,7 @@ void __stdcall DUNGEON_UpdateWarpRoomSelect(D2ActiveRoomStrc* pRoom, int nLevelI
 }
 
 //D2Common.0x6FD8D260 (#10092)
+//1.14d: 0x0061AC90
 void __stdcall DUNGEON_UpdateWarpRoomDeselect(D2ActiveRoomStrc* pRoom, int nLevelId)
 {
 	D2_ASSERT(pRoom);
@@ -1066,6 +1144,7 @@ void __stdcall DUNGEON_UpdateWarpRoomDeselect(D2ActiveRoomStrc* pRoom, int nLeve
 }
 
 //D2Common.0x6FD8D2A0 (#10093)
+//1.14d: 0x0061ACD0
 void __stdcall DUNGEON_UpdatePops(D2ActiveRoomStrc* pRoom, int nX, int nY, BOOL bOtherRoom)
 {
 	D2_ASSERT(pRoom);
@@ -1074,12 +1153,14 @@ void __stdcall DUNGEON_UpdatePops(D2ActiveRoomStrc* pRoom, int nX, int nY, BOOL 
 }
 
 //D2Common.0x6FD8D2E0 (#10094)
+//1.14d: 0x0061AD10
 void __stdcall DUNGEON_GetTombStoneTileCoords(D2ActiveRoomStrc* pRoom, D2CoordStrc** ppTombStoneTiles, int* pnTombStoneTiles)
 {
 	return DRLGPRESET_GetTombStoneTileCoords(pRoom->pDrlgRoom, ppTombStoneTiles, pnTombStoneTiles);
 }
 
 //D2Common.0x6FD8D300 (#10095)
+//1.14d: 0x0061B130
 int __stdcall D2Common_10095(D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	D2ActiveRoomStrc* pNearRoom = NULL;
@@ -1107,18 +1188,21 @@ int __stdcall D2Common_10095(D2ActiveRoomStrc* pRoom, int nX, int nY)
 }
 
 //D2Common.0x6FD8D3A0 (#10096)
+//1.14d: 0x0061AD30
 D2RoomCoordListStrc* __stdcall D2Common_10096(D2ActiveRoomStrc* pRoom, int nX, int nY)
 {
 	return sub_6FD77110(pRoom->pDrlgRoom, nX, nY);
 }
 
 //D2Common.0x6FD8D3C0 (#10097)
+//1.14d: 0x0061AD50
 D2RoomCoordListStrc* __stdcall DUNGEON_GetRoomCoordList(D2ActiveRoomStrc* pRoom)
 {
 	return DRLGLOGIC_GetRoomCoordList(pRoom->pDrlgRoom);
 }
 
 //D2Common.0x6FD8D3D0 (#10098)
+//1.14d: 0x0061AD70
 void __stdcall DUNGEON_GetPortalLevelArrayFromPortalFlags(void* pMemPool, int nFlags, int** ppLevels, int* pnLevels)
 {
 	int* pPortalLevels = NULL;
@@ -1153,6 +1237,7 @@ void __stdcall DUNGEON_GetPortalLevelArrayFromPortalFlags(void* pMemPool, int nF
 }
 
 //D2Common.0x6FD8D4B0 (#10099)
+//1.14d: 0x0061AE30
 int __stdcall DUNGEON_GetPortalFlagFromLevelId(int nPortalLevelId)
 {
 	int* pPortalLevels = NULL;
@@ -1172,6 +1257,7 @@ int __stdcall DUNGEON_GetPortalFlagFromLevelId(int nPortalLevelId)
 }
 
 //D2Common.0x6FD8D4F0 (#10037)
+//1.14d: 0x0061AE80
 int __stdcall DUNGEON_GetTownLevelIdFromAct(D2DrlgActStrc* pAct)
 {
 	D2_ASSERT(pAct);
@@ -1180,6 +1266,7 @@ int __stdcall DUNGEON_GetTownLevelIdFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8D520 (#10047)
+//1.14d: 0x0061AEB0
 int __stdcall DUNGEON_GetHoradricStaffTombLevelId(D2DrlgActStrc* pAct)
 {
 	if (pAct)
@@ -1191,6 +1278,7 @@ int __stdcall DUNGEON_GetHoradricStaffTombLevelId(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8D540 (#10102)
+//1.14d: 0x0061AED0
 void __stdcall DUNGEON_ToggleHasPortalFlag(D2ActiveRoomStrc* pRoom, BOOL bReset)
 {
 	if (pRoom)
@@ -1200,6 +1288,7 @@ void __stdcall DUNGEON_ToggleHasPortalFlag(D2ActiveRoomStrc* pRoom, BOOL bReset)
 }
 
 //D2Common.0x6FD8D560 (#10104)
+//1.14d: 0x0061AEF0
 void __stdcall DUNGEON_AnimateTiles(D2ActiveRoomStrc* pRoom)
 {
 	if (pRoom)
@@ -1209,6 +1298,7 @@ void __stdcall DUNGEON_AnimateTiles(D2ActiveRoomStrc* pRoom)
 }
 
 //D2Common.0x6FD8D580 (#10105)
+//1.14d: 0x0061AF10
 void __stdcall DUNGEON_InitRoomTileAnimation(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom1, D2ActiveRoomStrc* pRoom2)
 {
 	D2DrlgRoomStrc* pDrlgRoom1 = NULL;
@@ -1237,6 +1327,7 @@ void __stdcall DUNGEON_InitRoomTileAnimation(D2DrlgActStrc* pAct, D2ActiveRoomSt
 }
 
 //D2Common.0x6FD8D5C0 (#10103)
+//1.14d: 0x0061AF60
 void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pActCallbackFunction)
 {
 	if (pAct)
@@ -1250,6 +1341,7 @@ void __stdcall DUNGEON_SetActCallbackFunc(D2DrlgActStrc* pAct, ACTCALLBACKFN pAc
 }
 
 //D2Common.0x6FD8D600 (#10106)
+//1.14d: 0x0061AFA0
 void __stdcall DUNGEON_SaveKilledUnitGUID(D2ActiveRoomStrc* pRoom, D2UnitGUID nUnitGUID)
 {
 	if (pRoom)
@@ -1260,6 +1352,7 @@ void __stdcall DUNGEON_SaveKilledUnitGUID(D2ActiveRoomStrc* pRoom, D2UnitGUID nU
 }
 
 //D2Common.0x6FD8D690 (#10107)
+//1.14d: 0x006432C0
 void __stdcall DUNGEON_ClientToGameTileCoords(int* pX, int* pY)
 {
 	const int nOutX = (2 * *pY + *pX) / 160;
@@ -1281,6 +1374,7 @@ void __stdcall DUNGEON_ClientToGameSubtileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8A0 (#10109)
+//1.14d: 0x00643540
 void __stdcall DUNGEON_ClientToGameCoords(int* pX, int* pY)
 {
 	int nX = 2 * *pY + *pX;
@@ -1302,6 +1396,7 @@ void __stdcall DUNGEON_GameTileToClientCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D630 (#10111)
+//1.14d: 0x00643260
 void __stdcall DUNGEON_GameSubtileToClientCoords(int* pX, int* pY)
 {
 	const int nOutX = 16 * (*pX - *pY);
@@ -1323,6 +1418,7 @@ void __stdcall DUNGEON_GameToClientCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D8C0 (#10113)
+//1.14d: 0x00643560
 void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* pY)
 {
 	*pX *= 5;
@@ -1330,6 +1426,7 @@ void __stdcall DUNGEON_GameTileToSubtileCoords(int* pX, int* pY)
 }
 
 //D2Common.0x6FD8D710 (#10114)
+//1.14d: 0x00643340
 void __stdcall DUNGEON_ClientTileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
@@ -1355,6 +1452,7 @@ void __stdcall DUNGEON_ClientTileDrawPositionToGameCoords(int nX, int nY, int* p
 }
 
 //D2Common.0x6FD8D790 (#10115)
+//1.14d: 0x006433C0
 void __stdcall DUNGEON_GameToClientTileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 80 * (nX - nY);
@@ -1364,6 +1462,7 @@ void __stdcall DUNGEON_GameToClientTileDrawPositionCoords(int nX, int nY, int* p
 }
 
 //D2Common.0x6FD8D7D0 (#10116)
+//1.14d: 0x00643400
 void __stdcall DUNGEON_ClientSubileDrawPositionToGameCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 2 * nY + nX;
@@ -1389,6 +1488,7 @@ void __stdcall DUNGEON_ClientSubileDrawPositionToGameCoords(int nX, int nY, int*
 }
 
 //D2Common.0x6FD8D830 (#10117)
+//1.14d: 0x00643470
 void __stdcall DUNGEON_GameToClientSubtileDrawPositionCoords(int nX, int nY, int* pX, int* pY)
 {
 	*pX = 16 * (nX - nY);

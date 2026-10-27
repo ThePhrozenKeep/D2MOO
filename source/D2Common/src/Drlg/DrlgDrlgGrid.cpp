@@ -15,24 +15,28 @@ void(__fastcall* gpfFlagOperations[])(int*, int) =
 
 
 //D2Common.0x6FD75BA0
+//1.14d: 0x0067C420
 void __fastcall DRGLGRID_OverwriteFlag(int* pFlag, int nFlag)
 {
 	*pFlag = nFlag;
 }
 
 //D2Common.0x6FD75BB0
+//1.14d: 0x0067C430
 void __fastcall DRGLGRID_OrFlag(int* pFlag, int nFlag)
 {
 	*pFlag |= nFlag;
 }
 
 //D2Common.0x6FD75BC0
+//1.14d: 0x0067C440
 void __fastcall DRGLGRID_AndFlag(int* pFlag, int nFlag)
 {
 	*pFlag &= nFlag;
 }
 
 //D2Common.0x6FD75BD0
+//1.14d: 0x0067C450
 void __fastcall DRGLGRID_XorFlag(int* pFlag, int nFlag)
 {
 	*pFlag ^= nFlag;
@@ -54,36 +58,42 @@ void __fastcall DRGLGRID_AndNegatedFlag(int* pFlag, int nFlag)
 }
 
 //D2Common.0x6FD75C00
+//1.14d: 0x0067C480
 BOOL __fastcall DRLGGRID_IsGridValid(D2DrlgGridStrc* pDrlgGrid)
 {
 	return pDrlgGrid && pDrlgGrid->pCellsFlags;
 }
 
 //D2Common.0x6FD75C20
+//1.14d: 0x0067C4A0
 BOOL __fastcall DRLGGRID_IsPointInsideGridArea(D2DrlgGridStrc* pDrlgGrid, int nX, int nY)
 {
 	return nX >= 0 && nX < pDrlgGrid->nWidth && nY >= 0 && nY < pDrlgGrid->nHeight;
 }
 
 //D2Common.0x6FD75C50
+//1.14d: 0x0067C4F0
 void __fastcall DRLGGRID_AlterGridFlag(D2DrlgGridStrc* pDrlgGrid, int nX, int nY, int nFlag, FlagOperation eOperation)
 {
 	gpfFlagOperations[eOperation](&pDrlgGrid->pCellsFlags[nX + pDrlgGrid->pCellsRowOffsets[nY]], nFlag);
 }
 
 //D2Common.0x6FD75C80
+//1.14d: 0x0067C550
 int* __fastcall DRLGGRID_GetGridFlagsPointer(D2DrlgGridStrc* pDrlgGrid, int nX, int nY)
 {
 	return &pDrlgGrid->pCellsFlags[nX + pDrlgGrid->pCellsRowOffsets[nY]];
 }
 
 //D2Common.0x6FD75CA0
+//1.14d: 0x0067C570
 int __fastcall DRLGGRID_GetGridEntry(D2DrlgGridStrc* pDrlgGrid, int nX, int nY)
 {
 	return pDrlgGrid->pCellsFlags[nX + pDrlgGrid->pCellsRowOffsets[nY]];
 }
 
 //D2Common.0x6FD75CC0
+//1.14d: 0x0067C590
 void __fastcall DRLGGRID_AlterAllGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag, FlagOperation eOperation)
 {
 	for (int nY = 0; nY < pDrlgGrid->nHeight; ++nY)
@@ -96,6 +106,7 @@ void __fastcall DRLGGRID_AlterAllGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag,
 }
 
 //D2Common.0x6FD75D20
+//1.14d: 0x0067C600
 void __fastcall DRLGGRID_AlterEdgeGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag, FlagOperation eOperation)
 {
 	int* pFlagsFirstRow = &pDrlgGrid->pCellsFlags[pDrlgGrid->pCellsRowOffsets[0]];
@@ -183,6 +194,7 @@ void __fastcall sub_6FD75DE0(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 }
 
 //D2Common.0x6FD75F10
+//1.14d: 0x0067C890
 void __fastcall DRLGGRID_SetVertexGridFlags(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, int nFlag)
 {
 	int nX = 0;
@@ -205,6 +217,7 @@ void __fastcall DRLGGRID_SetVertexGridFlags(D2DrlgGridStrc* pDrlgGrid, D2DrlgVer
 
 //D2Common.0x6FD75F60
 //TODO: Name
+//1.14d: 0x0067C8E0
 void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, D2DrlgCoordStrc* pDrlgCoord, int nFlag, FlagOperation eOperation, int nSize)
 {
 	int nX = pDrlgVertex->nPosX;
@@ -308,6 +321,7 @@ void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgV
 }
 
 //D2Common.0x6FD76230
+//1.14d: 0x0067CB80
 void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight)
 {
 	pDrlgGrid->nWidth = nWidth;
@@ -329,6 +343,7 @@ void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDr
 }
 
 //D2Common.0x6FD762B0
+//1.14d: 0x0067CBF0
 void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight, int* pCellPos, int* pCellRowOffsets)
 {
 
@@ -351,6 +366,7 @@ void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHe
 }
 
 //D2Common.0x6FD76310
+//1.14d: 0x0067CCC0
 void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth)
 {
 
@@ -372,6 +388,7 @@ void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgG
 }
 
 //D2Common.0x6FD76380
+//1.14d: 0x0067CD30
 void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags)
 {
 	pDrlgGrid->nWidth = pDrlgCoord->nWidth;
@@ -389,6 +406,7 @@ void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(D2DrlgGridStrc* pDrlgGrid, i
 }
 
 //D2Common.0x6FD763E0
+//1.14d: 0x0067CD90
 void __fastcall DRLGGRID_FreeGrid(void* pMemPool, D2DrlgGridStrc* pDrlgGrid)
 {
 	if (pDrlgGrid->pCellsRowOffsets)
@@ -401,6 +419,7 @@ void __fastcall DRLGGRID_FreeGrid(void* pMemPool, D2DrlgGridStrc* pDrlgGrid)
 }
 
 //D2Common.0x6FD76410
+//1.14d: 0x0067CDC0
 void __fastcall DRLGGRID_ResetGrid(D2DrlgGridStrc* pDrlgGrid)
 {
 	pDrlgGrid->pCellsFlags = 0;

@@ -23,6 +23,7 @@ struct TanToDirectionLutEntryStrc {
 
 //1.00:  D2Common.0x1008AF38
 //1.10f: D2Common.0x6FDD2598 
+//1.14d: 0x006EB7E0
 TanToDirectionLutEntryStrc lutTanToDirection[] = {
 	{{ 0x0000, 0x1000 } , 0 },
 	{{ 0x0020, 0x0FFF } , 0 },
@@ -473,6 +474,7 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 
 
 //D2Common.0x6FDAB810
+//1.14d: 0x00678F00
 void __fastcall sub_6FDAB810(int* a1, int* a2)
 {
 	if (*a1 < 0)
@@ -513,6 +515,7 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
 //1.13c: D2Common.0x6FD5D8E0
+//1.14d: 0x00650660
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit)
 {
 	D2UnitStrc* v4; // eax
@@ -764,6 +767,7 @@ LABEL_61:
 
 //1.00:  D2Common.0x1005FAB0
 //1.10f: D2Common.0x6FDAD5E0
+//1.14d: 0x00650910
 BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pDestRoom, D2PathPointStrc tDest)
 {
 	D2UnitStrc* pUnit = pDynamicPath->pUnit;
@@ -912,6 +916,7 @@ void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pNe
 
 //1.00:  D2Common.0x10060640 (#10227)
 //1.10f: D2Common.0x6FDADF00 (#10230)
+//1.14d: 0x00650C60
 BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2ActiveRoomStrc* pRoom, unsigned int a4, __int16 a5)
 {
 	D2PathPointStrc tPos;
@@ -1021,6 +1026,7 @@ void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2ActiveRoomStrc*
 //1.00:  Inlined
 //1.10f: D2Common.0x6FDAD330
 //1.13c: D2Common.0x6FD5DC80
+//1.14d: 0x006507B0
 void PATH_ResetMovement(D2DynamicPathStrc* pDynamicPath)
 {
 	PATH_RecacheRoomAtCoordIfNeeded(
@@ -1070,6 +1076,7 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Act
 //1.00:  D2Common.0x10060A60 (#10230)
 //1.10f: D2Common.0x6FDAE290 (#10233)
 //1.13c: D2Common.0x6FD5DB40 (#10770)
+//1.14d: 0x00650590
 void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath)
 {
 	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, nullptr, PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX), PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY));
@@ -1079,6 +1086,7 @@ void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath)
 //1.00:  D2Common.0x10060C40 (#10231)
 //1.10f: D2Common.0x6FDAE500 (#10234)
 //TODO: Find a name
+//1.14d: 0x006505C0
 BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
 {
 	if (pDynamicPath)

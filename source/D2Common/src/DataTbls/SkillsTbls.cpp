@@ -6,6 +6,7 @@
 #include <Storm.h>
 
 //D2Common.0x6FD498D0
+//1.14d: 0x00611930
 int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
 {
 	if (0 == SStrCmpI(szKey, "min", 32))
@@ -44,6 +45,7 @@ int __fastcall DATATBLS_MapSkillsTxtKeywordToNumber(char* szKey)
 
 //D2Common.0x6FD49980
 //TODO: Find a name
+//1.14d: 0x006119E0
 int __fastcall sub_6FD49980(int nValue)
 {
 	return (nValue == 6) + 2;
@@ -51,6 +53,7 @@ int __fastcall sub_6FD49980(int nValue)
 
 //D2Common.0x6FD49990
 //TODO: Find a name
+//1.14d: 0x006119F0
 int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 {
 	D2TxtLinkStrc* pLinker = sgptDataTables->pSkillCalcLinker;
@@ -190,6 +193,7 @@ int __fastcall sub_6FD49990(char* szText, int* a2, int a3, int nKeywordNumber)
 }
 
 //D2Common.0x6FD49D20
+//1.14d: 0x00611BD0
 void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	unsigned int nNewSize = 0;
@@ -256,6 +260,7 @@ void __fastcall DATATBLS_SkillCalcLinker(char* pSrc, void* pRecord, int nOffset,
 }
 
 //D2Common.0x6FD49E40
+//1.14d: 0x00611C70
 void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	unsigned int nNewSize = 0;
@@ -322,6 +327,7 @@ void __fastcall DATATBLS_SkillDescCalcLinker(char* pSrc, void* pRecord, int nOff
 }
 
 //D2Common.0x6FD49F60
+//1.14d: 0x00613F80
 void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 {
 	D2PetTypeTxt* pPetTypeTxtRecord = NULL;
@@ -877,6 +883,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD4E350
+//1.14d: 0x00617C30
 void __fastcall DATATBLS_UnloadSkills_SkillDescTxt()
 {
 	if (sgptDataTables->nClassSkillCount)

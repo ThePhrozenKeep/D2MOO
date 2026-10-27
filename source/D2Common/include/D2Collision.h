@@ -84,6 +84,7 @@ struct D2RoomCollisionGridStrc
 #pragma pack()
 
 //D2Common.0x6FD41000
+//1.14d: 0x0064C860
 void __fastcall COLLISION_ReplaceTileCollision(D2ActiveRoomStrc* pRoom, D2DrlgTileDataStrc* pTileData, D2TileLibraryEntryStrc* pTileLibraryEntry);
 //D2Common.0x6FD411F0
 void __fastcall sub_6FD411F0(D2RoomCollisionGridStrc* pCollisionGrid, D2TileLibraryEntryStrc* pTileLibraryEntry, int nX, int nY);

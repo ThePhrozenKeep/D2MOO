@@ -20,6 +20,7 @@ D2BeltsTxt* gpBeltsTxtTable;
 // D2Common.0x6FDE9608
 D2DataTablesStrc gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
+//1.14d: 0x00744304
 extern "C" D2DataTablesStrc * sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
@@ -28,6 +29,7 @@ BOOL DATATBLS_LoadFromBin = TRUE;
 // BELTS
 
 //D2Common.0x6FD494D0
+//1.14d: 0x006117B0
 uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 {
 	const Unicode* pUnicode = NULL;
@@ -47,6 +49,7 @@ uint16_t __fastcall DATATBLS_GetStringIdFromReferenceString(char* szReference)
 }
 
 //D2Common.0x6FD49500 - Changed this function a lot (had 6 hardcoded (i.e. pre-defined) Args)
+//1.14d: 0x00612600
 void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt()
 {
 	Unicode wszClass[512] = {};
@@ -75,6 +78,7 @@ void __fastcall DATATBLS_InitUnicodeClassNamesInCharStatsTxt()
 }
 
 //D2Common.0x6FD49660 (#11255)
+//1.14d: 0x006117D0
 uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode)
 {
 	if (nCompCode < sgptDataTables->nCompCodeTxtRecordCount)
@@ -86,6 +90,7 @@ uint32_t __stdcall DATATBLS_GetCodeFromCompCodeTxt(int nCompCode)
 }
 
 //D2Common.0x6FD49680 (#11249)
+//1.14d: 0x00613E60
 uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel)
 {
 	if (sgptDataTables->pExperienceTxt)
@@ -107,6 +112,7 @@ uint32_t __stdcall DATATBLS_GetExpRatio(int nLevel)
 }
 
 //D2Common.0x6FD496B0 (#10628)
+//1.14d: 0x00611800
 uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 {
 	if (nClass < 0 || nClass >= NUMBER_OF_PLAYERCLASSES)
@@ -118,6 +124,7 @@ uint32_t __stdcall DATATBLS_GetLevelThreshold(int nClass, uint32_t dwLevel)
 }
 
 //D2Common.0x6FD496E0 (#10629)
+//1.14d: 0x00611830
 int __stdcall DATATBLS_GetMaxLevel(int nClass)
 {
 	if (nClass >= 0 && nClass < NUMBER_OF_PLAYERCLASSES)
@@ -129,6 +136,7 @@ int __stdcall DATATBLS_GetMaxLevel(int nClass)
 }
 
 //D2Common.0x6FD49710 (#10630)
+//1.14d: 0x00611860
 uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperience)
 {
 	if (nClass < 0 || nClass >= NUMBER_OF_PLAYERCLASSES)
@@ -147,6 +155,7 @@ uint32_t __stdcall DATATBLS_GetCurrentLevelFromExp(int nClass, uint32_t dwExperi
 }
 
 //D2Common.0x6FD49760
+//1.14d: 0x00613E90
 void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFile, void** ppFileHandle, int* pSize, int* pSizeEx)
 {
 	FILE* pFile = NULL;
@@ -173,6 +182,7 @@ void __fastcall DATATBLS_GetBinFileHandle(HD2ARCHIVE hArchive, const char* szFil
 }
 
 //D2Common.0x6FD49850
+//1.14d: 0x006118B0
 int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSizeEx, void* pBuffer, int nBufferSize)
 {
 	int nNewSize = 0;
@@ -215,18 +225,21 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 // SKILLS
 
 //D2Common.0x6FD4E4B0 (#10593)
+//1.14d: 0x00611D10
 D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable()
 {
 	return sgptDataTables->pCharStatsTxt;
 }
 
 //D2Common.0x6FD4E4C0
+//1.14d: 0x00611D20
 D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData()
 {
 	return sgptDataTables->pAnimData;
 }
 
 //D2Common.0x6FD4E4D0 (#10655)
+//1.14d: 0x00611D30
 D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty)
 {
 	if (nDifficulty < 0)
@@ -243,6 +256,7 @@ D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDiff
 }
 
 //D2Common.0x6FD4E500
+//1.14d: 0x00618100
 void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 {
 	uint32_t* pStateMasks = NULL;
@@ -395,6 +409,7 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD4F4A0
+//1.14d: 0x00618C90
 void __fastcall DATATBLS_UnloadStatesTxt()
 {
 	if (sgptDataTables->pStateMasks)
@@ -446,6 +461,7 @@ D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
 }
 
 //D2Common.0x6FD4F5A0
+//1.14d: 0x00618D90
 void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -587,6 +603,7 @@ char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nC
 }
 
 //D2Common.0x6FD4FCF0 (#10580)
+//1.14d: 0x006121F0
 void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount)
 {
 	FILE* pFile = NULL;
@@ -604,6 +621,7 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
+//1.14d: 0x006122F0
 void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize)
 {
 	D2BinFileStrc* pBinFile = NULL;
@@ -690,12 +708,14 @@ void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2B
 }
 
 //D2Common.0x6FD500F0 (#11242)
+//1.14d: 0x006125A0
 void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent)
 {
 	sgptDataTables->bCompileTxt = !bSilent;
 }
 
 //D2Common.0x6FD50110 (#10579)
+//1.14d: 0x006125C0
 void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 {
 	if (pBinFile)
@@ -712,6 +732,7 @@ void __stdcall DATATBLS_UnloadBin(void* pBinFile)
 }
 
 //D2Common.0x6FD50150 (#10575)
+//1.14d: 0x00619140
 void __stdcall DATATBLS_UnloadAllBins()
 {
 	DATATBLS_UnloadBin(sgptDataTables->pCompCodeTxt);
@@ -804,6 +825,7 @@ void __stdcall DATATBLS_UnloadAllBins()
 }
 
 //D2Common.0x6FD504B0 (#10576)
+//1.14d: 0x00619300
 void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3)
 {
 	D2BinFieldStrc pTbl[] =
@@ -881,6 +903,7 @@ void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3)
 }
 
 //D2Common.0x6FD507B0
+//1.14d: 0x00612750
 void __fastcall DATATBLS_LoadSomeTxts(HD2ARCHIVE hArchive)
 {
 	int nRecordCount = 0;
@@ -1019,6 +1042,7 @@ void __fastcall DATATBLS_LoadSomeTxts(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD50FB0
+//1.14d: 0x00613260
 void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -1103,6 +1127,7 @@ void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD51BF0
+//1.14d: 0x00617D90
 void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =

@@ -10,6 +10,7 @@
 
 //1.10f: D2Common.0x6FDD1D60
 //1.13c: D2Common.0x6FDDF508
+//1.14d: 0x006F1958
 static const D2CoordStrc aCoordOffsets[8] =
 {
     {1,0},
@@ -24,6 +25,7 @@ static const D2CoordStrc aCoordOffsets[8] =
 
 //1.10f: D2Common.0x6FDD1BE0
 //1.13c: D2Common.0x6FDDB860
+//1.14d: 0x006F17D8
 int32_t dword_6FDD1BE0[8][8] = {
     { 0, 1, 6, 3, 4, 5, 2, 7},
     { 0, 1, 6, 3, 1, 3, 6, 1},
@@ -37,6 +39,7 @@ int32_t dword_6FDD1BE0[8][8] = {
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0BB0
+//1.14d: 0x0067AAA0
 int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, D2PathInfoStrc* pPathInfo)
 {
     D2_ASSERT(pRoomCoords->nSubtileHeight * pRoomCoords->nSubtileWidth <= IDASTAR_MAXPROOM);
@@ -129,6 +132,7 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
 
 //1.10f: D2Common.0x6FDA7970
 //1.13c: D2Common.0x6FDC0E40
+//1.14d: 0x0067AD00
 int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
 {
 	pPathInfo->field_14 *= 2;
@@ -202,6 +206,7 @@ D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_GetNewNode(D2PathIDAStarContextSt
 
 //1.10f: D2Common.0x6FDA7D40
 //1.13c: D2Common.0x6FDC08F0
+//1.14d: 0x0067A740
 D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextStrc* pContext, int nFScoreCutoff, D2PathInfoStrc* pPathInfo)
 {
     D2PathIDAStarNodeStrc* pCurrentNode = pContext->pCurrentNode;
@@ -296,6 +301,7 @@ D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextSt
 
 // 1.10f: 0x6FDD1CE0
 // 1.13c: 0x6FDDB960
+//1.14d: 0x006F18D8
 int dword_6FDD1CE0[32] = {
 	-2, -1,  0,  1,
 	 2, -2, -1,  0,
@@ -309,6 +315,7 @@ int dword_6FDD1CE0[32] = {
 
 //1.10c: D2Common.0x6FDA81C0
 //1.13f: D2Common.0x6FDC07E0
+//1.14d: 0x0067A630
 void __fastcall PATH_IDAStar_GetNextNeighborIndex(D2PathIDAStarNodeStrc* pNode, D2PathIDAStarContextStrc* pContext)
 {
 	if (pContext->bRandomDirection)
@@ -326,6 +333,7 @@ void __fastcall PATH_IDAStar_GetNextNeighborIndex(D2PathIDAStarNodeStrc* pNode, 
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0840
+//1.14d: 0x0067A690
 D2PathIDAStarNodeStrc* __fastcall sub_6FDC0840(D2PathIDAStarNodeStrc* pNode, D2PathIDAStarContextStrc* pContext)
 {
     if (pNode->nEvaluationsCount < 4)
@@ -358,6 +366,7 @@ D2PathIDAStarNodeStrc* __fastcall sub_6FDC0840(D2PathIDAStarNodeStrc* pNode, D2P
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0650
+//1.14d: 0x0067A9F0
 signed int __fastcall PATH_IDAStar_FlushNodeToDynamicPath(D2PathIDAStarNodeStrc* pNode, D2PathInfoStrc* pPathInfo)
 {
     if (!pNode)

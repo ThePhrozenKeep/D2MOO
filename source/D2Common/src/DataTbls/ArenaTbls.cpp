@@ -3,6 +3,7 @@
 static const int NUM_ARENA_TYPES = 1;
 
 //D2Common.0x6FD47840
+//1.14d: 0x006649B0
 void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -21,6 +22,7 @@ void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD47970 (#10596)
+//1.14d: 0x00664AB0
 D2ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType)
 {
 	D2_ASSERT(nArenaType < NUM_ARENA_TYPES);
@@ -29,6 +31,7 @@ D2ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType)
 }
 
 //D2Common.0x6FD479B0
+//1.14d: 0x00664AF0
 void __fastcall DATATBLS_UnloadArenaTxt()
 {
 	DATATBLS_UnloadBin(gpArenaTxtTable);
@@ -36,6 +39,7 @@ void __fastcall DATATBLS_UnloadArenaTxt()
 }
 
 //D2Common.0x6FD479D0
+//1.14d: 0x00664B80
 void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive)
 {
 	int nMaxLevel = 0;
@@ -143,6 +147,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD48770
+//1.14d: 0x00665740
 void __fastcall DATATBLS_UnloadCharTemplateTxt()
 {
 	DATATBLS_UnloadBin(gpCharTemplateTxtTable);
@@ -150,12 +155,14 @@ void __fastcall DATATBLS_UnloadCharTemplateTxt()
 }
 
 //D2Common.0x6FD48790 (#10664)
+//1.14d: 0x00665760
 int __fastcall DATATBLS_GetCharTemplateTxtRecordCount()
 {
 	return gnCharTemplateTxtTableRecordCount;
 }
 
 //D2Common.0x6FD487A0 (#10665)
+//1.14d: 0x00665770
 D2CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, int nLevel)
 {
 	D2_ASSERT(nTemplate > 0);
@@ -166,6 +173,7 @@ D2CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, i
 }
 
 //D2Common.0x6FD48810 (#10666)
+//1.14d: 0x006657C0
 int __fastcall DATATBLS_GetClassFromCharTemplateTxtRecord(int nTemplate, int nLevel)
 {
 	return DATATBLS_GetCharTemplateTxtRecord(nTemplate, nLevel)->nClass;

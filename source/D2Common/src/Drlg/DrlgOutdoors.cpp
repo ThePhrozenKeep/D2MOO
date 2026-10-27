@@ -19,6 +19,7 @@
 
 
 //D2Common.0x6FD7DC20
+//1.14d: 0x00674040
 int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pDrlgVertex)
 {
 	static const D2CoordStrc pOffsetCoords[] =
@@ -82,6 +83,7 @@ int __fastcall DRLGOUTDOORS_GetOutLinkVisFlag(D2DrlgLevelStrc* pLevel, D2DrlgVer
 }
 
 //D2Common.0x6FD7DD00
+//1.14d: 0x00674120
 int __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	if (DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY).bHasPickedFile)
@@ -93,6 +95,7 @@ int __fastcall DRLGOUTDOORS_GetPresetIndexFromGridCell(D2DrlgLevelStrc* pLevel, 
 }
 
 //D2Common.0x6FD7DD40
+//1.14d: 0x00674160
 void __fastcall DRLGOUTDOORS_AlterAdjacentPresetGridCells(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[0], nX, nY, 0, FLAG_OPERATION_OVERWRITE);
@@ -100,6 +103,7 @@ void __fastcall DRLGOUTDOORS_AlterAdjacentPresetGridCells(D2DrlgLevelStrc* pLeve
 }
 
 //D2Common.0x6FD7DD70
+//1.14d: 0x006741A0
 void __fastcall DRLGOUTDOORS_SetBlankGridCell(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	DRLGGRID_AlterGridFlag(&pLevel->pOutdoors->pGrid[0], nX, nY, 0, FLAG_OPERATION_OVERWRITE);
@@ -109,12 +113,14 @@ void __fastcall DRLGOUTDOORS_SetBlankGridCell(D2DrlgLevelStrc* pLevel, int nX, i
 }
 
 //D2Common.0x6FD7DDB0
+//1.14d: 0x006741E0
 unsigned int __fastcall DRLGOUTDOORS_TestGridCellNonLvlLink(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	return DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY).bLvlLink == 0;
 }
 
 //D2Common.0x6FD7DDD0
+//1.14d: 0x00674200
 BOOL __fastcall DRLGOUTDOORS_TestGridCellSpawnValid(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	D2DrlgOutdoorPackedGrid2InfoStrc tPackedInfo = DRLGOUTDOORS_GetPackedGrid2Info(pLevel->pOutdoors, nX, nY);
@@ -123,6 +129,7 @@ BOOL __fastcall DRLGOUTDOORS_TestGridCellSpawnValid(D2DrlgLevelStrc* pLevel, int
 }
 
 //D2Common.0x6FD7DDF0
+//1.14d: 0x00674230
 BOOL __fastcall DRLGOUTDOORS_TestOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, int nX, int nY, int nLevelPrestId, int nOffset, char nFlags)
 {
 	D2LvlPrestTxt* pLvlPrestTxtRecord = NULL;
@@ -191,6 +198,7 @@ BOOL __fastcall DRLGOUTDOORS_TestOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, int
 }
 
 //D2Common.0x6FD7DEF0
+//1.14d: 0x006743C0
 void __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc* pLevel, int nX, int nY, int nLevelPrestId, int nPickedFile, BOOL bBorder)
 {
 	D2LvlPrestTxt* pLvlPrestTxtRecord = NULL;
@@ -257,6 +265,7 @@ void __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc* pLevel, 
 }
 
 //D2Common.0x6FD7E0F0
+//1.14d: 0x006744F0
 BOOL __fastcall DRLGOUTDOORS_SpawnPresetFarAway(D2DrlgLevelStrc* pLevel, D2DrlgCoordStrc* pDrlgCoord, int nLvlPrestId, int nRand, int nOffset, char nFlags)
 {
 	int nHeight = 0;
@@ -338,6 +347,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnPresetFarAway(D2DrlgLevelStrc* pLevel, D2DrlgC
 }
 
 //D2Common.0x6FD7E330
+//1.14d: 0x00674730
 BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, int nLevelPrestId, int nRand, int nOffset, char nFlags)
 {
 	D2CoordStrc pCoord[256] = {};
@@ -391,6 +401,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnOutdoorLevelPreset(D2DrlgLevelStrc* pLevel, in
 }
 
 //D2Common.0x6FD7E4D0
+//1.14d: 0x00674920
 BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int nLvlPrestId, int nRand)
 {
 	static const char nOffsetX[] =
@@ -470,6 +481,7 @@ BOOL __fastcall DRLGOUTDOORS_SpawnRandomOutdoorDS1(D2DrlgLevelStrc* pLevel, int 
 }
 
 //D2Common.0x6FD7E6D0
+//1.14d: 0x00674B70
 void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 {
 	D2CoordStrc pCoord[256] = {};
@@ -574,6 +586,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Waypoint(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD7E940
+//1.14d: 0x00674E40
 void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShrines)
 {
 	static const int dword_6FDCF948[] =
@@ -647,6 +660,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct12Shrines(D2DrlgLevelStrc* pLevel, int nShr
 
 //D2Common.0x6FD7EB20
 //TODO: a1
+//1.14d: 0x006752A0
 void __fastcall DRLGOUTDOORS_AddAct124SecondaryBorder(D2DrlgLevelStrc* pLevel, int nLvlSubId, int nLevelPrestId)
 {
 	D2UnkOutdoorStrc a1 = {};
@@ -668,6 +682,7 @@ void __fastcall DRLGOUTDOORS_AddAct124SecondaryBorder(D2DrlgLevelStrc* pLevel, i
 }
 
 //D2Common.0x6FD7EBA0
+//1.14d: 0x00675320
 void __fastcall DRLGOUTDOORS_AllocOutdoorInfo(D2DrlgLevelStrc* pLevel)
 {
 	pLevel->pOutdoors = D2_CALLOC_STRC_POOL(pLevel->pDrlg->pMempool, D2DrlgOutdoorInfoStrc);
@@ -832,6 +847,7 @@ void __fastcall DRLGOUTDOORS_GenerateLevel(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD7EEE0
+//1.14d: 0x006754C0
 void __fastcall DRLGOUTDOORS_FreeOutdoorInfo(D2DrlgLevelStrc* pLevel, BOOL bKeepRoomData)
 {
 	if (pLevel->pOutdoors->dwFlags & 0x20)
@@ -908,6 +924,7 @@ static const uint8_t byte_6FDCF958[] =
 };
 
 //D2Common.0x6FD7EFE0
+//1.14d: 0x00680C80
 void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRoomStrc* pDrlgRoom)
 {
 
@@ -996,6 +1013,7 @@ void __fastcall DRLG_OUTDOORS_GenerateDirtPath(D2DrlgLevelStrc* pLevel, D2DrlgRo
 }
 
 //D2Common.0x6FD7F250
+//1.14d: 0x00681420
 void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 {
 	D2DrlgOutdoorInfoStrc* pOutdoors = pLevel->pOutdoors;
@@ -1136,6 +1154,7 @@ void __fastcall DRLGOUTDOORS_SpawnAct1DirtPaths(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD7F500
+//1.14d: 0x00680CC0
 void __fastcall DRLGOUTDOORS_CalculatePathCoordinates(D2DrlgLevelStrc* pLevel, D2DrlgVertexStrc* pVertex1, D2DrlgVertexStrc* pVertex2)
 {
 	pVertex2->nPosX = pVertex1->nPosX - pLevel->nPosX;
@@ -1168,6 +1187,7 @@ void __fastcall DRLGOUTDOORS_CalculatePathCoordinates(D2DrlgLevelStrc* pLevel, D
 }
 
 //D2Common.0x6FD7F5B0
+//1.14d: 0x00681000
 void __fastcall sub_6FD7F5B0(D2DrlgLevelStrc* pLevel)
 {
 	static const int nXOffsets[] =
@@ -1278,6 +1298,7 @@ void __fastcall sub_6FD7F5B0(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD7F810
+//1.14d: 0x00681240
 void __fastcall sub_6FD7F810(D2DrlgLevelStrc* pLevel, int nVertexId)
 {
 	static const int nXOffsets[] =
@@ -1346,6 +1367,7 @@ void __fastcall sub_6FD7F810(D2DrlgLevelStrc* pLevel, int nVertexId)
 }
 
 //D2Common.0x6FD7F9B0
+//1.14d: 0x0067E890
 void __fastcall DRLGOUTDOORS_InitAct4OutdoorLevel(D2DrlgLevelStrc* pLevel)
 {
 	static const int nMesaLvlPrestIds[] =

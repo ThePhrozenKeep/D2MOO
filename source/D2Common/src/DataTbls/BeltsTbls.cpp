@@ -2,6 +2,7 @@
 
 
 //D2Common.0x6FD48880
+//1.14d: 0x00660290
 void __fastcall DATATBLS_LoadBeltsTxt(HD2ARCHIVE hArchive)
 {
 	int nRecordCount = 0;
@@ -81,12 +82,14 @@ void __fastcall DATATBLS_LoadBeltsTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD493A0
+//1.14d: 0x00660C60
 void __fastcall DATATBLS_UnloadBeltsTxt()
 {
 	DATATBLS_UnloadBin(gpBeltsTxtTable);
 }
 
 //D2Common.0x6FD493B0 (#10638)
+//1.14d: 0x00660CB0
 void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt* pRecord)
 {
 	D2_ASSERT(gpBeltsTxtTable);
@@ -94,6 +97,7 @@ void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt
 }
 
 //D2Common.0x6FD49420 (#10639)
+//1.14d: 0x00660D10
 void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2InvRectStrc* pInvRect, int nBoxId)
 {
 	D2BeltsTxt* ptBeltsTxtRecord = NULL;
