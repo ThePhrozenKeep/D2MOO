@@ -10,10 +10,10 @@ struct D2NpcVendorChainStrc;
 
 struct D2ItemCacheStrc
 {
-	char nMin;								//0x00
-	char nMax;								//0x01
-	char nMagicMin;							//0x02
-	char nMagicMax;							//0x03
+	uint8_t nMin;								//0x00
+	uint8_t nMax;								//0x01
+	uint8_t nMagicMin;							//0x02
+	uint8_t nMagicMax;							//0x03
 	uint32_t dwCode;							//0x04
 	int32_t nMagicLevel;						//0x08
 };

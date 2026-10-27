@@ -22,7 +22,8 @@ struct D2ArenaStrc
     int32_t nAlternateStartTown;				//0x00
     int32_t nType;								//0x04
     uint32_t fFlags;							//0x08 D2GameFlags
-    int32_t nTemplate;							//0x0C - uint8_t with 3 pad
+    uint8_t nTemplate;							//0x0C
+    uint8_t pad0x0D[3];							//0x0D
 };
 
 struct D2ArenaUnitStrc

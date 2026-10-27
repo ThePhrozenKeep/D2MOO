@@ -72,12 +72,12 @@ int16_t __fastcall PARTY_CreateParty(D2GameStrc* pGame)
 
     D2PartyControlStrc* pPartyControl = pGame->pPartyControl;
 
-    int16_t nPartyId = std::max(pPartyControl->nNextPartyId, 3i16);
+    uint16_t nPartyId = std::max<uint16_t>(pPartyControl->nNextPartyId, 3);
 
     while (1)
     {
         D2PartyStrc* pCurrent = pPartyControl->pParties;
-        while (pCurrent && pCurrent->nPartyId != nPartyId)
+        while (pCurrent && static_cast<uint16_t>(pCurrent->nPartyId) != nPartyId)
         {
             pCurrent = pCurrent->pNext;
         }
@@ -89,11 +89,11 @@ int16_t __fastcall PARTY_CreateParty(D2GameStrc* pGame)
 
         ++nPartyId;
 
-        nPartyId = std::max(nPartyId, 3i16);
+        nPartyId = std::max<uint16_t>(nPartyId, 3);
     }
 
     pPartyControl->nNextPartyId = nPartyId + 1;
-    pParty->nPartyId = nPartyId;
+    pParty->nPartyId = static_cast<int16_t>(nPartyId);
     pParty->pNext = pPartyControl->pParties;
     pPartyControl->pParties = pParty;
     return pParty->nPartyId;
