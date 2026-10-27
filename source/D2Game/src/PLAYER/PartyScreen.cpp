@@ -193,7 +193,7 @@ void __fastcall PARTYSCREEN_AcceptInvitation(D2GameStrc* pGame, D2UnitStrc* pPla
 }
 
 //Inlined in D2Game.0x6FC7AED0
-void __fastcall inlinedfunction(D2UnitStrc* pLocalPlayer, D2UnitStrc* pOtherPlayer)
+void __fastcall PARTYSCREEN_UpdatePartyStateWithPlayer(D2UnitStrc* pLocalPlayer, D2UnitStrc* pOtherPlayer)
 {
     int32_t nLocalGUID = -1;
     if (pLocalPlayer)
@@ -242,8 +242,8 @@ void __fastcall PARTYSCREEN_PlayerIterate_PartyJoined(D2GameStrc* pGame, D2UnitS
     PLAYERLIST_AllocPlayerList(pGame, pLocalPlayer, pPlayer2);
     PLAYERLIST_AllocPlayerList(pGame, pPlayer2, pLocalPlayer);
 
-    inlinedfunction(pLocalPlayer, pPlayer1);
-    inlinedfunction(pLocalPlayer, pPlayer2);
+    PARTYSCREEN_UpdatePartyStateWithPlayer(pLocalPlayer, pPlayer1);
+    PARTYSCREEN_UpdatePartyStateWithPlayer(pLocalPlayer, pPlayer2);
 
     if (nPartyId == pArg->nPartyId && nPartyId != -1 && pLocalPlayer != pPlayer2)
     {

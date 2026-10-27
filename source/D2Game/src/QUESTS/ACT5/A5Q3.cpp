@@ -166,7 +166,7 @@ void __fastcall ACT5Q3_RemoveNihlathakFromTown(D2GameStrc* pGame)
 
 	if (MONSTERAI_HasInteractUnit(pMonInteract))
 	{
-		D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pNihlathak, 0);
+		MONSTERAI_CloseNpcInteractions(pQuestData->pGame, pNihlathak, 0);
 	}
 
 	D2Common_10153(pNihlathak->pDynamicPath);
@@ -782,7 +782,7 @@ int32_t __fastcall ACT5Q3_RemoveDrehyaIced(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 	if (MONSTERAI_HasInteractUnit(pMonInteract))
 	{
-		D2GAME_MONSTERAI_Last_6FC61F70(pGame, pUnit, ACT5Q3_SendPacket0x5DToClient);
+		MONSTERAI_CloseNpcInteractions(pGame, pUnit, ACT5Q3_SendPacket0x5DToClient);
 		return 1;
 	}
 
@@ -899,7 +899,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 
 			if (MONSTERAI_HasInteractUnit(pMonInteract))
 			{
-				D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pDrehya, 0);
+				MONSTERAI_CloseNpcInteractions(pQuestData->pGame, pDrehya, 0);
 			}
 
 			D2ModeChangeStrc modeChange = {};
@@ -931,7 +931,7 @@ void __fastcall sub_6FCB4400(D2QuestDataStrc* pQuestData)
 
 			if (MONSTERAI_HasInteractUnit(pMonInteract))
 			{
-				D2GAME_MONSTERAI_Last_6FC61F70(pQuestData->pGame, pNihlathak, 0);
+				MONSTERAI_CloseNpcInteractions(pQuestData->pGame, pNihlathak, 0);
 			}
 
 			D2Common_10153(pNihlathak->pDynamicPath);

@@ -202,7 +202,7 @@ int32_t __fastcall ACT1Q4_UnitIterate_RemoveCainFromTristram(D2GameStrc* pGame, 
 
 	if (MONSTERAI_HasInteractUnit(pMonInteract))
 	{
-		D2GAME_MONSTERAI_Last_6FC61F70(pGame, pUnit, ACT1Q4_SendPacket0x5DToClient);
+		MONSTERAI_CloseNpcInteractions(pGame, pUnit, ACT1Q4_SendPacket0x5DToClient);
 		return 1;
 	}
 

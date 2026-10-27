@@ -616,7 +616,7 @@ int32_t __fastcall PLAYER_CanModifyInventory(D2GameStrc* pGame, D2UnitStrc* pPla
         }
         else if (nUnitType == UNIT_MONSTER)
         {
-            return sub_6FC61F20(pInteractUnit, pPlayer);
+            return MONSTERAI_IsInteractionReady(pInteractUnit, pPlayer);
         }
     }
     else

@@ -218,9 +218,9 @@ void __stdcall D2Win_10004(D2GameResolutionMode bForceResize)
 	}
 }
 
-// Helper function
-//TODO: Name
-void __stdcall D2Win_Helper()
+//D2Win: inlined (D2Win_10016 0x6F8ACE20, D2Win_10019 0x6F8AD6F0)
+//1.14d: 0x004F9290
+void __stdcall CONTROL_FreeDeadList()
 {
 	D2WinControlStrc* pNext = nullptr;
 
@@ -257,7 +257,7 @@ int __stdcall D2Win_10016()
 {
 	dword_6F8FE254 = 0;
 
-	D2Win_Helper();
+	CONTROL_FreeDeadList();
 
 	LIST_UnloadPentspinCellfile();
 	D2Win_10116();
@@ -903,7 +903,7 @@ void __stdcall D2Win_10019()
 
 	if (dword_6F8FE254 <= 0)
 	{
-		D2Win_Helper();
+		CONTROL_FreeDeadList();
 	}
 }
 
