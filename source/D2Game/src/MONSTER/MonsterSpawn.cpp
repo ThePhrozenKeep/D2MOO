@@ -1338,7 +1338,7 @@ int32_t __fastcall MONSTERSPAWN_SpawnFormation(D2GameStrc* pGame, D2ActiveRoomSt
     D2UnitStrc* pUnit = nullptr;
     
     int32_t bIncreaseClassId = 0;
-    if (pFormation->unk0x08 & 1)
+    if (pFormation->nFlags & 1)
     {
         bIncreaseClassId = 1;
     }
