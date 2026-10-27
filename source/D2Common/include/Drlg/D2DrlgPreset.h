@@ -25,6 +25,19 @@ struct D2LevelFileListStrc
 	D2LevelFileListStrc* pNext;				//0x10C
 };
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+struct D2PresetUnitStrc
+{
+	int32_t nMode;							//0x00
+	int32_t nIndex;							//0x04 see D2Common.#11278
+	int32_t nXpos;							//0x08
+	D2PresetUnitStrc* pNext;				//0x0C
+	D2MapAIStrc* pMapAI;					//0x10
+	int32_t nUnitType;						//0x14
+	int32_t nYpos;							//0x18
+	BOOL bSpawned;							//0x1C
+};
+#else
 struct D2PresetUnitStrc
 {
 	int32_t nUnitType;						//0x00
@@ -36,6 +49,7 @@ struct D2PresetUnitStrc
 	D2MapAIStrc* pMapAI;					//0x18
 	D2PresetUnitStrc* pNext;				//0x1C
 };
+#endif
 
 struct D2DrlgMapStrc
 {
