@@ -85,4 +85,4 @@ void __fastcall MONSTERREGION_RecordMonsterKill(D2MonsterRegionStrc** ppMonsterR
 //D2Game.0x6FC68280
 void __fastcall MONSTERREGION_UndoMonsterKill(D2MonsterRegionStrc** ppMonsterRegion, D2UnitStrc* pUnit);
 //D2Game.0x6FC682C0
-void __fastcall MONSTERREGION_AdjustCountsForInactiveMonster(D2MonsterRegionStrc** ppMonRegion, int32_t nLevelId1, int32_t nLevelId2, int32_t nAlignment, int32_t bDead, int32_t bExcludeFromCount, D2UnitStrc* pUnit);
+void __fastcall MONSTERREGION_AdjustCountsForInactiveMonster(D2MonsterRegionStrc** ppMonRegion, int32_t nSavedLevelId, int32_t nCurrentLevelId, int32_t nAlignment, int32_t bDead, int32_t bExcludeFromCount, D2UnitStrc* pUnit);

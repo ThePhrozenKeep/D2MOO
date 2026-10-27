@@ -599,7 +599,7 @@ int32_t __fastcall MONSTERREGION_CanRetryPresetSpawn(int32_t nMonsterId)
 //D2Game.0x6FC67190
 void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
-    // TODO: v24
+
     D2MonsterRegionStrc* pMonsterRegion = MONSTERREGION_GetMonsterRegionFromLevelId(pGame->pMonReg, DUNGEON_GetLevelIdFromRoom(pRoom));
     if (!pMonsterRegion)
     {
@@ -690,10 +690,10 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc
                         }
                         else if (nType == 1)
                         {
-                            D2MonsterFormationStrc* v24 = MONSTERCHOOSE_RollFormation(pRoom);
+                            D2MonsterFormationStrc* pFormation = MONSTERCHOOSE_RollFormation(pRoom);
                             int32_t nX = 0;
                             int32_t nY = 0;
-                            if (MONSTERREGION_FindFormationSpawnLocation(pGame, pRoom, nullptr, nMonsterId, v24, &nX, &nY) && MONSTERSPAWN_SpawnFormation(pGame, pRoom, nX, nY, nullptr, nMonsterId, 1, v24, 0))
+                            if (MONSTERREGION_FindFormationSpawnLocation(pGame, pRoom, nullptr, nMonsterId, pFormation, &nX, &nY) && MONSTERSPAWN_SpawnFormation(pGame, pRoom, nX, nY, nullptr, nMonsterId, 1, pFormation, 0))
                             {
                                 bIncrease = 1;
                             }
@@ -1165,15 +1165,15 @@ void __fastcall MONSTERREGION_UndoMonsterKill(D2MonsterRegionStrc** ppMonsterReg
 }
 
 //D2Game.0x6FC682C0
-void __fastcall MONSTERREGION_AdjustCountsForInactiveMonster(D2MonsterRegionStrc** ppMonRegion, int32_t nLevelId1, int32_t nLevelId2, int32_t nAlignment, int32_t bDead, int32_t bExcludeFromCount, D2UnitStrc* pUnit)
+void __fastcall MONSTERREGION_AdjustCountsForInactiveMonster(D2MonsterRegionStrc** ppMonRegion, int32_t nSavedLevelId, int32_t nCurrentLevelId, int32_t nAlignment, int32_t bDead, int32_t bExcludeFromCount, D2UnitStrc* pUnit)
 {
-    D2MonsterRegionStrc* pMonsterRegion1 = ppMonRegion[nLevelId1];
-    D2MonsterRegionStrc* pMonsterRegion2 = ppMonRegion[nLevelId2];
+    D2MonsterRegionStrc* pMonsterRegion1 = ppMonRegion[nSavedLevelId];
+    D2MonsterRegionStrc* pMonsterRegion2 = ppMonRegion[nCurrentLevelId];
     if (pUnit)
     {
         if (pMonsterRegion2 != pMonsterRegion1)
         {
-            MONSTER_SetLevelId(pUnit, nLevelId1);
+            MONSTER_SetLevelId(pUnit, nSavedLevelId);
         }
 
         if (!bExcludeFromCount && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL)
