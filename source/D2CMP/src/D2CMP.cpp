@@ -4,6 +4,7 @@
 
 #undef D2FUNC_DLL
 #define D2FUNC_DLL D2FUNC_DLL_STUB
-
+#undef D2FUNC_DLL_VOID
+#define D2FUNC_DLL_VOID D2FUNC_DLL_STUB_VOID
 
 #include <D2CMP.h>

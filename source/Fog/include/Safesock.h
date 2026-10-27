@@ -31,13 +31,13 @@ D2FUNC_DLL(FOG, SOCKET_WSAStartup, BOOL, __fastcall, (), 0x13290)															
 D2FUNC_DLL(FOG, SOCKET_WSACleanup, int, __fastcall, (), 0x132C0)															//Fog.#10002
 D2FUNC_DLL(FOG, SOCKET_Connect, FSafeSock*, __fastcall, (char* szHostAddress, uint16_t nPortNumber, LPTHREAD_START_ROUTINE pThreadProc, LPVOID lpParameter, const char* szName), 0x132D0)						//Fog.#10003
 D2FUNC_DLL(FOG, SOCKET_ConnectEx, FSafeSock*, __fastcall, (char* szHostAddress, uint16_t nPortNumber, LPTHREAD_START_ROUTINE pThreadProc, LPVOID lpParameter, const char* szName, BOOL bNonBlocking), 0x132F0)	//Fog.#10004
-D2FUNC_DLL(FOG, SOCKET_Destroy, void,  __fastcall, (FSafeSock* pSafeSock), 0x13590)											//Fog.#10005
+D2FUNC_DLL_VOID(FOG, SOCKET_Destroy, __fastcall, (FSafeSock* pSafeSock), 0x13590)											//Fog.#10005
 D2FUNC_DLL(FOG, SOCKET_Receive, int, __fastcall, (FSafeSock* pSafeSock, char* pBuffer, int nBufferLength), 0x13630)			//Fog.#10006
 D2FUNC_DLL(FOG, SOCKET_Send, int, __fastcall, (FSafeSock* pSafeSock, char* pBuffer, int nBufferLength), 0x13690)			//Fog.#10007
 D2FUNC_DLL(FOG, SOCKET_Select, int,  __fastcall, (FSafeSock* pSafeSock), 0x13770)											//Fog.#10008
 D2FUNC_DLL(FOG, SOCKET_SendNoLock, int, __fastcall, (FSafeSock* pSafeSock, char* pBuffer, int nBufferLength), 0x13700)		//Fog.#10009
-D2FUNC_DLL(FOG, SOCKET_Lock, void, __fastcall, (FSafeSock* pSafeSock), 0x13750)												//Fog.#10010
-D2FUNC_DLL(FOG, SOCKET_Unlock, void, __fastcall, (FSafeSock* pSafeSock), 0x13760)											//Fog.#10011
+D2FUNC_DLL_VOID(FOG, SOCKET_Lock, __fastcall, (FSafeSock* pSafeSock), 0x13750)												//Fog.#10010
+D2FUNC_DLL_VOID(FOG, SOCKET_Unlock, __fastcall, (FSafeSock* pSafeSock), 0x13760)											//Fog.#10011
 D2FUNC_DLL(FOG, SOCKET_GetPeerName, BOOL, __fastcall, (FSafeSock* pSafeSock, struct sockaddr* name, int* namelen), 0x13860)	//Fog.#10012
 D2FUNC_DLL(FOG, GetHostIPAddress, const char*, __fastcall, (), 0x138E0)														//Fog.#10013
 D2FUNC_DLL(FOG, inet_ntoa, const char*, __fastcall, (/*IN_ADDR, but cant due to callconv*/ULONG inaddr_S_addr), 0x13A00)	//Fog.#10014
