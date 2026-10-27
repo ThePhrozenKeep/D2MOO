@@ -38,7 +38,7 @@ enum D2PathTypes
 	PATHTYPE_COUNT = 18
 };
 
-enum D2PathFlags : uint32_t {
+D2_TYPED_ENUM(D2PathFlags, uint32_t) {
 	PATH_UNKNOWN_FLAG_0x00001 = 0x00001, // Set when rider and mount were in different rooms
 	PATH_CURRENT_ROOM_INVALID = 0x00002,
 	PATH_UNUSED_FLAG_0x00004  = 0x00004, // This is unused

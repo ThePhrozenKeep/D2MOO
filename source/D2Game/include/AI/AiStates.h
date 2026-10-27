@@ -3,7 +3,7 @@
 #pragma pack(1)
 
 
-enum D2C_AiSpecialState : uint32_t
+D2_TYPED_ENUM(D2C_AiSpecialState, uint32_t)
 {
 	AISPECIALSTATE_NONE = 0,
 	AISPECIALSTATE_NO_MON_STATS = 1,					// Set when classid > nMonStatsRecord
