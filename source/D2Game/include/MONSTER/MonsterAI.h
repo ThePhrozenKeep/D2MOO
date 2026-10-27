@@ -4,7 +4,7 @@
 #include <UNIT/SUnitNpc.h>
 
 #pragma pack(push, 1)
-struct Unk
+struct D2MonsterEquipmentStrc
 {
     int32_t nItemCode;
     uint8_t nBodyLoc;
@@ -16,7 +16,7 @@ struct Unk
 
 
 //D2Game.0x6FC61190
-void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItemCode, DWORD dwILvl, DWORD dwQuality);
+void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pItemCode, DWORD dwILvl, DWORD dwQuality);
 //D2Game.0x6FC61270
 void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nId, D2MercDataStrc* pMercData, int32_t bDead);
 //D2Game.0x6FC61490

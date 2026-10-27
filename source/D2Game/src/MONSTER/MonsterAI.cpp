@@ -40,7 +40,7 @@
 
 
 //D2Game.0x6FC61190
-void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, Unk* pItemCode, DWORD dwILvl, DWORD dwQuality)
+void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pItemCode, DWORD dwILvl, DWORD dwQuality)
 {
     if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER)
     {

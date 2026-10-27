@@ -3,7 +3,7 @@
 #include <Units/Units.h>
 #include <Drlg/D2DrlgDrlg.h>
 
-struct D2UnkMonCreateStrc2;
+struct D2MonsterFormationStrc;
 
 #pragma pack(1)
 
@@ -61,7 +61,7 @@ int32_t __fastcall MONSTERREGION_CanRetryPresetSpawn(int32_t nMonsterId);
 //D2Game.0x6FC67190
 void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC67570
-int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2UnkMonCreateStrc2* pFormation, int32_t* pX, int32_t* pY);
+int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2MonsterFormationStrc* pFormation, int32_t* pX, int32_t* pY);
 //D2Game.0x6FC677D0
 D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMin, uint8_t nMax);
 //D2Game.0x6FC679F0

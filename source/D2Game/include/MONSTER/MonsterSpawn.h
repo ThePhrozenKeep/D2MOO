@@ -6,7 +6,7 @@
 
 
 #pragma pack(push, 1)
-struct D2UnkMonCreateStrc
+struct D2MonsterSpawnParamsStrc
 {
 	D2GameStrc* pGame;						//0x00
 	D2ActiveRoomStrc* pRoom;						//0x04
@@ -20,20 +20,20 @@ struct D2UnkMonCreateStrc
 	int16_t nFlags;							//0x24
 };
 
-struct D2UnkMonCreateStrc3
+struct D2MonsterFormationRecordStrc
 {
 	int32_t nXOffset;						//0x00
 	int32_t nYOffset;						//0x04
 	int32_t nSpawnType;						//0x08
 };
 
-struct D2UnkMonCreateStrc2
+struct D2MonsterFormationStrc
 {
 	int32_t nRecordCount;					//0x00
 	int32_t unk0x04;						//0x04
 	uint8_t nFlags;							//0x08
 	uint8_t pad0x09[3];						//0x09
-	D2UnkMonCreateStrc3 records[4];			//0x0C - Could be variable length, but at both locations where it's used, it's 4
+	D2MonsterFormationRecordStrc records[4];	//0x0C - Could be variable length, but at both locations where it's used, it's 4
 };
 #pragma pack(pop)
 
@@ -47,14 +47,14 @@ int32_t __fastcall MONSTERSPAWN_GetResurrectMode(D2UnitStrc* pUnit, int32_t bUse
 //D2Game.0x6FC68D70
 D2UnitStrc* __fastcall MONSTERSPAWN_SpawnAtUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags);
 //D2Game.0x6FC68E30
-D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate);
+D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2MonsterSpawnParamsStrc* pMonCreate);
 
 
 
 //D2Game.0x6FC69B60
 void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit);
 //D2Game.0x6FC69C00
-void __fastcall MONSTERSPAWN_SpawnMinionParty(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
+void __fastcall MONSTERSPAWN_SpawnMinionParty(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit);
 //D2Game.0x6FC69F10
 D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags);
 //D2Game.0x6FC69F70
@@ -70,7 +70,7 @@ D2UnitStrc* __fastcall MONSTERSPAWN_SpawnLevelVariantAtUnit(D2GameStrc* pGame, D
 //D2Game.0x6FC6A230
 int32_t __fastcall MONSTERSPAWN_SpawnLinkedMinionsAtOwner(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int32_t nCount, int16_t nFlags);
 //D2Game.0x6FC6A350
-int32_t __fastcall MONSTERSPAWN_SpawnFormation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, D2UnitStrc* pOwner, int32_t nClassId, int32_t nAnimMode, D2UnkMonCreateStrc2* pFormation, int16_t nFlags);
+int32_t __fastcall MONSTERSPAWN_SpawnFormation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, D2UnitStrc* pOwner, int32_t nClassId, int32_t nAnimMode, D2MonsterFormationStrc* pFormation, int16_t nFlags);
 //D2Game.0x6FC6A810
 int32_t __fastcall MONSTERSPAWN_SpawnBonePrison(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nUnused1, int32_t nUnused2, D2UnitStrc* pTargetUnit, int32_t nMonsterId, int16_t nFlags);
 //D2Game.0x6FC6A8C0

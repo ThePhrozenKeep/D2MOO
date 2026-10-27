@@ -13,7 +13,7 @@ struct D2BaalThroneAiCallbackArgStrc
 	int32_t nMaxDistance;
 };
 
-struct D2UnkAiCallbackArgStrc
+struct D2AiTargetSearchArgsStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
@@ -24,7 +24,7 @@ struct D2UnkAiCallbackArgStrc
 	int32_t nAlternativeDistance;
 };
 
-struct D2UnkAiCallbackArgStrc2
+struct D2AiEligibleTargetSearchArgsStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
@@ -32,14 +32,14 @@ struct D2UnkAiCallbackArgStrc2
 	int32_t nAlternativeDistance;
 };
 
-struct D2AiCallback7ArgStrc
+struct D2AiExcludedTargetSearchArgsStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
 	D2UnitStrc* pExcludedTarget;
 };
 
-struct D2AiCallback11ArgStrc
+struct D2AiLineTargetSearchArgsStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
@@ -67,7 +67,7 @@ struct D2VileMotherAiCallbackArgStrc
 	int32_t nCounter;
 };
 
-struct UnkAiStrc5
+struct D2AiDeathModeSearchArgsStrc
 {
 	int32_t nMaxDistance;
 };

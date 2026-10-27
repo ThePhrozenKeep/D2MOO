@@ -690,7 +690,7 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc
                         }
                         else if (nType == 1)
                         {
-                            D2UnkMonCreateStrc2* v24 = MONSTERCHOOSE_RollFormation(pRoom);
+                            D2MonsterFormationStrc* v24 = MONSTERCHOOSE_RollFormation(pRoom);
                             int32_t nX = 0;
                             int32_t nY = 0;
                             if (MONSTERREGION_FindFormationSpawnLocation(pGame, pRoom, nullptr, nMonsterId, v24, &nX, &nY) && MONSTERSPAWN_SpawnFormation(pGame, pRoom, nX, nY, nullptr, nMonsterId, 1, v24, 0))
@@ -731,7 +731,7 @@ void __fastcall D2GAME_PopulateRoom_6FC67190(D2GameStrc* pGame, D2ActiveRoomStrc
 }
 
 //D2Game.0x6FC67570
-int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2UnkMonCreateStrc2* pFormation, int32_t* pX, int32_t* pY)
+int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, D2MonsterFormationStrc* pFormation, int32_t* pX, int32_t* pY)
 {
     int32_t nLeft = 0;
     int32_t nTop = 0;

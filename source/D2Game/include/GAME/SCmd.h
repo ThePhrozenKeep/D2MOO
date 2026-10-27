@@ -124,9 +124,9 @@ void __fastcall D2GAME_PACKETS_SendPacket0x79_6FC3E1D0(D2ClientStrc* pClient, in
 //D2Game.0x6FC3E200
 void __fastcall SCMD_SendUnitLifeAndPositionUpdate(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3E3D0
-D2UnkMonsterDataStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUnit);
+D2MonsterLifeSyncStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUnit);
 //D2Game.0x6FC3E3F0
-int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2UnkMonsterDataStrc* pLifeUpdateState, int32_t nCurrentLifePercentage);
+int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2MonsterLifeSyncStrc* pLifeUpdateState, int32_t nCurrentLifePercentage);
 //D2Game.0x6FC3E440
 int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t nLifePercentage, int32_t nLevelId);
 //D2Game.0x6FC3E570

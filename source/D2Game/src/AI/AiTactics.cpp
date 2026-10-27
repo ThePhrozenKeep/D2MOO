@@ -109,7 +109,7 @@ D2UnitStrc* __fastcall AITACTICS_FindNearbyPlayerOrSelf(D2GameStrc* pGame, D2Uni
 		return nullptr;
 	}
 
-	UnkAiStrc1 pCallbackArg = {};
+	D2AiNearbyPlayerSearchArgsStrc pCallbackArg = {};
 	pCallbackArg.pTarget = nullptr;
 	pCallbackArg.nDistance = INT_MAX;
 	AIUTIL_FindTargetWithCallback(pGame, pUnit, &pCallbackArg, AITACTICS_TargetCallback_FindNearbyPlayer, 2);
@@ -130,7 +130,7 @@ D2UnitStrc* __fastcall AITACTICS_FindNearbyPlayerOrSelf(D2GameStrc* pGame, D2Uni
 //D2Game.0x6FCCFDE0
 D2UnitStrc* __fastcall AITACTICS_TargetCallback_FindNearbyPlayer(D2GameStrc* pGame, D2UnitStrc* pNPC, D2UnitStrc* pPlayer, void* pCallbackArg)
 {
-	UnkAiStrc1* pArg = (UnkAiStrc1*)pCallbackArg;
+	D2AiNearbyPlayerSearchArgsStrc* pArg = (D2AiNearbyPlayerSearchArgsStrc*)pCallbackArg;
 
 	if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER)
 	{

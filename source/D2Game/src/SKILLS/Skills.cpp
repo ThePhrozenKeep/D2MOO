@@ -893,7 +893,7 @@ int32_t __fastcall SKILLS_IterateTargetsAroundTarget(D2GameStrc* pGame, uint32_t
 //D2Game.0x6FD10630
 D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nAuraRange, int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*))
 {
-    D2_6FD106F0_Strc arg = {};
+    D2AuraTargetSearchStrc arg = {};
 
     arg.pTarget = nullptr;
     arg.nDistanceSquared = INT_MAX;
@@ -909,7 +909,7 @@ D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUni
 //D2Game.0x6FD106F0
 int32_t __fastcall SKILLS_AuraCallback_FindClosestTarget(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2_6FD106F0_Strc* pArgs = (D2_6FD106F0_Strc*)pAuraCallback->pArgs;
+    D2AuraTargetSearchStrc* pArgs = (D2AuraTargetSearchStrc*)pAuraCallback->pArgs;
 
     if (!pArgs->pCallback || pArgs->pCallback(pAuraCallback->pGame, pUnit))
     {
@@ -950,7 +950,7 @@ int32_t __fastcall SKILLS_AuraCallback_CountTargets(D2AuraCallbackStrc* pAuraCal
 D2UnitStrc* __fastcall SKILLS_FindNextAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t nPreviousTargetGUID, int32_t* pTargetCount)
 {
     // TODO: Names
-    D2_6FD10880_Strc args = {};
+    D2AuraTargetCycleStrc args = {};
 
     args.nFirstTargetGUID = nPreviousTargetGUID;
     args.nPreviousTargetGUID = nPreviousTargetGUID;
@@ -976,7 +976,7 @@ D2UnitStrc* __fastcall SKILLS_FindNextAuraTarget(D2GameStrc* pGame, D2UnitStrc* 
 //D2Game.0x6FD10880
 int32_t __fastcall SKILLS_AuraCallback_FindNextTarget(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2_6FD10880_Strc* pArgs = (D2_6FD10880_Strc*)pAuraCallback->pArgs;
+    D2AuraTargetCycleStrc* pArgs = (D2AuraTargetCycleStrc*)pAuraCallback->pArgs;
 
     int32_t nUnitGUID = -1;
     if (pUnit)

@@ -1256,7 +1256,7 @@ void __fastcall SCMD_SendUnitLifeAndPositionUpdate(D2ClientStrc* pClient, D2Unit
     {
         if (AIGENERAL_GetMinionOwner(pUnit) == pPlayer)
         {
-            D2UnkMonsterDataStrc* pLifeUpdateState = SCMD_GetMonsterLifeUpdateState(pUnit);
+            D2MonsterLifeSyncStrc* pLifeUpdateState = SCMD_GetMonsterLifeUpdateState(pUnit);
             if (pLifeUpdateState && pLifeUpdateState->nLifePercentage != nLifePercentage)
             {
                 bSendPacket = SCMD_ShouldSendLifeUpdate(pLifeUpdateState, nLifePercentage);
@@ -1282,7 +1282,7 @@ void __fastcall SCMD_SendUnitLifeAndPositionUpdate(D2ClientStrc* pClient, D2Unit
 }
 
 //D2Game.0x6FC3E3D0
-D2UnkMonsterDataStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUnit)
+D2MonsterLifeSyncStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
     {
@@ -1293,7 +1293,7 @@ D2UnkMonsterDataStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUni
 }
 
 //D2Game.0x6FC3E3F0
-int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2UnkMonsterDataStrc* pLifeUpdateState, int32_t nCurrentLifePercentage)
+int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2MonsterLifeSyncStrc* pLifeUpdateState, int32_t nCurrentLifePercentage)
 {
     int32_t nDiff = nCurrentLifePercentage - pLifeUpdateState->nLifePercentage;
 
