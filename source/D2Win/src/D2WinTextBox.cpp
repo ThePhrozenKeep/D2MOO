@@ -27,11 +27,11 @@ extern int32_t dword_6F96A8DC;
 
 
 //D2Win.0x6F8AFAA0 (#10042)
-D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t(__stdcall* a8)(SMSGHANDLER_PARAMS*), uint32_t dwTextBoxFlags, int32_t a10, int32_t a11)
+D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t nInsetX, int32_t nInsetY, D2CellFileStrc* pCellFile, int32_t(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), uint32_t dwTextBoxFlags, int32_t pFontInfo, int32_t pScrollBarRect)
 {
 	D2WinTextBoxStrc* pTextBox = D2_CALLOC_STRC(D2WinTextBoxStrc);
 
-	if (dwTextBoxFlags & TEXTBOXFLAG_SCROLLBAR && !a11)
+	if (dwTextBoxFlags & TEXTBOXFLAG_SCROLLBAR && !pScrollBarRect)
 	{
 		nWidth -= 26;
 	}
@@ -49,8 +49,8 @@ D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, 
 	pTextBox->controlHeader.nWidth = nWidth;
 	pTextBox->controlHeader.nHeight = nHeight;
 	pTextBox->dwTextBoxFlags = dwTextBoxFlags;
-	pTextBox->field_40 = a5;
-	pTextBox->field_44 = a6;
+	pTextBox->field_40 = nInsetX;
+	pTextBox->field_44 = nInsetY;
 	pTextBox->controlHeader.pfDraw = TEXTBOX_Draw;
 	pTextBox->controlHeader.pfHandleMouseDown = TEXTBOX_HandleMouseDown;
 
@@ -59,14 +59,14 @@ D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, 
 		pTextBox->controlHeader.pfHandleVirtualKeyInput = TEXTBOX_HandleVirtualKeyInput;
 	}
 
-	pTextBox->controlHeader.field_34 = a8;
+	pTextBox->controlHeader.field_34 = pfCallback;
 	pTextBox->nCurrentLine = -1;
 	pTextBox->nNumColumns = 1;
 
-	if (a10)
+	if (pFontInfo)
 	{
-		pTextBox->eFont = *(Font*)a10;
-		pTextBox->field_98 = *(DWORD*)(a10 + 4);
+		pTextBox->eFont = *(Font*)pFontInfo;
+		pTextBox->field_98 = *(DWORD*)(pFontInfo + 4);
 	}
 	else
 	{
@@ -82,9 +82,9 @@ D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, 
 	{
 		pTextBox->controlHeader.pCellFile = nullptr;
 
-		if (a11)
+		if (pScrollBarRect)
 		{
-			pTextBox->pScrollBar = SCROLLBAR_Create(*(DWORD*)a11, *(DWORD*)(a11 + 4), 10, *(DWORD*)(a11 + 8), pCellFile, nullptr);
+			pTextBox->pScrollBar = SCROLLBAR_Create(*(DWORD*)pScrollBarRect, *(DWORD*)(pScrollBarRect + 4), 10, *(DWORD*)(pScrollBarRect + 8), pCellFile, nullptr);
 		}
 		else
 		{
@@ -213,13 +213,13 @@ int32_t __fastcall D2Win_10047(D2WinTextBoxStrc* pTextBox)
 }
 
 //D2Win.0x6F8AFED0 (#10062)
-int32_t __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t a2, int32_t a3)
+int32_t __fastcall D2Win_10062(D2WinTextBoxStrc* pTextBox, int32_t nWrappedLineGap, int32_t nLineGap)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	pTextBox->field_A0 = a2;
-	pTextBox->field_A4 = a3;
+	pTextBox->field_A0 = nWrappedLineGap;
+	pTextBox->field_A4 = nLineGap;
 	return 1;
 }
 
@@ -235,14 +235,14 @@ void __fastcall D2Win_10045(D2WinTextBoxStrc* pTextBox, const char* szText)
 }
 
 //D2Win.0x6F8AFFB0 (#10046)
-int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t a3)
+int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nColor)
 {
 	Unicode wszText[1024] = {};
 
 	D2_ASSERT(pTextBox);
 
 	Unicode::utf8ToUnicode(wszText, szText, std::size(wszText));
-	return D2Win_10051(pTextBox, wszText, a3, 0, 0);
+	return D2Win_10051(pTextBox, wszText, nColor, 0, 0);
 }
 
 //D2Win.0x6F8B0030 (#10044)
@@ -355,7 +355,7 @@ int32_t __fastcall D2Win_10051_Helper(D2WinTextBoxStrc* pTextBox, const Unicode*
 
 //D2Win.0x6F8B0040) --------------------------------------------------------
 // Tooltip ?
-int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, int32_t a3, char a4, int32_t a5)
+int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszText, int32_t nColor, char bIsWrapped, int32_t nIndent)
 {
 	Unicode* v14; // ebp@27
 	int v15; // edi@27
@@ -379,7 +379,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, in
 
 	Unicode v58[1024] = {};
 
-	Unicode::strcpy(v58, a2);
+	Unicode::strcpy(v58, wszText);
 
 	const Unicode* v9 = v58;
 	while (*v9)
@@ -395,24 +395,24 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* a2, in
 	
 	if (pTextBox->dwTextBoxFlags & TEXTBOXFLAG_NO_WORD_WRAP)
 	{
-		return D2Win_10051_Helper(pTextBox, v9, a3, a4, a5);
+		return D2Win_10051_Helper(pTextBox, v9, nColor, bIsWrapped, nIndent);
 	}
 
 	int32_t v10 = pTextBox->controlHeader.nWidth - 2 * pTextBox->field_40;
-	if (a5 == 2)
+	if (nIndent == 2)
 	{
 		v10 -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
 	}
 
 	if (D2Win_10122(v9, 255) < v10)
 	{
-		return D2Win_10051_Helper(pTextBox, v9, a3, a4, a5);
+		return D2Win_10051_Helper(pTextBox, v9, nColor, bIsWrapped, nIndent);
 	}
 
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
 	v48 = pTextBox->controlHeader.nWidth - 2 * pTextBox->field_40;
-	if (a5 == 2)
+	if (nIndent == 2)
 	{
 		v48 -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
 	}
@@ -472,15 +472,15 @@ LABEL_37:
 	v20[v19] = 0;
 
 	SMemFree(v49, __FILE__, __LINE__, 0);
-	D2Win_10051(pTextBox, v18, a3, 1, a5);
+	D2Win_10051(pTextBox, v18, nColor, 1, nIndent);
 	
-	if (a5 == 1)
+	if (nIndent == 1)
 	{
-		D2Win_10051(pTextBox, v20, a3, 0, 2);
+		D2Win_10051(pTextBox, v20, nColor, 0, 2);
 	}
 	else
 	{
-		D2Win_10051(pTextBox, v20, a3, 0, a5);
+		D2Win_10051(pTextBox, v20, nColor, 0, nIndent);
 	}
 
 	SMemFree(v18, __FILE__, __LINE__, 0);
@@ -489,12 +489,12 @@ LABEL_37:
 }
 
 //D2Win.0x6F8B05E0 (#10198)
-int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t a3, int32_t a4, char a5)
+int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nCount, int32_t nColor, char bIsWrapped)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	for (int32_t i = 0; i < a3; ++i)
+	for (int32_t i = 0; i < nCount; ++i)
 	{
 		D2WinTextBoxLineStrc* pLine = D2_CALLOC_STRC(D2WinTextBoxLineStrc);
 		pLine->pColumns[0] = (Unicode*)D2_ALLOC(sizeof(Unicode) * (Unicode::strlen(pText) + 1));
@@ -503,8 +503,8 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText,
 		pLine->pColumns[2] = nullptr;
 		pLine->pColumns[3] = nullptr;
 		pLine->pColumns[4] = nullptr;
-		pLine->field_14 = a4;
-		pLine->field_18 = a5;
+		pLine->field_14 = nColor;
+		pLine->field_18 = bIsWrapped;
 		pLine->pNext = nullptr;
 
 		if (pTextBox->pFirstLine)
@@ -532,16 +532,16 @@ int32_t __fastcall D2Win_10198(D2WinTextBoxStrc* pTextBox, const Unicode* pText,
 }
 
 //D2Win.0x6F8B0750 (#10057)
-int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* a2, int32_t a3, int32_t a4)
+int32_t __fastcall D2Win_10057(D2WinTextBoxStrc* pTextBox, const char* szText, int32_t nLine, int32_t nColumn)
 {
 	Unicode wszText[1024] = {};
 
-	Unicode::win2Unicode(wszText, a2, std::size(wszText));
-	return D2Win_10058_0(pTextBox, wszText, a3, a4);
+	Unicode::win2Unicode(wszText, szText, std::size(wszText));
+	return D2Win_10058_0(pTextBox, wszText, nLine, nColumn);
 }
 
 //D2Win.0x6F8B07C0 (#10058)
-int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t a3, int32_t nColumn)
+int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pText, int32_t nLine, int32_t nColumn)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -553,7 +553,7 @@ int32_t __fastcall D2Win_10058_0(D2WinTextBoxStrc* pTextBox, const Unicode* pTex
 
 	D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine;
 	
-	for (int32_t i = 0; i < a3; ++i)
+	for (int32_t i = 0; i < nLine; ++i)
 	{
 		if (!pLine)
 		{
@@ -643,15 +643,15 @@ void __fastcall D2Win_10050_TEXTBOX_SetLine(D2WinTextBoxStrc* pTextBox, int32_t 
 }
 
 //D2Win.0x6F8B0B30 (#10053)
-int32_t __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int32_t a2)
+int32_t __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int32_t nLine)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	a2 = std::min(a2, pTextBox->nNumLines);
+	nLine = std::min(nLine, pTextBox->nNumLines);
 
 	D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine;
-	for (int32_t i = 0; i < a2; ++i)
+	for (int32_t i = 0; i < nLine; ++i)
 	{
 		if (!pLine->pNext)
 		{
@@ -664,12 +664,12 @@ int32_t __fastcall D2Win_10053(D2WinTextBoxStrc* pTextBox, int32_t a2)
 	if (pLine)
 	{
 		pTextBox->pCurrentLine = pLine;
-		pTextBox->nLine = a2;
+		pTextBox->nLine = nLine;
 	}
 
 	if (pTextBox->pScrollBar)
 	{
-		SCROLLBAR_SetCurrentStep(pTextBox->pScrollBar, a2);
+		SCROLLBAR_SetCurrentStep(pTextBox->pScrollBar, nLine);
 	}
 
 	return 1;
@@ -757,23 +757,23 @@ void __fastcall D2Win_10056(D2WinTextBoxStrc* pTextBox, int32_t nNumColumns)
 }
 
 //D2Win.0x6F8B0E60 (#10059)
-void __fastcall D2Win_10059(D2WinTextBoxStrc* pTextBox, int32_t nColumn, int32_t a3)
+void __fastcall D2Win_10059(D2WinTextBoxStrc* pTextBox, int32_t nColumn, int32_t nOffsetX)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 	D2_ASSERT((nColumn >= 0) && (nColumn < pTextBox->nNumColumns));
 
-	pTextBox->unk0x68[nColumn] = a3;
+	pTextBox->unk0x68[nColumn] = nOffsetX;
 }
 
 //D2Win.0x6F8B0EE0 (#10060)
-void __fastcall D2Win_10060(D2WinTextBoxStrc* pTextBox, int32_t nColumn, int32_t a3)
+void __fastcall D2Win_10060(D2WinTextBoxStrc* pTextBox, int32_t nColumn, int32_t nAlignFlags)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 	D2_ASSERT(nColumn >= 0);
 	
-	pTextBox->unk0x7C[nColumn] = a3;
+	pTextBox->unk0x7C[nColumn] = nAlignFlags;
 }
 
 //D2Win.0x6F8B0F60 (#10061)
@@ -813,7 +813,7 @@ void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int32_t bSet)
 }
 
 //D2Win.0x6F8B1030 (#10188)
-int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t a3)
+int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t nColor)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -838,13 +838,13 @@ int __fastcall D2Win_10188(D2WinTextBoxStrc* pTextBox, int32_t nLineNum, int32_t
 		D2_ASSERT(pLine);
 		D2_ASSERT(i == nLineNum);
 
-		pLine->field_14 = a3;
+		pLine->field_14 = nColor;
 		return 1;
 	}
 
 	for (D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine; pLine; pLine = pLine->pNext)
 	{
-		pLine->field_14 = a3;
+		pLine->field_14 = nColor;
 	}
 
 	return 1;
@@ -1184,12 +1184,12 @@ int32_t __fastcall D2Win_10190(D2WinTextBoxStrc* pTextBox)
 }
 
 //D2Win.0x6F8B1940 (#10191)
-int32_t __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int32_t a2)
+int32_t __fastcall D2Win_10191(D2WinTextBoxStrc* pTextBox, int32_t nMaxSteps)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	return SCROLLBAR_SetMaxSteps(pTextBox->pScrollBar, a2);
+	return SCROLLBAR_SetMaxSteps(pTextBox->pScrollBar, nMaxSteps);
 }
 
 //D2Win.0x6F8B1990 (#10192)
@@ -1202,25 +1202,25 @@ int32_t __fastcall D2Win_10192(D2WinTextBoxStrc* pTextBox)
 }
 
 //D2Win.0x6F8B19E0 (#10193)
-int32_t __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int32_t a2)
+int32_t __fastcall D2Win_10193(D2WinTextBoxStrc* pTextBox, int32_t nCurrentStep)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	return SCROLLBAR_SetCurrentStep(pTextBox->pScrollBar, a2);
+	return SCROLLBAR_SetCurrentStep(pTextBox->pScrollBar, nCurrentStep);
 }
 
 //D2Win.0x6F8B1A30 (#10194)
-int32_t __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* a2)
+int32_t __fastcall D2Win_10194(D2WinTextBoxStrc* pTextBox, D2WinTextBoxStrc* pLinkedTextBox)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	return SCROLLBAR_SetTextBox(pTextBox->pScrollBar, a2);
+	return SCROLLBAR_SetTextBox(pTextBox->pScrollBar, pLinkedTextBox);
 }
 
 //D2Win.0x6F8B1A80 (#10195)
-int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(SMSGHANDLER_PARAMS*))
+int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* pfScrollCallback)(SMSGHANDLER_PARAMS*))
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -1229,17 +1229,17 @@ int32_t __fastcall D2Win_10195(D2WinTextBoxStrc* pTextBox, void(__stdcall* a2)(S
 
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
-	pScrollBar->field_5C = a2;
+	pScrollBar->field_5C = pfScrollCallback;
 	return 1;
 }
 
 //D2Win.0x6F8B1AD0 (#10204)
-void __fastcall D2Win_10204(D2WinTextBoxStrc* pTextBox, int32_t a2)
+void __fastcall D2Win_10204(D2WinTextBoxStrc* pTextBox, int32_t nPosition)
 {
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	D2Win_10202(pTextBox->pScrollBar, a2);
+	D2Win_10202(pTextBox->pScrollBar, nPosition);
 }
 
 //D2Win.0x6F8B1B20 (#10203)

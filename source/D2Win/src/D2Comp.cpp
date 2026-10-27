@@ -169,7 +169,7 @@ int dword_6F8BC190 = 15;
 //}
 
 //D2Win.0x6F8A1250) --------------------------------------------------------
-D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, unsigned int nMode, int* a4, int* a5, int a6)
+D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* pGfxInfo, unsigned int nClass, unsigned int nMode, int* pUnused1, int* pUnused2, int dwWeaponClass)
 {
 //	unsigned int v6; // ebp@1
 //	int v7; // eax@4
@@ -200,21 +200,21 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //	char v32; // [sp+14Bh] [bp-1h]@10
 //
 //	v6 = nClass;
-//	v28 = a1;
-//	if (!a1)
+//	v28 = pGfxInfo;
+//	if (!pGfxInfo)
 //	{
 //		FOG_DisplayAssert("ptGfxInfo", __FILE__, __LINE__);
 //		exit(-1);
 //	}
-//	v7 = *(DWORD*)a1;
-//	if (*(DWORD*)a1)
+//	v7 = *(DWORD*)pGfxInfo;
+//	if (*(DWORD*)pGfxInfo)
 //	{
 //		while (1)
 //		{
 //			nMode2 = nMode;
 //			if (*(DWORD*)(*(DWORD*)v7 + 4) == nMode)
 //			{
-//				if (*(DWORD*)(*(DWORD*)v7 + 12) == a6)
+//				if (*(DWORD*)(*(DWORD*)v7 + 12) == dwWeaponClass)
 //					break;
 //			}
 //			v7 = *(DWORD*)(v7 + 4);
@@ -241,12 +241,12 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			exit(-1);
 //		}
 //		v9 = dword_6F8BC040[nClass];
-//		LOBYTE(v25) = a6 & (((BYTE)a6 == 32) - 1);
+//		LOBYTE(v25) = dwWeaponClass & (((BYTE)dwWeaponClass == 32) - 1);
 //		v26 = v9;
 //		v10 = dword_6F8BC0A8[nMode2];
-//		BYTE1(v25) = BYTE1(a6) & ((BYTE1(a6) == 32) - 1);
+//		BYTE1(v25) = BYTE1(dwWeaponClass) & ((BYTE1(dwWeaponClass) == 32) - 1);
 //		v27 = v10;
-//		HIWORD(v25) = (unsigned __int8)(BYTE2(a6) & ((BYTE2(a6) == 32) - 1));
+//		HIWORD(v25) = (unsigned __int8)(BYTE2(dwWeaponClass) & ((BYTE2(dwWeaponClass) == 32) - 1));
 //		v22 = v9 & (((BYTE)v9 == 32) - 1);
 //		v23 = BYTE1(v26) & ((BYTE1(v9) == 32) - 1);
 //		v24 = (unsigned __int8)(BYTE2(v9) & ((BYTE2(v9) == 32) - 1));
@@ -272,7 +272,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //		v15 = dword_6F8FD654;
 //		if (dword_6F8FD654)
 //		{
-//			while (*(DWORD*)(v15 + 4) != nMode2 || *(DWORD*)(v15 + 8) != v6 || *(DWORD*)(v15 + 12) != a6)
+//			while (*(DWORD*)(v15 + 4) != nMode2 || *(DWORD*)(v15 + 8) != v6 || *(DWORD*)(v15 + 12) != dwWeaponClass)
 //			{
 //				v15 = *(DWORD*)(v15 + 24);
 //				if (!v15)
@@ -289,7 +289,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			*((DWORD*)v16 + 1) = nMode;
 //			*((DWORD*)v16 + 2) = v6;
 //			*(DWORD*)v16 = v17;
-//			*((DWORD*)v16 + 3) = a6;
+//			*((DWORD*)v16 + 3) = dwWeaponClass;
 //			*((DWORD*)v16 + 6) = dword_6F8FD654;
 //			*((DWORD*)v16 + 7) = 0;
 //			if (dword_6F8FD654)
@@ -1291,7 +1291,7 @@ void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* 
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
-void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int bUnlinkAndFree)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -1355,7 +1355,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 		pCompositeUnit->pEmblemCellFile = nullptr;
 	}
 
-	if (a2)
+	if (bUnlinkAndFree)
 	{
 		D2CompositeUnitStrc* v11 = pCompositeUnit->pPrev;
 		D2CompositeUnitStrc* v12 = pCompositeUnit->pNext;
@@ -1380,16 +1380,16 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 }
 
 //D2Win.0x6F8A2BD0 (#10154)
-void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a2, const Unicode* a3, const Unicode* a4, const Unicode* a5, int a6, int a7)
+void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* wszAccountName, const Unicode* wszCharName, const Unicode* wszGuildTag, const Unicode* wszRealmName, int nCharLevel, int dwProductCode)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	Unicode::strcpy(pCompositeUnit->wszAccountName, a2);
-	Unicode::strcpy(pCompositeUnit->wszCharName, a3);
-	Unicode::strcpy(pCompositeUnit->wszGuildTag, a4);
-	Unicode::strcpy(pCompositeUnit->wszRealmName, a5);
-	pCompositeUnit->nCharLevel = a6;
-	pCompositeUnit->dwProductCode = a7;
+	Unicode::strcpy(pCompositeUnit->wszAccountName, wszAccountName);
+	Unicode::strcpy(pCompositeUnit->wszCharName, wszCharName);
+	Unicode::strcpy(pCompositeUnit->wszGuildTag, wszGuildTag);
+	Unicode::strcpy(pCompositeUnit->wszRealmName, wszRealmName);
+	pCompositeUnit->nCharLevel = nCharLevel;
+	pCompositeUnit->dwProductCode = dwProductCode;
 }
 
 //D2Win.0x6F8A2C50 (#10143)
@@ -2543,7 +2543,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 
 //D2Win.0x6F8A4260 (#10145)
 //TODO: ...
-void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* a4, BYTE* a5)
+void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentColors)
 {
 	//D2GfxInfoStrc* pGfxInfo; // eax@4
 	//BYTE* v6; // ebx@7
@@ -2572,13 +2572,13 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	FOG_DisplayAssert("ptGfxInfo", __FILE__, __LINE__);
 	//	exit(-1);
 	//}
-	//v6 = a4;
+	//v6 = pComponents;
 	//pGfxInfo->pCofInfo = 0;
 	//pCompositeUnit->pGfxInfo = pGfxInfo;
 	//pCompositeUnit->nUnitIndex = nUnitIndex;
 	//if (nUnitIndex < 7)
 	//{
-	//	v7 = sub_6F8A3DC0(a4, nUnitIndex);
+	//	v7 = sub_6F8A3DC0(pComponents, nUnitIndex);
 	//	pCompositeUnit->nWClassTokenIndex = v7;
 	//	if (!v7)
 	//		return;
@@ -2614,7 +2614,7 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	++v10;
 	//}
 	//while (v12 < 16);
-	//v13 = a5;
+	//v13 = pComponentColors;
 	//v14 = pCompositeUnit->unk0x28;
 	//do
 	//{
@@ -2660,11 +2660,11 @@ D2CompositeUnitStrc* __stdcall D2Win_10148(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A4440 (#10149)
-void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
+void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t nDirection)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	pCompositeUnit->nDirection = D2Clamp(a2, 0ui8, pCompositeUnit->nDirections);
+	pCompositeUnit->nDirection = D2Clamp(nDirection, 0ui8, pCompositeUnit->nDirections);
 }
 
 //D2Win.0x6F8A4490 (#10150)
@@ -2684,12 +2684,12 @@ int __stdcall D2Win_10169(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A44F0 (#10151)
-void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int nFrame)
 {
 	D2_ASSERT(pCompositeUnit);
 
 	const int nMax = pCompositeUnit->nFrameCount << 8;
-	pCompositeUnit->nFrame = D2Clamp(a2, 0, nMax);
+	pCompositeUnit->nFrame = D2Clamp(nFrame, 0, nMax);
 }
 
 //D2Win.0x6F8A4540 (#10152)
@@ -2725,32 +2725,32 @@ void __stdcall D2Win_10156(D2CompositeUnitStrc* pCompositeUnit, int nFlags)
 }
 
 //D2Win.0x6F8A4600 (#10158)
-void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2, uint8_t a3, uint8_t a4)
+void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t nEmblem, uint8_t nEmblemColor1, uint8_t nEmblemColor2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	if (a2 < 1u || a2 > 32u)
+	if (nEmblem < 1u || nEmblem > 32u)
 	{
 		return;
 	}
 
 	char szFile[512] = {};
 
-	wsprintfA(szFile, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", a2 - 1);
+	wsprintfA(szFile, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", nEmblem - 1);
 	pCompositeUnit->pEmblemCellFile = ARCHIVE_LoadCellFile(szFile, 0);
 
-	if (a3 >= 1u && a3 <= 10u)
+	if (nEmblemColor1 >= 1u && nEmblemColor1 <= 10u)
 	{
-		pCompositeUnit->nEmblemColor1 = byte_6F8FD224[a3 - 1];
+		pCompositeUnit->nEmblemColor1 = byte_6F8FD224[nEmblemColor1 - 1];
 	}
 	else
 	{
 		pCompositeUnit->nEmblemColor1 = 0;
 	}
 
-	if (a4 >= 1u && a4 <= 10u)
+	if (nEmblemColor2 >= 1u && nEmblemColor2 <= 10u)
 	{
-		pCompositeUnit->nEmblemColor2 = byte_6F8FD218[a4 - 1];
+		pCompositeUnit->nEmblemColor2 = byte_6F8FD218[nEmblemColor2 - 1];
 	}
 	else
 	{
@@ -3234,19 +3234,19 @@ void __stdcall sub_6F8A4C10()
 }
 
 //D2Win.0x6F8A4C70 (#10161)
-const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
+const char* __stdcall D2Win_10161(int nClass, int nProgress, int bHardcore, BOOL bSoftCore)
 {
 	int v4 = 0;
 
 	if (bSoftCore)
 	{
-		if (a2 >= 5)
+		if (nProgress >= 5)
 		{
-			if (a2 < 10)
+			if (nProgress < 10)
 			{
 				v4 = 1;
 			}
-			else if (a2 < 15)
+			else if (nProgress < 15)
 			{
 				v4 = 2;
 			}
@@ -3258,13 +3258,13 @@ const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
 	}
 	else
 	{
-		if (a2 >= 4)
+		if (nProgress >= 4)
 		{
-			if (a2 < 8)
+			if (nProgress < 8)
 			{
 				v4 = 1;
 			}
-			else if (a2 < 12)
+			else if (nProgress < 12)
 			{
 				v4 = 2;
 			}
@@ -3275,26 +3275,26 @@ const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
 		}
 	}
 
-	if (a3 && v4)
+	if (bHardcore && v4)
 	{
 		v4 += 3;
 	}
 
-	return D2Win_10160_GetPlayerTitle(a1, v4, bSoftCore);
+	return D2Win_10160_GetPlayerTitle(nClass, v4, bSoftCore);
 }
 
 //D2Win.0x6F8A4CE0 (#10160)
-const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
+const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore)
 {
 	if (bSoftCore)
 	{
-		switch (a1)
+		switch (nClass)
 		{
 		case 0:
 		case 1:
 		case 6:
 		case 9:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Slayer ";
@@ -3314,7 +3314,7 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 			break;
 
 		default:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Slayer ";
@@ -3336,13 +3336,13 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 	}
 	else
 	{
-		switch (a1)
+		switch (nClass)
 		{
 		case 0:
 		case 1:
 		case 6:
 		case 9:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Dame ";
@@ -3362,7 +3362,7 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 			break;
 
 		default:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Sir ";

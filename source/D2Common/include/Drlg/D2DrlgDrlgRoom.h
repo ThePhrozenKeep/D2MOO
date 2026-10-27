@@ -64,11 +64,11 @@ const char* __fastcall DRLGROOM_GetPickedLevelPrestFilePathFromRoomEx(D2DrlgRoom
 //D2Common.0x6FD77B50
 int __fastcall DRLGROOM_ReorderNearRoomList(D2DrlgRoomStrc* pDrlgRoom, D2ActiveRoomStrc** ppRoomList);
 //D2Common.0x6FD77BB0
-void __fastcall sub_6FD77BB0(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom);
+void __fastcall DRLGROOM_InitNearRooms(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom);
 //D2Common.0x6FD77EB0
 void __fastcall DRLGROOM_SortRoomListByPosition(D2DrlgRoomStrc** ppRoomList, int nListSize);
 //D2Common.0x6FD77F00
-BOOL __fastcall sub_6FD77F00(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t nWarpId, D2DrlgRoomStrc* pDrlgRoom2, char nWarpFlag, int nDirection);
+BOOL __fastcall DRLGROOM_LinkNearRoomsByWarp(void* pMemPool, D2DrlgRoomStrc* pDrlgRoom1, uint8_t nWarpId, D2DrlgRoomStrc* pDrlgRoom2, char nWarpFlag, int nDirection);
 //D2Common.0x6FD780E0
 D2PresetUnitStrc* __fastcall DRLGROOM_AllocPresetUnit(D2DrlgRoomStrc* pDrlgRoom, void* pMemPool, int nUnitType, int nIndex, int nMode, int nX, int nY);
 //D2Common.0x6FD78160
