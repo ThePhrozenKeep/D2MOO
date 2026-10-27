@@ -396,7 +396,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTarget(D2GameStrc* 
 {
 	D2AiCallback7ArgStrc* pArg = (D2AiCallback7ArgStrc*)pCallbackArg;
 
-	if (pTarget == pArg->unk0x08 || !AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
+	if (pTarget == pArg->pExcludedTarget || !AIUTIL_CanSelectHostileTarget(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -433,7 +433,7 @@ D2UnitStrc* __fastcall AIUTIL_TargetCallback_SelectHighThreatTargetWithClearAppr
 {
 	D2AiCallback11ArgStrc* pArg = (D2AiCallback11ArgStrc*)pCallbackArg;
 
-	if (pTarget == pArg->unk0x08 || !pTarget || (pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
+	if (pTarget == pArg->pExcludedTarget || !pTarget || (pTarget->dwUnitType != UNIT_PLAYER && pTarget->dwUnitType != UNIT_MONSTER) || SUNIT_IsDead(pTarget) || !(pTarget->dwFlags & UNITFLAG_CANBEATTACKED) || !SUNIT_AreUnitsHostile(pGame, pUnit, pTarget))
 	{
 		return nullptr;
 	}
@@ -934,7 +934,7 @@ int32_t __fastcall AIUTIL_ShouldUseAlternativeTarget(D2UnitStrc* pUnit, D2UnitSt
 	D2AiCallback7ArgStrc arg = {};
 	arg.pTarget = nullptr;
 	arg.nDistance = INT_MAX;
-	arg.unk0x08 = *ppTarget;
+	arg.pExcludedTarget = *ppTarget;
 
 	AIUTIL_FindTargetWithCallback(pUnit->pGame, pUnit, &arg, nullptr, 7);
 

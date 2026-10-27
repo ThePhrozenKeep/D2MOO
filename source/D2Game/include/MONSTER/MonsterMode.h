@@ -21,14 +21,14 @@ struct D2ModeChangeStrc
 };
 
 // TODO: Better names
-using MonModeCallback1 = int32_t(__fastcall*)(D2GameStrc*, D2ModeChangeStrc*);
-using MonModeCallback2 = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
-using MonModeCallback3 = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+using MonModeStartFn = int32_t(__fastcall*)(D2GameStrc*, D2ModeChangeStrc*);
+using MonModeUpdateFn = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+using MonModeEndFn = void(__fastcall*)(D2GameStrc*, D2UnitStrc*);
 struct D2MonModeCallbackTableStrc
 {
-	MonModeCallback1 pfStart;
-	MonModeCallback2 pfUpdate;
-	MonModeCallback3 pfEnd;
+	MonModeStartFn pfStart;
+	MonModeUpdateFn pfUpdate;
+	MonModeEndFn pfEnd;
 	int32_t bScheduleEvents;
 };
 

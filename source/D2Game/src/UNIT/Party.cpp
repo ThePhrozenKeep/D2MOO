@@ -72,10 +72,16 @@ int16_t __fastcall PARTY_CreateParty(D2GameStrc* pGame)
 
     D2PartyControlStrc* pPartyControl = pGame->pPartyControl;
 
-    int16_t nPartyId = std::max(pPartyControl->nNextPartyId, 3i16);
+    int16_t nPartyId = pPartyControl->nNextPartyId;
 
     while (1)
     {
+        // The counter wraps through all 16 bits and skips only 0..2 (an unsigned compare), so ids from 0x8000 stay valid
+        if (static_cast<uint16_t>(nPartyId) < 3)
+        {
+            nPartyId = 3;
+        }
+
         D2PartyStrc* pCurrent = pPartyControl->pParties;
         while (pCurrent && pCurrent->nPartyId != nPartyId)
         {
@@ -88,8 +94,6 @@ int16_t __fastcall PARTY_CreateParty(D2GameStrc* pGame)
         }
 
         ++nPartyId;
-
-        nPartyId = std::max(nPartyId, 3i16);
     }
 
     pPartyControl->nNextPartyId = nPartyId + 1;

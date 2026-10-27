@@ -23,7 +23,7 @@ struct D2CofDataStrc
 
 struct D2CofNodeStrc
 {
-	uint32_t nRefCount;
+	int32_t nRefCount;
 	uint32_t nMode;
 	uint32_t nClass;
 	uint32_t dwWeaponClass;
@@ -51,8 +51,8 @@ struct D2CompositeUnitStrc
 	uint8_t nDirections;
 	uint8_t unk0x06;
 	uint8_t unk0x07;
-	uint32_t nFrame;
-	uint32_t nFrameCount;
+	int32_t nFrame;							// 8.8 fixed point
+	int32_t nFrameCount;
 	uint32_t nAnimSpeed;
 	int32_t nX;
 	int32_t nY;
@@ -89,7 +89,7 @@ struct D2CompositeUnitStrc
 	Unicode wszCharName[64];
 	Unicode wszGuildTag[16];
 	Unicode wszRealmName[32];
-	uint32_t nCharLevel;
+	int32_t nCharLevel;
 	uint32_t dwProductCode;
 };
 #pragma pack(pop)

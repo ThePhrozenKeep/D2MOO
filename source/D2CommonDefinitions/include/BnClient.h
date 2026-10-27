@@ -20,13 +20,13 @@ struct RealmLogonInformation
 
 struct BnClientInterface
 {
-	int(__stdcall* field0x00)();
+	void(__fastcall* Initialize)(struct D2ConfigStrc* pConfig);
 	HANDLE(__stdcall* OpenBNetConnection)();
-	int(__fastcall* Logon)(int a1, int a2);
+	int(__fastcall* Logon)(const char* szAccount, const char* szPassword);
 	int(__stdcall* GetLogonInfo)();
 	int(__stdcall* CloseBNetConnection)();
 	BOOL(__thiscall* ChatCommand)(const char* _this);
-	void* (__stdcall* field_18)();
+	char* (__stdcall* GetUniqueName)();
 	int(__fastcall* JoinChannel)(BYTE* a1, int a2, int a3);
 	int(__thiscall* GetChannelList)(void* _this);
 	int(__fastcall* BnMessQueue_Read)(DWORD* a1, void* a2);
@@ -34,24 +34,24 @@ struct BnClientInterface
 	int(__fastcall* field_2C)(int a1, int a2);
 	int(__stdcall* CheckAd)();
 	int(__fastcall* RefreshGame)(char *szGameName, char *szPassword, const char *szStatstring, int nGameType);
-	int(__fastcall* GetGamesList)(int a1, int a2, int a3, int a4);
-	int(__fastcall* NotifyJoinedGame)(int a1, int a2);
+	void* (__fastcall* GetGamesList)(const char* szGameName, const char* szGamePassword, int a3, int a4);
+	int(__fastcall* NotifyJoinedGame)(const char* szGameName, const char* szGamePassword);
 	int(__stdcall* SendRealmList)();
 	struct RealmLogonInformation* (__fastcall* LogonRealm)(const char *szRealmName, const char *szRealmPassword);
 	int(__thiscall* PatchUnk)(DWORD* _this);
-	int(__stdcall* field_4C)();
+	int(__stdcall* GetPatchState)();	// patch download progress: 0..100, 101 once done
 	uintptr_t(__fastcall* PatchUnk0x4C)(BYTE* source, size_t size);
-	int(__fastcall* EnterChat)(int ecx0, int a2, int a3, BYTE* a1, char a5);
+	int(__fastcall* EnterChat)(const char* szName, const char* szStats, int a3, BYTE* a4, char nFlags);
 	int(__stdcall* LeaveChat)();
 	int(__stdcall* GetVersion)();
 	int(__fastcall* CreateAccount)(int a1, int a2);
 	int(__thiscall* GetCreateAccountResult)(DWORD* _this);
-	int(__stdcall* field_68)();
+	int(__stdcall* IsSocketConnected)();
 	int(__fastcall* OnAdClick)(int a1, int a2);
 	int(__stdcall* UnkSet)();
-	int(__fastcall* BattleWriteUserData)(int a1, unsigned int a2, int a3, int a4);
-	BOOL(__fastcall* BattleRequestReadUserData)(int a1, unsigned int a2, int a3, int a4);
-	int(__fastcall* GetBattleReadUserData)(int a1, int a2, int a3, int a4);
+	int(__fastcall* BattleWriteUserData)(const char* szAccount, uint32_t nKeys, const char* const* ppKeys, const char* const* ppValues);
+	BOOL(__fastcall* BattleRequestReadUserData)(const char* szAccount, uint32_t nKeys, uint32_t nCookie, const char* const* ppKeys);
+	int(__fastcall* GetBattleReadUserData)(uint32_t nKeys, uint32_t nCookie, char* const* ppValues, const uint32_t* pLengths);
 	int(__thiscall* GetConnectionState)(DWORD* pState);
 	void (*LOG_Write)(char* Format, ...);
 	int(__cdecl* StartLogging)(int a1, int a2);
