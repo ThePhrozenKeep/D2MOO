@@ -205,7 +205,9 @@ TEST_SUITE("D2ChatTests")
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pHoverMsg, original_pHoverMsg, "Comparing pHoverMsg");
-			MOO_CHECK_EQ((DynamicArray<char>{ moo_szMessage, 256 }), (DynamicArray<char>{ original_szMessage, 256 }), "Comparing szMessage");
+			auto wrapped_moo_szMessage = DynamicArray<char>{ moo_szMessage, 256 };
+			auto wrapped_original_szMessage = DynamicArray<char>{ original_szMessage, 256 };
+			MOO_CHECK_EQ(wrapped_moo_szMessage, wrapped_original_szMessage, "Comparing szMessage");
 			MOO_CHECK_EQ(moo_szMessage, original_szMessage, "Comparing szMessage");
 
 			// Check specific values
