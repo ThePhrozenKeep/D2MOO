@@ -29,6 +29,7 @@
 #define D2_HAS_MULTILAN 0
 #endif
 
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
-#define D2_VERSION_HAS_UBERS
-#endif
+// D2_VERSION_HAS_UBERS (1.11+ uber levels, monsters, states and cube recipes) is not derived
+// from the version: the build defines it for every translation unit (CMake option
+// D2MOO_WITH_UBERS). Builds not using CMake must pass it on the command line of every
+// translation unit, never #define it in a header, or translation units will disagree.
