@@ -36,14 +36,14 @@ struct D2AiCallback7ArgStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
-	D2UnitStrc* unk0x08;
+	D2UnitStrc* pExcludedTarget;
 };
 
 struct D2AiCallback11ArgStrc
 {
 	D2UnitStrc* pTarget;
 	int32_t nDistance;
-	D2UnitStrc* unk0x08;
+	D2UnitStrc* pExcludedTarget;
 };
 
 struct D2DoorObjectAiCallbackArgStrc

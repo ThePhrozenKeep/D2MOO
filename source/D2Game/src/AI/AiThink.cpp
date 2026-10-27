@@ -17508,7 +17508,7 @@ int32_t __fastcall sub_6FCF0E40_inline(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	D2AiCallback11ArgStrc arg = {};
 	arg.pTarget = nullptr;
 	arg.nDistance = INT_MAX;
-	arg.unk0x08 = pAiTickParam->pTarget;
+	arg.pExcludedTarget = pAiTickParam->pTarget;
 	AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, nullptr, 11);
 
 	if (!arg.pTarget)
