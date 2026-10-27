@@ -220,7 +220,7 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
             D2_ASSERT(pPlayer);
 
             int32_t nUnused = 0;
-            if (!sub_6FC48940(pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), 1, &nUnused))
+            if (!ITEMMODE_PlaceCursorItemInBelt(pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), 1, &nUnused))
             {
                 PLAYER_PlaceItemInInventory(pItem, pPlayer, pGame, 1);
             }
@@ -231,7 +231,7 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
             D2_ASSERT(pPlayer);
 
             int32_t nUnused = 0;
-            if (!sub_6FC45060(pGame, pPlayer, pItem->dwUnitId, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
+            if (!ITEMMODE_EquipCursorItem(pGame, pPlayer, pItem->dwUnitId, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
             {
                 PLAYER_PlaceItemInInventory(pItem, pPlayer, pGame, 1);
             }
@@ -577,7 +577,7 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
     }
 
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
-    D2UnitStrc* pItem = sub_6FC4FCA0(pGame, pRoom, &pCoord, 4, 1, pUnit);
+    D2UnitStrc* pItem = ITEMS_DropMiscItemAtCoordinates(pGame, pRoom, &pCoord, 4, 1, pUnit);
     if (!pItem)
     {
         return 1;

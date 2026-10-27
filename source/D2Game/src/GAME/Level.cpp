@@ -82,7 +82,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                     break;
 
                 case UNIT_ITEM:
-                    sub_6FC420B0(pUnit, pClient);
+                    ITEMMODE_SendUpdatedGroundItemToClient(pUnit, pClient);
                     break;
 
                 default:

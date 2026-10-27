@@ -569,7 +569,7 @@ void __fastcall MONSTERMODE_DropTreasure(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         }
     }
 
-    sub_6FC52110(pGame, pUnit, pModeChange->pTargetUnit, nTCId, 0, nItemLevel, bIgnoreNoDrop, nullptr, nullptr, 0);
+    ITEMS_DropTreasureClassById(pGame, pUnit, pModeChange->pTargetUnit, nTCId, 0, nItemLevel, bIgnoreNoDrop, nullptr, nullptr, 0);
 }
 
 //D2Game.0x6FC63440

@@ -748,13 +748,13 @@ int32_t __fastcall SKILLITEM_pSpell07_OpenCube(D2GameStrc* pGame, D2UnitStrc* pU
         }
 
         SUNIT_ResetInteractInfo(pUnit);
-        sub_6FC4B830(pGame, pUnit);
+        ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
         D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 17u);
     }
 
     SUNIT_SetInteractInfo(pUnit, UNIT_ITEM, pItem ? pItem->dwUnitId : -1);
     D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), UPDATEUI_OPENCUBE);
-    sub_6FC4B830(pGame, pUnit);
+    ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     return 0;
 }
 
@@ -934,13 +934,13 @@ int32_t __fastcall SKILLS_SrvDo113_Scroll_Book(D2GameStrc* pGame, D2UnitStrc* pU
                 case 1:
                 {
                     int32_t nUnused = 0;
-                    sub_6FC47D30(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused);
+                    ITEMMODE_UseStoredItemAtCoordinates(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused);
                     return 1;
                 }
                 case 2:
                 {
                     int32_t nUnused = 0;
-                    sub_6FC49220(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused, 0);
+                    ITEMMODE_UseBeltItem(pGame, pUnit, pInvItem->dwUnitId, CLIENTS_GetUnitX(pInvItem), CLIENTS_GetUnitY(pInvItem), &nUnused, 0);
                     return 1;
                 }
 				default:

@@ -166,7 +166,7 @@ void __fastcall SUNITMSG_SendUnitToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     }
     case UNIT_ITEM:
     {
-        sub_6FC42050(pUnit, pClient);
+        ITEMMODE_SendGroundItemToClient(pUnit, pClient);
         break;
     }
     default:

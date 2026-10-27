@@ -300,7 +300,7 @@ void __fastcall SUNITNPC_RemoveStoreItem(D2UnitStrc* pNpc, D2UnitStrc* pItem, D2
     D2_ASSERT(pItem);
 
     int32_t nUnused = 0;
-    sub_6FC446B0(pGame, pNpc, pItem->dwUnitId, &nUnused, 0, 0, 0, 0);
+    ITEMMODE_RemoveStoredItem(pGame, pNpc, pItem->dwUnitId, &nUnused, 0, 0, 0, 0);
 
     if (bInit)
     {
@@ -842,7 +842,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
     }
     else
     {
-        sub_6FC45B30(pGame, pPlayer, ITEMS_GetBodyLocation(pItem), 1, &nUnused);
+        ITEMMODE_UnequipBodyItem(pGame, pPlayer, ITEMS_GetBodyLocation(pItem), 1, &nUnused);
     }
 
     ITEMS_HandleGoldTransaction(pGame, pPlayer, nTransactionCost);
@@ -881,7 +881,7 @@ void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitS
                         D2InventoryStrc* pGambleInventory = SUNITPROXY_GetGambleInventory(pGame, pUnit, pNpc);
                         if (pGambleInventory)
                         {
-                            sub_6FC446B0(pGame, pNpc, pItem->dwUnitId, &nUnused, 0, 0, pGambleInventory, 0);
+                            ITEMMODE_RemoveStoredItem(pGame, pNpc, pItem->dwUnitId, &nUnused, 0, 0, pGambleInventory, 0);
 
                             pItem->dwFlagEx |= 0x10u;
 
@@ -1392,7 +1392,7 @@ int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Un
 //LABEL_31:
 //    if (ITEMS_CheckItemTypeId(v10, 22))
 //    {
-//        v66 = sub_6FC4B430(v8, v9, v10, &v68);
+//        v66 = ITEMMODE_FindMatchingBookWithSpace(v8, v9, v10, &v68);
 //        if (v66)
 //        {
 //            v80 = 1;
@@ -1422,7 +1422,7 @@ int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Un
 //                    PLRTRADE_AddGold(v9, STAT_GOLD, -v19);
 //                }
 //
-//                sub_6FC4B520(v65, v9, v66, v80);
+//                ITEMMODE_AddBookQuantity(v65, v9, v66, v80);
 //                SUNITNPC_RemovePurchasedItemFromStore(v65, pNpc, v10, v9, v69);
 //                D2GAME_SendPacket0x2A_6FC3F3B0(SUNIT_GetClientFromPlayer(v9, __FILE__, __LINE__), 0x2Au, 0, STATLIST_UnitGetStatValue(v9, STAT_GOLD, 0), v66->dwUnitId, 5);
 //                return 0;
@@ -1510,7 +1510,7 @@ int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Un
 //            v68 = v36->dwClassId;
 //            if (ITEMS_CheckIfAutoBeltable(v71, v36))
 //            {
-//                v43 = sub_6FC48940(v65, v9, v36->dwUnitId, 0, 1, &v75);
+//                v43 = ITEMMODE_PlaceCursorItemInBelt(v65, v9, v36->dwUnitId, 0, 1, &v75);
 //                v84 = v43;
 //                if (v43)
 //                    goto LABEL_117;
@@ -1563,7 +1563,7 @@ int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Un
 //LABEL_113:
 //            if (v85)
 //            {
-//                v84 = sub_6FC4A9B0(v65, v9, v36, 0);
+//                v84 = ITEMMODE_EquipItemAtResolvedBodyLocation(v65, v9, v36, 0);
 //                if (v84)
 //                    goto LABEL_117;
 //            }
@@ -2066,7 +2066,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2079,7 +2079,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2101,7 +2101,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2121,7 +2121,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         }
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
-        sub_6FC4BBB0(pGame, pOutput, pPlayer);
+        ITEMMODE_IdentifyItemAndApplyCharmProperties(pGame, pOutput, pPlayer);
         ITEMS_SetInvPage(pOutput, INVPAGE_INVENTORY);
 
         if (bInputIsPersonalized)
@@ -2236,7 +2236,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2249,7 +2249,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
         
@@ -2258,7 +2258,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
         
@@ -2266,7 +2266,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2291,7 +2291,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         ITEMS_AddSockets(pOutput, nSockets);
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
-        sub_6FC4BBB0(pGame, pOutput, pPlayer);
+        ITEMMODE_IdentifyItemAndApplyCharmProperties(pGame, pOutput, pPlayer);
         ITEMS_SetInvPage(pOutput, 0);
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pOutput->dwUnitId, 0, 0, 1, 1, 0))
@@ -2332,7 +2332,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2345,7 +2345,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
@@ -2354,7 +2354,7 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             // TODO: Missing return 0?
         }
 
@@ -2362,12 +2362,12 @@ int32_t __fastcall NPC_HandleDialogMessage(D2GameStrc* pGame, D2UnitStrc* pPlaye
         {
             packet58.nAction = 7;
             D2GAME_SendPacket0x58_6FC3F520(pClient, &packet58);
-            sub_6FC44030(pGame, pPlayer, nItemGUID);
+            ITEMMODE_DropCursorItem(pGame, pPlayer, nItemGUID);
             return 0;
         }
 
         D2GAME_NPC_RepairItem_6FCC6970(pGame, pOutput, 0);
-        sub_6FC4BBB0(pGame, pOutput, pPlayer);
+        ITEMMODE_IdentifyItemAndApplyCharmProperties(pGame, pOutput, pPlayer);
         ITEMS_SetInvPage(pOutput, INVPAGE_INVENTORY);
 
         if (!D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, (pOutput ? pOutput->dwUnitId : -1), 0, 0, 1, 1, 0))

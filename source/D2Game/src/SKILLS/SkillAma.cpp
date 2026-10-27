@@ -171,7 +171,7 @@ int32_t __fastcall SKILLS_SrvSt07_Impale(D2GameStrc* pGame, D2UnitStrc* pUnit, i
                     const int32_t nNewDurability = STATLIST_UnitGetStatValue(pItem, STAT_DURABILITY, 0) - nAmount;
                     if (nNewDurability <= 0)
                     {
-                        sub_6FC4B580(pGame, pUnit, pItem);
+                        ITEMMODE_BreakItem(pGame, pUnit, pItem);
                     }
                     else
                     {

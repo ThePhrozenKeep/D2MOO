@@ -1476,7 +1476,7 @@ int32_t __fastcall SKILLS_SrvDo057_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUni
     uint8_t nBodyLoc2 = 0;
     ITEMS_GetAllowedBodyLocations(pTargetUnit, &nBodyLoc1, &nBodyLoc2);
     UNITS_ChangeAnimMode(pTargetUnit, IMODE_ONCURSOR);
-    sub_6FC45060(pGame, pPet, pTargetUnit->dwUnitId, nBodyLoc1, 1, 0);
+    ITEMMODE_EquipCursorItem(pGame, pPet, pTargetUnit->dwUnitId, nBodyLoc1, 1, 0);
 
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);

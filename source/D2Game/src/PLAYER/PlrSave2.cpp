@@ -1350,7 +1350,7 @@ int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
         return 0;
     }
 
-    D2UnitStrc* pItem = sub_6FC4EC10(pGame, 0, pSection, nSize, 1, &pItemSave, &nSize, dwVersion);
+    D2UnitStrc* pItem = ITEMS_CreateItemFromBitstream(pGame, 0, pSection, nSize, 1, &pItemSave, &nSize, dwVersion);
     if (!pItem)
     {
         return 0;
@@ -1363,7 +1363,7 @@ int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
         nSize = pEnd - pNext;
         ITEMS_GetCompactItemDataFromBitstream(pNext, nSize, 1, &pItemSave);
 
-        D2UnitStrc* pSocketable = sub_6FC4EC10(pGame, 0, pNext, nSize, 1, &pItemSave, &nSize, dwVersion);
+        D2UnitStrc* pSocketable = ITEMS_CreateItemFromBitstream(pGame, 0, pNext, nSize, 1, &pItemSave, &nSize, dwVersion);
         if (!pSocketable)
         {
             SUNIT_RemoveUnit(pGame, pItem);
@@ -1384,7 +1384,7 @@ int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 
     if (ITEMS_GetItemFlags(pItem) & IFLAG_RUNEWORD && !ITEMS_GetRunesTxtRecordFromItem(pItem))
     {
-        D2GAME_ITEMMODE_Unk_6FC4BC10(pGame, pPlayer, pItem);
+        ITEMMODE_DetachItemFromOwner(pGame, pPlayer, pItem);
         pItem = nullptr;
     }
 

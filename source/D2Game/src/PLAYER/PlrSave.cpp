@@ -77,7 +77,7 @@ int32_t __fastcall sub_6FC895E0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SavedI
     {
         UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
         int32_t nUnused = 0;
-        if (!sub_6FC45060(pGame, pPlayer, pItem->dwUnitId, pSavedItem->nBodyLoc, 1, &nUnused))
+        if (!ITEMMODE_EquipCursorItem(pGame, pPlayer, pItem->dwUnitId, pSavedItem->nBodyLoc, 1, &nUnused))
         {
             return 12;
         }
@@ -90,7 +90,7 @@ int32_t __fastcall sub_6FC895E0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SavedI
         UNITS_SetXForStaticUnit(pItem, pSavedItem->nX);
         UNITS_SetYForStaticUnit(pItem, pSavedItem->nY);
         int32_t nUnused = 0;
-        if (!sub_6FC48940(pGame, pPlayer, pItem->dwUnitId, pSavedItem->nX, 0, &nUnused))
+        if (!ITEMMODE_PlaceCursorItemInBelt(pGame, pPlayer, pItem->dwUnitId, pSavedItem->nX, 0, &nUnused))
         {
             return 12;
         }
@@ -101,7 +101,7 @@ int32_t __fastcall sub_6FC895E0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SavedI
     {
         UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
         INVENTORY_SetCursorItem(pPlayer->pInventory, pItem);
-        if (!sub_6FC4B9D0(pGame, pPlayer, pItem))
+        if (!ITEMMODE_MarkItemOnCursor(pGame, pPlayer, pItem))
         {
             return 12;
         }
@@ -202,7 +202,7 @@ int32_t __fastcall sub_6FC898F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         }
 
         int32_t nUnused = 0;
-        if (!sub_6FC45060(pGame, pPlayer, nItemGUID, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
+        if (!ITEMMODE_EquipCursorItem(pGame, pPlayer, nItemGUID, ITEMS_GetBodyLocation(pItem), 1, &nUnused))
         {
             return 12;
         }
@@ -212,7 +212,7 @@ int32_t __fastcall sub_6FC898F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     {
         UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
         int32_t nUnused = 0;
-        if (!sub_6FC48940(pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), 0, &nUnused))
+        if (!ITEMMODE_PlaceCursorItemInBelt(pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), 0, &nUnused))
         {
             return 12;
         }
@@ -222,7 +222,7 @@ int32_t __fastcall sub_6FC898F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
     {
         UNITS_ChangeAnimMode(pItem, IMODE_ONCURSOR);
         INVENTORY_SetCursorItem(pPlayer->pInventory, pItem);
-        if (!sub_6FC4B9D0(pGame, pPlayer, pItem))
+        if (!ITEMMODE_MarkItemOnCursor(pGame, pPlayer, pItem))
         {
             return 12;
         }
@@ -1423,7 +1423,7 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
         }
 
         uint32_t nRemainingSize = 0;
-        D2UnitStrc* pItem = sub_6FC4EC10(pGame, 0, pItemBitstream, nBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
+        D2UnitStrc* pItem = ITEMS_CreateItemFromBitstream(pGame, 0, pItemBitstream, nBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
         if (!pItem && nRemainingSize <= 0)
         {
             return SYSERROR_UNK_14;
@@ -1461,7 +1461,7 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
             const uint32_t nSocketableBitstreamSize = pSection - pItemBitstream + nSize;
             ITEMS_GetCompactItemDataFromBitstream(pItemBitstream, nSocketableBitstreamSize, 1, &itemSave);
             
-            D2UnitStrc* pSocketable = sub_6FC4EC10(pGame, 0, pItemBitstream, nSocketableBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
+            D2UnitStrc* pSocketable = ITEMS_CreateItemFromBitstream(pGame, 0, pItemBitstream, nSocketableBitstreamSize, 1, &itemSave, &nRemainingSize, dwVersion);
             if (!pSocketable && nRemainingSize <= 0)
             {
                 return SYSERROR_UNK_14;
@@ -1494,7 +1494,7 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
 
         if (pParentItem && ITEMS_GetItemFlags(pParentItem) & IFLAG_RUNEWORD && !ITEMS_GetRunesTxtRecordFromItem(pParentItem))
         {
-            D2GAME_ITEMMODE_Unk_6FC4BC10(pGame, pPlayer, pParentItem);
+            ITEMMODE_DetachItemFromOwner(pGame, pPlayer, pParentItem);
         }
     }
 

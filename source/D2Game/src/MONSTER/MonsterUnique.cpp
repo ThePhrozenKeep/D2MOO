@@ -1481,8 +1481,8 @@ void __fastcall MONSTERUNIQUE_StealBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit
 
                 ITEMS_SetItemFlag(pDupeItem, IFLAG_INSTORE, 1);
                 D2GAME_DropItem_6FC52260(pGame, pTarget, pDupeItem, pRoom, pReturnCoords.nX, pReturnCoords.nY);
-                sub_6FC47380(pGame, pTarget, pBeltItem);
-                sub_6FC49140(pGame, pTarget, CLIENTS_GetUnitX(pBeltItem));
+                ITEMMODE_RemoveBeltItem(pGame, pTarget, pBeltItem);
+                ITEMMODE_CompactBeltColumn(pGame, pTarget, CLIENTS_GetUnitX(pBeltItem));
             }
             return;
         }

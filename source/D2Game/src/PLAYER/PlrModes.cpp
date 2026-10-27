@@ -635,7 +635,7 @@ D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitS
     {
         D2CoordStrc pCoord = {};
         UNITS_GetCoords(pDeadBody, &pCoord);
-        D2UnitStrc* pGold = sub_6FC4FCA0(pGame, UNITS_GetRoom(pDeadBody), &pCoord, 4, 1, pUnit);
+        D2UnitStrc* pGold = ITEMS_DropMiscItemAtCoordinates(pGame, UNITS_GetRoom(pDeadBody), &pCoord, 4, 1, pUnit);
         if (pGold)
         {
             D2_ASSERT(ITEMS_GetItemType(pGold) == ITEMTYPE_GOLD);
@@ -662,7 +662,7 @@ void __fastcall sub_6FC802F0(D2GameStrc* pGame, int32_t nBodyloc, D2UnitStrc* pI
 
     if (ITEMS_GetItemType(pItem) == ITEMTYPE_BELT)
     {
-        sub_6FC45930(pGame, pUnit, nullptr);
+        ITEMMODE_MoveExcessBeltItems(pGame, pUnit, nullptr);
     }
 
     if (pItem)
@@ -722,7 +722,7 @@ void __fastcall sub_6FC80440(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         }
     }
 
-    if (sub_6FC4AD80(pGame, pPlayer, pDeadBody))
+    if (ITEMMODE_RecoverCorpseItems(pGame, pPlayer, pDeadBody))
     {
         INVENTORY_FreeCorpse(pPlayer->pInventory, pDeadBody->dwUnitId, 1);
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pDeadBody), pDeadBody->dwUnitType, pDeadBody->dwUnitId);
@@ -960,7 +960,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
             {
                 if (!ITEMS_CheckItemFlag(pWeapon, IFLAG_BROKEN, __LINE__, __FILE__))
                 {
-                    sub_6FC4B580(pGame, pPlayer, pWeapon);
+                    ITEMMODE_BreakItem(pGame, pPlayer, pWeapon);
                 }
             }
             else
@@ -970,7 +970,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                 UNITS_ChangeAnimMode(pPlayer, 1);
 
                 int32_t a5 = 0;
-                sub_6FC45B30(pGame, pPlayer, nBodyLoc, 1, &a5);
+                ITEMMODE_UnequipBodyItem(pGame, pPlayer, nBodyLoc, 1, &a5);
                 ITEMS_SetItemCMDFlag(pWeapon, 1, 1);
 
                 if (ITEMS_GetReload(pWeapon))
@@ -987,7 +987,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
                         if (nWeaponClassId == pItem->dwClassId && !ITEMS_CheckItemFlag(pItem, 0x100u, __LINE__, __FILE__))
                         {
-                            if (!INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc) && sub_6FC49F80(pGame, pPlayer, pItem->dwUnitId, nBodyLoc))
+                            if (!INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc) && ITEMMODE_EquipStoredItem(pGame, pPlayer, pItem->dwUnitId, nBodyLoc))
                             {
                                 return;
                             }
@@ -1006,7 +1006,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                     if (nWeaponGUID)
                     {
                         D2UnitStrc* pWeaponItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nWeaponGUID);
-                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetInvPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && sub_6FC42F20(pPlayer, pWeaponItem, (int32_t*)&nBodyLoc, 0))
+                        if (pWeaponItem && pPlayer->pInventory && !ITEMS_GetInvPage(pWeaponItem) && INVENTORY_CompareWithItemsParentInventory(pPlayer->pInventory, pWeaponItem) && ITEMMODE_FindFreeBodyLocation(pPlayer, pWeaponItem, (int32_t*)&nBodyLoc, 0))
                         {
                             if (INVENTORY_GetItemFromBodyLoc(pPlayer->pInventory, nBodyLoc))
                             {
@@ -1015,7 +1015,7 @@ void __fastcall sub_6FC80B90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
                                 exit(-1);
                             }
 
-                            sub_6FC49F80(pGame, pPlayer, nWeaponGUID, nBodyLoc);
+                            ITEMMODE_EquipStoredItem(pGame, pPlayer, nWeaponGUID, nBodyLoc);
                         }
 
                         UNITS_SetWeaponGUID(pPlayer, 0);
@@ -1045,7 +1045,7 @@ void __fastcall sub_6FC80E10(D2GameStrc* pGame, D2UnitStrc* pPlayer)
                     bChangedToNeutral = 1;
                 }
 
-                sub_6FC4B580(pGame, pPlayer, pItem);
+                ITEMMODE_BreakItem(pGame, pPlayer, pItem);
                 pItem = INVENTORY_GetFirstItem(pPlayer->pInventory);
             }
             else
