@@ -20,7 +20,7 @@ struct D2WinAnimImageStrc
 	D2AnimatedImageDescriptor* pAnimatedImageDescriptor;	//0x40
 	uint32_t nAnimSpeed;									//0x44
 	uint32_t dwStartTickCount;								//0x48
-	uint32_t nFrame;										//0x4C
+	int32_t nFrame;											//0x4C
 	int32_t nAnimType;										//0x50
 	DrawMode eDrawMode;										//0x54
 	void(__stdcall* field_58)(SMSGHANDLER_PARAMS*);				//0x58
