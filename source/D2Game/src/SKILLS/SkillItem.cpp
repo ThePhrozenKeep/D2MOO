@@ -96,7 +96,7 @@ int32_t __fastcall SKILLITEM_pSpell02_CastPortal(D2GameStrc* pGame, D2UnitStrc* 
         if (!DUNGEON_IsRoomInTown(pRoom))
 #endif
         {
-            sub_6FC7C170(pGame, pUnit);
+            PLAYER_RemoveTownPortal(pGame, pUnit);
             
             D2UnitStrc* pPortal = nullptr;
 

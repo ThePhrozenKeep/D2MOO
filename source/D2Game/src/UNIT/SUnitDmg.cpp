@@ -153,7 +153,7 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
     {
         if (!pItem)
         {
-            pItem = sub_6FC7C7B0(pUnit);
+            pItem = PLAYER_GetWeaponForSkill(pUnit);
         }
 
         if (pItem)
@@ -258,7 +258,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		nSrcDam = 128;
 	}
 
-	sub_6FC7C900(pAttacker, bTemporaryWeaponStats);
+	PLAYER_ApplyWeaponStatsForSkill(pAttacker, bTemporaryWeaponStats);
 
 	pDamage->dwHitFlags |= DAMAGEHITFLAG_32;
 
@@ -283,7 +283,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		if (MONSTERS_IsUndead(pDefender))
 		{
 			int32_t nUndeadDamagePct = 0;
-			D2UnitStrc* pWeapon = sub_6FC7C7B0(pAttacker);
+			D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pAttacker);
 			if (pWeapon && ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_BLUNT))
 			{
 				nUndeadDamagePct = 50;
@@ -321,7 +321,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		int32_t nWeaponMastery = 0;
 
 		if (!bTemporaryWeaponStats 
-			&& (nWeaponMastery = SKILLS_GetWeaponMasteryBonus(pAttacker, sub_6FC7C7B0(pAttacker), 0, 2), nWeaponMastery > 0) // NOLINT(bugprone-assignment-in-if-condition)
+			&& (nWeaponMastery = SKILLS_GetWeaponMasteryBonus(pAttacker, PLAYER_GetWeaponForSkill(pAttacker), 0, 2), nWeaponMastery > 0) // NOLINT(bugprone-assignment-in-if-condition)
 			&& (int32_t)(ITEMS_RollRandomNumber(&pAttacker->pSeed) % 100) < nWeaponMastery
 			)
 		{
@@ -720,7 +720,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 	}
 
 	D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(pAttacker, pDefender, pDamage);
-	sub_6FC7CA10(pAttacker, bTemporaryWeaponStats);
+	PLAYER_RestoreWeaponStats(pAttacker, bTemporaryWeaponStats);
 }
 
 //D2Game.0x6FCBF400
@@ -1831,7 +1831,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 		D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pDefender);
 		if (bPetKill && pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 		{
-			sub_6FC7D470(pGame, pOwner, pDefender);
+			PLAYERPETS_HandlePetDeath(pGame, pOwner, pDefender);
 		}
 		break;
 	}
@@ -2004,7 +2004,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			if (!(pDamage->wResultFlags & DAMAGERESULTFLAG_SOFTHIT) && (int32_t)(pGame->dwGameFrame - STATLIST_UnitGetStatValue(pUnit, STAT_LASTBLOCKFRAME, 0)) > STATLIST_UnitGetStatValue(pUnit, STAT_ITEM_FASTERBLOCKRATE, 0) / 8 + 15)
 			{
-				sub_6FC817D0(pGame, pUnit, 0, 9, 0, 0, 0);
+				PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, 9, 0, 0, 0);
 				STATLIST_SetUnitStat(pUnit, STAT_LASTBLOCKFRAME, pGame->dwGameFrame, 0);
 			}
 			return;
@@ -2028,7 +2028,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			{
 				if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !SUNITDMG_ShouldSkipHitRecovery(pUnit, pDamage, pDamage->dwHitClass))
 				{
-					sub_6FC817D0(pGame, pUnit, nullptr, 4, pDamage->dwDmgTotal, 0, 0);
+					PLRMODE_ChangeModeToCoords(pGame, pUnit, nullptr, 4, pDamage->dwDmgTotal, 0, 0);
 					return;
 				}
 			}
@@ -2331,7 +2331,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 
 		if (pAttacker->dwUnitType == UNIT_PLAYER)
 		{
-			D2UnitStrc* pItem = sub_6FC7C7B0(pAttacker);
+			D2UnitStrc* pItem = PLAYER_GetWeaponForSkill(pAttacker);
 			if (pItem)
 			{
 				ITEMS_UpdateDurability(pGame, pAttacker, pItem);
@@ -2506,7 +2506,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 
 		if (!bMissile)
 		{
-			D2UnitStrc* pWeapon = sub_6FC7C7B0(pAttacker);
+			D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pAttacker);
 			if (pWeapon)
 			{
 				nToHitPercent = SKILLS_GetWeaponMasteryBonus(pAttacker, pWeapon, 0, 0);
@@ -2976,7 +2976,7 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 	}
 
 	const uint32_t nDefenderLevel = STATLIST_GetUnitBaseStat(pDefender, STAT_LEVEL, 0);
-	D2UnitStrc* pPet = sub_6FC7E8B0(pGame, pPlayer, 7, 0);
+	D2UnitStrc* pPet = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, 7, 0);
 	if (pPet)
 	{
 		const uint32_t nPetLevel = STATLIST_GetUnitBaseStat(pPet, STAT_LEVEL, 0);

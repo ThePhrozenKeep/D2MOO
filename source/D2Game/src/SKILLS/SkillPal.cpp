@@ -943,7 +943,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
 
         int32_t nShiftedMinDamage = 0;
         int32_t nShiftedMaxDamage = 0;
-        if (sub_6FC7C7B0(pUnit))
+        if (PLAYER_GetWeaponForSkill(pUnit))
         {
             if (INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
             {

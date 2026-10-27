@@ -13792,7 +13792,7 @@ void __fastcall AITHINK_Fn102_BladeCreeper(D2GameStrc* pGame, D2UnitStrc* pUnit,
 				STATLIST_AddUnitStat(pUnit, STAT_TOHIT, UNITS_GetAttackRate(pOwner), 0);
 
 				int32_t nToHitPercent = STATLIST_UnitGetStatValue(pOwner, STAT_ITEM_TOHIT_PERCENT, 0);
-				D2UnitStrc* pWeapon = sub_6FC7C7B0(pOwner);
+				D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pOwner);
 				if (pWeapon)
 				{
 					nToHitPercent += SKILLS_GetWeaponMasteryBonus(pOwner, pWeapon, 0, 0);

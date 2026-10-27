@@ -1773,7 +1773,7 @@ void __fastcall MONSTERUNIQUE_KillUnitOrRemovePet(D2GameStrc* pGame, D2UnitStrc*
         }
         else
         {
-            sub_6FC7D260(pGame, pOwner, pUnit ? pUnit->dwUnitId : -1, 1);
+            PLAYERPETS_RemovePet(pGame, pOwner, pUnit ? pUnit->dwUnitId : -1, 1);
         }
     }
 }

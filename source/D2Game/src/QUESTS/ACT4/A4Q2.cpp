@@ -768,7 +768,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 //D2Game.0x6FCAF3D0
 int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	sub_6FC7BEC0(pGame, pUnit);
+	PLAYER_CloseInteraction(pGame, pUnit);
 	UNITS_GetPlayerData(pUnit)->bBusy = 1;
 
 	D2Act4Quest2Strc* pQuestDataEx = (D2Act4Quest2Strc*)QUESTS_GetQuestData(pGame, QUEST_A4Q2_DIABLO)->pQuestDataEx;

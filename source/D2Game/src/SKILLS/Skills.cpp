@@ -363,7 +363,7 @@ int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2Uni
         return nValue;
     }
     
-    D2UnitStrc* pBloodGolem = sub_6FC7E8B0(pGame, pUnit, 3, 0);
+    D2UnitStrc* pBloodGolem = PLAYERPETS_GetFirstPetByType(pGame, pUnit, 3, 0);
     if (!pBloodGolem || pBloodGolem->dwUnitType != UNIT_MONSTER || pBloodGolem->dwClassId != MONSTER_BLOODGOLEM)
     {
         return nValue;
@@ -1053,7 +1053,7 @@ void __fastcall SKILLS_UpdatePetLimitForSkill(D2GameStrc* pGame, D2UnitStrc* pUn
 
                 }
 
-                sub_6FC7D150(pGame, pUnit, pSkillsTxtRecord->nPetType, nMaxPets);
+                PLAYERPETS_SetPetLimit(pGame, pUnit, pSkillsTxtRecord->nPetType, nMaxPets);
             }
         }
     }
@@ -1255,7 +1255,7 @@ void __fastcall SKILLS_RemoveStateAndRefreshPassives(D2UnitStrc* pUnit, int32_t 
 
         if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
         {
-            sub_6FC7DF40(SUNIT_GetGameFromUnit(pUnit), pUnit);
+            PLAYERPETS_UpdatePetLimits(SUNIT_GetGameFromUnit(pUnit), pUnit);
         }
     }
 }
@@ -1451,7 +1451,7 @@ int32_t __fastcall SKILLS_ConsumeItemQuantity(D2GameStrc* pGame, D2UnitStrc* pUn
         D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pItem, 1, STAT_DURABILITY, nMaxDurability, 0);
     }
 
-    sub_6FC80A30(pGame, pUnit);
+    PLRMODE_HandleDepletedWeapons(pGame, pUnit);
 
     if (bNoQuantity)
     {
@@ -1619,7 +1619,7 @@ int32_t __fastcall SKILLS_ConsumeWeaponOrAmmoQuantity(D2GameStrc* pGame, D2UnitS
         return 0;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pUnit);
     int32_t bNoBow = 1;
 
     if (ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_BOW) || ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_CROSSBOW))
@@ -1655,7 +1655,7 @@ int32_t __fastcall SKILLS_CanUseWeaponAmmo(D2UnitStrc* pUnit)
         return 1;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pUnit);
     if (!pWeapon)
     {
         return 0;
@@ -1958,8 +1958,8 @@ int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(D2GameStrc* pGame, D2Unit
         return 1;
     }
 
-    sub_6FC80A30(pGame, pUnit);
-    sub_6FC80E10(pGame, pUnit);
+    PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+    PLRMODE_BreakDepletedWeapons(pGame, pUnit);
     return 0;
 }
 
@@ -1971,8 +1971,8 @@ int32_t __fastcall SKILLS_SrvSt65_Throw_LeftHandThrow(D2GameStrc* pGame, D2UnitS
         return 1;
     }
 
-    sub_6FC80A30(pGame, pUnit);
-    sub_6FC80E10(pGame, pUnit);
+    PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+    PLRMODE_BreakDepletedWeapons(pGame, pUnit);
     return 0;
 }
 
@@ -2031,7 +2031,7 @@ int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2Uni
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pUnit);
     if (pWeapon && ITEMS_GetItemType(pWeapon) == ITEMTYPE_MISSILE_POTION)
     {
         return 0;
@@ -2211,7 +2211,7 @@ int32_t __fastcall SKILLS_SrvDo004_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
     if (pSkill)
     {
-        sub_6FC7D260(pGame, pUnit, SKILLS_GetParam1(pSkill), 1);
+        PLAYERPETS_RemovePet(pGame, pUnit, SKILLS_GetParam1(pSkill), 1);
         return 1;
     }
 
@@ -2357,7 +2357,7 @@ int32_t __fastcall SKILLS_StartSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
             if (pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
+                PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2471,7 +2471,7 @@ int32_t __fastcall SKILLS_ExecuteSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 
                 if (pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
+                    PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
 
                 return 0;
@@ -2601,7 +2601,7 @@ int32_t __fastcall SKILLS_StartUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
         {
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
+                PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2612,7 +2612,7 @@ int32_t __fastcall SKILLS_StartUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
             {
                 if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
                 {
-                    sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
+                    PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
                 }
                 return 0;
             }
@@ -2668,7 +2668,7 @@ int32_t __fastcall SKILLS_StartUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC817D0(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
+                PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, PLRMODE_TOWNNEUTRAL, 0, 0, 1);
             }
             return 0;
         }
@@ -2677,7 +2677,7 @@ int32_t __fastcall SKILLS_StartUsedSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
     const int32_t nStartFuncResult = SKILLS_StartSkill(pGame, pUnit, nSkillId, nSkillLevel, 0);
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && !nStartFuncResult)
     {
-        sub_6FC817D0(pGame, pUnit, 0, 5, 0, 0, 1);
+        PLRMODE_ChangeModeToCoords(pGame, pUnit, 0, 5, 0, 0, 1);
     }
 
     return nStartFuncResult;
@@ -2862,7 +2862,7 @@ int32_t __fastcall SKILLS_TryIncreaseSkillLevel(D2UnitStrc* pUnit, int32_t nSkil
 
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                sub_6FC7DF40(SUNIT_GetGameFromUnit(pUnit), pUnit);
+                PLAYERPETS_UpdatePetLimits(SUNIT_GetGameFromUnit(pUnit), pUnit);
             }
 
             if (pSkill)
@@ -3596,7 +3596,7 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
     {
         nPetMax = 1;
     }
-    sub_6FC7D7A0(pGame, pSummonArg->pOwner, pPet, pSummonArg->nPetType, nPetMax);
+    PLAYERPETS_AddSummonedPet(pGame, pSummonArg->pOwner, pPet, pSummonArg->nPetType, nPetMax);
 
     if (pPet)
     {
@@ -3763,7 +3763,7 @@ void __fastcall SKILLS_RefreshPassivesAndPetLimits(D2UnitStrc* pUnit)
     SKILLS_RefreshPassiveSkills(pUnit);
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        sub_6FC7DF40(SUNIT_GetGameFromUnit(pUnit), pUnit);
+        PLAYERPETS_UpdatePetLimits(SUNIT_GetGameFromUnit(pUnit), pUnit);
     }
 }
 

@@ -60,8 +60,8 @@ int32_t __fastcall SKILLS_SrvSt04_Arrow_Bolt(D2GameStrc* pGame, D2UnitStrc* pUni
         return 1;
     }
 
-    sub_6FC80A30(pGame, pUnit);
-    sub_6FC80E10(pGame, pUnit);
+    PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+    PLRMODE_BreakDepletedWeapons(pGame, pUnit);
     return 0;
 }
 
@@ -152,7 +152,7 @@ int32_t __fastcall SKILLS_SrvSt07_Impale(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
         damage.dwHitFlags = DAMAGEHITFLAG_1;
 
-        D2UnitStrc* pItem = sub_6FC7C7B0(pUnit);
+        D2UnitStrc* pItem = PLAYER_GetWeaponForSkill(pUnit);
         if (pItem && ITEMS_HasDurability(pItem))
         {
             const int32_t nChance = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
@@ -205,8 +205,8 @@ int32_t __fastcall SKILLS_SrvSt08_Strafe(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 
     if (!SKILLS_CanUseWeaponAmmo(pUnit))
     {
-        sub_6FC80A30(pGame, pUnit);
-        sub_6FC80E10(pGame, pUnit);
+        PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+        PLRMODE_BreakDepletedWeapons(pGame, pUnit);
         return 0;
     }
 

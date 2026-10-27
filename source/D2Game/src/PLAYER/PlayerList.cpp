@@ -181,7 +181,7 @@ uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc* pPlayer1, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FCBA980
-void __fastcall sub_6FCBA980(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t a3)
+void __fastcall PLAYERLIST_SetPartyState(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nPartyState)
 {
     if (pPlayer1 == pPlayer2)
     {
@@ -194,11 +194,11 @@ void __fastcall sub_6FCBA980(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t
         return;
     }
 
-    pPlayerList->field_C = a3;
+    pPlayerList->field_C = nPartyState;
 }
 
 //D2Game.0x6FCBA9D0
-int16_t __fastcall sub_6FCBA9D0(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
+int16_t __fastcall PLAYERLIST_GetPartyState(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
     if (pPlayer1 == pPlayer2)
     {
@@ -215,7 +215,7 @@ int16_t __fastcall sub_6FCBA9D0(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 }
 
 //D2Game.0x6FCBAA20
-void __fastcall sub_6FCBAA20(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
+void __fastcall PLAYERLIST_SendPartyState(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
     if (pPlayer1 == pPlayer2)
     {
@@ -232,7 +232,7 @@ void __fastcall sub_6FCBAA20(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 }
 
 //D2Game.0x6FCBAAA0
-void __fastcall sub_6FCBAAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
+void __fastcall PLAYERLIST_BroadcastFlags(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2)
 {
     if (pPlayer1 == pPlayer2)
     {
@@ -249,15 +249,15 @@ void __fastcall sub_6FCBAAA0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc
 }
 
 //D2Game.0x6FCBAB20
-void __fastcall sub_6FCBAB20(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall PLAYERLIST_InitializePlayerRelations(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 {
     D2_ASSERT(pPlayer);
 
-    SUNIT_IterateLivingPlayers(pGame, sub_6FCBAB50, pPlayer);
+    SUNIT_IterateLivingPlayers(pGame, PLAYERLIST_IterateCallback_InitializePlayerRelation, pPlayer);
 }
 
 //D2Game.0x6FCBAB50
-void __fastcall sub_6FCBAB50(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
+void __fastcall PLAYERLIST_IterateCallback_InitializePlayerRelation(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 {
     D2UnitStrc* pUnit = (D2UnitStrc*)pArg;
     PLAYERLIST_AllocPlayerList(pGame, pPlayer, pUnit);
@@ -265,19 +265,19 @@ void __fastcall sub_6FCBAB50(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 
     D2GAME_PACKETS_SendPacket0x8D_6FC3F960(pUnit, pPlayer);
 
-    sub_6FCBA980(pPlayer, pUnit, 0);
+    PLAYERLIST_SetPartyState(pPlayer, pUnit, 0);
 
     if (SUNIT_GetPartyId(pPlayer) == -1)
     {
-        sub_6FCBA980(pUnit, pPlayer, 0);
+        PLAYERLIST_SetPartyState(pUnit, pPlayer, 0);
     }
     else
     {
-        sub_6FCBA980(pUnit, pPlayer, 1);
+        PLAYERLIST_SetPartyState(pUnit, pPlayer, 1);
     }
 
-    sub_6FCBAA20(pUnit, pPlayer);
-    sub_6FCBAA20(pPlayer, pUnit);
+    PLAYERLIST_SendPartyState(pUnit, pPlayer);
+    PLAYERLIST_SendPartyState(pPlayer, pUnit);
 
     for (D2PlayerListStrc* i = UNITS_GetPlayerData(pPlayer)->pPlayerList; i; i = i->pNext)
     {
@@ -286,7 +286,7 @@ void __fastcall sub_6FCBAB50(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 }
 
 //D2Game.0x6FCBAD60
-void __fastcall PLAYERLIST_sub_6FCBAD60(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall PLAYERLIST_ResetPendingPartyInvitations(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 {
     D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
     for (D2PlayerListStrc* pPlayerList = pPlayerData->pPlayerList; pPlayerList; pPlayerList = pPlayerList->pNext)
@@ -297,7 +297,7 @@ void __fastcall PLAYERLIST_sub_6FCBAD60(D2GameStrc* pGame, D2UnitStrc* pPlayer)
             if (pOtherPlayer)
             {
                 pPlayerList->field_C = PARTY_GetPartyIdForUnitOwner(pGame, pOtherPlayer) != -1;
-                sub_6FCBAA20(pPlayer, pOtherPlayer);
+                PLAYERLIST_SendPartyState(pPlayer, pOtherPlayer);
             }
         }
     }
@@ -330,14 +330,14 @@ int32_t __fastcall PLAYERLIST_GetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* 
 }
 
 //D2Game.0x6FCBAE70
-void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t a3)
+void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nHostileDelayEndTick)
 {
     if (pPlayer1 != pPlayer2)
     {
         D2PlayerListStrc* pPlayerList = PLAYERLIST_GetPlayerListRecordFromUnitGUID(pPlayer1, pPlayer2 ? pPlayer2->dwUnitId : -1);
         if (pPlayerList)
         {
-            pPlayerList->field_8 = a3;
+            pPlayerList->field_8 = nHostileDelayEndTick;
         }
     }
 
@@ -349,7 +349,7 @@ void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* pPl
 }
 
 //D2Game.0x6FCBAED0
-void __fastcall sub_6FCBAED0()
+void __fastcall PLAYERLIST_InitializeUnitSeed()
 {
     gnUnitInitSeed = GetTickCount();
 }

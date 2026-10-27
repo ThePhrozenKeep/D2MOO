@@ -496,7 +496,7 @@ int32_t __fastcall SKILLS_SrvDo074_DoubleThrow(D2GameStrc* pGame, D2UnitStrc* pU
         return 0;
     }
 
-    D2UnitStrc* pItem = sub_6FC7C7B0(pUnit);
+    D2UnitStrc* pItem = PLAYER_GetWeaponForSkill(pUnit);
     if (!pItem)
     {
         return 0;
@@ -717,8 +717,8 @@ int32_t __fastcall SKILLS_SrvDo009_Frenzy(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     {
         SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
         SUNITDMG_FreeAttackerDefenderCombatList(pGame, pUnit, pTarget);
-        sub_6FC80A30(pGame, pUnit);
-        sub_6FC80E10(pGame, pUnit);
+        PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+        PLRMODE_BreakDepletedWeapons(pGame, pUnit);
         SKILLS_ApplyFrenzyStats(pGame, pUnit, nSkillId, nSkillLevel);
         return SKILLS_RollFrenzyDamage(pGame, pUnit, pTarget, nSkillId, nSkillLevel);
     }
@@ -726,8 +726,8 @@ int32_t __fastcall SKILLS_SrvDo009_Frenzy(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
 
     SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
-    sub_6FC80A30(pGame, pUnit);
-    sub_6FC80E10(pGame, pUnit);
+    PLRMODE_HandleDepletedWeapons(pGame, pUnit);
+    PLRMODE_BreakDepletedWeapons(pGame, pUnit);
     SKILLS_ApplyFrenzyStats(pGame, pUnit, nSkillId, nSkillLevel);
     return SKILLS_RollFrenzyDamage(pGame, pUnit, SKILLS_FindNextAuraTarget(pGame, pUnit, 0, 0, SKILLS_GetMeleeSearchRange(pUnit), 0x20003u, pTarget->dwUnitId, 0), nSkillId, nSkillLevel);
 }
@@ -973,7 +973,7 @@ int32_t __fastcall SKILLS_SrvDo076_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUni
                 {
                     nCount = 1;
                     int32_t nDuration = 0;
-                    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+                    D2UnitStrc* pWeapon = PLAYER_GetWeaponForSkill(pUnit);
                     if (pWeapon)
                     {
                         const int32_t nAttackSpeed = ITEMS_GetWeaponAttackSpeed(pUnit, pWeapon);

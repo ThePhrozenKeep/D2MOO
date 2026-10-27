@@ -99,14 +99,14 @@ void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer,
         D2GAME_UpdateSummonAI_6FC401F0(pGame, pUnit, 0, pPlayer->dwNodeIndex);
     }
 
-    D2UnitStrc* pPet = sub_6FC7E8B0(pGame, pPlayer, PETTYPE_HIREABLE, 1);
+    D2UnitStrc* pPet = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, PETTYPE_HIREABLE, 1);
     if (pPet)
     {
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_PACKETS_SendPacket0x9B_6FC3FB30(pClient, -1, 0);
 
         AIGENERAL_SetOwnerData(pGame, pPet, -1, 1, 0, 0);
-        sub_6FC7D260(pGame, pPlayer, pPet->dwUnitId, 0);
+        PLAYERPETS_RemovePet(pGame, pPlayer, pPet->dwUnitId, 0);
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pPet), UNIT_MONSTER, pPet->dwUnitId);
         SUNIT_RemoveUnit(pGame, pPet);
     }
@@ -121,7 +121,7 @@ void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer,
     petInfo.nSeed = pMercData->dwSeed;
     petInfo.wName = pMercData->nMercName;
     petInfo.nHirelingId = hirelingInit.nId;
-    sub_6FC7DBF0(pGame, pPlayer, pUnit, PETTYPE_HIREABLE, &petInfo);
+    PLAYERPETS_AddPetWithInfo(pGame, pPlayer, pUnit, PETTYPE_HIREABLE, &petInfo);
 
     pUnit->dwFlags |= UNITFLAG_ISREVIVE;
     AIGENERAL_SetOwnerData(pGame, pUnit, pPlayer->dwUnitId, pPlayer->dwUnitType, 0, 0);
@@ -157,7 +157,7 @@ void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 //D2Game.0x6FC61490
 void __fastcall MONSTERAI_SendMercStats(D2GameStrc* pGame, D2UnitStrc* pPlayer, DWORD dwZero)
 {
-    D2UnitStrc* pMerc = sub_6FC7E8B0(pGame, pPlayer, PETTYPE_HIREABLE, 0);
+    D2UnitStrc* pMerc = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, PETTYPE_HIREABLE, 0);
     if (!pMerc)
     {
         return;
@@ -189,7 +189,7 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     D2UnitStrc* pHireling = pMerc;
     if (!pHireling)
     {
-        pHireling = sub_6FC7E8B0(pGame, pPlayer, PETTYPE_HIREABLE, 0);
+        pHireling = PLAYERPETS_GetFirstPetByType(pGame, pPlayer, PETTYPE_HIREABLE, 0);
     }
 
     if (!pHireling)

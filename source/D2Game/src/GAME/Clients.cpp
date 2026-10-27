@@ -270,7 +270,7 @@ void __fastcall sub_6FC31EF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2GameS
             {
                 D2CoordStrc coords = {};
                 D2ActiveRoomStrc* pSpawnLocation = DUNGEON_FindActSpawnLocationEx(pGame->pAct[pClient->nAct], DUNGEON_GetTownLevelIdFromActNo(pClient->nAct), 0, &coords.nX, &coords.nY, UNITS_GetUnitSizeX(pCorpsePlayer));
-                sub_6FC7BFC0(pGame, pSpawnLocation, nCorpseUnitGUID, &coords);
+                PLAYER_PlaceCorpse(pGame, pSpawnLocation, nCorpseUnitGUID, &coords);
             }
 
             pCorpse = INVENTORY_GetNextCorpse(pCorpse);
@@ -440,7 +440,7 @@ int32_t __fastcall CLIENTS_AddPlayerToGame(D2ClientStrc* pClient, D2GameStrc* pG
     }
 
     D2Common_10513(ppUnit, ppUnit, (void(__fastcall*)(D2UnitStrc*, int32_t, int32_t, D2UnitStrc*))D2GAME_UpdateAttribute_6FC822D0);
-    sub_6FC82360(ppUnit, ppUnit, 1);
+    PLRMSG_SendPlayerStatUpdates(ppUnit, ppUnit, 1);
     D2GAME_INVMODE_Last_6FC416D0(pGame, ppUnit);
 
     if (pGame->bExpansion)
@@ -838,7 +838,7 @@ void __fastcall sub_6FC33020(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom)
                     }
                 }
 
-                sub_6FC81650(pClient->pGame, pUnit, pClient, 0);
+                PLRMODE_SendPlayerUpdates(pClient->pGame, pUnit, pClient, 0);
             }
         }
     }
