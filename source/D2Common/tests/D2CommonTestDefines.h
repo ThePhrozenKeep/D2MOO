@@ -61,7 +61,7 @@
 //#define INVENTORY_TESTS
 //#define ITEMMODS_TESTS
 //#define ITEMS_TESTS
-//#define MONSTERS_TESTS
+#define MONSTERS_TESTS
 #define QUESTRECORD_TESTS
 #define SEED_TESTS
 //#define SKILLS_TESTS
