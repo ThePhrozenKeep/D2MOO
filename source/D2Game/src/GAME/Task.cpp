@@ -12,16 +12,21 @@ CRITICAL_SECTION_WRAPPER gTaskSlotsCriticalSection;
 
 int32_t gnNumberOfTasksCreated;
 // D2Game.0x6FD45858
+//1.14d: 0x0088C79C
 int32_t gnGamesCount;
 // D2Game.0x6FD45888
+//1.14d: 0x0088C7A8
 CRITICAL_SECTION_WRAPPER gtTaskQueuesCriticalSections[TASKQSLOTS];
 // D2Game.0x6FD45B88
+//1.14d: 0x0088C708
 D2TaskStrc* gtTaskSlots[TASKQSLOTS];
 // D2Game.0x6FD45868
+//1.14d: 0x0088C788
 D2LinkStrc gpTaskQueueLink;
 
 
 //D2Game.0x6FC404E0 (#10039)
+//1.14d: 0x00564320
 void __stdcall TASK_InitializeClock()
 {
     gbHasHighResolutionClock = QueryPerformanceFrequency(&gPerformanceFrequency);
@@ -43,6 +48,7 @@ static int32_t TASK_GetClockTime()
 
 
 //D2Game.0x6FC40500 (#10040)
+//1.14d: 0x00564890
 void __stdcall TASK_FreeAllQueueSlots()
 {
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
@@ -67,6 +73,7 @@ void __stdcall TASK_FreeAllQueueSlots()
 }
 
 //D2Game.0x6FC405B0 (#10041) 
+//1.14d: 0x00564960
 int __cdecl TASK_CreateQueue()
 {
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
@@ -176,6 +183,7 @@ int __cdecl TASK_CreateQueue()
 }
 
 //D2Game.0x6FC407A0 (#10042) --------------------------------------------------------
+//1.14d: 0x00564A00
 BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink)
 {
     BOOL nResult = FALSE;
@@ -214,6 +222,7 @@ BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPr
 }
 
 //D2Game.0x6FC40930 (#10043)
+//1.14d: 0x00564B20
 int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, int32_t* pOutBalanceTaskType)
 {
     const int8_t nIndex = nTaskNumber & 31;
@@ -248,6 +257,7 @@ int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, int32_t* pOutBalanceTask
 }
 
 //D2Game.0x6FC40A40 (#10044)
+//1.14d: 0x00564BE0
 int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber)
 {
     const int8_t nIndex = nTaskNumber & 31;
@@ -335,6 +345,7 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
 }
 
 //D2Game.0x6FC40B30 (#10045) --------------------------------------------------------
+//1.14d: 0x005645E0
 void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
 {
     D2_ASSERT(ptTask->nGameCount == TASK_PROCESSGAME);
@@ -437,6 +448,7 @@ void __fastcall TASK_LinkList_Insert(D2LinkStrc* pPrev, D2LinkStrc* pLink)
 
 // Exactly the same code as TASK_LinkList_Insert, except one is supposed to provide the list head instead of the previous element.
 //D2Game.0x6FC40F20
+//1.14d: 0x00564250
 void __fastcall TASK_LinkList_PushFront(D2LinkStrc* pList, D2LinkStrc* pLink)
 {
     D2_ASSERT(pList);
@@ -449,6 +461,7 @@ void __fastcall TASK_LinkList_PushFront(D2LinkStrc* pList, D2LinkStrc* pLink)
 }
 
 //D2Game.0x6FC40F70
+//1.14d: 0x005642E0
 void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink)
 {
     D2_ASSERT(pLink);
