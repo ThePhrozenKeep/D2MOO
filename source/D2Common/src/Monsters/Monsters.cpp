@@ -1,5 +1,7 @@
 #include "D2Monsters.h"
 
+#include <algorithm>
+
 #include "D2DataTbls.h"
 #include "Drlg/D2DrlgDrlg.h"
 #include "Drlg/D2DrlgMaze.h"
@@ -65,19 +67,14 @@ struct D2UnkHireStrc5
 //1.14d: 0x006637F0
 int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int nLowSeed, int nAct, int nDifficulty, D2HirelingInitStrc* pHirelingInit)
 {
-	D2HirelingTxt* pHirelingTxtRecord = NULL;
-	D2HirelingTxt* pRecord = NULL;
-	int nLevelUps = 0;
-	int nEntries = 0;
-	int nRecord = 0;
-	int nLevel = 0;
-	int nRand = 0;
-	D2HirelingTxt* pRecords[16] = {};
 	D2SeedStrc pSeed = {};
 
 	SEED_InitSeed(&pSeed);
 	SEED_InitLowSeed(&pSeed, nLowSeed);
 
+	D2HirelingTxt* pRecords[16] = {};
+	D2HirelingTxt* pRecord = nullptr;
+	int nEntries = 0;
 	while (1)
 	{
 		pRecord = DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(bExpansion, nAct, nDifficulty, pRecord);
@@ -89,93 +86,45 @@ int __fastcall MONSTERS_HirelingInit(BOOL bExpansion, D2UnitStrc* pMonster, int 
 		++nEntries;
 	}
 
-	if (nEntries)
+	if (!nEntries)
 	{
-		nRecord = SEED_RollLimitedRandomNumber(&pSeed, nEntries);
-
-		pHirelingTxtRecord = pRecords[nRecord];
-
-		pHirelingInit->nId = pHirelingTxtRecord->nId;
-
-		nLevel = STATLIST_UnitGetStatValue(pMonster, STAT_LEVEL, 0);
-		nRand = (uint32_t)SEED_RollRandomNumber(&pSeed) % 5;
-		if (nRand >= nLevel - pHirelingTxtRecord->nHirelingLevel)
-		{
-			nLevelUps = nLevel - pHirelingTxtRecord->nHirelingLevel;
-		}
-		else
-		{
-			nLevelUps = nRand;
-		}
-		pHirelingInit->nLevel = pHirelingTxtRecord->nHirelingLevel + nLevelUps;
-
-		pHirelingInit->nHitpoints = nLevelUps * pHirelingTxtRecord->dwHitpointsPerLvl + pHirelingTxtRecord->dwHitpoints;
-		if (pHirelingInit->nHitpoints <= 40)
-		{
-			pHirelingInit->nHitpoints = 40;
-		}
-
-		pHirelingInit->nStrength = (nLevelUps * pHirelingTxtRecord->nStrPerLvl >> 3) + pHirelingTxtRecord->nStr;
-		if (pHirelingInit->nStrength <= 10)
-		{
-			pHirelingInit->nStrength = 10;
-		}
-
-		pHirelingInit->nDexterity = (nLevelUps * pHirelingTxtRecord->nDexPerLvl >> 3) + pHirelingTxtRecord->nDex;
-		if (pHirelingInit->nDexterity <= 10)
-		{
-			pHirelingInit->nDexterity = 10;
-		}
-
-		pHirelingInit->nGold = pHirelingTxtRecord->nGold * (15 * nLevelUps + 100) / 100;
-		if (pHirelingInit->nGold < pHirelingTxtRecord->nGold)
-		{
-			pHirelingInit->nGold = pHirelingTxtRecord->nGold;
-		}
-
-		pHirelingInit->nExperience = pHirelingInit->nLevel * pHirelingInit->nLevel * pHirelingTxtRecord->dwExpPerLvl * (pHirelingInit->nLevel + 1);
-		if (pHirelingInit->nExperience <= 0)
-		{
-			pHirelingInit->nExperience = 0;
-		}
-
-		pHirelingInit->nDefense = pHirelingTxtRecord->dwDefense + nLevelUps * pHirelingTxtRecord->dwDefensePerLvl;
-		if (pHirelingInit->nDefense <= 0)
-		{
-			pHirelingInit->nDefense = 0;
-		}
-
-		pHirelingInit->nMinDamage = pHirelingTxtRecord->nDmgMin + (nLevelUps * pHirelingTxtRecord->nDmgPerLvl >> 3);
-		if (pHirelingInit->nMinDamage <= 0)
-		{
-			pHirelingInit->nMinDamage = 0;
-		}
-
-		pHirelingInit->nMaxDamage = pHirelingTxtRecord->nDmgMax + (nLevelUps * pHirelingTxtRecord->nDmgPerLvl >> 3);
-		if (pHirelingInit->nMaxDamage <= 1)
-		{
-			pHirelingInit->nMaxDamage = 1;
-		}
-
-		pHirelingInit->nShare = pHirelingTxtRecord->dwShare;
-		if (pHirelingInit->nShare <= 0)
-		{
-			pHirelingInit->nShare = 0;
-		}
-
-		pHirelingInit->nResist = pHirelingTxtRecord->dwResist;
-		if (pHirelingInit->nResist <= 0)
-		{
-			pHirelingInit->nResist = 0;
-		}
-
-		pHirelingInit->nHireDesc = pHirelingTxtRecord->nHireDesc;
-		pHirelingInit->field_34 = 1;
-		pHirelingInit->nFlags = 0;
-		return TRUE;
+		return FALSE;
 	}
 
-	return FALSE;
+	const int32_t nRecord = SEED_RollLimitedRandomNumber(&pSeed, nEntries);
+
+	D2HirelingTxt* pHirelingTxtRecord = pRecords[nRecord];
+
+	pHirelingInit->nId = pHirelingTxtRecord->nId;
+
+	const int32_t nLevel = STATLIST_UnitGetStatValue(pMonster, STAT_LEVEL, 0);
+	const int32_t nRand = ((uint32_t)SEED_RollRandomNumber(&pSeed) % 5);
+
+	int32_t nLevelUps = 0;
+	if (pHirelingTxtRecord->nHirelingLevel + nRand >= nLevel)
+	{
+		nLevelUps = nLevel - pHirelingTxtRecord->nHirelingLevel;
+	}
+	else
+	{
+		nLevelUps = nRand;
+	}
+
+	pHirelingInit->nLevel = pHirelingTxtRecord->nHirelingLevel + nLevelUps;
+	pHirelingInit->nHitpoints = std::max(nLevelUps * pHirelingTxtRecord->dwHitpointsPerLvl + pHirelingTxtRecord->dwHitpoints, 40);
+	pHirelingInit->nStrength = std::max((nLevelUps * pHirelingTxtRecord->nStrPerLvl >> 3) + pHirelingTxtRecord->nStr, 10);
+	pHirelingInit->nDexterity = std::max((nLevelUps * pHirelingTxtRecord->nDexPerLvl >> 3) + pHirelingTxtRecord->nDex, 10);
+	pHirelingInit->nGold = std::max(pHirelingTxtRecord->nGold * (15 * nLevelUps + 100) / 100, pHirelingTxtRecord->nGold);
+	pHirelingInit->nExperience = std::max(pHirelingInit->nLevel * pHirelingInit->nLevel * pHirelingTxtRecord->dwExpPerLvl * (pHirelingInit->nLevel + 1), 0u);
+	pHirelingInit->nDefense = std::max(pHirelingTxtRecord->dwDefense + nLevelUps * pHirelingTxtRecord->dwDefensePerLvl, 0);
+	pHirelingInit->nMinDamage = std::max(pHirelingTxtRecord->nDmgMin + (nLevelUps * pHirelingTxtRecord->nDmgPerLvl >> 3), 0);
+	pHirelingInit->nMaxDamage = std::max(pHirelingTxtRecord->nDmgMax + (nLevelUps * pHirelingTxtRecord->nDmgPerLvl >> 3), 1);
+	pHirelingInit->nShare = std::max(pHirelingTxtRecord->dwShare, 0u);
+	pHirelingInit->nResist = std::max(pHirelingTxtRecord->dwResist, 0);
+	pHirelingInit->nHireDesc = pHirelingTxtRecord->nHireDesc;
+	pHirelingInit->field_34 = 1;
+	pHirelingInit->nFlags = 0;
+	return TRUE;
 }
 
 //D2Common.0x6FDA4E20
@@ -434,15 +383,8 @@ int __stdcall MONSTERS_GetHirelingExpForNextLevel(int nLevel, int nExpPerLevel)
 //1.14d: 0x006637B0
 int __stdcall MONSTERS_GetHirelingResurrectionCost(D2UnitStrc* pHireling)
 {
-	int nLevel = STATLIST_UnitGetStatValue(pHireling, STAT_LEVEL, 0);
-	int nCost = 15 * nLevel * nLevel / 2;
-
-	if (nCost > 50000)
-	{
-		nCost = 50000;
-	}
-
-	return nCost;
+	const int nLevel = STATLIST_UnitGetStatValue(pHireling, STAT_LEVEL, 0);
+	return std::min(15 * ((nLevel * nLevel) / 2), 50000);
 }
 
 //D2Common.0x6FDA5270 (#11068)
@@ -486,7 +428,7 @@ uint32_t __stdcall D2Common_11069(D2UnitStrc* pMonster, unsigned int nIndex, uns
 	//1.14d: 0x00748924
 	static uint32_t dword_6FDE4DF0[10] =
 	{
-		' exa', ' exa', ' alf', ' alf', ' xah', ' xah', ' cam', ' cam', ' mcs', 'mcs'
+		' exa', ' exa', ' alf', ' alf', ' xah', ' xah', ' cam', ' cam', ' mcs', ' mcs'
 	};
 
 	//1.10f: D2Common.0x6FDE4E18

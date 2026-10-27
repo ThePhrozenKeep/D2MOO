@@ -356,9 +356,9 @@ struct D2MonStatsTxt
 	uint16_t wMonProp;						//0x1A
 	int16_t wMonType;						//0x1C
 	uint16_t wAI;							//0x1E
-	uint16_t wSpawn;						//0x20
-	uint8_t nSpawnX;						//0x22
-	uint8_t nSpawnY;						//0x23
+	int16_t wSpawn;							//0x20
+	int8_t nSpawnX;							//0x22
+	int8_t nSpawnY;							//0x23
 	uint8_t nSpawnMode;						//0x24
 	uint8_t unk0x25;						//0x25
 	int16_t wMinion[2];						//0x26
@@ -619,8 +619,8 @@ struct D2HirelingTxt
 	int32_t nGold;							//0x18
 	int32_t nHirelingLevel;					//0x1C
 	uint32_t dwExpPerLvl;					//0x20
-	uint32_t dwHitpoints;					//0x24
-	uint32_t dwHitpointsPerLvl;				//0x28
+	int32_t dwHitpoints;					//0x24
+	int32_t dwHitpointsPerLvl;				//0x28
 	int32_t dwDefense;						//0x2C
 	int32_t dwDefensePerLvl;				//0x30
 	int32_t nStr;							//0x34
