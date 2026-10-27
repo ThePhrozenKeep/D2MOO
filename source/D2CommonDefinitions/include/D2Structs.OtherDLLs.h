@@ -48,7 +48,7 @@ struct D2AutomapCellStrc
 struct D2AutomapLayerStrc
 {
 	uint32_t nLayerNo;							//0x00
-	uint32_t fSaved;							//0x04
+	uint32_t nCellFile;						//0x04 town automap cell file (1..3), saved in the .map layer header
 	D2AutomapCellStrc* pFloors;				//0x08
 	D2AutomapCellStrc* pWalls;				//0x0C
 	D2AutomapCellStrc* pObjects;			//0x10
