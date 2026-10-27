@@ -63,7 +63,9 @@ TEST_SUITE("D2StatesTests")
 
 				// Compare potentially modified input data
 				MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-				MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_StatFlags.get(), 2 * flag_count }), (DynamicArray<uint32_t> { original_StatFlags.get(), 2 * flag_count }), "Comparing StatFlags");
+				auto wrapped_moo_StatFlags = DynamicArray<uint32_t>{ moo_StatFlags.get(), 2 * flag_count };
+				auto wrapped_original_StatFlags = DynamicArray<uint32_t>{ original_StatFlags.get(), 2 * flag_count };
+				MOO_CHECK_EQ(wrapped_moo_StatFlags, wrapped_original_StatFlags, "Comparing StatFlags");
 			}
 		}
 	}
@@ -126,7 +128,9 @@ TEST_SUITE("D2StatesTests")
 
 				// Compare potentially modified input data
 				MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-				MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_StatFlags.get(), 2 * flag_count }), (DynamicArray<uint32_t> { original_StatFlags.get(), 2 * flag_count }), "Comparing StatFlags");
+				auto wrapped_moo_StatFlags = DynamicArray<uint32_t>{ moo_StatFlags.get(), 2 * flag_count };
+				auto wrapped_original_StatFlags = DynamicArray<uint32_t>{ original_StatFlags.get(), 2 * flag_count };
+				MOO_CHECK_EQ(wrapped_moo_StatFlags, wrapped_original_StatFlags, "Comparing StatFlags");
 			}
 		}
 	}
@@ -167,7 +171,9 @@ TEST_SUITE("D2StatesTests")
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_StatFlags.get(), 2 * flag_count }), (DynamicArray<uint32_t> { original_StatFlags.get(), 2 * flag_count }), "Comparing StatFlags");
+			auto wrapped_moo_StatFlags = DynamicArray<uint32_t>{ moo_StatFlags.get(), 2 * flag_count };
+			auto wrapped_original_StatFlags = DynamicArray<uint32_t>{ original_StatFlags.get(), 2 * flag_count };
+			MOO_CHECK_EQ(wrapped_moo_StatFlags, wrapped_original_StatFlags, "Comparing StatFlags");
 
 			// Check specific values
 			for (auto i = 0; i < flag_count; ++i)
@@ -234,7 +240,9 @@ TEST_SUITE("D2StatesTests")
 			const auto original_result = original(&original_pUnit);
 
 			// Compare return values
-			MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_result, flag_count }), (DynamicArray<uint32_t> { original_result, flag_count }), "Comparing results");
+			auto wrapped_moo_result = DynamicArray<uint32_t>{ moo_result, flag_count };
+			auto wrapped_original_result = DynamicArray<uint32_t>{ original_result, flag_count };
+			MOO_CHECK_EQ(wrapped_moo_result, wrapped_original_result, "Comparing results");
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
@@ -266,7 +274,9 @@ TEST_SUITE("D2StatesTests")
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_StatFlags.get(), 2 * flag_count }), (DynamicArray<uint32_t> { original_StatFlags.get(), 2 * flag_count }), "Comparing StatFlags");
+			auto wrapped_moo_StatFlags = DynamicArray<uint32_t>{ moo_StatFlags.get(), 2 * flag_count };
+			auto wrapped_original_StatFlags = DynamicArray<uint32_t>{ original_StatFlags.get(), 2 * flag_count };
+			MOO_CHECK_EQ(wrapped_moo_StatFlags, wrapped_original_StatFlags, "Comparing StatFlags");
 		}
 	}
 
@@ -282,7 +292,9 @@ TEST_SUITE("D2StatesTests")
 			const auto original_result = original(&original_pUnit);
 
 			// Compare return values
-			MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_result, 2 * flag_count }), (DynamicArray<uint32_t> { original_result, 2 * flag_count }), "Comparing results");
+			auto wrapped_moo_result = DynamicArray<uint32_t>{ moo_result, 2 * flag_count };
+			auto wrapped_original_result = DynamicArray<uint32_t>{ original_result, 2 * flag_count };
+			MOO_CHECK_EQ(wrapped_moo_result, wrapped_original_result, "Comparing results");
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
@@ -398,7 +410,9 @@ TEST_SUITE("D2StatesTests")
 
 			// Compare potentially modified input data
 			MOO_CHECK_EQ(moo_pUnit, original_pUnit, "Comparing pUnit");
-			MOO_CHECK_EQ((DynamicArray<uint32_t> { moo_StatFlags.get(), 2 * flag_count }), (DynamicArray<uint32_t> { original_StatFlags.get(), 2 * flag_count }), "Comparing StatFlags");
+			auto wrapped_moo_StatFlags = DynamicArray<uint32_t>{ moo_StatFlags.get(), 2 * flag_count };
+			auto wrapped_original_StatFlags = DynamicArray<uint32_t>{ original_StatFlags.get(), 2 * flag_count };
+			MOO_CHECK_EQ(wrapped_moo_StatFlags, wrapped_original_StatFlags, "Comparing StatFlags");
 		}
 	}
 
