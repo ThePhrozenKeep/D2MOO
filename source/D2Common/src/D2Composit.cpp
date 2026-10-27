@@ -14,7 +14,7 @@
 
 //D2Common.0x6FDCE260
 //1.14d: 0x006EB748
-static const D2CompositStrc stru_6FDCE260[] =
+static const D2CompositStrc gCompositWeaponClasses[] =
 {
 	{ ' sh1', WEAPONCLASS_1HS },
 	{ ' th1', WEAPONCLASS_1HT },
@@ -215,11 +215,11 @@ void __stdcall D2Common_10885_COMPOSIT_unk(D2UnitStrc* pUnit, char* szPath, int*
 //1.14d: 0x0064F020
 int __stdcall COMPOSIT_GetWeaponClassIdFromCode(int nWeaponClassCode)
 {
-	for (int i = 0; i < ARRAY_SIZE(stru_6FDCE260); ++i)
+	for (int i = 0; i < ARRAY_SIZE(gCompositWeaponClasses); ++i)
 	{
-		if (stru_6FDCE260[i].nWeaponClassCode == nWeaponClassCode)
+		if (gCompositWeaponClasses[i].nWeaponClassCode == nWeaponClassCode)
 		{
-			return stru_6FDCE260[i].nWeaponClassId;
+			return gCompositWeaponClasses[i].nWeaponClassId;
 		}
 	}
 

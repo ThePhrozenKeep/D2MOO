@@ -432,7 +432,7 @@ int32_t __fastcall PLRMODE_GetInteractUnitGUID(D2UnitStrc* pPlayer)
 //1.10f: D2Game.0x6FC7FBD0
 //1.13c: D2Game.0x6FC99210
 //1.14d: 0x0057F700
-D2UnitStrc* __fastcall D2GAME_CORPSE_Handler_6FC7FBD0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom)
+D2UnitStrc* __fastcall PLRMODE_CreateDeadBody(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, D2ActiveRoomStrc* pRoom)
 {
     if (pUnit->pInventory)
     {
@@ -802,7 +802,7 @@ void __fastcall PLRMODE_StartID_Death(D2GameStrc* pGame, D2UnitStrc* pDefender, 
 //1.14d: 0x0057FCA0
 void __fastcall PLRMODE_StartXY_Dead(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4, int32_t a5)
 {
-    D2GAME_CORPSE_Handler_6FC7FBD0(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), UNITS_GetRoom(pUnit));
+    PLRMODE_CreateDeadBody(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), UNITS_GetRoom(pUnit));
     D2GAME_KillPlayerPets_6FC7CD10(pGame, pUnit);
     
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
@@ -1365,7 +1365,7 @@ void __fastcall PLRMODE_EndAnimation(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 
     if (nAnimMode == PLRMODE_DEATH)
     {
-        D2GAME_CORPSE_Handler_6FC7FBD0(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), UNITS_GetRoom(pUnit));
+        PLRMODE_CreateDeadBody(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), UNITS_GetRoom(pUnit));
         D2GAME_KillPlayerPets_6FC7CD10(pGame, pUnit);
         
         D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);

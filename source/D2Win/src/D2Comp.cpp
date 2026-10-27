@@ -1707,7 +1707,7 @@ void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinField
 
 //D2Win.0x6F8A32B0
 //1.14d: 0x00504A20
-BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
+BOOL __stdcall D2COMP_IsItemTypeDescendant(int a1, int nItemType)
 {
 	if (!nItemType)
 	{
@@ -1857,7 +1857,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 	//	++v16;
 	//}
 	//while ((unsigned int)&v16[-40 - (_DWORD)v4] < 16);
-	//if (!sub_6F8A3570(v4) || D2Win_10143(v4, nMode))
+	//if (!D2COMP_ValidateAndLoadCOFForUnit(v4) || D2Win_10143(v4, nMode))
 	//{
 	//	v4->unk0xC8 = 0;
 	//	v4->pNext = dword_6F8FD650;
@@ -1869,7 +1869,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 
 //D2Win.0x6F8A3570
 //1.14d: 0x00504040
-int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
+int __fastcall D2COMP_ValidateAndLoadCOFForUnit(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2233,11 +2233,11 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //					v6 = *(DWORD*)(v5 + 128);
 //				}
 //				v22 = 1;
-//				if (!sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 3)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 51)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 37)
-//					|| sub_6F8A32B0(*(WORD*)(v5 + 286), 75))
+//				if (!D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 45)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 3)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 51)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 37)
+//					|| D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 75))
 //					v22 = 0;
 //				v7 = 0;
 //				if (v20 <= 0)
@@ -2246,10 +2246,10 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //					if (v22 == 1)
 //					{
 //						for (i = v20;
-//							 sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 45)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//							 || sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 50)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 50)
+//							 D2COMP_IsItemTypeDescendant(*(int*)((char*)dword_6F8BC1E0 + i), 45)
+//							 && D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 45)
+//							 || D2COMP_IsItemTypeDescendant(*(int*)((char*)dword_6F8BC1E0 + i), 50)
+//							 && D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 50)
 //							 || *(int*)((char*)dword_6F8C1520 + i);
 //							 i += 12)
 //							++v4;
@@ -2359,7 +2359,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				v4 = dword_6F8FD250[v5];
 //		}
 //		v6 = dword_6F8C1528[3 * v5];
-//		if ((v4 == 13 || v4 == 14) && a2 != 6 || sub_6F8A32B0(v6, 50))
+//		if ((v4 == 13 || v4 == 14) && a2 != 6 || D2COMP_IsItemTypeDescendant(v6, 50))
 //			v4 = dword_6F8BC1DC[3 * *(BYTE*)(v2 + 5)];
 //	}
 //	v7 = 0;
@@ -2367,7 +2367,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //	{
 //		v8 = *(BYTE*)(v2 + 6);
 //		v7 = v11 ? dword_6F8FD250[v8] : dword_6F8C1524[3 * v8];
-//		if (((v9 = dword_6F8C1528[3 * v8], v7 == 13) || v7 == 14) && v12 != 6 || sub_6F8A32B0(v9, 50))
+//		if (((v9 = dword_6F8C1528[3 * v8], v7 == 13) || v7 == 14) && v12 != 6 || D2COMP_IsItemTypeDescendant(v9, 50))
 //			v7 = dword_6F8BC1DC[3 * *(BYTE*)(v2 + 6)];
 //	}
 //	if ((v4 == 13 || v4 == 14) && v12 != 6)
@@ -2484,7 +2484,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //	v3 = a2;
 //	if ((a1 == 1 || a1 == 2 || a1 == 3 || a1 == 4) && *(BYTE*)a2 > 3u)
 //	{
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)a2], 3))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)a2], 3))
 //		{
 //			v4 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2502,7 +2502,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_13:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 16))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 16))
 //		{
 //			v6 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2520,7 +2520,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_21:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 15))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 15))
 //		{
 //			v8 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2538,7 +2538,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_29:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (!sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 51) || (v10 = 0, dword_6F8FD230 <= 0))
+//		if (!D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 51) || (v10 = 0, dword_6F8FD230 <= 0))
 //			goto LABEL_37;
 //		v11 = (int)dword_6F8C1520;
 //		while (*(DWORD*)v11 != dword_6F8BC1D8[3 * *(BYTE*)v3])
@@ -2553,9 +2553,9 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //			LABEL_37:
 //		*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //	}
-//	if (!v2 && !sub_6F8A32B0(dword_6F8C1528[3 * *(BYTE*)v3], 37))
+//	if (!v2 && !D2COMP_IsItemTypeDescendant(dword_6F8C1528[3 * *(BYTE*)v3], 37))
 //	{
-//		if (!sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 37) || (v12 = 0, dword_6F8FD230 <= 0))
+//		if (!D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 37) || (v12 = 0, dword_6F8FD230 <= 0))
 //			goto LABEL_50;
 //		v13 = (int)dword_6F8C1520;
 //		while (*(DWORD*)v13 != dword_6F8BC1D8[3 * *(BYTE*)v3])
@@ -2660,7 +2660,7 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	++v14;
 	//}
 	//while ((unsigned int)&v14[-40 - (_DWORD)pCompositeUnit] < 16);
-	//if (sub_6F8A3570(pCompositeUnit))
+	//if (D2COMP_ValidateAndLoadCOFForUnit(pCompositeUnit))
 	//{
 	//	D2Win_10143(pCompositeUnit, nMode);
 	//}
@@ -3241,7 +3241,7 @@ void __stdcall D2Win_10157()
 
 //D2Win.0x6F8A4C10
 //1.14d: 0x005055D0
-void __stdcall sub_6F8A4C10()
+void __stdcall D2COMP_InitEmblemColorTables()
 {
 	constexpr uint8_t byte_6F8BC194[] =
 	{

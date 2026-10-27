@@ -71,7 +71,7 @@ int32_t __fastcall D2Win_10177(uint8_t nAct)
 	sprintf_s(szDatFilename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.dat");
 	sprintf_s(szPL2Filename, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActNo, "pal.pl2");
 
-	const int32_t nResult = sub_6F8AE5E0(szDatFilename, szPL2Filename);
+	const int32_t nResult = PALETTE_LoadPaletteFiles(szDatFilename, szPL2Filename);
 
 	D2GFX_SetPalette(gRGBAPalette_6F9622C0);
 
@@ -80,7 +80,7 @@ int32_t __fastcall D2Win_10177(uint8_t nAct)
 
 //D2Win.0x6F8AE5E0
 //1.14d: 0x004FB1E0
-int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2FileName)
+int32_t __fastcall PALETTE_LoadPaletteFiles(const char* szDatFileName, const char* szPL2FileName)
 {
 	D2PaletteTableStrc paletteTable = {};
 
@@ -218,8 +218,8 @@ int32_t __stdcall D2Win_10028(const char* pszPalDatFilename, const char* pszPalP
 {
 	if (pszPalDatFilename)
 	{
-		sub_6F8AE5E0(pszPalDatFilename, pszPalPL2Filename);
-		sub_6F8A4C10();
+		PALETTE_LoadPaletteFiles(pszPalDatFilename, pszPalPL2Filename);
+		D2COMP_InitEmblemColorTables();
 		return 1;
 	}
 
@@ -229,8 +229,8 @@ int32_t __stdcall D2Win_10028(const char* pszPalDatFilename, const char* pszPalP
 	wsprintfA(szPalDatFilename, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.dat");
 	wsprintfA(szPalPL2Filename, "%s\\%s", "DATA\\GLOBAL", "palette\\act1\\pal.pl2");
 
-	sub_6F8AE5E0(szPalDatFilename, szPalPL2Filename);
-	sub_6F8A4C10();
+	PALETTE_LoadPaletteFiles(szPalDatFilename, szPalPL2Filename);
+	D2COMP_InitEmblemColorTables();
 
 	return 1;
 }

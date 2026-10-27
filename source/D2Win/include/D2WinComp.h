@@ -95,7 +95,7 @@ struct D2CompositeUnitStrc
 #pragma pack(pop)
 
 
-void __stdcall sub_6F8A4C10();
+void __stdcall D2COMP_InitEmblemColorTables();
 //1.10f: D2Win.0x6F8A46E0 (#10157)
 //1.14d: 0x00505550
 void __stdcall D2Win_10157();

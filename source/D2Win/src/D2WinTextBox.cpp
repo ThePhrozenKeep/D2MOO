@@ -1032,12 +1032,12 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				}
 				else
 				{
-					sub_6F8AB360(wszText, nX, nY, nBoxWidth, nColor, DRAWMODE_NORMAL, pCurrentLine->field_14 != 4 ? pCurrentLine->field_14 : 0);
+					FONT_DrawTextWithBackground(wszText, nX, nY, nBoxWidth, nColor, DRAWMODE_NORMAL, pCurrentLine->field_14 != 4 ? pCurrentLine->field_14 : 0);
 				}
 			}
 			else if (pTextBox->dwTextBoxFlags & TEXTBOXFLAG_HORIZONTAL_TICKER)
 			{
-				sub_6F8AA510(pCurrentLine->pColumns[i], nX, nY, pCurrentLine->field_14, pTextBox->field_9C, nBoxWidth);
+				FONT_DrawTickerText(pCurrentLine->pColumns[i], nX, nY, pCurrentLine->field_14, pTextBox->field_9C, nBoxWidth);
 			}
 			else if (pTextBox->dwTextBoxFlags & TEXTBOXFLAG_VERTICAL_SCROLL)
 			{
