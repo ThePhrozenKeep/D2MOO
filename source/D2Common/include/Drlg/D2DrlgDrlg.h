@@ -316,25 +316,27 @@ struct D2ActiveRoomStrc // Used to be called D2RoomStrc
 };
 #endif
 
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 struct D2RoomTileStrc
 {
 	D2DrlgRoomStrc* pDrlgRoom;				//0x00
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 	D2RoomTileStrc* pNext;					//0x04 (1.10f: 0x14)
-#else
-	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
-#endif
 	BOOL bEnabled;							//0x08
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 	D2DrlgTileDataStrc* pUnselectedTiles;	//0x0C (1.10f: 0x10)
 	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x10 (1.10f: 0x04)
 	D2DrlgTileDataStrc* pSelectedTiles;		//0x14 (1.10f: 0x0C)
+};
 #else
+struct D2RoomTileStrc
+{
+	D2DrlgRoomStrc* pDrlgRoom;				//0x00
+	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
+	BOOL bEnabled;							//0x08
 	D2DrlgTileDataStrc* pSelectedTiles;		//0x0C
 	D2DrlgTileDataStrc* pUnselectedTiles;	//0x10
 	D2RoomTileStrc* pNext;					//0x14
-#endif
 };
+#endif
 
 typedef void(__stdcall* AUTOMAPFN)(D2ActiveRoomStrc*);
 typedef void(__stdcall* TOWNAUTOMAPFN)(int32_t, int32_t, int32_t, int32_t);
