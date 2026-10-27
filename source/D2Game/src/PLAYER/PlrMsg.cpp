@@ -239,14 +239,14 @@ void __fastcall D2GAME_UpdateAttribute_6FC822D0(D2UnitStrc* pUnit, WORD nStat, u
 }
 
 //D2Game.0x6FC82360
-int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t bSkipHpCheck)
+int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* pPlayer, int32_t bSkipHpCheck)
 {
-    if (!pUnit2 || !pUnit)
+    if (!pPlayer || !pUnit)
     {
         return 0;
     }
     
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit2, __FILE__, __LINE__);
+    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     if (!pClient)
     {
         return 0;

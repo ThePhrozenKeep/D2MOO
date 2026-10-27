@@ -27,7 +27,7 @@ void __fastcall sub_6FC82270(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 //D2Game.0x6FC822D0
 void __fastcall D2GAME_UpdateAttribute_6FC822D0(D2UnitStrc* pUnit, WORD nStat, uint32_t nNewValue, D2UnitStrc* pPlayer);
 //D2Game.0x6FC82360
-int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* pUnit2, int32_t bSkipHpCheck);
+int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* pPlayer, int32_t bSkipHpCheck);
 //D2Game.0x6FC82830
 void __fastcall sub_6FC82830(D2UnitStrc* pUnit, D2ClientStrc* pClient);
 //D2Game.0x6FC828D0
