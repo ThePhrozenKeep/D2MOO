@@ -172,11 +172,11 @@ void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* 
             const int32_t nSkillLevel = SKILLS_GetSkillLevel(pMonster, pSkill, 1);
             if (pTarget && CLIENTS_IsInUnitsRoom(pTarget, pClient))
             {
-                sub_6FC3F0C0(pClient, 1u, pMonster->dwUnitId, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
+                SCMD_SendSkillUseOnUnit(pClient, 1u, pMonster->dwUnitId, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
             }
             else
             {
-                sub_6FC3F060(pClient, 1u, pMonster->dwUnitId, D2COMMON_10175_PathGetFirstPointX(pMonster->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pMonster->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
+                SCMD_SendUnitActionAtPosition(pClient, 1u, pMonster->dwUnitId, D2COMMON_10175_PathGetFirstPointX(pMonster->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pMonster->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
             }
         }
         return;

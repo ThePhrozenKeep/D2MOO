@@ -1551,7 +1551,7 @@ int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D
 		return 0;
 	}
 
-	sub_6FC385A0(pGame, pRoom);
+	GAME_ActivateRoom(pGame, pRoom);
 
 	pRoom = COLLISION_GetFreeCoordinatesEx(pRoom, pCoord, 3, 0xBE11, 7);
 	if (!pRoom)

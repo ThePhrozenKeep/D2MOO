@@ -545,7 +545,7 @@ void __fastcall ACT2Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 				}
 				else
 				{
-					sub_6FC3B2B0(pJerhyn, pQuestData->pGame);
+					GAME_RemoveUnit(pJerhyn, pQuestData->pGame);
 				}
 			}
 			else
@@ -601,7 +601,7 @@ void __fastcall ACT2Q4_InitializeJerhynMonster(D2QuestDataStrc* pQuestData, D2Un
 				return;
 			}
 
-			sub_6FC3B2B0(pJerhyn, pQuestData->pGame);
+			GAME_RemoveUnit(pJerhyn, pQuestData->pGame);
 			pQuestDataEx->bJerhynStartInitialized = 0;
 		}
 	}

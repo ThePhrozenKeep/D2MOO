@@ -137,11 +137,11 @@ void __fastcall sub_6FC81D20(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         if (pTarget && CLIENTS_IsInUnitsRoom(pTarget, pClient))
         {
-            sub_6FC3F0C0(pClient, 0, nUnitGUID, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
+            SCMD_SendSkillUseOnUnit(pClient, 0, nUnitGUID, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
         }
         else
         {
-            sub_6FC3F060(pClient, 0, nUnitGUID, D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
+            SCMD_SendUnitActionAtPosition(pClient, 0, nUnitGUID, D2COMMON_10175_PathGetFirstPointX(pUnit->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pUnit->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
         }
     }
 }
@@ -234,7 +234,7 @@ void __fastcall D2GAME_UpdateAttribute_6FC822D0(D2UnitStrc* pUnit, WORD nStat, u
     }
     else
     {
-        sub_6FC3D830(pClient, 0x20u, pUnit ? pUnit->dwUnitId : -1, nStat, nNewValue);
+        SCMD_SendUnitStat(pClient, 0x20u, pUnit ? pUnit->dwUnitId : -1, nStat, nNewValue);
     }
 }
 
@@ -334,7 +334,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
 
     if (pClientPlayerData->nPotionLifePercent != nPotionLifePercent || pClientPlayerData->nPotionManaPercent != nPotionManaPercent)
     {
-        sub_6FC3D890(pClient, nShiftedHitpoints, nShiftedMana, nStamina, nPotionLifePercent, nPotionManaPercent, nUnitX, nUnitY, nX, nY);
+        SCMD_SendVitalsAndPotionPrediction(pClient, nShiftedHitpoints, nShiftedMana, nStamina, nPotionLifePercent, nPotionManaPercent, nUnitX, nUnitY, nX, nY);
     
         pClientPlayerData->nPosX = nUnitX;
         pClientPlayerData->nPosY = nUnitY;
@@ -346,7 +346,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
     {
         if (pClientPlayerData->nHitPoints != (uint16_t)nShiftedHitpoints || pClientPlayerData->nManaPoints != (uint16_t)nShiftedMana)
         {
-            sub_6FC3D9A0(pClient, nShiftedHitpoints, nShiftedMana, nStamina, nUnitX, nUnitY, nX, nY);
+            SCMD_SendVitals(pClient, nShiftedHitpoints, nShiftedMana, nStamina, nUnitX, nUnitY, nX, nY);
 
             pClientPlayerData->nPosX = nUnitX;
             pClientPlayerData->nPosY = nUnitY;
@@ -439,7 +439,7 @@ void __fastcall sub_6FC82830(D2UnitStrc* pUnit, D2ClientStrc* pClient)
             D2ClientStrc* pPlayerClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
             D2_ASSERT(pPlayerClient);
 
-            sub_6FC3D830(pPlayerClient, 0x20u, pUnit ? pUnit->dwUnitId : -1, dword_6FD307F8[i], STATLIST_GetUnitBaseStat(pUnit, dword_6FD307F8[i], 0));
+            SCMD_SendUnitStat(pPlayerClient, 0x20u, pUnit ? pUnit->dwUnitId : -1, dword_6FD307F8[i], STATLIST_GetUnitBaseStat(pUnit, dword_6FD307F8[i], 0));
         }
     }
 }

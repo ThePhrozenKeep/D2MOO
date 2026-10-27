@@ -1458,11 +1458,11 @@ int32_t __fastcall PLRTRADE_HandleTradeButton(D2GameStrc* pGame, D2UnitStrc* pPl
                     packet78.nHeader = 0x78u;
                     strcpy_s(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__)));
                     packet78.dwPlayerGUID = pInteractPlayer->dwUnitId;
-                    sub_6FC3E0D0(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), &packet78);
+                    SCMD_SendTradePartner(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__), &packet78);
 
                     strcpy_s(packet78.szName, CLIENTS_GetName(SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__)));
                     packet78.dwPlayerGUID = pPlayer->dwUnitId;
-                    sub_6FC3E0D0(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), &packet78);
+                    SCMD_SendTradePartner(SUNIT_GetClientFromPlayer(pInteractPlayer, __FILE__, __LINE__), &packet78);
                     return 0;
                 }
 
@@ -2646,7 +2646,7 @@ void __fastcall PLRTRADE_UpdateTradeState(D2GameStrc* pGame, D2UnitStrc* pPlayer
         }
 
         GAME_LogMessage(3, "[HACKLIST]  PlayerTradeUpdate: Player %s caught in bad trade state", pPlayerData->szName);
-        sub_6FC36C20(pGame, pPlayerData->pClient->dwClientId, __FILE__, __LINE__);
+        GAME_AbortClient(pGame, pPlayerData->pClient->dwClientId, __FILE__, __LINE__);
         return;
     }
     case 14:

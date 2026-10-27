@@ -461,7 +461,7 @@ void __fastcall ACT5Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 					ITEMS_DropGoldPile(pQuestData->pGame, pQuestArg->pTarget, nMin + ITEMS_RollLimitedRandomNumber(QUESTS_GetGlobalSeed(pQuestData->pGame), nMax - nMin));
 				}
 			}
-			sub_6FC37B10(pQuestData->pGame);
+			GAME_SaveAndSendClientSaves(pQuestData->pGame);
 		}
 
 		if (pQuestData->fState != 5)
@@ -825,7 +825,7 @@ int32_t __fastcall OBJECTS_OperateFunction72_LastPortal(D2ObjOperateFnStrc* pOp,
 		LEVEL_WarpUnit(pOp->pGame, pOp->pPlayer, LEVEL_HARROGATH, 0);
 
 		D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pOp->pPlayer, "..\\D2Game/Quests/a5q6.cpp", 923);
-		sub_6FC37B10(pQuestData->pGame);
+		GAME_SaveAndSendClientSaves(pQuestData->pGame);
 
 		if (pClient && !PLAYER_IsBusy(pOp->pPlayer))
 		{

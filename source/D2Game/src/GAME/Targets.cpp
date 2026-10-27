@@ -2,7 +2,7 @@
 
 
 //D2Game.0x6FC40170
-void __fastcall D2GAME_TARGETS_First_6FC40170(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3)
+void __fastcall TARGETS_AllocPlayerNode(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData)
 {
     if (!pGame || !pUnit || pUnit->dwUnitType != UNIT_PLAYER || pUnit->dwNodeIndex != 11)
     {
@@ -27,7 +27,7 @@ void __fastcall D2GAME_TARGETS_First_6FC40170(D2GameStrc* pGame, D2UnitStrc* pUn
             memset(pTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
             pTargetNode->pUnit = pUnit;
-            pTargetNode->nNodeData = a3;
+            pTargetNode->nNodeData = nNodeData;
 
             pGame->pTargetNodes[nNodeIndex] = pTargetNode;
             pUnit->dwNodeIndex = nNodeIndex;
@@ -37,7 +37,7 @@ void __fastcall D2GAME_TARGETS_First_6FC40170(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC401F0
-void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nNodeIndex)
+void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData, int32_t nNodeIndex)
 {
     if (!pGame || !pUnit || pUnit->dwNodeIndex != 11 || nNodeIndex >= 8 || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER))
     {
@@ -59,7 +59,7 @@ void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pU
     memset(pNewTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
     pNewTargetNode->pUnit = pUnit;
-    pNewTargetNode->nNodeData = a3;
+    pNewTargetNode->nNodeData = nNodeData;
 
     pNewTargetNode->pPrevious = pTargetNode;
     pNewTargetNode->pNext = pTargetNode->pNext;
@@ -74,7 +74,7 @@ void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pU
 }
 
 //D2Game.0x6FC40280
-void __fastcall sub_6FC40280(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nNodeIndex)
+void __fastcall TARGETS_InsertUnitNode(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData, int32_t nNodeIndex)
 {
     if (!pGame || !pUnit || pUnit->dwNodeIndex != 11 || nNodeIndex < 8 || nNodeIndex >= 10 || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER))
     {
@@ -91,7 +91,7 @@ void __fastcall sub_6FC40280(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, i
     memset(pNewTargetNode, 0x00, sizeof(D2TargetNodeStrc));
 
     pNewTargetNode->pUnit = pUnit;
-    pNewTargetNode->nNodeData = a3;
+    pNewTargetNode->nNodeData = nNodeData;
 
     if (pTargetNode)
     {
@@ -133,7 +133,7 @@ void __fastcall D2GAME_FreeUnitNode_6FC40310(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FC40380
-void __fastcall D2GAME_TARGETS_Last_6FC40380(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall TARGETS_RemoveUnitNode(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (!pGame || !pUnit || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER))
     {

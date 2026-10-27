@@ -1505,7 +1505,7 @@ void __fastcall ITEMS_FreeSocketInventoryAndTimers(D2GameStrc* pGame, D2UnitStrc
         INVENTORY_FreeInventory(pItem->pInventory);
     }
 
-    sub_6FC349F0(pGame, pItem);
+    EVENT_FreeUnitTimers(pGame, pItem);
 }
 
 //D2Game.0x6FC502E0

@@ -1188,7 +1188,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
             D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, 15, 0);
             D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pOwner, pPet, nSkillId, nLevel, 0);
             UNITS_StoreOwner(pPet, pOwner);
-            sub_6FC40280(pGame, pPet, 0, 9);
+            TARGETS_InsertUnitNode(pGame, pPet, 0, 9);
             MISSILE_SetTargetY(pMissile, MISSILE_GetTargetY(pMissile) - 1);
         }
     }

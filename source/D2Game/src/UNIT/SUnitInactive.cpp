@@ -205,13 +205,13 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						{
 							if (nOldAlign == 2)
 							{
-								sub_6FC40280(pGame, pUnit, 0, 8);
+								TARGETS_InsertUnitNode(pGame, pUnit, 0, 8);
 							}
 							else
 							{
 								D2_ASSERT(nOldAlign == UNIT_ALIGNMENT_NEUTRAL);
 
-								sub_6FC40280(pGame, pUnit, 0, 9);
+								TARGETS_InsertUnitNode(pGame, pUnit, 0, 9);
 							}
 						}
 
@@ -617,7 +617,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			{
 				bCompress = 1;
 				SUNIT_SetAlignment(pUnit, 0, 1);
-				D2GAME_TARGETS_Last_6FC40380(pGame, pUnit);
+				TARGETS_RemoveUnitNode(pGame, pUnit);
 			}
 			else
 			{

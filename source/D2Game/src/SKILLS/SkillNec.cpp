@@ -586,7 +586,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
     }
 
     SUNIT_SetAlignment(pTargetUnit, 1u, 1);
-    sub_6FC40280(pGame, pTargetUnit, 0, 9);
+    TARGETS_InsertUnitNode(pGame, pTargetUnit, 0, 9);
     SKILLS_ClearMonsterMinionOwnership(pTargetUnit);
 
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
@@ -812,7 +812,7 @@ int32_t __fastcall SKILLS_AuraCallback_ApplyConfuse(D2UnitStrc* pUnit, void* pAr
     }
 
     SUNIT_SetAlignment(pUnit, 1u, 1);
-    sub_6FC40280(pParam->pGame, pUnit, 0, 9);
+    TARGETS_InsertUnitNode(pParam->pGame, pUnit, 0, 9);
     MONSTERAI_SetTargetOverride(pUnit, 3, 0);
     EVENT_SetEvent(pParam->pGame, pUnit, EVENTTYPE_AIRESET, pParam->nDuration + pParam->pGame->dwGameFrame, 0, 0);
 
@@ -825,7 +825,7 @@ void __fastcall SKILLS_CurseStateCallback_ResetAlignment(D2UnitStrc* pUnit, int3
     D2_MAYBE_UNUSED(pStatList);
     SUNIT_SetAlignment(pUnit, 0, 1);
     STATES_ToggleState(pUnit, nState, 0);
-    D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pUnit), pUnit);
+    TARGETS_RemoveUnitNode(SUNIT_GetGameFromUnit(pUnit), pUnit);
 }
 
 //D2Game.0x6FD0C2E0
@@ -1410,7 +1410,7 @@ int32_t __fastcall SKILLS_SrvDo056_Golem(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
         D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
         D2GAME_SetSummonResistance_6FD0C2E0(pUnit, pPet);
-        sub_6FC3E200(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pPet);
+        SCMD_SendUnitLifeAndPositionUpdate(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pPet);
         D2GAME_UpdateSummonAI_6FC401F0(pGame, pPet, 0, pUnit->dwNodeIndex);
         return 1;
     }
@@ -1481,7 +1481,7 @@ int32_t __fastcall SKILLS_SrvDo057_IronGolem(D2GameStrc* pGame, D2UnitStrc* pUni
     D2GAME_SKILLS_SetSummonBaseStats_6FD0CB10(pGame, pUnit, pPet, 0, nSkillLevel);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
     D2GAME_SetSummonResistance_6FD0C2E0(pUnit, pPet);
-    sub_6FC3E200(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pPet);
+    SCMD_SendUnitLifeAndPositionUpdate(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), pPet);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pPet, 0, pUnit->dwNodeIndex);
     return 1;
 }
@@ -1692,7 +1692,7 @@ int32_t __fastcall SKILLS_SrvDo060_BoneWall(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, MONUMOD_KILLMINIONSDEATH, 0);
     D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
-    sub_6FC40280(pGame, pPet, 0, 9);
+    TARGETS_InsertUnitNode(pGame, pPet, 0, 9);
 
     nTargetX = CLIENTS_GetUnitX(pPet);
     nTargetY = CLIENTS_GetUnitY(pPet);
@@ -1809,7 +1809,7 @@ int32_t __fastcall SKILLS_SrvDo062_BonePrison(D2GameStrc* pGame, D2UnitStrc* pUn
                     {
                         D2GAME_SetSummonPassiveStats_6FD0C530(pGame, pUnit, pPet, nSkillId, nSkillLevel, 0);
                         D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pPet, MONUMOD_KILLMINIONSDEATH, 0);
-                        sub_6FC40280(pGame, pPet, 0, 9);
+                        TARGETS_InsertUnitNode(pGame, pPet, 0, 9);
 
                         if (pOwner)
                         {

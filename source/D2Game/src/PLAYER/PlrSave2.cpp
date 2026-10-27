@@ -1093,7 +1093,7 @@ int32_t __fastcall PLRSAVE2_ReadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, u
         }
     }
 
-    sub_6FC3DCA0(pClient, pPlayer);
+    SCMD_SendSkillList(pClient, pPlayer);
     SKILLS_RefreshPassivesAndPetLimits(pPlayer);
 
     *ppSection = &pData[nSkills];
@@ -1711,7 +1711,7 @@ int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pCl
         }
 
         GAME_LogMessage(6, "[CLIENT]  PlayerCreate: %s", CLIENTS_GetName(pClient));
-        sub_6FC32220(pClient);
+        CLIENTS_SetPlayerUnitAlive(pClient);
 
         D2UnitStrc* pPlayer = SUNIT_AllocUnitData(UNIT_PLAYER, CLIENTS_GetClassId(pClient), 0, 0, pGame, nullptr, 0, 0, 0);
         CLIENTS_SetPlayerInClient(pClient, pPlayer);

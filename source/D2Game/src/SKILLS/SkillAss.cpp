@@ -2176,7 +2176,7 @@ void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t n
     D2_MAYBE_UNUSED(pStatList);
     SUNIT_SetAlignment(pItem, 0, 1);
     STATES_ToggleState(pItem, nState, 0);
-    D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pItem), pItem);
+    TARGETS_RemoveUnitNode(SUNIT_GetGameFromUnit(pItem), pItem);
 
     D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pItem, STATE_CONVERSION_SAVE);
     if (pConversionStatList)

@@ -900,7 +900,7 @@ void __fastcall MONSTERREGION_TrySpawnWanderingMonster(D2GameStrc* pGame, D2Acti
         return;
     }
 
-    sub_6FC40280(pGame, pMonster, 0, 8);
+    TARGETS_InsertUnitNode(pGame, pMonster, 0, 8);
     ++pMonsterRegion->unk0x2C4;
 }
 

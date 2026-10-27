@@ -48,7 +48,7 @@ int32_t __cdecl TASK_CreateQueue();
 //D2Game.0x6FC407A0 (#10042)
 BOOL __fastcall TASK_QueueGame(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink);
 //D2Game.0x6FC40930 (#10043)
-int32_t __fastcall TASK_DequeueGame(int8_t a1, int32_t* pOutBalanceTaskType);
+int32_t __fastcall TASK_DequeueGame(int8_t nTaskNumber, int32_t* pOutBalanceTaskType);
 //D2Game.0x6FC40A40 (#10044)
 int32_t __fastcall TASK_GetQueueDelay(int8_t nTaskNumber);
 //D2Game.0x6FC40B30 (#10045)
@@ -64,6 +64,6 @@ void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink);
 
 
 
-void __stdcall D2Game_10034_Return(int a1);
+void __stdcall D2Game_10034_Return(int nUnused);
 void __stdcall D2Game_10060_Return();
 void __stdcall D2Game_10061_Return();

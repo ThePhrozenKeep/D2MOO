@@ -1590,7 +1590,7 @@ void __fastcall SKILLS_AttachImpToMonster(D2GameStrc* pGame, D2UnitStrc* pUnit, 
                 UNITS_StoreOwner(pUnit, pTarget);
                 UNITS_StoreOwner(pTarget, pUnit);
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ACTIVESTATE, nSkillId);
-                sub_6FC35570(pGame, pUnit, EVENTTYPE_ACTIVESTATE, nSkillId, nSkillLevel);
+                EVENT_SetRecurringEvent(pGame, pUnit, EVENTTYPE_ACTIVESTATE, nSkillId, nSkillLevel);
                 pUnit->dwFlags &= 0xFFFFFFF1u;
                 if (pUnit->pMonsterData)
                 {

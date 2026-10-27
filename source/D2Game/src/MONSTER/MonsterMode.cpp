@@ -938,7 +938,7 @@ void __fastcall MONSTERMODE_CleanupDeath(D2GameStrc* pGame, D2UnitStrc* pUnit, D
     AIGENERAL_UpdateMinionList(pUnit);
 
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-    D2GAME_TARGETS_Last_6FC40380(pGame, pUnit);
+    TARGETS_RemoveUnitNode(pGame, pUnit);
 
     pUnit->dwFlags &= 0xFFFF7FF3u;
 

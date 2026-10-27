@@ -15984,7 +15984,7 @@ void __fastcall AITHINK_Fn127_NpcBarb(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ai
 {
 	if (pUnit->dwNodeIndex == 11)
 	{
-		sub_6FC40280(pGame, pUnit, 0, 8);
+		TARGETS_InsertUnitNode(pGame, pUnit, 0, 8);
 	}
 
 	if (pAiTickParam->pTarget)
@@ -16167,7 +16167,7 @@ void __fastcall AITHINK_Fn131_Wussie(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiT
 
 				if (pUnit->dwNodeIndex == 11)
 				{
-					sub_6FC40280(pGame, pUnit, 0, 8);
+					TARGETS_InsertUnitNode(pGame, pUnit, 0, 8);
 				}
 			}
 			else
