@@ -162,10 +162,29 @@ void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int n
 		{ 0, -1 },
 	};
 
+	//D2Common.0x6FDCE5E8 (native indexed base is one element later)
+	//1.14d: 0x006EEE38
+#ifdef NO_BUG_FIX
+	// D2MOO: tile types 0 and 13 have class -1 in dword_6FDCE650, so the lookup below reaches up to five
+	// dwords in front of this table. The original reads whatever the linker placed there: the tail of
+	// stru_6FDCE5C8, and in 1.14d also the alignment dword after it. Those words are laid out here so the
+	// read is defined and returns the original values.
+	static const int dword_6FDCE5EC_WithPrefix[] =
+	{
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+		-1, 0, 0, -1, 0, //1.14d: 0x006EEE24..0x006EEE34
+#else
+		1, -1, 0, 0, -1, //D2Common.0x6FDCE5D4..0x6FDCE5E4
+#endif
+#else
 	static const int dword_6FDCE5EC[] =
 	{
+#endif
 		23, 0, 5, 21, 17, 15, 3, 0, 9, 7, 39, 0, 0, 5, 3, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 0
 	};
+#ifdef NO_BUG_FIX
+	const int* dword_6FDCE5EC = &dword_6FDCE5EC_WithPrefix[5];
+#endif
 
 	//1.10f: D2Common.0x6FDCE650
 	//1.14d: 0x006EEEA0
@@ -201,7 +220,14 @@ void __fastcall DRLGLOGIC_SetTileGridFlags(D2UnkDrlgLogicStrc* a1, int nX, int n
 			nIndex = DRLGGRID_GetGridEntry(a1->pTileTypeGrid, nPosX, nPosY);
 		}
 
-		const int nFlags = dword_6FDCE5EC[a4 + 5 * dword_6FDCE650[nIndex] + 1];
+		const int nClass = dword_6FDCE650[nIndex];
+#ifdef NO_BUG_FIX
+		const int nFlags = dword_6FDCE5EC[a4 + 5 * nClass + 1];
+#else
+		// D2MOO: class -1 (tile types 0 and 13) has no row in dword_6FDCE5EC. Such a wall has no orientation, so it
+		// opens to no neighbour: a seed (a4 == -1) gets a region of its own, a flood reaching it from a neighbour stops.
+		const int nFlags = nClass >= 0 ? dword_6FDCE5EC[a4 + 5 * nClass + 1] : (a4 == -1 ? 1 : 0);
+#endif
 		if (nFlags & 1)
 		{
 			DRLGGRID_AlterGridFlag(a1->field_4, nPosX, nPosY, a1->nFlags, FLAG_OPERATION_OR);

@@ -2,6 +2,7 @@
 #include <doctest.h>
 
 
+#include <Drlg/D2DrlgDrlgLogic.h>
 #include <Path/Step.h>
 
 TEST_CASE("PATH_GetDirectionVector preserves native overflow behavior only with NO_BUG_FIX")
@@ -68,3 +69,65 @@ TEST_CASE("PATH_GetDirectionVector handles coincident points and the full DWORD 
     }
 }
 #endif
+
+
+namespace
+{
+// One row of three tiles: floor, a wall of the given tile type, floor. Returns which tiles the flood marked.
+struct TileGridFlagsRow
+{
+    int nRegions[3] = {};
+    int nRowOffsets[1] = {};
+    int nWalls[3] = { 0, 1, 0 };
+    int nWallRowOffsets[1] = {};
+    int nTileTypes[3] = {};
+    int nTileTypeRowOffsets[1] = {};
+    D2DrlgGridStrc tRegionGrid = {};
+    D2DrlgGridStrc tWallGrid = {};
+    D2DrlgGridStrc tTileTypeGrid = {};
+    D2DrlgRoomStrc tRoom = {};
+    D2UnkDrlgLogicStrc tLogic = {};
+
+    explicit TileGridFlagsRow(int nWallTileType)
+    {
+        DRLGGRID_FillGrid(&tRegionGrid, 3, 1, nRegions, nRowOffsets);
+        tWallGrid = { nWalls, nWallRowOffsets, 3, 1, 0 };
+        nTileTypes[1] = nWallTileType;
+        tTileTypeGrid = { nTileTypes, nTileTypeRowOffsets, 3, 1, 0 };
+        tRoom.pDrlgCoord = { 0, 0, 2, 0 };
+        tLogic.pDrlgRoom = &tRoom;
+        tLogic.field_4 = &tRegionGrid;
+        tLogic.pTileTypeGrid = &tTileTypeGrid;
+        tLogic.field_14 = &tWallGrid;
+        tLogic.nFlags = 0x10000001;
+    }
+
+    int Marked(int nSeedX)
+    {
+        DRLGLOGIC_SetTileGridFlags(&tLogic, nSeedX, 0, -1);
+        return (nRegions[0] != 0) | (nRegions[1] != 0) << 1 | (nRegions[2] != 0) << 2;
+    }
+};
+}
+
+TEST_CASE("DRLGLOGIC_SetTileGridFlags reads native data for walls without orientation only with NO_BUG_FIX")
+{
+    // Tile types 0 and 13 have no wall orientation (class -1).
+    for (int nTileType : { 0, 13 })
+    {
+        const int nFromFloor = TileGridFlagsRow(nTileType).Marked(0);
+        const int nFromWall = TileGridFlagsRow(nTileType).Marked(1);
+#ifdef NO_BUG_FIX
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+        CHECK(nFromFloor == 0b001);
+        CHECK(nFromWall == 0b111);
+#else
+        CHECK(nFromFloor == 0b111);
+        CHECK(nFromWall == 0b010);
+#endif
+#else
+        CHECK(nFromFloor == 0b001);
+        CHECK(nFromWall == 0b010);
+#endif
+    }
+}
