@@ -21,7 +21,7 @@ struct CharTemplateTxtFixture : Fixture
 		const auto working_directory = std::filesystem::current_path();
 		const auto d2common_base = reinterpret_cast<uintptr_t>(LoadLibraryA((working_directory / "D2Common.dll").string().c_str()));
 
-		auto [record_count, chartemplate] = read_bin_file<D2CharTemplateTxt>(working_directory / "data/global/excel" / "CharTemplate.bin");
+		auto [record_count, chartemplate] = read_bin_file<D2CharTemplateTxt>("CharTemplate.bin");
 
 		gnCharTemplateTxtTableRecordCount = record_count;
 		gpCharTemplateTxtTable = chartemplate.get();

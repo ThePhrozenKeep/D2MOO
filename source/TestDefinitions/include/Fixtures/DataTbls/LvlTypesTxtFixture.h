@@ -23,7 +23,7 @@ struct LvlTypesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, lvltypes] = read_bin_file<D2LvlTypesTxt>(working_directory / "data/global/excel" / "LvlTypes.bin");
+		auto [record_count, lvltypes] = read_bin_file<D2LvlTypesTxt>("LvlTypes.bin");
 
 		sgptDataTables->nLvlTypesTxtRecordCount = record_count;
 		sgptDataTables->pLvlTypesTxt = lvltypes.get();

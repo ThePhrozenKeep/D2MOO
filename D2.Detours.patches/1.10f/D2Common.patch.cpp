@@ -948,8 +948,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_RemoveNodeFromTextList                                         @10904
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetMenuType2NodeCount                                          @10905
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType2Node                                     @10906
-    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType1Or2Node                                  @10907
-    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType0Or2Node                                  @10908
+    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType0Node                                     @10907
+    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType1Node	                                    @10908
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_CreateMessageListFromTextHeader                                @10909
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_CreateTextHeaderFromMessageList                                @10910
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_SortTextNodeListByStringId                                     @10911

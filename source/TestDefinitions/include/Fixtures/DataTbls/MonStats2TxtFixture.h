@@ -23,7 +23,7 @@ struct MonStats2TxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, monstats2] = read_bin_file<D2MonStats2Txt>(working_directory / "data/global/excel" / "MonStats2.bin");
+		auto [record_count, monstats2] = read_bin_file<D2MonStats2Txt>("MonStats2.bin");
 
 		sgptDataTables->nMonStats2TxtRecordCount = record_count;
 		sgptDataTables->pMonStats2Txt = monstats2.get();

@@ -34,7 +34,7 @@ struct DynamicArray
 		template<class Visitor>																											\
 		static void Visit(Visitor& visitor, DynamicArray<TYPE>& object)																	\
 		{																																\
-			visitor.DynamicArray<&Self::data, &Self::count>(object, "data");															\
-			visitor.Field<&Self::count>(object, "count");																				\
+			visitor.template DynamicArray<&Self::data, &Self::count>(object, "data");													\
+			visitor.template Field<&Self::count>(object, "count");																		\
 		}																																\
 	};

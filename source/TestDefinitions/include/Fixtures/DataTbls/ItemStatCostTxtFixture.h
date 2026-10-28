@@ -23,7 +23,7 @@ struct ItemStatCostTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, itemstatcost] = read_bin_file<D2ItemStatCostTxt>(working_directory / "data/global/excel" / "ItemStatCost.bin");
+		auto [record_count, itemstatcost] = read_bin_file<D2ItemStatCostTxt>("ItemStatCost.bin");
 
 		sgptDataTables->nItemStatCostTxtRecordCount = record_count;
 		sgptDataTables->pItemStatCostTxt = itemstatcost.get();

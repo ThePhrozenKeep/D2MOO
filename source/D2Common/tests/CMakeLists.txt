@@ -6,94 +6,96 @@
 
 add_executable(D2CommonTests D2CommonTests.cpp D2CommonTestDefines.h)
 
-# DataTbls
-target_sources(D2CommonTests
-  PRIVATE
-    DataTbls\\AnimTblsTests.cpp
-    DataTbls\\ArenaTblsTests.cpp
-    DataTbls\\BeltsTblsTests.cpp
-    DataTbls\\FieldTblsTests.cpp
-    DataTbls\\HoradricCubeTests.cpp
-    DataTbls\\InvTblsTests.cpp
-    DataTbls\\ItemsTblsTests.cpp
-    DataTbls\\LevelsTblsTests.cpp
-    DataTbls\\MissilesTblsTests.cpp
-    DataTbls\\MonsterTblsTests.cpp
-    DataTbls\\ObjectsTblsTests.cpp
-    DataTbls\\OverlayTblsTests.cpp
-    DataTbls\\SequenceTblsTests.cpp
-    DataTbls\\SkillsTblsTests.cpp
-    DataTbls\\TokenTblsTests.cpp
-    DataTbls\\TransformTblsTests.cpp
-)
-
-# Drlg
-target_sources(D2CommonTests
-  PRIVATE
-    Drlg\\D2DrlgActivateTests.cpp
-    Drlg\\D2DrlgDrlgTests.cpp
-    Drlg\\D2DrlgDrlgAnimTests.cpp
-    Drlg\\D2DrlgDrlgGridTests.cpp
-    Drlg\\D2DrlgDrlgLogicTests.cpp
-    Drlg\\D2DrlgDrlgRoomTests.cpp
-    Drlg\\D2DrlgDrlgVerTests.cpp
-    Drlg\\D2DrlgDrlgWarpTests.cpp
-    Drlg\\D2DrlgMazeTests.cpp
-    Drlg\\D2DrlgOutDesrTests.cpp
-    Drlg\\D2DrlgOutdoorsTests.cpp
-    Drlg\\D2DrlgOutJungTests.cpp
-    Drlg\\D2DrlgOutPlaceTests.cpp
-    Drlg\\D2DrlgOutRoomTests.cpp
-    Drlg\\D2DrlgOutSiegeTests.cpp
-    Drlg\\D2DrlgOutWildTests.cpp
-    Drlg\\D2DrlgPresetTests.cpp
-    Drlg\\D2DrlgRoomTileTests.cpp
-    Drlg\\D2DrlgTileSubTests.cpp
-)
-
-# Path
-target_sources(D2CommonTests
-  PRIVATE
-    Path\\AStarTests.cpp
-    Path\\IDAStarTests.cpp
-    Path\\PathTests.cpp
-    Path\\PathMiscTests.cpp
-    Path\\PathUtilTests.cpp
-    Path\\PathWFTests.cpp
-    Path\\StepTests.cpp
-)
-
-# Units
-target_sources(D2CommonTests
-  PRIVATE
-    Units\\MissileTests.cpp
-    Units\\MissileStreamTests.cpp
-    Units\\UnitFindsTests.cpp
-    Units\\UnitRoomTests.cpp
-    Units\\UnitsTests.cpp
-)
-
-# Top-level
-target_sources(D2CommonTests
-  PRIVATE
-    D2ChatTests.cpp
-    D2CollisionTests.cpp
-    D2CompositTests.cpp
-    D2DataTblsTests.cpp
-    D2DungeonTests.cpp
-    D2EnvironmentTests.cpp
-    D2InventoryTests.cpp
-    D2ItemModsTests.cpp
-    D2ItemsTests.cpp
-    D2MonstersTests.cpp
-    D2QuestRecordTests.cpp
-    D2SeedTests.cpp
-    D2SkillsTests.cpp
-    D2StatesTests.cpp
-    D2StatListTests.cpp
-    D2TextTests.cpp
-    D2WaypointsTests.cpp
-)
+if(D2MOO_ORDINALS_VERSION STREQUAL "1.10f")
+  # DataTbls
+  target_sources(D2CommonTests
+    PRIVATE
+      DataTbls\\AnimTblsTests.cpp
+      DataTbls\\ArenaTblsTests.cpp
+      DataTbls\\BeltsTblsTests.cpp
+      DataTbls\\FieldTblsTests.cpp
+      DataTbls\\HoradricCubeTests.cpp
+      DataTbls\\InvTblsTests.cpp
+      DataTbls\\ItemsTblsTests.cpp
+      DataTbls\\LevelsTblsTests.cpp
+      DataTbls\\MissilesTblsTests.cpp
+      DataTbls\\MonsterTblsTests.cpp
+      DataTbls\\ObjectsTblsTests.cpp
+      DataTbls\\OverlayTblsTests.cpp
+      DataTbls\\SequenceTblsTests.cpp
+      DataTbls\\SkillsTblsTests.cpp
+      DataTbls\\TokenTblsTests.cpp
+      DataTbls\\TransformTblsTests.cpp
+  )
+  
+  # Drlg
+  target_sources(D2CommonTests
+    PRIVATE
+      Drlg\\D2DrlgActivateTests.cpp
+      Drlg\\D2DrlgDrlgTests.cpp
+      Drlg\\D2DrlgDrlgAnimTests.cpp
+      Drlg\\D2DrlgDrlgGridTests.cpp
+      Drlg\\D2DrlgDrlgLogicTests.cpp
+      Drlg\\D2DrlgDrlgRoomTests.cpp
+      Drlg\\D2DrlgDrlgVerTests.cpp
+      Drlg\\D2DrlgDrlgWarpTests.cpp
+      Drlg\\D2DrlgMazeTests.cpp
+      Drlg\\D2DrlgOutDesrTests.cpp
+      Drlg\\D2DrlgOutdoorsTests.cpp
+      Drlg\\D2DrlgOutJungTests.cpp
+      Drlg\\D2DrlgOutPlaceTests.cpp
+      Drlg\\D2DrlgOutRoomTests.cpp
+      Drlg\\D2DrlgOutSiegeTests.cpp
+      Drlg\\D2DrlgOutWildTests.cpp
+      Drlg\\D2DrlgPresetTests.cpp
+      Drlg\\D2DrlgRoomTileTests.cpp
+      Drlg\\D2DrlgTileSubTests.cpp
+  )
+  
+  # Path
+  target_sources(D2CommonTests
+    PRIVATE
+      Path\\AStarTests.cpp
+      Path\\IDAStarTests.cpp
+      Path\\PathTests.cpp
+      Path\\PathMiscTests.cpp
+      Path\\PathUtilTests.cpp
+      Path\\PathWFTests.cpp
+      Path\\StepTests.cpp
+  )
+  
+  # Units
+  target_sources(D2CommonTests
+    PRIVATE
+      Units\\MissileTests.cpp
+      Units\\MissileStreamTests.cpp
+      Units\\UnitFindsTests.cpp
+      Units\\UnitRoomTests.cpp
+      Units\\UnitsTests.cpp
+  )
+  
+  # Top-level
+  target_sources(D2CommonTests
+    PRIVATE
+      D2ChatTests.cpp
+      D2CollisionTests.cpp
+      D2CompositTests.cpp
+      D2DataTblsTests.cpp
+      D2DungeonTests.cpp
+      D2EnvironmentTests.cpp
+      D2InventoryTests.cpp
+      D2ItemModsTests.cpp
+      D2ItemsTests.cpp
+      D2MonstersTests.cpp
+      D2QuestRecordTests.cpp
+      D2SeedTests.cpp
+      D2SkillsTests.cpp
+      D2StatesTests.cpp
+      D2StatListTests.cpp
+      D2TextTests.cpp
+      D2WaypointsTests.cpp
+  )
+endif()
 
 get_target_property(D2CommonTestsSources D2CommonTests SOURCES)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${D2CommonTestsSources})

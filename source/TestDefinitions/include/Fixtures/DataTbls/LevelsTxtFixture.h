@@ -23,7 +23,7 @@ struct LevelsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, levels] = read_bin_file<D2LevelsTxt>(working_directory / "data/global/excel" / "Levels.bin");
+		auto [record_count, levels] = read_bin_file<D2LevelsTxt>("Levels.bin");
 
 		sgptDataTables->nLevelsTxtRecordCount = record_count;
 		sgptDataTables->pLevelsTxt = levels.get();

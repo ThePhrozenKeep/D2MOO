@@ -21,7 +21,7 @@ struct ArenaTxtFixture : Fixture
 		const auto working_directory = std::filesystem::current_path();
 		const auto d2common_base = reinterpret_cast<uintptr_t>(LoadLibraryA((working_directory / "D2Common.dll").string().c_str()));
 
-		auto [record_count, arena] = read_bin_file<D2ArenaTxt>(working_directory / "data/global/excel" / "Arena.bin");
+		auto [record_count, arena] = read_bin_file<D2ArenaTxt>("Arena.bin");
 
 		gpArenaTxtTable = arena.get();
 

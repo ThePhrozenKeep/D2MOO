@@ -43,12 +43,12 @@ D2COMMON_DLL_DECL void __stdcall TEXT_AddNodeToTextList(D2TextHeaderStrc* pTextH
 D2COMMON_DLL_DECL void __stdcall TEXT_RemoveNodeFromTextList(D2TextHeaderStrc* pTextHeader, short nStringId);
 //D2Common.0x6FDC37F0 (#10905)
 D2COMMON_DLL_DECL int __stdcall TEXT_GetMenuType2NodeCount(D2TextHeaderStrc* pTextHeader);
-//D2Common.0x6FDC33820 (#10906)
+//D2Common.0x6FDC3820 (#10906)
 D2COMMON_DLL_DECL short __stdcall TEXT_GetStringIdOfMenuType2Node(D2TextHeaderStrc* pTextHeader, int nNodeId);
 //D2Common.0x6FDC3850 (#10907)
-D2COMMON_DLL_DECL short __stdcall TEXT_GetStringIdOfMenuType1Or2Node(D2TextHeaderStrc* pTextHeader, int nNodeId);
+D2COMMON_DLL_DECL short __stdcall TEXT_GetStringIdOfMenuType0Node(D2TextHeaderStrc* pTextHeader, int nNodeId);
 //D2Common.0x6FDC3890 (#10908)
-D2COMMON_DLL_DECL short __stdcall TEXT_GetStringIdOfMenuType0Or2Node(D2TextHeaderStrc* pTextHeader, int nNodeId);
+D2COMMON_DLL_DECL short __stdcall TEXT_GetStringIdOfMenuType1Node(D2TextHeaderStrc* pTextHeader, int nNodeId);
 //D2Common.0x6FDC38C0 (#10909)
 D2COMMON_DLL_DECL void __stdcall TEXT_CreateMessageListFromTextHeader(D2TextHeaderStrc* pTextHeader, D2MessageListStrc* pMsgList);
 //D2Common.0x6FDC3970 (#10910)

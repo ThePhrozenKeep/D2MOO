@@ -23,7 +23,7 @@ struct UniquePrefixTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, uniqueprefix] = read_bin_file<D2UniquePrefixTxt>(working_directory / "data/global/excel" / "UniquePrefix.bin");
+		auto [record_count, uniqueprefix] = read_bin_file<D2UniquePrefixTxt>("UniquePrefix.bin");
 
 		sgptDataTables->nUniquePrefixTxtRecordCount = record_count;
 		sgptDataTables->pUniquePrefixTxt = uniqueprefix.get();

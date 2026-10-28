@@ -23,7 +23,7 @@ struct MonPlaceTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, monplace] = read_bin_file<D2MonPlaceTxt>(working_directory / "data/global/excel" / "MonPlace.bin");
+		auto [record_count, monplace] = read_bin_file<D2MonPlaceTxt>("MonPlace.bin");
 
 		sgptDataTables->nMonPlaceTxtRecordCount = record_count;
 		sgptDataTables->pMonPlaceTxt = monplace.get();

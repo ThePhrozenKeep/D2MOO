@@ -23,7 +23,7 @@ struct MonPropTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, monprop] = read_bin_file<D2MonPropTxt>(working_directory / "data/global/excel" / "MonProp.bin");
+		auto [record_count, monprop] = read_bin_file<D2MonPropTxt>("MonProp.bin");
 
 		sgptDataTables->nMonPropTxtRecordCount = record_count;
 		sgptDataTables->pMonPropTxt = monprop.get();

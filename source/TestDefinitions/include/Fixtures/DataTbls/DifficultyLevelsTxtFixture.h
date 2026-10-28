@@ -23,7 +23,7 @@ struct DifficultyLevelsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, difficultylevels] = read_bin_file<D2DifficultyLevelsTxt>(working_directory / "data/global/excel" / "DifficultyLevels.bin");
+		auto [record_count, difficultylevels] = read_bin_file<D2DifficultyLevelsTxt>("DifficultyLevels.bin");
 
 		sgptDataTables->nDifficultyLevelsTxtRecordCount = record_count;
 		sgptDataTables->pDifficultyLevelsTxt = difficultylevels.get();

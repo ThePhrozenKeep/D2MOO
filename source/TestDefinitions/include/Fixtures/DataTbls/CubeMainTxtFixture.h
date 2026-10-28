@@ -23,7 +23,7 @@ struct CubeMainTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, cubemain] = read_bin_file<D2CubeMainTxt>(working_directory / "data/global/excel" / "CubeMain.bin");
+		auto [record_count, cubemain] = read_bin_file<D2CubeMainTxt>("CubeMain.bin");
 
 		sgptDataTables->nCubeMainTxtRecordCount = record_count;
 		sgptDataTables->pCubeMainTxt = cubemain.get();

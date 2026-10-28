@@ -23,7 +23,7 @@ struct UniqueItemsTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, uniqueitems] = read_bin_file<D2UniqueItemsTxt>(working_directory / "data/global/excel" / "UniqueItems.bin");
+		auto [record_count, uniqueitems] = read_bin_file<D2UniqueItemsTxt>("UniqueItems.bin");
 
 		sgptDataTables->nUniqueItemsTxtRecordCount = record_count;
 		sgptDataTables->pUniqueItemsTxt = uniqueitems.get();

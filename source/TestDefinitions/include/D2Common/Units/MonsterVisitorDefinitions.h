@@ -19,7 +19,7 @@ BEGIN_VISIT(D2MonsterInteractStrc)
 	POINTER(pInteractInfo)
 END_VISIT()
 
-BEGIN_VISIT(D2UnkMonsterDataStrc)
+BEGIN_VISIT(D2MonsterLifeSyncStrc)
 	FIELD(unk0x00)
 	FIELD(nLifePercentage)
 	FIELD(unk0x08)

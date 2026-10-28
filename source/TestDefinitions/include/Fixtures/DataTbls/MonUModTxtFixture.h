@@ -23,7 +23,7 @@ struct MonUModTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, monumod] = read_bin_file<D2MonUModTxt>(working_directory / "data/global/excel" / "MonUMod.bin");
+		auto [record_count, monumod] = read_bin_file<D2MonUModTxt>("MonUMod.bin");
 
 		sgptDataTables->nMonUModTxtRecordCount = record_count;
 		sgptDataTables->pMonUModTxt = monumod.get();

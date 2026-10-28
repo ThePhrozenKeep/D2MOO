@@ -24,7 +24,7 @@ struct ItemTypesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, itemtypes] = read_bin_file<D2ItemTypesTxt>(working_directory / "data/global/excel" / "ItemTypes.bin");
+		auto [record_count, itemtypes] = read_bin_file<D2ItemTypesTxt>("ItemTypes.bin");
 
 		sgptDataTables->nItemTypesTxtRecordCount = record_count;
 		sgptDataTables->pItemTypesTxt = itemtypes.get();

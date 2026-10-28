@@ -29,11 +29,9 @@ BOOL __stdcall WAYPOINTS_GetLevelIdFromWaypointNo(short nWaypointNo, int* pLevel
 //1.14d: 0x00660E00
 BOOL __stdcall WAYPOINTS_GetWaypointNoFromLevelId(int nLevelId, short* pWaypointNo)
 {
-	D2LevelsTxt* pLevelsTxtRecord = NULL;
-
 	*pWaypointNo = 255;
 
-	pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(nLevelId);
+	D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(nLevelId);
 	if (pLevelsTxtRecord)
 	{
 		*pWaypointNo = pLevelsTxtRecord->nWaypoint;
@@ -49,7 +47,7 @@ int __stdcall WAYPOINTS_IsActivated(D2WaypointDataStrc* pData, uint16_t wField)
 	D2_ASSERT(pData);
 	D2_ASSERT(wField < gnNumberOfWaypoints);
 
-	return (pData->nFlags[wField / 16 + 1] & (1 << (wField & 15))) != 0;
+	return pData->nFlags[wField / 16 + 1] & (1 << (wField & 15));
 }
 
 //D2Common.0x6FDC3E80 (#11147)

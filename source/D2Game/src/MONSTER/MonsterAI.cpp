@@ -239,7 +239,7 @@ void __fastcall MONSTERAI_UpdateMercStatsAndSkills(D2GameStrc* pGame, D2UnitStrc
     const int32_t nDexterity = std::max(pHirelingTxtRecord->nDex + nLevelUps * pHirelingTxtRecord->nDexPerLvl / 8, 10);
     STATLIST_SetUnitStat(pHireling, STAT_DEXTERITY, nDexterity, 0);
 
-    const int32_t nHitpoints = std::max((pHirelingTxtRecord->dwHitpoints << 8) + nLevelUps * (pHirelingTxtRecord->dwHitpointsPerLvl << 8), (40u << 8));
+    const int32_t nHitpoints = std::max((pHirelingTxtRecord->dwHitpoints << 8) + nLevelUps * (pHirelingTxtRecord->dwHitpointsPerLvl << 8), (40 << 8));
     STATLIST_SetUnitStat(pHireling, STAT_MAXHP, nHitpoints, 0);
     STATLIST_SetUnitStat(pHireling, STAT_HITPOINTS, nHitpoints, 0);
 

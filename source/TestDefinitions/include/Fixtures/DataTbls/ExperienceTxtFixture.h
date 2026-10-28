@@ -23,7 +23,7 @@ struct ExperienceTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, experience] = read_bin_file<D2ExperienceTxt>(working_directory / "data/global/excel" / "Experience.bin");
+		auto [record_count, experience] = read_bin_file<D2ExperienceTxt>("Experience.bin");
 
 		sgptDataTables->pExperienceTxt = (D2ExperienceDataTbl*)experience.get();
 

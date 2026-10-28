@@ -23,7 +23,7 @@ struct BooksTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, books] = read_bin_file<D2BooksTxt>(working_directory / "data/global/excel" / "Books.bin");
+		auto [record_count, books] = read_bin_file<D2BooksTxt>("Books.bin");
 
 		sgptDataTables->pBookDataTables.nBooksTxtRecordCount = record_count;
 		sgptDataTables->pBookDataTables.pBooksTxt = books.get();

@@ -23,7 +23,7 @@ struct SuperUniquesTxtFixture : Fixture
 
 		const auto original_sgptDataTables = reinterpret_cast<D2DataTablesStrc**>(d2common_base + 0x00096A20);
 
-		auto [record_count, superuniques] = read_bin_file<D2SuperUniquesTxt>(working_directory / "data/global/excel" / "SuperUniques.bin");
+		auto [record_count, superuniques] = read_bin_file<D2SuperUniquesTxt>("SuperUniques.bin");
 
 		sgptDataTables->nSuperUniquesTxtRecordCount = record_count;
 		sgptDataTables->pSuperUniquesTxt = superuniques.get();
