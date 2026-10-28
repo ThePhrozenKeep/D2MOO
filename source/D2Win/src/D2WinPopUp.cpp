@@ -12,10 +12,13 @@
 #include "D2WinPalette.h"
 
 
+//1.10f: D2Win.0x6F96A7C8
+//1.14d: 0x0087E974
 D2WinPopUpStrc* gpPopUp;
 
 
 //D2Win.0x6F8AEAE0 (#10094)
+//1.14d: 0x005088C0
 void __stdcall POPUP_Create()
 {
 	POPUP_Destroy();
@@ -36,6 +39,7 @@ void __stdcall POPUP_Create()
 }
 
 //D2Win.0x6F8AEBA0 (#10095)
+//1.14d: 0x005085A0
 void __stdcall POPUP_Destroy()
 {
 	if (gpPopUp)
@@ -46,6 +50,7 @@ void __stdcall POPUP_Destroy()
 }
 
 //D2Win.0x6F8AEBC0
+//1.14d: 0x005085C0
 int32_t __stdcall POPUP_IsActive()
 {
 	D2WinPopUpStrc* pPopUp = gpPopUp;
@@ -66,6 +71,7 @@ int32_t __stdcall POPUP_IsActive()
 }
 
 //D2Win.0x6F8AEC10 (#10096)
+//1.14d: 0x00508610
 int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
 {
 	D2WinPopUpStrc* pPopUp = gpPopUp;
@@ -90,6 +96,7 @@ int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
 }
 
 //D2Win.0x6F8AECA0
+//1.14d: 0x005086A0
 int32_t __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinPopUpStrc* pPopUp = gpPopUp;
@@ -118,6 +125,7 @@ int32_t __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg)
 }
 
 //D2Win.0x6F8AED10
+//1.14d: 0x00508710
 int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl)
 {
 	D2WinPopUpStrc* pPopUp = (D2WinPopUpStrc*)pControl;
@@ -143,6 +151,7 @@ int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AEDB0
+//1.14d: 0x005087A0
 int32_t __fastcall POPUP_Draw(D2WinControlStrc* pControl)
 {
 	D2WinPopUpStrc* pPopUp = (D2WinPopUpStrc*)pControl;

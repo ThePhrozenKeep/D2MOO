@@ -7,6 +7,7 @@
 
 
 //D2Common.0x6FD729C0
+//1.14d: 0x0065ADC0
 void __fastcall DATATBLS_LoadPlrType_ModeTxt(HD2ARCHIVE hArchive)
 {
 	D2PlrModeTypeTxt* pPlrModeTypeTxt = NULL;
@@ -42,6 +43,7 @@ void __fastcall DATATBLS_LoadPlrType_ModeTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD72B30
+//1.14d: 0x0065AEF0
 void __fastcall DATATBLS_LoadMonModeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -74,6 +76,7 @@ void __fastcall DATATBLS_LoadMonModeTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD72E50
+//1.14d: 0x0065B1B0
 void __fastcall DATATBLS_LoadObjType_ModeTxt(HD2ARCHIVE hArchive)
 {
 	D2ObjModeTypeTxt* pObjModeTypeTxt = NULL;
@@ -109,6 +112,7 @@ void __fastcall DATATBLS_LoadObjType_ModeTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD72FC0
+//1.14d: 0x0065B2E0
 void __fastcall DATATBLS_LoadCompositTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -122,6 +126,7 @@ void __fastcall DATATBLS_LoadCompositTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD73040
+//1.14d: 0x0065B350
 void __fastcall DATATBLS_LoadArmTypeTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -135,6 +140,7 @@ void __fastcall DATATBLS_LoadArmTypeTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD730C0
+//1.14d: 0x0065B3C0
 void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_ArmtypeTxt()
 {
 	if (sgptDataTables->pPlrModeDataTables.pPlrModeTypeTxt)
@@ -169,24 +175,28 @@ void __fastcall DATATBLS_UnloadPlrMode_Type_MonMode_ObjMode_Type_Composit_Armtyp
 }
 
 //D2Common.0x6FD73150 (#10643)
+//1.14d: 0x0065B450
 D2PlrModeDataTbl* __fastcall DATATBLS_GetPlrMode_TypeDataTables()
 {
 	return &sgptDataTables->pPlrModeDataTables;
 }
 
 //D2Common.0x6FD73160 (#10644)
+//1.14d: 0x0065B460
 D2MonModeDataTbl* __fastcall DATATBLS_GetMonModeDataTables()
 {
 	return &sgptDataTables->pMonModeDataTables;
 }
 
 //D2Common.0x6FD73170 (#10645)
+//1.14d: 0x0065B470
 D2ObjModeDataTbl* __fastcall DATATBLS_GetObjMode_TypeDataTables()
 {
 	return &sgptDataTables->pObjModeDataTables;
 }
 
 //D2Common.0x6FD73180 (#10646)
+//1.14d: 0x0065B480
 D2PlrModeTypeTxt* __stdcall DATATBLS_GetPlrModeTypeTxtRecord(int nIndex, int bGetMode)
 {
 	if (nIndex >= sgptDataTables->pPlrModeDataTables.nPlrModeTypeTxtRecordCount)
@@ -212,6 +222,7 @@ D2PlrModeTypeTxt* __stdcall DATATBLS_GetPlrModeTypeTxtRecord(int nIndex, int bGe
 }
 
 //D2Common.0x6FD73230 (#10647)
+//1.14d: 0x0065B500
 D2MonModeTxt* __stdcall DATATBLS_GetMonModeTxtRecord(int nIndex, int bGetMode)
 {
 	if (nIndex >= sgptDataTables->pMonModeDataTables.nMonModeTxtRecordCount)
@@ -235,6 +246,7 @@ D2MonModeTxt* __stdcall DATATBLS_GetMonModeTxtRecord(int nIndex, int bGetMode)
 }
 
 //D2Common.0x6FD732B0 (#10648)
+//1.14d: 0x0065B570
 D2ObjModeTypeTxt* __stdcall DATATBLS_GetObjModeTypeTxtRecord(int nIndex, int bGetMode)
 {
 	if (nIndex >= sgptDataTables->pObjModeDataTables.nObjModeTypeTxtRecordCount)
@@ -257,6 +269,7 @@ D2ObjModeTypeTxt* __stdcall DATATBLS_GetObjModeTypeTxtRecord(int nIndex, int bGe
 }
 
 //D2Common.0x6FD73330 (#10649)
+//1.14d: 0x0065B5E0
 D2CompositTxt* __stdcall DATATBLS_GetCompositTxtRecord(int nComposit)
 {
 	D2_ASSERT(&sgptDataTables->pCompositTxt[nComposit]);
@@ -265,6 +278,7 @@ D2CompositTxt* __stdcall DATATBLS_GetCompositTxtRecord(int nComposit)
 }
 
 //D2Common.0x6FD73370 (#10650)
+//1.14d: 0x0065B620
 D2ArmTypeTxt* __stdcall DATATBLS_GetArmTypeTxtRecord(int nId)
 {
 	D2_ASSERT(&sgptDataTables->pArmTypeTxt[nId]);

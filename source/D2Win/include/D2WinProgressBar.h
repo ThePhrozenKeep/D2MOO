@@ -13,10 +13,14 @@ struct D2WinProgressBarStrc
 
 
 //D2Win.0x6F8AEED0
+//1.14d: 0x00507E50
 D2WinProgressBarStrc* __fastcall PROGRESSBAR_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight);
 //D2Win.0x6F8B1BF0
+//1.14d: 0x00507DB0
 int32_t __fastcall PROGRESSBAR_Destroy(D2WinControlStrc* pControl);
 //D2Win.0x6F8AEF70
+//1.14d: 0x00507D70
 int32_t __stdcall PROGRESSBAR_SetProgress(D2WinProgressBarStrc* pProgressBar, float fProgress);
 //D2Win.0x6F8AEFB0
+//1.14d: 0x00507DC0
 int32_t __fastcall PROGRESSBAR_Draw(D2WinControlStrc* pControl);

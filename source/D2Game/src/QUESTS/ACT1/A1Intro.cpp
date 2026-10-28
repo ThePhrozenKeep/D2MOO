@@ -8,6 +8,7 @@
 
 
 //D2Game.0x6FD31A98
+//1.14d: 0x007361F8
 D2NPCMessageTableStrc gpAct1IntroNpcMessages[] =
 {
 	{
@@ -38,6 +39,7 @@ D2NPCMessageTableStrc gpAct1IntroNpcMessages[] =
 
 
 //D2Game.0x6FC975E0
+//1.14d: 0x0058FA20
 void __fastcall ACT1Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -56,6 +58,7 @@ void __fastcall ACT1Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FC97640
+//1.14d: 0x0058F870
 void __fastcall ACT1Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg)
@@ -103,6 +106,7 @@ void __fastcall ACT1Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FC976C0
+//1.14d: 0x0058F8F0
 void __fastcall ACT1Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	int32_t nNpcId = -1;
@@ -156,6 +160,7 @@ void __fastcall ACT1Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2
 }
 
 //D2Game.0x6FC97770
+//1.14d: 0x0058F9C0
 bool __fastcall ACT1Intro_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	return QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pPlayer)->pQuestData[pQuest->pGame->nDifficulty], QUESTSTATEFLAG_A1Q1, QFLAG_REWARDGRANTED) != 1
@@ -164,6 +169,8 @@ bool __fastcall ACT1Intro_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t 
 }
 
 //
+//1.10f: D2Game.0x6FCA6B00
+//1.14d: 0x0058F9B0
 bool __fastcall ACT1Intro_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	*pStatus = 0;

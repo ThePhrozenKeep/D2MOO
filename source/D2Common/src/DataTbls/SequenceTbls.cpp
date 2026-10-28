@@ -6,6 +6,7 @@
 #include <D2Composit.h>
 
 //D2Common.0x6FDDE6A8
+//1.14d: 0x00746708
 D2AnimSeqTxt gPlayerSequenceHandToHand1[13] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -24,6 +25,7 @@ D2AnimSeqTxt gPlayerSequenceHandToHand1[13] =
 };
 
 //D2Common.0x6FDDE6F8
+//1.14d: 0x00746758
 D2AnimSeqTxt gPlayerSequenceHandToHand2[14] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -43,6 +45,7 @@ D2AnimSeqTxt gPlayerSequenceHandToHand2[14] =
 };
 
 //D2Common.0x6FDDE750
+//1.14d: 0x007467B0
 D2AnimSeqTxt gPlayerSequenceJab_BOW[18] =
 {
 	{ 0, PLRMODE_ATTACK1, 5, 0, ANIMSEQ_EVENT_NONE },
@@ -66,6 +69,7 @@ D2AnimSeqTxt gPlayerSequenceJab_BOW[18] =
 };
 
 //D2Common.0x6FDDE7C0
+//1.14d: 0x00746820
 D2AnimSeqTxt gPlayerSequenceJab_1HS[21] =
 {
 	{ 0, PLRMODE_ATTACK1, 2, 0, ANIMSEQ_EVENT_NONE },
@@ -92,6 +96,7 @@ D2AnimSeqTxt gPlayerSequenceJab_1HS[21] =
 };
 
 //D2Common.0x6FDDE840
+//1.14d: 0x007468A0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceJab =
 {
 	gPlayerSequenceHandToHand1, 13, 13,
@@ -100,6 +105,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceJab =
 };
 
 //D2Common.0x6FDDE8E8
+//1.14d: 0x007466DC
 D2AnimSeqTxt gPlayerSequenceSacrifice_1HT[7] =
 {
 	{ 0, PLRMODE_ATTACK2, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -112,6 +118,7 @@ D2AnimSeqTxt gPlayerSequenceSacrifice_1HT[7] =
 };
 
 //D2Common.0x6FDDE914
+//1.14d: 0x00746948
 D2AnimSeqTxt gPlayerSequenceSacrifice_STF[8] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -125,6 +132,7 @@ D2AnimSeqTxt gPlayerSequenceSacrifice_STF[8] =
 };
 
 //D2Common.0x6FDDE948
+//1.14d: 0x00746978
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceSacrifice =
 {
 	gPlayerSequenceHandToHand2, 14, 14,
@@ -135,6 +143,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceSacrifice =
 };
 
 //D2Common.0x6FDDE9F0
+//1.14d: 0x00746A20
 D2AnimSeqTxt gPlayerSequenceChastise_1HT[16] =
 {
 	{ 0, PLRMODE_SPECIAL1, 3, 0, ANIMSEQ_EVENT_NONE },
@@ -156,6 +165,7 @@ D2AnimSeqTxt gPlayerSequenceChastise_1HT[16] =
 };
 
 //D2Common.0x6FDDEA50
+//1.14d: 0x00746A80
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceChastise =
 {
 	gPlayerSequenceHandToHand2, 14, 14,
@@ -165,6 +175,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceChastise =
 };
 
 //D2Common.0x6FDDEAF8
+//1.14d: 0x00746B28
 D2AnimSeqTxt gPlayerSequenceCharge[15] =
 {
 	{ 0, PLRMODE_RUN, 0, 0, ANIMSEQ_EVENT_MELEE_ATTACK },
@@ -185,6 +196,7 @@ D2AnimSeqTxt gPlayerSequenceCharge[15] =
 };
 
 //D2Common.0x6FDDEB58
+//1.14d: 0x00746B88
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceCharge =
 {
 	gPlayerSequenceCharge, 15, 15,
@@ -198,6 +210,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceCharge =
 };
 
 //D2Common.0x6FDDEC00
+//1.14d: 0x00746C30
 D2AnimSeqTxt gPlayerSequenceDefiance_1HT[6] =
 {
 	{ 0, PLRMODE_ATTACK2, 5, 0, ANIMSEQ_EVENT_NONE },
@@ -209,6 +222,7 @@ D2AnimSeqTxt gPlayerSequenceDefiance_1HT[6] =
 };
 
 //D2Common.0x6FDDEC28
+//1.14d: 0x00746C58
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDefiance =
 {
 	gPlayerSequenceHandToHand2, 14, 14,
@@ -218,6 +232,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDefiance =
 };
 
 //D2Common.0x6FDDECD0
+//1.14d: 0x00746D00
 D2AnimSeqTxt gPlayerSequenceInferno[15] =
 {
 	{ 0, PLRMODE_CAST, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -238,6 +253,7 @@ D2AnimSeqTxt gPlayerSequenceInferno[15] =
 };
 
 //D2Common.0x6FDDED30
+//1.14d: 0x00746D60
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceInferno =
 {
 	gPlayerSequenceInferno, 15, 15,
@@ -257,6 +273,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceInferno =
 };
 
 //D2Common.0x6FDDEDD8
+//1.14d: 0x00746E08
 D2AnimSeqTxt gPlayerSequenceStrafe_2HS[13] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -275,6 +292,7 @@ D2AnimSeqTxt gPlayerSequenceStrafe_2HS[13] =
 };
 
 //D2Common.0x6FDDEE28
+//1.14d: 0x00746E58
 D2AnimSeqTxt gPlayerSequenceStrafe_2HT[20] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -300,6 +318,7 @@ D2AnimSeqTxt gPlayerSequenceStrafe_2HT[20] =
 };
 
 //D2Common.0x6FDDEEA0
+//1.14d: 0x00746ED0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceStrafe =
 {
 	gPlayerSequenceHandToHand1, 13, 13,
@@ -312,6 +331,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceStrafe =
 };
 
 //D2Common.0x6FDDEF48
+//1.14d: 0x00746F78
 D2AnimSeqTxt gPlayerSequenceImpale_BOW[21] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -338,6 +358,7 @@ D2AnimSeqTxt gPlayerSequenceImpale_BOW[21] =
 };
 
 //D2Common.0x6FDDEFC8
+//1.14d: 0x00746FF8
 D2AnimSeqTxt gPlayerSequenceImpale_1HS[24] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -367,6 +388,7 @@ D2AnimSeqTxt gPlayerSequenceImpale_1HS[24] =
 };
 
 //D2Common.0x6FDDF058
+//1.14d: 0x00747088
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceImpale =
 {
 	gPlayerSequenceHandToHand1, 13, 13,
@@ -375,6 +397,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceImpale =
 };
 
 //D2Common.0x6FDDF100
+//1.14d: 0x00747130
 D2AnimSeqTxt gPlayerSequenceFend_BOW[16] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -396,6 +419,7 @@ D2AnimSeqTxt gPlayerSequenceFend_BOW[16] =
 };
 
 //D2Common.0x6FDDF160
+//1.14d: 0x00747190
 D2AnimSeqTxt gPlayerSequenceFend_1HS[16] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -417,6 +441,7 @@ D2AnimSeqTxt gPlayerSequenceFend_1HS[16] =
 };
 
 //D2Common.0x6FDDF1C0
+//1.14d: 0x007471F0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceFend =
 {
 	gPlayerSequenceHandToHand1, 13, 13,
@@ -425,6 +450,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceFend =
 };
 
 //D2Common.0x6FDDF268
+//1.14d: 0x00747298
 D2AnimSeqTxt gPlayerSequenceWhirlwind[8] =
 {
 	{ 0, PLRMODE_ATTACK1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -438,6 +464,7 @@ D2AnimSeqTxt gPlayerSequenceWhirlwind[8] =
 };
 
 //D2Common.0x6FDDF298
+//1.14d: 0x007472C8
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceWhirlwind =
 {
 	gPlayerSequenceWhirlwind, 8, 8,
@@ -457,6 +484,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceWhirlwind =
 };
 
 //D2Common.0x6FDDF340
+//1.14d: 0x00747370
 D2AnimSeqTxt gPlayerSequenceDoubleSwing[17] =
 {
 	{ 0, PLRMODE_ATTACK1, 1, 0, ANIMSEQ_EVENT_NONE },
@@ -479,6 +507,7 @@ D2AnimSeqTxt gPlayerSequenceDoubleSwing[17] =
 };
 
 //D2Common.0x6FDDF3A8
+//1.14d: 0x007473D8
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDoubleSwing =
 {
 	gPlayerSequenceDoubleSwing, 17, 17,
@@ -498,6 +527,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDoubleSwing =
 };
 
 //D2Common.0x6FDDF450
+//1.14d: 0x00747480
 D2AnimSeqTxt gPlayerSequenceLightning[19] =
 {
 	{ 0, PLRMODE_CAST, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -522,6 +552,7 @@ D2AnimSeqTxt gPlayerSequenceLightning[19] =
 };
 
 //D2Common.0x6FDDF4C8
+//1.14d: 0x007474F8
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLightning =
 {
 	gPlayerSequenceLightning, 19, 19,
@@ -541,6 +572,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLightning =
 };
 
 //D2Common.0x6FDDF570
+//1.14d: 0x007475A0
 D2AnimSeqTxt gPlayerSequenceLeap[15] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -561,6 +593,7 @@ D2AnimSeqTxt gPlayerSequenceLeap[15] =
 };
 
 //D2Common.0x6FDDF5D0
+//1.14d: 0x00747600
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLeap =
 {
 	gPlayerSequenceLeap, 15, 15,
@@ -580,6 +613,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLeap =
 };
 
 //D2Common.0x6FDDF678
+//1.14d: 0x007476A8
 D2AnimSeqTxt gPlayerSequenceLeapAttack_HTH[22] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -607,6 +641,7 @@ D2AnimSeqTxt gPlayerSequenceLeapAttack_HTH[22] =
 };
 
 //D2Common.0x6FDDF700
+//1.14d: 0x00747730
 D2AnimSeqTxt gPlayerSequenceLeapAttack_BOW_1HT[25] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -637,6 +672,7 @@ D2AnimSeqTxt gPlayerSequenceLeapAttack_BOW_1HT[25] =
 };
 
 //D2Common.0x6FDDF798
+//1.14d: 0x007477C8
 D2AnimSeqTxt gPlayerSequenceLeapAttack_1HS_XBW[28] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -670,6 +706,7 @@ D2AnimSeqTxt gPlayerSequenceLeapAttack_1HS_XBW[28] =
 };
 
 //D2Common.0x6FDDF840
+//1.14d: 0x00747870
 D2AnimSeqTxt gPlayerSequenceLeapAttack_STF[27] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -702,6 +739,7 @@ D2AnimSeqTxt gPlayerSequenceLeapAttack_STF[27] =
 };
 
 //D2Common.0x6FDDF8E8
+//1.14d: 0x00747918
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLeapAttack =
 {
 	gPlayerSequenceLeapAttack_HTH, 22, 22,
@@ -721,6 +759,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceLeapAttack =
 };
 
 //D2Common.0x6FDDF990
+//1.14d: 0x007479C0
 D2AnimSeqTxt gPlayerSequenceDoubleThrow[12] =
 {
 	{ 0, PLRMODE_THROW, 2, 0, ANIMSEQ_EVENT_NONE },
@@ -738,6 +777,7 @@ D2AnimSeqTxt gPlayerSequenceDoubleThrow[12] =
 };
 
 //D2Common.0x6FDDF9D8
+//1.14d: 0x00747A08
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDoubleThrow =
 {
 	gPlayerSequenceDoubleThrow, 12, 12,
@@ -757,6 +797,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDoubleThrow =
 };
 
 //D2Common.0x6FDDFA80
+//1.14d: 0x00747AB0
 D2AnimSeqTxt gPlayerSequenceDragonClaw_HTH_HT1[12] =
 {
 	{ 0, PLRMODE_ATTACK2, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -774,6 +815,7 @@ D2AnimSeqTxt gPlayerSequenceDragonClaw_HTH_HT1[12] =
 };
 
 //D2Common.0x6FDDFAC8
+//1.14d: 0x00747AF8
 D2AnimSeqTxt gPlayerSequenceDragonClaw_HT2[16] =
 {
 	{ 0, PLRMODE_ATTACK2, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -795,6 +837,7 @@ D2AnimSeqTxt gPlayerSequenceDragonClaw_HT2[16] =
 };
 
 //D2Common.0x6FDDFB28
+//1.14d: 0x00747B58
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonClaw =
 {
 	gPlayerSequenceDragonClaw_HTH_HT1, 12, 12,
@@ -814,6 +857,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonClaw =
 };
 
 //D2Common.0x6FDDFBD0
+//1.14d: 0x00747C00
 D2AnimSeqTxt gPlayerSequenceProjection[19] =
 {
 	{ 0, PLRMODE_CAST, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -838,6 +882,7 @@ D2AnimSeqTxt gPlayerSequenceProjection[19] =
 };
 
 //D2Common.0x6FDDFC48
+//1.14d: 0x00747C78
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceProjection =
 {
 	gPlayerSequenceProjection, 19, 19,
@@ -857,6 +902,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceProjection =
 };
 
 //D2Common.0x6FDDFCF0
+//1.14d: 0x00747D20
 D2AnimSeqTxt gPlayerSequenceDragonTalon[20] =
 {
 	{ 0, PLRMODE_KICK, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -882,6 +928,7 @@ D2AnimSeqTxt gPlayerSequenceDragonTalon[20] =
 };
 
 //D2Common.0x6FDDFD68
+//1.14d: 0x00747D98
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonTalon =
 {
 	gPlayerSequenceDragonTalon, 20, 20,
@@ -901,6 +948,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonTalon =
 };
 
 //D2Common.0x6FDDFE10
+//1.14d: 0x00747E40
 D2AnimSeqTxt gPlayerSequenceArcticBlast[15] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -921,6 +969,7 @@ D2AnimSeqTxt gPlayerSequenceArcticBlast[15] =
 };
 
 //D2Common.0x6FDDFE70
+//1.14d: 0x00747EA0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceArcticBlast =
 {
 	gPlayerSequenceArcticBlast, 15, 15,
@@ -940,6 +989,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceArcticBlast =
 };
 
 //D2Common.0x6FDDFF18
+//1.14d: 0x00747F48
 D2AnimSeqTxt gPlayerSequenceDragonBreath[17] =
 {
 	{ 0, PLRMODE_SPECIAL1, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -962,6 +1012,7 @@ D2AnimSeqTxt gPlayerSequenceDragonBreath[17] =
 };
 
 //D2Common.0x6FDDFF80
+//1.14d: 0x00747FB0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonBreath =
 {
 	gPlayerSequenceDragonBreath, 17, 17,
@@ -981,6 +1032,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonBreath =
 };
 
 //D2Common.0x6FDE0028
+//1.14d: 0x00748058
 D2AnimSeqTxt gPlayerSequenceDragonFlight[23] =
 {
 	{ 0, PLRMODE_CAST, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -1009,6 +1061,7 @@ D2AnimSeqTxt gPlayerSequenceDragonFlight[23] =
 };
 
 //D2Common.0x6FDE00B8
+//1.14d: 0x007480E8
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonFlight =
 {
 	gPlayerSequenceDragonFlight, 23, 23,
@@ -1028,6 +1081,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceDragonFlight =
 };
 
 //D2Common.0x6FDE0160
+//1.14d: 0x00748190
 D2AnimSeqTxt gPlayerSequenceUnmorph[16] =
 {
 	{ 0, PLRMODE_SPECIAL1, 15, 0, ANIMSEQ_EVENT_NONE },
@@ -1049,6 +1103,7 @@ D2AnimSeqTxt gPlayerSequenceUnmorph[16] =
 };
 
 //D2Common.0x6FDE01C0
+//1.14d: 0x007481F0
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceUnmorph =
 {
 	gPlayerSequenceUnmorph, 16, 16,
@@ -1068,6 +1123,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceUnmorph =
 };
 
 //D2Common.0x6FDE0268
+//1.14d: 0x00748298
 D2AnimSeqTxt gPlayerSequenceBladeFury[19] =
 {
 	{ 0, PLRMODE_CAST, 0, 0, ANIMSEQ_EVENT_NONE },
@@ -1092,6 +1148,7 @@ D2AnimSeqTxt gPlayerSequenceBladeFury[19] =
 };
 
 //D2Common.0x6FDE02E0
+//1.14d: 0x00748310
 D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceBladeFury =
 {
 	gPlayerSequenceBladeFury, 19, 19,
@@ -1111,6 +1168,7 @@ D2PlayerWeaponSequencesStrc gPlayerWeaponsSequenceBladeFury =
 };
 
 //D2Common.0x6FDE0388
+//1.14d: 0x007483B8
 D2PlayerWeaponSequencesStrc* gPlayerWeaponsSequenceTable[24] =
 {
 	NULL,
@@ -1141,6 +1199,7 @@ D2PlayerWeaponSequencesStrc* gPlayerWeaponsSequenceTable[24] =
 
 //D2Common.0x6FDE03E8
 //Note: This should really just be an array since the indices are ordered anyway...
+//1.14d: 0x00748418
 static const int gWeaponIndexToClassMap[NUM_WEAPON_CLASSES][2] =
 {
 	{ 0, WEAPONCLASS_HTH },
@@ -1162,6 +1221,7 @@ static const int gWeaponIndexToClassMap[NUM_WEAPON_CLASSES][2] =
 
 
 //D2Common.0x6FD727A0 (#10682)
+//1.14d: 0x006633B0
 D2AnimSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit)
 {
 	D2AnimSeqRecordStrc* pSeqRecord = DATATBLS_GetSeqRecordFromUnit(pUnit);
@@ -1174,6 +1234,7 @@ D2AnimSeqTxt* __stdcall DATATBLS_GetMonSeqTxtRecordFromUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD727C0
+//1.14d: 0x00663310
 D2AnimSeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 {
 	if (D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit))
@@ -1218,6 +1279,7 @@ D2AnimSeqRecordStrc* __fastcall DATATBLS_GetSeqRecordFromUnit(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD728A0 (#10683)
+//1.14d: 0x006633D0
 int __stdcall DATATBLS_GetSeqFramePointsCount(D2UnitStrc* pUnit)
 {
 	D2AnimSeqRecordStrc* pSeqRecord = DATATBLS_GetSeqRecordFromUnit(pUnit);
@@ -1230,6 +1292,7 @@ int __stdcall DATATBLS_GetSeqFramePointsCount(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD728C0 (#10684)
+//1.14d: 0x006633F0
 int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit)
 {
 	D2AnimSeqRecordStrc* pSeqRecord = DATATBLS_GetSeqRecordFromUnit(pUnit);
@@ -1242,6 +1305,7 @@ int __stdcall DATATBLS_GetSeqFrameCount(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FD728E0 (#10685)
+//1.14d: 0x00663410
 void __stdcall DATATBLS_ComputeSequenceAnimation(D2AnimSeqTxt* pMonSeqTxt, int nTargetFramePoint, int nCurrentFramePoint, unsigned int* pMode, unsigned int* pFrame, int* pDirection, int* pEvent)
 {
 	if (pMonSeqTxt)
@@ -1281,6 +1345,7 @@ void __stdcall DATATBLS_ComputeSequenceAnimation(D2AnimSeqTxt* pMonSeqTxt, int n
 }
 
 //D2Common.0x6FD72990 (#10686)
+//1.14d: 0x006634C0
 void __stdcall DATATBLS_GetSequenceEvent(D2AnimSeqTxt* pMonSeqTxt, int nSeqFramePoint, int* pEvent)
 {
 	if (pMonSeqTxt)
@@ -1294,6 +1359,7 @@ void __stdcall DATATBLS_GetSequenceEvent(D2AnimSeqTxt* pMonSeqTxt, int nSeqFrame
 }
 
 //D2Common.0x6FD6F050
+//1.14d: 0x00659C60
 void __fastcall DATATBLS_LoadMonSeqTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -1329,6 +1395,7 @@ void __fastcall DATATBLS_LoadMonSeqTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD6F200 (#11262)
+//1.14d: 0x00659E30
 D2AnimSeqRecordStrc* __stdcall DATATBLS_GetMonSeqTableRecord(int nSequence)
 {
 	if (nSequence >= 0 && nSequence < sgptDataTables->nMonSeqTableRecordCount)

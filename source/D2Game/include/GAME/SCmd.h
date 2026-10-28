@@ -6,204 +6,303 @@
 
 
 //D2Game.0x6FC3C640
+//1.14d: 0x0053B1B0
 int32_t __fastcall D2GAME_PACKETS_SendGameListEntry(int32_t nClientId, int16_t nGameId, int16_t nClientCount, const char* szGameName);
 //D2Game.0x6FC3C690
+//1.14d: 0x0053B220
 void __fastcall D2GAME_PACKETS_SendGameLeft(int32_t nClientId);
 //D2Game.0x6FC3C6B0
+//1.14d: 0x0053B240
 void __fastcall D2GAME_PACKETS_SendGameExit(int32_t nClientId);
 //D2Game.0x6FC3C6D0
+//1.14d: 0x0053B260
 void __fastcall D2GAME_PACKETS_SendSystemError(int32_t nClientId, uint32_t nErrorCode);
 //D2Game.0x6FC3C6F0
+//1.14d: 0x0053B320
 void __fastcall D2GAME_PACKETS_SendHeaderOnlyPacket(D2ClientStrc* pClient, uint8_t nHeader);
 //D2Game.0x6FC3C710
+//1.14d: 0x0053B280
 void __fastcall D2GAME_PACKETS_SendPacket_6FC3C710(D2ClientStrc* pClient, void* pPacket, int32_t nPacketSize);
 //D2Game.0x6FC3C7C0
+//1.14d: 0x0053B340
 void __fastcall D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(D2ClientStrc* pClient, char nHeader, D2GameStrc* pGame);
 //D2Game.0x6FC3C810
+//1.14d: 0x0053B390
 void __fastcall D2GAME_PACKETS_SendPacket0x03_6FC3C810(D2ClientStrc* pClient, char nHeader, char nAct, int32_t nInitSeed, int32_t nObjectSeed, int16_t nTownId);
 //D2Game.0x6FC3C850
+//1.14d: 0x0053B3D0
 void __fastcall D2GAME_PACKETS_SendPacketSize06_6FC3C850(D2ClientStrc* pClient, DWORD nHeader, DWORD dwUnitType, DWORD dwUnitId);
 //D2Game.0x6FC3C880
+//1.14d: 0x0053B400
 void __fastcall D2GAME_SendPacketSize05_6FC3C880(D2ClientStrc* pClient, char nHeader, int32_t nArg);
 //D2Game.0x6FC3C8A0
+//1.14d: 0x0053B430
 void __fastcall D2GAME_PACKETS_SendPacket0x0C_6FC3C8A0(D2ClientStrc* pClient, char nHeader, D2C_UnitTypes nUnitType, int32_t nUnitGUID, char a5, char nHitClass, char nLifePct);
 //D2Game.0x6FC3C8E0
+//1.14d: 0x0053B470
 void __fastcall D2GAME_PACKETS_SendPacket0x0E_6FC3C8E0(D2ClientStrc* pClient, char nHeader, char nUnitType, int32_t nUnitGUID, char a5, char a6, int32_t nAnimMode);
 //D2Game.0x6FC3C920
+//1.14d: 0x0053B4B0
 void __fastcall D2GAME_PACKETS_SendPacket0x0D_6FC3C920(D2ClientStrc* pClient, char nPacketId, int32_t nUnitType, int32_t nUnitId, char nHitClass, WORD nX, WORD nY, char nHitType, char nLife);
 //D2Game.0x6FC3C9A0
+//1.14d: 0x0053B520
 void __fastcall D2GAME_PACKETS_SendPacket0x10_6FC3C9A0(D2ClientStrc* pClient, char nHeader, char nUnitType, int32_t nUnitGUID, char nFlags, char nTargetType, int32_t nTargetGUID, int16_t nCurrentPosX, int16_t nCurrentPosY);
 //D2Game.0x6FC3CA00
+//1.14d: 0x0053B570
 void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, char nHeader, uint8_t bTOU, int32_t nUnitGUID, char nFlags, int16_t nDestPosX, int16_t nDestPosY, char a8, int16_t nCurrentPosX, int16_t nCurrentPosY);
 //D2Game.0x6FC3CA90
+//1.14d: 0x0053B5F0
 void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CA90(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int8_t a5, int32_t a6, int8_t a7);
 //D2Game.0x6FC3CBC0
+//1.14d: 0x0053B710
 void __fastcall D2GAME_PACKETS_SendPacket0x67_6FC3CBC0(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int16_t nX, int16_t nY, int8_t a7);
 //D2Game.0x6FC3CCB0
+//1.14d: 0x0053B7F0
 void __fastcall D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int8_t a5, int32_t a6, int8_t a7, int8_t a8, int8_t a9);
 //D2Game.0x6FC3CDE0
+//1.14d: 0x0053B910
 void __fastcall D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(D2ClientStrc* pClient, uint8_t nHeader, int32_t nUnitGUID, int8_t a4, int16_t nX, int16_t nY, int8_t a7, int8_t a8, int8_t a9);
 //D2Game.0x6FC3CEE0
+//1.14d: 0x0053B9F0
 void __fastcall D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(D2ClientStrc* pClient, char nHeader, int32_t nUnitGUID, char nAction, char nTargetType, int32_t nTargetGUID, char nDirection);
 //D2Game.0x6FC3CF30
+//1.14d: 0x0053BA40
 void __fastcall D2GAME_PACKETS_SendPacket0x69_6FC3CF30(D2ClientStrc* pClient, char nHeader, int32_t nUnitGUID, char nAction, int16_t nX, int16_t nY, char nModeData, char nHitClass);
 //D2Game.0x6FC3CF90
+//1.14d: 0x0053BAA0
 void __fastcall D2GAME_PACKETS_SendPacket0x6C_6FC3CF90(D2ClientStrc* pClient, char nHeader, int32_t nUnitGUID, char nAction, char nTargetType, int32_t nTargetGUID, char nModeData, int16_t nCurrentPosX, int16_t nCurrentPosY);
 //D2Game.0x6FC3D000
+//1.14d: 0x0053BB00
 void __fastcall D2GAME_PACKETS_SendPacket0x6B_6FC3D000(D2ClientStrc* pClient, char nHeader, int32_t nUnitGUID, char nAction, int16_t nX, int16_t nY, char nModeData, char nHitClass, int16_t nCurrentPosX, int16_t nCurrentPosY);
 //D2Game.0x6FC3D080
+//1.14d: 0x0053BB70
 void __fastcall D2GAME_PACKETS_SendPacket0x6D_6FC3D080(D2ClientStrc* pClient, DWORD dwUnitId, WORD nX, WORD nY, BYTE nUnitLife);
 //D2Game.0x6FC3D0D0
+//1.14d: 0x0053BC10
 void __fastcall D2GAME_PACKETS_SendPacket0x15_6FC3D0D0(D2ClientStrc* pClient, char nHeader, char nUnitType, int32_t nUnitGUID, int16_t nPosX, int16_t nPosY, char a7);
 //D2Game.0x6FC3D120
+//1.14d: 0x0053BC50
 void __fastcall D2GAME_PACKETS_SendPacket0x07_6FC3D120(D2ClientStrc* pClient, uint8_t nAreaId, uint16_t nTileX, uint16_t nTileY);
 //D2Game.0x6FC3D160
+//1.14d: 0x0053BC90
 void __fastcall D2GAME_PACKETS_SendPacket0x08_6FC3D160(D2ClientStrc* pClient, uint8_t nAreaId, uint16_t nTileX, uint16_t nTileY);
 //D2Game.0x6FC3D1A0
+//1.14d: 0x0053BCD0
 void __fastcall D2GAME_PACKETS_SendPacket0x09_6FC3D1A0(D2ClientStrc* pClient, BYTE nHeader, BYTE nUnitType, DWORD nUnitGUID, BYTE a5, WORD nPosX, WORD nPosY);
 //D2Game.0x6FC3D1F0
+//1.14d: 0x0053E8F0
 void __fastcall SCMD_SendPlayerSpawnAndPartyRoster(D2ClientStrc* pClient, int32_t nUnitGUID, uint8_t nClassId, const char* szName, int16_t nX, int16_t nY);
 //D2Game.0x6FC3D300
+//1.14d: 0x0053BD10
 void __fastcall D2GAME_PACKETS_SendPacket0x51_6FC3D300(D2ClientStrc* pClient, char nHeader, uint8_t nUnitType, int32_t nUnitGUID, int16_t nObjectId, int16_t nX, int16_t nY, char nAnimMode, char nInteractType);
 //D2Game.0x6FC3D3A0
+//1.14d: 0x0053BDA0
 void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(D2ClientStrc* pClient, char alw0x0A, char nUnitType, int32_t nUnitId);
 //D2Game.0x6FC3D3D0
+//1.14d: 0x0053E9B0
 void __fastcall D2GAME_PACKETS_SendPacket0x19_6FC3D3D0(D2ClientStrc* pClient, int32_t nValue, int32_t nPreviousGold);
 //D2Game.0x6FC3D410
+//1.14d: 0x0053BDD0
 void __fastcall D2GAME_PACKETS_SendPacket0x1A_B_C_6FC3D410(D2ClientStrc* pClient, int32_t nExperience, int32_t nPreviousExperience);
 //D2Game.0x6FC3D480
+//1.14d: 0x0053BE40
 void __fastcall D2GAME_PACKETS_SendPacket0x1D_E_F_6FC3D480(D2ClientStrc* pClient, uint16_t nStatId, uint32_t nValue);
 //D2Game.0x6FC3D520
+//1.14d: 0x0053BEE0
 void __fastcall D2GAME_PACKETS_SendPacket0x9E_9F_A0_6FC3D520(D2ClientStrc* pClient, D2UnitStrc* pUnit, uint16_t nStatId, uint32_t nValue);
 //D2Game.0x6FC3D610
+//1.14d: 0x0053BFD0
 void __fastcall D2GAME_PACKETS_SendPacket0xA0_A1_A2_6FC3D610(D2ClientStrc* pClient, D2UnitStrc* pUnit, uint16_t nStatId, uint32_t nBaseValue, uint32_t nFullValue);
 //D2Game.0x6FC3D730
+//1.14d: 0x0053C0E0
 void __fastcall D2GAME_PACKETS_SendPacket0xA3_6FC3D730(D2ClientStrc* pClient, BYTE a2, WORD a3, WORD a4, BYTE a5, int32_t a6, BYTE a7, int32_t a8, int32_t a9, int32_t a10);
 //D2Game.0x6FC3D7B0
+//1.14d: 0x0053C150
 void __fastcall D2GAME_PACKETS_SendPacket0xAB_6FC3D7B0(D2ClientStrc* pClient, uint8_t nUnitType, int32_t dwUnitId, uint8_t nUnitLife);
 //D2Game.0x6FC3D7F0
+//1.14d: 0x0053C190
 void __fastcall D2GAME_PACKETS_SendPacket0xA5_6FC3D7F0(D2ClientStrc* pClient, uint8_t a2, int32_t a3, uint16_t a4);
 //D2Game.0x6FC3D830
+//1.14d: 0x0053C1D0
 void __fastcall SCMD_SendUnitStat(D2ClientStrc* pClient, BYTE nHeader, int32_t nUnitGUID, WORD nStatId, int32_t nValue);
 //D2Game.0x6FC3D890
+//1.14d: 0x0053C230
 void __fastcall SCMD_SendVitalsAndPotionPrediction(D2ClientStrc* pClient, uint16_t nHitpoints, uint16_t nMana, uint16_t nStamina, uint8_t nPotionLifePercent, uint8_t nPotionManaPercent, uint16_t nPosX, uint16_t nPosY, uint8_t nTargetOffsetX, uint8_t nTargetOffsetY);
 //D2Game.0x6FC3D9A0
+//1.14d: 0x0053C320
 void __fastcall SCMD_SendVitals(D2ClientStrc* pClient, uint16_t nHitpoints, uint16_t nMana, uint16_t nStamina, uint16_t nPosX, uint16_t nPosY, uint8_t nTargetOffsetX, uint8_t nTargetOffsetY);
 //D2Game.0x6FC3DA90
+//1.14d: 0x0053C3F0
 void __fastcall D2GAME_PACKETS_SendPacket0x96_WalkVerify_6FC3DA90(D2ClientStrc* pClient, uint16_t nStamina, uint16_t nPosX, uint16_t nPosY, uint8_t nTargetOffsetX, uint8_t nTargetOffsetY);
 //D2Game.0x6FC3DB50
+//1.14d: 0x0053C4A0
 void __fastcall D2GAME_PACKETS_SendPacket0x21_UpdateSkills_6FC3DB50(D2ClientStrc* pClient, D2UnitStrc* pUnit, WORD nSkillId, BYTE nSkillLevel, BYTE a4);
 //D2Game.0x6FC3DBE0
+//1.14d: 0x0053C520
 void __fastcall D2GAME_PACKETS_SendPacket0x22_6FC3DBE0(D2ClientStrc* pClient, BYTE nUnitType, int32_t nUnitGUID, int16_t nSkillId, char nQuantity);
 //D2Game.0x6FC3DC60
+//1.14d: 0x0053C590
 void __fastcall D2GAME_PACKETS_SendPacket0x23_6FC3DC60(D2ClientStrc* pClient, BYTE nUnitType, int32_t nUnitGUID, BYTE bLeftSkill, WORD nSkillId, int32_t nSkillOwnerGUID);
 //D2Game.0x6FC3DCA0
+//1.14d: 0x0053C5D0
 void __fastcall SCMD_SendSkillList(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3DDF0
+//1.14d: 0x0053C750
 void __fastcall D2GAME_PACKETS_SendPacket0x26_ServerMessage_6FC3DDF0(D2ClientStrc* pClient, D2GSPacketSrv26* pMsg);
 //D2Game.0x6FC3DEC0
+//1.14d: 0x0053C850
 void __fastcall D2GAME_PACKETS_SendPacket0x5A_6FC3DEC0(D2ClientStrc* pClient, D2GSPacketSrv5A* pPacket);
 //D2Game.0x6FC3DF20
+//1.14d: 0x0053C8D0
 void __fastcall D2GAME_PACKETS_SendPacket0x27_6FC3DF20(D2ClientStrc* pClient, D2GSPacketSrv27* pPacket);
 //D2Game.0x6FC3DF50
+//1.14d: 0x0053C900
 void __fastcall D2GAME_SendPacket0x53_6FC3DF50(D2ClientStrc* pClient, D2GSPacketSrv53* pPacket);
 //D2Game.0x6FC3DF80
+//1.14d: 0x0053C940
 void __fastcall SCMD_SendPlayerJoinAndPets(D2ClientStrc* pClient1, D2UnitStrc* pPlayer, D2ClientStrc* pClient2);
 //D2Game.0x6FC3E090
+//1.14d: 0x0053CA90
 void __fastcall D2GAME_PACKETS_SendPacket0x5C_6FC3E090(D2ClientStrc* pClient, DWORD dwUnitId);
 //D2Game.0x6FC3E0B0
+//1.14d: 0x0053CAB0
 void __fastcall D2GAME_PACKETS_SendPacket0x77_Ui_6FC3E0B0(D2ClientStrc* pClient, BYTE nUiNo);
 //D2Game.0x6FC3E0D0
+//1.14d: 0x0053CAD0
 void __fastcall SCMD_SendTradePartner(D2ClientStrc* pClient, D2GSPacketSrv78* pPacket);
 //D2Game.0x6FC3E100
+//1.14d: 0x0053CB30
 void __fastcall D2GAME_PACKETS_SendPacket0x7A_6FC3E100(D2ClientStrc* pClient, char a2, char a3, int32_t a4, int32_t a5, int16_t a6);
 //D2Game.0x6FC3E160
+//1.14d: 0x0053CB80
 void __fastcall D2GAME_PACKETS_SendPacket0x81_6FC3E160(D2ClientStrc* pClient, char a2, int32_t a3, int32_t a4, int16_t a5, int32_t a6, int32_t a7, int32_t a8);
 //D2Game.0x6FC3E1D0
+//1.14d: 0x0053CBE0
 void __fastcall D2GAME_PACKETS_SendPacket0x79_6FC3E1D0(D2ClientStrc* pClient, int32_t nGold, char bOwnGold);
 //D2Game.0x6FC3E200
+//1.14d: 0x0053CDF0
 void __fastcall SCMD_SendUnitLifeAndPositionUpdate(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3E3D0
 D2MonsterLifeSyncStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUnit);
 //D2Game.0x6FC3E3F0
+//1.14d: 0x0053CC10
 int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2MonsterLifeSyncStrc* pLifeUpdateState, int32_t nCurrentLifePercentage);
 //D2Game.0x6FC3E440
+//1.14d: 0x0053CC90
 int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t nLifePercentage, int32_t nLevelId);
 //D2Game.0x6FC3E570
+//1.14d: 0x0053EAE0
 void __fastcall D2GAME_SendPacket0x9C_6FC3E570(D2ClientStrc* pClient, D2UnitStrc* pItem, char nAction, DWORD dwFlag, int32_t bGamble);
 //D2Game.0x6FC3E6F0
+//1.14d: 0x0053CEF0
 void __fastcall D2GAME_SendPacket0x9D_6FC3E6F0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, char nAction, DWORD dwFlag, int32_t bGamble);
 //D2Game.0x6FC3E850
+//1.14d: 0x0053EC00
 void __fastcall D2GAME_SendP0x9C_ItemAction_AddToGround_6FC3E850(D2ClientStrc* pClient, D2UnitStrc* pItem, DWORD dwFlag);
 //D2Game.0x6FC3E870
+//1.14d: 0x0053EC20
 void __fastcall D2GAME_SendP0x9C_ItemAction_GroundToCursor_6FC3E870(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3E8E0
+//1.14d: 0x0053EC90
 void __fastcall D2GAME_SendP0x9C_ItemAction_DropToGround_6FC3E8E0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3E930
+//1.14d: 0x0053ECF0
 void __fastcall D2GAME_SendP0x9C_ItemAction_OnGround_6FC3E930(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3E980
+//1.14d: 0x0053ED50
 void __fastcall D2GAME_SendP0x9C_ItemAction_PutInContainer_6FC3E980(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3E9D0
+//1.14d: 0x0053D010
 void __fastcall D2GAME_UpdateClientItem_6FC3E9D0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwCmdFlag);
 //D2Game.0x6FC3EA50
+//1.14d: 0x0053D090
 void __fastcall D2GAME_SendP0x9D_ItemAction_Equip_6FC3EA50(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EA70
+//1.14d: 0x0053D0B0
 void __fastcall D2GAME_SendP0x9D_ItemAction_IndirectlySwapBodyItem_6FC3EA70(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EA90
+//1.14d: 0x0053D0D0
 void __fastcall D2GAME_SendP0x9D_ItemAction_Unequip_6FC3EA90(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EAB0
+//1.14d: 0x0053D0F0
 void __fastcall D2GAME_SendP0x9D_ItemAction_SwapBodyItem_6FC3EAB0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EAD0
+//1.14d: 0x0053D110
 void __fastcall D2GAME_SendP0x9D_ItemAction_WeaponSwitch_6FC3EAD0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EAF0
+//1.14d: 0x0053EDB0
 void __fastcall D2GAME_SendP0x9C_ItemAction_AddQuantity_6FC3EAF0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EB40
+//1.14d: 0x0053EE10
 void __fastcall D2GAME_SendP0x9C_ItemAction_SwapInContainer_6FC3EB40(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EB90
+//1.14d: 0x0053EE70
 void __fastcall D2GAME_SendP0x9C_ItemAction_PutInBelt_6FC3EB90(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EBE0
+//1.14d: 0x0053EED0
 void __fastcall D2GAME_SendP0x9C_ItemAction_RemoveFromBelt_6FC3EBE0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlag);
 //D2Game.0x6FC3EC00
+//1.14d: 0x0053EEF0
 void __fastcall D2GAME_SendP0x9C_ItemAction_SwapInBelt_6FC3EC00(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EC20
+//1.14d: 0x0053D130
 void __fastcall D2GAME_PACKETS_SendPacket0x3E_6FC3EC20(D2ClientStrc* pClient, D2UnitStrc* pItem, uint8_t a3, int32_t nStatId, uint32_t nValue, uint16_t nStatLayer);
 //D2Game.0x6FC3EDC0
+//1.14d: 0x0053D220
 void __fastcall D2GAME_PACKETS_SendPacket0x3F_6FC3EDC0(D2ClientStrc* pClient, D2UnitStrc* pUnit, char nCursorIcon, int32_t bClearCursor, int32_t a5, int16_t nSkillId);
 //D2Game.0x6FC3EE20
+//1.14d: 0x0053D2C0
 void __fastcall D2GAME_SendP0x9D_ItemAction_AutoUnequip_6FC3EE20(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EE40
+//1.14d: 0x0053D2E0
 void __fastcall D2GAME_PACKETS_SendPacket0x42_6FC3EE40(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3EEA0
+//1.14d: 0x0053EF10
 void __fastcall D2GAME_SendP0x9C_ItemAction_ToCursor_6FC3EEA0(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem);
 //D2Game.0x6FC3EEC0
+//1.14d: 0x0053D350
 void __fastcall D2GAME_SendP0x9D_ItemAction_Unknown0x14_6FC3EEC0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EEE0
+//1.14d: 0x0053D370
 void __fastcall D2GAME_SendPacket0x47_6FC3EEE0(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC3EF40
+//1.14d: 0x0053D3C0
 void __fastcall D2GAME_SendPacket0x48_6FC3EF40(D2ClientStrc* pClient, D2UnitStrc* pUnit, BYTE a3);
 //D2Game.0x6FC3EFA0
+//1.14d: 0x0053D420
 void __fastcall D2GAME_SendP0x9D_ItemAction_UpdateStats_6FC3EFA0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EFC0
+//1.14d: 0x0053D440
 void __fastcall SCMD_SendItemFlagUpdate(D2ClientStrc* pClient, D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t dwFlag, int32_t bSet);
 //D2Game.0x6FC3F040
+//1.14d: 0x0053D4B0
 void __fastcall D2GAME_SendP0x9D_ItemAction_Unknown0x16_6FC3F040(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3F060
+//1.14d: 0x0053D4D0
 void __fastcall SCMD_SendUnitActionAtPosition(D2ClientStrc* pClient, uint8_t nSourceUnitType, int32_t nSourceUnitGUID, uint16_t nX, uint16_t nY, int32_t nActionId, uint16_t nSkillParam, uint8_t nActionParam, int32_t bQueued);
 //D2Game.0x6FC3F0C0
+//1.14d: 0x0053D530
 void __fastcall SCMD_SendSkillUseOnUnit(D2ClientStrc* pClient, uint8_t nSourceUnitType, int32_t nSourceUnitGUID, uint8_t nUnitType, int32_t nUnitGUID, uint16_t nSkillId, uint16_t nSkillParam, uint8_t nSkillLevel, int32_t bQueued);
 //D2Game.0x6FC3F260
+//1.14d: 0x0053EF30
 void __fastcall D2GAME_SendP0x9C_ItemAction_AddOrRemoveFromShop_6FC3F260(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, char nShopAction);
 //D2Game.0x6FC3F2F0
+//1.14d: 0x0053D670
 void __fastcall D2GAME_SendPacket0x28_6FC3F2F0(D2ClientStrc* pClient, BYTE nHeader, BYTE nUnitType, int32_t nUnitGUID, D2BitBufferStrc* pQuestRecord, BYTE nQuestFlags);
 //D2Game.0x6FC3F340
+//1.14d: 0x0053D6D0
 void __fastcall SCMD_SendInteractionTarget(D2ClientStrc* pClient, BYTE nHeader, BYTE nUnitType, int32_t nUnitId, int32_t a5);
 //D2Game.0x6FC3F370
+//1.14d: 0x0053D700
 void __fastcall D2GAME_PACKETS_SendPacket0x29_6FC3F370(D2ClientStrc* pClient, D2GSPacketSrv29* pPacket);
 //D2Game.0x6FC3F380
+//1.14d: 0x0053D710
 void __fastcall SCMD_SendPacket0x5D(D2ClientStrc* pClient, D2GSPacketSrv5D* pPacket);
 //D2Game.0x6FC3F3B0
+//1.14d: 0x0053D740
 void __fastcall D2GAME_SendPacket0x2A_6FC3F3B0(D2ClientStrc* pClient, char nHeader, char nResult, int32_t nGold, int32_t nUnitGUID, char nTransactionType);
 //D2Game.0x6FC3F3F0
+//1.14d: 0x0053D780
 void __fastcall SCMD_SendPacket0x2C(D2ClientStrc* pClient, D2GSPacketSrv2C* pPacket);
 //D2Game.0x6FC3F410
 void __fastcall D2GAME_SendPacket0x4E_6FC3F410(D2ClientStrc* pClient, D2GSPacketSrv4E* pPacket);

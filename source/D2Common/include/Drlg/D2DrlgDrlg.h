@@ -748,16 +748,19 @@ struct D2DrlgWarpStrc
 #pragma pack()
 
 //D2Common.0x6FD74120 (#10014)
+//1.14d: 0x00642DA0
 D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)
 D2COMMON_DLL_DECL void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD74440
+//1.14d: 0x00642010
 void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAlloc);
 //D2Common.0x6FD745C0
 void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2);
 //D2Common.0x6FD74700
 void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg);
 //D2Common.0x6FD748D0 (#10013)
+//1.14d: 0x00642AE0
 D2COMMON_DLL_DECL D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId);
 //D2Common.0x6FD749A0 (#10005)
 D2COMMON_DLL_DECL D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId);

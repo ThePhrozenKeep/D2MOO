@@ -4,6 +4,7 @@
 
 //1.10f: D2Common.0x6FDAB890
 //1.13c: D2Common.0x6FD8E080
+//1.14d: 0x00679190
 void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath)
 {
 	D2_ASSERT(ptPath);

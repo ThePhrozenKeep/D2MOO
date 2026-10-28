@@ -95,24 +95,42 @@ struct D2CompositeUnitStrc
 #pragma pack(pop)
 
 
-void __stdcall sub_6F8A4C10();
+void __stdcall D2COMP_InitEmblemColorTables();
+//1.10f: D2Win.0x6F8A46E0 (#10157)
+//1.14d: 0x00505550
 void __stdcall D2Win_10157();
+//1.10f: D2Win.0x6F8A4400 (#10147)
+//1.14d: 0x00505150
 D2CompositeUnitStrc* __stdcall D2Win_10147();
+//1.10f: D2Win.0x6F8A4410 (#10148)
+//1.14d: 0x00505160
 inline void* D2Win_10148(void*)
 {
 	return nullptr;
 }
+//1.10f: D2Win.0x6F8A15E0
+//1.14d: 0x00503A50
 inline void sub_6F8A15E0(void*)
 {
 }
+//1.10f: D2Win.0x6F8A1890
+//1.14d: 0x00503BA0
 inline void sub_6F8A1890(void*, int)
 {
 }
+//1.10f: D2Win.0x6F8A1D10
+//1.14d: 0x00505810
 inline void sub_6F8A1D10(void*)
 {
 }
+//1.10f: D2Win.0x6F8A2070
+//1.14d: 0x00505A80
 inline void sub_6F8A2070(void*)
 {
 }
+//1.10f: D2Win.0x6F8A2A20 (#10142)
+//1.14d: 0x005041B0
 void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int bUnlinkAndFree);
+//1.10f: D2Win.0x6F8A4CE0 (#10160)
+//1.14d: 0x00505640
 const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore);

@@ -36,24 +36,32 @@ struct D2WinImage2Strc
 
 
 //D2Win.0x6F8ABA90
+//1.14d: 0x004FD6C0
 D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* pfHandleVirtualKeyInput)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1BF0
 int __fastcall IMAGE_Destroy(D2WinControlStrc* pControl);
 //D2Win.0x6F8ABB40
+//1.14d: 0x004FD770
 D2WinImageStrc* __fastcall IMAGE_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t a6, int32_t a7);
 //D2Win.0x6F8ABC00
 int32_t __stdcall IMAGE_SetCellFile(D2WinImageStrc* pImage, D2CellFileStrc* pCellFile, D2WinImageClickRectStrc* pClickRect);
 //D2Win.0x6F8ABC40
+//1.14d: 0x004FD0B0
 int32_t __stdcall IMAGE_SetCoordinates(D2WinImageStrc* pImage, int32_t nX, int32_t nY);
 //D2Win.0x6F8ABC80
+//1.14d: 0x004FD110
 int32_t __stdcall IMAGE_SetFrame(D2WinImageStrc* pImage, int32_t nFrame);
 //D2Win.0x6F8ABCD0
+//1.14d: 0x004FD170
 int32_t __stdcall IMAGE_ForceNormalDrawMode(D2WinImageStrc* pImage, int32_t nUnused);
 //D2Win.0x6F8ABD10
+//1.14d: 0x004FD1B0
 int32_t __stdcall IMAGE_GetFrameCount(D2WinImageStrc* pImage);
 //D2Win.0x6F8ABD50
+//1.14d: 0x004FD1F0
 int32_t __fastcall IMAGE2_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8ABEA0
 int32_t __fastcall IMAGE_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8AC170
+//1.14d: 0x004FD5D0
 int32_t __stdcall IMAGE2_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);

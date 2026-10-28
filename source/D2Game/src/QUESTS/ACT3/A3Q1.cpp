@@ -79,6 +79,7 @@ D2NPCMessageTableStrc gpAct3Q1NpcMessages[] =
 
 
 //D2Game.0x6FCA6E80
+//1.14d: 0x005B72B0
 bool __fastcall ACT3Q1_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId != MONSTER_ALKOR)
@@ -100,6 +101,7 @@ bool __fastcall ACT3Q1_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCA6F10
+//1.14d: 0x005B7A60
 int32_t __fastcall OBJECTS_OperateFunction28_LamEsenTome(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -156,6 +158,7 @@ int32_t __fastcall OBJECTS_OperateFunction28_LamEsenTome(D2ObjOperateFnStrc* pOp
 }
 
 //D2Game.0x6FCA7040
+//1.14d: 0x005B7340
 int32_t __fastcall ACT3Q1_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -171,6 +174,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCA70B0
+//1.14d: 0x005B7400
 void __fastcall ACT3Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const int32_t nIndices[] =
@@ -213,6 +217,7 @@ void __fastcall ACT3Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA7190
+//1.14d: 0x005B7740
 void __fastcall ACT3Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -284,6 +289,7 @@ void __fastcall ACT3Q1_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA73B0
+//1.14d: 0x005B73A0
 int32_t __fastcall ACT3Q1_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -302,6 +308,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCA7420
+//1.14d: 0x005B74E0
 int32_t __fastcall ACT3Q1_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -330,6 +337,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCA74A0
+//1.14d: 0x005B7580
 int32_t __fastcall ACT3Q1_UnitIterate_AddStatPointReward(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -346,6 +354,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_AddStatPointReward(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCA74F0
+//1.14d: 0x005B75D0
 int32_t __fastcall ACT3Q1_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -360,6 +369,7 @@ int32_t __fastcall ACT3Q1_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCA7530
+//1.14d: 0x005B76E0
 void __fastcall ACT3Q1_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_ALKOR)
@@ -393,6 +403,7 @@ void __fastcall ACT3Q1_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA7580
+//1.14d: 0x005B7E90
 void __fastcall ACT3Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -426,6 +437,7 @@ void __fastcall ACT3Q1_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA7670
+//1.14d: 0x005B7620
 void __fastcall ACT3Q1_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nNewLevel == LEVEL_LOWERKURAST && pQuestData->bNotIntro && pQuestData->fState < 1)
@@ -460,6 +472,7 @@ void __fastcall ACT3Q1_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA7740
+//1.14d: 0x005B7970
 void __fastcall ACT3Q1_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)pQuestData->pQuestDataEx;
@@ -485,6 +498,7 @@ void __fastcall ACT3Q1_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA77D0
+//1.14d: 0x005B7A00
 void __fastcall ACT3Q1_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)pQuestData->pQuestDataEx;
@@ -500,6 +514,7 @@ void __fastcall ACT3Q1_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA7830
+//1.14d: 0x005B7B80
 void __fastcall ACT3Q1_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)pQuestData->pQuestDataEx;
@@ -515,6 +530,7 @@ void __fastcall ACT3Q1_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 }
 
 //D2Game.0x6FCA7870
+//1.14d: 0x005B7BC0
 void __fastcall ACT3Q1_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act3Quest1Strc* pQuestDataEx = (D2Act3Quest1Strc*)pQuestData->pQuestDataEx;
@@ -534,6 +550,7 @@ void __fastcall ACT3Q1_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCA78D0
+//1.14d: 0x005B7C10
 void __fastcall ACT3Q1_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -575,6 +592,7 @@ void __fastcall ACT3Q1_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCA79A0
+//1.14d: 0x005B7CD0
 bool __fastcall ACT3Q1_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (pQuestData->fState != 5 && pQuestData->bNotIntro)
@@ -597,6 +615,7 @@ bool __fastcall ACT3Q1_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA7A10
+//1.14d: 0x005B7D70
 bool __fastcall ACT3Q1_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	if (!QUESTRECORD_GetQuestState(pFlags, QUESTSTATEFLAG_A2COMPLETED, QFLAG_REWARDGRANTED))
@@ -664,6 +683,7 @@ bool __fastcall ACT3Q1_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 }
 
 //D2Game.0x6FCA7B40
+//1.14d: 0x005B7D40
 void __fastcall ACT3Q1_UnitIterate_CheckForTomeItem(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' bbb'))

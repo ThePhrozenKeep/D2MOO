@@ -32,6 +32,7 @@ struct D2UnkMonMsgStrc
 
 
 //D2Game.0x6FC659E0
+//1.14d: 0x00598220
 void __fastcall MONSTERMSG_SendMonsterUpdates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t bUnitInitialized)
 {
     if (pUnit)
