@@ -47,14 +47,14 @@ void __fastcall AIBAAL_CountLivingMinions(D2UnitStrc* pUnit, void* ppUnitArg, vo
 //1.14d: 0x005FCF30
 void __fastcall AIBAAL_RunSpecialAiState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	int32_t nParam1 = 0;
-	int32_t nParam2 = 0;
+	int32_t nSavedCommandParam1 = 0;
+	int32_t nSavedCommandParam2 = 0;
 
 	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	if (pAiCmd)
 	{
-		nParam1 = pAiCmd->nCmdParam[1];
-		nParam2 = pAiCmd->nCmdParam[2];
+		nSavedCommandParam1 = pAiCmd->nCmdParam[1];
+		nSavedCommandParam2 = pAiCmd->nCmdParam[2];
 	}
 
 	if (STATES_CheckState(pUnit, STATE_INFERNO))
@@ -64,12 +64,12 @@ void __fastcall AIBAAL_RunSpecialAiState(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 
-	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nParam1 && nParam2)
+	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nSavedCommandParam1 && nSavedCommandParam2)
 	{
 		D2AiCmdStrc aiCmd = {};
 		aiCmd.nCmdParam[0] = 10;
-		aiCmd.nCmdParam[1] = nParam1;
-		aiCmd.nCmdParam[2] = nParam2;
+		aiCmd.nCmdParam[1] = nSavedCommandParam1;
+		aiCmd.nCmdParam[2] = nSavedCommandParam2;
 		AIGENERAL_CopyAiCommand(pGame, pUnit, &aiCmd);
 	}
 

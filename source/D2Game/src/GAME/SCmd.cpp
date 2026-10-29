@@ -673,14 +673,14 @@ void __fastcall D2GAME_PACKETS_SendPacket0x51_6FC3D300(D2ClientStrc* pClient, ch
 
 //D2Game.0x6FC3D3A0
 //1.14d: 0x0053BDA0
-void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(D2ClientStrc* pClient, char alw0x0A, char nUnitType, int32_t nUnitId)
+void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(D2ClientStrc* pClient, char nHeader, char nUnitType, int32_t nUnitId)
 {
     if (nUnitType != UNIT_MISSILE)
     {
         D2GSPacketSrv0A packet0A = {};
         
         packet0A.nUnitType = nUnitType;
-        packet0A.nHeader = alw0x0A;
+        packet0A.nHeader = nHeader;
         packet0A.dwUnitGUID = nUnitId;
 
         D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet0A, sizeof(packet0A));
@@ -1384,31 +1384,31 @@ int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2MonsterLifeSyncStrc* pLifeUpdateSt
 
 //D2Game.0x6FC3E440
 //1.14d: 0x0053CC90
-int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t nLifePercentage, int32_t nLevelId)
+int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pRecipientPlayer, D2UnitStrc* pTargetPlayer, int32_t nLifePercentage, int32_t nLevelId)
 {    
     // TODO: Names
-    D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit1);
+    D2GameStrc* pGame = SUNIT_GetGameFromUnit(pRecipientPlayer);
     if (!pGame)
     {
         return 0;
     }
     
-    const int16_t nPartyId = PARTY_GetPartyIdForUnitOwner(pGame, pUnit1);
-    if (nPartyId == -1 || nPartyId != PARTY_GetPartyIdForUnitOwner(pGame, pUnit2))
+    const int16_t nPartyId = PARTY_GetPartyIdForUnitOwner(pGame, pRecipientPlayer);
+    if (nPartyId == -1 || nPartyId != PARTY_GetPartyIdForUnitOwner(pGame, pTargetPlayer))
     {
         return 0;
     }
     
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit1);
+    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pRecipientPlayer);
     if (!pPlayerData)
     {
         return 0;
     }
 
     int32_t nUnitGUID = -1;
-    if (pUnit2)
+    if (pTargetPlayer)
     {
-        nUnitGUID = pUnit2->dwUnitId;
+        nUnitGUID = pTargetPlayer->dwUnitId;
     }
 
     D2UnkPlayerDataStrc* pData = pPlayerData->unk0x98;
@@ -1888,14 +1888,14 @@ void __fastcall D2GAME_SendP0x9D_ItemAction_UpdateStats_6FC3EFA0(D2ClientStrc* p
 
 //D2Game.0x6FC3EFC0
 //1.14d: 0x0053D440
-void __fastcall SCMD_SendItemFlagUpdate(D2ClientStrc* pClient, D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t dwFlag, int32_t bSet)
+void __fastcall SCMD_SendItemFlagUpdate(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, int32_t dwFlag, int32_t bSet)
 {
     D2GSPacketSrv7D packet7D = {};
 
     packet7D.nHeader = 0x7D;
-    packet7D.nUnitType = pUnit1 ? pUnit1->dwUnitType : 6;
-    packet7D.nUnitGUID1 = pUnit1 ? pUnit1->dwUnitId : -1;
-    packet7D.nUnitGUID2 = pUnit2 ? pUnit2->dwUnitId : -1;
+    packet7D.nUnitType = pPlayer ? pPlayer->dwUnitType : 6;
+    packet7D.nUnitGUID1 = pPlayer ? pPlayer->dwUnitId : -1;
+    packet7D.nUnitGUID2 = pItem ? pItem->dwUnitId : -1;
     packet7D.nItemFlag = dwFlag;
     packet7D.bSet = bSet;
 

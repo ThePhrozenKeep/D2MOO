@@ -97,7 +97,7 @@ void __fastcall SCMD_SendPlayerSpawnAndPartyRoster(D2ClientStrc* pClient, int32_
 void __fastcall D2GAME_PACKETS_SendPacket0x51_6FC3D300(D2ClientStrc* pClient, char nHeader, uint8_t nUnitType, int32_t nUnitGUID, int16_t nObjectId, int16_t nX, int16_t nY, char nAnimMode, char nInteractType);
 //D2Game.0x6FC3D3A0
 //1.14d: 0x0053BDA0
-void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(D2ClientStrc* pClient, char alw0x0A, char nUnitType, int32_t nUnitId);
+void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(D2ClientStrc* pClient, char nHeader, char nUnitType, int32_t nUnitId);
 //D2Game.0x6FC3D3D0
 //1.14d: 0x0053E9B0
 void __fastcall D2GAME_PACKETS_SendPacket0x19_6FC3D3D0(D2ClientStrc* pClient, int32_t nValue, int32_t nPreviousGold);
@@ -189,7 +189,7 @@ D2MonsterLifeSyncStrc* __fastcall SCMD_GetMonsterLifeUpdateState(D2UnitStrc* pUn
 int32_t __stdcall SCMD_ShouldSendLifeUpdate(D2MonsterLifeSyncStrc* pLifeUpdateState, int32_t nCurrentLifePercentage);
 //D2Game.0x6FC3E440
 //1.14d: 0x0053CC90
-int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t nLifePercentage, int32_t nLevelId);
+int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pRecipientPlayer, D2UnitStrc* pTargetPlayer, int32_t nLifePercentage, int32_t nLevelId);
 //D2Game.0x6FC3E570
 //1.14d: 0x0053EAE0
 void __fastcall D2GAME_SendPacket0x9C_6FC3E570(D2ClientStrc* pClient, D2UnitStrc* pItem, char nAction, DWORD dwFlag, int32_t bGamble);
@@ -273,7 +273,7 @@ void __fastcall D2GAME_SendPacket0x48_6FC3EF40(D2ClientStrc* pClient, D2UnitStrc
 void __fastcall D2GAME_SendP0x9D_ItemAction_UpdateStats_6FC3EFA0(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);
 //D2Game.0x6FC3EFC0
 //1.14d: 0x0053D440
-void __fastcall SCMD_SendItemFlagUpdate(D2ClientStrc* pClient, D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int32_t dwFlag, int32_t bSet);
+void __fastcall SCMD_SendItemFlagUpdate(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pItem, int32_t dwFlag, int32_t bSet);
 //D2Game.0x6FC3F040
 //1.14d: 0x0053D4B0
 void __fastcall D2GAME_SendP0x9D_ItemAction_Unknown0x16_6FC3F040(D2ClientStrc* pClient, D2UnitStrc* pUnit, D2UnitStrc* pItem, DWORD dwFlags);

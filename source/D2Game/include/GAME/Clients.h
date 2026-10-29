@@ -387,7 +387,7 @@ int32_t __fastcall CLIENTS_GetNameById(int32_t nClientId, char* szName);
 int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName);
 //D2Game.0x6FC33F90
 //1.14d: 0x00538C60
-int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szGameName);
+int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szCanonicalName);
 //D2Game.0x6FC34020
 //1.14d: 0x00538CE0
 int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveData, int32_t nSize, int32_t nTotalSize, BOOL bUnlockCharacter, int32_t nUnused1, int32_t nUnused2);
