@@ -43,17 +43,17 @@ int32_t __stdcall DEBUG_GetMonsterCount()
 
     D2_ASSERT(pGame);
 
-    int32_t nIndex = 0;
+    int32_t nMonsterCount = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
         for (D2UnitStrc* pUnit = pGame->pUnitList[1][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
-            ++nIndex;
+            ++nMonsterCount;
         }
     }
 
     GAME_UnlockDebugGame();
-    return nIndex;
+    return nMonsterCount;
 }
 
 //D2Game.0x6FCCD3B0 (#10028)

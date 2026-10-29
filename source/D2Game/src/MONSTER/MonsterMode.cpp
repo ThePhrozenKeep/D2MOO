@@ -43,9 +43,9 @@
 #pragma pack(push, 1)
 struct D2MonModeInfoTableStrc
 {
-    int32_t unk0x00;
-    int32_t unk0x04;
-    int32_t unk0x08;
+    int32_t bUseRecurringEvent;
+    int32_t bUseAnimationEvents;
+    int32_t bCheckMovingMode;
 };
 #pragma pack(pop)
 
@@ -1265,11 +1265,11 @@ int32_t __fastcall MONSTERMODE_StartAttackOrSkill(D2GameStrc* pGame, D2ModeChang
     {
         bool bContinue = false;
         const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pModeChange->nMode];
-        if (pMonModeInfoTableRecord->unk0x00)
+        if (pMonModeInfoTableRecord->bUseRecurringEvent)
         {
             bContinue = true;
         }
-        else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+        else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
         {
             D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pModeChange->pUnit->dwClassId);
             if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pModeChange->nMode >> 3] & gdwBitMasks[pModeChange->nMode & 7])
@@ -1330,11 +1330,11 @@ int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc
             if (pUnit->dwAnimMode < 16)
             {
                 const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pUnit->dwAnimMode];
-                if (pMonModeInfoTableRecord->unk0x00)
+                if (pMonModeInfoTableRecord->bUseRecurringEvent)
                 {
                     bUseRecurringEvent = 1;
                 }
-                else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+                else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
                     if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pUnit->dwAnimMode >> 3] & gdwBitMasks[pUnit->dwAnimMode & 7])
@@ -2018,9 +2018,9 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         else
         {
             const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nCurrentAnimMode];
-            if (!pMonModeInfoTableRecord->unk0x00)
+            if (!pMonModeInfoTableRecord->bUseRecurringEvent)
             {
-                if (pMonModeInfoTableRecord->unk0x04 || !pMonModeInfoTableRecord->unk0x08)
+                if (pMonModeInfoTableRecord->bUseAnimationEvents || !pMonModeInfoTableRecord->bCheckMovingMode)
                 {
                     SUNIT_ScheduleAnimationEvents(pGame, pUnit);
                 }
@@ -2124,11 +2124,11 @@ void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D
     }
 
     const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nMode];
-    if (pMonModeInfoTableRecord->unk0x00)
+    if (pMonModeInfoTableRecord->bUseRecurringEvent)
     {
         pModeChange->unk0x14[1] = 101;
     }
-    else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+    else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
     {
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
         if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nMode >> 3] & gdwBitMasks[nMode & 7])

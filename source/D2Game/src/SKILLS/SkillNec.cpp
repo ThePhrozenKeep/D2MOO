@@ -47,15 +47,15 @@
 
 
 #pragma pack(push, 1)
-struct D2UnkNecSkillStrc2
+struct D2CorpseExplosionCallbackArgsStrc
 {
     D2DamageStrc* pDamage;
     int32_t nX;
     int32_t nY;
-    int32_t unk0x0C;
+    int32_t nPhysicalRadiusSquared;
 };
 
-struct D2UnkNecSkillStrc3
+struct D2AttractCallbackArgsStrc
 {
     D2GameStrc* pGame;
     D2UnitStrc* pUnit;
@@ -611,7 +611,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
         nLength /= pDifficultyLevelsTxtRecord->dwAiCurseDiv;
     }
 
-    D2UnkNecSkillStrc3 arg = {};
+    D2AttractCallbackArgsStrc arg = {};
     arg.pGame = pGame;
     arg.pUnit = pUnit;
     arg.nSkillId = nSkillId;
@@ -639,7 +639,7 @@ int32_t __fastcall SKILLS_SrvDo059_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //1.14d: 0x005C3B30
 int32_t __fastcall SKILLS_AuraCallback_SetAttractTarget(D2UnitStrc* pUnit, void* pArg)
 {
-    D2UnkNecSkillStrc3* pParam = (D2UnkNecSkillStrc3*)pArg;
+    D2AttractCallbackArgsStrc* pParam = (D2AttractCallbackArgsStrc*)pArg;
 
     if (pUnit 
 		&& STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL 
@@ -1296,13 +1296,13 @@ int32_t __fastcall SKILLS_SrvDo032_PoisonDagger(D2GameStrc* pGame, D2UnitStrc* p
 //1.14d: 0x005C4D10
 int32_t __fastcall SKILLS_AuraCallback_ApplyCorpseExplosionDamage(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2UnkNecSkillStrc2* pArg = (D2UnkNecSkillStrc2*)pAuraCallback->pArgs;
+    D2CorpseExplosionCallbackArgsStrc* pArg = (D2CorpseExplosionCallbackArgsStrc*)pAuraCallback->pArgs;
     if (pArg)
     {
         D2DamageStrc damage = {};
         memcpy(&damage, pArg->pDamage, sizeof(damage));
 
-        if (pArg->unk0x0C < PATH_ComputeSquaredDistance(pArg->nX, pArg->nY, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)))
+        if (pArg->nPhysicalRadiusSquared < PATH_ComputeSquaredDistance(pArg->nX, pArg->nY, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit)))
         {
             damage.dwPhysDamage = 0;
         }
@@ -1383,12 +1383,12 @@ int32_t __fastcall SKILLS_SrvDo055_CorpseExplosion(D2GameStrc* pGame, D2UnitStrc
 
     damage.dwPhysDamage = nDamage;
 
-    D2UnkNecSkillStrc2 args = {};
+    D2CorpseExplosionCallbackArgsStrc args = {};
 
     args.pDamage = &damage;
     args.nX = nX;
     args.nY = nY;
-    args.unk0x0C = nHalfRange * nHalfRange;
+    args.nPhysicalRadiusSquared = nHalfRange * nHalfRange;
 
     SKILLS_IterateAuraTargets(pGame, pUnit, nX, nY, nRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_ApplyCorpseExplosionDamage, &args, 0, __FILE__, __LINE__);
 
