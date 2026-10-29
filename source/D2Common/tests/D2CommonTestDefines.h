@@ -57,7 +57,7 @@
 //#define COMPOSIT_TESTS
 //#define DATATBLS_TESTS
 //#define DUNGEON_TESTS
-//#define ENVIRONMENT_TESTS
+#define ENVIRONMENT_TESTS
 //#define INVENTORY_TESTS
 //#define ITEMMODS_TESTS
 //#define ITEMS_TESTS
