@@ -126,7 +126,7 @@ struct D2SummonArgStrc
 int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nLife);
 //D2Game.0x6FD0FA00
 //1.14d: 0x0056B3E0
-int32_t __fastcall SKILLS_CheckAuraTarget(D2UnitStrc* pSource, D2UnitStrc* pTarget, uint32_t nAuraFilter);
+int32_t __fastcall SKILLS_CheckAuraTarget(D2UnitStrc* pAttacker, D2UnitStrc* pTarget, uint32_t nAuraFilter);
 //D2Game.0x6FD0FDD0
 //1.14d: 0x0056B6C0
 void __fastcall SKILLS_ClampVitalsAndUpdateAnimRate(D2UnitStrc* pUnit);
