@@ -1503,7 +1503,7 @@ int32_t __fastcall CLIENTS_GetClientIdByName(const char* szName)
 
 //D2Game.0x6FC33F90
 //1.14d: 0x00538C60
-int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szGameName)
+int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szCanonicalName)
 {
     int32_t result = 1;
     const uint8_t nIndex = (uint8_t)FOG_ComputeStringCRC16(szName);
@@ -1522,9 +1522,9 @@ int32_t __fastcall CLIENTS_GetCanonicalName(const char* szName, char* szGameName
             }
         }
 
-        if (szGameName)
+        if (szCanonicalName)
         {
-            SStrCopy(szGameName, pClient->szName, sizeof(pClient->szName));
+            SStrCopy(szCanonicalName, pClient->szName, sizeof(pClient->szName));
         }
 
         result = 0;
