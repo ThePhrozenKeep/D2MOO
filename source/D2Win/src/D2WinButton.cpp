@@ -75,7 +75,7 @@ int32_t __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton)
 
 //D2Win.0x6F8A62F0 (#10109)
 //1.14d: 0x00500960
-int32_t __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton)
+BOOL __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton)
 {
 	D2_ASSERT(pButton->controlHeader.nType == D2WIN_BUTTON);
 

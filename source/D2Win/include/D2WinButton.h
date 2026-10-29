@@ -46,7 +46,7 @@ struct D2WinButtonStrc
 D2WinButtonStrc* __fastcall BUTTON_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), int32_t nActivationVirtualKey, int32_t nBaseFrame, uint32_t nFlags, uint16_t nStringId, int32_t(__stdcall* pfUpdateHoverState)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8A62C0
 //1.14d: 0x00500930
-int __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton);
+int32_t __fastcall BUTTON_Destroy(D2WinButtonStrc* pButton);
 //D2Win.0x6F8A62F0
 //1.14d: 0x00500960
 BOOL __fastcall BUTTON_IsPressed(D2WinButtonStrc* pButton);
@@ -78,10 +78,10 @@ void __fastcall BUTTON_SetStringId(D2WinButtonStrc* pButton, uint16_t nStringId)
 int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8A6A10
 //1.14d: 0x00501090
-int __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
+int32_t __stdcall BUTTON_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A6AF0
 //1.14d: 0x00501150
-int __stdcall BUTTON_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg);
+int32_t __stdcall BUTTON_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8A6BB0
 //1.14d: 0x005011F0
-int __stdcall BUTTON_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg);
+int32_t __stdcall BUTTON_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg);

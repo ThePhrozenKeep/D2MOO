@@ -258,7 +258,7 @@ int32_t __fastcall D2Win_10046(D2WinTextBoxStrc* pTextBox, const char* szText, i
 
 //D2Win.0x6F8B0030 (#10044)
 //1.14d: 0x004FD060
-int32_t __fastcall D2Win_10044(D2WinTextBoxStrc* pTextBox, const Unicode* wszText)
+BOOL __fastcall D2Win_10044(D2WinTextBoxStrc* pTextBox, const Unicode* wszText)
 {
 	return D2Win_10051(pTextBox, wszText, 4, 0, 0);
 }

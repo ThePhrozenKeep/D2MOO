@@ -41,7 +41,7 @@ struct BnClientInterface
 	int(__thiscall* PatchUnk)(DWORD* _this);
 	int(__stdcall* GetPatchState)();	// patch download progress: 0..100, 101 once done
 	uintptr_t(__fastcall* PatchUnk0x4C)(BYTE* source, size_t size);
-	int(__fastcall* EnterChat)(const char* szName, const char* szStats, int a3, BYTE* a4, char nFlags);
+	int(__fastcall* EnterChat)(const char* szName, const char* szStats, int nUnused, BYTE* szChannel, char nFlags);
 	int(__stdcall* LeaveChat)();
 	int(__stdcall* GetVersion)();
 	int(__fastcall* CreateAccount)(int a1, int a2);
