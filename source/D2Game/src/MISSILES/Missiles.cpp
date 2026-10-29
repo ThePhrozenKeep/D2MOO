@@ -361,7 +361,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 
 //D2Game.0x6FC55B70
 //1.14d: 0x0059FEE0
-void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nVelocity)
+void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t bSendFirstPathPoint)
 {
     if (!pMissile || pMissile->dwUnitType != UNIT_MISSILE)
     {
@@ -386,7 +386,7 @@ void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, 
     packet73.nX = CLIENTS_GetUnitX(pMissile);
     packet73.nY = CLIENTS_GetUnitY(pMissile);
 
-    if (nVelocity)
+    if (bSendFirstPathPoint)
     {
         packet73.nFirstX = D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath);
         packet73.nFirstY = D2COMMON_10176_PathGetFirstPointY(pMissile->pDynamicPath);
