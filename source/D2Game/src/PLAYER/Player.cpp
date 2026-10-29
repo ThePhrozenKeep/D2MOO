@@ -652,7 +652,7 @@ int32_t __fastcall PLAYER_CanModifyInventory(D2GameStrc* pGame, D2UnitStrc* pPla
 
 //D2Game.0x6FC7C450
 //1.14d: 0x005356B0
-int32_t __fastcall PLAYER_SetSkillHotKey(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char nHand, int32_t nFlags)
+int32_t __fastcall PLAYER_SetSkillHotKey(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char nHand, int32_t nItemGUID)
 {
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     if (!pClient)
@@ -660,7 +660,7 @@ int32_t __fastcall PLAYER_SetSkillHotKey(D2GameStrc* pGame, D2UnitStrc* pPlayer,
         return 0;
     }
 
-    CLIENTS_SetSkillHotKey(pClient, nHotkeyId, nSkillId, nHand, nFlags);
+    CLIENTS_SetSkillHotKey(pClient, nHotkeyId, nSkillId, nHand, nItemGUID);
     return 1;
 }
 

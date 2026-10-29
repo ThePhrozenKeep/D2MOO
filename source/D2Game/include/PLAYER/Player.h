@@ -21,7 +21,7 @@ void __fastcall PLAYER_InitializePosition(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2CharStatsTxt* pCharStatsTxt, int32_t nCount, D2CharItemStrc* pCharItem);
 //D2Game.0x6FC7BB50
 //1.14d: 0x00534B30
-void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlayer, D2GameStrc* pGame, int32_t a8);
+void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlayer, D2GameStrc* pGame, int32_t bFindFreePosition);
 //D2Game.0x6FC7BC30
 //1.14d: 0x00534F10
 void __fastcall PLAYER_CreateStartItemsFromCharStatsTxt(D2UnitStrc* pPlayer, D2GameStrc* pGame, void* pUnused);
@@ -61,7 +61,7 @@ int32_t __fastcall PLAYER_DropGold(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t
 int32_t __fastcall PLAYER_CanModifyInventory(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem);
 //D2Game.0x6FC7C450
 //1.14d: 0x005356B0
-int32_t __fastcall PLAYER_SetSkillHotKey(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char nHand, int32_t nFlags);
+int32_t __fastcall PLAYER_SetSkillHotKey(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char nHand, int32_t nItemGUID);
 //D2Game.0x6FC7C490 (#10059)
 //1.14d: 0x00535780
 void __fastcall PLAYER_SetVirtualPlayerCount(int32_t nPlayers);
