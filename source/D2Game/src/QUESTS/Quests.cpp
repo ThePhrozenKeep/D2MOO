@@ -900,10 +900,10 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			{
 				D2_ASSERT(pQuest->pfStatusFilter);
 
-				uint8_t a5 = 0;
-				if (pQuest->pfStatusFilter(pQuest, pUnit, pGame->pQuestControl->pQuestFlags, pQuestFlags, &a5) == 1)
+				uint8_t nQuestStatus = 0;
+				if (pQuest->pfStatusFilter(pQuest, pUnit, pGame->pQuestControl->pQuestFlags, pQuestFlags, &nQuestStatus) == 1)
 				{
-					packet52.pQuestList[pQuest->nQuestFilter] = a5;
+					packet52.pQuestList[pQuest->nQuestFilter] = nQuestStatus;
 				}
 			}
 			else

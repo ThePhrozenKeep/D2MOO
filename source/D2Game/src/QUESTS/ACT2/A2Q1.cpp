@@ -335,7 +335,7 @@ int32_t __fastcall ACT2Q1_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 //1.14d: 0x00598C40
 void __fastcall ACT2Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 4, 0
 	};
@@ -363,7 +363,7 @@ void __fastcall ACT2Q1_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		const int32_t nIndex = nIndices[pQuestData->fState];
+		const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 		if (nIndex != -1 && nIndex < 9)
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
@@ -633,16 +633,16 @@ void __fastcall ACT2Q1_OnRadamentActivated(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	pQuestData->pfCallback[QUESTEVENT_NPCDEACTIVATE] = nullptr;
 	
-	bool bReturn = true;
+	bool bStateAlreadyAdvanced = true;
 	if (pQuestData->fState < 3)
 	{
-		bReturn = false;
+		bStateAlreadyAdvanced = false;
 		QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 	}
 
 	if (pQuestData->fLastState >= 2)
 	{
-		if (bReturn)
+		if (bStateAlreadyAdvanced)
 		{
 			return;
 		}
