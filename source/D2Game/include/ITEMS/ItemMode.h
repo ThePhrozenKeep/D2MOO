@@ -222,10 +222,10 @@ int32_t __fastcall D2GAME_DoKeyCheck_6FC4A4B0(D2GameStrc* pGame, D2UnitStrc* pUn
 int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FC4A9B0
 //1.14d: 0x00562E00
-int32_t __fastcall ITEMMODE_EquipItemAtResolvedBodyLocation(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, uint8_t nBodyLoc);
+int32_t __fastcall ITEMMODE_EquipItemAtResolvedBodyLocation(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, uint8_t bSkipRequirementCheck);
 //D2Game.0x6FC4AB10
 //1.14d: 0x0055F2D0
-int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc** ppBodyItem, D2UnitStrc** ppOtherBodyItem, int32_t* pBodyLoc);
+int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppBodyItem, D2UnitStrc** ppOtherBodyItem, int32_t* pBodyLoc);
 //D2Game.0x6FC4AD80
 //1.14d: 0x00562F30
 int32_t __fastcall ITEMMODE_RecoverCorpseItems(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pCorpse);
