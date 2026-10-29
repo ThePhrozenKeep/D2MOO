@@ -870,10 +870,10 @@ void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitS
     if (pNpcRecord->bGambleInit && nTransactionType == 2)
     {
         D2NpcGambleStrc* pNpcGamble = pNpcRecord->pGamble;
-        const int32_t nUnitGUID = pPlayer ? pPlayer->dwUnitId : -1;
+        const int32_t nPlayerGUID = pPlayer ? pPlayer->dwUnitId : -1;
         while (pNpcGamble)
         {
-            if (pNpcGamble->dwGUID == nUnitGUID)
+            if (pNpcGamble->dwGUID == nPlayerGUID)
             {
                 break;
             }
