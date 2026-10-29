@@ -50,7 +50,7 @@ D2WinAnimImageStrc* __fastcall ANIMIMAGE_Create(int32_t nX, int32_t nY, int32_t 
 		pAnimImage->eDrawMode = DRAWMODE_NORMAL;
 	}
 
-	pAnimImage->field_58 = a10;
+	pAnimImage->pfOnHover = a10;
 	pAnimImage->bIsRunning = 1;
 
 	CONTROL_AppendToList(&pAnimImage->controlHeader);
@@ -150,9 +150,9 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 				msg.hWindow = (HWND)pAnimImage;
 				msg.wParam = v5 == 1;
 
-				if (pAnimImage->field_58)
+				if (pAnimImage->pfOnHover)
 				{
-					pAnimImage->field_58(&msg);
+					pAnimImage->pfOnHover(&msg);
 				}
 			}
 		}

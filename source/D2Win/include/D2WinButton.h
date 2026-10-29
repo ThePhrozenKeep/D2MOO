@@ -28,7 +28,7 @@ struct D2WinButtonStrc
 	int32_t nActivationCounter;								//0x4C
 	int32_t nActivationVirtualKey;							//0x50
 	int32_t nIsPressedFrameOffset;							//0x54
-	int32_t field_58;										//0x58
+	int32_t nDisabledFrameOffset;										//0x58
 	int32_t nBaseFrame;										//0x5C
 	Font eFont;												//0x60
 	Unicode wszText[256];									//0x64

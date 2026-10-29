@@ -21,8 +21,8 @@ struct D2WinImageStrc
 	int32_t nFrame;									//0x40
 	DrawMode eDrawMode;								//0x44
 	D2WinImageClickRectStrc* pClickRect;			//0x48
-	int32_t field_4C;								//0x4C
-	int32_t field_50;								//0x50
+	int32_t nBorderSliceWidth;								//0x4C
+	int32_t nBorderSliceHeight;								//0x50
 };
 
 struct D2WinImage2Strc
