@@ -64,7 +64,7 @@ D2WinTextBoxStrc* __fastcall D2Win_10042_TEXTBOX_Create(int32_t nX, int32_t nY, 
 		pTextBox->controlHeader.pfHandleVirtualKeyInput = TEXTBOX_HandleVirtualKeyInput;
 	}
 
-	pTextBox->controlHeader.field_34 = pfCallback;
+	pTextBox->controlHeader.pfCallback = pfCallback;
 	pTextBox->nCurrentLine = -1;
 	pTextBox->nNumColumns = 1;
 
@@ -831,14 +831,14 @@ int32_t __fastcall D2Win_10061(D2WinTextBoxStrc* pTextBox)
 //1.14d: 0x004FBD70
 void __fastcall D2Win_10187(D2WinTextBoxStrc* pTextBox, int32_t bSet)
 {
-	D2Win_10027_CONTROL_ToggleThirdFlag(&pTextBox->controlHeader, bSet);
+	CONTROL_SetVisible(&pTextBox->controlHeader, bSet);
 
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
 	if (pTextBox->pScrollBar)
 	{
-		D2Win_10027_CONTROL_ToggleThirdFlag(&pTextBox->pScrollBar->controlHeader, bSet);
+		CONTROL_SetVisible(&pTextBox->pScrollBar->controlHeader, bSet);
 	}
 }
 
@@ -1096,9 +1096,9 @@ int32_t __stdcall TEXTBOX_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 		}
 	}
 
-	if (pTextBox->controlHeader.field_34)
+	if (pTextBox->controlHeader.pfCallback)
 	{
-		return pTextBox->controlHeader.field_34(pMsg);
+		return pTextBox->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;
@@ -1113,7 +1113,7 @@ int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	if (!(pTextBox->controlHeader.dwFlags & gdwBitMasks[2]) || !(pTextBox->controlHeader.dwFlags & gdwBitMasks[0]) || pTextBox->nNumLines < 1 || pTextBox->nCurrentLine == -1 || D2Win_10023())
+	if (!(pTextBox->controlHeader.dwFlags & gdwBitMasks[2]) || !(pTextBox->controlHeader.dwFlags & gdwBitMasks[0]) || pTextBox->nNumLines < 1 || pTextBox->nCurrentLine == -1 || CONTROL_GetFocusedEditBox())
 	{
 		return 0;
 	}
@@ -1200,9 +1200,9 @@ int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		D2Win_10053(pTextBox, v3);
 	}
 
-	if (hasChanged && pTextBox->controlHeader.field_34)
+	if (hasChanged && pTextBox->controlHeader.pfCallback)
 	{
-		pTextBox->controlHeader.field_34(pMsg);
+		pTextBox->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;

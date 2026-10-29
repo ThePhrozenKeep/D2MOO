@@ -28,7 +28,7 @@ struct D2CropRectStrc
 
 //D2Win.0x6F8ABA90 (#10084)
 //1.14d: 0x004FD6C0
-D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* pfHandleVirtualKeyInput)(SMSGHANDLER_PARAMS*))
+D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), D2WinImageClickRectStrc* pClickRect, int32_t(__stdcall* pfHandleVirtualKeyInput)(SMSGHANDLER_PARAMS*))
 {
 	D2WinImage2Strc* pImage = D2_CALLOC_STRC(D2WinImage2Strc);
 
@@ -42,7 +42,7 @@ D2WinImage2Strc* __fastcall IMAGE2_Create(int32_t nX, int32_t nY, int32_t nWidth
 	pImage->controlHeader.pfDraw = IMAGE2_Draw;
 	pImage->controlHeader.pfHandleMouseDown = IMAGE2_HandleMouseDown;
 	pImage->controlHeader.pfHandleVirtualKeyInput = pfHandleVirtualKeyInput;
-	pImage->controlHeader.field_34 = a6;
+	pImage->controlHeader.pfCallback = pfCallback;
 	pImage->eDrawMode = DRAWMODE_NORMAL;
 	pImage->pClickRect = pClickRect;
 
@@ -321,9 +321,9 @@ int32_t __stdcall IMAGE2_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 		++pClickRect;
 	}
 
-	if (pImage->controlHeader.field_34)
+	if (pImage->controlHeader.pfCallback)
 	{
-		return pImage->controlHeader.field_34(pMsg);
+		return pImage->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;

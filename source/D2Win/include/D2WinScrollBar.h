@@ -23,7 +23,7 @@ struct D2WinScrollBarStrc
 
 //D2Win.0x6F8AF040
 //1.14d: 0x005084F0
-D2WinScrollBarStrc* __fastcall SCROLLBAR_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, int(__stdcall* a6)(SMSGHANDLER_PARAMS*));
+D2WinScrollBarStrc* __fastcall SCROLLBAR_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, int(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1BF0
 //1.14d: 0x00507EE0
 int __fastcall SCROLLBAR_Destroy(D2WinControlStrc* pControl);

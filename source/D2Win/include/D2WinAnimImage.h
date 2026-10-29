@@ -31,7 +31,7 @@ struct D2WinAnimImageStrc
 
 //D2Win.0x6F8A53B0
 //1.14d: 0x00500850
-D2WinAnimImageStrc* __fastcall ANIMIMAGE_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, uint32_t nAnimSpeed, int(__stdcall* a7)(SMSGHANDLER_PARAMS*), D2AnimatedImageDescriptor* pDescriptor, DrawMode eDrawMode, void(__stdcall* a10)(SMSGHANDLER_PARAMS*));
+D2WinAnimImageStrc* __fastcall ANIMIMAGE_Create(int nX, int nY, int nWidth, int nHeight, D2CellFileStrc* pCellFile, uint32_t nAnimSpeed, int(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), D2AnimatedImageDescriptor* pDescriptor, DrawMode eDrawMode, void(__stdcall* pfOnHover)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1BF0
 //1.14d: 0x00500300
 int __fastcall ANIMIMAGE_Destroy(D2WinControlStrc* pControl);
