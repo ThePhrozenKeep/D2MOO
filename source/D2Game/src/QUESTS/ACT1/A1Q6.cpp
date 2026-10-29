@@ -358,7 +358,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 //1.14d: 0x00595E20
 void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 4
 	};
@@ -436,7 +436,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		const int32_t nIndex = nIndices[pQuestData->fState];
+		const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 		if (nIndex != -1 && nIndex < 6)
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);

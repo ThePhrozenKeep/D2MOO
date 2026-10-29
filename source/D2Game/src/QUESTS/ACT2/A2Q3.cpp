@@ -320,7 +320,7 @@ void __fastcall ACT2Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 //1.14d: 0x0059A270
 void __fastcall ACT2Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 0
 	};
@@ -345,7 +345,7 @@ void __fastcall ACT2Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		}
 		else if (pQuestData->fState && pQuestData->bNotIntro && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && pQuestData->fState < 4)
 		{
-			const int32_t nIndex = nIndices[pQuestData->fState];
+			const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 			if (nIndex != -1 && (uint32_t)nIndex < 6)
 			{
 				QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);

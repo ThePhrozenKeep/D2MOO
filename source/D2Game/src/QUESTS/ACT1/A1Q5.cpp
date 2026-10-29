@@ -452,7 +452,7 @@ void __fastcall ACT1Q5_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 //1.14d: 0x00594C50
 void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, -1, 0, 1, 2, 3
 	};
@@ -536,7 +536,7 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			{
 				if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_REWARDGRANTED) != 1 || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_PRIMARYGOALDONE) != 1)
 				{
-					const int32_t nIndex = nIndices[pQuestData->fState];
+					const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 					if (nIndex != -1 && nIndex < 5)
 					{
 						QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
@@ -568,7 +568,7 @@ void __fastcall ACT1Q5_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	{
 		if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_REWARDGRANTED) != 1 || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q5, QFLAG_PRIMARYGOALDONE) != 1)
 		{
-			const int32_t nIndex = nIndices[pQuestData->fState];
+			const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 			if (nIndex != -1 && nIndex < 5)
 			{
 				QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
