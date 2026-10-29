@@ -326,7 +326,7 @@ int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem
     // TODO: nRand
     int16_t nSuffix = 0;
     int16_t nPrefix = 0;
-    int32_t nRand = 0;
+    int32_t bForceSuffixRoll = 0;
     if (pItemDrop->nPrefix[0] > 0)
     {
         nPrefix = ITEMS_RollMagicAffixes(pItem, 1, 1, 1, 1, pItemDrop->nPrefix[0]);
@@ -339,7 +339,7 @@ int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem
 
         if (!nSuffix)
         {
-            nRand = 1;
+            bForceSuffixRoll = 1;
         }
     }
 
@@ -350,7 +350,7 @@ int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem
     }
     else if (pItemDrop->nPrefix[0] <= 0)
     {
-        nPrefix = ITEMS_RollMagicAffixes(pItem, 1, nRand, 1, 0, pItemDrop->nPrefix[0]);
+        nPrefix = ITEMS_RollMagicAffixes(pItem, 1, bForceSuffixRoll, 1, 0, pItemDrop->nPrefix[0]);
         ITEMS_AssignSuffix(pItem, nPrefix, 0);
     }
 
@@ -1065,7 +1065,7 @@ D2UnitStrc* __fastcall ITEMS_DropRandomItemAtCoordinates(D2GameStrc* pGame, D2Ac
 
 //D2Game.0x6FC4F4A0
 //1.14d: 0x00556240
-int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts)
+int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nItemLevel, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts)
 {
     constexpr int32_t BASE_GOLD_RAND = 65;
 
@@ -1077,13 +1077,13 @@ int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* p
 
     D2_ASSERT(gnGoldItemId != -1);
     D2_ASSERT(gnGoldItemId != 0);
-    D2_ASSERT(nLevelId <= BASE_GOLD_RAND);
+    D2_ASSERT(nItemLevel <= BASE_GOLD_RAND);
 
-    const int32_t nBaseLayer = nLevelId >> 1;
-    const int32_t nDiff = BASE_GOLD_RAND - nLevelId;
+    const int32_t nBaseLayer = nItemLevel >> 1;
+    const int32_t nDiff = BASE_GOLD_RAND - nItemLevel;
     
     int32_t nAdd = nBaseLayer + 10;
-    if (nLevelId % 2)
+    if (nItemLevel % 2)
     {
         nAdd += 1;
     }
@@ -1098,17 +1098,17 @@ int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* p
 
     if (nRand < nBaseLayerChance)
     {
-        return ITEMMODE_SelectRandomArmorItemId(pGame, pSeed, nLevelId, nItemType, bIgnoreRarity);
+        return ITEMMODE_SelectRandomArmorItemId(pGame, pSeed, nItemLevel, nItemType, bIgnoreRarity);
     }
 
     if (nRand < nBaseLayerChance + nAdd)
     {
-        return ITEMMODE_SelectRandomWeaponItemId(pGame, pSeed, nLevelId, nItemType, bIgnoreRarity);
+        return ITEMMODE_SelectRandomWeaponItemId(pGame, pSeed, nItemLevel, nItemType, bIgnoreRarity);
     }
 
     if (nRand < 100)
     {
-        return ITEMMODE_SelectRandomMiscItemId(pGame, pSeed, nLevelId, nItemType, bIgnoreRarity, bAllowBodyParts);
+        return ITEMMODE_SelectRandomMiscItemId(pGame, pSeed, nItemLevel, nItemType, bIgnoreRarity, bAllowBodyParts);
     }
 
     FOG_DisplayAssert("0", __FILE__, __LINE__);

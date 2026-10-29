@@ -1023,94 +1023,94 @@ int32_t __fastcall ITEMMODE_FindFreeBodyLocation(D2UnitStrc* pUnit, D2UnitStrc* 
 
 //D2Game.0x6FC43160
 //1.14d: 0x0055D560
-void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pItemModeArg)
+void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pTraits)
 {
     D2_ASSERT(pItem);
     D2_ASSERT(pUnit);
 
-    memset(pItemModeArg, 0x00, sizeof(D2EquipmentTraitsStrc));
+    memset(pTraits, 0x00, sizeof(D2EquipmentTraitsStrc));
 
     if (pUnit->dwUnitType == UNIT_PLAYER && pUnit->dwClassId == PCLASS_BARBARIAN)
     {
-        pItemModeArg->bCanUse2Weapons = 1;
+        pTraits->bCanUse2Weapons = 1;
     }
 
     if (pUnit->dwUnitType == UNIT_PLAYER && pUnit->dwClassId == PCLASS_ASSASSIN && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_HAND_TO_HAND))
     {
-        pItemModeArg->bCanUse2Weapons = 1;
+        pTraits->bCanUse2Weapons = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOW))
     {
-        pItemModeArg->bIsBow = 1;
+        pTraits->bIsBow = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_CROSSBOW))
     {
-        pItemModeArg->bIsCrossBow = 1;
+        pTraits->bIsCrossBow = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_BOW_QUIVER))
     {
-        pItemModeArg->bIsBowQuiver = 1;
+        pTraits->bIsBowQuiver = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_CROSSBOW_QUIVER))
     {
-        pItemModeArg->bIsCrossBowQuiver = 1;
+        pTraits->bIsCrossBowQuiver = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_SHIELD))
     {
-        pItemModeArg->bIsShield = 1;
+        pTraits->bIsShield = 1;
     }
 
     if (ITEMS_CheckWeaponIfTwoHanded(pItem))
     {
-        pItemModeArg->bIsTwoHanded = 1;
+        pTraits->bIsTwoHanded = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON))
     {
-        pItemModeArg->bIsWeapon = 1;
+        pTraits->bIsWeapon = 1;
     }
 
     if (ITEMS_CheckIfThrowable(pItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pItem, STAT_ITEM_THROWABLE, 0))
     {
-        pItemModeArg->bIsThrowable = 1;
+        pTraits->bIsThrowable = 1;
     }
 
     if (ITEMS_CheckItemTypeId(pItem, ITEMTYPE_RING))
     {
-        pItemModeArg->bIsRing = 1;
+        pTraits->bIsRing = 1;
     }
 }
 
 //D2Game.0x6FC43280
 //1.14d: 0x0055D670
-int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pArg1, D2EquipmentTraitsStrc* pArg2)
+int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pTraits1, D2EquipmentTraitsStrc* pTraits2)
 {
-    if (pArg1->bIsBow && pArg2->bIsBowQuiver || pArg1->bIsBowQuiver && pArg2->bIsBow)
+    if (pTraits1->bIsBow && pTraits2->bIsBowQuiver || pTraits1->bIsBowQuiver && pTraits2->bIsBow)
     {
         return 1;
     }
 
-    if (pArg1->bIsCrossBow && pArg2->bIsCrossBowQuiver || pArg1->bIsCrossBowQuiver && pArg2->bIsCrossBow)
+    if (pTraits1->bIsCrossBow && pTraits2->bIsCrossBowQuiver || pTraits1->bIsCrossBowQuiver && pTraits2->bIsCrossBow)
     {
         return 1;
     }
 
-    if (pArg1->bIsWeapon && !pArg1->bIsTwoHanded && pArg2->bIsShield || pArg2->bIsWeapon && !pArg2->bIsTwoHanded && pArg1->bIsShield)
+    if (pTraits1->bIsWeapon && !pTraits1->bIsTwoHanded && pTraits2->bIsShield || pTraits2->bIsWeapon && !pTraits2->bIsTwoHanded && pTraits1->bIsShield)
     {
         return 1;
     }
 
-    if (pArg1->bIsWeapon && !pArg1->bIsTwoHanded && pArg2->bIsWeapon && !pArg2->bIsTwoHanded && pArg1->bCanUse2Weapons && pArg2->bCanUse2Weapons)
+    if (pTraits1->bIsWeapon && !pTraits1->bIsTwoHanded && pTraits2->bIsWeapon && !pTraits2->bIsTwoHanded && pTraits1->bCanUse2Weapons && pTraits2->bCanUse2Weapons)
     {
         return 1;
     }
 
-    if (pArg1->bIsRing && pArg2->bIsRing)
+    if (pTraits1->bIsRing && pTraits2->bIsRing)
     {
         return 1;
     }
@@ -4452,9 +4452,9 @@ void __fastcall ITEMMODE_RemoveInventoryItemFromAllPlayers(D2GameStrc* pGame, D2
 
 //D2Game.0x6FC49140
 //1.14d: 0x0055EDC0
-void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nX)
+void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nRemovedSlot)
 {
-    const int32_t nPosition = D2Clamp(nX & 3, 0, 3);
+    const int32_t nPosition = D2Clamp(nRemovedSlot & 3, 0, 3);
     int32_t j = nPosition;
     for (int32_t i = nPosition; i < 4; ++i)
     {
@@ -5299,23 +5299,23 @@ int32_t __fastcall ITEMMODE_EquipItemAtResolvedBodyLocation(D2GameStrc* pGame, D
 
 //D2Game.0x6FC4AB10
 //1.14d: 0x0055F2D0
-int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, int32_t* pBodyLoc)
+int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppBodyItem, D2UnitStrc** ppOtherBodyItem, int32_t* pBodyLoc)
 {
     if (!pPlayer || !pItem || pItem->dwUnitType != UNIT_ITEM)
     {
         return 0;
     }
 
-    if (*ppItem1)
+    if (*ppBodyItem)
     {
-        if (*ppItem2)
+        if (*ppOtherBodyItem)
         {
             return 0;
         }
     }
     else
     {
-        if (!*ppItem2)
+        if (!*ppOtherBodyItem)
         {
             return 1;
         }
@@ -5347,13 +5347,13 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
         break;
     }
 
-    D2UnitStrc* pItem1 = *ppItem1;
-    D2UnitStrc* pItem2 = *ppItem2;
+    D2UnitStrc* pItem1 = *ppBodyItem;
+    D2UnitStrc* pItem2 = *ppOtherBodyItem;
 
     if (pItem1)
     {
-        *ppItem1 = pItem2;
-        *ppItem2 = pItem1;
+        *ppBodyItem = pItem2;
+        *ppOtherBodyItem = pItem1;
         *pBodyLoc = nBodyLoc;
     }
 
@@ -5367,9 +5367,9 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
         int32_t nAmmoType = ITEMS_GetAmmoType(pItem);
         if (nAmmoType > 0)
         {
-            if (*ppItem2)
+            if (*ppOtherBodyItem)
             {
-                return ITEMS_CheckItemTypeId(*ppItem2, nAmmoType) != 0;
+                return ITEMS_CheckItemTypeId(*ppOtherBodyItem, nAmmoType) != 0;
             }
 
             return 1;
@@ -5377,12 +5377,12 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
 
         if (ITEMS_GetQuiverType(pItem))
         {
-            if (!*ppItem2)
+            if (!*ppOtherBodyItem)
             {
                 return 1;
             }
 
-            nAmmoType = ITEMS_GetAmmoType(*ppItem2);
+            nAmmoType = ITEMS_GetAmmoType(*ppOtherBodyItem);
             if (nAmmoType > 0)
             {
                 return ITEMS_CheckItemTypeId(pItem, nAmmoType) != 0;
@@ -5391,24 +5391,24 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
             return 0;
         }
 
-        nAmmoType = ITEMS_GetAmmoType(*ppItem2);
+        nAmmoType = ITEMS_GetAmmoType(*ppOtherBodyItem);
         if (nAmmoType > 0)
         {
             return ITEMS_CheckItemTypeId(pItem, nAmmoType) != 0;
         }
 
-        const int32_t nQuiverType = ITEMS_GetQuiverType(*ppItem2);
+        const int32_t nQuiverType = ITEMS_GetQuiverType(*ppOtherBodyItem);
         if (nQuiverType > 0)
         {
             return ITEMS_CheckItemTypeId(pItem, nQuiverType) != 0;
         }
 
-        if (ITEMS_CheckWeaponIfTwoHanded(pItem) && !ITEMS_Is1Or2Handed(pPlayer, pItem) || ITEMS_CheckWeaponIfTwoHanded(*ppItem2) && !ITEMS_Is1Or2Handed(pPlayer, *ppItem2))
+        if (ITEMS_CheckWeaponIfTwoHanded(pItem) && !ITEMS_Is1Or2Handed(pPlayer, pItem) || ITEMS_CheckWeaponIfTwoHanded(*ppOtherBodyItem) && !ITEMS_Is1Or2Handed(pPlayer, *ppOtherBodyItem))
         {
             return 0;
         }
 
-        const int32_t bIsWeapon = ITEMS_CheckItemTypeId(*ppItem2, ITEMTYPE_WEAPON);
+        const int32_t bIsWeapon = ITEMS_CheckItemTypeId(*ppOtherBodyItem, ITEMTYPE_WEAPON);
         if (!ITEMS_CheckItemTypeId(pItem, ITEMTYPE_WEAPON))
         {
             if (!bIsWeapon)
@@ -5416,12 +5416,12 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
                 return 0;
             }
 
-            return *ppItem1 == 0;
+            return *ppBodyItem == 0;
         }
 
         if (!bIsWeapon)
         {
-            return *ppItem1 == 0;
+            return *ppBodyItem == 0;
         }
 
         if (pPlayer->dwUnitType == UNIT_MONSTER)
@@ -5429,7 +5429,7 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
             return 0;
         }
 
-        if (pPlayer->dwClassId != PCLASS_BARBARIAN && (pPlayer->dwClassId != PCLASS_ASSASSIN || !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_HAND_TO_HAND) || !ITEMS_CheckItemTypeId(*ppItem2, ITEMTYPE_HAND_TO_HAND)))
+        if (pPlayer->dwClassId != PCLASS_BARBARIAN && (pPlayer->dwClassId != PCLASS_ASSASSIN || !ITEMS_CheckItemTypeId(pItem, ITEMTYPE_HAND_TO_HAND) || !ITEMS_CheckItemTypeId(*ppOtherBodyItem, ITEMTYPE_HAND_TO_HAND)))
         {
             return 0;
         }
@@ -5437,7 +5437,7 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
         return 1;
     }
     default:
-        return *ppItem1 == 0;
+        return *ppBodyItem == 0;
     }
 }
 
@@ -6403,9 +6403,9 @@ int32_t __fastcall ITEMMODE_FinalizeItemQuality(D2GameStrc* pGame, D2UnitStrc* p
 
 //D2Game.0x6FC4C5F0
 //1.14d: 0x00557450
-int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2UnitStrc** ppItem, D2ItemDropStrc* pItemDrop)
 {
-    D2UnitStrc* pItem = *ppUnit;
+    D2UnitStrc* pItem = *ppItem;
     if (!pItem || pItem->dwUnitType != UNIT_ITEM)
     {
         return 0;
@@ -6553,7 +6553,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
             pItemDrop->nQuality = ITEMQUAL_MAGIC;
 
             nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
-            if (!ITEMS_AssignDropMagicAffixes(ppUnit, pItemDrop))
+            if (!ITEMS_AssignDropMagicAffixes(ppItem, pItemDrop))
             {
                 for (int32_t i = 0; i < 3; ++i)
                 {
@@ -6598,7 +6598,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
     case ITEMQUAL_MAGIC:
     {
         nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
-        if (!ITEMS_AssignDropMagicAffixes(ppUnit, pItemDrop))
+        if (!ITEMS_AssignDropMagicAffixes(ppItem, pItemDrop))
         {
             for (int32_t i = 0; i < 3; ++i)
             {
@@ -6776,7 +6776,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
             STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(3 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
         }
 
-        ITEMS_ClearAffixesAndFileIndex(ppUnit);
+        ITEMS_ClearAffixesAndFileIndex(ppItem);
         ITEMS_SetItemStartSeed(pItem, nSeed);
         SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
         ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6786,16 +6786,16 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
         nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
         if (!D2GAME_RollRareItem_6FC53360(pItem, pItemDrop))
         {
-            ITEMS_ClearAffixesAndFileIndex(ppUnit);
+            ITEMS_ClearAffixesAndFileIndex(ppItem);
             ITEMS_SetItemStartSeed(pItem, nSeed);
             SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
             ITEMS_RollItemQuality(pItem, pItemDrop);
             ITEMS_SetItemQuality(pItem, ITEMQUAL_MAGIC);
             pItemDrop->nQuality = ITEMQUAL_MAGIC;
             nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
-            if (!ITEMS_AssignDropMagicAffixes(ppUnit, pItemDrop))
+            if (!ITEMS_AssignDropMagicAffixes(ppItem, pItemDrop))
             {
-                ITEMS_ClearAffixesAndFileIndex(ppUnit);
+                ITEMS_ClearAffixesAndFileIndex(ppItem);
                 ITEMS_SetItemStartSeed(pItem, nSeed);
                 SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
                 ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6804,7 +6804,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                 nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
                 if (!ITEMS_RollSuperiorItem(pItem, pItemDrop))
                 {
-                    ITEMS_ClearAffixesAndFileIndex(ppUnit);
+                    ITEMS_ClearAffixesAndFileIndex(ppItem);
                     ITEMS_SetItemStartSeed(pItem, nSeed);
                     SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
                     ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6825,7 +6825,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
         nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
         if (!ITEMS_RollCraftedItem(pItem, pItemDrop))
         {
-            ITEMS_ClearAffixesAndFileIndex(ppUnit);
+            ITEMS_ClearAffixesAndFileIndex(ppItem);
             ITEMS_SetItemStartSeed(pItem, nSeed);
             SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
             ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6851,7 +6851,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
         }
         else
         {
-            ITEMS_ClearAffixesAndFileIndex(ppUnit);
+            ITEMS_ClearAffixesAndFileIndex(ppItem);
             ITEMS_SetItemStartSeed(pItem, nSeed);
             SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
             ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6874,7 +6874,7 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
                 STATLIST_SetUnitStat(pItem, STAT_MAXDURABILITY, std::min(2 * STATLIST_GetUnitBaseStat(pItem, STAT_MAXDURABILITY, 0), 255), 0);
             }
 
-            ITEMS_ClearAffixesAndFileIndex(ppUnit);
+            ITEMS_ClearAffixesAndFileIndex(ppItem);
             ITEMS_SetItemStartSeed(pItem, nSeed);
             SEED_InitLowSeed(ITEMS_GetItemSeed(pItem), nSeed);
             ITEMS_RollItemQuality(pItem, pItemDrop);
@@ -6882,9 +6882,9 @@ int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2
             pItemDrop->nQuality = ITEMQUAL_MAGIC;
 
             nSeed = SEED_GetLowSeed(ITEMS_GetItemSeed(pItem));
-            if (!ITEMS_AssignDropMagicAffixes(ppUnit, pItemDrop) && !ITEMS_ResetToSuperiorQuality(pGame, pItemDrop, ppUnit, &nSeed))
+            if (!ITEMS_AssignDropMagicAffixes(ppItem, pItemDrop) && !ITEMS_ResetToSuperiorQuality(pGame, pItemDrop, ppItem, &nSeed))
             {
-                ITEMS_ResetToNormalQuality(pGame, pItemDrop, ppUnit, nSeed);
+                ITEMS_ResetToNormalQuality(pGame, pItemDrop, ppItem, nSeed);
             }
         }
         break;

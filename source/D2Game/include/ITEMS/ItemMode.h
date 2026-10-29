@@ -80,10 +80,10 @@ void __fastcall D2GAME_PickupGold_6FC42DD0(D2GameStrc* pGame, D2UnitStrc* pUnit,
 int32_t __fastcall ITEMMODE_FindFreeBodyLocation(D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pBodyLoc, int32_t bSkipRequirementCheck);
 //D2Game.0x6FC43160
 //1.14d: 0x0055D560
-void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pItemModeArg);
+void __fastcall ITEMMODE_BuildEquipmentTraits(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2EquipmentTraitsStrc* pTraits);
 //D2Game.0x6FC43280
 //1.14d: 0x0055D670
-int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pArg1, D2EquipmentTraitsStrc* pArg2);
+int32_t __fastcall ITEMMODE_AreEquipmentTraitsCompatible(D2EquipmentTraitsStrc* pTraits1, D2EquipmentTraitsStrc* pTraits2);
 //D2Game.0x6FC43340
 //1.14d: 0x00563560
 int32_t __fastcall D2GAME_PickupItem_6FC43340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, int32_t* pItemStatus);
@@ -181,7 +181,7 @@ int32_t __fastcall ITEMMODE_SwapCursorAndBeltItem(D2GameStrc* pGame, D2UnitStrc*
 void __fastcall ITEMMODE_RemoveInventoryItemFromAllPlayers(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem);
 //D2Game.0x6FC49140
 //1.14d: 0x0055EDC0
-void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nX);
+void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nRemovedSlot);
 //D2Game.0x6FC49220
 //1.14d: 0x00562390
 int32_t __fastcall ITEMMODE_UseBeltItem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nItemGUID, int32_t nX, int32_t nY, int32_t* pItemStatus, int32_t bUseOnMerc);
@@ -225,7 +225,7 @@ int32_t __fastcall D2GAME_Transmogrify_6FC4A660(D2GameStrc* pGame, D2UnitStrc* p
 int32_t __fastcall ITEMMODE_EquipItemAtResolvedBodyLocation(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, uint8_t bSkipRequirementCheck);
 //D2Game.0x6FC4AB10
 //1.14d: 0x0055F2D0
-int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppItem1, D2UnitStrc** ppItem2, int32_t* pBodyLoc);
+int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2UnitStrc** ppBodyItem, D2UnitStrc** ppOtherBodyItem, int32_t* pBodyLoc);
 //D2Game.0x6FC4AD80
 //1.14d: 0x00562F30
 int32_t __fastcall ITEMMODE_RecoverCorpseItems(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pCorpse);
@@ -294,4 +294,4 @@ int32_t __fastcall ITEMMODE_SelectRandomWeaponItemId(D2GameStrc* pGame, D2SeedSt
 int32_t __fastcall ITEMMODE_SelectRandomMiscItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts);
 //D2Game.0x6FC4C5F0
 //1.14d: 0x00557450
-int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2UnitStrc** ppUnit, D2ItemDropStrc* pItemDrop);
+int32_t __fastcall ITEMMODE_AssignItemQualityAndProperties(D2GameStrc* pGame, D2UnitStrc** ppItem, D2ItemDropStrc* pItemDrop);
