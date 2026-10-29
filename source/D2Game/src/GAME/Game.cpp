@@ -536,7 +536,13 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
         pGame->nSyncTimer = 2;
     }
 
-    TASK_QueueGame((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+    //1.14d: 0x00530BBC the task is allocated on its own (D2GameStrc has no tGameTask); TASK_ProcessGame frees it when the game closes
+    D2GameTaskStrc* pGameTask = D2_ALLOC_STRC(D2GameTaskStrc);
+#else
+    D2GameTaskStrc* pGameTask = &pGame->tGameTask;
+#endif
+    TASK_QueueGame(pGameTask, TASK_PROCESSGAME, GetHashValueFromGameHandle(hGame));
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nGameId;
 
@@ -801,8 +807,13 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
         pGame->nSyncTimer = 2;
     }
 
-    // TODO: 1st argument
-    TASK_QueueGame((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 11
+    //1.14d: 0x00530E4E the task is allocated on its own (D2GameStrc has no tGameTask); TASK_ProcessGame frees it when the game closes
+    D2GameTaskStrc* pGameTask = D2_ALLOC_STRC(D2GameTaskStrc);
+#else
+    D2GameTaskStrc* pGameTask = &pGame->tGameTask;
+#endif
+    TASK_QueueGame(pGameTask, TASK_PROCESSGAME, GetHashValueFromGameHandle(hGame));
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
