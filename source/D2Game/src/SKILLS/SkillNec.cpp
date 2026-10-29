@@ -478,43 +478,42 @@ int32_t __fastcall SKILLS_SrvDo030_Curse(D2GameStrc* pGame, D2UnitStrc* pUnit, i
         }
     }
 
-    // TODO: v29
-    D2CurseAuraCallbackArgsStrc v29 = {};
-    v29.pUnit = pUnit;
-    v29.pGame = pGame;
-    v29.nSkillLevel = nSkillLevel;
-    v29.bApplyAiState = bIsDimVisionOrTerrorCurse;
-    v29.nSkillId = nSkillId;
-    v29.nDuration = nLength;
-    v29.bUpdateAnimRate = 0;
+    D2CurseAuraCallbackArgsStrc curseArgs = {};
+    curseArgs.pUnit = pUnit;
+    curseArgs.pGame = pGame;
+    curseArgs.nSkillLevel = nSkillLevel;
+    curseArgs.bApplyAiState = bIsDimVisionOrTerrorCurse;
+    curseArgs.nSkillId = nSkillId;
+    curseArgs.nDuration = nLength;
+    curseArgs.bUpdateAnimRate = 0;
 
     for (int32_t i = 0; i < 6; ++i)
     {
         D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pSkillsTxtRecord->wAuraStat[i]);
         if (!pItemStatCostTxtRecord)
         {
-            v29.nAuraStat[i] = -1;
+            curseArgs.nAuraStat[i] = -1;
             break;
         }
 
         if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_UPDATEANIMRATE])
         {
-            v29.bUpdateAnimRate = 1;
+            curseArgs.bUpdateAnimRate = 1;
         }
 
-        v29.nAuraStat[i] = pSkillsTxtRecord->wAuraStat[i];
-        v29.nAuraStatCalc[i] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
+        curseArgs.nAuraStat[i] = pSkillsTxtRecord->wAuraStat[i];
+        curseArgs.nAuraStatCalc[i] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
     }
 
-    v29.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
+    curseArgs.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
 
     for (int32_t i = 0; i < 3; ++i)
     {
-        v29.nAuraEvent[i] = pSkillsTxtRecord->wAuraEvent[i];
-        v29.nAuraEventFunc[i] = pSkillsTxtRecord->wAuraEventFunc[i];
+        curseArgs.nAuraEvent[i] = pSkillsTxtRecord->wAuraEvent[i];
+        curseArgs.nAuraEventFunc[i] = pSkillsTxtRecord->wAuraEventFunc[i];
     }
 
-    return SKILLS_IterateTargetsAroundTarget(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nRange, SKILLS_AuraCallback_ApplyCurse, &v29);
+    return SKILLS_IterateTargetsAroundTarget(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nRange, SKILLS_AuraCallback_ApplyCurse, &curseArgs);
 }
 
 //D2Game.0x6FD0B9F0
@@ -697,37 +696,36 @@ int32_t __fastcall SKILLS_SrvDo061_Confuse(D2GameStrc* pGame, D2UnitStrc* pUnit,
         nLength = nBaseLength / pDifficultyLevelsTxtRecord->dwAiCurseDiv;
     }
 
-    // TODO: v25
-    D2CurseAuraCallbackArgsStrc v25 = {};
+    D2CurseAuraCallbackArgsStrc curseArgs = {};
 
-    v25.nSkillLevel = nSkillLevel;
-    v25.pGame = pGame;
-    v25.pUnit = pUnit;
-    v25.nSkillId = nSkillId;
-    v25.nDuration = nLength;
-    v25.bUpdateAnimRate = 0;
+    curseArgs.nSkillLevel = nSkillLevel;
+    curseArgs.pGame = pGame;
+    curseArgs.pUnit = pUnit;
+    curseArgs.nSkillId = nSkillId;
+    curseArgs.nDuration = nLength;
+    curseArgs.bUpdateAnimRate = 0;
 
     for (int32_t i = 1; i < 6; ++i)
     {
         D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(pSkillsTxtRecord->wAuraStat[i]);
         if (!pItemStatCostTxtRecord)
         {
-            v25.nAuraStat[i] = -1;
+            curseArgs.nAuraStat[i] = -1;
             break;
         }
 
         if (pItemStatCostTxtRecord->dwItemStatFlags & gdwBitMasks[ITEMSTATCOSTFLAGINDEX_UPDATEANIMRATE])
         {
-            v25.bUpdateAnimRate = 1;
+            curseArgs.bUpdateAnimRate = 1;
         }
 
-        v25.nAuraStat[i] = pSkillsTxtRecord->wAuraStat[i];
-        v25.nAuraStatCalc[i] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
+        curseArgs.nAuraStat[i] = pSkillsTxtRecord->wAuraStat[i];
+        curseArgs.nAuraStatCalc[i] = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraStatCalc[i], nSkillId, nSkillLevel);
     }
 
-    v25.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
+    curseArgs.nAuraTargetState = pSkillsTxtRecord->wAuraTargetState;
 
-    return SKILLS_IterateTargetsAroundTarget(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nRange, SKILLS_AuraCallback_ApplyConfuse, &v25);
+    return SKILLS_IterateTargetsAroundTarget(pGame, pSkillsTxtRecord->dwAuraFilter, pUnit, nRange, SKILLS_AuraCallback_ApplyConfuse, &curseArgs);
 }
 
 //D2Game.0x6FD0C060
