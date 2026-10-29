@@ -54,7 +54,7 @@ D2WinButtonStrc* __fastcall BUTTON_Create(int32_t nX, int32_t nY, int32_t nWidth
 	pButton->nIsPressedFrameOffset = v18;
 	if (pButton->dwButtonFlags & BUTTONFLAG_HAS_DISABLED_FRAMES)
 	{
-		pButton->field_58 = 2 * v18;
+		pButton->nDisabledFrameOffset = 2 * v18;
 	}
 
 	pButton->pfUpdateHoverState = pfUpdateHoverState;
@@ -214,7 +214,7 @@ int32_t __fastcall BUTTON_Draw(D2WinControlStrc* pControl)
 	int32_t nBaseFrame = pButton->nBaseFrame;
 	if (!(pButton->controlHeader.dwFlags & gdwBitMasks[2]) || !(pButton->controlHeader.dwFlags & gdwBitMasks[0]))
 	{
-		nBaseFrame += pButton->field_58;
+		nBaseFrame += pButton->nDisabledFrameOffset;
 	}
 	else if (pButton->bIsPressed)
 	{

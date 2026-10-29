@@ -125,9 +125,9 @@ int32_t __fastcall sub_6F8AF240(SMSGHANDLER_PARAMS* pMsg, D2WinScrollBarStrc* pS
 		D2Win_10053(pScrollBar->pTextBox, pScrollBar->nCurrentStep);
 	}
 
-	if (pScrollBar->field_5C)
+	if (pScrollBar->pfOnStepChange)
 	{
-		pScrollBar->field_5C(pMsg);
+		pScrollBar->pfOnStepChange(pMsg);
 	}
 
 	return 0;
@@ -139,7 +139,7 @@ void __fastcall D2Win_10202(D2WinScrollBarStrc* pScrollBar, int32_t nPosition)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
-	pScrollBar->field_50 = nPosition;
+	pScrollBar->nPageStep = nPosition;
 }
 
 //D2Win.0x6F8AF300 (#10201)
@@ -147,7 +147,7 @@ int32_t __fastcall D2Win_10201(D2WinScrollBarStrc* pScrollBar)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
-	return pScrollBar->field_50;
+	return pScrollBar->nPageStep;
 }
 
 //D2Win.0x6F8AF330
@@ -267,7 +267,7 @@ int32_t __stdcall SCROLLBAR_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 		}
 		else
 		{
-			int32_t nStep = pScrollBar->field_50;
+			int32_t nStep = pScrollBar->nPageStep;
 			if (!nStep)
 			{
 				int32_t nDivisor = v9 / 10;
@@ -301,9 +301,9 @@ int32_t __stdcall SCROLLBAR_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 		D2Win_10053(pScrollBar->pTextBox, pScrollBar->nCurrentStep);
 	}
 
-	if (pScrollBar->field_5C)
+	if (pScrollBar->pfOnStepChange)
 	{
-		pScrollBar->field_5C(pMsg);
+		pScrollBar->pfOnStepChange(pMsg);
 	}
 
 	if (pScrollBar->controlHeader.field_34)

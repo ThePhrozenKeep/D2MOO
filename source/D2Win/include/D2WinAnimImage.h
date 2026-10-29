@@ -23,7 +23,7 @@ struct D2WinAnimImageStrc
 	int32_t nFrame;											//0x4C
 	int32_t nAnimType;										//0x50
 	DrawMode eDrawMode;										//0x54
-	void(__stdcall* field_58)(SMSGHANDLER_PARAMS*);				//0x58
+	void(__stdcall* pfOnHover)(SMSGHANDLER_PARAMS*);				//0x58
 	int32_t bIsRunning;										//0x5C
 };
 #pragma pack(pop)

@@ -73,8 +73,8 @@ D2WinImageStrc* __fastcall IMAGE_Create(int32_t nX, int32_t nY, int32_t nWidth, 
 	pImage->controlHeader.pfDraw = IMAGE_Draw;
 	pImage->controlHeader.pfHandleMouseDown = IMAGE2_HandleMouseDown;
 	pImage->eDrawMode = DRAWMODE_NORMAL;
-	pImage->field_4C = a6;
-	pImage->field_50 = a7;
+	pImage->nBorderSliceWidth = a6;
+	pImage->nBorderSliceHeight = a7;
 
 	CONTROL_AppendToList(&pImage->controlHeader);
 
@@ -197,32 +197,32 @@ int32_t __fastcall IMAGE_Draw(D2WinControlStrc* pControl)
 	const int32_t v51[4] =
 	{ 
 		pImage->controlHeader.nImageY - pImage->controlHeader.nHeight,
-		pImage->controlHeader.nImageY - pImage->controlHeader.nHeight + pImage->field_50,
-		pImage->controlHeader.nImageY - pImage->field_50,
+		pImage->controlHeader.nImageY - pImage->controlHeader.nHeight + pImage->nBorderSliceHeight,
+		pImage->controlHeader.nImageY - pImage->nBorderSliceHeight,
 		pImage->controlHeader.nImageY
 	};
 
 	const int32_t v55[4] =
 	{
 		pImage->controlHeader.nImageX,
-		pImage->controlHeader.nImageX + pImage->field_4C,
-		pImage->controlHeader.nImageX + pImage->controlHeader.nWidth - pImage->field_4C,
+		pImage->controlHeader.nImageX + pImage->nBorderSliceWidth,
+		pImage->controlHeader.nImageX + pImage->controlHeader.nWidth - pImage->nBorderSliceWidth,
 		pImage->controlHeader.nImageX + pImage->controlHeader.nWidth
 	};
 
 	const int32_t v59[4] =
 	{
 		0,
-		pImage->field_4C,
-		256 - pImage->field_4C,
+		pImage->nBorderSliceWidth,
+		256 - pImage->nBorderSliceWidth,
 		256
 	};
 
 	const int32_t v63[4] =
 	{
 		0,
-		pImage->field_50,
-		256 - pImage->field_50,
+		pImage->nBorderSliceHeight,
+		256 - pImage->nBorderSliceHeight,
 		256
 	};
 
