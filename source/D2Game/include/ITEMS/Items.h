@@ -100,7 +100,7 @@ D2UnitStrc* __fastcall D2GAME_CreateItemEx_6FC4ED80(D2GameStrc* pGame, D2ItemDro
 D2UnitStrc* __fastcall ITEMS_DropRandomItemAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoords, D2ItemDropStrc* pItemDrop);
 //D2Game.0x6FC4F4A0
 //1.14d: 0x00556240
-int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nLevelId, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts);
+int32_t __fastcall ITEMS_SelectRandomDropItemId(D2GameStrc* pGame, D2SeedStrc* pSeed, int32_t nItemLevel, int32_t nItemType, int32_t bIgnoreRarity, int32_t bAllowBodyParts);
 //D2Game.0x6FC4F640
 //1.14d: 0x00559300
 void __fastcall ITEMS_DropGoldAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord);
