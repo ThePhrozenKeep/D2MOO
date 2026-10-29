@@ -1317,7 +1317,7 @@ int32_t __fastcall MONSTERMODE_StartAttackOrSkill(D2GameStrc* pGame, D2ModeChang
 }
 
 //D2Game.0x6FC64790
-//1.14d: 0x005A6D50, 0x005A6B70
+//1.14d: 0x005A7670
 int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
