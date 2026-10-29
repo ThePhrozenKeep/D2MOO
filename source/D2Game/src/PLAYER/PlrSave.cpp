@@ -738,7 +738,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc*
 
 //D2Game.0x6FC8A780
 //1.14d: 0x00532690
-int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSavefile, D2UnitStrc** ppPlayer, int32_t* pValid, int32_t* pVersion, int32_t* pStatCount, int32_t* pSkillCount, int32_t* pLeftSkillId, int32_t* pRightSkillId, int32_t* pHeaderSize)
+int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSavefile, D2UnitStrc** ppPlayer, int32_t* pCreateNewPlayer, int32_t* pVersion, int32_t* pStatCount, int32_t* pSkillCount, int32_t* pLeftSkillId, int32_t* pRightSkillId, int32_t* pHeaderSize)
 {
     // TODO: Names
     *pHeaderSize = 0;
@@ -752,7 +752,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *pValid = 1;
+            *pCreateNewPlayer = 1;
             return 0;
         }
 
@@ -763,7 +763,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *pValid = 1;
+            *pCreateNewPlayer = 1;
             return 0;
         }
 
@@ -777,7 +777,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *pValid = 1;
+            *pCreateNewPlayer = 1;
             return 9;
         }
 
@@ -791,7 +791,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
 
     if (_strcmpi(szClientName, (const char*)&saveHeader[8]))
     {
-        *pValid = 0;
+        *pCreateNewPlayer = 0;
         return SYSERROR_BAD_INPUT;
     }
 
@@ -886,7 +886,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     if (nFlags & CLIENTSAVEFLAG_INIT)
     {
         const uint32_t nFlagsCopy = nFlags & (~CLIENTSAVEFLAG_INIT);
-        *pValid = 1;
+        *pCreateNewPlayer = 1;
         CLIENTS_SetFlags(pClient, nFlagsCopy);
         return 0;
     }
@@ -894,7 +894,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     CLIENTS_SetWeaponSwitch(pClient, (nFlags & CLIENTSAVEFLAG_WEAPON_SWITCH) != 0);
 
     const int32_t nClassId = *(uint16_t*)&saveHeader[34];
-    *pValid = 0;
+    *pCreateNewPlayer = 0;
     CLIENTS_SetClassId(pClient, nClassId);
     CLIENTS_SetFlags(pClient, nFlags);
 
@@ -951,7 +951,7 @@ int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pCl
     {
         if (gpD2EventCallbackTable_6FD45830)
         {
-            *pValid = 1;
+            *pCreateNewPlayer = 1;
             return 0;
         }
 

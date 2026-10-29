@@ -274,14 +274,14 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 
 //D2Game.0x6FC7BB50
 //1.14d: 0x00534B30
-void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlayer, D2GameStrc* pGame, int32_t a8)
+void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlayer, D2GameStrc* pGame, int32_t bFindFreePosition)
 {
     D2_ASSERT(pItem);
     D2_ASSERT(pPlayer);
 
     ITEMS_SetInvPage(pItem, INVPAGE_INVENTORY);
 
-    D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), a8, 1, nullptr);
+    D2GAME_PlaceItem_6FC44410(__FILE__, __LINE__, pGame, pPlayer, pItem->dwUnitId, CLIENTS_GetUnitX(pItem), CLIENTS_GetUnitY(pItem), bFindFreePosition, 1, nullptr);
 }
 
 //D2Game.0x6FC7BC30
