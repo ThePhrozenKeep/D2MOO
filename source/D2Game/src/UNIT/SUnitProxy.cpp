@@ -87,7 +87,7 @@ D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromUnit(D2GameStrc* pGame, D
 
 //D2Game.0x6FCCB980
 //1.14d: 0x00535F30
-void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nEventParam)
+void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nEventParam)
 {
     int32_t nUnused = 0;
     D2NpcRecordStrc* pNpcRecord = SUNITPROXY_GetNpcRecordFromUnit(pGame, pNpc, &nUnused);
@@ -98,12 +98,12 @@ void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2
         pNpcEvent->pNext = pNpcRecord->pEvent;
         pNpcRecord->pEvent = pNpcEvent;
         pNpcEvent->field_C = 1;
-        pNpcEvent->pUnit = pPlayer;
+        pNpcEvent->pUnit = pItem;
         pNpcEvent->field_8 = nEventParam;
     }
     else
     {
-        ITEMS_RemoveFromAllPlayers(pGame, pPlayer);
+        ITEMS_RemoveFromAllPlayers(pGame, pItem);
     }
 }
 

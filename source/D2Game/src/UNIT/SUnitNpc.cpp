@@ -862,7 +862,7 @@ int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc
 
 //D2Game.0x6FCC7E20
 //1.14d: 0x00576F50
-void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pUnit, int32_t nTransactionType)
+void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pPlayer, int32_t nTransactionType)
 {
     int32_t nUnused = 0;
     D2NpcRecordStrc* pNpcRecord = SUNITPROXY_GetNpcRecordFromUnit(pGame, pNpc, &nUnused);
@@ -870,7 +870,7 @@ void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitS
     if (pNpcRecord->bGambleInit && nTransactionType == 2)
     {
         D2NpcGambleStrc* pNpcGamble = pNpcRecord->pGamble;
-        const int32_t nUnitGUID = pUnit ? pUnit->dwUnitId : -1;
+        const int32_t nUnitGUID = pPlayer ? pPlayer->dwUnitId : -1;
         while (pNpcGamble)
         {
             if (pNpcGamble->dwGUID == nUnitGUID)
@@ -889,7 +889,7 @@ void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitS
                 {
                     if (pItem && pNpc)
                     {
-                        D2InventoryStrc* pGambleInventory = SUNITPROXY_GetGambleInventory(pGame, pUnit, pNpc);
+                        D2InventoryStrc* pGambleInventory = SUNITPROXY_GetGambleInventory(pGame, pPlayer, pNpc);
                         if (pGambleInventory)
                         {
                             ITEMMODE_RemoveStoredItem(pGame, pNpc, pItem->dwUnitId, &nUnused, 0, 0, pGambleInventory, 0);
@@ -1173,11 +1173,11 @@ D2UnitStrc* __fastcall D2GAME_MERCS_Create_6FCC8630(D2GameStrc* pGame, D2UnitStr
 
 //D2Game.0x6FCC87C0
 //1.14d: 0x00577700
-D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pFreeStackCount)
+D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem, int32_t* pFreeStackCount)
 {
     *pFreeStackCount = 1;
 
-    if (!pUnit->pInventory || !ITEMS_CheckIfStackable(pItem) || !ITEMS_GetAutoStack(pItem))
+    if (!pPlayer->pInventory || !ITEMS_CheckIfStackable(pItem) || !ITEMS_GetAutoStack(pItem))
     {
         return nullptr;
     }
@@ -1186,7 +1186,7 @@ D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pPlayer, D
     int32_t nMaxStack = ITEMS_GetTotalMaxStack(pItem);
     while (1)
     {
-        pStackItem = INVENTORY_FindEquippedItemForStack(pUnit->pInventory, pItem, pStackItem);
+        pStackItem = INVENTORY_FindEquippedItemForStack(pPlayer->pInventory, pItem, pStackItem);
         if (!pStackItem)
         {
             break;
@@ -1209,7 +1209,7 @@ D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pPlayer, D
     {
         do
         {
-            pStackItem = INVENTORY_FindBackPackItemForStack(pUnit->pInventory, pItem, pStackItem);
+            pStackItem = INVENTORY_FindBackPackItemForStack(pPlayer->pInventory, pItem, pStackItem);
             if (!pStackItem)
             {
                 *pFreeStackCount = nMaxStack;

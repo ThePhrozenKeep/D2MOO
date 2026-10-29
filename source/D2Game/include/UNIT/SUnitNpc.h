@@ -112,7 +112,7 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCC74F0(D2GameStrc* pGame, D2Un
 int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int16_t nItemMode, int32_t nUnusedArg);
 //D2Game.0x6FCC7E20
 //1.14d: 0x00576F50
-void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pUnit, int32_t nTransactionType);
+void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pPlayer, int32_t nTransactionType);
 //D2Game.0x6FCC7FA0
 //1.14d: 0x005770E0
 void __fastcall SUNITNPC_HireMercenaryFromRoster(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, uint16_t wName);
