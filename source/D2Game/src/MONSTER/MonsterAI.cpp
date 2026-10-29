@@ -41,7 +41,7 @@
 
 //D2Game.0x6FC61190
 //1.14d: 0x00573B20
-void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pItemCode, DWORD dwILvl, DWORD dwQuality)
+void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pEquipment, uint32_t nItemLevel, uint32_t nItemQuality)
 {
     if (!pMonster || pMonster->dwUnitType != UNIT_MONSTER)
     {
@@ -54,20 +54,20 @@ void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMon
     }
 
     int32_t nItemId = 0;
-    if (!DATATBLS_GetItemRecordFromItemCode(pItemCode->nItemCode, &nItemId))
+    if (!DATATBLS_GetItemRecordFromItemCode(pEquipment->nItemCode, &nItemId))
     {
         return;
     }
 
-    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pMonster, nItemId, pGame, IMODE_ONCURSOR, dwQuality, 1u, 1u, dwILvl, 0, 0, 0);
+    D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pMonster, nItemId, pGame, IMODE_ONCURSOR, nItemQuality, 1u, 1u, nItemLevel, 0, 0, 0);
     if (!pItem)
     {
         return;
     }
 
     ITEMS_SetItemFlag(pItem, IFLAG_NOSELL, 1);
-    ITEMS_SetBodyLocation(pItem, pItemCode->nBodyLoc);
-    if (pItemCode->nBodyLoc == BODYLOC_NONE)
+    ITEMS_SetBodyLocation(pItem, pEquipment->nBodyLoc);
+    if (pEquipment->nBodyLoc == BODYLOC_NONE)
     {
         return;
     }
@@ -85,7 +85,7 @@ void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMon
 
 //D2Game.0x6FC61270
 //1.14d: 0x00573270
-void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nId, D2MercDataStrc* pMercData, int32_t bDead)
+void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nSaveVersion, D2MercDataStrc* pMercData, int32_t bDead)
 {
     if (!pPlayer || !pUnit || !pMercData || pPlayer->dwUnitType != UNIT_PLAYER)
     {
@@ -128,7 +128,7 @@ void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer,
     pUnit->dwFlags |= UNITFLAG_ISREVIVE;
     AIGENERAL_SetOwnerData(pGame, pUnit, pPlayer->dwUnitId, pPlayer->dwUnitType, 0, 0);
 
-    if (nId == -1)
+    if (nSaveVersion == -1)
     {
         if (!DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, hirelingInit.nId, hirelingInit.nLevel))
         {

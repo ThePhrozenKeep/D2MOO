@@ -183,7 +183,7 @@ void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* 
         return;
     }
 
-    uint8_t nDirection = 0;
+    uint8_t nModeData = 0;
     uint8_t nHitClass = 0;
     int nStepCount = 0;
     uint8_t nHeader = 0;
@@ -240,13 +240,13 @@ void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* 
     }
     case MONMODE_DEATH:
     {
-        nDirection = PATH_GetDirection(pDynamicPath);
+        nModeData = PATH_GetDirection(pDynamicPath);
         nHitClass = LOBYTE(pMonster->dwLastHitClass);
         break;
     }
     case MONMODE_DEAD:
     {
-        nDirection = PATH_GetDirection(pDynamicPath);
+        nModeData = PATH_GetDirection(pDynamicPath);
         break;
     }
     case MONMODE_KNOCKBACK:
@@ -292,11 +292,11 @@ void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* 
         {
             if (nHeader == 0x68)
             {
-                D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, nAction, v8, v9, nDirection, 0, 0);
+                D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, nAction, v8, v9, nModeData, 0, 0);
             }
             else
             {
-                D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, nAction, v8, v9, nDirection, 0, 0);
+                D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, nAction, v8, v9, nModeData, 0, 0);
             }
             return;
         }
@@ -319,22 +319,22 @@ void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* 
     {
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x6C_6FC3CF90(pClient, 0x6Cu, pMonster->dwUnitId, nAction, v8, v9, nDirection, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
+            D2GAME_PACKETS_SendPacket0x6C_6FC3CF90(pClient, 0x6Cu, pMonster->dwUnitId, nAction, v8, v9, nModeData, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x6B_6FC3D000(pClient, 0x6Bu, pMonster->dwUnitId, nAction, v8, v9, nDirection, nHitClass, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
+            D2GAME_PACKETS_SendPacket0x6B_6FC3D000(pClient, 0x6Bu, pMonster->dwUnitId, nAction, v8, v9, nModeData, nHitClass, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
         }
     }
     else
     {
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(pClient, 0x6Au, pMonster->dwUnitId, nAction, v8, v9, nDirection);
+            D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(pClient, 0x6Au, pMonster->dwUnitId, nAction, v8, v9, nModeData);
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x69_6FC3CF30(pClient, 0x69u, pMonster->dwUnitId, nAction, v8, v9, nDirection, nHitClass);
+            D2GAME_PACKETS_SendPacket0x69_6FC3CF30(pClient, 0x69u, pMonster->dwUnitId, nAction, v8, v9, nModeData, nHitClass);
         }
     }
 }

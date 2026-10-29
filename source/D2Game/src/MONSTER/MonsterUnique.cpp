@@ -2109,7 +2109,7 @@ void __fastcall MONSTERUNIQUE_ExecuteUModModeChangeCallbacks(D2GameStrc* pGame, 
 
 //D2Game.0x6FC6E870
 //1.14d: 0x005A4370
-void __fastcall MONSTERUNIQUE_EventExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUMod, int32_t bUnique)
+void __fastcall MONSTERUNIQUE_EventExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
     MONSTERUNIQUE_ExecuteUModCallbacks(pGame, pUnit, 0, 2);
 }
@@ -2140,9 +2140,9 @@ void __fastcall MONSTERUNIQUE_ExecuteUModMissileCallbacks(D2GameStrc* pGame, D2U
 
 //D2Game.0x6FC6E8D0
 //1.14d: 0x005A43E0
-D2UnitStrc* __fastcall MONSTERUNIQUE_SpawnUniqueGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t bAllowChampion, uint16_t nX, uint16_t nY, int32_t bAvoidWarps)
+D2UnitStrc* __fastcall MONSTERUNIQUE_SpawnUniqueGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, int32_t bAllowChampion, uint16_t nX, uint16_t nY, int32_t bAvoidWarps)
 {
-    D2UnitStrc* pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, pRoomCoordList, nX, nY, -1, nSuperUniqueId, bAvoidWarps);
+    D2UnitStrc* pMonster = MONSTERUNIQUE_SpawnUniqueMonster(pGame, pRoom, pRoomCoordList, nX, nY, -1, nMonsterId, bAvoidWarps);
     if (!pMonster)
     {
         return nullptr;

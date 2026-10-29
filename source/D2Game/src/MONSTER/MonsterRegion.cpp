@@ -27,7 +27,7 @@
 
 //D2Game.0x6FC66260
 //1.14d: 0x0054DC40
-int32_t __fastcall MONSTERREGION_FindSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nSuperUniqueId, int32_t* pX, int32_t* pY, int32_t bAvoidWarps)
+int32_t __fastcall MONSTERREGION_FindSpawnLocation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, int32_t* pX, int32_t* pY, int32_t bAvoidWarps)
 {
     int32_t nLeft = 0;
     int32_t nTop = 0;
@@ -118,14 +118,14 @@ int32_t __fastcall MONSTERREGION_FindSpawnLocation(D2GameStrc* pGame, D2ActiveRo
         {
             if (pRoomCoordList)
             {
-                if (D2Common_10095(pRoom, nX, nY) == nRoomCoordListIndex && MONSTERSPAWN_SpawnInCoordList(pGame, pRoom, pRoomCoordList, nX, nY, nSuperUniqueId, 1, -1, 1))
+                if (D2Common_10095(pRoom, nX, nY) == nRoomCoordListIndex && MONSTERSPAWN_SpawnInCoordList(pGame, pRoom, pRoomCoordList, nX, nY, nMonsterId, 1, -1, 1))
                 {
                     *pX = nX;
                     *pY = nY;
                     return 1;
                 }
             }
-            else if (D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nSuperUniqueId, 1, -1, 1))
+            else if (D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, nMonsterId, 1, -1, 1))
             {
                 *pX = nX;
                 *pY = nY;
@@ -820,9 +820,9 @@ int32_t __fastcall MONSTERREGION_FindFormationSpawnLocation(D2GameStrc* pGame, D
 
 //D2Game.0x6FC677D0
 //1.14d: 0x0054DF80
-D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMin, uint8_t nMax)
+D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nMonsterId, uint8_t nMinGroupSize, uint8_t nMaxGroupSize)
 {
-    if (!nMin || !nMax || nMax < nMin)
+    if (!nMinGroupSize || !nMaxGroupSize || nMaxGroupSize < nMinGroupSize)
     {
         return nullptr;
     }
@@ -840,8 +840,8 @@ D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2Acti
         return nullptr;
     }
 
-    --nMin;
-    --nMax;
+    --nMinGroupSize;
+    --nMaxGroupSize;
 
     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(nMonsterId);
     if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_OBJCOL] && nMonsterId == MONSTER_EVILHUT)
@@ -849,7 +849,7 @@ D2UnitStrc* __fastcall MONSTERREGION_SpawnMonsterGroup(D2GameStrc* pGame, D2Acti
         SUNIT_AllocUnitData(UNIT_OBJECT, 562, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster), pGame, pRoom, 1, 0, 0);
     }
 
-    const int32_t nCount = nMin + ITEMS_RollLimitedRandomNumber(&pMonster->pSeed, nMax - nMin + 1);
+    const int32_t nCount = nMinGroupSize + ITEMS_RollLimitedRandomNumber(&pMonster->pSeed, nMaxGroupSize - nMinGroupSize + 1);
     for (int32_t i = 0; i < nCount; ++i)
     {
         MONSTERSPAWN_SpawnAtUnitInCoordList(pGame, pRoomCoordList, pMonster, nMonsterId, 1, 3, 0);
@@ -1119,9 +1119,9 @@ void __fastcall MONSTERREGION_InitializeForGame(D2GameStrc* pGame)
 
 //D2Game.0x6FC68180
 //1.14d: 0x00547D90
-void __fastcall MONSTERREGION_RegisterSpawnedMonster(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bToggleFlag)
+void __fastcall MONSTERREGION_RegisterSpawnedMonster(D2MonsterRegionStrc** ppMonsterRegion, D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit, int32_t bExcludeFromCount)
 {
-    if (bToggleFlag)
+    if (bExcludeFromCount)
     {
         MONSTER_ToggleSummonerFlag(pUnit, 2, 1);
     }

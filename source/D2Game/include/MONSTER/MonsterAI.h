@@ -17,10 +17,10 @@ struct D2MonsterEquipmentStrc
 
 //D2Game.0x6FC61190
 //1.14d: 0x00573B20
-void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pItemCode, DWORD dwILvl, DWORD dwQuality);
+void __fastcall MONSTERAI_CreateAndEquipItem(D2GameStrc* pGame, D2UnitStrc* pMonster, D2MonsterEquipmentStrc* pEquipment, uint32_t nItemLevel, uint32_t nItemQuality);
 //D2Game.0x6FC61270
 //1.14d: 0x00573270
-void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nId, D2MercDataStrc* pMercData, int32_t bDead);
+void __fastcall MONSTERAI_AssignHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pUnit, int16_t nSaveVersion, D2MercDataStrc* pMercData, int32_t bDead);
 //D2Game.0x6FC61490
 //1.14d: 0x005726C0
 void __fastcall MONSTERAI_SendMercStats(D2GameStrc* pGame, D2UnitStrc* pPlayer, DWORD dwZero);
