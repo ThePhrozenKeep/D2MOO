@@ -41,7 +41,7 @@
 struct D2EnergyShieldDataStrc
 {
     int32_t nDamageOffset;
-    int32_t bPlayerOnly;
+    int32_t bLeechDamage;
 };
 #pragma pack(pop)
 
@@ -1035,13 +1035,13 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
         nDivisor = 1;
     }
 
-    int32_t bIsPlayer = 1;
+    int32_t bAbsorbLeech = 1;
     if (pUnit && (pUnit->dwUnitType != UNIT_MONSTER || MONSTERS_GetHirelingTypeId(pUnit)))
     {
-        bIsPlayer = 0;
+        bAbsorbLeech = 0;
     }
 
-    constexpr D2EnergyShieldDataStrc gEnergyShieldData_6FD29AD8[8] =
+    constexpr D2EnergyShieldDataStrc energyShieldDamageEntries[8] =
     {
         { offsetof(D2DamageStrc, dwPhysDamage), 0 },
         { offsetof(D2DamageStrc, dwFireDamage), 0 },
@@ -1056,8 +1056,8 @@ int32_t __fastcall SKILLS_EventFunc24_EnergyShield(D2GameStrc* pGame, int32_t nE
     int32_t nAbsorbedDamage = 0;
     for (int32_t i = 0; i < 8; ++i)
     {
-        const D2EnergyShieldDataStrc* pEnergyShieldData = &gEnergyShieldData_6FD29AD8[i];
-        if (!pEnergyShieldData->bPlayerOnly || bIsPlayer)
+        const D2EnergyShieldDataStrc* pEnergyShieldData = &energyShieldDamageEntries[i];
+        if (!pEnergyShieldData->bLeechDamage || bAbsorbLeech)
         {
             int32_t* pDamageValue = (int32_t*)((char*)pDamage + pEnergyShieldData->nDamageOffset);
             if (*pDamageValue > 0)

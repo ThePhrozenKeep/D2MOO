@@ -55,9 +55,9 @@ struct D2AuraModStrc
 using UModInitFunc = void(__fastcall*)(D2UnitStrc*, int32_t, int32_t);
 
 using MonUModFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
-struct D2UnkUModStrc
+struct D2UModCallbackTableStrc
 {
-    MonUModFunc unk0x00[6];
+    MonUModFunc pCallbacks[6];
 };
 #pragma pack(pop)
 
@@ -2015,9 +2015,9 @@ void __fastcall MONSTERUNIQUE_ExecuteUModModeStartCallbacks(D2GameStrc* pGame, D
 
 //D2Game.0x6FC6E780
 //1.14d: 0x005A4270
-void __fastcall MONSTERUNIQUE_ExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nIndex)
+void __fastcall MONSTERUNIQUE_ExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMissile, int32_t nCallbackIndex)
 {
-    constexpr D2UnkUModStrc tUModCallbacks[43] =
+    constexpr D2UModCallbackTableStrc tUModCallbacks[43] =
     {
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
         { nullptr,                                      nullptr,                                    nullptr,                                    nullptr,                            nullptr,        nullptr },
@@ -2076,11 +2076,11 @@ void __fastcall MONSTERUNIQUE_ExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    if (nIndex == 5)
+    if (nCallbackIndex == 5)
     {
         for (int32_t i = 0; i < 9; ++i)
         {
-            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].unk0x00[nIndex];
+            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].pCallbacks[nCallbackIndex];
             if (pUModFunc)
             {
                 pUModFunc(pGame, pMissile, pUMods[i], bUnique);
@@ -2091,7 +2091,7 @@ void __fastcall MONSTERUNIQUE_ExecuteUModCallbacks(D2GameStrc* pGame, D2UnitStrc
     {
         for (int32_t i = 0; i < 9; ++i)
         {
-            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].unk0x00[nIndex];
+            MonUModFunc pUModFunc = tUModCallbacks[pUMods[i]].pCallbacks[nCallbackIndex];
             if (pUModFunc)
             {
                 pUModFunc(pGame, pUnit, pUMods[i], bUnique);
