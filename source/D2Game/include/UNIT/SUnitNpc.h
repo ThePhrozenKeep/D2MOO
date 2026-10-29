@@ -36,7 +36,7 @@ struct D2NpcControlStrc
 struct D2NpcGambleStrc
 {
 	D2InventoryStrc* pInventory;			//0x00
-	D2UnitGUID dwGUID;							//0x04
+	D2UnitGUID dwPlayerGUID;					//0x04
 	D2NpcGambleStrc* pNext;					//0x08
 };
 
@@ -55,10 +55,14 @@ struct D2NpcVendorChainStrc
 
 struct D2NpcEventStrc
 {
-	D2UnitStrc* pUnit;
-	int32_t field_4;
-	int32_t field_8;
-	int32_t field_C;
+	union
+	{
+		D2UnitStrc* pItem;					// bItemEvent == 1: the store item that did not fit
+		int32_t nItemLevel;					// bItemEvent == 0: the player's new level
+	};
+	int32_t nItemQuality;
+	int32_t bPending;
+	int32_t bItemEvent;
 	D2NpcEventStrc* pNext;
 };
 
@@ -112,7 +116,7 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCC74F0(D2GameStrc* pGame, D2Un
 int32_t __fastcall D2GAME_STORES_SellItem_6FCC7680(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int16_t nItemMode, int32_t nUnusedArg);
 //D2Game.0x6FCC7E20
 //1.14d: 0x00576F50
-void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pUnit, int32_t nTransactionType);
+void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitStrc* pNpc, D2UnitStrc* pItem, D2UnitStrc* pPlayer, int32_t nTransactionType);
 //D2Game.0x6FCC7FA0
 //1.14d: 0x005770E0
 void __fastcall SUNITNPC_HireMercenaryFromRoster(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, uint16_t wName);
@@ -127,7 +131,7 @@ void __fastcall SUNITNPC_ResurrectHireling(D2GameStrc* pGame, D2UnitStrc* pPlaye
 D2UnitStrc* __fastcall D2GAME_MERCS_Create_6FCC8630(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t wName, uint32_t nSeed, int16_t wVersion, int32_t nBaseMonster, int32_t bDead);
 //D2Game.0x6FCC87C0
 //1.14d: 0x00577700
-D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pFreeStackCount);
+D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem, int32_t* pFreeStackCount);
 //D2Game.0x6FCC88B0
 //1.14d: 0x00577830
 int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bMultibuy);

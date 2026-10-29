@@ -149,7 +149,8 @@ struct D2PlayerDataStrc
 	int32_t unk0x30;							//0x30
 	D2ArenaUnitStrc* pArenaUnit;				//0x34
 	D2PlayerListStrc* pPlayerList;				//0x38
-	uint32_t unk0x3C[2];						//0x3C
+	uint32_t unk0x3C;							//0x3C
+	D2UnitGUID dwTrackedSummonGUID;			//0x40
 	D2PlayerPetStrc* pPlayerPets;				//0x44
 	uint32_t dwUniqueId;						//0x48
 	uint32_t bBusy;								//0x4C

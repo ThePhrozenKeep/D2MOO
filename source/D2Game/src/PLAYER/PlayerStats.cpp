@@ -116,7 +116,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     STATLIST_AddUnitStat(pUnit, STAT_SKILLPTS, nLevelDiff, 0);
 
-    SUNITPROXY_InitializeNpcEventChain(pGame, pUnit);
+    SUNITPROXY_InitializeNpcEventChain(pGame, pUnit, nNewLevel);
     SUNIT_AttachSound(pUnit, 2u, pUnit);
     SUNIT_IterateLivingPlayers(pGame, PLAYERSTATS_OnPlayerLeveledUp, pUnit);
     D2GAME_UpdatePlayerVitals_6FC4B240(pGame, pUnit);

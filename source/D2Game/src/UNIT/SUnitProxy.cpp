@@ -87,7 +87,7 @@ D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromUnit(D2GameStrc* pGame, D
 
 //D2Game.0x6FCCB980
 //1.14d: 0x00535F30
-void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nEventParam)
+void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pItem, int32_t bPending)
 {
     int32_t nUnused = 0;
     D2NpcRecordStrc* pNpcRecord = SUNITPROXY_GetNpcRecordFromUnit(pGame, pNpc, &nUnused);
@@ -97,13 +97,13 @@ void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2
 
         pNpcEvent->pNext = pNpcRecord->pEvent;
         pNpcRecord->pEvent = pNpcEvent;
-        pNpcEvent->field_C = 1;
-        pNpcEvent->pUnit = pPlayer;
-        pNpcEvent->field_8 = nEventParam;
+        pNpcEvent->bItemEvent = 1;
+        pNpcEvent->pItem = pItem;
+        pNpcEvent->bPending = bPending;
     }
     else
     {
-        ITEMS_RemoveFromAllPlayers(pGame, pPlayer);
+        ITEMS_RemoveFromAllPlayers(pGame, pItem);
     }
 }
 
@@ -430,9 +430,9 @@ void __fastcall SUNITPROXY_ClearNpcRecordData(D2GameStrc* pGame, D2NpcRecordStrc
     while (pNpcEvent)
     {
         D2NpcEventStrc* pNextEvent = pNpcEvent->pNext;
-        if (pNpcEvent->field_C == 1 && pNpcEvent->pUnit)
+        if (pNpcEvent->bItemEvent == 1 && pNpcEvent->pItem)
         {
-            ITEMS_RemoveFromAllPlayers(pGame, pNpcEvent->pUnit);
+            ITEMS_RemoveFromAllPlayers(pGame, pNpcEvent->pItem);
         }
         D2_FREE_POOL(pGame->pMemoryPool, pNpcEvent);
         pNpcEvent = pNextEvent;
@@ -622,7 +622,7 @@ void __fastcall SUNITPROXY_OnClientRemovedFromGame(D2GameStrc* pGame, D2UnitStrc
 
 //D2Game.0x6FCCC7C0
 //1.14d: 0x00536850
-void __fastcall SUNITPROXY_InitializeNpcEventChain(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall SUNITPROXY_InitializeNpcEventChain(D2GameStrc* pGame, D2UnitStrc* pUnused, int32_t nNewLevel)
 {
     //GetTickCount();
     for (int32_t i = 0; i < pGame->pNpcControl->nArraySize; ++i)
@@ -632,11 +632,11 @@ void __fastcall SUNITPROXY_InitializeNpcEventChain(D2GameStrc* pGame, D2UnitStrc
         if (pRecord->npcTrade.bTrader == 1 && pRecord->npcTrade.bVendorInit == 1 && pRecord->bTrading == 1)
         {
             D2NpcEventStrc* pEvent = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2NpcEventStrc);
-            pEvent->field_C = 0;
+            pEvent->bItemEvent = 0;
             pEvent->pNext = pRecord->pEvent;
-            pEvent->pUnit = pUnit;
-            pEvent->field_8 = 1;
-            pEvent->field_4 = 4;
+            pEvent->nItemLevel = nNewLevel;
+            pEvent->bPending = 1;
+            pEvent->nItemQuality = ITEMQUAL_MAGIC;
             pRecord->pEvent = pEvent;
         }
     }
@@ -683,7 +683,7 @@ void __fastcall SUNITPROXY_FreeVendorChain(D2GameStrc* pGame, D2UnitStrc* pPlaye
                 D2NpcGambleStrc* pPreviousGamble = nullptr;
                 for (D2NpcGambleStrc* pGamble = pNpcRecord->pGamble; pGamble; pGamble = pGamble->pNext)
                 {
-                    if (pGamble->dwGUID == nPlayerGUID)
+                    if (pGamble->dwPlayerGUID == nPlayerGUID)
                     {
                         if (pPreviousGamble)
                         {
@@ -762,7 +762,7 @@ void __fastcall SUNITPROXY_UpdateGambleInventory(D2GameStrc* pGame, D2UnitStrc* 
         const int32_t nPlayerGUID = pPlayer ? pPlayer->dwUnitId : -1;
         for (D2NpcGambleStrc* pGamble = pNpcRecord->pGamble; pGamble; pGamble = pGamble->pNext)
         {
-            if (pGamble->dwGUID == nPlayerGUID)
+            if (pGamble->dwPlayerGUID == nPlayerGUID)
             {
                 if (pGamble->pInventory)
                 {
@@ -789,7 +789,7 @@ D2InventoryStrc* __fastcall SUNITPROXY_GetGambleInventory(D2GameStrc* pGame, D2U
     const int32_t nPlayerGUID = pPlayer ? pPlayer->dwUnitId : -1;
     for (D2NpcGambleStrc* pGamble = pNpcRecord->pGamble; pGamble; pGamble = pGamble->pNext)
     {
-        if (pGamble->dwGUID == nPlayerGUID)
+        if (pGamble->dwPlayerGUID == nPlayerGUID)
         {
             return pGamble->pInventory;
         }
@@ -1020,7 +1020,7 @@ void __fastcall SUNITPROXY_FreeNpcGamble(D2GameStrc* pGame, D2UnitStrc* pNpc, D2
         D2NpcGambleStrc* pPreviousGamble = nullptr;
         for (D2NpcGambleStrc* pGamble = pNpcRecord->pGamble; pGamble; pGamble = pGamble->pNext)
         {
-            if (pGamble->dwGUID == nPlayerGUID)
+            if (pGamble->dwPlayerGUID == nPlayerGUID)
             {
                 if (pPreviousGamble)
                 {

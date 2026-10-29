@@ -155,7 +155,7 @@ void __fastcall SUNIT_RemoveAllItemsFromInventory(D2GameStrc* pGame, D2UnitStrc*
 D2GameStrc* __fastcall SUNIT_GetGameFromUnit(D2UnitStrc* pUnit);
 //D2Game.0x6FCBD760
 //1.14d: 0x00554040
-void __fastcall SUNIT_SetTrackedSummonGUID(D2UnitStrc* pUnit, int32_t nFlag);
+void __fastcall SUNIT_SetTrackedSummonGUID(D2UnitStrc* pUnit, int32_t nSummonGUID);
 //D2Game.0x6FCBD790
 //1.14d: 0x00554070
 uint32_t __fastcall SUNIT_GetTrackedSummonGUID(D2UnitStrc* pUnit);
