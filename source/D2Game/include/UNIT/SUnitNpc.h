@@ -55,9 +55,13 @@ struct D2NpcVendorChainStrc
 
 struct D2NpcEventStrc
 {
-	D2UnitStrc* pUnit;
-	int32_t field_4;
-	int32_t field_8;
+	union
+	{
+		D2UnitStrc* pItem;					// bItemEvent == 1: the store item that did not fit
+		int32_t nItemLevel;					// bItemEvent == 0: the player's new level
+	};
+	int32_t nItemQuality;
+	int32_t bPending;
 	int32_t bItemEvent;
 	D2NpcEventStrc* pNext;
 };

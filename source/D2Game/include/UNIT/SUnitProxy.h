@@ -37,7 +37,7 @@ D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromClassId(D2GameStrc* pGame
 D2NpcRecordStrc* __fastcall SUNITPROXY_GetNpcRecordFromUnit(D2GameStrc* pGame, D2UnitStrc* pNpc, int32_t* pIndex);
 //D2Game.0x6FCCB980
 //1.14d: 0x00535F30
-void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pItem, int32_t nEventParam);
+void __fastcall SUNITPROXY_AllocNpcEvent(D2UnitStrc* pNpc, D2GameStrc* pGame, D2UnitStrc* pItem, int32_t bPending);
 //D2Game.0x6FCCBA30
 //1.14d: 0x00536070
 void __fastcall SUNITPROXY_InitializeNpcControl(D2GameStrc* pGame);
@@ -64,7 +64,7 @@ void __fastcall SUNITPROXY_CountPlayersInLevel(D2GameStrc* pGame, D2UnitStrc* pU
 void __fastcall SUNITPROXY_OnClientRemovedFromGame(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCCC7C0
 //1.14d: 0x00536850
-void __fastcall SUNITPROXY_InitializeNpcEventChain(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall SUNITPROXY_InitializeNpcEventChain(D2GameStrc* pGame, D2UnitStrc* pUnused, int32_t nNewLevel);
 //D2Game.0x6FCCC860
 //1.14d: 0x00536B20
 D2InventoryStrc* __fastcall SUNITPROXY_GetNpcInventory(D2GameStrc* pGame, int32_t nNpc);
