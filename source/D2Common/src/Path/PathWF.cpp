@@ -35,8 +35,9 @@ void __vectorcall PATH_ReplaceSubpathPoints(D2PathMovStrc* pMov, D2PathPointStrc
 	(*pSubPathStartIdx) = nLastReplacedPointIdx + 1;
 }
 
-//1.10f: 0x6FDE5198
-//1.13C: 0x6FDD2458
+//1.10f: 0x6FDD2458
+//1.13C: 0x6FDE5198
+//1.14d: 0x006F1E18
 static int gnCellOffsetsToDirections[] =
 {
 	/*(-1,-1)*/ 7, /*( 0,-1)*/ 0, /*( 1,-1)*/ 1,

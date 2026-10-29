@@ -2186,6 +2186,7 @@ void __stdcall SKILLS_SetSkillMode(D2SkillStrc* pSkill, int nSkillMode)
 }
 
 //D2Common.0x6FDB18D0 (#10975)
+//1.14d: 0x644360
 int __stdcall SKILLS_GetSkillMode(D2SkillStrc* pSkill)
 {
 	if (pSkill)

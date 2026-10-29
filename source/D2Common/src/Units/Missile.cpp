@@ -13,6 +13,7 @@
 #include <D2Combat.h>
 #include <Calc.h>
 
+//1.14d: 0x745828
 D2CalcCallbackInfoStrc off_6FDE5A50[] =
 {
 	{ MISSILE_GetMinimum, 2 },
@@ -21,6 +22,8 @@ D2CalcCallbackInfoStrc off_6FDE5A50[] =
 	{ MISSILE_GetSpecialParamValueForSkillMissile, 2 },
 };
 
+//1.10f: 0x6FDE5A70
+//1.14d: 0x745848
 int dword_6FDE5A70 = ARRAY_SIZE(off_6FDE5A50);
 
 //TODO: Find names
