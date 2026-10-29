@@ -58,22 +58,22 @@ D2WIN_DLL_DECL int __stdcall BACKGROUND_SetCellFile(D2CellFileStrc* pCellFile);
 D2WIN_DLL_DECL int __stdcall CURSOR_SetCellFile(D2CellFileStrc* pCellFile);
 //D2Win.0x6F8ACF70 (#10010)
 //1.14d: 0x004F9180
-D2WIN_DLL_DECL void __stdcall D2Win_10010(int(*a1)());
+D2WIN_DLL_DECL void __stdcall D2Win_SetQuitCallback(int(*pfOnQuit)());
 //D2Win.0x6F8ACF80 (#10009)
 //1.14d: 0x004F9190
-D2WIN_DLL_DECL int __stdcall D2Win_10009();
+D2WIN_DLL_DECL int __stdcall D2Win_StopMessageLoop();
 //D2Win.0x6F8ACF90 (#10008)
 //1.14d: 0x004FA590
-D2WIN_DLL_DECL int __stdcall D2Win_10008(void(__stdcall* pCallback)(DWORD));
+D2WIN_DLL_DECL int __stdcall D2Win_RunMessageLoop(void(__stdcall* pfOnFrame)(DWORD));
 //D2Win.0x6F8AD0B0 (#10013)
 //1.14d: 0x004F91A0
 D2WIN_DLL_DECL int __stdcall CONTROL_SetCellFile(D2WinControlStrc* pControl, D2CellFileStrc* pCellFile);
 //D2Win.0x6F8AD0D0 (#10012)
 //1.14d: 0x004F91C0
-D2WIN_DLL_DECL int __stdcall D2Win_10012(D2WinEditBoxStrc* pEditBox);
+D2WIN_DLL_DECL int __stdcall CONTROL_SetFocusedEditBox(D2WinEditBoxStrc* pEditBox);
 //D2Win.0x6F8AD110 (#10023)
 //1.14d: 0x004F9200
-D2WIN_DLL_DECL D2WinEditBoxStrc* __stdcall D2Win_10023();
+D2WIN_DLL_DECL D2WinEditBoxStrc* __stdcall CONTROL_GetFocusedEditBox();
 //D2Win.0x6F8AD120
 //1.14d: 0x004F9210
 int __stdcall CONTROL_AppendToList(D2WinControlStrc* pControl);
@@ -88,16 +88,16 @@ D2WIN_DLL_DECL D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* 
 D2WIN_DLL_DECL int __stdcall CONTROL_Destroy(void*ppControl);
 //D2Win.0x6F8AD570 (#10025)
 //1.14d: 0x004F96F0
-D2WIN_DLL_DECL void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(D2WinControlStrc* pControl, int bSet);
+D2WIN_DLL_DECL void __fastcall CONTROL_SetEnabled(D2WinControlStrc* pControl, int bEnabled);
 //D2Win.0x6F8AD5A0 (#10024)
 //1.14d: 0x004F9710
-D2WIN_DLL_DECL int __fastcall D2Win_10024_CONTROL_CheckFirstFlag(D2WinControlStrc* pControl);
+D2WIN_DLL_DECL int __fastcall CONTROL_IsEnabled(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD5D0 (#10027)
 //1.14d: 0x004F9740
-D2WIN_DLL_DECL void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(D2WinControlStrc* pControl, int bSet);
+D2WIN_DLL_DECL void __fastcall CONTROL_SetVisible(D2WinControlStrc* pControl, int bVisible);
 //D2Win.0x6F8AD620 (#10026)
 //1.14d: 0x004F9780
-D2WIN_DLL_DECL int __fastcall D2Win_10026_CONTROL_CheckThirdFlag(D2WinControlStrc* pControl);
+D2WIN_DLL_DECL int __fastcall CONTROL_IsVisible(D2WinControlStrc* pControl);
 //D2Win.0x6F8AD650 (#10170)
 //1.14d: 0x004F97B0
 D2WIN_DLL_DECL BOOL __stdcall CONTROL_MouseInsideRect(const RECT* pRect);
@@ -106,7 +106,7 @@ D2WIN_DLL_DECL BOOL __stdcall CONTROL_MouseInsideRect(const RECT* pRect);
 void __stdcall D2Win_COMMANDS_MouseMove_6F8AD670(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AD6F0 (#10019)
 //1.14d: 0x004F98E0
-D2WIN_DLL_DECL void __stdcall D2Win_10019();
+D2WIN_DLL_DECL void __stdcall D2Win_UpdateAndDraw();
 //D2Win.0x6F8AD9B0
 //1.14d: 0x004F9A80
 LRESULT __stdcall D2Win_MAINWINDOW_WndProc_6F8AD9B0(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -139,7 +139,7 @@ D2WIN_DLL_DECL void __stdcall D2Win_10168_WINMAIN_CreateScreenshot();
 void __stdcall D2Win_COMMANDS_Snapshot_6F8ADE70(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE020
 //1.14d: 0x004FA160
-void __stdcall D2Win_COMMANDS_KeyF1_6F8AE020(SMSGHANDLER_PARAMS* pMsg);
+void __stdcall D2Win_COMMANDS_ToggleMusic_6F8AE020(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AE070
 //1.14d: 0x004FA860
 void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg);
@@ -154,7 +154,7 @@ D2WIN_DLL_DECL void __stdcall D2Win_10029(int a1);
 D2WIN_DLL_DECL void __stdcall D2Win_10030_CONTROL_ToggleFourthFlag(D2WinControlStrc* pControl, int bSet);
 //D2Win.0x6F8AE4F0 (#10031)
 //1.14d: 0x004FA450
-D2WIN_DLL_DECL void __stdcall D2Win_10031(void* a1);
+D2WIN_DLL_DECL void __stdcall CONTROL_SetEscapeButton(void* pButton);
 //D2Win.0x6F8AE500 (#10032)
 //1.14d: 0x004FA460
 D2WIN_DLL_DECL int __stdcall D2Win_IsMouseButtonPressed();

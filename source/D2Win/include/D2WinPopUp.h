@@ -37,7 +37,7 @@ int __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine);
 int __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8AED10
 //1.14d: 0x00508710
-int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl);
+int32_t __fastcall POPUP_UpdateHoveredLine(D2WinControlStrc* pControl);
 //D2Win.0x6F8AEDB0
 //1.14d: 0x005087A0
 int32_t __fastcall POPUP_Draw(D2WinControlStrc* pControl);

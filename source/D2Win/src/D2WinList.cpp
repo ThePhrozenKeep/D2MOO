@@ -383,9 +383,9 @@ int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 
 	dword_6F8FE220 = dwTickCount;
 
-	if (pList->controlHeader.field_34)
+	if (pList->controlHeader.pfCallback)
 	{
-		return pList->controlHeader.field_34(pMsg);
+		return pList->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;
@@ -425,7 +425,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 
 	if (pMsg->wParam == VK_RETURN)
 	{
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 
 		if (pList->pSelectedDataEntry->pfOnActivate)
 		{
@@ -461,7 +461,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 
 		pList->nFirstVisibleEntry = D2Clamp(pList->nFirstVisibleEntry, pList->nSelectedIndex - pList->nLastVisibleOffset, pList->nSelectedIndex);
 
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 		return 1;
 	}
 	else if (pMsg->wParam == VK_DOWN)
@@ -480,7 +480,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 
 		pList->nFirstVisibleEntry = D2Clamp(pList->nFirstVisibleEntry, pList->nSelectedIndex - pList->nLastVisibleOffset, pList->nSelectedIndex);
 
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 		return 1;
 	}
 

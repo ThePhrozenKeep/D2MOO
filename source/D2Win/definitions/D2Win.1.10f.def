@@ -8,30 +8,30 @@ EXPORTS
 	D2Win_10005														@10005
 	D2Win_10006_ClearDrawCaches										@10006
 	BACKGROUND_SetCellFile											@10007
-	D2Win_10008														@10008
-	D2Win_10009														@10009
-	D2Win_10010														@10010
+	D2Win_RunMessageLoop											@10008
+	D2Win_StopMessageLoop											@10009
+	D2Win_SetQuitCallback											@10010
 	CURSOR_SetCellFile												@10011
-	D2Win_10012														@10012
+	CONTROL_SetFocusedEditBox										@10012
 	CONTROL_SetCellFile												@10013
 	D2Win_10014_SetWndProc											@10014
 	D2Win_10015														@10015
 	D2Win_10016														@10016
 	CONTROL_Create													@10017
 	CONTROL_Destroy													@10018
-	D2Win_10019														@10019
+	D2Win_UpdateAndDraw												@10019
 	WREGISTER_RegisterCommand										@10020
 	WREGISTER_UnregisterCommand										@10021
 	WREGISTER_RegisterCommands										@10022
-	D2Win_10023														@10023
-	D2Win_10024_CONTROL_CheckFirstFlag								@10024
-	D2Win_10025_CONTROL_ToggleFirstFlag								@10025
-	D2Win_10026_CONTROL_CheckThirdFlag								@10026
-	D2Win_10027_CONTROL_ToggleThirdFlag								@10027
+	CONTROL_GetFocusedEditBox										@10023
+	CONTROL_IsEnabled												@10024
+	CONTROL_SetEnabled												@10025
+	CONTROL_IsVisible												@10026
+	CONTROL_SetVisible												@10027
 	D2Win_10028														@10028
 	D2Win_10029														@10029
 	D2Win_10030_CONTROL_ToggleFourthFlag							@10030
-	D2Win_10031														@10031
+	CONTROL_SetEscapeButton											@10031
 	D2Win_IsMouseButtonPressed										@10032
 	D2Win_10033														@10033
 	D2Win_10034_MixRGB												@10034
@@ -72,18 +72,18 @@ EXPORTS
 	SCROLLBAR_SetTextBox											@10069
 	D2Win_10070_EDITBOX_Create										@10070
 	D2Win_10071_EDITBOX_Destroy										@10071
-	D2Win_10072														@10072
-	D2Win_10073														@10073
+	EDITBOX_SetKeyFilter											@10072
+	EDITBOX_SetChangeCallback										@10073
 	D2Win_10074														@10074
-	D2Win_10075														@10075
+	EDITBOX_SetText													@10075
 	D2Win_10076														@10076
 	D2Win_10077_EDITBOX_GetText										@10077
 	D2Win_10078_IsNumber											@10078
 	D2Win_10079_IsLetter											@10079
 	D2Win_10080_EDITBOX_SetNextEditBox														@10080
-	D2Win_10081														@10081
+	EDITBOX_SetMaxLength											@10081
 	D2Win_10082														@10082
-	D2Win_10083														@10083
+	EDITBOX_ClearSelection											@10083
 	IMAGE2_Create													@10084
 	IMAGE_Destroy													@10085
 	IMAGE_SetCellFile												@10086
@@ -180,9 +180,9 @@ EXPORTS
 	D2Win_10177														@10177
 	D2Win_10178														@10178
 	D2Win_10179														@10179
-	D2Win_10180														@10180
+	TIMER_DisableSpaceKey												@10180
 	TIMER_Destroy													@10181
-	D2Win_10182														@10182
+	TIMER_SetRepeating												@10182
 	ARCHIVE_ShowInsertCinematicsDisc								@10183
 	D2Win_10184														@10184
 	D2Win_10185														@10185

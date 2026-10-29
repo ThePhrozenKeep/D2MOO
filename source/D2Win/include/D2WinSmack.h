@@ -18,7 +18,7 @@ struct D2WinSmackStrc
 
 //D2Win.0x6F8AF710
 //1.14d: 0x00506B70
-D2WinSmackStrc* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t(__stdcall* a5)(SMSGHANDLER_PARAMS*));
+D2WinSmackStrc* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8AF7E0
 int __stdcall SMACK_Decode(D2WinSmackStrc* pSmack, const char* szFileName, int nVersion, int nUnused, int nUnused2);
 //D2Win.0x6F8AF860
