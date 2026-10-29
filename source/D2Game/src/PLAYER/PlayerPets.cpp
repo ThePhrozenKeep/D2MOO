@@ -879,7 +879,7 @@ void __fastcall PLAYERPETS_UpdatePetsForOwnerMove(D2GameStrc* pGame, D2UnitStrc*
 //1.14d: 0x00574CC0
 void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPet, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
-    D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPet);
+    D2ActiveRoomStrc* pPreviousRoom = UNITS_GetRoom(pPet);
     if (pRoom)
     {
         if (pPet->nAct != DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)))
@@ -890,10 +890,10 @@ void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPet, D2Pe
 
     D2Common_10229(pPet->pDynamicPath, pPet, pRoom, nX, nY);
 
-    if (pRoom != pPlayerRoom)
+    if (pRoom != pPreviousRoom)
     {
         UNITS_SetCurrentRoomInvalid(pPet, 1);
-        SUNIT_SynchronizeRoomClients(pGame, pPet, pPlayerRoom);
+        SUNIT_SynchronizeRoomClients(pGame, pPet, pPreviousRoom);
     }
 
     pPet->nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pPet)));
