@@ -36,7 +36,7 @@ struct D2NpcControlStrc
 struct D2NpcGambleStrc
 {
 	D2InventoryStrc* pInventory;			//0x00
-	D2UnitGUID dwGUID;							//0x04
+	D2UnitGUID dwPlayerGUID;					//0x04
 	D2NpcGambleStrc* pNext;					//0x08
 };
 
@@ -58,7 +58,7 @@ struct D2NpcEventStrc
 	D2UnitStrc* pUnit;
 	int32_t field_4;
 	int32_t field_8;
-	int32_t field_C;
+	int32_t bItemEvent;
 	D2NpcEventStrc* pNext;
 };
 

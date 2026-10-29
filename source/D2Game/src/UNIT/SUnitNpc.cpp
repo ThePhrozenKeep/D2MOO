@@ -873,7 +873,7 @@ void __fastcall SUNITNPC_RemovePurchasedItemFromStore(D2GameStrc* pGame, D2UnitS
         const int32_t nPlayerGUID = pPlayer ? pPlayer->dwUnitId : -1;
         while (pNpcGamble)
         {
-            if (pNpcGamble->dwGUID == nPlayerGUID)
+            if (pNpcGamble->dwPlayerGUID == nPlayerGUID)
             {
                 break;
             }
@@ -2485,7 +2485,7 @@ void __fastcall D2GAME_STORES_FillGamble_6FCCA9F0(D2GameStrc* pGame, D2UnitStrc*
     }
 
     pGamble->pInventory = INVENTORY_AllocInventory(pGame->pMemoryPool, 0);
-    pGamble->dwGUID = pUnit ? pUnit->dwUnitId : -1;
+    pGamble->dwPlayerGUID = pUnit ? pUnit->dwUnitId : -1;
     pGamble->pNext = pNpcRecord->pGamble;
     pNpcRecord->pGamble = pGamble;
 
@@ -2631,7 +2631,7 @@ void __fastcall D2GAME_STORES_CreateVendorCache_6FCCAE20(D2GameStrc* pGame, D2Un
             int32_t bHasGamble = 0;
             for (D2NpcGambleStrc* pNpcGamble = pNpcRecord->pGamble; pNpcGamble; pNpcGamble = pNpcGamble->pNext)
             {
-                if (pNpcGamble->dwGUID == nPlayerGUID)
+                if (pNpcGamble->dwPlayerGUID == nPlayerGUID)
                 {
                     bHasGamble = 1;
                 }
@@ -3025,7 +3025,7 @@ int32_t __fastcall D2GAME_NPC_IsItemInNpcInventory_6FCCB7D0(D2GameStrc* pGame, D
     const int32_t nPlayerGUID = pPlayer ? pPlayer->dwUnitId : -1;
     for (D2NpcGambleStrc* pGamble = pNpcRecord->pGamble; pGamble; pGamble = pGamble->pNext)
     {
-        if (pGamble->dwGUID == nPlayerGUID)
+        if (pGamble->dwPlayerGUID == nPlayerGUID)
         {
             for (D2UnitStrc* pInventoryItem = INVENTORY_GetFirstItem(pGamble->pInventory); pInventoryItem; pInventoryItem = INVENTORY_GetNextItem(pInventoryItem))
             {
