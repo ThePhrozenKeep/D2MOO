@@ -127,7 +127,7 @@ void __fastcall SUNITNPC_ResurrectHireling(D2GameStrc* pGame, D2UnitStrc* pPlaye
 D2UnitStrc* __fastcall D2GAME_MERCS_Create_6FCC8630(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint16_t wName, uint32_t nSeed, int16_t wVersion, int32_t nBaseMonster, int32_t bDead);
 //D2Game.0x6FCC87C0
 //1.14d: 0x00577700
-D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pPlayer, D2UnitStrc* pUnit, D2UnitStrc* pItem, int32_t* pFreeStackCount);
+D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem, int32_t* pFreeStackCount);
 //D2Game.0x6FCC88B0
 //1.14d: 0x00577830
 int32_t __fastcall SUNITNPC_BuyItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNpc, int32_t nItemGUID, int32_t nItemMode, uint16_t nTransactionType, int32_t nCost, int32_t bMultibuy);

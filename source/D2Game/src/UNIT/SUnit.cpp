@@ -1905,12 +1905,12 @@ D2GameStrc* __fastcall SUNIT_GetGameFromUnit(D2UnitStrc* pUnit)
 
 //D2Game.0x6FCBD760
 //1.14d: 0x00554040
-void __fastcall SUNIT_SetTrackedSummonGUID(D2UnitStrc* pUnit, int32_t nFlag)
+void __fastcall SUNIT_SetTrackedSummonGUID(D2UnitStrc* pUnit, int32_t nSummonGUID)
 {
     //TODO: pUnit == PLAYER or MONSTER?
     D2_ASSERT(pUnit);
 
-    pUnit->pPlayerData->unk0x3C[1] = nFlag;
+    pUnit->pPlayerData->unk0x3C[1] = nSummonGUID;
 }
 
 //D2Game.0x6FCBD790
