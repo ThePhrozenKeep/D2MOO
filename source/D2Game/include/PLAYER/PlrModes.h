@@ -82,7 +82,7 @@ void __fastcall PLRMODE_HandleDepletedWeapon(D2GameStrc* pGame, D2UnitStrc* pPla
 void __fastcall PLRMODE_BreakDepletedWeapons(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 //D2Game.0x6FC80EE0
 //1.14d: 0x00580460
-int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nSkillId, int32_t nSkillLevel);
+int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nAction, int32_t nActionIndex);
 //D2Game.0x6FC80F80
 //1.14d: 0x00580810
 void __fastcall D2GAME_EVENTS_StatRegen_6FC80F80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam);
@@ -97,7 +97,7 @@ void __fastcall PLRMODE_FinalizeDeath(D2GameStrc* pGame, D2UnitStrc* pPlayer);
 void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2WeaponSkillSelectionStrc* pSelection);
 //D2Game.0x6FC81600
 //1.14d: 0x005811D0
-void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel);
+void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nAction, int32_t nActionIndex);
 //D2Game.0x6FC81650
 //1.14d: 0x00580860
 void __fastcall PLRMODE_SendPlayerUpdates(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2ClientStrc* pClient, int32_t bSkipInventory);

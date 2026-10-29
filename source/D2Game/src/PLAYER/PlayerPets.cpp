@@ -877,36 +877,36 @@ void __fastcall PLAYERPETS_UpdatePetsForOwnerMove(D2GameStrc* pGame, D2UnitStrc*
 
 //D2Game.0x6FC7E550
 //1.14d: 0x00574CC0
-void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
+void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPet, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
-    D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+    D2ActiveRoomStrc* pPreviousRoom = UNITS_GetRoom(pPet);
     if (pRoom)
     {
-        if (pPlayer->nAct != DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)))
+        if (pPet->nAct != DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)))
         {
-            D2Common_10229(pPlayer->pDynamicPath, pPlayer, 0, 0, 0);
+            D2Common_10229(pPet->pDynamicPath, pPet, 0, 0, 0);
         }
     }
 
-    D2Common_10229(pPlayer->pDynamicPath, pPlayer, pRoom, nX, nY);
+    D2Common_10229(pPet->pDynamicPath, pPet, pRoom, nX, nY);
 
-    if (pRoom != pPlayerRoom)
+    if (pRoom != pPreviousRoom)
     {
-        UNITS_SetCurrentRoomInvalid(pPlayer, 1);
-        SUNIT_SynchronizeRoomClients(pGame, pPlayer, pPlayerRoom);
+        UNITS_SetCurrentRoomInvalid(pPet, 1);
+        SUNIT_SynchronizeRoomClients(pGame, pPet, pPreviousRoom);
     }
 
-    pPlayer->nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pPlayer)));
-    pPlayer->pDrlgAct = pGame->pAct[pPlayer->nAct];
-    UNITROOM_RefreshUnit(pPlayer);
+    pPet->nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pPet)));
+    pPet->pDrlgAct = pGame->pAct[pPet->nAct];
+    UNITROOM_RefreshUnit(pPet);
 
-    pPlayer->dwFlagEx |= 0x10000u;
-    UNITROOM_RefreshUnit(pPlayer);
+    pPet->dwFlagEx |= 0x10000u;
+    UNITROOM_RefreshUnit(pPet);
 
-    MONSTER_UpdateAiCallbackEvent(pGame, pPlayer);
-    if (!MONSTERS_IsDead(pPlayer) && pPlayer->pDynamicPath)
+    MONSTER_UpdateAiCallbackEvent(pGame, pPet);
+    if (!MONSTERS_IsDead(pPet) && pPet->pDynamicPath)
     {
-        PATH_SetFootprintCollisionMask(pPlayer->pDynamicPath, COLLIDE_MONSTER);
+        PATH_SetFootprintCollisionMask(pPet->pDynamicPath, COLLIDE_MONSTER);
     }
 }
 

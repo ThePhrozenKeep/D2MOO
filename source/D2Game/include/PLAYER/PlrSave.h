@@ -65,7 +65,7 @@ int32_t __fastcall D2GAME_SAVE_WriteFileOnRealm_6FC8A1B0(D2GameStrc* pGame, D2Un
 int32_t __fastcall D2GAME_SAVE_WriteFile_6FC8A500(D2GameStrc* pGame, D2UnitStrc* pPlayer, const char* szName, DWORD dwArg);
 //D2Game.0x6FC8A780
 //1.14d: 0x00532690
-int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSavefile, D2UnitStrc** ppPlayer, int32_t* pValid, int32_t* pVersion, int32_t* pStatCount, int32_t* pSkillCount, int32_t* pLeftSkillId, int32_t* pRightSkillId, int32_t* pHeaderSize);
+int32_t __fastcall PLRSAVE_ReadLegacyHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSavefile, D2UnitStrc** ppPlayer, int32_t* pCreateNewPlayer, int32_t* pVersion, int32_t* pStatCount, int32_t* pSkillCount, int32_t* pLeftSkillId, int32_t* pRightSkillId, int32_t* pHeaderSize);
 //D2Game.0x6FC8AD50
 //1.14d: 0x00532C70
 int32_t __fastcall D2GAME_SAVE_ReadWaypointData_6FC8AD50(D2UnitStrc* pUnit, uint8_t* pSection, int32_t nUnused, int32_t* pSize);

@@ -104,7 +104,7 @@ D2PetListStrc* __fastcall PLAYERPETS_GetPetListFromPetType(D2PlayerPetStrc* pPla
 void __fastcall PLAYERPETS_UpdatePetsForOwnerMove(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nX, int32_t nY);
 //D2Game.0x6FC7E550
 //1.14d: 0x00574CC0
-void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY);
+void __fastcall PLAYERPETS_RelocatePet(D2GameStrc* pGame, D2UnitStrc* pPet, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY);
 //D2Game.0x6FC7E640
 //1.14d: 0x00575630
 void __fastcall PLAYERPETS_UpdatePetStates(D2GameStrc* pGame, D2UnitStrc* pPlayer);

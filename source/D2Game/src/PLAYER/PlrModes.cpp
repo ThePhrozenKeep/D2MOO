@@ -1076,7 +1076,7 @@ void __fastcall PLRMODE_BreakDepletedWeapons(D2GameStrc* pGame, D2UnitStrc* pPla
 
 //D2Game.0x6FC80EE0
 //1.14d: 0x00580460
-int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nAction, int32_t nActionIndex)
 {
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pPlayer);
     if (!pSkill)
@@ -1084,7 +1084,7 @@ int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, i
         return 2;
     }
 
-    UNITS_SetAnimationFrame(pPlayer, nSkillLevel);
+    UNITS_SetAnimationFrame(pPlayer, nActionIndex);
 
     const uint32_t nSkillFlags = SKILLS_GetFlags(pSkill);
     if (nSkillFlags & 1 && (SUNIT_ValidateTargetUnit(pGame, pPlayer), SUNIT_UpdateUnitPath(pGame, pPlayer) == 2))
@@ -1093,7 +1093,7 @@ int32_t __fastcall PLRMODE_UpdateSkill(D2GameStrc* pGame, D2UnitStrc* pPlayer, i
     }
     else
     {
-        if (pPlayer && pPlayer->dwFlags & UNITFLAG_SKSRVDOFUNC || nSkillId != 1 && nSkillId != 2)
+        if (pPlayer && pPlayer->dwFlags & UNITFLAG_SKSRVDOFUNC || nAction != 1 && nAction != 2)
         {
             return (SUNIT_IsDead(pPlayer) != 0) + 1;
         }
@@ -1447,7 +1447,7 @@ void __fastcall PLRMODE_RestoreWeaponSkills(D2UnitStrc* pUnit, D2WeaponSkillSele
 
 //D2Game.0x6FC81600
 //1.14d: 0x005811D0
-void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nAction, int32_t nActionIndex)
 {
     int32_t(__fastcall* tPlayerModeUpdateCallbacks[])(D2GameStrc*, D2UnitStrc*, int32_t, int32_t) =
     {
@@ -1499,9 +1499,9 @@ void __fastcall PLRMODE_EventModeUpdate(D2GameStrc* pGame, D2UnitStrc* pUnit, in
         nAnimMode = pUnit->dwAnimMode;
     }
 
-    if (tPlayerModeUpdateCallbacks[nAnimMode] && tPlayerModeUpdateCallbacks[nAnimMode](pGame, pUnit, nSkillId, nSkillLevel) == 2)
+    if (tPlayerModeUpdateCallbacks[nAnimMode] && tPlayerModeUpdateCallbacks[nAnimMode](pGame, pUnit, nAction, nActionIndex) == 2)
     {
-        PLRMODE_EndAnimation(pGame, pUnit, nSkillId, nSkillLevel);
+        PLRMODE_EndAnimation(pGame, pUnit, nAction, nActionIndex);
     }
 }
 
