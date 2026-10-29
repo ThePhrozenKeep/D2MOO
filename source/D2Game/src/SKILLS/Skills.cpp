@@ -357,33 +357,33 @@ static const int32_t gnSkillSrvDoFns = std::size(gpSkillSrvDoFnTable_6FD40A20);
 
 //D2Game.0x6FD0F8B0
 //1.14d: 0x005C6870
-int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nValue)
+int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nLife)
 {
     if (!pUnit)
     {
-        return nValue;
+        return nLife;
     }
     
     D2UnitStrc* pBloodGolem = PLAYERPETS_GetFirstPetByType(pGame, pUnit, 3, 0);
     if (!pBloodGolem || pBloodGolem->dwUnitType != UNIT_MONSTER || pBloodGolem->dwClassId != MONSTER_BLOODGOLEM)
     {
-        return nValue;
+        return nLife;
     }
 
-    if (!nValue)
+    if (!nLife)
     {
         STATLIST_SetUnitStat(pBloodGolem, STAT_HITPOINTS, STATLIST_GetMaxLifeFromUnit(pBloodGolem), 0);
-        return nValue;
+        return nLife;
     }
 
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_BLOODGOLEM);
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pMonStatsTxtRecord->nSkill[0]);
     if (!pSkillsTxtRecord)
     {
-        return nValue;
+        return nLife;
     }
 
-    int32_t nLifeAdded = nValue * pSkillsTxtRecord->dwParam[5] / 100;
+    int32_t nLifeAdded = nLife * pSkillsTxtRecord->dwParam[5] / 100;
     if (nLifeAdded > 0)
     {
         const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pBloodGolem);
@@ -395,17 +395,16 @@ int32_t __fastcall SKILLS_SharePotionLifeWithBloodGolem(D2GameStrc* pGame, D2Uni
         }
 
         STATLIST_SetUnitStat(pBloodGolem, STAT_HITPOINTS, nNewHp, 0);
-        return nValue - nLifeAdded;
+        return nLife - nLifeAdded;
     }
 
-    return nValue;
+    return nLife;
 }
 
 //D2Game.0x6FD0FA00
 //1.14d: 0x0056B3E0
-int32_t __fastcall SKILLS_CheckAuraTarget(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t nAuraFilter)
+int32_t __fastcall SKILLS_CheckAuraTarget(D2UnitStrc* pAttacker, D2UnitStrc* pTarget, uint32_t nAuraFilter)
 {
-    D2UnitStrc* pAttacker = pUnit;
     if (!pTarget)
     {
         return 0;
@@ -728,11 +727,11 @@ void __fastcall SKILLS_IterateAuraTargets(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
 //D2Game.0x6FD10140
 //1.14d: 0x0056B9C0
-void __fastcall SKILLS_ApplyDamageToTarget(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nUnused)
+void __fastcall SKILLS_ApplyDamageToTarget(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2UnitStrc* pTarget, D2DamageStrc* pDamage, int32_t nUnused)
 {
     D2UnitStrc* pAttacker = pAttackerArg;
 
-    if (pAttackerArg && pUnit)
+    if (pAttackerArg && pTarget)
     {
         if (pAttackerArg->dwUnitType == UNIT_MISSILE)
         {
@@ -745,7 +744,7 @@ void __fastcall SKILLS_ApplyDamageToTarget(D2GameStrc* pGame, D2UnitStrc* pAttac
 
         if (pDamage->wResultFlags)
         {
-            const int32_t nBlockFlags = SUNITDMG_ApplyBlockOrDodge(pGame, pAttacker, pUnit, 1, 0);
+            const int32_t nBlockFlags = SUNITDMG_ApplyBlockOrDodge(pGame, pAttacker, pTarget, 1, 0);
             if (nBlockFlags & 2)
             {
                 pDamage->wResultFlags |= 100u;
@@ -771,19 +770,19 @@ void __fastcall SKILLS_ApplyDamageToTarget(D2GameStrc* pGame, D2UnitStrc* pAttac
                 pDamage->wResultFlags &= 0xFEu;
             }
 
-            if (pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT && !STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
+            if (pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT && !STATES_CheckState(pTarget, STATE_UNINTERRUPTABLE))
             {
                 pDamage->wResultFlags |= 4u;
             }
 
-            D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(pAttacker, pUnit, pDamage);
+            D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(pAttacker, pTarget, pDamage);
 
             if (pDamage->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
             {
-                SUNITDMG_ExecuteEvents(pGame, pAttacker, pUnit, 1, pDamage);
+                SUNITDMG_ExecuteEvents(pGame, pAttacker, pTarget, 1, pDamage);
             }
 
-            SUNITDMG_ExecuteMissileDamage(pGame, pAttacker, pUnit, pDamage);
+            SUNITDMG_ExecuteMissileDamage(pGame, pAttacker, pTarget, pDamage);
         }
     }
 }
@@ -837,7 +836,7 @@ void __fastcall SKILLS_ApplyTimedState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2U
 
 //D2Game.0x6FD10360
 //1.14d: 0x0056E780
-int32_t __fastcall SKILLS_IterateTargetsAroundTarget(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* pUnit, int32_t nDistance, int32_t(__fastcall* pCallback)(D2UnitStrc*, void*), void* pArgs)
+int32_t __fastcall SKILLS_IterateTargetsAroundTarget(D2GameStrc* pGame, uint32_t nAuraFilter, D2UnitStrc* pUnit, int32_t nAuraRange, int32_t(__fastcall* pCallback)(D2UnitStrc*, void*), void* pArgs)
 {
     if (!pCallback)
     {
@@ -876,17 +875,17 @@ int32_t __fastcall SKILLS_IterateTargetsAroundTarget(D2GameStrc* pGame, uint32_t
 
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        if (!(nFlags & 0x2000) || !DUNGEON_IsRoomInTown(ppRoomList[i]))
+        if (!(nAuraFilter & 0x2000) || !DUNGEON_IsRoomInTown(ppRoomList[i]))
         {
             D2DrlgCoordsStrc drlgCoords = {};
             DUNGEON_GetRoomCoordinates(ppRoomList[i], &drlgCoords);
-            if (nX + nDistance >= drlgCoords.nSubtileX || nX - nDistance <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
+            if (nX + nAuraRange >= drlgCoords.nSubtileX || nX - nAuraRange <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
             {
-                if (nY + nDistance >= drlgCoords.nSubtileY || nY - nDistance <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
+                if (nY + nAuraRange >= drlgCoords.nSubtileY || nY - nAuraRange <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
                 {
                     for (D2UnitStrc* j = ppRoomList[i]->pUnitFirst; j; j = j->pRoomNext)
                     {
-                        if (nDistance * nDistance >= PATH_ComputeSquaredDistance(nX, nY, CLIENTS_GetUnitX(j), CLIENTS_GetUnitY(j)) && SKILLS_CheckAuraTarget(pUnit, j, nFlags))
+                        if (nAuraRange * nAuraRange >= PATH_ComputeSquaredDistance(nX, nY, CLIENTS_GetUnitX(j), CLIENTS_GetUnitY(j)) && SKILLS_CheckAuraTarget(pUnit, j, nAuraFilter))
                         {
                             pCallback(j, pArgs);
                         }
@@ -944,11 +943,11 @@ int32_t __fastcall SKILLS_AuraCallback_FindClosestTarget(D2AuraCallbackStrc* pAu
 //1.14d: 0x0056BC80
 int32_t __fastcall SKILLS_CountAuraTargets(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter)
 {
-    int32_t nSkillId = 0;
+    int32_t nTargetCount = 0;
 
-    SKILLS_IterateAuraTargets(pGame, pUnit, nX, nY, nAuraRange, nAuraFilter | 0xA783, SKILLS_AuraCallback_CountTargets, &nSkillId, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, nX, nY, nAuraRange, nAuraFilter | 0xA783, SKILLS_AuraCallback_CountTargets, &nTargetCount, 0, __FILE__, __LINE__);
 
-    return nSkillId;
+    return nTargetCount;
 }
 
 //D2Game.0x6FD107E0
@@ -1044,8 +1043,8 @@ void __fastcall SKILLS_UpdatePetLimitForSkill(D2GameStrc* pGame, D2UnitStrc* pUn
                 int32_t nMaxPets = 0;
                 for (int32_t i = 0; i < pPetTypeTxtRecord->nSkillCount; ++i)
                 {
-                    D2SkillsTxt* pTemp = SKILLS_GetSkillsTxtRecord(pPetTypeTxtRecord->wSkillIds[i]);
-                    if (pTemp)
+                    D2SkillsTxt* pPetSkillRecord = SKILLS_GetSkillsTxtRecord(pPetTypeTxtRecord->wSkillIds[i]);
+                    if (pPetSkillRecord)
                     {
                         D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pPetTypeTxtRecord->wSkillIds[i]);
                         if (pSkill)
@@ -1054,7 +1053,7 @@ void __fastcall SKILLS_UpdatePetLimitForSkill(D2GameStrc* pGame, D2UnitStrc* pUn
                             int32_t nPetMax = 0;
                             if (nSkillLevel > 0)
                             {
-                                nPetMax = SKILLS_EvaluateSkillFormula(pUnit, pTemp->dwPetMax, pPetTypeTxtRecord->wSkillIds[i], nSkillLevel);
+                                nPetMax = SKILLS_EvaluateSkillFormula(pUnit, pPetSkillRecord->dwPetMax, pPetTypeTxtRecord->wSkillIds[i], nSkillLevel);
                                 if (nPetMax < 1)
                                 {
                                     nPetMax = 1;
@@ -1595,7 +1594,7 @@ D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitSt
 
 //D2Game.0x6FD11710
 //1.14d: 0x0056EE90
-D2UnitStrc* __fastcall SKILLS_CreateMissileFromOrigin(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bSkipCheck)
+D2UnitStrc* __fastcall SKILLS_CreateMissileFromOrigin(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bConsumeQuantity)
 {
     D2MissileStrc missileParams = {};
     missileParams.nMissile = nMissileId;
@@ -1632,7 +1631,7 @@ D2UnitStrc* __fastcall SKILLS_CreateMissileFromOrigin(D2GameStrc* pGame, int32_t
         }
     }
 
-    if (!bSkipCheck || pUnit->dwUnitType != UNIT_PLAYER || SKILLS_ConsumeWeaponOrAmmoQuantity(pGame, pUnit) > 0)
+    if (!bConsumeQuantity || pUnit->dwUnitType != UNIT_PLAYER || SKILLS_ConsumeWeaponOrAmmoQuantity(pGame, pUnit) > 0)
     {
         return MISSILES_CreateMissileFromParams(pGame, &missileParams);
     }
@@ -2947,7 +2946,7 @@ int32_t __fastcall SKILLS_TryIncreaseSkillLevel(D2UnitStrc* pUnit, int32_t nSkil
 
 //D2Game.0x6FD13800
 //1.14d: 0x005701B0
-void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t bLeftSkill, int32_t nSkillId, int32_t nFlags)
+void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t bLeftSkill, int32_t nSkillId, int32_t nOwnerGUID)
 {
 
     if (nSkillId == SKILL_LEFTHANDSWING)
@@ -2960,7 +2959,7 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t bLeftSkil
         STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 0);
     }
 
-    D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, nFlags);
+    D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, nOwnerGUID);
     if (!pSkill)
     {
         return;
@@ -2969,19 +2968,19 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t bLeftSkil
     D2SkillStrc* pRightSkill = nullptr;
     if (bLeftSkill)
     {
-        SKILLS_SetLeftActiveSkill(pUnit, nSkillId, nFlags);
+        SKILLS_SetLeftActiveSkill(pUnit, nSkillId, nOwnerGUID);
     }
     else
     {
         pRightSkill = UNITS_GetRightSkill(pUnit);
-        SKILLS_SetRightActiveSkill(pUnit, nSkillId, nFlags);
+        SKILLS_SetRightActiveSkill(pUnit, nSkillId, nOwnerGUID);
     }
 
-    D2UnitGUID nOwnerGUID = D2UnitInvalidGUID;
-    SKILLS_GetSkillInfo(pSkill, &nOwnerGUID, nullptr, nullptr, nullptr);
+    D2UnitGUID nSelectedSkillOwnerGUID = D2UnitInvalidGUID;
+    SKILLS_GetSkillInfo(pSkill, &nSelectedSkillOwnerGUID, nullptr, nullptr, nullptr);
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        D2GAME_PACKETS_SendPacket0x23_6FC3DC60(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0, pUnit->dwUnitId, bLeftSkill, nSkillId, nOwnerGUID);
+        D2GAME_PACKETS_SendPacket0x23_6FC3DC60(SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__), 0, pUnit->dwUnitId, bLeftSkill, nSkillId, nSelectedSkillOwnerGUID);
     }
 
     if (!bLeftSkill)

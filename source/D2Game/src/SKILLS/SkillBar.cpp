@@ -808,14 +808,14 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
         return 0;
     }
 
-    const int32_t a2 = nUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
+    const int32_t nMoveCollisionMask = nUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
     PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, COLLIDE_MASK_PLAYER_WW);
     PATH_SetType(pUnit->pDynamicPath, PATHTYPE_STRAIGHT);
 
     if (!D2Common_10142(pUnit->pDynamicPath, pUnit, 0))
     {
         SUNITMSG_QueueSkillStop(pUnit, nSkillId);
-        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, a2);
+        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, nMoveCollisionMask);
         return 0;
     }
 
@@ -827,7 +827,7 @@ int32_t __fastcall SKILLS_SrvSt38_Whirlwind(D2GameStrc* pGame, D2UnitStrc* pUnit
     if (nPathPoints <= 0)
     {
         SUNITMSG_QueueSkillStop(pUnit, nSkillId);
-        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, a2);
+        PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, nMoveCollisionMask);
         return 0;
     }
 
@@ -906,14 +906,14 @@ int32_t __fastcall SKILLS_RemoveWhirlwindStats(D2GameStrc* pGame, D2UnitStrc* pU
     }
 
     const int32_t nFootprintMask = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_PLAYER : COLLIDE_MONSTER;
-    const int32_t pUnita = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
+    const int32_t nMoveCollisionMask = pUnit->dwUnitType == UNIT_PLAYER ? COLLIDE_MASK_PLAYER_PATH : COLLIDE_MASK_MONSTER_PATH;
     if (nX && nY)
     {
         COLLISION_ResetMaskWithPattern(UNITS_GetRoom(pUnit), nX, nY, PATH_GetUnitCollisionPattern(pUnit), nFootprintMask);
     }
 
     PATH_SetFootprintCollisionMask(pUnit->pDynamicPath, nFootprintMask);
-    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, pUnita);
+    PATH_SetMoveTestCollisionMask(pUnit->pDynamicPath, nMoveCollisionMask);
 
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && pSkillsTxtRecord->nAuraState >= 0 && pSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount)

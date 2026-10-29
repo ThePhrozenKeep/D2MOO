@@ -562,8 +562,8 @@ int32_t __fastcall SKILLS_SrvDo021_Telekinesis(D2GameStrc* pGame, D2UnitStrc* pU
         if (ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_SCROLL) || ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_GOLD) || ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_MISSILE_POTION)
             || ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_MISSILE) || ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_POTION) || ITEMS_CheckItemTypeId(pTarget, ITEMTYPE_KEY))
         {
-            int32_t a4 = 0;
-            D2GAME_PickupItem_6FC43340(pGame, pUnit, pTarget->dwUnitId, &a4);
+            int32_t nPickupStatus = 0;
+            D2GAME_PickupItem_6FC43340(pGame, pUnit, pTarget->dwUnitId, &nPickupStatus);
         }
         else
         {
