@@ -42,7 +42,7 @@ uint32_t  __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed)
 
 //D2Common.0x6FDAEAE0 (#10921)
 //1.14d: 0x00650E60
-void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed)
+void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t nLowSeed, uint32_t  nHighSeed)
 {
 	pSeed->nLowSeed = nLowSeed;
 	pSeed->nHighSeed = nHighSeed;

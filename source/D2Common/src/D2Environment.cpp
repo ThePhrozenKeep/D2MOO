@@ -159,7 +159,8 @@ void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnviron
 	}
 	else
 	{
-		double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * M_PI / (double)ENV_HALF_CIRCLE_DEGREES;
+		// Original multiplies by 1/180 (instead of dividing by 180) and uses PI rounded to float precision
+		const double dAngle = (double)pEnvironment->nTicks / (double)pEnvironment->nTimeRate * (1.0 / ENV_HALF_CIRCLE_DEGREES) * (double)(float)M_PI;
 
 		pEnvironment->fCos = float(-cos(dAngle));
 		pEnvironment->fSin = float(sin(dAngle));
@@ -221,7 +222,7 @@ BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomSt
 	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	const int nPreviousPeriodOfDay = pEnvironment->nPeriodOfDay;
-	const int nLevelId = pRoom ? DUNGEON_GetLevelIdFromRoom(pRoom): 0;
+	const int nLevelId = pRoom ? DUNGEON_GetLevelIdFromRoom(pRoom) : 0;
 	const int nActNo = DRLG_GetActNoFromLevelId(nLevelId);
 
 	ENVIRONMENT_UpdateTicks(pEnvironment, nActNo);
@@ -270,7 +271,22 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 	}
 
 	const int nNextEnvCycle = (pEnvironment->nCycleIndex + 1) % NUM_ENVIRONMENT_CYCLES;
-	const D2EnvironmentCycleStrc* pNextEnvCycle = ENVIRONMENT_GetCycle(nNextEnvCycle, nActNo, pEnvironment->bEclipse);
+	const D2EnvironmentCycleStrc* pNextEnvCycle = nullptr;
+	if (pEnvironment->bEclipse)
+	{
+		if (nActNo == ACT_IV)
+		{
+			pNextEnvCycle = &gAct4EnvironmentCycle[nNextEnvCycle];
+		}
+		else
+		{
+			pNextEnvCycle = &gEclipseEnvironmentCycle[nNextEnvCycle];
+		}
+	}
+	else
+	{
+		pNextEnvCycle = &gNormalEnvironmentCycle[nNextEnvCycle];
+	}
 
 	if (pEnvironment->nTicks > pEnvironment->nTimeRate * pNextEnvCycle->nTicksBegin)
 	{

@@ -293,7 +293,7 @@ void __fastcall DATATBLS_LoadLevelsTxt(HD2ARCHIVE hArchive)
 //1.14d: 0x0061DB70
 D2LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId)
 {
-	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
+	if (nLevelId > 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
 		return &sgptDataTables->pLevelsTxt[nLevelId];
 	}
@@ -305,7 +305,7 @@ D2LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId)
 //1.14d: 0x0061DBA0
 uint8_t __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId)
 {
-	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
+	if (nLevelId > 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
 		return sgptDataTables->pLevelsTxt[nLevelId].nRain;
 	}
@@ -317,7 +317,7 @@ uint8_t __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId)
 //1.14d: 0x0061DBE0
 uint8_t __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId)
 {
-	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
+	if (nLevelId > 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
 		return sgptDataTables->pLevelsTxt[nLevelId].nNoPer;
 	}
@@ -329,7 +329,7 @@ uint8_t __stdcall DATATBLS_GetNoPerFromLevelsTxt(int nLevelId)
 //1.14d: 0x0061DC20
 uint8_t __stdcall DATATBLS_GetMudFromLevelsTxt(int nLevelId)
 {
-	if (nLevelId >= 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
+	if (nLevelId > 0 && nLevelId < sgptDataTables->nLevelsTxtRecordCount)
 	{
 		return sgptDataTables->pLevelsTxt[nLevelId].nMud;
 	}
