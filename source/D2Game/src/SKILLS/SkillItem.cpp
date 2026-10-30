@@ -722,7 +722,7 @@ int32_t __fastcall SKILLITEM_pSpell06_AntidoteThawingPotion(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FD03C80
-int32_t __fastcall SKILLITEM_pSpell08_ExperienceElixir(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
+int32_t __fastcall SKILLITEM_pSpell08_AddItemValueToStat(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
     const int32_t nStatId = ITEMS_GetFileIndex(pItem);
     if (nStatId >= 0 && nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
@@ -811,7 +811,7 @@ int32_t __fastcall SKILLITEM_pSpell_Handler(D2GameStrc* pGame, D2UnitStrc* pUnit
         { nullptr, SKILLITEM_pSpell05_RejuvPotion },
         { nullptr, SKILLITEM_pSpell06_AntidoteThawingPotion },
         { nullptr, SKILLITEM_pSpell07_OpenCube },
-        { nullptr, SKILLITEM_pSpell08_ExperienceElixir },
+        { nullptr, SKILLITEM_pSpell08_AddItemValueToStat },
         { nullptr, SKILLITEM_pSpell09_StaminaPotion },
         { nullptr, SKILLITEM_pSpell10_CastFireBallOnTarget },
         { nullptr, SKILLITEM_pSpell11_CastFireBallToCoordinates },
