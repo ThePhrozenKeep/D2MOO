@@ -1331,15 +1331,15 @@ D2UnitStrc* __stdcall SUNIT_GetTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 //D2Game.0x6FCBC930
 //1.14d: 0x00554CA0
-int32_t __fastcall SUNIT_UpdateUnitPath(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall SUNIT_UpdateUnitPath(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pGame);
 
-    SUNIT_ValidateTargetUnit(pGame, pMissile);
-    const int32_t nPathStatus = 2 - (D2Common_10226(pMissile, 1024) != 0);
-    if (UNITS_IsCurrentRoomInvalid(pMissile))
+    SUNIT_ValidateTargetUnit(pGame, pUnit);
+    const int32_t nPathStatus = 2 - (D2Common_10226(pUnit, 1024) != 0);
+    if (UNITS_IsCurrentRoomInvalid(pUnit))
     {
-        SUNIT_SynchronizeRoomClients(pGame, pMissile, 0);
+        SUNIT_SynchronizeRoomClients(pGame, pUnit, 0);
     }
 
     return nPathStatus;

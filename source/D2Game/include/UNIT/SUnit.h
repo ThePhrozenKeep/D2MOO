@@ -101,7 +101,7 @@ void __fastcall SUNIT_ValidateTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit);
 D2UnitStrc* __stdcall SUNIT_GetTargetUnit(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBC930
 //1.14d: 0x00554CA0
-int32_t __fastcall SUNIT_UpdateUnitPath(D2GameStrc* pGame, D2UnitStrc* pMissile);
+int32_t __fastcall SUNIT_UpdateUnitPath(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCBC9A0
 //1.14d: 0x00553570
 void __fastcall SUNIT_SetCombatMode(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMode);
