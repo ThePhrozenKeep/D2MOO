@@ -137,6 +137,7 @@ short __stdcall TEXT_GetStringIdOfMenuType0Node(D2TextHeaderStrc* pTextHeader, i
 
 	while (pNode)
 	{
+		// The historical export name is misleading: only menu type 0 qualifies.
 		if (pNode->nMenu == 0)
 		{
 			if (nCounter == nNodeId)
@@ -164,6 +165,7 @@ short __stdcall TEXT_GetStringIdOfMenuType1Node(D2TextHeaderStrc* pTextHeader, i
 
 	while (pNode)
 	{
+		// The historical export name is misleading: only menu type 1 qualifies.
 		if (pNode->nMenu == 1)
 		{
 			if (nCounter == nNodeId)

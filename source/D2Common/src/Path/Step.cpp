@@ -157,7 +157,10 @@ TanToDirectionLutEntryStrc lutTanToDirection[] = {
 static_assert(ARRAY_SIZE(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
 
 #ifdef NO_BUG_FIX
-// Native constant prefix for wrapped negative tangent indices.
+// PATH_GetDirectionVector's 127 * minor delta wraps in 32 bits once the minor delta reaches 2^31 / 127 in 16.16 fixed
+// point (about 258 subtiles, a unit facing a target in another level), and the binary then indexes the table with
+// the negative tangent (-127 .. -1) and reads the constant data the linker placed in front of it. Its 127 entries
+// (1524 bytes) as the binary has them:
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 //1.14d: 0x006EB1EC .. 0x006EB7DF (.rdata, Game.exe has a fixed base)
 static const uint8_t gabBeforeTanToDirectionLut[127 * sizeof(TanToDirectionLutEntryStrc)] = {

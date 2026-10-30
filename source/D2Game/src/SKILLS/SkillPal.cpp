@@ -745,7 +745,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         const int32_t nSequenceFrameCount = DATATBLS_GetSeqFrameCount(pUnit);
         for (int32_t i = 0; i < nSequenceFrameCount; ++i)
         {
-            if (!pMonSeqTxtRecord->nEvent) // TODO: Why is this check inside a loop?
+            if (!pMonSeqTxtRecord->nEvent) // Native repeatedly checks the same sequence event.
             {
                 nEventFrame = i - 1;
                 break;

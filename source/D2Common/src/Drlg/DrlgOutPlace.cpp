@@ -125,6 +125,7 @@ static D2DrlgLinkStrc gAct5TundraDrlgLink[15] =
 
 //1.10f: D2Common.0x6FDCFC48
 //1.14d: 0x006F06F0
+// Native table has 12 pairs; the final two pairs below are unused adjacent 1.10f data.
 static const int gnBarricadeCliffBorderIds[14][2] =
 {
 	{ LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1,		LVLPREST_ACT5_BARRICADE_CLIFF_BORDER_1_SNOW },

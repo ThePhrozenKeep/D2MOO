@@ -57,6 +57,7 @@ void __fastcall ACT1Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pfCallback[QUESTEVENT_NPCACTIVATE] = ACT1Q7_Callback00_NpcActivate;
+	// Native slot 8 is empty, so leave the callback unset.
 	//pQuestData->pfCallback[8] = (QUESTCALLBACK)D2GAME_OBJECTS_InitFunction05_6FCA6660;
 	pQuestData->pNPCMessages = gpAct1Q7NpcMessages;
 	pQuestData->bActive = 1;

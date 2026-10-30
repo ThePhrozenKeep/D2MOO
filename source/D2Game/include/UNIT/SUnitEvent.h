@@ -34,12 +34,12 @@ struct D2UnitEventStrc
 	D2C_UnitEventTypes nUnitEvent;			//0x00 Event from events.txt. NOT the same thing as timer events
 	uint8_t unk0x01;						//0x01
 	uint16_t nFlags;						//0x02 D2C_UnitEventFlags
-	uint32_t nEventGroup;					//0x04
-	int32_t nEventKey;						//0x08
-	int32_t nParam1;						//0x0C First identifier
-	int32_t nParam2;						//0x10 Second identifier
+	uint32_t nEventGroup;						//0x04 0: one-shot, 1: state, 2: item stat
+	int32_t nEventKey;						//0x08 Matching key within the event group
+	int32_t nParam1;							//0x0C First callback parameter
+	int32_t nParam2;							//0x10 Second callback parameter
 	D2UnitEventCallbackFunction pCallback;	//0x14
-	D2UnitEventStrc* pPrevious;				//0x18  Seems to be any kind of id, not necessariyl the prevtimer ?
+	D2UnitEventStrc* pPrevious;				//0x18
 	D2UnitEventStrc* pNext;					//0x1C
 };
 

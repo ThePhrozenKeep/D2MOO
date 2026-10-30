@@ -2991,7 +2991,7 @@ int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc
         D2COMMON_10475_PostStatToStatList(pUnit, pNewStatList, 1);
         STATES_ToggleState(pUnit, pSkillsTxtRecord->wAuraTargetState, 1);
 
-        // TODO: pStatList = pNewStatList; ????
+        // Native continues with the original null pStatList after this allocation.
     }
 
     SKILLS_ApplyAuraStatsToStatList(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
