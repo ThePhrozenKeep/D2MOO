@@ -2186,13 +2186,13 @@ void __fastcall MONSTERUNIQUE_AssignRandomUMods(D2GameStrc* pGame, D2UnitStrc* p
 
     if (bAllowChampion)
     {
-        uint32_t nChance = 0;
+        int32_t nChance = 0;
         if (sgptDataTables->nMonUModTxtRecordCount > 0 && sgptDataTables->pMonUModTxt)
         {
             nChance = sgptDataTables->pMonUModTxt->dwConstants;
         }
 
-        if (ITEMS_RollRandomNumber(&pUnit->pSeed) % 100 < nChance)
+        if ((int32_t)(ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) < nChance)
         {
             pUnit->pMonsterData->nTypeFlag |= 4u;
 
@@ -2764,11 +2764,19 @@ D2UnitStrc* __fastcall D2GAME_SpawnSuperUnique_6FC6F690(D2GameStrc* pGame, D2Act
     uint8_t* pCurrentMonUMod = &pMonUmods[nCounter];
     for (int32_t i = 0; i < 3; ++i)
     {
-        const uint8_t nUMod = pSuperUniquesTxtRecord->dwMod[i];
+        const uint32_t nUMod = pSuperUniquesTxtRecord->dwMod[i];
         if (!nUMod)
         {
             break;
         }
+
+#ifndef NO_BUG_FIX
+        // Native uses the full DWORD as an unchecked index into this 256-byte table.
+        if (nUMod >= std::size(bUModUsageTable))
+        {
+            continue;
+        }
+#endif
 
         if (nUMod == MONUMOD_AURACHANT)
         {
