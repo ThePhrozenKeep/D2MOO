@@ -15547,7 +15547,7 @@ void __fastcall AITHINK_Fn107_Raven(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 		return;
 	}
 
-	// TODO: Unused Calculation?
+	// Preserve the native owner-target scan and its side effects even though the distance is unused.
 	int32_t nDist = 0;
 	int32_t bCombat = 0;
 	D2UnitStrc* pTarget = AIUTIL_FindAiTarget(pGame, pOwner, pAiTickParam->pAiControl, &nDist, &bCombat);

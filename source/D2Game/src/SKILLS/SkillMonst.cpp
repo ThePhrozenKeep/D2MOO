@@ -2061,7 +2061,7 @@ int32_t __fastcall SKILLS_GetMonFrenzySequenceFrame(D2UnitStrc* pUnit)
             return 0;
         }
 
-        // TODO: Why is this inside a loop?
+        // Native repeatedly tests the current frame instead of advancing the lookup.
         for (int32_t i = 0; i < nMax; ++i)
         {
             if (pUnit->pAnimData->pFrameFlags[nCurrent])

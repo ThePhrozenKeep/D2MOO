@@ -431,7 +431,7 @@ struct D2GSPacketClt39		//size of 0x05
 struct D2GSPacketClt3A		//size of 0x03
 {
 	uint8_t nHeader;			//0x00
-	uint16_t nStat;				//0x01
+	uint16_t nStat;				//0x01 low byte: stat id, high byte: point count - 1
 };
 
 struct D2GSPacketClt3B		//size of 0x03
@@ -476,7 +476,7 @@ struct D2GSPacketClt41		//size of 0x01
 	uint8_t nHeader;			//0x00
 };
 
-struct D2GSPacketClt42		//size of 0x01
+struct D2GSPacketClt42		//size of 0x01 (1.10f D2Net / 1.14d Game.exe size tables)
 {
 	uint8_t nHeader;			//0x00
 };
@@ -805,7 +805,7 @@ struct D2GSPacketSrv08		//size of 0x06
 	uint8_t nHeader;			//0x00
 	uint16_t nX;				//0x01
 	uint16_t nY;				//0x03
-	uint8_t nLevelId;			//0x04
+	uint8_t nLevelId;			//0x05
 };
 
 struct D2GSPacketSrv09		//size of 0x0B
@@ -1011,7 +1011,7 @@ struct D2GSPacketSrv21		//size of 0x0C
 	uint32_t nUnitGUID;			//0x03
 	uint16_t nSkillId;			//0x07
 	uint8_t nSkillLevel;		//0x09
-	uint8_t nBonusSkillLevel;	//0x0A
+	uint8_t nBonusSkillLevel;	//0x0A unused by D2Client 1.10f
 	uint8_t unk0x0B;			//0x0B
 };
 
@@ -1281,7 +1281,7 @@ struct D2GSPacketSrv53		//size of 0x0A
 	uint8_t bEclipse;			//0x09
 };
 
-struct D2GSPacketSrv54		//size of 0x03
+struct D2GSPacketSrv54		//size of 0x03 (D2Client 1.10f ignores it)
 {
 	uint8_t nHeader;			//0x00
 	uint8_t unk0x001[2];		//0x01
@@ -1734,7 +1734,7 @@ struct D2GSPacketSrv8A		//size of 0x06
 {
 	uint8_t nHeader;			//0x00
 	uint8_t nUnitType;			//0x01
-	uint32_t dwUnitGUID;		//0x05
+	uint32_t dwUnitGUID;		//0x02
 };
 
 struct D2GSPacketSrv8B		//size of 0x06
@@ -2025,7 +2025,7 @@ struct D2GSPacketSrvA8	//Variable Size
 	uint8_t nHeader;			//0x00
 	uint8_t nUnitType;			//0x01
 	int32_t nUnitId;			//0x02
-	uint8_t nSize;				//0x06
+	uint8_t nSize;				//0x06 total packet size; the stream holds nSize - 8 bytes
 	uint8_t nState;				//0x07
 	uint8_t pStream[512];		//0x08
 };
