@@ -468,7 +468,7 @@ int32_t __fastcall PLRTRADE_CheckCubeInput(D2GameStrc* pGame, D2InventoryStrc* p
 
 //D2Game.0x6FC8FE40
 //1.14d: 0x00565930
-int16_t __fastcall PLRTRADE_RollRandomItemClassOfSameType(D2GameStrc* pGame, int32_t nItemLevel, int32_t nItemId)
+int16_t __fastcall PLRTRADE_RollRandomItemClassOfSameType(D2GameStrc* pGame, int32_t nItemLevel, int32_t nItemType)
 {
     D2ItemDataTbl* pItemDataTbl = DATATBLS_GetItemDataTables();
     D2_ASSERT(pItemDataTbl);
@@ -495,7 +495,7 @@ int16_t __fastcall PLRTRADE_RollRandomItemClassOfSameType(D2GameStrc* pGame, int
             break;
         }
 
-        if (ITEMS_CheckItemTypeIdByItemId(nIndex, nItemId))
+        if (ITEMS_CheckItemTypeIdByItemId(nIndex, nItemType))
         {
             D2ItemsTxt* pItemsTxtRecord = &pItemDataTbl->pItemsTxt[nIndex];
             if (pItemsTxtRecord->nSpawnable && (pItemsTxtRecord->wVersion < 100u || pGame->wItemFormat >= 100u) && pItemsTxtRecord->nLevel <= nItemLevel)
@@ -2022,16 +2022,16 @@ void __fastcall PLRTRADE_HandleCubeInteraction(D2GameStrc* pGame, D2UnitStrc* pU
 
             if (bOpConditionsFulfilled && pUnit->pInventory)
             {
-                D2CubeItemStrc a5[3] = {};
-                int32_t a6[48] = {};
+                D2CubeItemStrc cubeItems[3] = {};
+                int32_t usedItems[48] = {};
 
                 int32_t nInputs = 0;
-                while (PLRTRADE_CheckCubeInput(pGame, pUnit->pInventory, pCubeMainTxtRecord, nInputs, a5, a6))
+                while (PLRTRADE_CheckCubeInput(pGame, pUnit->pInventory, pCubeMainTxtRecord, nInputs, cubeItems, usedItems))
                 {
                     ++nInputs;
                     if (nInputs >= 7)
                     {
-                        PLRTRADE_CreateCubeOutputs(pGame, pUnit, pCubeMainTxtRecord, a5);
+                        PLRTRADE_CreateCubeOutputs(pGame, pUnit, pCubeMainTxtRecord, cubeItems);
                         return;
                     }
                 }
