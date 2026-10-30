@@ -1937,14 +1937,14 @@ int32_t __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg)
 
 //D2Win.0x6F8A9850 (#10078)
 //1.14d: 0x004FE770
-bool __stdcall D2Win_10078_IsNumber(int32_t nUnused1, int32_t nUnused2, char* szChar)
+BOOL __stdcall D2Win_10078_IsNumber(int32_t nUnused1, int32_t nUnused2, char* szChar)
 {
 	return *szChar >= '0' && *szChar <= '9';
 }
 
 //D2Win.0x6F8A9870 (#10079)
 //1.14d: 0x004FE790
-bool __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar)
+BOOL __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar)
 {
 	return *szChar >= 'a' && *szChar <= 'z' || *szChar >= 'A' && *szChar <= 'Z';
 }

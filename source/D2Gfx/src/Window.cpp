@@ -367,11 +367,11 @@ void __stdcall WINDOW_ClearCaches()
 }
 
 //D2Gfx.0x6FA74C70 (#10032)
-void __stdcall WINDOW_PlayCutscene()
+BOOL __stdcall WINDOW_PlayCutscene()
 {
     D2_ASSERT(gpGraphicsInterface);
 
-    gpGraphicsInterface->pfPlayCutscene();
+    return gpGraphicsInterface->pfPlayCutscene();
 }
 
 //D2Gfx.0x6FA74CA0 (#10033)
