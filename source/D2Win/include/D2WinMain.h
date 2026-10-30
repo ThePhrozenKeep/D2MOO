@@ -46,7 +46,7 @@ D2WIN_DLL_DECL void __stdcall D2Win_10004(BOOL bForceResize);
 D2WIN_DLL_DECL int __stdcall D2Win_10016();
 //D2Win.0x6F8ACEC0 (#10005)
 //1.14d: 0x004F90A0
-D2WIN_DLL_DECL int __stdcall D2Win_10005(BOOL bForceResize);
+D2WIN_DLL_DECL int __stdcall D2Win_10005(D2GameResolutionMode nResolution);
 //D2Win.0x6F8ACF20 (#10006)
 //1.14d: 0x004F9130
 D2WIN_DLL_DECL void __stdcall D2Win_10006_ClearDrawCaches();

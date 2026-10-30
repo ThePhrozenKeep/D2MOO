@@ -18,7 +18,7 @@
 char gszSmackFileName[260];
 //1.10f: D2Win.0x6F96A8D4
 //1.14d: 0x0087E964
-int gnSmackVersion;
+uint8_t gnSmackVersion;
 //1.10f: D2Win.0x6F96A8D8
 //1.14d: 0x0087E968
 int32_t dword_6F96A8D8;

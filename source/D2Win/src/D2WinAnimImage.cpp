@@ -227,7 +227,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		nAnimSpeed = pAnimImage->nAnimSpeed;
 	}
 
-	const uint32_t nFrameCount = D2CMP_CelFileGetCelsPerDirection(pCellFile1);
+	const int32_t nFrameCount = D2CMP_CelFileGetCelsPerDirection(pCellFile1);
 
 	if (pCellFile1)
 	{
@@ -245,14 +245,14 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 
 	if (nAnimSpeed && nFrameCount > 1 && pAnimImage->bIsRunning)
 	{
-		const uint32_t nFrameDivisor = 1000 * nAnimSpeed / 25;
+		const uint32_t nFrameDivisor = 1000 * (int32_t)nAnimSpeed / 25;
 		if (pAnimImage->nAnimType != 2 && pAnimImage->nAnimType != 4)
 		{
-			pAnimImage->nFrame = (GetTickCount() - pAnimImage->dwStartTickCount) / nFrameDivisor % (nFrameCount - 1);
+			pAnimImage->nFrame = (GetTickCount() - pAnimImage->dwStartTickCount) / nFrameDivisor % (uint32_t)(nFrameCount - 1);
 		}
 		else
 		{
-			pAnimImage->nFrame = std::min(((uint32_t)GetTickCount() - pAnimImage->dwStartTickCount) / nFrameDivisor, nFrameCount - 1);
+			pAnimImage->nFrame = std::min((int32_t)((GetTickCount() - pAnimImage->dwStartTickCount) / nFrameDivisor), nFrameCount - 1);
 		}
 	}
 
