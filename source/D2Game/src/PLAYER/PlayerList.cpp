@@ -271,29 +271,29 @@ void __fastcall PLAYERLIST_InitializePlayerRelations(D2GameStrc* pGame, D2UnitSt
 //1.14d: 0x0055B540
 void __fastcall PLAYERLIST_IterateCallback_InitializePlayerRelation(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
 {
-    D2UnitStrc* pUnit = (D2UnitStrc*)pArg;
-    PLAYERLIST_AllocPlayerList(pGame, pPlayer, pUnit);
-    PLAYERLIST_AllocPlayerList(pGame, pUnit, pPlayer);
+    D2UnitStrc* pJoiningPlayer = (D2UnitStrc*)pArg;
+    PLAYERLIST_AllocPlayerList(pGame, pPlayer, pJoiningPlayer);
+    PLAYERLIST_AllocPlayerList(pGame, pJoiningPlayer, pPlayer);
 
-    D2GAME_PACKETS_SendPacket0x8D_6FC3F960(pUnit, pPlayer);
+    D2GAME_PACKETS_SendPacket0x8D_6FC3F960(pJoiningPlayer, pPlayer);
 
-    PLAYERLIST_SetPartyState(pPlayer, pUnit, 0);
+    PLAYERLIST_SetPartyState(pPlayer, pJoiningPlayer, 0);
 
     if (SUNIT_GetPartyId(pPlayer) == -1)
     {
-        PLAYERLIST_SetPartyState(pUnit, pPlayer, 0);
+        PLAYERLIST_SetPartyState(pJoiningPlayer, pPlayer, 0);
     }
     else
     {
-        PLAYERLIST_SetPartyState(pUnit, pPlayer, 1);
+        PLAYERLIST_SetPartyState(pJoiningPlayer, pPlayer, 1);
     }
 
-    PLAYERLIST_SendPartyState(pUnit, pPlayer);
-    PLAYERLIST_SendPartyState(pPlayer, pUnit);
+    PLAYERLIST_SendPartyState(pJoiningPlayer, pPlayer);
+    PLAYERLIST_SendPartyState(pPlayer, pJoiningPlayer);
 
-    for (D2PlayerListStrc* i = UNITS_GetPlayerData(pPlayer)->pPlayerList; i; i = i->pNext)
+    for (D2PlayerListStrc* pPlayerList = UNITS_GetPlayerData(pPlayer)->pPlayerList; pPlayerList; pPlayerList = pPlayerList->pNext)
     {
-        D2GAME_PACKETS_SendPacket0x8C_6FC3F8B0(pUnit, pPlayer ? pPlayer->dwUnitId : -1, i->nUnitGUID, i->dwFlags);
+        D2GAME_PACKETS_SendPacket0x8C_6FC3F8B0(pJoiningPlayer, pPlayer ? pPlayer->dwUnitId : -1, pPlayerList->nUnitGUID, pPlayerList->dwFlags);
     }
 }
 

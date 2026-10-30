@@ -308,15 +308,15 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
     {
         const uint8_t nHistoryIndex = pPlayerData->nPositionHistoryIndex;
         const uint8_t v47 = pPlayerData->nPositionHistoryIndex;
-        uint8_t v46 = 19;
+        uint8_t nPreviousIndex = 19;
         if (nHistoryIndex)
         {
-            v46 = nHistoryIndex - 1;
+            nPreviousIndex = nHistoryIndex - 1;
         }
 
         const int32_t nPlayerX = CLIENTS_GetUnitX(pPlayer);
         const int32_t nPlayerY = CLIENTS_GetUnitY(pPlayer);
-        if (PATH_ComputeSquaredDistance(nPlayerX, nPlayerY, pPlayerData->pPositionHistory[v46].nX, pPlayerData->pPositionHistory[v46].nY) > 45)
+        if (PATH_ComputeSquaredDistance(nPlayerX, nPlayerY, pPlayerData->pPositionHistory[nPreviousIndex].nX, pPlayerData->pPositionHistory[nPreviousIndex].nY) > 45)
         {
             pPlayerData->pPositionHistory[v47].nX = nPlayerX;
             pPlayerData->pPositionHistory[v47].nY = nPlayerY;
@@ -341,8 +341,8 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         return nPathResult;
     }
 
-    const int32_t v28 = pPlayer->pPlayerData->nInteractAction;
-    if (v28 < 0)
+    const int32_t nInteractAction = pPlayer->pPlayerData->nInteractAction;
+    if (nInteractAction < 0)
     {
         int32_t nMode = PLRMODE_NEUTRAL;
         D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
@@ -354,13 +354,13 @@ int32_t __fastcall PLRMODE_UpdateMovement(D2GameStrc* pGame, D2UnitStrc* pPlayer
         D2GAME_DeletePlayerPerFrameEvents_6FCBCE50(pGame, pPlayer);
         SUNIT_SetCombatMode(pGame, pPlayer, nMode);
         UNITS_SetUsedSkill(pPlayer, 0);
-        sub_6FC828D0(pPlayer, PLRMODE_GetInteractUnitType(pPlayer), PLRMODE_GetInteractUnitGUID(pPlayer), v28 == -2, pGame);
+        sub_6FC828D0(pPlayer, PLRMODE_GetInteractUnitType(pPlayer), PLRMODE_GetInteractUnitGUID(pPlayer), nInteractAction == -2, pGame);
         PLRMODE_SetInteractFlag(pPlayer, 0);
         return nPathResult;
     }
 
     int32_t nResult = 0;
-    D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pPlayer, v28);
+    D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pPlayer, nInteractAction);
     if (pSkill)
     {
         const int32_t nSkillMode = SKILLS_GetSkillModeFromUnit(pPlayer, pSkill);
