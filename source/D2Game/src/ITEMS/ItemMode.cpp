@@ -3088,8 +3088,8 @@ int32_t __fastcall ITEMMODE_ReplaceHandItemsWithCursorItem(D2GameStrc* pGame, D2
 }
 
 //Inlined in D2Game.0x6FC46840
-// TODO: Better name
-__forceinline int32_t ITEMMODE_CheckSkillUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+//1.14d: inlined in 0x005616A0
+__forceinline int32_t ITEMMODE_CanRestoreWeaponSwitchSkill(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 {
     if (!pSkill)
     {
@@ -3256,7 +3256,7 @@ int32_t __fastcall ITEMMODE_SwapWeaponSets(D2GameStrc* pGame, D2UnitStrc* pUnit,
     CLIENTS_SetWeaponSwitch(pClient, CLIENTS_GetWeaponSwitch(pClient) == 0);
     D2GAME_PACKETS_SendPacket0x97_6FC3FB60(pClient);
 
-    if (ITEMMODE_CheckSkillUseState(pUnit, pSwitchLeftSkill))
+    if (ITEMMODE_CanRestoreWeaponSwitchSkill(pUnit, pSwitchLeftSkill))
     {
         D2GAME_AssignSkill_6FD13800(pUnit, 1, nSwitchLeftSkillId, nSwitchLeftSkillFlags);
         SUNITMSG_QueueSkillSelection(pUnit, 1, nSwitchLeftSkillId, nSwitchLeftSkillFlags);
@@ -3275,7 +3275,7 @@ int32_t __fastcall ITEMMODE_SwapWeaponSets(D2GameStrc* pGame, D2UnitStrc* pUnit,
         }
     }
 
-    if (ITEMMODE_CheckSkillUseState(pUnit, pSwitchRightSkill))
+    if (ITEMMODE_CanRestoreWeaponSwitchSkill(pUnit, pSwitchRightSkill))
     {
         D2GAME_AssignSkill_6FD13800(pUnit, 0, nSwitchRightSkillId, nSwitchRightSkillFlags);
         SUNITMSG_QueueSkillSelection(pUnit, 0, nSwitchRightSkillId, nSwitchRightSkillFlags);
@@ -4455,15 +4455,15 @@ void __fastcall ITEMMODE_RemoveInventoryItemFromAllPlayers(D2GameStrc* pGame, D2
 void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit, int8_t nRemovedSlot)
 {
     const int32_t nPosition = D2Clamp(nRemovedSlot & 3, 0, 3);
-    int32_t j = nPosition;
-    for (int32_t i = nPosition; i < 4; ++i)
+    int32_t nWriteRow = nPosition;
+    for (int32_t nReadRow = nPosition; nReadRow < 4; ++nReadRow)
     {
-        D2UnitStrc* pBeltItem = INVENTORY_GetItemFromBeltSlot(pUnit->pInventory, 4 * i);
+        D2UnitStrc* pBeltItem = INVENTORY_GetItemFromBeltSlot(pUnit->pInventory, 4 * nReadRow);
         if (pBeltItem)
         {
-            if (j != i)
+            if (nWriteRow != nReadRow)
             {
-                INVENTORY_PlaceItemInBeltSlot(pUnit->pInventory, pBeltItem, 4 * j);
+                INVENTORY_PlaceItemInBeltSlot(pUnit->pInventory, pBeltItem, 4 * nWriteRow);
                 ITEMS_SetItemFlag(pBeltItem, IFLAG_UNK1, 1);
                 ITEMS_SetItemFlag(pBeltItem, IFLAG_NEWITEM, 1);
 
@@ -4476,7 +4476,7 @@ void __fastcall ITEMMODE_CompactBeltColumn(D2GameStrc* pGame, D2UnitStrc* pUnit,
                 INVENTORY_AddItemToCommandQueue(pUnit->pInventory, pBeltItem);
             }
 
-            ++j;
+            ++nWriteRow;
         }
     }
 }
@@ -5347,13 +5347,13 @@ int32_t __fastcall ITEMMODE_CheckAndResolveBodySlotPair(D2UnitStrc* pPlayer, D2U
         break;
     }
 
-    D2UnitStrc* pItem1 = *ppBodyItem;
-    D2UnitStrc* pItem2 = *ppOtherBodyItem;
+    D2UnitStrc* pBodyItem = *ppBodyItem;
+    D2UnitStrc* pOtherBodyItem = *ppOtherBodyItem;
 
-    if (pItem1)
+    if (pBodyItem)
     {
-        *ppBodyItem = pItem2;
-        *ppOtherBodyItem = pItem1;
+        *ppBodyItem = pOtherBodyItem;
+        *ppOtherBodyItem = pBodyItem;
         *pBodyLoc = nBodyLoc;
     }
 
@@ -5657,8 +5657,8 @@ void __fastcall D2GAME_UpdatePlayerVitals_6FC4B240(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    D2EquipmentRefreshStateStrc unused = {};
-    ITEMMODE_SaveEquipmentRefreshState(pUnit, &unused);
+    D2EquipmentRefreshStateStrc refreshState = {};
+    ITEMMODE_SaveEquipmentRefreshState(pUnit, &refreshState);
 
     D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory);
     while (pItem)
@@ -5676,7 +5676,7 @@ void __fastcall D2GAME_UpdatePlayerVitals_6FC4B240(D2GameStrc* pGame, D2UnitStrc
         pItem = pNextItem;
     }
 
-    ITEMMODE_RestoreSelectedSkills(pUnit, &unused);
+    ITEMMODE_RestoreSelectedSkills(pUnit, &refreshState);
 }
 
 //D2Game.0x6FC4B2D0
