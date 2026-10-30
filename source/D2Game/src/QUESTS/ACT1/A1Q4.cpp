@@ -1270,7 +1270,7 @@ void __fastcall ACT1Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 //1.14d: 0x00592580
 void __fastcall ACT1Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 4, 5, 6
 	};
@@ -1368,7 +1368,7 @@ void __fastcall ACT1Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	}
 	else if (pQuestData->fState < 6)
 	{
-		const int32_t nIndex = nIndices[pQuestData->fState];
+		const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 		if (nIndex != -1 && nIndex < 11)
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
