@@ -1093,9 +1093,9 @@ int32_t __fastcall PLRSAVE_ReadLegacyStats(D2GameStrc* pGame, D2UnitStrc* pUnit,
 
 //D2Game.0x6FC8AEC0
 //1.14d: 0x00532E90
-int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pClient, D2UnitStrc* pUnit, uint8_t* pSection, int32_t nUnused1, int32_t nUnused2, int32_t* pSkillCount)
+int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pClient, D2UnitStrc* pUnit, uint8_t* pSection, int32_t nUnused1, int32_t nUnused2, int32_t* pSize)
 {
-    *pSkillCount = 0;
+    *pSize = 0;
 
     if (*(uint16_t*)pSection == 'fi')
     {
@@ -1111,7 +1111,7 @@ int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pCl
 
         SCMD_SendSkillList(pClient, pUnit);
 
-        *pSkillCount = SKILLS_GetPlayerSkillCount(nClassId) + 2;
+        *pSize = SKILLS_GetPlayerSkillCount(nClassId) + 2;
         
         SKILLS_RefreshPassivesAndPetLimits(pUnit);
         

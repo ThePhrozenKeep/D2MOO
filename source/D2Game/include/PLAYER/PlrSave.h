@@ -74,7 +74,7 @@ int32_t __fastcall D2GAME_SAVE_ReadWaypointData_6FC8AD50(D2UnitStrc* pUnit, uint
 int32_t __fastcall PLRSAVE_ReadLegacyStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t* pSection, int32_t nStatCount, int32_t nUnused, int32_t* pSize);
 //D2Game.0x6FC8AEC0
 //1.14d: 0x00532E90
-int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pClient, D2UnitStrc* pUnit, BYTE* pSection, int32_t nUnused1, int32_t nUnused2, int32_t* pSkillCount);
+int32_t __fastcall PLRSAVE_ReadLegacySkills(D2GameStrc* pGame, D2ClientStrc* pClient, D2UnitStrc* pUnit, BYTE* pSection, int32_t nUnused1, int32_t nUnused2, int32_t* pSize);
 //D2Game.0x6FC8AF70
 //1.14d: 0x00532F30
 size_t __fastcall PLRSAVE_ReadLegacyItemData(void* a1, BYTE* a2);
