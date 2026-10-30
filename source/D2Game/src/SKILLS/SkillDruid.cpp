@@ -2234,8 +2234,8 @@ int32_t __fastcall SKILLS_SrvDo138_CreatePerpendicularMissileLine(D2GameStrc* pG
 
     for (int32_t i = 0; i < nSubMissiles; ++i)
     {
-        missileParams.nTargetY = nX;
-        missileParams.nTargetX = nY;
+        missileParams.nTargetY = nY;
+        missileParams.nTargetX = nX;
         MISSILES_CreateMissileFromParams(pGame, &missileParams);
         nX += nXDiff;
         nY += nYDiff;

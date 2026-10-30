@@ -2411,8 +2411,8 @@ D2UnitStrc* __fastcall SKILLS_CreateSpiderLayMissile(D2GameStrc* pGame, D2UnitSt
     D2Common_11055((uint8_t)nLayDirection, &nXOffset, &nYOffset);
 
     D2MissileStrc missileParams = {};
-    missileParams.nX = CLIENTS_GetUnitY(pUnit) + nXOffset;
-    missileParams.nY = CLIENTS_GetUnitX(pUnit) + nYOffset;
+    missileParams.nX = CLIENTS_GetUnitX(pUnit) + nXOffset;
+    missileParams.nY = CLIENTS_GetUnitY(pUnit) + nYOffset;
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nTargetX = missileParams.nX + 2 * nXOffset;
