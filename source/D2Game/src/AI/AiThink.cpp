@@ -11296,14 +11296,16 @@ void __fastcall AITHINK_Fn054_NpcStationary(D2GameStrc* pGame, D2UnitStrc* pUnit
 	int32_t bCloseToTarget = 0;
 	D2UnitStrc* pPlayer = AITACTICS_FindNearbyPlayerOrSelf(pGame, pUnit, &bCloseToTarget);
 
+	// Read before the player check: the Tyrael / Izual ghost branches below use it when no player is near.
 	D2MonsterInteractStrc* pMonInteract = nullptr;
+	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
+	{
+		pMonInteract = pUnit->pMonsterData->pMonInteract;
+	}
+
 	if (pPlayer && pPlayer != pUnit)
 	{
 		const int32_t nDistance = AIUTIL_GetDistanceToCoordinates_FullUnitSize(pUnit, pPlayer);
-		if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
-		{
-			pMonInteract = pUnit->pMonsterData->pMonInteract;
-		}
 
 		if (pPlayer->dwUnitType == UNIT_PLAYER && PLAYER_IsBusy(pPlayer) == 1 || MONSTERAI_HasInteractUnit(pMonInteract))
 		{
