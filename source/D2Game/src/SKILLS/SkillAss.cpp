@@ -38,7 +38,7 @@
 
 
 #pragma pack(push, 1)
-struct D2SrvDo47Strc
+struct D2CloakOfShadowsCallbackArgsStrc
 {
     int32_t nSkillId;
     int32_t nSkillLevel;
@@ -48,12 +48,12 @@ struct D2SrvDo47Strc
     int32_t nAuraStatCalcValue[6];
 };
 
-struct D2SrvDo51Strc
+struct D2MindBlastCallbackArgsStrc
 {
     D2DamageStrc* pDamage;
-    int32_t nMonCurseResSubstraction;
-    int32_t nParam1;
-    int32_t nParam2;
+    int32_t nConversionChance;
+    int32_t nBaseDuration;
+    int32_t nDurationRange;
 };
 
 struct D2SrvDo142Strc
@@ -1733,7 +1733,7 @@ int32_t __fastcall SKILLS_SrvDo047_CloakOfShadows(D2GameStrc* pGame, D2UnitStrc*
         return 0;
     }
 
-    D2SrvDo47Strc args = {};
+    D2CloakOfShadowsCallbackArgsStrc args = {};
 
     args.nSkillId = nSkillId;
     args.nSkillLevel = nSkillLevel;
@@ -1759,7 +1759,7 @@ int32_t __fastcall SKILLS_SrvDo047_CloakOfShadows(D2GameStrc* pGame, D2UnitStrc*
 //1.14d: 0x005D6520
 int32_t __fastcall SKILLS_AuraCallback_CloakOfShadows(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2SrvDo47Strc* pArgs = (D2SrvDo47Strc*)pAuraCallback->pArgs;
+    D2CloakOfShadowsCallbackArgsStrc* pArgs = (D2CloakOfShadowsCallbackArgsStrc*)pAuraCallback->pArgs;
     if (SUNIT_IsDead(pUnit))
     {
         return 0;
@@ -2265,11 +2265,11 @@ void __fastcall SKILLS_StatRemoveCallback_MindBlast(D2UnitStrc* pItem, int32_t n
 //1.14d: 0x005D7680
 int32_t __fastcall SKILLS_AuraCallback_MindBlast(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2SrvDo51Strc* pArgs = (D2SrvDo51Strc*)pAuraCallback->pArgs;
+    D2MindBlastCallbackArgsStrc* pArgs = (D2MindBlastCallbackArgsStrc*)pAuraCallback->pArgs;
 
-    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && SKILLS_CanSwitchAi(pUnit, AISPECIALSTATE_TERROR) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nMonCurseResSubstraction)
+    if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERS_GetHirelingTypeId(pUnit) && STATLIST_GetUnitAlignment(pUnit) == UNIT_ALIGNMENT_EVIL && SKILLS_CanSwitchAi(pUnit, AISPECIALSTATE_TERROR) && ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, 100) <= pArgs->nConversionChance)
     {
-        const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + pArgs->nParam1 + ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, pArgs->nParam2);
+        const int32_t nExpireFrame = pAuraCallback->pGame->dwGameFrame + pArgs->nBaseDuration + ITEMS_RollLimitedRandomNumber(&pAuraCallback->pOwner->pSeed, pArgs->nDurationRange);
         D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION);
         if (!pConversionStatList)
         {
@@ -2386,11 +2386,11 @@ int32_t __fastcall SKILLS_SrvDo051_MindBlast(D2GameStrc* pGame, D2UnitStrc* pUni
     damage.wResultFlags |= pSkillsTxtRecord->wResultFlags;
     damage.dwHitFlags |= pSkillsTxtRecord->dwHitFlags;
 
-    D2SrvDo51Strc args = {};
+    D2MindBlastCallbackArgsStrc args = {};
     args.pDamage = &damage;
-    args.nMonCurseResSubstraction = D2COMMON_11036_GetMonCurseResistanceSubtraction(nSkillLevel, nSkillId);
-    args.nParam1 = pSkillsTxtRecord->dwParam[2];
-    args.nParam2 = pSkillsTxtRecord->dwParam[3];
+    args.nConversionChance = D2COMMON_11036_GetMonCurseResistanceSubtraction(nSkillLevel, nSkillId);
+    args.nBaseDuration = pSkillsTxtRecord->dwParam[2];
+    args.nDurationRange = pSkillsTxtRecord->dwParam[3];
 
 
     SKILLS_IterateAuraTargets(pGame, pUnit, nX, nY, nRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_MindBlast, &args, 0, __FILE__, __LINE__);
@@ -2542,7 +2542,7 @@ int32_t __fastcall SKILLS_SrvDo053_ApplyAreaDamage(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCFA980
-int32_t __fastcall SKILLS_AuraCallback_SrvDo142(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
+int32_t __fastcall SKILLS_AuraCallback_AllocSkillCombat(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
     D2SrvDo142Strc* pArgs = (D2SrvDo142Strc*)pAuraCallback->pArgs;
     D2DamageStrc damage = {};
@@ -2600,7 +2600,7 @@ int32_t __fastcall SKILLS_SrvDo142_ApplyAreaCombat(D2GameStrc* pGame, D2UnitStrc
         args.nToHit = SKILLS_GetToHitFactor(pUnit, nSkillId, nSkillLevel);
     }
 
-    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_SrvDo142, &args, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_AllocSkillCombat, &args, 0, __FILE__, __LINE__);
     return 1;
 }
 

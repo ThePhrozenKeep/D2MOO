@@ -908,12 +908,12 @@ int32_t __fastcall SKILLS_SrvSt51_Submerge(D2GameStrc* pGame, D2UnitStrc* pUnit,
 //1.14d: 0x005CC1F0
 int32_t __fastcall SKILLS_SrvDo094_Submerge(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    int32_t pFrameNo; // [sp+Ch] [bp-8h]@1
-    int32_t pFrameCount; // [sp+10h] [bp-4h]@1
+    int32_t nFrameNo;
+    int32_t nFrameCount;
 
-    UNITS_GetShiftedFrameMetrics(pUnit, &pFrameNo, &pFrameCount);
+    UNITS_GetShiftedFrameMetrics(pUnit, &nFrameNo, &nFrameCount);
     pUnit->nActionFrame = 0;
-    if (pFrameNo <= 0)
+    if (nFrameNo <= 0)
     {
         pUnit->dwSeqSpeed = 0;
     }
@@ -2405,17 +2405,17 @@ D2UnitStrc* __fastcall SKILLS_CreateSpiderLayMissile(D2GameStrc* pGame, D2UnitSt
 
     // TODO: Check this calculation, Names    
     uint8_t spiderLayDirections[8] = { 10, 8, 22, 20, 18, 16, 14, 12, };
-    uint32_t a1a = spiderLayDirections[D2Common_11053(PATH_GetNewDirection(pUnit->pDynamicPath))];
-    int32_t a2a = 0;
+    uint32_t nLayDirection = spiderLayDirections[D2Common_11053(PATH_GetNewDirection(pUnit->pDynamicPath))];
+    int32_t nXOffset = 0;
     int32_t nYOffset = 0;
-    D2Common_11055((uint8_t)a1a, &a2a, &nYOffset);
+    D2Common_11055((uint8_t)nLayDirection, &nXOffset, &nYOffset);
 
     D2MissileStrc missileParams = {};
-    missileParams.nX = CLIENTS_GetUnitY(pUnit) + a2a;
+    missileParams.nX = CLIENTS_GetUnitY(pUnit) + nXOffset;
     missileParams.nY = CLIENTS_GetUnitX(pUnit) + nYOffset;
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
-    missileParams.nTargetX = missileParams.nX + 2 * a2a;
+    missileParams.nTargetX = missileParams.nX + 2 * nXOffset;
     missileParams.nTargetY = missileParams.nY + 2 * nYOffset;
     missileParams.nSkillLevel = SKILLS_GetSkillLevel(pUnit, SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, SKILL_SPIDERLAY), 1);
     missileParams.nVelocity = 3;

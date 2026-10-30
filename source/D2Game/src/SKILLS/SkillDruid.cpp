@@ -1193,61 +1193,61 @@ int32_t __fastcall SKILLS_EventFunc25_AbsorbElementalDamage(D2GameStrc* pGame, i
         return 0;
     }
 
-    const int32_t nValue1 = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[1], 0);
-    if (nValue1 <= 0 || pSkillsTxtRecord->wAuraStat[0] < 0 || pSkillsTxtRecord->wAuraStat[0] >= sgptDataTables->nItemStatCostTxtRecordCount)
+    const int32_t nMaxAbsorb = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[1], 0);
+    if (nMaxAbsorb <= 0 || pSkillsTxtRecord->wAuraStat[0] < 0 || pSkillsTxtRecord->wAuraStat[0] >= sgptDataTables->nItemStatCostTxtRecordCount)
     {
         return 0;
     }
 
-    int32_t nValue0 = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
-    if (nValue0)
+    int32_t nRemainingAbsorb = STATLIST_GetStatValue(pStatList, pSkillsTxtRecord->wAuraStat[0], 0);
+    if (nRemainingAbsorb)
     {
         if (pDamage->dwFireDamage > 0)
         {
-            if (nValue0 > pDamage->dwFireDamage)
+            if (nRemainingAbsorb > pDamage->dwFireDamage)
             {
-                nValue0 -= pDamage->dwFireDamage;
+                nRemainingAbsorb -= pDamage->dwFireDamage;
                 pDamage->dwFireDamage = 0;
             }
             else
             {
-                pDamage->dwFireDamage -= nValue0;
-                nValue0 = 0;
+                pDamage->dwFireDamage -= nRemainingAbsorb;
+                nRemainingAbsorb = 0;
             }
         }
 
         if (pDamage->dwColdDamage > 0)
         {
-            if (nValue0 > pDamage->dwColdDamage)
+            if (nRemainingAbsorb > pDamage->dwColdDamage)
             {
-                nValue0 -= pDamage->dwColdDamage;
+                nRemainingAbsorb -= pDamage->dwColdDamage;
                 pDamage->dwColdDamage = 0;
             }
             else
             {
-                pDamage->dwColdDamage -= nValue0;
-                nValue0 = 0;
+                pDamage->dwColdDamage -= nRemainingAbsorb;
+                nRemainingAbsorb = 0;
             }
         }
 
         if (pDamage->dwLtngDamage > 0)
         {
-            if (nValue0 > pDamage->dwLtngDamage)
+            if (nRemainingAbsorb > pDamage->dwLtngDamage)
             {
-                nValue0 -= pDamage->dwLtngDamage;
+                nRemainingAbsorb -= pDamage->dwLtngDamage;
                 pDamage->dwLtngDamage = 0;
             }
             else
             {
-                pDamage->dwLtngDamage -= nValue0;
-                nValue0 = 0;
+                pDamage->dwLtngDamage -= nRemainingAbsorb;
+                nRemainingAbsorb = 0;
             }
         }
 
-        STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], nValue0, 0);
+        STATLIST_SetStatIfListIsValid(pStatList, pSkillsTxtRecord->wAuraStat[0], nRemainingAbsorb, 0);
     }
 
-    if (nValue0 <= 0)
+    if (nRemainingAbsorb <= 0)
     {
         STATES_ToggleState(pAttacker, pSkillsTxtRecord->nAuraState, 0);
         D2Common_10474(pAttacker, pStatList);
@@ -1256,7 +1256,7 @@ int32_t __fastcall SKILLS_EventFunc25_AbsorbElementalDamage(D2GameStrc* pGame, i
     }
 
     const int32_t nOldParamValue = STATLIST_GetStatValue(pStatList, STAT_UNSENTPARAM1, 0);
-    const int32_t nNewParamValue = MONSTERUNIQUE_CalculatePercentage(100, nValue0, nValue1);
+    const int32_t nNewParamValue = MONSTERUNIQUE_CalculatePercentage(100, nRemainingAbsorb, nMaxAbsorb);
     if (nNewParamValue - nOldParamValue >= 5)
     {
         STATES_ToggleGfxStateFlag(pAttacker, pSkillsTxtRecord->nAuraState, 1);

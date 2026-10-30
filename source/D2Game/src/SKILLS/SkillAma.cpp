@@ -887,7 +887,6 @@ int32_t __fastcall SKILLS_SrvDo013_Fend_Zeal_Fury(D2GameStrc* pGame, D2UnitStrc*
 //1.14d: 0x005DBE50
 int32_t __fastcall SKILLS_SrvDo014_LightningStrike(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    // TODO: v13
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
@@ -903,8 +902,8 @@ int32_t __fastcall SKILLS_SrvDo014_LightningStrike(D2GameStrc* pGame, D2UnitStrc
     SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
     const int32_t nParam0 = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
 
-    D2UnitStrc* v13 = SKILLS_FindNextAuraTarget(pGame, pUnit, CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), nParam0, 3, pTarget->dwUnitId, 0);
-    if (!v13)
+    D2UnitStrc* pNextTarget = SKILLS_FindNextAuraTarget(pGame, pUnit, CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget), nParam0, 3, pTarget->dwUnitId, 0);
+    if (!pNextTarget)
     {
         return 0;
     }
@@ -924,8 +923,8 @@ int32_t __fastcall SKILLS_SrvDo014_LightningStrike(D2GameStrc* pGame, D2UnitStrc
     missileParams.nSkill = nSkillId;
     missileParams.nSkillLevel = nSkillLevel;
     missileParams.nMissile = nMissileId;
-    missileParams.nTargetX = CLIENTS_GetUnitY(v13);
-    missileParams.nTargetY = CLIENTS_GetUnitY(v13);
+    missileParams.nTargetX = CLIENTS_GetUnitY(pNextTarget);
+    missileParams.nTargetY = CLIENTS_GetUnitY(pNextTarget);
 
     D2UnitStrc* pMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
     if (pMissile)
