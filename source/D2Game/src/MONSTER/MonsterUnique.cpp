@@ -2314,14 +2314,16 @@ BOOL __fastcall MONSTERUNIQUE_CanAssignUMod(D2UnitStrc* pUnit, D2MonUModTxt* pMo
     for (int32_t i = 0; i < 2; ++i)
     {
         const int16_t nExcludeMonType = pMonUModTxtRecord->wExclude[i];
+        // 1.14d 0x5A040A: an empty exclude ends the list (most monumod rows have none), so it excludes nothing.
+        if (nExcludeMonType <= 0)
+        {
+            break;
+        }
+
         if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
         {
 			if (D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId))
 			{
-				// SUNITDMG_CheckMonType does not check sgptDataTables->pMonTypeNest if mon type is 0
-				// However original code in this function does. Just in case, trigger the error if this should actually be supported.
-				// This is unlikely since 0 is MONTYPE_NONE.
-				D2_ASSERT(pMonStatsTxtRecord->wMonType != MONTYPE_NONE && nExcludeMonType != MONTYPE_NONE);
 				if (SUNITDMG_CheckMonType(pMonStatsTxtRecord->wMonType, nExcludeMonType))
 				{
 					return FALSE;
