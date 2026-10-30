@@ -914,7 +914,7 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 				ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 1);
 
 				pQuestDataEx->bBaseStaffDropped = 1;
-				++pQuestDataEx->nHoradricCubes;
+				++pQuestDataEx->nBaseStaffs;
 			}
 		}
 	}
