@@ -1625,7 +1625,7 @@ void __fastcall GAME_EndGameForConnectedClient(D2GameStrc* pGame, D2ClientStrc* 
     }
 
     pCheckedClient = nullptr;
-    GAME_ForEachIngameClient(pGame, GAME_FindGameOwnerCallback, &pCheckedClient);
+    GAME_ForEachIngameClient(pGame, GAME_FindFirstClientCallback, &pCheckedClient);
 
     if (pCheckedClient)
     {
