@@ -2541,10 +2541,10 @@ void __fastcall D2GAME_STORES_FillGamble_6FCCA9F0(D2GameStrc* pGame, D2UnitStrc*
                 D2ItemsTxt* pUberItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode(pItemsTxtRecord->dwUberCode, &nUberItemId);
                 if (pUberItemsTxtRecord)
                 {
-                    const uint32_t nUberItemChance = pDifficultyLevelsTxtRecord->dwGambleUber * (nItemLevel - pUberItemsTxtRecord->nLevel) + 1;
+                    const int32_t nUberItemChance = pDifficultyLevelsTxtRecord->dwGambleUber * (nItemLevel - pUberItemsTxtRecord->nLevel) + 1;
                     if (nUberItemChance > 0)
                     {
-                        if (ITEMS_RollLimitedRandomNumber(pSeed, 10000) < nUberItemChance)
+                        if ((int32_t)ITEMS_RollLimitedRandomNumber(pSeed, 10000) < nUberItemChance)
                         {
                             nItemId = nUberItemId;
                         }
@@ -2556,8 +2556,8 @@ void __fastcall D2GAME_STORES_FillGamble_6FCCA9F0(D2GameStrc* pGame, D2UnitStrc*
                                 D2ItemsTxt* pUltraItemsTxtRecord = DATATBLS_GetItemRecordFromItemCode(pItemsTxtRecord->dwUltraCode, &nUltraItemId);
                                 if (pUltraItemsTxtRecord)
                                 {
-                                    const uint32_t nUltraItemChance = pDifficultyLevelsTxtRecord->dwGambleUltra * (nItemLevel - pUltraItemsTxtRecord->nLevel) + 1;
-                                    if (nUltraItemChance > 0 && (ITEMS_RollRandomNumber(pSeed) % 10000) < nUltraItemChance)
+                                    const int32_t nUltraItemChance = pDifficultyLevelsTxtRecord->dwGambleUltra * (nItemLevel - pUltraItemsTxtRecord->nLevel) + 1;
+                                    if (nUltraItemChance > 0 && (int32_t)(ITEMS_RollRandomNumber(pSeed) % 10000) < nUltraItemChance)
                                     {
                                         nItemId = nUltraItemId;
                                     }
