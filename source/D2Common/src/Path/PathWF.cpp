@@ -21,6 +21,7 @@ struct D2PathMovStrc
 
 // D2Common.0x6FD68400 (1.13C)
 // Inlined (1.10f)
+//1.14d: 0x0067BD80
 void __vectorcall PATH_ReplaceSubpathPoints(D2PathMovStrc* pMov, D2PathPointStrc* pPoints, int* pSubPathStartIdx, int nSubPathLastIdx, int* nMaxIndex)
 {
 	// negative if shrinking, positive is growing
@@ -45,6 +46,7 @@ static int gnCellOffsetsToDirections[] =
 
 //1.10f: D2Common.0x6FDD23D8
 //1.13C: D2Common.0x6fddca38
+//1.14d: 0x006F1D98
 static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 {
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1},
@@ -53,6 +55,7 @@ static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD686D0
+//1.14d: 0x0067BBF0
 BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
 {
 	D2_ASSERT(pInfo && pMov && pInfo->pDynamicPath->pUnit && (pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
@@ -85,10 +88,12 @@ BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2Path
 // We try to advance both paths at the same pace (one point by one point), and both evaluate paths to avoid but stay close to obstacles.
 // This effectively makes the unit slide along walls
 // If the path would be too long, then it goes straight to the first collision along the line.
+//1.14d: 0x0067BDF0
 int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPointStrc tSubPathStart, D2PathPointStrc* pPathPoints, int* pSubPathStartIdx, int* nMaxIndex, int nMaxLength, int nMajorDirection)
 {
 	//1.10f: D2Common.0x6FDD2480
 	//1.13C: D2Common.0x6FDE5158
+	//1.14d: 0x006F1F00
 	static int gnPreviousDirection1[16] =
 	{
 		6,6,0,0,2,2,4,4,
@@ -97,6 +102,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 	//1.10f: D2Common.0x6FDD24C0
 	//1.13C: D2Common.0x6FDE5118
+	//1.14d: 0x006F1E80
 	static int gnPreviousDirection2[16] =
 	{
 		// Opposite direction of gnDirIndexCache1List
@@ -106,6 +112,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 	//1.10f: D2Common.0x6FDD2500
 	//1.13C: D2Common.0x6FDE50D8
+	//1.14d: 0x006F1EC0
 	static int gnNextDirection1[16] =
 	{
 		2,2,4,4,6,6,0,0,
@@ -114,6 +121,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 	//1.10f: D2Common.0x6FDD2540
 	//1.13C: D2Common.0x6FDE5098
+	//1.14d: 0x006F1E40
 	static int gnNextDirection2[16] =
 	{
 		6,0,0,2,2,4,4,6,
@@ -319,6 +327,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 //D2Common.0x6FDAC170 (1.10f)
 //D2Common.0x6FD68310 (1.13c)
+//1.14d: 0x0067C1E0
 int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPointStrc* pInputPoints, D2PathPointStrc tStartCoord, signed int nbTempPoints)
 {
 	if (nbTempPoints >= 2)
@@ -368,6 +377,7 @@ int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPoint
 
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD684C0
+//1.14d: 0x0067B9F0
 static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTargetPoint, int nDistMax, int* nMajorDirection, D2PathPointStrc* pOutPoints)
 {
 	// We kind of "null terminate" the path by setting the last point X to 0
@@ -498,6 +508,7 @@ static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTarg
 // Author: Araksson
 // D2Common.0x6FDAC270 (1.10f) 
 // D2Common.0x6FD68C40 (1.13C)
+//1.14d: 0x0067C2D0
 int __fastcall PATH_ComputePathOrSlideAlongObstacles(D2PathInfoStrc* ptPathInfo)
 {
 	D2_ASSERT(ptPathInfo->pDynamicPath->pUnit && (ptPathInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || ptPathInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));

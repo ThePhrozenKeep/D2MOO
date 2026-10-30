@@ -20,12 +20,17 @@
 #pragma warning (disable : 28159)
 
 
+//1.10f: D2Win.0x6F8FD8B0
+//1.14d: 0x00841B78
 D2WinEditBoxStrc* dword_6F8FD8B0;
+//1.10f: D2Win.0x6F8FD8B4
+//1.14d: 0x00841B7C
 int dword_6F8FD8B4;
 
 
 //D2Win.0x6F8A6C80 (#10070)
-D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t a8, int32_t(__stdcall* a9)(SMSGHANDLER_PARAMS*), int32_t nEditBoxFlags, int32_t a11)
+//1.14d: 0x005001D0
+D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t pfOnReturn, int32_t(__stdcall* pfCallback)(SMSGHANDLER_PARAMS*), int32_t nEditBoxFlags, int32_t a11)
 {
 	D2WinEditBoxStrc* pEditBox = D2_CALLOC_STRC(D2WinEditBoxStrc);
 
@@ -36,25 +41,25 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 	pEditBox->controlHeader.nWidth = nWidth;
 	pEditBox->controlHeader.nHeight = nHeight;
 	pEditBox->controlHeader.pCellFile = pCellFile;
-	pEditBox->field_40 = a5;
-	pEditBox->field_44 = a6;
-	pEditBox->field_48 = 256;
-	pEditBox->field_54 = -1;
+	pEditBox->nTextInsetX = a5;
+	pEditBox->nTextInsetY = a6;
+	pEditBox->nMaxLength = 256;
+	pEditBox->nSelectionStart = -1;
 
-	if (!(nEditBoxFlags & 8))
+	if (!(nEditBoxFlags & EDITBOX_MULTILINE))
 	{
-		pEditBox->controlHeader.pfDraw = sub_6F8A82D0;
-		pEditBox->controlHeader.pfHandleMouseDown = sub_6F8A9120;
+		pEditBox->controlHeader.pfDraw = EDITBOX_DrawSingleLine;
+		pEditBox->controlHeader.pfHandleMouseDown = EDITBOX_HandleSingleLineMouseDown;
 	}
 	else
 	{
-		pEditBox->controlHeader.pfDraw = sub_6F8A86C0;
+		pEditBox->controlHeader.pfDraw = EDITBOX_DrawMultiLine;
 		pEditBox->controlHeader.pfHandleMouseDown = sub_6F8A97D0;
 	}
 
 	pEditBox->controlHeader.pfHandleMouseUp = EDITBOX_HandleMouseUp;
-	pEditBox->field_264 = a8;
-	pEditBox->controlHeader.field_34 = a9;
+	pEditBox->pfOnReturn = (EditBoxReturnCallback)pfOnReturn;
+	pEditBox->controlHeader.pfCallback = pfCallback;
 	pEditBox->dwEditBoxFlags = nEditBoxFlags;
 
 	if (a11)
@@ -74,6 +79,7 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 }
 
 //D2Win.0x6F8A6DC0 (#10071)
+//1.14d: 0x004FDAA0
 int32_t __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox)
 {
 	D2_ASSERT(pEditBox);
@@ -83,31 +89,34 @@ int32_t __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A6E10 (#10072)
-void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, int32_t a2)
+//1.14d: 0x004FDAD0
+void __fastcall EDITBOX_SetKeyFilter(D2WinEditBoxStrc* pEditBox, EditBoxKeyFilterCallback pfKeyFilter)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_268 = a2;
+	pEditBox->pfKeyFilter = pfKeyFilter;
 }
 
 //D2Win.0x6F8A6E60 (#10073)
-void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, void(__stdcall* a2)(int32_t))
+//1.14d: 0x004FDB00
+void __fastcall EDITBOX_SetChangeCallback(D2WinEditBoxStrc* pEditBox, EditBoxChangeCallback pfOnChange)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_26C = a2;
+	pEditBox->pfOnChange = pfOnChange;
 }
 
 //D2Win.0x6F8A6EB0 (#10083)
-void __fastcall D2Win_10083(D2WinEditBoxStrc* pEditBox)
+//1.14d: 0x004FDCC0
+void __fastcall EDITBOX_ClearSelection(D2WinEditBoxStrc* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_54 = -1;
-	pEditBox->nTextLength = 0;
+	pEditBox->nSelectionStart = -1;
+	pEditBox->nSelectionEnd = 0;
 }
 
 //D2Win.0x6F8A6F10 (#10082)
@@ -116,13 +125,14 @@ int32_t __fastcall D2Win_10082(D2WinEditBoxStrc* pEditBox)
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_54 = 0;
-	pEditBox->nTextLength = Unicode::strlen(pEditBox->wszText);
+	pEditBox->nSelectionStart = 0;
+	pEditBox->nSelectionEnd = Unicode::strlen(pEditBox->wszText);
 
-	return pEditBox->nTextLength;
+	return pEditBox->nSelectionEnd;
 }
 
 //D2Win.0x6F8A6F70) --------------------------------------------------------
+//1.14d: 0x004FEAE0
 int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 {
 //	D2WinEditBoxStrc* v2; // ebx@1
@@ -659,6 +669,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 }
 
 //D2Win.0x6F8A7970
+//1.14d: 0x004FE9F0
 void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 {
 	// TODO: Names
@@ -668,18 +679,18 @@ void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	int32_t v6 = pEditBox->nTextLength;
-	int32_t v7 = pEditBox->field_54;
-	int32_t v8 = pEditBox->field_54;
+	int32_t v6 = pEditBox->nSelectionEnd;
+	int32_t v7 = pEditBox->nSelectionStart;
+	int32_t v8 = pEditBox->nSelectionStart;
 
-	int32_t v9 = pEditBox->nTextLength;
+	int32_t v9 = pEditBox->nSelectionEnd;
 
 	if (v7 >= v6)
 	{
-		v8 = pEditBox->nTextLength;
+		v8 = pEditBox->nSelectionEnd;
 		if (v7 > v6)
 		{
-			v9 = pEditBox->field_54;
+			v9 = pEditBox->nSelectionStart;
 		}
 	}
 
@@ -699,18 +710,19 @@ void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 	int32_t v10 = Unicode::strlen(pEditBox->wszText);
 	if (v8 > v10)
 	{
-		pEditBox->field_25C = v10;
+		pEditBox->nCaretPosition = v10;
 	}
 	else
 	{
-		pEditBox->field_25C = v8;
+		pEditBox->nCaretPosition = v8;
 	}
 
-	D2Win_10083(pEditBox);
+	EDITBOX_ClearSelection(pEditBox);
 }
 
 //D2Win.0x6F8A7AB0) --------------------------------------------------------
-int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
+//1.14d: 0x004FF050
+int32_t __fastcall EDITBOX_HandleKeyDown(D2WinEditBoxStrc* pEditBox, char nVirtualKey)
 {
 //	unsigned int v2; // ebp@0
 //	D2WinEditBoxStrc* v3; // esi@1
@@ -745,7 +757,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //	SMSGHANDLER_PARAMS a1; // [sp+1Ch] [bp-24h]@38
 //
 //	v3 = pEditBox;
-//	v29 = a2;
+//	v29 = nVirtualKey;
 //	D2_ASSERT(pEditBox);
 //	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 //
@@ -794,7 +806,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //			}
 //			else
 //			{
-//				D2Win_10083(v3);
+//				EDITBOX_ClearSelection(v3);
 //			}
 //			break;
 //		default:
@@ -814,7 +826,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //		case 38:
 //			if (v3->dwEditBoxFlags & 8)
 //			{
-//				sub_6F8A8D60(v3, (int *)&a1, &a2a);
+//				EDITBOX_GetCaretPosition(v3, (int *)&a1, &a2a);
 //				v16 = D2Win_10125();
 //				v17 = a1.hWindow;
 //				v27 = a2a - v16;
@@ -828,14 +840,14 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //		case 40:
 //			if (v3->dwEditBoxFlags & 8)
 //			{
-//				sub_6F8A8D60(v3, &a2a, (int *)&a1);
+//				EDITBOX_GetCaretPosition(v3, &a2a, (int *)&a1);
 //				v18 = D2Win_10125();
 //				v17 = (void *)a2a;
 //				v27 = (int)((char *)a1.hWindow + v18);
 //LABEL_41:
 //				a1.uMessage = (UINT)v3;
 //				a1.wParam = 0;
-//				sub_6F8A9410((SMSGHANDLER_PARAMS*)((char *)&a1 + 4), (int)v17, v27);
+//				EDITBOX_PlaceMultiLineCaret((SMSGHANDLER_PARAMS*)((char *)&a1 + 4), (int)v17, v27);
 //				v7 = &v3->wszText[v3->field_25C];
 //			}
 //			else
@@ -979,7 +991,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //				}
 //				while (v23);
 //			}
-//			D2Win_10012(v23);
+//			CONTROL_SetFocusedEditBox(v23);
 //			D2_ASSERT(v23);
 //			D2_ASSERT(v23->controlHeader.nType == D2WIN_EDITBOX);
 //
@@ -1003,31 +1015,34 @@ return 0;
 }
 
 //D2Win.0x6F8A80A0 (#10081)
-void __fastcall D2Win_10081(D2WinEditBoxStrc* pEditBox, int32_t a2)
+//1.14d: 0x004FDD50
+void __fastcall EDITBOX_SetMaxLength(D2WinEditBoxStrc* pEditBox, int32_t nMaxLength)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_48 = a2;
+	pEditBox->nMaxLength = nMaxLength;
 }
 
 //D2Win.0x6F8A80F0 (#10076)
+//1.14d: 0x004FFE10
 int32_t __fastcall D2Win_10076(D2WinEditBoxStrc* pEditBox, const char* szText)
 {
 	Unicode wszText[256] = {};
 
 	Unicode::win2Unicode(wszText, szText, 256);
-	return D2Win_10075(pEditBox, wszText);
+	return EDITBOX_SetText(pEditBox, wszText);
 }
 
 //D2Win.0x6F8A8140 (#10075)
-int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
+//1.14d: 0x004FF5A0
+int32_t __fastcall EDITBOX_SetText(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	pEditBox->field_25C = Unicode::strlen(pText);
-	if (pEditBox->field_25C)
+	pEditBox->nCaretPosition = Unicode::strlen(pText);
+	if (pEditBox->nCaretPosition)
 	{
 		Unicode::strcpy(pEditBox->wszText, pText);
 	}
@@ -1038,15 +1053,16 @@ int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
 
 	sub_6F8A98A0(pEditBox);
 
-	if (pEditBox->field_26C)
+	if (pEditBox->pfOnChange)
 	{
-		pEditBox->field_26C(0);
+		pEditBox->pfOnChange(0);
 	}
 
 	return 1;
 }
 
 //D2Win.0x6F8A81E0 (#10077)
+//1.14d: 0x004FDD90
 const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox)
 {
 	D2_ASSERT(pEditBox);
@@ -1056,6 +1072,7 @@ const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox
 }
 
 //D2Win.0x6F8A8230 (#10080)
+//1.14d: 0x004FDDD0
 void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext)
 {
 	D2_ASSERT(pEditBox);
@@ -1069,7 +1086,8 @@ void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D
 }
 
 //D2Win.0x6F8A82D0
-int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
+//1.14d: 0x004FFE50
+int32_t __fastcall EDITBOX_DrawSingleLine(D2WinControlStrc* pControl)
 {
 	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
 
@@ -1081,15 +1099,15 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 	{
 		if (!D2Win_IsMouseButtonPressed())
 		{
-			pEditBox->field_280 = 0;
+			pEditBox->bMouseSelecting = 0;
 		}
 
-		if (pEditBox->field_280)
+		if (pEditBox->bMouseSelecting)
 		{
 			SMSGHANDLER_PARAMS msg = {};
 			msg.hWindow = (HWND)pEditBox;
 			msg.nMessage = WM_LBUTTONDOWN;
-			sub_6F8A9120(&msg);
+			EDITBOX_HandleSingleLineMouseDown(&msg);
 		}
 
 		if (pEditBox->controlHeader.pCellFile)
@@ -1103,14 +1121,14 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 
 		D2Win_10127_SetFont(pEditBox->eFont);
 
-		int32_t nX = pEditBox->controlHeader.nImageX + pEditBox->field_40;
-		const int32_t nY = pEditBox->field_44 - pEditBox->controlHeader.nHeight + pEditBox->controlHeader.nImageY + 16;
+		int32_t nX = pEditBox->controlHeader.nImageX + pEditBox->nTextInsetX;
+		const int32_t nY = pEditBox->nTextInsetY - pEditBox->controlHeader.nHeight + pEditBox->controlHeader.nImageY + 16;
 
 		Unicode v48[300] = {};
-		Unicode::strncpy(v48, &pEditBox->wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1);
+		Unicode::strncpy(v48, &pEditBox->wszText[pEditBox->nFirstVisibleChar], pEditBox->nLastVisibleChar - pEditBox->nFirstVisibleChar + 1);
 
 		//const int32_t v50 = Unicode::strlen(v48);
-		if (pEditBox->dwEditBoxFlags & 1)
+		if (pEditBox->dwEditBoxFlags & EDITBOX_PASSWORD)
 		{
 			Unicode v41[2] = {};
 			Unicode::win2Unicode(v41, "*", 2);
@@ -1133,7 +1151,7 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 			//}
 		}
 
-		if (pEditBox->field_54 == -1 || pEditBox->field_54 == pEditBox->nTextLength)
+		if (pEditBox->nSelectionStart == -1 || pEditBox->nSelectionStart == pEditBox->nSelectionEnd)
 		{
 			D2Win_10117_DrawText(v48, nX, nY, pEditBox->nTextColor, 0);
 		}
@@ -1143,28 +1161,28 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 			Unicode wszText[256] = {};
 			Unicode v51[256] = {};
 
-			int32_t v27 = pEditBox->field_54;
-			if (pEditBox->field_54 >= pEditBox->nTextLength)
+			int32_t v27 = pEditBox->nSelectionStart;
+			if (pEditBox->nSelectionStart >= pEditBox->nSelectionEnd)
 			{
-				v27 = pEditBox->nTextLength;
+				v27 = pEditBox->nSelectionEnd;
 			}
 
 			int32_t v29 = 0;
-			if (v29 > v27 - pEditBox->field_4C)
+			if (v29 > v27 - pEditBox->nFirstVisibleChar)
 			{
-				v29 = v27 - pEditBox->field_4C;
+				v29 = v27 - pEditBox->nFirstVisibleChar;
 			}
 
-			int32_t v25 = pEditBox->nTextLength;
-			if (pEditBox->field_54 > v25)
+			int32_t v25 = pEditBox->nSelectionEnd;
+			if (pEditBox->nSelectionStart > v25)
 			{
-				v25 = pEditBox->field_54;
+				v25 = pEditBox->nSelectionStart;
 			}
 
 			int32_t v30 = 0;
-			if (v25 - pEditBox->field_4C - v29 > 0)
+			if (v25 - pEditBox->nFirstVisibleChar - v29 > 0)
 			{
-				v30 = v25 - pEditBox->field_4C - v29;
+				v30 = v25 - pEditBox->nFirstVisibleChar - v29;
 			}
 
 			Unicode::strncpy(wszText, v48, v29);
@@ -1181,13 +1199,13 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 			D2Win_10117_DrawText(v51, nX + nWidth1 + nWidth2, nY, pEditBox->nTextColor, 0);
 		}
 
-		if (D2Win_10023() == pEditBox && GetTickCount() / 250 & 1)
+		if (CONTROL_GetFocusedEditBox() == pEditBox && GetTickCount() / 250 & 1)
 		{
 			Unicode v41[2] = {};
 			Unicode::win2Unicode(v41, "_", 2);
-			if (pEditBox->field_25C != pEditBox->field_4C)
+			if (pEditBox->nCaretPosition != pEditBox->nFirstVisibleChar)
 			{
-				nX += D2Win_10122(v48, pEditBox->field_25C - pEditBox->field_4C);
+				nX += D2Win_10122(v48, pEditBox->nCaretPosition - pEditBox->nFirstVisibleChar);
 			}
 
 			D2Win_10117_DrawText(v41, nX, nY, pEditBox->nTextColor, 0);
@@ -1197,7 +1215,8 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8A86C0) --------------------------------------------------------
-int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
+//1.14d: 0x004FF620
+int32_t __fastcall EDITBOX_DrawMultiLine(D2WinControlStrc* pControl)
 {
 	//D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
 
@@ -1261,7 +1280,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //			msg.hWindow = (HWND)pEditBox;
 //			msg.uMessage = WM_LBUTTONDOWN;
 //
-//			sub_6F8A9410(&msg, gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY);
+//			EDITBOX_PlaceMultiLineCaret(&msg, gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY);
 //		}
 //
 //		Unicode v61[300] = {};
@@ -1279,7 +1298,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 //		Unicode::win2Unicode(wszText, "_", 2);
 //
 //		v55 = D2Win_10122(wszText, 2);
-//		if (D2Win_10023() != pEditBox || !(GetTickCount() / 250 & 1))
+//		if (CONTROL_GetFocusedEditBox() != pEditBox || !(GetTickCount() / 250 & 1))
 //		{
 //			v45 = 0;
 //		}
@@ -1513,7 +1532,8 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8A8D60
-void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a3)
+//1.14d: 0x004FDFF0
+void __fastcall EDITBOX_GetCaretPosition(D2WinEditBoxStrc* pEditBox, int32_t* pX, int32_t* pY)
 {
 	//Unicode v48[300] = {};
 
@@ -1523,9 +1543,9 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 
 	D2Win_10127_SetFont(pEditBox->eFont);
 
-	const int32_t v37 = pEditBox->controlHeader.nImageX + pEditBox->field_40;
+	const int32_t v37 = pEditBox->controlHeader.nImageX + pEditBox->nTextInsetX;
 	const int32_t v6 = D2Win_10125();
-	const int32_t v38 = pEditBox->field_44 + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + v6;
+	const int32_t v38 = pEditBox->nTextInsetY + pEditBox->controlHeader.nImageY - pEditBox->controlHeader.nHeight + v6;
 	int32_t v7 = v38;
 	//Unicode::strcpy(v48, pEditBox->wszText);
 
@@ -1538,11 +1558,11 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 	Unicode::unicode2Win(v45, pEditBox->wszText, ARRAY_SIZE(v45));
 	const char* v10 = v45;
 	const char* v32 = v45;
-	const int32_t v44 = pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40;
-	const int32_t v39 = pEditBox->controlHeader.nHeight - 2 * pEditBox->field_44;
+	const int32_t v44 = pEditBox->controlHeader.nWidth - 2 * pEditBox->nTextInsetX;
+	const int32_t v39 = pEditBox->controlHeader.nHeight - 2 * pEditBox->nTextInsetY;
 
-	*a2 = -1;
-	*a3 = -1;
+	*pX = -1;
+	*pY = -1;
 
 	while (*v10)
 	{
@@ -1569,16 +1589,16 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 			++v16;
 		}
 
-		const int32_t v19 = (int32_t)&v45[pEditBox->field_25C - (int32_t)v32];
-		if (*a2 == -1 && v19 >= 0 && v19 <= v16)
+		const int32_t v19 = (int32_t)&v45[pEditBox->nCaretPosition - (int32_t)v32];
+		if (*pX == -1 && v19 >= 0 && v19 <= v16)
 		{
-			*a2 = v37;
+			*pX = v37;
 			if (v19)
 			{
 				Unicode::win2Unicode(v47, v46, 256);
-				*a2 += D2Win_10122(v47, v19);
+				*pX += D2Win_10122(v47, v19);
 			}
-			*a3 = v7;
+			*pY = v7;
 		}
 
 		if (v41)
@@ -1602,10 +1622,10 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 					v22 += 2;
 					v7 += v6;
 					v23 += v6;
-					if (*a2 == -1 && pEditBox->field_25C == v22 && v23 < v39)
+					if (*pX == -1 && pEditBox->nCaretPosition == v22 && v23 < v39)
 					{
-						*a2 = v37;
-						*a3 = v7;
+						*pX = v37;
+						*pY = v7;
 					}
 				}
 				while (*v10 == '\r');
@@ -1620,10 +1640,10 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 					++v24;
 					v7 += v6;
 					v25 += v6;
-					if (*a2 == -1 && pEditBox->field_25C == v24 && v25 < v39)
+					if (*pX == -1 && pEditBox->nCaretPosition == v24 && v25 < v39)
 					{
-						*a2 = v37;
-						*a3 = v7;
+						*pX = v37;
+						*pY = v7;
 					}
 				}
 				while (*v10 == '\r');
@@ -1632,18 +1652,19 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 		v32 = v10;
 	}
 
-	if (*a2 != -1)
+	if (*pX != -1)
 	{
-		*a2 -= pEditBox->controlHeader.nImageX - 1;
-		*a3 += pEditBox->controlHeader.nHeight - pEditBox->controlHeader.nImageY - 1;
+		*pX -= pEditBox->controlHeader.nImageX - 1;
+		*pY += pEditBox->controlHeader.nHeight - pEditBox->controlHeader.nImageY - 1;
 
-		*a2 = D2Clamp(*a2, pEditBox->field_40, pEditBox->controlHeader.nWidth - pEditBox->field_40 - 1);
-		*a3 = D2Clamp(*a2, pEditBox->field_44, pEditBox->controlHeader.nHeight - pEditBox->field_44 - 1);
+		*pX = D2Clamp(*pX, pEditBox->nTextInsetX, pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
+		*pY = D2Clamp(*pX, pEditBox->nTextInsetY, pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
 	}
 }
 
 //D2Win.0x6F8A9120
-int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
+//1.14d: 0x004FFBF0
+int32_t __stdcall EDITBOX_HandleSingleLineMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
 
@@ -1655,49 +1676,49 @@ int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
 		return 0;
 	}
 
-	D2Win_10012(pEditBox);
+	CONTROL_SetFocusedEditBox(pEditBox);
 
-	const int32_t nX = gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX;
-	const int32_t nY = pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY + gMousePosition_6F8FE234.y;
+	const int32_t nX = gMousePosition_6F8FE234.x - pEditBox->nTextInsetX - pEditBox->controlHeader.nImageX;
+	const int32_t nY = pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - pEditBox->controlHeader.nImageY + gMousePosition_6F8FE234.y;
 
-	const bool bInside = nX >= -pEditBox->field_40 && nX < pEditBox->controlHeader.nWidth - pEditBox->field_40 && nY > -pEditBox->field_44 && nY < pEditBox->controlHeader.nHeight - pEditBox->field_44;
+	const bool bInside = nX >= -pEditBox->nTextInsetX && nX < pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX && nY > -pEditBox->nTextInsetY && nY < pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY;
 	const uint32_t dwTickCount = GetTickCount();
 
-	if (bInside && !pEditBox->field_280 && pEditBox == dword_6F8FD8B0 && dwTickCount - dword_6F8FD8B4 < 300)
+	if (bInside && !pEditBox->bMouseSelecting && pEditBox == dword_6F8FD8B0 && dwTickCount - dword_6F8FD8B4 < 300)
 	{
 		D2Win_10082(pEditBox);
 	}
 	else
 	{
-		if (pEditBox->field_280 || bInside)
+		if (pEditBox->bMouseSelecting || bInside)
 		{
 			D2Win_10127_SetFont(pEditBox->eFont);
 
-			if (pEditBox->field_280)
+			if (pEditBox->bMouseSelecting)
 			{
-				if (nX < -pEditBox->field_40)
+				if (nX < -pEditBox->nTextInsetX)
 				{
-					if (pEditBox->field_25C - 1 < 0)
+					if (pEditBox->nCaretPosition - 1 < 0)
 					{
-						pEditBox->field_25C = 0;
+						pEditBox->nCaretPosition = 0;
 					}
 					else
 					{
-						--pEditBox->field_25C;
+						--pEditBox->nCaretPosition;
 					}
 
 					sub_6F8A98A0(pEditBox);
 				}
-				else if (nX >= pEditBox->controlHeader.nWidth - pEditBox->field_40)
+				else if (nX >= pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX)
 				{
 					const int nLength = Unicode::strlen(pEditBox->wszText) - 1;
-					if (pEditBox->field_25C + 1 > nLength)
+					if (pEditBox->nCaretPosition + 1 > nLength)
 					{
-						pEditBox->field_25C = nLength;
+						pEditBox->nCaretPosition = nLength;
 					}
 					else
 					{
-						++pEditBox->field_25C;
+						++pEditBox->nCaretPosition;
 					}
 
 					sub_6F8A98A0(pEditBox);
@@ -1705,51 +1726,52 @@ int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
 			}
 
 			int nCounter = 1;
-			while (nX > D2Win_10122(&pEditBox->wszText[pEditBox->field_4C], nCounter))
+			while (nX > D2Win_10122(&pEditBox->wszText[pEditBox->nFirstVisibleChar], nCounter))
 			{
-				if (nCounter > Unicode::strlen(&pEditBox->wszText[pEditBox->field_4C]))
+				if (nCounter > Unicode::strlen(&pEditBox->wszText[pEditBox->nFirstVisibleChar]))
 				{
 					break;
 				}
 				++nCounter;
 			}
 
-			const int nOldValue = pEditBox->field_25C;
-			pEditBox->field_25C = pEditBox->field_4C + nCounter - 1;
+			const int nOldValue = pEditBox->nCaretPosition;
+			pEditBox->nCaretPosition = pEditBox->nFirstVisibleChar + nCounter - 1;
 
-			if (GetKeyState(VK_SHIFT) & 0x8000 || pEditBox->field_280)
+			if (GetKeyState(VK_SHIFT) & 0x8000 || pEditBox->bMouseSelecting)
 			{
-				if (pEditBox->field_54 == -1)
+				if (pEditBox->nSelectionStart == -1)
 				{
-					pEditBox->field_54 = nOldValue;
+					pEditBox->nSelectionStart = nOldValue;
 				}
 
-				pEditBox->nTextLength = pEditBox->field_25C;
+				pEditBox->nSelectionEnd = pEditBox->nCaretPosition;
 			}
 			else
 			{
-				D2Win_10083(pEditBox);
+				EDITBOX_ClearSelection(pEditBox);
 			}
 		}
 
 		if (pMsg->nMessage == WM_LBUTTONDOWN)
 		{
-			pEditBox->field_280 = 1;
+			pEditBox->bMouseSelecting = 1;
 		}
 	}
 
 	dword_6F8FD8B0 = pEditBox;
 	dword_6F8FD8B4 = dwTickCount;
 
-	if (pEditBox->controlHeader.field_34)
+	if (pEditBox->controlHeader.pfCallback)
 	{
-		return pEditBox->controlHeader.field_34(pMsg);
+		return pEditBox->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;
 }
 
 //D2Win.0x6F8A93A0
+//1.14d: 0x004FE350
 int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
@@ -1757,9 +1779,9 @@ int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	if (pEditBox->field_280)
+	if (pEditBox->bMouseSelecting)
 	{
-		pEditBox->field_280 = 0;
+		pEditBox->bMouseSelecting = 0;
 		return 1;
 	}
 
@@ -1767,7 +1789,8 @@ int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 }
 
 //D2Win.0x6F8A9410
-int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY)
+//1.14d: 0x004FE3B0
+int32_t __fastcall EDITBOX_PlaceMultiLineCaret(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY)
 {
 	//TODO: Names
 	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
@@ -1780,15 +1803,15 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 		return 0;
 	}
 
-	D2Win_10012(pEditBox);
+	CONTROL_SetFocusedEditBox(pEditBox);
 
-	if (pEditBox->field_280)
+	if (pEditBox->bMouseSelecting)
 	{
-		nX = D2Clamp(nX, pEditBox->field_40, pEditBox->controlHeader.nWidth - pEditBox->field_40 - 1);
-		nY = D2Clamp(nY, pEditBox->field_44, pEditBox->controlHeader.nHeight - pEditBox->field_44 - 1);
+		nX = D2Clamp(nX, pEditBox->nTextInsetX, pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX - 1);
+		nY = D2Clamp(nY, pEditBox->nTextInsetY, pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - 1);
 	}
 
-	if (nX >= -pEditBox->field_40 && nX < pEditBox->controlHeader.nWidth - pEditBox->field_40 && nY >= -pEditBox->field_44 && nY < pEditBox->controlHeader.nHeight - pEditBox->field_44)
+	if (nX >= -pEditBox->nTextInsetX && nX < pEditBox->controlHeader.nWidth - pEditBox->nTextInsetX && nY >= -pEditBox->nTextInsetY && nY < pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY)
 	{
 		D2Win_10127_SetFont(pEditBox->eFont);
 
@@ -1817,7 +1840,7 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 			{
 				v39[v18] = *v13;
 				Unicode::win2Unicode(v40, v39, 256);
-				if (v36 + D2Win_10122(v40, v18) > pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40)
+				if (v36 + D2Win_10122(v40, v18) > pEditBox->controlHeader.nWidth - 2 * pEditBox->nTextInsetX)
 				{
 					v34 = 1;
 					break;
@@ -1838,9 +1861,9 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 					}
 					++v21;
 				}
-				v35 = pEditBox->field_25C;
+				v35 = pEditBox->nCaretPosition;
 				v31 = 1;
-				pEditBox->field_25C = (int32_t)&v30[v21 - (int32_t)v38 - 1];
+				pEditBox->nCaretPosition = (int32_t)&v30[v21 - (int32_t)v38 - 1];
 			}
 
 			if (!v34)
@@ -1869,38 +1892,39 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 		int32_t v23 = v35;
 		if (!v31)
 		{
-			v23 = pEditBox->field_25C;
-			pEditBox->field_25C = Unicode::strlen(pEditBox->wszText);
+			v23 = pEditBox->nCaretPosition;
+			pEditBox->nCaretPosition = Unicode::strlen(pEditBox->wszText);
 		}
 
-		if ((GetKeyState(VK_SHIFT) & 0x8000 || pEditBox->field_280) && v23 != -1)
+		if ((GetKeyState(VK_SHIFT) & 0x8000 || pEditBox->bMouseSelecting) && v23 != -1)
 		{
-			if (pEditBox->field_54 == -1)
+			if (pEditBox->nSelectionStart == -1)
 			{
-				pEditBox->field_54 = v23;
+				pEditBox->nSelectionStart = v23;
 			}
-			pEditBox->nTextLength = pEditBox->field_25C;
+			pEditBox->nSelectionEnd = pEditBox->nCaretPosition;
 		}
 		else
 		{
-			D2Win_10083(pEditBox);
+			EDITBOX_ClearSelection(pEditBox);
 		}
 	}
 
 	if (pMsg->nMessage == WM_LBUTTONDOWN)
 	{
-		pEditBox->field_280 = 1;
+		pEditBox->bMouseSelecting = 1;
 	}
 
-	if (pEditBox->controlHeader.field_34)
+	if (pEditBox->controlHeader.pfCallback)
 	{
-		return pEditBox->controlHeader.field_34(pMsg);
+		return pEditBox->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;
 }
 
 //D2Win.0x6F8A97D0
+//1.14d: 0x004FE710
 int32_t __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
@@ -1908,22 +1932,25 @@ int32_t __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg)
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
 
-	return sub_6F8A9410(pMsg, gMousePosition_6F8FE234.x - pEditBox->field_40 - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->field_44 - pEditBox->controlHeader.nImageY);
+	return EDITBOX_PlaceMultiLineCaret(pMsg, gMousePosition_6F8FE234.x - pEditBox->nTextInsetX - pEditBox->controlHeader.nImageX, gMousePosition_6F8FE234.y + pEditBox->controlHeader.nHeight - pEditBox->nTextInsetY - pEditBox->controlHeader.nImageY);
 }
 
 //D2Win.0x6F8A9850 (#10078)
+//1.14d: 0x004FE770
 bool __stdcall D2Win_10078_IsNumber(int32_t nUnused1, int32_t nUnused2, char* szChar)
 {
 	return *szChar >= '0' && *szChar <= '9';
 }
 
 //D2Win.0x6F8A9870 (#10079)
+//1.14d: 0x004FE790
 bool __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar)
 {
 	return *szChar >= 'a' && *szChar <= 'z' || *szChar >= 'A' && *szChar <= 'Z';
 }
 
 //D2Win.0x6F8A98A0
+//1.14d: 0x004FE7C0
 void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
 {
 	//TODO: Names
@@ -1963,91 +1990,91 @@ void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
 	const int32_t nDashWidth = D2Win_10121_GetTextWidth(wszDash);
 
 	int32_t nTextWidth = D2Win_10121_GetTextWidth(wszText);
-	if (pEditBox->field_25C == v2)
+	if (pEditBox->nCaretPosition == v2)
 	{
 		nTextWidth += nDashWidth;
 	}
 
-	if (nTextWidth <= pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40)
+	if (nTextWidth <= pEditBox->controlHeader.nWidth - 2 * pEditBox->nTextInsetX)
 	{
-		pEditBox->field_4C = 0;
-		pEditBox->field_50 = v2 - 1;
+		pEditBox->nFirstVisibleChar = 0;
+		pEditBox->nLastVisibleChar = v2 - 1;
 	}
 	else
 	{
-		int32_t v16 = pEditBox->controlHeader.nWidth - 2 * pEditBox->field_40;
-		if (pEditBox->field_25C == v2)
+		int32_t v16 = pEditBox->controlHeader.nWidth - 2 * pEditBox->nTextInsetX;
+		if (pEditBox->nCaretPosition == v2)
 		{
 			v16 -= nDashWidth;
 		}
 
-		if (pEditBox->field_25C > pEditBox->field_50)
+		if (pEditBox->nCaretPosition > pEditBox->nLastVisibleChar)
 		{
-			pEditBox->field_50 = pEditBox->field_25C;
-			pEditBox->field_4C = pEditBox->field_25C - 1;
-			while (pEditBox->field_4C)
+			pEditBox->nLastVisibleChar = pEditBox->nCaretPosition;
+			pEditBox->nFirstVisibleChar = pEditBox->nCaretPosition - 1;
+			while (pEditBox->nFirstVisibleChar)
 			{
-				if (D2Win_10122(&wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1) >= v16)
+				if (D2Win_10122(&wszText[pEditBox->nFirstVisibleChar], pEditBox->nLastVisibleChar - pEditBox->nFirstVisibleChar + 1) >= v16)
 				{
 					break;
 				}
 
-				--pEditBox->field_4C;
+				--pEditBox->nFirstVisibleChar;
 			}
 
-			++pEditBox->field_4C;
+			++pEditBox->nFirstVisibleChar;
 		}
-		else if (pEditBox->field_25C > pEditBox->field_4C + 1)
+		else if (pEditBox->nCaretPosition > pEditBox->nFirstVisibleChar + 1)
 		{
-			if (D2Win_10121_GetTextWidth(&wszText[pEditBox->field_4C]) >= v16)
+			if (D2Win_10121_GetTextWidth(&wszText[pEditBox->nFirstVisibleChar]) >= v16)
 			{
-				pEditBox->field_50 = pEditBox->field_4C + 1;
-				while (pEditBox->field_50 < v2)
+				pEditBox->nLastVisibleChar = pEditBox->nFirstVisibleChar + 1;
+				while (pEditBox->nLastVisibleChar < v2)
 				{
-					if (D2Win_10122(&wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1) >= v16)
+					if (D2Win_10122(&wszText[pEditBox->nFirstVisibleChar], pEditBox->nLastVisibleChar - pEditBox->nFirstVisibleChar + 1) >= v16)
 					{
 						break;
 					}
 
-					++pEditBox->field_50;
+					++pEditBox->nLastVisibleChar;
 				}
 
-				--pEditBox->field_50;
+				--pEditBox->nLastVisibleChar;
 			}
 			else
 			{
-				pEditBox->field_50 = v2 - 1;
-				pEditBox->field_4C = v2 - 2;
-				while (pEditBox->field_4C)
+				pEditBox->nLastVisibleChar = v2 - 1;
+				pEditBox->nFirstVisibleChar = v2 - 2;
+				while (pEditBox->nFirstVisibleChar)
 				{
-					if (D2Win_10121_GetTextWidth(&wszText[pEditBox->field_4C]) >= v16)
+					if (D2Win_10121_GetTextWidth(&wszText[pEditBox->nFirstVisibleChar]) >= v16)
 					{
 						break;
 					}
 
-					--pEditBox->field_4C;
+					--pEditBox->nFirstVisibleChar;
 				}
 
-				++pEditBox->field_4C;
+				++pEditBox->nFirstVisibleChar;
 			}
 		}
 		else
 		{
-			const int32_t v19 = std::max(pEditBox->field_25C - 1, 0);
+			const int32_t v19 = std::max(pEditBox->nCaretPosition - 1, 0);
 
-			pEditBox->field_4C = v19;
-			pEditBox->field_50 = v19 + 1;
-			while (pEditBox->field_50 < v2)
+			pEditBox->nFirstVisibleChar = v19;
+			pEditBox->nLastVisibleChar = v19 + 1;
+			while (pEditBox->nLastVisibleChar < v2)
 			{
-				if (D2Win_10122(&wszText[pEditBox->field_4C], pEditBox->field_50 - pEditBox->field_4C + 1) >= v16)
+				if (D2Win_10122(&wszText[pEditBox->nFirstVisibleChar], pEditBox->nLastVisibleChar - pEditBox->nFirstVisibleChar + 1) >= v16)
 				{
 					break;
 				}
 
-				++pEditBox->field_50;
+				++pEditBox->nLastVisibleChar;
 			}
 
-			--pEditBox->field_50;
+			--pEditBox->nLastVisibleChar;
 		}
 	}
 }

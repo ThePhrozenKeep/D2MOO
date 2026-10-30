@@ -21,6 +21,7 @@
 
 
 //D2Game.0x6FD35AA8
+//1.14d: 0x0073A188
 D2NPCMessageTableStrc gpAct2Q3NpcMessages[] =
 {
 	{
@@ -111,6 +112,7 @@ D2NPCMessageTableStrc gpAct2Q3NpcMessages[] =
 
 
 //D2Game.0x6FCA1440
+//1.14d: 0x0059A040
 void __fastcall ACT2Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -136,6 +138,7 @@ void __fastcall ACT2Q3_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FCA14B0
+//1.14d: 0x0059A1C0
 bool __fastcall ACT2Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_REWARDGRANTED) == 1)
@@ -172,6 +175,7 @@ bool __fastcall ACT2Q3_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCA1640
+//1.14d: 0x00599F50
 int32_t __fastcall ACT2Q3_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -187,6 +191,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCA16B0
+//1.14d: 0x0059A100
 int32_t __fastcall ACT2Q3_UnitIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
@@ -197,9 +202,9 @@ int32_t __fastcall ACT2Q3_UnitIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc
 
 	D2GSPacketSrv53 packet53 = {};
 	packet53.nHeader = 0x53;
-	packet53.unk0x01 = 5;
-	packet53.unk0x05 = 0;
-	packet53.unk0x09 = 1;
+	packet53.nIndex = 5;
+	packet53.nTicks = 0;
+	packet53.bEclipse = 1;
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet53, sizeof(packet53));
 
 	D2GSPacketSrv5D packet5D = {};
@@ -212,6 +217,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCA1730
+//1.14d: 0x0059EEA0
 void __fastcall ACT2Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -239,6 +245,7 @@ void __fastcall ACT2Q3_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA17F0
+//1.14d: 0x0059EBE0
 void __fastcall ACT2Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nMessageIndex == 348)
@@ -293,6 +300,7 @@ void __fastcall ACT2Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA19B0
+//1.14d: 0x00599FB0
 void __fastcall ACT2Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pQuestArg);
@@ -309,9 +317,10 @@ void __fastcall ACT2Q3_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCA19E0
+//1.14d: 0x0059A270
 void __fastcall ACT2Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 0
 	};
@@ -336,7 +345,7 @@ void __fastcall ACT2Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 		}
 		else if (pQuestData->fState && pQuestData->bNotIntro && QUESTRECORD_GetQuestState(pQuestFlags, pQuestData->nQuestFilter, QFLAG_REWARDGRANTED) != 1 && pQuestData->fState < 4)
 		{
-			const int32_t nIndex = nIndices[pQuestData->fState];
+			const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 			if (nIndex != -1 && (uint32_t)nIndex < 6)
 			{
 				QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
@@ -346,6 +355,7 @@ void __fastcall ACT2Q3_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA1AC0
+//1.14d: 0x0059EE00
 void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
@@ -356,7 +366,7 @@ void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 		pQuestDataEx->bDarkenTimerCreated = 1;
 	}
 
-	if (pQuestArg->nNewLevel == LEVEL_LUTGHOLEIN && pQuestDataEx->bBlackened == 1)
+	if (pQuestArg->nNewLevel == LEVEL_LUTGHOLEIN && pQuestDataEx->bDarknessPending == 1)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
 		QUESTS_UnitIterate(pQuestData, 1, 0, ACT2Q3_UnitIterate_StatusCyclerEx, 1);
@@ -370,11 +380,11 @@ void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 			ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateQuestStateFlags);
-			pQuestDataEx->bBlackened = 0;
+			pQuestDataEx->bDarknessPending = 0;
 		}
 		else
 		{
-			pQuestDataEx->bBlackened = 1;
+			pQuestDataEx->bDarknessPending = 1;
 		}
 	}
 
@@ -389,12 +399,13 @@ void __fastcall ACT2Q3_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA1C00
+//1.14d: 0x0059ED80
 bool __fastcall ACT2Q3_DarkenEnvironment(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
 
 	pQuestDataEx->bDarkenTimerCreated = 0;
-	if (pQuestDataEx->bRewarded)
+	if (pQuestDataEx->bDarknessApplied)
 	{
 		return true;
 	}
@@ -411,16 +422,17 @@ bool __fastcall ACT2Q3_DarkenEnvironment(D2GameStrc* pGame, D2QuestDataStrc* pQu
 	{
 		ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-		pQuestDataEx->bRewarded = 1;
+		pQuestDataEx->bDarknessApplied = 1;
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateQuestStateFlags);
 		return true;
 	}
 
-	pQuestDataEx->bBlackened = 1;
+	pQuestDataEx->bDarknessPending = 1;
 	return true;
 }
 
 //D2Game.0x6FCA1CA0
+//1.14d: 0x0059A480
 bool __fastcall ACT2Q3_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (pQuestData->fState != 5 && pQuestData->bNotIntro)
@@ -443,6 +455,7 @@ bool __fastcall ACT2Q3_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA1D10
+//1.14d: 0x0059A4F0
 int32_t __fastcall ACT2Q3_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -475,6 +488,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCA1D90
+//1.14d: 0x0059A5D0
 void __fastcall ACT2Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -498,13 +512,13 @@ void __fastcall ACT2Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		{
 			ENVIRONMENT_TaintedSunBegin(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_UpdateClient);
-			pQuestDataEx->bRewarded = 1;
+			pQuestDataEx->bDarknessApplied = 1;
 		}
 		else
 		{
 			D2GSPacketSrv5D packet5D = {};
 			packet5D.field_4 = 0;
-			pQuestDataEx->bBlackened = 1;
+			pQuestDataEx->bDarknessPending = 1;
 			packet5D.nHeader = 0x5D;
 			packet5D.nQuestId = QUEST_A2Q3_TAINTEDSUN;
 			packet5D.nFlags = 1;
@@ -530,6 +544,7 @@ void __fastcall ACT2Q3_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCA1F00
+//1.14d: 0x0059A7E0
 int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -585,8 +600,8 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 		OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
 
 		D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
-
-		for (uint32_t i = 0; i < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++i)
+		const uint32_t nGoldDropCount = ITEMS_RollRandomNumber(pSeed) % 5 + 5;
+		for (uint32_t i = 0; i < nGoldDropCount; ++i)
 		{
 			OBJMODE_DropItemWithCodeAndQuality(pOp->pGame, pOp->pObject, ' dlg', 2);
 		}
@@ -613,7 +628,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 	{
 		if (pQuestData->pGame->pAct[ACT_II])
 		{
-			pQuestDataEx->bRewarded = 0;
+			pQuestDataEx->bDarknessApplied = 0;
 			ENVIRONMENT_TaintedSunEnd(pQuestData->pGame->pAct[ACT_II]);
 			SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT2Q3_UnitIterate_SendPacket0x53ToClient);
 		}
@@ -664,8 +679,8 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 	OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
-
-	for (uint32_t i = 0; i < ITEMS_RollRandomNumber(pSeed) % 5 + 5; ++i)
+	const uint32_t nGoldDropCount = ITEMS_RollRandomNumber(pSeed) % 5 + 5;
+	for (uint32_t i = 0; i < nGoldDropCount; ++i)
 	{
 		OBJMODE_DropItemWithCodeAndQuality(pOp->pGame, pObject, ' dlg', 2);
 	}
@@ -677,6 +692,7 @@ int32_t __fastcall OBJECTS_OperateFunction24_TaintedSunAltar(D2ObjOperateFnStrc*
 }
 
 //D2Game.0x6FCA2320
+//1.14d: 0x00599FE0
 int32_t __fastcall ACT2Q3_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -691,6 +707,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCA2380
+//1.14d: 0x0059A0B0
 int32_t __fastcall ACT2Q3_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A2Q3, QFLAG_PRIMARYGOALDONE))
@@ -708,6 +725,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 }
 
 //D2Game.0x6FCA23D0
+//1.14d: 0x0059A170
 int32_t __fastcall ACT2Q3_UnitIterate_SendPacket0x53ToClient(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
@@ -718,14 +736,15 @@ int32_t __fastcall ACT2Q3_UnitIterate_SendPacket0x53ToClient(D2GameStrc* pGame, 
 
 	D2GSPacketSrv53 pPacket53 = {};
 	pPacket53.nHeader = 0x53;
-	pPacket53.unk0x01 = 2;
-	pPacket53.unk0x05 = 0;
-	pPacket53.unk0x09 = 0;
+	pPacket53.nIndex = 2;
+	pPacket53.nTicks = 0;
+	pPacket53.bEclipse = 0;
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &pPacket53, sizeof(pPacket53));
 	return 0;
 }
 
 //D2Game.0x6FCA2420
+//1.14d: 0x0059A680
 int32_t __fastcall ACT2Q3_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -745,6 +764,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FCA24A0
+//1.14d: 0x0059A700
 bool __fastcall ACT2Q3_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
@@ -760,6 +780,7 @@ bool __fastcall ACT2Q3_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 }
 
 //D2Game.0x6FCA24D0
+//1.14d: 0x0059A730
 int32_t __fastcall ACT2Q3_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A2Q3, QFLAG_PRIMARYGOALDONE))
@@ -771,6 +792,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCA2510
+//1.14d: 0x0059A770
 int32_t __fastcall ACT2Q3_UnitIterate_DetermineViperAmuletDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' piv') || ITEMS_FindQuestItem(pGame, pUnit, ' tsh'))
@@ -793,7 +815,7 @@ int32_t __fastcall ACT2Q3_UnitIterate_DetermineViperAmuletDropCount(D2GameStrc* 
 }
 
 //D2Game.0x6FCA2580
-void __fastcall ACT2Q3_BrightenEnvironment(D2GameStrc* pGame, uint8_t nActNo)
+void __fastcall ACT2Q3_ApplyPendingDarkness(D2GameStrc* pGame, uint8_t nActNo)
 {
 	if (nActNo != ACT_II)
 	{
@@ -807,12 +829,12 @@ void __fastcall ACT2Q3_BrightenEnvironment(D2GameStrc* pGame, uint8_t nActNo)
 	}
 
 	D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
-	if (pQuestDataEx->bBlackened != 1)
+	if (pQuestDataEx->bDarknessPending != 1)
 	{
 		return;
 	}
 
 	ENVIRONMENT_TaintedSunBegin(pGame->pAct[ACT_II]);
-	pQuestDataEx->bBlackened = 0;
-	pQuestDataEx->bRewarded = 1;
+	pQuestDataEx->bDarknessPending = 0;
+	pQuestDataEx->bDarknessApplied = 1;
 }

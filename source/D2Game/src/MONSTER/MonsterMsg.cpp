@@ -32,37 +32,38 @@ struct D2UnkMonMsgStrc
 
 
 //D2Game.0x6FC659E0
-void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t a4)
+//1.14d: 0x00598220
+void __fastcall MONSTERMSG_SendMonsterUpdates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t bUnitInitialized)
 {
     if (pUnit)
     {
         if (pUnit->dwFlagEx & UNITFLAGEX_TELEPORTED)
         {
             D2GAME_PACKETS_SendPacket0x15_6FC3D0D0(pClient, 0x15u, pUnit->dwUnitType, pUnit->dwUnitId, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit), 1);
-            sub_6FCBB190(pGame, pUnit, 0);
+            SUNIT_SynchronizeRoomClients(pGame, pUnit, 0);
         }
 
         if (pUnit->dwFlags & UNITFLAG_DOUPDATE)
         {
-            sub_6FC65C70(pGame, pUnit, pClient);
+            MONSTERMSG_SendMonsterModeUpdate(pGame, pUnit, pClient);
         }
 
         pUnit->dwFlags &= ~UNITFLAG_MONMODEISCHANGING;
     }
 
-    sub_6FCC6540(pUnit, pClient);
+    SUNITMSG_SendQueuedMessages(pUnit, pClient);
 
     if (pUnit)
     {
         if (pUnit->dwFlags & UNITFLAG_HASTXTMSG)
         {
-            sub_6FCC5FA0(pUnit, pClient);
+            SUNITMSG_SendHoverText(pUnit, pClient);
         }
 
         if (pUnit->dwFlagEx & UNITFLAGEX_HASINV)
         {
             D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-            if (pPlayer && sub_6FC61B30(pUnit, pPlayer))
+            if (pPlayer && MONSTERAI_IsTrading(pUnit, pPlayer))
             {
                 SUNITPROXY_UpdateGambleInventory(pGame, pUnit, pPlayer, pClient);
             }
@@ -79,7 +80,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         if (pUnit->dwFlags & UNITFLAG_UPGRLIFENHITCLASS)
         {
-            uint8_t nHpPct = sub_6FC62F50(pUnit);
+            uint8_t nHpPct = MONSTERMODE_GetHpPercent128(pUnit);
             STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nHpPct, 0);
             if (nHpPct > 1u)
             {
@@ -95,14 +96,14 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
         }
     }
 
-    if (!a4 && STATES_IsAnyGfxStateFlagSet(pUnit))
+    if (!bUnitInitialized && STATES_IsAnyGfxStateFlagSet(pUnit))
     {
         D2GAME_STATES_SendStates_6FCC5F00(pUnit, pClient, 0);
     }
 
     if (D2COMMON_10530_D2CheckStatlistFlagDMGRed(pUnit))
     {
-        sub_6FCC5F20(pUnit, pClient);
+        SUNITMSG_SendOverlay(pUnit, pClient);
     }
 
     if (pUnit && pUnit->dwFlags & UNITFLAG_SUMMONER && MONSTER_CheckSummonerFlag(pUnit, 1u))
@@ -128,7 +129,7 @@ static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
 
 //D2Game.0x6FC65C70
 //1.14d: 0x00597E20
-void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
+void __fastcall MONSTERMSG_SendMonsterModeUpdate(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
 {
     // TODO: Names
     constexpr D2UnkMonMsgStrc stru_6FD28988[16] =
@@ -155,10 +156,10 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     D2_ASSERT(pClient);
 
     const int32_t nAnimMode = pMonster->dwAnimMode;
-    const D2UnkMonMsgStrc* v5 = &stru_6FD28988[nAnimMode];
+    const D2UnkMonMsgStrc* pModeInfo = &stru_6FD28988[nAnimMode];
 
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pMonster);
-    if (pTarget && !CLIENTS_IsInUnitsRoom(pTarget, pClient) || !v5->unk0x00)
+    if (pTarget && !CLIENTS_IsInUnitsRoom(pTarget, pClient) || !pModeInfo->unk0x00)
     {
         pTarget = nullptr;
     }
@@ -172,21 +173,21 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
             const int32_t nSkillLevel = SKILLS_GetSkillLevel(pMonster, pSkill, 1);
             if (pTarget && CLIENTS_IsInUnitsRoom(pTarget, pClient))
             {
-                sub_6FC3F0C0(pClient, 1u, pMonster->dwUnitId, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
+                SCMD_SendSkillUseOnUnit(pClient, 1u, pMonster->dwUnitId, pTarget->dwUnitType, pTarget->dwUnitId, nSkillId, 0, nSkillLevel, 0);
             }
             else
             {
-                sub_6FC3F060(pClient, 1u, pMonster->dwUnitId, D2COMMON_10175_PathGetFirstPointX(pMonster->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pMonster->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
+                SCMD_SendUnitActionAtPosition(pClient, 1u, pMonster->dwUnitId, D2COMMON_10175_PathGetFirstPointX(pMonster->pDynamicPath), D2COMMON_10176_PathGetFirstPointY(pMonster->pDynamicPath), nSkillId, 0, nSkillLevel, 0);
             }
         }
         return;
     }
 
-    uint8_t nDirection = 0;
-    uint8_t v39 = 0;
-    int a7 = 0;
+    uint8_t nModeData = 0;
+    uint8_t nHitClass = 0;
+    int nStepCount = 0;
     uint8_t nHeader = 0;
-    int32_t a4 = 0;
+    int32_t nAction = 0;
     int32_t v8 = 0;
     int32_t v9 = 0;
 
@@ -198,23 +199,23 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
         if (!IsPathCircling(nAnimMode, pDynamicPath))
         {
             nHeader = 0x68u;
-            a4 = v5->unk0x14;
+            nAction = pModeInfo->unk0x14;
             v8 = pTarget->dwUnitType;
             v9 = pTarget->dwUnitId;
         }
         else
         {
             nHeader = 0x67u;
-            a4 = v5->unk0x10;
+            nAction = pModeInfo->unk0x10;
             v8 = D2COMMON_10177_PATH_GetLastPointX(pDynamicPath);
             v9 = D2COMMON_10178_PATH_GetLastPointY(pDynamicPath);
         }
     }
     else
     {
-        a4 = v5->unk0x10;
+        nAction = pModeInfo->unk0x10;
         nHeader = 0x67u;
-        if (v5->unk0x04)
+        if (pModeInfo->unk0x04)
         {
             v8 = D2COMMON_10177_PATH_GetLastPointX(pDynamicPath);
             v9 = D2COMMON_10178_PATH_GetLastPointY(pDynamicPath);
@@ -239,13 +240,13 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     }
     case MONMODE_DEATH:
     {
-        nDirection = PATH_GetDirection(pDynamicPath);
-        v39 = LOBYTE(pMonster->dwLastHitClass);
+        nModeData = PATH_GetDirection(pDynamicPath);
+        nHitClass = LOBYTE(pMonster->dwLastHitClass);
         break;
     }
     case MONMODE_DEAD:
     {
-        nDirection = PATH_GetDirection(pDynamicPath);
+        nModeData = PATH_GetDirection(pDynamicPath);
         break;
     }
     case MONMODE_KNOCKBACK:
@@ -253,17 +254,17 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
         const int32_t nDistance = D2COMMON_10191_PATH_GetDistance(pDynamicPath);
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, nDistance, sub_6FC62F50(pMonster), pMonster->dwLastHitClass);
+            D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, nAction, v8, v9, nDistance, MONSTERMODE_GetHpPercent128(pMonster), pMonster->dwLastHitClass);
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, a4, v8, v9, nDistance, sub_6FC62F50(pMonster), pMonster->dwLastHitClass);
+            D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, nAction, v8, v9, nDistance, MONSTERMODE_GetHpPercent128(pMonster), pMonster->dwLastHitClass);
         }
         return;
     }
     case MONMODE_GETHIT:
     {
-        uint8_t nUnitLife = sub_6FC62F50(pMonster);
+        uint8_t nUnitLife = MONSTERMODE_GetHpPercent128(pMonster);
         if (nUnitLife > 1u)
         {
             --nUnitLife;
@@ -274,15 +275,15 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
             nUnitLife |= 0x80u;
         }
 
-        v39 = LOBYTE(pMonster->dwLastHitClass);
+        nHitClass = LOBYTE(pMonster->dwLastHitClass);
         break;
     }
     default:
     {
-        a7 = PATH_GetStepNum(pDynamicPath);
+        nStepCount = PATH_GetStepNum(pDynamicPath);
         if (nAnimMode == MONMODE_NEUTRAL)
         {
-            D2GAME_PACKETS_SendPacket0x6D_6FC3D080(pClient, pMonster->dwUnitId, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster), sub_6FC62F50(pMonster));
+            D2GAME_PACKETS_SendPacket0x6D_6FC3D080(pClient, pMonster->dwUnitId, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster), MONSTERMODE_GetHpPercent128(pMonster));
             STATLIST_SetUnitStat(pMonster, STAT_PIERCE_IDX, STATLIST_GetUnitBaseStat(pMonster, STAT_PIERCE_IDX, 0) + 1, 0);
             return;
         }
@@ -291,11 +292,11 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
         {
             if (nHeader == 0x68)
             {
-                D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, nDirection, 0, 0);
+                D2GAME_PACKETS_SendPacket0x68_6FC3CCB0(pClient, 0x68u, pMonster->dwUnitId, nAction, v8, v9, nModeData, 0, 0);
             }
             else
             {
-                D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, a4, v8, v9, nDirection, 0, 0);
+                D2GAME_PACKETS_SendPacket0x67_6FC3CDE0(pClient, nHeader, pMonster->dwUnitId, nAction, v8, v9, nModeData, 0, 0);
             }
             return;
         }
@@ -303,37 +304,37 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     }
     }
 
-    if (v5->unk0x08)
+    if (pModeInfo->unk0x08)
     {
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x68_6FC3CA90(pClient, 0x68u, pMonster->dwUnitId, a4, v8, v9, a7);
+            D2GAME_PACKETS_SendPacket0x68_6FC3CA90(pClient, 0x68u, pMonster->dwUnitId, nAction, v8, v9, nStepCount);
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x67_6FC3CBC0(pClient, nHeader, pMonster->dwUnitId, a4, v8, v9, a7);
+            D2GAME_PACKETS_SendPacket0x67_6FC3CBC0(pClient, nHeader, pMonster->dwUnitId, nAction, v8, v9, nStepCount);
         }
     }
-    else if (v5->unk0x0C)
+    else if (pModeInfo->unk0x0C)
     {
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x6C_6FC3CF90(pClient, 0x6Cu, pMonster->dwUnitId, a4, v8, v9, nDirection, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
+            D2GAME_PACKETS_SendPacket0x6C_6FC3CF90(pClient, 0x6Cu, pMonster->dwUnitId, nAction, v8, v9, nModeData, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x6B_6FC3D000(pClient, 0x6Bu, pMonster->dwUnitId, a4, v8, v9, nDirection, v39, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
+            D2GAME_PACKETS_SendPacket0x6B_6FC3D000(pClient, 0x6Bu, pMonster->dwUnitId, nAction, v8, v9, nModeData, nHitClass, CLIENTS_GetUnitX(pMonster), CLIENTS_GetUnitY(pMonster));
         }
     }
     else
     {
         if (nHeader == 0x68)
         {
-            D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(pClient, 0x6Au, pMonster->dwUnitId, a4, v8, v9, nDirection);
+            D2GAME_PACKETS_SendPacket0x6A_6FC3CEE0(pClient, 0x6Au, pMonster->dwUnitId, nAction, v8, v9, nModeData);
         }
         else
         {
-            D2GAME_PACKETS_SendPacket0x69_6FC3CF30(pClient, 0x69u, pMonster->dwUnitId, a4, v8, v9, nDirection, v39);
+            D2GAME_PACKETS_SendPacket0x69_6FC3CF30(pClient, 0x69u, pMonster->dwUnitId, nAction, v8, v9, nModeData, nHitClass);
         }
     }
 }

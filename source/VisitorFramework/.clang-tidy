@@ -1,0 +1,5 @@
+---
+InheritParentConfig: true
+ExtraArgs:
+  - /EHsc
+Checks: '-bugprone-macro-parentheses,-bugprone-crtp-constructor-accessibility,-bugprone-implicit-widening-of-multiplication-result,-bugprone-throwing-static-initialization,-bugprone-branch-clone,-bugprone-exception-escape'

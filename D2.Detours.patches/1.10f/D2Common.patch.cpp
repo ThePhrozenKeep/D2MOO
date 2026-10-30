@@ -321,10 +321,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetFirstItem                                              @10277
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetLastItem                                               @10278
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_RemoveInventoryItems                                      @10279
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetTradeInventory                                         @10280
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeTradeInventory                                        @10281
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_CheckForItemInTradeInventory                              @10282
-    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_AddItemToTradeInventory                                   @10283
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetCommandQueue                                           @10280
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_FreeCommandQueue                                          @10281
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_IsItemInCommandQueue                                      @10282
+    PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_AddItemToCommandQueue                                     @10283
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetItemCount                                              @10284
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetBackPackItemByType                                     @10285
     PatchAction::FunctionReplaceOriginalByPatch, /*C*/ //   INVENTORY_GetEquippedItemByType                                     @10286
@@ -948,8 +948,8 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_RemoveNodeFromTextList                                         @10904
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetMenuType2NodeCount                                          @10905
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType2Node                                     @10906
-    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType1Or2Node                                  @10907
-    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType0Or2Node                                  @10908
+    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType0Node                                     @10907
+    PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_GetStringIdOfMenuType1Node	                                    @10908
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_CreateMessageListFromTextHeader                                @10909
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_CreateTextHeaderFromMessageList                                @10910
     PatchAction::FunctionReplacePatchByOriginal,       //   TEXT_SortTextNodeListByStringId                                     @10911

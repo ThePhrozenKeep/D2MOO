@@ -29,7 +29,8 @@
 
 
 //D2Game.0x6FC68350
-int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t a5)
+//1.14d: 0x005FD350
+int32_t __fastcall MONSTERSPAWN_CanSpawnAtSpawnerExit(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t bSkipVileMotherCheck)
 {
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nMonsterId);
     if (pMonStatsTxtRecord)
@@ -61,7 +62,7 @@ int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int
         break;
 
     case MONSTER_VILEMOTHER1:
-        if (a5)
+        if (bSkipVileMotherCheck)
         {
             return 1;
         }
@@ -97,7 +98,8 @@ int32_t __fastcall sub_6FC68350(int32_t nMonsterId, D2ActiveRoomStrc* pRoom, int
 }
 
 //D2Game.0x6FC68630
-int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, D2UnitStrc* pTarget, int32_t nX, int32_t nY)
+//1.14d: 0x005FD470
+int32_t __fastcall MONSTERSPAWN_CheckSkillPlacement(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, D2UnitStrc* pTarget, int32_t nX, int32_t nY)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
@@ -154,7 +156,7 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
     if (nSkillId == SKILL_DIABPRISON)
     {
-        return sub_6FC6A810(pGame, UNITS_GetRoom(pTarget), 0, 0, pTarget, MONSTER_BONEPRISON1, 1);
+        return MONSTERSPAWN_SpawnBonePrison(pGame, UNITS_GetRoom(pTarget), 0, 0, pTarget, MONSTER_BONEPRISON1, 1);
     }
 
     if (nSkillId == SKILL_MONTELEPORT)
@@ -209,9 +211,10 @@ int32_t __fastcall sub_6FC68630(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 }
 
 //D2Game.0x6FC68CC0
-int32_t __fastcall MONSTERSPAWN_GetResurrectMode(D2UnitStrc* pUnit, int32_t a2)
+//1.14d: 0x005FD7B0
+int32_t __fastcall MONSTERSPAWN_GetResurrectMode(D2UnitStrc* pUnit, int32_t bUseResurrectConfig)
 {
-    if (!a2 || !pUnit)
+    if (!bUseResurrectConfig || !pUnit)
     {
         return MONMODE_NEUTRAL;
     }
@@ -237,9 +240,10 @@ int32_t __fastcall MONSTERSPAWN_GetResurrectMode(D2UnitStrc* pUnit, int32_t a2)
 }
 
 //D2Game.0x6FC68D70
-D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t a5, int16_t nFlags)
+//1.14d: 0x005B23C0
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnAtUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.nUnitGUID = 0;
     monCreate.nMonsterId = nMonsterId;
@@ -247,7 +251,7 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     monCreate.pGame = pGame;
     monCreate.pRoomCoordList = nullptr;
     monCreate.pRoom = UNITS_GetRoom(pUnit);
-    monCreate.field_20 = a5;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.nFlags = nFlags;
     monCreate.nX = CLIENTS_GetUnitX(pUnit);
     monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -255,14 +259,14 @@ D2UnitStrc* __fastcall sub_6FC68D70(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
     return D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
 }
 
-void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
-void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
-void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit);
+void __fastcall MONSTERSPAWN_SetupNormalMods(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit);
+void __fastcall MONSTERSPAWN_SetupBossMods(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit);
+void __fastcall MONSTERSPAWN_SpawnMinionParty(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit);
 
 //1.10f:D2Game.0x6FC68E30) --------------------------------------------------------
 //1.11: D2Game.0x6FCE79E0
-
-D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pMonCreate)
+//1.14d: 0x005B2A00
+D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2MonsterSpawnParamsStrc* pMonCreate)
 {
     // Written from the Hex-Rays output kept below (D2Game 1.10f 0x6FC68E30) and checked against 1.14d
     // Game.0x5B2A00 (SetupNormalMods: 0x5B21B0): same checks, the same room-seed rolls in the same
@@ -323,8 +327,8 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
     }
 
     D2SeedStrc* pSeed = &pRoom->pSeed;
-    int32_t nRadius = pMonCreate->field_20 >= 0 ? 3 : 0;
-    const int32_t nMaxRadius = pMonCreate->field_20 >= 0 ? 3 * pMonCreate->field_20 : 0;
+    int32_t nRadius = pMonCreate->nMaxSearchRings >= 0 ? 3 : 0;
+    const int32_t nMaxRadius = pMonCreate->nMaxSearchRings >= 0 ? 3 * pMonCreate->nMaxSearchRings : 0;
     int32_t nX = 0;
     int32_t nY = 0;
     bool bFloorTilePath = false;
@@ -386,7 +390,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 
                 if (nCurX >= tArea.left && nCurX < tArea.right && nCurY >= tArea.top && nCurY < tArea.bottom
                     && (!bCheckTile || D2Common_10095(pRoom, nCurX, nCurY) == nAreaTile)
-                    && sub_6FC68350(nMonsterId, pRoom, nCurX, nCurY, 1)
+                    && MONSTERSPAWN_CanSpawnAtSpawnerExit(nMonsterId, pRoom, nCurX, nCurY, 1)
                     && (!COLLISION_CheckMaskWithSize(pRoom, nCurX, nCurY, pMonStats2TxtRecord->nSizeX, nCollisionMask) || (int8_t)nFlags < 0))
                 {
                     nX = nCurX;
@@ -479,7 +483,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
     {
         bNeverCount = 1;
     }
-    sub_6FC68180(pMonCreate->pGame->pMonReg, pSpawnRoom, pMonster, bNeverCount);
+    MONSTERREGION_RegisterSpawnedMonster(pMonCreate->pGame->pMonReg, pSpawnRoom, pMonster, bNeverCount);
 
     D2RoomCoordListStrc* pCoordList = pMonCreate->pRoomCoordList ? pMonCreate->pRoomCoordList : D2Common_10096(pSpawnRoom, nX, nY);
     if (pMonster->dwUnitType == UNIT_MONSTER && pMonster->pMonsterData)
@@ -489,16 +493,16 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 
     if (pMonStatsTxtRecord->nAlign == 1)
     {
-        sub_6FCBDD30(pMonster, 2u, 1);
+        SUNIT_SetAlignment(pMonster, 2u, 1);
         pMonster->dwFlags |= UNITFLAG_NOTC;
     }
     else if (pMonStatsTxtRecord->nAlign == 2)
     {
-        sub_6FCBDD30(pMonster, 1u, 1);
+        SUNIT_SetAlignment(pMonster, 1u, 1);
     }
     else
     {
-        sub_6FCBDD30(pMonster, 0, 1);
+        SUNIT_SetAlignment(pMonster, 0, 1);
     }
 
     if (!(nFlags & 2))
@@ -508,13 +512,13 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
     MONSTERSPAWN_SetupBossMods(pMonCreate, pMonster);
     if (!(nFlags & 0x40))
     {
-        sub_6FC69C00(pMonCreate, pMonster);
+        MONSTERSPAWN_SpawnMinionParty(pMonCreate, pMonster);
     }
     return pMonster;
 
     // Original decompilation, kept for reference:
 
-//    D2UnkMonCreateStrc* v1; // ebp@1
+//    D2MonsterSpawnParamsStrc* v1; // ebp@1
 //    int32_t nMonsterId; // eax@1
 //    int32_t v3; // edi@2
 //    D2MonStatsTxt* ptMonStatsTxtRecord; // edx@3
@@ -571,7 +575,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //    int32_t v55; // eax@90
 //    int32_t v56; // ebx@112
 //    D2UnitStrc* result; // eax@113
-//    D2UnkMonCreateStrc* v58; // edi@116
+//    D2MonsterSpawnParamsStrc* v58; // edi@116
 //    D2ActiveRoomStrc* v59; // ebp@116
 //    D2UnitStrc* v60; // esi@116
 //    int32_t v61; // eax@117
@@ -598,7 +602,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //    D2ActiveRoomStrc** pFloorCount; // [sp+5Ch] [bp-8Ch]@22
 //    int32_t nX; // [sp+60h] [bp-88h]@22
 //    D2ActiveRoomStrc* pRoom; // [sp+64h] [bp-84h]@9
-//    D2UnkMonCreateStrc* v85; // [sp+68h] [bp-80h]@1
+//    D2MonsterSpawnParamsStrc* v85; // [sp+68h] [bp-80h]@1
 //    int32_t v86; // [sp+6Ch] [bp-7Ch]@68
 //    int32_t nY; // [sp+70h] [bp-78h]@22
 //    uint32_t nCollisionFlags; // [sp+74h] [bp-74h]@10
@@ -680,7 +684,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //    }
 //    if (!v9 || (v14 = (int32_t)&v9->pSeed, v9 == (D2ActiveRoomStrc*)-60))
 //        return 0;
-//    v15 = v1->field_20;
+//    v15 = v1->nMaxSearchRings;
 //    if (v15 >= 0)
 //    {
 //        v81 = 3;
@@ -850,7 +854,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            {
 //                if (!v91 || (D2DrlgTileDataStrc*)D2Common_10095(pRoom, v52, v53) == v89)
 //                {
-//                    if (sub_6FC68350(v85->nMonsterId, pRoom, v52, (D2ActiveRoomStrc**)v53, 1)
+//                    if (MONSTERSPAWN_CanSpawnAtSpawnerExit(v85->nMonsterId, pRoom, v52, (D2ActiveRoomStrc**)v53, 1)
 //                        && (!COLLISION_CheckMaskWithSize(pRoom, v52, v53, v102->nSizeX, nCollisionFlags)
 //                            || SLOBYTE(v85->nFlags) < 0))
 //                        break;
@@ -996,7 +1000,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            v61 = v90 & 8;
 //            if (BYTE2(v94->dwMonStatsFlags) & gdwBitMasks[2])
 //                v61 = 1;
-//            sub_6FC68180(v58->pGame->pMonReg, v59, v60, v61);
+//            MONSTERREGION_RegisterSpawnedMonster(v58->pGame->pMonReg, v59, v60, v61);
 //            v62 = (D2RoomCoordListStrc*)v58->pRoomCoordList;
 //            if (!v62)
 //                v62 = D2Common_10096(v59, nX, v56);
@@ -1008,15 +1012,15 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            }
 //            if (v94->nAlign == 1)
 //            {
-//                sub_6FCBDD30(v60, 2u, 1);
+//                SUNIT_SetAlignment(v60, 2u, 1);
 //                v60->dwFlags |= UNITFLAG_NOTC;
 //            }
 //            else
 //            {
 //                if (v94->nAlign == 2)
-//                    sub_6FCBDD30(v60, 1u, 1);
+//                    SUNIT_SetAlignment(v60, 1u, 1);
 //                else
-//                    sub_6FCBDD30(v60, 0, 1);
+//                    SUNIT_SetAlignment(v60, 0, 1);
 //            }
 //            if (!(v90 & 2))
 //            {
@@ -1024,7 +1028,7 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 //            }
 //            MONSTERSPAWN_SetupBossMods(pMonCreate, v60);
 //            if (!(v90 & 0x40))
-//                sub_6FC69C00((int32_t)v85, v60);
+//                MONSTERSPAWN_SpawnMinionParty((int32_t)v85, v60);
 //            return v60;
 //        }
 //    }
@@ -1036,9 +1040,10 @@ D2UnitStrc* __fastcall D2GAME_SpawnNormalMonster_6FC68E30(D2UnkMonCreateStrc* pM
 
 
 //D2Game.0x6FC69B60
+//1.14d: 0x005B1C50
 void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
 {
-    constexpr Unk dword_6FD28B08[] =
+    constexpr D2MonsterEquipmentStrc tAncientEquipment[] =
     {
         { ' dsb', BODYLOC_RARM, 1, 0, 0 },
         { ' xat', BODYLOC_RARM, 1, 0, 0 },
@@ -1060,12 +1065,12 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
     }
 
     D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
-    const Unk* pItemInfo = &dword_6FD28B08[pUnit->dwClassId - MONSTER_ANCIENTBARB1];
+    const D2MonsterEquipmentStrc* pItemInfo = &tAncientEquipment[pUnit->dwClassId - MONSTER_ANCIENTBARB1];
     const int32_t nLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
 
     for (int32_t i = 0; i < 4; ++i)
     {
-        Unk itemInfo = {};
+        D2MonsterEquipmentStrc itemInfo = {};
 
         itemInfo.nItemCode = pItemInfo->nItemCode;
         itemInfo.nBodyLoc = pItemInfo->nBodyLoc;
@@ -1084,14 +1089,14 @@ void __fastcall MONSTERSPAWN_EquipAncientBarbarians(D2UnitStrc* pUnit)
             itemInfo.nItemCode = pItemsTxtRecord->dwUltraCode;
         }
 
-        sub_6FC61190(pGame, pUnit, &itemInfo, nLevel, 4u);
+        MONSTERAI_CreateAndEquipItem(pGame, pUnit, &itemInfo, nLevel, 4u);
         pItemInfo += 3;
     }
 }
 
 //1.10: Inlined
 //1.14d: 0x005B1CF0
-void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+void __fastcall MONSTERSPAWN_SetupBossMods(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit)
 {
     int32_t nMonsterId = pMonCreate->nMonsterId;
     D2GameStrc* pGame = pMonCreate->pGame;
@@ -1256,7 +1261,7 @@ void __fastcall MONSTERSPAWN_SetupBossMods(D2UnkMonCreateStrc* pMonCreate, D2Uni
 //1.10: Inlined
 //1.14d: 0x005B21B0
 // Written from the decompilation below and checked against 1.14d Game.0x5B21B0: monster types with a fixed unique mod.
-void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+void __fastcall MONSTERSPAWN_SetupNormalMods(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit)
 {
     int32_t nMonsterId = pMonCreate->nMonsterId;
     D2GameStrc* pGame = pMonCreate->pGame;
@@ -1318,7 +1323,7 @@ void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2U
     D2GAME_BOSSES_AssignUMod_6FC6FF10(pGame, pUnit, nUMod, bFlag);
 }
 
-//void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+//void __fastcall MONSTERSPAWN_SetupNormalMods(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit)
 //{
 //    v64 = v58->nMonsterId;
 //    v65 = v58->pGame;
@@ -1417,7 +1422,8 @@ void __fastcall MONSTERSPAWN_SetupNormalMods(D2UnkMonCreateStrc* pMonCreate, D2U
 //}
 
 //D2Game.0x6FC69C00
-void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
+//1.14d: 0x005B2830
+void __fastcall MONSTERSPAWN_SpawnMinionParty(D2MonsterSpawnParamsStrc* pMonCreate, D2UnitStrc* pUnit)
 {
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pMonCreate->nMonsterId);
     if (!pMonStatsTxtRecord)
@@ -1455,11 +1461,11 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
 
         for (int32_t i = 0; i < nMinions; ++i)
         {
-            D2UnkMonCreateStrc monCreate = {};
+            D2MonsterSpawnParamsStrc monCreate = {};
             monCreate.nUnitGUID = 0;
             monCreate.nAnimMode = 1;
             monCreate.nMonsterId = pMonStatsTxtRecord->wMinion[nMinionIndex];
-            monCreate.field_20 = 4;
+            monCreate.nMaxSearchRings = 4;
             monCreate.pRoomCoordList = nullptr;
             monCreate.pRoom = UNITS_GetRoom(pUnit);
             monCreate.pGame = pMonCreate->pGame;
@@ -1491,21 +1497,22 @@ void __fastcall sub_6FC69C00(D2UnkMonCreateStrc* pMonCreate, D2UnitStrc* pUnit)
             nMinions += ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, pMonStatsTxtRecord->nPartyMax - nMinions + 1);
         }
         const uint32_t bNonWaterSpawn = ((~static_cast<uint32_t>(pMonCreate->nFlags)) >> 2) & 1;
-        sub_6FC6A8C0(pMonCreate->pGame, pUnit, pMonStatsTxtRecord->wMinion[0], 1, nMinions, bNonWaterSpawn, 0x40u);
+        MONSTERSPAWN_SpawnTentacleMinions(pMonCreate->pGame, pUnit, pMonStatsTxtRecord->wMinion[0], 1, nMinions, bNonWaterSpawn, 0x40u);
     }
 }
 
 //1.10f:D2Game.0x6FC69F10
 //1.11: D2Game.0x6FCE80F0
-D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags)
+//1.14d: 0x005B2F20
+D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.pRoom = pRoom;
     monCreate.pGame = pGame;
     monCreate.nUnitGUID = 0;
     monCreate.nMonsterId = nMonsterId;
-    monCreate.field_20 = a7;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.pRoomCoordList = nullptr;
     monCreate.nX = nX;
     monCreate.nAnimMode = nAnimMode;
@@ -1516,9 +1523,10 @@ D2UnitStrc* __fastcall D2GAME_SpawnMonster_6FC69F10(D2GameStrc* pGame, D2ActiveR
 }
 
 //D2Game.0x6FC69F70
-D2UnitStrc* __fastcall sub_6FC69F70(D2GameStrc* pGame, D2RoomCoordListStrc* pRoomCoordList, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t a6, int16_t nFlags)
+//1.14d: 0x005B2F70
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnAtUnitInCoordList(D2GameStrc* pGame, D2RoomCoordListStrc* pRoomCoordList, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.nUnitGUID = 0;
     monCreate.nMonsterId = nMonsterId;
@@ -1526,7 +1534,7 @@ D2UnitStrc* __fastcall sub_6FC69F70(D2GameStrc* pGame, D2RoomCoordListStrc* pRoo
     monCreate.pGame = pGame;
     monCreate.pRoomCoordList = pRoomCoordList;
     monCreate.pRoom = UNITS_GetRoom(pUnit);
-    monCreate.field_20 = a6;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.nFlags = nFlags;
     monCreate.nX = CLIENTS_GetUnitX(pUnit);
     monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -1535,15 +1543,16 @@ D2UnitStrc* __fastcall sub_6FC69F70(D2GameStrc* pGame, D2RoomCoordListStrc* pRoo
 }
 
 //D2Game.0x6FC6A030
-D2UnitStrc* __fastcall sub_6FC6A030(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a8, int16_t nFlags)
+//1.14d: 0x005B3040
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnInCoordList(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2RoomCoordListStrc* pRoomCoordList, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.pRoom = pRoom;
     monCreate.nMonsterId = nMonsterId;
     monCreate.pGame = pGame;
     monCreate.nAnimMode = nAnimMode;
-    monCreate.field_20 = a8;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.pRoomCoordList = pRoomCoordList;
     monCreate.nFlags = nFlags;
     monCreate.nUnitGUID = 0;
@@ -1554,9 +1563,10 @@ D2UnitStrc* __fastcall sub_6FC6A030(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 }
 
 //D2Game.0x6FC6A090
-D2UnitStrc* __fastcall sub_6FC6A090(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int16_t nFlags)
+//1.14d: 0x005B3090
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnAtCoordinates(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.pGame = pGame;
     monCreate.nUnitGUID = 0;
@@ -1565,7 +1575,7 @@ D2UnitStrc* __fastcall sub_6FC6A090(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
     monCreate.pRoomCoordList = nullptr;
     monCreate.nX = nX;
     monCreate.nAnimMode = nAnimMode;
-    monCreate.field_20 = -1;
+    monCreate.nMaxSearchRings = -1;
     monCreate.nFlags = nFlags;
     monCreate.nY = nY;
 
@@ -1573,15 +1583,16 @@ D2UnitStrc* __fastcall sub_6FC6A090(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 }
 
 //D2Game.0x6FC6A0F0
-D2UnitStrc* __fastcall sub_6FC6A0F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nMode, int32_t nUnitId, int32_t a8, int16_t nFlags)
+//1.14d: 0x005B30E0
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnWithUnitId(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nMode, int32_t nUnitId, int32_t nMaxSearchRings, int16_t nFlags)
 {
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.pRoom = pRoom;
     monCreate.nUnitGUID = nUnitId;
     monCreate.pGame = pGame;
     monCreate.nMonsterId = nMonsterId;
-    monCreate.field_20 = a8;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.nAnimMode = nMode;
     monCreate.nX = nX;
     monCreate.pRoomCoordList = nullptr;
@@ -1592,19 +1603,20 @@ D2UnitStrc* __fastcall sub_6FC6A0F0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, 
 }
 
 //D2Game.0x6FC6A150
-D2UnitStrc* __fastcall sub_6FC6A150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t a5, int16_t nFlags)
+//1.14d: 0x005B2490
+D2UnitStrc* __fastcall MONSTERSPAWN_SpawnLevelVariantAtUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int16_t nFlags)
 {
     D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
     if (DUNGEON_GetLevelIdFromPopulatedRoom(pRoom))
     {
-        D2UnkMonCreateStrc monCreate = {};
+        D2MonsterSpawnParamsStrc monCreate = {};
         monCreate.nUnitGUID = 0;
         monCreate.nMonsterId = D2Common_11063(pRoom, nMonsterId);
         monCreate.nAnimMode = nAnimMode;
         monCreate.pGame = pGame;
         monCreate.pRoomCoordList = nullptr;
         monCreate.pRoom = pRoom;
-        monCreate.field_20 = a5;
+        monCreate.nMaxSearchRings = nMaxSearchRings;
         monCreate.nFlags = nFlags;
         monCreate.nX = CLIENTS_GetUnitX(pUnit);
         monCreate.nY = CLIENTS_GetUnitY(pUnit);
@@ -1616,7 +1628,8 @@ D2UnitStrc* __fastcall sub_6FC6A150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 }
 
 //D2Game.0x6FC6A230
-int32_t __fastcall sub_6FC6A230(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t nMonsterId, int32_t nAnimMode, int32_t a5, int32_t nCount, int16_t nFlags)
+//1.14d: 0x005B24E0
+int32_t __fastcall MONSTERSPAWN_SpawnLinkedMinionsAtOwner(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t nMonsterId, int32_t nAnimMode, int32_t nMaxSearchRings, int32_t nCount, int16_t nFlags)
 {
     if (!pOwner)
     {
@@ -1626,7 +1639,7 @@ int32_t __fastcall sub_6FC6A230(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t n
     int32_t nResult = 0;
     const int32_t nOwnerId = pOwner->dwUnitId;
 
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
 
     monCreate.nUnitGUID = 0;
     monCreate.nMonsterId = nMonsterId;
@@ -1635,7 +1648,7 @@ int32_t __fastcall sub_6FC6A230(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t n
     monCreate.pRoomCoordList = nullptr;
     monCreate.pRoom = UNITS_GetRoom(pOwner);
     monCreate.nFlags = nFlags;
-    monCreate.field_20 = a5;
+    monCreate.nMaxSearchRings = nMaxSearchRings;
     monCreate.nX = CLIENTS_GetUnitX(pOwner);
     monCreate.nY = CLIENTS_GetUnitY(pOwner);
 
@@ -1654,12 +1667,13 @@ int32_t __fastcall sub_6FC6A230(D2GameStrc* pGame, D2UnitStrc* pOwner, int32_t n
 }
 
 //D2Game.0x6FC6A350
-int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, D2UnitStrc* pOwner, int32_t nClassId, int32_t nAnimMode, D2UnkMonCreateStrc2* a8, int16_t nFlags)
+//1.14d: 0x005B3270
+int32_t __fastcall MONSTERSPAWN_SpawnFormation(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, D2UnitStrc* pOwner, int32_t nClassId, int32_t nAnimMode, D2MonsterFormationStrc* pFormation, int16_t nFlags)
 {
     D2UnitStrc* pUnit = nullptr;
     
     int32_t bIncreaseClassId = 0;
-    if (a8->unk0x08 & 1)
+    if (pFormation->nFlags & 1)
     {
         bIncreaseClassId = 1;
     }
@@ -1671,28 +1685,28 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
     }
 
     int32_t nResult = 0;
-    for (int32_t i = 0; i < a8->nRecordCount; ++i)
+    for (int32_t i = 0; i < pFormation->nRecordCount; ++i)
     {
         int32_t nSpawnType = 4;
         if (!bUseDefaultSpawnType)
         {
-            nSpawnType = a8->records[i].nSpawnType;
+            nSpawnType = pFormation->records[i].nSpawnType;
         }
 
         switch (nSpawnType)
         {
         case 0:
         {
-            D2UnkMonCreateStrc monCreate = {};
+            D2MonsterSpawnParamsStrc monCreate = {};
             monCreate.pGame = pGame;
             monCreate.pRoom = pRoom;
             monCreate.pRoomCoordList = nullptr;
             monCreate.nMonsterId = nClassId;
             monCreate.nAnimMode = nAnimMode;
             monCreate.nUnitGUID = 0;
-            monCreate.nX = nX + a8->records[i].nXOffset;
-            monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nX = nX + pFormation->records[i].nXOffset;
+            monCreate.nY = nY + pFormation->records[i].nYOffset;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = nFlags;
 
             if (D2GAME_SpawnNormalMonster_6FC68E30(&monCreate))
@@ -1704,16 +1718,16 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         }
         case 1:
         {
-            D2UnkMonCreateStrc monCreate = {};
+            D2MonsterSpawnParamsStrc monCreate = {};
             monCreate.pGame = pGame;
             monCreate.pRoom = pRoom;
             monCreate.pRoomCoordList = nullptr;
             monCreate.nMonsterId = nClassId;
             monCreate.nAnimMode = nAnimMode;
             monCreate.nUnitGUID = 0;
-            monCreate.nX = nX + a8->records[i].nXOffset;
-            monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nX = nX + pFormation->records[i].nXOffset;
+            monCreate.nY = nY + pFormation->records[i].nYOffset;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = 0;
 
             pUnit = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1726,16 +1740,16 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         }
         case 2:
         {
-            D2UnkMonCreateStrc monCreate = {};
+            D2MonsterSpawnParamsStrc monCreate = {};
             monCreate.pGame = pGame;
             monCreate.pRoom = pRoom;
             monCreate.pRoomCoordList = nullptr;
             monCreate.nMonsterId = nClassId;
             monCreate.nAnimMode = nAnimMode;
             monCreate.nUnitGUID = 0;
-            monCreate.nX = nX + a8->records[i].nXOffset;
-            monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nX = nX + pFormation->records[i].nXOffset;
+            monCreate.nY = nY + pFormation->records[i].nYOffset;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = 0;
 
             pUnit = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1750,16 +1764,16 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         {
             if (pUnit)
             {
-                D2UnkMonCreateStrc monCreate = {};
+                D2MonsterSpawnParamsStrc monCreate = {};
                 monCreate.pGame = pGame;
                 monCreate.pRoom = UNITS_GetRoom(pUnit);
                 monCreate.pRoomCoordList = nullptr;
                 monCreate.nMonsterId = nClassId;
                 monCreate.nAnimMode = nAnimMode;
                 monCreate.nUnitGUID = 0;
-                monCreate.nX = nX + a8->records[i].nXOffset;
-                monCreate.nY = nY + a8->records[i].nYOffset;
-                monCreate.field_20 = -1;
+                monCreate.nX = nX + pFormation->records[i].nXOffset;
+                monCreate.nY = nY + pFormation->records[i].nYOffset;
+                monCreate.nMaxSearchRings = -1;
                 monCreate.nFlags = 0;
 
                 D2UnitStrc* pMonster = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1774,16 +1788,16 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         }
         case 4:
         {
-            D2UnkMonCreateStrc monCreate = {};
+            D2MonsterSpawnParamsStrc monCreate = {};
             monCreate.pGame = pGame;
             monCreate.pRoom = pRoom;
             monCreate.pRoomCoordList = nullptr;
             monCreate.nMonsterId = nClassId;
             monCreate.nAnimMode = nAnimMode;
             monCreate.nUnitGUID = 0;
-            monCreate.nX = nX + a8->records[i].nXOffset;
-            monCreate.nY = nY + a8->records[i].nYOffset;
-            monCreate.field_20 = -1;
+            monCreate.nX = nX + pFormation->records[i].nXOffset;
+            monCreate.nY = nY + pFormation->records[i].nYOffset;
+            monCreate.nMaxSearchRings = -1;
             monCreate.nFlags = nFlags;
 
             nResult = 1;
@@ -1799,16 +1813,16 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         {
             if (pOwner)
             {
-                D2UnkMonCreateStrc monCreate = {};
+                D2MonsterSpawnParamsStrc monCreate = {};
                 monCreate.pGame = pGame;
                 monCreate.pRoom = pRoom;
                 monCreate.pRoomCoordList = nullptr;
                 monCreate.nMonsterId = nClassId;
                 monCreate.nAnimMode = nAnimMode;
                 monCreate.nUnitGUID = 0;
-                monCreate.nX = nX + a8->records[i].nXOffset;
-                monCreate.nY = nY + a8->records[i].nYOffset;
-                monCreate.field_20 = -1;
+                monCreate.nX = nX + pFormation->records[i].nXOffset;
+                monCreate.nY = nY + pFormation->records[i].nYOffset;
+                monCreate.nMaxSearchRings = -1;
                 monCreate.nFlags = 0;
                 
                 D2UnitStrc* pMonster = D2GAME_SpawnNormalMonster_6FC68E30(&monCreate);
@@ -1834,9 +1848,10 @@ int32_t __fastcall sub_6FC6A350(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
 }
 
 //D2Game.0x6FC6A810
-int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t a3, int32_t a4, D2UnitStrc* pTargetUnit, int32_t a6, int16_t a7)
+//1.14d: 0x005B34C0
+int32_t __fastcall MONSTERSPAWN_SpawnBonePrison(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nUnused1, int32_t nUnused2, D2UnitStrc* pTargetUnit, int32_t nMonsterId, int16_t nFlags)
 {
-    D2UnkMonCreateStrc2 dword_6FD2EEAC =
+    D2MonsterFormationStrc tBonePrisonFormation =
     {
         4, 0, 1, 0, 0, 0,
         {
@@ -1847,16 +1862,17 @@ int32_t __fastcall sub_6FC6A810(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int3
         }
     };
 
-    if (a6 == MONSTER_BONEPRISON1 && pTargetUnit)
+    if (nMonsterId == MONSTER_BONEPRISON1 && pTargetUnit)
     {
-        return sub_6FC6A350(pGame, pRoom, CLIENTS_GetUnitX(pTargetUnit), CLIENTS_GetUnitY(pTargetUnit), 0, MONSTER_BONEPRISON1, 8, &dword_6FD2EEAC, a7);
+        return MONSTERSPAWN_SpawnFormation(pGame, pRoom, CLIENTS_GetUnitX(pTargetUnit), CLIENTS_GetUnitY(pTargetUnit), 0, MONSTER_BONEPRISON1, 8, &tBonePrisonFormation, nFlags);
     }
 
     return 0;
 }
 
 //D2Game.0x6FC6A8C0
-int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nCount, int32_t bNonWaterSpawn, int16_t nFlags)
+//1.14d: 0x005B2570
+int32_t __fastcall MONSTERSPAWN_SpawnTentacleMinions(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMonsterId, int32_t nAnimMode, int32_t nCount, int32_t bNonWaterSpawn, int16_t nFlags)
 {
     static const D2CoordStrc stru_6FD28B68[12] =
     {
@@ -1879,7 +1895,7 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
         return 0;
     }
 
-    int32_t v9 = bNonWaterSpawn;
+    int32_t nOffsetSetIndex = bNonWaterSpawn;
 #ifdef NO_BUG_FIX
     // Original game accepts a value of 2 here, which then indexes past the end of stru_6FD28B68 (only 2 sets of 6 coordinates).
     if (bNonWaterSpawn < 0 || bNonWaterSpawn > 2)
@@ -1887,7 +1903,7 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     if (bNonWaterSpawn < 0 || bNonWaterSpawn > 1)
 #endif
     {
-        v9 = 0;
+        nOffsetSetIndex = 0;
     }
 
     int32_t nResult = 0;
@@ -1896,12 +1912,12 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
     const int32_t nY = CLIENTS_GetUnitY(pUnit);
 
     int32_t nParam1 = ITEMS_RollRandomNumber(&pUnit->pSeed) % 6;
-    const int32_t nParam2 = 6 * v9;
+    const int32_t nParam2 = 6 * nOffsetSetIndex;
 
-    D2UnkMonCreateStrc monCreate = {};
+    D2MonsterSpawnParamsStrc monCreate = {};
     monCreate.nUnitGUID = 0;
     monCreate.pRoomCoordList = nullptr;
-    monCreate.field_20 = -1;
+    monCreate.nMaxSearchRings = -1;
     monCreate.nFlags = nFlags;
     monCreate.nMonsterId = nMonsterId;
     monCreate.nAnimMode = nAnimMode;
@@ -1930,6 +1946,7 @@ int32_t __fastcall sub_6FC6A8C0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
 }
 
 //D2Game.0x6FC6AA70
+//1.14d: 0x005B3570
 int32_t __fastcall MONSTERSPAWN_SpawnRandomMonsterForLevel(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY)
 {
     D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(DUNGEON_GetLevelIdFromRoom(pRoom));

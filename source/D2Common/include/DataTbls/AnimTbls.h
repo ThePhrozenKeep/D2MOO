@@ -18,7 +18,7 @@ struct D2AnimDataRecordStrc
 struct D2AnimDataBucketStrc
 {
 	int32_t nbEntries;
-	D2AnimDataRecordStrc aEntries[]; // Dynamically sized
+	D2AnimDataRecordStrc aEntries[1]; // Dynamically sized
 };
 
 struct D2AnimDataTableStrc

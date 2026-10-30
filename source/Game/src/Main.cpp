@@ -17,7 +17,7 @@
 
 #define cmdidx(m)	offsetof(D2ConfigStrc, m)
 //1.10f: Game.0x
-D2CmdArgStrc gaCmdArguments[] = {
+D2CmdArgStrc gaCmdArguments[] = { D2_CMDARG_FIRST_ROWS
 	{ "VIDEO",     "WINDOW",       "w",          CMD_BOOLEAN, cmdidx(bWindow),        0 },
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	{ "VIDEO",     "WINDOW",       "window",     CMD_BOOLEAN, cmdidx(bWindow),        0 },
@@ -210,7 +210,7 @@ void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
 				*(uint32_t*)pCfgMember = GetPrivateProfileIntA(rCmdArg.szSection, rCmdArg.szKey, rCmdArg.dwDefault, szPath);
 				break;
 			case CMD_STRING:
-				GetPrivateProfileStringA(rCmdArg.szSection, rCmdArg.szKey, &lpZero, (char*)pCfgMember, 16, szPath);
+				GetPrivateProfileStringA(rCmdArg.szSection, rCmdArg.szKey, &lpZero, (char*)pCfgMember, D2_CMDARG_INI_STRING_SIZE, szPath);
 				break;
 			case CMD_BOOLEAN:
 				*(BYTE*)pCfgMember = 0 != GetPrivateProfileIntA(rCmdArg.szSection, rCmdArg.szKey, rCmdArg.dwDefault, szPath);

@@ -25,6 +25,7 @@
 
 
 //D2Game.0x6FC552A0
+//1.14d: 0x0059F840
 void __fastcall MISSILES_RemoveAll(D2GameStrc* pGame)
 {
     for (int32_t i = 0; i < 128; ++i)
@@ -40,6 +41,7 @@ void __fastcall MISSILES_RemoveAll(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC552F0
+//1.14d: 0x0059F8A0
 void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnitGUID)
 {
     if (!pMissile)
@@ -51,10 +53,11 @@ void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int
     pMissile->dwUnitId = nUnitGUID;
     pMissile->dwFlags &= ~(UNITFLAG_TARGETABLE | UNITFLAG_ISVALIDTARGET);
     D2GAME_DeleteTimersOnUnit_6FC34A30(pGame, pMissile);
-    sub_6FC35570(pGame, pMissile, EVENTTYPE_MODECHANGE, 0, 0);
+    EVENT_SetRecurringEvent(pGame, pMissile, EVENTTYPE_MODECHANGE, 0, 0);
 }
 
 //D2Game.0x6FC55340
+//1.14d: 0x0059F8E0
 void __fastcall MISSILES_Free(D2GameStrc* pGame, D2UnitStrc* pMissile)
 {
     if (!pMissile)
@@ -63,10 +66,11 @@ void __fastcall MISSILES_Free(D2GameStrc* pGame, D2UnitStrc* pMissile)
     }
 
     MISSILE_FreeMissileData(pMissile);
-    sub_6FC349F0(pGame, pMissile);
+    EVENT_FreeUnitTimers(pGame, pMissile);
 }
 
 //D2Game.0x6FC55360
+//1.14d: 0x0059FA30
 D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2MissileStrc* missileParams)
 {
     if (!missileParams->pOwner || (missileParams->pOwner->dwUnitType != UNIT_PLAYER && missileParams->pOwner->dwUnitType != UNIT_MONSTER))
@@ -260,7 +264,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         PATH_SetFootprintCollisionMask(pMissile->pDynamicPath, COLLIDE_NONE);
     }
 
-    PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, stru_6FD2E5F8[pMissilesTxtRecord->nCollideType].nCollisionMask);
+    PATH_SetMoveTestCollisionMask(pMissile->pDynamicPath, gtMissileCollisionModes[pMissilesTxtRecord->nCollideType].nCollisionMask);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CANDESTROY])
     {
@@ -304,12 +308,12 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     MISSILE_SetSkill(pMissile, missileParams->nSkill);
     MISSILE_SetLevel(pMissile, missileParams->nSkillLevel);
 
-    sub_6FC7C900(missileParams->pOwner, 0);
+    PLAYER_ApplyWeaponStatsForSkill(missileParams->pOwner, 0);
     D2MissileDamageDataStrc missileDamageData = {};
     MISSILE_CalculateDamageData(&missileDamageData, missileParams->pOwner, missileParams->pOrigin, pMissile, missileParams->nSkillLevel);
     MISSILE_SetDamageStats(missileParams->pOwner, pMissile, &missileDamageData, missileParams->nSkillLevel);
 
-    sub_6FC7CA10(missileParams->pOwner, 0);
+    PLAYER_RestoreWeaponStats(missileParams->pOwner, 0);
     UNITS_StoreOwner(pMissile, missileParams->pOwner);
 
     pMissile->dwFlags &= ~UNITFLAG_ISVALIDTARGET;
@@ -349,14 +353,15 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         MISSILE_SetFlags(pMissile, MISSILE_GetFlags(pMissile) | 2);
     }
 
-    sub_6FC6E8B0(pGame, missileParams->pOwner, pMissile);
+    MONSTERUNIQUE_ExecuteUModMissileCallbacks(pGame, missileParams->pOwner, pMissile);
     STATLIST_SetUnitStat(pMissile, STAT_DAMAGE_FRAMERATE, pMissilesTxtRecord->dwDamageRate, 0);
 
     return pMissile;
 }
 
 //D2Game.0x6FC55B70
-void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nVelocity)
+//1.14d: 0x0059FEE0
+void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t bSendFirstPathPoint)
 {
     if (!pMissile || pMissile->dwUnitType != UNIT_MISSILE)
     {
@@ -381,7 +386,7 @@ void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, 
     packet73.nX = CLIENTS_GetUnitX(pMissile);
     packet73.nY = CLIENTS_GetUnitY(pMissile);
 
-    if (nVelocity)
+    if (bSendFirstPathPoint)
     {
         packet73.nFirstX = D2COMMON_10175_PathGetFirstPointX(pMissile->pDynamicPath);
         packet73.nFirstY = D2COMMON_10176_PathGetFirstPointY(pMissile->pDynamicPath);

@@ -18,6 +18,7 @@ constexpr int32_t CHARACTER_SAVE_SIZE = 0x2000;
 
 
 //D2Game.0x6FC317F0
+//1.14d: 0x0053EFC0
 int32_t __fastcall CCMD_IsStringZeroTerminated(const char* pData, int32_t nDataSize)
 {
     for (int32_t i = 0; i < nDataSize; ++i)
@@ -32,6 +33,7 @@ int32_t __fastcall CCMD_IsStringZeroTerminated(const char* pData, int32_t nDataS
 }
 
 //D2Game.0x6FC31810
+//1.14d: 0x0053EFF0
 uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClientName)
 {
     // TODO: Names
@@ -85,6 +87,7 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
 }
 
 //D2Game.0x6FC31910
+//1.14d: 0x0053F100
 void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
 {
     // TODO: Names
@@ -103,7 +106,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_NEWGAME)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -112,10 +115,10 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         D2GSPacketClt67* pPacket67 = (D2GSPacketClt67*)pPacket;
         if (!gpD2EventCallbackTable_6FD45830)
         {
-            const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->unk0x08, pPacket67->szClientName);
+            const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->dwVersion, pPacket67->szClientName);
             if (nErrorCode)
             {
-                sub_6FC3C6D0(nClientId, nErrorCode);
+                D2GAME_PACKETS_SendSystemError(nClientId, nErrorCode);
                 D2NET_10015(nClientId, __FILE__, __LINE__);
             }
         }
@@ -123,15 +126,15 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         char szAccountName[16] = {};
         int32_t nCharSaveTransactionToken = 0;
         int32_t v18 = 0;
-        int32_t v19 = 0;
-        if (GAME_VerifyJoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nTokenId, szAccountName, &nCharSaveTransactionToken, pPacket67->nLocale, &v19, &v18))
+        int32_t v19 = 0 D2_SERVER_CALLBACK_ARGS_114(v20 = 0, v21 = 0);
+        if (GAME_VerifyJoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, pPacket67->nTokenId, szAccountName, &nCharSaveTransactionToken, pPacket67->nLocale, &v19, &v18 D2_SERVER_CALLBACK_ARGS_114(&v20, &v21)))
         {
             GAME_JoinGame(nClientId, pPacket67->nGameId, pPacket67->nPlayerClass, pPacket67->szClientName, szAccountName, nCharSaveTransactionToken, pPacket67->nLocale, v19, v18);
         }
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINGAME)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -147,12 +150,12 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     {
         if (D2GAME_Return1_6FC41900())
         {
-            sub_6FC39870(nClientId);
+            GAME_SendGameList(nClientId);
         }
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINLIST)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -165,7 +168,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_JOINACT)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
@@ -176,19 +179,19 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
 
         if (D2GAME_Return1_6FC41900())
         {
-            sub_6FC399A0(nClientId, pPacket6B);
+            GAME_ReceiveSaveFilePart(nClientId, pPacket6B);
         }
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_OPENCHAR)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
-    case D2CLTSYS_0x6C:
+    case D2CLTSYS_PING:
     {
         D2GSPacketClt6C* pPacket6C = (D2GSPacketClt6C*)pPacket;
-        CLIENTS_UpdatePing(nClientId, pPacket6C->unk0x01, pPacket6C->unk0x05);
+        CLIENTS_UpdatePing(nClientId, pPacket6C->dwTickCount, pPacket6C->nHalfAveragePing);
         break;
     }
     case D2CLTSYS_DISCONNECT:
@@ -200,21 +203,22 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
         else
         {
             GAME_LogMessage(3, "[HACKLIST]  ProcessCltSysMessage(D2CLTSYS_FORCEDISCONNECT)");
-            sub_6FC36B20(nClientId, __FILE__, __LINE__);
+            GAME_AbortClientById(nClientId, __FILE__, __LINE__);
         }
         break;
     }
-    case D2CLTSYS_REMOVEFROMGAME:
-    {
-        D2Game_10024_RemoveClientFromGame(nClientId);
+#if !(D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14)
+    case D2CLTSYS_REMOVEFROMGAME: // 1.14d has no REMOVEFROMGAME: 0x6F takes the default case
+        GAME_RemoveClientById(nClientId);
         break;
-    }
+#endif
     default:
         return;
     }
 }
 
 //D2Game.0x6FC31C00
+//1.14d: 0x0053F3D0
 void __fastcall CCMD_ProcessClientMessage(void* pData, int32_t nPacketSize)
 {
     const int32_t nClientId = *(int32_t*)pData;
@@ -234,7 +238,7 @@ void __fastcall CCMD_ProcessClientMessage(void* pData, int32_t nPacketSize)
     if (pPlayer && pPlayer->dwUnitType == UNIT_PLAYER && D2GAME_PACKET_Handler_6FC89320(pGame, pPlayer, pPacket, nPacketSize) >= 3 && pGame->nGameType != 3)
     {
         GAME_LogMessage(3, "[HACKLIST]  ProcessClientMessage: Client %d '%s' believed to be cheating. Command was %d", nClientId, pClient->szName, *pPacket);
-        sub_6FC36C20(pGame, nClientId, __FILE__, __LINE__);
+        GAME_AbortClient(pGame, nClientId, __FILE__, __LINE__);
     }
 
     GAME_LeaveGamesCriticalSection(pGame);

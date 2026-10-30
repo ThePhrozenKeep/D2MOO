@@ -6,7 +6,9 @@
 #include "Path/PathMisc.h"
 #include "Units/Units.h"
 #include "Units/UnitRoom.h"
+#ifdef NO_BUG_FIX
 #include <cstring>
+#endif
 #include <utility>
 
 D2PathPointStrc sgctZeroGameCoord = { 0,0 };
@@ -21,6 +23,7 @@ struct TanToDirectionLutEntryStrc {
 
 //1.00:  D2Common.0x1008AF38
 //1.10f: D2Common.0x6FDD2598 
+//1.14d: 0x006EB7E0
 TanToDirectionLutEntryStrc lutTanToDirection[] = {
 	{{ 0x0000, 0x1000 } , 0 },
 	{{ 0x0020, 0x0FFF } , 0 },
@@ -153,7 +156,11 @@ TanToDirectionLutEntryStrc lutTanToDirection[] = {
 };
 static_assert(ARRAY_SIZE(lutTanToDirection) == 128, "There should be 128 entries in this lookup table");
 
-// Native constant prefix for wrapped negative tangent indices.
+#ifdef NO_BUG_FIX
+// PATH_GetDirectionVector's 127 * minor delta wraps in 32 bits once the minor delta reaches 2^31 / 127 in 16.16 fixed
+// point (about 258 subtiles, a unit facing a target in another level), and the binary then indexes the table with
+// the negative tangent (-127 .. -1) and reads the constant data the linker placed in front of it. Its 127 entries
+// (1524 bytes) as the binary has them:
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
 //1.14d: 0x006EB1EC .. 0x006EB7DF (.rdata, Game.exe has a fixed base)
 static const uint8_t gabBeforeTanToDirectionLut[127 * sizeof(TanToDirectionLutEntryStrc)] = {
@@ -368,6 +375,8 @@ static TanToDirectionLutEntryStrc PATH_GetTanToDirectionLutEntry(int nTangent)
 	return tEntry;
 }
 
+#endif // NO_BUG_FIX
+
 //1.00:  D2Common.0x1005E6D0
 //1.10f: D2Common.0x6FDAC5E0
 //1.14d: 0x0064FC60
@@ -406,7 +415,11 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 	}
 
 	bool bDeltaXGreaterThanY;
+#ifdef NO_BUG_FIX
 	if ((int)(dwMaxPrecisionX - dwMinPrecisionX) > (int)(dwMaxPrecisionY - dwMinPrecisionY))
+#else
+	if (dwMaxPrecisionX - dwMinPrecisionX > dwMaxPrecisionY - dwMinPrecisionY)
+#endif
 	{
 		std::swap(dwMinPrecisionX, dwMinPrecisionY);
 		std::swap(dwMaxPrecisionX, dwMaxPrecisionY);
@@ -418,9 +431,20 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 	}
 	int tangent = 0;
 	if (dwMaxPrecisionY != dwMinPrecisionY)
+	{
+#ifdef NO_BUG_FIX
 		tangent = (int)(127 * (dwMaxPrecisionX - dwMinPrecisionX)) / (int)(dwMaxPrecisionY - dwMinPrecisionY);
+#else
+		// Widen before multiplying the 16.16 distance so the tangent stays in [0, 127].
+		tangent = static_cast<int>(127ull * (dwMaxPrecisionX - dwMinPrecisionX) / (dwMaxPrecisionY - dwMinPrecisionY));
+#endif
+	}
 
+#ifdef NO_BUG_FIX
 	const TanToDirectionLutEntryStrc lutEntry = PATH_GetTanToDirectionLutEntry(tangent);
+#else
+	const auto& lutEntry = lutTanToDirection[tangent];
+#endif
 
 	uint8_t nAngle = (uint8_t)lutEntry.nAngle;
 	if (!bDeltaXGreaterThanY)
@@ -453,6 +477,7 @@ void __fastcall PATH_GetDirectionVector(D2CoordStrc* pDirectionVector, int* pOut
 
 
 //D2Common.0x6FDAB810
+//1.14d: 0x00678F00
 void __fastcall sub_6FDAB810(int* a1, int* a2)
 {
 	if (*a1 < 0)
@@ -493,6 +518,7 @@ void __fastcall sub_6FDAB810(int* a1, int* a2)
 //1.00:  D2Common.0x1005F420
 //1.10f: D2Common.0x6FDACEC0
 //1.13c: D2Common.0x6FD5D8E0
+//1.14d: 0x00650660
 BOOL __fastcall sub_6FDACEC0(D2DynamicPathStrc* pDynamicPath, D2FP32_16* a2, D2UnitStrc** pUnit)
 {
 	D2UnitStrc* v4; // eax
@@ -744,6 +770,7 @@ LABEL_61:
 
 //1.00:  D2Common.0x1005FAB0
 //1.10f: D2Common.0x6FDAD5E0
+//1.14d: 0x00650910
 BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* pDestRoom, D2PathPointStrc tDest)
 {
 	D2UnitStrc* pUnit = pDynamicPath->pUnit;
@@ -892,6 +919,7 @@ void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pNe
 
 //1.00:  D2Common.0x10060640 (#10227)
 //1.10f: D2Common.0x6FDADF00 (#10230)
+//1.14d: 0x00650C60
 BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2ActiveRoomStrc* pRoom, unsigned int a4, __int16 a5)
 {
 	D2PathPointStrc tPos;
@@ -1001,6 +1029,7 @@ void PATH_RecacheRoomAtCoordIfNeeded(D2DynamicPathStrc* pPath, D2ActiveRoomStrc*
 //1.00:  Inlined
 //1.10f: D2Common.0x6FDAD330
 //1.13c: D2Common.0x6FD5DC80
+//1.14d: 0x006507B0
 void PATH_ResetMovement(D2DynamicPathStrc* pDynamicPath)
 {
 	PATH_RecacheRoomAtCoordIfNeeded(
@@ -1050,6 +1079,7 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Act
 //1.00:  D2Common.0x10060A60 (#10230)
 //1.10f: D2Common.0x6FDAE290 (#10233)
 //1.13c: D2Common.0x6FD5DB40 (#10770)
+//1.14d: 0x00650590
 void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath)
 {
 	PATH_RecacheRoomAtCoordIfNeeded(pDynamicPath, nullptr, PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionX), PATH_FP16FitToCenter(pDynamicPath->tGameCoords.dwPrecisionY));
@@ -1059,6 +1089,7 @@ void __stdcall PATH_RecacheRoomIfNeeded(D2DynamicPathStrc* pDynamicPath)
 //1.00:  D2Common.0x10060C40 (#10231)
 //1.10f: D2Common.0x6FDAE500 (#10234)
 //TODO: Find a name
+//1.14d: 0x006505C0
 BOOL __stdcall D2Common_10234(D2DynamicPathStrc* pDynamicPath)
 {
 	if (pDynamicPath)

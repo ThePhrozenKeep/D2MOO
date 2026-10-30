@@ -21,11 +21,16 @@
 #pragma warning (disable : 28159)
 
 
+//1.10f: D2Win.0x6F8FE21C
+//1.14d: 0x0087E96C
 D2CellFileStrc* ghPentagramCellFile;
+//1.10f: D2Win.0x6F8FE220
+//1.14d: 0x0087E970
 uint32_t dword_6F8FE220;
 
 
 //D2Win.0x6F8AC270 (#10135)
+//1.14d: 0x005075E0
 D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, void* a5, Font* pFont)
 {
 	// TODO: a5, pFont, nWidtha, v24
@@ -47,10 +52,10 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 	pList->controlHeader.pfHandleCharInput = LIST_HandleCharInput;
 	pList->controlHeader.pfHandleVirtualKeyInput = LIST_HandleVirtualKeyInput;
 	pList->eFont = *pFont;
-	pList->field_44 = nFontHeight[pList->eFont];
-	pList->field_48 = nFontHeight[pList->eFont] >> 2;
-	pList->field_54 = -1;
-	pList->field_58 = nHeight / (pList->field_44 + 2 * pList->field_48) - 1;
+	pList->nLineHeight = nFontHeight[pList->eFont];
+	pList->nLinePadding = nFontHeight[pList->eFont] >> 2;
+	pList->nSelectedIndex = -1;
+	pList->nLastVisibleOffset = nHeight / (pList->nLineHeight + 2 * pList->nLinePadding) - 1;
 
 	D2Win_10127_SetFont(pList->eFont);
 
@@ -72,20 +77,20 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 			D2Win_10131_GetTextDimensions(pText, &nTextWidth, &nTextHeight);
 
 			nTextWidth += 8;
-			if (pList->field_60 < nTextWidth)
+			if (pList->nWidestEntry < nTextWidth)
 			{
-				pList->field_60 = nTextWidth;
+				pList->nWidestEntry = nTextWidth;
 			}
 
 			v24 = nWidtha;
-			pData->field_200 = nTextWidth;
-			pData->field_208 = 0;
-			pData->field_204 = (int32_t(__stdcall*)(SMSGHANDLER_PARAMS*))*((DWORD*)nWidtha + 2);
-			pData->field_20C = 0;
-			pData->field_210 = 0;
-			pData->field_214 = 0;
-			pData->field_218 = *nWidtha;
-			pData->field_21C = *((DWORD*)nWidtha + 1);
+			pData->nTextWidth = nTextWidth;
+			pData->nHitRectLeft = 0;
+			pData->pfOnActivate = (int32_t(__stdcall*)(SMSGHANDLER_PARAMS*))*((DWORD*)nWidtha + 2);
+			pData->nHitRectRight = 0;
+			pData->nHitRectTop = 0;
+			pData->nHitRectBottom = 0;
+			pData->nHotKey = *nWidtha;
+			pData->nVirtualKey = *((DWORD*)nWidtha + 1);
 			pData->pNext = nullptr;
 
 			if (pList->pDataList)
@@ -104,7 +109,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 
 			nWidtha += 16;
 
-			++pList->field_50;
+			++pList->nEntryCount;
 		}
 		while (*((DWORD *)v24 + 3));
 	}
@@ -119,6 +124,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 }
 
 //D2Win.0x6F8AC490 (#10136)
+//1.14d: 0x00506E60
 int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
@@ -134,6 +140,7 @@ int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
 }
 
 //D2Win.0x6F8AC4F0 (#10138)
+//1.14d: 0x005077F0
 void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
 	Unicode wszText[256] = {};
@@ -143,6 +150,7 @@ void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__
 }
 
 //D2Win.0x6F8AC570 (#10137)
+//1.14d: 0x00506EC0
 void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
@@ -160,16 +168,16 @@ void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__st
 
 	nTextWidth += 8;
 
-	pList->field_60 = std::max(pList->field_60, nTextWidth);
+	pList->nWidestEntry = std::max(pList->nWidestEntry, nTextWidth);
 
-	pNewData->field_200 = nTextWidth;
-	pNewData->field_21C = a5;
-	pNewData->field_204 = a3;
-	pNewData->field_208 = 0;
-	pNewData->field_20C = 0;
-	pNewData->field_210 = 0;
-	pNewData->field_214 = 0;
-	pNewData->field_218 = a4;
+	pNewData->nTextWidth = nTextWidth;
+	pNewData->nVirtualKey = a5;
+	pNewData->pfOnActivate = a3;
+	pNewData->nHitRectLeft = 0;
+	pNewData->nHitRectRight = 0;
+	pNewData->nHitRectTop = 0;
+	pNewData->nHitRectBottom = 0;
+	pNewData->nHotKey = a4;
 
 	if (a6)
 	{
@@ -196,18 +204,19 @@ void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__st
 		pNewData->pNext = nullptr;
 	}
 
-	++pList->field_50;
+	++pList->nEntryCount;
 
 	D2Win_10127_SetFont(D2FONT_FONT16);
 
 	if (a7)
 	{
 		pList->pSelectedDataEntry = pNewData;
-		pList->field_54 = pList->field_50 - 1;
+		pList->nSelectedIndex = pList->nEntryCount - 1;
 	}
 }
 
 //D2Win.0x6F8AC6D0 (#10139)
+//1.14d: 0x00507000
 int32_t __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
@@ -227,6 +236,7 @@ int32_t __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList)
 }
 
 //D2Win.0x6F8AC720 (#10140)
+//1.14d: 0x00507050
 D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_t nIndex)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
@@ -246,14 +256,16 @@ D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_
 }
 
 //D2Win.0x6F8AC770 (#10141)
+//1.14d: 0x005070A0
 int32_t __fastcall D2Win_10141(D2WinListStrc* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
-	return pList->field_50;
+	return pList->nEntryCount;
 }
 
 //D2Win.0x6F8AC7A0
+//1.14d: 0x005070D0
 void __stdcall LIST_LoadPentspinCellfile()
 {
 	D2_ASSERT(ghPentagramCellFile == nullptr);
@@ -264,6 +276,7 @@ void __stdcall LIST_LoadPentspinCellfile()
 }
 
 //D2Win.0x6F8AC800
+//1.14d: 0x00507140
 void __stdcall LIST_UnloadPentspinCellfile()
 {
 	ARCHIVE_FreeCellFile(ghPentagramCellFile);
@@ -271,6 +284,7 @@ void __stdcall LIST_UnloadPentspinCellfile()
 }
 
 //D2Win.0x6F8AC820
+//1.14d: 0x00507160
 int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 {
 	D2WinListStrc* pList = (D2WinListStrc*)pControl;
@@ -280,7 +294,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 	D2Win_10127_SetFont(pList->eFont);
 
 	D2WinListDataStrc* pData = pList->pDataList;
-	for (int32_t i = 0; i < pList->field_4C; ++i)
+	for (int32_t i = 0; i < pList->nFirstVisibleEntry; ++i)
 	{
 		if (pData)
 		{
@@ -291,9 +305,9 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 	D2GfxDataStrc gfxData = {};
 	gfxData.pCellFile = ghPentagramCellFile;
 	gfxData.nDirection = 0;
-	gfxData.nFrame = pList->field_5C;
+	gfxData.nFrame = pList->nPentagramFrame;
 
-	int32_t nTextY = pList->controlHeader.nImageY + pList->field_44 + pList->field_48 - pList->controlHeader.nHeight;
+	int32_t nTextY = pList->controlHeader.nImageY + pList->nLineHeight + pList->nLinePadding - pList->controlHeader.nHeight;
 
 	while (pData)
 	{
@@ -302,7 +316,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 			break;
 		}
 
-		const int32_t nTextX = pList->controlHeader.nImageX + ((pList->controlHeader.nWidth - pData->field_200) >> 1);
+		const int32_t nTextX = pList->controlHeader.nImageX + ((pList->controlHeader.nWidth - pData->nTextWidth) >> 1);
 
 		if (pData == pList->pSelectedDataEntry)
 		{
@@ -312,7 +326,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 				nImageY += 6;
 			}
 
-			const int32_t nOffsetX = (pList->controlHeader.nWidth - pList->field_60) >> 2;
+			const int32_t nOffsetX = (pList->controlHeader.nWidth - pList->nWidestEntry) >> 2;
 			const int32_t nImageX1 = pList->controlHeader.nImageX + nOffsetX - 25;
 			const int32_t nImageX2 = pList->controlHeader.nImageX - nOffsetX + pList->controlHeader.nWidth - 25;
 			TEXTURE_CelDraw(&gfxData, nImageX1, nImageY, -1, DRAWMODE_NORMAL, 0);
@@ -321,20 +335,20 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 
 		D2Win_10117_DrawText(pData->wszText, nTextX, nTextY, 0, 0);
 
-		pData->field_208 = pList->controlHeader.nImageX;
-		pData->field_20C = pList->controlHeader.nImageX + pList->controlHeader.nWidth;
-		pData->field_210 = nTextY - pList->field_48 - pList->field_44;
-		pData->field_214 = nTextY + pList->field_48;
+		pData->nHitRectLeft = pList->controlHeader.nImageX;
+		pData->nHitRectRight = pList->controlHeader.nImageX + pList->controlHeader.nWidth;
+		pData->nHitRectTop = nTextY - pList->nLinePadding - pList->nLineHeight;
+		pData->nHitRectBottom = nTextY + pList->nLinePadding;
 
-		nTextY += pList->field_44 + 2 * pList->field_48;
+		nTextY += pList->nLineHeight + 2 * pList->nLinePadding;
 
 		pData = pData->pNext;
 	}
 
-	++pList->field_5C;
-	if (pList->field_5C >= 8)
+	++pList->nPentagramFrame;
+	if (pList->nPentagramFrame >= 8)
 	{
-		pList->field_5C = 0;
+		pList->nPentagramFrame = 0;
 	}
 
 	D2Win_10127_SetFont(D2FONT_FONT16);
@@ -343,6 +357,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AC9B0
+//1.14d: 0x005072F0
 int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
@@ -353,30 +368,31 @@ int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 
 	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
-		if (gMousePosition_6F8FE234.x > pData->field_208 && gMousePosition_6F8FE234.x < pData->field_20C && gMousePosition_6F8FE234.y > pData->field_210 && gMousePosition_6F8FE234.y < pData->field_214)
+		if (gMousePosition_6F8FE234.x > pData->nHitRectLeft && gMousePosition_6F8FE234.x < pData->nHitRectRight && gMousePosition_6F8FE234.y > pData->nHitRectTop && gMousePosition_6F8FE234.y < pData->nHitRectBottom)
 		{
 			if (pData != pList->pSelectedDataEntry || dwTickCount - dword_6F8FE220 >= 300)
 			{
 				pList->pSelectedDataEntry = pData;
 			}
-			else if (pData->field_204)
+			else if (pData->pfOnActivate)
 			{
-				return pData->field_204(pMsg);
+				return pData->pfOnActivate(pMsg);
 			}
 		}
 	}
 
 	dword_6F8FE220 = dwTickCount;
 
-	if (pList->controlHeader.field_34)
+	if (pList->controlHeader.pfCallback)
 	{
-		return pList->controlHeader.field_34(pMsg);
+		return pList->controlHeader.pfCallback(pMsg);
 	}
 
 	return 0;
 }
 
 //D2Win.0x6F8ACA70
+//1.14d: 0x005073B0
 int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
@@ -385,9 +401,9 @@ int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 
 	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
-		if (pData->field_218 == pMsg->wParam && pData->field_204)
+		if (pData->nHotKey == pMsg->wParam && pData->pfOnActivate)
 		{
-			return pData->field_204(pMsg);
+			return pData->pfOnActivate(pMsg);
 		}
 	}
 
@@ -395,6 +411,7 @@ int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 }
 
 //D2Win.0x6F8ACAE0
+//1.14d: 0x00507420
 int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
 	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
@@ -408,11 +425,11 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 
 	if (pMsg->wParam == VK_RETURN)
 	{
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 
-		if (pList->pSelectedDataEntry->field_204)
+		if (pList->pSelectedDataEntry->pfOnActivate)
 		{
-			return pList->pSelectedDataEntry->field_204(pMsg);
+			return pList->pSelectedDataEntry->pfOnActivate(pMsg);
 		}
 	}
 	else if (pMsg->wParam == VK_UP)
@@ -436,15 +453,15 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 
 		pList->pSelectedDataEntry = pTemp;
 
-		pList->field_54 = 0;
+		pList->nSelectedIndex = 0;
 		for (D2WinListDataStrc* pData = pList->pDataList; pData != pTemp; pData = pData->pNext)
 		{
-			++pList->field_54;
+			++pList->nSelectedIndex;
 		}
 
-		pList->field_4C = D2Clamp(pList->field_4C, pList->field_54 - pList->field_58, pList->field_54);
+		pList->nFirstVisibleEntry = D2Clamp(pList->nFirstVisibleEntry, pList->nSelectedIndex - pList->nLastVisibleOffset, pList->nSelectedIndex);
 
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 		return 1;
 	}
 	else if (pMsg->wParam == VK_DOWN)
@@ -455,23 +472,23 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 			pList->pSelectedDataEntry = pList->pDataList;
 		}
 
-		pList->field_54 = 0;
+		pList->nSelectedIndex = 0;
 		for (D2WinListDataStrc* pData = pList->pDataList; pData != pList->pSelectedDataEntry; pData = pData->pNext)
 		{
-			++pList->field_54;
+			++pList->nSelectedIndex;
 		}
 
-		pList->field_4C = D2Clamp(pList->field_4C, pList->field_54 - pList->field_58, pList->field_54);
+		pList->nFirstVisibleEntry = D2Clamp(pList->nFirstVisibleEntry, pList->nSelectedIndex - pList->nLastVisibleOffset, pList->nSelectedIndex);
 
-		D2Win_10012(nullptr);
+		CONTROL_SetFocusedEditBox(nullptr);
 		return 1;
 	}
 
 	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
-		if (pData->field_21C == pMsg->wParam && pData->field_204)
+		if (pData->nVirtualKey == pMsg->wParam && pData->pfOnActivate)
 		{
-			return pData->field_204(pMsg);
+			return pData->pfOnActivate(pMsg);
 		}
 	}
 

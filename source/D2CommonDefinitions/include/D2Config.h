@@ -38,6 +38,9 @@ struct D2ConfigStrc
 #if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
 	BOOL bIsExpansion;
 #endif
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	BOOL bCrashApp; // -crash ([DEBUG] CRASHAPP), first entry of the 1.14d command line table
+#endif
 	uint8_t bWindow;
 #if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	uint8_t bNoFixedAspect;
@@ -70,7 +73,8 @@ struct D2ConfigStrc
 	uint8_t bAssassin;
 #endif
 	uint8_t bInvincible;
-	uint8_t _0082[48];
+	char szAccountName[24];		// written from the Battle.net login screen's account box
+	char szAccountPassword[24];	// and its password box, which is then hashed into nAccountPasswordHash
 	char szName[24];
 	char szRealm[24];
 	D2CharacterPreviewInfoStrc tCharPreviewInfo;
@@ -82,7 +86,7 @@ struct D2ConfigStrc
 		uint32_t dwCTemp;
 		struct
 		{
-			uint8_t nUnk;
+			uint8_t nArenaTemplate;			// passed to the client's arena template setter
 			uint8_t nCharacterClassId;		// D2C_PlayerClasses
 			uint16_t nCharacterSaveFlags;	// D2PackedClientSaveFlags
 		} unpackedCTemp;

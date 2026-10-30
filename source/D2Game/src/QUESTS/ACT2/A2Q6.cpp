@@ -114,12 +114,14 @@ D2NPCMessageTableStrc gpAct2Q6NpcMessages[] =
 
 
 //D2Game.0x6FCA4650
+//1.14d: 0x0059C750
 void __fastcall ACT2Q6_AttachCompletionSoundToPlayers(D2GameStrc* pGame)
 {
 	SUNIT_IterateUnitsOfType(pGame, 0, nullptr, ACT2Q6_UnitIterate_AttachCompletionSound);
 }
 
 //D2Game.0x6FCA4660
+//1.14d: 0x0059C710
 int32_t __fastcall ACT2Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A2Q6, QFLAG_PRIMARYGOALDONE))
@@ -131,6 +133,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCA46A0
+//1.14d: 0x0059C920
 void __fastcall ACT2Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL))
@@ -164,6 +167,7 @@ void __fastcall ACT2Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FCA4750
+//1.14d: 0x0059CA50
 bool __fastcall ACT2Q6_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	if (!QUESTRECORD_GetQuestState(pFlags, QUESTSTATEFLAG_A1COMPLETED, QFLAG_REWARDGRANTED))
@@ -220,6 +224,7 @@ bool __fastcall ACT2Q6_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 }
 
 //D2Game.0x6FCA4820
+//1.14d: 0x0059CF20
 void __fastcall ACT2Q6_UnitIterate_SetCustom1Flag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL))
@@ -250,6 +255,7 @@ void __fastcall ACT2Q6_UnitIterate_SetCustom1Flag(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FCA48B0
+//1.14d: 0x0059D300
 bool __fastcall ACT2Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	switch (nNpcId)
@@ -356,6 +362,7 @@ bool __fastcall ACT2Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCA49C0
+//1.14d: 0x0059D5B0
 void __fastcall ACT2Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -388,6 +395,7 @@ void __fastcall ACT2Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA4AB0
+//1.14d: 0x0059C3C0
 void __fastcall ACT2Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const int32_t nIndices[] =
@@ -515,12 +523,14 @@ void __fastcall ACT2Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FC96C80
+//1.14d: 0x00545530
 void __fastcall ACT2Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pQuestArg);
 }
 
 //D2Game.0x6FCA4D50
+//1.14d: 0x0059C760
 void __fastcall ACT2Q6_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget)
@@ -580,6 +590,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCA4E70
+//1.14d: 0x0059C6C0
 int32_t __fastcall ACT2Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -598,6 +609,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCA4EC0
+//1.14d: 0x0059CB20
 void __fastcall ACT2Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act2Quest6Strc* pQuestDataEx = (D2Act2Quest6Strc*)pQuestData->pQuestDataEx;
@@ -728,6 +740,7 @@ void __fastcall ACT2Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA52D0
+//1.14d: 0x0059C860
 int32_t __fastcall ACT2Q6_UnitIterate_SetLeaveTownFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -758,6 +771,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_SetLeaveTownFlag(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FCA53B0
+//1.14d: 0x0059C9A0
 int32_t __fastcall ACT2Q6_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A2Q6, QFLAG_PRIMARYGOALDONE))
@@ -775,6 +789,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 }
 
 //D2Game.0x6FCA5400
+//1.14d: 0x0059C9F0
 int32_t __fastcall ACT2Q6_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -791,6 +806,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCA5470
+//1.14d: 0x0059D050
 void __fastcall ACT2Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTS_DebugOutput(pQuestData->pGame, "killed duriel for quest", __FILE__, __LINE__);
@@ -843,6 +859,7 @@ void __fastcall ACT2Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA55E0
+//1.14d: 0x0059CEE0
 bool __fastcall ACT2Q6_TImer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act2Quest6Strc* pQuestDataEx = (D2Act2Quest6Strc*)pQuestData->pQuestDataEx;
@@ -859,6 +876,7 @@ bool __fastcall ACT2Q6_TImer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 }
 
 //D2Game.0x6FCA5620
+//1.14d: 0x0059CFB0
 int32_t __fastcall ACT2Q6_UnitIterate_SetCustom1FlagForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -887,6 +905,7 @@ int32_t __fastcall ACT2Q6_UnitIterate_SetCustom1FlagForPartyMembers(D2GameStrc* 
 }
 
 //D2Game.0x6FCA56C0
+//1.14d: 0x0059D1C0
 void __fastcall ACT2Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nNewLevel < LEVEL_LUTGHOLEIN || pQuestArg->nNewLevel >= LEVEL_KURASTDOCKTOWN)
@@ -1029,6 +1048,7 @@ void __fastcall ACT2Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA5880
+//1.14d: 0x0059D450
 bool __fastcall ACT2Q6_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (!pQuestData->fState && pQuestData->bNotIntro == 1)
@@ -1051,12 +1071,14 @@ bool __fastcall ACT2Q6_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA5900
+//1.14d: 0x0059D4D0
 void __fastcall ACT2Q6_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	QUESTRECORD_ClearQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], QUESTSTATEFLAG_A2Q2, QFLAG_CUSTOM5);
 }
 
 //D2Game.0x6FCA5930
+//1.14d: 0x0059D4F0
 void __fastcall ACT2Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -1091,6 +1113,7 @@ void __fastcall ACT2Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCA59F0
+//1.14d: 0x0059D6A0
 void __fastcall ACT2Q6_SendTombIdToClient(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
@@ -1114,6 +1137,7 @@ void __fastcall ACT2Q6_SendTombIdToClient(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCA5B00
+//1.14d: 0x0059D830
 int32_t __fastcall ACT2Q6_GetObjectIdForArcaneThing(D2GameStrc* pGame)
 {
 	static const int32_t nArcaneThingObjectIds[] =
@@ -1159,6 +1183,7 @@ int32_t __fastcall ACT2Q6_GetObjectIdForArcaneThing(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCA5B20
+//1.14d: 0x0059D9D0
 void __fastcall D2GAME_WarpPlayerToTile_6FCA5B20(D2ObjOperateFnStrc* pOp)
 {
 	for (D2UnitStrc* i = UNITS_GetRoom(pOp->pObject)->pUnitFirst; i; i = i->pRoomNext)
@@ -1171,6 +1196,7 @@ void __fastcall D2GAME_WarpPlayerToTile_6FCA5B20(D2ObjOperateFnStrc* pOp)
 }
 
 //D2Game.0x6FCA5B60
+//1.14d: 0x0059DA50
 void __fastcall OBJECTS_InitFunction37_Unused(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q6_DURIEL);
@@ -1214,6 +1240,7 @@ void __fastcall OBJECTS_InitFunction37_Unused(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCA5BE0
+//1.14d: 0x0059DAD0
 void __fastcall OBJECTS_InitFunction38_TyraelsDoor(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q6_DURIEL);
@@ -1243,6 +1270,7 @@ void __fastcall OBJECTS_InitFunction38_TyraelsDoor(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCA5C30
+//1.14d: 0x0059DB20
 int32_t __fastcall ACT2Q6_IsDurielsLairClosed(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
@@ -1256,6 +1284,7 @@ int32_t __fastcall ACT2Q6_IsDurielsLairClosed(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FCA5C60
+//1.14d: 0x0059DB50
 void __fastcall OBJECTS_InitFunction21_HoradricOrifice(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q6_DURIEL);
@@ -1290,6 +1319,7 @@ void __fastcall OBJECTS_InitFunction21_HoradricOrifice(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCA5CE0
+//1.14d: 0x0059D870
 bool __fastcall ACT2Q6_Timer_UpdateObjects(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act2Quest6Strc* pQuestDataEx = (D2Act2Quest6Strc*)pQuestData->pQuestDataEx;
@@ -1364,6 +1394,7 @@ bool __fastcall ACT2Q6_Timer_UpdateObjects(D2GameStrc* pGame, D2QuestDataStrc* p
 }
 
 //D2Game.0x6FCA5F20
+//1.14d: 0x0059DBD0
 void __fastcall ACT2Q6_UnitIterate_DeleteHoradricItems(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -1397,6 +1428,7 @@ void __fastcall ACT2Q6_UnitIterate_DeleteHoradricItems(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FCA5FB0
+//1.14d: 0x0059DC70
 int32_t __fastcall OBJECTS_OperateFunction25_StaffOrifice(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1448,6 +1480,7 @@ int32_t __fastcall OBJECTS_OperateFunction25_StaffOrifice(D2ObjOperateFnStrc* pO
 }
 
 //D2Game.0x6FCA60D0
+//1.14d: 0x0059DD80
 void __fastcall ACT2Q6_DeleteAllHoradricItemsAndOpenTomb(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pObject)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -1497,6 +1530,7 @@ void __fastcall ACT2Q6_DeleteAllHoradricItemsAndOpenTomb(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCA6310
+//1.14d: 0x0059DF50
 int32_t __fastcall ACT2Q6_IsInRangeOfTyrael(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
@@ -1523,6 +1557,7 @@ int32_t __fastcall ACT2Q6_IsInRangeOfTyrael(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FCA6370
+//1.14d: 0x0059DF30
 void __fastcall ACT2Q6_UnitIterate_CheckDistanceToTyrael(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2Act2Quest6Strc* pQuestDataEx = (D2Act2Quest6Strc*)pData;
@@ -1535,6 +1570,7 @@ void __fastcall ACT2Q6_UnitIterate_CheckDistanceToTyrael(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FCA6390
+//1.14d: 0x0059DFD0
 int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D2ActiveRoomStrc** ppRoom)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q6_DURIEL);
@@ -1551,7 +1587,7 @@ int32_t __fastcall ACT2Q6_ActivateTomb(D2GameStrc* pGame, D2CoordStrc* pCoord, D
 		return 0;
 	}
 
-	sub_6FC385A0(pGame, pRoom);
+	GAME_ActivateRoom(pGame, pRoom);
 
 	pRoom = COLLISION_GetFreeCoordinatesEx(pRoom, pCoord, 3, 0xBE11, 7);
 	if (!pRoom)

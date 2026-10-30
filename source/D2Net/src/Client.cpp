@@ -24,21 +24,42 @@
 #pragma warning (disable: 28159)
 
 
+//1.10f: D2Net.0x6FC0B088
+//1.14d: 0x00882CE8
 CRITICAL_SECTION gClientCriticalSection;
+//1.10f: D2Net.0x6FC0B0A0
+//1.14d: 0x00882CDC
 D2NetQueuedPacketStrc* gpSystemPacketList;
+//1.10f: D2Net.0x6FC0B0A4
+//1.14d: 0x00882B38
 sockaddr_in gHostSockAddr;
+//1.10f: D2Net.0x6FC0B0B4
+//1.14d: 0x00882CE4
 D2NetQueuedPacketStrc* gpGamePacketList;
+//1.10f: D2Net.0x6FC0B0B8
+//1.14d: 0x00882B34
 D2NetReceiveBufferStrc* gpReceiveBuffer;
+//1.10f: D2Net.0x6FC0B0BC
+//1.14d: 0x00882CD8
 HANDLE ghReceiveThread;
+//1.10f: D2Net.0x6FC0B0C0
+//1.14d: 0x00730AE0
 SOCKET gClientSocket;
+//1.10f: D2Net.0x6FC0B0C4
+//1.14d: 0x00882CE0
 HANDLE ghConnectThread;
+//1.10f: D2Net.0x6FC0B0C8
+//1.14d: 0x00882B48
 WSADATA gWSAData;
+//1.10f: D2Net.0x6FC0B258
+//1.14d: 0x00882B30
 DWORD gdwThreadId;
 BOOL gbStopReceiveThread;
 BOOL gbConnected;
 
 
 //D2Net.0x6FC01000 (#10017)
+//1.14d: 0x0052A640
 int32_t __stdcall CLIENT_IsConnected()
 {
 	if (NET_IsLocalConnection())
@@ -59,6 +80,7 @@ int32_t __stdcall CLIENT_IsConnected()
 }
 
 //D2Net.0x6FC01040
+//1.14d: 0x0052A680
 DWORD __stdcall CLIENT_ConnectToHost(void* szHostAddress)
 {
 	gbStopReceiveThread = 0;
@@ -92,6 +114,7 @@ DWORD __stdcall CLIENT_ConnectToHost(void* szHostAddress)
 }
 
 //D2Net.0x6FC01120 (#10025)
+//1.14d: 0x0052B050
 int32_t __stdcall CLIENT_GetConnectionStatus()
 {
 	if (NET_IsLocalConnection())
@@ -124,6 +147,7 @@ int32_t __stdcall CLIENT_GetConnectionStatus()
 }
 
 //D2Net.0x6FC011B0 (#10000)
+//1.14d: 0x0052A750
 int32_t __stdcall CLIENT_Initialize(int32_t nConnectionMode, const char* szHostAddress)
 {
 	gpGamePacketList = nullptr;
@@ -147,6 +171,7 @@ int32_t __stdcall CLIENT_Initialize(int32_t nConnectionMode, const char* szHostA
 }
 
 //D2Net.0x6FC01240 (#10001)
+//1.14d: 0x0052A7E0
 void __stdcall CLIENT_Release()
 {
 	D2_LOCK(&gClientCriticalSection);
@@ -191,18 +216,21 @@ void __stdcall CLIENT_Release()
 }
 
 //D2Net.0x6FC01300 (#10007)
+//1.14d: 0x0052A890
 int32_t __stdcall CLIENT_DequeueGamePacket(uint8_t* pBuffer, uint32_t nBufferSize)
 {
 	return NET_DequeueFirstPacketFromList(&gClientCriticalSection, &gpGamePacketList, pBuffer, nBufferSize);
 }
 
 //D2Net.0x6FC01310 (#10008)
+//1.14d: 0x0052A8B0
 int32_t __stdcall CLIENT_DequeueSystemPacket(uint8_t* pBuffer, uint32_t nBufferSize)
 {
 	return NET_DequeueFirstPacketFromList(&gClientCriticalSection, &gpSystemPacketList, pBuffer, nBufferSize);
 }
 
 //D2Net.0x6FC01320
+//1.14d: 0x0052AB00
 DWORD __stdcall CLIENT_ReceiveThreadProc(void* pUnused)
 {
 	BOOL bCompressionEnabled = FALSE;
@@ -334,6 +362,7 @@ DWORD __stdcall CLIENT_ReceiveThreadProc(void* pUnused)
 }
 
 //D2Net.0x6FC015C0
+//1.14d: 0x0052A8D0
 int32_t __stdcall CLIENT_ParseReceiveBuffer()
 {
 	D2NetReceiveBufferStrc* pPacketBuffer = gpReceiveBuffer;
@@ -449,6 +478,7 @@ int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t n
 }
 
 //D2Net.0x6FC01810
+//1.14d: 0x0052AEB0
 void __fastcall CLIENT_EnqueuePacketsFromLocalServer(D2NetReceiveBufferStrc* pBuffer, int32_t nBufferSize)
 {
 	D2NetReceiveBufferStrc* pPacketBuffer = pBuffer;
@@ -522,6 +552,7 @@ void __fastcall CLIENT_EnqueuePacketsFromLocalServer(D2NetReceiveBufferStrc* pBu
 }
 
 //D2Net.0x6FC019A0 (#10013)
+//1.14d: 0x0052AFE0
 void __stdcall CLIENT_GetLocalIpAddressString(char* szBuffer)
 {
 	sockaddr_in localSockAddr = {};

@@ -23,23 +23,49 @@ struct D2ItemTypesTxt
 };
 
 
+//1.10f: D2Win.0x6F8FD650
+//1.14d: 0x0087E838
 D2CompositeUnitStrc* dword_6F8FD650;
+//1.10f: D2Win.0x6F8FD654
+//1.14d: 0x0087E83C
 D2CofNodeStrc* dword_6F8FD654;
 
+//1.10f: D2Win.0x6F8FD218
+//1.14d: 0x0087E82C
 uint8_t byte_6F8FD218[10];
+//1.10f: D2Win.0x6F8FD224
+//1.14d: 0x0087D810
 uint8_t byte_6F8FD224[10];
 
 char byte_6F8FD678[4];
 
+//1.10f: D2Win.0x6F8FD65C
+//1.14d: 0x0087E844
 D2CellFileStrc* ghSquelchCelFile_6F8FD65C;
+//1.10f: D2Win.0x6F8FD660
+//1.14d: 0x0087E848
 int gnSquelchCelFileFrameCount_6F8FD660;
+//1.10f: D2Win.0x6F8FD668
+//1.14d: 0x0087E850
 D2CellFileStrc* ghSelectedCelFile_6F8FD668;
+//1.10f: D2Win.0x6F8FD66C
+//1.14d: 0x0087E854
 int gnSelectedCelFileFrameCount_6F8FD66C;
 
+//1.10f: D2Win.0x6F8BCF94
+//1.14d: 0x0072EF2C
 int dword_6F8BCF94 = 1;
+//1.10f: D2Win.0x6F8FD244
+//1.14d: 0x0087D82C
 D2ItemTypesTxt* gpItemTypesTxt_6F8FD244;
+//1.10f: D2Win.0x6F8BC0A4
+//1.14d: 0x0072E04C
 int dword_6F8BC0A4;
+//1.10f: D2Win.0x6F8BC0F8
+//1.14d: 0x0072E0B4
 int gnPlayerModeTokenTblSize_6F8BC0F8;
+//1.10f: D2Win.0x6F8BC154
+//1.14d: 0x0072E15C
 int dword_6F8BC154[15] =
 {
 	0,
@@ -58,6 +84,8 @@ int dword_6F8BC154[15] =
 	' 1th',
 	' 2th',
 };
+//1.10f: D2Win.0x6F8BC190
+//1.14d: 0x0072E198
 int dword_6F8BC190 = 15;
 
 
@@ -169,7 +197,7 @@ int dword_6F8BC190 = 15;
 //}
 
 //D2Win.0x6F8A1250) --------------------------------------------------------
-D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, unsigned int nMode, int* a4, int* a5, int a6)
+D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* pGfxInfo, unsigned int nClass, unsigned int nMode, int* pUnused1, int* pUnused2, int dwWeaponClass)
 {
 //	unsigned int v6; // ebp@1
 //	int v7; // eax@4
@@ -200,21 +228,21 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //	char v32; // [sp+14Bh] [bp-1h]@10
 //
 //	v6 = nClass;
-//	v28 = a1;
-//	if (!a1)
+//	v28 = pGfxInfo;
+//	if (!pGfxInfo)
 //	{
 //		FOG_DisplayAssert("ptGfxInfo", __FILE__, __LINE__);
 //		exit(-1);
 //	}
-//	v7 = *(DWORD*)a1;
-//	if (*(DWORD*)a1)
+//	v7 = *(DWORD*)pGfxInfo;
+//	if (*(DWORD*)pGfxInfo)
 //	{
 //		while (1)
 //		{
 //			nMode2 = nMode;
 //			if (*(DWORD*)(*(DWORD*)v7 + 4) == nMode)
 //			{
-//				if (*(DWORD*)(*(DWORD*)v7 + 12) == a6)
+//				if (*(DWORD*)(*(DWORD*)v7 + 12) == dwWeaponClass)
 //					break;
 //			}
 //			v7 = *(DWORD*)(v7 + 4);
@@ -241,12 +269,12 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			exit(-1);
 //		}
 //		v9 = dword_6F8BC040[nClass];
-//		LOBYTE(v25) = a6 & (((BYTE)a6 == 32) - 1);
+//		LOBYTE(v25) = dwWeaponClass & (((BYTE)dwWeaponClass == 32) - 1);
 //		v26 = v9;
 //		v10 = dword_6F8BC0A8[nMode2];
-//		BYTE1(v25) = BYTE1(a6) & ((BYTE1(a6) == 32) - 1);
+//		BYTE1(v25) = BYTE1(dwWeaponClass) & ((BYTE1(dwWeaponClass) == 32) - 1);
 //		v27 = v10;
-//		HIWORD(v25) = (unsigned __int8)(BYTE2(a6) & ((BYTE2(a6) == 32) - 1));
+//		HIWORD(v25) = (unsigned __int8)(BYTE2(dwWeaponClass) & ((BYTE2(dwWeaponClass) == 32) - 1));
 //		v22 = v9 & (((BYTE)v9 == 32) - 1);
 //		v23 = BYTE1(v26) & ((BYTE1(v9) == 32) - 1);
 //		v24 = (unsigned __int8)(BYTE2(v9) & ((BYTE2(v9) == 32) - 1));
@@ -272,7 +300,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //		v15 = dword_6F8FD654;
 //		if (dword_6F8FD654)
 //		{
-//			while (*(DWORD*)(v15 + 4) != nMode2 || *(DWORD*)(v15 + 8) != v6 || *(DWORD*)(v15 + 12) != a6)
+//			while (*(DWORD*)(v15 + 4) != nMode2 || *(DWORD*)(v15 + 8) != v6 || *(DWORD*)(v15 + 12) != dwWeaponClass)
 //			{
 //				v15 = *(DWORD*)(v15 + 24);
 //				if (!v15)
@@ -289,7 +317,7 @@ D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, u
 //			*((DWORD*)v16 + 1) = nMode;
 //			*((DWORD*)v16 + 2) = v6;
 //			*(DWORD*)v16 = v17;
-//			*((DWORD*)v16 + 3) = a6;
+//			*((DWORD*)v16 + 3) = dwWeaponClass;
 //			*((DWORD*)v16 + 6) = dword_6F8FD654;
 //			*((DWORD*)v16 + 7) = 0;
 //			if (dword_6F8FD654)
@@ -1291,7 +1319,7 @@ void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* 
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
-void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int bUnlinkAndFree)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -1309,11 +1337,11 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 
 		if (dword_6F8FD654)
 		{
-			--pRemCofNode->unk0x00;
-			if (pRemCofNode->unk0x00 <= 0)
+			--pRemCofNode->nRefCount;
+			if (pRemCofNode->nRefCount <= 0)
 			{
-				D2CofNodeStrc* v8 = pRemCofNode->unk0x1C;
-				D2CofNodeStrc* v9 = pRemCofNode->unk0x18;
+				D2CofNodeStrc* v8 = pRemCofNode->pPrev;
+				D2CofNodeStrc* v9 = pRemCofNode->pNext;
 
 				D2_FREE(pRemCofNode->pCofData);
 				pRemCofNode->pCofData = nullptr;
@@ -1322,12 +1350,12 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 				{
 					if (v9)
 					{
-						v8->unk0x18 = v9;
-						v9->unk0x1C = v8;
+						v8->pNext = v9;
+						v9->pPrev = v8;
 					}
 					else
 					{
-						v8->unk0x18 = nullptr;
+						v8->pNext = nullptr;
 					}
 				}
 				else
@@ -1335,7 +1363,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 					dword_6F8FD654 = v9;
 					if (v9)
 					{
-						v9->unk0x1C = nullptr;
+						v9->pPrev = nullptr;
 					}
 				}
 				D2_FREE(pRemCofNode);
@@ -1355,16 +1383,16 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 		pCompositeUnit->pEmblemCellFile = nullptr;
 	}
 
-	if (a2)
+	if (bUnlinkAndFree)
 	{
-		D2CompositeUnitStrc* v11 = pCompositeUnit->unk0xC8;
+		D2CompositeUnitStrc* v11 = pCompositeUnit->pPrev;
 		D2CompositeUnitStrc* v12 = pCompositeUnit->pNext;
 		if (v11)
 		{
 			v11->pNext = v12;
 			if (v12)
 			{
-				v12->unk0xC8 = v11;
+				v12->pPrev = v11;
 			}
 		}
 		else
@@ -1372,7 +1400,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 			dword_6F8FD650 = pCompositeUnit->pNext;
 			if (v12)
 			{
-				v12->unk0xC8 = nullptr;
+				v12->pPrev = nullptr;
 			}
 		}
 		D2_FREE(pCompositeUnit);
@@ -1380,19 +1408,21 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 }
 
 //D2Win.0x6F8A2BD0 (#10154)
-void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a2, const Unicode* a3, const Unicode* a4, const Unicode* a5, int a6, int a7)
+//1.14d: 0x00504270
+void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* wszAccountName, const Unicode* wszCharName, const Unicode* wszGuildTag, const Unicode* wszRealmName, int nCharLevel, int dwProductCode)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	Unicode::strcpy(pCompositeUnit->unk0xCC, a2);
-	Unicode::strcpy(pCompositeUnit->unk0x14C, a3);
-	Unicode::strcpy(pCompositeUnit->unk0x1CC, a4);
-	Unicode::strcpy(pCompositeUnit->unk0x1EC, a5);
-	pCompositeUnit->unk0x22C = a6;
-	pCompositeUnit->unk0x230 = a7;
+	Unicode::strcpy(pCompositeUnit->wszAccountName, wszAccountName);
+	Unicode::strcpy(pCompositeUnit->wszCharName, wszCharName);
+	Unicode::strcpy(pCompositeUnit->wszGuildTag, wszGuildTag);
+	Unicode::strcpy(pCompositeUnit->wszRealmName, wszRealmName);
+	pCompositeUnit->nCharLevel = nCharLevel;
+	pCompositeUnit->dwProductCode = dwProductCode;
 }
 
 //D2Win.0x6F8A2C50 (#10143)
+//1.14d: 0x005042F0
 BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -1407,10 +1437,10 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 			D2_ASSERT(pCofData);
 
 			pCompositeUnit->nMode = nMode;
-			pCompositeUnit->unk0x08 = 0;
-			pCompositeUnit->unk0x0C = pCofData->unk0x01;
-			pCompositeUnit->unk0x10 = pCofData->unk0x18;
-			pCompositeUnit->unk0x05 = pCofData->unk0x02;
+			pCompositeUnit->nFrame = 0;
+			pCompositeUnit->nFrameCount = pCofData->nFramesPerDirection;
+			pCompositeUnit->nAnimSpeed = pCofData->nAnimSpeed;
+			pCompositeUnit->nDirections = pCofData->nDirections;
 
 			return TRUE;
 		}
@@ -1676,7 +1706,8 @@ void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinField
 //}
 
 //D2Win.0x6F8A32B0
-BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
+//1.14d: 0x00504A20
+BOOL __stdcall D2COMP_IsItemTypeDescendant(int a1, int nItemType)
 {
 	if (!nItemType)
 	{
@@ -1720,6 +1751,7 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 }
 
 //D2Win.0x6F8A3360 (#10159)
+//1.14d: 0x00504D30
 void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSelectedCelFile)
 {
 	ghSquelchCelFile_6F8FD65C = pSquelchCelFile;
@@ -1730,6 +1762,7 @@ void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSel
 
 //D2Win.0x6F8A3390 (#10144)
 //TODO: ...
+//1.14d: 0x005066C0
 void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentsColors)
 {
 	//D2CompositeUnitStrc* v4; // esi@1
@@ -1824,7 +1857,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 	//	++v16;
 	//}
 	//while ((unsigned int)&v16[-40 - (_DWORD)v4] < 16);
-	//if (!sub_6F8A3570(v4) || D2Win_10143(v4, nMode))
+	//if (!D2COMP_ValidateAndLoadCOFForUnit(v4) || D2Win_10143(v4, nMode))
 	//{
 	//	v4->unk0xC8 = 0;
 	//	v4->pNext = dword_6F8FD650;
@@ -1835,7 +1868,8 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 }
 
 //D2Win.0x6F8A3570
-int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
+//1.14d: 0x00504040
+int __fastcall D2COMP_ValidateAndLoadCOFForUnit(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2199,11 +2233,11 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //					v6 = *(DWORD*)(v5 + 128);
 //				}
 //				v22 = 1;
-//				if (!sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 3)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 51)
-//					&& !sub_6F8A32B0(*(WORD*)(v5 + 286), 37)
-//					|| sub_6F8A32B0(*(WORD*)(v5 + 286), 75))
+//				if (!D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 45)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 3)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 51)
+//					&& !D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 37)
+//					|| D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 75))
 //					v22 = 0;
 //				v7 = 0;
 //				if (v20 <= 0)
@@ -2212,10 +2246,10 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //					if (v22 == 1)
 //					{
 //						for (i = v20;
-//							 sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 45)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 45)
-//							 || sub_6F8A32B0(*(int*)((char*)dword_6F8BC1E0 + i), 50)
-//							 && sub_6F8A32B0(*(WORD*)(v5 + 286), 50)
+//							 D2COMP_IsItemTypeDescendant(*(int*)((char*)dword_6F8BC1E0 + i), 45)
+//							 && D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 45)
+//							 || D2COMP_IsItemTypeDescendant(*(int*)((char*)dword_6F8BC1E0 + i), 50)
+//							 && D2COMP_IsItemTypeDescendant(*(WORD*)(v5 + 286), 50)
 //							 || *(int*)((char*)dword_6F8C1520 + i);
 //							 i += 12)
 //							++v4;
@@ -2325,7 +2359,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				v4 = dword_6F8FD250[v5];
 //		}
 //		v6 = dword_6F8C1528[3 * v5];
-//		if ((v4 == 13 || v4 == 14) && a2 != 6 || sub_6F8A32B0(v6, 50))
+//		if ((v4 == 13 || v4 == 14) && a2 != 6 || D2COMP_IsItemTypeDescendant(v6, 50))
 //			v4 = dword_6F8BC1DC[3 * *(BYTE*)(v2 + 5)];
 //	}
 //	v7 = 0;
@@ -2333,7 +2367,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //	{
 //		v8 = *(BYTE*)(v2 + 6);
 //		v7 = v11 ? dword_6F8FD250[v8] : dword_6F8C1524[3 * v8];
-//		if (((v9 = dword_6F8C1528[3 * v8], v7 == 13) || v7 == 14) && v12 != 6 || sub_6F8A32B0(v9, 50))
+//		if (((v9 = dword_6F8C1528[3 * v8], v7 == 13) || v7 == 14) && v12 != 6 || D2COMP_IsItemTypeDescendant(v9, 50))
 //			v7 = dword_6F8BC1DC[3 * *(BYTE*)(v2 + 6)];
 //	}
 //	if ((v4 == 13 || v4 == 14) && v12 != 6)
@@ -2450,7 +2484,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //	v3 = a2;
 //	if ((a1 == 1 || a1 == 2 || a1 == 3 || a1 == 4) && *(BYTE*)a2 > 3u)
 //	{
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)a2], 3))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)a2], 3))
 //		{
 //			v4 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2468,7 +2502,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_13:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 16))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 16))
 //		{
 //			v6 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2486,7 +2520,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_21:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 15))
+//		if (D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 15))
 //		{
 //			v8 = 0;
 //			if (dword_6F8FD230 <= 0)
@@ -2504,7 +2538,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //				LABEL_29:
 //			*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //		}
-//		if (!sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 51) || (v10 = 0, dword_6F8FD230 <= 0))
+//		if (!D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 51) || (v10 = 0, dword_6F8FD230 <= 0))
 //			goto LABEL_37;
 //		v11 = (int)dword_6F8C1520;
 //		while (*(DWORD*)v11 != dword_6F8BC1D8[3 * *(BYTE*)v3])
@@ -2519,9 +2553,9 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 //			LABEL_37:
 //		*(BYTE*)v3 = *(BYTE*)v3 % 3 + 1;
 //	}
-//	if (!v2 && !sub_6F8A32B0(dword_6F8C1528[3 * *(BYTE*)v3], 37))
+//	if (!v2 && !D2COMP_IsItemTypeDescendant(dword_6F8C1528[3 * *(BYTE*)v3], 37))
 //	{
-//		if (!sub_6F8A32B0(dword_6F8BC1E0[3 * *(BYTE*)v3], 37) || (v12 = 0, dword_6F8FD230 <= 0))
+//		if (!D2COMP_IsItemTypeDescendant(dword_6F8BC1E0[3 * *(BYTE*)v3], 37) || (v12 = 0, dword_6F8FD230 <= 0))
 //			goto LABEL_50;
 //		v13 = (int)dword_6F8C1520;
 //		while (*(DWORD*)v13 != dword_6F8BC1D8[3 * *(BYTE*)v3])
@@ -2543,7 +2577,8 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 
 //D2Win.0x6F8A4260 (#10145)
 //TODO: ...
-void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* a4, BYTE* a5)
+//1.14d: 0x00504F80
+void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentColors)
 {
 	//D2GfxInfoStrc* pGfxInfo; // eax@4
 	//BYTE* v6; // ebx@7
@@ -2572,13 +2607,13 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	FOG_DisplayAssert("ptGfxInfo", __FILE__, __LINE__);
 	//	exit(-1);
 	//}
-	//v6 = a4;
+	//v6 = pComponents;
 	//pGfxInfo->pCofInfo = 0;
 	//pCompositeUnit->pGfxInfo = pGfxInfo;
 	//pCompositeUnit->nUnitIndex = nUnitIndex;
 	//if (nUnitIndex < 7)
 	//{
-	//	v7 = sub_6F8A3DC0(a4, nUnitIndex);
+	//	v7 = sub_6F8A3DC0(pComponents, nUnitIndex);
 	//	pCompositeUnit->nWClassTokenIndex = v7;
 	//	if (!v7)
 	//		return;
@@ -2614,7 +2649,7 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	++v10;
 	//}
 	//while (v12 < 16);
-	//v13 = a5;
+	//v13 = pComponentColors;
 	//v14 = pCompositeUnit->unk0x28;
 	//do
 	//{
@@ -2625,13 +2660,14 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	++v14;
 	//}
 	//while ((unsigned int)&v14[-40 - (_DWORD)pCompositeUnit] < 16);
-	//if (sub_6F8A3570(pCompositeUnit))
+	//if (D2COMP_ValidateAndLoadCOFForUnit(pCompositeUnit))
 	//{
 	//	D2Win_10143(pCompositeUnit, nMode);
 	//}
 }
 
 //D2Win.0x6F8A43C0 (#10146)
+//1.14d: 0x00505100
 void __stdcall D2Win_10146()
 {
 	D2CompositeUnitStrc* pCompositeUnit = dword_6F8FD650;
@@ -2646,12 +2682,14 @@ void __stdcall D2Win_10146()
 }
 
 //D2Win.0x6F8A4400 (#10147)
+//1.14d: 0x00505150
 D2CompositeUnitStrc* __stdcall D2Win_10147()
 {
 	return dword_6F8FD650;
 }
 
 //D2Win.0x6F8A4410 (#10148)
+//1.14d: 0x00505160
 D2CompositeUnitStrc* __stdcall D2Win_10148(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -2660,39 +2698,44 @@ D2CompositeUnitStrc* __stdcall D2Win_10148(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A4440 (#10149)
-void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
+//1.14d: 0x005051A0
+void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t nDirection)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	pCompositeUnit->unk0x04 = D2Clamp(a2, 0ui8, pCompositeUnit->unk0x05);
+	pCompositeUnit->nDirection = D2Clamp(nDirection, 0ui8, pCompositeUnit->nDirections);
 }
 
 //D2Win.0x6F8A4490 (#10150)
+//1.14d: 0x00505200
 uint8_t __stdcall D2Win_10150(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	return pCompositeUnit->unk0x05;
+	return pCompositeUnit->nDirections;
 }
 
 //D2Win.0x6F8A44C0 (#10169)
+//1.14d: 0x00505230
 int __stdcall D2Win_10169(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	return pCompositeUnit->unk0x0C;
+	return pCompositeUnit->nFrameCount;
 }
 
 //D2Win.0x6F8A44F0 (#10151)
-void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int a2)
+//1.14d: 0x00505260
+void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int nFrame)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	const int nMax = pCompositeUnit->unk0x0C << 8;
-	pCompositeUnit->unk0x08 = D2Clamp(a2, 0, nMax);
+	const int nMax = pCompositeUnit->nFrameCount << 8;
+	pCompositeUnit->nFrame = D2Clamp(nFrame, 0, nMax);
 }
 
 //D2Win.0x6F8A4540 (#10152)
+//1.14d: 0x005052B0
 void __stdcall D2Win_10152(D2CompositeUnitStrc* pCompositeUnit, int nX)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -2701,6 +2744,7 @@ void __stdcall D2Win_10152(D2CompositeUnitStrc* pCompositeUnit, int nX)
 }
 
 //D2Win.0x6F8A4570 (#10153)
+//1.14d: 0x005052F0
 void __stdcall D2Win_10153(D2CompositeUnitStrc* pCompositeUnit, int nY)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -2709,6 +2753,7 @@ void __stdcall D2Win_10153(D2CompositeUnitStrc* pCompositeUnit, int nY)
 }
 
 //D2Win.0x6F8A45A0 (#10155)
+//1.14d: 0x00505330
 int __stdcall D2Win_10155(D2CompositeUnitStrc* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -2717,6 +2762,7 @@ int __stdcall D2Win_10155(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A45D0 (#10156)
+//1.14d: 0x00505360
 void __stdcall D2Win_10156(D2CompositeUnitStrc* pCompositeUnit, int nFlags)
 {
 	D2_ASSERT(pCompositeUnit);
@@ -2725,41 +2771,43 @@ void __stdcall D2Win_10156(D2CompositeUnitStrc* pCompositeUnit, int nFlags)
 }
 
 //D2Win.0x6F8A4600 (#10158)
-void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2, uint8_t a3, uint8_t a4)
+//1.14d: 0x005053A0
+void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t nEmblem, uint8_t nEmblemColor1, uint8_t nEmblemColor2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	if (a2 < 1u || a2 > 32u)
+	if (nEmblem < 1u || nEmblem > 32u)
 	{
 		return;
 	}
 
 	char szFile[512] = {};
 
-	wsprintfA(szFile, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", a2 - 1);
+	wsprintfA(szFile, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", nEmblem - 1);
 	pCompositeUnit->pEmblemCellFile = ARCHIVE_LoadCellFile(szFile, 0);
 
-	if (a3 >= 1u && a3 <= 10u)
+	if (nEmblemColor1 >= 1u && nEmblemColor1 <= 10u)
 	{
-		pCompositeUnit->unk0xC0 = byte_6F8FD224[a3 - 1];
+		pCompositeUnit->nEmblemColor1 = byte_6F8FD224[nEmblemColor1 - 1];
 	}
 	else
 	{
-		pCompositeUnit->unk0xC0 = 0;
+		pCompositeUnit->nEmblemColor1 = 0;
 	}
 
-	if (a4 >= 1u && a4 <= 10u)
+	if (nEmblemColor2 >= 1u && nEmblemColor2 <= 10u)
 	{
-		pCompositeUnit->unk0xC1 = byte_6F8FD218[a4 - 1];
+		pCompositeUnit->nEmblemColor2 = byte_6F8FD218[nEmblemColor2 - 1];
 	}
 	else
 	{
-		pCompositeUnit->unk0xC1 = 0;
+		pCompositeUnit->nEmblemColor2 = 0;
 	}
 }
 
 //D2Win.0x6F8A46E0 (#10157)
 //TODO: ...
+//1.14d: 0x00505550
 void __stdcall D2Win_10157()
 {
 //	int v0; // eax@1
@@ -3192,7 +3240,8 @@ void __stdcall D2Win_10157()
 //}
 
 //D2Win.0x6F8A4C10
-void __stdcall sub_6F8A4C10()
+//1.14d: 0x005055D0
+void __stdcall D2COMP_InitEmblemColorTables()
 {
 	constexpr uint8_t byte_6F8BC194[] =
 	{
@@ -3234,19 +3283,20 @@ void __stdcall sub_6F8A4C10()
 }
 
 //D2Win.0x6F8A4C70 (#10161)
-const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
+//1.14d: 0x005068A0
+const char* __stdcall D2Win_10161(int nClass, int nProgress, int bHardcore, BOOL bSoftCore)
 {
 	int v4 = 0;
 
 	if (bSoftCore)
 	{
-		if (a2 >= 5)
+		if (nProgress >= 5)
 		{
-			if (a2 < 10)
+			if (nProgress < 10)
 			{
 				v4 = 1;
 			}
-			else if (a2 < 15)
+			else if (nProgress < 15)
 			{
 				v4 = 2;
 			}
@@ -3258,13 +3308,13 @@ const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
 	}
 	else
 	{
-		if (a2 >= 4)
+		if (nProgress >= 4)
 		{
-			if (a2 < 8)
+			if (nProgress < 8)
 			{
 				v4 = 1;
 			}
-			else if (a2 < 12)
+			else if (nProgress < 12)
 			{
 				v4 = 2;
 			}
@@ -3275,26 +3325,27 @@ const char* __stdcall D2Win_10161(int a1, int a2, int a3, BOOL bSoftCore)
 		}
 	}
 
-	if (a3 && v4)
+	if (bHardcore && v4)
 	{
 		v4 += 3;
 	}
 
-	return D2Win_10160_GetPlayerTitle(a1, v4, bSoftCore);
+	return D2Win_10160_GetPlayerTitle(nClass, v4, bSoftCore);
 }
 
 //D2Win.0x6F8A4CE0 (#10160)
-const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
+//1.14d: 0x00505640
+const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore)
 {
 	if (bSoftCore)
 	{
-		switch (a1)
+		switch (nClass)
 		{
 		case 0:
 		case 1:
 		case 6:
 		case 9:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Slayer ";
@@ -3314,7 +3365,7 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 			break;
 
 		default:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Slayer ";
@@ -3336,13 +3387,13 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 	}
 	else
 	{
-		switch (a1)
+		switch (nClass)
 		{
 		case 0:
 		case 1:
 		case 6:
 		case 9:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Dame ";
@@ -3362,7 +3413,7 @@ const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore)
 			break;
 
 		default:
-			switch (a2)
+			switch (nTitle)
 			{
 			case 1:
 				return "Sir ";

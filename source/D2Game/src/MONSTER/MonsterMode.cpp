@@ -43,13 +43,13 @@
 #pragma pack(push, 1)
 struct D2MonModeInfoTableStrc
 {
-    int32_t unk0x00;
-    int32_t unk0x04;
-    int32_t unk0x08;
+    int32_t bUseRecurringEvent;
+    int32_t bUseAnimationEvents;
+    int32_t bCheckMovingMode;
 };
 #pragma pack(pop)
 
-constexpr D2MonModeInfoTableStrc stru_6FD28738[16] =
+constexpr D2MonModeInfoTableStrc gtMonsterModeEventPolicies[16] =
 {
     { 0, 1, 0 },
     { 0, 1, 0 },
@@ -72,19 +72,19 @@ constexpr D2MonModeInfoTableStrc stru_6FD28738[16] =
 using MonEventFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
 constexpr MonEventFunc gpMonsterEventFunctions[] =
 {
-    D2GAME_MONSTERS_AiFunction01_6FC65080,
-    D2GAME_MONSTERS_AiFunction02_6FC65150,
-    D2GAME_MONSTERS_AiFunction03_6FCF0A70,
+    MONSTERMODE_EventModeChange,
+    MONSTERMODE_EventEndAnimation,
+    AITHINK_ExecuteMonsterAiTick,
     D2GAME_MONSTER_ApplyStatRegen_6FC63440,
     nullptr,
-    D2GAME_MONSTERS_AiFunction06_6FD14370,
-    D2GAME_MONSTERS_AiFunction07_6FC658B0,
-    D2GAME_MONSTERS_AiFunction08_6FC6E870,
-    D2GAME_MONSTERS_AiFunction09_6FD13470,
-    D2GAME_MONSTERS_AiFunction10_6FD13610,
-    D2GAME_MONSTERS_AiFunction11_6FC65920,
+    SKILLS_EventCallback_ActiveState,
+    MONSTERMODE_EventFreeHoverText,
+    MONSTERUNIQUE_EventExecuteUModCallbacks,
+    SKILLS_EventCallback_PeriodicSkillAura,
+    SKILLS_EventCallback_ItemAura,
+    MONSTERMODE_EventClearTargetOverride,
     nullptr,
-    D2GAME_MONSTERS_AiFunction13_6FC65890,
+    MONSTERMODE_EventUpdateStatListExpirations,
     nullptr,
     nullptr,
 };
@@ -92,51 +92,52 @@ static_assert(EVENTTYPE_COUNT == std::size(gpMonsterEventFunctions), "missing ca
 
 constexpr D2MonModeCallbackTableStrc gMonModeCallbacks[16] =
 {
-    { sub_6FC63B30, sub_6FC64280,                                   sub_6FC641D0, 1 },
-    { sub_6FC64310, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
-    { sub_6FC64450, sub_6FC64480,                                   nullptr, 1 },
-    { sub_6FC64540, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  sub_6FC63680, 1 },
-    { sub_6FC645E0, sub_6FC64790,                                   sub_6FC63680, 1 },
-    { sub_6FC645E0, sub_6FC64790,                                   sub_6FC63680, 1 },
-    { sub_6FC64B50, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  sub_6FC63680, 1 },
-    { sub_6FC645E0, sub_6FC64790,                                   sub_6FC63680, 1 },
-    { sub_6FC645E0, sub_6FC64790,                                   sub_6FC63680, 1 },
-    { sub_6FC645E0, sub_6FC64790,                                   sub_6FC63680, 1 },
-    { sub_6FC643D0, sub_6FC643E0,                                   nullptr/*D2GAME_OBJECTS_InitFunction05_Door_6FCA6660*/, 0},
-    { sub_6FC64410, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
-    { sub_6FC642C0, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
-    { sub_6FC64B60, sub_6FC64E20,                                   sub_6FC64CD0, 1 },
-    { sub_6FC64E60, sub_6FC64E90,                                   sub_6FC63680, 1 },
-    { sub_6FC644E0, sub_6FC64510,                                   nullptr, 1 },
+    { MONSTERMODE_StartDeath, MONSTERMODE_UpdateDeath,                                   MONSTERMODE_EndDeath, 1 },
+    { MONSTERMODE_StartNeutral, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
+    { MONSTERMODE_StartWalk, MONSTERMODE_UpdateWalk,                                   nullptr, 1 },
+    { MONSTERMODE_StartGetHit, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartBlock, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartSkill3, MONSTERMODE_UpdateSkill3,                                   nullptr/*D2GAME_OBJECTS_InitFunction05_Door_6FCA6660*/, 0},
+    { MONSTERMODE_StartSkill4, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
+    { MONSTERMODE_StartDead, D2GAME_RemoveModeChangeEventCallback_6FC63B20,  nullptr, 0 },
+    { MONSTERMODE_StartKnockback, MONSTERMODE_UpdateKnockback,                                   MONSTERMODE_EndKnockback, 1 },
+    { MONSTERMODE_StartSequence, MONSTERMODE_UpdateSequence,                                   MONSTERMODE_HandleEndAnimation, 1 },
+    { MONSTERMODE_StartRun, MONSTERMODE_UpdateRun,                                   nullptr, 1 },
 };
 
 constexpr D2MonModeCallbackTableStrc gDiablo_Skill4_Callbacks =
 {
-    sub_6FC645E0, sub_6FC64790,                                     sub_6FC63680, 1
+    MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                     MONSTERMODE_HandleEndAnimation, 1
 };
 
 constexpr D2MonModeCallbackTableStrc gDiablo_Skill3_Callbacks =
 {
-    sub_6FC645E0, sub_6FC64790,                                     sub_6FC63680, 1
+    MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                     MONSTERMODE_HandleEndAnimation, 1
 };
 
 constexpr D2MonModeCallbackTableStrc gTrappedSoul_Attack_Callbacks =
 {
-    sub_6FC645E0, sub_6FC64790,                                     sub_6FC63940, 1
+    MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                     MONSTERMODE_EndTrappedSoulAttack, 1
 };
 
 constexpr D2MonModeCallbackTableStrc gTrappedSoul_Skill_Callbacks =
 {
-    sub_6FC645E0, sub_6FC64790,                                     sub_6FC63A30, 1
+    MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                     MONSTERMODE_EndTrappedSoulSkill, 1
 };
 
 constexpr D2MonModeCallbackTableStrc gShadowMasterWarrior_Skill4_Callbacks =
 {
-    sub_6FC645E0, sub_6FC64790,                                     sub_6FC63680, 1
+    MONSTERMODE_StartAttackOrSkill, MONSTERMODE_UpdateAttackOrSkill,                                     MONSTERMODE_HandleEndAnimation, 1
 };
 
 
 //D2Game.0x6FC62770
+//1.14d: 0x005A4EE0
 int32_t __fastcall D2GAME_IsMonster_6FC62770(D2UnitStrc* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
@@ -148,7 +149,8 @@ int32_t __fastcall D2GAME_IsMonster_6FC62770(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC62780
-void __fastcall sub_6FC62780(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2GameStrc* pGame)
+//1.14d: 0x005A4EF0
+void __fastcall MONSTERMODE_DistributeExperienceIfEligible(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2GameStrc* pGame)
 {
     if (pAttacker && pDefender && !(pDefender->dwFlags & 0x04000000))
     {
@@ -157,9 +159,10 @@ void __fastcall sub_6FC62780(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2Gam
 }
 
 //D2Game.0x6FC627B0
-void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
+//1.14d: 0x005A4F50
+void __fastcall MONSTERMODE_UpdateModeAttackStats(D2UnitStrc* pUnit, int32_t nMode)
 {
-    constexpr int32_t dword_6FD2870C[] =
+    constexpr int32_t nPlayerCountDamageBonus[] =
     {
         0, 0, 8, 16, 24, 32, 40, 48, 56
     };
@@ -176,7 +179,7 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
     }
     
     D2MonSkillInfoStrc monSkillInfo = {};
-    sub_6FD14D20(pUnit, nMode, &monSkillInfo);
+    SKILLS_FillMinionSkillDamage(pUnit, nMode, &monSkillInfo);
 
     D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pUnit, 1);
     if (!pStatList)
@@ -200,13 +203,13 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
 
         if (pGame->nDifficulty != DIFFMODE_NORMAL && nPlayerCount >= 2)
         {
-            if (nPlayerCount >= std::size(dword_6FD2870C))
+            if (nPlayerCount >= std::size(nPlayerCountDamageBonus))
             {
                 nMultiplier = 8 * nPlayerCount - 16;
             }
             else
             {
-                nMultiplier = dword_6FD2870C[nPlayerCount];
+                nMultiplier = nPlayerCountDamageBonus[nPlayerCount];
             }
         }
     }
@@ -354,7 +357,8 @@ void __fastcall sub_6FC627B0(D2UnitStrc* pUnit, int32_t nMode)
 }
 
 //D2Game.0x6FC62D90
-void __fastcall sub_6FC62D90(D2UnitStrc* pUnit, D2GameStrc* pGame)
+//1.14d: 0x005A5490
+void __fastcall MONSTERMODE_AllocateTargetCombat(D2UnitStrc* pUnit, D2GameStrc* pGame)
 {
     D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
@@ -366,7 +370,8 @@ void __fastcall sub_6FC62D90(D2UnitStrc* pUnit, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC62DF0
-void __stdcall sub_6FC62DF0(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+//1.14d: 0x005A54F0
+void __stdcall MONSTERMODE_AddSandLeaperKnockback(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
 {
     if (pDamage->wResultFlags & 4 && D2GAME_GetMonsterBaseId_6FC64B10(pUnit) == MONSTER_SANDLEAPER1 && !STATES_CheckState(pUnit, STATE_FREEZE))
     {
@@ -375,6 +380,7 @@ void __stdcall sub_6FC62DF0(D2UnitStrc* pUnit, D2DamageStrc* pDamage)
 }
 
 //D2Game.0x6FC62E70
+//1.14d: 0x005A5560
 void __fastcall D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
 {
     if (pAttacker && pAttacker->dwUnitType == UNIT_MONSTER)
@@ -398,7 +404,8 @@ void __fastcall D2GAME_MONSTER_ApplyCriticalDamage_6FC62E70(D2UnitStrc* pAttacke
 }
 
 //D2Game.0x6FC62F50
-uint8_t __fastcall sub_6FC62F50(D2UnitStrc* pUnit)
+//1.14d: 0x005A5650
+uint8_t __fastcall MONSTERMODE_GetHpPercent128(D2UnitStrc* pUnit)
 {
     if (pUnit)
     {
@@ -414,6 +421,7 @@ uint8_t __fastcall sub_6FC62F50(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC62F90
+//1.14d: 0x005A61F0
 void __fastcall D2GAME_MONSTERMODE_ResetVelocityParams_6FC62F90(D2UnitStrc* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
@@ -426,11 +434,12 @@ void __fastcall D2GAME_MONSTERMODE_ResetVelocityParams_6FC62F90(D2UnitStrc* pUni
 }
 
 //D2Game.0x6FC62FC0
-void __fastcall D2GAME_MONSTERMODE_SetVelocityParams_6FC62FC0(D2AiParamStrc* pAiParam, int32_t a2, int32_t nVel, uint8_t a4)
+//1.14d: 0x005A6260
+void __fastcall D2GAME_MONSTERMODE_SetVelocityParams_6FC62FC0(D2AiParamStrc* pAiParam, int32_t nPathType, int32_t nVel, uint8_t nNewDistance)
 {
-    if (a2)
+    if (nPathType)
     {
-        pAiParam->unk0x18 = a2;
+        pAiParam->unk0x18 = nPathType;
     }
 
     if (nVel)
@@ -438,26 +447,29 @@ void __fastcall D2GAME_MONSTERMODE_SetVelocityParams_6FC62FC0(D2AiParamStrc* pAi
         pAiParam->nVelocity = nVel;
     }
 
-    if (a4)
+    if (nNewDistance)
     {
-        pAiParam->unk0x20 = std::min(a4, 77ui8);
+        pAiParam->unk0x20 = std::min(nNewDistance, 77ui8);
     }
 }
 
 //D2Game.0x6FC62FF0
+//1.14d: 0x005A6490
 D2AiParamStrc* __fastcall D2GAME_MONSTERMODE_AllocParams_6FC62FF0(D2GameStrc* pGame)
 {
     return D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2AiParamStrc);
 }
 
 //D2Game.0x6FC63020
+//1.14d: 0x005A64D0
 void __fastcall D2GAME_MONSTERMODE_FreeParams_6FC63020(D2GameStrc* pGame, D2AiParamStrc* pAiParam)
 {
     D2_FREE_POOL(pGame->pMemoryPool, pAiParam);
 }
 
 //D2Game.0x6FC63040
-void __fastcall D2GAME_MONSTERMODE_Unk_6FC63040(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange, int32_t a3)
+//1.14d: 0x005A6830
+void __fastcall MONSTERMODE_TryDropTreasure(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange, int32_t nUnused)
 {
     D2UnitStrc* pUnit = pModeChange->pUnit;
     D2_ASSERT(pUnit);
@@ -483,12 +495,13 @@ void __fastcall D2GAME_MONSTERMODE_Unk_6FC63040(D2GameStrc* pGame, D2ModeChangeS
 
         D2_ASSERT(pMonStatsTxtRecord);
 
-        sub_6FC631B0(pGame, pUnit, 0, pModeChange);
+        MONSTERMODE_DropTreasure(pGame, pUnit, 0, pModeChange);
     }
 }
 
 //D2Game.0x6FC631B0
-void __fastcall sub_6FC631B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a7, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A6600
+void __fastcall MONSTERMODE_DropTreasure(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t bIgnoreNoDrop, D2ModeChangeStrc* pModeChange)
 {    
     D2_ASSERT(pUnit);
 
@@ -569,11 +582,12 @@ void __fastcall sub_6FC631B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a7, D
         }
     }
 
-    sub_6FC52110(pGame, pUnit, pModeChange->pTargetUnit, nTCId, 0, nItemLevel, a7, nullptr, nullptr, 0);
+    ITEMS_DropTreasureClassById(pGame, pUnit, pModeChange->pTargetUnit, nTCId, 0, nItemLevel, bIgnoreNoDrop, nullptr, nullptr, 0);
 }
 
 //D2Game.0x6FC63440
-void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+//1.14d: 0x005A6920
+void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnused1, int32_t nUnused2)
 {
     pUnit = pUnit;
 
@@ -617,13 +631,13 @@ void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2Unit
             STATLIST_SetUnitStat(pUnit, STAT_HITPOINTS, nNewHp, 0);
 
             const uint8_t nLastSentHpPct = STATLIST_UnitGetStatValue(pUnit, STAT_LAST_SENT_HP_PCT, 0);
-            const uint8_t nNewSentHpPct = sub_6FC62F50(pUnit);
+            const uint8_t nNewSentHpPct = MONSTERMODE_GetHpPercent128(pUnit);
             int32_t nHpPctDiff = nLastSentHpPct - nNewSentHpPct;
             nHpPctDiff = std::abs(nHpPctDiff);
 
             if (nHpPctDiff > 4)
             {
-                sub_6FCC6270(pUnit, nNewSentHpPct);
+                SUNITMSG_QueueLifeUpdate(pUnit, nNewSentHpPct);
                 STATLIST_SetUnitStat(pUnit, STAT_LAST_SENT_HP_PCT, nNewSentHpPct, 0);
             }
 
@@ -674,6 +688,7 @@ void __fastcall D2GAME_MONSTER_ApplyStatRegen_6FC63440(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC63650
+//1.14d: 0x00451F80
 D2MonStatsTxt* __fastcall MONSTERMODE_GetMonStatsTxtRecord(int32_t nMonsterId)
 {
     if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
@@ -686,7 +701,7 @@ D2MonStatsTxt* __fastcall MONSTERMODE_GetMonStatsTxtRecord(int32_t nMonsterId)
 
 //D2Game.0x6FC63680
 //1.14d: 0x005A8030
-void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall MONSTERMODE_HandleEndAnimation(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
     {
@@ -773,7 +788,7 @@ void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
     {
         if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
         {
-            sub_6FCBDE90(pUnit, 0);
+            SUNIT_SetUninterruptable(pUnit, 0);
 
             if (SUNIT_IsDead(pUnit))
             {
@@ -789,7 +804,8 @@ void __fastcall sub_6FC63680(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC63940
-void __fastcall sub_6FC63940(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A8330
+void __fastcall MONSTERMODE_EndTrappedSoulAttack(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     UNITS_SetUsedSkill(pUnit, nullptr);
 
@@ -822,7 +838,8 @@ void __fastcall sub_6FC63940(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC63A30
-void __fastcall sub_6FC63A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A83E0
+void __fastcall MONSTERMODE_EndTrappedSoulSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     UNITS_SetUsedSkill(pUnit, nullptr);
 
@@ -855,6 +872,7 @@ void __fastcall sub_6FC63A30(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC63B20
+//1.14d: 0x005A6DE0
 int32_t __fastcall D2GAME_RemoveModeChangeEventCallback_6FC63B20(D2GameStrc* pGame, D2UnitStrc* pMonster)
 {
     D2GAME_EVENTS_Delete_6FC34840(pGame, pMonster, EVENTTYPE_MODECHANGE, 0);
@@ -862,12 +880,13 @@ int32_t __fastcall D2GAME_RemoveModeChangeEventCallback_6FC63B20(D2GameStrc* pGa
 }
 
 //D2Game.0x6FC63B30
-int32_t __fastcall sub_6FC63B30(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A6FF0
+int32_t __fastcall MONSTERMODE_StartDeath(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, MONMODE_DEATH);
-    sub_6FC63E80(pGame, pModeChange->pUnit, pModeChange->unk0x14[0]);
-    D2GAME_MONSTERMODE_Unk_6FC63040(pGame, pModeChange, 0);
-    sub_6FC68240(pGame->pMonReg, pModeChange->pUnit);
+    MONSTERMODE_CleanupDeath(pGame, pModeChange->pUnit, pModeChange->unk0x14[0]);
+    MONSTERMODE_TryDropTreasure(pGame, pModeChange, 0);
+    MONSTERREGION_RecordMonsterKill(pGame->pMonReg, pModeChange->pUnit);
     DUNGEON_SaveKilledUnitGUID(UNITS_GetRoom(pModeChange->pUnit), pModeChange->pUnit ? pModeChange->pUnit->dwUnitId : -1);
 
     if (!pModeChange->pUnit)
@@ -887,7 +906,7 @@ int32_t __fastcall sub_6FC63B30(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
         {
             const int32_t nX = CLIENTS_GetUnitX(pModeChange->pUnit);
             const int32_t nY = CLIENTS_GetUnitY(pModeChange->pUnit);
-            D2UnitStrc* pMissile = sub_6FD11420(pGame, MISSILE_MONSTERCORPSEEXPLODE, pModeChange->pUnit, 0, 1, 0, 0, nX, nY, 1);
+            D2UnitStrc* pMissile = SKILLS_CreateMissileAtOffset(pGame, MISSILE_MONSTERCORPSEEXPLODE, pModeChange->pUnit, 0, 1, 0, 0, nX, nY, 1);
             if (pMissile)
             {
                 D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
@@ -910,17 +929,18 @@ int32_t __fastcall sub_6FC63B30(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
         }
         else if (pMonStatsTxtRecord->nBaseId == MONSTER_SIEGEBEAST1)
         {
-            sub_6FC64090(pGame, pModeChange->pUnit);
+            MONSTERMODE_HandleSiegeBeastDeath(pGame, pModeChange->pUnit);
             return 1;
         }
     }
 
-    sub_6FC63FD0(pGame, pModeChange->pUnit);
+    MONSTERMODE_ApplyDeathAreaDamage(pGame, pModeChange->pUnit);
     return 1;
 }
 
 //D2Game.0x6FC63E80
-void __fastcall sub_6FC63E80(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDir)
+//1.14d: 0x005A6520
+void __fastcall MONSTERMODE_CleanupDeath(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDir)
 {
     if (!pUnit)
     {
@@ -938,7 +958,7 @@ void __fastcall sub_6FC63E80(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDir)
     AIGENERAL_UpdateMinionList(pUnit);
 
     D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
-    D2GAME_TARGETS_Last_6FC40380(pGame, pUnit);
+    TARGETS_RemoveUnitNode(pGame, pUnit);
 
     pUnit->dwFlags &= 0xFFFF7FF3u;
 
@@ -961,7 +981,8 @@ void __fastcall sub_6FC63E80(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD dwDir)
 }
 
 //D2Game.0x6FC63FD0
-void __fastcall sub_6FC63FD0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
+//1.14d: 0x005A6DF0
+void __fastcall MONSTERMODE_ApplyDeathAreaDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker)
 {
     for (D2UnitStrc* i = UNITS_GetRoom(pAttacker)->pUnitFirst; i; i = i->pRoomNext)
     {
@@ -983,7 +1004,8 @@ void __fastcall sub_6FC63FD0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
 }
 
 //D2Game.0x6FC64090
-void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A6EB0
+void __fastcall MONSTERMODE_HandleSiegeBeastDeath(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2UnitStrc* pMonster = SUNIT_GetOwner(pGame, pUnit);
     if (pMonster)
@@ -1008,7 +1030,8 @@ void __fastcall sub_6FC64090(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC641D0
-void __fastcall sub_6FC641D0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
+//1.14d: 0x005A72B0
+void __fastcall MONSTERMODE_EndDeath(D2GameStrc* pGame, D2UnitStrc* pAttacker)
 {
     if (pAttacker)
     {
@@ -1039,7 +1062,8 @@ void __fastcall sub_6FC641D0(D2GameStrc* pGame, D2UnitStrc* pAttacker)
 }
 
 //D2Game.0x6FC64280
-int32_t __fastcall sub_6FC64280(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A7350
+int32_t __fastcall MONSTERMODE_UpdateDeath(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (!MONSTERS_IsSandLeaper(pUnit, 0))
     {
@@ -1047,7 +1071,7 @@ int32_t __fastcall sub_6FC64280(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return 1;
     }
 
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
 
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
@@ -1059,13 +1083,14 @@ int32_t __fastcall sub_6FC64280(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC642C0
-int32_t __fastcall sub_6FC642C0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7390
+int32_t __fastcall MONSTERMODE_StartDead(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (pModeChange->pUnit)
     {
         if (pModeChange->pUnit->dwAnimMode)
         {
-            sub_6FC63E80(pGame, pModeChange->pUnit, pModeChange->unk0x14[0]);
+            MONSTERMODE_CleanupDeath(pGame, pModeChange->pUnit, pModeChange->unk0x14[0]);
         }
     }
 
@@ -1077,7 +1102,8 @@ int32_t __fastcall sub_6FC642C0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64310
-int32_t __fastcall sub_6FC64310(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A73E0
+int32_t __fastcall MONSTERMODE_StartNeutral(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 1);
 
@@ -1118,16 +1144,18 @@ int32_t __fastcall sub_6FC64310(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC643D0
-int32_t __fastcall sub_6FC643D0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7490
+int32_t __fastcall MONSTERMODE_StartSkill3(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 10);
     return 1;
 }
 
 //D2Game.0x6FC643E0
-int32_t __fastcall sub_6FC643E0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A74A0
+int32_t __fastcall MONSTERMODE_UpdateSkill3(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
     {
@@ -1138,7 +1166,8 @@ int32_t __fastcall sub_6FC643E0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64410
-int32_t __fastcall sub_6FC64410(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A74E0
+int32_t __fastcall MONSTERMODE_StartSkill4(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 11);
     EVENT_SetEvent(pGame, pModeChange->pUnit, EVENTTYPE_AITHINK, pGame->dwGameFrame + 15, 0, 0);
@@ -1146,7 +1175,8 @@ int32_t __fastcall sub_6FC64410(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64450
-int32_t __fastcall sub_6FC64450(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7520
+int32_t __fastcall MONSTERMODE_StartWalk(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (PATH_GetNumberOfPathPoints(pModeChange->pUnit->pDynamicPath))
     {
@@ -1159,7 +1189,7 @@ int32_t __fastcall sub_6FC64450(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 
 //D2Game.0x6FC64480
 //1.14d: 0x005A8490
-int32_t __fastcall sub_6FC64480(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall MONSTERMODE_UpdateWalk(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (STATES_CheckState(pUnit, STATE_BLAZE))
     {
@@ -1171,9 +1201,9 @@ int32_t __fastcall sub_6FC64480(D2GameStrc* pGame, D2UnitStrc* pUnit)
         SKILLS_CreateSpiderLayMissile(pGame, pUnit);
     }
 
-    if (sub_6FCBC930(pGame, pUnit) == 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
     {
-        sub_6FC63680(pGame, pUnit);
+        MONSTERMODE_HandleEndAnimation(pGame, pUnit);
         return 2;
     }
 
@@ -1181,7 +1211,8 @@ int32_t __fastcall sub_6FC64480(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC644E0
-int32_t __fastcall sub_6FC644E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7550
+int32_t __fastcall MONSTERMODE_StartRun(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (PATH_GetNumberOfPathPoints(pModeChange->pUnit->pDynamicPath))
     {
@@ -1194,11 +1225,11 @@ int32_t __fastcall sub_6FC644E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 
 //D2Game.0x6FC64510
 //1.14d: 0x005A84F0
-int32_t __fastcall sub_6FC64510(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall MONSTERMODE_UpdateRun(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    if (sub_6FCBC930(pGame, pUnit) == 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
     {
-        sub_6FC63680(pGame, pUnit);
+        MONSTERMODE_HandleEndAnimation(pGame, pUnit);
         return 2;
     }
 
@@ -1206,7 +1237,8 @@ int32_t __fastcall sub_6FC64510(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64540
-int32_t __fastcall sub_6FC64540(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7580
+int32_t __fastcall MONSTERMODE_StartGetHit(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (pModeChange->pUnit)
     {
@@ -1226,17 +1258,18 @@ int32_t __fastcall sub_6FC64540(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC645E0
-int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A75C0
+int32_t __fastcall MONSTERMODE_StartAttackOrSkill(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (pModeChange->pUnit && pModeChange->nMode < 16)
     {
         bool bContinue = false;
-        const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[pModeChange->nMode];
-        if (pMonModeInfoTableRecord->unk0x00)
+        const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pModeChange->nMode];
+        if (pMonModeInfoTableRecord->bUseRecurringEvent)
         {
             bContinue = true;
         }
-        else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+        else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
         {
             D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pModeChange->pUnit->dwClassId);
             if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pModeChange->nMode >> 3] & gdwBitMasks[pModeChange->nMode & 7])
@@ -1277,7 +1310,7 @@ int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 
     if (UNITS_GetUsedSkill(pModeChange->pUnit))
     {
-        sub_6FD12FD0(pGame, pModeChange->pUnit);
+        SKILLS_StartUsedSkill(pGame, pModeChange->pUnit);
     }
 
     return 1;
@@ -1285,36 +1318,36 @@ int32_t __fastcall sub_6FC645E0(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 
 //D2Game.0x6FC64790
 //1.14d: 0x005A6D50, 0x005A6B70
-int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall MONSTERMODE_UpdateAttackOrSkill(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
-        // TODO: v10
-        int32_t v10 = 0;
+
+        int32_t bUseRecurringEvent = 0;
         if (pUnit)
         {
             if (pUnit->dwAnimMode < 16)
             {
-                const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[pUnit->dwAnimMode];
-                if (pMonModeInfoTableRecord->unk0x00)
+                const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[pUnit->dwAnimMode];
+                if (pMonModeInfoTableRecord->bUseRecurringEvent)
                 {
-                    v10 = 1;
+                    bUseRecurringEvent = 1;
                 }
-                else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+                else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
                     if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[pUnit->dwAnimMode >> 3] & gdwBitMasks[pUnit->dwAnimMode & 7])
                     {
-                        v10 = 1;
+                        bUseRecurringEvent = 1;
                     }
                 }
             }
         }
 
-        if (v10)
+        if (bUseRecurringEvent)
         {
-            sub_6FCBC930(pGame, pUnit);
+            SUNIT_UpdateUnitPath(pGame, pUnit);
             UNITS_StopSequence(pUnit);
 
             if (UNITS_IsAtEndOfFrameCycle(pUnit))
@@ -1338,7 +1371,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
             }
         }
 
-        int32_t nMissileId = D2Common_11050(pUnit, v10);
+        int32_t nMissileId = D2Common_11050(pUnit, bUseRecurringEvent);
         if (nMissileId >= 0)
         {
             int32_t nSkillLevel = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty)->dwMonsterSkillBonus + 1;
@@ -1347,7 +1380,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 nSkillLevel = STATLIST_UnitGetStatValue(pUnit, STAT_LEVEL, 0);
             }
 
-            if (sub_6FD11420(pGame, nMissileId, pUnit, 0, nSkillLevel, 0, 0, 0, 0, 1))
+            if (SKILLS_CreateMissileAtOffset(pGame, nMissileId, pUnit, 0, nSkillLevel, 0, 0, 0, 0, 1))
             {
                 const int32_t nBaseId = D2GAME_GetMonsterBaseId_6FC64B10(pUnit);
                 if (nBaseId == MONSTER_QUILLRAT1)
@@ -1390,7 +1423,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
                         }
 
                         D2COMMON_10170_PathSetTargetPos(pUnit->pDynamicPath, nX + nXOffset, nY + nYOffset);
-                        sub_6FD11420(pGame, nMissileId, pUnit, 0, 1, 0, 0, 0, 0, 0);
+                        SKILLS_CreateMissileAtOffset(pGame, nMissileId, pUnit, 0, 1, 0, 0, 0, 0, 0);
                     }
 
                     PATH_SetTargetUnit(pUnit->pDynamicPath, pTarget);
@@ -1400,7 +1433,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
         }
         else
         {
-            sub_6FC62D90(pUnit, pGame);
+            MONSTERMODE_AllocateTargetCombat(pUnit, pGame);
 
             D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
             if (pTarget)
@@ -1415,36 +1448,36 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
     const int32_t nSkillFlags = SKILLS_GetFlags(pSkill);
     if (!(nSkillFlags & 1))
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
         UNITS_StopSequence(pUnit);
         return 1;
     }
 
-    sub_6FCBC7E0(pGame, pUnit);
+    SUNIT_ValidateTargetUnit(pGame, pUnit);
 
-    if (sub_6FCBC930(pGame, pUnit) != 2)
+    if (SUNIT_UpdateUnitPath(pGame, pUnit) != 2)
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
         UNITS_StopSequence(pUnit);
         return 1;
     }
 
     SKILLS_SetFlags(pSkill, nSkillFlags | 2);
 
-    sub_6FD13410(pGame, pUnit);
+    SKILLS_ExecuteUsedSkill(pGame, pUnit);
 
     if (pUnit && pUnit->dwAnimMode == MONMODE_SEQUENCE)
     {
         if (pUnit->dwFlags & UNITFLAG_SKSRVDOFUNC)
         {
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
         }
     }
     else
     {
         if (pUnit->nActionFrame == 1)
         {
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
         }
     }
 
@@ -1453,6 +1486,7 @@ int32_t __fastcall sub_6FC64790(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64B10
+//1.14d: 0x00463860
 int32_t __fastcall D2GAME_GetMonsterBaseId_6FC64B10(D2UnitStrc* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
@@ -1472,14 +1506,16 @@ int32_t __fastcall D2GAME_GetMonsterBaseId_6FC64B10(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64B50
-int32_t __fastcall sub_6FC64B50(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A77C0
+int32_t __fastcall MONSTERMODE_StartBlock(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 6);
     return 1;
 }
 
 //D2Game.0x6FC64B60
-int32_t __fastcall sub_6FC64B60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A77D0
+int32_t __fastcall MONSTERMODE_StartKnockback(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     if (!pModeChange->pUnit)
     {
@@ -1521,7 +1557,8 @@ int32_t __fastcall sub_6FC64B60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
 }
 
 //D2Game.0x6FC64CD0
-void __fastcall sub_6FC64CD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A8520
+void __fastcall MONSTERMODE_EndKnockback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     PATH_ResetToPreviousType(pUnit->pDynamicPath);
 
@@ -1561,13 +1598,14 @@ void __fastcall sub_6FC64CD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64E20
-int32_t __fastcall sub_6FC64E20(D2GameStrc* pGame, D2UnitStrc* pUnit)
+//1.14d: 0x005A8630
+int32_t __fastcall MONSTERMODE_UpdateKnockback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
-    sub_6FCBC930(pGame, pUnit);
+    SUNIT_UpdateUnitPath(pGame, pUnit);
     UNITS_StopSequence(pUnit);
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
     {
-        sub_6FC64CD0(pGame, pUnit);
+        MONSTERMODE_EndKnockback(pGame, pUnit);
         return 2;
     }
 
@@ -1575,7 +1613,8 @@ int32_t __fastcall sub_6FC64E20(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC64E60
-int32_t __fastcall sub_6FC64E60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
+//1.14d: 0x005A7870
+int32_t __fastcall MONSTERMODE_StartSequence(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange)
 {
     SUNIT_SetCombatMode(pGame, pModeChange->pUnit, 14);
 
@@ -1584,16 +1623,16 @@ int32_t __fastcall sub_6FC64E60(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange
         pModeChange->pUnit->dwFlags &= 0xFFFFFFBF;
     }
 
-    return sub_6FD12FD0(pGame, pModeChange->pUnit);
+    return SKILLS_StartUsedSkill(pGame, pModeChange->pUnit);
 }
 
 //D2Game.0x6FC64E90
 //1.14d: 0x005A8670
-int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall MONSTERMODE_UpdateSequence(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     if (UNITS_IsAtEndOfFrameCycle(pUnit))
     {
-        sub_6FC63680(pGame, pUnit);
+        MONSTERMODE_HandleEndAnimation(pGame, pUnit);
         return 2;
     }
 
@@ -1602,12 +1641,12 @@ int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
     int32_t bCheck = 1;
     if (nSkillFlags & 1)
     {
-        sub_6FCBC7E0(pGame, pUnit);
+        SUNIT_ValidateTargetUnit(pGame, pUnit);
 
-        if (sub_6FCBC930(pGame, pUnit) == 2)
+        if (SUNIT_UpdateUnitPath(pGame, pUnit) == 2)
         {
             SKILLS_SetFlags(pSkill, nSkillFlags | 2);
-            sub_6FD13410(pGame, pUnit);
+            SKILLS_ExecuteUsedSkill(pGame, pUnit);
             bCheck = 0;
         }
     }
@@ -1615,7 +1654,7 @@ int32_t __fastcall sub_6FC64E90(D2GameStrc* pGame, D2UnitStrc* pUnit)
     const int32_t nActionFrame = pUnit->nActionFrame;
     if (nActionFrame == 4 || bCheck && !((pUnit->dwFlags >> 6) & 1) && (nActionFrame == 1 || nActionFrame == 2))
     {
-        sub_6FD13410(pGame, pUnit);
+        SKILLS_ExecuteUsedSkill(pGame, pUnit);
     }
 
     UNITS_StopSequence(pUnit);
@@ -1705,7 +1744,7 @@ const D2MonModeCallbackTableStrc* __fastcall MONSTERMODE_GetCallbackTableRecord(
 
 //D2Game.0x6FC65080
 //1.14d: 0x005A7BA0
-void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+void __fastcall MONSTERMODE_EventModeChange(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
     int32_t nAnimMode = 0;
     if (pUnit)
@@ -1714,9 +1753,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitS
     }
 
     const D2MonModeCallbackTableStrc* pMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nAnimMode);
-    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->unk0x04)
+    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->pfUpdate)
     {
-        pMonModeCallbackTableRecord->unk0x04(pGame, pUnit);
+        pMonModeCallbackTableRecord->pfUpdate(pGame, pUnit);
         return;
     }
 
@@ -1729,13 +1768,13 @@ void __fastcall D2GAME_MONSTERS_AiFunction01_6FC65080(D2GameStrc* pGame, D2UnitS
         modeChange.pUnit = pUnit;
         modeChange.nMode = MONMODE_NEUTRAL;
 
-        sub_6FC64310(pGame, &modeChange);
+        MONSTERMODE_StartNeutral(pGame, &modeChange);
     }
 }
 
 //D2Game.0x6FC65150
 //1.14d: 0x005A7BE0
-void __fastcall D2GAME_MONSTERS_AiFunction02_6FC65150(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+void __fastcall MONSTERMODE_EventEndAnimation(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
     int32_t nAnimMode = 0;
     if (pUnit)
@@ -1744,9 +1783,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction02_6FC65150(D2GameStrc* pGame, D2UnitS
     }
 
     const D2MonModeCallbackTableStrc* pMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nAnimMode);
-    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->unk0x08)
+    if (pMonModeCallbackTableRecord && pMonModeCallbackTableRecord->pfEnd)
     {
-        pMonModeCallbackTableRecord->unk0x08(pGame, pUnit);
+        pMonModeCallbackTableRecord->pfEnd(pGame, pUnit);
         return;
     }
 
@@ -1759,14 +1798,15 @@ void __fastcall D2GAME_MONSTERS_AiFunction02_6FC65150(D2GameStrc* pGame, D2UnitS
         modeChange.pUnit = pUnit;
         modeChange.nMode = MONMODE_NEUTRAL;
 
-        sub_6FC64310(pGame, &modeChange);
+        MONSTERMODE_StartNeutral(pGame, &modeChange);
     }
 }
 
 //D2Game.0x6FC65220
-int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange, int32_t a3)
+//1.14d: 0x005A7C20
+int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc* pModeChange, int32_t bClearUsedSkill)
 {
-    // TODO: v12, v13, v31, dwNewDist
+    // TODO: v12, v13, dwNewDist
 
     D2UnitStrc* pUnit = pModeChange->pUnit;
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
@@ -1780,7 +1820,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
     if (STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE))
     {
-        sub_6FCBDE90(pUnit, 0);
+        SUNIT_SetUninterruptable(pUnit, 0);
 
         if (SUNIT_IsDead(pUnit))
         {
@@ -1831,7 +1871,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             pAiParam = pUnit->pMonsterData->pAiParam;
         }
 
-        int32_t v31 = pModeChange->unk0x18;
+        int32_t nVelocityPercent = pModeChange->unk0x18;
         uint8_t nPathType = pModeChange->unk0x14[1];
         uint8_t dwNewDist = pModeChange->unk0x1C;
 
@@ -1842,7 +1882,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 
         if (pAiParam->nVelocity)
         {
-            v31 = pAiParam->nVelocity;
+            nVelocityPercent = pAiParam->nVelocity;
         }
 
         if (pAiParam->unk0x20)
@@ -1859,7 +1899,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         if (nPathType == 100)
         {
             nNewPathType = 0;
-            v31 = 0;
+            nVelocityPercent = 0;
         }
         else
         {
@@ -1873,7 +1913,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
                 nPathType = PATHTYPE_TOWARD_FINISH;
             }
 
-            nNewPathType = sub_6FC65680(pUnit, nPathType, pAiParam, dwNewDist);
+            nNewPathType = MONSTERMODE_ComputePath(pUnit, nPathType, pAiParam, dwNewDist);
             if (nNewPathType != PATHTYPE_ASTAR && PATH_GetTargetUnit(pUnit->pDynamicPath))
             {
                 v13 = 10;
@@ -1881,7 +1921,7 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         }
 
         pAiParam->unk0x14 = v13;
-        pAiParam->unk0x10 = v31;
+        pAiParam->unk0x10 = nVelocityPercent;
 
         ++pGame->dwPathTypesCount[nNewPathType];
 
@@ -1890,12 +1930,12 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             ++pGame->nTotalPathTypesCount;
         }
 
-        sub_6FC627B0(pUnit, nMode);
-        sub_6FC6E770(pGame, pUnit);
+        MONSTERMODE_UpdateModeAttackStats(pUnit, nMode);
+        MONSTERUNIQUE_ExecuteUModModeStartCallbacks(pGame, pUnit);
     }
 
     const D2MonModeCallbackTableStrc* pTargetMonModeCallbackTableRecord = MONSTERMODE_GetCallbackTableRecord(pUnit, nMode);
-    if (!pTargetMonModeCallbackTableRecord || !pTargetMonModeCallbackTableRecord->unk0x00)
+    if (!pTargetMonModeCallbackTableRecord || !pTargetMonModeCallbackTableRecord->pfStart)
     {
         UNITS_SetUsedSkill(pUnit, nullptr);
         if (nMode == MONMODE_DEATH || nMode == MONMODE_DEAD || !SUNIT_IsDead(pUnit))
@@ -1903,13 +1943,13 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             D2ModeChangeStrc modeChange = {};
             modeChange.pUnit = pUnit;
             modeChange.nMode = MONMODE_NEUTRAL;
-            sub_6FC64310(pGame, &modeChange);
+            MONSTERMODE_StartNeutral(pGame, &modeChange);
         }
 
         return 0;
     }
 
-    const int32_t nResult = pTargetMonModeCallbackTableRecord->unk0x00(pGame, pModeChange);
+    const int32_t nResult = pTargetMonModeCallbackTableRecord->pfStart(pGame, pModeChange);
     if (!nResult)
     {
         UNITS_SetUsedSkill(pUnit, nullptr);
@@ -1918,12 +1958,12 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             return 1;
         }
 
-        sub_6FC64310(pGame, pModeChange);
+        MONSTERMODE_StartNeutral(pGame, pModeChange);
     }
 
     pUnit->dwFlags |= UNITFLAG_MONMODEISCHANGING;
 
-    sub_6FCBC4D0(pUnit);
+    SUNIT_InitializeAnimation(pUnit);
 
     if (pAiParam && pAiParam->unk0x10)
     {
@@ -1945,10 +1985,10 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
         }
     }
 
-    sub_6FC6E860(pGame, pUnit);
+    MONSTERUNIQUE_ExecuteUModModeChangeCallbacks(pGame, pUnit);
 
     const int32_t nCurrentAnimMode = pUnit->dwAnimMode;
-    if (a3 && nMode == nCurrentAnimMode)
+    if (bClearUsedSkill && nMode == nCurrentAnimMode)
     {
         UNITS_SetUsedSkill(pUnit, nullptr);
     }
@@ -1964,42 +2004,42 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
             D2ModeChangeStrc modeChange = {};
             modeChange.pUnit = pUnit;
             modeChange.nMode = MONMODE_NEUTRAL;
-            sub_6FC64310(pGame, &modeChange);
+            MONSTERMODE_StartNeutral(pGame, &modeChange);
         }
         return 0;
     }
 
-    if (pCurrentMonModeCallbackTableRecord->unk0x0C)
+    if (pCurrentMonModeCallbackTableRecord->bScheduleEvents)
     {
         if (nCurrentAnimMode >= 16)
         {
-            sub_6FCBCE70(pGame, pUnit);
+            SUNIT_ScheduleAnimationEvents(pGame, pUnit);
         }
         else
         {
-            const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[nCurrentAnimMode];
-            if (!pMonModeInfoTableRecord->unk0x00)
+            const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nCurrentAnimMode];
+            if (!pMonModeInfoTableRecord->bUseRecurringEvent)
             {
-                if (pMonModeInfoTableRecord->unk0x04 || !pMonModeInfoTableRecord->unk0x08)
+                if (pMonModeInfoTableRecord->bUseAnimationEvents || !pMonModeInfoTableRecord->bCheckMovingMode)
                 {
-                    sub_6FCBCE70(pGame, pUnit);
+                    SUNIT_ScheduleAnimationEvents(pGame, pUnit);
                 }
                 else
                 {
                     D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
                     if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nCurrentAnimMode >> 3] & gdwBitMasks[nCurrentAnimMode & 7]))
                     {
-                        sub_6FCBCE70(pGame, pUnit);
+                        SUNIT_ScheduleAnimationEvents(pGame, pUnit);
                     }
                     else
                     {
-                        sub_6FCBD3A0(pGame, pUnit);
+                        SUNIT_ResetRecurringModeChangeEvent(pGame, pUnit);
                     }
                 }
             }
             else
             {
-                sub_6FCBD3A0(pGame, pUnit);
+                SUNIT_ResetRecurringModeChangeEvent(pGame, pUnit);
             }
         }
     }
@@ -2014,7 +2054,8 @@ int32_t __stdcall D2GAME_ModeChange_6FC65220(D2GameStrc* pGame, D2ModeChangeStrc
 }
 
 //D2Game.0x6FC65680
-int32_t __fastcall sub_6FC65680(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamStrc* pAiParam, int32_t dwNewDist)
+//1.14d: 0x005A6290
+int32_t __fastcall MONSTERMODE_ComputePath(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamStrc* pAiParam, int32_t dwNewDist)
 {
     PATH_SetNewDistance(pUnit->pDynamicPath, dwNewDist);
 
@@ -2064,6 +2105,7 @@ int32_t __fastcall sub_6FC65680(D2UnitStrc* pUnit, int32_t nPathType, D2AiParamS
 }
 
 //D2Game.0x6FC65780
+//1.14d: 0x005A7E60
 void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D2ModeChangeStrc* pModeChange)
 {
     D2_ASSERT(nMode < 16);
@@ -2081,12 +2123,12 @@ void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D
         return;
     }
 
-    const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &stru_6FD28738[nMode];
-    if (pMonModeInfoTableRecord->unk0x00)
+    const D2MonModeInfoTableStrc* pMonModeInfoTableRecord = &gtMonsterModeEventPolicies[nMode];
+    if (pMonModeInfoTableRecord->bUseRecurringEvent)
     {
         pModeChange->unk0x14[1] = 101;
     }
-    else if (!pMonModeInfoTableRecord->unk0x04 && pMonModeInfoTableRecord->unk0x08)
+    else if (!pMonModeInfoTableRecord->bUseAnimationEvents && pMonModeInfoTableRecord->bCheckMovingMode)
     {
         D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
         if (pMonStats2TxtRecord && pMonStats2TxtRecord->nModeEnabledWhenMovingFlags[nMode >> 3] & gdwBitMasks[nMode & 7])
@@ -2097,13 +2139,15 @@ void __stdcall MONSTERMODE_GetModeChangeInfo(D2UnitStrc* pUnit, int32_t nMode, D
 }
 
 //D2Game.0x6FC65890
-void __fastcall D2GAME_MONSTERS_AiFunction13_6FC65890(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+//1.14d: 0x005A7EF0
+void __fastcall MONSTERMODE_EventUpdateStatListExpirations(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
     STATLIST_UpdateStatListsExpiration(pUnit, pGame->dwGameFrame);
 }
 
 //D2Game.0x6FC658B0
-void __fastcall D2GAME_MONSTERS_AiFunction07_6FC658B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+//1.14d: 0x005A7F00
+void __fastcall MONSTERMODE_EventFreeHoverText(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
     if (!pUnit || !pUnit->pHoverText)
     {
@@ -2125,12 +2169,14 @@ void __fastcall D2GAME_MONSTERS_AiFunction07_6FC658B0(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC65920
-void __fastcall D2GAME_MONSTERS_AiFunction11_6FC65920(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t a4)
+//1.14d: 0x005A7F70
+void __fastcall MONSTERMODE_EventClearTargetOverride(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nEventCustomId, int32_t nEventCustomParam)
 {
-    sub_6FC61F00(pUnit);
+    MONSTERAI_ClearTargetOverride(pUnit);
 }
 
 //D2Game.0x6FC65930
+//1.14d: 0x005A7F80
 void __fastcall MONSTERMODE_EventHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEvent, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (nEvent < 0 || nEvent >= EVENTTYPE_COUNT)
@@ -2162,12 +2208,13 @@ void __fastcall MONSTERMODE_EventHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 }
 
 //D2Game.0x6FC659B0
-void __fastcall sub_6FC659B0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t a4)
+//1.14d: 0x005A8000
+void __fastcall MONSTERMODE_DropTreasureForFindItem(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t a4)
 {
     D2ModeChangeStrc modeChange = {};
 
     modeChange.pUnit = pUnit;
     modeChange.pTargetUnit = pTarget;
 
-    sub_6FC631B0(pGame, pUnit, 1, &modeChange);
+    MONSTERMODE_DropTreasure(pGame, pUnit, 1, &modeChange);
 }

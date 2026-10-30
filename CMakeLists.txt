@@ -33,6 +33,7 @@ endif()
 
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
+option(D2MOO_WITH_UBERS "Compile the 1.11+ uber content (Pandemonium levels, uber monsters, uber states and cube recipes) by defining D2_VERSION_HAS_UBERS for every target. Requires D2MOO_ORDINALS_VERSION 1.11 or later." OFF)
 cmake_dependent_option(D2MOO_BUILD_TESTS
     "Enable D2Moo project tests targets" ON # By default we want tests if CTest is enabled
     "BUILD_TESTING" OFF # Stay coherent with CTest variables

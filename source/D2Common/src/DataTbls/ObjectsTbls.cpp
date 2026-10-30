@@ -3,6 +3,7 @@
 
 
 //D2Common.0x6FD6FDF0
+//1.14d: 0x0063F690
 void __fastcall DATATBLS_LoadObjectsTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -182,6 +183,7 @@ void __fastcall DATATBLS_LoadObjectsTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD718F0 (#10626)
+//1.14d: 0x00640E90
 D2ObjectsTxt* __stdcall DATATBLS_GetObjectsTxtRecord(int nObjectId)
 {
 	D2_ASSERT(nObjectId < sgptDataTables->nObjectsTxtRecordCount);
@@ -190,6 +192,7 @@ D2ObjectsTxt* __stdcall DATATBLS_GetObjectsTxtRecord(int nObjectId)
 }
 
 //D2Common.0x6FD71960
+//1.14d: 0x00640EE0
 void __fastcall DATATBLS_UnloadObjectsTxt()
 {
 	DATATBLS_UnloadBin(sgptDataTables->pObjectsTxt);
@@ -198,6 +201,7 @@ void __fastcall DATATBLS_UnloadObjectsTxt()
 }
 
 //D2Common.0x6FD71980
+//1.14d: 0x00640F00
 void __fastcall DATATBLS_UnloadObjGroupTxt()
 {
 	DATATBLS_UnloadBin(sgptDataTables->pObjGroupTxt);
@@ -206,6 +210,7 @@ void __fastcall DATATBLS_UnloadObjGroupTxt()
 }
 
 //D2Common.0x6FD719A0
+//1.14d: 0x00640F20
 void __fastcall DATATBLS_LoadObjGroupTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -243,6 +248,7 @@ void __fastcall DATATBLS_LoadObjGroupTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD71E00 (#10627)
+//1.14d: 0x006412F0
 D2ObjGroupTxt* __stdcall DATATBLS_GetObjGroupTxtRecord(int nId)
 {
 	if (nId < sgptDataTables->nObjGroupTxtRecordCount)
@@ -254,6 +260,7 @@ D2ObjGroupTxt* __stdcall DATATBLS_GetObjGroupTxtRecord(int nId)
 }
 
 //D2Common.0x6FD71E30
+//1.14d: 0x00641320
 void __fastcall DATATBLS_LoadShrinesTxt(HD2ARCHIVE hArchive)
 {
 	D2BinFieldStrc pTbl[] =
@@ -275,6 +282,7 @@ void __fastcall DATATBLS_LoadShrinesTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD72000 (#10624)
+//1.14d: 0x006414B0
 D2ShrinesTxt* __stdcall DATATBLS_GetShrinesTxtRecord(int nShrineId)
 {
 	D2_ASSERT(nShrineId < sgptDataTables->nShrinesTxtRecordCount);
@@ -283,12 +291,14 @@ D2ShrinesTxt* __stdcall DATATBLS_GetShrinesTxtRecord(int nShrineId)
 }
 
 //D2Common.0x6FD72070 (#10625)
+//1.14d: 0x00641500
 int __stdcall DATATBLS_GetShrinesTxtRecordCount()
 {
 	return sgptDataTables->nShrinesTxtRecordCount;
 }
 
 //D2Common.0x6FD72080
+//1.14d: 0x00641510
 void __fastcall DATATBLS_UnloadShrinesTxt()
 {
 	DATATBLS_UnloadBin(sgptDataTables->pShrinesTxt);

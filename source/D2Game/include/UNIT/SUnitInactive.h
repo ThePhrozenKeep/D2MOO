@@ -29,7 +29,7 @@ struct D2InactiveMonsterNodeStrc
 	int32_t nUnitFlags;							//0x10
 	int32_t nUnitFlagsEx;						//0x14
 	int32_t nTypeFlags;							//0x18
-	int32_t unk0x1C;							//0x1C
+	int32_t nOwnerGUID;							//0x1C
 	D2MinionListStrc* pMinionList;				//0x20
 	D2MapAIStrc* pMapAI;						//0x24
 	D2C_AiSpecialState nAiSpecialState;			//0x28
@@ -80,32 +80,45 @@ struct D2InactiveUnitListStrc
 #pragma pack()
 
 //D2Game.0x6FCC3850
+//1.14d: 0x00542B40
 void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FCC40D0
+//1.14d: 0x00541860
 D2AiControlStrc* __fastcall AIGENERAL_GetAiControlFromUnit(D2UnitStrc* pUnit);
 //D2Game.0x6FCC40F0
 void __fastcall SUNITINACTIVE_FreeInactiveMonsterNode(D2GameStrc* pGame, D2InactiveMonsterNodeStrc* pInactiveMonsterNode);
 //D2Game.0x6FCC4120
+//1.14d: 0x00541990
 D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode);
 //D2Game.0x6FCC4270
+//1.14d: 0x00543080
 void __fastcall SUNITINACTIVE_FreeInactiveUnitLists(D2GameStrc* pGame);
 //D2Game.0x6FCC4370
+//1.14d: 0x005433F0
 void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCC4650
+//1.14d: 0x00542E10
 void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCC4C90
+//1.14d: 0x00543140
 void __fastcall SUNITINACTIVE_DeleteSingleListNode(D2GameStrc* pGame, uint16_t nUnitType, uint16_t nClassId, uint8_t nAct);
 //D2Game.0x6FCC4DC0
+//1.14d: 0x00541D20
 D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinates(D2GameStrc* pGame, int32_t nAct, int32_t nX, int32_t nY, int32_t bAllocNewNode);
 //D2Game.0x6FCC4E80
+//1.14d: 0x00541DE0
 D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t bAllocNewNode);
 //D2Game.0x6FCC4ED0
+//1.14d: 0x00541E20
 void __fastcall SUNITINACTIVE_RestoreSpecialMonsterParameters(D2GameStrc* pGame, D2UnitStrc* pUnit, D2InactiveMonsterNodeStrc* pInactiveMonsterNode);
 //D2Game.0x6FCC50B0
+//1.14d: 0x00541FE0
 void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2UnitStrc* pUnit, D2InactiveMonsterNodeStrc* pInactiveMonsterNode);
 //D2Game.0x6FCC52C0
+//1.14d: 0x005429B0
 int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId);
 //D2Game.0x6FCC5490
+//1.14d: 0x00542AC0
 void __fastcall SUNITINACTIVE_DeleteExpiredItemNodes(D2GameStrc* pGame, int32_t nAct);
 //D2Game.0x6FCC54F0
 void __fastcall SUNITINACTIVE_SetUnitFlagEx(D2UnitStrc* pUnit, uint32_t nFlag, int32_t bSet);

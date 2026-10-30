@@ -31,6 +31,7 @@
 
 
 //D2Game.0x6FCCD450
+//1.14d: 0x005FC830
 void __fastcall AIBAAL_CountLivingMinions(D2UnitStrc* pUnit, void* ppUnitArg, void* pCounterArg)
 {
 	D2UnitStrc** ppUnit = (D2UnitStrc**)ppUnitArg;
@@ -43,16 +44,17 @@ void __fastcall AIBAAL_CountLivingMinions(D2UnitStrc* pUnit, void* ppUnitArg, vo
 }
 
 //D2Game.0x6FCCD470
-void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
+//1.14d: 0x005FCF30
+void __fastcall AIBAAL_RunSpecialAiState(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	int32_t nParam1 = 0;
-	int32_t nParam2 = 0;
+	int32_t nSavedCommandParam1 = 0;
+	int32_t nSavedCommandParam2 = 0;
 
 	D2AiCmdStrc* pAiCmd = AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0);
 	if (pAiCmd)
 	{
-		nParam1 = pAiCmd->nCmdParam[1];
-		nParam2 = pAiCmd->nCmdParam[2];
+		nSavedCommandParam1 = pAiCmd->nCmdParam[1];
+		nSavedCommandParam2 = pAiCmd->nCmdParam[2];
 	}
 
 	if (STATES_CheckState(pUnit, STATE_INFERNO))
@@ -62,12 +64,12 @@ void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUn
 
 	AITHINK_ExecuteAiFn(pGame, pUnit, pAiTickParam->pAiControl, pAiTickParam->pAiControl->nAiSpecialState);
 
-	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nParam1 && nParam2)
+	if (!AIGENERAL_GetAiCommandFromParam(pUnit, 10, 0) && nSavedCommandParam1 && nSavedCommandParam2)
 	{
 		D2AiCmdStrc aiCmd = {};
 		aiCmd.nCmdParam[0] = 10;
-		aiCmd.nCmdParam[1] = nParam1;
-		aiCmd.nCmdParam[2] = nParam2;
+		aiCmd.nCmdParam[1] = nSavedCommandParam1;
+		aiCmd.nCmdParam[2] = nSavedCommandParam2;
 		AIGENERAL_CopyAiCommand(pGame, pUnit, &aiCmd);
 	}
 
@@ -75,6 +77,7 @@ void __fastcall D2GAME_AI_Unk135_140_6FCCD470(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FCCD520
+//1.14d: 0x005FCFE0
 void __fastcall AITHINK_Fn135_BaalCrab(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 	int32_t nCount = 0;
@@ -353,13 +356,13 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 	// UBER TWEAK START
 	D2UbersAiCallbackArgStrc arg_target = {};
 	arg_target.nDistance = INT_MAX;
-	sub_6FCF1E80(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
+	AIUTIL_FindTargetWithCallback(pGame, pTarget ? pTarget : pUnit, &arg_target, AIUTIL_TargetCallback_Ubers, 1);
 	BOOL bAlone = (arg_target.nUberDiablo == 0 && arg_target.nUberMephisto == 0);
 	if (bAlone && pTarget)
 	{
 		D2UbersAiCallbackArgStrc arg_self = {};
 		arg_self.nDistance = INT_MAX;
-		sub_6FCF1E80(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
+		AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg_self, AIUTIL_TargetCallback_Ubers, 1);
 		bAlone = (arg_self.nUberDiablo == 0 && arg_self.nUberMephisto == 0);
 	}
 	if ((bAlone && arg_target.nBaalMinions < 15 && SEED_RollPercentage(&pUnit->pSeed) < 45)
@@ -414,6 +417,7 @@ void __fastcall AITHINK_Fn145_UberBaal(D2GameStrc* pGame, D2UnitStrc* pUnit, D2A
 #endif
 
 //D2Game.0x6FCCD630
+//1.14d: 0x005FBDD0
 D2UnitStrc* __fastcall AIBAAL_GetTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pMax, int32_t* pCount, void* pArgs, int32_t(__fastcall* pfCull)(D2UnitStrc*, D2UnitStrc*))
 {
 	D2_ASSERT(pfCull);
@@ -525,6 +529,7 @@ D2UnitStrc* __fastcall AIBAAL_GetTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, in
 }
 
 //D2Game.0x6FCCD8A0
+//1.14d: 0x005FBB00
 int32_t __fastcall AIBAAL_GetTargetScore(D2UnitStrc* pUnit, D2UnitStrc* pTarget, void* pArgs)
 {
 	const int32_t bInMeleeRange = UNITS_IsInMeleeRange(pUnit, pTarget, 0);
@@ -621,6 +626,7 @@ int32_t __fastcall AIBAAL_CullPotentialTargets(D2UnitStrc* pBaal, D2UnitStrc* pT
 }
 
 //D2Game.0x6FCCDC80
+//1.14d: 0x005FC630
 int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiControlStrc* pAiControl, D2UnitStrc* pTarget, int32_t nMax, int32_t nCount, D2AiCmdStrc* pAiCmd)
 {
 	if (pAiControl->dwAiParam[0])
@@ -772,6 +778,7 @@ int32_t __fastcall AIBAAL_RollRandomAiParam(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FCCE040
+//1.14d: 0x005FC0C0
 int32_t __fastcall AI_CheckSpecialSkillsOnPrimeEvil(D2UnitStrc* pUnit)
 {
 	D2SkillStrc* pSkill = UNITS_GetRightSkill(pUnit);
@@ -852,6 +859,7 @@ int32_t __fastcall AI_GetRandomArrayIndex(int32_t* pArray, int32_t nArraySize, D
 }
 
 //D2Game.0x6FCCE1A0
+//1.14d: 0x005FC450
 int32_t __fastcall AIBAAL_RollRandomAiParamForNonCollidingUnit(D2GameStrc* pGame, D2AiControlStrc* pAiControl, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nCount, int32_t bInMediumRange, int32_t bInFarRange, int32_t bInCloseRange, int32_t nMax)
 {
 	int32_t aiParams[16] = { 0, 0, 5, 5, 5, 0, 5, 0, 40, 40, 0, 70, 80, 60, 20, 0};
@@ -986,7 +994,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 	}
 	case 3:
 	{
-		sub_6FCD0E80(pGame, pUnit, pTarget, 6u, 1);
+		AITACTICS_WalkToTargetWithRandomPathType(pGame, pUnit, pTarget, 6u, 1);
 		return;
 	}
 	case 4:
@@ -1073,7 +1081,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 		}
 #endif
 
-		if (sub_6FC66260(pGame, UNITS_GetRoom(pUnit), 0, pUnit->dwClassId, &nFinalX, &nFinalY, 0))
+		if (MONSTERREGION_FindSpawnLocation(pGame, UNITS_GetRoom(pUnit), 0, pUnit->dwClassId, &nFinalX, &nFinalY, 0))
 		{
 			AITACTICS_UseSkill(pGame, pUnit, pMonstatsTxtRecord->nSkillMode[4], pMonstatsTxtRecord->nSkill[4], 0, nFinalX, nFinalY);
 		}
@@ -1156,6 +1164,7 @@ void __fastcall AIBAAL_MainSkillHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
 }
 
 //D2Game.0x6FCCEB70
+//1.14d: 0x005FD210
 void __fastcall AITHINK_Fn140_BaalCrabClone(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
 	D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);

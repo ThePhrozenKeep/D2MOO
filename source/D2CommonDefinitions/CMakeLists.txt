@@ -52,6 +52,13 @@ if(D2MOO_ORDINALS_VERSION)
         D2_VERSION_PATCH='${D2MOO_ORDINAL_VERSION_PATCH}' # Allow only single character
         $<$<NOT:$<STREQUAL:D2MOO_ORDINAL_VERSION_SPECIAL,"">>:D2_VERSION_SPECIAL="${D2MOO_ORDINAL_VERSION_SPECIAL}">
     )
+    if(D2MOO_WITH_UBERS)
+      if(D2MOO_ORDINAL_VERSION_MAJOR LESS_EQUAL 1 AND D2MOO_ORDINAL_VERSION_MINOR_NO_LEADING_ZEROS LESS 11)
+        message(FATAL_ERROR "D2MOO_WITH_UBERS requires D2MOO_ORDINALS_VERSION 1.11 or later (got ${D2MOO_ORDINALS_VERSION}): the uber levels, monsters and states do not exist before 1.11.")
+      endif()
+      # On the interface every target links, so all translation units agree on the uber ids.
+      target_compile_definitions(D2CommonDefinitions INTERFACE D2_VERSION_HAS_UBERS)
+    endif()
   else()
     message(FATAL_ERROR "Ordinal version format is incorrect. Needs to match '${D2_VERSION_REGEX}'")
   endif()

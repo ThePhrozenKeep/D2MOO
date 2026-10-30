@@ -103,6 +103,7 @@ D2NPCMessageTableStrc gpAct3Q2NpcMessages[] =
 
 
 //D2Game.0x6FCA7B70
+//1.14d: 0x005BD500
 bool __fastcall ACT3Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId != MONSTER_CAIN3)
@@ -170,6 +171,7 @@ bool __fastcall ACT3Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCA7CD0
+//1.14d: 0x005BDA30
 void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -198,6 +200,7 @@ void __fastcall ACT3Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA7DA0
+//1.14d: 0x005BD630
 void __fastcall ACT3Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -323,6 +326,7 @@ void __fastcall ACT3Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA7FB0
+//1.14d: 0x005B7FF0
 void __fastcall ACT3Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nNewLevel == LEVEL_GREATMARSH && pQuestData->bNotIntro && pQuestData->fState < 3)
@@ -332,6 +336,7 @@ void __fastcall ACT3Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA7FE0
+//1.14d: 0x005BD850
 bool __fastcall ACT3Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
 {
 	*pStatus = 0;
@@ -432,6 +437,7 @@ bool __fastcall ACT3Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 }
 
 //D2Game.0x6FCA81E0
+//1.14d: 0x005B8060
 void __fastcall ACT3Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -474,6 +480,7 @@ void __fastcall ACT3Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA82D0
+//1.14d: 0x005B8020
 void __fastcall ACT3Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_CAIN3)
@@ -490,6 +497,7 @@ void __fastcall ACT3Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA8310
+//1.14d: 0x005B7F90
 int32_t __fastcall ACT3Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -503,6 +511,7 @@ int32_t __fastcall ACT3Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCA8360
+//1.14d: 0x005B8150
 bool __fastcall ACT3Q2_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (pQuestData->fState != 5 && pQuestData->bNotIntro)
@@ -529,6 +538,7 @@ bool __fastcall ACT3Q2_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA83D0
+//1.14d: 0x005B8210
 void __fastcall ACT3Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -688,6 +698,7 @@ void __fastcall ACT3Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA8780
+//1.14d: 0x005B8470
 void __fastcall ACT3Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -721,6 +732,7 @@ void __fastcall ACT3Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCA87F0
+//1.14d: 0x005B84E0
 int32_t __fastcall OBJECTS_OperateFunction44_SewerStairs(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -739,6 +751,7 @@ int32_t __fastcall OBJECTS_OperateFunction44_SewerStairs(D2ObjOperateFnStrc* pOp
 }
 
 //D2Game.0x6FCA8810
+//1.14d: 0x005B8530
 int32_t __fastcall OBJECTS_OperateFunction45_SewerLever(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -778,6 +791,7 @@ int32_t __fastcall OBJECTS_OperateFunction45_SewerLever(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCA8940
+//1.14d: 0x005B8660
 void __fastcall OBJECTS_InitFunction41_SewerStairs(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q2_KHALIMFLAIL);
@@ -807,6 +821,7 @@ void __fastcall OBJECTS_InitFunction41_SewerStairs(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCA8990
+//1.14d: 0x005B86B0
 void __fastcall OBJECTS_InitFunction42_SewerLever(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q2_KHALIMFLAIL);
@@ -817,6 +832,7 @@ void __fastcall OBJECTS_InitFunction42_SewerLever(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCA89C0
+//1.14d: 0x005B86E0
 void __fastcall ACT3Q2_UpdateKhalimItemCounts(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	//D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -841,6 +857,7 @@ void __fastcall ACT3Q2_UpdateKhalimItemCounts(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FCA8A30
+//1.14d: 0x005B8860
 int32_t __fastcall OBJECTS_OperateFunction57_KhalimChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -890,6 +907,7 @@ int32_t __fastcall OBJECTS_OperateFunction57_KhalimChest(D2ObjOperateFnStrc* pOp
 }
 
 //D2Game.0x6FCA8B10
+//1.14d: 0x005B8810
 int32_t __fastcall ACT3Q2_UnitIterate_DetermineKhalimHeartDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' rhq') || ITEMS_FindQuestItem(pGame, pUnit, ' 2fq'))
@@ -906,6 +924,7 @@ int32_t __fastcall ACT3Q2_UnitIterate_DetermineKhalimHeartDropCount(D2GameStrc* 
 }
 
 //D2Game.0x6FCA8B60
+//1.14d: 0x005B8940
 int32_t __fastcall OBJECTS_OperateFunction58_KhalimChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -955,6 +974,7 @@ int32_t __fastcall OBJECTS_OperateFunction58_KhalimChest(D2ObjOperateFnStrc* pOp
 }
 
 //D2Game.0x6FCA8C40
+//1.14d: 0x005B8770
 int32_t __fastcall ACT3Q2_UnitIterate_DetermineKhalimEyeDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' yeq') || ITEMS_FindQuestItem(pGame, pUnit, ' 2fq'))
@@ -972,6 +992,7 @@ int32_t __fastcall ACT3Q2_UnitIterate_DetermineKhalimEyeDropCount(D2GameStrc* pG
 }
 
 //D2Game.0x6FCA8C90
+//1.14d: 0x005B8A20
 int32_t __fastcall OBJECTS_OperateFunction59_KhalimChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1021,6 +1042,7 @@ int32_t __fastcall OBJECTS_OperateFunction59_KhalimChest(D2ObjOperateFnStrc* pOp
 }
 
 //D2Game.0x6FCA8D70
+//1.14d: 0x005B87C0
 int32_t __fastcall ACT3Q2_UnitIterate_DetermineKhalimBrainDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' rbq') || ITEMS_FindQuestItem(pGame, pUnit, ' 2fq'))

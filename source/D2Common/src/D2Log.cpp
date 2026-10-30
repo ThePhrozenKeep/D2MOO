@@ -4,11 +4,15 @@
 #include <Fog.h>
 
 
+//1.10f: D2Common.0x6FDA47A0
+//1.14d: 0x006248E0
 void __cdecl LOG_11100(int a1, int a2, int a3, int a4, const char* szFile, int nLine, const char* szFormat, ...)
 {
 	REMOVE_LATER_Trace("LOG_11100: Useless");
 }
 
+//1.10f: D2Common.0x6FDA48E0
+//1.14d: 0x00624930
 void __cdecl LOG_11101(int nGame, int nFrame, int nClient, int a4, int nSize, const char* szFormat, ...)
 {
 	REMOVE_LATER_Trace("LOG_11101: Useless");
@@ -19,6 +23,8 @@ void __fastcall LOG_11102(void* a1)
 	REMOVE_LATER_Trace("LOG_11102: Useless");
 }
 
+//1.10f: D2Common.0x6FDA4790
+//1.14d: 0x00624700
 void __fastcall LOG_11103(void* a1)
 {
 	REMOVE_LATER_Trace("LOG_11103: Useless");
@@ -29,6 +35,8 @@ void __fastcall LOG_11104(void* a1)
 	REMOVE_LATER_Trace("LOG_11104: Useless");
 }
 
+//1.10f: D2Common.0x6FDA4B00
+//1.14d: 0x006116B0
 void __cdecl LOG_11105()
 {
 	REMOVE_LATER_Trace("LOG_11105: Useless");

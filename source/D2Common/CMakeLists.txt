@@ -207,6 +207,7 @@ if(D2MOO_WITH_STATIC_TESTS)
       statictests/D2StatList_staticchecks.cpp
       statictests/D2PacketDef_staticchecks.cpp
       statictests/Path_staticchecks.cpp
+      statictests/Drlg_staticchecks.cpp
   )
 endif()
 

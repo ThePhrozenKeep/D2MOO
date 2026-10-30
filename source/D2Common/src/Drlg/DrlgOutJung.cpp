@@ -9,6 +9,7 @@
 
 //D2Common.0x6FD7FC20
 //TODO: v19
+//1.14d: 0x0067E910
 void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 {
 	static const int dword_6FDCFB18[] =
@@ -89,6 +90,7 @@ void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD7FE50
 //TODO: v5, v10
+//1.14d: 0x0067EAD0
 void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
@@ -129,6 +131,7 @@ void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD7FFA0
 //TODO: v7, v8
+//1.14d: 0x0067EC30
 void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
@@ -167,6 +170,7 @@ void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD800E0
 //TODO: v8
+//1.14d: 0x0067ED70
 void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
@@ -206,6 +210,7 @@ void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD80230
 //TODO: Rename variables
+//1.14d: 0x0067EED0
 void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLevelPrestId1, int nLevelPrestId2, int a4)
 {
 	int v8; // edi@1

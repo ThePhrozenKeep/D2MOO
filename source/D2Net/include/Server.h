@@ -22,14 +22,15 @@ constexpr int8_t D2NET_SEND_GAME = 1;			// Compressed
 constexpr int8_t D2NET_SEND_UNCOMPRESSED = 2;	// Sent as is (used for admin packets)
 
 // Queues in which the server sorts received client packets
-constexpr int32_t SERVER_PACKET_QUEUE_SYSTEM = 0;	// Packets 0x66-0x6F
-constexpr int32_t SERVER_PACKET_QUEUE_GAME = 1;		// Packets < 0x66
+constexpr int32_t SERVER_PACKET_QUEUE_SYSTEM = 0;	// Packets 0x66-0x6F (1.14d: 0x67-0x70)
+constexpr int32_t SERVER_PACKET_QUEUE_GAME = 1;		// Packets < 0x66 (1.14d: < 0x67, the Warden reply included)
 constexpr int32_t SERVER_PACKET_QUEUE_ADMIN = 2;	// Packet 0xFF
 
 
 //D2Net.0x6FC01B30 (#10024)
 D2NET_DLL_DECL int32_t __stdcall SERVER_WSAGetLastError();
 //D2Net.0x6FC01B60 (#10030)
+//1.14d: 0x0052B920
 D2NET_DLL_DECL int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);
 //D2Net.0x6FC01E60 (#10031)
 D2NET_DLL_DECL int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);

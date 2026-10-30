@@ -9,28 +9,28 @@
 #pragma pack(push, 1)
 struct D2CofDataStrc
 {
-	uint8_t unk0x00;
-	uint8_t unk0x01;
-	uint8_t unk0x02;
-	uint8_t unk0x03;
+	uint8_t nLayers;
+	uint8_t nFramesPerDirection;
+	uint8_t nDirections;
+	uint8_t nVersion;
 	uint32_t unk0x04;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
-	uint32_t unk0x10;
-	uint32_t unk0x14;
-	uint32_t unk0x18;
+	uint32_t nBoxLeft;
+	uint32_t nBoxRight;
+	uint32_t nBoxTop;
+	uint32_t nBoxBottom;
+	uint32_t nAnimSpeed;
 };
 
 struct D2CofNodeStrc
 {
-	uint32_t unk0x00;
+	int32_t nRefCount;
 	uint32_t nMode;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
+	uint32_t nClass;
+	uint32_t dwWeaponClass;
 	uint32_t unk0x10;
 	D2CofDataStrc* pCofData;
-	D2CofNodeStrc* unk0x18;
-	D2CofNodeStrc* unk0x1C;
+	D2CofNodeStrc* pNext;
+	D2CofNodeStrc* pPrev;
 };
 
 struct D2CofInfoStrc
@@ -47,19 +47,19 @@ struct D2GfxInfoStrc
 struct D2CompositeUnitStrc
 {
 	uint32_t dwFlags;
-	uint8_t unk0x04;
-	uint8_t unk0x05;
+	uint8_t nDirection;
+	uint8_t nDirections;
 	uint8_t unk0x06;
 	uint8_t unk0x07;
-	uint32_t unk0x08;
-	uint32_t unk0x0C;
-	uint32_t unk0x10;
+	int32_t nFrame;							// 8.8 fixed point
+	int32_t nFrameCount;
+	uint32_t nAnimSpeed;
 	int32_t nX;
 	int32_t nY;
 	int32_t nUnitIndex;
 	int32_t nMode;
 	int32_t nWClassTokenIndex;
-	uint8_t unk0x28[16];
+	uint8_t nComponentColors[16];
 	uint32_t dwArmorType[16];
 	uint32_t unk0x78;
 	uint32_t unk0x7C;
@@ -77,44 +77,60 @@ struct D2CompositeUnitStrc
 	uint32_t unk0xAC;
 	uint32_t unk0xB0;
 	uint32_t unk0xB4;
-	uint32_t unk0xB8;
 	D2GfxInfoStrc* pGfxInfo;
 	D2CellFileStrc* pEmblemCellFile;
-	uint8_t unk0xC0;
-	uint8_t unk0xC1;
+	uint8_t nEmblemColor1;
+	uint8_t nEmblemColor2;
 	uint8_t unk0xC2;
 	uint8_t unk0xC3;
 	D2CompositeUnitStrc* pNext;
-	D2CompositeUnitStrc* unk0xC8;
-	Unicode unk0xCC[64];
-	Unicode unk0x14C[64];
-	Unicode unk0x1CC[16];
-	Unicode unk0x1EC[32];
-	uint32_t unk0x22C;
-	uint32_t unk0x230;
-	uint32_t unk0x234;
+	D2CompositeUnitStrc* pPrev;
+	Unicode wszAccountName[64];
+	Unicode wszCharName[64];
+	Unicode wszGuildTag[16];
+	Unicode wszRealmName[32];
+	int32_t nCharLevel;
+	uint32_t dwProductCode;
 };
 #pragma pack(pop)
 
 
-void __stdcall sub_6F8A4C10();
+void __stdcall D2COMP_InitEmblemColorTables();
+//1.10f: D2Win.0x6F8A46E0 (#10157)
+//1.14d: 0x00505550
 void __stdcall D2Win_10157();
+//1.10f: D2Win.0x6F8A4400 (#10147)
+//1.14d: 0x00505150
 D2CompositeUnitStrc* __stdcall D2Win_10147();
+//1.10f: D2Win.0x6F8A4410 (#10148)
+//1.14d: 0x00505160
 inline void* D2Win_10148(void*)
 {
 	return nullptr;
 }
+//1.10f: D2Win.0x6F8A15E0
+//1.14d: 0x00503A50
 inline void sub_6F8A15E0(void*)
 {
 }
+//1.10f: D2Win.0x6F8A1890
+//1.14d: 0x00503BA0
 inline void sub_6F8A1890(void*, int)
 {
 }
+//1.10f: D2Win.0x6F8A1D10
+//1.14d: 0x00505810
 inline void sub_6F8A1D10(void*)
 {
 }
+//1.10f: D2Win.0x6F8A2070
+//1.14d: 0x00505A80
 inline void sub_6F8A2070(void*)
 {
 }
-void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2);
-const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore);
+//1.10f: D2Win.0x6F8A2A20 (#10142)
+//1.14d: 0x005041B0
+void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int bUnlinkAndFree);
+//1.10f: D2Win.0x6F8A4CE0 (#10160)
+//1.14d: 0x00505640
+const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore);

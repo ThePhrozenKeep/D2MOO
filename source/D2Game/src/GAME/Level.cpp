@@ -28,9 +28,9 @@
 
 
 //D2Game.0x6FC3BBA0
+//1.14d: 0x0053A620
 void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
-    // TODO: v10
     if (!pGame->pAct[CLIENTS_GetActNo(pClient)]->bHasPendingUnitListUpdates)
     {
         return;
@@ -52,7 +52,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
         {
             D2UnitStrc* pNextUnit = pUnit->pChangeNextUnit;
 
-            int32_t v10 = 0;
+            int32_t bUnitInitialized = 0;
             int32_t bProcessUnit = 0;
             if (!(pUnit->dwFlags & UNITFLAG_INITSEEDSET) || CLIENTS_GetPlayerFromClient(pClient, 0) == pUnit)
             {
@@ -60,8 +60,8 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
             }
             else if (pUnit->dwUnitType != UNIT_MISSILE)
             {
-                D2GAME_SUNITMSG_FirstFn_6FCC5520(pGame, pUnit, pClient);
-                v10 = 1;
+                SUNITMSG_SendUnitToClient(pGame, pUnit, pClient);
+                bUnitInitialized = 1;
                 bProcessUnit = 1;
             }
 
@@ -70,19 +70,19 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                 switch (pUnit->dwUnitType)
                 {
                 case UNIT_PLAYER:
-                    sub_6FC81650(pGame, pUnit, pClient, v10);
+                    PLRMODE_SendPlayerUpdates(pGame, pUnit, pClient, bUnitInitialized);
                     break;
 
                 case UNIT_MONSTER:
-                    sub_6FC659E0(pGame, pUnit, pClient, v10);
+                    MONSTERMSG_SendMonsterUpdates(pGame, pUnit, pClient, bUnitInitialized);
                     break;
 
                 case UNIT_OBJECT:
-                    sub_6FC75350(pGame, pUnit, pClient);
+                    OBJMODE_SendObjectUpdates(pGame, pUnit, pClient);
                     break;
 
                 case UNIT_ITEM:
-                    sub_6FC420B0(pUnit, pClient);
+                    ITEMMODE_SendUpdatedGroundItemToClient(pUnit, pClient);
                     break;
 
                 default:
@@ -96,6 +96,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
 }
 
 //D2Game.0x6FC3BD10
+//1.14d: 0x0053A770
 void __fastcall LEVEL_RemoveUnitsExceptClientPlayer(D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
     D2_ASSERT(pRoom);
@@ -120,6 +121,7 @@ void __fastcall LEVEL_RemoveUnitsExceptClientPlayer(D2ActiveRoomStrc* pRoom, D2C
 }
 
 //D2Game.0x6FC3BDE0
+//1.14d: 0x0053A820
 void __fastcall LEVEL_FreeDrlgDeletes(D2GameStrc* pGame)
 {
     for (int32_t i = 0; i < NUM_ACTS; ++i)
@@ -138,6 +140,7 @@ void __fastcall LEVEL_FreeDrlgDeletes(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC3BE40
+//1.14d: 0x0053A8E0
 void __fastcall LEVEL_AddClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
     D2_ASSERT(pRoom);
@@ -164,12 +167,13 @@ void __fastcall LEVEL_AddClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2Cl
     {
         if (pPlayer != pUnit)
         {
-            D2GAME_SUNITMSG_FirstFn_6FCC5520(pGame, pUnit, pClient);
+            SUNITMSG_SendUnitToClient(pGame, pUnit, pClient);
         }
     }
 }
 
 //D2Game.0x6FC3BF00
+//1.14d: 0x0053A9B0
 void __fastcall LEVEL_RemoveClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
     D2_ASSERT(pRoom);
@@ -198,6 +202,7 @@ void __fastcall LEVEL_RemoveClient(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D
 }
 
 //D2Game.0x6FC3BFB0
+//1.14d: 0x0053AB80
 void __fastcall LEVEL_RemoveClientFromAdjacentRooms(D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
     D2_ASSERT(pRoom);
@@ -213,6 +218,7 @@ void __fastcall LEVEL_RemoveClientFromAdjacentRooms(D2ActiveRoomStrc* pRoom, D2C
 }
 
 //D2Game.0x6FC3C010
+//1.14d: 0x0053ABE0
 void __fastcall LEVEL_SynchronizeDayNightCycleWithClient(D2GameStrc* pGame, D2ClientStrc* pClient)
 {
     const uint8_t nAct = CLIENTS_GetActNo(pClient);
@@ -225,13 +231,14 @@ void __fastcall LEVEL_SynchronizeDayNightCycleWithClient(D2GameStrc* pGame, D2Cl
     
     D2GSPacketSrv53 packet53 = {};
     packet53.nHeader = 0x53u;
-    packet53.unk0x01 = nCycleIndex;
-    packet53.unk0x05 = nTicks;
-    packet53.unk0x09 = nEclipse;
+    packet53.nIndex = nCycleIndex;
+    packet53.nTicks = nTicks;
+    packet53.bEclipse = nEclipse;
     D2GAME_SendPacket0x53_6FC3DF50(pClient, &packet53);
 }
 
 //D2Game.0x6FC3C0B0
+//1.14d: 0x0053ACC0
 void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t nDestinationLevelId, int32_t nTileCalc)
 {
     if (ARENA_IsInArenaMode(pGame))
@@ -283,7 +290,7 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
         exit(-1);
     }
 
-    sub_6FCBB190(pGame, pUnit, UNITS_GetRoom(pUnit));
+    SUNIT_SynchronizeRoomClients(pGame, pUnit, UNITS_GetRoom(pUnit));
 
     if (!D2Common_10229(pUnit->pDynamicPath, pUnit, pRoom, nX, nY))
     {
@@ -300,16 +307,17 @@ void __fastcall LEVEL_ChangeAct(D2GameStrc* pGame, D2ClientStrc* pClient, int32_
     CLIENTS_SetRoomInClient(pClient, pRoom);
     UNITROOM_RefreshUnit(pUnit);
     pUnit->dwFlagEx |= UNITFLAGEX_TELEPORTED;
-    sub_6FCBB190(pGame, pUnit, nullptr);
+    SUNIT_SynchronizeRoomClients(pGame, pUnit, nullptr);
     UNITROOM_RefreshUnit(pUnit);
 
     if (pUnit->dwUnitType == UNIT_PLAYER)
     {
-        sub_6FC7E310(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
+        PLAYERPETS_UpdatePetsForOwnerMove(pGame, pUnit, CLIENTS_GetUnitX(pUnit), CLIENTS_GetUnitY(pUnit));
     }
 }
 
 //D2Game.0x6FC3C410
+//1.14d: 0x0053AEC0
 void __fastcall LEVEL_WarpUnit(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nDestinationLevelId, int32_t nTileCalc)
 {
     D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
@@ -335,11 +343,12 @@ void __fastcall LEVEL_WarpUnit(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t n
     D2ActiveRoomStrc* pSpawnRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nDestinationAct], nDestinationLevelId, nTileCalc, &nX, &nY, UNITS_GetUnitSizeX(pPlayer));
     if (pSpawnRoom)
     {
-        sub_6FCBDFE0(pGame, pPlayer, pSpawnRoom, nX, nY, 0, 0);
+        SUNIT_TeleportUnit(pGame, pPlayer, pSpawnRoom, nX, nY, 0, 0);
     }
 }
 
 //D2Game.0x6FC3C510
+//1.14d: 0x0053AFB0
 void __fastcall LEVEL_LoadAct(D2GameStrc* pGame, uint8_t nAct)
 {
     if (pGame->pAct[nAct])
@@ -358,10 +367,11 @@ void __fastcall LEVEL_LoadAct(D2GameStrc* pGame, uint8_t nAct)
     }
 
     pGame->pAct[nAct] = DUNGEON_AllocAct(nAct, pGame->dwInitSeed, 0, pGame, pGame->nDifficulty, pGame->pMemoryPool, nTownLevelId, 0, 0);
-    ACT2Q3_BrightenEnvironment(pGame, nAct);
+    ACT2Q3_ApplyPendingDarkness(pGame, nAct);
 }
 
 //D2Game.0x6FC3C580
+//1.14d: 0x0053AFD0
 void __fastcall LEVEL_RemoveAllUnits(D2GameStrc* pGame)
 {
     MONSTER_RemoveAll(pGame);
@@ -383,6 +393,7 @@ void __fastcall LEVEL_RemoveAllUnits(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC3C5B0
+//1.14d: 0x0053B000
 void __fastcall LEVEL_UpdateQueuedUnitsInAllActs(D2GameStrc* pGame)
 {
     for (int32_t i = 0; i < NUM_ACTS; ++i)
@@ -394,7 +405,7 @@ void __fastcall LEVEL_UpdateQueuedUnitsInAllActs(D2GameStrc* pGame)
             {
                 for (D2UnitStrc* pUnit = pRoom->pUnitUpdate; pUnit; pUnit = pUnit->pChangeNextUnit)
                 {
-                    sub_6FCBC300(pGame, pUnit);
+                    SUNIT_ClearUpdateData(pGame, pUnit);
                 }
 
                 UNITROOM_ClearUpdateQueue(pRoom);

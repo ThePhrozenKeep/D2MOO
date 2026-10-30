@@ -280,10 +280,10 @@ EXPORTS
 	INVENTORY_GetFirstItem												@10277
 	INVENTORY_GetLastItem												@10278
 	INVENTORY_RemoveInventoryItems										@10279
-	INVENTORY_GetTradeInventory											@10280
-	INVENTORY_FreeTradeInventory										@10281
-	INVENTORY_CheckForItemInTradeInventory								@10282
-	INVENTORY_AddItemToTradeInventory									@10283
+	INVENTORY_GetCommandQueue											@10280
+	INVENTORY_FreeCommandQueue											@10281
+	INVENTORY_IsItemInCommandQueue										@10282
+	INVENTORY_AddItemToCommandQueue										@10283
 	INVENTORY_GetItemCount												@10284
 	INVENTORY_GetBackPackItemByType										@10285
 	INVENTORY_GetEquippedItemByType										@10286
@@ -907,8 +907,8 @@ EXPORTS
 	TEXT_RemoveNodeFromTextList											@10904
 	TEXT_GetMenuType2NodeCount											@10905
 	TEXT_GetStringIdOfMenuType2Node										@10906
-	TEXT_GetStringIdOfMenuType1Or2Node									@10907
-	TEXT_GetStringIdOfMenuType0Or2Node									@10908
+	TEXT_GetStringIdOfMenuType0Node										@10907
+	TEXT_GetStringIdOfMenuType1Node										@10908
 	TEXT_CreateMessageListFromTextHeader								@10909
 	TEXT_CreateTextHeaderFromMessageList								@10910
 	TEXT_SortTextNodeListByStringId										@10911
