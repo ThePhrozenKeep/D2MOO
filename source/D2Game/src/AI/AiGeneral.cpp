@@ -351,13 +351,14 @@ D2MapAIStrc** __stdcall AIGENERAL_GetMapAiFromUnit(D2UnitStrc* pUnit)
 //1.14d: 0x0058F030
 void __fastcall AIGENERAL_SetOwnerData(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nOwnerGUID, int32_t nOwnerType, int32_t bSetFlag1, int32_t bSetFlag2)
 {
+	D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
+#ifndef NO_BUG_FIX
 	// Only monsters have AI control (MONSTERUNIQUE_KillMinions passes the player owning a summon).
-	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
+	if (!pAiControl)
 	{
 		return;
 	}
-
-	D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
+#endif
 
 	if (bSetFlag2)
 	{
