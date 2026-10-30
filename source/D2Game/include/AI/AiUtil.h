@@ -69,7 +69,7 @@ struct D2VileMotherAiCallbackArgStrc
 
 struct D2AiDeathModeSearchArgsStrc
 {
-	int32_t nMaxDistance;
+	uint32_t nMaxDistance;
 };
 
 #ifdef D2_VERSION_HAS_UBERS

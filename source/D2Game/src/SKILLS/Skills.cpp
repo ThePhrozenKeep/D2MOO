@@ -4187,7 +4187,7 @@ int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(D2UnitStrc* pUnit, int32
 
 //D2Game.0x6FD155E0
 //1.14d: 0x0056E680
-void __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t nRangeOffset)
+uint16_t __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t nRangeOffset)
 {
     if (pSkillsTxtRecord->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -4201,6 +4201,8 @@ void __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitSt
             pDamage->wResultFlags |= pSkillsTxtRecord->wResultFlags;
         }
     }
+
+    return pDamage->wResultFlags;
 }
 
 //D2Game.0x6FD15650
