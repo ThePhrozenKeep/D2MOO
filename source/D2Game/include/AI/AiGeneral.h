@@ -150,7 +150,7 @@ void __fastcall AIGENERAL_DetachOwnedMinions(D2UnitStrc* pUnit);
 void __fastcall AIGENERAL_FreeAllMinionLists(D2GameStrc* pGame, D2MinionListStrc* pMinionList);
 //D2Game.0x6FCCF5C0
 //1.14d: 0x0058F380
-void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfnParty)(D2UnitStrc*, void*, void*));
+void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfCallback)(D2UnitStrc*, void*, void*));
 //D2Game.0x6FCCF680
 //1.14d: 0x0058F440
 void __fastcall AIGENERAL_GetAiControlInfo(D2UnitStrc* pUnit, int32_t* pOwnerGUID, int32_t* pOwnerType, int32_t* pAiControlFlag1, int32_t* pAiControlFlag2, D2MinionListStrc** ppMinionList);
