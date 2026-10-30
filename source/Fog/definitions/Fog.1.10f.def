@@ -37,7 +37,7 @@ UnimplementedOrdinal_10020=UnimplementedOrdinal @10020;   FOG_10020 @10020 NONAM
     FOG_DisplayWarning @10025 NONAME
     FOG_DisplayError @10026 NONAME
 UnimplementedOrdinal_10027=UnimplementedOrdinal @10027;   FOG_10027 @10027 NONAME
-UnimplementedOrdinal_10028=UnimplementedOrdinal @10028;   FOG_10028 @10028 NONAME
+	FOG_10028 @10028 NONAME
     FOG_Trace @10029 NONAME
     FOG_TraceF @10030 NONAME
     FOG_TraceAppend @10031 NONAME

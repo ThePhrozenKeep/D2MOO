@@ -1,5 +1,6 @@
 #pragma once
 
+
 enum DisplayType
 {
 	DISPLAYTYPE_NONE,
