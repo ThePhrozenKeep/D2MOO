@@ -2419,7 +2419,7 @@ int32_t __fastcall SUNIT_TeleportUnit(D2GameStrc* pGame, D2UnitStrc* pUnit, D2Ac
             pPlayerData->nPositionHistoryIndex = 0;
         }
 
-        j_D2GAME_InitTimer_6FC351D0(pGame, pUnit, EVENTTYPE_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, SUNIT_EventClearTeleportCoordinates, 0, 0);
+        EVENT_SetEventWithCallback(pGame, pUnit, EVENTTYPE_REMOVESKILLCOOLDOWN, pGame->dwGameFrame + 50, SUNIT_EventClearTeleportCoordinates, 0, 0);
         PLAYERPETS_UpdatePetsForOwnerMove(pGame, pUnit, coords.nX, coords.nY);
     }
     else

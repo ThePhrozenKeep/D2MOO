@@ -1151,14 +1151,14 @@ void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc*
 
 //D2Game.0x6FC33830
 //1.14d: 0x00538260
-void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull)
+void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, D2UnitStrc* pUnit)
 {
     D2_ASSERT(pClient);
 
-    if (pAlwaysNull)
+    if (pUnit)
     {
-        pClient->unk0x198[0] = *(int32_t*)pAlwaysNull;
-        pClient->unk0x198[1] = *((int32_t*)(pAlwaysNull) + 3);
+        pClient->dwDeathUnitType = pUnit->dwUnitType;
+        pClient->dwDeathUnitGUID = pUnit->dwUnitId;
         pClient->dwFlags |= 2;
     }
     else

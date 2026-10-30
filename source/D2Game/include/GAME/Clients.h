@@ -192,7 +192,9 @@ struct D2ClientStrc
 	uint32_t nSaveHeaderDataSentBytes;			//0x188
 	DWORD nSaveChecksum;						//0x18C
 	FILETIME nSaveCreationTimestamp;			//0x190
-	DWORD unk0x198[4];							//0x198
+	uint32_t dwDeathUnitType;					//0x198
+	D2UnitGUID dwDeathUnitGUID;					//0x19C
+	DWORD unk0x1A0[2];							//0x1A0
 	D2GameStrc* pGame;							//0x1A8
 	uint8_t nAct;								//0x1AC
 	uint8_t pad0x1AD[3];						//0x1AD
@@ -309,7 +311,7 @@ int32_t __fastcall CLIENTS_IsInGame(D2GameStrc* pGame, int32_t nClientId);
 void __fastcall CLIENTS_SetRoomInClient(D2ClientStrc* pClient, D2ActiveRoomStrc* pRoom);
 //D2Game.0x6FC33830
 //1.14d: 0x00538260
-void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, void* pAlwaysNull);
+void __fastcall D2GAME_SetClientDead_6FC33830(D2ClientStrc* pClient, D2UnitStrc* pUnit);
 //D2Game.0x6FC33890
 //1.14d: 0x005382B0
 uint8_t __fastcall CLIENTS_GetActNo(D2ClientStrc* pClient);
