@@ -4,6 +4,7 @@ if(D2MOO_ORDINALS_VERSION STREQUAL "1.10f")
   target_sources(TestDefinitions
     PRIVATE
       include/TestDefinitions.h
+      include/D2GfxTestDefinitions.h
       include/DynamicArray.h
       include/EqualityMacros.h
       include/RepetitionMacros.h
@@ -71,6 +72,12 @@ if(D2MOO_ORDINALS_VERSION STREQUAL "1.10f")
       include/Fixtures/DataTbls/UniquePrefixTxtFixture.h
       include/Fixtures/DataTbls/UniqueSuffixTxtFixture.h
       include/Fixtures/DataTbls/UniqueTitleTxtFixture.h
+
+      include/Fixtures/D2Gfx/D2GfxGlobalsFixture.h
+      include/Fixtures/D2Gfx/D2GfxOriginalDll.h
+      include/Fixtures/D2Gfx/D2GfxSoftwareRendererFixture.h
+      include/Fixtures/D2Gfx/D2GraphicsInterfaceMockFixture.h
+      include/Fixtures/D2Gfx/D2GfxWin32ApiMockFixture.h
   
       include/Fixtures/D2Lang/D2LangStringTblFixture.h
   
@@ -128,6 +135,9 @@ if(D2MOO_ORDINALS_VERSION STREQUAL "1.10f")
       include/D2Common/D2StatListVisitorDefinitions.h
       include/D2Common/D2TextVisitorDefinitions.h
       include/D2Common/D2WaypointsVisitorDefinitions.h
+
+      include/D2Gfx/CmnSubtileVisitorDefinitions.h
+      include/D2Gfx/D2GfxVisitorDefinitions.h
   )
 endif()
 target_include_directories(TestDefinitions PUBLIC include)
