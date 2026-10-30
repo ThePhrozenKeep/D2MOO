@@ -272,12 +272,12 @@ void __fastcall D2GAME_PACKETS_SendPacket0x10_6FC3C9A0(D2ClientStrc* pClient, ch
 
 //D2Game.0x6FC3CA00
 //1.14d: 0x0053B570
-void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, char nHeader, uint8_t bTOU, int32_t nUnitGUID, char nFlags, int16_t nDestPosX, int16_t nDestPosY, char a8, int16_t nCurrentPosX, int16_t nCurrentPosY)
+void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, char nHeader, uint8_t nUnitType, int32_t nUnitGUID, char nFlags, int16_t nDestPosX, int16_t nDestPosY, char a8, int16_t nCurrentPosX, int16_t nCurrentPosY)
 {
     D2GSPacketSrv0F packet0F = {};
 
     packet0F.nHeader = nHeader;
-    packet0F.nUnitType = bTOU;
+    packet0F.nUnitType = nUnitType;
     packet0F.dwUnitGUID = nUnitGUID;
     packet0F.nFlags = nFlags;
     packet0F.nDestPosX = nDestPosX;
@@ -286,9 +286,9 @@ void __fastcall D2GAME_PACKETS_SendPacket0x0F_6FC3CA00(D2ClientStrc* pClient, ch
     packet0F.nCurrentPosX = nCurrentPosX;
     packet0F.nCurrentPosY = nCurrentPosY;
 
-    if (bTOU >= 6u)
+    if (nUnitType >= 6u)
     {
-        D2_ASSERT(bTOU < UNIT_TYPES_COUNT);
+        D2_ASSERT(nUnitType < UNIT_TYPES_COUNT);
         exit(-1);
     }
 
@@ -1411,39 +1411,39 @@ int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pRecipientPlayer, 
         nUnitGUID = pTargetPlayer->dwUnitId;
     }
 
-    D2UnkPlayerDataStrc* pData = pPlayerData->unk0x98;
-    while (pData)
+    D2UnkPlayerDataStrc* pLifeUpdateState = pPlayerData->unk0x98;
+    while (pLifeUpdateState)
     {
-        if (nUnitGUID == pData->nUnitGUID)
+        if (nUnitGUID == pLifeUpdateState->nUnitGUID)
         {
             break;
         }
 
-        pData = pData->pNext;
+        pLifeUpdateState = pLifeUpdateState->pNext;
     }
 
-    if (!pData)
+    if (!pLifeUpdateState)
     {
-        pData = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2UnkPlayerDataStrc);
-        if (!pData)
+        pLifeUpdateState = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2UnkPlayerDataStrc);
+        if (!pLifeUpdateState)
         {
             return 0;
         }
 
-        memset(pData, 0x00, sizeof(*pData));
-        pData->pNext = pPlayerData->unk0x98;
-        pPlayerData->unk0x98 = pData;
-        pData->nUnitGUID = nUnitGUID;
+        memset(pLifeUpdateState, 0x00, sizeof(*pLifeUpdateState));
+        pLifeUpdateState->pNext = pPlayerData->unk0x98;
+        pPlayerData->unk0x98 = pLifeUpdateState;
+        pLifeUpdateState->nUnitGUID = nUnitGUID;
     }
 
-    if (pData->unk0x08 != nLevelId)
+    if (pLifeUpdateState->nLevelId != nLevelId)
     {
-        pData->unk0x04 = nLifePercentage;
-        pData->unk0x08 = nLevelId;
+        pLifeUpdateState->nLifePercentage = nLifePercentage;
+        pLifeUpdateState->nLevelId = nLevelId;
         return 1;
     }
 
-    int32_t nLifeDifference = nLifePercentage - pData->unk0x04;
+    int32_t nLifeDifference = nLifePercentage - pLifeUpdateState->nLifePercentage;
     if (nLifeDifference == 0)
     {
         return 0;
@@ -1453,19 +1453,19 @@ int32_t __fastcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc* pRecipientPlayer, 
 
     if (nLifeDifference > 8)
     {
-        pData->unk0x0C = 0;
-        pData->unk0x04 = nLifePercentage;
+        pLifeUpdateState->nCount = 0;
+        pLifeUpdateState->nLifePercentage = nLifePercentage;
         return 1;
     }
 
-    ++pData->unk0x0C;
-    if (pData->unk0x0C <= 6u)
+    ++pLifeUpdateState->nCount;
+    if (pLifeUpdateState->nCount <= 6u)
     {
         return 0;
     }
 
-    pData->unk0x0C = 0;
-    pData->unk0x04 = nLifePercentage;
+    pLifeUpdateState->nCount = 0;
+    pLifeUpdateState->nLifePercentage = nLifePercentage;
     return 1;
 }
 

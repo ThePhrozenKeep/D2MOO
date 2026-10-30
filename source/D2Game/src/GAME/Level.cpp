@@ -31,7 +31,6 @@
 //1.14d: 0x0053A620
 void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2ClientStrc* pClient)
 {
-    // TODO: v10
     if (!pGame->pAct[CLIENTS_GetActNo(pClient)]->bHasPendingUnitListUpdates)
     {
         return;
@@ -53,7 +52,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
         {
             D2UnitStrc* pNextUnit = pUnit->pChangeNextUnit;
 
-            int32_t v10 = 0;
+            int32_t bUnitInitialized = 0;
             int32_t bProcessUnit = 0;
             if (!(pUnit->dwFlags & UNITFLAG_INITSEEDSET) || CLIENTS_GetPlayerFromClient(pClient, 0) == pUnit)
             {
@@ -62,7 +61,7 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
             else if (pUnit->dwUnitType != UNIT_MISSILE)
             {
                 SUNITMSG_SendUnitToClient(pGame, pUnit, pClient);
-                v10 = 1;
+                bUnitInitialized = 1;
                 bProcessUnit = 1;
             }
 
@@ -71,11 +70,11 @@ void __fastcall LEVEL_UpdateUnitsInAdjacentRooms(D2GameStrc* pGame, D2ActiveRoom
                 switch (pUnit->dwUnitType)
                 {
                 case UNIT_PLAYER:
-                    PLRMODE_SendPlayerUpdates(pGame, pUnit, pClient, v10);
+                    PLRMODE_SendPlayerUpdates(pGame, pUnit, pClient, bUnitInitialized);
                     break;
 
                 case UNIT_MONSTER:
-                    MONSTERMSG_SendMonsterUpdates(pGame, pUnit, pClient, v10);
+                    MONSTERMSG_SendMonsterUpdates(pGame, pUnit, pClient, bUnitInitialized);
                     break;
 
                 case UNIT_OBJECT:

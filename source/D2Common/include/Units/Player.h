@@ -132,9 +132,9 @@ struct D2PlayerListStrc
 struct D2UnkPlayerDataStrc
 {
 	int32_t nUnitGUID;							//0x00
-	int32_t unk0x04;							//0x04
-	int32_t unk0x08;							//0x08
-	uint8_t unk0x0C;							//0x0C
+	int32_t nLifePercentage;					//0x04
+	int32_t nLevelId;							//0x08
+	uint8_t nCount;								//0x0C
 	uint8_t unk0x0D[3];							//0x0D
 	D2UnkPlayerDataStrc* pNext;					//0x10
 };

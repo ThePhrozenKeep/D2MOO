@@ -1499,7 +1499,6 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t bSendLeaveMessage)
 {
     D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
 
-    // TODO: v10
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvEndGame: Client %d was not in any game", nClientId);
@@ -1515,8 +1514,8 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t bSendLeaveMessage)
     }
 
     D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
-    const uint32_t v10 = CLIENT_IsGameOwner(pClient);
-    if (v10 || pGame->nGameType)
+    const uint32_t bIsGameOwner = CLIENT_IsGameOwner(pClient);
+    if (bIsGameOwner || pGame->nGameType)
     {
         D2ClientStrc* i = pGame->pClientList;
         while (i)
@@ -1572,7 +1571,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t bSendLeaveMessage)
             CLIENTS_CopyAccountNameToBuffer(pClient, &packet5A.szText[16]);
             packet5A.szText[31] = '\0';
             SStrCopy(packet5A.szText, CLIENTS_GetName(pClient), 16u);
-            CLIENTS_RemoveClientFromGame(pGame, nClientId, !v10);
+            CLIENTS_RemoveClientFromGame(pGame, nClientId, !bIsGameOwner);
 
             if (bSendLeaveMessage)
             {
@@ -1581,7 +1580,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t bSendLeaveMessage)
 
             GAME_LogMessage(6, "[SERVER]  SrvEndGame: Disconnect %d '%s' from game %d '%s'", nClientId, packet5A.szText, pGame->nGameId, pGame->szGameName);
 
-            if (!v10)
+            if (!bIsGameOwner)
             {
                 break;
             }
@@ -2202,13 +2201,13 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t bLimitCatchUp)
         return 0;
     }
 
-    int32_t v5 = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
-    if (bLimitCatchUp && v5 >= gnTargetMsPerFrame_6FD457F8)
+    int32_t nRemainingDelayMs = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
+    if (bLimitCatchUp && nRemainingDelayMs >= gnTargetMsPerFrame_6FD457F8)
     {
-        v5 = gnTargetMsPerFrame_6FD457F8;
+        nRemainingDelayMs = gnTargetMsPerFrame_6FD457F8;
     }
 
-    dword_6FD45844 = nSysTimeMs - v5;
+    dword_6FD45844 = nSysTimeMs - nRemainingDelayMs;
     
     int32_t bQueryPerformance = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
