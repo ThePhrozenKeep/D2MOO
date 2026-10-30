@@ -39,14 +39,21 @@
 #include "UNIT/SUnit.h"
 
 
-constexpr uint32_t dword_6FD3F45C = 0xDEADDEAD;
-constexpr uint32_t dword_6FD3F460 = 1;
-constexpr uint32_t dword_6FD3F464 = 2;
+//1.10f: D2Game.0x6FD3F45C
+//1.14d: 0x007314C0
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAGS_MARKER = 0xDEADDEAD;
+//1.10f: D2Game.0x6FD3F460
+//1.14d: 0x007314C4
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAG_NOXP = 1;
+//1.10f: D2Game.0x6FD3F464
+//1.14d: 0x007314C8
+constexpr uint32_t INACTIVE_MONSTER_SAVED_FLAG_NOTC = 2;
 
 
 
 
 //D2Game.0x6FCC3850
+//1.14d: 0x00542B40
 void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
@@ -122,18 +129,18 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 
 					if (nType == 0)
 					{
-						pUnit = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+						pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 
 						if (!pUnit)
 						{
-							pUnit = sub_6FC6A0F0(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, 5, nFlags);
+							pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, nX, nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, 5, nFlags);
 
 							if (!pUnit)
 							{
 								D2CoordStrc pCoord = {};
-								if (sub_6FC66260(pGame, pRoom, 0, nClassId, &pCoord.nX, &pCoord.nY, 0))
+								if (MONSTERREGION_FindSpawnLocation(pGame, pRoom, 0, nClassId, &pCoord.nX, &pCoord.nY, 0))
 								{
-									pUnit = sub_6FC6A0F0(pGame, pRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+									pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, pRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 									if (!pUnit)
 									{
 										pCoord.nX = nX;
@@ -142,7 +149,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 										D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 										if (ppRoom)
 										{
-											pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+											pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 										}
 									}
 								}
@@ -154,7 +161,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 									D2Common_10136(pRoom, &pCoord, 1, COLLIDE_MASK_MONSTER_PATH, &ppRoom);
 									if (ppRoom)
 									{
-										pUnit = sub_6FC6A0F0(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
+										pUnit = MONSTERSPAWN_SpawnWithUnitId(pGame, ppRoom, pCoord.nX, pCoord.nY, nClassId, nMode, pInactiveMonsterNode->nUnitId, -1, nFlags);
 									}
 								}
 							}
@@ -162,11 +169,11 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 					}
 					else if (nType == 1)
 					{
-						pUnit = sub_6FC6FBA0(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nNameSeed, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_CHAMPION, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_SUPERUNIQUE, pInactiveMonsterNode->nBossHcIdx, pInactiveMonsterNode->nMonUMods);
+						pUnit = MONSTERUNIQUE_RestoreUniqueMonster(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nNameSeed, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_CHAMPION, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_TYPE_SUPERUNIQUE, pInactiveMonsterNode->nBossHcIdx, pInactiveMonsterNode->nMonUMods);
 					}
 					else if (nType == 2)
 					{
-						pUnit = sub_6FC6FDC0(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nMonUMods);
+						pUnit = MONSTERUNIQUE_RestoreMinion(pGame, pRoom, nX, nY, nClassId, pInactiveMonsterNode->nUnitId, pInactiveMonsterNode->nMonUMods);
 					}
 
 					int32_t nOldAlign = UNIT_ALIGNMENT_EVIL;
@@ -182,7 +189,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 
 					if (pUnit)
 					{
-						AIGENERAL_SetAiControlInfo(pGame, pUnit, pInactiveMonsterNode->unk0x1C, 1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED2, pInactiveMonsterNode->pMinionList);
+						AIGENERAL_SetAiControlInfo(pGame, pUnit, pInactiveMonsterNode->nOwnerGUID, 1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED1, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_MINIONRELATED2, pInactiveMonsterNode->pMinionList);
 
 						STATLIST_SetUnitStat(pUnit, STAT_EXPERIENCE, pInactiveMonsterNode->nExperience, 0);
 
@@ -205,13 +212,13 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						{
 							if (nOldAlign == 2)
 							{
-								sub_6FC40280(pGame, pUnit, 0, 8);
+								TARGETS_InsertUnitNode(pGame, pUnit, 0, 8);
 							}
 							else
 							{
 								D2_ASSERT(nOldAlign == UNIT_ALIGNMENT_NEUTRAL);
 
-								sub_6FC40280(pGame, pUnit, 0, 9);
+								TARGETS_InsertUnitNode(pGame, pUnit, 0, 9);
 							}
 						}
 
@@ -227,7 +234,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 							}
 						}
 
-						sub_6FCBDD30(pUnit, nOldAlign, 1);
+						SUNIT_SetAlignment(pUnit, nOldAlign, 1);
 
 						if (pInactiveMonsterNode->nUnitFlagsEx & 0x200)
 						{
@@ -241,7 +248,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						AIGENERAL_FreeAllMinionLists(pGame, pInactiveMonsterNode->pMinionList);
 					}
 
-					sub_6FC682C0(pGame->pMonReg, pInactiveMonsterNode->nLevelId, DUNGEON_GetLevelIdFromRoom(pRoom), nOldAlign, nMode == MONMODE_DEAD, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_UNKSUMMONERFLAG, pUnit);
+					MONSTERREGION_AdjustCountsForInactiveMonster(pGame->pMonReg, pInactiveMonsterNode->nLevelId, DUNGEON_GetLevelIdFromRoom(pRoom), nOldAlign, nMode == MONMODE_DEAD, pInactiveMonsterNode->nTypeFlags & INACTIVEMONSTERFLAG_UNKSUMMONERFLAG, pUnit);
 					SUNITINACTIVE_FreeInactiveMonsterNode(pGame, pInactiveMonsterNode);
 				}
 				else
@@ -353,20 +360,20 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 				}
 				else
 				{
-					int32_t v45 = 2 * pObjectsTxtRecord->dwParm[2];
-					int32_t v46 = pInactiveUnitNode->nInteractType;
-					if (v46 < v45)
+					int32_t nMaxCharges = 2 * pObjectsTxtRecord->dwParm[2];
+					int32_t nCharges = pInactiveUnitNode->nInteractType;
+					if (nCharges < nMaxCharges)
 					{
 						int32_t nFrameDelta = pObjectsTxtRecord->dwParm[0];
 						D2_ASSERT(nFrameDelta);
 
 						if (pInactiveUnitNode->nGameFrame >= (int32_t)(pGame->dwGameFrame + nFrameDelta))
 						{
-							pUnit->pObjectData->InteractType = v46;
-							if (v46 < v45 && v45 - v46 > 0)
+							pUnit->pObjectData->InteractType = nCharges;
+							if (nCharges < nMaxCharges && nMaxCharges - nCharges > 0)
 							{
 								int32_t nOffset = nFrameDelta;
-								int32_t nCounter = v45 - v46;
+								int32_t nCounter = nMaxCharges - nCharges;
 								do
 								{
 									EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
@@ -379,32 +386,32 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 						}
 						else
 						{
-							int32_t v50 = (pGame->dwGameFrame - pInactiveUnitNode->nGameFrame) / nFrameDelta;
-							if (v50 >= 1)
+							int32_t nRegenerateSteps = (pGame->dwGameFrame - pInactiveUnitNode->nGameFrame) / nFrameDelta;
+							if (nRegenerateSteps >= 1)
 							{
-								v50 = 1;
+								nRegenerateSteps = 1;
 							}
 
-							int32_t v71 = (BYTE)(v50 + v46);
-							if (v71 > v45)
+							int32_t nRegeneratedCharges = (BYTE)(nRegenerateSteps + nCharges);
+							if (nRegeneratedCharges > nMaxCharges)
 							{
-								v71 = v45;
+								nRegeneratedCharges = nMaxCharges;
 							}
 
-							pUnit->dwAnimMode = (BYTE)2 - v71 / (int32_t)pObjectsTxtRecord->dwParm[2];
+							pUnit->dwAnimMode = (BYTE)2 - nRegeneratedCharges / (int32_t)pObjectsTxtRecord->dwParm[2];
 							if (pUnit->dwAnimMode > 2)
 							{
 								pUnit->dwAnimMode = OBJMODE_NEUTRAL;
-								pUnit->pObjectData->InteractType = v45;
+								pUnit->pObjectData->InteractType = nMaxCharges;
 							}
 							else
 							{
-								v46 = v71;
-								pUnit->pObjectData->InteractType = v46;
-								if (v46 < v45 && v45 - v46 > 0)
+								nCharges = nRegeneratedCharges;
+								pUnit->pObjectData->InteractType = nCharges;
+								if (nCharges < nMaxCharges && nMaxCharges - nCharges > 0)
 								{
 									int32_t nOffset = nFrameDelta;
-									int32_t nCounter = v45 - v46;
+									int32_t nCounter = nMaxCharges - nCharges;
 									do
 									{
 										EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
@@ -452,6 +459,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 }
 
 //D2Game.0x6FCC40D0
+//1.14d: 0x00541860
 D2AiControlStrc* __fastcall AIGENERAL_GetAiControlFromUnit(D2UnitStrc* pUnit)
 {
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
@@ -474,6 +482,7 @@ void __fastcall SUNITINACTIVE_FreeInactiveMonsterNode(D2GameStrc* pGame, D2Inact
 }
 
 //D2Game.0x6FCC4120
+//1.14d: 0x00541990
 D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, D2InactiveItemNodeStrc* pInactiveItemNode)
 {
 	D2ItemSaveStrc pItemSave = {};
@@ -481,7 +490,7 @@ D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2Ac
 	ITEMS_GetCompactItemDataFromBitstream(pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave);
 
 	uint32_t nSize = 0;
-	D2UnitStrc* pItem = sub_6FC4EC10(pGame, pRoom, pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave, &nSize, 96);
+	D2UnitStrc* pItem = ITEMS_CreateItemFromBitstream(pGame, pRoom, pBitstream, pInactiveItemNode->nBitstreamSize, 1, &pItemSave, &nSize, 96);
 	if (!pItem)
 	{
 		return nullptr;
@@ -510,7 +519,7 @@ D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2Ac
 		for (int32_t i = 0; i < pItemSave.nItemFileIndex; ++i)
 		{
 			ITEMS_GetCompactItemDataFromBitstream(pBitstream, nAvailableSize, 1, &pItemSave);
-			D2UnitStrc* pSocketable = sub_6FC4EC10(pGame, nullptr, pBitstream, nAvailableSize, 1, &pItemSave, &nSize, 96);
+			D2UnitStrc* pSocketable = ITEMS_CreateItemFromBitstream(pGame, nullptr, pBitstream, nAvailableSize, 1, &pItemSave, &nSize, 96);
 			if (!pSocketable)
 			{
 				FOG_DisplayWarning("Unable to create item", __FILE__, __LINE__);
@@ -528,6 +537,7 @@ D2UnitStrc* __fastcall SUNITINACTIVE_RestoreInactiveItem(D2GameStrc* pGame, D2Ac
 }
 
 //D2Game.0x6FCC4270
+//1.14d: 0x00543080
 void __fastcall SUNITINACTIVE_FreeInactiveUnitLists(D2GameStrc* pGame)
 {
 	for (int32_t i = 0; i < 5; ++i)
@@ -570,6 +580,7 @@ void __fastcall SUNITINACTIVE_FreeInactiveUnitLists(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCC4370
+//1.14d: 0x005433F0
 void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	int32_t bCompress = 0;
@@ -616,8 +627,8 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			if (!bIsDead)
 			{
 				bCompress = 1;
-				sub_6FCBDD30(pUnit, 0, 1);
-				D2GAME_TARGETS_Last_6FC40380(pGame, pUnit);
+				SUNIT_SetAlignment(pUnit, 0, 1);
+				TARGETS_RemoveUnitNode(pGame, pUnit);
 			}
 			else
 			{
@@ -637,13 +648,13 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			bCompress = 0;
 		}
 
-		int32_t bUnk = 0;
+		int32_t bPreserveUnit = 0;
 		if (pUnit->dwFlags & UNITFLAG_ISREVIVE)
 		{
 			D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 			if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 			{
-				bUnk = sub_6FC7D5F0(pGame, pOwner, pUnit);
+				bPreserveUnit = PLAYERPETS_HandlePetDeactivation(pGame, pOwner, pUnit);
 			}
 			bCompress = 0;
 		}
@@ -666,7 +677,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 			bCompress = 0;
 		}
 
-		if (bUnk)
+		if (bPreserveUnit)
 		{
 			SUNITINACTIVE_SetUnitFlagEx(pUnit, UNITFLAGEX_HASBEENDELETED, 1);
 
@@ -765,6 +776,7 @@ void __fastcall SUNITINACTIVE_CompressUnitIfNeeded(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCC4650
+//1.14d: 0x00542E10
 void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -792,7 +804,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 
 		D2InactiveMonsterNodeStrc* pInactiveMonsterNode = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2InactiveMonsterNodeStrc);
 
-		pInactiveMonsterNode->unk0x1C = -1;
+		pInactiveMonsterNode->nOwnerGUID = -1;
 		pInactiveMonsterNode->nX = CLIENTS_GetUnitX(pUnit);
 		pInactiveMonsterNode->nY = CLIENTS_GetUnitY(pUnit);
 		pInactiveMonsterNode->nClassId = pUnit->dwClassId;
@@ -873,23 +885,23 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		}
 
 		D2MinionListStrc* pMinionList = nullptr;
-		int32_t a2 = 0;
-		int32_t a3 = 0;
-		int32_t a4 = 0;
-		int32_t a5 = 0;
-		AIGENERAL_GetAiControlInfo(pUnit, &a2, &a3, &a4, &a5, &pMinionList);
+		int32_t nOwnerGUID = 0;
+		int32_t nOwnerType = 0;
+		int32_t bAiControlFlag1 = 0;
+		int32_t bAiControlFlag2 = 0;
+		AIGENERAL_GetAiControlInfo(pUnit, &nOwnerGUID, &nOwnerType, &bAiControlFlag1, &bAiControlFlag2, &pMinionList);
 
-		if (a2 != -1 && a3 == 1)
+		if (nOwnerGUID != -1 && nOwnerType == 1)
 		{
-			pInactiveMonsterNode->unk0x1C = a2;
+			pInactiveMonsterNode->nOwnerGUID = nOwnerGUID;
 			pInactiveMonsterNode->pMinionList = pMinionList;
 
-			if (a4)
+			if (bAiControlFlag1)
 			{
 				pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_MINIONRELATED1;
 			}
 
-			if (a5)
+			if (bAiControlFlag2)
 			{
 				pInactiveMonsterNode->nTypeFlags |= INACTIVEMONSTERFLAG_MINIONRELATED2;
 			}
@@ -1002,6 +1014,7 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCC4C90
+//1.14d: 0x00543140
 void __fastcall SUNITINACTIVE_DeleteSingleListNode(D2GameStrc* pGame, uint16_t nUnitType, uint16_t nClassId, uint8_t nAct)
 {
 	if (nUnitType == UNIT_MONSTER)
@@ -1072,6 +1085,7 @@ void __fastcall SUNITINACTIVE_DeleteSingleListNode(D2GameStrc* pGame, uint16_t n
 }
 
 //D2Game.0x6FCC4DC0
+//1.14d: 0x00541D20
 D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinates(D2GameStrc* pGame, int32_t nAct, int32_t nX, int32_t nY, int32_t bAllocNewNode)
 {
 	int32_t bFound = 0;
@@ -1124,6 +1138,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromActAndCoordinate
 }
 
 //D2Game.0x6FCC4E80
+//1.14d: 0x00541DE0
 D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t bAllocNewNode)
 {
 	D2DrlgCoordsStrc pCoord = {};
@@ -1133,6 +1148,7 @@ D2InactiveUnitListStrc* __fastcall SUNITINACTIVE_GetListNodeFromRoom(D2GameStrc*
 }
 
 //D2Game.0x6FCC4ED0
+//1.14d: 0x00541E20
 void __fastcall SUNITINACTIVE_RestoreSpecialMonsterParameters(D2GameStrc* pGame, D2UnitStrc* pUnit, D2InactiveMonsterNodeStrc* pInactiveMonsterNode)
 {
 	const int32_t nClassId = pUnit->dwClassId;
@@ -1197,14 +1213,14 @@ void __fastcall SUNITINACTIVE_RestoreSpecialMonsterParameters(D2GameStrc* pGame,
 		}
 	}
 
-	if (pInactiveMonsterNode->nCmdParam1 == dword_6FD3F45C)
+	if (pInactiveMonsterNode->nCmdParam1 == INACTIVE_MONSTER_SAVED_FLAGS_MARKER)
 	{
-		if (pInactiveMonsterNode->nCmdParam2 & dword_6FD3F460)
+		if (pInactiveMonsterNode->nCmdParam2 & INACTIVE_MONSTER_SAVED_FLAG_NOXP)
 		{
 			pUnit->dwFlags |= UNITFLAG_NOXP;
 		}
 
-		if (pInactiveMonsterNode->nCmdParam2 & dword_6FD3F464)
+		if (pInactiveMonsterNode->nCmdParam2 & INACTIVE_MONSTER_SAVED_FLAG_NOTC)
 		{
 			pUnit->dwFlags |= UNITFLAG_NOTC;
 		}
@@ -1212,6 +1228,7 @@ void __fastcall SUNITINACTIVE_RestoreSpecialMonsterParameters(D2GameStrc* pGame,
 }
 
 //D2Game.0x6FCC50B0
+//1.14d: 0x00541FE0
 void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2UnitStrc* pUnit, D2InactiveMonsterNodeStrc* pInactiveMonsterNode)
 {
 	const int32_t nClassId = pUnit->dwClassId;
@@ -1220,14 +1237,14 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 
 	if (pUnit->dwFlags & UNITFLAG_NOXP)
 	{
-		pInactiveMonsterNode->nCmdParam1 = dword_6FD3F45C;
-		pInactiveMonsterNode->nCmdParam2 |= dword_6FD3F460;
+		pInactiveMonsterNode->nCmdParam1 = INACTIVE_MONSTER_SAVED_FLAGS_MARKER;
+		pInactiveMonsterNode->nCmdParam2 |= INACTIVE_MONSTER_SAVED_FLAG_NOXP;
 	}
 
 	if (pUnit->dwFlags & UNITFLAG_NOTC)
 	{
-		pInactiveMonsterNode->nCmdParam1 = dword_6FD3F45C;
-		pInactiveMonsterNode->nCmdParam2 |= dword_6FD3F464;
+		pInactiveMonsterNode->nCmdParam1 = INACTIVE_MONSTER_SAVED_FLAGS_MARKER;
+		pInactiveMonsterNode->nCmdParam2 |= INACTIVE_MONSTER_SAVED_FLAG_NOTC;
 	}
 
 	if (pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]
@@ -1287,6 +1304,7 @@ void __fastcall SUNITINACTIVE_SaveSpecialMonsterParameters(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FCC52C0
+//1.14d: 0x005429B0
 int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoomNear, int32_t nGameX, int32_t nGameY, int32_t nClassId)
 {
 	D2_ASSERT(pGame);
@@ -1329,6 +1347,7 @@ int32_t __fastcall SUNITINACTIVE_IsUnitInsideRoom(D2GameStrc* pGame, D2ActiveRoo
 }
 
 //D2Game.0x6FCC5490
+//1.14d: 0x00542AC0
 void __fastcall SUNITINACTIVE_DeleteExpiredItemNodes(D2GameStrc* pGame, int32_t nAct)
 {
 	for (D2InactiveUnitListStrc* i = pGame->pInactiveUnitList[nAct]; i; i = i->pNext)

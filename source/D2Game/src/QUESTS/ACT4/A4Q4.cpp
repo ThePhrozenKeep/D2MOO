@@ -33,6 +33,7 @@ D2NPCMessageTableStrc gpAct4Q4NpcMessages[] =
 
 
 //D2Game.0x6FCB0E50
+//1.14d: 0x005B6A70
 void __fastcall ACT4Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -48,6 +49,7 @@ void __fastcall ACT4Q4_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB0EB0
+//1.14d: 0x005B6940
 void __fastcall ACT4Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_MALACHAI)
@@ -71,6 +73,7 @@ void __fastcall ACT4Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCB0F50
+//1.14d: 0x005B69F0
 bool __fastcall ACT4Q4_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId != MONSTER_MALACHAI)

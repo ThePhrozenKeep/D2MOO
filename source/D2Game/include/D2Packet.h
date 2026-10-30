@@ -16,7 +16,7 @@ struct D2PacketListStrc
 	int32_t nTotal;						//0x00
 	int32_t nUsed;						//0x04
 	int32_t unk0x08;					//0x08
-	void* unk0x0C;						//0x0C
+	uint8_t* pPackets;					//0x0C nTotal entries of the per-unit packet entry size
 };
 
 struct D2PacketTableStrc

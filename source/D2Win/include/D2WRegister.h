@@ -14,10 +14,14 @@ struct D2WinCommandRegisterStrc
 
 
 //D2Win.0x6F8B1DC0
+//1.14d: 0x00506C40
 void __fastcall WREGISTER_RegisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1EC0
+//1.14d: 0x00506CF0
 void __fastcall WREGISTER_UnregisterCommand(HWND hWnd, int32_t nType, int32_t nId, void(__stdcall* pCallback)(SMSGHANDLER_PARAMS*));
 //D2Win.0x6F8B1FC0
+//1.14d: 0x00506DA0
 void __fastcall WREGISTER_RegisterCommands(HWND hWnd, D2WinCommandRegisterStrc* pCommandRegister, int32_t nCommands);
 //D2Win.0x6F8B2010
+//1.14d: 0x00506E00
 void __fastcall WREGISTER_UnregisterCommands(HWND hWnd, D2WinCommandRegisterStrc* pCommandRegister, int32_t nCommands);

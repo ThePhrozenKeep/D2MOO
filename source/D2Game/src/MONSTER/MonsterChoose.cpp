@@ -12,7 +12,9 @@
 #include "MONSTER/MonsterSpawn.h"
 
 
-D2UnkMonCreateStrc2 dword_6FD2E9A0 = {
+//1.10f: D2Game.0x6FD2E9A0
+//1.14d: 0x007415B4
+D2MonsterFormationStrc gtDiamondMonsterFormation = {
     4, 0, 0, 0, 0, 0,
     {
         { 1, 0, 0 },
@@ -21,11 +23,14 @@ D2UnkMonCreateStrc2 dword_6FD2E9A0 = {
         { 1, 2, 0}
     }
 };
-D2UnkMonCreateStrc2* off_6FD2E9DC = &dword_6FD2E9A0;
+//1.10f: D2Game.0x6FD2E9DC
+//1.14d: 0x007415F0
+D2MonsterFormationStrc* gpDiamondMonsterFormation = &gtDiamondMonsterFormation;
 
 
 //D2Game.0x6FC62020
-void __stdcall sub_6FC62020(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, int32_t nCount)
+//1.14d: 0x005BDB20
+void __stdcall MONSTERCHOOSE_GenerateComponentVariants(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, int32_t nCount)
 {
     D2_ASSERT(pSeed);
     D2_ASSERT(pMonRegData);
@@ -145,6 +150,7 @@ void __stdcall sub_6FC62020(D2SeedStrc* pSeed, D2MonRegDataStrc* pMonRegData, in
 }
 
 //D2Game.0x6FC62420
+//1.14d: 0x005BDE80
 int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2MonsterRegionStrc* pMonsterRegion, D2ActiveRoomStrc* pRoom, D2MonStatsTxt** ppMonStatsTxtRecord, uint8_t nChance, int32_t bSpawnUMon)
 {
     D2SeedStrc* pSeed = nullptr;
@@ -198,17 +204,19 @@ int32_t __fastcall MONSTERCHOOSE_GetPresetMonsterId(D2GameStrc* pGame, D2Monster
 }
 
 //D2Game.0x6FC62640
-D2UnkMonCreateStrc2* __fastcall sub_6FC62640(D2ActiveRoomStrc* pRoom)
+//1.14d: 0x005BDFF0
+D2MonsterFormationStrc* __fastcall MONSTERCHOOSE_RollFormation(D2ActiveRoomStrc* pRoom)
 {
     if (pRoom)
     {
         ITEMS_RollRandomNumber(&pRoom->pSeed);
     }
 
-    return off_6FD2E9DC;
+    return gpDiamondMonsterFormation;
 }
 
 //D2Game.0x6FC62670
+//1.14d: 0x005BE020
 int32_t __fastcall MONSTERCHOOSE_GetBossSpawnType(D2MonsterRegionStrc* pMonsterRegion, D2ActiveRoomStrc* pRoom)
 {
     if (pMonsterRegion->dwUniqueCount < pMonsterRegion->nBossMin && pMonsterRegion->unk0x0C && (ITEMS_RollRandomNumber(&pRoom->pSeed) % 100) < 100 * pMonsterRegion->unk0x04 / pMonsterRegion->unk0x0C)

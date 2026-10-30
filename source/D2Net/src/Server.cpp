@@ -37,6 +37,7 @@ int32_t __stdcall SERVER_WSAGetLastError()
 }
 
 //D2Net.0x6FC01B60 (#10030)
+//1.14d: 0x0052B920
 int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize)
 {
 	constexpr int32_t gServerPacketSizeTable[] =
@@ -229,12 +230,12 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 	}
 
 	const uint8_t nHeader = pBuffer->data[0];
-	if (nHeader >= std::size(gServerPacketSizeTable))
+	if (nHeader >= std::size(D2NET_SERVER_PACKET_SIZES))
 	{
 		return 0;
 	}
 
-	*pSize = gServerPacketSizeTable[nHeader];
+	*pSize = D2NET_SERVER_PACKET_SIZES[nHeader];
 	if (*pSize >= 0)
 	{
 		return *pSize;
@@ -357,7 +358,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		*pSize = pBuffer->data[12];
 		return *pSize;
 	}
-	case 0xAEu:
+	case SERVER_PACKET_HEADER_COMPRESSION_INFO:
 	{
 		if (nBufferSize < 2)
 		{
@@ -374,7 +375,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		}
 		return *pSize;
 	}
-	case 0xB2u:
+	case SERVER_PACKET_HEADER_SAVE_PART:
 	{
 		if (nBufferSize < 8)
 		{
@@ -384,7 +385,7 @@ int32_t __fastcall SERVER_GetServerPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		*pSize = pBuffer->data[1] + 7;
 		return *pSize;
 	}
-	default:
+	D2NET_SERVER_EXTRA_PACKET_CASES default:
 	{
 		*pSize = 0;
 		return 0;
@@ -523,12 +524,12 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		return 1;
 	}
 
-	if (nHeader >= std::size(gClientPacketSizeTable))
+	if (nHeader >= std::size(D2NET_CLIENT_PACKET_SIZES))
 	{
 		return 0;
 	}
 
-	*pSize = gClientPacketSizeTable[nHeader];
+	*pSize = D2NET_CLIENT_PACKET_SIZES[nHeader];
 	if (*pSize >= 0)
 	{
 		return *pSize;
@@ -569,7 +570,7 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		*pSize = nPacketSize;
 		return *pSize;
 	}
-	case 0x6B:
+	case CLIENT_PACKET_HEADER_SAVE_UPLOAD:
 	{
 		if (nBufferSize < 6)
 		{
@@ -579,7 +580,7 @@ int32_t __fastcall SERVER_GetClientPacketSize(D2NetReceiveBufferStrc* pBuffer, u
 		*pSize = pBuffer->data[1] + 7;
 		return *pSize;
 	}
-	default:
+	D2NET_CLIENT_EXTRA_PACKET_CASES default:
 	{
 		*pSize = 0;
 		return *pSize;
@@ -617,7 +618,7 @@ int32_t __fastcall SERVER_ValidateClientPacket(D2NetReceiveBufferStrc* pPacketBu
 	}
 
 	const uint8_t nHeader = pPacketBuffer->data[0];
-	if ((nHeader >= 0x70u && nHeader != CLIENT_PACKET_HEADER_ADMIN) || nSize < 0 || nSize > MAX_MSG_SIZE)
+	if ((nHeader >= CLIENT_PACKET_HEADER_END && nHeader != CLIENT_PACKET_HEADER_ADMIN) || nSize < 0 || nSize > MAX_MSG_SIZE)
 	{
 		return PACKET_VALIDATION_INVALID;
 	}
@@ -630,11 +631,11 @@ int32_t __fastcall SERVER_ValidateClientPacket(D2NetReceiveBufferStrc* pPacketBu
 	*a4 = 0;
 	*pPacketSize = nSize;
 
-	if (nHeader < 0x66u)
+	if (nHeader < CLIENT_SYSTEM_PACKET_HEADER_MIN)
 	{
 		*pPacketQueue = SERVER_PACKET_QUEUE_GAME;
 	}
-	else if (nHeader < 0x70u)
+	else if (nHeader < CLIENT_PACKET_HEADER_END)
 	{
 		*pPacketQueue = SERVER_PACKET_QUEUE_SYSTEM;
 	}
@@ -667,7 +668,7 @@ int32_t __fastcall SERVER_OnClientConnectedCallback(int32_t a1, int32_t nClientI
 int32_t __fastcall SERVER_OnClientDisconnectedCallback(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4)
 {
 	// Enqueue D2CLTSYS_REMOVEFROMGAME on behalf of the disconnected client
-	const uint8_t removeFromGame[1] = { 0x6F };
+	const uint8_t removeFromGame[1] = { CLIENT_PACKET_HEADER_REMOVE_FROM_GAME };
 
 	FOG_10175(gpServer, removeFromGame, sizeof(removeFromGame), nClientId);
 	return 1;

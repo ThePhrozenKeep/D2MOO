@@ -132,9 +132,9 @@ struct D2PlayerListStrc
 struct D2UnkPlayerDataStrc
 {
 	int32_t nUnitGUID;							//0x00
-	int32_t unk0x04;							//0x04
-	int32_t unk0x08;							//0x08
-	uint8_t unk0x0C;							//0x0C
+	int32_t nLifePercentage;					//0x04
+	int32_t nLevelId;							//0x08
+	uint8_t nCount;								//0x0C
 	uint8_t unk0x0D[3];							//0x0D
 	D2UnkPlayerDataStrc* pNext;					//0x10
 };
@@ -149,7 +149,8 @@ struct D2PlayerDataStrc
 	int32_t unk0x30;							//0x30
 	D2ArenaUnitStrc* pArenaUnit;				//0x34
 	D2PlayerListStrc* pPlayerList;				//0x38
-	uint32_t unk0x3C[2];						//0x3C
+	uint32_t unk0x3C;							//0x3C
+	D2UnitGUID dwTrackedSummonGUID;			//0x40
 	D2PlayerPetStrc* pPlayerPets;				//0x44
 	uint32_t dwUniqueId;						//0x48
 	uint32_t bBusy;								//0x4C
@@ -171,10 +172,16 @@ struct D2PlayerDataStrc
 	uint32_t unk0x94;							//0x94
 	D2UnkPlayerDataStrc* unk0x98;				//0x98
 	D2ClientStrc* pClient;						//0x9C
-	uint8_t unk0xA0;							//0xA0
+	uint8_t nPositionHistoryIndex;				//0xA0
 	uint8_t unk0xA1[3];							//0xA1
-	uint32_t unk0xA4;							//0xA4
-	uint32_t unk0xA8[46];						//0xA8
+	uint32_t dwPositionHistoryTick;				//0xA4
+	D2CoordStrc pPositionHistory[20];			//0xA8 last 20 positions, which pets follow
+	uint32_t nLastTeleportX;					//0x148
+	uint32_t nLastTeleportY;					//0x14C
+	BOOL bInteract;								//0x150
+	int32_t nInteractAction;					//0x154
+	int32_t nInteractUnitType;					//0x158
+	D2UnitGUID nInteractUnitGUID;				//0x15C
 	uint32_t dwHostileDelay;					//0x160
 	uint32_t unk0x164;							//0x164
 	uint32_t dwGameFrame;						//0x168

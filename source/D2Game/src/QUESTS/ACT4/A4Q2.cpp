@@ -86,6 +86,7 @@ D2NPCMessageTableStrc gpAct4Q2NpcMessages[] =
 
 
 //D2Game.0x6FCAE4C0
+//1.14d: 0x005B4450
 bool __fastcall ACT4Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	if (nNpcId == MONSTER_TYRAEL2)
@@ -123,6 +124,7 @@ bool __fastcall ACT4Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCAE5B0
+//1.14d: 0x005B4DA0
 void __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -162,6 +164,7 @@ void __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FCAE670
+//1.14d: 0x005B5210
 int32_t __fastcall ACT4Q2_IsChaosSanctumCleared(D2GameStrc* pGame)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q2_DIABLO);
@@ -175,6 +178,7 @@ int32_t __fastcall ACT4Q2_IsChaosSanctumCleared(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCAE690
+//1.14d: 0x005B54C0
 void __fastcall ACT4Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -201,6 +205,7 @@ void __fastcall ACT4Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCAE750
+//1.14d: 0x005B4530
 bool __fastcall ACT4Q2_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (!pQuestData->fState && pQuestData->bNotIntro == 1)
@@ -212,6 +217,7 @@ bool __fastcall ACT4Q2_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCAE780
+//1.14d: 0x005B4670
 void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act4Quest2Strc* pQuestDataEx = (D2Act4Quest2Strc*)pQuestData->pQuestDataEx;
@@ -286,6 +292,7 @@ void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCAE950
+//1.14d: 0x005B4560
 int32_t __fastcall ACT4Q2_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -321,6 +328,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCAE9D0
+//1.14d: 0x005B4790
 void __fastcall ACT4Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const int32_t nIndices[] = { -1, 0, 1, -1, -1 };
@@ -407,6 +415,7 @@ void __fastcall ACT4Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCAEBD0
+//1.14d: 0x005B4EA0
 void __fastcall ACT4Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nOldLevel == LEVEL_THEPANDEMONIUMFORTRESS && pQuestData->fState == 2)
@@ -448,6 +457,7 @@ void __fastcall ACT4Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCAECC0
+//1.14d: 0x005B4E40
 int32_t __fastcall ACT4Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -463,6 +473,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCAED30
+//1.14d: 0x005B4F90
 void __fastcall ACT4Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_TYRAEL2)
@@ -508,6 +519,7 @@ void __fastcall ACT4Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCAEE30
+//1.14d: 0x005B5030
 void __fastcall ACT4Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pGame->bExpansion)
@@ -523,6 +535,7 @@ void __fastcall ACT4Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCAEE80
+//1.14d: 0x005B5080
 void __fastcall ACT4Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
@@ -555,6 +568,7 @@ void __fastcall ACT4Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCAEF40
+//1.14d: 0x005B52E0
 void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2Act4Quest2Strc* pQuestDataEx = (D2Act4Quest2Strc*)pQuestData->pQuestDataEx;
@@ -604,7 +618,7 @@ void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 		{
 			pQuestDataEx->nPlayerCount = 0;
 			QUESTS_UnitIterate(pQuestData, 13, 0, ACT4Q2_UnitIterate_StatusCyclerEx, 1);
-			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_UpdateQuestStateFlags);
+			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_UpdatePlayerState);
 			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers);
 			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_SetCompletionFlag);
 			SUNIT_IterateUnitsOfType(pQuestArg->pGame, 0, pQuestArg->pTarget, ACT4Q2_UnitIterate_AttachCompletionSound);
@@ -653,6 +667,7 @@ void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCAF110
+//1.14d: 0x005B4970
 int32_t __fastcall ACT4Q2_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -668,6 +683,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCAF160
+//1.14d: 0x005B49C0
 int32_t __fastcall ACT4Q2_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A4Q2, QFLAG_PRIMARYGOALDONE))
@@ -686,6 +702,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FCAF1E0
+//1.14d: 0x005B4BE0
 bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	D2Act4Quest2Strc* pQuestDataEx = (D2Act4Quest2Strc*)pQuestData->pQuestDataEx;
@@ -739,7 +756,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 			return true;
 		}
 
-		sub_6FC37FB0(pGame, nullptr);
+		GAME_EndGameForConnectedClient(pGame, nullptr);
 		return true;
 	}
 
@@ -748,7 +765,7 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 		if (pQuestDataEx->dwTickCount + 75000 < GetTickCount() && !pQuestDataEx->bClientsSaved)
 		{
 			pQuestDataEx->bClientsSaved = 1;
-			sub_6FC37B10(pGame);
+			GAME_SaveAndSendClientSaves(pGame);
 		}
 		return false;
 	}
@@ -766,9 +783,10 @@ bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestDat
 }
 
 //D2Game.0x6FCAF3D0
+//1.14d: 0x005B4A80
 int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
-	sub_6FC7BEC0(pGame, pUnit);
+	PLAYER_CloseInteraction(pGame, pUnit);
 	UNITS_GetPlayerData(pUnit)->bBusy = 1;
 
 	D2Act4Quest2Strc* pQuestDataEx = (D2Act4Quest2Strc*)QUESTS_GetQuestData(pGame, QUEST_A4Q2_DIABLO)->pQuestDataEx;
@@ -797,6 +815,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCAF4A0
+//1.14d: 0x005B4DF0
 int32_t __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A4Q2, QFLAG_PRIMARYGOALDONE))
@@ -814,6 +833,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 }
 
 //D2Game.0x6FCAF4F0
+//1.14d: 0x005B5140
 int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -869,6 +889,7 @@ int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCAF630
+//1.14d: 0x005B5230
 void __fastcall ACT4Q2_KillAllMonstersInCS(D2GameStrc* pGame, D2Act4Quest2Strc* pQuestDataEx)
 {
 	if (pQuestDataEx->bSanctumCleared)
@@ -897,6 +918,7 @@ void __fastcall ACT4Q2_KillAllMonstersInCS(D2GameStrc* pGame, D2Act4Quest2Strc* 
 }
 
 //D2Game.0x6FCAF6D0
+//1.14d: 0x005B5590
 void __fastcall OBJECTS_InitFunction55_DiabloStartPoint(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A4Q2_DIABLO);
@@ -947,6 +969,7 @@ void __fastcall OBJECTS_InitFunction55_DiabloStartPoint(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCAF760
+//1.14d: 0x005B6B70
 int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -990,6 +1013,7 @@ int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCAF8D0
+//1.14d: 0x005B6BC0
 int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1033,6 +1057,7 @@ int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCAFA40
+//1.14d: 0x005B6C10
 int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1076,6 +1101,7 @@ int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCAFBB0
+//1.14d: 0x005B5630
 int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
@@ -1160,6 +1186,7 @@ int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(D2ObjOperateFnStrc* pOp,
 }
 
 //D2Game.0x6FCAFCB0
+//1.14d: 0x005B5750
 void __fastcall ACT4Q2_SpawnSealBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2CoordStrc pCoord = {};
@@ -1202,6 +1229,7 @@ void __fastcall ACT4Q2_SpawnSealBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCAFD80
+//1.14d: 0x005B5810
 int32_t __fastcall ACT4Q2_HasDiabloBeenKilled(D2GameStrc* pGame)
 {
 	if (pGame->bExpansion)
@@ -1219,6 +1247,7 @@ int32_t __fastcall ACT4Q2_HasDiabloBeenKilled(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCAFDB0
+//1.14d: 0x005B5840
 void __fastcall OBJECTS_InitFunction78_LastLastPortal(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A4Q2_DIABLO);
@@ -1240,6 +1269,7 @@ void __fastcall OBJECTS_InitFunction78_LastLastPortal(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCAFDF0
+//1.14d: 0x005B5880
 int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pGame)
@@ -1291,7 +1321,7 @@ int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* 
 
 			D2GSPacketSrv61 packet61 = {};
 			packet61.nHeader = 0x61;
-			packet61.unk0x001 = 5;
+			packet61.nCinematic = 5;
 			D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet61, sizeof(packet61));
 		}
 	}

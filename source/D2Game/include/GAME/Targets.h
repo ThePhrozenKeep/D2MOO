@@ -5,12 +5,17 @@
 #include <GAME/Game.h>
 
 //D2Game.0x6FC40170
-void __fastcall D2GAME_TARGETS_First_6FC40170(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3);
+//1.14d: 0x005B1880
+void __fastcall TARGETS_AllocPlayerNode(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData);
 //D2Game.0x6FC401F0
-void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nNodeIndex);
+//1.14d: 0x005B1900
+void __fastcall D2GAME_UpdateSummonAI_6FC401F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData, int32_t nNodeIndex);
 //D2Game.0x6FC40280
-void __fastcall sub_6FC40280(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nNodeIndex);
+//1.14d: 0x005B1990
+void __fastcall TARGETS_InsertUnitNode(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nNodeData, int32_t nNodeIndex);
 //D2Game.0x6FC40310
+//1.14d: 0x005B1A20
 void __fastcall D2GAME_FreeUnitNode_6FC40310(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FC40380
-void __fastcall D2GAME_TARGETS_Last_6FC40380(D2GameStrc* pGame, D2UnitStrc* pUnit);
+//1.14d: 0x005B1A90
+void __fastcall TARGETS_RemoveUnitNode(D2GameStrc* pGame, D2UnitStrc* pUnit);

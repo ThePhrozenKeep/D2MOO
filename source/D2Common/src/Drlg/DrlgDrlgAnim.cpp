@@ -12,6 +12,7 @@
 
 
 //D2Common.0x6FD75480
+//1.14d: 0x00642A30
 void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData)
 {
 	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
@@ -46,6 +47,7 @@ void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileD
 }
 
 //D2Common.0x6FD75560
+//1.14d: 0x0066D290
 void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pDrlgGrid, D2DrlgGridStrc* pTileTypeGrid, int nTileType, int nTileX, int nTileY)
 {
 	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
@@ -101,6 +103,8 @@ static int AnimationFrameIntegerToFixedPoint(int nIntegerPart)
 }
 
 //D2Common.0x6FD756B0
+//1.14d: 0x0066D3B0
+//1.14d: 0x0066D410
 void __fastcall DRLGANIM_AnimateTiles(D2DrlgRoomStrc* pDrlgRoom)
 {
 
@@ -131,6 +135,7 @@ void __fastcall DRLGANIM_AnimateTiles(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.0x6FD75740
+//1.14d: 0x0066D700
 void __fastcall DRLGANIM_AllocAnimationTileGrids(D2DrlgRoomStrc* pDrlgRoom, int nAnimationSpeed, D2DrlgGridStrc* pWallGrid, int nWalls, D2DrlgGridStrc* pFloorGrid, int nFloors, D2DrlgGridStrc* pShadowGrid)
 {
 	DRLGANIM_AllocAnimationTileGrid(pDrlgRoom, nAnimationSpeed, pDrlgRoom->pTileGrid->pTiles.pWallTiles, pDrlgRoom->pTileGrid->nWalls, pWallGrid, nWalls);
@@ -155,6 +160,7 @@ D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** 
 }
 
 //D2Common.0x6FD757B0
+//1.14d: 0x0066D440
 void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int nAnimationSpeed, D2DrlgTileDataStrc* pTiles, int nTiles, D2DrlgGridStrc* pDrlgGrid, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
@@ -225,6 +231,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 }
 
 //D2Common.0x6FD75B00
+//1.14d: 0x0066D750
 void __fastcall DRLGANIM_UpdateFrameInAdjacentRooms(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2)
 {
 	if (!pDrlgRoom2)

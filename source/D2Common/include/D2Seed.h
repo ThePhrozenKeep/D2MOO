@@ -30,7 +30,7 @@ D2COMMON_DLL_DECL void __fastcall SEED_InitLowSeed(D2SeedStrc* pSeed, int nLowSe
 //D2Common.0x6FDAEAD0 (#10914)
 D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed);
 //D2Common.0x6FDAEAE0 (#10921)
-D2COMMON_DLL_DECL void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed);
+D2COMMON_DLL_DECL void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t nLowSeed, uint32_t  nHighSeed);
 //D2Common.0x6FDAEAF0 (#10922)
 D2COMMON_DLL_DECL void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLowSeed, uint32_t* pHighSeed);
 //D2Common.0x6FDAEB00 (#10915)

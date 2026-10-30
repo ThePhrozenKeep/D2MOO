@@ -86,18 +86,35 @@ enum D2ParseCmdArgType : uint8_t
 /*
  *	Structure for command line arguments
  */
-struct D2CmdArgStrc				//sizeof(0x3C)
+struct D2CmdArgStrc				//sizeof(0x3C) (1.14d: 0x5C)
 {
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+	char szSection[27];			//0x00
+	char szKey[27];				//0x1B
+	char szCommand[27];			//0x36
+	D2ParseCmdArgType dwType;	//0x51
+#else
 	char szSection[16];			//0x00
 	char szKey[16];				//0x10
 	char szCommand[16];			//0x20
 	D2ParseCmdArgType dwType;	//0x30
-	DWORD dwIndex;				//0x34
-	DWORD dwDefault;			//0x38
+#endif
+	DWORD dwIndex;				//0x34 (1.14d: 0x54)
+	DWORD dwDefault;			//0x38 (1.14d: 0x58)
 };
 #pragma pack(pop)
 
 #pragma warning(pop)
+
+#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 14
+// 1.14d: the command line table (Game.exe 0x705040) starts with -crash, and string values are read from the ini
+// into 27 bytes (MISC_GetValueFromD2Ini 0x004054C9 push 1Bh)
+#define D2_CMDARG_FIRST_ROWS { "DEBUG", "CRASHAPP", "crash", CMD_BOOLEAN, offsetof(D2ConfigStrc, bCrashApp), 0 },
+constexpr int32_t D2_CMDARG_INI_STRING_SIZE = 27;
+#else
+#define D2_CMDARG_FIRST_ROWS
+constexpr int32_t D2_CMDARG_INI_STRING_SIZE = 16;
+#endif
 
 /*
  *	Prototypes

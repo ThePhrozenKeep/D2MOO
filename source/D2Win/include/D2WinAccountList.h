@@ -18,7 +18,7 @@ struct D2WinAccountListStrc
 	D2WinControlStrc controlHeader;					//0x00
 	D2WinAccountListDataStrc* pDataList;			//0x40
 	D2WinAccountListDataStrc* pSelectedDataEntry;	//0x44
-	int32_t field_48;								//0x48
+	int32_t nFirstDrawnEntry;								//0x48
 	int32_t field_4C;								//0x4C
 	Font eFont;										//0x50
 	int32_t field_54;								//0x54
@@ -27,18 +27,26 @@ struct D2WinAccountListStrc
 
 
 //D2Win.0x6F8A4E90
+//1.14d: 0x00507CA0
 D2WinAccountListStrc* __fastcall ACCOUNTLIST_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, void* a6);
 //D2Win.0x6F8A4F70
+//1.14d: 0x00507AF0
 int __fastcall ACCOUNTLIST_Destroy(D2WinAccountListStrc* pAccountList);
 //D2Win.0x6F8A4FC0
+//1.14d: 0x00507850
 void __fastcall ACCOUNTLIST_FreeData(D2WinAccountListStrc* pAccountList);
 //D2Win.0x6F8A5010
+//1.14d: 0x005078A0
 void __fastcall ACCOUNTLIST_AllocData(D2WinAccountListStrc* pAccountList, const char* szText);
 //D2Win.0x6F8A5080
+//1.14d: 0x00507900
 int __fastcall ACCOUNTLIST_RemoveEntry(D2WinAccountListStrc* pAccountList, const char* szText);
 //D2Win.0x6F8A5140
+//1.14d: 0x005079C0
 int __fastcall ACCOUNTLIST_GetTextFromSelectedEntry(D2WinAccountListStrc* pAccountList, char* szBuffer);
 //D2Win.0x6F8A5180
+//1.14d: 0x00507B30
 int32_t __fastcall ACCOUNTLIST_Draw(D2WinControlStrc* pControl);
 //D2Win.0x6F8A52E0
+//1.14d: 0x00507A10
 int __stdcall ACCOUNTLIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);

@@ -79,62 +79,87 @@ struct D2AiParamStrc
 
 struct D2AiTableStrc
 {
-	int32_t unk0x00;						//0x00
-	AIPARAMFN unk0x04;						//0x04
+	int32_t nTargetSelectionMode;			//0x00
+	AIPARAMFN pInitializeFn;				//0x04
 	AIPARAMFN pAiParamFn;					//0x08
-	AIPARAMFN unk0x0C;						//0x0C
+	AIPARAMFN pTransitionFn;				//0x0C
 };
 
 
 #pragma pack()
 
 //D2Game.0x6FCCED00
+//1.14d: 0x0058EBC0
 D2AiControlStrc* __fastcall AIGENERAL_AllocAiControl(D2GameStrc* pGame);
 //D2Game.0x6FCCED40
+//1.14d: 0x0058EC00
 void __fastcall AIGENERAL_SetAiControlParam(D2UnitStrc* pMonster, int32_t nIndex, int32_t nParamValue);
 //D2Game.0x6FCCED80
+//1.14d: 0x0058EC50
 int32_t __fastcall AIGENERAL_GetAiControlParam(D2UnitStrc* pUnit, int32_t nIndex);
 //D2Game.0x6FCCEDC0
+//1.14d: 0x0058EC90
 D2AiCmdStrc* __fastcall AIGENERAL_AllocAiCommand(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCCEE40
+//1.14d: 0x0058ED10
 void __fastcall AIGENERAL_FreeCurrentAiCommand(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCCEEB0
+//1.14d: 0x0058EDE0
 void __fastcall AIGENERAL_FreeAllAiCommands(D2GameStrc* pGame, D2UnitStrc* pUnit);
 //D2Game.0x6FCCEEF0
+//1.14d: 0x0058EE80
 D2AiCmdStrc* __fastcall AIGENERAL_GetCurrentAiCommandFromUnit(D2UnitStrc* pUnit);
 //D2Game.0x6FCCEF10
+//1.14d: 0x0058EEF0
 D2AiCmdStrc* __fastcall AIGENERAL_GetAiCommandFromParam(D2UnitStrc* pUnit, int32_t nCmdParam, int32_t bSet);
 //D2Game.0x6FCCEF70
+//1.14d: 0x0058F730
 void __fastcall AIGENERAL_AllocCommandsForMinions(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCmdStrc* pAiCmd);
 //D2Game.0x6FCCF050
+//1.14d: 0x0058EF40
 D2AiCmdStrc* __fastcall AIGENERAL_CopyAiCommand(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiCmdStrc* pAiCmd);
 //D2Game.0x6FCCF090
+//1.14d: 0x0058EFA0
 D2AiCmdStrc* __fastcall AIGENERAL_SetCurrentAiCommand(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nCmdParam, int32_t bSet);
 //D2Game.0x6FCCF190
+//1.14d: 0x0058F810
 void __fastcall AIGENERAL_FreeAiControl(D2GameStrc* pGame, D2AiControlStrc* pAiControl);
 //D2Game.0x6FCCF240
+//1.14d: 0x0058F000
 D2MapAIStrc** __stdcall AIGENERAL_GetMapAiFromUnit(D2UnitStrc* pUnit);
 //D2Game.0x6FCCF270
+//1.14d: 0x0058F030
 void __fastcall AIGENERAL_SetOwnerData(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nOwnerGUID, int32_t nOwnerType, int32_t bSetFlag1, int32_t bSetFlag2);
 //D2Game.0x6FCCF2D0
+//1.14d: 0x0058F090
 void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc* pUnit, int32_t* pUnitGUID, int32_t* pUnitType);
 //D2Game.0x6FCCF320
+//1.14d: 0x0058F0D0
 D2UnitStrc* __fastcall AIGENERAL_GetMinionOwner(D2UnitStrc* pUnit);
 //D2Game.0x6FCCF360
+//1.14d: 0x0058F100
 void __fastcall AIGENERAL_AllocMinionList(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pMinion);
 //D2Game.0x6FCCF3C0
+//1.14d: 0x0058F160
 void __fastcall AIGENERAL_FreeMinionList(D2UnitStrc* pUnit);
 //D2Game.0x6FCCF4B0
-void __fastcall sub_6FCCF4B0(D2UnitStrc* pUnit);
+//1.14d: 0x0058F260
+void __fastcall AIGENERAL_DetachOwnedMinions(D2UnitStrc* pUnit);
 //D2Game.0x6FCCF590
+//1.14d: 0x0058F350
 void __fastcall AIGENERAL_FreeAllMinionLists(D2GameStrc* pGame, D2MinionListStrc* pMinionList);
 //D2Game.0x6FCCF5C0
-void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* a2, void* a3, void(__fastcall* pfnParty)(D2UnitStrc*, void*, void*));
+//1.14d: 0x0058F380
+void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfCallback)(D2UnitStrc*, void*, void*));
 //D2Game.0x6FCCF680
+//1.14d: 0x0058F440
 void __fastcall AIGENERAL_GetAiControlInfo(D2UnitStrc* pUnit, int32_t* pOwnerGUID, int32_t* pOwnerType, int32_t* pAiControlFlag1, int32_t* pAiControlFlag2, D2MinionListStrc** ppMinionList);
 //D2Game.0x6FCCF710
+//1.14d: 0x0058F4D0
 void __fastcall AIGENERAL_SetAiControlInfo(D2GameStrc* pGame, D2UnitStrc* pUnit, DWORD nOwnerGUID, DWORD nOwnerType, int32_t bSetFlag1, int32_t bSetFlag2, D2MinionListStrc* pMinionList);
 //D2Game.0x6FCCF7C0
+//1.14d: 0x0058F6C0
 void __fastcall AIGENERAL_UpdateMinionList(D2UnitStrc* pUnit);
 //D2Game.0x6FCCF9B0
+//1.14d: 0x0058F710
 int32_t __fastcall AIGENERAL_GetMinionSpawnClassId(D2UnitStrc* pUnit);

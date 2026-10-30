@@ -11,28 +11,56 @@
 #include <Window.h>
 
 
+//1.10f: D2Win.0x6F8FD67C
+//1.14d: 0x007D5628
 D2ArchiveHandleStrc* gpD2MusicMPQ;
+//1.10f: D2Win.0x6F8FD680
+//1.14d: 0x007D5624
 D2ArchiveHandleStrc* gpD2SpeechMPQ;
+//1.10f: D2Win.0x6F8FD684
+//1.14d: 0x007D5610
 D2ArchiveHandleStrc* gpD2CharMPQ;
+//1.10f: D2Win.0x6F8FD688
+//1.14d: 0x007D5604
 D2ArchiveHandleStrc* gpD2XMusicMPQ;
+//1.10f: D2Win.0x6F8FD68C
+//1.14d: 0x007D561C
 D2ArchiveHandleStrc* gpD2DataMPQ;
+//1.10f: D2Win.0x6F8FD690
+//1.14d: 0x007D5614
 D2ArchiveHandleStrc* gpD2VideoMPQ;
+//1.10f: D2Win.0x6F8FD694
+//1.14d: 0x007D560C
 D2ArchiveHandleStrc* gpD2DeltaMPQ;
+//1.10f: D2Win.0x6F8FD698
+//1.14d: 0x007D5630
 D2ArchiveHandleStrc* gpD2PatchMPQ;
+//1.10f: D2Win.0x6F8FD69C
+//1.14d: 0x007D5620
 D2ArchiveHandleStrc* gpD2kfixupMPQ;
+//1.10f: D2Win.0x6F8FD6A0
+//1.14d: 0x007D562C
 D2ArchiveHandleStrc* gpD2XVideoMPQ;
+//1.10f: D2Win.0x6F8FD6A4
+//1.14d: 0x007D5618
 D2ArchiveHandleStrc* gpD2XTalkMPQ;
+//1.10f: D2Win.0x6F8FD6A8
+//1.14d: 0x007D5634
 D2ArchiveHandleStrc* gpD2ExpMPQ;
+//1.10f: D2Win.0x6F8FD6AC
+//1.14d: 0x007D5608
 D2ArchiveHandleStrc* gpD2SfxMPQ;
 
 
 //D2Win.0x6F8A59C0 (#10039)
+//1.14d: 0x004FA9B0
 D2CellFileStrc* __fastcall ARCHIVE_LoadCellFile(const char* szFile, int32_t nType)
 {
 	return ARCHIVE_LoadCellFileWithFileSize(szFile, nullptr, nType);
 }
 
 //D2Win.0x6F8A5A50 (#10040)
+//1.14d: 0x004FAA40
 D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, uint32_t* pFileSize, int32_t nType)
 {
 	char szPath[260] = {};
@@ -48,6 +76,7 @@ D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, 
 }
 
 //D2Win.0x6F8A5AE0 (#10041)
+//1.14d: 0x004FAAE0
 void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile)
 {
 	D2CMP_CelFileFreeHardware(pCellFile);
@@ -59,24 +88,28 @@ void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile)
 }
 
 //D2Win.0x6F8A5B00 (#10205)
+//1.14d: 0x004FAB00
 BOOL __stdcall ARCHIVE_ShowInsertExpansionDiscMessage()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Expansion Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
 
 //D2Win.0x6F8A5B20 (#10174)
+//1.14d: 0x004FAB30
 BOOL __stdcall ARCHIVE_ShowInsertPlayDiscMessage()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Play Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
 
 //D2Win.0x6F8A5B40 (#10183)
+//1.14d: 0x004FAB60
 BOOL __stdcall ARCHIVE_ShowInsertCinematicsDisc()
 {
 	return MessageBoxA(WINDOW_GetWindow(), "Insert Cinematics Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
 }
 
 //D2Win.0x6F8A5B60 (#10037)
+//1.14d: 0x004FAB90
 int32_t __fastcall ARCHIVE_LoadArchives()
 {
 	gpD2DataMPQ = ARCHIVE_LoadMPQFile("D2Win.dll", "d2data.mpq", "D2DATA", 0, 0, nullptr, 1000);
@@ -91,6 +124,7 @@ int32_t __fastcall ARCHIVE_LoadArchives()
 }
 
 //D2Win.0x6F8A5CB0 (#10036)
+//1.14d: 0x004FAE00
 void __fastcall ARCHIVE_FreeArchives()
 {
 	if (gpD2DataMPQ)
@@ -145,12 +179,14 @@ void __fastcall ARCHIVE_FreeArchives()
 }
 
 //D2Win.0x6F8A5DE0 (#10038)
+//1.14d: 0x004FAC80
 HD2ARCHIVE __stdcall D2Win_GetArchive()
 {
 	return nullptr;
 }
 
 //D2Win.0x6F8A5DF0 (#10185)
+//1.14d: 0x004FAC90
 int32_t __stdcall D2Win_10185()
 {
 	char szPath[260] = {};
@@ -174,6 +210,7 @@ int32_t __stdcall D2Win_10185()
 }
 
 //D2Win.0x6F8A5E80 (#10171)
+//1.14d: 0x004FAEC0
 BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, D2ConfigStrc* pConfig)
 {
 	if (FOG_UseDirect())
@@ -216,6 +253,7 @@ BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfS
 }
 
 //D2Win.0x6F8A60A0 (#10172)
+//1.14d: 0x004FAD10
 BOOL __fastcall ARCHIVE_LoadVideoArchives(ARCHIVE_ShowMessageFunctionPtr pfShowMessage, HANDLE hFile, int32_t bExpansion)
 {
 	if (FOG_UseDirect())
@@ -244,6 +282,7 @@ BOOL __fastcall ARCHIVE_LoadVideoArchives(ARCHIVE_ShowMessageFunctionPtr pfShowM
 }
 
 //D2Win.0x6F8A6110 (#10173)
+//1.14d: 0x004FAD70
 void __fastcall ARCHIVE_UnloadExpansionArchives()
 {
 	if (gpD2MusicMPQ)

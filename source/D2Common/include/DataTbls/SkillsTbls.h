@@ -198,7 +198,7 @@ struct D2SkillsTxt
 	uint32_t dwPassiveCalc[5];				//0xA4
 	uint16_t wPassiveEvent;					//0xB8
 	uint16_t wPassiveEventFunc;				//0xBA
-	uint16_t wSummon;						//0xBC
+	int16_t wSummon;						//0xBC
 	int8_t nPetType;						//0xBE
 	int8_t nSumMode;						//0xBF
 	uint32_t dwPetMax;						//0xC0

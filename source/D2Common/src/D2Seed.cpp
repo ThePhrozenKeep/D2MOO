@@ -4,18 +4,21 @@
 #include <Fog.h>
 
 //D2Common.0x6FDA5260 (#10916)
+//1.14d: 0x00650EA0
 void __stdcall SEED_Return()
 {
 	REMOVE_LATER_Trace("SEED_Return: Useless");
 }
 
 //D2Common.0x6FDAEA80 (#10920)
+//1.14d: 0x00650DE0
 int __fastcall SEED_GetRandomValue(int nValue)
 {
 	return (0x2F490A95 * (time(NULL) + nValue + GetTickCount()) - 0x2E330917) & 0x7FFFFFFF;
 }
 
 //D2Common.0x6FDAEAB0 (#10912)
+//1.14d: 0x00650E30
 void __fastcall SEED_InitSeed(D2SeedStrc* pSeed)
 {
 	pSeed->nLowSeed = 1;
@@ -23,6 +26,7 @@ void __fastcall SEED_InitSeed(D2SeedStrc* pSeed)
 }
 
 //D2Common.0x6FDAEAC0 (#10913)
+//1.14d: 0x00650E40
 void __fastcall SEED_InitLowSeed(D2SeedStrc* pSeed, int nLowSeed)
 {
 	pSeed->nLowSeed = nLowSeed;
@@ -30,19 +34,22 @@ void __fastcall SEED_InitLowSeed(D2SeedStrc* pSeed, int nLowSeed)
 }
 
 //D2Common.0x6FDAEAD0 (#10914)
+//1.14d: 0x00650E50
 uint32_t  __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed)
 {
 	return pSeed->nLowSeed;
 }
 
 //D2Common.0x6FDAEAE0 (#10921)
-void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed)
+//1.14d: 0x00650E60
+void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t nLowSeed, uint32_t  nHighSeed)
 {
 	pSeed->nLowSeed = nLowSeed;
 	pSeed->nHighSeed = nHighSeed;
 }
 
 //D2Common.0x6FDAEAF0 (#10922)
+//1.14d: 0x00650E70
 void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLowSeed, uint32_t* pHighSeed)
 {
 	*pLowSeed = pSeed->nLowSeed;
@@ -50,6 +57,7 @@ void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLowSeed, uint32_t* p
 }
 
 //D2Common.0x6FDAEB00 (#10915)
+//1.14d: 0x00650E90
 uint32_t __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed)
 {
 	return pSeed->nHighSeed;

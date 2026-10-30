@@ -4,4 +4,5 @@
 
 
 //D2Game.0x6FC745D0
+//1.14d: 0x005DFA00
 void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSrcUnit, D2UnitStrc* pTargetUnit, int32_t nDamageType);

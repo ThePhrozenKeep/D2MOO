@@ -16,6 +16,7 @@
 
 
 //D2Game.0x6FCAD210
+//1.14d: 0x005BD0D0
 int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pCoord)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
@@ -90,6 +91,7 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FCAD360
+//1.14d: 0x005BD1F0
 void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q7_DARKWANDERER);
@@ -117,6 +119,7 @@ void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCAD460
+//1.14d: 0x005BD300
 void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -138,6 +141,7 @@ void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCAD4F0
+//1.14d: 0x005BD2C0
 void __fastcall ACT3Q7_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], QUESTSTATEFLAG_A3Q7, QFLAG_REWARDGRANTED) == 1)
@@ -148,6 +152,7 @@ void __fastcall ACT3Q7_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCAD530
+//1.14d: 0x005BD4A0
 void __fastcall ACT3Q7_CreateVileDogSpawnTimer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
 	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
@@ -176,6 +181,7 @@ void __fastcall ACT3Q7_CreateVileDogSpawnTimer(D2GameStrc* pGame, D2UnitStrc* pU
 }
 
 //D2Game.0x6FCAD590
+//1.14d: 0x005BD390
 bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	static const D2CoordStrc pAdjustCoords[] =
@@ -209,15 +215,17 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 
 	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pGame);
 
+	const int32_t nFirstIndex = SEED_RollRandomNumber(pSeed) & 1;
+
 	D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
-	//UNITS_GetCoords(pDarkWanderer, &pCoord); // TODO: Was this meant to be used on pCoords?
+	D2CoordStrc pWandererCoords = {};
+	UNITS_GetCoords(pDarkWanderer, &pWandererCoords);
 
-	D2CoordStrc pCoords = {};
-
-	for (int32_t i = SEED_RollRandomNumber(pSeed) & 1; i < ARRAY_SIZE(pAdjustCoords); ++i)
+	for (int32_t i = nFirstIndex; i < ARRAY_SIZE(pAdjustCoords); ++i)
 	{
-		pCoords.nY += pAdjustCoords[i].nY;
-		pCoords.nX += pAdjustCoords[i].nX;
+		D2CoordStrc pCoords = {};
+		pCoords.nX = pWandererCoords.nX + pAdjustCoords[i].nX;
+		pCoords.nY = pWandererCoords.nY + pAdjustCoords[i].nY;
 		D2ActiveRoomStrc* pRoom = nullptr;
 		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, COLLIDE_MASK_PLACEMENT, &pRoom, 11);
 
@@ -231,6 +239,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 }
 
 //D2Game.0x6FCAD690
+//1.14d: 0x005BD260
 int32_t __fastcall ACT3Q7_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];

@@ -42,7 +42,7 @@ struct D2AuraBaseStrc
     int32_t nDuration;
     int32_t nAuraStat[6];
     int32_t nAuraStatCalcValue[6];
-    int32_t field_40;
+    int32_t nEffectCount;
     D2StatListStrc* pStatList;
     int32_t nPassiveState;
 
@@ -58,16 +58,17 @@ struct D2DamageAuraParamStrc : D2AuraBaseStrc
     D2DamageStrc* pDamage;
 };
 
-struct D2UnkPalSkillStrc2
+struct D2RedemptionCallbackArgsStrc
 {
     int32_t nSkillId;
     int32_t nSkillLevel;
-    int32_t nCounter;
+    int32_t nRedeemedCorpseCount;
 };
 #pragma pack(pop)
 
 
 //D2Game.0x6FD18330
+//1.14d: 0x005CE790
 int32_t __fastcall SKILLS_SrvSt29_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -106,6 +107,7 @@ int32_t __fastcall SKILLS_SrvSt29_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FD184B0
+//1.14d: 0x005CE8E0
 int32_t __fastcall SKILLS_SrvDo064_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -143,6 +145,7 @@ int32_t __fastcall SKILLS_SrvDo064_Sacrifice(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD18650
+//1.14d: 0x005CE9F0
 int32_t __fastcall SKILLS_SrvDo150_Smite(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -160,7 +163,7 @@ int32_t __fastcall SKILLS_SrvDo150_Smite(D2GameStrc* pGame, D2UnitStrc* pUnit, i
     D2DamageStrc damage = {};
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
-        sub_6FC627B0(pUnit, MONMODE_ATTACK2);
+        MONSTERMODE_UpdateModeAttackStats(pUnit, MONMODE_ATTACK2);
         damage.dwStunLen = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, 0, 0);
     }
@@ -224,6 +227,7 @@ int32_t __fastcall SKILLS_SrvDo150_Smite(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FD18900
+//1.14d: 0x005CF010
 int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -263,7 +267,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
     {
         args.nAuraState = pSkillsTxtRecord->nAuraState;
 
-        sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args);
+        SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args);
 
         if (args.pStatList && nMana > nManaCost && pSkillsTxtRecord->nPassiveState <= 0)
         {
@@ -285,13 +289,13 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
 
         const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-        sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_BasicAura, &args, 1, __FILE__, __LINE__);
+        SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_BasicAura, &args, 1, __FILE__, __LINE__);
 
         if (nManaCost > 0)
         {
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
             {
-                if (args.field_40 > 0)
+                if (args.nEffectCount > 0)
                 {
                     STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 1);
                     D2GAME_SKILLMANA_AuraConsume_6FD10C90(pUnit, nManaCost);
@@ -308,6 +312,7 @@ int32_t __fastcall SKILLS_SrvDo065_BasicAura(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD18BC0
+//1.14d: 0x005CEDC0
 int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
     D2BasicAuraParamStrc* pArgs = (D2BasicAuraParamStrc*)pAuraCallback->pArgs;
@@ -332,7 +337,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
         curse.pStateRemoveCallback = SKILLS_CurseStateCallback_BasicAura;
     }
 
-    D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
+    D2StatListStrc* pStatList = SKILLS_ApplyStateEffect(&curse);
     if (!pStatList)
     {
         return 0;
@@ -383,12 +388,12 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
 
                     if (bPoisonedOrCursed)
                     {
-                        ++pArgs->field_40;
+                        ++pArgs->nEffectCount;
                     }
                 }
                 else
                 {
-                    int32_t nBonus = sub_6FD0B3D0(pUnit, nStatId, pArgs->nAuraStatCalcValue[j]);
+                    int32_t nBonus = SKILLS_ApplyResistanceImmunityPenalty(pUnit, nStatId, pArgs->nAuraStatCalcValue[j]);
                     if (nBonus)
                     {
                         if (nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
@@ -412,7 +417,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                                     if (nValue != nBaseValue)
                                     {
                                         STATLIST_SetUnitStat(pUnit, nStatId, nValue, 0);
-                                        ++pArgs->field_40;
+                                        ++pArgs->nEffectCount;
                                     }
                                 }
                                 else
@@ -438,7 +443,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
                                         STATLIST_SetStatIfListIsValid(pStatList, STAT_OTHER_ANIMRATE, nBonus, 0);
                                     }
 
-                                    ++pArgs->field_40;
+                                    ++pArgs->nEffectCount;
                                 }
                             }
                         }
@@ -467,6 +472,7 @@ int32_t __fastcall SKILLS_AuraCallback_BasicAura(D2AuraCallbackStrc* pAuraCallba
 }
 
 //D2Game.0x6FD18FE0
+//1.14d: 0x005CEC50
 void __fastcall SKILLS_CurseStateCallback_BasicAura(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
@@ -477,10 +483,11 @@ void __fastcall SKILLS_CurseStateCallback_BasicAura(D2UnitStrc* pUnit, int32_t n
     }
 
     D2GAME_RefreshPassiveSkills_6FD14CC0(pUnit);
-    sub_6FD0FDD0(pUnit);
+    SKILLS_ClampVitalsAndUpdateAnimRate(pUnit);
 }
 
 //D2Game.0x6FD19020
+//1.14d: 0x005CF3A0
 int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -508,7 +515,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
     
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
@@ -553,11 +560,11 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
 
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction, &args2, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction, &args2, 0, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && !pUnit->dwUnitType)
     {
-        if (args2.field_40 > 0)
+        if (args2.nEffectCount > 0)
         {
             STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 1);
             D2GAME_SKILLMANA_AuraConsume_6FD10C90(pUnit, nManaCost);
@@ -572,6 +579,7 @@ int32_t __fastcall SKILLS_SrvDo066_HolyFire_HolyShock_Sanctuary_Conviction(D2Gam
 }
 
 //D2Game.0x6FD19390
+//1.14d: 0x005CF2A0
 int32_t __fastcall SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
     D2DamageAuraParamStrc* pArgs = (D2DamageAuraParamStrc*)pAuraCallback->pArgs;
@@ -608,6 +616,7 @@ int32_t __fastcall SKILLS_AuraCallback_HolyFire_HolyShock_Sanctuary_Conviction(D
 }
 
 //D2Game.0x6FD19460
+//1.14d: 0x005CF6B0
 int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -652,7 +661,7 @@ int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, i
             return D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
         }
 
-        return sub_6FD150A0(pGame, pUnit, pTargetUnit);
+        return SKILLS_StartBasicAttack(pGame, pUnit, pTargetUnit);
     }
 
     if (!pTargetUnit || STATES_CheckState(pTargetUnit, STATE_UNINTERRUPTABLE))
@@ -708,6 +717,7 @@ int32_t __fastcall SKILLS_SrvSt31_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FD19780
+//1.14d: 0x005CF900
 int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     pUnit = pUnit;
@@ -732,10 +742,10 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     D2AnimSeqTxt* pMonSeqTxtRecord = DATATBLS_GetMonSeqTxtRecordFromUnit(pUnit);
     if (pMonSeqTxtRecord)
     {
-        const int32_t v8 = DATATBLS_GetSeqFrameCount(pUnit);
-        for (int32_t i = 0; i < v8; ++i)
+        const int32_t nSequenceFrameCount = DATATBLS_GetSeqFrameCount(pUnit);
+        for (int32_t i = 0; i < nSequenceFrameCount; ++i)
         {
-            if (!pMonSeqTxtRecord->nEvent) // TODO: Why is this check inside a loop?
+            if (!pMonSeqTxtRecord->nEvent) // Native repeatedly checks the same sequence event.
             {
                 nEventFrame = i - 1;
                 break;
@@ -757,7 +767,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
         SKILLS_SetFlags(pSkill, 0);
         SKILLS_SetParam1(pSkill, 0);
         SKILLS_SetParam2(pSkill, 0);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
         D2GAME_SKILLS_RewindSkillEx_6FCBD260(pGame, pUnit, nEventFrame);
 
         if (pUnit)
@@ -767,7 +777,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 
         if (!pTarget)
         {
-            pTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, -1, 0);
+            pTarget = SKILLS_FindNextAuraTarget(pGame, pUnit, 0, 0, 3, 3, -1, 0);
             if (!pTarget)
             {
                 D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_ENDANIM, 0);
@@ -823,7 +833,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
                 nMonMode = MONMODE_ATTACK2;
             }
 
-            sub_6FC627B0(pUnit, nMonMode);
+            MONSTERMODE_UpdateModeAttackStats(pUnit, nMonMode);
         }
 
         damage.dwHitClass = 0x70u;
@@ -843,16 +853,16 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
     {
         SKILLS_SetFlags(pSkill, 0);
         D2GAME_SKILLS_RewindSkillEx_6FCBD260(pGame, pUnit, nEventFrame + 1);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
         return 1;
     }
 
     if (nSkillFlags & 2)
     {
         SKILLS_SetFlags(pSkill, 0);
-        sub_6FCC63D0(pUnit, nSkillId);
+        SUNITMSG_QueueSkillStop(pUnit, nSkillId);
 
-        D2UnitStrc* pNewTarget = sub_6FD107F0(pGame, pUnit, 0, 0, 3, 3, nUnitGUID, 0);
+        D2UnitStrc* pNewTarget = SKILLS_FindNextAuraTarget(pGame, pUnit, 0, 0, 3, 3, nUnitGUID, 0);
         if (pNewTarget && UNITS_IsInMeleeRange(pUnit, pNewTarget, 0))
         {
             SKILLS_SetParam1(pSkill, pNewTarget->dwUnitType);
@@ -911,6 +921,7 @@ int32_t __fastcall SKILLS_SrvDo067_Charge(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 }
 
 //D2Game.0x6FD19C80
+//1.14d: 0x005CFE10
 int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -943,7 +954,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
 
         int32_t nShiftedMinDamage = 0;
         int32_t nShiftedMaxDamage = 0;
-        if (sub_6FC7C7B0(pUnit))
+        if (PLAYER_GetWeaponForSkill(pUnit))
         {
             if (INVENTORY_GetWieldType(pUnit, pUnit->pInventory) == 2)
             {
@@ -1048,6 +1059,7 @@ int32_t __fastcall SKILLS_SrvSt35_Vengeance(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FD1A200
+//1.14d: 0x005D0040
 int32_t __fastcall SKILLS_SrvDo073_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (SKILLS_GetSkillsTxtRecord(nSkillId))
@@ -1096,6 +1108,7 @@ int32_t __fastcall SKILLS_SrvDo073_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FD1A480
+//1.14d: 0x005D0180
 int32_t __fastcall SKILLS_SrvSt36_HolyShield(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (pUnit->pInventory)
@@ -1107,9 +1120,9 @@ int32_t __fastcall SKILLS_SrvSt36_HolyShield(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD1A4A0
+//1.14d: 0x005D0350
 int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    // TODO: v8
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
@@ -1127,13 +1140,13 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
         return 0;
     }
 
-    int32_t v8 = 0;
-    if (SUNITDMG_GetDamageFromUnits(pUnit, pTarget) && !MONSTERS_GetHirelingTypeId(pTarget) && pTarget->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL && sub_6FD15190(pTarget, AISPECIALSTATE_TERROR))
+    int32_t bCanConvertTarget = 0;
+    if (SUNITDMG_GetDamageFromUnits(pUnit, pTarget) && !MONSTERS_GetHirelingTypeId(pTarget) && pTarget->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL && SKILLS_CanSwitchAi(pTarget, AISPECIALSTATE_TERROR))
     {
-        v8 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
+        bCanConvertTarget = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
     }
 
-    if (pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount || !v8)
+    if (pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount || !bCanConvertTarget)
     {
         SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
         return 1;
@@ -1170,8 +1183,8 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
 
     D2COMMON_10476(pStatList, nExpireFrame);
     EVENT_SetEvent(pGame, pTarget, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
-    sub_6FD154D0(pTarget);
-    sub_6FCBDD30(pTarget, 2u, 1);
+    SKILLS_ClearMonsterMinionOwnership(pTarget);
+    SUNIT_SetAlignment(pTarget, 2u, 1);
     D2GAME_UpdateSummonAI_6FC401F0(pGame, pTarget, 0, pUnit->dwNodeIndex);
     UNITS_SetTargetUnitForDynamicUnit(pUnit, 0);
 
@@ -1224,11 +1237,12 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FD1A900
+//1.14d: 0x005D01A0
 void __fastcall SKILLS_StatRemoveCallback_Conversion(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     STATES_ToggleState(pUnit, nState, 0);
-    sub_6FCBDD30(pUnit, 0, 1);
-    D2GAME_TARGETS_Last_6FC40380(SUNIT_GetGameFromUnit(pUnit), pUnit);
+    SUNIT_SetAlignment(pUnit, 0, 1);
+    TARGETS_RemoveUnitNode(SUNIT_GetGameFromUnit(pUnit), pUnit);
 
     D2StatListStrc* pConversionStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_CONVERSION_SAVE);
     if (!pConversionStatList)
@@ -1261,6 +1275,7 @@ void __fastcall SKILLS_StatRemoveCallback_Conversion(D2UnitStrc* pUnit, int32_t 
 }
 
 //D2Game.0x6FD1AA50
+//1.14d: 0x005D0670
 int32_t __fastcall SKILLS_SrvDo080_FistOfTheHeavens(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -1302,6 +1317,7 @@ int32_t __fastcall SKILLS_SrvDo080_FistOfTheHeavens(D2GameStrc* pGame, D2UnitStr
 }
 
 //D2Game.0x6FD1ABC0
+//1.14d: 0x005D0920
 int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -1330,7 +1346,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
 
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
@@ -1375,11 +1391,11 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
     
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
     
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFreeze, &args2, 0, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_HolyFreeze, &args2, 0, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        if (args2.field_40 > 0)
+        if (args2.nEffectCount > 0)
         {
             STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 1);
             D2GAME_SKILLMANA_AuraConsume_6FD10C90(pUnit, nManaCost);
@@ -1394,6 +1410,7 @@ int32_t __fastcall SKILLS_SrvDo081_HolyFreeze(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FD1AF40
+//1.14d: 0x005D0770
 void __fastcall SKILLS_CurseStateCallback_HolyFreeze(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
@@ -1411,6 +1428,7 @@ void __fastcall SKILLS_CurseStateCallback_HolyFreeze(D2UnitStrc* pUnit, int32_t 
 }
 
 //D2Game.0x6FD1AF90
+//1.14d: 0x005D07C0
 int32_t __fastcall SKILLS_AuraCallback_HolyFreeze(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
     D2BasicAuraParamStrc* pArgs = (D2BasicAuraParamStrc*)pAuraCallback->pArgs;
@@ -1460,6 +1478,7 @@ int32_t __fastcall SKILLS_AuraCallback_HolyFreeze(D2AuraCallbackStrc* pAuraCallb
 }
 
 //D2Game.0x6FD1B100
+//1.14d: 0x005D0C40
 int32_t __fastcall SKILLS_ApplyRedemptionEffect(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pCorpse, int32_t nSkillId, int32_t nSkillLevel, int32_t bSkipChanceRoll)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -1480,6 +1499,7 @@ int32_t __fastcall SKILLS_ApplyRedemptionEffect(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FD1B260
+//1.14d: 0x005D0E90
 int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
@@ -1506,24 +1526,24 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
         }
     }
 
-    sub_6FD0FE50(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
+    SKILLS_ApplyAuraToSelf(pGame, pUnit, SKILLS_AuraCallback_BasicAura, &args1);
 
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pUnit)))
     {
         return 1;
     }
 
-    D2UnkPalSkillStrc2 args2 = {};
+    D2RedemptionCallbackArgsStrc args2 = {};
     args2.nSkillId = nSkillId;
     args2.nSkillLevel = nSkillLevel;
     
     const int32_t nAuraRange = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nSkillLevel);
 
-    sub_6FD0FE80(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_Redemption, &args2, 1, __FILE__, __LINE__);
+    SKILLS_IterateAuraTargets(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxtRecord->dwAuraFilter, SKILLS_AuraCallback_Redemption, &args2, 1, __FILE__, __LINE__);
 
     if (nManaCost > 0 && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        if (args2.nCounter > 0)
+        if (args2.nRedeemedCorpseCount > 0)
         {
             STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 1);
             D2GAME_SKILLMANA_AuraConsume_6FD10C90(pUnit, nManaCost);
@@ -1538,20 +1558,22 @@ int32_t __fastcall SKILLS_SrvDo082_Redemption(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FD1B490
+//1.14d: 0x005D0D70
 int32_t __fastcall SKILLS_AuraCallback_Redemption(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
-    D2UnkPalSkillStrc2* pArgs = (D2UnkPalSkillStrc2*)pAuraCallback->pArgs;
+    D2RedemptionCallbackArgsStrc* pArgs = (D2RedemptionCallbackArgsStrc*)pAuraCallback->pArgs;
 
     const int32_t nResult = SKILLS_ApplyRedemptionEffect(pAuraCallback->pGame, pAuraCallback->pOwner, pUnit, pArgs->nSkillId, pArgs->nSkillLevel, 0);
     if (nResult)
     {
-        ++pArgs->nCounter;
+        ++pArgs->nRedeemedCorpseCount;
     }
 
     return nResult;
 }
 
 //D2Game.0x6FD1B4C0
+//1.14d: 0x005D10C0
 void __fastcall SKILLS_ApplyThornsDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
 {
     int32_t nThornsPercent = STATLIST_UnitGetStatValue(pDefender, STAT_THORNS_PERCENT, 0);

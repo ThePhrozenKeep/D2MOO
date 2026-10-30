@@ -40,6 +40,7 @@ void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pNe
 D2COMMON_DLL_DECL BOOL __stdcall D2Common_10230(D2DynamicPathStrc* pDynamicPath, int a2, D2ActiveRoomStrc* pRoom, unsigned int a4, __int16 a5);
 //1.00:  D2Common.0x10060120 (#10228)
 //1.10f: D2Common.0x6FDADC20 (#10231)
+//1.14d: 0x00650AA0
 D2COMMON_DLL_DECL int __stdcall D2Common_10231(D2DynamicPathStrc* pDynamicPath, D2UnitStrc* pUnit_unused, D2ActiveRoomStrc* pRooms, uint16_t nX, uint16_t nY);
 //1.00:  D2Common.0x100606B0 (#10229)
 //1.10f: D2Common.0x6FDADF50 (#10232)

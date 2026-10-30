@@ -17,6 +17,7 @@
 
 
 //D2Game.0x6FD33B68
+//1.14d: 0x007382E0
 D2NPCMessageTableStrc gpAct1Q6NpcMessages[] =
 {
 	{
@@ -79,6 +80,7 @@ D2NPCMessageTableStrc gpAct1Q6NpcMessages[] =
 
 
 //D2Game.0x6FC9DFF0
+//1.14d: 0x00596320
 void __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -107,9 +109,9 @@ void __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 		nUnitId = pUnit->dwUnitId;
 	}
 
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID1, nUnitId);
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID2, nUnitId);
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID3, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId);
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_PRIMARYGOALDONE);
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDPENDING);
@@ -118,6 +120,7 @@ void __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC9E0E0
+//1.14d: 0x005967F0
 bool __fastcall ACT1Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
 {
 	int32_t nUnitId = -1;
@@ -129,7 +132,7 @@ bool __fastcall ACT1Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 	D2Act1Quest6Strc* pQuestDataEx = (D2Act1Quest6Strc*)pQuest->pQuestDataEx;
 	if (nNpcId == MONSTER_CAIN5)
 	{
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID1, nUnitId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId))
 		{
 			return true;
 		}
@@ -148,17 +151,18 @@ bool __fastcall ACT1Q6_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 	}
 	else if (nNpcId == MONSTER_AKARA)
 	{
-		return QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID2, nUnitId) != 0;
+		return QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId) != 0;
 	}
 	if (nNpcId == MONSTER_KASHYA)
 	{
-		return QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID3, nUnitId) != 0;
+		return QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId) != 0;
 	}
 
 	return false;
 }
 
 //D2Game.0x6FC9E1B0
+//1.14d: 0x00596990
 void __fastcall ACT1Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
@@ -191,12 +195,13 @@ void __fastcall ACT1Q6_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestDataEx->bAndarielKilled = 0;
 	pQuestDataEx->bCainActivated = 0;
 
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID1);
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID2);
-	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->pGUID3);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tCainCompletionDialogueGUIDs);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tAkaraCompletionDialogueGUIDs);
+	QUESTS_ResetPlayerGUIDCount(&pQuestDataEx->tKashyaCompletionDialogueGUIDs);
 }
 
 //D2Game.0x6FC9E2B0
+//1.14d: 0x00595B80
 void __fastcall ACT1Q6_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_CAIN5)
@@ -217,6 +222,7 @@ void __fastcall ACT1Q6_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FC9E300
+//1.14d: 0x00595B20
 int32_t __fastcall ACT1Q6_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -232,6 +238,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC9E370
+//1.14d: 0x00595C60
 void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	int32_t nUnitId = -1;
@@ -255,7 +262,7 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 		}
 		else if (pQuestArg->nMessageIndex == 184)
 		{
-			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID1, nUnitId);
+			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId);
 		}
 		return;
 	}
@@ -294,7 +301,7 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 	{
 		if (pQuestArg->nMessageIndex == 179)
 		{
-			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID2, nUnitId);
+			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId);
 		}
 		return;
 	}
@@ -302,7 +309,7 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 	{
 		if (pQuestArg->nMessageIndex == 181)
 		{
-			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID3, nUnitId);
+			QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId);
 		}
 		return;
 	}
@@ -312,6 +319,7 @@ void __fastcall ACT1Q6_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FC9E510
+//1.14d: 0x00595BD0
 int32_t __fastcall ACT1Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -347,9 +355,10 @@ int32_t __fastcall ACT1Q6_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC9E5A0
+//1.14d: 0x00595E20
 void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
-	static const int32_t nIndices[] =
+	static const int32_t tDialogueChainByQuestState[] =
 	{
 		-1, 0, 1, 2, 3, 4
 	};
@@ -372,7 +381,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 
 	if (nNpcId == MONSTER_AKARA)
 	{
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID2, nUnitId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_AKARA, 3);
 			return;
@@ -380,7 +389,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	}
 	else if (nNpcId == MONSTER_KASHYA)
 	{
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID3, nUnitId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_KASHYA, 3);
 			return;
@@ -388,7 +397,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 	}
 	else if (nNpcId == MONSTER_CAIN5)
 	{
-		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->pGUID1, nUnitId))
+		if (QUESTS_QuickCheckPlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId))
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_CAIN5, 3);
 			return;
@@ -427,7 +436,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 			return;
 		}
 
-		const int32_t nIndex = nIndices[pQuestData->fState];
+		const int32_t nIndex = tDialogueChainByQuestState[pQuestData->fState];
 		if (nIndex != -1 && nIndex < 6)
 		{
 			QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, nNpcId, nIndex);
@@ -440,6 +449,7 @@ void __fastcall ACT1Q6_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FC9E7A0
+//1.14d: 0x00596010
 void __fastcall ACT1Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	if (pQuestArg->nNewLevel >= LEVEL_CATACOMBSLEV1 && pQuestArg->nNewLevel <= LEVEL_CATACOMBSLEV4 && pQuestData->bNotIntro)
@@ -512,6 +522,7 @@ void __fastcall ACT1Q6_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FC9E900
+//1.14d: 0x005965A0
 void __fastcall ACT1Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	static const uint32_t dwChippedGemCodes[] =
@@ -577,6 +588,7 @@ void __fastcall ACT1Q6_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FC9EB50
+//1.14d: 0x00596170
 int32_t __fastcall ACT1Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -590,6 +602,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC9EBA0
+//1.14d: 0x005961C0
 void __fastcall ACT1Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pArgs)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pArgs);
@@ -601,12 +614,13 @@ void __fastcall ACT1Q6_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, 
 		nUnitId = pArgs->pPlayer->dwUnitId;
 	}
 
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID1, nUnitId);
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID2, nUnitId);
-	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->pGUID3, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId);
+	QUESTS_FastRemovePlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId);
 }
 
 //D2Game.0x6FC9EBF0
+//1.14d: 0x00596260
 int32_t __fastcall ACT1Q6_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -629,9 +643,9 @@ int32_t __fastcall ACT1Q6_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 		nUnitId = pUnit->dwUnitId;
 	}
 
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID1, nUnitId);
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID2, nUnitId);
-	QUESTS_AddPlayerGUID(&pQuestDataEx->pGUID3, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tCainCompletionDialogueGUIDs, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tAkaraCompletionDialogueGUIDs, nUnitId);
+	QUESTS_AddPlayerGUID(&pQuestDataEx->tKashyaCompletionDialogueGUIDs, nUnitId);
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_PRIMARYGOALDONE);
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDPENDING);
@@ -641,6 +655,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC9ECD0
+//1.14d: 0x005963E0
 int32_t __fastcall ACT1Q6_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
@@ -655,6 +670,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FC9ED30
+//1.14d: 0x00596440
 int32_t __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	if (!QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A1Q6, QFLAG_PRIMARYGOALDONE))
@@ -672,6 +688,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameSt
 }
 
 //D2Game.0x6FC9ED80
+//1.14d: 0x00596500
 bool __fastcall ACT1Q6_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQuest)
 {
 	D2Act1Quest6Strc* pQuestDataEx = (D2Act1Quest6Strc*)pQuest->pQuestDataEx;
@@ -698,6 +715,7 @@ bool __fastcall ACT1Q6_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQ
 }
 
 //D2Game.0x6FC9EE00
+//1.14d: 0x00596490
 int32_t __fastcall ACT1Q6_UnitIterate_CreatePortalToTown(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
 {
 	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
@@ -714,6 +732,7 @@ int32_t __fastcall ACT1Q6_UnitIterate_CreatePortalToTown(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FC9EE70
+//1.14d: 0x005968E0
 bool __fastcall ACT1Q6_SeqCallback(D2QuestDataStrc* pQuestData)
 {
 	if (!pQuestData->fState && pQuestData->bNotIntro == 1)
@@ -725,6 +744,7 @@ bool __fastcall ACT1Q6_SeqCallback(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FC9EE90
+//1.14d: 0x00596580
 bool __fastcall ACT1Q6_Timer_StateDebug(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
 {
 	if (!pQuestData->fState)
@@ -736,6 +756,7 @@ bool __fastcall ACT1Q6_Timer_StateDebug(D2GameStrc* pGame, D2QuestDataStrc* pQue
 }
 
 //D2Game.0x6FC9EEB0
+//1.14d: 0x00596900
 void __fastcall ACT1Q6_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
 {
 	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];

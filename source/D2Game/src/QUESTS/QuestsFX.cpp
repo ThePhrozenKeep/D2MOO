@@ -24,12 +24,14 @@
 
 
 //D2Game.0x6FCB95A0
+//1.14d: 0x005DFD90
 void __fastcall QUESTSFX_Bloodraven(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 25, 125, 1);
 }
 
 //D2Game.0x6FCB95B0
+//1.14d: 0x005DFBF0
 void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSize, int32_t nDelayMin, int32_t nDelayMax, int32_t bCheckIfUndead)
 {
     D2_ASSERT(nDelayMax);
@@ -69,6 +71,7 @@ void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 }
 
 //D2Game.0x6FCB97D0
+//1.14d: 0x005DFDB0
 void __fastcall QUESTSFX_SpawnMephistoDeathControlMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2MissileStrc missileParams = {};
@@ -84,12 +87,14 @@ void __fastcall QUESTSFX_SpawnMephistoDeathControlMissile(D2GameStrc* pGame, D2U
 }
 
 //D2Game.0x6FCB9820
+//1.14d: 0x005DFE00
 void __fastcall QUESTSFX_Andariel(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 1, 51, 0);
 }
 
 //D2Game.0x6FCB9830
+//1.14d: 0x005DFE20
 void __fastcall QUESTSFX_SpawnRadamentDeathMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(MISSILE_RADAMENTDEATH);
@@ -102,6 +107,7 @@ void __fastcall QUESTSFX_SpawnRadamentDeathMissile(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCB98F0
+//1.14d: 0x005DFEE0
 void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     D2UnitStrc* pStairs = UNITFINDS_FindUnitInNeighboredRooms(UNITS_GetRoom(pUnit), UNIT_OBJECT, 386);
@@ -132,12 +138,14 @@ void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCB9A30
+//1.14d: 0x005E0020
 void __fastcall QUESTSFX_Izual(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 105, 1, 2, 0);
 }
 
 //D2Game.0x6FCB9A40
+//1.14d: 0x005E0040
 void __fastcall QUESTSFX_ShenkTheOverseer(D2GameStrc* pGame, D2UnitStrc* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 25, 125, 0);

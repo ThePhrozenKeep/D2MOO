@@ -90,6 +90,7 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2AR
 }
 
 //D2Common.0x6FD743B0 (#10012)
+//1.14d: 0x00642190
 void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 {
 	D2DrlgLevelStrc* pNextLevel = NULL;
@@ -231,6 +232,7 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 
 //D2Common.0x6FD745C0
 //TODO: Name
+//1.14d: 0x00643020
 void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2)
 {
 	D2DrlgLevelStrc* pLevel1 = NULL;
@@ -311,6 +313,7 @@ void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRo
 
 //D2Common.0x6FD74700
 //TODO: Clean loops
+//1.14d: 0x00643200
 void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 {
 	for (D2DrlgLevelStrc* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
@@ -445,6 +448,7 @@ D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 }
 
 //D2Common.0x6FD749A0 (#10005)
+//1.14d: 0x00642BB0
 D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId)
 {
 	for (D2DrlgLevelStrc* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
@@ -459,6 +463,7 @@ D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId)
 }
 
 //D2Common.0x6FD749D0
+//1.14d: 0x00642230
 int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg)
 {
 	if (pDrlg)
@@ -470,6 +475,7 @@ int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg)
 }
 
 //D2Common.0x6FD749E0
+//1.14d: 0x00642240
 int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2)
 {
 	if (pDrlgCoord1->nPosX <= pDrlgCoord2->nPosX)
@@ -506,6 +512,7 @@ int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2
 }
 
 //D2Common.0x6FD74A40
+//1.14d: 0x006422A0
 void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom)
 {
 	D2DrlgCoordsStrc pDrlgCoords = {};
@@ -543,12 +550,14 @@ void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrl
 }
 
 //D2Common.0x6FD74B30
+//1.14d: 0x00642380
 int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2DrlgRoomStrc* pDrlgRoom)
 {
 	return pDrlgRoom->pLevel->nRoom_Center_Warp_X;
 }
 
 //D2Common.0x6FD74B40
+//1.14d: 0x006423D0
 void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 {
 	for (D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
@@ -587,6 +596,7 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74C10 (#10006)
+//1.14d: 0x006424A0
 void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 {
 	SEED_InitLowSeed(&pLevel->pSeed, pLevel->nLevelId + pLevel->pDrlg->dwStartSeed);
@@ -627,6 +637,7 @@ void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74D50
+//1.14d: 0x00642BE0
 int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(D2DrlgStrc* pDrlg, int nLevelId)
 {
 	D2DrlgLevelStrc* pLevel = DRLG_GetLevel(pDrlg, nLevelId);
@@ -644,6 +655,7 @@ int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(D2DrlgStrc* pDrlg, int nLev
 }
 
 //D2Common.0x6FD74D90
+//1.14d: 0x00642520
 void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, int* pTileMinX, int* pTileMinY, int* pTileMaxX, int* pTileMaxY)
 {
 	D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx;
@@ -680,6 +692,7 @@ void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, i
 }
 
 //D2Common.0x6FD74E10
+//1.14d: 0x00642590
 void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel)
 {
 	D2DrlgRoomStrc* pDrlgRoom = NULL;
@@ -721,6 +734,7 @@ void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74EF0
+//1.14d: 0x00642630
 D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* pLevel, int nX, int nY)
 {
 	D2DrlgRoomStrc* pDrlgRoom = NULL;
@@ -750,6 +764,7 @@ D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc
 }
 
 //D2Common.0x6FD74F70
+//1.14d: 0x00642C30
 D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoomHint, D2DrlgLevelStrc* pLevel)
 {
 
@@ -807,6 +822,7 @@ D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgS
 
 //1.10f: D2Common.0x6FD751C0
 //1.13c: D2Common.0x6FD7D320
+//1.14d: 0x006426A0
 BOOL __fastcall DRLG_IsTownLevel(int nLevelId)
 {
 	switch (nLevelId)
@@ -824,12 +840,14 @@ BOOL __fastcall DRLG_IsTownLevel(int nLevelId)
 }
 
 //D2Common.0x6FD75260 (#10000)
+//1.14d: 0x00642750
 int __stdcall DRLG_GetLevelTypeFromLevelId(int nLevelId)
 {
 	return DATATBLS_GetLevelDefRecord(nLevelId)->dwLevelType;
 }
 
 //D2Common.0x6FD75270
+//1.14d: 0x00642D10
 void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc* pLevel)
 {
 	D2LevelDefBin* pLevelDefBin = DATATBLS_GetLevelDefRecord(pLevel->nLevelId);
@@ -853,10 +871,13 @@ void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc*
 }
 
 //D2Common.0x6FD75300 (#10001)
+//1.14d: 0x006427F0
 uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId)
 {
 	//IMPROVEMENT: Lookup the act from Levels.txt
 
+	//1.10f: D2Common.0x6FDCE5B0
+	//1.14d: 0x006EB2F0
 	static const int gnTownIds[] = { LEVEL_ROGUEENCAMPMENT, LEVEL_LUTGHOLEIN, LEVEL_KURASTDOCKTOWN, LEVEL_THEPANDEMONIUMFORTRESS, LEVEL_HARROGATH, 1024 };
 
 	int nAct = 1;
@@ -874,18 +895,21 @@ uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD75330 (#10004)
+//1.14d: 0x00642820
 int __stdcall DRLG_GetSaveMonstersFromLevelId(int nLevelId)
 {
 	return DATATBLS_GetLevelDefRecord(nLevelId)->dwSaveMonsters;
 }
 
 //D2Common.0x6FD75350 (#10002)
+//1.14d: 0x00642840
 int __stdcall DRLG_GetLOSDrawFromLevelId(int nLevelId)
 {
 	return DATATBLS_GetLevelDefRecord(nLevelId)->dwLOSDraw;
 }
 
 //D2Common.0x6FD75370
+//1.14d: 0x00642860
 D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nLevelId)
 {
 	D2LevelDefBin* pLevelDefBin = NULL;
@@ -916,6 +940,7 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 }
 
 //D2Common.0x6FD753F0
+//1.14d: 0x00642920
 void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, int nId)
 {
 	for (int i = 0; i < 8; ++i)
@@ -948,6 +973,7 @@ void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, i
 }
 
 //D2Common.0x6FD75450
+//1.14d: 0x00642A00
 int __fastcall DRLG_IsOnClient(D2DrlgStrc* pDrlg)
 {
 	D2_ASSERT(pDrlg);

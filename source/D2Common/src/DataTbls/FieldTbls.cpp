@@ -12,6 +12,7 @@ static const int gnFieldYOffsets[] = { -1, -1, 0, 1, 1, 1, 0, -1, 0 };
 
 
 //D2Common.0x6FD51FC0
+//1.14d: 0x0066A700
 BOOL __fastcall DATATBLS_LoadExpFieldD2(HD2ARCHIVE hArchive)
 {
 	char szPath[80] = {};
@@ -25,6 +26,7 @@ BOOL __fastcall DATATBLS_LoadExpFieldD2(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD52010 (#11089)
+//1.14d: 0x0066A2B0
 BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize)
 {
 	uint32_t v2 = *(uint32_t*)(pExpField + 2);
@@ -51,6 +53,7 @@ BOOL __stdcall DATATBLS_InitializeCollisionFieldTable(char* pExpField, int nSize
 }
 
 //D2Common.0x6FD520F0 (#11090)
+//1.14d: 0x0066A420
 BOOL __stdcall DATATBLS_FreeCollisionFieldTable()
 {
 	if (sgptDataTables->pFieldData)
@@ -69,6 +72,7 @@ BOOL __stdcall DATATBLS_FreeCollisionFieldTable()
 }
 
 //D2Common.0x6FD52140 (#11091)
+//1.14d: 0x0066A470
 void __stdcall DATATBLS_GetCollisionFieldCenter(int* pCenterX, int* pCenterY)
 {
 	*pCenterX = sgptDataTables->pCollisionField.nCenterX;
@@ -76,18 +80,21 @@ void __stdcall DATATBLS_GetCollisionFieldCenter(int* pCenterX, int* pCenterY)
 }
 
 //D2Common.0x6FD52160 (#11092)
+//1.14d: 0x0066A490
 int __stdcall DATATBLS_GetCollisionFieldWidth()
 {
 	return sgptDataTables->pCollisionField.nWidth;
 }
 
 //D2Common.0x6FD52170 (#11093)
+//1.14d: 0x0066A4A0
 int __stdcall DATATBLS_GetCollisionFieldHeight()
 {
 	return sgptDataTables->pCollisionField.nHeight;
 }
 
 //D2Common.0x6FD52180 (#11094)
+//1.14d: 0x0066A4B0
 D2FieldStrc* __stdcall DATATBLS_AllocField()
 {
 	D2FieldStrc* pField = D2_ALLOC_STRC_POOL(nullptr, D2FieldStrc);
@@ -100,6 +107,7 @@ D2FieldStrc* __stdcall DATATBLS_AllocField()
 }
 
 //D2Common.0x6FD521D0 (#11095)
+//1.14d: 0x0066A500
 void __stdcall DATATBLS_FreeField(D2FieldStrc* pField)
 {
 	D2_ASSERT(pField);
@@ -108,6 +116,7 @@ void __stdcall DATATBLS_FreeField(D2FieldStrc* pField)
 }
 
 //D2Common.0x6FD52210 (#11096)
+//1.14d: 0x0066A540
 void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY)
 {
 	D2_ASSERT(pField);
@@ -117,6 +126,7 @@ void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY)
 }
 
 //D2Common.0x6FD52250 (#11097)
+//1.14d: 0x0066A580
 int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
 {
 	D2_ASSERT(pField);
@@ -125,6 +135,7 @@ int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
 }
 
 //D2Common.0x6FD522A0 (#11098)
+//1.14d: 0x0066A5D0
 int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 {
 	
@@ -139,6 +150,7 @@ int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 }
 
 //D2Common.0x6FD52360 (#11099)
+//1.14d: 0x0066A670
 BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t fMask)
 {
 	if (pRoom)

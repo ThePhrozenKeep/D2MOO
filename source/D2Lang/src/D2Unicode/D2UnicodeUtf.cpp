@@ -137,6 +137,7 @@ static int Utf8CodePointToUnicodeChar(Unicode* dest, const char* src, int count)
   return -1;
 }
 
+//1.14d: 0x00526320
 Unicode* __fastcall Unicode::toUnicode(
     Unicode* dest,
     const char* src,
@@ -170,6 +171,7 @@ Unicode* __fastcall Unicode::toUnicode(
   return dest;
 }
 
+//1.14d: 0x005263E0
 char* __fastcall Unicode::toUtf(char* dest, const Unicode* src, int count) {
   D2_ASSERT(count >= 0);
 
