@@ -360,20 +360,20 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 				}
 				else
 				{
-					int32_t v45 = 2 * pObjectsTxtRecord->dwParm[2];
-					int32_t v46 = pInactiveUnitNode->nInteractType;
-					if (v46 < v45)
+					int32_t nMaxCharges = 2 * pObjectsTxtRecord->dwParm[2];
+					int32_t nCharges = pInactiveUnitNode->nInteractType;
+					if (nCharges < nMaxCharges)
 					{
 						int32_t nFrameDelta = pObjectsTxtRecord->dwParm[0];
 						D2_ASSERT(nFrameDelta);
 
 						if (pInactiveUnitNode->nGameFrame >= (int32_t)(pGame->dwGameFrame + nFrameDelta))
 						{
-							pUnit->pObjectData->InteractType = v46;
-							if (v46 < v45 && v45 - v46 > 0)
+							pUnit->pObjectData->InteractType = nCharges;
+							if (nCharges < nMaxCharges && nMaxCharges - nCharges > 0)
 							{
 								int32_t nOffset = nFrameDelta;
-								int32_t nCounter = v45 - v46;
+								int32_t nCounter = nMaxCharges - nCharges;
 								do
 								{
 									EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
@@ -392,26 +392,26 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 								nRegenerateSteps = 1;
 							}
 
-							int32_t nRegeneratedType = (BYTE)(nRegenerateSteps + v46);
-							if (nRegeneratedType > v45)
+							int32_t nRegeneratedCharges = (BYTE)(nRegenerateSteps + nCharges);
+							if (nRegeneratedCharges > nMaxCharges)
 							{
-								nRegeneratedType = v45;
+								nRegeneratedCharges = nMaxCharges;
 							}
 
-							pUnit->dwAnimMode = (BYTE)2 - nRegeneratedType / (int32_t)pObjectsTxtRecord->dwParm[2];
+							pUnit->dwAnimMode = (BYTE)2 - nRegeneratedCharges / (int32_t)pObjectsTxtRecord->dwParm[2];
 							if (pUnit->dwAnimMode > 2)
 							{
 								pUnit->dwAnimMode = OBJMODE_NEUTRAL;
-								pUnit->pObjectData->InteractType = v45;
+								pUnit->pObjectData->InteractType = nMaxCharges;
 							}
 							else
 							{
-								v46 = nRegeneratedType;
-								pUnit->pObjectData->InteractType = v46;
-								if (v46 < v45 && v45 - v46 > 0)
+								nCharges = nRegeneratedCharges;
+								pUnit->pObjectData->InteractType = nCharges;
+								if (nCharges < nMaxCharges && nMaxCharges - nCharges > 0)
 								{
 									int32_t nOffset = nFrameDelta;
-									int32_t nCounter = v45 - v46;
+									int32_t nCounter = nMaxCharges - nCharges;
 									do
 									{
 										EVENT_SetEvent(pGame, pUnit, EVENTTYPE_AITHINK, nOffset + pGame->dwGameFrame, 0, 0);
@@ -885,15 +885,15 @@ void __fastcall SUNITINACTIVE_CompressInactiveUnit(D2GameStrc* pGame, D2UnitStrc
 		}
 
 		D2MinionListStrc* pMinionList = nullptr;
-		int32_t a2 = 0;
+		int32_t nOwnerGUID = 0;
 		int32_t nOwnerType = 0;
 		int32_t bAiControlFlag1 = 0;
 		int32_t bAiControlFlag2 = 0;
-		AIGENERAL_GetAiControlInfo(pUnit, &a2, &nOwnerType, &bAiControlFlag1, &bAiControlFlag2, &pMinionList);
+		AIGENERAL_GetAiControlInfo(pUnit, &nOwnerGUID, &nOwnerType, &bAiControlFlag1, &bAiControlFlag2, &pMinionList);
 
-		if (a2 != -1 && nOwnerType == 1)
+		if (nOwnerGUID != -1 && nOwnerType == 1)
 		{
-			pInactiveMonsterNode->nOwnerGUID = a2;
+			pInactiveMonsterNode->nOwnerGUID = nOwnerGUID;
 			pInactiveMonsterNode->pMinionList = pMinionList;
 
 			if (bAiControlFlag1)
