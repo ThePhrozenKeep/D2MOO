@@ -323,7 +323,6 @@ void __fastcall ITEMS_AssignLegacySpecialProperties(D2GameStrc* pGame, D2UnitStr
 //1.14d: 0x00556A60
 int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
-    // TODO: nRand
     int16_t nSuffix = 0;
     int16_t nPrefix = 0;
     int32_t bForceSuffixRoll = 0;

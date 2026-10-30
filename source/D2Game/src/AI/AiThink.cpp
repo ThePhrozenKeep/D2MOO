@@ -8886,8 +8886,6 @@ void __fastcall AITHINK_Fn098_Smith(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTi
 //1.14d: 0x005E4CF0
 void __fastcall AITHINK_Fn067_NecroPet(D2GameStrc* pGame, D2UnitStrc* pUnit, D2AiTickParamStrc* pAiTickParam)
 {
-	//TODO: Names
-
 	D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_AITHINK, 0);
 
 	if (!pAiTickParam->pAiControl->dwAiParam[0])
@@ -11256,7 +11254,6 @@ int32_t __fastcall AITHINK_ExecuteMapAiAction(D2GameStrc* pGame, D2UnitStrc* pUn
 {
 	typedef int32_t(__fastcall* ACTIONFN)(D2GameStrc*, D2UnitStrc*, D2AiTickParamStrc*, D2MapAIPathPositionStrc*);
 
-	//TODO: Name
 	ACTIONFN tMapAiActions[] =
 	{
 		nullptr,
