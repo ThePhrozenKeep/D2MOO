@@ -513,9 +513,9 @@ void __fastcall AIGENERAL_FreeAllMinionLists(D2GameStrc* pGame, D2MinionListStrc
 
 //D2Game.0x6FCCF5C0
 //1.14d: 0x0058F380
-void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfnParty)(D2UnitStrc*, void*, void*))
+void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCallbackArg1, void* pCallbackArg2, void(__fastcall* pfCallback)(D2UnitStrc*, void*, void*))
 {
-	D2_ASSERT(pfnParty);
+	D2_ASSERT(pfCallback);
 
 	D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
 	if (!pAiControl || !pAiControl->pGame)
@@ -529,7 +529,7 @@ void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCal
 		D2UnitStrc* pMinion = SUNIT_GetServerUnit(pOwnerAiControl->pGame, UNIT_MONSTER, pMinionList->dwMinionGUID);
 		if (pMinion)
 		{
-			pfnParty(pMinion, pCallbackArg1, pCallbackArg2);
+			pfCallback(pMinion, pCallbackArg1, pCallbackArg2);
 		}
 	}
 }
