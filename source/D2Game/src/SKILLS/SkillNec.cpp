@@ -1932,7 +1932,7 @@ int32_t __fastcall SKILLS_EventFunc04_ReflectPhysicalDamage(D2GameStrc* pGame, i
     int32_t nDamagePercent = 0;
     if (pAttacker->dwUnitType == UNIT_PLAYER || MONSTERS_GetHirelingTypeId(pAttacker))
     {
-        if (pUnit->dwUnitType == UNIT_MONSTER)
+        if (pUnit->dwUnitType == UNIT_PLAYER)
         {
             nDamagePercent = SKILLS_EvaluateSkillFormula(pStatListOwner, pSkillsTxtRecord->dwCalc[1], nSkillId, nSkillLevel);
         }

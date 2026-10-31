@@ -1452,7 +1452,7 @@ void __fastcall ACT1Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 
 	if (pQuestArg->nNewLevel == LEVEL_ROGUEENCAMPMENT)
 	{
-		if (pQuestDataEx->pPlayerInTristram)
+		if (pQuestDataEx->bCainObjectInitialized)
 		{
 			D2UnitStrc* pCain = SUNIT_GetServerUnit(pQuestArg->pGame, UNIT_OBJECT, pQuestDataEx->nCainObjectGUID);
 			if (pCain && pQuestDataEx->bCainInTownSpawnPending == 1 && !pQuestDataEx->bCainInTownSpawned)

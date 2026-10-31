@@ -8,8 +8,6 @@
 
 
 
-//TODO: Variable names
-
 
 //D2Common.0x6FD75480
 //1.14d: 0x00642A30

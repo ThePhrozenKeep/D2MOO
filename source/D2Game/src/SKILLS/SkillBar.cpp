@@ -201,7 +201,7 @@ int32_t __fastcall SKILLS_SrvDo069_FindPotion(D2GameStrc* pGame, D2UnitStrc* pUn
     STATES_ToggleState(pTarget, STATE_CORPSE_NOSELECT, 1);
     UNITROOM_RefreshUnit(pTarget);
 
-    if ((ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel))
+    if ((int32_t)(ITEMS_RollRandomNumber(&pUnit->pSeed) % 100) >= SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel))
     {
         return 1;
     }
@@ -227,7 +227,7 @@ int32_t __fastcall SKILLS_SrvDo069_FindPotion(D2GameStrc* pGame, D2UnitStrc* pUn
         return 1;
     }
 
-    const uint32_t nChance = ITEMS_RollRandomNumber(&pUnit->pSeed) % 100;
+    const int32_t nChance = ITEMS_RollRandomNumber(&pUnit->pSeed) % 100;
 
     if (nChance >= pSkillsTxtRecord->dwParam[2])
     {

@@ -799,7 +799,7 @@ void __fastcall SKILLS_MissileInit_SeededChargedBolt(D2UnitStrc* pMissile, int32
         return;
     }
 
-    uint8_t nTotalFrames = MISSILE_GetTotalFrames(pMissile);
+    int32_t nTotalFrames = MISSILE_GetTotalFrames(pMissile);
     if (nTotalFrames >= 78)
     {
         nTotalFrames = 77;
@@ -893,7 +893,6 @@ void __fastcall SKILLS_CreateCurvingMissileRing(D2GameStrc* pGame, D2UnitStrc* p
 //1.14d: 0x005D4680
 void __fastcall SKILLS_MissileInit_CurvingPath(D2UnitStrc* pMissile, int32_t nInitSeed)
 {
-    // TODO: Names
     constexpr int32_t nXStepOffsets[] =
     {
         2, 2, 0, -2, -2, -2, 0, 2
@@ -2542,6 +2541,7 @@ int32_t __fastcall SKILLS_SrvDo053_ApplyAreaDamage(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCFA980
+//1.14d: 0x005D7C40
 int32_t __fastcall SKILLS_AuraCallback_AllocSkillCombat(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
 {
     D2SrvDo142Strc* pArgs = (D2SrvDo142Strc*)pAuraCallback->pArgs;

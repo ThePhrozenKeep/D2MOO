@@ -4696,7 +4696,7 @@ void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* p
         return;
     }
 
-    uint32_t nChance = 0;
+    int32_t nChance = 0;
     switch (pUnit->dwUnitType)
     {
     case UNIT_PLAYER:

@@ -722,6 +722,7 @@ int32_t __fastcall SKILLITEM_pSpell06_AntidoteThawingPotion(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FD03C80
+//1.14d: 0x005BF060
 int32_t __fastcall SKILLITEM_pSpell08_AddItemValueToStat(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem, D2UnitStrc* pTarget, int32_t nX, int32_t nY, int32_t nSkillId)
 {
     const int32_t nStatId = ITEMS_GetFileIndex(pItem);

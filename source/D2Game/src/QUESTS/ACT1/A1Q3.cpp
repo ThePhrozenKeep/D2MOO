@@ -185,7 +185,7 @@ int32_t __fastcall OBJECTS_OperateFunction21_HoradrimMalus(D2ObjOperateFnStrc* p
 	if (pQuestData->fLastState != 1)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
-		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 0);
+		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 0);
 	}
 
 	return 1;
@@ -400,13 +400,13 @@ void __fastcall ACT1Q3_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2Q
 	{
 		SUNIT_IterateUnitsOfType(pQuestData->pGame, 0, 0, ACT1Q3_UnitIterate_UpdateQuestStateFlags);
 		pQuestData->dwFlags &= 0xFFFFFF00;
-		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+		QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 		pQuestDataEx->bCharsiIntroActivated = 0;
 	}
 	else if (pQuestDataEx->bCharsiEndActivated == 1)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
-		QUESTS_UnitIterate(pQuestData, 13, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+		QUESTS_UnitIterate(pQuestData, 13, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 		pQuestDataEx->bCharsiEndActivated = 0;
 	}
 }
@@ -448,7 +448,7 @@ void __fastcall ACT1Q3_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 			const int16_t nPartyId = SUNIT_GetPartyId(pQuestArg->pPlayer);
 			if (nPartyId != -1)
 			{
-				PARTY_IteratePartyMembers(pQuestArg->pGame, nPartyId, ACT1Q2_UnitIterate_SetPrimaryGoalDone, 0);
+				PARTY_IteratePartyMembers(pQuestArg->pGame, nPartyId, ACT1Q3_UnitIterate_SetPrimaryGoalDone, 0);
 			}
 
 			if (pQuestData->bNotIntro)
@@ -590,7 +590,7 @@ void __fastcall ACT1Q3_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 	}
 
 	pQuestData->dwFlags &= 0xFFFFFF00;
-	QUESTS_UnitIterate(pQuestData, 2, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+	QUESTS_UnitIterate(pQuestData, 2, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 }
 
 //D2Game.0x6FC999F0
@@ -631,7 +631,7 @@ void __fastcall ACT1Q3_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 	if (!pQuestDataEx->nMalusItemsInGame && pQuestDataEx->bMalusInitialized && pQuestDataEx->nMalusObjectMode == OBJMODE_OPENED)
 	{
 		pQuestData->dwFlags &= 0xFFFFFF00;
-		QUESTS_UnitIterate(pQuestData, 3, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+		QUESTS_UnitIterate(pQuestData, 3, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 	}
 }
 
@@ -676,7 +676,7 @@ void __fastcall ACT1Q3_Callback06_MalusRemoved(D2QuestDataStrc* pQuestData, D2Qu
 
 	QUESTS_StateDebug(pQuestData, 3, __FILE__, __LINE__);
 	pQuestData->dwFlags = 0x00000001;
-	QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q2_UnitIterate_StatusCyclerEx, 1);
+	QUESTS_UnitIterate(pQuestData, 1, 0, ACT1Q3_UnitIterate_StatusCyclerEx, 1);
 	pQuestDataEx->unk0x08 = 0;
 
 	if (pQuestDataEx->bMalusInitialized != 1)

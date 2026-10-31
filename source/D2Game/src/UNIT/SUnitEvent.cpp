@@ -124,13 +124,14 @@ D2UnitEventStrc* __fastcall SUNITEVENT_GetEvent(D2GameStrc* pGame, D2UnitStrc* p
 
 //D2Game.0x6FCC3790
 //1.14d: 0x005C0C30
-void __fastcall SUNITEVENT_Trigger(D2GameStrc* pGame, D2C_UnitEventTypes nUnitEvent, D2UnitStrc* pUnit, D2UnitStrc* pEventSourceUnit, D2DamageStrc* pDamage)
+int32_t __fastcall SUNITEVENT_Trigger(D2GameStrc* pGame, D2C_UnitEventTypes nUnitEvent, D2UnitStrc* pUnit, D2UnitStrc* pEventSourceUnit, D2DamageStrc* pDamage)
 {
     if (!pUnit)
     {
-        return;
+        return 0;
     }
 
+    int32_t nResult = 0;
     D2UnitEventStrc* pUnitEvent = pUnit->pSrvUnitEventsList;
     while (pUnitEvent)
     {
@@ -138,7 +139,7 @@ void __fastcall SUNITEVENT_Trigger(D2GameStrc* pGame, D2C_UnitEventTypes nUnitEv
         if (pUnitEvent->nUnitEvent == nUnitEvent)
         {
             pUnitEvent->nFlags |= UNITEVENTFLAG_IN_CALLBACK;
-            pUnitEvent->pCallback(pGame, nUnitEvent, pUnit, pEventSourceUnit, pDamage, pUnitEvent->nParam1, pUnitEvent->nParam2);
+            nResult = pUnitEvent->pCallback(pGame, nUnitEvent, pUnit, pEventSourceUnit, pDamage, pUnitEvent->nParam1, pUnitEvent->nParam2);
             pUnitEvent->nFlags &= ~UNITEVENTFLAG_IN_CALLBACK;
 
             if ((pUnitEvent->nFlags & UNITEVENTFLAG_SHOULD_BE_FREED) || !pUnitEvent->nEventGroup)
@@ -148,4 +149,6 @@ void __fastcall SUNITEVENT_Trigger(D2GameStrc* pGame, D2C_UnitEventTypes nUnitEv
         }
         pUnitEvent = pNext;
     }
+
+    return nResult;
 }

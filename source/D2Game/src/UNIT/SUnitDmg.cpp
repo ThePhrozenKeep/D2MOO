@@ -2973,7 +2973,7 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 		return;
 	}
 
-	const uint32_t nDefenderExperience = STATLIST_GetUnitBaseStat(pDefender, STAT_EXPERIENCE, 0);
+	const int32_t nDefenderExperience = STATLIST_GetUnitBaseStat(pDefender, STAT_EXPERIENCE, 0);
 	if (nDefenderExperience <= 0)
 	{
 		return;
@@ -3084,7 +3084,7 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 		return 0;
 	}
 
-	uint32_t nResult = nDefenderExperience;
+	int32_t nResult = nDefenderExperience;
 	if (nDefenderLevel <= nAttackerLevel)
 	{
 		//1.10f: D2Game.0x6FD293A4
@@ -3169,7 +3169,7 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 	}
 
 	const uint32_t nMaxExp = (uint32_t)(MONSTERS_GetHirelingExpForNextLevel(nAttackerLevel + 1, pHirelingTxtRecord->dwExpPerLvl) - MONSTERS_GetHirelingExpForNextLevel(nAttackerLevel, pHirelingTxtRecord->dwExpPerLvl)) >> 6;
-	return std::min(nResult, nMaxExp);
+	return std::min((uint32_t)nResult, nMaxExp);
 }
 
 //D2Game.0x6FCC3170
