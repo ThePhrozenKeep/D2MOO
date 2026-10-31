@@ -923,7 +923,7 @@ int32_t __fastcall SKILLS_SrvDo014_LightningStrike(D2GameStrc* pGame, D2UnitStrc
     missileParams.nSkill = nSkillId;
     missileParams.nSkillLevel = nSkillLevel;
     missileParams.nMissile = nMissileId;
-    missileParams.nTargetX = CLIENTS_GetUnitY(pNextTarget);
+    missileParams.nTargetX = CLIENTS_GetUnitX(pNextTarget);
     missileParams.nTargetY = CLIENTS_GetUnitY(pNextTarget);
 
     D2UnitStrc* pMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
