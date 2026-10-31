@@ -2193,18 +2193,28 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t bLimitCatchUp)
         dword_6FD45844 = nSysTimeMs;
     }
 
-    if (nSysTimeMs - dword_6FD45844 < gnTargetMsPerFrame_6FD457F8)
+#ifdef NO_BUG_FIX
+    const int32_t nElapsedMs = static_cast<int32_t>(nSysTimeMs - dword_6FD45844);
+#else
+    // timeGetTime is masked to 31 bits; retain the frame cadence when it wraps.
+    const int32_t nElapsedMs = (nSysTimeMs - dword_6FD45844) & 0x7FFFFFFF;
+#endif
+    if (nElapsedMs < gnTargetMsPerFrame_6FD457F8)
     {
         return 0;
     }
 
-    int32_t nRemainingDelayMs = nSysTimeMs - dword_6FD45844 - gnTargetMsPerFrame_6FD457F8;
+    int32_t nRemainingDelayMs = nElapsedMs - gnTargetMsPerFrame_6FD457F8;
     if (bLimitCatchUp && nRemainingDelayMs >= gnTargetMsPerFrame_6FD457F8)
     {
         nRemainingDelayMs = gnTargetMsPerFrame_6FD457F8;
     }
 
+#ifdef NO_BUG_FIX
     dword_6FD45844 = nSysTimeMs - nRemainingDelayMs;
+#else
+    dword_6FD45844 = (nSysTimeMs - nRemainingDelayMs) & 0x7FFFFFFF;
+#endif
     
     int32_t bQueryPerformance = 0;
     for (int32_t i = 0; i < std::size(gnGamesGUIDs_6FD447F8); ++i)
