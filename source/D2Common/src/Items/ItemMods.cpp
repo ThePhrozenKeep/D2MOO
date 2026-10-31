@@ -614,68 +614,55 @@ BOOL __stdcall ITEMMODS_GetItemCharges(D2UnitStrc* pItem, int nSkillId, int nSki
 
 //D2Common.0x6FD927D0 (#10847)
 //1.14d: 0x0065C940
-BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkillId, int nSkillLevel, int a4)
+BOOL __stdcall ITEMMODS_UpdateItemWithSkillCharges(D2UnitStrc* pItem, int nSkillId, int nSkillLevel, int nCharges)
 {
-	D2StatListStrc* pStatList = NULL;
-	D2UnitStrc* pSocketable = NULL;
-	int nShiftedValue = 0;
-	int nValue = 0;
-	int nLayer = 0;
-	uint8_t v11 = 0;
-
-	if (pItem && pItem->dwUnitType == UNIT_ITEM)
+	if (!pItem || pItem->dwUnitType != UNIT_ITEM)
 	{
-		nLayer = (nSkillLevel & sgptDataTables->nShiftedStuff) + (nSkillId << sgptDataTables->nStuff);
+		return FALSE;
+	}
 
-		pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x40);
-		while (pStatList)
+	const int nLayer = (nSkillLevel & sgptDataTables->nShiftedStuff) + (nSkillId << sgptDataTables->nStuff);
+
+	int nValue = 0;
+	D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, STATLIST_MAGIC);
+	while (pStatList)
+	{
+		nValue = STATLIST_GetStatValue(pStatList, STAT_ITEM_CHARGED_SKILL, nLayer);
+		if (nValue)
 		{
-			nValue = STATLIST_GetStatValue(pStatList, STAT_ITEM_CHARGED_SKILL, nLayer);
-			if (nValue)
-			{
-				break;
-			}
-			pStatList = STATLIST_GetStatListFromFlag(pStatList, 0x40);
+			break;
 		}
 
-		if (pStatList)
+		pStatList = STATLIST_GetStatListFromFlag(pStatList, STATLIST_MAGIC);
+	}
+
+	if (pStatList)
+	{
+		const int nMaxCharges = nValue >> 8;
+		if (nMaxCharges <= 0 || nMaxCharges > 255)
 		{
-			nShiftedValue = nValue >> 8;
-			if (nShiftedValue > 0 && nShiftedValue <= 255)
-			{
-				v11 = a4;
-
-				if (v11 < 0)
-				{
-					v11 = 0;
-				}
-
-				if (v11 >= nShiftedValue)
-				{
-					v11 = nShiftedValue;
-				}
-
-				STATLIST_SetBaseStat2(pStatList, STAT_ITEM_CHARGED_SKILL, v11 + (nShiftedValue << 8), nLayer, pItem);
-				return TRUE;
-			}
-
 			return FALSE;
 		}
 
-		if (pItem->pInventory)
+		int32_t nNewCharges = nCharges;
+		if (nNewCharges < 0)
 		{
-			pSocketable = INVENTORY_GetFirstItem(pItem->pInventory);
-			while (pSocketable)
-			{
-				if (ITEMMODS_UpdateItemWithSkillCharges(INVENTORY_UnitIsItem(pSocketable), nSkillId, nSkillLevel, a4))
-				{
-					break;
-				}
+			nNewCharges = 0;
+		}
+		else if (nNewCharges > nMaxCharges)
+		{
+			nNewCharges = nMaxCharges;
+		}
 
-				pSocketable = INVENTORY_GetNextItem(pSocketable);
-			}
+		STATLIST_SetBaseStat2(pStatList, STAT_ITEM_CHARGED_SKILL, (nMaxCharges << 8) + nNewCharges, nLayer, pItem);
+		return TRUE;
+	}
 
-			if (pSocketable)
+	if (pItem->pInventory)
+	{
+		for (D2UnitStrc* pSocketable = INVENTORY_GetFirstItem(pItem->pInventory); pSocketable; pSocketable = INVENTORY_GetNextItem(pSocketable))
+		{
+			if (ITEMMODS_UpdateItemWithSkillCharges(INVENTORY_UnitIsItem(pSocketable), nSkillId, nSkillLevel, nCharges))
 			{
 				return TRUE;
 			}
