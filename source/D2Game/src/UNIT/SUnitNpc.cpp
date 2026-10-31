@@ -1227,9 +1227,9 @@ D2UnitStrc* __fastcall SUNITNPC_FindStackForStorePurchase(D2GameStrc* pGame, D2U
     return pStackItem;
 }
 
+extern int32_t gnCrossbowQuiverItemId; // SUnitProxy.cpp
+extern int32_t gnArrowQuiverItemId;
 //D2Game.0x6FCC88B0) --------------------------------------------------------
-extern int32_t dword_6FD4DD80; // class of 'cqv ' (bolts), SUnitProxy.cpp
-extern int32_t dword_6FD4DD84; // class of 'aqv ' (arrows)
 
 //1.14d: Game.0x576D90 (inlined in 1.10f)
 // Takes nCost from the player's gold and the rest from the stash; 0 when the player cannot pay.
@@ -1479,12 +1479,12 @@ ITEM_PLACED: // [LABEL_117]
     bEquip = 1; // [v85]
     pWeapon = INVENTORY_GetLeftHandWeapon(pInventory); // [v44]
     nWeaponClass = UNITS_GetWeaponClass(pPlayer); // [v45]
-    if (nNewClass == dword_6FD4DD80 && pWeapon && nWeaponClass != 7)
+    if (nNewClass == gnCrossbowQuiverItemId && pWeapon && nWeaponClass != 7)
     {
         bEquip = 0;
     }
 
-    if (nNewClass == dword_6FD4DD84)
+    if (nNewClass == gnArrowQuiverItemId)
     {
         if (!pWeapon)
         {
@@ -1506,7 +1506,7 @@ ITEM_PLACED: // [LABEL_117]
     }
 
 CHECK_QUIVER:
-    if (nNewClass != dword_6FD4DD80 && nNewClass != dword_6FD4DD84)
+    if (nNewClass != gnCrossbowQuiverItemId && nNewClass != gnArrowQuiverItemId)
     {
 TRY_EQUIP:
         if (bEquip)
