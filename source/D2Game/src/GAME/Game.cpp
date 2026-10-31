@@ -71,7 +71,7 @@ int32_t dword_6FD4581C;
 int32_t gnTargetFrameRate_6FD2CA60 = DEFAULT_FRAMES_PER_SECOND;
 //1.10f: D2Game.0x6FD457F8
 //1.14d: 0x00883D60
-int32_t gnTargetMsPerFrame_6FD457F8;
+int32_t gnTargetMsPerFrame_6FD457F8 = GAME_InitializeFrameRate();
 //1.10f: D2Game.0x6FD2CA14
 //1.14d: 0x00731010
 int32_t gnFrameRate_6FD2CA14;
@@ -2173,9 +2173,9 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
 //D2Game.0x6FC38E00
 //1.14d: 0x006CAF10
-void __fastcall GAME_InitializeFrameRate()
+int32_t __fastcall GAME_InitializeFrameRate()
 {
-    gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
+    return gnTargetMsPerFrame_6FD457F8 = 1000 / gnTargetFrameRate_6FD2CA60;
 }
 
 //1.10f:D2Game.0x6FC38E20 (#10004)

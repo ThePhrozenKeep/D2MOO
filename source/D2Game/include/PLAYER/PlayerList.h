@@ -52,4 +52,4 @@ int32_t __fastcall PLAYERLIST_GetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* 
 void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nHostileDelayEndTick);
 //D2Game.0x6FCBAED0
 //1.14d: 0x006CAF60
-void __fastcall PLAYERLIST_InitializeUnitSeed();
+uint32_t __fastcall PLAYERLIST_InitializeUnitSeed();
