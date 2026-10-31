@@ -357,7 +357,7 @@ void __fastcall AIGENERAL_SetOwnerData(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 		return;
 	}
 
-	D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
+	D2AiControlStrc* pAiControl = pUnit->pMonsterData ? pUnit->pMonsterData->pAiControl : nullptr;
 
 	if (bSetFlag2)
 	{
