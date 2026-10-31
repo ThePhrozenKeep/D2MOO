@@ -2861,7 +2861,7 @@ int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMete
             nMissileRange = pSkillsTxtRecord->dwParam[2] + (nLevel - 1) * pSkillsTxtRecord->dwParam[3];
         }
 
-        const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[1], 1u);
+        const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[1], 1);
         MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(pGame, pMissile, nHitSubMissile, nMissileRange, nStep);
     }
 
@@ -3423,7 +3423,7 @@ int32_t __fastcall MISSMODE_SrvHit25_PantherPotGreen(D2GameStrc* pGame, D2UnitSt
         pOrigin = pMissile;
     }
 
-    const int32_t nHitPar = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nHitPar = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
     MISSMODE_CreatePantherPotGreenSubmissiles(pGame, pOwner, pOrigin, pMissilesTxtRecord->wHitSubMissile[0], MISSILE_GetSkill(pMissile), MISSILE_GetLevel(pMissile), nHitPar);
     return 3;
 }
@@ -3544,7 +3544,7 @@ int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pM
     missileParams.nSkillLevel = MISSILE_GetLevel(pMissile);
     missileParams.nMissile = pMissilesTxtRecord->wHitSubMissile[0];
 
-    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
 
     const int32_t xOffsets[64] =
     {
@@ -3601,7 +3601,7 @@ int32_t __fastcall MISSMODE_SrvHit05_CreateRadialSubmissiles(D2GameStrc* pGame, 
     missileParams.nSkillLevel = MISSILE_GetLevel(pMissile);
     missileParams.nMissile = pMissilesTxtRecord->wHitSubMissile[0];
 
-    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
 
     const int32_t xOffsets[64] =
     {
@@ -4036,7 +4036,7 @@ int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc
         nResult = 3;
     }
 
-    const int32_t nParam = std::max(pMissilesTxtRecord->dwHitPar[1], 1u);
+    const int32_t nParam = std::max(pMissilesTxtRecord->dwHitPar[1], 1);
     MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(pGame, pMissile, pMissilesTxtRecord->wHitSubMissile[0], nRange, nParam);
     return nResult;
 }
@@ -4164,7 +4164,7 @@ int32_t __fastcall MISSMODE_SrvHit52_BladeFury(D2GameStrc* pGame, D2UnitStrc* pM
     missileParams.nSkill = MISSILE_GetSkill(pMissile);
     missileParams.nSkillLevel = MISSILE_GetLevel(pMissile);
 
-    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nStep = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
 
     const int32_t xOffsets[] =
     {
@@ -4259,7 +4259,7 @@ int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* p
         return 1;
     }
 
-    const int32_t nPercentage = D2Clamp(pMissilesTxtRecord->dwHitPar[0], 1u, 100u);
+    const int32_t nPercentage = D2Clamp(pMissilesTxtRecord->dwHitPar[0], 1, 100);
     const int32_t nLostMana = D2Clamp(MONSTERUNIQUE_CalculatePercentage(nCurrentMana, nPercentage, 100), 1, nCurrentMana);
     STATLIST_SetUnitStat(pUnit, STAT_MANA, nCurrentMana - nLostMana, 0);
     return 2;
@@ -4341,7 +4341,7 @@ int32_t __fastcall MISSMODE_SrvHit58_BaalTauntLightningControl(D2GameStrc* pGame
     }
 
     SEED_InitLowSeed(&pMissile->pSeed, CLIENTS_GetUnitX(pMissile));
-    const int32_t nRadius = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nRadius = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
 
     D2MissileStrc missileParams = {};
     missileParams.dwFlags = 32;
@@ -4380,7 +4380,7 @@ int32_t __fastcall MISSMODE_SrvHit59_BaalTauntPoisonControl(D2GameStrc* pGame, D
         return 1;
     }
 
-    const int32_t nHitPar = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
+    const int32_t nHitPar = std::max(pMissilesTxtRecord->dwHitPar[0], 1);
     MISSMODE_CreatePoisonCloudHitSubmissiles(pGame, pOwner, pMissile, pMissilesTxtRecord->wHitSubMissile[0], MISSILE_GetSkill(pMissile), MISSILE_GetLevel(pMissile), nHitPar, 2, 0);
     return 1;
 }
