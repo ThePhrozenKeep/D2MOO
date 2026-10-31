@@ -3817,11 +3817,11 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
     {
         int32_t bUsed = 0;
 
-        const int32_t nMaxLife = STATLIST_GetMaxLifeFromUnit(pPlayer);
-        const int32_t nLife = STATLIST_UnitGetStatValue(pPlayer, STAT_HITPOINTS, 0);
+        const uint32_t nMaxLife = STATLIST_GetMaxLifeFromUnit(pPlayer);
+        const uint32_t nLife = STATLIST_UnitGetStatValue(pPlayer, STAT_HITPOINTS, 0);
         if (nLife < nMaxLife && pObjectsTxtRecord->dwParm[3] & 2)
         {
-            int32_t nNewLife = nLife + (nMaxLife * pObjectsTxtRecord->dwParm[1] >> 8);
+            uint32_t nNewLife = nLife + (nMaxLife * pObjectsTxtRecord->dwParm[1] >> 8);
             if (nNewLife > nMaxLife)
             {
                 nNewLife = nMaxLife;
@@ -3831,11 +3831,11 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
             bUsed = 1;
         }
 
-        const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pPlayer);
-        const int32_t nMana = STATLIST_UnitGetStatValue(pPlayer, STAT_MANA, 0);
+        const uint32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pPlayer);
+        const uint32_t nMana = STATLIST_UnitGetStatValue(pPlayer, STAT_MANA, 0);
         if (nMana < nMaxMana && pObjectsTxtRecord->dwParm[3] & 1)
         {
-            int32_t nNewMana = nMana + (nMaxMana * pObjectsTxtRecord->dwParm[1] >> 8);
+            uint32_t nNewMana = nMana + (nMaxMana * pObjectsTxtRecord->dwParm[1] >> 8);
             if (nNewMana > nMaxMana)
             {
                 nNewMana = nMaxMana;
@@ -3845,11 +3845,11 @@ int32_t __fastcall OBJECTS_OperateFunction22_Well(D2ObjOperateFnStrc* pOp, int32
             bUsed = 1;
         }
 
-        const int32_t nMaxStamina = STATLIST_GetMaxStaminaFromUnit(pPlayer);
-        const int32_t nStamina = STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0);
+        const uint32_t nMaxStamina = STATLIST_GetMaxStaminaFromUnit(pPlayer);
+        const uint32_t nStamina = STATLIST_UnitGetStatValue(pPlayer, STAT_STAMINA, 0);
         if (nStamina < nMaxStamina)
         {
-            int32_t nNewStamina = nStamina + (nMaxStamina * pObjectsTxtRecord->dwParm[1] >> 8);
+            uint32_t nNewStamina = nStamina + (nMaxStamina * pObjectsTxtRecord->dwParm[1] >> 8);
             if (nNewStamina > nMaxStamina)
             {
                 nNewStamina = nMaxStamina;
