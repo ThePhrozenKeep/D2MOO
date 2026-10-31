@@ -423,7 +423,7 @@ void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom);
 void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame);
 //D2Game.0x6FC38E00
 //1.14d: 0x006CAF10
-void __fastcall GAME_InitializeFrameRate();
+int32_t __fastcall GAME_InitializeFrameRate();
 //1.10f:D2Game.0x6FC38E20 (#10004)
 //1.13c:D2Game.0x6FC4E1E0 (#10008)
 //1.14d: 0x0052FC20

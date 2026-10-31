@@ -296,7 +296,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
     }
     
     D2StatListStrc* pHealthPotStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_HEALTHPOT);
-    int32_t nPotionLifePercent = 0;
+    uint8_t nPotionLifePercent = 0;
     if (pHealthPotStatList && nShiftedMaxHp)
     {
         D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
@@ -311,7 +311,7 @@ int32_t __fastcall PLRMSG_SendPlayerStatUpdates(D2UnitStrc* pUnit, D2UnitStrc* p
 
     const int32_t nMaxMana = STATLIST_GetMaxManaFromUnit(pUnit);
     D2StatListStrc* pManaPotStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_MANAPOT);
-    int32_t nPotionManaPercent = 0;
+    uint8_t nPotionManaPercent = 0;
     if (pManaPotStatList && nMaxMana)
     {
         D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
