@@ -167,7 +167,7 @@ void __fastcall COLLISION_AllocRoomCollisionGrid(void* pMemPool, D2ActiveRoomStr
 		DUNGEON_SetCollisionGridInRoom(pRoom, pCollisionGrid);
 
 		pCollisionGrid->pCollisionMask = (uint16_t*)&pCollisionGrid[1];
-		memset(pCollisionGrid->pCollisionMask, 0x00, sizeof(uint16_t) * (pDrlgCoords.nSubtileWidth * pDrlgCoords.nSubtileHeight)); // TODO: (pDrlgCoords.dwSubtilesWidth + 2) as above?
+		memset(pCollisionGrid->pCollisionMask, 0x00, sizeof(uint16_t) * (pDrlgCoords.nSubtileWidth * pDrlgCoords.nSubtileHeight)); // NOTE: Only width * height masks are cleared, the original game allocates (width + 2) * height masks but does not clear the extra ones either
 
 		DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nAdjacentRooms);
 		for (int i = 0; i < nAdjacentRooms; ++i)
@@ -1877,6 +1877,8 @@ void __fastcall D2Common_10136(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int
 	D2ActiveRoomStrc *v22; // ebx@25
 	int v48; // [sp+34h] [bp-44h]@24
 	int v49; // [sp+38h] [bp-40h]@2
+	int nCurrentX = 0;
+	int nCurrentY = 0;
 	D2DrlgCoordsStrc pDrlgCoords; // [sp+58h] [bp-20h]@1
 
 	v6 = pCoord->nX;
@@ -1891,11 +1893,13 @@ void __fastcall D2Common_10136(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int
 	{
 		if (v10 < v9)
 		{
-			pCoord->nY = v10 + v8;
+			// The current position is only written to pCoord when it is checked, so pCoord holds the last checked position afterwards
+			nCurrentY = v10 + v8;
 			v49 = v10;
 
 			while (v49 < v9)
 			{
+				pCoord->nY = nCurrentY;
 				v13 = pRoom;
 
 				if (pCoord->nY < pDrlgCoords.nSubtileY || pCoord->nY >= pDrlgCoords.nSubtileY + pDrlgCoords.nSubtileHeight)
@@ -1906,9 +1910,10 @@ void __fastcall D2Common_10136(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int
 				if (v13)
 				{
 					v48 = v10;
-					pCoord->nX = v10 + v6;
+					nCurrentX = v10 + v6;
 					while (v48 < v9)
 					{
+						pCoord->nX = nCurrentX;
 						v22 = v13;
 
 						DUNGEON_GetRoomCoordinates(v13, &pDrlgCoords);
@@ -1924,12 +1929,12 @@ void __fastcall D2Common_10136(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, int
 							return;
 						}
 
-						pCoord->nX += 2;
+						nCurrentX += 2;
 						v48 += 2;
 					}
 				}
 
-				pCoord->nY += 2;
+				nCurrentY += 2;
 				v49 += 2;
 			}
 		}
