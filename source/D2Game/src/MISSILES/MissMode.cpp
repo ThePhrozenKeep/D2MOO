@@ -2099,7 +2099,7 @@ int32_t __fastcall MISSMODE_SrvDo35_RoyalStrikeChaosIce(D2GameStrc* pGame, D2Uni
 
     int32_t nSignedOffsetX = nPreviousOffsetX;
     int32_t nSignedOffsetY = nPreviousOffsetY;
-    if (ITEMS_RollRandomNumber(&pMissile->pSeed) & 1)
+    if (!(ITEMS_RollRandomNumber(&pMissile->pSeed) & 1))
     {
         nSignedOffsetX = -nSignedOffsetX;
     }
@@ -2124,7 +2124,9 @@ int32_t __fastcall MISSMODE_SrvDo35_RoyalStrikeChaosIce(D2GameStrc* pGame, D2Uni
     D2Common_10142(pMissile->pDynamicPath, pMissile, 0);
 
     MISSILE_SetTargetX(pMissile, SEED_GetLowSeed(&pMissile->pSeed));
-    MISSILE_SetTargetY(pMissile, (int16_t)nNextOffsetX + (nNextOffsetY << 16));
+    const uint16_t nPackedOffsetX = nNextOffsetX;
+    const uint16_t nPackedOffsetY = nNextOffsetY;
+    MISSILE_SetTargetY(pMissile, nPackedOffsetX | (nPackedOffsetY << 16));
 
     return MISSMODE_HandleMissileCollision(pGame, pMissile);
 }
