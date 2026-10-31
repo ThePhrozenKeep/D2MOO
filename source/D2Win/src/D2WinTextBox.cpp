@@ -390,36 +390,36 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszTex
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	Unicode v58[1024] = {};
+	Unicode wszBuffer[1024] = {};
 
-	Unicode::strcpy(v58, wszText);
+	Unicode::strcpy(wszBuffer, wszText);
 
-	const Unicode* v9 = v58;
-	while (*v9)
+	const Unicode* wszTrimmed = wszBuffer;
+	while (*wszTrimmed)
 	{
-		if (*v9 >= 0x100u || !isspace(*v9))
+		if (*wszTrimmed >= 0x100u || !isspace(*wszTrimmed))
 		{
 			break;
 		}
-		++v9;
+		++wszTrimmed;
 	}
 
 	D2Win_10127_SetFont(pTextBox->eFont);
 	
 	if (pTextBox->dwTextBoxFlags & TEXTBOXFLAG_NO_WORD_WRAP)
 	{
-		return D2Win_10051_Helper(pTextBox, v9, nColor, bIsWrapped, nIndent);
+		return D2Win_10051_Helper(pTextBox, wszTrimmed, nColor, bIsWrapped, nIndent);
 	}
 
-	int32_t v10 = pTextBox->controlHeader.nWidth - 2 * pTextBox->nTextInsetX;
+	int32_t nMaxWidth = pTextBox->controlHeader.nWidth - 2 * pTextBox->nTextInsetX;
 	if (nIndent == 2)
 	{
-		v10 -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
+		nMaxWidth -= D2Win_10121_GetTextWidth((const Unicode*)L"     ");
 	}
 
-	if (D2Win_10122(v9, 255) < v10)
+	if (D2Win_10122(wszTrimmed, 255) < nMaxWidth)
 	{
-		return D2Win_10051_Helper(pTextBox, v9, nColor, bIsWrapped, nIndent);
+		return D2Win_10051_Helper(pTextBox, wszTrimmed, nColor, bIsWrapped, nIndent);
 	}
 
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
@@ -432,7 +432,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszTex
 
 	v14 = (Unicode*)SMemAlloc(2048, __FILE__, __LINE__, 0);
 	v49 = v14;
-	Unicode::strcpy(v14, v9);
+	Unicode::strcpy(v14, wszTrimmed);
 
 	v15 = 0;
 	v16 = Unicode::strlen(v14);
@@ -450,7 +450,7 @@ int32_t __fastcall D2Win_10051(D2WinTextBoxStrc* pTextBox, const Unicode* wszTex
 			}
 
 			a2a = (Unicode*)(v15 + 1);
-			if (D2Win_10122(v9, v15 + 1) >= v48)
+			if (D2Win_10122(wszTrimmed, v15 + 1) >= v48)
 			{
 				break;
 			}
@@ -811,20 +811,20 @@ int32_t __fastcall D2Win_10061(D2WinTextBoxStrc* pTextBox)
 	D2_ASSERT(pTextBox);
 	D2_ASSERT(pTextBox->controlHeader.nType == D2WIN_TEXTBOX);
 
-	int32_t nLineCount = 0;
+	int32_t nLastLine = 0;
 	D2WinTextBoxLineStrc* pLine = pTextBox->pFirstLine;
 	while (pLine)
 	{
 		pLine = pLine->pNext;
 		if (!pLine)
 		{
-			return nLineCount;
+			return nLastLine;
 		}
 
-		++nLineCount;
+		++nLastLine;
 	}
 
-	return nLineCount;
+	return nLastLine;
 }
 
 //D2Win.0x6F8B0FC0 (#10187)
@@ -895,7 +895,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 		return 0;
 	}
 
-	const uint8_t nColor = D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u);
+	const uint8_t nSelectionColor = D2Win_10034_MixRGB(0x40u, 0x40u, 0x40u);
 
 	D2CellFileStrc* pCellFile = pTextBox->controlHeader.pCellFile;
 	if (pCellFile)
@@ -910,14 +910,13 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 	sub_6F8AFCC0(pTextBox->eFont);
 	D2Win_10127_SetFont(pTextBox->eFont);
 
-	// TODO: v51, v8, v49, v48, v16, v34
-	const int32_t v51 = pTextBox->nTextInsetX + pTextBox->controlHeader.nImageX;
+	const int32_t nTextX = pTextBox->nTextInsetX + pTextBox->controlHeader.nImageX;
 	int32_t nY = pTextBox->nTextInsetY + pTextBox->controlHeader.nImageY - pTextBox->controlHeader.nHeight + D2Win_10125();
 
 	sub_6F8AFCC0(pTextBox->eFont);
 
-	const int32_t v8 = pTextBox->nLineSpacing + D2Win_10125();
-	int32_t v49 = pTextBox->controlHeader.nHeight - 2 * pTextBox->nTextInsetY;
+	const int32_t nLineHeight = pTextBox->nLineSpacing + D2Win_10125();
+	int32_t nRemainingHeight = pTextBox->controlHeader.nHeight - 2 * pTextBox->nTextInsetY;
 	
 	const int32_t nBoxWidth = pTextBox->controlHeader.nWidth - 2 * pTextBox->nTextInsetX;
 
@@ -942,7 +941,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 		{
 			pTextBox->nScrollOffset -= 2;
 
-			if (pTextBox->nScrollOffset < -v8)
+			if (pTextBox->nScrollOffset < -nLineHeight)
 			{
 				pTextBox->nScrollOffset = 0;
 				pTextBox->pCurrentLine = pCurrentLine->pNext;
@@ -961,37 +960,37 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				break;
 			}
 
-			int32_t v48 = pTextBox->controlHeader.nWidth;
+			int32_t nColumnWidth = pTextBox->controlHeader.nWidth;
 			if (i < pTextBox->nNumColumns - 1)
 			{
-				v48 = pTextBox->nColumnOffsets[i + 1];
+				nColumnWidth = pTextBox->nColumnOffsets[i + 1];
 			}
 
-			const int32_t v16 = pTextBox->nColumnOffsets[i];
+			const int32_t nColumnOffset = pTextBox->nColumnOffsets[i];
 			int32_t nX = 0;
-			if (v16)
+			if (nColumnOffset)
 			{
-				nX = v16 + v51;
+				nX = nColumnOffset + nTextX;
 
-				int32_t v18 = 0;
+				int32_t nAlignWidth = 0;
 				if (i + 1 >= pTextBox->nNumColumns)
 				{
-					v18 = pTextBox->controlHeader.nWidth - v16;
-					v48 = pTextBox->controlHeader.nWidth - v16;
+					nAlignWidth = pTextBox->controlHeader.nWidth - nColumnOffset;
+					nColumnWidth = pTextBox->controlHeader.nWidth - nColumnOffset;
 				}
 				else
 				{
-					v18 = pTextBox->nColumnOffsets[i + 1] - v16;
-					v48 = pTextBox->nColumnOffsets[i + 1] - v16;
+					nAlignWidth = pTextBox->nColumnOffsets[i + 1] - nColumnOffset;
+					nColumnWidth = pTextBox->nColumnOffsets[i + 1] - nColumnOffset;
 				}
 
 				if (pTextBox->nColumnAlignFlags[i] & 2)
 				{
-					nX += std::max((v18 - D2Win_10121_GetTextWidth(wszColumn)) / 2, 0);
+					nX += std::max((nAlignWidth - D2Win_10121_GetTextWidth(wszColumn)) / 2, 0);
 				}
 				else if (pTextBox->nColumnAlignFlags[i] & 0x10)
 				{
-					nX += v48 - std::max(D2Win_10121_GetTextWidth(wszColumn), 0);
+					nX += nColumnWidth - std::max(D2Win_10121_GetTextWidth(wszColumn), 0);
 				}
 			}
 			else
@@ -1006,7 +1005,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				}
 				else
 				{
-					nX = v51;
+					nX = nTextX;
 				}
 			}
 
@@ -1016,7 +1015,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 			int32_t j = 0;
 			while (j < Unicode::strlen(wszText))
 			{
-				if (D2Win_10122(wszText, j + 1) >= v48)
+				if (D2Win_10122(wszText, j + 1) >= nColumnWidth)
 				{
 					break;
 				}
@@ -1032,7 +1031,7 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 				}
 				else
 				{
-					FONT_DrawTextWithBackground(wszText, nX, nY, nBoxWidth, nColor, DRAWMODE_NORMAL, pCurrentLine->nColor != 4 ? pCurrentLine->nColor : 0);
+					FONT_DrawTextWithBackground(wszText, nX, nY, nBoxWidth, nSelectionColor, DRAWMODE_NORMAL, pCurrentLine->nColor != 4 ? pCurrentLine->nColor : 0);
 				}
 			}
 			else if (pTextBox->dwTextBoxFlags & TEXTBOXFLAG_HORIZONTAL_TICKER)
@@ -1049,13 +1048,13 @@ int32_t __fastcall TEXTBOX_Draw(D2WinControlStrc* pControl)
 			}
 		}
 
-		const int32_t v34 = v8 + (pCurrentLine->bWrappedSegment ? pTextBox->nWrappedLineGap : pTextBox->nLineGap);
-		nY += v34;
-		v49 -= v34;
+		const int32_t nLineStep = nLineHeight + (pCurrentLine->bWrappedSegment ? pTextBox->nWrappedLineGap : pTextBox->nLineGap);
+		nY += nLineStep;
+		nRemainingHeight -= nLineStep;
 
 		++nCounter;
 
-		if (v49 < v34)
+		if (nRemainingHeight < nLineStep)
 		{
 			break;
 		}
@@ -1118,72 +1117,71 @@ int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		return 0;
 	}
 
-	// TODO: v3, v4, v9, v10
-	int32_t v3 = pTextBox->nLine;
-	int32_t v4 = pTextBox->nCurrentLine;
+	int32_t nTopLine = pTextBox->nLine;
+	int32_t nSelectedLine = pTextBox->nCurrentLine;
 
 	const int32_t nNumLines = pTextBox->nNumLines;
-	const int32_t v9 = D2Win_10055(pTextBox);
+	const int32_t nVisibleLines = D2Win_10055(pTextBox);
 
 	switch (pMsg->wParam)
 	{
 	case VK_PRIOR:
 	{
-		if (v4 > v3)
+		if (nSelectedLine > nTopLine)
 		{
-			v4 = v3;
+			nSelectedLine = nTopLine;
 		}
-		else if (v3 > 0)
+		else if (nTopLine > 0)
 		{
-			v3 = std::max(v3 - v9 + 1, 0);
-			v4 = v3;
+			nTopLine = std::max(nTopLine - nVisibleLines + 1, 0);
+			nSelectedLine = nTopLine;
 		}
 		break;
 	}
 	case VK_NEXT:
 	{
-		const int32_t v10 = v9 + v3 - 1;
-		if (v4 < v10)
+		const int32_t nBottomLine = nVisibleLines + nTopLine - 1;
+		if (nSelectedLine < nBottomLine)
 		{
-			v4 = std::min(nNumLines - 1, v10);
+			nSelectedLine = std::min(nNumLines - 1, nBottomLine);
 		}
-		else if (v3 < nNumLines - v9)
+		else if (nTopLine < nNumLines - nVisibleLines)
 		{
-			v3 = std::min(v10, nNumLines - v9);
-			v4 = std::min(v10, nNumLines - 1);
+			nTopLine = std::min(nBottomLine, nNumLines - nVisibleLines);
+			nSelectedLine = std::min(nBottomLine, nNumLines - 1);
 		}
 		break;
 	}
 	case VK_UP:
 	{
-		if (v4 > 0)
+		if (nSelectedLine > 0)
 		{
-			--v4;
+			--nSelectedLine;
 
-			v3 = D2Clamp(v3, v4 - v9 + 1, v4);
+			nTopLine = D2Clamp(nTopLine, nSelectedLine - nVisibleLines + 1, nSelectedLine);
 		}
 		break;
 	}
 	case VK_DOWN:
 	{
-		if (v4 < nNumLines - 1)
+		if (nSelectedLine < nNumLines - 1)
 		{
-			++v4;
+			++nSelectedLine;
 
-			v3 = D2Clamp(v3, v4 - v9 + 1, v4);
+			nTopLine = D2Clamp(nTopLine, nSelectedLine - nVisibleLines + 1, nSelectedLine);
 		}
 		break;
 	}
 	case VK_HOME:
 	{
-		v4 = 0;
-		v3 = 0;
+		nSelectedLine = 0;
+		nTopLine = 0;
 		break;
 	}
 	case VK_END:
 	{
-		v4 = nNumLines - 1;
-		v3 = nNumLines - v9;
+		nSelectedLine = nNumLines - 1;
+		nTopLine = nNumLines - nVisibleLines;
 		break;
 	}
 	default:
@@ -1192,12 +1190,12 @@ int32_t __stdcall TEXTBOX_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 	}
 	}
 
-	const bool hasChanged = v4 != pTextBox->nCurrentLine;
-	pTextBox->nCurrentLine = v4;
+	const bool hasChanged = nSelectedLine != pTextBox->nCurrentLine;
+	pTextBox->nCurrentLine = nSelectedLine;
 
-	if (nNumLines > v9 && v3 != pTextBox->nLine)
+	if (nNumLines > nVisibleLines && nTopLine != pTextBox->nLine)
 	{
-		D2Win_10053(pTextBox, v3);
+		D2Win_10053(pTextBox, nTopLine);
 	}
 
 	if (hasChanged && pTextBox->controlHeader.pfCallback)

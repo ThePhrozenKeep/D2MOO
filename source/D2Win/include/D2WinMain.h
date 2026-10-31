@@ -40,7 +40,7 @@ D2WIN_DLL_DECL int __stdcall D2Win_CloseSpriteCache();
 D2WIN_DLL_DECL void __stdcall D2Win_10003();
 //D2Win.0x6F8ACDE0 (#10004)
 //1.14d: 0x004F9060
-D2WIN_DLL_DECL void __stdcall D2Win_10004(BOOL bForceResize);
+D2WIN_DLL_DECL void __stdcall D2Win_10004(D2GameResolutionMode nResolution);
 //D2Win.0x6F8ACE20 (#10016)
 //1.14d: 0x004FA550
 D2WIN_DLL_DECL int __stdcall D2Win_10016();
