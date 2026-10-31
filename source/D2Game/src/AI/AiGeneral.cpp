@@ -352,6 +352,13 @@ D2MapAIStrc** __stdcall AIGENERAL_GetMapAiFromUnit(D2UnitStrc* pUnit)
 void __fastcall AIGENERAL_SetOwnerData(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nOwnerGUID, int32_t nOwnerType, int32_t bSetFlag1, int32_t bSetFlag2)
 {
 	D2AiControlStrc* pAiControl = AIGENERAL_GetAiControlFromUnit(pUnit);
+#ifndef NO_BUG_FIX
+	// Only monsters have AI control (MONSTERUNIQUE_KillMinions passes the player owning a summon).
+	if (!pAiControl)
+	{
+		return;
+	}
+#endif
 
 	if (bSetFlag2)
 	{
@@ -427,7 +434,14 @@ void __fastcall AIGENERAL_FreeMinionList(D2UnitStrc* pUnit)
 		return;
 	}
 
-	D2AiControlStrc* pOwnerAiControl = AIGENERAL_GetAiControlFromUnit(SUNIT_GetServerUnit(pAiControl->pGame, pAiControl->dwOwnerTypeEx, pAiControl->dwOwnerGUIDEx));
+	// As in AIGENERAL_ExecuteCallbackOnMinions: only a monster owner has a minion list.
+	D2UnitStrc* pOwner = SUNIT_GetServerUnit(pAiControl->pGame, pAiControl->dwOwnerTypeEx, pAiControl->dwOwnerGUIDEx);
+	if (!pOwner || pOwner->dwUnitType != UNIT_MONSTER)
+	{
+		return;
+	}
+
+	D2AiControlStrc* pOwnerAiControl = AIGENERAL_GetAiControlFromUnit(pOwner);
 
 	D2MinionListStrc* pPreviousMinionList = nullptr;
 	for (D2MinionListStrc* pMinionList = pOwnerAiControl->pMinionList; pMinionList; pMinionList = pMinionList->pNext)
@@ -523,7 +537,14 @@ void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCal
 		return;
 	}
 
-	D2AiControlStrc* pOwnerAiControl = AIGENERAL_GetAiControlFromUnit(SUNIT_GetServerUnit(pAiControl->pGame, pAiControl->dwOwnerTypeEx, pAiControl->dwOwnerGUIDEx));
+	// Only a monster owner has a minion list: the owner of a player's summon (e.g. a Bone Wall) is the player.
+	D2UnitStrc* pOwner = SUNIT_GetServerUnit(pAiControl->pGame, pAiControl->dwOwnerTypeEx, pAiControl->dwOwnerGUIDEx);
+	if (!pOwner || pOwner->dwUnitType != UNIT_MONSTER)
+	{
+		return;
+	}
+
+	D2AiControlStrc* pOwnerAiControl = AIGENERAL_GetAiControlFromUnit(pOwner);
 	for (D2MinionListStrc* pMinionList = pOwnerAiControl->pMinionList; pMinionList; pMinionList = pMinionList->pNext)
 	{
 		D2UnitStrc* pMinion = SUNIT_GetServerUnit(pOwnerAiControl->pGame, UNIT_MONSTER, pMinionList->dwMinionGUID);
