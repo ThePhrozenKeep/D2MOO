@@ -9000,7 +9000,7 @@ int32_t __fastcall D2GAME_AI_PetMove_6FCE2BA0(D2GameStrc* pGame, D2UnitStrc* pOw
 
 		const int32_t nOwnerRegionId = D2Common_10095(UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
 
-		for (int32_t i = 0; i < 7; ++i)
+		for (int32_t i = 0; i < 8; ++i)
 		{
 			int32_t nXOffset = 0;
 			int32_t nYOffset = 0;
@@ -9666,7 +9666,7 @@ int32_t __fastcall D2GAME_PETAI_PetMove_6FCE3EE0(D2GameStrc* pGame, D2UnitStrc* 
 
 		const int32_t a4 = D2Common_10095(UNITS_GetRoom(pOwner), CLIENTS_GetUnitX(pOwner), CLIENTS_GetUnitY(pOwner));
 
-		for (int32_t i = 0; i < 7; ++i)
+		for (int32_t i = 0; i < 8; ++i)
 		{
 			int32_t nXOffset = 0;
 			int32_t nYOffset = 0;
