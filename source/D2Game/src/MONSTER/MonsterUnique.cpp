@@ -2297,6 +2297,31 @@ int32_t __fastcall MONSTERUNIQUE_GetUModCount(uint8_t* pUMods)
     return nIndex;
 }
 
+//Inlined in D2Game.0x6FC6EC10 and D2Game.0x6FC6EE90
+//1.14d: 0x005A0070
+int32_t __fastcall MONSTERUNIQUE_CheckMonTypeNest(D2UnitStrc* pUnit, int32_t nMonType)
+{
+    if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
+    {
+        return 0;
+    }
+
+    D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+    if (!pMonStatsTxtRecord)
+    {
+        return 0;
+    }
+
+    // Unlike SUNITDMG_CheckMonType, this accepts a type of 0 on either side.
+    const int32_t nUnitMonType = pMonStatsTxtRecord->wMonType;
+    if (nUnitMonType >= 0 && nUnitMonType < sgptDataTables->nMonTypeTxtRecordCount && nMonType >= 0 && nMonType < sgptDataTables->nMonTypeTxtRecordCount)
+    {
+        return gdwBitMasks[nUnitMonType & 31] & sgptDataTables->pMonTypeNest[(nUnitMonType >> 5) + nMonType * sgptDataTables->nMonTypeIndex];
+    }
+
+    return 0;
+}
+
 //D2Game.0x6FC6EC10
 //1.14d: 0x005A03E0
 BOOL __fastcall MONSTERUNIQUE_CanAssignUMod(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion)
@@ -2320,15 +2345,9 @@ BOOL __fastcall MONSTERUNIQUE_CanAssignUMod(D2UnitStrc* pUnit, D2MonUModTxt* pMo
             break;
         }
 
-        if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
+        if (MONSTERUNIQUE_CheckMonTypeNest(pUnit, nExcludeMonType))
         {
-			if (D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId))
-			{
-				if (SUNITDMG_CheckMonType(pMonStatsTxtRecord->wMonType, nExcludeMonType))
-				{
-					return FALSE;
-				}
-			}
+            return FALSE;
         }
     }
 
