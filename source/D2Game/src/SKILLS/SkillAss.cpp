@@ -893,7 +893,6 @@ void __fastcall SKILLS_CreateCurvingMissileRing(D2GameStrc* pGame, D2UnitStrc* p
 //1.14d: 0x005D4680
 void __fastcall SKILLS_MissileInit_CurvingPath(D2UnitStrc* pMissile, int32_t nInitSeed)
 {
-    // TODO: Names
     constexpr int32_t nXStepOffsets[] =
     {
         2, 2, 0, -2, -2, -2, 0, 2

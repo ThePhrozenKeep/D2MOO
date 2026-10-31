@@ -646,7 +646,6 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 //1.14d: 0x00530BF0
 void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t nGameType, uint8_t nCharTemplate, const char* szClientName, int32_t nArena, uint32_t nFlags, int32_t nArenaTemplate, int32_t nUnused1, int32_t nUnused2, uint8_t nDifficulty, uint8_t nLocale, int32_t nUnused3, int32_t nUnused4)
 {
-    // TODO: v22
     if (!gpGameDataTbl_6FD45818)
     {
         return;
@@ -1851,8 +1850,6 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
 //1.14d: Game.0x52D870
 void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 {
-    // TODO: v2, v6
-
     const uint32_t nDebugBreakTrigger = pGame->nDebugBreakTrigger;
     ++pGame->dwGameFrame;
 

@@ -962,7 +962,6 @@ int32_t __fastcall SKILLS_AuraCallback_CountTargets(D2AuraCallbackStrc* pAuraCal
 //1.14d: 0x0056BD10
 D2UnitStrc* __fastcall SKILLS_FindNextAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t nPreviousTargetGUID, int32_t* pTargetCount)
 {
-    // TODO: Names
     D2AuraTargetCycleStrc args = {};
 
     args.nFirstTargetGUID = nPreviousTargetGUID;
