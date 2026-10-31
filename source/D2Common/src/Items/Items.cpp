@@ -1913,7 +1913,7 @@ int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit,
 					nBase = nBaseCost * ((pStat[nCounter].nLayer & sgptDataTables->nShiftedStuff) + 2 * (pSkillsTxtRecord->wReqLevel / 6) + 2);
 					if (nBase > 65535 && pSkillsTxtRecord->nCostMult)
 					{
-						nAdd = pSkillsTxtRecord->nCostMult * (nBase / 1024);
+						nAdd = pSkillsTxtRecord->nCostMult * (nBase / 1024); // divides first: avoids the 32-bit overflow, truncates the remainder
 					}
 					else
 					{
@@ -2055,6 +2055,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, i
 }
 
 //TODO: Check Calculations for unnamed variables, contains some small (rounding?) errors
+// The "> 65535" branches divide before multiplying (no 32-bit overflow, remainder truncated), unlike the others
 //D2Common.0x6FD9B1C0
 //1.14d: 0x0062EFB0
 int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType)
@@ -2319,7 +2320,7 @@ int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* p
 						break;
 					}
 				}
-
+				// A unique without a valid UniqueItems.txt record is priced as a magic item.
 			case ITEMQUAL_MAGIC:
 				pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(pItemData->wMagicPrefix[0]);
 				if (pMagicAffixTxtRecord)
@@ -2719,7 +2720,7 @@ void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, in
 					pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(pStat[nStatId].nLayer);
 					if (pSkillsTxtRecord)
 					{
-						if (*pSellCost > 65535 && pSkillsTxtRecord->nCostMult)
+						if (*pSellCost > 65535 && pSkillsTxtRecord->nCostMult) // unlike the other large-value branches, scales the multiplier down, not the cost
 						{
 							nSell += (2 * pStat[nStatId].nValue - 1) * (pSkillsTxtRecord->nCostAdd + *pSellCost * (pSkillsTxtRecord->nCostMult / 1024));
 							nBuy += (2 * pStat[nStatId].nValue - 1) * (pSkillsTxtRecord->nCostAdd + *pBuyCost * (pSkillsTxtRecord->nCostMult / 4096));

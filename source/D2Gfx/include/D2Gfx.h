@@ -173,7 +173,7 @@ struct D2GraphicsInterfaceStrc
 	void(__fastcall* pfSetAmbientColor)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 	int32_t(__fastcall* pfFloorTileDraw)(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
 	void(__fastcall* pfCelFlatSpriteDraw)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nScreenMode, uint8_t* pPalette);
-	BOOL(__fastcall* pfCelDraw)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, uint8_t* pPalette);
+	BOOL(__fastcall* pfCelDraw)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, uint8_t* pPalette); // returns FALSE when nothing was drawn
 	void(__fastcall* pfCelDrawColor)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nGlobalPaletteShift);
 	void(__fastcall* pfCelDrawEx)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, DrawMode eDrawMode);
 	void(__fastcall* pfCelDrawShadow)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY);

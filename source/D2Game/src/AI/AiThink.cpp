@@ -14943,7 +14943,7 @@ void __fastcall AITHINK_Fn106_143_ShadowMaster(D2GameStrc* pGame, D2UnitStrc* pU
 						pSkillTarget = 0;
 						if (!pOwner)
 						{
-							ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 40);
+							ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 40); // The game rolls a target position here and never uses it
 							ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 40);
 						}
 
