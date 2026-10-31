@@ -66,10 +66,10 @@ struct D2AuraTargetSearchStrc
 struct D2AuraTargetCycleStrc
 {
 	D2UnitStrc* pNextTarget;
-	int32_t nNextTargetGUID;
+	D2UnitGUID nNextTargetGUID;
 	D2UnitStrc* pFirstTarget;
-	int32_t nFirstTargetGUID;
-	int32_t nPreviousTargetGUID;
+	D2UnitGUID nFirstTargetGUID;
+	D2UnitGUID nPreviousTargetGUID;
 	int32_t nTargetCount;
 };
 
@@ -393,7 +393,7 @@ int32_t __fastcall SKILLS_GetBaseWalkVelocity(D2UnitStrc* pUnit);
 int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(D2UnitStrc* pUnit, int32_t bFromMonster, int32_t nSkillId, int32_t nSkillLevel, int32_t* pSpawnMode, int32_t* pX, int32_t* pY);
 //D2Game.0x6FD155E0
 //1.14d: 0x0056E680
-void __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t nRangeOffset);
+uint16_t __fastcall SKILLS_SetDamageResultFlagsFromSkill(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t nRangeOffset);
 //D2Game.0x6FD15650
 //1.14d: 0x0056E6F0
 void __fastcall SKILLS_SetDamageResultFlags(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, uint16_t wResultFlags, int32_t nToHitFactor, D2DamageStrc* pDamage, int32_t nRangeOffset);
