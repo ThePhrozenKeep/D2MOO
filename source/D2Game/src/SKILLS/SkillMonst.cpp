@@ -270,7 +270,6 @@ int32_t __fastcall SKILLS_SrvDo086_MaggotDown(D2GameStrc* pGame, D2UnitStrc* pUn
 //1.14d: 0x005CB3C0
 int32_t __fastcall SKILLS_SrvDo087_MaggotLay(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    // TODO: Name
     constexpr int8_t nMaggotLayDirections[] =
     {
         10, 8, 22, 20, 18, 16, 14, 12
@@ -339,7 +338,6 @@ int32_t __fastcall SKILLS_SrvSt46_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pU
 //1.14d: 0x005CB580
 int32_t __fastcall SKILLS_SrvDo088_AndrialSpray(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    // TODO: Names
     constexpr int8_t nAndarielSprayDirections[] =
     {
         27, 14, 15, 3, 99, 7, 21, 22, 31,
@@ -2411,8 +2409,8 @@ D2UnitStrc* __fastcall SKILLS_CreateSpiderLayMissile(D2GameStrc* pGame, D2UnitSt
     D2Common_11055((uint8_t)nLayDirection, &nXOffset, &nYOffset);
 
     D2MissileStrc missileParams = {};
-    missileParams.nX = CLIENTS_GetUnitY(pUnit) + nXOffset;
-    missileParams.nY = CLIENTS_GetUnitX(pUnit) + nYOffset;
+    missileParams.nX = CLIENTS_GetUnitX(pUnit) + nXOffset;
+    missileParams.nY = CLIENTS_GetUnitY(pUnit) + nYOffset;
     missileParams.dwFlags = 0x21;
     missileParams.pOwner = pUnit;
     missileParams.nTargetX = missileParams.nX + 2 * nXOffset;

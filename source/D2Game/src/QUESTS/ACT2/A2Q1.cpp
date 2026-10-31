@@ -70,7 +70,7 @@ D2NPCMessageTableStrc gpAct2Q1NpcMessages[] =
 	},
 	{
 		{
-			{ MONSTER_JERHYN, 331, 0, 2, },
+			{ MONSTER_WARRIV2, 331, 0, 2, },
 			{ MONSTER_ATMA, 334, 0, 2, },
 			{ MONSTER_GREIZ, 325, 0, 2, },
 			{ MONSTER_ELZIX, 330, 0, 2, },

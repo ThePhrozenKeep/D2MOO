@@ -69,7 +69,6 @@ short __stdcall SKILLS_GetPassiveState(int nSkillId)
 }
 
 //D2Common.0x6FDAEB60 (#11271)
-//TODO: v8
 //1.14d: 0x00646460
 int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, int nSkillId, int nSkillLevel)
 {

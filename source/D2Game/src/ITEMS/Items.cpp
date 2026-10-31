@@ -37,12 +37,12 @@ struct D2TCArrayStrc
 {
     D2TCExShortStrc* pTC;
     int32_t nPicks;
-    int16_t nMagic;
-    int16_t nRare;
-    int16_t nSet;
-    int16_t nUnique;
-    int16_t nSuperior;
-    int16_t nNormal;
+    uint16_t nMagic;
+    uint16_t nRare;
+    uint16_t nSet;
+    uint16_t nUnique;
+    uint16_t nSuperior;
+    uint16_t nNormal;
 };
 #pragma pack(pop)
 
@@ -323,7 +323,6 @@ void __fastcall ITEMS_AssignLegacySpecialProperties(D2GameStrc* pGame, D2UnitStr
 //1.14d: 0x00556A60
 int32_t __fastcall ITEMS_AssignCharmAffixes(D2GameStrc* pGame, D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 {
-    // TODO: nRand
     int16_t nSuffix = 0;
     int16_t nPrefix = 0;
     int32_t bForceSuffixRoll = 0;
@@ -2284,16 +2283,17 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                     tcArray[nTCStackTop].pTC = pTCExTxtRecord;
                     tcArray[nTCStackTop].nPicks = std::max(std::abs(pTCExTxtRecord->nPicks), 1);
 
-                    int16_t* pCurrent = &tcArray[nTCStackTop].nMagic;
-                    int16_t* pTCValue = &pTCExTxtRecord->nMagic;
-                    int16_t* pOld = &tcArray[nOldCounter].nMagic;
+                    uint16_t* pCurrent = &tcArray[nTCStackTop].nMagic;
+                    const int16_t* pTCValue = &pTCExTxtRecord->nMagic;
+                    const uint16_t* pOld = &tcArray[nOldCounter].nMagic;
 
                     for (int32_t i = 0; i < 6; ++i)
                     {
-                        int16_t nVal = *pOld;
-                        if (!*pOld || *pTCValue > *pOld)
+                        uint16_t nVal = *pOld;
+                        const uint16_t nTCValue = static_cast<uint16_t>(*pTCValue);
+                        if (!*pOld || nTCValue > *pOld)
                         {
-                            nVal = *pTCValue;
+                            nVal = nTCValue;
                         }
                         *pCurrent = nVal;
 
@@ -2317,13 +2317,14 @@ void __fastcall D2GAME_DropTC_6FC51360(D2GameStrc* pGame, D2UnitStrc* pMonster, 
                             continue;
                         }
 
-                        int16_t* pCurrent = &tcArray[nCounter].nMagic;
-                        int16_t* pTCValue = &pTCExInfo->nMagic;
+                        uint16_t* pCurrent = &tcArray[nCounter].nMagic;
+                        const int16_t* pTCValue = &pTCExInfo->nMagic;
                         for (int32_t i = 0; i < 6; ++i)
                         {
-                            if (*pTCValue > *pCurrent)
+                            const uint16_t nTCValue = static_cast<uint16_t>(*pTCValue);
+                            if (nTCValue > *pCurrent)
                             {
-                                *pCurrent = *pTCValue;
+                                *pCurrent = nTCValue;
                             }
 
                             ++pTCValue;

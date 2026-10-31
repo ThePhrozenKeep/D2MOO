@@ -352,7 +352,6 @@ void __fastcall EVENT_SetEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTy
 //1.14d: 0x005416B0
 void __fastcall EVENT_ScheduleTimer(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
-    // TODO: v19
     if (nEventType >= 15)
     {
         return;
@@ -547,7 +546,8 @@ void __fastcall EVENT_SetRecurringEvent(D2GameStrc* pGame, D2UnitStrc* pUnit, D2
     *ppEventTimer = pNewTimer;
 }
 
-//D2Game.0x6FC351D0
+//D2Game.0x6FC356A0
+//1.14d: 0x00541800
 void __fastcall EVENT_SetEventWithCallback(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_EventTypes nEventType, int32_t nExpireFrame, EventTimerCallback pfCallBack, int32_t dwEventCustomId, int32_t dwEventCustomParam)
 {
     EVENT_ScheduleTimer(pGame, pUnit, nEventType, nExpireFrame, pfCallBack, dwEventCustomId, dwEventCustomParam);
