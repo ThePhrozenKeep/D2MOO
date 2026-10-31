@@ -545,8 +545,11 @@ void __fastcall AIGENERAL_ExecuteCallbackOnMinions(D2UnitStrc* pUnit, void* pCal
 	}
 
 	D2AiControlStrc* pOwnerAiControl = AIGENERAL_GetAiControlFromUnit(pOwner);
-	for (D2MinionListStrc* pMinionList = pOwnerAiControl->pMinionList; pMinionList; pMinionList = pMinionList->pNext)
+	D2MinionListStrc* pNextMinionList = nullptr;
+	for (D2MinionListStrc* pMinionList = pOwnerAiControl->pMinionList; pMinionList; pMinionList = pNextMinionList)
 	{
+		// The callback can free this node (MONSTERUNIQUE_MinionCallback_KillMinion -> AIGENERAL_FreeMinionList).
+		pNextMinionList = pMinionList->pNext;
 		D2UnitStrc* pMinion = SUNIT_GetServerUnit(pOwnerAiControl->pGame, UNIT_MONSTER, pMinionList->dwMinionGUID);
 		if (pMinion)
 		{
