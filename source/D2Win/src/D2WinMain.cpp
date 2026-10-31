@@ -256,10 +256,10 @@ int __stdcall D2Win_CloseSpriteCache()
 
 //D2Win.0x6F8ACDD0 (#10003)
 //1.14d: 0x004F9050
-void __stdcall D2Win_10003()
+BOOL __stdcall D2Win_10003()
 {
 	gnResolution_6F8FE248 = 0;
-	WINDOW_PlayCutscene();
+	return WINDOW_PlayCutscene();
 }
 
 //D2Win.0x6F8ACDE0 (#10004)

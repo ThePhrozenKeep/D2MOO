@@ -38,7 +38,7 @@ D2GFX_DLL_DECL int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution,
 //D2Gfx.0x6FA74C60 (#10031)
 D2GFX_DLL_DECL void __stdcall WINDOW_ClearCaches();
 //D2Gfx.0x6FA74C70 (#10032)
-D2GFX_DLL_DECL void __stdcall WINDOW_PlayCutscene();
+D2GFX_DLL_DECL BOOL __stdcall WINDOW_PlayCutscene();
 //D2Gfx.0x6FA74CA0 (#10033)
 D2GFX_DLL_DECL void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution);
 //D2Gfx.0x6FA74DE0 (#10034)
