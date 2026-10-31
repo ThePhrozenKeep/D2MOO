@@ -1,7 +1,7 @@
 
 D2MOO_prepare_targets(D2Gfx)
 
-target_link_libraries(${D2GfxImplName} PRIVATE Fog Storm D2CommonDefinitions)
+target_link_libraries(${D2GfxImplName} PRIVATE Fog Storm D2Hell D2CommonDefinitions)
 
 target_sources(${D2GfxImplName}
   PRIVATE
