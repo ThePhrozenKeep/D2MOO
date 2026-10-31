@@ -799,7 +799,7 @@ void __fastcall SKILLS_MissileInit_SeededChargedBolt(D2UnitStrc* pMissile, int32
         return;
     }
 
-    uint8_t nTotalFrames = MISSILE_GetTotalFrames(pMissile);
+    int32_t nTotalFrames = MISSILE_GetTotalFrames(pMissile);
     if (nTotalFrames >= 78)
     {
         nTotalFrames = 77;
