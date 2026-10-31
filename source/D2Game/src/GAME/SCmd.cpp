@@ -837,7 +837,7 @@ void __fastcall D2GAME_PACKETS_SendPacket0xA0_A1_A2_6FC3D610(D2ClientStrc* pClie
             packetA0.nHeader = 0xA0;
             packetA0.nStat = nPacketStatId;
             packetA0.dwGUID = pUnit ? pUnit->dwUnitId : -1;
-            packetA0.nValue = nDiff;
+            packetA0.nValue = nBaseValue;
 
             D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packetA0, sizeof(packetA0));
         }
@@ -2299,8 +2299,8 @@ void __fastcall D2GAME_PACKETS_SendPacket0x82_6FC3F790(D2GameStrc* pGame, D2Clie
             SStrCopy(packet82.szOwnerName, UNITS_GetPlayerData(pPlayer)->szName, sizeof(packet82.szOwnerName));
            
             packet82.dwOwnerGUID = pPlayer->dwUnitId;
-            packet82.dwPortalGUID[0] = nPortalOwnerGUID; // TODO: Maybe [1]
-            packet82.dwPortalGUID[1] = nPortalGUID; // TODO: Maybe [0]
+            packet82.dwPortalGUID = nPortalGUID;
+            packet82.dwDestPortalGUID = nPortalOwnerGUID;
 
             D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet82, sizeof(packet82));
         }

@@ -1721,7 +1721,8 @@ struct D2GSPacketSrv82		//size of 0x1D
 	uint8_t nHeader;			//0x00
 	uint32_t dwOwnerGUID;		//0x01
 	char szOwnerName[16];		//0x05
-	uint32_t dwPortalGUID[2];	//0x15
+	uint32_t dwPortalGUID;		//0x15
+	uint32_t dwDestPortalGUID;	//0x19
 };
 
 struct D2GSPacketSrv89		//size of 0x02

@@ -1553,7 +1553,7 @@ int32_t __fastcall CLIENTS_AttachSaveFile(int32_t nClientId, const void* pSaveDa
             break;
         }
 
-        pClient = pClient->pNext;
+        pClient = pClient->pServerNext;
     }
 
     int32_t nResult = 0;
