@@ -73,12 +73,12 @@ struct D2MissilesTxt
 	uint16_t wExplosionMissile;				//0x16
 	uint16_t wSubMissile[3];				//0x18
 	uint16_t wCltSubMissile[3];				//0x1E
-	uint16_t wHitSubMissile[4];				//0x24
+	int16_t wHitSubMissile[4];				//0x24
 	uint16_t wCltHitSubMissile[4];			//0x2C
 	uint16_t wProgSound;					//0x34
 	uint16_t wProgOverlay;					//0x36
 	int32_t dwParam[5];					//0x38
-	uint32_t dwHitPar[3];					//0x4C
+	int32_t dwHitPar[3];					//0x4C
 	uint32_t dwCltParam[5];					//0x58
 	uint32_t dwCltHitPar[3];				//0x6C
 	int32_t dwDmgParam[2];					//0x78
