@@ -1478,7 +1478,7 @@ int32_t __fastcall PLRSAVE_ReadItems_6FC8B8A0(D2GameStrc* pGame, D2UnitStrc* pPl
             pParentItem = nullptr;
         }
 
-        const int32_t nSocketedItems = itemSave.nItemFileIndex;
+        const int32_t nSocketedItems = itemSave.nItemFileIndex; // read first: each socketed item below overwrites itemSave
         for (int32_t j = 0; j < nSocketedItems; ++j)
         {
             const uint32_t nSocketableBitstreamSize = pSection - pItemBitstream + nSize;

@@ -282,7 +282,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
         if (strlen(szGameName) + nCharactersForSuffix >= ARRAY_SIZE(D2GameStrc::szGameName))
         {
             // Truncate so that we have enough space for the game ID
-            // Somehow the original game truncated at 10 characters instead of 11 ?
+            // The original game keeps 11 characters too, which leaves room for "~99"
             szGameName[ARRAY_SIZE(D2GameStrc::szGameName) - 2 - nCharactersForSuffix] = '\0';
         }
 
