@@ -225,6 +225,9 @@ D2MonsterDataStrc* __fastcall MONSTERUNIQUE_GetMonsterData(D2UnitStrc* pUnit);
 //D2Game.0x6FC6EBF0
 //1.14d: 0x005A0260
 int32_t __fastcall MONSTERUNIQUE_GetUModCount(uint8_t* pUMods);
+//Inlined in D2Game.0x6FC6EC10 and D2Game.0x6FC6EE90
+//1.14d: 0x005A0070
+int32_t __fastcall MONSTERUNIQUE_CheckMonTypeNest(D2UnitStrc* pUnit, int32_t nMonType);
 //D2Game.0x6FC6EC10
 //1.14d: 0x005A03E0
 BOOL __fastcall MONSTERUNIQUE_CanAssignUMod(D2UnitStrc* pUnit, D2MonUModTxt* pMonUModTxtRecord, int32_t bExpansion);
