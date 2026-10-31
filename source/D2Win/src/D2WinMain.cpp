@@ -264,18 +264,18 @@ void __stdcall D2Win_10003()
 
 //D2Win.0x6F8ACDE0 (#10004)
 //1.14d: 0x004F9060
-void __stdcall D2Win_10004(D2GameResolutionMode bForceResize)
+void __stdcall D2Win_10004(D2GameResolutionMode nResolution)
 {
-	gnResolution_6F8FE248 = bForceResize;
+	gnResolution_6F8FE248 = nResolution;
 
-	if (bForceResize == 1)
+	if (nResolution == 1)
 	{
 		D2CMP_FlushSpriteCache(1);
 	}
 
-	WINDOW_EndCutScene(bForceResize);
+	WINDOW_EndCutScene(nResolution);
 
-	if (bForceResize == 1)
+	if (nResolution == 1)
 	{
 		D2CMP_InitSpriteCache(0, 0x800000u, 0x7D000u, 0);
 	}
@@ -699,64 +699,64 @@ int __stdcall CONTROL_Destroy(void* ppControl)
 
 	if (ppControl)
 	{
-		D2WinControlStrc* v2 = *(D2WinControlStrc**)ppControl;
+		D2WinControlStrc* pControl = *(D2WinControlStrc**)ppControl;
 		if (*(DWORD*)ppControl)
 		{
-			switch (v2->nType)
+			switch (pControl->nType)
 			{
 			case D2WIN_IMAGE:
 			case D2WIN_IMAGE2:
-				result = IMAGE_Destroy(v2);
+				result = IMAGE_Destroy(pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_ANIMIMAGE:
-				result = ANIMIMAGE_Destroy(v2);
+				result = ANIMIMAGE_Destroy(pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_SCROLLBAR:
-				result = SCROLLBAR_Destroy(v2);
+				result = SCROLLBAR_Destroy(pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_TIMER:
-				result = TIMER_Destroy(v2);
+				result = TIMER_Destroy(pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_PROGRESSBAR:
-				result = PROGRESSBAR_Destroy(v2);
+				result = PROGRESSBAR_Destroy(pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_TEXTBOX:
-				result = D2Win_10043_TEXTBOX_Destroy((D2WinTextBoxStrc*)v2);
+				result = D2Win_10043_TEXTBOX_Destroy((D2WinTextBoxStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_EDITBOX:
-				result = D2Win_10071_EDITBOX_Destroy((D2WinEditBoxStrc*)v2);
+				result = D2Win_10071_EDITBOX_Destroy((D2WinEditBoxStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_BUTTON:
-				result = BUTTON_Destroy((D2WinButtonStrc*)v2);
+				result = BUTTON_Destroy((D2WinButtonStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_LIST:
-				result = LIST_Destroy((D2WinListStrc*)v2);
+				result = LIST_Destroy((D2WinListStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_SMACK:
-				result = SMACK_Destroy((D2WinSmackStrc*)v2);
+				result = SMACK_Destroy((D2WinSmackStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
 			case D2WIN_ACCOUNTLIST:
-				result = ACCOUNTLIST_Destroy((D2WinAccountListStrc*)v2);
+				result = ACCOUNTLIST_Destroy((D2WinAccountListStrc*)pControl);
 				*(DWORD*)ppControl = 0;
 				break;
 
@@ -1116,7 +1116,6 @@ void __stdcall D2Win_COMMANDS_Escape_6F8ADB10(SMSGHANDLER_PARAMS* pMsg)
 //1.14d: 0x004F9BF0
 void __stdcall D2Win_COMMANDS_VirtualKey_6F8ADB50(SMSGHANDLER_PARAMS* pMsg)
 {
-	//TODO: v4
 	D2WinControlStrc* pControl = dword_6F8FE264;
 	if (gpFocusedEditBox)
 	{
@@ -1159,9 +1158,9 @@ void __stdcall D2Win_COMMANDS_VirtualKey_6F8ADB50(SMSGHANDLER_PARAMS* pMsg)
 		{
 			pMsg->hWindow = (HWND)pControl;
 			++dword_6F8FE254;
-			const int v4 = pControl->pfHandleVirtualKeyInput(pMsg);
+			const int bHandled = pControl->pfHandleVirtualKeyInput(pMsg);
 			--dword_6F8FE254;
-			if (v4)
+			if (bHandled)
 			{
 				SMsgBreakHandlerChain(pMsg);
 				// Should we return SMsgBreakHandlerChain's result?
@@ -1199,8 +1198,8 @@ void __stdcall D2Win_COMMANDS_Control_6F8ADBF0(SMSGHANDLER_PARAMS* pMsg)
 //1.14d: 0x004F9CC0
 void __stdcall D2Win_COMMANDS_SysCommand_6F8ADC00(SMSGHANDLER_PARAMS* pMsg)
 {
-	uint16_t v1 = pMsg->wParam & 0xFFF0;
-	if (v1 == 0xF130 || v1 == 0xF100 || v1 == 0xF010 && WINDOW_IsFullScreen())
+	uint16_t nCommand = pMsg->wParam & 0xFFF0;
+	if (nCommand == 0xF130 || nCommand == 0xF100 || nCommand == 0xF010 && WINDOW_IsFullScreen())
 	{
 		pMsg->bUseResult = 1;
 		pMsg->lResult = 0;
@@ -1327,7 +1326,6 @@ void __stdcall D2Win_COMMANDS_ToggleMusic_6F8AE020(SMSGHANDLER_PARAMS* pMsg)
 //1.14d: 0x004FA860
 void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg)
 {
-	//TODO: v10
 	D2Win_COMMANDS_MouseMove_6F8AD670(pMsg);
 
 	if (POPUP_IsActive())
@@ -1362,9 +1360,9 @@ void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg)
 				if (pControl->pfHandleMouseDown)
 				{
 					++dword_6F8FE254;
-					const int v10 = pControl->pfHandleMouseDown(pMsg);
+					const int bHandled = pControl->pfHandleMouseDown(pMsg);
 					--dword_6F8FE254;
-					if (v10)
+					if (bHandled)
 					{
 						SMsgBreakHandlerChain(pMsg);
 						// Should we return SMsgBreakHandlerChain's result?
@@ -1411,7 +1409,6 @@ void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg)
 //1.14d: 0x004FA340
 void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg)
 {
-	//TODO: Names
 	const int nIncrement = (int)(int16_t)HIWORD(pMsg->wParam) / 120; // GET_WHEEL_DELTA_WPARAM
 
 	D2Win_COMMANDS_MouseMove_6F8AD670(pMsg);

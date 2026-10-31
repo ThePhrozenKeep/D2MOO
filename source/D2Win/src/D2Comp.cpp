@@ -1340,30 +1340,30 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 			--pRemCofNode->nRefCount;
 			if (pRemCofNode->nRefCount <= 0)
 			{
-				D2CofNodeStrc* v8 = pRemCofNode->pPrev;
-				D2CofNodeStrc* v9 = pRemCofNode->pNext;
+				D2CofNodeStrc* pPrevCofNode = pRemCofNode->pPrev;
+				D2CofNodeStrc* pNextCofNode = pRemCofNode->pNext;
 
 				D2_FREE(pRemCofNode->pCofData);
 				pRemCofNode->pCofData = nullptr;
 
-				if (v8)
+				if (pPrevCofNode)
 				{
-					if (v9)
+					if (pNextCofNode)
 					{
-						v8->pNext = v9;
-						v9->pPrev = v8;
+						pPrevCofNode->pNext = pNextCofNode;
+						pNextCofNode->pPrev = pPrevCofNode;
 					}
 					else
 					{
-						v8->pNext = nullptr;
+						pPrevCofNode->pNext = nullptr;
 					}
 				}
 				else
 				{
-					dword_6F8FD654 = v9;
-					if (v9)
+					dword_6F8FD654 = pNextCofNode;
+					if (pNextCofNode)
 					{
-						v9->pPrev = nullptr;
+						pNextCofNode->pPrev = nullptr;
 					}
 				}
 				D2_FREE(pRemCofNode);
@@ -1385,22 +1385,22 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 
 	if (bUnlinkAndFree)
 	{
-		D2CompositeUnitStrc* v11 = pCompositeUnit->pPrev;
-		D2CompositeUnitStrc* v12 = pCompositeUnit->pNext;
-		if (v11)
+		D2CompositeUnitStrc* pPrevUnit = pCompositeUnit->pPrev;
+		D2CompositeUnitStrc* pNextUnit = pCompositeUnit->pNext;
+		if (pPrevUnit)
 		{
-			v11->pNext = v12;
-			if (v12)
+			pPrevUnit->pNext = pNextUnit;
+			if (pNextUnit)
 			{
-				v12->pPrev = v11;
+				pNextUnit->pPrev = pPrevUnit;
 			}
 		}
 		else
 		{
 			dword_6F8FD650 = pCompositeUnit->pNext;
-			if (v12)
+			if (pNextUnit)
 			{
-				v12->pPrev = nullptr;
+				pNextUnit->pPrev = nullptr;
 			}
 		}
 		D2_FREE(pCompositeUnit);
@@ -1722,15 +1722,15 @@ BOOL __stdcall D2COMP_IsItemTypeDescendant(int a1, int nItemType)
 		int nStackIndex = 1;
 		while (nStackIndex)
 		{
-			const int v5 = itemTypeStack[nStackIndex];
+			const int nCurrentType = itemTypeStack[nStackIndex];
 			--nStackIndex;
 
-			if (nItemType == v5)
+			if (nItemType == nCurrentType)
 			{
 				return TRUE;
 			}
 
-			D2ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt_6F8FD244[v5];
+			D2ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt_6F8FD244[nCurrentType];
 			if (pItemTypesTxtRecord->nEquiv1)
 			{
 				++nStackIndex;
@@ -1884,9 +1884,9 @@ int __fastcall D2COMP_ValidateAndLoadCOFForUnit(D2CompositeUnitStrc* pCompositeU
 
 	D2_ASSERT(pGfxInfo);
 
-	int v4 = 0;
+	int nUnused = 0;
 
-	if (sub_6F8A1250(pGfxInfo, pCompositeUnit->nUnitIndex, pCompositeUnit->nMode, &v4, &v4, dword_6F8BC154[pCompositeUnit->nWClassTokenIndex]))
+	if (sub_6F8A1250(pGfxInfo, pCompositeUnit->nUnitIndex, pCompositeUnit->nMode, &nUnused, &nUnused, dword_6F8BC154[pCompositeUnit->nWClassTokenIndex]))
 	{
 		return 1;
 	}
@@ -1895,7 +1895,7 @@ int __fastcall D2COMP_ValidateAndLoadCOFForUnit(D2CompositeUnitStrc* pCompositeU
 	pCompositeUnit->nUnitIndex = 7;
 	pCompositeUnit->nWClassTokenIndex = 1;
 
-	D2CofDataStrc* pCurrCofData = sub_6F8A1250(pGfxInfo, 7u, 5u, &v4, &v4, dword_6F8BC154[1]);
+	D2CofDataStrc* pCurrCofData = sub_6F8A1250(pGfxInfo, 7u, 5u, &nUnused, &nUnused, dword_6F8BC154[1]);
 
 	D2_ASSERT(pCurrCofData);
 	return 1;
@@ -3284,25 +3284,25 @@ void __stdcall D2COMP_InitEmblemColorTables()
 
 //D2Win.0x6F8A4C70 (#10161)
 //1.14d: 0x005068A0
-const char* __stdcall D2Win_10161(int nClass, int nProgress, int bHardcore, BOOL bSoftCore)
+const char* __stdcall D2Win_10161(int nClass, int nProgress, int bHardcore, BOOL bExpansion)
 {
-	int v4 = 0;
+	int nTitle = 0;
 
-	if (bSoftCore)
+	if (bExpansion)
 	{
 		if (nProgress >= 5)
 		{
 			if (nProgress < 10)
 			{
-				v4 = 1;
+				nTitle = 1;
 			}
 			else if (nProgress < 15)
 			{
-				v4 = 2;
+				nTitle = 2;
 			}
 			else
 			{
-				v4 = 3;
+				nTitle = 3;
 			}
 		}
 	}
@@ -3312,32 +3312,32 @@ const char* __stdcall D2Win_10161(int nClass, int nProgress, int bHardcore, BOOL
 		{
 			if (nProgress < 8)
 			{
-				v4 = 1;
+				nTitle = 1;
 			}
 			else if (nProgress < 12)
 			{
-				v4 = 2;
+				nTitle = 2;
 			}
 			else
 			{
-				v4 = 3;
+				nTitle = 3;
 			}
 		}
 	}
 
-	if (bHardcore && v4)
+	if (bHardcore && nTitle)
 	{
-		v4 += 3;
+		nTitle += 3;
 	}
 
-	return D2Win_10160_GetPlayerTitle(nClass, v4, bSoftCore);
+	return D2Win_10160_GetPlayerTitle(nClass, nTitle, bExpansion);
 }
 
 //D2Win.0x6F8A4CE0 (#10160)
 //1.14d: 0x00505640
-const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bSoftCore)
+const char* __stdcall D2Win_10160_GetPlayerTitle(int nClass, int nTitle, BOOL bExpansion)
 {
-	if (bSoftCore)
+	if (bExpansion)
 	{
 		switch (nClass)
 		{
