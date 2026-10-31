@@ -1143,7 +1143,8 @@ int32_t __fastcall SKILLS_SrvDo079_Conversion(D2GameStrc* pGame, D2UnitStrc* pUn
     int32_t bCanConvertTarget = 0;
     if (SUNITDMG_GetDamageFromUnits(pUnit, pTarget) && !MONSTERS_GetHirelingTypeId(pTarget) && pTarget->dwUnitType == UNIT_MONSTER && STATLIST_GetUnitAlignment(pTarget) == UNIT_ALIGNMENT_EVIL && SKILLS_CanSwitchAi(pTarget, AISPECIALSTATE_TERROR))
     {
-        bCanConvertTarget = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
+        const int32_t nConversionChance = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwCalc[0], nSkillId, nSkillLevel);
+        bCanConvertTarget = (int32_t)ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, 100) < nConversionChance;
     }
 
     if (pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount || !bCanConvertTarget)
