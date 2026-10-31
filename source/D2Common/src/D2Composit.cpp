@@ -138,6 +138,10 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 
 			szPathPrefix = "DATA\\GLOBAL\\MONSTERS";
 		}
+		else
+		{
+			return;
+		}
 	}
 	else if (nUnitType == UNIT_OBJECT)
 	{
@@ -231,6 +235,7 @@ int __stdcall COMPOSIT_GetWeaponClassIdFromCode(int nWeaponClassCode)
 int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int nClass, int nMode, D2InventoryStrc* pInventory, int* pWeaponClassId)
 {
 	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
+	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
 	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
 	D2UnitStrc* pSecondaryWeapon = NULL;
 	D2UnitStrc* pPrimaryWeapon = NULL;
@@ -372,7 +377,11 @@ int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int 
 	}
 	else if (nUnitType == UNIT_MONSTER)
 	{
-		pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nClass);
+		pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(nClass);
+		if (pMonStatsTxtRecord)
+		{
+			pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecord(pMonStatsTxtRecord->wMonStatsEx);
+		}
 
 		if (!pMonStats2TxtRecord)
 		{

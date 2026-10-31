@@ -58,19 +58,19 @@ struct ItemsTxtFixture : Fixture
 		*original_weapons = sgptDataTables->pItemDataTables.pWeapons;
 
 		const auto original_weapons_record_count = reinterpret_cast<int*>(d2common_base + 0x000A9608 + 0x00000CE4);
-		*original_weapons_record_count = record_count;
+		*original_weapons_record_count = weapons_record_count;
 
 		const auto original_armor = reinterpret_cast<D2ItemsTxt**>(d2common_base + 0x000A9608 + 0x00000CE8);
 		*original_armor = sgptDataTables->pItemDataTables.pArmor;
 
 		const auto original_armor_record_count = reinterpret_cast<int*>(d2common_base + 0x000A9608 + 0x00000CEC);
-		*original_armor_record_count = record_count;
+		*original_armor_record_count = armor_record_count;
 
 		const auto original_misc = reinterpret_cast<D2ItemsTxt**>(d2common_base + 0x000A9608 + 0x00000CF0);
 		*original_misc = sgptDataTables->pItemDataTables.pMisc;
 
 		const auto original_misc_record_count = reinterpret_cast<int*>(d2common_base + 0x000A9608 + 0x00000CF4);
-		*original_misc_record_count = record_count;
+		*original_misc_record_count = misc_record_count;
 
 		items_txt = std::move(items);
 		items_record_count = record_count;
