@@ -250,7 +250,10 @@ void __stdcall UNITROOM_RemoveUnitFromRoom(D2UnitStrc* pUnit)
 			UNITS_ResetRoom(pUnit);
 		}
 	}
-	D2_ASSERT(!pUnit->pRoomNext);
+	else
+	{
+		D2_ASSERT(!pUnit->pRoomNext);
+	}
 }
 
 //D2Common.0x6FDBD400 (#10387)
@@ -297,7 +300,10 @@ void __stdcall UNITROOM_RemoveUnitFromUpdateQueue(D2UnitStrc* pUnit)
 			}
 		}
 	}
-	D2_ASSERT(!pUnit->pChangeNextUnit);
+	else
+	{
+		D2_ASSERT(!pUnit->pChangeNextUnit);
+	}
 }
 
 //D2Common.0x6FDBD4C0 (#10389)
@@ -316,6 +322,7 @@ BOOL __stdcall UNITROOM_IsUnitInRoom(D2ActiveRoomStrc* pRoom, D2UnitStrc* pUnit)
 	pRoomUnit = *DUNGEON_GetUnitListFromRoom(pRoom);
 	if (pRoomUnit != pUnit)
 	{
+		// NOTE: The original game does not check the first unit and crashes when the unit list of the room is empty
 		while (pRoomUnit)
 		{
 			pRoomUnit = pRoomUnit->pRoomNext;
