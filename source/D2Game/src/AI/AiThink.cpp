@@ -4384,9 +4384,9 @@ D2UnitStrc* __fastcall AITHINK_FindTargetForMephisto(D2GameStrc* pGame, D2UnitSt
 
 	AIUTIL_FindTargetWithCallback(pGame, pUnit, &arg, AITHINK_TargetCallback_Mephisto, 1);
 
-	if (!arg.pLowestLifeTarget || AI_RollPercentage(pUnit) >= pMonStatsTxtRecord->wAiParam[MEPHISTO_AI_PARAM_1][pGame->nDifficulty])
+	if (!arg.pLowestLifeTarget || static_cast<int32_t>(AI_RollPercentage(pUnit)) >= pMonStatsTxtRecord->wAiParam[MEPHISTO_AI_PARAM_1][pGame->nDifficulty])
 	{
-		if (!arg.pClosestTargetForPlayerActor || AI_RollPercentage(pUnit) >= pMonStatsTxtRecord->wAiParam[MEPHISTO_AI_PARAM_2][pGame->nDifficulty])
+		if (!arg.pClosestTargetForPlayerActor || static_cast<int32_t>(AI_RollPercentage(pUnit)) >= pMonStatsTxtRecord->wAiParam[MEPHISTO_AI_PARAM_2][pGame->nDifficulty])
 		{
 			return pFallbackTarget;
 		}
