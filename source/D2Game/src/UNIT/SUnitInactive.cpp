@@ -360,7 +360,7 @@ void __fastcall SUNITINACTIVE_RestoreInactiveUnits(D2GameStrc* pGame, D2ActiveRo
 				}
 				else
 				{
-					int32_t nMaxCharges = 2 * pObjectsTxtRecord->dwParm[2];
+					uint8_t nMaxCharges = 2 * pObjectsTxtRecord->dwParm[2];
 					int32_t nCharges = pInactiveUnitNode->nInteractType;
 					if (nCharges < nMaxCharges)
 					{
