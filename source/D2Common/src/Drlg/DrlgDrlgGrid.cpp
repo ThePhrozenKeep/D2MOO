@@ -3,6 +3,8 @@
 #include <Drlg/D2DrlgDrlgRoom.h>
 
 
+//1.10f: D2Common.0x6FDE0A34
+//1.14d: 0x00749BAC
 void(__fastcall* gpfFlagOperations[])(int*, int) =
 {
 	DRGLGRID_OrFlag,
