@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <cstdint>
 
 #include <D2Constants.h>
